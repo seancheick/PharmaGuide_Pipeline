@@ -7639,6 +7639,14 @@ class SupplementEnricherV3:
         "peach", "peach fruit extract",
         "organic black elderberry juice concentrate",
         "eggshell",
+        # Plants a compound parent is taken from (2026-09-28 form curation):
+        # soy isoflavones, chicory inulin, club-moss huperzine A, knotweed
+        # resveratrol, kelp iodine, fenugreek fiber, green-tea caffeine,
+        # marigold zeaxanthin, citrus-fruit bioflavonoids. Bitter orange is
+        # deliberately absent: it has its own safety owner.
+        "glycine max", "chicory root extract", "chicory root", "huperzia serrata",
+        "polygonum cuspidatum", "kelp", "fenugreek", "green tea",
+        "marigold flower extract", "orange", "lemon", "lime", "grapefruit", "tangerine",
         # Mineral-source marketing claims
         "algae", "algae minerals", "sea minerals", "sea mineral salt",
         "dead sea minerals", "algae dead sea minerals",
@@ -9036,7 +9044,8 @@ class SupplementEnricherV3:
         - ``restatement``: the row's own identity again: by name, by name plus
           plant-part words, or a botanical token in the row's DSLD ingredient
           group ("Matricaria chamomilla Flower Extract" under Chamomile).
-        - ``marker``: a standardization marker ("Polyphenols").
+        - ``marker``: a standardization marker ("Polyphenols", "Total Rosavins",
+          "Salidrosides"), or any token DSLD prefixes "standardized ..." or "std. ...".
         - ``source``: the material the nutrient comes from ("Cantaloupe"
           under SOD, "Emblic Fruit Extract" under Vitamin C, a Latin binomial,
           a yeast culture, a mineral-source claim).
@@ -9064,7 +9073,14 @@ class SupplementEnricherV3:
                 or self._restates_identity(token, parent_names)):
             return 'restatement'
         source_text = self._normalize_source_token_text(raw)
-        if token in self._standardization_marker_names() or self._is_standardization_marker_token(source_text):
+        # A recorded marker also reads as "Total Rosavins" or "Salidrosides",
+        # and DSLD's own "standardized for" / "std. to 85%-" prefix marks one.
+        unprefixed = token[len('total '):] if token.startswith('total ') else token
+        singular_marker = ' '.join(w[:-1] if len(w) > 3 and w.endswith('s') else w
+                                   for w in unprefixed.split())
+        if (prefix.startswith(('standardized', 'std.'))
+                or {token, unprefixed, singular_marker} & self._standardization_marker_names()
+                or self._is_standardization_marker_token(source_text)):
             return 'marker'
         contains = {rel.get('target_id') for rel in
                     ((self.databases.get('ingredient_quality_map') or {}).get(parent_key) or {}).get('relationships') or []

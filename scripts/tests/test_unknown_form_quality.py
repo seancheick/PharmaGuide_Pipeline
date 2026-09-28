@@ -361,6 +361,49 @@ def test_curated_source_forms_leave_standalone_identities_alone(normalizer, name
     assert normalizer._resolve_canonical_identity(name, raw_name=name) == identity
 
 
+_B = 'botanical'
+_M = 'non-nutrient/non-botanical'
+
+
+@pytest.mark.parametrize('parent, label, form', [
+    # 2026-09-28 form curation, batch 4: DSLD form tags copied from real cleaned
+    # labels. A plant a compound is taken from, or a standardization marker,
+    # names no form of the row's parent.
+    ('isoflavones', 'Soy Isoflavones', {'name': 'Glycine max', 'category': _B, 'ingredientGroup': 'Soy'}),
+    ('inulin', 'Inulin', {'name': 'Chicory root extract', 'category': _B, 'ingredientGroup': 'chicory'}),
+    ('huperzine_a', 'Huperzine A', {'name': 'Huperzia serrata', 'category': _B, 'ingredientGroup': 'Chinese Club Moss'}),
+    ('resveratrol', 'Resveratrol', {'name': 'Polygonum cuspidatum', 'category': _B, 'ingredientGroup': 'Hu Zhang'}),
+    ('iodine', 'Iodine', {'name': 'Kelp', 'category': 'other', 'prefix': 'as', 'ingredientGroup': 'Kelp'}),
+    ('fiber', 'Galactomannan', {'name': 'Fenugreek', 'category': _B, 'ingredientGroup': 'Fenugreek'}),
+    ('citrus_bioflavonoids', 'Citrus Bioflavonoids', {'name': 'Orange', 'category': _B, 'ingredientGroup': 'Orange (unspecified)'}),
+    ('citrus_bioflavonoids', 'Citrus Bioflavonoids', {'name': 'Lemon', 'category': _B, 'ingredientGroup': 'Lemon'}),
+    ('citrus_bioflavonoids', 'Citrus Bioflavonoids', {'name': 'Lime', 'category': _B, 'ingredientGroup': 'Lime'}),
+    ('citrus_bioflavonoids', 'Citrus Bioflavonoids', {'name': 'Grapefruit', 'category': _B, 'ingredientGroup': 'Grapefruit'}),
+    ('citrus_bioflavonoids', 'Citrus Bioflavonoids', {'name': 'Tangerine', 'category': _B, 'ingredientGroup': 'Tangerine'}),
+    ('caffeine', 'Caffeine', {'name': 'Green Tea', 'category': _B, 'ingredientGroup': 'Green Tea'}),
+    ('zeaxanthin', 'Zeaxanthin', {'name': 'Marigold Flower Extract', 'category': _B, 'ingredientGroup': 'Marigold (unspecified)'}),
+    ('rhodiola', 'Rhodiola', {'name': 'Total Rosavins', 'category': _M, 'ingredientGroup': 'Rosavin'}),
+    ('rhodiola', 'Rhodiola', {'name': 'Salidrosides', 'category': _M, 'ingredientGroup': 'Salidroside'}),
+    ('saw_palmetto', 'Saw Palmetto', {'name': 'Total Fatty Acids', 'category': 'fatty acid', 'prefix': 'std. to 85%-', 'ingredientGroup': 'Fatty Acid (unspecified)'}),
+    ('cayenne_pepper', 'Cayenne Pepper', {'name': 'Capsaicinoids', 'category': _M, 'prefix': 'standardized for', 'ingredientGroup': 'Capsaicinoid'}),
+])
+def test_a_source_plant_or_standardization_marker_names_no_form(enricher, parent, label, form):
+    match = enricher._match_quality_map(label, label, enricher.databases['ingredient_quality_map'],
+                                        cleaned_forms=[form], cleaner_canonical_id=parent)
+    assert match['canonical_id'] == parent
+    assert not match.get('unmapped_forms')
+
+
+def test_bitter_orange_under_citrus_bioflavonoids_stays_held_for_review(enricher):
+    """Bitter orange carries its own safety owner (synephrine); it is not
+    folded into the generic citrus-source list without a review."""
+    match = enricher._match_quality_map(
+        'Citrus Bioflavonoids', 'Citrus Bioflavonoids', enricher.databases['ingredient_quality_map'],
+        cleaned_forms=[{'name': 'Bitter Orange', 'category': _B, 'ingredientGroup': 'Bitter orange'}],
+        cleaner_canonical_id='citrus_bioflavonoids')
+    assert match.get('unmapped_forms') == ['Bitter Orange']
+
+
 def test_generic_tocopherol_is_curated_without_claiming_a_specific_isomer(enricher):
     match = enricher._match_quality_map(
         'Vitamin E',
