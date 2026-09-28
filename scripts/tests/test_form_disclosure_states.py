@@ -147,12 +147,16 @@ def test_a_form_the_pipeline_dropped_is_held_and_not_mistaken_for_nondisclosure(
 
 
 def test_descriptor_and_curated_unspecified_tokens_are_not_losses(pipeline):
-    # "Sodium Borate" is an IQM alias of boron's unspecified form; "Kelp" is
-    # iodine's source. Neither names a form the row dropped.
+    # "Sodium Borate" is an IQM alias of boron's unspecified form; "Green Tea"
+    # is caffeine's source. Neither names a form the row dropped.
     _, enricher = pipeline
     assert enricher._dropped_label_forms('Boron', 'boron', [{'name': 'Sodium Borate', 'ingredientGroup': 'Boron'}]) == []
+    assert enricher._dropped_label_forms('Caffeine', 'caffeine', [{'name': 'Green Tea', 'category': 'botanical',
+                                                                   'ingredientGroup': 'Green Tea'}]) == []
+    # Under iodine, "Kelp" names the map's kelp iodine form (form curation batch
+    # 11), so a row that drops it has lost a disclosed form.
     assert enricher._dropped_label_forms('Iodine', 'iodine', [{'name': 'Kelp', 'category': 'botanical',
-                                                               'ingredientGroup': 'Kelp'}]) == []
+                                                               'ingredientGroup': 'Kelp'}]) == ['Kelp']
 
 
 def test_the_queue_report_ranks_by_held_products_and_names_them(pipeline):
