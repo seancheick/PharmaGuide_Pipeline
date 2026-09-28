@@ -85,7 +85,7 @@ recency, scope and stacking).
 
 | # | Policy | Where it lived | Status |
 |---|---|---|---|
-| C1 | Parent-relative IQM denominator (bio_score / parent reference) and IQM reference-eligibility flags | `form_quality_facts.py`, IQM `formulation_reference_eligible` | Not ported. Needs a reviewed, authored `formulation_reference_score` per parent, never a dynamic maximum |
+| C1 | Parent-relative IQM denominator (bio_score / parent reference) and IQM reference-eligibility flags | `form_quality_facts.py`, IQM `formulation_reference_eligible` | Superseded in part, 2026-09-25: IQM 5.6.1 defines bio_score as a within-parent 0-15 scale (best eligible form 15), authored so far for B12 and BCAA; every other parent is scaled at runtime to its best eligible named form (`scoring_reference_resolver.parent_relative_form_quality`, dd2cf1ff dda033c7 afb71c6c 6a3ab83f, empty commit bodies; the 2026-09-25 archetype and contract-snapshot re-locks accepted the movements). That runtime maximum is the dynamic reference this row ruled out: open for Sean in `scripts/audits/rr_correctness_20260928/CALIBRATION_PACKET.md` |
 | C2 | Activity-equivalence sets (vitamin E, folate, vitamin A) | IQM `formulation_activity_equivalence` | Not ported; revisit with C1 |
 | C3 | Audience-specific Dose benchmarks (highest RDA/AI among printed-audience cells) | `scoring_v4/benchmark_population.py` | Candidate for v4 Dose; needs replay and review |
 | C4 | UL excess treatment (cliff vs graduated bands, per-slot before aggregation) | `dose_policy.py`, `panel_assessment.py` | Step 8 comparison |
@@ -93,7 +93,7 @@ recency, scope and stacking).
 | C6 | Transparency 15/15 for full factual disclosure; one deduction owner per fact | `purpose_assessment.py` (shared criteria) | Step 10 |
 | C7 | 299v outcome split (abdominal pain frequency primary, severity secondary) in the strain registry | `data/clinically_relevant_strains.json` | Owner-approved data correction; moves live v4 Evidence (archetype 87.1 -> 93.1). Port with A-items only after the probiotic replay |
 | C8 | LGG IBS and 299v context arms added to the registry | `data/clinically_relevant_strains.json` | Registry data; port with C7 |
-| C9 | Proposed IQM bio_score corrections (B12, vitamin C, calcium, folate, thiamine) | IQM | Awaiting team approval (review page 2026-09-24); never tuned for score recovery |
+| C9 | Proposed IQM bio_score corrections (B12, vitamin C, calcium, folate, thiamine) | IQM | B12 applied 2026-09-25 (IQM 5.6.1 `parent_relative_b12_recalibration`: six disclosed forms tie at 15, unspecified 14; basis Dr Pham's C2 finding of no established absorption advantage, pinned in test_b35_dr_pham_signoff_integrity). Vitamin C, calcium, folate and thiamine still await team approval; never tuned for score recovery |
 
 ## D. Duplicate architecture to retire (not ported)
 
