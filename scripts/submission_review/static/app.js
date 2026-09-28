@@ -1419,7 +1419,9 @@ async function autoPrepare() {
     state.selected?.evidence_revision === submission.evidence_revision &&
     !state.reviewInvalidated;
   if (!saved) {
-    await loadDraftIntoEditor();
+    // A draft that did not load leaves the editor blank; saving that would
+    // make the blank label the review and the draft would never be adopted.
+    if (!(await loadDraftIntoEditor())) return;
     if (!stillHere()) return;
     await saveReview();
   }
@@ -2228,7 +2230,7 @@ function renderDraft() {
  */
 async function loadDraftIntoEditor() {
   const draft = state.draft?.draft_payload;
-  if (!draft) return;
+  if (!draft) return false;
   let mapped;
   try {
     const response = await fetch('/api/draft_to_label', {
@@ -2243,9 +2245,9 @@ async function loadDraftIntoEditor() {
     mapped = await response.json();
   } catch {
     setStatus('The AI draft could not be loaded. Transcribe the label by hand.', true);
-    return;
+    return false;
   }
-  if (state.draft?.draft_payload !== draft) return;
+  if (state.draft?.draft_payload !== draft) return false;
   // A draft is a starting point for a human, never an approval. Everything
   // below still has to be read off the photographs and ticked.
   state.payload = structuredClone(mapped.payload);
@@ -2262,6 +2264,7 @@ async function loadDraftIntoEditor() {
       + 'approving.'
     : 'Draft loaded, unverified. Read every field off the photographs '
       + 'before approving.');
+  return true;
 }
 
 /** What the model could not supply, in the reviewer's words. */

@@ -153,13 +153,24 @@ def _env(name: str, *alternates: str) -> str:
     raise AgentError(f"missing {name} in the environment (.env)")
 
 
+def _private_dir(path: Path) -> Path:
+    """Work files hold private photos, submission ids and a session: owner only."""
+    path.mkdir(mode=0o700, parents=True, exist_ok=True)
+    path.chmod(0o700)
+    return path
+
+
 class Reviewer:
     """The review function, called with the configured reviewer's session."""
 
     def __init__(self) -> None:
         self.url = _env("SUPABASE_URL").rstrip("/")
         self.anon = _env("SUPABASE_ANON_KEY", "SUPABASE_PUBLISHABLE_KEY")
-        self.token_path = WORK / ".session"
+        self.email = _env("PG_REVIEWER_EMAIL")
+        # One cached session per account, so changing PG_REVIEWER_EMAIL never
+        # keeps acting as the previous reviewer.
+        account = hashlib.sha256(self.email.lower().encode()).hexdigest()[:16]
+        self.token_path = WORK / f".session-{account}"
 
     def _post(self, path: str, body: dict, headers: dict) -> tuple[int, Any]:
         response = bounded_http.request(
@@ -172,7 +183,7 @@ class Reviewer:
 
     def _mint(self) -> str:
         service = _env("SUPABASE_SERVICE_ROLE_KEY")
-        email = _env("PG_REVIEWER_EMAIL")
+        email = self.email
         status, link = self._post(
             "/auth/v1/admin/generate_link", {"type": "magiclink", "email": email},
             {"apikey": service, "authorization": f"Bearer {service}"})
@@ -184,8 +195,11 @@ class Reviewer:
             {"apikey": self.anon})
         if status != 200 or not verified.get("access_token"):
             raise AgentError(f"could not verify the reviewer session ({status})")
-        WORK.mkdir(parents=True, exist_ok=True)
-        self.token_path.write_text(verified["access_token"])
+        _private_dir(WORK)
+        # Created owner-only and never through a planted symlink.
+        fd = os.open(self.token_path, os.O_WRONLY | os.O_CREAT | os.O_TRUNC | os.O_NOFOLLOW, 0o600)
+        with os.fdopen(fd, "w") as handle:
+            handle.write(verified["access_token"])
         self.token_path.chmod(stat.S_IRUSR | stat.S_IWUSR)
         return verified["access_token"]
 
@@ -236,7 +250,7 @@ def _aliases(rows: list[dict] | None = None) -> dict[str, str]:
                 while f"S{number:02d}" in mapping:
                     number += 1
                 mapping[f"S{number:02d}"] = row["id"]
-        WORK.mkdir(parents=True, exist_ok=True)
+        _private_dir(WORK)
         path.write_text(json.dumps(mapping, indent=1))
     return mapping
 
@@ -251,6 +265,8 @@ def _resolve(alias: str) -> str:
 def _bundle(submission: dict, directory: Path) -> EvidenceBundle:
     manifest = json.loads((directory / "photos.json").read_text())
     files = {entry["photo_id"]: entry["file"] for entry in manifest}
+    if any(photo["photo_id"] not in files for photo in submission.get("photos") or ()):
+        raise AgentError("the photos changed after `fetch`; run `fetch` again")
     return EvidenceBundle(
         submission_id=submission["id"],
         evidence_revision=submission["evidence_revision"],
@@ -284,7 +300,8 @@ def cmd_fetch(api: Reviewer, alias: str) -> None:
     alias = alias.upper()
     submission = api.submission(_resolve(alias))
     directory = WORK / alias
-    (directory / "photos").mkdir(parents=True, exist_ok=True)
+    _private_dir(directory)
+    _private_dir(directory / "photos")
     manifest = []
     for index, photo in enumerate(submission.get("photos") or [], start=1):
         response = bounded_http.request("GET", photo["signed_url"], timeout=90, max_bytes=MAX_PHOTO)
@@ -420,6 +437,18 @@ def cmd_record(api: Reviewer, alias: str, model: str) -> int:
     return 0
 
 
+def save_refusal(draft: dict, label: dict, submission: dict, review: dict) -> str | None:
+    """Why `save` must not write this label as the review, or None."""
+    if draft.get("evidence_revision") != submission.get("evidence_revision"):
+        return "the photos changed after `record`; run `fetch` and `record` again"
+    if any(entry.get("live") for entry in review.get("verifications") or []):
+        return "the reviewer has already ticked fields; the review is theirs now"
+    saved = (review.get("draft") or {}).get("payload")
+    if saved and saved not in (label, to_manual_label(draft).payload):
+        return "the reviewer has edited the saved review; the review is theirs now"
+    return None
+
+
 def cmd_save(api: Reviewer, alias: str) -> int:
     alias = alias.upper()
     directory = WORK / alias
@@ -444,6 +473,11 @@ def cmd_save(api: Reviewer, alias: str) -> int:
             print("    " + json.dumps(item)[:200])
         return 1
     submission = api.submission(_resolve(alias))
+    review = api.call("load_review", submission_id=submission["id"]).get("review") or {}
+    refusal = save_refusal(draft, label, submission, review)
+    if refusal:
+        print(f"{alias}: not saved; {refusal}")
+        return 1
     api.call("save_review", submission_id=submission["id"], payload=label,
              expected_evidence_revision=submission["evidence_revision"],
              evidence_manifest_sha256=submission["evidence_manifest_sha256"])

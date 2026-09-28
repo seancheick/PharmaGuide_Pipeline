@@ -17,7 +17,7 @@ if str(SCRIPTS) not in sys.path:
     sys.path.insert(0, str(SCRIPTS))
 
 from submission_review.extraction.agent_reader import (  # noqa: E402
-    AgentError, build_draft, reading_changes,
+    AgentError, _bundle as bundle_from_fetch, build_draft, reading_changes, save_refusal,
 )
 from submission_review.extraction.extractor import (  # noqa: E402
     PreparedBundle, PreparedInput,
@@ -76,3 +76,34 @@ def test_label_json_may_add_but_not_change_the_reading() -> None:
         {**completed["ingredientRows"][0], "quantity": [{"quantity": 100.0, "unit": "mg"}]}]}
     assert reading_changes(skeleton, altered) == ["$.ingredientRows[0].quantity[0].quantity"]
     assert reading_changes(skeleton, {**completed, "statements": []}) == ["$.statements"]
+
+
+def _saveable():
+    draft = build_draft({"identity": {"brand": _source_field("Acme")}}, _bundle(), "m1")
+    return draft, {"brandName": "Acme"}, {"evidence_revision": 3}
+
+
+def test_save_refuses_a_reading_of_photos_that_changed_since_record() -> None:
+    draft, label, submission = _saveable()
+    assert save_refusal(draft, label, submission, {}) is None
+    assert "photos changed" in save_refusal(draft, label, {"evidence_revision": 4}, {})
+
+
+def test_save_never_writes_over_a_review_the_reviewer_has_started() -> None:
+    draft, label, submission = _saveable()
+    ticked = {"verifications": [{"field": "brand", "live": True}]}
+    assert "ticked" in save_refusal(draft, label, submission, ticked)
+    edited = {"draft": {"payload": {"brandName": "Acme Labs"}}}
+    assert "edited" in save_refusal(draft, label, submission, edited)
+    # The agent's own earlier save of the same label is not the reviewer's edit.
+    assert save_refusal(draft, label, submission, {"draft": {"payload": label}}) is None
+
+
+def test_a_photo_added_after_fetch_asks_for_fetch_not_a_traceback(tmp_path) -> None:
+    import json
+    (tmp_path / "photos.json").write_text(json.dumps([{"photo_id": PHOTO, "file": "a.jpg"}]))
+    submission = {"id": "s", "evidence_revision": 2, "photos": [
+        {"photo_id": PHOTO, "content_sha256": "a" * 64},
+        {"photo_id": "22222222-2222-4222-8222-222222222222", "content_sha256": "b" * 64}]}
+    with pytest.raises(AgentError, match="fetch"):
+        bundle_from_fetch(submission, tmp_path)

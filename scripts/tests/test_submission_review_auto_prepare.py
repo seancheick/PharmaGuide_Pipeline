@@ -26,7 +26,7 @@ const ctx=vm.createContext({out,console,
   document:{createElement:()=>el(),createTextNode:(t)=>({textContent:t}),getElementById:()=>el()}});
 vm.runInContext(fs.readFileSync(asset,'utf8')+`
 function boot(){}
-async function loadDraftIntoEditor(){ out.calls.push('load_draft'); }
+async function loadDraftIntoEditor(){ out.calls.push('load_draft'); return globalThis.draftLoads; }
 async function saveReview(){ out.calls.push('save_review'); }
 async function checkIdentity(o){ out.calls.push('identity:'+Boolean(o&&o.record)); }
 async function chooseProductImage(p){ out.calls.push('image:'+p.id); }
@@ -45,6 +45,7 @@ function renderProductPictureOptions(){}
     state.draft = s.draft ?? null;
     state.identityRecorded = s.identityRecorded ?? null;
     state.productImage = s.productImage ?? null;
+    globalThis.draftLoads = s.draftLoads ?? true;
   `, ctx);
   await vm.runInContext('autoPrepare()', ctx);
   await vm.runInContext('autoPrepare()', ctx);
@@ -91,6 +92,14 @@ def test_a_fresh_reading_is_prepared_up_to_the_reviewer_s_clicks() -> None:
     ]
     # Once per revision, however many times the page re-renders.
     assert out["prepared"].endswith(":1")
+
+
+def test_a_draft_that_fails_to_load_is_not_saved_as_a_blank_review() -> None:
+    """A mapper failure leaves the editor blank; saving it would make the blank
+    label the review, and the draft would never be adopted again."""
+    out = _run(draft=DRAFT, draftLoads=False)
+
+    assert out["calls"] == ["load_draft"]
 
 
 def test_a_saved_review_is_kept_rather_than_overwritten_by_the_draft() -> None:
