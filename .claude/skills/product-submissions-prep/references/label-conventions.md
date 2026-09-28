@@ -130,7 +130,10 @@ names, never change a reading value (fix the reading and record again).
   `{"minQuantity": 1, "maxQuantity": 1, "unit": "Tablet(s)", "order": 1}` from
   what is printed. Add `minDailyServings`/`maxDailyServings` **only when the
   directions print a daily amount** ("Take one tablet daily" → 1/1; "1 to 2
-  daily" → 1/2). When the label prints a ceiling ("not to exceed 5 servings
+  daily" → 1/2). They count **servings**, not tablets: with "Serving Size 2
+  Tablets", "Take 2 tablets daily" is one serving → 1/1 (as on the approved
+  Seed, Ritual and Youtheory labels). Recording 2/2 there doubles every daily
+  exposure figure; S19's first reading made exactly that mistake. When the label prints a ceiling ("not to exceed 5 servings
   per day"), the ceiling is the maximum: it is the most a user is told they
   may take, and this number multiplies every interaction dose threshold, so
   under-stating it under-warns. Flag the choice in your report either way.
