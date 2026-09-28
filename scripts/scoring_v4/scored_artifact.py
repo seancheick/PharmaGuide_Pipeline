@@ -16,6 +16,7 @@ from typing import Any, Dict
 
 from score_supplements_v4 import score_product_v4
 from scoring_input_contract import get_scoring_ingredients, scoring_input_scope
+from scoring_v4.gate_safety import safety_resolvers_failed
 from supplement_taxonomy import percentile_label_for
 
 
@@ -92,6 +93,9 @@ def _product_safety_status(
         return "unsafe"
     if verdict == "CAUTION":
         return "caution"
+    if safety_resolvers_failed(safety_gate.get("ingredient_assessment_errors")):
+        # No hard verdict, and a safety resolver never checked the rows.
+        return "not_assessed"
     if verdict in {"", "SAFE"}:
         return "no_known_catalog_concern"
     return "not_assessed"

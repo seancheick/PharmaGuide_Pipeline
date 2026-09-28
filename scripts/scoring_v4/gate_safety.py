@@ -175,12 +175,30 @@ class SafetyResult:
     quarantine_reason: Optional[str] = None
     review_records: List[Dict[str, Any]] = field(default_factory=list)
     # Factual completion of the ingredient assessment. These facts never alter
-    # gate verdicts or public warning projections. ingredient_concerns holds
+    # gate verdicts or public warning projections; the scorer withholds the
+    # score when a resolver failed and no hard verdict was reached
+    # (safety_resolvers_failed). ingredient_concerns holds
     # the signals that survived this gate's policy; the B0 penalty and the
     # Safety/Hygiene base read them instead of re-interpreting raw signals.
     ingredient_assessment_complete: bool = False
     ingredient_assessment_errors: List[str] = field(default_factory=list)
     ingredient_concerns: List[SafetySignal] = field(default_factory=list)
+
+
+_CAPTURE_GAP_PREFIX = "capture_unavailable:"
+
+
+def safety_resolvers_failed(errors: Any) -> bool:
+    """True when a safety resolver could not assess the captured rows.
+
+    Capture gaps (``capture_unavailable:*``) stay recorded facts: the
+    completeness gate owns a label without an assessable active panel. A
+    resolver failure means the rows that do exist were never checked.
+    """
+    return any(
+        not str(error).startswith(_CAPTURE_GAP_PREFIX)
+        for error in (errors or ())
+    )
 
 
 # NOTE: match-type → trust mapping moved to the SafetySignal v1 kernel
@@ -1199,11 +1217,12 @@ def evaluate_safety_gate(
         rows = product.get(source_key)
         if (not isinstance(rows, list)
                 or source_key == 'activeIngredients' and not rows):
-            result.ingredient_assessment_errors.append('capture_unavailable:' + source_key)
+            result.ingredient_assessment_errors.append(_CAPTURE_GAP_PREFIX + source_key)
             continue
         for index, row in enumerate(rows):
             if not isinstance(row, dict) or not _ingredient_name_terms(row)[0].strip():
-                result.ingredient_assessment_errors.append(f'capture_unavailable:{source_key}[{index}]')
+                result.ingredient_assessment_errors.append(
+                    f'{_CAPTURE_GAP_PREFIX}{source_key}[{index}]')
     if dose_safety is None:
         policy = _quality_config_block("dose_safety_policy", "ul_pct_threshold")
         dose_safety = resolve_dose_safety(

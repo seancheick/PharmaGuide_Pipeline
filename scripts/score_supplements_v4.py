@@ -58,7 +58,11 @@ from scoring_v4.dose_safety import (
     evaluate_dose_safety,
 )
 from scoring_v4.gate_completeness import evaluate_completeness_gate
-from scoring_v4.gate_safety import evaluate_safety_gate, safety_gate_scope
+from scoring_v4.gate_safety import (
+    evaluate_safety_gate,
+    safety_gate_scope,
+    safety_resolvers_failed,
+)
 from scoring_v4.modules.b_complex import score_b_complex
 from scoring_v4.modules.fiber_digestive import score_fiber_digestive
 from scoring_v4.modules.generic import _assemble_score, score_generic
@@ -143,6 +147,12 @@ def _safety_gate_breakdown(safety_result) -> Dict[str, Any]:
         "quarantine_reason": getattr(safety_result, "quarantine_reason", None),
         "review_records": list(
             getattr(safety_result, "review_records", []) or []
+        ),
+        "ingredient_assessment_complete": bool(
+            getattr(safety_result, "ingredient_assessment_complete", False)
+        ),
+        "ingredient_assessment_errors": list(
+            getattr(safety_result, "ingredient_assessment_errors", []) or []
         ),
         # Clean-label additive flags (e.g. titanium dioxide). Verdict-independent;
         # consumed by quality_score for the graduated safety_hygiene penalty +
@@ -376,6 +386,14 @@ def _score_v4_core(enriched_product: Dict[str, Any]) -> Dict[str, Any]:
                 if completeness.reason and completeness.reason != "incomplete_product_data"
                 else "blocked_by_completeness_gate"
             )
+        return result
+
+    if safety_resolvers_failed(safety.ingredient_assessment_errors):
+        # A safety resolver could not check the captured rows. Hard verdicts
+        # above still ship; without one, a score here would present an
+        # unchecked label as clean.
+        result["v4_verdict"] = "NOT_SCORED"
+        result["score_unavailable_reason"] = "safety_assessment_incomplete"
         return result
 
     # Layer 3 — one dispatch/assembly seam for every routed module. The former
