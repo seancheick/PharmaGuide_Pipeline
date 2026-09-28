@@ -3410,6 +3410,10 @@ _CLASSIFICATION_RAW_CATEGORY_DOMAINS = {
     "botanical": "herb",
     "herb": "herb",
     "probiotic": "probiotic_strain",
+    # DSLD files an isolated dietary fiber as `fiber` even when its source form
+    # names the plant ("Resistant Dextrin from Cassava"): provenance, not a
+    # botanical intervention.
+    "fiber": "fiber",
 }
 _CLASSIFICATION_VITAMIN_CANONICAL_RE = re.compile(r"^(vitamin_|folate$|choline$)")
 _CLASSIFICATION_MINERAL_CANONICALS = {
@@ -4871,6 +4875,7 @@ _PROFILE_BOTANICAL_OWNER_TYPES = frozenset({
 _PROFILE_MATERIAL_NONBOTANICAL_DOMAINS = frozenset({
     "vitamin", "mineral", "amino_acid", "fatty_acid", "omega_epa_dha",
     "omega_parent", "sports_active", "probiotic_strain", "enzyme", "collagen",
+    "fiber",
 })
 _PROFILE_DELIVERABLE_ROLES = frozenset({"primary", "claim_prominent", "major"})
 _PROFILE_MICRONUTRIENT_DOMAINS = frozenset({"vitamin", "mineral"})
