@@ -286,12 +286,17 @@ def cmd_list(api: Reviewer) -> None:
     mapping = {value: key for key, value in _aliases(rows).items()}
     print(f"open submissions: {len(rows)}")
     for row in rows:
+        # A queue page carries no drafts; the one-submission read does.
+        state = prep_state(api.submission(row["id"]),
+                           api.call("load_review", submission_id=row["id"]).get("review") or {})
         print(f"  {mapping[row['id']]}  {row.get('kind') or '-':<16} "
               f"{row.get('review_status') or '-':<13} photos={len(row.get('photos') or [])} "
-              f"submitted={(row.get('submitted_at') or row.get('created_at') or '')[:10]}")
+              f"submitted={(row.get('submitted_at') or row.get('created_at') or '')[:10]}  [{state}]")
+    print("  A submission with an agent draft and a saved review may be done: "
+          "run `verify` before redoing it.")
 
 
-def cmd_fetch(api: Reviewer, alias: str) -> None:
+def cmd_fetch(api: Reviewer, alias: str, *, force: bool = False) -> None:
     from submission_review.extraction.adapters.ocr_adapter import (
         PROVIDER as OCR, RULES_VERSION, OcrLabelAdapter,
     )
@@ -320,10 +325,15 @@ def cmd_fetch(api: Reviewer, alias: str) -> None:
     prepared = prepare_bundle(_bundle(submission, directory))
     config = ExtractionConfig(provider=OCR, model="rapidocr", model_digest="0" * 64,
                               prompt_version=RULES_VERSION, retention_policy_version="local-only-v1")
-    lead = OcrLabelAdapter(RapidOcrReader()).extract(prepared, config).draft
-    reading = {key: lead[key] for key in LABEL_CONTENT_KEYS if key in lead}
-    (directory / "reading.json").write_text(json.dumps(reading, indent=1, ensure_ascii=False))
-    print(f"{alias}: {len(manifest)} photo(s) and an OCR lead reading in {directory}")
+    target = directory / "reading.json"
+    if target.exists() and not force:
+        print(f"{alias}: {len(manifest)} photo(s) refreshed; kept the existing reading.json "
+              "(pass --force to replace it with a new OCR lead)")
+    else:
+        lead = OcrLabelAdapter(RapidOcrReader()).extract(prepared, config).draft
+        write_lead_reading(directory, {key: lead[key] for key in LABEL_CONTENT_KEYS if key in lead},
+                           force=force)
+        print(f"{alias}: {len(manifest)} photo(s) and an OCR lead reading in {directory}")
     for entry in manifest:
         print(f"    {entry['photo']}  {', '.join(entry['categories']) or 'uncategorised'}")
 
@@ -437,6 +447,23 @@ def cmd_record(api: Reviewer, alias: str, model: str) -> int:
     return 0
 
 
+def is_blank_label(payload: Any) -> bool:
+    """True when a saved payload carries no label at all.
+
+    Every value is empty, null, zero or false: the editor's empty form, saved
+    by opening a submission before any reading existed. Defined by content,
+    not by copying the console's template, so the two sides cannot drift;
+    static/app.js ``isBlankLabel`` applies the same rule.
+    """
+    if isinstance(payload, Mapping):
+        return all(is_blank_label(value) for value in payload.values())
+    if isinstance(payload, list):
+        return all(is_blank_label(value) for value in payload)
+    if isinstance(payload, str):
+        return not payload.strip()
+    return payload in (None, 0, False)
+
+
 def save_refusal(draft: dict, label: dict, submission: dict, review: dict) -> str | None:
     """Why `save` must not write this label as the review, or None."""
     if draft.get("evidence_revision") != submission.get("evidence_revision"):
@@ -444,9 +471,33 @@ def save_refusal(draft: dict, label: dict, submission: dict, review: dict) -> st
     if any(entry.get("live") for entry in review.get("verifications") or []):
         return "the reviewer has already ticked fields; the review is theirs now"
     saved = (review.get("draft") or {}).get("payload")
-    if saved and saved not in (label, to_manual_label(draft).payload):
+    if saved and not is_blank_label(saved) and saved not in (label, to_manual_label(draft).payload):
         return "the reviewer has edited the saved review; the review is theirs now"
     return None
+
+
+def prep_state(submission: dict, review: dict) -> str:
+    """What already exists for a submission, so nobody redoes finished work."""
+    drafts = submission.get("extractions") or []
+    latest = drafts[0] if drafts else None
+    parts = [f"draft {latest.get('provider')}/{latest.get('model')} v{latest.get('version')}"
+             if latest else "no draft"]
+    saved = (review.get("draft") or {}).get("payload")
+    parts.append("no saved review" if not saved
+                 else "blank saved review" if is_blank_label(saved) else "saved review")
+    ticks = sum(1 for entry in review.get("verifications") or [] if entry.get("live"))
+    if ticks:
+        parts.append(f"{ticks} tick" + ("s" if ticks != 1 else ""))
+    return " · ".join(parts)
+
+
+def write_lead_reading(directory: Path, reading: dict, *, force: bool = False) -> None:
+    """Write the OCR lead, never over a reading someone has already worked on."""
+    target = directory / "reading.json"
+    if target.exists() and not force:
+        raise AgentError(f"{target} already exists (someone's reading); "
+                         "keep it, or pass --force to replace it with the OCR lead")
+    target.write_text(json.dumps(reading, indent=1, ensure_ascii=False))
 
 
 def cmd_save(api: Reviewer, alias: str) -> int:
@@ -527,6 +578,8 @@ def main(argv: list[str] | None = None) -> int:
     sub.add_parser("list")
     fetch = sub.add_parser("fetch")
     fetch.add_argument("aliases", nargs="+")
+    fetch.add_argument("--force", action="store_true",
+                       help="replace an existing reading.json with a new OCR lead")
     sheet = sub.add_parser("sheet")
     sheet.add_argument("alias")
     record = sub.add_parser("record")
@@ -548,7 +601,7 @@ def main(argv: list[str] | None = None) -> int:
             return 0
         if args.command == "fetch":
             for alias in args.aliases:
-                cmd_fetch(api, alias)
+                cmd_fetch(api, alias, force=args.force)
             return 0
         if args.command == "record":
             return cmd_record(api, args.alias, args.model)

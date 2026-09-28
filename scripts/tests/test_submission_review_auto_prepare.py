@@ -160,3 +160,62 @@ def test_the_evidence_beside_a_tick_is_the_draft_s_quote_and_region() -> None:
     assert region["x"] == pytest.approx(0.19) and region["y"] == pytest.approx(0.39)
     assert region["x"] + region["w"] == pytest.approx(0.71)
     assert region["y"] + region["h"] == pytest.approx(0.46)
+
+
+# S19, 2026-09-28: opening it before any draft existed saved the editor's empty
+# form, and that blank review then blocked both auto-prep and the agent's save.
+BLANK_FORM = {
+    "fullName": "", "brandName": "", "offMarket": 0, "statements": [],
+    "servingSizes": [{"unit": "", "maxQuantity": None, "minQuantity": None,
+                      "maxDailyServings": None, "minDailyServings": None}],
+    "ingredientRows": [{"name": "", "forms": [], "quantity": [], "nestedRows": [],
+                        "ingredientGroup": ""}],
+    "otherIngredients": "", "servingsPerContainer": None, "otherIngredientsDisclosure": "",
+}
+
+
+def test_a_blank_saved_form_is_replaced_by_the_draft() -> None:
+    out = _run(draft=DRAFT, review={"draft": {"payload": BLANK_FORM}})
+
+    assert out["calls"][:2] == ["load_draft", "save_review"]
+
+
+_SAVE_HARNESS = r"""
+const fs=require('node:fs'),vm=require('node:vm');
+const [asset, payloadJson] = process.argv.slice(1);
+const out={edge:[]};
+function el(){ return {children:[],classList:{add(){},remove(){},contains(){return false;}},
+  dataset:{},style:{},append(){},addEventListener(){},textContent:''}; }
+const ctx=vm.createContext({out,console,
+  document:{createElement:()=>el(),createTextNode:(t)=>({textContent:t}),getElementById:()=>el()}});
+vm.runInContext(fs.readFileSync(asset,'utf8')+`
+function boot(){} function renderReviewBanner(){} function setDecisionAvailability(){}
+async function edge(body){ out.edge.push(body.action); return {review:{}}; }
+`,ctx);
+(async()=>{
+  vm.runInContext(`
+    state.session = {access_token:'t'};
+    state.selected = {id:'s', evidence_revision:1, evidence_manifest_sha256:'m', review_status:'submitted'};
+    state.reviewReadyFor = 's:1';
+    state.payloadSha = 'x';
+    state.payload = ${payloadJson};
+  `, ctx);
+  await vm.runInContext('saveReview()', ctx);
+  process.stdout.write(JSON.stringify(out));
+})().catch(e=>{console.error(e);process.exitCode=1});
+"""
+
+
+def test_the_console_never_saves_an_untouched_blank_form() -> None:
+    node = shutil.which("node")
+    if node is None:
+        pytest.skip("Node.js required for console behavior")
+
+    def saves(payload):
+        result = subprocess.run([node, "-e", _SAVE_HARNESS, str(ASSET), json.dumps(payload)],
+                                capture_output=True, text=True, timeout=30, check=False)
+        assert result.returncode == 0, result.stderr
+        return json.loads(result.stdout)["edge"]
+
+    assert saves(BLANK_FORM) == []
+    assert saves({**BLANK_FORM, "brandName": "Acme"}) == ["save_review"]
