@@ -1,0 +1,7 @@
+# Generated / gitignored data dumps: not knowledge, and they dwarf the corpus.
+scripts/products/
+reports/
+scripts/reports/
+scripts/api_audit/reports/
+scripts/dist.*/
+*.db
