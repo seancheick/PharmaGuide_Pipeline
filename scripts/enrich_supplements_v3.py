@@ -7657,6 +7657,33 @@ class SupplementEnricherV3:
         # bran, and a multivitamin's fermented vitamin and mineral blends.
         "aquamin", "aquamin calcified mineral source red algae", "l. calcareum", "rice bran",
         "fermented vitamin blend", "fermented mineral blend",
+        # Plants and organisms a compound is taken from (batch 9): fisetin (wax
+        # tree), gypenosides, d-limonene (orange oil), inulin, sulforaphane,
+        # caffeine, EGCG, huperzine A, resveratrol and pterostilbene, citrus
+        # and Sophora flavonoids (bitter orange stays out: its own safety
+        # owner), luteolin, ellagic acid, lignans, phytosterols, ceramides,
+        # lecithin and phospholipids, algal DHA, mushroom mycelium substrate.
+        "wax tree stem extract", "gynostemma pentaphyllum stem extract", "orange oil",
+        "jerusalem artichoke", "chicory", "broccoli seed extract", "kale", "coconut", "coconut cream",
+        "citrus", "citrus fruit", "citrus hongheensis fruit extract", "citrus limon", "citrus paradisi",
+        "citrus sinensis", "citrus spp.", "sophora japonica", "sophorae japonica", "saphora japonica",
+        "sophora japonica extract dried purified", "japanese sophora flower extract",
+        "chrysanthemum morifolium", "camellia sinensis", "green tea extract", "green tea leaf extract",
+        "guarana extract", "yerba mate extract", "coffee bean extract", "coffea arabica", "green coffee",
+        "huperzia serrata whole plant extract", "toothed clubmoss whole herb extract",
+        "piper nigrum berry extract", "ahiflower", "grape extract", "grape fruit extract",
+        "grape seed extract", "grapeseed", "grapeseed extract", "grapeskin extract", "red grape extracts",
+        "red grape (fruit) extract", "whole red grape extract", "vitis vinifera", "vitis vinifera extract",
+        "fallopia japonica", "tiger cane", "pterocarpus marsupium", "cranberry (vaccinium macrocarpon) extract",
+        "strawberry extract", "strawberry fruit extract", "pomegranate hull extract",
+        "holy basil leaf extract", "ampelopsis grossedentata", "laminaria japonica extract",
+        "undaria pinnatifida extract", "ajuga l. whole herb extract",
+        "sceletium tortuosum aerial parts extract", "helianthus annuus", "soy", "soybeans",
+        "soy isoflavones concentrate", "pine", "wheat oil extract", "wheat seed oil",
+        "norway spruce knotwood extract", "picea abies", "secale cereale", "morus alba powder",
+        "european black currant fruit extract", "hawthorn extract", "hawthorn fruit flower stem extract",
+        "purple corn optimized biomass", "purple kculli corn", "purple kculli corn optimized biomass",
+        "ester-c", "plant based algae", "from algae of schizochytrium sp.",
         # Mineral-source marketing claims
         "algae", "algae minerals", "sea minerals", "sea mineral salt",
         "dead sea minerals", "algae dead sea minerals",
@@ -7701,6 +7728,8 @@ class SupplementEnricherV3:
         # Probiotic / yeast genera (strain-level source descriptors)
         "lactobacillus", "bifidobacterium", "streptococcus", "lactococcus",
         "saccharomyces", "bacillus",
+        # Enzyme and algal-oil source organisms (serrapeptase, DHA)
+        "serratia", "schizochytrium",
     })
 
     # Tissue / plant-part suffix tokens that, when combined with a genus or
@@ -7874,16 +7903,36 @@ class SupplementEnricherV3:
 
         return False
 
+    # Standardization markers and constituent classes a label names beside an
+    # extract that standardized_botanicals.json does not record ("Chicoric
+    # Acid" under Echinacea, "IgG" under Colostrum, "Type I Collagen" under a
+    # collagen peptide). Classifier-only: they name no form, and they feed no
+    # standardization credit.
+    _STANDARDIZATION_MARKER_TERMS: frozenset = frozenset({
+        "8-prenylnaringenin", "8 prenylnaringenin",
+        "14-deoxyandrographolides", "neoandrographolides", "3-0-acetyl-11-keto beta boswellic acid",
+        "alpha-keto-boswellic acids", "boswelic acid", "5-caffeoylquinic acid", "50% piperine",
+        "alkoxyglycerols", "anthocyanidins", "anthocyanin", "apocynin", "picroside i & ii", "picroside ii",
+        "bioactive eurypeptides", "glyco saponins", "biochanins", "bitter principles", "capsaicinoid",
+        "carnosic acid,carnosol", "diterpenic compounds", "cascarosides", "chicoric acid", "dianthrones",
+        "ecgc", "epigallocatechin", "eleutherosides e and b", "eleuthrosides", "flavanones",
+        "polyphenolic flavanones", "flavonol glycosides", "flavonols", "ginkgoflavoglycosides",
+        "ginkgoheterosides", "ginkgolic acid", "free fatty acids", "fucoxanthin", "genistein",
+        "glycolipids", "glycosylceramides", "glycosides", "hederacoside c", "hydroxycinammic acids",
+        "hydroxycinnamic acid", "hyperoside", "igg", "immunoglobulin g", "immunoglobulin g1 + g2",
+        "ketosterones", "l-dihydroxyphenylalanine", "maslinic acid", "milk peptides",
+        "bioactive milk peptides", "proline-rich peptide complex", "other active polyphenols",
+        "phenolic acids", "phenolics", "total phenols", "silicic acid", "type i collagen",
+        "type iii collagen", "collagen type i", "collagen type iii", "collagen type i hydrolyzed",
+        "collagen type iii hydrolyzed", "yohimbe alkaloid", "yohimbe alkaloids",
+    })
+
     def _is_standardization_marker_token(self, normalized_text: str) -> bool:
         """Return True for standardized active-marker text that is not itself an IQM form."""
         if not normalized_text:
             return False
 
-        marker_terms = {
-            "8-prenylnaringenin",
-            "8 prenylnaringenin",
-        }
-        return normalized_text in marker_terms
+        return normalized_text in self._STANDARDIZATION_MARKER_TERMS
 
     def _structural_parent_total_row_ids(
         self,
