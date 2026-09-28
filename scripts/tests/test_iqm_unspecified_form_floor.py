@@ -145,10 +145,6 @@ _STANDARDIZATION_MARKER_LOCKED_SPREAD = {
 # (14-15). The ratio-unspecified generic form (renamed from "(standard)" on
 # 2026-09-25, value unchanged at the curated 10) is not required to sit
 # within one of them. Pinned in test_audit_locked_unspecified_scores_pinned.
-_PREMIUM_ONLY_PEER_EXEMPTIONS = {
-    'branched_chain_amino_acids',
-}
-
 _LOCAL_MATRIX_UNSPECIFIED_PEER_MIN_EXEMPTIONS = {
     'lions_mane',
     'reishi',
@@ -204,7 +200,6 @@ _AUDIT_LOCKED_UNSPECIFIED_PEER_MIN_EXEMPTIONS = {
     'ginkgo':               8,  # botanicals_06o: < EGb 24% flavone-glycoside extract
     'vanadium':             4,  # minerals/B25: hazardous trace mineral — unknown-form floor (UMLS poison flag, GI tox >1.8 mg/day, ~5% F) kept below the disclosed sodium-vanadate class floor (7); conservative-by-design, and the safety-correct direction
     'vitamin_k2':           6,  # subtype undisclosed: cannot inherit MK-4, MK-7, cis-isomer, or source-specific properties
-    'branched_chain_amino_acids': 10,  # ratio-unspecified generic BCAA; see _PREMIUM_ONLY_PEER_EXEMPTIONS
     'green_tea_extract':    7,  # register Q25 2026-09-26: whole-leaf matcha (8) left this extract parent; unspecified keeps 7, which unknown_form_quality already uses (floor 9 - 1 = 8)
 }
 
@@ -228,8 +223,6 @@ def test_no_unspec_form_scores_below_peer_min(iqm):
         if parent_key in _LOCAL_MATRIX_UNSPECIFIED_PEER_MIN_EXEMPTIONS:
             continue
         if parent_key in _AUDIT_LOCKED_UNSPECIFIED_PEER_MIN_EXEMPTIONS:
-            continue
-        if parent_key in _PREMIUM_ONLY_PEER_EXEMPTIONS:
             continue
         forms = v.get('forms', {})
         if not isinstance(forms, dict):

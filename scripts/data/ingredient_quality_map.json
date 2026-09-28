@@ -1746,9 +1746,10 @@
           "Aligned six disclosed oral/sublingual B12 forms at 15 because reviewed evidence does not establish meaningful absorption or efficacy superiority at equivalent supplemental doses.",
           "Set B12 unspecified to 14 under the existing lowest-eligible-minus-one nondisclosure rule and removed conflicting methyl/MTHFR and sublingual-premium copy.",
           "2026-09-26: cascara_sagrada gains rxcui 66869 (RxNorm IN 'cascara sagrada', ATC A06AB07); its note had said no RxNorm concept existed. Receipt: scripts/audits/pending_items_20260926/research.md.",
-          "2026-09-26: miroestrol description no longer calls it a coumestan: PubChem CID 165001 (C20H22O6) is a pentacyclic phytoestrogen, while the coumestan skeleton is [1]benzofuro[3,2-c]chromen-6-one (CID 638309). Receipt: scripts/audits/pending_items_20260926/research.md."
+          "2026-09-26: miroestrol description no longer calls it a coumestan: PubChem CID 165001 (C20H22O6) is a pentacyclic phytoestrogen, while the coumestan skeleton is [1]benzofuro[3,2-c]chromen-6-one (CID 638309). Receipt: scripts/audits/pending_items_20260926/research.md.",
+          "2026-09-28: branched_chain_amino_acids aligned at 15 (bcaa 2:1:1, bcaa 4:1:1, instantized bcaas, bcaa peptides): no evidence shows the extent absorbed differs by ratio, instantizing or peptide binding (peptides only reach the blood faster), and the 4:1:1 split rested on popularity and muscle-protein-synthesis outcomes, which the honesty rule excludes. BCAA unspecified 10 -> 14 (lowest eligible named bio_score - 1). 2:1:1, 4:1:1, instantized and unspecified carry source-verified class-equivalence evidence (PMID 34642762, free amino acid absorption RCT) and leave the Excellent backlog; peptides stays a frozen legacy score. Copy implying form superiority removed."
         ],
-        "regression_tests": "scripts/tests/test_iqm_b12_sublingual_integrity.py, scripts/tests/test_b35_dr_pham_signoff_integrity.py, scripts/tests/test_ingredient_matching_regression.py"
+        "regression_tests": "scripts/tests/test_iqm_b12_sublingual_integrity.py, scripts/tests/test_b35_dr_pham_signoff_integrity.py, scripts/tests/test_ingredient_matching_regression.py, scripts/tests/test_bcaa_ratio_form.py"
       },
       "5.6.0": {
         "date": "2026-09-24",
@@ -45145,7 +45146,7 @@
           "by": "Product owner approval",
           "date": "2026-08-08"
         },
-        "notes": "The most common and clinically studied ratio of Leucine, Isoleucine, and Valine. It is highly effective for muscle protein synthesis and recovery.",
+        "notes": "Leucine, isoleucine and valine in a 2:1:1 ratio. The ratio sets how much of each amino acid a serving holds; it does not change absorption, so every disclosed BCAA form scores alike.",
         "aliases": [
           "leucine:isoleucine:valine 2:1:1",
           "bcaa 2:1:1 supplement",
@@ -45162,17 +45163,51 @@
         "source_form_aliases": [
           "2:1:1",
           "bcaa 2:1:1 blend"
-        ]
+        ],
+        "form_evidence_axis": "class_equivalence",
+        "form_evidence": {
+          "schema_version": "1.0.0",
+          "evidence_level": "moderate",
+          "score_supported": true,
+          "rationale": "BCAA 2:1:1 is free L-leucine, L-isoleucine and L-valine in a 2:1:1 ratio. Free amino acids are absorbed rapidly, with greater postprandial plasma availability than an equal amount of intact protein (Weijzen 2022, randomized trial). A ratio or an instantizing aid changes the amounts or the mixing, not the free L-leucine, L-isoleucine and L-valine absorbed, so the disclosed free-form BCAA forms share the parent's top tier.",
+          "review": {
+            "status": "source_verified",
+            "by": "PharmaGuide evidence audit",
+            "date": "2026-09-28"
+          },
+          "references_structured": [
+            {
+              "type": "pubmed",
+              "authority": "NCBI PubMed",
+              "pmid": "34642762",
+              "doi": "10.1093/jn/nxab305",
+              "title": "Ingestion of Free Amino Acids Compared with an Equivalent Amount of Intact Protein Results in More Rapid Amino Acid Absorption and Greater Postprandial Plasma Amino Acid Availability Without Affecting Muscle Protein Synthesis Rates in Young Adults in a Double-Blind Randomized Trial.",
+              "url": "https://pubmed.ncbi.nlm.nih.gov/34642762/",
+              "published_date": "2022-01-11",
+              "publication_types": [
+                "Journal Article",
+                "Randomized Controlled Trial"
+              ],
+              "evidence_grade": "human_comparative",
+              "retracted": false,
+              "supports_claims": [
+                "free_amino_acid_absorption"
+              ],
+              "verification_source": "pubmed_eutils",
+              "verified_on": "2026-09-28"
+            }
+          ]
+        }
       },
       "bcaa 4:1:1": {
-        "bio_score": 14,
+        "bio_score": 15,
         "absorption": "excellent",
         "consumer_note": "BCAA 4:1:1 contains leucine, isoleucine, and valine in a 4-to-1-to-1 ratio.",
         "consumer_note_review": {
           "by": "Product owner approval",
           "date": "2026-08-08"
         },
-        "notes": "A BCAA ratio with a higher concentration of Leucine to maximize muscle protein synthesis, often preferred for bodybuilders and athletes.",
+        "notes": "Leucine, isoleucine and valine in a 4:1:1 ratio (more leucine per gram). The ratio does not change absorption, so every disclosed BCAA form scores alike.",
         "aliases": [
           "leucine:isoleucine:valine 4:1:1",
           "bcaa 4:1:1 supplement",
@@ -45184,6 +45219,40 @@
           "range_low": 0.85,
           "range_high": 0.95,
           "quality": "very_good"
+        },
+        "form_evidence_axis": "class_equivalence",
+        "form_evidence": {
+          "schema_version": "1.0.0",
+          "evidence_level": "moderate",
+          "score_supported": true,
+          "rationale": "BCAA 4:1:1 is free L-leucine, L-isoleucine and L-valine in a 4:1:1 ratio. Free amino acids are absorbed rapidly, with greater postprandial plasma availability than an equal amount of intact protein (Weijzen 2022, randomized trial). A ratio or an instantizing aid changes the amounts or the mixing, not the free L-leucine, L-isoleucine and L-valine absorbed, so the disclosed free-form BCAA forms share the parent's top tier.",
+          "review": {
+            "status": "source_verified",
+            "by": "PharmaGuide evidence audit",
+            "date": "2026-09-28"
+          },
+          "references_structured": [
+            {
+              "type": "pubmed",
+              "authority": "NCBI PubMed",
+              "pmid": "34642762",
+              "doi": "10.1093/jn/nxab305",
+              "title": "Ingestion of Free Amino Acids Compared with an Equivalent Amount of Intact Protein Results in More Rapid Amino Acid Absorption and Greater Postprandial Plasma Amino Acid Availability Without Affecting Muscle Protein Synthesis Rates in Young Adults in a Double-Blind Randomized Trial.",
+              "url": "https://pubmed.ncbi.nlm.nih.gov/34642762/",
+              "published_date": "2022-01-11",
+              "publication_types": [
+                "Journal Article",
+                "Randomized Controlled Trial"
+              ],
+              "evidence_grade": "human_comparative",
+              "retracted": false,
+              "supports_claims": [
+                "free_amino_acid_absorption"
+              ],
+              "verification_source": "pubmed_eutils",
+              "verified_on": "2026-09-28"
+            }
+          ]
         }
       },
       "instantized bcaas": {
@@ -45194,7 +45263,7 @@
           "by": "Product owner approval",
           "date": "2026-08-08"
         },
-        "notes": "BCAAs that have been treated for enhanced solubility in water, making them easier to mix and absorb quickly. Does not alter bioavailability but improves user experience.",
+        "notes": "BCAAs processed with a dispersing aid so they mix into water. Instantizing does not change absorption, so every disclosed BCAA form scores alike.",
         "aliases": [
           "bcaa instant",
           "instant bcaa",
@@ -45209,17 +45278,51 @@
           "range_low": 0.85,
           "range_high": 0.95,
           "quality": "very_good"
+        },
+        "form_evidence_axis": "class_equivalence",
+        "form_evidence": {
+          "schema_version": "1.0.0",
+          "evidence_level": "moderate",
+          "score_supported": true,
+          "rationale": "Instantized BCAAs are free L-leucine, L-isoleucine and L-valine with a dispersing aid. Free amino acids are absorbed rapidly, with greater postprandial plasma availability than an equal amount of intact protein (Weijzen 2022, randomized trial). A ratio or an instantizing aid changes the amounts or the mixing, not the free L-leucine, L-isoleucine and L-valine absorbed, so the disclosed free-form BCAA forms share the parent's top tier.",
+          "review": {
+            "status": "source_verified",
+            "by": "PharmaGuide evidence audit",
+            "date": "2026-09-28"
+          },
+          "references_structured": [
+            {
+              "type": "pubmed",
+              "authority": "NCBI PubMed",
+              "pmid": "34642762",
+              "doi": "10.1093/jn/nxab305",
+              "title": "Ingestion of Free Amino Acids Compared with an Equivalent Amount of Intact Protein Results in More Rapid Amino Acid Absorption and Greater Postprandial Plasma Amino Acid Availability Without Affecting Muscle Protein Synthesis Rates in Young Adults in a Double-Blind Randomized Trial.",
+              "url": "https://pubmed.ncbi.nlm.nih.gov/34642762/",
+              "published_date": "2022-01-11",
+              "publication_types": [
+                "Journal Article",
+                "Randomized Controlled Trial"
+              ],
+              "evidence_grade": "human_comparative",
+              "retracted": false,
+              "supports_claims": [
+                "free_amino_acid_absorption"
+              ],
+              "verification_source": "pubmed_eutils",
+              "verified_on": "2026-09-28"
+            }
+          ]
         }
       },
       "bcaa peptides": {
         "bio_score": 15,
-        "absorption": "superior (faster uptake)",
+        "absorption": "excellent (faster uptake)",
         "consumer_note": "BCAA peptides contain branched-chain amino acids within short peptide fragments rather than solely as free amino acids.",
         "consumer_note_review": {
           "by": "Product owner approval",
           "date": "2026-08-08"
         },
-        "notes": "BCAAs linked into short peptide chains. This form may be absorbed even faster than free-form BCAAs, potentially improving muscle delivery.",
+        "notes": "BCAAs bound in short peptides. Peptide-bound amino acids can reach the blood faster; no evidence shows a greater extent absorbed than free-form BCAAs, so every disclosed BCAA form scores alike.",
         "aliases": [
           "bcaa dipeptides",
           "bcaa protein hydrolysate",
@@ -45236,14 +45339,14 @@
         }
       },
       "branched chain amino acids (unspecified)": {
-        "bio_score": 10,
+        "bio_score": 14,
         "absorption": "BCAAs; LAT1/B0AT1 small-intestine transport; class F~90% as free or peptide-bound",
         "consumer_note": "Branched-chain amino acids are the group of L-leucine, L-isoleucine, and L-valine. This listing does not state the ratio or individual amounts of those three amino acids.",
         "consumer_note_review": {
           "by": "Product owner approval",
           "date": "2026-08-08"
         },
-        "notes": "Generic BCAA supplement (leucine, isoleucine, valine). Ratio and form unspecified. BCAAs are rapidly absorbed (~90-95% oral F) via active amino acid transport. Support muscle protein synthesis, exercise recovery, and fatigue reduction. Specify ratio (2:1:1 or 4:1:1) for accurate scoring. Evidence update 2026-04-25 (Batch 22): Mixed-cluster audit — 7 PMIDs WebFetch-verified. FOUR major findings: (1) Prebiotics inulin + larch AG CATEGORY ERROR (3rd confirmation after manuka Batch 18 + organ extracts Batch 20) — Holscher 2017 (PMID:28165863) explicit on non-digestibility. (2) BHB salts ≠ creatine salts pattern: Stubbs 2017 (PMID:29163194) shows salts deliver ~50% inactive L-βHB enantiomer, ester delivers pure D-βHB. (3) BCAA peptides confirm Silk pattern (Batch 20): kinetic faster but extent same ~90%. (4) D-chiro-inositol = myo-inositol class-equivalent (Lepore 2021 PMID:34202683). 5 ghost references caught: Stubbs PMID:28261556 (actually Korean diet paper), DPA PMID:29618497 (SCFA letter), \"Crittenden 2007 inulin\" NOT FOUND, \"Larrosa 2010 inulin\" NOT FOUND, TUDCA human oral F NOT FOUND.",
+        "notes": "Generic BCAA supplement (leucine, isoleucine, valine). Ratio and form unspecified. BCAAs are rapidly absorbed (~90-95% oral F) via active amino acid transport. Support muscle protein synthesis, exercise recovery, and fatigue reduction. Scored one below the lowest disclosed BCAA form (IQM unknown-form rule). Evidence update 2026-04-25 (Batch 22): Mixed-cluster audit — 7 PMIDs WebFetch-verified. FOUR major findings: (1) Prebiotics inulin + larch AG CATEGORY ERROR (3rd confirmation after manuka Batch 18 + organ extracts Batch 20) — Holscher 2017 (PMID:28165863) explicit on non-digestibility. (2) BHB salts ≠ creatine salts pattern: Stubbs 2017 (PMID:29163194) shows salts deliver ~50% inactive L-βHB enantiomer, ester delivers pure D-βHB. (3) BCAA peptides confirm Silk pattern (Batch 20): kinetic faster but extent same ~90%. (4) D-chiro-inositol = myo-inositol class-equivalent (Lepore 2021 PMID:34202683). 5 ghost references caught: Stubbs PMID:28261556 (actually Korean diet paper), DPA PMID:29618497 (SCFA letter), \"Crittenden 2007 inulin\" NOT FOUND, \"Larrosa 2010 inulin\" NOT FOUND, TUDCA human oral F NOT FOUND.",
         "aliases": [
           "Branch Chain Amino Acids",
           "Branched Chain Amino Acids",
@@ -45281,7 +45384,41 @@
           "l-leucine, micronized",
           "l-isoleucine, micronized",
           "l-valine, micronized"
-        ]
+        ],
+        "form_evidence_axis": "class_equivalence",
+        "form_evidence": {
+          "schema_version": "1.0.0",
+          "evidence_level": "moderate",
+          "score_supported": true,
+          "rationale": "The label does not disclose the BCAA form or ratio. The IQM unknown-form rule scores that as the lowest eligible named BCAA form (15) minus 1; the named free-form tier rests on free amino acids' rapid absorption and greater plasma availability (Weijzen 2022, randomized trial).",
+          "review": {
+            "status": "source_verified",
+            "by": "PharmaGuide evidence audit",
+            "date": "2026-09-28"
+          },
+          "references_structured": [
+            {
+              "type": "pubmed",
+              "authority": "NCBI PubMed",
+              "pmid": "34642762",
+              "doi": "10.1093/jn/nxab305",
+              "title": "Ingestion of Free Amino Acids Compared with an Equivalent Amount of Intact Protein Results in More Rapid Amino Acid Absorption and Greater Postprandial Plasma Amino Acid Availability Without Affecting Muscle Protein Synthesis Rates in Young Adults in a Double-Blind Randomized Trial.",
+              "url": "https://pubmed.ncbi.nlm.nih.gov/34642762/",
+              "published_date": "2022-01-11",
+              "publication_types": [
+                "Journal Article",
+                "Randomized Controlled Trial"
+              ],
+              "evidence_grade": "human_comparative",
+              "retracted": false,
+              "supports_claims": [
+                "free_amino_acid_absorption"
+              ],
+              "verification_source": "pubmed_eutils",
+              "verified_on": "2026-09-28"
+            }
+          ]
+        }
       }
     },
     "match_rules": {
@@ -45298,7 +45435,7 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-28",
+      "last_reviewed_at": "2026-09-28",
       "research_status": "validated"
     },
     "external_ids": {},

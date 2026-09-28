@@ -76,6 +76,20 @@ def _superseded_by_unknown_floor(iqm, row):
     )
 
 
+def _passed_verified_review(form, row):
+    """The form now carries approved structured evidence that passes the same
+    release validator used by production data."""
+    from iqm_form_evidence import validate_iqm_form
+
+    return bool(
+        form.get("form_evidence", {}).get("score_supported") is True
+        and validate_iqm_form(
+            form,
+            label=f'{row["ingredient_key"]}::{row["form_key"]}',
+        ) == []
+    )
+
+
 def _superseded_by_verified_recalibration(form, row):
     """A later source-verified form review supersedes this historical manifest.
 
@@ -83,16 +97,7 @@ def _superseded_by_verified_recalibration(form, row):
     score may differ only when the current form carries approved structured
     evidence that passes the same release validator used by production data.
     """
-    from iqm_form_evidence import validate_iqm_form
-
-    return bool(
-        form.get("bio_score") != row["final_score"]
-        and form.get("form_evidence", {}).get("score_supported") is True
-        and validate_iqm_form(
-            form,
-            label=f'{row["ingredient_key"]}::{row["form_key"]}',
-        ) == []
-    )
+    return form.get("bio_score") != row["final_score"] and _passed_verified_review(form, row)
 
 
 def test_legacy_excellent_forms_are_frozen_without_weakening_new_score_gate():
@@ -104,12 +109,14 @@ def test_legacy_excellent_forms_are_frozen_without_weakening_new_score_gate():
         if row["provenance_status"] == "legacy_curated_unvalidated"
         and row["final_score"] >= 12
         and not _superseded_by_unknown_floor(iqm, row)
+        # The backlog policy: remaining_forms shrink as evidence is verified.
+        and not _passed_verified_review(iqm[row["ingredient_key"]]["forms"][row["form_key"]], row)
     }
 
     # Reference reconciliation can return previously cited legacy forms to the
     # frozen backlog when a citation is found to be clinical-only or off-axis.
-    # Every original legacy form must remain protected, while newly unsupported
-    # Excellent forms are still rejected below.
+    # Every original legacy form without verified evidence must remain
+    # protected, while newly unsupported Excellent forms are still rejected below.
     assert legacy_keys <= backlog
     assert validate_iqm_form_evidence(iqm, backlog=backlog) == []
 
