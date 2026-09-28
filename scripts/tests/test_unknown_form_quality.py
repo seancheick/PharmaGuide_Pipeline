@@ -386,6 +386,18 @@ _M = 'non-nutrient/non-botanical'
     ('rhodiola', 'Rhodiola', {'name': 'Salidrosides', 'category': _M, 'ingredientGroup': 'Salidroside'}),
     ('saw_palmetto', 'Saw Palmetto', {'name': 'Total Fatty Acids', 'category': 'fatty acid', 'prefix': 'std. to 85%-', 'ingredientGroup': 'Fatty Acid (unspecified)'}),
     ('cayenne_pepper', 'Cayenne Pepper', {'name': 'Capsaicinoids', 'category': _M, 'prefix': 'standardized for', 'ingredientGroup': 'Capsaicinoid'}),
+    # Batch 7: marigold, palm, chlorella; krill, Calanus and safflower oil carrying astaxanthin.
+    ('lutein', 'Lutein', {'name': 'Tagetes erecta', 'category': _B, 'ingredientGroup': 'Tagetes'}),
+    ('zeaxanthin', 'Zeaxanthin', {'name': 'Marigold', 'category': _B, 'ingredientGroup': 'Marigold (unspecified)'}),
+    ('zeaxanthin', 'Zeaxanthin', {'name': 'Marigold Petal Extract', 'category': _B, 'ingredientGroup': 'Tagetes'}),
+    ('zeaxanthin', 'Zeaxanthin Carotenoid', {'name': 'Aztec Marigold Flower Extract', 'category': _B, 'ingredientGroup': 'Tagetes'}),
+    ('zeaxanthin', 'Zeaxanthin', {'name': 'Marigold flower ext.,', 'category': _B, 'ingredientGroup': 'Tagetes'}),
+    ('astaxanthin', 'natural Astaxanthin', {'name': 'Safflower Oil', 'category': 'fat', 'prefix': 'in', 'ingredientGroup': 'Safflower Oil'}),
+    ('astaxanthin', 'Astaxanthin', {'name': 'Krill Oil', 'category': 'fat', 'ingredientGroup': 'Krill Oil'}),
+    ('astaxanthin', 'Astaxanthin', {'name': 'Calanus Oil', 'category': 'fat', 'ingredientGroup': 'Calanus finmarchicus Oil'}),
+    ('alpha_carotene', 'Alpha-Carotene', {'name': 'Palm', 'category': _B, 'ingredientGroup': 'Oil Palm'}),
+    ('vitamin_a', 'Carotenoids', {'name': 'Chlorella', 'category': 'other', 'ingredientGroup': 'Chlorella'}),
+    ('chlorophyll', 'Chlorophyll', {'name': 'Chlorella', 'category': 'other', 'ingredientGroup': 'Chlorella'}),
 ])
 def test_a_source_plant_or_standardization_marker_names_no_form(enricher, parent, label, form):
     match = enricher._match_quality_map(label, label, enricher.databases['ingredient_quality_map'],
@@ -408,6 +420,23 @@ def test_a_source_plant_or_standardization_marker_names_no_form(enricher, parent
     ('vitamin_b9_folate', 'Folate', {'name': '6S-5-Methyltetrahydrofolate (glucosamine salt)'}, 'quatrefolic'),
     ('shilajit', 'ElevATP', {'name': 'Apple Extract', 'category': 'botanical'}, 'fulvic acid'),
     ('shilajit', 'ElevATP', {'name': 'Ancient Peat extract', 'category': 'other'}, 'fulvic acid'),
+    # Batch 7 (carotenoids). FloraGLO's brand still decides its form; the generic
+    # "Lutein Carotenoid" alias reads unspecified lutein under a plain Lutein row.
+    ('lutein', 'FloraGLO', {'name': 'Lutein Carotenoid', 'category': _M, 'ingredientGroup': 'Lutein'}, 'free lutein (floraglo / lutemax, marigold)'),
+    ('lutein', 'Lutein', {'name': 'Lutein Carotenoid', 'category': _M, 'ingredientGroup': 'Lutein'}, 'lutein (unspecified)'),
+    ('beta_carotene', 'Vitamin A', {'name': 'Alpha Carotene', 'category': _M, 'prefix': 'as', 'ingredientGroup': 'Alpha-carotene'}, 'natural beta-carotene (from dunaliella salina)'),
+    ('beta_carotene', 'Mixed Carotenoids', {'name': 'Cryptoxanthin', 'category': _M, 'ingredientGroup': 'Cryptoxanthin'}, 'natural beta-carotene (from dunaliella salina)'),
+    ('vitamin_a', 'Mixed Carotenoids', {'name': 'Alpha-Carotene', 'category': _M, 'ingredientGroup': 'Alpha-carotene'}, 'alpha-carotene (provitamin A activity)'),
+    ('vitamin_a', 'Mixed Carotenoids', {'name': 'Cryptoxanthin', 'category': _M, 'ingredientGroup': 'Cryptoxanthin'}, 'beta-cryptoxanthin (provitamin A activity)'),
+    ('vitamin_a', 'Carotenoid Blend', {'name': 'Gamma-Carotene', 'category': _M, 'ingredientGroup': 'Gamma-carotene'}, 'vitamin a (unspecified)'),
+    ('vitamin_a', 'Vitamin A', {'name': 'RETINYL PALMIATE', 'category': 'vitamin', 'ingredientGroup': 'Vitamin A (retinyl palmitate)'}, 'retinyl palmitate'),
+    ('zeaxanthin', 'Zeaxanthin', {'name': 'Lutemax 2020', 'category': _B, 'ingredientGroup': 'Tagetes'}, 'zeaxanthin (unspecified)'),
+    ('zeaxanthin', 'Zeaxanthin Isomers', {'name': 'Lutemax 2020 Aztec Marigold extract', 'category': _B, 'ingredientGroup': 'Tagetes'}, 'zeaxanthin (unspecified)'),
+    ('zeaxanthin', 'Zeaxanthin Isomers', {'name': 'Lutemax 2020 Marigold flower extract', 'category': _B, 'ingredientGroup': 'Marigold (unspecified)'}, 'zeaxanthin (unspecified)'),
+    ('zeaxanthin', 'Zeaxanthin', {'name': 'Lute-Gen', 'category': _B, 'ingredientGroup': 'Marigold (unspecified)'}, 'zeaxanthin (unspecified)'),
+    ('zeaxanthin', 'Zeaxanthin', {'name': 'Mesozeaxanthin', 'category': _M, 'prefix': 'as', 'ingredientGroup': 'Zeaxanthin'}, 'zeaxanthin (unspecified)'),
+    ('zeaxanthin', 'Zeaxanthin', {'name': 'RR Xeaxanthin', 'category': _M, 'prefix': 'and', 'ingredientGroup': 'Zeaxanthin'}, 'zeaxanthin (unspecified)'),
+    ('astaxanthin', 'Astaxanthin', {'name': 'Haematococcus pluvialis microalgae', 'category': 'other', 'prefix': 'solvent-free extract from', 'ingredientGroup': 'Haematococcus pluvialis'}, 'natural astaxanthin (haematococcus pluvialis)'),
 ])
 def test_a_held_label_spelling_reaches_the_form_it_names(enricher, parent, label, form, expected):
     match = enricher._match_quality_map(label, label, enricher.databases['ingredient_quality_map'],

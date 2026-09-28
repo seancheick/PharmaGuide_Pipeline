@@ -7647,6 +7647,12 @@ class SupplementEnricherV3:
         "glycine max", "chicory root extract", "chicory root", "huperzia serrata",
         "polygonum cuspidatum", "kelp", "fenugreek", "green tea",
         "marigold flower extract", "orange", "lemon", "lime", "grapefruit", "tangerine",
+        # Carotenoid sources and carriers (batch 7): marigold (Tagetes erecta)
+        # lutein and zeaxanthin, palm alpha-carotene, chlorella carotenoids and
+        # chlorophyll, astaxanthin in krill, Calanus or safflower oil.
+        "marigold", "tagetes erecta", "tagetes erecta flower extract", "marigold petal extract",
+        "aztec marigold flower extract", "marigold flower ext.", "palm", "chlorella",
+        "krill oil", "calanus oil", "safflower oil",
         # Mineral-source marketing claims
         "algae", "algae minerals", "sea minerals", "sea mineral salt",
         "dead sea minerals", "algae dead sea minerals",

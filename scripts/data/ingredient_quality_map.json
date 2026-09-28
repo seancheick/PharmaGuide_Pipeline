@@ -33,7 +33,7 @@
     "statistics": {
       "total_parents": 655,
       "total_forms": 1458,
-      "total_form_aliases": 12208,
+      "total_form_aliases": 12214,
       "parents_with_parent_aliases": 146,
       "parents_with_contains_aliases": 0,
       "parents_with_pattern_aliases": 0
@@ -1909,7 +1909,8 @@
           "palmitate vit a",
           "preformed vit a palmitate",
           "retinol palmitate ester",
-          "A palmitate"
+          "A palmitate",
+          "retinyl palmiate"
         ],
         "dosage_importance": 1.5,
         "absorption_structured": {
@@ -2146,7 +2147,8 @@
           "pro vitamin A",
           "natural algae carotene",
           "mixed algal carotenoids",
-          "Betatene mixed carotenoids"
+          "Betatene mixed carotenoids",
+          "gamma-carotene"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -2198,7 +2200,10 @@
             "20807466",
             "32872544"
           ]
-        }
+        },
+        "source_form_aliases": [
+          "alpha-carotene"
+        ]
       },
       "beta-cryptoxanthin (provitamin A activity)": {
         "bio_score": 5,
@@ -2239,7 +2244,10 @@
             "20807466",
             "32872544"
           ]
-        }
+        },
+        "source_form_aliases": [
+          "cryptoxanthin"
+        ]
       }
     },
     "match_rules": {
@@ -11373,7 +11381,8 @@
           "astaxanthin ≥3% extract",
           "Haematococcus pluvialis",
           "H. pluvialis",
-          "Haematococcus pluvialis algae"
+          "Haematococcus pluvialis algae",
+          "haematococcus pluvialis microalgae"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -22267,7 +22276,8 @@
           "lutein 20%",
           "Trans-Lutein",
           "all-trans lutein",
-          "organic Lutein"
+          "organic Lutein",
+          "lutein carotenoid"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -22399,7 +22409,9 @@
           "zeaxanthin (rr)",
           "zeaxanthin (rs)",
           "Optisharp Zeaxanthin",
-          "optisharp"
+          "optisharp",
+          "mesozeaxanthin",
+          "rr xeaxanthin"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -22407,7 +22419,13 @@
           "range_low": 0.1,
           "range_high": 0.5,
           "quality": "low"
-        }
+        },
+        "source_form_aliases": [
+          "lutemax 2020",
+          "lutemax 2020 aztec marigold extract",
+          "lutemax 2020 marigold flower extract",
+          "lute-gen"
+        ]
       }
     },
     "match_rules": {
@@ -55215,7 +55233,9 @@
         },
         "source_form_aliases": [
           "mixed carotenoids",
-          "alpha-carotene"
+          "alpha-carotene",
+          "alpha carotene",
+          "cryptoxanthin"
         ]
       },
       "beta-carotene beadlet": {
