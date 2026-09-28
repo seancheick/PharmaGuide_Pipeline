@@ -436,14 +436,23 @@ def _declared_active_count(product: Dict[str, Any], rows: List[Dict[str, Any]]) 
         parsed = int(_as_float(value, 0) or 0)
         if parsed > 0:
             # Both counts are every cleaned active row. A printed Nutrition
-            # Facts line on that panel (Sodium, Chloride) is disclosed but is
-            # not an active, so it is never a missing active row.
+            # Facts line on that panel (Calories, Sodium, Chloride) is disclosed
+            # but is not an active, so it is never a missing active row, unless
+            # an active row restores it (a fiber product's "Dietary Fiber").
+            restored = {
+                path
+                for row in rows
+                if row.get("scoring_input_kind") == "product_level_evidence"
+                for path in (row.get("raw_source_path"), *_safe_list(row.get("linked_rows")))
+                if path
+            }
             nutrition_fact_rows = sum(
                 1
                 for row in quality.get("ingredients") or []
                 if isinstance(row, dict)
                 and _norm_text(row.get("source_section")) == "active"
                 and is_nutrition_fact_declaration(row)
+                and row.get("raw_source_path") not in restored
             )
             return max(parsed - nutrition_fact_rows, 0)
     return len(rows)
