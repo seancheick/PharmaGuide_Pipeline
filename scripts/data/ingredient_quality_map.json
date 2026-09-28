@@ -33,7 +33,7 @@
     "statistics": {
       "total_parents": 655,
       "total_forms": 1455,
-      "total_form_aliases": 12136,
+      "total_form_aliases": 12189,
       "parents_with_parent_aliases": 146,
       "parents_with_contains_aliases": 0,
       "parents_with_pattern_aliases": 0
@@ -7161,7 +7161,8 @@
           "calcium citrate supplement",
           "cal citrate supplement",
           "citrate calcium supplement",
-          "citrated calcium supplement"
+          "citrated calcium supplement",
+          "calcium citrate tetrahydrate"
         ],
         "dosage_importance": 1.5,
         "absorption_structured": {
@@ -7260,7 +7261,8 @@
           "calcium bisglycinate chelate supplement",
           "TRAACS Calcium supplement",
           "calcium glycinate",
-          "Albion Calcium Bisglycinate Chelate"
+          "Albion Calcium Bisglycinate Chelate",
+          "calcium glycinate amino acid chelate"
         ],
         "dosage_importance": 1.5,
         "absorption_structured": {
@@ -7968,7 +7970,9 @@
           "Magnesium Glycinate Buffered",
           "Magnesium Bisglycinate Chelate Buffered",
           "TRAACS Magnesium Lysinate Glycinate Chelate",
-          "Albion Magnesium Lysinate Glycinate Chelate"
+          "Albion Magnesium Lysinate Glycinate Chelate",
+          "magnesium glycinate amino acid chelate",
+          "traacs magnesium bis-glycinate chelate"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -8133,7 +8137,8 @@
           "trimagnesium citrate",
           "magnesium citrate powder",
           "citrate of magnesia",
-          "magnesium citrate anhydrous"
+          "magnesium citrate anhydrous",
+          "trimagnesium dicitrate"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -8854,7 +8859,10 @@
           "iron trisglycinate",
           "Albion Ferrochel",
           "Ferrochel Ferrous Bisglycinate Chelate",
-          "Ferrous Bisglycinate Chelate Ferrochel"
+          "Ferrous Bisglycinate Chelate Ferrochel",
+          "iron bisglycinate, fermented",
+          "iron bisglycinate amino acid chelate",
+          "ferrous bis-glycinate"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -9239,7 +9247,10 @@
           "hydrolyzed protein iron chelate",
           "iron protein chelate",
           "iron aac",
-          "aac iron"
+          "aac iron",
+          "iron hydrolyzed protein chelate",
+          "iron hydrolyzed vegetable protein chelate",
+          "soy protein iron chelate, hydrolyzed"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -9647,7 +9658,9 @@
           "zinc bisglycinate supplement",
           "zinc glycinate chelate",
           "TRAACS Zinc Bisglycinate",
-          "Albion Z-life Zinc Bisglycinate Chelate Max"
+          "Albion Z-life Zinc Bisglycinate Chelate Max",
+          "zinc glycinate amino acid chelate",
+          "zinc bisglycinate, fermented"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -9764,7 +9777,9 @@
         "notes": "Zinc citrate is a well-supported soluble supplement form. PubMed API verified Wegmuller et al. (PMID:24259556): zinc citrate absorption was comparable with zinc gluconate and higher than zinc oxide in young adults. Clinician recalibration 2026-06-02: good/solid, not uniquely top-tier.",
         "aliases": [
           "citrate zinc",
-          "zinc citrate trihydrate"
+          "zinc citrate trihydrate",
+          "zinc citrate dihydrate",
+          "trizinc citrate"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -10198,7 +10213,9 @@
           "zinc proteinate",
           "amino acid chelated zinc",
           "hydrolyzed protein zinc chelate",
-          "zinc arginate"
+          "zinc arginate",
+          "zinc histidinate chelate",
+          "zinc hydrolyzed vegetable protein chelate"
         ],
         "dosage_importance": 0.7,
         "absorption_structured": {
@@ -11025,7 +11042,9 @@
           "selenium glycinate supplement",
           "albion selenium glycinate supplement",
           "selenium bisglycinate supplement",
-          "chelated selenium supplement"
+          "chelated selenium supplement",
+          "fermented selenium glycinate",
+          "selenium glycinate, fermented"
         ],
         "dosage_importance": 0.5,
         "absorption_structured": {
@@ -14357,7 +14376,10 @@
           "Copper Bis-Glycinate",
           "Albion Copper Bisglycinate Chelate",
           "Albion Copper Bisglycinate",
-          "Copper Glycinate Chelate"
+          "Copper Glycinate Chelate",
+          "copper glycinate amino acid chelate",
+          "albion copper glycinate amino acid chelate",
+          "copper bisglycinate, fermented"
         ],
         "dosage_importance": 0.5,
         "absorption_structured": {
@@ -14490,7 +14512,8 @@
           "citrate-bound copper",
           "copper citrate supplement",
           "citric acid copper supplement",
-          "citrate-bound copper supplement"
+          "citrate-bound copper supplement",
+          "copper citrate chelate"
         ],
         "dosage_importance": 0.5,
         "absorption_structured": {
@@ -14823,7 +14846,15 @@
           "Zychrome",
           "Chromium Citrate",
           "Chromium Aspartate",
-          "Chromium Ascorbate"
+          "Chromium Ascorbate",
+          "chromium glutamate",
+          "chromium chelate",
+          "fermented chromium glycinate",
+          "chromium glycinate",
+          "hydrolyzed protein chromium chelate",
+          "chromium hydrolyzed chelate protein",
+          "chromium hydrolyzed protein chelate",
+          "chromium nicotinate amino acid chelate"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -15073,7 +15104,10 @@
           "natural iodine",
           "Iodine Chelate",
           "iodine tablets",
-          "thyroid iodine"
+          "thyroid iodine",
+          "fermented iodine glycinate",
+          "iodine glycinate",
+          "iodine glycinate, fermented"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -15143,7 +15177,11 @@
           "Mn bisglycinate",
           "Mn glycinate",
           "manganese diglycinate",
-          "Albion Manganese Bisglycinate Chelate"
+          "Albion Manganese Bisglycinate Chelate",
+          "fermented manganese bisglycinate",
+          "manganese bisglycinate, fermented",
+          "manganese glycinate amino acid chelate",
+          "manganese glycinate chelate"
         ],
         "dosage_importance": 0.5,
         "absorption_structured": {
@@ -15195,7 +15233,8 @@
           "manganese citrate complex",
           "citric acid manganese",
           "manganese citric",
-          "Mn citrate"
+          "Mn citrate",
+          "manganese citrate chelate"
         ],
         "dosage_importance": 0.5,
         "absorption_structured": {
@@ -15561,7 +15600,10 @@
           "Mo glycinate",
           "molybdenum bisglycinate chelate",
           "Albion Molybdenum Glycinate",
-          "Albion Molybdenum Glycinate Chelate"
+          "Albion Molybdenum Glycinate Chelate",
+          "fermented molybdenum bisglycinate",
+          "molybdenum bisglycinate, fermented",
+          "molybdenum glycinate amino acid chelate"
         ],
         "dosage_importance": 0.5,
         "absorption_structured": {
@@ -15586,7 +15628,8 @@
           "molybdenum from rice protein chelate",
           "Molybdenum Brown Rice Protein Chelate",
           "molybdenum rice protein chelate",
-          "brown rice protein molybdenum chelate"
+          "brown rice protein molybdenum chelate",
+          "molybdenum hydrolyzed rice protein chelate"
         ],
         "dosage_importance": 0.5,
         "absorption_structured": {
@@ -15860,7 +15903,11 @@
           "Bororganic Boron Glycinate Chelate",
           "Bororganic Glycinate Complex",
           "Boroganic Glycine",
-          "{Boron} Glycinate Amino Acid Complex"
+          "{Boron} Glycinate Amino Acid Complex",
+          "fermented boron triglycinate",
+          "boron bisglycinate, fermented",
+          "boron triglycinate",
+          "boron glycinate chelate"
         ],
         "dosage_importance": 0.5,
         "absorption_structured": {
@@ -15888,7 +15935,8 @@
           "boron from rice protein chelate",
           "Boron Brown Rice Protein Chelate",
           "boron rice protein chelate",
-          "brown rice protein boron chelate"
+          "brown rice protein boron chelate",
+          "boron hydrolyzed rice protein chelate"
         ],
         "dosage_importance": 0.5,
         "absorption_structured": {
@@ -15949,7 +15997,8 @@
           "boron chelate",
           "boric acid",
           "sodium borate",
-          "boric acid, sodium borate"
+          "boric acid, sodium borate",
+          "boron amino acid complex"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -16228,7 +16277,8 @@
           "Potassium Malate",
           "cream of tartar",
           "potassium bitartrate",
-          "potassium sulfate"
+          "potassium sulfate",
+          "potassium amino acid complex"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -16253,7 +16303,10 @@
           "potassium amino acid chelate",
           "chelated potassium",
           "potassium glycinate chelate",
-          "potassium bisglycinate chelate"
+          "potassium bisglycinate chelate",
+          "potassium glycinate amino acid complex",
+          "potassium glycinate complex",
+          "potassium glycine complex"
         ],
         "cui_note": null,
         "rxcui_note": null,
