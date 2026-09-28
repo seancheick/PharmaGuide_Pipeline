@@ -1525,7 +1525,8 @@ def _derive_blend_header_anchor_from_nested_child(
         return None
 
     child = _best_nested_anchor_child(product, parent, candidate_rows)
-    if not child:
+    if not child or _positive_quantity(child) is not None:
+        # A child with its own amount is its own dose; the blend mass is not.
         return None
     anchor_canonical, anchor_name = _anchor_identity(child)
     if not anchor_canonical:
@@ -2082,9 +2083,21 @@ def derive_product_scoring_evidence(product: Dict[str, Any]) -> List[Dict[str, A
             name=anchor_name or row.get("name") or "Title embedded dose",
         ))
 
+    # A header that names itself already carries its mass as blend-level
+    # evidence; lending that mass to a child would make it the child's dose.
+    self_anchored_paths = {
+        str(item.get("raw_source_path") or "")
+        for item in evidence
+        if item.get("evidence_type") == "blend_anchor_mass"
+    }
     for parent in skipped_rows:
         parent_path = str(parent.get("raw_source_path") or "")
-        if not parent_path or parent_path in scorable_paths or parent_path in special_evidence_paths:
+        if (
+            not parent_path
+            or parent_path in scorable_paths
+            or parent_path in special_evidence_paths
+            or parent_path in self_anchored_paths
+        ):
             continue
         item = _derive_blend_header_anchor_from_nested_child(product, parent, candidate_rows)
         if item:

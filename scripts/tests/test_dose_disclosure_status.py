@@ -5,8 +5,8 @@ display label and both v4 Transparency modules read it directly.
 
 Disclosure is a label fact: a printed enzyme activity (45,000 HUT) is disclosed
 even though Dose cannot use it as a mass exposure. Real record 232243 (digestive
-enzymes in HUT, FIP, CU, USP ...): Transparency used to count 2 of its 11 active
-rows as dose-disclosed while the export showed all 11 amounts.
+enzymes in HUT, FIP, CU, USP ...): Transparency used to count 2 of its active
+rows as dose-disclosed while the export showed every amount.
 """
 import json
 import math
@@ -53,4 +53,7 @@ def test_real_enzyme_label_rows_are_all_disclosed():
     enriched, _ = SupplementEnricherV3().enrich_product(EnhancedDSLDNormalizer().normalize_product(raw))
     scored = build_scored_artifact(enriched)
     disclosure = scored['_v4_module_breakdown']['dimensions']['transparency']['metadata']['complete_active_disclosure']
-    assert disclosure['complete_row_count'] == disclosure['active_row_count'] == 11
+    # 10 enzyme rows, each with its printed activity. The unnamed "Nutrient
+    # Absorption Blend 200 mg" header is no longer lent to Protease SP as an
+    # 11th, 200 mg protease row (audit RR-04): the child has its own amount.
+    assert disclosure['complete_row_count'] == disclosure['active_row_count'] == 10
