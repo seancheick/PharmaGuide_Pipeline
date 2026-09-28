@@ -1411,7 +1411,10 @@ async function autoPrepare() {
   const key = `${submission.id}:${submission.evidence_revision}`;
   if (state.autoPreparedFor === key || state.reviewReadyFor !== key) return;
   if (!['submitted', 'under_review'].includes(submission.review_status)) return;
-  const saved = Boolean(state.review?.draft?.payload && !state.review.draft.superseded);
+  // A blank saved form (the editor opened before any reading existed) is
+  // nobody's work, so the draft is still adopted over it.
+  const saved = Boolean(state.review?.draft?.payload && !state.review.draft.superseded &&
+    !isBlankLabel(state.review.draft.payload));
   // Nothing to adopt yet: the drafts may still be on their way.
   if (!saved && !state.draft) return;
   state.autoPreparedFor = key;
@@ -1658,10 +1661,25 @@ function scheduleReviewSave() {
   state.reviewSaveTimer = setTimeout(() => void saveReview(), 800);
 }
 
+/**
+ * True when a label carries nothing: every value empty, null, zero or false.
+ * Defined by content rather than by defaultPayload(), so it cannot drift from
+ * the editor; extraction/agent_reader.py `is_blank_label` applies the same rule.
+ */
+function isBlankLabel(value) {
+  if (Array.isArray(value)) return value.every(isBlankLabel);
+  if (value && typeof value === 'object') return Object.values(value).every(isBlankLabel);
+  if (typeof value === 'string') return value.trim() === '';
+  return value === null || value === undefined || value === 0 || value === false;
+}
+
 async function saveReview() {
   const submission = state.selected;
   if (!submission || !state.session || submission.review_status === 'approved') return;
   if (!state.payloadSha || state.reviewInvalidated) return;
+  // Opening a submission must not save the empty editor as its review: that
+  // blank review would stand in front of the reading that arrives later.
+  if (isBlankLabel(state.payload)) return;
   if (!submission.evidence_manifest_sha256) return;
   if (state.reviewReadyFor !== `${submission.id}:${submission.evidence_revision}`) return;
   const requestId = ++state.reviewSaveRequest;

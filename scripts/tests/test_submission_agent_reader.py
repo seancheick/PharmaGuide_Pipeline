@@ -107,3 +107,52 @@ def test_a_photo_added_after_fetch_asks_for_fetch_not_a_traceback(tmp_path) -> N
         {"photo_id": "22222222-2222-4222-8222-222222222222", "content_sha256": "b" * 64}]}
     with pytest.raises(AgentError, match="fetch"):
         bundle_from_fetch(submission, tmp_path)
+
+
+# The review the console saved for S19 on 2026-09-28, before any draft existed:
+# the editor's empty form. It carries no label, so it is nobody's work.
+BLANK_CONSOLE_FORM = {
+    "fullName": "", "brandName": "", "offMarket": 0, "statements": [],
+    "servingSizes": [{"unit": "", "maxQuantity": None, "minQuantity": None,
+                      "maxDailyServings": None, "minDailyServings": None}],
+    "ingredientRows": [{"name": "", "forms": [], "quantity": [], "nestedRows": [],
+                        "ingredientGroup": ""}],
+    "otherIngredients": "", "servingsPerContainer": None, "otherIngredientsDisclosure": "",
+}
+
+
+def test_a_blank_saved_form_does_not_block_save() -> None:
+    from submission_review.extraction.agent_reader import is_blank_label
+
+    assert is_blank_label(BLANK_CONSOLE_FORM)
+    assert not is_blank_label({**BLANK_CONSOLE_FORM, "brandName": "Acme"})
+    draft, label, submission = _saveable()
+    assert save_refusal(draft, label, submission, {"draft": {"payload": BLANK_CONSOLE_FORM}}) is None
+    # Ticks still make it the reviewer's, blank or not.
+    ticked = {"draft": {"payload": BLANK_CONSOLE_FORM}, "verifications": [{"live": True}]}
+    assert "ticked" in save_refusal(draft, label, submission, ticked)
+
+
+def test_fetch_never_overwrites_a_reading_without_force(tmp_path) -> None:
+    from submission_review.extraction.agent_reader import write_lead_reading
+
+    write_lead_reading(tmp_path, {"identity": {}})
+    (tmp_path / "reading.json").write_text('{"mine": true}')
+    with pytest.raises(AgentError, match="--force"):
+        write_lead_reading(tmp_path, {"identity": {}})
+    assert (tmp_path / "reading.json").read_text() == '{"mine": true}'
+    write_lead_reading(tmp_path, {"identity": {}}, force=True)
+    assert "mine" not in (tmp_path / "reading.json").read_text()
+
+
+def test_list_says_what_is_already_prepared() -> None:
+    from submission_review.extraction.agent_reader import prep_state
+
+    fresh = prep_state({"extractions": []}, {})
+    assert fresh == "no draft · no saved review"
+    blank = prep_state({"extractions": []}, {"draft": {"payload": BLANK_CONSOLE_FORM}})
+    assert blank == "no draft · blank saved review"
+    done = prep_state(
+        {"extractions": [{"provider": "agent", "model": "m1", "version": 3}]},
+        {"draft": {"payload": {"brandName": "Acme"}}, "verifications": [{"live": True}]})
+    assert done == "draft agent/m1 v3 · saved review · 1 tick"

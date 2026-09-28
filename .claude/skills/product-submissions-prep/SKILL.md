@@ -30,9 +30,18 @@ plausible wrong value costs a patient.
   output gets pasted into chats. Use aliases (`S18`).
 - **Never touch another agent's work.** Work in your own branch/worktree,
   stage only your own paths, commit nothing you did not create.
+- **Never put a photo, crop or viewer inside the repository folder**, not even
+  a gitignored one. Scratch lives in `/tmp/pg_submissions/<alias>/`.
 
 Photographs may be opened by hosted models (owner's decision, 2026-09-27):
 looking at the photo yourself is the most accurate reader available.
+
+**This job needs a model that can see images.** Before anything else, open
+one fetched photo and describe it in one line. If you cannot view it, stop
+and tell the owner. Do not build viewers or read the label through OCR and
+pixel tricks instead: on 2026-09-28 an agent that could not see spent over
+two hours that way and still left two defects a look at the photo would have
+caught (a dropped Other Ingredients list, a truncated barcode).
 
 ## Setup
 
@@ -43,6 +52,10 @@ source scripts/python_env.sh                 # sets $PG_PYTHON (Python 3.13)
 export PG_REVIEWER_EMAIL=<reviewer account>  # ask the owner if it is not set
 R="$PG_PYTHON scripts/submission_review/extraction/agent_reader.py"
 ```
+
+Use `$R` unquoted (`"$R"` is one command name and fails), and run every
+Python helper of your own with `$PG_PYTHON`, never bare `python3` (on this Mac
+that is Xcode's interpreter, without the repo's packages).
 
 `.env` must hold `SUPABASE_URL`, the anon/publishable key and the service-role
 key. It is gitignored, so a fresh worktree has none: symlink the main
@@ -58,8 +71,16 @@ exists. Work files go to `/tmp/pg_submissions/<alias>/`
 $R list
 ```
 
-Only open submissions are listed. `submitted` is untouched; `under_review`
-may already have a saved review: check with the owner before redoing one.
+Only open submissions are listed, each with what already exists, e.g.
+`[draft agent/<model> v3 · saved review]` or `[no draft · blank saved review]`.
+
+- An agent draft plus a saved review may be finished: run `$R verify SNN`.
+  If it says READY, skip it. Redoing finished work is the costliest mistake
+  in this job, and a second reading only muddies the draft the reviewer sees.
+- A **blank** saved review is the console's empty form, saved when someone
+  opened the submission before any reading existed. It is nobody's work;
+  transcribe normally and `save` replaces it.
+- Any ticks: the review is the reviewer's. Leave it alone.
 
 ### 2. Fetch evidence and the OCR lead
 
@@ -70,7 +91,9 @@ $R fetch S18 S19
 Per submission: `photos/NN_<category>.jpg` (hash-checked against the
 evidence), `photos.json` (photo number → `photo_id`), and `reading.json`, an
 OCR machine reading in draft format. **The OCR reading is a lead, never the
-answer**: it misreads small print, splits lines, and drops columns.
+answer**: it misreads small print, splits lines, and drops columns. A second
+`fetch` refreshes the photos but keeps an existing `reading.json` (someone's
+work); `--force` replaces it with a new OCR lead.
 
 ### 3. Read the label properly
 
@@ -89,6 +112,14 @@ For anything small, ambiguous or dense, look closer before you write it:
 
 Rejoining fragments of a line by hand is where transcription errors are
 born, so re-read a whole line or block as one crop instead.
+
+Time-box a stubborn glyph: one zoomed crop and one tesseract pass. If it is
+still ambiguous, mark the field `partial` (or leave it out) and flag it.
+Pixel forensics, glyph-width measurement and curve straightening are not part
+of this job. Dash style (`-` vs `–`) does not matter. A barcode is copied only
+when every digit is crisp, including the leading zeros (Trader Joe's prints 8
+digits, e.g. `0067 1422`); otherwise leave it null: the console checks the
+barcode against the catalog itself.
 
 ### 4. Write `reading.json`
 
@@ -125,7 +156,9 @@ $R record S18 --model <your model id, e.g. claude-opus-5-5 or gpt-5-codex>
 ```
 
 This refuses a malformed reading (with the exact path) and convention
-defects (a printed "(as X)" with no `form_text`, a %DV read as an amount).
+defects: a printed "(as X)" with no `form_text`, a %DV read as an amount, a
+read Other Ingredients list not disclosed as `present` (it would be dropped
+from the label), and a "read" barcode that is not a whole GTIN.
 Then it runs the deterministic checks and an **independent OCR grounding**
 pass, records the draft, and writes `label.json` + `unresolved.json`.
 
@@ -221,6 +254,13 @@ the budget is gone, one failure code dominates, or the pinned configuration is
 not the one that qualified on the frozen holdout.
 
 ## Known failure modes
+
+- **`finding critical: barcode_mismatch`** after a whole, crisp barcode: the
+  bottle's barcode is not the one the submission was filed under (S19: label
+  `0067 1422`, filed `00671477`). Usually the user scanned a neighbouring
+  product. Approving would attach this label to someone else's barcode.
+  Finish the transcription, put the mismatch first in your report, and leave
+  the decision (retake request or reject) to the reviewer.
 
 - **Barcode check says the index is rebuilding.** Another pipeline run is
   rewriting the corpus; the console refuses mid-write on purpose. The reviewer
