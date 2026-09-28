@@ -10385,12 +10385,20 @@ class SupplementEnricherV3:
 
         return best["match_data"]
 
+    @staticmethod
+    def _physical_state_description(product: Dict) -> str:
+        """The label's dosage form: DSLD's LanguaL description, else the
+        physicalState.name that a manual-label submission carries."""
+        physical_state = product.get('physicalState') or {}
+        described = str(physical_state.get('langualCodeDescription') or '').strip()
+        return described or str(physical_state.get('name') or '').strip()
+
     def _collect_delivery_data(self, product: Dict) -> Dict:
         """
         Collect enhanced delivery system data for scoring Section A3.
         """
         delivery_db = self.databases.get('enhanced_delivery', {})
-        physical_state = product.get('physicalState', {}).get('langualCodeDescription', '').lower()
+        physical_state = self._physical_state_description(product).lower()
 
         evidence_sources: List[Tuple[str, str]] = []
         for field in ("name", "fullName", "productName"):
@@ -17387,11 +17395,7 @@ class SupplementEnricherV3:
 
         # Determine form_factor from physicalState
         form_factor = None
-        # Manual-label submissions use physicalState.name. Prefer the DSLD
-        # description when supplied, but normalize both through the same path.
-        langual_desc = str(physical_state.get('langualCodeDescription') or '').strip()
-        if not langual_desc:
-            langual_desc = str(physical_state.get('name') or '').strip()
+        langual_desc = self._physical_state_description(product)
         if langual_desc:
             form_factor = self._normalize_form_factor(langual_desc)
 

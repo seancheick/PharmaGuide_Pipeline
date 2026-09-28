@@ -38,6 +38,9 @@ def _names(delivery_data):
     # 205138 Fortify Women's 50 Billion.
     ({"netContents": [{"order": 1, "quantity": 30, "unit": "Delayed-Release Veg. Capsule(s)",
                        "display": "30 Delayed-Release Veg. Capsule(s)"}]}, "delayed-release"),
+    # Approved submission PG_SUB_A89A9212EDDD4A89A54842EF791F2AE2: a manual label
+    # carries physicalState.name only, no DSLD LanguaL description.
+    ({"physicalState": {"name": "Delayed-release capsule"}}, "delayed-release"),
 ])
 def test_label_wording_matches_the_delivery_form(enricher, product, expected):
     delivery = enricher._collect_delivery_data({"fullName": "Supplement", **product})
