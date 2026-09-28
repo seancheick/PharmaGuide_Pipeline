@@ -277,11 +277,11 @@ def _delta(old_score: float | None, new_score: float | None) -> float | None:
 # sports/probiotic/enzyme/collagen row carrying a primary/claim_prominent/major
 # role. A botanical-owned product that ALSO has one is the Acerola-Vitamin-C bug
 # class: the consumer's real deliverable is the nutrient, not a therapeutic herb.
-_MATERIAL_NONBOTANICAL_DOMAINS = frozenset({
-    "vitamin", "mineral", "amino_acid", "fatty_acid", "omega_epa_dha",
-    "sports_active", "probiotic_strain", "enzyme", "collagen",
-})
-_MATERIAL_DELIVERABLE_ROLES = frozenset({"primary", "claim_prominent", "major"})
+# The contract's own sets, so this audit cannot drift from the classifier.
+from scoring_input_contract import (  # noqa: E402
+    _PROFILE_DELIVERABLE_ROLES as _MATERIAL_DELIVERABLE_ROLES,
+    _PROFILE_MATERIAL_NONBOTANICAL_DOMAINS as _MATERIAL_NONBOTANICAL_DOMAINS,
+)
 
 
 def _has_material_nonbotanical_deliverable(contract: Dict[str, Any]) -> bool:
