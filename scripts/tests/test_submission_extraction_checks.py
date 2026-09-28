@@ -206,3 +206,48 @@ def test_convention_codes_are_their_own_vocabulary() -> None:
     # (schema.ts DRAFT_DISCREPANCY_CODES) changed and deployed first.
     assert not CONVENTION_CODES & DISCREPANCY_CODES
     assert convention_findings(_draft()) == []
+
+
+# S19, 2026-09-28: the list was read, but marked as sitting on the facts panel,
+# so the converter dropped it and titanium dioxide never reached the label.
+_OTHER = "OTHER INGREDIENTS: Microcrystalline cellulose, titanium dioxide [color]."
+
+
+def test_a_printed_other_ingredients_list_must_be_disclosed_as_present() -> None:
+    for hint in ("on_facts_panel", "unknown"):
+        draft = _draft(other_ingredients={"text": _f(_OTHER), "disclosure_hint": hint})
+        assert _codes(convention_findings(draft)) == ["other_ingredients_not_present"]
+
+
+def test_present_or_declared_none_other_ingredients_are_clean() -> None:
+    present = _draft(other_ingredients={"text": _f(_OTHER), "disclosure_hint": "present"})
+    none = _draft(other_ingredients={"text": _f("None."), "disclosure_hint": "declared_none"})
+    unread = _draft(other_ingredients={"text": _f(None, "not_present"),
+                                       "disclosure_hint": "on_facts_panel"})
+    assert convention_findings(present) == convention_findings(none) == []
+    assert convention_findings(unread) == []
+
+
+# S19 again: "0067 1422" is printed whole; "671422" was recorded as read. A
+# number that cannot be a GTIN is a partial reading, and comparing it with the
+# filing produced a mismatch for the wrong reason.
+
+def test_a_read_barcode_must_be_a_whole_gtin() -> None:
+    draft = _draft(identity={"brand": _f("Acme"), "product_name": _f("Multi"),
+                             "barcode_digits_seen": _f("671422")})
+    assert _codes(convention_findings(draft)) == ["barcode_not_gtin"]
+    partial = _draft(identity={"brand": _f("Acme"), "product_name": _f("Multi"),
+                               "barcode_digits_seen": _f("0067 14", "partial")})
+    assert convention_findings(partial) == []
+
+
+def test_only_a_whole_barcode_is_compared_with_the_filing() -> None:
+    def findings(printed, status="read"):
+        draft = _draft(identity={"brand": _f("Acme"), "product_name": _f("Multi"),
+                                 "barcode_digits_seen": _f(printed, status)})
+        return _codes(run_checks(draft, submission_gtin="00671477"))
+
+    assert findings("671422") == []
+    assert findings("0067 14", "partial") == []
+    # The real S19 case still fires: the bottle's code is not the filed one.
+    assert findings("0067 1422") == ["barcode_mismatch"]

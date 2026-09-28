@@ -153,7 +153,10 @@ def _barcode_findings(draft: Mapping[str, Any],
     expected = canonical_normalized_gtin14(submission_gtin)
     if expected is None:
         return []
-    if expected in canonical_gtin14_candidates(printed):
+    printed_candidates = canonical_gtin14_candidates(printed)
+    # Digits that cannot be a GTIN are a partial reading, not a different
+    # barcode; comparing them would report a mismatch for the wrong reason.
+    if not printed_candidates or expected in printed_candidates:
         return []
     return [_finding(
         "barcode_mismatch", "critical",
@@ -187,14 +190,24 @@ def _duplicate_photo_findings(draft: Mapping[str, Any]) -> list[dict[str, Any]]:
 #: (schema.ts) changed and deployed first.
 #: (A child row under a non-blend row is already refused by the envelope
 #: validator, which owns row parentage.)
-CONVENTION_CODES = frozenset({"form_not_split", "percent_as_amount"})
+CONVENTION_CODES = frozenset({
+    "form_not_split", "percent_as_amount", "other_ingredients_not_present",
+    "barcode_not_gtin",
+})
 
 _AS_FORM = re.compile(r"\(\s*as\s+[^)]+\)", re.IGNORECASE)
 
 
-def _convention(code: str, index: int, detail: str) -> dict[str, Any]:
+def _convention(code: str, path: str, detail: str) -> dict[str, Any]:
     return {"code": code, "severity": "critical",
-            "detail": f"ingredient_rows[{index}]: {detail}", "photo_ids": []}
+            "detail": f"{path}: {detail}", "photo_ids": []}
+
+
+def _read_text(field: Any) -> str | None:
+    if not isinstance(field, Mapping) or field.get("status") not in {"read", "partial"}:
+        return None
+    value = field.get("value")
+    return value.strip() if isinstance(value, str) and value.strip() else None
 
 
 def convention_findings(draft: Mapping[str, Any]) -> list[dict[str, Any]]:
@@ -212,13 +225,31 @@ def convention_findings(draft: Mapping[str, Any]) -> list[dict[str, Any]]:
         if isinstance(name, str) and _AS_FORM.search(name) and not (
                 isinstance(form, str) and form.strip()):
             findings.append(_convention(
-                "form_not_split", index,
+                "form_not_split", f"ingredient_rows[{index}]",
                 f"{name!r} prints a form; copy it into form_text as printed."))
         amount = (row.get("amount") or {}).get("value")
         if isinstance(amount, Mapping) and str(amount.get("unit_text") or "").strip() == "%":
             findings.append(_convention(
-                "percent_as_amount", index,
+                "percent_as_amount", f"ingredient_rows[{index}]",
                 "a %DV was read as the amount; put it in percent_dv."))
+
+    # The converter keeps the list only for `present`, and the importer then
+    # accepts a label with no inactive ingredients: an additive would vanish.
+    other = draft.get("other_ingredients") or {}
+    if _read_text(other.get("text")) and other.get("disclosure_hint") in {"on_facts_panel", "unknown"}:
+        findings.append(_convention(
+            "other_ingredients_not_present", "other_ingredients",
+            "a printed list was read, so disclosure_hint is 'present'. If the "
+            "inactive ingredients are rows inside the panel instead, transcribe "
+            "them as rows and leave text empty."))
+
+    printed = _read_text((draft.get("identity") or {}).get("barcode_digits_seen"))
+    if (printed and (draft["identity"]["barcode_digits_seen"].get("status") == "read")
+            and not canonical_gtin14_candidates(printed)):
+        findings.append(_convention(
+            "barcode_not_gtin", "identity.barcode_digits_seen",
+            f"{printed!r} is not a whole GTIN. Copy every printed digit, or mark "
+            "it partial, or leave it null; the console checks the barcode itself."))
     return findings
 
 
