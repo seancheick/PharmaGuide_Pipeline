@@ -368,6 +368,7 @@ function select(submission) {
   state.comparisonTarget = null;
   state.reviewerImages = [];
   state.productImage = null;
+  state.evidenceBitmaps = new Map();
   $('reviewer-image-attestation').checked = false;
   $('reviewer-image-file').value = '';
   // Last, and only if one is pending: cancelling a save is cleanup, and
@@ -409,6 +410,8 @@ async function refreshSelected() {
       state.selected = fresh;
       renderDetail();
       if (state.reviewerImages.length) await refreshReviewerPictureUrls();
+      // The one-submission read is what carries its drafts.
+      void autoPrepare();
     }
   } catch {
     // Keep the edited payload; retry metadata without inventing a fresh binding.
@@ -1307,6 +1310,134 @@ function renderVerifyChecklist() {
       group.append(source);
     }
     slot.append(group);
+    const evidence = draftEvidence(field);
+    if (evidence) slot.append(renderDraftEvidence(evidence));
+  }
+}
+
+/**
+ * What the draft quotes for one field, and the one region it says it read it
+ * from. A reading to compare against the photograph, never a reason to tick.
+ */
+function draftEvidence(field) {
+  const draft = state.draft?.draft_payload;
+  if (!draft) return null;
+  const entries = {
+    brand: [draft.identity?.brand],
+    name: [draft.identity?.product_name],
+    serving: [draft.serving?.size, draft.serving?.servings_per_container],
+    rows: (draft.ingredient_rows ?? []).flatMap((row) => [row?.display_name, row?.amount]),
+    other: [draft.other_ingredients?.text],
+  }[field] ?? [];
+  const sources = entries.flatMap((entry) => Array.isArray(entry?.sources) ? entry.sources : []);
+  const quotes = [...new Set(sources
+    .map((source) => source?.supporting_text)
+    .filter((text) => typeof text === 'string' && text.trim()))];
+  const current = new Set((state.selected?.photos ?? []).map((photo) => photo.photo_id));
+  const located = sources.filter((source) => source?.region && current.has(source.photo_id));
+  const photoId = located[0]?.photo_id ?? null;
+  let box = null;
+  for (const { region } of located.filter((source) => source.photo_id === photoId)) {
+    box = box
+      ? { x0: Math.min(box.x0, region.x), y0: Math.min(box.y0, region.y),
+        x1: Math.max(box.x1, region.x + region.w), y1: Math.max(box.y1, region.y + region.h) }
+      : { x0: region.x, y0: region.y, x1: region.x + region.w, y1: region.y + region.h };
+  }
+  if (!quotes.length && !box) return null;
+  // A little margin, so the crop shows the print around the reading too.
+  const region = box && {
+    x: Math.max(0, box.x0 - 0.01), y: Math.max(0, box.y0 - 0.01),
+    w: Math.min(1, box.x1 + 0.01) - Math.max(0, box.x0 - 0.01),
+    h: Math.min(1, box.y1 + 0.01) - Math.max(0, box.y0 - 0.01),
+  };
+  return { quotes, photoId: box ? photoId : null, region };
+}
+
+function renderDraftEvidence(evidence) {
+  const host = document.createElement('div');
+  host.className = 'verify-evidence';
+  const photo = (state.selected?.photos ?? []).find((entry) => entry.photo_id === evidence.photoId);
+  if (photo?.signed_url && evidence.region && typeof createImageBitmap === 'function') {
+    const canvas = document.createElement('canvas');
+    canvas.className = 'verify-crop';
+    host.append(canvas);
+    void drawEvidenceCrop(canvas, photo, evidence.region);
+  }
+  const quotes = document.createElement('ul');
+  quotes.className = 'verify-quotes';
+  for (const text of evidence.quotes.slice(0, 40)) {
+    const item = document.createElement('li');
+    item.textContent = `“${text}”`;
+    quotes.append(item);
+  }
+  host.append(quotes);
+  return host;
+}
+
+async function drawEvidenceCrop(canvas, photo, region) {
+  const selection = state.selected;
+  try {
+    state.evidenceBitmaps ??= new Map();
+    if (!state.evidenceBitmaps.has(photo.photo_id)) {
+      state.evidenceBitmaps.set(photo.photo_id,
+        fetchReviewPhoto(photo.signed_url).then((blob) => createImageBitmap(blob)));
+    }
+    const bitmap = await state.evidenceBitmaps.get(photo.photo_id);
+    if (state.selected?.id !== selection?.id) return;
+    const sx = region.x * bitmap.width;
+    const sy = region.y * bitmap.height;
+    const sw = region.w * bitmap.width;
+    const sh = region.h * bitmap.height;
+    const scale = Math.min(1, 520 / sw);
+    canvas.width = Math.max(1, Math.round(sw * scale));
+    canvas.height = Math.max(1, Math.round(sh * scale));
+    canvas.getContext('2d').drawImage(bitmap, sx, sy, sw, sh, 0, 0, canvas.width, canvas.height);
+  } catch {
+    state.evidenceBitmaps?.delete(photo.photo_id);
+    canvas.remove?.();
+  }
+}
+
+// ------------------------------------------------- open, inspect, confirm
+//
+// Opening a submitted product that already has a reading does the mechanical
+// steps a reviewer would otherwise click through: adopt the draft, record the
+// barcode check, preselect the front photo, start the review. It ticks no
+// field and approves nothing; those stay the reviewer's clicks.
+
+async function autoPrepare() {
+  const submission = state.selected;
+  if (!submission || state.reviewInvalidated || state.reviewSuperseded) return;
+  const key = `${submission.id}:${submission.evidence_revision}`;
+  if (state.autoPreparedFor === key || state.reviewReadyFor !== key) return;
+  if (!['submitted', 'under_review'].includes(submission.review_status)) return;
+  const saved = Boolean(state.review?.draft?.payload && !state.review.draft.superseded);
+  // Nothing to adopt yet: the drafts may still be on their way.
+  if (!saved && !state.draft) return;
+  state.autoPreparedFor = key;
+  const stillHere = () => state.selected?.id === submission.id &&
+    state.selected?.evidence_revision === submission.evidence_revision &&
+    !state.reviewInvalidated;
+  if (!saved) {
+    await loadDraftIntoEditor();
+    if (!stillHere()) return;
+    await saveReview();
+  }
+  if (submission.kind === 'missing_product') {
+    if (!stillHere()) return;
+    if (!state.identityRecorded && !activeCatalogRelation()) {
+      await checkIdentity({ record: true });
+    }
+    if (!stillHere()) return;
+    const front = (state.selected.photos ?? [])
+      .find((photo) => (photo.categories ?? []).includes('front_identity'));
+    if (!state.productImage && front) {
+      await chooseProductImage({ kind: 'photo', id: front.photo_id })
+        .catch(() => renderProductPictureOptions());
+    }
+  }
+  if (stillHere() && state.selected.review_status === 'submitted') {
+    await transition({ to_status: 'under_review' });
   }
 }
 
@@ -1516,6 +1647,7 @@ async function loadReview() {
       review?.identity_check) {
     await checkIdentity();
   }
+  await autoPrepare();
 }
 
 function scheduleReviewSave() {

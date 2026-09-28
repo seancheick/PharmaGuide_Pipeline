@@ -15,6 +15,7 @@ a catalog hit is a candidate to compare against, never a disposition.
 
 from __future__ import annotations
 
+import re
 from typing import Any, Iterable, Mapping, Sequence
 
 from ..gtin import canonical_gtin14_candidates, canonical_normalized_gtin14
@@ -178,6 +179,47 @@ def _duplicate_photo_findings(draft: Mapping[str, Any]) -> list[dict[str, Any]]:
         )
         for ids in duplicates
     ]
+
+
+#: How a reading was written down, as opposed to what the label says. A reader
+#: fixes these before submitting, so they are a gate, not draft discrepancies:
+#: recording one would need the edge function's DRAFT_DISCREPANCY_CODES mirror
+#: (schema.ts) changed and deployed first.
+#: (A child row under a non-blend row is already refused by the envelope
+#: validator, which owns row parentage.)
+CONVENTION_CODES = frozenset({"form_not_split", "percent_as_amount"})
+
+_AS_FORM = re.compile(r"\(\s*as\s+[^)]+\)", re.IGNORECASE)
+
+
+def _convention(code: str, index: int, detail: str) -> dict[str, Any]:
+    return {"code": code, "severity": "critical",
+            "detail": f"ingredient_rows[{index}]: {detail}", "photo_ids": []}
+
+
+def convention_findings(draft: Mapping[str, Any]) -> list[dict[str, Any]]:
+    """Transcription-convention defects reviewers have sent back.
+
+    Each rule is exact on purpose: a gate that fires on a correct reading
+    teaches readers to ignore it.
+    """
+    findings: list[dict[str, Any]] = []
+    for index, row in enumerate(draft.get("ingredient_rows") or []):
+        if not isinstance(row, Mapping):
+            continue
+        name = (row.get("display_name") or {}).get("value")
+        form = (row.get("form_text") or {}).get("value")
+        if isinstance(name, str) and _AS_FORM.search(name) and not (
+                isinstance(form, str) and form.strip()):
+            findings.append(_convention(
+                "form_not_split", index,
+                f"{name!r} prints a form; copy it into form_text as printed."))
+        amount = (row.get("amount") or {}).get("value")
+        if isinstance(amount, Mapping) and str(amount.get("unit_text") or "").strip() == "%":
+            findings.append(_convention(
+                "percent_as_amount", index,
+                "a %DV was read as the amount; put it in percent_dv."))
+    return findings
 
 
 def _injection_findings(draft: Mapping[str, Any]) -> list[dict[str, Any]]:
