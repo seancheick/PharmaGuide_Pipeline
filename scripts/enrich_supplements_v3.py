@@ -8679,6 +8679,8 @@ class SupplementEnricherV3:
                 from_source_map[compound] = from_source_map.pop(i)
 
         _CHELATE_TOKENS = frozenset({'chelate', 'chelated'})
+        _AMINO_ACID_CHELATE_LIGANDS = frozenset({
+            'arginate', 'aspartate', 'bisglycinate', 'glycinate', 'lysinate'})
         sibling_tokens = {(form.get('name') or '').strip().lower() for form in cleaned_forms}
 
         extracted_forms = []
@@ -8720,12 +8722,11 @@ class SupplementEnricherV3:
 
             if i in folded_salts:
                 continue
-            # A bare "chelate" token beside a salt token names that salt's
-            # chelate ("Magnesium Lysinate Glycinate Chelate" split into
-            # "glycinate" + "chelated"), not a second form.
+            # A bare "chelate" token beside an amino acid ligand token names
+            # that ligand's chelate ("Magnesium Lysinate Glycinate Chelate"
+            # split into "glycinate" + "chelated"), not a second form.
             if (form_name_token in _CHELATE_TOKENS
-                    and any(other in _SALT_QUALIFIERS - _CHELATE_TOKENS
-                            for other in sibling_tokens)):
+                    and sibling_tokens & _AMINO_ACID_CHELATE_LIGANDS):
                 continue
 
             form_name = form.get('name', '')
