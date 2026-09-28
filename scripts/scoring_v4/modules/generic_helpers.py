@@ -18,6 +18,7 @@ from typing import Any, Dict, List, Optional, Tuple
 from scoring_input_contract import (
     get_scoring_ingredients,
     get_source_score_eligible_active_rows,
+    is_lent_blend_mass,
 )
 from scoring_reference_resolver import delivers_parent_nutrient
 from serving_frequency import resolve_daily_serving_range
@@ -118,6 +119,10 @@ def has_usable_individual_dose(ingredient: Dict[str, Any]) -> bool:
     `has_dose=True` to bypass unit checks (legacy probiotic CFU shapes).
     """
     if not isinstance(ingredient, dict):
+        return False
+    if is_lent_blend_mass(ingredient):
+        # A blend total lent to one child identity: the child's own amount is
+        # not on the label, so it is blend-level evidence, never its dose.
         return False
     qty = _as_float(ingredient.get("quantity"), None)
     if qty is None or qty <= 0:
