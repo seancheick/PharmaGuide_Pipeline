@@ -33,7 +33,7 @@
     "statistics": {
       "total_parents": 655,
       "total_forms": 1458,
-      "total_form_aliases": 12192,
+      "total_form_aliases": 12207,
       "parents_with_parent_aliases": 146,
       "parents_with_contains_aliases": 0,
       "parents_with_pattern_aliases": 0
@@ -2787,7 +2787,8 @@
           "Riboflavin 5'Phosphate",
           "Riboflavin 5’ Phosphate",
           "Vitamin B2, Riboflavin 5 Phosphate",
-          "Riboflavin 5’-Phosphate"
+          "Riboflavin 5’-Phosphate",
+          "riboflavin-5 phosphate"
         ],
         "dosage_importance": 1.5,
         "absorption_structured": {
@@ -3739,7 +3740,8 @@
           "Pyridoxal 5-Phosphate Monohydrate",
           "activated vitamin b6",
           "vitamin b6, activated",
-          "vitamin b6 activated"
+          "vitamin b6 activated",
+          "pyridoxal-5-phosphate"
         ],
         "dosage_importance": 1.5,
         "absorption_structured": {
@@ -6700,7 +6702,9 @@
           "d-beta tocotrienol",
           "Full Spectrum Palm Fruit Extract",
           "tocosource palm tocotrienols",
-          "tocosource tocotrienols"
+          "tocosource tocotrienols",
+          "alpha-tocotrienol",
+          "beta-tocotrienol"
         ],
         "dosage_importance": 1.5,
         "absorption_structured": {
@@ -10033,7 +10037,9 @@
           "zinc mono-l-methionine sulfate",
           "zinc mono l methionine sulfate",
           "zinc mono-l-methionine",
-          "zinc mono l methionine"
+          "zinc mono l methionine",
+          "optizinc zinc monomethionine",
+          "zinc l-methionine sulfate"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -10795,7 +10801,8 @@
           "methylselenocysteine supplement",
           "methyl-selenocysteine supplement",
           "se-methylselenocysteine",
-          "se-methylselenocysteine supplement"
+          "se-methylselenocysteine supplement",
+          "se-methyl l- selenocysteine"
         ],
         "dosage_importance": 0.5,
         "absorption_structured": {
@@ -16920,7 +16927,8 @@
           "Coenzyme Q-10",
           "Co-Enzyme Q-10",
           "co-q10",
-          "Co Q-10"
+          "Co Q-10",
+          "ubiquinone 10"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -18306,7 +18314,8 @@
           "nutraflora scfos",
           "nutraflora short chain fructooligosaccharides",
           "short chain fructooligosaccharides",
-          "prebiotic fos"
+          "prebiotic fos",
+          "short-chain fructooligosaccharides"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -18721,7 +18730,9 @@
           "tartaric acid choline",
           "bitartrate choline",
           "choline l-bitartrate",
-          "Choline DL-Bitartrate"
+          "Choline DL-Bitartrate",
+          "dl-choline bitartrate",
+          "choline l(+) bitartrate"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -19565,7 +19576,8 @@
           "carnipure LCLT",
           "l-carnitine l-tartrate",
           "l-carnitine-l-tartrate",
-          "carnipure"
+          "carnipure",
+          "l-carnitine l- tartrate"
         ],
         "dosage_importance": 0.5,
         "bio_score": 10,
@@ -25392,7 +25404,10 @@
         },
         "external_ids": {
           "unii": "750W5330FY"
-        }
+        },
+        "source_form_aliases": [
+          "hydrochloride"
+        ]
       },
       "glucosamine sulfate (crystalline)": {
         "bio_score": 11,
@@ -27903,6 +27918,9 @@
           "D3.6 (2026-04-20): added serrapeptase enzyme variants (Doctor's Best label).",
           "D3.8 (2026-09-21): moved the serrapeptase variants to the serrapeptase parent and the DPP-IV (dipeptidyl peptidase IV) aliases, including BioCore DPP-IV, to the protease parent. Discrete enzymes keep their own identity and never inherit multi-enzyme digestive evidence.",
           "D3.7 (2026-09-20): added transglucosidase as label-normalization alias under specific enzymes form. Added to satisfy test contract (test_transglucosidase_routes_to_specific_digestive_enzyme). Transglucosidase (fungal glucosyltransferase, EC 2.4.1.-) is classified as a digestive enzyme supplement; no new CUI/UNII claimed."
+        ],
+        "source_form_aliases": [
+          "lactase"
         ]
       },
       "enteric-coated enzymes": {
@@ -31975,7 +31993,10 @@
           "range_low": 0.85,
           "range_high": 0.96,
           "quality": "very_good"
-        }
+        },
+        "source_form_aliases": [
+          "ala"
+        ]
       }
     },
     "cui": "C0051405",
@@ -42657,7 +42678,8 @@
           "mushroom beta-glucan",
           "mushroom beta glucans",
           "wellmune baker's yeast beta glucans",
-          "BetaVia"
+          "BetaVia",
+          "beta 1-3 glucan"
         ],
         "absorption_structured": {
           "value": 0.45,
@@ -44300,7 +44322,8 @@
           "parthenolide",
           "parthenolide standardized",
           "tanacetum parthenium parthenolide",
-          "parthenolide sesquiterpene lactone"
+          "parthenolide sesquiterpene lactone",
+          "parthenolides"
         ],
         "dosage_importance": 1.5,
         "absorption_structured": {
@@ -51300,7 +51323,8 @@
           "madecassoside",
           "madecassoside standardized",
           "centella asiatica madecassoside",
-          "madecassic acid extract"
+          "madecassic acid extract",
+          "asiaticosides"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {

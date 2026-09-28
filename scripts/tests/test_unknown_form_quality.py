@@ -296,6 +296,25 @@ def test_a_compound_filed_under_another_parent_reads_as_this_parents_counter_ion
     ('iron', 'Iron', 'Iron Hydrolyzed Protein Chelate', 'iron amino acid chelate'),
     ('iron', 'Iron', 'Iron Hydrolyzed Vegetable Protein Chelate', 'iron amino acid chelate'),
     ('iron', 'Iron', 'Soy Protein Iron Chelate, Hydrolyzed', 'iron amino acid chelate'),
+    # 2026-09-28 form curation, batch 5: parent-scoped clues and exact spellings.
+    ('alpha_linolenic_acid', 'Alpha-Linolenic Acid', 'ALA', 'alpha-linolenic acid (unspecified)'),
+    ('digestive_enzymes', 'Enzyme Blend', 'Lactase', 'specific enzymes'),
+    ('glucosamine', 'D-Glucosamine HCl', 'hydrochloride', 'glucosamine hydrochloride'),
+    ('zinc', 'Zinc', 'OptiZinc Zinc Monomethionine', 'zinc monomethionine'),
+    ('zinc', 'Zinc', 'Zinc L-Methionine Sulfate', 'zinc monomethionine'),
+    ('coq10', 'Coenzyme Q10', 'Ubiquinone 10', 'ubiquinone standard'),
+    ('vitamin_b6_pyridoxine', 'Vitamin B6', 'Pyridoxal-5-Phosphate', 'pyridoxal-5-phosphate (P5P)'),
+    ('choline', 'Choline', 'DL-Choline Bitartrate', 'choline bitartrate'),
+    ('choline', 'Choline', 'Choline L(+) Bitartrate', 'choline bitartrate'),
+    ('selenium', 'Selenium', 'Se-Methyl L- Selenocysteine', 'selenium-methyl L-selenocysteine'),
+    ('vitamin_b2_riboflavin', 'Vitamin B2', 'Riboflavin-5 Phosphate', 'riboflavin-5-phosphate'),
+    ('beta_glucan', 'Beta Glucan', 'Beta 1-3 Glucan', 'beta-glucan'),
+    ('l_carnitine', 'L-Carnitine', 'L-Carnitine L- Tartrate', 'l-carnitine tartrate (lclt)'),
+    ('prebiotics', 'Prebiotic', 'Short-Chain Fructooligosaccharides', 'fructooligosaccharides (FOS)'),
+    ('vitamin_e', 'Vitamin E', 'Alpha-Tocotrienol', 'tocotrienols'),
+    ('vitamin_e', 'Vitamin E', 'Beta-Tocotrienol', 'tocotrienols'),
+    ('feverfew', 'Feverfew', 'Parthenolides', 'feverfew extract (parthenolide)'),
+    ('gotu_kola', 'Gotu Kola', 'Asiaticosides', 'gotu kola aerial extract'),
 ])
 def test_real_dsld_disclosures_reach_their_reviewed_parent_scoped_form(
         enricher, parent, label, token, form):
@@ -331,6 +350,9 @@ def normalizer():
     ('Ester-C', ('vitamin_c', 'ingredient_quality_map')),
     ('Magnesium Phosphate', ('magnesium', 'ingredient_quality_map')),
     ('Calcium Phosphate Dibasic', ('dicalcium_phosphate', 'ingredient_quality_map')),
+    ('ALA', ('alpha_lipoic_acid', 'ingredient_quality_map')),
+    ('Lactase', ('lactase', 'ingredient_quality_map')),
+    ('Hydrochloride', (None, None)),
 ])
 def test_curated_source_forms_leave_standalone_identities_alone(normalizer, name, identity):
     """Salt names curated as forms of another parent go in source_form_aliases,
