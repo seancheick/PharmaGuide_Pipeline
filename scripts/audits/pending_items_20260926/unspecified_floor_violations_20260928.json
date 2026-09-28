@@ -1,0 +1,544 @@
+{
+ "_metadata": {
+  "description": "IQM parents whose authored unspecified bio_score differs from lowest eligible named bio_score - 1 (Sean 2026-09-28: unspecified is that value, always). Register Q38. Not changed: each parent's named-form set needs review first.",
+  "generated_on": "2026-09-28",
+  "iqm_commit": "296d5f3e",
+  "method": "scoring_reference_resolver.authored_unknown_form / unknown_floor / unknown_floor_override over scripts/data/ingredient_quality_map.json",
+  "parents_with_authored_unspecified_and_floor": 203,
+  "violations": 53,
+  "below_mechanical": 35,
+  "above_with_override": 18
+ },
+ "violations": [
+  {
+   "parent": "bifidobacterium_lactis",
+   "unspecified_form": "bifidobacterium lactis (unspecified)",
+   "authored": 7,
+   "mechanical": 11.0,
+   "lowest_named": "bifidobacterium animalis subsp. lactis",
+   "gap": -4.0,
+   "override": false,
+   "review_status": "validated"
+  },
+  {
+   "parent": "digestive_enzymes",
+   "unspecified_form": "digestive enzymes (unspecified)",
+   "authored": 5,
+   "mechanical": 9.0,
+   "lowest_named": "plant-based enzyme complex",
+   "gap": -4.0,
+   "override": false,
+   "review_status": "validated"
+  },
+  {
+   "parent": "auricularia",
+   "unspecified_form": "auricularia (unspecified)",
+   "authored": 5,
+   "mechanical": 8.0,
+   "lowest_named": "auricularia fruiting body extract",
+   "gap": -3.0,
+   "override": false,
+   "review_status": "stub"
+  },
+  {
+   "parent": "bifidobacterium_breve",
+   "unspecified_form": "bifidobacterium breve (unspecified)",
+   "authored": 10,
+   "mechanical": 13.0,
+   "lowest_named": "bifidobacterium breve m-16v",
+   "gap": -3.0,
+   "override": false,
+   "review_status": "validated"
+  },
+  {
+   "parent": "chaga",
+   "unspecified_form": "chaga (unspecified)",
+   "authored": 5,
+   "mechanical": 8.0,
+   "lowest_named": "chaga sclerotium",
+   "gap": -3.0,
+   "override": false,
+   "review_status": "validated"
+  },
+  {
+   "parent": "lactobacillus_reuteri",
+   "unspecified_form": "lactobacillus reuteri (unspecified)",
+   "authored": 10,
+   "mechanical": 13.0,
+   "lowest_named": "lactobacillus reuteri ATCC PTA 5289",
+   "gap": -3.0,
+   "override": false,
+   "review_status": "validated"
+  },
+  {
+   "parent": "lactobacillus_rhamnosus",
+   "unspecified_form": "lactobacillus rhamnosus (unspecified)",
+   "authored": 7,
+   "mechanical": 10.0,
+   "lowest_named": "lactobacillus rhamnosus crl-1505",
+   "gap": -3.0,
+   "override": false,
+   "review_status": "validated"
+  },
+  {
+   "parent": "lions_mane",
+   "unspecified_form": "lion's mane (unspecified)",
+   "authored": 5,
+   "mechanical": 8.0,
+   "lowest_named": "lions mane fruiting body",
+   "gap": -3.0,
+   "override": false,
+   "review_status": "validated"
+  },
+  {
+   "parent": "maitake",
+   "unspecified_form": "maitake (unspecified)",
+   "authored": 5,
+   "mechanical": 8.0,
+   "lowest_named": "maitake fruiting body",
+   "gap": -3.0,
+   "override": false,
+   "review_status": "validated"
+  },
+  {
+   "parent": "nad_precursors",
+   "unspecified_form": "nad+ precursors (unspecified)",
+   "authored": 5,
+   "mechanical": 8.0,
+   "lowest_named": "liposomal nmn / nr",
+   "gap": -3.0,
+   "override": false,
+   "review_status": "validated"
+  },
+  {
+   "parent": "reishi",
+   "unspecified_form": "reishi (unspecified)",
+   "authored": 5,
+   "mechanical": 8.0,
+   "lowest_named": "reishi fruiting body",
+   "gap": -3.0,
+   "override": false,
+   "review_status": "validated"
+  },
+  {
+   "parent": "saccharomyces_boulardii",
+   "unspecified_form": "saccharomyces boulardii (unspecified)",
+   "authored": 11,
+   "mechanical": 14.0,
+   "lowest_named": "saccharomyces boulardii cncm i-745",
+   "gap": -3.0,
+   "override": false,
+   "review_status": "validated"
+  },
+  {
+   "parent": "shiitake",
+   "unspecified_form": "shiitake (unspecified)",
+   "authored": 5,
+   "mechanical": 8.0,
+   "lowest_named": "shiitake fruiting body",
+   "gap": -3.0,
+   "override": false,
+   "review_status": "validated"
+  },
+  {
+   "parent": "streptococcus_salivarius",
+   "unspecified_form": "streptococcus salivarius (unspecified)",
+   "authored": 10,
+   "mechanical": 13.0,
+   "lowest_named": "streptococcus salivarius k12",
+   "gap": -3.0,
+   "override": false,
+   "review_status": "validated"
+  },
+  {
+   "parent": "turkey_tail",
+   "unspecified_form": "turkey tail (unspecified)",
+   "authored": 5,
+   "mechanical": 8.0,
+   "lowest_named": "turkey tail fruiting body",
+   "gap": -3.0,
+   "override": false,
+   "review_status": "validated"
+  },
+  {
+   "parent": "button_mushroom",
+   "unspecified_form": "button mushroom (unspecified)",
+   "authored": 5,
+   "mechanical": 7.0,
+   "lowest_named": "button mushroom fruiting body extract",
+   "gap": -2.0,
+   "override": false,
+   "review_status": "stub"
+  },
+  {
+   "parent": "cordyceps",
+   "unspecified_form": "cordyceps (unspecified)",
+   "authored": 5,
+   "mechanical": 7.0,
+   "lowest_named": "cordyceps sinensis mycelium",
+   "gap": -2.0,
+   "override": false,
+   "review_status": "validated"
+  },
+  {
+   "parent": "l_carnitine",
+   "unspecified_form": "l-carnitine (unspecified)",
+   "authored": 5,
+   "mechanical": 7.0,
+   "lowest_named": "l-carnitine fumarate",
+   "gap": -2.0,
+   "override": false,
+   "review_status": "validated"
+  },
+  {
+   "parent": "lactobacillus_casei",
+   "unspecified_form": "lactobacillus casei (unspecified)",
+   "authored": 10,
+   "mechanical": 12.0,
+   "lowest_named": "lactobacillus casei lc-11",
+   "gap": -2.0,
+   "override": false,
+   "review_status": "validated"
+  },
+  {
+   "parent": "lactobacillus_paracasei",
+   "unspecified_form": "lactobacillus paracasei (unspecified)",
+   "authored": 10,
+   "mechanical": 12.0,
+   "lowest_named": "lactobacillus paracasei l.casei 431",
+   "gap": -2.0,
+   "override": false,
+   "review_status": "validated"
+  },
+  {
+   "parent": "lactobacillus_plantarum",
+   "unspecified_form": "lactobacillus plantarum (unspecified)",
+   "authored": 7,
+   "mechanical": 9.0,
+   "lowest_named": "lactobacillus plantarum l-137 (heat-killed/postbiotic)",
+   "gap": -2.0,
+   "override": false,
+   "review_status": "validated"
+  },
+  {
+   "parent": "pygeum",
+   "unspecified_form": "pygeum (unspecified)",
+   "authored": 8,
+   "mechanical": 10.0,
+   "lowest_named": "pygeum bark extract",
+   "gap": -2.0,
+   "override": false,
+   "review_status": "validated"
+  },
+  {
+   "parent": "vanadium",
+   "unspecified_form": "vanadium (unspecified)",
+   "authored": 4,
+   "mechanical": 6.0,
+   "lowest_named": "bis-glycinato oxovanadium",
+   "gap": -2.0,
+   "override": false,
+   "review_status": "validated"
+  },
+  {
+   "parent": "astaxanthin",
+   "unspecified_form": "unspecified astaxanthin",
+   "authored": 10,
+   "mechanical": 11.0,
+   "lowest_named": "natural astaxanthin (haematococcus pluvialis)",
+   "gap": -1.0,
+   "override": false,
+   "review_status": "validated"
+  },
+  {
+   "parent": "bacillus_coagulans",
+   "unspecified_form": "bacillus coagulans (unspecified)",
+   "authored": 11,
+   "mechanical": 12.0,
+   "lowest_named": "bacillus coagulans snz 1969",
+   "gap": -1.0,
+   "override": false,
+   "review_status": "validated"
+  },
+  {
+   "parent": "choline",
+   "unspecified_form": "choline (unspecified)",
+   "authored": 8,
+   "mechanical": 9.0,
+   "lowest_named": "choline bitartrate",
+   "gap": -1.0,
+   "override": false,
+   "review_status": "validated"
+  },
+  {
+   "parent": "english_ivy",
+   "unspecified_form": "english ivy leaf extract (unspecified)",
+   "authored": 8,
+   "mechanical": 9.0,
+   "lowest_named": "english ivy standardized (hederacoside C marker)",
+   "gap": -1.0,
+   "override": false,
+   "review_status": "validated"
+  },
+  {
+   "parent": "green_tea_extract",
+   "unspecified_form": "green tea extract (unspecified)",
+   "authored": 7,
+   "mechanical": 8.0,
+   "lowest_named": "green tea catechins",
+   "gap": -1.0,
+   "override": false,
+   "review_status": "validated"
+  },
+  {
+   "parent": "horse_chestnut_seed",
+   "unspecified_form": "horse chestnut seed (unspecified)",
+   "authored": 8,
+   "mechanical": 9.0,
+   "lowest_named": "horse chestnut standardized (aescin marker)",
+   "gap": -1.0,
+   "override": false,
+   "review_status": "validated"
+  },
+  {
+   "parent": "lutein",
+   "unspecified_form": "lutein (unspecified)",
+   "authored": 8,
+   "mechanical": 9.0,
+   "lowest_named": "free lutein (floraglo / lutemax, marigold)",
+   "gap": -1.0,
+   "override": false,
+   "review_status": "validated"
+  },
+  {
+   "parent": "nadh",
+   "unspecified_form": "generic nadh",
+   "authored": 4,
+   "mechanical": 5.0,
+   "lowest_named": "panmol nadh",
+   "gap": -1.0,
+   "override": false,
+   "review_status": "validated"
+  },
+  {
+   "parent": "vitamin_b1_thiamine",
+   "unspecified_form": "vitamin b1 (unspecified)",
+   "authored": 6,
+   "mechanical": 7.0,
+   "lowest_named": "thiamine disulfide",
+   "gap": -1.0,
+   "override": false,
+   "review_status": "validated"
+  },
+  {
+   "parent": "vitamin_b2_riboflavin",
+   "unspecified_form": "vitamin b2 (unspecified)",
+   "authored": 6,
+   "mechanical": 7.0,
+   "lowest_named": "riboflavin from yeast",
+   "gap": -1.0,
+   "override": false,
+   "review_status": "validated"
+  },
+  {
+   "parent": "vitamin_b6_pyridoxine",
+   "unspecified_form": "vitamin b6 (unspecified)",
+   "authored": 6,
+   "mechanical": 7.0,
+   "lowest_named": "pyridoxine glutamate",
+   "gap": -1.0,
+   "override": false,
+   "review_status": "validated"
+  },
+  {
+   "parent": "vitamin_b7_biotin",
+   "unspecified_form": "vitamin b7 (unspecified)",
+   "authored": 6,
+   "mechanical": 7.0,
+   "lowest_named": "dl-biotin (racemic)",
+   "gap": -1.0,
+   "override": false,
+   "review_status": "validated"
+  },
+  {
+   "parent": "acetyl_l_carnitine",
+   "unspecified_form": "acetyl-l-carnitine (unspecified)",
+   "authored": 10,
+   "mechanical": 9.0,
+   "lowest_named": "alcar",
+   "gap": 1.0,
+   "override": true,
+   "review_status": "validated"
+  },
+  {
+   "parent": "bacillus_subtilis",
+   "unspecified_form": "bacillus subtilis (unspecified)",
+   "authored": 11,
+   "mechanical": 10.0,
+   "lowest_named": "bacillus subtilis de111",
+   "gap": 1.0,
+   "override": true,
+   "review_status": "validated"
+  },
+  {
+   "parent": "beta_carotene",
+   "unspecified_form": "beta-carotene (unspecified)",
+   "authored": 6,
+   "mechanical": 5.0,
+   "lowest_named": "beta-carotene beadlet",
+   "gap": 1.0,
+   "override": true,
+   "review_status": "validated"
+  },
+  {
+   "parent": "capsaicin",
+   "unspecified_form": "capsaicin (unspecified)",
+   "authored": 7,
+   "mechanical": 6.0,
+   "lowest_named": "capsaicin extract",
+   "gap": 1.0,
+   "override": true,
+   "review_status": "validated"
+  },
+  {
+   "parent": "msm",
+   "unspecified_form": "msm (methylsulfonylmethane) (unspecified)",
+   "authored": 11,
+   "mechanical": 10.0,
+   "lowest_named": "MSM (methylsulfonylmethane)",
+   "gap": 1.0,
+   "override": true,
+   "review_status": "validated"
+  },
+  {
+   "parent": "nickel",
+   "unspecified_form": "nickel (unspecified)",
+   "authored": 7.0,
+   "mechanical": 6.0,
+   "lowest_named": "nickel sulfate",
+   "gap": 1.0,
+   "override": true,
+   "review_status": "validated"
+  },
+  {
+   "parent": "phosphatidylcholine",
+   "unspecified_form": "phosphatidylcholine (unspecified)",
+   "authored": 11,
+   "mechanical": 10.0,
+   "lowest_named": "soy phosphatidylcholine",
+   "gap": 1.0,
+   "override": true,
+   "review_status": "validated"
+  },
+  {
+   "parent": "phosphatidylserine",
+   "unspecified_form": "phosphatidylserine (unspecified)",
+   "authored": 10,
+   "mechanical": 9.0,
+   "lowest_named": "Actiserine (enhanced PS blend)",
+   "gap": 1.0,
+   "override": true,
+   "review_status": "validated"
+  },
+  {
+   "parent": "tin",
+   "unspecified_form": "tin (unspecified)",
+   "authored": 7.0,
+   "mechanical": 6.0,
+   "lowest_named": "stannous chloride",
+   "gap": 1.0,
+   "override": true,
+   "review_status": "validated"
+  },
+  {
+   "parent": "vanadyl_sulfate",
+   "unspecified_form": "vanadyl sulfate (unspecified)",
+   "authored": 7,
+   "mechanical": 6.0,
+   "lowest_named": "bis(maltolato)oxovanadium (BMOV)",
+   "gap": 1.0,
+   "override": true,
+   "review_status": "validated"
+  },
+  {
+   "parent": "yohimbe",
+   "unspecified_form": "yohimbe (unspecified)",
+   "authored": 5,
+   "mechanical": 4.0,
+   "lowest_named": "yohimbe extract standardized to yohimbine alkaloids",
+   "gap": 1.0,
+   "override": true,
+   "review_status": "validated"
+  },
+  {
+   "parent": "ginkgo",
+   "unspecified_form": "ginkgo (unspecified)",
+   "authored": 8,
+   "mechanical": 6.0,
+   "lowest_named": "ginkgo leaf powder",
+   "gap": 2.0,
+   "override": true,
+   "review_status": "validated"
+  },
+  {
+   "parent": "iron",
+   "unspecified_form": "iron (unspecified)",
+   "authored": 6,
+   "mechanical": 4.0,
+   "lowest_named": "ferric iron",
+   "gap": 2.0,
+   "override": true,
+   "review_status": "validated"
+  },
+  {
+   "parent": "rhodiola",
+   "unspecified_form": "rhodiola (unspecified)",
+   "authored": 8,
+   "mechanical": 6.0,
+   "lowest_named": "rhodiola root powder",
+   "gap": 2.0,
+   "override": true,
+   "review_status": "validated"
+  },
+  {
+   "parent": "vitamin_a",
+   "unspecified_form": "vitamin a (unspecified)",
+   "authored": 6,
+   "mechanical": 4.0,
+   "lowest_named": "alpha-carotene (provitamin A activity)",
+   "gap": 2.0,
+   "override": true,
+   "review_status": "validated"
+  },
+  {
+   "parent": "zinc",
+   "unspecified_form": "zinc (unspecified)",
+   "authored": 6,
+   "mechanical": 4.0,
+   "lowest_named": "zinc oxide",
+   "gap": 2.0,
+   "override": true,
+   "review_status": "validated"
+  },
+  {
+   "parent": "creatine_monohydrate",
+   "unspecified_form": "creatine monohydrate ((unspecified))",
+   "authored": 6,
+   "mechanical": 3.0,
+   "lowest_named": "creatine ethyl ester",
+   "gap": 3.0,
+   "override": true,
+   "review_status": "validated"
+  },
+  {
+   "parent": "magnesium",
+   "unspecified_form": "magnesium (unspecified)",
+   "authored": 5,
+   "mechanical": 2.0,
+   "lowest_named": "magnesium hydroxide",
+   "gap": 3.0,
+   "override": true,
+   "review_status": "validated"
+  }
+ ]
+}
