@@ -169,3 +169,11 @@ def test_disclosed_bcaa_forms_share_the_parent_maximum_and_unspecified_is_one_lo
     for unsupported in ('most common and clinically studied', 'maximize muscle protein synthesis',
                         'absorbed even faster', 'superior', 'for accurate scoring'):
         assert unsupported not in copy
+
+
+def test_pmid_34642762_is_cited_by_its_real_byline(enricher):
+    """PMID 34642762 is Weijzen et al., J Nutr 2022 (free amino acids vs intact milk
+    protein); the leucine note had it as "Churchward-Venne 2021"."""
+    iqm = enricher.databases['ingredient_quality_map']
+    assert 'Weijzen 2022, PMID:34642762' in iqm['l_leucine']['forms']['l-leucine powder']['notes']
+    assert 'Churchward-Venne' not in json.dumps(iqm)
