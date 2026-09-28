@@ -353,6 +353,8 @@ def normalizer():
     ('ALA', ('alpha_lipoic_acid', 'ingredient_quality_map')),
     ('Lactase', ('lactase', 'ingredient_quality_map')),
     ('Hydrochloride', (None, None)),
+    # Batch 7 reads it only under a vitamin A row: a standalone carotenoid row stays its own.
+    ('Gamma-Carotene', (None, None)),
 ])
 def test_curated_source_forms_leave_standalone_identities_alone(normalizer, name, identity):
     """Salt names curated as forms of another parent go in source_form_aliases,
@@ -714,9 +716,6 @@ def test_a_held_source_or_marker_token_leaves_the_row_unheld(enricher, parent, l
     ('l_carnitine', 'L-Carnitine', {'name': 'L-Canitine Fumarate', 'category': _M, 'prefix': 'as', 'ingredientGroup': 'L-Carnitine'}, 'l-carnitine fumarate'),
     ('l_ornithine', 'L-Ornithine', {'name': 'L-Ornithine Monohydrochloride', 'category': 'amino acid', 'ingredientGroup': 'Ornithine'}, 'l-ornithine standard'),
     ('l_ornithine', 'L-Ornithine', {'name': 'L-Ornithine Hydrochloride', 'category': 'amino acid', 'ingredientGroup': 'Ornithine'}, 'l-ornithine standard'),
-    ('vitamin_b9_folate', 'L-5-Methyltetrahydrofolate', {'name': 'Glucosamine Salt', 'category': _M, 'ingredientGroup': 'Glucosamine (unspecified)'}, 'quatrefolic'),
-    ('vitamin_b9_folate', 'Folate', {'name': '(6S)-5-Methyltetrahydrofolic Acid', 'category': 'vitamin', 'ingredientGroup': 'Folate'}, '5-methyltetrahydrofolate (5-MTHF)'),
-    ('vitamin_b9_folate', 'Folate', {'name': '(6S)-5-Methyltetrahydrofolate Acid', 'category': 'vitamin', 'prefix': 'as', 'ingredientGroup': 'Vitamin B9 (5-Methyltetrahydrofolate)'}, '5-methyltetrahydrofolate (5-MTHF)'),
     ('same', 'SAM-e', {'name': 'S-Adenosyl-L-Methionine Disulfate P-Toluenesulfonate', 'category': _M, 'ingredientGroup': 'SAMe'}, 'same supplement'),
     ('dmae', 'Dimethylethanolamine', {'name': 'Dimethylethanolamine Bitartrate', 'category': _M, 'prefix': 'as', 'ingredientGroup': 'Deanol'}, 'dmae bitartrate'),
     ('dmae', 'DMAE', {'name': '2-Dimethylaminoethanol Bitartrate', 'category': _M, 'ingredientGroup': 'Deanol'}, 'dmae bitartrate'),
@@ -892,6 +891,20 @@ def test_fenugreek_galactomannan_is_not_konjac_glucomannan(enricher, label, form
     match = enricher._match_quality_map(label, 'Galactomannan', enricher.databases['ingredient_quality_map'],
                                         cleaned_forms=[form], cleaner_canonical_id='fiber')
     assert (match['canonical_id'], match['form_id']) == ('fiber', 'fiber (unspecified)')
+
+
+def test_5_mthf_beside_its_glucosamine_salt_reads_quatrefolic(enricher):
+    """60812 "Folate (as (6S)-5-Methyltetrahydrofolic Acid, Glucosamine Salt)" is
+    one compound, Quatrefolic: the combined label text reads it. Aliasing either
+    token alone makes the row two forms (5-MTHF + Quatrefolic), so the held
+    folate salt labels wait for the matcher to read a salt beside its compound."""
+    match = enricher._match_quality_map(
+        'Folate', 'Folate', enricher.databases['ingredient_quality_map'],
+        cleaned_forms=[{'name': '(6S)-5-Methyltetrahydrofolic Acid', 'prefix': 'as'},
+                       {'name': 'Glucosamine Salt'}],
+        cleaner_canonical_id='vitamin_b9_folate')
+    assert match['form_id'] == 'quatrefolic'
+    assert [m['form_key'] for m in match.get('matched_forms') or []] in ([], ['quatrefolic'])
 
 
 def test_bitter_orange_under_citrus_bioflavonoids_stays_held_for_review(enricher):

@@ -33,7 +33,7 @@
     "statistics": {
       "total_parents": 655,
       "total_forms": 1458,
-      "total_form_aliases": 12309,
+      "total_form_aliases": 12306,
       "parents_with_parent_aliases": 146,
       "parents_with_contains_aliases": 0,
       "parents_with_pattern_aliases": 0
@@ -2147,8 +2147,7 @@
           "pro vitamin A",
           "natural algae carotene",
           "mixed algal carotenoids",
-          "Betatene mixed carotenoids",
-          "gamma-carotene"
+          "Betatene mixed carotenoids"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -2162,7 +2161,10 @@
           "rationale": "Vitamin A family policy: undisclosed vitamin A kept at the policy value (tests/test_vitamin_a_family_recalibration_20260602.py).",
           "reviewed_by": "Vitamin A / provitamin carotenoid reconciliation (commit 99fd5179)",
           "reviewed_on": "2026-06-02"
-        }
+        },
+        "source_form_aliases": [
+          "gamma-carotene"
+        ]
       },
       "alpha-carotene (provitamin A activity)": {
         "bio_score": 5,
@@ -4356,9 +4358,7 @@
           "patented methylfolate",
           "patented methylfolate supplement",
           "patented calcium methylfolate",
-          "patented calcium methylfolate supplement",
-          "(6s)-5-methyltetrahydrofolic acid",
-          "(6s)-5-methyltetrahydrofolate acid"
+          "patented calcium methylfolate supplement"
         ],
         "dosage_importance": 1.5,
         "absorption_structured": {
@@ -4505,10 +4505,7 @@
           "range_low": 0.8,
           "range_high": 0.95,
           "quality": "very_good"
-        },
-        "source_form_aliases": [
-          "glucosamine salt"
-        ]
+        }
       },
       "metafolin": {
         "bio_score": 13,
