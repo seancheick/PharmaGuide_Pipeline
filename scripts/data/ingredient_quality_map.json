@@ -32,8 +32,8 @@
     },
     "statistics": {
       "total_parents": 655,
-      "total_forms": 1454,
-      "total_form_aliases": 12133,
+      "total_forms": 1455,
+      "total_form_aliases": 12136,
       "parents_with_parent_aliases": 146,
       "parents_with_contains_aliases": 0,
       "parents_with_pattern_aliases": 0
@@ -7732,6 +7732,31 @@
           "range_high": 0.4,
           "quality": "moderate"
         }
+      },
+      "monocalcium phosphate": {
+        "bio_score": 6,
+        "absorption": "unknown (no reviewed form-specific calcium absorption value; scored with the calcium phosphate class)",
+        "consumer_note": "Monocalcium phosphate is a calcium and phosphate salt. It is used as a mineral source and in effervescent tablets.",
+        "consumer_note_review": {
+          "by": "Claude form curation batch 1 (agent review)",
+          "date": "2026-09-28"
+        },
+        "notes": "Monocalcium phosphate, Ca(H2PO4)2 (PubChem CID 24454, CAS 7758-23-8); the label spelling 'Monobasic Calcium Phosphate' resolves to the same CID. Declared as a calcium source on Emergen-C labels (e.g. DSLD 1178). Scored with the calcium phosphate class (tricalcium and dicalcium phosphate, 6): no form-specific calcium absorption value was reviewed, so its higher solubility earns no premium. Also provides phosphorus; see the phosphorus entry.",
+        "aliases": [
+          "monobasic calcium phosphate",
+          "calcium dihydrogen phosphate"
+        ],
+        "dosage_importance": 1.5,
+        "absorption_structured": {
+          "value": null,
+          "range_low": null,
+          "range_high": null,
+          "quality": "unknown"
+        },
+        "external_ids": {
+          "cas": "7758-23-8",
+          "pubchem_cid": 24454
+        }
       }
     },
     "match_rules": {
@@ -7805,7 +7830,17 @@
           "range_low": 0.4,
           "range_high": 0.6,
           "quality": "moderate"
-        }
+        },
+        "source_form_aliases": [
+          "monobasic sodium phosphate",
+          "sodium phosphate",
+          "monobasic potassium phosphate",
+          "monopotassium phosphate",
+          "potassium phosphate",
+          "dipotassium phosphate",
+          "monobasic calcium phosphate",
+          "monocalcium phosphate"
+        ]
       },
       "phosphorus (unspecified)": {
         "bio_score": 7,
@@ -16135,7 +16170,8 @@
           "dipotassium phosphate",
           "KH₂PO₄",
           "K₂HPO₄",
-          "potassium phosphate dibasic"
+          "potassium phosphate dibasic",
+          "monobasic potassium phosphate"
         ],
         "dosage_importance": 1.5,
         "absorption_structured": {

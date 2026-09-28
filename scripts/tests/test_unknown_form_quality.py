@@ -223,6 +223,15 @@ def test_a_compound_filed_under_another_parent_reads_as_this_parents_counter_ion
     ('vanadium', 'Vanadium', 'Bis-Glycinato OxoVanadium', 'bis-glycinato oxovanadium'),
     ('yohimbe', 'Yohimbe Bark Extract', 'Yohimbine Alkaloids',
      'yohimbe extract standardized to yohimbine alkaloids'),
+    # 2026-09-28 form curation, batch 1: phosphate salts (Emergen-C).
+    ('phosphorus', 'Phosphorus', 'Monobasic Sodium Phosphate', 'phosphate salts'),
+    ('phosphorus', 'Phosphorus', 'Monobasic Potassium Phosphate', 'phosphate salts'),
+    ('phosphorus', 'Phosphorus', 'Monobasic Calcium Phosphate', 'phosphate salts'),
+    ('phosphorus', 'Phosphorus', 'sodium phosphate', 'phosphate salts'),
+    ('phosphorus', 'Phosphorus', 'Potassium Phosphate', 'phosphate salts'),
+    ('phosphorus', 'Phosphorus', 'Dipotassium Phosphate', 'phosphate salts'),
+    ('potassium', 'Potassium', 'Monobasic Potassium Phosphate', 'potassium phosphate'),
+    ('calcium', 'Calcium', 'Monobasic Calcium Phosphate', 'monocalcium phosphate'),
 ])
 def test_real_dsld_disclosures_reach_their_reviewed_parent_scoped_form(
         enricher, parent, label, token, form):
@@ -237,6 +246,26 @@ def test_real_dsld_disclosures_reach_their_reviewed_parent_scoped_form(
     assert (match['canonical_id'], match['form_id']) == (parent, form)
     assert match.get('form_match_status') != 'unmapped'
     assert not match.get('unmapped_forms')
+
+
+@pytest.fixture(scope='module')
+def normalizer():
+    from enhanced_normalizer import EnhancedDSLDNormalizer
+    return EnhancedDSLDNormalizer()
+
+
+@pytest.mark.parametrize('name, identity', [
+    ('Potassium Phosphate', ('potassium', 'ingredient_quality_map')),
+    ('Dipotassium Phosphate', ('potassium', 'ingredient_quality_map')),
+    ('Sodium Phosphate', ('PII_SODIUM_PHOSPHATE_GENERIC', 'other_ingredients')),
+    ('Monosodium Phosphate', ('phosphorus', 'ingredient_quality_map')),
+    ('Calcium Phosphate', ('calcium', 'ingredient_quality_map')),
+])
+def test_curated_source_forms_leave_standalone_identities_alone(normalizer, name, identity):
+    """Salt names curated as forms of another parent go in source_form_aliases,
+    which the cleaner's identity index never reads: a row that is only
+    "Sodium Phosphate" stays the excipient it was."""
+    assert normalizer._resolve_canonical_identity(name, raw_name=name) == identity
 
 
 def test_generic_tocopherol_is_curated_without_claiming_a_specific_isomer(enricher):
