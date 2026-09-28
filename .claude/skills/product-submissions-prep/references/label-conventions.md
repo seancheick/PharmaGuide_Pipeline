@@ -53,8 +53,10 @@ An **amount** field's value is `{"value": <number>, "unit_text": "<unit as print
 - **identity.brand / identity.product_name**: split as printed on the front:
   brand `Trader Joe's`, product name `Vitamin D3 125 mcg (5000 IU)`. Keep the
   printed strength in the name when the front prints it as part of the name.
-  `identity.barcode_digits_seen`: the digits under the barcode if a photo
-  shows them, else null.
+  `identity.barcode_digits_seen`: every digit under the barcode, including
+  leading zeros (`0067 1422`, `3 49597 00280 7`), when all are crisp. Some
+  digits unreadable → `partial` with what you can read, or null. A `read`
+  value that is not a whole GTIN is refused.
 - **serving.size**: the phrase as printed (`1 Tablet`). **serving.amount**:
   the same as a number plus unit (`{"value": 1, "unit_text": "Tablet"}`) when
   it is printed that plainly. **serving.servings_per_container**: as printed
@@ -79,12 +81,25 @@ An **amount** field's value is `{"value": <number>, "unit_text": "<unit as print
     a child row.
   - `status`: `read`, `partial` or `unreadable` for the row as a whole.
 - **other_ingredients**: `text` is the full printed list, verbatim, one
-  string. `disclosure_hint`: `present` (a list is printed), `declared_none`
-  (the label says there are none), `on_facts_panel` (listed inside the
-  panel), `unknown`.
-- **statements**: one field per printed statement, verbatim: directions,
-  warnings, storage, distributor line, "Gluten Free", "Vegan", seals. Not the
-  decorative graphics text (e.g. "TABLET SIZE" next to a size diagram).
+  string, without the "Other Ingredients:" heading. `disclosure_hint`:
+  - `present`: a list is printed, **wherever it sits**: below the panel, in
+    the panel's box, on another side. This is almost always the answer.
+  - `declared_none`: the label says there are none.
+  - `on_facts_panel`: the inactive ingredients appear only as rows *inside*
+    the Supplement Facts table; transcribe them as rows and leave `text` null.
+  - `unknown`: no photo shows the list.
+
+  Only `present` carries the list into the label. On S19 a correctly read
+  list was marked `on_facts_panel` and titanium dioxide silently vanished;
+  `record` now refuses that combination.
+- **statements**: one field per printed statement, verbatim: the front's
+  "DIETARY SUPPLEMENT" (statement of identity), directions, warnings,
+  storage, distributor line, "Gluten Free", "Vegan", seals. Split sentences
+  that have different types even when printed together: "Store in a cool,
+  dry place. Keep out of reach of children." is a Storage statement and a
+  Precautions re: Children statement. Not decorative graphics text (e.g.
+  "TABLET SIZE" next to a size diagram), and nothing from shelf signs or other
+  bottles in the frame.
 - **photo_roles**: one entry per photo: `photo_id`, `declared` (its
   categories from photos.json), `inferred` (`[{"role": ..., "confidence": ...}]`
   from what you see), `readability` (`ok`/`partial`/`unreadable`), `issues`
