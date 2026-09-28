@@ -11,6 +11,10 @@ The ratio counts when the Supplement Facts row prints it, in the row name ("2:1:
 BCAA") or in the text DSLD keeps as that row's `notes` ("BCAA" + "2:1:1"). A ratio
 stated only in a label statement, or computable from the leucine, isoleucine and
 valine amounts, does not count (register Q36).
+
+The ratio names the row's form; it does not change form quality. Every disclosed
+BCAA form absorbs to the same extent, so each scores 15 and the unspecified form is
+the lowest eligible named score minus 1 (IQM unknown-form rule), 14.
 """
 import json
 import logging
@@ -61,9 +65,9 @@ def test_a_bcaa_label_without_a_ratio_gives_the_scorer_the_unspecified_form(enri
     enriched = _enrich(enricher, 'bcaa_31148_raw.json')
     readings = _bcaa_readings(enriched)
 
-    assert (UNSPECIFIED, 10.0) in readings
+    assert (UNSPECIFIED, 14.0) in readings
     assert not {form for form, _ in readings} & {'bcaa 2:1:1', 'bcaa 4:1:1', 'bcaa peptides'}
-    assert _scored_bcaa_bio(enriched) == {10.0}
+    assert _scored_bcaa_bio(enriched) == {14.0}
     assert build_scored_artifact(enriched)['quality_score_status'] == 'scored'
 
 
@@ -138,3 +142,30 @@ def test_a_panel_note_names_the_form_only_through_the_parents_source_form_aliase
     assert (match['canonical_id'], match['form_id']) == (BCAA, form)
     assert match.get('match_status') not in ('FORM_DISCLOSED_UNMAPPED', 'FORM_UNMAPPED')
     assert (match.get('form_source') == 'row_notes') == (form == 'bcaa 2:1:1')
+
+
+def test_disclosed_bcaa_forms_share_the_parent_maximum_and_unspecified_is_one_lower(enricher):
+    """IQM bio_score for a systemic active follows absorption. A ratio sets how much of
+    each amino acid a serving holds, instantizing aids mixing, and peptide-bound BCAAs
+    appear faster but to the same ~90% extent (IQM Batch 22), so no disclosed form
+    outranks another."""
+    from scoring_reference_resolver import unknown_floor
+    parent = enricher.databases['ingredient_quality_map'][BCAA]
+    forms = parent['forms']
+    named = ('bcaa 2:1:1', 'bcaa 4:1:1', 'instantized bcaas', 'bcaa peptides')
+
+    assert {forms[name]['bio_score'] for name in named} == {15}
+    assert forms[UNSPECIFIED]['bio_score'] == unknown_floor(parent)[0] == 14
+
+    # The tier rests on a verified free-amino-acid absorption trial; peptides keeps
+    # its frozen legacy score until a source for peptide-bound extent is verified.
+    from iqm_form_evidence import validate_iqm_form
+    for name in ('bcaa 2:1:1', 'bcaa 4:1:1', 'instantized bcaas', UNSPECIFIED):
+        assert validate_iqm_form(forms[name], label=name) == []
+        assert [ref['pmid'] for ref in forms[name]['form_evidence']['references_structured']] == ['34642762']
+    assert 'form_evidence' not in forms['bcaa peptides']
+
+    copy = ' '.join(str(form.get(field) or '').lower() for form in forms.values() for field in ('notes', 'absorption'))
+    for unsupported in ('most common and clinically studied', 'maximize muscle protein synthesis',
+                        'absorbed even faster', 'superior', 'for accurate scoring'):
+        assert unsupported not in copy
