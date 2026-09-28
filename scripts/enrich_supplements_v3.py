@@ -4196,6 +4196,7 @@ class SupplementEnricherV3:
                 quality_map,
                 cleaned_forms=ingredient.get("forms") or [],
                 cleaner_canonical_id=reviewed_label_parent,
+                row_notes=ingredient.get("notes"),
             )
             if (
                 isinstance(reviewed_match, dict)
@@ -4324,6 +4325,7 @@ class SupplementEnricherV3:
                 quality_map,
                 cleaned_forms=ingredient.get("forms") or [],
                 cleaner_canonical_id=decision.canonical_id,
+                row_notes=ingredient.get("notes"),
             )
             taxonomy_coherent = self._identity_taxonomy_coherent(
                 ingredient, match_result, quality_map
@@ -4824,6 +4826,7 @@ class SupplementEnricherV3:
                         quality_map,
                         cleaned_forms=ingredient_forms,
                         cleaner_canonical_id="fish_oil",
+                        row_notes=ingredient.get("notes"),
                     )
                 else:
                     match_result = self._match_quality_map(
@@ -4832,6 +4835,7 @@ class SupplementEnricherV3:
                         quality_map,
                         cleaned_forms=ingredient_forms,
                         branded_token=_bte, cleaner_canonical_id=_cleaner_iqm_cid,
+                        row_notes=ingredient.get("notes"),
                     )
             context_match_reason = pre_context_match_reason
             authoritative_marker_context = False
@@ -4841,6 +4845,7 @@ class SupplementEnricherV3:
                     "Fucoidan",
                     quality_map,
                     cleaned_forms=ingredient_forms,
+                    row_notes=ingredient.get("notes"),
                 )
                 if context_match:
                     match_result = context_match
@@ -5168,6 +5173,7 @@ class SupplementEnricherV3:
                 match_result = self._match_quality_map(
                     ing_name, std_name, quality_map, cleaned_forms=ingredient_forms,
                     branded_token=_bte, cleaner_canonical_id=_cleaner_iqm_cid,
+                    row_notes=ingredient.get('notes'),
                 )
                 if self._is_blocked_botanical_source_marker_match(ingredient, match_result):
                     match_result = None
@@ -5514,20 +5520,8 @@ class SupplementEnricherV3:
                 if current and "unspecified" not in current:
                     continue
 
-                match = self._match_quality_map(
-                    disclosure,
-                    disclosure,
-                    quality_map,
-                    _form_extraction_attempt=True,
-                    preferred_parent=canonical_id,
-                    cleaner_canonical_id=canonical_id,
-                )
-                if (
-                    not isinstance(match, dict)
-                    or match.get("fallback_form_selected")
-                    or str(match.get("canonical_id") or "").strip().lower() != canonical_id
-                    or not self._is_specific_form_match(match, quality_map)
-                ):
+                match = self._specific_form_in_parent(disclosure, canonical_id, quality_map)
+                if not match:
                     continue
 
                 row.update({
@@ -8860,8 +8854,12 @@ class SupplementEnricherV3:
                            cleaned_forms: Optional[List[Dict]] = None,
                            preferred_parent: Optional[str] = None,
                            branded_token: Optional[str] = None,
-                           cleaner_canonical_id: Optional[str] = None) -> Optional[Dict]:
+                           cleaner_canonical_id: Optional[str] = None,
+                           row_notes: Optional[str] = None) -> Optional[Dict]:
         """Memoizing wrapper around :meth:`_match_quality_map_impl`.
+
+        ``row_notes`` (the row's DSLD notes) is read after the cached match,
+        by :meth:`_read_form_in_row_notes`, so it is not part of the key.
 
         The match result is a pure function of these arguments plus the static
         (within a run) quality_map, so repeated ingredient labels — ubiquitous in
@@ -8875,6 +8873,14 @@ class SupplementEnricherV3:
         intentionally NOT re-incremented on a cache hit — they are diagnostic,
         not part of the scored output.
         """
+        if isinstance(row_notes, str) and row_notes.strip() and not _form_extraction_attempt:
+            match = self._match_quality_map(
+                ing_name, std_name, quality_map, cleaned_forms=cleaned_forms,
+                preferred_parent=preferred_parent, branded_token=branded_token,
+                cleaner_canonical_id=cleaner_canonical_id,
+            )
+            return self._read_form_in_row_notes(
+                match, row_notes.strip(), quality_map, ing_name, cleaned_forms, cleaner_canonical_id)
         try:
             key = json.dumps(
                 [
@@ -8903,6 +8909,44 @@ class SupplementEnricherV3:
         # hand every caller its own isolated copy — the cache entry is immutable.
         self._match_quality_cache[key] = copy.deepcopy(result)
         return copy.deepcopy(result)
+
+    def _specific_form_in_parent(self, text: str, parent: str, quality_map: Dict) -> Optional[Dict]:
+        """The IQM form ``text`` names inside an already-known parent: a
+        specific form (not the parent default or its unspecified form) of that
+        same parent, or None. The one lookup for label text that selects a form
+        once the parent is known (a product-label disclosure, a row's panel note)."""
+        match = self._match_quality_map(
+            text, text, quality_map, _form_extraction_attempt=True,
+            preferred_parent=parent, cleaner_canonical_id=parent,
+        )
+        if (isinstance(match, dict) and match.get('canonical_id') == parent
+                and self._is_specific_form_match(match, quality_map)):
+            return match
+        return None
+
+    def _read_form_in_row_notes(self, match: Optional[Dict], notes: str, quality_map: Dict, ing_name: str,
+                                cleaned_forms: Optional[List[Dict]], cleaner_canonical_id: Optional[str]) -> Optional[Dict]:
+        """Panel text DSLD keeps apart from the row name ("BCAA" + notes
+        "2:1:1") can name the form the name and forms left unnamed. It is read
+        only under the parent the cleaner or a reviewer established, and only
+        through that parent's source_form_aliases (the reviewed clues that
+        select a form once the parent is known); any other note changes nothing
+        and is never a disclosed form. A disclosed form the reading dropped
+        wins: the row stays for the dropped-form check to hold."""
+        parent = (match or {}).get('canonical_id')
+        if (parent not in quality_map or parent != cleaner_canonical_id
+                or match.get('match_status') in ('FORM_DISCLOSED_UNMAPPED', 'FORM_UNMAPPED')
+                or self._is_specific_form_match(match, quality_map)):
+            return match
+        note_match = self._specific_form_in_parent(notes, parent, quality_map)
+        form = (quality_map[parent].get('forms') or {}).get((note_match or {}).get('form_id')) or {}
+        if (not note_match
+                or note_match.get('match_tier') not in {'exact', 'normalized'}
+                or note_match.get('matched_alias') not in (form.get('source_form_aliases') or [])
+                or self._dropped_label_forms(ing_name, parent, cleaned_forms)):
+            return match
+        note_match.update({'form_source': 'row_notes', 'original_label': ing_name})
+        return note_match
 
     @staticmethod
     def _norm_form_name(value: Any) -> str:
@@ -16620,10 +16664,10 @@ class SupplementEnricherV3:
             "postbiotic_metabolite_name": postbiotic_metabolite_name,
         }
 
-    def _anchor_form_reading(self, item: Dict[str, Any]) -> Dict[str, Any]:
+    def _anchor_form_reading(self, item: Dict[str, Any], row_notes: Optional[str] = None) -> Dict[str, Any]:
         """The enricher's own form reading for a blend-anchor identity: the
-        same matcher and unknown-form owner as an ingredient row, so scoring
-        never re-matches IQM aliases."""
+        same matcher and unknown-form owner as an ingredient row, reading the
+        source row's notes too, so scoring never re-matches IQM aliases."""
         quality_map = self.databases.get('ingredient_quality_map') or {}
         canonical = item.get('canonical_id')
         if canonical not in quality_map:
@@ -16631,7 +16675,7 @@ class SupplementEnricherV3:
         name = str(item.get('raw_source_text') or item.get('name') or '')
         match = self._match_quality_map(
             name, str(item.get('standardName') or item.get('standard_name') or name), quality_map,
-            cleaned_forms=item.get('forms') or [], cleaner_canonical_id=canonical,
+            cleaned_forms=item.get('forms') or [], cleaner_canonical_id=canonical, row_notes=row_notes,
         )
         if not match or match.get('canonical_id') != canonical:
             return {}
@@ -16652,9 +16696,11 @@ class SupplementEnricherV3:
             item for item in derive_product_scoring_evidence(enriched)
             if item.get("evidence_type") != "probiotic_cfu"
         ]
+        notes_by_path = {row.get("raw_source_path"): row.get("notes")
+                         for row in enriched.get("activeIngredients") or [] if isinstance(row, dict)}
         for item in evidence:
             if item.get("evidence_type") == "blend_anchor_mass":
-                item.update(self._anchor_form_reading(item))
+                item.update(self._anchor_form_reading(item, notes_by_path.get(item.get("raw_source_path"))))
         probiotic_data = enriched.get("probiotic_data") if isinstance(enriched.get("probiotic_data"), dict) else {}
         try:
             total_cfu_value = float(probiotic_data.get("total_cfu") or 0)

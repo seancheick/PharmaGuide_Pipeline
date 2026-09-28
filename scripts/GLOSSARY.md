@@ -96,7 +96,7 @@ committed outcome after a lost response without borrowing another attempt's resu
 | `AXIS_REQUIRED_CLAIMS` | Per-axis structured criteria the references must collectively support. Without it an axis name constrains nothing, and evidence answering a different scientific question could clear a backlog entry. |
 | `alias_identity_scope` | Reviewed identity authority for a form alias. `same_identity` permits exact parent-identity recovery; `source_preparation` excludes the form and its aliases from primary identity indexes. |
 | `same_identity_aliases` | Narrow per-alias alternative to form-wide `same_identity`; only exact listed labels receive parent-identity authority. |
-| `source_form_aliases` | Parent-scoped form-selection clues evaluated only after the cleaner/reviewer has established that IQM parent. They are absent from global identity indexes. |
+| `source_form_aliases` | Parent-scoped form-selection clues evaluated only after the cleaner/reviewer has established that IQM parent. They are absent from global identity indexes. They are also the only way a row's panel `notes` can name its form ("BCAA" + notes "2:1:1"; `form_source` 'row_notes'). |
 
 ## Product taxonomy terms
 

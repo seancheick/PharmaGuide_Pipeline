@@ -1,4 +1,4 @@
-"""A BCAA label that states no ratio reads the unspecified BCAA form.
+"""A BCAA row reads a ratio form only when its own panel text states the ratio.
 
 IQM `branched_chain_amino_acids`: a ratio form (2:1:1, 4:1:1) needs the label to
 state the ratio. A generic name ("BCAA", "Branched-Chain Amino Acids", "BCAA
@@ -6,6 +6,11 @@ Blend") reads `branched chain amino acids (unspecified)`, whose own consumer not
 says the listing does not state the ratio. Until 2026-09-28 the generic names sat
 on the 2:1:1 form (bio 15), so the hyphenated spelling read 2:1:1 and the
 unhyphenated one read unspecified (bio 10).
+
+The ratio counts when the Supplement Facts row prints it, in the row name ("2:1:1
+BCAA") or in the text DSLD keeps as that row's `notes` ("BCAA" + "2:1:1"). A ratio
+stated only in a label statement, or computable from the leucine, isoleucine and
+valine amounts, does not count (register Q36).
 """
 import json
 import logging
@@ -48,17 +53,29 @@ def _scored_bcaa_bio(enriched):
 
 
 def test_a_bcaa_label_without_a_ratio_gives_the_scorer_the_unspecified_form(enricher):
-    """Nutricost Intra (311733) lists "BCAA 5000 mg": no ratio, no amino-acid amounts.
-    Its blend-anchor evidence row is the BCAA row the scorer reads. (Its total does not
-    move: only the multi/prenatal route reads that row into Formulation.)"""
+    """GNC Ultra Mega Green Active (31148) lists "Branched-Chain Amino Acids 100 mg"
+    with leucine, isoleucine and valine undisclosed, and states no ratio anywhere.
+    Its blend-anchor evidence row is the BCAA row the scorer reads; on the
+    multi/prenatal route that reading enters Formulation."""
     from scoring_v4.scored_artifact import build_scored_artifact
-    enriched = _enrich(enricher, 'bcaa_311733_raw.json')
+    enriched = _enrich(enricher, 'bcaa_31148_raw.json')
     readings = _bcaa_readings(enriched)
 
     assert (UNSPECIFIED, 10.0) in readings
     assert not {form for form, _ in readings} & {'bcaa 2:1:1', 'bcaa 4:1:1', 'bcaa peptides'}
     assert _scored_bcaa_bio(enriched) == {10.0}
     assert build_scored_artifact(enriched)['quality_score_status'] == 'scored'
+
+
+def test_a_ratio_printed_on_the_panel_row_reads_the_ratio_form(enricher):
+    """Nutricost Intra (311733) prints "BCAA 2:1:1 ... 5,000mg" on its Supplement
+    Facts panel; DSLD keeps "BCAA" as the row name and "2:1:1" as the row's notes."""
+    enriched = _enrich(enricher, 'bcaa_311733_raw.json')
+    readings = _bcaa_readings(enriched)
+
+    assert ('bcaa 2:1:1', 15.0) in readings
+    assert UNSPECIFIED not in {form for form, _ in readings}
+    assert _scored_bcaa_bio(enriched) == {15.0}
 
 
 def test_a_label_that_states_2_1_1_keeps_the_ratio_form(enricher):
@@ -103,3 +120,21 @@ def test_instantized_amino_acids_is_not_a_bcaa_identity(enricher):
     assert match.get('canonical_id') != BCAA
     assert enricher._match_quality_map('Branched-Chain Amino Acids, Instantized', 'Branched-Chain Amino Acids, Instantized',
                                        iqm)['form_id'] == 'instantized bcaas'
+
+
+@pytest.mark.parametrize('name, notes, form', [
+    ('BCAA', '2:1:1', 'bcaa 2:1:1'),
+    ('Branched-Chain Amino Acids', '2:1:1', 'bcaa 2:1:1'),
+    ('Branched-Chain Amino Acids', 'BCAA 2:1:1 Blend', 'bcaa 2:1:1'),
+    # The row name already names a form, so the note is not consulted.
+    ('Branched-Chain Amino Acids, Instantized', '2:1:1', 'instantized bcaas'),
+    # Panel text that is not one of the parent's source-form tokens changes nothing.
+    ('BCAA', 'Supports muscle recovery', UNSPECIFIED),
+])
+def test_a_panel_note_names_the_form_only_through_the_parents_source_form_aliases(enricher, name, notes, form):
+    match = enricher._match_quality_map(name, name, enricher.databases['ingredient_quality_map'],
+                                        cleaner_canonical_id=BCAA, row_notes=notes)
+
+    assert (match['canonical_id'], match['form_id']) == (BCAA, form)
+    assert match.get('match_status') not in ('FORM_DISCLOSED_UNMAPPED', 'FORM_UNMAPPED')
+    assert (match.get('form_source') == 'row_notes') == (form == 'bcaa 2:1:1')

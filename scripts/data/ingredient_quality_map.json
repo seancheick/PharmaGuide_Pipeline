@@ -45158,7 +45158,11 @@
           "range_low": 0.85,
           "range_high": 0.95,
           "quality": "very_good"
-        }
+        },
+        "source_form_aliases": [
+          "2:1:1",
+          "bcaa 2:1:1 blend"
+        ]
       },
       "bcaa 4:1:1": {
         "bio_score": 14,
