@@ -394,6 +394,28 @@ def test_a_source_plant_or_standardization_marker_names_no_form(enricher, parent
     assert not match.get('unmapped_forms')
 
 
+@pytest.mark.parametrize('parent, label, form, expected', [
+    # 2026-09-28 form curation, batch 6: DSLD tags copied from the held labels, including
+    # the two approved submissions (Quatrefolic folate; EPA/DHA ethyl ester).
+    ('beta_carotene', 'Mixed Carotenoids', {'name': 'Alpha-Carotene', 'category': 'non-nutrient/non-botanical', 'ingredientGroup': 'Alpha-carotene'}, 'natural beta-carotene (from dunaliella salina)'),
+    ('chlorophyll', 'Chlorophyll', {'name': 'Chlorophyllin Copper Complex', 'category': 'non-nutrient/non-botanical', 'ingredientGroup': 'Chlorophyllin'}, 'copper chlorophyllin'),
+    ('copper', 'Copper', {'name': 'Chlorophyllin Copper Complex Sodium', 'category': 'non-nutrient/non-botanical', 'ingredientGroup': 'Chlorophyllin'}, 'copper (unspecified)'),
+    ('vitamin_e', 'Vitamin E', {'name': 'D-Beta-Tocopherol', 'category': 'vitamin', 'ingredientGroup': 'Vitamin E'}, 'mixed tocopherols'),
+    ('vitamin_e', 'Vitamin E', {'name': 'D-Delta-Tocopherol', 'category': 'vitamin', 'ingredientGroup': 'Vitamin E'}, 'mixed tocopherols'),
+    ('epa', 'KD-Pur EPA', {'name': 'Ethyl Ester', 'category': 'non-nutrient/non-botanical', 'prefix': 'as', 'ingredientGroup': 'Ethyl Ester'}, 'EPA fish oil ethyl ester'),
+    ('chamomile', 'Chamomile Flower Extract', {'name': 'Matricaria chamomilla Flower Extract', 'category': 'botanical', 'ingredientGroup': 'German Chamomile '}, 'chamomile extract'),
+    ('beta_carotene', 'Vitamin A', {'name': 'Mixed Carotenoids', 'category': 'non-nutrient/non-botanical', 'prefix': 'with', 'ingredientGroup': 'carotenoids'}, 'natural beta-carotene (from dunaliella salina)'),
+    ('vitamin_b9_folate', 'Folate', {'name': '6S-5-Methyltetrahydrofolate (glucosamine salt)'}, 'quatrefolic'),
+    ('shilajit', 'ElevATP', {'name': 'Apple Extract', 'category': 'botanical'}, 'fulvic acid'),
+    ('shilajit', 'ElevATP', {'name': 'Ancient Peat extract', 'category': 'other'}, 'fulvic acid'),
+])
+def test_a_held_label_spelling_reaches_the_form_it_names(enricher, parent, label, form, expected):
+    match = enricher._match_quality_map(label, label, enricher.databases['ingredient_quality_map'],
+                                        cleaned_forms=[form], cleaner_canonical_id=parent)
+    assert (match['canonical_id'], match['form_id']) == (parent, expected)
+    assert not match.get('unmapped_forms')
+
+
 def test_bitter_orange_under_citrus_bioflavonoids_stays_held_for_review(enricher):
     """Bitter orange carries its own safety owner (synephrine); it is not
     folded into the generic citrus-source list without a review."""

@@ -33,7 +33,7 @@
     "statistics": {
       "total_parents": 655,
       "total_forms": 1458,
-      "total_form_aliases": 12207,
+      "total_form_aliases": 12208,
       "parents_with_parent_aliases": 146,
       "parents_with_contains_aliases": 0,
       "parents_with_pattern_aliases": 0
@@ -54,7 +54,7 @@
       "vitamins": 25
     },
     "schema_version": "5.6.1",
-    "last_updated": "2026-09-27",
+    "last_updated": "2026-09-28",
     "pipeline_integration": "Used by enrichment to assign form quality (bio_score) to matched ingredient forms. Match ingredient name against forms aliases (case-insensitive).",
     "matching_notes": [
       "Match ingredient name + forms text against aliases array (case-insensitive)",
@@ -4482,7 +4482,8 @@
           "quatrefolic (6s)-5-methyltetrahydrofolic acid glucosamine salt",
           "quatrefolic (6s)-5-methyltetrahydrofolate glucosamine salt",
           "Quatrefolic (6S)-5-Methyltetrahyrdofolic Acid, Glucosamine Salt",
-          "L-5 Methyltetrahydrofolic Acid, Glucosamine Salt"
+          "L-5 Methyltetrahydrofolic Acid, Glucosamine Salt",
+          "6s-5-methyltetrahydrofolate (glucosamine salt)"
         ],
         "dosage_importance": 1.5,
         "absorption_structured": {
@@ -6490,7 +6491,9 @@
           "gamma-tocopherol",
           "delta-tocopherol",
           "delta tocopherol",
-          "delta tocopherols"
+          "delta tocopherols",
+          "d-beta-tocopherol",
+          "d-delta-tocopherol"
         ],
         "bio_score": 12,
         "absorption": "full-spectrum natural; α-form retained via α-TTP, β/γ/δ absorbed but rapidly metabolized",
@@ -14626,7 +14629,11 @@
           "range_low": 0.2,
           "range_high": 0.65,
           "quality": "moderate"
-        }
+        },
+        "source_form_aliases": [
+          "chlorophyllin copper complex",
+          "chlorophyllin copper complex sodium"
+        ]
       },
       "copper picolinate": {
         "bio_score": 10,
@@ -33330,7 +33337,11 @@
         "external_ids": {
           "unii": "EEM82VOY7C"
         },
-        "absorption": "low (water-soluble; CuCle4 detected in human serum)"
+        "absorption": "low (water-soluble; CuCle4 detected in human serum)",
+        "source_form_aliases": [
+          "chlorophyllin copper complex",
+          "chlorophyllin copper complex sodium"
+        ]
       },
       "natural chlorophyll": {
         "bio_score": 3,
@@ -46130,7 +46141,11 @@
         },
         "external_ids": {
           "unii": "XII14C5FXV"
-        }
+        },
+        "source_form_aliases": [
+          "ancient peat extract",
+          "apple extract"
+        ]
       },
       "shilajit resin": {
         "bio_score": 10,
@@ -47210,7 +47225,10 @@
           "quality": "good",
           "range_low": 0.6,
           "range_high": 0.8
-        }
+        },
+        "source_form_aliases": [
+          "ethyl ester"
+        ]
       },
       "DHA fish oil triglyceride": {
         "bio_score": 11,
@@ -47431,7 +47449,10 @@
           "quality": "good",
           "range_low": 0.6,
           "range_high": 0.8
-        }
+        },
+        "source_form_aliases": [
+          "ethyl ester"
+        ]
       },
       "EPA fish oil triglyceride": {
         "bio_score": 11,
@@ -49728,7 +49749,10 @@
           "range_high": 0.6,
           "quality": "moderate"
         },
-        "dosage_importance": 1.0
+        "dosage_importance": 1.0,
+        "source_form_aliases": [
+          "matricaria chamomilla flower extract"
+        ]
       }
     },
     "match_rules": {
@@ -55188,7 +55212,11 @@
           "range_low": 0.09,
           "range_high": 0.35,
           "quality": "low"
-        }
+        },
+        "source_form_aliases": [
+          "mixed carotenoids",
+          "alpha-carotene"
+        ]
       },
       "beta-carotene beadlet": {
         "bio_score": 6,
