@@ -33,7 +33,7 @@
     "statistics": {
       "total_parents": 655,
       "total_forms": 1458,
-      "total_form_aliases": 12307,
+      "total_form_aliases": 12305,
       "parents_with_parent_aliases": 146,
       "parents_with_contains_aliases": 0,
       "parents_with_pattern_aliases": 0
@@ -45147,17 +45147,9 @@
         },
         "notes": "The most common and clinically studied ratio of Leucine, Isoleucine, and Valine. It is highly effective for muscle protein synthesis and recovery.",
         "aliases": [
-          "bcaa",
-          "bcaas",
-          "branched-chain amino acids",
           "leucine:isoleucine:valine 2:1:1",
-          "bcaa powder",
-          "bcaa supplement",
-          "bcaas supplement",
-          "branched-chain amino acids supplement",
           "bcaa 2:1:1 supplement",
           "leucine:isoleucine:valine 2:1:1 supplement",
-          "bcaa powder supplement",
           "2:1:1 BCAA"
         ],
         "dosage_importance": 1.0,
@@ -45178,13 +45170,9 @@
         },
         "notes": "A BCAA ratio with a higher concentration of Leucine to maximize muscle protein synthesis, often preferred for bodybuilders and athletes.",
         "aliases": [
-          "high leucine bcaa",
           "leucine:isoleucine:valine 4:1:1",
-          "leucine dominant bcaa",
           "bcaa 4:1:1 supplement",
-          "high leucine bcaa supplement",
-          "leucine:isoleucine:valine 4:1:1 supplement",
-          "leucine dominant bcaa supplement"
+          "leucine:isoleucine:valine 4:1:1 supplement"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -45206,11 +45194,9 @@
         "aliases": [
           "bcaa instant",
           "instant bcaa",
-          "instantized amino acids",
           "instantized bcaas supplement",
           "bcaa instant supplement",
           "instant bcaa supplement",
-          "instantized amino acids supplement",
           "Branched-Chain Amino Acids, Instantized"
         ],
         "dosage_importance": 1.0,
@@ -45233,11 +45219,9 @@
         "aliases": [
           "bcaa dipeptides",
           "bcaa protein hydrolysate",
-          "bcaa blend",
           "bcaa peptides supplement",
           "bcaa dipeptides supplement",
-          "bcaa protein hydrolysate supplement",
-          "bcaa blend supplement"
+          "bcaa protein hydrolysate supplement"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -45263,7 +45247,21 @@
           "Micronized BCAAs",
           "Free-form BCAA's",
           "free-form BCAAs",
-          "free-form BCAA’s"
+          "free-form BCAA’s",
+          "bcaa",
+          "bcaas",
+          "branched-chain amino acids",
+          "bcaa powder",
+          "bcaa supplement",
+          "bcaas supplement",
+          "branched-chain amino acids supplement",
+          "bcaa powder supplement",
+          "bcaa blend",
+          "bcaa blend supplement",
+          "high leucine bcaa",
+          "leucine dominant bcaa",
+          "high leucine bcaa supplement",
+          "leucine dominant bcaa supplement"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {

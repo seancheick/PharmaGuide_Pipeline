@@ -696,7 +696,7 @@ def test_a_held_source_or_marker_token_leaves_the_row_unheld(enricher, parent, l
     ('potassium', 'Potassium', {'name': 'Potassium Hydroxycitrate', 'category': _M, 'prefix': 'as', 'ingredientGroup': 'Potassium hydroxycitrate'}, 'potassium (unspecified)'),
     # Batch 10: vitamin, amino-acid and botanical spellings, phytosomes and blend members. When
     # the token reads the unspecified form, the row label decides (psyllium husk powder,
-    # tart cherry extract, the BCAA label's existing 2:1:1 alias).
+    # tart cherry extract; a generic BCAA label reads the unspecified BCAA form).
     ('caffeine', 'Caffeine', {'name': 'extended-release Caffeine', 'category': _M, 'prefix': 'as', 'ingredientGroup': 'Caffeine'}, 'caffeine anhydrous'),
     ('caffeine', 'Caffeine', {'name': 'extended release Caffeine', 'category': _M, 'prefix': 'as', 'ingredientGroup': 'Caffeine'}, 'caffeine anhydrous'),
     ('inulin', 'Inulin', {'name': 'Fructooligosaccharides', 'category': 'fiber', 'ingredientGroup': 'Fructo-Oligosaccharides (FOS)'}, 'inulin (unspecified)'),
@@ -785,9 +785,9 @@ def test_a_held_source_or_marker_token_leaves_the_row_unheld(enricher, parent, l
     ('green_tea_extract', 'TeaSlender Green Tea Phytosome', {'name': 'Green Tea Phytosome decaffeinated extract', 'category': _B, 'ingredientGroup': 'Green Tea'}, 'green tea phytosome'),
     ('citrus_bioflavonoids', 'Rutin', {'name': 'Quercetin Rutinoside', 'category': _M, 'ingredientGroup': 'Quercetin'}, 'rutin'),
     ('pterostilbene', 'trans-Pterostilbene', {'name': 'Dimethylresveratrol', 'category': _M, 'ingredientGroup': 'Dimethylresveratrol'}, 'trans-pterostilbene'),
-    ('branched_chain_amino_acids', 'Branched-Chain Amino Acids', {'name': 'L-Leucine', 'category': 'amino acid', 'ingredientGroup': 'Leucine'}, 'bcaa 2:1:1'),
-    ('branched_chain_amino_acids', 'Branched-Chain Amino Acids', {'name': 'L-Isoleucine', 'category': 'amino acid', 'ingredientGroup': 'Isoleucine'}, 'bcaa 2:1:1'),
-    ('branched_chain_amino_acids', 'Branched-Chain Amino Acids', {'name': 'L-Valine', 'category': 'amino acid', 'ingredientGroup': 'Valine'}, 'bcaa 2:1:1'),
+    ('branched_chain_amino_acids', 'Branched-Chain Amino Acids', {'name': 'L-Leucine', 'category': 'amino acid', 'ingredientGroup': 'Leucine'}, 'branched chain amino acids (unspecified)'),
+    ('branched_chain_amino_acids', 'Branched-Chain Amino Acids', {'name': 'L-Isoleucine', 'category': 'amino acid', 'ingredientGroup': 'Isoleucine'}, 'branched chain amino acids (unspecified)'),
+    ('branched_chain_amino_acids', 'Branched-Chain Amino Acids', {'name': 'L-Valine', 'category': 'amino acid', 'ingredientGroup': 'Valine'}, 'branched chain amino acids (unspecified)'),
     ('branched_chain_amino_acids', 'BCAA Complex', {'name': 'L-Leucine, Micronized', 'category': 'amino acid', 'ingredientGroup': 'Leucine'}, 'branched chain amino acids (unspecified)'),
     ('branched_chain_amino_acids', 'BCAA Complex', {'name': 'L-Isoleucine, Micronized', 'category': 'amino acid', 'ingredientGroup': 'Isoleucine'}, 'branched chain amino acids (unspecified)'),
     ('branched_chain_amino_acids', 'BCAA Complex', {'name': 'L-Valine, Micronized', 'category': 'amino acid', 'ingredientGroup': 'Valine'}, 'branched chain amino acids (unspecified)'),
