@@ -863,6 +863,12 @@ def _free_from_clause_spans(text: str) -> List[Tuple[int, int]]:
     return spans
 
 
+# A counter-ion token the cleaner split from its compound ("Glucosamine Salt",
+# "Calcium Salt"); never a form on its own.
+_COUNTER_ION_SALT_RE = re.compile(
+    r"(?:glucosamine|calcium|sodium|potassium|magnesium)\s+salt", re.IGNORECASE)
+
+
 class SupplementEnricherV3:
     """
     Lean enrichment system focused on data collection for scoring.
@@ -8524,7 +8530,8 @@ class SupplementEnricherV3:
 
         return result
 
-    def _build_form_info_from_cleaned(self, ing_name: str, cleaned_forms: List[Dict]) -> Optional[Dict]:
+    def _build_form_info_from_cleaned(self, ing_name: str, cleaned_forms: List[Dict],
+                                      std_name: Optional[str] = None) -> Optional[Dict]:
         """
         Build a form_info dict from the cleaning stage's structured forms[] array.
 
@@ -8638,8 +8645,45 @@ class SupplementEnricherV3:
                 if src:
                     from_source_map[i - 1] = src
 
+        # COUNTER-ION FOLDING: "Folate (as (6S)-5-Methyltetrahydrofolic Acid,
+        # Glucosamine Salt)" is one compound (Quatrefolic); "... Calcium Salt"
+        # is Metafolin. The cleaner splits the parenthetical, and the salt
+        # token alone names no form, so fold it into its neighbouring compound
+        # form: tried as "compound, salt" then the compound (register Q35).
+        salt_of: Dict[int, str] = {}  # compound index → counter-ion token
+        folded_salts: set[int] = set()
+
+        def _plain_form(index: int) -> bool:
+            if not 0 <= index < len(cleaned_forms):
+                return False
+            other = cleaned_forms[index]
+            other_prefix = (other.get('prefix') or '').strip()
+            return bool((other.get('name') or '').strip()) and not (
+                _COUNTER_ION_SALT_RE.fullmatch((other.get('name') or '').strip())
+                or other_prefix in _FROM_PREFIXES
+                or other_prefix in _CULTURE_PREFIXES
+            )
+
+        for i, form in enumerate(cleaned_forms):
+            salt_name = (form.get('name') or '').strip()
+            if (not _COUNTER_ION_SALT_RE.fullmatch(salt_name)
+                    or (form.get('prefix') or '').strip() in _FROM_PREFIXES):
+                continue
+            compound = next(
+                (j for j in (i - 1, i + 1) if _plain_form(j) and j not in salt_of), None)
+            if compound is None:
+                continue
+            salt_of[compound] = salt_name
+            folded_salts.add(i)
+            if i in from_source_map and compound not in from_source_map:
+                from_source_map[compound] = from_source_map.pop(i)
+
+        _CHELATE_TOKENS = frozenset({'chelate', 'chelated'})
+        sibling_tokens = {(form.get('name') or '').strip().lower() for form in cleaned_forms}
+
         extracted_forms = []
         for i, form in enumerate(cleaned_forms):
+            form_name_token = (form.get('name') or '').strip().lower()
             prefix = (form.get('prefix') or '').strip()
             keep_from_prefixed_form = (
                 prefix in _FROM_PREFIXES
@@ -8674,6 +8718,16 @@ class SupplementEnricherV3:
                         })
                 continue
 
+            if i in folded_salts:
+                continue
+            # A bare "chelate" token beside a salt token names that salt's
+            # chelate ("Magnesium Lysinate Glycinate Chelate" split into
+            # "glycinate" + "chelated"), not a second form.
+            if (form_name_token in _CHELATE_TOKENS
+                    and any(other in _SALT_QUALIFIERS - _CHELATE_TOKENS
+                            for other in sibling_tokens)):
+                continue
+
             form_name = form.get('name', '')
             if not form_name or not form_name.strip():
                 continue
@@ -8694,6 +8748,11 @@ class SupplementEnricherV3:
                 stripped_src = source_name.strip()
                 if stripped_src != source_name:
                     match_candidates.append(stripped_src)
+            display_form = form_name
+            if i in salt_of:
+                compound_text = form_name.strip()
+                display_form = f"{compound_text}, {salt_of[i]}"
+                match_candidates.extend([display_form, f"{compound_text} {salt_of[i]}"])
 
             # SALT QUALIFIER RESOLUTION: when DSLD forms[] provides only a bare
             # chemical qualifier (e.g., "citrate" from "Magnesium Citrate"), the
@@ -8704,6 +8763,13 @@ class SupplementEnricherV3:
                 ing_stripped = ing_name.strip()
                 if ing_stripped and ing_stripped not in match_candidates:
                     match_candidates.insert(0, ing_stripped)
+                # When the match name is a brand token ("Albion"), the salt is
+                # the nutrient's ("Magnesium malate"), not "Albion malate" (Q35).
+                nutrient = (std_name or '').strip()
+                if nutrient and nutrient.lower() != ing_stripped.lower():
+                    nutrient_salt = f"{nutrient} {form_name.strip()}"
+                    if nutrient_salt not in match_candidates:
+                        match_candidates.insert(1 if ing_stripped else 0, nutrient_salt)
 
             # Canonicalize generic form prose once, then resolve it only inside
             # the already-authoritative ingredient parent. Do not duplicate the
@@ -8771,7 +8837,7 @@ class SupplementEnricherV3:
             extracted_forms.append({
                 'raw_form_text': form_name,
                 'match_candidates': match_candidates,
-                'display_form': form_name,
+                'display_form': display_form,
                 'percent_share': percent_share,
                 # Phase 2: preserve DSLD structural signals from the cleaner
                 # so `_match_multi_form` can short-circuit source descriptors
@@ -9375,7 +9441,7 @@ class SupplementEnricherV3:
         if not _form_extraction_attempt:
             # PRIORITY 1: Use cleaned_forms[] from cleaning stage (structured, reliable)
             if cleaned_forms and isinstance(cleaned_forms, list) and len(cleaned_forms) > 0:
-                form_info = self._build_form_info_from_cleaned(ing_name, cleaned_forms)
+                form_info = self._build_form_info_from_cleaned(ing_name, cleaned_forms, std_name)
                 if form_info and form_info.get('form_extraction_success'):
                     multi_form_result = self._match_multi_form(
                         form_info, quality_map,

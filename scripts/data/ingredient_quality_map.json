@@ -33,7 +33,7 @@
     "statistics": {
       "total_parents": 655,
       "total_forms": 1458,
-      "total_form_aliases": 12305,
+      "total_form_aliases": 12307,
       "parents_with_parent_aliases": 146,
       "parents_with_contains_aliases": 0,
       "parents_with_pattern_aliases": 0
@@ -4528,7 +4528,9 @@
           "L-Methylfolate Calcium supplement",
           "(6S)-5-Methyltetrahydrofolate Calcium",
           "(6S)-N5-Methyltetrahydrofolic Acid Calcium Salt",
-          "N5-Methyltetrahydrofolic Acid Calcium Salt"
+          "N5-Methyltetrahydrofolic Acid Calcium Salt",
+          "(6s)-5-methyltetrahydrofolic acid calcium salt",
+          "(6s)-5-methyltetrahydrofolate acid calcium salt"
         ],
         "dosage_importance": 1.5,
         "absorption_structured": {
