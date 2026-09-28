@@ -43,3 +43,46 @@ def test_the_header_mass_is_not_a_child_dose(label, header_mg, leucine_mg):
     assert [(r.get("quantity"), r.get("evidence_scope")) for r in bcaa] == [(header_mg, "blend_level")]
     assert [r.get("quantity") for r in rows if r.get("canonical_id") == "l_leucine"] == leucine_mg
     assert not any(r.get("reason") == "identity_bearing_blend_header_mass_from_nested_child" for r in rows)
+
+
+def test_an_unnamed_header_still_lends_its_mass_to_an_undosed_child():
+    """GNC Ravage (2219): "Assault Proprietary Blend 5.3 g" names no identity
+    (its own anchor is only the name slug) and its children carry no amounts,
+    so the blend-level mass stays with the title child identity, as before."""
+    rows = _rows("blend_2219_raw.json")
+    lent = {(r.get("canonical_id"), r.get("quantity")) for r in rows
+            if r.get("reason") == "identity_bearing_blend_header_mass_from_nested_child"}
+    assert ("beta_alanine", 3.2) in lent and ("creatine_monohydrate", 3.1) in lent
+    assert all(r.get("evidence_scope") == "blend_level" for r in rows
+               if r.get("reason") == "identity_bearing_blend_header_mass_from_nested_child")
+
+
+def test_a_lent_blend_mass_is_not_a_sports_dose():
+    """Ravage's "ATP Optimizing Creatine Module 3.1 g" lists creatine
+    monohydrate, creatine ethyl ester, creatine AKG, guanidinoacetate, AKG,
+    arginine, glycine and methionine with no amounts. The 3.1 g is lent to the
+    creatine child as a blend-level anchor, and sports Dose read it as a 3.1 g
+    creatine dose: 20/20 (creatine_3_to_10_g). A blend mass lent to a child is
+    not that child's individual dose (Codex, RR-04 review); the opaque blend
+    is scored as one."""
+    import json
+    from enhanced_normalizer import EnhancedDSLDNormalizer
+    from enrich_supplements_v3 import SupplementEnricherV3
+    from scoring_v4.modules.sports_helpers import sports_dosed_rows
+
+    raw = json.loads((FIXTURES / "blend_2219_raw.json").read_text())
+    enriched, _ = SupplementEnricherV3().enrich_product(EnhancedDSLDNormalizer().normalize_product(raw))
+    lent = [r for r in sports_dosed_rows(enriched)
+            if r.get("reason") == "identity_bearing_blend_header_mass_from_nested_child"]
+    assert lent == []
+
+
+def test_a_self_named_bcaa_total_stays_a_sports_dose():
+    from scoring_v4.modules.sports_helpers import sports_dosed_rows
+    import json
+    from enhanced_normalizer import EnhancedDSLDNormalizer
+    from enrich_supplements_v3 import SupplementEnricherV3
+
+    raw = json.loads((FIXTURES / "bcaa_67304_raw.json").read_text())
+    enriched, _ = SupplementEnricherV3().enrich_product(EnhancedDSLDNormalizer().normalize_product(raw))
+    assert any(r.get("canonical_id") == "branched_chain_amino_acids" for r in sports_dosed_rows(enriched))

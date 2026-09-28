@@ -13,6 +13,7 @@ from scoring_v4.exposure import row_exposure
 from serving_frequency import has_loading_protocol
 
 from scoring_v4.modules.generic_helpers import _norm_text, _safe_list, get_active_ingredients
+from scoring_input_contract import is_lent_blend_mass
 from scoring_v4.modules.sports_helpers import (
     ALPHA_GPC_CANONICALS,
     ATP_CANONICALS,
@@ -124,7 +125,7 @@ def _dominant_disclosed_active_is_offlist(product: Dict[str, Any]) -> bool:
     best_row: Optional[Dict[str, Any]] = None
     best_g = 0.0
     for row in get_active_ingredients(product or {}):
-        if not isinstance(row, dict):
+        if not isinstance(row, dict) or is_lent_blend_mass(row):
             continue
         grams = dose_g(row)
         if grams is not None and grams > best_g:

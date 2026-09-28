@@ -75,6 +75,12 @@ _LABEL_ACTIVE_PROJECTION_REASONS = {
     "identity_bearing_active_anchor_mass",
     "single_active_title_embedded_mass",
 }
+# A blend total lent to one child identity (the header or blend names none of
+# its own): blend-level evidence of that child, never its individual dose.
+_LENT_BLEND_MASS_REASONS = {
+    "identity_bearing_blend_header_mass_from_nested_child",
+    "proprietary_blend_total_from_botanical_child",
+}
 SCORING_CLASSIFICATION_SCHEMA_VERSION = "1.3.0"
 ROUTE_CLASSIFIER_VERSION = "1.3.1"
 SCORING_CLASSIFICATION_ORIGINS = {"compatibility_derived", "native_enrichment"}
@@ -89,6 +95,17 @@ def normalize_product_evidence_scope(value: Any) -> str:
     return {
         "blend_total": "blend_level",
     }.get(scope, scope)
+
+
+def is_lent_blend_mass(row: Any) -> bool:
+    """True for a blend total lent to a child identity: the child's share of
+    the blend is not on the label, so no dose reader may take it as the
+    child's individual amount."""
+    return (
+        isinstance(row, dict)
+        and _norm(row.get("evidence_type")) == "blend_anchor_mass"
+        and _norm(row.get("reason")) in _LENT_BLEND_MASS_REASONS
+    )
 
 
 def _scoring_input_kind_for_product_evidence(item: Dict[str, Any]) -> str:
@@ -2083,9 +2100,11 @@ def derive_product_scoring_evidence(product: Dict[str, Any]) -> List[Dict[str, A
             name=anchor_name or row.get("name") or "Title embedded dose",
         ))
 
-    # A header that names itself already carries its mass as blend-level
-    # evidence; lending that mass to a child would make it the child's dose.
-    self_anchored_paths = {
+    # A header that names a verified identity ("2:1:1 BCAA") already carries
+    # its mass as its own blend-level anchor; lending that mass to a child
+    # would make it the child's dose. An unnamed header ("Assault Proprietary
+    # Blend") anchors only a name slug, so it still borrows a child identity.
+    anchored_paths = {
         str(item.get("raw_source_path") or "")
         for item in evidence
         if item.get("evidence_type") == "blend_anchor_mass"
@@ -2096,7 +2115,7 @@ def derive_product_scoring_evidence(product: Dict[str, Any]) -> List[Dict[str, A
             not parent_path
             or parent_path in scorable_paths
             or parent_path in special_evidence_paths
-            or parent_path in self_anchored_paths
+            or (parent_path in anchored_paths and _verified_anchor_canonical(parent))
         ):
             continue
         item = _derive_blend_header_anchor_from_nested_child(product, parent, candidate_rows)

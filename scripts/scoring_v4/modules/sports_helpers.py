@@ -4,6 +4,8 @@ from __future__ import annotations
 
 from typing import Any, Dict, Iterable, List, Optional, Set
 
+from scoring_input_contract import is_lent_blend_mass
+
 from scoring_v4.route_features import (
     BCAA_CANONICALS as ROUTE_FEATURE_BCAA_CANONICALS,
     EAA_CANONICALS as ROUTE_FEATURE_EAA_CANONICALS,
@@ -151,7 +153,9 @@ def sports_identity_rows(product: Dict[str, Any]) -> List[Dict[str, Any]]:
 def sports_dosed_rows(product: Dict[str, Any]) -> List[Dict[str, Any]]:
     rows: List[Dict[str, Any]] = []
     for row in sports_identity_rows(product):
-        if not has_usable_individual_dose(row):
+        # A blend mass lent to one child ("Creatine Module 3.1 g" of eight
+        # undosed ingredients) is not that child's dose; the blend stays opaque.
+        if not has_usable_individual_dose(row) or is_lent_blend_mass(row):
             continue
         rows.append(row)
     return rows
