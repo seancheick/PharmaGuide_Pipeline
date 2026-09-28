@@ -33,7 +33,7 @@
     "statistics": {
       "total_parents": 655,
       "total_forms": 1458,
-      "total_form_aliases": 12214,
+      "total_form_aliases": 12260,
       "parents_with_parent_aliases": 146,
       "parents_with_contains_aliases": 0,
       "parents_with_pattern_aliases": 0
@@ -7233,7 +7233,10 @@
             }
           ]
         },
-        "form_evidence_axis": "form_quality_confidence"
+        "form_evidence_axis": "form_quality_confidence",
+        "source_form_aliases": [
+          "calcium magnesium citrate"
+        ]
       },
       "calcium malate": {
         "bio_score": 13,
@@ -7257,7 +7260,9 @@
           "DimaCal Dicalcium Malate supplement",
           "DimaCal supplement",
           "DimaCal Di-Calcium Malate",
-          "Di-Calcium Malate"
+          "Di-Calcium Malate",
+          "albion dicalcium malate",
+          "albion dimacal"
         ],
         "dosage_importance": 1.5,
         "absorption_structured": {
@@ -7297,7 +7302,8 @@
           "TRAACS Calcium supplement",
           "calcium glycinate",
           "Albion Calcium Bisglycinate Chelate",
-          "calcium glycinate amino acid chelate"
+          "calcium glycinate amino acid chelate",
+          "calcium bisglycinate, fermented"
         ],
         "dosage_importance": 1.5,
         "absorption_structured": {
@@ -7328,7 +7334,8 @@
           "bone calcium supplement",
           "hydroxyapatite calcium supplement",
           "MCHC supplement",
-          "hydroxyapatite"
+          "hydroxyapatite",
+          "microcrystalline hydroxyapatite calcium"
         ],
         "dosage_importance": 1.5,
         "absorption_structured": {
@@ -7410,7 +7417,8 @@
           "calcium lactate supplement",
           "cal lactate supplement",
           "lactic acid calcium supplement",
-          "calcium lactate gluconate"
+          "calcium lactate gluconate",
+          "calcium lactate pentahydrate"
         ],
         "dosage_importance": 1.5,
         "absorption_structured": {
@@ -7720,7 +7728,18 @@
           "calcium d-pantothenate",
           "d-calcium pantothenate",
           "d calcium pantothenate",
-          "r-3-hydroxybutyric acid calcium"
+          "r-3-hydroxybutyric acid calcium",
+          "calcium laurate",
+          "calcium caprylate",
+          "calcium undecylenate",
+          "calcium stearate",
+          "calcium silicate",
+          "calcium magnesium phytate",
+          "calcium-magnesium inositol hexaphosphate",
+          "calcium beta-hydroxy-beta-methylbutyrate monohydrate",
+          "calcium beta-hydroxy-beta-methylbutyrate",
+          "calcium beta-hydroxybutyrate",
+          "calcium pyruvate"
         ],
         "bio_score": 3,
         "absorption": "moderate (Ca class baseline; form-dependent 25-42%)",
@@ -7736,7 +7755,9 @@
           "Calcium, Natural",
           "Calcium Formate",
           "calcium potassium phosphate citrate",
-          "Calcium Hydroxycitrate"
+          "Calcium Hydroxycitrate",
+          "calcium l-aspartate",
+          "calcium krebs cycle chelates"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -7763,7 +7784,8 @@
           "calcium protein chelate",
           "calcium proteinate",
           "amino acid chelated calcium",
-          "hydrolyzed protein calcium chelate"
+          "hydrolyzed protein calcium chelate",
+          "calcium hydrolyzed vegetable protein"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -7771,7 +7793,10 @@
           "range_low": 0.3,
           "range_high": 0.4,
           "quality": "moderate"
-        }
+        },
+        "source_form_aliases": [
+          "koact calcium collagen chelate"
+        ]
       },
       "monocalcium phosphate": {
         "bio_score": 6,
@@ -7904,7 +7929,10 @@
           "monobasic calcium phosphate",
           "monocalcium phosphate",
           "magnesium phosphate",
-          "dimagnesium phosphate"
+          "dimagnesium phosphate",
+          "calcium potassium phosphate citrate",
+          "microcrystalline hydroxyapatite calcium",
+          "mch-cal"
         ]
       },
       "phosphorus (unspecified)": {
@@ -7926,7 +7954,10 @@
           "range_low": 0.3,
           "range_high": 0.55,
           "quality": "moderate"
-        }
+        },
+        "source_form_aliases": [
+          "calcium magnesium phytate"
+        ]
       },
       "dicalcium phosphate (as phosphorus source)": {
         "bio_score": 8,
@@ -7955,7 +7986,10 @@
           "primary_parent": "calcium",
           "primary_form": "dicalcium phosphate",
           "note": "Same chemical substance as calcium/dicalcium phosphate. Scored here for phosphorus bioavailability."
-        }
+        },
+        "source_form_aliases": [
+          "dibasic calcium phosphate dihydrate"
+        ]
       }
     },
     "aliases": [
@@ -8035,7 +8069,8 @@
           "TRAACS Magnesium Lysinate Glycinate Chelate",
           "Albion Magnesium Lysinate Glycinate Chelate",
           "magnesium glycinate amino acid chelate",
-          "traacs magnesium bis-glycinate chelate"
+          "traacs magnesium bis-glycinate chelate",
+          "magnesium bisglycinate, fermented"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -8144,7 +8179,8 @@
           "mag acetyl taurate",
           "magnesium n-acetyltaurate",
           "MgAT",
-          "magnesium acetyl-tuarate"
+          "magnesium acetyl-tuarate",
+          "magnesium acetyl taurinate"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -8264,7 +8300,10 @@
             }
           ]
         },
-        "form_evidence_axis": "systemic_bioavailability"
+        "form_evidence_axis": "systemic_bioavailability",
+        "source_form_aliases": [
+          "calcium magnesium citrate"
+        ]
       },
       "magnesium orotate": {
         "bio_score": 9,
@@ -8506,7 +8545,8 @@
           "mag carbonate",
           "dolomite magnesium",
           "magnesite",
-          "dolomite"
+          "dolomite",
+          "magneisum carbonate"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -8534,7 +8574,8 @@
           "magnesia",
           "magnesium oxide 400mg",
           "magnesium oxide 500mg",
-          "high potency magnesium oxide"
+          "high potency magnesium oxide",
+          "zumxr magnesium oxide"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -8599,7 +8640,9 @@
       },
       "magnesium (unspecified)": {
         "source_form_aliases": [
-          "r-3-hydroxybutyric acid magnesium"
+          "r-3-hydroxybutyric acid magnesium",
+          "calcium magnesium phytate",
+          "magnesium d-aspartate"
         ],
         "bio_score": 5,
         "absorption": "form unknown; assume oxide-tier worst-case for scoring",
@@ -8687,7 +8730,9 @@
           "magnesium protein chelate",
           "magnesium proteinate",
           "amino acid chelated magnesium",
-          "hydrolyzed protein magnesium chelate"
+          "hydrolyzed protein magnesium chelate",
+          "magnesium hydrolyzed vegetable protein chelate",
+          "magnesium lysinate"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -9179,7 +9224,8 @@
         "aliases": [
           "iron(iii)",
           "iron ferric pyrophosphate",
-          "ferric saccharate"
+          "ferric saccharate",
+          "ferric glycinate"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -9230,7 +9276,9 @@
           "Ferric Orthophosphate",
           "iron sulfate",
           "iron sulphate",
-          "standard iron"
+          "standard iron",
+          "iron aspartate",
+          "ferrous succinate"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -10050,7 +10098,8 @@
           "zinc mono-l-methionine",
           "zinc mono l methionine",
           "optizinc zinc monomethionine",
-          "zinc l-methionine sulfate"
+          "zinc l-methionine sulfate",
+          "optizinc(r) brand monomethionine-bound zinc"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -10058,7 +10107,10 @@
           "range_low": 0.4,
           "range_high": 0.7,
           "quality": "good"
-        }
+        },
+        "source_form_aliases": [
+          "l-monomethionine"
+        ]
       },
       "zinc orotate": {
         "bio_score": 9,
@@ -10147,7 +10199,9 @@
           "zinc",
           "zn",
           "zinc supplement",
-          "zinmax"
+          "zinmax",
+          "zinc krebs cycle chelates",
+          "zinc caprylate"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -10161,7 +10215,10 @@
           "rationale": "Clinician mineral recalibration: unspecified zinc kept at the clinician-set value (tests/test_mineral_form_recalibration_20260602.py).",
           "reviewed_by": "Zn/Mg/Fe mineral form recalibration, clinician rule after live API verification (commit 99fd5179)",
           "reviewed_on": "2026-06-02"
-        }
+        },
+        "source_form_aliases": [
+          "zinc quercetin"
+        ]
       },
       "zinc aspartate": {
         "bio_score": 13,
@@ -10924,7 +10981,9 @@
           "Na₂SeO₃",
           "sodium selenite supplement",
           "selenious acid sodium supplement",
-          "Na₂SeO₃ supplement"
+          "Na₂SeO₃ supplement",
+          "sodium selenite anhydrous",
+          "selenium selenite"
         ],
         "dosage_importance": 0.5,
         "absorption_structured": {
@@ -11226,7 +11285,12 @@
           "selenite supplement",
           "selenate",
           "selenate supplement",
-          "selenium selenate"
+          "selenium selenate",
+          "hydrolyzed protein selenium chelate",
+          "selenium hydrolyzed vegetable protein",
+          "selenium hydrolyzed vegetable protein chelate",
+          "selenium malate",
+          "selenium asparate"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -14608,7 +14672,8 @@
           "aac copper",
           "chelated copper",
           "albion copper",
-          "TRAACS Copper"
+          "TRAACS Copper",
+          "copper hydrolyzed vegetable protein"
         ],
         "dosage_importance": 0.5,
         "absorption_structured": {
@@ -14630,7 +14695,8 @@
         "aliases": [
           "Copper",
           "Cobre",
-          "copper supplement"
+          "copper supplement",
+          "copper complex"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -14641,7 +14707,8 @@
         },
         "source_form_aliases": [
           "chlorophyllin copper complex",
-          "chlorophyllin copper complex sodium"
+          "chlorophyllin copper complex sodium",
+          "copper chlorophyllin"
         ]
       },
       "copper picolinate": {
@@ -14757,7 +14824,8 @@
           "chromium from rice protein chelate",
           "Chromium Brown Rice Protein Chelate",
           "chromium rice protein chelate",
-          "brown rice protein chromium chelate"
+          "brown rice protein chromium chelate",
+          "chromium hydrolyzed rice protein chelate"
         ],
         "dosage_importance": 0.5,
         "absorption_structured": {
@@ -14785,7 +14853,8 @@
           "chrome mate",
           "chromemate cm-100m",
           "chromemate cm-100",
-          "Chromium Dinicocysteinate"
+          "Chromium Dinicocysteinate",
+          "chromium nicotinate, fermented"
         ],
         "dosage_importance": 0.5,
         "absorption_structured": {
@@ -14810,7 +14879,8 @@
           "GTF chromium complex",
           "g.t.f. chromium",
           "GTF",
-          "brewer's yeast chromium"
+          "brewer's yeast chromium",
+          "chromium yeast"
         ],
         "dosage_importance": 0.5,
         "absorption_structured": {
@@ -14888,7 +14958,9 @@
           "Albion chromium chelate",
           "Albion Chromium Nicotinate Glycinate Chelate",
           "TRAACS Chromium Glycinate Chelate",
-          "TRAACS Nicotinate Glycinate Chelate"
+          "TRAACS Nicotinate Glycinate Chelate",
+          "chromium dinicotinate glycinate",
+          "chromium nicotinoglycinate"
         ],
         "dosage_importance": 0.5,
         "absorption_structured": {
@@ -14896,7 +14968,10 @@
           "range_low": 0.025,
           "range_high": 0.03,
           "quality": "poor"
-        }
+        },
+        "source_form_aliases": [
+          "niacin amino acid chelate"
+        ]
       },
       "chromium (unspecified)": {
         "bio_score": 5,
@@ -14925,7 +15000,10 @@
           "hydrolyzed protein chromium chelate",
           "chromium hydrolyzed chelate protein",
           "chromium hydrolyzed protein chelate",
-          "chromium nicotinate amino acid chelate"
+          "chromium nicotinate amino acid chelate",
+          "chromium hydrolyzed vegetable protein",
+          "chromium complex",
+          "chromium glutamate, fermented"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -15281,7 +15359,8 @@
           "hydrolyzed protein manganese chelate",
           "manganese protein chelate",
           "manganese aac",
-          "aac manganese"
+          "aac manganese",
+          "manganese hydrolyzed vegetable protein"
         ],
         "dosage_importance": 0.5,
         "absorption_structured": {
@@ -15326,7 +15405,8 @@
         "notes": "An organic salt bound to gluconic acid. Better tolerated than sulfate with moderate absorption. A reliable mid-tier choice commonly found in daily multivitamins. Evidence update 2026-04-25 (Batch 11): Mineral chelate audit — 9 PMIDs WebFetch-verified. CRITICAL FINDING: \"brown rice chelate\" returned ZERO PubMed hits across iron/Mn/Zn/Se variants — the recurring \"60-70%\" claim is marketing copy without peer-reviewed PK validation. Verified citations: Piacenza 2023 (PMID:37111104) zinc FZA; Pineda 2001 (PMID:11377130) iron bisglycinate in anemic infants; Layrisse 2000 (PMID:10958812) ferrochel; Hemilä 2015 (PMID:25888289) Zn lozenge — LOCAL pharyngeal action only, not systemic F; Gordeuk 1987 (PMID:3318377) carbonyl iron 7% effective F. Class context: Mn ~2-15% (homeostatic); Fe non-heme 2-20% / heme 15-35%; Zn 20-70%; Se 50-95% (inorganic→organic gradient).",
         "aliases": [
           "gluconic acid manganese",
-          "Mn gluconate"
+          "Mn gluconate",
+          "manganese gluconate, powder"
         ],
         "dosage_importance": 0.5,
         "absorption_structured": {
@@ -15572,7 +15652,8 @@
           "manganese fumarate",
           "manganese lactate",
           "manganese orotate",
-          "Mn orotate"
+          "Mn orotate",
+          "manganese complex"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -15722,7 +15803,9 @@
         "aliases": [
           "Na₂MoO₄",
           "Sodium Molybdate Dihydrate",
-          "Na2MoO4"
+          "Na2MoO4",
+          "sodium molybdenate",
+          "sodium molybdenum"
         ],
         "dosage_importance": 0.5,
         "absorption_structured": {
@@ -15824,7 +15907,8 @@
           "yeast-bound molybdenum",
           "{molybdenum} hydrolyzed protein chelate",
           "molybdenum hydrolyzed protein chelate",
-          "molybdate salt"
+          "molybdate salt",
+          "molybdenum hydrolyzed vegetable protein"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -16040,7 +16124,12 @@
         },
         "external_ids": {
           "unii": "S043P4DV22"
-        }
+        },
+        "source_form_aliases": [
+          "citric acid",
+          "citric acid complex",
+          "citric acid blend"
+        ]
       },
       "boron (unspecified)": {
         "bio_score": 8,
@@ -16069,7 +16158,9 @@
           "boric acid",
           "sodium borate",
           "boric acid, sodium borate",
-          "boron amino acid complex"
+          "boron amino acid complex",
+          "sodium boron",
+          "boron krebs cycle complex"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -16077,7 +16168,12 @@
           "range_low": 0.98,
           "range_high": 1.0,
           "quality": "excellent"
-        }
+        },
+        "source_form_aliases": [
+          "sodium tetraborate",
+          "sodium tetraborate decahydrate",
+          "krebs cycle intermediate blend"
+        ]
       },
       "boron picolinate": {
         "bio_score": 11,
@@ -16197,7 +16293,12 @@
         },
         "external_ids": {
           "unii": "660YQ98I10"
-        }
+        },
+        "source_form_aliases": [
+          "glucosamine sulfate potassium chloride",
+          "glucosamine sulfate potassium chloride salt",
+          "greengrown glucosamine sulfate 2kcl"
+        ]
       },
       "potassium gluconate": {
         "bio_score": 12,
@@ -16359,7 +16460,10 @@
           "quality": "very_good"
         },
         "source_form_aliases": [
-          "potassium iodide"
+          "potassium iodide",
+          "glucosamine hydrochloride potassium sulfate",
+          "calcium potassium phosphate citrate",
+          "potassium hydroxycitrate"
         ]
       },
       "potassium glycinate": {
@@ -71907,6 +72011,9 @@
         "dosage_importance": 0.5,
         "aliases": [
           "Nickel Sulfate"
+        ],
+        "source_form_aliases": [
+          "nickelous sulfate"
         ]
       }
     },
@@ -71964,7 +72071,8 @@
         "dosage_importance": 0.5,
         "aliases": [
           "Tin",
-          "Sn"
+          "Sn",
+          "tin chloride"
         ],
         "unknown_floor": {
           "override": true,

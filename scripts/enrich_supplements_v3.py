@@ -7653,6 +7653,10 @@ class SupplementEnricherV3:
         "marigold", "tagetes erecta", "tagetes erecta flower extract", "marigold petal extract",
         "aztec marigold flower extract", "marigold flower ext.", "palm", "chlorella",
         "krill oil", "calanus oil", "safflower oil",
+        # Mineral sources (batch 8): Aquamin and Lithothamnion red algae, rice
+        # bran, and a multivitamin's fermented vitamin and mineral blends.
+        "aquamin", "aquamin calcified mineral source red algae", "l. calcareum", "rice bran",
+        "fermented vitamin blend", "fermented mineral blend",
         # Mineral-source marketing claims
         "algae", "algae minerals", "sea minerals", "sea mineral salt",
         "dead sea minerals", "algae dead sea minerals",
