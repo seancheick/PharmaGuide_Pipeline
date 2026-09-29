@@ -77,6 +77,9 @@
 #     - .env at repo root: UMLS_API_KEY, SUPABASE_URL,
 #       SUPABASE_SERVICE_ROLE_KEY
 #     - Flutter repo exists at $FLUTTER_REPO
+#     - Publishing runs (Supabase upload or Flutter bundle) start from a clean
+#       checkout at the fetched origin/main; the release-base check refuses
+#       anything else before the first step.
 #
 # Exit codes:
 #     0  full pipeline completed (incl. when every step auto-skipped)
@@ -177,6 +180,37 @@ CATALOG_BUILD_SOURCES=(
   "$REPO_ROOT/scripts/scoring_v4/pillar_explanations.py"
   "$REPO_ROOT/scripts/release_catalog_artifact.py"
 )
+
+# A release publishes what this checkout builds, so a publishing run must start
+# from a clean checkout at the freshly fetched origin/main. On 2026-09-29 a
+# checkout still at 827f6b90 built a catalog after four newer fixes had landed;
+# every gate passed because its outputs were current for that checkout.
+# Local-only runs (no Supabase upload, no Flutter bundle) may use any checkout.
+require_release_base() {
+  local repo="$1" head origin
+  if ! git -C "$repo" fetch --quiet origin main; then
+    err "Cannot fetch origin/main to confirm this checkout is the release base."
+    return 1
+  fi
+  if [[ -n "$(git -C "$repo" status --porcelain --untracked-files=no)" ]]; then
+    err "Tracked files have uncommitted changes; a release builds only committed code and data."
+    return 1
+  fi
+  head="$(git -C "$repo" rev-parse HEAD)"
+  origin="$(git -C "$repo" rev-parse origin/main)"
+  if [[ "$head" != "$origin" ]]; then
+    err "This checkout is at ${head:0:8}; origin/main is ${origin:0:8}."
+    err "Fast-forward (git merge --ff-only origin/main), rebuild from the earliest stale stage, then release."
+    return 1
+  fi
+}
+
+if (( SKIP_FLUTTER == 0 || (SKIP_SUPABASE == 0 && SUPABASE_DRY_RUN == 0) )); then
+  require_release_base "$REPO_ROOT" || exit 1
+  ok "Release base: clean checkout at origin/main $(git -C "$REPO_ROOT" rev-parse --short HEAD)"
+else
+  skip "Release base check skipped (local-only run: no Supabase upload, no Flutter bundle)"
+fi
 
 START_TS=$(date +%s)
 
