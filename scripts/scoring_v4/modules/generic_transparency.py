@@ -373,7 +373,14 @@ def _score_complete_active_disclosure_bonus(
     not qualify.
     """
     rows = [row for row in get_active_ingredients(product) if isinstance(row, dict)]
-    declared_count = _declared_active_count(product, rows)
+    # A bioavailability aid the enricher demoted (piperine <= 10 mg) is a
+    # declared label row but no clinical active, so it is not owed a row here.
+    demoted_aids = sum(
+        1
+        for row in _safe_list(_safe_dict(product.get("ingredient_quality_data")).get("ingredients"))
+        if isinstance(row, dict) and row.get("demotion_reason") == "absorption_enhancer_sub_threshold"
+    )
+    declared_count = _declared_active_count(product, rows) - demoted_aids
 
     blockers: List[str] = []
     if not rows:

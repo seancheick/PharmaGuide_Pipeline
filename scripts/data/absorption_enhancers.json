@@ -3,9 +3,10 @@
     "description": "Absorption enhancers that improve nutrient bioavailability",
     "purpose": "bioavailability_bonuses",
     "schema_version": "5.1.1",
-    "last_updated": "2026-08-08",
+    "last_updated": "2026-09-29",
     "total_entries": 23,
     "changelog": [
+      "2026-09-29 (data only): ENHANCER_BLACK_PEPPER gains the IQM piperine standard name 'Piperine (Black Pepper Extract)' (UNII U71XL721QK). Enhancer matching is by name, so 44 enriched rows of piperine <= 10 mg whose label spelling matched no alias were never demoted and never paired with the curcumin or CoQ10 they accompany (e.g. 182824 'Bioperine Black Pepper (Piper nigrum) extract' 5.3 mg, 31064 'Piperine beadlets' 5 mg).",
       "5.1.1 (2026-08-08): Documented that the 10 mg piperine demotion boundary is a product-classification convention, not a clinical cutoff; content-verified PMID 10715596 (5 mg piperine with CoQ10 in humans) and PMID 9619120 (20 mg piperine with curcumin in humans; 20 mg/kg only in the animal arm)."
     ],
     "schema_notes": {
@@ -24,7 +25,8 @@
         "black pepper fruit",
         "piper nigrum extract",
         "bioperine complex",
-        "black pepper powder"
+        "black pepper powder",
+        "Piperine (Black Pepper Extract)"
       ],
       "enhances": [
         "Turmeric",

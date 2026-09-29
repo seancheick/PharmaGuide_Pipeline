@@ -1833,6 +1833,11 @@ def derive_product_scoring_evidence(product: Dict[str, Any]) -> List[Dict[str, A
                 # The shared required-conflict ledger retains this exposure
                 # for coverage/readiness; it cannot become scoring evidence.
                 continue
+            if identity_row.get("demotion_reason") == "absorption_enhancer_sub_threshold":
+                # The enricher demoted this bioavailability aid
+                # (absorption_enhancers.json non_scorable_when_sub_threshold);
+                # no projection promotes it back to a scored active.
+                continue
             if is_nutrition_fact_declaration(identity_row):
                 active_row["score_exclusion_reason"] = "excluded_nutrition_fact"
             if identity_row.get("identity_disposition") is not None:

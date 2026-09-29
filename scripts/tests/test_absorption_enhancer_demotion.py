@@ -40,7 +40,7 @@ def test_piperine_threshold_is_explicitly_governed_as_product_policy():
     policy = entry["non_scorable_when_sub_threshold"]
 
     assert payload["_metadata"]["schema_version"] == "5.1.1"
-    assert payload["_metadata"]["last_updated"] == "2026-08-08"
+    assert payload["_metadata"]["last_updated"] == "2026-09-29"
     assert policy["threshold_basis"] == "classification_convention"
     rationale = policy["rationale"].lower()
     assert "not a clinically established boundary" in rationale
@@ -190,3 +190,46 @@ def test_no_demotion_when_no_enhancer_present(enricher):
     enriched, _ = enricher.enrich_product(product)
     demoted = enriched["ingredient_quality_data"].get("demoted_absorption_enhancers") or []
     assert demoted == []
+
+
+def _enrich_fixture(name):
+    import logging
+    from enhanced_normalizer import EnhancedDSLDNormalizer
+
+    logging.disable(logging.INFO)
+    raw = json.loads((Path(__file__).parent / "fixtures" / name).read_text())
+    enriched, _ = SupplementEnricherV3().enrich_product(EnhancedDSLDNormalizer().normalize_product(raw))
+    return enriched
+
+
+def _scored_canonicals(enriched):
+    from scoring_input_contract import get_scoring_ingredients
+
+    return {r.get("canonical_id") for r in get_scoring_ingredients(enriched, strict=True).rows}
+
+
+def test_a_demoted_absorption_aid_is_not_projected_back_into_scoring():
+    """229934 Turmerich Joint: the enricher demotes BioPerine 5 mg, and the
+    compatibility anchor projection (identity_bearing_active_anchor_mass) put
+    it back as a scored active: all 114 demoted products in the 2026-09-29
+    corpus scored piperine anyway."""
+    enriched = _enrich_fixture("enhancer_demoted_229934_raw.json")
+    assert enriched["ingredient_quality_data"]["demoted_absorption_enhancers"]
+    assert "piperine" not in _scored_canonicals(enriched)
+    # Still on the label, so it still pairs with the turmeric it enhances (A4).
+    assert enriched["absorption_enhancer_paired"] is True
+
+
+def test_piperine_read_under_its_iqm_name_is_demoted_and_pairs_with_curcumin():
+    """182824 prints "Bioperine Black Pepper (Piper nigrum) extract" 5.3 mg. Enhancer
+    matching is by name and the row's IQM name "Piperine (Black Pepper Extract)" was
+    no alias: 44 rows of <= 10 mg piperine were never demoted, and the label earned
+    no curcumin pairing (A4) while piperine owned its Evidence."""
+    from evidence_resolver import evidence_owner_canonicals
+
+    enriched = _enrich_fixture("brand_generic_182824_raw.json")
+    demoted = enriched["ingredient_quality_data"]["demoted_absorption_enhancers"]
+    assert [d["enhancer_id"] for d in demoted] == ["ENHANCER_BLACK_PEPPER"]
+    assert "piperine" not in _scored_canonicals(enriched)
+    assert "piperine" not in evidence_owner_canonicals(enriched)
+    assert enriched["absorption_enhancer_paired"] is True

@@ -10737,6 +10737,13 @@ class SupplementEnricherV3:
 
         found_enhancers = []
         enhanced_nutrients_present = []
+        # A demoted bioavailability aid (piperine <= 10 mg) is no scoring
+        # active, but the label still pairs it with what it enhances.
+        demoted_enhancer_ids = {
+            row.get('enhancer_id')
+            for row in product.get("ingredient_quality_data", {}).get("demoted_absorption_enhancers") or []
+            if isinstance(row, dict)
+        }
 
         for enhancer in enhancers_list:
             # DB uses standard_name (not name) as primary identifier
@@ -10744,7 +10751,7 @@ class SupplementEnricherV3:
             enhancer_aliases = enhancer.get('aliases', [])
 
             # Check if enhancer present
-            enhancer_found = False
+            enhancer_found = enhancer.get('id') in demoted_enhancer_ids
             for ing in all_ingredients:
                 if self._exact_match(ing.get('name', ''), enhancer_name, enhancer_aliases) or \
                    self._exact_match(ing.get('standardName', ''), enhancer_name, enhancer_aliases):
