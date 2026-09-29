@@ -63,3 +63,31 @@ declared state was missing). 8 more gain `assessed` because they are now scored 
 
 One corpus pass from the clean stage and the release rung run after Sean's calibration decisions
 and the merge, per AGENTS.md fix loop step 5.
+
+## Packet decisions applied (Sean, 2026-09-28)
+
+Commits 99e160bc..90b94f87 on the same branch. Replay: baseline `212e5a1b`-equivalent code
+(`wt_cand` at 99e160bc, whose only change is an audit script) against `42817875`, on the 143
+sample, 222 targeted, 356 dosed-Chloride and 575 ranged-directions labels. 90b94f87 (review fix)
+touches only a case none of these labels has (a title-embedded row-level mass as the heaviest row
+of a sports product). No status, route or BLOCKED/UNSAFE change in any set.
+
+| Set | Labels | Totals move | Down | Up |
+|---|---:|---:|---:|---:|
+| sample | 143 | 11 | 9 | 2 |
+| targeted | 222 | 14 | 13 | 1 |
+| chloride | 356 | 21 | 20 | 1 |
+| ranged | 575 (556 scored) | 118 | 118 | 0 |
+
+| Item | Commit | Movers (examples) | Cause |
+|---|---|---|---|
+| 7 release gate | 99e160bc | none (audit only) | `audit_scoring` reports `SCORING_SAFETY_ASSESSMENT_INCOMPLETE` |
+| 1 form references | 342fc582 | none (test only) | 655 IQM parent references pinned |
+| 5 chloride | b22a91a8, 57a83a39 | 69770 +0.2 (back to its pre-batch value); Transparency −0.1 to −3.0 on products whose macro lines (protein, carbohydrate, fiber) counted as active mass: Re-Size 42176 −3.0, Amplified Mass XXX 75181 −2.7, Energy & Metabolism ×4 −0.5 to −1.8, Airborne ×12 −0.1, Raw Organic Fiber 299755 −1.7 | a Nutrition Facts row earns no adequacy credit (UL kept) and is not label active mass, so a proprietary blend's hidden share is no longer diluted by macro grams |
+| 2 daily basis | f20b75ef | ranged set: 93 Dose movers, all down, mean −6.8; glucosamine/MSM 182940 80.5 → 66.6, GS-500 184231 87.5 → 75.4, HMB 312819 74.5 → 65.2, N-Acetyl Glucosamine 311082 −9.1, Inulin 252551 −8.8; Evidence at the minimum: ALCAR 293877/307547 −7.3, CogniPhos 309486 −4.9 (now sub-clinical) | adequacy at the minimum directed daily use; excess at the maximum. Label directions checked on 7 movers, all genuine ranges (e.g. "2 capsules, 1-3 times daily"; 315703's own directions say one lozenge a day while DSLD allowed 2). Projected ~170 corpus products (joint ~48, fiber ~28), all down |
+| 6 sports off-list | fd79fc35, 90b94f87 | Ravage 2219/28981 26.0 → 10.7, 1179 40.6 → 25.3, 12800 33.7 → 23.5; Wheybolic ×2 −0.7/−0.8, LIT ×2 −0.8 | an opaque blend total is not an off-list primary; calcium/niacin adequacy no longer stands in for sports Dose |
+| 3 evidence review | 42817875 | all 8 products now show a reviewed state (7 `applicability_unestablished`, Fitbiotic `assessed`); Tesnor 315089 38.9 → 42.9 and Sytrinol 54775 42.8 → 49.5 (Formulation) | 7 literature records + 2 clinical entries; the botanical profile rates a branded extract with a clinical entry at the top of the form scale (existing policy). Evidence stays 0: Sytrinol's 150 mg is below the 300 mg studied dose; Tesnor is a DSLD blend heading, which evidence matching never reads (open question below) |
+
+Checks: `scripts/test.sh fast` 17,694 passed, 170 skipped, 0 failed (no corpus link; log
+`~/pg_quality/rr_fix/fast_packet.log`). Fresh-context review of the code diff: one bug (fixed in
+90b94f87), docstring and comment gaps (fixed), sleep payload now reports the top daily amount.

@@ -1,8 +1,10 @@
 # Calibration decision packet (2026-09-28)
 
-Decisions for Sean that follow the correctness batch (MEASUREMENT.md). Nothing here is applied;
-`quality_score.json` is unchanged. Each item gives today's behavior, the conflict, the measured arm
-and a recommendation.
+**Decided (Sean, 2026-09-28):** every recommendation approved; item 3 changed to "review all of them". Applied in 99e160bc..90b94f87; measured in MEASUREMENT.md. Item 2 moved far more products than arm B showed and is listed there for confirmation. Omega floor kept (item 4).
+
+Decisions for Sean that follow the correctness batch (MEASUREMENT.md). Each item gives the
+behavior at 212e5a1b ("Today"), the conflict, the measured arm and the recommendation that was
+approved. No magnitude in `quality_score.json` changed.
 
 Arms ran read-only over 365 frozen raw labels (the 143 sample plus 222 targeted) at the batch tip
 `212e5a1b`, by in-memory patches: `~/pg_quality/rr_fix/arms.py`; report
