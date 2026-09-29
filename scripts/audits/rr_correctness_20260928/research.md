@@ -119,5 +119,5 @@ returned 3 (the third, PMID 9781306, is an animal-cancer review and does not qua
   minimum directed use lose the brand floor (224694 MSM 1000 mg, 1 g/day: 78.4 → 62.8, Evidence
   15.6 → 0, `applicability_unestablished`); at 2 g/day or more they keep ingredient-level
   Evidence (202773 3 g/day: 15.6 → 10.4).
-- **Scope, recorded not changed:** 202 of 211 clinical entries carry no studied dose, so Evidence
+- **Scope, recorded not changed:** 201 of 211 clinical entries carry no studied dose, so Evidence
   cannot check the label amount for them; register Q39g.
