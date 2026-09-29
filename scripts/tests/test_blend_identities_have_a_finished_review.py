@@ -58,3 +58,17 @@ def test_tesnor_and_sytrinol_resolve_to_their_reviewed_trials(enriched):
         resolution = resolve_product_evidence(enriched[pid], owner_scoped=True)
         owner = next(r for r in resolution.resolutions if r.canonical_id == canonical)
         assert "backed_clinical_studies" in owner.matched_owners
+
+
+@pytest.mark.parametrize("pid,canonical", [("1179", "cinnamon"), ("243271", "turmeric")])
+def test_a_lent_blend_total_is_no_evidence_dose(enriched, pid, canonical):
+    """Ravage's cinnamon and Golden Milk's turmeric carry only their blend's
+    total (3.2 g), lent to them as a blend-level anchor. The Evidence dose map
+    read that total as their own dose, so the trials looked applicable. Their
+    own amounts are not on the label (RR-04: no consumer reads a lent mass as
+    an individual dose)."""
+    from evidence_resolver import resolve_product_evidence
+
+    resolution = resolve_product_evidence(enriched[pid], owner_scoped=True)
+    owner = next(r for r in resolution.resolutions if r.canonical_id == canonical)
+    assert owner.applicability_status == "dose_undisclosed"

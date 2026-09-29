@@ -25,6 +25,7 @@ from clinical_applicability import filter_clinical_matches
 from scoring_input_contract import (
     primary_mass_competitor_rows,
     get_assessable_evidence_ingredients,
+    is_lent_blend_mass,
     is_nutrition_fact_declaration as _contract_is_nutrition_fact,
 )
 from scoring_v4.modules.generic_helpers import (
@@ -1371,7 +1372,7 @@ def _active_mass_index(product: Dict[str, Any]) -> Tuple[Dict[str, float], float
     for row in rows:
         if not isinstance(row, dict):
             continue
-        if _is_nutrition_fact_declaration(row):
+        if _is_nutrition_fact_declaration(row) or is_lent_blend_mass(row):
             continue
         mass = _evidence_matching_mass_mg(row) or 0.0
         if mass <= 0:
@@ -1689,6 +1690,9 @@ def _dose_map(product: Dict[str, Any], *, rows=None) -> Dict[str, Tuple[float, s
     doses: Dict[str, Tuple[float, str]] = {}
     daily_multiplier = _daily_serving_multiplier(product)
     for ing in nutrient_delivering_rows(product) if rows is None else rows:
+        if is_lent_blend_mass(ing):
+            # A blend total lent to one child is not that child's amount.
+            continue
         quantity = _positive_quantity(ing)
         if quantity is None:
             continue
