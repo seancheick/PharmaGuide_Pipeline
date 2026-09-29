@@ -86,3 +86,24 @@ def test_a_self_named_bcaa_total_stays_a_sports_dose():
     raw = json.loads((FIXTURES / "bcaa_67304_raw.json").read_text())
     enriched, _ = SupplementEnricherV3().enrich_product(EnhancedDSLDNormalizer().normalize_product(raw))
     assert any(r.get("canonical_id") == "branched_chain_amino_acids" for r in sports_dosed_rows(enriched))
+
+
+def test_an_opaque_sports_blend_is_not_an_off_list_primary():
+    """Ravage (2219) prints its sports actives only as blend totals (Assault
+    Proprietary Blend 5.3 g, ATP Optimizing Creatine Module 3.1 g, ...) and
+    discloses calcium, niacin and potassium. The off-list floor took the 5.3 g
+    blend as an off-list disclosed primary and credited the vitamins' RDA
+    adequacy as sports Dose (19.1/20). A blend total is not one disclosed
+    active: the undisclosed blend is scored on its disclosure (Sean,
+    2026-09-28, packet item 6)."""
+    import json
+    from enhanced_normalizer import EnhancedDSLDNormalizer
+    from enrich_supplements_v3 import SupplementEnricherV3
+    from scoring_v4.modules.sports_dose import score_dose
+
+    raw = json.loads((FIXTURES / "blend_2219_raw.json").read_text())
+    enriched, _ = SupplementEnricherV3().enrich_product(EnhancedDSLDNormalizer().normalize_product(raw))
+    result = score_dose(enriched)
+    assert result["metadata"]["dose_basis"] != "generic_dose_proxy_for_offlist_primary"
+    assert result["metadata"]["not_evaluable_reason"] == "opaque_primary_sports_blend"
+    assert result["penalties"]["opaque_primary_sports_blend"] < 0

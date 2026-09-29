@@ -121,6 +121,9 @@ def _dominant_disclosed_active_is_offlist(product: Dict[str, Any]) -> bool:
 
     Such a product (e.g. L-carnitine 1 g + a token BCAA) would otherwise have its
     real primary ignored by the band rubric and crater to a trace accessory.
+    When the heaviest amount is a blend total, the primary is an undisclosed
+    blend, not an off-list active: the blend is scored on its disclosure and
+    no nutrient's RDA adequacy stands in for it (Ravage 2219).
     """
     best_row: Optional[Dict[str, Any]] = None
     best_g = 0.0
@@ -131,7 +134,7 @@ def _dominant_disclosed_active_is_offlist(product: Dict[str, Any]) -> bool:
         if grams is not None and grams > best_g:
             best_g = grams
             best_row = row
-    if best_row is None:
+    if best_row is None or _norm_text(best_row.get("evidence_type")) == "blend_anchor_mass":
         return False
     return canonical(best_row) not in SPORTS_BAND_CANONICALS
 
