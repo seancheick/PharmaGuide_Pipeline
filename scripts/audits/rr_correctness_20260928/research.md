@@ -75,3 +75,22 @@ returned 3 (the third, PMID 9781306, is an animal-cancer review and does not qua
 - `scripts/data_batch.py check ... --since HEAD`: 7 literature records and 2 clinical entries
   added, nothing else changed.
 - No clinician sign-off is asserted.
+
+## BRAND_ZYLOFRESH alias (2026-09-29)
+
+- **Entry:** `backed_clinical_studies.json` BRAND_ZYLOFRESH, aliases `["zylofresh", "alfalfa extract"]` →
+  `["zylofresh"]`. The entry is preclinical and its own `notable_studies` records no human trials for
+  the brand. "alfalfa extract" names the plant preparation, not the brand; it stays where it belongs,
+  on IQM `alfalfa` and `botanical_ingredients` `alfalfa_leaf`.
+- **Effect:** the branded clinically-studied form credit (`botanical_profile._branded_studied_set`: +3
+  and full standardization) and a preclinical Evidence match reached every alfalfa extract.
+- **Replay:** 300 frozen labels naming a branded ingredient (`~/pg_quality/rr_fix/frozen_branded`),
+  origin/main c581a9ae against the fix: 2 move, BulkSupplements Alfalfa Extract 253578 and 253582,
+  63.0 → 55.7 (Formulation 20 → 13.3; Evidence 0.6 → 0, now `applicability_unestablished` from the
+  existing reviewed `alfalfa` literature record: PubMed, no qualifying human studies). No status,
+  route or verdict change.
+- **Siblings, recorded not changed:** 29 other BRAND_ entries carry a generic ingredient name as an
+  alias (for example astaxanthin, L-theanine, MSM, HMB, methylfolate, piperine, lactoferrin,
+  citicoline, urolithin A). For Evidence some may be intended (ingredient-level trials); for the
+  branded Formulation credit they are the same defect, which the branded-shortcut decision (register
+  D24 item 6) removes at the owner. Not bulk-edited.

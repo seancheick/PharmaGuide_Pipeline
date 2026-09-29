@@ -3,7 +3,7 @@
     "description": "Ingredients backed by clinical research and studies - Enhanced for Section C v3.4.0",
     "purpose": "evidence_scoring",
     "schema_version": "5.6.2",
-    "last_updated": "2026-09-28",
+    "last_updated": "2026-09-29",
     "total_entries": 210,
     "changelog": [
       "5.6.2 (2026-09-26): INGR_OMEGA3 purpose_evidence retains factual scope and sources only. Numerical points, operational exposure cutoffs, interpolation and eligibility are owned by quality_score.json. Scientific boundaries rechecked against live source content; no clinician sign-off asserted and no score values changed.",
@@ -1758,8 +1758,7 @@
       "id": "BRAND_ZYLOFRESH",
       "standard_name": "ZyloFresh Alfalfa Extract",
       "aliases": [
-        "zylofresh",
-        "alfalfa extract"
+        "zylofresh"
       ],
       "category": "vitamin_supplement",
       "evidence_level": "preclinical",
