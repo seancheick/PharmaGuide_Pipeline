@@ -1,0 +1,358 @@
+labels 365; scored non-probiotic 339; probiotic unchanged 5; not scored 21; errors 0
+
+== arms (all scored non-probiotic labels) ==
+missing A excess E0          down 270 up  48 same  21 unassessable  0 | total mean -3.57 | tier crossings 83
+missing A excess E1          down 271 up  46 same  22 unassessable  0 | total mean -3.78 | tier crossings 78
+missing A excess E2          down 272 up  46 same  21 unassessable  0 | total mean -3.82 | tier crossings 77
+missing B excess E0          down 222 up  77 same  23 unassessable 17 | total mean -0.15 | tier crossings 52
+missing B excess E1          down 223 up  76 same  23 unassessable 17 | total mean -0.37 | tier crossings 46
+missing B excess E2          down 223 up  76 same  23 unassessable 17 | total mean -0.41 | tier crossings 45
+missing C excess E0          down 225 up  81 same  33 unassessable  0 | total mean -0.02 | tier crossings 64
+missing C excess E1          down 228 up  81 same  30 unassessable  0 | total mean -0.23 | tier crossings 59
+missing C excess E2          down 228 up  81 same  30 unassessable  0 | total mean -0.28 | tier crossings 58
+missing R excess E0          down 244 up  72 same  23 unassessable  0 | total mean -1.02 | tier crossings 61
+missing R excess E1          down 245 up  71 same  23 unassessable  0 | total mean -1.24 | tier crossings 55
+missing R excess E2          down 245 up  71 same  23 unassessable  0 | total mean -1.28 | tier crossings 54
+missing R excess E0 L100     down 262 up  54 same  23 unassessable  0 | total mean -1.65 | tier crossings 78
+missing R excess E0 D23      down 243 up  73 same  23 unassessable  0 | total mean -0.97 | tier crossings 61
+
+== by route, Dose change, missing A / B / C (excess E0) ==
+(route pass A)               down 270 up  48 same  21 unassessable  0 | total mean -3.57 | tier crossings 83
+(route pass B)               down 222 up  77 same  23 unassessable 17 | total mean -0.15 | tier crossings 52
+(route pass C)               down 225 up  81 same  33 unassessable  0 | total mean -0.02 | tier crossings 64
+(route pass R)               down 244 up  72 same  23 unassessable  0 | total mean -1.02 | tier crossings 61
+b_complex          n=  5  A: mean +3.91 [-0.2,+7.8]  B: mean +4.93 [+0.1,+7.8]  C: mean +4.78 [+0.1,+7.8]  R: mean +4.93 [+0.1,+7.8]
+fiber_digestive    n=  9  A: mean -6.24 [-12.8,-0.6]  B: mean -4.95 [-12.8,-0.6]  C: mean -3.03 [-12.4,+1.7]  R: mean -5.74 [-12.8,-0.6]
+generic            n= 67  A: mean -1.90 [-14.5,+20.0]  B: mean +2.35 [-14.5,+20.0]  C: mean +2.27 [-10.2,+20.0]  R: mean -1.61 [-14.5,+20.0]
+multi_or_prenatal  n=194  A: mean -5.00 [-6.8,+5.3]  B: mean -0.85 [-6.7,+7.5]  C: mean -1.01 [-6.2,+7.6]  R: mean -0.85 [-6.7,+7.5]
+omega              n=  7  A: mean -2.13 [-5.1,+0.0]  B: mean -2.13 [-5.1,+0.0]  C: mean -2.13 [-5.1,+0.0]  R: mean -2.13 [-5.1,+0.0]
+sports             n= 40  A: mean -0.59 [-7.3,+4.8]  B: mean +0.14 [-6.5,+5.6]  C: mean +0.56 [-6.4,+6.4]  R: mean +0.07 [-6.5,+5.6]
+
+== where a missing benchmark decides the result ==
+    12012 Spectravite Advanced Formula           multi_or main only (rest unassessable)  Dose now  17.9 | A  11.9 tot  67.6 | B  17.0 tot  72.7 | C  16.3 tot  72.0 | R  17.0 tot  72.7 | today 73.6
+    12052 Women's Multivitamin/Multimineral      multi_or main only (rest unassessable)  Dose now  17.6 | A  11.6 tot  64.2 | B  16.6 tot  69.2 | C  15.9 tot  68.5 | R  16.6 tot  69.2 | today 70.2
+    17139 Centrum Adults Under 50                multi_or main only (rest unassessable)  Dose now  17.8 | A  11.9 tot  62.8 | B  17.0 tot  67.9 | C  16.2 tot  67.1 | R  17.0 tot  67.9 | today 68.7
+    17144 Centrum Men Under 50                   multi_or main only (rest unassessable)  Dose now  17.7 | A  12.2 tot  63.1 | B  17.5 tot  68.4 | C  16.6 tot  67.5 | R  17.5 tot  68.4 | today 68.6
+    17148 Centrum Women Under 50                 multi_or main only (rest unassessable)  Dose now  18.4 | A  12.3 tot  63.2 | B  17.6 tot  68.5 | C  16.7 tot  67.6 | R  17.6 tot  68.5 | today 69.3
+    17214 Teen Advantage for Him Complete Multiv multi_or main only (rest unassessable)  Dose now  17.7 | A  12.1 tot  63.0 | B  17.2 tot  68.1 | C  16.4 tot  67.3 | R  17.2 tot  68.1 | today 68.6
+   178352 Beta-Immune Booster Zesty Orange       multi_or main only (rest unassessable)  Dose now  11.1 | A   8.4 tot  49.5 | B  12.0 tot  53.1 | C  12.7 tot  53.8 | R  12.0 tot  53.1 | today 52.2
+   178537 Complete Multivitamin Adults 50+       multi_or main only (rest unassessable)  Dose now  16.6 | A  10.8 tot  59.7 | B  15.4 tot  64.3 | C  15.1 tot  64.0 | R  15.4 tot  64.3 | today 65.5
+   178555 Complete Multivitamin Adults 50+       multi_or main only (rest unassessable)  Dose now  16.6 | A  10.8 tot  59.7 | B  15.4 tot  64.3 | C  15.1 tot  64.0 | R  15.4 tot  64.3 | today 65.5
+   180206 Beta-Immune Booster Zesty Orange       multi_or main only (rest unassessable)  Dose now  11.1 | A   8.4 tot  49.5 | B  12.0 tot  53.1 | C  12.7 tot  53.8 | R  12.0 tot  53.1 | today 52.2
+   180316 Prenatal Multi + DHA                   multi_or main only (rest unassessable)  Dose now  19.7 | A  12.9 tot  88.3 | B  18.4 tot  93.8 | C  17.3 tot  92.7 | R  18.4 tot  93.8 | today 95.1
+   184004 Artery Advantage                       generic  rest only (main unassessable)  Dose now   9.5 | A   4.1 tot  67.8 | B  16.9 tot  80.6 | C  15.1 tot  78.8 | R   5.1 tot  68.8 | today 73.2
+   184924 G.I. Integrity                         fiber_di main only (rest unassessable)  Dose now  17.6 | A  11.7 tot  65.8 | B  16.7 tot  70.8 | C  16.0 tot  70.1 | R  16.7 tot  70.8 | today 71.7
+    18913 Centrum Women Under 50                 multi_or main only (rest unassessable)  Dose now  18.4 | A  12.3 tot  63.2 | B  17.6 tot  68.5 | C  16.7 tot  67.6 | R  17.6 tot  68.5 | today 69.3
+    18918 Centrum Silver Women 50+               multi_or main only (rest unassessable)  Dose now  17.6 | A  11.6 tot  62.5 | B  16.6 tot  67.5 | C  15.9 tot  66.8 | R  16.6 tot  67.5 | today 68.5
+    18934 Centrum Women Under 50                 multi_or main only (rest unassessable)  Dose now  18.4 | A  12.3 tot  63.2 | B  17.6 tot  68.5 | C  16.7 tot  67.6 | R  17.6 tot  68.5 | today 69.3
+    18935 Centrum Silver Women 50+               multi_or main only (rest unassessable)  Dose now  17.6 | A  11.6 tot  62.5 | B  16.6 tot  67.5 | C  15.9 tot  66.8 | R  16.6 tot  67.5 | today 68.5
+    18940 Centrum Silver Adults 50+              multi_or main only (rest unassessable)  Dose now  16.8 | A  11.0 tot  61.9 | B  15.8 tot  66.7 | C  15.4 tot  66.3 | R  15.8 tot  66.7 | today 67.7
+    18988 Centrum Men Under 50                   multi_or main only (rest unassessable)  Dose now  17.7 | A  12.2 tot  63.1 | B  17.5 tot  68.4 | C  16.6 tot  67.5 | R  17.5 tot  68.4 | today 68.6
+    18994 Complete Multivitamin Adilts Under 50  multi_or main only (rest unassessable)  Dose now  17.8 | A  11.9 tot  65.2 | B  17.0 tot  70.3 | C  16.2 tot  69.5 | R  17.0 tot  70.3 | today 71.1
+    18997 Centrum Silver Adults 50+              multi_or main only (rest unassessable)  Dose now  16.8 | A  11.0 tot  61.9 | B  15.8 tot  66.7 | C  15.4 tot  66.3 | R  15.8 tot  66.7 | today 67.7
+    19001 Centrum Silver Adults 50+              multi_or main only (rest unassessable)  Dose now  16.8 | A  11.0 tot  61.9 | B  15.8 tot  66.7 | C  15.4 tot  66.3 | R  15.8 tot  66.7 | today 67.7
+    19008 Centrum Adults Under 50                multi_or main only (rest unassessable)  Dose now  17.8 | A  11.9 tot  62.8 | B  17.0 tot  67.9 | C  16.2 tot  67.1 | R  17.0 tot  67.9 | today 68.7
+    19013 Centrum Silver Men 50+                 multi_or main only (rest unassessable)  Dose now  17.2 | A  11.9 tot  62.8 | B  16.9 tot  67.8 | C  16.2 tot  67.1 | R  16.9 tot  67.8 | today 68.1
+    19028 Centrum Specialist Prenatal            multi_or main only (rest unassessable)  Dose now  18.8 | A  12.0 tot  62.9 | B  17.1 tot  68.0 | C  16.3 tot  67.2 | R  17.1 tot  68.0 | today 69.7
+    19090 Centrum Adults Under 50                multi_or main only (rest unassessable)  Dose now  17.8 | A  11.9 tot  62.8 | B  17.0 tot  67.9 | C  16.2 tot  67.1 | R  17.0 tot  67.9 | today 68.7
+    19143 Centrum Specialist Heart               multi_or main only (rest unassessable)  Dose now  17.1 | A  10.9 tot  61.8 | B  15.5 tot  66.4 | C  15.2 tot  66.1 | R  15.5 tot  66.4 | today 68.0
+    19157 Centrum Specialist Vision              multi_or main only (rest unassessable)  Dose now  17.9 | A  12.5 tot  63.4 | B  17.8 tot  68.7 | C  16.8 tot  67.7 | R  17.8 tot  68.7 | today 68.8
+    19196 Daily Multi Vitamins & Minerals        multi_or main only (rest unassessable)  Dose now  17.3 | A  12.1 tot  75.2 | B  17.3 tot  80.4 | C  16.4 tot  79.5 | R  17.3 tot  80.4 | today 80.4
+    19868 Multivitamin/Multimineral Adults Under multi_or main only (rest unassessable)  Dose now  17.8 | A  11.9 tot  65.2 | B  17.0 tot  70.3 | C  16.2 tot  69.5 | R  17.0 tot  70.3 | today 71.1
+    19910 Multivitamin/Multimineral Adults Under multi_or main only (rest unassessable)  Dose now  17.8 | A  11.9 tot  65.2 | B  17.0 tot  70.3 | C  16.2 tot  69.5 | R  17.0 tot  70.3 | today 71.1
+    19916 Adults' 50+ Multivitamin/Multimineral  multi_or main only (rest unassessable)  Dose now  16.8 | A  11.0 tot  59.9 | B  15.8 tot  64.7 | C  15.4 tot  64.3 | R  15.8 tot  64.7 | today 65.7
+   200827 Centrum Adults                         multi_or main only (rest unassessable)  Dose now  17.8 | A  12.1 tot  64.0 | B  17.3 tot  69.2 | C  16.4 tot  68.3 | R  17.3 tot  69.2 | today 69.7
+   200883 Centrum Silver Men 50+                 multi_or main only (rest unassessable)  Dose now  17.0 | A  11.4 tot  60.3 | B  16.3 tot  65.2 | C  15.8 tot  64.7 | R  16.3 tot  65.2 | today 65.9
+   204642 Centrum Adults                         multi_or main only (rest unassessable)  Dose now  16.5 | A  11.8 tot  64.4 | B  16.9 tot  69.5 | C  16.2 tot  68.8 | R  16.9 tot  69.5 | today 69.1
+   204705 Centrum Silver Adults 50+              multi_or main only (rest unassessable)  Dose now  16.8 | A  11.0 tot  59.9 | B  15.7 tot  64.6 | C  15.4 tot  64.3 | R  15.7 tot  64.6 | today 65.7
+   204717 Centrum Adults                         multi_or main only (rest unassessable)  Dose now  16.7 | A  11.8 tot  64.4 | B  16.9 tot  69.5 | C  16.2 tot  68.8 | R  16.9 tot  69.5 | today 69.3
+   204720 Centrum Adults                         multi_or main only (rest unassessable)  Dose now  16.7 | A  11.8 tot  64.4 | B  16.9 tot  69.5 | C  16.2 tot  68.8 | R  16.9 tot  69.5 | today 69.3
+   204722 Centrum Silver Adults 50+              multi_or main only (rest unassessable)  Dose now  16.8 | A  11.0 tot  59.9 | B  15.7 tot  64.6 | C  15.4 tot  64.3 | R  15.7 tot  64.6 | today 65.7
+   204726 Centrum Silver Adults 50+              multi_or main only (rest unassessable)  Dose now  16.8 | A  11.0 tot  59.9 | B  15.7 tot  64.6 | C  15.4 tot  64.3 | R  15.7 tot  64.6 | today 65.7
+   204728 Centrum Silver Adults 50+              multi_or main only (rest unassessable)  Dose now  16.8 | A  11.0 tot  59.9 | B  15.7 tot  64.6 | C  15.4 tot  64.3 | R  15.7 tot  64.6 | today 65.7
+   204780 Centrum Silver Women 50+               multi_or main only (rest unassessable)  Dose now  17.5 | A  11.7 tot  60.6 | B  16.7 tot  65.6 | C  16.1 tot  65.0 | R  16.7 tot  65.6 | today 66.4
+   204787 Centrum Silver Women 50+               multi_or main only (rest unassessable)  Dose now  17.5 | A  11.7 tot  60.6 | B  16.7 tot  65.6 | C  16.1 tot  65.0 | R  16.7 tot  65.6 | today 66.4
+   204788 Centrum Men                            multi_or main only (rest unassessable)  Dose now  17.8 | A  12.3 tot  61.2 | B  17.5 tot  66.4 | C  16.6 tot  65.5 | R  17.5 tot  66.4 | today 66.7
+   204793 Centrum Men                            multi_or main only (rest unassessable)  Dose now  17.8 | A  12.3 tot  61.2 | B  17.5 tot  66.4 | C  16.6 tot  65.5 | R  17.5 tot  66.4 | today 66.7
+   204796 Centrum Men                            multi_or main only (rest unassessable)  Dose now  17.8 | A  12.3 tot  61.2 | B  17.5 tot  66.4 | C  16.6 tot  65.5 | R  17.5 tot  66.4 | today 66.7
+   204797 Centrum Men                            multi_or main only (rest unassessable)  Dose now  17.8 | A  12.3 tot  61.2 | B  17.5 tot  66.4 | C  16.6 tot  65.5 | R  17.5 tot  66.4 | today 66.7
+   204799 Centrum Men                            multi_or main only (rest unassessable)  Dose now  17.8 | A  12.3 tot  61.2 | B  17.5 tot  66.4 | C  16.6 tot  65.5 | R  17.5 tot  66.4 | today 66.7
+   207381 Active Vitamin Pack                    multi_or main only (rest unassessable)  Dose now  13.8 | A  11.9 tot  62.8 | B  16.9 tot  67.8 | C  16.2 tot  67.1 | R  16.9 tot  67.8 | today 64.7
+   207454 Performance Multi Energy Formula       multi_or main only (rest unassessable)  Dose now  16.4 | A  11.8 tot  65.7 | B  16.8 tot  70.7 | C  16.1 tot  70.0 | R  16.8 tot  70.7 | today 70.3
+   208190 Complete Multivitamin Adults           multi_or main only (rest unassessable)  Dose now  17.8 | A  12.1 tot  65.4 | B  17.3 tot  70.6 | C  16.4 tot  69.7 | R  17.3 tot  70.6 | today 71.1
+   208299 Complete Multivitamin Men 50+          multi_or main only (rest unassessable)  Dose now  17.0 | A  11.4 tot  60.3 | B  16.3 tot  65.2 | C  15.8 tot  64.7 | R  16.3 tot  65.2 | today 65.9
+   208302 Complete Multivitamin Women 50+        multi_or main only (rest unassessable)  Dose now  17.4 | A  11.5 tot  60.4 | B  16.5 tot  65.4 | C  15.9 tot  64.8 | R  16.5 tot  65.4 | today 66.3
+   210441 SpectraVite Adult                      multi_or main only (rest unassessable)  Dose now  17.8 | A  12.1 tot  65.4 | B  17.3 tot  70.6 | C  16.4 tot  69.7 | R  17.3 tot  70.6 | today 71.1
+   210972 Spectravite Ultra Men                  multi_or main only (rest unassessable)  Dose now  17.7 | A  12.2 tot  61.1 | B  17.5 tot  66.4 | C  16.6 tot  65.5 | R  17.5 tot  66.4 | today 66.6
+   211233 Men's Multivitamin/Multimineral        multi_or main only (rest unassessable)  Dose now  17.7 | A  12.2 tot  61.1 | B  17.5 tot  66.4 | C  16.6 tot  65.5 | R  17.5 tot  66.4 | today 66.6
+   211573 Women's 50+ Multivitamin Mineral       multi_or main only (rest unassessable)  Dose now  17.4 | A  11.5 tot  60.4 | B  16.5 tot  65.4 | C  15.9 tot  64.8 | R  16.5 tot  65.4 | today 66.3
+   214586 Ipriflavone 200 mg                     generic  nothing assessable             Dose now  14.5 | A   0.0 tot  42.3 | B  None tot  52.9 | C  14.5 tot  56.8 | R   0.0 tot  42.3 | today 56.8
+   218448 Centrum Energy                         multi_or main only (rest unassessable)  Dose now  17.0 | A  12.1 tot  66.0 | B  17.3 tot  71.2 | C  16.5 tot  70.4 | R  17.3 tot  71.2 | today 70.9
+   218464 Centrum Heart                          multi_or main only (rest unassessable)  Dose now  17.1 | A  10.9 tot  66.9 | B  15.5 tot  71.5 | C  15.2 tot  71.2 | R  15.5 tot  71.5 | today 73.1
+   218500 Centrum Silver Plus Vision             multi_or main only (rest unassessable)  Dose now  17.9 | A  12.5 tot  63.4 | B  17.8 tot  68.7 | C  16.8 tot  67.7 | R  17.8 tot  68.7 | today 68.8
+   232243 Extraordinary Enzymes                  fiber_di main only (rest unassessable)  Dose now  12.8 | A   0.0 tot  32.0 | B   0.0 tot  32.0 | C  13.2 tot  45.2 | R   0.0 tot  32.0 | today 44.8
+   232592 BioActive Complete B-Complex           b_comple main only (rest unassessable)  Dose now  12.2 | A  12.0 tot  85.7 | B  17.1 tot  90.8 | C  16.3 tot  90.0 | R  17.1 tot  90.8 | today 85.9
+   233404 Keto Brain and Body Boost Peach Flavor generic  rest only (main unassessable)  Dose now  14.5 | A   4.0 tot  47.8 | B  20.0 tot  63.8 | C  15.6 tot  59.4 | R   6.0 tot  49.8 | today 58.3
+   233406 Keto Brain and Body Boost Peach Flavor generic  rest only (main unassessable)  Dose now  14.5 | A   4.0 tot  47.8 | B  20.0 tot  63.8 | C  15.6 tot  59.4 | R   6.0 tot  49.8 | today 58.3
+   239803 Adults' 50+ Multivitamin               multi_or main only (rest unassessable)  Dose now  16.6 | A  10.8 tot  59.7 | B  15.4 tot  64.3 | C  15.1 tot  64.0 | R  15.4 tot  64.3 | today 65.5
+   241318 Laxaherb                               generic  nothing assessable             Dose now   9.5 | A   0.0 tot  49.7 | B  None tot  62.1 | C  14.5 tot  64.2 | R   0.0 tot  49.7 | today 59.2
+   242946 BetaBoost + Vitamin C Citrus           generic  main only (rest unassessable)  Dose now  14.5 | A  14.0 tot  61.2 | B  20.0 tot  67.2 | C  18.4 tot  65.6 | R  20.0 tot  67.2 | today 61.7
+   251312 Centrum Men                            multi_or main only (rest unassessable)  Dose now  17.8 | A  12.3 tot  61.2 | B  17.5 tot  66.4 | C  16.6 tot  65.5 | R  17.5 tot  66.4 | today 66.7
+   252781 L-Leucine                              generic  nothing assessable             Dose now  14.5 | A   0.0 tot  51.0 | B  None tot  63.8 | C  14.5 tot  65.5 | R   0.0 tot  51.0 | today 65.5
+   253273 Garcinia Cambogia Extract              generic  nothing assessable             Dose now  11.4 | A   0.0 tot  23.7 | B  None tot  29.6 | C  14.5 tot  38.2 | R   0.0 tot  23.7 | today 35.1
+   253774 Guarana Extract                        generic  nothing assessable             Dose now   9.5 | A   0.0 tot  59.9 | B  None tot  74.9 | C  14.5 tot  74.4 | R   0.0 tot  59.9 | today 69.4
+   254838 Centrum Men                            multi_or main only (rest unassessable)  Dose now  17.8 | A  12.3 tot  61.2 | B  17.5 tot  66.4 | C  16.6 tot  65.5 | R  17.5 tot  66.4 | today 66.7
+   254848 Centrum Women                          multi_or main only (rest unassessable)  Dose now  17.9 | A  11.8 tot  60.7 | B  16.9 tot  65.8 | C  16.2 tot  65.1 | R  16.9 tot  65.8 | today 66.8
+   254863 Centrum Women                          multi_or main only (rest unassessable)  Dose now  17.9 | A  11.8 tot  60.7 | B  16.9 tot  65.8 | C  16.2 tot  65.1 | R  16.9 tot  65.8 | today 66.8
+   254914 Centrum Silver Adults 50+              multi_or main only (rest unassessable)  Dose now  16.8 | A  11.0 tot  59.9 | B  15.7 tot  64.6 | C  15.4 tot  64.3 | R  15.7 tot  64.6 | today 65.7
+   254937 Centrum Silver Women 50+               multi_or main only (rest unassessable)  Dose now  17.5 | A  11.7 tot  60.6 | B  16.7 tot  65.6 | C  16.1 tot  65.0 | R  16.7 tot  65.6 | today 66.4
+   254951 Centrum Silver Women 50+               multi_or main only (rest unassessable)  Dose now  17.5 | A  11.7 tot  60.6 | B  16.7 tot  65.6 | C  16.1 tot  65.0 | R  16.7 tot  65.6 | today 66.4
+   254954 Centrum Silver Men 50+                 multi_or main only (rest unassessable)  Dose now  17.1 | A  11.6 tot  60.5 | B  16.6 tot  65.5 | C  16.0 tot  64.9 | R  16.6 tot  65.5 | today 66.0
+   256937 Centrum Silver Adults 50+              multi_or main only (rest unassessable)  Dose now  16.8 | A  11.0 tot  59.9 | B  15.7 tot  64.6 | C  15.4 tot  64.3 | R  15.7 tot  64.6 | today 65.7
+   256945 Centrum Adults                         multi_or main only (rest unassessable)  Dose now  17.9 | A  12.2 tot  65.5 | B  17.4 tot  70.7 | C  16.5 tot  69.8 | R  17.4 tot  70.7 | today 71.2
+   256959 Centrum Silver Adults 50+              multi_or main only (rest unassessable)  Dose now  16.7 | A  10.9 tot  59.8 | B  15.6 tot  64.5 | C  15.3 tot  64.2 | R  15.6 tot  64.5 | today 65.6
+   256960 Centrum Silver Adults 50+              multi_or main only (rest unassessable)  Dose now  16.8 | A  11.0 tot  59.9 | B  15.7 tot  64.6 | C  15.4 tot  64.3 | R  15.7 tot  64.6 | today 65.7
+   256964 Centrum Adults                         multi_or main only (rest unassessable)  Dose now  16.7 | A  11.8 tot  64.4 | B  16.9 tot  69.5 | C  16.2 tot  68.8 | R  16.9 tot  69.5 | today 69.3
+   256965 Centrum Adults                         multi_or main only (rest unassessable)  Dose now  16.7 | A  11.8 tot  64.4 | B  16.9 tot  69.5 | C  16.2 tot  68.8 | R  16.9 tot  69.5 | today 69.3
+   256969 Centrum Adults                         multi_or main only (rest unassessable)  Dose now  17.9 | A  12.2 tot  64.8 | B  17.4 tot  70.0 | C  16.5 tot  69.1 | R  17.4 tot  70.0 | today 70.5
+   256971 Centrum Adults                         multi_or main only (rest unassessable)  Dose now  17.9 | A  12.2 tot  64.8 | B  17.4 tot  70.0 | C  16.5 tot  69.1 | R  17.4 tot  70.0 | today 70.5
+   256974 Centrum Silver Adults 50+              multi_or main only (rest unassessable)  Dose now  16.8 | A  11.0 tot  59.9 | B  15.7 tot  64.6 | C  15.4 tot  64.3 | R  15.7 tot  64.6 | today 65.7
+   256975 Centrum Silver Adults 50+              multi_or main only (rest unassessable)  Dose now  16.8 | A  11.0 tot  59.9 | B  15.7 tot  64.6 | C  15.4 tot  64.3 | R  15.7 tot  64.6 | today 65.7
+   256977 Centrum Specialist Energy Multivitamin multi_or main only (rest unassessable)  Dose now  17.1 | A  12.3 tot  66.9 | B  17.6 tot  72.2 | C  16.6 tot  71.2 | R  17.6 tot  72.2 | today 71.7
+   256978 Centrum Specialist Energy Multivitamin multi_or main only (rest unassessable)  Dose now  17.1 | A  12.3 tot  66.9 | B  17.6 tot  72.2 | C  16.6 tot  71.2 | R  17.6 tot  72.2 | today 71.7
+   257002 Centrum Specialist Heart Multivitamin  multi_or main only (rest unassessable)  Dose now  17.2 | A  11.1 tot  67.1 | B  15.9 tot  71.9 | C  15.5 tot  71.5 | R  15.9 tot  71.9 | today 73.2
+   257004 Centrum Specialist Heart Multivitamin  multi_or main only (rest unassessable)  Dose now  17.2 | A  11.1 tot  67.1 | B  15.9 tot  71.9 | C  15.5 tot  71.5 | R  15.9 tot  71.9 | today 73.2
+   257010 Centrum Women                          multi_or main only (rest unassessable)  Dose now  17.9 | A  11.8 tot  60.7 | B  16.9 tot  65.8 | C  16.2 tot  65.1 | R  16.9 tot  65.8 | today 66.8
+   257014 Centrum Women                          multi_or main only (rest unassessable)  Dose now  17.9 | A  11.8 tot  60.7 | B  16.9 tot  65.8 | C  16.2 tot  65.1 | R  16.9 tot  65.8 | today 66.8
+   257022 Centrum Women                          multi_or main only (rest unassessable)  Dose now  17.9 | A  11.8 tot  60.7 | B  16.9 tot  65.8 | C  16.2 tot  65.1 | R  16.9 tot  65.8 | today 66.8
+   257030 Centrum Women                          multi_or main only (rest unassessable)  Dose now  17.9 | A  11.8 tot  60.7 | B  16.9 tot  65.8 | C  16.2 tot  65.1 | R  16.9 tot  65.8 | today 66.8
+   257055 Centrum Women                          multi_or main only (rest unassessable)  Dose now  17.9 | A  11.8 tot  60.7 | B  16.9 tot  65.8 | C  16.2 tot  65.1 | R  16.9 tot  65.8 | today 66.8
+   257056 Centrum Women                          multi_or main only (rest unassessable)  Dose now  17.9 | A  11.8 tot  60.7 | B  16.9 tot  65.8 | C  16.2 tot  65.1 | R  16.9 tot  65.8 | today 66.8
+   257057 Centrum Silver Women 50+               multi_or main only (rest unassessable)  Dose now  17.5 | A  11.7 tot  60.6 | B  16.7 tot  65.6 | C  16.1 tot  65.0 | R  16.7 tot  65.6 | today 66.4
+   257058 Centrum Silver Women 50+               multi_or main only (rest unassessable)  Dose now  17.5 | A  11.7 tot  60.6 | B  16.7 tot  65.6 | C  16.1 tot  65.0 | R  16.7 tot  65.6 | today 66.4
+   257064 Centrum Silver Women 50+               multi_or main only (rest unassessable)  Dose now  17.5 | A  11.7 tot  60.6 | B  16.7 tot  65.6 | C  16.1 tot  65.0 | R  16.7 tot  65.6 | today 66.4
+   257065 Centrum Silver Women 50+               multi_or main only (rest unassessable)  Dose now  17.5 | A  11.7 tot  60.6 | B  16.7 tot  65.6 | C  16.1 tot  65.0 | R  16.7 tot  65.6 | today 66.4
+   257066 Centrum Silver Women 50+               multi_or main only (rest unassessable)  Dose now  17.5 | A  11.7 tot  60.6 | B  16.7 tot  65.6 | C  16.1 tot  65.0 | R  16.7 tot  65.6 | today 66.4
+   257067 Centrum Silver Women 50+               multi_or main only (rest unassessable)  Dose now  17.5 | A  11.7 tot  60.6 | B  16.7 tot  65.6 | C  16.1 tot  65.0 | R  16.7 tot  65.6 | today 66.4
+   257069 Centrum Silver Women 50+               multi_or main only (rest unassessable)  Dose now  17.5 | A  11.7 tot  60.6 | B  16.7 tot  65.6 | C  16.1 tot  65.0 | R  16.7 tot  65.6 | today 66.4
+   257071 Centrum Men                            multi_or main only (rest unassessable)  Dose now  17.8 | A  12.3 tot  64.9 | B  17.5 tot  70.1 | C  16.6 tot  69.2 | R  17.5 tot  70.1 | today 70.4
+   257074 Centrum Men                            multi_or main only (rest unassessable)  Dose now  17.8 | A  12.3 tot  64.9 | B  17.5 tot  70.1 | C  16.6 tot  69.2 | R  17.5 tot  70.1 | today 70.4
+   257075 Centrum Men                            multi_or main only (rest unassessable)  Dose now  17.8 | A  12.3 tot  61.2 | B  17.5 tot  66.4 | C  16.6 tot  65.5 | R  17.5 tot  66.4 | today 66.7
+   257078 Centrum Men                            multi_or main only (rest unassessable)  Dose now  17.8 | A  12.3 tot  61.2 | B  17.5 tot  66.4 | C  16.6 tot  65.5 | R  17.5 tot  66.4 | today 66.7
+   257086 Centrum Men                            multi_or main only (rest unassessable)  Dose now  17.8 | A  12.3 tot  61.2 | B  17.5 tot  66.4 | C  16.6 tot  65.5 | R  17.5 tot  66.4 | today 66.7
+   257088 Centrum Men                            multi_or main only (rest unassessable)  Dose now  17.8 | A  12.3 tot  61.2 | B  17.5 tot  66.4 | C  16.6 tot  65.5 | R  17.5 tot  66.4 | today 66.7
+   257092 Centrum Silver Men 50+                 multi_or main only (rest unassessable)  Dose now  17.1 | A  11.6 tot  60.5 | B  16.6 tot  65.5 | C  16.0 tot  64.9 | R  16.6 tot  65.5 | today 66.0
+   257097 Centrum Silver Men 50+                 multi_or main only (rest unassessable)  Dose now  17.1 | A  11.6 tot  60.5 | B  16.6 tot  65.5 | C  16.0 tot  64.9 | R  16.6 tot  65.5 | today 66.0
+   257100 Centrum Silver Men 50+                 multi_or main only (rest unassessable)  Dose now  17.1 | A  11.6 tot  60.5 | B  16.6 tot  65.5 | C  16.0 tot  64.9 | R  16.6 tot  65.5 | today 66.0
+   257104 Centrum Silver Men 50+                 multi_or main only (rest unassessable)  Dose now  17.1 | A  11.6 tot  60.5 | B  16.6 tot  65.5 | C  16.0 tot  64.9 | R  16.6 tot  65.5 | today 66.0
+   257106 Centrum Silver Men 50+                 multi_or main only (rest unassessable)  Dose now  17.1 | A  11.6 tot  60.5 | B  16.6 tot  65.5 | C  16.0 tot  64.9 | R  16.6 tot  65.5 | today 66.0
+   257110 Centrum Silver Men 50+                 multi_or main only (rest unassessable)  Dose now  17.1 | A  11.6 tot  60.5 | B  16.6 tot  65.5 | C  16.0 tot  64.9 | R  16.6 tot  65.5 | today 66.0
+   257113 Centrum Silver Men 50+                 multi_or main only (rest unassessable)  Dose now  17.1 | A  11.6 tot  60.5 | B  16.6 tot  65.5 | C  16.0 tot  64.9 | R  16.6 tot  65.5 | today 66.0
+   257116 Centrum Minis Women 50+                multi_or main only (rest unassessable)  Dose now  17.5 | A  11.7 tot  60.6 | B  16.7 tot  65.6 | C  16.1 tot  65.0 | R  16.7 tot  65.6 | today 66.4
+   257117 Centrum Minis Men 50+                  multi_or main only (rest unassessable)  Dose now  17.1 | A  11.6 tot  60.5 | B  16.6 tot  65.5 | C  16.0 tot  64.9 | R  16.6 tot  65.5 | today 66.0
+   257121 Centrum minis Adults 50+               multi_or main only (rest unassessable)  Dose now  16.8 | A  11.0 tot  59.9 | B  15.7 tot  64.6 | C  15.4 tot  64.3 | R  15.7 tot  64.6 | today 65.7
+   257221 Centrum Women                          multi_or main only (rest unassessable)  Dose now  17.9 | A  11.8 tot  60.7 | B  16.9 tot  65.8 | C  16.2 tot  65.1 | R  16.9 tot  65.8 | today 66.8
+   257222 Centrum Silver Men 50+                 multi_or main only (rest unassessable)  Dose now  17.1 | A  11.6 tot  60.5 | B  16.6 tot  65.5 | C  16.0 tot  64.9 | R  16.6 tot  65.5 | today 66.0
+   257223 Centrum Silver Men 50+                 multi_or main only (rest unassessable)  Dose now  15.6 | A  10.6 tot  56.2 | B  15.2 tot  60.8 | C  15.0 tot  60.6 | R  15.2 tot  60.8 | today 61.2
+   257225 Centrum Silver Men 50+                 multi_or main only (rest unassessable)  Dose now  17.1 | A  11.6 tot  57.2 | B  16.6 tot  62.2 | C  16.0 tot  61.6 | R  16.6 tot  62.2 | today 62.7
+    25884 Complete Ultra Women's Health Women Ag multi_or main only (rest unassessable)  Dose now  17.6 | A  11.6 tot  60.5 | B  16.6 tot  65.5 | C  15.9 tot  64.8 | R  16.6 tot  65.5 | today 66.5
+   259304 Barley Grass                           generic  nothing assessable             Dose now  11.4 | A   0.0 tot  42.7 | B  None tot  53.4 | C  14.5 tot  57.2 | R   0.0 tot  42.7 | today 54.1
+    26177 Centrum Specialist Energy              multi_or main only (rest unassessable)  Dose now  17.0 | A  12.1 tot  63.0 | B  17.3 tot  68.2 | C  16.5 tot  67.4 | R  17.3 tot  68.2 | today 67.9
+    26394 Daily Pak Maximum Multivitamin with As multi_or main only (rest unassessable)  Dose now  13.8 | A  11.9 tot  58.8 | B  16.9 tot  63.8 | C  16.2 tot  63.1 | R  16.9 tot  63.8 | today 60.7
+   271093 Prenatal Essentials                    multi_or main only (rest unassessable)  Dose now  18.0 | A  12.4 tot  62.2 | B  17.6 tot  67.4 | C  16.7 tot  66.5 | R  17.6 tot  67.4 | today 67.8
+   272786 Adults 50+ Multivitamin                multi_or main only (rest unassessable)  Dose now  16.8 | A  11.0 tot  59.9 | B  15.7 tot  64.6 | C  15.4 tot  64.3 | R  15.7 tot  64.6 | today 65.7
+   272954 Complete Multivitamin Adults 50+       multi_or main only (rest unassessable)  Dose now  16.8 | A  11.0 tot  59.9 | B  15.7 tot  64.6 | C  15.4 tot  64.3 | R  15.7 tot  64.6 | today 65.7
+   272956 Complete Multivitamin Adults           multi_or main only (rest unassessable)  Dose now  17.9 | A  12.2 tot  61.1 | B  17.4 tot  66.3 | C  16.5 tot  65.4 | R  17.4 tot  66.3 | today 66.8
+   272957 Complete Multivitamin Women 50+        multi_or main only (rest unassessable)  Dose now  17.5 | A  11.7 tot  60.6 | B  16.7 tot  65.6 | C  16.1 tot  65.0 | R  16.7 tot  65.6 | today 66.4
+   273813 Centrum Minis Women 50+                multi_or main only (rest unassessable)  Dose now  17.5 | A  11.7 tot  60.6 | B  16.7 tot  65.6 | C  16.1 tot  65.0 | R  16.7 tot  65.6 | today 66.4
+   273856 Complete Multivitamin Men 50+          multi_or main only (rest unassessable)  Dose now  17.1 | A  11.6 tot  60.5 | B  16.6 tot  65.5 | C  16.0 tot  64.9 | R  16.6 tot  65.5 | today 66.0
+   275464 Fitbiotic Weight Management 50 Billion generic  main only (rest unassessable)  Dose now  14.5 | A   0.0 tot  41.8 | B   0.0 tot  41.8 | C   4.3 tot  46.1 | R   0.0 tot  41.8 | today 56.3
+   277384 Men 50+ Multivitamin                   multi_or main only (rest unassessable)  Dose now  17.1 | A  11.6 tot  60.5 | B  16.6 tot  65.5 | C  16.0 tot  64.9 | R  16.6 tot  65.5 | today 66.0
+   277386 Women 50+ Multivitamin                 multi_or main only (rest unassessable)  Dose now  17.5 | A  11.7 tot  60.6 | B  16.7 tot  65.6 | C  16.1 tot  65.0 | R  16.7 tot  65.6 | today 66.4
+   277429 For Men Under 50 Multivitamin Multimin multi_or main only (rest unassessable)  Dose now  17.7 | A  11.7 tot  65.0 | B  16.6 tot  69.9 | C  16.0 tot  69.3 | R  16.6 tot  69.9 | today 71.0
+   277821 Centrum Silver Adults 50+              multi_or main only (rest unassessable)  Dose now  16.6 | A  10.8 tot  59.7 | B  15.4 tot  64.3 | C  15.1 tot  64.0 | R  15.4 tot  64.3 | today 65.5
+   286151 Keratin 500 mg                         generic  nothing assessable             Dose now  14.5 | A   0.0 tot  43.0 | B  None tot  53.8 | C  14.5 tot  57.5 | R   0.0 tot  43.0 | today 57.5
+   302683 Hydrolyzed Keratin with KeraGLO 500 mg generic  nothing assessable             Dose now  14.5 | A   0.0 tot  41.0 | B  None tot  51.2 | C  14.5 tot  55.5 | R   0.0 tot  41.0 | today 55.5
+   311716 Turkey Rhubarb Extract                 generic  nothing assessable             Dose now  11.4 | A   0.0 tot  30.3 | B  None tot  37.9 | C  14.5 tot  44.8 | R   0.0 tot  30.3 | today 41.7
+   311749 Pygeum Africanum Extract               generic  nothing assessable             Dose now  11.4 | A   0.0 tot  47.0 | B  None tot  58.8 | C  14.5 tot  61.5 | R   0.0 tot  47.0 | today 58.4
+   311833 Raspberry Powder                       generic  nothing assessable             Dose now   9.5 | A   0.0 tot  41.7 | B  None tot  52.1 | C  14.5 tot  56.2 | R   0.0 tot  41.7 | today 51.2
+   311946 L-Leucine 5 g Unflavored               generic  nothing assessable             Dose now  14.5 | A   0.0 tot  53.0 | B  None tot  66.2 | C  14.5 tot  67.5 | R   0.0 tot  53.0 | today 67.5
+   312431 Dong Quai Extract                      generic  nothing assessable             Dose now  11.4 | A   0.0 tot  47.0 | B  None tot  58.8 | C  14.5 tot  61.5 | R   0.0 tot  47.0 | today 58.4
+     3173 Men's                                  multi_or main only (rest unassessable)  Dose now  17.8 | A  13.7 tot  64.6 | B  19.5 tot  70.4 | C  18.0 tot  68.9 | R  19.5 tot  70.4 | today 68.7
+   321605 Adults 50+ Multivitamin                multi_or main only (rest unassessable)  Dose now  16.8 | A  11.0 tot  59.9 | B  15.7 tot  64.6 | C  15.4 tot  64.3 | R  15.7 tot  64.6 | today 65.7
+   323711 Essential for Men                      multi_or main only (rest unassessable)  Dose now  13.2 | A   7.7 tot  77.5 | B  11.0 tot  80.8 | C  12.1 tot  81.9 | R  11.0 tot  80.8 | today 83.0
+    32381 Adults' 50+ Multivitamin/Multimineral  multi_or main only (rest unassessable)  Dose now  16.8 | A  11.0 tot  59.9 | B  15.8 tot  64.7 | C  15.4 tot  64.3 | R  15.8 tot  64.7 | today 65.7
+   329991 Organic Lemon Powder 450 mg            generic  nothing assessable             Dose now   9.5 | A   0.0 tot  41.0 | B  None tot  51.2 | C  14.5 tot  55.5 | R   0.0 tot  41.0 | today 50.5
+   330223 Papaya Seed Powder 500 mg              generic  nothing assessable             Dose now   9.5 | A   0.0 tot  41.7 | B  None tot  52.1 | C  14.5 tot  56.2 | R   0.0 tot  41.7 | today 51.2
+    37261 Re-Size Vanilla                        generic  rest only (main unassessable)  Dose now  14.5 | A   1.9 tot  46.9 | B  15.7 tot  60.7 | C  14.6 tot  59.6 | R   4.7 tot  49.7 | today 59.5
+    42176 Re-Size Double Chocolate               generic  rest only (main unassessable)  Dose now  14.5 | A   1.9 tot  25.2 | B  14.4 tot  37.7 | C  14.5 tot  37.8 | R   4.3 tot  27.6 | today 37.8
+    47220 Women 50+ Multivitamin Tablets         multi_or main only (rest unassessable)  Dose now  17.4 | A  11.5 tot  60.4 | B  16.5 tot  65.4 | C  15.9 tot  64.8 | R  16.5 tot  65.4 | today 66.3
+    47223 Men 50+ Multivitamin Tablets           multi_or main only (rest unassessable)  Dose now  17.0 | A  11.4 tot  60.3 | B  16.3 tot  65.2 | C  15.8 tot  64.7 | R  16.3 tot  65.2 | today 65.9
+    47224 Adults 50+ Multivitamin Tablets        multi_or main only (rest unassessable)  Dose now  16.6 | A  10.7 tot  59.6 | B  15.2 tot  64.1 | C  15.0 tot  63.9 | R  15.2 tot  64.1 | today 65.5
+    64337 Spectravite Energy Metabolism          multi_or main only (rest unassessable)  Dose now  17.0 | A  12.1 tot  64.7 | B  17.3 tot  69.9 | C  16.5 tot  69.1 | R  17.3 tot  69.9 | today 69.6
+    69752 Complete Multivitamin Women's 50+      multi_or main only (rest unassessable)  Dose now  17.6 | A  11.6 tot  64.2 | B  16.6 tot  69.2 | C  15.9 tot  68.5 | R  16.6 tot  69.2 | today 70.2
+    77257 Spirulina 8 g                          generic  nothing assessable             Dose now  14.5 | A   0.0 tot  59.2 | B  None tot  74.0 | C  14.5 tot  73.7 | R   0.0 tot  59.2 | today 73.7
+    81855 Centrum Silver Men 50+                 multi_or main only (rest unassessable)  Dose now  17.0 | A  11.4 tot  62.3 | B  16.3 tot  67.2 | C  15.8 tot  66.7 | R  16.3 tot  67.2 | today 67.9
+    81863 Centrum Silver Men 50+                 multi_or main only (rest unassessable)  Dose now  17.0 | A  11.4 tot  62.3 | B  16.3 tot  67.2 | C  15.8 tot  66.7 | R  16.3 tot  67.2 | today 67.9
+    81872 Centrum Silver Women 50+               multi_or main only (rest unassessable)  Dose now  17.4 | A  11.5 tot  62.4 | B  16.5 tot  67.4 | C  15.9 tot  66.8 | R  16.5 tot  67.4 | today 68.3
+    81903 Centrum Women                          multi_or main only (rest unassessable)  Dose now  17.9 | A  11.6 tot  62.5 | B  16.6 tot  67.5 | C  16.0 tot  66.9 | R  16.6 tot  67.5 | today 68.8
+    82149 Centrum Adults                         multi_or main only (rest unassessable)  Dose now  17.8 | A  11.9 tot  67.2 | B  17.0 tot  72.3 | C  16.2 tot  71.5 | R  17.0 tot  72.3 | today 73.1
+    82222 Centrum Silver Adults 50+              multi_or main only (rest unassessable)  Dose now  16.6 | A  10.8 tot  61.7 | B  15.4 tot  66.3 | C  15.1 tot  66.0 | R  15.4 tot  66.3 | today 67.5
+    82333 Spectravite Adult                      multi_or main only (rest unassessable)  Dose now  17.8 | A  11.9 tot  65.2 | B  17.0 tot  70.3 | C  16.2 tot  69.5 | R  17.0 tot  70.3 | today 71.1
+    82364 Spectravite Ultra Women                multi_or main only (rest unassessable)  Dose now  17.9 | A  11.6 tot  60.5 | B  16.6 tot  65.5 | C  16.0 tot  64.9 | R  16.6 tot  65.5 | today 66.8
+    82372 Beanaid                                fiber_di nothing assessable             Dose now  12.8 | A   0.0 tot  51.0 | B  None tot  63.8 | C  14.5 tot  65.5 | R   0.0 tot  51.0 | today 63.8
+    82387 Adults 50+ Multivitamin Multimineral   multi_or main only (rest unassessable)  Dose now  16.6 | A  10.7 tot  59.6 | B  15.2 tot  64.1 | C  15.0 tot  63.9 | R  15.2 tot  64.1 | today 65.5
+     8719 Multi For Her With Calcium & Iron      multi_or main only (rest unassessable)  Dose now  16.9 | A  12.2 tot  76.1 | B  17.4 tot  81.3 | C  16.5 tot  80.4 | R  17.4 tot  81.3 | today 80.8
+     8784 Multi For Him With Potent Antioxidants multi_or main only (rest unassessable)  Dose now  16.1 | A  11.3 tot  73.0 | B  16.1 tot  77.8 | C  15.6 tot  77.3 | R  16.1 tot  77.8 | today 77.8
+     8786 Multi 50+ Bone & Heart Health          multi_or main only (rest unassessable)  Dose now  16.0 | A  11.7 tot  76.5 | B  16.7 tot  81.5 | C  16.0 tot  80.8 | R  16.7 tot  81.5 | today 80.8
+     9112 Multi 50+ Bone & Heart Health          multi_or main only (rest unassessable)  Dose now  16.0 | A  11.7 tot  76.5 | B  16.7 tot  81.5 | C  16.0 tot  80.8 | R  16.7 tot  81.5 | today 80.8
+     9118 Multi Complete with iron               multi_or main only (rest unassessable)  Dose now  16.4 | A  11.1 tot  74.3 | B  15.9 tot  79.1 | C  15.5 tot  78.7 | R  15.9 tot  79.1 | today 79.6
+     9125 Essential Balance                      multi_or main only (rest unassessable)  Dose now  17.2 | A  11.1 tot  75.0 | B  15.9 tot  79.8 | C  15.5 tot  79.4 | R  15.9 tot  79.8 | today 81.1
+     9128 Multi Complete                         multi_or main only (rest unassessable)  Dose now  16.4 | A  11.1 tot  74.3 | B  15.9 tot  79.1 | C  15.5 tot  78.7 | R  15.9 tot  79.1 | today 79.6
+     9245 Multi Complete With Lutein             multi_or main only (rest unassessable)  Dose now  16.4 | A  11.1 tot  74.3 | B  15.9 tot  79.1 | C  15.5 tot  78.7 | R  15.9 tot  79.1 | today 79.6
+     9735 Maximum                                multi_or main only (rest unassessable)  Dose now  17.7 | A  12.2 tot  63.1 | B  17.4 tot  68.3 | C  16.5 tot  67.4 | R  17.4 tot  68.3 | today 68.6
+  main-group benchmark coverage: {'main fully benchmarked': 300, 'main partly unbenchmarked': 17, 'main all unbenchmarked': 22}
+
+== excess: products with a row over its UL (missing R) ==
+   180225 Iron 65 mg                         Dose now   5.7 | E0  14.4 E1  10.9 E2  10.9 | Safety now 8.0 | Iron 144% UL
+   184058 Vitamin D3 5000 IU                 Dose now  10.0 | E0  20.0 E1  15.0 E2  15.0 | Safety now 10.0 | Vitamin D 125% UL
+    18529 Amplified Endurance Booster Blue R Dose now  13.4 | E0  13.3 E1  12.8 E2  12.6 | Safety now 4.0 | Copper 20000% UL
+    19173 Balanced B-100                     Dose now  12.2 | E0  20.0 E1  18.8 E2  18.1 | Safety now 7.0 | Niacin 286% UL
+   207381 Active Vitamin Pack                Dose now  13.8 | E0  16.9 E1  16.5 E2  16.3 | Safety now 3.0 | Niacin 200% UL
+   207454 Performance Multi Energy Formula   Dose now  16.4 | E0  16.8 E1  16.6 E2  16.6 | Safety now 6.0 | Niacin 143% UL
+   218448 Centrum Energy                     Dose now  17.0 | E0  17.3 E1  17.1 E2  17.1 | Safety now 7.0 | Niacin 114% UL
+   219039 Energy & Metabolism Vanilla        Dose now  15.4 | E0  13.0 E1  12.9 E2  12.9 | Safety now 0.0 | Niacin 143% UL
+   220238 Re-Built Mass XP Strawberry        Dose now  15.2 | E0  16.8 E1  16.6 E2  16.5 | Safety now 4.0 | Magnesium 166% UL
+   221095 Energy & Metabolism Chocolate      Dose now  15.8 | E0  13.7 E1  13.6 E2  13.6 | Safety now 0.0 | Niacin 143% UL
+   228355 Female Multiple                    Dose now  14.0 | E0  16.2 E1  15.9 E2  15.8 | Safety now 6.0 | Niacin 171% UL; Magnesium 114% UL
+   232592 BioActive Complete B-Complex       Dose now  12.2 | E0  17.1 E1  16.1 E2  15.6 | Safety now 8.0 | Niacin 286% UL
+   236915 Time Released Niacin 250 mg        Dose now   0.0 | E0  20.0 E1  10.0 E2   5.0 | Safety now 7.0 | Niacin 714% UL
+   239417 Energy                             Dose now  17.4 | E0  14.6 E1  14.4 E2  14.4 | Safety now 7.0 | Niacin 114% UL
+   248756 Triumph Men's Sport Multivitamin   Dose now  15.0 | E0  19.1 E1  18.8 E2  18.7 | Safety now 8.0 | Vitamin B3 286% UL
+   252640 Ascorbic Acid (750 mg)             Dose now   0.0 | E0  20.0 E1  10.0 E2   5.0 | Safety now 8.0 | Vitamin C 150% UL
+   256977 Centrum Specialist Energy Multivit Dose now  17.1 | E0  17.6 E1  17.4 E2  17.4 | Safety now 7.0 | Niacin 114% UL
+   256978 Centrum Specialist Energy Multivit Dose now  17.1 | E0  17.6 E1  17.4 E2  17.4 | Safety now 7.0 | Niacin 114% UL
+    26177 Centrum Specialist Energy          Dose now  17.0 | E0  17.3 E1  17.1 E2  17.1 | Safety now 5.0 | Niacin 114% UL
+    26394 Daily Pak Maximum Multivitamin wit Dose now  13.8 | E0  16.9 E1  16.5 E2  16.3 | Safety now 3.0 | Niacin 200% UL
+   269689 High Absorption Magnesium Powder S Dose now  10.0 | E0  20.0 E1  15.0 E2  15.0 | Safety now 10.0 | Magnesium 114% UL; Magnesium Lysinate Glycinate Chelate 114% UL
+   299069 Multi t/d                          Dose now  15.0 | E0  14.0 E1  13.6 E2  13.4 | Safety now 8.0 | Niacin 214% UL
+   302674 High Absorption Magnesium 100 mg   Dose now  10.0 | E0  20.0 E1  15.0 E2  15.0 | Safety now 10.0 | Magnesium 114% UL; Magnesium Lysinate Glycinate Chelate 114% UL
+   302675 High Absorption Magnesium Powder   Dose now  10.0 | E0  20.0 E1  15.0 E2  15.0 | Safety now 10.0 | Magnesium 114% UL; Magnesium Lysinate Glycinate Chelate 114% UL
+   306380 PRE-SF Blue Raspberry              Dose now  10.1 | E0  17.6 E1  15.6 E2  14.6 | Safety now 5.0 | Niacin 429% UL; Vitamin B6 150% UL
+   317611 Women's Ultra Mega Active Multivit Dose now  15.6 | E0  12.5 E1  12.4 E2  12.4 | Safety now 9.0 | Niacin 143% UL
+   321975 Multi-Vitamin Elite A.M.           Dose now  14.0 | E0  14.1 E1  13.8 E2  13.7 | Safety now 8.0 | Niacin 171% UL
+   322515 High Absorption Magnesium 200 mg   Dose now  10.0 | E0  20.0 E1  15.0 E2  15.0 | Safety now 10.0 | Magnesium 114% UL; Albion Magnesium Lysinate Glycinate Chelate 114% UL
+   323099 B-Complex #12                      Dose now  12.6 | E0  18.6 E1  17.9 E2  17.5 | Safety now 8.0 | Niacin 686% UL
+   327588 Vitamin D3 5000 IU (125 mcg) with  Dose now  15.3 | E0  19.0 E1  15.5 E2  15.5 | Safety now 10.0 | Vitamin D3 125% UL
+   328832 Magnesium CitraMate                Dose now  10.0 | E0  20.0 E1  15.0 E2  15.0 | Safety now 10.0 | Magnesium 116% UL; Magnesium Citrate 116% UL; Albion Dimagnesium Malate 116% UL
+   331488 Women's Multivitamin 50 Plus       Dose now  15.7 | E0  12.2 E1  12.1 E2  12.1 | Safety now 5.0 | Niacin 143% UL
+   333872 Alive! Max3 Potency Adult Complete Dose now  13.9 | E0  12.7 E1  12.4 E2  12.3 | Safety now 8.0 | Niacin 286% UL
+   336307 Stress B-Complex                   Dose now  12.3 | E0  18.1 E1  17.4 E2  17.1 | Safety now 8.0 | Niacin 686% UL
+     3565 Mega Men                           Dose now  15.4 | E0  11.9 E1  11.8 E2  11.8 | Safety now 9.0 | Niacin 143% UL
+     5862 Amplified Endurance Booster Blue R Dose now  13.4 | E0  13.3 E1  12.8 E2  12.6 | Safety now 4.0 | Copper 20000% UL
+    63367 Active Chocolate                   Dose now  15.7 | E0  13.1 E1  13.0 E2  13.0 | Safety now 6.0 | Niacin 143% UL
+    64337 Spectravite Energy Metabolism      Dose now  17.0 | E0  17.3 E1  17.1 E2  17.1 | Safety now 7.0 | Niacin 114% UL
+    67309 Mega Men Sport                     Dose now  14.4 | E0  11.6 E1  11.4 E2  11.4 | Safety now 9.0 | Niacin 143% UL
+    69374 Amplified Wheybolic Extreme 60 Rip Dose now  14.4 | E0  19.0 E1  18.8 E2  18.8 | Safety now 8.0 | Niacin 114% UL
+    69734 Active Vanilla                     Dose now  15.7 | E0  13.1 E1  13.0 E2  13.0 | Safety now 6.0 | Niacin 143% UL
+    69759 Energy & Metabolism Vanilla        Dose now  15.8 | E0  13.7 E1  13.6 E2  13.6 | Safety now 0.0 | Niacin 143% UL
+    69770 Energy & Metabolism Chocolate      Dose now  15.8 | E0  13.7 E1  13.6 E2  13.6 | Safety now 0.0 | Niacin 143% UL
+    70017 Energy & Metabolism Chocolate      Dose now  15.4 | E0  13.9 E1  13.8 E2  13.8 | Safety now 0.0 | Niacin 143% UL
+    70018 Energy & Metabolism Vanilla        Dose now  15.4 | E0  13.9 E1  13.8 E2  13.8 | Safety now 0.0 | Niacin 143% UL
+    70021 Sport Chocolate                    Dose now  14.8 | E0  12.8 E1  12.7 E2  12.7 | Safety now 6.0 | Niacin 143% UL
+    70034 Sport Vanilla                      Dose now  14.8 | E0  12.8 E1  12.7 E2  12.7 | Safety now 6.0 | Niacin 143% UL
+    74777 Energy & Metabolism Vanilla        Dose now  15.8 | E0  13.4 E1  13.3 E2  13.3 | Safety now 0.0 | Niacin 143% UL
+    75571 Energy & Metabolism Chocolate      Dose now  15.4 | E0  13.0 E1  12.9 E2  12.9 | Safety now 0.0 | Niacin 143% UL
+     9080 Iron Supplement                    Dose now  10.0 | E0  20.0 E1  15.0 E2  15.0 | Safety now 7.0 | Iron 144% UL
+     9711 Energy                             Dose now  17.4 | E0  11.9 E1  11.7 E2  11.7 | Safety now 5.0 | Niacin 114% UL
+
+== legacy 25% reference on multi routes: L25 vs L100 ==
+  188 of 199 multi/B-complex labels move; mean -1.15, min -1.8
+
+== agreed products (missing R, excess E0; B and E1 for comparison) ==
+   182940 Glucosamine/MSM                          Dose   6.1 -> R   6.7 (B 6.7, E1 6.7) total 66.6 -> 67.2 [both groups]
+        main claim_prominent assessed       0.33  Glucosamine Sulfate                500 mg/day vs 1500.0 (joint target) 
+        rest major           assessed       0.33  MSM                                500 mg/day vs 1500.0 (joint target) 
+        rest major           not_assessable       Ginger (Zingiber officinale) extra declared, no applicable benchmark 
+        rest major           not_assessable       Turmeric (Curcuma longa) extract   declared, no applicable benchmark 
+   312819 HMB (Calcium HMB)                        Dose   3.5 -> R   7.6 (B 7.6, E1 7.6) total 65.2 -> 69.3 [both groups]
+        rest adjunct         assessed       0.62  Calcium                            16% of RDA/AI vs 25% (legacy) salt of the primary compound (G1)
+        main primary         assessed       0.28  HMB                                825 mg daily vs 3000 (HMB 3-6 g/day band) 
+   252551 Inulin                                   Dose   7.2 -> R   5.7 (B 5.7, E1 5.7) total 73.1 -> 71.6 [main only]
+        main primary         assessed       0.29  Inulin                             2 g fiber/day vs 7 g (fiber full band) 
+    66953 Essential Amino Acids                    Dose   6.4 -> R   2.8 (B 2.8, E1 2.8) total 41.9 -> 38.3 [both groups]
+        main claim_prominent assessed       0.2   EAA total                          1600 mg per use vs 8000 (complete EAA >=8 g band) 
+        rest primary         assessed       0.01  hydrolyzed Whey Peptide Complex    100 mg per_use vs 20000 (protein 20-40 g band) under 25% of the heaviest main row (G2)
+     1179 Ravage Fruit Punch                       Dose   0.0 -> R   5.2 (B 5.2, E1 5.2) total 25.3 -> 30.5 [both groups]
+        rest adjunct         assessed       0.74  Calcium                            18% of RDA/AI vs 25% (legacy) 
+        rest adjunct         assessed       1.0   Niacin                             188% of RDA/AI vs 100% (dri) 
+        rest adjunct         not_assessable       Potassium                          dietary-intake nutrient, no supplement benchmark 
+        main major           unknown              Anabolic Muscle Primer             blend total; contents' amounts hidden 
+        main major           unknown              Muscle Buffering System            blend total; contents' amounts hidden 
+   239467 Fish Oil 1000 mg                         Dose   0.0 -> R   0.0 (B 0.0, E1 0.0) total 27.7 -> 27.7 [main only]
+        main primary         unknown              EPA+DHA                            EPA/DHA not declared (oil mass is not EPA/DHA) 
+   236915 Time Released Niacin 250 mg              Dose   0.0 -> R  20.0 (B 20.0, E1 10.0) total 48.1 -> 68.1 [main only]
+        main claim_prominent assessed       1.0   Niacin                             1562% of RDA/AI vs 100% (dri) 
+   247332 Vitamin D3 250 mcg (10,000 IU)           Dose   0.0 -> R  20.0 (B 20.0, E1 10.0) total 70.1 -> 90.1 [main only]
+        main claim_prominent assessed       1.0   Vitamin D                          1667% of RDA/AI vs 100% (dri) 
+   315089 Healthy Hormone Formula                  Dose   9.5 -> R   2.9 (B 4.1, E1 2.9) total 42.9 -> 36.3 [both groups]
+        rest adjunct         assessed       0.2   Calcium                            5% of RDA/AI vs 25% (legacy) 
+        main major           not_assessable       Tribulus Fruit Extract             declared, no applicable benchmark 
+        main major           assessed       0.5   Tongkat Ali Root Extract           100 mg/day vs 200 (Tongkat Ali range low) 
+        rest adjunct         assessed       0.04  Diindolylmethane                   1% of RDA/AI vs 25% (legacy) 
+        rest adjunct         assessed       0.04  Indole-3-Carbinol                  1% of RDA/AI vs 25% (legacy) 
+        main major           unknown              Tesnor (Pomegranate-Cocoa Blend)   blend total; contents' amounts hidden 
+    54775 Sytrinol                                 Dose   9.5 -> R   0.0 (B 0.0, E1 0.0) total 49.5 -> 40.0 [main only]
+        main claim_prominent unknown              Sytrinol                           blend total; contents' amounts hidden 
+   315333 One Daily Multivitamin plus Probiotics   Dose  19.2 -> R  12.6 (B 12.6, E1 12.6) total 80.5 -> 73.9 [both groups]
+        main adjunct         assessed       0.89  Vitamin A                          89% of RDA/AI vs 100% (dri) 
+        main major           assessed       0.89  Vitamin C                          89% of RDA/AI vs 100% (dri) 
+        main major           assessed       1.0   Vitamin D                          167% of RDA/AI vs 100% (dri) 
+        main major           assessed       0.8   Vitamin E                          80% of RDA/AI vs 100% (dri) 
+        main major           assessed       0.62  Vitamin K                          62% of RDA/AI vs 100% (dri) 
+        main major           assessed       0.92  Thiamine                           92% of RDA/AI vs 100% (dri) 
+        main major           assessed       1.0   Riboflavin                         108% of RDA/AI vs 100% (dri) 
+        main adjunct         assessed       1.0   Niacin                             100% of RDA/AI vs 100% (dri) 
+        main major           assessed       1.0   Vitamin B6                         108% of RDA/AI vs 100% (dri) 
+        main adjunct         assessed       0.85  Folate                             85% of RDA/AI vs 100% (dri) 
+        main major           assessed       0.85  Folic Acid                         85% of RDA/AI vs 100% (dri) 
+        main major           assessed       1.0   Vitamin B12                        104% of RDA/AI vs 100% (dri) 
+        main major           assessed       1.0   Biotin                             167% of RDA/AI vs 100% (dri) 
+        main major           assessed       1.0   Pantothenic Acid                   120% of RDA/AI vs 100% (dri) 
+        main major           assessed       0.48  Calcium                            12% of RDA/AI vs 25% (legacy) 
+        main major           assessed       0.78  Iron                               78% of RDA/AI vs 100% (dri) 
+        main major           assessed       1.0   Iodine                             100% of RDA/AI vs 100% (dri) 
+        main major           assessed       0.56  Magnesium                          14% of RDA/AI vs 25% (legacy) 
+        main major           assessed       0.91  Zinc                               91% of RDA/AI vs 100% (dri) 
+        main major           assessed       1.0   Selenium                           100% of RDA/AI vs 100% (dri) 
+        main major           assessed       1.0   Copper                             111% of RDA/AI vs 100% (dri) 
+        main major           assessed       0.87  Manganese                          87% of RDA/AI vs 100% (dri) 
+        main major           assessed       1.0   Chromium                           114% of RDA/AI vs 100% (dri) 
+        main major           assessed       1.0   Molybdenum                         111% of RDA/AI vs 100% (dri) 
+        main adjunct         assessed       1.0   Coenzyme Q-10                      67% of RDA/AI vs 25% (legacy) 
+        rest adjunct         not_assessable       Silica                             declared, no applicable benchmark 
+        rest adjunct         not_assessable       Boron                              declared, no applicable benchmark 
+        rest claim_prominent unknown              Probiotics                         blend total; contents' amounts hidden 
+   214586 Ipriflavone 200 mg                       Dose  14.5 -> R   0.0 (B None, E1 0.0) total 56.8 -> 42.3 [main only]
+        main claim_prominent not_assessable       Ipriflavone                        declared, no applicable benchmark 
+   311946 L-Leucine 5 g Unflavored                 Dose  14.5 -> R   0.0 (B None, E1 0.0) total 67.5 -> 53.0 [main only]
+        main claim_prominent not_assessable       L-Leucine, Instantized             single amino acid outside a complete set; no own benchmark 
+   220082 Wheybolic Ripped Chocolate Fudge         Dose  11.2 -> R  16.8 (B 16.8, E1 16.8) total 60.0 -> 65.6 [both groups]
+        main primary         assessed       1.0   BCAA total                         15000 mg per use vs 5000 (BCAA >=5 g band) 
+        rest adjunct         assessed       0.06  Vitamin D                          6% of RDA/AI vs 100% (dri) 
+        rest adjunct         assessed       0.88  Calcium                            22% of RDA/AI vs 25% (legacy) 
+        rest adjunct         assessed       0.08  Iron                               8% of RDA/AI vs 100% (dri) 
+        rest adjunct         assessed       0.51  Magnesium                          13% of RDA/AI vs 25% (legacy) 
+        rest adjunct         assessed       1.0   Chromium                           1429% of RDA/AI vs 100% (dri) 
+        rest adjunct         not_assessable       Potassium                          dietary-intake nutrient, no supplement benchmark 
+        rest adjunct         assessed       0.75  Caffeine Anhydrous                 150 mg per_use vs 200 (caffeine 200-400 mg per use band) 
+        rest adjunct         assessed       1.0   L-Carnitine                        133% of RDA/AI vs 25% (legacy) 
+        rest adjunct         assessed       0.38  Caffeine Anhydrous                 75 mg per_use vs 200 (caffeine 200-400 mg per use band) 
+        rest adjunct         assessed       1.0   L-Carnitine                        133% of RDA/AI vs 25% (legacy) 
+        rest major           unknown              Glutamic Acid and Glutamine        blend total; contents' amounts hidden 
+        rest adjunct         not_assessable       Velositol (Amylopectin-Chromium Co declared, no applicable benchmark 
+        rest adjunct         not_assessable       ProHydrolase Protease Enzyme Blend declared, no applicable benchmark 
+        rest adjunct         not_assessable       Digestive Enzymes                  declared, no applicable benchmark 
+        rest adjunct         unknown              Water Balance Blend                blend total; contents' amounts hidden 
+        rest adjunct         not_assessable       ProHydrolase Protease Enzyme Blend declared, no applicable benchmark 
+        rest adjunct         unknown              Water Balance Blend                blend total; contents' amounts hidden 
