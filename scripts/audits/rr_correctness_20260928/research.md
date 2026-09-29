@@ -23,6 +23,24 @@ A record completes the review; it never awards points.
 Each blend's disclosed constituents keep their existing records (turmeric, ashwagandha, flaxseed,
 barley grass, the probiotic species, ...); a blend's undisclosed amounts cannot inherit them.
 
+## Composition searches (added after review)
+
+Brand-name searches alone cannot close a review. Each blend with printed contents was also searched by
+composition; the GNC labels print no ingredients under their blends, so no composition search is
+possible for those three.
+
+| Canonical | Composition query | Hits | Verdict |
+|---|---|---:|---|
+| `organic_golden_milk_blend` | `(turmeric[tiab] OR curcuma[tiab]) AND ginger[tiab] AND (cinnamon[tiab] OR ashwagandha[tiab] OR "black pepper"[tiab]) AND (randomized controlled trial[pt] OR clinical trial[pt]) AND humans[mh]` | 6 | other formulas only (PMIDs 42360298, 36419388, 32211803, 32180294, 30259284, 25592751) |
+| `organic_u_s_a_farmed_green_juice_blend` | `("barley grass"[tiab] OR "young barley"[tiab]) AND (wheatgrass[tiab] OR "wheat grass"[tiab] OR alfalfa[tiab] OR "oat grass"[tiab]) AND (randomized controlled trial[pt] OR clinical trial[pt])` | 0 | none |
+| `raw_organic_sprout_and_fiber_blend` | `(sprouted[tiab] OR sprout[tiab]) AND (flax*[tiab] OR chia[tiab] OR quinoa[tiab] OR amaranth[tiab]) AND fiber[tiab] AND (randomized controlled trial[pt] OR clinical trial[pt])` | 0 | none |
+| `raw_fitbiotic_blend` | `(probiotic*[tiab]) AND "Lactobacillus gasseri"[tiab] AND "Bifidobacterium longum"[tiab] AND "Lactobacillus rhamnosus"[tiab] AND (weight[tiab] OR adipos*[tiab] OR obes*[tiab] OR "body fat"[tiab]) AND randomized controlled trial[pt]` | 1 | a different formula for GI symptoms after bariatric surgery (PMID 38418752); the label names no strains |
+
+Product-level state after review (owner-scoped `resolve_product_evidence`): 7 of 8 read
+`applicability_unestablished` because another owner ingredient legitimately keeps it there
+(cinnamon/turmeric amount undisclosed inside a blend, pomegranate and flaxseed sub-clinical,
+Sytrinol 150 mg below the 300 mg studied dose, Tesnor blocked by D23); Fitbiotic reads `assessed`.
+
 ## Reviewed clinical entries (`backed_clinical_studies.json`)
 
 The one Evidence points owner. Query `Tesnor[tiab]` returned 4 records; query
