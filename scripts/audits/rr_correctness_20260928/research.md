@@ -167,6 +167,13 @@ returned 3 (the third, PMID 9781306, is an animal-cancer review and does not qua
   or tier change. Five plain black pepper extracts -4.0 (311167, 330436-330439: Formulation
   20 -> 16, 62.4 -> 58.4); 300258 Legion Fortify +0.7 (its row reads "Meriva Curcuma longa L.
   rhizome extract", which the exact-name set missed).
+- **Regression caught in the fresh corpus (07116c4a) and fixed:** a label-level projection (a
+  brand-named blend total: Sytrinol 54775/251856, Tesnor 315089/315816, Pycnogenol in Mirtogenol
+  231868) is never assessed by the enricher's evidence matcher, so it lost the credit (-4.0 to -6.7;
+  231868 SAFE -> POOR). The same rule now reads such a row's own label name (aliases find,
+  `brand_tokens` confirm). Full corpus re-scored from the fresh enriched outputs: exactly these 5
+  return to their prior Formulation, nothing else of 15,421 changes. Remove the projection branch
+  when the enricher records brand matches for brand-named blend totals.
 - **Found, not changed:** GNC 316434 names KSM-66 only in label statements ("Ashwagandha as
   KSM-66") over a plain "Ashwagandha Root Extract" row, so no brand record is discovered
   (before and after this change).

@@ -36,3 +36,11 @@ def test_plain_black_pepper_extract_is_not_bioperine():
 def test_a_label_naming_ksm66_keeps_the_branded_credit():
     components = _botanical_formulation("branded_form_ksm66_305203_raw.json")
     assert components.get("branded_clinically_studied_extract") == 3.0
+
+
+def test_a_brand_named_blend_total_keeps_the_branded_credit():
+    """54775 prints one "Sytrinol" total over its two extracts. The row scored is a
+    label-level projection the enricher's evidence matcher never assesses, so its
+    own label name is what names the brand."""
+    components = _botanical_formulation("branded_form_sytrinol_54775_raw.json")
+    assert components.get("branded_clinically_studied_extract") == 3.0

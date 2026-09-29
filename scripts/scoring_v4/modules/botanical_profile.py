@@ -182,18 +182,59 @@ def _known_botanical_identity_set() -> frozenset:
     return _botanical_identity_set() | _standardized_botanical_identity_set()
 
 
+@lru_cache(maxsize=1)
+def _branded_studied_entries() -> tuple:
+    """(names and aliases, brand_tokens) of each clinically studied brand record."""
+    try:
+        raw = json.loads((_DATA_DIR / "backed_clinical_studies.json").read_text())
+    except Exception:  # pragma: no cover
+        return ()
+    out = []
+    for entry in raw.get("backed_clinical_studies") or []:
+        if not isinstance(entry, dict):
+            continue
+        level = _norm(entry.get("evidence_level"))
+        branded = "branded" in level or _norm(entry.get("id")).startswith("brand_")
+        if not branded or level == "preclinical":
+            continue
+        names = frozenset(k for k in (_norm(v) for v in [entry.get("standard_name"), *(entry.get("aliases") or [])]) if k)
+        out.append((names, tuple(_norm(t) for t in entry.get("brand_tokens") or [] if _norm(t))))
+    return tuple(out)
+
+
 def _branded_studied_row(product: Dict[str, Any], row: Dict[str, Any]) -> bool:
     """Whether ``row`` is a branded clinically-studied extract on this label.
 
-    The enricher decides once whether a label names a brand
+    The enricher decides whether a label names a brand
     (``enrich_supplements_v3._brand_mentioned``: a BRAND_ entry's aliases find
-    it, its ``brand_tokens`` confirm it) and records the rows a clinical match
-    covers. A brand known only from animal or in-vitro work is not clinically
-    studied.
+    it, its ``brand_tokens`` confirm it) and records the rows each clinical
+    match covers. A brand known only from animal or in-vitro work is not
+    clinically studied.
+
+    A label-level projection (a brand-named blend total such as "Sytrinol") is
+    never assessed by that matcher, so the same rule reads the projection's own
+    label name. Remove this branch when the enricher records brand matches for
+    those rows.
     """
     ref = row.get("raw_source_path")
-    if not ref:
+    for match in ((product.get("evidence_data") or {}).get("clinical_matches") or []):
+        if not isinstance(match, dict):
+            continue
+        level = _norm(match.get("evidence_level"))
+        branded = "branded" in level or _norm(match.get("id")).startswith("brand_")
+        if ref and branded and level != "preclinical" and ref in (match.get("matched_source_row_refs") or []):
+            return True
+    if row.get("scoring_input_kind") != "product_level_evidence":
         return False
+    keys = set(_ingredient_identity_keys(row))
+    text = " ".join(sorted(keys))
+    return any(
+        keys & names and (
+            not tokens
+            or any(re.search(r"(?<!\w)" + re.escape(t) + r"(?!\w)", text) for t in tokens)
+        )
+        for names, tokens in _branded_studied_entries()
+    )
     for match in ((product.get("evidence_data") or {}).get("clinical_matches") or []):
         if not isinstance(match, dict):
             continue
