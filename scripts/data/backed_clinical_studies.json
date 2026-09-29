@@ -3,8 +3,8 @@
     "description": "Ingredients backed by clinical research and studies - Enhanced for Section C v3.4.0",
     "purpose": "evidence_scoring",
     "schema_version": "5.6.2",
-    "last_updated": "2026-09-26",
-    "total_entries": 208,
+    "last_updated": "2026-09-28",
+    "total_entries": 210,
     "changelog": [
       "5.6.2 (2026-09-26): INGR_OMEGA3 purpose_evidence retains factual scope and sources only. Numerical points, operational exposure cutoffs, interpolation and eligibility are owned by quality_score.json. Scientific boundaries rechecked against live source content; no clinician sign-off asserted and no score values changed.",
       "5.6.1 (2026-09-26): INGR_WHEY_PROTEIN no longer aliases generic Protein macro declarations, unspecified powders/blends, or rice/hemp sources absent from its cited 49-trial source inventory. Known whey, casein, milk, soy and pea source identities remain. Fresh-enrichment regressions cover two collagen labels and greens coffee; source-free macro recovery is intentionally rejected.",
@@ -23305,6 +23305,196 @@
         }
       ],
       "last_updated": "2026-09-18"
+    },
+    {
+      "id": "BRAND_TESNOR",
+      "standard_name": "Tesnor",
+      "applicability": {
+        "scope": "ingredient",
+        "required_form_terms": [
+          "tesnor",
+          "ln18178"
+        ],
+        "supported_outcomes": [
+          "hormone_balance"
+        ],
+        "studied_population": "Healthy men aged 21-55 years, studied for 56 days",
+        "reviewed_at": "2026-09-28",
+        "source_pmids": [
+          "35129040",
+          "35928723"
+        ]
+      },
+      "min_clinical_dose": 200,
+      "max_studied_clinical_dose": 400,
+      "dose_unit": "mg",
+      "aliases": [
+        "ln18178",
+        "tesnor pomegranate cocoa blend",
+        "tesnor (pomegranate-cocoa blend)"
+      ],
+      "category": "hormonal_endocrine",
+      "evidence_level": "branded-rct",
+      "study_type": "rct_multiple",
+      "published_studies": [
+        "RCT",
+        "brand"
+      ],
+      "score_contribution": "tier_1",
+      "key_endpoints": [
+        "serum free testosterone ↑ at 200 and 400 mg/day",
+        "serum total testosterone ↑ at 400 mg/day",
+        "aging males' symptoms score ↓",
+        "hand-grip strength ↑"
+      ],
+      "health_goals_supported": [
+        "Hormone Balance"
+      ],
+      "notes": "Both trials tested LN18178 (Tesnor), a proprietary blend of standardized Punica granatum fruit-rind and Theobroma cocoa seed extracts, at 200 or 400 mg/day for 56 days in healthy men. Both were run by the ingredient's developer; no independent replication was found. Endpoints are hormone levels and a symptom score, not clinical outcomes. Pomegranate or cocoa extracts outside this blend cannot borrow this evidence.",
+      "last_updated": "2026-09-28",
+      "notable_studies": "Sreeramaneni et al. (2023, PMID 35129040) randomized 120 men aged 21-35 to placebo, 200 or 400 mg/day for 56 days: free testosterone rose at both doses and total testosterone at 400 mg versus placebo. Pandit et al. (2022, PMID 35928723) randomized 120 men aged 36-55 to the same arms: aging males' symptoms scores fell and free and total testosterone rose at both doses.",
+      "references_structured": [
+        {
+          "type": "pubmed",
+          "authority": "NCBI PubMed",
+          "pmid": "35129040",
+          "doi": "10.1080/19390211.2022.2035037",
+          "title": "A Proprietary Herbal Blend Containing Extracts of Punica granatum Fruit Rind and Theobroma cocoa Seeds Increases Serum Testosterone Level in Healthy Young Males: A Randomized, Double-Blind Placebo-Controlled Study.",
+          "citation": "Journal of dietary supplements (2023-01-01)",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/35129040/",
+          "published_date": "2023-01-01",
+          "publication_types": [
+            "Randomized Controlled Trial",
+            "Journal Article"
+          ],
+          "mesh_terms": [],
+          "supplementary_concepts": [],
+          "evidence_grade": "journal_article",
+          "retracted": false,
+          "supports_claims": [],
+          "verification_source": "pubmed_eutils"
+        },
+        {
+          "type": "pubmed",
+          "authority": "NCBI PubMed",
+          "pmid": "35928723",
+          "doi": "10.7150/ijms.73645",
+          "title": "A proprietary blend of standardized Punica granatum fruit rind and Theobroma cocoa seed extracts mitigates aging males' symptoms: A randomized, double-blind, placebo-controlled study.",
+          "citation": "International journal of medical sciences (2022-07-11)",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/35928723/",
+          "published_date": "2022-07-11",
+          "publication_types": [
+            "Journal Article",
+            "Randomized Controlled Trial"
+          ],
+          "mesh_terms": [],
+          "supplementary_concepts": [],
+          "evidence_grade": "journal_article",
+          "retracted": false,
+          "supports_claims": [],
+          "verification_source": "pubmed_eutils"
+        }
+      ],
+      "effect_direction": "positive_weak",
+      "primary_outcome": "Hormone Balance",
+      "total_enrollment": 240,
+      "effect_direction_confidence": "medium",
+      "effect_direction_rationale": "Two positive double-blind placebo-controlled trials (240 men) on hormone levels and a symptom score, both from the ingredient's developer and without independent replication: positive_weak rather than positive_strong.",
+      "endpoint_relevance_tags": [
+        "hormone_balance"
+      ]
+    },
+    {
+      "id": "BRAND_SYTRINOL",
+      "standard_name": "Sytrinol",
+      "applicability": {
+        "scope": "ingredient",
+        "required_form_terms": [
+          "sytrinol"
+        ],
+        "supported_outcomes": [
+          "cardiovascular"
+        ],
+        "studied_population": "Adults with hypercholesterolemia, studied for 4-12 weeks",
+        "reviewed_at": "2026-09-28",
+        "source_pmids": [
+          "17985810",
+          "25828621"
+        ]
+      },
+      "min_clinical_dose": 300,
+      "max_studied_clinical_dose": 300,
+      "dose_unit": "mg",
+      "aliases": [],
+      "category": "cardiovascular",
+      "evidence_level": "branded-rct",
+      "study_type": "rct_multiple",
+      "published_studies": [
+        "RCT",
+        "brand"
+      ],
+      "score_contribution": "tier_1",
+      "key_endpoints": [
+        "total and LDL cholesterol ↓ at 300 mg/day (2007 trial)",
+        "no LDL-C or hsCRP change beyond placebo at 59-115 mg/day (2015 trial)"
+      ],
+      "health_goals_supported": [
+        "Cardiovascular/Heart Health"
+      ],
+      "notes": "Sytrinol combines citrus (Citrus sinensis) polymethoxylated flavones with palm (Elaeis guineensis) tocotrienols. A 2007 trial of 270 mg flavones plus 30 mg tocotrienols daily reported large cholesterol reductions; its report combines two open-label pilots with one double-blind arm. An independent 2015 double-blind trial of the same two ingredient classes at lower doses found no effect beyond placebo. Evidence is mixed; only the 300 mg/day exposure was positive.",
+      "last_updated": "2026-09-28",
+      "notable_studies": "Roza et al. (2007, PMID 17985810): 120 hypercholesterolemic adults randomized to 300 mg/day (270 mg citrus flavonoids + 30 mg tocotrienols) or placebo for 12 weeks, plus two 4-week open-label groups of 10; total cholesterol fell 20-30% and LDL 19-27%. Schuchardt et al. (2015, PMID 25828621): 240 adults with elevated LDL-C and hsCRP randomized to 12 mg tocotrienols + 103 mg flavones, 27 mg + 32 mg, or placebo for 12 weeks; no difference in LDL-C or hsCRP versus placebo.",
+      "references_structured": [
+        {
+          "type": "pubmed",
+          "authority": "NCBI PubMed",
+          "pmid": "17985810",
+          "doi": null,
+          "title": "Effect of citrus flavonoids and tocotrienols on serum cholesterol levels in hypercholesterolemic subjects.",
+          "citation": "Alternative therapies in health and medicine (2007-11-01)",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/17985810/",
+          "published_date": "2007-11-01",
+          "publication_types": [
+            "Controlled Clinical Trial",
+            "Journal Article",
+            "Randomized Controlled Trial"
+          ],
+          "mesh_terms": [],
+          "supplementary_concepts": [],
+          "evidence_grade": "journal_article",
+          "retracted": false,
+          "supports_claims": [],
+          "verification_source": "pubmed_eutils"
+        },
+        {
+          "type": "pubmed",
+          "authority": "NCBI PubMed",
+          "pmid": "25828621",
+          "doi": "10.1038/ejcn.2015.44",
+          "title": "A combination of palm oil tocotrienols and citrus peel polymethoxylated flavones does not influence elevated LDL cholesterol and high-sensitivity C-reactive protein levels.",
+          "citation": "European journal of clinical nutrition (2015-11-01)",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/25828621/",
+          "published_date": "2015-11-01",
+          "publication_types": [
+            "Journal Article",
+            "Randomized Controlled Trial"
+          ],
+          "mesh_terms": [],
+          "supplementary_concepts": [],
+          "evidence_grade": "journal_article",
+          "retracted": false,
+          "supports_claims": [],
+          "verification_source": "pubmed_eutils"
+        }
+      ],
+      "effect_direction": "mixed",
+      "primary_outcome": "Cardiovascular/Heart Health",
+      "total_enrollment": 380,
+      "effect_direction_confidence": "medium",
+      "effect_direction_rationale": "A positive 2007 trial at 300 mg/day with open-label components against a null independent 2015 double-blind trial at lower doses: mixed.",
+      "endpoint_relevance_tags": [
+        "cardiovascular"
+      ]
     }
   ]
 }

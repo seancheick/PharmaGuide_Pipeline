@@ -3,8 +3,8 @@
     "description": "Phase 4 shadow literature resolution registry for high-impact canonical actives",
     "purpose": "literature_evidence_resolution",
     "schema_version": "5.0.0",
-    "last_updated": "2026-09-25",
-    "total_entries": 747,
+    "last_updated": "2026-09-28",
+    "total_entries": 754,
     "verification_pipeline": "scripts/api_audit/verify_literature_records.py",
     "verified_studies_count": 207,
     "verified_records_count": 744
@@ -23133,6 +23133,167 @@
         "all_pmids_verified": true,
         "retractions_found": false
       }
+    },
+    {
+      "canonical_id": "anabolic_muscle_primer",
+      "material_form": "GNC Beyond Raw 'Anabolic Muscle Primer' proprietary blend (undisclosed amounts)",
+      "search_query": "\"Anabolic Muscle Primer\"[tiab] OR (\"Ravage\"[tiab] AND \"GNC\"[tiab])",
+      "search_date": "2026-09-28",
+      "databases_searched": [
+        "PubMed"
+      ],
+      "records_screened": 0,
+      "qualifying_human_studies": [],
+      "effect_direction": "no_qualifying_human_evidence",
+      "population_context": "human clinical trials unestablished",
+      "studied_dose_exposure": {},
+      "applicability_decision": "Reproducible literature search identified no human clinical trial of this proprietary blend as formulated. Its disclosed constituents keep their own evidence records; the blend's undisclosed amounts cannot inherit their trials.",
+      "applicability_status": "no_qualifying_trials_found",
+      "verification_provenance": {
+        "verified_by": "live PubMed E-utilities esearch/efetch; receipts in scripts/audits/rr_correctness_20260928/research.md",
+        "verified_at": "2026-09-28T00:00:00+00:00",
+        "all_pmids_verified": true,
+        "retractions_found": false
+      },
+      "verification_result": "authoritative_pubmed_verified"
+    },
+    {
+      "canonical_id": "muscle_buffering_system",
+      "material_form": "GNC Beyond Raw 'Muscle Buffering System' proprietary blend (undisclosed amounts)",
+      "search_query": "\"Muscle Buffering System\"[tiab]",
+      "search_date": "2026-09-28",
+      "databases_searched": [
+        "PubMed"
+      ],
+      "records_screened": 0,
+      "qualifying_human_studies": [],
+      "effect_direction": "no_qualifying_human_evidence",
+      "population_context": "human clinical trials unestablished",
+      "studied_dose_exposure": {},
+      "applicability_decision": "Reproducible literature search identified no human clinical trial of this proprietary blend as formulated. Its disclosed constituents keep their own evidence records; the blend's undisclosed amounts cannot inherit their trials.",
+      "applicability_status": "no_qualifying_trials_found",
+      "verification_provenance": {
+        "verified_by": "live PubMed E-utilities esearch/efetch; receipts in scripts/audits/rr_correctness_20260928/research.md",
+        "verified_at": "2026-09-28T00:00:00+00:00",
+        "all_pmids_verified": true,
+        "retractions_found": false
+      },
+      "verification_result": "authoritative_pubmed_verified"
+    },
+    {
+      "canonical_id": "thermo_energy_matrix",
+      "material_form": "GNC Beyond Raw 'Thermo Energy Matrix' proprietary blend (undisclosed amounts)",
+      "search_query": "\"Thermo Energy Matrix\"[tiab] OR (\"Rampant\"[tiab] AND \"GNC\"[tiab])",
+      "search_date": "2026-09-28",
+      "databases_searched": [
+        "PubMed"
+      ],
+      "records_screened": 0,
+      "qualifying_human_studies": [],
+      "effect_direction": "no_qualifying_human_evidence",
+      "population_context": "human clinical trials unestablished",
+      "studied_dose_exposure": {},
+      "applicability_decision": "Reproducible literature search identified no human clinical trial of this proprietary blend as formulated. Its disclosed constituents keep their own evidence records; the blend's undisclosed amounts cannot inherit their trials.",
+      "applicability_status": "no_qualifying_trials_found",
+      "verification_provenance": {
+        "verified_by": "live PubMed E-utilities esearch/efetch; receipts in scripts/audits/rr_correctness_20260928/research.md",
+        "verified_at": "2026-09-28T00:00:00+00:00",
+        "all_pmids_verified": true,
+        "retractions_found": false
+      },
+      "verification_result": "authoritative_pubmed_verified"
+    },
+    {
+      "canonical_id": "organic_golden_milk_blend",
+      "material_form": "Organic golden milk blend: turmeric, coconut water powder, tapioca fiber, cinnamon, ashwagandha, ginger, cardamom, black pepper, two probiotic strains (undisclosed amounts)",
+      "search_query": "\"golden milk\"[tiab] AND (randomized controlled trial[pt] OR clinical trial[pt] OR systematic review[pt])",
+      "search_date": "2026-09-28",
+      "databases_searched": [
+        "PubMed"
+      ],
+      "records_screened": 0,
+      "qualifying_human_studies": [],
+      "effect_direction": "no_qualifying_human_evidence",
+      "population_context": "human clinical trials unestablished",
+      "studied_dose_exposure": {},
+      "applicability_decision": "Reproducible literature search identified no human clinical trial of this proprietary blend as formulated. Its disclosed constituents keep their own evidence records; the blend's undisclosed amounts cannot inherit their trials.",
+      "applicability_status": "no_qualifying_trials_found",
+      "verification_provenance": {
+        "verified_by": "live PubMed E-utilities esearch/efetch; receipts in scripts/audits/rr_correctness_20260928/research.md",
+        "verified_at": "2026-09-28T00:00:00+00:00",
+        "all_pmids_verified": true,
+        "retractions_found": false
+      },
+      "verification_result": "authoritative_pubmed_verified"
+    },
+    {
+      "canonical_id": "organic_u_s_a_farmed_green_juice_blend",
+      "material_form": "Organic cereal-grass juice blend: barley, alfalfa, oat, wheat and kamut grass (undisclosed amounts)",
+      "search_query": "(\"grass juice\"[tiab] OR \"cereal grass\"[tiab]) AND (randomized controlled trial[pt] OR clinical trial[pt])",
+      "search_date": "2026-09-28",
+      "databases_searched": [
+        "PubMed"
+      ],
+      "records_screened": 4,
+      "qualifying_human_studies": [],
+      "effect_direction": "no_qualifying_human_evidence",
+      "population_context": "human clinical trials unestablished",
+      "studied_dose_exposure": {},
+      "applicability_decision": "Reproducible literature search found three small wheat-grass-juice pilot trials in disease populations (PMIDs 11989836, 15297687, 17571966) and one observational diet study; none tested this five-grass blend or a general-health endpoint, so none qualifies. Constituents keep their own evidence records.",
+      "applicability_status": "no_qualifying_trials_found",
+      "verification_provenance": {
+        "verified_by": "live PubMed E-utilities esearch/efetch; receipts in scripts/audits/rr_correctness_20260928/research.md",
+        "verified_at": "2026-09-28T00:00:00+00:00",
+        "all_pmids_verified": true,
+        "retractions_found": false
+      },
+      "verification_result": "authoritative_pubmed_verified"
+    },
+    {
+      "canonical_id": "raw_organic_sprout_and_fiber_blend",
+      "material_form": "Organic sprouted seed, grain and legume fiber blend: flax, amaranth, quinoa, chia, millet, buckwheat, garbanzo, lentil, adzuki, sunflower, pumpkin, sesame, coconut flour (undisclosed amounts)",
+      "search_query": "\"Raw Organic Fiber\"[tiab] OR (\"sprout\"[tiab] AND \"fiber blend\"[tiab])",
+      "search_date": "2026-09-28",
+      "databases_searched": [
+        "PubMed"
+      ],
+      "records_screened": 0,
+      "qualifying_human_studies": [],
+      "effect_direction": "no_qualifying_human_evidence",
+      "population_context": "human clinical trials unestablished",
+      "studied_dose_exposure": {},
+      "applicability_decision": "Reproducible literature search identified no human clinical trial of this proprietary blend as formulated. Its disclosed constituents keep their own evidence records; the blend's undisclosed amounts cannot inherit their trials.",
+      "applicability_status": "no_qualifying_trials_found",
+      "verification_provenance": {
+        "verified_by": "live PubMed E-utilities esearch/efetch; receipts in scripts/audits/rr_correctness_20260928/research.md",
+        "verified_at": "2026-09-28T00:00:00+00:00",
+        "all_pmids_verified": true,
+        "retractions_found": false
+      },
+      "verification_result": "authoritative_pubmed_verified"
+    },
+    {
+      "canonical_id": "raw_fitbiotic_blend",
+      "material_form": "Garden of Life 'RAW Fitbiotic' 16-strain probiotic blend, 50 billion CFU, strains without strain designations",
+      "search_query": "Fitbiotic[tiab] OR (\"Garden of Life\"[tiab] AND probiotic*[tiab])",
+      "search_date": "2026-09-28",
+      "databases_searched": [
+        "PubMed"
+      ],
+      "records_screened": 0,
+      "qualifying_human_studies": [],
+      "effect_direction": "no_qualifying_human_evidence",
+      "population_context": "human clinical trials unestablished",
+      "studied_dose_exposure": {},
+      "applicability_decision": "Reproducible literature search identified no human clinical trial of this proprietary blend as formulated. Its disclosed constituents keep their own evidence records; the blend's undisclosed amounts cannot inherit their trials.",
+      "applicability_status": "no_qualifying_trials_found",
+      "verification_provenance": {
+        "verified_by": "live PubMed E-utilities esearch/efetch; receipts in scripts/audits/rr_correctness_20260928/research.md",
+        "verified_at": "2026-09-28T00:00:00+00:00",
+        "all_pmids_verified": true,
+        "retractions_found": false
+      },
+      "verification_result": "authoritative_pubmed_verified"
     }
   ]
 }
