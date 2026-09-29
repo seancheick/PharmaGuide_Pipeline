@@ -7869,7 +7869,8 @@
           "range_high": 0.42,
           "quality": "moderate"
         },
-        "absorption": "moderate (Ca class baseline; form-dependent 25-42%)"
+        "absorption": "moderate (Ca class baseline; form-dependent 25-42%)",
+        "dosage_importance": 1.0
       },
       "calcium sulfate": {
         "bio_score": 3,
@@ -7883,7 +7884,8 @@
           "range_high": 0.42,
           "quality": "moderate"
         },
-        "absorption": "moderate (Ca class baseline; form-dependent 25-42%)"
+        "absorption": "moderate (Ca class baseline; form-dependent 25-42%)",
+        "dosage_importance": 1.0
       },
       "calcium chloride": {
         "bio_score": 3,
@@ -7897,7 +7899,8 @@
           "range_high": 0.42,
           "quality": "moderate"
         },
-        "absorption": "moderate (Ca class baseline; form-dependent 25-42%)"
+        "absorption": "moderate (Ca class baseline; form-dependent 25-42%)",
+        "dosage_importance": 1.0
       },
       "calcium glycerophosphate": {
         "bio_score": 3,
@@ -7911,7 +7914,8 @@
           "range_high": 0.42,
           "quality": "moderate"
         },
-        "absorption": "moderate (Ca class baseline; form-dependent 25-42%)"
+        "absorption": "moderate (Ca class baseline; form-dependent 25-42%)",
+        "dosage_importance": 1.0
       }
     },
     "match_rules": {
@@ -8966,7 +8970,8 @@
           "range_low": 0.05,
           "range_high": 0.3
         },
-        "absorption": "form unknown; assume oxide-tier worst-case for scoring"
+        "absorption": "form unknown; assume oxide-tier worst-case for scoring",
+        "dosage_importance": 1.0
       }
     },
     "match_rules": {
@@ -16611,7 +16616,8 @@
           "range_high": 0.92,
           "quality": "very_good"
         },
-        "absorption": "very_good (K class baseline ~80-95%; mineral)"
+        "absorption": "very_good (K class baseline ~80-95%; mineral)",
+        "dosage_importance": 1.0
       }
     },
     "match_rules": {
@@ -38340,7 +38346,8 @@
           "range_high": 0.44,
           "quality": "moderate"
         },
-        "absorption": "unknown"
+        "absorption": "unknown",
+        "dosage_importance": 1.0
       }
     },
     "cui": "C0037098",
@@ -45001,7 +45008,8 @@
           "range_high": 0.75,
           "quality": "good"
         },
-        "absorption": "good"
+        "absorption": "good",
+        "dosage_importance": 1.0
       },
       "magnesium trisilicate": {
         "bio_score": 8,
@@ -45015,7 +45023,8 @@
           "range_high": 0.75,
           "quality": "good"
         },
-        "absorption": "good"
+        "absorption": "good",
+        "dosage_importance": 1.0
       },
       "calcium silicate (as silicon source)": {
         "bio_score": 8,
@@ -45032,7 +45041,8 @@
           "range_high": 0.75,
           "quality": "good"
         },
-        "absorption": "good"
+        "absorption": "good",
+        "dosage_importance": 1.0
       }
     },
     "match_rules": {
@@ -68920,7 +68930,8 @@
         "absorption": "low (~5%)",
         "aliases": [
           "vanadium from vanadyl sulfate"
-        ]
+        ],
+        "dosage_importance": 1.0
       },
       "bis(maltolato)oxovanadium (as vanadium source)": {
         "bio_score": 7,
@@ -68939,7 +68950,8 @@
         "absorption": "low (~5%)",
         "aliases": [
           "vanadium from bmov"
-        ]
+        ],
+        "dosage_importance": 1.0
       },
       "bis(picolinato)oxovanadium (as vanadium source)": {
         "bio_score": 7,
@@ -68958,7 +68970,8 @@
         "absorption": "low (~5%)",
         "aliases": [
           "vanadium from bpov"
-        ]
+        ],
+        "dosage_importance": 1.0
       },
       "vanadium amino acid chelate": {
         "bio_score": 7,
@@ -68981,7 +68994,8 @@
           "vanadium amino acid chelate",
           "vanadium glycinate",
           "vanadium chelate"
-        ]
+        ],
+        "dosage_importance": 1.0
       },
       "vanadium aspartate (as vanadium source)": {
         "bio_score": 7,
@@ -69001,7 +69015,8 @@
         "absorption": "low (~5%)",
         "aliases": [
           "vanadium from vanadium aspartate"
-        ]
+        ],
+        "dosage_importance": 1.0
       },
       "vanadium citrate (as vanadium source)": {
         "bio_score": 7,
@@ -69020,7 +69035,8 @@
         "absorption": "low (~5%)",
         "aliases": [
           "vanadium from vanadium citrate"
-        ]
+        ],
+        "dosage_importance": 1.0
       }
     },
     "cui": "C0042306",
