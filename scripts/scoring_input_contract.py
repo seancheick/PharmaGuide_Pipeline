@@ -982,6 +982,22 @@ def _derive_explicit_epa_dha_aggregate_evidence(
     return evidence
 
 
+def _children_are_exactly_the_eaas(owner: Dict[str, Any], rows: List[Dict[str, Any]]) -> bool:
+    """True when the header's own printed children are the nine EAAs and
+    nothing else ("Micro-Peptide Essential Amino Complex", 66953): its
+    composition, not its name, makes its mass an EAA total."""
+    prefix = str(owner.get("raw_source_path") or "") + ".nestedRows["
+    if prefix == ".nestedRows[":
+        return False
+    children = [
+        row for row in rows
+        if str(row.get("raw_source_path") or "").startswith(prefix)
+        and "." not in str(row.get("raw_source_path"))[len(prefix):]
+    ]
+    canonicals = [_norm(row.get("canonical_id")) for row in children]
+    return len(canonicals) == len(EAA_CANONICALS) and set(canonicals) == set(EAA_CANONICALS)
+
+
 def _derive_explicit_eaa_aggregate_evidence(
     rows: List[Dict[str, Any]],
 ) -> List[Dict[str, Any]]:
@@ -1019,7 +1035,7 @@ def _derive_explicit_eaa_aggregate_evidence(
             " ",
             str(owner.get("raw_source_text") or owner.get("name") or "").lower(),
         ).strip()
-        if owner_name not in _EXPLICIT_EAA_AGGREGATE_NAMES:
+        if owner_name not in _EXPLICIT_EAA_AGGREGATE_NAMES and not _children_are_exactly_the_eaas(owner, rows):
             continue
         if _norm(owner.get("cleaner_row_role")) != "blend_header_total":
             continue
