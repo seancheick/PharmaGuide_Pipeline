@@ -414,3 +414,21 @@ def test_static_audit_current_v4_modules_have_no_forbidden_fallbacks() -> None:
     )
 
     assert audit_scoring_static(args) == []
+
+
+def test_scoring_audit_refuses_a_failed_safety_lookup(tmp_path: Path) -> None:
+    # A resolver that could not check a label withholds the score (RR-08), and
+    # the builder then leaves the product out of the catalog. At release that is
+    # a bug to fix, never a smaller catalog to publish: a failure that hits every
+    # product would otherwise ship an empty catalog without a single error.
+    path = tmp_path / "scored.json"
+    _write(path, _scored(
+        verdict="NOT_SCORED",
+        quality_score_status="not_scored",
+        score_100_equivalent=None,
+        score_unavailable_reason="safety_assessment_incomplete",
+        _v4_completeness_gate={"is_live_eligible": True, "verdict": None},
+    ))
+
+    codes = {finding.code for finding in audit_scoring(_args(path))}
+    assert "SCORING_SAFETY_ASSESSMENT_INCOMPLETE" in codes

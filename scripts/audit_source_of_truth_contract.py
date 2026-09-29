@@ -737,6 +737,10 @@ def audit_scoring(args: argparse.Namespace) -> list[Finding]:
             )
             if source not in allowed_sources and verdict not in {"BLOCKED", "UNSAFE"}:
                 findings.append(Finding("SCORING_SOURCE_FORBIDDEN", f"{pid}: scoring source {source!r} is not strict scorable input", str(file_path)))
+            if product.get("score_unavailable_reason") == "safety_assessment_incomplete":
+                # A safety resolver failed on this label; publishing would drop
+                # the product (or, on a global failure, the catalog) silently.
+                findings.append(Finding("SCORING_SAFETY_ASSESSMENT_INCOMPLETE", f"{pid}: a safety resolver could not check this label", str(file_path)))
             if diag.get("iqd_ingredients_fallback_used") is True:
                 findings.append(Finding("SCORING_USED_IQD_FALLBACK", f"{pid}: scoring consumed ingredient_quality_data.ingredients fallback", str(file_path)))
 
