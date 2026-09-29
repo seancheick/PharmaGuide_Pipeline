@@ -22230,6 +22230,18 @@ class SupplementEnricherV3:
                         # product). No adequacy credit; the UL check stands.
                         adequacy_dict.update({"pct_rda": 0.0, "scoring_eligible": False,
                                               "point_recommendation": 0})
+                    if self._excluded_text_reason(ing_name) == SKIP_REASON_NUTRITION_FACT:
+                        # A Nutrition Facts line (chloride, like sodium) is never
+                        # a scoring ingredient, so it earns no adequacy credit
+                        # either (register D22). The UL check stands.
+                        adequacy_dict.update({
+                            "rda_ai": None,
+                            "rda_ai_source": "unknown",
+                            "pct_rda": None,
+                            "adequacy_band": "unknown",
+                            "scoring_eligible": False,
+                            "point_recommendation": 0,
+                        })
                     adequacy_results.append(adequacy_dict)
 
                     dose_assessment = build_dose_assessment(
