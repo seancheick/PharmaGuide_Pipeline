@@ -25,12 +25,15 @@ barley grass, the probiotic species, ...); a blend's undisclosed amounts cannot 
 
 ## Composition searches (added after review)
 
-Brand-name searches alone cannot close a review. Each blend with printed contents was also searched by
-composition; the GNC labels print no ingredients under their blends, so no composition search is
-possible for those three.
+Brand-name searches alone cannot close a review, so each blend was also searched by composition. The
+GNC blends list their contents as DSLD `forms` (their `nestedRows` are empty; an earlier note here wrongly
+said they list none), with no individual amounts.
 
 | Canonical | Composition query | Hits | Verdict |
 |---|---|---:|---|
+| `muscle_buffering_system` (astaxanthin, CarnoSyn) | `(astaxanthin[tiab]) AND ("beta-alanine"[tiab] OR "beta alanine"[tiab] OR carnosyn[tiab]) AND (randomized controlled trial[pt] OR clinical trial[pt])` | 0 | none |
+| `anabolic_muscle_primer` (betaine, fenugreek, saw palmetto, yam, yohimbe) | `(betaine[tiab]) AND (fenugreek[tiab] OR "saw palmetto"[tiab] OR yohimbe[tiab] OR yohimbine[tiab] OR "wild yam"[tiab] OR dioscorea[tiab]) AND (randomized controlled trial[pt] OR clinical trial[pt])`; `(fenugreek[tiab] AND ("saw palmetto"[tiab] OR yohimbe[tiab] OR yohimbine[tiab])) AND (randomized controlled trial[pt] OR clinical trial[pt])` | 0 | none |
+| `thermo_energy_matrix` (acetyl-L-carnitine, black pepper, caffeine, Capsimax, choline, phenylalanine, taurine) | `(caffeine[tiab]) AND (capsicum[tiab] OR capsaicin*[tiab] OR capsimax[tiab]) AND (taurine[tiab] OR carnitine[tiab] OR choline[tiab]) AND humans[mh]` | 2 | two narrative reviews (PMIDs 35565754, 27465721), no trial of the combination |
 | `organic_golden_milk_blend` | `(turmeric[tiab] OR curcuma[tiab]) AND ginger[tiab] AND (cinnamon[tiab] OR ashwagandha[tiab] OR "black pepper"[tiab]) AND (randomized controlled trial[pt] OR clinical trial[pt]) AND humans[mh]` | 6 | other formulas only (PMIDs 42360298, 36419388, 32211803, 32180294, 30259284, 25592751) |
 | `organic_u_s_a_farmed_green_juice_blend` | `("barley grass"[tiab] OR "young barley"[tiab]) AND (wheatgrass[tiab] OR "wheat grass"[tiab] OR alfalfa[tiab] OR "oat grass"[tiab]) AND (randomized controlled trial[pt] OR clinical trial[pt])` | 0 | none |
 | `raw_organic_sprout_and_fiber_blend` | `(sprouted[tiab] OR sprout[tiab]) AND (flax*[tiab] OR chia[tiab] OR quinoa[tiab] OR amaranth[tiab]) AND fiber[tiab] AND (randomized controlled trial[pt] OR clinical trial[pt])` | 0 | none |
