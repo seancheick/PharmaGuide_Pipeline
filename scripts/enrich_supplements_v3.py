@@ -14503,6 +14503,10 @@ class SupplementEnricherV3:
         # Step 3c: Compute total_active_mg for scorer B5 impact calculation.
         total_active_mg = 0.0
         for ing in active_ingredients:
+            if self._excluded_text_reason(ing.get("name") or "") == SKIP_REASON_NUTRITION_FACT:
+                # A Nutrition Facts line (chloride, like sodium) is not active
+                # mass (register D22).
+                continue
             qty_list = ing.get("quantity", [])
             qty_val = 0.0
             qty_unit = ""

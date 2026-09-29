@@ -52,3 +52,25 @@ def test_the_multivitamin_panel_has_no_chloride(enriched, pid):
     from scoring_v4.modules.multi_prenatal_dose import _coverage_scores
 
     assert "chloride" not in _coverage_scores(enriched[pid])
+
+
+
+def test_chloride_mass_is_not_label_active_mass(enriched):
+    """The blend-opacity share divides hidden blend mass by the label's active
+    mass. Sodium never enters that total (the cleaner files it as Nutrition
+    Facts); Chloride must not either: the total equals the same label's
+    total with no Chloride amount. (DSLD nests 25 unrelated rows under this
+    Chloride row, so the twin keeps the row and drops only its amount.)"""
+    from enhanced_normalizer import EnhancedDSLDNormalizer
+    from enrich_supplements_v3 import SupplementEnricherV3
+
+    raw = json.loads((FIXTURES / "multi_chloride_69770_raw.json").read_text())
+    for row in raw["ingredientRows"]:
+        if row.get("name") == "Chloride":
+            row["quantity"] = []
+    without, _ = SupplementEnricherV3().enrich_product(EnhancedDSLDNormalizer().normalize_product(raw))
+
+    def total(product):
+        return (product.get("proprietary_data") or {}).get("total_active_mg")
+
+    assert total(enriched["69770"]) == pytest.approx(total(without))
