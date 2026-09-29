@@ -347,7 +347,9 @@ fi
 # 37-brand dataset root, but the catalog snapshot includes it. Rebuild it (clean,
 # enrich, score) whenever reference data or stage code changed, so a successful
 # brand run cannot reach snapshot assembly with one stale auxiliary manifest.
-if [ "$SKIP_SNAPSHOT" != "1" ] \
+# A pipeline-only run over every brand refreshes them too: the snapshot that
+# follows it by hand reads them.
+if { [ "$SKIP_SNAPSHOT" != "1" ] || { [ "$PIPELINE_ONLY" = "1" ] && [ -z "$TARGET_DATASETS" ]; }; } \
     && [ -d "$SUBMISSION_OUTPUT_DIR" ] \
     && find "$SUBMISSION_OUTPUT_DIR" -maxdepth 1 -type f -name '*.json' \
         -print -quit 2>/dev/null | grep -q .; then
