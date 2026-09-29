@@ -1065,7 +1065,8 @@ def test_nordic_softgels_inactive_unmapped_labels_map(
         ("Boswellin Super (Boswellia serrata) gum resin extract", "Boswellia"),
         ("Lactobacillus acidophilus L-92", "Lactobacillus Acidophilus"),
         ("N-Acetyl-L-Cysteine/L-Cysteine HCl", "N-Acetyl Cysteine"),
-        ("Vanadium Amino Acid Chelate", "Vanadyl Sulfate"),
+        # Phase 2 keeps the nutrient parent distinct from the verified printed form.
+        ("Vanadium Amino Acid Chelate", "Vanadium"),
         ("Pancreatic Enzymes 11x", "Pancreatin"),
         ("Sharp-PS Gold Conjugated PS-DHA", "Phosphatidylserine"),
         ("Coptis (Coptis chinensis) root & rhizome 12:1 extract", "Coptis Rhizome"),
@@ -1353,7 +1354,7 @@ def test_nordic_softgels_inactive_unmapped_labels_map(
         ("Boneset aerial parts extract", "Boneset"),
         ("Blackcurrant freeze-dried extract", "Black Currant"),
         ("Black Tea leaves extract", "Black Tea"),
-        ("Calcium Glycerophosphate", "calcium glycerophosphate"),
+        ("Calcium Glycerophosphate", "Calcium"),
         ("Calcium Caprylate", "calcium caprylate"),
         ("Crominex 3+", "chromium"),  # Now maps via IQM alias → chromium parent
         ("Beta-Ecdysterone", "Ecdysterones"),
@@ -1400,7 +1401,7 @@ def test_nordic_softgels_inactive_unmapped_labels_map(
         ("certified organic AlgaeCal", "Calcium"),
         ("acid-stable Protease", "Protease"),
         ("acid stable Protease", "Protease"),
-        ("Vanadium Glycinate", "Vanadyl Sulfate"),
+        ("Vanadium Glycinate", "Vanadium"),
         ("Total Beta Glucan", "Beta-Glucan"),
         ("Super CitriMax Garcinia extract", "Garcinia"),
         ("Sulphoraphane", "Sulforaphane"),
