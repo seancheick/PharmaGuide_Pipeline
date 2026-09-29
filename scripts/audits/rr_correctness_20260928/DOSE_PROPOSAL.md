@@ -115,7 +115,9 @@ E1 −1.35, E2 −1.39).
 
 ## Branded-trial credit
 
-`botanical_profile._branded_studied_set` gives any row naming a branded clinical entry full
+`botanical_profile._branded_studied_row` (2026-09-29; it replaced an alias-keyed set, so a plain
+black pepper extract no longer counts as BioPerine) gives a row the enricher matched to a label-named
+branded clinical entry full
 standardization (4), +3 "branded clinically studied" and, in Dose, standardized-extract status for
 the studied-range check. Removing it on 300 branded labels moved 23 (mean −5.2, 14 tier crossings,
 no verdict change). Label-stated standardization survives the removal; studied-dose matching does

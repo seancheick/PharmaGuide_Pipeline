@@ -182,32 +182,26 @@ def _known_botanical_identity_set() -> frozenset:
     return _botanical_identity_set() | _standardized_botanical_identity_set()
 
 
-@lru_cache(maxsize=1)
-def _branded_studied_set() -> frozenset:
-    """Normalised names/aliases of branded clinically-studied extracts
-    (backed_clinical_studies entries flagged branded / id BRAND_*)."""
-    try:
-        raw = json.loads((_DATA_DIR / "backed_clinical_studies.json").read_text())
-    except Exception:  # pragma: no cover
-        return frozenset()
-    entries = raw if isinstance(raw, list) else [v for k, v in raw.items() if k != "_metadata"]
-    if len(entries) == 1 and isinstance(entries[0], list):
-        entries = entries[0]
-    names = set()
-    for entry in entries:
-        if not isinstance(entry, dict):
+def _branded_studied_row(product: Dict[str, Any], row: Dict[str, Any]) -> bool:
+    """Whether ``row`` is a branded clinically-studied extract on this label.
+
+    The enricher decides once whether a label names a brand
+    (``enrich_supplements_v3._brand_mentioned``: a BRAND_ entry's aliases find
+    it, its ``brand_tokens`` confirm it) and records the rows a clinical match
+    covers. A brand known only from animal or in-vitro work is not clinically
+    studied.
+    """
+    ref = row.get("raw_source_path")
+    if not ref:
+        return False
+    for match in ((product.get("evidence_data") or {}).get("clinical_matches") or []):
+        if not isinstance(match, dict):
             continue
-        is_branded = (
-            "branded" in _norm(entry.get("evidence_level"))
-            or _norm(entry.get("id")).startswith("brand_")
-        )
-        if not is_branded:
-            continue
-        for key in [entry.get("standard_name")] + list(entry.get("aliases") or []):
-            k = _norm(key)
-            if k:
-                names.add(k)
-    return frozenset(names)
+        level = _norm(match.get("evidence_level"))
+        branded = "branded" in level or _norm(match.get("id")).startswith("brand_")
+        if branded and level != "preclinical" and ref in (match.get("matched_source_row_refs") or []):
+            return True
+    return False
 
 
 # --- ingredient helpers ----------------------------------------------------
@@ -617,7 +611,7 @@ def _standardization_tier_credit(product: Dict[str, Any], row: Dict[str, Any]) -
     """Return the 0-4 tiered marker-standardization credit for ``row``."""
     keys = set(_ingredient_identity_keys(row))
     # A branded clinically-studied extract is standardized by definition.
-    if keys & _branded_studied_set():
+    if _branded_studied_row(product, row):
         return STANDARDIZATION_TIER_FULL
     sb = ((product.get("formulation_data") or {}).get("standardized_botanicals")) or []
     best = 0.0
@@ -655,7 +649,6 @@ def score_botanical_formulation(product: Dict[str, Any]) -> Dict[str, Any]:
         return {"score": 0.0, "max": BOTANICAL_FORMULATION_CAP, "components": {},
                 "metadata": {"reason": "no_botanical_active"}}
 
-    keys = set(_ingredient_identity_keys(row))
     recognized = _recognized_botanical_identity(row)
 
     if not recognized:
@@ -675,7 +668,7 @@ def score_botanical_formulation(product: Dict[str, Any]) -> Dict[str, Any]:
     std_credit = _standardization_tier_credit(product, row)
     if std_credit > 0:
         components["marker_standardization_declared"] = std_credit
-    if keys & _branded_studied_set():
+    if _branded_studied_row(product, row):
         components["branded_clinically_studied_extract"] = 3.0
 
     raw = sum(components.values())
@@ -713,8 +706,7 @@ def _is_named_standardized_botanical_complex(product: Dict[str, Any], row: Dict[
     an opaque proprietary-blend total. Plain blend headers and product-level
     anchors stay conservative.
     """
-    keys = set(_ingredient_identity_keys(row))
-    return _standardized_match(product, row) or bool(keys & _branded_studied_set())
+    return _standardized_match(product, row) or _branded_studied_row(product, row)
 
 
 def _parse_dose_range(entry: Dict[str, Any]) -> Optional[tuple]:

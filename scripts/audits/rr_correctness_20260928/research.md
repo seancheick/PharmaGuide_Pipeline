@@ -153,3 +153,40 @@ returned 3 (the third, PMID 9781306, is an animal-cancer review and does not qua
   compounds), yet the entry reads positive_strong with "Increase Energy"; and the Formulation
   branded-trial credit (`botanical_profile._branded_studied_set`) still keys on aliases, so plain
   black pepper extract keeps +3/+4 there (register D24 item 6).
+
+## Branded form credit follows the brand check (2026-09-29)
+
+- **Defect:** `botanical_profile._branded_studied_set` gave full standardization (4), +3 "branded
+  clinically studied" and studied-dose status to any row whose names met a BRAND_ entry's aliases,
+  a second, looser answer to "does this label name the brand". A plain black pepper extract
+  (BulkSupplements 311167) scored Formulation 20/20 as BioPerine.
+- **Owner:** `enrich_supplements_v3._brand_mentioned` (aliases find, `brand_tokens` confirm) and the
+  clinical match's `matched_source_row_refs`. New `botanical_profile._branded_studied_row(product,
+  row)` reads that record; a preclinical-only brand is not "clinically studied".
+- **Replay** (920 raw labels whose rows meet a brand alias, cc0d8b92 vs this): 6 move, no status
+  or tier change. Five plain black pepper extracts -4.0 (311167, 330436-330439: Formulation
+  20 -> 16, 62.4 -> 58.4); 300258 Legion Fortify +0.7 (its row reads "Meriva Curcuma longa L.
+  rhizome extract", which the exact-name set missed).
+- **Found, not changed:** GNC 316434 names KSM-66 only in label statements ("Ashwagandha as
+  KSM-66") over a plain "Ashwagandha Root Extract" row, so no brand record is discovered
+  (before and after this change).
+
+## BioPerine evidence record (2026-09-29, decision for Sean)
+
+- `BRAND_BIOPERINE` reads positive_strong, primary outcome "Increase Energy", goals Energy and
+  Healthy Aging. Its one citation, PMID 9619120 (Shoba 1998, doi 10.1055/s-2006-957450), is a
+  pharmacokinetic study: piperine 20 mg with 2 g curcumin raised curcumin exposure (reported
+  2000%) in human volunteers. No energy or ageing outcome.
+- PubMed, piperine RCTs without curcumin/turmeric in the title (9 hits, read 2026-09-29): absorption
+  results differ by compound. Resveratrol 2.5 g + piperine 5 or 25 mg showed no significant PK
+  change (PMID 32868637, doi 10.1097/CEJ.0000000000000621); resveratrol + piperine 20 mg changed
+  cerebral blood flow but not plasma levels, cognition or mood (PMID 24804871); nevirapine
+  exposure rose ~170% (PMID 17963429, a drug-interaction signal). Piperine-alone efficacy: one
+  12-week NAFLD trial at 5 mg/day (PMID 38200253, liver enzymes, glucose, lipids).
+- The absorption-aid fact already has an owner: `absorption_enhancers.json` ENHANCER_BLACK_PEPPER
+  (same PMIDs, content-verified 2026-08-08; piperine <= 10 mg demoted to non-scorable). The
+  clinical record restates it as efficacy for user goals the evidence does not reach.
+- Impact today: after c842e774 the record reaches only labels naming BioPerine; in the 100 such
+  labels in the 2026-09-22 corpus, Evidence came from the main ingredient (CoQ10, curcumin).
+- Recommendation: remove the record (the enhancer entry keeps the fact). Deleting curated clinical
+  data is Sean's decision.

@@ -77,6 +77,12 @@ def _botanical_product(ingredient=None, *, primary_type="herbal_botanical",
         "ingredient_quality_data": {"ingredients_scorable": [ing], "ingredients": [ing]},
         "formulation_data": {},
     }
+    if "KSM-66" in ing.get("name", "") and ing.get("raw_source_path"):
+        # The enricher's record for a label that names KSM-66 on this row.
+        product["evidence_data"] = {"clinical_matches": [{
+            "id": "BRAND_KSM66", "evidence_level": "branded-rct",
+            "matched_source_row_refs": [ing["raw_source_path"]],
+        }]}
     if standardized:
         product["formulation_data"]["standardized_botanicals"] = [{
             "name": "KSM-66", "botanical_id": "ashwagandha", "standard_name": "Ashwagandha",
@@ -210,7 +216,8 @@ def test_vitamin_product_is_not_botanical():
 
 def test_ksm66_formulation_caps_at_15():
     # recognized(6)+plant_part(2)+dose(2)+extract(2)+marker(4)+branded(3) = 19 -> cap 15
-    out = score_botanical_formulation(_botanical_product())
+    ksm66 = _botanical_ingredient(raw_source_path="ingredientRows[0]")
+    out = score_botanical_formulation(_botanical_product(ingredient=ksm66))
     assert out["score"] == BOTANICAL_FORMULATION_CAP == 15.0
     c = out["components"]
     assert c["recognized_botanical_identity"] == 6.0

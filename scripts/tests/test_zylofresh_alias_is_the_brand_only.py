@@ -3,7 +3,7 @@
 BRAND_ZYLOFRESH (backed_clinical_studies.json, evidence level preclinical, no
 human trials) carried the generic alias "alfalfa extract", so every alfalfa
 extract collected the branded clinically-studied form credit through
-`botanical_profile._branded_studied_set` (BulkSupplements 253578: Formulation
+`botanical_profile`'s alias-keyed brand set, since replaced by the enricher's brand check (BulkSupplements 253578: Formulation
 20 of 20 with +3 "branded clinically studied" and full standardization). A
 brand's aliases name the brand; the plant's own names stay on the botanical
 and IQM alfalfa identities.
