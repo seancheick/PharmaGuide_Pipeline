@@ -50,7 +50,9 @@ def score_sleep_support_dose(product: Dict[str, Any]) -> Optional[Dict[str, Any]
             # maximum: the lower of the two.
             top_mg = active_daily_mg(product, canonicals, top=True)
             score, label = min(band(top_mg), band(daily_mg), key=lambda scored: scored[0])
-            return _payload(active, daily_mg, score, label)
+            payload = _payload(active, daily_mg, score, label)
+            payload["daily_mg_max"] = round(top_mg, 4)
+            return payload
 
     return None
 

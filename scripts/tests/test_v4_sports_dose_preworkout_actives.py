@@ -136,6 +136,27 @@ def test_offlist_dominant_active_uses_generic_dose_proxy() -> None:
     assert res["metadata"]["dose_basis"] == "generic_dose_proxy_for_offlist_primary"
 
 
+def test_a_single_active_title_mass_is_still_an_offlist_primary() -> None:
+    # A row-level active whose mass comes from the product title is also typed
+    # blend_anchor_mass by the contract, but it is one disclosed active, not a
+    # blend total: the off-list floor must still credit it.
+    carnitine = dict(
+        _row("l_carnitine", 1, "Gram(s)"),
+        evidence_type="blend_anchor_mass",
+        evidence_scope="row_level",
+        reason="single_active_title_embedded_mass",
+    )
+    res = score_dose(
+        _product(
+            carnitine,
+            _row("branched_chain_amino_acids", 250, "mg"),
+            name="Carnitine 1000 + BCAA",
+            primary_type="amino_acid",
+        )
+    )
+    assert res["metadata"]["dose_basis"] == "generic_dose_proxy_for_offlist_primary"
+
+
 def test_onlist_underdosed_active_is_not_rescued_by_proxy() -> None:
     # An under-dosed creatine (1 g, on-list) keeps its strict sports band (8.0); the
     # off-list proxy floor must NOT rescue it, because creatine has a sports band.

@@ -35,6 +35,8 @@ class Exposure:
     benchmark_amount: float | None = None
     # The same number at the maximum directed daily use: the side a band's
     # above-range reduction reads (benefit at the minimum, excess at the top).
+    # Not `maximum`, which is None for a qualified amount or a defaulted
+    # frequency; like `benchmark_amount`, this still scores the stated number.
     benchmark_maximum: float | None = None
 
     @property

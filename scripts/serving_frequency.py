@@ -338,11 +338,10 @@ def resolve_daily_serving_range(record: Dict[str, Any]) -> Tuple[float, float, b
 
 
 def resolve_daily_serving_multiplier(record: Dict[str, Any]) -> float:
-    """Servings per day to scale a per-serving amount by.
-
-    The top of `resolve_daily_serving_range` — the maximum directed daily use,
-    which is what both the dose thresholds and the evidence minima compare
-    against.
+    """Servings per day for risk: the top of `resolve_daily_serving_range`,
+    the maximum directed daily use, which interaction dose thresholds and
+    safety checks compare against. Adequacy credit reads the bottom of the
+    same range (`scoring_v4.modules.generic_helpers.daily_serving_multiplier`).
     """
     return resolve_daily_serving_range(record)[1]
 

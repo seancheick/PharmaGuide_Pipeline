@@ -13,7 +13,7 @@ from scoring_v4.exposure import row_exposure
 from serving_frequency import has_loading_protocol
 
 from scoring_v4.modules.generic_helpers import _norm_text, _safe_list, get_active_ingredients
-from scoring_input_contract import is_lent_blend_mass
+from scoring_input_contract import is_lent_blend_mass, normalize_product_evidence_scope
 from scoring_v4.modules.sports_helpers import (
     ALPHA_GPC_CANONICALS,
     ATP_CANONICALS,
@@ -134,7 +134,10 @@ def _dominant_disclosed_active_is_offlist(product: Dict[str, Any]) -> bool:
         if grams is not None and grams > best_g:
             best_g = grams
             best_row = row
-    if best_row is None or _norm_text(best_row.get("evidence_type")) == "blend_anchor_mass":
+    if best_row is None or (
+        _norm_text(best_row.get("evidence_type")) == "blend_anchor_mass"
+        and normalize_product_evidence_scope(best_row.get("evidence_scope")) == "blend_level"
+    ):
         return False
     return canonical(best_row) not in SPORTS_BAND_CANONICALS
 
