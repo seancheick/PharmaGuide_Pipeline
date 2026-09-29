@@ -109,6 +109,7 @@ from scoring_input_contract import (
     UNRESOLVED_IDENTITY_FORM_UNMAPPED,
     UNRESOLVED_IDENTITY_NO_QUALITY_MAP_MATCH,
     derive_product_scoring_evidence,
+    get_evidence_subject_rows,
     get_scoring_ingredients,
     normalize_product_evidence_scope,
     source_linked_rows,
@@ -1207,6 +1208,45 @@ class SupplementEnricherV3:
         return self._source_owned_active_ingredients_for_enrichment(
             contract_product, include_ancestors=False,
         )
+
+    def _evidence_subject_ingredients_for_enrichment(
+        self,
+        product: Dict,
+        ingredient_quality_data: Optional[Dict] = None,
+    ) -> List[Dict]:
+        """Label rows to match clinical evidence over: the source-owned actives
+        plus every Evidence owner the contract's one Evidence-subject provider
+        yields (label-level projections such as a blend's DIM or a branded
+        total), so no owner goes unmatched and no non-owner is added."""
+        contract_product = dict(product)
+        if isinstance(ingredient_quality_data, dict):
+            contract_product["ingredient_quality_data"] = ingredient_quality_data
+        ingredients = self._primary_active_ingredients_for_enrichment(
+            product, ingredient_quality_data=ingredient_quality_data,
+        )
+        iqd = contract_product.get("ingredient_quality_data")
+        if not isinstance(iqd, dict) or not isinstance(
+            iqd.get("ingredients_scorable"), list
+        ):
+            return ingredients
+        from evidence_resolver import evidence_owner_canonicals
+
+        try:
+            subject_rows = get_evidence_subject_rows(contract_product)
+            owners = evidence_owner_canonicals(contract_product)
+        except Exception as exc:  # pragma: no cover - defensive old artifacts.
+            self.logger.warning("evidence subject provider unavailable: %s", exc)
+            return ingredients
+        covered = {
+            str(row.get("canonical_id") or "").strip().lower()
+            for row in ingredients
+        }
+        for row in subject_rows:
+            canonical = str(row.get("canonical_id") or "").strip().lower()
+            if canonical in owners and canonical not in covered:
+                covered.add(canonical)
+                ingredients.append(self._active_ingredient_from_scoring_row(row))
+        return ingredients
 
     def _dose_active_ingredients_for_enrichment(
         self,
@@ -15120,7 +15160,7 @@ class SupplementEnricherV3:
         clinical_db = self.databases.get('backed_clinical_studies', {})
         studies = clinical_db.get('backed_clinical_studies', [])
 
-        active_ingredients = self._primary_active_ingredients_for_enrichment(
+        active_ingredients = self._evidence_subject_ingredients_for_enrichment(
             product,
             ingredient_quality_data=ingredient_quality_data,
         )

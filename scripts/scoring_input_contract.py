@@ -3109,10 +3109,10 @@ DETERMINISTIC_NON_EFFICACY_CANONICALS = frozenset({
 
 
 def get_assessable_evidence_ingredients(product: Mapping[str, Any]) -> List[Dict[str, Any]]:
-    """Return ingredient rows eligible for clinical evidence assessment.
+    """Return label rows eligible for clinical evidence assessment.
 
-    Canonical contract for Evidence-bearing rows across all scoring modules
-    (generic, fiber_digestive, sports, etc.).
+    The label-row fallback of ``get_evidence_subject_rows``, which is the one
+    provider of a product's Evidence subjects.
 
     Reads from the canonical cleaner mirror (``ingredient_quality_data.ingredients``)
     which contains ALL active rows, including undosed child rows of blends that
@@ -3202,6 +3202,19 @@ def get_assessable_evidence_ingredients(product: Mapping[str, Any]) -> List[Dict
         result.append(dict(row))
 
     return result
+
+
+def get_evidence_subject_rows(product: Mapping[str, Any]) -> List[Dict[str, Any]]:
+    """The one provider of rows that may own a product's Evidence.
+
+    Strict scoring rows, label-level projections (``product_level_evidence``)
+    included; the assessable label rows only when the contract yields none.
+    Owner selection (``evidence_resolver.evidence_owner_canonicals``) and the
+    enricher's clinical matching both read this set, so every owner has had
+    its evidence looked up.
+    """
+    rows = list(get_scoring_ingredients(dict(product), strict=True).rows)
+    return rows or get_assessable_evidence_ingredients(product)
 
 
 def scoring_row_key(row: Dict[str, Any], index: int) -> str:

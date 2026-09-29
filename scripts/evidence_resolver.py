@@ -1196,14 +1196,11 @@ def evidence_owner_canonicals(
         ROLE_MAJOR,
         ROLE_PRIMARY,
         classify_ingredient_roles,
-        get_assessable_evidence_ingredients,
-        get_scoring_ingredients,
+        get_evidence_subject_rows,
     )
 
     prod_dict = dict(product or {})
-    rows = list(get_scoring_ingredients(prod_dict, strict=True).rows)
-    if not rows:
-        rows = get_assessable_evidence_ingredients(prod_dict)
+    rows = get_evidence_subject_rows(prod_dict)
     roles = classify_ingredient_roles(prod_dict, module=module, rows=rows)
 
     def canonicals_for(accepted_roles: Set[str]) -> Set[str]:
@@ -1278,14 +1275,10 @@ def resolve_product_evidence(
     if owner_scoped:
         owners = evidence_owner_canonicals(prod_dict, module=module)
         if owners:
-            from scoring_input_contract import get_scoring_ingredients
-            owner_rows = [
+            from scoring_input_contract import get_evidence_subject_rows
+            assessable_rows = [
                 row
-                for row in get_scoring_ingredients(prod_dict, strict=True).rows
-                if str(row.get("canonical_id") or "").strip().lower() in owners
-            ]
-            assessable_rows = owner_rows or [
-                row for row in assessable_rows
+                for row in get_evidence_subject_rows(prod_dict)
                 if str(row.get("canonical_id") or "").strip().lower() in owners
             ]
 

@@ -88,6 +88,23 @@ def _is_exposure_row(row: Mapping) -> bool:
     return _key(row.get("dose_class")) != "source material mass"
 
 
+def _evidence_subject_refs(product: Mapping) -> set:
+    """Label rows the scoring contract projected as Evidence subjects (a branded
+    complex or blend the cleaner reads as a header total), so their evidence
+    links to the printed row. Every other cleaner non-exposure role still
+    excludes a row."""
+    iqd = product.get("ingredient_quality_data")
+    if not isinstance(iqd, Mapping) or not isinstance(iqd.get("ingredients_scorable"), list):
+        return set()
+    from scoring_input_contract import get_evidence_subject_rows
+    return {
+        row.get("raw_source_path")
+        for row in get_evidence_subject_rows(product)
+        if row.get("scoring_input_kind") == "product_level_evidence"
+        and isinstance(row.get("raw_source_path"), str) and row.get("raw_source_path").strip()
+    }
+
+
 def _valid_policy(policy: Any) -> bool:
     """Validate reviewed constraints before any matching or numeric comparisons."""
     if not isinstance(policy, Mapping) or not isinstance(policy.get("scope"), str):
@@ -153,6 +170,7 @@ def _rows(product: Mapping, *, source_only: bool = False):
     # A source-required scope distrusts enrichment-derived names, so it never
     # receives them; every other scope reads the identity enrichment resolved.
     resolved = {} if source_only else _resolved_identity_by_ref(product)
+    subject_refs = _evidence_subject_refs(product)
 
     def walk(rows):
         for row in rows or []:
@@ -161,10 +179,19 @@ def _rows(product: Mapping, *, source_only: bool = False):
             ref = row.get("raw_source_path") or row.get("source_row_ref")
             valid_reference = not source_only or (isinstance(ref, str) and bool(ref.strip()))
             identity = (ref, row.get("name"), str(row.get("quantity")), row.get("unit"))
-            if valid_reference and identity not in seen and _is_exposure_row(row):
+            exposure = _is_exposure_row(row)
+            # A projected Evidence subject is excused only from the cleaner's
+            # score eligibility (a header total); its printed mass is the
+            # blend's, never a member's amount, so it carries no dose here.
+            projected = not exposure and ref in subject_refs and _is_exposure_row(
+                {**row, "score_eligible_by_cleaner": None}
+            )
+            if valid_reference and identity not in seen and (exposure or projected):
                 seen.add(identity)
                 missing = {key: value for key, value in (resolved.get(ref) or {}).items()
                            if not row.get(key)}
+                if projected:
+                    missing["quantity"] = None
                 yield {**row, **missing} if missing else row
             yield from walk(row.get("nestedIngredients"))
 
