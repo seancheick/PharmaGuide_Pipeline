@@ -1007,20 +1007,18 @@ def test_a_packaging_word_never_picks_a_form_the_label_does_not_state(enricher):
     assert (match['canonical_id'], match['form_id']) == ('ginseng', 'ginseng (unspecified)')
 
 
-def test_the_contradictory_wild_cherry_label_is_held(enricher):
-    # 311881 "Wild Cherry Fruit Extract" (black cherry, Prunus serotina) as
-    # "Cerasus avium Fruit Extract" (sweet cherry): out of scoring until the
-    # identity is resolved.
+def test_the_wild_cherry_label_is_read_by_its_binomial(enricher):
+    # 311881 "Wild Cherry Fruit Extract" as "Cerasus avium Fruit Extract". Held
+    # 2026-09-25 as black cherry (Prunus serotina) vs sweet cherry; but "wild
+    # cherry" is an English name of both species (GBIF 3020791 and P. serotina),
+    # and Cerasus avium (L.) Moench is a synonym of Prunus avium, the species the
+    # dark sweet cherry form names. Neither cherry carries a safety rule.
     from score_supplements_v4 import score_product_v4
     enriched = _enrich(enricher, 'form_association_311881_raw.json')
     readiness = score_product_v4(enriched)['v4_breakdown']['assessment_readiness']
-    assert readiness['is_live_ready'] is False
-    assert readiness['identity']['blocking_contract_findings'] == ['disclosed_form_unmapped']
-    unmapped = [r['unmapped_forms'] for r in enriched['ingredient_quality_data']['ingredients']
-                if r.get('form_match_status') == 'unmapped']
-    unmapped += [e['unmapped_forms'] for e in enriched['product_scoring_evidence']
-                 if e.get('form_match_status') == 'unmapped']
-    assert unmapped == [['Cerasus avium Fruit Extract']]
+    assert readiness['is_live_ready'] is True
+    rows = [r for r in enriched['ingredient_quality_data']['ingredients'] if r.get('canonical_id') == 'dark_sweet_cherry']
+    assert [(r.get('form_match_status'), r.get('matched_form')) for r in rows] == [('mapped', 'dark sweet cherry powder')]
 
 
 def test_a_disclosed_form_is_read_not_replaced_by_a_default(enricher):

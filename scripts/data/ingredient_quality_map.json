@@ -31,8 +31,8 @@
     },
     "statistics": {
       "total_parents": 655,
-      "total_forms": 1474,
-      "total_form_aliases": 12321,
+      "total_forms": 1475,
+      "total_form_aliases": 12324,
       "parents_with_parent_aliases": 146,
       "parents_with_contains_aliases": 0,
       "parents_with_pattern_aliases": 0
@@ -15323,6 +15323,26 @@
           "range_high": 0.99,
           "quality": "excellent"
         }
+      },
+      "potassium iodate (as iodine source)": {
+        "bio_score": 10,
+        "source_form_aliases": [
+          "potassium iodate",
+          "KIO3",
+          "KIO₃"
+        ],
+        "notes": "Iodine nutrient declared from potassium iodate (PubChem CID 23665710, verified 2026-09-29). Parent-scoped source form; the exact compound stays under potassium. No comparative human absorption evidence was reviewed, so it takes the iodine unspecified baseline plus one, no premium; absorption fields are the iodine class baseline.",
+        "absorption_structured": {
+          "value": 0.95,
+          "range_low": 0.9,
+          "range_high": 0.99,
+          "quality": "excellent"
+        },
+        "absorption": "excellent (default to iodide class; KI/NaI ~97%)",
+        "aliases": [
+          "iodine from potassium iodate"
+        ],
+        "dosage_importance": 1.0
       }
     },
     "rxcui": "5933",
@@ -68918,7 +68938,8 @@
           "vanadyl sulfate",
           "vanadium sulfate",
           "VOSO4",
-          "VOSO₄"
+          "VOSO₄",
+          "vanadyl sulfate hydrate"
         ],
         "notes": "Vanadium nutrient declared from vanadyl sulfate. Parent-scoped source form only; exact compound identity remains with vanadyl_sulfate. No score premium over the reviewed vanadium class baseline.",
         "absorption_structured": {
@@ -71806,7 +71827,9 @@
           "sweet cherry juice concentrate",
           "prunus avium",
           "prunus avium extract",
-          "prunus avium fruit extract"
+          "prunus avium fruit extract",
+          "cerasus avium",
+          "cerasus avium fruit extract"
         ],
         "dosage_importance": 0.85,
         "absorption_structured": {
