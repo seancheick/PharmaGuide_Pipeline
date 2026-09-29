@@ -4888,14 +4888,14 @@ class EnhancedDSLDNormalizer:
 
         # One serving printed at two sizes ("1 scoop" / "2 scoops": the same
         # servingSizeOrder, a different servingSizeQuantity). DSLD gives the
-        # second column's rows their own ingredientId, sometimes a respelled
-        # form, and occasionally files a node of the other column under this
-        # block (DSLD 49630, 221108, 250086). Such rows are the same
-        # ingredient at another size, never an additive pack, so they merge
-        # by name once those misplaced nodes are set aside; the owner keeps
-        # its identity and forms. Different serving orders (age bands, packs)
-        # keep the exact rule above, and blocks whose own children differ
-        # stay separate panels.
+        # second column's rows their own ingredientId and occasionally files a
+        # node of the other column under this block (DSLD 49630, 221108).
+        # Such rows are the same ingredient at another size, never an
+        # additive pack, so they merge by name once those misplaced nodes are
+        # set aside, provided every node declares the same forms (or one side
+        # none); conflicting declarations stay separate. Different serving
+        # orders (age bands, packs) keep the exact rule above, and blocks
+        # whose own children differ stay separate panels.
         def own_contexts(row: Dict[str, Any]) -> Set[tuple]:
             return {
                 context
@@ -4919,9 +4919,37 @@ class EnhancedDSLDNormalizer:
                 tuple(sorted(name_tree(child, column) for child in placed_children(row, column))),
             )
 
+        def declared_forms(row: Dict[str, Any]) -> frozenset:
+            return frozenset(
+                norm_module.make_normalized_key(form.get("name") or "")
+                for form in row.get("forms") or []
+                if isinstance(form, dict) and form.get("name")
+            )
+
+        def forms_agree(owner_row: Dict[str, Any], alternate: Dict[str, Any],
+                        owner_column: Set[tuple], alternate_column: Set[tuple]) -> bool:
+            """Both columns declare the same forms, node by node, or one declares
+            none. D-alpha against DL-alpha tocopherol is two declarations; a
+            respelling is not proven the same, so neither merges."""
+            owner_forms, alternate_forms = declared_forms(owner_row), declared_forms(alternate)
+            if owner_forms and alternate_forms and owner_forms != alternate_forms:
+                return False
+            owner_children = placed_children(owner_row, owner_column)
+            for child in placed_children(alternate, alternate_column):
+                match = next(
+                    c for c in owner_children
+                    if name_tree(c, owner_column) == name_tree(child, alternate_column)
+                )
+                owner_children.remove(match)
+                if not forms_agree(match, child, owner_column, alternate_column):
+                    return False
+            return True
+
         def merge_by_name(owner_row: Dict[str, Any], alternate: Dict[str, Any],
                           owner_column: Set[tuple], alternate_column: Set[tuple]) -> None:
             owner_row["quantity"] = quantity_rows(owner_row) + quantity_rows(alternate)
+            if not declared_forms(owner_row) and declared_forms(alternate):
+                owner_row["forms"] = alternate.get("forms")
             owner_children = placed_children(owner_row, owner_column)
             placed = {id(child) for child in placed_children(alternate, alternate_column)}
             for child in alternate.get("nestedRows") or []:
@@ -4960,6 +4988,11 @@ class EnhancedDSLDNormalizer:
             )
             trees = {name_tree(row, column) for row, column in zip(alternatives, columns)}
             if len(orders) != 1 or not disjoint or len(trees) != 1:
+                continue
+            if not all(
+                forms_agree(alternatives[0], alternate, columns[0], column)
+                for alternate, column in zip(alternatives[1:], columns[1:])
+            ):
                 continue
             owner = alternatives[0]
             for alternate, column in zip(alternatives[1:], columns[1:]):

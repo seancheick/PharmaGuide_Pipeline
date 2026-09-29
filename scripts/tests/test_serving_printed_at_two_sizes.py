@@ -2,16 +2,19 @@
 
 GNC and others print "1 scoop" and "2 scoops" columns. DSLD files them with
 the same servingSizeOrder and different servingSizeQuantity, but gives the
-second column's rows their own ingredientId, sometimes a respelled form
-("DL-Alpha-Tocopheryl" / "Tocopherol" Acetate) and occasionally a node
+second column's rows their own ingredientId and occasionally a node
 misplaced from the other column ("Calories from Fat" at the 2-scoop size
 nested under the 1-scoop creatine block). The exact-identity merge in
 `_merge_alternate_serving_rows` declined those rows, so both columns entered
 analysis: 49630 counted every creatine ingredient twice (2.5 g and 5 g blocks),
-221108 two Protein rows, 250086 two Vitamin E rows (register Q39a).
+221108 two Protein rows (register Q39a).
 
-Different serving orders (age bands, AM/PM packs) keep the exact rule, and two
-blocks whose own children differ stay two panels.
+Declared forms must agree (the same normalized form names, or no form on one
+side): D-alpha and DL-alpha tocopherol are different declarations, and a
+respelling (250086 "Tocopheryl" / "Tocopherol" Acetate) is not proven the
+same, so those rows stay separate rather than lose a declaration. Different
+serving orders (age bands, AM/PM packs) keep the exact rule, and two blocks
+whose own children differ stay two panels.
 """
 import collections
 import json
@@ -37,7 +40,6 @@ def _names(rows):
 
 @pytest.mark.parametrize("pid, name", [
     ("221108", "Protein"),
-    ("250086", "Vitamin E"),
     ("49630", "Advanced Creatine Complex"),
     ("49630", "Creatine Hydrochloride"),
     ("49630", "CoQ-10"),
@@ -76,16 +78,49 @@ def _row(name, order, size, qty, ingredient_id, children=(), form=None):
     }
 
 
-def test_ids_and_form_spelling_do_not_split_one_serving():
+def test_ids_do_not_split_one_serving():
     from enhanced_normalizer import EnhancedDSLDNormalizer
 
     merge = EnhancedDSLDNormalizer._merge_alternate_serving_rows
     rows = [_row("Vitamin E", 1, 4, 30, 1, form="DL-Alpha-Tocopheryl Acetate"),
-            _row("Vitamin E", 1, 2, 15, 2, form="DL-Alpha-Tocopherol Acetate")]
+            _row("Vitamin E", 1, 2, 15, 2, form="dl-alpha-tocopheryl acetate")]
     merged = merge(rows)
     assert len(merged) == 1
     assert [q["quantity"] for q in merged[0]["quantity"]] == [30, 15]
-    assert merged[0]["forms"][0]["name"] == "DL-Alpha-Tocopheryl Acetate"
+
+
+def test_a_form_declared_in_one_column_only_is_kept():
+    from enhanced_normalizer import EnhancedDSLDNormalizer
+
+    merged = EnhancedDSLDNormalizer._merge_alternate_serving_rows(
+        [_row("Vitamin E", 1, 4, 30, 1), _row("Vitamin E", 1, 2, 15, 2, form="D-Alpha-Tocopherol")])
+    assert len(merged) == 1
+    assert [f["name"] for f in merged[0]["forms"]] == ["D-Alpha-Tocopherol"]
+
+
+@pytest.mark.parametrize("first, second", [
+    ("D-Alpha-Tocopherol", "DL-Alpha-Tocopherol"),
+    ("DL-Alpha-Tocopheryl Acetate", "DL-Alpha-Tocopherol Acetate"),
+])
+def test_conflicting_form_declarations_are_not_merged(first, second):
+    from enhanced_normalizer import EnhancedDSLDNormalizer
+
+    merged = EnhancedDSLDNormalizer._merge_alternate_serving_rows(
+        [_row("Vitamin E", 1, 4, 30, 1, form=first), _row("Vitamin E", 1, 2, 15, 2, form=second)])
+    assert [[f["name"] for f in r["forms"]] for r in merged] == [[first], [second]]
+
+
+def test_conflicting_child_forms_keep_the_blocks_apart():
+    from enhanced_normalizer import EnhancedDSLDNormalizer
+
+    a = _row("Blend", 1, 2, 500, 1, children=[_row("Vitamin E", 1, 2, 30, 3, form="D-Alpha-Tocopherol")])
+    b = _row("Blend", 1, 1, 250, 2, children=[_row("Vitamin E", 1, 1, 15, 4, form="DL-Alpha-Tocopherol")])
+    assert len(EnhancedDSLDNormalizer._merge_alternate_serving_rows([a, b])) == 2
+
+
+def test_the_respelled_real_label_keeps_both_declarations():
+    rows = [r for r in _clean("250086") if r["name"] == "Vitamin E"]
+    assert len(rows) == 2
 
 
 def test_different_orders_or_different_children_stay_separate():
