@@ -127,3 +127,29 @@ def test_therapeutic_index_parity_with_botanical_profile_dosing_index():
     from scoring_v4.modules.botanical_profile import _dosing_index
 
     assert set(_therapeutic_index().keys()) == set(_dosing_index().keys())
+
+
+def test_every_parent_form_reference_is_pinned():
+    """Each IQM parent's best eligible form is the reference its products are
+    scored against, computed at runtime. Adding a better form, or changing a
+    bio_score or review status, silently moves every product of that parent.
+    Sean ratified the runtime reference on 2026-09-28 as the interim rule
+    (scripts/audits/rr_correctness_20260928/CALIBRATION_PACKET.md item 1) on
+    condition that no reference moves unnoticed. When this fails, measure the
+    parent's products with replay.py, then update
+    fixtures/iqm_parent_form_references.json in the same commit."""
+    import json
+    from pathlib import Path
+
+    from scoring_reference_resolver import iqm_reference_index, parent_best_form_quality
+
+    pinned = json.loads(
+        (Path(__file__).parent / "fixtures" / "iqm_parent_form_references.json").read_text()
+    )
+    current = {cid: parent_best_form_quality(cid) for cid in iqm_reference_index()}
+    moved = {
+        cid: (pinned.get(cid, "unpinned"), current.get(cid, "removed"))
+        for cid in set(pinned) | set(current)
+        if pinned.get(cid, "unpinned") != current.get(cid, "removed")
+    }
+    assert moved == {}, f"parent form references moved (pinned, now): {moved}"
