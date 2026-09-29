@@ -1148,7 +1148,12 @@ def _derive_declared_nutrition_protein_evidence(
             and _norm(row.get("raw_source_text") or row.get("display_name"))
             == "protein"
             and str(row.get("raw_source_path") or "").strip()
-            and str(row.get("exact_dose_text") or "").strip()
+            # A row printed in two serving columns carries them as
+            # serving_variants instead of one dose string (228714).
+            and (
+                str(row.get("exact_dose_text") or "").strip()
+                or row.get("serving_variants")
+            )
         ),
         None,
     )

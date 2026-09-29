@@ -4854,6 +4854,89 @@ class EnhancedDSLDNormalizer:
                 owner.get("name"),
             )
 
+        # One serving printed at two sizes ("1 scoop" / "2 scoops": the same
+        # servingSizeOrder, a different servingSizeQuantity). DSLD gives the
+        # second column's rows their own ingredientId, sometimes a respelled
+        # form, and occasionally files a node of the other column under this
+        # block (DSLD 49630, 221108, 250086). Such rows are the same
+        # ingredient at another size, never an additive pack, so they merge
+        # by name once those misplaced nodes are set aside; the owner keeps
+        # its identity and forms. Different serving orders (age bands, packs)
+        # keep the exact rule above, and blocks whose own children differ
+        # stay separate panels.
+        def own_contexts(row: Dict[str, Any]) -> Set[tuple]:
+            return {
+                context
+                for context in (serving_context(q) for q in quantity_rows(row))
+                if context is not None
+            }
+
+        def placed_children(row: Dict[str, Any], column: Set[tuple]) -> List[Dict[str, Any]]:
+            """Children printed in this row's column (a misplaced node's
+            amounts all belong to another column)."""
+            return [
+                child
+                for child in row.get("nestedRows") or []
+                if isinstance(child, dict)
+                and not (own_contexts(child) and not own_contexts(child) & column)
+            ]
+
+        def name_tree(row: Dict[str, Any], column: Set[tuple]) -> tuple:
+            return (
+                normalized_text(row.get("name")),
+                tuple(sorted(name_tree(child, column) for child in placed_children(row, column))),
+            )
+
+        def merge_by_name(owner_row: Dict[str, Any], alternate: Dict[str, Any],
+                          owner_column: Set[tuple], alternate_column: Set[tuple]) -> None:
+            owner_row["quantity"] = quantity_rows(owner_row) + quantity_rows(alternate)
+            owner_children = placed_children(owner_row, owner_column)
+            placed = {id(child) for child in placed_children(alternate, alternate_column)}
+            for child in alternate.get("nestedRows") or []:
+                if not isinstance(child, dict):
+                    continue
+                if id(child) in placed:
+                    match = next(
+                        c for c in owner_children
+                        if name_tree(c, owner_column) == name_tree(child, alternate_column)
+                    )
+                    owner_children.remove(match)
+                    merge_by_name(match, child, owner_column, alternate_column)
+                else:
+                    owner_row.setdefault("nestedRows", []).append(child)
+
+        sizes: Dict[tuple, List[Dict[str, Any]]] = {}
+        for row in ingredient_rows:
+            if not isinstance(row, dict) or id(row) in merged_ids or not own_contexts(row):
+                continue
+            key = (
+                normalized_text(row.get("name")),
+                normalized_text(row.get("ingredientGroup")),
+                normalized_text(row.get("category")),
+            )
+            if key[0]:
+                sizes.setdefault(key, []).append(row)
+
+        for alternatives in sizes.values():
+            if len(alternatives) < 2:
+                continue
+            columns = [own_contexts(row) for row in alternatives]
+            orders = {order for column in columns for order, _size, _unit in column}
+            disjoint = all(
+                not (columns[i] & columns[j])
+                for i in range(len(columns)) for j in range(i + 1, len(columns))
+            )
+            trees = {name_tree(row, column) for row, column in zip(alternatives, columns)}
+            if len(orders) != 1 or not disjoint or len(trees) != 1:
+                continue
+            owner = alternatives[0]
+            for alternate, column in zip(alternatives[1:], columns[1:]):
+                merge_by_name(owner, alternate, columns[0], column)
+                merged_ids.add(id(alternate))
+            logger.info(
+                "Merged %d serving size(s) of '%s'", len(alternatives), owner.get("name")
+            )
+
         return [row for row in ingredient_rows if id(row) not in merged_ids]
 
     def _flatten_nested_ingredients(self, ingredient_rows: List[Dict], _depth: int = 0) -> List[Dict]:
