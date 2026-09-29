@@ -88,8 +88,29 @@ points and level multipliers).
   Evidence; pillars orthogonal; one penalty for a safety-listed active ("not assessed:
   safety-listed", never "no assessable actives"); partial credit by evidence tier (product RCT >
   branded > generic ingredient > authority > preclinical), never by dose; undisclosed blend
-  members keep their ingredient's evidence while Dose and Transparency charge the blend. Open:
-  what a remaining true library gap shows ("insufficient data") once lanes 1-4 land.
+  members keep their ingredient's evidence while Dose and Transparency charge the blend.
+- **No shipped product carries a pending, not-assessed or not-completed Evidence state** (Sean):
+  it tells users the product was shipped unready. Every Evidence-owning ingredient in a shipped
+  product has a completed determination: a tier score, "reviewed: no human trials support this",
+  or "reviewed: studies show no effect". A library gap is closed by completing the review (one
+  record per ingredient, reused across every product), never by relabelling it. A release gate
+  refuses a catalog that still holds a pending Evidence state. This replaces the "insufficient
+  data" and "not assessed: safety-listed" options.
+- Safety-listed actives (DHEA, yohimbe, cascara): Evidence scores their literature; Safety and the
+  verdict carry the hazard (one charge).
+- Blend and whole-food credit (no "half"): a real active inside an undisclosed blend keeps its
+  ingredient's Evidence; Dose and Transparency charge the blend. Whole-food powders get a
+  food-level review like any ingredient. Colorant or flavor identities never own Evidence.
+- Studied-dose windows (MSM, L-carnitine, BCAA, L-arginine, probiotic CFU/strain dose) live in one
+  place, the Dose owner. Evidence may read them for copy, never to cut points. Agree with the
+  Codex D24 Dose lane before lane 3.
+- Probiotics: strain identity and human strain evidence stay in Evidence; CFU and trial-dose match
+  move to Dose; an unresolvable proprietary blend charges Transparency, not Evidence.
+- Sequence binding: lane 1 is one provider function with tests on BP Manager 212273, beet 337241,
+  raspberry leaf 251678, gelatin 3785 and one enzyme blend (278019), started in a fresh session.
+  Library promotion (lane 4) comes after the owner contract. Acceptance before release: DIM-plus
+  251549, Fiber Fusion 219048, Gelatin 3785, BP Manager 212273, ALCAR 232618, DHEA 251998, Ultra
+  Energy Generator 315848, plus three strain-curated probiotic products. Release held.
 
 ## Further findings (same day)
 
