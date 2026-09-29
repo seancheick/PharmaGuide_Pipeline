@@ -213,6 +213,39 @@ returned 3 (the third, PMID 9781306, is an animal-cancer review and does not qua
   (UNII U71XL721QK) is no enhancer alias, so 44 more <= 10 mg rows are never demoted.
 - Effect: piperine enters Formulation averages, and on a title that names BioPerine it becomes
   the Evidence owner (182824: `evidence_owner_canonicals` = {piperine}, not the 500 mg turmeric).
-- Fix together, measured: the contract honours the enricher's demotion, then the alias. About
-  158 products move. The one-alias change alone was reverted (it moves enriched rows while
-  scoring re-adds them).
+- **Fixed 2026-09-29** at the owners (Sean: finish before the rerun):
+  `scoring_input_contract.derive_product_scoring_evidence` skips a row the enricher demoted
+  (`demotion_reason`); `_collect_absorption_data` pairs a demoted enhancer from the enricher's
+  `demoted_absorption_enhancers` record (it had only paired because the contract re-added it);
+  `generic_transparency` no longer owes a demoted aid a disclosure row; the alias.
+- **Replay** (228 raw labels with a piperine row + 40 random controls, 99ca93ea vs this):
+  51 move, no status change, 0 controls. 45 up: piperine no longer averaged into A1, or the A4
+  pairing now found (CoQ10 + BioPerine +2.3 to +5.0, turmeric +4.0). 6 down -0.1 to -1.4: the
+  aid's own standardization no longer counts as the product's standardized botanical (A5b).
+  182824/184133 Evidence 0 -> 15.6 (turmeric now owns it; total 66.4 -> 82.0). A first cut that
+  counted the aid as a graded disclosure row cost 68 labels -6 Transparency; corrected before commit.
+- Only ENHANCER_BLACK_PEPPER carries a demotion rule, so this covers every enhancer.
+
+## A4 absorption-enhancer pairing (2026-09-29, calibration note for Sean)
+
+- +3 raw Formulation when the enricher finds an enhancer beside a nutrient it lists
+  (`generic_formulation._score_absorption_enhancer`); 2,574 products in the 07116c4a corpus.
+  Carried by vitamin C + iron (2,089; sole reason 773) and vitamin D + calcium (1,559; 349);
+  black pepper 76. Weak pairings are few: methionine 24, lysine 23, glycine 20, prebiotics 18,
+  garlic 8, aloe 4. Whether co-presence in a multivitamin should earn the bonus is Phase 4.
+
+## Held-form synonym batch (2026-09-29)
+
+From the fresh-corpus census (168 products held on 89 disclosed forms IQM lacks), the three
+known identities, each verified:
+- `dark_sweet_cherry` form aliases + "cerasus avium", "cerasus avium fruit extract": Cerasus avium
+  (L.) Moench is a synonym of Prunus avium (GBIF usage 3020791, api.gbif.org 2026-09-29). 311881
+  was held 2026-09-25 as a contradictory label (wild cherry = Prunus serotina); GBIF lists "wild
+  cherry" as an English name of both species, so the binomial decides. No cherry safety rule
+  exists. Releases 311881-311884.
+- `vanadium` "vanadyl sulfate (as vanadium source)" source_form_aliases + "vanadyl sulfate
+  hydrate" (VOSO4 hydrate; the vanadyl_sulfate parent already treats it as the same form). 315319.
+- `iodine` new "potassium iodate (as iodine source)", bio 10 = unspecified 9 + 1, no premium,
+  iodine class absorption fields (PubChem CID 23665710, receipt in
+  phase2_form_curation_20260929). 33535.
+- Left held: 1063 (DSLD lists "L-Carnitine" as the form of its Vanadium row).
