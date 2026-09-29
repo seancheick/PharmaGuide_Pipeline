@@ -1,7 +1,7 @@
 {
   "_comment": "Phase 0 scoring-snapshot fixtures. Each entry freezes the scoring-critical fields of one scored product so we can detect drift across pipeline runs (especially during Phase 3 enricher canonical_id work). See docs/HANDOFF_2026-04-20_PIPELINE_REFACTOR.md § Phase 0.",
   "schema_version": "2.0.0",
-  "frozen_on": "2026-09-27",
+  "frozen_on": "2026-09-29",
   "fixture_schema": {
     "frozen_fields": [
       "dsld_id",
@@ -203,6 +203,23 @@
     }
   ],
   "changelog": [
+    {
+      "date": "2026-09-29",
+      "action": "refrozen_reviewed_phase1_correctness_and_phase2_strict_form_outputs",
+      "products": [
+        18141,
+        182730,
+        239600,
+        241353,
+        288344,
+        306381
+      ],
+      "sprints_covered": [
+        "Phase 1 dose, evidence, blend-mass, and disclosure ownership corrections",
+        "Phase 2 strict Q38 unspecified-form rule and verified form curation"
+      ],
+      "notes": "Re-froze the complete six-product snapshot drift set after a fresh 37-brand Clean -> Enrich -> Score run on main. A frozen-raw A/B at b059cd56, 30c4c46a, c581a9ae and current main attributes every movement to the accepted Phase 1 and Phase 2 owners: 18141 62.7->52.3 removes Evidence credit derived through invalid blend-mass dose ownership; 241353 47.8->45.9 applies corrected blend disclosure ownership; 182730 85.6->85.8, 239600 73.9->73.8, 288344 78.1->77.2 and 306381 75.6->75.5 reflect reviewed parent-scoped form recognition plus the strict unspecified-form floor. No route or score status changed. 18141 crosses SAFE/Needs improvement to POOR/Poor because its unsupported 10.4 Evidence points are removed. The A/B receipts are under ~/pg_quality/independent_dose_fixes_20260929/snapshot_drift_ab_v2; fixtures were generated from the fresh scored artifacts with freeze_contract_snapshots.py."
+    },
     {
       "date": "2026-09-21",
       "action": "refrozen_after_artifact_field_consolidation",
