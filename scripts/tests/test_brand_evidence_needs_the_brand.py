@@ -25,7 +25,6 @@ def _entries():
 
 def test_brands_with_generic_aliases_confirm_on_their_brand_token():
     entries = _entries()
-    assert entries["BRAND_BIOPERINE"]["brand_tokens"] == ["bioperine"]
     assert entries["BRAND_ZYNAMITE"]["brand_tokens"] == ["zynamite"]
     assert entries["BRAND_SUNTHEANINE"]["brand_tokens"] == ["suntheanine"]
 
@@ -40,6 +39,16 @@ def test_ingredient_evidence_is_filed_as_ingredient_evidence():
     assert (lactoferrin["min_clinical_dose"], lactoferrin["dose_unit"]) == (200, "mg")
 
 
+def test_bioperine_is_an_absorption_aid_not_an_efficacy_record():
+    """BRAND_BIOPERINE (removed 2026-09-29, Sean) filed pharmacokinetic evidence
+    (piperine raising curcumin exposure) as Energy / Healthy Aging efficacy. The
+    absorption-aid role stays with its owner, absorption_enhancers.json."""
+    assert "BRAND_BIOPERINE" not in _entries()
+    enhancers = json.loads((DATA / "absorption_enhancers.json").read_text())["absorption_enhancers"]
+    pepper = next(e for e in enhancers if e["id"] == "ENHANCER_BLACK_PEPPER")
+    assert "bioperine" in pepper["aliases"]
+
+
 def _matches(pid):
     from enhanced_normalizer import EnhancedDSLDNormalizer
     from enrich_supplements_v3 import SupplementEnricherV3
@@ -51,11 +60,10 @@ def _matches(pid):
 
 
 @pytest.mark.parametrize("pid, absent, present", [
-    ("176168", "BRAND_BIOPERINE", None),         # piperine, BioPerine not named
     ("233404", "BRAND_ZYNAMITE", None),          # mangiferin, Zynamite not named
     ("18416", "BRAND_HMB", "INGR_HMB"),          # plain HMB
     ("267894", "BRAND_OPTIFERRIN", "INGR_LACTOFERRIN"),  # plain lactoferrin
-    ("182824", None, "BRAND_BIOPERINE"),        # "Curcumin 500 with Bioperine"
+    ("182824", "BRAND_BIOPERINE", None),        # "Curcumin 500 with Bioperine": no efficacy record
     ("214982", None, "BRAND_SUNTHEANINE"),      # names Suntheanine
 ])
 def test_real_labels_reach_the_right_record(pid, absent, present):

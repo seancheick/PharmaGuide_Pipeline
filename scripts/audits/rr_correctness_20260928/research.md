@@ -197,3 +197,22 @@ returned 3 (the third, PMID 9781306, is an animal-cancer review and does not qua
   labels in the 2026-09-22 corpus, Evidence came from the main ingredient (CoQ10, curcumin).
 - Recommendation: remove the record (the enhancer entry keeps the fact). Deleting curated clinical
   data is Sean's decision.
+- **Removed 2026-09-29 (Sean):** `BRAND_BIOPERINE` deleted; ENHANCER_BLACK_PEPPER keeps the fact.
+  Replay of the 63 raw labels that matched it (ea72092f vs this): 2 move, 182824 and 184133
+  "Curcumin 500 with Bioperine" 69.1 -> 66.4 (Evidence 2.7 -> 0, now "review pending"), because
+  of the defect below.
+
+## Absorption-enhancer demotion never reaches scoring (2026-09-29, recorded for next cycle)
+
+- `enrich_supplements_v3._apply_absorption_enhancer_demotion` removes piperine <= 10 mg from
+  `ingredients_scorable` (130 rows in the fresh corpus at 07116c4a), but the scoring contract
+  puts it back: through a row-level `label_active_projection` (229934: enricher
+  `product_scoring_evidence` reason `identity_bearing_active_anchor_mass`) or a row rebuilt
+  from the label (262176). All 114 products with a demoted piperine score it anyway.
+- The demotion also matches names exactly and the IQM name "Piperine (Black Pepper Extract)"
+  (UNII U71XL721QK) is no enhancer alias, so 44 more <= 10 mg rows are never demoted.
+- Effect: piperine enters Formulation averages, and on a title that names BioPerine it becomes
+  the Evidence owner (182824: `evidence_owner_canonicals` = {piperine}, not the 500 mg turmeric).
+- Fix together, measured: the contract honours the enricher's demotion, then the alias. About
+  158 products move. The one-alias change alone was reverted (it moves enriched rows while
+  scoring re-adds them).

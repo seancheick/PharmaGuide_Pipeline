@@ -4,7 +4,7 @@
     "purpose": "evidence_scoring",
     "schema_version": "5.6.2",
     "last_updated": "2026-09-29",
-    "total_entries": 211,
+    "total_entries": 210,
     "changelog": [
       "5.6.2 (2026-09-26): INGR_OMEGA3 purpose_evidence retains factual scope and sources only. Numerical points, operational exposure cutoffs, interpolation and eligibility are owned by quality_score.json. Scientific boundaries rechecked against live source content; no clinician sign-off asserted and no score values changed.",
       "5.6.1 (2026-09-26): INGR_WHEY_PROTEIN no longer aliases generic Protein macro declarations, unspecified powders/blends, or rice/hemp sources absent from its cited 49-trial source inventory. Known whey, casein, milk, soy and pea source identities remain. Fresh-enrichment regressions cover two collagen labels and greens coffee; source-free macro recovery is intentionally rejected.",
@@ -45,7 +45,8 @@
       "2.3 (2026-02-17): Evidence-quality cleanup pass removed 6 weak/inconclusive entries, renamed PRECLIN_PEA -> INGR_PEA, and downgraded study_type for low-certainty nutrient/herbal records. Total entries: 164",
       "2.2 (2026-02-17): Added 33 clinically reviewed ingredient records (branded, generic, and emerging), expanded elderberry alias coverage for exact-match evidence mapping. Total entries: 170",
       "2.1 (2026-01-05): Added 12 new clinically-backed branded ingredients (Nitrosigine, LJ100, Shoden, Testofen, Magtein, Sunfiber, Cynatine HNS, TamaFlex, HMB, Zynamite, HEAL9). Total entries: 137",
-      "2.0 (2025-12-04): Added study_type field support, updated evidence_level mapping for hierarchy scoring"
+      "2.0 (2025-12-04): Added study_type field support, updated evidence_level mapping for hierarchy scoring",
+      "2026-09-29: BRAND_BIOPERINE removed (Sean). Its only human evidence is pharmacokinetic (piperine raising curcumin exposure, PMID 9619120) and absorption gains differ by compound (resveratrol PMIDs 32868637, 24804871: no significant PK change); it carried no energy or ageing outcome. BioPerine's absorption-aid role stays in absorption_enhancers.json ENHANCER_BLACK_PEPPER."
     ],
     "evidence_level_values": {
       "product-human": "Exact product tested in human RCTs (1.0x multiplier)",
@@ -3423,87 +3424,6 @@
       "endpoint_relevance_tags": [
         "glycemic_control",
         "digestive_health"
-      ]
-    },
-    {
-      "id": "BRAND_BIOPERINE",
-      "standard_name": "BioPerine Black Pepper Extract",
-      "aliases": [
-        "bioperine",
-        "piperine",
-        "black pepper extract"
-      ],
-      "category": "general_herbs",
-      "evidence_level": "product-human",
-      "published_studies": [
-        "clinical trial"
-      ],
-      "score_contribution": "tier_1",
-      "key_endpoints": [
-        "nutrient absorption ↑",
-        "bioavailability ↑"
-      ],
-      "health_goals_supported": [
-        "Increase Energy",
-        "Healthy Aging/Longevity"
-      ],
-      "notes": "Patented black pepper extract with human bioavailability studies, but the magnitude and generalizability of its absorption effects remain disputed. Plain piperine or black pepper extract reaches this record only on a label that names BioPerine (brand_tokens); its one citation (PMID 9619120) is a pharmacokinetic study of piperine 20 mg raising curcumin absorption.",
-      "study_type": "rct_single",
-      "last_updated": "2026-09-29",
-      "notable_studies": "Shoba et al. (1998, PMID 9619120) remains the central human BioPerine pharmacokinetic trial, showing a marked curcumin exposure increase with piperine co-administration. That is meaningful interventional evidence, but it does not justify treating BioPerine as if it has a broad efficacy RCT portfolio across endpoints. Later skepticism such as Verhoeven 2025 should be read as a caution against over-claiming PK superiority, not as proof that the original interventional signal never existed.",
-      "references_structured": [
-        {
-          "type": "pubmed",
-          "authority": "NCBI PubMed",
-          "pmid": "9619120",
-          "doi": "10.1055/s-2006-957450",
-          "title": "Influence of piperine on the pharmacokinetics of curcumin in animals and human volunteers.",
-          "citation": "Planta medica (1998-05-01)",
-          "url": "https://pubmed.ncbi.nlm.nih.gov/9619120/",
-          "published_date": "1998-05-01",
-          "publication_types": [
-            "Clinical Trial",
-            "Journal Article"
-          ],
-          "mesh_terms": [
-            "Adult",
-            "Alkaloids",
-            "Animals",
-            "Area Under Curve",
-            "Benzodioxoles",
-            "Chromatography, High Pressure Liquid",
-            "Curcumin",
-            "Drug Interactions",
-            "Female",
-            "Humans",
-            "Male",
-            "Piperidines",
-            "Polyunsaturated Alkamides",
-            "Rats",
-            "Rats, Wistar",
-            "Spectrophotometry, Ultraviolet"
-          ],
-          "supplementary_concepts": [],
-          "evidence_grade": "journal_article",
-          "retracted": false,
-          "supports_claims": [],
-          "verification_source": "pubmed_eutils"
-        }
-      ],
-      "external_ids": {
-        "unii": "U71XL721QK"
-      },
-      "effect_direction": "positive_strong",
-      "primary_outcome": "Increase Energy",
-      "total_enrollment": 40,
-      "registry_completed_trials_count": 1,
-      "effect_direction_confidence": "medium",
-      "effect_direction_rationale": "Retained positive_strong classification; study_type=rct_single; evidence_level=product-human; primary_outcome=Increase Energy; published_tags=clinical trial; registry_completed_trials_count=1; total_enrollment=40; endpoint_tags=digestive_health; notes/citations contain no automated downgrade signals.",
-      "endpoint_relevance_tags": [
-        "digestive_health"
-      ],
-      "brand_tokens": [
-        "bioperine"
       ]
     },
     {
