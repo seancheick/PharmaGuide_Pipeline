@@ -1,32 +1,32 @@
 labels 365; scored non-probiotic 339; probiotic unchanged 5; not scored 21; errors 0
 
 == arms (all scored non-probiotic labels) ==
-missing A excess E0          down 270 up  48 same  21 unassessable  0 | total mean -3.57 | tier crossings 83
-missing A excess E1          down 271 up  46 same  22 unassessable  0 | total mean -3.78 | tier crossings 78
-missing A excess E2          down 272 up  46 same  21 unassessable  0 | total mean -3.82 | tier crossings 77
-missing B excess E0          down 222 up  77 same  23 unassessable 17 | total mean -0.15 | tier crossings 52
-missing B excess E1          down 223 up  76 same  23 unassessable 17 | total mean -0.37 | tier crossings 46
-missing B excess E2          down 223 up  76 same  23 unassessable 17 | total mean -0.41 | tier crossings 45
-missing C excess E0          down 225 up  81 same  33 unassessable  0 | total mean -0.02 | tier crossings 64
-missing C excess E1          down 228 up  81 same  30 unassessable  0 | total mean -0.23 | tier crossings 59
-missing C excess E2          down 228 up  81 same  30 unassessable  0 | total mean -0.28 | tier crossings 58
-missing R excess E0          down 244 up  72 same  23 unassessable  0 | total mean -1.02 | tier crossings 61
-missing R excess E1          down 245 up  71 same  23 unassessable  0 | total mean -1.24 | tier crossings 55
-missing R excess E2          down 245 up  71 same  23 unassessable  0 | total mean -1.28 | tier crossings 54
-missing R excess E0 L100     down 262 up  54 same  23 unassessable  0 | total mean -1.65 | tier crossings 78
-missing R excess E0 D23      down 243 up  73 same  23 unassessable  0 | total mean -0.97 | tier crossings 61
+missing A excess E0          down 274 up  44 same  21 unassessable  0 | total mean -3.68 | tier crossings 85
+missing A excess E1          down 275 up  43 same  21 unassessable  0 | total mean -3.90 | tier crossings 80
+missing A excess E2          down 275 up  43 same  21 unassessable  0 | total mean -3.94 | tier crossings 79
+missing B excess E0          down 225 up  74 same  23 unassessable 17 | total mean -0.22 | tier crossings 52
+missing B excess E1          down 226 up  73 same  23 unassessable 17 | total mean -0.44 | tier crossings 46
+missing B excess E2          down 226 up  73 same  23 unassessable 17 | total mean -0.48 | tier crossings 45
+missing C excess E0          down 227 up  79 same  33 unassessable  0 | total mean -0.09 | tier crossings 63
+missing C excess E1          down 230 up  79 same  30 unassessable  0 | total mean -0.31 | tier crossings 58
+missing C excess E2          down 230 up  79 same  30 unassessable  0 | total mean -0.35 | tier crossings 57
+missing R excess E0          down 248 up  68 same  23 unassessable  0 | total mean -1.13 | tier crossings 61
+missing R excess E1          down 249 up  67 same  23 unassessable  0 | total mean -1.35 | tier crossings 55
+missing R excess E2          down 249 up  67 same  23 unassessable  0 | total mean -1.39 | tier crossings 54
+missing R excess E0 L100     down 266 up  50 same  23 unassessable  0 | total mean -1.77 | tier crossings 78
+missing R excess E0 D23      down 247 up  69 same  23 unassessable  0 | total mean -1.09 | tier crossings 61
 
 == by route, Dose change, missing A / B / C (excess E0) ==
-(route pass A)               down 270 up  48 same  21 unassessable  0 | total mean -3.57 | tier crossings 83
-(route pass B)               down 222 up  77 same  23 unassessable 17 | total mean -0.15 | tier crossings 52
-(route pass C)               down 225 up  81 same  33 unassessable  0 | total mean -0.02 | tier crossings 64
-(route pass R)               down 244 up  72 same  23 unassessable  0 | total mean -1.02 | tier crossings 61
+(route pass A)               down 274 up  44 same  21 unassessable  0 | total mean -3.68 | tier crossings 85
+(route pass B)               down 225 up  74 same  23 unassessable 17 | total mean -0.22 | tier crossings 52
+(route pass C)               down 227 up  79 same  33 unassessable  0 | total mean -0.09 | tier crossings 63
+(route pass R)               down 248 up  68 same  23 unassessable  0 | total mean -1.13 | tier crossings 61
 b_complex          n=  5  A: mean +3.91 [-0.2,+7.8]  B: mean +4.93 [+0.1,+7.8]  C: mean +4.78 [+0.1,+7.8]  R: mean +4.93 [+0.1,+7.8]
 fiber_digestive    n=  9  A: mean -6.24 [-12.8,-0.6]  B: mean -4.95 [-12.8,-0.6]  C: mean -3.03 [-12.4,+1.7]  R: mean -5.74 [-12.8,-0.6]
-generic            n= 67  A: mean -1.90 [-14.5,+20.0]  B: mean +2.35 [-14.5,+20.0]  C: mean +2.27 [-10.2,+20.0]  R: mean -1.61 [-14.5,+20.0]
+generic            n= 67  A: mean -2.01 [-14.5,+20.0]  B: mean +2.21 [-14.5,+20.0]  C: mean +2.16 [-10.2,+20.0]  R: mean -1.72 [-14.5,+20.0]
 multi_or_prenatal  n=194  A: mean -5.00 [-6.8,+5.3]  B: mean -0.85 [-6.7,+7.5]  C: mean -1.01 [-6.2,+7.6]  R: mean -0.85 [-6.7,+7.5]
 omega              n=  7  A: mean -2.13 [-5.1,+0.0]  B: mean -2.13 [-5.1,+0.0]  C: mean -2.13 [-5.1,+0.0]  R: mean -2.13 [-5.1,+0.0]
-sports             n= 40  A: mean -0.59 [-7.3,+4.8]  B: mean +0.14 [-6.5,+5.6]  C: mean +0.56 [-6.4,+6.4]  R: mean +0.07 [-6.5,+5.6]
+sports             n= 40  A: mean -1.33 [-8.5,+4.8]  B: mean -0.22 [-6.5,+5.6]  C: mean +0.18 [-6.4,+6.4]  R: mean -0.67 [-7.5,+5.6]
 
 == where a missing benchmark decides the result ==
     12012 Spectravite Advanced Formula           multi_or main only (rest unassessable)  Dose now  17.9 | A  11.9 tot  67.6 | B  17.0 tot  72.7 | C  16.3 tot  72.0 | R  17.0 tot  72.7 | today 73.6
@@ -211,7 +211,7 @@ sports             n= 40  A: mean -0.59 [-7.3,+4.8]  B: mean +0.14 [-6.5,+5.6]  
      9128 Multi Complete                         multi_or main only (rest unassessable)  Dose now  16.4 | A  11.1 tot  74.3 | B  15.9 tot  79.1 | C  15.5 tot  78.7 | R  15.9 tot  79.1 | today 79.6
      9245 Multi Complete With Lutein             multi_or main only (rest unassessable)  Dose now  16.4 | A  11.1 tot  74.3 | B  15.9 tot  79.1 | C  15.5 tot  78.7 | R  15.9 tot  79.1 | today 79.6
      9735 Maximum                                multi_or main only (rest unassessable)  Dose now  17.7 | A  12.2 tot  63.1 | B  17.4 tot  68.3 | C  16.5 tot  67.4 | R  17.4 tot  68.3 | today 68.6
-  main-group benchmark coverage: {'main fully benchmarked': 300, 'main partly unbenchmarked': 17, 'main all unbenchmarked': 22}
+  main-group benchmark coverage: {'main fully benchmarked': 297, 'main partly unbenchmarked': 20, 'main all unbenchmarked': 22}
 
 == excess: products with a row over its UL (missing R) ==
    180225 Iron 65 mg                         Dose now   5.7 | E0  14.4 E1  10.9 E2  10.9 | Safety now 8.0 | Iron 144% UL
@@ -222,7 +222,7 @@ sports             n= 40  A: mean -0.59 [-7.3,+4.8]  B: mean +0.14 [-6.5,+5.6]  
    207454 Performance Multi Energy Formula   Dose now  16.4 | E0  16.8 E1  16.6 E2  16.6 | Safety now 6.0 | Niacin 143% UL
    218448 Centrum Energy                     Dose now  17.0 | E0  17.3 E1  17.1 E2  17.1 | Safety now 7.0 | Niacin 114% UL
    219039 Energy & Metabolism Vanilla        Dose now  15.4 | E0  13.0 E1  12.9 E2  12.9 | Safety now 0.0 | Niacin 143% UL
-   220238 Re-Built Mass XP Strawberry        Dose now  15.2 | E0  16.8 E1  16.6 E2  16.5 | Safety now 4.0 | Magnesium 166% UL
+   220238 Re-Built Mass XP Strawberry        Dose now  15.2 | E0  12.7 E1  12.3 E2  12.1 | Safety now 4.0 | Magnesium 166% UL
    221095 Energy & Metabolism Chocolate      Dose now  15.8 | E0  13.7 E1  13.6 E2  13.6 | Safety now 0.0 | Niacin 143% UL
    228355 Female Multiple                    Dose now  14.0 | E0  16.2 E1  15.9 E2  15.8 | Safety now 6.0 | Niacin 171% UL; Magnesium 114% UL
    232592 BioActive Complete B-Complex       Dose now  12.2 | E0  17.1 E1  16.1 E2  15.6 | Safety now 8.0 | Niacin 286% UL
@@ -253,7 +253,7 @@ sports             n= 40  A: mean -0.59 [-7.3,+4.8]  B: mean +0.14 [-6.5,+5.6]  
     63367 Active Chocolate                   Dose now  15.7 | E0  13.1 E1  13.0 E2  13.0 | Safety now 6.0 | Niacin 143% UL
     64337 Spectravite Energy Metabolism      Dose now  17.0 | E0  17.3 E1  17.1 E2  17.1 | Safety now 7.0 | Niacin 114% UL
     67309 Mega Men Sport                     Dose now  14.4 | E0  11.6 E1  11.4 E2  11.4 | Safety now 9.0 | Niacin 143% UL
-    69374 Amplified Wheybolic Extreme 60 Rip Dose now  14.4 | E0  19.0 E1  18.8 E2  18.8 | Safety now 8.0 | Niacin 114% UL
+    69374 Amplified Wheybolic Extreme 60 Rip Dose now  14.4 | E0   9.7 E1   9.4 E2   9.4 | Safety now 8.0 | Niacin 114% UL
     69734 Active Vanilla                     Dose now  15.7 | E0  13.1 E1  13.0 E2  13.0 | Safety now 6.0 | Niacin 143% UL
     69759 Energy & Metabolism Vanilla        Dose now  15.8 | E0  13.7 E1  13.6 E2  13.6 | Safety now 0.0 | Niacin 143% UL
     69770 Energy & Metabolism Chocolate      Dose now  15.8 | E0  13.7 E1  13.6 E2  13.6 | Safety now 0.0 | Niacin 143% UL
@@ -280,9 +280,9 @@ sports             n= 40  A: mean -0.59 [-7.3,+4.8]  B: mean +0.14 [-6.5,+5.6]  
         main primary         assessed       0.28  HMB                                825 mg daily vs 3000 (HMB 3-6 g/day band) 
    252551 Inulin                                   Dose   7.2 -> R   5.7 (B 5.7, E1 5.7) total 73.1 -> 71.6 [main only]
         main primary         assessed       0.29  Inulin                             2 g fiber/day vs 7 g (fiber full band) 
-    66953 Essential Amino Acids                    Dose   6.4 -> R   2.8 (B 2.8, E1 2.8) total 41.9 -> 38.3 [both groups]
+    66953 Essential Amino Acids                    Dose   6.4 -> R   2.1 (B 2.1, E1 2.1) total 41.9 -> 37.5 [main only]
         main claim_prominent assessed       0.2   EAA total                          1600 mg per use vs 8000 (complete EAA >=8 g band) 
-        rest primary         assessed       0.01  hydrolyzed Whey Peptide Complex    100 mg per_use vs 20000 (protein 20-40 g band) under 25% of the heaviest main row (G2)
+        main primary         assessed       0.01  hydrolyzed Whey Peptide Complex    100 mg per_use vs 20000 (protein 20-40 g band) 
      1179 Ravage Fruit Punch                       Dose   0.0 -> R   5.2 (B 5.2, E1 5.2) total 25.3 -> 30.5 [both groups]
         rest adjunct         assessed       0.74  Calcium                            18% of RDA/AI vs 25% (legacy) 
         rest adjunct         assessed       1.0   Niacin                             188% of RDA/AI vs 100% (dri) 
@@ -356,3 +356,6 @@ sports             n= 40  A: mean -0.59 [-7.3,+4.8]  B: mean +0.14 [-6.5,+5.6]  
         rest adjunct         unknown              Water Balance Blend                blend total; contents' amounts hidden 
         rest adjunct         not_assessable       ProHydrolase Protease Enzyme Blend declared, no applicable benchmark 
         rest adjunct         unknown              Water Balance Blend                blend total; contents' amounts hidden 
+   294477 Calcium Carbonate & Vitamin D3 Softgels  Dose  20.0 -> R  20.0 (B 20.0, E1 20.0) total 84.9 -> 84.9 [main only]
+        main claim_prominent assessed       1.0   Vitamin D3                         200% of RDA/AI vs 100% (dri) 
+        main claim_prominent assessed       1.0   Calcium                            48% of RDA/AI vs 25% (legacy) 

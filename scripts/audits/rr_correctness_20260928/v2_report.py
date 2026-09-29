@@ -14,6 +14,18 @@ import glob, json, statistics, sys
 from collections import Counter, defaultdict
 
 P = [json.loads(l) for f in sorted(glob.glob("/Users/seancheick/pg_quality/rr_fix/v2_[0-9].jsonl")) for l in open(f)]
+NO_G2 = "--no-g2" in sys.argv  # undo the rejected 25%-of-heaviest-main mass rule (review 2026-09-29)
+
+
+def ungroup(products):
+    for p in products:
+        for i in p.get("items") or []:
+            if "G2" in (i.get("regroup") or ""):
+                i["group"], i["regroup"] = "main", None
+
+
+if NO_G2:
+    ungroup(P)
 NOREF = 14.5 / 20
 CAPS = {"E0": (1.0, 1.0), "E1": (0.75, 0.5), "E2": (0.75, 0.25)}
 TIERS = [95, 90, 80, 70, 55]
@@ -145,10 +157,12 @@ for p in scored:
 print(f"  {len(dl)} of {sum(1 for p in scored if p['route'] in {'multi_or_prenatal','b_complex'})} multi/B-complex labels move; "
       f"mean {statistics.mean(x for x, _ in dl):+.2f}, min {min(x for x, _ in dl):+.1f}")
 
-AGREED = sys.argv[1].split(",") if len(sys.argv) > 1 else []
+AGREED = next((a.split(",") for a in sys.argv[1:] if not a.startswith("--")), [])
 if AGREED:
     print("\n== agreed products (missing R, excess E0; B and E1 for comparison) ==")
     extra = [json.loads(l) for l in open("/Users/seancheick/pg_quality/rr_fix/v2agreed.jsonl")]
+    if NO_G2:
+        ungroup(extra)
     byid = {p["id"]: p for p in P + extra}
     for pid in AGREED:
         p = byid.get(pid)
