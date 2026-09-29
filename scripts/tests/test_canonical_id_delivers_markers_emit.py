@@ -113,7 +113,7 @@ _BUILD_CANDIDATES = (final_build_dir(), catalog_dist_dir())
 # Canary blobs: (dsld_id, brand, expected_ingredient_substring,
 #                expected_canonical_id, expects_markers_nonempty)
 CANARY_BLOBS = [
-    ("1060",   "GNC",          "vitamin a",   "vitamin_a", False),
+    ("12031",  "GNC",          "vitamin a",   "vitamin_a", False),  # 1060 left the live catalog (held form)
     ("278548", "Doctors_Best", "turmeric",    "turmeric",  True),
     ("24439",  "Doctors_Best", "camu camu",   "camu_camu", True),
 ]
