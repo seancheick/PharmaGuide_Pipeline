@@ -9,12 +9,15 @@ nested under the 1-scoop creatine block). The exact-identity merge in
 analysis: 49630 counted every creatine ingredient twice (2.5 g and 5 g blocks),
 221108 two Protein rows (register Q39a).
 
+Columns for different audiences (serving orders whose DV target groups
+differ, 241222 "2-3 years" / "4 years and older") merge the same way; each
+audience's amount stays a variant and analysis reads the adult/largest column.
 Declared forms must agree (the same normalized form names, or no form on one
 side): D-alpha and DL-alpha tocopherol are different declarations, and a
 respelling (250086 "Tocopheryl" / "Tocopherol" Acetate) is not proven the
-same, so those rows stay separate rather than lose a declaration. Different
-serving orders (age bands, AM/PM packs) keep the exact rule, and two blocks
-whose own children differ stay two panels.
+same, so those rows stay separate rather than lose a declaration. Serving
+orders for one audience (AM/PM packs) or none keep the exact rule, and two
+blocks whose own children differ stay two panels.
 """
 import collections
 import json
@@ -60,11 +63,38 @@ def test_the_merged_row_keeps_its_own_raw_path():
     assert [r["raw_source_path"] for r in creatine] == ["ingredientRows[8].nestedRows[1]"]
 
 
-def test_age_band_columns_keep_the_exact_rule():
-    # U-Cubes 241222: servingSizes order 1 (2-3 years) and order 2 (4 years and
-    # older) are different servings; this change does not touch them.
-    assert {k: v for k, v in _names(_clean("241222")).items() if v > 1} == {
-        "Iodine": 2, "Magnesium": 2, "Inositol": 2}
+def test_audience_columns_are_one_row_analysed_for_the_adult_column():
+    # U-Cubes 241222: order 1 is "2-3 years of age" (DV group "Children less
+    # than 4 years of age"), order 2 "Children 4 years and older" ("Adults and
+    # children 4 or more years of age"). Each audience's amount is kept as a
+    # variant; analysis reads the largest serving (serving_frequency
+    # .select_canonical_serving), the adult/4+ column the app shows.
+    rows = _clean("241222")
+    assert not {k: v for k, v in _names(rows).items() if v > 1}
+    iodine = next(r for r in rows if r["name"] == "Iodine")
+    variants = iodine["raw_taxonomy"]["quantityVariants"]
+    assert sorted((v["quantity"], v["serving_size_order"]) for v in variants) == [(30, 1), (60, 2)]
+    assert iodine["quantity"] == 60.0
+
+
+def _audience_row(name, order, size, qty, ingredient_id, group):
+    row = _row(name, order, size, qty, ingredient_id)
+    row["quantity"][0]["dailyValueTargetGroup"] = [{"name": group}] if group else []
+    return row
+
+
+def test_columns_of_one_audience_or_none_keep_the_exact_rule():
+    from enhanced_normalizer import EnhancedDSLDNormalizer
+
+    merge = EnhancedDSLDNormalizer._merge_alternate_serving_rows
+    adults = "Adults and children 4 or more years of age"
+    # AM / PM packets: two serving orders for the same audience add up.
+    assert len(merge([_audience_row("Zinc", 1, 1, 5, 1, adults), _audience_row("Zinc", 2, 1, 10, 2, adults)])) == 2
+    # No audience named: not established as alternatives.
+    assert len(merge([_audience_row("Zinc", 1, 2, 5, 1, None), _audience_row("Zinc", 2, 4, 10, 2, None)])) == 2
+    # Two audiences: one ingredient with two audience amounts.
+    kids = "Children less than 4 years of age"
+    assert len(merge([_audience_row("Zinc", 1, 2, 5, 1, kids), _audience_row("Zinc", 2, 4, 10, 2, adults)])) == 1
 
 
 def _row(name, order, size, qty, ingredient_id, children=(), form=None):

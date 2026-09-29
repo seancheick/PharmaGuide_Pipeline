@@ -4893,9 +4893,11 @@ class EnhancedDSLDNormalizer:
         # Such rows are the same ingredient at another size, never an
         # additive pack, so they merge by name once those misplaced nodes are
         # set aside, provided every node declares the same forms (or one side
-        # none); conflicting declarations stay separate. Different serving
-        # orders (age bands, packs) keep the exact rule above, and blocks
-        # whose own children differ stay separate panels.
+        # none); conflicting declarations stay separate. Columns for
+        # different audiences (serving orders whose DV target groups differ)
+        # merge the same way, each audience's amount kept as a variant; packs
+        # keep the exact rule above, and blocks whose own children differ
+        # stay separate panels.
         def own_contexts(row: Dict[str, Any]) -> Set[tuple]:
             return {
                 context
@@ -4987,7 +4989,25 @@ class EnhancedDSLDNormalizer:
                 for i in range(len(columns)) for j in range(i + 1, len(columns))
             )
             trees = {name_tree(row, column) for row, column in zip(alternatives, columns)}
-            if len(orders) != 1 or not disjoint or len(trees) != 1:
+            if len(orders) != 1:
+                # Different serving orders are alternatives only when each
+                # column names one audience and the audiences differ (241222:
+                # "Children less than 4 years of age" / "Adults and children 4
+                # or more years of age"); AM/PM packs share one or name none.
+                audiences = [
+                    {
+                        normalized_text(group.get("name") or group.get("targetGroup"))
+                        for q in quantity_rows(row)
+                        for group in q.get("dailyValueTargetGroup") or []
+                        if isinstance(group, dict)
+                    } - {""}
+                    for row in alternatives
+                ]
+                if not all(len(a) == 1 for a in audiences) or len(
+                    set().union(*audiences)
+                ) != len(audiences):
+                    continue
+            if not disjoint or len(trees) != 1:
                 continue
             if not all(
                 forms_agree(alternatives[0], alternate, columns[0], column)
