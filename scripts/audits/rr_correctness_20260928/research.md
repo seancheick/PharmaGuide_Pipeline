@@ -121,3 +121,35 @@ returned 3 (the third, PMID 9781306, is an animal-cancer review and does not qua
   Evidence (202773 3 g/day: 15.6 → 10.4).
 - **Scope, recorded not changed:** 201 of 211 clinical entries carry no studied dose, so Evidence
   cannot check the label amount for them; register Q39g.
+
+## Brand evidence reaching plain ingredients (2026-09-29)
+
+- **Owner:** `enrich_supplements_v3._brand_mentioned` confirms an alias-only BRAND_ match in the
+  product text; aliases are the discovery surface and may be generic, and a curated `brand_tokens`
+  list is the confirmation. Without `brand_tokens` the check fell back to the aliases, so a generic
+  alias confirmed itself.
+- **Census** (all 15,414 raw labels holding a BRAND_ entry's generic name, enriched at 495c2d8c):
+  221 BRAND_ matches; 81 labels took a brand record while never naming a brand: BioPerine via
+  "piperine" 37, HMB 35, OptiFerrin via "lactoferrin" 6, Zynamite via "mangiferin" 2 (a Suntheanine
+  case was a census false positive: 261621 names Suntheanine). Entries that already carry
+  `brand_tokens` (AstaReal, Quatrefolic, Cognizin, Suntheanine, MenaQ7) leaked nothing.
+- **Receipts** (live PubMed efetch, 2026-09-29):
+  - BRAND_BIOPERINE: its only citation, PMID 9619120 (Shoba 1998), is a pharmacokinetic study
+    (piperine 20 mg raised curcumin bioavailability). → `brand_tokens: ["bioperine"]`.
+  - BRAND_ZYNAMITE: PMIDs 32717999, 30736383, 31661850 all name Zynamite (>60% mangiferin); two
+    test it with luteolin or quercetin. → `brand_tokens: ["zynamite"]`.
+  - BRAND_HMB → **INGR_HMB**, ingredient-human: PMIDs 24599749 (HMB free acid RCT), 35911112 and
+    41305674 (meta-analyses), 25700845 (RCT, older men) test HMB with no brand. No dose in the
+    abstracts, so none recorded.
+  - BRAND_OPTIFERRIN → **INGR_LACTOFERRIN**, ingredient-human, 200 mg/day: its notes already said
+    the brand identity was never verified; PMID 19639462 (bovine lactoferrin 100 mg twice daily vs
+    ferrous sulfate, 100 pregnant women) and PMID 35276902 (meta-analysis).
+  - `verify_backed_studies_citations.py`: every cited PMID resolves and matches its stored title.
+- **Replay** (81 affected + 25 brand-naming controls, main 495c2d8c vs this): 23 move, 10 tier
+  crossings, no status change, 0 controls move. HMB -4.4 x12 (ingredient evidence, no brand floor);
+  lactoferrin -0.5 to -4.4 x6; plain black pepper extract -18.9 x5 (311167 81.3 -> 62.4, Evidence
+  18.9 -> 0).
+- **Recorded, not changed:** BioPerine's evidence is pharmacokinetic (absorption of other
+  compounds), yet the entry reads positive_strong with "Increase Energy"; and the Formulation
+  branded-trial credit (`botanical_profile._branded_studied_set`) still keys on aliases, so plain
+  black pepper extract keeps +3/+4 there (register D24 item 6).
