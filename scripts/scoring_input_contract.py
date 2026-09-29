@@ -5894,8 +5894,12 @@ def _named_in_title(row: Dict[str, Any], title_norm: str) -> bool:
             )
         ):
             return True
+        # A whole one-token name of three letters ("MSM", 182940) matches the
+        # same title token; the four-letter floor guards fragments of longer
+        # names ("oil" of "Fish Oil").
+        min_len = 3 if len(candidate_tokens) == 1 else 4
         for token in candidate_tokens:
-            if len(token) >= 4 and token not in _ROLE_TITLE_STOPWORDS and token in title_tokens:
+            if len(token) >= min_len and token not in _ROLE_TITLE_STOPWORDS and token in title_tokens:
                 return True
     return False
 
