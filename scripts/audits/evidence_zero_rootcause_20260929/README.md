@@ -84,6 +84,12 @@ points and level multipliers).
   dose; the Dose pillar owns dose adequacy. Evidence never re-charges a safety listing; Safety
   and the verdict own the hazard.
 - Re-weighting the total around a gap was rejected as hiding the defect.
+- Reviewers (Claude, Grok, pasted 2026-09-29) concur: one owner set; only purpose actives own
+  Evidence; pillars orthogonal; one penalty for a safety-listed active ("not assessed:
+  safety-listed", never "no assessable actives"); partial credit by evidence tier (product RCT >
+  branded > generic ingredient > authority > preclinical), never by dose; undisclosed blend
+  members keep their ingredient's evidence while Dose and Transparency charge the blend. Open:
+  what a remaining true library gap shows ("insufficient data") once lanes 1-4 land.
 
 ## Further findings (same day)
 
@@ -115,7 +121,12 @@ corpus run at the end, then the release checks.
    an active-section row that is the product's purpose is not an excipient (C, D, E-blend). Census
    the active rows that resolve to inactive databases and fix identity precedence at the cleaner
    (beet, raspberry leaf).
-3. **Policy at the owner** (decided above): drop the dose gate from Evidence (`generic_evidence`
+3. **Policy at the owner** (decided above). Probiotics too: on the 535 probiotic-route products
+   median Evidence is 5.4/20 (191 at 0; 444 `research_present_applicability_unestablished`, 4
+   `evaluated_applicable`): `probiotic_evidence` reserves 8 of 20 for an exact tested dose
+   (`dose_applicability_credit` 1.0 only for EXACT_TESTED_DOSE) and gates strain credit on dose
+   status, so the curated strain library rarely reaches the score. Move that dose judgment to Dose.
+   Then drop the dose gate from Evidence (`generic_evidence`
    sub-clinical skip, resolver `dose_below_studied_clinical_range`), after confirming the Dose
    pillar carries the studied dose for MSM, L-carnitine, BCAA, L-arginine (overlaps the D24 Dose
    lane on `codex/dose-calibration`: coordinate); safety-listed actives assessed on their
