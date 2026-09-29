@@ -282,7 +282,7 @@ sports             n= 40  A: mean -1.33 [-8.5,+4.8]  B: mean -0.22 [-6.5,+5.6]  
         main primary         assessed       0.29  Inulin                             2 g fiber/day vs 7 g (fiber full band) 
     66953 Essential Amino Acids                    Dose   6.4 -> R   2.1 (B 2.1, E1 2.1) total 41.9 -> 37.5 [main only]
         main claim_prominent assessed       0.2   EAA total                          1600 mg per use vs 8000 (complete EAA >=8 g band) 
-        main primary         assessed       0.01  hydrolyzed Whey Peptide Complex    100 mg per_use vs 20000 (protein 20-40 g band) 
+        main primary         assessed       0.01  hydrolyzed Whey Peptide Complex    100 mg per_use vs 20000 (protein 20-40 g band)
      1179 Ravage Fruit Punch                       Dose   0.0 -> R   5.2 (B 5.2, E1 5.2) total 25.3 -> 30.5 [both groups]
         rest adjunct         assessed       0.74  Calcium                            18% of RDA/AI vs 25% (legacy) 
         rest adjunct         assessed       1.0   Niacin                             188% of RDA/AI vs 100% (dri) 
@@ -357,5 +357,5 @@ sports             n= 40  A: mean -1.33 [-8.5,+4.8]  B: mean -0.22 [-6.5,+5.6]  
         rest adjunct         not_assessable       ProHydrolase Protease Enzyme Blend declared, no applicable benchmark 
         rest adjunct         unknown              Water Balance Blend                blend total; contents' amounts hidden 
    294477 Calcium Carbonate & Vitamin D3 Softgels  Dose  20.0 -> R  20.0 (B 20.0, E1 20.0) total 84.9 -> 84.9 [main only]
-        main claim_prominent assessed       1.0   Vitamin D3                         200% of RDA/AI vs 100% (dri) 
-        main claim_prominent assessed       1.0   Calcium                            48% of RDA/AI vs 25% (legacy) 
+        main claim_prominent assessed       1.0   Vitamin D3                         200% of RDA/AI vs 100% (dri)
+        main claim_prominent assessed       1.0   Calcium                            48% of RDA/AI vs 25% (legacy)
