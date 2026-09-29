@@ -110,11 +110,13 @@ def test_confidence_high_when_evidence_identity_label_and_verification_are_stron
 def test_unreviewed_evidence_is_provisional_not_low_score_confidence() -> None:
     from score_supplements_v4 import score_product_v4
 
+    # Acemannan has no clinical or literature record (MSM, the earlier
+    # example, gained INGR_MSM in 2026-09).
     product = _product(
-        ingredient=_ingredient(name="MSM", canonical_id="msm"),
+        ingredient=_ingredient(name="Acemannan", canonical_id="acemannan"),
         evidence_data={"clinical_matches": []},
         rda_ul_data={
-            "adequacy_results": [{"nutrient": "MSM", "pct_rda": None, "pct_ul": None}],
+            "adequacy_results": [{"nutrient": "Acemannan", "pct_rda": None, "pct_ul": None}],
             "safety_flags": [],
         },
     )
