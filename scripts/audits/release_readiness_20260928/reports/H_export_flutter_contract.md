@@ -1,0 +1,25 @@
+# H. Export ↔ Flutter contract (pipeline 391b87c5 ↔ app d71e47f5)
+
+## Generations in play (§35)
+| Layer | Value | Where |
+|---|---|---|
+| App-bundled catalog | db_version 2026.09.22.201915, export schema 2.5.0, scoring 4.4.0, score_model v4, pipeline 3.4.0, config checksum d70f38bb…, interaction DB 1.0.12, min_app_version 1.0.0 | `assets/db/export_manifest.json`, `assets/db/interaction_db_manifest.json` |
+| Live catalog | same build (dist/ 2026-09-22) | `scripts/dist/export_manifest.json` |
+| Candidate (0d4d59a6) | 13,530 products, built 2026-09-27; not bundled, not live | `~/PharmaGuide_release_candidates/…` |
+| HEAD | no corpus; config `1.21.3-omega-transparency-owner` (fingerprint f39af73fc7e43f48), omega `2.2.0-verification-owned-oxidation`, engine 4.4.0, classification 1.3.0 | `head.jsonl provenance` |
+| App reader checks | interaction DB: `schema_version` major + `min_app_version` enforced (`interaction_database.dart:513–532`); core DB: `output_schema_version`/`export_version` columns exist, projection generated from the manifest (e44ceee8); tier fallback for old cached records | code |
+- The next release must rebuild the whole corpus (af488ecf: stage code fingerprints) — no generation mix is possible after that gate, but until then the bundled/live catalog is 6 config versions behind HEAD.
+
+## Core columns
+- `core_export_model.PRODUCTS_CORE_COLUMNS` 117 @2.5.0; `APP_CORE_COLUMNS` 91 @3.0.0 (`_SCHEMA3_REMOVED_COLUMNS` = 11: `score_100_equivalent`, `score_display_100_equivalent`, v3 subscores ×8, `v4_confidence`); app table `products_core_table.dart` 92 columns; projection `products_core_projection.dart` generated. App reads of the removed mirrors: 0 (`score_100_equivalent`, `score_display_100_equivalent`, `pillar_evidence_v4`… greps) → schema 3 is app-safe (D14 decision pending).
+- Enums/status values read by the app (literal hits in `lib/`): `quality_score_status` 16, `quality_assessment_status` 10, `product_safety_status` 11, `safety_verdict` 9, BLOCKED 42 / UNSAFE 30 / CAUTION 19 / POOR 11, `suppressed_safety` 3, `not_scored` 2; tiers via `quality_tier` (authoritative) with `legacyTierForScore` fallback (thresholds equal the config: 95/90/80/70/55). No app recomputation of score, verdict or tier found (`v4_pillars.dart` reads scores; `score_tier.dart` fallback only for old cached rows).
+
+## Detail blob
+- `BLOB_TOP_LEVEL` 68 keys (row shapes `ACTIVE_CONTRACT`/`INACTIVE_CONTRACT`, gate on undeclared keys). Keys with no literal read in `lib/` (34): audit/provenance families (`audit`, `label_ledger_audit`, `label_ledger_omissions`, `row_ledger*`, `omega3_audit`, `non_gmo_audit`, `proprietary_blend_audit`, `supplement_type_audit`, `v4_score_provenance`, `v4_safety_gate`, `v4_dose_safety`, `v4_completeness_gate`, `ingredients_dropped_reasons`, `unmapped_actives`, `unverified_ingredient`, `raw_actives_count`, `raw_inactives_count`, `completeness_claim_mismatch`, `classification_*`, `product_role_evidence`, `label_source_rows`), plus `blob_version`, `brand_name_raw`, `brand_family`, `product_line`, `primary_type`, `secondary_type`, `serving_info`, `proprietary_blend`, `compliance_detail`, `dietary_sensitivity_detail`, `gluten_free_validated`. Pipeline consumers exist for most (dashboard/audits/reviewer console: `serving_info` reviewer 3, `unmapped_actives` audits 5, `primary_type` audits 41 …); `v4_safety_gate`, `v4_dose_safety`, `v4_score_provenance`, `compliance_detail`, `dietary_sensitivity_detail` have only 1 audit read each → J candidates "produced, barely consumed" (not dead: audit surface).
+- Evidence pillar contract: `quality_pillars_v4.evidence.{score,max,reason,evidence_result_state,display_state}`; app carries `display_state` verbatim (`pg_score_breakdown_card.dart`, `pg_compare_pillar_row.dart`, `v4_pillars.dart`). **RR-11**: multi/prenatal and B-complex emit `evidence_result_state: null` → `display_state: not_yet_reviewed` → the app renders "review pending" on complete panels (1,553 candidate products with positive Evidence).
+- Ingredient rows: retired twins all absent from app reads (T1 export family); `dailyValue` added to enriched rows (11446221) — declared in the row contract (row-shape gate passed in the 17,752 suite).
+- Warnings: severity verbs verbatim (`safety_warning_one_liner`); dedup key includes dose state (6d2a6d85); interaction cards keyed by plant identity (504504f7); app joins stack pairs on `ingredient_fingerprint.herbs` (family/twin ids since 01213079) — `product_canonical_ids.dart` consumption NOT ESTABLISHED in this pass (grep only).
+
+## Nullability / meaning checks
+- `quality_score_v4_100` null when `suppressed_safety`/`not_scored` (73 + held); app handles (`suppressed_safety` 3 reads). `verdict` POOR is quality, not safety (schema doc 2.5.0 says so; app reads `product_safety_status` for safety).
+- Flutter → pipeline assumptions (§34): tier thresholds duplicated but equal (L-14); severity vocabulary (`avoid/caution/monitor/contraindicated/informational/no_data`) read from data; no hard-coded route or pillar names beyond the six pillar keys.

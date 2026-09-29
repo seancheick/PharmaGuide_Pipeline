@@ -1,0 +1,130 @@
+sha	date	subject	data_files	plus	minus	has_body	entry_ids	iqm_parents_touched
+c6520535	2026-09-28	fix(data): a BCAA label that states no ratio reads the unspecified BCAA form	ingredient_quality_map.json	18	20	True		
+c456e479	2026-09-28	fix(data): extended release caffeine without the hyphen	ingredient_quality_map.json	3	2	True		
+845d17c5	2026-09-28	fix(data): keep Quatrefolic one compound; scope gamma-carotene to vitamin A	ingredient_quality_map.json	8	11	True		
+08c9a194	2026-09-28	fix(data): fenugreek galactomannan is not konjac glucomannan	ingredient_quality_map.json	2	2	True		
+00303a69	2026-09-28	fix(data): form curation batch 11 - seaweed iodine and parent binomials	ingredient_quality_map.json	110	27	True		
+d6dbf0e4	2026-09-28	fix(data): form curation batch 10 - vitamin, amino-acid and botanical names	ingredient_quality_map.json	215	63	True		
+64e27094	2026-09-28	fix(data): form curation batch 6 - held label spellings of forms the map holds	ingredient_quality_map.json	39	11	True		
+f56d49eb	2026-09-27	fix(data): monocalcium phosphate carries the calcium phosphate class absorption	ingredient_quality_map.json	5	5	True		
+852adda2	2026-09-27	fix(data): form curation batch 5 - parent-scoped clues and exact spellings	ingredient_quality_map.json	39	15	True		
+57bc0986	2026-09-27	fix(data): form curation batch 3 - nutrient rows that name another nutrient's salt	ingredient_quality_map.json	80	6	True		
+a6a521c7	2026-09-27	fix(data): form curation batch 2 - mineral amino-acid chelates, glycinates, salt hydrates	ingredient_quality_map.json	77	24	True		
+44948004	2026-09-27	fix(data): form curation batch 1 - phosphate salts disclosed on labels	ingredient_quality_map.json	40	4	True		
+84ec8398	2026-09-27	fix(data): review trace mineral routing overlaps	cross_db_overlap_allowlist.json	17	3	False		
+889856ef	2026-09-27	fix(data): complete curated form records	ingredient_quality_map.json	26	18	False		
+f8241717	2026-09-27	fix(forms): curate blocked DSLD disclosures	ingredient_quality_map.json	120	6	False		
+9fc80c24	2026-09-27	fix(data): every derivable _metadata count is recounted, and six had drifted	banned_recalled_ingredients.json;cert_verification_overrides.json;harmful_additives.json;ingredient_quality_map.json;sta	42	29	True		
+6ef5c1f9	2026-09-27	chore(data): the IQM, interaction rules and standardized botanicals in canonical JSON	ingredient_interaction_rules.json;ingredient_quality_map.json;standardized_botanicals.json	2700	2700	True		
+f3b23bfb	2026-09-27	fix(data): the byte-pinned profile-gate fixture keeps its bytes	profile_gate_test_cases.json	112	743	True		
+7af59d6a	2026-09-27	chore(data): 26 data files in canonical JSON (content unchanged)	allergen_prevalence_vocab.json;botanical_marker_contributions.json;caers_adverse_event_signals.json;canary_products.json	6938	4436	True		
+d8ddf208	2026-09-27	fix(clinical): keep one dandelion rule owner	ingredient_interaction_rules.json	40	52	False	RULE_IQM_DANDELION_GLUCOSE;dandelion	
+70108b45	2026-09-27	fix(clinical): route DGL and close botanical warnings	botanical_ingredients.json;ingredient_interaction_rules.json;ingredient_quality_map.json;standardized_botanicals.json	133	49	False	RULE_IQM_SIBERIAN_GINSENG_PREGNANCY;siberian_ginseng	
+c0022415	2026-09-27	test(iqm): absorption coverage leaves out declared category-error forms	ingredient_quality_map.json	1	1	True		
+3315ebee	2026-09-27	fix(safety): 36 banned records cite what the government actually did (Q15)	banned_recalled_ingredients.json	1426	820	True		
+28178b54	2026-09-27	fix(identity): FiberSMART stays out of resistant starch	ingredient_quality_map.json	1	3	True		
+863deb0f	2026-09-27	fix(identity): excipients and ALCAR arginate keep their owners	cross_db_overlap_allowlist.json;ingredient_quality_map.json;other_ingredients.json	6	105	True		
+e7bcfce5	2026-09-26	fix(interaction): licorice blood-pressure warnings fire on presence	ingredient_interaction_rules.json	18	38	True		
+70b654e6	2026-09-26	fix(data): Slendesta cites a real potato PI2 satiety trial	citation_content_backlog.json;standardized_botanicals.json	4	19	True		
+139c2513	2026-09-26	fix(data): ginger standardized extract cites a real Marx 2017 review	citation_content_backlog.json;standardized_botanicals.json	5	20	True		
+32718da7	2026-09-27	fix(safety): three Iron Legion designer steroids ship blocked with their reason	banned_recalled_ingredients.json	297	12	True	BANNED_DIMETHANDROSTENOL;BANNED_METHYLDIAZINOL;BANNED_NORETHANDRIOL	
+82e383dd	2026-09-26	fix(data): citation backlog declares the ledger schema namespace	citation_content_backlog.json	1	1	True		
+455dc72d	2026-09-26	fix(interaction): green tea extract liver warning treats 800 mg EGCG as a risk dose	ingredient_interaction_rules.json	15	8	True		
+0514c2aa	2026-09-26	fix(interaction): ginseng and nettle glucose rules fire on presence	ingredient_interaction_rules.json;interaction_rules_ghost_review.json	26	129	True		
+272a580c	2026-09-26	fix(data): vitex drops the chaste-tree CUI it inherited from a wrong species	botanical_ingredients.json	1	1	True		
+482514c5	2026-09-26	fix(data): a bare species name never confirms a nettle or dandelion part	botanical_ingredients.json	6	9	True		
+5494300c	2026-09-26	fix(interaction): a nettle root label keeps the blood-pressure claim	ingredient_interaction_rules.json	62	36	True	RULE_IQM_STINGING_NETTLE_BLOOD_PRESSURE;stinging_nettle	
+c61a5934	2026-09-26	fix(data): vitex, nirgundi and milk thistle records name their own species	botanical_ingredients.json	13	15	True		
+60d2ebcb	2026-09-26	fix(interaction): one ginkgo pregnancy verdict, avoid	ingredient_interaction_rules.json	12	8	True		
+3c0648ba	2026-09-26	fix(audit): interaction-rules citation verifier reads PMC links	interaction_rules_ghost_review.json	19	1	True		
+19436bb0	2026-09-26	docs(audit): review two full-text citations the strict gate cannot read	interaction_rules_ghost_review.json	46	1	True		
+0827e9b0	2026-09-26	fix(interaction): IQM licorice BP floors cite the 100 mg glycyrrhizic acid trial	ingredient_interaction_rules.json	8	7	True		
+7d8f7b08	2026-09-26	fix(interaction): licorice root BP floor cites the 100 mg glycyrrhizic acid trial	ingredient_interaction_rules.json	5	4	True		
+6e475af1	2026-09-26	fix(interaction): stinging nettle glucose floor is the trial dose, not a guess	ingredient_interaction_rules.json	22	21	True		
+a19ff8b8	2026-09-26	fix(interaction): ginseng floors match the effect their source measured	ingredient_interaction_rules.json	16	33	True		
+34410403	2026-09-26	fix(interaction): feverfew anticoagulant rule drops a floor from a general review	ingredient_interaction_rules.json	3	11	True		
+117584e3	2026-09-26	fix(interaction): boswellia bleeding rules drop an arthritis-trial floor	ingredient_interaction_rules.json	8	33	True		
+aa915835	2026-09-26	fix(interaction): saw palmetto bleeding rules drop a floor borrowed from BPH	ingredient_interaction_rules.json	6	41	True		
+dc92c43f	2026-09-26	fix(interaction): resveratrol-warfarin note links the mouse study it describes	ingredient_interaction_rules.json	3	2	True		
+172a850b	2026-09-26	fix(interaction): NAC bleeding rule drops a CKD citation and an invented floor	ingredient_interaction_rules.json	5	22	True		
+7ac5f2c4	2026-09-26	fix(interaction): senna pregnancy follows its sources; unsupported floors removed	ingredient_interaction_rules.json	38	124	True		
+34c8cd0e	2026-09-26	fix(safety): SARM records state what FDA did, not a ban	banned_recalled_ingredients.json	257	186	True		
+7a6ce5b4	2026-09-26	fix(interaction): ginseng-warfarin threshold drops a gastric-cancer citation	ingredient_interaction_rules.json	1	1	True		
+9aec5a4c	2026-09-26	fix(clean): avoid partial nicotinamide compound form matches	form_keywords_vocab.json	2	2	False		
+786d318b	2026-09-26	fix(depletion): beta-blocker CoQ10 source label names the paper its URL points to	medication_depletions.json	1	1	True		
+f7a10389	2026-09-26	fix(interaction): garlic-warfarin pair drops an antimicrobial allicin citation	curated_interactions_v1.json	5	7	True		
+a70e057d	2026-09-26	fix(interaction): chondroitin, black seed and evening primrose copy says what its sources 	ingredient_interaction_rules.json	19	16	True		
+e69e1223	2026-09-26	fix(iqm): cascara RxNorm anchor and miroestrol structural class	ingredient_quality_map.json	6	3	True		
+ce3088a6	2026-09-26	fix(iqm): miroestrol identifiers are miroestrol, not crisnatol and hexenol	ingredient_quality_map.json	5	4	True		
+121ae9f7	2026-09-26	fix(iqm): phlorizin CUI is the compound, not a homeopathic trituration	ingredient_quality_map.json	3	3	True		
+2d086156	2026-09-26	data(audit): review the LiverTox aloe citation on the Cape aloe liver rule	interaction_rules_ghost_review.json	10	1	True		
+c88e0fbe	2026-09-26	test(safety): align three pins with the anthraquinone curation	cross_db_overlap_allowlist.json	1	1	True		
+f9eed995	2026-09-26	fix(safety): HIGH_RISK_CHAPARRAL CUI is Larrea tridentata, the species its reason names	banned_recalled_ingredients.json	6	1	True		
+e60670d7	2026-09-26	data(safety): BANNED_EPHEDRA keeps C0885298, with a note on its UMLS name	banned_recalled_ingredients.json	6	0	True		
+1749a64a	2026-09-26	fix(safety): BANNED_IBUTAMOREN_MK677 cites FDA letter 719339, not an unverifiable 2020 let	banned_recalled_ingredients.json	15	10	True		
+b52a3245	2026-09-26	fix(safety): ADD_5A_HYDROXY_LAXOGENIN cites FDA's 2022 letters, not a dead 2020 URL	banned_recalled_ingredients.json	14	9	True		
+e3854e39	2026-09-26	fix(safety): ADD_5A_HYDROXY_LAXOGENIN gets its RxNorm and UMLS anchors	banned_recalled_ingredients.json;cui_overrides.json	9	5	True		
+cd7216d1	2026-09-26	fix(safety): BANNED_TANSY CUI is the tansy plant, not a flower essence	banned_recalled_ingredients.json	6	1	True		
+e769134a	2026-09-26	fix(evidence): prevent protein macro aliases borrowing training evidence	backed_clinical_studies.json	7	13	False		
+d16f9d0c	2026-09-26	fix(safety): ADD_N_PHENETHYL_DIMETHYLAMINE UNII is the amine, not the beta-keto analog	banned_recalled_ingredients.json	6	2	True		
+45278c2a	2026-09-26	fix(safety): ADD_5A_HYDROXY_LAXOGENIN UNII is 5alpha-hydroxy-laxogenin, not laxogenin	banned_recalled_ingredients.json	17	6	True		
+94f4ce04	2026-09-26	fix(interaction): bergamot avoid-level alerts use an avoid verb again	ingredient_interaction_rules.json	5	4	True		
+795d0cd1	2026-09-26	fix(interaction): horny goat weed nitrate action says whose risk it is	ingredient_interaction_rules.json	3	2	True		
+e8fafcb6	2026-09-26	fix(interaction): L-theanine sedative action no longer contradicts its sources	ingredient_interaction_rules.json	3	2	True		
+8c7d7cf7	2026-09-26	fix(interaction): saw palmetto keeps its source's in-vitro hedge; PL review rationale corr	ingredient_interaction_rules.json;interaction_rules_ghost_review.json	7	6	True		
+250ea264	2026-09-26	fix(interaction): willow mechanisms say the aspirin comparison was not randomised	ingredient_interaction_rules.json	6	5	True		
+87abcc6c	2026-09-26	fix(interaction): huperzine mechanism quotes the donepezil label, nothing more	ingredient_interaction_rules.json	4	3	True		
+bd98a863	2026-09-26	feat(audit): review the two Bookshelf suspects the NBK citation check reports	interaction_rules_ghost_review.json	19	1	True		
+15237e09	2026-09-26	feat(audit): record the 62 reviewed interaction-rule citations; --strict passes	interaction_rules_ghost_review.json	569	0	True		
+2be605a7	2026-09-26	fix(interaction): green tea nadolol rules cite the primary OATP1A2 trial	ingredient_interaction_rules.json	6	3	True		
+73264e8b	2026-09-26	fix(interaction): chondroitin bleeding rule states the documented INR data	ingredient_interaction_rules.json	5	4	True		
+71f22a10	2026-09-26	fix(interaction): chasteberry pregnancy mechanism says what its two sources say	ingredient_interaction_rules.json	3	2	True		
+26610465	2026-09-26	"fix(interaction): red yeast rice ""EFSA 2025"" sentence cites the 2025 EFSA opinion"	ingredient_interaction_rules.json	4	2	True		
+8889d0db	2026-09-26	fix(interaction): borage seizure rule cites the borage status-epilepticus case	ingredient_interaction_rules.json	7	4	True		
+787b68a2	2026-09-26	fix(interaction): 5-HTP pregnancy rules drop a LiverTox muscle-relaxant chapter	ingredient_interaction_rules.json	10	7	True		
+5cd0026e	2026-09-26	fix(interaction): quercetin rules cite thyroid and warfarin studies, not a general safety 	ingredient_interaction_rules.json	9	5	True		
+2e98fd24	2026-09-26	fix(interaction): black seed rules cite meta-analyses and drop unsourced numbers	ingredient_interaction_rules.json	20	15	True		
+74b708f7	2026-09-26	fix(interaction): horny goat weed rules say what the PDE5 and case sources say	ingredient_interaction_rules.json	7	5	True		
+802aff80	2026-09-26	fix(interaction): vanadium glucose rules cite the vanadyl sulfate trials	ingredient_interaction_rules.json	14	9	True		
+91b3f254	2026-09-26	fix(interaction): nettle glucose rules cite human trials, not a general review	ingredient_interaction_rules.json	14	9	True		
+cf7ffe2a	2026-09-26	fix(interaction): omega-3 NSAID rule reports the aspirin bleeding data, not a warfarin rev	ingredient_interaction_rules.json	9	6	True		
+c3a5d081	2026-09-26	fix(interaction): evening primrose anticoagulant rule cites MSKCC, not Heck 2000	ingredient_interaction_rules.json	4	3	True		
+7d4755d6	2026-09-26	fix(interaction): cat's claw anticoagulant rule drops an unverifiable Heck 2000 citation	ingredient_interaction_rules.json	5	4	True		
+293d7024	2026-09-26	fix(interaction): genistein levothyroxine rule cites levothyroxine evidence, not a rat stu	ingredient_interaction_rules.json	10	5	True		
+3d2f520b	2026-09-26	fix(interaction): Chinese skullcap pregnancy rule reports the animal data it cites	ingredient_interaction_rules.json	9	6	True		
+1651eafb	2026-09-26	fix(interaction): SAMe MAOI rule cites serotonergic sources, not an efficacy meta-analysis	ingredient_interaction_rules.json	7	4	True		
+076b4cd4	2026-09-26	fix(interaction): rhodiola sedative rule states no interaction is established	ingredient_interaction_rules.json	9	8	True		
+ea53970d	2026-09-26	fix(interaction): huperzine anticholinergic rule cites AChE pharmacology and the class lab	ingredient_interaction_rules.json	5	3	True		
+a9d4582f	2026-09-26	fix(interaction): guarana sedative rule treats guarana as a stimulant	ingredient_interaction_rules.json	8	7	True		
+75f09cbe	2026-09-26	fix(interaction): L-theanine BP rule cites the BP trials; sedative copy matches its source	ingredient_interaction_rules.json	9	8	True		
+abcfd7c6	2026-09-26	fix(interaction): bacopa thyroid and sedative rules drop a pediatric cognition review	ingredient_interaction_rules.json	12	10	True		
+6360fe4f	2026-09-26	fix(interaction): andrographis immune rules cite trials, not antiplatelet papers	ingredient_interaction_rules.json	10	7	True		
+16ce5cc0	2026-09-26	fix(interaction): yerba mate anticoagulant rule drops an unsourced vitamin K claim	ingredient_interaction_rules.json	6	4	True		
+94352e83	2026-09-26	fix(interaction): tansy pregnancy rule cites reproductive-toxicity sources	ingredient_interaction_rules.json	5	3	True		
+b49123ad	2026-09-26	fix(interaction): white willow bark rules describe willow, not aspirin	ingredient_interaction_rules.json	31	25	True		
+7185804b	2026-09-26	fix(interaction): CoQ10 heart-disease rule cites Q-SYMBIO, not two warfarin papers	ingredient_interaction_rules.json	6	4	True		
+1c7f19d7	2026-09-26	fix(interaction): re-source kava pregnancy/lactation and seizure-disorder sub-rules	ingredient_interaction_rules.json	11	7	True		
+30f071fc	2026-09-26	fix(interaction): valerian pregnancy/lactation cites the EU monograph, not a liver case	ingredient_interaction_rules.json	5	3	True		
+3107f0a6	2026-09-26	fix(interaction): re-source saw palmetto pregnancy, TTC and anticoagulant sub-rules	ingredient_interaction_rules.json	18	13	True		
+d3f6f5bf	2026-09-26	fix(interaction): bergamot drug rules cite bergamottin data, not an osteosarcopenia review	ingredient_interaction_rules.json	40	31	True		
+13ed5bea	2026-09-26	fix(interaction): re-source red clover anticoagulants; PMID 9464451 is a soy thyroid paper	ingredient_interaction_rules.json	11	6	True		
+4ac662e3	2026-09-26	fix(iqm): cascara notes list cascarosides A-F, not A-D	ingredient_quality_map.json	2	2	True		
+44b2d5b2	2026-09-26	fix(safety): cascara inactive reason names the casanthranol gap; FR title corrected	banned_recalled_ingredients.json	4	4	True		
+1b10d2e9	2026-09-26	fix(interaction): senna digoxin copy says no more than its sources	ingredient_interaction_rules.json	5	5	True		
+7dbd1447	2026-09-25	fix(iqm): complete B12 evidence governance	ingredient_quality_map.json	175	0	False		
+66df7944	2026-09-25	fix(interaction): cascara rule copy says no more than its sources	ingredient_interaction_rules.json	8	8	True		
+c713dea4	2026-09-25	fix(iqm): cascara note misdated the FDA category III step	ingredient_quality_map.json	2	2	True		
+461d1525	2026-09-25	fix(evidence): aloe_ferox record states the real basis of the 2002 FDA rule	literature_evidence_records.json	3	3	True		
+ebedd28a	2026-09-25	fix(safety): ADD_CASCARA_SAGRADA UNII is the bark (4VBP01X99F), not casanthranol	banned_recalled_ingredients.json	7	2	True		
+9ca15764	2026-09-25	fix(interaction): re-source senna kidney and digoxin rules; PMID 36702448 was Cassiae Seme	ingredient_interaction_rules.json	11	7	True		
+86fdadbb	2026-09-25	fix(interaction): re-source the cascara rule; PMID 32876395 was a chromatography paper	ingredient_interaction_rules.json	19	15	True		
+53764ac4	2026-09-25	data(interaction): Cape aloe interaction rule from the EU herbal monograph	ingredient_interaction_rules.json	251	2	True	RULE_IQM_ALOE_FEROX;aloe_ferox	
+70a24eee	2026-09-25	fix(iqm): align B12 forms to parent-relative evidence	ingredient_quality_map.json	33	23	False		
+14bdcede	2026-09-25	"Revert ""fix(iqm): remove unsupported sublingual B12 absorption claims"""	ingredient_quality_map.json	761	527	True		
+05c2ec25	2026-09-25	fix(iqm): remove unsupported sublingual B12 absorption claims	ingredient_quality_map.json	527	761	False		
+c20a80b5	2026-09-24	data(iqm): 'nigella sativa seed oil' names black seed oil	ingredient_quality_map.json	3	2	True		
+e00bcdc9	2026-09-24	data(iqm): 'vitamin a fish liver oil' names the cod-liver-oil vitamin A form	ingredient_quality_map.json	3	2	True		
+9aeb7fbc	2026-09-24	fix(data): 9080's USP Verified claim is the Nature Made Iron 65 mg record	cert_verification_overrides.json	16	1	True		
+e8c6da11	2026-09-24	fix(data): life'sDHA Oil is 77225's algal source oil, not DHA	product_label_corrections.json	22	1	True		
+36d7ff82	2026-09-24	fix(data): record the FiberSMART review provenance (233404, 233406)	product_label_corrections.json	2	2	True		
+da8a572b	2026-09-24	fix(data): FiberSMART is an unmapped resistant-dextrin active, not a blend header (233404,	product_label_corrections.json	46	2	True		

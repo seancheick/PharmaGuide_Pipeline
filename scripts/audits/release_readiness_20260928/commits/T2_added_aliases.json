@@ -1,0 +1,2836 @@
+{
+ "b1 phosphate salts": [
+  [
+   null,
+   "monocalcium phosphate",
+   "monobasic calcium phosphate"
+  ],
+  [
+   null,
+   "monocalcium phosphate",
+   "calcium dihydrogen phosphate"
+  ],
+  [
+   null,
+   "monocalcium phosphate",
+   "monobasic sodium phosphate"
+  ],
+  [
+   null,
+   "monocalcium phosphate",
+   "sodium phosphate"
+  ],
+  [
+   null,
+   "monocalcium phosphate",
+   "monobasic potassium phosphate"
+  ],
+  [
+   null,
+   "monocalcium phosphate",
+   "monopotassium phosphate"
+  ],
+  [
+   null,
+   "monocalcium phosphate",
+   "potassium phosphate"
+  ],
+  [
+   null,
+   "monocalcium phosphate",
+   "dipotassium phosphate"
+  ],
+  [
+   null,
+   "monocalcium phosphate",
+   "monobasic calcium phosphate"
+  ],
+  [
+   null,
+   "monocalcium phosphate",
+   "monocalcium phosphate"
+  ],
+  [
+   null,
+   "phosphorus (unspecified)",
+   "potassium phosphate dibasic"
+  ],
+  [
+   null,
+   "phosphorus (unspecified)",
+   "monobasic potassium phosphate"
+  ]
+ ],
+ "b2 chelates/glycinates/hydrates": [
+  [
+   null,
+   null,
+   "citrated calcium supplement"
+  ],
+  [
+   null,
+   null,
+   "calcium citrate tetrahydrate"
+  ],
+  [
+   null,
+   null,
+   "Albion Calcium Bisglycinate Chelate"
+  ],
+  [
+   null,
+   null,
+   "calcium glycinate amino acid chelate"
+  ],
+  [
+   null,
+   null,
+   "Albion Magnesium Lysinate Glycinate Chelate"
+  ],
+  [
+   null,
+   null,
+   "magnesium glycinate amino acid chelate"
+  ],
+  [
+   null,
+   null,
+   "traacs magnesium bis-glycinate chelate"
+  ],
+  [
+   null,
+   null,
+   "magnesium citrate anhydrous"
+  ],
+  [
+   null,
+   null,
+   "trimagnesium dicitrate"
+  ],
+  [
+   null,
+   null,
+   "Ferrous Bisglycinate Chelate Ferrochel"
+  ],
+  [
+   null,
+   null,
+   "iron bisglycinate, fermented"
+  ],
+  [
+   null,
+   null,
+   "iron bisglycinate amino acid chelate"
+  ],
+  [
+   null,
+   null,
+   "ferrous bis-glycinate"
+  ],
+  [
+   null,
+   null,
+   "aac iron"
+  ],
+  [
+   null,
+   null,
+   "iron hydrolyzed protein chelate"
+  ],
+  [
+   null,
+   null,
+   "iron hydrolyzed vegetable protein chelate"
+  ],
+  [
+   null,
+   null,
+   "soy protein iron chelate, hydrolyzed"
+  ],
+  [
+   null,
+   null,
+   "Albion Z-life Zinc Bisglycinate Chelate Max"
+  ],
+  [
+   null,
+   null,
+   "zinc glycinate amino acid chelate"
+  ],
+  [
+   null,
+   null,
+   "zinc bisglycinate, fermented"
+  ],
+  [
+   null,
+   null,
+   "zinc citrate trihydrate"
+  ],
+  [
+   null,
+   null,
+   "zinc citrate dihydrate"
+  ],
+  [
+   null,
+   null,
+   "trizinc citrate"
+  ],
+  [
+   null,
+   null,
+   "zinc arginate"
+  ],
+  [
+   null,
+   null,
+   "zinc histidinate chelate"
+  ],
+  [
+   null,
+   null,
+   "zinc hydrolyzed vegetable protein chelate"
+  ],
+  [
+   null,
+   null,
+   "chelated selenium supplement"
+  ],
+  [
+   null,
+   null,
+   "fermented selenium glycinate"
+  ],
+  [
+   null,
+   null,
+   "selenium glycinate, fermented"
+  ],
+  [
+   null,
+   null,
+   "Copper Glycinate Chelate"
+  ],
+  [
+   null,
+   null,
+   "copper glycinate amino acid chelate"
+  ],
+  [
+   null,
+   null,
+   "albion copper glycinate amino acid chelate"
+  ],
+  [
+   null,
+   null,
+   "copper bisglycinate, fermented"
+  ],
+  [
+   null,
+   null,
+   "citrate-bound copper supplement"
+  ],
+  [
+   null,
+   null,
+   "copper citrate chelate"
+  ],
+  [
+   null,
+   null,
+   "Chromium Ascorbate"
+  ],
+  [
+   null,
+   null,
+   "chromium glutamate"
+  ],
+  [
+   null,
+   null,
+   "chromium chelate"
+  ],
+  [
+   null,
+   null,
+   "fermented chromium glycinate"
+  ],
+  [
+   null,
+   null,
+   "chromium glycinate"
+  ],
+  [
+   null,
+   null,
+   "hydrolyzed protein chromium chelate"
+  ],
+  [
+   null,
+   null,
+   "chromium hydrolyzed chelate protein"
+  ],
+  [
+   null,
+   null,
+   "chromium hydrolyzed protein chelate"
+  ],
+  [
+   null,
+   null,
+   "chromium nicotinate amino acid chelate"
+  ],
+  [
+   null,
+   null,
+   "thyroid iodine"
+  ],
+  [
+   null,
+   null,
+   "fermented iodine glycinate"
+  ],
+  [
+   null,
+   null,
+   "iodine glycinate"
+  ],
+  [
+   null,
+   null,
+   "iodine glycinate, fermented"
+  ],
+  [
+   null,
+   null,
+   "Albion Manganese Bisglycinate Chelate"
+  ],
+  [
+   null,
+   null,
+   "fermented manganese bisglycinate"
+  ],
+  [
+   null,
+   null,
+   "manganese bisglycinate, fermented"
+  ],
+  [
+   null,
+   null,
+   "manganese glycinate amino acid chelate"
+  ],
+  [
+   null,
+   null,
+   "manganese glycinate chelate"
+  ],
+  [
+   null,
+   null,
+   "Mn citrate"
+  ],
+  [
+   null,
+   null,
+   "manganese citrate chelate"
+  ],
+  [
+   null,
+   null,
+   "Albion Molybdenum Glycinate Chelate"
+  ],
+  [
+   null,
+   null,
+   "fermented molybdenum bisglycinate"
+  ],
+  [
+   null,
+   null,
+   "molybdenum bisglycinate, fermented"
+  ],
+  [
+   null,
+   null,
+   "molybdenum glycinate amino acid chelate"
+  ],
+  [
+   null,
+   null,
+   "brown rice protein molybdenum chelate"
+  ],
+  [
+   null,
+   null,
+   "molybdenum hydrolyzed rice protein chelate"
+  ],
+  [
+   null,
+   null,
+   "{Boron} Glycinate Amino Acid Complex"
+  ],
+  [
+   null,
+   null,
+   "fermented boron triglycinate"
+  ],
+  [
+   null,
+   null,
+   "boron bisglycinate, fermented"
+  ],
+  [
+   null,
+   null,
+   "boron triglycinate"
+  ],
+  [
+   null,
+   null,
+   "boron glycinate chelate"
+  ],
+  [
+   null,
+   null,
+   "brown rice protein boron chelate"
+  ],
+  [
+   null,
+   null,
+   "boron hydrolyzed rice protein chelate"
+  ],
+  [
+   null,
+   null,
+   "boric acid, sodium borate"
+  ],
+  [
+   null,
+   null,
+   "boron amino acid complex"
+  ],
+  [
+   null,
+   null,
+   "potassium sulfate"
+  ],
+  [
+   null,
+   null,
+   "potassium amino acid complex"
+  ],
+  [
+   null,
+   null,
+   "potassium bisglycinate chelate"
+  ],
+  [
+   null,
+   null,
+   "potassium glycinate amino acid complex"
+  ],
+  [
+   null,
+   null,
+   "potassium glycinate complex"
+  ],
+  [
+   null,
+   null,
+   "potassium glycine complex"
+  ]
+ ],
+ "b3 other-nutrient salts": [
+  [
+   null,
+   "vitamin c from chromium ascorbate",
+   "vitamin c from chromium ascorbate"
+  ],
+  [
+   null,
+   "vitamin c from chromium ascorbate",
+   "chromium ascorbate"
+  ],
+  [
+   null,
+   "vitamin c from chromium ascorbate",
+   "calcium ascorbate"
+  ],
+  [
+   null,
+   "vitamin c from chromium ascorbate",
+   "ester-c calcium ascorbate"
+  ],
+  [
+   null,
+   "vitamin c from chromium ascorbate",
+   "ester-c"
+  ],
+  [
+   null,
+   "calcium citrate",
+   "calcium phosphate dibasic"
+  ],
+  [
+   null,
+   "calcium pantothenate (as calcium source)",
+   "calcium from calcium pantothenate"
+  ],
+  [
+   null,
+   "calcium pantothenate (as calcium source)",
+   "calcium pantothenate"
+  ],
+  [
+   null,
+   "calcium pantothenate (as calcium source)",
+   "monocalcium phosphate"
+  ],
+  [
+   null,
+   "calcium pantothenate (as calcium source)",
+   "magnesium phosphate"
+  ],
+  [
+   null,
+   "calcium pantothenate (as calcium source)",
+   "dimagnesium phosphate"
+  ],
+  [
+   null,
+   "phosphorus (unspecified)",
+   "potassium iodide"
+  ],
+  [
+   null,
+   "potassium ascorbate (as potassium source)",
+   "potassium from potassium ascorbate"
+  ],
+  [
+   null,
+   "potassium ascorbate (as potassium source)",
+   "potassium ascorbate"
+  ]
+ ],
+ "b5 parent-scoped clues": [
+  [
+   null,
+   null,
+   "Riboflavin 5\u2019-Phosphate"
+  ],
+  [
+   null,
+   null,
+   "riboflavin-5 phosphate"
+  ],
+  [
+   null,
+   null,
+   "vitamin b6 activated"
+  ],
+  [
+   null,
+   null,
+   "pyridoxal-5-phosphate"
+  ],
+  [
+   null,
+   null,
+   "tocosource tocotrienols"
+  ],
+  [
+   null,
+   null,
+   "alpha-tocotrienol"
+  ],
+  [
+   null,
+   null,
+   "beta-tocotrienol"
+  ],
+  [
+   null,
+   null,
+   "zinc mono l methionine"
+  ],
+  [
+   null,
+   null,
+   "optizinc zinc monomethionine"
+  ],
+  [
+   null,
+   null,
+   "zinc l-methionine sulfate"
+  ],
+  [
+   null,
+   null,
+   "se-methylselenocysteine supplement"
+  ],
+  [
+   null,
+   null,
+   "se-methyl l- selenocysteine"
+  ],
+  [
+   null,
+   null,
+   "Co Q-10"
+  ],
+  [
+   null,
+   null,
+   "ubiquinone 10"
+  ],
+  [
+   null,
+   null,
+   "prebiotic fos"
+  ],
+  [
+   null,
+   null,
+   "short-chain fructooligosaccharides"
+  ],
+  [
+   null,
+   null,
+   "Choline DL-Bitartrate"
+  ],
+  [
+   null,
+   null,
+   "dl-choline bitartrate"
+  ],
+  [
+   null,
+   null,
+   "choline l(+) bitartrate"
+  ],
+  [
+   null,
+   null,
+   "carnipure"
+  ],
+  [
+   null,
+   null,
+   "l-carnitine l- tartrate"
+  ],
+  [
+   null,
+   null,
+   "hydrochloride"
+  ],
+  [
+   null,
+   "glucosamine sulfate (crystalline)",
+   "lactase"
+  ],
+  [
+   null,
+   "enteric-coated enzymes",
+   "ala"
+  ],
+  [
+   null,
+   "enteric-coated enzymes",
+   "BetaVia"
+  ],
+  [
+   null,
+   "enteric-coated enzymes",
+   "beta 1-3 glucan"
+  ],
+  [
+   null,
+   "enteric-coated enzymes",
+   "parthenolide sesquiterpene lactone"
+  ],
+  [
+   null,
+   "enteric-coated enzymes",
+   "parthenolides"
+  ],
+  [
+   null,
+   "enteric-coated enzymes",
+   "madecassic acid extract"
+  ],
+  [
+   null,
+   "enteric-coated enzymes",
+   "asiaticosides"
+  ]
+ ],
+ "b6 held spellings": [
+  [
+   null,
+   null,
+   "L-5 Methyltetrahydrofolic Acid, Glucosamine Salt"
+  ],
+  [
+   null,
+   null,
+   "6s-5-methyltetrahydrofolate (glucosamine salt)"
+  ],
+  [
+   null,
+   "mixed tocopherols",
+   "delta tocopherols"
+  ],
+  [
+   null,
+   "mixed tocopherols",
+   "d-beta-tocopherol"
+  ],
+  [
+   null,
+   "mixed tocopherols",
+   "d-delta-tocopherol"
+  ],
+  [
+   null,
+   "mixed tocopherols",
+   "chlorophyllin copper complex"
+  ],
+  [
+   null,
+   "mixed tocopherols",
+   "chlorophyllin copper complex sodium"
+  ],
+  [
+   null,
+   "copper picolinate",
+   "chlorophyllin copper complex"
+  ],
+  [
+   null,
+   "copper picolinate",
+   "chlorophyllin copper complex sodium"
+  ],
+  [
+   null,
+   "natural chlorophyll",
+   "ancient peat extract"
+  ],
+  [
+   null,
+   "natural chlorophyll",
+   "apple extract"
+  ],
+  [
+   null,
+   "shilajit resin",
+   "ethyl ester"
+  ],
+  [
+   null,
+   "DHA fish oil triglyceride",
+   "ethyl ester"
+  ],
+  [
+   null,
+   "EPA fish oil triglyceride",
+   "matricaria chamomilla flower extract"
+  ],
+  [
+   null,
+   "EPA fish oil triglyceride",
+   "mixed carotenoids"
+  ],
+  [
+   null,
+   "EPA fish oil triglyceride",
+   "alpha-carotene"
+  ]
+ ],
+ "b7 carotenoids": [
+  [
+   null,
+   null,
+   "A palmitate"
+  ],
+  [
+   null,
+   null,
+   "retinyl palmiate"
+  ],
+  [
+   null,
+   null,
+   "Betatene mixed carotenoids"
+  ],
+  [
+   null,
+   null,
+   "gamma-carotene"
+  ],
+  [
+   null,
+   null,
+   "alpha-carotene"
+  ],
+  [
+   null,
+   "beta-cryptoxanthin (provitamin A activity)",
+   "cryptoxanthin"
+  ],
+  [
+   null,
+   "beta-cryptoxanthin (provitamin A activity)",
+   "Haematococcus pluvialis algae"
+  ],
+  [
+   null,
+   "beta-cryptoxanthin (provitamin A activity)",
+   "haematococcus pluvialis microalgae"
+  ],
+  [
+   null,
+   "beta-cryptoxanthin (provitamin A activity)",
+   "organic Lutein"
+  ],
+  [
+   null,
+   "beta-cryptoxanthin (provitamin A activity)",
+   "lutein carotenoid"
+  ],
+  [
+   null,
+   "beta-cryptoxanthin (provitamin A activity)",
+   "optisharp"
+  ],
+  [
+   null,
+   "beta-cryptoxanthin (provitamin A activity)",
+   "mesozeaxanthin"
+  ],
+  [
+   null,
+   "beta-cryptoxanthin (provitamin A activity)",
+   "rr xeaxanthin"
+  ],
+  [
+   null,
+   "beta-cryptoxanthin (provitamin A activity)",
+   "lutemax 2020"
+  ],
+  [
+   null,
+   "beta-cryptoxanthin (provitamin A activity)",
+   "lutemax 2020 aztec marigold extract"
+  ],
+  [
+   null,
+   "beta-cryptoxanthin (provitamin A activity)",
+   "lutemax 2020 marigold flower extract"
+  ],
+  [
+   null,
+   "beta-cryptoxanthin (provitamin A activity)",
+   "lute-gen"
+  ],
+  [
+   null,
+   "beta-cryptoxanthin (provitamin A activity)",
+   "alpha-carotene"
+  ],
+  [
+   null,
+   "beta-cryptoxanthin (provitamin A activity)",
+   "alpha carotene"
+  ],
+  [
+   null,
+   "beta-cryptoxanthin (provitamin A activity)",
+   "cryptoxanthin"
+  ]
+ ],
+ "b8 mineral salts": [
+  [
+   null,
+   null,
+   "calcium magnesium citrate"
+  ],
+  [
+   null,
+   "calcium malate",
+   "Di-Calcium Malate"
+  ],
+  [
+   null,
+   "calcium malate",
+   "albion dicalcium malate"
+  ],
+  [
+   null,
+   "calcium malate",
+   "albion dimacal"
+  ],
+  [
+   null,
+   "calcium malate",
+   "calcium glycinate amino acid chelate"
+  ],
+  [
+   null,
+   "calcium malate",
+   "calcium bisglycinate, fermented"
+  ],
+  [
+   null,
+   "calcium malate",
+   "hydroxyapatite"
+  ],
+  [
+   null,
+   "calcium malate",
+   "microcrystalline hydroxyapatite calcium"
+  ],
+  [
+   null,
+   "calcium malate",
+   "calcium lactate gluconate"
+  ],
+  [
+   null,
+   "calcium malate",
+   "calcium lactate pentahydrate"
+  ],
+  [
+   null,
+   "calcium (unspecified)",
+   "r-3-hydroxybutyric acid calcium"
+  ],
+  [
+   null,
+   "calcium (unspecified)",
+   "calcium laurate"
+  ],
+  [
+   null,
+   "calcium (unspecified)",
+   "calcium caprylate"
+  ],
+  [
+   null,
+   "calcium (unspecified)",
+   "calcium undecylenate"
+  ],
+  [
+   null,
+   "calcium (unspecified)",
+   "calcium stearate"
+  ],
+  [
+   null,
+   "calcium (unspecified)",
+   "calcium silicate"
+  ],
+  [
+   null,
+   "calcium (unspecified)",
+   "calcium magnesium phytate"
+  ],
+  [
+   null,
+   "calcium (unspecified)",
+   "calcium-magnesium inositol hexaphosphate"
+  ],
+  [
+   null,
+   "calcium (unspecified)",
+   "calcium beta-hydroxy-beta-methylbutyrate monohydrate"
+  ],
+  [
+   null,
+   "calcium (unspecified)",
+   "calcium beta-hydroxy-beta-methylbutyrate"
+  ],
+  [
+   null,
+   "calcium (unspecified)",
+   "calcium beta-hydroxybutyrate"
+  ],
+  [
+   null,
+   "calcium (unspecified)",
+   "calcium pyruvate"
+  ],
+  [
+   null,
+   "calcium (unspecified)",
+   "Calcium Hydroxycitrate"
+  ],
+  [
+   null,
+   "calcium (unspecified)",
+   "calcium l-aspartate"
+  ],
+  [
+   null,
+   "calcium (unspecified)",
+   "calcium krebs cycle chelates"
+  ],
+  [
+   null,
+   "calcium (unspecified)",
+   "hydrolyzed protein calcium chelate"
+  ],
+  [
+   null,
+   "calcium (unspecified)",
+   "calcium hydrolyzed vegetable protein"
+  ],
+  [
+   null,
+   "calcium (unspecified)",
+   "koact calcium collagen chelate"
+  ],
+  [
+   null,
+   "monocalcium phosphate",
+   "dimagnesium phosphate"
+  ],
+  [
+   null,
+   "monocalcium phosphate",
+   "calcium potassium phosphate citrate"
+  ],
+  [
+   null,
+   "monocalcium phosphate",
+   "microcrystalline hydroxyapatite calcium"
+  ],
+  [
+   null,
+   "monocalcium phosphate",
+   "mch-cal"
+  ],
+  [
+   null,
+   "phosphorus (unspecified)",
+   "calcium magnesium phytate"
+  ],
+  [
+   null,
+   "dicalcium phosphate (as phosphorus source)",
+   "dibasic calcium phosphate dihydrate"
+  ],
+  [
+   null,
+   "dicalcium phosphate (as phosphorus source)",
+   "traacs magnesium bis-glycinate chelate"
+  ],
+  [
+   null,
+   "dicalcium phosphate (as phosphorus source)",
+   "magnesium bisglycinate, fermented"
+  ],
+  [
+   null,
+   "dicalcium phosphate (as phosphorus source)",
+   "magnesium acetyl-tuarate"
+  ],
+  [
+   null,
+   "dicalcium phosphate (as phosphorus source)",
+   "magnesium acetyl taurinate"
+  ],
+  [
+   null,
+   "dicalcium phosphate (as phosphorus source)",
+   "calcium magnesium citrate"
+  ],
+  [
+   null,
+   "magnesium orotate",
+   "dolomite"
+  ],
+  [
+   null,
+   "magnesium orotate",
+   "magneisum carbonate"
+  ],
+  [
+   null,
+   "magnesium orotate",
+   "high potency magnesium oxide"
+  ],
+  [
+   null,
+   "magnesium orotate",
+   "zumxr magnesium oxide"
+  ],
+  [
+   null,
+   "magnesium (unspecified)",
+   "r-3-hydroxybutyric acid magnesium"
+  ],
+  [
+   null,
+   "magnesium (unspecified)",
+   "calcium magnesium phytate"
+  ],
+  [
+   null,
+   "magnesium (unspecified)",
+   "magnesium d-aspartate"
+  ],
+  [
+   null,
+   "magnesium (unspecified)",
+   "hydrolyzed protein magnesium chelate"
+  ],
+  [
+   null,
+   "magnesium (unspecified)",
+   "magnesium hydrolyzed vegetable protein chelate"
+  ],
+  [
+   null,
+   "magnesium (unspecified)",
+   "magnesium lysinate"
+  ],
+  [
+   null,
+   "magnesium (unspecified)",
+   "ferric saccharate"
+  ],
+  [
+   null,
+   "magnesium (unspecified)",
+   "ferric glycinate"
+  ],
+  [
+   null,
+   "magnesium (unspecified)",
+   "standard iron"
+  ],
+  [
+   null,
+   "magnesium (unspecified)",
+   "iron aspartate"
+  ],
+  [
+   null,
+   "magnesium (unspecified)",
+   "ferrous succinate"
+  ],
+  [
+   null,
+   "magnesium (unspecified)",
+   "zinc l-methionine sulfate"
+  ],
+  [
+   null,
+   "magnesium (unspecified)",
+   "optizinc(r) brand monomethionine-bound zinc"
+  ],
+  [
+   null,
+   "magnesium (unspecified)",
+   "l-monomethionine"
+  ],
+  [
+   null,
+   "zinc orotate",
+   "zinmax"
+  ],
+  [
+   null,
+   "zinc orotate",
+   "zinc krebs cycle chelates"
+  ],
+  [
+   null,
+   "zinc orotate",
+   "zinc caprylate"
+  ],
+  [
+   null,
+   "zinc orotate",
+   "zinc quercetin"
+  ],
+  [
+   null,
+   "zinc aspartate",
+   "Na\u2082SeO\u2083 supplement"
+  ],
+  [
+   null,
+   "zinc aspartate",
+   "sodium selenite anhydrous"
+  ],
+  [
+   null,
+   "zinc aspartate",
+   "selenium selenite"
+  ],
+  [
+   null,
+   "zinc aspartate",
+   "selenium selenate"
+  ],
+  [
+   null,
+   "zinc aspartate",
+   "hydrolyzed protein selenium chelate"
+  ],
+  [
+   null,
+   "zinc aspartate",
+   "selenium hydrolyzed vegetable protein"
+  ],
+  [
+   null,
+   "zinc aspartate",
+   "selenium hydrolyzed vegetable protein chelate"
+  ],
+  [
+   null,
+   "zinc aspartate",
+   "selenium malate"
+  ],
+  [
+   null,
+   "zinc aspartate",
+   "selenium asparate"
+  ],
+  [
+   null,
+   "zinc aspartate",
+   "TRAACS Copper"
+  ],
+  [
+   null,
+   "zinc aspartate",
+   "copper hydrolyzed vegetable protein"
+  ],
+  [
+   null,
+   "zinc aspartate",
+   "copper supplement"
+  ],
+  [
+   null,
+   "zinc aspartate",
+   "copper complex"
+  ],
+  [
+   null,
+   "zinc aspartate",
+   "chlorophyllin copper complex sodium"
+  ],
+  [
+   null,
+   "zinc aspartate",
+   "copper chlorophyllin"
+  ],
+  [
+   null,
+   "copper picolinate",
+   "brown rice protein chromium chelate"
+  ],
+  [
+   null,
+   "copper picolinate",
+   "chromium hydrolyzed rice protein chelate"
+  ],
+  [
+   null,
+   "copper picolinate",
+   "Chromium Dinicocysteinate"
+  ],
+  [
+   null,
+   "copper picolinate",
+   "chromium nicotinate, fermented"
+  ],
+  [
+   null,
+   "copper picolinate",
+   "brewer's yeast chromium"
+  ],
+  [
+   null,
+   "copper picolinate",
+   "chromium yeast"
+  ],
+  [
+   null,
+   "copper picolinate",
+   "TRAACS Nicotinate Glycinate Chelate"
+  ],
+  [
+   null,
+   "copper picolinate",
+   "chromium dinicotinate glycinate"
+  ],
+  [
+   null,
+   "copper picolinate",
+   "chromium nicotinoglycinate"
+  ],
+  [
+   null,
+   "copper picolinate",
+   "niacin amino acid chelate"
+  ],
+  [
+   null,
+   "chromium (unspecified)",
+   "chromium nicotinate amino acid chelate"
+  ],
+  [
+   null,
+   "chromium (unspecified)",
+   "chromium hydrolyzed vegetable protein"
+  ],
+  [
+   null,
+   "chromium (unspecified)",
+   "chromium complex"
+  ],
+  [
+   null,
+   "chromium (unspecified)",
+   "chromium glutamate, fermented"
+  ],
+  [
+   null,
+   "chromium (unspecified)",
+   "aac manganese"
+  ],
+  [
+   null,
+   "chromium (unspecified)",
+   "manganese hydrolyzed vegetable protein"
+  ],
+  [
+   null,
+   "chromium (unspecified)",
+   "Mn gluconate"
+  ],
+  [
+   null,
+   "chromium (unspecified)",
+   "manganese gluconate, powder"
+  ],
+  [
+   null,
+   "chromium (unspecified)",
+   "Mn orotate"
+  ],
+  [
+   null,
+   "chromium (unspecified)",
+   "manganese complex"
+  ],
+  [
+   null,
+   "chromium (unspecified)",
+   "Na2MoO4"
+  ],
+  [
+   null,
+   "chromium (unspecified)",
+   "sodium molybdenate"
+  ],
+  [
+   null,
+   "chromium (unspecified)",
+   "sodium molybdenum"
+  ],
+  [
+   null,
+   "chromium (unspecified)",
+   "molybdate salt"
+  ],
+  [
+   null,
+   "chromium (unspecified)",
+   "molybdenum hydrolyzed vegetable protein"
+  ],
+  [
+   null,
+   "chromium (unspecified)",
+   "citric acid"
+  ],
+  [
+   null,
+   "chromium (unspecified)",
+   "citric acid complex"
+  ],
+  [
+   null,
+   "chromium (unspecified)",
+   "citric acid blend"
+  ],
+  [
+   null,
+   "boron (unspecified)",
+   "boron amino acid complex"
+  ],
+  [
+   null,
+   "boron (unspecified)",
+   "sodium boron"
+  ],
+  [
+   null,
+   "boron (unspecified)",
+   "boron krebs cycle complex"
+  ],
+  [
+   null,
+   "boron (unspecified)",
+   "sodium tetraborate"
+  ],
+  [
+   null,
+   "boron (unspecified)",
+   "sodium tetraborate decahydrate"
+  ],
+  [
+   null,
+   "boron (unspecified)",
+   "krebs cycle intermediate blend"
+  ],
+  [
+   null,
+   "boron picolinate",
+   "glucosamine sulfate potassium chloride"
+  ],
+  [
+   null,
+   "boron picolinate",
+   "glucosamine sulfate potassium chloride salt"
+  ],
+  [
+   null,
+   "boron picolinate",
+   "greengrown glucosamine sulfate 2kcl"
+  ],
+  [
+   null,
+   "potassium gluconate",
+   "potassium iodide"
+  ],
+  [
+   null,
+   "potassium gluconate",
+   "glucosamine hydrochloride potassium sulfate"
+  ],
+  [
+   null,
+   "potassium gluconate",
+   "calcium potassium phosphate citrate"
+  ],
+  [
+   null,
+   "potassium gluconate",
+   "potassium hydroxycitrate"
+  ],
+  [
+   null,
+   "potassium glycinate",
+   "nickelous sulfate"
+  ],
+  [
+   null,
+   "potassium glycinate",
+   "Sn"
+  ],
+  [
+   null,
+   "potassium glycinate",
+   "tin chloride"
+  ]
+ ],
+ "b10 vitamins/aminos/botanicals": [
+  [
+   null,
+   null,
+   "riboflavin-5 phosphate"
+  ],
+  [
+   null,
+   null,
+   "vitamin b2, activated"
+  ],
+  [
+   null,
+   null,
+   "pyridoxal-5-phosphate"
+  ],
+  [
+   null,
+   null,
+   "pyridoxyl 5-phosphate"
+  ],
+  [
+   null,
+   null,
+   "Pyridoxine Hydrchloride"
+  ],
+  [
+   null,
+   null,
+   "pyridoxide hcl"
+  ],
+  [
+   null,
+   null,
+   "free biotin supplement"
+  ],
+  [
+   null,
+   null,
+   "biotin triturate"
+  ],
+  [
+   null,
+   null,
+   "patented calcium methylfolate supplement"
+  ],
+  [
+   null,
+   null,
+   "(6s)-5-methyltetrahydrofolic acid"
+  ],
+  [
+   null,
+   null,
+   "(6s)-5-methyltetrahydrofolate acid"
+  ],
+  [
+   null,
+   null,
+   "glucosamine salt"
+  ],
+  [
+   null,
+   "metafolin",
+   "hydroxycobalamin"
+  ],
+  [
+   null,
+   "metafolin",
+   "hydroxocobalamin hydrochloride"
+  ],
+  [
+   null,
+   "metafolin",
+   "pure ascorbic acid supplement"
+  ],
+  [
+   null,
+   "metafolin",
+   "q-c"
+  ],
+  [
+   null,
+   "metafolin",
+   "vitamin d-3"
+  ],
+  [
+   null,
+   "metafolin",
+   "cholecalciferol, fermented"
+  ],
+  [
+   null,
+   "metafolin",
+   "d-delta-tocopherol"
+  ],
+  [
+   null,
+   "metafolin",
+   "d-beta tocopherol"
+  ],
+  [
+   null,
+   "metafolin",
+   "Tocopherol"
+  ],
+  [
+   null,
+   "metafolin",
+   "alpha-tocopherol acetate"
+  ],
+  [
+   null,
+   "metafolin",
+   "k2"
+  ],
+  [
+   null,
+   "metafolin",
+   "omniflavone(tm) sophora japonica fruit extract"
+  ],
+  [
+   null,
+   "metafolin",
+   "quercetin rutinoside"
+  ],
+  [
+   null,
+   "metafolin",
+   "Beta-Hydroxy Beta-Methylbutyrate Monohydrate"
+  ],
+  [
+   null,
+   "metafolin",
+   "calcium beta-hydroxy beta-methylbutyric acid"
+  ],
+  [
+   null,
+   "metafolin",
+   "calcium beta-hydroxybeta-methylbutyrate monohydrate"
+  ],
+  [
+   null,
+   "metafolin",
+   "cyclodextrin coq10 complex"
+  ],
+  [
+   null,
+   "metafolin",
+   "microactive q10-cyclodextrin"
+  ],
+  [
+   null,
+   "metafolin",
+   "sustained-release microactive q10-cyclodextrin complex"
+  ],
+  [
+   null,
+   "metafolin",
+   "ubiquinone 10"
+  ],
+  [
+   null,
+   "metafolin",
+   "ubiquinone-10"
+  ],
+  [
+   null,
+   "metafolin",
+   "phospholipid complex"
+  ],
+  [
+   null,
+   "metafolin",
+   "phosphatidylcholine"
+  ],
+  [
+   null,
+   "metafolin",
+   "phosphatidylcholine complex"
+  ],
+  [
+   null,
+   "quercetin phytosome",
+   "phosphatidylcholine complex"
+  ],
+  [
+   null,
+   "quercetin phytosome",
+   "phospholipid complex"
+  ],
+  [
+   null,
+   "quercetin phytosome",
+   "phospholipid"
+  ],
+  [
+   null,
+   "quercetin phytosome",
+   "phospholipids"
+  ],
+  [
+   null,
+   "quercetin phytosome",
+   "alpha-glycerylphosphorylcholine"
+  ],
+  [
+   null,
+   "CDP-choline (citicoline)",
+   "CDP Choline"
+  ],
+  [
+   null,
+   "CDP-choline (citicoline)",
+   "citicoline monosodium salt"
+  ],
+  [
+   null,
+   "CDP-choline (citicoline)",
+   "fumaric acid carnitine"
+  ],
+  [
+   null,
+   "CDP-choline (citicoline)",
+   "l-canitine fumarate"
+  ],
+  [
+   null,
+   "CDP-choline (citicoline)",
+   "L-Arginine Hydrochloride, Powder"
+  ],
+  [
+   null,
+   "CDP-choline (citicoline)",
+   "l-arginine monohydrochloride"
+  ],
+  [
+   null,
+   "CDP-choline (citicoline)",
+   "micronized arginine"
+  ],
+  [
+   null,
+   "CDP-choline (citicoline)",
+   "l-arginine monohydrate"
+  ],
+  [
+   null,
+   "CDP-choline (citicoline)",
+   "micronized l-ornithine hydrochloride"
+  ],
+  [
+   null,
+   "CDP-choline (citicoline)",
+   "l-ornithine monohydrochloride"
+  ],
+  [
+   null,
+   "CDP-choline (citicoline)",
+   "l-ornithine hydrochloride"
+  ],
+  [
+   null,
+   "CDP-choline (citicoline)",
+   "hyamax hyaluronic acid"
+  ],
+  [
+   null,
+   "CDP-choline (citicoline)",
+   "sodium hyaluronic acid"
+  ],
+  [
+   null,
+   "CDP-choline (citicoline)",
+   "sodium"
+  ],
+  [
+   null,
+   "CDP-choline (citicoline)",
+   "stabilized r-lipoic acid"
+  ],
+  [
+   null,
+   "CDP-choline (citicoline)",
+   "na-rala sodium r-lipoate"
+  ],
+  [
+   null,
+   "CDP-choline (citicoline)",
+   "bio-enhanced na-rala"
+  ],
+  [
+   null,
+   "CDP-choline (citicoline)",
+   "biocell hydrolyzed chicken sternal cartilage extract"
+  ],
+  [
+   null,
+   "CDP-choline (citicoline)",
+   "porcine collagen peptides"
+  ],
+  [
+   null,
+   "CDP-choline (citicoline)",
+   "chicken collagen, hydrolyzed"
+  ],
+  [
+   null,
+   "CDP-choline (citicoline)",
+   "glucosamine sulfate kcl"
+  ],
+  [
+   null,
+   "CDP-choline (citicoline)",
+   "d-glucosamine sulfate 2kcl"
+  ],
+  [
+   null,
+   "CDP-choline (citicoline)",
+   "greengrown glucosamine sulfate 2kcl"
+  ],
+  [
+   null,
+   "CDP-choline (citicoline)",
+   "green tea phytosome decaffeinated extract"
+  ],
+  [
+   null,
+   "green tea extract (50% EGCG)",
+   "phosphatidylcholine complex"
+  ],
+  [
+   null,
+   "grape seed extract (95% proanthocyanidins)",
+   "panax quinquefolium l. rhizome extract"
+  ],
+  [
+   null,
+   "ginseng (unspecified)",
+   "rosa roxburghii"
+  ],
+  [
+   null,
+   "ginseng (unspecified)",
+   "panax ginseng aerial part extract"
+  ],
+  [
+   null,
+   "ginseng (unspecified)",
+   "panax ginseng aerial parts extract"
+  ],
+  [
+   null,
+   "ginseng (unspecified)",
+   "panax ginseng, powder"
+  ],
+  [
+   null,
+   "ginseng (unspecified)",
+   "lactase"
+  ],
+  [
+   null,
+   "ginseng (unspecified)",
+   "protease"
+  ],
+  [
+   null,
+   "ginseng (unspecified)",
+   "peptidase"
+  ],
+  [
+   null,
+   "ginseng (unspecified)",
+   "amylase"
+  ],
+  [
+   null,
+   "ginseng (unspecified)",
+   "acid protease"
+  ],
+  [
+   null,
+   "ginseng (unspecified)",
+   "alkaline proteases"
+  ],
+  [
+   null,
+   "ginseng (unspecified)",
+   "cellulase"
+  ],
+  [
+   null,
+   "ginseng (unspecified)",
+   "lipase"
+  ],
+  [
+   null,
+   "enteric-coated enzymes",
+   "Cardiokinase"
+  ],
+  [
+   null,
+   "enteric-coated enzymes",
+   "fibrinase"
+  ],
+  [
+   null,
+   "enteric-coated enzymes",
+   "DMAE bitartrate salt"
+  ],
+  [
+   null,
+   "enteric-coated enzymes",
+   "dimethylethanolamine bitartrate"
+  ],
+  [
+   null,
+   "enteric-coated enzymes",
+   "2-dimethylaminoethanol bitartrate"
+  ],
+  [
+   null,
+   "enteric-coated enzymes",
+   "s-adenosylmethionine tosylate disulfate"
+  ],
+  [
+   null,
+   "enteric-coated enzymes",
+   "s-adenosyl-l-methionine disulfate p-toluenesulfonate"
+  ],
+  [
+   null,
+   "enteric-coated enzymes",
+   "Caffeine Pterostilbene Complex"
+  ],
+  [
+   null,
+   "enteric-coated enzymes",
+   "extended-release caffeine"
+  ],
+  [
+   null,
+   "enteric-coated enzymes",
+   "fructooligosaccharides"
+  ],
+  [
+   null,
+   "enteric-coated enzymes",
+   "dimethylresveratrol"
+  ],
+  [
+   null,
+   "enteric-coated enzymes",
+   "plantago ovata, powder"
+  ],
+  [
+   null,
+   "enteric-coated enzymes",
+   "beta 1-3 glucan"
+  ],
+  [
+   null,
+   "enteric-coated enzymes",
+   "yeast beta 1,3/1,6 glucan"
+  ],
+  [
+   null,
+   "enteric-coated enzymes",
+   "beta 1-6 glucans"
+  ],
+  [
+   null,
+   "enteric-coated enzymes",
+   "1,3 beta glucan"
+  ],
+  [
+   null,
+   "enteric-coated enzymes",
+   "glucagel"
+  ],
+  [
+   null,
+   "enteric-coated enzymes",
+   "saccharomyces cerevisiae"
+  ],
+  [
+   null,
+   "enteric-coated enzymes",
+   "reishi mycelia extract"
+  ],
+  [
+   null,
+   "enteric-coated enzymes",
+   "l-leucine"
+  ],
+  [
+   null,
+   "enteric-coated enzymes",
+   "l-isoleucine"
+  ],
+  [
+   null,
+   "enteric-coated enzymes",
+   "l-valine"
+  ],
+  [
+   null,
+   "enteric-coated enzymes",
+   "l-leucine, micronized"
+  ],
+  [
+   null,
+   "enteric-coated enzymes",
+   "l-isoleucine, micronized"
+  ],
+  [
+   null,
+   "enteric-coated enzymes",
+   "l-valine, micronized"
+  ],
+  [
+   null,
+   "d beta hydroxybutyrate bhb (standard)",
+   "r-3-hydroxybutyric acid magnesium"
+  ],
+  [
+   null,
+   "d beta hydroxybutyrate bhb (standard)",
+   "4-in-1 ketone salt blend"
+  ],
+  [
+   null,
+   "d beta hydroxybutyrate bhb (standard)",
+   "shilajit fulvic acid complex"
+  ],
+  [
+   null,
+   "purified shilajit extract",
+   "apple extract"
+  ],
+  [
+   null,
+   "purified shilajit extract",
+   "peat"
+  ],
+  [
+   null,
+   "purified shilajit extract",
+   "apple fruit extract"
+  ],
+  [
+   null,
+   "shilajit resin",
+   "fish oil triglycerides"
+  ],
+  [
+   null,
+   "shilajit resin",
+   "omega-3 fatty acid triglycerides"
+  ],
+  [
+   null,
+   "shilajit resin",
+   "matricaria chamomilla flower extract"
+  ],
+  [
+   null,
+   "shilajit resin",
+   "matricaria recutita flower extract"
+  ],
+  [
+   null,
+   "shilajit resin",
+   "matricaria recutita flowering top extract"
+  ],
+  [
+   null,
+   "shilajit resin",
+   "rosae canina fruit extract"
+  ],
+  [
+   null,
+   "shilajit resin",
+   "rosa canina fruit extract"
+  ],
+  [
+   null,
+   "shilajit resin",
+   "cinnamomum aromaticum bark extract"
+  ],
+  [
+   null,
+   "shilajit resin",
+   "cinnamomum spp."
+  ],
+  [
+   null,
+   "shilajit resin",
+   "cinnamomum burmannii"
+  ],
+  [
+   null,
+   "shilajit resin",
+   "cinnamomum bark extract"
+  ],
+  [
+   null,
+   "shilajit resin",
+   "cfa blend"
+  ],
+  [
+   null,
+   "shilajit resin",
+   "esterified fatty acid carbons"
+  ],
+  [
+   null,
+   "shilajit resin",
+   "milk peptides"
+  ],
+  [
+   null,
+   "shilajit resin",
+   "apolactoferrin"
+  ],
+  [
+   null,
+   "shilajit resin",
+   "perilla frutescens seed extract"
+  ],
+  [
+   null,
+   "shilajit resin",
+   "zea mays, powder"
+  ],
+  [
+   null,
+   "shilajit resin",
+   "aloe barbadensis, dehydrate, powder"
+  ],
+  [
+   null,
+   "shilajit resin",
+   "aloe barbadensis leaf extract"
+  ],
+  [
+   null,
+   "shilajit resin",
+   "montmorency tart cherry variety"
+  ],
+  [
+   null,
+   "shilajit resin",
+   "cerasus vulgaris mill fruit extract"
+  ],
+  [
+   null,
+   "shilajit resin",
+   "3-acetyl-7-oxo-dehydroepiandrosterone"
+  ],
+  [
+   null,
+   "shilajit resin",
+   "7-oxo-dehydroepiandrosterone-3 beta-acetate"
+  ],
+  [
+   null,
+   "shilajit resin",
+   "7-oxo-dehydroepiandrosterone acetate"
+  ],
+  [
+   null,
+   "shilajit resin",
+   "capsicum annuum fruit extract"
+  ],
+  [
+   null,
+   "shilajit resin",
+   "capsicum annuum seed extract"
+  ],
+  [
+   null,
+   "shilajit resin",
+   "capsicum extract"
+  ],
+  [
+   null,
+   "shilajit resin",
+   "capsicum fruit extract"
+  ],
+  [
+   null,
+   "shilajit resin",
+   "aesculus hippocastanum seed extract"
+  ],
+  [
+   null,
+   "horse chestnut standardized (aescin marker)",
+   "menaq7 vitamin k-2"
+  ],
+  [
+   null,
+   "horse chestnut standardized (aescin marker)",
+   "menaquinone-7, natural"
+  ],
+  [
+   null,
+   "horse chestnut standardized (aescin marker)",
+   "K2VITAL Delta"
+  ],
+  [
+   null,
+   "horse chestnut standardized (aescin marker)",
+   "trans-menaquinone-7"
+  ],
+  [
+   null,
+   "horse chestnut standardized (aescin marker)",
+   "amylase"
+  ],
+  [
+   null,
+   "horse chestnut standardized (aescin marker)",
+   "lipase"
+  ],
+  [
+   null,
+   "horse chestnut standardized (aescin marker)",
+   "protease"
+  ]
+ ],
+ "b11 seaweed iodine": [
+  [
+   null,
+   null,
+   "calcium ascorbate supplement"
+  ],
+  [
+   null,
+   null,
+   "calcium l-ascorbate"
+  ],
+  [
+   null,
+   null,
+   "kelp"
+  ],
+  [
+   null,
+   null,
+   "organic sea kelp"
+  ],
+  [
+   null,
+   null,
+   "bladderwrack"
+  ],
+  [
+   null,
+   null,
+   "kelp (whole thallus) powder"
+  ],
+  [
+   null,
+   null,
+   "kelp powder"
+  ],
+  [
+   null,
+   null,
+   "ascophyllum nodosum"
+  ],
+  [
+   null,
+   null,
+   "fucus vesiculosus"
+  ],
+  [
+   null,
+   "sodium iodide",
+   "apple"
+  ],
+  [
+   null,
+   "mixed prebiotic blend",
+   "green micro-algae"
+  ],
+  [
+   null,
+   "mixed prebiotic blend",
+   "european black elderberry extract"
+  ],
+  [
+   null,
+   "mixed prebiotic blend",
+   "fenugreek seed extract"
+  ],
+  [
+   null,
+   "konjac glucomannan",
+   "konjac root extract"
+  ],
+  [
+   null,
+   "konjac glucomannan",
+   "konjac extract"
+  ],
+  [
+   null,
+   "konjac glucomannan",
+   "umbrella arum"
+  ],
+  [
+   null,
+   "konjac glucomannan",
+   "amorphophallus konjac root extract"
+  ],
+  [
+   null,
+   "luteolin (unspecified)",
+   "japanese sophora"
+  ],
+  [
+   null,
+   "luteolin (unspecified)",
+   "phospholipid complex"
+  ],
+  [
+   null,
+   "luteolin (unspecified)",
+   "Soy Phytosterol Complex"
+  ],
+  [
+   null,
+   "luteolin (unspecified)",
+   "beta-sisterol"
+  ],
+  [
+   null,
+   "luteolin (unspecified)",
+   "campsterols"
+  ],
+  [
+   null,
+   "luteolin (unspecified)",
+   "campestrol"
+  ],
+  [
+   null,
+   "luteolin (unspecified)",
+   "black cumin seed oil"
+  ],
+  [
+   null,
+   "black seed powder",
+   "omega-3"
+  ],
+  [
+   null,
+   "DHA fish oil rTG",
+   "omega-3"
+  ],
+  [
+   null,
+   "EPA fish oil rTG",
+   "linum usitatissimum oil"
+  ],
+  [
+   null,
+   "flaxseed meal/powder",
+   "magnolia officinalis bark extract, powder"
+  ],
+  [
+   null,
+   "magnolia bark honokiol-enriched",
+   "argania spinosa"
+  ],
+  [
+   null,
+   "magnolia bark honokiol-enriched",
+   "calcium magnesium phytate"
+  ],
+  [
+   null,
+   "magnolia bark honokiol-enriched",
+   "phaseolus vulgaris"
+  ],
+  [
+   null,
+   "magnolia bark honokiol-enriched",
+   "phaseolus vulgaris seed extract"
+  ],
+  [
+   null,
+   "magnolia bark honokiol-enriched",
+   "oenothera biennis"
+  ],
+  [
+   null,
+   "magnolia bark honokiol-enriched",
+   "triglyceride algal oil"
+  ],
+  [
+   null,
+   "magnolia bark honokiol-enriched",
+   "hydrochloride"
+  ],
+  [
+   null,
+   "magnolia bark honokiol-enriched",
+   "lycium barbarum fruit juice, powder"
+  ],
+  [
+   null,
+   "magnolia bark honokiol-enriched",
+   "decapeptide"
+  ],
+  [
+   null,
+   "magnolia bark honokiol-enriched",
+   "coffea arabica whole fruit extract"
+  ],
+  [
+   null,
+   "magnolia bark honokiol-enriched",
+   "avena sativa"
+  ],
+  [
+   null,
+   "magnolia bark honokiol-enriched",
+   "citrus sinensis var. moro fruit extract"
+  ],
+  [
+   null,
+   "magnolia bark honokiol-enriched",
+   "citrus sinensis var. moro peel extract"
+  ],
+  [
+   null,
+   "magnolia bark honokiol-enriched",
+   "blood orange fruit extract"
+  ],
+  [
+   null,
+   "magnolia bark honokiol-enriched",
+   "protease, fungal"
+  ],
+  [
+   null,
+   "magnolia bark honokiol-enriched",
+   "alkaline protease, bacterial"
+  ]
+ ],
+ "f8241717 blocked disclosures": [
+  [
+   null,
+   null,
+   "Tocopheryl Acetate"
+  ],
+  [
+   null,
+   null,
+   "Tocopherol"
+  ],
+  [
+   null,
+   null,
+   "sustained release from l-arginine alpha-keto-glutarate"
+  ],
+  [
+   null,
+   null,
+   "L-Arginine-Alpha-Ketoglutarate"
+  ],
+  [
+   null,
+   "yohimbe extract standardized to yohimbine alkaloids",
+   "Yohimbine Alkaloids"
+  ],
+  [
+   null,
+   "yohimbe extract standardized to yohimbine alkaloids",
+   "yohimbe extract 2% yohimbine alkaloids"
+  ],
+  [
+   null,
+   "yohimbe extract standardized to yohimbine alkaloids",
+   "yohimbe standardized to yohimbine"
+  ],
+  [
+   null,
+   "bis-glycinato oxovanadium",
+   "Bis-Glycinato OxoVanadium"
+  ],
+  [
+   null,
+   "bis-glycinato oxovanadium",
+   "Bis-Glycinato Oxo Vanadium"
+  ],
+  [
+   null,
+   "bis-glycinato oxovanadium",
+   "bis glycinato oxovanadium"
+  ],
+  [
+   null,
+   "nickel sulfate",
+   "Nickel Sulfate"
+  ],
+  [
+   null,
+   "stannous chloride",
+   "Stannous Chloride"
+  ]
+ ],
+ "654e5034 unmapped forms": [
+  [
+   null,
+   null,
+   "l-5-methyltetrahydrofolate calcium salt"
+  ],
+  [
+   null,
+   "mixed tocopherols",
+   "beta-tocopherol"
+  ],
+  [
+   null,
+   "mixed tocopherols",
+   "gamma-tocopherol"
+  ],
+  [
+   null,
+   "mixed tocopherols",
+   "delta-tocopherol"
+  ],
+  [
+   null,
+   "mixed tocopherols",
+   "delta tocopherol"
+  ],
+  [
+   null,
+   "mixed tocopherols",
+   "delta tocopherols"
+  ],
+  [
+   null,
+   "vitamin e (unspecified)",
+   "alpha-tocopherol"
+  ],
+  [
+   null,
+   "calcium ascorbate (as calcium source)",
+   "calcium from calcium ascorbate"
+  ],
+  [
+   null,
+   "calcium ascorbate (as calcium source)",
+   "calcium ascorbate"
+  ],
+  [
+   null,
+   "calcium (unspecified)",
+   "calcium d-glucarate"
+  ],
+  [
+   null,
+   "calcium (unspecified)",
+   "calcium d-pantothenate"
+  ],
+  [
+   null,
+   "calcium (unspecified)",
+   "d-calcium pantothenate"
+  ],
+  [
+   null,
+   "calcium (unspecified)",
+   "d calcium pantothenate"
+  ],
+  [
+   null,
+   "calcium (unspecified)",
+   "r-3-hydroxybutyric acid calcium"
+  ],
+  [
+   null,
+   "magnesium (unspecified)",
+   "r-3-hydroxybutyric acid magnesium"
+  ],
+  [
+   null,
+   "magnesium amino acid chelate",
+   "magnesium arginate"
+  ],
+  [
+   null,
+   "magnesium amino acid chelate",
+   "l-optizinc zinc mono-l-methionine sulfate"
+  ],
+  [
+   null,
+   "magnesium amino acid chelate",
+   "high selenium yeast"
+  ],
+  [
+   null,
+   "crominex 3+ chromium complex",
+   "primavie"
+  ],
+  [
+   null,
+   "crominex 3+ chromium complex",
+   "crominex 3+ chromium"
+  ],
+  [
+   null,
+   "quercetin phytosome",
+   "phosphatidylcholine complex"
+  ],
+  [
+   null,
+   "quercetin dihydrate",
+   "japanese sophora concentrate"
+  ],
+  [
+   null,
+   "quercetin dihydrate",
+   "japanese sophora flower bud concentrate"
+  ],
+  [
+   null,
+   "ginseng (unspecified)",
+   "panax notoginseng"
+  ],
+  [
+   null,
+   "ginseng (unspecified)",
+   "rosa roxburghii"
+  ],
+  [
+   null,
+   "cyanidin-3-glucoside (unspecified)",
+   "black currant fruit extract"
+  ],
+  [
+   null,
+   "cyanidin-3-glucoside (unspecified)",
+   "black current fruit extract"
+  ],
+  [
+   null,
+   "delphinidin (unspecified)",
+   "delphinol"
+  ],
+  [
+   null,
+   "resistant dextrin",
+   "resistant dextrin"
+  ],
+  [
+   null,
+   "resistant dextrin",
+   "resistant tapioca dextrin"
+  ],
+  [
+   null,
+   "resistant dextrin",
+   "tapioca resistant dextrin"
+  ],
+  [
+   null,
+   "resistant dextrin",
+   "fibersmart"
+  ],
+  [
+   null,
+   "resistant dextrin",
+   "fibersmart resistant starch"
+  ],
+  [
+   null,
+   "resistant dextrin",
+   "fibersmart soluble tapioca fiber"
+  ],
+  [
+   null,
+   "luteolin (unspecified)",
+   "japanese sophora"
+  ],
+  [
+   null,
+   "luteolin (unspecified)",
+   "alpha-glycerylphosphorylcholine"
+  ],
+  [
+   null,
+   "d beta hydroxybutyrate bhb (standard)",
+   "r-3-hydroxybutyric acid calcium"
+  ],
+  [
+   null,
+   "d beta hydroxybutyrate bhb (standard)",
+   "r-3-hydroxybutyric acid magnesium"
+  ],
+  [
+   null,
+   "blueberry extract",
+   "anthocyanin"
+  ],
+  [
+   null,
+   "blueberry extract",
+   "anthocyanins"
+  ],
+  [
+   null,
+   "blueberry extract",
+   "sour cherry, powder"
+  ],
+  [
+   null,
+   "olive fruit extract standardized",
+   "tyrosol"
+  ],
+  [
+   null,
+   "olive fruit extract standardized",
+   "oleuropein"
+  ],
+  [
+   null,
+   "olive fruit extract standardized",
+   "polyphenols"
+  ],
+  [
+   null,
+   "olive fruit extract standardized",
+   "polyphenols, hydroxytyrosol, tyrosol and oleuropein"
+  ],
+  [
+   null,
+   "sodium (unspecified)",
+   "himalayan rock salt"
+  ],
+  [
+   null,
+   "sodium (unspecified)",
+   "himalayan salt"
+  ],
+  [
+   null,
+   "sodium (unspecified)",
+   "himalayan pink salt"
+  ]
+ ],
+ "d36b6052 high-risk actives": [
+  [
+   null,
+   null,
+   "calcium silicate"
+  ],
+  [
+   null,
+   null,
+   "bitter orange citrus bioflavonoids"
+  ],
+  [
+   null,
+   null,
+   "bitter orange citrus bioflavonoid"
+  ],
+  [
+   null,
+   null,
+   "resistant starch"
+  ],
+  [
+   null,
+   null,
+   "fibersmart resistant starch"
+  ],
+  [
+   null,
+   null,
+   "acetyl-l-carnitine arginate dihydrochloride"
+  ],
+  [
+   null,
+   null,
+   "acetyl-l-carnitine arginate"
+  ],
+  [
+   null,
+   null,
+   "polydextrose"
+  ],
+  [
+   null,
+   null,
+   "litesse polydextrose"
+  ],
+  [
+   null,
+   null,
+   "litesse polydextrose fiber"
+  ],
+  [
+   null,
+   null,
+   "litesse"
+  ],
+  [
+   null,
+   null,
+   "7-keto"
+  ],
+  [
+   null,
+   null,
+   "7-oxo-dehydroepiandrosterone-3beta-acetate"
+  ],
+  [
+   null,
+   "mannitol (unspecified)",
+   "Mannitol"
+  ],
+  [
+   null,
+   "mannitol (unspecified)",
+   "d-mannitol"
+  ],
+  [
+   null,
+   "germanium sesquioxide (ge-132)",
+   "bis-beta carboxyethyl germanium sesquioxide"
+  ],
+  [
+   null,
+   "germanium sesquioxide (ge-132)",
+   "carboxyethylgermanium sesquioxide"
+  ],
+  [
+   null,
+   "germanium sesquioxide (ge-132)",
+   "bis(2-carboxyethylgermanium) sesquioxide"
+  ],
+  [
+   null,
+   "germanium sesquioxide (ge-132)",
+   "germanium sesquioxide"
+  ],
+  [
+   null,
+   "germanium sesquioxide (ge-132)",
+   "ge-132"
+  ],
+  [
+   null,
+   "germanium sesquioxide (ge-132)",
+   "propagermanium"
+  ],
+  [
+   null,
+   "germanium sesquioxide (ge-132)",
+   "repagermanium"
+  ],
+  [
+   null,
+   "silver (unspecified)",
+   "Silver"
+  ],
+  [
+   null,
+   "silver (unspecified)",
+   "colloidal silver"
+  ]
+ ]
+}

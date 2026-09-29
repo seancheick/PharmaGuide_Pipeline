@@ -1,0 +1,144 @@
+id	reason	brand	name	supplement_type	v4_module	verdict_cand	score_cand	verdict_live	score_live
+1179	reference_cases coverage sports_subtype:sports_other	GNC Beyond Raw	Ravage Fruit Punch	vitamin_mineral_combo	sports	POOR	41	POOR	48
+3565	in live 09-22 catalog, absent from 0d4d59a6 candidate	GNC Mega Men	Mega Men	multivitamin	multi_or_prenatal	None	None	CAUTION	71
+9080	USP Verified record (9aeb7fbc)	Nature Made	Iron Supplement	single_mineral	generic	CAUTION	62	CAUTION	61
+12012	vitamin A pregnancy rule (A5)	CVS Pharmacy	Spectravite Advanced Formula	multivitamin	multi_or_prenatal	SAFE	74	SAFE	66
+14168	stratified generic/vitamin_mineral_combo	GNC Beyond Raw	Rampant	vitamin_mineral_combo	generic	POOR	46	SAFE	57
+17192	buckthorn identity (D2)	Nature's Bounty	Colon Cleanser	herbal_botanical	fiber_digestive	CAUTION	59	CAUTION	51
+17214	assessment incomplete/ambiguous	Bayer One A Day	Teen Advantage for Him Complete Multivitamin	multivitamin	multi_or_prenatal	SAFE	69	SAFE	63
+18174	reference_cases coverage special:multi_strain	CVS Pharmacy	Adult 50+ Probiotic	probiotic	probiotic	POOR	33	POOR	36
+18219	St John's wort contraindicated (P1)	GNC Herbal Plus Standardized	St. John's Wort	general_supplement	generic	SAFE	78	SAFE	78
+19067	stratified probiotic/any	Nature Made	Digestive Health Probiotic	probiotic	probiotic	SAFE	78	SAFE	70
+19173	reference_cases coverage route:b_complex	CVS Pharmacy	Balanced B-100	b_complex	b_complex	CAUTION	76	CAUTION	75
+20022	stratified generic/single_mineral	up&up	Calcium Chews Vanilla Flavor	single_mineral	generic	SAFE	69	SAFE	69
+20028	BLOCKED in candidate	up&up	Coenzyme Q10 100 mg	fiber_digestive	generic	BLOCKED	None	BLOCKED	None
+20195	stratified generic/single_mineral	up&up	Selenium 200 mcg	single_mineral	generic	SAFE	80	SAFE	78
+25704	stratified sports/any	GNC Pro Performance	Ultra Amino Complex Watermelon	amino_acid	sports	POOR	52	SAFE	61
+28613	stratified omega/any	Garden of Life Minami Nutrition	MorDHA Lemon Flavor	omega_3	omega	SAFE	61	SAFE	68
+29341	stratified omega/any	Nature's Bounty	Dual Spectrum Lutein with Zeaxanthin & Omega-3	omega_3	omega	POOR	46	SAFE	58
+31016	stratified sports/any	GNC Pro Performance	Creatine Complex Chews Lemonade Burst	amino_acid	sports	SAFE	80	SAFE	79
+31148	BCAA no ratio (test fixture)	GNC Ultra Mega Green	Active Mixed Berry	multivitamin	multi_or_prenatal	None	None	SAFE	55
+33212	BLOCKED in candidate	GNC Pro Performance	Decadent Delight Vanilla Milkshake	single_mineral	generic	BLOCKED	None	BLOCKED	None
+33360	Iron Legion designer steroid BLOCKED (32718da7)	Iron Legion	Mithras Dimethandrostenol	general_supplement	generic	BLOCKED	None	None	None
+54515	stratified fiber_digestive/any	Nature's Way	Psyllium Husk	general_supplement	fiber_digestive	SAFE	82	SAFE	88
+54775	stratified generic/herbal_botanical	Nature's Way	Sytrinol	herbal_botanical	generic	POOR	43	POOR	44
+59952	BCAA ratio derivable from amounts	Doctor's Best	BCAA Capsules	amino_acid	sports	POOR	52	POOR	49
+60006	stratified generic/joint_support	CVS Health	Triple Strength Glucosamine Chondroitin + D3 1000 IU	joint_support	generic	SAFE	79	SAFE	75
+67304	BCAA ratio in row notes	GNC Pro Performance	Carnitine 1000 + BCAA Orange Cream	amino_acid	sports	POOR	52	POOR	54
+69374	certification-rich	GNC Pro Performance AMP	Amplified Wheybolic Extreme 60 Ripped Chocolate Peanut Butter	protein_powder	sports	CAUTION	67	CAUTION	70
+69400	stratified sports/any	GNC Pro Performance	Creatine Monohydrate 3500 mg	amino_acid	sports	SAFE	93	SAFE	92
+69784	vanadium held (D20)	GNC Women's Ultra Mega	50 Plus One Daily	multivitamin	multi_or_prenatal	None	None	SAFE	71
+77108	BCAA ratio in row name	Nutricost	BCAA+ With Hydration Complex 6 g Grape	amino_acid	sports	SAFE	62	SAFE	69
+77225	life'sDHA algal source oil (e8c6da11)	Solgar	Naturally Sourced Omega-3 Vegetarian DHA 200 mg	omega_3	omega	None	None	SAFE	66
+77257	stratified generic/general_supplement	Nutricost	Spirulina 8 g	general_supplement	generic	SAFE	74	SAFE	74
+82372	reference_cases coverage special:digestive_enzyme	CVS Pharmacy	Beanaid	general_supplement	fiber_digestive	SAFE	64	SAFE	56
+177088	stratified fiber_digestive/any	vitafusion	Fiber+Calcium	fiber_digestive	fiber_digestive	POOR	49	SAFE	55
+178352	reference_cases coverage route:multi_or_prenatal	Airborne Plus	Beta-Immune Booster Zesty Orange	multivitamin	multi_or_prenatal	POOR	52	SAFE	58
+180206	stratified multi_or_prenatal/multivitamin	Airborne Plus	Beta-Immune Booster Zesty Orange	multivitamin	multi_or_prenatal	POOR	52	SAFE	58
+180210	reference_cases coverage route:probiotic	Airborne Plus	Probiotic Assorted Fruit Flavors	probiotic	probiotic	SAFE	62	SAFE	58
+180225	stratified generic/single_mineral	Nature Made	Iron 65 mg	single_mineral	generic	CAUTION	61	CAUTION	55
+180270	assessment incomplete/ambiguous	Nature Made VitaMelts	Multivitamin Tropical Fruit	multivitamin	multi_or_prenatal	SAFE	73	SAFE	67
+180316	certification-rich	Nature Made	Prenatal Multi + DHA	multivitamin	multi_or_prenatal	SAFE	95	SAFE	88
+180330	stratified generic/single_vitamin	Nature Made	Vitamin B12 3000 mcg Cherry Flavor	single_vitamin	generic	SAFE	78	SAFE	72
+182289	stratified generic/single_vitamin	Thorne	Pantethine	single_vitamin	generic	SAFE	89	SAFE	85
+184004	garlic bulb interaction twin (P1)	Nature's Way	Artery Advantage	b_complex	generic	SAFE	73	SAFE	75
+184058	CAUTION with UL signal	Spring Valley	Vitamin D3 5000 IU	single_vitamin	generic	CAUTION	78	CAUTION	77
+184924	reference_cases coverage special:incomplete_review	Pure Encapsulations	G.I. Integrity	general_supplement	fiber_digestive	SAFE	72	SAFE	61
+209429	stratified multi_or_prenatal/multivitamin	Nature Made	VitaMelts Tropical Fruit	multivitamin	multi_or_prenatal	SAFE	73	SAFE	67
+209616	top tier (Exceptional)	Nature Made	Super B Energy Complex	b_complex	b_complex	SAFE	99	SAFE	97
+212455	stratified generic/joint_support	Nature's Way	GS-500 Glucosamine Sulfate	joint_support	generic	SAFE	73	SAFE	74
+214586	reference_cases review queue	Solgar	Ipriflavone 200 mg	general_supplement	generic	POOR	51	SAFE	57
+219685	in live 09-22 catalog, absent from 0d4d59a6 candidate	Solgar	Ester-C Effervescent 1000 mg Natural Raspberry Flavor	multivitamin	multi_or_prenatal	None	None	SAFE	64
+219813	reference_cases coverage sports_subtype:pre_workout	GNC Beyond Raw	LIT Rainbow Candy	general_supplement	sports	None	None	SAFE	67
+219819	reference_cases coverage sports_subtype:stimulant_fat_burner	GNC Beyond Raw	Precision EAA Elevated Gummy Worm	amino_acid	sports	None	None	CAUTION	62
+220238	reference_cases coverage sports_subtype:None	GNC Beyond Raw	Re-Built Mass XP Strawberry	protein_powder	sports	CAUTION	54	CAUTION	58
+221132	BCAA ratio derivable from amounts	GNC AMP Advanced Muscle Performance	Myopower BCAA Tangy Orange	amino_acid	sports	SAFE	81	SAFE	81
+222867	bergamot x immunosuppressants (Q18)	Garden of Life Dr. Formulated CBD Probiotics	Stress Relief CBD 10 mg	herbal_botanical	probiotic	BLOCKED	None	BLOCKED	None
+222896	BLOCKED in candidate	Garden of Life Dr. Formulated	CBD 50 mg Liquid Drops Chocolate Mint	general_supplement	generic	BLOCKED	None	BLOCKED	None
+223147	reference_cases coverage route:sports	BulkSupplements.com	Creatine HCl	amino_acid	sports	SAFE	73	SAFE	72
+228355	label unit correction (A6)	Solgar	Female Multiple	multivitamin	multi_or_prenatal	None	None	CAUTION	65
+232592	stratified b_complex/any	Life Extension	BioActive Complete B-Complex	b_complex	b_complex	CAUTION	86	CAUTION	84
+233404	FiberSMART unmapped active (da8a572b)	Life Extension	Keto Brain and Body Boost Peach Flavor	general_supplement	generic	POOR	40	SAFE	83
+233406	FiberSMART unmapped active	Life Extension	Keto Brain and Body Boost Peach Flavor	general_supplement	generic	POOR	40	SAFE	83
+236915	Niacin 250 mg form-less (A1 largest mover)	Nature's Bounty	Time Released Niacin 250 mg	single_vitamin	generic	CAUTION	48	CAUTION	54
+239462	reference_cases coverage special:prenatal	CVS Health	Prenatal Vitamins	multivitamin	multi_or_prenatal	None	None	SAFE	60
+239467	stratified omega/any	CVS Health	Fish Oil 1000 mg	omega_3	omega	POOR	28	POOR	36
+240122	stratified generic/sleep_support	Nature's Bounty	Melatonin 5 mg	sleep_support	generic	SAFE	75	SAFE	72
+240372	reference_cases coverage generic_formulation:botanical	Airborne	Airborne Elderberry	immune_support	generic	SAFE	58	SAFE	60
+240566	stratified generic/single_vitamin	Pure Encapsulations	Vitamin E (with Mixed Tocopherols)	single_vitamin	generic	SAFE	85	SAFE	81
+241318	Laxaherb buckthorn (D2)	Garden of Life Wild Rose	Laxaherb	herbal_botanical	generic	SAFE	59	SAFE	59
+242946	reference_cases coverage generic_formulation:generic_iqm	Airborne Advanced	BetaBoost + Vitamin C Citrus	single_vitamin	generic	SAFE	56	SAFE	61
+243032	many inactive ingredients (>=15)	GNC Beyond Raw	LIT Dragon Fruit	general_supplement	sports	None	None	SAFE	71
+243271	certification-rich	Garden of Life MyKind Organics	Golden Milk	mineral_complex	generic	POOR	39	SAFE	56
+246412	in live 09-22 catalog, absent from 0d4d59a6 candidate	vitafusion	Collagen 2500 mg Natural Berry Pomegranate Flavor	collagen	generic	None	None	SAFE	78
+252404	reference_cases coverage sports_subtype:bcaa_eaa	BulkSupplements.com	BCAA 2:1:1	amino_acid	sports	SAFE	58	SAFE	56
+252414	BCAA 2:1:1 reference case	BulkSupplements.com	BCAA 2:1:1	amino_acid	sports	SAFE	57	SAFE	55
+252445	reference_cases coverage sports_subtype:beta_alanine	BulkSupplements.com	Beta Alanine (600 mg)	amino_acid	sports	SAFE	73	SAFE	72
+252451	reference_cases coverage generic_profile:joint_support	BulkSupplements.com	Glucosamine Sulfate	joint_support	generic	SAFE	69	SAFE	67
+252496	reference_cases coverage route:omega	BulkSupplements.com	Fish Oil Softgels 1000 mg	omega_3	omega	POOR	37	POOR	44
+252510	reference_cases coverage sports_subtype:protein	BulkSupplements.com	Grass-Fed Whey Protein Isolate	protein_powder	sports	SAFE	81	SAFE	77
+252542	reference_cases coverage route:fiber_digestive	BulkSupplements.com	Guar Gum	general_supplement	fiber_digestive	SAFE	58	SAFE	64
+252577	reference_cases coverage sports_subtype:citrulline	BulkSupplements.com	L-Citrulline DL-Malate 1:1	amino_acid	sports	SAFE	64	SAFE	64
+252640	CAUTION with UL signal	BulkSupplements.com	Ascorbic Acid (750 mg)	single_vitamin	generic	CAUTION	57	CAUTION	57
+252781	stratified generic/amino_acid	BulkSupplements.com	L-Leucine	amino_acid	generic	SAFE	66	SAFE	64
+252907	reference_cases review queue	BulkSupplements.com	Psyllium Husk 500 mg	fiber_digestive	fiber_digestive	SAFE	75	SAFE	75
+253273	CAUTION (other signal)	BulkSupplements.com	Garcinia Cambogia Extract	herbal_botanical	generic	CAUTION	35	CAUTION	35
+253774	stratified generic/general_supplement	BulkSupplements.com	Guarana Extract	general_supplement	generic	SAFE	69	SAFE	69
+259304	barley grass context override (A8)	Nature's Way	Barley Grass	herbal_botanical	generic	POOR	48	POOR	54
+259484	reference_cases review queue	Nature's Way NutraSea hp	Omega-3 Extra Strength EPA 1500 mg Zesty Lemon Flavored	omega_3	omega	SAFE	82	SAFE	73
+263890	reference_cases coverage generic_profile:immune_support	CVS Pharmacy	Children's Immune Support Honey Lemon Flavored	immune_support	generic	POOR	53	POOR	53
+269666	in live 09-22 catalog, absent from 0d4d59a6 candidate	Doctor's Best	Fish Collagen with Naticol 5 g	collagen	generic	None	None	SAFE	84
+270253	BCAA ratio in row name	Nutricost	BCAA 6 g Unflavored	amino_acid	sports	SAFE	81	SAFE	77
+270561	many inactive ingredients (>=15)	Bayer One A Day Kids	DreamWorks Trolls Complete Multivitamin Gummies	multivitamin	multi_or_prenatal	SAFE	77	SAFE	69
+278009	in live 09-22 catalog, absent from 0d4d59a6 candidate	Pure Encapsulations	Nutrient 950 without Iron	multivitamin	multi_or_prenatal	None	None	CAUTION	79
+282638	POOR verdict	Garden of Life	Raw Organic Perfect Food Green Superfood Juiced Greens Powder Original	greens_powder	generic	POOR	44	SAFE	60
+286151	stratified generic/protein_powder	Double Wood Supplements	Keratin 500 mg	protein_powder	generic	SAFE	58	SAFE	56
+288632	certification-rich	Thorne	Riboflavin 5'-Phosphate	single_vitamin	generic	SAFE	94	SAFE	87
+294404	reference_cases coverage generic_profile:sleep_support	BulkSupplements.com	Melatonin Softgels	sleep_support	generic	SAFE	78	SAFE	75
+294458	reference_cases coverage generic_formulation:collagen	BulkSupplements.com	Collagen Softgels	collagen	generic	POOR	51	POOR	50
+294477	stratified generic/vitamin_mineral_combo	BulkSupplements.com	Calcium Carbonate & Vitamin D3 Softgels	vitamin_mineral_combo	generic	SAFE	85	SAFE	82
+294554	in live 09-22 catalog, absent from 0d4d59a6 candidate	BulkSupplements.com	Resveratrol (500 mg)	herbal_botanical	generic	None	None	SAFE	68
+295203	stratified generic/immune_support	Nature's Way	Sambucus Elderberry Immune Lozenges	immune_support	generic	SAFE	60	SAFE	64
+297614	Garden of Life kelp iodine note (a7351548)	Garden of Life Vitamin Code	50 & Wiser Women	multivitamin	multi_or_prenatal	SAFE	73	SAFE	70
+299069	label unit correction (A6)	Pure Encapsulations	Multi t/d	multivitamin	multi_or_prenatal	None	None	CAUTION	78
+299755	stratified fiber_digestive/any	Garden of Life	Raw Organic Fiber	omega_3	fiber_digestive	SAFE	57	SAFE	70
+302644	forms contract case (099f4b5b)	Doctor's Best	Calamari DHA Omega-3	omega_3	omega	SAFE	67	SAFE	66
+302683	stratified generic/protein_powder	Doctor's Best	Hydrolyzed Keratin with KeraGLO 500 mg	protein_powder	generic	SAFE	56	SAFE	56
+304647	vanadium held (D20)	GNC Mega Men	One Daily Multi	multivitamin	multi_or_prenatal	None	None	SAFE	66
+304683	stratified generic/immune_support	Nature's Way	Sambucus Elderberry Gummies	immune_support	generic	SAFE	59	SAFE	65
+306183	BCAA ratio in row notes	Nutricost Performance	BCAA+ Peach Mango	amino_acid	sports	SAFE	61	SAFE	64
+306192	stratified generic/herbal_botanical	Nutricost	Caffeine 200 mg	herbal_botanical	generic	SAFE	83	SAFE	79
+306235	BCAA ratio in row notes	Nutricost Performance	Intra Pink Lemonade	general_supplement	generic	SAFE	76	SAFE	83
+306380	CAUTION with UL signal	Nutricost Performance	PRE-SF Blue Raspberry	multivitamin	multi_or_prenatal	CAUTION	57	CAUTION	63
+307569	held botanical species mismatch (D21)	Jarrow Formulas	Buffered Vitamin C + Citrus Bioflavonoids	general_supplement	generic	None	None	SAFE	63
+307773	BCAA ratio in row notes	Nutricost Performance	BCAA+ Raspberry Lemonade	amino_acid	sports	SAFE	61	SAFE	64
+308249	stratified sports/pre_workout	Nutricost Performance	PRE Pre-Workout Complex Grape	pre_workout	sports	SAFE	76	SAFE	75
+309959	stratified sports/pre_workout	Transparent Labs	Preseries Lean Pre-Workout Tropical Punch	pre_workout	sports	SAFE	75	SAFE	83
+310608	held botanical species mismatch (D21)	BulkSupplements.com	Acai Berry Extract	general_supplement	generic	None	None	SAFE	58
+311536	held botanical species mismatch (D21)	BulkSupplements.com	Sarsaparilla Root Extract	herbal_botanical	generic	None	None	SAFE	58
+311646	label unit correction (A6)	BulkSupplements.com	Psyllium Husk	fiber_digestive	fiber_digestive	SAFE	75	SAFE	87
+311716	CAUTION (other signal)	BulkSupplements.com	Turkey Rhubarb Extract	herbal_botanical	generic	CAUTION	42	SAFE	57
+311733	BCAA ratio in row notes (a7351548)	Nutricost Performance	Intra Blue Raspberry	general_supplement	generic	SAFE	72	SAFE	78
+311734	BCAA ratio in row notes	Nutricost Performance	Intra Peach Mango	general_supplement	generic	SAFE	69	SAFE	78
+311749	stratified generic/herbal_botanical	BulkSupplements.com	Pygeum Africanum Extract	herbal_botanical	generic	SAFE	58	SAFE	58
+311833	POOR verdict	BulkSupplements.com	Raspberry Powder	general_supplement	generic	POOR	51	POOR	51
+311946	stratified generic/amino_acid	Nutricost	L-Leucine 5 g Unflavored	amino_acid	generic	SAFE	68	SAFE	66
+312431	stratified generic/herbal_botanical	BulkSupplements.com	Dong Quai Extract	herbal_botanical	generic	SAFE	58	SAFE	58
+312819	reference_cases coverage sports_subtype:hmb	BulkSupplements.com	HMB (Calcium HMB)	general_supplement	sports	None	None	SAFE	67
+315089	assessment incomplete/ambiguous	GNC Mega Men	Healthy Hormone Formula	herbal_botanical	generic	POOR	39	POOR	46
+315332	many inactive ingredients (>=15)	GNC Women's	One Daily Multivitamin Energy	multivitamin	multi_or_prenatal	None	None	SAFE	68
+315333	reference_cases review queue	GNC Women's	One Daily Multivitamin plus Probiotics	probiotic	multi_or_prenatal	SAFE	81	SAFE	76
+315810	vanadium held (D20)	GNC Mega Men Essentials	50 Plus One Daily Multi	multivitamin	multi_or_prenatal	None	None	SAFE	66
+321364	stratified multi_or_prenatal/multivitamin	Garden of Life	Raw Enzymes Men	multivitamin	multi_or_prenatal	SAFE	60	POOR	53
+327588	CAUTION with UL signal	MegaFood	Vitamin D3 5000 IU (125 mcg) with K & K2	vitamin_complex	generic	CAUTION	87	CAUTION	84
+328027	stratified probiotic/any	Nature's Way	Primadophilus Bifidus Once Daily	probiotic	probiotic	POOR	54	POOR	53
+328803	stratified probiotic/any	Life Extension Florassist	Heart Health	probiotic	probiotic	POOR	47	POOR	47
+329935	stratified generic/collagen	BulkSupplements.com	Collegen Peptides Powder 11 g	collagen	generic	SAFE	81	SAFE	81
+329991	POOR verdict	BulkSupplements.com	Organic Lemon Powder 450 mg	general_supplement	generic	POOR	51	POOR	51
+330223	stratified generic/general_supplement	BulkSupplements.com	Papaya Seed Powder 500 mg	general_supplement	generic	POOR	51	POOR	51
+330285	held botanical species mismatch (D21)	BulkSupplements.com	Pine Bark Extract Powder 250 mg	general_supplement	generic	None	None	SAFE	67
+330334	stratified sports/any	BulkSupplements.com	Beef Protein Isolate Powder 30 g	protein_powder	sports	SAFE	56	SAFE	61
+331488	vitamin A pregnancy rule (A5)	GNC Women's	Women's Multivitamin 50 Plus	multivitamin	multi_or_prenatal	CAUTION	67	CAUTION	62
+336307	stratified b_complex/any	Thorne	Stress B-Complex	multivitamin	b_complex	CAUTION	82	CAUTION	85
+336348	stratified generic/sleep_support	Thorne	PharmaGABA-250	sleep_support	generic	SAFE	86	SAFE	74
+336362	top tier (Exceptional)	Thorne	Creatine	amino_acid	sports	SAFE	99	SAFE	98

@@ -1,0 +1,2449 @@
+COMMIT 391b87c5 a735154845e1bc4b64a0957183b1ce1c2085862d
+
+scripts/audits/pending_items_20260926/LEDGER.md
+COMMIT a7351548 dde22dabea2b5db653d1d8bc2eafda0025a4d59a
+
+scripts/GLOSSARY.md
+scripts/data/ingredient_quality_map.json
+scripts/enrich_supplements_v3.py
+scripts/tests/fixtures/bcaa_31148_raw.json
+scripts/tests/fixtures/iodine_kelp_note_297614_raw.json
+scripts/tests/test_bcaa_ratio_form.py
+scripts/tests/test_row_notes_form.py
+COMMIT dde22dab c65205351f3d5253428fcc5911643686143998e9
+
+scripts/audits/pending_items_20260926/LEDGER.md
+COMMIT c6520535 ff31409637890f560452363eba997135f1c8719e
+
+scripts/data/ingredient_quality_map.json
+scripts/tests/fixtures/bcaa_270253_raw.json
+scripts/tests/fixtures/bcaa_311733_raw.json
+scripts/tests/test_bcaa_ratio_form.py
+scripts/tests/test_unknown_form_quality.py
+COMMIT ff314096 c456e47918cc3094b930d82769de9cf8e3731d6b
+
+scripts/audits/pending_items_20260926/LEDGER.md
+COMMIT c456e479 cb945215aaaff9e489bf00faa9c65737dddb4fe1
+
+scripts/data/ingredient_quality_map.json
+scripts/tests/test_unknown_form_quality.py
+COMMIT cb945215 845d17c570ce4234fb69ebc491caf88dc5ef1053
+
+scripts/tests/test_form_disclosure_states.py
+COMMIT 845d17c5 08c9a194d406bb50e5ff07b9ddd40f5770ea49c2
+
+scripts/data/ingredient_quality_map.json
+scripts/tests/test_unknown_form_quality.py
+COMMIT 08c9a194 00303a697ec6e2036e07e8e415db0c6c920bebe0
+
+scripts/data/ingredient_quality_map.json
+scripts/tests/test_unknown_form_quality.py
+COMMIT 00303a69 d6dbf0e4387f43c25d43c56b50162b729b0814d4
+
+scripts/data/ingredient_quality_map.json
+scripts/tests/test_unknown_form_quality.py
+COMMIT d6dbf0e4 580c7924d00bf2bae911b5965be501d08351ea0c
+
+scripts/data/ingredient_quality_map.json
+scripts/tests/test_unknown_form_quality.py
+COMMIT 580c7924 c8147f8dc118edb3c093f05070e0da09fc4d12ab
+
+scripts/enrich_supplements_v3.py
+scripts/tests/test_unknown_form_quality.py
+COMMIT c8147f8d 1c3b27ce0ac8788096c3b64e007e8c08bacf23fb
+
+scripts/data/ingredient_quality_map.json
+scripts/enrich_supplements_v3.py
+scripts/tests/test_unknown_form_quality.py
+COMMIT 1c3b27ce 1eab691f3ce13885a185af90a5a1f6da2b5c8283
+
+scripts/data/ingredient_quality_map.json
+scripts/enrich_supplements_v3.py
+scripts/tests/test_unknown_form_quality.py
+COMMIT 1eab691f 2f7339ad0e959a91ec4321c023c76f4af23647be
+
+scripts/enrich_supplements_v3.py
+scripts/tests/test_unknown_form_quality.py
+COMMIT 2f7339ad 64e27094b8e193a73fbc4020cf2f25dced6e98cc
+
+scripts/audits/pending_items_20260926/LEDGER.md
+COMMIT 64e27094 9bdb896afa6581e35e47a740eb59cb79446b5775
+
+scripts/data/ingredient_quality_map.json
+scripts/tests/test_unknown_form_quality.py
+COMMIT 9bdb896a 319f674dd417c5a1e7661f1435bfdee5af192183
+
+scripts/submission_review/extraction/agent_reader.py
+scripts/submission_review/static/app.js
+scripts/tests/test_submission_agent_reader.py
+scripts/tests/test_submission_review_auto_prepare.py
+COMMIT 319f674d 992a29bfcbd135ef8acf76c976d7ec17b164010a 8b8360f46ecdf37dd12610e04fed4cabf5718ec3
+COMMIT 992a29bf faf426db5783690f2d146f28afc1a172f8e0df08
+
+scripts/enrich_supplements_v3.py
+scripts/tests/test_delivery_label_wording.py
+COMMIT faf426db b5ad5a8f2f425e063afae3d0ec39443d334e91aa
+
+scripts/audits/pending_items_20260926/LEDGER.md
+COMMIT b5ad5a8f f56d49ebbdfdd89f13b0c8a383801c8b495f54e1
+
+scripts/enrich_supplements_v3.py
+scripts/tests/test_unknown_form_quality.py
+COMMIT f56d49eb 852adda2e5da5625b92dc687441d262888626cc7
+
+scripts/data/ingredient_quality_map.json
+COMMIT 852adda2 57bc0986812f2bd1531b50d8004f3ae34ef44f6e
+
+scripts/data/ingredient_quality_map.json
+scripts/tests/test_unknown_form_quality.py
+COMMIT 57bc0986 a6a521c7794beb38c4e7756f470515a433fca34a
+
+scripts/data/ingredient_quality_map.json
+scripts/tests/test_unknown_form_quality.py
+COMMIT a6a521c7 4494800414721568e9e292707701d82097df5492
+
+scripts/data/ingredient_quality_map.json
+scripts/tests/test_unknown_form_quality.py
+COMMIT 44948004 2f79050b8688033271bc00778b4680605438a196
+
+scripts/data/ingredient_quality_map.json
+scripts/tests/test_unknown_form_quality.py
+COMMIT 2f79050b 0d4d59a6f816dadba52943df4e70701884883a31
+
+scripts/tests/test_probiotic_cfu_adequacy.py
+scripts/tests/test_verify_all_citations_content.py
+COMMIT 0d4d59a6 84ec8398aafff7e0ec27afe5a4d644efcd223476
+
+scripts/audit_source_of_truth_contract.py
+scripts/tests/test_release_catalog_artifact.py
+COMMIT 84ec8398 b059cd565e6eef05a820233573a1530737797388
+
+scripts/data/cross_db_overlap_allowlist.json
+scripts/tests/test_other_ingredient_alias_guard.py
+COMMIT b059cd56 d3845a44a0c2fafaf022696411e0c7ab2baf3614
+
+scripts/tests/fixtures/contract_snapshots/12012.json
+scripts/tests/fixtures/contract_snapshots/12043.json
+scripts/tests/fixtures/contract_snapshots/180417.json
+scripts/tests/fixtures/contract_snapshots/18141.json
+scripts/tests/fixtures/contract_snapshots/182730.json
+scripts/tests/fixtures/contract_snapshots/204571.json
+scripts/tests/fixtures/contract_snapshots/223084.json
+scripts/tests/fixtures/contract_snapshots/239600.json
+scripts/tests/fixtures/contract_snapshots/241353.json
+scripts/tests/fixtures/contract_snapshots/245156.json
+scripts/tests/fixtures/contract_snapshots/269278.json
+scripts/tests/fixtures/contract_snapshots/270256.json
+scripts/tests/fixtures/contract_snapshots/274498.json
+scripts/tests/fixtures/contract_snapshots/278454.json
+scripts/tests/fixtures/contract_snapshots/288344.json
+scripts/tests/fixtures/contract_snapshots/288742.json
+scripts/tests/fixtures/contract_snapshots/293924.json
+scripts/tests/fixtures/contract_snapshots/293943.json
+scripts/tests/fixtures/contract_snapshots/294077.json
+scripts/tests/fixtures/contract_snapshots/298070.json
+scripts/tests/fixtures/contract_snapshots/298102.json
+scripts/tests/fixtures/contract_snapshots/306381.json
+scripts/tests/fixtures/contract_snapshots/321405.json
+scripts/tests/fixtures/contract_snapshots/321969.json
+scripts/tests/fixtures/contract_snapshots/323080.json
+scripts/tests/fixtures/contract_snapshots/327416.json
+scripts/tests/fixtures/contract_snapshots/74716.json
+scripts/tests/fixtures/contract_snapshots/_manifest.json
+COMMIT d3845a44 889856ef94bb6bee115563a7f22652e3711d4435
+
+scripts/tests/test_unknown_form_quality.py
+COMMIT 889856ef af4dc08e0fbd2d71df3a4e9b36de84b22844d98b
+
+scripts/data/ingredient_quality_map.json
+COMMIT af4dc08e f8241717cfb2205384199881fdf5074a6d9c8e95
+
+scripts/tests/test_v4_omega_transparency_p165.py
+COMMIT f8241717 5f2915c472da0e833182aa2fb329c2a5fda992ec
+
+scripts/data/ingredient_quality_map.json
+scripts/tests/test_unknown_form_quality.py
+COMMIT 5f2915c4 7af5d5b17e71c5e76167ce710c789f9bcbec908b
+
+scripts/audit_source_of_truth_contract.py
+scripts/tests/test_source_of_truth_contract.py
+COMMIT 8b8360f4 a04c5704dea5851cf7bb94a9bdac067aacd4d6ce
+
+.claude/skills/product-submissions-prep/SKILL.md
+scripts/submission_review/extraction/agent_reader.py
+COMMIT a04c5704 b83231f879cea647dac3995caaade5006adf07b4
+
+.claude/skills/product-submissions-prep/SKILL.md
+.claude/skills/product-submissions-prep/references/label-conventions.md
+scripts/submission_review/extraction/agent_reader.py
+COMMIT b83231f8 b59e5fddf9f4d666d7c02cc702d8d8698844fa28
+
+.claude/skills/prepare-product-submissions/SKILL.md
+.claude/skills/product-submissions-prep/SKILL.md
+.claude/skills/product-submissions-prep/references/label-conventions.md
+CLAUDE.md
+COMMIT b59e5fdd 05674bf57d6a79faef1352fea55e1583b3ea8d61
+
+scripts/submission_review/extraction/agent_reader.py
+scripts/submission_review/extraction/checks.py
+scripts/tests/test_submission_extraction_checks.py
+COMMIT 05674bf5 b22770ca4642dee82d89b5d4b1281128be048d56
+
+scripts/submission_review/static/app.js
+scripts/submission_review/static/styles.css
+scripts/tests/test_submission_review_auto_prepare.py
+COMMIT b22770ca d2119e284c53e06306c6afaae465362e5d40bf2e
+
+scripts/submission_review/extraction/agent_reader.py
+scripts/tests/test_submission_agent_reader.py
+COMMIT d2119e28 2a2887f01db61ddbbe96eb14b0fa2b75d14c89f4
+
+scripts/submission_review/extraction/checks.py
+scripts/tests/test_submission_extraction_checks.py
+COMMIT 2a2887f0 1201be024286d49f489543481252bf50d7de94a0
+
+scripts/submission_review/extraction/to_manual_label.py
+scripts/tests/test_submission_ollama_adapter.py
+scripts/tests/test_submission_to_manual_label.py
+COMMIT 7af5d5b1 5cb7716c4aeba36a1d33ed4f8670b9c98f61644b
+
+scripts/coverage_gate.py
+scripts/enrich_supplements_v3.py
+scripts/tests/test_coverage_gate.py
+COMMIT 5cb7716c 5af8f96825400a2c1584215f1fefff2bee8f7c00 2a84da3d632ca118e1bf9ce4d87689939a7dd1aa
+COMMIT 2a84da3d af488ecff206e643518e84ea5511724da96f2d46
+
+.claude/skills/data-fix/SKILL.md
+AGENTS.md
+COMMIT af488ecf 1201be024286d49f489543481252bf50d7de94a0
+
+.claude/rules/release.md
+.claude/skills/catalog-release/SKILL.md
+batch_run_all_datasets.sh
+scripts/GLOSSARY.md
+scripts/audit_source_of_truth_contract.py
+scripts/batch_processor.py
+scripts/pipeline_freshness.py
+scripts/release_full.sh
+scripts/run_pipeline.py
+scripts/test.sh
+scripts/tests/test_batch_run_all_datasets.py
+scripts/tests/test_pipeline_input_fingerprint.py
+scripts/tests/test_product_submission_import.py
+scripts/tests/test_release_preflight_staleness_2026_05_25.py
+scripts/tests/test_source_of_truth_contract.py
+scripts/tests/test_stage_output_manifest.py
+COMMIT 5af8f968 29ede7dd1d2e94427d6ee6e76985daac7be1e3dc 1201be024286d49f489543481252bf50d7de94a0
+COMMIT 29ede7dd cb419f41dde7eb529f2d94a4e9c7050e4d3482ab
+
+scripts/probiotic_measurements.py
+scripts/tests/test_probiotic_identity_single_owner.py
+COMMIT cb419f41 437aecb15183ae314dc526c56d109016d32dcdc4
+
+scripts/coverage_gate.py
+scripts/data/curated_overrides/product_label_corrections.json
+scripts/enrich_supplements_v3.py
+scripts/tests/test_coverage_gate.py
+scripts/tests/test_dose_assessment_contract.py
+scripts/tests/test_label_correction_integration.py
+scripts/tests/test_unit_conversions.py
+scripts/unit_converter.py
+COMMIT 1201be02 b98b641cdac60af214c596142ab14535b4cc3019
+
+.gitignore
+docs/adr/0001-release-pipeline-safety.md
+scripts/INTERACTION_RULE_SCHEMA_V6_ADR.md
+scripts/SCORING_README.md
+scripts/api_audit/.cache/discover_cache_backfill-auditability.json
+scripts/api_audit/.cache/discover_cache_discover.json
+scripts/api_audit/.cache/discover_cache_enrich.json
+scripts/api_audit/.cache/test_endpoint_cache.json
+scripts/api_audit/.cache/test_pubmed_cache.json
+scripts/dashboard/README.md
+scripts/data/views/README.md
+COMMIT b98b641c 9fc80c241a7954586f83425e1acad1d98a427b8d
+
+scripts/tests/test_b04_functional_roles_integrity.py
+scripts/tests/test_b05_functional_roles_integrity.py
+scripts/tests/test_cleanup_old_versions_gated.py
+scripts/tests/test_docs_counts_not_hand_copied.py
+scripts/tests/test_fuzzy_matching.py
+scripts/tests/test_iqm_form_evidence_contract.py
+scripts/tests/test_sync_flutter_reference_data.py
+COMMIT 9fc80c24 6ef5c1f9d4787db50e7570291e794dad6d55b08a
+
+scripts/data/banned_recalled_ingredients.json
+scripts/data/curated_overrides/cert_verification_overrides.json
+scripts/data/harmful_additives.json
+scripts/data/ingredient_quality_map.json
+scripts/data/standardized_botanicals.json
+scripts/data/synergy_cluster.json
+scripts/data_batch.py
+scripts/tests/test_data_batch.py
+scripts/tests/test_data_file_metadata_contract.py
+scripts/tests/test_ingredient_quality_map_schema.py
+COMMIT 6ef5c1f9 f3b23bfb94545b973018e8a3076f2445845df6e0
+
+scripts/data/ingredient_interaction_rules.json
+scripts/data/ingredient_quality_map.json
+scripts/data/standardized_botanicals.json
+scripts/tests/test_data_batch.py
+COMMIT f3b23bfb 70dec135d4c4c37126a03b445f62a56cf5bb2679
+
+scripts/data/profile_gate_test_cases.json
+scripts/tests/test_data_batch.py
+COMMIT 70dec135 0fa778769f079be10fa3ffaa2088747959e1ae9d
+
+scripts/data_batch.py
+scripts/tests/test_data_batch.py
+COMMIT 0fa77876 a3249ce780b5cee333f0936b813283f2bac47451
+
+.claude/skills/fda-weekly-sync/SKILL.md
+.claude/skills/pg-scoring-change/SKILL.md
+README.md
+docs/AUTOMATION_ROADMAP.md
+docs/adr/0003-iqm-owns-form-quality.md
+docs/archive/2026-09/2026-05-20-pipeline-stability-vocab-expansion-design.md
+docs/archive/2026-09/2026-05-21-sp0-sp6-completion-status.md
+docs/archive/2026-09/CONVERGENCE_INVENTORY_2026-09-18.md
+docs/archive/2026-09/FLUTTER_V4_MIGRATION_HANDOFF.md
+docs/archive/2026-09/HANDOFF_2026_06_09_V4_CERT_CONFIDENCE_AUDIT.md
+docs/archive/2026-09/KNOWN_FAILURES.md
+docs/archive/2026-09/LESSONS_LEARNED.md
+docs/archive/2026-09/PG_SCORE_EXPLAINED.md
+docs/archive/2026-09/PHARMAGUIDE_FLUTTER_ROADMAP.md
+docs/archive/2026-09/PHARMAGUIDE_MASTER_ROADMAP.md
+docs/archive/2026-09/PROBIOTIC_EVIDENCE_REVIEW_RESPONSE_2026-09-14.md
+docs/archive/2026-09/RELEASES.md
+docs/archive/2026-09/SCORING_SELF_AUDIT_2026-09-18.md
+docs/archive/2026-09/V3_TO_V4_RETIREMENT_HANDOFF.md
+docs/archive/2026-09/V4_CUTOVER_HANDOFF.md
+docs/archive/2026-09/reviewer_followup_audit_2026-09-12.md
+docs/archive/2026-09/reviewer_persistence_2026-09-11.md
+docs/archive/2026-09/submission_review_followup_audit_20260912.md
+docs/plans/CLINICIAN_VERIFICATION_QUEUE.md
+docs/plans/RC_review_checklist_20260519.md
+docs/plans/SCORING_V3_TO_V4_MAPPING.md
+docs/plans/SCORING_V4_PROPOSAL.md
+scripts/DATABASE_SCHEMA.md
+scripts/FINAL_EXPORT_SCHEMA_V1.md
+scripts/GLOSSARY.md
+scripts/INTERACTION_RULE_AUTHORING_SOP.md
+scripts/PIPELINE_ARCHITECTURE.md
+scripts/SCORING_ENGINE_SPEC.md
+scripts/audits/prompts/Harmful_additive_audit_prompt.md
+scripts/audits/prompts/IQM_AUDIT_MASTER_PROMPT.md
+scripts/audits/prompts/Ingredient_Aliases_accuracy_audit.md
+scripts/audits/prompts/PROMPT_ADD_INTERACTION_RULES.md
+scripts/audits/prompts/UNMAPPED_RESOLUTION_PROMPT.md
+scripts/audits/sp2_adoption/INVENTORY.md
+scripts/scoring_v4/modules/botanical_profile.py
+scripts/scoring_v4/modules/generic.py
+scripts/scoring_v4/modules/omega_formulation.py
+scripts/scoring_v4/modules/probiotic.py
+COMMIT a3249ce7 f6ed07bf9293593276eb7e57970fb94dc28e0261
+
+.claude/rules/clinical-data.md
+.claude/skills/catalog-release/SKILL.md
+.claude/skills/data-fix/SKILL.md
+.claude/skills/verify-data/SKILL.md
+AGENTS.md
+CLAUDE.md
+COMMIT f6ed07bf 7b40e4dde6b4aedc8dac90548dcddf1b057df387
+
+scripts/audits/quality_redesign/replay.py
+scripts/tests/test_quality_redesign_replay.py
+COMMIT 7b40e4dd ba23685e6bed18598451ec9efde0ebd85df382df
+
+scripts/api_audit/verify_all_citations_content.py
+scripts/api_audit/verify_interaction_rules_citations.py
+scripts/tests/test_verify_all_citations_content.py
+COMMIT ba23685e 7af59d6aafcc2c3c1083bb2cc8732faf2ad9d0c8
+
+scripts/api_audit/backfill_unii_from_cache.py
+scripts/api_audit/discover_clinical_evidence.py
+scripts/api_audit/ingest_caers.py
+scripts/tests/test_data_batch.py
+COMMIT 7af59d6a b6923c6a929d4584e3ed03ae28652113ecd92f58
+
+scripts/data/allergen_prevalence_vocab.json
+scripts/data/botanical_marker_contributions.json
+scripts/data/caers_adverse_event_signals.json
+scripts/data/canary_products.json
+scripts/data/catalog_brand_registry.json
+scripts/data/cert_claim_rules.json
+scripts/data/citation_content_backlog.json
+scripts/data/clinical_indication_vocab.json
+scripts/data/cross_db_overlap_allowlist.json
+scripts/data/daily_values.json
+scripts/data/drug_class_vocab.json
+scripts/data/enhanced_delivery.json
+scripts/data/form_factor_vocab.json
+scripts/data/form_keywords_vocab.json
+scripts/data/functional_roles_vocab.json
+scripts/data/ingredient_category_vocab.json
+scripts/data/iqm_excellent_evidence_backlog.json
+scripts/data/medication_profile_gate_rules.json
+scripts/data/other_ingredients.json
+scripts/data/profile_gate_test_cases.json
+scripts/data/proprietary_blends.json
+scripts/data/rda_therapeutic_dosing.json
+scripts/data/safety_alerts/_TEMPLATE.json
+scripts/data/top_manufacturers_data.json
+scripts/data/unii_exoneration_allowlist.json
+scripts/data/unit_conversions.json
+scripts/tests/test_data_batch.py
+COMMIT b6923c6a 75164464be6dd5459d7359837c4162ca56ecde42
+
+scripts/data_batch.py
+scripts/run_artifacts.py
+scripts/tests/test_data_batch.py
+scripts/tests/test_data_file_metadata_contract.py
+scripts/tests/test_ingredient_quality_map_schema.py
+COMMIT 437aecb1 d173ca145b40c7b18c8a481da8534114fa580178
+
+scripts/audits/pending_items_20260926/LEDGER.md
+scripts/audits/pending_items_20260926/research.md
+COMMIT d173ca14 d8ddf20810dc234c4e0156a4d0912649365888c0
+
+scripts/tests/test_interaction_serving_frequency_unified.py
+COMMIT d8ddf208 9bd079ea195e1d74d571079d17de0c6bd3f527cd
+
+scripts/data/ingredient_interaction_rules.json
+scripts/tests/test_botanical_interaction_subjects.py
+scripts/tests/test_interaction_plant_part_rules.py
+scripts/tests/test_preparation_identity_splits.py
+COMMIT 9bd079ea 7a26f2f87df72f6c6dec5c6907bd214e78b6a063
+
+scripts/tests/fixtures/v4_archetype_decision_suite.json
+scripts/tests/test_v4_category_magnitudes_config.py
+scripts/tests/test_v4_transparency_magnitudes_config.py
+COMMIT 7a26f2f8 70108b45ffb6418ab8a94d05e8f66755a4b68d39
+
+scripts/tests/test_clean_unmapped_alias_regressions.py
+COMMIT 70108b45 4ebdd0cfb8a932c7bf6edc176162515d80d13c0e
+
+scripts/data/botanical_ingredients.json
+scripts/data/ingredient_interaction_rules.json
+scripts/data/ingredient_quality_map.json
+scripts/data/standardized_botanicals.json
+scripts/tests/test_clean_unmapped_alias_regressions.py
+scripts/tests/test_preparation_identity_splits.py
+COMMIT 4ebdd0cf cfbc2ddf549ce8db1daa063936246ce97d886ed2
+
+scripts/api_audit/v4_full_corpus_delta.py
+scripts/audit_contract_sync.py
+scripts/build_final_db.py
+scripts/tests/test_build_final_db.py
+COMMIT cfbc2ddf ee76a231edad964faf837bab5965a30353029efe
+
+scripts/data/omega_rubric.json
+scripts/scoring_v4/config/config_fingerprint_history.json
+scripts/scoring_v4/config/quality_score.json
+scripts/scoring_v4/modules/omega.py
+scripts/scoring_v4/modules/omega_transparency.py
+scripts/scoring_v4/quality_score.py
+scripts/tests/test_v4_config_registry.py
+scripts/tests/test_v4_omega_module_skeleton_p160.py
+scripts/tests/test_v4_omega_transparency_p165.py
+COMMIT ee76a231 fa7f5c18cb478fff5106d0901dd3f9c5fc042c55
+
+scripts/scoring_v4/modules/generic_evidence.py
+scripts/scoring_v4/quality_score.py
+scripts/tests/test_evidence_result_state.py
+COMMIT fa7f5c18 5185a0c020c48faa8fe58aed3c39854d207a0d61 75164464be6dd5459d7359837c4162ca56ecde42
+COMMIT 75164464 6557a7bda4eaf40ca5a66e7285a061039a42211a
+
+scripts/audits/pending_items_20260926/LEDGER.md
+COMMIT 5185a0c0 c5080f5530c9b9ffc245819dd64b8a7ffee7562e c0022415f133fb0e7411f11aad284a215e90980a
+COMMIT 6557a7bd 106a8d5976f8c3a4f7f5196d0cbe232e9cc176a7
+
+scripts/supplement_taxonomy.py
+COMMIT c5080f55 eb3eb5105af16bf4b4cfcfa1440e8c834f60efa9
+
+scripts/tests/test_b34_bulk_finalization_integrity.py
+COMMIT eb3eb510 dbf61fa6ccfb3ee293304830e76419cedbf1ad9f
+
+scripts/identity/interaction.py
+scripts/tests/test_interaction_plant_part_rules.py
+COMMIT 106a8d59 177eab343fd32587c33ad5a8645ae1fff936a0aa c0022415f133fb0e7411f11aad284a215e90980a
+COMMIT dbf61fa6 974edb421af0f6bc03360628ec10cb0bcacbf164
+
+scripts/scoring_v4/modules/generic_evidence.py
+scripts/tests/test_evidence_result_state.py
+COMMIT 177eab34 3315ebee427b9b0d3c1154ec3e1e1c8c0ba771bd 0de250a21a841a5096c9d2c3ddeee0fcbd8a216f
+COMMIT c0022415 f7a58b2ca9674463de4392670f057ef35ade844e
+
+scripts/data/ingredient_quality_map.json
+scripts/tests/test_b34_bulk_finalization_integrity.py
+COMMIT 974edb42 654e5034ab9d116f3561095ba0cc8a0b3d86e27e 3315ebee427b9b0d3c1154ec3e1e1c8c0ba771bd
+COMMIT f7a58b2c 0433c3863e2eb32938f2f4cd25fb5723abf86669 3315ebee427b9b0d3c1154ec3e1e1c8c0ba771bd
+COMMIT 0433c386 654e5034ab9d116f3561095ba0cc8a0b3d86e27e
+
+scripts/enrich_supplements_v3.py
+scripts/tests/fixtures/safety_only_row_252699_raw.json
+scripts/tests/test_safety_only_rows_get_scored.py
+COMMIT 3315ebee 33e807e92de29a4669515d17c099e7357c118301
+
+scripts/audits/pending_items_20260926/LEDGER.md
+scripts/audits/pending_items_20260926/research.md
+scripts/data/banned_recalled_ingredients.json
+scripts/tests/test_banned_recalled_identifier_integrity.py
+scripts/tests/test_jurisdiction_queries.py
+COMMIT 33e807e9 a3abb1995807995a52f38e3debbf97c375ad5fe6
+
+scripts/audits/pending_items_20260926/LEDGER.md
+scripts/audits/pending_items_20260926/research.md
+scripts/data/botanical_ingredients.json
+scripts/data/canonical_equivalences.json
+scripts/data/ingredient_interaction_rules.json
+scripts/data/ingredient_quality_map.json
+scripts/data/interaction_rules_ghost_review.json
+scripts/data/standardized_botanicals.json
+scripts/identity/interaction.py
+scripts/tests/test_b05_functional_roles_integrity.py
+scripts/tests/test_b24_mito_neuro_integrity.py
+scripts/tests/test_botanical_interaction_subjects.py
+scripts/tests/test_existing_iqm_identity_recovery.py
+scripts/tests/test_iqm_unspecified_form_floor.py
+scripts/tests/test_preparation_identity_splits.py
+COMMIT 654e5034 19d9487bb1f994ca2da67cfb2e065413a39097d9
+
+scripts/data/ingredient_quality_map.json
+scripts/enrich_supplements_v3.py
+scripts/scoring_input_contract.py
+scripts/tests/test_fibersmart_unmapped_quarantine.py
+scripts/tests/test_form_share_association.py
+scripts/tests/test_safety_only_rows_get_scored.py
+COMMIT 19d9487b 28178b5478eac1b1f68c5e469e49d7a3badf5b98 a3abb1995807995a52f38e3debbf97c375ad5fe6
+COMMIT 28178b54 24bebc01d6348404f511a608d55d66f39b865dd3
+
+scripts/data/ingredient_quality_map.json
+scripts/tests/fixtures/safety_only_row_233404_raw.json
+scripts/tests/test_safety_only_rows_get_scored.py
+COMMIT 24bebc01 863deb0f354d1f11cc4d983fb1867e227f673b43
+
+scripts/enrich_supplements_v3.py
+scripts/tests/test_safety_only_rows_get_scored.py
+COMMIT 863deb0f d36b60523f06dcaa566410776653a079a084f1c1
+
+scripts/data/cross_db_overlap_allowlist.json
+scripts/data/ingredient_quality_map.json
+scripts/data/other_ingredients.json
+scripts/tests/fixtures/inactive_additive_306215_raw.json
+scripts/tests/fixtures/safety_only_row_213508_raw.json
+scripts/tests/fixtures/safety_only_row_252699_raw.json
+scripts/tests/fixtures/safety_only_row_295773_raw.json
+scripts/tests/test_safety_only_rows_get_scored.py
+COMMIT d36b6052 007f4e47ea01f0e6c8a8a6b2a69ac0b057544f24
+
+scripts/data/cross_db_overlap_allowlist.json
+scripts/data/ingredient_quality_map.json
+scripts/preflight.py
+scripts/tests/fixtures/safety_only_row_182627_raw.json
+scripts/tests/fixtures/safety_only_row_200891_raw.json
+scripts/tests/fixtures/safety_only_row_213508_raw.json
+scripts/tests/fixtures/safety_only_row_233404_raw.json
+scripts/tests/fixtures/safety_only_row_241706_raw.json
+scripts/tests/fixtures/safety_only_row_241744_raw.json
+scripts/tests/fixtures/safety_only_row_252699_raw.json
+scripts/tests/fixtures/safety_only_row_295773_raw.json
+scripts/tests/fixtures/safety_only_row_307546_raw.json
+scripts/tests/fixtures/safety_only_row_328274_raw.json
+scripts/tests/test_cross_db_overlap_guard.py
+scripts/tests/test_safety_only_rows_get_scored.py
+COMMIT a3abb199 28d8e304f24e537a3ac070e1a33b2d00fbfaf162
+
+scripts/tests/test_blend_child_interaction_alerts.py
+COMMIT 28d8e304 e7bcfce557b1e4f1dc19d6baf9e1dc3ea7998185
+
+scripts/audits/pending_items_20260926/LEDGER.md
+COMMIT e7bcfce5 70b654e6d30d79d62371fb43a9adc5633ceefc09
+
+scripts/audits/pending_items_20260926/LEDGER.md
+scripts/audits/pending_items_20260926/research.md
+scripts/data/ingredient_interaction_rules.json
+scripts/tests/test_interaction_rules_integrity_regressions.py
+scripts/tests/test_phase3_dose_floors.py
+COMMIT 70b654e6 139c2513ce63baff1be67033a7f704e0b450b720
+
+scripts/audits/pending_items_20260926/research.md
+scripts/data/citation_content_backlog.json
+scripts/data/standardized_botanicals.json
+scripts/tests/test_standardized_botanicals_citation_integrity.py
+COMMIT 139c2513 dd6a29e4c883f82768eda77200d3fcb8d03ed1dc
+
+scripts/audits/pending_items_20260926/research.md
+scripts/data/citation_content_backlog.json
+scripts/data/standardized_botanicals.json
+scripts/tests/test_standardized_botanicals_citation_integrity.py
+COMMIT 007f4e47 32718da7bfeb8fad17cb3aa336f632047244fe82
+
+scripts/tests/fixtures/designer_steroid_33360_raw.json
+COMMIT 32718da7 7dbbf67765e2868d81035236bcdb797579e27427
+
+scripts/data/banned_recalled_ingredients.json
+scripts/tests/fixtures/designer_steroid_33358_raw.json
+scripts/tests/fixtures/designer_steroid_33361_raw.json
+scripts/tests/test_banned_class_recognition.py
+scripts/tests/test_designer_steroid_products_ship_blocked.py
+scripts/tests/test_safety_policy_readiness.py
+COMMIT dd6a29e4 82e383dddd5358ccd051bd54c03899cf9acc3f52 591a0c59d76cfc19a215d878aa485e9a7388ac18
+COMMIT 82e383dd 0edf0bb348433c16fdc6b67a03c2428a23f1a261
+
+scripts/data/citation_content_backlog.json
+COMMIT 7dbbf677 79cecfa1cde17753c8789167865928682a5c6408
+
+scripts/enrich_supplements_v3.py
+scripts/identity_integrity.py
+scripts/tests/fixtures/stale_source_db_28986_raw.json
+scripts/tests/fixtures/stale_source_db_64494_raw.json
+scripts/tests/test_identity_source_db_coherence.py
+COMMIT 591a0c59 11446221e14a13dde72b40290730b17e6e0cecb6
+
+scripts/audits/pending_items_20260926/LEDGER.md
+scripts/audits/pending_items_20260926/research.md
+COMMIT 11446221 455dc72d4f65620401d5ac5f236f763415fa94ea
+
+scripts/enhanced_normalizer.py
+scripts/enrich_supplements_v3.py
+scripts/identity/interaction.py
+scripts/tests/test_blend_child_interaction_alerts.py
+scripts/tests/test_daily_value_zero_preserved.py
+scripts/tests/test_label_row_presence.py
+COMMIT 455dc72d 9c132a938e1bb4b8327c9bc326e78c3ff50fd206
+
+scripts/data/ingredient_interaction_rules.json
+scripts/tests/test_interaction_rules_integrity_regressions.py
+COMMIT 0edf0bb3 cb23b7afa9fc78a579e31e93c03bdb2565e3c3cd
+
+.claude/rules/clinical-data.md
+scripts/INTERACTION_RULE_AUTHORING_SOP.md
+COMMIT cb23b7af 05c3e5ad9d62faa1d292e6f4e3ae7a023e2e94f3
+
+scripts/api_audit/verify_all_citations_content.py
+scripts/audits/pending_items_20260926/LEDGER.md
+scripts/data/citation_content_backlog.json
+scripts/release_full.sh
+scripts/test.sh
+scripts/tests/test_verify_all_citations_content.py
+scripts/tests/test_verify_interaction_rules_citations.py
+COMMIT 05c3e5ad 0514c2aa42f45d813a39804d01e420865b06e4d1
+
+scripts/api_audit/verify_all_citations_content.py
+scripts/tests/test_verify_all_citations_content.py
+COMMIT 0514c2aa 9c132a938e1bb4b8327c9bc326e78c3ff50fd206
+
+scripts/audits/pending_items_20260926/LEDGER.md
+scripts/audits/pending_items_20260926/research.md
+scripts/data/ingredient_interaction_rules.json
+scripts/data/interaction_rules_ghost_review.json
+scripts/tests/test_interaction_rules_integrity_regressions.py
+COMMIT 79cecfa1 272a580cc0c9bd4fe5cdbd99fecc4f626d2db1f9
+
+scripts/data/views/REPORT.md
+scripts/data/views/by_condition/asbestos_exposure.md
+scripts/data/views/by_condition/autoimmune.md
+scripts/data/views/by_condition/bleeding_disorders.md
+scripts/data/views/by_condition/current_smoker.md
+scripts/data/views/by_condition/diabetes.md
+scripts/data/views/by_condition/former_smoker.md
+scripts/data/views/by_condition/heart_disease.md
+scripts/data/views/by_condition/hypertension.md
+scripts/data/views/by_condition/immunocompromised.md
+scripts/data/views/by_condition/kidney_disease.md
+scripts/data/views/by_condition/liver_disease.md
+scripts/data/views/by_condition/pregnancy.md
+scripts/data/views/by_condition/seizure_disorder.md
+scripts/data/views/by_condition/surgery_scheduled.md
+scripts/data/views/by_condition/thyroid_disorder.md
+scripts/data/views/by_condition/ttc.md
+scripts/data/views/by_drug_class/antiarrhythmics.md
+scripts/data/views/by_drug_class/anticholinergics.md
+scripts/data/views/by_drug_class/anticoagulants.md
+scripts/data/views/by_drug_class/antihypertensives.md
+scripts/data/views/by_drug_class/antiplatelets.md
+scripts/data/views/by_drug_class/beta_blockers.md
+scripts/data/views/by_drug_class/calcium_channel_blockers.md
+scripts/data/views/by_drug_class/cardiac_glycosides.md
+scripts/data/views/by_drug_class/doacs.md
+scripts/data/views/by_drug_class/fluoroquinolones.md
+scripts/data/views/by_drug_class/hypoglycemics_high_risk.md
+scripts/data/views/by_drug_class/hypoglycemics_lower_risk.md
+scripts/data/views/by_drug_class/hypoglycemics_unknown.md
+scripts/data/views/by_drug_class/immunosuppressants.md
+scripts/data/views/by_drug_class/maois.md
+scripts/data/views/by_drug_class/nsaids.md
+scripts/data/views/by_drug_class/oral_contraceptives.md
+scripts/data/views/by_drug_class/potassium_sparing_diuretics.md
+scripts/data/views/by_drug_class/sedatives.md
+scripts/data/views/by_drug_class/serotonergic_medications.md
+scripts/data/views/by_drug_class/statins.md
+scripts/data/views/by_drug_class/thiazide_diuretics.md
+scripts/data/views/by_drug_class/thyroid_medications.md
+scripts/data/views/by_drug_class/vitamin_k_antagonists.md
+scripts/data/views/pregnancy_lactation.md
+COMMIT 272a580c 482514c5d4714c40029be0b9f2c4c2a20edaae93
+
+scripts/data/botanical_ingredients.json
+scripts/tests/test_botanical_ingredients_identifier_integrity.py
+scripts/tests/test_botanical_species_records.py
+COMMIT 482514c5 21209f2139acb6728bbdc31ee7cee547fbb0b4ab
+
+scripts/data/botanical_ingredients.json
+scripts/tests/test_interaction_plant_part_rules.py
+COMMIT 21209f21 5494300c84ed34dc2831ab3b4f1a7cdcdde27331
+
+scripts/DATABASE_SCHEMA.md
+scripts/GLOSSARY.md
+scripts/data/ingredient_interaction_rules.json
+scripts/db_integrity_sanity_check.py
+scripts/enrich_supplements_v3.py
+scripts/tests/test_interaction_plant_part_rules.py
+COMMIT 5494300c 6d2a6d852d6eef9e13346249b5d437bf0aa7368a
+
+scripts/data/ingredient_interaction_rules.json
+scripts/tests/test_interaction_plant_part_rules.py
+COMMIT 6d2a6d85 c61a5934107de7b0db3dd9ed99ee2d30a477b04e
+
+scripts/build_final_db.py
+scripts/tests/test_warning_dedup.py
+COMMIT 0de250a2 e8a0817ef25318970d07d519f93b5e7471fe024a
+
+scripts/audits/v41_recovery/RECONCILIATION.md
+COMMIT c61a5934 ce8c38fac245f1cc14ea2766e1eaf1ad9b041b93
+
+scripts/data/botanical_ingredients.json
+scripts/tests/fixtures/vitex_species_64228_raw.json
+scripts/tests/fixtures/vitex_species_67354_raw.json
+scripts/tests/test_botanical_species_records.py
+COMMIT ce8c38fa 504504f740c3614a760cadea7e37e0b038f60888
+
+scripts/enrich_supplements_v3.py
+scripts/tests/fixtures/stale_registry_210555_raw.json
+scripts/tests/test_botanical_interaction_subjects.py
+COMMIT 504504f7 489d5240b86741d0bb2b221c4ba6b5a26c69603c
+
+scripts/build_final_db.py
+scripts/identity/interaction.py
+scripts/tests/test_warning_dedup.py
+COMMIT 489d5240 88ef0a98b685c5e1342bda90e4fa96e9d83a4454
+
+scripts/enrich_supplements_v3.py
+scripts/identity/interaction.py
+scripts/tests/fixtures/standardized_twin_16374_raw.json
+scripts/tests/fixtures/standardized_twin_201405_raw.json
+scripts/tests/fixtures/standardized_twin_231794_raw.json
+scripts/tests/test_botanical_interaction_subjects.py
+COMMIT 88ef0a98 60d2ebcb3b2f3b65771f775d8bbab193138c304b
+
+scripts/DATABASE_SCHEMA.md
+scripts/data/ingredient_interaction_rules.json
+scripts/data/ingredient_quality_map.json
+scripts/enrich_supplements_v3.py
+scripts/identity/interaction.py
+scripts/tests/fixtures/plant_part_223501_raw.json
+scripts/tests/fixtures/plant_part_228119_raw.json
+scripts/tests/fixtures/plant_part_228932_raw.json
+scripts/tests/fixtures/plant_part_229831_raw.json
+scripts/tests/fixtures/plant_part_315977_raw.json
+scripts/tests/fixtures/plant_part_330073_raw.json
+scripts/tests/test_botanical_interaction_subjects.py
+scripts/tests/test_interaction_plant_part_rules.py
+COMMIT e8a0817e a54cca7bbc947b9923526a8a05c8f4689911807f
+
+scripts/enhanced_normalizer.py
+scripts/tests/test_nutrition_facts_extended.py
+COMMIT 60d2ebcb 9c132a938e1bb4b8327c9bc326e78c3ff50fd206
+
+scripts/data/ingredient_interaction_rules.json
+scripts/tests/test_interaction_rules_integrity_regressions.py
+scripts/tests/test_interaction_rules_w_m_l_c_batch.py
+COMMIT a54cca7b 5b8d7702f053407684e566470f832ea1c5c6e95b
+
+scripts/enrich_supplements_v3.py
+scripts/tests/test_scorable_classification.py
+COMMIT 9c132a93 36bbc5b279560ba8775cdf9ca85b59b6ddedfa90
+
+scripts/identity/interaction.py
+scripts/tests/fixtures/botanical_twin_74529_raw.json
+scripts/tests/test_botanical_interaction_subjects.py
+COMMIT 36bbc5b2 012130794648d0434622502051c3698daf4e2edb
+
+scripts/audits/pending_items_20260926/LEDGER.md
+COMMIT 01213079 e70a4adfe33c98d8a51a908b47c350df7dba06c5
+
+scripts/build_final_db.py
+scripts/enrich_supplements_v3.py
+scripts/identity/interaction.py
+scripts/tests/test_blend_child_interaction_alerts.py
+scripts/tests/test_label_row_presence.py
+COMMIT e70a4adf f6c7d89ddd80dd8bc6432d34ea67770977c3ea0d
+
+scripts/enrich_supplements_v3.py
+scripts/tests/test_blend_child_interaction_alerts.py
+COMMIT 5b8d7702 7b055d5bf205d2660f2f88fc75e515fe35f06c99
+
+scripts/audits/v41_recovery/RECONCILIATION.md
+COMMIT 7b055d5b 7cf610e17913dbd7d5a07dceeac790a71997b1e1
+
+scripts/audits/v41_recovery/RECONCILIATION.md
+COMMIT f6c7d89d 3c0648ba131c82fe61fe39b750f89d94493a7a28
+
+scripts/audits/pending_items_20260926/LEDGER.md
+scripts/audits/pending_items_20260926/citation_coverage_20260926.json
+COMMIT 7cf610e1 a40880a96a1842a334218f6c5439c264484d4154
+
+scripts/scoring_input_contract.py
+scripts/tests/test_scoring_input_contract.py
+COMMIT 3c0648ba c11c29165795ff3ac0cd18795bd8a1373ba099ea
+
+scripts/api_audit/verify_interaction_rules_citations.py
+scripts/data/interaction_rules_ghost_review.json
+scripts/tests/test_interaction_rules_integrity_regressions.py
+scripts/tests/test_verify_interaction_rules_citations.py
+COMMIT c11c2916 e349a2b7443279cfba235009fd040c6218f0560f
+
+scripts/api_audit/verify_backed_studies_citations.py
+scripts/tests/test_verify_backed_studies_citations.py
+COMMIT e349a2b7 df89c74e7cd844a2849181a7d9c149aa282e8c8c
+
+scripts/api_audit/verify_all_citations_content.py
+scripts/tests/test_verify_all_citations_content.py
+COMMIT a40880a9 b42b5b39fdc00cc790e6c60fca64e49165bec860
+
+scripts/scoring_input_contract.py
+scripts/tests/test_scoring_input_contract.py
+COMMIT b42b5b39 dafdf860e915d32c1aef8c26a9d38cdfde37139d
+
+scripts/data/ingredient_quality_map.json
+scripts/enrich_supplements_v3.py
+scripts/tests/test_scorable_classification.py
+COMMIT dafdf860 a875c626c1883c437bb6a2ce8153e90a0bc72609 df89c74e7cd844a2849181a7d9c149aa282e8c8c
+COMMIT a875c626 becdcb4a9fc683a268970464e316580d75bda8d8 52b275ea0a657dcf3c57896d890d4eae7b946320
+COMMIT df89c74e 00eabf5e738f5aacbd1c4e3c5012fd4a0ce749d5 52b275ea0a657dcf3c57896d890d4eae7b946320
+COMMIT 00eabf5e 19436bb04e5b719641691ea624a44eee25c6ef78
+
+scripts/audits/pending_items_20260926/LEDGER.md
+COMMIT 19436bb0 0827e9b011341100e1a69ddd9613eb000eebd5d8
+
+scripts/data/interaction_rules_ghost_review.json
+scripts/tests/test_interaction_rules_integrity_regressions.py
+COMMIT becdcb4a a0eee3e583e6d011c446c83b349e6cf868d06927
+
+scripts/audits/v41_recovery/RECONCILIATION.md
+COMMIT 52b275ea 6767a383c9ffc29b1c8c57622fed306ea9df4a2f
+
+scripts/audits/pending_items_20260926/LEDGER.md
+COMMIT 0827e9b0 7d8f7b08e6f3d8b6182fb412781fda0de17d4a21
+
+scripts/data/ingredient_interaction_rules.json
+scripts/tests/test_interaction_rules_integrity_regressions.py
+COMMIT 7d8f7b08 6e475af1c98443a2f9340733beca4389b3c57ee2
+
+scripts/audits/pending_items_20260926/research.md
+scripts/data/ingredient_interaction_rules.json
+scripts/tests/test_interaction_rules_integrity_regressions.py
+COMMIT 6e475af1 a19ff8b8b4d3c6daeefa971ce04b6cbd9816a37c
+
+scripts/audits/pending_items_20260926/research.md
+scripts/data/ingredient_interaction_rules.json
+scripts/tests/test_interaction_rules_integrity_regressions.py
+COMMIT a19ff8b8 344104037d6fcaeda5c3740a6d7c3961d1875efb
+
+scripts/audits/pending_items_20260926/research.md
+scripts/data/ingredient_interaction_rules.json
+scripts/tests/test_interaction_rules_integrity_regressions.py
+COMMIT 34410403 117584e3b8a5a699bd7644fc7e647f3c7316dfd1
+
+scripts/audits/pending_items_20260926/research.md
+scripts/data/ingredient_interaction_rules.json
+scripts/tests/test_interaction_rules_integrity_regressions.py
+scripts/tests/test_phase3_dose_floors.py
+COMMIT 117584e3 aa915835f986a20fdaaaa3be430419e1ff4935e4
+
+scripts/audits/pending_items_20260926/research.md
+scripts/data/ingredient_interaction_rules.json
+scripts/tests/test_interaction_rules_integrity_regressions.py
+COMMIT a0eee3e5 37db58d71d08f45c23fd9a723e21ac705c0860e2
+
+scripts/audits/v41_recovery/RECONCILIATION.md
+scripts/enrich_supplements_v3.py
+scripts/tests/fixtures/fiber_evidence_252564_raw.json
+scripts/tests/fixtures/fiber_evidence_255063_raw.json
+scripts/tests/fixtures/fiber_evidence_259395_raw.json
+scripts/tests/test_scorable_classification.py
+COMMIT 37db58d7 c2a20b009ccf47ad38722a87e1c0176519d40525
+
+scripts/audits/v41_recovery/RECONCILIATION.md
+scripts/scoring_input_contract.py
+scripts/tests/test_scoring_input_contract.py
+COMMIT aa915835 dc92c43f66d98c1d203df61ef2f2b86f26de15ba
+
+scripts/audits/pending_items_20260926/research.md
+scripts/data/ingredient_interaction_rules.json
+scripts/tests/test_interaction_rules_integrity_regressions.py
+scripts/tests/test_phase3_dose_floors.py
+COMMIT 6767a383 7863d0f2dc25267586de013120a8156ec98d903a
+
+scripts/audits/pending_items_20260926/LEDGER.md
+COMMIT c2a20b00 97b8a0ed075718a42523746e6f0ed1d52fa268cb
+
+scripts/audits/v41_recovery/RECONCILIATION.md
+scripts/enhanced_normalizer.py
+scripts/tests/fixtures/fiber_evidence_228873_raw.json
+scripts/tests/test_nutrition_facts_extended.py
+COMMIT 7863d0f2 0fa3334064088bf0c1d366680fa6e9353c70a79f
+
+scripts/enrich_supplements_v3.py
+scripts/tests/test_blend_child_interaction_alerts.py
+COMMIT dc92c43f 172a850b54a73471abb4e62bab7e25b20202d718
+
+scripts/audits/pending_items_20260926/research.md
+scripts/data/ingredient_interaction_rules.json
+scripts/tests/test_interaction_rules_integrity_regressions.py
+COMMIT 172a850b 7260479a8288b4eab24f0dbcb3dfe5171c8f66f5
+
+scripts/audits/pending_items_20260926/research.md
+scripts/data/ingredient_interaction_rules.json
+scripts/tests/test_interaction_rules_integrity_regressions.py
+COMMIT 0fa33340 7ac5f2c463e2e495316ae5de2e130ceaf1a54222
+
+scripts/audits/pending_items_20260926/LEDGER.md
+COMMIT 7ac5f2c4 34c8cd0e4e899227162c5ebbb70c8116087c0db1
+
+scripts/audits/pending_items_20260926/research.md
+scripts/data/ingredient_interaction_rules.json
+scripts/tests/test_interaction_rules_integrity_regressions.py
+scripts/tests/test_phase3_dose_floors.py
+COMMIT 34c8cd0e 6c4a130e37eff24098f5f9e6299af7361423e9fd
+
+scripts/data/banned_recalled_ingredients.json
+scripts/tests/test_banned_recalled_identifier_integrity.py
+COMMIT 7260479a 50d99d9b720fce707ba750871acb4437dfa8cd0a
+
+scripts/audits/pending_items_20260926/LEDGER.md
+COMMIT 50d99d9b 7a6ce5b406b879f261385535e12ba3ea303244d6
+
+scripts/api_audit/verify_interaction_rules_citations.py
+scripts/tests/test_verify_interaction_rules_citations.py
+COMMIT 97b8a0ed 4ff8abff0d8a145fb9bbfce3abd7eee8bda10e38
+
+scripts/audits/v41_recovery/RECONCILIATION.md
+scripts/scoring_input_contract.py
+scripts/tests/test_clinical_match_hyphen_insensitive.py
+COMMIT 7a6ce5b4 da77c4566b776df57a1a30d88e27e58b5127a5cd
+
+scripts/audits/pending_items_20260926/research.md
+scripts/data/ingredient_interaction_rules.json
+scripts/tests/test_interaction_rules_integrity_regressions.py
+COMMIT 4ff8abff 9aec5a4c3d037e5d4000f1579bdce3daa28fbd9b
+
+scripts/audits/v41_recovery/RECONCILIATION.md
+scripts/scoring_input_contract.py
+scripts/tests/test_scoring_input_contract.py
+COMMIT 9aec5a4c dc6313b8b27691bb33b14adaff777dc95b58d7da
+
+scripts/audits/v41_recovery/RECONCILIATION.md
+scripts/data/form_keywords_vocab.json
+scripts/tests/test_form_name_extraction.py
+COMMIT 6c4a130e 49f53e8c5456428ddceaae7107fafa1d8aed21a2
+
+scripts/enrich_supplements_v3.py
+scripts/tests/test_botanical_interaction_subjects.py
+COMMIT 49f53e8c 0e18c9bc58555aebdd6850b39e630c3fbe18160f
+
+scripts/GLOSSARY.md
+scripts/build_final_db.py
+scripts/enrich_supplements_v3.py
+scripts/identity/interaction.py
+scripts/tests/fixtures/botanical_twin_184004_raw.json
+scripts/tests/fixtures/botanical_twin_311160_raw.json
+scripts/tests/test_botanical_interaction_subjects.py
+COMMIT 0e18c9bc da77c4566b776df57a1a30d88e27e58b5127a5cd
+
+scripts/enrich_supplements_v3.py
+scripts/tests/test_botanical_interaction_subjects.py
+COMMIT dc6313b8 220c4e5e544c883fcc89ba8d28f5d7dc14859ab1
+
+scripts/audit_scoring_contract_leaks.py
+scripts/audits/v41_recovery/RECONCILIATION.md
+COMMIT 220c4e5e d586fc902ab97e098977da174ada80ef852b0af0
+
+scripts/audits/v41_recovery/RECONCILIATION.md
+scripts/evidence_resolver.py
+scripts/scoring_input_contract.py
+scripts/tests/test_evidence_resolver.py
+scripts/tests/test_v4_generic_evidence_p133.py
+COMMIT d586fc90 3c8bf24f714f1a4b57e427130d14d4004a0fcb98
+
+scripts/audits/v41_recovery/RECONCILIATION.md
+scripts/evidence_resolver.py
+scripts/scoring_v4/modules/generic_evidence.py
+scripts/tests/test_evidence_resolver.py
+COMMIT da77c456 7133937d13b242c458ba8a6dcb6f0e75143c6617
+
+scripts/audits/pending_items_20260926/LEDGER.md
+COMMIT 3c8bf24f ed2a5f364007c1872d6034f25f9bf014f6207b45
+
+scripts/audits/v41_recovery/RECONCILIATION.md
+scripts/evidence_resolver.py
+scripts/scoring_input_contract.py
+scripts/scoring_v4/modules/generic_evidence.py
+scripts/scoring_v4/modules/probiotic_evidence.py
+scripts/tests/test_v4_generic_evidence_p133.py
+COMMIT ed2a5f36 d60cfc40e938749792fc42385b35627511674fc8
+
+scripts/GLOSSARY.md
+scripts/audits/v41_recovery/RECONCILIATION.md
+scripts/scoring_input_contract.py
+scripts/scoring_v4/modules/generic_evidence.py
+scripts/tests/fixtures/stress_gut_evidence_enriched.json
+scripts/tests/test_v4_generic_evidence_p133.py
+scripts/tests/test_v4_role_classification.py
+COMMIT 7133937d ff1793cb5ad5d1c7cd9a96fbb5f7c983f4987c53
+
+scripts/audits/pending_items_20260926/LEDGER.md
+COMMIT ff1793cb 786d318bb5883d169fd894f5fcee1897533d369c
+
+scripts/contracts/source_of_truth_matrix.json
+COMMIT d60cfc40 00a0c5f9c06ed5113db918a1e55d3d7a4158f2c2
+
+scripts/audits/v41_recovery/RECONCILIATION.md
+COMMIT 786d318b f7a1038993cf230aa58a0d34f0c36854b7bc777f
+
+scripts/data/medication_depletions.json
+scripts/tests/test_known_depletion_citation_ghost_suppressions.py
+COMMIT f7a10389 a70e057dffd2fa3e4cdddd0f62ffae317a8532b9
+
+scripts/data/curated_interactions/curated_interactions_v1.json
+scripts/tests/test_curated_interactions_citation_integrity.py
+COMMIT a70e057d e69e12232b742e508d3c95d833cd25e3fdbf40a1
+
+scripts/data/ingredient_interaction_rules.json
+scripts/tests/test_interaction_rules_integrity_regressions.py
+COMMIT 00a0c5f9 f3f75bcdd9fc573674cdee1c0ba1e14c586c4c99
+
+scripts/audits/v41_recovery/RECONCILIATION.md
+scripts/build_final_db.py
+scripts/tests/test_export_gate.py
+COMMIT e69e1223 8dbd621bd79a678f46437a2a285ed825784b9166
+
+scripts/audits/pending_items_20260926/research.md
+scripts/data/ingredient_quality_map.json
+scripts/tests/test_iqm_identifier_integrity.py
+COMMIT f3f75bcd 6bdffe33515e21b201ac7201912004dae4a94611
+
+scripts/audits/v41_recovery/RECONCILIATION.md
+scripts/tests/test_active_banned_recalled_parity.py
+scripts/tests/test_clean_label_nested_forms.py
+scripts/tests/test_red_yeast_rice_alias_coverage.py
+COMMIT 8dbd621b 292f83fc92c9caa1292c64c41c7e93ad95c6c45b
+
+scripts/audits/scoring_diagnosis_20260922/DIAGNOSIS.md
+scripts/audits/scoring_diagnosis_20260922/drivers.json
+scripts/audits/scoring_diagnosis_20260922/exposure_audit.json
+scripts/audits/scoring_diagnosis_20260922/inputs.json
+scripts/audits/scoring_diagnosis_20260922/iqm_maxima.json
+scripts/audits/scoring_diagnosis_20260922/probes.json
+scripts/audits/scoring_diagnosis_20260922/provenance.json
+scripts/audits/scoring_diagnosis_20260922/route_examples.json
+scripts/audits/scoring_diagnosis_20260922/serving_probes.json
+scripts/audits/scoring_diagnosis_20260922/summary.json
+COMMIT 292f83fc 0d410c8451fc3799d835a95873a7a510a36c46d3 a59659bd60ed38c391eb730119a0dee373f74705
+COMMIT 0d410c84 f667c7618b02d676288229151583b7c9eb95af76 d101baff184e6317cc0b08e32cee356c224802d9
+COMMIT f667c761 ff5a812faa7a9dd1831d5ee376aaa388cedd4993 ce3088a6a63d36f76fe236fdeb671f28ad5631e3
+COMMIT ff5a812f 19b44db432560868b4608a4d3b75dc0a7b2c3d25 121ae9f7d3c9b8f20fa76f7c878f96448a958a0d
+COMMIT 19b44db4 3cbd6fe65212f0a8df77621168c23e21a2b88a3d 1749a64a4dca4a8b04cecd1a989bfaceeb208ae7
+COMMIT 3cbd6fe6 a5bc92b73c60426038264c5c8fc47f6784abd048 f9eed995b6fea90533b024c36aa2666b8b13f5ca
+COMMIT 6bdffe33 e1eb3bc23f4d98dcd27ec197e4ecd869c4ead332
+
+scripts/audits/v41_recovery/RECONCILIATION.md
+scripts/scoring_v4/modules/generic_evidence.py
+scripts/tests/test_v4_generic_evidence_p133.py
+COMMIT e1eb3bc2 674a2ec94bfc2c23322e269ee58c5ebfd51ed8d9
+
+scripts/audits/v41_recovery/RECONCILIATION.md
+scripts/evidence_resolver.py
+scripts/tests/test_evidence_resolver.py
+COMMIT ce3088a6 001bcad834a628e7eacdb4cc88f27e48fa7801ce
+
+scripts/audits/quarantine_triage_20260919/add_standardization_marker_identities.py
+scripts/data/ingredient_quality_map.json
+scripts/tests/test_iqm_identifier_integrity.py
+COMMIT 674a2ec9 a4cc5c6b4708cd79740df9ef92eec15697efe707
+
+scripts/assessment_readiness.py
+scripts/audits/v41_recovery/RECONCILIATION.md
+scripts/tests/test_assessment_readiness.py
+COMMIT a4cc5c6b 3e830c0f06386963278c407d71a12421ab8baee1
+
+scripts/tests/test_candidate_d_omega_standard.py
+COMMIT 3e830c0f d7754ed564cd7af8ab9b0d6a99dcbdaf81b00746
+
+scripts/audits/v41_recovery/RECONCILIATION.md
+scripts/scoring_v4/modules/botanical_profile.py
+scripts/tests/test_v4_botanical_profile.py
+COMMIT d7754ed5 e9f1a54cdbd58f7a4d29c3b489ff6912fec691d7
+
+scripts/audits/v41_recovery/RECONCILIATION.md
+scripts/scoring_v4/modules/generic_evidence.py
+scripts/tests/test_v4_generic_evidence_p133.py
+COMMIT e9f1a54c 372be31d18177f04c3807b1a7682e10b2110a56f
+
+scripts/audits/v41_recovery/RECONCILIATION.md
+scripts/scoring_v4/modules/omega_dose.py
+scripts/tests/test_v4_omega_dose_p162.py
+COMMIT 372be31d 4c4400c1046a93db77dc5ef0929907f3e1a32395
+
+scripts/audits/v41_recovery/RECONCILIATION.md
+scripts/enrich_supplements_v3.py
+scripts/tests/test_form_disclosure_states.py
+COMMIT 4c4400c1 ae2d4ae1032f34fdccf4a04d6f620ab9814d89e1
+
+scripts/audits/v41_recovery/RECONCILIATION.md
+scripts/scoring_input_contract.py
+scripts/scoring_v4/modules/fiber_digestive.py
+scripts/scoring_v4/modules/generic.py
+scripts/scoring_v4/modules/generic_evidence.py
+scripts/tests/fixtures/v4_archetype_decision_suite.json
+scripts/tests/test_v4_generic_evidence_p133.py
+COMMIT ae2d4ae1 9203826c3dbb0d2ff5b3e3b34ac7b0f03bd823a7
+
+scripts/audits/v41_recovery/RECONCILIATION.md
+scripts/enhanced_normalizer.py
+scripts/scoring_input_contract.py
+scripts/tests/fixtures/protein_evidence_42289_raw.json
+scripts/tests/fixtures/protein_evidence_42306_raw.json
+scripts/tests/test_clinical_match_hyphen_insensitive.py
+scripts/tests/test_single_path_cleaner_contract.py
+COMMIT 9203826c 69c08dbcde0acae144d9e09acb779ebeb1dc9bd2
+
+scripts/audits/v41_recovery/RECONCILIATION.md
+scripts/scoring_v4/modules/botanical_profile.py
+scripts/tests/test_v4_botanical_profile.py
+COMMIT 121ae9f7 001bcad834a628e7eacdb4cc88f27e48fa7801ce
+
+scripts/data/ingredient_quality_map.json
+scripts/tests/test_iqm_identifier_integrity.py
+COMMIT d101baff 51dd4afb2d9ce15ecd71d045e2485da7b7410de9
+
+scripts/api_audit/verify_cui.py
+scripts/tests/test_verify_cui.py
+COMMIT a5bc92b7 2d086156e639223882e8ac7db000cf7e96e23e14 69c08dbcde0acae144d9e09acb779ebeb1dc9bd2
+COMMIT 51dd4afb 001bcad834a628e7eacdb4cc88f27e48fa7801ce
+
+scripts/api_audit/README.md
+scripts/api_audit/verify_cui.py
+scripts/tests/test_verify_cui.py
+COMMIT 69c08dbc 2b9a0454c1a58ffeae611b26f0f9eb382817749f
+
+scripts/audits/v41_recovery/RECONCILIATION.md
+COMMIT 2d086156 b594cee09f31c75b974f48b775797a13f7dfde92
+
+scripts/data/interaction_rules_ghost_review.json
+COMMIT b594cee0 b3d4eb7c4cbfd18fb1ccd81a0eb6722b29313414
+
+scripts/api_audit/verify_interaction_rules_citations.py
+COMMIT b3d4eb7c c88e0fbea0d961dfb2b43018c018596fc1d1e1b3 94f4ce048a55732fa0d95b5515171d85124aaf86
+COMMIT a59659bd c85b0d971aebde7fe992d9e18ac10155f7ecadef
+
+scripts/audit_scoring_contract_leaks.py
+scripts/score_supplements_v4.py
+scripts/scoring_v4/gate_safety.py
+scripts/scoring_v4/modules/generic_formulation.py
+scripts/scoring_v4/modules/safety_hygiene.py
+scripts/tests/fixtures/b0_policy_19598_raw.json
+scripts/tests/fixtures/b0_policy_315305_raw.json
+scripts/tests/fixtures/b0_policy_328464_raw.json
+scripts/tests/test_b0_gate_policy_signals.py
+COMMIT 2b9a0454 235ffccd0a96edaffe1430c86f29b06d974099e0
+
+scripts/audits/v41_recovery/RECONCILIATION.md
+scripts/data/backed_clinical_studies.json
+scripts/scoring_input_contract.py
+scripts/scoring_v4/modules/generic_evidence.py
+scripts/tests/fixtures/v4_archetype_decision_suite.json
+scripts/tests/test_omega_epa_dha_amount_owner.py
+scripts/tests/test_v4_evidence_magnitudes_config.py
+COMMIT c88e0fbe e55de3623c405cdbc1dbbde44252e55a5b2bb5b3
+
+scripts/data/cross_db_overlap_allowlist.json
+scripts/tests/test_evidence_resolver.py
+scripts/tests/test_other_ingredient_alias_guard.py
+scripts/tests/test_plant_part_disambiguation_2026_06.py
+COMMIT f9eed995 e60670d73338f60137a2c025000866a9f494b38e
+
+scripts/data/banned_recalled_ingredients.json
+scripts/tests/test_banned_recalled_identifier_integrity.py
+COMMIT e55de362 26e9d733b470be2abba51d99d0ce4e1de6f9b891 2df4bed27568c0de631dd7985ab9f2983acefec3
+COMMIT e60670d7 b52a3245a774c8daae006ce65c66485abbee31d2
+
+scripts/data/banned_recalled_ingredients.json
+scripts/tests/test_banned_recalled_identifier_integrity.py
+COMMIT 26e9d733 5efe5a9b06c3326004ea4a4e43b5c017f38f218d 305329ac350fda450ff4f633d1db09eaef333dc0
+COMMIT 5efe5a9b d2c6909495a114246a4646ea85e22e3bca729c5e 4c59e795f1cbf9c3bbc366c794986ebb0441af09
+COMMIT d2c69094 3a12e873beb95507982da2fba25df735682b146f b3191f6244993e28abe34dca0777f27f7c162a30
+COMMIT 1749a64a 001bcad834a628e7eacdb4cc88f27e48fa7801ce
+
+scripts/data/banned_recalled_ingredients.json
+scripts/tests/test_banned_recalled_identifier_integrity.py
+COMMIT 3a12e873 87529ab2c2d8ec0a948e8ffe580409270b088f56 8c6a279773b6e7e7ea6dd0f339e6742585f11f10
+COMMIT 235ffccd 01b8a66ccbcf953d269f0d11de7c1b90becb6668
+
+scripts/audits/v41_recovery/RECONCILIATION.md
+scripts/scoring_v4/modules/generic_evidence.py
+scripts/tests/test_v4_generic_evidence_p133.py
+COMMIT 87529ab2 5ed85a1aded403cceb5c0cb6d67f6437a76c2aa1 a550b8e341df306161d9061cdf0e35c0679dd752
+COMMIT 5ed85a1a fffcd21f656426ea936a4d92a7caa7538430f6f4 07cb56a8523c9f0d83c5174a6c1a9c0acd7702e6
+COMMIT 01b8a66c 44c7937c24f3d5866c2a67d6d10d5e54b579e8fc
+
+scripts/audits/v41_recovery/RECONCILIATION.md
+scripts/scoring_v4/modules/generic_evidence.py
+scripts/tests/test_v4_generic_evidence_p133.py
+COMMIT fffcd21f 24133e0d1f899dd2a4fa7eb480b7bc3ec69a9d16 0d5fa6b812d07da61c75913231f0728d6b8bf606
+COMMIT b52a3245 e3854e391e5dd2cb0015daedc40b7ea3ad3ee252
+
+scripts/data/banned_recalled_ingredients.json
+scripts/tests/test_banned_recalled_identifier_integrity.py
+COMMIT e3854e39 cd7216d18b4d3bb8e3aa3e7bef768052e712e8b9
+
+scripts/data/banned_recalled_ingredients.json
+scripts/data/curated_overrides/cui_overrides.json
+scripts/tests/test_banned_recalled_identifier_integrity.py
+COMMIT cd7216d1 305329ac350fda450ff4f633d1db09eaef333dc0
+
+scripts/data/banned_recalled_ingredients.json
+scripts/tests/test_banned_recalled_identifier_integrity.py
+COMMIT 24133e0d bb6ef1917e34546ba28ca7b8f6d5d88f8be14c84 a2f57953509bf7247ac0374b9eacf8445398c1a1
+COMMIT 44c7937c 6c3a0d57aca0816664839000e0adb5ab643590c5
+
+scripts/audits/v41_recovery/RECONCILIATION.md
+scripts/scoring_v4/modules/generic_evidence.py
+scripts/tests/fixtures/protein_evidence_294073_raw.json
+scripts/tests/test_clinical_match_hyphen_insensitive.py
+scripts/tests/test_v4_generic_evidence_p133.py
+COMMIT bb6ef191 0fd92bb9e5a12fca90f3c3d1dc0f50bc0bebe24c
+
+scripts/scoring_v4/modules/fiber_digestive_helpers.py
+COMMIT 0fd92bb9 362aa338239ab33262e9df924aa13932671812d6 60d0323c89be8cad4a549a54a4952b23a98d3b30
+COMMIT 362aa338 c85b0d971aebde7fe992d9e18ac10155f7ecadef ab4e1eca4247e5df522e58011f1cea9743943aac
+COMMIT 6c3a0d57 e769134adcb0a645c1be8405e63f93273bb91478
+
+scripts/DATABASE_SCHEMA.md
+scripts/GLOSSARY.md
+scripts/audits/v41_recovery/RECONCILIATION.md
+scripts/contracts/source_of_truth_matrix.json
+scripts/data/backed_clinical_studies.json
+scripts/evidence_resolver.py
+scripts/scoring_v4/config/config_fingerprint_history.json
+scripts/scoring_v4/config/quality_score.json
+scripts/scoring_v4/modules/omega_evidence.py
+scripts/tests/test_candidate_d_omega_standard.py
+scripts/tests/test_v4_config_registry.py
+scripts/tests/test_v4_omega_evidence_p163.py
+COMMIT e769134a c85b0d971aebde7fe992d9e18ac10155f7ecadef
+
+scripts/audits/v41_recovery/RECONCILIATION.md
+scripts/data/backed_clinical_studies.json
+scripts/tests/fixtures/protein_evidence_204521_raw.json
+scripts/tests/fixtures/protein_evidence_222864_raw.json
+scripts/tests/fixtures/protein_evidence_299952_raw.json
+scripts/tests/test_clinical_match_hyphen_insensitive.py
+scripts/tests/test_v4_generic_evidence_p133.py
+COMMIT c85b0d97 f2efb7933c3cd5c8c91b3c949721b8d39aa3e740
+
+scripts/scoring_v4/config/config_fingerprint_history.json
+scripts/scoring_v4/config/quality_score.json
+scripts/scoring_v4/modules/probiotic.py
+scripts/scoring_v4/modules/probiotic_formulation.py
+scripts/tests/fixtures/v4_archetype_decision_suite.json
+scripts/tests/test_prebiotic_catalog_matcher.py
+scripts/tests/test_probiotic_identity_completeness.py
+scripts/tests/test_probiotic_rubric_shadow.py
+scripts/tests/test_studied_formula_assessment.py
+scripts/tests/test_v4_archetype_fixtures.py
+scripts/tests/test_v4_category_magnitudes_config.py
+scripts/tests/test_v4_config_registry.py
+scripts/tests/test_v4_formulation_variant_magnitudes_config.py
+scripts/tests/test_v4_probiotic_formulation_p21.py
+scripts/tests/test_v4_probiotic_module_skeleton_p20.py
+scripts/tests/test_v4_probiotic_trust_p24.py
+COMMIT 305329ac d16f9d0cce60adcc1ac23c0c9730469fce50f9ac
+
+scripts/tests/test_banned_recalled_identifier_integrity.py
+COMMIT d16f9d0c 45278c2abd0241510e816e94677beddf27fb8a22
+
+scripts/data/banned_recalled_ingredients.json
+scripts/tests/test_banned_recalled_identifier_integrity.py
+COMMIT 45278c2a 001bcad834a628e7eacdb4cc88f27e48fa7801ce
+
+scripts/data/banned_recalled_ingredients.json
+scripts/tests/test_banned_recalled_identifier_integrity.py
+COMMIT 94f4ce04 795d0cd12f5a8b101d4a7045e02f7a8e4da43299
+
+scripts/data/ingredient_interaction_rules.json
+scripts/tests/test_interaction_rules_integrity_regressions.py
+COMMIT 795d0cd1 e8fafcb63851f534defb185e5ffd74071bd3f58a
+
+scripts/data/ingredient_interaction_rules.json
+scripts/tests/test_interaction_rules_integrity_regressions.py
+COMMIT e8fafcb6 8c7d7cf746d89c5760c1e6d0e07cd97bc609dc0e
+
+scripts/data/ingredient_interaction_rules.json
+scripts/tests/test_interaction_rules_integrity_regressions.py
+COMMIT 8c7d7cf7 250ea2649e5bb7e067851fce88466bc3f6229dbc
+
+scripts/data/ingredient_interaction_rules.json
+scripts/data/interaction_rules_ghost_review.json
+scripts/tests/test_interaction_rules_integrity_regressions.py
+COMMIT 250ea264 87abcc6c77952d06deff27ebf57cd368ba72ff83
+
+scripts/data/ingredient_interaction_rules.json
+scripts/tests/test_interaction_rules_integrity_regressions.py
+COMMIT 87abcc6c bd98a8636a456c611d3e390f801b96aa7051396e
+
+scripts/data/ingredient_interaction_rules.json
+scripts/tests/test_interaction_rules_integrity_regressions.py
+COMMIT bd98a863 15237e097ea124e7ee96819063a2a7be4248d2e2
+
+scripts/audits/interaction_rules/citation_triage_2026_09/research.md
+scripts/data/interaction_rules_ghost_review.json
+scripts/tests/test_interaction_rules_integrity_regressions.py
+COMMIT 15237e09 2be605a78ccfc2843c60c6df6de9e0117c255ada
+
+scripts/data/interaction_rules_ghost_review.json
+scripts/tests/test_interaction_rules_integrity_regressions.py
+COMMIT 2be605a7 73264e8bb7896346296ad7cf79a609e20ac9b9c0
+
+scripts/audits/interaction_rules/citation_triage_2026_09/research.md
+scripts/data/ingredient_interaction_rules.json
+scripts/tests/test_interaction_rules_integrity_regressions.py
+COMMIT 73264e8b 71f22a10c25c4c5aec5cc542ea93c74ff434a93f
+
+scripts/audits/interaction_rules/citation_triage_2026_09/research.md
+scripts/data/ingredient_interaction_rules.json
+scripts/tests/test_interaction_rules_integrity_regressions.py
+COMMIT 71f22a10 26610465ab40099f7546383120864e75609fd26d
+
+scripts/audits/interaction_rules/citation_triage_2026_09/research.md
+scripts/data/ingredient_interaction_rules.json
+scripts/tests/test_interaction_rules_integrity_regressions.py
+COMMIT 26610465 8889d0dba896be2d12e4c3e66466f4b612d85e8e
+
+scripts/audits/interaction_rules/citation_triage_2026_09/research.md
+scripts/data/ingredient_interaction_rules.json
+scripts/tests/test_interaction_rules_integrity_regressions.py
+COMMIT 8889d0db 787b68a237411e1330dc9ded1d44b6887d497170
+
+scripts/audits/interaction_rules/citation_triage_2026_09/research.md
+scripts/data/ingredient_interaction_rules.json
+scripts/tests/test_interaction_rules_integrity_regressions.py
+COMMIT 787b68a2 5cd0026e8b42a0eb5c49581d004fbfb71065a5fa
+
+scripts/audits/interaction_rules/citation_triage_2026_09/research.md
+scripts/data/ingredient_interaction_rules.json
+scripts/tests/test_interaction_rules_integrity_regressions.py
+COMMIT 5cd0026e 2e98fd24e08b5955b73d9ca7d42eebe119b2a6b6
+
+scripts/audits/interaction_rules/citation_triage_2026_09/research.md
+scripts/data/ingredient_interaction_rules.json
+scripts/tests/test_interaction_rules_integrity_regressions.py
+COMMIT 2e98fd24 74b708f7c6a0367405592641707387489c1062cd
+
+scripts/audits/interaction_rules/citation_triage_2026_09/research.md
+scripts/data/ingredient_interaction_rules.json
+scripts/tests/test_interaction_rules_integrity_regressions.py
+COMMIT 74b708f7 802aff80bb08f11e800fd8f546860c683d3d8097
+
+scripts/audits/interaction_rules/citation_triage_2026_09/research.md
+scripts/data/ingredient_interaction_rules.json
+scripts/tests/test_interaction_rules_integrity_regressions.py
+COMMIT 802aff80 91b3f254860619244cc6a5eb4c06f2cd25f39072
+
+scripts/audits/interaction_rules/citation_triage_2026_09/research.md
+scripts/data/ingredient_interaction_rules.json
+scripts/tests/test_interaction_rules_integrity_regressions.py
+COMMIT 91b3f254 cf7ffe2a9b2b7d0b9fb3a9f895305c591fbbdcb7
+
+scripts/audits/interaction_rules/citation_triage_2026_09/research.md
+scripts/data/ingredient_interaction_rules.json
+scripts/tests/test_interaction_rules_integrity_regressions.py
+COMMIT cf7ffe2a c3a5d081881394f3efafaba9b1d92d58b3857028
+
+scripts/data/ingredient_interaction_rules.json
+scripts/tests/test_interaction_rules_integrity_regressions.py
+COMMIT c3a5d081 7d4755d6d775f10eceadddfb2f9f97056416df9b
+
+scripts/data/ingredient_interaction_rules.json
+scripts/tests/test_interaction_rules_integrity_regressions.py
+COMMIT 7d4755d6 293d7024b72ae3f290422d3b5d9852f32a45dc06
+
+scripts/audits/interaction_rules/citation_triage_2026_09/research.md
+scripts/data/ingredient_interaction_rules.json
+scripts/tests/test_interaction_rules_integrity_regressions.py
+COMMIT 293d7024 3d2f520b40184344bea0e28b5572d3a3ba3ca5a2
+
+scripts/audits/interaction_rules/citation_triage_2026_09/research.md
+scripts/data/ingredient_interaction_rules.json
+scripts/tests/test_interaction_rules_integrity_regressions.py
+COMMIT 3d2f520b 1651eafb0ecf3f22236511e97207e2169edfc767
+
+scripts/audits/interaction_rules/citation_triage_2026_09/research.md
+scripts/data/ingredient_interaction_rules.json
+scripts/tests/test_interaction_rules_integrity_regressions.py
+COMMIT 1651eafb 076b4cd46f9d53fa0de594b0a01098e8caa01f25
+
+scripts/audits/interaction_rules/citation_triage_2026_09/research.md
+scripts/data/ingredient_interaction_rules.json
+scripts/tests/test_interaction_rules_integrity_regressions.py
+COMMIT 076b4cd4 ea53970d2d0cec56c34b3d10098ed2cc8a1045f5
+
+scripts/audits/interaction_rules/citation_triage_2026_09/research.md
+scripts/data/ingredient_interaction_rules.json
+scripts/tests/test_interaction_rules_integrity_regressions.py
+COMMIT ea53970d a9d4582fcaeb8d1c1cfe329207d3eb8ea384d08a
+
+scripts/audits/interaction_rules/citation_triage_2026_09/research.md
+scripts/data/ingredient_interaction_rules.json
+scripts/tests/test_interaction_rules_integrity_regressions.py
+COMMIT a9d4582f 75f09cbe40b3276b1479b7a6ae774f130078d77d
+
+scripts/audits/interaction_rules/citation_triage_2026_09/research.md
+scripts/data/ingredient_interaction_rules.json
+scripts/tests/test_interaction_rules_integrity_regressions.py
+COMMIT 75f09cbe abcfd7c6b6966b68a53b3c0fefecc43a12e372a1
+
+scripts/audits/interaction_rules/citation_triage_2026_09/research.md
+scripts/data/ingredient_interaction_rules.json
+scripts/tests/test_interaction_rules_integrity_regressions.py
+COMMIT abcfd7c6 6360fe4f4cb587e5198e1fe27d6c770334ae0637
+
+scripts/audits/interaction_rules/citation_triage_2026_09/research.md
+scripts/data/ingredient_interaction_rules.json
+scripts/tests/test_interaction_rules_integrity_regressions.py
+COMMIT 6360fe4f 16ce5cc0881eef0fcc45a142f5f3b73f08f22a52
+
+scripts/audits/interaction_rules/citation_triage_2026_09/research.md
+scripts/data/ingredient_interaction_rules.json
+scripts/tests/test_interaction_rules_integrity_regressions.py
+COMMIT 16ce5cc0 94352e83c844922066d7fbd4a6c6c1f737b7959a
+
+scripts/audits/interaction_rules/citation_triage_2026_09/research.md
+scripts/data/ingredient_interaction_rules.json
+scripts/tests/test_interaction_rules_integrity_regressions.py
+COMMIT 94352e83 b49123ad260f2773f4e2851dd520e34f6ecb058c
+
+scripts/audits/interaction_rules/citation_triage_2026_09/research.md
+scripts/data/ingredient_interaction_rules.json
+scripts/tests/test_interaction_rules_integrity_regressions.py
+COMMIT b49123ad 7185804b2b98d9487896d5c7dc0435c8959017aa
+
+scripts/audits/interaction_rules/citation_triage_2026_09/research.md
+scripts/data/ingredient_interaction_rules.json
+scripts/tests/test_interaction_rules_integrity_regressions.py
+COMMIT 7185804b 1c7f19d70610276adab3ad5ea42bb7281b10e336
+
+scripts/audits/interaction_rules/citation_triage_2026_09/research.md
+scripts/data/ingredient_interaction_rules.json
+scripts/tests/test_interaction_rules_integrity_regressions.py
+COMMIT 1c7f19d7 30f071fc3f4572e2d6a42e0f63aed3ded394b6fd
+
+scripts/audits/interaction_rules/citation_triage_2026_09/research.md
+scripts/data/ingredient_interaction_rules.json
+scripts/tests/test_interaction_rules_integrity_regressions.py
+COMMIT 30f071fc 3107f0a6e82e5b02f82b2c38d0839f86a3b874f9
+
+scripts/audits/interaction_rules/citation_triage_2026_09/research.md
+scripts/data/ingredient_interaction_rules.json
+scripts/tests/test_interaction_rules_integrity_regressions.py
+COMMIT 3107f0a6 d3f6f5bf7d63122f053da2bafe5f9aa8083c8ce8
+
+scripts/audits/interaction_rules/citation_triage_2026_09/research.md
+scripts/data/ingredient_interaction_rules.json
+scripts/tests/test_interaction_rules_integrity_regressions.py
+COMMIT d3f6f5bf 13ed5bea79c14169530aab9a756cb5cc400b639c
+
+scripts/audits/interaction_rules/citation_triage_2026_09/research.md
+scripts/data/ingredient_interaction_rules.json
+scripts/tests/test_interaction_rules_integrity_regressions.py
+COMMIT 13ed5bea d9ae0687c43445f703a2996bbe140787363ff36e
+
+scripts/audits/interaction_rules/citation_triage_2026_09/research.md
+scripts/data/ingredient_interaction_rules.json
+scripts/tests/test_interaction_rules_integrity_regressions.py
+COMMIT d9ae0687 f834caa54075830f3d5e92695156a4e779192a6e
+
+scripts/api_audit/verify_interaction_rules_citations.py
+scripts/tests/test_verify_interaction_rules_citations.py
+COMMIT 4c59e795 93942c044768be5b84b5649f72bbc01224ae4526
+
+scripts/api_audit/verify_unii.py
+scripts/tests/test_verify_unii.py
+COMMIT 93942c04 001bcad834a628e7eacdb4cc88f27e48fa7801ce
+
+scripts/api_audit/verify_unii.py
+scripts/tests/test_verify_unii.py
+COMMIT f2efb793 c2557674b6d745829579c7030d7852c2c5c9f2b5
+
+scripts/evidence_resolver.py
+scripts/scoring_v4/config/config_fingerprint_history.json
+scripts/scoring_v4/config/quality_score.json
+scripts/scoring_v4/modules/b_complex.py
+scripts/scoring_v4/modules/multi_prenatal_evidence.py
+scripts/tests/fixtures/v4_archetype_decision_suite.json
+scripts/tests/test_v4_archetype_fixtures.py
+scripts/tests/test_v4_b_complex_module.py
+scripts/tests/test_v4_config_registry.py
+scripts/tests/test_v4_multi_prenatal_evidence_p33.py
+scripts/tests/test_vitamin_form_ownership.py
+COMMIT f834caa5 4ac662e34b55cf6b7c7ebf93f1d63410228ff9ac
+
+scripts/audits/interaction_rules/laxative_resourcing_2026_09/research.md
+COMMIT 4ac662e3 304e6e576236a90322203cbeb922806eca3cb8eb
+
+scripts/data/ingredient_quality_map.json
+scripts/tests/test_b31_pk_rich_b_integrity.py
+COMMIT 304e6e57 44b2d5b2d9c03f39f061726031de4d8154b77153
+
+scripts/api_audit/verify_interaction_rules_citations.py
+scripts/tests/test_verify_interaction_rules_citations.py
+COMMIT 44b2d5b2 1b10d2e92a6c76c5a7e8cd3d9689b73708fe19e9
+
+scripts/data/banned_recalled_ingredients.json
+scripts/tests/test_b0_inactive_role_gate.py
+COMMIT 1b10d2e9 66df79442bd5d2d487e642a97be19c5e60fcc910
+
+scripts/data/ingredient_interaction_rules.json
+scripts/tests/test_interaction_rules_integrity_regressions.py
+COMMIT c2557674 6a3ab83f8499e6b0ddb7b375cfcdbeff748a731b
+
+scripts/scoring_v4/modules/omega_formulation.py
+scripts/tests/test_v4_omega_formulation_p161.py
+COMMIT 6a3ab83f 6b4522a8a9fbca7f9b0f9d18fc8a6752c29d5179
+
+scripts/data/omega_rubric.json
+scripts/enrich_supplements_v3.py
+scripts/normalization.py
+scripts/scoring_input_contract.py
+scripts/scoring_v4/config/config_fingerprint_history.json
+scripts/scoring_v4/modules/omega_formulation.py
+scripts/tests/fixtures/v4_archetype_decision_suite.json
+scripts/tests/test_omega_product_level_form_enrichment.py
+scripts/tests/test_v4_config_registry.py
+scripts/tests/test_v4_omega_canary_diversity_p161.py
+scripts/tests/test_v4_omega_formulation_p161.py
+scripts/tests/test_v4_omega_module_skeleton_p160.py
+scripts/tests/test_v4_quality_score.py
+COMMIT 6b4522a8 7dbd1447208558d413ddc5340763cd0eb2848244
+
+scripts/tests/test_native_clinical_strain_provenance.py
+scripts/tests/test_native_human_evidence_guard.py
+scripts/tests/test_phase5_evidence_integration.py
+scripts/tests/test_probiotic_applicability_rubric.py
+scripts/tests/test_probiotic_label_dose_independence.py
+scripts/tests/test_probiotic_research_scope_integrity.py
+scripts/tests/test_v4_generic_module_skeleton.py
+scripts/tests/test_v4_immune_support_audit.py
+scripts/tests/test_v4_multi_prenatal_formulation_p31.py
+COMMIT 7dbd1447 59a59132504cf4adeb13e6c6c7dcd0610f003c34
+
+scripts/data/ingredient_quality_map.json
+scripts/tests/test_form_score_reconciliation.py
+scripts/tests/test_iqm_form_evidence_contract.py
+COMMIT 59a59132 1929d398e65b2427496c58c504b9ff5f3c2e9d79
+
+scripts/scoring_v4/config/config_fingerprint_history.json
+scripts/scoring_v4/config/quality_score.json
+scripts/scoring_v4/modules/sports_dose.py
+scripts/tests/fixtures/v4_archetype_decision_suite.json
+scripts/tests/test_v4_archetype_fixtures.py
+scripts/tests/test_v4_config_registry.py
+scripts/tests/test_v4_sports_dose_p171.py
+scripts/tests/test_v4_sports_dose_preworkout_actives.py
+COMMIT 1929d398 ff77935e0a4e4fd7125f0f07c21d2327600e292a
+
+scripts/data/omega_rubric.json
+scripts/scoring_v4/config/config_fingerprint_history.json
+scripts/scoring_v4/config/quality_score.json
+scripts/scoring_v4/modules/generic_transparency.py
+scripts/scoring_v4/modules/multi_prenatal_transparency.py
+scripts/scoring_v4/modules/omega_transparency.py
+scripts/scoring_v4/modules/probiotic_transparency.py
+scripts/tests/test_v4_config_registry.py
+scripts/tests/test_v4_generic_transparency_p135.py
+scripts/tests/test_v4_multi_prenatal_transparency_p35.py
+scripts/tests/test_v4_omega_transparency_p165.py
+scripts/tests/test_v4_probiotic_transparency_p25.py
+scripts/tests/test_v4_transparency_magnitudes_config.py
+COMMIT ff77935e 4a761c304c4bd150ebe3b12f1fb36b3cd6ab0d21
+
+scripts/data/backed_clinical_studies.json
+scripts/evidence_resolver.py
+scripts/scoring_input_contract.py
+scripts/scoring_v4/config/config_fingerprint_history.json
+scripts/scoring_v4/config/quality_score.json
+scripts/scoring_v4/modules/generic_evidence.py
+scripts/scoring_v4/modules/sports.py
+scripts/tests/test_v4_config_registry.py
+scripts/tests/test_v4_generic_evidence_p133.py
+scripts/tests/test_v4_role_classification.py
+scripts/tests/test_v4_sports_final_assembly_p172.py
+COMMIT 66df7944 b1dbe9d169ac7b191b1affba9deb307bcf99c360
+
+scripts/data/ingredient_interaction_rules.json
+scripts/tests/test_interaction_rules_integrity_regressions.py
+COMMIT 2df4bed2 cc03c54cfed054cb13aaffd20d986242aa389e47
+
+scripts/enrich_supplements_v3.py
+scripts/tests/test_enricher_banned_label_evidence_parity.py
+COMMIT b1dbe9d1 c713dea459edd87a89139b6632ce3b0794b6ae04
+
+scripts/api_audit/verify_all_citations_content.py
+scripts/api_audit/verify_interaction_rules_citations.py
+scripts/tests/test_verify_interaction_rules_citations.py
+COMMIT c713dea4 461d1525dac95c5c82278b247e62e3f47f120927
+
+scripts/data/ingredient_quality_map.json
+scripts/tests/test_b31_pk_rich_b_integrity.py
+COMMIT 461d1525 118e19e1c2cb0d6b57f33d3dc3f220eeec91c697
+
+scripts/audits/build_final_sweep_records.py
+scripts/data/literature_evidence_records.json
+scripts/tests/test_evidence_resolver.py
+COMMIT cc03c54c a66c71bbd897b112a4535189738a0dabe4bebb37
+
+scripts/identity/safety.py
+scripts/scoring_v4/gate_safety.py
+COMMIT 118e19e1 ebedd28aa62acf0b8710b2e4c00d2610206f0329
+
+scripts/data/banned_recalled_ingredients.json
+scripts/enrich_supplements_v3.py
+scripts/tests/test_b0_inactive_role_gate.py
+COMMIT ebedd28a 9ca15764cfba61907278f93daa7f372cbfd31231
+
+scripts/data/banned_recalled_ingredients.json
+scripts/tests/test_banned_recalled_identifier_integrity.py
+COMMIT 9ca15764 86fdadbbcdc1feddbb01cb8baf788a3b98329129
+
+scripts/data/ingredient_interaction_rules.json
+scripts/tests/test_interaction_rules_integrity_regressions.py
+COMMIT 86fdadbb 001bcad834a628e7eacdb4cc88f27e48fa7801ce
+
+scripts/audits/interaction_rules/laxative_resourcing_2026_09/research.md
+scripts/data/ingredient_interaction_rules.json
+scripts/tests/test_interaction_rules_integrity_regressions.py
+COMMIT a66c71bb 635fa79c27701fef2cb619535dc0b750e44d6d1b
+
+scripts/data/banned_recalled_ingredients.json
+scripts/preflight.py
+scripts/tests/test_anthraquinone_laxative_integrity.py
+scripts/tests/test_cross_db_overlap_guard.py
+COMMIT 635fa79c 53764ac411214dbf4e3aa6b18e79f87118fce525
+
+scripts/data/banned_recalled_ingredients.json
+scripts/preflight.py
+scripts/tests/test_anthraquinone_laxative_integrity.py
+scripts/tests/test_cross_db_overlap_guard.py
+COMMIT a550b8e3 e81cfe2e0f744e08dd2ebf047a534ec5b7b9b618
+
+scripts/audits/ingredient_row_twins_20260925/REPORT.md
+COMMIT e81cfe2e cd8f45f2bab8df27b23ad075876eb2c4974b92d2
+
+docs/runbooks/verification-gates.md
+scripts/FINAL_EXPORT_SCHEMA_V1.md
+scripts/audit_contract_sync.py
+scripts/tests/test_d53_detail_blob_top_level_contract.py
+scripts/tests/test_export_gate.py
+COMMIT cd8f45f2 f5a8afdd3a73f69d66b4a07fcc083533ef3790f5
+
+scripts/FINAL_EXPORT_SCHEMA_V1.md
+scripts/build_final_db.py
+scripts/inactive_ingredient_resolver.py
+scripts/tests/test_build_final_db.py
+scripts/tests/test_export_gate.py
+COMMIT f5a8afdd 9745b7863aab6432504684893ce5ee4d6574a3e5
+
+scripts/FINAL_EXPORT_SCHEMA_V1.md
+scripts/audits/schema3_payload_report.py
+scripts/build_final_db.py
+scripts/export_schema.py
+scripts/tests/test_build_final_db.py
+scripts/tests/test_export_gate.py
+scripts/tests/test_export_schema3.py
+scripts/tests/test_schema3_payload_report.py
+COMMIT 9745b786 d4f242a93226018ea5a00408a28d40227948436a
+
+scripts/build_final_db.py
+scripts/submission_review/extraction/catalog_gold.py
+scripts/tests/test_build_final_db.py
+scripts/tests/test_inactive_ingredient_contract.py
+scripts/tests/test_prepare_holdout_set.py
+COMMIT d4f242a9 64e6249760635565bfd6f0fabda21d6fd79f4173
+
+scripts/FINAL_EXPORT_SCHEMA_V1.md
+scripts/audit_raw_to_final.py
+scripts/build_final_db.py
+scripts/dashboard/data_loader.py
+scripts/tests/test_build_final_db.py
+scripts/tests/test_export_gate.py
+COMMIT 64e62497 a6447ee2d095735459a832af3e6fa5e7d16a2126
+
+scripts/FINAL_EXPORT_SCHEMA_V1.md
+scripts/audit_raw_to_final.py
+scripts/build_final_db.py
+scripts/tests/test_build_final_db.py
+scripts/tests/test_export_gate.py
+COMMIT a6447ee2 aa394463b2a0775e34df5376355e299972167770
+
+scripts/FINAL_EXPORT_SCHEMA_V1.md
+scripts/api_audit/audit_standardname_safety_separation.py
+scripts/audits/v4_evidence_coverage_triage.py
+scripts/build_final_db.py
+scripts/dashboard/data_loader.py
+scripts/tests/test_build_final_db.py
+scripts/tests/test_dv_backed_dose_correction.py
+scripts/tests/test_export_gate.py
+COMMIT aa394463 001bcad834a628e7eacdb4cc88f27e48fa7801ce
+
+scripts/api_audit/audit_standardname_safety_separation.py
+scripts/tests/test_identity_safety_separation.py
+COMMIT 8c6a2797 3a6b35b4abe391ab37272ffaff6bc7cace8ac7d2
+
+scripts/audits/ingredient_row_twins_20260925/REPORT.md
+COMMIT 3a6b35b4 e72844dd508c42be84f7bd9389bd94aeb01f4084
+
+scripts/FINAL_EXPORT_SCHEMA_V1.md
+scripts/audit_contract_sync.py
+scripts/build_final_db.py
+scripts/tests/test_build_final_db.py
+scripts/tests/test_inactive_ingredient_contract.py
+COMMIT e72844dd a9992c469bb3ee2d2c53703be153ee84f40061b3
+
+scripts/FINAL_EXPORT_SCHEMA_V1.md
+scripts/audit_contract_sync.py
+scripts/build_final_db.py
+scripts/tests/test_build_final_db.py
+scripts/tests/test_inactive_active_form_duplicate_2026_06.py
+COMMIT a9992c46 01f606c50134e0abd41ab7268aa9507f09ee84a2
+
+scripts/FINAL_EXPORT_SCHEMA_V1.md
+scripts/audit_contract_sync.py
+scripts/build_final_db.py
+scripts/tests/test_build_final_db.py
+COMMIT 01f606c5 ae38d8590dbf353b6691b5216565a9b20bfbe045
+
+scripts/FINAL_EXPORT_SCHEMA_V1.md
+scripts/audit_contract_sync.py
+scripts/build_final_db.py
+scripts/inactive_ingredient_resolver.py
+scripts/tests/test_build_final_db.py
+scripts/tests/test_functional_roles_export_contract.py
+COMMIT ae38d859 55754205b208734786a8a2d37813d0f72c37e584
+
+scripts/FINAL_EXPORT_SCHEMA_V1.md
+scripts/audit_contract_sync.py
+scripts/build_final_db.py
+scripts/tests/test_build_final_db.py
+scripts/tests/test_e1_2_2_preflight_invariant.py
+scripts/tests/test_native_clinical_strain_provenance.py
+scripts/tests/test_probiotic_confidence_hybrid.py
+scripts/tests/test_probiotic_structured_form_identity.py
+COMMIT 55754205 102ec43c41d203445a9f61cf7546ec2558e52c26
+
+scripts/FINAL_EXPORT_SCHEMA_V1.md
+scripts/audit_contract_sync.py
+scripts/build_final_db.py
+scripts/tests/test_build_final_db.py
+COMMIT 102ec43c 4108982f0b9ff764d675eb8324a5a0c2e72a6a82
+
+scripts/FINAL_EXPORT_SCHEMA_V1.md
+scripts/audit_contract_sync.py
+scripts/build_final_db.py
+scripts/tests/test_build_final_db.py
+COMMIT 4108982f c69664615d8fedacea2e2fbe6b868c87945b845b
+
+scripts/FINAL_EXPORT_SCHEMA_V1.md
+scripts/audit_contract_sync.py
+scripts/build_final_db.py
+scripts/tests/test_build_final_db.py
+COMMIT c6966461 1a29023bdc732bb1babc54f7130e0fe656ac436f
+
+scripts/FINAL_EXPORT_SCHEMA_V1.md
+scripts/audit_contract_sync.py
+scripts/build_final_db.py
+scripts/tests/test_build_final_db.py
+COMMIT 1a29023b a6ef1e7416ca41ef2af79e3f3a02d95665930f0a
+
+scripts/FINAL_EXPORT_SCHEMA_V1.md
+scripts/api_audit/audit_dv_plausibility.py
+scripts/audit_contract_sync.py
+scripts/audit_raw_to_final.py
+scripts/build_final_db.py
+scripts/dashboard/views/inspector.py
+scripts/tests/test_build_final_db.py
+COMMIT a6ef1e74 bc633dab8f9b0b03f2a8b5f12ba20f7c0b3bbbca
+
+scripts/tests/test_vitamin_a_form_aware_normalization.py
+COMMIT 07cb56a8 1c8b345771170218be4a83deafec9bd8b65e4a8d
+
+scripts/SCORING_ENGINE_SPEC.md
+scripts/scoring_v4/config/config_fingerprint_history.json
+scripts/scoring_v4/config/quality_score.json
+scripts/scoring_v4/modules/immune_support.py
+scripts/tests/test_v4_category_magnitudes_config.py
+scripts/tests/test_v4_config_registry.py
+scripts/tests/test_v4_immune_support_audit.py
+COMMIT 1c8b3457 09bb3dddb291c242a7d187c8c5724b47966d9af0
+
+scripts/tests/test_v4_immune_support_audit.py
+COMMIT b3191f62 650f575d75cc621cbffeb112dbcfb3a9bdf480b6
+
+docs/adr/0001-release-pipeline-safety.md
+scripts/PIPELINE_ARCHITECTURE.md
+COMMIT 650f575d d54d898504b09c4283e67159ec3cdfaa39678222
+
+scripts/release_full.sh
+scripts/tests/test_release_full_catalog_path.py
+COMMIT d54d8985 001bcad834a628e7eacdb4cc88f27e48fa7801ce
+
+scripts/release_interaction_artifact.py
+scripts/tests/test_release_interaction_artifact.py
+COMMIT 53764ac4 c5b0562947c22313f23cfd4fc058fa6cddde1185
+
+scripts/data/ingredient_interaction_rules.json
+scripts/tests/test_anthraquinone_laxative_integrity.py
+scripts/tests/test_migrate_to_profile_gate.py
+COMMIT c5b05629 e79044160e68aba2a13fc45725dda56bdae0fdbf
+
+scripts/data/banned_recalled_ingredients.json
+scripts/data/cross_db_overlap_allowlist.json
+scripts/data/harmful_additives.json
+scripts/preflight.py
+scripts/tests/test_anthraquinone_laxative_integrity.py
+scripts/tests/test_b02_functional_roles_integrity.py
+scripts/tests/test_cross_db_overlap_guard.py
+scripts/tests/test_harmful_additives_cui_cleanup.py
+scripts/tests/test_harmful_additives_identifier_integrity.py
+COMMIT e7904416 7dc199979483ecc175f48965cb03f578ae3f97ea
+
+scripts/data/banned_recalled_ingredients.json
+scripts/preflight.py
+scripts/tests/test_anthraquinone_laxative_integrity.py
+COMMIT 4a761c30 72a301fccce156c182000d613cf9ba61cc896f88
+
+scripts/SCORING_ENGINE_SPEC.md
+scripts/scoring_v4/config/config_fingerprint_history.json
+scripts/scoring_v4/config/quality_score.json
+scripts/tests/test_probiotic_context_approval_bridge.py
+scripts/tests/test_v4_config_registry.py
+scripts/tests/test_v4_evidence_magnitudes_config.py
+scripts/tests/test_v4_probiotic_evidence_p23.py
+COMMIT 72a301fc dda033c7cefb1aed0dd0ffbac7dd4b1d0abebc32
+
+scripts/scoring_v4/modules/probiotic_dose.py
+scripts/tests/test_v4_probiotic_dose_p22.py
+COMMIT 7dc19997 001bcad834a628e7eacdb4cc88f27e48fa7801ce
+
+scripts/data/banned_recalled_ingredients.json
+scripts/preflight.py
+scripts/tests/test_anthraquinone_laxative_integrity.py
+scripts/tests/test_cross_db_overlap_guard.py
+COMMIT dda033c7 afb71c6ca67d425d6465012a23a5c0e249920d31
+
+scripts/scoring_v4/modules/generic_formulation.py
+scripts/tests/test_v4_generic_formulation_neutrality.py
+scripts/tests/test_v4_generic_formulation_p131.py
+COMMIT afb71c6c 70a24eeee5d24fd1773cea88d494b85a52296bdb
+
+scripts/scoring_v4/modules/b_complex.py
+scripts/tests/test_v4_b_complex_module.py
+scripts/tests/test_vitamin_form_ownership.py
+COMMIT 70a24eee dd2cf1ffa16b741c6294071feaa20e8a2205fa19
+
+scripts/data/ingredient_quality_map.json
+scripts/tests/test_b35_dr_pham_signoff_integrity.py
+scripts/tests/test_ingredient_matching_regression.py
+scripts/tests/test_iqm_b12_sublingual_integrity.py
+scripts/tests/test_scoring_reference_resolver.py
+scripts/tests/test_vitamins_bdk_integrity.py
+COMMIT bc633dab cef318608a08046aed251288db914b6a8e794e24
+
+docs/runbooks/verification-gates.md
+scripts/FINAL_EXPORT_SCHEMA_V1.md
+scripts/audits/ingredient_row_twins_20260925/REPORT.md
+COMMIT cef31860 001bcad834a628e7eacdb4cc88f27e48fa7801ce
+
+scripts/api_audit/audit_standardname_safety_separation.py
+scripts/audit_contract_sync.py
+scripts/audit_raw_to_final.py
+scripts/audits/schema3_payload_report.py
+scripts/audits/v4_evidence_coverage_triage.py
+scripts/build_final_db.py
+scripts/dashboard/data_loader.py
+scripts/export_schema.py
+scripts/inactive_ingredient_resolver.py
+scripts/submission_review/extraction/catalog_gold.py
+scripts/tests/test_build_final_db.py
+scripts/tests/test_d53_detail_blob_top_level_contract.py
+scripts/tests/test_dv_backed_dose_correction.py
+scripts/tests/test_export_gate.py
+scripts/tests/test_export_schema3.py
+scripts/tests/test_identity_safety_separation.py
+scripts/tests/test_inactive_ingredient_contract.py
+scripts/tests/test_prepare_holdout_set.py
+scripts/tests/test_schema3_payload_report.py
+COMMIT dd2cf1ff 3c2d28b491780e914bdd5470dad3282c89671920
+
+scripts/scoring_reference_resolver.py
+scripts/scoring_v4/modules/multi_prenatal_formulation.py
+scripts/tests/fixtures/v4_archetype_decision_suite.json
+scripts/tests/test_scoring_reference_resolver.py
+scripts/tests/test_v4_multi_prenatal_formulation_p31.py
+COMMIT 3c2d28b4 5db560e487641577d6b970069ddb37422bd3cadd
+
+scripts/scoring_v4/modules/multi_prenatal_dose.py
+scripts/tests/test_v4_multi_prenatal_dose_p32.py
+COMMIT ab4e1eca 56026a35b191905b1e59c7ee30465e62768e14a7
+
+AGENTS.md
+COMMIT 5db560e4 271fb544e80356a85fa405da8def7c835c4dffd9
+
+scripts/data/backed_clinical_studies.json
+scripts/evidence_resolver.py
+scripts/tests/fixtures/v4_archetype_decision_suite.json
+scripts/tests/test_candidate_d_omega_standard.py
+COMMIT a2f57953 020a3c99869d4639b7b580f28efbb08ad8f374c9
+
+scripts/scoring_v4/modules/generic.py
+COMMIT 60d0323c d7be60b44910e81d84b8bd1484ec7de43a6ba214
+
+scripts/audit_source_of_truth_contract.py
+scripts/contracts/source_of_truth_matrix.json
+COMMIT d7be60b4 001bcad834a628e7eacdb4cc88f27e48fa7801ce
+
+scripts/scoring_v4/modules/fiber_digestive_formulation.py
+scripts/scoring_v4/modules/fiber_digestive_helpers.py
+scripts/scoring_v4/route_features.py
+scripts/tests/test_v4_fiber_digestive_module.py
+COMMIT 020a3c99 001bcad834a628e7eacdb4cc88f27e48fa7801ce
+
+scripts/scoring_v4/modules/generic.py
+COMMIT 09bb3ddd 001bcad834a628e7eacdb4cc88f27e48fa7801ce
+
+scripts/SCORING_ENGINE_SPEC.md
+scripts/scoring_v4/config/config_fingerprint_history.json
+scripts/scoring_v4/config/quality_score.json
+scripts/scoring_v4/modules/immune_support.py
+scripts/tests/test_v4_category_magnitudes_config.py
+scripts/tests/test_v4_config_registry.py
+COMMIT 56026a35 b73179046e930c5967c95f0d6ca63e7664597645
+
+.claude/rules/scoring.md
+.claude/skills/pg-scoring-change/SKILL.md
+AGENTS.md
+CLAUDE.md
+COMMIT 0d5fa6b8 8fbfd60182da561aa73d88d01c82578b93ea6965
+
+scripts/scoring_v4/modules/botanical_profile.py
+scripts/scoring_v4/modules/generic_helpers.py
+scripts/tests/test_v4_botanical_profile.py
+COMMIT 8fbfd601 001bcad834a628e7eacdb4cc88f27e48fa7801ce
+
+scripts/SCORING_ENGINE_SPEC.md
+scripts/scoring_v4/config/config_fingerprint_history.json
+scripts/scoring_v4/config/quality_score.json
+scripts/scoring_v4/modules/generic.py
+scripts/scoring_v4/modules/generic_dose.py
+scripts/scoring_v4/quality_score.py
+scripts/tests/test_v4_config_registry.py
+scripts/tests/test_v4_dose_magnitudes_config.py
+scripts/tests/test_v4_generic_dose_p132a.py
+COMMIT b7317904 9d0ccc8ef5e0c28d20d182ce9c7a74002de5305e
+
+scripts/audits/ingredient_row_key_census_20260925/REPORT.md
+scripts/audits/ingredient_row_key_census_20260925/census.py
+COMMIT 271fb544 2be4e59d01ddc02436d3ef6aa77b42f90cfafefd
+
+scripts/data/backed_clinical_studies.json
+scripts/scoring_v4/config/config_fingerprint_history.json
+scripts/scoring_v4/modules/omega_evidence.py
+scripts/tests/fixtures/v4_archetype_decision_suite.json
+scripts/tests/test_probiotic_batch1_disposition.py
+scripts/tests/test_v4_config_registry.py
+scripts/tests/test_vitamins_bdk_integrity.py
+COMMIT 9d0ccc8e 2e44652645262e27fe87b437a3494183b3af9616
+
+docs/adr/0002-one-public-quality-scorer.md
+docs/adr/0003-iqm-owns-form-quality.md
+docs/adr/0004-one-owner-per-decision.md
+COMMIT 2e446526 df1df7ab79200812cda42688b1990a239b0b3c76
+
+scripts/audit_source_of_truth_contract.py
+scripts/contracts/source_of_truth_matrix.json
+COMMIT df1df7ab 349312c8d28c4371402c40efec8c127c9dc0677c
+
+scripts/audit_source_of_truth_contract.py
+scripts/contracts/source_of_truth_matrix.json
+COMMIT 349312c8 e555e613f7895a88dc131072d6ae7d72e3e15588
+
+scripts/audit_source_of_truth_contract.py
+scripts/contracts/source_of_truth_matrix.json
+COMMIT 2be4e59d 14bdcede938000e8742f87b9d7bbdb4e544b0a44
+
+scripts/data/ingredient_quality_map.json
+scripts/db_integrity_sanity_check.py
+scripts/tests/test_ingredient_quality_map_schema.py
+scripts/tests/test_iqm_b12_sublingual_integrity.py
+scripts/tests/test_iqm_bio_score_guard.py
+COMMIT 14bdcede c480dcacbba224bc8cbe223a4a6a6e64bd4d1556
+
+scripts/audits/iqm_recalibration_20260925/RECONCILIATION.md
+scripts/audits/iqm_recalibration_20260925/b12_live_identity.json
+scripts/audits/iqm_recalibration_20260925/b12_pubmed.json
+scripts/audits/iqm_recalibration_20260925/research.md
+scripts/data/ingredient_quality_map.json
+scripts/tests/test_iqm_b12_sublingual_integrity.py
+COMMIT c480dcac b999a29b29a2876e9c06c597c3c81146055ecd56
+
+scripts/audits/iqm_recalibration_20260925/RECONCILIATION.md
+scripts/db_integrity_sanity_check.py
+scripts/tests/test_ingredient_quality_map_schema.py
+COMMIT b999a29b 05c2ec25362ae1bff78087468033117845c6d39a
+
+scripts/audits/iqm_recalibration_20260925/RECONCILIATION.md
+scripts/db_integrity_sanity_check.py
+scripts/tests/test_ingredient_quality_map_schema.py
+COMMIT 05c2ec25 23759274ff5b6b4ea6842738d65fb4495796574b
+
+scripts/audits/iqm_recalibration_20260925/RECONCILIATION.md
+scripts/audits/iqm_recalibration_20260925/b12_live_identity.json
+scripts/audits/iqm_recalibration_20260925/b12_pubmed.json
+scripts/audits/iqm_recalibration_20260925/research.md
+scripts/data/ingredient_quality_map.json
+scripts/tests/test_iqm_b12_sublingual_integrity.py
+COMMIT e555e613 001bcad834a628e7eacdb4cc88f27e48fa7801ce
+
+scripts/audit_source_of_truth_contract.py
+scripts/contracts/source_of_truth_matrix.json
+COMMIT 23759274 45bff370cc7ef96c5544028878e604d39f49ceec
+
+scripts/evidence_resolver.py
+scripts/tests/test_candidate_d_omega_standard.py
+COMMIT 45bff370 247b77a4275479ada3dc8706dc4c77e9ebc50672
+
+scripts/scoring_input_contract.py
+scripts/scoring_v4/modules/multi_prenatal_dose.py
+scripts/tests/test_v4_multi_prenatal_dose_p32.py
+COMMIT 247b77a4 281d3b975e396ac9a33260ab741c63d40fc2a5dd
+
+scripts/data/backed_clinical_studies.json
+scripts/data/omega_rubric.json
+scripts/evidence_resolver.py
+scripts/scoring_v4/modules/omega_dose.py
+scripts/scoring_v4/modules/omega_evidence.py
+scripts/tests/test_candidate_d_omega_standard.py
+scripts/tests/test_v4_omega_evidence_p163.py
+COMMIT 281d3b97 c55ffee1b94aaa22651ba762b3e1fd7df5a5497d 001bcad834a628e7eacdb4cc88f27e48fa7801ce
+COMMIT c55ffee1 099f4b5bc4ef9d80faf9d7ffa54f0bd3798c2da2
+
+scripts/scoring_reference_resolver.py
+COMMIT 001bcad8 0b7bf3f722835f1e91f3c1c2a61721c25089ed78
+
+.claude/rules/clinical-data.md
+.claude/rules/release.md
+.claude/rules/scoring.md
+.claude/settings.json
+.claude/skills/code-reviewer/SKILL.md
+.claude/skills/code-reviewer/references/code_review_checklist.md
+.claude/skills/code-reviewer/references/coding_standards.md
+.claude/skills/code-reviewer/references/common-issues.md
+.claude/skills/code-reviewer/references/common_antipatterns.md
+.claude/skills/code-reviewer/references/feedback-examples.md
+.claude/skills/code-reviewer/references/receiving-feedback.md
+.claude/skills/code-reviewer/references/report-template.md
+.claude/skills/code-reviewer/references/review-checklist.md
+.claude/skills/code-reviewer/references/spec-compliance-review.md
+.claude/skills/code-reviewer/scripts/code_quality_checker.py
+.claude/skills/code-reviewer/scripts/pr_analyzer.py
+.claude/skills/code-reviewer/scripts/review_report_generator.py
+.claude/skills/debugging-wizard/SKILL.md
+.claude/skills/debugging-wizard/references/common-patterns.md
+.claude/skills/debugging-wizard/references/debugging-tools.md
+.claude/skills/debugging-wizard/references/quick-fixes.md
+.claude/skills/debugging-wizard/references/strategies.md
+.claude/skills/debugging-wizard/references/systematic-debugging.md
+.claude/skills/prepare-product-submissions/SKILL.md
+.claude/skills/python-pro/SKILL.md
+.claude/skills/python-pro/references/async-patterns.md
+.claude/skills/python-pro/references/packaging.md
+.claude/skills/python-pro/references/standard-library.md
+.claude/skills/python-pro/references/testing.md
+.claude/skills/python-pro/references/type-system.md
+.claude/skills/security-reviewer/SKILL.md
+.claude/skills/security-reviewer/references/infrastructure-security.md
+.claude/skills/security-reviewer/references/penetration-testing.md
+.claude/skills/security-reviewer/references/report-template.md
+.claude/skills/security-reviewer/references/sast-tools.md
+.claude/skills/security-reviewer/references/secret-scanning.md
+.claude/skills/security-reviewer/references/vulnerability-patterns.md
+.claude/skills/the-fool/SKILL.md
+.claude/skills/the-fool/references/dialectic-synthesis.md
+.claude/skills/the-fool/references/evidence-audit.md
+.claude/skills/the-fool/references/mode-selection-guide.md
+.claude/skills/the-fool/references/pre-mortem-analysis.md
+.claude/skills/the-fool/references/red-team-adversarial.md
+.claude/skills/the-fool/references/socratic-questioning.md
+.claude/skills/verify-data/SKILL.md
+.gitignore
+AGENTS.md
+CLAUDE.md
+docs/runbooks/verification-gates.md
+scripts/tests/conftest.py
+COMMIT 099f4b5b a7065751ff4900f843254bf5e963743a94e94435
+
+scripts/audits/v41_recovery/RECONCILIATION.md
+scripts/build_final_db.py
+scripts/dashboard/views/quality.py
+scripts/data/ingredient_quality_map.json
+scripts/enrich_supplements_v3.py
+scripts/scoring_input_contract.py
+scripts/scoring_reference_resolver.py
+scripts/scoring_v4/modules/generic_dose.py
+scripts/scoring_v4/modules/generic_evidence.py
+scripts/scoring_v4/modules/generic_helpers.py
+scripts/tests/fixtures/form_association_302644_raw.json
+scripts/tests/test_active_unmapped_quick_win_aliases_2026_06.py
+scripts/tests/test_botanical_absorption_integrity.py
+scripts/tests/test_form_disclosure_states.py
+scripts/tests/test_unknown_form_quality.py
+COMMIT a7065751 83f75fe98cdb42a4e9e79ce892dfbc24b1c0555f
+
+scripts/audits/evidence_expansion_2026_09/build_inventory.py
+scripts/audits/evidence_expansion_2026_09/extract_corpus.py
+scripts/audits/v41_recovery/RECONCILIATION.md
+scripts/audits/v41_recovery/unspecified_named_alias_census.py
+scripts/build_final_db.py
+scripts/dashboard/data_loader.py
+scripts/dashboard/views/quality.py
+scripts/data/ingredient_quality_map.json
+scripts/db_integrity_sanity_check.py
+scripts/enrich_supplements_v3.py
+scripts/scoring_input_contract.py
+scripts/scoring_reference_resolver.py
+scripts/tests/test_dashboard_form_curation.py
+scripts/tests/test_form_disclosure_states.py
+scripts/tests/test_source_of_truth_contract.py
+scripts/tests/test_unknown_form_quality.py
+COMMIT 83f75fe9 c521380b073da4360ed60fe91880aa03a29db541
+
+scripts/audit_source_of_truth_contract.py
+scripts/audits/v41_recovery/RECONCILIATION.md
+scripts/audits/v41_recovery/bare_alias_census.py
+scripts/audits/v41_recovery/unspecified_census.py
+scripts/build_final_db.py
+scripts/data/ingredient_quality_map.json
+scripts/data/iqm_excellent_evidence_backlog.json
+scripts/db_integrity_sanity_check.py
+scripts/enrich_supplements_v3.py
+scripts/enrichment_contract_validator.py
+scripts/scoring_input_contract.py
+scripts/scoring_reference_resolver.py
+scripts/tests/fixtures/form_association_311881_raw.json
+scripts/tests/fixtures/form_association_59086_raw.json
+scripts/tests/test_active_ingredient_contract.py
+scripts/tests/test_b22_mixed_integrity.py
+scripts/tests/test_botanical_identity_projection.py
+scripts/tests/test_capsule_unmapped_resolution.py
+scripts/tests/test_cleaner_iqd_contract_validator.py
+scripts/tests/test_dose_decision_contract.py
+scripts/tests/test_enrichment_regressions.py
+scripts/tests/test_form_fallback_audit_noise.py
+scripts/tests/test_form_fallback_audit_source_descriptors.py
+scripts/tests/test_form_score_reconciliation.py
+scripts/tests/test_form_share_association.py
+scripts/tests/test_ingredient_matching_regression.py
+scripts/tests/test_iqm_form_evidence_contract.py
+scripts/tests/test_iqm_retired_fields.py
+scripts/tests/test_iqm_unspecified_form_floor.py
+scripts/tests/test_jarrow_yeast_extract_identity.py
+scripts/tests/test_min_effective_dose_suppression.py
+scripts/tests/test_preparation_identity_projection.py
+scripts/tests/test_scorable_classification.py
+scripts/tests/test_scoring_input_contract.py
+scripts/tests/test_unknown_form_quality.py
+COMMIT c521380b 40efe44d468bff0cf6acc0e481c5aae208980b04
+
+scripts/audits/v41_recovery/RECONCILIATION.md
+COMMIT 40efe44d 4233181d020f0f338ea280fd4d41be25c20a8690
+
+scripts/audits/v41_recovery/RECONCILIATION.md
+scripts/build_final_db.py
+scripts/enrich_supplements_v3.py
+scripts/rda_ul_calculator.py
+scripts/tests/test_ul_display_severity_owner.py
+COMMIT 4233181d 56314f5cc3d30518dc911be317d46e7826b5e763
+
+scripts/scoring_v4/cert_evidence.py
+scripts/scoring_v4/modules/generic_trust.py
+scripts/tests/test_marine_cert_registry_owner.py
+COMMIT 56314f5c c3afa98bac06dbba3103c6af49231b34118842e6
+
+scripts/FINAL_EXPORT_SCHEMA_V1.md
+scripts/GLOSSARY.md
+scripts/audits/v41_recovery/RECONCILIATION.md
+scripts/audits/v41_recovery/unspecified_census.py
+scripts/config/scoring_config.json
+scripts/data/ingredient_quality_map.json
+scripts/enrich_supplements_v3.py
+scripts/scoring_input_contract.py
+scripts/scoring_reference_resolver.py
+scripts/tests/fixtures/form_association_318107_raw.json
+scripts/tests/test_active_ingredient_contract.py
+scripts/tests/test_boswellia_resin_class_finding_2026_05_25.py
+scripts/tests/test_boswellia_standardized_class_finding_2026_05_25.py
+scripts/tests/test_botanical_identity_projection.py
+scripts/tests/test_build_final_db.py
+scripts/tests/test_capsule_unmapped_resolution.py
+scripts/tests/test_clean_unmapped_alias_regressions.py
+scripts/tests/test_d29_fallback_audit.py
+scripts/tests/test_enricher_collagen_subtype.py
+scripts/tests/test_enrichment_regressions.py
+scripts/tests/test_export_gate.py
+scripts/tests/test_form_share_association.py
+scripts/tests/test_inactive_active_form_duplicate_2026_06.py
+scripts/tests/test_ingredient_quality_map_schema.py
+scripts/tests/test_iqm_acacia_catechu_entry.py
+scripts/tests/test_iqm_aminoacids4_audit_2026_06j.py
+scripts/tests/test_iqm_black_cherry_entry.py
+scripts/tests/test_iqm_botanicals_actives_audit_2026_06c.py
+scripts/tests/test_iqm_cofactors_audit_2026_06e.py
+scripts/tests/test_iqm_form_evidence_contract.py
+scripts/tests/test_iqm_form_note.py
+scripts/tests/test_iqm_glucomannan_entry.py
+scripts/tests/test_iqm_minerals_actives_audit_2026_06b.py
+scripts/tests/test_iqm_minerals_coq10_audit_2026_06d.py
+scripts/tests/test_iqm_phosphatidylcholine_entry.py
+scripts/tests/test_iqm_probiotics_phospholipids_audit_2026_06f.py
+scripts/tests/test_iqm_retired_fields.py
+scripts/tests/test_iqm_vitamin_mineral_audit_2026_06.py
+scripts/tests/test_primary_mass_floor_anchor_provenance.py
+scripts/tests/test_role_aware_stack_coverage.py
+scripts/tests/test_scorable_classification.py
+scripts/tests/test_unknown_form_quality.py
+scripts/tests/test_v4_confidence_p14.py
+scripts/tests/test_v4_evidence_primary_floor_p8.py
+scripts/tests/test_v4_generic_final_assembly_p136.py
+scripts/tests/test_v4_multi_prenatal_final_assembly_p36.py
+COMMIT c3afa98b a980168541f6201f97f8f366a3a616ba3d6eeb25
+
+scripts/DATABASE_SCHEMA.md
+scripts/audits/v41_recovery/RECONCILIATION.md
+scripts/build_final_db.py
+scripts/config/scoring_config.json
+scripts/data/ingredient_quality_map.json
+scripts/db_integrity_sanity_check.py
+scripts/enrich_supplements_v3.py
+scripts/scoring_input_contract.py
+scripts/scoring_v4/modules/generic_helpers.py
+scripts/tests/test_b35_dr_pham_signoff_integrity.py
+scripts/tests/test_boswellia_resin_class_finding_2026_05_25.py
+scripts/tests/test_boswellia_standardized_class_finding_2026_05_25.py
+scripts/tests/test_botanical_identity_projection.py
+scripts/tests/test_build_final_db.py
+scripts/tests/test_creatine_integrity.py
+scripts/tests/test_d29_fallback_audit.py
+scripts/tests/test_dried_yeast_fermentate_identity.py
+scripts/tests/test_export_gate.py
+scripts/tests/test_form_evidence_final_reconciliation.py
+scripts/tests/test_form_score_reconciliation.py
+scripts/tests/test_iqm_aminoacids3_audit_2026_06i.py
+scripts/tests/test_iqm_aminoacids4_audit_2026_06j.py
+scripts/tests/test_iqm_aminoacids_audit_2026_06g.py
+scripts/tests/test_iqm_botanicals_actives_audit_2026_06c.py
+scripts/tests/test_iqm_carotenoids2_fix_2026_06n.py
+scripts/tests/test_iqm_carotenoids_audit_2026_06k.py
+scripts/tests/test_iqm_cofactors_audit_2026_06e.py
+scripts/tests/test_iqm_minerals_actives_audit_2026_06b.py
+scripts/tests/test_iqm_minerals_coq10_audit_2026_06d.py
+scripts/tests/test_iqm_open_decisions_2026_06_09.py
+scripts/tests/test_iqm_pepsin_entry.py
+scripts/tests/test_iqm_phellodendron_entry.py
+scripts/tests/test_iqm_phyto2_audit_2026_06l.py
+scripts/tests/test_iqm_probiotic_species_only_calibration.py
+scripts/tests/test_iqm_probiotics_phospholipids_audit_2026_06f.py
+scripts/tests/test_iqm_report_mechanical_fixes.py
+scripts/tests/test_iqm_retired_fields.py
+scripts/tests/test_iqm_unspecified_form_floor.py
+scripts/tests/test_iqm_vinpocetine_entry.py
+scripts/tests/test_iqm_vitamin_mineral_audit_2026_06.py
+scripts/tests/test_mineral_form_recalibration_20260602.py
+scripts/tests/test_parent_fallback_final_state_guard.py
+scripts/tests/test_pipeline_integrity.py
+scripts/tests/test_pipeline_smoke.py
+scripts/tests/test_preparation_identity_projection.py
+scripts/tests/test_scoring_input_contract.py
+scripts/tests/test_unii_vanadium_vanadyl_model_2026_05_25.py
+scripts/tests/test_vitamin_a_family_recalibration_20260602.py
+scripts/tests/test_vitamin_k_identity_contract.py
+COMMIT a9801685 c20a80b507c99f23adc8fe1bc082cd482569c9e5
+
+scripts/audits/v41_recovery/RECONCILIATION.md
+scripts/enrich_supplements_v3.py
+scripts/tests/fixtures/form_association_214477_raw.json
+scripts/tests/fixtures/form_association_317111_raw.json
+scripts/tests/test_form_share_association.py
+COMMIT c20a80b5 e00bcdc96f26279c92a9626a5ae42c542a298199
+
+scripts/data/ingredient_quality_map.json
+COMMIT e00bcdc9 08351e2dd8a824c19b45b234e1a46e7dd440c925
+
+scripts/data/ingredient_quality_map.json
+COMMIT 08351e2d 4cf582b1e788b4788179695f1a0bf1ce180f61c0
+
+scripts/enrich_supplements_v3.py
+scripts/tests/fixtures/form_association_12012_raw.json
+scripts/tests/fixtures/form_association_15823_raw.json
+scripts/tests/fixtures/form_association_17118_raw.json
+scripts/tests/fixtures/form_association_176044_raw.json
+scripts/tests/fixtures/form_association_47815_raw.json
+scripts/tests/test_form_share_association.py
+COMMIT 4cf582b1 24dc229b2b26ce0d538d20e6dcb277092cae1a50
+
+scripts/audits/quality_redesign/replay.py
+scripts/tests/test_quality_redesign_replay.py
+COMMIT 24dc229b daaff8b1d714e9f804d760888d493dd270ccc5ea
+
+scripts/audits/quality_redesign/replay.py
+scripts/tests/test_quality_redesign_replay.py
+COMMIT daaff8b1 e3d36f2ce001c232b8f4f74f8f5c0cd7135f7563
+
+scripts/audits/v41_recovery/RECONCILIATION.md
+COMMIT e3d36f2c 2f5c28e1824dc49c38433e715d52d10cdcd08ca7
+
+scripts/audit_scoring_contract_leaks.py
+scripts/tests/test_scoring_contract_leak_audit.py
+COMMIT 2f5c28e1 30af5396062c7b1ab93354b270ff2dc4199838b2
+
+scripts/scoring_input_contract.py
+scripts/tests/test_omega_epa_dha_amount_owner.py
+COMMIT 30af5396 a6222c7d1e3551f64f073b652fdf4e9e6e794f82
+
+scripts/audits/v41_recovery/RECONCILIATION.md
+COMMIT a6222c7d f7b73abb02359a6c850da6d988751560ee1e0835
+
+scripts/build_final_db.py
+scripts/data/ingredient_interaction_rules.json
+scripts/db_integrity_sanity_check.py
+scripts/enrich_supplements_v3.py
+scripts/tests/test_beta_carotene_lung_cancer_rule.py
+COMMIT f7b73abb 7db29838850963439a09ccd82ddc9c424abfad1c
+
+scripts/build_final_db.py
+scripts/scoring_input_contract.py
+scripts/scoring_v4/modules/generic_helpers.py
+scripts/scoring_v4/modules/generic_transparency.py
+scripts/scoring_v4/modules/multi_prenatal_transparency.py
+scripts/tests/test_dose_disclosure_status.py
+COMMIT 7db29838 7ee85a26c5ae321d7147ab37f9f0521c14fbc916
+
+scripts/audit_scoring_contract_leaks.py
+scripts/scoring_input_contract.py
+scripts/scoring_v4/modules/omega_dose.py
+scripts/scoring_v4/modules/omega_evidence.py
+scripts/scoring_v4/modules/omega_formulation.py
+scripts/tests/test_omega_epa_dha_amount_owner.py
+COMMIT 7ee85a26 9aeb7fbc6e8759c37849e49e993fb85035cbf5c9
+
+scripts/build_final_db.py
+scripts/data/clinical_risk_taxonomy.json
+scripts/data/ingredient_interaction_rules.json
+scripts/enrich_supplements_v3.py
+scripts/tests/fixtures/beta_carotene_184325_raw.json
+scripts/tests/fixtures/beta_carotene_79660_raw.json
+scripts/tests/test_beta_carotene_lung_cancer_rule.py
+scripts/tests/test_clinical_risk_taxonomy_contract.py
+scripts/tests/test_migrate_to_profile_gate.py
+scripts/tests/test_sync_flutter_reference_data.py
+scripts/tests/test_vocab_contracts.py
+COMMIT 9aeb7fbc 2da8222612628f4a1e69e12e6dce6f0972392a43
+
+scripts/data/curated_overrides/cert_verification_overrides.json
+COMMIT 2da82226 e44ceee8f88ce91e76bbbb134baab44dbd657712
+
+scripts/assessment_readiness.py
+scripts/cert_resolver.py
+scripts/tests/test_assessment_readiness.py
+scripts/tests/test_cert_resolver.py
+COMMIT e44ceee8 33ba3973b44dc62620eb8fcd2975444a7c2c81de
+
+scripts/generate_flutter_core_projection.py
+scripts/tests/test_core_export_model.py
+COMMIT 33ba3973 e8c6da116a80c33b35c3735831330b45b82407cd
+
+scripts/build_final_db.py
+scripts/scoring_input_contract.py
+scripts/scoring_v4/modules/generic_helpers.py
+scripts/scoring_v4/modules/generic_transparency.py
+scripts/scoring_v4/modules/multi_prenatal_transparency.py
+scripts/tests/fixtures/dose_disclosure_232243_raw.json
+scripts/tests/test_dose_disclosure_status.py
+COMMIT e8c6da11 25decbf5111caa581e7d4cf62a43aa6a2d9941d5
+
+scripts/data/curated_overrides/product_label_corrections.json
+COMMIT 25decbf5 36d7ff82ef38ed36385676220d73df351e1a8deb
+
+scripts/enhanced_normalizer.py
+scripts/scoring_v4/modules/omega_formulation.py
+scripts/tests/fixtures/omega_amount_206295_raw.json
+scripts/tests/fixtures/omega_amount_224615_raw.json
+scripts/tests/fixtures/omega_amount_35718_raw.json
+scripts/tests/fixtures/omega_amount_77225_raw.json
+scripts/tests/test_omega_epa_dha_amount_owner.py
+COMMIT 36d7ff82 108b7e53ea76cdb57c98887ce8290979b252736c
+
+scripts/audits/v41_recovery/RECONCILIATION.md
+scripts/data/curated_overrides/product_label_corrections.json
+COMMIT 108b7e53 da8a572b5ae9d9bbdc4fc4bc4232d09a04564e92
+
+scripts/audits/v41_recovery/RECONCILIATION.md
+COMMIT da8a572b de63b205e635b32e3a77ba9f05dd72dd862425fe
+
+scripts/data/curated_overrides/product_label_corrections.json
+scripts/tests/fixtures/fibersmart_233404_raw.json
+scripts/tests/fixtures/fibersmart_233406_raw.json
+scripts/tests/test_fibersmart_unmapped_quarantine.py
+COMMIT de63b205 b0b06053276043752516309a9cac5d4748eda8c8
+
+scripts/audits/quarantine_triage_20260919/compare_scored_arms.py
+scripts/audits/quarantine_triage_20260919/drive_pipeline_ab.py
+scripts/tests/test_pipeline_ab_review_projection.py
+COMMIT b0b06053 5c9996f45d9ade8b59ab52c17d60a57ef9c31bdb
+
+scripts/audits/v41_recovery/RECONCILIATION.md
+COMMIT 5c9996f4 7b031050db6dea208e407006007e086124003738
+
+scripts/audits/quality_redesign/TASK2.md
+scripts/data/canonical_equivalences.json
+scripts/enhanced_normalizer.py
+scripts/enrich_supplements_v3.py
+scripts/scoring_input_contract.py
+scripts/scoring_v4/exposure.py
+scripts/scoring_v4/gate_completeness.py
+scripts/scoring_v4/modules/fiber_digestive_dose.py
+scripts/scoring_v4/modules/fiber_digestive_formulation.py
+scripts/scoring_v4/modules/fiber_digestive_helpers.py
+scripts/scoring_v4/modules/sports_dose.py
+scripts/scoring_v4/route_features.py
+scripts/serving_frequency.py
+scripts/tests/fixtures/boulardii_306383_raw.json
+scripts/tests/fixtures/oat_bran_293280_raw.json
+scripts/tests/fixtures/oat_bran_293400_raw.json
+scripts/tests/test_enrich_taxonomy_dependency_order.py
+scripts/tests/test_identity_unii_literal_proof.py
+scripts/tests/test_phgg_formulation_identity.py
+scripts/tests/test_quality_exposure_identity.py
+scripts/tests/test_v4_fiber_digestive_module.py
+scripts/tests/test_v4_sports_dose_p171.py
+scripts/tests/test_v4_sports_dose_preworkout_actives.py
+scripts/tests/test_v4_sports_final_assembly_p172.py

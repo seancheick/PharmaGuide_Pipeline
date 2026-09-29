@@ -1,0 +1,413 @@
+391b87c5199527f3a3b157c0fed9d2003d7eb232	391b87c5	2026-09-28T11:27:59-04:00	SeanB	a735154845e1bc4b64a0957183b1ce1c2085862d	docs(register): Q36 is the BCAA ratio-source policy; Q37 label-text readers
+a735154845e1bc4b64a0957183b1ce1c2085862d	a7351548	2026-09-28T10:43:07-04:00	SeanB	dde22dabea2b5db653d1d8bc2eafda0025a4d59a	fix(enrich): a ratio printed on the panel row reads the ratio form
+dde22dabea2b5db653d1d8bc2eafda0025a4d59a	dde22dab	2026-09-28T04:59:06-04:00	SeanB	c65205351f3d5253428fcc5911643686143998e9	docs(register): Q36 resolved - generic BCAA names read the unspecified form
+c65205351f3d5253428fcc5911643686143998e9	c6520535	2026-09-28T04:35:35-04:00	SeanB	ff31409637890f560452363eba997135f1c8719e	fix(data): a BCAA label that states no ratio reads the unspecified BCAA form
+ff31409637890f560452363eba997135f1c8719e	ff314096	2026-09-28T04:15:17-04:00	SeanB	c456e47918cc3094b930d82769de9cf8e3731d6b	docs(register): form curation after batch 11 (Q32, D21, Q35, Q36)
+c456e47918cc3094b930d82769de9cf8e3731d6b	c456e479	2026-09-28T04:14:46-04:00	SeanB	cb945215aaaff9e489bf00faa9c65737dddb4fe1	fix(data): extended release caffeine without the hyphen
+cb945215aaaff9e489bf00faa9c65737dddb4fe1	cb945215	2026-09-28T04:06:18-04:00	SeanB	845d17c570ce4234fb69ebc491caf88dc5ef1053	test(enrich): Kelp names iodine's kelp form since form curation batch 11
+845d17c570ce4234fb69ebc491caf88dc5ef1053	845d17c5	2026-09-28T03:53:54-04:00	SeanB	08c9a194d406bb50e5ff07b9ddd40f5770ea49c2	fix(data): keep Quatrefolic one compound; scope gamma-carotene to vitamin A
+08c9a194d406bb50e5ff07b9ddd40f5770ea49c2	08c9a194	2026-09-28T03:45:32-04:00	SeanB	00303a697ec6e2036e07e8e415db0c6c920bebe0	fix(data): fenugreek galactomannan is not konjac glucomannan
+00303a697ec6e2036e07e8e415db0c6c920bebe0	00303a69	2026-09-28T03:43:30-04:00	SeanB	d6dbf0e4387f43c25d43c56b50162b729b0814d4	fix(data): form curation batch 11 - seaweed iodine and parent binomials
+d6dbf0e4387f43c25d43c56b50162b729b0814d4	d6dbf0e4	2026-09-28T03:40:13-04:00	SeanB	580c7924d00bf2bae911b5965be501d08351ea0c	fix(data): form curation batch 10 - vitamin, amino-acid and botanical names
+580c7924d00bf2bae911b5965be501d08351ea0c	580c7924	2026-09-28T03:36:16-04:00	SeanB	c8147f8dc118edb3c093f05070e0da09fc4d12ab	fix(enrich): form curation batch 9 - source plants and standardization markers
+c8147f8dc118edb3c093f05070e0da09fc4d12ab	c8147f8d	2026-09-28T03:29:27-04:00	SeanB	1c3b27ce0ac8788096c3b64e007e8c08bacf23fb	fix(data): form curation batch 8 - mineral salt names on held labels
+1c3b27ce0ac8788096c3b64e007e8c08bacf23fb	1c3b27ce	2026-09-28T03:22:21-04:00	SeanB	1eab691f3ce13885a185af90a5a1f6da2b5c8283	fix(data): form curation batch 7 - carotenoid names on held labels
+1eab691f3ce13885a185af90a5a1f6da2b5c8283	1eab691f	2026-09-28T03:16:03-04:00	SeanB	2f7339ad0e959a91ec4321c023c76f4af23647be	fix(enrich): judge a row's form tokens under the parent it is scored as
+2f7339ad0e959a91ec4321c023c76f4af23647be	2f7339ad	2026-09-28T01:02:27-04:00	SeanB	64e27094b8e193a73fbc4020cf2f25dced6e98cc	docs(register): form curation after batch 6 (Q32)
+64e27094b8e193a73fbc4020cf2f25dced6e98cc	64e27094	2026-09-28T00:45:56-04:00	SeanB	9bdb896afa6581e35e47a740eb59cb79446b5775	fix(data): form curation batch 6 - held label spellings of forms the map holds
+9bdb896afa6581e35e47a740eb59cb79446b5775	9bdb896a	2026-09-28T00:39:03-04:00	SeanB	319f674dd417c5a1e7661f1435bfdee5af192183	fix(submissions): integrator review findings on the agent reader and console auto-prep
+319f674dd417c5a1e7661f1435bfdee5af192183	319f674d	2026-09-28T00:26:07-04:00	SeanB	992a29bfcbd135ef8acf76c976d7ec17b164010a 8b8360f46ecdf37dd12610e04fed4cabf5718ec3	Merge the submission-transcription lane: agent reader, console auto-prep, product-submissions-prep skill
+992a29bfcbd135ef8acf76c976d7ec17b164010a	992a29bf	2026-09-28T00:24:24-04:00	SeanB	faf426db5783690f2d146f28afc1a172f8e0df08	fix(enrich): delivery matching reads a manual label's physicalState.name
+faf426db5783690f2d146f28afc1a172f8e0df08	faf426db	2026-09-27T23:26:20-04:00	SeanB	b5ad5a8f2f425e063afae3d0ec39443d334e91aa	docs(register): Codex lane audit and form curation status (D19-D21, Q32-Q34, R1)
+b5ad5a8f2f425e063afae3d0ec39443d334e91aa	b5ad5a8f	2026-09-27T23:25:33-04:00	SeanB	f56d49ebbdfdd89f13b0c8a383801c8b495f54e1	fix(enrich): source plants and standardization markers name no form
+f56d49ebbdfdd89f13b0c8a383801c8b495f54e1	f56d49eb	2026-09-27T23:25:33-04:00	SeanB	852adda2e5da5625b92dc687441d262888626cc7	fix(data): monocalcium phosphate carries the calcium phosphate class absorption
+852adda2e5da5625b92dc687441d262888626cc7	852adda2	2026-09-27T23:01:53-04:00	SeanB	57bc0986812f2bd1531b50d8004f3ae34ef44f6e	fix(data): form curation batch 5 - parent-scoped clues and exact spellings
+57bc0986812f2bd1531b50d8004f3ae34ef44f6e	57bc0986	2026-09-27T22:50:13-04:00	SeanB	a6a521c7794beb38c4e7756f470515a433fca34a	fix(data): form curation batch 3 - nutrient rows that name another nutrient's salt
+a6a521c7794beb38c4e7756f470515a433fca34a	a6a521c7	2026-09-27T22:44:58-04:00	SeanB	4494800414721568e9e292707701d82097df5492	fix(data): form curation batch 2 - mineral amino-acid chelates, glycinates, salt hydrates
+4494800414721568e9e292707701d82097df5492	44948004	2026-09-27T22:41:16-04:00	SeanB	2f79050b8688033271bc00778b4680605438a196	fix(data): form curation batch 1 - phosphate salts disclosed on labels
+2f79050b8688033271bc00778b4680605438a196	2f79050b	2026-09-27T22:27:54-04:00	SeanB	0d4d59a6f816dadba52943df4e70701884883a31	test: citation coverage reads tracked data only; the 299v canary reads the strain record
+0d4d59a6f816dadba52943df4e70701884883a31	0d4d59a6	2026-09-27T18:51:13-04:00	SeanB	84ec8398aafff7e0ec27afe5a4d644efcd223476	fix(release): contain verified form backlog
+84ec8398aafff7e0ec27afe5a4d644efcd223476	84ec8398	2026-09-27T18:14:37-04:00	SeanB	b059cd565e6eef05a820233573a1530737797388	fix(data): review trace mineral routing overlaps
+b059cd565e6eef05a820233573a1530737797388	b059cd56	2026-09-27T18:03:13-04:00	SeanB	d3845a44a0c2fafaf022696411e0c7ab2baf3614	test(scoring): freeze reviewed owner deltas
+d3845a44a0c2fafaf022696411e0c7ab2baf3614	d3845a44	2026-09-27T17:08:18-04:00	SeanB	889856ef94bb6bee115563a7f22652e3711d4435	test(forms): pin generic tocopherol weighting
+889856ef94bb6bee115563a7f22652e3711d4435	889856ef	2026-09-27T16:50:23-04:00	SeanB	af4dc08e0fbd2d71df3a4e9b36de84b22844d98b	fix(data): complete curated form records
+af4dc08e0fbd2d71df3a4e9b36de84b22844d98b	af4dc08e	2026-09-27T16:47:16-04:00	SeanB	f8241717cfb2205384199881fdf5074a6d9c8e95	test(omega): align transparency canaries with native cap
+f8241717cfb2205384199881fdf5074a6d9c8e95	f8241717	2026-09-27T16:47:16-04:00	SeanB	5f2915c472da0e833182aa2fb329c2a5fda992ec	fix(forms): curate blocked DSLD disclosures
+5f2915c472da0e833182aa2fb329c2a5fda992ec	5f2915c4	2026-09-27T16:30:26-04:00	SeanB	7af5d5b17e71c5e76167ce710c789f9bcbec908b	fix(clinical): allow explicit presence-risk dose context
+8b8360f46ecdf37dd12610e04fed4cabf5718ec3	8b8360f4	2026-09-27T15:54:41-04:00	SeanB	a04c5704dea5851cf7bb94a9bdac067aacd4d6ce	feat(submissions): agent_reader verify reads back what the reviewer will see
+a04c5704dea5851cf7bb94a9bdac067aacd4d6ce	a04c5704	2026-09-27T15:52:42-04:00	SeanB	b83231f879cea647dac3995caaade5006adf07b4	feat(submissions): agent_reader sheet, and what the first live run taught the skill
+b83231f879cea647dac3995caaade5006adf07b4	b83231f8	2026-09-27T15:44:54-04:00	SeanB	b59e5fddf9f4d666d7c02cc702d8d8698844fa28	docs(skills): product-submissions-prep replaces prepare-product-submissions
+b59e5fddf9f4d666d7c02cc702d8d8698844fa28	b59e5fdd	2026-09-27T15:41:48-04:00	SeanB	05674bf57d6a79faef1352fea55e1583b3ea8d61	refactor(submissions): row parentage stays with the envelope; record asks it first
+05674bf57d6a79faef1352fea55e1583b3ea8d61	05674bf5	2026-09-27T15:40:43-04:00	SeanB	b22770ca4642dee82d89b5d4b1281128be048d56	feat(console): opening a prepared submission leaves only the reviewer's clicks
+b22770ca4642dee82d89b5d4b1281128be048d56	b22770ca	2026-09-27T15:40:40-04:00	SeanB	d2119e284c53e06306c6afaae465362e5d40bf2e	feat(submissions): agent_reader files an agent's reading through the extractor
+d2119e284c53e06306c6afaae465362e5d40bf2e	d2119e28	2026-09-27T15:26:38-04:00	SeanB	2a2887f01db61ddbbe96eb14b0fa2b75d14c89f4	feat(submissions): transcription-convention findings in checks.py
+2a2887f01db61ddbbe96eb14b0fa2b75d14c89f4	2a2887f0	2026-09-27T15:25:29-04:00	SeanB	1201be024286d49f489543481252bf50d7de94a0	fix(submissions): a loaded draft's statements carry notes, and every row names its missing ingredientGroup
+7af5d5b17e71c5e76167ce710c789f9bcbec908b	7af5d5b1	2026-09-27T15:13:46-04:00	SeanB	5cb7716c4aeba36a1d33ed4f8670b9c98f61644b	fix(coverage): preserve conversion source provenance
+5cb7716c4aeba36a1d33ed4f8670b9c98f61644b	5cb7716c	2026-09-27T15:08:12-04:00	SeanB	5af8f96825400a2c1584215f1fefff2bee8f7c00 2a84da3d632ca118e1bf9ce4d87689939a7dd1aa	Merge branch 'main' into codex/claude-177233-headline
+2a84da3d632ca118e1bf9ce4d87689939a7dd1aa	2a84da3d	2026-09-27T14:43:39-04:00	SeanB	af488ecff206e643518e84ea5511724da96f2d46	docs(harness): the fix loop runs the cheapest failing check first and the corpus once
+af488ecff206e643518e84ea5511724da96f2d46	af488ecf	2026-09-27T14:43:39-04:00	SeanB	1201be024286d49f489543481252bf50d7de94a0	feat(freshness): every stage records the code it ran; the release check refuses mixed code
+5af8f96825400a2c1584215f1fefff2bee8f7c00	5af8f968	2026-09-27T14:34:22-04:00	SeanB	29ede7dd1d2e94427d6ee6e76985daac7be1e3dc 1201be024286d49f489543481252bf50d7de94a0	Merge remote-tracking branch 'origin/main' into codex/claude-177233-headline
+29ede7dd1d2e94427d6ee6e76985daac7be1e3dc	29ede7dd	2026-09-27T14:14:56-04:00	SeanB	cb419f41dde7eb529f2d94a4e9c7050e4d3482ab	fix(probiotics): exclude food-blend brewer's yeast
+cb419f41dde7eb529f2d94a4e9c7050e4d3482ab	cb419f41	2026-09-27T14:14:56-04:00	SeanB	437aecb15183ae314dc526c56d109016d32dcdc4	fix(dose): reconcile DSLD label unit semantics
+1201be024286d49f489543481252bf50d7de94a0	1201be02	2026-09-27T13:09:28-04:00	SeanB	b98b641cdac60af214c596142ab14535b4cc3019	docs: round-two stale docs; the rollback playbook no longer promises a re-activation
+b98b641cdac60af214c596142ab14535b4cc3019	b98b641c	2026-09-27T13:07:10-04:00	SeanB	9fc80c241a7954586f83425e1acad1d98a427b8d	test: drop count pins that only block data growth; one copy of each duplicate
+9fc80c241a7954586f83425e1acad1d98a427b8d	9fc80c24	2026-09-27T13:01:05-04:00	SeanB	6ef5c1f9d4787db50e7570291e794dad6d55b08a	fix(data): every derivable _metadata count is recounted, and six had drifted
+6ef5c1f9d4787db50e7570291e794dad6d55b08a	6ef5c1f9	2026-09-27T12:54:46-04:00	SeanB	f3b23bfb94545b973018e8a3076f2445845df6e0	chore(data): the IQM, interaction rules and standardized botanicals in canonical JSON
+f3b23bfb94545b973018e8a3076f2445845df6e0	f3b23bfb	2026-09-27T12:17:00-04:00	SeanB	70dec135d4c4c37126a03b445f62a56cf5bb2679	fix(data): the byte-pinned profile-gate fixture keeps its bytes
+70dec135d4c4c37126a03b445f62a56cf5bb2679	70dec135	2026-09-27T12:01:46-04:00	SeanB	0fa778769f079be10fa3ffaa2088747959e1ae9d	fix(data): a mistyped git ref fails the landed check instead of passing it
+0fa778769f079be10fa3ffaa2088747959e1ae9d	0fa77876	2026-09-27T11:59:28-04:00	SeanB	a3249ce780b5cee333f0936b813283f2bac47451	docs: stale docs that misdirect agents are fixed, archived or marked historical
+a3249ce780b5cee333f0936b813283f2bac47451	a3249ce7	2026-09-27T11:52:26-04:00	SeanB	f6ed07bf9293593276eb7e57970fb94dc28e0261	docs(harness): batch by topic, verify per entry; data-fix and catalog-release in the repo
+f6ed07bf9293593276eb7e57970fb94dc28e0261	f6ed07bf	2026-09-27T11:49:04-04:00	SeanB	7b40e4dde6b4aedc8dac90548dcddf1b057df387	feat(replay): measure a data batch from raw labels, in parallel
+7b40e4dde6b4aedc8dac90548dcddf1b057df387	7b40e4dd	2026-09-27T11:46:47-04:00	SeanB	ba23685e6bed18598451ec9efde0ebd85df382df	feat(verify): citation verifiers check only a batch's changed entries
+ba23685e6bed18598451ec9efde0ebd85df382df	ba23685e	2026-09-27T11:45:23-04:00	SeanB	7af59d6aafcc2c3c1083bb2cc8732faf2ad9d0c8	fix(data): data-file writers write canonical JSON; format test reads tracked files
+7af59d6aafcc2c3c1083bb2cc8732faf2ad9d0c8	7af59d6a	2026-09-27T11:42:38-04:00	SeanB	b6923c6a929d4584e3ed03ae28652113ecd92f58	chore(data): 26 data files in canonical JSON (content unchanged)
+b6923c6a929d4584e3ed03ae28652113ecd92f58	b6923c6a	2026-09-27T11:41:40-04:00	SeanB	75164464be6dd5459d7359837c4162ca56ecde42	feat(data): one batch helper for curated-data edits
+437aecb15183ae314dc526c56d109016d32dcdc4	437aecb1	2026-09-27T11:11:42-04:00	SeanB	d173ca145b40c7b18c8a481da8534114fa580178	docs(audit): close final outstanding code findings
+d173ca145b40c7b18c8a481da8534114fa580178	d173ca14	2026-09-27T11:03:30-04:00	SeanB	d8ddf20810dc234c4e0156a4d0912649365888c0	test(export): require canonical serving basis
+d8ddf20810dc234c4e0156a4d0912649365888c0	d8ddf208	2026-09-27T11:03:30-04:00	SeanB	9bd079ea195e1d74d571079d17de0c6bd3f527cd	fix(clinical): keep one dandelion rule owner
+9bd079ea195e1d74d571079d17de0c6bd3f527cd	9bd079ea	2026-09-27T11:03:11-04:00	SeanB	7a26f2f87df72f6c6dec5c6907bd214e78b6a063	test(scoring): refresh omega transparency contracts
+7a26f2f87df72f6c6dec5c6907bd214e78b6a063	7a26f2f8	2026-09-27T10:46:56-04:00	SeanB	70108b45ffb6418ab8a94d05e8f66755a4b68d39	test(identity): preserve bitter orange dual classification
+70108b45ffb6418ab8a94d05e8f66755a4b68d39	70108b45	2026-09-27T10:43:57-04:00	SeanB	4ebdd0cfb8a932c7bf6edc176162515d80d13c0e	fix(clinical): route DGL and close botanical warnings
+4ebdd0cfb8a932c7bf6edc176162515d80d13c0e	4ebdd0cf	2026-09-27T10:40:56-04:00	SeanB	cfbc2ddf549ce8db1daa063936246ce97d886ed2	fix(export): read canonical score brand and serving owners
+cfbc2ddf549ce8db1daa063936246ce97d886ed2	cfbc2ddf	2026-09-27T10:40:51-04:00	SeanB	ee76a231edad964faf837bab5965a30353029efe	fix(scoring): keep omega oxidation under verification owner
+ee76a231edad964faf837bab5965a30353029efe	ee76a231	2026-09-27T10:15:59-04:00	SeanB	fa7f5c18cb478fff5106d0901dd3f9c5fc042c55	fix(evidence): name decisive authority credit
+fa7f5c18cb478fff5106d0901dd3f9c5fc042c55	fa7f5c18	2026-09-27T10:12:06-04:00	SeanB	5185a0c020c48faa8fe58aed3c39854d207a0d61 75164464be6dd5459d7359837c4162ca56ecde42	Merge remote-tracking branch 'origin/main' into codex/claude-177233-headline
+75164464be6dd5459d7359837c4162ca56ecde42	75164464	2026-09-27T02:01:34-04:00	SeanB	6557a7bda4eaf40ca5a66e7285a061039a42211a	docs(audit): register records the v41 and identity-lane integration
+5185a0c020c48faa8fe58aed3c39854d207a0d61	5185a0c0	2026-09-27T01:48:49-04:00	SeanB	c5080f5530c9b9ffc245819dd64b8a7ffee7562e c0022415f133fb0e7411f11aad284a215e90980a	Merge remote-tracking branch 'origin/main' into codex/claude-177233-headline
+6557a7bda4eaf40ca5a66e7285a061039a42211a	6557a7bd	2026-09-27T01:45:07-04:00	SeanB	106a8d5976f8c3a4f7f5196d0cbe232e9cc176a7	chore(taxonomy): the enzyme identity set lists each enzyme once
+c5080f5530c9b9ffc245819dd64b8a7ffee7562e	c5080f55	2026-09-27T01:38:22-04:00	SeanB	eb3eb5105af16bf4b4cfcfa1440e8c834f60efa9	test(iqm): preserve main coverage denominator
+eb3eb5105af16bf4b4cfcfa1440e8c834f60efa9	eb3eb510	2026-09-27T01:23:37-04:00	SeanB	dbf61fa6ccfb3ee293304830e76419cedbf1ad9f	fix(interaction): reconcile landed plant-part decisions
+106a8d5976f8c3a4f7f5196d0cbe232e9cc176a7	106a8d59	2026-09-27T01:22:00-04:00	SeanB	177eab343fd32587c33ad5a8645ae1fff936a0aa c0022415f133fb0e7411f11aad284a215e90980a	Merge origin/main (Claude identity lane c0022415) into the v41 integration
+dbf61fa6ccfb3ee293304830e76419cedbf1ad9f	dbf61fa6	2026-09-27T01:18:12-04:00	SeanB	974edb421af0f6bc03360628ec10cb0bcacbf164	fix(evidence): keep authority owner as product headline
+177eab343fd32587c33ad5a8645ae1fff936a0aa	177eab34	2026-09-27T01:13:08-04:00	SeanB	3315ebee427b9b0d3c1154ec3e1e1c8c0ba771bd 0de250a21a841a5096c9d2c3ddeee0fcbd8a216f	Merge v41-recovery (Codex scoring/evidence recovery lane) into main
+c0022415f133fb0e7411f11aad284a215e90980a	c0022415	2026-09-27T05:11:38Z	Claude	f7a58b2ca9674463de4392670f057ef35ade844e	test(iqm): absorption coverage leaves out declared category-error forms
+974edb421af0f6bc03360628ec10cb0bcacbf164	974edb42	2026-09-27T01:09:31-04:00	SeanB	654e5034ab9d116f3561095ba0cc8a0b3d86e27e 3315ebee427b9b0d3c1154ec3e1e1c8c0ba771bd	Merge current main into Claude identity lane
+f7a58b2ca9674463de4392670f057ef35ade844e	f7a58b2c	2026-09-27T04:54:59Z	Claude	0433c3863e2eb32938f2f4cd25fb5723abf86669 3315ebee427b9b0d3c1154ec3e1e1c8c0ba771bd	Merge origin/main (Q18/Q25 identity splits, Q15 banned citations)
+0433c3863e2eb32938f2f4cd25fb5723abf86669	0433c386	2026-09-27T04:45:11Z	Claude	654e5034ab9d116f3561095ba0cc8a0b3d86e27e	Ship sole-active low-severity additives scored (BulkSupplements Mannitol)
+3315ebee427b9b0d3c1154ec3e1e1c8c0ba771bd	3315ebee	2026-09-27T00:30:11-04:00	SeanB	33e807e92de29a4669515d17c099e7357c118301	fix(safety): 36 banned records cite what the government actually did (Q15)
+33e807e92de29a4669515d17c099e7357c118301	33e807e9	2026-09-27T00:10:44-04:00	SeanB	a3abb1995807995a52f38e3debbf97c375ad5fe6	fix(identity): label rows keep the organism and preparation they name (Q18, Q25)
+654e5034ab9d116f3561095ba0cc8a0b3d86e27e	654e5034	2026-09-27T03:52:01Z	Claude	19d9487bb1f994ca2da67cfb2e065413a39097d9	fix(identity): map the unmapped forms that kept products unscored
+19d9487bb1f994ca2da67cfb2e065413a39097d9	19d9487b	2026-09-27T02:40:36Z	Claude	28178b5478eac1b1f68c5e469e49d7a3badf5b98 a3abb1995807995a52f38e3debbf97c375ad5fe6	Merge remote-tracking branch 'origin/main' into claude/kind-newton-f2mz4l
+28178b5478eac1b1f68c5e469e49d7a3badf5b98	28178b54	2026-09-27T02:36:03Z	Claude	24bebc01d6348404f511a608d55d66f39b865dd3	fix(identity): FiberSMART stays out of resistant starch
+24bebc01d6348404f511a608d55d66f39b865dd3	24bebc01	2026-09-27T02:00:26Z	Claude	863deb0f354d1f11cc4d983fb1867e227f673b43	fix(interaction): a row meets the rules authored on its safety match
+863deb0f354d1f11cc4d983fb1867e227f673b43	863deb0f	2026-09-27T01:33:25Z	Claude	d36b60523f06dcaa566410776653a079a084f1c1	fix(identity): excipients and ALCAR arginate keep their owners
+d36b60523f06dcaa566410776653a079a084f1c1	d36b6052	2026-09-27T01:00:53Z	Claude	007f4e47ea01f0e6c8a8a6b2a69ac0b057544f24	fix(identity): high-risk and additive actives get an identity and ship
+a3abb1995807995a52f38e3debbf97c375ad5fe6	a3abb199	2026-09-26T20:54:54-04:00	SeanB	28d8e304f24e537a3ac070e1a33b2d00fbfaf162	test(interaction): licorice hypertension flags unquantified blend children
+28d8e304f24e537a3ac070e1a33b2d00fbfaf162	28d8e304	2026-09-26T20:49:41-04:00	SeanB	e7bcfce557b1e4f1dc19d6baf9e1dc3ea7998185	docs(audit): register records the green citation gates
+e7bcfce557b1e4f1dc19d6baf9e1dc3ea7998185	e7bcfce5	2026-09-26T20:47:21-04:00	SeanB	70b654e6d30d79d62371fb43a9adc5633ceefc09	fix(interaction): licorice blood-pressure warnings fire on presence
+70b654e6d30d79d62371fb43a9adc5633ceefc09	70b654e6	2026-09-26T20:41:55-04:00	SeanB	139c2513ce63baff1be67033a7f704e0b450b720	fix(data): Slendesta cites a real potato PI2 satiety trial
+139c2513ce63baff1be67033a7f704e0b450b720	139c2513	2026-09-26T20:40:31-04:00	SeanB	dd6a29e4c883f82768eda77200d3fcb8d03ed1dc	fix(data): ginger standardized extract cites a real Marx 2017 review
+007f4e47ea01f0e6c8a8a6b2a69ac0b057544f24	007f4e47	2026-09-27T00:37:16Z	Claude	32718da7bfeb8fad17cb3aa336f632047244fe82	test(safety): add the Mithras (33360) fixture the designer-steroid test reads
+32718da7bfeb8fad17cb3aa336f632047244fe82	32718da7	2026-09-27T00:37:05Z	Claude	7dbbf67765e2868d81035236bcdb797579e27427	fix(safety): three Iron Legion designer steroids ship blocked with their reason
+dd6a29e4c883f82768eda77200d3fcb8d03ed1dc	dd6a29e4	2026-09-26T20:21:51-04:00	SeanB	82e383dddd5358ccd051bd54c03899cf9acc3f52 591a0c59d76cfc19a215d878aa485e9a7388ac18	Merge remote-tracking branch 'origin/main' into claude/adoring-keller-9ab18a
+82e383dddd5358ccd051bd54c03899cf9acc3f52	82e383dd	2026-09-26T20:21:12-04:00	SeanB	0edf0bb348433c16fdc6b67a03c2428a23f1a261	fix(data): citation backlog declares the ledger schema namespace
+7dbbf67765e2868d81035236bcdb797579e27427	7dbbf677	2026-09-27T00:19:54Z	Claude	79cecfa1cde17753c8789167865928682a5c6408	fix(identity): a repaired IQM identity names the IQM registry
+591a0c59d76cfc19a215d878aa485e9a7388ac18	591a0c59	2026-09-26T20:17:30-04:00	SeanB	11446221e14a13dde72b40290730b17e6e0cecb6	docs(audit): resolve Q23, Q24 and D18 with receipts; queue matcha identity (Q25)
+11446221e14a13dde72b40290730b17e6e0cecb6	11446221	2026-09-26T20:17:30-04:00	SeanB	455dc72d4f65620401d5ac5f236f763415fa94ea	fix(clean): keep a printed 0% Daily Value apart from no percent
+455dc72d4f65620401d5ac5f236f763415fa94ea	455dc72d	2026-09-26T20:17:30-04:00	SeanB	9c132a938e1bb4b8327c9bc326e78c3ff50fd206	fix(interaction): green tea extract liver warning treats 800 mg EGCG as a risk dose
+0edf0bb348433c16fdc6b67a03c2428a23f1a261	0edf0bb3	2026-09-26T20:12:40-04:00	SeanB	cb23b7afa9fc78a579e31e93c03bdb2565e3c3cd	docs(rules): a studied dose is not a warning threshold
+cb23b7afa9fc78a579e31e93c03bdb2565e3c3cd	cb23b7af	2026-09-26T20:12:30-04:00	SeanB	05c3e5ad9d62faa1d292e6f4e3ae7a023e2e94f3	feat(release): interaction-rule citations gate the release; data citations gate on a backlog
+05c3e5ad9d62faa1d292e6f4e3ae7a023e2e94f3	05c3e5ad	2026-09-26T20:06:28-04:00	SeanB	0514c2aa42f45d813a39804d01e420865b06e4d1	fix(audit): citation fetch reads PubMed book records
+0514c2aa42f45d813a39804d01e420865b06e4d1	0514c2aa	2026-09-26T20:03:12-04:00	SeanB	9c132a938e1bb4b8327c9bc326e78c3ff50fd206	fix(interaction): ginseng and nettle glucose rules fire on presence
+79cecfa1cde17753c8789167865928682a5c6408	79cecfa1	2026-09-26T23:24:45Z	Claude	272a580cc0c9bd4fe5cdbd99fecc4f626d2db1f9	docs(views): regenerate the interaction-rule views from the current rules
+272a580cc0c9bd4fe5cdbd99fecc4f626d2db1f9	272a580c	2026-09-26T23:24:21Z	Claude	482514c5d4714c40029be0b9f2c4c2a20edaae93	fix(data): vitex drops the chaste-tree CUI it inherited from a wrong species
+482514c5d4714c40029be0b9f2c4c2a20edaae93	482514c5	2026-09-26T23:16:21Z	Claude	21209f2139acb6728bbdc31ee7cee547fbb0b4ab	fix(data): a bare species name never confirms a nettle or dandelion part
+21209f2139acb6728bbdc31ee7cee547fbb0b4ab	21209f21	2026-09-26T23:10:09Z	Claude	5494300c84ed34dc2831ab3b4f1a7cdcdde27331	refactor(interaction): the plant-part scope mode is fail_open, and checked
+5494300c84ed34dc2831ab3b4f1a7cdcdde27331	5494300c	2026-09-26T23:04:43Z	Claude	6d2a6d852d6eef9e13346249b5d437bf0aa7368a	fix(interaction): a nettle root label keeps the blood-pressure claim
+6d2a6d852d6eef9e13346249b5d437bf0aa7368a	6d2a6d85	2026-09-26T22:56:40Z	Claude	c61a5934107de7b0db3dd9ed99ee2d30a477b04e	fix(export): a below-floor row never displaces the plant's card that fires
+0de250a21a841a5096c9d2c3ddeee0fcbd8a216f	0de250a2	2026-09-26T18:31:39-04:00	SeanB	e8a0817ef25318970d07d519f93b5e7471fe024a	docs(audit): close nutrition source acceptance
+c61a5934107de7b0db3dd9ed99ee2d30a477b04e	c61a5934	2026-09-26T22:29:33Z	Claude	ce8c38fac245f1cc14ea2766e1eaf1ad9b041b93	fix(data): vitex, nirgundi and milk thistle records name their own species
+ce8c38fac245f1cc14ea2766e1eaf1ad9b041b93	ce8c38fa	2026-09-26T22:10:06Z	Claude	504504f740c3614a760cadea7e37e0b038f60888	fix(interaction): the subject registry is the one that holds the id
+504504f740c3614a760cadea7e37e0b038f60888	504504f7	2026-09-26T22:06:19Z	Claude	489d5240b86741d0bb2b221c4ba6b5a26c69603c	fix(export): one interaction card per plant and hazard
+489d5240b86741d0bb2b221c4ba6b5a26c69603c	489d5240	2026-09-26T22:04:25Z	Claude	88ef0a98b685c5e1342bda90e4fa96e9d83a4454	fix(interaction): standardized botanicals answer to their IQM twin's rules
+88ef0a98b685c5e1342bda90e4fa96e9d83a4454	88ef0a98	2026-09-26T21:54:44Z	Claude	60d2ebcb3b2f3b65771f775d8bbab193138c304b	fix(interaction): dandelion and nettle claims follow the plant part
+e8a0817ef25318970d07d519f93b5e7471fe024a	e8a0817e	2026-09-26T17:50:17-04:00	SeanB	a54cca7bbc947b9923526a8a05c8f4689911807f	fix(cleaner): keep nutrition aggregate owners
+60d2ebcb3b2f3b65771f775d8bbab193138c304b	60d2ebcb	2026-09-26T21:34:04Z	Claude	9c132a938e1bb4b8327c9bc326e78c3ff50fd206	fix(interaction): one ginkgo pregnancy verdict, avoid
+a54cca7bbc947b9923526a8a05c8f4689911807f	a54cca7b	2026-09-26T17:31:06-04:00	SeanB	5b8d7702f053407684e566470f832ea1c5c6e95b	fix(export): preserve nutrition row disposition
+9c132a938e1bb4b8327c9bc326e78c3ff50fd206	9c132a93	2026-09-26T19:54:27Z	Claude	36bbc5b279560ba8775cdf9ca85b59b6ddedfa90	fix(interaction): twin the same-plant botanicals the first pass missed
+36bbc5b279560ba8775cdf9ca85b59b6ddedfa90	36bbc5b2	2026-09-26T16:53:53-04:00	SeanB	012130794648d0434622502051c3698daf4e2edb	docs(audit): D1b and D1c resolved; Q23 cleaner 0% DV and Q24 green tea severity
+012130794648d0434622502051c3698daf4e2edb	01213079	2026-09-26T16:53:35-04:00	SeanB	e70a4adfe33c98d8a51a908b47c350df7dba06c5	fix(interaction): one presence rule for interaction rows and the app's fingerprint
+e70a4adfe33c98d8a51a908b47c350df7dba06c5	e70a4adf	2026-09-26T16:40:27-04:00	SeanB	f6c7d89ddd80dd8bc6432d34ea67770977c3ea0d	fix(interaction): a presence rule stays visible when the amount is unknown
+5b8d7702f053407684e566470f832ea1c5c6e95b	5b8d7702	2026-09-26T16:53:17-04:00	SeanB	7b055d5bf205d2660f2f88fc75e515fe35f06c99	docs(audit): record final fast checkpoint
+7b055d5bf205d2660f2f88fc75e515fe35f06c99	7b055d5b	2026-09-26T16:43:42-04:00	SeanB	7cf610e17913dbd7d5a07dceeac790a71997b1e1	docs(audit): record approved fiber source contract
+f6c7d89ddd80dd8bc6432d34ea67770977c3ea0d	f6c7d89d	2026-09-26T16:40:57-04:00	SeanB	3c0648ba131c82fe61fe39b750f89d94493a7a28	docs(audit): register the first full-coverage citation run
+7cf610e17913dbd7d5a07dceeac790a71997b1e1	7cf610e1	2026-09-26T16:36:56-04:00	SeanB	a40880a96a1842a334218f6c5439c264484d4154	fix(scoring): reject stale persisted fiber evidence
+3c0648ba131c82fe61fe39b750f89d94493a7a28	3c0648ba	2026-09-26T16:36:44-04:00	SeanB	c11c29165795ff3ac0cd18795bd8a1373ba099ea	fix(audit): interaction-rules citation verifier reads PMC links
+c11c29165795ff3ac0cd18795bd8a1373ba099ea	c11c2916	2026-09-26T16:36:44-04:00	SeanB	e349a2b7443279cfba235009fd040c6218f0560f	fix(audit): backed-studies citation gate reads every citation in an entry
+e349a2b7443279cfba235009fd040c6218f0560f	e349a2b7	2026-09-26T16:36:31-04:00	SeanB	df89c74e7cd844a2849181a7d9c149aa282e8c8c	fix(audit): citation content verifier reads every citation in scripts/data
+a40880a96a1842a334218f6c5439c264484d4154	a40880a9	2026-09-26T16:35:17-04:00	SeanB	b42b5b39fdc00cc790e6c60fca64e49165bec860	feat(scoring): join active fiber rows to nutrition dose
+b42b5b39fdc00cc790e6c60fca64e49165bec860	b42b5b39	2026-09-26T16:35:02-04:00	SeanB	dafdf860e915d32c1aef8c26a9d38cdfde37139d	fix(fiber): preserve owned active identities
+dafdf860e915d32c1aef8c26a9d38cdfde37139d	dafdf860	2026-09-26T16:34:55-04:00	SeanB	a875c626c1883c437bb6a2ce8153e90a0bc72609 df89c74e7cd844a2849181a7d9c149aa282e8c8c	Merge remote-tracking branch 'origin/main' into v41-recovery
+a875c626c1883c437bb6a2ce8153e90a0bc72609	a875c626	2026-09-26T16:20:44-04:00	SeanB	becdcb4a9fc683a268970464e316580d75bda8d8 52b275ea0a657dcf3c57896d890d4eae7b946320	Merge branch 'main' into v41-recovery
+df89c74e7cd844a2849181a7d9c149aa282e8c8c	df89c74e	2026-09-26T16:20:29-04:00	SeanB	00eabf5e738f5aacbd1c4e3c5012fd4a0ce749d5 52b275ea0a657dcf3c57896d890d4eae7b946320	Merge remote-tracking branch 'origin/main' into claude/adoring-keller-9ab18a
+00eabf5e738f5aacbd1c4e3c5012fd4a0ce749d5	00eabf5e	2026-09-26T16:17:29-04:00	SeanB	19436bb04e5b719641691ea624a44eee25c6ef78	docs(audit): register records Sean's D8 ruling and what it changed
+19436bb04e5b719641691ea624a44eee25c6ef78	19436bb0	2026-09-26T16:12:58-04:00	SeanB	0827e9b011341100e1a69ddd9613eb000eebd5d8	docs(audit): review two full-text citations the strict gate cannot read
+becdcb4a9fc683a268970464e316580d75bda8d8	becdcb4a	2026-09-26T16:14:07-04:00	SeanB	a0eee3e583e6d011c446c83b349e6cf868d06927	docs(audit): record verified fiber source checkpoint and decisions
+52b275ea0a657dcf3c57896d890d4eae7b946320	52b275ea	2026-09-26T16:12:59-04:00	SeanB	6767a383c9ffc29b1c8c57622fed306ea9df4a2f	docs(audit): record P1's measured delta, identity notes and the stale local canary
+0827e9b011341100e1a69ddd9613eb000eebd5d8	0827e9b0	2026-09-26T16:09:49-04:00	SeanB	7d8f7b08e6f3d8b6182fb412781fda0de17d4a21	fix(interaction): IQM licorice BP floors cite the 100 mg glycyrrhizic acid trial
+7d8f7b08e6f3d8b6182fb412781fda0de17d4a21	7d8f7b08	2026-09-26T16:07:15-04:00	SeanB	6e475af1c98443a2f9340733beca4389b3c57ee2	fix(interaction): licorice root BP floor cites the 100 mg glycyrrhizic acid trial
+6e475af1c98443a2f9340733beca4389b3c57ee2	6e475af1	2026-09-26T16:03:47-04:00	SeanB	a19ff8b8b4d3c6daeefa971ce04b6cbd9816a37c	fix(interaction): stinging nettle glucose floor is the trial dose, not a guess
+a19ff8b8b4d3c6daeefa971ce04b6cbd9816a37c	a19ff8b8	2026-09-26T16:00:25-04:00	SeanB	344104037d6fcaeda5c3740a6d7c3961d1875efb	fix(interaction): ginseng floors match the effect their source measured
+344104037d6fcaeda5c3740a6d7c3961d1875efb	34410403	2026-09-26T15:56:51-04:00	SeanB	117584e3b8a5a699bd7644fc7e647f3c7316dfd1	fix(interaction): feverfew anticoagulant rule drops a floor from a general review
+117584e3b8a5a699bd7644fc7e647f3c7316dfd1	117584e3	2026-09-26T15:53:14-04:00	SeanB	aa915835f986a20fdaaaa3be430419e1ff4935e4	fix(interaction): boswellia bleeding rules drop an arthritis-trial floor
+a0eee3e583e6d011c446c83b349e6cf868d06927	a0eee3e5	2026-09-26T15:51:03-04:00	SeanB	37db58d71d08f45c23fd9a723e21ac705c0860e2	fix(enrich): preserve verified named fiber source eligibility
+37db58d71d08f45c23fd9a723e21ac705c0860e2	37db58d7	2026-09-26T15:50:43-04:00	SeanB	c2a20b009ccf47ad38722a87e1c0176519d40525	fix(scoring): contain contradictory safety identity projections
+aa915835f986a20fdaaaa3be430419e1ff4935e4	aa915835	2026-09-26T15:50:07-04:00	SeanB	dc92c43f66d98c1d203df61ef2f2b86f26de15ba	fix(interaction): saw palmetto bleeding rules drop a floor borrowed from BPH
+6767a383c9ffc29b1c8c57622fed306ea9df4a2f	6767a383	2026-09-26T15:49:17-04:00	SeanB	7863d0f2dc25267586de013120a8156ec98d903a	docs(audit): record D1's measured delta and P1's landing
+c2a20b009ccf47ad38722a87e1c0176519d40525	c2a20b00	2026-09-26T15:48:03-04:00	SeanB	97b8a0ed075718a42523746e6f0ed1d52fa268cb	fix(clean): bind nutrition totals to panel declarations
+7863d0f2dc25267586de013120a8156ec98d903a	7863d0f2	2026-09-26T15:36:00-04:00	SeanB	0fa3334064088bf0c1d366680fa6e9353c70a79f	fix(interaction): an identified ingredient inside a blend keeps its alerts
+dc92c43f66d98c1d203df61ef2f2b86f26de15ba	dc92c43f	2026-09-26T15:41:56-04:00	SeanB	172a850b54a73471abb4e62bab7e25b20202d718	fix(interaction): resveratrol-warfarin note links the mouse study it describes
+172a850b54a73471abb4e62bab7e25b20202d718	172a850b	2026-09-26T15:39:06-04:00	SeanB	7260479a8288b4eab24f0dbcb3dfe5171c8f66f5	fix(interaction): NAC bleeding rule drops a CKD citation and an invented floor
+0fa3334064088bf0c1d366680fa6e9353c70a79f	0fa33340	2026-09-26T15:33:16-04:00	SeanB	7ac5f2c463e2e495316ae5de2e130ceaf1a54222	docs(audit): register Sean's decisions, the C2 protein review and the Gemini-audit findings
+7ac5f2c463e2e495316ae5de2e130ceaf1a54222	7ac5f2c4	2026-09-26T15:31:45-04:00	SeanB	34c8cd0e4e899227162c5ebbb70c8116087c0db1	fix(interaction): senna pregnancy follows its sources; unsupported floors removed
+34c8cd0e4e899227162c5ebbb70c8116087c0db1	34c8cd0e	2026-09-26T15:31:45-04:00	SeanB	6c4a130e37eff24098f5f9e6299af7361423e9fd	fix(safety): SARM records state what FDA did, not a ban
+7260479a8288b4eab24f0dbcb3dfe5171c8f66f5	7260479a	2026-09-26T15:22:51-04:00	SeanB	50d99d9b720fce707ba750871acb4437dfa8cd0a	docs(audit): register the verifier coverage gap and the ghosts it hid
+50d99d9b720fce707ba750871acb4437dfa8cd0a	50d99d9b	2026-09-26T15:21:33-04:00	SeanB	7a6ce5b406b879f261385535e12ba3ea303244d6	fix(audit): interaction-rules citation verifier reads dose floors and threshold notes
+97b8a0ed075718a42523746e6f0ed1d52fa268cb	97b8a0ed	2026-09-26T15:16:40-04:00	SeanB	4ff8abff0d8a145fb9bbfce3abd7eee8bda10e38	fix(scoring): route declared protein through typed dose evidence
+7a6ce5b406b879f261385535e12ba3ea303244d6	7a6ce5b4	2026-09-26T15:14:19-04:00	SeanB	da77c4566b776df57a1a30d88e27e58b5127a5cd	fix(interaction): ginseng-warfarin threshold drops a gastric-cancer citation
+4ff8abff0d8a145fb9bbfce3abd7eee8bda10e38	4ff8abff	2026-09-26T15:08:17-04:00	SeanB	9aec5a4c3d037e5d4000f1579bdce3daa28fbd9b	fix(scoring): retain nutrition exclusion in generic projections
+9aec5a4c3d037e5d4000f1579bdce3daa28fbd9b	9aec5a4c	2026-09-26T15:08:17-04:00	SeanB	dc6313b8b27691bb33b14adaff777dc95b58d7da	fix(clean): avoid partial nicotinamide compound form matches
+6c4a130e37eff24098f5f9e6299af7361423e9fd	6c4a130e	2026-09-26T18:59:29Z	Claude	49f53e8c5456428ddceaae7107fafa1d8aed21a2	fix(interaction): scan a non-scorable row once
+49f53e8c5456428ddceaae7107fafa1d8aed21a2	49f53e8c	2026-09-26T18:56:05Z	Claude	0e18c9bc58555aebdd6850b39e630c3fbe18160f	fix(interaction): a botanical answers to the rules of its IQM twin
+0e18c9bc58555aebdd6850b39e630c3fbe18160f	0e18c9bc	2026-09-26T18:55:43Z	Claude	da77c4566b776df57a1a30d88e27e58b5127a5cd	fix(interaction): a resolved row answers to its own registry's rules
+dc6313b8b27691bb33b14adaff777dc95b58d7da	dc6313b8	2026-09-26T15:05:16-04:00	SeanB	220c4e5e544c883fcc89ba8d28f5d7dc14859ab1	test(contracts): remove obsolete dose read exceptions
+220c4e5e544c883fcc89ba8d28f5d7dc14859ab1	220c4e5e	2026-09-26T14:53:56-04:00	SeanB	d586fc902ab97e098977da174ada80ef852b0af0	fix(evidence): retain all explicit purposes without endpoint leakage
+d586fc902ab97e098977da174ada80ef852b0af0	d586fc90	2026-09-26T14:49:35-04:00	SeanB	3c8bf24f714f1a4b57e427130d14d4004a0fcb98	fix(evidence): resolve disclosed rows with shared daily dose contract
+da77c4566b776df57a1a30d88e27e58b5127a5cd	da77c456	2026-09-26T14:49:14-04:00	SeanB	7133937d13b242c458ba8a6dcb6f0e75143c6617	docs(audit): register the pinned unlanded commits, app stashes and unreachable WIP
+3c8bf24f714f1a4b57e427130d14d4004a0fcb98	3c8bf24f	2026-09-26T14:47:38-04:00	SeanB	ed2a5f364007c1872d6034f25f9bf014f6207b45	fix(evidence): reject negated and unrelated label purpose claims
+ed2a5f364007c1872d6034f25f9bf014f6207b45	ed2a5f36	2026-09-26T14:41:29-04:00	SeanB	d60cfc40e938749792fc42385b35627511674fc8	fix(evidence): include substantial actives with explicit label function claims
+7133937d13b242c458ba8a6dcb6f0e75143c6617	7133937d	2026-09-26T14:36:15-04:00	SeanB	ff1793cb5ad5d1c7cd9a96fbb5f7c983f4987c53	docs(audit): one register of every pending item from the 2026-09-26 integration
+ff1793cb5ad5d1c7cd9a96fbb5f7c983f4987c53	ff1793cb	2026-09-26T14:34:58-04:00	SeanB	786d318bb5883d169fd894f5fcee1897533d369c	docs(contracts): matrix consumers match the code
+d60cfc40e938749792fc42385b35627511674fc8	d60cfc40	2026-09-26T14:31:49-04:00	SeanB	00a0c5f9c06ed5113db918a1e55d3d7a4158f2c2	docs(audit): record release blockers and mixed-purpose policy probe
+786d318bb5883d169fd894f5fcee1897533d369c	786d318b	2026-09-26T14:28:17-04:00	SeanB	f7a1038993cf230aa58a0d34f0c36854b7bc777f	fix(depletion): beta-blocker CoQ10 source label names the paper its URL points to
+f7a1038993cf230aa58a0d34f0c36854b7bc777f	f7a10389	2026-09-26T14:27:02-04:00	SeanB	a70e057dffd2fa3e4cdddd0f62ffae317a8532b9	fix(interaction): garlic-warfarin pair drops an antimicrobial allicin citation
+a70e057dffd2fa3e4cdddd0f62ffae317a8532b9	a70e057d	2026-09-26T14:25:46-04:00	SeanB	e69e12232b742e508d3c95d833cd25e3fdbf40a1	fix(interaction): chondroitin, black seed and evening primrose copy says what its sources say
+00a0c5f9c06ed5113db918a1e55d3d7a4158f2c2	00a0c5f9	2026-09-26T14:24:01-04:00	SeanB	f3f75bcdd9fc573674cdee1c0ba1e14c586c4c99	fix(export): retain confirmed safety warnings across form gaps
+e69e12232b742e508d3c95d833cd25e3fdbf40a1	e69e1223	2026-09-26T14:23:01-04:00	SeanB	8dbd621bd79a678f46437a2a285ed825784b9166	fix(iqm): cascara RxNorm anchor and miroestrol structural class
+f3f75bcdd9fc573674cdee1c0ba1e14c586c4c99	f3f75bcd	2026-09-26T13:59:32-04:00	SeanB	6bdffe33515e21b201ac7201912004dae4a94611	test(harness): keep corpus safety scans in artifact gates
+8dbd621bd79a678f46437a2a285ed825784b9166	8dbd621b	2026-09-26T13:48:03-04:00	SeanB	292f83fc92c9caa1292c64c41c7e93ad95c6c45b	docs(audit): track the 2026-09-22 scoring diagnosis packet
+292f83fc92c9caa1292c64c41c7e93ad95c6c45b	292f83fc	2026-09-26T13:40:54-04:00	SeanB	0d410c8451fc3799d835a95873a7a510a36c46d3 a59659bd60ed38c391eb730119a0dee373f74705	Merge branch 'claude/b0-policy-signals' into integration
+0d410c8451fc3799d835a95873a7a510a36c46d3	0d410c84	2026-09-26T13:39:02-04:00	SeanB	f667c7618b02d676288229151583b7c9eb95af76 d101baff184e6317cc0b08e32cee356c224802d9	Merge branch 'claude/verify-cui-prep-guard' into integration
+f667c7618b02d676288229151583b7c9eb95af76	f667c761	2026-09-26T13:39:02-04:00	SeanB	ff5a812faa7a9dd1831d5ee376aaa388cedd4993 ce3088a6a63d36f76fe236fdeb671f28ad5631e3	Merge branch 'claude/iqm-miroestrol-cui' into integration
+ff5a812faa7a9dd1831d5ee376aaa388cedd4993	ff5a812f	2026-09-26T13:38:52-04:00	SeanB	19b44db432560868b4608a4d3b75dc0a7b2c3d25 121ae9f7d3c9b8f20fa76f7c878f96448a958a0d	Merge branch 'claude/iqm-phlorizin-cui' into integration
+19b44db432560868b4608a4d3b75dc0a7b2c3d25	19b44db4	2026-09-26T13:38:44-04:00	SeanB	3cbd6fe65212f0a8df77621168c23e21a2b88a3d 1749a64a4dca4a8b04cecd1a989bfaceeb208ae7	Merge branch 'claude/mk677-fda-source' into integration
+3cbd6fe65212f0a8df77621168c23e21a2b88a3d	3cbd6fe6	2026-09-26T13:37:20-04:00	SeanB	a5bc92b73c60426038264c5c8fc47f6784abd048 f9eed995b6fea90533b024c36aa2666b8b13f5ca	Merge branch 'claude/banned-cui-anchor-review' into integration
+6bdffe33515e21b201ac7201912004dae4a94611	6bdffe33	2026-09-26T13:29:27-04:00	SeanB	e1eb3bc23f4d98dcd27ec197e4ecd869c4ead332	fix(evidence): apply nutrient authority floor within purpose owners
+e1eb3bc23f4d98dcd27ec197e4ecd869c4ead332	e1eb3bc2	2026-09-26T13:28:39-04:00	SeanB	674a2ec94bfc2c23322e269ee58c5ebfd51ed8d9	fix(evidence): distinguish nutrient totals from opaque blends
+ce3088a6a63d36f76fe236fdeb671f28ad5631e3	ce3088a6	2026-09-26T13:15:34-04:00	SeanB	001bcad834a628e7eacdb4cc88f27e48fa7801ce	fix(iqm): miroestrol identifiers are miroestrol, not crisnatol and hexenol
+674a2ec94bfc2c23322e269ee58c5ebfd51ed8d9	674a2ec9	2026-09-26T12:56:07-04:00	SeanB	a4cc5c6b4708cd79740df9ef92eec15697efe707	fix(readiness): include source-scoped recovered evidence
+a4cc5c6b4708cd79740df9ef92eec15697efe707	a4cc5c6b	2026-09-26T12:49:24-04:00	SeanB	3e830c0f06386963278c407d71a12421ab8baee1	test(dose): pin omega minimum exposure instead of endpoint average
+3e830c0f06386963278c407d71a12421ab8baee1	3e830c0f	2026-09-26T12:49:24-04:00	SeanB	d7754ed564cd7af8ab9b0d6a99dcbdaf81b00746	fix(dose): keep whole herb mass outside extract dose references
+d7754ed564cd7af8ab9b0d6a99dcbdaf81b00746	d7754ed5	2026-09-26T12:48:09-04:00	SeanB	e9f1a54cdbd58f7a4d29c3b489ff6912fec691d7	fix(evidence): reject individual dose recovery from mixed blend totals
+e9f1a54cdbd58f7a4d29c3b489ff6912fec691d7	e9f1a54c	2026-09-26T12:44:12-04:00	SeanB	372be31d18177f04c3807b1a7682e10b2110a56f	fix(dose): align omega adequacy with minimum daily exposure
+372be31d18177f04c3807b1a7682e10b2110a56f	372be31d	2026-09-26T12:41:31-04:00	SeanB	4c4400c1046a93db77dc5ef0929907f3e1a32395	fix(forms): retain zero adequacy and reject non-delivering absorption pairs
+4c4400c1046a93db77dc5ef0929907f3e1a32395	4c4400c1	2026-09-26T12:38:46-04:00	SeanB	ae2d4ae1032f34fdccf4a04d6f620ab9814d89e1	fix(evidence): scope generic and digestive evidence to purpose owners
+ae2d4ae1032f34fdccf4a04d6f620ab9814d89e1	ae2d4ae1	2026-09-26T12:34:28-04:00	SeanB	9203826c3dbb0d2ff5b3e3b34ac7b0f03bd823a7	fix(clean): retain disclosed sources inside skipped blend headers
+9203826c3dbb0d2ff5b3e3b34ac7b0f03bd823a7	9203826c	2026-09-26T12:30:54-04:00	SeanB	69c08dbcde0acae144d9e09acb779ebeb1dc9bd2	fix(dose): compare botanical amounts on daily exposure basis
+121ae9f7d3c9b8f20fa76f7c878f96448a958a0d	121ae9f7	2026-09-26T12:28:52-04:00	SeanB	001bcad834a628e7eacdb4cc88f27e48fa7801ce	fix(iqm): phlorizin CUI is the compound, not a homeopathic trituration
+d101baff184e6317cc0b08e32cee356c224802d9	d101baff	2026-09-26T12:21:44-04:00	SeanB	51dd4afb2d9ce15ecd71d045e2485da7b7410de9	refactor(audit): cui_overrides.json is verify_cui's only override source
+a5bc92b73c60426038264c5c8fc47f6784abd048	a5bc92b7	2026-09-26T12:18:41-04:00	SeanB	2d086156e639223882e8ac7db000cf7e96e23e14 69c08dbcde0acae144d9e09acb779ebeb1dc9bd2	Merge branch 'v41-recovery' into integration
+51dd4afb2d9ce15ecd71d045e2485da7b7410de9	51dd4afb	2026-09-26T12:16:05-04:00	SeanB	001bcad834a628e7eacdb4cc88f27e48fa7801ce	fix(audit): verify_cui rejects CUIs named for a product form the entry lacks
+69c08dbcde0acae144d9e09acb779ebeb1dc9bd2	69c08dbc	2026-09-26T12:13:08-04:00	SeanB	2b9a0454c1a58ffeae611b26f0f9eb382817749f	docs(audit): record protein and omega acceptance results
+2d086156e639223882e8ac7db000cf7e96e23e14	2d086156	2026-09-26T12:11:05-04:00	SeanB	b594cee09f31c75b974f48b775797a13f7dfde92	data(audit): review the LiverTox aloe citation on the Cape aloe liver rule
+b594cee09f31c75b974f48b775797a13f7dfde92	b594cee0	2026-09-26T12:11:04-04:00	SeanB	b3d4eb7c4cbfd18fb1ccd81a0eb6722b29313414	fix(audit): citation topic stems for the smoker and asbestos conditions
+b3d4eb7c4cbfd18fb1ccd81a0eb6722b29313414	b3d4eb7c	2026-09-26T12:10:56-04:00	SeanB	c88e0fbea0d961dfb2b43018c018596fc1d1e1b3 94f4ce048a55732fa0d95b5515171d85124aaf86	Merge branch 'claude/affectionate-euclid-47926a' into integration
+a59659bd60ed38c391eb730119a0dee373f74705	a59659bd	2026-09-26T12:05:14-04:00	SeanB	c85b0d971aebde7fe992d9e18ac10155f7ecadef	fix(scoring): B0 and Safety/Hygiene read the gate's policy-filtered concerns
+2b9a0454c1a58ffeae611b26f0f9eb382817749f	2b9a0454	2026-09-26T12:05:06-04:00	SeanB	235ffccd0a96edaffe1430c86f29b06d974099e0	fix(evidence): keep protein source projection in input contract
+c88e0fbea0d961dfb2b43018c018596fc1d1e1b3	c88e0fbe	2026-09-26T12:04:19-04:00	SeanB	e55de3623c405cdbc1dbbde44252e55a5b2bb5b3	test(safety): align three pins with the anthraquinone curation
+f9eed995b6fea90533b024c36aa2666b8b13f5ca	f9eed995	2026-09-26T12:02:37-04:00	SeanB	e60670d73338f60137a2c025000866a9f494b38e	fix(safety): HIGH_RISK_CHAPARRAL CUI is Larrea tridentata, the species its reason names
+e55de3623c405cdbc1dbbde44252e55a5b2bb5b3	e55de362	2026-09-26T12:02:01-04:00	SeanB	26e9d733b470be2abba51d99d0ce4e1de6f9b891 2df4bed27568c0de631dd7985ab9f2983acefec3	Merge branch 'claude/elegant-proskuriakova-54f9b7' into integration
+e60670d73338f60137a2c025000866a9f494b38e	e60670d7	2026-09-26T11:59:49-04:00	SeanB	b52a3245a774c8daae006ce65c66485abbee31d2	data(safety): BANNED_EPHEDRA keeps C0885298, with a note on its UMLS name
+26e9d733b470be2abba51d99d0ce4e1de6f9b891	26e9d733	2026-09-26T11:57:58-04:00	SeanB	5efe5a9b06c3326004ea4a4e43b5c017f38f218d 305329ac350fda450ff4f633d1db09eaef333dc0	Merge branch 'claude/banned-unii-alias-only-matches' into integration
+5efe5a9b06c3326004ea4a4e43b5c017f38f218d	5efe5a9b	2026-09-26T11:57:57-04:00	SeanB	d2c6909495a114246a4646ea85e22e3bca729c5e 4c59e795f1cbf9c3bbc366c794986ebb0441af09	Merge branch 'claude/fervent-zhukovsky-791ee1' into integration
+d2c6909495a114246a4646ea85e22e3bca729c5e	d2c69094	2026-09-26T11:57:22-04:00	SeanB	3a12e873beb95507982da2fba25df735682b146f b3191f6244993e28abe34dca0777f27f7c162a30	Merge branch 'claude/xenodochial-yonath-ce0df1' into integration
+1749a64a4dca4a8b04cecd1a989bfaceeb208ae7	1749a64a	2026-09-26T11:55:55-04:00	SeanB	001bcad834a628e7eacdb4cc88f27e48fa7801ce	fix(safety): BANNED_IBUTAMOREN_MK677 cites FDA letter 719339, not an unverifiable 2020 letter
+3a12e873beb95507982da2fba25df735682b146f	3a12e873	2026-09-26T11:53:36-04:00	SeanB	87529ab2c2d8ec0a948e8ffe580409270b088f56 8c6a279773b6e7e7ea6dd0f339e6742585f11f10	Merge branch 'claude/pensive-jones-c021db' into integration
+235ffccd0a96edaffe1430c86f29b06d974099e0	235ffccd	2026-09-26T11:49:48-04:00	SeanB	01b8a66ccbcf953d269f0d11de7c1b90becb6668	fix(evidence): align protein source recovery and readiness
+87529ab2c2d8ec0a948e8ffe580409270b088f56	87529ab2	2026-09-26T11:48:19-04:00	SeanB	5ed85a1aded403cceb5c0cb6d67f6437a76c2aa1 a550b8e341df306161d9061cdf0e35c0679dd752	Merge branch 'claude/practical-saha-38fbb3' into integration
+5ed85a1aded403cceb5c0cb6d67f6437a76c2aa1	5ed85a1a	2026-09-26T11:43:38-04:00	SeanB	fffcd21f656426ea936a4d92a7caa7538430f6f4 07cb56a8523c9f0d83c5174a6c1a9c0acd7702e6	Merge branch 'claude/heuristic-blackburn-a294f5' into integration
+01b8a66ccbcf953d269f0d11de7c1b90becb6668	01b8a66c	2026-09-26T11:42:18-04:00	SeanB	44c7937c24f3d5866c2a67d6d10d5e54b579e8fc	fix(evidence): retain structured protein source provenance
+fffcd21f656426ea936a4d92a7caa7538430f6f4	fffcd21f	2026-09-26T11:40:47-04:00	SeanB	24133e0d1f899dd2a4fa7eb480b7bc3ec69a9d16 0d5fa6b812d07da61c75913231f0728d6b8bf606	Merge PR #58 branch 'claude/angry-khayyam-155ede' into integration
+b52a3245a774c8daae006ce65c66485abbee31d2	b52a3245	2026-09-26T11:38:44-04:00	SeanB	e3854e391e5dd2cb0015daedc40b7ea3ad3ee252	fix(safety): ADD_5A_HYDROXY_LAXOGENIN cites FDA's 2022 letters, not a dead 2020 URL
+e3854e391e5dd2cb0015daedc40b7ea3ad3ee252	e3854e39	2026-09-26T11:33:49-04:00	SeanB	cd7216d18b4d3bb8e3aa3e7bef768052e712e8b9	fix(safety): ADD_5A_HYDROXY_LAXOGENIN gets its RxNorm and UMLS anchors
+cd7216d18b4d3bb8e3aa3e7bef768052e712e8b9	cd7216d1	2026-09-26T11:29:04-04:00	SeanB	305329ac350fda450ff4f633d1db09eaef333dc0	fix(safety): BANNED_TANSY CUI is the tansy plant, not a flower essence
+24133e0d1f899dd2a4fa7eb480b7bc3ec69a9d16	24133e0d	2026-09-26T11:37:47-04:00	SeanB	bb6ef1917e34546ba28ca7b8f6d5d88f8be14c84 a2f57953509bf7247ac0374b9eacf8445398c1a1	Merge PR #59 branch 'claude/busy-hugle-008027' into integration
+44c7937c24f3d5866c2a67d6d10d5e54b579e8fc	44c7937c	2026-09-26T11:35:32-04:00	SeanB	6c3a0d57aca0816664839000e0adb5ab643590c5	fix(evidence): recover protein support from disclosed source lists
+bb6ef1917e34546ba28ca7b8f6d5d88f8be14c84	bb6ef191	2026-09-26T11:34:48-04:00	SeanB	0fd92bb9e5a12fca90f3c3d1dc0f50bc0bebe24c	fix(fiber): drop the duplicate fiber-canonical import after merging PR #60
+0fd92bb9e5a12fca90f3c3d1dc0f50bc0bebe24c	0fd92bb9	2026-09-26T11:34:36-04:00	SeanB	362aa338239ab33262e9df924aa13932671812d6 60d0323c89be8cad4a549a54a4952b23a98d3b30	Merge PR #60 branch 'claude/priceless-elgamal-691d42' into integration
+362aa338239ab33262e9df924aa13932671812d6	362aa338	2026-09-26T11:34:20-04:00	SeanB	c85b0d971aebde7fe992d9e18ac10155f7ecadef ab4e1eca4247e5df522e58011f1cea9743943aac	Merge branch 'harness/ownership' into integration
+6c3a0d57aca0816664839000e0adb5ab643590c5	6c3a0d57	2026-09-26T11:30:17-04:00	SeanB	e769134adcb0a645c1be8405e63f93273bb91478	fix(evidence): keep omega scoring policy in canonical config
+e769134adcb0a645c1be8405e63f93273bb91478	e769134a	2026-09-26T11:26:19-04:00	SeanB	c85b0d971aebde7fe992d9e18ac10155f7ecadef	fix(evidence): prevent protein macro aliases borrowing training evidence
+c85b0d971aebde7fe992d9e18ac10155f7ecadef	c85b0d97	2026-09-26T01:33:25-04:00	SeanB	f2efb7933c3cd5c8c91b3c949721b8d39aa3e740	fix(scoring): remove optional probiotic formulation reward
+305329ac350fda450ff4f633d1db09eaef333dc0	305329ac	2026-09-26T01:29:36-04:00	SeanB	d16f9d0cce60adcc1ac23c0c9730469fce50f9ac	test(safety): pin the laxogenin gsrs block's DSLD fields, not only its name
+d16f9d0cce60adcc1ac23c0c9730469fce50f9ac	d16f9d0c	2026-09-26T01:16:41-04:00	SeanB	45278c2abd0241510e816e94677beddf27fb8a22	fix(safety): ADD_N_PHENETHYL_DIMETHYLAMINE UNII is the amine, not the beta-keto analog
+45278c2abd0241510e816e94677beddf27fb8a22	45278c2a	2026-09-26T01:12:15-04:00	SeanB	001bcad834a628e7eacdb4cc88f27e48fa7801ce	fix(safety): ADD_5A_HYDROXY_LAXOGENIN UNII is 5alpha-hydroxy-laxogenin, not laxogenin
+94f4ce048a55732fa0d95b5515171d85124aaf86	94f4ce04	2026-09-26T01:24:14-04:00	SeanB	795d0cd12f5a8b101d4a7045e02f7a8e4da43299	fix(interaction): bergamot avoid-level alerts use an avoid verb again
+795d0cd12f5a8b101d4a7045e02f7a8e4da43299	795d0cd1	2026-09-26T01:23:47-04:00	SeanB	e8fafcb63851f534defb185e5ffd74071bd3f58a	fix(interaction): horny goat weed nitrate action says whose risk it is
+e8fafcb63851f534defb185e5ffd74071bd3f58a	e8fafcb6	2026-09-26T01:23:25-04:00	SeanB	8c7d7cf746d89c5760c1e6d0e07cd97bc609dc0e	fix(interaction): L-theanine sedative action no longer contradicts its sources
+8c7d7cf746d89c5760c1e6d0e07cd97bc609dc0e	8c7d7cf7	2026-09-26T01:22:43-04:00	SeanB	250ea2649e5bb7e067851fce88466bc3f6229dbc	fix(interaction): saw palmetto keeps its source's in-vitro hedge; PL review rationale corrected
+250ea2649e5bb7e067851fce88466bc3f6229dbc	250ea264	2026-09-26T01:22:00-04:00	SeanB	87abcc6c77952d06deff27ebf57cd368ba72ff83	fix(interaction): willow mechanisms say the aspirin comparison was not randomised
+87abcc6c77952d06deff27ebf57cd368ba72ff83	87abcc6c	2026-09-26T01:21:32-04:00	SeanB	bd98a8636a456c611d3e390f801b96aa7051396e	fix(interaction): huperzine mechanism quotes the donepezil label, nothing more
+bd98a8636a456c611d3e390f801b96aa7051396e	bd98a863	2026-09-26T01:21:01-04:00	SeanB	15237e097ea124e7ee96819063a2a7be4248d2e2	feat(audit): review the two Bookshelf suspects the NBK citation check reports
+15237e097ea124e7ee96819063a2a7be4248d2e2	15237e09	2026-09-26T01:10:55-04:00	SeanB	2be605a78ccfc2843c60c6df6de9e0117c255ada	feat(audit): record the 62 reviewed interaction-rule citations; --strict passes
+2be605a78ccfc2843c60c6df6de9e0117c255ada	2be605a7	2026-09-26T01:07:07-04:00	SeanB	73264e8bb7896346296ad7cf79a609e20ac9b9c0	fix(interaction): green tea nadolol rules cite the primary OATP1A2 trial
+73264e8bb7896346296ad7cf79a609e20ac9b9c0	73264e8b	2026-09-26T01:06:33-04:00	SeanB	71f22a10c25c4c5aec5cc542ea93c74ff434a93f	fix(interaction): chondroitin bleeding rule states the documented INR data
+71f22a10c25c4c5aec5cc542ea93c74ff434a93f	71f22a10	2026-09-26T01:04:09-04:00	SeanB	26610465ab40099f7546383120864e75609fd26d	fix(interaction): chasteberry pregnancy mechanism says what its two sources say
+26610465ab40099f7546383120864e75609fd26d	26610465	2026-09-26T01:03:10-04:00	SeanB	8889d0dba896be2d12e4c3e66466f4b612d85e8e	fix(interaction): red yeast rice "EFSA 2025" sentence cites the 2025 EFSA opinion
+8889d0dba896be2d12e4c3e66466f4b612d85e8e	8889d0db	2026-09-26T01:01:57-04:00	SeanB	787b68a237411e1330dc9ded1d44b6887d497170	fix(interaction): borage seizure rule cites the borage status-epilepticus case
+787b68a237411e1330dc9ded1d44b6887d497170	787b68a2	2026-09-26T01:00:14-04:00	SeanB	5cd0026e8b42a0eb5c49581d004fbfb71065a5fa	fix(interaction): 5-HTP pregnancy rules drop a LiverTox muscle-relaxant chapter
+5cd0026e8b42a0eb5c49581d004fbfb71065a5fa	5cd0026e	2026-09-26T00:57:04-04:00	SeanB	2e98fd24e08b5955b73d9ca7d42eebe119b2a6b6	fix(interaction): quercetin rules cite thyroid and warfarin studies, not a general safety review
+2e98fd24e08b5955b73d9ca7d42eebe119b2a6b6	2e98fd24	2026-09-26T00:55:28-04:00	SeanB	74b708f7c6a0367405592641707387489c1062cd	fix(interaction): black seed rules cite meta-analyses and drop unsourced numbers
+74b708f7c6a0367405592641707387489c1062cd	74b708f7	2026-09-26T00:53:54-04:00	SeanB	802aff80bb08f11e800fd8f546860c683d3d8097	fix(interaction): horny goat weed rules say what the PDE5 and case sources say
+802aff80bb08f11e800fd8f546860c683d3d8097	802aff80	2026-09-26T00:52:23-04:00	SeanB	91b3f254860619244cc6a5eb4c06f2cd25f39072	fix(interaction): vanadium glucose rules cite the vanadyl sulfate trials
+91b3f254860619244cc6a5eb4c06f2cd25f39072	91b3f254	2026-09-26T00:50:54-04:00	SeanB	cf7ffe2a9b2b7d0b9fb3a9f895305c591fbbdcb7	fix(interaction): nettle glucose rules cite human trials, not a general review
+cf7ffe2a9b2b7d0b9fb3a9f895305c591fbbdcb7	cf7ffe2a	2026-09-26T00:49:02-04:00	SeanB	c3a5d081881394f3efafaba9b1d92d58b3857028	fix(interaction): omega-3 NSAID rule reports the aspirin bleeding data, not a warfarin review
+c3a5d081881394f3efafaba9b1d92d58b3857028	c3a5d081	2026-09-26T00:48:33-04:00	SeanB	7d4755d6d775f10eceadddfb2f9f97056416df9b	fix(interaction): evening primrose anticoagulant rule cites MSKCC, not Heck 2000
+7d4755d6d775f10eceadddfb2f9f97056416df9b	7d4755d6	2026-09-26T00:48:07-04:00	SeanB	293d7024b72ae3f290422d3b5d9852f32a45dc06	fix(interaction): cat's claw anticoagulant rule drops an unverifiable Heck 2000 citation
+293d7024b72ae3f290422d3b5d9852f32a45dc06	293d7024	2026-09-26T00:45:56-04:00	SeanB	3d2f520b40184344bea0e28b5572d3a3ba3ca5a2	fix(interaction): genistein levothyroxine rule cites levothyroxine evidence, not a rat study
+3d2f520b40184344bea0e28b5572d3a3ba3ca5a2	3d2f520b	2026-09-26T00:44:41-04:00	SeanB	1651eafb0ecf3f22236511e97207e2169edfc767	fix(interaction): Chinese skullcap pregnancy rule reports the animal data it cites
+1651eafb0ecf3f22236511e97207e2169edfc767	1651eafb	2026-09-26T00:43:26-04:00	SeanB	076b4cd46f9d53fa0de594b0a01098e8caa01f25	fix(interaction): SAMe MAOI rule cites serotonergic sources, not an efficacy meta-analysis
+076b4cd46f9d53fa0de594b0a01098e8caa01f25	076b4cd4	2026-09-26T00:42:09-04:00	SeanB	ea53970d2d0cec56c34b3d10098ed2cc8a1045f5	fix(interaction): rhodiola sedative rule states no interaction is established
+ea53970d2d0cec56c34b3d10098ed2cc8a1045f5	ea53970d	2026-09-26T00:40:44-04:00	SeanB	a9d4582fcaeb8d1c1cfe329207d3eb8ea384d08a	fix(interaction): huperzine anticholinergic rule cites AChE pharmacology and the class label
+a9d4582fcaeb8d1c1cfe329207d3eb8ea384d08a	a9d4582f	2026-09-26T00:39:32-04:00	SeanB	75f09cbe40b3276b1479b7a6ae774f130078d77d	fix(interaction): guarana sedative rule treats guarana as a stimulant
+75f09cbe40b3276b1479b7a6ae774f130078d77d	75f09cbe	2026-09-26T00:38:07-04:00	SeanB	abcfd7c6b6966b68a53b3c0fefecc43a12e372a1	fix(interaction): L-theanine BP rule cites the BP trials; sedative copy matches its sources
+abcfd7c6b6966b68a53b3c0fefecc43a12e372a1	abcfd7c6	2026-09-26T00:36:38-04:00	SeanB	6360fe4f4cb587e5198e1fe27d6c770334ae0637	fix(interaction): bacopa thyroid and sedative rules drop a pediatric cognition review
+6360fe4f4cb587e5198e1fe27d6c770334ae0637	6360fe4f	2026-09-26T00:34:56-04:00	SeanB	16ce5cc0881eef0fcc45a142f5f3b73f08f22a52	fix(interaction): andrographis immune rules cite trials, not antiplatelet papers
+16ce5cc0881eef0fcc45a142f5f3b73f08f22a52	16ce5cc0	2026-09-26T00:33:21-04:00	SeanB	94352e83c844922066d7fbd4a6c6c1f737b7959a	fix(interaction): yerba mate anticoagulant rule drops an unsourced vitamin K claim
+94352e83c844922066d7fbd4a6c6c1f737b7959a	94352e83	2026-09-26T00:32:12-04:00	SeanB	b49123ad260f2773f4e2851dd520e34f6ecb058c	fix(interaction): tansy pregnancy rule cites reproductive-toxicity sources
+b49123ad260f2773f4e2851dd520e34f6ecb058c	b49123ad	2026-09-26T00:30:46-04:00	SeanB	7185804b2b98d9487896d5c7dc0435c8959017aa	fix(interaction): white willow bark rules describe willow, not aspirin
+7185804b2b98d9487896d5c7dc0435c8959017aa	7185804b	2026-09-26T00:28:05-04:00	SeanB	1c7f19d70610276adab3ad5ea42bb7281b10e336	fix(interaction): CoQ10 heart-disease rule cites Q-SYMBIO, not two warfarin papers
+1c7f19d70610276adab3ad5ea42bb7281b10e336	1c7f19d7	2026-09-26T00:26:00-04:00	SeanB	30f071fc3f4572e2d6a42e0f63aed3ded394b6fd	fix(interaction): re-source kava pregnancy/lactation and seizure-disorder sub-rules
+30f071fc3f4572e2d6a42e0f63aed3ded394b6fd	30f071fc	2026-09-26T00:24:24-04:00	SeanB	3107f0a6e82e5b02f82b2c38d0839f86a3b874f9	fix(interaction): valerian pregnancy/lactation cites the EU monograph, not a liver case
+3107f0a6e82e5b02f82b2c38d0839f86a3b874f9	3107f0a6	2026-09-26T00:22:49-04:00	SeanB	d3f6f5bf7d63122f053da2bafe5f9aa8083c8ce8	fix(interaction): re-source saw palmetto pregnancy, TTC and anticoagulant sub-rules
+d3f6f5bf7d63122f053da2bafe5f9aa8083c8ce8	d3f6f5bf	2026-09-26T00:18:55-04:00	SeanB	13ed5bea79c14169530aab9a756cb5cc400b639c	fix(interaction): bergamot drug rules cite bergamottin data, not an osteosarcopenia review
+13ed5bea79c14169530aab9a756cb5cc400b639c	13ed5bea	2026-09-26T00:14:02-04:00	SeanB	d9ae0687c43445f703a2996bbe140787363ff36e	fix(interaction): re-source red clover anticoagulants; PMID 9464451 is a soy thyroid paper
+d9ae0687c43445f703a2996bbe140787363ff36e	d9ae0687	2026-09-26T01:18:12-04:00	SeanB	f834caa54075830f3d5e92695156a4e779192a6e	feat(audit): interaction-rule Bookshelf citations must name the rule's subject
+4c59e795f1cbf9c3bbc366c794986ebb0441af09	4c59e795	2026-09-26T01:13:39-04:00	SeanB	93942c044768be5b84b5649f72bbc01224ae4526	fix(verify_unii): confirm a curated UNII whose GSRS record carries the entry's name
+93942c044768be5b84b5649f72bbc01224ae4526	93942c04	2026-09-26T00:14:10-04:00	SeanB	001bcad834a628e7eacdb4cc88f27e48fa7801ce	fix(verify_unii): set iteration order no longer decides the name-match verdict
+f2efb7933c3cd5c8c91b3c949721b8d39aa3e740	f2efb793	2026-09-26T00:20:23-04:00	SeanB	c2557674b6d745829579c7030d7852c2c5c9f2b5	fix(scoring): base nutrient panels on authority evidence
+f834caa54075830f3d5e92695156a4e779192a6e	f834caa5	2026-09-26T00:20:44-04:00	SeanB	4ac662e34b55cf6b7c7ebf93f1d63410228ff9ac	docs(audit): laxative receipts quote LiverTox tolerability, EMA 5.3 and the casanthranol gap
+4ac662e34b55cf6b7c7ebf93f1d63410228ff9ac	4ac662e3	2026-09-26T00:20:44-04:00	SeanB	304e6e576236a90322203cbeb922806eca3cb8eb	fix(iqm): cascara notes list cascarosides A-F, not A-D
+304e6e576236a90322203cbeb922806eca3cb8eb	304e6e57	2026-09-26T00:18:05-04:00	SeanB	44b2d5b2d9c03f39f061726031de4d8154b77153	fix(audit): common English words no longer satisfy the citation subject check
+44b2d5b2d9c03f39f061726031de4d8154b77153	44b2d5b2	2026-09-26T00:14:01-04:00	SeanB	1b10d2e92a6c76c5a7e8cd3d9689b73708fe19e9	fix(safety): cascara inactive reason names the casanthranol gap; FR title corrected
+1b10d2e92a6c76c5a7e8cd3d9689b73708fe19e9	1b10d2e9	2026-09-26T00:13:54-04:00	SeanB	66df79442bd5d2d487e642a97be19c5e60fcc910	fix(interaction): senna digoxin copy says no more than its sources
+c2557674b6d745829579c7030d7852c2c5c9f2b5	c2557674	2026-09-26T00:09:47-04:00	SeanB	6a3ab83f8499e6b0ddb7b375cfcdbeff748a731b	fix(scoring): reject impossible omega concentration
+6a3ab83f8499e6b0ddb7b375cfcdbeff748a731b	6a3ab83f	2026-09-26T00:07:56-04:00	SeanB	6b4522a8a9fbca7f9b0f9d18fc8a6752c29d5179	fix(scoring): make IQM the omega form-quality owner
+6b4522a8a9fbca7f9b0f9d18fc8a6752c29d5179	6b4522a8	2026-09-25T23:39:23-04:00	SeanB	7dbd1447208558d413ddc5340763cd0eb2848244	test(scoring): align contracts with calibrated rubric
+7dbd1447208558d413ddc5340763cd0eb2848244	7dbd1447	2026-09-25T23:39:23-04:00	SeanB	59a59132504cf4adeb13e6c6c7dcd0610f003c34	fix(iqm): complete B12 evidence governance
+59a59132504cf4adeb13e6c6c7dcd0610f003c34	59a59132	2026-09-25T23:26:38-04:00	SeanB	1929d398e65b2427496c58c504b9ff5f3c2e9d79	fix(scoring): separate sports dose adequacy from evidence
+1929d398e65b2427496c58c504b9ff5f3c2e9d79	1929d398	2026-09-25T23:03:07-04:00	SeanB	ff77935e0a4e4fd7125f0f07c21d2327600e292a	fix(scoring): let complete disclosure earn full transparency
+ff77935e0a4e4fd7125f0f07c21d2327600e292a	ff77935e	2026-09-25T22:53:42-04:00	SeanB	4a761c304c4bd150ebe3b12f1fb36b3cd6ab0d21	fix(scoring): scope sports evidence to purpose owners
+66df79442bd5d2d487e642a97be19c5e60fcc910	66df7944	2026-09-25T21:44:28-04:00	SeanB	b1dbe9d169ac7b191b1affba9deb307bcf99c360	fix(interaction): cascara rule copy says no more than its sources
+2df4bed27568c0de631dd7985ab9f2983acefec3	2df4bed2	2026-09-25T20:58:14-04:00	SeanB	cc03c54cfed054cb13aaffd20d986242aa389e47	fix(enrich): banned check reads the label evidence the v4 gate reads
+b1dbe9d169ac7b191b1affba9deb307bcf99c360	b1dbe9d1	2026-09-25T21:16:08-04:00	SeanB	c713dea459edd87a89139b6632ce3b0794b6ae04	feat(audit): interaction-rule citations must match their sub-rule's subject and topic
+c713dea459edd87a89139b6632ce3b0794b6ae04	c713dea4	2026-09-25T21:03:39-04:00	SeanB	461d1525dac95c5c82278b247e62e3f47f120927	fix(iqm): cascara note misdated the FDA category III step
+461d1525dac95c5c82278b247e62e3f47f120927	461d1525	2026-09-25T21:00:14-04:00	SeanB	118e19e1c2cb0d6b57f33d3dc3f220eeec91c697	fix(evidence): aloe_ferox record states the real basis of the 2002 FDA rule
+cc03c54cfed054cb13aaffd20d986242aa389e47	cc03c54c	2026-09-25T20:58:14-04:00	SeanB	a66c71bbd897b112a4535189738a0dabe4bebb37	refactor(safety): one owner for a rule's role policy status
+118e19e1c2cb0d6b57f33d3dc3f220eeec91c697	118e19e1	2026-09-25T20:56:12-04:00	SeanB	ebedd28aa62acf0b8710b2e4c00d2610206f0329	fix(safety): cascara inactive policy follows 21 CFR 172.510 (natural flavoring)
+ebedd28aa62acf0b8710b2e4c00d2610206f0329	ebedd28a	2026-09-25T20:51:32-04:00	SeanB	9ca15764cfba61907278f93daa7f372cbfd31231	fix(safety): ADD_CASCARA_SAGRADA UNII is the bark (4VBP01X99F), not casanthranol
+9ca15764cfba61907278f93daa7f372cbfd31231	9ca15764	2026-09-25T20:44:14-04:00	SeanB	86fdadbbcdc1feddbb01cb8baf788a3b98329129	fix(interaction): re-source senna kidney and digoxin rules; PMID 36702448 was Cassiae Semen
+86fdadbbcdc1feddbb01cb8baf788a3b98329129	86fdadbb	2026-09-25T20:41:19-04:00	SeanB	001bcad834a628e7eacdb4cc88f27e48fa7801ce	fix(interaction): re-source the cascara rule; PMID 32876395 was a chromatography paper
+a66c71bbd897b112a4535189738a0dabe4bebb37	a66c71bb	2026-09-25T19:13:49-04:00	SeanB	635fa79c27701fef2cb619535dc0b750e44d6d1b	data(safety): rhubarb root (Rheum palmatum / officinale) is a watchlist entry
+635fa79c27701fef2cb619535dc0b750e44d6d1b	635fa79c	2026-09-25T19:06:50-04:00	SeanB	53764ac411214dbf4e3aa6b18e79f87118fce525	data(safety): frangula bark is a watchlist entry in banned_recalled
+a550b8e341df306161d9061cdf0e35c0679dd752	a550b8e3	2026-09-25T18:53:49-04:00	SeanB	e81cfe2e0f744e08dd2ebf047a534ec5b7b9b618	docs(audit): classify the ingredient-row twins and record the evidence
+e81cfe2e0f744e08dd2ebf047a534ec5b7b9b618	e81cfe2e	2026-09-25T18:53:48-04:00	SeanB	cd8f45f2bab8df27b23ad075876eb2c4974b92d2	feat(contract): declare the ingredient-row shape; fail on undeclared row keys
+cd8f45f2bab8df27b23ad075876eb2c4974b92d2	cd8f45f2	2026-09-25T18:53:11-04:00	SeanB	f5a8afdd3a73f69d66b4a07fcc083533ef3790f5	refactor(export): stop shipping harmful_notes on ingredient rows
+f5a8afdd3a73f69d66b4a07fcc083533ef3790f5	f5a8afdd	2026-09-25T18:52:04-04:00	SeanB	9745b7863aab6432504684893ce5ee4d6574a3e5	refactor(export): stop shipping safety_hits on ingredient rows
+9745b7863aab6432504684893ce5ee4d6574a3e5	9745b786	2026-09-25T18:51:36-04:00	SeanB	d4f242a93226018ea5a00408a28d40227948436a	refactor(export): retire the inactive label_display row twin
+d4f242a93226018ea5a00408a28d40227948436a	d4f242a9	2026-09-25T18:51:12-04:00	SeanB	64e6249760635565bfd6f0fabda21d6fd79f4173	refactor(export): retire the mapped ingredient-row twin; keep is_mapped
+64e6249760635565bfd6f0fabda21d6fd79f4173	64e62497	2026-09-25T18:50:33-04:00	SeanB	a6447ee2d095735459a832af3e6fa5e7d16a2126	refactor(export): retire the normalized_value ingredient-row twin
+a6447ee2d095735459a832af3e6fa5e7d16a2126	a6447ee2	2026-09-25T18:49:25-04:00	SeanB	aa394463b2a0775e34df5376355e299972167770	refactor(export): retire the standardName ingredient-row twin
+aa394463b2a0775e34df5376355e299972167770	aa394463	2026-09-25T18:47:27-04:00	SeanB	001bcad834a628e7eacdb4cc88f27e48fa7801ce	fix(audit): read the blob's standard_name in the safety-separation audit
+8c6a279773b6e7e7ea6dd0f339e6742585f11f10	8c6a2797	2026-09-25T18:36:13-04:00	SeanB	3a6b35b4abe391ab37272ffaff6bc7cace8ac7d2	docs(audit): record the row-twin follow-up classification and evidence
+3a6b35b4abe391ab37272ffaff6bc7cace8ac7d2	3a6b35b4	2026-09-25T18:36:11-04:00	SeanB	e72844dd508c42be84f7bd9389bd94aeb01f4084	refactor(export): retire the inactive resolved_display_label row key
+e72844dd508c42be84f7bd9389bd94aeb01f4084	e72844dd	2026-09-25T18:36:09-04:00	SeanB	a9992c469bb3ee2d2c53703be153ee84f40061b3	refactor(export): retire the inactive label_row_disposition restatement
+a9992c469bb3ee2d2c53703be153ee84f40061b3	a9992c46	2026-09-25T18:36:08-04:00	SeanB	01f606c50134e0abd41ab7268aa9507f09ee84a2	refactor(export): retire the jurisdiction_scope row restatement
+01f606c50134e0abd41ab7268aa9507f09ee84a2	01f606c5	2026-09-25T18:36:06-04:00	SeanB	ae38d8590dbf353b6691b5216565a9b20bfbe045	refactor(export): retire unread inactive mechanism_of_harm / common_uses
+ae38d8590dbf353b6691b5216565a9b20bfbe045	ae38d859	2026-09-25T18:36:04-04:00	SeanB	55754205b208734786a8a2d37813d0f72c37e584	refactor(export): retire the row copies of per-strain probiotic adequacy
+55754205b208734786a8a2d37813d0f72c37e584	55754205	2026-09-25T18:36:02-04:00	SeanB	102ec43c41d203445a9f61cf7546ec2558e52c26	refactor(export): keep the identity repair trail on the enriched row only
+102ec43c41d203445a9f61cf7546ec2558e52c26	102ec43c	2026-09-25T18:35:59-04:00	SeanB	4108982f0b9ff764d675eb8324a5a0c2e72a6a82	refactor(export): retire the unread active is_allergen row key
+4108982f0b9ff764d675eb8324a5a0c2e72a6a82	4108982f	2026-09-25T18:35:57-04:00	SeanB	c69664615d8fedacea2e2fbe6b868c87945b845b	refactor(export): retire the unread active natural row key
+c69664615d8fedacea2e2fbe6b868c87945b845b	c6966461	2026-09-25T18:35:55-04:00	SeanB	1a29023bdc732bb1babc54f7130e0fe656ac436f	refactor(export): retire the score row alias of bio_score
+1a29023bdc732bb1babc54f7130e0fe656ac436f	1a29023b	2026-09-25T18:35:52-04:00	SeanB	a6ef1e7416ca41ef2af79e3f3a02d95665930f0a	refactor(export): retire the dosage / dosage_unit row twins
+a6ef1e7416ca41ef2af79e3f3a02d95665930f0a	a6ef1e74	2026-09-25T18:35:49-04:00	SeanB	bc633dab8f9b0b03f2a8b5f12ba20f7c0b3bbbca	test: run the vitamin-A unit audit test against the production check
+07cb56a8523c9f0d83c5174a6c1a9c0acd7702e6	07cb56a8	2026-09-25T18:35:16-04:00	SeanB	1c8b345771170218be4a83deafec9bd8b65e4a8d	refactor(immune): the Dose bands and high-dose thresholds read from config (quality_score 1.13.2)
+1c8b345771170218be4a83deafec9bd8b65e4a8d	1c8b3457	2026-09-25T18:35:04-04:00	SeanB	09bb3dddb291c242a7d187c8c5724b47966d9af0	test(immune): pin the Dose band edges, the strict high-dose thresholds and the at-cap sum
+b3191f6244993e28abe34dca0777f27f7c162a30	b3191f62	2026-09-25T18:31:24-04:00	SeanB	650f575d75cc621cbffeb112dbcfb3a9bdf480b6	docs(release): record the interaction hydration pin as part of the bundle
+650f575d75cc621cbffeb112dbcfb3a9bdf480b6	650f575d	2026-09-25T18:31:23-04:00	SeanB	d54d898504b09c4283e67159ec3cdfaa39678222	fix(release): move the app's interaction hydration pin with the bundle commit
+d54d898504b09c4283e67159ec3cdfaa39678222	d54d8985	2026-09-25T18:31:23-04:00	SeanB	001bcad834a628e7eacdb4cc88f27e48fa7801ce	feat(release): publish the staged interaction DB and point the app's hydration pin at it
+53764ac411214dbf4e3aa6b18e79f87118fce525	53764ac4	2026-09-25T18:25:29-04:00	SeanB	c5b0562947c22313f23cfd4fc058fa6cddde1185	data(interaction): Cape aloe interaction rule from the EU herbal monograph
+c5b0562947c22313f23cfd4fc058fa6cddde1185	c5b05629	2026-09-25T18:10:17-04:00	SeanB	e79044160e68aba2a13fc45725dda56bdae0fdbf	data(safety): senna moves to banned_recalled as watchlist; one owner
+e79044160e68aba2a13fc45725dda56bdae0fdbf	e7904416	2026-09-25T17:56:18-04:00	SeanB	7dc199979483ecc175f48965cb03f578ae3f97ea	fix(safety): Cape aloe EU status is contested, not a settled ban
+4a761c304c4bd150ebe3b12f1fb36b3cd6ab0d21	4a761c30	2026-09-25T17:51:11-04:00	SeanB	72a301fccce156c182000d613cf9ba61cc896f88	fix(scoring): let one strong probiotic strain earn full evidence
+72a301fccce156c182000d613cf9ba61cc896f88	72a301fc	2026-09-25T17:39:20-04:00	SeanB	dda033c7cefb1aed0dd0ffbac7dd4b1d0abebc32	fix(scoring): remove probiotic strain-count dose reward
+7dc199979483ecc175f48965cb03f578ae3f97ea	7dc19997	2026-09-25T17:37:26-04:00	SeanB	001bcad834a628e7eacdb4cc88f27e48fa7801ce	data(safety): Cape aloe latex is high_risk in banned_recalled
+dda033c7cefb1aed0dd0ffbac7dd4b1d0abebc32	dda033c7	2026-09-25T17:30:51-04:00	SeanB	afb71c6ca67d425d6465012a23a5c0e249920d31	fix(scoring): normalize generic forms within IQM parent
+afb71c6ca67d425d6465012a23a5c0e249920d31	afb71c6c	2026-09-25T17:24:36-04:00	SeanB	70a24eeee5d24fd1773cea88d494b85a52296bdb	fix(scoring): normalize B-complex forms within IQM parent
+70a24eeee5d24fd1773cea88d494b85a52296bdb	70a24eee	2026-09-25T17:18:15-04:00	SeanB	dd2cf1ffa16b741c6294071feaa20e8a2205fa19	fix(iqm): align B12 forms to parent-relative evidence
+bc633dab8f9b0b03f2a8b5f12ba20f7c0b3bbbca	bc633dab	2026-09-25T17:14:59-04:00	SeanB	cef318608a08046aed251288db914b6a8e794e24	docs(export): record the retired row twins and the row-shape gate
+cef318608a08046aed251288db914b6a8e794e24	cef31860	2026-09-25T17:14:59-04:00	SeanB	001bcad834a628e7eacdb4cc88f27e48fa7801ce	refactor(export): retire duplicate ingredient-row keys; gate the row shape
+dd2cf1ffa16b741c6294071feaa20e8a2205fa19	dd2cf1ff	2026-09-25T17:08:47-04:00	SeanB	3c2d28b491780e914bdd5470dad3282c89671920	fix(scoring): normalize multi forms within IQM parent
+3c2d28b491780e914bdd5470dad3282c89671920	3c2d28b4	2026-09-25T17:02:02-04:00	SeanB	5db560e487641577d6b970069ddb37422bd3cadd	fix(scoring): use pregnancy RDA for prenatal dose
+ab4e1eca4247e5df522e58011f1cea9743943aac	ab4e1eca	2026-09-25T17:01:14-04:00	SeanB	56026a35b191905b1e59c7ee30465e62768e14a7	docs(agents): every agent records its lane in its worktree handoff
+5db560e487641577d6b970069ddb37422bd3cadd	5db560e4	2026-09-25T16:42:27-04:00	SeanB	271fb544e80356a85fa405da8def7c835c4dffd9	fix(scoring): gate omega evidence by reviewed exposure
+a2f57953509bf7247ac0374b9eacf8445398c1a1	a2f57953	2026-09-25T16:22:07-04:00	SeanB	020a3c99869d4639b7b580f28efbb08ad8f374c9	docs(scoring): say the Formulation penalties are subtracted as one sum
+60d0323c89be8cad4a549a54a4952b23a98d3b30	60d0323c	2026-09-25T16:18:20-04:00	SeanB	d7be60b44910e81d84b8bd1484ec7de43a6ba214	docs(contracts): register fiber_identity (owner route_features.FIBER_CANONICALS)
+d7be60b44910e81d84b8bd1484ec7de43a6ba214	d7be60b4	2026-09-25T16:18:20-04:00	SeanB	001bcad834a628e7eacdb4cc88f27e48fa7801ce	refactor(fiber): one fiber canonical set, owned by route_features
+020a3c99869d4639b7b580f28efbb08ad8f374c9	020a3c99	2026-09-25T16:14:30-04:00	SeanB	001bcad834a628e7eacdb4cc88f27e48fa7801ce	docs(scoring): generic Formulation row lists only the live components
+09bb3dddb291c242a7d187c8c5724b47966d9af0	09bb3ddd	2026-09-25T16:13:56-04:00	SeanB	001bcad834a628e7eacdb4cc88f27e48fa7801ce	refactor(immune): the botanical-stack penalty reads its magnitudes from config (quality_score 1.13.1)
+56026a35b191905b1e59c7ee30465e62768e14a7	56026a35	2026-09-25T15:53:14-04:00	SeanB	b73179046e930c5967c95f0d6ca63e7664597645	docs(skill): add /pg-scoring-change; move the measuring procedure out of the scoring rule
+0d5fa6b812d07da61c75913231f0728d6b8bf606	0d5fa6b8	2026-09-25T15:52:34-04:00	SeanB	8fbfd60182da561aa73d88d01c82578b93ea6965	fix(botanical): primary-row tie-break reads form quality through its owner
+8fbfd60182da561aa73d88d01c82578b93ea6965	8fbfd601	2026-09-25T15:52:34-04:00	SeanB	001bcad834a628e7eacdb4cc88f27e48fa7801ce	fix(dose): a premium-form count earns no Dose credit
+b73179046e930c5967c95f0d6ca63e7664597645	b7317904	2026-09-25T15:42:58-04:00	SeanB	9d0ccc8ef5e0c28d20d182ce9c7a74002de5305e	docs(audit): census undeclared ingredient-row blob keys (report only)
+271fb544e80356a85fa405da8def7c835c4dffd9	271fb544	2026-09-25T15:42:07-04:00	SeanB	2be4e59d01ddc02436d3ef6aa77b42f90cfafefd	test(scoring): align fixtures with reviewed omega evidence
+9d0ccc8ef5e0c28d20d182ce9c7a74002de5305e	9d0ccc8e	2026-09-25T15:39:45-04:00	SeanB	2e44652645262e27fe87b437a3494183b3af9616	docs(adr): record one public scorer, IQM form ownership, one owner per decision
+2e44652645262e27fe87b437a3494183b3af9616	2e446526	2026-09-25T15:35:19-04:00	SeanB	df1df7ab79200812cda42688b1990a239b0b3c76	docs(contracts): register cert_evidence as the certification-evidence owner
+df1df7ab79200812cda42688b1990a239b0b3c76	df1df7ab	2026-09-25T15:33:15-04:00	SeanB	349312c8d28c4371402c40efec8c127c9dc0677c	docs(contracts): register prebiotic_catalog as the prebiotic identity owner
+349312c8d28c4371402c40efec8c127c9dc0677c	349312c8	2026-09-25T15:32:10-04:00	SeanB	e555e613f7895a88dc131072d6ae7d72e3e15588	docs(contracts): register probiotic_measurements as the probiotic row-identity owner
+2be4e59d01ddc02436d3ef6aa77b42f90cfafefd	2be4e59d	2026-09-25T15:31:50-04:00	SeanB	14bdcede938000e8742f87b9d7bbdb4e544b0a44	fix(iqm): remove unsupported B12 fractions and harden bio scores
+14bdcede938000e8742f87b9d7bbdb4e544b0a44	14bdcede	2026-09-25T15:30:25-04:00	SeanB	c480dcacbba224bc8cbe223a4a6a6e64bd4d1556	Revert "fix(iqm): remove unsupported sublingual B12 absorption claims"
+c480dcacbba224bc8cbe223a4a6a6e64bd4d1556	c480dcac	2026-09-25T15:30:25-04:00	SeanB	b999a29b29a2876e9c06c597c3c81146055ecd56	Revert "fix(iqm): enforce finite form quality on the 0-15 scale"
+b999a29b29a2876e9c06c597c3c81146055ecd56	b999a29b	2026-09-25T15:08:06-04:00	SeanB	05c2ec25362ae1bff78087468033117845c6d39a	fix(iqm): enforce finite form quality on the 0-15 scale
+05c2ec25362ae1bff78087468033117845c6d39a	05c2ec25	2026-09-25T15:06:51-04:00	SeanB	23759274ff5b6b4ea6842738d65fb4495796574b	fix(iqm): remove unsupported sublingual B12 absorption claims
+e555e613f7895a88dc131072d6ae7d72e3e15588	e555e613	2026-09-25T15:28:53-04:00	SeanB	001bcad834a628e7eacdb4cc88f27e48fa7801ce	docs(contracts): register IQM bio_score as the one form-quality owner
+23759274ff5b6b4ea6842738d65fb4495796574b	23759274	2026-09-25T15:21:41-04:00	SeanB	45bff370cc7ef96c5544028878e604d39f49ceec	fix(scoring): mark applicable omega weak evidence
+45bff370cc7ef96c5544028878e604d39f49ceec	45bff370	2026-09-25T15:21:21-04:00	SeanB	247b77a4275479ada3dc8706dc4c77e9ebc50672	fix(scoring): share prenatal route keyword contract
+247b77a4275479ada3dc8706dc4c77e9ebc50672	247b77a4	2026-09-25T15:17:51-04:00	SeanB	281d3b975e396ac9a33260ab741c63d40fc2a5dd	feat(scoring): resolve omega evidence by directed exposure
+281d3b975e396ac9a33260ab741c63d40fc2a5dd	281d3b97	2026-09-25T15:06:07-04:00	SeanB	c55ffee1b94aaa22651ba762b3e1fd7df5a5497d 001bcad834a628e7eacdb4cc88f27e48fa7801ce	Merge remote-tracking branch 'origin/main' into v41-recovery
+c55ffee1b94aaa22651ba762b3e1fd7df5a5497d	c55ffee1	2026-09-25T15:06:07-04:00	SeanB	099f4b5bc4ef9d80faf9d7ffa54f0bd3798c2da2	docs(scoring): correct non-delivering relationship contract
+001bcad834a628e7eacdb4cc88f27e48fa7801ce	001bcad8	2026-09-25T13:54:37-04:00	SeanB	0b7bf3f722835f1e91f3c1c2a61721c25089ed78	docs(harness): load AGENTS.md every session; scope rules by path; one brain across repos
+099f4b5bc4ef9d80faf9d7ffa54f0bd3798c2da2	099f4b5b	2026-09-25T12:43:41-04:00	SeanB	a7065751ff4900f843254bf5e963743a94e94435	fix(forms): back to the existing contract; component, eleuthero, CurcuWIN, 302644
+a7065751ff4900f843254bf5e963743a94e94435	a7065751	2026-09-25T10:54:14-04:00	SeanB	83f75fe98cdb42a4e9e79ce892dfbc24b1c0555f	fix(forms): every form state has one outcome and one curation queue
+83f75fe98cdb42a4e9e79ce892dfbc24b1c0555f	83f75fe9	2026-09-25T05:35:32-04:00	SeanB	c521380b073da4360ed60fe91880aa03a29db541	fix(forms): a named form IQM lacks is held, not scored; one matcher; nondisclosure floor
+c521380b073da4360ed60fe91880aa03a29db541	c521380b	2026-09-25T02:15:53-04:00	SeanB	40efe44d468bff0cf6acc0e481c5aae208980b04	docs(ledger): record the cert and UL owner integration onto v41-recovery
+40efe44d468bff0cf6acc0e481c5aae208980b04	40efe44d	2026-09-24T23:04:26-04:00	SeanB	4233181d020f0f338ea280fd4d41be25c20a8690	fix(ul): centralize the 200-percent display severity
+4233181d020f0f338ea280fd4d41be25c20a8690	4233181d	2026-09-24T23:04:26-04:00	SeanB	56314f5cc3d30518dc911be317d46e7826b5e763	fix(cert): make marine policy registry-owned and fail loudly
+56314f5cc3d30518dc911be317d46e7826b5e763	56314f5c	2026-09-25T02:03:18-04:00	SeanB	c3afa98bac06dbba3103c6af49231b34118842e6	fix(forms): an undisclosed form has one owner and never names a form
+c3afa98bac06dbba3103c6af49231b34118842e6	c3afa98b	2026-09-25T00:26:33-04:00	SeanB	a980168541f6201f97f8f366a3a616ba3d6eeb25	refactor(iqm): retire the natural-bonus score and the natural flag; bio_score is the only form quality
+a980168541f6201f97f8f366a3a616ba3d6eeb25	a9801685	2026-09-24T23:39:48-04:00	SeanB	c20a80b507c99f23adc8fe1bc082cd482569c9e5	fix(enrich): form fallback reads bio_score only; unmatched shares take the parent's unknown form
+c20a80b507c99f23adc8fe1bc082cd482569c9e5	c20a80b5	2026-09-24T23:10:34-04:00	SeanB	e00bcdc96f26279c92a9626a5ae42c542a298199	data(iqm): 'nigella sativa seed oil' names black seed oil
+e00bcdc96f26279c92a9626a5ae42c542a298199	e00bcdc9	2026-09-24T23:10:34-04:00	SeanB	08351e2dd8a824c19b45b234e1a46e7dd440c925	data(iqm): 'vitamin a fish liver oil' names the cod-liver-oil vitamin A form
+08351e2dd8a824c19b45b234e1a46e7dd440c925	08351e2d	2026-09-24T23:10:34-04:00	SeanB	4cf582b1e788b4788179695f1a0bf1ce180f61c0	fix(enrich): a row's form shares hold only forms of its own parent
+4cf582b1e788b4788179695f1a0bf1ce180f61c0	4cf582b1	2026-09-24T21:16:07-04:00	SeanB	24dc229b2b26ce0d538d20e6dcb277092cae1a50	fix(replay): name a pillar aggregation change instead of calling it unattributed
+24dc229b2b26ce0d538d20e6dcb277092cae1a50	24dc229b	2026-09-24T20:52:50-04:00	SeanB	daaff8b1d714e9f804d760888d493dd270ccc5ea	feat(replay): read-only calibration report over frozen snapshots
+daaff8b1d714e9f804d760888d493dd270ccc5ea	daaff8b1	2026-09-24T20:13:52-04:00	SeanB	e3d36f2ce001c232b8f4f74f8f5c0cd7135f7563	docs(v41): A4 was not ported and P4 is ported under Dr. Pham's approval
+e3d36f2ce001c232b8f4f74f8f5c0cd7135f7563	e3d36f2c	2026-09-24T20:13:52-04:00	SeanB	2f5c28e1824dc49c38433e715d52d10cdcd08ca7	fix(audit): the contract-leak gate classifies every raw read and passes honestly
+2f5c28e1824dc49c38433e715d52d10cdcd08ca7	2f5c28e1	2026-09-24T20:13:52-04:00	SeanB	30af5396062c7b1ab93354b270ff2dc4199838b2	fix(contract): one unit selector for every label-amount reader
+30af5396062c7b1ab93354b270ff2dc4199838b2	30af5396	2026-09-24T19:35:47-04:00	SeanB	a6222c7d1e3551f64f073b652fdf4e9e6e794f82	docs(v41): record A13-P4, the one-brain consolidations and the full integration comparison
+a6222c7d1e3551f64f073b652fdf4e9e6e794f82	a6222c7d	2026-09-24T19:35:18-04:00	SeanB	f7b73abb02359a6c850da6d988751560ee1e0835	refactor(safety): the all-viewer beta-carotene card is a rule-owned pure-dose threshold
+f7b73abb02359a6c850da6d988751560ee1e0835	f7b73abb	2026-09-24T19:35:09-04:00	SeanB	7db29838850963439a09ccd82ddc9c424abfad1c	refactor(disclosure): one row-based quantity-disclosure owner
+7db29838850963439a09ccd82ddc9c424abfad1c	7db29838	2026-09-24T19:32:57-04:00	SeanB	7ee85a26c5ae321d7147ab37f9f0521c14fbc916	refactor(omega): one public EPA/DHA amount provider in the scoring contract
+7ee85a26c5ae321d7147ab37f9f0521c14fbc916	7ee85a26	2026-09-24T17:53:31-04:00	SeanB	9aeb7fbc6e8759c37849e49e993fb85035cbf5c9	feat(safety): beta-carotene lung-cancer warnings exactly as clinician-approved (P4)
+9aeb7fbc6e8759c37849e49e993fb85035cbf5c9	9aeb7fbc	2026-09-24T16:43:49-04:00	SeanB	2da8222612628f4a1e69e12e6dce6f0972392a43	fix(data): 9080's USP Verified claim is the Nature Made Iron 65 mg record
+2da8222612628f4a1e69e12e6dce6f0972392a43	2da82226	2026-09-24T16:43:48-04:00	SeanB	e44ceee8f88ce91e76bbbb134baab44dbd657712	fix(verification): readiness pairs agree; a multivitamin record never names its add-on (A16)
+e44ceee8f88ce91e76bbbb134baab44dbd657712	e44ceee8	2026-09-24T16:42:13-04:00	SeanB	33ba3973b44dc62620eb8fcd2975444a7c2c81de	fix(tooling): the Flutter projection lists the manifest columns it fingerprints (A17)
+33ba3973b44dc62620eb8fcd2975444a7c2c81de	33ba3973	2026-09-24T16:38:37-04:00	SeanB	e8c6da116a80c33b35c3735831330b45b82407cd	fix(transparency,export): quantity disclosure has one owner (A15)
+e8c6da116a80c33b35c3735831330b45b82407cd	e8c6da11	2026-09-24T16:38:37-04:00	SeanB	25decbf5111caa581e7d4cf62a43aa6a2d9941d5	fix(data): life'sDHA Oil is 77225's algal source oil, not DHA
+25decbf5111caa581e7d4cf62a43aa6a2d9941d5	25decbf5	2026-09-24T16:38:37-04:00	SeanB	36d7ff82ef38ed36385676220d73df351e1a8deb	fix(dose,omega): EPA+DHA per serving reads one serving column and one owner (A13)
+36d7ff82ef38ed36385676220d73df351e1a8deb	36d7ff82	2026-09-24T16:04:45-04:00	SeanB	108b7e53ea76cdb57c98887ce8290979b252736c	fix(data): record the FiberSMART review provenance (233404, 233406)
+108b7e53ea76cdb57c98887ce8290979b252736c	108b7e53	2026-09-24T15:15:42-04:00	SeanB	da8a572b5ae9d9bbdc4fc4bc4232d09a04564e92	docs(v41): record the final Task 2, harness and FiberSMART commits and the tracked follow-ups
+da8a572b5ae9d9bbdc4fc4bc4232d09a04564e92	da8a572b	2026-09-24T15:15:27-04:00	SeanB	de63b205e635b32e3a77ba9f05dd72dd862425fe	fix(data): FiberSMART is an unmapped resistant-dextrin active, not a blend header (233404, 233406)
+de63b205e635b32e3a77ba9f05dd72dd862425fe	de63b205	2026-09-24T15:15:18-04:00	SeanB	b0b06053276043752516309a9cac5d4748eda8c8	feat(tooling): the production A/B harness records route, eligibility, identity and exposure
+b0b06053276043752516309a9cac5d4748eda8c8	b0b06053	2026-09-24T12:11:18-04:00	SeanB	5c9996f45d9ade8b59ab52c17d60a57ef9c31bdb	docs(v41): record the B5, B1, B3 and Task 2 ports with their validation
+5c9996f45d9ade8b59ab52c17d60a57ef9c31bdb	5c9996f4	2026-09-24T11:29:06-04:00	SeanB	7b031050db6dea208e407006007e086124003738	fix(dose,route): daily exposure for fiber and sports Dose; PHGG and claim-aware fiber routing (A10, A12, B2)
