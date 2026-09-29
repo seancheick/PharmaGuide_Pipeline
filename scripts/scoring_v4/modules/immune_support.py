@@ -15,6 +15,7 @@ from scoring_v4.modules.generic_helpers import (
     _safe_dict,
     _safe_list,
     daily_serving_multiplier,
+    daily_serving_range,
     get_active_ingredients,
     primary_type_of,
 )
@@ -69,20 +70,26 @@ def score_immune_support_dose(product: Dict[str, Any]) -> Optional[Dict[str, Any
     doses = immune_active_doses(product)
     if not doses:
         return None
+    peak = immune_active_doses(product, top=True)
 
-    design_flags = _immune_design_flags(product, doses)
+    design_flags = _immune_design_flags(product, peak)
     high_zinc = design_flags["high_zinc"]
     high_d = design_flags["high_vitamin_d"]
 
+    def band(dose_key: str) -> float:
+        # Adequacy at the minimum directed use, the above-band reduction at the
+        # maximum: the lower of the two.
+        return min(_band_score(doses, dose_key), _band_score(peak, dose_key))
+
     components = {
-        "vitamin_c_daily_range": _band_score(doses, "vitamin_c_mg"),
-        "vitamin_d_daily_range": 0.0 if high_d else _band_score(doses, "vitamin_d_mcg"),
-        "zinc_daily_range": 0.0 if high_zinc else _band_score(doses, "zinc_mg"),
-        "copper_balance": _band_score(doses, "copper_mg"),
-        "selenium_daily_range": _band_score(doses, "selenium_mcg"),
-        "beta_glucan_disclosed": _band_score(doses, "beta_glucan_mg"),
-        "quercetin_disclosed": _band_score(doses, "quercetin_mg"),
-        "elderberry_disclosed": _band_score(doses, "elderberry_mg"),
+        "vitamin_c_daily_range": band("vitamin_c_mg"),
+        "vitamin_d_daily_range": 0.0 if high_d else band("vitamin_d_mcg"),
+        "zinc_daily_range": 0.0 if high_zinc else band("zinc_mg"),
+        "copper_balance": band("copper_mg"),
+        "selenium_daily_range": band("selenium_mcg"),
+        "beta_glucan_disclosed": band("beta_glucan_mg"),
+        "quercetin_disclosed": band("quercetin_mg"),
+        "elderberry_disclosed": band("elderberry_mg"),
         "daily_use_discipline": 0.0 if (high_zinc or high_d) else IMMUNE_DAILY_USE_DISCIPLINE_POINTS,
     }
 
@@ -114,7 +121,7 @@ def immune_support_formulation_adjustment(product: Dict[str, Any]) -> Optional[D
         if (identity := _active_id(row))
     }
     doses = immune_active_doses(product)
-    high_zinc = (doses.get("zinc_mg") or 0.0) > HIGH_ZINC_THRESHOLD_MG
+    high_zinc = (immune_active_doses(product, top=True).get("zinc_mg") or 0.0) > HIGH_ZINC_THRESHOLD_MG
     botanical_count = _high_variability_botanical_count(product)
     herb_soup = botanical_count >= HIGH_VARIABILITY_BOTANICAL_STACK_MIN_COUNT
 
@@ -151,8 +158,10 @@ def _immune_design_flags(product: Dict[str, Any], doses: Dict[str, float]) -> Di
     }
 
 
-def immune_active_doses(product: Dict[str, Any]) -> Dict[str, float]:
-    daily_multiplier = _daily_serving_multiplier(product)
+def immune_active_doses(product: Dict[str, Any], *, top: bool = False) -> Dict[str, float]:
+    """Daily amounts at the minimum directed use (adequacy), or at the maximum
+    (``top``) for the above-band and high-dose checks."""
+    daily_multiplier = daily_serving_range(product)[1] if top else _daily_serving_multiplier(product)
     out: Dict[str, float] = {}
     for row in get_active_ingredients(product):
         active = _active_id(row)

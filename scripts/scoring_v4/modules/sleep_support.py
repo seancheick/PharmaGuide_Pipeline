@@ -11,6 +11,7 @@ from typing import Any, Dict, Iterable, Optional
 
 from scoring_v4.modules.generic_helpers import (
     daily_serving_multiplier,
+    daily_serving_range,
     get_active_ingredients,
     primary_type_of,
     _as_float,
@@ -39,22 +40,25 @@ def score_sleep_support_dose(product: Dict[str, Any]) -> Optional[Dict[str, Any]
     if not is_sleep_support_product(product):
         return None
 
-    melatonin_mg = active_daily_mg(product, MELATONIN_CANONICALS)
-    if melatonin_mg is not None:
-        score, band = _melatonin_score(melatonin_mg)
-        return _payload("melatonin", melatonin_mg, score, band)
-
-    five_htp_mg = active_daily_mg(product, FIVE_HTP_CANONICALS)
-    if five_htp_mg is not None:
-        score, band = _five_htp_sleep_score(five_htp_mg)
-        return _payload("5_htp", five_htp_mg, score, band)
+    for active, canonicals, band in (
+        ("melatonin", MELATONIN_CANONICALS, _melatonin_score),
+        ("5_htp", FIVE_HTP_CANONICALS, _five_htp_sleep_score),
+    ):
+        daily_mg = active_daily_mg(product, canonicals)
+        if daily_mg is not None:
+            # Adequacy at the minimum directed use, the high-dose bands at the
+            # maximum: the lower of the two.
+            top_mg = active_daily_mg(product, canonicals, top=True)
+            score, label = min(band(top_mg), band(daily_mg), key=lambda scored: scored[0])
+            return _payload(active, daily_mg, score, label)
 
     return None
 
 
-def active_daily_mg(product: Dict[str, Any], canonicals: Iterable[str]) -> Optional[float]:
+def active_daily_mg(product: Dict[str, Any], canonicals: Iterable[str], *, top: bool = False) -> Optional[float]:
+    """Daily amount at the minimum directed use, or at the maximum (``top``)."""
     canonical_set = {_norm_text(c) for c in canonicals}
-    daily_multiplier = _daily_serving_multiplier(product)
+    daily_multiplier = daily_serving_range(product)[1] if top else _daily_serving_multiplier(product)
     best: Optional[float] = None
     for row in get_active_ingredients(product):
         if not _row_matches(row, canonical_set):

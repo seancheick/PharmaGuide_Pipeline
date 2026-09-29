@@ -6,7 +6,7 @@ than the generic RDA/UL proxy used for vitamins and minerals.
 
 from __future__ import annotations
 
-from typing import Any, Dict, Optional, Tuple
+from typing import Any, Callable, Dict, Optional, Tuple
 from dataclasses import asdict
 
 from scoring_v4.exposure import row_exposure
@@ -97,7 +97,7 @@ def score_dose(product: Dict[str, Any]) -> Dict[str, Any]:
             for row in sports_dosed_rows(product)
             if canonical(row) in _DAILY_CANONICALS | CAFFEINE_CANONICALS
         ],
-        "daily_interval_selection": "maximum_directed_use",
+        "daily_interval_selection": "minimum_directed_use",
 
     }
     unknown_daily = [e for e in metadata["benchmark_exposures"] if e["benchmark_amount"] is None and e["uncertainty"]]
@@ -178,34 +178,34 @@ def _score_primary(product: Dict[str, Any], identity: Optional[str]) -> Tuple[fl
         return 16.0, "protein_above_40_g"
 
     if identity == "creatine":
-        grams = _max_benchmark_amount(product, rows, CREATINE_CANONICALS, basis="daily", unit="g")
-        if grams is None:
-            return 0.0, "creatine_no_dose"
-        if grams < 2:
-            return 8.0, "creatine_under_2_g"
-        if grams < 3:
-            return 16.0, "creatine_2_to_3_g"
-        if grams <= 10:
-            return 20.0, "creatine_3_to_10_g"
-        # DSLD prints a loading phase's servings as the daily maximum. The
-        # reviewed NIH ODS loading protocol is ~20 g/day for 5-7 days, so a
-        # labelled loading regimen up to 20 g/day earns full credit; anything
-        # above it, or without loading directions, keeps the high-dose band.
-        if grams <= 20 and has_loading_protocol(product):
-            return 20.0, "creatine_loading_protocol_up_to_20_g"
-        return 16.0, "creatine_above_10_g_no_loading_protocol"
+        def creatine_band(grams: float) -> Tuple[float, str]:
+            if grams < 2:
+                return 8.0, "creatine_under_2_g"
+            if grams < 3:
+                return 16.0, "creatine_2_to_3_g"
+            if grams <= 10:
+                return 20.0, "creatine_3_to_10_g"
+            # DSLD prints a loading phase's servings as the daily maximum. The
+            # reviewed NIH ODS loading protocol is ~20 g/day for 5-7 days, so a
+            # labelled loading regimen up to 20 g/day earns full credit; anything
+            # above it, or without loading directions, keeps the high-dose band.
+            if grams <= 20 and has_loading_protocol(product):
+                return 20.0, "creatine_loading_protocol_up_to_20_g"
+            return 16.0, "creatine_above_10_g_no_loading_protocol"
+
+        return _daily_band(product, rows, CREATINE_CANONICALS, creatine_band, "creatine_no_dose")
 
     if identity == "beta_alanine":
-        grams = _max_benchmark_amount(product, rows, BETA_ALANINE_CANONICALS, basis="daily", unit="g")
-        if grams is None:
-            return 0.0, "beta_alanine_no_dose"
-        if grams < 2:
-            return 8.0, "beta_alanine_under_2_g"
-        if grams < 4:
-            return 16.0, "beta_alanine_2_to_4_g"
-        if grams <= 6:
-            return 20.0, "beta_alanine_4_to_6_g"
-        return 16.0, "beta_alanine_above_6_g"
+        def beta_alanine_band(grams: float) -> Tuple[float, str]:
+            if grams < 2:
+                return 8.0, "beta_alanine_under_2_g"
+            if grams < 4:
+                return 16.0, "beta_alanine_2_to_4_g"
+            if grams <= 6:
+                return 20.0, "beta_alanine_4_to_6_g"
+            return 16.0, "beta_alanine_above_6_g"
+
+        return _daily_band(product, rows, BETA_ALANINE_CANONICALS, beta_alanine_band, "beta_alanine_no_dose")
 
     if identity == "citrulline":
         row = _first_row(rows, CITRULLINE_CANONICALS)
@@ -227,16 +227,16 @@ def _score_primary(product: Dict[str, Any], identity: Optional[str]) -> Tuple[fl
         return 20.0, "l_citrulline_6_to_8_g"
 
     if identity == "hmb":
-        grams = _max_benchmark_amount(product, rows, HMB_CANONICALS, basis="daily", unit="g")
-        if grams is None:
-            return 0.0, "hmb_no_dose"
-        if grams < 1.5:
-            return _partial(grams, 1.5, 8.0), "hmb_under_1_5_g"
-        if grams < 3:
-            return 16.0, "hmb_1_5_to_3_g"
-        if grams <= 6:
-            return 20.0, "hmb_3_to_6_g"
-        return 16.0, "hmb_above_6_g"
+        def hmb_band(grams: float) -> Tuple[float, str]:
+            if grams < 1.5:
+                return _partial(grams, 1.5, 8.0), "hmb_under_1_5_g"
+            if grams < 3:
+                return 16.0, "hmb_1_5_to_3_g"
+            if grams <= 6:
+                return 20.0, "hmb_3_to_6_g"
+            return 16.0, "hmb_above_6_g"
+
+        return _daily_band(product, rows, HMB_CANONICALS, hmb_band, "hmb_no_dose")
 
     if identity == "bcaa":
         grouped = group_bcaa(rows)
@@ -444,11 +444,29 @@ def _opaque_penalty(product: Dict[str, Any], primary_score: float) -> Tuple[floa
     return 0.0, "no_sports_primary_dose"
 
 
-def _max_benchmark_amount(product: Dict[str, Any], rows: list[Dict[str, Any]], canonicals: frozenset[str], *, basis: str, unit: str) -> Optional[float]:
+def _max_benchmark_amount(product: Dict[str, Any], rows: list[Dict[str, Any]], canonicals: frozenset[str], *, basis: str, unit: str, top: bool = False) -> Optional[float]:
     exposures = [row_exposure(product, row, basis=basis, unit=unit)
                  for row in rows if canonical(row) in canonicals]
-    values = [e.benchmark_amount for e in exposures if e.benchmark_amount is not None]
+    values = [e.benchmark_maximum if top else e.benchmark_amount for e in exposures]
+    values = [v for v in values if v is not None]
     return max(values) if values else None
+
+
+def _daily_band(
+    product: Dict[str, Any],
+    rows: list[Dict[str, Any]],
+    canonicals: frozenset[str],
+    band: Callable[[float], Tuple[float, str]],
+    no_dose: str,
+) -> Tuple[float, str]:
+    """Adequacy at the minimum directed daily use, the above-range reduction
+    at the maximum: the lower of the two band scores (on a tie, the maximum's
+    label, which names a loading peak that kept full credit)."""
+    low = _max_benchmark_amount(product, rows, canonicals, basis="daily", unit="g")
+    high = _max_benchmark_amount(product, rows, canonicals, basis="daily", unit="g", top=True)
+    if low is None or high is None:
+        return 0.0, no_dose
+    return min(band(high), band(low), key=lambda scored: scored[0])
 
 
 def _max_g(rows: list[Dict[str, Any]], canonicals: frozenset[str]) -> Optional[float]:

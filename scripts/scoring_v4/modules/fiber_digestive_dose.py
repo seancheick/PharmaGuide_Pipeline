@@ -75,7 +75,7 @@ def score_dose(product: Dict[str, Any]) -> Dict[str, Any]:
             "fiber_grams_daily_maximum": daily_maximum,
             "fiber_grams_daily_benchmark": round(daily_amount, 4),
             "benchmark_exposures": [asdict(e) for e in exposures],
-            "daily_interval_selection": "maximum_directed_use",
+            "daily_interval_selection": "minimum_directed_use",
             **({"exposure_uncertainty": next((e.uncertainty for e in exposures if not e.exact), "fiber_amount_missing")} if not exact else {}),
         },
     }

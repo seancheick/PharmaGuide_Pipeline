@@ -306,7 +306,9 @@ def test_top_level_servings_per_day_outranks_serving_basis() -> None:
 def test_serving_basis_is_used_when_plausible() -> None:
     product = {"serving_basis": {"max_servings_per_day": 4, "min_servings_per_day": 1}}
 
-    assert daily_serving_multiplier(product) == pytest.approx(4.0)
+    assert daily_serving_range(product)[:2] == pytest.approx((1.0, 4.0))
+    # Adequacy credit reads the minimum directed use (Sean, 2026-09-28).
+    assert daily_serving_multiplier(product) == pytest.approx(1.0)
 
 
 def test_directions_parsed_fraction_is_trusted() -> None:
@@ -355,7 +357,7 @@ def test_canonical_adult_serving_wins_over_the_first_serving_entry() -> None:
         },
     }
 
-    assert daily_serving_multiplier(product) == pytest.approx(4.0)
+    assert daily_serving_range(product)[:2] == pytest.approx((1.0, 4.0))
 
 
 def test_serving_basis_above_the_label_ceiling_is_rejected() -> None:
@@ -477,7 +479,7 @@ def test_inverted_label_range_is_normalised_not_trusted_literally() -> None:
     product = {"servingSizes": [{"minDailyServings": 3, "maxDailyServings": 1}]}
 
     assert daily_serving_range(product) == (1.0, 3.0, False)
-    assert daily_serving_multiplier(product) == pytest.approx(3.0)
+    assert daily_serving_multiplier(product) == pytest.approx(1.0)
 
 
 def test_omega_flags_the_default_when_nothing_is_declared() -> None:
@@ -485,10 +487,11 @@ def test_omega_flags_the_default_when_nothing_is_declared() -> None:
 
 
 def test_range_and_multiplier_agree() -> None:
-    """The multiplier is the top of the resolved range — one policy, two shapes."""
-    _, range_max, _ = daily_serving_range(SAMBUCUS_SHAPED)
+    """The adequacy multiplier is the bottom of the resolved range — one
+    policy, two shapes. Excess checks read the top of the same range."""
+    range_min, _, _ = daily_serving_range(SAMBUCUS_SHAPED)
 
-    assert daily_serving_multiplier(SAMBUCUS_SHAPED) == pytest.approx(range_max)
+    assert daily_serving_multiplier(SAMBUCUS_SHAPED) == pytest.approx(range_min)
 
 
 @pytest.mark.parametrize("bad", [True, False, None, [], {}, "many"])

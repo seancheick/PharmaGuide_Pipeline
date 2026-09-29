@@ -28,10 +28,14 @@ class Exposure:
     # Why the amount is not exact ("quantity_qualified", "daily_frequency_unknown",
     # ...): provenance for an amount that is still benchmarked below.
     uncertainty: str | None = None
-    # What Dose benchmarks: the label's stated number at the resolved daily
-    # range (one serving a day when the label is silent). A qualifier or a
-    # defaulted frequency is recorded above as provenance, never scored as 0.
+    # What Dose benchmarks: the label's stated number at the minimum directed
+    # daily use (one serving a day when the label is silent), what everyone
+    # following the label gets. A qualifier or a defaulted frequency is
+    # recorded above as provenance, never scored as 0.
     benchmark_amount: float | None = None
+    # The same number at the maximum directed daily use: the side a band's
+    # above-range reduction reads (benefit at the minimum, excess at the top).
+    benchmark_maximum: float | None = None
 
     @property
     def exact(self) -> bool:
@@ -79,8 +83,8 @@ def row_exposure(product: dict, row: Mapping[str, Any], *, basis: str, unit: str
 
     Qualified quantities and a defaulted frequency keep their bounds and an
     `uncertainty` as provenance; Dose still benchmarks `benchmark_amount`, the stated
-    number at the resolved daily range. Unsupported bases (including a course
-    duration) have no benchmark amount.
+    number at the minimum directed daily use (`benchmark_maximum` at the top).
+    Unsupported bases (including a course duration) have no benchmark amount.
     """
     low, high, defaulted = resolve_daily_serving_range(product)
     path = str(row.get("raw_source_path") or row.get("source") or "")
@@ -127,11 +131,15 @@ def row_exposure(product: dict, row: Mapping[str, Any], *, basis: str, unit: str
                 candidate = _decimal_product(decimal_amount, decimal_factor)
                 if math.isfinite(candidate):
                     converted = candidate
-    benchmark = None
+    benchmark = benchmark_top = None
     if converted is not None and basis in {"daily", "per_use"} and operator not in UNRESOLVED_OPERATORS:
-        benchmark = _decimal_product(decimal_amount, decimal_factor, Decimal(str(high))) if basis == "daily" else converted
-        if not math.isfinite(benchmark):
-            benchmark = None
+        if basis == "daily":
+            benchmark = _decimal_product(decimal_amount, decimal_factor, Decimal(str(low)))
+            benchmark_top = _decimal_product(decimal_amount, decimal_factor, Decimal(str(high)))
+        else:
+            benchmark = benchmark_top = converted
+        if not (math.isfinite(benchmark) and math.isfinite(benchmark_top)):
+            benchmark = benchmark_top = None
     reason = None
     minimum = maximum = None
     if converted is None:
@@ -155,4 +163,4 @@ def row_exposure(product: dict, row: Mapping[str, Any], *, basis: str, unit: str
                 maximum = None
             else:
                 minimum = maximum = None
-    return Exposure(basis, target_unit, converted, minimum, maximum, path, defaulted, operator, reason, benchmark)
+    return Exposure(basis, target_unit, converted, minimum, maximum, path, defaulted, operator, reason, benchmark, benchmark_top)

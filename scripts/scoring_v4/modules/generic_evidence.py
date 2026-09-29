@@ -33,6 +33,7 @@ from scoring_v4.modules.generic_helpers import (
     _safe_dict,
     _safe_list,
     daily_serving_multiplier,
+    daily_serving_range,
     get_active_ingredients,
     nutrient_delivering_rows,
     has_usable_individual_dose,
@@ -253,6 +254,10 @@ def score_evidence(product: Dict[str, Any], *, apply_primary_floor: bool = False
     )
     active_canonical_index = _active_canonical_index(product)
     dose_map = _dose_map(product)
+    servings_low, servings_high, _ = daily_serving_range(product)
+    # The dose map is at the minimum directed daily use; the supra-clinical
+    # flag is an excess check, so it reads the maximum.
+    top_ratio = servings_high / servings_low if servings_low > 0 else 1.0
     ingredient_points: Dict[str, float] = defaultdict(float)
     matched_entry_ids: set[str] = set()
     scoped_matches: List[Dict[str, Any]] = []
@@ -316,7 +321,7 @@ def score_evidence(product: Dict[str, Any], *, apply_primary_floor: bool = False
             converted_dose is not None
             and max_studied_dose is not None
             and max_studied_dose > 0
-            and converted_dose > (SUPRA_CLINICAL_MULTIPLE * max_studied_dose)
+            and converted_dose * top_ratio > (SUPRA_CLINICAL_MULTIPLE * max_studied_dose)
         ):
             _append_once(flags, "SUPRA_CLINICAL_DOSE")
 
@@ -1707,7 +1712,7 @@ def _dose_map(product: Dict[str, Any], *, rows=None) -> Dict[str, Tuple[float, s
 
 
 def _daily_serving_multiplier(product: Dict[str, Any]) -> float:
-    """Return the label-directed daily serving count.
+    """Return the minimum label-directed daily serving count.
 
     Scoring rows carry the amount per canonical label serving, while clinical
     evidence minima and maxima are daily doses. Delegates to the shared v4

@@ -162,7 +162,7 @@ never be reintroduced. Final export rejects any non-v4 Stage-3 artifact.
 
 | Term | Meaning |
 |---|---|
-| **Adequacy exposure** | Minimum/recommended daily exposure (`per_day_min`) used for adequacy. |
+| **Adequacy exposure** | The daily amount at the minimum directed use (`per_day_min`; `Exposure.benchmark_amount`; `generic_helpers.daily_serving_multiplier`). Every adequacy credit reads it; above-range reductions, high-dose flags, UL and interaction thresholds read the maximum (`benchmark_maximum`, top of `daily_serving_range`). |
 | **Safety exposure** | Maximum daily exposure (`per_day_max`) used for UL and other safety comparisons. |
 | **Daily serving resolver** | `serving_frequency.py`, the sole policy for converting label serving directions and their provenance into a daily range. Scoring, interaction thresholds, reviewer facts, audits, and consumer cadence copy delegate to it. |
 | **CFU normalization** | Enrichment-owned parsing of probiotic label text into `probiotic_data.total_cfu`, `total_billion_count`, per-strain dose evidence, and guarantee provenance. The nutrient unit converter does not interpret CFU. |

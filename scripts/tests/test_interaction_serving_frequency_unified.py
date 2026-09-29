@@ -189,8 +189,10 @@ def test_rda_adequacy_resolves_the_same_range_as_the_thresholds() -> None:
 
 
 def test_interaction_and_scoring_resolve_the_same_multiplier() -> None:
-    """One policy: the enricher and the v4 helper cannot disagree by construction."""
-    from scoring_v4.modules.generic_helpers import daily_serving_multiplier
+    """One policy: the enricher's interaction thresholds and the v4 helper read
+    one range. Interactions (risk) take its top; adequacy credit takes its
+    bottom (benefit at the minimum directed use, Sean 2026-09-28)."""
+    from scoring_v4.modules.generic_helpers import daily_serving_multiplier, daily_serving_range
 
     records = [
         _creatine_record(
@@ -215,6 +217,6 @@ def test_interaction_and_scoring_resolve_the_same_multiplier() -> None:
     ]
 
     for record in records:
-        assert daily_serving_multiplier(record) == pytest.approx(
-            resolve_daily_serving_multiplier(record)
-        )
+        low, high, _ = daily_serving_range(record)
+        assert high == pytest.approx(resolve_daily_serving_multiplier(record))
+        assert daily_serving_multiplier(record) == pytest.approx(low)

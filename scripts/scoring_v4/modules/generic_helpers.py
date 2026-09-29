@@ -80,11 +80,14 @@ def daily_serving_range(product: Dict[str, Any]) -> Tuple[float, float, bool]:
 
 
 def daily_serving_multiplier(product: Dict[str, Any]) -> float:
-    """Servings per day to scale a per-serving amount by.
+    """Servings per day to scale a per-serving amount by for adequacy credit.
 
-    The top of `daily_serving_range` — the maximum directed daily use.
+    The bottom of `daily_serving_range`, the minimum directed daily use: what
+    everyone following the label gets. An above-range or excess check reads
+    the top of `daily_serving_range` instead (benefit at the minimum, risk at
+    the maximum; Sean, 2026-09-28).
     """
-    return resolve_daily_serving_range(product)[1]
+    return resolve_daily_serving_range(product)[0]
 
 
 def get_active_ingredients(product: Dict[str, Any]) -> List[Dict[str, Any]]:
