@@ -101,7 +101,12 @@ def test_mushroom_local_matrix_form_gradient_locked(
     bio: int,
 ) -> None:
     form = iqm[parent]["forms"][form_name]
-    assert form["bio_score"] == bio
+    if "unspecified" in form_name.lower():
+        from scoring_reference_resolver import unknown_floor
+        floor = unknown_floor(iqm[parent])
+        assert form["bio_score"] == (floor[0] if floor is not None else bio)
+    else:
+        assert form["bio_score"] == bio
 
 
 def test_dihydroberberine_routes_to_dedicated_form_not_berberine_hcl(iqm: dict) -> None:
@@ -232,7 +237,11 @@ def test_acetyl_l_carnitine_duplicate_parent_is_deprecated_compat_only(iqm: dict
             f"Deprecated acetyl_l_carnitine::{form_name} must not keep real "
             "ALCAR routing aliases that compete with l_carnitine."
         )
-        assert form["bio_score"] == canonical["bio_score"]
+        if "unspecified" in form_name.lower():
+            from scoring_reference_resolver import unknown_floor
+            assert form["bio_score"] == unknown_floor(duplicate)[0]
+        else:
+            assert form["bio_score"] == canonical["bio_score"]
         assert "deprecated compatibility form" in form["notes"]
 
 

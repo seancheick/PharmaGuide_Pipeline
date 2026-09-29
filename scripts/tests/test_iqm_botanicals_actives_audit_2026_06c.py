@@ -32,7 +32,7 @@ SCORE_TARGETS = [
     ("atp", "atp disodium salt", 7),                                  # intact ATP not orally bioavailable
     ("atp", "atp (adenosine triphosphate) (unspecified)", 6),         # below disodium
     ("stinging_nettle", "stinging nettle (unspecified)", 9),          # below root 11 / leaf 10
-    ("pygeum", "pygeum (unspecified)", 8),                            # below bark extract 11
+    ("pygeum", "pygeum (unspecified)", 10),                            # below bark extract 11
     ("saw_palmetto", "liposomal saw palmetto", 8),                   # no extraction-outcome edge (NCCIH)
 ]
 

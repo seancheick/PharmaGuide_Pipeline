@@ -1,0 +1,75 @@
+{
+  "queried_on": "2026-09-29",
+  "endpoint": "https://pubchem.ncbi.nlm.nih.gov/rest/pug/compound/name/{name}/property/Title,MolecularFormula,InChIKey/JSON",
+  "results": [
+    {
+      "query": "calcium acetate",
+      "cid": 6116,
+      "formula": "C4H6CaO4",
+      "inchikey": "VSGNNIFQASZAOI-UHFFFAOYSA-L",
+      "url": "https://pubchem.ncbi.nlm.nih.gov/compound/6116"
+    },
+    {
+      "query": "calcium sulfate",
+      "cid": 24497,
+      "formula": "CaO4S",
+      "inchikey": "OSGAYBCDTDRGGQ-UHFFFAOYSA-L",
+      "url": "https://pubchem.ncbi.nlm.nih.gov/compound/24497"
+    },
+    {
+      "query": "calcium chloride",
+      "cid": 5284359,
+      "formula": "CaCl2",
+      "inchikey": "UXVMQQNJUSDDNG-UHFFFAOYSA-L",
+      "url": "https://pubchem.ncbi.nlm.nih.gov/compound/5284359"
+    },
+    {
+      "query": "calcium glycerophosphate",
+      "cid": 62820,
+      "formula": "C3H7CaO6P",
+      "inchikey": "UHHRFSOMMCWGSO-UHFFFAOYSA-L",
+      "url": "https://pubchem.ncbi.nlm.nih.gov/compound/62820"
+    },
+    {
+      "query": "magnesium glycerophosphate",
+      "cid": 10012877,
+      "formula": "C3H7MgO6P",
+      "inchikey": "BHJKUVVFSKEBEX-UHFFFAOYSA-L",
+      "url": "https://pubchem.ncbi.nlm.nih.gov/compound/10012877"
+    },
+    {
+      "query": "potassium iodate",
+      "cid": 23665710,
+      "formula": "IKO3",
+      "inchikey": "JLKDVMWYMMLWTI-UHFFFAOYSA-M",
+      "url": "https://pubchem.ncbi.nlm.nih.gov/compound/23665710"
+    },
+    {
+      "query": "sodium metasilicate",
+      "cid": 23266,
+      "formula": "Na2O3Si",
+      "inchikey": "NTHWMYGWWRZVTN-UHFFFAOYSA-N",
+      "url": "https://pubchem.ncbi.nlm.nih.gov/compound/23266"
+    },
+    {
+      "query": "magnesium trisilicate",
+      "cid": 5311266,
+      "formula": "Mg2O8Si3",
+      "inchikey": "GXGAKHNRMVGRPK-UHFFFAOYSA-N",
+      "url": "https://pubchem.ncbi.nlm.nih.gov/compound/5311266"
+    },
+    {
+      "query": "calcium silicate",
+      "cid": 73415800,
+      "formula": "CaH6O8Si2",
+      "inchikey": "LECAAGVQUHQAJK-UHFFFAOYSA-N",
+      "url": "https://pubchem.ncbi.nlm.nih.gov/compound/73415800"
+    }
+  ],
+  "unresolved": [
+    {
+      "query": "phosphorus oxide",
+      "disposition": "held; name is chemically ambiguous and returned no PubChem compound result"
+    }
+  ]
+}

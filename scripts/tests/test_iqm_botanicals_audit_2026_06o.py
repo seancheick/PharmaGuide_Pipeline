@@ -33,8 +33,8 @@ def _al(iqm, p, f):
 
 # ── unspecified / liposomal inversions ───────────────────────────────────────
 def test_score_inversions(iqm):
-    assert iqm["rhodiola"]["forms"]["rhodiola (unspecified)"]["bio_score"] == 8
-    assert iqm["ginkgo"]["forms"]["ginkgo (unspecified)"]["bio_score"] == 8
+    assert iqm["rhodiola"]["forms"]["rhodiola (unspecified)"]["bio_score"] == 6
+    assert iqm["ginkgo"]["forms"]["ginkgo (unspecified)"]["bio_score"] == 6
     # liposomal ginkgo below the validated EGb extract (single-study, terpene-only)
     assert iqm["ginkgo"]["forms"]["liposomal ginkgo"]["bio_score"] == 10
     assert iqm["ginkgo"]["forms"][EGB]["bio_score"] == 11

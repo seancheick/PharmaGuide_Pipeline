@@ -30,7 +30,7 @@ def test_used_species_only_probiotic_forms_are_not_premium_strain_tier() -> None
         ("lactobacillus_gasseri", "lactobacillus gasseri (unspecified)", 10),
         ("bifidobacterium_breve", "bifidobacterium breve (unspecified)", 10),
         ("bacillus_coagulans", "bacillus coagulans (unspecified)", 11),
-        ("bacillus_subtilis", "bacillus subtilis (unspecified)", 11),
+        ("bacillus_subtilis", "bacillus subtilis (unspecified)", 10),
         ("bacillus_clausii", "bacillus clausii (unspecified)", 11),
     ]
 

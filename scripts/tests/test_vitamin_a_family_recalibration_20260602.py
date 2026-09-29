@@ -30,7 +30,7 @@ def test_vitamin_a_direct_forms_use_absorption_only_scores() -> None:
         "liposomal vitamin A": 11,
         "beta-carotene synthetic": 6,
         "beta-carotene from mixed carotenoids": 7,
-        "vitamin a (unspecified)": 6,
+        "vitamin a (unspecified)": 4,
     }
 
     for form_name, bio_score in expected.items():
@@ -64,7 +64,7 @@ def test_standalone_carotenoid_forms_use_conservative_provitamin_a_scores() -> N
     expected = {
         ("beta_carotene", "natural beta-carotene (from dunaliella salina)"): 7,
         ("beta_carotene", "beta-carotene beadlet"): 6,
-        ("beta_carotene", "beta-carotene (unspecified)"): 6,
+        ("beta_carotene", "beta-carotene (unspecified)"): 5,
         ("alpha_carotene", "alpha-carotene (unspecified)"): 5,
         ("cryptoxanthin", "beta-cryptoxanthin"): 5,
     }

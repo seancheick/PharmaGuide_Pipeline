@@ -24,16 +24,15 @@
       },
       "unknown_form": {
         "description": "What a form the label does not disclose is worth. Owner: scoring_reference_resolver.unknown_form_quality; enrichment reads it and scoring consumes enrichment's reading.",
-        "rule": "Lowest eligible named bio_score - 1. An authored unspecified form supplies the identity and may sit at or below that floor; above it only with a reviewed override. With no authored form the result names no form.",
-        "eligibility": "Form field parent_relationship names a form that is not an ordinary form of its parent: non_functional_analog, degradation_product, not_a_nutrient_source (this nutrient, poorly delivered: scored at its own bio_score), wrong_stereoisomer, different_compound (not this parent's identity: a matching row is held for identity verification and never scored as the parent). Any relationship makes the form ineligible for the floor. Absent = an ordinary form. Source preparations are never eligible.",
-        "override": "Form field unknown_floor {override: true, rationale, reviewed_by, reviewed_on} on an authored unspecified form; db_integrity_sanity_check rejects an incomplete override or an undocumented value above the floor.",
+        "rule": "Lowest eligible named bio_score - 1, always. An authored unspecified form stores that mechanical floor; no historical or clinical override changes it. If no evidence-approved named form can define the floor, an unsupported authored unspecified form is capped below Excellent at 11. With no authored form the result names no form.",
+        "eligibility": "An ordinary parent form is eligible unless parent_relationship marks a non-parent relationship or alias_identity_scope marks a source preparation. A grandfathered Excellent form without approved structured form_evidence cannot propagate a new Excellent unspecified score.",
         "not_covered": "A named form IQM does not recognize is a disclosed unmapped form: the row keeps its identity, gets no form quality, and the product is held until curated. A disclosed form the pipeline lost is a pipeline defect."
       }
     },
     "statistics": {
       "total_parents": 655,
-      "total_forms": 1458,
-      "total_form_aliases": 12307,
+      "total_forms": 1474,
+      "total_form_aliases": 12321,
       "parents_with_parent_aliases": 146,
       "parents_with_contains_aliases": 0,
       "parents_with_pattern_aliases": 0
@@ -54,7 +53,7 @@
       "vitamins": 25
     },
     "schema_version": "5.6.1",
-    "last_updated": "2026-09-28",
+    "last_updated": "2026-09-29",
     "pipeline_integration": "Used by enrichment to assign form quality (bio_score) to matched ingredient forms. Match ingredient name against forms aliases (case-insensitive).",
     "matching_notes": [
       "Match ingredient name + forms text against aliases array (case-insensitive)",
@@ -2098,7 +2097,7 @@
         }
       },
       "vitamin a (unspecified)": {
-        "bio_score": 6,
+        "bio_score": 4,
         "absorption": "good (retinol/retinyl ester class baseline)",
         "consumer_note": "This listing identifies vitamin A without naming its compound, such as retinol, a retinyl ester, or a carotenoid. The label does not provide enough form detail to distinguish among vitamin A forms.",
         "consumer_note_review": {
@@ -2156,12 +2155,6 @@
           "range_low": 0.5,
           "range_high": 0.85,
           "quality": "good"
-        },
-        "unknown_floor": {
-          "override": true,
-          "rationale": "Vitamin A family policy: undisclosed vitamin A kept at the policy value (tests/test_vitamin_a_family_recalibration_20260602.py).",
-          "reviewed_by": "Vitamin A / provitamin carotenoid reconciliation (commit 99fd5179)",
-          "reviewed_on": "2026-06-02"
         },
         "source_form_aliases": [
           "gamma-carotene"
@@ -2685,7 +2678,7 @@
         "parent_relationship": "degradation_product"
       },
       "vitamin b1 (unspecified)": {
-        "bio_score": 6,
+        "bio_score": 7,
         "absorption": "moderate (thiamine class baseline; saturable)",
         "consumer_note": "This label names vitamin B1 without identifying the thiamine compound or delivery form.",
         "consumer_note_review": {
@@ -2958,7 +2951,7 @@
         "parent_relationship": "degradation_product"
       },
       "vitamin b2 (unspecified)": {
-        "bio_score": 6,
+        "bio_score": 7,
         "absorption": "moderate (riboflavin saturable; ~60% at 5 mg)",
         "consumer_note": "This listing identifies vitamin B2 without naming riboflavin, FMN, FAD, or another form. The label does not provide enough form detail to distinguish among B2 compounds.",
         "consumer_note_review": {
@@ -3909,7 +3902,7 @@
         "parent_relationship": "non_functional_analog"
       },
       "vitamin b6 (unspecified)": {
-        "bio_score": 6,
+        "bio_score": 7,
         "absorption": "good (B6 class baseline)",
         "consumer_note": "This listing identifies vitamin B6 without naming pyridoxine, P5P, or another compound. The label does not provide enough form detail to distinguish among B6 forms.",
         "consumer_note_review": {
@@ -4205,7 +4198,7 @@
         "parent_relationship": "degradation_product"
       },
       "vitamin b7 (unspecified)": {
-        "bio_score": 6,
+        "bio_score": 7,
         "absorption": "good (default to biotin class baseline)",
         "consumer_note": "This listing identifies vitamin B7 without naming biotin's source, stereochemistry, or binding form. The label does not provide enough form detail to distinguish among biotin materials.",
         "consumer_note_review": {
@@ -7759,7 +7752,7 @@
           "calcium beta-hydroxybutyrate",
           "calcium pyruvate"
         ],
-        "bio_score": 3,
+        "bio_score": 2,
         "absorption": "moderate (Ca class baseline; form-dependent 25-42%)",
         "consumer_note": "The label names calcium without identifying the calcium salt. That limits comparison with named forms such as carbonate, citrate, or phosphate.",
         "consumer_note_review": {
@@ -7863,6 +7856,62 @@
           "primary_form": "calcium pantothenate",
           "note": "Same chemical substance as vitamin_b5_pantothenic/calcium pantothenate. Scored here for calcium bioavailability."
         }
+      },
+      "calcium acetate": {
+        "bio_score": 3,
+        "aliases": [
+          "calcium acetate"
+        ],
+        "notes": "Identity verified against PubChem CID 6116 on 2026-09-29. No comparative human absorption evidence was reviewed, so this identity-only form receives no premium over the parent conservative baseline.",
+        "absorption_structured": {
+          "value": 0.32,
+          "range_low": 0.2,
+          "range_high": 0.42,
+          "quality": "moderate"
+        },
+        "absorption": "moderate (Ca class baseline; form-dependent 25-42%)"
+      },
+      "calcium sulfate": {
+        "bio_score": 3,
+        "aliases": [
+          "calcium sulfate"
+        ],
+        "notes": "Identity verified against PubChem CID 24497 on 2026-09-29. No comparative human absorption evidence was reviewed, so this identity-only form receives no premium over the parent conservative baseline.",
+        "absorption_structured": {
+          "value": 0.32,
+          "range_low": 0.2,
+          "range_high": 0.42,
+          "quality": "moderate"
+        },
+        "absorption": "moderate (Ca class baseline; form-dependent 25-42%)"
+      },
+      "calcium chloride": {
+        "bio_score": 3,
+        "aliases": [
+          "calcium chloride"
+        ],
+        "notes": "Identity verified against PubChem CID 5284359 on 2026-09-29. No comparative human absorption evidence was reviewed, so this identity-only form receives no premium over the parent conservative baseline.",
+        "absorption_structured": {
+          "value": 0.32,
+          "range_low": 0.2,
+          "range_high": 0.42,
+          "quality": "moderate"
+        },
+        "absorption": "moderate (Ca class baseline; form-dependent 25-42%)"
+      },
+      "calcium glycerophosphate": {
+        "bio_score": 3,
+        "aliases": [
+          "calcium glycerophosphate"
+        ],
+        "notes": "Identity verified against PubChem CID 62820 on 2026-09-29. No comparative human absorption evidence was reviewed, so this identity-only form receives no premium over the parent conservative baseline.",
+        "absorption_structured": {
+          "value": 0.32,
+          "range_low": 0.2,
+          "range_high": 0.42,
+          "quality": "moderate"
+        },
+        "absorption": "moderate (Ca class baseline; form-dependent 25-42%)"
       }
     },
     "match_rules": {
@@ -8662,7 +8711,7 @@
           "calcium magnesium phytate",
           "magnesium d-aspartate"
         ],
-        "bio_score": 5,
+        "bio_score": 1,
         "absorption": "form unknown; assume oxide-tier worst-case for scoring",
         "consumer_note": "The label names magnesium without identifying the magnesium salt. That limits comparison with named forms such as oxide, citrate, or glycinate.",
         "consumer_note_review": {
@@ -8689,12 +8738,6 @@
           "quality": "low",
           "range_low": 0.05,
           "range_high": 0.3
-        },
-        "unknown_floor": {
-          "override": true,
-          "rationale": "Clinician mineral recalibration: unspecified magnesium kept at the clinician-set value (tests/test_mineral_form_recalibration_20260602.py).",
-          "reviewed_by": "Zn/Mg/Fe mineral form recalibration, clinician rule after live API verification (commit 99fd5179)",
-          "reviewed_on": "2026-06-02"
         }
       },
       "magnesium ascorbate (as magnesium source)": {
@@ -8910,6 +8953,20 @@
           "gsrs_unii_status": "exact_match",
           "umls_cui_status": "exact_match"
         }
+      },
+      "magnesium glycerophosphate": {
+        "bio_score": 2,
+        "aliases": [
+          "magnesium glycerophosphate"
+        ],
+        "notes": "Identity verified against PubChem CID 10012877 on 2026-09-29. No comparative human absorption evidence was reviewed, so this identity-only form receives no premium over the parent conservative baseline.",
+        "absorption_structured": {
+          "value": 0.15,
+          "quality": "low",
+          "range_low": 0.05,
+          "range_high": 0.3
+        },
+        "absorption": "form unknown; assume oxide-tier worst-case for scoring"
       }
     },
     "match_rules": {
@@ -9277,7 +9334,7 @@
         "parent_relationship": "not_a_nutrient_source"
       },
       "iron (unspecified)": {
-        "bio_score": 6,
+        "bio_score": 4,
         "absorption": "low-variable (form-dependent: 5-30%)",
         "consumer_note": "This listing identifies iron without naming its oxidation state, salt, chelate, or delivery format. The label does not provide enough form detail to distinguish among iron compounds.",
         "consumer_note_review": {
@@ -9304,12 +9361,6 @@
           "range_low": 0.05,
           "range_high": 0.3,
           "quality": "low"
-        },
-        "unknown_floor": {
-          "override": true,
-          "rationale": "Clinician mineral recalibration: unspecified iron kept at the clinician-set value (tests/test_mineral_form_recalibration_20260602.py).",
-          "reviewed_by": "Zn/Mg/Fe mineral form recalibration, clinician rule after live API verification (commit 99fd5179)",
-          "reviewed_on": "2026-06-02"
         }
       },
       "ferric citrate": {
@@ -10205,7 +10256,7 @@
         }
       },
       "zinc (unspecified)": {
-        "bio_score": 6,
+        "bio_score": 4,
         "absorption": "moderate (Zn class baseline; form-dependent)",
         "consumer_note": "This listing identifies zinc without naming its salt, chelate, or delivery format. The label does not provide enough form detail to distinguish among zinc compounds.",
         "consumer_note_review": {
@@ -10227,12 +10278,6 @@
           "range_low": 0.1,
           "range_high": 0.45,
           "quality": "low"
-        },
-        "unknown_floor": {
-          "override": true,
-          "rationale": "Clinician mineral recalibration: unspecified zinc kept at the clinician-set value (tests/test_mineral_form_recalibration_20260602.py).",
-          "reviewed_by": "Zn/Mg/Fe mineral form recalibration, clinician rule after live API verification (commit 99fd5179)",
-          "reviewed_on": "2026-06-02"
         },
         "source_form_aliases": [
           "zinc quercetin"
@@ -11501,7 +11546,7 @@
         }
       },
       "unspecified astaxanthin": {
-        "bio_score": 10,
+        "bio_score": 11,
         "absorption": "low/variable when fat-matrix unknown; reference Cmax ~3.86 µg/mL (Khayyal 2024)",
         "consumer_note": "This listing identifies astaxanthin without naming its source or delivery format. The label does not provide enough form detail to distinguish among astaxanthin preparations.",
         "consumer_note_review": {
@@ -12098,7 +12143,7 @@
         }
       },
       "creatine monohydrate ((unspecified))": {
-        "bio_score": 6,
+        "bio_score": 3,
         "absorption": "creatine form not specified; assume class-typical F",
         "consumer_note": "This label identifies creatine without specifying its chemical form. The specific creatine preparation is not established.",
         "consumer_note_review": {
@@ -12128,12 +12173,6 @@
           "range_low": 0.85,
           "range_high": 0.99,
           "quality": "excellent"
-        },
-        "unknown_floor": {
-          "override": true,
-          "rationale": "Creatine F-class audit: undisclosed creatine kept at the audited value; ethyl ester is a pro-drug, not the plain form (tests/test_creatine_integrity.py).",
-          "reviewed_by": "IQM audit 2026-04-25 batch 14, creatine F-class collapse (commit 134ff76d)",
-          "reviewed_on": "2026-04-25"
         }
       }
     },
@@ -12984,7 +13023,7 @@
         }
       },
       "phosphatidylcholine (unspecified)": {
-        "bio_score": 11,
+        "bio_score": 10,
         "absorption": "good (estimated; default for unsourced PC)",
         "consumer_note": "This listing identifies phosphatidylcholine without naming its botanical source or phospholipid specification. The label does not provide enough form detail to distinguish among phosphatidylcholine materials.",
         "consumer_note_review": {
@@ -13005,12 +13044,6 @@
           "range_low": 0.7,
           "range_high": 0.9,
           "quality": "good"
-        },
-        "unknown_floor": {
-          "override": true,
-          "rationale": "Batch-3 audit lock: undisclosed phosphatidylcholine sits just below soy PC (tests/test_iqm_botanicals_actives_audit_2026_06c.py).",
-          "reviewed_by": "IQM 2026-06 batch-3 audit, botanicals + actives (commit d5784b96)",
-          "reviewed_on": "2026-06-09"
         }
       }
     },
@@ -14119,7 +14152,7 @@
         }
       },
       "pygeum (unspecified)": {
-        "bio_score": 8,
+        "bio_score": 10,
         "absorption": "unknown",
         "consumer_note": "This listing identifies pygeum without naming the plant part, extract ratio, or standardization. The label does not provide enough form detail to distinguish among pygeum materials.",
         "consumer_note_review": {
@@ -14258,7 +14291,7 @@
         }
       },
       "vanadyl sulfate (unspecified)": {
-        "bio_score": 7,
+        "bio_score": 6,
         "absorption": "very_low (V class baseline ~1-3%)",
         "consumer_note": "This listing identifies vanadyl sulfate without a source or delivery specification. Vanadyl sulfate is an inorganic vanadium compound paired with sulfate.",
         "consumer_note_review": {
@@ -14267,10 +14300,6 @@
         },
         "notes": "Generic vanadium listing without specifying the salt form. Most supplements use vanadyl sulfate, but the form matters significantly for bioavailability. Conservative score applied. B25 audit 2026-04-25: V class baseline (PMID:23982218).",
         "aliases": [
-          "vanadium amino acid chelate",
-          "vanadium glycinate",
-          "Vanadium Nicotinate Glycinate Chelate",
-          "Vanadium Krebs Cycle Chelates",
           "vanadyl",
           "vanadyl supplement"
         ],
@@ -14280,12 +14309,6 @@
           "range_low": 0.01,
           "range_high": 0.03,
           "quality": "low"
-        },
-        "unknown_floor": {
-          "override": true,
-          "rationale": "Class-equivalence finding: every vanadyl form is the same class value, so an undisclosed form hides nothing (tests/test_unii_vanadium_vanadyl_model_2026_05_25.py).",
-          "reviewed_by": "Vanadium/vanadyl class-equivalence model (commit 3895c2de)",
-          "reviewed_on": "2026-05-25"
         }
       },
       "vanadium aspartate": {
@@ -16461,7 +16484,7 @@
         }
       },
       "potassium (unspecified)": {
-        "bio_score": 7,
+        "bio_score": 6,
         "absorption": "very_good (K class baseline ~80-95%; mineral)",
         "consumer_note": "This label names potassium without its accompanying salt or chelate, so the exact potassium compound is unknown.",
         "consumer_note_review": {
@@ -16575,6 +16598,20 @@
           "primary_form": "potassium ascorbate",
           "note": "Same chemical substance as vitamin_c/potassium ascorbate. Scored here for potassium bioavailability."
         }
+      },
+      "potassium iodate": {
+        "bio_score": 7,
+        "aliases": [
+          "potassium iodate"
+        ],
+        "notes": "Identity verified against PubChem CID 23665710 on 2026-09-29. No comparative human absorption evidence was reviewed, so this identity-only form receives no premium over the parent conservative baseline.",
+        "absorption_structured": {
+          "value": 0.85,
+          "range_low": 0.78,
+          "range_high": 0.92,
+          "quality": "very_good"
+        },
+        "absorption": "very_good (K class baseline ~80-95%; mineral)"
       }
     },
     "match_rules": {
@@ -18960,7 +18997,7 @@
         }
       },
       "choline (unspecified)": {
-        "bio_score": 8,
+        "bio_score": 9,
         "absorption": "very_good (choline class baseline; PC ~95%)",
         "consumer_note": "This listing identifies choline without naming its salt or delivery form, such as choline bitartrate or citicoline. The label does not provide enough form detail to distinguish among choline compounds.",
         "consumer_note_review": {
@@ -19308,7 +19345,7 @@
         }
       },
       "phosphatidylserine (unspecified)": {
-        "bio_score": 10,
+        "bio_score": 9,
         "absorption": "moderate (PS class baseline; form-dependent)",
         "consumer_note": "This label names phosphatidylserine without identifying its source, concentration, or delivery formulation.",
         "consumer_note_review": {
@@ -19328,12 +19365,6 @@
           "range_low": 0.35,
           "range_high": 0.7,
           "quality": "moderate"
-        },
-        "unknown_floor": {
-          "override": true,
-          "rationale": "Batch-6 audit lock: undisclosed phosphatidylserine sits below disclosed source forms (tests/test_iqm_probiotics_phospholipids_audit_2026_06f.py).",
-          "reviewed_by": "IQM 2026-06 batch-6 audit (commit f1be4565)",
-          "reviewed_on": "2026-06-09"
         }
       },
       "sharp-ps gold (PS-DHA conjugate)": {
@@ -19862,7 +19893,7 @@
         "parent_relationship": "wrong_stereoisomer"
       },
       "l-carnitine (unspecified)": {
-        "bio_score": 5,
+        "bio_score": 7,
         "absorption": "low (supplement F 14-18%; carrier-saturable)",
         "consumer_note": "This label names L-carnitine without identifying a salt, derivative, brand, or delivery formulation.",
         "consumer_note_review": {
@@ -22418,7 +22449,7 @@
     "rxcui": "11359",
     "forms": {
       "lutein (unspecified)": {
-        "bio_score": 8,
+        "bio_score": 9,
         "absorption": "variable, fat-dependent (~10-50% with dietary fat; <5% fasted)",
         "consumer_note": "This label names lutein without identifying its botanical source, ester state, brand, or delivery formulation.",
         "consumer_note_review": {
@@ -23831,7 +23862,7 @@
         }
       },
       "msm (methylsulfonylmethane) (unspecified)": {
-        "bio_score": 11,
+        "bio_score": 10,
         "absorption": "unknown",
         "consumer_note": "This label names methylsulfonylmethane without identifying its source, purity specification, or delivery format.",
         "consumer_note_review": {
@@ -23853,12 +23884,6 @@
           "range_low": 0.1,
           "range_high": 0.3,
           "quality": "low"
-        },
-        "unknown_floor": {
-          "override": true,
-          "rationale": "MSM is one compound (dimethyl sulfone): an undisclosed form hides nothing, so it equals the named MSM form (tests/test_iqm_phyto2_audit_2026_06l.py).",
-          "reviewed_by": "IQM 2026-06 batch-12 audit, PubChem-verified identity (commit 2c204925)",
-          "reviewed_on": "2026-06-10"
         }
       }
     },
@@ -24374,7 +24399,7 @@
         }
       },
       "rhodiola (unspecified)": {
-        "bio_score": 8,
+        "bio_score": 6,
         "absorption": "low-moderate (rosavin + salidroside class)",
         "consumer_note": "This listing identifies rhodiola without naming the species, plant part, or standardization. The label does not provide enough form detail to distinguish among rhodiola materials.",
         "consumer_note_review": {
@@ -24398,12 +24423,6 @@
           "range_low": 0.28,
           "range_high": 0.38,
           "quality": "moderate"
-        },
-        "unknown_floor": {
-          "override": true,
-          "rationale": "Batch-13 audit lock: undisclosed rhodiola sits below the rosavin-standardized extract (tests/test_iqm_botanicals_audit_2026_06o.py).",
-          "reviewed_by": "IQM 2026-06 batch-13 audit (commit 1f556e3e)",
-          "reviewed_on": "2026-06-10"
         }
       }
     },
@@ -24527,7 +24546,7 @@
         }
       },
       "ginkgo (unspecified)": {
-        "bio_score": 8,
+        "bio_score": 6,
         "absorption": "moderate (flavonoid + terpene lactone class)",
         "consumer_note": "This label names ginkgo without identifying plant part, powder versus extract, or standardization.",
         "consumer_note_review": {
@@ -24555,12 +24574,6 @@
           "range_low": 0.25,
           "range_high": 0.65,
           "quality": "moderate"
-        },
-        "unknown_floor": {
-          "override": true,
-          "rationale": "Batch-13 audit lock: undisclosed ginkgo sits below the EGb 24% flavone-glycoside extract (tests/test_iqm_botanicals_audit_2026_06o.py).",
-          "reviewed_by": "IQM 2026-06 batch-13 audit (commit 1f556e3e)",
-          "reviewed_on": "2026-06-10"
         }
       }
     },
@@ -26011,7 +26024,7 @@
         }
       },
       "green tea extract (unspecified)": {
-        "bio_score": 7,
+        "bio_score": 8,
         "absorption": "very_low (EGCG class-poor; F ~0.1-1%)",
         "consumer_note": "This listing identifies green tea extract without naming the plant part, catechin standardization, or delivery format. The label does not provide enough form detail to distinguish among green tea extracts.",
         "consumer_note_review": {
@@ -28205,7 +28218,7 @@
         "parent_relationship": "degradation_product"
       },
       "digestive enzymes (unspecified)": {
-        "bio_score": 5,
+        "bio_score": 9,
         "absorption": "framework_mismatch (luminal activity not systemic F)",
         "consumer_note": "This label names digestive enzymes without identifying individual enzymes, sources, or activity units.",
         "consumer_note_review": {
@@ -28771,7 +28784,7 @@
         "parent_relationship": "degradation_product"
       },
       "nad+ precursors (unspecified)": {
-        "bio_score": 5,
+        "bio_score": 8,
         "absorption": "moderate (NAD precursor class baseline; NR/NMN ~50%)",
         "consumer_note": "This label names an NAD precursor without identifying NR, NMN, niacinamide, nicotinic acid, or another compound.",
         "consumer_note_review": {
@@ -35421,7 +35434,7 @@
     "dosage_importance": 1.0,
     "forms": {
       "huperzine a (unspecified)": {
-        "bio_score": 12,
+        "bio_score": 11,
         "absorption": "~96% absolute oral bioavailability in humans (PMID 9421157)",
         "consumer_note": "Huperzine A is a defined alkaloid associated with Huperzia serrata.",
         "consumer_note_review": {
@@ -35643,7 +35656,7 @@
     "dosage_importance": 0.1,
     "forms": {
       "inulin (unspecified)": {
-        "bio_score": 12,
+        "bio_score": 11,
         "absorption": "non-digestible β(2→1) fructan; colonic fermentation to SCFA; not systemically absorbed intact",
         "consumer_note": "Inulin is a fructan fiber made of fructose chains; source and chain length are unspecified.",
         "consumer_note_review": {
@@ -38247,7 +38260,7 @@
     "dosage_importance": 0.1,
     "forms": {
       "silica (unspecified)": {
-        "bio_score": 8,
+        "bio_score": 7,
         "absorption": "unknown",
         "consumer_note": "The label says silica but does not identify the specific silicon material, particle form, or delivery format.",
         "consumer_note_review": {
@@ -38311,6 +38324,23 @@
           "range_high": 0.44,
           "quality": "moderate"
         }
+      },
+      "sodium metasilicate (as silica source)": {
+        "bio_score": 8,
+        "aliases": [
+          "silica from sodium metasilicate"
+        ],
+        "notes": "Identity verified against PubChem CID 23266 on 2026-09-29. No comparative human absorption evidence was reviewed, so this identity-only form receives no premium over the parent conservative baseline.",
+        "source_form_aliases": [
+          "sodium metasilicate"
+        ],
+        "absorption_structured": {
+          "value": 0.35,
+          "range_low": 0.27,
+          "range_high": 0.44,
+          "quality": "moderate"
+        },
+        "absorption": "unknown"
       }
     },
     "cui": "C0037098",
@@ -39207,7 +39237,7 @@
         }
       },
       "nicotinamide riboside (unspecified)": {
-        "bio_score": 12,
+        "bio_score": 11,
         "absorption": "unknown",
         "consumer_note": "This label names nicotinamide riboside without identifying its salt, brand, or delivery formulation.",
         "consumer_note_review": {
@@ -39794,7 +39824,7 @@
         }
       },
       "generic nadh": {
-        "bio_score": 4,
+        "bio_score": 5,
         "absorption": "poor-moderate",
         "consumer_note": "Generic NADH identifies reduced nicotinamide adenine dinucleotide without a named stabilization system.",
         "consumer_note_review": {
@@ -40791,7 +40821,7 @@
         }
       },
       "coenzymated complex (unspecified)": {
-        "bio_score": 13,
+        "bio_score": 11,
         "absorption": "unknown",
         "consumer_note": "This label names a coenzymated complex without identifying the individual vitamin compounds or their amounts.",
         "consumer_note_review": {
@@ -41079,7 +41109,7 @@
         }
       },
       "acetyl-l-carnitine (unspecified)": {
-        "bio_score": 10,
+        "bio_score": 9,
         "absorption": "unknown",
         "consumer_note": "This label names acetyl-L-carnitine without identifying salt, brand, purity, or delivery formulation.",
         "consumer_note_review": {
@@ -41096,12 +41126,6 @@
           "range_low": 0.1,
           "range_high": 0.3,
           "quality": "low"
-        },
-        "unknown_floor": {
-          "override": true,
-          "rationale": "Deprecated compatibility parent: each form mirrors the canonical l_carnitine ALCAR form exactly (tests/test_iqm_report_mechanical_fixes.py).",
-          "reviewed_by": "IQM v4 defensibility-audit mechanical fixes (commit 9f014520)",
-          "reviewed_on": "2026-06-06"
         }
       }
     },
@@ -41557,7 +41581,7 @@
         }
       },
       "lion's mane (unspecified)": {
-        "bio_score": 5,
+        "bio_score": 8,
         "absorption": "low/unspecified mushroom form quality; disclosed fruiting-body or standardized extract required for higher confidence",
         "consumer_note": "This label names lion’s mane without identifying fruiting body, mycelium, powder, extract, or standardization.",
         "consumer_note_review": {
@@ -41787,7 +41811,7 @@
         }
       },
       "reishi (unspecified)": {
-        "bio_score": 5,
+        "bio_score": 8,
         "absorption": "low/unspecified mushroom form quality; disclosed fruiting-body or standardized extract required for higher confidence",
         "consumer_note": "This label names reishi without identifying fruiting body, mycelium, powder, extract, or standardization.",
         "consumer_note_review": {
@@ -41908,7 +41932,7 @@
         }
       },
       "maitake (unspecified)": {
-        "bio_score": 5,
+        "bio_score": 8,
         "absorption": "low/unspecified mushroom form quality; disclosed fruiting-body or standardized extract required for higher confidence",
         "consumer_note": "This label names maitake without identifying fruiting body, mycelium, powder, extract, or standardized fraction.",
         "consumer_note_review": {
@@ -42019,7 +42043,7 @@
         }
       },
       "shiitake (unspecified)": {
-        "bio_score": 5,
+        "bio_score": 8,
         "absorption": "low/unspecified mushroom form quality; disclosed fruiting-body or standardized extract required for higher confidence",
         "consumer_note": "This label names shiitake without identifying fruiting body, mycelium, powder, extract, or standardization.",
         "consumer_note_review": {
@@ -42128,7 +42152,7 @@
         }
       },
       "turkey tail (unspecified)": {
-        "bio_score": 5,
+        "bio_score": 8,
         "absorption": "low/unspecified mushroom form quality; disclosed fruiting-body or standardized extract required for higher confidence",
         "consumer_note": "This label names turkey tail without identifying fruiting body, mycelium, powder, extract, or standardization.",
         "consumer_note_review": {
@@ -42225,7 +42249,7 @@
         }
       },
       "chaga (unspecified)": {
-        "bio_score": 5,
+        "bio_score": 8,
         "absorption": "low (mushroom class-poor; chitin shell barrier)",
         "consumer_note": "This label names chaga without identifying sclerotium, mycelium, powder, extract, or standardization.",
         "consumer_note_review": {
@@ -42324,7 +42348,7 @@
         }
       },
       "cordyceps (unspecified)": {
-        "bio_score": 5,
+        "bio_score": 7,
         "absorption": "low/unspecified mushroom form quality; disclosed fruiting-body or standardized extract required for higher confidence",
         "consumer_note": "This label names Cordyceps without identifying species, fruiting body versus mycelium, or extract standardization.",
         "consumer_note_review": {
@@ -43282,7 +43306,7 @@
         }
       },
       "bifidobacterium lactis (unspecified)": {
-        "bio_score": 7,
+        "bio_score": 11,
         "absorption": "live organism; F = gut survival not classical absorption; CFU dose-dependent",
         "consumer_note": "This label identifies B. lactis at species level without a strain code.",
         "consumer_note_review": {
@@ -43487,7 +43511,7 @@
         }
       },
       "lactobacillus rhamnosus (unspecified)": {
-        "bio_score": 7,
+        "bio_score": 10,
         "absorption": "L. rhamnosus; live organism gut-survival F",
         "consumer_note": "This label identifies L. rhamnosus at species level without a strain code.",
         "consumer_note_review": {
@@ -43678,7 +43702,7 @@
         }
       },
       "lactobacillus plantarum (unspecified)": {
-        "bio_score": 7,
+        "bio_score": 9,
         "absorption": "L. plantarum; live organism gut-survival F",
         "consumer_note": "This label identifies L. plantarum at species level without a strain code.",
         "consumer_note_review": {
@@ -44964,6 +44988,51 @@
         "aliases": [
           "silicon from silicon dioxide"
         ]
+      },
+      "sodium metasilicate": {
+        "bio_score": 8,
+        "aliases": [
+          "sodium metasilicate"
+        ],
+        "notes": "Identity verified against PubChem CID 23266 on 2026-09-29. No comparative human absorption evidence was reviewed, so this identity-only form receives no premium over the parent conservative baseline.",
+        "absorption_structured": {
+          "value": 0.65,
+          "range_low": 0.55,
+          "range_high": 0.75,
+          "quality": "good"
+        },
+        "absorption": "good"
+      },
+      "magnesium trisilicate": {
+        "bio_score": 8,
+        "aliases": [
+          "magnesium trisilicate"
+        ],
+        "notes": "Identity verified against PubChem CID 5311266 on 2026-09-29. No comparative human absorption evidence was reviewed, so this identity-only form receives no premium over the parent conservative baseline.",
+        "absorption_structured": {
+          "value": 0.65,
+          "range_low": 0.55,
+          "range_high": 0.75,
+          "quality": "good"
+        },
+        "absorption": "good"
+      },
+      "calcium silicate (as silicon source)": {
+        "bio_score": 8,
+        "aliases": [
+          "silicon from calcium silicate"
+        ],
+        "notes": "Identity verified against PubChem CID 73415800 on 2026-09-29. No comparative human absorption evidence was reviewed, so this identity-only form receives no premium over the parent conservative baseline.",
+        "source_form_aliases": [
+          "calcium silicate"
+        ],
+        "absorption_structured": {
+          "value": 0.65,
+          "range_low": 0.55,
+          "range_high": 0.75,
+          "quality": "good"
+        },
+        "absorption": "good"
       }
     },
     "match_rules": {
@@ -48771,7 +48840,7 @@
         }
       },
       "calamari oil (unspecified)": {
-        "bio_score": 12,
+        "bio_score": 11,
         "absorption": "form unspecified; default to general marine TG/PL class",
         "consumer_note": "This listing identifies oil from calamari without stating its fatty-acid profile or processing format. The label does not provide enough form detail to distinguish among calamari-oil preparations.",
         "consumer_note_review": {
@@ -52022,7 +52091,7 @@
         }
       },
       "herring roe extract (unspecified)": {
-        "bio_score": 12,
+        "bio_score": 11,
         "absorption": "unknown",
         "consumer_note": "This label names herring-roe extract without identifying concentration, lipid structure, or standardization.",
         "consumer_note_review": {
@@ -55689,7 +55758,7 @@
         }
       },
       "beta-carotene (unspecified)": {
-        "bio_score": 6,
+        "bio_score": 5,
         "absorption": "5-25%",
         "consumer_note": "The label identifies beta-carotene without stating its source or delivery system. Beta-carotene is a provitamin A carotenoid whose conversion to vitamin A varies among people.",
         "consumer_note_review": {
@@ -55708,12 +55777,6 @@
           "range_low": 0.05,
           "range_high": 0.25,
           "quality": "low"
-        },
-        "unknown_floor": {
-          "override": true,
-          "rationale": "Vitamin A family policy: undisclosed beta-carotene equals the beadlet form (tests/test_vitamin_a_family_recalibration_20260602.py).",
-          "reviewed_by": "Vitamin A / provitamin carotenoid reconciliation (commit 99fd5179)",
-          "reviewed_on": "2026-06-02"
         }
       }
     },
@@ -56691,7 +56754,7 @@
         }
       },
       "capsaicin (unspecified)": {
-        "bio_score": 7,
+        "bio_score": 6,
         "absorption": "good (capsaicinoid class baseline; passive diffusion)",
         "consumer_note": "This label names capsaicin without identifying capsicum source, extract standardization, purity, or delivery format.",
         "consumer_note_review": {
@@ -56711,12 +56774,6 @@
           "range_low": 0.5,
           "range_high": 0.7,
           "quality": "good"
-        },
-        "unknown_floor": {
-          "override": true,
-          "rationale": "Cayenne batch lock: capsaicin (unspecified) is the reference the cayenne entry sits one below (tests/test_iqm_track_BEF_aliases_2026_05_23.py).",
-          "reviewed_by": "IQM track B/E/F alias batch (commit 17bc1fdb)",
-          "reviewed_on": "2026-05-23"
         }
       }
     },
@@ -64089,7 +64146,7 @@
         }
       },
       "button mushroom (unspecified)": {
-        "bio_score": 5,
+        "bio_score": 7,
         "absorption": "low/unspecified mushroom form quality; disclosed fruiting-body or standardized extract required for higher confidence",
         "consumer_note": "This label names button mushroom without identifying fruiting body, mycelium, powder, extract, or standardization.",
         "consumer_note_review": {
@@ -64186,7 +64243,7 @@
         }
       },
       "auricularia (unspecified)": {
-        "bio_score": 5,
+        "bio_score": 8,
         "absorption": "low/unspecified mushroom form quality; disclosed fruiting-body or standardized extract required for higher confidence",
         "consumer_note": "This label names Auricularia without identifying species, fruiting body, mycelium, powder, extract, or standardization.",
         "consumer_note_review": {
@@ -64607,7 +64664,7 @@
     "cui_note": "",
     "forms": {
       "yohimbe (unspecified)": {
-        "bio_score": 5,
+        "bio_score": 4,
         "aliases": [
           "yohimbe",
           "yohimbe bark extract",
@@ -64636,12 +64693,6 @@
           "range_low": 0.1,
           "range_high": 0.3,
           "quality": "low"
-        },
-        "unknown_floor": {
-          "override": true,
-          "rationale": "Yohimbine standardization identifies assay content, not a proven absorption advantage; the standardized and undisclosed extracts retain the same conservative class value.",
-          "reviewed_by": "DSLD form closure audit 2026-09-27",
-          "reviewed_on": "2026-09-27"
         }
       },
       "yohimbe extract standardized to yohimbine alkaloids": {
@@ -65135,7 +65186,7 @@
     "rxcui": "1310845",
     "forms": {
       "lactobacillus helveticus (unspecified)": {
-        "bio_score": 12,
+        "bio_score": 11,
         "absorption": "good",
         "consumer_note": "This label identifies L. helveticus at species level without a strain code.",
         "consumer_note_review": {
@@ -65520,7 +65571,7 @@
     "rxcui": "1311119",
     "forms": {
       "bacillus subtilis (unspecified)": {
-        "bio_score": 11,
+        "bio_score": 10,
         "absorption": "good spore survivability; strain not specified",
         "consumer_note": "This label identifies B. subtilis at species level without a strain code.",
         "consumer_note_review": {
@@ -65545,12 +65596,6 @@
           "range_low": 0.65,
           "range_high": 0.85,
           "quality": "good"
-        },
-        "unknown_floor": {
-          "override": true,
-          "rationale": "Species-only probiotic calibration: a species-only row is scored separately from named strains (tests/test_iqm_probiotic_species_only_calibration.py; score reconciliation manifest audit_locked_correction).",
-          "reviewed_by": "IQM probiotic species-only calibration (commit 71656f2b)",
-          "reviewed_on": "2026-06-06"
         }
       },
       "bacillus subtilis de111": {
@@ -65676,7 +65721,7 @@
     "cui": "C1468787",
     "forms": {
       "bacillus indicus (unspecified)": {
-        "bio_score": 12,
+        "bio_score": 11,
         "absorption": "very good",
         "consumer_note": "This label identifies B. indicus at species level without a strain code.",
         "consumer_note_review": {
@@ -68775,7 +68820,7 @@
     "dosage_importance": 2.0,
     "forms": {
       "vanadium (unspecified)": {
-        "bio_score": 4,
+        "bio_score": 6,
         "absorption": "low (~5%)",
         "consumer_note": "This label names vanadium without identifying oxidation state, salt, complex, or elemental amount.",
         "consumer_note_review": {
@@ -68856,6 +68901,126 @@
           "bis glycinato oxovanadium"
         ],
         "dosage_importance": 1.5
+      },
+      "vanadyl sulfate (as vanadium source)": {
+        "bio_score": 7,
+        "source_form_aliases": [
+          "vanadyl sulfate",
+          "vanadium sulfate",
+          "VOSO4",
+          "VOSO₄"
+        ],
+        "notes": "Vanadium nutrient declared from vanadyl sulfate. Parent-scoped source form only; exact compound identity remains with vanadyl_sulfate. No score premium over the reviewed vanadium class baseline.",
+        "absorption_structured": {
+          "value": 0.05,
+          "range_low": 0.01,
+          "range_high": 0.1,
+          "quality": "low"
+        },
+        "absorption": "low (~5%)",
+        "aliases": [
+          "vanadium from vanadyl sulfate"
+        ]
+      },
+      "bis(maltolato)oxovanadium (as vanadium source)": {
+        "bio_score": 7,
+        "source_form_aliases": [
+          "BMOV",
+          "bis maltolato oxovanadium",
+          "maltol vanadium"
+        ],
+        "notes": "Vanadium nutrient declared from BMOV. Parent-scoped source form only; exact compound identity remains with vanadyl_sulfate. No score premium over the reviewed vanadium class baseline.",
+        "absorption_structured": {
+          "value": 0.05,
+          "range_low": 0.01,
+          "range_high": 0.1,
+          "quality": "low"
+        },
+        "absorption": "low (~5%)",
+        "aliases": [
+          "vanadium from bmov"
+        ]
+      },
+      "bis(picolinato)oxovanadium (as vanadium source)": {
+        "bio_score": 7,
+        "source_form_aliases": [
+          "BPOV",
+          "bis picolinato oxovanadium",
+          "vanadium picolinate"
+        ],
+        "notes": "Vanadium nutrient declared from BPOV. Parent-scoped source form only; exact compound identity remains with vanadyl_sulfate. No score premium over the reviewed vanadium class baseline.",
+        "absorption_structured": {
+          "value": 0.05,
+          "range_low": 0.01,
+          "range_high": 0.1,
+          "quality": "low"
+        },
+        "absorption": "low (~5%)",
+        "aliases": [
+          "vanadium from bpov"
+        ]
+      },
+      "vanadium amino acid chelate": {
+        "bio_score": 7,
+        "source_form_aliases": [
+          "vanadium amino acid chelate",
+          "vanadium glycinate",
+          "Vanadium Nicotinate Glycinate Chelate",
+          "Vanadium Krebs Cycle Chelates",
+          "vanadium chelate"
+        ],
+        "notes": "Generic disclosed vanadium amino-acid chelate. Parent-scoped source form only; exact compound identity remains with vanadyl_sulfate. No score premium over the reviewed vanadium class baseline.",
+        "absorption_structured": {
+          "value": 0.05,
+          "range_low": 0.01,
+          "range_high": 0.1,
+          "quality": "low"
+        },
+        "absorption": "low (~5%)",
+        "aliases": [
+          "vanadium amino acid chelate",
+          "vanadium glycinate",
+          "vanadium chelate"
+        ]
+      },
+      "vanadium aspartate (as vanadium source)": {
+        "bio_score": 7,
+        "source_form_aliases": [
+          "vanadium aspartate",
+          "vanadyl aspartate",
+          "vanadium L-aspartate",
+          "vanadium aspartate chelate"
+        ],
+        "notes": "Vanadium nutrient declared from an aspartate source. Parent-scoped source form only; exact compound identity remains with vanadyl_sulfate. No score premium over the reviewed vanadium class baseline.",
+        "absorption_structured": {
+          "value": 0.05,
+          "range_low": 0.01,
+          "range_high": 0.1,
+          "quality": "low"
+        },
+        "absorption": "low (~5%)",
+        "aliases": [
+          "vanadium from vanadium aspartate"
+        ]
+      },
+      "vanadium citrate (as vanadium source)": {
+        "bio_score": 7,
+        "source_form_aliases": [
+          "vanadium citrate",
+          "vanadyl citrate",
+          "vanadium citrate chelate"
+        ],
+        "notes": "Vanadium nutrient declared from a citrate source. Parent-scoped source form only; exact compound identity remains with vanadyl_sulfate. No score premium over the reviewed vanadium class baseline.",
+        "absorption_structured": {
+          "value": 0.05,
+          "range_low": 0.01,
+          "range_high": 0.1,
+          "quality": "low"
+        },
+        "absorption": "low (~5%)",
+        "aliases": [
+          "vanadium from vanadium citrate"
+        ]
       }
     },
     "cui": "C0042306",
@@ -71296,7 +71461,7 @@
     "cui": "C0331030",
     "forms": {
       "english ivy leaf extract (unspecified)": {
-        "bio_score": 8,
+        "bio_score": 9,
         "absorption": "moderate — saponin glycosides hydrolyzed in vivo to alpha-hederin",
         "consumer_note": "This label names English-ivy leaf extract without identifying extract ratio or hederacoside standardization.",
         "consumer_note_review": {
@@ -71385,7 +71550,7 @@
     "cui": "C0874047",
     "forms": {
       "horse chestnut seed (unspecified)": {
-        "bio_score": 8,
+        "bio_score": 9,
         "absorption": "moderate — saponin glycosides (aescin) absorption",
         "consumer_note": "This label names horse-chestnut seed without identifying powder, extract, or aescin standardization.",
         "consumer_note_review": {
@@ -72335,7 +72500,7 @@
     "rxcui": 1311629,
     "forms": {
       "nickel (unspecified)": {
-        "bio_score": 7.0,
+        "bio_score": 6,
         "absorption": "moderate",
         "absorption_structured": {
           "quality": "moderate",
@@ -72353,13 +72518,7 @@
         "aliases": [
           "Nickel",
           "Ni"
-        ],
-        "unknown_floor": {
-          "override": true,
-          "rationale": "Nickel sulfate has no reviewed form-specific supplement absorption advantage; disclosed and undisclosed nickel retain the same conservative ultratrace baseline.",
-          "reviewed_by": "DSLD form closure audit 2026-09-27",
-          "reviewed_on": "2026-09-27"
-        }
+        ]
       },
       "nickel sulfate": {
         "bio_score": 7.0,
@@ -72422,7 +72581,7 @@
     "rxcui": 10603,
     "forms": {
       "tin (unspecified)": {
-        "bio_score": 7.0,
+        "bio_score": 6,
         "absorption": "moderate",
         "absorption_structured": {
           "quality": "moderate",
@@ -72441,13 +72600,7 @@
           "Tin",
           "Sn",
           "tin chloride"
-        ],
-        "unknown_floor": {
-          "override": true,
-          "rationale": "Stannous chloride has no reviewed form-specific supplement absorption advantage; disclosed and undisclosed tin retain the same conservative ultratrace baseline.",
-          "reviewed_by": "DSLD form closure audit 2026-09-27",
-          "reviewed_on": "2026-09-27"
-        }
+        ]
       },
       "stannous chloride": {
         "bio_score": 7.0,

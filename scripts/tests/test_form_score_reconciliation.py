@@ -62,17 +62,18 @@ def test_reconciliation_manifest_is_complete_and_matches_iqm():
 
 def _superseded_by_unknown_floor(iqm, row):
     """A legacy-restored unspecified score later governed by the unknown-form
-    floor (2026-09-25): the parent's authored unspecified form, no reviewed
-    override, now exactly lowest eligible named bio_score - 1."""
-    from scoring_reference_resolver import authored_unknown_form, unknown_floor, unknown_floor_override
+    floor (Q38): the parent's authored unspecified form now exactly equals
+    lowest eligible named bio_score - 1."""
+    from scoring_reference_resolver import authored_unknown_form, unknown_floor
     entry = iqm[row["ingredient_key"]]
     authored = authored_unknown_form(entry)
     floor = unknown_floor(entry)
     return bool(
-        row["provenance_status"] == "legacy_curated_unvalidated"
-        and authored and authored[0] == row["form_key"]
-        and not unknown_floor_override(authored[1])
-        and floor and authored[1]["bio_score"] == floor[0]
+        authored and authored[0] == row["form_key"]
+        and (
+            (floor and authored[1]["bio_score"] == floor[0])
+            or (floor is None and authored[1]["bio_score"] == 11)
+        )
     )
 
 

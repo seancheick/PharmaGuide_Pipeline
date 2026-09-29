@@ -2,11 +2,10 @@
 
 - A form the label does not disclose is worth the lowest *eligible* named
   bio_score minus 1 (scoring_reference_resolver.unknown_form_quality). The
-  IQM owns eligibility (form field ``unknown_floor``): non-functional
+  IQM owns eligibility (``parent_relationship``): non-functional
   analogs, degradation products, wrong stereoisomers, different compounds and
   non-nutrient sources never set the floor. An authored unspecified form
-  supplies the identity; its value may sit above the floor only with a
-  reviewed override, which the integrity gate checks.
+  supplies the identity and stores exactly that mechanical floor.
 - With no authored unspecified form the result is identity-neutral: no
   form_id, so no named form's notes, evidence or copy can attach.
 - A form the label names that IQM does not recognize is not nondisclosure:
@@ -23,7 +22,6 @@ import pytest
 
 from scoring_reference_resolver import (
     unknown_floor,
-    unknown_floor_override,
     unknown_form_quality,
 )
 
@@ -67,8 +65,8 @@ def test_an_authored_unspecified_form_is_capped_at_the_floor():
     # calcium (unspecified) was 6; the plainest eligible calcium form is the
     # oxide at 4, so nondisclosure is worth 3.
     unknown = unknown_form_quality(IQM['calcium'])
-    assert (unknown['form_id'], unknown['bio_score']) == ('calcium (unspecified)', 3.0)
-    assert unknown_floor(IQM['calcium']) == (3.0, 'calcium oxide')
+    assert (unknown['form_id'], unknown['bio_score']) == ('calcium (unspecified)', 2.0)
+    assert unknown_floor(IQM['calcium']) == (2.0, 'calcium acetate')
 
 
 def test_an_ineligible_form_never_sets_the_floor():
@@ -94,52 +92,39 @@ def test_a_source_preparation_is_not_an_eligible_named_form():
     assert unknown_form_quality(parent)['bio_score'] == 7.0
 
 
-def test_nondisclosure_is_never_worth_more_than_the_floor_without_an_override():
+def test_nondisclosure_is_always_worth_the_floor_even_if_stale_data_is_higher():
     parent = {'forms': {'plain': {'bio_score': 8},
                         'x (unspecified)': {'bio_score': 12}}}
     assert unknown_form_quality(parent)['bio_score'] == 7.0
-    reviewed = copy.deepcopy(parent)
-    reviewed['forms']['x (unspecified)']['unknown_floor'] = {
-        'override': True, 'rationale': 'r', 'reviewed_by': 'b', 'reviewed_on': '2026-09-25'}
-    assert unknown_form_quality(reviewed)['bio_score'] == 12.0
-    incomplete = copy.deepcopy(reviewed)
-    incomplete['forms']['x (unspecified)']['unknown_floor']['reviewed_by'] = ''
-    assert unknown_form_quality(incomplete)['bio_score'] == 7.0
 
 
-def test_every_shipped_override_is_documented_and_every_unspecified_form_is_at_or_below_its_floor():
+def test_every_shipped_unspecified_form_equals_its_floor():
     from scoring_reference_resolver import authored_unknown_form
-    overrides = []
     for key, entry in IQM.items():
         if key == '_metadata' or not isinstance(entry, dict):
             continue
         authored, floor = authored_unknown_form(entry), unknown_floor(entry)
         if not authored or not floor:
             continue
-        if unknown_floor_override(authored[1]):
-            overrides.append(key)
-        else:
-            assert authored[1]['bio_score'] <= floor[0], (key, authored[1]['bio_score'], floor)
-    assert sorted(overrides) == sorted([
-        'magnesium', 'zinc', 'iron', 'vitamin_a', 'beta_carotene', 'bacillus_subtilis',
-        'phosphatidylcholine', 'rhodiola', 'ginkgo', 'msm', 'phosphatidylserine',
-        'acetyl_l_carnitine', 'creatine_monohydrate', 'vanadyl_sulfate', 'capsaicin',
-        # These label-identity forms have no reviewed absorption premium over
-        # their parent baseline. The override prevents disclosure alone from
-        # manufacturing a quality advantage.
-        'nickel', 'tin', 'yohimbe'])
+        assert authored[1]['bio_score'] == floor[0], (key, authored[1]['bio_score'], floor)
+        assert 'unknown_floor' not in authored[1]
 
 
-def test_the_integrity_gate_rejects_an_undocumented_value_above_the_floor():
+def test_the_integrity_gate_rejects_any_value_off_the_floor_and_retired_override():
     from db_integrity_sanity_check import check_iqm
     mutated = copy.deepcopy(IQM)
     mutated['calcium']['forms']['calcium (unspecified)']['bio_score'] = 9
-    del mutated['magnesium']['forms']['magnesium (unspecified)']['unknown_floor']['reviewed_by']
+    mutated['magnesium']['forms']['magnesium (unspecified)']['unknown_floor'] = {'override': True}
+    mutated['nicotinamide_riboside']['forms']['nicotinamide riboside (unspecified)']['bio_score'] = 12
     findings = []
     check_iqm(findings, mutated, 'ingredient_quality_map.json')
     codes = {(f.path, f.issue) for f in findings if f.severity == 'error'}
-    assert ('calcium.forms.calcium (unspecified).bio_score', 'unspecified_above_floor') in codes
-    assert ('magnesium.forms.magnesium (unspecified).unknown_floor', 'invalid_unknown_floor') in codes
+    assert ('calcium.forms.calcium (unspecified).bio_score', 'unspecified_not_mechanical_floor') in codes
+    assert ('magnesium.forms.magnesium (unspecified).unknown_floor', 'retired_field_present') in codes
+    assert (
+        'nicotinamide_riboside.forms.nicotinamide riboside (unspecified).bio_score',
+        'unsupported_unspecified_excellent',
+    ) in codes
 
 
 def test_the_integrity_gate_rejects_an_unknown_relationship_and_a_retired_floor_mark():
@@ -151,7 +136,7 @@ def test_the_integrity_gate_rejects_an_unknown_relationship_and_a_retired_floor_
     check_iqm(findings, mutated, 'ingredient_quality_map.json')
     codes = {(f.path, f.issue) for f in findings if f.severity == 'error'}
     assert ('l_tyrosine.forms.d-tyrosine.parent_relationship', 'enum_value_not_supported') in codes
-    assert ('iron.forms.iron oxide.unknown_floor', 'invalid_unknown_floor') in codes
+    assert ('iron.forms.iron oxide.unknown_floor', 'retired_field_present') in codes
 
 
 def test_the_per_form_checks_run_on_every_form_not_only_the_last():
@@ -617,6 +602,10 @@ def test_a_held_source_or_marker_token_leaves_the_row_unheld(enricher, parent, l
     ('calcium', 'Calcium', {'name': 'Calcium Undecylenate', 'category': 'mineral', 'ingredientGroup': 'Calcium'}, 'calcium (unspecified)'),
     ('calcium', 'Calcium', {'name': 'Calcium Stearate', 'category': 'mineral', 'ingredientGroup': 'Calcium'}, 'calcium (unspecified)'),
     ('calcium', 'Calcium', {'name': 'Calcium Silicate', 'category': 'other', 'ingredientGroup': 'Calcium Silicate'}, 'calcium (unspecified)'),
+    ('calcium', 'Calcium', {'name': 'Calcium Acetate', 'category': 'mineral', 'ingredientGroup': 'Calcium'}, 'calcium acetate'),
+    ('calcium', 'Calcium', {'name': 'Calcium Sulfate', 'category': 'mineral', 'ingredientGroup': 'Calcium'}, 'calcium sulfate'),
+    ('calcium', 'Calcium', {'name': 'Calcium Chloride', 'category': 'mineral', 'ingredientGroup': 'Calcium'}, 'calcium chloride'),
+    ('calcium', 'Calcium', {'name': 'Calcium Glycerophosphate', 'category': 'mineral', 'ingredientGroup': 'Calcium'}, 'calcium glycerophosphate'),
     ('calcium', 'Calcium', {'name': 'Calcium Magnesium Phytate', 'category': 'mineral', 'ingredientGroup': 'Calcium'}, 'calcium (unspecified)'),
     ('calcium', 'Calcium', {'name': 'Calcium-Magnesium Inositol Hexaphosphate', 'category': 'mineral', 'ingredientGroup': 'Calcium'}, 'calcium (unspecified)'),
     ('calcium', 'Calcium', {'name': 'Calcium Beta-Hydroxy-Beta-Methylbutyrate Monohydrate', 'category': 'mineral', 'ingredientGroup': 'Calcium'}, 'calcium (unspecified)'),
@@ -640,6 +629,15 @@ def test_a_held_source_or_marker_token_leaves_the_row_unheld(enricher, parent, l
     ('magnesium', 'Magnesium', {'name': 'Magnesium Lysinate', 'category': 'mineral', 'ingredientGroup': 'Magnesium'}, 'magnesium amino acid chelate'),
     ('magnesium', 'Magnesium', {'name': 'Calcium Magnesium Phytate', 'category': 'mineral', 'ingredientGroup': 'Calcium'}, 'magnesium (unspecified)'),
     ('magnesium', 'Magnesium', {'name': 'Magnesium D-Aspartate', 'category': _M, 'prefix': 'as', 'ingredientGroup': 'Magnesium'}, 'magnesium (unspecified)'),
+    ('magnesium', 'Magnesium', {'name': 'Magnesium Glycerophosphate', 'category': 'mineral', 'ingredientGroup': 'Magnesium'}, 'magnesium glycerophosphate'),
+    ('potassium', 'Potassium', {'name': 'Potassium Iodate', 'category': 'mineral', 'ingredientGroup': 'Potassium'}, 'potassium iodate'),
+    ('silicon', 'Silicon', {'name': 'Sodium Metasilicate', 'category': 'mineral', 'ingredientGroup': 'Silicon'}, 'sodium metasilicate'),
+    ('silicon', 'Silicon', {'name': 'Magnesium Trisilicate', 'category': 'mineral', 'ingredientGroup': 'Silicon'}, 'magnesium trisilicate'),
+    ('silicon', 'Silicon', {'name': 'Calcium Silicate', 'category': 'mineral', 'ingredientGroup': 'Silicon'}, 'calcium silicate (as silicon source)'),
+    ('vanadium', 'Vanadium', {'name': 'Vanadyl Sulfate', 'category': 'mineral', 'ingredientGroup': 'Vanadium'}, 'vanadyl sulfate (as vanadium source)'),
+    ('vanadium', 'Vanadium', {'name': 'Vanadium Aspartate', 'category': 'mineral', 'ingredientGroup': 'Vanadium'}, 'vanadium aspartate (as vanadium source)'),
+    ('vanadium', 'Vanadium', {'name': 'Vanadium Citrate', 'category': 'mineral', 'ingredientGroup': 'Vanadium'}, 'vanadium citrate (as vanadium source)'),
+    ('vanadium', 'Vanadium', {'name': 'Vanadium Amino Acid Chelate', 'category': 'mineral', 'ingredientGroup': 'Vanadium'}, 'vanadium amino acid chelate'),
     ('zinc', 'Zinc', {'name': 'OptiZinc(R) Brand MonoMethionine-bound Zinc', 'category': _M, 'prefix': 'as', 'ingredientGroup': 'Zinc'}, 'zinc monomethionine'),
     ('zinc', 'Zinc', {'name': 'L-Monomethionine', 'category': _M, 'prefix': 'as', 'ingredientGroup': 'Zinc'}, 'zinc monomethionine'),
     ('zinc', 'Zinc', {'name': 'Zinc Krebs Cycle Chelates', 'category': 'mineral', 'ingredientGroup': 'Zinc'}, 'zinc (unspecified)'),
@@ -873,6 +871,14 @@ def test_form_tokens_are_judged_under_the_parent_the_row_is_scored_as(enricher, 
     ('Acai Berry Extract', 'Acai Berry', {'name': 'Euterpe badiocarpa Berry Extract', 'category': _B, 'ingredientGroup': 'Acai'}, 'acai_berry'),
     ('Sarsaparilla Root Extract', 'Sarsaparilla', {'name': 'Smilax china Root Extract', 'category': _B, 'ingredientGroup': 'Chinese Smilax'}, 'sarsaparilla'),
     ('Pine Bark Extract', 'Pine Bark Extract', {'name': 'Pinus massoniana Bark Extract', 'category': _B, 'ingredientGroup': 'Masson Pine'}, 'pine_bark_extract'),
+    ('White Willow Bark', 'White Willow Bark', {'name': 'Salix babylonica Bark', 'category': _B, 'ingredientGroup': 'Willow'}, 'white_willow_bark'),
+    ('Oat Straw Extract', 'Oat Straw', {'name': 'Avena sativa Seed Extract', 'category': _B, 'ingredientGroup': 'Oats'}, 'oat_straw'),
+    ('Goji Berry Extract', 'Goji Berry', {'name': 'Lycium chinense Fruit Extract', 'category': _B, 'ingredientGroup': 'Goji'}, 'goji_berry'),
+    ('Pumpkin Seed Oil', 'Pumpkin Seed Oil', {'name': 'Cucurbita moschata Seed Oil', 'category': _B, 'ingredientGroup': 'Pumpkin'}, 'pumpkin_seed_oil'),
+    ('Celery Seed', 'Celery Seed', {'name': 'Apium graveolens Stalk Juice', 'category': _B, 'ingredientGroup': 'Celery'}, 'celery_seed'),
+    ('Psyllium', 'Psyllium', {'name': 'Plantago asiatica Seed', 'category': _B, 'ingredientGroup': 'Plantago'}, 'psyllium'),
+    ('Grape Seed Extract', 'Grape Seed', {'name': 'Vitis vinifera Skin', 'category': _B, 'ingredientGroup': 'Grape'}, 'grape_seed_extract'),
+    ('Oat Straw', 'Oat Straw', {'name': 'Wild Green Oat Aerial Parts', 'category': _B, 'ingredientGroup': 'Oats'}, 'oat_straw'),
 ])
 def test_a_different_species_under_the_row_parent_stays_held_for_review(enricher, label, std_name, form,
                                                                        cleaner_canonical_id):

@@ -173,11 +173,6 @@ IDENTITY_MISMATCH_RELATIONSHIPS = frozenset({"wrong_stereoisomer", "different_co
 # This nutrient in a form that delivers none of it: a matching row is scored
 # at its own IQM Formulation quality, with no parent Dose or Evidence credit.
 NON_DELIVERING_RELATIONSHIPS = PARENT_RELATIONSHIPS - IDENTITY_MISMATCH_RELATIONSHIPS
-# A reviewed override lets an authored unspecified form sit above the floor:
-# ``unknown_floor: {"override": true, "rationale", "reviewed_by", "reviewed_on"}``.
-UNKNOWN_FLOOR_OVERRIDE_FIELDS = ("rationale", "reviewed_by", "reviewed_on")
-
-
 def _raw_form_bio(parent: Dict[str, Any], form: Dict[str, Any]) -> Optional[float]:
     try:
         bio = float(form.get("bio_score"))
@@ -216,12 +211,23 @@ def floor_eligible(form: Dict[str, Any]) -> bool:
     return parent_relationship(form) is None
 
 
-def unknown_floor_override(form: Dict[str, Any]) -> bool:
-    """A complete reviewed override on an authored unspecified form."""
-    floor = form.get("unknown_floor") or {}
-    return floor.get("override") is True and all(
-        str(floor.get(field) or "").strip() for field in UNKNOWN_FLOOR_OVERRIDE_FIELDS
-    )
+def _nondisclosure_floor_eligible(form: Dict[str, Any]) -> bool:
+    """Whether a named form may propagate its score to nondisclosure.
+
+    Legacy Excellent forms may remain while their evidence backlog is being
+    retired, but the evidence gate forbids using that grandfathered score to
+    create a new Excellent score on an unspecified form.
+    """
+    if not floor_eligible(form):
+        return False
+    bio = _raw_form_bio({}, form)
+    # A score of 12 produces a non-Excellent floor of 11 and therefore does
+    # not propagate the grandfathered Excellent claim. Scores 13+ would.
+    if bio is None or bio < 13:
+        return True
+    from iqm_form_evidence import validate_iqm_form
+
+    return validate_iqm_form(form, label="nondisclosure floor candidate", excellent=True) == []
 
 
 def authored_unknown_form(parent: Dict[str, Any]) -> Optional[Tuple[str, Dict[str, Any]]]:
@@ -247,7 +253,8 @@ def unknown_floor(parent: Dict[str, Any]) -> Optional[Tuple[float, str]]:
     named = sorted(
         (_raw_form_bio(parent, form), name)
         for name, form in _candidate_forms(parent).items()
-        if (not authored or name != authored[0]) and floor_eligible(form)
+        if (not authored or name != authored[0])
+        and (floor_eligible(form) if authored is None else _nondisclosure_floor_eligible(form))
     )
     if not named:
         return None
@@ -259,9 +266,9 @@ def unknown_form_quality(parent: Dict[str, Any]) -> Optional[Dict[str, Any]]:
     the lowest eligible named bio_score minus 1, so nondisclosure never
     scores above the plainest real form.
 
-    - An authored unspecified form supplies the identity. Its own bio_score
-      counts only at or below that floor, or above it with a reviewed
-      override (``unknown_floor_override``).
+    - An authored unspecified form supplies the identity and stores exactly
+      that floor. Q38 retired historical and clinical overrides so the same
+      nondisclosure rule applies to every parent.
     - With no authored form the result is identity-neutral: ``form_id`` is
       None, so no named form's aliases, absorption, notes, identifiers,
       evidence or consumer copy can attach to it.
@@ -273,12 +280,17 @@ def unknown_form_quality(parent: Dict[str, Any]) -> Optional[Dict[str, Any]]:
     authored = authored_unknown_form(parent)
     floor = unknown_floor(parent)
     if authored:
-        authored_bio = _raw_form_bio(parent, authored[1])
-        if floor is None or unknown_floor_override(authored[1]) or authored_bio <= floor[0]:
-            bio, basis = authored_bio, "authored_unspecified"
-        else:
-            bio, basis = floor[0], "authored_capped_at_floor"
-        return {"form_id": authored[0], "form": authored[1], "bio_score": bio, "basis": basis}
+        bio = floor[0] if floor is not None else _raw_form_bio(parent, authored[1])
+        if floor is None and bio is not None and bio >= 12:
+            from iqm_form_evidence import validate_iqm_form
+
+            if validate_iqm_form(
+                authored[1], label="authored unspecified form", excellent=True
+            ):
+                bio = 11.0
+        return {"form_id": authored[0], "form": authored[1], "bio_score": bio,
+                "basis": ("authored_unspecified_mechanical_floor" if floor is not None
+                          else "authored_unspecified_evidence_ceiling")}
     if floor is None:
         return None
     return {"form_id": None, "form": None, "bio_score": floor[0],

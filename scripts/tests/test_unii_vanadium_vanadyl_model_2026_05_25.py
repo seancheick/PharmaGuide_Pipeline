@@ -101,7 +101,7 @@ def test_vanadyl_sulfate_forms_obey_class_equivalence_bio_score_floor():
         "vanadyl sulfate (VOSO4)": 7,
         "bis(maltolato)oxovanadium (BMOV)": 7,
         "bis(picolinato)oxovanadium (BPOV)": 7,
-        "vanadyl sulfate (unspecified)": 7,
+        "vanadyl sulfate (unspecified)": 6,
         "vanadium aspartate": 7,
         "vanadium citrate": 7,
     }

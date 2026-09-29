@@ -27,10 +27,10 @@ def _al(iqm, p, f):
 
 # ── flag + display-value consistency ─────────────────────────────────────────
 def test_msm_unspecified_value_aligned(iqm):
-    # MSM = single compound (dimethyl sulfone); unspecified must match exact MSM
+    # Q38 applies even when the label omits the form of a single compound.
     ex = iqm["msm"]["forms"]["MSM (methylsulfonylmethane)"]
     un = iqm["msm"]["forms"]["msm (methylsulfonylmethane) (unspecified)"]
-    assert ex["bio_score"] == un["bio_score"]
+    assert un["bio_score"] == ex["bio_score"] - 1
     assert un["absorption_structured"]["value"] == ex["absorption_structured"]["value"]
 
 

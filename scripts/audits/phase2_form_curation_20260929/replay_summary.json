@@ -1,0 +1,122 @@
+{
+  "baseline_head": "30c4c46a59e4759fde3998540fe210a163a95508",
+  "raw_label_count": 14,
+  "changed_product_count": 12,
+  "held_to_scored_count": 11,
+  "already_scored_changes": 1,
+  "unchanged_count": 2,
+  "products": [
+    {
+      "dsld_id": "179309",
+      "baseline_status": "not_scored",
+      "candidate_status": "scored",
+      "baseline_score": null,
+      "candidate_score": 78.3,
+      "route": "multi_or_prenatal"
+    },
+    {
+      "dsld_id": "182730",
+      "baseline_status": "scored",
+      "candidate_status": "scored",
+      "baseline_score": 85.7,
+      "candidate_score": 85.8,
+      "route": "multi_or_prenatal"
+    },
+    {
+      "dsld_id": "239462",
+      "baseline_status": "not_scored",
+      "candidate_status": "scored",
+      "baseline_score": null,
+      "candidate_score": 62.1,
+      "route": "multi_or_prenatal"
+    },
+    {
+      "dsld_id": "246080",
+      "baseline_status": "not_scored",
+      "candidate_status": "scored",
+      "baseline_score": null,
+      "candidate_score": 82.5,
+      "route": "multi_or_prenatal"
+    },
+    {
+      "dsld_id": "249518",
+      "baseline_status": "not_scored",
+      "candidate_status": "scored",
+      "baseline_score": null,
+      "candidate_score": 77.1,
+      "route": "multi_or_prenatal"
+    },
+    {
+      "dsld_id": "269842",
+      "baseline_status": "not_scored",
+      "candidate_status": "scored",
+      "baseline_score": null,
+      "candidate_score": 67.5,
+      "route": "generic"
+    },
+    {
+      "dsld_id": "288678",
+      "baseline_status": "not_scored",
+      "candidate_status": "scored",
+      "baseline_score": null,
+      "candidate_score": 54.0,
+      "route": "multi_or_prenatal"
+    },
+    {
+      "dsld_id": "294050",
+      "baseline_status": "not_scored",
+      "candidate_status": "scored",
+      "baseline_score": null,
+      "candidate_score": 85.6,
+      "route": "multi_or_prenatal"
+    },
+    {
+      "dsld_id": "311207",
+      "baseline_status": "not_scored",
+      "candidate_status": "scored",
+      "baseline_score": null,
+      "candidate_score": 60.9,
+      "route": "generic"
+    },
+    {
+      "dsld_id": "313913",
+      "baseline_status": "not_scored",
+      "candidate_status": "scored",
+      "baseline_score": null,
+      "candidate_score": 79.1,
+      "route": "multi_or_prenatal"
+    },
+    {
+      "dsld_id": "337226",
+      "baseline_status": "not_scored",
+      "candidate_status": "scored",
+      "baseline_score": null,
+      "candidate_score": 51.3,
+      "route": "generic"
+    },
+    {
+      "dsld_id": "83231",
+      "baseline_status": "not_scored",
+      "candidate_status": "scored",
+      "baseline_score": null,
+      "candidate_score": 77.5,
+      "route": "multi_or_prenatal"
+    }
+  ],
+  "full_local_artifacts": "/Users/seancheick/pg_quality/phase2_20260929/run4",
+  "release_readiness_replay": {
+    "raw_label_count": 143,
+    "changed_record_count": 39,
+    "not_scored_to_scored_count": 6,
+    "scored_to_not_scored_count": 0,
+    "numeric_score_change_count": 28,
+    "numeric_score_decrease_count": 24,
+    "numeric_score_increase_count": 4,
+    "numeric_score_delta_min": -2.3,
+    "numeric_score_delta_max": 0.7,
+    "numeric_score_delta_mean": -0.54,
+    "changed_pillar": "formulation",
+    "route_change_count": 0,
+    "local_delta": "/Users/seancheick/pg_quality/phase2_20260929/rr143_delta.json"
+  }
+}

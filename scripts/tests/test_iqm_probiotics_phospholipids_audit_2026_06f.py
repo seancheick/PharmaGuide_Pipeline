@@ -40,7 +40,7 @@ SCORE_TARGETS = [
     ("choline", "choline chloride", 10),
     ("phosphatidylserine", "Actiserine (enhanced PS blend)", 10),     # 1 conflicted study, val 0.3
     ("phosphatidylserine", "liposomal phosphatidylserine", 11),       # no proven liposomal advantage
-    ("phosphatidylserine", "phosphatidylserine (unspecified)", 10),   # below disclosed source forms
+    ("phosphatidylserine", "phosphatidylserine (unspecified)", 9),   # below disclosed source forms
 ]
 
 

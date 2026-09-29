@@ -13,7 +13,7 @@ Real DSLD labels (tests/fixtures/form_association_*_raw.json):
 - Controls: 47815 Magnesium and 17118 Calcium name salts the IQM curated on
   2026-09-27 as parent-scoped source aliases: magnesium arginate is an amino
   acid chelate (the zinc arginate precedent) and calcium D-pantothenate, with
-  no calcium absorption data, is calcium (unspecified) at the unknown value 3.
+  no calcium absorption data, is calcium (unspecified) at the unknown value 2.
   A salt the IQM lacks is still held as unmapped, never an invented form.
 - 214477 "Vitamin A (as Fish Liver Oil)" and 317111 "Black Cumin Seed Oil (as
   Nigella sativa Seed Oil)" resolve through IQM aliases, not a fallback guess.
@@ -69,7 +69,7 @@ def test_source_proteins_are_not_forms_of_an_amino_acid(enricher):
 
 
 @pytest.mark.parametrize('pid, name, expected', [('47815', 'Magnesium', 10.0),
-                                                ('17118', 'Calcium', 5.7)])
+                                                ('17118', 'Calcium', 5.3)])
 def test_curated_salts_map_without_an_invented_form(enricher, pid, name, expected):
     row = _row(enricher, pid, name)
     assert row['unmapped_forms'] == [] and row['form_match_status'] == 'mapped'
@@ -103,11 +103,11 @@ def test_alias_phrases(enricher, phrase, parent, form):
 
 def test_an_unmatched_share_takes_the_parents_own_unknown_form_value(enricher):
     # Calcium carbonate 8, dicalcium phosphate 6, D-pantothenate at calcium
-    # (unspecified), the same unknown value 3 (calcium oxide 4 - 1): (8 + 6 + 3) / 3.
+    # (unspecified), the same unknown value 2 (calcium acetate 3 - 1): (8 + 6 + 2) / 3.
     from scoring_reference_resolver import unknown_form_quality
     iqm = enricher.databases['ingredient_quality_map']
-    assert unknown_form_quality(iqm['calcium'])['bio_score'] == 3
-    assert _row(enricher, '17118', 'Calcium')['bio_score'] == 5.7
+    assert unknown_form_quality(iqm['calcium'])['bio_score'] == 2
+    assert _row(enricher, '17118', 'Calcium')['bio_score'] == 5.3
 
 
 def test_a_preparation_word_never_lifts_the_fallback_above_the_unknown_value(enricher):

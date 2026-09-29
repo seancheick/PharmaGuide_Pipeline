@@ -233,7 +233,7 @@ def test_cayenne_pepper_unspecified_form_aliases_include_label_variants(iqm, exp
 
 def test_cayenne_pepper_bio_score_is_six_not_capsaicin_seven(iqm):
     """Cayenne_pepper bio_score=6 is intentionally ONE BELOW the existing
-    capsaicin (unspecified) bio_score=7. Whole-fruit supplementation provides
+    capsaicin (unspecified) Q38 floor=6. Whole-fruit supplementation provides
     ~0.5-5 mg capsaicin per 450-500 mg dose, at the low end of the 2-10 mg/day
     capsaicinoid range. Conservative scoring is the safety floor."""
     form = iqm["cayenne_pepper"]["forms"]["cayenne pepper (unspecified)"]
@@ -241,12 +241,9 @@ def test_cayenne_pepper_bio_score_is_six_not_capsaicin_seven(iqm):
         f"cayenne_pepper bio_score changed from 6 to {form['bio_score']} — "
         f"must remain conservative (one below capsaicin's 7)."
     )
-    # cross-check: ensure capsaicin parent is unchanged at 7
+    # Cross-check the Q38 undisclosed-form floor.
     cap = iqm["capsaicin"]["forms"]["capsaicin (unspecified)"]
-    assert cap["bio_score"] == 7, (
-        f"capsaicin (unspecified) bio_score drifted to {cap['bio_score']}; "
-        f"Cayenne batch must not touch the existing capsaicin parent."
-    )
+    assert cap["bio_score"] == 6
 
 
 @pytest.mark.parametrize(
@@ -447,9 +444,9 @@ def test_english_ivy_unspecified_form_aliases_include_label_variants(iqm, expect
     assert expected_alias.lower() in aliases_lower
 
 
-def test_english_ivy_unspecified_bio_score_is_eight(iqm):
+def test_english_ivy_unspecified_follows_q38_floor(iqm):
     form = iqm["english_ivy"]["forms"]["english ivy leaf extract (unspecified)"]
-    assert form["bio_score"] == 8
+    assert form["bio_score"] == 9
 
 
 def test_english_ivy_standardized_form_exists_and_bio_score_is_ten(iqm):
@@ -639,9 +636,9 @@ def test_horse_chestnut_seed_two_forms_unspecified_and_standardized(iqm):
     assert "horse chestnut standardized (aescin marker)" in forms
 
 
-def test_horse_chestnut_seed_unspecified_bio_score_is_eight(iqm):
+def test_horse_chestnut_seed_unspecified_follows_q38_floor(iqm):
     form = iqm["horse_chestnut_seed"]["forms"]["horse chestnut seed (unspecified)"]
-    assert form["bio_score"] == 8
+    assert form["bio_score"] == 9
 
 
 def test_horse_chestnut_seed_standardized_bio_score_is_ten(iqm):

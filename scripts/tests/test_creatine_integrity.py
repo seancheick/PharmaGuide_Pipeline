@@ -459,4 +459,4 @@ def test_generic_alias_ownership_and_unspecified_copy(iqm):
     assert 'without specifying its chemical form' in copy
     assert 'standard monohydrate form' not in copy
     assert forms['creatine monohydrate']['bio_score']==14
-    assert forms[UNSPECIFIED_CREATINE_FORM]['bio_score']==6
+    assert forms[UNSPECIFIED_CREATINE_FORM]['bio_score']==3

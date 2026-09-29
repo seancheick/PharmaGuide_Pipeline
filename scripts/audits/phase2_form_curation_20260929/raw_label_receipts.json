@@ -1,0 +1,3806 @@
+{
+  "fetched_on": "2026-09-29",
+  "source": "NIH DSLD v9 API normalized by scripts/dsld_api_client.py",
+  "labels": [
+    {
+      "dsld_id": "179309",
+      "product_name": "Men's Pack",
+      "source": "api/label/179309",
+      "active_rows_with_forms": [
+        {
+          "name": "Vitamin A",
+          "category": "vitamin",
+          "ingredientGroup": "Vitamin A (vitamin A acetate)",
+          "forms": [
+            {
+              "name": "Vitamin A Acetate",
+              "category": "vitamin",
+              "ingredientGroup": "Vitamin A",
+              "prefix": "as"
+            }
+          ]
+        },
+        {
+          "name": "Vitamin C",
+          "category": "vitamin",
+          "ingredientGroup": "Vitamin C",
+          "forms": [
+            {
+              "name": "Ascorbic Acid",
+              "category": "vitamin",
+              "ingredientGroup": "Vitamin C",
+              "prefix": null
+            }
+          ]
+        },
+        {
+          "name": "Vitamin D3",
+          "category": "vitamin",
+          "ingredientGroup": "Vitamin D",
+          "forms": [
+            {
+              "name": "Cholecalciferol",
+              "category": "vitamin",
+              "ingredientGroup": "Vitamin D",
+              "prefix": null
+            }
+          ]
+        },
+        {
+          "name": "Vitamin E",
+          "category": "vitamin",
+          "ingredientGroup": "Vitamin E",
+          "forms": [
+            {
+              "name": "DL-Alpha-Tocopheryl Acetate",
+              "category": "vitamin",
+              "ingredientGroup": "Vitamin E",
+              "prefix": null
+            }
+          ]
+        },
+        {
+          "name": "Vitamin K",
+          "category": "vitamin",
+          "ingredientGroup": "Vitamin K",
+          "forms": [
+            {
+              "name": "Phytonadione",
+              "category": "vitamin",
+              "ingredientGroup": "Vitamin K",
+              "prefix": null
+            }
+          ]
+        },
+        {
+          "name": "Thiamine",
+          "category": "vitamin",
+          "ingredientGroup": "Thiamin",
+          "forms": [
+            {
+              "name": "Thiamine Mononitrate",
+              "category": "vitamin",
+              "ingredientGroup": "Thiamin",
+              "prefix": null
+            }
+          ]
+        },
+        {
+          "name": "Niacin",
+          "category": "vitamin",
+          "ingredientGroup": "Niacin",
+          "forms": [
+            {
+              "name": "Niacinamide",
+              "category": "vitamin",
+              "ingredientGroup": "Niacin",
+              "prefix": null
+            }
+          ]
+        },
+        {
+          "name": "Vitamin B6",
+          "category": "vitamin",
+          "ingredientGroup": "Vitamin B6",
+          "forms": [
+            {
+              "name": "Pyridoxine Hydrochloride",
+              "category": "vitamin",
+              "ingredientGroup": "Vitamin B6",
+              "prefix": null
+            }
+          ]
+        },
+        {
+          "name": "Vitamin B12",
+          "category": "vitamin",
+          "ingredientGroup": "Vitamin B12",
+          "forms": [
+            {
+              "name": "Cyanocobalamin",
+              "category": "vitamin",
+              "ingredientGroup": "Vitamin B12",
+              "prefix": null
+            }
+          ]
+        },
+        {
+          "name": "Pantothenic Acid",
+          "category": "vitamin",
+          "ingredientGroup": "Pantothenic Acid (Vitamin B5)",
+          "forms": [
+            {
+              "name": "D-Calcium Pantothenate",
+              "category": "mineral",
+              "ingredientGroup": "Calcium",
+              "prefix": null
+            }
+          ]
+        },
+        {
+          "name": "Calcium",
+          "category": "mineral",
+          "ingredientGroup": "Calcium",
+          "forms": [
+            {
+              "name": "Calcium Carbonate",
+              "category": "mineral",
+              "ingredientGroup": "Calcium",
+              "prefix": null
+            },
+            {
+              "name": "Calcium D-Pantothenate",
+              "category": "mineral",
+              "ingredientGroup": "Calcium",
+              "prefix": null
+            },
+            {
+              "name": "Dibasic Calcium Phosphate",
+              "category": "mineral",
+              "ingredientGroup": "Calcium",
+              "prefix": null
+            }
+          ]
+        },
+        {
+          "name": "Phosphorus",
+          "category": "mineral",
+          "ingredientGroup": "Phosphorus",
+          "forms": [
+            {
+              "name": "Dibasic Calcium Phosphate",
+              "category": "mineral",
+              "ingredientGroup": "Calcium",
+              "prefix": "as"
+            }
+          ]
+        },
+        {
+          "name": "Iodine",
+          "category": "mineral",
+          "ingredientGroup": "Iodine",
+          "forms": [
+            {
+              "name": "Potassium Iodide",
+              "category": "mineral",
+              "ingredientGroup": "Iodine",
+              "prefix": "as"
+            }
+          ]
+        },
+        {
+          "name": "Magnesium",
+          "category": "mineral",
+          "ingredientGroup": "Magnesium",
+          "forms": [
+            {
+              "name": "Magnesium Oxide",
+              "category": "mineral",
+              "ingredientGroup": "Magnesium",
+              "prefix": "as"
+            }
+          ]
+        },
+        {
+          "name": "Zinc",
+          "category": "mineral",
+          "ingredientGroup": "Zinc",
+          "forms": [
+            {
+              "name": "Zinc Oxide",
+              "category": "mineral",
+              "ingredientGroup": "Zinc",
+              "prefix": null
+            }
+          ]
+        },
+        {
+          "name": "Selenium",
+          "category": "mineral",
+          "ingredientGroup": "Selenium",
+          "forms": [
+            {
+              "name": "Sodium Selenate",
+              "category": "mineral",
+              "ingredientGroup": "Sodium",
+              "prefix": null
+            },
+            {
+              "name": "Sodium Selenite",
+              "category": "mineral",
+              "ingredientGroup": "Sodium",
+              "prefix": null
+            }
+          ]
+        },
+        {
+          "name": "Copper",
+          "category": "mineral",
+          "ingredientGroup": "Copper",
+          "forms": [
+            {
+              "name": "Copper Oxide",
+              "category": "other",
+              "ingredientGroup": "Copper oxide",
+              "prefix": "as"
+            }
+          ]
+        },
+        {
+          "name": "Manganese",
+          "category": "mineral",
+          "ingredientGroup": "Manganese",
+          "forms": [
+            {
+              "name": "Manganese Sulfate",
+              "category": "mineral",
+              "ingredientGroup": "Manganese",
+              "prefix": "as"
+            }
+          ]
+        },
+        {
+          "name": "Chromium",
+          "category": "mineral",
+          "ingredientGroup": "Chromium",
+          "forms": [
+            {
+              "name": "Chromium Chloride",
+              "category": "mineral",
+              "ingredientGroup": "Chromium",
+              "prefix": "as"
+            }
+          ]
+        },
+        {
+          "name": "Molybdenum",
+          "category": "mineral",
+          "ingredientGroup": "Molybdenum",
+          "forms": [
+            {
+              "name": "Sodium Molybdate",
+              "category": "mineral",
+              "ingredientGroup": "Sodium",
+              "prefix": "as"
+            }
+          ]
+        },
+        {
+          "name": "Chloride",
+          "category": "mineral",
+          "ingredientGroup": "Chloride",
+          "forms": [
+            {
+              "name": "Potassium Chloride",
+              "category": "non-nutrient/non-botanical",
+              "ingredientGroup": "Potassium Chloride",
+              "prefix": "as"
+            }
+          ]
+        },
+        {
+          "name": "Potassium",
+          "category": "mineral",
+          "ingredientGroup": "Potassium",
+          "forms": [
+            {
+              "name": "Potassium Chloride",
+              "category": "non-nutrient/non-botanical",
+              "ingredientGroup": "Potassium Chloride",
+              "prefix": "as"
+            }
+          ]
+        },
+        {
+          "name": "Boron",
+          "category": "mineral",
+          "ingredientGroup": "Boron",
+          "forms": [
+            {
+              "name": "Sodium Borate",
+              "category": "mineral",
+              "ingredientGroup": "Sodium",
+              "prefix": null
+            }
+          ]
+        },
+        {
+          "name": "Nickel",
+          "category": "mineral",
+          "ingredientGroup": "Nickel",
+          "forms": [
+            {
+              "name": "Nickelous Sulfate",
+              "category": "other",
+              "ingredientGroup": "Nickel Sulfate",
+              "prefix": "as"
+            }
+          ]
+        },
+        {
+          "name": "Silicon",
+          "category": "mineral",
+          "ingredientGroup": "Silicon",
+          "forms": [
+            {
+              "name": "Silicon Dioxide",
+              "category": "mineral",
+              "ingredientGroup": "Silicon",
+              "prefix": null
+            },
+            {
+              "name": "Sodium Metasilicate",
+              "category": "mineral",
+              "ingredientGroup": "Sodium",
+              "prefix": null
+            }
+          ]
+        },
+        {
+          "name": "Tin",
+          "category": "other",
+          "ingredientGroup": "Tin",
+          "forms": [
+            {
+              "name": "Stannous Chloride",
+              "category": "other",
+              "ingredientGroup": "Stannous Chloride",
+              "prefix": "as"
+            }
+          ]
+        },
+        {
+          "name": "Vanadium",
+          "category": "mineral",
+          "ingredientGroup": "Vanadium",
+          "forms": [
+            {
+              "name": "Sodium Metavanadate",
+              "category": "mineral",
+              "ingredientGroup": "Sodium",
+              "prefix": null
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "dsld_id": "182730",
+      "product_name": "Athletic Pure Pack",
+      "source": "api/label/182730",
+      "active_rows_with_forms": [
+        {
+          "name": "Vitamin A",
+          "category": "vitamin",
+          "ingredientGroup": "Vitamin A",
+          "forms": [
+            {
+              "name": "Beta-Carotene",
+              "category": "vitamin",
+              "ingredientGroup": "Vitamin A",
+              "prefix": null
+            }
+          ]
+        },
+        {
+          "name": "Vitamin C",
+          "category": "vitamin",
+          "ingredientGroup": "Vitamin C",
+          "forms": [
+            {
+              "name": "Ascorbic Acid",
+              "category": "vitamin",
+              "ingredientGroup": "Vitamin C",
+              "prefix": null
+            }
+          ]
+        },
+        {
+          "name": "Vitamin D",
+          "category": "vitamin",
+          "ingredientGroup": "Vitamin D",
+          "forms": [
+            {
+              "name": "Cholecalciferol",
+              "category": "vitamin",
+              "ingredientGroup": "Vitamin D",
+              "prefix": null
+            },
+            {
+              "name": "Vitamin D3",
+              "category": "vitamin",
+              "ingredientGroup": "Vitamin D",
+              "prefix": null
+            }
+          ]
+        },
+        {
+          "name": "Vitamin E",
+          "category": "vitamin",
+          "ingredientGroup": "Vitamin E",
+          "forms": [
+            {
+              "name": "D-Alpha-Tocopherol Succinate",
+              "category": "vitamin",
+              "ingredientGroup": "Vitamin E",
+              "prefix": null
+            },
+            {
+              "name": "Tocopherol",
+              "category": "vitamin",
+              "ingredientGroup": "Vitamin E",
+              "prefix": null
+            }
+          ]
+        },
+        {
+          "name": "Vitamin K",
+          "category": "vitamin",
+          "ingredientGroup": "Vitamin K (unspecified)",
+          "forms": [
+            {
+              "name": "Vitamin K1",
+              "category": "vitamin",
+              "ingredientGroup": "Vitamin K",
+              "prefix": "as"
+            }
+          ]
+        },
+        {
+          "name": "Thiamine",
+          "category": "vitamin",
+          "ingredientGroup": "Thiamin",
+          "forms": [
+            {
+              "name": "Thiamine Hydrochloride",
+              "category": "vitamin",
+              "ingredientGroup": "Thiamin",
+              "prefix": null
+            },
+            {
+              "name": "Vitamin B1",
+              "category": "vitamin",
+              "ingredientGroup": "Thiamin",
+              "prefix": null
+            }
+          ]
+        },
+        {
+          "name": "Riboflavin",
+          "category": "vitamin",
+          "ingredientGroup": "Vitamin B2 (riboflavin 5-phosphate)",
+          "forms": [
+            {
+              "name": "Riboflavin 5' Phosphate",
+              "category": "vitamin",
+              "ingredientGroup": "Vitamin B2 (riboflavin 5-phosphate)",
+              "prefix": "as"
+            }
+          ]
+        },
+        {
+          "name": "Niacin",
+          "category": "vitamin",
+          "ingredientGroup": "Niacin",
+          "forms": [
+            {
+              "name": "Niacin",
+              "category": "vitamin",
+              "ingredientGroup": "Niacin",
+              "prefix": null
+            },
+            {
+              "name": "Niacinamide",
+              "category": "vitamin",
+              "ingredientGroup": "Niacin",
+              "prefix": null
+            }
+          ]
+        },
+        {
+          "name": "Vitamin B6",
+          "category": "vitamin",
+          "ingredientGroup": "Vitamin B6 (Mixed)",
+          "forms": [
+            {
+              "name": "Pyridoxal 5-Phosphate",
+              "category": "vitamin",
+              "ingredientGroup": "Vitamin B6",
+              "prefix": "and"
+            },
+            {
+              "name": "Pyridoxine Hydrochloride",
+              "category": "vitamin",
+              "ingredientGroup": "Vitamin B6",
+              "prefix": "as"
+            }
+          ]
+        },
+        {
+          "name": "Folate",
+          "category": "vitamin",
+          "ingredientGroup": "Vitamin B9 (Folate)",
+          "forms": [
+            {
+              "name": "Metafolin",
+              "category": "vitamin",
+              "ingredientGroup": "Vitamin B9 (5-Methyltetrahydrofolate)",
+              "prefix": "as"
+            }
+          ]
+        },
+        {
+          "name": "Vitamin B12",
+          "category": "vitamin",
+          "ingredientGroup": "Vitamin B12",
+          "forms": [
+            {
+              "name": "Methylcobalamin",
+              "category": "vitamin",
+              "ingredientGroup": "Vitamin B12",
+              "prefix": null
+            }
+          ]
+        },
+        {
+          "name": "Pantothenic Acid",
+          "category": "vitamin",
+          "ingredientGroup": "Pantothenic Acid (Vitamin B5)",
+          "forms": [
+            {
+              "name": "Calcium Pantothenate",
+              "category": "mineral",
+              "ingredientGroup": "Calcium",
+              "prefix": null
+            },
+            {
+              "name": "Vitamin B5",
+              "category": "vitamin",
+              "ingredientGroup": "Vitamin B5",
+              "prefix": null
+            }
+          ]
+        },
+        {
+          "name": "Choline",
+          "category": "vitamin",
+          "ingredientGroup": "Choline",
+          "forms": [
+            {
+              "name": "Choline Bitartrate",
+              "category": "vitamin",
+              "ingredientGroup": "Choline",
+              "prefix": null
+            }
+          ]
+        },
+        {
+          "name": "Calcium",
+          "category": "mineral",
+          "ingredientGroup": "Calcium",
+          "forms": [
+            {
+              "name": "Calcium Citrate",
+              "category": "mineral",
+              "ingredientGroup": "Calcium",
+              "prefix": null
+            }
+          ]
+        },
+        {
+          "name": "Iodine",
+          "category": "mineral",
+          "ingredientGroup": "Iodine",
+          "forms": [
+            {
+              "name": "Potassium Iodide",
+              "category": "mineral",
+              "ingredientGroup": "Iodine",
+              "prefix": "as"
+            }
+          ]
+        },
+        {
+          "name": "Magnesium",
+          "category": "mineral",
+          "ingredientGroup": "Magnesium",
+          "forms": [
+            {
+              "name": "Magnesium Citrate",
+              "category": "mineral",
+              "ingredientGroup": "Magnesium",
+              "prefix": "as"
+            }
+          ]
+        },
+        {
+          "name": "Zinc",
+          "category": "mineral",
+          "ingredientGroup": "Zinc",
+          "forms": [
+            {
+              "name": "Zinc Citrate",
+              "category": "mineral",
+              "ingredientGroup": "Zinc",
+              "prefix": null
+            }
+          ]
+        },
+        {
+          "name": "Selenium",
+          "category": "mineral",
+          "ingredientGroup": "Selenium",
+          "forms": [
+            {
+              "name": "Selenomethionine",
+              "category": "amino acid",
+              "ingredientGroup": "Selenomethionine",
+              "prefix": null
+            }
+          ]
+        },
+        {
+          "name": "Copper",
+          "category": "mineral",
+          "ingredientGroup": "Copper",
+          "forms": [
+            {
+              "name": "Copper Glycinate",
+              "category": "non-nutrient/non-botanical",
+              "ingredientGroup": "Copper",
+              "prefix": "as"
+            }
+          ]
+        },
+        {
+          "name": "Manganese",
+          "category": "mineral",
+          "ingredientGroup": "Manganese",
+          "forms": [
+            {
+              "name": "Manganese Citrate",
+              "category": "mineral",
+              "ingredientGroup": "Manganese",
+              "prefix": "as"
+            }
+          ]
+        },
+        {
+          "name": "Chromium",
+          "category": "mineral",
+          "ingredientGroup": "Chromium",
+          "forms": [
+            {
+              "name": "Chromium Polynicotinate",
+              "category": "mineral",
+              "ingredientGroup": "Chromium",
+              "prefix": null
+            }
+          ]
+        },
+        {
+          "name": "Potassium",
+          "category": "mineral",
+          "ingredientGroup": "Potassium",
+          "forms": [
+            {
+              "name": "Potassium Phosphate",
+              "category": "mineral",
+              "ingredientGroup": "Potassium",
+              "prefix": "as"
+            }
+          ]
+        },
+        {
+          "name": "Vanadium",
+          "category": "mineral",
+          "ingredientGroup": "Vanadium",
+          "forms": [
+            {
+              "name": "Bis-Glycinato OxoVanadium",
+              "category": "non-nutrient/non-botanical",
+              "ingredientGroup": "Vanadium",
+              "prefix": null
+            }
+          ]
+        },
+        {
+          "name": "Green Tea (Camellia sinensis) extract",
+          "category": "botanical",
+          "ingredientGroup": "Green Tea",
+          "forms": [
+            {
+              "name": "Epigallocatechin Gallate",
+              "category": "non-nutrient/non-botanical",
+              "ingredientGroup": "EGCG",
+              "prefix": "standardized to contain"
+            }
+          ]
+        },
+        {
+          "name": "Fish Oil concentrate",
+          "category": "fat",
+          "ingredientGroup": "Fish Oil",
+          "forms": [
+            {
+              "name": "Anchovies",
+              "category": "animal part or source",
+              "ingredientGroup": "Fish",
+              "prefix": "from"
+            },
+            {
+              "name": "Mackerel",
+              "category": "animal part or source",
+              "ingredientGroup": "Fish",
+              "prefix": null
+            },
+            {
+              "name": "Sardines",
+              "category": "animal part or source",
+              "ingredientGroup": "Fish",
+              "prefix": null
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "dsld_id": "214676",
+      "product_name": "Naturvite",
+      "source": "api/label/214676",
+      "active_rows_with_forms": [
+        {
+          "name": "Vitamin A",
+          "category": "vitamin",
+          "ingredientGroup": "Vitamin A (unspecified)",
+          "forms": [
+            {
+              "name": "Vitamin A Palmitate",
+              "category": "vitamin",
+              "ingredientGroup": "Vitamin A",
+              "prefix": "as"
+            }
+          ]
+        },
+        {
+          "name": "Vitamin C",
+          "category": "vitamin",
+          "ingredientGroup": "Vitamin C",
+          "forms": [
+            {
+              "name": "Niacinamide Ascorbate",
+              "category": "vitamin",
+              "ingredientGroup": "Niacinamide ascorbate",
+              "prefix": null
+            }
+          ]
+        },
+        {
+          "name": "Vitamin D",
+          "category": "vitamin",
+          "ingredientGroup": "Vitamin D",
+          "forms": [
+            {
+              "name": "Cholecalciferol",
+              "category": "vitamin",
+              "ingredientGroup": "Vitamin D",
+              "prefix": null
+            }
+          ]
+        },
+        {
+          "name": "Vitamin E",
+          "category": "vitamin",
+          "ingredientGroup": "Vitamin E",
+          "forms": [
+            {
+              "name": "D-Alpha-Tocopheryl Succinate",
+              "category": "vitamin",
+              "ingredientGroup": "Vitamin E",
+              "prefix": null
+            }
+          ]
+        },
+        {
+          "name": "Thiamine",
+          "category": "vitamin",
+          "ingredientGroup": "Thiamin",
+          "forms": [
+            {
+              "name": "Thiamine Mononitrate",
+              "category": "vitamin",
+              "ingredientGroup": "Thiamin",
+              "prefix": null
+            }
+          ]
+        },
+        {
+          "name": "Niacin",
+          "category": "vitamin",
+          "ingredientGroup": "Niacin",
+          "forms": [
+            {
+              "name": "Niacinamide",
+              "category": "vitamin",
+              "ingredientGroup": "Niacin",
+              "prefix": null
+            },
+            {
+              "name": "Niacinamide Ascorbate",
+              "category": "vitamin",
+              "ingredientGroup": "Niacinamide ascorbate",
+              "prefix": null
+            }
+          ]
+        },
+        {
+          "name": "Vitamin B6",
+          "category": "vitamin",
+          "ingredientGroup": "Vitamin B6",
+          "forms": [
+            {
+              "name": "Pyridoxine Hydrochloride",
+              "category": "vitamin",
+              "ingredientGroup": "Vitamin B6",
+              "prefix": null
+            }
+          ]
+        },
+        {
+          "name": "Vitamin B12",
+          "category": "vitamin",
+          "ingredientGroup": "Vitamin B12",
+          "forms": [
+            {
+              "name": "Cobalamin",
+              "category": "vitamin",
+              "ingredientGroup": "Vitamin B12",
+              "prefix": null
+            }
+          ]
+        },
+        {
+          "name": "Pantothenic Acid",
+          "category": "vitamin",
+          "ingredientGroup": "Pantothenic Acid (Vitamin B5)",
+          "forms": [
+            {
+              "name": "D-Calcium Pantothenate",
+              "category": "mineral",
+              "ingredientGroup": "Calcium",
+              "prefix": null
+            }
+          ]
+        },
+        {
+          "name": "Calcium",
+          "category": "mineral",
+          "ingredientGroup": "Calcium",
+          "forms": [
+            {
+              "name": "Calcium Oxide",
+              "category": "mineral",
+              "ingredientGroup": "Calcium",
+              "prefix": "as"
+            }
+          ]
+        },
+        {
+          "name": "Iron",
+          "category": "mineral",
+          "ingredientGroup": "Iron",
+          "forms": [
+            {
+              "name": "Ferrous Gluconate",
+              "category": "mineral",
+              "ingredientGroup": "Iron",
+              "prefix": "as"
+            }
+          ]
+        },
+        {
+          "name": "Phosphorus",
+          "category": "mineral",
+          "ingredientGroup": "Phosphorus",
+          "forms": [
+            {
+              "name": "Phosphorus Oxide",
+              "category": "other",
+              "ingredientGroup": "Phosphorus  oxide",
+              "prefix": "as"
+            }
+          ]
+        },
+        {
+          "name": "Iodine",
+          "category": "mineral",
+          "ingredientGroup": "Iodine",
+          "forms": [
+            {
+              "name": "Potassium Iodide",
+              "category": "mineral",
+              "ingredientGroup": "Iodine",
+              "prefix": "as"
+            }
+          ]
+        },
+        {
+          "name": "Magnesium",
+          "category": "mineral",
+          "ingredientGroup": "Magnesium",
+          "forms": [
+            {
+              "name": "Magnesium Gluconate",
+              "category": "mineral",
+              "ingredientGroup": "Magnesium",
+              "prefix": "as"
+            }
+          ]
+        },
+        {
+          "name": "Zinc",
+          "category": "mineral",
+          "ingredientGroup": "Zinc",
+          "forms": [
+            {
+              "name": "Zinc Gluconate",
+              "category": "mineral",
+              "ingredientGroup": "Zinc",
+              "prefix": null
+            }
+          ]
+        },
+        {
+          "name": "Copper",
+          "category": "mineral",
+          "ingredientGroup": "Copper",
+          "forms": [
+            {
+              "name": "Copper Gluconate",
+              "category": "mineral",
+              "ingredientGroup": "Copper",
+              "prefix": "as"
+            }
+          ]
+        },
+        {
+          "name": "Manganese",
+          "category": "mineral",
+          "ingredientGroup": "Manganese",
+          "forms": [
+            {
+              "name": "Manganese Gluconate",
+              "category": "mineral",
+              "ingredientGroup": "Manganese",
+              "prefix": "as"
+            }
+          ]
+        },
+        {
+          "name": "Choline",
+          "category": "vitamin",
+          "ingredientGroup": "Choline",
+          "forms": [
+            {
+              "name": "Choline Bitartrate",
+              "category": "vitamin",
+              "ingredientGroup": "Choline",
+              "prefix": null
+            }
+          ]
+        },
+        {
+          "name": "Rutin",
+          "category": "non-nutrient/non-botanical",
+          "ingredientGroup": "Rutin",
+          "forms": [
+            {
+              "name": "Dimorphandra mollis",
+              "category": "botanical",
+              "ingredientGroup": "Dimorphandra mollis",
+              "prefix": "from"
+            }
+          ]
+        },
+        {
+          "name": "Betaine HCl",
+          "category": "non-nutrient/non-botanical",
+          "ingredientGroup": "Betaine Hydrochloride",
+          "forms": [
+            {
+              "name": "Beets",
+              "category": "botanical",
+              "ingredientGroup": "Beet",
+              "prefix": "from"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "dsld_id": "239462",
+      "product_name": "Prenatal Vitamins",
+      "source": "api/label/239462",
+      "active_rows_with_forms": [
+        {
+          "name": "Vitamin A",
+          "category": "vitamin",
+          "ingredientGroup": "Vitamin A",
+          "forms": [
+            {
+              "name": "Beta-Carotene",
+              "category": "vitamin",
+              "ingredientGroup": "Vitamin A",
+              "prefix": null
+            },
+            {
+              "name": "Vitamin A Acetate",
+              "category": "vitamin",
+              "ingredientGroup": "Vitamin A",
+              "prefix": null
+            }
+          ]
+        },
+        {
+          "name": "Vitamin C",
+          "category": "vitamin",
+          "ingredientGroup": "Vitamin C",
+          "forms": [
+            {
+              "name": "Ascorbic Acid",
+              "category": "vitamin",
+              "ingredientGroup": "Vitamin C",
+              "prefix": null
+            }
+          ]
+        },
+        {
+          "name": "Vitamin D3",
+          "category": "vitamin",
+          "ingredientGroup": "Vitamin D",
+          "forms": [
+            {
+              "name": "Cholecalciferol",
+              "category": "vitamin",
+              "ingredientGroup": "Vitamin D",
+              "prefix": null
+            }
+          ]
+        },
+        {
+          "name": "Vitamin E",
+          "category": "vitamin",
+          "ingredientGroup": "Vitamin E",
+          "forms": [
+            {
+              "name": "DL-Alpha-Tocopheryl Acetate",
+              "category": "vitamin",
+              "ingredientGroup": "Vitamin E",
+              "prefix": null
+            }
+          ]
+        },
+        {
+          "name": "Vitamin B1",
+          "category": "vitamin",
+          "ingredientGroup": "Thiamin",
+          "forms": [
+            {
+              "name": "Thiamine Mononitrate",
+              "category": "vitamin",
+              "ingredientGroup": "Thiamin",
+              "prefix": null
+            }
+          ]
+        },
+        {
+          "name": "Vitamin B2",
+          "category": "vitamin",
+          "ingredientGroup": "Riboflavin",
+          "forms": [
+            {
+              "name": "Riboflavin",
+              "category": "vitamin",
+              "ingredientGroup": "Riboflavin",
+              "prefix": null
+            }
+          ]
+        },
+        {
+          "name": "Vitamin B3",
+          "category": "vitamin",
+          "ingredientGroup": "Niacin",
+          "forms": [
+            {
+              "name": "Niacinamide",
+              "category": "vitamin",
+              "ingredientGroup": "Niacin",
+              "prefix": null
+            }
+          ]
+        },
+        {
+          "name": "Vitamin B6",
+          "category": "vitamin",
+          "ingredientGroup": "Vitamin B6",
+          "forms": [
+            {
+              "name": "Pyridoxine Hydrochloride",
+              "category": "vitamin",
+              "ingredientGroup": "Vitamin B6",
+              "prefix": null
+            }
+          ]
+        },
+        {
+          "name": "Vitamin B12",
+          "category": "vitamin",
+          "ingredientGroup": "Vitamin B12",
+          "forms": [
+            {
+              "name": "Cyanocobalamin",
+              "category": "vitamin",
+              "ingredientGroup": "Vitamin B12",
+              "prefix": null
+            }
+          ]
+        },
+        {
+          "name": "Calcium",
+          "category": "mineral",
+          "ingredientGroup": "Calcium",
+          "forms": [
+            {
+              "name": "Calcium Carbonate",
+              "category": "mineral",
+              "ingredientGroup": "Calcium",
+              "prefix": null
+            },
+            {
+              "name": "Calcium Sulfate",
+              "category": "mineral",
+              "ingredientGroup": "Calcium",
+              "prefix": null
+            }
+          ]
+        },
+        {
+          "name": "Iron",
+          "category": "mineral",
+          "ingredientGroup": "Iron",
+          "forms": [
+            {
+              "name": "Ferrous Fumarate",
+              "category": "mineral",
+              "ingredientGroup": "Iron",
+              "prefix": "as"
+            }
+          ]
+        },
+        {
+          "name": "Zinc",
+          "category": "mineral",
+          "ingredientGroup": "Zinc",
+          "forms": [
+            {
+              "name": "Zinc Oxide",
+              "category": "mineral",
+              "ingredientGroup": "Zinc",
+              "prefix": null
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "dsld_id": "246080",
+      "product_name": "Detox Pure Pack",
+      "source": "api/label/246080",
+      "active_rows_with_forms": [
+        {
+          "name": "Vitamin A",
+          "category": "vitamin",
+          "ingredientGroup": "Vitamin A",
+          "forms": [
+            {
+              "name": "Beta-Carotene",
+              "category": "vitamin",
+              "ingredientGroup": "Vitamin A",
+              "prefix": null
+            }
+          ]
+        },
+        {
+          "name": "Vitamin C",
+          "category": "vitamin",
+          "ingredientGroup": "Vitamin C",
+          "forms": [
+            {
+              "name": "Ascorbyl Palmitate",
+              "category": "vitamin",
+              "ingredientGroup": "Vitamin C",
+              "prefix": null
+            }
+          ]
+        },
+        {
+          "name": "Vitamin D",
+          "category": "vitamin",
+          "ingredientGroup": "Vitamin D",
+          "forms": [
+            {
+              "name": "Cholecalciferol",
+              "category": "vitamin",
+              "ingredientGroup": "Vitamin D",
+              "prefix": null
+            },
+            {
+              "name": "Vitamin D3",
+              "category": "vitamin",
+              "ingredientGroup": "Vitamin D",
+              "prefix": null
+            }
+          ]
+        },
+        {
+          "name": "Vitamin E",
+          "category": "vitamin",
+          "ingredientGroup": "Vitamin E",
+          "forms": [
+            {
+              "name": "D-Alpha-Tocopherol Succinate",
+              "category": "vitamin",
+              "ingredientGroup": "Vitamin E",
+              "prefix": null
+            },
+            {
+              "name": "Tocopherol",
+              "category": "vitamin",
+              "ingredientGroup": "Vitamin E",
+              "prefix": null
+            }
+          ]
+        },
+        {
+          "name": "Thiamine",
+          "category": "vitamin",
+          "ingredientGroup": "Thiamin",
+          "forms": [
+            {
+              "name": "Thiamine Hydrochloride",
+              "category": "vitamin",
+              "ingredientGroup": "Thiamin",
+              "prefix": null
+            },
+            {
+              "name": "Vitamin B1",
+              "category": "vitamin",
+              "ingredientGroup": "Thiamin",
+              "prefix": null
+            }
+          ]
+        },
+        {
+          "name": "Riboflavin",
+          "category": "vitamin",
+          "ingredientGroup": "Vitamin B2 (riboflavin 5-phosphate)",
+          "forms": [
+            {
+              "name": "Riboflavin 5' Phosphate",
+              "category": "vitamin",
+              "ingredientGroup": "Vitamin B2 (riboflavin 5-phosphate)",
+              "prefix": "as"
+            }
+          ]
+        },
+        {
+          "name": "Niacin",
+          "category": "vitamin",
+          "ingredientGroup": "Vitamin B3 (mixed)",
+          "forms": [
+            {
+              "name": "Inositol Hexaniacinate",
+              "category": "non-nutrient/non-botanical",
+              "ingredientGroup": "Inositol nicotinate",
+              "prefix": "and"
+            },
+            {
+              "name": "Niacinamide",
+              "category": "vitamin",
+              "ingredientGroup": "Niacin",
+              "prefix": "as"
+            }
+          ]
+        },
+        {
+          "name": "Vitamin B6",
+          "category": "vitamin",
+          "ingredientGroup": "Vitamin B6 (Mixed)",
+          "forms": [
+            {
+              "name": "Pyridoxal 5-Phosphate",
+              "category": "vitamin",
+              "ingredientGroup": "Vitamin B6",
+              "prefix": "and"
+            },
+            {
+              "name": "Pyridoxine Hydrochloride",
+              "category": "vitamin",
+              "ingredientGroup": "Vitamin B6",
+              "prefix": "as"
+            }
+          ]
+        },
+        {
+          "name": "Folate",
+          "category": "vitamin",
+          "ingredientGroup": "Vitamin B9 (Mixed)",
+          "forms": [
+            {
+              "name": "L-5-MTHF",
+              "category": "vitamin",
+              "ingredientGroup": "Vitamin B9 (5-Methyltetrahydrofolate)",
+              "prefix": null
+            },
+            {
+              "name": "Metafolin",
+              "category": "vitamin",
+              "ingredientGroup": "Vitamin B9 (methylfolate)",
+              "prefix": "as"
+            }
+          ]
+        },
+        {
+          "name": "Vitamin B12",
+          "category": "vitamin",
+          "ingredientGroup": "Vitamin B12",
+          "forms": [
+            {
+              "name": "Methylcobalamin",
+              "category": "vitamin",
+              "ingredientGroup": "Vitamin B12",
+              "prefix": null
+            }
+          ]
+        },
+        {
+          "name": "Pantothenic Acid",
+          "category": "vitamin",
+          "ingredientGroup": "Pantothenic Acid (Vitamin B5)",
+          "forms": [
+            {
+              "name": "Calcium Pantothenate",
+              "category": "mineral",
+              "ingredientGroup": "Calcium",
+              "prefix": null
+            },
+            {
+              "name": "Vitamin B5",
+              "category": "vitamin",
+              "ingredientGroup": "Vitamin B5",
+              "prefix": null
+            }
+          ]
+        },
+        {
+          "name": "Calcium",
+          "category": "mineral",
+          "ingredientGroup": "Calcium",
+          "forms": [
+            {
+              "name": "Calcium Citrate",
+              "category": "mineral",
+              "ingredientGroup": "Calcium",
+              "prefix": null
+            },
+            {
+              "name": "Calcium Malate",
+              "category": "mineral",
+              "ingredientGroup": "Calcium",
+              "prefix": null
+            }
+          ]
+        },
+        {
+          "name": "Magnesium",
+          "category": "mineral",
+          "ingredientGroup": "Magnesium",
+          "forms": [
+            {
+              "name": "Magnesium Aspartate",
+              "category": "non-nutrient/non-botanical",
+              "ingredientGroup": "Magnesium",
+              "prefix": "as"
+            }
+          ]
+        },
+        {
+          "name": "Zinc",
+          "category": "mineral",
+          "ingredientGroup": "Zinc",
+          "forms": [
+            {
+              "name": "Zinc Picolinate",
+              "category": "mineral",
+              "ingredientGroup": "Zinc",
+              "prefix": null
+            }
+          ]
+        },
+        {
+          "name": "Selenium",
+          "category": "mineral",
+          "ingredientGroup": "Selenium",
+          "forms": [
+            {
+              "name": "Selenomethionine",
+              "category": "amino acid",
+              "ingredientGroup": "Selenomethionine",
+              "prefix": null
+            }
+          ]
+        },
+        {
+          "name": "Copper",
+          "category": "mineral",
+          "ingredientGroup": "Copper",
+          "forms": [
+            {
+              "name": "Copper Glycinate",
+              "category": "non-nutrient/non-botanical",
+              "ingredientGroup": "Copper",
+              "prefix": "as"
+            }
+          ]
+        },
+        {
+          "name": "Manganese",
+          "category": "mineral",
+          "ingredientGroup": "Manganese",
+          "forms": [
+            {
+              "name": "Manganese Aspartate",
+              "category": "non-nutrient/non-botanical",
+              "ingredientGroup": "Manganese",
+              "prefix": "as"
+            }
+          ]
+        },
+        {
+          "name": "Chromium",
+          "category": "mineral",
+          "ingredientGroup": "Chromium",
+          "forms": [
+            {
+              "name": "Chromium Polynicotinate",
+              "category": "mineral",
+              "ingredientGroup": "Chromium",
+              "prefix": null
+            }
+          ]
+        },
+        {
+          "name": "Molybdenum",
+          "category": "mineral",
+          "ingredientGroup": "Molybdenum",
+          "forms": [
+            {
+              "name": "Molybdenum Aspartate",
+              "category": "non-nutrient/non-botanical",
+              "ingredientGroup": "Molybdenum",
+              "prefix": "as"
+            }
+          ]
+        },
+        {
+          "name": "Potassium",
+          "category": "mineral",
+          "ingredientGroup": "Potassium",
+          "forms": [
+            {
+              "name": "Potassium Aspartate",
+              "category": "non-nutrient/non-botanical",
+              "ingredientGroup": "Potassium",
+              "prefix": "as"
+            }
+          ]
+        },
+        {
+          "name": "Vanadium",
+          "category": "mineral",
+          "ingredientGroup": "Vanadium",
+          "forms": [
+            {
+              "name": "Vanadium Aspartate",
+              "category": "mineral",
+              "ingredientGroup": "Vanadium",
+              "prefix": null
+            }
+          ]
+        },
+        {
+          "name": "Hawthorn (Crataegus spp.) extract",
+          "category": "botanical",
+          "ingredientGroup": "Hawthorn",
+          "forms": [
+            {
+              "name": "Vitexins",
+              "category": "non-nutrient/non-botanical",
+              "ingredientGroup": "Vitexin",
+              "prefix": "standardized to contain"
+            }
+          ]
+        },
+        {
+          "name": "Ginger (Zingiber officinale) extract",
+          "category": "botanical",
+          "ingredientGroup": "Ginger ",
+          "forms": [
+            {
+              "name": "Gingerols",
+              "category": "non-nutrient/non-botanical",
+              "ingredientGroup": "Gingerol",
+              "prefix": "standardized to contain"
+            }
+          ]
+        },
+        {
+          "name": "Milk Thistle (Silybum marianum) extract",
+          "category": "botanical",
+          "ingredientGroup": "Milk Thistle",
+          "forms": [
+            {
+              "name": "Silymarin",
+              "category": "non-nutrient/non-botanical",
+              "ingredientGroup": "Silymarin",
+              "prefix": "standardized to contain"
+            }
+          ]
+        },
+        {
+          "name": "Turmeric (Curcuma longa) extract",
+          "category": "botanical",
+          "ingredientGroup": "Turmeric",
+          "forms": [
+            {
+              "name": "Curcuminoids",
+              "category": "non-nutrient/non-botanical",
+              "ingredientGroup": "Curcuminoid",
+              "prefix": "standardized to contain"
+            }
+          ]
+        },
+        {
+          "name": "Fish Oil concentrate",
+          "category": "fat",
+          "ingredientGroup": "Fish Oil",
+          "forms": [
+            {
+              "name": "Anchovies",
+              "category": "animal part or source",
+              "ingredientGroup": "Fish",
+              "prefix": "from"
+            },
+            {
+              "name": "Mackerel",
+              "category": "animal part or source",
+              "ingredientGroup": "Fish",
+              "prefix": null
+            },
+            {
+              "name": "Sardines",
+              "category": "animal part or source",
+              "ingredientGroup": "Fish",
+              "prefix": null
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "dsld_id": "249518",
+      "product_name": "Doctor's Choice Multivitamin 45+ Women",
+      "source": "api/label/249518",
+      "active_rows_with_forms": [
+        {
+          "name": "Vitamin A",
+          "category": "vitamin",
+          "ingredientGroup": "Vitamin A",
+          "forms": [
+            {
+              "name": "Beta-Carotene",
+              "category": "vitamin",
+              "ingredientGroup": "Vitamin A",
+              "prefix": null
+            },
+            {
+              "name": "Retinyl Acetate",
+              "category": "vitamin",
+              "ingredientGroup": "Vitamin A",
+              "prefix": null
+            }
+          ]
+        },
+        {
+          "name": "Vitamin C",
+          "category": "vitamin",
+          "ingredientGroup": "Vitamin C",
+          "forms": [
+            {
+              "name": "Ascorbic Acid",
+              "category": "vitamin",
+              "ingredientGroup": "Vitamin C",
+              "prefix": null
+            }
+          ]
+        },
+        {
+          "name": "Vitamin D3",
+          "category": "vitamin",
+          "ingredientGroup": "Vitamin D",
+          "forms": [
+            {
+              "name": "Cholecalciferol",
+              "category": "vitamin",
+              "ingredientGroup": "Vitamin D",
+              "prefix": null
+            }
+          ]
+        },
+        {
+          "name": "Vitamin E",
+          "category": "vitamin",
+          "ingredientGroup": "Vitamin E",
+          "forms": [
+            {
+              "name": "D-Alpha-Tocopheryl Acetate",
+              "category": "vitamin",
+              "ingredientGroup": "Vitamin E",
+              "prefix": null
+            },
+            {
+              "name": "Mixed Tocopherols",
+              "category": "vitamin",
+              "ingredientGroup": "Vitamin E",
+              "prefix": null
+            }
+          ]
+        },
+        {
+          "name": "Vitamin K",
+          "category": "vitamin",
+          "ingredientGroup": "Vitamin K",
+          "forms": [
+            {
+              "name": "Phytonadione",
+              "category": "vitamin",
+              "ingredientGroup": "Vitamin K",
+              "prefix": null
+            }
+          ]
+        },
+        {
+          "name": "Thiamine",
+          "category": "vitamin",
+          "ingredientGroup": "Thiamin",
+          "forms": [
+            {
+              "name": "Vitamin B1",
+              "category": "vitamin",
+              "ingredientGroup": "Thiamin",
+              "prefix": null
+            }
+          ]
+        },
+        {
+          "name": "Riboflavin",
+          "category": "vitamin",
+          "ingredientGroup": "Riboflavin",
+          "forms": [
+            {
+              "name": "Vitamin B2",
+              "category": "vitamin",
+              "ingredientGroup": "Riboflavin",
+              "prefix": null
+            }
+          ]
+        },
+        {
+          "name": "Niacin",
+          "category": "vitamin",
+          "ingredientGroup": "Niacin",
+          "forms": [
+            {
+              "name": "Niacin",
+              "category": "vitamin",
+              "ingredientGroup": "Niacin",
+              "prefix": null
+            },
+            {
+              "name": "Niacinamide",
+              "category": "vitamin",
+              "ingredientGroup": "Niacin",
+              "prefix": null
+            }
+          ]
+        },
+        {
+          "name": "Vitamin B6",
+          "category": "vitamin",
+          "ingredientGroup": "Vitamin B6",
+          "forms": [
+            {
+              "name": "Pyridoxine Hydrochloride",
+              "category": "vitamin",
+              "ingredientGroup": "Vitamin B6",
+              "prefix": null
+            }
+          ]
+        },
+        {
+          "name": "Vitamin B12",
+          "category": "vitamin",
+          "ingredientGroup": "Vitamin B12",
+          "forms": [
+            {
+              "name": "Cyanocobalamin",
+              "category": "vitamin",
+              "ingredientGroup": "Vitamin B12",
+              "prefix": null
+            }
+          ]
+        },
+        {
+          "name": "Pantothenic Acid",
+          "category": "vitamin",
+          "ingredientGroup": "Pantothenic Acid (Vitamin B5)",
+          "forms": [
+            {
+              "name": "Calcium D-Pantothenate",
+              "category": "mineral",
+              "ingredientGroup": "Calcium",
+              "prefix": null
+            }
+          ]
+        },
+        {
+          "name": "Choline",
+          "category": "vitamin",
+          "ingredientGroup": "Choline",
+          "forms": [
+            {
+              "name": "Choline Bitartrate",
+              "category": "vitamin",
+              "ingredientGroup": "Choline",
+              "prefix": null
+            }
+          ]
+        },
+        {
+          "name": "Calcium",
+          "category": "mineral",
+          "ingredientGroup": "Calcium",
+          "forms": [
+            {
+              "name": "Calcium Carbonate",
+              "category": "mineral",
+              "ingredientGroup": "Calcium",
+              "prefix": null
+            },
+            {
+              "name": "Calcium Citrate",
+              "category": "mineral",
+              "ingredientGroup": "Calcium",
+              "prefix": null
+            },
+            {
+              "name": "Tricalcium Phosphate",
+              "category": "mineral",
+              "ingredientGroup": "Calcium",
+              "prefix": null
+            }
+          ]
+        },
+        {
+          "name": "Iodine",
+          "category": "mineral",
+          "ingredientGroup": "Iodine",
+          "forms": [
+            {
+              "name": "Potassium Iodide",
+              "category": "mineral",
+              "ingredientGroup": "Iodine",
+              "prefix": "as"
+            }
+          ]
+        },
+        {
+          "name": "Magnesium",
+          "category": "mineral",
+          "ingredientGroup": "Magnesium",
+          "forms": [
+            {
+              "name": "Magnesium Aspartate",
+              "category": "non-nutrient/non-botanical",
+              "ingredientGroup": "Magnesium",
+              "prefix": "as"
+            },
+            {
+              "name": "Magnesium Oxide",
+              "category": "mineral",
+              "ingredientGroup": "Magnesium",
+              "prefix": "and"
+            }
+          ]
+        },
+        {
+          "name": "Zinc",
+          "category": "mineral",
+          "ingredientGroup": "Zinc",
+          "forms": [
+            {
+              "name": "Zinc Gluconate",
+              "category": "mineral",
+              "ingredientGroup": "Zinc",
+              "prefix": null
+            }
+          ]
+        },
+        {
+          "name": "Selenium",
+          "category": "mineral",
+          "ingredientGroup": "Selenium",
+          "forms": [
+            {
+              "name": "L-Selenomethionine",
+              "category": "amino acid",
+              "ingredientGroup": "Selenomethionine",
+              "prefix": null
+            }
+          ]
+        },
+        {
+          "name": "Copper",
+          "category": "mineral",
+          "ingredientGroup": "Copper",
+          "forms": [
+            {
+              "name": "Copper Gluconate",
+              "category": "mineral",
+              "ingredientGroup": "Copper",
+              "prefix": "as"
+            }
+          ]
+        },
+        {
+          "name": "Manganese",
+          "category": "mineral",
+          "ingredientGroup": "Manganese",
+          "forms": [
+            {
+              "name": "Manganese Citrate",
+              "category": "mineral",
+              "ingredientGroup": "Manganese",
+              "prefix": "as"
+            }
+          ]
+        },
+        {
+          "name": "Molybdenum",
+          "category": "mineral",
+          "ingredientGroup": "Molybdenum",
+          "forms": [
+            {
+              "name": "Sodium Molybdate",
+              "category": "mineral",
+              "ingredientGroup": "Sodium",
+              "prefix": "as"
+            }
+          ]
+        },
+        {
+          "name": "Potassium",
+          "category": "mineral",
+          "ingredientGroup": "Potassium",
+          "forms": [
+            {
+              "name": "Potassium Aspartate",
+              "category": "non-nutrient/non-botanical",
+              "ingredientGroup": "Potassium",
+              "prefix": "and"
+            },
+            {
+              "name": "Potassium Carbonate",
+              "category": "mineral",
+              "ingredientGroup": "Potassium",
+              "prefix": "as"
+            }
+          ]
+        },
+        {
+          "name": "Japanese Knotweed root extract",
+          "category": "botanical",
+          "ingredientGroup": "Hu Zhang",
+          "forms": [
+            {
+              "name": "Resveratrol",
+              "category": "non-nutrient/non-botanical",
+              "ingredientGroup": "Resveratrol",
+              "prefix": "standardized to"
+            }
+          ]
+        },
+        {
+          "name": "Boron",
+          "category": "mineral",
+          "ingredientGroup": "Boron",
+          "forms": [
+            {
+              "name": "Boric Acid",
+              "category": "other",
+              "ingredientGroup": "Boric acid",
+              "prefix": null
+            },
+            {
+              "name": "Citric Acid",
+              "category": "non-nutrient/non-botanical",
+              "ingredientGroup": "Citric Acid",
+              "prefix": null
+            }
+          ]
+        },
+        {
+          "name": "Lutein",
+          "category": "non-nutrient/non-botanical",
+          "ingredientGroup": "Lutein",
+          "forms": [
+            {
+              "name": "Aztec Marigold extract",
+              "category": "botanical",
+              "ingredientGroup": "Tagetes",
+              "prefix": "from"
+            }
+          ]
+        },
+        {
+          "name": "Silicon",
+          "category": "mineral",
+          "ingredientGroup": "Silicon",
+          "forms": [
+            {
+              "name": "Magnesium Trisilicate",
+              "category": "other",
+              "ingredientGroup": "Magnesium Silicate",
+              "prefix": "as"
+            }
+          ]
+        },
+        {
+          "name": "Vanadium",
+          "category": "mineral",
+          "ingredientGroup": "Vanadium",
+          "forms": [
+            {
+              "name": "Vanadyl Sulfate",
+              "category": "mineral",
+              "ingredientGroup": "Vanadium",
+              "prefix": null
+            }
+          ]
+        },
+        {
+          "name": "Zeaxanthin",
+          "category": "non-nutrient/non-botanical",
+          "ingredientGroup": "Zeaxanthin",
+          "forms": [
+            {
+              "name": "Aztec Marigold extract",
+              "category": "botanical",
+              "ingredientGroup": "Tagetes",
+              "prefix": "from"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "dsld_id": "269842",
+      "product_name": "Vanadium 2 mg",
+      "source": "api/label/269842",
+      "active_rows_with_forms": [
+        {
+          "name": "Chromium",
+          "category": "mineral",
+          "ingredientGroup": "Chromium",
+          "forms": [
+            {
+              "name": "Chromium Picolinate",
+              "category": "mineral",
+              "ingredientGroup": "Chromium",
+              "prefix": null
+            }
+          ]
+        },
+        {
+          "name": "Vanadium",
+          "category": "mineral",
+          "ingredientGroup": "Vanadium",
+          "forms": [
+            {
+              "name": "Vanadyl Sulfate",
+              "category": "mineral",
+              "ingredientGroup": "Vanadium",
+              "prefix": null
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "dsld_id": "288678",
+      "product_name": "Mineral Wealth Natural Cherry Flavor",
+      "source": "api/label/288678",
+      "active_rows_with_forms": [
+        {
+          "name": "Vitamin B12",
+          "category": "vitamin",
+          "ingredientGroup": "Vitamin B12",
+          "forms": [
+            {
+              "name": "Cyanocobalamin",
+              "category": "vitamin",
+              "ingredientGroup": "Vitamin B12",
+              "prefix": null
+            }
+          ]
+        },
+        {
+          "name": "Calcium",
+          "category": "mineral",
+          "ingredientGroup": "Calcium",
+          "forms": [
+            {
+              "name": "Calcium Chloride",
+              "category": "mineral",
+              "ingredientGroup": "Calcium",
+              "prefix": null
+            },
+            {
+              "name": "Calcium Citrate",
+              "category": "mineral",
+              "ingredientGroup": "Calcium",
+              "prefix": "from"
+            },
+            {
+              "name": "Calcium Glycerophosphate",
+              "category": "mineral",
+              "ingredientGroup": "Calcium",
+              "prefix": "and/or"
+            }
+          ]
+        },
+        {
+          "name": "Magnesium",
+          "category": "mineral",
+          "ingredientGroup": "Magnesium",
+          "forms": [
+            {
+              "name": "Magnesium Citrate",
+              "category": "mineral",
+              "ingredientGroup": "Magnesium",
+              "prefix": null
+            },
+            {
+              "name": "Magnesium Sulfate",
+              "category": "mineral",
+              "ingredientGroup": "Magnesiium",
+              "prefix": null
+            }
+          ]
+        },
+        {
+          "name": "Zinc",
+          "category": "mineral",
+          "ingredientGroup": "Zinc",
+          "forms": [
+            {
+              "name": "Zinc Citrate",
+              "category": "mineral",
+              "ingredientGroup": "Zinc",
+              "prefix": null
+            },
+            {
+              "name": "Zinc Sulfate",
+              "category": "mineral",
+              "ingredientGroup": "Zinc",
+              "prefix": null
+            }
+          ]
+        },
+        {
+          "name": "Selenium",
+          "category": "mineral",
+          "ingredientGroup": "Selenium",
+          "forms": [
+            {
+              "name": "Sodium Selenite",
+              "category": "mineral",
+              "ingredientGroup": "Sodium",
+              "prefix": null
+            }
+          ]
+        },
+        {
+          "name": "Manganese",
+          "category": "mineral",
+          "ingredientGroup": "Manganese",
+          "forms": [
+            {
+              "name": "Manganese Sulfate",
+              "category": "mineral",
+              "ingredientGroup": "Manganese",
+              "prefix": null
+            }
+          ]
+        },
+        {
+          "name": "Chromax",
+          "category": "non-nutrient/non-botanical",
+          "ingredientGroup": "Chromium",
+          "forms": [
+            {
+              "name": "Chromium",
+              "category": "mineral",
+              "ingredientGroup": "Chromium",
+              "prefix": null
+            }
+          ]
+        },
+        {
+          "name": "Potassium",
+          "category": "mineral",
+          "ingredientGroup": "Potassium",
+          "forms": [
+            {
+              "name": "Potassium Chloride",
+              "category": "mineral",
+              "ingredientGroup": "Potassium",
+              "prefix": null
+            },
+            {
+              "name": "Potassium Citrate",
+              "category": "mineral",
+              "ingredientGroup": "Potassium",
+              "prefix": null
+            }
+          ]
+        },
+        {
+          "name": "72 naturally occurring Trace Minerals",
+          "category": "blend",
+          "ingredientGroup": "Blend (Combination)",
+          "forms": [
+            {
+              "name": "Diatomaceous Earth",
+              "category": "other",
+              "ingredientGroup": "Diatomite",
+              "prefix": "from"
+            }
+          ]
+        },
+        {
+          "name": "Silica",
+          "category": "mineral",
+          "ingredientGroup": "Silicon",
+          "forms": [
+            {
+              "name": "Sodium Metasilicate",
+              "category": "mineral",
+              "ingredientGroup": "Sodium",
+              "prefix": null
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "dsld_id": "294050",
+      "product_name": "PurePals (with Iron) Natural Cherry Flavor",
+      "source": "api/label/294050",
+      "active_rows_with_forms": [
+        {
+          "name": "Vitamin A",
+          "category": "vitamin",
+          "ingredientGroup": "Vitamin A",
+          "forms": [
+            {
+              "name": "Beta-Carotene",
+              "category": "vitamin",
+              "ingredientGroup": "Vitamin A",
+              "prefix": null
+            },
+            {
+              "name": "Vitamin A Palmitate",
+              "category": "vitamin",
+              "ingredientGroup": "Vitamin A",
+              "prefix": null
+            }
+          ]
+        },
+        {
+          "name": "Vitamin C",
+          "category": "vitamin",
+          "ingredientGroup": "Vitamin C",
+          "forms": [
+            {
+              "name": "Ascorbic Acid",
+              "category": "vitamin",
+              "ingredientGroup": "Vitamin C",
+              "prefix": null
+            },
+            {
+              "name": "Calcium Ascorbate",
+              "category": "mineral",
+              "ingredientGroup": "Calcium",
+              "prefix": null
+            }
+          ]
+        },
+        {
+          "name": "Vitamin D",
+          "category": "vitamin",
+          "ingredientGroup": "Vitamin D",
+          "forms": [
+            {
+              "name": "Cholecalciferol",
+              "category": "vitamin",
+              "ingredientGroup": "Vitamin D",
+              "prefix": null
+            },
+            {
+              "name": "Vitamin D3",
+              "category": "vitamin",
+              "ingredientGroup": "Vitamin D",
+              "prefix": null
+            }
+          ]
+        },
+        {
+          "name": "Vitamin D",
+          "category": "vitamin",
+          "ingredientGroup": "Vitamin D",
+          "forms": [
+            {
+              "name": "Cholecalciferol",
+              "category": "vitamin",
+              "ingredientGroup": "Vitamin D",
+              "prefix": null
+            },
+            {
+              "name": "Vitamin D3",
+              "category": "vitamin",
+              "ingredientGroup": "Vitamin D",
+              "prefix": null
+            }
+          ]
+        },
+        {
+          "name": "Vitamin E",
+          "category": "vitamin",
+          "ingredientGroup": "Vitamin E",
+          "forms": [
+            {
+              "name": "D-Alpha-Tocopheryl Succinate",
+              "category": "vitamin",
+              "ingredientGroup": "Vitamin E",
+              "prefix": null
+            },
+            {
+              "name": "Mixed Tocopherols",
+              "category": "vitamin",
+              "ingredientGroup": "Vitamin E",
+              "prefix": null
+            }
+          ]
+        },
+        {
+          "name": "Thiamine",
+          "category": "vitamin",
+          "ingredientGroup": "Thiamin",
+          "forms": [
+            {
+              "name": "Thiamine Mononitrate",
+              "category": "vitamin",
+              "ingredientGroup": "Thiamin",
+              "prefix": null
+            },
+            {
+              "name": "Vitamin B1",
+              "category": "vitamin",
+              "ingredientGroup": "Thiamin",
+              "prefix": null
+            }
+          ]
+        },
+        {
+          "name": "Riboflavin",
+          "category": "vitamin",
+          "ingredientGroup": "Riboflavin",
+          "forms": [
+            {
+              "name": "Vitamin B2",
+              "category": "vitamin",
+              "ingredientGroup": "Riboflavin",
+              "prefix": null
+            }
+          ]
+        },
+        {
+          "name": "Niacin",
+          "category": "vitamin",
+          "ingredientGroup": "Niacin",
+          "forms": [
+            {
+              "name": "Niacinamide",
+              "category": "vitamin",
+              "ingredientGroup": "Niacin",
+              "prefix": null
+            }
+          ]
+        },
+        {
+          "name": "Vitamin B6",
+          "category": "vitamin",
+          "ingredientGroup": "Vitamin B6",
+          "forms": [
+            {
+              "name": "Pyridoxine Hydrochloride",
+              "category": "vitamin",
+              "ingredientGroup": "Vitamin B6",
+              "prefix": null
+            }
+          ]
+        },
+        {
+          "name": "Vitamin B6",
+          "category": "vitamin",
+          "ingredientGroup": "Vitamin B6",
+          "forms": [
+            {
+              "name": "Pyridoxine Hydrochloride",
+              "category": "vitamin",
+              "ingredientGroup": "Vitamin B6",
+              "prefix": null
+            }
+          ]
+        },
+        {
+          "name": "Folate",
+          "category": "vitamin",
+          "ingredientGroup": "Folate",
+          "forms": [
+            {
+              "name": "Metafolin",
+              "category": "vitamin",
+              "ingredientGroup": "Folic Acid",
+              "prefix": null
+            }
+          ]
+        },
+        {
+          "name": "Vitamin B12",
+          "category": "vitamin",
+          "ingredientGroup": "Vitamin B12",
+          "forms": [
+            {
+              "name": "Methylcobalamin",
+              "category": "vitamin",
+              "ingredientGroup": "Vitamin B12",
+              "prefix": null
+            }
+          ]
+        },
+        {
+          "name": "Pantothenic Acid",
+          "category": "vitamin",
+          "ingredientGroup": "Pantothenic Acid (Vitamin B5)",
+          "forms": [
+            {
+              "name": "Calcium Pantothenate",
+              "category": "mineral",
+              "ingredientGroup": "Calcium",
+              "prefix": null
+            },
+            {
+              "name": "Vitamin B5",
+              "category": "vitamin",
+              "ingredientGroup": "Vitamin B5",
+              "prefix": null
+            }
+          ]
+        },
+        {
+          "name": "Choline",
+          "category": "vitamin",
+          "ingredientGroup": "Choline",
+          "forms": [
+            {
+              "name": "Choline Bitartrate",
+              "category": "vitamin",
+              "ingredientGroup": "Choline",
+              "prefix": null
+            }
+          ]
+        },
+        {
+          "name": "Calcium",
+          "category": "mineral",
+          "ingredientGroup": "Calcium",
+          "forms": [
+            {
+              "name": "Calcium Ascorbate",
+              "category": "mineral",
+              "ingredientGroup": "Calcium",
+              "prefix": null
+            },
+            {
+              "name": "Calcium Citrate",
+              "category": "mineral",
+              "ingredientGroup": "Calcium",
+              "prefix": null
+            }
+          ]
+        },
+        {
+          "name": "Iron",
+          "category": "mineral",
+          "ingredientGroup": "Iron",
+          "forms": [
+            {
+              "name": "Iron Trisglycinate",
+              "category": "mineral",
+              "ingredientGroup": "Iron",
+              "prefix": null
+            }
+          ]
+        },
+        {
+          "name": "Iodine",
+          "category": "mineral",
+          "ingredientGroup": "Iodine",
+          "forms": [
+            {
+              "name": "Potassium Iodide",
+              "category": "mineral",
+              "ingredientGroup": "Potassium",
+              "prefix": null
+            }
+          ]
+        },
+        {
+          "name": "Magnesium",
+          "category": "mineral",
+          "ingredientGroup": "Magnesium",
+          "forms": [
+            {
+              "name": "Magnesium Aspartate",
+              "category": "mineral",
+              "ingredientGroup": "Magnesium",
+              "prefix": null
+            }
+          ]
+        },
+        {
+          "name": "Zinc",
+          "category": "mineral",
+          "ingredientGroup": "Zinc",
+          "forms": [
+            {
+              "name": "Zinc Amino Acid Chelate",
+              "category": "mineral",
+              "ingredientGroup": "Zinc",
+              "prefix": null
+            }
+          ]
+        },
+        {
+          "name": "Selenium",
+          "category": "mineral",
+          "ingredientGroup": "Selenium",
+          "forms": [
+            {
+              "name": "Selenium Amino Acid Chelate",
+              "category": "mineral",
+              "ingredientGroup": "Selenium",
+              "prefix": null
+            }
+          ]
+        },
+        {
+          "name": "Copper",
+          "category": "mineral",
+          "ingredientGroup": "Copper",
+          "forms": [
+            {
+              "name": "Copper Amino Acid Chelate",
+              "category": "mineral",
+              "ingredientGroup": "Copper",
+              "prefix": null
+            }
+          ]
+        },
+        {
+          "name": "Manganese",
+          "category": "mineral",
+          "ingredientGroup": "Manganese",
+          "forms": [
+            {
+              "name": "Manganese Amino Acid Chelate",
+              "category": "mineral",
+              "ingredientGroup": "Manganese",
+              "prefix": null
+            }
+          ]
+        },
+        {
+          "name": "Chromium",
+          "category": "mineral",
+          "ingredientGroup": "Chromium",
+          "forms": [
+            {
+              "name": "Chromium Picolinate",
+              "category": "mineral",
+              "ingredientGroup": "Chromium",
+              "prefix": null
+            }
+          ]
+        },
+        {
+          "name": "Molybdenum",
+          "category": "mineral",
+          "ingredientGroup": "Molybdenum",
+          "forms": [
+            {
+              "name": "Molybdenum Amino Acid Chelate",
+              "category": "mineral",
+              "ingredientGroup": "Molybdenum",
+              "prefix": null
+            }
+          ]
+        },
+        {
+          "name": "Potassium",
+          "category": "mineral",
+          "ingredientGroup": "Potassium",
+          "forms": [
+            {
+              "name": "Potassium Aspartate",
+              "category": "mineral",
+              "ingredientGroup": "Potassium",
+              "prefix": null
+            }
+          ]
+        },
+        {
+          "name": "Boron",
+          "category": "mineral",
+          "ingredientGroup": "Boron",
+          "forms": [
+            {
+              "name": "Boron Citrate",
+              "category": "mineral",
+              "ingredientGroup": "Boron",
+              "prefix": null
+            }
+          ]
+        },
+        {
+          "name": "Vanadium",
+          "category": "mineral",
+          "ingredientGroup": "Vanadium",
+          "forms": [
+            {
+              "name": "Vanadium Amino Acid Chelate",
+              "category": "mineral",
+              "ingredientGroup": "Vanadium",
+              "prefix": null
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "dsld_id": "311207",
+      "product_name": "Calcium Acetate",
+      "source": "api/label/311207",
+      "active_rows_with_forms": [
+        {
+          "name": "Calcium",
+          "category": "mineral",
+          "ingredientGroup": "Calcium",
+          "forms": [
+            {
+              "name": "Calcium Acetate",
+              "category": "mineral",
+              "ingredientGroup": "Calcium",
+              "prefix": null
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "dsld_id": "313913",
+      "product_name": "MediClear Orange Vanilla Flavored",
+      "source": "api/label/313913",
+      "active_rows_with_forms": [
+        {
+          "name": "Vitamin C",
+          "category": "vitamin",
+          "ingredientGroup": "Vitamin C",
+          "forms": [
+            {
+              "name": "Ascorbic Acid",
+              "category": "vitamin",
+              "ingredientGroup": "Vitamin C",
+              "prefix": null
+            }
+          ]
+        },
+        {
+          "name": "Vitamin D",
+          "category": "vitamin",
+          "ingredientGroup": "Vitamin D",
+          "forms": [
+            {
+              "name": "Vitamin D3",
+              "category": "vitamin",
+              "ingredientGroup": "Vitamin D",
+              "prefix": null
+            }
+          ]
+        },
+        {
+          "name": "Thiamine",
+          "category": "vitamin",
+          "ingredientGroup": "Thiamin",
+          "forms": [
+            {
+              "name": "Thiamine Hydrochloride",
+              "category": "vitamin",
+              "ingredientGroup": "Thiamin",
+              "prefix": null
+            }
+          ]
+        },
+        {
+          "name": "Riboflavin",
+          "category": "vitamin",
+          "ingredientGroup": "Vitamin B2 (Riboflavin)",
+          "forms": [
+            {
+              "name": "Riboflavin 5'-Phosphate Sodium",
+              "category": "vitamin",
+              "ingredientGroup": "Vitamin B2 (riboflavin 5-phosphate)",
+              "prefix": "as"
+            }
+          ]
+        },
+        {
+          "name": "Vitamin B6",
+          "category": "vitamin",
+          "ingredientGroup": "Vitamin B6 (unspecified)",
+          "forms": [
+            {
+              "name": "Pyridoxal 5-Phosphate",
+              "category": "vitamin",
+              "ingredientGroup": "Vitamin B6",
+              "prefix": "as"
+            }
+          ]
+        },
+        {
+          "name": "L-5-Methyltetrahydrofolate",
+          "category": "vitamin",
+          "ingredientGroup": "Vitamin B9 (5-Methyltetrahydrofolate)",
+          "forms": [
+            {
+              "name": "L-5-Methyltetrahydrofolic Acid, Glucosamine Salt",
+              "category": "TBD",
+              "ingredientGroup": "TBD",
+              "prefix": "from"
+            }
+          ]
+        },
+        {
+          "name": "Vitamin B12",
+          "category": "vitamin",
+          "ingredientGroup": "Vitamin B12",
+          "forms": [
+            {
+              "name": "Methylcobalamin",
+              "category": "vitamin",
+              "ingredientGroup": "Vitamin B12",
+              "prefix": null
+            }
+          ]
+        },
+        {
+          "name": "Pantothenic Acid",
+          "category": "vitamin",
+          "ingredientGroup": "Pantothenic Acid",
+          "forms": [
+            {
+              "name": "Calcium Pantothenate",
+              "category": "mineral",
+              "ingredientGroup": "Calcium",
+              "prefix": null
+            }
+          ]
+        },
+        {
+          "name": "Choline",
+          "category": "vitamin",
+          "ingredientGroup": "Choline",
+          "forms": [
+            {
+              "name": "Choline Citrate",
+              "category": "vitamin",
+              "ingredientGroup": "Choline",
+              "prefix": null
+            }
+          ]
+        },
+        {
+          "name": "Calcium",
+          "category": "mineral",
+          "ingredientGroup": "Calcium",
+          "forms": [
+            {
+              "name": "Calcium Citrate",
+              "category": "mineral",
+              "ingredientGroup": "Calcium",
+              "prefix": null
+            }
+          ]
+        },
+        {
+          "name": "Magnesium",
+          "category": "mineral",
+          "ingredientGroup": "Magnesium",
+          "forms": [
+            {
+              "name": "Magnesium Citrate",
+              "category": "mineral",
+              "ingredientGroup": "Magnesium",
+              "prefix": null
+            }
+          ]
+        },
+        {
+          "name": "Zinc",
+          "category": "mineral",
+          "ingredientGroup": "Zinc",
+          "forms": [
+            {
+              "name": "Albion Zinc Bisglycinate Chelate",
+              "category": "mineral",
+              "ingredientGroup": "Zinc",
+              "prefix": null
+            }
+          ]
+        },
+        {
+          "name": "Selenium",
+          "category": "mineral",
+          "ingredientGroup": "Selenium",
+          "forms": [
+            {
+              "name": "L-Selenomethionine",
+              "category": "amino acid",
+              "ingredientGroup": "Selenomethionine",
+              "prefix": null
+            }
+          ]
+        },
+        {
+          "name": "Manganese",
+          "category": "mineral",
+          "ingredientGroup": "Manganese",
+          "forms": [
+            {
+              "name": "Albion Manganese Bisglycinate Chelate",
+              "category": "mineral",
+              "ingredientGroup": "Manganese",
+              "prefix": null
+            }
+          ]
+        },
+        {
+          "name": "Chromium",
+          "category": "mineral",
+          "ingredientGroup": "Chromium",
+          "forms": [
+            {
+              "name": "Albion Chromium Nicotinate Glycinate Chelate",
+              "category": "mineral",
+              "ingredientGroup": "Chromium",
+              "prefix": null
+            }
+          ]
+        },
+        {
+          "name": "Molybdenum",
+          "category": "mineral",
+          "ingredientGroup": "Molybdenum",
+          "forms": [
+            {
+              "name": "Albion Molybdenum Glycinate Chelate",
+              "category": "mineral",
+              "ingredientGroup": "Molybdenum",
+              "prefix": null
+            }
+          ]
+        },
+        {
+          "name": "Potassium",
+          "category": "mineral",
+          "ingredientGroup": "Potassium",
+          "forms": [
+            {
+              "name": "Potassium Citrate",
+              "category": "mineral",
+              "ingredientGroup": "Potassium",
+              "prefix": null
+            }
+          ]
+        },
+        {
+          "name": "L-Lysine",
+          "category": "amino acid",
+          "ingredientGroup": "Lysine",
+          "forms": [
+            {
+              "name": "L-Lysine Monohydrochloride",
+              "category": "amino acid",
+              "ingredientGroup": "Lysine",
+              "prefix": null
+            }
+          ]
+        },
+        {
+          "name": "Betaine Anhydrous",
+          "category": "non-nutrient/non-botanical",
+          "ingredientGroup": "Betaine Anhydrous",
+          "forms": [
+            {
+              "name": "Trimethylglycine",
+              "category": "non-nutrient/non-botanical",
+              "ingredientGroup": "Betaine",
+              "prefix": null
+            }
+          ]
+        },
+        {
+          "name": "Greenselect",
+          "category": "botanical",
+          "ingredientGroup": "Green Tea",
+          "forms": [
+            {
+              "name": "Green Tea Phytosome",
+              "category": "botanical",
+              "ingredientGroup": "Green Tea",
+              "prefix": null
+            }
+          ]
+        },
+        {
+          "name": "Boron",
+          "category": "mineral",
+          "ingredientGroup": "Boron",
+          "forms": [
+            {
+              "name": "Albion Bororganic",
+              "category": "non-nutrient/non-botanical",
+              "ingredientGroup": "Boron",
+              "prefix": null
+            }
+          ]
+        },
+        {
+          "name": "Lutein",
+          "category": "non-nutrient/non-botanical",
+          "ingredientGroup": "Lutein",
+          "forms": [
+            {
+              "name": "Aztec Marigold Flower Extract",
+              "category": "botanical",
+              "ingredientGroup": "Tagetes",
+              "prefix": null
+            }
+          ]
+        },
+        {
+          "name": "Vanadium",
+          "category": "mineral",
+          "ingredientGroup": "Vanadium",
+          "forms": [
+            {
+              "name": "Vanadium Citrate",
+              "category": "mineral",
+              "ingredientGroup": "Vanadium",
+              "prefix": null
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "dsld_id": "33535",
+      "product_name": "Mega Men",
+      "source": "api/label/33535",
+      "active_rows_with_forms": [
+        {
+          "name": "Vitamin A",
+          "category": "vitamin",
+          "ingredientGroup": "Vitamin A",
+          "forms": [
+            {
+              "name": "Beta-Carotene",
+              "category": "vitamin",
+              "ingredientGroup": "Vitamin A",
+              "prefix": null
+            },
+            {
+              "name": "Retinyl Acetate",
+              "category": "vitamin",
+              "ingredientGroup": "Vitamin A",
+              "prefix": null
+            }
+          ]
+        },
+        {
+          "name": "Vitamin C",
+          "category": "vitamin",
+          "ingredientGroup": "Vitamin C",
+          "forms": [
+            {
+              "name": "Ascorbic Acid",
+              "category": "vitamin",
+              "ingredientGroup": "Vitamin C",
+              "prefix": null
+            },
+            {
+              "name": "Calcium Ascorbate",
+              "category": "mineral",
+              "ingredientGroup": "Calcium",
+              "prefix": null
+            }
+          ]
+        },
+        {
+          "name": "Vitamin D",
+          "category": "vitamin",
+          "ingredientGroup": "Vitamin D",
+          "forms": [
+            {
+              "name": "Cholecalciferol",
+              "category": "vitamin",
+              "ingredientGroup": "Vitamin D",
+              "prefix": null
+            },
+            {
+              "name": "Vitamin D3",
+              "category": "vitamin",
+              "ingredientGroup": "Vitamin D",
+              "prefix": null
+            }
+          ]
+        },
+        {
+          "name": "Vitamin E",
+          "category": "vitamin",
+          "ingredientGroup": "Vitamin E",
+          "forms": [
+            {
+              "name": "D-Alpha-Tocopherol Acetate",
+              "category": "vitamin",
+              "ingredientGroup": "Vitamin E",
+              "prefix": null
+            }
+          ]
+        },
+        {
+          "name": "Vitamin K",
+          "category": "vitamin",
+          "ingredientGroup": "Vitamin K (unspecified)",
+          "forms": [
+            {
+              "name": "Phytonadione",
+              "category": "vitamin",
+              "ingredientGroup": "Vitamin K",
+              "prefix": null
+            }
+          ]
+        },
+        {
+          "name": "Thiamine",
+          "category": "vitamin",
+          "ingredientGroup": "Thiamin",
+          "forms": [
+            {
+              "name": "Thiamine Mononitrate",
+              "category": "vitamin",
+              "ingredientGroup": "Thiamin",
+              "prefix": null
+            },
+            {
+              "name": "Vitamin B1",
+              "category": "vitamin",
+              "ingredientGroup": "Thiamin",
+              "prefix": null
+            }
+          ]
+        },
+        {
+          "name": "Riboflavin",
+          "category": "vitamin",
+          "ingredientGroup": "Riboflavin",
+          "forms": [
+            {
+              "name": "Vitamin B2",
+              "category": "vitamin",
+              "ingredientGroup": "Riboflavin",
+              "prefix": null
+            }
+          ]
+        },
+        {
+          "name": "Niacin",
+          "category": "vitamin",
+          "ingredientGroup": "Niacin",
+          "forms": [
+            {
+              "name": "Niacin",
+              "category": "vitamin",
+              "ingredientGroup": "Niacin",
+              "prefix": null
+            },
+            {
+              "name": "Niacinamide",
+              "category": "vitamin",
+              "ingredientGroup": "Niacin",
+              "prefix": null
+            }
+          ]
+        },
+        {
+          "name": "Vitamin B6",
+          "category": "vitamin",
+          "ingredientGroup": "Vitamin B6",
+          "forms": [
+            {
+              "name": "Pyridoxine Hydrochloride",
+              "category": "vitamin",
+              "ingredientGroup": "Vitamin B6",
+              "prefix": null
+            }
+          ]
+        },
+        {
+          "name": "Vitamin B12",
+          "category": "vitamin",
+          "ingredientGroup": "Vitamin B12",
+          "forms": [
+            {
+              "name": "Cyanocobalamin",
+              "category": "vitamin",
+              "ingredientGroup": "Vitamin B12",
+              "prefix": null
+            }
+          ]
+        },
+        {
+          "name": "Pantothenic Acid",
+          "category": "vitamin",
+          "ingredientGroup": "Pantothenic Acid (Vitamin B5)",
+          "forms": [
+            {
+              "name": "Calcium D-Pantothenate",
+              "category": "mineral",
+              "ingredientGroup": "Calcium",
+              "prefix": null
+            }
+          ]
+        },
+        {
+          "name": "Calcium",
+          "category": "mineral",
+          "ingredientGroup": "Calcium",
+          "forms": [
+            {
+              "name": "Calcium Carbonate",
+              "category": "mineral",
+              "ingredientGroup": "Calcium",
+              "prefix": null
+            }
+          ]
+        },
+        {
+          "name": "Iodine",
+          "category": "mineral",
+          "ingredientGroup": "Iodine",
+          "forms": [
+            {
+              "name": "Potassium Iodate",
+              "category": "mineral",
+              "ingredientGroup": "Iodine",
+              "prefix": "as"
+            }
+          ]
+        },
+        {
+          "name": "Magnesium",
+          "category": "mineral",
+          "ingredientGroup": "Magnesium",
+          "forms": [
+            {
+              "name": "Magnesium Oxide",
+              "category": "mineral",
+              "ingredientGroup": "Magnesium",
+              "prefix": "as"
+            }
+          ]
+        },
+        {
+          "name": "Zinc",
+          "category": "mineral",
+          "ingredientGroup": "Zinc",
+          "forms": [
+            {
+              "name": "Zinc Oxide",
+              "category": "mineral",
+              "ingredientGroup": "Zinc",
+              "prefix": null
+            }
+          ]
+        },
+        {
+          "name": "Selenium",
+          "category": "mineral",
+          "ingredientGroup": "Selenium",
+          "forms": [
+            {
+              "name": "L-Selenomethionine",
+              "category": "amino acid",
+              "ingredientGroup": "Selenomethionine",
+              "prefix": null
+            }
+          ]
+        },
+        {
+          "name": "Copper",
+          "category": "mineral",
+          "ingredientGroup": "Copper",
+          "forms": [
+            {
+              "name": "Cupric Oxide",
+              "category": "other",
+              "ingredientGroup": "Copper oxide",
+              "prefix": "as"
+            }
+          ]
+        },
+        {
+          "name": "Manganese",
+          "category": "mineral",
+          "ingredientGroup": "Manganese",
+          "forms": [
+            {
+              "name": "Manganese Sulfate",
+              "category": "mineral",
+              "ingredientGroup": "Manganese",
+              "prefix": "as"
+            }
+          ]
+        },
+        {
+          "name": "Chromium",
+          "category": "mineral",
+          "ingredientGroup": "Chromium",
+          "forms": [
+            {
+              "name": "Chromium Chelate",
+              "category": "non-nutrient/non-botanical",
+              "ingredientGroup": "Chromium",
+              "prefix": "as hydrolyzed protein"
+            }
+          ]
+        },
+        {
+          "name": "Molybdenum",
+          "category": "mineral",
+          "ingredientGroup": "Molybdenum",
+          "forms": [
+            {
+              "name": "Sodium Molybdate",
+              "category": "mineral",
+              "ingredientGroup": "Sodium",
+              "prefix": "as"
+            }
+          ]
+        },
+        {
+          "name": "Choline",
+          "category": "vitamin",
+          "ingredientGroup": "Choline",
+          "forms": [
+            {
+              "name": "Choline Bitartrate",
+              "category": "vitamin",
+              "ingredientGroup": "Choline",
+              "prefix": null
+            }
+          ]
+        },
+        {
+          "name": "Silica",
+          "category": "mineral",
+          "ingredientGroup": "Silicon",
+          "forms": [
+            {
+              "name": "Silicon Dioxide",
+              "category": "mineral",
+              "ingredientGroup": "Silicon",
+              "prefix": null
+            }
+          ]
+        },
+        {
+          "name": "Boron",
+          "category": "mineral",
+          "ingredientGroup": "Boron",
+          "forms": [
+            {
+              "name": "Boron Hydrolyzed Protein Chelate",
+              "category": "mineral",
+              "ingredientGroup": "Boron",
+              "prefix": null
+            }
+          ]
+        },
+        {
+          "name": "Vanadium",
+          "category": "mineral",
+          "ingredientGroup": "Vanadium",
+          "forms": [
+            {
+              "name": "Sodium Metavanadate",
+              "category": "mineral",
+              "ingredientGroup": "Sodium",
+              "prefix": null
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "dsld_id": "337226",
+      "product_name": "Acid-A-Cal Formula",
+      "source": "api/label/337226",
+      "active_rows_with_forms": [
+        {
+          "name": "Vitamin C",
+          "category": "vitamin",
+          "ingredientGroup": "Vitamin C",
+          "forms": [
+            {
+              "name": "Ascorbic Acid",
+              "category": "vitamin",
+              "ingredientGroup": "Vitamin C",
+              "prefix": null
+            }
+          ]
+        },
+        {
+          "name": "Vitamin B6",
+          "category": "vitamin",
+          "ingredientGroup": "Vitamin B6",
+          "forms": [
+            {
+              "name": "Pyridoxal 5-Phosphate",
+              "category": "vitamin",
+              "ingredientGroup": "Vitamin B6",
+              "prefix": null
+            },
+            {
+              "name": "Pyridoxine Hydrochloride",
+              "category": "vitamin",
+              "ingredientGroup": "Vitamin B6",
+              "prefix": null
+            }
+          ]
+        },
+        {
+          "name": "Calcium",
+          "category": "mineral",
+          "ingredientGroup": "Calcium",
+          "forms": [
+            {
+              "name": "Calcium Chloride",
+              "category": "mineral",
+              "ingredientGroup": "Calcium",
+              "prefix": null
+            },
+            {
+              "name": "Dicalcium Phosphate",
+              "category": "mineral",
+              "ingredientGroup": "Calcium",
+              "prefix": null
+            }
+          ]
+        },
+        {
+          "name": "Magnesium",
+          "category": "mineral",
+          "ingredientGroup": "Magnesium",
+          "forms": [
+            {
+              "name": "Magnesium Glycerophosphate",
+              "category": "mineral",
+              "ingredientGroup": "Magnesium",
+              "prefix": null
+            }
+          ]
+        },
+        {
+          "name": "Lemon Bioflavonoids",
+          "category": "botanical",
+          "ingredientGroup": "Lemon",
+          "forms": [
+            {
+              "name": "Citrus x limon",
+              "category": "botanical",
+              "ingredientGroup": "Lemon",
+              "prefix": null
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "dsld_id": "83231",
+      "product_name": "Basics",
+      "source": "api/label/83231",
+      "active_rows_with_forms": [
+        {
+          "name": "Vitamin A",
+          "category": "vitamin",
+          "ingredientGroup": "Vitamin A",
+          "forms": [
+            {
+              "name": "Beta-Carotene",
+              "category": "vitamin",
+              "ingredientGroup": "Vitamin A",
+              "prefix": null
+            },
+            {
+              "name": "Retinyl Acetate",
+              "category": "vitamin",
+              "ingredientGroup": "Vitamin A",
+              "prefix": null
+            }
+          ]
+        },
+        {
+          "name": "Vitamin C",
+          "category": "vitamin",
+          "ingredientGroup": "Vitamin C",
+          "forms": [
+            {
+              "name": "Ascorbic Acid",
+              "category": "vitamin",
+              "ingredientGroup": "Vitamin C",
+              "prefix": null
+            }
+          ]
+        },
+        {
+          "name": "Vitamin D",
+          "category": "vitamin",
+          "ingredientGroup": "Vitamin D",
+          "forms": [
+            {
+              "name": "Cholecalciferol",
+              "category": "vitamin",
+              "ingredientGroup": "Vitamin D",
+              "prefix": null
+            },
+            {
+              "name": "Vitamin D3",
+              "category": "vitamin",
+              "ingredientGroup": "Vitamin D",
+              "prefix": null
+            }
+          ]
+        },
+        {
+          "name": "Vitamin E",
+          "category": "vitamin",
+          "ingredientGroup": "Vitamin E",
+          "forms": [
+            {
+              "name": "D-Alpha-Tocopheryl Acetate",
+              "category": "vitamin",
+              "ingredientGroup": "Vitamin E",
+              "prefix": null
+            }
+          ]
+        },
+        {
+          "name": "Vitamin K",
+          "category": "vitamin",
+          "ingredientGroup": "Vitamin K",
+          "forms": [
+            {
+              "name": "Phytonadione",
+              "category": "vitamin",
+              "ingredientGroup": "Vitamin K",
+              "prefix": null
+            }
+          ]
+        },
+        {
+          "name": "Thiamine",
+          "category": "vitamin",
+          "ingredientGroup": "Thiamin",
+          "forms": [
+            {
+              "name": "Thiamine Mononitrate",
+              "category": "vitamin",
+              "ingredientGroup": "Thiamin",
+              "prefix": null
+            },
+            {
+              "name": "Vitamin B1",
+              "category": "vitamin",
+              "ingredientGroup": "Thiamin",
+              "prefix": null
+            }
+          ]
+        },
+        {
+          "name": "Riboflavin",
+          "category": "vitamin",
+          "ingredientGroup": "Riboflavin",
+          "forms": [
+            {
+              "name": "Vitamin B2",
+              "category": "vitamin",
+              "ingredientGroup": "Riboflavin",
+              "prefix": null
+            }
+          ]
+        },
+        {
+          "name": "Niacin",
+          "category": "vitamin",
+          "ingredientGroup": "Niacin",
+          "forms": [
+            {
+              "name": "Niacinamide",
+              "category": "vitamin",
+              "ingredientGroup": "Niacin",
+              "prefix": null
+            }
+          ]
+        },
+        {
+          "name": "Vitamin B6",
+          "category": "vitamin",
+          "ingredientGroup": "Vitamin B6",
+          "forms": [
+            {
+              "name": "Pyridoxine Hydrochloride",
+              "category": "vitamin",
+              "ingredientGroup": "Vitamin B6",
+              "prefix": null
+            }
+          ]
+        },
+        {
+          "name": "Vitamin B12",
+          "category": "vitamin",
+          "ingredientGroup": "Vitamin B12",
+          "forms": [
+            {
+              "name": "Cyanocobalamin",
+              "category": "vitamin",
+              "ingredientGroup": "Vitamin B12",
+              "prefix": null
+            }
+          ]
+        },
+        {
+          "name": "Pantothenic Acid",
+          "category": "vitamin",
+          "ingredientGroup": "Pantothenic Acid (Vitamin B5)",
+          "forms": [
+            {
+              "name": "Calcium D-Pantothenate",
+              "category": "mineral",
+              "ingredientGroup": "Calcium",
+              "prefix": null
+            }
+          ]
+        },
+        {
+          "name": "Calcium",
+          "category": "mineral",
+          "ingredientGroup": "Calcium",
+          "forms": [
+            {
+              "name": "Calcium Carbonate",
+              "category": "mineral",
+              "ingredientGroup": "Calcium",
+              "prefix": null
+            },
+            {
+              "name": "Dicalcium Phosphate",
+              "category": "mineral",
+              "ingredientGroup": "Calcium",
+              "prefix": null
+            }
+          ]
+        },
+        {
+          "name": "Iron",
+          "category": "mineral",
+          "ingredientGroup": "Iron",
+          "forms": [
+            {
+              "name": "Ferrous Fumarate",
+              "category": "mineral",
+              "ingredientGroup": "Iron",
+              "prefix": "as"
+            }
+          ]
+        },
+        {
+          "name": "Phosphorus",
+          "category": "mineral",
+          "ingredientGroup": "Phosphorus",
+          "forms": [
+            {
+              "name": "Dicalcium Phosphate",
+              "category": "mineral",
+              "ingredientGroup": "Calcium",
+              "prefix": "as"
+            }
+          ]
+        },
+        {
+          "name": "Iodine",
+          "category": "mineral",
+          "ingredientGroup": "Iodine",
+          "forms": [
+            {
+              "name": "Potassium Iodide",
+              "category": "mineral",
+              "ingredientGroup": "Iodine",
+              "prefix": "as"
+            }
+          ]
+        },
+        {
+          "name": "Magnesium",
+          "category": "mineral",
+          "ingredientGroup": "Magnesium",
+          "forms": [
+            {
+              "name": "Magnesium Oxide",
+              "category": "mineral",
+              "ingredientGroup": "Magnesium",
+              "prefix": "as"
+            }
+          ]
+        },
+        {
+          "name": "Zinc",
+          "category": "mineral",
+          "ingredientGroup": "Zinc",
+          "forms": [
+            {
+              "name": "Zinc Oxide",
+              "category": "mineral",
+              "ingredientGroup": "Zinc",
+              "prefix": null
+            }
+          ]
+        },
+        {
+          "name": "Selenium",
+          "category": "mineral",
+          "ingredientGroup": "Selenium",
+          "forms": [
+            {
+              "name": "Sodium Selenate",
+              "category": "mineral",
+              "ingredientGroup": "Sodium",
+              "prefix": null
+            }
+          ]
+        },
+        {
+          "name": "Copper",
+          "category": "mineral",
+          "ingredientGroup": "Copper",
+          "forms": [
+            {
+              "name": "Copper Sulfate",
+              "category": "mineral",
+              "ingredientGroup": "Copper",
+              "prefix": "as"
+            }
+          ]
+        },
+        {
+          "name": "Manganese",
+          "category": "mineral",
+          "ingredientGroup": "Manganese",
+          "forms": [
+            {
+              "name": "Manganese Sulfate",
+              "category": "mineral",
+              "ingredientGroup": "Manganese",
+              "prefix": "as"
+            }
+          ]
+        },
+        {
+          "name": "Chromium",
+          "category": "mineral",
+          "ingredientGroup": "Chromium",
+          "forms": [
+            {
+              "name": "Chromium Picolinate",
+              "category": "mineral",
+              "ingredientGroup": "Chomium picolinate",
+              "prefix": "as"
+            }
+          ]
+        },
+        {
+          "name": "Molybdenum",
+          "category": "mineral",
+          "ingredientGroup": "Molybdenum",
+          "forms": [
+            {
+              "name": "Sodium Molybdate",
+              "category": "mineral",
+              "ingredientGroup": "Sodium",
+              "prefix": "as"
+            }
+          ]
+        },
+        {
+          "name": "Chloride",
+          "category": "mineral",
+          "ingredientGroup": "Chloride",
+          "forms": [
+            {
+              "name": "Potassium Chloride",
+              "category": "non-nutrient/non-botanical",
+              "ingredientGroup": "Potassium Chloride",
+              "prefix": null
+            }
+          ]
+        },
+        {
+          "name": "Potassium",
+          "category": "mineral",
+          "ingredientGroup": "Potassium",
+          "forms": [
+            {
+              "name": "Potassium Chloride",
+              "category": "non-nutrient/non-botanical",
+              "ingredientGroup": "Potassium Chloride",
+              "prefix": "as"
+            }
+          ]
+        },
+        {
+          "name": "Silicon",
+          "category": "mineral",
+          "ingredientGroup": "Silicon",
+          "forms": [
+            {
+              "name": "Calcium Silicate",
+              "category": "other",
+              "ingredientGroup": "Calcium Silicate",
+              "prefix": "&"
+            },
+            {
+              "name": "Sodium Metasilicate",
+              "category": "other",
+              "ingredientGroup": null,
+              "prefix": "as"
+            }
+          ]
+        },
+        {
+          "name": "Boron",
+          "category": "mineral",
+          "ingredientGroup": "Boron",
+          "forms": [
+            {
+              "name": "Sodium Borate",
+              "category": "mineral",
+              "ingredientGroup": "Sodium",
+              "prefix": null
+            }
+          ]
+        },
+        {
+          "name": "Tin",
+          "category": "other",
+          "ingredientGroup": "Tin",
+          "forms": [
+            {
+              "name": "Stannous Chloride",
+              "category": "other",
+              "ingredientGroup": "Stannous Chloride",
+              "prefix": "as"
+            }
+          ]
+        },
+        {
+          "name": "Vanadium",
+          "category": "mineral",
+          "ingredientGroup": "Vanadium",
+          "forms": [
+            {
+              "name": "Sodium Metavanadate",
+              "category": "mineral",
+              "ingredientGroup": "Sodium",
+              "prefix": null
+            }
+          ]
+        },
+        {
+          "name": "Nickel",
+          "category": "mineral",
+          "ingredientGroup": "Nickel",
+          "forms": [
+            {
+              "name": "Nickel Sulfate",
+              "category": "other",
+              "ingredientGroup": "Nickel Sulfate",
+              "prefix": "as"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

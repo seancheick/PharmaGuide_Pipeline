@@ -93,10 +93,10 @@ def iqm():
     ('iron', 'iron amino acid chelate',                       11),
     ('iron', 'ferrous ascorbate',                             13),
     # C9 — Probiotics → 7 placeholder
-    ('lactobacillus_plantarum', 'lactobacillus plantarum (unspecified)',         7),
+    ('lactobacillus_plantarum', 'lactobacillus plantarum (unspecified)',         9),
     ('lactobacillus_salivarius', 'lactobacillus salivarius ha-118',              7),
-    ('bifidobacterium_lactis', 'bifidobacterium lactis (unspecified)',           7),
-    ('lactobacillus_rhamnosus', 'lactobacillus rhamnosus (unspecified)',         7),
+    ('bifidobacterium_lactis', 'bifidobacterium lactis (unspecified)',          11),
+    ('lactobacillus_rhamnosus', 'lactobacillus rhamnosus (unspecified)',        10),
     ('bifidobacterium_longum', 'bifidobacterium longum infantis 35624',          7),
     # C12 — BMOV
     ('vanadyl_sulfate', 'bis(maltolato)oxovanadium (BMOV)',   7),

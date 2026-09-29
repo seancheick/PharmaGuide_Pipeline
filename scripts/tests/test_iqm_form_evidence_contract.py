@@ -1006,9 +1006,10 @@ def test_shipped_iqm_carries_no_nested_axis_and_full_canonical_coverage():
     assert coverage.legacy == 0
     # 2026-09-28: BCAA 2:1:1, 4:1:1, instantized and unspecified gained verified
     # class-equivalence evidence (62 -> 66); BCAA unspecified rose to 14 under the
-    # unknown-form floor, a new Excellent form (239 -> 240); backlog 177 -> 174.
+    # unknown-form floor. Q38 then lowered eight unsupported authored unspecified
+    # Excellent forms to their evidence ceiling, leaving 232 Excellent forms total.
     assert coverage.canonical == 66
     # 2026-09-25: 18 legacy unspecified forms fell below Excellent under the
     # unknown-form floor and left the backlog (250 -> 232, 195 -> 177).
-    assert coverage.total == 240
+    assert coverage.total == 232
     assert sorted(coverage.missing) == sorted(load_backlog_file(BACKLOG_PATH))
