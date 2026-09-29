@@ -432,3 +432,31 @@ def test_scoring_audit_refuses_a_failed_safety_lookup(tmp_path: Path) -> None:
 
     codes = {finding.code for finding in audit_scoring(_args(path))}
     assert "SCORING_SAFETY_ASSESSMENT_INCOMPLETE" in codes
+
+
+@pytest.mark.parametrize("overrides", [
+    # The completeness gate runs first, so its reason wins over the safety one.
+    dict(verdict="NOT_SCORED", quality_score_status="not_scored", score_100_equivalent=None,
+         score_unavailable_reason="blocked_by_completeness_gate",
+         _v4_completeness_gate={"is_live_eligible": False, "verdict": "NOT_SCORED"}),
+    # A hard verdict still ships, but the lookup that failed may have been the
+    # one that would have found another ban: the build is unchecked either way.
+    dict(verdict="BLOCKED", quality_score_status="suppressed_safety", score_100_equivalent=None,
+         score_unavailable_reason="blocked_by_safety_gate"),
+])
+def test_scoring_audit_reads_the_resolver_errors_not_the_final_reason(tmp_path: Path, overrides) -> None:
+    path = tmp_path / "scored.json"
+    _write(path, _scored(_v4_safety_gate={"ingredient_assessment_errors": ["banned_recalled: lookup failed"]}, **overrides))
+
+    codes = {finding.code for finding in audit_scoring(_args(path))}
+    assert "SCORING_SAFETY_ASSESSMENT_INCOMPLETE" in codes
+
+
+def test_scoring_audit_treats_a_capture_gap_as_a_fact(tmp_path: Path) -> None:
+    from scoring_v4.gate_safety import _CAPTURE_GAP_PREFIX
+
+    path = tmp_path / "scored.json"
+    _write(path, _scored(_v4_safety_gate={"ingredient_assessment_errors": [_CAPTURE_GAP_PREFIX + " label rows"]}))
+
+    codes = {finding.code for finding in audit_scoring(_args(path))}
+    assert "SCORING_SAFETY_ASSESSMENT_INCOMPLETE" not in codes

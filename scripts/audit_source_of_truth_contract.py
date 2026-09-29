@@ -28,6 +28,7 @@ from assessment_readiness import (
 
 from stage_manifest import select_stage_files
 from pipeline_freshness import stage_freshness_issues
+from scoring_v4.gate_safety import safety_resolvers_failed
 from release_catalog_artifact import (
     ReleaseValidationError,
     SUPPRESSED_SAFETY_DOSE_QUARANTINE,
@@ -737,9 +738,14 @@ def audit_scoring(args: argparse.Namespace) -> list[Finding]:
             )
             if source not in allowed_sources and verdict not in {"BLOCKED", "UNSAFE"}:
                 findings.append(Finding("SCORING_SOURCE_FORBIDDEN", f"{pid}: scoring source {source!r} is not strict scorable input", str(file_path)))
-            if product.get("score_unavailable_reason") == "safety_assessment_incomplete":
-                # A safety resolver failed on this label; publishing would drop
-                # the product (or, on a global failure, the catalog) silently.
+            if (
+                product.get("score_unavailable_reason") == "safety_assessment_incomplete"
+                or safety_resolvers_failed(_safe_dict(product.get("_v4_safety_gate")).get("ingredient_assessment_errors"))
+            ):
+                # A safety resolver failed on this label, whatever reason won
+                # the verdict: the build is unchecked. Publishing would drop the
+                # product (or, on a global failure, the catalog) silently, and a
+                # failed banned-substance lookup cannot establish BLOCKED.
                 findings.append(Finding("SCORING_SAFETY_ASSESSMENT_INCOMPLETE", f"{pid}: a safety resolver could not check this label", str(file_path)))
             if diag.get("iqd_ingredients_fallback_used") is True:
                 findings.append(Finding("SCORING_USED_IQD_FALLBACK", f"{pid}: scoring consumed ingredient_quality_data.ingredients fallback", str(file_path)))
