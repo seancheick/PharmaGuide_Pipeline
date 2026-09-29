@@ -94,3 +94,30 @@ returned 3 (the third, PMID 9781306, is an animal-cancer review and does not qua
   citicoline, urolithin A). For Evidence some may be intended (ingredient-level trials); for the
   branded Formulation credit they are the same defect, which the branded-shortcut decision (register
   D24 item 6) removes at the owner. Not bulk-edited.
+
+## MSM evidence applicability (2026-09-29)
+
+- **Finding (review):** 182940 Glucosamine/MSM read Evidence 15.6/20 `evaluated_applicable` at 500 mg
+  MSM/day; the cited trials used 2 and 6 g/day. Cause: `BRAND_OPTIMSM` carried the generic aliases
+  "msm" and "methylsulfonylmethane" and no studied dose, so every MSM row took the branded
+  verified-primary floor (`generic_evidence`, `_BRANDED_EVIDENCE_LEVELS` / `brand_` id) with no
+  sub-clinical check.
+- **Receipts (live PubMed efetch, Europe PMC full text, 2026-09-29):** PMID 16309928 (Kim 2006,
+  Osteoarthritis Cartilage): 50 adults with knee OA, MSM 3 g twice daily (6 g/day) 12 weeks, WOMAC
+  pain and physical function better than placebo; stiffness and total symptoms unchanged; pilot;
+  MSM source not named in the abstract. PMID 37447322 (Toguchi 2023, Nutrients, PMC10346176): 88
+  adults with mild knee pain, ten 200 mg tablets (2 g/day) 12 weeks, JKOM total score better than
+  placebo (p = 0.046); full text: "OptiMSM (Bergstrom Nutrition ...) was used as the active
+  substance". Identity: UNII 9H4PO4Z4FT = methylsulfonylmethane (GSRS), as on IQM `msm`.
+- **Change:** `BRAND_OPTIMSM` aliases → `["optimsm"]`, studied dose 2000-6000 mg/day; new
+  `INGR_MSM` (ingredient-human, aliases msm / methylsulfonylmethane, same two trials, 2000-6000
+  mg/day, positive_weak, tier_2, joint endpoints only). `verify_backed_studies_citations.py`: 496
+  claims ok, 0 mismatch, 0 ghost.
+- **Replay** (82 raw labels with a 3-letter title ingredient, main 827f6b90 vs this): 44 move,
+  33 tier crossings, no status or route change, Evidence only. Glucosamine + MSM products return
+  to their values before the title fix (182940 74.9 → 66.6). Single MSM products below 2 g/day at
+  minimum directed use lose the brand floor (224694 MSM 1000 mg, 1 g/day: 78.4 → 62.8, Evidence
+  15.6 → 0, `applicability_unestablished`); at 2 g/day or more they keep ingredient-level
+  Evidence (202773 3 g/day: 15.6 → 10.4).
+- **Scope, recorded not changed:** 202 of 211 clinical entries carry no studied dose, so Evidence
+  cannot check the label amount for them; register Q39g.

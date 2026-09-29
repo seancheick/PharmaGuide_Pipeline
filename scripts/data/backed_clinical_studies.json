@@ -4,7 +4,7 @@
     "purpose": "evidence_scoring",
     "schema_version": "5.6.2",
     "last_updated": "2026-09-29",
-    "total_entries": 210,
+    "total_entries": 211,
     "changelog": [
       "5.6.2 (2026-09-26): INGR_OMEGA3 purpose_evidence retains factual scope and sources only. Numerical points, operational exposure cutoffs, interpolation and eligibility are owned by quality_score.json. Scientific boundaries rechecked against live source content; no clinician sign-off asserted and no score values changed.",
       "5.6.1 (2026-09-26): INGR_WHEY_PROTEIN no longer aliases generic Protein macro declarations, unspecified powders/blends, or rice/hemp sources absent from its cited 49-trial source inventory. Known whey, casein, milk, soy and pea source identities remain. Fresh-enrichment regressions cover two collagen labels and greens coffee; source-free macro recovery is intentionally rejected.",
@@ -3610,9 +3610,7 @@
       "id": "BRAND_OPTIMSM",
       "standard_name": "OptiMSM",
       "aliases": [
-        "optimsm",
-        "msm",
-        "methylsulfonylmethane"
+        "optimsm"
       ],
       "category": "joint_bone",
       "evidence_level": "product-human",
@@ -3629,9 +3627,9 @@
         "Healthy Aging/Longevity",
         "Increase Energy"
       ],
-      "notes": "Distilled MSM with explicit randomized human evidence in knee pain and osteoarthritis; newer mild-knee-pain data extend support but remain ingredient-like rather than uniquely product-specific.",
+      "notes": "Distilled MSM with explicit randomized human evidence in knee pain and osteoarthritis; newer mild-knee-pain data extend support but remain ingredient-like rather than uniquely product-specific. Studied doses: 6 g/day (PMID 16309928, MSM 3 g twice daily; source not named in the abstract) and 2 g/day (PMID 37447322, ten 200 mg OptiMSM tablets). Generic MSM draws on INGR_MSM, not on this brand record.",
       "study_type": "rct_multiple",
-      "last_updated": "2026-03-06",
+      "last_updated": "2026-09-29",
       "notable_studies": "Kim et al. (2006, PMID 16309928) placebo-controlled osteoarthritis trial found improved pain and physical function with MSM. More recent randomized knee-pain data include Toguchi et al. (2023, PMID 37447322), which showed improved quality-of-life measures after 12 weeks of MSM intake.",
       "references_structured": [
         {
@@ -3714,7 +3712,121 @@
       "effect_direction_rationale": "Retained positive_strong classification; study_type=rct_multiple; evidence_level=product-human; primary_outcome=Healthy Aging/Longevity; published_tags=RCT; total_enrollment=100; endpoint_tags=healthy_aging; notes/citations contain no automated downgrade signals.",
       "endpoint_relevance_tags": [
         "healthy_aging"
-      ]
+      ],
+      "min_clinical_dose": 2000,
+      "max_studied_clinical_dose": 6000,
+      "dose_unit": "mg"
+    },
+    {
+      "id": "INGR_MSM",
+      "standard_name": "MSM (Methylsulfonylmethane)",
+      "evidence_group_id": "msm",
+      "aliases": [
+        "msm",
+        "methylsulfonylmethane"
+      ],
+      "category": "joint_bone",
+      "evidence_level": "ingredient-human",
+      "study_type": "rct_multiple",
+      "published_studies": [
+        "RCT"
+      ],
+      "score_contribution": "tier_2",
+      "key_endpoints": [
+        "knee osteoarthritis pain and physical function (WOMAC) improved at 6 g/day for 12 weeks",
+        "knee quality of life (JKOM total score) improved at 2 g/day for 12 weeks in mild knee pain"
+      ],
+      "health_goals_supported": [
+        "Healthy Aging/Longevity"
+      ],
+      "notes": "Ingredient-level record for methylsulfonylmethane. Two small randomized, double-blind, placebo-controlled trials: knee osteoarthritis, 50 adults, MSM 3 g twice daily (6 g/day) for 12 weeks, lower WOMAC pain and physical-function impairment, no change in stiffness or total symptoms (PMID 16309928, a pilot); mild knee pain, 88 adults, 2 g/day (OptiMSM) for 12 weeks, primary JKOM total score better than placebo (p = 0.046) (PMID 37447322). No benefit is established below 2 g/day. Not evidence for energy, recovery or general inflammation claims.",
+      "last_updated": "2026-09-29",
+      "notable_studies": "Kim et al. (2006, PMID 16309928): 6 g/day MSM improved WOMAC pain and physical function in knee osteoarthritis over 12 weeks (pilot, n=50). Toguchi et al. (2023, PMID 37447322): 2 g/day MSM improved the JKOM total score in adults with mild knee pain over 12 weeks (n=88).",
+      "references_structured": [
+        {
+          "type": "pubmed",
+          "authority": "NCBI PubMed",
+          "pmid": "16309928",
+          "doi": "10.1016/j.joca.2005.10.003",
+          "title": "Efficacy of methylsulfonylmethane (MSM) in osteoarthritis pain of the knee: a pilot clinical trial.",
+          "citation": "Osteoarthritis and cartilage (2006-03-01)",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/16309928/",
+          "published_date": "2006-03-01",
+          "publication_types": [
+            "Journal Article",
+            "Randomized Controlled Trial",
+            "Research Support, Non-U.S. Gov't"
+          ],
+          "mesh_terms": [
+            "Adult",
+            "Aged",
+            "Analgesics",
+            "Dietary Supplements",
+            "Dimethyl Sulfoxide",
+            "Double-Blind Method",
+            "Drug Administration Schedule",
+            "Female",
+            "Humans",
+            "Male",
+            "Middle Aged",
+            "Osteoarthritis, Knee",
+            "Pain",
+            "Pilot Projects",
+            "Severity of Illness Index",
+            "Sulfones",
+            "Treatment Outcome"
+          ],
+          "supplementary_concepts": [],
+          "evidence_grade": "rct",
+          "retracted": false,
+          "supports_claims": [],
+          "verification_source": "pubmed_eutils"
+        },
+        {
+          "type": "pubmed",
+          "authority": "NCBI PubMed",
+          "pmid": "37447322",
+          "doi": "10.3390/nu15132995",
+          "title": "Methylsulfonylmethane Improves Knee Quality of Life in Participants with Mild Knee Pain: A Randomized, Double-Blind, Placebo-Controlled Trial.",
+          "citation": "Nutrients (2023-06-30)",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/37447322/",
+          "published_date": "2023-06-30",
+          "publication_types": [
+            "Randomized Controlled Trial",
+            "Journal Article"
+          ],
+          "mesh_terms": [
+            "Humans",
+            "Quality of Life",
+            "Pain",
+            "Knee Joint",
+            "Dimethyl Sulfoxide",
+            "Osteoarthritis, Knee",
+            "Double-Blind Method",
+            "Treatment Outcome",
+            "Sulfones"
+          ],
+          "supplementary_concepts": [],
+          "evidence_grade": "rct",
+          "retracted": false,
+          "supports_claims": [],
+          "verification_source": "pubmed_eutils"
+        }
+      ],
+      "external_ids": {
+        "unii": "9H4PO4Z4FT"
+      },
+      "effect_direction": "positive_weak",
+      "primary_outcome": "Healthy Aging/Longevity",
+      "total_enrollment": 138,
+      "effect_direction_confidence": "low",
+      "effect_direction_rationale": "Two small positive RCTs (a 50-person pilot at 6 g/day; 88 people at 2 g/day with p = 0.046 on the primary outcome); no replication at lower doses.",
+      "endpoint_relevance_tags": [
+        "joint_pain"
+      ],
+      "min_clinical_dose": 2000,
+      "max_studied_clinical_dose": 6000,
+      "dose_unit": "mg"
     },
     {
       "id": "BRAND_AQUAMIN",
