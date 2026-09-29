@@ -3577,17 +3577,49 @@ class EnhancedDSLDNormalizer:
         name = str(ingredient.get("name") or "").strip()
         if not name:
             return None
-        standard_name, mapped, _ = self._enhanced_ingredient_mapping(
-            name,
-            [],
-            ingredient_group=ingredient.get("ingredientGroup"),
+        ingredient_group = str(ingredient.get("ingredientGroup") or "").strip()
+
+        # ``source_form_aliases`` are parent-local by contract. A compound can
+        # legitimately supply more than one nutrient (Calcium Silicate is
+        # curated under both Calcium and Silicon), so its bare name cannot pick
+        # a parent from the global form index. When DSLD supplies an exact IQM
+        # parent in ingredientGroup, accept the source alias only inside that
+        # parent. Inactive rows never enter this active nutrient path.
+        group_result = self._exact_ingredient_group_lookup(ingredient_group)
+        group_standard_name = group_result.get("standard_name")
+        group_canonical_id, group_source_db = self._resolve_canonical_identity(
+            group_standard_name or "",
+            raw_name=ingredient_group,
         )
-        if not mapped:
-            return None
-        canonical_id, source_db = self._resolve_canonical_identity(
-            standard_name,
-            raw_name=name,
+        group_parent = (
+            self.ingredient_map.get(group_canonical_id, {})
+            if group_source_db == "ingredient_quality_map"
+            else {}
         )
+        processed_name = self.matcher.preprocess_text(name)
+        is_parent_scoped_source_form = any(
+            processed_name == self.matcher.preprocess_text(alias)
+            for form_data in (group_parent.get("forms") or {}).values()
+            if isinstance(form_data, dict)
+            for alias in (form_data.get("source_form_aliases") or [])
+            if isinstance(alias, str)
+        )
+        if is_parent_scoped_source_form:
+            standard_name = group_standard_name
+            canonical_id, source_db = group_canonical_id, group_source_db
+            return standard_name, canonical_id, source_db
+        else:
+            standard_name, mapped, _ = self._enhanced_ingredient_mapping(
+                name,
+                [],
+                ingredient_group=ingredient_group,
+            )
+            if not mapped:
+                return None
+            canonical_id, source_db = self._resolve_canonical_identity(
+                standard_name,
+                raw_name=name,
+            )
         if not canonical_id or source_db != "ingredient_quality_map":
             return None
         unii_match = self._try_unii_match(ingredient)

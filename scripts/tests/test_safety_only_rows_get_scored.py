@@ -81,6 +81,37 @@ def test_an_inactive_excipient_keeps_its_additive_record(pipeline):
     assert "ADD_CALCIUM_SILICATE" in {hit["additive_id"] for hit in hits}
 
 
+def test_an_active_calcium_source_uses_its_raw_parent_and_the_product_scores(pipeline):
+    """DSLD 295773 files Calcium Silicate in the active panel under Calcium.
+
+    Calcium Silicate is also a reviewed Silicon source and an inactive additive.
+    The raw section and ingredientGroup therefore scope its identity: this row
+    is active Calcium, while the separate inactive regression above remains an
+    additive and Silicon-group rows remain Silicon.
+    """
+    from scoring_v4.scored_artifact import build_scored_artifact
+
+    normalizer, enricher = pipeline
+    raw = json.loads((FIXTURES / "active_calcium_silicate_295773_raw.json").read_text())
+    cleaned = normalizer.normalize_product(raw)
+    calcium_silicate = next(
+        row for row in cleaned["activeIngredients"]
+        if row.get("raw_source_text") == "Calcium Silicate"
+    )
+    assert calcium_silicate["source_section"] == "active"
+    assert calcium_silicate["ingredientGroup"] == "Calcium"
+    assert calcium_silicate["canonical_id"] == "calcium"
+
+    enriched, _ = enricher.enrich_product(cleaned)
+    identity = next(
+        row for row in enriched["ingredient_quality_data"]["ingredients"]
+        if row.get("raw_source_path") == calcium_silicate["raw_source_path"]
+    )
+    assert identity["canonical_id"] == "calcium"
+    assert identity.get("identity_disposition") != "identity_conflict"
+    assert build_scored_artifact(enriched)["quality_score_status"] == "scored"
+
+
 @pytest.mark.parametrize(
     "pid,rule_id",
     [
