@@ -91,3 +91,17 @@ of a sports product). No status, route or BLOCKED/UNSAFE change in any set.
 Checks: `scripts/test.sh fast` 17,694 passed, 170 skipped, 0 failed (no corpus link; log
 `~/pg_quality/rr_fix/fast_packet.log`). Fresh-context review of the code diff: one bug (fixed in
 90b94f87), docstring and comment gaps (fixed), sleep payload now reports the top daily amount.
+
+## Follow-up fixes (18b0c069..e4831c01)
+
+Replay of the sample, targeted, off-list-floor (61 sports labels that used the generic proxy in the
+09-22 catalog) and ranged sets at e4831c01 against 42817875/fd79fc35 outputs: only 66953 and 74718
+(Essential Amino Acids) move, +1.4 Formulation, because L-Histidine no longer carries the complex's
+1.6 g (28d0c553). The Evidence lent-dose fix (73bf598f) moves no score or display state in these
+sets; it corrects the resolver's reason (cinnamon, turmeric: `dose_undisclosed`). The release-gate
+fix (18b0c069) is audit-only. `scripts/test.sh fast`: 17,702 passed, 170 skipped, 0 failed.
+
+The off-list-floor replay (fd79fc35, 61 labels) also sizes item 6: Ravage x4 −10.2 to −17.6, Amino
+Energy Advanced 66957 −12.8 (both now Dose 0: every sports amount is inside a blend); Essential
+Amino Acids x2 −6.4; LIT pre-workouts −1.6 to +1.2. Whether a fully hidden sports product should
+read Dose 0 or "cannot be assessed" belongs to the Dose-model proposal.
