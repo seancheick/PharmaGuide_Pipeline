@@ -26,11 +26,6 @@ sys.path.insert(0, str(Path(__file__).parent.parent))
 from enrich_supplements_v3 import SupplementEnricherV3
 
 DIST_BLOBS = Path(__file__).parent.parent / "dist" / "detail_blobs"
-ENRICHED_DIRS = sorted(
-    (Path(__file__).parent.parent / "products").glob("output_*_enriched/enriched/*.json")
-)
-
-
 def _enricher() -> SupplementEnricherV3:
     return SupplementEnricherV3.__new__(SupplementEnricherV3)
 
@@ -380,36 +375,3 @@ def serving_frequency_violations(record: dict) -> list[str]:
 )
 def test_frequency_invariants_catch_both_directions(record: dict, expected: bool) -> None:
     assert bool(serving_frequency_violations(record)) is expected
-
-
-@pytest.mark.skipif(not ENRICHED_DIRS, reason="no enriched output present")
-def test_no_enriched_record_derives_frequency_from_serving_size() -> None:
-    """Corpus invariant over the stage that actually owns provenance.
-
-    The detail blob keeps only basis_count/basis_unit/min/max, so it cannot be
-    audited for provenance — this runs where `basis_reason` and
-    `servings_per_day_source` still exist.
-    """
-    offenders = []
-    scanned = 0
-    for batch in ENRICHED_DIRS:
-        try:
-            payload = json.loads(batch.read_text())
-        except (json.JSONDecodeError, OSError):
-            continue
-        records = payload if isinstance(payload, list) else payload.get("products") or []
-        if isinstance(records, dict):
-            records = list(records.values())
-        for record in records:
-            if not isinstance(record, dict):
-                continue
-            scanned += 1
-            problems = serving_frequency_violations(record)
-            if problems:
-                offenders.append((record.get("dsld_id"), problems[0]))
-
-    assert scanned, "no enriched records scanned — the guard would pass vacuously"
-    assert not offenders, (
-        f"{len(offenders)} of {scanned} enriched records violate the serving-frequency "
-        f"invariants; first 5: {offenders[:5]}"
-    )

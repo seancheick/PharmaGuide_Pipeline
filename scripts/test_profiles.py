@@ -61,6 +61,7 @@ ARTIFACT_TEST_FILES: FrozenSet[str] = frozenset({
     "test_safety_audit_gates.py",
     "test_safety_copy_contract.py",
     "test_scoring_snapshot_v1.py",
+    "test_serving_basis_corpus_invariant.py",
     "test_unii_cache.py",
     "test_unii_exoneration_allowlist.py",
     "test_v4_canary_coverage.py",
