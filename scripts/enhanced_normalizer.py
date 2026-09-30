@@ -10115,6 +10115,11 @@ class EnhancedDSLDNormalizer:
                         {"quantity": variant}
                     ),
                     "is_canonical": is_canonical_serving_variant(variant),
+                    **(
+                        {"dailyValue": variant.get("daily_value")}
+                        if variant.get("daily_value") is not None
+                        else {}
+                    ),
                 }
                 for variant in variants
                 if isinstance(variant, dict)
@@ -10250,6 +10255,12 @@ class EnhancedDSLDNormalizer:
             row = dict(candidate)
             for key, value in source.items():
                 if key == "label_display_name" and row.get("label_display_name"):
+                    continue
+                if row.get("_has_alternate_servings") and key in {
+                    "serving_size_order",
+                    "serving_size_quantity",
+                    "serving_size_unit",
+                }:
                     continue
                 if (
                     key == "exact_dose_text"

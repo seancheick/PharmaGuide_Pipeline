@@ -293,6 +293,7 @@ def test_queued_daily_value_uses_the_same_canonical_serving_as_its_dose(tmp_path
             "serving_size_unit": "tablets",
             "exact_dose_text": "100 mg",
             "is_canonical": False,
+            "dailyValue": 4.0,
         },
         {
             "serving_size_order": 2,
@@ -300,10 +301,18 @@ def test_queued_daily_value_uses_the_same_canonical_serving_as_its_dose(tmp_path
             "serving_size_unit": "tablets",
             "exact_dose_text": "200 mg",
             "is_canonical": True,
+            "dailyValue": 9.0,
         },
     ]
-    assert rows["Cholesterol"]["dailyValue"] == 0.0
-    assert "dailyValue" not in rows["Total Carbohydrate"]
+    for key in ("serving_size_order", "serving_size_quantity", "serving_size_unit"):
+        assert key not in sodium
+    cholesterol = rows["Cholesterol"]
+    assert cholesterol["dailyValue"] == 0.0
+    assert [variant["dailyValue"] for variant in cholesterol["serving_variants"]] == [2.0, 0.0]
+    carbohydrate = rows["Total Carbohydrate"]
+    assert "dailyValue" not in carbohydrate
+    assert carbohydrate["serving_variants"][0]["dailyValue"] == 1.0
+    assert "dailyValue" not in carbohydrate["serving_variants"][1]
 
     enriched, warnings = SupplementEnricherV3().enrich_product(cleaned)
     assert warnings == []
@@ -338,7 +347,17 @@ def test_queued_daily_value_uses_the_same_canonical_serving_as_its_dose(tmp_path
     }
     assert exported["Sodium"]["dailyValue"] == 9.0
     assert exported["Sodium"]["exact_dose_text"] == ""
+    assert exported["Sodium"]["serving_variants"][0]["dailyValue"] == 4.0
+    assert exported["Sodium"]["serving_variants"][1]["dailyValue"] == 9.0
     assert exported["Sodium"]["serving_variants"][1]["exact_dose_text"] == "200 mg"
     assert exported["Sodium"]["serving_variants"][1]["is_canonical"] is True
+    for key in ("serving_size_order", "serving_size_quantity", "serving_size_unit"):
+        assert key not in exported["Sodium"]
     assert exported["Cholesterol"]["dailyValue"] == 0.0
+    assert [
+        variant["dailyValue"]
+        for variant in exported["Cholesterol"]["serving_variants"]
+    ] == [2.0, 0.0]
     assert "dailyValue" not in exported["Total Carbohydrate"]
+    assert exported["Total Carbohydrate"]["serving_variants"][0]["dailyValue"] == 1.0
+    assert "dailyValue" not in exported["Total Carbohydrate"]["serving_variants"][1]
