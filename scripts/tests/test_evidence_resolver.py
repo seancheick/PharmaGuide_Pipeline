@@ -487,11 +487,9 @@ def test_absence_of_qualifying_studies_cannot_emit_reviewed_null():
     "buchu_leaf",
     "goldenrod",
     "lima_bean",
-    "nha_total_terpene_lactones",
     "oi_galactose",
     "pediococcus_pentosaceus",
     "sweet_clover",
-    "withaferin_a",
 ])
 def test_legacy_zero_study_records_resolve_as_no_qualifying_human_evidence(canonical_id):
     """A completed bounded search with no qualifying studies is a reviewed zero."""
@@ -500,6 +498,31 @@ def test_legacy_zero_study_records_resolve_as_no_qualifying_human_evidence(canon
     assert res.disposition == EvidenceDisposition.NO_QUALIFYING_HUMAN_EVIDENCE.value
     assert res.applicability_status == "no_qualifying_trials_found"
     assert res.reason_code == "reproducible_search_found_no_qualifying_human_studies"
+    assert res.points_eligible is False
+
+
+def test_legacy_analytical_marker_preserves_identity_material_hold():
+    """A bounded search must not erase a more specific unresolved-material lock."""
+    res = er.resolve_evidence_for_canonical("nha_total_terpene_lactones")
+
+    assert res.disposition == EvidenceDisposition.IDENTITY_INSUFFICIENT.value
+    assert res.applicability_status == "identity_material_unresolved"
+    assert res.reason_code == "identity_material_unresolved"
+    assert "identity_material_unresolved" in res.blocking_reasons
+    assert res.points_eligible is False
+
+
+def test_legacy_isolated_marker_preserves_applicability_hold():
+    """Whole-extract research cannot complete review for an isolated marker."""
+    res = er.resolve_evidence_for_canonical("withaferin_a")
+
+    assert (
+        res.disposition
+        == EvidenceDisposition.RESEARCH_PRESENT_APPLICABILITY_UNESTABLISHED.value
+    )
+    assert res.applicability_status == "applicability_unestablished"
+    assert res.reason_code == "literature_applicability_unestablished"
+    assert "literature_applicability_unestablished" in res.blocking_reasons
     assert res.points_eligible is False
 
 
