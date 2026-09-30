@@ -10,19 +10,24 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
+import pytest  # noqa: E402
+
 import audit_dead_code  # noqa: E402
 
-SCAN = audit_dead_code.scan_functions()
+
+@pytest.fixture(scope="module")
+def scan():
+    return audit_dead_code.scan_functions()
 
 
-def test_every_unreferenced_or_test_only_definition_is_removed_or_kept_with_a_reason():
-    new = [f'{f["bucket"]}: {f["id"]} (line {f["start"]})' for f in SCAN["findings"]
+def test_every_unreferenced_or_test_only_definition_is_removed_or_kept_with_a_reason(scan):
+    new = [f'{f["bucket"]}: {f["id"]} (line {f["start"]})' for f in scan["findings"]
            if f["id"] not in audit_dead_code.KEEP]
     assert not new, "Delete these, or keep them in audit_dead_code.KEEP with a reason:\n" + "\n".join(new)
 
 
-def test_keep_entries_are_still_findings():
-    found = {f["id"] for f in SCAN["findings"]}
+def test_keep_entries_are_still_findings(scan):
+    found = {f["id"] for f in scan["findings"]}
     stale = sorted(set(audit_dead_code.KEEP) - found)
     assert not stale, "No longer dead or already gone; remove from audit_dead_code.KEEP:\n" + "\n".join(stale)
 
