@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Derive and persist the complete production assessable canonical active universe.
 
-Outputs scripts/data/production_assessable_actives.json with:
+Outputs scripts/audits/production_assessable_actives/production_assessable_actives.json with:
 - canonical_id
 - top_names / standard_name
 - product_count
@@ -20,7 +20,7 @@ if str(_SCRIPTS_DIR) not in sys.path:
 
 from scoring_input_contract import get_assessable_evidence_ingredients
 
-OUTPUT_FILE = _SCRIPTS_DIR / "data" / "production_assessable_actives.json"
+OUTPUT_FILE = _SCRIPTS_DIR / "audits" / "production_assessable_actives" / "production_assessable_actives.json"
 
 
 def main():

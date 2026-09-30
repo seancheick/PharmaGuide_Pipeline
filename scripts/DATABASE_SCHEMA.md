@@ -72,9 +72,7 @@ Every database file MUST include a `_metadata` object as its first key:
 | `synergy_bonuses` | synergy_cluster.json | Enrichment |
 | `blend_detection` | proprietary_blends.json | Enrichment |
 | `dosing_validation` | rda_optimal_uls.json | Enrichment, Scoring |
-| `dosing_categories` | ingredient_weights.json | Enrichment |
 | `dosing_normalization` | unit_conversions.json | Enrichment |
-| `unit_mapping` | unit_mappings.json | Enrichment |
 | `manufacturer_quality` | top_manufacturers_data.json | Enrichment |
 | `manufacturer_penalties` | manufacturer_violations.json | Enrichment, Scoring |
 | `manufacturer_deduction_explanation` | manufacture_deduction_expl.json | Scoring |
@@ -590,14 +588,11 @@ ship to the app.
 
 ---
 
-### 19. ingredient_weights.json
-**Purpose:** `dosing_categories` | **Entries:** read `_metadata.total_entries`
+### 19. ingredient_weights.json — RETIRED 2026-09-30
 
-Primary keys: `category_weights`, `dosage_weights`, `ingredient_priorities`
-
-Defines weight categories for ingredient classes, dosage tiers, and priority levels.
-
----
+Removed. No code ever read it: `constants.INGREDIENT_WEIGHTS` was defined in the first
+commit and never used (`scripts/audits/data_inventory_20260930/`). Not the IQM
+`dosage_importance` field, which is live.
 
 ### 20. manufacture_deduction_expl.json
 **Purpose:** `manufacturer_deduction_explanation` | **Entries:** read `_metadata.total_entries`
@@ -798,14 +793,11 @@ Defines conversion factors for IU→mcg, mg→g, CFU→billion, and vitamin-spec
 
 ---
 
-### 32. unit_mappings.json
-**Purpose:** `unit_mapping` | **Entries:** read `_metadata.total_entries`
+### 32. unit_mappings.json — RETIRED 2026-09-30
 
-Structure: Object keyed by supplement type (e.g., `Vitamin D3`, `Omega-3 Fish Oil`, `Magnesium`)
-
-Each entry maps dosage forms (capsule, softgel, tablet, powder) to `{amount, unit, notes}`.
-
----
+Removed. No code ever read it (`constants.UNIT_MAPPINGS` never used). It held assumed
+default strengths per product form, which must never become inferred label doses; unit
+conversion is owned by `unit_conversions.json`.
 
 ### 33. user_goals_to_clusters.json
 **Purpose:** `goal_mapping` | **Entries:** read `_metadata.total_entries`

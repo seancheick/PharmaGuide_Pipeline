@@ -1202,13 +1202,6 @@ def check_functional_ingredient_groupings(findings: List[Finding], data: Dict[st
                 findings.append(Finding("error", file, f"vague_terms_to_flag[{i}].term", "missing_or_wrong_type", "str", _type_name(term)))
 
 
-def check_ingredient_weights(findings: List[Finding], data: Dict[str, Any], file: str) -> None:
-    for key in ("category_weights", "dosage_weights", "ingredient_priorities"):
-        val = data.get(key)
-        if not isinstance(val, dict):
-            findings.append(Finding("error", file, key, "missing_or_non_object", "dict", _type_name(val)))
-
-
 def check_manufacture_deduction_expl(findings: List[Finding], data: Dict[str, Any], file: str) -> None:
     cap = data.get("total_deduction_cap")
     if not isinstance(cap, (int, float)):
@@ -1684,7 +1677,6 @@ def run_checks() -> List[Finding]:
         "cross_db_overlap_allowlist.json": check_overlap_allowlist,
         "banned_match_allowlist.json": check_banned_match_allowlist,
         "functional_ingredient_groupings.json": check_functional_ingredient_groupings,
-        "ingredient_weights.json": check_ingredient_weights,
         "manufacture_deduction_expl.json": check_manufacture_deduction_expl,
         "user_goals_to_clusters.json": check_user_goals_to_clusters,
         "clinical_risk_taxonomy.json": check_clinical_risk_taxonomy,

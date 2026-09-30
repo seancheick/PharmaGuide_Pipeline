@@ -69,7 +69,6 @@ IMPORTANT_DATA_FILES = [
 OPTIONAL_DATA_FILES = [
     ("botanical_ingredients.json", "Extended botanical data"),
     ("color_indicators.json", "Natural vs artificial colors"),
-    ("ingredient_weights.json", "Ingredient importance weights"),
     ("functional_ingredient_groupings.json", "Functional groupings"),
     ("manufacturer_violations.json", "Manufacturer violation history"),
     ("banned_match_allowlist.json", "Banned-match false-positive controls"),
@@ -78,7 +77,6 @@ OPTIONAL_DATA_FILES = [
     ("manufacture_deduction_expl.json", "Manufacturer deduction explanation"),
     ("migration_report.json", "Normalization migration audit"),
     ("rda_therapeutic_dosing.json", "Therapeutic dosage references"),
-    ("unit_mappings.json", "Unit alias mappings"),
     ("user_goals_to_clusters.json", "Goal-to-cluster mappings"),
 ]
 
@@ -153,7 +151,6 @@ REFERENCE_DATABASES = [
     "ingredient_classification.json",
     "ingredient_quality_map.json",
     "ingredient_interaction_rules.json",
-    "ingredient_weights.json",
     "manufacture_deduction_expl.json",
     "manufacturer_violations.json",
     "medication_profile_gate_rules.json",
@@ -166,7 +163,6 @@ REFERENCE_DATABASES = [
     "synergy_cluster.json",
     "top_manufacturers_data.json",
     "unit_conversions.json",
-    "unit_mappings.json",
     "user_goals_to_clusters.json",
 ]
 

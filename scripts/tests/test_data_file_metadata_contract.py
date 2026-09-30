@@ -20,7 +20,7 @@ three recognized shapes:
 * **top_level_dict_of_dicts**: no nested wrapper — the top level itself is
   the entry map, and every non-`_metadata` value is a dict (one entry record
   per top-level key). Examples: `ingredient_quality_map.json` (621 entries),
-  `enhanced_delivery.json` (78), `unit_mappings.json` (14).
+  `enhanced_delivery.json` (78).
 
 Files with a different shape (multi-array, mixed scalar+dict, etc.) are
 skipped — but only with an explicit `INTENTIONAL_EXCEPTIONS` entry that

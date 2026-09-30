@@ -76,7 +76,6 @@ class TestDBIntegrity:
             "cross_db_overlap_allowlist.json",
             "banned_match_allowlist.json",
             "functional_ingredient_groupings.json",
-            "ingredient_weights.json",
             "manufacture_deduction_expl.json",
             "user_goals_to_clusters.json",
             "clinical_risk_taxonomy.json",

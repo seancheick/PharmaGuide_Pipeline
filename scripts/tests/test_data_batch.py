@@ -78,7 +78,7 @@ def test_recount_writes_only_existing_fields_and_skips_exceptions():
     no_field = {"_metadata": {}, "items": [{"id": 1}]}
     assert db.recount("x.json", no_field) == {} and "total_entries" not in no_field["_metadata"]
     exception = {"_metadata": {"total_entries": 4}, "a": [1], "b": [2]}
-    assert db.recount("ingredient_weights.json", exception) == {}
+    assert db.recount("manufacture_deduction_expl.json", exception) == {}
 
 
 def test_recount_iqm_statistics():
