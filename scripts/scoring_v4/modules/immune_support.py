@@ -12,8 +12,6 @@ from typing import Any, Dict, Iterable, Optional
 from scoring_v4.modules.generic_helpers import (
     _as_float,
     _norm_text,
-    _safe_dict,
-    _safe_list,
     daily_serving_multiplier,
     daily_serving_range,
     get_active_ingredients,
@@ -153,8 +151,6 @@ def _immune_design_flags(product: Dict[str, Any], doses: Dict[str, float]) -> Di
     return {
         "high_zinc": (doses.get("zinc_mg") or 0.0) > HIGH_ZINC_THRESHOLD_MG,
         "high_vitamin_d": (doses.get("vitamin_d_mcg") or 0.0) > HIGH_VITAMIN_D_THRESHOLD_MCG,
-        "gummy_or_syrup": _is_gummy_or_syrup(product),
-        "high_glycemic_sugar": _has_high_glycemic_sugar(product),
     }
 
 
@@ -260,22 +256,6 @@ def _is_gummy_or_syrup(product: Dict[str, Any]) -> bool:
         f"{product.get('form_factor_canonical') or ''} {product.get('form_factor') or ''} {product.get('product_name') or ''}"
     )
     return any(token in form_text for token in ("gummy", "gummies", "syrup"))
-
-
-def _has_high_glycemic_sugar(product: Dict[str, Any]) -> bool:
-    dietary = _safe_dict((product or {}).get("dietary_sensitivity_data"))
-    sugar = _safe_dict(dietary.get("sugar"))
-    sweeteners = _safe_dict(dietary.get("sweeteners"))
-    level = _norm_text(sugar.get("level"))
-    sugar_sources = _safe_list(sugar.get("sugar_sources"))
-    high_glycemic = _safe_list(
-        sweeteners.get("high_glycemic") or sweeteners.get("high_glycemic_sweeteners")
-    )
-    return (
-        level == "high"
-        or bool(high_glycemic)
-        or any("syrup" in _norm_text(source) for source in sugar_sources)
-    )
 
 
 def _high_variability_botanical_count(product: Dict[str, Any]) -> int:
