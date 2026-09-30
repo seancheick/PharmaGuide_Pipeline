@@ -216,7 +216,8 @@ def test_vitamin_product_is_not_botanical():
 
 def test_ksm66_formulation_caps_at_15():
     # recognized(6)+plant_part(2)+dose(2)+extract(2)+marker(4)+branded(3) = 19 -> cap 15
-    ksm66 = _botanical_ingredient(raw_source_path="ingredientRows[0]")
+    # The cleaner stamps plantPart from the label form "Ashwagandha Root Extract" (Q40).
+    ksm66 = _botanical_ingredient(raw_source_path="ingredientRows[0]", plantPart="root")
     out = score_botanical_formulation(_botanical_product(ingredient=ksm66))
     assert out["score"] == BOTANICAL_FORMULATION_CAP == 15.0
     c = out["components"]
@@ -255,7 +256,7 @@ def test_standardization_tier_credit_is_proportional():
 def test_plain_whole_herb_powder_scores_modestly():
     # whole herb powder, no standardization, not branded, with a recognized id + dose
     ing = _botanical_ingredient(name="Ashwagandha Root Powder",
-                                form="Ashwagandha Root Powder", quantity=500)
+                                form="Ashwagandha Root Powder", quantity=500, plantPart="root")
     out = score_botanical_formulation(_botanical_product(ingredient=ing, standardized=False))
     c = out["components"]
     assert c.get("recognized_botanical_identity") == 6.0
