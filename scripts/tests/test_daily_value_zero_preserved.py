@@ -35,6 +35,19 @@ def _group(percent):
              "percent": percent, "footnote": None}]
 
 
+def _serving_variant(order, serving_quantity, amount, percent):
+    groups = [] if percent is None else _group(percent)
+    return {
+        "servingSizeOrder": order,
+        "servingSizeQuantity": serving_quantity,
+        "operator": "=",
+        "quantity": amount,
+        "unit": "mg",
+        "dailyValueTargetGroup": groups,
+        "servingSizeUnit": "Tablet(s)",
+    }
+
+
 def test_printed_zero_percent_is_kept_and_reads_as_absent():
     raw = {"id": 990001, "fullName": "Test Protein", "brandName": "Test",
            "ingredientRows": [
@@ -198,3 +211,134 @@ def test_daily_value_reaches_the_canonical_display_ledger_without_changing_score
     assert exported_display["Calcium"]["dailyValue"] == 13.0
     assert exported_display["Sodium"]["dailyValue"] == 50.0
     assert exported_display["Total Carbohydrate"]["dailyValue"] == 0.0
+
+
+def test_queued_daily_value_uses_the_same_canonical_serving_as_its_dose(tmp_path):
+    """A canonical two-tablet DV cannot ship beside the one-tablet dose."""
+    from build_final_db import build_final_db
+    from enrich_supplements_v3 import SupplementEnricherV3
+    from scoring_v4.scored_artifact import build_scored_artifact
+
+    def nutrition_row(order, name, first_percent, canonical_percent):
+        return {
+            "order": order,
+            "ingredientId": 3000 + order,
+            "name": name,
+            "category": "Amount Per Serving",
+            "ingredientGroup": name,
+            "nestedRows": [],
+            "alternateNames": [],
+            "forms": [],
+            "quantity": [
+                _serving_variant(1, 1, 100, first_percent),
+                _serving_variant(2, 2, 200, canonical_percent),
+            ],
+        }
+
+    raw = {
+        "id": 990004,
+        "fullName": "Test Protein",
+        "brandName": "Test",
+        "productVersionCode": "1",
+        "productType": {"langualCodeDescription": "Dietary Supplement"},
+        "ingredientRows": [
+            {
+                "order": 0,
+                "ingredientId": 3000,
+                "name": "Protein",
+                "category": "protein",
+                "ingredientGroup": "Protein (unspecified)",
+                "nestedRows": [],
+                "alternateNames": [],
+                "forms": [],
+                "quantity": [{
+                    "servingSizeOrder": 2,
+                    "servingSizeQuantity": 2,
+                    "operator": "=",
+                    "quantity": 24,
+                    "unit": "Gram(s)",
+                    "dailyValueTargetGroup": [],
+                    "servingSizeUnit": "Tablet(s)",
+                }],
+            },
+            nutrition_row(1, "Sodium", 4, 9),
+            nutrition_row(2, "Cholesterol", 2, 0),
+            nutrition_row(3, "Total Carbohydrate", 1, None),
+        ],
+        "otheringredients": {"text": None, "ingredients": []},
+        "servingSizes": [{
+            "order": 2,
+            "minQuantity": 2,
+            "maxQuantity": 2,
+            "minDailyServings": 1,
+            "maxDailyServings": 1,
+            "unit": "Tablet(s)",
+        }],
+        "statements": [{"text": "Take two tablets daily."}],
+    }
+
+    cleaned = EnhancedDSLDNormalizer().normalize_product(raw)
+    rows = {
+        row["label_display_name"]: row
+        for row in cleaned["display_ingredients"]
+    }
+    sodium = rows["Sodium"]
+    assert sodium["display_type"] == "nutrition_fact"
+    assert sodium["dailyValue"] == 9.0
+    assert sodium["exact_dose_text"] == ""
+    assert sodium["serving_variants"] == [
+        {
+            "serving_size_order": 1,
+            "serving_size_quantity": 1,
+            "serving_size_unit": "tablets",
+            "exact_dose_text": "100 mg",
+            "is_canonical": False,
+        },
+        {
+            "serving_size_order": 2,
+            "serving_size_quantity": 2,
+            "serving_size_unit": "tablets",
+            "exact_dose_text": "200 mg",
+            "is_canonical": True,
+        },
+    ]
+    assert rows["Cholesterol"]["dailyValue"] == 0.0
+    assert "dailyValue" not in rows["Total Carbohydrate"]
+
+    enriched, warnings = SupplementEnricherV3().enrich_product(cleaned)
+    assert warnings == []
+    scored = build_scored_artifact(enriched)
+
+    enriched_dir = tmp_path / "enriched"
+    scored_dir = tmp_path / "scored"
+    output_dir = tmp_path / "output"
+    enriched_dir.mkdir()
+    scored_dir.mkdir()
+    (enriched_dir / "batch.json").write_text(
+        json.dumps([enriched]), encoding="utf-8"
+    )
+    (scored_dir / "batch.json").write_text(
+        json.dumps([scored]), encoding="utf-8"
+    )
+    result = build_final_db(
+        [str(enriched_dir)],
+        [str(scored_dir)],
+        str(output_dir),
+        str(SCRIPTS),
+    )
+    assert result["product_count"] == 1
+    assert result["error_count"] == 0
+
+    blob = json.loads(
+        (output_dir / "detail_blobs" / "990004.json").read_text(encoding="utf-8")
+    )
+    exported = {
+        row["label_display_name"]: row
+        for row in blob["display_ingredients"]
+    }
+    assert exported["Sodium"]["dailyValue"] == 9.0
+    assert exported["Sodium"]["exact_dose_text"] == ""
+    assert exported["Sodium"]["serving_variants"][1]["exact_dose_text"] == "200 mg"
+    assert exported["Sodium"]["serving_variants"][1]["is_canonical"] is True
+    assert exported["Cholesterol"]["dailyValue"] == 0.0
+    assert "dailyValue" not in exported["Total Carbohydrate"]

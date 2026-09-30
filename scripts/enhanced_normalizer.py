@@ -10018,7 +10018,7 @@ class EnhancedDSLDNormalizer:
             self._display_ingredients_buffer = []
         source_metadata: Dict[str, Any] = {}
         if isinstance(source_row, dict):
-            _, _, daily_value, _ = self._process_quantity(
+            _, _, daily_value, quantity_variants = self._process_quantity(
                 source_row.get("quantity")
             )
             source_metadata = {
@@ -10029,6 +10029,11 @@ class EnhancedDSLDNormalizer:
                 "parent_source_path": source_row.get("parent_source_path"),
                 "exact_dose_text": self._exact_label_dose_text(source_row),
                 **({"dailyValue": daily_value} if daily_value is not None else {}),
+                **(
+                    {"quantityVariants": quantity_variants}
+                    if len(quantity_variants) > 1
+                    else {}
+                ),
                 "raw_category": source_row.get("category"),
                 "ingredient_group": source_row.get("ingredientGroup"),
             }
@@ -10198,6 +10203,15 @@ class EnhancedDSLDNormalizer:
                     }
                 )
         candidates.extend(list(getattr(self, "_display_ingredients_buffer", [])))
+        for candidate in candidates:
+            if candidate.get("serving_variants"):
+                continue
+            serving_variants = serving_variants_for(candidate)
+            candidate.pop("quantityVariants", None)
+            if serving_variants:
+                candidate["exact_dose_text"] = ""
+                candidate["serving_variants"] = serving_variants
+                candidate["_has_alternate_servings"] = True
 
         source_rows = list(getattr(self, "_display_source_rows", []))
         claimed_source_indices: Set[int] = set()
