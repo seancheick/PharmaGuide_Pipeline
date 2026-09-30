@@ -40,6 +40,7 @@ from collections import defaultdict
 from pathlib import Path
 
 REPO = Path(__file__).resolve().parents[1]
+SELF = Path(__file__).resolve().relative_to(REPO).as_posix()
 FLUTTER_LIB = Path("/Users/seancheick/PharmaGuide ai/lib")
 TESTS = "scripts/tests/"
 AUDITS = "scripts/audits/"
@@ -139,7 +140,7 @@ def _docstring_ids(tree: ast.AST) -> set[int]:
     return ids
 
 
-def references(tree: ast.AST) -> list[tuple[str, int]]:
+def references(tree: ast.AST, strings: bool = True) -> list[tuple[str, int]]:
     """(identifier, line) for every name the code uses; definitions and prose excluded."""
     docs = _docstring_ids(tree)
     refs = []
@@ -153,7 +154,8 @@ def references(tree: ast.AST) -> list[tuple[str, int]]:
                 refs.extend((part, node.lineno) for part in name.split(".") if part)
         elif isinstance(node, ast.ImportFrom) and node.module:
             refs.extend((part, node.lineno) for part in node.module.split("."))
-        elif isinstance(node, ast.Constant) and isinstance(node.value, str) and id(node) not in docs:
+        elif strings and isinstance(node, ast.Constant) and isinstance(node.value, str) \
+                and id(node) not in docs:
             refs.extend((tok, node.lineno) for tok in IDENT.findall(node.value))
     return refs
 
@@ -204,7 +206,8 @@ def scan_functions() -> dict:
     wanted = {d["name"] for d in defs} | {module_name(p) for p in trees}
     uses: dict[str, list[tuple[str, int]]] = defaultdict(list)   # name -> (file, line)
     for path, tree in trees.items():
-        for name, line in references(tree):
+        # KEEP names every finding in string literals; naming is not using.
+        for name, line in references(tree, strings=path != SELF):
             if name in wanted:
                 uses[name].append((path, line))
     importers: dict[str, set[str]] = defaultdict(set)             # module path -> files naming it
