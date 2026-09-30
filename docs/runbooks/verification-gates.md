@@ -36,8 +36,18 @@ Contract tests worth knowing: `test_label_fidelity_contract.py`, `test_active_co
 | `fda_weekly_sync.py` | FDA recall tracking (openFDA, RSS, DEA) — see the `fda-weekly-sync` skill |
 | `audit_banned_recalled_accuracy.py` | Release gate for banned/recalled data |
 | `audit_clinical_evidence_strength.py` | Evidence-strength classification |
+| `verify_semantic_applicability.py` | A cited intervention supports the canonical identity and material in `literature_evidence_records.json` (combination vs standalone, material match) |
+| `botanical_cui_resolver.py` | Read-only candidate CUIs for botanicals whose CUI is retired or points at the wrong concept; review before any data change |
 
 Tooling reference: `scripts/api_audit/README.md`.
+
+## Diagnostics and importers
+
+| Script | Use |
+|---|---|
+| `scripts/api_audit/explain_v4_product.py` | Print the route contract and v4 scoring trace for one enriched product id |
+| `scripts/tools/import_upc_overrides.py` | Rebuild `scripts/data/curated_overrides/upc_overrides.json` from the curated `~/Downloads/UPC_Found_PharmaGuide_Pipeline.md` |
+| `scripts/audit_dead_code.py` | Dead-code candidates: `functions` (the fast-rung ratchet), `keys` (values never read), `trace` (functions a frozen-label scoring run never enters) |
 
 ## Key documents (verify against code before trusting)
 
