@@ -507,9 +507,10 @@ def test_literature_registry_has_no_legacy_no_qualifying_evidence_token():
     """The registry stores one spelling for a bounded search with no qualifying studies."""
     import json
 
-    records = json.loads(
+    registry = json.loads(
         (SCRIPTS_ROOT / "data" / "literature_evidence_records.json").read_text()
-    )["literature_evidence_records"]
+    )
+    records = registry["literature_evidence_records"]
     leaked = [
         record["canonical_id"]
         for record in records
@@ -517,6 +518,8 @@ def test_literature_registry_has_no_legacy_no_qualifying_evidence_token():
     ]
 
     assert leaked == []
+    assert registry["_metadata"]["total_entries"] == len(records)
+    assert registry["_metadata"]["verified_records_count"] == len(records)
 
 
 def test_phase4_batch4_null_unfavorable_canaries():

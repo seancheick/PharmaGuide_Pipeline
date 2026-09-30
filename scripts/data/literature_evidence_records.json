@@ -7,7 +7,7 @@
     "total_entries": 754,
     "verification_pipeline": "scripts/api_audit/verify_literature_records.py",
     "verified_studies_count": 207,
-    "verified_records_count": 744
+    "verified_records_count": 754
   },
   "literature_evidence_records": [
     {
