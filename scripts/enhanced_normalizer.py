@@ -1185,14 +1185,6 @@ class EnhancedIngredientMatcher:
             
         return True  # Default to accepting
 
-    def clear_cache(self):
-        """Clear fuzzy matching cache to free memory - now using @lru_cache"""
-        # Clear the lru_cache decorators
-        if hasattr(self.preprocess_text, 'cache_clear'):
-            self.preprocess_text.cache_clear()
-        if hasattr(self._safe_fuzzy_match_cached, 'cache_clear'):
-            self._safe_fuzzy_match_cached.cache_clear()
-
 
 # An explicitly named branched-chain amino acid total, optionally with its
 # printed ratio ("2:1:1 BCAA", "Branched-Chain Amino Acids (BCAA)").
@@ -1507,32 +1499,6 @@ class EnhancedDSLDNormalizer:
         """Set the output directory and initialize the unmapped tracker"""
         self.unmapped_tracker = UnmappedIngredientTracker(output_dir / "unmapped")
         
-    def clear_caches(self):
-        """Clear all thread-safe @lru_cache caches"""
-        # Clear all @lru_cache decorated methods
-        cache_methods = [
-            '_enhanced_ingredient_mapping_cached',
-            '_enhanced_allergen_check_cached',
-            '_enhanced_harmful_check_cached',
-            '_enhanced_non_harmful_check_cached'
-        ]
-
-        for method_name in cache_methods:
-            if hasattr(self, method_name):
-                method = getattr(self, method_name)
-                if hasattr(method, 'cache_clear'):
-                    method.cache_clear()
-
-        # Clear matcher caches
-        self.matcher.clear_cache()
-
-        # Clear simple lookup caches
-        self._fast_exact_lookup.clear()
-        self._common_ingredients_cache.clear()
-
-        logger.info("Cleared all thread-safe LRU caches")
-
-
     def _build_fast_lookups_impl(self):
         """Build optimized fast lookup indices"""
         logger.info("Building fast lookup indices...")
@@ -8125,7 +8091,7 @@ class EnhancedDSLDNormalizer:
         return result
     
     def _process_other_ingredients_enhanced(self, other_ing_data: Dict) -> List[Dict]:
-        """Process inactive/other ingredients with enhanced mapping and parallel processing"""
+        """Process inactive/other ingredients through the one sequential cleaning path"""
         ingredients = other_ing_data.get("ingredients", [])
 
         # Handle None values from DSLD data
@@ -8168,200 +8134,6 @@ class EnhancedDSLDNormalizer:
 
         return self._process_ingredients_sequential(expanded_ingredients)
 
-
-    def _process_ingredient_for_other_parallel(self, ingredient_data: Dict[str, Any]) -> Tuple[Optional[Dict[str, Any]], Optional[Dict[str, Any]]]:
-        """
-        Process a single other/inactive ingredient for parallel execution.
-
-        Returns:
-            Tuple of (processed_ingredient, unmapped_info)
-            - processed_ingredient: cleaned ingredient dict, or None if skipped
-            - unmapped_info: dict with name, processed_name, etc. if unmapped, else None
-
-        Thread-safety: This method does NOT mutate shared state. The caller
-        merges unmapped_info in a single-threaded step after parallel execution.
-        """
-        name = ingredient_data.get("name", "")
-
-        if self._is_structural_form_container(name, is_active=False):
-            return (None, None)
-
-        # SKIP ENFORCEMENT: Check skip list FIRST before any processing
-        if self._should_skip_inactive_ingredient(name):
-            logger.debug(f"Skipping other ingredient from skip list: {name}")
-            return (None, None)  # Tuple format for consistency with normal return
-
-        # Extract forms with prefix for context-aware mapping (e.g., "from Fruits" for natural colors)
-        forms = []
-        for f in ingredient_data.get("forms", []) or []:
-            if isinstance(f, dict):
-                prefix = (f.get("prefix", "") or "").strip()
-                name_part = (f.get("name", "") or "").strip()
-                full_form = f"{prefix} {name_part}".strip() if prefix else name_part
-                if full_form:
-                    forms.append(full_form)
-            elif f:
-                forms.append(str(f))
-
-        # Exact inactive matches should prefer other_ingredients before active-canonical aliases.
-        standard_name, mapped, _ = self._map_inactive_name_prefer_other(
-            name,
-            forms,
-            ingredient_group=ingredient_data.get("ingredientGroup"),
-        )
-
-        # Enhanced checks
-        allergen_info = self._enhanced_allergen_check(name, forms)
-        harmful_info = self._enhanced_harmful_check(name)
-
-        # Check if proprietary blend
-        is_proprietary = self._is_proprietary_blend_name(name)
-
-        # Calculate final mapping status
-        is_mapped = (mapped or
-                    harmful_info["category"] != "none" or
-                    allergen_info["is_allergen"] or
-                    is_proprietary)
-
-        # Track unmapped ingredients only if not found in any database
-        # NOTE: We collect unmapped info here but DON'T mutate shared state
-        # The calling function merges this in a single-threaded step after parallel execution
-        unmapped_info = None
-        if (
-            not is_mapped
-            and not self._is_inactive_unmapped_report_container(ingredient_data)
-            and not self._is_nutrition_fact(name)
-        ):
-            processed_name = self.matcher.preprocess_text(name)
-            unmapped_info = {
-                "name": name,
-                "processed_name": processed_name,
-                "forms": forms,  # Include forms for context
-                "variations_tried": self.matcher.generate_variations(processed_name),
-                "is_active": False  # Other ingredients
-            }
-
-        # Preserve forms with full DSLD schema (category/ingredientGroup/uniiCode).
-        # See primary site above for field semantics.
-        forms_structured = []
-        raw_forms = ingredient_data.get("forms", []) or []
-        for form in raw_forms:
-            if isinstance(form, dict):
-                forms_structured.append({
-                    "name": form.get("name", ""),
-                    "ingredientId": form.get("ingredientId"),
-                    "order": form.get("order"),
-                    "prefix": form.get("prefix"),
-                    "percent": form.get("percent"),
-                    "category": form.get("category"),
-                    "ingredientGroup": form.get("ingredientGroup"),
-                    "uniiCode": form.get("uniiCode"),
-                })
-            elif isinstance(form, str):
-                forms_structured.append({"name": form})
-
-        # Check if this ingredient is an additive (add metadata flag for enrichment phase)
-        processed_name_check = self.matcher.preprocess_text(name)
-        is_additive = False
-        additive_type = None
-        if processed_name_check in self.other_ingredients_lookup:
-            additive_data = self.other_ingredients_lookup[processed_name_check]
-            is_additive = additive_data.get("is_additive", False)
-            if is_additive:
-                additive_type = additive_data.get("additive_type")
-
-        # CANONICAL IDENTITY + NUTRIENT CONTEXT (Phase 1b/1c, inactive path).
-        # Prefer raw_name for the reverse-index lookup — see primary site
-        # in the active-ingredient builder for the fish-oil-vs-omega-3
-        # rationale.
-        canonical_id, canonical_source_db = (
-            self._resolve_inactive_canonical_identity(name, standard_name)
-        )
-        # D2.1 CONTRACT (protocol rule #4): is_mapped ⇒ canonical_id.
-        # See primary site in active-ingredient builder for rationale.
-        if not is_mapped:
-            canonical_id = None
-            canonical_source_db = "unmapped"
-        elif canonical_id is None:
-            # Safety-only recognizers may mark an inactive as known, but they
-            # cannot supply cleaner identity or standardName.
-            standard_name = name
-            is_mapped = False
-            canonical_source_db = "unmapped"
-            if (
-                not self._is_inactive_unmapped_report_container(ingredient_data)
-                and not self._is_nutrition_fact(name)
-            ):
-                self._record_unmapped_ingredient(name, forms, is_active=False)
-        raw_category_i = ingredient_data.get("category") or ""
-        label_nutrient_context = None
-        if raw_category_i in {"vitamin", "mineral"}:
-            label_nutrient_context = norm_module.normalize_text(name)
-
-        # Build result - CLEANING ONLY (no enrichment)
-        result = {
-            # Original DSLD identifiers (PRESERVE)
-            "ingredientId": ingredient_data.get("ingredientId"),
-            "uniiCode": ingredient_data.get("uniiCode"),
-            "order": ingredient_data.get("order", 0),
-            "raw_category": raw_category_i or None,
-
-            # PROVENANCE FIELDS (Pipeline Hardening Phase 2)
-            # raw_source_text: Exact substring from DSLD, set once, never modified
-            "raw_source_text": name,
-            "source_section": "inactive",
-            "raw_source_path": ingredient_data.get("raw_source_path", "inactiveIngredients"),
-            # normalized_key: Stable key for dedup/tracking, computed ONCE
-            "normalized_key": norm_module.make_normalized_key(name),
-            "cleaner_row_role": "inactive",
-            "score_eligible_by_cleaner": False,
-            "score_exclusion_reason": "inactive",
-            "dose_class": "none",
-            "raw_taxonomy": {
-                "category": ingredient_data.get("category"),
-                "ingredientGroup": ingredient_data.get("ingredientGroup"),
-                "ingredientId": ingredient_data.get("ingredientId"),
-                "uniiCode": ingredient_data.get("uniiCode"),
-                "forms": forms_structured if forms_structured else [],
-                "parentBlend": ingredient_data.get("parentBlend"),
-                "isNestedIngredient": bool(ingredient_data.get("isNestedIngredient", False)),
-                "nested_depth": ingredient_data.get("_raw_nested_depth", 0),
-                "quantityVariants": [],
-            },
-            # CANONICAL IDENTITY (Phase 1b)
-            "canonical_id": canonical_id,
-            "canonical_source_db": canonical_source_db,
-            # LABEL NUTRIENT CONTEXT (Phase 1c)
-            "label_nutrient_context": label_nutrient_context,
-
-            # Basic ingredient info
-            "name": name,
-            "standardName": standard_name,  # From our database mapping
-            "ingredientGroup": ingredient_data.get("ingredientGroup"),  # PRESERVE from DSLD (even if wrong)
-
-            # Forms (PRESERVE full structure with IDs)
-            "forms": forms_structured if forms_structured else [],
-            "alternateNames": ingredient_data.get("alternateNames", []) or [],
-
-            # Mapping status (basic cleaning metadata)
-            "mapped": is_mapped,
-
-            # Hierarchy classification for scoring (source/summary/component)
-            "hierarchyType": self._classify_hierarchy_type(name)
-        }
-
-        # Add additive metadata flag (for enrichment phase to use)
-        if is_additive:
-            result["isAdditive"] = True
-            if additive_type:
-                result["additiveType"] = additive_type
-
-        # NO ENRICHMENT FIELDS (transparency, formsDisclosed, functional_context, vague_disclosure, etc.)
-        # Those belong in the enrichment phase
-
-        # Return tuple: (processed_ingredient, unmapped_info)
-        # Caller merges unmapped_info in single-threaded step (thread-safety fix)
-        return (result, unmapped_info)
 
     def _process_ingredients_sequential(self, ingredients: List[Dict]) -> List[Dict]:
         """Process ingredients sequentially (for small lists)"""

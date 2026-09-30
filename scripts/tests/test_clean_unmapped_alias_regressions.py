@@ -3251,32 +3251,7 @@ def test_megafood_inactive_aliases_map(normalizer, name, expected):
     assert expected.lower() in standard_name.lower()
 
 
-@pytest.mark.parametrize(
-    "name,expected_canonical",
-    [
-        ("Tricalcium Phosphate", "PII_TRICALCIUM_PHOSPHATE"),
-        ("Sodium Starch Glycolate", "PII_SODIUM_STARCH_GLYCOLATE"),
-    ],
-)
-def test_inactive_taxonomy_owns_canonical_identity_when_iqm_alias_is_ambiguous(
-    normalizer, name, expected_canonical
-):
-    result, unmapped = normalizer._process_ingredient_for_other_parallel(
-        {
-            "name": name,
-            "category": "other",
-            "ingredientGroup": name,
-            "forms": [],
-        }
-    )
-
-    assert unmapped is None
-    assert result["mapped"] is True
-    assert result["canonical_id"] == expected_canonical
-    assert result["canonical_source_db"] == "other_ingredients"
-
-
-def test_sequential_inactive_path_uses_same_taxonomy_owner(normalizer):
+def test_inactive_taxonomy_owns_canonical_identity_when_iqm_alias_is_ambiguous(normalizer):
     snapshot = normalizer.get_unmapped_snapshot()
 
     rows = normalizer._process_ingredients_sequential(
@@ -3291,6 +3266,7 @@ def test_sequential_inactive_path_uses_same_taxonomy_owner(normalizer):
         "PII_SODIUM_STARCH_GLYCOLATE",
     ]
     assert all(row["mapped"] is True for row in rows)
+    assert all(row["canonical_source_db"] == "other_ingredients" for row in rows)
     assert normalizer.get_unmapped_delta(snapshot)["unmapped"] == []
 
 
