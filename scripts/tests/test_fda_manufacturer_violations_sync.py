@@ -703,3 +703,47 @@ def test_filter_keeps_moringa_dietary_supplement_capsules():
         product_type="Food",
     )
     assert eligible, f"rejected with reason={reason!r}"
+
+
+@pytest.mark.parametrize(
+    "description,reason",
+    [
+        (
+            "Everything Sprouts Crunchy Protein Sprout Mix, containing Alfalfa Fenugreek, Cabbage, Mung, "
+            "Adzuki, Lentils, Green Pea, Net Wt. 5.0 oz (142 g)",
+            "Sprouts may be contaminated with STEC E. coli and/or Salmonella.",
+        ),
+        (
+            "Pico De Gallo. Ingredients: Tomato, Red Onion, Tomato Juice (Salt, Vitamin C [Ascorbic Acid]), "
+            "Lime Juice, Garlic, Cilantro. Keep Refrigerated.",
+            "Potential contamination with Salmonella.",
+        ),
+        (
+            "Mercer's brand ICE CREAM SANDWICHES TO GO. Ingredients: Cream, sugar, chocolate wafer, thiamine "
+            "mononitrate [vitamin B1], cocoa powder, extract. May contain nuts.",
+            "Undeclared peanuts",
+        ),
+    ],
+)
+def test_conventional_food_recalls_are_never_manufacturer_records(description, reason):
+    record = {
+        "_source_type": "openfda_enforcement",
+        "product_type": "Food",
+        "product_description": description,
+        "reason_for_recall": reason,
+        "classification": "Class I",
+    }
+    eligible, why = sync.is_eligible_manufacturer_record(record)
+    assert not eligible, why
+
+
+def test_food_endpoint_supplement_recall_stays_eligible():
+    record = {
+        "_source_type": "openfda_enforcement",
+        "product_type": "Food",
+        "product_description": "Aonic Complete His dietary supplement liquid drink shot, 34 ml bottle",
+        "reason_for_recall": "Possible coliforms, E.coli, and/or Pseudomonas aeruginosa contamination.",
+        "classification": "Class II",
+    }
+    eligible, why = sync.is_eligible_manufacturer_record(record)
+    assert eligible, why

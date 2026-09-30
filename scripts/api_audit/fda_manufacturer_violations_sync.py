@@ -212,6 +212,15 @@ PURE_FOOD_INDICATORS = [
     "dried chili",
 ]
 
+# Unmistakably conventional foods. Ingredient lists ("cocoa powder", "vitamin B1")
+# and herbs in a sprout mix must not rescue these: only an explicit
+# "dietary supplement" statement can.
+STRONG_FOOD_INDICATORS = [
+    "ice cream", "sandwich", "pizza", "salad", "pico de gallo", "sprout",
+    "cheese", "yogurt", "yoghurt", "pasta", "noodle", "bread", "soup",
+    "cereal", "jerky", "salsa",
+]
+
 
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description="Sync manufacturer_violations.json from FDA openFDA data")
@@ -524,6 +533,10 @@ def is_eligible_manufacturer_record(record: dict) -> tuple[bool, str]:
         return False, f"pharmaceutical_only_form:{pharma_form}"
 
     # (4) Reject pure conventional food products lacking any supplement form term.
+    if "dietary supplement" not in pf_text:
+        strong_food = next((t for t in STRONG_FOOD_INDICATORS if t in pf_text), None)
+        if strong_food:
+            return False, f"pure_food:{strong_food}"
     food_indicator = _matches_pure_food(pf_text)
     if food_indicator and not any(term in pf_text for term in SUPPLEMENT_FORM_TERMS):
         return False, f"pure_food:{food_indicator}"
