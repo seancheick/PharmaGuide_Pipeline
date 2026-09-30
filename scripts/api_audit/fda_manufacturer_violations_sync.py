@@ -34,6 +34,7 @@ SCRIPTS_ROOT = REPO_ROOT / "scripts"
 if str(SCRIPTS_ROOT) not in sys.path:
     sys.path.insert(0, str(SCRIPTS_ROOT))
 
+from run_artifacts import atomic_write_json
 from api_audit.fda_weekly_sync import (
     fetch_enforcement,
     fetch_fda_rss,
@@ -231,6 +232,13 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--include-rss", action="store_true", help="Also include FDA RSS sources in candidate selection")
     parser.add_argument("--confirm", action="store_true", help="Interactive confirmation prompt before writing new entries")
     parser.add_argument("--dry-run", action="store_true", help="Do not persist file, only print summary")
+    parser.add_argument("--as-of", type=date.fromisoformat, default=None, metavar="YYYY-MM-DD",
+                        help="Calculation date for ageing, recency and repeat-offender logic (default: today)")
+    mode = parser.add_mutually_exclusive_group()
+    mode.add_argument("--recalculate-only", action="store_true",
+                      help="Re-age existing entries as of --as-of; no openFDA fetch, no new entries")
+    mode.add_argument("--check", action="store_true",
+                      help="Exit 1 if any stored deduction differs from a recalculation as of --as-of; writes nothing")
     return parser.parse_args()
 
 
@@ -762,14 +770,17 @@ def lookup_base_deduction(code: str, deduction_expl: dict | None = None) -> int:
     return int(VIOLATION_CODE_MAP.get(code, -10))
 
 
-def parse_entry_date(value: str | None) -> tuple[str, date]:
+def parse_entry_date(value: str | None, as_of: date | None = None) -> tuple[str, date]:
     normalized = date_from_openfda(value or "")
     if normalized is None:
-        normalized = date.today().isoformat()
+        normalized = (as_of or date.today()).isoformat()
     return normalized, datetime.fromisoformat(normalized).date()
 
 
-def build_repeat_violation_lookup(entries: list[dict], deduction_expl: dict | None = None) -> dict[str, bool]:
+def build_repeat_violation_lookup(
+    entries: list[dict], deduction_expl: dict | None = None, as_of: date | None = None
+) -> dict[str, bool]:
+    as_of = as_of or date.today()
     lookback_days = DEFAULT_REPEAT_LOOKBACK_DAYS
     if deduction_expl:
         trigger = (
@@ -790,8 +801,8 @@ def build_repeat_violation_lookup(entries: list[dict], deduction_expl: dict | No
         )
         if not manufacturer_key:
             continue
-        _, entry_date = parse_entry_date(entry.get("date"))
-        days_since = (date.today() - entry_date).days
+        _, entry_date = parse_entry_date(entry.get("date"), as_of)
+        days_since = (as_of - entry_date).days
         if days_since <= lookback_days:
             counts[manufacturer_key] = counts.get(manufacturer_key, 0) + 1
 
@@ -842,9 +853,10 @@ def _maybe_seed_related_cluster_metadata(entry: dict) -> None:
         entry["related_brand_cluster_aliases"] = cluster_aliases
 
 
-def recalculate_all_entries(data: dict, deduction_expl: dict | None = None) -> int:
+def recalculate_all_entries(data: dict, deduction_expl: dict | None = None, as_of: date | None = None) -> int:
+    as_of = as_of or date.today()
     entries = data.get("manufacturer_violations", [])
-    repeat_lookup = build_repeat_violation_lookup(entries, deduction_expl)
+    repeat_lookup = build_repeat_violation_lookup(entries, deduction_expl, as_of)
     multi_line_threshold = (
         deduction_expl.get("modifiers", {})
         .get("MULTIPLE_PRODUCT_LINES", {})
@@ -858,8 +870,8 @@ def recalculate_all_entries(data: dict, deduction_expl: dict | None = None) -> i
     for entry in entries:
         before = json.dumps(entry, sort_keys=True, default=str)
 
-        normalized_date, entry_date = parse_entry_date(entry.get("date"))
-        days_since = (date.today() - entry_date).days
+        normalized_date, entry_date = parse_entry_date(entry.get("date"), as_of)
+        days_since = (as_of - entry_date).days
         manufacturer = (entry.get("manufacturer") or "").strip() or "Unknown Manufacturer"
         manufacturer_id = (
             (entry.get("manufacturer_id") or "").strip()
@@ -928,10 +940,35 @@ def recalculate_all_entries(data: dict, deduction_expl: dict | None = None) -> i
     return changed
 
 
+# days_since_violation is display-only and changes daily; the scorer reads total_deduction_applied.
+_AGED_FIELDS = ("recency_multiplier", "repeat_violation", "total_deduction_applied")
+
+
+def stale_entries(data: dict, deduction_expl: dict | None = None, as_of: date | None = None) -> list[dict]:
+    """Entries whose stored ageing fields differ from a recalculation as of `as_of`."""
+    fresh = json.loads(json.dumps(data))
+    recalculate_all_entries(fresh, deduction_expl, as_of)
+    stale = []
+    for old, new in zip(data.get("manufacturer_violations", []), fresh["manufacturer_violations"]):
+        drift = {f: (old.get(f), new.get(f)) for f in _AGED_FIELDS if old.get(f) != new.get(f)}
+        if drift:
+            stale.append({"id": old.get("id"), "drift": drift})
+    return stale
+
+
 def main() -> int:
     args = parse_args()
+    as_of = args.as_of or date.today()
     output_path = Path(args.output)
     deduction_expl = load_deduction_expl()
+
+    if args.check:
+        with open(output_path, "r", encoding="utf-8") as f:
+            stale = stale_entries(json.load(f), deduction_expl, as_of)
+        for item in stale:
+            print(f"STALE {item['id']}: {item['drift']}")
+        print(f"{len(stale)} stale entries as of {as_of.isoformat()}")
+        return 1 if stale else 0
 
     date_end = datetime.now().strftime("%Y%m%d")
     date_start = (datetime.now() - timedelta(days=args.days)).strftime("%Y%m%d")
@@ -940,8 +977,8 @@ def main() -> int:
     report_path.parent.mkdir(parents=True, exist_ok=True)
 
     # Fetch data from FDAs.
-    food_records = fetch_enforcement("food/enforcement", date_start, date_end, api_key=args.api_key)
-    drug_records = fetch_enforcement("drug/enforcement", date_start, date_end, api_key=args.api_key)
+    food_records = [] if args.recalculate_only else fetch_enforcement("food/enforcement", date_start, date_end, api_key=args.api_key)
+    drug_records = [] if args.recalculate_only else fetch_enforcement("drug/enforcement", date_start, date_end, api_key=args.api_key)
 
     # Optionally include safety alert RSS as extra signal.
     rss_records = []
@@ -992,7 +1029,7 @@ def main() -> int:
                 "description": "Manufacturer FDA violations and recall history",
                 "purpose": "manufacturer_penalties",
                 "schema_version": "5.0.0",
-                "last_updated": date.today().isoformat(),
+                "last_updated": as_of.isoformat(),
                 "total_entries": 0,
                 "statistics": {},
             },
@@ -1072,9 +1109,9 @@ def main() -> int:
 
         d = date_from_openfda(record.get("recall_initiation_date") or record.get("report_date"))
         if d is None:
-            d = date.today().isoformat()
+            d = as_of.isoformat()
         date_obj = datetime.fromisoformat(d).date() if isinstance(d, str) else d
-        days_since = (date.today() - date_obj).days
+        days_since = (as_of - date_obj).days
         recency = recency_multiplier(days_since, deduction_expl)
         source_type = record.get("_source_type", "openfda_enforcement")
         product_text = (record.get("product_description") or record.get("product_quantity") or "Unknown").strip()
@@ -1193,7 +1230,7 @@ def main() -> int:
     if added:
         data.setdefault("manufacturer_violations", []).extend(added)
 
-    recalculated_count = recalculate_all_entries(data, deduction_expl)
+    recalculated_count = recalculate_all_entries(data, deduction_expl, as_of)
 
     # recompute meta counters
     stats = {
@@ -1224,7 +1261,8 @@ def main() -> int:
 
     stats["repeat_offenders"] = sum(1 for _, c in manufacturer_total.items() if c > 1)
 
-    data.setdefault("_metadata", {})["last_updated"] = date.today().isoformat()
+    data.setdefault("_metadata", {})["last_updated"] = as_of.isoformat()
+    data["_metadata"]["calculation_date"] = as_of.isoformat()
     data["_metadata"]["total_entries"] = len(data.get("manufacturer_violations", []))
     data["_metadata"]["statistics"] = stats
 
@@ -1269,8 +1307,7 @@ def main() -> int:
         return 0
 
     output_path.parent.mkdir(parents=True, exist_ok=True)
-    with open(output_path, "w", encoding="utf-8") as f:
-        json.dump(data, f, indent=2, ensure_ascii=False)
+    atomic_write_json(output_path, data)
 
     report = {
         "generated_at": datetime.now().isoformat(),

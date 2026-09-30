@@ -747,3 +747,86 @@ def test_food_endpoint_supplement_recall_stays_eligible():
     }
     eligible, why = sync.is_eligible_manufacturer_record(record)
     assert eligible, why
+
+
+def _aged_data():
+    return {
+        "_metadata": {},
+        "manufacturer_violations": [
+            {
+                "id": "V001",
+                "manufacturer": "Aging Co",
+                "reason": "Undeclared sildenafil",
+                "violation_type": "Class I",
+                "violation_code": "CRI_UNDRUG",
+                "date": "2026-01-01",
+                "is_resolved": False,
+                "product": "Test product",
+            }
+        ],
+    }
+
+
+def test_recalculation_depends_on_as_of_not_the_wall_clock():
+    from datetime import date
+
+    expl = sync.load_deduction_expl()
+    a, b = _aged_data(), _aged_data()
+    sync.recalculate_all_entries(a, expl, as_of=date(2026, 3, 1))
+    sync.recalculate_all_entries(b, expl, as_of=date(2028, 3, 1))
+    ea, eb = a["manufacturer_violations"][0], b["manufacturer_violations"][0]
+    assert ea["days_since_violation"] == 59
+    assert eb["days_since_violation"] == 790
+    assert ea["total_deduction_applied"] != eb["total_deduction_applied"]
+    again = _aged_data()
+    sync.recalculate_all_entries(again, expl, as_of=date(2026, 3, 1))
+    assert again == a
+
+
+def test_stale_entries_reports_only_entries_that_drift_at_the_build_date():
+    from datetime import date
+
+    expl = sync.load_deduction_expl()
+    data = _aged_data()
+    sync.recalculate_all_entries(data, expl, as_of=date(2026, 3, 1))
+    assert sync.stale_entries(data, expl, as_of=date(2026, 3, 1)) == []
+    assert [s["id"] for s in sync.stale_entries(data, expl, as_of=date(2028, 3, 1))] == ["V001"]
+
+
+def test_recalculate_only_reages_without_fetching(monkeypatch, tmp_path):
+    path = tmp_path / "mv.json"
+    path.write_text(json.dumps(_aged_data()))
+    def boom(*a, **k):
+        raise AssertionError("recalculate-only must not fetch")
+    monkeypatch.setattr(sync, "fetch_enforcement", boom)
+    monkeypatch.setattr(sys, "argv", ["x", "--recalculate-only", "--as-of", "2026-03-01", "--output", str(path),
+                                      "--report", str(tmp_path / "r.json")])
+    assert sync.main() == 0
+    out = json.loads(path.read_text())
+    assert out["_metadata"]["calculation_date"] == "2026-03-01"
+    assert out["manufacturer_violations"][0]["days_since_violation"] == 59
+    assert path.read_text().endswith("\n")
+
+
+def test_check_exits_nonzero_when_stale_and_writes_nothing(monkeypatch, tmp_path):
+    from datetime import date
+
+    path = tmp_path / "mv.json"
+    data = _aged_data()
+    sync.recalculate_all_entries(data, sync.load_deduction_expl(), as_of=date(2026, 3, 1))
+    path.write_text(json.dumps(data))
+    before = path.read_text()
+    argv = ["x", "--check", "--output", str(path)]
+    monkeypatch.setattr(sys, "argv", argv + ["--as-of", "2026-03-01"])
+    assert sync.main() == 0
+    monkeypatch.setattr(sys, "argv", argv + ["--as-of", "2028-03-01"])
+    assert sync.main() == 1
+    assert path.read_text() == before
+
+
+def test_committed_deductions_reproduce_at_their_recorded_calculation_date():
+    from datetime import date
+
+    data = json.loads(sync.DATA_PATH.read_text(encoding="utf-8"))
+    as_of = date.fromisoformat(data["_metadata"]["calculation_date"])
+    assert sync.stale_entries(data, sync.load_deduction_expl(), as_of=as_of) == []
