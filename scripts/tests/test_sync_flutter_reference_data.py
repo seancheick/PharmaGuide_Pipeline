@@ -147,3 +147,39 @@ def test_sync_timing_rules_uses_pipeline_file_as_only_source(
         source_path=source,
         flutter_repo=flutter_repo,
     )
+
+
+def test_every_app_vocabulary_is_a_byte_copy_of_the_pipeline_source(tmp_path: Path) -> None:
+    """The app bundles pipeline vocabularies. A stale app copy (the app kept the
+    retired NUTRITION_ONLY verdict and lacked legal status `under_review`) must
+    fail validation, and the sync must replace every copy from scripts/data."""
+    data = Path(__file__).parent.parent / "data"
+    flutter_repo = tmp_path / "PharmaGuide-ai"
+    app_data = flutter_repo / "assets" / "data"
+    sync_mod.sync_app_vocabularies(flutter_repo=flutter_repo)
+    (app_data / "verdict_vocab.json").write_text('{"verdicts": []}\n')
+
+    with pytest.raises(ValueError, match="verdict_vocab.json differs from the pipeline"):
+        sync_mod.validate_app_vocabularies(flutter_repo=flutter_repo)
+
+    synced = sync_mod.sync_app_vocabularies(flutter_repo=flutter_repo)
+
+    assert len(synced) == len(sync_mod.APP_VOCABULARIES)
+    for name in sync_mod.APP_VOCABULARIES:
+        assert (app_data / name).read_bytes() == (data / name).read_bytes()
+    sync_mod.validate_app_vocabularies(flutter_repo=flutter_repo)
+
+
+def test_an_app_vocabulary_the_pipeline_does_not_sync_fails(tmp_path: Path) -> None:
+    flutter_repo = tmp_path / "PharmaGuide-ai"
+    sync_mod.sync_app_vocabularies(flutter_repo=flutter_repo)
+    (flutter_repo / "assets" / "data" / "app_only_vocab.json").write_text("{}\n")
+
+    with pytest.raises(ValueError, match="app_only_vocab.json"):
+        sync_mod.validate_app_vocabularies(flutter_repo=flutter_repo)
+
+
+def test_every_synced_vocabulary_is_in_the_release_manifest() -> None:
+    manifested = {path.as_posix() for path in sync_mod.MANIFESTED_ARTIFACTS}
+    for name in sync_mod.APP_VOCABULARIES:
+        assert f"assets/data/{name}" in manifested

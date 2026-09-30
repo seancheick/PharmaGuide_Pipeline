@@ -49,6 +49,41 @@ MANIFEST_DESTINATION_RELATIVE_PATH = Path(
     "assets/reference_data/reference_data_manifest.json"
 )
 
+# Controlled vocabularies the app bundles verbatim (pubspec `assets/data/`).
+# scripts/data is their only source; the app copy is a byte copy. product_type
+# has its own semantic sync above. An app vocab missing here fails validation.
+DATA_DIR = Path(__file__).parent / "data"
+APP_VOCAB_RELATIVE_DIR = Path("assets/data")
+APP_VOCABULARIES = (
+    "allergen_prevalence_vocab.json",
+    "allergen_regulatory_status_vocab.json",
+    "ban_context_vocab.json",
+    "banned_status_vocab.json",
+    "clinical_indication_vocab.json",
+    "clinical_risk_vocab.json",
+    "confidence_tier_vocab.json",
+    "drug_class_vocab.json",
+    "effect_direction_vocab.json",
+    "efsa_genotoxicity_vocab.json",
+    "efsa_status_vocab.json",
+    "evidence_level_vocab.json",
+    "evidence_strength_vocab.json",
+    "form_factor_vocab.json",
+    "functional_roles_vocab.json",
+    "ingredient_category_vocab.json",
+    "iqm_category_vocab.json",
+    "legal_status_vocab.json",
+    "manufacturer_trust_tier_vocab.json",
+    "match_mode_vocab.json",
+    "primary_outcome_vocab.json",
+    "score_contribution_tier_vocab.json",
+    "severity_vocab.json",
+    "signal_strength_vocab.json",
+    "study_type_vocab.json",
+    "user_goals_vocab.json",
+    "verdict_vocab.json",
+)
+
 # Every artifact this script owns. The manifest below records a SHA-256 for each
 # so the FLUTTER repo can detect drift on its own.
 #
@@ -63,6 +98,7 @@ MANIFESTED_ARTIFACTS = (
     DEPLETIONS_DESTINATION_RELATIVE_PATH,
     CLINICAL_TAXONOMY_DESTINATION_RELATIVE_PATH,
     TIMING_RULES_DESTINATION_RELATIVE_PATH,
+    *(APP_VOCAB_RELATIVE_DIR / name for name in APP_VOCABULARIES),
 )
 
 
@@ -162,6 +198,34 @@ def sync_reference_data(*, source_path: Path, flutter_repo: Path) -> dict[str, A
     destination.parent.mkdir(parents=True, exist_ok=True)
     shutil.copyfile(source_path, destination)
     return validate_flutter_reference_data(source_path=source_path, flutter_repo=flutter_repo)
+
+
+def sync_app_vocabularies(*, flutter_repo: Path) -> list[Path]:
+    """Byte-copy every app-bundled vocabulary from scripts/data."""
+    destination_dir = flutter_repo.resolve() / APP_VOCAB_RELATIVE_DIR
+    destination_dir.mkdir(parents=True, exist_ok=True)
+    written = []
+    for name in APP_VOCABULARIES:
+        source = DATA_DIR / name
+        json.loads(source.read_text(encoding="utf-8"))
+        shutil.copyfile(source, destination_dir / name)
+        written.append(destination_dir / name)
+    return written
+
+
+def validate_app_vocabularies(*, flutter_repo: Path) -> list[str]:
+    """Fail unless every app vocabulary is the pipeline's bytes and the app
+    bundles no vocabulary this script does not own."""
+    app_dir = flutter_repo.resolve() / APP_VOCAB_RELATIVE_DIR
+    owned = set(APP_VOCABULARIES) | {PRODUCT_TYPE_DESTINATION_RELATIVE_PATH.name}
+    unowned = sorted(p.name for p in app_dir.glob("*_vocab.json") if p.name not in owned)
+    if unowned:
+        raise ValueError(f"App vocabularies with no pipeline sync: {unowned}")
+    for name in APP_VOCABULARIES:
+        copy = app_dir / name
+        if not copy.is_file() or _sha256_of(copy) != _sha256_of(DATA_DIR / name):
+            raise ValueError(f"{name} differs from the pipeline source; re-run the sync")
+    return list(APP_VOCABULARIES)
 
 
 def _load_product_type_vocab(source_path: Path) -> tuple[Path, dict[str, Any]]:
@@ -567,6 +631,9 @@ def main() -> int:
         source_path=Path(args.timing_rules_source),
         flutter_repo=Path(args.flutter_repo),
     )
+    if not args.check:
+        sync_app_vocabularies(flutter_repo=Path(args.flutter_repo))
+    vocabularies = validate_app_vocabularies(flutter_repo=Path(args.flutter_repo))
     depletion_kwargs: dict[str, Any] = dict(
         source_path=Path(args.depletions_source),
         flutter_repo=Path(args.flutter_repo),
@@ -610,6 +677,7 @@ def main() -> int:
         f"schema={timing_result['schema_version']} "
         f"entries={timing_result['total_entries']}"
     )
+    print(f"{verb} app vocabularies: files={len(vocabularies)}")
     print(f"{verb} reference-data manifest: artifacts={len(manifest['artifacts'])}")
     return 0
 
