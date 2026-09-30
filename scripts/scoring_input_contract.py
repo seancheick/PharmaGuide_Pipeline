@@ -29,6 +29,7 @@ from constants import (
 )
 from scoring_reference_resolver import (
     has_therapeutic_reference,
+    iqm_reference_entry,
     is_known_botanical,
 )
 
@@ -3208,13 +3209,64 @@ def get_evidence_subject_rows(product: Mapping[str, Any]) -> List[Dict[str, Any]
     """The one provider of rows that may own a product's Evidence.
 
     Strict scoring rows, label-level projections (``product_level_evidence``)
-    included; the assessable label rows only when the contract yields none.
-    Owner selection (``evidence_resolver.evidence_owner_canonicals``) and the
-    enricher's clinical matching both read this set, so every owner has had
-    its evidence looked up.
+    included, plus the disclosed active members of an undosed blend. A blend
+    or marketing name and a descriptor are never subjects; a blend total lent
+    to one child is one only when that child's identity is assessable. The
+    blend's members are subjects with no dose (Dose and Transparency charge the
+    blend). Owner selection
+    (``evidence_resolver.evidence_owner_canonicals``), the enricher's clinical
+    matching and the scorer all read this set, so every owner has had its
+    evidence looked up.
     """
-    rows = list(get_scoring_ingredients(dict(product), strict=True).rows)
-    return rows or get_assessable_evidence_ingredients(product)
+    assessable = [
+        row for row in get_assessable_evidence_ingredients(product)
+        if not _is_ineligible_evidence_subject(row)
+    ]
+    assessable_canonicals = {_norm(row.get("canonical_id")) for row in assessable}
+    rows = [
+        row
+        for row in get_scoring_ingredients(product, strict=True).rows
+        if not _is_ineligible_evidence_subject(row)
+        # A blend's mass lent to one child names that child; the child is a
+        # subject only when its own identity is assessable (never stevia).
+        and (not is_lent_blend_mass(row) or _norm(row.get("canonical_id")) in assessable_canonicals)
+    ]
+    covered = {_norm(row.get("canonical_id")) for row in rows}
+    for row in assessable:
+        canonical = _norm(row.get("canonical_id"))
+        if canonical and canonical not in covered:
+            covered.add(canonical)
+            rows.append(row)
+    return rows
+
+
+def _is_ineligible_evidence_subject(row: Mapping[str, Any]) -> bool:
+    """A label name for a blend or a product, a descriptor, or a bioavailability
+    aid the enricher demoted (piperine <= 10 mg): none is an ingredient whose
+    studies the product owns. Every candidate row of get_evidence_subject_rows
+    passes this one decision.
+    A name minted from the label is an ingredient only when an active-identity
+    owner knows it: IQM (DSLD groups the BR-DIM complex as Diindolylmethane) or
+    a curated branded clinical record (Sytrinol, Tesnor: studied materials, not
+    marketing names). The botanical, other-ingredient and blend databases map
+    label rows; they do not make a label name an active."""
+    from evidence_resolver import is_reviewed_branded_material
+
+    canonical = _norm(row.get("canonical_id"))
+    minted = (
+        row.get("identity_kind") == "label_taxonomy_anchor"
+        or _norm(row.get("canonical_source_db")) == "proprietary_blends"
+    )
+    known = minted and (
+        iqm_reference_entry(canonical)
+        or is_reviewed_branded_material(canonical, row.get("name"))
+    )
+    return (
+        (minted and not known)
+        or row.get("demotion_reason") == "absorption_enhancer_sub_threshold"
+        or canonical.endswith("_descriptor")
+        or canonical in DETERMINISTIC_NON_EFFICACY_CANONICALS
+    )
 
 
 def scoring_row_key(row: Dict[str, Any], index: int) -> str:

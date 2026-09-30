@@ -92,17 +92,15 @@ def test_branded_projection_reaches_its_branded_record(enriched):
     assert "sytrinol" in _matches(enriched["54775"]).get("BRAND_SYTRINOL", set())
 
 
-def test_a_branded_blend_projection_reaches_its_branded_record(enriched):
-    assert "uc_ii_proprietary_cartilage_blend" in _matches(enriched["321604"]).get("BRAND_UCII", set())
+def test_a_branded_blend_reaches_its_record_through_the_member(enriched):
+    """The UC-II blend's name is not an identity; its disclosed member,
+    undenatured type II collagen (IQM collagen, form alias "uc-ii"), is."""
+    assert "collagen" in _matches(enriched["321604"]).get("BRAND_UCII", set())
 
 
-@pytest.mark.xfail(strict=True, reason=(
-    "Lane 2: a blend header's DSLD forms mix member actives (glucosamine "
-    "sulfate, bromelain: they keep their evidence) with carriers (UC-II's "
-    "potassium chloride); no owner yet decides which form is a carrier. "
-    "Moves no points on 321604 or 239447 (UC-II wins the top slot)."
-))
 def test_a_carrier_form_on_a_blend_earns_no_evidence(enriched):
+    """The blend name no longer carries its DSLD forms (Cartilage, Potassium
+    Chloride) into matching, so the carrier matches nothing."""
     assert "INGR_POTASSIUM" not in _matches(enriched["321604"])
 
 
@@ -126,3 +124,36 @@ def test_a_blend_total_is_not_a_member_dose_for_applicability(enriched):
     for match in enriched["19505"]["evidence_data"]["clinical_matches"]:
         if match["id"] == "INGR_D_ASPARTIC_ACID":
             assert (match.get("applicability_assessment") or {}).get("status") != "applicable"
+
+
+_INELIGIBLE = [
+    {"canonical_id": "protectamins_vegetable_blend", "identity_kind": "label_taxonomy_anchor",
+     "name": "Protectamins Vegetable Blend", "raw_source_path": "ingredientRows[1]"},
+    {"canonical_id": "piperine", "demotion_reason": "absorption_enhancer_sub_threshold",
+     "name": "BioPerine", "raw_source_path": "ingredientRows[2]"},
+    {"canonical_id": "vegetable_source_descriptor", "name": "from vegetables",
+     "raw_source_path": "ingredientRows[3]"},
+]
+
+
+@pytest.mark.parametrize("path", ["strict", "label_rows", "both"])
+def test_one_eligibility_decision_on_every_provider_path(monkeypatch, path):
+    """A blend name, a demoted aid and a descriptor are refused whether they
+    arrive as strict scoring rows, as label rows (the mirror, or its
+    pre-enrichment fallback), or both; an all-ineligible label stays empty."""
+    import scoring_input_contract as sic
+    from types import SimpleNamespace
+
+    strict = [dict(r) for r in _INELIGIBLE] if path in ("strict", "both") else []
+    label = [dict(r) for r in _INELIGIBLE] if path in ("label_rows", "both") else []
+    monkeypatch.setattr(sic, "get_scoring_ingredients", lambda product, **_: SimpleNamespace(rows=strict))
+    monkeypatch.setattr(sic, "get_assessable_evidence_ingredients", lambda product: label)
+    assert sic.get_evidence_subject_rows({}) == []
+
+    real = {"canonical_id": "diindolylmethane", "name": "DIM", "raw_source_path": "ingredientRows[0]"}
+    (strict if path != "label_rows" else label).append(real)
+    assert _canonicals(sic.get_evidence_subject_rows({})) == {"diindolylmethane"}
+
+
+def test_the_minted_blend_name_is_not_a_subject_on_a_real_label(enriched):
+    assert "protectamins_vegetable_blend" not in _canonicals(get_evidence_subject_rows(enriched["251549"]))

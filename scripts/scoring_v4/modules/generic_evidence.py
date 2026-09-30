@@ -25,6 +25,7 @@ from clinical_applicability import filter_clinical_matches
 from scoring_input_contract import (
     primary_mass_competitor_rows,
     get_assessable_evidence_ingredients,
+    get_evidence_subject_rows,
     is_lent_blend_mass,
     is_nutrition_fact_declaration as _contract_is_nutrition_fact,
 )
@@ -37,6 +38,7 @@ from scoring_v4.modules.generic_helpers import (
     daily_serving_range,
     get_active_ingredients,
     nutrient_delivering_rows,
+    delivers_its_nutrient,
     has_usable_individual_dose,
     is_scorable,
 )
@@ -1442,9 +1444,12 @@ def _active_canonical_index(product: Dict[str, Any]) -> Dict[str, str]:
     """Map each active's normalized identity tokens -> its raw canonical_id. An
     evidence match resolves to a normalized standard-name (e.g. 'psyllium husk',
     'vitamin d3'); this lets it be tied back to the active's clean canonical_id
-    ('psyllium', 'vitamin_d') for the consensus gold-standard allowlist check."""
+    ('psyllium', 'vitamin_d') for the consensus gold-standard allowlist check.
+    Evidence subjects without a dose (a blend's disclosed members) are indexed
+    too, from the same provider that chose the owners."""
     out: Dict[str, str] = {}
-    for row in nutrient_delivering_rows(product):
+    subjects = [row for row in get_evidence_subject_rows(product) if delivers_its_nutrient(row)]
+    for row in nutrient_delivering_rows(product) + subjects:
         if not isinstance(row, dict):
             continue
         cid_raw = str(row.get("canonical_id") or "").strip().lower()

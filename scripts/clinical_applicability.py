@@ -89,10 +89,11 @@ def _is_exposure_row(row: Mapping) -> bool:
 
 
 def _evidence_subject_refs(product: Mapping) -> set:
-    """Label rows the scoring contract projected as Evidence subjects (a branded
-    complex or blend the cleaner reads as a header total), so their evidence
-    links to the printed row. Every other cleaner non-exposure role still
-    excludes a row."""
+    """Label rows projected by the one Evidence-subject provider.
+
+    Clinical applicability consumes the provider's decision and never rebuilds
+    subject eligibility from cleaner roles or display rows.
+    """
     iqd = product.get("ingredient_quality_data")
     if not isinstance(iqd, Mapping) or not isinstance(iqd.get("ingredients_scorable"), list):
         return set()

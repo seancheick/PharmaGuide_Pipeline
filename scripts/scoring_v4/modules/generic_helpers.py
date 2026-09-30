@@ -109,11 +109,16 @@ def nutrient_delivering_rows(product: Dict[str, Any]) -> List[Dict[str, Any]]:
     nutrient."""
     return [
         row for row in get_active_ingredients(product)
-        if not isinstance(row, dict) or delivers_parent_nutrient(
-            row.get("canonical_id"),
-            [row.get("form_id")] + [m.get("form_key") for m in row.get("matched_forms") or [] if isinstance(m, dict)],
-        )
+        if not isinstance(row, dict) or delivers_its_nutrient(row)
     ]
+
+
+def delivers_its_nutrient(row: Dict[str, Any]) -> bool:
+    """The row's IQM forms deliver its nutrient (see nutrient_delivering_rows)."""
+    return delivers_parent_nutrient(
+        row.get("canonical_id"),
+        [row.get("form_id")] + [m.get("form_key") for m in row.get("matched_forms") or [] if isinstance(m, dict)],
+    )
 
 
 def has_usable_individual_dose(ingredient: Dict[str, Any]) -> bool:

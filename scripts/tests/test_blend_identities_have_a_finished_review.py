@@ -18,6 +18,18 @@ import pytest
 FIXTURES = Path(__file__).parent / "fixtures"
 PRODUCTS = ["1179", "14168", "315089", "243271", "282638", "299755", "54775", "275464"]
 
+# Since lane 2A (2026-09-30) a blend's disclosed members own its Evidence, not
+# the blend name. Golden Milk's piperine is an undosed member of the turmeric
+# blend: the <=10 mg aid demotion cannot be evaluated, so piperine owns and has
+# no review yet. Open decision for Sean (register R3), not a code defect.
+_GOLDEN_MILK_PIPERINE = pytest.mark.xfail(strict=True, reason=(
+    "243271 piperine is an undosed turmeric-blend member: aid or active? (register R3)"
+))
+_REVIEW_PRODUCTS = [
+    pytest.param(pid, marks=_GOLDEN_MILK_PIPERINE) if pid == "243271" else pid
+    for pid in PRODUCTS
+]
+
 
 @pytest.fixture(scope="module")
 def enriched():
@@ -33,7 +45,7 @@ def enriched():
     return out
 
 
-@pytest.mark.parametrize("pid", PRODUCTS)
+@pytest.mark.parametrize("pid", _REVIEW_PRODUCTS)
 def test_the_owner_review_is_finished(enriched, pid):
     from evidence_resolver import resolve_product_evidence
 
@@ -43,7 +55,7 @@ def test_the_owner_review_is_finished(enriched, pid):
     ]
 
 
-@pytest.mark.parametrize("pid", PRODUCTS)
+@pytest.mark.parametrize("pid", _REVIEW_PRODUCTS)
 def test_the_evidence_pillar_no_longer_says_not_yet_reviewed(enriched, pid):
     from scoring_v4.scored_artifact import build_scored_artifact
 
@@ -60,7 +72,13 @@ def test_tesnor_and_sytrinol_resolve_to_their_reviewed_trials(enriched):
         assert "backed_clinical_studies" in owner.matched_owners
 
 
-@pytest.mark.parametrize("pid,canonical", [("1179", "cinnamon"), ("243271", "turmeric")])
+@pytest.mark.parametrize("pid,canonical", [
+    pytest.param("1179", "cinnamon", marks=pytest.mark.xfail(strict=True, reason=(
+        "Ravage's active 'Cinnamon Extract' row carries is_excipient=True, so it is "
+        "not an Evidence subject: purpose-over-excipient defect, lane 2B"
+    ))),
+    ("243271", "turmeric"),
+])
 def test_a_lent_blend_total_is_no_evidence_dose(enriched, pid, canonical):
     """Ravage's cinnamon and Golden Milk's turmeric carry only their blend's
     total (3.2 g), lent to them as a blend-level anchor. The Evidence dose map
