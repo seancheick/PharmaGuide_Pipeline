@@ -10018,6 +10018,9 @@ class EnhancedDSLDNormalizer:
             self._display_ingredients_buffer = []
         source_metadata: Dict[str, Any] = {}
         if isinstance(source_row, dict):
+            _, _, daily_value, _ = self._process_quantity(
+                source_row.get("quantity")
+            )
             source_metadata = {
                 "raw_source_path": source_row.get("raw_source_path"),
                 "source_order": source_row.get("order"),
@@ -10025,6 +10028,7 @@ class EnhancedDSLDNormalizer:
                 "parent_label": source_row.get("parentBlend"),
                 "parent_source_path": source_row.get("parent_source_path"),
                 "exact_dose_text": self._exact_label_dose_text(source_row),
+                **({"dailyValue": daily_value} if daily_value is not None else {}),
                 "raw_category": source_row.get("category"),
                 "ingredient_group": source_row.get("ingredientGroup"),
             }
@@ -10176,6 +10180,11 @@ class EnhancedDSLDNormalizer:
                         "parent_source_path": ing.get("parent_source_path"),
                         "exact_dose_text": (
                             "" if serving_variants else self._exact_label_dose_text(ing)
+                        ),
+                        **(
+                            {"dailyValue": ing.get("dailyValue")}
+                            if ing.get("dailyValue") is not None
+                            else {}
                         ),
                         "serving_variants": serving_variants,
                         "_has_alternate_servings": bool(serving_variants),

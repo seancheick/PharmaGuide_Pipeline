@@ -9,6 +9,8 @@ presence rule reads it instead of guessing from the nutrient category.
 
 from __future__ import annotations
 
+import copy
+import json
 import sys
 from pathlib import Path
 
@@ -79,3 +81,120 @@ def test_enriched_rows_carry_daily_value_to_the_fingerprint():
     ids = set(fp["nutrients"]) | set(fp["herbs"])
     assert not any(i.startswith("vitamin_a") for i in ids)
     assert any(i.startswith("vitamin_b12") for i in ids)
+
+
+def test_daily_value_reaches_the_canonical_display_ledger_without_changing_scores(tmp_path):
+    """Printed numeric and zero %DV survive the production export boundary."""
+    from build_final_db import build_final_db
+    from enrich_supplements_v3 import SupplementEnricherV3
+    from scoring_v4.scored_artifact import build_scored_artifact
+
+    raw = {
+        "id": 990003,
+        "fullName": "Test Protein",
+        "brandName": "Test",
+        "productVersionCode": "1",
+        "productType": {"langualCodeDescription": "Dietary Supplement"},
+        "ingredientRows": [
+            {
+                "order": 1,
+                "ingredientId": 2001,
+                "name": "Protein",
+                "category": "protein",
+                "ingredientGroup": "Protein (unspecified)",
+                "nestedRows": [],
+                "alternateNames": [],
+                "forms": [],
+                "quantity": [{
+                    "servingSizeOrder": 1,
+                    "servingSizeQuantity": 35.5,
+                    "operator": "=",
+                    "quantity": 24,
+                    "unit": "Gram(s)",
+                    "dailyValueTargetGroup": [],
+                    "servingSizeUnit": "Gram(s)",
+                }],
+            },
+            _row(2, "Vitamin A", "vitamin", _group(0)),
+            _row(3, "Calcium", "mineral", _group(13)),
+            _row(4, "Sodium", "Amount Per Serving", _group(50)),
+            _row(5, "Total Carbohydrate", "Amount Per Serving", _group(0)),
+        ],
+        "otheringredients": {"text": None, "ingredients": []},
+        "servingSizes": [{
+            "order": 1,
+            "minQuantity": 35.5,
+            "maxQuantity": 35.5,
+            "minDailyServings": 1,
+            "maxDailyServings": 1,
+            "unit": "Gram(s)",
+        }],
+        "statements": [{"text": "Mix one serving daily."}],
+    }
+
+    cleaned = EnhancedDSLDNormalizer().normalize_product(raw)
+    cleaned_display = {
+        row["label_display_name"]: row
+        for row in cleaned["display_ingredients"]
+    }
+    assert cleaned_display["Vitamin A"]["dailyValue"] == 0.0
+    assert cleaned_display["Calcium"]["dailyValue"] == 13.0
+    assert cleaned_display["Vitamin A"]["source_section"] == "activeIngredients"
+    assert cleaned_display["Vitamin A"]["score_included"] is True
+    assert "dailyValue" not in cleaned_display["Protein"]
+    assert cleaned_display["Sodium"]["display_type"] == "nutrition_fact"
+    assert cleaned_display["Sodium"]["dailyValue"] == 50.0
+    assert cleaned_display["Sodium"]["source_section"] == "activeIngredients"
+    assert cleaned_display["Sodium"]["score_included"] is False
+    assert cleaned_display["Total Carbohydrate"]["display_type"] == "nutrition_fact"
+    assert cleaned_display["Total Carbohydrate"]["dailyValue"] == 0.0
+    assert not any(row["name"] == "Sodium" for row in cleaned["activeIngredients"])
+
+    enriched, warnings = SupplementEnricherV3().enrich_product(cleaned)
+    assert warnings == []
+    scored = build_scored_artifact(enriched)
+
+    without_display_dv = copy.deepcopy(cleaned)
+    for row in without_display_dv["display_ingredients"]:
+        row.pop("dailyValue", None)
+    baseline_enriched, baseline_warnings = SupplementEnricherV3().enrich_product(
+        without_display_dv
+    )
+    assert baseline_warnings == []
+    baseline_scored = build_scored_artifact(baseline_enriched)
+    scored["scoring_metadata"].pop("scored_date")
+    baseline_scored["scoring_metadata"].pop("scored_date")
+    assert scored == baseline_scored
+
+    enriched_dir = tmp_path / "enriched"
+    scored_dir = tmp_path / "scored"
+    output_dir = tmp_path / "output"
+    enriched_dir.mkdir()
+    scored_dir.mkdir()
+    (enriched_dir / "batch.json").write_text(
+        json.dumps([enriched]), encoding="utf-8"
+    )
+    (scored_dir / "batch.json").write_text(
+        json.dumps([scored]), encoding="utf-8"
+    )
+
+    result = build_final_db(
+        [str(enriched_dir)],
+        [str(scored_dir)],
+        str(output_dir),
+        str(SCRIPTS),
+    )
+    assert result["product_count"] == 1
+    assert result["error_count"] == 0
+
+    blob = json.loads(
+        (output_dir / "detail_blobs" / "990003.json").read_text(encoding="utf-8")
+    )
+    exported_display = {
+        row["label_display_name"]: row
+        for row in blob["display_ingredients"]
+    }
+    assert exported_display["Vitamin A"]["dailyValue"] == 0.0
+    assert exported_display["Calcium"]["dailyValue"] == 13.0
+    assert exported_display["Sodium"]["dailyValue"] == 50.0
+    assert exported_display["Total Carbohydrate"]["dailyValue"] == 0.0
