@@ -166,7 +166,13 @@ def test_soy_protein_isolate_does_not_get_whey_isolate_source_class() -> None:
     assert payload["metadata"]["protein_source_class"] != "whey_isolate"
 
 
-def test_artificially_sweetened_whey_is_capped_below_clean_elite_band() -> None:
+def test_artificially_sweetened_whey_pays_the_shared_additive_charge_once() -> None:
+    clean = score_formulation(
+        _protein_product(
+            [_row("whey_protein", 25, name="Whey Protein Isolate", matched_form="whey protein isolate")],
+            name="Flavored Whey Protein Isolate",
+        )
+    )
     payload = score_formulation(
         _protein_product(
             [_row("whey_protein", 25, name="Whey Protein Isolate", matched_form="whey protein isolate")],
@@ -184,8 +190,12 @@ def test_artificially_sweetened_whey_is_capped_below_clean_elite_band() -> None:
         )
     )
 
-    assert payload["score"] < 21.0
-    assert payload["penalties"]["sports_artificial_sweeteners"] < 0
+    # 1.21.4: B1_harmful_additives owns the sucralose/acesulfame charge; the protein adapter no
+    # longer adds its own sweetener penalty or withholds clean-daily-use points for the same rows.
+    additive = abs(payload["penalties"]["B1_harmful_additives"])
+    assert additive > 0
+    assert "sports_artificial_sweeteners" not in payload["penalties"]
+    assert payload["score"] == clean["score"] - additive
 
 
 def test_opaque_proprietary_or_amino_spiked_protein_matrix_scores_low() -> None:

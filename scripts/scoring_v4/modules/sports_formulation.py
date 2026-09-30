@@ -39,6 +39,9 @@ _FVM = _cfg_block("formulation_variant_magnitudes", "sports")["sports"]
 
 
 DIMENSION_CAP = _FVM["dimension_cap"]
+# Former clean-daily-use points, kept as a fixed base (1.21.4): sugar and sweeteners are
+# charged once, by the shared B1 owners in shared_formulation_penalty_detail.
+ROUTE_BASE = _FVM["route_base"]
 PHASE_MARKER = "P1.7_sports_protein_formulation_v1"
 
 _WHEY_TERMS = ("whey",)
@@ -68,14 +71,13 @@ def score_formulation(product: Dict[str, Any]) -> Dict[str, Any]:
     dose_transparency = _dose_transparency(protein_rows, source_class)
     amino_disclosure = _amino_profile_disclosure(rows)
     focus = _protein_focus(rows, source_class)
-    clean_daily_use = _clean_daily_use(product)
 
     components: Dict[str, float] = {
         "sports_protein_source_quality": round(source_quality, 4),
         "sports_protein_dose_transparency": round(dose_transparency, 4),
         "sports_amino_profile_disclosure": round(amino_disclosure, 4),
         "sports_protein_focus": round(focus, 4),
-        "sports_clean_daily_use": round(clean_daily_use, 4),
+        "sports_route_base": ROUTE_BASE,
     }
 
     shared = shared_formulation_penalty_detail(product)
@@ -254,29 +256,6 @@ def _protein_focus(rows: List[Dict[str, Any]], source_class: str) -> float:
     return 3.0
 
 
-def _clean_daily_use(product: Dict[str, Any]) -> float:
-    dietary = _safe_dict((product or {}).get("dietary_sensitivity_data"))
-    sugar = _safe_dict(dietary.get("sugar"))
-    sweeteners = _safe_dict(dietary.get("sweeteners"))
-    artificial = _safe_list(sweeteners.get("artificial"))
-    sugar_alcohols = _safe_list(sweeteners.get("sugar_alcohols"))
-    high_glycemic = _safe_list(sweeteners.get("high_glycemic") or sweeteners.get("high_glycemic_sweeteners"))
-    level = _norm_text(sugar.get("level"))
-
-    score = 2.0
-    if artificial:
-        score -= min(2.0, len(artificial) * 1.0)
-    if sugar_alcohols:
-        score -= 1.0
-    if high_glycemic:
-        score -= 1.0
-    if level == "high":
-        score -= 2.0
-    elif level == "moderate":
-        score -= 1.0
-    return max(0.0, min(2.0, score))
-
-
 def _protein_penalties(
     product: Dict[str, Any],
     rows: List[Dict[str, Any]],
@@ -284,19 +263,11 @@ def _protein_penalties(
     source_class: str,
 ) -> Dict[str, float]:
     penalties: Dict[str, float] = {
-        "sports_artificial_sweeteners": -_artificial_sweetener_penalty(product),
         "sports_opaque_protein_blend": -_opaque_protein_penalty(product, protein_rows, source_class),
         "sports_amino_spiking_risk": -_amino_spiking_penalty(rows, protein_rows, source_class),
         "sports_collagen_not_complete_protein": -_collagen_penalty(source_class),
     }
     return {key: round(value, 4) for key, value in penalties.items() if value < 0}
-
-
-def _artificial_sweetener_penalty(product: Dict[str, Any]) -> float:
-    dietary = _safe_dict((product or {}).get("dietary_sensitivity_data"))
-    sweeteners = _safe_dict(dietary.get("sweeteners"))
-    artificial = _safe_list(sweeteners.get("artificial"))
-    return min(4.0, len(artificial) * 2.0)
 
 
 def _opaque_protein_penalty(

@@ -35,6 +35,9 @@ _FVM = _cfg_block("formulation_variant_magnitudes", "fiber_digestive")["fiber_di
 
 
 DIMENSION_CAP = _FVM["dimension_cap"]
+# Former clean-daily-use points, kept as a fixed base (1.21.4): sugar and sweeteners are
+# charged once, by the shared B1 owners in shared_formulation_penalty_detail.
+ROUTE_BASE = _FVM["route_base"]
 PHASE_MARKER = "P1.8_fiber_digestive_formulation_v1"
 STIMULANT_LAXATIVE_CANONICALS = {"senna", "cascara_sagrada", "aloe_latex", "aloe_emodin"}
 
@@ -51,14 +54,13 @@ def score_formulation(product: Dict[str, Any]) -> Dict[str, Any]:
     source_quality, source_class = _source_quality(rows, product)
     disclosure = _fiber_disclosure(rows, product)
     focus = _fiber_focus(all_rows, rows)
-    clean_daily = _clean_daily_use(product)
     practicality = _practicality(product)
 
     components: Dict[str, float] = {
         "fiber_source_quality": round(source_quality, 4),
         "fiber_disclosure": round(disclosure, 4),
         "fiber_formula_focus": round(focus, 4),
-        "fiber_clean_daily_use": round(clean_daily, 4),
+        "fiber_route_base": ROUTE_BASE,
         "fiber_practicality": round(practicality, 4),
     }
 
@@ -160,22 +162,6 @@ def _fiber_focus(all_rows: List[Dict[str, Any]], rows: List[Dict[str, Any]]) -> 
     if len(all_rows) <= max(2, fiber_like + 1):
         return 5.0
     return 3.0
-
-
-def _clean_daily_use(product: Dict[str, Any]) -> float:
-    dietary = _safe_dict((product or {}).get("dietary_sensitivity_data"))
-    sugar = _safe_dict(dietary.get("sugar"))
-    sweeteners = _safe_dict(dietary.get("sweeteners"))
-    score = 5.0
-    if sugar.get("has_added_sugar") or float(sugar.get("amount_g") or 0.0) >= 3.0:
-        score -= 2.5
-    if _safe_list(sweeteners.get("high_glycemic")):
-        score -= 1.0
-    if _safe_list(sweeteners.get("artificial")):
-        score -= 0.75
-    if _safe_list(sweeteners.get("sugar_alcohols")):
-        score -= 0.75
-    return max(0.0, score)
 
 
 def _practicality(product: Dict[str, Any]) -> float:

@@ -27,8 +27,10 @@ ORIGINAL = {
     # 1.20.0: optional prebiotics no longer manufacture probiotic form quality.
     "probiotic": {"cap_formulation": 15.0, "cap_total_potency_disclosure": 4.0,
                   "cap_exact_identity_completeness": 8.0, "cap_delivery_survivability": 3.0},
-    "sports": {"dimension_cap": 30.0},
-    "fiber_digestive": {"dimension_cap": 30.0},
+    # 1.21.4: the former clean-daily-use points are a fixed route_base; sugar and sweeteners
+    # are charged once by the shared B1 owners.
+    "sports": {"dimension_cap": 30.0, "route_base": 2.0},
+    "fiber_digestive": {"dimension_cap": 30.0, "route_base": 5.0},
     "botanical": {
         "botanical_formulation_cap": 15.0, "standardization_tier_full": 4.0, "standardization_tier_near": 3.0,
         "standardization_tier_half": 2.0, "standardization_tier_disclosed": 1.0,

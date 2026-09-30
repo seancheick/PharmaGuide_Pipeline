@@ -41,9 +41,6 @@ PENALTY_REGISTRY: Dict[str, PenaltySpec] = {
     "fiber_stimulant_laxative_penalty": PenaltySpec(
         "formulation", "consumer_material"
     ),
-    "sports_artificial_sweeteners": PenaltySpec(
-        "formulation", "consumer_material"
-    ),
     "sports_opaque_protein_blend": PenaltySpec(
         "formulation", "quality_context"
     ),
