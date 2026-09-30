@@ -26,9 +26,6 @@ class TestUniiCacheLoading:
     def cache(self):
         return UniiCache(enable_api_fallback=False)
 
-    def test_cache_loads(self, cache):
-        assert cache.is_loaded is True
-
     def test_cache_has_substances(self, cache):
         assert cache.size > 100_000  # 172K expected
 
@@ -87,83 +84,9 @@ class TestReverseLookup:
         assert cache.reverse_lookup("") is None
 
 
-class TestBulkLookup:
-    @pytest.fixture
-    def cache(self):
-        return UniiCache(enable_api_fallback=False)
-
-    def test_bulk_returns_dict(self, cache):
-        result = cache.bulk_lookup(["ascorbic acid", "caffeine", "nonexistent_xyz"])
-        assert isinstance(result, dict)
-        assert result["ascorbic acid"] == "PQ6CK8PD0R"
-        assert result["caffeine"] == "3G6A5W338E"
-        assert result["nonexistent_xyz"] is None
-
-
 # -------------------------------------------------------------------------
 # IQM entry resolution
 # -------------------------------------------------------------------------
-
-
-class TestIQMEntryLookup:
-    @pytest.fixture
-    def cache(self):
-        return UniiCache(enable_api_fallback=False)
-
-    @pytest.fixture
-    def iqm(self):
-        iqm_path = os.path.join(
-            os.path.dirname(__file__), "..", "data", "ingredient_quality_map.json"
-        )
-        with open(iqm_path) as f:
-            return json.load(f)
-
-    def test_entry_with_external_ids_unii(self, cache, iqm):
-        """Entries with external_ids.unii should return that directly."""
-        entry = iqm.get("vitamin_a", {})
-        unii = cache.lookup_for_iqm_entry("vitamin_a", entry)
-        assert unii is not None
-        assert unii == entry.get("external_ids", {}).get("unii")
-
-    def test_entry_resolved_via_forms(self, cache, iqm):
-        """Entries without direct UNII should resolve via form chemical names."""
-        # Find an entry that has forms but no external_ids.unii
-        for key, entry in iqm.items():
-            if key == "_metadata":
-                continue
-            ext = entry.get("external_ids", {})
-            has_ext_unii = isinstance(ext, dict) and ext.get("unii")
-            has_top_unii = bool(entry.get("unii"))
-            forms = entry.get("forms", {})
-            if not has_ext_unii and not has_top_unii and isinstance(forms, dict) and len(forms) > 0:
-                unii = cache.lookup_for_iqm_entry(key, entry)
-                if unii:
-                    # Found one resolved via forms
-                    assert isinstance(unii, str)
-                    assert len(unii) == 10  # UNII codes are 10 chars
-                    return
-        pytest.skip("No form-only resolvable entries found")
-
-    def test_probiotics_returns_none(self, cache, iqm):
-        """Probiotics is a category, not a chemical — should not resolve."""
-        entry = iqm.get("probiotics", {})
-        if not entry:
-            pytest.skip("probiotics not in IQM")
-        unii = cache.lookup_for_iqm_entry("probiotics", entry)
-        assert unii is None
-
-    def test_overall_match_rate_above_60_pct(self, cache, iqm):
-        """At least 60% of IQM entries should resolve to a UNII."""
-        total = 0
-        matched = 0
-        for key, entry in iqm.items():
-            if key == "_metadata":
-                continue
-            total += 1
-            if cache.lookup_for_iqm_entry(key, entry):
-                matched += 1
-        rate = matched / total if total else 0
-        assert rate >= 0.60, f"UNII match rate {rate:.1%} is below 60% threshold"
 
 
 # -------------------------------------------------------------------------

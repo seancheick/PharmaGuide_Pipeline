@@ -347,17 +347,6 @@ def test_contingent_directions_are_not_loading(text):
     assert sports_dose(loading)["metadata"]["dose_basis"] == "creatine_above_10_g_no_loading_protocol"
 
 
-@pytest.mark.parametrize("text,state", [
-    ("Take 1 scoop daily.", "daily"),
-    ("Mix 1 scoop before your workout.", "contingent"),
-    ("Take as needed.", "contingent"),
-    ("Take 2 capsules with a meal.", "unstated"),
-])
-def test_daily_use_direction_state(text, state):
-    from serving_frequency import daily_use_direction_state
-    assert daily_use_direction_state({"statements": [{"type": "Suggested/Recommended/Usage/Directions", "notes": text}]}) == state
-
-
 def test_reviewed_fiber_identities_added_in_task2():
     # oat_bran: 21 CFR 101.81 whole-oat beta-glucan source (DSLD 293400/293280).
     # oligosaccharides: IQM prebiotic fiber; dual-purpose like "prebiotics", so

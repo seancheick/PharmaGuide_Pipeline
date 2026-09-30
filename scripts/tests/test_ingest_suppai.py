@@ -10,7 +10,6 @@ touch the real 254 MB corpus. Covers:
 - select_top_sentences — at most N, retraction filtered, human preferred
 - compress_paper_meta — only 4 fields retained (PHI + bundle-size control)
 - build_research_pair_row — full shape + canonical_id / rxcui resolution
-- enrich_curated_with_suppai — appends supp.ai PMIDs without duplicating
 - run_ingest — full pipeline smoke test against a fake 5-file dump
 """
 
@@ -320,11 +319,6 @@ def test_build_cui_to_rxcui_index_matches_unambiguous_drug_alias(
     assert idx == {"C0043031": "11289"}
 
 
-def test_build_known_supplement_cuis_from_iqm(fake_iqm):
-    cuis = ing.build_known_supplement_cuis(fake_iqm)
-    assert cuis == {"C0042878", "C0016157"}
-
-
 # --------------------------------------------------------------------------- #
 # Pair anchor filter
 # --------------------------------------------------------------------------- #
@@ -613,63 +607,6 @@ def test_build_research_pair_row_drops_retraction_sentences(
 # --------------------------------------------------------------------------- #
 # Curated auto-enrichment
 # --------------------------------------------------------------------------- #
-
-
-def test_enrich_curated_with_suppai_appends_pmids():
-    research_pairs = [
-        {
-            "cui_a": "C0042878",
-            "cui_b": "C0043031",
-            "top_pmids": ["28458697", "12345678"],
-        }
-    ]
-    curated = [
-        {
-            "id": "DDI_WAR_VITK",
-            "agent1_id": "11289",
-            "agent2_id": "C0042878",
-            "source_pmids": [],
-        }
-    ]
-    # warfarin rxcui 11289 maps to supp.ai CUI C0043031
-    rxcui_to_cui = {"11289": "C0043031"}
-    enriched = ing.enrich_curated_with_suppai(curated, research_pairs, rxcui_to_cui)
-    assert "28458697" in enriched[0]["source_pmids"]
-    assert "12345678" in enriched[0]["source_pmids"]
-
-
-def test_enrich_curated_with_suppai_deduplicates_pmids():
-    research_pairs = [
-        {"cui_a": "C0042878", "cui_b": "C0043031", "top_pmids": ["28458697"]}
-    ]
-    curated = [
-        {
-            "id": "DDI_WAR_VITK",
-            "agent1_id": "11289",
-            "agent2_id": "C0042878",
-            "source_pmids": ["28458697"],
-        }
-    ]
-    rxcui_to_cui = {"11289": "C0043031"}
-    enriched = ing.enrich_curated_with_suppai(curated, research_pairs, rxcui_to_cui)
-    assert enriched[0]["source_pmids"].count("28458697") == 1
-
-
-def test_enrich_curated_with_suppai_leaves_unmatched_alone():
-    research_pairs = [
-        {"cui_a": "C0001111", "cui_b": "C0002222", "top_pmids": ["99998888"]}
-    ]
-    curated = [
-        {
-            "id": "DDI_SOMETHING",
-            "agent1_id": "6448",
-            "agent2_id": "C0042878",
-            "source_pmids": ["111"],
-        }
-    ]
-    rxcui_to_cui = {"6448": "C0043031"}
-    enriched = ing.enrich_curated_with_suppai(curated, research_pairs, rxcui_to_cui)
-    assert enriched[0]["source_pmids"] == ["111"]
 
 
 # --------------------------------------------------------------------------- #

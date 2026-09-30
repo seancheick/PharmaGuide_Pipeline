@@ -9,48 +9,10 @@ from api_audit.discover_clinical_evidence import (
     APIClient,
     audit_all_entries,
     backfill_auditability_metadata,
-    candidate_to_clinical_entry,
     derive_endpoint_relevance_tags,
     discover_candidates,
     enrich_enrollment,
 )
-
-
-def test_candidate_to_clinical_entry_keeps_registry_and_published_counts_separate():
-    candidate = {
-        "standard_name": "Test Compound",
-        "slug": "test_compound",
-        "category": "herbs",
-        "ct_total_trials": 12,
-        "ct_max_enrollment": 640,
-        "ct_top_trials": [
-            {"nct_id": "NCT00000001", "title": "Test trial", "enrollment": 640},
-        ],
-        "ct_trials_with_outcomes": [
-            {
-                "nct_id": "NCT00000001",
-                "title": "Test trial",
-                "enrollment": 640,
-                "primary_outcomes": ["Change in joint pain from baseline"],
-            }
-        ],
-        "suggested_evidence_level": "ingredient-human",
-        "suggested_study_type": "rct_multiple",
-        "suggested_effect_direction": "positive_weak",
-        "suggested_effect_direction_confidence": "low",
-        "suggested_effect_direction_rationale": "Trial registry confirms completed human studies, but result direction is not verified from registry metadata alone.",
-        "suggested_total_enrollment": 640,
-        "endpoint_relevance_tags": ["joint_pain", "joint_health"],
-    }
-
-    entry = candidate_to_clinical_entry(candidate)
-
-    assert entry["registry_completed_trials_count"] == 12
-    assert "published_studies_count" not in entry
-    assert entry["effect_direction"] == "positive_weak"
-    assert entry["effect_direction_confidence"] == "low"
-    assert "not verified" in entry["effect_direction_rationale"].lower()
-    assert entry["endpoint_relevance_tags"] == ["joint_pain", "joint_health"]
 
 
 def test_discover_candidates_defaults_to_conservative_effect_direction(monkeypatch):

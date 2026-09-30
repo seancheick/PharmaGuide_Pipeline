@@ -81,13 +81,6 @@ KEEP: dict[str, str] = {
     "scripts/release_safety/gates.py::failure_summary": _RELEASE,
     "scripts/release_safety/orphan_reconcile.py::total_objects_examined": _RELEASE,
     # Removed in this branch, one topic per commit.
-    "scripts/unii_cache.py::lookup_for_iqm_entry": _PENDING,
-    "scripts/unii_cache.py::bulk_lookup": _PENDING,
-    "scripts/unii_cache.py::is_loaded": _PENDING,
-    "scripts/api_audit/discover_clinical_evidence.py::candidate_to_clinical_entry": _PENDING,
-    "scripts/ingest_suppai.py::build_known_supplement_cuis": _PENDING,
-    "scripts/ingest_suppai.py::enrich_curated_with_suppai": _PENDING,
-    "scripts/serving_frequency.py::daily_use_direction_state": _PENDING,
 }
 
 

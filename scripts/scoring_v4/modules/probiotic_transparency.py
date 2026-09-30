@@ -38,7 +38,6 @@ generic_transparency where v4 already has v3-parity tests (P1.3.5).
 
 from __future__ import annotations
 
-import math
 from typing import Any, Dict
 
 from scoring_v4.modules.generic_transparency import (

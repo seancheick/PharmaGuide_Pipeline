@@ -16,7 +16,6 @@ Usage:
 
 import json
 import logging
-import re
 import urllib.request
 import urllib.parse
 from pathlib import Path
@@ -55,10 +54,6 @@ class UniiCache:
             logger.warning("Failed to load UNII cache: %s", exc)
 
     @property
-    def is_loaded(self) -> bool:
-        return self._loaded
-
-    @property
     def size(self) -> int:
         return len(self._name_to_unii)
 
@@ -93,71 +88,6 @@ class UniiCache:
         if not unii:
             return None
         return self._unii_to_name.get(unii.strip())
-
-    def bulk_lookup(self, names: list[str]) -> dict[str, Optional[str]]:
-        """Look up multiple names at once. Returns {name: unii_or_none}."""
-        return {name: self.lookup(name) for name in names}
-
-    def lookup_for_iqm_entry(self, canonical_id: str, entry: dict) -> Optional[str]:
-        """Resolve the PRIMARY (parent-level) UNII for an IQM entry.
-
-        IQM identifier hierarchy:
-          Parent level: cui (concept), rxcui (drug mapping), external_ids.unii (representative)
-          Form level:   forms[name].external_ids.unii (form-specific chemical identity)
-
-        This method resolves the PARENT UNII. For form-specific UNIIs,
-        use lookup_for_iqm_form().
-
-        Priority order:
-        1. Already-verified UNII in parent external_ids.unii
-        2. Canonical ID as readable name
-        3. standard_name field
-        4. Aliases (skip CUI codes)
-        5. First matching form name (fallback — returns the form UNII as parent)
-
-        Returns:
-            UNII code or None
-        """
-        # 0. Already-verified parent UNII
-        ext_ids = entry.get("external_ids", {})
-        if isinstance(ext_ids, dict) and ext_ids.get("unii"):
-            return ext_ids["unii"]
-
-        # 1. Canonical ID as readable name
-        readable = canonical_id.replace("_", " ")
-        unii = self.lookup(readable)
-        if unii:
-            return unii
-
-        # 2. standard_name field
-        std = (entry.get("standard_name") or "").strip()
-        if std:
-            unii = self.lookup(std)
-            if unii:
-                return unii
-
-        # 3. Aliases (skip CUI codes)
-        for alias in entry.get("aliases", []):
-            if isinstance(alias, str) and not re.match(r"^C\d{5,}$", alias):
-                unii = self.lookup(alias)
-                if unii:
-                    return unii
-
-        # 4. Form names (fallback — uses first matching form's UNII)
-        forms = entry.get("forms", {})
-        if isinstance(forms, dict):
-            for form_name, form_data in forms.items():
-                # Check form's own external_ids first
-                if isinstance(form_data, dict):
-                    fext = form_data.get("external_ids", {})
-                    if isinstance(fext, dict) and fext.get("unii"):
-                        return fext["unii"]
-                # Then try cache lookup by form name
-                unii = self.lookup(form_name)
-                if unii:
-                    return unii
-
-        return None
 
     def _gsrs_search(self, name: str) -> Optional[str]:
         """Search GSRS API for a UNII by substance name."""

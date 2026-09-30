@@ -374,35 +374,7 @@ def format_daily_frequency(servings_per_day: Any) -> str:
 
 
 _DIRECTIONS_TYPE = "Suggested/Recommended/Usage/Directions"
-_DAILY_USE_RE = re.compile(r"\b(daily|per day|a day|each day|every day|once a day)\b", re.IGNORECASE)
 _NUMBER = r"(?:\d+|one|two|three|four|five|six|seven|eight|nine|ten|fourteen)"
-_CONTINGENT_USE_RE = re.compile(
-    r"\b(load(?:ing)?|phase|work\s*-?\s*outs?|pre\s*-?\s*workout|post\s*-?\s*workout|training days?|days? you train|"
-    r"(?:before|after|during|prior to)\s+(?:physical\s+)?(?:exercise|training|activity|competition)|"
-    r"(?:pre|post)\s*-?\s*exercise|as needed|cycle|maint(?:ain|enance)|, then|then\s+\d|"
-    r"days? \d+\s*(?:-|through|to)\s*\d+|for " + _NUMBER + r"\s*(?:-|to)?\s*\d*\s*(?:days?|weeks?)|"
-    r"first " + _NUMBER + r"?\s*(?:days?|weeks?))\b",
-    re.IGNORECASE,
-)
-
-
-def daily_use_direction_state(record: Dict[str, Any]) -> str:
-    """'daily' | 'contingent' | 'unstated' from the label's direction statements.
-
-    The daily serving range reads DSLD serving fields, which cannot tell an
-    ongoing daily regimen from a loading phase or workout-timed use (DSLD 77130
-    prints 1-4 scoops a day because days 1-5 load at 4). 'contingent' when any
-    direction mentions a loading or maintenance phase, workout or exercise
-    timing, cycling or as-needed use; 'daily' when every direction states daily
-    use and none is contingent; otherwise 'unstated'.
-    """
-    directions = [str(s.get("notes") or "") for s in record.get("statements") or ()
-                  if isinstance(s, dict) and s.get("type") == _DIRECTIONS_TYPE]
-    if not directions:
-        return "unstated"
-    if any(_CONTINGENT_USE_RE.search(text) for text in directions):
-        return "contingent"
-    return "daily" if all(_DAILY_USE_RE.search(text) for text in directions) else "unstated"
 
 
 _LOADING_WORDING_RE = re.compile(r"\bloading\b|\bload\s+(?:phase|period|dose|protocol)\b", re.IGNORECASE)
@@ -416,7 +388,7 @@ def has_loading_protocol(record: Dict[str, Any]) -> bool:
     wording ("Loading Phase: Day 1 through 5"), or a defined initial period
     followed by a later maintenance regimen ("first 5 days ... then 1 scoop").
     Workout timing, as-needed use, cycling, "Phase 1" names and maintenance
-    wording alone are contingent use (daily_use_direction_state), not loading.
+    wording alone are contingent use, not loading.
     """
     for statement in record.get("statements") or ():
         if not isinstance(statement, dict) or statement.get("type") != _DIRECTIONS_TYPE:

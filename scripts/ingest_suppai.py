@@ -126,10 +126,6 @@ def build_cui_to_canonical_index(iqm: dict[str, Any]) -> dict[str, str]:
     return idx
 
 
-def build_known_supplement_cuis(iqm: dict[str, Any]) -> set[str]:
-    return set(build_cui_to_canonical_index(iqm).keys())
-
-
 def build_known_drug_rxcuis(drug_classes: dict[str, Any]) -> set[str]:
     """Return the set of every RxCUI referenced in drug_classes.json."""
     out: set[str] = set()
@@ -427,54 +423,6 @@ def build_research_pair_row(
 # --------------------------------------------------------------------------- #
 # Curated auto-enrichment
 # --------------------------------------------------------------------------- #
-
-
-def enrich_curated_with_suppai(
-    curated: list[dict[str, Any]],
-    research_pairs: list[dict[str, Any]],
-    rxcui_to_cui: dict[str, str],
-) -> list[dict[str, Any]]:
-    """Append supp.ai PMIDs to curated entries where a matching research pair
-    exists. Dedupes. Non-destructive — returns new dicts, doesn't mutate
-    input in place.
-
-    Matching rule: normalize curated agent IDs to CUIs where possible
-    (RxCUIs become CUIs via ``rxcui_to_cui``; CUIs pass through; classes are
-    skipped because research_pairs are concrete pairs, not class aggregates).
-    """
-    pair_index: dict[tuple[str, str], list[str]] = {}
-    for rp in research_pairs:
-        key = sort_pair_key(rp["cui_a"], rp["cui_b"])
-        pair_index.setdefault(key, []).extend(rp.get("top_pmids", []))
-
-    out: list[dict[str, Any]] = []
-    for entry in curated:
-        copy = dict(entry)
-        copy["source_pmids"] = list(copy.get("source_pmids", []))
-
-        a_id = str(copy.get("agent1_id", ""))
-        b_id = str(copy.get("agent2_id", ""))
-        a_cui = _agent_to_cui(a_id, rxcui_to_cui)
-        b_cui = _agent_to_cui(b_id, rxcui_to_cui)
-        if a_cui and b_cui:
-            key = sort_pair_key(a_cui, b_cui)
-            for pmid in pair_index.get(key, []):
-                if pmid not in copy["source_pmids"]:
-                    copy["source_pmids"].append(pmid)
-        out.append(copy)
-    return out
-
-
-def _agent_to_cui(agent_id: str, rxcui_to_cui: dict[str, str]) -> str | None:
-    if not agent_id:
-        return None
-    if agent_id.startswith("class:"):
-        return None
-    if agent_id.startswith("C") and agent_id[1:].isdigit():
-        return agent_id
-    if agent_id.isdigit():
-        return rxcui_to_cui.get(agent_id)
-    return None
 
 
 # --------------------------------------------------------------------------- #
