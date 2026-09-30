@@ -7620,11 +7620,22 @@ class EnhancedDSLDNormalizer:
         # embeds a plant-part token (e.g., "KSM-66 Ashwagandha root
         # extract" from GNC/Goli), recover the qualifier so tissue-level
         # bioactivity is preserved for enrichment & scoring.
+        # The label's own form names are label text too ("Slippery Elm" with
+        # the DSLD form "bark powder"); names this pipeline adds later (IQM
+        # forms, standard names) never are.
         if not botanical_details.get("plantPart"):
-            inferred_part = self._infer_plant_part_from_name(raw_name or name)
-            if inferred_part:
-                botanical_details["plantPart"] = inferred_part
-                botanical_details["plantPart_source"] = "name_inference"
+            label_forms = [
+                f.get("name") for f in forms_structured
+                if isinstance(f, dict) and f.get("source") != "name_extraction"
+            ]
+            for source, text in [("name_inference", raw_name or name)] + [
+                ("form_inference", form_name) for form_name in label_forms
+            ]:
+                inferred_part = self._infer_plant_part_from_name(text or "")
+                if inferred_part:
+                    botanical_details["plantPart"] = inferred_part
+                    botanical_details["plantPart_source"] = source
+                    break
 
         # Check if this ingredient is an additive (add metadata flag for enrichment phase)
         processed_name_check = self.matcher.preprocess_text(name)

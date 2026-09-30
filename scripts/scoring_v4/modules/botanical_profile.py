@@ -89,11 +89,6 @@ _NON_BOTANICAL_RAW_CATEGORIES = frozenset({
 })
 _BOTANICAL_SOURCE_FORM_CATEGORIES = frozenset({"botanical", "herb"})
 
-_PLANT_PARTS = (
-    "root", "leaf", "leaves", "bark", "flower", "seed", "fruit", "berry",
-    "rhizome", "aerial", "bulb", "stem", "rind", "peel", "whole herb", "herb",
-    "needle", "resin", "gum", "hull", "shell", "pod",
-)
 _EXTRACT_TOKENS = ("extract", "extracted", "concentrate", "standardized")
 _WHOLE_HERB_TOKENS = ("powder", "whole herb", "whole-herb", "dried herb", "cut")
 
@@ -700,7 +695,9 @@ def score_botanical_formulation(product: Dict[str, Any]) -> Dict[str, Any]:
 
     forms = _forms_text(row)
     components["recognized_botanical_identity"] = 6.0
-    if any(re.search(r"\b" + re.escape(pp) + r"\b", forms) for pp in _PLANT_PARTS):
+    # The cleaner owns plant part (DSLD PlantPart note, else the label row's
+    # name or forms). IQM form and standard names are not label disclosure.
+    if row.get("plantPart"):
         components["plant_part_disclosed"] = 2.0
     if _mass_mg(row) is not None:
         components["quantified_dose_present"] = 2.0

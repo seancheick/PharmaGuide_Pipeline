@@ -770,6 +770,7 @@ def _evidence_base(
         "standardName",
         "standard_name",
         "raw_source_text",
+        "plantPart",
     ):
         if field in row and row.get(field) not in (None, ""):
             item[field] = deepcopy(row.get(field))
@@ -2462,6 +2463,7 @@ def _product_scoring_evidence_rows(
         "standardName",
         "standard_name",
         "raw_source_text",
+        "plantPart",
         "anchor_risk_class",
         # Native evidence may have been emitted before the shared identity
         # contract was added.  The freshly derived row is linked to the same

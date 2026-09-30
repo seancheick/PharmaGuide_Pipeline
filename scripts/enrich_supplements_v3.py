@@ -4768,6 +4768,7 @@ class SupplementEnricherV3:
                     "score_exclusion_reason": ingredient.get("score_exclusion_reason") or skip_reason,
                     "dose_class": ingredient.get("dose_class"),
                     "raw_taxonomy": ingredient.get("raw_taxonomy"),
+                    "plantPart": ingredient.get("plantPart"),
                     "hierarchyType": hierarchy_type,
                     "form_extraction_used": False,
                     "is_dual_form": False,
@@ -7579,6 +7580,7 @@ class SupplementEnricherV3:
         entry["score_exclusion_reason"] = ingredient.get("score_exclusion_reason")
         entry["dose_class"] = ingredient.get("dose_class")
         entry["raw_taxonomy"] = ingredient.get("raw_taxonomy")
+        entry["plantPart"] = ingredient.get("plantPart")
         if activity_quantity is not None:
             entry["activity_quantity"] = int(activity_quantity) if activity_quantity.is_integer() else activity_quantity
             entry["activity_unit"] = activity_unit
