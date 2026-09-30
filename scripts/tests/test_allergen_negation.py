@@ -5,11 +5,11 @@ Allergen Negation Handling Tests
 Verifies that allergen detection correctly handles negation contexts.
 Statements like "Contains no milk/egg/soy" should NOT trigger allergen detection.
 
-Policy:
-- YES, we treat negation patterns as exclusions for allergen detection
-- Supported patterns: "no X", "free from X", "free of X", "without X",
-  "does not contain X", "contains no X"
-- If allergen appears in negation context, it is NOT flagged as detected
+Policy (production path: statements[] -> _parse_allergen_statement):
+- A negated clause ("contains no X", "does not contain X", "free from/of X",
+  "without X", "no added X") declares nothing; "no X" declares nothing because
+  only "contains", "may contain" and facility wording declare an allergen.
+- Structured ingredient rows are never negated by a label claim.
 
 Run with: pytest tests/test_allergen_negation.py -v
 """
@@ -23,143 +23,62 @@ sys.path.insert(0, str(Path(__file__).parent.parent))
 from enrich_supplements_v3 import SupplementEnricherV3
 
 
-class TestAllergenNegationPolicy:
-    """Tests proving allergen negation handling works correctly."""
+_ALLERGENS = {
+    'allergens': [
+        {'id': 'ALG_MILK', 'standard_name': 'milk', 'aliases': ['dairy', 'lactose', 'casein', 'whey'],
+         'severity_level': 'high', 'regulatory_status': 'major_allergen', 'general_handling': 'flag_and_warn'},
+        {'id': 'ALG_SOY', 'standard_name': 'soy', 'aliases': ['soya', 'soybean', 'soy lecithin'],
+         'severity_level': 'high', 'regulatory_status': 'major_allergen', 'general_handling': 'flag_and_warn'},
+        {'id': 'ALG_EGG', 'standard_name': 'eggs', 'aliases': ['egg', 'albumin', 'ovalbumin'],
+         'severity_level': 'high', 'regulatory_status': 'major_allergen', 'general_handling': 'flag_and_warn'},
+        {'id': 'ALG_WHEAT', 'standard_name': 'wheat', 'aliases': ['gluten', 'wheat flour'],
+         'severity_level': 'high', 'regulatory_status': 'major_allergen', 'general_handling': 'flag_and_warn'},
+    ]
+}
 
-    @pytest.fixture
+
+class TestAllergenNegationPolicy:
+    """Label statements go through the production path (`statements[]` ->
+    `_parse_allergen_statement`), not a helper production never calls."""
+
+    @pytest.fixture(scope='class')
     def enricher(self):
-        """Create enricher with allergen database loaded."""
         enricher = SupplementEnricherV3()
-        # Minimal allergen database for testing
-        enricher.databases['allergens'] = {
-            'allergens': [
-                {
-                    'id': 'ALG_MILK',
-                    'standard_name': 'milk',
-                    'aliases': ['dairy', 'lactose', 'casein', 'whey'],
-                    'severity_level': 'high',
-                    'regulatory_status': 'major_allergen',
-                    'general_handling': 'flag_and_warn'
-                },
-                {
-                    'id': 'ALG_SOY',
-                    'standard_name': 'soy',
-                    'aliases': ['soya', 'soybean', 'soy lecithin'],
-                    'severity_level': 'high',
-                    'regulatory_status': 'major_allergen',
-                    'general_handling': 'flag_and_warn'
-                },
-                {
-                    'id': 'ALG_EGG',
-                    'standard_name': 'eggs',
-                    'aliases': ['egg', 'albumin', 'ovalbumin'],
-                    'severity_level': 'high',
-                    'regulatory_status': 'major_allergen',
-                    'general_handling': 'flag_and_warn'
-                },
-                {
-                    'id': 'ALG_WHEAT',
-                    'standard_name': 'wheat',
-                    'aliases': ['gluten', 'wheat flour'],
-                    'severity_level': 'high',
-                    'regulatory_status': 'major_allergen',
-                    'general_handling': 'flag_and_warn'
-                },
-            ]
-        }
+        enricher.databases['allergens'] = _ALLERGENS
         return enricher
 
-    def test_negation_contains_no(self, enricher):
-        """'Contains no milk' should NOT flag milk as allergen."""
-        result = enricher._is_negated(
-            name='milk',
-            aliases=['dairy'],
-            text='this product contains no milk or dairy'
-        )
-        assert result is True, "Expected 'contains no milk' to be recognized as negation"
+    @staticmethod
+    def _detected(enricher, statement):
+        product = {
+            'dsld_id': '99990',
+            'fullName': 'Test Vitamin',
+            'statements': [{'type': 'Precautions', 'notes': statement}],
+            'activeIngredients': [{'name': 'Vitamin C', 'quantity': '100', 'unit': 'mg'}],
+            'inactiveIngredients': [{'name': 'Cellulose'}],
+        }
+        allergens = enricher._collect_contaminant_data(product).get('allergens', {}).get('allergens', [])
+        return {a.get('allergen_name') for a in allergens}
 
-    def test_negation_free_from(self, enricher):
-        """'Free from soy' should NOT flag soy as allergen."""
-        result = enricher._is_negated(
-            name='soy',
-            aliases=['soya'],
-            text='free from soy and other allergens'
-        )
-        assert result is True, "Expected 'free from soy' to be recognized as negation"
+    @pytest.mark.parametrize('statement', [
+        'this product contains no milk or dairy',
+        'Contains no milk or dairy',
+        'free from soy and other allergens',
+        'this formula is free of eggs',
+        'made without wheat or gluten',
+        'this supplement does not contain milk',
+        'no soy, no gluten, no artificial colors',
+        'no dairy products used',
+    ])
+    def test_negated_statement_declares_no_allergen(self, enricher, statement):
+        assert self._detected(enricher, statement) == set()
 
-    def test_negation_free_of(self, enricher):
-        """'Free of eggs' should NOT flag eggs as allergen."""
-        result = enricher._is_negated(
-            name='eggs',
-            aliases=['egg'],
-            text='this formula is free of eggs'
-        )
-        assert result is True, "Expected 'free of eggs' to be recognized as negation"
-
-    def test_negation_without(self, enricher):
-        """'Without wheat' should NOT flag wheat as allergen."""
-        result = enricher._is_negated(
-            name='wheat',
-            aliases=['gluten'],
-            text='made without wheat or gluten'
-        )
-        assert result is True, "Expected 'without wheat' to be recognized as negation"
-
-    def test_negation_does_not_contain(self, enricher):
-        """'Does not contain milk' should NOT flag milk as allergen."""
-        result = enricher._is_negated(
-            name='milk',
-            aliases=['dairy'],
-            text='this supplement does not contain milk'
-        )
-        assert result is True, "Expected 'does not contain milk' to be recognized as negation"
-
-    def test_negation_no_prefix(self, enricher):
-        """'No soy' should NOT flag soy as allergen."""
-        result = enricher._is_negated(
-            name='soy',
-            aliases=['soya'],
-            text='no soy, no gluten, no artificial colors'
-        )
-        assert result is True, "Expected 'no soy' to be recognized as negation"
-
-    def test_no_negation_positive_detection(self, enricher):
-        """'Contains milk' without negation SHOULD flag milk as allergen."""
-        result = enricher._is_negated(
-            name='milk',
-            aliases=['dairy'],
-            text='contains milk and soy lecithin'
-        )
-        assert result is False, "Expected 'contains milk' to NOT be negated"
-
-    def test_no_negation_ingredient_list(self, enricher):
-        """'Milk protein' in ingredients SHOULD flag milk as allergen."""
-        result = enricher._is_negated(
-            name='milk',
-            aliases=['dairy'],
-            text='ingredients: vitamin c, milk protein, zinc'
-        )
-        assert result is False, "Expected ingredient list mention to NOT be negated"
-
-    def test_negation_alias_match(self, enricher):
-        """'No dairy' should NOT flag milk (dairy is alias)."""
-        result = enricher._is_negated(
-            name='milk',
-            aliases=['dairy'],
-            text='no dairy products used'
-        )
-        assert result is True, "Expected 'no dairy' to negate milk (alias match)"
-
-    def test_negation_case_insensitive(self, enricher):
-        """Negation detection works when text is pre-lowercased (as done by _check_allergens)."""
-        # Note: _check_allergens lowercases text before calling _is_negated
-        # So in production, uppercase input works. Direct calls need lowercase text.
-        result = enricher._is_negated(
-            name='milk',
-            aliases=['dairy'],
-            text='contains no milk or dairy'  # Lowercased as done in _check_allergens
-        )
-        assert result is True, "Expected lowercased 'contains no milk' to be recognized"
+    @pytest.mark.parametrize('statement,expected', [
+        ('contains milk and soy lecithin', {'milk', 'soy'}),
+        ('Contains: milk.', {'milk'}),
+        ('May contain soy.', {'soy'}),
+    ])
+    def test_positive_statement_declares_its_allergens(self, enricher, statement, expected):
+        assert self._detected(enricher, statement) == expected
 
 
 class TestAllergenDetectionEndToEnd:
@@ -196,7 +115,7 @@ class TestAllergenDetectionEndToEnd:
         product = {
             'dsld_id': '99999',
             'fullName': 'Test Vitamin',
-            'labelStatement': 'Contains no milk, egg, or soy.',
+            'statements': [{'type': 'Precautions', 'notes': 'Contains no milk, egg, or soy.'}],
             'activeIngredients': [
                 {'name': 'Vitamin C', 'quantity': '100', 'unit': 'mg'}
             ],
@@ -221,7 +140,7 @@ class TestAllergenDetectionEndToEnd:
         product = {
             'dsld_id': '99998',
             'fullName': 'Test Vitamin with Soy',
-            'labelStatement': '',
+            'statements': [],
             'activeIngredients': [
                 {'name': 'Vitamin C', 'quantity': '100', 'unit': 'mg'}
             ],
@@ -247,7 +166,7 @@ class TestAllergenDetectionEndToEnd:
         product = {
             'dsld_id': '99997',
             'fullName': 'Complex Test',
-            'labelStatement': 'Contains no milk. May contain traces of tree nuts.',
+            'statements': [{'type': 'Precautions', 'notes': 'Contains no milk. May contain traces of tree nuts.'}],
             'activeIngredients': [
                 {'name': 'Vitamin C', 'quantity': '100', 'unit': 'mg'}
             ],

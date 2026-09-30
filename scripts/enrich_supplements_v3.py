@@ -12851,7 +12851,7 @@ class SupplementEnricherV3:
                     # NEVER apply negation to structured ingredient-list matches.
                     # If "Milk Protein" is in the ingredient list, it IS an allergen
                     # regardless of any "dairy-free" claim in marketing text.
-                    # See _is_negated() docstring for the safety contract.
+                    # Negation applies only to label statements (_parse_allergen_statement).
 
                     all_found.append({
                         "allergen_id": allergen.get('id', ''),
@@ -12901,51 +12901,6 @@ class SupplementEnricherV3:
             "allergens": found,
             "has_may_contain_warning": has_may_contain
         }
-
-    def _is_negated(self, name: str, aliases: List[str], text: str) -> bool:
-        """
-        Check if allergen mention is in negation context.
-
-        IMPORTANT - SCOPE LIMITATION:
-        This negation check applies ONLY to free-text fields:
-        - allergenStatement (e.g., "Contains no milk, egg, or soy")
-        - labelStatement (e.g., "Free from common allergens")
-        - targetGroups text (e.g., "Dairy-Free")
-        - marketing claims and descriptions
-
-        This check MUST NOT be used to filter out allergens detected from:
-        - structured ingredient rows (activeIngredients, inactiveIngredients)
-        - ingredient name fields directly
-
-        Rationale: If "Milk Protein" appears as an ingredient row, it IS an
-        allergen regardless of any "dairy-free" claim elsewhere. The structured
-        ingredient list is authoritative. Negation only filters allergens
-        detected via text scanning of unstructured fields.
-
-        Args:
-            name: Allergen standard name (e.g., "milk")
-            aliases: List of allergen aliases (e.g., ["dairy", "lactose"])
-            text: The free-text to scan for negation context (must be lowercase)
-
-        Returns:
-            True if allergen appears in negation context, False otherwise
-        """
-        negation_patterns = [
-            r'\bno\s+', r'\bfree\s+(from|of)\s+', r'\bwithout\s+',
-            r'\bdoes\s+not\s+contain\s+', r'\bcontains\s+no\s+'
-        ]
-
-        terms = [name.lower()] + [a.lower() for a in aliases]
-
-        for term in terms:
-            for pattern in negation_patterns:
-                # Limit to 60 chars between negation word and allergen term
-                # to prevent cross-sentence false matches like:
-                # "No artificial flavors. ... soy lecithin" matching as negated soy
-                if re.search(pattern + r'.{0,60}' + re.escape(term), text):
-                    return True
-
-        return False
 
     def _collect_compliance_data(self, product: Dict,
                                   contaminant_data: Optional[Dict] = None) -> Dict:

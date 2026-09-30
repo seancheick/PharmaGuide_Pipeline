@@ -81,7 +81,6 @@ KEEP: dict[str, str] = {
     "scripts/release_safety/gates.py::failure_summary": _RELEASE,
     "scripts/release_safety/orphan_reconcile.py::total_objects_examined": _RELEASE,
     # Removed in this branch, one topic per commit.
-    "scripts/enrich_supplements_v3.py::_is_negated": _PENDING,
     "scripts/enhanced_normalizer.py::_process_ingredient_for_other_parallel": _PENDING,
     "scripts/enhanced_normalizer.py::clear_caches": _PENDING,
     "scripts/scoring_v4/modules/probiotic_dose.py::_as_int": _PENDING,
