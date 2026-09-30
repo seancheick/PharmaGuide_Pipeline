@@ -65,13 +65,13 @@ KEEP: dict[str, str] = {
     "scripts/release_artifact_paths.py::catalog_dist_dir": "release tests locate candidate vs live artifacts through it",
     "scripts/release_artifact_paths.py::final_build_dir": "release tests locate candidate vs live artifacts through it",
     "scripts/submission_review/extraction/grounding.py::ungrounded": "grounding tests read the report through it",
+    "scripts/evidence_resolver.py::resolve_evidence_for_canonical": "tests drive the live resolve_evidence_for_row through it (builds the row)",
     # Cross-repo reference implementations the app must match.
     "scripts/profile_gate_evaluator.py::evaluate_profile_gate": "reference evaluator; Flutter must match it on scripts/data/profile_gate_test_cases.json",
     "scripts/profile_gate_evaluator.py::validate_profile_gate": "reference validator; Flutter must match it on scripts/data/profile_gate_test_cases.json",
     "scripts/safety_alerts.py::applies_to": "reference of the device-side alert applicability the app implements",
     "scripts/export_schema.py::resolve_warning_rule_refs": "reference of schema-3 warning-ref rehydration (app: warning_rule_ref_resolver.dart)",
     # Owned elsewhere: another lane or Sean decides.
-    "scripts/evidence_resolver.py::resolve_evidence_for_canonical": "lane 2A (evidence/owner-eligibility) edits this file; classify after it lands",
     "scripts/clinical_evidence_schema.py::validate_ingredient_context": "validator for ingredient-lane study contexts, not yet wired into a data gate (a wiring decision)",
     "scripts/submission_review/extraction/development.py::run_development_split": "submission-extraction lane owns the development harness",
     "scripts/cleanup_old_versions.py::list_version_directory": _RELEASE,

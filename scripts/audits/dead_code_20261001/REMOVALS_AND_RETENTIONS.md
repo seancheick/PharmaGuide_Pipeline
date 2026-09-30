@@ -36,9 +36,8 @@ unreferenced or test-only production function, and on a stale `KEEP` entry.
 
 | Item | Why it stays |
 |---|---|
-| `normalization.clear_caches`, `normalization.validate_normalized_key`, `cert_resolver.recency_for`, `identity_integrity.resolve_unambiguous`, `release_artifact_paths.*`, `grounding.ungrounded` | Test support: tests read a live object's state through them. |
+| `normalization.clear_caches`, `normalization.validate_normalized_key`, `cert_resolver.recency_for`, `identity_integrity.resolve_unambiguous`, `release_artifact_paths.*`, `grounding.ungrounded`, `evidence_resolver.resolve_evidence_for_canonical` | Test support: tests reach a live object or the live resolver (`resolve_evidence_for_row`) through them. |
 | `profile_gate_evaluator.*`, `safety_alerts.applies_to`, `export_schema.resolve_warning_rule_refs` | Reference implementations the app must match (shared fixtures / Dart resolver). |
-| `evidence_resolver.resolve_evidence_for_canonical` | Lane 2A edits this file; classify after it lands. |
 | `clinical_evidence_schema.validate_ingredient_context` | A validator no gate runs yet: a wiring decision, not dead code. |
 | `submission_review/extraction/development.run_development_split` | The submission-extraction lane owns the harness. |
 | `cleanup_old_versions.list_version_directory`, `supabase_client.storage_object_exists`, `release_safety` `require_complete` / `failure_summary` / `total_objects_examined` | Release chain, test-only: Sean decides. Note: `blob_inventory.py` says destructive callers "must call `require_complete()`"; the actual callers check `.complete` directly. |
