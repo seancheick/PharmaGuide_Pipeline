@@ -129,6 +129,9 @@ bug-fix notes are history, not specifications.
 - Remove the code, its docs and its tests in one commit; no "legacy" shim unless a named consumer
   is live. A dormant data-driven guard (trigger absent from today's corpus) is not dead.
 - Deleting curated clinical data or a live public contract needs Sean.
+- `scripts/audit_dead_code.py` lists candidates (`functions`; `keys` for values never read). The
+  fast-rung ratchet fails on new unreferenced or test-only production code: delete it, or add it to
+  `KEEP` with its reason. Dead code met while working in a file leaves in its own commit.
 
 ## Cross-repo contract (pipeline → Flutter)
 

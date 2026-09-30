@@ -5,3 +5,5 @@ scripts/reports/
 scripts/api_audit/reports/
 scripts/dist.*/
 *.db
+# Dated one-off audit scripts: history, not live code. Their Markdown ledgers stay in.
+scripts/audits/*.py
