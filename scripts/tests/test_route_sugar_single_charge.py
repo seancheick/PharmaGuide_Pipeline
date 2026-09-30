@@ -1,4 +1,4 @@
-"""Q3: a sugar or sweetener on the label is charged once, by the shared owner.
+"""Q3: sugar and sweetener charges come only from the shared owners, never from a route.
 
 generic_formulation._dietary_sugar_penalty_detail (B1_dietary_sugar) and
 _b1_harmful_additive_penalty_detail (B1_harmful_additives) charge every route. The sports-protein

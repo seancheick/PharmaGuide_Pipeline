@@ -2,10 +2,10 @@
 
 The generic formulation scorer under-recognizes protein powders because it is
 built around vitamin/mineral form quality and broad supplement composition.
-This adapter keeps the shared safety/sugar penalties but scores protein powders
-on the formulation facts that matter for the category: source quality,
-transparent protein dosing, amino-profile disclosure, focus, and daily-use
-cleanliness.
+This adapter keeps the shared safety/sugar penalties (the only sugar and
+sweetener charge, 1.21.4) and scores protein powders on the formulation facts
+that matter for the category: source quality, transparent protein dosing,
+amino-profile disclosure and focus.
 """
 
 from __future__ import annotations
