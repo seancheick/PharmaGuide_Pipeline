@@ -40,15 +40,21 @@ unreferenced or test-only production function, and on a stale `KEEP` entry.
 | `profile_gate_evaluator.*`, `safety_alerts.applies_to`, `export_schema.resolve_warning_rule_refs` | Reference implementations the app must match (shared fixtures / Dart resolver). |
 | `clinical_evidence_schema.validate_ingredient_context` | A validator no gate runs yet: a wiring decision, not dead code. |
 | `submission_review/extraction/development.run_development_split` | The submission-extraction lane owns the harness. |
-| `cleanup_old_versions.list_version_directory`, `supabase_client.storage_object_exists`, `release_safety` `require_complete` / `failure_summary` / `total_objects_examined` | Release chain, test-only: Sean decides. Note: `blob_inventory.py` says destructive callers "must call `require_complete()`"; the actual callers check `.complete` directly. |
+| `release_safety.gates.failure_summary` (with `evaluate_cleanup_gates`) | Unwired since e3e64f43 and superseded by the protected blob set, the `--expected-count` approval report and reversible quarantine. Removing the gate module is a release-chain call. |
 
-## For Sean
+## Follow-up batch (same branch)
 
-- Six CLI tools nothing names (no import, script, skill or doc): `api_audit/audit_v4_step10_cohorts.py`,
-  `api_audit/botanical_cui_resolver.py`, `api_audit/explain_v4_product.py`,
-  `api_audit/verify_semantic_applicability.py`, `tools/author_phase3_pairwise_floors.py`,
-  `tools/import_upc_overrides.py`. Delete, or name them in a runbook?
-- The release-chain KEEP entries above.
+| Item | Decision | Evidence |
+|---|---|---|
+| `api_audit/audit_v4_step10_cohorts.py` | Deleted | The v3 -> v4 cutover gate; v4 has been the production contract since 2026-06-09. |
+| `tools/author_phase3_pairwise_floors.py` | Deleted | The 2026-07-02 one-off whose output is curated in `curated_interactions_v1.json`; `--apply` would overwrite it. |
+| `explain_v4_product`, `verify_semantic_applicability`, `botanical_cui_resolver`, `import_upc_overrides` | Kept | Now named in `docs/runbooks/verification-gates.md`. |
+| `release_safety.blob_inventory.require_complete` + `IncompleteInventoryError` | Deleted | All six inventory consumers refuse when `complete` is False; tests pin that. |
+| `orphan_reconcile.total_objects_examined`, `supabase_client.storage_object_exists`, `cleanup_old_versions.list_version_directory` | Deleted | No caller; the lister was replaced by the recursive enumerator in e3e64f43. |
+
+`audit_dead_code.py trace` on the 1,261 frozen labels: 209 functions (4,197 lines) in 99 imported
+modules never entered (`~/pg_quality/deadcode_20261001/trace.json`). A review list only: dormant
+guards stay.
 
 ## Score neutrality
 
