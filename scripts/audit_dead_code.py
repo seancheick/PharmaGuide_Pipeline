@@ -55,7 +55,6 @@ PLAIN_DECORATORS = {"staticmethod", "classmethod", "property", "lru_cache", "cac
                     "wraps", "cached_property"}
 
 # path::name -> why it stays. Each reason names the proof of life or the owner who decides.
-_PENDING = "PENDING removal, batch 1 (scripts/audits/dead_code_20261001)"
 _RELEASE = "release chain: test-only, removal is Sean's call (dead_code_20261001 ledger)"
 KEEP: dict[str, str] = {
     # Test support: tests read a live object's state through it.
@@ -80,7 +79,6 @@ KEEP: dict[str, str] = {
     "scripts/release_safety/blob_inventory.py::require_complete": _RELEASE,
     "scripts/release_safety/gates.py::failure_summary": _RELEASE,
     "scripts/release_safety/orphan_reconcile.py::total_objects_examined": _RELEASE,
-    # Removed in this branch, one topic per commit.
 }
 
 
