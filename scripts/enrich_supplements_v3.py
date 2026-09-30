@@ -113,6 +113,7 @@ from scoring_input_contract import (
     get_scoring_ingredients,
     normalize_product_evidence_scope,
     source_linked_rows,
+    _positive_quantity,
 )
 from scoring_reference_resolver import (
     IDENTITY_MISMATCH_RELATIONSHIPS,
@@ -10753,6 +10754,12 @@ class SupplementEnricherV3:
         # follow the same primary-active contract used by Section A scoring.
         all_ingredients = self._primary_active_ingredients_for_enrichment(product)
         quality_rows = product.get("ingredient_quality_data", {}).get("ingredients", [])
+        active_quality_rows = [
+            row for row in quality_rows
+            if isinstance(row, dict)
+            and str(row.get("source_section") or "active").strip().lower() != "inactive"
+            and not row.get("is_excipient")
+        ]
         quality_row_ids = {id(row) for row in quality_rows if isinstance(row, dict)}
         delivering_ingredients = []
         for ingredient in all_ingredients:
@@ -10774,7 +10781,30 @@ class SupplementEnricherV3:
         for ing in all_ingredients:
             ingredient_names.add(self._normalize_text(ing.get('name', '')))
             ingredient_names.add(self._normalize_text(ing.get('standardName', '')))
-
+        # An aid-role enhancer (one whose entry carries
+        # ``non_scorable_when_sub_threshold``: piperine) may be an undosed
+        # blend member paired with an undosed target, so its pairing also
+        # reads the active label rows.  Every other enhancer (vitamin D with
+        # calcium, vitamin C with iron) is an active in its own right and keeps
+        # the primary-active pairing above.
+        aid_target_names = set(ingredient_names)
+        for row in active_quality_rows:
+            if str(row.get("cleaner_row_role") or "").strip().lower() == "blend_header_total":
+                continue
+            if not delivers_parent_nutrient(
+                row.get("canonical_id"),
+                [row.get("form_id")] + [
+                    match.get("form_key")
+                    for match in row.get("matched_forms") or []
+                    if isinstance(match, dict)
+                ],
+            ):
+                continue
+            aid_target_names.add(self._normalize_text(row.get('name', '')))
+            aid_target_names.add(self._normalize_text(row.get('standard_name', '')))
+            aid_target_names.add(
+                self._normalize_text(row.get('canonical_id') or '').replace('_', ' ')
+            )
         found_enhancers = []
         enhanced_nutrients_present = []
         # A demoted bioavailability aid (piperine <= 10 mg) is no scoring
@@ -10792,24 +10822,43 @@ class SupplementEnricherV3:
 
             # Check if enhancer present
             enhancer_found = enhancer.get('id') in demoted_enhancer_ids
-            for ing in all_ingredients:
-                if self._exact_match(ing.get('name', ''), enhancer_name, enhancer_aliases) or \
-                   self._exact_match(ing.get('standardName', ''), enhancer_name, enhancer_aliases):
+            aid_role = isinstance(enhancer.get('non_scorable_when_sub_threshold'), dict)
+            matched_quality_rows = []
+            for row in active_quality_rows if aid_role else []:
+                if self._exact_match(row.get('name', ''), enhancer_name, enhancer_aliases) or \
+                   self._exact_match(row.get('standard_name', ''), enhancer_name, enhancer_aliases) or \
+                   self._exact_match(str(row.get('canonical_id') or '').replace('_', ' '), enhancer_name, enhancer_aliases):
                     enhancer_found = True
-                    break
+                    matched_quality_rows.append(row)
+            if not enhancer_found:
+                for ing in all_ingredients:
+                    if self._exact_match(ing.get('name', ''), enhancer_name, enhancer_aliases) or \
+                       self._exact_match(ing.get('standardName', ''), enhancer_name, enhancer_aliases):
+                        enhancer_found = True
+                        break
 
             if enhancer_found:
                 # Check which enhanced nutrients are present
                 enhances = enhancer.get('enhances', [])
                 nutrients_found = []
+                target_names = aid_target_names if aid_role else ingredient_names
 
                 for nutrient in enhances:
                     nutrient_norm = self._normalize_text(nutrient)
-                    if nutrient_norm in ingredient_names:
+                    if nutrient_norm in target_names:
                         nutrients_found.append(nutrient)
 
                 if nutrients_found:
                     enhanced_nutrients_present.extend(nutrients_found)
+                    # The pairing is the aid's role only when the label gives
+                    # no amount: a dosed row is judged by the entry's threshold
+                    # (<= threshold demoted above, above it an active), and a
+                    # row another owner already recognised keeps that record.
+                    for row in matched_quality_rows:
+                        if _positive_quantity(row) is None and not row.get('recognition_source'):
+                            row['recognition_source'] = 'absorption_enhancers'
+                            row['recognition_type'] = 'paired_absorption_enhancer'
+                            row['recognition_reason'] = 'paired_absorption_enhancer'
 
                 found_enhancers.append({
                     "name": enhancer_name,

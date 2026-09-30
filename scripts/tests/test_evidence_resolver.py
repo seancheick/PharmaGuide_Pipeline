@@ -2,7 +2,7 @@
 """Tests for Universal Evidence Resolver (Phase 3 Architecture).
 
 Validates:
-- Full 10-owner capability contract
+- Full authoritative-owner capability contract
 - The fundamental invariant: matched owner != Evidence points
 - All 6 canonical Evidence dispositions
 - Sub-clinical dose and form mismatch applicability guards
@@ -25,7 +25,7 @@ from evidence_resolver import EvidenceDisposition, OWNER_CAPABILITY_MAP
 
 
 def test_owner_capability_map_completeness():
-    """All 10 required authoritative owners must be registered with complete metadata."""
+    """Every required authoritative owner is registered with complete metadata."""
     required_owners = {
         "identity_iqm",
         "nutrition_authority",
@@ -35,6 +35,7 @@ def test_owner_capability_map_completeness():
         "dose_exposure",
         "form_preparation",
         "finished_formula",
+        "absorption_enhancer_role",
         "monograph_claims",
         "safety_boundaries",
     }

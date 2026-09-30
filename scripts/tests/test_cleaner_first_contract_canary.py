@@ -88,6 +88,50 @@ def test_cleaner_contract_for_blend_header_enzyme_and_inactive_rows():
     assert inactive["score_eligible_by_cleaner"] is False
 
 
+def test_reviewed_super_greens_form_members_are_expanded_but_carriers_are_not():
+    """DSLD forms[] is overloaded.  Expand only exact blend labels whose
+    forms were reviewed as ingredients; an arbitrary blend keeps its forms as
+    attributes so a carrier cannot become an active."""
+    cleaned = EnhancedDSLDNormalizer().normalize_product({
+        "id": "reviewed-form-members",
+        "fullName": "Reviewed Form Members",
+        "brandName": "Contract Brand",
+        "offMarket": 0,
+        "contacts": [],
+        "statements": [],
+        "ingredientRows": [
+            {
+                "name": "Super Greens Whole Food Blend",
+                "category": "blend",
+                "ingredientGroup": "Blend (Combination)",
+                "order": 1,
+                "quantity": [{"quantity": 4, "unit": "g"}],
+                "nestedRows": [],
+                "forms": [
+                    {"name": "Spirulina", "category": "bacteria", "ingredientGroup": "Blue-Green Algae"},
+                    {"name": "Chlorella", "category": "other", "ingredientGroup": "Chlorella"},
+                ],
+            },
+            {
+                "name": "Unreviewed Cartilage Blend",
+                "category": "blend",
+                "ingredientGroup": "Blend (Combination)",
+                "order": 2,
+                "quantity": [{"quantity": 40, "unit": "mg"}],
+                "nestedRows": [],
+                "forms": [
+                    {"name": "Potassium Chloride", "category": "mineral", "ingredientGroup": "Potassium Chloride"},
+                ],
+            },
+        ],
+        "otheringredients": {"ingredients": []},
+    })
+
+    active_names = {row.get("name") for row in cleaned["activeIngredients"]}
+    assert {"Spirulina", "Chlorella"} <= active_names
+    assert "Potassium Chloride" not in active_names
+
+
 def test_cleaner_preserves_external_manual_product_provenance():
     cleaned = EnhancedDSLDNormalizer().normalize_product({
         "id": "RITUAL_SYNBIOTIC_001",
@@ -572,3 +616,4 @@ def test_iqd_activity_replaces_failed_mass_conversion_for_same_exposure():
     assert assessments[0]["ul_assessment_status"] == "no_ul_applicable"
     assert assessments[0]["reason_code"] == "not_ul_applicable"
     assert assessments[0]["readiness"] == "not_applicable"
+

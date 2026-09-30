@@ -18,17 +18,7 @@ import pytest
 FIXTURES = Path(__file__).parent / "fixtures"
 PRODUCTS = ["1179", "14168", "315089", "243271", "282638", "299755", "54775", "275464"]
 
-# Since lane 2A (2026-09-30) a blend's disclosed members own its Evidence, not
-# the blend name. Golden Milk's piperine is an undosed member of the turmeric
-# blend: the <=10 mg aid demotion cannot be evaluated, so piperine owns and has
-# no review yet. Open decision for Sean (register R3), not a code defect.
-_GOLDEN_MILK_PIPERINE = pytest.mark.xfail(strict=True, reason=(
-    "243271 piperine is an undosed turmeric-blend member: aid or active? (register R3)"
-))
-_REVIEW_PRODUCTS = [
-    pytest.param(pid, marks=_GOLDEN_MILK_PIPERINE) if pid == "243271" else pid
-    for pid in PRODUCTS
-]
+_REVIEW_PRODUCTS = PRODUCTS
 
 
 @pytest.fixture(scope="module")
@@ -74,8 +64,8 @@ def test_tesnor_and_sytrinol_resolve_to_their_reviewed_trials(enriched):
 
 @pytest.mark.parametrize("pid,canonical", [
     pytest.param("1179", "cinnamon", marks=pytest.mark.xfail(strict=True, reason=(
-        "Ravage's active 'Cinnamon Extract' row carries is_excipient=True, so it is "
-        "not an Evidence subject: purpose-over-excipient defect, lane 2B"
+        "Ravage's undosed 'Cinnamon Extract' blend member is read as the other-ingredients "
+        "flavour (is_excipient): active or carrier is a per-item purpose decision, lane 2B"
     ))),
     ("243271", "turmeric"),
 ])
@@ -85,8 +75,86 @@ def test_a_lent_blend_total_is_no_evidence_dose(enriched, pid, canonical):
     read that total as their own dose, so the trials looked applicable. Their
     own amounts are not on the label (RR-04: no consumer reads a lent mass as
     an individual dose)."""
+    from evidence_resolver import resolve_evidence_for_row
+    from scoring_input_contract import get_evidence_subject_rows
+
+    row = next(
+        r for r in get_evidence_subject_rows(enriched[pid])
+        if r.get("canonical_id") == canonical
+    )
+    resolution = resolve_evidence_for_row(row, enriched[pid])
+    assert resolution.applicability_status == "dose_undisclosed"
+
+
+def test_golden_milk_piperine_uses_the_absorption_aid_owner(enriched):
+    """An undosed active-panel aid stays visible, while the established
+    turmeric pairing resolves its Evidence role without inventing an efficacy
+    trial for piperine."""
     from evidence_resolver import resolve_product_evidence
 
-    resolution = resolve_product_evidence(enriched[pid], owner_scoped=True)
-    owner = next(r for r in resolution.resolutions if r.canonical_id == canonical)
-    assert owner.applicability_status == "dose_undisclosed"
+    product = enriched["243271"]
+    assert product["absorption_enhancer_paired"] is True
+    resolution = resolve_product_evidence(product, owner_scoped=True)
+    piperine = next(r for r in resolution.resolutions if r.canonical_id == "piperine")
+    assert piperine.disposition == "not_efficacy_relevant"
+    assert piperine.matched_owners == ["absorption_enhancer_role"]
+
+
+@pytest.fixture(scope="module")
+def multivitamins():
+    from enhanced_normalizer import EnhancedDSLDNormalizer
+    from enrich_supplements_v3 import SupplementEnricherV3
+
+    logging.disable(logging.INFO)
+    normalizer, enricher = EnhancedDSLDNormalizer(), SupplementEnricherV3()
+    out = {}
+    for pid in ("200362", "15923"):
+        raw = json.loads((FIXTURES / f"absorption_pairing_{pid}_raw.json").read_text())
+        out[pid], _ = enricher.enrich_product(normalizer.normalize_product(raw))
+    return out
+
+
+@pytest.mark.parametrize("pid", ["200362", "15923"])
+def test_a_nutrient_listed_as_an_enhancer_keeps_its_own_evidence(multivitamins, pid):
+    """absorption_enhancers.json also lists nutrients (vitamin D for calcium,
+    vitamin C and A for iron). They are actives in their own right: only an
+    aid-role entry (non_scorable_when_sub_threshold: piperine) may resolve a
+    label row as a paired absorption aid."""
+    from evidence_resolver import resolve_product_evidence
+
+    product = multivitamins[pid]
+    assert not [
+        row.get("name") for row in product["ingredient_quality_data"]["ingredients"]
+        if row.get("recognition_type") == "paired_absorption_enhancer"
+    ]
+    resolution = resolve_product_evidence(product, owner_scoped=True)
+    assert not [
+        r.canonical_id for r in resolution.resolutions
+        if r.applicability_status == "paired_absorption_aid"
+    ]
+
+
+def test_nutrient_enhancers_pair_only_through_primary_actives(multivitamins):
+    """15923 (vitamins A/C/D with calcium and iron on 06b00bb3: no absorption
+    bonus) must not gain the bonus from quality-row canonical names."""
+    assert multivitamins["15923"]["absorption_data"]["qualifies_for_bonus"] is False
+
+
+@pytest.mark.parametrize("quantity,paired_aid", [(0.0, True), (20.0, False)])
+def test_only_an_undosed_aid_takes_the_paired_aid_role(quantity, paired_aid):
+    """absorption_enhancers.json: piperine <= 10 mg is an aid (demoted by the
+    threshold rule), above 10 mg a therapeutic active. The pairing may settle
+    the role only when the label gives no amount."""
+    from enrich_supplements_v3 import SupplementEnricherV3
+
+    turmeric = {"name": "Turmeric", "standard_name": "Turmeric", "canonical_id": "turmeric",
+                "source_section": "active", "quantity": 0.0, "unit": "NP",
+                "raw_source_path": "ingredientRows[0].nestedRows[0]"}
+    piperine = {"name": "Black Pepper", "standard_name": "Piperine", "canonical_id": "piperine",
+                "source_section": "active", "quantity": quantity, "unit": "mg",
+                "raw_source_path": "ingredientRows[0].nestedRows[1]"}
+    product = {"activeIngredients": [], "ingredient_quality_data": {"ingredients": [turmeric, piperine]}}
+    data = SupplementEnricherV3()._collect_absorption_data(product)
+    assert data["qualifies_for_bonus"] is True
+    assert (piperine.get("recognition_type") == "paired_absorption_enhancer") is paired_aid
+

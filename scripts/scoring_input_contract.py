@@ -5941,6 +5941,14 @@ def _named_in_title(row: Dict[str, Any], title_norm: str) -> bool:
         _norm(row.get("standard_name")),
         canonical.replace("_", " "),
     ]
+    # A forms[] member the cleaner expanded from a reviewed blend header
+    # (BLEND_HEADER_EXACT_NAMES) loses that header row, so its parent_blend is
+    # the surviving source fact for the header's title role.  A nestedRows[]
+    # member keeps its header row, whose role Evidence reads directly
+    # (evidence_resolver.evidence_owner_canonicals).
+    parent_blend = row.get("parent_blend") or row.get("parentBlend")
+    if parent_blend and ".forms[" in str(row.get("raw_source_path") or ""):
+        candidates.append(_norm(parent_blend))
     curated_aliases = _ROLE_TITLE_ALIASES_BY_CANONICAL.get(canonical, ())
     # Curated identity aliases may be shorter than the generic four-character
     # title-token floor (notably D2/D3). Their canonical-scoped allowlist is

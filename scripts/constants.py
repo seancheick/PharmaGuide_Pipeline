@@ -1037,6 +1037,16 @@ BLEND_HEADER_EXACT_NAMES = {
     "n.o. vasodilation amplifier",
     "atp optimizing creatine module",
     "thermo energy intensifier",
+    # DSLD 17226: these label rows carry their disclosed members in forms[],
+    # not nestedRows[].  Exact review confirmed each form is an ingredient,
+    # so the cleaner may expand them.  Keep this label-specific boundary:
+    # forms[] is overloaded elsewhere (for example UC-II lists its carrier).
+    "super greens digestive enzyme blend",
+    "super greens whole food blend",
+    "super greens herb blend",
+    "super greens vegetable blend",
+    "super greens fruit blend",
+    "super greens mushroom blend",
     "micronized creatine precursors",
     "liver health",
     "total bcaa",

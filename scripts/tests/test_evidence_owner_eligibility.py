@@ -93,6 +93,67 @@ def test_lent_blend_mass_never_reaches_a_dose_reader(enriched):
     assert "nha_stevia" not in {r.get("canonical_id") for r in get_evidence_subject_rows(enriched["212273"])}
 
 
+def test_reviewed_form_members_inherit_their_blend_role(monkeypatch):
+    """The cleaner expands forms[] only for exact reviewed blend headers.
+    Once expanded, those real members follow the same Evidence ownership rule
+    as nestedRows[] members."""
+    import evidence_resolver as resolver
+
+    subjects = [
+        {"canonical_id": "spirulina", "raw_source_path": "ingredientRows[0].forms[0]"},
+        {"canonical_id": "chlorella", "raw_source_path": "ingredientRows[0].forms[1]"},
+    ]
+    subject_roles = [{"role": "adjunct"}, {"role": "adjunct"}]
+    headers = [{"canonical_id": "greens_blend", "raw_source_path": "ingredientRows[0]"}]
+    header_roles = [{"role": "major"}]
+    monkeypatch.setattr(
+        resolver,
+        "_evidence_subject_roles",
+        lambda product, module: (subjects, subject_roles, headers, header_roles),
+    )
+    assert resolver.evidence_owner_canonicals({}) == {"spirulina", "chlorella"}
+
+
+def test_expanded_member_keeps_a_title_named_parent_role():
+    from scoring_input_contract import ROLE_CLAIM_PROMINENT, classify_ingredient_roles
+
+    row = {
+        "canonical_id": "spirulina",
+        "name": "Spirulina",
+        "parent_blend": "Super Greens Whole Food Blend",
+        "raw_source_path": "ingredientRows[0].forms[0]",
+        "source_section": "active",
+        "score_eligible_by_cleaner": True,
+        "scoreable_identity": True,
+    }
+    role = classify_ingredient_roles(
+        {"product_name": "Super Greens"}, module="generic", rows=[row]
+    )[0]
+    assert role["role"] == ROLE_CLAIM_PROMINENT
+    assert role["role_source"] == "product_name"
+
+
+def test_a_nested_member_is_not_made_prominent_by_its_parent_name():
+    """A nestedRows[] member keeps its header row, so the title role stays
+    the header's (Evidence reads it through the blend tier); the shared role
+    owner does not promote every member of a title-named blend."""
+    from scoring_input_contract import ROLE_CLAIM_PROMINENT, classify_ingredient_roles
+
+    row = {
+        "canonical_id": "spirulina",
+        "name": "Spirulina",
+        "parent_blend": "Super Greens Whole Food Blend",
+        "raw_source_path": "ingredientRows[0].nestedRows[0]",
+        "source_section": "active",
+        "score_eligible_by_cleaner": True,
+        "scoreable_identity": True,
+    }
+    role = classify_ingredient_roles(
+        {"product_name": "Super Greens"}, module="generic", rows=[row]
+    )[0]
+    assert role["role"] != ROLE_CLAIM_PROMINENT
+
+
 @pytest.mark.parametrize("dsld_id", ["212273", "251549", "219048", "321604"])
 def test_owners_are_the_same_inside_and_outside_the_scoring_scope(enriched, dsld_id):
     """The enricher asks outside a scoring pass, the scorer inside one: one

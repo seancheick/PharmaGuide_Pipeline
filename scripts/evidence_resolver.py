@@ -176,6 +176,12 @@ OWNER_CAPABILITY_MAP: Dict[str, OwnerCapability] = {
         facts_owned=("has_finished_product_trial", "formula_id", "study_type", "pmids"),
         capability_description="Product-level finished commercial formulation RCT evidence",
     ),
+    "absorption_enhancer_role": OwnerCapability(
+        owner_id="absorption_enhancer_role",
+        data_source="data/absorption_enhancers.json",
+        facts_owned=("enhancer_identity", "paired_target", "formulation_role"),
+        capability_description="Label-declared absorption aid paired with a nutrient it enhances",
+    ),
     "monograph_claims": OwnerCapability(
         owner_id="monograph_claims",
         data_source="USP; Commission E; Health Canada NHP; EFSA",
@@ -552,6 +558,30 @@ def resolve_evidence_for_row(
     matched_owners: List[str] = []
     owner_facts: Dict[str, Any] = {}
     blocking_reasons: List[str] = []
+
+    # The existing absorption owner can finish the role assessment without an
+    # efficacy trial.  The ingredient remains an active label row for safety,
+    # interactions and formulation; it simply does not pretend to be an
+    # independent efficacy owner when it is paired as an absorption aid.
+    if (
+        product
+        and (
+            product.get("absorption_enhancer_paired") is True
+            or (product.get("absorption_data") or {}).get("qualifies_for_bonus") is True
+        )
+        and row_dict.get("recognition_source") == "absorption_enhancers"
+        and row_dict.get("recognition_type") == "paired_absorption_enhancer"
+    ):
+        return EvidenceResolution(
+            canonical_id=canonical,
+            ingredient_name=name,
+            matched_owners=["absorption_enhancer_role"],
+            disposition=EvidenceDisposition.NOT_EFFICACY_RELEVANT.value,
+            points_eligible=False,
+            applicability_status="paired_absorption_aid",
+            reason_code="paired_absorption_aid_not_independent_efficacy_owner",
+            owner_facts={"absorption_enhancer_role": {"paired": True}},
+        )
 
     # 1. Check structural & excipient exclusion -> NOT_EFFICACY_RELEVANT
     cleaner_role = _norm(row_dict.get("cleaner_row_role"))
@@ -1267,7 +1297,9 @@ def evidence_owner_canonicals(
             for row in rows
             if str(row.get("canonical_id") or "").strip()
             and any(
-                str(row.get("raw_source_path") or "").startswith(parent + ".nestedRows[")
+                str(row.get("raw_source_path") or "").startswith(
+                    (parent + ".nestedRows[", parent + ".forms[")
+                )
                 for parent in parents
             )
         }
