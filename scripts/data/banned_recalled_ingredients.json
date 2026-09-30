@@ -3,8 +3,8 @@
     "description": "Banned and recalled ingredients database for regulatory compliance and safety (v3.0)",
     "purpose": "safety_disqualification_and_regulatory_compliance",
     "schema_version": "5.5.3",
-    "last_updated": "2026-09-27",
-    "total_entries": 185,
+    "last_updated": "2026-09-30",
+    "total_entries": 187,
     "data_source_metadata": {
       "sources": [
         "FDA",
@@ -410,6 +410,17 @@
             "  RECALLED_SENSUAL_MIRACLE_HONEY (sildenafil + tadalafil)",
             "total_entries: 157 → 161"
           ]
+        },
+        {
+          "version": "5.5.3",
+          "date": "2026-09-30",
+          "auditor": "fda_weekly_sync_agent",
+          "changes": [
+            "Added RECALLED_MIRACLE_POWER_OF_KING_KONG_HONEY (tadalafil)",
+            "Added RECALLED_CANDY_POWER_FOR_MAN (tadalafil)",
+            "RECALLED_GREEN_LUMBER last_reviewed_at refreshed (FDA D-0304-2026 ongoing)",
+            "total_entries: 185 -> 187"
+          ]
         }
       ],
       "known_limitations": [
@@ -437,7 +448,7 @@
       "2026-05-30: Safety-copy tone close-out (Option B). After 6bfe7c43 voice normalization, applied the final bounded rubric to the ACTION_MISMATCH set: fixed the one true action defect (7-OH mitragynine had no action verb), aligned HM_CADMIUM to the heavy-metal contaminant voice ('Avoid untested products'), restored dropped specificity on EPHEDRA (stroke/heart) and DMAA (stroke/cardiac), and strengthened two genuinely-soft controlled/cancer-linked drug rows (modafinil, cardarine). Regulatory-only revocations (Red 3, BVO, PHO, Amaranth), legal-status (CBD, delta-8), lawful-but-cautioned (red yeast rice), OTC (docusate, simethicone), and general heavy-metal/contaminant rows are INTENTIONALLY kept soft ('Avoid'/'Avoid untested products'/'Talk to your doctor') — encoded in audit_safety_oneliner_tone.py so they no longer flag as under-warning. An earlier uncommitted batch that escalated all 19 to 'Stop using this product' was rejected: it busted the 80-char cap on 13 rows and over-corrected regulatory/contaminant cases. Closes safety-copy tone."
     ],
     "risk_breakdown": {
-      "critical": 112,
+      "critical": 114,
       "dose_dependent": 3,
       "high": 46,
       "low": 1,
@@ -468,6 +479,11 @@
         "version": "5.5.3",
         "date": "2026-09-13",
         "change": "BANNED_ADD_TITANIUM_DIOXIDE reclassified high_risk -> watchlist (clinical_risk moderate, legal_status restricted). US-lawful excipient with an EU-only withdrawal and a split regulator consensus does not meet the high_risk bar; warning copy moves from High-risk/critical to Watchlist/informational for ~1,336 shipped products. Verdicts and the clean-label penalty are unchanged."
+      },
+      {
+        "version": "5.5.3",
+        "date": "2026-09-30",
+        "change": "FDA weekly sync (30-day scan): added RECALLED_MIRACLE_POWER_OF_KING_KONG_HONEY and RECALLED_CANDY_POWER_FOR_MAN (undeclared tadalafil, FDA Health Fraud notices 2026-09-25); RECALLED_GREEN_LUMBER re-verified ongoing. Food recalls and allergen-only (Byron White walnut) records skipped."
       }
     ]
   },
@@ -10400,14 +10416,19 @@
       "entity_type": "product",
       "review": {
         "status": "validated",
-        "last_reviewed_at": "2026-02-16",
-        "next_review_due": "2026-07-27",
+        "last_reviewed_at": "2026-09-30",
+        "next_review_due": "2027-03-30",
         "reviewed_by": "manual_entry",
         "change_log": [
           {
             "date": "2026-01-27",
             "change": "Added new FDA recall entry",
             "by": "manual"
+          },
+          {
+            "date": "2026-09-30",
+            "change": "Stale-recall check: FDA D-0304-2026 (Class I, undeclared tadalafil) still Ongoing on openFDA — kept active",
+            "by": "fda_weekly_sync"
           }
         ]
       },
@@ -23087,6 +23108,179 @@
       "safety_warning_one_liner": "Chelating agent - not scored as a routine supplement.",
       "cui_status": "no_confirmed_umls_match",
       "cui_note": "No UMLS concept resolved for this chelating-salt name via the registry's own verifier. Identity is authored from the DSLD ingredient name; no identifier is invented."
+    },
+    {
+      "id": "RECALLED_MIRACLE_POWER_OF_KING_KONG_HONEY",
+      "standard_name": "Miracle Power of King Kong Honey",
+      "aliases": [
+        "miracle power of king kong honey",
+        "king kong honey",
+        "miracle power king kong honey"
+      ],
+      "cui": null,
+      "reason": "FDA laboratory analysis confirmed undeclared tadalafil (the active ingredient in Cialis), which can interact with nitrates found in heart medicines such as nitroglycerin and drop blood pressure to dangerous levels.",
+      "status": "banned",
+      "ban_context": "adulterant_in_supplements",
+      "class_tags": [
+        "illegal_spiking_agents",
+        "sexual_enhancement_fraud"
+      ],
+      "match_rules": {
+        "exclusions": [],
+        "case_sensitive": false,
+        "priority": 1,
+        "match_type": "exact",
+        "confidence": "high",
+        "negative_match_terms": []
+      },
+      "match_mode": "active",
+      "inactive_policy": "penalize_anyway",
+      "inactive_policy_reason": "Product-level ban — entire product is adulterated with an undeclared prescription drug.",
+      "safety_warning": "Hidden in this supplement is a prescription ED drug (tadalafil), risking dangerous blood-pressure drops with heart medications. Stop using and talk to your doctor.",
+      "safety_warning_one_liner": "Contains a hidden prescription drug — stop using and talk to your doctor.",
+      "legal_status_enum": "adulterant",
+      "clinical_risk_enum": "critical",
+      "jurisdictions": [
+        {
+          "region": "US",
+          "level": "federal",
+          "status": "banned",
+          "effective_date": "2026-09-25",
+          "source": {
+            "type": "fda_advisory",
+            "citation": "FDA Medication Health Fraud notification: Miracle Power of King Kong Honey may be harmful due to hidden ingredient — 2026-09-25",
+            "accessed_date": "2026-09-30"
+          },
+          "jurisdiction_type": "country",
+          "jurisdiction_code": "US",
+          "last_verified_date": "2026-09-30"
+        }
+      ],
+      "references_structured": [
+        {
+          "type": "fda_advisory",
+          "title": "FDA: Miracle Power of King Kong Honey may be harmful due to hidden ingredient",
+          "url": "https://www.fda.gov/drugs/medication-health-fraud-notifications/miracle-power-king-kong-honey-may-be-harmful-due-hidden-ingredient",
+          "evidence_grade": "R",
+          "date": "2026-09-25",
+          "supports_claims": [
+            "regulatory_action"
+          ],
+          "evidence_summary": "FDA laboratory analysis confirmed Miracle Power of King Kong Honey contains tadalafil not listed on the product label."
+        }
+      ],
+      "source_category": "illegal_spiking_agents",
+      "entity_type": "product",
+      "review": {
+        "status": "validated",
+        "last_reviewed_at": "2026-09-30",
+        "next_review_due": "2027-03-30",
+        "reviewed_by": "fda_weekly_sync_agent",
+        "change_log": [
+          {
+            "date": "2026-09-30",
+            "change": "Added from FDA Medication Health Fraud notification 2026-09-25 — Miracle Power of King Kong Honey contains undeclared tadalafil. Notification page fetched and its date and adulterant read live. Safety copy follows the reviewed tadalafil template (RECALLED_BIG_DICK_ENERGY / RECALLED_MAXMAN_COFFEE) — flag for Dr Pham confirmation.",
+            "by": "fda_weekly_sync"
+          }
+        ]
+      },
+      "supersedes_ids": null,
+      "regulatory_date": "2026-09-25",
+      "regulatory_date_label": "FDA advisory publication date",
+      "recall_scope": {
+        "brand": "Miracle Power of King Kong Honey",
+        "formulations": null,
+        "lots": null,
+        "effective_from": "2026-09-25",
+        "effective_to": null,
+        "note": "Promoted for sexual enhancement on various websites, including usroyalhoney.com, and possibly in some retail stores"
+      }
+    },
+    {
+      "id": "RECALLED_CANDY_POWER_FOR_MAN",
+      "standard_name": "Candy Power For Man",
+      "aliases": [
+        "candy power for man",
+        "candy power man"
+      ],
+      "cui": null,
+      "reason": "FDA laboratory analysis confirmed undeclared tadalafil (the active ingredient in Cialis), which can interact with nitrates found in heart medicines such as nitroglycerin and drop blood pressure to dangerous levels.",
+      "status": "banned",
+      "ban_context": "adulterant_in_supplements",
+      "class_tags": [
+        "illegal_spiking_agents",
+        "sexual_enhancement_fraud"
+      ],
+      "match_rules": {
+        "exclusions": [],
+        "case_sensitive": false,
+        "priority": 1,
+        "match_type": "exact",
+        "confidence": "high",
+        "negative_match_terms": []
+      },
+      "match_mode": "active",
+      "inactive_policy": "penalize_anyway",
+      "inactive_policy_reason": "Product-level ban — entire product is adulterated with an undeclared prescription drug.",
+      "safety_warning": "Hidden in this supplement is a prescription ED drug (tadalafil), risking dangerous blood-pressure drops with heart medications. Stop using and talk to your doctor.",
+      "safety_warning_one_liner": "Contains a hidden prescription drug — stop using and talk to your doctor.",
+      "legal_status_enum": "adulterant",
+      "clinical_risk_enum": "critical",
+      "jurisdictions": [
+        {
+          "region": "US",
+          "level": "federal",
+          "status": "banned",
+          "effective_date": "2026-09-25",
+          "source": {
+            "type": "fda_advisory",
+            "citation": "FDA Medication Health Fraud notification: Candy Power For Man may be harmful due to hidden ingredient — 2026-09-25",
+            "accessed_date": "2026-09-30"
+          },
+          "jurisdiction_type": "country",
+          "jurisdiction_code": "US",
+          "last_verified_date": "2026-09-30"
+        }
+      ],
+      "references_structured": [
+        {
+          "type": "fda_advisory",
+          "title": "FDA: Candy Power For Man may be harmful due to hidden ingredient",
+          "url": "https://www.fda.gov/drugs/medication-health-fraud-notifications/candy-power-man-may-be-harmful-due-hidden-ingredient",
+          "evidence_grade": "R",
+          "date": "2026-09-25",
+          "supports_claims": [
+            "regulatory_action"
+          ],
+          "evidence_summary": "FDA laboratory analysis confirmed Candy Power For Man contains tadalafil not listed on the product label."
+        }
+      ],
+      "source_category": "illegal_spiking_agents",
+      "entity_type": "product",
+      "review": {
+        "status": "validated",
+        "last_reviewed_at": "2026-09-30",
+        "next_review_due": "2027-03-30",
+        "reviewed_by": "fda_weekly_sync_agent",
+        "change_log": [
+          {
+            "date": "2026-09-30",
+            "change": "Added from FDA Medication Health Fraud notification 2026-09-25 — Candy Power For Man contains undeclared tadalafil. Notification page fetched and its date and adulterant read live. Safety copy follows the reviewed tadalafil template (RECALLED_BIG_DICK_ENERGY / RECALLED_MAXMAN_COFFEE) — flag for Dr Pham confirmation.",
+            "by": "fda_weekly_sync"
+          }
+        ]
+      },
+      "supersedes_ids": null,
+      "regulatory_date": "2026-09-25",
+      "regulatory_date_label": "FDA advisory publication date",
+      "recall_scope": {
+        "brand": "Candy Power For Man",
+        "formulations": null,
+        "lots": null,
+        "effective_from": "2026-09-25",
+        "effective_to": null,
+        "note": "Promoted for sexual enhancement on various websites, including ebay.com, and possibly in some retail stores"
+      }
     }
   ]
 }
