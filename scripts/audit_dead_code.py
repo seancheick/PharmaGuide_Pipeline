@@ -55,7 +55,6 @@ PLAIN_DECORATORS = {"staticmethod", "classmethod", "property", "lru_cache", "cac
                     "wraps", "cached_property"}
 
 # path::name -> why it stays. Each reason names the proof of life or the owner who decides.
-_RELEASE = "release chain: test-only, removal is Sean's call (dead_code_20261001 ledger)"
 KEEP: dict[str, str] = {
     # Test support: tests read a live object's state through it.
     "scripts/cert_resolver.py::recency_for": "cert-audit canary test reads registry recency through it",
@@ -74,11 +73,7 @@ KEEP: dict[str, str] = {
     # Owned elsewhere: another lane or Sean decides.
     "scripts/clinical_evidence_schema.py::validate_ingredient_context": "validator for ingredient-lane study contexts, not yet wired into a data gate (a wiring decision)",
     "scripts/submission_review/extraction/development.py::run_development_split": "submission-extraction lane owns the development harness",
-    "scripts/cleanup_old_versions.py::list_version_directory": _RELEASE,
-    "scripts/supabase_client.py::storage_object_exists": _RELEASE,
-    "scripts/release_safety/blob_inventory.py::require_complete": _RELEASE,
-    "scripts/release_safety/gates.py::failure_summary": _RELEASE,
-    "scripts/release_safety/orphan_reconcile.py::total_objects_examined": _RELEASE,
+    "scripts/release_safety/gates.py::failure_summary": "part of evaluate_cleanup_gates, unwired since e3e64f43 and superseded by protected set + expected-count + quarantine; removing the gate module is Sean's call (ledger Q41)",
 }
 
 

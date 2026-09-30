@@ -18,7 +18,9 @@ reap the orphan v-dirs in a separate run. But the bug meant the primary
 cleanup path silently lied about its work.
 
 These tests pin the path-shape contract so future refactors can't
-re-introduce the double prefix.
+re-introduce the double prefix. ``list_version_directory`` itself was replaced
+by the recursive enumerator (release_safety.delete_stale_version_dirs), whose
+listing contract is pinned in test_version_cleanup_manifest_safety.py.
 """
 
 from __future__ import annotations
@@ -110,36 +112,6 @@ def _no_double_prefix(path: str) -> bool:
     return not path.startswith("pharmaguide/")
 
 
-def test_list_version_directory_uses_bucket_relative_path():
-    """list_version_directory must call client.storage.from_('pharmaguide').list(path='v{ver}'),
-    not path='pharmaguide/v{ver}'. The latter is the double-prefix bug."""
-    from cleanup_old_versions import list_version_directory
-
-    client = _SpyClient()
-    bucket = client.storage.from_("pharmaguide")
-    # Seed a realistic v-dir layout
-    bucket.seed("v2026.05.13.162119/pharmaguide_core.db", b"db")
-    bucket.seed("v2026.05.13.162119/detail_index.json", b"idx")
-
-    paths = list_version_directory(client, "2026.05.13.162119")
-
-    assert bucket.list_calls, "list() never called"
-    for call_path in bucket.list_calls:
-        assert _no_double_prefix(call_path), (
-            f"list_version_directory called list(path={call_path!r}) — "
-            f"that's the double-prefix bug. Bucket-relative path must be "
-            f"'v...' not 'pharmaguide/v...'."
-        )
-
-    # Returned paths should also be bucket-relative (so remove() can use them)
-    assert len(paths) == 2
-    for p in paths:
-        assert _no_double_prefix(p), (
-            f"list_version_directory returned path {p!r} with 'pharmaguide/' "
-            f"prefix. Subsequent remove() would fail silently."
-        )
-
-
 def test_delete_version_directory_deletes_actual_storage():
     """End-to-end: delete_version_directory must actually clear the v-dir
     from storage when given a populated v-dir. Pre-fix, this returned
@@ -171,13 +143,3 @@ def test_delete_version_directory_deletes_actual_storage():
             assert _no_double_prefix(p), (
                 f"remove() called with double-prefixed path {p!r}"
             )
-
-
-def test_list_version_directory_returns_empty_when_dir_truly_empty():
-    """Sanity: if the v-dir genuinely doesn't exist in storage, return []."""
-    from cleanup_old_versions import list_version_directory
-
-    client = _SpyClient()
-    # No seeds — bucket is empty
-    paths = list_version_directory(client, "v_does_not_exist")
-    assert paths == []

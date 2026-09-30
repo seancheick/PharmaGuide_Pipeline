@@ -15,7 +15,7 @@ blobs):
 Design rules
 ------------
 1. **Partial is always labelled partial.** ``BlobInventory.complete`` is False
-   whenever any shard failed, and ``require_complete()`` raises. The previous
+   whenever any shard failed, and every destructive caller refuses to act on it. The previous
    inventory helpers returned "whatever I got so far" on error, which is how a
    truncated listing can quietly become a deletion decision.
 2. **Bounded parallelism, one client per thread.** Mirrors
@@ -68,10 +68,6 @@ MAX_ATTEMPTS = int(os.environ.get("PG_STORAGE_LIST_MAX_RETRIES", "5"))
 MAX_WORKERS = int(os.environ.get("PG_STORAGE_LIST_MAX_WORKERS", "8"))
 
 CHECKPOINT_VERSION = 3
-
-
-class IncompleteInventoryError(RuntimeError):
-    """Raised when a caller requires a complete inventory and cannot have one."""
 
 
 class RpcInventoryError(RuntimeError):
@@ -159,22 +155,6 @@ class BlobInventory:
         return ObjectFingerprint(
             size=self.sizes[blob_hash],
             etag=self.etags.get(blob_hash),
-        )
-
-    def require_complete(self) -> "BlobInventory":
-        """Return self, or raise if any shard could not be read."""
-        if self.complete:
-            return self
-        detail = ", ".join(f"{f.shard} ({f.error})" for f in self.failures[:5])
-        more = "" if len(self.failures) <= 5 else f" (+{len(self.failures) - 5} more)"
-        integrity = (
-            f" Integrity violations: {'; '.join(self.integrity_failures[:5])}."
-            if self.integrity_failures else ""
-        )
-        raise IncompleteInventoryError(
-            f"Inventory covered {self.shards_completed}/{self.shards_total} "
-            f"shard(s); {len(self.failures)} failed: {detail}{more}.{integrity} "
-            "Refusing to treat a partial inventory as authoritative."
         )
 
     def to_dict(self) -> dict:
@@ -321,7 +301,7 @@ def inventory_detail_blobs(
 
     Never raises for storage failures — a failed shard is recorded in
     ``failures`` and the inventory reports ``complete=False``. Callers that
-    will act destructively must call ``require_complete()``.
+    will act destructively must refuse when ``complete`` is False.
     """
     shards = tuple(shards)
     max_attempts = MAX_ATTEMPTS if max_attempts is None else max_attempts

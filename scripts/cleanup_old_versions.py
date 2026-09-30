@@ -100,42 +100,6 @@ def partition_versions(rows, keep):
 # Storage helpers
 # ---------------------------------------------------------------------------
 
-def list_version_directory(client, db_version):
-    """List all objects inside v{db_version}/ within the pharmaguide bucket.
-
-    Returns a list of bucket-relative storage paths (str), e.g.
-    ``v2026.05.13.162119/pharmaguide_core.db``.
-
-    Bug-fix 2026-05-13: the prefix here was previously ``pharmaguide/v{ver}``
-    which double-prefixed the bucket name (Supabase storage `.list(path=...)`
-    is bucket-relative). The buggy prefix caused list() to return zero items
-    silently, which meant the cleanup THOUGHT it had nothing to delete and
-    deleted only the manifest row — leaving the v-dir orphaned in storage.
-    This is exactly the failure mode test_p3_6a_registry_rollback_row_*
-    was designed to catch downstream, but at the wrong layer.
-    """
-    prefix = f"v{db_version}"
-    from release_safety.transient import retry_transient
-
-    items = retry_transient(
-        lambda: client.storage.from_(BUCKET).list(
-            path=prefix,
-            options={"limit": 1000, "offset": 0},
-        ),
-        max_attempts=4,
-    )
-
-    if not items:
-        return []
-
-    paths = []
-    for item in items:
-        name = item.get("name")
-        if name:
-            paths.append(f"{prefix}/{name}")
-    return paths
-
-
 def delete_version_directory(client, db_version, dry_run):
     """Delete every object under v{db_version}/ — recursively, with proof.
 

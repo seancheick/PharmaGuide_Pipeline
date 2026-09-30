@@ -152,7 +152,7 @@ def test_report_computes_exact_orphan_count_and_bytes(tmp_path):
     assert report.orphan_count == 2
     assert report.orphan_bytes == 200  # two 100-byte blobs
     assert report.proposed_quarantine == 2
-    assert report.total_objects_examined == 3
+    assert report.inventory.total_objects == 3
 
 
 def test_text_report_carries_every_operator_approval_field(tmp_path):

@@ -87,10 +87,6 @@ class OrphanReport:
         """Zero whenever anything about the answer is unproven."""
         return 0 if self.blocked_reason else len(self.orphan_hashes)
 
-    @property
-    def total_objects_examined(self) -> int:
-        return self.inventory.total_objects
-
     def to_dict(self) -> dict:
         return {
             "blocked_reason": self.blocked_reason,

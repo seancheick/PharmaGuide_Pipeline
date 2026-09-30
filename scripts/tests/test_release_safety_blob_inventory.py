@@ -237,20 +237,17 @@ def test_inventory_marks_itself_incomplete_when_a_shard_never_succeeds():
     assert len(inv.hashes) == 1
 
 
-def test_incomplete_inventory_raises_when_completeness_is_required():
-    """Callers that will act destructively ask for the strict form."""
-    from release_safety.blob_inventory import (
-        IncompleteInventoryError,
-        inventory_detail_blobs,
-    )
+def test_inventory_with_a_permanently_failed_shard_is_never_complete():
+    """Destructive callers refuse when ``complete`` is False."""
+    from release_safety.blob_inventory import inventory_detail_blobs
 
     client, _ = _client_with(
         {_blob("00", 1)}, fail_plan={f"{PREFIX}/00": 10_000},
     )
 
     inv = inventory_detail_blobs(client, shards=("00",), max_attempts=2)
-    with pytest.raises(IncompleteInventoryError):
-        inv.require_complete()
+    assert inv.complete is False
+    assert inv.failures
 
 
 def test_inventory_does_not_retry_permanent_errors():
@@ -515,10 +512,7 @@ def test_checkpoint_resume_preserves_etags(tmp_path):
 def test_duplicate_hash_across_shards_fails_closed():
     """The same blob name observed under two shards means the deletion path
     cannot be trusted — never present that inventory as usable."""
-    from release_safety.blob_inventory import (
-        IncompleteInventoryError,
-        inventory_detail_blobs,
-    )
+    from release_safety.blob_inventory import inventory_detail_blobs
 
     h = "aa" + "0" * 62
     good = f"{PREFIX}/aa/{h}.json"
@@ -529,8 +523,6 @@ def test_duplicate_hash_across_shards_fails_closed():
 
     assert inv.complete is False
     assert inv.integrity_failures, "duplicate placement must be recorded"
-    with pytest.raises(IncompleteInventoryError):
-        inv.require_complete()
 
 
 def test_misplaced_blob_alone_fails_closed():

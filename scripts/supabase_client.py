@@ -139,11 +139,6 @@ def download_file(client, bucket, remote_path):
 CACHE_CONTROL_IMMUTABLE = 31536000
 
 
-def storage_object_exists(client, bucket, remote_path):
-    """Return True when a storage object already exists at the given path."""
-    return client.storage.from_(bucket).exists(remote_path)
-
-
 def list_storage_paths(client, bucket, prefix, limit=1000, offset=0):
     """List storage objects under a prefix using paged bucket.list()."""
     return client.storage.from_(bucket).list(
