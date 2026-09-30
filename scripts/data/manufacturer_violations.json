@@ -69,7 +69,8 @@
     "pipeline_integration": "Used by enrichment script to apply manufacturer trust score penalties during scoring",
     "reviewed_by": "Lead Clinician (PharmaGuide)",
     "reviewed_date": "2026-04-18",
-    "review_round": "brand_trust_uniform_pass_v1"
+    "review_round": "brand_trust_uniform_pass_v1",
+    "calculation_date": "2026-09-30"
   },
   "manufacturer_violations": [
     {
