@@ -479,6 +479,46 @@ def test_absence_of_qualifying_studies_cannot_emit_reviewed_null():
         assert res.points_eligible is False
 
 
+@pytest.mark.parametrize("canonical_id", [
+    "arugula",
+    "oi_guar_gum",
+    "carob",
+    "oleanolic_acid",
+    "buchu_leaf",
+    "goldenrod",
+    "lima_bean",
+    "nha_total_terpene_lactones",
+    "oi_galactose",
+    "pediococcus_pentosaceus",
+    "sweet_clover",
+    "withaferin_a",
+])
+def test_legacy_zero_study_records_resolve_as_no_qualifying_human_evidence(canonical_id):
+    """A completed bounded search with no qualifying studies is a reviewed zero."""
+    res = er.resolve_evidence_for_canonical(canonical_id)
+
+    assert res.disposition == EvidenceDisposition.NO_QUALIFYING_HUMAN_EVIDENCE.value
+    assert res.applicability_status == "no_qualifying_trials_found"
+    assert res.reason_code == "reproducible_search_found_no_qualifying_human_studies"
+    assert res.points_eligible is False
+
+
+def test_literature_registry_has_no_legacy_no_qualifying_evidence_token():
+    """The registry stores one spelling for a bounded search with no qualifying studies."""
+    import json
+
+    records = json.loads(
+        (SCRIPTS_ROOT / "data" / "literature_evidence_records.json").read_text()
+    )["literature_evidence_records"]
+    leaked = [
+        record["canonical_id"]
+        for record in records
+        if record.get("effect_direction") == "no_qualifying_evidence"
+    ]
+
+    assert leaked == []
+
+
 def test_phase4_batch4_null_unfavorable_canaries():
     """Batch 4 reviewed-null cases with qualifying human trials showing null outcomes."""
     for cid in ["hoodia_gordonii", "OI_SHARK_CARTILAGE"]:
