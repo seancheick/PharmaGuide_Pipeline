@@ -224,7 +224,7 @@ Use it when:
 Purpose:
 
 - Shared NCBI E-utilities client for PubMed work.
-- Handles env loading, retry, timeout, cache, batching, DOI lookup, `efetch`, `esearch`, `esummary`, `elink`, `epost`, and `ecitmatch`.
+- Handles env loading, retry, timeout, cache, batching, DOI lookup, `efetch`, `esearch`, `esummary`, and `ecitmatch`.
 
 Key behavior:
 

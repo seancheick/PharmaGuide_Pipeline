@@ -302,15 +302,3 @@ def _safe_list(value: Any) -> list:
     return value if isinstance(value, list) else []
 
 
-def _as_int(value: Any, default: int = 0) -> int:
-    return int(_as_float(value, default))
-
-
-def _as_float(value: Any, default: float = 0.0) -> float:
-    try:
-        if value is None or isinstance(value, bool):
-            return default
-        number = float(value)
-        return number if math.isfinite(number) else default
-    except (TypeError, ValueError, OverflowError):
-        return default

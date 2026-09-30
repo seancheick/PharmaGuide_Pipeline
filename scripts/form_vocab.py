@@ -7,15 +7,11 @@ across the normalizer, enricher, scorer, and constants modules.
 Loaded once at import time; regexes compiled once. Pure functions on a
 frozen module-level singleton — no mutable state.
 
-Three consumer surfaces:
+Two consumer surfaces:
 
   extract_forms(text, categories=None)
       Cleaner usage. Walk the named categories (or all) and return the
       ordered list of canonical form names that match the text.
-
-  matches_premium_omega3_form(haystack)
-      Scorer usage. Boolean — does the text disclose a premium omega-3
-      molecular form?
 
   matches_probiotic_delivery(text)
   matches_postbiotic(text)
@@ -136,26 +132,6 @@ def extract_forms(text: str, categories: Optional[Iterable[str]] = None) -> List
 
 
 # Scorer surface ---------------------------------------------------------
-
-def matches_premium_omega3_form(haystack: str) -> bool:
-    """True if the text discloses a premium-form omega-3 molecular form.
-
-    Replaces score_supplements._PREMIUM_OMEGA3_FORM_PATTERN. Reads the
-    omega3_molecular_forms category — every canonical form there gates
-    the A2 bonus. The scorer doesn't care which specific form matched,
-    only that one did.
-    """
-    if not haystack:
-        return False
-    cat = _BY_ID.get("omega3_molecular_forms")
-    if not cat:
-        return False
-    for form in cat.forms:
-        for pattern in form.patterns:
-            if pattern.search(haystack):
-                return True
-    return False
-
 
 # Enricher surface -------------------------------------------------------
 

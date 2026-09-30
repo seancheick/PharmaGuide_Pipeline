@@ -159,33 +159,6 @@ class UniiCache:
 
         return None
 
-    def lookup_for_iqm_form(self, form_name: str, form_data: dict) -> Optional[str]:
-        """Resolve the UNII for a specific IQM form (chemical substance level).
-
-        Each form (e.g., "calcium ascorbate", "thiamine mononitrate") is a
-        distinct chemical substance with its own UNII, CAS, and PubChem CID.
-
-        Priority:
-        1. Already-verified form external_ids.unii
-        2. Cache lookup by form name
-
-        Args:
-            form_name: e.g. "calcium ascorbate"
-            form_data: the form's dict with bio_score, absorption, etc.
-
-        Returns:
-            UNII code or None
-        """
-        # 1. Already stored on form
-        if isinstance(form_data, dict):
-            fext = form_data.get("external_ids", {})
-            if isinstance(fext, dict) and fext.get("unii"):
-                return fext["unii"]
-
-        # 2. Cache lookup
-        return self.lookup(form_name)
-
-
     def _gsrs_search(self, name: str) -> Optional[str]:
         """Search GSRS API for a UNII by substance name."""
         try:

@@ -368,16 +368,6 @@ class PubMedClient:
         merged.update(params)
         return self._request("efetch.fcgi", params=merged)
 
-    def elink(self, ids: list[str] | str, **params: Any) -> str:
-        merged = {"id": ",".join(ids) if isinstance(ids, list) else ids, "retmode": "xml"}
-        merged.update(params)
-        return self._request("elink.fcgi", params=merged)
-
-    def epost(self, ids: list[str], **params: Any) -> str:
-        merged = {"id": ",".join(ids), "retmode": "xml"}
-        merged.update(params)
-        return self._request("epost.fcgi", params=merged, method="POST")
-
     def ecitmatch(self, bdata: str, **params: Any) -> str:
         merged = {"retmode": "xml", "bdata": bdata}
         merged.update(params)

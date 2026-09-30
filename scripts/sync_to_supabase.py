@@ -457,11 +457,6 @@ def collect_detail_blobs(build_dir):
     return blobs
 
 
-def remote_blob_storage_path(blob_sha256):
-    shard = blob_sha256[:2]
-    return f"{DETAIL_BLOB_STORAGE_PREFIX}/{shard}/{blob_sha256}.json"
-
-
 def remote_blob_directory_for_path(remote_path):
     return os.path.dirname(remote_path)
 

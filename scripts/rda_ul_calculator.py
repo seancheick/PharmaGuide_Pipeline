@@ -174,31 +174,6 @@ class NutrientAdequacyResult:
         }
 
 
-@dataclass
-class SafetyFlag:
-    """Safety flag for over-UL nutrients."""
-    nutrient: str
-    amount: float
-    unit: str
-    ul: float
-    pct_ul: float
-    over_amount: float
-    warning: str
-    severity: str  # "caution", "warning", "critical"
-
-    def to_dict(self) -> Dict:
-        return {
-            "nutrient": self.nutrient,
-            "amount": self.amount,
-            "unit": self.unit,
-            "ul": self.ul,
-            "pct_ul": self.pct_ul,
-            "over_amount": self.over_amount,
-            "warning": self.warning,
-            "severity": self.severity
-        }
-
-
 class RDAULCalculator:
     """
     Calculates nutrient adequacy based on RDA/AI and UL values.
@@ -522,44 +497,6 @@ class RDAULCalculator:
             highest_ul=_highest_ul_raw,
         )
 
-    def get_safety_flags(self, adequacy_results: List[NutrientAdequacyResult]) -> List[SafetyFlag]:
-        """
-        Get safety flags for any nutrients exceeding UL.
-
-        Args:
-            adequacy_results: List of computed adequacy results
-
-        Returns:
-            List of SafetyFlag objects
-        """
-        flags = []
-
-        for result in adequacy_results:
-            if result.over_ul and result.over_ul_amount:
-                # 150% separates warning from caution in this convenience
-                # helper. The 200% display word is ul_display_severity.
-                if result.pct_ul and result.pct_ul >= 150:
-                    severity = (
-                        ul_display_severity(result.pct_ul)
-                        if result.pct_ul >= 200
-                        else "warning"
-                    )
-                else:
-                    severity = "caution"
-
-                flags.append(SafetyFlag(
-                    nutrient=result.nutrient,
-                    amount=result.amount,
-                    unit=result.unit,
-                    ul=result.ul,
-                    pct_ul=result.pct_ul,
-                    over_amount=result.over_ul_amount,
-                    warning=f"Exceeds Tolerable Upper Intake Level by {result.over_ul_amount:.1f} {result.unit}",
-                    severity=severity
-                ))
-
-        return flags
-
     def _lookup_key(self, key: str) -> Optional[Dict]:
         if key in self.nutrient_lookup:
             return self.nutrient_lookup[key]
@@ -782,44 +719,3 @@ def compute_nutrient_adequacy(
     calculator = RDAULCalculator(rda_db_path)
     result = calculator.compute_nutrient_adequacy(nutrient, amount, unit, age_group, sex)
     return result.to_dict()
-
-
-def get_safety_flags(adequacy_results: List[Dict], rda_db_path: Optional[Path] = None) -> List[Dict]:
-    """
-    Convenience function to get safety flags from adequacy results.
-
-    Args:
-        adequacy_results: List of adequacy result dictionaries
-
-    Returns:
-        List of safety flag dictionaries
-    """
-    # Convert dicts back to dataclass for processing
-    results = []
-    for r in adequacy_results:
-        results.append(NutrientAdequacyResult(
-            nutrient=r["nutrient"],
-            amount=r["amount"],
-            unit=r["unit"],
-            rda_ai=r.get("rda_ai"),
-            rda_ai_source=r.get("rda_ai_source", "unknown"),
-            ul=r.get("ul"),
-            ul_status=r.get("ul_status", "unknown"),
-            optimal_min=r.get("optimal_min"),
-            optimal_max=r.get("optimal_max"),
-            pct_rda=r.get("pct_rda"),
-            pct_ul=r.get("pct_ul"),
-            adequacy_band=r.get("adequacy_band", "unknown"),
-            over_ul=r.get("over_ul", False),
-            over_ul_amount=r.get("over_ul_amount"),
-            scoring_eligible=r.get("scoring_eligible", False),
-            point_recommendation=r.get("point_recommendation", 0),
-            notes=r.get("notes", []),
-            warnings=r.get("warnings", []),
-            age_group=r.get("age_group", "19-30"),
-            sex_group=r.get("sex_group", "Male")
-        ))
-
-    calculator = RDAULCalculator(rda_db_path)
-    flags = calculator.get_safety_flags(results)
-    return [f.to_dict() for f in flags]

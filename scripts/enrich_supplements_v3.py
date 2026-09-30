@@ -9883,12 +9883,6 @@ class SupplementEnricherV3:
         def build_form_match_data(
             parent_key: str, parent_data: Dict, form_name: str, form_data: Dict
         ) -> Dict:
-            def _as_float(value, default):
-                try:
-                    return float(value)
-                except (TypeError, ValueError):
-                    return default
-
             def _coerce_dosage_importance(value) -> float:
                 if isinstance(value, (int, float)):
                     return float(value)

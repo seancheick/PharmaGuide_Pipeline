@@ -35,10 +35,6 @@ def _safe_list(value: Any) -> list[Any]:
     return value if isinstance(value, list) else []
 
 
-def _safe_dict(value: Any) -> dict[str, Any]:
-    return value if isinstance(value, dict) else {}
-
-
 def _normalized_ids(value: Any) -> list[str]:
     return [
         str(item).strip()

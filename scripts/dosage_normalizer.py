@@ -722,15 +722,3 @@ class DosageNormalizer:
         sanitized["warnings"] = warnings
         sanitized["notes"] = notes
         return sanitized
-
-
-# Convenience function
-def normalize_product(product: Dict, unit_converter: Optional[UnitConverter] = None) -> Dict:
-    """
-    Convenience function to normalize a product's dosages.
-
-    Returns dictionary suitable for adding to enriched product data.
-    """
-    normalizer = DosageNormalizer(unit_converter)
-    result = normalizer.normalize_product_dosages(product)
-    return result.to_dict()

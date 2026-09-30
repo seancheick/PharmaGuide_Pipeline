@@ -481,10 +481,6 @@ def _as_float(value: Any, default: float = 0.0) -> float:
         return default
 
 
-def _as_int(value: Any, default: int = 0) -> int:
-    return int(_as_float(value, default))
-
-
 def _norm(value: Any) -> str | None:
     if value is None:
         return None

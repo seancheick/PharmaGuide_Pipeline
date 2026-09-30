@@ -399,16 +399,8 @@ def _native_strain_key(strain: Dict[str, Any]) -> str:
     )
 
 
-def _probiotic_payload(product: Dict[str, Any]) -> Dict[str, Any]:
-    return _safe_dict(product.get("probiotic_data") or product.get("probiotic_detail"))
-
-
 def _norm_text(value: Any) -> str:
     return re.sub(r"[^a-z0-9]+", " ", str(value or "").strip().lower()).strip()
-
-
-def _safe_dict(value: Any) -> Dict[str, Any]:
-    return value if isinstance(value, dict) else {}
 
 
 def _safe_list(value: Any) -> list:
