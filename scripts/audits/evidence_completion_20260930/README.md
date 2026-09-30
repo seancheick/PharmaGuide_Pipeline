@@ -31,20 +31,24 @@ pass.
   better label identity appears. They are not a literature search queue.
 - 153 records correctly use `no_qualifying_human_evidence`.
 
-## Correctness defect found by the inventory
+## Correctness defect found by the inventory — resolved
 
-Twelve completed reviews use obsolete `effect_direction:
-no_qualifying_evidence`, while the resolver recognizes the canonical
-`no_qualifying_human_evidence`. Current code consequently misreports them as
-reviewed applicable evidence. The affected canonicals are arugula,
+Twelve completed reviews used obsolete `effect_direction:
+no_qualifying_evidence`, while the resolver recognizes the canonical registry
+states. Current code consequently misreported them as reviewed applicable
+evidence. The affected canonicals were arugula,
 oi_guar_gum, carob, oleanolic_acid, buchu_leaf, goldenrod, lima_bean,
 nha_total_terpene_lactones, oi_galactose, pediococcus_pentosaceus,
 sweet_clover and withaferin_a.
 
-Resolution: failing resolver regression, canonicalize the 12 stored values,
-and add a registry census forbidding the obsolete token. Do not add a second
-accepted spelling.
+Resolved in `3900e66a5`, `8e4b4605` and `6202b374`: ten bounded searches now
+use `no_qualifying_human_evidence`; the Ginkgo analytical-marker record keeps
+its stronger `identity_material_unresolved` lock; and isolated withaferin A
+keeps `applicability_unestablished`. Production-boundary regressions cover all
+twelve and a full-registry census forbids the obsolete token. No resolver alias
+or second accepted spelling was added.
 
-The registry metadata's `verified_records_count: 744` is stale relative to the
-754-record provenance census and must be recounted through the data owner's
-existing metadata convention rather than copied from this document.
+The registry metadata now records 754 verified records and the canonical
+`data_batch` workflow updated `last_updated`. The landed batch check reports
+exactly the twelve expected record changes and zero problems. Related tests:
+279 passed, with the separate Ravage cinnamon expected failure unchanged.
