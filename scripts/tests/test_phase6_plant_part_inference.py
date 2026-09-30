@@ -51,6 +51,9 @@ class TestPlantPartNameInference:
         ("Kanna aerial parts extract", "aerial parts"),
         ("Holy Basil whole herb", "whole herb"),
         ("Ginger Rhizome 500 mg", "rhizome"),
+        # Q40: DSLD labels print the singular and the bare word too.
+        ("Eyebright Aerial Part Extract", "aerial parts"),
+        ("Horny Goat Weed Aerial Extract", "aerial parts"),
     ])
     def test_common_plant_parts_inferred(self, normalizer, name, expected) -> None:
         assert normalizer._infer_plant_part_from_name(name) == expected

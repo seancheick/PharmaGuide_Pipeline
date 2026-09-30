@@ -9669,9 +9669,9 @@ class EnhancedDSLDNormalizer:
 
     # Ordered longest-first so "aerial parts" beats "aerial" etc.
     _PLANT_PART_TOKENS = (
-        "aerial parts", "whole plant", "whole herb",
+        "aerial parts", "aerial part", "whole plant", "whole herb",
         "root and rhizome", "leaf and stem",
-        "rhizome", "root", "leaves", "leaf", "bark", "seed", "seeds",
+        "aerial", "rhizome", "root", "leaves", "leaf", "bark", "seed", "seeds",
         "flower", "flowers", "fruit", "fruits", "berry", "berries",
         "stem", "stems", "needle", "needles", "hull", "hulls",
         "peel", "peels", "pod", "pods", "twig", "twigs", "sprout",
@@ -9707,6 +9707,8 @@ class EnhancedDSLDNormalizer:
                 # Normalize simple plurals back to canonical singular form
                 # so downstream comparisons are stable.
                 canonical = {
+                    "aerial part": "aerial parts",
+                    "aerial": "aerial parts",
                     "leaves": "leaf",
                     "seeds": "seed",
                     "flowers": "flower",
