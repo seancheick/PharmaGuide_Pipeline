@@ -1282,7 +1282,7 @@
         "ingredient_quality_data": {
           "total_active": 1,
           "ingredients_scorable": [
-            {"name": "KSM-66 Ashwagandha", "standard_name": "Ashwagandha", "canonical_id": "ashwagandha", "quantity": 600, "dose": 600, "unit": "mg", "bio_score": 11, "matched_form": "KSM-66 ashwagandha", "raw_taxonomy": {"category": "botanical", "ingredientGroup": "Ashwagandha", "forms": [{"name": "Ashwagandha Root Extract"}]}, "mapped": true, "mapped_identity": true, "scoreable_identity": true, "score_eligible_by_cleaner": true, "cleaner_row_role": "active_scorable", "role_classification": "active_scorable", "source_section": "activeIngredients", "raw_source_path": "activeIngredients[0]", "dose_class": "therapeutic_mass"}
+            {"name": "KSM-66 Ashwagandha", "standard_name": "Ashwagandha", "canonical_id": "ashwagandha", "quantity": 600, "dose": 600, "unit": "mg", "bio_score": 11, "matched_form": "KSM-66 ashwagandha", "raw_taxonomy": {"category": "botanical", "ingredientGroup": "Ashwagandha", "forms": [{"name": "Ashwagandha Root Extract"}]}, "plantPart": "root", "mapped": true, "mapped_identity": true, "scoreable_identity": true, "score_eligible_by_cleaner": true, "cleaner_row_role": "active_scorable", "role_classification": "active_scorable", "source_section": "activeIngredients", "raw_source_path": "activeIngredients[0]", "dose_class": "therapeutic_mass"}
           ]
         },
         "formulation_data": {
