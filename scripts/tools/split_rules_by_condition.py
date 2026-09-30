@@ -49,6 +49,14 @@ def _row(rule: dict, sub: dict) -> str:
     return f"| `{sid}` | {db} | {sev} | {ev} | {head} | {mech} |"
 
 
+def _remove_stale_views(out_dir: Path, written: set[str]) -> None:
+    """Delete views this generator no longer produces. Only files that carry its
+    header are removed; anything hand-written in the folder is left alone."""
+    for path in out_dir.glob("*.md"):
+        if path.name not in written and path.read_text().startswith(HEADER):
+            path.unlink()
+
+
 TABLE_HEAD = (
     "| canonical_id | db | severity | evidence | alert_headline | mechanism |\n"
     "|---|---|---|---|---|---|\n"
@@ -67,7 +75,7 @@ def write_condition_views(rules: list[dict], conditions: list[dict]) -> int:
     out_dir.mkdir(parents=True, exist_ok=True)
     valid_ids = {c["id"]: c for c in conditions if isinstance(c, dict)}
 
-    written = 0
+    written: set[str] = set()
     for cid, items in sorted(by_cond.items()):
         meta = valid_ids.get(cid, {})
         label = meta.get("label", cid)
@@ -78,8 +86,9 @@ def write_condition_views(rules: list[dict], conditions: list[dict]) -> int:
         body += TABLE_HEAD
         body += "\n".join(_row(r, cr) for r, cr in items) + "\n"
         (out_dir / f"{cid}.md").write_text(body)
-        written += 1
-    return written
+        written.add(f"{cid}.md")
+    _remove_stale_views(out_dir, written)
+    return len(written)
 
 
 def write_drug_class_views(rules: list[dict], drug_classes: list[dict]) -> int:
@@ -94,7 +103,7 @@ def write_drug_class_views(rules: list[dict], drug_classes: list[dict]) -> int:
     out_dir.mkdir(parents=True, exist_ok=True)
     valid_ids = {c["id"]: c for c in drug_classes if isinstance(c, dict)}
 
-    written = 0
+    written: set[str] = set()
     for did, items in sorted(by_dc.items()):
         meta = valid_ids.get(did, {})
         label = meta.get("label", did)
@@ -105,8 +114,9 @@ def write_drug_class_views(rules: list[dict], drug_classes: list[dict]) -> int:
         body += TABLE_HEAD
         body += "\n".join(_row(r, dr) for r, dr in items) + "\n"
         (out_dir / f"{did}.md").write_text(body)
-        written += 1
-    return written
+        written.add(f"{did}.md")
+    _remove_stale_views(out_dir, written)
+    return len(written)
 
 
 def write_pregnancy_lactation_view(rules: list[dict]) -> None:

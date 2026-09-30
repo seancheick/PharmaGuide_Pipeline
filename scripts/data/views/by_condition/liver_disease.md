@@ -2,7 +2,7 @@
 
 # Liver Disease (liver_disease)
 
-**21 rules.** Category: hepatic
+**22 rules.** Category: hepatic
 
 | canonical_id | db | severity | evidence | alert_headline | mechanism |
 |---|---|---|---|---|---|
@@ -14,6 +14,7 @@
 | `cascara_sagrada` | ingredient_quality_map | caution | probable | Chronic use may affect the liver | Cascara is generally well tolerated at recommended short-term doses, but longer-term use of high doses has been linked to rare cases of clinically apparent liver injury, some seve… |
 | `chinese_skullcap` | ingredient_quality_map | caution | probable | Linked to herb-induced liver injury | Scutellaria species have been linked to herb-induced liver injury (HILI) in published case series. Proposed mechanisms include flavone-mediated mitochondrial dysfunction and idios… |
 | `copper` | ingredient_quality_map | caution | established | Copper handling depends on the liver | Copper homeostasis depends on hepatic biliary excretion as the primary elimination route. In Wilson's disease, ATP7B mutations block copper export into bile, causing pathological … |
+| `dandelion` | ingredient_quality_map | avoid | established | Not recommended with liver or biliary disease | The EU herbal monograph does not recommend dandelion root in liver disease, bile-duct obstruction, cholangitis, gallstones, or other biliary disease because it may stimulate bile … |
 | `gotu_kola` | ingredient_quality_map | monitor | probable | Rare liver injury reports | Centella asiatica triterpenoids (asiaticoside, madecassoside) have been associated with idiosyncratic hepatotoxicity in case reports. Three cases of jaundice with markedly elevate… |
 | `green_tea_extract` | ingredient_quality_map | avoid | established | Green tea extract may injure the liver | Green tea extract has been implicated in clinically apparent acute liver injury, including acute liver failure (LiverTox). Case reports associate liver injury with EGCG intakes fr… |
 | `iron` | ingredient_quality_map | caution | established | Extra iron may worsen liver overload | The liver is the principal organ of iron storage and regulation. In liver disease, hepatic hepcidin production is impaired, disrupting iron homeostasis and increasing intestinal i… |

@@ -57,8 +57,7 @@
 | `cranberry` | no_data | no_data | no_data |  |
 | `creatine_monohydrate` | no_data | no_data | no_data |  |
 | `curcumin` | caution | no_data | theoretical |  |
-| `dandelion` | no_data | no_data | no_data |  |
-| `dandelion` | no_data | no_data | no_data |  |
+| `dandelion` | avoid | avoid | established | The EU herbal monograph states that safety during pregnancy and lactation has not been established and, without sufficient data, use is not recommended. |
 | `devils_claw` | no_data | no_data | no_data |  |
 | `dha` | no_data | no_data | no_data |  |
 | `dhea` | avoid | avoid | established | DHEA has significant androgenic/hormonal activity and is contraindicated once pregnancy is achieved and during lactation. |
@@ -131,6 +130,7 @@
 | `schisandra_berry` | no_data | no_data | no_data |  |
 | `selenium` | monitor | monitor | limited |  |
 | `senna` | avoid | caution | probable |  |
+| `siberian_ginseng` | avoid | avoid | established | The EU herbal monograph states that safety during pregnancy and lactation has not been established and, without sufficient data, use is not recommended. |
 | `sodium` | no_data | no_data | no_data |  |
 | `st_johns_wort` | avoid | caution | probable | Potential fetal risk and broad CYP/P-gp interactions. |
 | `stinging_nettle` | no_data | no_data | no_data |  |
