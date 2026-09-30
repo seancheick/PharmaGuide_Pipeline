@@ -1,6 +1,6 @@
 # Evidence → Dose responsibility transfer
 
-Status: implementation decision packet; no score arithmetic in this document.
+Status: owner inventory complete; measured options are in `MEASUREMENT.md`; score-changing integration awaits the decisions below.
 
 Baseline: pipeline `880b17a7`; focused owner/role suite 103 passed, 7 skipped,
 1 strict xfail. The frozen 1,261-label audit sample is
@@ -23,7 +23,7 @@ assessment. Will NOT create a second subject provider or post-route Dose engine.
 
 | Route / decision | Current Evidence owner | Existing Dose coverage | Transfer classification |
 |---|---|---|---|
-| Generic record minimum (`min_clinical_dose`) and undisclosed amount | `clinical_applicability.py::assess_clinical_applicability`; `evidence_resolver.py::resolve_evidence_for_row`; `generic_evidence.py::score_evidence` | The registry has 16 dose-bearing records. Existing Dose covers KSM-66, white kidney bean, amla, MSM/OptiMSM, BCAA and official nutrient adequacy. It does not yet own equivalent benchmarks for nine named groups below. | Add a typed, audit-visible studied-dose assessment to the existing Dose result before deleting the Evidence veto. Numerical treatment of a missing benchmark remains D24 policy. Shared removal cannot land while any record lacks an owner. |
+| Generic record minimum (`min_clinical_dose`) and undisclosed amount | `clinical_applicability.py::assess_clinical_applicability`; `evidence_resolver.py::resolve_evidence_for_row`; `generic_evidence.py::score_evidence` | The registry has 16 dose-bearing records: 11 top-level studied-dose records plus 5 applicability-policy dose records. Existing Dose covers KSM-66, white kidney bean, amla, MSM/OptiMSM, BCAA and official nutrient adequacy. It does not yet own equivalent benchmarks for nine named groups below. | Add a typed, audit-visible studied-dose assessment to the existing Dose result before deleting the Evidence veto. Numerical treatment of a missing benchmark remains D24 policy. Shared removal cannot land while any record lacks an owner. |
 | Generic primary floor amount gate | `generic_evidence.py::_primary_mass_floor` | Route Dose owns amount adequacy; shared role classifier owns prominence | Replace its private mass-primary selection with `classify_ingredient_roles`; Evidence floor eligibility may use research/role facts but not label amount. Dose retains the exposure judgment. |
 | Literature `studied_dose_exposure` gate | `evidence_resolver.py::resolve_evidence_for_row` | Partial; only routes/reference families with an existing benchmark | Same as generic record minimum. Do not discard the studied exposure from the source record. |
 | Probiotic trial-dose applicability, up to 8 Evidence points | `probiotic_evidence.py::score_evidence` via native context `dose_applicability_credit` | `probiotic_dose.py::score_dose` owns disclosed CFU and adequacy, but most current adequacy tiers are industry-potency rather than trial-dose judgments | Remove dose from Evidence only with an explicit Evidence magnitude decision. Preserve trial-dose comparison in Dose metadata; do not silently convert the 12-point clinical subscale to 20. |
@@ -101,3 +101,19 @@ comparison. The shared amount gates, probiotic 8-point component, omega scale,
 and primary Evidence floor are not landable until their named ownership and
 magnitude decisions close. A partial removal would violate the transfer
 invariant even if its focused tests passed.
+
+
+## Measured packet closeout
+
+`MEASUREMENT.md` is the frozen all-route comparison produced from 1,259 raw
+omega/probiotic labels and 11 real generic canaries. Report SHA-256 before
+tracking: `2a13f67cc5797e337c47b69664aaa949f31fc30707f185887254d2041b595b03`.
+All experimental scorer/config edits were restored; none are part of this branch.
+
+The packet proves that removing the amount gates without extending Dose loses an
+assessment. It also shows that both illustrative omega mappings and the
+probiotic 12-to-20 rescale create broad numerical policy changes. Phase 1 is
+therefore measured but not integration-approved. The next integration change
+requires explicit decisions for probiotic magnitude/trial-range ownership,
+omega purpose mapping/magnitudes, and the generic clinical-anchor mapping,
+including reviewed-null trial amounts and brand/generic precedence.
