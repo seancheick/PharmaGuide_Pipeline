@@ -830,3 +830,14 @@ def test_committed_deductions_reproduce_at_their_recorded_calculation_date():
     data = json.loads(sync.DATA_PATH.read_text(encoding="utf-8"))
     as_of = date.fromisoformat(data["_metadata"]["calculation_date"])
     assert sync.stale_entries(data, sync.load_deduction_expl(), as_of=as_of) == []
+
+
+def test_publishing_release_runs_the_penalty_freshness_check_after_the_release_base():
+    release = (Path(__file__).resolve().parents[1] / "release_full.sh").read_text(encoding="utf-8")
+    call = release.index("require_manufacturer_penalties_current || exit 1")
+    assert release.index("require_release_base \"$REPO_ROOT\" || exit 1") < call
+    assert call < release.index("START_TS=$(date +%s)")
+    body = release[release.index("require_manufacturer_penalties_current() {"):call]
+    assert "fda_manufacturer_violations_sync.py\" --check" in body
+    assert "--recalculate-only" in body  # the failure message names the fix
+    assert "--as-of" not in body  # compared against today, never a pinned date

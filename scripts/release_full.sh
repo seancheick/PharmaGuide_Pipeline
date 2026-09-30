@@ -80,6 +80,8 @@
 #     - Publishing runs (Supabase upload or Flutter bundle) start from a clean
 #       checkout at the fetched origin/main; the release-base check refuses
 #       anything else before the first step.
+#     - Publishing runs also refuse manufacturer penalties that a recalculation as
+#       of today would change (fda_manufacturer_violations_sync.py --check).
 #
 # Exit codes:
 #     0  full pipeline completed (incl. when every step auto-skipped)
@@ -205,9 +207,29 @@ require_release_base() {
   fi
 }
 
+# Manufacturer penalties age with the calendar: a recall drops a recency band, or
+# a repeat-offender window closes, on a day nobody edits the file. Publishing
+# stored deductions computed on an earlier day ships stale scores, so a
+# publishing run refuses them. The check is offline and compares against today,
+# so it only ever blocks when a deduction would actually change: a same-day
+# rerun, or a new day with no penalty crossing a band, passes untouched. It never
+# re-ages by itself: that edits scripts/data, needs review and a corpus rebuild.
+require_manufacturer_penalties_current() {
+  local out
+  if ! out="$("$PG_PYTHON" "$REPO_ROOT/scripts/api_audit/fda_manufacturer_violations_sync.py" --check 2>&1)"; then
+    printf '%s\n' "$out" | tail -n 15 >&2
+    err "Stored manufacturer penalties differ from a recalculation as of today."
+    err "Re-age them in their own commit, push, rebuild from the earliest stale stage, then release:"
+    err "  \"\$PG_PYTHON\" scripts/api_audit/fda_manufacturer_violations_sync.py --recalculate-only --output scripts/data/manufacturer_violations.json"
+    return 1
+  fi
+  ok "Manufacturer penalties current: $(printf '%s\n' "$out" | tail -n 1)"
+}
+
 if (( SKIP_FLUTTER == 0 || (SKIP_SUPABASE == 0 && SUPABASE_DRY_RUN == 0) )); then
   require_release_base "$REPO_ROOT" || exit 1
   ok "Release base: clean checkout at origin/main $(git -C "$REPO_ROOT" rev-parse --short HEAD)"
+  require_manufacturer_penalties_current || exit 1
 else
   skip "Release base check skipped (local-only run: no Supabase upload, no Flutter bundle)"
 fi

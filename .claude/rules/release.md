@@ -23,6 +23,9 @@ paths:
 - **Never infer "the build didn't run" from timestamps.** `rebuild_dashboard_snapshot.sh` builds
   into `scripts/.final_db_output.candidate.<PID>` and swaps into place only at the end. Until then
   `dist/` carries the previous run's mtime. Check running processes before starting a second build.
+- **Publishing runs refuse stale manufacturer penalties.** `release_full.sh` runs
+  `fda_manufacturer_violations_sync.py --check` against today and stops only when a stored deduction
+  would change (same-day reruns pass). Fix: `--recalculate-only` in its own commit, then rebuild.
 - **Banned/recalled products always ship.** Any export or release hold must be unable to fire on a
   BLOCKED/UNSAFE `suppressed_safety` product. A check that protects a score protects nothing on a
   product that ships no score.
