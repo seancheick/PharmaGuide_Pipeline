@@ -476,6 +476,18 @@ def test_real_nested_enzyme_member_has_one_physical_source_link():
     header = next(row for row in get_scoring_ingredients(product, strict=True).rows
                   if row.get("raw_source_path") == "ingredientRows[30]"
                   and row.get("evidence_type") == "blend_anchor_mass")
-    assert is_lent_blend_mass(header)
+    assert not is_lent_blend_mass(header), "The enzyme preparation is not a named individual member"
     assert len(header["linked_rows"]) == len(set(header["linked_rows"]))
     _evidence(product)  # exercise the production artifact, not only the adapter
+
+
+@pytest.mark.parametrize("pid", ["231868", "284197"])
+def test_a_named_whole_preparation_is_not_its_mapped_component(pid):
+    from scoring_input_contract import get_scoring_ingredients, is_lent_blend_mass
+
+    product = _enrich(f"prominence_preparation_{pid}_raw.json")
+    headers = [row for row in get_scoring_ingredients(product, strict=True).rows
+               if row.get("reason") == "identity_bearing_blend_header_mass"]
+    assert headers, "A named preparation must retain its own blend-level amount"
+    assert not any(is_lent_blend_mass(row) for row in headers)
+    assert _evidence(product)["metadata"]["primary_evidence_floor"] == 14.0

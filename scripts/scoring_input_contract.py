@@ -2081,10 +2081,16 @@ def derive_product_scoring_evidence(product: Dict[str, Any]) -> List[Dict[str, A
                 ]
                 child_identities = {_anchor_identity(child)[0] for child in children}
                 child_paths = {str(child.get("raw_source_path")) for child in children}
-                if anchor_canonical in child_identities and len(child_paths) > 1:
-                    # A heading named for one member still declares the whole
-                    # blend amount. Reuse the existing lent-mass contract so
-                    # every Dose/Evidence consumer refuses it as a member dose.
+                names_member = any(
+                    _norm(child.get("name")) == _norm(row.get("name"))
+                    for child in children
+                )
+                if anchor_canonical in child_identities and len(child_paths) > 1 and names_member:
+                    # Require the declared name, not just a shared canonical:
+                    # a whole preparation (Mirtogenol, a phytosome) can map to
+                    # a component ID without being that component's amount.
+                    # A heading literally named for a member of a larger blend
+                    # reuses the existing lent-mass contract for all consumers.
                     item["reason"] = "identity_bearing_blend_header_mass_from_nested_child"
                     item["linked_rows"].extend(
                         sorted({
