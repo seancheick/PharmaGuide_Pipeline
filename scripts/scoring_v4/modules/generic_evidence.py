@@ -1652,12 +1652,18 @@ def _primary_mass_floor(
             continue
         linked = _evidence_anchor_rows(product, entry)
         if prominent:
-            linked = [row for row in linked if _is_prominent_anchor(product, entry, row, prominent)]
-            if not linked:
+            anchors = [row for row in linked if _is_prominent_anchor(product, entry, row, prominent)]
+            if not anchors:
                 continue  # the evidenced row is not what the label is about
-        # Retained exposure stand-in (see docstring): the anchor rows' own
-        # amount against the heaviest competing active, never another
-        # identity's row the same match also references.
+            identities = {str(row.get("canonical_id") or "").strip().lower() for row in anchors}
+            linked = [
+                row for row in linked
+                if str(row.get("canonical_id") or "").strip().lower() in identities
+            ]
+        # Retained exposure stand-in (see docstring): the amount of the anchor's
+        # own identity rows (as before, e.g. an extract and its source berries)
+        # against the heaviest competing active, never another identity's row
+        # the same match also references.
         anchor_mass = max((_evidence_matching_mass_mg(row) or 0.0 for row in linked), default=0.0)
         if anchor_mass < PRIMARY_MASS_FRACTION * heaviest:
             continue
