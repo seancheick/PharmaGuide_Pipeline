@@ -299,6 +299,30 @@ def test_named_bcaa_mixture_without_co_named_protein_keeps_protein_adjunct():
     assert roles["whey_protein"]["role"] == "adjunct"
 
 
+def test_real_218600_lineage_owned_complex_never_demotes_its_active():
+    """Solgar 218600: "Phosphatidyl Serine 200 mg" with its 1,000 mg supplying
+    complex nested under it. The contract's competitor rule drops that complex
+    (the same mass counted twice), so the mass ratio must not demote the 200 mg
+    active to adjunct."""
+    import json
+    import logging
+    from pathlib import Path
+
+    from enhanced_normalizer import EnhancedDSLDNormalizer
+    from enrich_supplements_v3 import SupplementEnricherV3
+    from scoring_input_contract import get_scoring_ingredients
+
+    logging.disable(logging.INFO)
+    raw = json.loads((Path(__file__).parent / "fixtures/prominence_lineage_218600_raw.json").read_text())
+    product = SupplementEnricherV3().enrich_product(EnhancedDSLDNormalizer().normalize_product(raw))[0]
+    rows = get_scoring_ingredients(product, strict=True).rows
+    roles = {
+        (row.get("raw_source_path"), row.get("canonical_id")): role["role"]
+        for row, role in zip(rows, classify_ingredient_roles(product, rows=rows))
+    }
+    assert roles[("ingredientRows[2]", "phosphatidylserine")] == "major"
+
+
 def test_amino_mixture_title_abbreviations_use_the_existing_canonical_alias_owner():
     for title, canonical_id in [("EAA", "essential_amino_acids"),
                                 ("BCAAs", "branched_chain_amino_acids")]:

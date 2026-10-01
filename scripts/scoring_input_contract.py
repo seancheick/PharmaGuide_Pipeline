@@ -6092,7 +6092,14 @@ def _role_context(
         if named_amino_mixture:
             drivers.difference_update(SPORTS_PROTEIN_CANONICALS)
             drivers.update(named_mixtures)
-    masses = [m for m in (_role_mass_mg(r) for r in rows) if m is not None]
+    # Materiality is read against the rows that compete for mass. A structural
+    # total whose mass is the physical source of its own quantified actives
+    # (the contract's lineage rule) is the same mass counted twice, so it must
+    # not demote the very active it supplies; opaque totals keep competing.
+    masses = [
+        m for m in (_role_mass_mg(r) for r in primary_mass_competitor_rows(product, rows))
+        if m is not None
+    ]
     return {
         "module": module,
         "statements": _safe_list(product.get("statements")),
