@@ -863,8 +863,8 @@
         "archetype": "probiotic",
         "quality_score_status": "scored",
         "product_safety_status": "no_known_catalog_concern",
-        "quality_score_v4_100": 90.2,
-        "quality_tier": "Excellent",
+        "quality_score_v4_100": 87.9,
+        "quality_tier": "Very good",
         "v4_confidence": "moderate",
         "normalization_references": {
           "formulation": 15.0,
@@ -874,7 +874,7 @@
         "pillars": {
           "formulation": 20.0,
           "dose": 18.2,
-          "evidence": 12.0,
+          "evidence": 9.7,
           "transparency": 15.0,
           "verification": 15.0,
           "safety_hygiene": 10.0
@@ -882,7 +882,7 @@
         "raw_dimensions": {
           "formulation": 15.0,
           "dose": 20.0,
-          "evidence": 12.0,
+          "evidence": 9.6667,
           "transparency": 15.0
         }
       }
@@ -934,7 +934,7 @@
         "archetype": "probiotic",
         "quality_score_status": "scored",
         "product_safety_status": "no_known_catalog_concern",
-        "quality_score_v4_100": 25.0,
+        "quality_score_v4_100": 30.0,
         "quality_tier": "Poor",
         "v4_confidence": "low",
         "normalization_references": {
@@ -945,7 +945,7 @@
         "pillars": {
           "formulation": 0.0,
           "dose": 0.0,
-          "evidence": 5.0,
+          "evidence": 10.0,
           "transparency": 8.0,
           "verification": 6.0,
           "safety_hygiene": 6.0
@@ -953,7 +953,7 @@
         "raw_dimensions": {
           "formulation": 0.0,
           "dose": 0.0,
-          "evidence": 5.0,
+          "evidence": 10.0,
           "transparency": 8.0
         }
       }

@@ -165,7 +165,9 @@ def test_category_fixture_contracts() -> None:
     assert probiotic["raw_dimensions"]["formulation"] == 15.0
     assert probiotic["normalization_references"]["formulation"] == 15.0
     assert probiotic["pillars"]["formulation"] == 20.0
-    assert probiotic["raw_dimensions"]["evidence"] == 12.0
+    # Unspecified clinical study design earns 6.6667 certainty plus 3
+    # applicability; extra strain names do not establish trial replication.
+    assert probiotic["raw_dimensions"]["evidence"] == 9.6667
     # Omega raw dose tops out at 20 now that the EPA:DHA ratio bonus is gone
     # (quality_score 1.2.0); the reference equals that ceiling because the rubric
     # gives full band credit at 2 g/day. A complete prenatal essential-nutrient
