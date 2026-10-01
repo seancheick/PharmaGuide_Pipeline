@@ -13,7 +13,13 @@ Automatic multiplication of the existing 12-point clinical result to 20 is
 also rejected. The measured P2 arm changed hundreds of products without adding
 new evidence facts.
 
-## Candidate evidence-only structure
+## Preliminary evidence-only structure
+
+The initial 10/6/4 split below is one replay candidate, not an approved rubric.
+The verified decomposition in `PROBIOTIC_CURRENT_12_DECOMPOSITION.md` shows that
+the current 12 already rewards study design, evidence scope, effect direction,
+enrollment and, on the generic path, some research depth. A replacement must
+reuse those facts without awarding them twice.
 
 | Component | Points | Owns |
 |---|---:|---|
@@ -51,8 +57,9 @@ label amount or industry potency.
 - Combination-only record applied to a single strain: zero for that strain.
 - Unspecified blend: zero until the formula or strains are identified.
 
-These are directional examples. Exact band values must be measured on the
-frozen 542-label probiotic cohort before approval.
+These are directional examples. Exact band values must be compared against at
+least one non-overlapping alternative on the frozen 542-label probiotic cohort
+before approval.
 
 ## Required measurement
 
