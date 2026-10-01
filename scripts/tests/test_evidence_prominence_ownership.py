@@ -584,3 +584,20 @@ def test_equal_peptide_amounts_prefer_available_source_lineage(reverse_rows):
     entry = next(e for e in recovered if e["id"] == "RECOVERED_COLLAGEN_PEPTIDES_V1")
     assert entry["matched_source_row_refs"] == ["ingredientRows[1]"]
     assert _evidence(product)["score"] > 0
+
+
+def test_same_named_peptide_preparation_links_its_separate_declarations():
+    from scoring_v4.modules.generic_evidence import resolved_clinical_matches
+    rows = [
+        _row("Hydrolyzed Collagen Type 1 & 3", "collagen", 6, unit="g",
+             path="ingredientRows[1].forms[0]"),
+        _row("Hydrolyzed Collagen Type 1 & 3", "collagen", 6.6, unit="g",
+             path="ingredientRows[2]"),
+    ]
+    product = _product(product_name="Pure Collagen Types 1 and 3 Powder", ingredients=rows, matches=[])
+    _, recovered = resolved_clinical_matches(product, owner_scoped=True)
+    entry = next(e for e in recovered if e["id"] == "RECOVERED_COLLAGEN_PEPTIDES_V1")
+    assert set(entry["matched_source_row_refs"]) == {"ingredientRows[1].forms[0]", "ingredientRows[2]"}
+    from assessment_readiness import evaluate_assessment_readiness
+    readiness = evaluate_assessment_readiness(product, module="generic")
+    assert readiness["evidence"]["readiness"] == "complete"

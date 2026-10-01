@@ -747,6 +747,18 @@ def _recover_contract_evidence_matches(
         entry["matched_term"] = peptide_row.get("name") or peptide_row.get("standard_name")
         entry["matched_canonical_id"] = peptide_row.get("canonical_id")
         _stamp_recovery_source_ref(entry, peptide_row)
+        if entry.get("matched_source_row_refs"):
+            # A label can declare the same preparation as a protein source
+            # and as an active. Keep both determinations linked, without
+            # borrowing from a different preparation or summing declarations.
+            name = _canonical_text(entry["matched_term"])
+            for row in nutrient_delivering_rows(product):
+                ref = _recovery_source_ref(row)
+                if (ref and _is_collagen_peptide_row(row)
+                    and not is_lent_blend_mass(row)
+                    and _canonical_text(row.get("name") or row.get("standard_name")) == name
+                    and ref not in entry["matched_source_row_refs"]):
+                    entry["matched_source_row_refs"].append(ref)
         recovered.append(entry)
         recovered_ids.add(_RECOVERED_COLLAGEN_PEPTIDES_MATCH["id"])
 
