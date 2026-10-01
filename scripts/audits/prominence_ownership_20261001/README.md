@@ -121,16 +121,16 @@ reader at all.
 | Step | State | Receipt |
 |---|---|---|
 | Failing-first regressions | done | RED `~/pg_quality/prominence_20261001/red_baseline.log` (11 failed / 7 protections passed), `c3_probiotic_red.log`, `c4_rerecovery_red.log` |
-| Source commits | done | `eb70f424`, `2ce48b21`, `5c549d1a`, `2d9ede38`; after the first replay `c4119d30`, `916d0c62`; after review round 1 `32765afe`, `db939b57`, `41eb22d7`, `452a618e`; after the preview replay and review round 2 `7ea61daa`, `46ca2145`, `9ea4af85`; after the final replay of `9ea4af85` `b43a048f`; after review round 3 and the raw-coverage replay `9a6eb7c9`, `5b8cc834`, `9d65403f` (**final source**). RED logs (`~/pg_quality/prominence_20261001/`): `red_baseline.log` 11 failed, `c3_probiotic_red.log`, `c4_rerecovery_red.log`, `c6_heading_red.log` 2, `c7_brand_identifier_red.log` 4, `c8_review_red.log` 6, `c9_authority_red.log` 1, `c10_review2_red.log` 2, `c11_identity_red.log` 1, `c12_collagen_red.log` 1, `c13_bcaa_red.log` 1; GREEN focused `c13_bcaa_green.log` 149 passed |
+| Source commits | done | `eb70f424`, `2ce48b21`, `5c549d1a`, `2d9ede38`; after the first replay `c4119d30`, `916d0c62`; after review round 1 `32765afe`, `db939b57`, `41eb22d7`, `452a618e`; after the preview replay and review round 2 `7ea61daa`, `46ca2145`, `9ea4af85`; after the final replay of `9ea4af85` `b43a048f`; after review round 3 and the raw-coverage replay `9a6eb7c9`, `5b8cc834`, `9d65403f`; after review round 4 `0cf9262e` (comments); after the full fast checkpoint `68cae99a` (**final source**). RED logs (`~/pg_quality/prominence_20261001/`): `red_baseline.log` 11 failed, `c3_probiotic_red.log`, `c4_rerecovery_red.log`, `c6_heading_red.log` 2, `c7_brand_identifier_red.log` 4, `c8_review_red.log` 6, `c9_authority_red.log` 1, `c10_review2_red.log` 2, `c11_identity_red.log` 1, `c12_collagen_red.log` 1, `c13_bcaa_red.log` 1, `c14_probiotic_red.log` 1; GREEN focused `c14_probiotic_green.log` 190 passed |
 | Focused + consumer tests | done (exploratory) | focused 308 passed; 90 consumer files 2,698 passed / 38 skipped; one artifact test fails identically on `e8687b39` |
-| Frozen targeted replay (2,781 raw labels) | first pass at `2d9ede38` (170 moved) superseded; preview at `452a618e` (34 moved, every mover classified) superseded by defect 13–15 fixes; run on `9ea4af85` (17 moved, all down) found defect 16 and is archived in `superseded_9ea4af85/`; final run on `b43a048f` running from the isolated checkout `prominence-final` | manifest `2b314063…`; baseline `9ba85f1a…` (head `e8687b39`). Two runs were aborted: one by my own docs commit changing HEAD in the measured worktree (the harness checks HEAD), one stopped for a source change |
-| 1,259-label control replay | done at `2d9ede38` (1,251 identical; 232059 Evidence 13→0; 7 readiness-only); final run on `9ea4af85` queued | Codex manifest `cbe04144…`; baseline = Codex capture `a20cea18…` (head `3ee91eae`, all 434 source hashes equal to `e8687b39`) |
-| Brand-identifier cohort (every raw label naming UC-II, BCM-95 or EGb 761: 48) | done at `916d0c62` | manifest `4f62f9a2…`; baseline `66a228a2…`, candidate `b7dea4de…`: 47 identical, 219249 TamaFlex readiness lists `BRAND_UCII` for its "UC-II Type II Collagen Complex 20 mg" adjunct row (score unchanged) |
+| Frozen targeted replay (2,781 raw labels) | done on `68cae99a` | see Measured results; earlier runs (`2d9ede38`, `452a618e` preview, `9ea4af85`, `b43a048f`, `9d65403f`) each found or confirmed a defect and are archived. Two runs were aborted: one by my own docs commit changing HEAD in the measured worktree (the harness checks HEAD), one stopped for a source change |
+| 1,259-label control replay | done on `68cae99a` | 1,252 identical, 0 score moves (see Measured results) |
+| Brand-identifier cohort (every raw label naming UC-II, BCM-95 or EGb 761: 48) | done on `68cae99a` | 47 identical, 1 readiness-only |
 | D26 counterfactual (P arm) | done | scratch worktree `prominence-parm` at `9d65403f` with all four stand-ins removed (`counterfactual_patch.py`), never committed; results in the D26 packet |
-| Fresh-context review | round 1 (`e8687b39..916d0c62`): 1 blocker + 4 should-fix, all reproduced and fixed (defects 10–12). Round 2 (`e8687b39..452a618e`, fresh agent): no blocker; S1 and S3 reproduced and fixed (defects 14–15); S2 recorded below; its 400-label raw sample found 0 authority-subset violations and 1 intended down (79192 caffeine floor on a lent 243 mg blend total). Review of `7ea61daa` onward pending; round 3 (`e8687b39..b43a048f`, fresh agent): 1 blocker (collagen borrow, defect 17) and 1 should-fix (non-owner-scoped recovery, measured: no effect), both resolved | probes `scratchpad/probe4.py`, `probe9.py`, `scratchpad/review2/`, `scratchpad/review3/` |
-| Full fast checkpoint | pending | |
+| Fresh-context review | round 1 (`e8687b39..916d0c62`): 1 blocker + 4 should-fix, all reproduced and fixed (defects 10–12). Round 2 (`e8687b39..452a618e`, fresh agent): no blocker; S1 and S3 reproduced and fixed (defects 14–15); S2 recorded below; its 400-label raw sample found 0 authority-subset violations and 1 intended down (79192 caffeine floor on a lent 243 mg blend total). Review of `7ea61daa` onward pending; round 3 (`e8687b39..b43a048f`, fresh agent): 1 blocker (collagen borrow, defect 17) and 1 should-fix (non-owner-scoped recovery), both resolved (the second finally by defect 19); round 4 (`b43a048f..9d65403f`, fresh agent): no blocker, no should-fix, two comment notes fixed in `0cf9262e` | probes `scratchpad/probe4.py`, `probe9.py`, `scratchpad/review2/`, `scratchpad/review3/` |
+| Full fast checkpoint | first run at `90d0d741`: 17,991 passed, 126 skipped, 5 failed (`superseded_9d65403f/final_fast.log`): 3 path assertions caused by the scratch `scripts/products` symlink, 1 timeout in an interaction-citations test under load, and the locked `probiotic__failure` fixture, which found defect 19. Final run on `68cae99a` pending | |
 
-| Second cohort (raw-only coverage) | running | The targeted cohort came from stored-corpus movers and missed raw-only movers (273823/40604 were absent). Added every label not yet frozen whose raw label prints a blend total over an undisclosed member (1,464) plus a seeded random 1,500 of the remaining 9,902; manifest `6a4b4807…`. 8,402 labels stay unreplayed; the random sample estimates their mover rate |
+| Raw-coverage cohort (2,964) | done on `68cae99a` | 52 movers, all down; random 1,500 move none |
 
 ## Fresh review notes and disposition
 
@@ -161,33 +161,29 @@ reader at all.
 | R3-N5 stale docstrings | fixed in `9d65403f`; D26 count updated |
 | Raw-coverage single-member blend (241676 Collagen Love: "Collagen Peptide Hydro-Matrix Blend 600 mg" with one undisclosed member) | the input contract marks the total as lent and Dose readers follow it, so Evidence does too; whether a single-member heading's total is its member's amount is a contract question for Codex |
 
-## Measured results (final source `9d65403f`; `0cf9262e` is comments only, AST identical)
-
-> **Being re-measured.** The full fast checkpoint at `90d0d741` found defect 19; source `68cae99a`
-> keeps the approved probiotic model's inputs unchanged. Every arm is replaying on `68cae99a` now.
-> The figures below are from `9d65403f`, where 232059 still moved (13 → 0); it is expected to
-> drop out. This note is replaced when the new receipts exist.
+## Measured results (final source `68cae99a`)
 
 All arms are complete Clean→Enrich→Score captures of frozen raw DSLD labels with
 `scripts/audits/quality_redesign/replay.py`; every capture reports `exit_code 0`,
 `source_unchanged true`, full product coverage and the same input manifest as its baseline.
 Baselines ran on `e8687b39` (clean detached worktree `prominence-base`); candidates on the
-isolated detached worktree `prominence-final` at `9d65403f`. Outputs live in
+isolated detached worktree `prominence-final` at `68cae99a`. Outputs live in
 `~/pg_quality/prominence_20261001/`; every changed product of every arm is listed with its
 cause columns in `replay_*_changed.md` in this folder (produced by `classify_movers.py`).
+Earlier candidate runs are archived in `superseded_*` folders there.
 
 | Arm | Inputs (manifest SHA-256) | Baseline output | Candidate output | Result |
 |---|---|---|---|---|
-| Targeted, 2,781 labels | `2b314063…5c41c` | `9ba85f1a…2b5` | `86e0e44d…0437` | 2,653 identical; 15 totals move, **all down**; tiers Good→Needs improvement 2, Needs improvement→Poor 2; 113 metadata-only |
-| Controls, 1,259 labels (Codex set) | `cbe04144…8286` | Codex `a20cea18…ea72` (head `3ee91eae`; all 434 source hashes equal to `e8687b39`) | `42de5e4a…3553` | 1,251 identical; 232059 Evidence 13→0; 7 readiness-metadata-only (omega/probiotic) |
+| Targeted, 2,781 labels | `2b314063…5c41c` | `9ba85f1a…2b5` | `e7f37b56…b067` | 2,654 identical; 14 totals move, **all down**; tiers Good→Needs improvement 2, Needs improvement→Poor 2; 113 metadata-only |
+| Controls, 1,259 labels (Codex set: 542 probiotic, 717 others) | `cbe04144…8286` | Codex `a20cea18…ea72` (head `3ee91eae`; all 434 source hashes equal to `e8687b39`) | `a345a53c…ff95` | 1,252 identical; **0 score moves**; 7 readiness-metadata-only (omega/probiotic) |
 | Brand identifiers, 48 labels | `4f62f9a2…55ea` | `66a228a2…b5a` | `b7dea4de…7d7` | 47 identical; 219249 readiness lists `BRAND_UCII` on its "UC-II Type II Collagen Complex 20 mg" adjunct row |
 | Raw coverage, 2,964 labels | `6a4b4807…086a` | `cohort2_baseline` | `3df7e371…54b9` | 2,908 identical; 52 totals move, **all down**; tiers Good→Needs improvement 6, Needs improvement→Poor 7; 4 metadata/no-score |
-| D26 counterfactual (four stand-ins removed) | targeted + raw coverage | final candidate | `cbb9489d…5c20`, `333c5336…a87c` | 793 and 22 totals up, none down (D26 packet) |
+| D26 counterfactual (four stand-ins removed) | targeted + raw coverage | final candidate | see D26 packet | measured at `9d65403f`; re-measuring on `68cae99a` |
 
 Every arm: Evidence is the only pillar that moves; status, route, Safety/Hygiene, Dose,
-Formulation, Transparency and Verification are unchanged for every product. In total 67
-distinct products move (15 targeted, 52 raw coverage; 232059 appears in both the targeted and
-control arms), all down, 17 crossing a quality tier.
+Formulation, Transparency and Verification are unchanged for every product. In total **66
+distinct products move, all down, 17 crossing a quality tier**; every probiotic in every arm keeps
+its score (the approved probiotic model's inputs are unchanged, defect 19).
 
 **Coverage.** The raw-coverage cohort holds every raw label (of 15,414) not already frozen whose
 label prints a blend total over at least one undisclosed member (1,464 → 52 movers) plus a seeded
@@ -219,11 +215,10 @@ that structure; 0 of 1,500 bounds their mover rate below about 0.2% (rule of thr
 | 82935 | Stress Hormone Balancing Blend | 55.4 → 43.8 (NI → Poor) | floor 14 → 0 | phosphatidylserine floor on the 400 mg two-member total (defect 2) |
 | 251578, 251594, 308198, 323062 | Ex-Stress / Garlic Parsley / Glucosamine Chondroitin / Calming Day | −0.6 to −7.0 | floor → 0 | lemon balm, garlic, MSM and taurine floors on two- to six-member blend totals (defect 2) |
 | 241676, 268562, 268575, 326268 | Collagen Love / Multi-Collagen Complex / Multi Collagen 1600 mg | −6.3 each (one NI → Poor) | 6.3 → 0 | collagen record recovered from a blend total lent to its first member (three four-member blends; 241676 has one member, see notes) (defect 12) |
-| 232059 | Bifido GI Balance | 53.5 → 40.5 | 13 → 0 | generic recovery had lent a species record to a live organism row; the approved probiotic model's own result stands (defect 6) |
 
 Each member keeps its Evidence ownership and research points; only the floor or recovered record
 that read a blend total as the member's dose is gone. Exact per-product values:
-`replay_targeted_changed.md`, `replay_raw_coverage_changed.md`, `replay_controls_changed.md`.
+`replay_targeted_changed.md` and `replay_raw_coverage_changed.md`.
 
 ### Changes without a score movement
 
@@ -235,7 +230,7 @@ that read a blend total as the member's dose is gone. Exact per-product values:
 - Raw coverage 4: 273823 and 40604 lose a magnesium authority floor that rested on the lent
   "Epsom Salt" blend total (their pipeline already exceeds 10); two floor-only changes with no
   total movement (classified in `replay_raw_coverage_changed.md`).
-- Controls 7 and brand 1: readiness metadata as above.
+- Controls 7 and brand 1: readiness metadata as above; no control product changes score.
 
 ### Reproduction
 

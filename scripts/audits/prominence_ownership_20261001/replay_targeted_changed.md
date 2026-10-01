@@ -79,7 +79,6 @@
 | 229727 | Pump Orange Mango | = | = | = | = | = | = | = | metadata: reasons.assessment_readiness.dose, reasons.assessment_readiness.evidence, reasons.assessment_readiness.shadow_incomplete_dimensions |
 | 229913 | Precision BCAA Gummy Worm | = | = | = | = | = | = | = | metadata: reasons.assessment_readiness.dose, reasons.assessment_readiness.evidence, reasons.confidence.evidence_review |
 | 231343 | Test 1700 | = | = | = | = | = | = | = | metadata: reasons.assessment_readiness.dose, reasons.assessment_readiness.evidence, reasons.assessment_readiness.shadow_incomplete_dimensions |
-| 232059 | Bifido GI Balance | 53.5 → 40.5 | = | 13.0 → 0.0 | = | = | = | = | metadata: reasons.assessment_readiness.evidence, reasons.confidence.evidence, reasons.module.metadata |
 | 232507 | Advanced Curcumin Elite | = | = | = | = | = | = | = | metadata: reasons.assessment_readiness.dose, reasons.assessment_readiness.evidence, reasons.confidence.evidence_review |
 | 232624 | Super Omega-3 Plus | = | = | = | = | = | = | = | metadata: reasons.assessment_readiness.dose, reasons.assessment_readiness.evidence, reasons.assessment_readiness.shadow_incomplete_dimensions |
 | 233617 | Oceans 3 Healthy Hormones | = | = | = | = | = | = | = | metadata: reasons.assessment_readiness.dose, reasons.assessment_readiness.evidence, reasons.confidence.evidence_review |
