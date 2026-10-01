@@ -75,18 +75,20 @@ def test_an_unrelated_ingredients_mass_never_changes_the_declared_purpose(leucin
     assert evidence_prominent_row_keys(product) == {("ingredientRows[0]", "melatonin")}
 
 
-def test_without_a_declared_or_material_purpose_no_row_is_prominent():
-    """Retain-everything fallback (real 321604: boron 5 mg and hyaluronic acid
-    3.3 mg beside a 401 mg UC-II blend). Only the blend's undisclosed member
-    owns Evidence, and nothing with its own amount is the product's purpose,
-    so no row may anchor a floor."""
+def test_when_the_owner_names_no_purpose_the_previous_floors_stand_and_nothing_is_recovered():
+    """Retain-everything fallback (real 315700, Trace Minerals): the role owner
+    names no purpose row, so there is no prominence to read. The authority
+    floor keeps its previous heaviest-essential rule and recovery has no
+    identified purpose to borrow evidence for."""
     from evidence_resolver import evidence_prominent_row_keys
+    from scoring_v4.modules.generic_evidence import resolved_clinical_matches
 
-    product = _enrich("evidence_subject_321604_raw.json")
-    assert {canonical for _, canonical in evidence_prominent_row_keys(product)} <= {"collagen"}
+    product = _enrich("prominence_owner_abstains_315700_raw.json")
+    assert evidence_prominent_row_keys(product) == set()
+    assert resolved_clinical_matches(product, owner_scoped=True)[1] == []
     evidence = _evidence(product)
-    assert evidence["metadata"]["primary_evidence_floor"] == 0.0
-    assert evidence["metadata"]["nutrition_authority_canonical"] is None
+    assert evidence["metadata"]["nutrition_authority_canonical"] == "manganese"
+    assert evidence["components"]["primary_evidence_floor"] == 10.0
 
 
 # --- the primary floor --------------------------------------------------------
@@ -254,6 +256,7 @@ def test_real_210555_disclosed_members_of_the_title_named_blend_anchor_the_floor
 @pytest.mark.parametrize("fixture,member", [
     ("prominence_blend_total_328062_raw.json", "ashwagandha"),  # Sensoril in a 2-member 250 mg blend
     ("evidence_subject_219048_raw.json", "psyllium"),            # psyllium under a 3.1 g fiber blend
+    ("blend_2219_raw.json", "creatine_monohydrate"),             # one of ten in a 3.1 g creatine module
 ])
 def test_real_blend_total_never_becomes_an_undisclosed_members_floor(fixture, member):
     """The member stays an Evidence owner and keeps its research points, but its
@@ -262,6 +265,19 @@ def test_real_blend_total_never_becomes_an_undisclosed_members_floor(fixture, me
     assert member in evidence["metadata"]["evidence_owner_canonicals"]
     assert evidence["metadata"]["primary_evidence_floor"] == 0.0
     assert evidence["components"]["clinical_evidence_pipeline"] > 0
+
+
+@pytest.mark.parametrize("fixture,floor_canonical,floor", [
+    # "Relora 175 mg": the heading is the branded intervention itself
+    ("prominence_branded_heading_293928_raw.json", "relora", 17.0),
+])
+def test_real_heading_that_names_its_brand_anchors_that_brands_floor(fixture, floor_canonical, floor):
+    """A blend heading's printed total is not a member's dose, but when the
+    heading itself names a verified branded record, that total is the studied
+    intervention's amount. The prominent label row keeps that record's floor."""
+    evidence = _evidence(_enrich(fixture))
+    assert evidence["metadata"]["primary_evidence_floor_canonical"] == floor_canonical
+    assert evidence["components"]["primary_evidence_floor"] == floor
 
 
 @pytest.mark.parametrize("fixture", [

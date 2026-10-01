@@ -1524,6 +1524,33 @@ def _prominent_essential_canonical(
     return essentials[0] if essentials else None
 
 
+def _is_prominent_anchor(
+    product: Dict[str, Any], entry: Dict[str, Any], row: Dict[str, Any], prominent: set,
+) -> bool:
+    """Whether ``row`` is a prominent label row that may carry ``entry``'s amount.
+
+    A row the role owner marks prominent qualifies. A blend heading's total
+    (``blend_anchor_mass``) is never a member's amount, so it carries only a
+    verified product-level record the heading itself names (the predicate
+    product-level recovery uses), and only when the role owner marks that same
+    label row prominent. A member's ingredient record, or a branded member of a
+    larger blend, never borrows the total.
+    """
+    from evidence_resolver import evidence_row_key
+
+    if evidence_row_key(row) in prominent:
+        return True
+    if _norm_text(row.get("evidence_type")) != "blend_anchor_mass":
+        return False
+    path = str(row.get("raw_source_path") or "").strip()
+    return (
+        bool(path)
+        and any(key[0] == path for key in prominent)
+        and _is_verified_product_level_entry(entry)
+        and _verified_product_entry_matches_text(entry, _row_identity_text(product, row))
+    )
+
+
 def _evidence_matching_mass_mg(row: Dict[str, Any]) -> Optional[float]:
     """Comparable mass used only to link label doses to ingredient evidence."""
     mass = _mass_mg(row)
@@ -1565,7 +1592,7 @@ def _primary_mass_floor(
     yet assess every anchor's exposure, so the check is retained as the
     uncovered exposure stand-in (transfer invariant) until Dose covers it.
     """
-    from evidence_resolver import evidence_prominent_row_keys, evidence_row_key
+    from evidence_resolver import evidence_prominent_row_keys
 
     if prominent is None:
         prominent = evidence_prominent_row_keys(product)
@@ -1592,7 +1619,7 @@ def _primary_mass_floor(
         ):
             continue
         linked = _evidence_anchor_rows(product, entry)
-        if prominent and not any(evidence_row_key(row) in prominent for row in linked):
+        if prominent and not any(_is_prominent_anchor(product, entry, row, prominent) for row in linked):
             continue  # the evidenced row is not what the label is about
         # Retained exposure stand-in (see docstring), unchanged: the linked
         # rows' own amount against the heaviest competing active.
