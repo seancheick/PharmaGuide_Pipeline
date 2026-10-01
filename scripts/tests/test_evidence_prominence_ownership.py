@@ -256,6 +256,25 @@ def test_collagen_recovery_follows_prominence():
     assert "RECOVERED_COLLAGEN_PEPTIDES_V1" not in _scored(token)["metadata"]["recovered_matches"]
 
 
+def test_collagen_recovery_keeps_the_retained_exposure_stand_in():
+    """The recovered record's 2,500 mg minimum is read from the heaviest
+    "collagen" row, here 10 g of non-peptide hide collagen, not from the
+    300 mg peptide row. So the peptide row must still hold half the heaviest
+    active's mass (D26), or a trace peptide row borrows the other row's amount."""
+    product = _product(
+        product_name="Collagen Complex",
+        ingredients=[
+            _row("Bovine Hide Collagen", "collagen", 10, unit="g", path="ingredientRows[0]",
+                 standard_name="Collagen"),
+            _row("Hydrolyzed Collagen Peptides Type I & III", "collagen", 300,
+                 path="ingredientRows[1]", standard_name="Collagen"),
+        ],
+        matches=[],
+    )
+
+    assert "RECOVERED_COLLAGEN_PEPTIDES_V1" not in _scored(product)["metadata"]["recovered_matches"]
+
+
 # --- real DSLD labels through Clean -> Enrich -> Score ---------------------
 
 def test_real_218600_a_lineage_owned_complex_never_demotes_the_active_it_supplies():

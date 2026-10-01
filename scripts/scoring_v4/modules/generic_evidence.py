@@ -1264,19 +1264,30 @@ def _has_primary_collagen_peptide_identity(
     product: Dict[str, Any], *, prominent: Optional[set] = None,
 ) -> bool:
     """A prominent hydrolyzed type I/III peptide row with its own disclosed mass
-    (never a blend total lent to it)."""
+    (never a blend total lent to it) that still holds half the heaviest
+    competing active's mass. That comparison is the retained exposure stand-in
+    (decision D26), unchanged: the recovered record's minimum is read from the
+    heaviest "collagen" row, which need not be this peptide row."""
     from evidence_resolver import evidence_prominent_row_keys, evidence_row_key
 
     if prominent is None:
         prominent = evidence_prominent_row_keys(product)
-    return any(
-        isinstance(row, dict)
-        and evidence_row_key(row) in prominent
-        and _is_collagen_peptide_row(row)
-        and (_mass_mg(row) or 0.0) > 0.0
-        and not is_lent_blend_mass(row)
-        for row in _competing_active_rows(product)
-    )
+    max_active_mass = 0.0
+    max_peptide_mass = 0.0
+    for row in _competing_active_rows(product):
+        if not isinstance(row, dict):
+            continue
+        mass = _mass_mg(row) or 0.0
+        max_active_mass = max(max_active_mass, mass)
+        if (
+            evidence_row_key(row) in prominent
+            and _is_collagen_peptide_row(row)
+            and not is_lent_blend_mass(row)
+        ):
+            max_peptide_mass = max(max_peptide_mass, mass)
+    if max_peptide_mass <= 0.0:
+        return False
+    return max_peptide_mass >= (PRIMARY_MASS_FRACTION * max_active_mass)
 
 
 def _is_collagen_peptide_row(row: Dict[str, Any]) -> bool:
