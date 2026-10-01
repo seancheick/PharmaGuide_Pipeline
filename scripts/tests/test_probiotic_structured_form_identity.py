@@ -425,7 +425,8 @@ def test_real_direct_name_generic_form_controls(enricher, brand, product_id):
         pytest.skip("Local manifest-owned direct-strain control is absent")
     from stage_manifest import select_stage_input_files
 
-    assert path in select_stage_input_files(path.parent, "enrich", require_manifest=True)
+    # The manifest owner resolves symlinked artifact roots to physical paths.
+    assert path.resolve() in select_stage_input_files(path.parent, "enrich", require_manifest=True)
     product = next(p for p in json.loads(path.read_text()) if str(p.get("id")) == product_id)
     product["probiotic_data"] = enricher._collect_probiotic_data(product)
     clinical = independent_clinical_strains(product)
