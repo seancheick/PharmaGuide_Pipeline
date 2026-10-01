@@ -1,10 +1,8 @@
 # Phase 2 — generic Evidence prominence ownership
 
-Status: **IN PROGRESS — implementation committed, Claude validation underway (frozen replay, fresh
-review and full fast checkpoint pending); Codex audit/integration pending.** Branch
+Status: **Claude validation complete; Codex audit/integration pending.** Branch
 `claude/generic-prominence-ownership` from main/origin `e8687b39`, pushed as a feature branch for
-tracking only. Not merged to main, no catalog release. Measured numbers are added below only from
-receipts.
+tracking only; final source `68cae99a`. Not merged to main, no catalog release.
 
 ## Owner Check
 
@@ -96,12 +94,12 @@ pattern D24 rejected for Dose.
 Unblocking work, already queued elsewhere: Phase 3 studied-minimum curation per record (Q39(g)) and
 Phase 4 Dose policy packets (D24). Either retires the stand-in without a magnitude decision here.
 
-**Measured counterfactual P** (all four stand-ins removed in a scratch worktree at `9d65403f` by
+**Measured counterfactual P** (all four stand-ins removed in a scratch worktree at `68cae99a` by
 `counterfactual_patch.py`; compared with the final candidate on the same frozen inputs):
 
 | Cohort | Totals that move | Direction | Tier crossings | Size |
 |---|---|---|---|---|
-| Targeted 2,781 (output `cbb9489d…5c20`) | 793 | all up | 347 (Needs improvement→Good 166, Good→Very good 113, Poor→Needs improvement 38, Very good→Excellent 17, NI→Very good 10, others 3) | median +4.4; 341 ≥ +5; 64 ≥ +10; max +16 |
+| Targeted 2,781 (output `d79b4eaf…95f6`) | 793 | all up | 347 (Needs improvement→Good 166, Good→Very good 113, Poor→Needs improvement 38, Very good→Excellent 17, NI→Very good 10, others 3) | median +4.4; 341 ≥ +5; 64 ≥ +10; max +16 |
 | Raw coverage 2,964 (output `333c5336…a87c`) | 22 | all up | 12 | median +5.9 |
 
 New floors under P are led by vitamin D3 (211 targeted labels), creatine monohydrate (91),
@@ -126,9 +124,9 @@ reader at all.
 | Frozen targeted replay (2,781 raw labels) | done on `68cae99a` | see Measured results; earlier runs (`2d9ede38`, `452a618e` preview, `9ea4af85`, `b43a048f`, `9d65403f`) each found or confirmed a defect and are archived. Two runs were aborted: one by my own docs commit changing HEAD in the measured worktree (the harness checks HEAD), one stopped for a source change |
 | 1,259-label control replay | done on `68cae99a` | 1,252 identical, 0 score moves (see Measured results) |
 | Brand-identifier cohort (every raw label naming UC-II, BCM-95 or EGb 761: 48) | done on `68cae99a` | 47 identical, 1 readiness-only |
-| D26 counterfactual (P arm) | done | scratch worktree `prominence-parm` at `9d65403f` with all four stand-ins removed (`counterfactual_patch.py`), never committed; results in the D26 packet |
+| D26 counterfactual (P arm) | done | scratch worktree `prominence-parm` at `68cae99a` with all four stand-ins removed (`counterfactual_patch.py`), never committed; results in the D26 packet |
 | Fresh-context review | round 1 (`e8687b39..916d0c62`): 1 blocker + 4 should-fix, all reproduced and fixed (defects 10–12). Round 2 (`e8687b39..452a618e`, fresh agent): no blocker; S1 and S3 reproduced and fixed (defects 14–15); S2 recorded below; its 400-label raw sample found 0 authority-subset violations and 1 intended down (79192 caffeine floor on a lent 243 mg blend total). Review of `7ea61daa` onward pending; round 3 (`e8687b39..b43a048f`, fresh agent): 1 blocker (collagen borrow, defect 17) and 1 should-fix (non-owner-scoped recovery), both resolved (the second finally by defect 19); round 4 (`b43a048f..9d65403f`, fresh agent): no blocker, no should-fix, two comment notes fixed in `0cf9262e` | probes `scratchpad/probe4.py`, `probe9.py`, `scratchpad/review2/`, `scratchpad/review3/` |
-| Full fast checkpoint | first run at `90d0d741`: 17,991 passed, 126 skipped, 5 failed (`superseded_9d65403f/final_fast.log`): 3 path assertions caused by the scratch `scripts/products` symlink, 1 timeout in an interaction-citations test under load, and the locked `probiotic__failure` fixture, which found defect 19. Final run on `68cae99a` pending | |
+| Full fast checkpoint | first run at `90d0d741`: 17,991 passed, 126 skipped, 5 failed (`superseded_9d65403f/final_fast.log`): 3 path assertions caused by the scratch `scripts/products` symlink, 1 timeout in an interaction-citations test under load, and the locked `probiotic__failure` fixture, which found defect 19. Final run at `002d2683` (source identical to `68cae99a`), symlink removed: **17,954 passed, 168 skipped, 0 failed, 0 xfail** (624.5 s; `final_fast.log`); 167 skipped at `3ee91eae`; the log tail shows the opt-in live-stack skips, and the one-skip difference is not itemized here | |
 
 | Raw-coverage cohort (2,964) | done on `68cae99a` | 52 movers, all down; random 1,500 move none |
 
@@ -178,14 +176,14 @@ Earlier candidate runs are archived in `superseded_*` folders there.
 | Controls, 1,259 labels (Codex set: 542 probiotic, 717 others) | `cbe04144…8286` | Codex `a20cea18…ea72` (head `3ee91eae`; all 434 source hashes equal to `e8687b39`) | `a345a53c…ff95` | 1,252 identical; **0 score moves**; 7 readiness-metadata-only (omega/probiotic) |
 | Brand identifiers, 48 labels | `4f62f9a2…55ea` | `66a228a2…b5a` | `b7dea4de…7d7` | 47 identical; 219249 readiness lists `BRAND_UCII` on its "UC-II Type II Collagen Complex 20 mg" adjunct row |
 | Raw coverage, 2,964 labels | `6a4b4807…086a` | `cohort2_baseline` | `3df7e371…54b9` | 2,908 identical; 52 totals move, **all down**; tiers Good→Needs improvement 6, Needs improvement→Poor 7; 4 metadata/no-score |
-| D26 counterfactual (four stand-ins removed) | targeted + raw coverage | final candidate | see D26 packet | measured at `9d65403f`; re-measuring on `68cae99a` |
+| D26 counterfactual (four stand-ins removed) | targeted + raw coverage | final candidate | `d79b4eaf…95f6`, `333c5336…a87c` | 793 and 22 totals up, none down (D26 packet) |
 
 Every arm: Evidence is the only pillar that moves; status, route, Safety/Hygiene, Dose,
 Formulation, Transparency and Verification are unchanged for every product. In total **66
 distinct products move, all down, 17 crossing a quality tier**; every probiotic in every arm keeps
 its score (the approved probiotic model's inputs are unchanged, defect 19).
 
-**Coverage.** The raw-coverage cohort holds every raw label (of 15,414) not already frozen whose
+**Coverage.** 7,015 distinct raw labels were replayed (22 overlap between the targeted and control sets, 13 between targeted and brand-identifier). The raw-coverage cohort holds every raw label (of 15,414) not already frozen whose
 label prints a blend total over at least one undisclosed member (1,464 → 52 movers) plus a seeded
 random 1,500 of the other 9,902 labels (→ **0 movers**). The 8,402 labels never replayed all lack
 that structure; 0 of 1,500 bounds their mover rate below about 0.2% (rule of three).
