@@ -119,6 +119,11 @@ All 15 coverage tests must pass. Then walk the 35 canaries manually using
 
 ## 5. Top movers (catalog-wide)
 
+> 2026-10-01: `score_delta_report.py` was retired. `release_full.sh` now runs
+> `scripts/release_safety/catalog_diff.py`, which writes `scripts/reports/release_catalog_diff.md`;
+> for stage-level diffs use `scripts/audits/quality_redesign/replay.py compare`. The command below
+> is kept as the record of this RC.
+
 Run score-delta:
 
 ```bash
