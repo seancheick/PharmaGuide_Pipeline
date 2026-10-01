@@ -359,6 +359,14 @@ def test_real_authority_floor_needs_the_heaviest_owner_with_its_own_amount(fixtu
     assert _evidence(_enrich(fixture))["metadata"]["nutrition_authority_canonical"] is None
 
 
+def test_real_authority_floor_reads_purpose_by_identity_not_by_row():
+    """Calcium Ascorbate 1 g (306193): the title names the "Calcium Ascorbate"
+    row, while the heaviest vitamin C row is the "Vitamin C 900 mg" line. The
+    owner's purpose is vitamin C either way, so the authority floor stands."""
+    evidence = _evidence(_enrich("prominence_authority_compound_row_306193_raw.json"))
+    assert evidence["metadata"]["nutrition_authority_canonical"] == "vitamin_c"
+
+
 def test_a_title_naming_a_brand_never_lends_a_blend_total_to_that_member():
     """Only the heading row's own text can name the branded record: "Sensoril"
     in the product title does not make a 250 mg two-member blend Sensoril's dose."""

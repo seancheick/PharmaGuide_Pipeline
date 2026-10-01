@@ -373,13 +373,12 @@ def score_evidence(product: Dict[str, Any], *, apply_primary_floor: bool = False
         primary_floor, floor_canonical = _primary_mass_floor(
             product, scoped_matches, sub_clinical_canonicals, prominent=prominent
         )
-        # P5: DRI-essential nutrient authority floor. A prominent essential
-        # vitamin/mineral with established RDA/AI has evidence of necessity even
-        # without a strong RCT match. Floor (never cap) — it only lifts, never
-        # lowers the clinical floor above it (e.g. a consensus/branded 18 stays 18).
-        auth_canon = _prominent_essential_canonical(
-            product, owner_canonicals=owner_canonicals if owner_scoped else None,
-            prominent=prominent,
+        # P5: DRI-essential nutrient authority floor. An essential vitamin/mineral
+        # with established RDA/AI has evidence of necessity even without a strong
+        # RCT match. Floor (never cap) — it only lifts, never lowers the clinical
+        # floor above it (e.g. a consensus/branded 18 stays 18).
+        auth_canon = _mass_dominant_essential_canonical(
+            product, owner_canonicals=owner_canonicals if owner_scoped else None
         )
         if (auth_canon and (not owner_scoped or auth_canon in owner_canonicals)
                 and primary_floor < NUTRITION_AUTHORITY_FLOOR):
@@ -1502,26 +1501,23 @@ def _matched_active_canonical(
     return ""
 
 
-def _prominent_essential_canonical(
+def _mass_dominant_essential_canonical(
     product: Dict[str, Any], *, owner_canonicals: Optional[set] = None,
-    prominent: Optional[set] = None,
 ) -> Optional[str]:
-    """Canonical_id of the heaviest competing owner IFF it is a DRI-essential
-    vitamin/mineral (established RDA/AI) on a PROMINENT row with its own
-    disclosed amount. Anchors the P5 nutrition-authority evidence floor.
+    """Canonical_id of the heaviest active IFF it is a DRI-essential vitamin/mineral
+    (established RDA/AI). Anchors the P5 nutrition-authority evidence floor — keyed
+    on the mass-dominant active so a trace essential co-ingredient never floats a
+    product, only a product whose PRIMARY ingredient is the essential nutrient.
+    Scoped callers restrict the competitors to their existing purpose owners
+    (the shared role owner's identities).
 
-    Prominence is the shared role owner's (when it names a purpose; scoped
-    callers also restrict to their purpose owners). Being the heaviest owner is
-    NOT prominence: it is the retained exposure stand-in (decision D26). Only
-    generic Dose judges DRI adequacy, sports and fiber Dose do not, and the
-    transfer packet forbids a route-specific exception, so the comparison stays
-    unchanged on every route. A blend total lent to a child is not its amount.
+    Mass dominance here is not the purpose decision but the retained exposure
+    stand-in (decision D26): only generic Dose judges DRI adequacy, sports and
+    fiber Dose do not, and the transfer packet forbids a route-specific
+    exception. A blend total lent to a child is never that child's amount.
     """
-    from evidence_resolver import evidence_prominent_row_keys, evidence_row_key
-
-    if prominent is None:
-        prominent = evidence_prominent_row_keys(product)
-    heaviest: Optional[Dict[str, Any]] = None
+    best_row: Optional[Dict[str, Any]] = None
+    best_cid: Optional[str] = None
     best_mass = 0.0
     for row in _competing_active_rows(product):
         if not isinstance(row, dict):
@@ -1531,13 +1527,14 @@ def _prominent_essential_canonical(
             continue
         mass = _mass_mg(row) or 0.0
         if mass > best_mass:
-            heaviest, best_mass = row, mass
-    if heaviest is None or is_lent_blend_mass(heaviest):
+            best_mass = mass
+            best_cid = canonical
+            best_row = row
+    if best_row is not None and is_lent_blend_mass(best_row):
         return None
-    if prominent and evidence_row_key(heaviest) not in prominent:
-        return None
-    canonical = str(heaviest.get("canonical_id") or "").strip().lower()
-    return canonical if canonical in DRI_ESSENTIAL_NUTRIENTS else None
+    if best_mass > 0 and best_cid in DRI_ESSENTIAL_NUTRIENTS:
+        return best_cid
+    return None
 
 
 def _is_prominent_anchor(
