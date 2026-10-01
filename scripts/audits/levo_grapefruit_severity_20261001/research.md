@@ -1,0 +1,145 @@
+# Levothyroxine and grapefruit pair severities — evidence packet, 2026-10-01
+
+Status: **evidence only, no data changed.** Ledger row D27. Branch `claude/levo-grapefruit-severity`.
+
+Found while checking website examples against production data: the same supplement–drug pair
+carries different severities or instructions in different owners. Owners involved:
+
+- `scripts/data/ingredient_interaction_rules.json` (schema 6.3.0): profile rules, shipped in detail
+  blobs and evaluated on the phone when the profile has the drug class. Product page / For You card.
+- `scripts/data/curated_interactions/curated_interactions_v1.json` (schema 1.2.5): drug-specific
+  pairs, normalized by `api_audit/verify_interactions.py::SEVERITY_MAP` (Major→avoid,
+  Moderate→caution) into the interaction DB. Stack screen and pre-add check.
+- `scripts/data/timing_rules.json` (schema 6.0.0): timing guidance card.
+
+App severity labels (`app:lib/core/constants/severity.dart`): avoid = "Not recommended",
+caution = "Use caution". Bundled DB checked: `app:assets/db/interaction_db.sqlite`, version 1.0.12.
+
+## E1. Calcium + levothyroxine — severity conflict
+
+| Owner | Entry | Severity | Evidence | Instruction |
+|---|---|---|---|---|
+| Profile rules | `RULE_IQM_CALCIUM` / drug `thyroid_medications` | caution | probable | separate ≥ 4 h |
+| Curated pairs | `DSI_LEVOTHYROXINE_CALCIUM` | Major → **avoid** (bundled DB: avoid) | established | ≥ 4 h |
+| Timing | `timing_calcium_iron_thyroid_separate` | — | established | ≥ 4 h |
+| Depletion | `DEP_LEVOTHYROXINE_CALCIUM` (verified) | moderate | — | ≥ 4 h |
+
+**What a user sees today:** a levothyroxine user with a calcium product in the stack gets
+"Not recommended" from the stack check and "Use caution" on the product page, for the same pair.
+
+**Sources read:**
+- SYNTHROID label, DailyMed setid 1e11ad30-1041-4520-10b0-8f9d30d30fcc, effective 2024-02-20.
+  Section 7 table: phosphate binders "(e.g., calcium carbonate, ferrous sulfate ...) may bind to
+  levothyroxine. Administer SYNTHROID at least 4 hours apart from these agents." Section 17: iron
+  and calcium supplements and antacids decrease absorption; do not take within 4 hours.
+  The label manages the interaction by separation; it does not say to avoid the combination.
+- Zamfirescu 2011, Thyroid, PMID 21595516 (cited by the curated pair): 500 mg elemental calcium
+  as carbonate, citrate or acetate reduced levothyroxine absorption "by about 20%-25%"; calls the
+  effect "modest"; advises separation.
+- Singh 2001, Thyroid, PMID 11716045 (cited by the timing rule): 2.0 g calcium as carbonate cut
+  peak absorption from 83.7% to 57.9% of the dose (about 31% relative) in 7 volunteers.
+
+**Defect besides severity:** the curated mechanism says absorption falls "by up to 40%"; its own
+source says 20–25%, and the strongest dose read (2 g) gives about 31%. Unsupported number.
+
+**Proposal (needs Sean):** one severity in both files.
+- **Option A (recommended): caution, evidence established, everywhere.** Matches the label's
+  management (separate, don't stop), keeps the pair actionable ("Review"), and the timing card
+  still gives the 4-hour instruction. Effect: the stack check moves from "Not recommended" to
+  "Use caution" for levothyroxine + calcium. Calcium is in most multivitamins, so "Not
+  recommended" for the most common thyroid combination is also an alert-fatigue risk.
+- Option B: avoid everywhere. The product page would then also show "Not recommended" and the
+  For You card hides goal fit for every calcium-containing product a thyroid user scans.
+- Either way: replace "up to 40%" with the sourced figures.
+
+## E2. Iron + levothyroxine — same conflict (sibling, same decision)
+
+| Owner | Entry | Severity | Evidence |
+|---|---|---|---|
+| Profile rules | `RULE_IQM_IRON_HYPERTENSION` / drug `thyroid_medications` | caution | probable |
+| Curated pairs | `DSI_LEVOTHYROXINE_IRON` | Major → **avoid** (bundled DB: avoid) | established |
+| Timing | `timing_thyroid_med_iron_separate` | — | established, ≥ 4 h |
+
+Sources: same SYNTHROID label (ferrous sulfate, at least 4 hours apart); Campbell 1992, Ann
+Intern Med, PMID 1443969, "Ferrous sulfate reduces thyroxine efficacy in patients with
+hypothyroidism" (cited by the profile rule). Proposal: follow the E1 decision.
+
+Other levothyroxine pairs checked and left alone: zinc (rule caution, no curated pair), soy and
+coffee (curated caution, no conflict).
+
+## E3. Magnesium + levothyroxine — wrong citation and interval mismatch (severities agree)
+
+| Owner | Entry | Severity | Evidence | Instruction | Cited source |
+|---|---|---|---|---|---|
+| Profile rules | `RULE_IQM_MAGNESIUM_HYPERTENSION` / drug `thyroid_medications` | caution | probable | ≥ 4 h | ODS magnesium fact sheet |
+| Curated pairs | `DSI_LEVOTHYROXINE_MAGNESIUM` | Moderate → caution | moderate | "2–4 hours" | ODS magnesium fact sheet |
+| Timing | `timing_thyroid_med_magnesium_separate` | — | **established** | ≥ 4 h | generic levothyroxine label |
+
+**Sources read:**
+- NIH ODS Magnesium Health Professional fact sheet (updated January 6, 2026), read in full in the
+  browser: **no mention of levothyroxine or thyroid.** Both entries cite a page that does not
+  support the claim.
+- Generic levothyroxine label, DailyMed setid 3e77de84-6f59-40ac-a1a4-7bfe30387823 (effective
+  2023-12-12): names only "Antacids (e.g., aluminum & magnesium hydroxides, simethicone)" via
+  reduced gastric acidity; "Monitor patients appropriately". Magnesium supplements are not named.
+- Attinger 2025 (ThyroMag), Clin Transl Sci, PMID 41221788: randomized crossover, 15 healthy
+  adults. Magnesium aspartate cut thyroxine AUC by 12% (significant); magnesium citrate by 7%
+  (not significant). Authors: "magnesium reduces the absorption of levothyroxine"; smaller than
+  other divalent cations; advise separation. States magnesium had never been studied before.
+- Mersebach 1999, Pharmacol Toxicol, PMID 10193669: two case reports (aluminum hydroxide;
+  magnesium oxide laxative) with raised TSH that fell after stopping; in vitro adsorption with
+  Al/Mg hydroxide and Mg carbonate, none with magnesium oxide alone.
+
+**Proposal (factual corrections, no severity change):**
+- Re-cite both entries to PMID 41221788 and PMID 10193669 (plus the label for antacids); drop the
+  ODS fact sheet as the source for this sub-rule.
+- One interval everywhere: at least 4 hours (the label's interval for magnesium-containing
+  antacids; the rule and timing data already say 4 hours). Curated "2–4 hours" has no source.
+- Evidence level: probable in all three (one small PK trial plus case reports). The timing rule's
+  "established" over-grades the evidence for magnesium supplements.
+
+## E4. Grapefruit + statins — text overstates one label, citation argues the opposite
+
+`DSI_STATINS_GRAPEFRUIT`: Moderate → caution, class-level (statins), `alert_style`
+`food_advisory_note`. The app shows it only as a calm "Good to know" note to statin users
+(`app:lib/services/stack/stack_interaction_checker.dart::checkMedicationFoodAdvisories`; display
+severity informational, `app:lib/core/models/interaction_result.dart`). No profile rule or timing
+rule exists for grapefruit.
+
+**Sources read (DailyMed SPL, current):**
+- Simvastatin, setid 3f6fad0b-0278-433f-86db-761b673a5803 (effective 2026-08-31): "Avoid
+  grapefruit juice when taking simvastatin."
+- Atorvastatin, setid d57720ab-9f83-4da9-a57f-0d55e00a605c (effective 2026-09-22): "Avoid intake
+  of large quantities of grapefruit juice, more than 1.2 liters daily."
+- Lovastatin, setid 9438d8a0-ca5b-4676-aab9-d0241ccff6c9 (effective 2026-07-23): grapefruit juice
+  increases myopathy risk; double-strength juice raised lovastatin AUC 15-fold, one glass of
+  single-strength about 1.9-fold.
+- Lee 2016, Am J Med, PMID 26299317 (the entry's only PMID): concludes "Grapefruit juice should not
+  be contraindicated in people taking statins." It supports a moderate tier, not the "avoid" text.
+
+**Defects:** `management` says avoid with simvastatin, atorvastatin and lovastatin, and
+`practical_guidance` says skip grapefruit on all three; the atorvastatin label limits this to more
+than 1.2 L a day. The bundled DB also stores `agent2_canonical_id` empty for this row
+(`identity.interaction.normalize_interaction_canonical_id` drops "grapefruit"); harmless for the
+medication-triggered food note, recorded only.
+
+**Proposal (no severity change):** keep class-level Moderate shown as a food note; rewrite
+`management`, `note_body` and `practical_guidance` per statin from the three labels; add the three
+label URLs as sources and keep PMID 26299317 as context. Website: show grapefruit as what the app
+shows (a food note), or quote the simvastatin label for the simvastatin example.
+
+## Gate gap found on the way
+
+`scripts/api_audit/verify_interaction_rules_citations.py` content-checks only PubMed, PMC and
+Bookshelf ids (`PMID_RE`, `BOOK_RE`). ODS fact-sheet and DailyMed URLs are never read, so the
+magnesium–thyroid citation passed the strict gate while not mentioning levothyroxine. Belongs to
+roadmap item 1.8 (citation governance).
+
+## After Sean decides
+
+One `/data-fix` batch: failing regressions first (one severity per pair across owners, no
+"up to 40%", magnesium sources and interval, grapefruit per-statin text), explicit patch per entry
+through `scripts/data_batch.py`, `check --expect` on the changed keys, strict citation gate and the
+content verifier on the changed entries, `scripts/test.sh fast` on the interaction tests, rebuild
+the interaction DB and confirm the bundled rows. No catalog score moves (the scorer does not read
+interaction alerts); warning severities do move for thyroid users if Option A or B is chosen.
