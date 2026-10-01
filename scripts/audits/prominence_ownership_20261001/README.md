@@ -129,4 +129,67 @@ Phase 4 Dose policy packets (D24). Either retires the stand-in without a magnitu
 | R2-N5 `nutrition_authority_canonical` metadata can appear where the baseline's higher floor pre-empted it | superseded: the authority helper is now the baseline's plus the lent rule |
 | R2 stale docs (owner_eligibility, p8, p133 docstrings; generic.py opt-in comment) | fixed in `9ea4af85`; `numerical_ownership_20260930/README.md` names `_mass_dominant_essential_canonical`, which exists again |
 
-Measured results and reproduction commands are added when each receipt exists.
+## Measured results (final source `b43a048f`)
+
+All arms are complete Clean→Enrich→Score captures of frozen raw DSLD labels with
+`scripts/audits/quality_redesign/replay.py`; every capture reports `exit_code 0`,
+`source_unchanged true`, full product coverage and the same input manifest as its baseline.
+Baselines ran on `e8687b39` (clean detached worktree `prominence-base`); candidates on the
+isolated detached worktree `prominence-final` at `b43a048f`. Outputs live in
+`~/pg_quality/prominence_20261001/` (classifications `final_*_classified.json`, tables
+`final_*_movers.md`, produced by `classify_movers.py` in this folder).
+
+| Arm | Inputs (manifest SHA-256) | Baseline output | Candidate output | Result |
+|---|---|---|---|---|
+| Targeted, 2,781 labels | `2b314063…5c41c` | `9ba85f1a…2b5` | `8b55e6cc…23d` | 2,653 identical; 15 totals move, **all down**, Evidence pillar only; 0 status, route or Safety change; tiers: Good→Needs improvement 2, Needs improvement→Poor 2; 113 metadata-only |
+| Controls, 1,259 labels (Codex set) | `cbe04144…8286` | Codex `a20cea18…ea72` (head `3ee91eae`; all 434 source hashes equal to `e8687b39`) | `42de5e4a…3553` | 1,251 identical; 232059 Evidence 13→0; 7 readiness-metadata-only (omega/probiotic) |
+| Brand identifiers, 48 labels | `4f62f9a2…55ea` | `66a228a2…b5a` | `b7dea4de…7d7` | 47 identical; 219249 readiness lists `BRAND_UCII` on its "UC-II Type II Collagen Complex 20 mg" adjunct row |
+| Raw-coverage cohort, 2,964 labels | `6a4b4807…086a` | running | running | pending |
+| D26 counterfactual (stand-ins removed) | targeted + cohort | — | running | pending |
+
+### Every product whose score moves (targeted arm; the control arm adds only 232059)
+
+| id | product | route | total | Evidence | cause |
+|---|---|---|---|---|---|
+| 219048 | Fiber Fusion Daily | fiber | 75.8 → 61.8 (Good → NI) | 20 → 6 | psyllium floor 18 had rested on the 3.1 g four-fiber blend total; psyllium's amount is undisclosed (defect 2) |
+| 328062 | Sleep Tonight | generic | 72.8 → 59.7 (Good → NI) | 20 → 6.9 | Sensoril floor 18 had rested on the 250 mg two-member blend total (defect 2) |
+| 79233 | Thisilyn Daily Cleanse | fiber | 68.6 → 58.8 | 20 → 10.2 | psyllium floor 18 on the 1.4 g six-fiber blend total (defect 2) |
+| 2219 | Ravage Grape | sports | 30.7 → 22.0 | 20 → 11.3 | creatine monohydrate floor 18 on the 3.1 g ten-member "ATP Optimizing Creatine Module" total (defect 2) |
+| 2221 | Re-Built Mass Vanilla Cake Batter | sports | 54.3 → 48.2 | 20 → 13.9 | creatine floor 18 on the 10 g ten-member "Advanced Creatine Complex" total (defect 2) |
+| 36992, 42235, 42236, 42237, 63923 | Re-Built Mass (five flavors) | generic | −7.8 each (e.g. 65.2 → 57.4) | 20 → 12.2 | same creatine complex total (defect 2) |
+| 40581, 40595 | fucoPROTEIN (two flavors) | fiber | 62.0 → 53.6, 62.4 → 54.0 (NI → Poor) | 15.6 → 7.2 | "protein supplementation" floor 14 on the 15 g four-member protein blend total (milk, rice, whey protein, brown seaweed; none dosed) (defect 2) |
+| 37217, 37224 | Rare Vanilla / Chocolate Fudge | generic | 48.3 → 43.3 | 12.2 → 7.2 | glycine floor 11 on the 6.2 g "Creatine Precursors" total (glycine, lysine, methionine) (defect 2) |
+| 232059 | Bifido GI Balance | probiotic | 53.5 → 40.5 | 13 → 0 | generic recovery had lent a species record to a live BB536 organism row; the approved probiotic model's own result (`applicability_unestablished`) now stands (defect 6) |
+
+Each member keeps its Evidence ownership and research points; only the floor that read the
+blend total as its dose is gone. Safety/Hygiene, Dose, Formulation, Transparency and
+Verification are unchanged for every product in every arm.
+
+### Changes without a score movement (targeted 113)
+
+- 82 readiness/confidence metadata only: role materiality now excludes lineage-owned supplying
+  totals (defect 3), so more disclosed rows are `material` (e.g. 232624 olive extract 200 mg
+  beside EPA/DHA); evidence readiness counts follow. No status changes.
+- 20 BCAA and 3 turmeric labels: recovery no longer re-stamps a record onto a row enrichment
+  already links (defect 7); readiness then credits the linked member rows (one fewer
+  "not yet evaluated" row).
+- 3 valerian recoveries (315311, 333901, 333903): a 200 mg major row with its own amount that
+  passes the retained stand-in; the pipeline total was already at or above the new points.
+- 6 owner-set additions (63330, 63475, 210738, 229547, 297666, 328292): defect 3 makes a
+  heading major, so its disclosed members join the material tier.
+
+### Reproduction
+
+```
+P=/Users/seancheick/.pyenv/versions/3.13.3/bin/python
+R=scripts/audits/quality_redesign/replay.py
+$P $R freeze-raw --raw-root ~/Downloads/PharmaGuide_Datasets/staging/brands --ids <ids.json> --frozen-root <F> --manifest <F>/manifest.json
+$P $R snapshot --checkout <worktree at e8687b39> --products-root <F> --manifest <F>/manifest.json --out base.jsonl --workers 4
+$P $R snapshot --checkout <worktree at b43a048f> --products-root <F> --manifest <F>/manifest.json --out cand.jsonl --workers 4
+```
+
+Id lists: `targeted_ids.json` (stored-corpus movers of every draft plus canaries),
+`brand_identifier_ids.json`, `cohort2_ids.json` (`select_cohort.py` in this folder, seed 20261001).
+The counterfactual arm is a scratch detached worktree at `b43a048f` patched by
+`counterfactual_patch.py` (never committed). Classify with
+`classify_movers.py <checkout> base.jsonl cand.jsonl out.json out.md`. Run snapshots only from a checkout nothing commits to: the harness also checks HEAD.
