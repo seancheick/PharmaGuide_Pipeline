@@ -136,3 +136,11 @@ def test_grapefruit_text_follows_each_statin_label(curated):
     # Class-level food note: severity is unchanged by this batch.
     assert entry["severity"] == "Moderate"
     assert entry["alert_style"] == "food_advisory_note"
+
+
+@pytest.mark.parametrize("pair_id", ["DSI_LEVOTHYROXINE_CALCIUM", "DSI_LEVOTHYROXINE_IRON"])
+def test_label_backed_pairs_cite_live_synthroid_label(curated, pair_id):
+    """The retired setid redirects to the DailyMed index, not prescribing information."""
+    sources = curated[pair_id]["source_urls"]
+    assert not any("f4f5a9a4-b4db-4b9f-908b-c0be9a0e5b20" in url for url in sources)
+    assert "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=1e11ad30-1041-4520-10b0-8f9d30d30fcc" in sources
