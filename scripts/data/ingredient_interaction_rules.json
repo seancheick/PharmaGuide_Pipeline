@@ -3,7 +3,7 @@
     "description": "Deterministic ingredient-level interaction rules keyed by canonical database identity",
     "purpose": "interaction_alert_rules",
     "schema_version": "6.3.0",
-    "last_updated": "2026-09-27",
+    "last_updated": "2026-10-01",
     "total_entries": 151,
     "structure_note": "One entry per ingredient (or per form-scoped variant). All conditions, drug classes, and dose thresholds for that ingredient are in one object. As of v6.0.0, every sub-rule (condition_rules[], drug_class_rules[], dose_thresholds[], pregnancy_lactation block) carries an explicit profile_gate predicate that consumers MUST evaluate against the user profile before firing the alert.",
     "total_rules": 151,
@@ -5903,12 +5903,13 @@
           "severity": "caution",
           "mechanism": "Ferrous sulfate and other iron salts form stable insoluble complexes with levothyroxine, reducing thyroid hormone absorption. Concurrent ingestion can significantly impair replacement therapy efficacy.",
           "action": "Separate iron supplementation from levothyroxine by at least 4 hours.",
-          "last_reviewed": "2026-04-09",
+          "last_reviewed": "2026-10-01",
           "drug_class_id": "thyroid_medications",
           "sources": [
-            "https://pubmed.ncbi.nlm.nih.gov/1443969/"
+            "https://pubmed.ncbi.nlm.nih.gov/1443969/",
+            "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=1e11ad30-1041-4520-10b0-8f9d30d30fcc"
           ],
-          "evidence_level": "probable",
+          "evidence_level": "established",
           "alert_headline": "May affect thyroid medication",
           "alert_body": "Iron can interact with thyroid hormone absorption or metabolism. If you take thyroid medication, talk to your endocrinologist about timing iron away from your dose.",
           "informational_note": "Iron affects thyroid pathways — relevant to people on thyroid medication.",
@@ -6525,12 +6526,14 @@
         },
         {
           "severity": "caution",
-          "mechanism": "Divalent magnesium cations can bind levothyroxine and impair gastrointestinal absorption, similar to other divalent mineral-levothyroxine chelation interactions.",
+          "mechanism": "Magnesium can reduce levothyroxine absorption from the gut. In a 2025 crossover trial in healthy adults, magnesium aspartate taken with levothyroxine lowered thyroxine absorption by 12% and magnesium citrate by 7%, a smaller effect than reported for calcium or iron; case reports describe raised TSH with magnesium-containing laxatives and antacids.",
           "action": "Separate magnesium supplementation from levothyroxine by at least 4 hours.",
-          "last_reviewed": "2026-04-09",
+          "last_reviewed": "2026-10-01",
           "drug_class_id": "thyroid_medications",
           "sources": [
-            "https://ods.od.nih.gov/factsheets/Magnesium-HealthProfessional/"
+            "https://pubmed.ncbi.nlm.nih.gov/41221788/",
+            "https://pubmed.ncbi.nlm.nih.gov/10193669/",
+            "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=3e77de84-6f59-40ac-a1a4-7bfe30387823"
           ],
           "evidence_level": "probable",
           "alert_headline": "May affect thyroid medication",
@@ -13729,12 +13732,15 @@
           "severity": "caution",
           "mechanism": "Calcium forms insoluble chelate complexes with levothyroxine in the gastrointestinal tract, reducing oral absorption by 20–25%. Effect is dose-dependent and clinically significant at standard supplementation doses (600–1000 mg/day).",
           "action": "Separate calcium supplementation from levothyroxine by at least 4 hours to prevent absorption interference.",
-          "last_reviewed": "2026-04-09",
+          "last_reviewed": "2026-10-01",
           "drug_class_id": "thyroid_medications",
           "sources": [
-            "https://pubmed.ncbi.nlm.nih.gov/30368654/"
+            "https://pubmed.ncbi.nlm.nih.gov/30368654/",
+            "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=1e11ad30-1041-4520-10b0-8f9d30d30fcc",
+            "https://pubmed.ncbi.nlm.nih.gov/21595516/",
+            "https://pubmed.ncbi.nlm.nih.gov/11716045/"
           ],
-          "evidence_level": "probable",
+          "evidence_level": "established",
           "alert_headline": "May affect thyroid medication",
           "alert_body": "Calcium can interact with thyroid hormone absorption or metabolism. If you take thyroid medication, talk to your endocrinologist about timing calcium away from your dose.",
           "informational_note": "Calcium affects thyroid pathways — relevant to people on thyroid medication.",

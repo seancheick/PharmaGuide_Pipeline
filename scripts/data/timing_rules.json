@@ -3,7 +3,7 @@
     "description": "Supplement timing and absorption interaction rules for optimal nutrient uptake",
     "purpose": "timing_optimization",
     "schema_version": "6.0.0",
-    "last_updated": "2026-08-23",
+    "last_updated": "2026-10-01",
     "total_entries": 20,
     "clinical_review_version": "timing-section-2-adversarial",
     "runtime_policy": "verified_only",
@@ -412,23 +412,33 @@
       "category": "important_separation",
       "applies_to": "any",
       "actionability": "recommended",
-      "source_authority": "fda_label",
+      "source_authority": "clinical_study",
       "review_status": "needs_revision",
       "advice": "Keep magnesium supplements at least 4 hours away from levothyroxine unless the prescriber gives different instructions.",
-      "mechanism": "Magnesium-containing products can reduce levothyroxine absorption. Levothyroxine labeling directs patients to separate medicines known to interfere with absorption by at least 4 hours.",
+      "mechanism": "Magnesium can reduce levothyroxine absorption: in a 2025 crossover trial, magnesium aspartate taken with levothyroxine lowered absorption by 12% and magnesium citrate by 7%. Levothyroxine labeling names magnesium-containing antacids among agents to keep 4 hours away.",
       "score_impact": -2,
-      "evidence_level": "established",
+      "evidence_level": "probable",
       "sources": [
         {
+          "source_type": "pubmed",
+          "label": "Attinger MC et al. — ThyroMag randomized crossover trial of levothyroxine with magnesium citrate or aspartate (Clin Transl Sci 2025)",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/41221788/"
+        },
+        {
+          "source_type": "pubmed",
+          "label": "Mersebach H et al. — Intestinal adsorption of levothyroxine by antacids and laxatives: case stories and in vitro experiments (1999)",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/10193669/"
+        },
+        {
           "source_type": "fda",
-          "label": "DailyMed — Levothyroxine sodium tablets prescribing information",
+          "label": "DailyMed — Levothyroxine sodium tablets prescribing information: antacids (aluminum and magnesium hydroxides) reduce absorption",
           "url": "https://dailymed.nlm.nih.gov/dailymed/lookup.cfm?setid=3e77de84-6f59-40ac-a1a4-7bfe30387823"
         }
       ],
-      "review_note": "NOT LABEL-SUPPORTED AS WRITTEN. Verification on 2026-08-01 read the SYNTHROID label (setid 1e11ad30-1041-4520-10b0-8f9d30d30fcc, SPL v1537) and the generic in full: magnesium is never named as a SUPPLEMENT. Every occurrence is either 'magnesium hydroxides' (an antacid) or 'magnesium stearate' (an excipient), and the antacid row in section 7.1 carries no interval at all - it says only 'Monitor patients appropriately.' Section 17 does place antacids inside the 4-hour instruction, so a magnesium-ANTACID rule may be defensible, but a standalone magnesium-supplement rule at 4 hours is not. This rule was briefly promoted on the assumption the label covered it; reading the label removed it. Needs either an antacid-scoped rewrite or a source that addresses magnesium salts.",
-      "reviewed_on": "2026-08-01",
+      "review_note": "2026-08-01: the levothyroxine labels never name magnesium as a supplement; only magnesium-hydroxide antacids (section 7.1, no interval; section 17 places antacids inside the 4-hour instruction). 2026-10-01 (agent review, D27): citation blocker resolved by the ThyroMag trial (PMID 41221788; magnesium aspartate -12% thyroxine AUC, citrate -7% not significant), which supports separating but tests no interval. The 4-hour interval still rests on the antacid label instruction, so the rule stays unpublished until an interval source or a clinician decision exists.",
+      "reviewed_on": "2026-10-01",
       "review_blockers": [
-        "citation_not_content_verified"
+        "interval_not_supported_by_cited_source"
       ]
     },
     {

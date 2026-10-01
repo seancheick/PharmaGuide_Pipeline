@@ -1,6 +1,35 @@
 # Levothyroxine and grapefruit pair severities — evidence packet, 2026-10-01
 
-Status: **evidence only, no data changed.** Ledger row D27. Branch `claude/levo-grapefruit-severity`.
+Status: **decided and applied 2026-10-01.** Sean chose Option A (caution everywhere) and approved every
+factual correction. Ledger row D27 (resolved), follow-up Q50. Branch `claude/levo-grapefruit-severity`.
+
+## Result per entry
+
+| Entry | Before | After |
+|---|---|---|
+| `DSI_LEVOTHYROXINE_CALCIUM` | Major (avoid); "by up to 40%" | Moderate (caution); "by about 20–25% when taken together" |
+| `DSI_LEVOTHYROXINE_IRON` | Major (avoid) | Moderate (caution) |
+| `DSI_LEVOTHYROXINE_MAGNESIUM` | cites ODS fact sheet; "2–4 hours" | cites PMID 41221788, 10193669, generic label; "at least 4 hours"; mechanism states the trial result |
+| `DSI_STATINS_GRAPEFRUIT` | "avoid" for all three statins | per-statin text from the three labels; label URLs added; severity unchanged |
+| `RULE_IQM_CALCIUM` thyroid sub-rule | probable | established; SYNTHROID label, PMID 21595516, 11716045 added |
+| `RULE_IQM_IRON_HYPERTENSION` thyroid sub-rule | probable | established; SYNTHROID label added |
+| `RULE_IQM_MAGNESIUM_HYPERTENSION` thyroid sub-rule | cites ODS fact sheet | cites PMID 41221788, 10193669, generic label; mechanism states the trial result |
+| `timing_thyroid_med_magnesium_separate` | established; fda_label; blocker citation_not_content_verified | probable; clinical_study; blocker interval_not_supported_by_cited_source; still unpublished |
+
+Checks: `data_batch.py check --expect` on all three files (exactly these 8 entries changed);
+`verify_interaction_rules_citations.py --strict --changed-since origin/main` PASS;
+`verify_all_citations_content.py --changed-since origin/main` 7/7 match; rebuilt interaction DB
+(staged, not imported) shows calcium, iron and magnesium + levothyroxine as caution in both the
+curated pairs and the profile rules. Release note: the staged DB still reads version 1.0.12 with new
+content, so the release must bump `scripts/config/interaction_db_release.json`.
+
+## Found while applying (queued as Q50, not changed)
+
+The ODS magnesium fact sheet (read in full 2026-10-01) mentions neither lithium nor thyroid. In
+`RULE_IQM_MAGNESIUM_HYPERTENSION`, the `lithium` sub-rule (monitor, established, "separate by 2
+hours") cites only that page, and the `kidney_disease` sub-rule (avoid, established) cites a
+kidney.org page about potassium. Both need their own source review. The website's "magnesium +
+lithium" example was withdrawn for this reason.
 
 Found while checking website examples against production data: the same supplement–drug pair
 carries different severities or instructions in different owners. Owners involved:

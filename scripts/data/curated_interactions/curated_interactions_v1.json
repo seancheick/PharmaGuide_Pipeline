@@ -1,7 +1,7 @@
 {
   "_metadata": {
     "schema_version": "1.2.5",
-    "last_updated": "2026-09-26",
+    "last_updated": "2026-10-01",
     "total_entries": 92,
     "purpose": "Tier 1 curated drug-supplement and supplement-supplement interactions for the interaction database",
     "sources": [
@@ -604,11 +604,14 @@
       "severity": "Moderate",
       "interaction_effect_type": "Enhancer",
       "mechanism": "Furanocoumarins in grapefruit irreversibly inhibit intestinal CYP3A4, increasing bioavailability of CYP3A4-metabolized statins (simvastatin, atorvastatin, lovastatin). This raises statin plasma levels and muscle toxicity risk.",
-      "management": "Avoid grapefruit and grapefruit juice with simvastatin, atorvastatin, and lovastatin. Pravastatin, rosuvastatin, and fluvastatin are not significantly affected. Timing the dose away from grapefruit does not eliminate the risk due to irreversible enzyme inhibition.",
+      "management": "Simvastatin labeling says to avoid grapefruit juice. Lovastatin labeling warns that grapefruit juice raises lovastatin levels and myopathy risk. Atorvastatin labeling advises against large quantities (more than 1.2 liters a day). Pravastatin, rosuvastatin, and fluvastatin are not significantly affected. Taking the statin hours apart from grapefruit juice reduces but does not remove the effect.",
       "source_urls": [
         "https://ods.od.nih.gov/factsheets/list-all/",
         "https://www.fda.gov/consumers/consumer-updates/grapefruit-juice-and-some-drugs-dont-mix",
-        "https://pubmed.ncbi.nlm.nih.gov/26299317/"
+        "https://pubmed.ncbi.nlm.nih.gov/26299317/",
+        "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=3f6fad0b-0278-433f-86db-761b673a5803",
+        "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=d57720ab-9f83-4da9-a57f-0d55e00a605c",
+        "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=9438d8a0-ca5b-4676-aab9-d0241ccff6c9"
       ],
       "source_pmids": [
         "26299317"
@@ -633,8 +636,8 @@
       "agent1_canonical_id": null,
       "agent2_canonical_id": "grapefruit",
       "alert_style": "food_advisory_note",
-      "note_body": "Grapefruit and grapefruit juice can affect how your body breaks down some statins (simvastatin, atorvastatin, lovastatin). It slows down a liver enzyme, which means more of the drug stays in your system than intended. This can raise the chance of muscle aches or weakness.",
-      "practical_guidance": "Either skip grapefruit while on these statins, or talk to your prescriber about switching to pravastatin, rosuvastatin, or fluvastatin — those aren't affected by grapefruit.",
+      "note_body": "Grapefruit and grapefruit juice can raise blood levels of some statins by slowing an enzyme in the gut that breaks them down. The effect is large with simvastatin and lovastatin; with atorvastatin it matters mainly with large amounts of juice (more than 1.2 liters a day). Higher statin levels can raise the chance of muscle aches or weakness.",
+      "practical_guidance": "On simvastatin, skip grapefruit juice. On lovastatin, ask your prescriber before having grapefruit. On atorvastatin, avoid large amounts (more than 1.2 liters a day). Pravastatin, rosuvastatin and fluvastatin aren't affected by grapefruit.",
       "direction": "harmful",
       "materiality": "presence"
     },
@@ -1396,9 +1399,9 @@
       "agent1_id": "10582",
       "agent2_name": "Calcium",
       "agent2_id": "C0006675",
-      "severity": "Major",
+      "severity": "Moderate",
       "interaction_effect_type": "Inhibitor",
-      "mechanism": "Calcium forms insoluble complexes with levothyroxine in the GI tract, significantly reducing its absorption (by up to 40%). This can result in inadequately controlled hypothyroidism.",
+      "mechanism": "Calcium forms insoluble complexes with levothyroxine in the GI tract, reducing its absorption by about 20–25% when taken together. This can result in inadequately controlled hypothyroidism.",
       "management": "Take levothyroxine at least 4 hours before or after calcium supplements. Take levothyroxine on an empty stomach, 30–60 minutes before breakfast. Monitor thyroid function tests if supplementation regimen changes.",
       "source_urls": [
         "https://pubmed.ncbi.nlm.nih.gov/21595516/",
@@ -1431,7 +1434,7 @@
       "agent1_id": "10582",
       "agent2_name": "Iron (supplement)",
       "agent2_id": "C0302583",
-      "severity": "Major",
+      "severity": "Moderate",
       "interaction_effect_type": "Inhibitor",
       "mechanism": "Ferrous sulfate and other iron supplements form insoluble complexes with levothyroxine in the GI tract, reducing levothyroxine absorption significantly. This is a well-documented interaction affecting thyroid control.",
       "management": "Take levothyroxine at least 4 hours before or after iron supplements. Monitor TSH levels after starting or stopping iron. Women often take both and need to manage this timing carefully.",
@@ -1468,12 +1471,17 @@
       "agent2_id": "C0024467",
       "severity": "Moderate",
       "interaction_effect_type": "Inhibitor",
-      "mechanism": "Magnesium can bind levothyroxine in the GI tract, reducing its absorption. The effect is less pronounced than with calcium or iron but clinically relevant in long-term thyroid management.",
-      "management": "Take magnesium supplements at least 2–4 hours away from levothyroxine. Morning levothyroxine with evening magnesium is a practical approach.",
+      "mechanism": "Magnesium can bind levothyroxine in the GI tract and reduce its absorption. In a 2025 crossover trial, magnesium aspartate lowered levothyroxine absorption by 12% and magnesium citrate by 7% (not significant), a smaller effect than reported for calcium or iron.",
+      "management": "Take magnesium supplements at least 4 hours away from levothyroxine. Morning levothyroxine with evening magnesium is a practical approach.",
       "source_urls": [
-        "https://ods.od.nih.gov/factsheets/Magnesium-HealthProfessional/"
+        "https://pubmed.ncbi.nlm.nih.gov/41221788/",
+        "https://pubmed.ncbi.nlm.nih.gov/10193669/",
+        "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=3e77de84-6f59-40ac-a1a4-7bfe30387823"
       ],
-      "source_pmids": [],
+      "source_pmids": [
+        "41221788",
+        "10193669"
+      ],
       "verification": {
         "status": "verified",
         "verified_at": "2026-04-13T16:37:00Z",
