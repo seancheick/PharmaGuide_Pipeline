@@ -275,3 +275,25 @@ def test_real_probiotic_organisms_never_borrow_generic_ingredient_recovery(fixtu
 
     _, recovered = resolved_clinical_matches(_enrich(fixture))
     assert recovered == []
+
+
+@pytest.mark.parametrize("fixture,record,floor_canonical", [
+    # INGR_GARLIC already links the 1,000 mg powder and its Allicin/Alliin rows
+    ("prominence_rerecovery_217818_raw.json", "INGR_GARLIC", "garlic extract"),
+    # INGR_OMEGA3 already links EPA, DHA and ALA
+    ("prominence_rerecovery_1838_raw.json", "INGR_OMEGA3", "omega 3 fatty acids"),
+])
+def test_real_recovery_never_restamps_a_record_onto_a_row_it_already_links(
+    fixture, record, floor_canonical,
+):
+    """Recovery supplies evidence enrichment did not link. Re-stamping an
+    existing record onto one of its own rows would only narrow its source
+    references (to a 1.5 mg Allicin marker, or to plant ALA)."""
+    from scoring_v4.modules.generic_evidence import resolved_clinical_matches
+
+    product = _enrich(fixture)
+    matches, recovered = resolved_clinical_matches(product, owner_scoped=True)
+    assert recovered == []
+    entry = next(m for m in matches if m.get("id") == record)
+    assert len(entry.get("matched_source_row_refs") or []) > 1
+    assert _evidence(product)["metadata"]["primary_evidence_floor_canonical"] == floor_canonical

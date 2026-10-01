@@ -840,6 +840,14 @@ def _recover_verified_primary_ingredient_matches(
         for entry in matches
         if isinstance(entry, dict)
     }
+    existing_refs: Dict[str, set[str]] = defaultdict(set)
+    for entry in matches:
+        if isinstance(entry, dict):
+            existing_refs[_entry_id(entry)].update(
+                str(ref).strip()
+                for ref in (entry.get("matched_source_row_refs") or [])
+                if str(ref or "").strip()
+            )
     existing_identity_keys = _existing_match_identity_keys(matches)
     active_canonical_index = _active_canonical_index(product)
     matched_active_canonicals = {
@@ -896,10 +904,15 @@ def _recover_verified_primary_ingredient_matches(
         ):
             continue
 
+        row_ref = str(row.get("raw_source_path") or row.get("source_row_ref") or "").strip()
         for entry in _verified_ingredient_human_evidence_entries():
             entry_id = _entry_id(entry)
             existing_id = entry_id in existing_ids
             if existing_id and row_canonical_id in matched_active_canonicals:
+                continue
+            if existing_id and row_ref and row_ref in existing_refs[entry_id]:
+                # Enrichment already links this record to this very row; a
+                # re-stamp would only narrow its source references.
                 continue
             if _entry_excludes_recovery_context(entry, row, product):
                 continue
