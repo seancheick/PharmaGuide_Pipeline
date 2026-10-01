@@ -226,3 +226,24 @@ Changed-entry citation content verifier: 2/2 MATCH, no mismatch. Focused reconci
 magnesium and data-batch modules: 226 passed. Full fast checkpoint is deferred to the
 integrator's combined candidate; this atomic source-only fix does not claim release validation.
 No DB rebuild, upload or publication was performed.
+
+## Codex source audit: grapefruit timing scope (2026-10-01)
+
+Owner: `curated_interactions_v1.json::DSI_STATINS_GRAPEFRUIT.management` — evidence:
+its newly generalized timing sentence and live PMID 26299317 abstract. Will NOT create:
+a new food-advisory owner or numeric policy.
+
+The unqualified sentence that taking "the statin" hours apart reduces the interaction
+incorrectly includes atorvastatin. The cited abstract distinguishes simvastatin/lovastatin
+(about 260% increase together versus about 90% when 12 hours apart) from atorvastatin
+(about 80% increase whenever taken). Replaced only that sentence with statin-specific
+scope and an explicit reminder that spacing does not replace the label precautions.
+Independently read all three live DailyMed labels: simvastatin avoid grapefruit juice;
+atorvastatin advises avoiding quantities above 1.2 liters/day; lovastatin describes raised
+exposure and myopathy risk. Severity and food-note behavior remain unchanged.
+
+Regression first: 1 failing scoped-timing check. Exact `data_batch check` since
+`1ee2a0c6`: only `interactions/DSI_STATINS_GRAPEFRUIT`, 1 changed entry / 0 problems.
+Changed-entry content verifier: PMID 26299317 MATCH. Focused reconciliation, magnesium
+and data-batch modules: 227 passed. Integrator owns the final combined full-fast checkpoint;
+this receipt does not claim catalog or interaction-DB publication.

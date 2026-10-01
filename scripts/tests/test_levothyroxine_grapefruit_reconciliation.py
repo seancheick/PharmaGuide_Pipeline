@@ -144,3 +144,11 @@ def test_label_backed_pairs_cite_live_synthroid_label(curated, pair_id):
     sources = curated[pair_id]["source_urls"]
     assert not any("f4f5a9a4-b4db-4b9f-908b-c0be9a0e5b20" in url for url in sources)
     assert "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=1e11ad30-1041-4520-10b0-8f9d30d30fcc" in sources
+
+
+def test_grapefruit_timing_claim_is_scoped_to_supported_statins(curated):
+    management = curated["DSI_STATINS_GRAPEFRUIT"]["management"]
+    assert "Taking the statin hours apart" not in management
+    assert "Spacing simvastatin or lovastatin" in management
+    assert "Spacing atorvastatin" in management
+    assert "does not reliably reduce" in management
