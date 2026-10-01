@@ -1572,12 +1572,15 @@ def _is_prominent_anchor(
         (e for e in _verified_product_level_evidence_entries() if _entry_id(e) == _entry_id(entry)),
         None,
     ) if _norm_text(row.get("evidence_type")) == "blend_anchor_mass" else None
-    if record is not None and path and any(
-        str(child.get("raw_source_path") or "").startswith(f"{path}.nestedRows[")
-        and _verified_product_entry_matches_text(
+    children = [
+        child for child in get_assessable_evidence_ingredients(product)
+        if path and str(child.get("raw_source_path") or "").startswith(f"{path}.nestedRows[")
+    ] if record is not None else []
+    if len({child.get("raw_source_path") for child in children}) > 1 and any(
+        _verified_product_entry_matches_text(
             record, _row_identity_text(product, child, with_product=False)
         )
-        for child in get_assessable_evidence_ingredients(product)
+        for child in children
     ):
         # Naming a heading after a separately listed branded member does not
         # declare that member's amount. Exact whole-formula headings (Relora,

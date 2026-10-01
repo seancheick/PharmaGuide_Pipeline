@@ -409,7 +409,8 @@ def test_recovery_never_reads_a_blend_total_lent_to_a_member():
 
 
 @pytest.mark.parametrize("heading", ["Sensoril", "Sensoril Sleep Blend"])
-def test_a_member_named_heading_does_not_own_the_multi_ingredient_total(heading):
+@pytest.mark.parametrize("same_canonical_preparations", [False, True])
+def test_a_member_named_heading_does_not_own_the_multi_ingredient_total(heading, same_canonical_preparations):
     """Naming the heading after Sensoril cannot turn Sensoril + L-theanine's
     250 mg total into a disclosed Sensoril amount, for any scoring consumer."""
     from scoring_input_contract import get_scoring_ingredients, is_lent_blend_mass
@@ -417,6 +418,9 @@ def test_a_member_named_heading_does_not_own_the_multi_ingredient_total(heading)
     raw = _raw("prominence_blend_total_328062_raw.json")
     raw["fullName"] = "Sensoril Sleep Tonight"
     raw["ingredientRows"][1]["name"] = heading
+    if same_canonical_preparations:
+        member = raw["ingredientRows"][1]["nestedRows"][1]
+        member.update(name="Ashwagandha Root Powder", ingredientGroup="Ashwagandha", category="botanical", forms=[])
     product = _enrich(raw)
     header = next(
         row for row in get_scoring_ingredients(product, strict=True).rows
@@ -428,3 +432,12 @@ def test_a_member_named_heading_does_not_own_the_multi_ingredient_total(heading)
     evidence = _evidence(product)
     assert evidence["metadata"]["primary_evidence_floor"] == 0.0
     assert evidence["components"]["clinical_evidence_pipeline"] > 0
+
+
+def test_a_single_branded_intervention_nested_under_its_own_heading_keeps_its_floor():
+    raw = _raw("prominence_blend_total_328062_raw.json")
+    raw["fullName"] = "Sensoril Sleep Tonight"
+    raw["ingredientRows"][1]["name"] = "Sensoril"
+    raw["ingredientRows"][1]["nestedRows"] = raw["ingredientRows"][1]["nestedRows"][:1]
+    evidence = _evidence(_enrich(raw))
+    assert evidence["metadata"]["primary_evidence_floor"] == 18.0

@@ -2077,7 +2077,8 @@ def derive_product_scoring_evidence(product: Dict[str, Any]) -> List[Dict[str, A
                     and _anchor_identity(child)[0]
                 ]
                 child_identities = {_anchor_identity(child)[0] for child in children}
-                if anchor_canonical in child_identities and len(child_identities) > 1:
+                child_paths = {str(child.get("raw_source_path")) for child in children}
+                if anchor_canonical in child_identities and len(child_paths) > 1:
                     # A heading named for one member still declares the whole
                     # blend amount. Reuse the existing lent-mass contract so
                     # every Dose/Evidence consumer refuses it as a member dose.
