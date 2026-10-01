@@ -22,6 +22,7 @@ from typing import Any, Dict, List, Optional, Tuple
 
 from collagen_taxonomy import PEPTIDES_I_III, classify_collagen_subtype_strict
 from clinical_applicability import filter_clinical_matches
+from probiotic_measurements import is_probiotic_source_identity
 from scoring_input_contract import (
     primary_mass_competitor_rows,
     get_assessable_evidence_ingredients,
@@ -888,6 +889,10 @@ def _recover_verified_primary_ingredient_matches(
             row_canonical_id == "collagen"
             or _keys_include_dri_essential(row_keys)
             or _keys_include_module_owned_evidence(row_keys)
+            # Live organisms are probiotic-Evidence owned at every species and
+            # strain, not only the canonicals listed above; the registered
+            # probiotic identity owner decides what is one.
+            or is_probiotic_source_identity(row)
         ):
             continue
 

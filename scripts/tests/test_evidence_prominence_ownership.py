@@ -262,3 +262,16 @@ def test_real_blend_total_never_becomes_an_undisclosed_members_floor(fixture, me
     assert member in evidence["metadata"]["evidence_owner_canonicals"]
     assert evidence["metadata"]["primary_evidence_floor"] == 0.0
     assert evidence["components"]["clinical_evidence_pipeline"] > 0
+
+
+@pytest.mark.parametrize("fixture", [
+    "prominence_probiotic_species_236913_raw.json",  # title-named La-14, 0.5 mg
+    "prominence_probiotic_species_232059_raw.json",  # BB536, the one pre-existing leak
+])
+def test_real_probiotic_organisms_never_borrow_generic_ingredient_recovery(fixture):
+    """Live organisms are probiotic-Evidence owned. Generic contract recovery
+    must not hand a species-level ingredient record to a strain row."""
+    from scoring_v4.modules.generic_evidence import resolved_clinical_matches
+
+    _, recovered = resolved_clinical_matches(_enrich(fixture))
+    assert recovered == []
