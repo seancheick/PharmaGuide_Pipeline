@@ -371,6 +371,16 @@ def test_real_recovery_never_restamps_a_record_onto_a_row_it_already_links(
     assert _evidence(product)["metadata"]["primary_evidence_floor_canonical"] == floor_canonical
 
 
+def test_real_bcaa_record_still_binds_to_its_disclosed_aggregate():
+    """Essential Amino Complete (220827): "Branched-Chain Amino Acids 5 g" lists
+    leucine 2.5 g, isoleucine 1.25 g and valine 1.25 g. The BCAA record is for the
+    whole mixture, so recovery's existing aggregate exception binds it to the 5 g
+    aggregate. The no-re-stamp rule (for markers and plant ALA) must not undo
+    that designed binding."""
+    evidence = _evidence(_enrich("prominence_bcaa_aggregate_220827_raw.json"))
+    assert evidence["metadata"]["primary_evidence_floor_canonical"] == "bcaa"
+
+
 @pytest.mark.parametrize("record,label_text,expected", [
     ("BRAND_UCII", "uc ii proprietary cartilage blend", True),
     ("BRAND_BCM95", "bcm 95 turmeric extract", True),

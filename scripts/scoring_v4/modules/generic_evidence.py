@@ -923,9 +923,15 @@ def _recover_verified_primary_ingredient_matches(
             existing_id = entry_id in existing_ids
             if existing_id and row_canonical_id in matched_active_canonicals:
                 continue
-            if existing_id and row_ref and row_ref in existing_refs[entry_id]:
+            if (
+                existing_id and row_ref and row_ref in existing_refs[entry_id]
+                and _norm_text(row.get("evidence_type")) != "blend_anchor_mass"
+            ):
                 # Enrichment already links this record to this very row; a
-                # re-stamp would only narrow its source references.
+                # re-stamp would only narrow its source references (to a marker
+                # or one oil). The aggregates admitted above (a disclosed BCAA
+                # or protein total) are the record's own subject, so binding the
+                # record to them stays as before.
                 continue
             if _entry_excludes_recovery_context(entry, row, product):
                 continue
