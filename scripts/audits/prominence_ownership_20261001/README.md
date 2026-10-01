@@ -1,6 +1,6 @@
 # Phase 2 — generic Evidence prominence ownership
 
-Status: **PINNED CODEX AUDIT IMPLEMENTED AND MEASURED; FINAL FAST PASSED; NOT INTEGRATED.**
+Status: **COMBINED SOURCE VALIDATED; MAIN INTEGRATION NEXT; CATALOG RELEASE PENDING.**
 Codex fixes through `9f7837e8` extend Claude production `b43a048f` on the isolated
 `codex/quality-completion` branch. Claude subsequently advanced production to `68cae99a`
 (fetched feature tip `002d2683`); those later changes require reconciliation and a new candidate
@@ -300,3 +300,70 @@ The counterfactual arm is a scratch detached worktree at `b43a048f` patched by
 ## Combined integration candidate — October 1
 
 Codex is reconciling latest Claude source `68cae99a` with the independently audited member-total safeguards and the Q51 unit-map replacement. Earlier receipts apply only to their named sources. Combined regression, replay and final checkpoint results will be recorded before main integration.
+
+### Combined measurements and fresh review
+
+Candidate production/source checkpoint `a3a2d904` combines latest Claude prominence `68cae99a`,
+Codex's narrowed member-total safeguards, Q51's record-unit amount map, approved interaction
+and roadmap lanes, and the independently reproduced clinical source fixes. The earlier
+Codex mass-only correction is superseded by Q51's shared record-unit reader; no second amount
+selector or new numerical policy remains. Probiotic non-owner-scoped recovery retains the
+approved baseline; the earlier archetype migration is therefore superseded by restoration of
+its three baseline expectations. Preservation does not establish clinical applicability.
+
+- Seven focused modules: **182 passed** before the two later clinical source repairs; the
+  clinical repair lane independently passed **227 focused checks** after those repairs.
+- Fresh reviewer checked final source completeness, the shared contract and branded-member
+  guard, Q49/Q50/Q51 register retention and **seven consumer probes** through
+  `evidence_resolver::_reviewed_row_dose` and the exact-source amount reader.
+- 186 actual frozen labels, latest Claude `c2240ed2` versus combined `bb21703f`: **185 identical**;
+  only `321351` moves 70.4→54.8, Evidence20→4.4, retaining clinical points4 and Dose6.7.
+- Fifteen raw controls/edited variants: eleven identical; four edited member-named headings
+  lose only invalid Evidence floors. Twelve actual unit-discovery labels: all identical.
+- Fresh 1,259-label candidate at `a3a2d904` versus Claude's final `68cae99a` capture:
+  **all complete captured payloads identical**, including the probiotic controls.
+  Output SHA256 `a345a53cbc9d030944cc02cd11a2041b87d1c2939602f733fd1c5054b9cdff95`.
+- Edited unit positive control `329893` (not an unmodified catalog product) moves 70.0→85.3,
+  Evidence0.3→15.6, proving the unit repair is exercised. Actual raw controls do not move.
+- Every capture has exit0, unchanged source and complete expected coverage. Durable inputs,
+  outputs, comparisons and metadata: `/Users/seancheick/pg_quality/integration_20261001/`.
+  Captures omit final `v4_verdict`; no full-corpus or final exported-verdict audit is claimed.
+
+### Additional clinical and app audit findings
+
+Owner: `curated_interactions_v1.json::DSI_LEVOTHYROXINE_CALCIUM`,
+`::DSI_LEVOTHYROXINE_IRON`, `::DSI_STATINS_GRAPEFRUIT` — evidence: independently checked
+live DailyMed labels and PMID26299317, failing regressions, exact 2+1-entry batch checks and
+3/3 citation-content matches. `1ee2a0c6` replaces dead label URLs; `0efa8671` scopes grapefruit
+spacing advice to the statins actually supported by the source. Accepted severities unchanged.
+See the [clinical receipt](../levo_grapefruit_severity_20261001/research.md).
+
+Owner: app `SafetyAlertRepository::_decodeBytes/_cachePayload/_loadCached` — evidence:
+realistic pipeline-shaped feed failed an offline round-trip because reconstructed bytes did
+not match the original checksum. `fe385971` retains exact verified bytes and removes the dead
+reconstruction; `ec23bdca` tests cache-only/no-HTTP reads and tamper rejection after reconciling
+app main. Eight focused checks passed. Integrated app `make check` at `ec23bdca`: **3,747 passed**, analysis no issues; all seven previously failing golden tests pass.
+
+**Release hold Q53, not corrected by this scoring integration:** live primary-source review
+confirmed wrong-species/strain and source-attribution defects in generic probiotic records.
+Longum's [PMID38341968](https://pubmed.ncbi.nlm.nih.gov/38341968/) concerns wastewater research;
+[NCT04422327](https://clinicaltrials.gov/api/v2/studies/NCT04422327) studies the combination
+35624+1714 rather than BB536. [PMID37702965](https://pubmed.ncbi.nlm.nih.gov/37702965/) is
+observational and its 43.4% measure is TISS, not IBS-SSS. Acidophilus's
+[NCT02103972](https://clinicaltrials.gov/api/v2/studies/NCT02103972) studies heat-treated
+L. paracasei GM080; [PMID32538776](https://pubmed.ncbi.nlm.nih.gov/32538776/) is a two-strain
+intervention with a null primary endpoint. These facts require correction through the existing
+clinical registry/applicability owners and a measured per-entry batch. No clinical data was
+silently deleted, no replacement positive evidence was invented, and baseline parity must not
+be labeled clinical closure. D26 and preparation binding also remain open before release.
+
+### Cleanup provenance
+
+The rejected Dose draft is not integrated. Its tracked patch, untracked files, state and all
+pre-cleanup Git refs are preserved under `/Users/seancheick/pg_quality/integration_20261001/cleanup/`.
+The obsolete Dose, transfer-policy and probiotic-measurement worktrees/branches were removed;
+the specified clean `dose-map-base` scratch worktree was removed. The already-merged app UX
+worktree/branch was removed after preserving its private audit state. Active candidate lanes
+will be removed only after main integration and push are verified.
+
+Final combined pipeline `scripts/test.sh fast` at source `a3a2d904`: **17,994 passed, 167 skipped, zero failures/xfails**, exit0 in828.13s. Skips are artifact-dependent/opt-in checks; no final corpus or catalog-release validation is claimed. Final integrated app `make check` at `ec23bdca`: analysis no issues, **3,747 passed**, exit0. Logs are in the durable integration receipt folder.

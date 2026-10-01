@@ -65,8 +65,8 @@ No catalog release has occurred under this plan. Recorded checkpoints validate t
   - [x] Final full fast checkpoint at `b0c51483` (production unchanged from `c6ea928d`): **17,823 passed, 307 skipped, zero failures and zero expected failures**; exit zero. Skips include missing stored artifacts and Node-dependent console tests; these are not release validation. Focused protections: 53 passed. First complete run: 17,961 passed, 167 skipped, one stale probiotic archetype expectation failed. Its generic species credit was independently traced and the expectation corrected; all 41 archetype checks pass. Canonical-provenance canary independently passed after replacing its obsolete corpus fixture with a fresh production-boundary extraction.
   - [x] Complete the unit-selection correction packet: `c6ea928d` uses the existing converter so 10 g beats 300 mg, while exact source rows stay authoritative. Failing regression reproduced, 143 focused checks passed and fresh review accepted; all twelve frozen raw labels remain identical and all 186 controls retain identical captured payloads. No new Dose policy or benchmark.
   - [x] Reproduce and correct the symlinked manifest-path assertions (`b0c51483`); all three real-product clinical identity checks pass unchanged. The citation-parser timeout passes on focused rerun without data or timeout changes. The isolated combined checkpoint passed as recorded above.
-  - [ ] Reconcile and independently validate Claude's later production `68cae99a` (including BCAA/collagen safeguards and recovery behavior for non-owner-scoped callers); latest fetched feature tip `c2240ed2`. Earlier pinned measurements do not validate later code.
-  - [ ] Implementation and all-cohort measurement validated by Claude on one frozen final candidate.
+  - [x] Reconcile and independently validate Claude's later production `68cae99a` and Q51's record-unit amount reader, retaining the Codex member-total safeguards. Combined source `a3a2d904`: 17,994 fast tests passed, 167 skipped, zero failures/xfails; seven independent consumer probes passed. Latest-Claude control replay: all 1,259 captured payloads identical; narrow 186-label replay retains the single explained UC-II correction. Earlier pinned results alone do not validate this combined source.
+  - [x] Claude latest-source implementation/cohort measurement validated on `68cae99a` (17,954 passed, 168 skipped); Codex independently reconciled and tested the combined source. This is sampling, not full-corpus release validation.
   - [ ] Codex integration; Q49 remains open. No main merge, push or release in this audit.
   - [ ] Decision D26 and Evidence→Dose transfer: relative mass comparisons remain legacy eligibility gates, not reviewed clinical benchmarks. Latest Claude source retains four comparisons (primary floor, ingredient recovery, authority and collagen recovery). Do not silently transplant these heuristics into Dose. Bind any reviewed minimum to its actual matched preparation/source row before assigning amount ownership.
 - [ ] Resolve remaining alternate-serving identity/duplicate cases from raw JSON (Q39); never merge materially different preparations or discard label variants.
@@ -79,6 +79,8 @@ Do not introduce the rejected mass-based demotion of purpose ingredients. Keep s
 
 - [x] Complete the registry-state inventory and repair the obsolete determination token without weakening specific identity/applicability holds (Q43; [receipt](../../scripts/audits/evidence_completion_20260930/README.md)).
 - [x] Preserve verified probiotic preparation/population/purpose, primary outcomes, review approval and trial-family independence in production migration.
+- [x] Independently identify source/strain attribution defects in the generic longum and acidophilus records (Q53); record a release hold rather than treating unchanged scores as clinical validation.
+- [ ] Correct Q53 through existing registry/applicability owners with verified per-entry sources and measured production consequences.
 - [ ] Audit coverage against the **corrected release subject set**, not just the earlier registry census.
 - [ ] Finish omega preparation/purpose applicability and the remaining generic/branded-formula coverage, including Tesnor/Sytrinol.
 - [ ] Verify each remaining identity, preparation, intervention, population, outcome and identifier against live primary sources; document negative searches.
@@ -108,7 +110,8 @@ A completed determination may be applicable positive evidence, reviewed null/no 
 
 - [x] Implement and review the separate Flutter lane's taxonomy, numeric/zero daily-value rendering and seven diagnosed golden updates (`2de825fe`, `e21df0fd`, `d5de1023`, `ec7b1530`). Its recorded app gates passed; this is lane validation, not frozen-candidate acceptance.
 - [x] Fix the pipeline's daily-value loss at the cleaner owner and verify real-product `214452` rendering with a local candidate.
-- [ ] Integrate the Flutter lane against the final pipeline candidate; recheck all condition IDs, contract parity, app tests and analysis.
+- [x] Reconcile Flutter Phase 6 with app main P0 and fix verified-feed cache ownership (`fe385971`, `ec23bdca`); integrated source passes `make check`: 3,747 tests, analysis no issues. Taxonomy byte/hash parity verified; seven golden failures closed.
+- [ ] Validate the integrated Flutter source against the final rebuilt release candidate; recheck real-product contracts/rendering and bundle parity.
 - [ ] Verify nutrition/active/other sections, full label-row rendering and summary fallback: amounts, exact units, available daily values, explicit zeros and absent values.
 - [ ] Confirm no app calculation recreates a pipeline score, verdict, role or Evidence determination.
 
