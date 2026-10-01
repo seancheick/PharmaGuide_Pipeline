@@ -107,7 +107,8 @@ L_FAMILY = [
     ("L3",  "ingredient_quality_map", "sodium",    "lithium", "monitor"),
     ("L4a", "ingredient_quality_map", "turmeric",  "lithium", "monitor"),
     ("L4b", "ingredient_quality_map", "curcumin",  "lithium", "monitor"),
-    ("L5",  "ingredient_quality_map", "magnesium", "lithium", "monitor"),
+    # L5 magnesium x lithium retired 2026-10-01 (Q50): no source supports it;
+    # see test_magnesium_rule_citations.py.
     ("L6",  "ingredient_quality_map", "iodine",    "lithium", "caution"),
     ("L7",  "ingredient_quality_map", "dandelion", "lithium", "monitor"),
 ]

@@ -3,7 +3,7 @@
     "description": "Deterministic ingredient-level interaction rules keyed by canonical database identity",
     "purpose": "interaction_alert_rules",
     "schema_version": "6.3.0",
-    "last_updated": "2026-09-27",
+    "last_updated": "2026-10-01",
     "total_entries": 151,
     "structure_note": "One entry per ingredient (or per form-scoped variant). All conditions, drug classes, and dose thresholds for that ingredient are in one object. As of v6.0.0, every sub-rule (condition_rules[], drug_class_rules[], dose_thresholds[], pregnancy_lactation block) carries an explicit profile_gate predicate that consumers MUST evaluate against the user profile before firing the alert.",
     "total_rules": 151,
@@ -5903,12 +5903,13 @@
           "severity": "caution",
           "mechanism": "Ferrous sulfate and other iron salts form stable insoluble complexes with levothyroxine, reducing thyroid hormone absorption. Concurrent ingestion can significantly impair replacement therapy efficacy.",
           "action": "Separate iron supplementation from levothyroxine by at least 4 hours.",
-          "last_reviewed": "2026-04-09",
+          "last_reviewed": "2026-10-01",
           "drug_class_id": "thyroid_medications",
           "sources": [
-            "https://pubmed.ncbi.nlm.nih.gov/1443969/"
+            "https://pubmed.ncbi.nlm.nih.gov/1443969/",
+            "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=1e11ad30-1041-4520-10b0-8f9d30d30fcc"
           ],
-          "evidence_level": "probable",
+          "evidence_level": "established",
           "alert_headline": "May affect thyroid medication",
           "alert_body": "Iron can interact with thyroid hormone absorption or metabolism. If you take thyroid medication, talk to your endocrinologist about timing iron away from your dose.",
           "informational_note": "Iron affects thyroid pathways — relevant to people on thyroid medication.",
@@ -6427,10 +6428,13 @@
           "condition_id": "kidney_disease",
           "severity": "avoid",
           "evidence_level": "established",
-          "mechanism": "Impaired renal magnesium excretion in CKD (especially eGFR <30) leads to hypermagnesemia accumulation. Supplemental magnesium doses safe in healthy adults can cause life-threatening hypermagnesemia in CKD patients (cardiac arrest, respiratory failure).",
+          "mechanism": "The kidneys excrete magnesium, so reduced kidney function lets supplemental magnesium accumulate. Hypermagnesemia can cause respiratory, cardiovascular and neuromuscular complications and can be life-threatening. In patients taking daily magnesium oxide, CKD stage 4 (eGFR 15-29) and higher doses were associated with hypermagnesemia.",
           "action": "Avoid magnesium supplementation in severe CKD (eGFR <30) without nephrologist guidance. In mild-moderate CKD, use with caution and monitor serum Mg levels.",
           "sources": [
-            "https://www.kidney.org/atoz/content/potassium"
+            "https://pubmed.ncbi.nlm.nih.gov/37512002/",
+            "https://pubmed.ncbi.nlm.nih.gov/31379418/",
+            "https://pubmed.ncbi.nlm.nih.gov/30805197/",
+            "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=8cc7d52a-8fc3-4f52-9e50-b15613ddd02c"
           ],
           "alert_headline": "Magnesium can accumulate in CKD",
           "alert_body": "Magnesium from supplements, laxatives, or antacids can accumulate when kidney function is reduced. If you have kidney disease, use magnesium-containing products only with clinician guidance.",
@@ -6454,7 +6458,8 @@
             "dose": null
           },
           "direction": "harmful",
-          "materiality": "presence"
+          "materiality": "presence",
+          "last_reviewed": "2026-10-01"
         },
         {
           "condition_id": "diabetes",
@@ -6525,12 +6530,14 @@
         },
         {
           "severity": "caution",
-          "mechanism": "Divalent magnesium cations can bind levothyroxine and impair gastrointestinal absorption, similar to other divalent mineral-levothyroxine chelation interactions.",
+          "mechanism": "Magnesium can reduce levothyroxine absorption from the gut. In a 2025 crossover trial in healthy adults, magnesium aspartate taken with levothyroxine lowered thyroxine absorption by 12% and magnesium citrate by 7%, a smaller effect than reported for calcium or iron; case reports describe raised TSH with magnesium-containing laxatives and antacids.",
           "action": "Separate magnesium supplementation from levothyroxine by at least 4 hours.",
-          "last_reviewed": "2026-04-09",
+          "last_reviewed": "2026-10-01",
           "drug_class_id": "thyroid_medications",
           "sources": [
-            "https://ods.od.nih.gov/factsheets/Magnesium-HealthProfessional/"
+            "https://pubmed.ncbi.nlm.nih.gov/41221788/",
+            "https://pubmed.ncbi.nlm.nih.gov/10193669/",
+            "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=3e77de84-6f59-40ac-a1a4-7bfe30387823"
           ],
           "evidence_level": "probable",
           "alert_headline": "May affect thyroid medication",
@@ -6542,39 +6549,6 @@
               "conditions_any": [],
               "drug_classes_any": [
                 "thyroid_medications"
-              ],
-              "profile_flags_any": []
-            },
-            "excludes": {
-              "conditions_any": [],
-              "drug_classes_any": [],
-              "profile_flags_any": [],
-              "product_forms_any": [],
-              "nutrient_forms_any": []
-            },
-            "dose": null
-          },
-          "direction": "harmful",
-          "materiality": "presence"
-        },
-        {
-          "drug_class_id": "lithium",
-          "severity": "monitor",
-          "evidence_level": "established",
-          "mechanism": "May reduce lithium absorption when co-ingested. Separate doses by 2 hours.",
-          "action": "If you take lithium, separate magnesium supplements from your lithium dose by at least 2 hours.",
-          "sources": [
-            "https://ods.od.nih.gov/factsheets/Magnesium-HealthProfessional/"
-          ],
-          "alert_headline": "Space doses 2 hours apart",
-          "alert_body": "High-dose magnesium taken at the same time as lithium may reduce absorption. Take them at least 2 hours apart.",
-          "informational_note": "Magnesium can affect lithium absorption — relevant to anyone on lithium therapy.",
-          "profile_gate": {
-            "gate_type": "drug_class",
-            "requires": {
-              "conditions_any": [],
-              "drug_classes_any": [
-                "lithium"
               ],
               "profile_flags_any": []
             },
@@ -13729,12 +13703,15 @@
           "severity": "caution",
           "mechanism": "Calcium forms insoluble chelate complexes with levothyroxine in the gastrointestinal tract, reducing oral absorption by 20–25%. Effect is dose-dependent and clinically significant at standard supplementation doses (600–1000 mg/day).",
           "action": "Separate calcium supplementation from levothyroxine by at least 4 hours to prevent absorption interference.",
-          "last_reviewed": "2026-04-09",
+          "last_reviewed": "2026-10-01",
           "drug_class_id": "thyroid_medications",
           "sources": [
-            "https://pubmed.ncbi.nlm.nih.gov/30368654/"
+            "https://pubmed.ncbi.nlm.nih.gov/30368654/",
+            "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=1e11ad30-1041-4520-10b0-8f9d30d30fcc",
+            "https://pubmed.ncbi.nlm.nih.gov/21595516/",
+            "https://pubmed.ncbi.nlm.nih.gov/11716045/"
           ],
-          "evidence_level": "probable",
+          "evidence_level": "established",
           "alert_headline": "May affect thyroid medication",
           "alert_body": "Calcium can interact with thyroid hormone absorption or metabolism. If you take thyroid medication, talk to your endocrinologist about timing calcium away from your dose.",
           "informational_note": "Calcium affects thyroid pathways — relevant to people on thyroid medication.",

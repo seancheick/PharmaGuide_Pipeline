@@ -2,7 +2,7 @@
 
 # Lithium (lithium)
 
-**8 rules.** Category: psychiatric
+**7 rules.** Category: psychiatric
 
 | canonical_id | db | severity | evidence | alert_headline | mechanism |
 |---|---|---|---|---|---|
@@ -10,7 +10,6 @@
 | `curcumin` | ingredient_quality_map | monitor | probable | Mention to your prescriber | Theoretical NSAID-like mechanism; no documented clinical lithium-elevation cases. Conservative posture given lithium's narrow therapeutic index. |
 | `dandelion` | ingredient_quality_map | monitor | probable | May raise lithium levels | Diuretic effect → potential lithium concentration via fluid/sodium depletion. Same mechanism family as the established lithium-thiazide warning. Common in 'detox' and 'liver suppo… |
 | `iodine` | ingredient_quality_map | caution | established | Hypothyroidism risk with lithium | Lithium is goitrogenic; supplemental iodine combined with lithium amplifies hypothyroidism risk. Both substances independently affect thyroid function. Iodine/kelp is common in 't… |
-| `magnesium` | ingredient_quality_map | monitor | established | Space doses 2 hours apart | May reduce lithium absorption when co-ingested. Separate doses by 2 hours. |
 | `psyllium` | ingredient_quality_map | monitor | established | May reduce lithium absorption | Reduces lithium absorption when taken concurrently. Separate dosing by 1-2 hours. |
 | `sodium` | ingredient_quality_map | monitor | established | Keep sodium intake stable | High sodium intake increases lithium clearance. Low sodium increases lithium retention → toxicity risk. Like caffeine, the principle is consistency. |
 | `turmeric` | ingredient_quality_map | monitor | probable | Mention to your prescriber | NSAID-like prostaglandin inhibition is theoretical for curcumin specifically; clinical lithium-elevation evidence absent. Severity reflects conservative safety posture given lithi… |
