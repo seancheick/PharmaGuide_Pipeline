@@ -72,8 +72,11 @@ from scoring_v4.dose_safety import (
 from scoring_v4.quality_score_config import block as _quality_config_block
 
 
-# Verdict precedence — index = severity rank.
-_VERDICT_PRECEDENCE = ("BLOCKED", "UNSAFE", "CAUTION")
+# The verdicts that carry a safety warning, most severe first (index = rank).
+# Every other verdict is "no safety warning": SAFE, and POOR, which is the
+# lowest quality tier, not a safety finding. The release catalog gate ranks
+# public verdicts with this ladder too.
+SAFETY_VERDICT_PRECEDENCE = ("BLOCKED", "UNSAFE", "CAUTION")
 _SAFETY_RULES_PATH = (
     Path(__file__).resolve().parents[1]
     / "data"
@@ -93,19 +96,19 @@ _AUTHORITATIVE_US_POLICY_HOSTS = (
 )
 
 
-def _verdict_rank(v: Optional[str]) -> int:
+def safety_verdict_rank(v: Optional[str]) -> int:
     """Lower index = more severe. None = no verdict (least severe)."""
     if v is None:
-        return len(_VERDICT_PRECEDENCE)
+        return len(SAFETY_VERDICT_PRECEDENCE)
     try:
-        return _VERDICT_PRECEDENCE.index(v)
+        return SAFETY_VERDICT_PRECEDENCE.index(v)
     except ValueError:
-        return len(_VERDICT_PRECEDENCE)
+        return len(SAFETY_VERDICT_PRECEDENCE)
 
 
 def _max_verdict(a: Optional[str], b: Optional[str]) -> Optional[str]:
     """Return the more severe of two verdicts (lower rank wins)."""
-    if _verdict_rank(a) <= _verdict_rank(b):
+    if safety_verdict_rank(a) <= safety_verdict_rank(b):
         return a
     return b
 
@@ -580,8 +583,8 @@ def _apply_hard_decision(
         verdict=verdict,
         reason_code=reason_code,
     )
-    should_replace = _verdict_rank(verdict) < _verdict_rank(result.verdict)
-    if _verdict_rank(verdict) == _verdict_rank(result.verdict):
+    should_replace = safety_verdict_rank(verdict) < safety_verdict_rank(result.verdict)
+    if safety_verdict_rank(verdict) == safety_verdict_rank(result.verdict):
         should_replace = (
             result.safety_decision is None
             or _decision_quality(candidate) > _decision_quality(result.safety_decision)

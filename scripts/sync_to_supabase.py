@@ -35,7 +35,7 @@ DEFAULT_PROGRESS_EVERY = 500
 # Ensure scripts/ is on the path for sibling imports (supabase_client)
 sys.path.insert(0, os.path.dirname(__file__))
 import env_loader  # noqa: F401
-from supabase_client import CACHE_CONTROL_IMMUTABLE
+from supabase_client import CACHE_CONTROL_IMMUTABLE, core_db_remote_path
 from audit_source_of_truth_contract import check_v4_pillar_contract
 
 DETAIL_BLOB_STORAGE_PREFIX = "shared/details/sha256"
@@ -1195,7 +1195,7 @@ def sync(
     # Upload SQLite DB
     db_path = build_stats["db_path"]
 
-    remote_db_path = f"v{version}/pharmaguide_core.db"
+    remote_db_path = core_db_remote_path(version)
     print(f"\nUploading {remote_db_path}...")
     start = time.time()
     upload_file(client, bucket, remote_db_path, db_path,

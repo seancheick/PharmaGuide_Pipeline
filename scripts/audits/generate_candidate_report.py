@@ -318,9 +318,7 @@ def build_report(args) -> dict:
         }
         # The release gate's own diff; the per-product rows stay in its report.
         diff = diff_catalogs(baseline, db, load_approvals())
-        report["baseline_candidate_diff"] = {
-            k: v for k, v in diff.items() if k not in ("gated", "biggest_rises")
-        }
+        report["baseline_candidate_diff"] = {k: v for k, v in diff.items() if k != "gated"}
     if args.verification:
         report["verification"] = _validated_verification(Path(args.verification))
 
@@ -453,14 +451,16 @@ def render_markdown(r: dict) -> str:
             f"- shared products: {d['shared']}",
             f"- added live: {d['added']}",
             f"- removed live: {d['removed']}",
-            f"- changes the release gate (`scripts/release_safety/catalog_diff.py`) "
+            f"- `blocking_reason` changed: {d['column_changes']['blocking_reason']}",
+            f"- `quality_score_status` changed: {d['column_changes']['quality_score_status']}",
+            f"- products the release gate (`scripts/release_safety/catalog_diff.py`) "
             f"stops on until approved: {d['unapproved']}",
             "",
             "Verdict changes on shared products:",
             "",
         ]
         for t in d["verdict_transitions"]:
-            milder = " (milder)" if t["milder"] else ""
+            milder = " (milder safety warning)" if t["safety"] == "milder" else ""
             lines.append(f"- {t['from']} → {t['to']}: {t['products']}{milder}")
         lines.append("")
 

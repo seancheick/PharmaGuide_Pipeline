@@ -55,6 +55,12 @@ def parse_manifest_response(response):
     return data[0]
 
 
+def core_db_remote_path(db_version):
+    """Storage path of a catalog's core DB; the app reads the same path
+    (Flutter ``SupabaseContract.coreDbPath``)."""
+    return f"v{db_version}/pharmaguide_core.db"
+
+
 def fetch_current_manifest(client):
     """Fetch the current (is_current=true) export_manifest row.
 

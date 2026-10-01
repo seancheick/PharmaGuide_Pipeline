@@ -752,12 +752,14 @@ else
   skip "Strict gate: scoring snapshot contract already passed before candidate promotion"
 fi
 
-# Compare every product with the catalog the app ships (the bundle committed on
-# the app's main). A milder verdict, a warned product leaving the catalog, or a
-# 10+ point score drop stops the release until an approval in
-# scripts/release_safety/catalog_change_approvals.json names that exact change.
-# Runs even with --skip-flutter: Supabase publication still follows.
-run_strict_gate "catalog changes vs app bundle" \
+# Compare every product with each catalog users can have: the app bundle
+# committed on the app's main, and the live Supabase catalog the in-app updater
+# downloads when that differs. A milder safety warning, a warned product
+# leaving the catalog, a 10+ point score move either way, or a grade up with a
+# 5+ point rise stops the release until an approval in
+# scripts/release_safety/catalog_change_approvals.json names that product's
+# exact before and after. Runs with every --skip-* flag: something still ships.
+run_strict_gate "catalog changes vs what users have" \
   "$PG_PYTHON" scripts/release_safety/catalog_diff.py \
     --flutter-repo "$FLUTTER_REPO" \
     --candidate-db "$DIST_DIR/pharmaguide_core.db" \

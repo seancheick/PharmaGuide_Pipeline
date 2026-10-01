@@ -1,8 +1,11 @@
-"""The release gate that compares the candidate catalog with the app's bundle.
+"""The release gate that compares the candidate catalog with what users have.
 
-A change that weakens what a user is told (a milder verdict, a warned product
-leaving the catalog, a big score drop) stops the release unless a reviewed
-approval names that exact change.
+Users have the app bundle and, through the in-app updater, the live catalog on
+Supabase. A product change that weakens what a user is told stops the release
+unless a reviewed approval names that product's exact before and after:
+a milder safety warning (BLOCKED > UNSAFE > CAUTION > none; POOR is a quality
+grade), a warned product leaving the catalog, a quality grade up with a 5+
+point rise, or a score move of 10+ points either way.
 """
 
 from __future__ import annotations
@@ -21,27 +24,27 @@ if str(SCRIPTS) not in sys.path:
     sys.path.insert(0, str(SCRIPTS))
 
 from release_safety import catalog_diff  # noqa: E402
+from scoring_v4.gate_safety import SAFETY_VERDICT_PRECEDENCE  # noqa: E402
 from scoring_v4.scored_artifact import PUBLIC_VERDICT_PRECEDENCE, _public_verdict  # noqa: E402
-
-
-COLUMNS = (
-    "dsld_id", "product_name", "brand_name", "verdict",
-    "quality_score_v4_100", "quality_score_status", "blocking_reason",
-)
 
 
 def make_db(path: Path, rows: list[tuple]) -> Path:
     path.unlink(missing_ok=True)
     con = sqlite3.connect(path)
-    con.execute(f"create table products_core ({', '.join(COLUMNS)})")
-    con.executemany(f"insert into products_core values ({', '.join('?' * len(COLUMNS))})", rows)
+    con.execute(f"create table products_core ({', '.join(catalog_diff.COLUMNS)})")
+    con.executemany(
+        f"insert into products_core values ({', '.join('?' * len(catalog_diff.COLUMNS))})", rows)
     con.commit()
     con.close()
     return path
 
 
-def row(pid, verdict="SAFE", score=70.0, name=None, status="scored", reason=None):
-    return (pid, name or f"Product {pid}", "Brand", verdict, score, status, reason)
+def row(pid, verdict="SAFE", score=72.0, tier="Good", name=None, status="scored", reason=None):
+    return (pid, name or f"Product {pid}", "Brand", verdict, score, tier, status, reason)
+
+
+def blocked(pid, name=None):
+    return row(pid, "BLOCKED", None, None, name=name, status="suppressed_safety", reason="recall")
 
 
 def diff(tmp_path, before, after, approvals=()):
@@ -53,7 +56,11 @@ def diff(tmp_path, before, after, approvals=()):
 
 
 def gated(result):
-    return {(c["dsld_id"], c["kind"], c["from"], c["to"]) for c in result["gated"]}
+    return {c["dsld_id"]: [r["kind"] for r in c["reasons"]] for c in result["gated"]}
+
+
+def state(verdict="SAFE", tier="Good", score=72.0):
+    return {"verdict": verdict, "tier": tier, "score": score}
 
 
 def approval(changes, reason="Reviewed: dose calibration", approved_by="Sean"):
@@ -61,74 +68,91 @@ def approval(changes, reason="Reviewed: dose calibration", approved_by="Sean"):
 
 
 def test_unchanged_catalog_passes(tmp_path):
-    rows = [row("1"), row("2", "BLOCKED", None, status="suppressed_safety", reason="recall")]
+    rows = [row("1"), blocked("2")]
     result = diff(tmp_path, rows, rows)
     assert result["gated"] == [] and result["unapproved"] == 0
     assert result["shared"] == 2 and result["added"] == 0 and result["removed"] == 0
 
 
-def test_milder_verdicts_are_gated_and_stricter_ones_are_not(tmp_path):
-    before = [row("1", "BLOCKED", None, status="suppressed_safety"), row("2", "POOR", 40.0),
-              row("3", "SAFE"), row("4", "CAUTION")]
-    after = [row("1", "CAUTION"), row("2", "SAFE", 40.0), row("3", "POOR", 70.0), row("4", "UNSAFE", None)]
+def test_a_milder_safety_warning_stops_and_poor_counts_as_no_warning(tmp_path):
+    before = [blocked("1"), row("2", "CAUTION"), row("3", "CAUTION"), row("4", "UNSAFE", None, None),
+              row("5"), row("6", "POOR", 50.0, "Poor")]
+    after = [row("1", "CAUTION"), row("2", "SAFE"), row("3", "POOR", 72.0), blocked("4"),
+             row("5", "CAUTION"), row("6", "SAFE", 50.0, "Poor")]
     result = diff(tmp_path, before, after)
-    assert gated(result) == {("1", "milder_verdict", "BLOCKED", "CAUTION"),
-                             ("2", "milder_verdict", "POOR", "SAFE")}
-    transitions = {(t["from"], t["to"]): (t["products"], t["milder"]) for t in result["verdict_transitions"]}
-    assert transitions[("SAFE", "POOR")] == (1, False)
-    assert transitions[("CAUTION", "UNSAFE")] == (1, False)
-    assert result["unapproved"] == 2
+    assert gated(result) == {"1": ["milder_safety"], "2": ["milder_safety"], "3": ["milder_safety"]}
+    rows = {(t["from"], t["to"]): t["safety"] for t in result["verdict_transitions"]}
+    assert rows[("CAUTION", "SAFE")] == "milder"
+    assert rows[("SAFE", "CAUTION")] == "stricter"
+    assert rows[("POOR", "SAFE")] == "none"
 
 
-def test_a_warned_product_leaving_the_catalog_is_gated_but_a_safe_one_is_not(tmp_path):
-    before = [row("1", "BLOCKED", None), row("2", "CAUTION"), row("3", "SAFE"), row("4")]
-    after = [row("4"), row("5", "BLOCKED", None)]
+def test_a_warned_product_leaving_the_catalog_stops_but_a_safe_or_poor_one_does_not(tmp_path):
+    before = [blocked("1"), row("2", "CAUTION"), row("3"), row("4", "POOR", 40.0, "Poor"), row("5")]
+    after = [row("5"), blocked("6")]
     result = diff(tmp_path, before, after)
-    assert gated(result) == {("1", "removed", "BLOCKED", None), ("2", "removed", "CAUTION", None)}
-    assert result["removed"] == 3 and result["added"] == 1
+    assert gated(result) == {"1": ["removed"], "2": ["removed"]}
+    assert result["removed"] == 4 and result["added"] == 1
     assert result["added_by_verdict"] == {"BLOCKED": 1}
 
 
-def test_score_drops_are_gated_from_the_limit_and_rises_are_only_reported(tmp_path):
-    before = [row("1", score=72.3), row("2", score=72.3), row("3", score=50.0), row("4", score=None)]
-    after = [row("1", score=62.3), row("2", score=62.4), row("3", score=75.0), row("4", score=20.0)]
+def test_a_grade_up_stops_only_with_a_rise_of_five_points(tmp_path):
+    before = [row("1", score=72.0, tier="Good"), row("2", score=68.0, tier="Needs improvement"),
+              row("3", "POOR", 50.0, "Poor"), row("4", score=81.0, tier="Very good")]
+    after = [row("1", score=81.0, tier="Very good"), row("2", score=71.0, tier="Good"),
+             row("3", "SAFE", 56.0, "Needs improvement"), row("4", score=79.0, tier="Good")]
+    result = diff(tmp_path, before, after)
+    assert gated(result) == {"1": ["tier_up"], "3": ["tier_up"]}
+    tiers = {(t["from"], t["to"]): (t["products"], t["stopping"]) for t in result["tier_transitions"]}
+    assert tiers[("Needs improvement", "Good")] == (1, 0)
+    assert tiers[("Very good", "Good")] == (1, 0)
+
+
+def test_a_score_move_of_ten_points_stops_either_way(tmp_path):
+    before = [row("1", score=72.3), row("2", score=72.3), row("3", score=50.0, tier="Poor"),
+              row("4", score=60.0, tier="Needs improvement")]
+    after = [row("1", score=62.3), row("2", score=62.4), row("3", score=59.9, tier="Poor"),
+             row("4", score=70.0, tier="Needs improvement")]
     result = diff(tmp_path, before, after)
     # 72.3 - 62.3 is 9.999... in floating point; the gate still counts it as 10.
-    assert gated(result) == {("1", "score_drop", 72.3, 62.3)}
-    assert result["score_changes"] == {"down": 2, "up": 1}
-    assert [r["dsld_id"] for r in result["biggest_rises"]] == ["3"]
+    assert gated(result) == {"1": ["score_drop"], "4": ["score_rise"]}
+    assert result["score_changes"] == {"down": 2, "up": 2}
 
 
-def test_a_score_suppressed_by_a_safety_verdict_is_not_a_score_drop(tmp_path):
-    result = diff(tmp_path, [row("1", score=80.0)],
-                  [row("1", "BLOCKED", None, status="suppressed_safety")])
+def test_one_product_is_one_row_with_every_reason(tmp_path):
+    result = diff(tmp_path, [row("1", "CAUTION", 70.0, "Good")], [row("1", "SAFE", 85.0, "Very good")])
+    assert gated(result) == {"1": ["milder_safety", "score_rise", "tier_up"]}
+    assert result["gated"][0]["kind"] == "milder_safety"
+
+
+def test_a_score_suppressed_by_a_safety_verdict_is_not_a_score_move(tmp_path):
+    result = diff(tmp_path, [row("1", score=80.0)], [blocked("1")])
     assert result["gated"] == []
 
 
-def test_an_approval_covers_only_the_exact_change_it_names(tmp_path):
-    before = [row("1", "POOR", 40.0), row("2", "POOR", 40.0)]
-    after = [row("1", "SAFE", 40.0), row("2", "SAFE", 40.0)]
+def test_an_approval_covers_only_the_exact_before_and_after(tmp_path):
+    before = [row("1", "CAUTION"), row("2", "CAUTION")]
+    after = [row("1"), row("2")]
     approvals = [approval([
-        {"dsld_id": "1", "kind": "milder_verdict", "from": "POOR", "to": "SAFE"},
-        {"dsld_id": "2", "kind": "milder_verdict", "from": "CAUTION", "to": "SAFE"},
+        {"dsld_id": "1", "from": state("CAUTION"), "to": state()},
+        {"dsld_id": 2, "from": state("CAUTION"), "to": state(score=73.0)},
     ])]
     result = diff(tmp_path, before, after, approvals)
     by_id = {c["dsld_id"]: c for c in result["gated"]}
     assert by_id["1"]["approval"]["approved_by"] == "Sean"
     assert by_id["2"]["approval"] is None
     assert result["unapproved"] == 1
-    assert result["stale_approvals"] == [
-        {"dsld_id": "2", "kind": "milder_verdict", "from": "CAUTION", "to": "SAFE"}
-    ]
+    assert [a["dsld_id"] for a in result["stale_approvals"]] == [2]
 
 
 @pytest.mark.parametrize("bad", [
     approval([], reason="x"),
-    approval([{"dsld_id": "1", "kind": "milder_verdict", "from": "POOR", "to": "SAFE"}], reason=" "),
-    approval([{"dsld_id": "1", "kind": "milder_verdict", "from": "POOR", "to": "SAFE"}], approved_by=""),
-    approval([{"dsld_id": "1", "kind": "made_up", "from": "POOR", "to": "SAFE"}]),
-    approval([{"dsld_id": "1", "kind": "milder_verdict", "form": "POOR", "to": "SAFE"}]),
-    {**approval([{"dsld_id": "1", "kind": "removed", "from": "CAUTION", "to": None}]), "date": "yesterday"},
+    approval([{"dsld_id": "1", "from": state(), "to": None}], reason=" "),
+    approval([{"dsld_id": "1", "from": state(), "to": None}], approved_by=""),
+    approval([{"dsld_id": "1", "from": {"verdict": "SAFE"}, "to": None}]),
+    approval([{"dsld_id": "1", "form": state(), "to": None}]),
+    approval([{"dsld_id": "1", "from": None, "to": state()}]),
+    {**approval([{"dsld_id": "1", "from": state(), "to": None}]), "date": "yesterday"},
 ])
 def test_an_approval_without_a_reason_approver_date_or_exact_change_is_refused(tmp_path, bad):
     path = tmp_path / "approvals.json"
@@ -137,13 +161,19 @@ def test_an_approval_without_a_reason_approver_date_or_exact_change_is_refused(t
         catalog_diff.load_approvals(path)
 
 
-def test_an_unknown_verdict_fails_closed(tmp_path):
-    with pytest.raises(ValueError, match="MAYBE"):
-        diff(tmp_path, [row("1")], [row("1", "MAYBE")])
+@pytest.mark.parametrize("bad_row", [row("1", "MAYBE"), row("1", tier="Okay")])
+def test_an_unknown_verdict_or_grade_fails_closed(tmp_path, bad_row):
+    with pytest.raises(ValueError, match="MAYBE|Okay"):
+        diff(tmp_path, [row("1")], [bad_row])
 
 
 def test_the_committed_approvals_file_loads():
     catalog_diff.load_approvals()
+
+
+def test_the_safety_ladder_follows_the_public_precedence():
+    assert [v for v in PUBLIC_VERDICT_PRECEDENCE if v in SAFETY_VERDICT_PRECEDENCE] == list(SAFETY_VERDICT_PRECEDENCE)
+    assert "POOR" not in SAFETY_VERDICT_PRECEDENCE
 
 
 def test_precedence_names_every_public_verdict():
@@ -164,15 +194,18 @@ def test_the_cutover_audit_ranks_verdicts_by_the_shared_precedence():
 
 
 def test_report_and_draft_approvals_close_the_loop(tmp_path):
-    before = [row("1", "POOR", 40.0, name="Iron Plus"), row("2", "CAUTION", name="Two |\nLines"),
-              row("3", score=90.0)]
-    after = [row("1", "SAFE", 40.0, name="Iron Plus"), row("3", score=60.0)]
+    before = [row("1", "CAUTION", name="Iron Plus"), row("2", "CAUTION", name="Two |\nLines"),
+              row("3", score=90.0, tier="Excellent"), row("4", "POOR", 50.0, "Poor")]
+    after = [row("1", name="Iron Plus"), row("3", score=60.0, tier="Needs improvement"),
+             row("4", "SAFE", 58.0, "Needs improvement")]
     result = diff(tmp_path, before, after)
 
     report = catalog_diff.render_markdown(result)
     assert "STOPS THE RELEASE" in report and "Iron Plus" in report
-    assert "POOR → SAFE" in report and "-30.0" in report
-    assert "| 2 | Two / Lines | Brand | CAUTION → not in catalog |" in report
+    assert "CAUTION → no safety warning" in report
+    assert "| 2 | Two / Lines | Brand | CAUTION · Good · 72 | not in catalog |" in report
+    assert "score -30.0" in report and "grade Poor → Needs improvement (+8.0)" in report
+    assert "| POOR → SAFE | 1 | no: quality grade only |" in report
 
     draft = catalog_diff.draft_approvals(result)
     for group in draft["approvals"]:
@@ -180,11 +213,68 @@ def test_report_and_draft_approvals_close_the_loop(tmp_path):
     path = tmp_path / "approvals.json"
     path.write_text(json.dumps(draft))
     approved = diff(tmp_path, before, after, catalog_diff.load_approvals(path))
-    assert approved["unapproved"] == 0 and len(approved["gated"]) == 3
+    assert approved["unapproved"] == 0 and len(approved["gated"]) == 4
     assert "Release can proceed" in catalog_diff.render_markdown(approved)
 
 
-# --- CLI: the baseline must be the bundle committed on the app's main --------
+# --- Live catalog: what the in-app updater downloads -------------------------
+
+
+class FakeStorage:
+    def __init__(self, files):
+        self.files, self.requests = files, []
+
+    def from_(self, bucket):
+        self.bucket = bucket
+        return self
+
+    def download(self, path):
+        self.requests.append((self.bucket, path))
+        return self.files[path]
+
+
+class FakeClient:
+    def __init__(self, files):
+        self.storage = FakeStorage(files)
+
+
+def live(monkeypatch, row_, files=None):
+    client = FakeClient(files or {})
+    monkeypatch.setattr(catalog_diff, "get_supabase_client", lambda: client)
+    monkeypatch.setattr(catalog_diff, "fetch_current_manifest", lambda c: row_)
+    return client
+
+
+def sha(data: bytes) -> str:
+    return "sha256:" + hashlib.sha256(data).hexdigest()
+
+
+def test_the_live_catalog_is_skipped_when_it_is_the_bundled_one(tmp_path, monkeypatch):
+    client = live(monkeypatch, {"db_version": "v1", "checksum": sha(b"bundle")})
+    assert catalog_diff._live_baseline(hashlib.sha256(b"bundle").hexdigest(), tmp_path) is None
+    assert client.storage.requests == []
+
+
+def test_a_newer_live_catalog_is_downloaded_and_checksum_verified(tmp_path, monkeypatch):
+    client = live(monkeypatch, {"db_version": "2026.09.30", "checksum": sha(b"live")},
+                  {"v2026.09.30/pharmaguide_core.db": b"live"})
+    db, info = catalog_diff._live_baseline("0" * 64, tmp_path)
+    assert db.read_bytes() == b"live" and info["db_version"] == "2026.09.30"
+    assert client.storage.requests == [("pharmaguide", "v2026.09.30/pharmaguide_core.db")]
+
+
+@pytest.mark.parametrize("row_, files", [
+    (None, {}),
+    ({"db_version": "x"}, {}),
+    ({"db_version": "x", "checksum": sha(b"expected")}, {"vx/pharmaguide_core.db": b"tampered"}),
+])
+def test_an_unreadable_or_mismatched_live_catalog_fails_closed(tmp_path, monkeypatch, row_, files):
+    live(monkeypatch, row_, files)
+    with pytest.raises(ValueError):
+        catalog_diff._live_baseline("0" * 64, tmp_path)
+
+
+# --- CLI: compare with every catalog users can have ---------------------------
 
 
 def fake_flutter_repo(tmp_path: Path, rows: list[tuple], *, commit_checksum=True) -> Path:
@@ -201,10 +291,16 @@ def fake_flutter_repo(tmp_path: Path, rows: list[tuple], *, commit_checksum=True
     return repo
 
 
-def run_cli(tmp_path, repo, candidate_rows, approvals=None):
+def run_cli(tmp_path, monkeypatch, repo, candidate_rows, live_rows=None):
+    def fake_live(bundle_sha, workdir):
+        if live_rows is None:
+            return None
+        return make_db(workdir / "live.db", live_rows), {"db_version": "2026.09.30", "source": "live"}
+
+    monkeypatch.setattr(catalog_diff, "_live_baseline", fake_live)
     candidate = make_db(tmp_path / "candidate.db", candidate_rows)
     approvals_path = tmp_path / "approvals.json"
-    approvals_path.write_text(json.dumps({"approvals": approvals or []}))
+    approvals_path.write_text(json.dumps({"approvals": []}))
     out = tmp_path / "out"
     code = catalog_diff.main([
         "--flutter-repo", str(repo), "--candidate-db", str(candidate),
@@ -214,23 +310,45 @@ def run_cli(tmp_path, repo, candidate_rows, approvals=None):
     return code, out
 
 
-def test_cli_passes_when_nothing_weakens(tmp_path):
-    repo = fake_flutter_repo(tmp_path, [row("1", "POOR", 40.0)])
-    code, out = run_cli(tmp_path, repo, [row("1", "CAUTION", 40.0)])
+def test_cli_passes_when_nothing_weakens(tmp_path, monkeypatch):
+    repo = fake_flutter_repo(tmp_path, [row("1", "POOR", 40.0, "Poor")])
+    code, out = run_cli(tmp_path, monkeypatch, repo, [row("1", "CAUTION", 40.0, "Poor")])
     assert code == 0
     assert "2026.09.22" in (out / "report.md").read_text()
     assert not (out / "draft.json").exists()
 
 
-def test_cli_stops_on_an_unapproved_change_and_writes_a_draft(tmp_path):
-    repo = fake_flutter_repo(tmp_path, [row("1", "POOR", 40.0)])
-    code, out = run_cli(tmp_path, repo, [row("1", "SAFE", 40.0)])
+def test_cli_stops_on_an_unapproved_change_and_writes_a_draft(tmp_path, monkeypatch):
+    repo = fake_flutter_repo(tmp_path, [row("1", "CAUTION")])
+    code, out = run_cli(tmp_path, monkeypatch, repo, [row("1")])
     assert code == 1
     draft = json.loads((out / "draft.json").read_text())
     assert draft["approvals"][0]["changes"][0]["dsld_id"] == "1"
 
 
-def test_cli_refuses_a_bundle_that_is_not_the_one_committed_on_main(tmp_path):
+def test_cli_also_compares_with_a_newer_live_catalog(tmp_path, monkeypatch):
+    # A Supabase-only release added Q as BLOCKED; the bundle never had it.
+    repo = fake_flutter_repo(tmp_path, [row("1")])
+    code, out = run_cli(tmp_path, monkeypatch, repo, [row("1")], live_rows=[row("1"), blocked("Q")])
+    assert code == 1
+    report = (out / "report.md").read_text()
+    assert "2026.09.30" in report and "| Q |" in report
+
+
+def test_cli_refuses_a_bundle_that_is_not_the_one_committed_on_main(tmp_path, monkeypatch):
     repo = fake_flutter_repo(tmp_path, [row("1")], commit_checksum=False)
-    code, _ = run_cli(tmp_path, repo, [row("1")])
+    code, _ = run_cli(tmp_path, monkeypatch, repo, [row("1")])
+    assert code == 2
+
+
+def test_cli_fails_closed_when_the_live_catalog_cannot_be_read(tmp_path, monkeypatch):
+    repo = fake_flutter_repo(tmp_path, [row("1")])
+    monkeypatch.setattr(catalog_diff, "_live_baseline", lambda *a: (_ for _ in ()).throw(OSError("offline")))
+    candidate = make_db(tmp_path / "candidate.db", [row("1")])
+    approvals_path = tmp_path / "approvals.json"
+    approvals_path.write_text(json.dumps({"approvals": []}))
+    code = catalog_diff.main([
+        "--flutter-repo", str(repo), "--candidate-db", str(candidate), "--approvals", str(approvals_path),
+        "--report", str(tmp_path / "r.md"), "--draft-approvals", str(tmp_path / "d.json"),
+    ])
     assert code == 2
