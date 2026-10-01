@@ -25,12 +25,17 @@ from tests.test_v4_generic_evidence_p133 import _ingredient, _match, _product
 FIXTURES = Path(__file__).parent / "fixtures"
 
 
-def _enrich(fixture: str) -> dict:
+def _raw(fixture: str) -> dict:
+    return json.loads((FIXTURES / fixture).read_text())
+
+
+def _enrich(fixture) -> dict:
+    """Clean -> Enrich a raw DSLD label (a fixture name or an edited raw dict)."""
     from enhanced_normalizer import EnhancedDSLDNormalizer
     from enrich_supplements_v3 import SupplementEnricherV3
 
     logging.disable(logging.INFO)
-    raw = json.loads((FIXTURES / fixture).read_text())
+    raw = _raw(fixture) if isinstance(fixture, str) else fixture
     return SupplementEnricherV3().enrich_product(EnhancedDSLDNormalizer().normalize_product(raw))[0]
 
 
@@ -352,3 +357,13 @@ def test_a_brand_identifier_matches_as_labels_spell_it(record, label_text, expec
 ])
 def test_real_authority_floor_needs_the_heaviest_owner_with_its_own_amount(fixture):
     assert _evidence(_enrich(fixture))["metadata"]["nutrition_authority_canonical"] is None
+
+
+def test_a_title_naming_a_brand_never_lends_a_blend_total_to_that_member():
+    """Only the heading row's own text can name the branded record: "Sensoril"
+    in the product title does not make a 250 mg two-member blend Sensoril's dose."""
+    raw = _raw("prominence_blend_total_328062_raw.json")
+    raw["fullName"] = "Sensoril Sleep Tonight"
+    evidence = _evidence(_enrich(raw))
+    assert evidence["metadata"]["primary_evidence_floor"] == 0.0
+    assert evidence["components"]["clinical_evidence_pipeline"] > 0

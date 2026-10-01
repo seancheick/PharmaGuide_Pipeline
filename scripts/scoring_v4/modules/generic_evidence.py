@@ -1030,10 +1030,12 @@ def _is_verified_ingredient_human_entry(entry: Dict[str, Any]) -> bool:
     }
 
 
-def _row_identity_text(product: Dict[str, Any], row: Dict[str, Any]) -> str:
+def _row_identity_text(
+    product: Dict[str, Any], row: Dict[str, Any], *, with_product: bool = True,
+) -> str:
     values = [
-        product.get("product_name"),
-        product.get("name"),
+        product.get("product_name") if with_product else None,
+        product.get("name") if with_product else None,
         row.get("name"),
         row.get("standard_name"),
         row.get("raw_source_text"),
@@ -1542,9 +1544,10 @@ def _is_prominent_anchor(
     A row the role owner marks prominent qualifies. A blend heading's total
     (``blend_anchor_mass``) is never a member's amount, so it carries only a
     verified product-level record the heading itself names (the registry record
-    and predicate product-level recovery use), and only when the role owner
-    marks that same label row prominent. A member's ingredient record, or a
-    branded member of a larger blend, never borrows the total.
+    and predicate product-level recovery use; the heading's own text, never the
+    product title), and only when the role owner marks that same label row
+    prominent. A member's ingredient record, or a branded member of a larger
+    blend, never borrows the total.
     """
     from evidence_resolver import evidence_row_key
 
@@ -1560,7 +1563,7 @@ def _is_prominent_anchor(
         None,
     )
     return record is not None and _verified_product_entry_matches_text(
-        record, _row_identity_text(product, row)
+        record, _row_identity_text(product, row, with_product=False)
     )
 
 
