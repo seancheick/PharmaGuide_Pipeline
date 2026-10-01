@@ -110,7 +110,7 @@ DEPTH_BONUS_BANDS = tuple(tuple(b) for b in _EM["depth_bonus_bands"])
 # Phase 8 — primary-ingredient evidence floor (PROTOTYPE). The top-N additive
 # pipeline rewards ingredient COUNT: a focused single clinically-validated
 # ingredient (KSM-66) scores ~4.5/20 while two generic minerals score ~11.5/20.
-# When the product's MASS-DOMINANT active is a strongly-evidenced, positively-
+# When the product's PROMINENT active is a strongly-evidenced, positively-
 # effective, clinically-dosed ingredient, the dimension earns a floor so quality
 # is rewarded independent of count. Keyed on a PROMINENT active (the evidence match
 # must link to a dosed label row the shared role owner names as the product's
@@ -360,10 +360,10 @@ def score_evidence(product: Dict[str, Any], *, apply_primary_floor: bool = False
 
     depth_bonus = _depth_bonus(scoped_matches)
 
-    # Phase 8 — primary-ingredient evidence floor. The TOP evidence contributor
-    # (highest points, excluding sub-clinical) anchors a floor when it is strongly
-    # & positively evidenced, so a focused premium ingredient isn't out-scored by
-    # ingredient count.
+    # Phase 8 — primary-ingredient evidence floor. A strongly & positively
+    # evidenced match on a prominent row (excluding sub-clinical) anchors a
+    # floor, so a focused premium ingredient isn't out-scored by ingredient
+    # count. See _primary_mass_floor.
     primary_floor = 0.0
     floor_canonical: Optional[str] = None
     nutrition_authority_canonical: Optional[str] = None
