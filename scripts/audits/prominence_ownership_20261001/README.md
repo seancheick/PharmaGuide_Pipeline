@@ -1,6 +1,6 @@
 # Phase 2 — generic Evidence prominence ownership
 
-Status: **COMBINED SOURCE VALIDATED; MAIN INTEGRATION NEXT; CATALOG RELEASE PENDING.**
+Status: **COMBINED SOURCE VALIDATED AND INTEGRATED ON MAIN; CATALOG RELEASE PENDING.**
 Codex fixes through `9f7837e8` extend Claude production `b43a048f` on the isolated
 `codex/quality-completion` branch. Claude subsequently advanced production to `68cae99a`
 (fetched feature tip `002d2683`); those later changes require reconciliation and a new candidate
@@ -299,7 +299,7 @@ The counterfactual arm is a scratch detached worktree at `b43a048f` patched by
 
 ## Combined integration candidate — October 1
 
-Codex is reconciling latest Claude source `68cae99a` with the independently audited member-total safeguards and the Q51 unit-map replacement. Earlier receipts apply only to their named sources. Combined regression, replay and final checkpoint results will be recorded before main integration.
+Historical pre-integration checkpoint: Codex was reconciling latest Claude source `68cae99a` with the independently audited member-total safeguards and the Q51 unit-map replacement. Earlier receipts apply only to their named sources. Combined regression, replay and final checkpoint results will be recorded before main integration.
 
 ### Combined measurements and fresh review
 
