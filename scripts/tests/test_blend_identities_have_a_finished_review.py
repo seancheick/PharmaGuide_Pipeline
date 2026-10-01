@@ -63,10 +63,7 @@ def test_tesnor_and_sytrinol_resolve_to_their_reviewed_trials(enriched):
 
 
 @pytest.mark.parametrize("pid,canonical", [
-    pytest.param("1179", "cinnamon", marks=pytest.mark.xfail(strict=True, reason=(
-        "Ravage's undosed 'Cinnamon Extract' blend member is read as the other-ingredients "
-        "flavour (is_excipient): active or carrier is a per-item purpose decision, lane 2B"
-    ))),
+    ("1179", "cinnamon"),
     ("243271", "turmeric"),
 ])
 def test_a_lent_blend_total_is_no_evidence_dose(enriched, pid, canonical):
@@ -158,3 +155,50 @@ def test_only_an_undosed_aid_takes_the_paired_aid_role(quantity, paired_aid):
     assert data["qualifies_for_bonus"] is True
     assert (piperine.get("recognition_type") == "paired_absorption_enhancer") is paired_aid
 
+
+
+@pytest.mark.parametrize("name,is_additive", [
+    ("Cinnamon Extract", False),
+    ("Natural Cinnamon Flavoring", True),
+    ("Cinnamon (Natural Flavoring)", True),
+    ("Natural Orange Flavor", True),
+])
+def test_printed_blend_member_function_is_not_a_generated_identity_alias(name, is_additive):
+    """Identity variations may find a parent, but cannot invent flavor use."""
+    from enhanced_normalizer import EnhancedDSLDNormalizer
+
+    raw = json.loads((FIXTURES / "evidence_review_1179_raw.json").read_text())
+    raw["ingredientRows"][10]["forms"][0]["name"] = name
+    cleaned = EnhancedDSLDNormalizer().normalize_product(raw)
+
+    def descendants(rows):
+        for row in rows:
+            yield row
+            yield from descendants(row.get("nestedIngredients") or [])
+
+    row = next(r for r in descendants(cleaned["activeIngredients"])
+               if r.get("raw_source_path") == "ingredientRows[10].forms[0]")
+    assert row.get("isAdditive", False) is is_additive
+    assert row["source_section"] == "active"
+    assert row["quantity"] == 0
+    assert row["parentBlendMass"] == 3.2
+    if not is_additive:
+        assert row["canonical_id"] == "cinnamon"
+        assert row["score_eligible_by_cleaner"] is True
+
+
+@pytest.mark.parametrize("quantity", [None, 1, 500])
+def test_active_cinnamon_function_does_not_depend_on_amount(quantity):
+    from enhanced_normalizer import EnhancedDSLDNormalizer
+
+    raw = json.loads((FIXTURES / "evidence_review_1179_raw.json").read_text())
+    leaf = dict(raw["ingredientRows"][10]["forms"][0])
+    leaf.update({"forms": [], "nestedRows": [], "quantity": [] if quantity is None else [{
+        "quantity": quantity, "unit": "mg", "servingSizeOrder": 1,
+        "servingSizeQuantity": 26, "servingSizeUnit": "Gram(s)",
+    }]})
+    raw["ingredientRows"] = [leaf]
+    row = EnhancedDSLDNormalizer().normalize_product(raw)["activeIngredients"][0]
+    assert row["canonical_id"] == "cinnamon"
+    assert row["source_section"] == "active"
+    assert row.get("isAdditive", False) is False

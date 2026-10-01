@@ -7637,12 +7637,14 @@ class EnhancedDSLDNormalizer:
                     botanical_details["plantPart_source"] = source
                     break
 
-        # Check if this ingredient is an additive (add metadata flag for enrichment phase)
-        processed_name_check = self.matcher.preprocess_text(name)
+        # Attribute additive function only from declared names/aliases. Identity
+        # variations may recognize a botanical but cannot turn its extract
+        # into flavoring. Amount and source membership are separate facts.
+        processed_name_check = name.strip().lower()
         is_additive = False
         additive_type = None
-        if processed_name_check in self.other_ingredients_lookup:
-            additive_data = self.other_ingredients_lookup[processed_name_check]
+        if processed_name_check in self.other_ingredients_exact_lookup:
+            additive_data = self.other_ingredients_exact_lookup[processed_name_check]
             is_additive = additive_data.get("is_additive", False)
             if is_additive:
                 additive_type = additive_data.get("additive_type")
@@ -8322,11 +8324,11 @@ class EnhancedDSLDNormalizer:
                     forms_structured.append({"name": form})
 
             # Check if this ingredient is an additive (add metadata flag for enrichment phase)
-            processed_name_check = self.matcher.preprocess_text(name)
+            processed_name_check = name.strip().lower()
             is_additive = False
             additive_type = None
-            if processed_name_check in self.other_ingredients_lookup:
-                additive_data = self.other_ingredients_lookup[processed_name_check]
+            if processed_name_check in self.other_ingredients_exact_lookup:
+                additive_data = self.other_ingredients_exact_lookup[processed_name_check]
                 is_additive = additive_data.get("is_additive", False)
                 if is_additive:
                     additive_type = additive_data.get("additive_type")
