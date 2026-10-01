@@ -604,7 +604,7 @@
       "severity": "Moderate",
       "interaction_effect_type": "Enhancer",
       "mechanism": "Furanocoumarins in grapefruit irreversibly inhibit intestinal CYP3A4, increasing bioavailability of CYP3A4-metabolized statins (simvastatin, atorvastatin, lovastatin). This raises statin plasma levels and muscle toxicity risk.",
-      "management": "Simvastatin labeling says to avoid grapefruit juice. Lovastatin labeling warns that grapefruit juice raises lovastatin levels and myopathy risk. Atorvastatin labeling advises against large quantities (more than 1.2 liters a day). Pravastatin, rosuvastatin, and fluvastatin are not significantly affected. Taking the statin hours apart from grapefruit juice reduces but does not remove the effect.",
+      "management": "Simvastatin labeling says to avoid grapefruit juice. Lovastatin labeling warns that grapefruit juice raises lovastatin levels and myopathy risk. Atorvastatin labeling advises against large quantities (more than 1.2 liters a day). Pravastatin, rosuvastatin, and fluvastatin are not significantly affected. Spacing simvastatin or lovastatin from grapefruit juice can reduce but does not remove the effect. Spacing atorvastatin does not reliably reduce the effect. Dose spacing is not a substitute for the label precautions above.",
       "source_urls": [
         "https://ods.od.nih.gov/factsheets/list-all/",
         "https://www.fda.gov/consumers/consumer-updates/grapefruit-juice-and-some-drugs-dont-mix",
@@ -1405,7 +1405,7 @@
       "management": "Take levothyroxine at least 4 hours before or after calcium supplements. Take levothyroxine on an empty stomach, 30–60 minutes before breakfast. Monitor thyroid function tests if supplementation regimen changes.",
       "source_urls": [
         "https://pubmed.ncbi.nlm.nih.gov/21595516/",
-        "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=f4f5a9a4-b4db-4b9f-908b-c0be9a0e5b20"
+        "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=1e11ad30-1041-4520-10b0-8f9d30d30fcc"
       ],
       "source_pmids": [
         "21595516"
@@ -1440,7 +1440,7 @@
       "management": "Take levothyroxine at least 4 hours before or after iron supplements. Monitor TSH levels after starting or stopping iron. Women often take both and need to manage this timing carefully.",
       "source_urls": [
         "https://pubmed.ncbi.nlm.nih.gov/20554088/",
-        "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=f4f5a9a4-b4db-4b9f-908b-c0be9a0e5b20"
+        "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=1e11ad30-1041-4520-10b0-8f9d30d30fcc"
       ],
       "source_pmids": [
         "20554088"

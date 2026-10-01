@@ -202,3 +202,48 @@ sheet (updated 2026-01-06) no longer discusses renal toxicity in its text. New s
   2026-09-14): "Ask a doctor before use if you have kidney disease".
 Mechanism text rewritten to these sources (the unsourced "cardiac arrest" and "doses safe in
 healthy adults" phrases removed). Severity, action and alert copy unchanged.
+
+## Codex source audit: calcium and iron label repair (2026-10-01)
+
+Owner: `scripts/data/curated_interactions/curated_interactions_v1.json` — evidence: both
+`DSI_LEVOTHYROXINE_CALCIUM` and `DSI_LEVOTHYROXINE_IRON` retained the old label URL;
+the profile counterparts already cite the real SYNTHROID label. Will NOT create: another
+interaction owner or review registry.
+
+Per-entry live review: the calcium and iron pair source URL with DailyMed setid
+`f4f5a9a4-b4db-4b9f-908b-c0be9a0e5b20` redirects to `/dailymed/index.cfm`, with title
+`DailyMed` and no prescribing information. Each URL is replaced with
+`1e11ad30-1041-4520-10b0-8f9d30d30fcc`, independently read live: SYNTHROID levothyroxine,
+updated February 20, 2024, names calcium carbonate and ferrous sulfate and specifies at
+least 4-hour separation. Calcium PMID 21595516 and iron PMID 20554088 independently
+match their interventions and absorption/thyroid-control outcomes. Severity, timing,
+mechanism, identity, clinical confidence and numerical policy are unchanged for both entries.
+
+Regression first: 2 failing checks reproduced the dead source. Exact `data_batch check`
+since `e7445fd2`: only `interactions/DSI_LEVOTHYROXINE_CALCIUM` and
+`interactions/DSI_LEVOTHYROXINE_IRON`, 2 changed entries / 0 problems.
+Changed-entry citation content verifier: 2/2 MATCH, no mismatch. Focused reconciliation,
+magnesium and data-batch modules: 226 passed. Full fast checkpoint is deferred to the
+integrator's combined candidate; this atomic source-only fix does not claim release validation.
+No DB rebuild, upload or publication was performed.
+
+## Codex source audit: grapefruit timing scope (2026-10-01)
+
+Owner: `curated_interactions_v1.json::DSI_STATINS_GRAPEFRUIT.management` — evidence:
+its newly generalized timing sentence and live PMID 26299317 abstract. Will NOT create:
+a new food-advisory owner or numeric policy.
+
+The unqualified sentence that taking "the statin" hours apart reduces the interaction
+incorrectly includes atorvastatin. The cited abstract distinguishes simvastatin/lovastatin
+(about 260% increase together versus about 90% when 12 hours apart) from atorvastatin
+(about 80% increase whenever taken). Replaced only that sentence with statin-specific
+scope and an explicit reminder that spacing does not replace the label precautions.
+Independently read all three live DailyMed labels: simvastatin avoid grapefruit juice;
+atorvastatin advises avoiding quantities above 1.2 liters/day; lovastatin describes raised
+exposure and myopathy risk. Severity and food-note behavior remain unchanged.
+
+Regression first: 1 failing scoped-timing check. Exact `data_batch check` since
+`1ee2a0c6`: only `interactions/DSI_STATINS_GRAPEFRUIT`, 1 changed entry / 0 problems.
+Changed-entry content verifier: PMID 26299317 MATCH. Focused reconciliation, magnesium
+and data-batch modules: 227 passed. Integrator owns the final combined full-fast checkpoint;
+this receipt does not claim catalog or interaction-DB publication.
