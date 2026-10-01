@@ -2087,8 +2087,10 @@ def derive_product_scoring_evidence(product: Dict[str, Any]) -> List[Dict[str, A
                     # every Dose/Evidence consumer refuses it as a member dose.
                     item["reason"] = "identity_bearing_blend_header_mass_from_nested_child"
                     item["linked_rows"].extend(
-                        str(child["raw_source_path"]) for child in children
-                        if _anchor_identity(child)[0] == anchor_canonical
+                        sorted({
+                            str(child["raw_source_path"]) for child in children
+                            if _anchor_identity(child)[0] == anchor_canonical
+                        } - set(item["linked_rows"]))
                     )
             if _is_botanical_or_standardized_anchor(row):
                 item["anchor_risk_class"] = "botanical_or_standardized"

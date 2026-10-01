@@ -467,3 +467,15 @@ def test_a_single_branded_intervention_nested_under_its_own_heading_keeps_its_fl
     # marker's 1.25 mg row and the existing source guard grants no floor. Keep
     # that baseline behavior; this correction must not invent another join.
     assert evidence["metadata"]["primary_evidence_floor"] == (0.0 if with_constituent else 18.0)
+
+
+def test_real_nested_enzyme_member_has_one_physical_source_link():
+    from scoring_input_contract import get_scoring_ingredients, is_lent_blend_mass
+
+    product = _enrich("prominence_nested_enzyme_242529_raw.json")
+    header = next(row for row in get_scoring_ingredients(product, strict=True).rows
+                  if row.get("raw_source_path") == "ingredientRows[30]"
+                  and row.get("evidence_type") == "blend_anchor_mass")
+    assert is_lent_blend_mass(header)
+    assert len(header["linked_rows"]) == len(set(header["linked_rows"]))
+    _evidence(product)  # exercise the production artifact, not only the adapter
