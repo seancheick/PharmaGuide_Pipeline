@@ -1,6 +1,6 @@
 # Probiotic Evidence certainty parity — October 1, 2026
 
-Status: Policy APPROVED / Measurement COMPLETE / Production validated for local integration / Release NOT AUTHORIZED. These results supersede the historical September30 counts below. No push or release.
+Status: Policy APPROVED / Measurement COMPLETE / Production LOCALLY INTEGRATED / Release NOT AUTHORIZED. These results supersede the historical September30 counts below. No push or release.
 
 ## Owner Check
 
@@ -52,7 +52,7 @@ Seed's8.5 certainty belongs to its exact formula's recorded positive-weak RCT. T
 -119 Evidence-state clarifications were independently checked:24 applicable primary null states and95 zero-credit native assessments without applicable primary null findings. All are recorded per product in the JSON receipt; no numerical or safety change.
 - Focused checkpoint4002 passed21 skipped; additional owner checks64 passed1 skipped; population regression checkpoint746 passed. Final full `scripts/test.sh fast`: **17898 passed,167 skipped,1 existing Ravage cinnamon xfail**,627.94 seconds. Log `.claude/state/probiotic_production_reconciled_fast.log`. The preliminary run interrupted to reconcile main is not an acceptance receipt.
 - Fresh-context reviewer approved source, clinical guards, semantic test migration, complete replay equality and main reconciliation. The existing Ravage xfail is unrelated and remains a mandatory Phase2 closure before release.
-- Next: local integration, then Phase2 identity/roles/prominence (Ravage, shared primary selection, trace protein and alternate servings). Generic/omega amount transfers and broader Dose policies remain open. No push or release.
+- Locally integrated on main7262d192. Subsequent Phase2 cleaner fixb39328b9 closes Ravage:17906passed167skippedzero xfails; extended1259 complete replay payloads remain unchanged (ledgerQ48). Next: shared primary selection, trace protein and alternate servings. Generic/omega amount transfers and broader Dose policies remain open. No push or release.
 
 ## Historical September30 report — superseded measurements
 

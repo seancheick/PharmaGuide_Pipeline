@@ -1,8 +1,8 @@
 # Evidence → Dose responsibility transfer
 
-Status: owner inventory complete; measured options are in `MEASUREMENT.md`; score-changing integration awaits the decisions below.
+Status: all-route owner inventory complete; approved probiotic transfer locally integrated (Q47). Generic/omega transfer and wider Dose-policy decisions remain open. Phase2 Ravage closure is Q48; final prominence/serving corrections remain pending. No push or release.
 
-Baseline: pipeline `880b17a7`; focused owner/role suite 103 passed, 7 skipped,
+Inventory baseline: pipeline `880b17a7`; focused owner/role suite 103 passed, 7 skipped,
 1 strict xfail. The frozen 1,261-label audit sample is
 `~/pg_quality/closure_20261001/deadcode_6917_1261.jsonl`.
 
@@ -117,3 +117,18 @@ therefore measured but not integration-approved. The next integration change
 requires explicit decisions for probiotic magnitude/trial-range ownership,
 omega purpose mapping/magnitudes, and the generic clinical-anchor mapping,
 including reviewed-null trial amounts and brand/generic precedence.
+
+
+## Phase2 cleaner function correction — October1
+
+Owner: `scripts/enhanced_normalizer.py::EnhancedDSLDNormalizer._process_single_ingredient_enhanced` and `EnhancedDSLDNormalizer._process_ingredients_sequential`, using existing `other_ingredients_exact_lookup` for declared function aliases. Matrix source_section/cleaner_row_role and raw1179 trace establish ownership. Expanded identity lookup remains; no scorer bypass, new owner, registry, parser, field or borrowed member dose.
+
+Sourceb39328b9; baseline7262d192. Full verified capture hashes:
+
+- baseline: head `7262d192c041314e9f3533d68f9a30e4e5a002ba`, manifest `048ffd9669499ab9f94625f7ee1b2a237a163c9310e945a6dadadc488516be67`, output `c2a80028eaf37f51b51e29d0f5a9c715e45f5d4dca70b5bff7a3fb73dc70a68a`, 6 rows, source unchanged `true`.
+- candidate: head `b39328b98c7cf83fe617c032b66fc4b6bfc67532`, manifest `048ffd9669499ab9f94625f7ee1b2a237a163c9310e945a6dadadc488516be67`, output `60c23ac620761a485375138ff2668ed74f94c552176829f6683c4f235560ce7c`, 6 rows, source unchanged `true`.
+- extended_candidate: head `b39328b98c7cf83fe617c032b66fc4b6bfc67532`, manifest `cbe041440eb1eb565edf2564298e106adfc35175f413d1aab26782447a1e8286`, output `a20cea182bc18ecb6eeff4dc7dc54232c6452a2631c22a53b5b11e2560c5ea72`, 1259 rows, source unchanged `true`.
+
+Targeted outcomes: Ravage1179 raw Formulation8.2846→8.4307, public11.0→11.2, total33.5→33.7; restored cinnamon raises the existing IQM assessment count21→22. GoldenMilk243271 gains cinnamon Evidence-owner metadata6→7 without score movement.2219,221108,49630,66953 complete payloads are unchanged. All six preserve Safety, route, status, Evidence and Dose scores. Extended1259 output is identical to approved productionSHAa20cea182bc18ecb6eeff4dc7dc54232c6452a2631c22a53b5b11e2560c5ea72.
+
+Verification: failing regression5failed27passed; focused1427passed; normalizer covering143files3153passed12artifactskips; final `scripts/test.sh fast`17906passed167skippedzero xfails,543.63seconds. Fresh reviewer independently verified source, capture/input/output hashes, every targeted movement and extended equality. No clinical policy/data edited. Existing dual-use amount overrides and other Phase2 prominence/serving defects are separate open work; this checkpoint does not validate release.
