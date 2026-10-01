@@ -1832,7 +1832,15 @@ def _dose_map(product: Dict[str, Any], *, rows=None) -> Dict[str, Tuple[float, s
             key = _canonical_text(name)
             if not key:
                 continue
-            if key not in doses or quantity > doses[key][0]:
+            previous = doses.get(key)
+            previous_quantity = previous[0] if previous is not None else None
+            if previous is not None:
+                converted = _convert_unit(previous[0], previous[1], unit)
+                if converted is not None:
+                    previous_quantity = converted
+                # Unrecognized/incompatible dimensions retain their previous
+                # behavior; no activity-to-mass equivalence is invented here.
+            if previous_quantity is None or quantity > previous_quantity:
                 doses[key] = (quantity, unit)
     return doses
 
