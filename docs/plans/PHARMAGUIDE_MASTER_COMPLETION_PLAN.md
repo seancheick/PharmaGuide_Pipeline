@@ -125,6 +125,8 @@ A completed determination may be applicable positive evidence, reviewed null/no 
 
 Any candidate change after approval requires a new freeze and approval.
 
+What follows Phase 7 (and the few items that can run beside it) is in the [product roadmap](PHARMAGUIDE_PRODUCT_ROADMAP.md); this plan is its Phase 0.
+
 ## Added and discovered since the original plan
 
 | Item | Finding/change | Outcome and evidence |
