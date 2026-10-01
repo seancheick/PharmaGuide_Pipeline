@@ -884,7 +884,8 @@ def _recover_verified_primary_ingredient_matches(
             # borrow generic per-ingredient human evidence or primary floors.
             # A disclosed BCAA aggregate is different: the reviewed evidence
             # record itself is for the complete BCAA mixture, and the sports
-            # contract already owns that aggregate identity.
+            # contract already owns that aggregate identity. A protein total is
+            # also admitted when enrichment already links evidence.
             from scoring_v4.modules.sports_helpers import BCAA_AGGREGATE_CANONICALS
             blend_canonical = str(row.get("canonical_id") or "").strip().lower()
             if (
@@ -1631,9 +1632,10 @@ def _primary_mass_floor(
 
     Which rows may anchor is the shared role owner's decision
     (``evidence_resolver.evidence_prominent_row_keys``), and the match must link
-    to such a row (``_is_prominent_anchor``: never a mass lent to a member, and a
-    blend heading's total only for the identity the input contract gives the
-    heading or the branded record its own text names). The clinical-dose gates
+    to such a row (``_is_prominent_anchor``: a blend heading's total only for the
+    identity the input contract gives the heading or the branded record its own
+    text names; ``_evidence_anchor_rows`` never offers a mass lent to a member
+    or a Nutrition Facts declaration). The clinical-dose gates
     stay with the record. When the
     owner names no purpose at all (its retain-everything fallback), there is no
     prominence to read and the previous behavior stands unchanged.
