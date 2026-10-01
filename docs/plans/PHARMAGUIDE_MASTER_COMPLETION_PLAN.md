@@ -14,7 +14,7 @@ A checked implementation box means that specific deliverable is implemented, mea
 - [ ] Complete the remaining Phase 2 role/prominence and serving corrections.
 - [ ] Validate a fresh complete catalog, approve its exact manifest, publish and verify live behavior.
 
-No catalog release has occurred under this plan. Recorded checkpoints validate their named source and frozen samples, not the entire rebuilt corpus. The combined pipeline source is integrated locally on main through `2aaafc15` (tested production checkpoint `a3a2d904`). Q49 and Q51 are retained separately; D26, remaining identity cases and Q53 are still release holds. Source push and cleanup receipts are recorded below.
+No catalog release has occurred under this plan. Recorded checkpoints validate their named source and frozen samples, not the entire rebuilt corpus. The combined pipeline source is integrated locally on main through `2aaafc15` (tested production checkpoint `a3a2d904`). Q49 and Q51 are retained separately; D26, remaining identity cases and Q53 are still release holds. Source is pushed to main; source push and cleanup receipts are recorded below.
 
 ## Fixed boundaries and Owner Check
 
@@ -110,7 +110,7 @@ A completed determination may be applicable positive evidence, reviewed null/no 
 
 - [x] Implement and review the separate Flutter lane's taxonomy, numeric/zero daily-value rendering and seven diagnosed golden updates (`2de825fe`, `e21df0fd`, `d5de1023`, `ec7b1530`). Its recorded app gates passed; this is lane validation, not frozen-candidate acceptance.
 - [x] Fix the pipeline's daily-value loss at the cleaner owner and verify real-product `214452` rendering with a local candidate.
-- [x] Reconcile Flutter Phase 6 with app main P0 and fix verified-feed cache ownership (`fe385971`, `ec23bdca`); integrated source passes `make check`: 3,747 tests, analysis no issues. Taxonomy byte/hash parity verified; seven golden failures closed.
+- [x] Integrate and push Flutter Phase 6, app P0, verified-feed cache ownership and reviewed blocked-page clarity on app main `d6882d79`. Final combined `make check`: **3,754 passed**, analysis no issues; 72 blocked-page focused checks passed. Taxonomy byte/hash parity verified; seven golden failures closed. Simulator screenshot inspected (existing running build; final bundle acceptance remains below).
 - [ ] Validate the integrated Flutter source against the final rebuilt release candidate; recheck real-product contracts/rendering and bundle parity.
 - [ ] Verify nutrition/active/other sections, full label-row rendering and summary fallback: amounts, exact units, available daily values, explicit zeros and absent values.
 - [ ] Confirm no app calculation recreates a pipeline score, verdict, role or Evidence determination.
@@ -177,3 +177,12 @@ This is the original phase outline and acceptance boundary retained for comparis
 Original reported baseline: main/origin `880b17a7`, clean; 17,950 fast tests passed, 40 skipped and one expected failure. Lane 2A, Evidence classification closure, Q3 and Q40 were integrated; rejected Dose draft unlanded. Ravage, Evidence/Dose coupling, final calibration, Flutter parity/screenshots, final corpus and publication were outstanding. This is a **historical starting statement**, not today's verification result.
 
 Original fixed boundaries remain: six maxima 20/20/20/15/15/10, existing public fields/statuses/mirrors, existing owners only; no second scoring system. Original acceptance remains: no lost assessment, unexplained deltas or release-critical expected failure; justified identity holds and completed Evidence determinations; current provenance, passing pipeline/app gates and successful post-publication verification. A deferred expected failure requires explicit approval and proof it cannot affect shipped products.
+
+## October 1 integration and cleanup receipt
+
+- [x] Push validated pipeline source and Q49/Q51 integration register to main (`de63a5f0`, tested production `a3a2d904`); final fast: 17,994 passed,167 skipped,zero failures/xfails.
+- [x] Push combined Flutter source to main `d6882d79`; final analyzer and 3,754 tests passed.
+- [x] Remove clean merged lane worktrees and branches after verifying their tips are contained in published main. Remove the requested `dose-map-base` scratch checkout. Preserve rejected/superseded experiments and ignored handoffs in recoverable archives.
+- [ ] Correct Q53 probiotic registry attribution/applicability per entry, then complete D26, remaining identity work and approved calibration before the fresh corpus/release sequence.
+
+Durable replay, logs, simulator capture and cleanup archives: `/Users/seancheick/pg_quality/integration_20261001/`. App Dependabot branches are new unreviewed dependency proposals and remain untouched. Website main already contains its reconciled work; untracked `axis-proposals-for-review.csv` is preserved. No catalog, interaction DB, Supabase or OTA publication occurred.

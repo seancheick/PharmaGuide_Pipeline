@@ -363,7 +363,10 @@ The rejected Dose draft is not integrated. Its tracked patch, untracked files, s
 pre-cleanup Git refs are preserved under `/Users/seancheick/pg_quality/integration_20261001/cleanup/`.
 The obsolete Dose, transfer-policy and probiotic-measurement worktrees/branches were removed;
 the specified clean `dose-map-base` scratch worktree was removed. The already-merged app UX
-worktree/branch was removed after preserving its private audit state. Active candidate lanes
-will be removed only after main integration and push are verified.
+worktree/branch was removed after preserving its private audit state. All five pipeline lane tips were verified contained in published main before their clean worktrees and local/remote branches were removed. The Codex integration checkout was removed after separately preserving its ignored state and derived outputs. Both app lanes are contained in published app main `d6882d79`; their clean branches/worktree were removed. New unreviewed Dependabot branches remain untouched.
 
 Final combined pipeline `scripts/test.sh fast` at source `a3a2d904`: **17,994 passed, 167 skipped, zero failures/xfails**, exit0 in828.13s. Skips are artifact-dependent/opt-in checks; no final corpus or catalog-release validation is claimed. Final integrated app `make check` at `ec23bdca`: analysis no issues, **3,747 passed**, exit0. Logs are in the durable integration receipt folder.
+
+### Published source checkpoint
+
+Pipeline source and integration register pushed through `de63a5f0` (production tested at `a3a2d904`). App combined source pushed at `d6882d79`: final `make check` analysis no issues, **3,754 passed**, exit0; focused blocked-page checks72/72. Screenshot `app_simulator_current.png` records the existing simulator blocked-product view, with visible warning/ingredient and no observed overflow; it does not prove the final rebuilt bundle. Durable log `app_combined_check.log`. Main refs verified equal origin after push. Cleanup inventories/archives live under the durable receipt folder. No runtime catalog/clinical DB/OTA publication; Q53 and D26 stay open.
