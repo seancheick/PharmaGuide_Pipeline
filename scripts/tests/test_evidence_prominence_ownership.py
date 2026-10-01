@@ -151,6 +151,14 @@ def test_the_retained_stand_in_reads_the_prominent_rows_own_amount():
     assert _scored(product)["metadata"]["primary_evidence_floor"] == 0.0
 
 
+def test_real_the_stand_in_keeps_reading_the_purposes_own_identity_rows():
+    """Sambucus (204048): the title-named 250 mg extract carries a nested
+    "Elderberries 16 g" source row of the same identity. Excluding only other
+    identities keeps the previous stand-in result for this record."""
+    evidence = _evidence(_enrich("prominence_source_equivalent_204048_raw.json"))
+    assert evidence["metadata"]["primary_evidence_floor_canonical"] == "elderberry extract"
+
+
 def test_clinical_dose_gate_still_blocks_a_declared_purpose():
     product = _product(
         product_name="Melatonin 0.5 mg",
