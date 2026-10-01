@@ -1554,7 +1554,10 @@ def _is_prominent_anchor(
 ) -> bool:
     """Whether ``row`` is a prominent label row that may carry ``entry``'s amount.
 
-    A row the role owner marks prominent qualifies. A blend heading's total
+    A row the role owner marks prominent qualifies, including a heading the
+    input contract itself resolves to an identity (``identity_bearing``): the
+    contract, not this gate, decides that the heading total is that identity's
+    amount. Otherwise a blend heading's total
     (``blend_anchor_mass``) is never a member's amount, so it carries only a
     verified product-level record the heading itself names (the registry record
     and predicate product-level recovery use; the heading's own text, never the

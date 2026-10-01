@@ -1079,8 +1079,9 @@ def test_non_vitamin_d_iu_is_not_given_a_generic_primary_sentinel() -> None:
 
 
 def test_hidden_coactive_does_not_recover_generic_ingredient_evidence() -> None:
-    """A mass-dominant co-active still needs to be clear from the product title
-    unless it is the only scorable active.
+    """A heavier co-active the label does not declare is not the product's
+    purpose (the shared role owner names Lithium Orotate in the title), so its
+    verified record is never recovered.
     """
     from scoring_v4.modules.generic_evidence import score_evidence
 

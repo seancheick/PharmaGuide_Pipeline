@@ -290,7 +290,8 @@ def score_generic(product: Any) -> GenericModuleResult:
 
     # Layer 3 — Evidence dimension (P1.3.3 complete for generic).
     # Phase 8: the generic module opts into the primary-ingredient evidence floor
-    # (it has the count-over-quality flaw); omega/probiotic/multi/sports do not.
+    # (it has the count-over-quality flaw), as do sports and fiber;
+    # omega/probiotic/multi do not.
     evidence_payload = score_evidence(product, apply_primary_floor=True, owner_scoped=True)
     evidence_dim = result.dimensions["evidence"]
     evidence_dim.score = evidence_payload["score"]

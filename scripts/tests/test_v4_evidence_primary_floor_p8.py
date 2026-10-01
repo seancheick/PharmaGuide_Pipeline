@@ -2,10 +2,11 @@
 
 The top-N additive evidence pipeline rewards ingredient COUNT: a focused single
 clinically-validated ingredient (KSM-66) scored ~4.5/20 while two generic minerals
-scored ~11.5/20. The floor lifts the dimension when the product's MASS-DOMINANT
-active is strongly & positively evidenced at a clinical dose — keyed on the
-primary active (not a well-studied trace co-ingredient), opt-in to the generic
-module only (omega/probiotic/multi reuse this scorer and must not inherit it).
+scored ~11.5/20. The floor lifts the dimension when the product's PROMINENT
+active (the shared role owner's purpose, still holding half the heaviest active's
+mass as the retained exposure stand-in) is strongly & positively evidenced at a
+clinical dose — never a well-studied trace co-ingredient. Generic, sports and
+fiber opt in; omega/probiotic/multi reuse this scorer and do not.
 """
 from __future__ import annotations
 

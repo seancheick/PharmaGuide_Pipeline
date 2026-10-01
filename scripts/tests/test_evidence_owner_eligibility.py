@@ -74,8 +74,9 @@ def test_a_named_active_keeps_evidence_when_the_blend_name_leaves(enriched):
 def test_a_small_add_on_is_not_prominent_beside_an_undisclosed_blend(enriched):
     """Boron 5 mg beside a 401 mg blend is not what the product is about: the
     UC-II blend's member (collagen) owns Evidence alone; boron and hyaluronic
-    acid do not. The undisclosed member has no amount of its own, so nothing
-    here anchors a primary-evidence floor."""
+    acid do not. (The "UC-II" heading itself names its branded record, so that
+    record's floor rests on the heading total; see
+    test_evidence_prominence_ownership.)"""
     assert evidence_owner_canonicals(enriched["321604"]) == {"collagen"}
 
 
