@@ -336,17 +336,22 @@ def test_real_heading_that_names_its_brand_anchors_that_brands_floor(fixture, fl
     assert evidence["components"]["primary_evidence_floor"] == floor
 
 
-@pytest.mark.parametrize("fixture", [
-    "prominence_probiotic_species_236913_raw.json",  # title-named La-14, 0.5 mg
-    "prominence_probiotic_species_232059_raw.json",  # BB536, the one pre-existing leak
+@pytest.mark.parametrize("fixture,recovered,evidence", [
+    # title-named La-14 at 0.5 mg beside a 100 million CFU total: never "the clear primary"
+    ("prominence_probiotic_species_236913_raw.json", [], 0.0),
+    # BB536: its species record is part of the approved model's input
+    ("prominence_probiotic_species_232059_raw.json", ["INGR_BIFIDOBACTERIUM_LONGUM"], 13.0),
 ])
-def test_real_probiotic_organisms_never_borrow_generic_ingredient_recovery(fixture):
-    """Live organisms are probiotic-Evidence owned. Generic contract recovery
-    must not hand a species-level ingredient record to a strain row."""
+def test_real_probiotic_model_inputs_stay_as_approved(fixture, recovered, evidence):
+    """The approved probiotic model reads resolved_clinical_matches without
+    owner scoping. Callers that are not owner-scoped keep the previous recovery
+    rule, so this batch neither adds nor removes a species record there."""
     from scoring_v4.modules.generic_evidence import resolved_clinical_matches
+    from scoring_v4.scored_artifact import build_scored_artifact
 
-    _, recovered = resolved_clinical_matches(_enrich(fixture))
-    assert recovered == []
+    _, found = resolved_clinical_matches(_enrich(fixture), assess_amount=False)
+    assert [entry.get("id") for entry in found] == recovered
+    assert build_scored_artifact(_enrich(fixture))["quality_pillars_v4"]["evidence"]["score"] == evidence
 
 
 @pytest.mark.parametrize("fixture,record,floor_canonical", [
