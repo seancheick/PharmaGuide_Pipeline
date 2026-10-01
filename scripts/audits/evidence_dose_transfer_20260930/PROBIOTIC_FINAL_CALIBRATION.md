@@ -1,3 +1,57 @@
+# Probiotic Evidence certainty parity — October 1, 2026
+
+Status: approved architecture measured and independently reviewed; production integration unfinished. These results supersede the historical September30 counts below. No push or release.
+
+## Owner Check
+
+- Owner: `scripts/scoring_v4/modules/probiotic_evidence.py::score_evidence` — certainty/applicability/confirmation; traced callers, focused regressions and frozen replay.
+- Owner: `scripts/studied_formulas.py::_assess` — formula identity/preparation/source ownership and existing dose comparison.
+- Owner: `scripts/scoring_v4/modules/probiotic_dose.py::score_dose` — amount and reviewed trial comparison destination.
+- Owner: `scripts/scoring_v4/config/quality_score.json` — production magnitudes.
+- Will NOT create: another scorer, clinical registry, formula matcher, Dose engine or app calculation.
+
+## Corrections
+
+Equivalent recorded study designs and effects now share one certainty calculation across generic/formula and native paths. Identity specificity belongs exclusively to applicability. Missing design never becomes an RCT; missing native effect strength is not invented or derived from replication counts. Mixed primary outcomes cap that family's certainty using the existing mixed-effect weight.
+
+An assessed exact formula cannot borrow species/member research. Applicability follows the same family earning certainty. Candidate ownership metadata and explanations no longer claim companion credit or matching dose. An unknown formula strain fails closed instead of crashing. Native eligibility preserves preparation and identity safeguards: inactivated organisms cannot inherit live-strain Evidence. That last correction is latent in this cohort but protected by a failing-before/passing-after regression.
+
+## Current frozen result
+
+| Check | Corrected candidate |
+|---|---:|
+| Labels |1259:542 probiotics+717 controls|
+| Comparable scored probiotics |535|
+| Seed Evidence / total |14.5/20 /84.5/100|
+| Seed certainty / applicability / confirmation |8.5+6+0|
+| Seed Transparency / Verification |12/15 /8/15|
+| Four infant BB12 anchors |Evidence18=10+6+2|
+| Changed totals versus prior graded draft |191, entirely Evidence|
+| Quality-tier crossings versus baseline |106, previously103|
+| Added / removed crossings versus prior draft |12 /9|
+| Needs improvement→Poor |31, previously36|
+| Other pillars, Safety drivers, route/status changes |0|
+| Changed nonprobiotic controls |0/717, complete payloads identical|
+| Unexplained measured deltas |0|
+
+The JSON re-reports all103 previously classified crossing IDs, all106 current crossings and all191 changes versus the prior graded draft with component causes. Raw components and displayed pillar deltas are distinguished to account for public rounding. None of the31 downward-to-Poor labels has certainty≥8, replication credit or an assessed formula. Quality tiers and Safety are different judgments; none of these changes alters a Safety driver.
+
+Observed certainty among535 scored probiotics:0:225;4:4;5.6667:2;6.6667:56;8.5:1;10:247. Clinical-strain summaries without a reported design retain the conservative4/6 design weight; this is not randomized research.
+
+Seed's8.5 certainty belongs to its exact formula's recorded positive-weak RCT. The previous6 was not solely that formula's score: generic B.longum research on other strains could win the earlier candidate. The corrected owner prevents that substitution. No competitor score target or Seed exception is used. Keep the verified stored label because the current webpage has conflicting blend allocations. Transparency12 and Verification8 remain; Seed is a Phase5 Verification calibration canary.
+
+## Verification and next integration gate
+
+- Clean replay head145ff18c:1259/1259. The preparation-corrected replay is byte-identical to f82ba9cd:SHA25645ad0e58d79ae746c0994409acbe0d156d355e5925e7ca722854eb5291a708d2.
+- Frozen manifest:cbe041440eb1eb565edf2564298e106adfc35175f413d1aab26782447a1e8286.
+- Current focused measurement suite:50 passed. Prior full-fast checkpoint at a5ab7029:17885 passed,168 skipped,1 existing Ravage cinnamon xfail. Current full-fast checkpoint at145ff18c:17886 passed,168 skipped,1 existing Ravage cinnamon xfail (536.28 seconds).
+- Fresh reviewer reproduced Seed, all four BB12 anchors, every crossing, all controls and preparation rejection. No measurement blocker remains.
+- Production draft relocates configuration, removes experimental/legacy scoring paths, shares `_assess` without synthesizing label quantities, and exposes the existing trial-comparison object in Dose metadata. Three new production-boundary regressions pass: Seed amount invariance plus Dose retention, reviewed-null result state and inactivated BB12 rejection.
+- Production validation is unfinished: the initial focused migration run had106 failures,1653 passes and12 skips. Many assertions address retired12/8 components, diagnostic score fields and dose-based copy. Review also found actual implementation gaps; those are fixed in the draft. Existing regressions must be migrated without losing identity, review, preparation or outcome safeguards; the complete suite must pass before integration.
+- Next: finish that migration, replay the production implementation against this accepted measurement, full-fast checkpoint and fresh review. Then finish remaining all-route transfers and Phase2 roles. No release.
+
+## Historical September30 report — superseded measurements
+
 # Probiotic Evidence final calibration
 
 Status: measurement and crossing classification complete; production policy is not integrated.
@@ -116,6 +170,17 @@ Seed DS-01 remains Very good at 82:
 | Safety/Hygiene | 10 / 10 |
 
 Its 12 Evidence points are six for the strongest exact-formula evidence family plus six for direct applicability. It receives no consistency points because the registry does not establish independent symptom replication. The other ten lost points are three in Transparency and seven in Verification, not a probiotic ceiling. Competitor scores remain canaries rather than calibration targets.
+
+## Seed source audit follow-up — October 1, 2026
+
+The current Seed website audit adds unresolved checks before policy ratification; it does not change the frozen replay or award points.
+
+- **Certainty consistency:** the native exact-strain path assigns 10 to accepted positive top-design contexts, whereas the formula/generic path preserves design, evidence-level and effect weights. Seed receives 6 through the latter. Compare matched study-design/quality scenarios across both paths and justify differences by clinical facts rather than record representation. The existing recorded trial has limitations; a higher score is not presumed.
+- **Label version:** the official reference library currently lists new blend allocations near its top but old allocations in its lower Supplement Facts section. The verified September submission matches the older label. Establish commercial version and trial-formula equivalence before altering label facts or the exact-formula contract. Source: https://seed.com/reference/syn-wk?tab=studies .
+- **Transparency:** the reviewed pages disclose blend totals and strain names, but not individual-strain allocation. No new basis for the remaining three disclosure points was found.
+- **Verification:** current company pages describe accredited third-party testing; the current pillar still treats this as a company assertion without independent product certification. Mamavation reports a separately purchased contaminant test dated February 24, 2026 (https://mamavation.com/supplements-mamavation/seed-testing-results.html). Obtain and verify underlying laboratory/sample provenance before treating that narrative as verified test results. Its scope cannot establish strain identity, probiotic potency, every batch, or product certification.
+
+Next action: measure representation consistency through the existing probiotic Evidence owner, then present any required numerical policy revision with affected labels and controls. Keep source completeness, clinical certainty and independent product verification as distinct judgments.
 
 ## Decision and integration boundary
 
