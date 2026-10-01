@@ -1864,9 +1864,15 @@ def _enrollment_multiplier(enrollment: float) -> float:
     return ENROLLMENT_DEFAULT_MULTIPLIER
 
 
-def _dose_map(product: Dict[str, Any], *, rows=None) -> Dict[str, Tuple[float, str]]:
+def _dose_map(product: Dict[str, Any], *, rows=None) -> Dict[str, List[Tuple[float, str]]]:
+    """Daily label amounts by source row and by every identity a row names.
+
+    An identity key keeps each amount in its own unit: raw numbers are not
+    comparable across units (300 mg vs 10 g, mg vs FU), so the reader converts
+    every amount to the evidence record's unit before taking the largest.
+    """
     from scoring_input_contract import _positive_quantity, _row_unit
-    doses: Dict[str, Tuple[float, str]] = {}
+    doses: Dict[str, List[Tuple[float, str]]] = {}
     daily_multiplier = _daily_serving_multiplier(product)
     for ing in nutrient_delivering_rows(product) if rows is None else rows:
         if is_lent_blend_mass(ing):
@@ -1879,7 +1885,7 @@ def _dose_map(product: Dict[str, Any], *, rows=None) -> Dict[str, Tuple[float, s
         unit = _norm_text(ing.get("unit_normalized") or _row_unit(ing))
         source_ref = ing.get("raw_source_path") or ing.get("source_row_ref")
         if source_ref:
-            doses[f"source:{source_ref}"] = (quantity, unit)
+            doses[f"source:{source_ref}"] = [(quantity, unit)]
         for name in (
             ing.get("standard_name"),
             ing.get("name"),
@@ -1889,16 +1895,9 @@ def _dose_map(product: Dict[str, Any], *, rows=None) -> Dict[str, Tuple[float, s
             key = _canonical_text(name)
             if not key:
                 continue
-            previous = doses.get(key)
-            previous_quantity = previous[0] if previous is not None else None
-            if previous is not None:
-                converted = _convert_unit(previous[0], previous[1], unit)
-                if converted is not None:
-                    previous_quantity = converted
-                # Unrecognized/incompatible dimensions retain their previous
-                # behavior; no activity-to-mass equivalence is invented here.
-            if previous_quantity is None or quantity > previous_quantity:
-                doses[key] = (quantity, unit)
+            amounts = doses.setdefault(key, [])
+            if (quantity, unit) not in amounts:
+                amounts.append((quantity, unit))
     return doses
 
 
@@ -1917,9 +1916,27 @@ def _daily_serving_multiplier(product: Dict[str, Any]) -> float:
     return daily_serving_multiplier(product)
 
 
+def _largest_converted_amount(
+    entry: Dict[str, Any],
+    amounts: List[Tuple[float, str]],
+    dose_unit: str,
+) -> Optional[float]:
+    # Multiple eligible rows are not summed without an explicit aggregate
+    # contract. The largest individually disclosed matching amount wins, judged
+    # in the record's unit; an amount that cannot be converted never competes.
+    converted = []
+    for quantity, unit in amounts:
+        value = _convert_unit(quantity, unit, dose_unit)
+        if value is None and _is_vitamin_d_evidence_entry(entry):
+            value = _convert_vitamin_d_evidence_unit(quantity, unit, dose_unit)
+        if value is not None:
+            converted.append(value)
+    return max(converted, default=None)
+
+
 def _converted_product_dose(
     entry: Dict[str, Any],
-    dose_map: Dict[str, Tuple[float, str]],
+    dose_map: Dict[str, List[Tuple[float, str]]],
 ) -> tuple[Optional[float], str]:
     # The evidence record's standard name can be less form-specific than the
     # exact label row that enrichment matched.  Resolve the exact match
@@ -1930,19 +1947,8 @@ def _converted_product_dose(
     if refs and not entry.get("aggregate_canonical_ids"):
         # Source lineage is authoritative. Never borrow a larger amount from
         # a differently formulated sibling just because canonical IDs agree.
-        converted = []
-        for ref in refs:
-            dose = dose_map.get(f"source:{ref}")
-            if dose is None:
-                continue
-            value = _convert_unit(dose[0], dose[1], dose_unit)
-            if value is None and _is_vitamin_d_evidence_entry(entry):
-                value = _convert_vitamin_d_evidence_unit(dose[0], dose[1], dose_unit)
-            if value is not None:
-                converted.append(value)
-        # Multiple eligible rows are not summed without an explicit aggregate
-        # contract. The largest individually disclosed matching amount wins.
-        return max(converted, default=None), _canonical_from_entry(entry) or ""
+        amounts = [amount for ref in refs for amount in dose_map.get(f"source:{ref}", [])]
+        return _largest_converted_amount(entry, amounts, dose_unit), _canonical_from_entry(entry) or ""
     lookup_keys: List[str] = []
     for lookup_name in (
         entry.get("matched_term"),
@@ -1957,21 +1963,15 @@ def _converted_product_dose(
         if lookup_key and lookup_key not in lookup_keys:
             lookup_keys.append(lookup_key)
 
-    product_dose = None
+    product_amounts = None
     resolved_key = lookup_keys[0] if lookup_keys else ""
     for lookup_key in lookup_keys:
-        product_dose = dose_map.get(lookup_key)
-        if product_dose is not None:
+        product_amounts = dose_map.get(lookup_key)
+        if product_amounts is not None:
             resolved_key = lookup_key
             break
-    dose_unit = _norm_text(entry.get("dose_unit") or "mg")
-    if product_dose is not None:
-        converted = _convert_unit(product_dose[0], product_dose[1], dose_unit)
-        if converted is None and _is_vitamin_d_evidence_entry(entry):
-            converted = _convert_vitamin_d_evidence_unit(
-                product_dose[0], product_dose[1], dose_unit
-            )
-        return converted, resolved_key
+    if product_amounts is not None:
+        return _largest_converted_amount(entry, product_amounts, dose_unit), resolved_key
 
     aggregate_ids = [
         _canonical_text(value)
@@ -1981,11 +1981,8 @@ def _converted_product_dose(
     if aggregate_ids:
         aggregate_dose = 0.0
         for canonical_id in aggregate_ids:
-            component_dose = dose_map.get(canonical_id)
-            if component_dose is None:
-                return None, resolved_key
-            converted_component = _convert_unit(
-                component_dose[0], component_dose[1], dose_unit
+            converted_component = _largest_converted_amount(
+                entry, dose_map.get(canonical_id, []), dose_unit
             )
             if converted_component is None:
                 return None, resolved_key
