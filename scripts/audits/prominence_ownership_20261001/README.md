@@ -52,7 +52,9 @@ Every regression is in `scripts/tests/test_evidence_prominence_ownership.py` unl
 | 4 | Role owner cannot size `mg NE`/`mcg DFE`/`mcg RAE`/vitamin D IU, so such products have no purpose row (Niacinamide 306366) | not fixed (cross-owner, see open items); the abstention rule keeps their legacy floors | existing folate DFE / vitamin D IU tests stay green unchanged |
 | 5 | Disclosed members of a title-named blend lost purpose at row level (Test 1700 210555) | `evidence_resolver._evidence_owner_selection` reads blend tier per row | `test_real_210555_...`, `test_disclosed_members_...` |
 | 6 | Generic recovery lent species records to live probiotic rows (232059 pre-existing; 236913 would follow) | recovery identity exclusions + `probiotic_measurements.is_probiotic_source_identity` | `test_real_probiotic_organisms_never_borrow_generic_ingredient_recovery` |
-| 7 | Recovery re-stamped a record enrichment already linked to the same row, narrowing its refs (Garlic Powder 217818, Multi-Oil 1838) | recovery skips an existing record already linked to that row `test_real_recovery_never_restamps_a_record_onto_a_row_it_already_links` |
+| 7 | Recovery re-stamped a record enrichment already linked to the same row, narrowing its refs (Garlic Powder 217818, Multi-Oil 1838) | recovery skips an existing record already linked to that row | `test_real_recovery_never_restamps_a_record_onto_a_row_it_already_links` |
+| 8 | Found by the frozen raw replay: the floor's prominence check also dropped a blend heading that IS the branded intervention ("Relora 175 mg", 293928: baseline floor 17 → 0), while correctly dropping member records under a heading total | `_is_prominent_anchor`: a `blend_anchor_mass` heading carries only a verified product-level record the heading names (the product-level recovery predicate), on a row the role owner marks prominent | `test_real_heading_that_names_its_brand_anchors_that_brands_floor`; Ravage creatine module added to `test_real_blend_total_never_becomes_an_undisclosed_members_floor` |
+| 9 | Product-level predicate built brand keys from the record id only: `BRAND_UCII` → "ucii", label "UC-II" → "uc ii" (also BCM-95, EGb 761), so UC-II's heading (321604, baseline floor 18) could not name its record | `_verified_product_entry_matches_text` also accepts an alias that is the identifier itself once separators are removed; descriptive aliases stay excluded; floor gate reads the registry record | `test_a_brand_identifier_matches_as_labels_spell_it`, 321604 case of the heading test |
 
 ## Decision packet D26 — the primary floor's retained exposure stand-in
 
@@ -79,10 +81,11 @@ Phase 4 Dose policy packets (D24). Either retires the stand-in without a magnitu
 | Step | State | Receipt |
 |---|---|---|
 | Failing-first regressions | done | RED `~/pg_quality/prominence_20261001/red_baseline.log` (11 failed / 7 protections passed), `c3_probiotic_red.log`, `c4_rerecovery_red.log` |
-| Source commits | done | `eb70f424`, `2ce48b21`, `5c549d1a`, `2d9ede38` |
+| Source commits | done | `eb70f424`, `2ce48b21`, `5c549d1a`, `2d9ede38`; after the first replay `c4119d30`, `916d0c62` (RED `c6_heading_red.log` 2 failed, `c7_brand_identifier_red.log` 4 failed) |
 | Focused + consumer tests | done (exploratory) | focused 308 passed; 90 consumer files 2,698 passed / 38 skipped; one artifact test fails identically on `e8687b39` |
-| Frozen targeted replay (2,781 raw labels) | running | frozen manifest SHA-256 `2b3140639883423bb75d2f0db750aeedad9ed2ceee052590caf259b20ee5c41c` |
-| 1,259-label control replay | pending | Codex frozen manifest and `a20cea18` capture |
+| Frozen targeted replay (2,781 raw labels) | first pass done at `2d9ede38`; re-run on `916d0c62` running | manifest `2b314063…`; baseline output `9ba85f1a…` (head `e8687b39`), first candidate `0edd8dd2…`: 170 totals moved (153 up / 17 down), 0 status/route, Evidence pillar only. The stored-corpus exploratory A/B missed most of the 17 downs because stored enrichment predates the identity-bearing heading rows: raw replay is authoritative. Classification of the downs found defect 8 |
+| 1,259-label control replay | done at `2d9ede38`; re-run on final HEAD pending | Codex manifest `cbe04144…`; baseline = Codex capture `a20cea18…` (head `3ee91eae`, all 434 source hashes equal to `e8687b39`); candidate `42de5e4a…`: 1,251 identical, 232059 Evidence 13→0 (defect 6), 7 omega/probiotic labels readiness metadata only (role materiality excludes the supplying-oil total, defect 3) |
+| Brand-identifier cohort (every raw label naming UC-II, BCM-95 or EGb 761: 48) | done at `916d0c62` | manifest `4f62f9a2…`; baseline `66a228a2…`, candidate `b7dea4de…`: 47 identical, 219249 TamaFlex readiness lists `BRAND_UCII` for its "UC-II Type II Collagen Complex 20 mg" adjunct row (score unchanged) |
 | D26 counterfactual (P arm) | pending | |
 | Fresh-context review | pending | |
 | Full fast checkpoint | pending | |
