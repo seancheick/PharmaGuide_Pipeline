@@ -22,7 +22,6 @@ from typing import Any, Dict, List, Optional, Tuple
 
 from collagen_taxonomy import PEPTIDES_I_III, classify_collagen_subtype_strict
 from clinical_applicability import filter_clinical_matches
-from probiotic_measurements import is_probiotic_source_identity
 from scoring_input_contract import (
     primary_mass_competitor_rows,
     get_assessable_evidence_ingredients,
@@ -41,6 +40,7 @@ from scoring_v4.modules.generic_helpers import (
     nutrient_delivering_rows,
     delivers_its_nutrient,
     has_usable_individual_dose,
+    is_scorable,
 )
 from scoring_v4.modules.botanical_profile import _mass_mg
 from scoring_v4.modules.collagen_profile import is_collagen_product
@@ -236,9 +236,9 @@ def score_evidence(product: Dict[str, Any], *, apply_primary_floor: bool = False
     `GenericModuleResult.dimensions["evidence"]`.
 
     `apply_primary_floor`: the Phase-8 primary-ingredient floor is opt-in per
-    caller. Only the GENERIC module (which has the count-over-quality flaw) passes
-    True. omega / probiotic / multi / sports reuse this scorer as a sub-component
-    and have their own evidence logic, so they must NOT inherit the floor.
+    caller. The generic, sports and fiber modules pass True (with
+    `owner_scoped`); omega / probiotic / multi reuse this scorer as a
+    sub-component with their own evidence logic and do not inherit the floor.
     """
     if not isinstance(product, dict):
         product = {}
@@ -721,7 +721,9 @@ def _recover_contract_evidence_matches(
 
     recovered: List[Dict[str, Any]] = []
     recovered_ids: set[str] = set()
-    prominent = evidence_prominent_row_keys(product)
+    # Owner-scoped callers read the shared role owner; the others keep the
+    # previous rules (see _recover_verified_primary_ingredient_matches).
+    prominent = evidence_prominent_row_keys(product) if owner_scoped else None
 
     if (
         _has_primary_collagen_peptide_identity(product, prominent=prominent)
@@ -821,20 +823,28 @@ def _recover_verified_primary_ingredient_matches(
     - only verified ingredient-human entries with structured references;
     - only structured identity equality (canonical_id/standard_name/alias), no
       fuzzy substring matching;
-    - only a row the shared role owner names as the product's purpose
+    - owner-scoped callers (generic, sports, fiber Evidence): only a row the
+      shared role owner names as the product's purpose
       (``evidence_resolver.evidence_prominent_row_keys``) and that carries its
-      own disclosed mass, so co-active add-ons never borrow evidence;
-    - that mass still holds half the heaviest competing active's, the retained
-      exposure stand-in (decision D26), so trace amounts never borrow it either.
+      own disclosed mass, never a blend total lent to it;
+    - other callers (the approved probiotic model, omega, multi, readiness,
+      confidence) keep the previous rule unchanged: the only scorable active or
+      one named in the title (``_is_clear_primary_recovery_row``). Moving them
+      to the role owner changes the approved probiotic model's inputs, which
+      needs its own measured decision;
+    - either way the row still holds half the heaviest competing active's mass,
+      the retained exposure stand-in (decision D26), so trace amounts never
+      borrow evidence.
     """
     if matches and not allow_with_existing_matches:
         return []
     from evidence_resolver import evidence_prominent_row_keys, evidence_row_key
 
-    if prominent is None:
-        prominent = evidence_prominent_row_keys(product)
-    if not prominent:
-        return []
+    if allow_with_existing_matches:
+        if prominent is None:
+            prominent = evidence_prominent_row_keys(product)
+        if not prominent:
+            return []
 
     existing_ids = {
         _entry_id(entry)
@@ -884,7 +894,8 @@ def _recover_verified_primary_ingredient_matches(
             # borrow generic per-ingredient human evidence or primary floors.
             # A disclosed BCAA aggregate is different: the reviewed evidence
             # record itself is for the complete BCAA mixture, and the sports
-            # contract already owns that aggregate identity.
+            # contract already owns that aggregate identity. A protein total is
+            # also admitted when enrichment already links evidence.
             from scoring_v4.modules.sports_helpers import BCAA_AGGREGATE_CANONICALS
             blend_canonical = str(row.get("canonical_id") or "").strip().lower()
             if (
@@ -892,12 +903,13 @@ def _recover_verified_primary_ingredient_matches(
                 and not (allow_with_existing_matches and blend_canonical == "protein")
             ):
                 continue
-        if evidence_row_key(row) not in prominent:
-            continue
-        if (_mass_mg(row) or 0.0) <= 0.0 or is_lent_blend_mass(row):
-            # Only a row with its own amount: an undisclosed amount, or a blend
-            # total lent to one member, recovers nothing.
-            continue
+        if allow_with_existing_matches:
+            if evidence_row_key(row) not in prominent:
+                continue
+            if (_mass_mg(row) or 0.0) <= 0.0 or is_lent_blend_mass(row):
+                # Only a row with its own amount: an undisclosed amount, or a
+                # blend total lent to one member, recovers nothing.
+                continue
         if (_mass_mg(row) or 0.0) < threshold:
             continue
         row_canonical_id = str(row.get("canonical_id") or "").strip().lower()
@@ -910,11 +922,9 @@ def _recover_verified_primary_ingredient_matches(
             row_canonical_id == "collagen"
             or _keys_include_dri_essential(row_keys)
             or _keys_include_module_owned_evidence(row_keys)
-            # Live organisms are probiotic-Evidence owned at every species and
-            # strain, not only the canonicals listed above; the registered
-            # probiotic identity owner decides what is one.
-            or is_probiotic_source_identity(row)
         ):
+            continue
+        if not allow_with_existing_matches and not _is_clear_primary_recovery_row(product, row_keys):
             continue
 
         row_ref = str(row.get("raw_source_path") or row.get("source_row_ref") or "").strip()
@@ -923,9 +933,15 @@ def _recover_verified_primary_ingredient_matches(
             existing_id = entry_id in existing_ids
             if existing_id and row_canonical_id in matched_active_canonicals:
                 continue
-            if existing_id and row_ref and row_ref in existing_refs[entry_id]:
+            if (
+                existing_id and row_ref and row_ref in existing_refs[entry_id]
+                and _norm_text(row.get("evidence_type")) != "blend_anchor_mass"
+            ):
                 # Enrichment already links this record to this very row; a
-                # re-stamp would only narrow its source references.
+                # re-stamp would only narrow its source references (to a marker
+                # or one oil). The aggregates admitted above (a disclosed BCAA
+                # or protein total) are the record's own subject, so binding the
+                # record to them stays as before.
                 continue
             if _entry_excludes_recovery_context(entry, row, product):
                 continue
@@ -1260,23 +1276,61 @@ def _keys_include_module_owned_evidence(keys: set[str]) -> bool:
     return False
 
 
-def _has_primary_collagen_peptide_identity(
-    product: Dict[str, Any], *, prominent: Optional[set] = None,
-) -> bool:
-    """A prominent hydrolyzed type I/III peptide row with its own disclosed mass
-    (never a blend total lent to it)."""
-    from evidence_resolver import evidence_prominent_row_keys, evidence_row_key
+def _is_clear_primary_recovery_row(product: Dict[str, Any], row_keys: set[str]) -> bool:
+    """The previous recovery rule, kept unchanged for callers that are not
+    owner-scoped: the row is the only scorable active, or the product title
+    names it."""
+    scorable = [
+        ing
+        for ing in nutrient_delivering_rows(product)
+        if isinstance(ing, dict) and is_scorable(ing)
+    ]
+    if len(scorable) == 1:
+        return True
 
-    if prominent is None:
-        prominent = evidence_prominent_row_keys(product)
-    return any(
-        isinstance(row, dict)
-        and evidence_row_key(row) in prominent
-        and _is_collagen_peptide_row(row)
-        and (_mass_mg(row) or 0.0) > 0.0
-        and not is_lent_blend_mass(row)
-        for row in _competing_active_rows(product)
+    title_text = _canonical_text(
+        " ".join(
+            str(product.get(field) or "")
+            for field in ("product_name", "fullName", "full_name", "name")
+        )
     )
+    if not title_text:
+        return False
+    for key in row_keys:
+        if len(key) < 3:
+            continue
+        if re.search(rf"(?<![a-z0-9]){re.escape(key)}(?![a-z0-9])", title_text):
+            return True
+    return False
+
+
+def _has_primary_collagen_peptide_identity(
+    product: Dict[str, Any], *, prominent: Optional[set],
+) -> bool:
+    """A hydrolyzed type I/III peptide row that holds half the heaviest
+    competing active's mass. That comparison is the retained exposure stand-in
+    (decision D26), unchanged: the recovered record's minimum is read from the
+    heaviest "collagen" row, which need not be this peptide row. Owner-scoped
+    callers pass ``prominent``: the peptide row must then be prominent and its
+    mass its own (never a blend total lent to it). ``None`` keeps the previous
+    rule for the other callers."""
+    from evidence_resolver import evidence_row_key
+
+    max_active_mass = 0.0
+    max_peptide_mass = 0.0
+    for row in _competing_active_rows(product):
+        if not isinstance(row, dict):
+            continue
+        mass = _mass_mg(row) or 0.0
+        max_active_mass = max(max_active_mass, mass)
+        if _is_collagen_peptide_row(row) and (
+            prominent is None
+            or (evidence_row_key(row) in prominent and not is_lent_blend_mass(row))
+        ):
+            max_peptide_mass = max(max_peptide_mass, mass)
+    if max_peptide_mass <= 0.0:
+        return False
+    return max_peptide_mass >= (PRIMARY_MASS_FRACTION * max_active_mass)
 
 
 def _is_collagen_peptide_row(row: Dict[str, Any]) -> bool:
@@ -1396,7 +1450,7 @@ def _heaviest_competing_mass(product: Dict[str, Any]) -> float:
 def _evidence_anchor_rows(
     product: Dict[str, Any], entry: Dict[str, Any]
 ) -> List[Dict[str, Any]]:
-    """The label rows carrying their own amount that an evidence match links to.
+    """The label rows with a positive amount that an evidence match links to.
 
     Only rows with a positive evidence-matching amount qualify; a Nutrition
     Facts declaration or a blend total lent to one child never does. Linkage
@@ -1630,8 +1684,11 @@ def _primary_mass_floor(
 
     Which rows may anchor is the shared role owner's decision
     (``evidence_resolver.evidence_prominent_row_keys``), and the match must link
-    to such a row carrying its own disclosed amount (never a blend total or a
-    mass lent to it). The clinical-dose gates stay with the record. When the
+    to such a row (``_is_prominent_anchor``: a blend heading's total only for the
+    identity the input contract gives the heading or the branded record its own
+    text names; ``_evidence_anchor_rows`` never offers a mass lent to a member
+    or a Nutrition Facts declaration). The clinical-dose gates
+    stay with the record. When the
     owner names no purpose at all (its retain-everything fallback), there is no
     prominence to read and the previous behavior stands unchanged.
 

@@ -256,6 +256,25 @@ def test_collagen_recovery_follows_prominence():
     assert "RECOVERED_COLLAGEN_PEPTIDES_V1" not in _scored(token)["metadata"]["recovered_matches"]
 
 
+def test_collagen_recovery_keeps_the_retained_exposure_stand_in():
+    """The recovered record's 2,500 mg minimum is read from the heaviest
+    "collagen" row, here 10 g of non-peptide hide collagen, not from the
+    300 mg peptide row. So the peptide row must still hold half the heaviest
+    active's mass (D26), or a trace peptide row borrows the other row's amount."""
+    product = _product(
+        product_name="Collagen Complex",
+        ingredients=[
+            _row("Bovine Hide Collagen", "collagen", 10, unit="g", path="ingredientRows[0]",
+                 standard_name="Collagen"),
+            _row("Hydrolyzed Collagen Peptides Type I & III", "collagen", 300,
+                 path="ingredientRows[1]", standard_name="Collagen"),
+        ],
+        matches=[],
+    )
+
+    assert "RECOVERED_COLLAGEN_PEPTIDES_V1" not in _scored(product)["metadata"]["recovered_matches"]
+
+
 # --- real DSLD labels through Clean -> Enrich -> Score ---------------------
 
 def test_real_218600_a_lineage_owned_complex_never_demotes_the_active_it_supplies():
@@ -317,17 +336,22 @@ def test_real_heading_that_names_its_brand_anchors_that_brands_floor(fixture, fl
     assert evidence["components"]["primary_evidence_floor"] == floor
 
 
-@pytest.mark.parametrize("fixture", [
-    "prominence_probiotic_species_236913_raw.json",  # title-named La-14, 0.5 mg
-    "prominence_probiotic_species_232059_raw.json",  # BB536, the one pre-existing leak
+@pytest.mark.parametrize("fixture,recovered,evidence", [
+    # title-named La-14 at 0.5 mg beside a 100 million CFU total: never "the clear primary"
+    ("prominence_probiotic_species_236913_raw.json", [], 0.0),
+    # BB536: its species record is part of the approved model's input
+    ("prominence_probiotic_species_232059_raw.json", ["INGR_BIFIDOBACTERIUM_LONGUM"], 13.0),
 ])
-def test_real_probiotic_organisms_never_borrow_generic_ingredient_recovery(fixture):
-    """Live organisms are probiotic-Evidence owned. Generic contract recovery
-    must not hand a species-level ingredient record to a strain row."""
+def test_real_probiotic_model_inputs_stay_as_approved(fixture, recovered, evidence):
+    """The approved probiotic model reads resolved_clinical_matches without
+    owner scoping. Callers that are not owner-scoped keep the previous recovery
+    rule, so this batch neither adds nor removes a species record there."""
     from scoring_v4.modules.generic_evidence import resolved_clinical_matches
+    from scoring_v4.scored_artifact import build_scored_artifact
 
-    _, recovered = resolved_clinical_matches(_enrich(fixture))
-    assert recovered == []
+    _, found = resolved_clinical_matches(_enrich(fixture), assess_amount=False)
+    assert [entry.get("id") for entry in found] == recovered
+    assert build_scored_artifact(_enrich(fixture))["quality_pillars_v4"]["evidence"]["score"] == evidence
 
 
 @pytest.mark.parametrize("fixture,record,floor_canonical", [
@@ -350,6 +374,16 @@ def test_real_recovery_never_restamps_a_record_onto_a_row_it_already_links(
     entry = next(m for m in matches if m.get("id") == record)
     assert len(entry.get("matched_source_row_refs") or []) > 1
     assert _evidence(product)["metadata"]["primary_evidence_floor_canonical"] == floor_canonical
+
+
+def test_real_bcaa_record_still_binds_to_its_disclosed_aggregate():
+    """Essential Amino Complete (220827): "Branched-Chain Amino Acids 5 g" lists
+    leucine 2.5 g, isoleucine 1.25 g and valine 1.25 g. The BCAA record is for the
+    whole mixture, so recovery's existing aggregate exception binds it to the 5 g
+    aggregate. The no-re-stamp rule (for markers and plant ALA) must not undo
+    that designed binding."""
+    evidence = _evidence(_enrich("prominence_bcaa_aggregate_220827_raw.json"))
+    assert evidence["metadata"]["primary_evidence_floor_canonical"] == "bcaa"
 
 
 @pytest.mark.parametrize("record,label_text,expected", [
