@@ -17,8 +17,8 @@ receipts.
 - Extension, not a second owner: `_evidence_owner_selection` returns both views of the one decision —
   owner identities (unchanged contract of `evidence_owner_canonicals`) and the prominent subject rows
   (`evidence_prominent_row_keys`, keyed by `evidence_row_key`, the subject key that already existed).
-- Probiotic organism identity: `scripts/probiotic_measurements.py::is_probiotic_source_identity`
-  (matrix concept `probiotic_row_identity`).
+- Approved probiotic model input: `scripts/scoring_v4/modules/probiotic_evidence.py` reads
+  `resolved_clinical_matches` without owner scoping; this batch leaves that path unchanged (defect 19).
 - Will NOT create: classifier, subject list, scorer, Dose engine, registry, public field/status,
   config key or app calculation. No config, clinical data or export change.
 
@@ -32,7 +32,8 @@ receipts.
 | Anchor linkage (single non-structural ref, refs, identity token) and own positive amount; never lent blend mass, NF declaration | `_active_mass_index`/`_match_active_mass` | 2 source/structural | retained (`_evidence_anchor_rows`), now row-level |
 | Authority floor "heaviest owner is DRI-essential" | `_mass_dominant_essential_canonical` | 3 (first classed 1; corrected after both fresh reviews) | **baseline helper restored unchanged** (`7ea61daa`): it was already scoped to the role owner's purpose identities, so no private prominence remained; the mass dominance is the authority's exposure stand-in (D26) because only generic Dose reads DRI adequacy and route-specific exceptions are forbidden. Only addition: a heaviest row that is a blend total lent to a member never qualifies |
 | Recovery "mass >= 0.5 x max" + single-scorable/owner/title-regex primary | `_recover_verified_primary_ingredient_matches`, `_is_clear_primary_recovery_row` | 1 (selection) + 3 (exposure; first classed 1 only, corrected after round-2 review) | selection: prominent row with its own, non-lent mass (`_is_clear_primary_recovery_row` deleted); the half-heaviest comparison is **retained unchanged** as recovery's exposure stand-in (D26), since 199 of 210 records carry no studied minimum |
-| Recovery identity exclusions (collagen, DRI, module-owned), blend-anchor rule, protein every-source rule | same | 2 | retained; probiotic organisms added via the identity owner |
+| Recovery identity exclusions (collagen, DRI, module-owned), blend-anchor rule, protein every-source rule | same | 2 | retained unchanged |
+| Recovery for callers that are not owner-scoped (approved probiotic model, omega, multi, readiness, confidence) | same, `_is_clear_primary_recovery_row` | 1, but feeding approved models | **kept unchanged** (`68cae99a`, defect 19): only owner-scoped generic/sports/fiber Evidence moves to the role owner here; moving the others changes the approved probiotic model's inputs and needs its own measured decision |
 | Collagen peptide "mass >= 0.5 x max" | `_has_primary_collagen_peptide_identity` | 1 (selection) + 3 (exposure; first classed 1 only, corrected after round-3 review) | selection: prominent peptide row with own non-lent mass; the baseline comparison is **retained unchanged** as collagen's stand-in (D26): the record's 2,500 mg minimum is read from the heaviest "collagen" row, not the peptide row |
 | Blend heading total as an anchor | `_primary_mass_floor` (baseline anchored any heading total) | 2 | a `blend_anchor_mass` heading carries only a verified product-level record that the heading's own text names (never a member's record, never via the product title) |
 | Competitor structural filter (`_competing_active_rows`) | shared | 2 | retained |
@@ -52,7 +53,7 @@ Every regression is in `scripts/tests/test_evidence_prominence_ownership.py` unl
 | 3 | Role owner counted a lineage-owned supplying complex in its mass ratio (Solgar 218600) | `scoring_input_contract._role_context` reads `primary_mass_competitor_rows` | `test_real_218600_...` |
 | 4 | Role owner cannot size `mg NE`/`mcg DFE`/`mcg RAE`/vitamin D IU, so such products have no purpose row (Niacinamide 306366) | not fixed (cross-owner, see open items); the abstention rule keeps their legacy floors | existing folate DFE / vitamin D IU tests stay green unchanged |
 | 5 | Disclosed members of a title-named blend lost purpose at row level (Test 1700 210555) | `evidence_resolver._evidence_owner_selection` reads blend tier per row | `test_real_210555_...`, `test_disclosed_members_...` |
-| 6 | Generic recovery lent species records to live probiotic rows (232059 pre-existing; 236913 would follow) | recovery identity exclusions + `probiotic_measurements.is_probiotic_source_identity` | `test_real_probiotic_organisms_never_borrow_generic_ingredient_recovery` |
+| 6 | **Withdrawn.** First classed as "generic recovery lends species records to live probiotic rows (232059)". The full fast checkpoint's locked fixture `probiotic__failure` showed it is the approved probiotic model's designed input (same species record on the organism row); the guard (`5c549d1a`) is superseded by defect 19 | — | — |
 | 7 | Recovery re-stamped a record enrichment already linked to the same row, narrowing its refs (Garlic Powder 217818, Multi-Oil 1838) | recovery skips an existing record already linked to that row | `test_real_recovery_never_restamps_a_record_onto_a_row_it_already_links` |
 | 8 | Found by the frozen raw replay: the floor's prominence check also dropped a blend heading that IS the branded intervention ("Relora 175 mg", 293928: baseline floor 17 → 0), while correctly dropping member records under a heading total | `_is_prominent_anchor`: a `blend_anchor_mass` heading carries only a verified product-level record the heading names (the product-level recovery predicate), on a row the role owner marks prominent | `test_real_heading_that_names_its_brand_anchors_that_brands_floor`; Ravage creatine module added to `test_real_blend_total_never_becomes_an_undisclosed_members_floor` |
 | 9 | Product-level predicate built brand keys from the record id only: `BRAND_UCII` → "ucii", label "UC-II" → "uc ii" (also BCM-95, EGb 761), so UC-II's heading (321604, baseline floor 18) could not name its record | `_verified_product_entry_matches_text` also accepts an alias that is the identifier itself once separators are removed; descriptive aliases stay excluded; floor gate reads the registry record | `test_a_brand_identifier_matches_as_labels_spell_it`, 321604 case of the heading test |
@@ -65,6 +66,7 @@ Every regression is in `scripts/tests/test_evidence_prominence_ownership.py` unl
 | 16 | Found by the final replay of `9ea4af85`: the defect-14 fix also dropped the anchor's own same-identity rows, so Sambucus (204048, 242865: 250 mg elderberry extract with a nested "Elderberries 16 g" source row) lost its baseline floor 6.6 | stand-in reads every linked row of the prominent anchor's identity, never another identity's (`b43a048f`) | `test_real_the_stand_in_keeps_reading_the_purposes_own_identity_rows` |
 | 17 | Fresh review round 3 B1: with collagen's comparison removed, a 300 mg peptide row beside a 10 g non-peptide "Bovine Hide Collagen" row recovered the collagen record (baseline: nothing); the 2,500 mg minimum reads the heaviest "collagen" row | comparison restored as collagen's retained stand-in (`9a6eb7c9`) | `test_collagen_recovery_keeps_the_retained_exposure_stand_in` |
 | 18 | Found by the raw-coverage replay of `b43a048f`: four Essential Amino Complete labels (220827, 220956, 221014, 259615) lost their BCAA floor 9.35. "Branched-Chain Amino Acids 5 g" discloses leucine 2.5 g, isoleucine 1.25 g, valine 1.25 g; the no-re-stamp rule (defect 7) blocked recovery's designed re-binding of the BCAA mixture record to that aggregate | the rule leaves the admitted aggregates (disclosed BCAA or protein totals) alone (`5b8cc834`) | `test_real_bcaa_record_still_binds_to_its_disclosed_aggregate` |
+| 19 | Found by the full fast checkpoint at `90d0d741`: the locked archetype fixture `probiotic__failure` (Evidence 10 → 0) and 232059 (13 → 0) lost the species record the approved probiotic model reads through `resolved_clinical_matches` without owner scoping; removing the guard alone would instead add one the baseline never gave (236913, La-14 at 0.5 mg: Evidence 0 → 10) | callers that are not owner-scoped keep the previous ingredient and collagen recovery rules unchanged (`_is_clear_primary_recovery_row` restored for them); guard removed (`68cae99a`) | `test_real_probiotic_model_inputs_stay_as_approved` (236913, 232059); `test_v4_archetype_fixtures` passes again |
 
 ## Decision packet D26 — the retained exposure stand-ins
 
@@ -94,6 +96,26 @@ pattern D24 rejected for Dose.
 Unblocking work, already queued elsewhere: Phase 3 studied-minimum curation per record (Q39(g)) and
 Phase 4 Dose policy packets (D24). Either retires the stand-in without a magnitude decision here.
 
+**Measured counterfactual P** (all four stand-ins removed in a scratch worktree at `9d65403f` by
+`counterfactual_patch.py`; compared with the final candidate on the same frozen inputs):
+
+| Cohort | Totals that move | Direction | Tier crossings | Size |
+|---|---|---|---|---|
+| Targeted 2,781 (output `cbb9489d…5c20`) | 793 | all up | 347 (Needs improvement→Good 166, Good→Very good 113, Poor→Needs improvement 38, Very good→Excellent 17, NI→Very good 10, others 3) | median +4.4; 341 ≥ +5; 64 ≥ +10; max +16 |
+| Raw coverage 2,964 (output `333c5336…a87c`) | 22 | all up | 12 | median +5.9 |
+
+New floors under P are led by vitamin D3 (211 targeted labels), creatine monohydrate (91),
+vitamin C (65), biotin (39), calcium (28), melatonin (22) and magnesium (20); new authority floors
+by vitamin C (65), zinc (9), choline (7) and chromium (6). The vitamin D3 class is mostly
+"Calcium 500–600 mg with Vitamin D" labels (e.g. 4226, 8836, 8955), where P moves the floor from
+calcium 14 to the vitamin D3 consensus 18 (+4.4 total). It cuts both ways: raw mass ranks any
+microgram-scale vitamin D3 as trace beside grams of calcium, yet the same class includes 12054
+"Calcium + Vitamin D 600 mg/125 IU" (3.1 mcg, about a fifth of the RDA), which P would also float
+to 18. Generic Dose judges D3 against its RDA, but the Evidence floor would not see that judgment.
+Removing the stand-ins therefore needs per-ingredient exposure from Dose (or reviewed studied
+minima) feeding the floor, not a different fraction. Sports (96 movers) and fiber (11) have no DRI
+reader at all.
+
 ## Progress
 
 | Step | State | Receipt |
@@ -104,7 +126,7 @@ Phase 4 Dose policy packets (D24). Either retires the stand-in without a magnitu
 | Frozen targeted replay (2,781 raw labels) | first pass at `2d9ede38` (170 moved) superseded; preview at `452a618e` (34 moved, every mover classified) superseded by defect 13–15 fixes; run on `9ea4af85` (17 moved, all down) found defect 16 and is archived in `superseded_9ea4af85/`; final run on `b43a048f` running from the isolated checkout `prominence-final` | manifest `2b314063…`; baseline `9ba85f1a…` (head `e8687b39`). Two runs were aborted: one by my own docs commit changing HEAD in the measured worktree (the harness checks HEAD), one stopped for a source change |
 | 1,259-label control replay | done at `2d9ede38` (1,251 identical; 232059 Evidence 13→0; 7 readiness-only); final run on `9ea4af85` queued | Codex manifest `cbe04144…`; baseline = Codex capture `a20cea18…` (head `3ee91eae`, all 434 source hashes equal to `e8687b39`) |
 | Brand-identifier cohort (every raw label naming UC-II, BCM-95 or EGb 761: 48) | done at `916d0c62` | manifest `4f62f9a2…`; baseline `66a228a2…`, candidate `b7dea4de…`: 47 identical, 219249 TamaFlex readiness lists `BRAND_UCII` for its "UC-II Type II Collagen Complex 20 mg" adjunct row (score unchanged) |
-| D26 counterfactual (P arm) | queued on the targeted and second cohorts | scratch worktree `prominence-parm` at `9ea4af85` with all three stand-ins removed (`scratchpad/patch_parm.py`), never committed |
+| D26 counterfactual (P arm) | done | scratch worktree `prominence-parm` at `9d65403f` with all four stand-ins removed (`counterfactual_patch.py`), never committed; results in the D26 packet |
 | Fresh-context review | round 1 (`e8687b39..916d0c62`): 1 blocker + 4 should-fix, all reproduced and fixed (defects 10–12). Round 2 (`e8687b39..452a618e`, fresh agent): no blocker; S1 and S3 reproduced and fixed (defects 14–15); S2 recorded below; its 400-label raw sample found 0 authority-subset violations and 1 intended down (79192 caffeine floor on a lent 243 mg blend total). Review of `7ea61daa` onward pending; round 3 (`e8687b39..b43a048f`, fresh agent): 1 blocker (collagen borrow, defect 17) and 1 should-fix (non-owner-scoped recovery, measured: no effect), both resolved | probes `scratchpad/probe4.py`, `probe9.py`, `scratchpad/review2/`, `scratchpad/review3/` |
 | Full fast checkpoint | pending | |
 
@@ -121,7 +143,7 @@ Phase 4 Dose policy packets (D24). Either retires the stand-in without a magnitu
 | N5 one synthetic test passed on the baseline | it is a protection, counted among the 7 baseline-passing protections |
 | N6 stale comments | fixed in `452a618e` |
 | N7 repeated owner selection per score | about +20% scoring time on a 349-product sample; no behavior effect |
-| N8 232059 probiotic total moves through a generic-module edit | for Sean: removing the leak leaves the approved probiotic model's own result (`applicability_unestablished`, Evidence 0) |
+| N8 232059 probiotic total moves through a generic-module edit | resolved: it no longer moves (defect 19); the approved probiotic model's inputs are unchanged |
 | N9 alias rule | no false-positive path found; title leak closed by defect 10 |
 | R2-S2 an identity-bearing heading (the input contract resolves the heading itself to an identity) passes the prominence gate for any record | kept, recorded for Codex: the input contract's `identity_bearing_blend_header_mass` decides that the heading total is that identity's amount; real anchors through this branch in the reviewer's sample were all single-identity rows (Lion's Mane 1 g, Red Yeast Rice, Honey 7 g, a BCAA aggregate, Probiotics). A heading named for one member of a multi-member blend would be a contract defect (synthetic only) |
 | R2-N1 owner-abstain floor can still anchor a heading total | same as baseline; recovery/collagen recover nothing when the owner abstains |
@@ -131,7 +153,7 @@ Phase 4 Dose policy packets (D24). Either retires the stand-in without a magnitu
 | R2-N5 `nutrition_authority_canonical` metadata can appear where the baseline's higher floor pre-empted it | superseded: the authority helper is now the baseline's plus the lent rule |
 | R2 stale docs (owner_eligibility, p8, p133 docstrings; generic.py opt-in comment) | fixed in `9ea4af85`; `numerical_ownership_20260930/README.md` names `_mass_dominant_essential_canonical`, which exists again |
 | R3-B1 collagen borrow | fixed, defect 17 |
-| R3-S1 recovery for callers that are not owner-scoped (omega, multi, probiotic, readiness, confidence) now uses role-owner prominence instead of "single scorable or title regex" | kept (the one prominence owner) and measured: across 1,912 multi/prenatal, 727 omega, 554 probiotic and 54 B-complex replayed labels, 0 recovery differences and 0 score moves except 232059; those routes skip recovery whenever enrichment has matches |
+| R3-S1 recovery for callers that are not owner-scoped (omega, multi, probiotic, readiness, confidence) used role-owner prominence instead of "single scorable or title regex" | resolved by keeping the previous rule for those callers (defect 19): its first measurement showed no effect only because the organism guard blocked probiotic rows |
 | R3-N1 authority ⊆ baseline holds for a fixed owner set; `eb70f424` can change the owner set | every authority change in every arm is listed; the targeted arm has none, the owner-set additions moved no authority |
 | R3-N2 identity-scoped numerator still counts same-canonical structural rows (compound duplicate) | same as baseline (pre-existing); recorded for Codex |
 | R3-N3 `_dose_map` compares raw quantities across units (300 mg beats 10 g for one identity key) | pre-existing defect in the clinical-dose gates, outside this batch: separate measured task offered ("Fix cross-unit comparison in generic Evidence dose map") |
@@ -140,6 +162,11 @@ Phase 4 Dose policy packets (D24). Either retires the stand-in without a magnitu
 | Raw-coverage single-member blend (241676 Collagen Love: "Collagen Peptide Hydro-Matrix Blend 600 mg" with one undisclosed member) | the input contract marks the total as lent and Dose readers follow it, so Evidence does too; whether a single-member heading's total is its member's amount is a contract question for Codex |
 
 ## Measured results (final source `9d65403f`; `0cf9262e` is comments only, AST identical)
+
+> **Being re-measured.** The full fast checkpoint at `90d0d741` found defect 19; source `68cae99a`
+> keeps the approved probiotic model's inputs unchanged. Every arm is replaying on `68cae99a` now.
+> The figures below are from `9d65403f`, where 232059 still moved (13 → 0); it is expected to
+> drop out. This note is replaced when the new receipts exist.
 
 All arms are complete Clean→Enrich→Score captures of frozen raw DSLD labels with
 `scripts/audits/quality_redesign/replay.py`; every capture reports `exit_code 0`,
@@ -155,7 +182,7 @@ cause columns in `replay_*_changed.md` in this folder (produced by `classify_mov
 | Controls, 1,259 labels (Codex set) | `cbe04144…8286` | Codex `a20cea18…ea72` (head `3ee91eae`; all 434 source hashes equal to `e8687b39`) | `42de5e4a…3553` | 1,251 identical; 232059 Evidence 13→0; 7 readiness-metadata-only (omega/probiotic) |
 | Brand identifiers, 48 labels | `4f62f9a2…55ea` | `66a228a2…b5a` | `b7dea4de…7d7` | 47 identical; 219249 readiness lists `BRAND_UCII` on its "UC-II Type II Collagen Complex 20 mg" adjunct row |
 | Raw coverage, 2,964 labels | `6a4b4807…086a` | `cohort2_baseline` | `3df7e371…54b9` | 2,908 identical; 52 totals move, **all down**; tiers Good→Needs improvement 6, Needs improvement→Poor 7; 4 metadata/no-score |
-| D26 counterfactual (four stand-ins removed) | targeted + raw coverage | final candidate | running | pending |
+| D26 counterfactual (four stand-ins removed) | targeted + raw coverage | final candidate | `cbb9489d…5c20`, `333c5336…a87c` | 793 and 22 totals up, none down (D26 packet) |
 
 Every arm: Evidence is the only pillar that moves; status, route, Safety/Hygiene, Dose,
 Formulation, Transparency and Verification are unchanged for every product. In total 67
