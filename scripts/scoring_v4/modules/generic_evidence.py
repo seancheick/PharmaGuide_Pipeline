@@ -726,9 +726,7 @@ def _recover_contract_evidence_matches(
     prominent = evidence_prominent_row_keys(product) if owner_scoped else None
 
     peptide_row = _collagen_peptide_recovery_row(product, prominent=prominent)
-    if peptide_row is not None and not (
-        peptide_row.get("raw_source_path") or peptide_row.get("source_row_ref")
-    ):
+    if peptide_row is not None and not _recovery_source_ref(peptide_row):
         # Legacy inputs may lack source refs. Their exact name is usable only
         # when no other dose-bearing row contributes to that lookup key.
         term = _canonical_text(peptide_row.get("name") or peptide_row.get("standard_name"))
@@ -812,6 +810,11 @@ def _recover_verified_product_level_matches(
     return recovered
 
 
+def _recovery_source_ref(row: Dict[str, Any]) -> str:
+    """Use the same reference validity for recovery selection and stamping."""
+    return str(row.get("raw_source_path") or row.get("source_row_ref") or "").strip()
+
+
 def _stamp_recovery_source_ref(entry: Dict[str, Any], row: Dict[str, Any]) -> None:
     """Bind a scoring-contract recovery to the exact row it was recovered from.
 
@@ -819,7 +822,7 @@ def _stamp_recovery_source_ref(entry: Dict[str, Any], row: Dict[str, Any]) -> No
     row; without the reference every recovery is rejected as unresolved even
     when the row's own label satisfies the scope.
     """
-    ref = str(row.get("raw_source_path") or row.get("source_row_ref") or "").strip()
+    ref = _recovery_source_ref(row)
     if ref:
         entry["matched_source_row_refs"] = [ref]
 
@@ -1349,8 +1352,8 @@ def _collagen_peptide_recovery_row(
         ) and (
             mass > max_peptide_mass
             or (mass == max_peptide_mass and peptide_row is not None
-                and not (peptide_row.get("raw_source_path") or peptide_row.get("source_row_ref"))
-                and (row.get("raw_source_path") or row.get("source_row_ref")))
+                and not _recovery_source_ref(peptide_row)
+                and _recovery_source_ref(row))
         ):
             max_peptide_mass = mass
             peptide_row = row

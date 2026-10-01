@@ -557,11 +557,12 @@ def test_recovered_peptide_match_preserves_its_actual_source_row(reverse_rows):
     assert _evidence(product)["score"] > 0
 
 
-def test_ambiguous_unreferenced_peptide_recovery_cannot_borrow_a_shared_name():
+@pytest.mark.parametrize("peptide_ref", [None, "   ", "\t"])
+def test_ambiguous_unreferenced_peptide_recovery_cannot_borrow_a_shared_name(peptide_ref):
     from scoring_v4.modules.generic_evidence import resolved_clinical_matches
     product = _product(product_name="Collagen Complex", ingredients=[
         _row("Collagen", "collagen", 3, unit="g", path="ingredientRows[0]"),
-        _row("Collagen", "collagen", 2, unit="g", collagen_subtype="peptides_i_iii"),
+        _row("Collagen", "collagen", 2, unit="g", path=peptide_ref, collagen_subtype="peptides_i_iii"),
     ], matches=[])
     _, recovered = resolved_clinical_matches(product, owner_scoped=True)
     assert not any(e["id"] == "RECOVERED_COLLAGEN_PEPTIDES_V1" for e in recovered)
