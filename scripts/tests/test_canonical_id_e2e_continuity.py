@@ -187,9 +187,16 @@ def test_scorable_rows_lack_evidence_origin(dsld_id: str) -> None:
 
 
 def test_label_active_projection_retains_its_source_provenance() -> None:
-    rows = _evidence_rows(_load_product(PROTEIN_DSLD))
+    from enrich_supplements_v3 import SupplementEnricherV3
+    from tests.test_jarrow_yeast_extract_identity import _jarrow_product
+
+    # The protein aggregate canary no longer creates a label-row projection.
+    # Exercise this separate contract on a real extract label through fresh
+    # production enrichment, rather than depending on stored corpus output.
+    product, _ = SupplementEnricherV3().enrich_product(_jarrow_product("264610"))
+    rows = _evidence_rows(product)
     projections = [r for r in rows if r.get("scoring_input_kind") == "label_active_projection"]
-    assert projections, "The protein canary must exercise a direct label-row projection"
+    assert projections, "The extract label must exercise a direct label-row projection"
     for row in projections:
         assert row["evidence_scope"] == "row_level"
         assert row["raw_source_path"]
