@@ -442,10 +442,28 @@ def test_a_member_named_heading_does_not_own_the_multi_ingredient_total(heading,
     assert evidence["components"]["clinical_evidence_pipeline"] > 0
 
 
-def test_a_single_branded_intervention_nested_under_its_own_heading_keeps_its_floor():
+@pytest.mark.parametrize("with_constituent", [False, True])
+def test_a_single_branded_intervention_nested_under_its_own_heading_keeps_its_floor(with_constituent):
+    from copy import deepcopy
+    from scoring_input_contract import get_scoring_ingredients, is_lent_blend_mass
+
     raw = _raw("prominence_blend_total_328062_raw.json")
     raw["fullName"] = "Sensoril Sleep Tonight"
     raw["ingredientRows"][1]["name"] = "Sensoril"
     raw["ingredientRows"][1]["nestedRows"] = raw["ingredientRows"][1]["nestedRows"][:1]
-    evidence = _evidence(_enrich(raw))
-    assert evidence["metadata"]["primary_evidence_floor"] == 18.0
+    if with_constituent:
+        member = raw["ingredientRows"][1]["nestedRows"][0]
+        constituent = deepcopy(member)
+        constituent.update(name="Withanolides", ingredientGroup="Withanolides", category="other", forms=[], nestedRows=[])
+        constituent["quantity"][0].update(quantity=1.25, unit="mg")
+        member["nestedRows"] = [constituent]
+    product = _enrich(raw)
+    header = next(row for row in get_scoring_ingredients(product, strict=True).rows
+                  if row.get("raw_source_path") == "ingredientRows[1]"
+                  and row.get("evidence_type") == "blend_anchor_mass")
+    assert not is_lent_blend_mass(header), "A constituent is not another blend member"
+    evidence = _evidence(product)
+    # With the constituent, current enrichment links the records only to the
+    # marker's 1.25 mg row and the existing source guard grants no floor. Keep
+    # that baseline behavior; this correction must not invent another join.
+    assert evidence["metadata"]["primary_evidence_floor"] == (0.0 if with_constituent else 18.0)

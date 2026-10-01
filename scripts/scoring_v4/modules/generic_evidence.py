@@ -1574,7 +1574,9 @@ def _is_prominent_anchor(
     ) if _norm_text(row.get("evidence_type")) == "blend_anchor_mass" else None
     children = [
         child for child in get_assessable_evidence_ingredients(product)
-        if path and str(child.get("raw_source_path") or "").startswith(f"{path}.nestedRows[")
+        if path and re.fullmatch(
+            re.escape(path) + r"\.nestedRows\[\d+\]", str(child.get("raw_source_path") or "")
+        )
     ] if record is not None else []
     if len({child.get("raw_source_path") for child in children}) > 1 and any(
         _verified_product_entry_matches_text(

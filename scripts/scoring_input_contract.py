@@ -2073,7 +2073,10 @@ def derive_product_scoring_evidence(product: Dict[str, Any]) -> List[Dict[str, A
             if cleaner_role == "blend_header_total":
                 children = [
                     child for child in skipped_rows + active_rows
-                    if _is_nested_under(str(row.get("raw_source_path") or ""), child)
+                    if re.fullmatch(
+                        re.escape(str(row.get("raw_source_path") or "")) + r"\.nestedRows\[\d+\]",
+                        str(child.get("raw_source_path") or ""),
+                    )
                     and _anchor_identity(child)[0]
                 ]
                 child_identities = {_anchor_identity(child)[0] for child in children}
