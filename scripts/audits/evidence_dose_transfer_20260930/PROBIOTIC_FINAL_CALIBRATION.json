@@ -13554,12 +13554,12 @@
       "focused": "4002 passed21 skipped;owner checks64 passed1 skipped;population fix746 passed;final4 regression failures4 passed --lf",
       "fresh_review": "Source, clinical guards, migration semantics, all119 state changes, exact1259 parity and reconciled main independently approved; finalfast receipt supplied",
       "full_fast": "17898 passed,167 skipped,1 known Ravage cinnamon xfail;627.94 seconds atb06be980",
-      "integration": "locally_integrated",
+      "integration": "integrated_main_source_pushed",
       "release": "not_authorized"
     }
   },
   "schema_version": 1,
-  "status": "policy_approved_measurement_complete_production_locally_integrated_release_not_authorized",
+  "status": "policy_approved_measurement_complete_production_integrated_source_pushed_release_not_authorized",
   "strong_evidence_but_overall_poor": {
     "count": 94,
     "definition": "overall Poor with family certainty >=8 or consistency credit >0",
@@ -14696,7 +14696,7 @@
   },
   "verification": {
     "focused_current": "50 passed at145ff18c",
-    "fresh_review": "Preparation guard and identical1259-row corrected replay independently confirmed; production remains a draft",
+    "fresh_review": "Preparation guard and identical1259-row corrected replay independently confirmed; production was a draft at this historical measurement checkpoint",
     "full_fast_current": "17886 passed,168 skipped,1 existing Ravage cinnamon xfail at145ff18c;536.28 seconds",
     "full_fast_prior": "17885 passed,168 skipped,1 Ravage xfail ata5ab7029",
     "known_ravage_expected_failure": "Closed separately by Phase2 b39328b9:17906passed167skippedzero xfails; extended1259 complete payloads unchanged (Q48).",

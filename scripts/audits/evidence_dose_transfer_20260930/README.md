@@ -1,6 +1,6 @@
 # Evidence → Dose responsibility transfer
 
-Status: all-route owner inventory complete; approved probiotic transfer locally integrated (Q47). Generic/omega transfer and wider Dose-policy decisions remain open. Phase2 Ravage closure is Q48; final prominence/serving corrections remain pending. No push or release.
+Status: all-route owner inventory complete; approved probiotic transfer integrated and source pushed to main (Q47). Generic/omega transfer and wider Dose-policy decisions remain open. Phase2 Ravage closure is Q48; final prominence/serving corrections remain pending. Source through `3ee91eae` is pushed with Sean's approval; no catalog release.
 
 Inventory baseline: pipeline `880b17a7`; focused owner/role suite 103 passed, 7 skipped,
 1 strict xfail. The frozen 1,261-label audit sample is
@@ -19,9 +19,11 @@ subject set; `scripts/scoring_v4/exposure.py::row_exposure`, enrichment
 `rda_ul_data.adequacy_results`, and the existing route Dose modules for amount
 assessment. Will NOT create a second subject provider or post-route Dose engine.
 
-## Current amount judgments
+## Original amount inventory at `880b17a7` — historical
 
-| Route / decision | Current Evidence owner | Existing Dose coverage | Transfer classification |
+The table preserves the initial findings. The probiotic row is closed by Q47 and the approved certainty/applicability/replication model; it is not a pending 12/20 ceiling decision. Generic and omega transfers remain open.
+
+| Route / decision | Baseline Evidence owner | Baseline Dose coverage | Original transfer classification |
 |---|---|---|---|
 | Generic record minimum (`min_clinical_dose`) and undisclosed amount | `clinical_applicability.py::assess_clinical_applicability`; `evidence_resolver.py::resolve_evidence_for_row`; `generic_evidence.py::score_evidence` | The registry has 16 dose-bearing records: 11 top-level studied-dose records plus 5 applicability-policy dose records. Existing Dose covers KSM-66, white kidney bean, amla, MSM/OptiMSM, BCAA and official nutrient adequacy. It does not yet own equivalent benchmarks for nine named groups below. | Add a typed, audit-visible studied-dose assessment to the existing Dose result before deleting the Evidence veto. Numerical treatment of a missing benchmark remains D24 policy. Shared removal cannot land while any record lacks an owner. |
 | Generic primary floor amount gate | `generic_evidence.py::_primary_mass_floor` | Route Dose owns amount adequacy; shared role classifier owns prominence | Replace its private mass-primary selection with `classify_ingredient_roles`; Evidence floor eligibility may use research/role facts but not label amount. Dose retains the exposure judgment. |
@@ -78,9 +80,7 @@ enriched labels 327776, 288740, 273630, 239592, 184654, 261863 and 267461.
 
 ## Decisions required before score-changing implementation
 
-1. **Probiotic Evidence magnitude:** keep the reviewed clinical-strength
-   subscale at its current maximum of 12/20, or approve a new non-dose mapping.
-   Automatic 12→20 rescaling is excluded.
+1. **Probiotic decision CLOSED (Q47):** approved certainty 0–10, applicability 0–6 and independent same-condition replication 0/2/4 are integrated. CFU/trial-amount comparison stays in Dose. No automatic 12→20 rescale or category ceiling remains. Preserve the historical experiments below.
 2. **Omega Evidence purpose mapping:** approve which existing reviewed record
    applies to an ordinary omega product, an explicit triglyceride-purpose
    product, and a prenatal DHA product, independent of amount. Existing point
@@ -97,9 +97,7 @@ No implementation agent may decide these magnitudes implicitly.
 
 Immediately landable work is regression and replay scaffolding plus relocation
 of a diagnostic only where the existing Dose result receives the same
-comparison. The shared amount gates, probiotic 8-point component, omega scale,
-and primary Evidence floor are not landable until their named ownership and
-magnitude decisions close. A partial removal would violate the transfer
+comparison. Probiotic ownership and magnitudes are now closed by Q47. Generic shared amount gates and omega amount-triggered policy remain blocked until equivalent Dose coverage and the named decisions close. Phase2 primary-selection corrections may proceed through the existing shared role owner while retaining uncovered amount safeguards; they do not authorize deleting those safeguards. A partial removal would violate the transfer
 invariant even if its focused tests passed.
 
 
@@ -112,10 +110,7 @@ All experimental scorer/config edits were restored; none are part of this branch
 
 The packet proves that removing the amount gates without extending Dose loses an
 assessment. It also shows that both illustrative omega mappings and the
-probiotic 12-to-20 rescale create broad numerical policy changes. Phase 1 is
-therefore measured but not integration-approved. The next integration change
-requires explicit decisions for probiotic magnitude/trial-range ownership,
-omega purpose mapping/magnitudes, and the generic clinical-anchor mapping,
+probiotic 12-to-20 rescale create broad numerical policy changes. This is the original experimental receipt, not today's approval state. The later approved probiotic model is integrated (Q47). Remaining transfers require omega purpose mapping/magnitudes and the generic clinical-anchor mapping,
 including reviewed-null trial amounts and brand/generic precedence.
 
 
@@ -132,3 +127,31 @@ Sourceb39328b9; baseline7262d192. Full verified capture hashes:
 Targeted outcomes: Ravage1179 raw Formulation8.2846→8.4307, public11.0→11.2, total33.5→33.7; restored cinnamon raises the existing IQM assessment count21→22. GoldenMilk243271 gains cinnamon Evidence-owner metadata6→7 without score movement.2219,221108,49630,66953 complete payloads are unchanged. All six preserve Safety, route, status, Evidence and Dose scores. Extended1259 output is identical to approved productionSHAa20cea182bc18ecb6eeff4dc7dc54232c6452a2631c22a53b5b11e2560c5ea72.
 
 Verification: failing regression5failed27passed; focused1427passed; normalizer covering143files3153passed12artifactskips; final `scripts/test.sh fast`17906passed167skippedzero xfails,543.63seconds. Fresh reviewer independently verified source, capture/input/output hashes, every targeted movement and extended equality. No clinical policy/data edited. Existing dual-use amount overrides and other Phase2 prominence/serving defects are separate open work; this checkpoint does not validate release.
+
+
+## Phase2 shared EAA purpose correction — October 1
+
+Owner: `scripts/scoring_input_contract.py::classify_ingredient_roles` — existing role/title-alias owner, matrix and raw `66953` production-boundary tests. Consumers `sports_helpers::primary_sports_identity`, `sports_subtype`, `sports_formulation::_is_protein_context` and `sports_dose::_best_primary_score` consume that purpose. Will NOT create another classifier, scorer, Dose engine, registry, public field or numerical policy.
+
+Source `3ee91eae` fixes Q39(b). The label declares a 1,600 mg verified nine-EAA mixture and a separate 100 mg whey line. Named EAA/BCAA purpose no longer becomes protein purpose merely because whey exists. Co-named protein and genuine protein products remain protected; protein/stimulant subtype coexistence is explicitly tested. Dose still compares existing eligible anchors using unchanged bands. Blend totals remain formula totals, never member doses.
+
+| Product `66953` | Before | After | Classification |
+|---|---:|---:|---|
+| Dose | 6.4 | 4.7 | Actual owner becomes `eaa` / `eaa_under_5_g`; existing partial-dose and completeness rules |
+| Evidence | 7.2 | 0 | Incidental whey stops owning Evidence; EAA/member subjects retained |
+| Formulation | 15.2 | 12 | Protein adapter no longer applies; existing generic rubric |
+| Transparency | 3.3 | 3.3 | Unchanged |
+| Verification | 8 | 8 | Unchanged |
+| Safety/Hygiene | 9 | 9 | Unchanged |
+| Total | 49.1 | 37.0 | Explained quality-tier change: Needs improvement → Poor |
+
+Status remains `scored`, module remains `sports`, and safety judgments are unchanged. `clinical_review_not_covered` remains explicit: missing EAA research is a Phase3 task, not a completed negative review. This fix does not finish calibration or authorize release.
+
+Clean source `3ee91eae9285b1a0fda492de2d0acdc6edae9fc6`, baseline `b39328b9`, full Clean→Enrich→Score captures:
+
+- Six-label manifest SHA `048ffd9669499ab9f94625f7ee1b2a237a163c9310e945a6dadadc488516be67`; candidate SHA `eb126dbff734db2d1665eac3a6621629eda0dd22e86b77d18d5117274058f205`. Controls `1179`, `2219`, `243271`, `221108`, `49630` retain identical complete payloads.
+- Extended 1,259-label manifest SHA `cbe041440eb1eb565edf2564298e106adfc35175f413d1aab26782447a1e8286`; candidate SHA `a20cea182bc18ecb6eeff4dc7dc54232c6452a2631c22a53b5b11e2560c5ea72`. All 1,259 complete payloads remain identical to baseline. Both captures report unchanged source and matching frozen input hashes.
+- RED regressions cover original purpose, abbreviation, genuine protein/stimulant Formulation and actual Dose driver. Final focused suite: 74 passed; prior 62 consumer files: 2,150 passed, two artifact skips; final eight Dose consumer files: 117 passed.
+- Fresh independent review accepted source and measured causality after catching and fixing both the Formulation subtype regression and Dose's separate best-credit protein path. Full fast checkpoint passed at source `3ee91eae`: **17,915 passed, 167 skipped, zero expected failures** (551.27 seconds). Q39(b) is closed for source/sample validation; source pushed to main with Sean's approval. Fresh review accepted source, causality and controls; no catalog release.
+
+Receipts: integration worktree `.claude/state/trace_protein/final_receipt.json`, `final_candidate.jsonl`, `final_extended_candidate.jsonl`, focused logs and `final_fast.log`. Source push and catalog release are separate states.

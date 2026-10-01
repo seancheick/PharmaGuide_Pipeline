@@ -7,10 +7,10 @@ A checked implementation box means that specific deliverable is implemented, mea
 ## Current checkpoint
 
 - [x] Reconcile current main and the integration lane, including the release/storage changes on `d021061b`.
-- [x] Integrate and push the approved probiotic production model and Ravage correction to pipeline `main` (`0f695b19`; Q47/Q48).
+- [x] Integrate and push the approved probiotic production model and Ravage correction to pipeline `main` (`0f695b19`; Q47/Q48); source and plan subsequently pushed through `3ee91eae`.
 - [x] Match the approved probiotic candidate across 1,259 frozen labels: 542 probiotics and 717 controls; no numerical/component/tier/route/status/Safety/confidence mismatch.
 - [x] Close Ravage's cinnamon expected failure with a cleaner-owned fix, not a scorer exception.
-- [x] Complete the latest source checkpoint: **17,906 passed, 167 skipped, zero expected failures**, with independent review. Artifact-dependent skips still require release-stage checks.
+- [x] Complete the latest source checkpoint: **17,915 passed, 167 skipped, zero expected failures** at `3ee91eae`, with independent review. Artifact-dependent skips still require release-stage checks.
 - [ ] Complete the remaining Phase 2 role/prominence and serving corrections.
 - [ ] Validate a fresh complete catalog, approve its exact manifest, publish and verify live behavior.
 
@@ -57,7 +57,7 @@ No catalog release has occurred under this plan. The latest checkpoint validates
 - [x] Preserve landed Lane 2A subject ownership, Q3 single sugar/sweetener charging and Q40 cleaner-owned plant part.
 - [x] Fix Ravage cinnamon at the cleaner's functional attribution seam; retain explicit flavors, active/other membership, source paths and undisclosed member dose (Q48).
 - [x] Measure Ravage and five controls, then the extended 1,259-label cohort; obtain fresh review and **zero expected failures** in the full fast checkpoint.
-- [ ] Correct shared purpose classification for trace protein and the EAA product `66953`; sports consumers must use the same shared role decision.
+- [x] Correct trace-protein purpose for EAA product `66953` through shared roles and sports Evidence/Formulation/Dose consumers (Q39(b), source `3ee91eae`, pushed). Final fast suite passed; fresh review accepted clean replays. Total 49.1→37.0 is explained, Safety unchanged; five targeted and all 1,259 extended controls retain identical full payloads. EAA research remains open in Phase3.
 - [ ] Replace `_primary_mass_floor`'s private primary selection with shared role facts; inspect the related generic recovery/collagen prominence consumers together. Preserve identity, source-lineage, structural and deduplication guards.
 - [ ] Resolve remaining alternate-serving identity/duplicate cases from raw JSON (Q39); never merge materially different preparations or discard label variants.
 - [ ] Align dual-use active/excipient decisions without using amount as a substitute for purpose. Preserve genuine excipients and nutrition rollups.
@@ -126,6 +126,9 @@ Any candidate change after approval requires a new freeze and approval.
 | Migration tests | Old fixtures encoded retired policy/copy/diagnostics | Assertions migrated by protected invariant, not blindly refreshed; independent review |
 | Ravage | Generated flavor identity alias assigned flavor function to active Cinnamon Extract | Existing declared alias lookup now owns functional flags; Q48, zero xfails |
 | Golden Milk | The same correction restores cinnamon to Evidence-owner metadata | Scores unchanged; explicitly measured and reviewed |
+| EAA trace protein | Raw `66953` was borrowing whey purpose in Evidence, Formulation and Dose | Shared role and consumer correction measured; five targeted controls and all 1,259 comparison labels unchanged; final 17,915-test checkpoint passed and source pushed; EAA research remains open |
+| Review-discovered consumer paths | Formulation could conflate calibration subtype with purpose; Dose still selected protein independently by its flat credit | Both corrected before acceptance; genuine protein/stimulant and actual EAA Dose-driver regressions added |
+| Stale handoff wording | Historical transfer docs still described the retired probiotic decision as pending and source as unpushed | Historical inventory labeled; approved Q47 and source-push status synchronized; catalog release remains separate |
 | Remaining prominence | Generic recovery/collagen and sports consumers also select primary independently | Added to Phase 2 scope so fixing one helper does not leave another decision behind |
 | Concurrent main | Release gate/storage changes arrived during integration | Reconciled and replayed before acceptance; D25 remains an explicit decision queue |
 
