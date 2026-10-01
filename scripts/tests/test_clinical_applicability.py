@@ -487,3 +487,79 @@ def test_products_without_enrichment_resolved_forms_are_untouched_by_the_merge()
     rows = list(_rows(product))
 
     assert [dict(r) for r in rows] == product["ingredient_quality_data"]["ingredients_scorable"]
+
+
+@pytest.mark.parametrize("record_id,name", [
+    ("INGR_AMLA", "Amla fruit extract"),
+    ("INGR_VITAMIN_B12", "Vitamin B12"),
+])
+def test_reference_only_registry_cannot_be_revived_by_stale_enriched_credit(record_id, name):
+    """A withdrawn clinical credit stays withdrawn even with an older match."""
+    from scoring_v4.scored_artifact import build_scored_artifact
+
+    row = {"name": name, "standard_name": name, "canonical_id": "amla" if record_id == "INGR_AMLA" else "vitamin_b12_cobalamin",
+           "mapped": True, "quantity": 500, "unit": "mg",
+           "raw_source_text": name, "raw_source_path": "ingredientRows[0]"}
+    stale = {"id": record_id, "ingredient": name, "standard_name": name,
+             "study_type": "rct_multiple", "evidence_level": "ingredient-human",
+             "effect_direction": "positive_strong", "total_enrollment": 500,
+             "matched_source_row_refs": ["ingredientRows[0]"],
+             "applicability": {"scope": "ingredient"}}
+    product = {"id": "test_reference_guard", "status": "active",
+               "form_factor_canonical": "capsule",
+               "ingredient_quality_data": {"ingredients": [row], "ingredients_scorable": [row]},
+               "evidence_data": {"clinical_matches": [stale]}}
+    assert resolved_clinical_matches(product)[0] == []
+    artifact = build_scored_artifact(product)
+    assert artifact["_v4_module_breakdown"]["dimensions"]["evidence"]["metadata"].get("matched_entries", 0) == 0
+    if record_id == "INGR_VITAMIN_B12":
+        evidence = artifact["_v4_module_breakdown"]["dimensions"]["evidence"]
+        assert evidence["metadata"]["nutrition_authority_canonical"] == "vitamin_b12_cobalamin"
+        assert evidence["metadata"]["nutrition_authority_floor_applied"] is True
+        assert evidence["score"] == 10.0
+
+
+@pytest.mark.parametrize("record_id", [
+    "INGR_BIFIDOBACTERIUM_LONGUM", "INGR_LACTOBACILLUS_ACIDOPHILUS",
+])
+@pytest.mark.parametrize("suffix", ["", " BB536", " 1714", " 35624", " NCFM"])
+def test_generic_probiotic_summary_cannot_supply_species_or_sibling_strain_credit(record_id, suffix):
+    from scoring_v4.scored_artifact import build_scored_artifact
+
+    entry = reviewed_entries()[record_id]
+    name = entry["standard_name"] + suffix
+    row = {"name": name, "standard_name": name,
+           "canonical_id": "bifidobacterium_longum" if "LONGUM" in record_id else "lactobacillus_acidophilus",
+           "mapped": True, "quantity": 100, "unit": "mg",
+           "raw_source_text": name, "raw_source_path": "ingredientRows[0]"}
+    stale = {**entry, "ingredient": name, "study_type": "rct_multiple",
+             "evidence_level": "ingredient-human", "effect_direction": "positive_strong",
+             "matched_source_row_refs": ["ingredientRows[0]"],
+             "applicability": {"scope": "ingredient"}}
+    product = {"id": "test_species_scope", "status": "active",
+               "form_factor_canonical": "capsule",
+               "ingredient_quality_data": {"ingredients": [row], "ingredients_scorable": [row]},
+               "evidence_data": {"clinical_matches": [stale]}}
+    assert entry["study_type"] == entry["evidence_level"] == "reference"
+    assert resolved_clinical_matches(product)[0] == []
+    artifact = build_scored_artifact(product)
+    assert artifact["_v4_module_breakdown"]["dimensions"]["evidence"]["metadata"].get("matched_entries", 0) == 0
+
+
+def test_probiotic_summary_claims_keep_trial_scope_and_endpoint_roles():
+    longum = reviewed_entries()["INGR_BIFIDOBACTERIUM_LONGUM"]
+    acidophilus = reviewed_entries()["INGR_LACTOBACILLUS_ACIDOPHILUS"]
+    assert "RCT" not in longum["published_studies"]
+    assert "38341968" not in json.dumps(longum)
+    assert "43.4%" in longum["key_endpoints"][0] and "TISS" in longum["key_endpoints"][0]
+    for entry in (longum, acidophilus):
+        assert "total_enrollment" not in entry
+        assert "published_studies_count" not in entry
+        assert "registry_completed_trials_count" not in entry
+    assert "single-strain evidence from LAPIBSS" not in json.dumps(acidophilus)
+    assert "primary" in acidophilus["key_endpoints"][0].lower()
+    assert "null" in acidophilus["key_endpoints"][0].lower()
+    assert "10 billion" in acidophilus["key_endpoints"][0]
+    ref = next(r for r in acidophilus["references_structured"] if r.get("nct_id") == "NCT02103972")
+    assert ref["evidence_grade"] == "reference"
+    assert "not acidophilus" in ref["note"].lower()

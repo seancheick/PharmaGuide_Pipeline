@@ -247,6 +247,10 @@ def _linked_rows(product: Mapping, entry: Mapping, *, source_only: bool = False,
 
 def assess_clinical_applicability(product: Mapping, entry: Mapping, *, assess_amount: bool = True) -> dict:
     reference = reviewed_entries().get(str(entry.get("id") or entry.get("study_id")), {})
+    # The curated owner can retain research for context while withdrawing
+    # numerical credit. An old enriched positive stamp cannot reverse that.
+    if reference.get("study_type") == "reference" or reference.get("evidence_level") == "reference":
+        return {"status": "not_applicable", "reason_code": "reference_only_clinical_record"}
     policy = reference["applicability"] if "applicability" in reference else entry.get("applicability")
     if policy is None:
         return {"status": "not_curated", "reason_code": "no_reviewed_scope_constraints"}

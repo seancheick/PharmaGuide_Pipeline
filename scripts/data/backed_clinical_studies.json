@@ -2,10 +2,11 @@
   "_metadata": {
     "description": "Ingredients backed by clinical research and studies - Enhanced for Section C v3.4.0",
     "purpose": "evidence_scoring",
-    "schema_version": "5.6.2",
-    "last_updated": "2026-09-29",
+    "schema_version": "5.6.3",
+    "last_updated": "2026-10-01",
     "total_entries": 210,
     "changelog": [
+      "5.6.3 (2026-10-01): Correct INGR_BIFIDOBACTERIUM_LONGUM and INGR_LACTOBACILLUS_ACIDOPHILUS source attribution, strain/formula scopes, endpoint roles and unverifiable aggregate counts. Retain both as non-scoring reference context; existing exact-strain evidence remains authoritative. No numerical config, strain registry or Dose benchmark changed.",
       "5.6.2 (2026-09-26): INGR_OMEGA3 purpose_evidence retains factual scope and sources only. Numerical points, operational exposure cutoffs, interpolation and eligibility are owned by quality_score.json. Scientific boundaries rechecked against live source content; no clinician sign-off asserted and no score values changed.",
       "5.6.1 (2026-09-26): INGR_WHEY_PROTEIN no longer aliases generic Protein macro declarations, unspecified powders/blends, or rice/hemp sources absent from its cited 49-trial source inventory. Known whey, casein, milk, soy and pea source identities remain. Fresh-enrichment regressions cover two collagen labels and greens coffee; source-free macro recovery is intentionally rejected.",
       "5.6.0 (2026-09-25): Corrected INGR_WHEY_PROTEIN to the source-neutral Protein Supplementation scope supported by its cited 49-RCT, 1,863-participant meta-analysis; the stable ID is retained for stored-artifact compatibility. The reviewed purpose is protein supplementation alongside resistance training; whey, casein, milk, soy, pea, rice, hemp, and disclosed protein blends share the category Evidence owner while source-quality differences remain in Formulation. Corrected the stale 250 enrollment, 488-trial count, and unrelated focus/glycemic endpoint tags. No new study was invented and the two existing verified PubMed sources remain the record's evidence base.",
@@ -30,8 +31,6 @@
       "5.3.2 (2026-08-06): Added form- and dose-scoped mixed human evidence for L-carnitine base/tartrate from three content-verified systematic reviews; explicitly excluded fumarate, hydrochloride, acetyl-, propionyl-, D-, and DL-carnitine identities. Corrected BRAND_CARNIPURE from 224 participants/five trials/strong energy-heart claims to its two cited small crossover recovery-marker trials (28 total participants, positive_weak, 2 g/day), and grouped its evidence with generic L-carnitine so the same active cannot create false ingredient breadth.",
       "5.3.1 (2026-08-06): Corrected the stale PRECLIN_ALCAR record to INGR_ACETYL_L_CARNITINE; constrained linkage to acetyl-L-carnitine/base and hydrochloride identities; classified conflicting, condition-specific human reviews as mixed; added dose scope and three limiting PubMed reviews; removed unrelated registry/enrollment/endpoint claims; synchronized the documented evidence multipliers with the production scorer.",
       "auto (2026-04-02): backfill-auditability updated 47 high-impact entries with registry counts, endpoint tags, and effect_direction auditability fields.",
-      "auto (2026-04-02): backfill-auditability updated 50 high-impact entries with registry counts, endpoint tags, and effect_direction auditability fields.",
-      "auto (2026-04-02): backfill-auditability updated 50 high-impact entries with registry counts, endpoint tags, and effect_direction auditability fields.",
       "auto (2026-04-02): backfill-auditability updated 50 high-impact entries with registry counts, endpoint tags, and effect_direction auditability fields.",
       "4.0 (2026-04-02): Schema 5.3.0 adds auditability fields for effect_direction rationale/confidence, separates registry_completed_trials_count from published_studies_count, and reserves endpoint_relevance_tags / study-count subtype fields for future curation and refresh tooling.",
       "auto (2026-04-02): discover --apply added 14 entries: Vitamin B3 (Niacin), Molybdenum, Spirulina, Lactobacillus Acidophilus, Chlorella, Branched Chain Amino Acids, Black Seed Oil (Nigella Sativa), Sea Buckthorn, Slippery Elm, Bilberry, Bifidobacterium Longum, Bifidobacterium Bifidum, Black Cohosh, Ceramides. All flagged for human review of key_endpoints and effect_direction.",
@@ -21437,71 +21436,82 @@
         "lactobacillus acidophilus"
       ],
       "category": "probiotics",
-      "evidence_level": "ingredient-human",
-      "study_type": "rct_multiple",
+      "evidence_level": "reference",
+      "study_type": "reference",
       "published_studies": [
-        "RCT"
+        "reference",
+        "RCT",
+        "systematic_review"
       ],
-      "score_contribution": "tier_1",
+      "score_contribution": "tier_3",
       "key_endpoints": [
-        "Reduced IBS symptom composite score at 8 weeks vs placebo in 80-patient double-blind RCT with 5x10^9 CFU/day (PMID: 32538776)",
-        "Reduced overall diarrhea risk by 35% during antibiotic treatment (RR=0.65, 95% CI: 0.44-0.94) in 313-child RCT (PMID: 35727573)",
-        "Achieved 68% IBS symptom relief rate vs 37.5% placebo at 4 weeks with significant abdominal pain and bloating improvement (PMID: 23829297)",
-        "Shortened diarrhea duration (SMD=-0.74, p<0.001) in meta-analysis of 12 RCTs with 744 pediatric patients (PMID: 35070839)"
+        "LAPIBSS tested a two-strain L. acidophilus mixture in 80 adults at 10 billion total CFU/day (two 5-billion capsules) for 8 weeks. Primary abdominal pain result was null; secondary flatus and composite scores improved. The cited communication reviews that trial, not independent single-strain efficacy (PMID: 32538776)",
+        "An eight-strain formulation at 10 billion total CFU/day randomized 350 children, with 313 in intention-to-treat analysis. Primary antibiotic-associated diarrhea was null (RR 0.81, 95% CI 0.49-1.33); secondary all-cause diarrhea decreased (RR 0.65, 95% CI 0.44-0.94). Combination-only findings (PMID: 35727573)",
+        "A six-species formulation in 49 IBS patients improved primary symptom relief (68% versus 37.5% placebo); this formula result cannot be assigned to acidophilus alone (PMID: 23829297)",
+        "A meta-analysis of 12 heterogeneous probiotic trials in 744 children reported shorter diarrhea duration (SMD -0.74). The pooled intervention is probiotics, not isolated acidophilus efficacy (PMID: 35070839)"
       ],
       "health_goals_supported": [
         "Digestive Health"
       ],
       "primary_outcome": "Digestive Health",
-      "effect_direction": "positive_strong",
-      "total_enrollment": 437,
-      "notes": "L. acidophilus has moderate evidence for IBS symptom relief and antibiotic-associated diarrhea prevention. Strongest single-strain evidence from LAPIBSS trial (PMID: 32538776). Multi-strain formulations containing L. acidophilus show consistent diarrhea prevention benefits.",
-      "last_updated": "2026-04-02",
-      "notable_studies": "NCT01868737 (n=184): Probiotics in the Management of Necrotizing Enterocolitis in HIV-exposed Premature Infants. NCT02103972 (n=126): Assessment of Efficacy of the Consumption of a Heat-treated Lactobacillus Paracasei (GM080) on Atopic Dermatitis. NCT00305227 (n=100): Intravaginal LACTIN-V for Prevention of Recurrent Urinary Tract Infection.",
+      "effect_direction": "mixed",
+      "notes": "REFERENCE CONTEXT ONLY: these IBS and diarrhea sources assess two-strain, multispecies or heterogeneous pooled probiotic interventions. They cannot establish efficacy for arbitrary L. acidophilus labels or another exact strain. LAPIBSS did not improve primary abdominal pain; secondary findings are not single-strain evidence. The pediatric eight-strain trial had a null primary AAD endpoint and a positive secondary all-cause-diarrhea result. Exact-strain evidence remains owned by clinically_relevant_strains.json. No generic-species numerical clinical credit is authorized; this bounded review does not establish absence of acidophilus human evidence.",
+      "last_updated": "2026-10-01",
+      "notable_studies": "NCT01868737 (184 participants): L. rhamnosus GG + B. infantis in preterm infants, not acidophilus; no posted results. NCT02103972 (126 participants): heat-treated L. paracasei GM080 for atopic dermatitis, not acidophilus; no posted results. NCT00305227 (100 participants): intravaginal L. crispatus CTV05, not oral acidophilus. These registrations are inapplicable to this species summary and supply no clinical credit.",
       "references_structured": [
         {
           "type": "clinical_trial",
           "nct_id": "NCT02103972",
           "title": "Assessment of Efficacy of the Consumption of a Heat-treated Lactobacillus Paracasei (GM080) on Atopic Dermatitis",
-          "evidence_grade": "rct",
-          "enrollment": 126
+          "evidence_grade": "reference",
+          "enrollment": 126,
+          "note": "Content verified 2026-10-01: heat-treated L. paracasei GM080, not acidophilus; wrong species/preparation, no posted results; retained only as inapplicable audit context."
         },
         {
           "pmid": "32538776",
           "url": "https://pubmed.ncbi.nlm.nih.gov/32538776/",
           "source": "PubMed",
           "verified": true,
-          "note": "Extracted from key_endpoints text — needs content verification"
+          "note": "Content verified 2026-10-01: Communication on two-strain LAPIBSS, 10 billion total CFU/day; primary pain null, secondary flatus/composite positive."
         },
         {
           "pmid": "35727573",
           "url": "https://pubmed.ncbi.nlm.nih.gov/35727573/",
           "source": "PubMed",
           "verified": true,
-          "note": "Extracted from key_endpoints text — needs content verification"
+          "note": "Content verified 2026-10-01: Eight-strain trial, primary AAD null, secondary all-cause diarrhea positive; no component efficacy attribution."
         },
         {
           "pmid": "23829297",
           "url": "https://pubmed.ncbi.nlm.nih.gov/23829297/",
           "source": "PubMed",
           "verified": true,
-          "note": "Extracted from key_endpoints text — needs content verification"
+          "note": "Content verified 2026-10-01: Six-species IBS formula, positive primary relief; no single-species efficacy attribution."
         },
         {
           "pmid": "35070839",
           "url": "https://pubmed.ncbi.nlm.nih.gov/35070839/",
           "source": "PubMed",
           "verified": true,
-          "note": "Extracted from key_endpoints text — needs content verification"
+          "note": "Content verified 2026-10-01: 12-trial pooled probiotic pediatric diarrhea synthesis, not isolated acidophilus evidence."
         }
       ],
-      "published_studies_count": 808,
-      "registry_completed_trials_count": 808,
-      "effect_direction_confidence": "high",
-      "effect_direction_rationale": "Retained positive_strong classification; study_type=rct_multiple; evidence_level=ingredient-human; primary_outcome=Digestive Health; published_tags=RCT; published_studies_count=808; registry_completed_trials_count=808; total_enrollment=437; endpoint_tags=immune_support; notes/citations contain no automated downgrade signals.",
+      "effect_direction_confidence": "low",
+      "effect_direction_rationale": "Reference-only combination and pooled contexts include null primary and positive secondary or formula outcomes. Mixed does not establish a species-level effect or transfer combination benefit to individual strains. Exact-strain evidence remains with its existing owner.",
       "endpoint_relevance_tags": [
-        "immune_support"
-      ]
+        "digestive_health"
+      ],
+      "applicability": {
+        "scope": "formula_context_only",
+        "source_pmids": [
+          "32538776",
+          "35727573",
+          "23829297",
+          "35070839"
+        ],
+        "reviewed_at": "2026-10-01",
+        "reason": "Two-strain, multispecies and pooled interventions do not establish independent acidophilus-species efficacy. Exact-strain evidence remains with the existing strain owner."
+      }
     },
     {
       "id": "INGR_CHLORELLA",
@@ -21971,67 +21981,78 @@
         "bifidobacterium longum"
       ],
       "category": "probiotics",
-      "evidence_level": "ingredient-human",
-      "study_type": "rct_single",
+      "evidence_level": "reference",
+      "study_type": "reference",
       "published_studies": [
-        "RCT"
+        "reference",
+        "observational"
       ],
-      "score_contribution": "tier_2",
+      "score_contribution": "tier_3",
       "key_endpoints": [
-        "Reduced IBS-SSS score by 43.4% after 8 weeks with >60% achieving clinically meaningful reductions (>50-point decrease) using B. longum 35624 strain (PMID: 37702965)",
-        "Decreased IBS severity (IBS-SSS 208 vs 303 baseline, p<0.001) with 57% achieving lower severity categories or remission at 30 days (PMID: 35317278)",
-        "Attenuated cortisol output and subjective anxiety in response to social stress after 4 weeks at 1x10^9 CFU/day of B. longum 1714 in healthy volunteers (PMID: 27801892)",
-        "Improved sleep quality (PSQI) and reduced daytime dysfunction at 4 weeks, with further energy/vitality improvements at 8 weeks vs placebo using B. longum 1714 (PMID: 38341968)"
+        "In a 37-person open-label observational 35624 study, TISS decreased 43.4% versus baseline over 8 weeks; over 60% had clinically meaningful TISS and IBS-SSS reductions. No placebo comparison; this is strain-specific association, not generic B. longum efficacy (PMID: 37702965)",
+        "In an open-label 35624 study with 278 enrolled and 233 analyzed, IBS-SSS decreased from 303 to 208 versus baseline after 30 days at 1 billion CFU/day; 57% moved to lower severity categories or remission. No randomized comparator (PMID: 35317278)",
+        "In 22 healthy volunteers in a nonrandomized repeated-measures design (placebo followed by 1714), B. longum 1714 attenuated stress-related cortisol and subjective anxiety. Strain-specific stress research does not establish generic digestive-health benefit or applicability to BB536 (PMID: 27801892)"
       ],
       "health_goals_supported": [
         "Digestive Health"
       ],
       "primary_outcome": "Digestive Health",
-      "effect_direction": "positive_strong",
-      "total_enrollment": 583,
-      "notes": "B. longum has strong strain-specific evidence: 35624 strain for IBS symptom relief (PMID: 37702965, 35317278), and 1714 strain for gut-brain axis effects including stress response and sleep quality (PMID: 27801892, 38341968). Strain specificity is critical for clinical translation.",
-      "last_updated": "2026-04-02",
-      "notable_studies": "NCT04706559 (n=98): Efficacy of Oral Supplementation of Probiotics in Children With Atopic Dermatitis. NCT05367427 (n=60): Heat-treated Postbiotic Consumption in Healthy People With Mild to Moderate Gastrointestinal Symptoms. NCT04422327 (n=40): The Impact of a Combination of Bifidobacterium Longum 35624® and 1714™ Strains in Adults With Irritable Bowel Syndrome.",
+      "effect_direction": "mixed",
+      "notes": "REFERENCE CONTEXT ONLY: these sources study exact strains 35624 or 1714, or a combination; none establishes efficacy for arbitrary Bifidobacterium longum labels or BB536. Observational IBS associations are not placebo-controlled efficacy findings. No generic-species numerical clinical credit is authorized. Exact-strain decisions remain owned by clinically_relevant_strains.json, including 35624, 1714 and BB536; their primary outcomes and preparations must not be overridden by this summary. The erroneous sleep citation was withdrawn after source-content review; the actual sleep context is already retained by the existing 1714 owner. This bounded correction is not a finding that B. longum strains lack human evidence.",
+      "last_updated": "2026-10-01",
+      "notable_studies": "NCT04422327 (40 participants): open-label single-group 35624 + 1714 combination; mood/stress primary, IBS symptoms secondary, no posted results. NCT04706559 (98 participants): four-species formulation with conventional atopic-dermatitis treatment, not isolated longum; no posted results. NCT05367427 (60 participants): heat-treated CECT7347 postbiotic, not live BB536, 35624 or 1714; no posted results. Registrations are context, not demonstrated benefit.",
       "references_structured": [
         {
           "type": "clinical_trial",
           "nct_id": "NCT04422327",
           "title": "The Impact of a Combination of Bifidobacterium Longum 35624® and 1714™ Strains in Adults With Irritable Bowel Syndrome",
-          "evidence_grade": "rct",
-          "enrollment": 40
+          "evidence_grade": "reference",
+          "enrollment": 40,
+          "note": "Open-label single-group 35624 + 1714 registration; no posted results, not an RCT efficacy result."
         },
         {
           "pmid": "37702965",
           "url": "https://pubmed.ncbi.nlm.nih.gov/37702965/",
           "source": "PubMed",
           "verified": true,
-          "note": "Extracted from key_endpoints text — needs content verification"
+          "note": "Content verified 2026-10-01: Open-label observational 35624; 43.4% refers to TISS, not IBS-SSS; no generic species efficacy."
         },
         {
           "pmid": "35317278",
           "url": "https://pubmed.ncbi.nlm.nih.gov/35317278/",
           "source": "PubMed",
           "verified": true,
-          "note": "Extracted from key_endpoints text — needs content verification"
+          "note": "Content verified 2026-10-01: Observational 35624, 278 enrolled, 233 analyzed; baseline comparison, not an RCT."
         },
         {
           "pmid": "27801892",
           "url": "https://pubmed.ncbi.nlm.nih.gov/27801892/",
           "source": "PubMed",
           "verified": true,
-          "note": "Extracted from key_endpoints text — needs content verification"
+          "note": "Content verified 2026-10-01: 1714 in 22 healthy volunteers, within-participant stress/cognition study; not BB536 or species-wide digestive evidence."
         }
       ],
-      "published_studies_count": 131,
-      "registry_completed_trials_count": 131,
-      "effect_direction_confidence": "medium",
-      "effect_direction_rationale": "Retained positive_strong classification; study_type=rct_single; evidence_level=ingredient-human; primary_outcome=Digestive Health; published_tags=RCT; published_studies_count=131; registry_completed_trials_count=131; total_enrollment=583; endpoint_tags=immune_support,stress_mood,glycemic_control,digestive_health; notes/citations contain no automated downgrade signals.",
+      "effect_direction_confidence": "low",
+      "effect_direction_rationale": "Reference-only summary of heterogeneous strain-specific observational, stress and combination contexts. Mixed describes those contexts, not a pooled species-level efficacy estimate. No affirmative species clinical points; exact-strain outcomes remain with their existing owner.",
       "endpoint_relevance_tags": [
-        "immune_support",
-        "stress_mood",
-        "glycemic_control",
-        "digestive_health"
-      ]
+        "digestive_health",
+        "stress_mood"
+      ],
+      "applicability": {
+        "scope": "ingredient",
+        "require_source_label_form": true,
+        "required_form_terms": [
+          "35624",
+          "1714"
+        ],
+        "source_pmids": [
+          "37702965",
+          "35317278",
+          "27801892"
+        ],
+        "reviewed_at": "2026-10-01",
+        "reason": "Retained research is limited to named strains and cannot establish species-wide or BB536 efficacy. This reference-only summary is non-scoring; exact-strain evidence has its existing owner."
+      }
     },
     {
       "id": "INGR_BIFIDOBACTERIUM_BIFIDUM",
