@@ -257,10 +257,9 @@ def test_collagen_recovery_follows_prominence():
 
 
 def test_collagen_recovery_keeps_the_retained_exposure_stand_in():
-    """The recovered record's 2,500 mg minimum is read from the heaviest
-    "collagen" row, here 10 g of non-peptide hide collagen, not from the
-    300 mg peptide row. So the peptide row must still hold half the heaviest
-    active's mass (D26), or a trace peptide row borrows the other row's amount."""
+    """Keep D26's existing half-of-heaviest recovery safeguard until its
+    replacement is approved, even though the recovered minimum is now bound
+    to the peptide row itself."""
     product = _product(
         product_name="Collagen Complex",
         ingredients=[
@@ -524,3 +523,63 @@ def test_a_named_whole_preparation_is_not_its_mapped_component(pid):
     assert headers, "A named preparation must retain its own blend-level amount"
     assert not any(is_lent_blend_mass(row) for row in headers)
     assert _evidence(product)["metadata"]["primary_evidence_floor"] == 14.0
+
+
+@pytest.mark.parametrize("peptide_quantity,peptide_unit", [(2, "g"), (2000, "mg")])
+def test_recovered_peptide_minimum_never_borrows_other_collagen_amount(peptide_quantity, peptide_unit):
+    product = _product(
+        product_name="Collagen Complex",
+        ingredients=[
+            _row("Bovine Hide Collagen", "collagen", 3, unit="g", path="ingredientRows[0]", standard_name="Collagen"),
+            _row("Hydrolyzed Collagen Peptides Type I & III", "collagen", peptide_quantity,
+                 unit=peptide_unit, path="ingredientRows[1]", standard_name="Collagen"),
+        ], matches=[],
+    )
+    result = _evidence(product)
+    assert "SUB_CLINICAL_DOSE_DETECTED" in result["metadata"]["flags"]
+    assert result["metadata"]["primary_evidence_floor"] == 0.0
+    assert result["metadata"]["ingredient_points"].get("collagen", 0.0) == 0.0
+
+
+@pytest.mark.parametrize("reverse_rows", [False, True])
+def test_recovered_peptide_match_preserves_its_actual_source_row(reverse_rows):
+    from scoring_v4.modules.generic_evidence import resolved_clinical_matches
+    rows = [
+        _row("Bovine Hide Collagen", "collagen", 5, unit="g", path="ingredientRows[0]", standard_name="Collagen"),
+        _row("Hydrolyzed Collagen Peptides Type I & III", "collagen", 3, unit="g", path="ingredientRows[1]", standard_name="Collagen"),
+    ]
+    if reverse_rows:
+        rows.reverse()
+    product = _product(product_name="Collagen Complex", ingredients=rows, matches=[])
+    _, recovered = resolved_clinical_matches(product, owner_scoped=True)
+    entry = next(e for e in recovered if e["id"] == "RECOVERED_COLLAGEN_PEPTIDES_V1")
+    assert entry["matched_source_row_refs"] == ["ingredientRows[1]"]
+    assert _evidence(product)["score"] > 0
+
+
+def test_ambiguous_unreferenced_peptide_recovery_cannot_borrow_a_shared_name():
+    from scoring_v4.modules.generic_evidence import resolved_clinical_matches
+    product = _product(product_name="Collagen Complex", ingredients=[
+        _row("Collagen", "collagen", 3, unit="g", path="ingredientRows[0]"),
+        _row("Collagen", "collagen", 2, unit="g", collagen_subtype="peptides_i_iii"),
+    ], matches=[])
+    _, recovered = resolved_clinical_matches(product, owner_scoped=True)
+    assert not any(e["id"] == "RECOVERED_COLLAGEN_PEPTIDES_V1" for e in recovered)
+    assert _evidence(product)["metadata"]["primary_evidence_floor"] == 0.0
+
+
+@pytest.mark.parametrize("reverse_rows", [False, True])
+def test_equal_peptide_amounts_prefer_available_source_lineage(reverse_rows):
+    from scoring_v4.modules.generic_evidence import resolved_clinical_matches
+    rows = [
+        _row("Collagen", "collagen", 3, unit="g", collagen_subtype="peptides_i_iii"),
+        _row("Collagen", "collagen", 3, unit="g", path="ingredientRows[1]",
+             collagen_subtype="peptides_i_iii"),
+    ]
+    if reverse_rows:
+        rows.reverse()
+    product = _product(product_name="Collagen Complex", ingredients=rows, matches=[])
+    _, recovered = resolved_clinical_matches(product, owner_scoped=True)
+    entry = next(e for e in recovered if e["id"] == "RECOVERED_COLLAGEN_PEPTIDES_V1")
+    assert entry["matched_source_row_refs"] == ["ingredientRows[1]"]
+    assert _evidence(product)["score"] > 0

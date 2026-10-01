@@ -725,12 +725,31 @@ def _recover_contract_evidence_matches(
     # previous rules (see _recover_verified_primary_ingredient_matches).
     prominent = evidence_prominent_row_keys(product) if owner_scoped else None
 
+    peptide_row = _collagen_peptide_recovery_row(product, prominent=prominent)
+    if peptide_row is not None and not (
+        peptide_row.get("raw_source_path") or peptide_row.get("source_row_ref")
+    ):
+        # Legacy inputs may lack source refs. Their exact name is usable only
+        # when no other dose-bearing row contributes to that lookup key.
+        term = _canonical_text(peptide_row.get("name") or peptide_row.get("standard_name"))
+        if not term or any(
+            row is not peptide_row
+            and term in {_canonical_text(row.get(key)) for key in (
+                "standard_name", "name", "raw_source_text", "canonical_id",
+            )}
+            for row in nutrient_delivering_rows(product)
+        ):
+            peptide_row = None
     if (
-        _has_primary_collagen_peptide_identity(product, prominent=prominent)
+        peptide_row is not None
         and not _has_match_for_identity(matches, "collagen")
         and is_collagen_product(product)
     ):
-        recovered.append(dict(_RECOVERED_COLLAGEN_PEPTIDES_MATCH))
+        entry = dict(_RECOVERED_COLLAGEN_PEPTIDES_MATCH)
+        entry["matched_term"] = peptide_row.get("name") or peptide_row.get("standard_name")
+        entry["matched_canonical_id"] = peptide_row.get("canonical_id")
+        _stamp_recovery_source_ref(entry, peptide_row)
+        recovered.append(entry)
         recovered_ids.add(_RECOVERED_COLLAGEN_PEPTIDES_MATCH["id"])
 
     for entry in _recover_verified_product_level_matches(product, matches):
@@ -1304,20 +1323,21 @@ def _is_clear_primary_recovery_row(product: Dict[str, Any], row_keys: set[str]) 
     return False
 
 
-def _has_primary_collagen_peptide_identity(
+def _collagen_peptide_recovery_row(
     product: Dict[str, Any], *, prominent: Optional[set],
-) -> bool:
-    """A hydrolyzed type I/III peptide row that holds half the heaviest
-    competing active's mass. That comparison is the retained exposure stand-in
-    (decision D26), unchanged: the recovered record's minimum is read from the
-    heaviest "collagen" row, which need not be this peptide row. Owner-scoped
-    callers pass ``prominent``: the peptide row must then be prominent and its
-    mass its own (never a blend total lent to it). ``None`` keeps the previous
-    rule for the other callers."""
+) -> Optional[Dict[str, Any]]:
+    """Return the peptide row supplying a recovered study's exposure.
+
+    Keep the half-of-heaviest exposure stand-in pending D26 policy approval.
+    Owner-scoped recovery still requires shared prominence and the row's own
+    amount. Returning that row binds the study minimum to its preparation;
+    another collagen preparation must never supply this peptide dose.
+    """
     from evidence_resolver import evidence_row_key
 
     max_active_mass = 0.0
     max_peptide_mass = 0.0
+    peptide_row = None
     for row in _competing_active_rows(product):
         if not isinstance(row, dict):
             continue
@@ -1326,11 +1346,19 @@ def _has_primary_collagen_peptide_identity(
         if _is_collagen_peptide_row(row) and (
             prominent is None
             or (evidence_row_key(row) in prominent and not is_lent_blend_mass(row))
+        ) and (
+            mass > max_peptide_mass
+            or (mass == max_peptide_mass and peptide_row is not None
+                and not (peptide_row.get("raw_source_path") or peptide_row.get("source_row_ref"))
+                and (row.get("raw_source_path") or row.get("source_row_ref")))
         ):
-            max_peptide_mass = max(max_peptide_mass, mass)
+            max_peptide_mass = mass
+            peptide_row = row
     if max_peptide_mass <= 0.0:
-        return False
-    return max_peptide_mass >= (PRIMARY_MASS_FRACTION * max_active_mass)
+        return None
+    if max_peptide_mass < (PRIMARY_MASS_FRACTION * max_active_mass):
+        return None
+    return peptide_row
 
 
 def _is_collagen_peptide_row(row: Dict[str, Any]) -> bool:
