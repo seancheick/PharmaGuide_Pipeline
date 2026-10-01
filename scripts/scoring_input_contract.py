@@ -5823,6 +5823,8 @@ _ROLE_TITLE_STOPWORDS = {
 # enriched row is canonicalized to vitamin_e / Vitamin E; the role classifier
 # still needs to know the product title is selling that row.
 _ROLE_TITLE_ALIASES_BY_CANONICAL = {
+    "essential_amino_acids": ("eaa", "eaas"),
+    "branched_chain_amino_acids": ("bcaa", "bcaas"),
     "vitamin_a": ("beta carotene", "beta-carotene", "retinol"),
     "vitamin_d": ("d2", "d3", "cholecalciferol", "ergocalciferol"),
     "vitamin_e": (
@@ -6070,12 +6072,33 @@ def _role_context(
             # The existing subtype owner defines this panel; microgram nutrients
             # must not lose their purpose merely because another row is heavier.
             drivers.update(_norm(row.get("canonical_id")) for row in rows if _active_id(row))
+    title_norm = _norm(product.get("product_name") or product.get("fullName"))
+    named_amino_mixture = False
+    if module == "sports":
+        from scoring_v4.modules.sports_helpers import (
+            BCAA_AGGREGATE_CANONICALS, EAA_AGGREGATE_CANONICALS,
+            SPORTS_PROTEIN_CANONICALS,
+        )
+        # A label-owned, explicitly named amino mixture is the purpose row.
+        # The presence of a separate protein source does not redefine that
+        # purpose. Co-named protein still receives the ordinary title role.
+        named_mixtures = {
+            _norm(row.get("canonical_id")) for row in rows
+            if _norm(row.get("canonical_id")) in (
+                BCAA_AGGREGATE_CANONICALS | EAA_AGGREGATE_CANONICALS
+            ) and _named_in_title(row, title_norm)
+        }
+        named_amino_mixture = bool(named_mixtures)
+        if named_amino_mixture:
+            drivers.difference_update(SPORTS_PROTEIN_CANONICALS)
+            drivers.update(named_mixtures)
     masses = [m for m in (_role_mass_mg(r) for r in rows) if m is not None]
     return {
         "module": module,
         "statements": _safe_list(product.get("statements")),
-        "title_norm": _norm(product.get("product_name") or product.get("fullName")),
+        "title_norm": title_norm,
         "driver_canonicals": drivers,
+        "named_amino_mixture": named_amino_mixture,
         "max_mass_mg": max(masses) if masses else 0.0,
     }
 
@@ -6102,6 +6125,7 @@ def _classify_one(row: Dict[str, Any], ctx: Dict[str, Any]) -> Dict[str, Any]:
         and canonical == "protein"
         and _norm(row.get("scoring_input_kind")) == "product_level_evidence"
         and _norm(row.get("evidence_type")) == "sports_primary_dose"
+        and not ctx["named_amino_mixture"]
     ):
         return out(ROLE_PRIMARY, "drives_module_sports_protein", "router_driver", "high")
     if canonical and canonical in ctx["driver_canonicals"]:

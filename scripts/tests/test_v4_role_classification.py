@@ -277,3 +277,35 @@ def test_duplicate_canonical_yields_one_role_per_row():
     ])
     roles = classify_ingredient_roles(product, module="generic")
     assert len(roles) == 2
+
+
+def test_named_eaa_mixture_does_not_hide_a_co_named_protein_purpose():
+    product = _product("EAA Essential Amino Acids and Whey Protein", "amino_acid", [
+        _row("essential_amino_acids", "Essential Amino Acids", 1600, "mg"),
+        _row("whey_protein", "Whey Protein", 100, "mg"),
+    ])
+    roles = _by_canonical(product, module="sports")
+    assert roles["essential_amino_acids"]["role"] == "primary"
+    assert roles["whey_protein"]["role"] in {"primary", "claim_prominent"}
+
+
+def test_named_bcaa_mixture_without_co_named_protein_keeps_protein_adjunct():
+    product = _product("Branched Chain Amino Acids", "amino_acid", [
+        _row("branched_chain_amino_acids", "Branched Chain Amino Acids", 5000, "mg"),
+        _row("whey_protein", "Whey Protein", 100, "mg"),
+    ])
+    roles = _by_canonical(product, module="sports")
+    assert roles["branched_chain_amino_acids"]["role"] == "primary"
+    assert roles["whey_protein"]["role"] == "adjunct"
+
+
+def test_amino_mixture_title_abbreviations_use_the_existing_canonical_alias_owner():
+    for title, canonical_id in [("EAA", "essential_amino_acids"),
+                                ("BCAAs", "branched_chain_amino_acids")]:
+        product = _product(title, "amino_acid", [
+            _row(canonical_id, canonical_id.replace("_", " "), 1600, "mg"),
+            _row("whey_protein", "Whey Protein", 100, "mg"),
+        ])
+        roles = _by_canonical(product, module="sports")
+        assert roles[canonical_id]["role"] == "primary"
+        assert roles["whey_protein"]["role"] == "adjunct"

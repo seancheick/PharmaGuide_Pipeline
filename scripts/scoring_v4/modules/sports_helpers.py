@@ -4,6 +4,8 @@ from __future__ import annotations
 
 from typing import Any, Dict, Iterable, List, Optional, Set
 
+from scoring_input_contract import classify_ingredient_roles
+
 from scoring_v4.route_features import (
     BCAA_CANONICALS as ROUTE_FEATURE_BCAA_CANONICALS,
     EAA_CANONICALS as ROUTE_FEATURE_EAA_CANONICALS,
@@ -240,7 +242,12 @@ def primary_sports_identity(product: Dict[str, Any]) -> Optional[str]:
     canons = {canonical(row) for row in rows}
     name = _norm_text((product or {}).get("product_name") or (product or {}).get("fullName"))
 
-    if canons & SPORTS_PROTEIN_CANONICALS:
+    roles = classify_ingredient_roles(product, module="sports", rows=rows)
+    purpose_canons = {
+        canonical(row) for row, role in zip(rows, roles)
+        if role["role"] in {"primary", "claim_prominent"}
+    }
+    if purpose_canons & SPORTS_PROTEIN_CANONICALS:
         return "protein"
     if CREATINE_CANONICALS & canons:
         return "creatine"
@@ -275,7 +282,8 @@ def sports_subtype(product: Dict[str, Any]) -> str:
 
     if _is_opaque_stimulant_context(product, canons, text, taxonomy):
         return "stimulant_fat_burner"
-    if _is_protein_context(canons, text, taxonomy):
+    primary = primary_sports_identity(product)
+    if _is_protein_context(canons, text, taxonomy, primary=primary):
         return "protein"
     if _is_pre_workout_context(canons, text, taxonomy):
         return "pre_workout"
@@ -289,7 +297,6 @@ def sports_subtype(product: Dict[str, Any]) -> str:
         return "bcaa_eaa"
     if taxonomy == "electrolyte" or any(term in text for term in ("electrolyte", "hydration")):
         return "electrolyte_hydration"
-    primary = primary_sports_identity(product)
     if primary in {"creatine", "protein"}:
         return primary
     if primary in {"bcaa", "eaa"}:
@@ -341,9 +348,11 @@ def _taxonomy_type(product: Dict[str, Any]) -> str:
     return ""
 
 
-def _is_protein_context(canons: set[str], text: str, taxonomy: str) -> bool:
+def _is_protein_context(
+    canons: set[str], text: str, taxonomy: str, *, primary: Optional[str],
+) -> bool:
     if canons & SPORTS_PROTEIN_CANONICALS:
-        return True
+        return primary == "protein"
     if taxonomy == "protein_powder":
         return True
     return "protein" in text and "collagen" not in text

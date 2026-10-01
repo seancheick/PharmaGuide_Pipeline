@@ -120,6 +120,21 @@ def test_clean_whey_isolate_gets_elite_protein_formulation_credit() -> None:
     assert payload["components"]["sports_amino_profile_disclosure"] > 0.0
 
 
+def test_protein_purpose_survives_a_stimulant_calibration_subtype() -> None:
+    from scoring_v4.modules.sports_helpers import primary_sports_identity, sports_subtype
+    from scoring_v4.scored_artifact import build_scored_artifact
+
+    product = _protein_product([
+        _row("whey_protein", 25, name="Whey Protein Isolate", matched_form="whey protein isolate"),
+        _row("caffeine", 0.1, name="Caffeine"),
+    ], name="Whey Protein Shred")
+    assert primary_sports_identity(product) == "protein"
+    assert sports_subtype(product) == "stimulant_fat_burner"
+    assert score_formulation(product)["metadata"]["sports_protein_profile_applied"] is True
+    components = build_scored_artifact(product)["quality_pillars_v4"]["formulation"]["components"]
+    assert components["raw_formulation"] > 20.0
+
+
 def test_complete_plant_blend_gets_strong_but_not_isolate_level_credit() -> None:
     payload = score_formulation(
         _protein_product(

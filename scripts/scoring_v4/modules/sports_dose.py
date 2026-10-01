@@ -360,17 +360,22 @@ def _best_primary_score(product: Dict[str, Any]) -> Tuple[Optional[str], float, 
     best_identity: Optional[str] = None
     best_score = 0.0
     best_basis: Optional[str] = "no_sports_primary_dose"
+    shared_primary = primary_sports_identity(product)
     for identity in (
         "protein", "creatine", "bcaa", "eaa", "beta_alanine", "citrulline", "hmb",
         "alpha_gpc", "atp", "caffeine", "betaine", "taurine",
     ):
+        # Protein's flat low-amount band must not compete when the shared
+        # purpose owner identifies it as an incidental amino-mixture source.
+        if identity == "protein" and shared_primary != "protein":
+            continue
         score, basis = _score_primary(product, identity)
         if score > best_score:
             best_identity = identity
             best_score = score
             best_basis = basis
     if best_identity is None:
-        fallback_identity = primary_sports_identity(product)
+        fallback_identity = shared_primary
         if fallback_identity:
             _score, basis = _score_primary(product, fallback_identity)
             return fallback_identity, 0.0, basis

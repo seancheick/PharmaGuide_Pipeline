@@ -18,7 +18,6 @@ from scoring_v4.modules.generic_formulation import (
 )
 from scoring_v4.modules.generic_helpers import (
     _norm_text,
-    _safe_dict,
     _safe_list,
     get_active_ingredients,
 )
@@ -30,6 +29,7 @@ from scoring_v4.modules.sports_helpers import (
     canonical,
     dose_g,
     primary_sports_identity,
+    sports_subtype,
 )
 
 
@@ -111,19 +111,9 @@ def score_formulation(product: Dict[str, Any]) -> Dict[str, Any]:
 
 
 def _is_protein_context(product: Dict[str, Any]) -> bool:
-    taxonomy = _safe_dict((product or {}).get("supplement_taxonomy"))
-    ptype = _norm_text(
-        (product or {}).get("primary_type")
-        or taxonomy.get("primary_type")
-    )
-    category = _norm_text(taxonomy.get("percentile_category"))
-    name = _norm_text((product or {}).get("product_name") or (product or {}).get("fullName"))
-    return (
-        ptype == "protein_powder"
-        or category == "protein_powder"
-        or primary_sports_identity(product) == "protein"
-        or "protein" in name
-    )
+    """Consume the shared sports purpose result rather than reinterpret it."""
+    # Calibration subtype can be stimulant while the shared purpose is protein.
+    return primary_sports_identity(product) == "protein" or sports_subtype(product) == "protein"
 
 
 def _row_text(row: Dict[str, Any]) -> str:

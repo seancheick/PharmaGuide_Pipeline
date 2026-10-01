@@ -13,6 +13,8 @@ the identity; the amounts of each amino acid stay undisclosed.
 import copy
 import json
 import logging
+
+import pytest
 from pathlib import Path
 
 FIXTURES = Path(__file__).parent / "fixtures"
@@ -55,3 +57,51 @@ def test_a_complex_with_a_non_eaa_child_is_not_an_eaa_total():
     from scoring_v4.modules.sports_dose import _score_primary
 
     assert _score_primary(_enrich(raw), "eaa")[1] == "eaa_incomplete_under_6"
+
+
+@pytest.fixture(scope="module")
+def eaa_product():
+    return _enrich(_raw())
+
+
+def test_the_declared_eaa_product_owns_the_sports_primary(eaa_product):
+    from scoring_input_contract import classify_ingredient_roles, get_scoring_ingredients
+    from scoring_v4.modules.sports_helpers import primary_sports_identity, sports_subtype
+    from scoring_v4.scored_artifact import build_scored_artifact
+
+    rows = get_scoring_ingredients(eaa_product).rows
+    roles = {role["canonical_id"]: role for role in
+             classify_ingredient_roles(eaa_product, module="sports", rows=rows)}
+    assert roles["essential_amino_acids"]["role"] == "primary"
+    assert roles["whey_protein"]["role"] == "adjunct"
+    assert primary_sports_identity(eaa_product) == "eaa"
+    assert sports_subtype(eaa_product) == "bcaa_eaa"
+    artifact = build_scored_artifact(eaa_product)
+    assert artifact["quality_pillars_v4"]["dose"]["components"]["archetype"] == "sports_bcaa_eaa"
+    dose = artifact["_v4_module_breakdown"]["dimensions"]["dose"]["metadata"]
+    assert dose["primary_identity"] == "eaa"
+    assert dose["dose_basis"].startswith("eaa_")
+
+
+@pytest.mark.parametrize("protein_amount", [None, 0, 100, 10000])
+def test_named_amino_mixture_primary_does_not_depend_on_protein_mass(protein_amount):
+    from scoring_input_contract import classify_ingredient_roles, get_scoring_ingredients
+    from scoring_v4.modules.sports_helpers import primary_sports_identity, sports_subtype
+    from scoring_v4.modules.sports_dose import score_dose
+
+    raw = _raw()
+    whey = raw["ingredientRows"][1]
+    if protein_amount is None:
+        whey["quantity"] = []
+    else:
+        for quantity in whey["quantity"]:
+            quantity["quantity"] = protein_amount
+    product = _enrich(raw)
+    rows = get_scoring_ingredients(product).rows
+    roles = classify_ingredient_roles(product, module="sports", rows=rows)
+    assert next(r for r in roles if r["canonical_id"] == "essential_amino_acids")["role"] == "primary"
+    assert all(r["role"] not in {"primary", "claim_prominent"}
+               for r in roles if r["canonical_id"] == "whey_protein")
+    assert primary_sports_identity(product) == "eaa"
+    assert sports_subtype(product) == "bcaa_eaa"
+    assert score_dose(product)["metadata"]["primary_identity"] == "eaa"
