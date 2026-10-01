@@ -4,6 +4,39 @@ Status: **Claude validation complete; Codex audit/integration pending.** Branch
 `claude/generic-prominence-ownership` from main/origin `e8687b39`, pushed as a feature branch for
 tracking only; final source `68cae99a`. Not merged to main, no catalog release.
 
+## Handoff to Codex (audit and integration)
+
+- **Branch** `claude/generic-prominence-ownership` (origin), worktree
+  `~/Downloads/dsld_clean/.claude/worktrees/generic-prominence`, clean. **Base** `e8687b39` (origin/main,
+  unchanged since). **Final source** `68cae99a`; branch head `a803ceea` adds docs only. A strict
+  descendant of main: a fast-forward. Not merged, not pushed to main, no release.
+- **Source commits, in order:** `eb70f424` role materiality; `2ce48b21` owner row view and consumers;
+  `5c549d1a` organism guard (superseded by `68cae99a`); `2d9ede38` no re-stamp; `c4119d30`, `916d0c62`
+  branded headings and brand identifiers; `32765afe`, `db939b57`, `41eb22d7`, `452a618e` (review 1);
+  `7ea61daa`, `46ca2145`, `9ea4af85` (preview replay, review 2); `b43a048f` (Sambucus); `9a6eb7c9`,
+  `5b8cc834`, `9d65403f` (review 3, raw coverage); `0cf9262e` (review 4, comments); `68cae99a`
+  (approved probiotic model inputs).
+- **Files:** `scripts/evidence_resolver.py`, `scripts/scoring_input_contract.py`,
+  `scripts/scoring_v4/modules/generic_evidence.py`, `scripts/scoring_v4/modules/generic.py` (comment);
+  tests `test_evidence_prominence_ownership.py` (new), `test_v4_role_classification.py`,
+  `test_evidence_blend_header_wiring.py`, `test_evidence_nutrition_facts_provenance.py`,
+  `test_evidence_owner_eligibility.py`, `test_v4_generic_evidence_p133.py`,
+  `test_v4_evidence_primary_floor_p8.py`; 16 raw fixtures; docs below. No config, data, export or
+  public-field change.
+- **Outcome:** 66 distinct products move, all down, Evidence only, 17 tier crossings; 0 of 1,259
+  controls and no probiotic anywhere change score; random 1,500 raw labels move none. Every mover and
+  its cause: "Measured results" below and `replay_*_changed.md`.
+- **Tests:** RED-first per defect (logs listed under Progress); focused 190 passed; final
+  `scripts/test.sh fast` **17,954 passed, 168 skipped, 0 failed** (167 skipped at `3ee91eae`).
+- **Reviews:** four fresh-context rounds; every finding reproduced, then fixed or dispositioned below.
+- **Reproduce:** frozen inputs, baselines, candidates and logs in `~/pg_quality/prominence_20261001/`;
+  commands under "Reproduction"; never snapshot from a worktree that receives commits.
+- **Checkboxes:** plan Phase 2 sub-item "validated by Claude" checked; "Codex audit and integration",
+  D26 and the parent Phase 2 item stay unchecked. Ledger Q49 and D26 updated.
+- **For Codex/Sean:** D26 (four retained exposure stand-ins, measured counterfactual); open items listed
+  in ledger Q49; separate `_dose_map` unit task on `claude/dose-map-unit-compare` edits the same file
+  (different function). After integration: one corpus pass from Clean, then the release rung.
+
 ## Owner Check
 
 - Owner: `scripts/scoring_input_contract.py::classify_ingredient_roles` (roles) read through
