@@ -63,8 +63,8 @@ then multiplies the clinical component by 20/12.
 
 - 392/542 probiotic labels moved; 375 moved by at least one point.
 - Deltas: -2.2 to +4.8; mean +2.9704 among movers, +0.9330 across all 1,248.
-- Tier: 41 Poor -> Needs improvement, 22 Needs improvement -> Good, 3 Good ->
-  Very good; 2 Very good -> Good. Verdict: 41 POOR -> SAFE. No status, Safety,
+- Shipped tier: 40 Poor -> Needs improvement, 21 Needs improvement -> Good,
+  4 Good -> Very good. Legacy verdict: 40 POOR -> SAFE. No status, Safety,
   Dose, or other-pillar movement.
 - Exact-dose products can fall because baseline 12 + 8 = 20 exceeds the
   rescaled clinical-only result. DS-01 falls 2.2; the two Women's gummies and
@@ -102,10 +102,14 @@ Identity-gated projection:
 - Deltas: -9.6 to +10.4; mean +3.0967 among movers, +0.7469 across all 1,248.
 - Standards: 141 None -> ordinary reviewed; 9 ordinary -> explicit triglyceride;
   196 amount-derived triglyceride -> ordinary.
-- Tier up: 52 Poor -> Needs improvement, 8 Needs improvement -> Good, 3 Good ->
-  Very good. Tier down: 21 Good -> Needs improvement, 31 Very good -> Good,
-  9 Excellent -> Very good.
-- Verdict: 52 POOR -> SAFE; no SAFE -> POOR. Status/Safety/Dose/other pillars: 0.
+- Shipped tier up: 56 Poor -> Needs improvement, 8 Needs improvement -> Good,
+  3 Good -> Very good. Tier down: 35 Good -> Needs improvement, 36 Very good ->
+  Good, 10 Excellent -> Very good.
+- Legacy verdict: 56 POOR -> SAFE; no SAFE -> POOR. This is the compatibility
+  quality-tier alias, not a safety improvement. Status/Safety/Dose/other pillars: 0.
+- Individual crossing review: `OMEGA_O1_CROSSING_REVIEW.md`. It classifies 38
+  plausible ordinary-omega crossings and 18 holds requiring identity,
+  population, preparation, DHA-only applicability, or mixed-purpose resolution.
 - Representative high-dose/no-purpose labels (Clearly EPA/DHA and Super Omega-3
   families) fall 9.6 because amount no longer manufactures a strong purpose.
 
@@ -119,12 +123,21 @@ Identity-gated projection:
 
 - 655/717 omega labels moved (all by at least one point).
 - Deltas: -10.7 to +9.3; mean +0.2333 among movers, +0.1224 across all 1,248.
-- Tier up: 40 Poor -> Needs improvement, 1 Needs improvement -> Good. Tier down:
-  4 Needs improvement -> Poor, 42 Good -> Needs improvement, 32 Very good ->
-  Good, 1 Excellent -> Very good, 8 Excellent -> Good.
-- Verdict: 40 POOR -> SAFE; 4 SAFE -> POOR. Status/Safety/Dose/other pillars: 0.
+- Shipped tier up: 41 Poor -> Needs improvement, 1 Needs improvement -> Good.
+  Tier down: 3 Needs improvement -> Poor, 42 Good -> Needs improvement,
+  41 Very good -> Good, 9 Excellent -> Very good, 1 Excellent -> Good.
+- Legacy verdict: 41 POOR -> SAFE; 3 SAFE -> POOR. Status/Safety/Dose/other
+  pillars: 0.
 
 The data establish direction and affected labels, not the correct mapping.
+
+### Shipped-tier measurement correction
+
+The original analysis helper compared the one-decimal audit total directly to
+the configured tier floors. Production instead rounds that total half-up to the
+whole score shown to the user and assigns the tier from that whole score. The
+counts above now use the production rule. This correction changes reporting
+only; no replay output or score changed.
 
 ## Generic all-route inventory
 
