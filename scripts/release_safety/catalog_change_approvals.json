@@ -1,0 +1,7 @@
+{
+  "_metadata": {
+    "description": "Reviewed catalog changes allowed to ship although they weaken what a user is told: a milder verdict, a product with a warning leaving the catalog, or a score drop of 10 points or more. Read by scripts/release_safety/catalog_diff.py, which release_full.sh runs before any publication. Each entry approves only the exact change it names (dsld_id, kind, from, to); a group needs a reason, an approver and a YYYY-MM-DD date. Entries that match nothing in a later diff are reported as stale and can be deleted.",
+    "schema_version": 1
+  },
+  "approvals": []
+}

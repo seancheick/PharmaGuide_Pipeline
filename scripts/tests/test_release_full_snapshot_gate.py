@@ -35,6 +35,17 @@ def test_release_runs_snapshot_contract_before_supabase_sync():
     assert "scripts/tests/test_scoring_snapshot_v1.py" in source
 
 
+def test_release_runs_catalog_change_gate_before_any_publication():
+    source = RELEASE_SCRIPT.read_text(encoding="utf-8")
+
+    gate = source.index('run_strict_gate "catalog changes vs app bundle"')
+    asset_publish = source.index('run_strict_gate "interaction DB release asset + app hydration pin"')
+    supabase_sync = source.index("# Step 5: Sync to Supabase")
+
+    assert gate < asset_publish < supabase_sync
+    assert "scripts/release_safety/catalog_diff.py" in source[gate:asset_publish]
+
+
 def test_release_preflights_flutter_import_before_supabase_sync():
     source = RELEASE_SCRIPT.read_text(encoding="utf-8")
 

@@ -23,6 +23,11 @@ from supplement_taxonomy import percentile_label_for
 SCORED_ARTIFACT_SCHEMA_VERSION = "4.3.0"
 LOW_COVERAGE_TRUST_FLOOR = 0.3
 
+#: Public verdict precedence, most restrictive first (GLOSSARY "Verdict
+#: precedence"). ``_public_verdict`` returns one of these. Code that compares
+#: two verdicts ranks them by this tuple instead of keeping its own order.
+PUBLIC_VERDICT_PRECEDENCE = ("BLOCKED", "UNSAFE", "NOT_SCORED", "CAUTION", "POOR", "SAFE")
+
 
 def _safe_dict(value: Any) -> Dict[str, Any]:
     return value if isinstance(value, dict) else {}

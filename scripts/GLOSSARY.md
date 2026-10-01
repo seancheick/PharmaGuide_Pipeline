@@ -153,7 +153,8 @@ committed outcome after a lost response without borrowing another attempt's resu
 | **Router** | `scoring_input_contract.py::build_scoring_classification` decides the v4 module route; `scoring_v4/router.py` is a thin adapter over it (`class_for_product`). |
 | **Safety suppression** | BLOCKED/UNSAFE products retain verdict/evidence but ship a null public score with `quality_score_status=suppressed_safety`. |
 | **Completeness exclusion** | Products without usable identity/payload become `NOT_SCORED` and are quarantined from the live catalog. Missing disclosure can instead remain scoreable as explicit soft debt. |
-| **Verdict precedence** | BLOCKED > UNSAFE > NOT_SCORED > CAUTION > POOR > SAFE. |
+| **Verdict precedence** | BLOCKED > UNSAFE > NOT_SCORED > CAUTION > POOR > SAFE. Declared once as `scored_artifact.py::PUBLIC_VERDICT_PRECEDENCE`. |
+| **Catalog change gate** | `release_safety/catalog_diff.py`, run by `release_full.sh` before any publication: compares the candidate catalog with the app bundle committed on the app's main and stops on a milder verdict, a warned product leaving the catalog, or a 10+ point score drop, unless `release_safety/catalog_change_approvals.json` names that exact change. |
 
 Deprecated `/80` export fields (`score_quality_80`, `score_display_80`) must
 never be reintroduced. Final export rejects any non-v4 Stage-3 artifact.

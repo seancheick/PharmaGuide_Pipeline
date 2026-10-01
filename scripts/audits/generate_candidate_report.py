@@ -23,9 +23,14 @@ import json
 import re
 import sqlite3
 import subprocess
+import sys
 from pathlib import Path
 
 REPO = Path(__file__).resolve().parents[2]
+if str(REPO / "scripts") not in sys.path:
+    sys.path.insert(0, str(REPO / "scripts"))
+
+from release_safety.catalog_diff import diff_catalogs, load_approvals  # noqa: E402
 
 REQUIRED_VERIFICATION_GATES = (
     "full_corpus_pipeline",
@@ -191,39 +196,6 @@ def _quarantine(manifest: dict) -> dict:
     return {"total": sum(groups.values()), "groups": dict(sorted(groups.items()))}
 
 
-def _shared_diff(baseline: Path, candidate: Path) -> dict:
-    def rows(db: Path) -> tuple[dict, set]:
-        con = sqlite3.connect(str(db))
-        try:
-            cols = [r[1] for r in con.execute("pragma table_info(products_core)")]
-            wanted = [c for c in ("dsld_id", "verdict", "blocking_reason",
-                                  "quality_score_status") if c in cols]
-            data = {
-                str(r[0]): dict(zip(wanted, r))
-                for r in con.execute(f"select {','.join(wanted)} from products_core")
-            }
-            return data, set(wanted)
-        finally:
-            con.close()
-
-    base, base_cols = rows(baseline)
-    cand, cand_cols = rows(candidate)
-    common = sorted((base_cols & cand_cols) - {"dsld_id"})
-    shared = set(base) & set(cand)
-    changed = {c: 0 for c in common}
-    for pid in shared:
-        for col in common:
-            if base[pid].get(col) != cand[pid].get(col):
-                changed[col] += 1
-    return {
-        "shared": len(shared),
-        "added_live": len(set(cand) - set(base)),
-        "removed_live": len(set(base) - set(cand)),
-        "comparable_columns": common,
-        "changed": changed,
-    }
-
-
 def _policy_holds() -> list[dict]:
     path = REPO / "scripts" / "data" / "banned_recalled_ingredients.json"
     payload = json.loads(path.read_text(encoding="utf-8"))
@@ -344,7 +316,11 @@ def build_report(args) -> dict:
             "database_sha256": _sha256(baseline),
             "product_count": _product_count(baseline),
         }
-        report["baseline_candidate_diff"] = _shared_diff(baseline, db)
+        # The release gate's own diff; the per-product rows stay in its report.
+        diff = diff_catalogs(baseline, db, load_approvals())
+        report["baseline_candidate_diff"] = {
+            k: v for k, v in diff.items() if k not in ("gated", "biggest_rises")
+        }
     if args.verification:
         report["verification"] = _validated_verification(Path(args.verification))
 
@@ -475,15 +451,17 @@ def render_markdown(r: dict) -> str:
             "## Against the shipped baseline",
             "",
             f"- shared products: {d['shared']}",
-            f"- added live: {d['added_live']}",
-            f"- removed live: {d['removed_live']}",
+            f"- added live: {d['added']}",
+            f"- removed live: {d['removed']}",
+            f"- changes the release gate (`scripts/release_safety/catalog_diff.py`) "
+            f"stops on until approved: {d['unapproved']}",
             "",
-            "Changes on shared products, over the columns present in both schemas "
-            f"({', '.join(d['comparable_columns'])}):",
+            "Verdict changes on shared products:",
             "",
         ]
-        for col, count in d["changed"].items():
-            lines.append(f"- `{col}`: {count}")
+        for t in d["verdict_transitions"]:
+            milder = " (milder)" if t["milder"] else ""
+            lines.append(f"- {t['from']} → {t['to']}: {t['products']}{milder}")
         lines.append("")
 
     if "verification" in r:
