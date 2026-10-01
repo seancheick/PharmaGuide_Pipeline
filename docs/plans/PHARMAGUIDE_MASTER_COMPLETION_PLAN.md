@@ -14,7 +14,7 @@ A checked implementation box means that specific deliverable is implemented, mea
 - [ ] Complete the remaining Phase 2 role/prominence and serving corrections.
 - [ ] Validate a fresh complete catalog, approve its exact manifest, publish and verify live behavior.
 
-No catalog release has occurred under this plan. Recorded checkpoints validate their named source and frozen samples, not the entire rebuilt corpus. The combined pipeline source is integrated locally on main through `2aaafc15` (tested production checkpoint `a3a2d904`). Q49 and Q51 are retained separately; D26, remaining identity cases and Q53 are still release holds. Source is pushed to main; source push and cleanup receipts are recorded below.
+No catalog release has occurred under this plan. Recorded checkpoints validate their named source and frozen samples, not the entire rebuilt corpus. The earlier combined source was pushed through `19d4f661` (tested production checkpoint `a3a2d904`). Q49 and Q51 remain separate integrated items. Q53 source correction `0acde33e`, its two benchmark follow-ups and Q52 source correction `6a15be14` are integrated on main. Final combined fast: **18,008 passed,168 skipped,zero failures/xfails**; source fingerprints match measured candidate bytes and fresh review accepted. D26, remaining identity/research cases and fresh candidate validation remain open. Source push and cleanup receipts are recorded below.
 
 ## Fixed boundaries and Owner Check
 
@@ -80,7 +80,9 @@ Do not introduce the rejected mass-based demotion of purpose ingredients. Keep s
 - [x] Complete the registry-state inventory and repair the obsolete determination token without weakening specific identity/applicability holds (Q43; [receipt](../../scripts/audits/evidence_completion_20260930/README.md)).
 - [x] Preserve verified probiotic preparation/population/purpose, primary outcomes, review approval and trial-family independence in production migration.
 - [x] Independently identify source/strain attribution defects in the generic longum and acidophilus records (Q53); record a release hold rather than treating unchanged scores as clinical validation.
-- [ ] Correct Q53 through existing registry/applicability owners with verified per-entry sources and measured production consequences.
+- [x] Correct Q53 through the existing registry/applicability owners: two per-entry source reviews, canonical reference-only veto, 536 frozen raw labels plus one preserved submission, and fresh independent review. All 54 DSLD score decreases are Evidence-only; existing native-strain assessments are unchanged.
+- [x] Integrate Q53 final source checkpoint on main through `6a15be14`, including the corrected BB536 preservation canary; combined fast18,008passed/168skipped/zero failures or xfails.
+- [ ] Validate broader Evidence coverage on the fresh release candidate. Eight labels now expose incomplete Evidence coverage; one already-incomplete label adds an unresolved subject. Research queue:12091,1834,19171,19172,19890,264105,35694,46802,65049 (`probiotic_q53_20261001/research_queue.json`). These are research/identity checks, not a reason to restore unsupported species credit.
 - [ ] Audit coverage against the **corrected release subject set**, not just the earlier registry census.
 - [ ] Finish omega preparation/purpose applicability and the remaining generic/branded-formula coverage, including Tesnor/Sytrinol.
 - [ ] Verify each remaining identity, preparation, intervention, population, outcome and identifier against live primary sources; document negative searches.
@@ -183,6 +185,11 @@ Original fixed boundaries remain: six maxima 20/20/20/15/15/10, existing public 
 - [x] Push validated pipeline source and Q49/Q51 integration register to main (`de63a5f0`, tested production `a3a2d904`); final fast: 17,994 passed,167 skipped,zero failures/xfails.
 - [x] Push combined Flutter source to main `d6882d79`; final analyzer and 3,754 tests passed.
 - [x] Remove clean merged lane worktrees and branches after verifying their tips are contained in published main. Remove the requested `dose-map-base` scratch checkout. Preserve rejected/superseded experiments and ignored handoffs in recoverable archives.
-- [ ] Correct Q53 probiotic registry attribution/applicability per entry, then complete D26, remaining identity work and approved calibration before the fresh corpus/release sequence.
+- [x] Implement, measure and independently review Q53 generic probiotic source/applicability corrections (`0acde33e`; benchmark-only follow-up `de3d0353`). Exact-strain registry and all numerical policy magnitudes are unchanged.
+- [x] Complete and integrate Q53/Q52 final source checkpoint through `6a15be14`:18,008 passed,168 skipped,zero failures/xfails; fresh review accepted. Q52 corrects both CoQ10 copy branches through the existing rule owner; severity/gates/other siblings remain unchanged.
+- [ ] Complete D26, remaining identity/research and approved calibration before the fresh corpus/release sequence. Q53 coverage queue and new interaction copy require fresh generation before release.
+- [x] Push app reference metadata parity to main `be368cfe`: clinical payloads unchanged, all 32 canonical artifacts synchronized, analyzer clean and 27 focused tests passed. Remove its clean merged worktree/branch; private handoff preserved.
 
 Durable replay, logs, simulator capture and cleanup archives: `/Users/seancheick/pg_quality/integration_20261001/`. App Dependabot branches are new unreviewed dependency proposals and remain untouched. Website main already contains its reconciled work; untracked `axis-proposals-for-review.csv` is preserved. No catalog, interaction DB, Supabase or OTA publication occurred.
+
+Final October1 source batch: Q53 and Q52 are implemented, measured, independently reviewed and integrated on main; source push/clean checkout verification follows through the existing Git chain. Full frozen corpus, final exported-verdict review, generated interaction artifact, release/full gates, exact candidate approval and runtime publication remain open. The current source gate does not replace those stages.
