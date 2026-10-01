@@ -1,0 +1,7 @@
+{
+  "_metadata": {
+    "description": "Reviewed product changes allowed to ship although the release gate stops on them: a milder safety warning, a product with a safety warning leaving the catalog, a score move of 10+ points either way, or a quality grade up with a 5+ point rise. Read by scripts/release_safety/catalog_diff.py, which release_full.sh runs before any publication. Each entry approves one product's exact change: dsld_id, 'from' state and 'to' state (verdict, tier, score), or 'to': null for a product leaving the catalog. A group needs a reason, an approver and a YYYY-MM-DD date. Entries that match nothing in a later comparison are reported as stale and can be deleted.",
+    "schema_version": 1
+  },
+  "approvals": []
+}

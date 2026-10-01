@@ -75,7 +75,7 @@ Public API
         dist_manifest_filename="export_manifest.json",
         dist_index_filename="detail_index.json",
         supabase_client=None,                  # P3.5: enables registry side
-        registry_bucket="pharmaguide",         # P3.5
+        registry_bucket=STORAGE_BUCKET,        # P3.5
         registry_table="catalog_releases",     # P3.5
         retained_versions=(),                  # cleanup --keep N versions
     ) -> ProtectedBlobSet
@@ -126,11 +126,11 @@ from .bundle_alignment import (
     read_flutter_bundle_manifest,
 )
 from .index_validator import validate_detail_index
+from supabase_client import STORAGE_BUCKET
 
 DEFAULT_BUNDLED_CATALOG_PATH = "assets/db/pharmaguide_core.db"
 DEFAULT_DIST_INDEX_FILENAME = "detail_index.json"
 DEFAULT_DIST_MANIFEST_FILENAME = "export_manifest.json"
-DEFAULT_REGISTRY_BUCKET = "pharmaguide"
 
 #: Attempts for each protected-set storage call. The protected set is the
 #: thing standing between a transient blip and a rejected (or, with a bad
@@ -332,7 +332,7 @@ def compute_protected_blob_set(
     dist_index_filename: str = DEFAULT_DIST_INDEX_FILENAME,
     # P3.5: registry side — additive, opt-in via supabase_client
     supabase_client=None,
-    registry_bucket: str = DEFAULT_REGISTRY_BUCKET,
+    registry_bucket: str = STORAGE_BUCKET,
     registry_table: Optional[str] = None,
     retained_versions: Iterable[str] = (),
 ) -> ProtectedBlobSet:

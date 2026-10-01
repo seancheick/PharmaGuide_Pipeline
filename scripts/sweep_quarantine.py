@@ -48,8 +48,8 @@ from release_safety.quarantine_sweeper import (  # noqa: E402
     list_quarantine_dates,
 )
 from release_safety.transient import retry_transient  # noqa: E402
+from supabase_client import STORAGE_BUCKET  # noqa: E402
 
-BUCKET = "pharmaguide"
 QUARANTINE_ROOT = "shared/quarantine"
 TTL_DAYS = 30
 
@@ -505,13 +505,13 @@ def _execute(client, args, today: _date) -> int:
                     try:
                         retry_transient(
                             lambda batch=batch: remove_storage_batch(
-                                client, BUCKET, batch,
+                                client, STORAGE_BUCKET, batch,
                             ),
                             max_attempts=4,
                         )
                     except Exception:  # noqa: BLE001 — isolate the poison.
                         for path in batch:
-                            ok, err = _remove_storage_object(client, BUCKET, path)
+                            ok, err = _remove_storage_object(client, STORAGE_BUCKET, path)
                             if not ok:
                                 delete_failures.append(f"{path} ({err})")
             # Absence proof for this shard — the listing is the authority,
@@ -519,7 +519,7 @@ def _execute(client, args, today: _date) -> int:
             prefix = f"{QUARANTINE_ROOT}/{date_str}/{shard}"
             try:
                 still = retry_transient(
-                    lambda prefix=prefix: client.storage.from_(BUCKET).list(
+                    lambda prefix=prefix: client.storage.from_(STORAGE_BUCKET).list(
                         path=prefix, options={"limit": 1000, "offset": 0},
                     ),
                     max_attempts=4,

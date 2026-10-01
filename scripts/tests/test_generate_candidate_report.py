@@ -142,8 +142,8 @@ def test_report_date_retains_legacy_exported_at_compatibility() -> None:
     ) == "2026-08-22"
 
 
-def test_markdown_title_uses_artifact_report_date() -> None:
-    report = {
+def _report() -> dict:
+    return {
         "report_date": "2026-08-23",
         "repositories": {
             "pipeline": {
@@ -185,9 +185,41 @@ def test_markdown_title_uses_artifact_report_date() -> None:
         "integrity": {"sha256": "c" * 64},
     }
 
+
+def test_markdown_title_uses_artifact_report_date() -> None:
+    report = _report()
+
     assert render_markdown(report).startswith(
         "# Scoring integrity 2.4 candidate — 2026-08-23"
     )
     assert "12 products remain conservatively quarantined" in render_markdown(
         report
     )
+
+
+def test_baseline_section_reports_the_release_gate_diff(tmp_path: Path) -> None:
+    import sqlite3
+
+    from release_safety.catalog_diff import COLUMNS, diff_catalogs
+
+    def db(name: str, rows: list[tuple]) -> Path:
+        path = tmp_path / name
+        con = sqlite3.connect(path)
+        con.execute(f"create table products_core ({', '.join(COLUMNS)})")
+        con.executemany(f"insert into products_core values ({', '.join('?' * len(COLUMNS))})", rows)
+        con.commit()
+        con.close()
+        return path
+
+    before = db("before.db", [("1", "A", "B", "CAUTION", 70.0, "Good", "scored", None),
+                              ("2", "C", "B", "SAFE", 70.0, "Good", "scored", None)])
+    after = db("after.db", [("1", "A", "B", "SAFE", 70.0, "Good", "scored", None),
+                            ("3", "D", "B", "SAFE", 70.0, "Good", "scored", None)])
+    report = _report()
+    report["baseline_candidate_diff"] = diff_catalogs(before, after, [])
+
+    text = render_markdown(report)
+    assert "- added live: 1" in text and "- removed live: 1" in text
+    assert "- `blocking_reason` changed: 0" in text
+    assert "stops on until approved: 1" in text
+    assert "- CAUTION → SAFE: 1 (milder safety warning)" in text

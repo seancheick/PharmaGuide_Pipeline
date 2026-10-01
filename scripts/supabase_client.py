@@ -6,6 +6,12 @@ Provides typed helpers for manifest queries and storage uploads.
 
 import os
 
+#: Storage bucket for pipeline artifacts (core DB, detail blobs, indexes,
+#: quarantine); the app reads the same bucket (Flutter
+#: ``SupabaseContract.storageBucket``). Product images live in a separate
+#: bucket (``sync_to_supabase.PRODUCT_IMAGE_BUCKET``).
+STORAGE_BUCKET = "pharmaguide"
+
 
 def _load_env():
     """Load .env the same way all pipeline scripts do."""
@@ -53,6 +59,12 @@ def parse_manifest_response(response):
     if not data:
         return None
     return data[0]
+
+
+def core_db_remote_path(db_version):
+    """Storage path of a catalog's core DB; the app reads the same path
+    (Flutter ``SupabaseContract.coreDbPath``)."""
+    return f"v{db_version}/pharmaguide_core.db"
 
 
 def fetch_current_manifest(client):

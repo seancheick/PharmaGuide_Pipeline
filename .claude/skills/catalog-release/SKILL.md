@@ -75,8 +75,13 @@ with `$PG_PYTHON scripts/release_interaction_artifact.py --output-dir scripts/di
   gate-ineligible, `test_ul_gate_eligibility.py`); prose `warnings[]` never drive a UL verdict.
 - **mapped_coverage** — safety-critical; `scoring_v4/scored_artifact.py` takes it from the
   scoring input contract. Never ship a bundle where it regressed.
-- **Score movement** — `scripts/api_audit/score_delta_report.py --before <previous release>
-  --after <candidate>`; every BLOCKED/UNSAFE change and every large move has a named cause.
+- **Score and verdict movement** — the train's "catalog changes vs what users have" gate
+  (`scripts/release_safety/catalog_diff.py`) compares every product with the app's committed
+  bundle and the live Supabase catalog, and writes `scripts/reports/release_catalog_diff.md`. It
+  stops on a milder safety warning, a warned product leaving the catalog, a 10+ point score move,
+  or a grade up with a 5+ point rise. It reads Supabase, so it needs `.env`. Show Sean that report; only he
+  signs approvals in `scripts/release_safety/catalog_change_approvals.json`. Never fill one in
+  yourself to get past the gate.
 
 ## 5. Report
 

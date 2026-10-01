@@ -33,6 +33,7 @@ for _p in (str(SCRIPTS_ROOT), str(SCRIPTS_ROOT / "api_audit")):
 
 from scoring_input_contract import build_scoring_classification  # noqa: E402
 from scoring_v4.router import class_for_product  # noqa: E402
+from scoring_v4.scored_artifact import PUBLIC_VERDICT_PRECEDENCE  # noqa: E402
 from score_supplements_v4 import score_product_v4  # noqa: E402
 import scoring_v4.modules.botanical_profile as botanical_profile  # noqa: E402
 import scoring_v4.modules.collagen_profile as collagen_profile  # noqa: E402
@@ -44,14 +45,7 @@ from audit_v4_profile_consistency import _profile_divergence_reason  # noqa: E40
 
 DEFAULT_PRODUCTS_ROOT = SCRIPTS_ROOT / "products"
 DEFAULT_OUT_DIR = REPO_ROOT / "reports" / "v4_profile_cutover_impact"
-VERDICT_RANK = {
-    "SAFE": 0,
-    "POOR": 1,
-    "CAUTION": 2,
-    "NOT_SCORED": 3,
-    "UNSAFE": 4,
-    "BLOCKED": 5,
-}
+VERDICT_RANK = {verdict: rank for rank, verdict in enumerate(reversed(PUBLIC_VERDICT_PRECEDENCE))}
 SAFETY_VERDICTS = {"UNSAFE", "BLOCKED"}
 SIGNED_STATUSES = {"approved", "signed_off", "yes"}
 

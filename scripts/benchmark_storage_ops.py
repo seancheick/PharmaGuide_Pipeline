@@ -37,8 +37,8 @@ import env_loader  # noqa: F401,E402
 from release_safety.blob_inventory import list_storage_page  # noqa: E402
 from release_safety.quarantine import remove_storage_batch  # noqa: E402
 from release_safety.transient import retry_transient  # noqa: E402
+from supabase_client import STORAGE_BUCKET  # noqa: E402
 
-BUCKET = "pharmaguide"
 BENCH_ROOT = "shared/_bench"
 WORKER_LEVELS = (1, 2, 4, 8)
 P95_REGRESSION_LIMIT = 1.2
@@ -53,7 +53,7 @@ def _percentile(values, q):
 
 
 def _upload(client, path, payload):
-    client.storage.from_(BUCKET).upload(
+    client.storage.from_(STORAGE_BUCKET).upload(
         path, payload, {"content-type": "application/json", "upsert": "true"},
     )
 
@@ -61,7 +61,7 @@ def _upload(client, path, payload):
 def _copy(client, src, dst):
     from release_safety.quarantine import _copy_storage_object
 
-    ok, err = _copy_storage_object(client, BUCKET, src, dst)
+    ok, err = _copy_storage_object(client, STORAGE_BUCKET, src, dst)
     if not ok:
         raise RuntimeError(err or "copy failed")
 
@@ -72,7 +72,7 @@ def _list_names(client, prefix):
     while True:
         items = retry_transient(
             lambda offset=offset: list_storage_page(
-                client.storage.from_(BUCKET), prefix, offset,
+                client.storage.from_(STORAGE_BUCKET), prefix, offset,
             ),
             max_attempts=5,
         )
@@ -97,7 +97,7 @@ def _list_fingerprints(client, prefix):
     while True:
         items = retry_transient(
             lambda offset=offset: list_storage_page(
-                client.storage.from_(BUCKET), prefix, offset,
+                client.storage.from_(STORAGE_BUCKET), prefix, offset,
             ),
             max_attempts=5,
         )
@@ -155,7 +155,7 @@ def _cleanup_bench_prefix(base_client, root):
             return
         for start in range(0, len(paths), 500):
             remove_storage_batch(
-                base_client, BUCKET, paths[start:start + 500],
+                base_client, STORAGE_BUCKET, paths[start:start + 500],
             )
         leftovers = paths
     raise RuntimeError(

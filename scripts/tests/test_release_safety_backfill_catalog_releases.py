@@ -38,6 +38,7 @@ if _scripts_dir not in sys.path:
     sys.path.insert(0, os.path.abspath(_scripts_dir))
 
 from release_safety import backfill_catalog_releases as bcr
+from supabase_client import STORAGE_BUCKET
 from release_safety.backfill_catalog_releases import (
     BackfillCandidate,
     BackfillPlan,
@@ -202,7 +203,7 @@ class FakeClient:
 
     def seed_v_dir(
         self, db_version: str, *, files: Optional[list[str]] = None,
-        bucket: str = bcr.DEFAULT_BUCKET,
+        bucket: str = STORAGE_BUCKET,
     ) -> "FakeClient":
         b = self.storage.from_(bucket)
         files = files or ["pharmaguide_core.db", "detail_index.json"]

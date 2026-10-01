@@ -153,7 +153,9 @@ committed outcome after a lost response without borrowing another attempt's resu
 | **Router** | `scoring_input_contract.py::build_scoring_classification` decides the v4 module route; `scoring_v4/router.py` is a thin adapter over it (`class_for_product`). |
 | **Safety suppression** | BLOCKED/UNSAFE products retain verdict/evidence but ship a null public score with `quality_score_status=suppressed_safety`. |
 | **Completeness exclusion** | Products without usable identity/payload become `NOT_SCORED` and are quarantined from the live catalog. Missing disclosure can instead remain scoreable as explicit soft debt. |
-| **Verdict precedence** | BLOCKED > UNSAFE > NOT_SCORED > CAUTION > POOR > SAFE. |
+| **Verdict precedence** | BLOCKED > UNSAFE > NOT_SCORED > CAUTION > POOR > SAFE. Declared once as `scored_artifact.py::PUBLIC_VERDICT_PRECEDENCE`. |
+| **Safety ladder** | BLOCKED > UNSAFE > CAUTION > no warning, declared as `gate_safety.py::SAFETY_VERDICT_PRECEDENCE` (rank: `safety_verdict_rank`). POOR is the lowest quality grade, not a safety warning, so it ranks as no warning. |
+| **Catalog change gate** | `release_safety/catalog_diff.py`, run by `release_full.sh` before any publication. It compares the candidate catalog with every catalog users can have: the app bundle committed on the app's main, and the live Supabase catalog when that differs. It stops on a milder step on the safety ladder, a warned product leaving the catalog, a score move of 10+ points either way, or a quality grade up with a 5+ point rise, unless `release_safety/catalog_change_approvals.json` names that product's exact before and after. |
 
 Deprecated `/80` export fields (`score_quality_80`, `score_display_80`) must
 never be reintroduced. Final export rejects any non-v4 Stage-3 artifact.

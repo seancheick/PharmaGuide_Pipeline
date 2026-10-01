@@ -26,14 +26,13 @@ from pathlib import Path
 sys.path.insert(0, os.path.dirname(__file__))
 import env_loader  # noqa: F401
 
-from supabase_client import get_supabase_client  # noqa: E402
+from supabase_client import STORAGE_BUCKET, get_supabase_client  # noqa: E402
 from release_safety import sweep_quarantine  # noqa: E402
 from release_safety.quarantine import (  # noqa: E402
     DEFAULT_REMOVE_BATCH_SIZE,
     remove_storage_batch,
 )
 
-BUCKET = "pharmaguide"
 CHECKPOINT_REVERIFY_UNAVAILABLE = (
     "verification unavailable for previously completed shard"
 )
@@ -120,7 +119,7 @@ def delete_version_directory(client, db_version, dry_run):
 
     prefix = f"v{db_version}"
     try:
-        entries = _enumerate_dir_objects(client, BUCKET, prefix)
+        entries = _enumerate_dir_objects(client, STORAGE_BUCKET, prefix)
     except Exception as exc:  # noqa: BLE001 — cannot see, cannot act.
         print(
             f"  [ERROR] Could not fully enumerate {prefix}/ "
@@ -144,19 +143,19 @@ def delete_version_directory(client, db_version, dry_run):
         batch = paths[start_idx:start_idx + DEFAULT_REMOVE_BATCH_SIZE]
         try:
             retry_transient(
-                lambda batch=batch: remove_storage_batch(client, BUCKET, batch),
+                lambda batch=batch: remove_storage_batch(client, STORAGE_BUCKET, batch),
                 max_attempts=4,
             )
         except Exception:  # noqa: BLE001 — isolate the poison pill.
             for path in batch:
-                ok, err = _remove_storage_object(client, BUCKET, path)
+                ok, err = _remove_storage_object(client, STORAGE_BUCKET, path)
                 if not ok:
                     print(f"  [ERROR] Failed to delete {path}: {err}")
                     failed += 1
 
     # Absence proof: the listing is the authority, not remove()'s response.
     try:
-        residue = _enumerate_dir_objects(client, BUCKET, prefix)
+        residue = _enumerate_dir_objects(client, STORAGE_BUCKET, prefix)
     except Exception as exc:  # noqa: BLE001
         print(
             f"  [ERROR] Could not verify {prefix}/ is empty "
@@ -374,7 +373,7 @@ def quarantine_orphan_blob_batch(
         try:
             retry_transient(
                 lambda: _raise_on_copy_failure(
-                    _copy_storage_object(_worker_client(), BUCKET, src, dst)
+                    _copy_storage_object(_worker_client(), STORAGE_BUCKET, src, dst)
                 ),
                 max_attempts=max_attempts,
             )
@@ -415,7 +414,7 @@ def quarantine_orphan_blob_batch(
 
         active_prefix = f"{BLOB_STORAGE_PREFIX}/{shard}"
         target_prefix = f"shared/quarantine/{run_date}/{shard}"
-        bucket_proxy = client.storage.from_(BUCKET)
+        bucket_proxy = client.storage.from_(STORAGE_BUCKET)
 
         # One failure record per candidate, first reason wins. `failed` and
         # `failed_paths` are derived from this exactly once, at shard end.
@@ -592,7 +591,7 @@ def quarantine_orphan_blob_batch(
             try:
                 retry_transient(
                     lambda batch_paths=batch_paths: remove_storage_batch(
-                        client, BUCKET, batch_paths,
+                        client, STORAGE_BUCKET, batch_paths,
                     ),
                     max_attempts=max_attempts,
                 )

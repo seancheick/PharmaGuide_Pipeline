@@ -28,12 +28,12 @@ from typing import Callable, Dict, Iterable, Optional, Sequence, Tuple
 
 from .blob_inventory import (
     BLOB_STORAGE_PREFIX,
-    DEFAULT_BUCKET,
     HEX_BLOB_SHARDS,
     BlobInventory,
     ObjectFingerprint,
     inventory_detail_blobs,
 )
+from supabase_client import STORAGE_BUCKET
 
 
 def hash_set_digest(hashes) -> str:
@@ -178,7 +178,7 @@ def build_orphan_report(
     dist_dir,
     retained_versions: Sequence[str] = (),
     branch: str = "main",
-    bucket: str = DEFAULT_BUCKET,
+    bucket: str = STORAGE_BUCKET,
     shards: Iterable[str] = HEX_BLOB_SHARDS,
     max_workers: Optional[int] = None,
     max_attempts: Optional[int] = None,

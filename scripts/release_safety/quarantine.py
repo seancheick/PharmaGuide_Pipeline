@@ -52,17 +52,17 @@ Public API
 
     quarantine_blob(client, source_path, *, run_date=None,
                     quarantine_root=QUARANTINE_PREFIX,
-                    bucket=DEFAULT_BUCKET)
+                    bucket=STORAGE_BUCKET)
         -> tuple[bool, Optional[str]]
 
     recover_blob(client, blob_hash, *, search_dates=None,
                  quarantine_root=QUARANTINE_PREFIX,
                  active_root=ACTIVE_PREFIX,
-                 bucket=DEFAULT_BUCKET)
+                 bucket=STORAGE_BUCKET)
         -> tuple[bool, Optional[str]]
 
     list_quarantine_dates(client, *, quarantine_root=QUARANTINE_PREFIX,
-                          bucket=DEFAULT_BUCKET) -> list[str]
+                          bucket=STORAGE_BUCKET) -> list[str]
         Pulled in here too because the sweeper needs it; importable from
         either module.
 """
@@ -77,13 +77,13 @@ from datetime import datetime, timezone
 from typing import List, Optional, Tuple
 
 from .transient import retry_transient
+from supabase_client import STORAGE_BUCKET
 
 # ---------------------------------------------------------------------------
-# Constants — paths/buckets are configurable for tests but match the
+# Constants — paths are configurable for tests but match the
 # pipeline defaults in production.
 # ---------------------------------------------------------------------------
 
-DEFAULT_BUCKET = "pharmaguide"
 ACTIVE_PREFIX = "shared/details/sha256"
 QUARANTINE_PREFIX = "shared/quarantine"
 STORAGE_OPERATION_TIMEOUT_SECONDS = int(
@@ -389,7 +389,7 @@ def quarantine_blob(
     *,
     run_date: Optional[str] = None,
     quarantine_root: str = QUARANTINE_PREFIX,
-    bucket: str = DEFAULT_BUCKET,
+    bucket: str = STORAGE_BUCKET,
 ) -> Tuple[bool, Optional[str]]:
     """Move a blob from active storage to quarantine.
 
@@ -480,7 +480,7 @@ def recover_blob(
     search_dates: Optional[List[str]] = None,
     quarantine_root: str = QUARANTINE_PREFIX,
     active_root: str = ACTIVE_PREFIX,
-    bucket: str = DEFAULT_BUCKET,
+    bucket: str = STORAGE_BUCKET,
 ) -> Tuple[bool, Optional[str]]:
     """Find ``blob_hash`` in quarantine and restore it to active storage.
 
@@ -605,7 +605,7 @@ def list_quarantine_dates(
     client,
     *,
     quarantine_root: str = QUARANTINE_PREFIX,
-    bucket: str = DEFAULT_BUCKET,
+    bucket: str = STORAGE_BUCKET,
 ) -> List[str]:
     """List date directories under the quarantine root, sorted ascending.
 

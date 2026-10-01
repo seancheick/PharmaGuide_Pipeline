@@ -38,6 +38,7 @@ import env_loader  # noqa: F401,E402
 
 from release_safety.blob_inventory import HEX_BLOB_SHARDS  # noqa: E402
 from release_safety.orphan_reconcile import build_orphan_report  # noqa: E402
+from supabase_client import STORAGE_BUCKET  # noqa: E402
 
 EXIT_OK = 0
 EXIT_ERROR = 1
@@ -54,7 +55,7 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--flutter-repo", required=True, dest="flutter_repo")
     parser.add_argument("--dist-dir", required=True, dest="dist_dir")
     parser.add_argument("--branch", default="main")
-    parser.add_argument("--bucket", default="pharmaguide")
+    parser.add_argument("--bucket", default=STORAGE_BUCKET)
     parser.add_argument(
         "--retained-version", action="append", default=[], dest="retained_versions",
         help="db_version whose blobs must stay protected. Repeatable. "

@@ -351,7 +351,7 @@
       "first_created_stage": "scored",
       "field_kind": "scored",
       "source_data_files": ["scripts/scoring_v4/config/quality_score.json", "scripts/data/banned_recalled_ingredients.json"],
-      "consumers": ["scripts/build_final_db.py", "Flutter app"],
+      "consumers": ["scripts/build_final_db.py", "scripts/release_safety/catalog_diff.py", "Flutter app"],
       "forbidden_recomputation": ["verdict precedence is scorer-owned; export and Flutter preserve verdict/scoring_status/score_basis without remapping safety meaning"],
       "fallback_class": "clinical_fail_safe",
       "release_gate": "scripts/audit_source_of_truth_contract.py scoring",
