@@ -43,6 +43,8 @@ A critical product safety gate (recall, ban, adulteration) sits above all three:
 | 2026-10-01 | Personal Fit stays on the phone. The pipeline writes the rules; the phone applies them. The profile never leaves the device for this. |
 | 2026-10-01 | One compact personal card: a safety line always; a goal line only when the product matches a goal or works against one; nothing when neutral. |
 | 2026-10-01 | The first external beta comes after Stack Impact. |
+| 2026-10-01 | Business team's answers to the decision queue, forwarded by Sean; see "Decisions taken" below. |
+| 2026-10-01 | Public catalog wording: the catalog is "sourced from NIH's Dietary Supplement Label Database (200,000+ labels)". No product count is shown (Sean: 15k reads as weak; 180,000+ described neither our catalog nor the source). |
 | 2026-07-23 | No consumer change timeline or notifications before beta data shows the changes are meaningful (signal-lifecycle guardrail). Still in force: Change Watch UI is Phase 4. |
 | 2026-07-22 | No user-facing health score for the stack; use status and concern counts. |
 
@@ -196,21 +198,31 @@ AI health coach; AI-generated interaction rules; a home-grown drug–drug databa
 pairs; proprietary-blend dose estimation; individual outcome prediction; a complete biochemical
 ontology. Examine's API is never ingested (its terms forbid it, see below).
 
-## Decisions queued for Sean
+## Decisions taken (business team, 2026-10-01, forwarded by Sean)
 
-Each needs its evidence packet first; none is decided here.
+| Topic | Decision | Applies to |
+|---|---|---|
+| Score arithmetic | Keep category rescaling and the Verification 6/15 neutral baseline during Phase 0. In master-plan Phase 5, replay three Verification options (A current 6/15, B zero baseline, C reduced baseline) and the rescaling, measuring mean/median change, tier crossings, category effects, controls, products entering Poor/Excellent, claim-only versus registry-certified products. Public wording until then: "a 100-point score of six weighted dimensions, each with a defined maximum", never "raw additive points". Keep showing the numbers (84.5/100, 18/20 ...). | 1.6, master plan Phase 5 |
+| Pillar wording | Pipeline exports dimension-specific labels (Evidence: Strong/Moderate/Limited; Verification: Strong/Partial/Limited; Transparency: High/Moderate/Low; Dose: Well aligned/Mixed/Poorly aligned). | 1.6 |
+| Analysis Coverage | Build one pipeline-owned value (High/Moderate/Limited, percentage in details). Remove coverage from the safety verdict: CAUTION means a reason for caution was found, never "we don't know enough". Remove the app's own low-coverage score hiding; the pipeline owns scorability ("Not scored"). | 1.3 |
+| Personal Fit | On the phone; delete the unused /20 math; never show a personal number. | 1.5 |
+| Stack score | Retire the composite stack score; show disposition counts plus highest severity. | 2.2 |
+| Drug–drug | Keep the curated pairs; never market comprehensive DDI checking; all-clear copy is coverage-aware ("No additional reviewed interactions identified within PharmaGuide's current coverage"); license a mature source later if needed. | 1.2, copy |
+| Catalog number | See "Decisions already made" (NIH source wording, no product count). Long-term metric: share of scanned products resolved instantly. | 1.1, 3.2 |
+| Adverse events | Not in the consumer app yet. Keep internal ingestion for research and review priority. Consumer copy: "FDA recalls and safety monitoring". | 1.1 |
+| CoQ10 + statins | Resolved first-hand: the 2026 ACC/AHA dyslipidemia guideline rates routine CoQ10 for statin-attributed muscle symptoms Class 3: No Benefit. Keep the depletion record (biology); never imply supplementation. | 1.1, ledger Q51 |
+| Examine | Outside the canonical pipeline under current terms; only under a negotiated agreement. | — |
+| Privacy | Local by default (Personal Fit, condition gating, core stack rules, health profile); explicit network services (RxNorm lookup, optional account sync, catalog/recall updates, future AI). Ask PharmaGuide is hybrid: answer from structured engine output where possible; cloud only when invoked, minimum context, disclosed, no training. Claim: "Core Personal Fit and stack safety logic runs on your device." | 1.2, Phase 5 |
+| Pricing | Never paywall a critical safety finding (recall, contraindication, avoid, unsafe accumulation). Premium monetizes history, Change Watch, advanced Stack Impact, profiles, AI, comparisons, reports, sync. Exact price after beta. | — |
+| Fail-open and guest recall | Absolute P0, beside each other: lookup and critical safety before any quota; safety uncertainty fails closed with "Current safety status unavailable", never positive reassurance. | 1.2 |
+| Human reviewer | Required on every published clinical record (reviewed_by human + reviewed_at); AI provenance kept as audited_by, never as the accountable reviewer. Before external beta. | 1.8 |
+| Gold benchmark | Start authoring now: about 100 interaction/safety, 80 identity/form/strain, 60 dose/UL, 40 condition/profile, 40 proprietary/missing data, 30 recall/regulatory, 30 scoring controls, 20 formula/version cases, each with expected verdict, score presence, critical flags, severity, evidence tier, coverage, identity, dose resolution and citation requirements. | 1.10 |
+| Rule schema | Target fields: rule_id, rule_version, entities, severity, evidence_level, presence/dose based, studied_dose, activation_threshold, threshold_basis, form/population/route scope, mechanism, clinical_effect, action, sources, reviewed_by, reviewed_at. | 1.7 |
+| Formula history | Activate the existing snapshot writer; never overwrite history. | 3.1 |
+| Stack Impact diff contract | Explicit now and reused by Change Watch: added_signals, removed_signals, changed_signals (before/after severity, before/after evidence, reason), nutrient_deltas, timing_deltas, coverage_deltas. | 2.1, Phase 4 |
+| Phase order | Unchanged: 0 → 1 → 2 → external beta → 3 → 4 → 5 → 6. Friends-and-family usability tests may run before beta. | all |
 
-1. **Score arithmetic.** The strategists assume literal points. In production, Formulation, Dose and
-   Evidence are `(score / archetype_reference) × weight` and Verification starts from a neutral
-   baseline (`scripts/scoring_v4/quality_score.py`, `scripts/scoring_v4/config/quality_score.json`) [V].
-   Keep and document publicly, or change. Belongs to master-plan Phase 5.
-2. **Analysis Coverage** as an exported field, and removing coverage from the verdict (1.3).
-3. **Drug–drug scope:** keep the curated pairs with coverage-limited wording, hide them, or license a source.
-4. **Public catalog number** on the website (1.1).
-5. **Adverse-event signals** in the app at all, and from which FDA source.
-6. **Ask PharmaGuide privacy model** (on-device or cloud with explicit consent).
-7. **Pricing**, with the rule that a safety warning is never behind a paywall.
-8. **Goal conflict data** ("works against your goal") as a pipeline-authored field (1.5).
+Still open: **goal conflict data** ("works against your goal") as a pipeline-authored field (1.5).
 
 ## Status of each recommendation
 
