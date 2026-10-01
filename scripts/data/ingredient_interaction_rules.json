@@ -6428,10 +6428,13 @@
           "condition_id": "kidney_disease",
           "severity": "avoid",
           "evidence_level": "established",
-          "mechanism": "Impaired renal magnesium excretion in CKD (especially eGFR <30) leads to hypermagnesemia accumulation. Supplemental magnesium doses safe in healthy adults can cause life-threatening hypermagnesemia in CKD patients (cardiac arrest, respiratory failure).",
+          "mechanism": "The kidneys excrete magnesium, so reduced kidney function lets supplemental magnesium accumulate. Hypermagnesemia can cause respiratory, cardiovascular and neuromuscular complications and can be life-threatening. In patients taking daily magnesium oxide, CKD stage 4 (eGFR 15-29) and higher doses were associated with hypermagnesemia.",
           "action": "Avoid magnesium supplementation in severe CKD (eGFR <30) without nephrologist guidance. In mild-moderate CKD, use with caution and monitor serum Mg levels.",
           "sources": [
-            "https://www.kidney.org/atoz/content/potassium"
+            "https://pubmed.ncbi.nlm.nih.gov/37512002/",
+            "https://pubmed.ncbi.nlm.nih.gov/31379418/",
+            "https://pubmed.ncbi.nlm.nih.gov/30805197/",
+            "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=8cc7d52a-8fc3-4f52-9e50-b15613ddd02c"
           ],
           "alert_headline": "Magnesium can accumulate in CKD",
           "alert_body": "Magnesium from supplements, laxatives, or antacids can accumulate when kidney function is reduced. If you have kidney disease, use magnesium-containing products only with clinician guidance.",
@@ -6455,7 +6458,8 @@
             "dose": null
           },
           "direction": "harmful",
-          "materiality": "presence"
+          "materiality": "presence",
+          "last_reviewed": "2026-10-01"
         },
         {
           "condition_id": "diabetes",
@@ -6545,39 +6549,6 @@
               "conditions_any": [],
               "drug_classes_any": [
                 "thyroid_medications"
-              ],
-              "profile_flags_any": []
-            },
-            "excludes": {
-              "conditions_any": [],
-              "drug_classes_any": [],
-              "profile_flags_any": [],
-              "product_forms_any": [],
-              "nutrient_forms_any": []
-            },
-            "dose": null
-          },
-          "direction": "harmful",
-          "materiality": "presence"
-        },
-        {
-          "drug_class_id": "lithium",
-          "severity": "monitor",
-          "evidence_level": "established",
-          "mechanism": "May reduce lithium absorption when co-ingested. Separate doses by 2 hours.",
-          "action": "If you take lithium, separate magnesium supplements from your lithium dose by at least 2 hours.",
-          "sources": [
-            "https://ods.od.nih.gov/factsheets/Magnesium-HealthProfessional/"
-          ],
-          "alert_headline": "Space doses 2 hours apart",
-          "alert_body": "High-dose magnesium taken at the same time as lithium may reduce absorption. Take them at least 2 hours apart.",
-          "informational_note": "Magnesium can affect lithium absorption — relevant to anyone on lithium therapy.",
-          "profile_gate": {
-            "gate_type": "drug_class",
-            "requires": {
-              "conditions_any": [],
-              "drug_classes_any": [
-                "lithium"
               ],
               "profile_flags_any": []
             },

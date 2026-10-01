@@ -172,3 +172,33 @@ through `scripts/data_batch.py`, `check --expect` on the changed keys, strict ci
 content verifier on the changed entries, `scripts/test.sh fast` on the interaction tests, rebuild
 the interaction DB and confirm the bundled rows. No catalog score moves (the scorer does not read
 interaction alerts); warning severities do move for thyroid users if Option A or B is chosen.
+
+## Q50 resolved (Sean, 2026-10-01)
+
+**Magnesium x lithium (`RULE_IQM_MAGNESIUM_HYPERTENSION` / drug `lithium`): retired.** It said
+monitor, established, "may reduce lithium absorption; separate by 2 hours", citing only the ODS
+magnesium fact sheet, which never mentions lithium. Sources read:
+- Lithium carbonate label, DailyMed setid b839ff4b-f62d-41ab-a823-550a756d58ec (Hikma, effective
+  2026-08-16): drug interactions list diuretics, NSAIDs, RAS antagonists, metronidazole,
+  serotonergic agents and antipsychotics; no magnesium or antacid interaction.
+- Goode 1984, Clin Pharm, PMID 6428800: crossover in 6 healthy men, lithium carbonate 300 mg with
+  30 mL Al/Mg hydroxide antacid: no significant change in peak, AUC or absorption rate;
+  "Concurrent administration of antacids and lithium carbonate should not affect lithium blood
+  concentrations."
+No source supports the warning and the only human study contradicts it, so Sean chose removal. Do
+not re-add without new evidence. The separate psyllium x lithium rule (PMID 1968148) is unaffected.
+
+**Magnesium x kidney disease (`condition` `kidney_disease`, avoid, established): re-sourced.** It
+cited https://www.kidney.org/atoz/content/potassium (a potassium page). The current ODS magnesium
+sheet (updated 2026-01-06) no longer discusses renal toxicity in its text. New sources, each read:
+- Aal-Hamad 2023, Medicina, PMID 37512002 (review): hypermagnesemia is potentially
+  life-threatening (respiratory, cardiovascular, neuromuscular complications, coma); high-risk
+  groups include impaired renal function and magnesium-containing medicines or supplements.
+- Mori 2019, J Clin Biochem Nutr, PMID 31379418: 193 daily magnesium-oxide users; CKD grade 4 and
+  dose were associated with hypermagnesemia (supports the action's eGFR < 30).
+- Wakai 2019, J Pharm Health Care Sci, PMID 30805197: 320 patients on magnesium oxide; eGFR
+  <= 55.4 mL/min, BUN, dose >= 1,650 mg/day and duration were independent risk factors.
+- Milk of Magnesia Drug Facts, DailyMed setid 8cc7d52a-8fc3-4f52-9e50-b15613ddd02c (effective
+  2026-09-14): "Ask a doctor before use if you have kidney disease".
+Mechanism text rewritten to these sources (the unsourced "cardiac arrest" and "doses safe in
+healthy adults" phrases removed). Severity, action and alert copy unchanged.
