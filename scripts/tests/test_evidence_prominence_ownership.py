@@ -339,13 +339,12 @@ def test_real_heading_that_names_its_brand_anchors_that_brands_floor(fixture, fl
 @pytest.mark.parametrize("fixture,recovered,evidence", [
     # title-named La-14 at 0.5 mg beside a 100 million CFU total: never "the clear primary"
     ("prominence_probiotic_species_236913_raw.json", [], 0.0),
-    # BB536: its species record is part of the approved model's input
-    ("prominence_probiotic_species_232059_raw.json", ["INGR_BIFIDOBACTERIUM_LONGUM"], 13.0),
+    # Q53: BB536 cannot inherit the reference-only 35624/1714 species summary.
+    ("prominence_probiotic_species_232059_raw.json", [], 0.0),
 ])
-def test_real_probiotic_model_inputs_stay_as_approved(fixture, recovered, evidence):
-    """The approved probiotic model reads resolved_clinical_matches without
-    owner scoping. Callers that are not owner-scoped keep the previous recovery
-    rule, so this batch neither adds nor removes a species record there."""
+def test_real_probiotic_inputs_respect_reviewed_species_applicability(fixture, recovered, evidence):
+    """Recovery cannot revive reference-only species credit after Q53.
+    The native exact-strain owner determines Evidence independently."""
     from scoring_v4.modules.generic_evidence import resolved_clinical_matches
     from scoring_v4.scored_artifact import build_scored_artifact
 
