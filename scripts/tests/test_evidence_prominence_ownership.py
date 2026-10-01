@@ -406,3 +406,25 @@ def test_recovery_never_reads_a_blend_total_lent_to_a_member():
         m for m in matches if m.get("id") != "INGR_WHEY_PROTEIN"
     ]
     assert resolved_clinical_matches(product, owner_scoped=True)[1] == []
+
+
+@pytest.mark.parametrize("heading", ["Sensoril", "Sensoril Sleep Blend"])
+def test_a_member_named_heading_does_not_own_the_multi_ingredient_total(heading):
+    """Naming the heading after Sensoril cannot turn Sensoril + L-theanine's
+    250 mg total into a disclosed Sensoril amount, for any scoring consumer."""
+    from scoring_input_contract import get_scoring_ingredients, is_lent_blend_mass
+
+    raw = _raw("prominence_blend_total_328062_raw.json")
+    raw["fullName"] = "Sensoril Sleep Tonight"
+    raw["ingredientRows"][1]["name"] = heading
+    product = _enrich(raw)
+    header = next(
+        row for row in get_scoring_ingredients(product, strict=True).rows
+        if row.get("raw_source_path") == "ingredientRows[1]"
+        and row.get("evidence_type") == "blend_anchor_mass"
+        and row.get("canonical_id") == "ashwagandha"
+    )
+    assert is_lent_blend_mass(header), "The shared contract must preserve member amount ownership"
+    evidence = _evidence(product)
+    assert evidence["metadata"]["primary_evidence_floor"] == 0.0
+    assert evidence["components"]["clinical_evidence_pipeline"] > 0

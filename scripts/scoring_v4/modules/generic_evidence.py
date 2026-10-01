@@ -1567,17 +1567,28 @@ def _is_prominent_anchor(
     """
     from evidence_resolver import evidence_row_key
 
+    path = str(row.get("raw_source_path") or "").strip()
+    record = next(
+        (e for e in _verified_product_level_evidence_entries() if _entry_id(e) == _entry_id(entry)),
+        None,
+    ) if _norm_text(row.get("evidence_type")) == "blend_anchor_mass" else None
+    if record is not None and path and any(
+        str(child.get("raw_source_path") or "").startswith(f"{path}.nestedRows[")
+        and _verified_product_entry_matches_text(
+            record, _row_identity_text(product, child, with_product=False)
+        )
+        for child in get_assessable_evidence_ingredients(product)
+    ):
+        # Naming a heading after a separately listed branded member does not
+        # declare that member's amount. Exact whole-formula headings (Relora,
+        # UC-II) remain eligible when their children do not name that record.
+        return False
     if evidence_row_key(row) in prominent:
         return True
     if _norm_text(row.get("evidence_type")) != "blend_anchor_mass":
         return False
-    path = str(row.get("raw_source_path") or "").strip()
     if not path or not any(key[0] == path for key in prominent):
         return False
-    record = next(
-        (e for e in _verified_product_level_evidence_entries() if _entry_id(e) == _entry_id(entry)),
-        None,
-    )
     return record is not None and _verified_product_entry_matches_text(
         record, _row_identity_text(product, row, with_product=False)
     )

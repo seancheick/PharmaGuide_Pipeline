@@ -2070,6 +2070,22 @@ def derive_product_scoring_evidence(product: Dict[str, Any]) -> List[Dict[str, A
                 reason=anchor_reason,
                 name=anchor_name or row.get("name") or "Anchor mass",
             )
+            if cleaner_role == "blend_header_total":
+                children = [
+                    child for child in skipped_rows + active_rows
+                    if _is_nested_under(str(row.get("raw_source_path") or ""), child)
+                    and _anchor_identity(child)[0]
+                ]
+                child_identities = {_anchor_identity(child)[0] for child in children}
+                if anchor_canonical in child_identities and len(child_identities) > 1:
+                    # A heading named for one member still declares the whole
+                    # blend amount. Reuse the existing lent-mass contract so
+                    # every Dose/Evidence consumer refuses it as a member dose.
+                    item["reason"] = "identity_bearing_blend_header_mass_from_nested_child"
+                    item["linked_rows"].extend(
+                        str(child["raw_source_path"]) for child in children
+                        if _anchor_identity(child)[0] == anchor_canonical
+                    )
             if _is_botanical_or_standardized_anchor(row):
                 item["anchor_risk_class"] = "botanical_or_standardized"
             evidence.append(item)
