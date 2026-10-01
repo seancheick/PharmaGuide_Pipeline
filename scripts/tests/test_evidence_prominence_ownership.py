@@ -136,6 +136,21 @@ def test_the_retained_exposure_stand_in_still_blocks_a_trace_declared_anchor():
     assert payload["metadata"]["primary_evidence_floor"] == 14.0
 
 
+def test_the_retained_stand_in_reads_the_prominent_rows_own_amount():
+    """The exposure stand-in measures the purpose row. A match that also
+    references another identity's heavier row cannot pass on that row's mass."""
+    product = _product(
+        product_name="Melatonin",
+        ingredients=[_row("Melatonin", "melatonin", 1, path="ingredientRows[0]"),
+                     _row("L-Theanine", "l_theanine", 400, path="ingredientRows[1]")],
+        matches=[_match(id="INGR_MELATONIN", ingredient="Melatonin", standard_name="Melatonin",
+                        study_type="rct_multiple",
+                        matched_source_row_refs=["ingredientRows[0]", "ingredientRows[1]"])],
+    )
+
+    assert _scored(product)["metadata"]["primary_evidence_floor"] == 0.0
+
+
 def test_clinical_dose_gate_still_blocks_a_declared_purpose():
     product = _product(
         product_name="Melatonin 0.5 mg",
@@ -189,18 +204,20 @@ def test_authority_floor_needs_a_disclosed_amount():
 
 # --- recovery ----------------------------------------------------------------
 
-def test_ingredient_recovery_serves_a_prominent_dosed_row():
-    """The title declares NAC; 1,000 mg of milk thistle no longer decides that
-    its verified record can be recovered (the old rule required half its mass)."""
+@pytest.mark.parametrize("nac_mg,recovered", [(400, False), (600, True)])
+def test_ingredient_recovery_keeps_the_retained_exposure_stand_in(nac_mg, recovered):
+    """The title declares NAC, so the role owner, not milk thistle, decides the
+    purpose. Recovery still keeps the baseline half-heaviest comparison as the
+    exposure stand-in (D26): 199 of 210 records carry no studied minimum."""
     product = _product(
-        product_name="NAC 400 mg with Milk Thistle",
-        ingredients=[_row("N-Acetyl Cysteine", "nac", 400, path="ingredientRows[0]",
+        product_name="NAC with Milk Thistle",
+        ingredients=[_row("N-Acetyl Cysteine", "nac", nac_mg, path="ingredientRows[0]",
                           standard_name="N-Acetylcysteine"),
                      _row("Milk Thistle", "milk_thistle", 1000, path="ingredientRows[1]")],
         matches=[],
     )
 
-    assert "INGR_NAC" in _scored(product)["metadata"]["recovered_matches"]
+    assert ("INGR_NAC" in _scored(product)["metadata"]["recovered_matches"]) is recovered
 
 
 def test_ingredient_recovery_never_serves_a_co_active_the_label_does_not_declare():

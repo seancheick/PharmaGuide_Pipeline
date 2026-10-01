@@ -823,7 +823,9 @@ def _recover_verified_primary_ingredient_matches(
       fuzzy substring matching;
     - only a row the shared role owner names as the product's purpose
       (``evidence_resolver.evidence_prominent_row_keys``) and that carries its
-      own disclosed mass, so trace/co-active add-ons never borrow evidence.
+      own disclosed mass, so co-active add-ons never borrow evidence;
+    - that mass still holds half the heaviest competing active's, the retained
+      exposure stand-in (decision D26), so trace amounts never borrow it either.
     """
     if matches and not allow_with_existing_matches:
         return []
@@ -848,6 +850,14 @@ def _recover_verified_primary_ingredient_matches(
                 if str(ref or "").strip()
             )
     existing_identity_keys = _existing_match_identity_keys(matches)
+    # Retained exposure stand-in (decision D26), unchanged from the previous
+    # rule: most records carry no studied minimum, so a recovered row must
+    # still hold half the heaviest competing active's mass. Prominence, not
+    # this comparison, decides which rows are the product's purpose.
+    heaviest = _heaviest_competing_mass(product)
+    if heaviest <= 0.0:
+        return []
+    threshold = PRIMARY_MASS_FRACTION * heaviest
     active_canonical_index = _active_canonical_index(product)
     matched_active_canonicals = {
         canonical
@@ -887,6 +897,8 @@ def _recover_verified_primary_ingredient_matches(
         if (_mass_mg(row) or 0.0) <= 0.0 or is_lent_blend_mass(row):
             # Only a row with its own amount: an undisclosed amount, or a blend
             # total lent to one member, recovers nothing.
+            continue
+        if (_mass_mg(row) or 0.0) < threshold:
             continue
         row_canonical_id = str(row.get("canonical_id") or "").strip().lower()
         if row_canonical_id in matched_active_canonicals:
@@ -1636,10 +1648,13 @@ def _primary_mass_floor(
         ):
             continue
         linked = _evidence_anchor_rows(product, entry)
-        if prominent and not any(_is_prominent_anchor(product, entry, row, prominent) for row in linked):
-            continue  # the evidenced row is not what the label is about
-        # Retained exposure stand-in (see docstring), unchanged: the linked
-        # rows' own amount against the heaviest competing active.
+        if prominent:
+            linked = [row for row in linked if _is_prominent_anchor(product, entry, row, prominent)]
+            if not linked:
+                continue  # the evidenced row is not what the label is about
+        # Retained exposure stand-in (see docstring): the anchor rows' own
+        # amount against the heaviest competing active, never another
+        # identity's row the same match also references.
         anchor_mass = max((_evidence_matching_mass_mg(row) or 0.0 for row in linked), default=0.0)
         if anchor_mass < PRIMARY_MASS_FRACTION * heaviest:
             continue
