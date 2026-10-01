@@ -1343,3 +1343,34 @@ def test_both_ginkgo_rules_give_one_pregnancy_verdict():
         assert stale not in copy, stale
     assert "early labor" in copy
     assert iqm["lactation_category"] == "caution"  # NCCIH: little is known
+
+
+def _assert_coq10_statins_guideline_copy(sub_rule):
+    assert _pmid("41824590") in sub_rule["sources"]
+    assert _pmid("26192349") in sub_rule["sources"]
+    assert "routine coq10 supplementation is not recommended" in sub_rule["action"].lower()
+    assert "do not stop a statin on your own" in sub_rule["action"].lower()
+    display = " ".join(sub_rule[key] for key in
+                       ("mechanism", "action", "alert_headline", "alert_body", "informational_note"))
+    for obsolete in ("100–300 mg", "safe to co-administer", "considered safe to combine",
+                     "commonly used to mitigate", "shares muscle or liver pathways"):
+        assert obsolete not in display.lower()
+    assert "does not establish tissue deficiency" in sub_rule["mechanism"]
+    assert sub_rule["severity"] == "informational"
+    assert sub_rule["evidence_level"] == "established"
+    assert sub_rule["direction"] == "neutral"
+    assert sub_rule["materiality"] == "presence"
+
+
+def test_coq10_statin_copy_follows_current_guideline():
+    sub_rule = _sub_rule(_rule("RULE_IQM_COQ10_HEART_DISEASE_STATINS"), "drug_class_id", "statins")
+    _assert_coq10_statins_guideline_copy(sub_rule)
+    assert sub_rule["profile_gate"]["requires"]["drug_classes_any"] == ["statins"]
+
+
+def test_coq10_cholesterol_copy_does_not_assume_statin_use_or_deficiency():
+    sub_rule = _sub_rule(_rule("RULE_IQM_COQ10_HEART_DISEASE_STATINS"), "condition_id", "high_cholesterol")
+    _assert_coq10_statins_guideline_copy(sub_rule)
+    assert "if you take a statin" in sub_rule["alert_body"].lower()
+    assert "high cholesterol alone does not establish a CoQ10 deficiency" in sub_rule["informational_note"]
+    assert sub_rule["profile_gate"]["requires"]["conditions_any"] == ["high_cholesterol"]

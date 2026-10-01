@@ -199,7 +199,8 @@
       "2026-09-26: RULE_BOTAN_MATCHA_BETA_BLOCKERS added (register Q25, matcha split from green tea extract). Matcha rows used to resolve to IQM green_tea_extract and met the extract-only liver warning and extract adverse-event signals; they now resolve to botanical matcha_tea_powder (whole leaf), which is not twinned to the extract. This rule carries over the beta-blocker sub-rule unchanged in severity (avoid, presence) because its evidence is brewed green tea (Misaka 2014, PMID 24419562) and EGCG (Abe 2018, PMID 29480324), both present in whole leaf. The extract rule's hypertension and antihypertensive sub-rules were not copied: they are gated on a 400 mg extract floor derived from extract caffeine content. Whole-leaf green tea generally (botanical green_tea, green_tea_leaf, standardized green_tea) still carries no nadolol rule: register Q27.",
       "2026-09-26: RULE_IQM_DANDELION_KIDNEY kidney_disease cites the EU herbal monograph on dandelion root (EMA/HMPC/475726/2020, final 2021-11-24): traditional use 'to increase the amount of urine', and root 'is not recommended for patients with conditions where reduced fluid intake is advised by a medical doctor'. IQM dandelion's form covers root, and the rule's diuretic premise was cited only to leaf evidence (register Q18).",
       "2026-09-27: Dandelion root now carries the EMA pregnancy/lactation and liver/biliary recommendations; eleuthero carries only the EMA pregnancy/lactation recommendation because the monograph reports no interactions and removed the hypertension contraindication; DGL uses its distinct botanical identity instead of an unread form_exclusion field.",
-      "2026-09-27: Dandelion glucose sub-rules were folded back into RULE_IQM_DANDELION_KIDNEY so one ingredient has one rule owner and one pregnancy/lactation policy."
+      "2026-09-27: Dandelion glucose sub-rules were folded back into RULE_IQM_DANDELION_KIDNEY so one ingredient has one rule owner and one pregnancy/lactation policy.",
+      "2026-10-01: Q52 agent source correction, not a new clinician sign-off: CoQ10 high_cholesterol and statins copy follows the 2026 ACC/AHA dyslipidemia guideline (PMID41824590, section5.1 recommendation4, Class3 No Benefit/B-R) for routine prevention/treatment of statin-attributed muscle symptoms. Circulating depletion and conflicting supplementation studies remain distinct; unsupported routine doses and blanket safe-coadministration claims removed. Severity, evidence level, profile gates, direction, materiality and human review stamps unchanged. Heart-failure, TTC and anticoagulant siblings unchanged."
     ]
   },
   "interaction_rules": [
@@ -15036,15 +15037,17 @@
           "condition_id": "high_cholesterol",
           "severity": "informational",
           "evidence_level": "established",
-          "mechanism": "Statins inhibit HMG-CoA reductase, blocking not only cholesterol synthesis but also the mevalonate pathway used to synthesize CoQ10. Plasma and muscle CoQ10 levels are measurably reduced by statin therapy. CoQ10 depletion is proposed as a contributing mechanism to statin-induced myopathy.",
-          "action": "CoQ10 supplementation (100–300 mg/day) is commonly used to address statin-induced muscle symptoms. It is considered safe to combine. Discuss with prescriber whether supplementation is warranted based on symptoms.",
+          "mechanism": "Statins inhibit HMG-CoA reductase in the mevalonate pathway and can lower circulating CoQ10 concentrations. A lower blood concentration does not establish tissue deficiency or prove that CoQ10 depletion causes muscle symptoms. Supplementation trials have conflicting results; the 2026 ACC/AHA dyslipidemia guideline does not recommend routine CoQ10 use to prevent or treat statin-attributed muscle symptoms.",
+          "action": "If you take a statin and have persistent muscle symptoms, discuss them with your prescriber. Do not stop a statin on your own. Routine CoQ10 supplementation is not recommended to prevent or treat statin-attributed muscle symptoms.",
           "sources": [
-            "https://pubmed.ncbi.nlm.nih.gov/19528564/",
-            "https://pubmed.ncbi.nlm.nih.gov/12622602/"
+            "https://pubmed.ncbi.nlm.nih.gov/26192349/",
+            "https://pubmed.ncbi.nlm.nih.gov/30371340/",
+            "https://pubmed.ncbi.nlm.nih.gov/32179207/",
+            "https://pubmed.ncbi.nlm.nih.gov/41824590/"
           ],
-          "alert_headline": "Often discussed with statin therapy",
-          "alert_body": "CoQ10 is commonly discussed alongside statin therapy because statins may reduce CoQ10 levels. Evidence for symptom benefit is mixed. If you take a statin, ask your clinician about CoQ10.",
-          "informational_note": "CoQ10 affects lipid pathways — relevant to people managing high cholesterol.",
+          "alert_headline": "CoQ10 and statin-related muscle symptoms",
+          "alert_body": "If you take a statin, routine CoQ10 is not recommended for statin-related muscle symptoms. Lower blood CoQ10 does not prove deficiency. Discuss persistent symptoms with your prescriber.",
+          "informational_note": "If you take a statin, this applies; high cholesterol alone does not establish a CoQ10 deficiency.",
           "profile_gate": {
             "gate_type": "condition",
             "requires": {
@@ -15139,14 +15142,17 @@
           "drug_class_id": "statins",
           "severity": "informational",
           "evidence_level": "established",
-          "mechanism": "Statins deplete endogenous CoQ10 by blocking the mevalonate pathway. CoQ10 supplementation is commonly used to mitigate statin-associated myopathy. No adverse pharmacokinetic interaction between CoQ10 and statins has been demonstrated.",
-          "action": "CoQ10 100–300 mg/day may be used alongside statins, particularly if myopathy symptoms are present. Safe to co-administer.",
+          "mechanism": "Statins inhibit HMG-CoA reductase in the mevalonate pathway and can lower circulating CoQ10 concentrations. A lower blood concentration does not establish tissue deficiency or prove that CoQ10 depletion causes muscle symptoms. Supplementation trials have conflicting results; the 2026 ACC/AHA dyslipidemia guideline does not recommend routine CoQ10 use to prevent or treat statin-attributed muscle symptoms.",
+          "action": "If you take a statin and have persistent muscle symptoms, discuss them with your prescriber. Do not stop a statin on your own. Routine CoQ10 supplementation is not recommended to prevent or treat statin-attributed muscle symptoms.",
           "sources": [
-            "https://www.nccih.nih.gov/health/coenzyme-q10"
+            "https://pubmed.ncbi.nlm.nih.gov/26192349/",
+            "https://pubmed.ncbi.nlm.nih.gov/30371340/",
+            "https://pubmed.ncbi.nlm.nih.gov/32179207/",
+            "https://pubmed.ncbi.nlm.nih.gov/41824590/"
           ],
-          "alert_headline": "May affect statin tolerability",
-          "alert_body": "CoQ10 shares muscle or liver pathways with statins. If you take a statin, talk to your prescriber before adding CoQ10 and watch for new muscle aches.",
-          "informational_note": "CoQ10 affects statin pathways — relevant to people on statin therapy.",
+          "alert_headline": "CoQ10 and statin-related muscle symptoms",
+          "alert_body": "Routine CoQ10 is not recommended to prevent or treat statin-related muscle symptoms. Lower blood CoQ10 does not prove deficiency. Discuss persistent symptoms with your prescriber.",
+          "informational_note": "Lower circulating CoQ10 during statin therapy does not establish a need for routine supplementation.",
           "profile_gate": {
             "gate_type": "drug_class",
             "requires": {
