@@ -1057,9 +1057,17 @@ def _verified_product_entry_matches_text(entry: Dict[str, Any], row_text: str) -
     keys: List[str] = []
     entry_id = _norm_text(entry.get("id"))
     if entry_id.startswith("brand_"):
-        keys.append(entry_id.removeprefix("brand_").replace("_", " "))
-        keys.append(entry_id.removeprefix("brand_"))
+        identifier = entry_id.removeprefix("brand_")
+        keys.append(identifier.replace("_", " "))
+        keys.append(identifier)
         keys.append(_canonical_text(entry.get("standard_name")))
+        # The identifier as labels spell it ("UC-II", "BCM-95", "EGb 761"):
+        # only an alias that IS the identifier once separators are removed.
+        compact = re.sub(r"[^a-z0-9]", "", identifier)
+        keys.extend(
+            alias for alias in _safe_list(entry.get("aliases"))
+            if re.sub(r"[^a-z0-9]", "", _canonical_text(alias)) == compact
+        )
     else:
         keys.extend([_canonical_text(entry.get("standard_name"))])
         keys.extend(_canonical_text(alias) for alias in _safe_list(entry.get("aliases")))
@@ -1531,10 +1539,10 @@ def _is_prominent_anchor(
 
     A row the role owner marks prominent qualifies. A blend heading's total
     (``blend_anchor_mass``) is never a member's amount, so it carries only a
-    verified product-level record the heading itself names (the predicate
-    product-level recovery uses), and only when the role owner marks that same
-    label row prominent. A member's ingredient record, or a branded member of a
-    larger blend, never borrows the total.
+    verified product-level record the heading itself names (the registry record
+    and predicate product-level recovery use), and only when the role owner
+    marks that same label row prominent. A member's ingredient record, or a
+    branded member of a larger blend, never borrows the total.
     """
     from evidence_resolver import evidence_row_key
 
@@ -1543,11 +1551,14 @@ def _is_prominent_anchor(
     if _norm_text(row.get("evidence_type")) != "blend_anchor_mass":
         return False
     path = str(row.get("raw_source_path") or "").strip()
-    return (
-        bool(path)
-        and any(key[0] == path for key in prominent)
-        and _is_verified_product_level_entry(entry)
-        and _verified_product_entry_matches_text(entry, _row_identity_text(product, row))
+    if not path or not any(key[0] == path for key in prominent):
+        return False
+    record = next(
+        (e for e in _verified_product_level_evidence_entries() if _entry_id(e) == _entry_id(entry)),
+        None,
+    )
+    return record is not None and _verified_product_entry_matches_text(
+        record, _row_identity_text(product, row)
     )
 
 

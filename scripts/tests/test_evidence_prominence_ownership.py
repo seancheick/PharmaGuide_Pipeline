@@ -270,6 +270,8 @@ def test_real_blend_total_never_becomes_an_undisclosed_members_floor(fixture, me
 @pytest.mark.parametrize("fixture,floor_canonical,floor", [
     # "Relora 175 mg": the heading is the branded intervention itself
     ("prominence_branded_heading_293928_raw.json", "relora", 17.0),
+    # "UC-II Proprietary Cartilage Blend 401 mg"
+    ("evidence_subject_321604_raw.json", "uc ii undenatured type ii collagen", 18.0),
 ])
 def test_real_heading_that_names_its_brand_anchors_that_brands_floor(fixture, floor_canonical, floor):
     """A blend heading's printed total is not a member's dose, but when the
@@ -313,3 +315,23 @@ def test_real_recovery_never_restamps_a_record_onto_a_row_it_already_links(
     entry = next(m for m in matches if m.get("id") == record)
     assert len(entry.get("matched_source_row_refs") or []) > 1
     assert _evidence(product)["metadata"]["primary_evidence_floor_canonical"] == floor_canonical
+
+
+@pytest.mark.parametrize("record,label_text,expected", [
+    ("BRAND_UCII", "uc ii proprietary cartilage blend", True),
+    ("BRAND_BCM95", "bcm 95 turmeric extract", True),
+    ("BRAND_EGB761", "ginkgo biloba leaf extract egb 761", True),
+    # a descriptive alias never names the brand
+    ("BRAND_RELORA", "magnolia phellodendron extract", False),
+])
+def test_a_brand_identifier_matches_as_labels_spell_it(record, label_text, expected):
+    """The brand's own identifier, spelled with a hyphen or space on the label
+    (UC-II, BCM-95, EGb 761), names the branded record; descriptive aliases
+    stay excluded."""
+    from scoring_v4.modules.generic_evidence import (
+        _verified_product_entry_matches_text,
+        _verified_product_level_evidence_entries,
+    )
+
+    entry = next(e for e in _verified_product_level_evidence_entries() if e["id"] == record)
+    assert _verified_product_entry_matches_text(entry, label_text) is expected
