@@ -1,5 +1,7 @@
 # Pending items register, 2026-09-26
 
+Readable phase checklist and preserved September 30 scope: [master completion plan](../../../docs/plans/PHARMAGUIDE_MASTER_COMPLETION_PLAN.md). This ledger remains the execution register. Pipeline source through `0f695b19` pushed to main on October 1 with Sean's approval; catalog release remains pending.
+
 One register for every open item found by the 2026-09-26 integration: the 25 lane handoffs (archived
 under `~/claude-attic/2026-09-26/worktree-state/`), the memory open-work index, Codex's v41 handoff and
 live API checks. Duplicates are merged. Every row was re-checked against pipeline main 8dbd621b and
