@@ -1,12 +1,9 @@
 # Phase 2 — generic Evidence prominence ownership
 
 Status: **COMBINED SOURCE VALIDATED AND INTEGRATED ON MAIN; CATALOG RELEASE PENDING.**
-Codex fixes through `9f7837e8` extend Claude production `b43a048f` on the isolated
-`codex/quality-completion` branch. Claude subsequently advanced production to `68cae99a`
-(fetched feature tip `002d2683`); those later changes require reconciliation and a new candidate
-checkpoint. Main remains outside this audit. No push or catalog release authorized/performed by this Codex audit; Claude has pushed its feature branch for review.
-Historical Claude progress below is preserved as history, superseded by the dated audit receipt
-for Codex validation status. Older numbers do not validate a later candidate.
+Current source checkpoint: pipeline main/origin `b575104c` (production `6a15be14`); Q49 and Q51 separately integrated, Q52/Q53 source corrections measured and independently reviewed. Final combined fast:18,008 passed,168 skipped,zero failures/xfails. App main/origin `be368cfe`, clean;32 canonical reference artifacts synchronized. No catalog, Supabase, generated interaction artifact or OTA publication. D26, remaining identity/research, calibration and final release gates remain open.
+
+Historical lane baseline: Codex `9f7837e8` extended Claude `b43a048f`; later Claude `68cae99a`/feature `002d2683` required reconciliation. That reconciliation and source push are complete in the dated receipts below. Older baseline statements and counts apply only to their named candidate.
 
 ## Owner Check
 
@@ -410,3 +407,7 @@ Isolated frozen-raw Q52 replay: six actual CoQ10 labels (295004,295005,312966,32
 Q53 full-suite follow-up: first checkpoint atde3d0353 returned1 failed/18,005 passed/168 skipped. Its only failure was the real BB536232059 preservation expectation still requiring the withdrawn generic-longum13points. Existing536-label replay already proved Evidence13→0/native assessment unchanged. Only that fixture's recovered list and Evidence expectation changed; the test name/docstring now reflects current applicability. Focused2pass. A renamed-node `--lf` fallback unintentionally started a broad run; it was interrupted and is not a checkpoint. Final combined full fast completed: **18,008 passed,168 skipped,zero failures and zero expected failures**, exit0 (590.20s), `statin_q52_20261001/final_fast.log`. Artifact-dependent/opt-in skips remain release work. Fresh independent review closed the provenance finding and accepted the shortened copy, unchanged siblings/controls and bounded integration. Source fingerprints still match the isolated measured Q52 candidate; no corpus or runtime release occurred.
 
 Source integration: final clinical/copy source `6a15be14` is on pipeline main; full-fast tested bytes match the measured Q52 candidate source fingerprint. Q53 corrective source is `0acde33e`; expectation-only follow-ups `de3d0353` and `9548797d` preserve policy magnitudes. App reference follow-up `be368cfe` is already published to source main with a clean checkout; no runtime release. The reviewed Q53 readiness research queue is nine labels, derived from existing scored readiness, at the durable Q53 receipt path.
+
+### Final source push and cleanup receipt
+
+Pipeline published checkpoint `b575104c` verified equal origin/main with a clean checkout. Finished managed clinical-source worktree archived after preserving ignored state/audit reports; its branch deleted only after ancestor proof. Actual pipeline and app worktree inventories now contain their primary main checkouts only. Pipeline local/remote branch inventory contains main only; app preserves five new unreviewed Dependabot proposals. Prior stale/merged lane cleanup and rejected experiments remain recoverable in the earlier archive receipts. User-owned website CSV remains untouched. Durable cleanup receipts: `/Users/seancheick/pg_quality/probiotic_q53_20261001/cleanup/`. No release validation or runtime publication is implied by source cleanup.
