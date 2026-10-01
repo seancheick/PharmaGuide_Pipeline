@@ -91,14 +91,46 @@ def test_an_identity_with_no_convertible_amount_stays_unresolved():
     assert _collagen_dose(_collagen_row("Collagen", 50000, "IU")) is None
 
 
+@pytest.mark.parametrize("reverse", [False, True])
+def test_equal_numbers_in_different_units_are_not_a_tie(reverse):
+    rows = [_collagen_row("Collagen", 5, "mg"), _collagen_row("Collagen", 5, "g")]
+
+    assert _collagen_dose(*(rows[::-1] if reverse else rows)) == pytest.approx(5000)
+
+
+def test_the_first_resolved_identity_stays_authoritative_when_it_has_no_convertible_amount():
+    # The record names "Marine Collagen" first; that identity's amount is not
+    # mass, so the dose is unresolved rather than borrowed from a sibling key.
+    entry = dict(_RECOVERED_COLLAGEN_PEPTIDES_MATCH, matched_term="Marine Collagen")
+    product = _product(ingredients=[
+        _ingredient(name="Marine Collagen", canonical_id="marine_collagen", quantity=50000, unit="IU"),
+        _collagen_row("Collagen", 5, "g"),
+    ], matches=[])
+
+    assert _converted_product_dose(entry, _dose_map(product)) == (None, "marine collagen")
+
+
+@pytest.mark.parametrize("dose_unit, expected", [("IU", 2000), ("mcg", 50)])
+def test_vitamin_d_amounts_under_one_identity_compare_after_conversion(dose_unit, expected):
+    entry = {"id": "test_vitamin_d", "ingredient": "Vitamin D3", "standard_name": "Vitamin D", "dose_unit": dose_unit}
+    product = _product(ingredients=[
+        _ingredient(name="Vitamin D3", standard_name="Vitamin D", canonical_id="vitamin_d", quantity=1000, unit="IU"),
+        _ingredient(name="Vitamin D3", standard_name="Vitamin D", canonical_id="vitamin_d", quantity=50, unit="mcg"),
+    ], matches=[])
+
+    assert _converted_product_dose(entry, _dose_map(product))[0] == pytest.approx(expected)
+
+
+_BCAA_RECORD = {
+    "id": "INGR_BRANCHED_CHAIN_AMINO_ACIDS",
+    "ingredient": "Branched Chain Amino Acids",
+    "aggregate_canonical_ids": ["l_leucine", "l_isoleucine", "l_valine"],
+    "min_clinical_dose": 5000,
+    "dose_unit": "mg",
+}
+
+
 def test_aggregate_components_read_their_largest_converted_amount():
-    record = {
-        "id": "INGR_BRANCHED_CHAIN_AMINO_ACIDS",
-        "ingredient": "Branched Chain Amino Acids",
-        "aggregate_canonical_ids": ["l_leucine", "l_isoleucine", "l_valine"],
-        "min_clinical_dose": 5000,
-        "dose_unit": "mg",
-    }
     product = _product(ingredients=[
         _ingredient(name="L-Leucine", canonical_id="l_leucine", quantity=3, unit="Gram(s)"),
         _ingredient(name="L-Leucine", canonical_id="l_leucine", quantity=500, unit="mg"),
@@ -106,4 +138,16 @@ def test_aggregate_components_read_their_largest_converted_amount():
         _ingredient(name="L-Valine", canonical_id="l_valine", quantity=1500, unit="mg"),
     ], matches=[])
 
-    assert _converted_product_dose(record, _dose_map(product))[0] == pytest.approx(6000)
+    assert _converted_product_dose(_BCAA_RECORD, _dose_map(product))[0] == pytest.approx(6000)
+
+
+@pytest.mark.parametrize("valine", [None, (1500, "IU")], ids=["missing", "unconvertible"])
+def test_an_aggregate_never_returns_a_partial_sum(valine):
+    rows = [
+        _ingredient(name="L-Leucine", canonical_id="l_leucine", quantity=3000, unit="mg"),
+        _ingredient(name="L-Isoleucine", canonical_id="l_isoleucine", quantity=1500, unit="mg"),
+    ]
+    if valine:
+        rows.append(_ingredient(name="L-Valine", canonical_id="l_valine", quantity=valine[0], unit=valine[1]))
+
+    assert _converted_product_dose(_BCAA_RECORD, _dose_map(_product(ingredients=rows, matches=[])))[0] is None
