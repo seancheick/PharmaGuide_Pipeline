@@ -367,3 +367,17 @@ def test_a_title_naming_a_brand_never_lends_a_blend_total_to_that_member():
     evidence = _evidence(_enrich(raw))
     assert evidence["metadata"]["primary_evidence_floor"] == 0.0
     assert evidence["components"]["clinical_evidence_pipeline"] > 0
+
+
+def test_recovery_never_reads_a_blend_total_lent_to_a_member():
+    """fucoPROTEIN's 15 g blend total is lent to its first member, Milk Protein.
+    Without enrichment's own whey link, recovery must not rebuild one from that
+    lent total: none of the four members discloses an amount."""
+    from scoring_v4.modules.generic_evidence import resolved_clinical_matches
+
+    product = _enrich("prominence_lent_protein_40581_raw.json")
+    matches = product["evidence_data"]["clinical_matches"]
+    product["evidence_data"]["clinical_matches"] = [
+        m for m in matches if m.get("id") != "INGR_WHEY_PROTEIN"
+    ]
+    assert resolved_clinical_matches(product, owner_scoped=True)[1] == []

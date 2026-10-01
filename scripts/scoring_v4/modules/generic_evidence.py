@@ -885,8 +885,10 @@ def _recover_verified_primary_ingredient_matches(
                 continue
         if evidence_row_key(row) not in prominent:
             continue
-        if (_mass_mg(row) or 0.0) <= 0.0:
-            continue  # only a dose-bearing row; an undisclosed amount recovers nothing
+        if (_mass_mg(row) or 0.0) <= 0.0 or is_lent_blend_mass(row):
+            # Only a row with its own amount: an undisclosed amount, or a blend
+            # total lent to one member, recovers nothing.
+            continue
         row_canonical_id = str(row.get("canonical_id") or "").strip().lower()
         if row_canonical_id in matched_active_canonicals:
             continue
@@ -1250,7 +1252,8 @@ def _keys_include_module_owned_evidence(keys: set[str]) -> bool:
 def _has_primary_collagen_peptide_identity(
     product: Dict[str, Any], *, prominent: Optional[set] = None,
 ) -> bool:
-    """A prominent hydrolyzed type I/III peptide row with its own disclosed mass."""
+    """A prominent hydrolyzed type I/III peptide row with its own disclosed mass
+    (never a blend total lent to it)."""
     from evidence_resolver import evidence_prominent_row_keys, evidence_row_key
 
     if prominent is None:
@@ -1260,6 +1263,7 @@ def _has_primary_collagen_peptide_identity(
         and evidence_row_key(row) in prominent
         and _is_collagen_peptide_row(row)
         and (_mass_mg(row) or 0.0) > 0.0
+        and not is_lent_blend_mass(row)
         for row in _competing_active_rows(product)
     )
 
