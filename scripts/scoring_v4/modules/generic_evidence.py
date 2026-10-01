@@ -1500,36 +1500,38 @@ def _prominent_essential_canonical(
     product: Dict[str, Any], *, owner_canonicals: Optional[set] = None,
     prominent: Optional[set] = None,
 ) -> Optional[str]:
-    """Canonical_id of a PROMINENT DRI-essential vitamin/mineral (established
-    RDA/AI) with its own disclosed amount. Anchors the P5 nutrition-authority
-    evidence floor: a product whose declared purpose includes the essential
-    nutrient, never a trace essential co-ingredient. Prominence is the shared
-    role owner's; scoped callers also restrict to their purpose owners. Several
-    qualifying nutrients earn the same floor; the heaviest is the one reported.
-    When the owner names no purpose (its retain-everything fallback), the
-    previous rule stands: the heaviest competing owner, if it is essential.
+    """Canonical_id of the heaviest competing owner IFF it is a DRI-essential
+    vitamin/mineral (established RDA/AI) on a PROMINENT row with its own
+    disclosed amount. Anchors the P5 nutrition-authority evidence floor.
+
+    Prominence is the shared role owner's (when it names a purpose; scoped
+    callers also restrict to their purpose owners). Being the heaviest owner is
+    NOT prominence: it is the retained exposure stand-in (decision D26). Only
+    generic Dose judges DRI adequacy, sports and fiber Dose do not, and the
+    transfer packet forbids a route-specific exception, so the comparison stays
+    unchanged on every route. A blend total lent to a child is not its amount.
     """
     from evidence_resolver import evidence_prominent_row_keys, evidence_row_key
 
     if prominent is None:
         prominent = evidence_prominent_row_keys(product)
-    candidates = []
-    for index, row in enumerate(_competing_active_rows(product)):
+    heaviest: Optional[Dict[str, Any]] = None
+    best_mass = 0.0
+    for row in _competing_active_rows(product):
         if not isinstance(row, dict):
-            continue
-        if prominent and evidence_row_key(row) not in prominent:
             continue
         canonical = str(row.get("canonical_id") or "").strip().lower()
         if owner_canonicals is not None and canonical not in owner_canonicals:
             continue
         mass = _mass_mg(row) or 0.0
-        if mass > 0:
-            candidates.append((-mass, index, canonical))
-    candidates.sort()
-    if not prominent:
-        candidates = candidates[:1]  # legacy: only the heaviest owner may qualify
-    essentials = [canonical for _, _, canonical in candidates if canonical in DRI_ESSENTIAL_NUTRIENTS]
-    return essentials[0] if essentials else None
+        if mass > best_mass:
+            heaviest, best_mass = row, mass
+    if heaviest is None or is_lent_blend_mass(heaviest):
+        return None
+    if prominent and evidence_row_key(heaviest) not in prominent:
+        return None
+    canonical = str(heaviest.get("canonical_id") or "").strip().lower()
+    return canonical if canonical in DRI_ESSENTIAL_NUTRIENTS else None
 
 
 def _is_prominent_anchor(

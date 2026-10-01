@@ -112,7 +112,7 @@ def test_a_heavier_undeclared_adjunct_never_anchors_the_floor():
 def test_the_retained_exposure_stand_in_still_blocks_a_trace_declared_anchor():
     """Both are declared, but 2.5 mcg of vitamin D beside 600 mg of calcium is
     not floored at the consensus tier: no owner judges that anchor's exposure
-    yet (decision packet D27). Calcium, the heavier declared purpose, anchors."""
+    yet (decision packet D26). Calcium, the heavier declared purpose, anchors."""
     product = _product(
         product_name="Calcium with Vitamin D3",
         ingredients=[_row("Calcium", "calcium", 600, path="ingredientRows[0]"),
@@ -148,21 +148,26 @@ def test_clinical_dose_gate_still_blocks_a_declared_purpose():
 
 # --- the nutrition-authority floor --------------------------------------------
 
-def test_authority_floor_follows_a_declared_essential_beside_a_heavier_co_purpose():
-    """Both rows are named in the title; the essential one need not be heavier."""
+@pytest.mark.parametrize("root_mg,authority", [(600, None), (5, "zinc")])
+def test_authority_floor_keeps_the_heaviest_declared_owner_exposure_stand_in(root_mg, authority):
+    """Both rows are named in the title, so both are the product's purpose. Being
+    the heaviest declared owner is not prominence but the retained exposure
+    stand-in (D26): only generic Dose judges DRI adequacy, sports and fiber Dose
+    do not, and the transfer packet forbids a route-specific exception."""
     from scoring_v4.modules.generic_evidence import NUTRITION_AUTHORITY_FLOOR
 
     product = _product(
         product_name="Zinc + Novel Root",
         ingredients=[_row("Zinc", "zinc", 15, path="ingredientRows[0]"),
-                     _row("Novel Root", "novel_root", 600, path="ingredientRows[1]")],
+                     _row("Novel Root", "novel_root", root_mg, path="ingredientRows[1]")],
         matches=[],
     )
 
     payload = _scored(product)
 
-    assert payload["metadata"]["nutrition_authority_canonical"] == "zinc"
-    assert payload["components"]["primary_evidence_floor"] == NUTRITION_AUTHORITY_FLOOR
+    assert payload["metadata"]["nutrition_authority_canonical"] == authority
+    if authority:
+        assert payload["components"]["primary_evidence_floor"] == NUTRITION_AUTHORITY_FLOOR
 
 
 def test_authority_floor_needs_a_disclosed_amount():
@@ -335,3 +340,15 @@ def test_a_brand_identifier_matches_as_labels_spell_it(record, label_text, expec
 
     entry = next(e for e in _verified_product_level_evidence_entries() if e["id"] == record)
     assert _verified_product_entry_matches_text(entry, label_text) is expected
+
+
+@pytest.mark.parametrize("fixture", [
+    # the title-named "Epsom Salt" row carries the 3.4 g Remove blend total lent to it
+    "prominence_lent_essential_273823_raw.json",
+    # fiber route: 500 mg calcium is declared, 4 g fiber is the heaviest owner
+    "prominence_authority_fiber_route_177088_raw.json",
+    # "Calcium BHB": 233 mg calcium beside 1,238 mg BHB
+    "prominence_authority_salt_title_311247_raw.json",
+])
+def test_real_authority_floor_needs_the_heaviest_owner_with_its_own_amount(fixture):
+    assert _evidence(_enrich(fixture))["metadata"]["nutrition_authority_canonical"] is None
