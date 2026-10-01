@@ -6,7 +6,7 @@ This test suite pins:
 1. Candidate rows with only blend headers/parent totals yield 'no_assessable_actives'.
 2. Proprietary blend containing child actives (e.g. ashwagandha + rhodiola) ignores the
    parent header row and assesses the child actives.
-3. Blend headers never compete for mass dominance in _competing_active_rows / _active_mass_index.
+3. Blend headers never compete for mass dominance in _competing_active_rows / _heaviest_competing_mass.
 """
 
 from __future__ import annotations
@@ -14,7 +14,7 @@ from __future__ import annotations
 import pytest
 
 from scoring_v4.modules.generic_evidence import (
-    _active_mass_index,
+    _heaviest_competing_mass,
     _competing_active_rows,
     score_evidence,
 )
@@ -158,7 +158,7 @@ def test_blend_headers_excluded_from_competing_active_rows():
 
 
 def test_blend_header_does_not_inflate_max_mass():
-    """A 1000 mg blend header must not set max_mass in _active_mass_index."""
+    """A 1000 mg blend header must not set the heaviest competing mass (_heaviest_competing_mass)."""
     blend_header = {
         "name": "Proprietary Blend",
         "canonical_id": "blend_general",
@@ -176,7 +176,7 @@ def test_blend_header_does_not_inflate_max_mass():
         "mapped": True,
     }
     product = _product(ingredients=[blend_header, active_row], matches=[])
-    _, max_mass = _active_mass_index(product)
+    max_mass = _heaviest_competing_mass(product)
     assert max_mass == 500.0
 
 
@@ -235,7 +235,7 @@ def test_proprietary_blend_ashwagandha_rhodiola_canary():
     competing = _competing_active_rows(product_bare)
     competing_names = {r.get("name") for r in competing}
     assert "Proprietary Blend" not in competing_names
-    _, max_mass = _active_mass_index(product_bare)
+    max_mass = _heaviest_competing_mass(product_bare)
     assert max_mass == 0.0  # no dose invented
 
     # 3. State without matches is applicability_unestablished (terminal, no unearned credit)

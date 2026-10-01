@@ -21,7 +21,7 @@ from __future__ import annotations
 import pytest
 
 from scoring_v4.modules.generic_evidence import (
-    _active_mass_index,
+    _heaviest_competing_mass,
     _assessable_active_ingredients,
     _competing_active_rows,
     _is_nutrition_fact_declaration,
@@ -243,7 +243,7 @@ def test_multiple_source_ingredients_assesses_disclosed_sources_no_invented_allo
 # 8. Nutrition Facts declarations never compete for primary mass dominance
 def test_nutrition_facts_declaration_never_competes_for_primary_mass():
     """Nutrition Facts declarations (e.g. Protein 25 g) must never compete in
-    _competing_active_rows or set max_mass in _active_mass_index."""
+    _competing_active_rows or set the heaviest competing mass."""
     protein_decl = _nutrition_fact_row("Protein", canonical_id="protein", quantity=25.0, unit="g")
     creatine = _supplement_active_row("Creatine Monohydrate", canonical_id="creatine_monohydrate", quantity=5.0, unit="g")
 
@@ -254,6 +254,6 @@ def test_nutrition_facts_declaration_never_competes_for_primary_mass():
     assert len(competing) == 1
     assert competing[0]["canonical_id"] == "creatine_monohydrate"
 
-    # In active_mass_index, max_mass is creatine's 5000 mg, not protein's 25000 mg
-    index, max_mass = _active_mass_index(product)
+    # The heaviest competing mass is creatine's 5000 mg, not protein's 25000 mg
+    max_mass = _heaviest_competing_mass(product)
     assert max_mass == 5000.0

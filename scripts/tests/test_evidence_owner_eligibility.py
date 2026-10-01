@@ -12,8 +12,9 @@ dose (Dose and Transparency charge the blend). Real DSLD labels:
 
 Prominence (who the product is about, which the primary-evidence floor
 needs) is the role owner's decision (classify_ingredient_roles), read against
-the whole label; it is never inherited from, or recomputed out of, a blend's
-mass.
+the whole label and per row (evidence_resolver.evidence_prominent_row_keys). A
+disclosed member takes its blend's owner tier, but never the blend's mass: a
+member without its own amount cannot anchor anything that needs one.
 """
 
 import json
@@ -61,10 +62,10 @@ def test_a_minted_blend_name_never_owns_evidence(enriched):
 
 def test_a_named_active_keeps_evidence_when_the_blend_name_leaves(enriched):
     """Psyllium, not "Proprietary Fiber Blend", owns Fiber Fusion's Evidence.
-    Ownership grants no prominence: lane 2 leaves the primary-evidence floor as
-    it was. (That floor still reads the blend header's mass for an undisclosed
-    member, a pre-existing proxy that rewards withholding an amount; changing
-    it is a prominence-policy decision, ledger R4.)"""
+    Ownership grants no amount: the primary-evidence floor needs the anchoring
+    row's own disclosed amount, so a blend header's mass never stands in for an
+    undisclosed member (Phase 2 prominence, 2026-10-01; blend totals never
+    become member doses)."""
     owners = evidence_owner_canonicals(enriched["219048"])
     assert "psyllium" in owners
     assert "proprietary_fiber_blend" not in owners
@@ -73,8 +74,8 @@ def test_a_named_active_keeps_evidence_when_the_blend_name_leaves(enriched):
 def test_a_small_add_on_is_not_prominent_beside_an_undisclosed_blend(enriched):
     """Boron 5 mg beside a 401 mg blend is not what the product is about: the
     UC-II blend's member (collagen) owns Evidence alone; boron and hyaluronic
-    acid do not. (The floor itself still reads the UC-II header's mass through
-    the unchanged mass rules.)"""
+    acid do not. The undisclosed member has no amount of its own, so nothing
+    here anchors a primary-evidence floor."""
     assert evidence_owner_canonicals(enriched["321604"]) == {"collagen"}
 
 

@@ -1240,25 +1240,28 @@ def _evidence_subject_roles(product: Mapping[str, Any], module: Optional[str]):
         get_scoring_ingredients,
     )
 
-    def key(row: Mapping[str, Any]) -> Tuple[str, str]:
-        # Outside a scoring pass every call rebuilds its rows, so a subject is
-        # recognised by where it sits on the label and what it is, never by
-        # object identity.
-        return (
-            str(row.get("raw_source_path") or ""),
-            str(row.get("canonical_id") or "").strip().lower(),
-        )
-
     prod_dict = product if isinstance(product, dict) else dict(product or {})
     rows = get_evidence_subject_rows(prod_dict)
-    subject_keys = {key(row) for row in rows}
+    subject_keys = {evidence_row_key(row) for row in rows}
     others = [
         row
         for row in get_scoring_ingredients(prod_dict, strict=True).rows
-        if key(row) not in subject_keys
+        if evidence_row_key(row) not in subject_keys
     ]
     roles = classify_ingredient_roles(prod_dict, module=module, rows=rows + others)
     return rows, roles[: len(rows)], others, roles[len(rows):]
+
+
+def evidence_row_key(row: Mapping[str, Any]) -> Tuple[str, str]:
+    """A label row's identity across scoring passes: where it sits and what it is.
+
+    Outside a scoring pass every call rebuilds its rows, so a row is recognised
+    by its source position and canonical identity, never by object identity.
+    """
+    return (
+        str(row.get("raw_source_path") or ""),
+        str(row.get("canonical_id") or "").strip().lower(),
+    )
 
 
 def evidence_owner_canonicals(
@@ -1280,6 +1283,33 @@ def evidence_owner_canonicals(
     them material): the blend is real even though each member's share is
     unknown.  That makes the member assessed; it gives it no dose and no floor.
     """
+    return _evidence_owner_selection(product, module)[0]
+
+
+def evidence_prominent_row_keys(
+    product: Mapping[str, Any],
+    *,
+    module: Optional[str] = None,
+) -> Set[Tuple[str, str]]:
+    """The label rows the product is about, as ``evidence_row_key`` values.
+
+    The same owner decision as ``evidence_owner_canonicals``, read per row
+    instead of per identity: the subject rows that set the winning tier (route
+    driver, title or label claim; otherwise material-major), including the
+    disclosed members of a blend in that tier.  The retain-everything fallback
+    has no prominent row.  Primary-evidence selection consumes this instead of
+    choosing by mass, so another ingredient's amount never changes which
+    ingredient the label declares.  Prominence grants no amount: a member whose
+    own amount is undisclosed still cannot anchor anything that needs one.
+    """
+    return _evidence_owner_selection(product, module)[1]
+
+
+def _evidence_owner_selection(
+    product: Mapping[str, Any],
+    module: Optional[str],
+) -> Tuple[Set[str], Set[Tuple[str, str]]]:
+    """One owner decision: (owner identities, prominent subject row keys)."""
     from scoring_input_contract import ROLE_CLAIM_PROMINENT, ROLE_MAJOR, ROLE_PRIMARY
 
     rows, roles, others, other_roles = _evidence_subject_roles(product, module)
@@ -1291,40 +1321,35 @@ def evidence_owner_canonicals(
             if role.get("role") in accepted_roles and str(row.get("raw_source_path") or "")
         }
 
-    def members_of(parents: Set[str]) -> Set[str]:
-        return {
-            str(row.get("canonical_id") or "").strip().lower()
-            for row in rows
-            if str(row.get("canonical_id") or "").strip()
-            and any(
-                str(row.get("raw_source_path") or "").startswith(
-                    (parent + ".nestedRows[", parent + ".forms[")
-                )
-                for parent in parents
-            )
-        }
-
-    def canonicals_for(accepted_roles: Set[str]) -> Set[str]:
-        return {
-            str(row.get("canonical_id") or "").strip().lower()
+    def tier_rows(accepted_roles: Set[str]) -> List[Mapping[str, Any]]:
+        parents = blend_paths(accepted_roles)
+        return [
+            row
             for row, role in zip(rows, roles)
-            if role.get("role") in accepted_roles
-            and str(row.get("canonical_id") or "").strip()
-        }
+            if str(row.get("canonical_id") or "").strip()
+            and (
+                role.get("role") in accepted_roles
+                or any(
+                    str(row.get("raw_source_path") or "").startswith(
+                        (parent + ".nestedRows[", parent + ".forms[")
+                    )
+                    for parent in parents
+                )
+            )
+        ]
 
-    explicit = canonicals_for({ROLE_PRIMARY, ROLE_CLAIM_PROMINENT}) | members_of(
-        blend_paths({ROLE_PRIMARY, ROLE_CLAIM_PROMINENT})
-    )
-    if explicit:
-        return explicit
-    material = canonicals_for({ROLE_MAJOR}) | members_of(blend_paths({ROLE_MAJOR}))
-    if material:
-        return material
+    for accepted in ({ROLE_PRIMARY, ROLE_CLAIM_PROMINENT}, {ROLE_MAJOR}):
+        owners = tier_rows(accepted)
+        if owners:
+            return (
+                {str(row.get("canonical_id") or "").strip().lower() for row in owners},
+                {evidence_row_key(row) for row in owners},
+            )
     return {
         str(row.get("canonical_id") or "").strip().lower()
         for row in rows
         if str(row.get("canonical_id") or "").strip()
-    }
+    }, set()
 
 
 def _evidence_claim_purposes(product: Mapping[str, Any], module: Optional[str] = None) -> Dict[str, Set[str]]:
