@@ -131,7 +131,7 @@ def test_generic_evidence_dose_map_ignores_a_label_sourced_fraction() -> None:
         },
     )
 
-    assert _dose_map(product)["vitamin c"][0] == pytest.approx(500.0)
+    assert _dose_map(product)["vitamin c"] == [(pytest.approx(500.0), "mg")]
 
 
 def test_generic_evidence_dose_map_scales_by_a_real_multi_serving_label() -> None:
@@ -141,7 +141,7 @@ def test_generic_evidence_dose_map_scales_by_a_real_multi_serving_label() -> Non
         servingSizes=[{"minDailyServings": 2, "maxDailyServings": 2}],
     )
 
-    assert _dose_map(product)["vitamin c"][0] == pytest.approx(1000.0)
+    assert _dose_map(product)["vitamin c"] == [(pytest.approx(1000.0), "mg")]
 
 
 def test_sleep_dose_still_scales_by_a_real_multi_serving_regimen() -> None:
