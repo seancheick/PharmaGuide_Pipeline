@@ -223,3 +223,18 @@ def test_amount_cannot_make_unmatched_purpose_evidence_applicable(registry):
         assert evidence["score"] == 0
         states.append(evidence["metadata"]["evidence_result_state"])
     assert states == ["applicability_unestablished", "applicability_unestablished"]
+
+
+def test_pediatric_context_cannot_supply_adult_summary_applicability(registry):
+    from test_v4_probiotic_evidence_p23 import _match
+    row = positive_rct(approved=True)
+    row["population"] = {**row["population"], "age_group": "child", "description": "Children with constipation"}
+    registry[STUB]["study_contexts"] = [row]
+    product = la14_product()
+    product["product_name"] = "Adult Digestive Constipation probiotic"
+    product["evidence_data"] = {"clinical_matches": [_match(id=STUB,
+        ingredient="Lactobacillus acidophilus La-14", standard_name="Lactobacillus acidophilus La-14")]}
+    evidence = score_evidence(product)
+    assert evidence["components"]["evidence_family_certainty"] == 6.6667
+    assert evidence["components"]["product_applicability"] == 0
+    assert evidence["components"]["independent_replication_consistency"] == 0

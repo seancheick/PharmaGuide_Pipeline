@@ -362,17 +362,21 @@ def _eligible_native_contexts(assessment: dict, relevance: dict) -> list[tuple[s
             context_categories = set(_categories_from_text(context_text))
             if not context_categories.intersection(matched_categories):
                 continue
-            population = context.get("population") or {}
-            population_text = str(population.get("description") or "")
-            required = set(_categories_from_text(population_text)).intersection(
-                {"infant", "prenatal", "women"}
-            )
-            if population.get("age_group") in {"infant", "child"}:
-                required.add("infant")
-            if required and not required.intersection(product_categories):
+            if not _native_context_population_applies(context, product_categories):
                 continue
             result.append((clinical_id, context))
     return result
+
+
+def _native_context_population_applies(context: dict, product_categories: Set[str]) -> bool:
+    """Share the existing native population restriction with purpose fallback."""
+    population = context.get("population") or {}
+    required = set(_categories_from_text(str(population.get("description") or ""))).intersection(
+        {"infant", "prenatal", "women"}
+    )
+    if population.get("age_group") in {"infant", "child"}:
+        required.add("infant")
+    return not required or bool(required.intersection(product_categories))
 
 
 def _human_research_reviewed(uncredited_row: Dict[str, Any], assessment: Dict[str, Any]) -> bool:
@@ -389,7 +393,7 @@ def _human_research_reviewed(uncredited_row: Dict[str, Any], assessment: Dict[st
 
 def _claim_alignment(product: Dict[str, Any], assessment: Dict[str, Any]) -> Dict[str, Any]:
     product_categories = _product_positioning_categories(product)
-    strain_categories = _strain_indication_categories(assessment)
+    strain_categories = _strain_indication_categories(assessment, product_categories)
     matched = product_categories & strain_categories
     partial = {
         b
@@ -456,7 +460,7 @@ def _product_positioning_categories(product: Dict[str, Any]) -> Set[str]:
     return categories
 
 
-def _strain_indication_categories(assessment: Dict[str, Any]) -> Set[str]:
+def _strain_indication_categories(assessment: Dict[str, Any], product_categories: Set[str]) -> Set[str]:
     """Use current registry copy from the same assessment that owns credit."""
     categories: Set[str] = set()
     for strain in assessment["strain_assessments"]:
@@ -470,7 +474,8 @@ def _strain_indication_categories(assessment: Dict[str, Any]) -> Set[str]:
             for context in strain.get("study_contexts") or []:
                 if (context.get("identity_scope") == "exact_strain"
                         and context_accepted_for_scoring(context)
-                        and valid_native_study_context(context, strain.get("clinical_id"))):
+                        and valid_native_study_context(context, strain.get("clinical_id"))
+                        and _native_context_population_applies(context, product_categories)):
                     text = " ".join([str(context.get("condition") or ""),
                         *(str(outcome.get("name") or "") for outcome in _qualifying_outcomes(context))])
                     if _qualifying_outcomes(context):
