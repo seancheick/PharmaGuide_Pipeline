@@ -148,7 +148,7 @@ def _evidence_confidence(
     clinical_matches = _clinical_matches(product)
 
     if matched_entries <= 0 and not clinical_matches:
-        module_owned = _module_owned_evidence_drivers(metadata, score)
+        module_owned = _module_owned_evidence_drivers(metadata, score, components=_safe_dict(evidence_dim.get("components")))
         if module_owned:
             return "moderate", module_owned
         if "evaluated_supported" in assessed_states:
@@ -178,7 +178,7 @@ def _evidence_confidence(
         level = "moderate"
         drivers.extend(["limited_human_evidence", "product_specific_nct_absent"])
     else:
-        module_owned = _module_owned_evidence_drivers(metadata, score)
+        module_owned = _module_owned_evidence_drivers(metadata, score, components=_safe_dict(evidence_dim.get("components")))
         if module_owned:
             level = "moderate"
             drivers.extend(module_owned)
@@ -199,7 +199,8 @@ def _evidence_confidence(
     return level, drivers
 
 
-def _module_owned_evidence_drivers(metadata: Dict[str, Any], score: float) -> List[str]:
+def _module_owned_evidence_drivers(metadata: Dict[str, Any], score: float, *,
+                                   components: Dict[str, Any] | None = None) -> List[str]:
     """Recognize evidence recovered by v4 modules after enrichment.
 
     Some v4 modules restore evidence from scoped contracts: DRI authority floors,
@@ -218,7 +219,8 @@ def _module_owned_evidence_drivers(metadata: Dict[str, Any], score: float) -> Li
         drivers.append("v4_evidence_recovered_from_contract")
     if (_as_float(metadata.get("primary_evidence_floor"), 0.0) or 0.0) > 0.0:
         drivers.append("primary_evidence_floor")
-    if (_as_float(metadata.get("native_clinical_strain_evidence_score"), 0.0) or 0.0) >= 4.0:
+    if (metadata.get("credit_owner") == "strain"
+            and (_as_float((components or {}).get("evidence_family_certainty"), 0.0) or 0.0) >= 4.0):
         drivers.append("native_clinical_strain_evidence")
 
     nested_generic = _safe_dict(metadata.get("generic_evidence_metadata"))

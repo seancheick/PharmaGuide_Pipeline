@@ -27,8 +27,6 @@ def test_nonhuman_native_reference_does_not_earn_human_clinical_credit(clinical_
     assert assessment["research_accepted"] is True  # Identity/review is a separate decision.
     assert assessment["human_evidence"] is True
     assert pmid not in assessment["scoring_source_pmids"]
-    for row in metadata["native_clinical_strain_evidence_rows"]:
-        assert pmid not in row["source_pmids"]
     assert metadata["evidence_assessment"]["native_context_review"]["status"] == "clinically_reviewed"
     from probiotic_measurements import derived_context_evidence
     human_record = derived_context_evidence(studied_formulas._clinical_strain_registry()[clinical_id])
@@ -58,7 +56,9 @@ def test_native_nonhuman_reference_cannot_supply_dose_applicability_points(monke
     assessment = result["metadata"]["evidence_assessment"]["strain_assessments"][0]
     assert assessment["dose_applicable"] is False
     assert assessment["human_evidence"] is False
-    assert result["components"] == {"strain_clinical_evidence": 0, "dose_applicability": 0}
+    assert result["score"] == 0
+    assert all(value == 0 for value in result["components"].values())
+    assert "dose_applicability" not in result["components"]
 
 
 @pytest.mark.parametrize("native_source", ["nonhuman", "unreviewed"])
@@ -82,8 +82,9 @@ def test_native_source_gap_does_not_silence_independent_backbone_match(monkeypat
     result = score_evidence(product)
     assert result["metadata"]["evidence_assessment"]["strain_assessments"][0]["human_evidence"] is False
     assert result["metadata"]["uncredited_strain_match_ids"] == []
-    assert result["metadata"]["native_clinical_strain_evidence_score"] == 0
-    assert result["score"] == generic_score
+    assert result["components"] == {"evidence_family_certainty": 6.6667,
+        "product_applicability": 1.5, "independent_replication_consistency": 0.0}
+    assert result["score"] == 8.1667
 
 
 @pytest.mark.parametrize("effect", ["positive_weak", "mixed", "null", "negative"])
@@ -97,24 +98,23 @@ def test_nonhuman_native_fallback_cannot_overrule_independent_match_effect(effec
         id="STRAIN_ACIDOPHILUS_NCFM", ingredient="Lactobacillus acidophilus NCFM",
         standard_name="Lactobacillus acidophilus NCFM", effect_direction=effect)]}
     result = score_evidence(product)
-    assert result["metadata"]["native_clinical_strain_evidence_score"] == 0
-    assert result["score"] == score_generic_evidence(product)["score"]
+    assert result["score"] == pytest.approx({"positive_weak": 7.1667, "mixed": 5.5, "null": 0, "negative": 0}[effect])
+    assert result["components"]["independent_replication_consistency"] == 0
     if effect == "negative":
         assert result["metadata"]["evidence_result_state"] == "evaluated_unfavorable"
 
 
-# null joined negative at 0 on 2026-09-18: a strain trial that did not show a benefit
-# earns no affirmative credit in the probiotic lane either. mixed is unchanged.
-@pytest.mark.parametrize("direction,multiplier", [("null", 0), ("mixed", .6), ("negative", 0)])
-def test_native_primary_effect_direction_is_not_defaulted_to_positive(monkeypatch, direction, multiplier):
+@pytest.mark.parametrize("direction", ["null", "mixed", "negative"])
+def test_aggregate_summary_does_not_override_authoritative_context_outcomes(monkeypatch, direction):
     registry = deepcopy(studied_formulas._clinical_strain_registry())
-    registry["STRAIN_LGG"]["cfu_thresholds"]["evidence"]["effect_direction"] = direction
+    product = strain_product(clinical_id="STRAIN_LACTIS_BB12", name="Bifidobacterium lactis BB-12")
+    product["product_name"] = "Infant Colic Digestive Probiotic"
+    before = score_evidence(product)
+    registry["STRAIN_LACTIS_BB12"]["cfu_thresholds"]["evidence"] = {"effect_direction": direction}
     monkeypatch.setattr(studied_formulas, "_clinical_strain_registry", lambda: registry)
-    result = score_evidence(strain_product())
-    assert result["score"] == pytest.approx(9 * multiplier)  # LGG is medium under the single-strain scale
-    assert result["metadata"]["native_clinical_strain_evidence_rows"][0]["effect_direction"] == direction
-    if direction == "negative":
-        assert result["metadata"]["evidence_result_state"] == "evaluated_unfavorable"
+    after = score_evidence(product)
+    assert before["score"] == 18
+    assert after["components"] == before["components"]
 
 
 def test_nonhuman_zero_is_not_presented_as_evidence_of_no_benefit(monkeypatch):

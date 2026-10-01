@@ -38,7 +38,9 @@ def registry(monkeypatch):
 
 
 def la14_product(dose=1e9):
-    return strain_product(dose=dose, clinical_id=STUB, name="Lactobacillus acidophilus La-14")
+    product = strain_product(dose=dose, clinical_id=STUB, name="Lactobacillus acidophilus La-14")
+    product["product_name"] = "Digestive Constipation probiotic"
+    return product
 
 
 def test_policy_default_is_clinician_only():
@@ -76,7 +78,13 @@ def test_attributable_clinician_approval_can_score(registry):
     assert pm.identity_review_accepted(entry) is True
     row = studied_formulas.assess_probiotic_evidence(la14_product())["strain_assessments"][0]
     assert row["status"] == "strain_dose_applicable"
-    assert score_evidence(la14_product())["components"]["dose_applicability"] > 0
+    evidence = score_evidence(la14_product())
+    assert evidence["components"]["evidence_family_certainty"] > 0
+    assert evidence["components"]["product_applicability"] == 6
+    assert score_evidence(la14_product(dose=None))["components"] == evidence["components"]
+    from scoring_v4.modules.probiotic_dose import score_dose
+    retained = score_dose(la14_product())["metadata"]["evidence_assessment"]
+    assert retained["strain_assessments"][0]["dose_applicable"] is True
 
 
 def test_explicitly_ineligible_context_never_scores_after_clinician_approval(registry):
@@ -86,7 +94,7 @@ def test_explicitly_ineligible_context_never_scores_after_clinician_approval(reg
     assert pm.effective_strain_evidence(registry[STUB]) is None
     assessed = studied_formulas.assess_probiotic_evidence(la14_product())["strain_assessments"][0]
     assert assessed["dose_applicable"] is False
-    assert score_evidence(la14_product())["components"]["dose_applicability"] == 0
+    assert score_evidence(la14_product())["score"] == 0
 
 
 @pytest.mark.parametrize("review", [
@@ -202,3 +210,16 @@ def test_scoring_eligible_is_only_true_or_absent(value):
     assert pm.context_accepted_for_scoring(row) is False
     assert pm.context_accepted_for_scoring(positive_rct(approved=True)) is True
     assert pm.context_accepted_for_scoring(positive_rct(approved=True, scoring_eligible=True)) is True
+
+
+def test_amount_cannot_make_unmatched_purpose_evidence_applicable(registry):
+    registry[STUB]["study_contexts"] = [positive_rct(approved=True)]
+    states = []
+    for amount in (None, 1e9):
+        product = la14_product(dose=amount)
+        product["product_name"] = "Women vaginal probiotic"
+        product["probiotic_data"]["is_probiotic_product"] = True
+        evidence = score_evidence(product)
+        assert evidence["score"] == 0
+        states.append(evidence["metadata"]["evidence_result_state"])
+    assert states == ["applicability_unestablished", "applicability_unestablished"]

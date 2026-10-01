@@ -66,11 +66,12 @@ def score_dose(product: Any) -> Dict[str, Any]:
     """
     product = product if isinstance(product, dict) else {}
     from studied_formulas import (
-        assess_studied_formula, label_owned_native_strains, measured_native_strain_doses,
+        assess_probiotic_evidence, label_owned_native_strains, measured_native_strain_doses,
     )
     if not product.get("probiotic_data") and isinstance(product.get("probiotic_detail"), dict):
         product = {**product, "probiotic_data": product["probiotic_detail"]}
-    formula = assess_studied_formula(product)
+    assessment = assess_probiotic_evidence(product)
+    formula = assessment["formula_assessment"]
     if formula["status"] == "assessed_studied_formula":
         return {
             "score": CAP_DOSE, "max": CAP_DOSE,
@@ -79,6 +80,7 @@ def score_dose(product: Any) -> Dict[str, Any]:
             "metadata": {"phase": PHASE_MARKER, "assessment_status": formula["status"],
                          "dose_adequacy_basis": "studied_formula_native_afu",
                          "studied_formula_assessment": formula,
+                         "evidence_assessment": assessment,
                          "per_strain_cfu_disclosed_count": 0,
                          "window_proxy_reason": "formula_dose_not_individual_strain_doses"},
         }
@@ -94,6 +96,8 @@ def score_dose(product: Any) -> Dict[str, Any]:
                 "assessment_status": "unresolved_reference",
                 "reason_code": AFU_REVIEW_REASON,
                 "afu_measurements": afu_rows,
+                "studied_formula_assessment": formula,
+                "evidence_assessment": assessment,
             },
         }
     pdata = _probiotic_payload(product)
@@ -168,6 +172,8 @@ def score_dose(product: Any) -> Dict[str, Any]:
         "penalties": {},
         "metadata": {
             "phase": PHASE_MARKER,
+            "studied_formula_assessment": formula,
+            "evidence_assessment": assessment,
             "raw_score": round(raw_score, 4),
             "total_strain_count": total_strain_count,
             "per_strain_cfu_disclosed_count": disclosed_count,

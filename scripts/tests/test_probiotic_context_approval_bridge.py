@@ -1,11 +1,9 @@
-"""A clinician-approved study context is the only native path to dose applicability.
+"""Reviewed native contexts preserve separate Evidence and Dose responsibilities.
 
-Before 2026-09-13 every native strain row ended at ``strain_context_review_pending``
-or ``strain_dose_reference_unreviewed``: ``dose_applicable`` could never be True
-for a strain, so ``dose_applicability`` points existed only for Seed's whole-formula
-path. This bridge reads an approved context, compares the label's owned daily dose
-to the studied arms, and requires a positive primary patient-important outcome.
-Pending, adjudication-required and rejected sources never score.
+Exact identity, preparation, population and primary outcomes constrain Evidence.
+The same context's discrete trial-arm comparisons remain under Dose; unknown,
+nearby or interpolated label amounts cannot award trial-dose applicability.
+Held, rejected and unattributed reviews never confer clinical approval.
 """
 from copy import deepcopy
 
@@ -49,11 +47,11 @@ def assessment(product):
 
 
 def test_approved_context_with_matching_dose_and_positive_primary_outcome_is_applicable(registry):
-    # A strong exact-strain record at its reviewed dose must be able to reach
-    # full Evidence credit without requiring unrelated additional strains.
+    # One exact-strain primary family can earn certainty and applicability;
+    # full Evidence also requires independent same-condition replication.
     registry["STRAIN_LGG"]["evidence_level"] = "high"
     registry["STRAIN_LGG"]["cfu_thresholds"]["evidence"]["evidence_strength"] = "high"
-    registry["STRAIN_LGG"]["study_contexts"] = [approved()]
+    registry["STRAIN_LGG"]["study_contexts"] = [approved(study_design="rct")]
     row = assessment(strain_product(dose=1e9))
     assert row["status"] == "strain_dose_applicable"
     assert row["dose_applicable"] is True
@@ -64,10 +62,13 @@ def test_approved_context_with_matching_dose_and_positive_primary_outcome_is_app
     assert ctx["dose_applicability_credit"] == 1.0
     evidence = score_evidence(strain_product(dose=1e9))
     assert evidence["components"] == {
-        "strain_clinical_evidence": 12.0,
-        "dose_applicability": 8.0,
+        "evidence_family_certainty": 10.0,
+        "product_applicability": 3.0,
+        "independent_replication_consistency": 0.0,
     }
-    assert evidence["score"] == 20.0
+    assert evidence["score"] == 13.0  # Broad daily positioning receives partial applicability.
+    from scoring_v4.modules.probiotic_dose import score_dose
+    assert score_dose(strain_product(dose=1e9))["metadata"]["evidence_assessment"]["strain_assessments"][0]["dose_applicability_credit"] == 1.0
 
 
 @pytest.mark.parametrize("dose,reason", [
@@ -140,7 +141,10 @@ def test_unstudied_doses_between_or_near_arms_earn_no_credit(registry):
     assert near["study_contexts"][0]["dose_applicability_class"] == "OUTSIDE_TESTED_RANGE"
     assert near["status"] == "strain_context_not_applicable"
     assert near["dose_applicability_credit"] == 0.0
-    assert score_evidence(strain_product(dose=5e9))["components"]["dose_applicability"] == 0
+    assert score_evidence(strain_product(dose=5e9))["components"] == score_evidence(strain_product(dose=1e9))["components"]
+    from scoring_v4.modules.probiotic_dose import score_dose
+    retained = score_dose(strain_product(dose=5e9))["metadata"]["evidence_assessment"]
+    assert retained["strain_assessments"][0]["dose_applicability_credit"] == 0.0
 
 
 def test_status_string_without_approval_provenance_is_invalid_and_cannot_score(registry):

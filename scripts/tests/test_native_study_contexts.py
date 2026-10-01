@@ -274,6 +274,7 @@ def test_lpc37_sources_join_without_new_approval_or_interpolated_dose():
 
     product = strain_product(clinical_id="STRAIN_PARACASEI_LPC37",
                              name="Lactobacillus paracasei Lpc-37", dose=1.56e10)
+    product["product_name"] = "Stress support probiotic"
     result = assessment(product)
     # Exact-strain sources plus the Wave 1 combination contexts that join Lpc-37
     # through `components`; joining never lends approval or an individual dose.
@@ -287,6 +288,10 @@ def test_lpc37_sources_join_without_new_approval_or_interpolated_dose():
     # Its contexts are clinician-approved: a finished review, not pending work.
     assert evidence["metadata"]["evidence_assessment"]["native_context_review"]["status"] == "clinically_reviewed"
     assert evidence["metadata"]["evidence_result_state"] == "evaluated_null"
+    unrelated = deepcopy(product)
+    unrelated["product_name"] = "Digestive support probiotic"
+    assert score_evidence(unrelated)["score"] == 0
+    assert score_evidence(unrelated)["metadata"]["evidence_result_state"] == "applicability_unestablished"
 
 
 @pytest.mark.parametrize("stale_field", ["indication_primary", "indication_secondary", "clinical_support_level"])
@@ -295,6 +300,7 @@ def test_native_indication_copy_uses_current_registry_not_old_artifact(stale_fie
 
     product = strain_product(clinical_id="STRAIN_PARACASEI_LPC37",
                              name="Lactobacillus paracasei Lpc-37", dose=1.56e10)
+    product["product_name"] = "Stress support probiotic"
     clinical = product["probiotic_data"]["clinical_strains"][0]
     clinical[stale_field] = "digestive immune support"
     before = deepcopy(product)
@@ -381,13 +387,15 @@ def test_unaccepted_strain_review_is_not_reported_as_a_dose_gap(registry):
 
 
 def test_undisclosed_cfu_with_accepted_human_research_is_terminal_contextual_credit():
-    """The accepted-research case is already terminal; dose only limits applicability."""
+    """An amount cannot change the finished but inapplicable research determination."""
     from scoring_v4.modules.probiotic_evidence import score_evidence
 
     p = strain_product(clinical_id="STRAIN_LGG", name="Lactobacillus rhamnosus GG", dose=None)
     evidence = score_evidence(p)
-    assert evidence["metadata"]["evidence_result_state"] == "research_present_applicability_unestablished"
-    assert evidence["components"]["dose_applicability"] == 0
+    assert evidence["metadata"]["evidence_result_state"] == "applicability_unestablished"
+    assert "dose_applicability" not in evidence["components"]
+    assert score_evidence(strain_product(clinical_id="STRAIN_LGG",
+        name="Lactobacillus rhamnosus GG", dose=1e9))["components"] == evidence["components"]
 
 
 @pytest.mark.parametrize("cid,name", [
@@ -396,11 +404,10 @@ def test_undisclosed_cfu_with_accepted_human_research_is_terminal_contextual_cre
     ("STRAIN_SACCHAROMYCES", "Saccharomyces boulardii"),
 ])
 def test_pending_review_is_independent_of_existing_positive_or_null_credit(monkeypatch, cid, name):
-    """Approving or un-approving a context changes review state, never credit.
+    """Review incompleteness stays visible even when a finished label earns zero.
 
-    HN019's curated direction is null, which has earned nothing since the
-    2026-09-18 owner decision; the other strains score. Either way the review
-    state of the contexts must not be what decides it.
+    These labels lack an applicable positive primary family. A review hold must
+    not be disguised as a missing amount or a finished null determination.
     """
     from scoring_v4.modules.probiotic_evidence import score_evidence
     from scoring_v4.confidence import _evidence_confidence
@@ -408,12 +415,13 @@ def test_pending_review_is_independent_of_existing_positive_or_null_credit(monke
     p = strain_product(clinical_id=cid, name=name, dose=1e9)
     reviewed = score_evidence(p)
     assert reviewed["metadata"]["evidence_assessment"]["native_context_review"]["status"] == "clinically_reviewed"
-    assert reviewed["score"] > 0 or cid == "STRAIN_LACTIS_HN019"
+    assert reviewed["score"] == 0  # These adult labels have no eligible positive primary family.
 
     _with_contexts_pending(monkeypatch, cid)
     pending = score_evidence(p)
     assert pending["metadata"]["evidence_assessment"]["native_context_review"]["status"] == "pending_clinical_review"
     assert pending["score"] == reviewed["score"]
+    assert pending["metadata"]["evidence_result_state"] == "native_research_review_incomplete"
     assert _evidence_confidence(p, {"dimensions": {"evidence": pending}},
         evidence_assessment={"readiness": "complete"}) == ("moderate", ["evidence_review_incomplete"])
     if cid == "STRAIN_LACTIS_HN019":
@@ -480,7 +488,10 @@ def test_frozen_stamped_malformed_context_is_invalid_and_cannot_crash_scoring(re
     result = assessment(strain_product(dose=1e9))
     assert result["study_contexts"][0]["status"] == "invalid_context"
     assert result["dose_applicable"] is False
-    assert score_evidence(strain_product(dose=1e9))["components"]["dose_applicability"] == 0
+    assert score_evidence(strain_product(dose=1e9))["score"] == 0
+    from scoring_v4.modules.probiotic_dose import score_dose
+    retained = score_dose(strain_product(dose=1e9))["metadata"]["evidence_assessment"]
+    assert retained["strain_assessments"][0]["study_contexts"][0]["status"] == "invalid_context"
 
 
 @pytest.mark.parametrize("value", [0, 1, "false", "no", "true"])

@@ -516,3 +516,15 @@ def test_confidence_layer_does_not_import_v3_scorer() -> None:
     source = Path(confidence.__file__).read_text()
     assert "from score_supplements" not in source
     assert "import score_supplements" not in source
+
+
+def test_approved_native_family_confidence_consumes_production_components():
+    from scoring_v4.confidence import _evidence_confidence
+    from scoring_v4.modules.probiotic_evidence import score_evidence
+    from test_v4_probiotic_evidence_p23 import _infant_product
+    product = _infant_product()
+    evidence = score_evidence(product)
+    assert evidence["score"] == 18
+    level, drivers = _evidence_confidence(product, {"dimensions": {"evidence": evidence}}, evidence_assessment={})
+    assert level == "moderate"
+    assert "native_clinical_strain_evidence" in drivers

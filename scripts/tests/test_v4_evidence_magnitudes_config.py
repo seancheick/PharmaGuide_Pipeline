@@ -39,34 +39,15 @@ EXPECTED = {
         "depth_bonus_bands": [[20.0, 0.25], [40.0, 0.5]],
     },
     "probiotic": {
-        "cap_evidence": 20.0, "cap_strain_clinical": 12.0, "cap_dose_applicability": 8.0,
-        "effect_direction_multipliers": {"positive_strong": 1.0, "positive_weak": 0.85,
-                                         "mixed": 0.6, "null": 0.0, "negative": 0.0},
-        "native_strain_evidence_points": {"strong": 12.0, "high": 12.0, "moderate": 9.0,
-                                          "medium": 9.0, "weak": 4.5, "low": 4.5, "limited": 4.5},
-        "native_strain_evidence_weights": [1.0],
-        "native_context_review_policy": "clinician_only",
-        "dose_applicability_policy": {
-            "credit": {
-                "EXACT_TESTED_DOSE": 1.0,
-                "WITHIN_TESTED_RANGE": 0.0,
-                "NEAR_TESTED_RANGE": 0.0,
-                "OUTSIDE_TESTED_RANGE": 0.0,
-                "DOSE_UNKNOWN": 0.0,
-            }
-        },
-        "_context_policy_doc": (
-            "1.15.0 (2026-09-25): native study contexts remain research records until an "
-            "attributable clinical approval names the reviewer, review time, and "
-            "identity-dose-outcome applicability scope. Source-verified pending contexts "
-            "never score. Discrete trial arms are points, not continuous dose windows: "
-            "only an exact tested daily arm can earn applicability credit. Start/end viable-count "
-            "measurements describe stability and do not establish an efficacy dose. Combination "
-            "and species-level contexts never earn individual-strain applicability. The strongest "
-            "applicable exact-strain record owns clinical support; adding strains does not manufacture "
-            "Evidence credit, and one strong record at its reviewed exact dose can reach the 20-point "
-            "Evidence cap."
-        ),
+        "cap_evidence": 20.0, "certainty_cap": 10.0, "applicability_cap": 6.0,
+        "replication_cap": 4.0, "native_context_review_policy": "clinician_only",
+        "alignment_weights": {"direct": 1.0, "partial": 0.75, "broad": 0.5,
+                              "not_evaluable": 0.0, "none": 0.0},
+        "generic_identity_weight": 0.5,
+        "single_family_design_weights": {"rct": 1.0, "crossover_rct": 1.0, "cluster_rct": 1.0,
+            "meta_analysis": 1.0, "systematic_review": 1.0, "guideline": 0.8,
+            "observational": 0.5, "open_label": 0.4},
+        "unspecified_human_design_weight": 4.0 / 6.0,
     },
     "multi_prenatal": {"cap_evidence": 20.0, "generic_cap_evidence": 20.0},
     "omega": {
@@ -87,7 +68,7 @@ EXPECTED = {
 
 def test_config_matches_reviewed_evidence_magnitudes():
     for mod, vals in EXPECTED.items():
-        assert {key: value for key, value in EM[mod].items() if key != "_doc"} == vals, f"evidence_magnitudes.{mod} drifted from reviewed values"
+        assert {key: value for key, value in EM[mod].items() if not key.startswith("_")} == {k: v for k, v in vals.items() if not k.startswith("_")}, f"evidence_magnitudes.{mod} drifted from reviewed values"
 
 
 def test_runtime_constants_read_from_config_no_drift():
@@ -100,13 +81,15 @@ def test_runtime_constants_read_from_config_no_drift():
     assert generic_evidence.ENROLLMENT_QUALITY_BANDS == ((50.0, 0.6), (200.0, 0.8), (500.0, 1.0), (1000.0, 1.1))
     assert generic_evidence.TOP_N_WEIGHTS == (1.0, 0.7, 0.5, 0.3)
     assert generic_evidence.DEPTH_BONUS_BANDS == ((20.0, 0.25), (40.0, 0.5))
-    assert probiotic_evidence.CAP_STRAIN_CLINICAL == EM["probiotic"]["cap_strain_clinical"] == 12.0
-    assert probiotic_evidence.CAP_DOSE_APPLICABILITY == EM["probiotic"]["cap_dose_applicability"] == 8.0
-    assert probiotic_evidence.EFFECT_DIRECTION_MULTIPLIERS == EXPECTED["probiotic"]["effect_direction_multipliers"]
+    assert probiotic_evidence.CAP_EVIDENCE == 20.0
+    assert probiotic_evidence._EM["certainty_cap"] == 10.0
+    assert probiotic_evidence._EM["applicability_cap"] == 6.0
+    assert probiotic_evidence._EM["replication_cap"] == 4.0
+    assert "cap_dose_applicability" not in EM["probiotic"]
+    assert "dose_applicability_policy" not in EM["probiotic"]
     # Both lanes and both generic paths read the one config owner - no second copy anywhere.
     assert generic_evidence.EFFECT_DIRECTION_MULTIPLIERS == EXPECTED["generic"]["effect_direction_multipliers"]
     assert generic_evidence._EFFECT_FLOOR_MULTIPLIER is generic_evidence.EFFECT_DIRECTION_MULTIPLIERS
-    assert probiotic_evidence.NATIVE_STRAIN_EVIDENCE_POINTS == EXPECTED["probiotic"]["native_strain_evidence_points"]
-    assert probiotic_evidence.NATIVE_STRAIN_EVIDENCE_WEIGHTS == (1.0,)
+    assert probiotic_evidence.GENERIC_EFFECT_MULTIPLIERS is generic_evidence.EFFECT_DIRECTION_MULTIPLIERS
     assert multi_prenatal_evidence.CAP_EVIDENCE == multi_prenatal_evidence.GENERIC_CAP_EVIDENCE == 20.0
     assert omega_evidence.CAP_EVIDENCE == 20.0

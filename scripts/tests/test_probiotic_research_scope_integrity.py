@@ -29,7 +29,7 @@ def test_unknown_scope_does_not_display_an_affirmative_species_badge():
     assert result["research_match_status"] == "scope_unresolved"
 
 
-def test_unknown_scope_preserves_contextual_credit_without_inventing_specificity(monkeypatch):
+def test_unknown_scope_preserves_research_facts_without_inventing_specificity(monkeypatch):
     registry = deepcopy(studied_formulas._clinical_strain_registry())
     evidence = registry["STRAIN_LGG"]["cfu_thresholds"]["evidence"]
     evidence.pop("clinical_validation", None)
@@ -43,10 +43,9 @@ def test_unknown_scope_preserves_contextual_credit_without_inventing_specificity
     assert row["research_accepted"] is True
     assert row["evidence_scope"] == "scope_unresolved"
     assert row["dose_applicable"] is False
-    assert result["score"] == 9  # LGG is medium under the single-strain scale
+    assert result["score"] == 0  # Unresolved identity scope cannot establish a product-specific family.
     reason = _pillar_evidence(result, 20, "probiotic", config())["reason"]
-    assert "specificity" in reason
-    assert "incomplete" in reason
+    assert "does not establish probiotic benefit" in reason
     assert "species-level" not in reason
 
 

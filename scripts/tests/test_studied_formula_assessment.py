@@ -112,7 +112,7 @@ def test_unreviewed_formula_strains_do_not_earn_independent_strain_credit():
                "research_match_status": "pending_review", "evidence_scope": "formula_specific",
                "indication_primary": "digestive"}]}}
     result = score_evidence(product)
-    assert result["metadata"]["native_clinical_strain_evidence_score"] == 0
+    assert result["score"] == 0
     assert result["metadata"]["strain_indication_categories"] == []
 
 
@@ -149,3 +149,18 @@ def test_native_strain_review_does_not_mark_an_unrelated_active_evaluated():
                "clinical_support_level": "strong"}]}}
     assert _probiotic_native_evidence_state(product, owner) == "evaluated_supported"
     assert _probiotic_native_evidence_state(product, unrelated) is None
+
+
+def test_production_formula_evidence_is_amount_independent_and_dose_retains_assessment():
+    product = seed_label()
+    before = score_evidence(product)
+    product['activeIngredients'][-1]['quantity'] = 200
+    for m in product['probiotic_data']['afu_measurements']:
+        m['source_value'] /= 2
+        m['normalized_value'] /= 2
+    after = score_evidence(product)
+    assert before['score'] == after['score'] == 14.5
+    assert 'dose_applicability' not in after['components']
+    dose = score_dose(product)
+    assert dose['metadata']['studied_formula_assessment']['status'] != 'assessed_studied_formula'
+    assert 'evidence_assessment' in dose['metadata']

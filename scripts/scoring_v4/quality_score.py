@@ -808,6 +808,14 @@ def evidence_display_state(state: Optional[str]) -> str:
 
 
 _EVIDENCE_ZERO_REASON = {
+    "human_clinical_evidence_unestablished": (
+        "Our review of human clinical evidence is incomplete; the recorded nonclinical or "
+        "unresolved sources do not establish benefit. This is not a product-quality finding."
+    ),
+    "native_research_review_incomplete": (
+        "Our strain-specific human clinical review is incomplete; no conclusion about benefit "
+        "or product quality follows from this review gap."
+    ),
     "clinical_review_not_covered": (
         "Clinical evidence review pending. We haven't completed our evidence review for the "
         "ingredients on this label yet. This does not mean they lack clinical evidence."
@@ -873,62 +881,26 @@ def _pillar_evidence(dim: Dict[str, Any], weight: float, archetype: str,
     # recompute it.
     if metadata.get("primary_evidence_floor_decisive"):
         reason = "Evidence credit is driven by the primary ingredient, not a trial of the whole formula."
-    if (
-        (metadata.get("studied_formula_assessment") or {}).get("status") == "assessed_studied_formula"
-        and metadata.get("credit_owner") == "studied_formula"
-    ):
-        reason = "The complete formula has adult digestive-symptom trial evidence; independent confirmation is limited."
-    elif archetype == "probiotic":
-        assessed = (metadata.get("evidence_assessment") or {}).get("strain_assessments", [])
-        if metadata.get("evidence_result_state") == "evaluated_unfavorable":
-            reason = "Reviewed research is unfavorable for the assessed outcome; this is distinct from missing research."
-        elif metadata.get("evidence_result_state") == "evaluated_null":
-            reason = "The cited human trial did not show benefit for its primary outcome; other outcomes and studies require separate assessment."
-        elif metadata.get("evidence_result_state") == "human_clinical_evidence_unestablished":
-            reason = "Our review of human clinical evidence is incomplete; the recorded nonclinical or unresolved sources do not establish benefit. This is not a product-quality finding."
-        elif metadata.get("evidence_result_state") == "native_research_review_incomplete" and val <= 0:
-            reason = "Our strain-specific human clinical review is incomplete; no conclusion about benefit or product quality follows from this review gap."
-        elif metadata.get("evidence_result_state") in {"identity_material_unresolved", "clinical_review_not_covered"} and val <= 0:
-            reason = _EVIDENCE_ZERO_REASON[metadata["evidence_result_state"]]
-        # Credit ownership is decided by the probiotic Evidence module
-        # (metadata.credit_owner) and outranks strain applicability copy.
-        elif val > 0 and metadata.get("credit_owner") == "companion":
-            reason = ("Evidence credit comes from the formula's other ingredients; research on its "
-                      "probiotic strains is limited or not yet reviewed for this label.")
-        elif val > 0 and metadata.get("credit_owner") == "mixed":
-            strain_dose = (
-                "reviewed strain evidence matches the disclosed dose"
-                if any(row.get("dose_applicable") for row in assessed)
-                else "a matching studied strain dose is not established for this label"
-            )
-            reason = ("Evidence credit combines research on the named strains with research on the "
-                      f"formula's other ingredients; {strain_dose}.")
-        elif any(row.get("dose_applicable") for row in assessed):
-            reason = "Reviewed strain evidence matches the disclosed dose and label context; benefits remain outcome-specific."
-        elif val > 0 and any(row.get("research_accepted") for row in assessed):
-            credited = metadata.get("native_clinical_strain_evidence_rows") or []
-            if credited and any(row.get("evidence_scope") == "scope_unresolved" for row in credited):
-                reason = "Research is recorded, but our review of its specificity and dose applicability is incomplete; this is not a product-quality finding."
-            elif credited and all(row.get("evidence_scope") == "species_general" for row in credited):
-                reason = "Our registry currently classifies this as species-level research; applicability to the exact studied strain and dose is not established for this label."
-            else:
-                reason = "Named strains have reviewed research; a matching studied dose is not established for this label."
-        else:
-            reason = "Our reviewed evidence does not establish probiotic benefit for this formula and dose; this is not a product-quality finding."
-        if (
-            metadata.get("evidence_result_state") in {
-                "human_clinical_evidence_unestablished", "native_research_review_incomplete",
-                "applicability_unestablished"}
-            and assessed and all((row.get("cfu_per_day") or 0) <= 0 for row in assessed)
-        ):
-            # A separate limit whatever the review state: the label gives no
-            # per-strain amounts, so nothing can be matched to a studied dose.
-            reason += (" Individual strain amounts are also not disclosed, so no strain can be "
-                       "matched to a studied dose.")
-    if val == 0 and archetype != "probiotic":
+    if "evidence_family_certainty" in (dim.get("components") or {}):
+        parts = dim["components"]
+        reason = (
+            f"Research certainty {parts.get('evidence_family_certainty', 0):g}/10; "
+            f"product applicability {parts.get('product_applicability', 0):g}/6; "
+            f"independent confirmation {parts.get('independent_replication_consistency', parts.get('independent_replication', 0)):g}/4. "
+            "Findings are specific to the assessed purpose and population."
+        )
+        if metadata.get("notes"):
+            reason += " " + metadata["notes"]
+    if val == 0:
         state = metadata.get("evidence_result_state") or (
             metadata.get("generic_evidence_metadata") or {}).get("evidence_result_state")
         zero_copy = _EVIDENCE_ZERO_REASON.get(state)
+        if archetype == "probiotic" and state == "evaluated_unfavorable":
+            zero_copy = "Reviewed research is unfavorable for the assessed outcome; this is distinct from missing research."
+        if archetype == "probiotic" and state == "applicability_unestablished":
+            zero_copy = ("Our reviewed evidence does not establish probiotic benefit for this "
+                         "product's assessed preparation, purpose and population; this is not "
+                         "a product-quality finding.")
         if zero_copy is None:
             zero_copy = _EVIDENCE_ZERO_REASON.get(
                 _EVIDENCE_ZERO_CLASS_FALLBACK.get(

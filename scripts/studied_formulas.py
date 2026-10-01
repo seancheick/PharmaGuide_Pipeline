@@ -44,8 +44,12 @@ def _failure(reason):
     return {"status": "unresolved_reference", "reason_code": reason}
 
 
-def assess_studied_formula(product: Mapping) -> dict:
-    """Prove exact species/strain set, native potency, prebiotic and daily dose."""
+def assess_studied_formula(product: Mapping, *, assess_amount: bool = True) -> dict:
+    """Prove the reviewed formula; Dose additionally validates label exposure.
+
+    Both uses share identity, preparation and source-lineage safeguards.
+    Evidence never projects registry quantities into a label.
+    """
     brand = _key(product.get("brandName") or product.get("brand_name"))
     name = _key(product.get("fullName") or product.get("product_name"))
     for entry in reviewed_entries().values():
@@ -53,17 +57,25 @@ def assess_studied_formula(product: Mapping) -> dict:
         if not isinstance(contract, dict):
             continue
         if brand == _key(contract["brand"]) and name == _key(contract["product_name"]):
-            return _assess(product, entry, contract)
+            return _assess(product, entry, contract, assess_amount=assess_amount)
     return _failure("no_reviewed_formula_reference")
 
 
-def _assess(product, entry, contract):
+def assess_studied_formula_identity(product: Mapping) -> dict:
+    """Prove identity through the existing formula owner without dose judgment."""
+    return assess_studied_formula(product, assess_amount=False)
+
+
+def _assess(product, entry, contract, *, assess_amount=True):
     basis = product.get("serving_basis") or {}
     if not isinstance(basis, Mapping):
-        return _failure("formula_daily_serving_mismatch")
+        if assess_amount:
+            return _failure("formula_daily_serving_mismatch")
+        basis = {}
     lower, upper, _ = resolve_daily_serving_range(dict(product))
-    if (_key(product.get("form_factor_canonical")) != _key(contract["dosage_form"])
-            or _key(basis.get("basis_unit")) not in {"capsule", "capsules"}
+    if _key(product.get("form_factor_canonical")) != _key(contract["dosage_form"]):
+        return _failure("formula_delivery_mismatch")
+    if assess_amount and (_key(basis.get("basis_unit")) not in {"capsule", "capsules"}
             or _number(basis.get("basis_count")) != contract["capsules_per_serving"]
             or not basis.get("servings_per_day_source")
             or lower != contract["daily_servings"] or upper != lower):
@@ -109,33 +121,35 @@ def _assess(product, entry, contract):
             or _key(contract["prebiotic_brand_token"]) not in _key(prebiotic.get("name"))
             or "indianpomegranate" not in _key(text) or "fruit" not in _key(text)
             or not re.search(r"(?:greater\s+than|>)\s*40\s*%\s*polyphenol", text, re.I)
-            or _number(prebiotic.get("quantity")) != contract["prebiotic_mass_mg"]
-            or _key(prebiotic.get("unit")) != "mg"):
+            or (assess_amount and (_number(prebiotic.get("quantity")) != contract["prebiotic_mass_mg"]
+                                   or _key(prebiotic.get("unit")) != "mg"))):
         return _failure("formula_prebiotic_mismatch")
-    pdata = product.get("probiotic_data") or {}
-    if not isinstance(pdata, Mapping):
-        return _failure("formula_afu_ownership_mismatch")
-    measures = pdata.get("afu_measurements") or []
     header_refs = {r["raw_source_path"] for r in headers}
-    if (not isinstance(measures, list) or len(measures) != len(headers)
-            or any(not isinstance(m, dict) for m in measures)
-            or {m.get("source_row_ref") for m in measures} != header_refs):
-        return _failure("formula_afu_ownership_mismatch")
-    total = 0.0
-    for m in measures:
-        value = _number(m.get("normalized_value"))
-        source = _number(m.get("source_value"))
-        scale = {"afu": 1, "millionafu": 1e6, "billionafu": 1e9}.get(_key(m.get("source_unit")))
-        if (m.get("normalized_unit") != "AFU" or value is None or value <= 0
-                or source is None or scale is None or not math.isclose(source * scale, value, rel_tol=1e-12)
-                or any(m.get(k) is not None for k in ("serving_size_order", "serving_size_quantity", "serving_size_unit"))):
-            return _failure("formula_afu_measurement_mismatch")
-        total += value
-        if not math.isclose(value * lower, group_doses[m["source_row_ref"]], rel_tol=1e-12):
-            return _failure("formula_blend_afu_mismatch")
-    if not math.isclose(total * lower, contract["daily_afu"], rel_tol=1e-12):
-        return _failure("formula_afu_dose_mismatch")
-    return {"status": "assessed_studied_formula", "reason_code": "reviewed_commercial_formula_and_reported_total_dose",
+    if assess_amount:
+        pdata = product.get("probiotic_data") or {}
+        if not isinstance(pdata, Mapping):
+            return _failure("formula_afu_ownership_mismatch")
+        measures = pdata.get("afu_measurements") or []
+        header_refs = {r["raw_source_path"] for r in headers}
+        if (not isinstance(measures, list) or len(measures) != len(headers)
+                or any(not isinstance(m, dict) for m in measures)
+                or {m.get("source_row_ref") for m in measures} != header_refs):
+            return _failure("formula_afu_ownership_mismatch")
+        total = 0.0
+        for m in measures:
+            value = _number(m.get("normalized_value"))
+            source = _number(m.get("source_value"))
+            scale = {"afu": 1, "millionafu": 1e6, "billionafu": 1e9}.get(_key(m.get("source_unit")))
+            if (m.get("normalized_unit") != "AFU" or value is None or value <= 0
+                    or source is None or scale is None or not math.isclose(source * scale, value, rel_tol=1e-12)
+                    or any(m.get(k) is not None for k in ("serving_size_order", "serving_size_quantity", "serving_size_unit"))):
+                return _failure("formula_afu_measurement_mismatch")
+            total += value
+            if not math.isclose(value * lower, group_doses[m["source_row_ref"]], rel_tol=1e-12):
+                return _failure("formula_blend_afu_mismatch")
+        if not math.isclose(total * lower, contract["daily_afu"], rel_tol=1e-12):
+            return _failure("formula_afu_dose_mismatch")
+    result = {"status": "assessed_studied_formula", "reason_code": "reviewed_commercial_formula_and_reported_total_dose",
             "evidence_id": entry["id"], "scope": "formula_specific",
             "daily_dose": {"value": contract["daily_afu"], "unit": "AFU"},
             "afu_source_row_refs": sorted(header_refs), "strain_source_row_refs": sorted(strain_refs),
@@ -143,10 +157,13 @@ def _assess(product, entry, contract):
             "source_pmids": contract["source_pmids"], "supported_outcomes": contract["supported_outcomes"],
             "studied_population": contract["studied_population"], "limitations": entry["notes"],
             "delivery_basis": contract["delivery_basis"], "reviewed_at": contract["reviewed_at"]}
+    if not assess_amount:
+        result.pop("daily_dose")
+        result["reason_code"] = "reviewed_commercial_formula_identity_and_preparation"
+    return result
 
 
-def formula_clinical_match(product: Mapping) -> dict | None:
-    assessment = assess_studied_formula(product)
+def _formula_clinical_match_from_assessment(assessment: Mapping) -> dict | None:
     if assessment["status"] != "assessed_studied_formula":
         return None
     entry = reviewed_entries()[assessment["evidence_id"]]
@@ -154,6 +171,16 @@ def formula_clinical_match(product: Mapping) -> dict | None:
                                    "study_type", "effect_direction", "total_enrollment", "references_structured")},
             "evidence_origin": "verified_formula_contract", "applicability_assessment": assessment,
             "matched_source_row_refs": assessment["strain_source_row_refs"] + assessment["afu_source_row_refs"] + [assessment["prebiotic_source_row_ref"]]}
+
+
+def formula_clinical_match(product: Mapping) -> dict | None:
+    """Return the dose-qualified match used by existing non-Evidence consumers."""
+    return _formula_clinical_match_from_assessment(assess_studied_formula(product))
+
+
+def formula_identity_clinical_match(product: Mapping) -> dict | None:
+    """Return amount-independent formula Evidence through the same owner."""
+    return _formula_clinical_match_from_assessment(assess_studied_formula_identity(product))
 
 
 @lru_cache(maxsize=1)
@@ -1168,7 +1195,7 @@ def strain_assessments_for_match(entry: Mapping, assessment: Mapping) -> list[di
     registry = _clinical_strain_registry()
     return [row for row in assessment["strain_assessments"]
             if row["research_accepted"] and row["status"] not in {
-                "strain_context_mismatch", "strain_context_unresolved", "strain_dose_incompatible"}
+                "strain_context_mismatch", "strain_context_unresolved"}
             and (entry.get("id") == row["clinical_id"] or any(
                 clinical_strain_identity_matches(entry.get(field), registry[row["clinical_id"]])
                 for field in ("standard_name", "ingredient")))]

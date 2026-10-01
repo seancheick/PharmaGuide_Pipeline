@@ -134,8 +134,9 @@ def test_unproven_native_rows_cannot_award_evidence_or_indication_credit(
 
     assert independent_clinical_strains(product) == []
     evidence = score_evidence(product)
-    assert evidence["metadata"]["native_clinical_strain_evidence_score"] == 0
-    assert evidence["components"]["dose_applicability"] == 0
+    assert evidence["score"] == 0
+    assert "dose_applicability" not in evidence["components"]
+    assert evidence["components"]["product_applicability"] == 0
 
 
 @pytest.mark.parametrize("status", [None, "exact_strain", "species_level"])
@@ -150,9 +151,10 @@ def test_reviewed_lgg_registry_identity_retains_native_support(status: str | Non
     product = _owned_product(include_source_ref=True, **fields)
 
     assert independent_clinical_strains(product) == product["probiotic_data"]["clinical_strains"]
-    # Registry support wins over the row's claim: LGG is medium (moderate, 9 points)
-    # since Dr Pham's 2026-09-22 review graded ESPGHAN's evidence moderate quality.
-    assert score_evidence(product)["metadata"]["native_clinical_strain_evidence_score"] == 9
+    # Accepted identity and review are facts, not automatic efficacy points.
+    assessed = studied_formulas.assess_probiotic_evidence(product)["strain_assessments"][0]
+    assert assessed["research_accepted"] is True
+    assert assessed["support_level"] == "moderate"
 
 
 @pytest.mark.parametrize(
@@ -310,11 +312,17 @@ def test_verified_corpus_spelling_variants_keep_exact_native_identity(
     null_direction = {"STRAIN_LACTIS_HN019", "STRAIN_PARACASEI_LPC37", "STRAIN_ACIDOPHILUS_NCFM"}
     assert independent_clinical_strains(product) == (
         [] if clinical_id in held else product["probiotic_data"]["clinical_strains"])
-    score = score_evidence(product)["metadata"]["native_clinical_strain_evidence_score"]
-    if clinical_id in held | nonhuman | null_direction | reviewed_not_effective:
-        assert score == 0
-    else:
-        assert score > 0
+    # Alias resolution must preserve the same Evidence as the canonical label
+    # under the same purpose/population, without asserting universal efficacy.
+    canonical = copy.deepcopy(product)
+    canonical_name = reference["standard_name"]
+    canonical["activeIngredients"][0]["name"] = canonical_name
+    canonical["probiotic_data"]["clinical_strains"][0]["strain"] = canonical_name
+    canonical["probiotic_data"]["clinical_strains"][0]["label_name"] = canonical_name
+    canonical["probiotic_data"]["probiotic_blends"][0]["name"] = canonical_name
+    canonical["probiotic_data"]["probiotic_blends"][0]["strains"] = [canonical_name]
+    assert score_evidence(product)["components"] == score_evidence(canonical)["components"]
+
 
 
 @pytest.mark.parametrize(
@@ -391,7 +399,7 @@ def test_pending_strain_keeps_label_potency_without_clinical_adequacy() -> None:
     dose = score_dose(product)
     assert dose["components"]["per_strain_cfu_disclosure"] == 10
     assert dose["components"]["cfu_adequacy"] == 10
-    assert score_evidence(product)["components"]["dose_applicability"] == 0
+    assert "dose_applicability" not in score_evidence(product)["components"]
 
 
 def test_pending_strain_cannot_supply_an_aggregate_clinical_dose_proxy() -> None:

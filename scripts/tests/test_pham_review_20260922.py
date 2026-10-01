@@ -201,18 +201,28 @@ def test_every_strain_evidence_summary_states_its_direction():
     assert missing == []
 
 
-def test_a_summary_without_a_direction_earns_no_evidence_credit(monkeypatch):
+def test_a_summary_without_a_direction_cannot_supply_or_erase_primary_family_credit(monkeypatch):
     from scoring_v4.modules.probiotic_evidence import score_evidence
     from test_probiotic_applicability_rubric import strain_product
+    import studied_formulas
 
     registry = deepcopy(_clinical_strain_registry())
-    assert score_evidence(strain_product())["metadata"]["native_clinical_strain_evidence_score"] > 0
-    registry["STRAIN_LGG"]["cfu_thresholds"]["evidence"].pop("effect_direction")
-    import studied_formulas
+    product = strain_product(clinical_id="STRAIN_LACTIS_BB12",
+                             name="Bifidobacterium lactis BB-12")
+    product["product_name"] = "Infant Colic Digestive probiotic"
+    baseline = score_evidence(product)
+    assert baseline["score"] == 18
+    registry["STRAIN_LACTIS_BB12"]["cfu_thresholds"]["evidence"] = {
+        "type": "clinical_guideline", "evidence_strength": "strong",
+        "clinical_validation": {"q1_strain_explicit": "YES", "q3_human_clinical": "YES"},
+    }
     monkeypatch.setattr(studied_formulas, "_clinical_strain_registry", lambda: registry)
-    result = score_evidence(strain_product())
-    assert result["metadata"]["native_clinical_strain_evidence_score"] == 0
-    assert result["metadata"]["native_clinical_strain_evidence_rows"][0]["effect_multiplier"] == 0.0
+    result = score_evidence(product)
+    # These points belong to independently reviewed primary trial outcomes,
+    # not the aggregate summary, whose missing direction grants no support.
+    assert result["components"] == baseline["components"]
+    from enrich_supplements_v3 import _derive_clinical_support_level
+    assert _derive_clinical_support_level(registry["STRAIN_LACTIS_BB12"]) is None
 
 
 def test_an_approved_context_outcome_without_a_direction_never_credits():

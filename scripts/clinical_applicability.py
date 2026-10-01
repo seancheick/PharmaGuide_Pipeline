@@ -245,7 +245,7 @@ def _linked_rows(product: Mapping, entry: Mapping, *, source_only: bool = False,
     return discriminated if len(discriminated) == 1 else []
 
 
-def assess_clinical_applicability(product: Mapping, entry: Mapping) -> dict:
+def assess_clinical_applicability(product: Mapping, entry: Mapping, *, assess_amount: bool = True) -> dict:
     reference = reviewed_entries().get(str(entry.get("id") or entry.get("study_id")), {})
     policy = reference["applicability"] if "applicability" in reference else entry.get("applicability")
     if policy is None:
@@ -295,7 +295,7 @@ def assess_clinical_applicability(product: Mapping, entry: Mapping) -> dict:
         amount = _number(row.get("quantity"))
         unit_scale = _mass_unit_scale(row.get("unit_normalized") or row.get("unit"))
         target_scale = _mass_unit_scale(policy.get("dose_unit"))
-        if target_scale is not None:
+        if assess_amount and target_scale is not None:
             if amount is None or amount <= 0 or unit_scale is None:
                 reasons.append("clinical_dose_unresolved")
                 continue
@@ -315,10 +315,10 @@ def assess_clinical_applicability(product: Mapping, entry: Mapping) -> dict:
     return {"status": "not_applicable", "reason_code": reasons[0] if reasons else "clinical_source_row_unresolved"}
 
 
-def filter_clinical_matches(product: Mapping, matches: list[dict]) -> tuple[list[dict], list[dict]]:
+def filter_clinical_matches(product: Mapping, matches: list[dict], *, assess_amount: bool = True) -> tuple[list[dict], list[dict]]:
     accepted, rejected = [], []
     for entry in matches:
-        decision = assess_clinical_applicability(product, entry)
+        decision = assess_clinical_applicability(product, entry, assess_amount=assess_amount)
         if decision["status"] in {"applicable", "not_curated"}:
             # Preserve legacy shape for unreviewed records; never imply that a
             # missing applicability policy is a completed scientific review.

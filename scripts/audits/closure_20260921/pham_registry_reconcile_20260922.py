@@ -21,35 +21,36 @@ from probiotic_measurements import (derived_context_evidence, effective_strain_e
                                     identity_review_accepted, strain_literature_review_concluded,
                                     clinical_strain_research_scope, context_accepted_for_scoring)
 from studied_formulas import valid_native_study_context
+from scoring_v4.modules.probiotic_evidence import _single_native_family_certainty, _EM
 
 from enrich_supplements_v3 import (_PROBIOTIC_RESULT_STATED, _derive_clinical_support_level,
                                     _probiotic_research_presentation)
 
 DATA = json.loads((ROOT / "scripts/data/clinically_relevant_strains.json").read_text())
 REG = {e["id"]: e for e in DATA["clinically_relevant_strains"]}
-CFG = json.loads((ROOT / "scripts/scoring_v4/config/quality_score.json").read_text())["evidence_magnitudes"]["probiotic"]
-POINTS, MULT = CFG["native_strain_evidence_points"], CFG["effect_direction_multipliers"]
 POSITIVE = {"positive_strong", "positive_weak"}
 
 
 # Dr Pham packet: decision, expected sign-off, allowed effective directions,
+# Aggregate null directions stay pinned below, but do not erase a separately
+# qualifying family under the approved strongest-family/conflict policy.
 # PMIDs that must be present, citations she withdrew/replaced for THIS strain.
 PACKET = {
     "STRAIN_LACTIS_BI07": dict(dec="1a A: sign off; single-strain = acute lactose-challenge surrogate 36149331; 21436726 combination only",
-                               signoff=True, dirs={"unresolved"}, need={"36149331"}, combo={"21436726"}, max_pts=0),
+                               signoff=True, dirs={"unresolved"}, need={"36149331"}, combo={"21436726"}, no_positive_exact_family=True),
     "STRAIN_LACTIS_BB12": dict(dec="1b A: sign off; human evidence reviewed, mixed/limited",
                                signoff=True, dirs={"mixed", "null", "unresolved"}, need={"26382580", "39271904"}),
     "STRAIN_ACIDOPHILUS_LA5": dict(dec="withdraw single-strain; 1c A: 30439760 + 39102225 literal combinations",
-                                   signoff=False, terminal=True, withdrawn={"34405373"}, combo={"30439760", "39102225"}, max_pts=0),
+                                   signoff=False, terminal=True, withdrawn={"34405373"}, combo={"30439760", "39102225"}, no_positive_exact_family=True),
     "STRAIN_LGG": dict(dec="confirm; medium (moderate QoE)", signoff=True, strength="medium", dirs=POSITIVE),
     "STRAIN_SACCHAROMYCES": dict(dec="confirm; medium (moderate QoE)", signoff=True, strength="medium", dirs=POSITIVE),
-    "STRAIN_CASEI_SHIROTA": dict(dec="confirm; null, no efficacy credit", signoff=True, dirs={"null"}, max_pts=0),
+    "STRAIN_CASEI_SHIROTA": dict(dec="confirm; null, no efficacy credit", signoff=True, dirs={"null"}),
     "STRAIN_COAGULANS_MTCC5856": dict(dec="confirm", signoff=True),
     "STRAIN_REUTERI_DSM17938": dict(dec="confirm", signoff=True),
     "STRAIN_K12": dict(dec="confirm", signoff=True),
-    "STRAIN_LACTIS_HN019": dict(dec="confirm; null, no efficacy credit", signoff=True, dirs={"null"}, max_pts=0),
+    "STRAIN_LACTIS_HN019": dict(dec="confirm; null, no efficacy credit", signoff=True, dirs={"null"}),
     "STRAIN_PLANTARUM_299V": dict(dec="confirm; medium (n = 40)", signoff=True, strength="medium"),
-    "STRAIN_INFANTIS_35624": dict(dec="confirm; null, no efficacy credit", signoff=True, dirs={"null"}, max_pts=0),
+    "STRAIN_INFANTIS_35624": dict(dec="confirm; null, no efficacy credit", signoff=True, dirs={"null"}),
     "STRAIN_LONGUM_BB536": dict(dec="confirm", signoff=True),
     "STRAIN_RHAMNOSUS_HN001": dict(dec="confirm; medium (mood outcome secondary)", signoff=True, strength="medium"),
     "STRAIN_RHAMNOSUS_SP1": dict(dec="confirm", signoff=True),
@@ -59,12 +60,12 @@ PACKET = {
     "STRAIN_REUTERI_ATCC6475": dict(dec="replace 36261538 (responder secondary) -> 29926979", signoff=True, need={"29926979"}, withdrawn={"36261538"}),
     "STRAIN_CRISPATUS_CTV05": dict(dec="replace 35659905 -> 32402161 (35659905 supportive only)", signoff=True, need={"32402161"}, withdrawn_primary={"35659905"}),
     "STRAIN_PLANTARUM_HEAL9": dict(dec="withdraw 31734734 as single-strain (HEAL9 + 8700:2)", signoff=False, withdrawn={"31734734"}, combo={"31734734"}),
-    "STRAIN_RHAMNOSUS_GR1": dict(dec="withdraw 12628548 as single-strain (GR-1 + RC-14)", signoff=False, terminal=True, withdrawn={"12628548"}, combo={"12628548"}, max_pts=0),
-    "STRAIN_FERMENTUM_RC14": dict(dec="withdraw 12628548 as single-strain (GR-1 + RC-14)", signoff=False, terminal=True, withdrawn={"12628548"}, max_pts=0),
-    "STRAIN_HELVETICUS_R0052": dict(dec="withdraw 20974015 as single-strain (R0052 + R0175)", signoff=False, terminal=True, withdrawn={"20974015"}, combo={"20974015"}, max_pts=0),
-    "STRAIN_LONGUM_R0175": dict(dec="withdraw 20974015 as single-strain (R0052 + R0175)", signoff=False, terminal=True, withdrawn={"20974015"}, max_pts=0),
+    "STRAIN_RHAMNOSUS_GR1": dict(dec="withdraw 12628548 as single-strain (GR-1 + RC-14)", signoff=False, terminal=True, withdrawn={"12628548"}, combo={"12628548"}, no_positive_exact_family=True),
+    "STRAIN_FERMENTUM_RC14": dict(dec="withdraw 12628548 as single-strain (GR-1 + RC-14)", signoff=False, terminal=True, withdrawn={"12628548"}, no_positive_exact_family=True),
+    "STRAIN_HELVETICUS_R0052": dict(dec="withdraw 20974015 as single-strain (R0052 + R0175)", signoff=False, terminal=True, withdrawn={"20974015"}, combo={"20974015"}, no_positive_exact_family=True),
+    "STRAIN_LONGUM_R0175": dict(dec="withdraw 20974015 as single-strain (R0052 + R0175)", signoff=False, terminal=True, withdrawn={"20974015"}, no_positive_exact_family=True),
     "STRAIN_SUBTILIS_CU1": dict(dec="section 3: proceed; primary null, respiratory finding post hoc n = 44; 27825987 safety data"),
-    "STRAIN_NISSLE_1917": dict(dec="15479682 active-comparator equivalence, medium, no superiority credit", signoff=True, need={"15479682"}, dirs={"unresolved"}, max_pts=0),
+    "STRAIN_NISSLE_1917": dict(dec="15479682 active-comparator equivalence, medium, no superiority credit", signoff=True, need={"15479682"}, dirs={"unresolved"}, no_positive_exact_family=True),
 }
 
 FAILS, INFOS = [], []
@@ -87,14 +88,21 @@ def scoring_pmids(e):
     return out
 
 
-def points_possible(e):
-    ev = effective_strain_evidence(e) or {}
-    scope = clinical_strain_research_scope(e)
-    if not scope.get("human_evidence") or not (identity_review_accepted(e)):
-        return 0.0
-    support = ev.get("clinical_support_level") or ev.get("evidence_strength") or "weak"
-    support = {"strong": "high", "medium": "moderate"}.get(support, support)
-    return round(POINTS.get(support, 0.0) * MULT.get(str(ev.get("effect_direction") or "").replace(" ", "_"), 0.0), 2)
+def positive_exact_families(e):
+    """Report eligible positive families through the production Evidence seam.
+
+    This registry audit has no product label and cannot assign a product score.
+    It can prove that withdrawn/null/combination-only records supply no eligible
+    positive exact-strain family, without recreating the retired support scale.
+    """
+    if not identity_review_accepted(e):
+        return set()
+    return {c.get("trial_family") or c["context_id"]
+            for c in e.get("study_contexts") or []
+            if c.get("identity_scope") == "exact_strain"
+            and context_accepted_for_scoring(c)
+            and valid_native_study_context(c, e["id"])
+            and _single_native_family_certainty(c, _EM) > 0}
 
 
 def disposition(e):
@@ -114,7 +122,7 @@ for sid, exp in PACKET.items():
     single = [c for c in ctxs if c["identity_scope"] == "exact_strain"]
     combos = [c for c in ctxs if c["identity_scope"] == "combination"]
     rs, ms, direction = disposition(e)
-    pts = points_possible(e)
+    positive_families = positive_exact_families(e)
     spm = scoring_pmids(e)
     old = [x for x in [(ev.get("previous_citation") or {}).get("pmid"),
                        ((e.get("literature_review") or {}).get("withdrawn_citation") or {}).get("pmid")] if x]
@@ -126,7 +134,7 @@ for sid, exp in PACKET.items():
         id=sid, name=e["standard_name"], ctx_review=sorted({c["review_status"] for c in ctxs}) or ["-"],
         decision=exp["dec"], old=old, final=sorted(spm), single=len(single), combination=len(combos),
         primary_kinds={f"{h}:{k}": n for (h, k), n in primaries.items()}, direction=direction, strength=eff.get("evidence_strength"),
-        eligible=sum(1 for c in ctxs if context_accepted_for_scoring(c)), points=pts,
+        eligible=sum(1 for c in ctxs if context_accepted_for_scoring(c)), positive_exact_families=sorted(positive_families),
         signoff=t.get("dr_pham_signoff"), disposition=f"{rs}/{ms}", support=_derive_clinical_support_level(e),
         indication=t.get("indication_primary")))
 
@@ -138,8 +146,8 @@ for sid, exp in PACKET.items():
         fail(sid, "direction", f"expected one of {sorted(exp['dirs'])}, got {direction}")
     if "strength" in exp and eff.get("evidence_strength") != exp["strength"]:
         fail(sid, "strength", f"expected {exp['strength']}, got {eff.get('evidence_strength')}")
-    if "max_pts" in exp and pts > exp["max_pts"]:
-        fail(sid, "points", f"expected <= {exp['max_pts']}, got {pts}")
+    if exp.get("no_positive_exact_family") and positive_families:
+        fail(sid, "positive_exact_family", sorted(positive_families))
     all_pmids = {p for c in ctxs for p in c["source_pmids"]} | spm
     for p in exp.get("need", ()):
         if p not in all_pmids:
@@ -311,9 +319,9 @@ for sid, e in REG.items():
         if p in str(e.get("notable_studies") or "") and "withdraw" not in str(e.get("notable_studies")).lower():
             fail(sid, "withdrawn_citation_in_notable_studies", p)
 
-print(f"{'strain':28} {'dir':15} {'str':7} {'pts':>5} {'sign':5} {'1x/cmb':6} disposition / support / indication")
+print(f"{'strain':28} {'dir':15} {'str':7} {'pos':>5} {'sign':5} {'1x/cmb':6} disposition / support / indication")
 for r in rows:
-    print(f"{r['id'][7:35]:28} {str(r['direction']):15} {str(r['strength']):7} {r['points']:>5} {str(r['signoff']):5} "
+    print(f"{r['id'][7:35]:28} {str(r['direction']):15} {str(r['strength']):7} {len(r['positive_exact_families']):>5} {str(r['signoff']):5} "
           f"{r['single']}/{r['combination']:<4} {r['disposition']} / {r['support']} / {r['indication']}")
     print(f"{'':28} old={r['old']} final={r['final']} eligible={r['eligible']} ctx_review={r['ctx_review']} kinds={r['primary_kinds']}")
 if "--out" in sys.argv:

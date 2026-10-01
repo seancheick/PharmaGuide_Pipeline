@@ -172,7 +172,9 @@ def test_review_gap_and_undisclosed_strain_dose_are_both_named(monkeypatch):
     assert evidence["score"] == 0
     assert evidence["metadata"]["evidence_result_state"] == "native_research_review_incomplete"
     reason = _pillar_evidence(evidence, 20, "probiotic", _config())["reason"]
-    assert reason.endswith(_UNDISCLOSED)
+    assert "studied dose" not in reason
+    from scoring_v4.modules.probiotic_dose import score_dose
+    assert score_dose(product)["metadata"]["per_strain_cfu_disclosed_count"] == 0
     assert "review is incomplete" in reason
 
 
@@ -190,7 +192,9 @@ def test_finished_review_still_names_undisclosed_strain_amounts():
     evidence = probiotic_evidence(product)
     assert evidence["metadata"]["evidence_result_state"] == "applicability_unestablished"
     reason = _pillar_evidence(evidence, 20, "probiotic", _config())["reason"]
-    assert reason.endswith(_UNDISCLOSED)
+    assert "studied dose" not in reason
+    from scoring_v4.modules.probiotic_dose import score_dose
+    assert score_dose(product)["metadata"]["per_strain_cfu_disclosed_count"] == 0
     assert "review is incomplete" not in reason
 
 

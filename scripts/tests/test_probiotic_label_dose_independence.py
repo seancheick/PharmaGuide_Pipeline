@@ -22,8 +22,10 @@ def owned_label(dose=1e10):
 
 @pytest.mark.parametrize("legacy", [False, True])
 def test_nonlive_source_invalidates_stale_live_clinical_and_cfu_projection(legacy):
-    product = strain_product(dose=1e10)
-    assert score_evidence(product)["score"] > 0
+    product = strain_product(dose=1e10, clinical_id="STRAIN_LACTIS_BB12",
+                             name="Bifidobacterium lactis BB-12")
+    product["product_name"] = "Infant Colic Digestive probiotic"
+    assert score_evidence(product)["score"] == 18
     assert len(studied_formulas.measured_native_strain_doses(product)) == 1
     if legacy:
         product["activeIngredients"][0].pop("raw_source_path")
@@ -74,8 +76,8 @@ def test_citation_review_does_not_change_label_dose_or_formulation(monkeypatch, 
         assert old["score"] == new["score"]
         assert old["components"] == new["components"]
     if change == "hold":
-        rows = score_evidence(product)["metadata"]["native_clinical_strain_evidence_rows"]
-        assert not [r for r in rows if r["clinical_id"] == "STRAIN_LGG" and r["contribution"] > 0]
+        rows = score_evidence(product)["metadata"]["evidence_assessment"]["strain_assessments"]
+        assert all(r["research_accepted"] is False for r in rows if r["clinical_id"] == "STRAIN_LGG")
 
 
 def test_aggregate_blend_keeps_presence_credit_without_inventing_strain_allocations():

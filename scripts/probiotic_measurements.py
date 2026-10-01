@@ -541,7 +541,7 @@ def _probiotic_evidence_policy() -> dict:
     from scoring_v4.quality_score_config import block as config_block
     block = config_block("evidence_magnitudes", "probiotic")["probiotic"]
     return {"review_policy": block.get("native_context_review_policy", "clinician_only"),
-            "dose": dict(block.get("dose_applicability_policy") or {})}
+            "dose": dict(config_block("dose_magnitudes", "probiotic")["probiotic"].get("dose_applicability_policy") or {})}
 
 
 def native_context_review_policy() -> str:

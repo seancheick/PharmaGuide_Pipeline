@@ -656,6 +656,7 @@ def resolved_clinical_matches(
     product: Dict[str, Any],
     *,
     owner_scoped: bool = False,
+    assess_amount: bool = True,
 ) -> tuple[List[Dict[str, Any]], List[Dict[str, Any]]]:
     """Return the exact reviewed evidence rows consumed by v4 scoring.
 
@@ -684,9 +685,10 @@ def resolved_clinical_matches(
             if _entry_id(entry) not in recovered_ids
         ]
         matches.extend(recovered_matches)
-    matches, _ = filter_clinical_matches(product, matches)
-    from studied_formulas import formula_clinical_match
-    formula = formula_clinical_match(product)
+    matches, _ = filter_clinical_matches(product, matches, assess_amount=assess_amount)
+    from studied_formulas import formula_clinical_match, formula_identity_clinical_match
+    formula = (formula_clinical_match(product) if assess_amount
+               else formula_identity_clinical_match(product))
     if formula:
         matches = [entry for entry in matches if _entry_id(entry) != formula["id"]]
         matches.append(formula)
