@@ -1,6 +1,6 @@
 # Probiotic Evidence certainty parity — October 1, 2026
 
-Status: approved architecture measured and independently reviewed; production integration unfinished. These results supersede the historical September30 counts below. No push or release.
+Status: Policy APPROVED / Measurement COMPLETE / Production validated for local integration / Release NOT AUTHORIZED. These results supersede the historical September30 counts below. No push or release.
 
 ## Owner Check
 
@@ -46,9 +46,13 @@ Seed's8.5 certainty belongs to its exact formula's recorded positive-weak RCT. T
 - Frozen manifest:cbe041440eb1eb565edf2564298e106adfc35175f413d1aab26782447a1e8286.
 - Current focused measurement suite:50 passed. Prior full-fast checkpoint at a5ab7029:17885 passed,168 skipped,1 existing Ravage cinnamon xfail. Current full-fast checkpoint at145ff18c:17886 passed,168 skipped,1 existing Ravage cinnamon xfail (536.28 seconds).
 - Fresh reviewer reproduced Seed, all four BB12 anchors, every crossing, all controls and preparation rejection. No measurement blocker remains.
-- Production draft relocates configuration, removes experimental/legacy scoring paths, shares `_assess` without synthesizing label quantities, and exposes the existing trial-comparison object in Dose metadata. Three new production-boundary regressions pass: Seed amount invariance plus Dose retention, reviewed-null result state and inactivated BB12 rejection.
-- Production validation is unfinished: the initial focused migration run had106 failures,1653 passes and12 skips. Many assertions address retired12/8 components, diagnostic score fields and dose-based copy. Review also found actual implementation gaps; those are fixed in the draft. Existing regressions must be migrated without losing identity, review, preparation or outcome safeguards; the complete suite must pass before integration.
-- Next: finish that migration, replay the production implementation against this accepted measurement, full-fast checkpoint and fresh review. Then finish remaining all-route transfers and Phase2 roles. No release.
+- Production single owner migrated: retired12/8 and experiment path removed; formula identity delegates to `_assess`; CFU/studied-amount assessment stays with existing Dose. Identity, preparation, population, purpose, primary outcomes, review and trial-family independence remain guarded.
+- Clean reconciled production head `b06be9802f8c6d91126ab6033880c25bd9c1c249`, including concurrent main `d021061b`. Production replay SHA256 `a20cea182bc18ecb6eeff4dc7dc54232c6452a2631c22a53b5b11e2560c5ea72`:1259/1259 captured, source unchanged. All Evidence components, dimension math, public pillars, totals, tiers, routes, status, Safety and confidence match the accepted measurement. All717 controls retain complete semantic payloads; only the four exact quality-config version/fingerprint provenance paths are excluded.
+- Config revision `1.22.0-probiotic-family-evidence` has fingerprint `b23444ae2b18e041`; prior version/fingerprint history is preserved. Synthetic expectations were migrated without changing their labels or other fixture values: unspecified study design6.6667 certainty+3 applicability=9.6667 Evidence; species research10 certainty+0 applicability=10 Evidence. Neither receives invented strain efficacy or replication.
+-119 Evidence-state clarifications were independently checked:24 applicable primary null states and95 zero-credit native assessments without applicable primary null findings. All are recorded per product in the JSON receipt; no numerical or safety change.
+- Focused checkpoint4002 passed21 skipped; additional owner checks64 passed1 skipped; population regression checkpoint746 passed. Final full `scripts/test.sh fast`: **17898 passed,167 skipped,1 existing Ravage cinnamon xfail**,627.94 seconds. Log `.claude/state/probiotic_production_reconciled_fast.log`. The preliminary run interrupted to reconcile main is not an acceptance receipt.
+- Fresh-context reviewer approved source, clinical guards, semantic test migration, complete replay equality and main reconciliation. The existing Ravage xfail is unrelated and remains a mandatory Phase2 closure before release.
+- Next: local integration, then Phase2 identity/roles/prominence (Ravage, shared primary selection, trace protein and alternate servings). Generic/omega amount transfers and broader Dose policies remain open. No push or release.
 
 ## Historical September30 report — superseded measurements
 

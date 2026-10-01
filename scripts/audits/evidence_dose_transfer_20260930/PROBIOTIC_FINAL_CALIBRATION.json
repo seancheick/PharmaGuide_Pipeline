@@ -12878,8 +12878,687 @@
     ],
     "rows": 1259
   },
+  "production_integration": {
+    "accepted_head": "145ff18c7ba827f143d2fed1ce85b37a2bdd9f07",
+    "changed_path_counts": {
+      ".pillars.evidence.display_state": 31,
+      ".pillars.evidence.evidence_result_state": 119,
+      ".pillars.evidence.reason": 535,
+      ".provenance.config_versions.quality_score.fingerprint": 1259,
+      ".provenance.config_versions.quality_score.version": 1259,
+      ".reasons.module.dimensions.dose.metadata.evidence_assessment": 535,
+      ".reasons.module.dimensions.dose.metadata.studied_formula_assessment": 534,
+      ".reasons.module.dimensions.evidence.metadata.claim_alignment.level": 4,
+      ".reasons.module.dimensions.evidence.metadata.claim_alignment.matched_categories": 11,
+      ".reasons.module.dimensions.evidence.metadata.claim_alignment.reason": 4,
+      ".reasons.module.dimensions.evidence.metadata.claim_alignment.strain_categories": 12,
+      ".reasons.module.dimensions.evidence.metadata.evidence_result_state": 119,
+      ".reasons.module.dimensions.evidence.metadata.experimental_evidence_model": 535,
+      ".reasons.module.dimensions.evidence.metadata.final_points": 221,
+      ".reasons.module.dimensions.evidence.metadata.generic_evidence_metadata": 535,
+      ".reasons.module.dimensions.evidence.metadata.generic_evidence_score": 535,
+      ".reasons.module.dimensions.evidence.metadata.indication_relevance_level": 4,
+      ".reasons.module.dimensions.evidence.metadata.matched_relevance_categories": 11,
+      ".reasons.module.dimensions.evidence.metadata.native_clinical_strain_evidence_rows": 535,
+      ".reasons.module.dimensions.evidence.metadata.native_clinical_strain_evidence_score": 535,
+      ".reasons.module.dimensions.evidence.metadata.notes": 535,
+      ".reasons.module.dimensions.evidence.metadata.relevance_reason": 4,
+      ".reasons.module.dimensions.evidence.metadata.strain_indication_categories": 12,
+      ".reasons.module.dimensions.evidence.metadata.uncredited_native_strain_evidence_rows": 535,
+      ".reasons.provenance.config_versions.quality_score.fingerprint": 1259,
+      ".reasons.provenance.config_versions.quality_score.version": 1259
+    },
+    "confidence_changed_ids": [],
+    "controls": 717,
+    "controls_comparison_exclusions": [
+      "provenance.config_versions.quality_score.fingerprint",
+      "reasons.provenance.config_versions.quality_score.fingerprint",
+      "provenance.config_versions.quality_score.version",
+      "reasons.provenance.config_versions.quality_score.version"
+    ],
+    "evidence_state_changes": [
+      {
+        "after": "applicability_unestablished",
+        "before": "evaluated_null",
+        "id": "173776"
+      },
+      {
+        "after": "applicability_unestablished",
+        "before": "research_present_applicability_unestablished",
+        "id": "178453"
+      },
+      {
+        "after": "applicability_unestablished",
+        "before": "research_present_applicability_unestablished",
+        "id": "180210"
+      },
+      {
+        "after": "evaluated_null",
+        "before": "research_present_applicability_unestablished",
+        "id": "180289"
+      },
+      {
+        "after": "evaluated_null",
+        "before": "research_present_applicability_unestablished",
+        "id": "180290"
+      },
+      {
+        "after": "applicability_unestablished",
+        "before": "research_present_applicability_unestablished",
+        "id": "180336"
+      },
+      {
+        "after": "applicability_unestablished",
+        "before": "research_present_applicability_unestablished",
+        "id": "182421"
+      },
+      {
+        "after": "applicability_unestablished",
+        "before": "research_present_applicability_unestablished",
+        "id": "182666"
+      },
+      {
+        "after": "applicability_unestablished",
+        "before": "research_present_applicability_unestablished",
+        "id": "19067"
+      },
+      {
+        "after": "applicability_unestablished",
+        "before": "evaluated_null",
+        "id": "200156"
+      },
+      {
+        "after": "applicability_unestablished",
+        "before": "evaluated_null",
+        "id": "202097"
+      },
+      {
+        "after": "applicability_unestablished",
+        "before": "evaluated_null",
+        "id": "202109"
+      },
+      {
+        "after": "applicability_unestablished",
+        "before": "research_present_applicability_unestablished",
+        "id": "206889"
+      },
+      {
+        "after": "applicability_unestablished",
+        "before": "research_present_applicability_unestablished",
+        "id": "206896"
+      },
+      {
+        "after": "applicability_unestablished",
+        "before": "research_present_applicability_unestablished",
+        "id": "206904"
+      },
+      {
+        "after": "applicability_unestablished",
+        "before": "research_present_applicability_unestablished",
+        "id": "207050"
+      },
+      {
+        "after": "applicability_unestablished",
+        "before": "research_present_applicability_unestablished",
+        "id": "207214"
+      },
+      {
+        "after": "applicability_unestablished",
+        "before": "research_present_applicability_unestablished",
+        "id": "207218"
+      },
+      {
+        "after": "applicability_unestablished",
+        "before": "research_present_applicability_unestablished",
+        "id": "210848"
+      },
+      {
+        "after": "evaluated_null",
+        "before": "research_present_applicability_unestablished",
+        "id": "212443"
+      },
+      {
+        "after": "applicability_unestablished",
+        "before": "research_present_applicability_unestablished",
+        "id": "213086"
+      },
+      {
+        "after": "applicability_unestablished",
+        "before": "research_present_applicability_unestablished",
+        "id": "218190"
+      },
+      {
+        "after": "applicability_unestablished",
+        "before": "research_present_applicability_unestablished",
+        "id": "218199"
+      },
+      {
+        "after": "applicability_unestablished",
+        "before": "research_present_applicability_unestablished",
+        "id": "219289"
+      },
+      {
+        "after": "applicability_unestablished",
+        "before": "research_present_applicability_unestablished",
+        "id": "230231"
+      },
+      {
+        "after": "applicability_unestablished",
+        "before": "research_present_applicability_unestablished",
+        "id": "232097"
+      },
+      {
+        "after": "applicability_unestablished",
+        "before": "research_present_applicability_unestablished",
+        "id": "232325"
+      },
+      {
+        "after": "applicability_unestablished",
+        "before": "research_present_applicability_unestablished",
+        "id": "232334"
+      },
+      {
+        "after": "applicability_unestablished",
+        "before": "research_present_applicability_unestablished",
+        "id": "232400"
+      },
+      {
+        "after": "applicability_unestablished",
+        "before": "research_present_applicability_unestablished",
+        "id": "232728"
+      },
+      {
+        "after": "applicability_unestablished",
+        "before": "research_present_applicability_unestablished",
+        "id": "232775"
+      },
+      {
+        "after": "evaluated_null",
+        "before": "research_present_applicability_unestablished",
+        "id": "233043"
+      },
+      {
+        "after": "evaluated_null",
+        "before": "research_present_applicability_unestablished",
+        "id": "233050"
+      },
+      {
+        "after": "applicability_unestablished",
+        "before": "research_present_applicability_unestablished",
+        "id": "233091"
+      },
+      {
+        "after": "applicability_unestablished",
+        "before": "research_present_applicability_unestablished",
+        "id": "233110"
+      },
+      {
+        "after": "applicability_unestablished",
+        "before": "research_present_applicability_unestablished",
+        "id": "236913"
+      },
+      {
+        "after": "applicability_unestablished",
+        "before": "research_present_applicability_unestablished",
+        "id": "236951"
+      },
+      {
+        "after": "applicability_unestablished",
+        "before": "research_present_applicability_unestablished",
+        "id": "239178"
+      },
+      {
+        "after": "evaluated_null",
+        "before": "research_present_applicability_unestablished",
+        "id": "241328"
+      },
+      {
+        "after": "evaluated_null",
+        "before": "research_present_applicability_unestablished",
+        "id": "241331"
+      },
+      {
+        "after": "evaluated_null",
+        "before": "research_present_applicability_unestablished",
+        "id": "241707"
+      },
+      {
+        "after": "applicability_unestablished",
+        "before": "research_present_applicability_unestablished",
+        "id": "242572"
+      },
+      {
+        "after": "applicability_unestablished",
+        "before": "research_present_applicability_unestablished",
+        "id": "250224"
+      },
+      {
+        "after": "applicability_unestablished",
+        "before": "research_present_applicability_unestablished",
+        "id": "250619"
+      },
+      {
+        "after": "evaluated_null",
+        "before": "research_present_applicability_unestablished",
+        "id": "251169"
+      },
+      {
+        "after": "applicability_unestablished",
+        "before": "research_present_applicability_unestablished",
+        "id": "251907"
+      },
+      {
+        "after": "evaluated_null",
+        "before": "research_present_applicability_unestablished",
+        "id": "256934"
+      },
+      {
+        "after": "applicability_unestablished",
+        "before": "research_present_applicability_unestablished",
+        "id": "257008"
+      },
+      {
+        "after": "evaluated_null",
+        "before": "research_present_applicability_unestablished",
+        "id": "257033"
+      },
+      {
+        "after": "applicability_unestablished",
+        "before": "research_present_applicability_unestablished",
+        "id": "259890"
+      },
+      {
+        "after": "applicability_unestablished",
+        "before": "research_present_applicability_unestablished",
+        "id": "263873"
+      },
+      {
+        "after": "evaluated_null",
+        "before": "research_present_applicability_unestablished",
+        "id": "267340"
+      },
+      {
+        "after": "applicability_unestablished",
+        "before": "research_present_applicability_unestablished",
+        "id": "267567"
+      },
+      {
+        "after": "applicability_unestablished",
+        "before": "research_present_applicability_unestablished",
+        "id": "267568"
+      },
+      {
+        "after": "evaluated_null",
+        "before": "research_present_applicability_unestablished",
+        "id": "267571"
+      },
+      {
+        "after": "applicability_unestablished",
+        "before": "research_present_applicability_unestablished",
+        "id": "267572"
+      },
+      {
+        "after": "applicability_unestablished",
+        "before": "research_present_applicability_unestablished",
+        "id": "267573"
+      },
+      {
+        "after": "applicability_unestablished",
+        "before": "research_present_applicability_unestablished",
+        "id": "267662"
+      },
+      {
+        "after": "evaluated_null",
+        "before": "research_present_applicability_unestablished",
+        "id": "268078"
+      },
+      {
+        "after": "applicability_unestablished",
+        "before": "research_present_applicability_unestablished",
+        "id": "273553"
+      },
+      {
+        "after": "applicability_unestablished",
+        "before": "research_present_applicability_unestablished",
+        "id": "274764"
+      },
+      {
+        "after": "evaluated_null",
+        "before": "research_present_applicability_unestablished",
+        "id": "274777"
+      },
+      {
+        "after": "evaluated_null",
+        "before": "research_present_applicability_unestablished",
+        "id": "274807"
+      },
+      {
+        "after": "applicability_unestablished",
+        "before": "evaluated_null",
+        "id": "275474"
+      },
+      {
+        "after": "evaluated_null",
+        "before": "research_present_applicability_unestablished",
+        "id": "276704"
+      },
+      {
+        "after": "applicability_unestablished",
+        "before": "research_present_applicability_unestablished",
+        "id": "277021"
+      },
+      {
+        "after": "applicability_unestablished",
+        "before": "research_present_applicability_unestablished",
+        "id": "277797"
+      },
+      {
+        "after": "applicability_unestablished",
+        "before": "evaluated_null",
+        "id": "286725"
+      },
+      {
+        "after": "evaluated_null",
+        "before": "research_present_applicability_unestablished",
+        "id": "287477"
+      },
+      {
+        "after": "evaluated_null",
+        "before": "research_present_applicability_unestablished",
+        "id": "297589"
+      },
+      {
+        "after": "applicability_unestablished",
+        "before": "research_present_applicability_unestablished",
+        "id": "297601"
+      },
+      {
+        "after": "applicability_unestablished",
+        "before": "research_present_applicability_unestablished",
+        "id": "297602"
+      },
+      {
+        "after": "applicability_unestablished",
+        "before": "research_present_applicability_unestablished",
+        "id": "297695"
+      },
+      {
+        "after": "applicability_unestablished",
+        "before": "research_present_applicability_unestablished",
+        "id": "297696"
+      },
+      {
+        "after": "applicability_unestablished",
+        "before": "research_present_applicability_unestablished",
+        "id": "297697"
+      },
+      {
+        "after": "applicability_unestablished",
+        "before": "research_present_applicability_unestablished",
+        "id": "297698"
+      },
+      {
+        "after": "applicability_unestablished",
+        "before": "research_present_applicability_unestablished",
+        "id": "299736"
+      },
+      {
+        "after": "applicability_unestablished",
+        "before": "research_present_applicability_unestablished",
+        "id": "299737"
+      },
+      {
+        "after": "applicability_unestablished",
+        "before": "research_present_applicability_unestablished",
+        "id": "307557"
+      },
+      {
+        "after": "applicability_unestablished",
+        "before": "research_present_applicability_unestablished",
+        "id": "307621"
+      },
+      {
+        "after": "applicability_unestablished",
+        "before": "research_present_applicability_unestablished",
+        "id": "307624"
+      },
+      {
+        "after": "applicability_unestablished",
+        "before": "research_present_applicability_unestablished",
+        "id": "307625"
+      },
+      {
+        "after": "applicability_unestablished",
+        "before": "research_present_applicability_unestablished",
+        "id": "307626"
+      },
+      {
+        "after": "applicability_unestablished",
+        "before": "research_present_applicability_unestablished",
+        "id": "307627"
+      },
+      {
+        "after": "applicability_unestablished",
+        "before": "research_present_applicability_unestablished",
+        "id": "307628"
+      },
+      {
+        "after": "applicability_unestablished",
+        "before": "research_present_applicability_unestablished",
+        "id": "307629"
+      },
+      {
+        "after": "applicability_unestablished",
+        "before": "research_present_applicability_unestablished",
+        "id": "307630"
+      },
+      {
+        "after": "applicability_unestablished",
+        "before": "research_present_applicability_unestablished",
+        "id": "307631"
+      },
+      {
+        "after": "applicability_unestablished",
+        "before": "research_present_applicability_unestablished",
+        "id": "307632"
+      },
+      {
+        "after": "applicability_unestablished",
+        "before": "research_present_applicability_unestablished",
+        "id": "307750"
+      },
+      {
+        "after": "applicability_unestablished",
+        "before": "research_present_applicability_unestablished",
+        "id": "307751"
+      },
+      {
+        "after": "applicability_unestablished",
+        "before": "research_present_applicability_unestablished",
+        "id": "321946"
+      },
+      {
+        "after": "applicability_unestablished",
+        "before": "research_present_applicability_unestablished",
+        "id": "323063"
+      },
+      {
+        "after": "applicability_unestablished",
+        "before": "research_present_applicability_unestablished",
+        "id": "326252"
+      },
+      {
+        "after": "applicability_unestablished",
+        "before": "research_present_applicability_unestablished",
+        "id": "326766"
+      },
+      {
+        "after": "evaluated_null",
+        "before": "research_present_applicability_unestablished",
+        "id": "326769"
+      },
+      {
+        "after": "applicability_unestablished",
+        "before": "research_present_applicability_unestablished",
+        "id": "328029"
+      },
+      {
+        "after": "applicability_unestablished",
+        "before": "research_present_applicability_unestablished",
+        "id": "328476"
+      },
+      {
+        "after": "applicability_unestablished",
+        "before": "research_present_applicability_unestablished",
+        "id": "328805"
+      },
+      {
+        "after": "applicability_unestablished",
+        "before": "research_present_applicability_unestablished",
+        "id": "328809"
+      },
+      {
+        "after": "applicability_unestablished",
+        "before": "research_present_applicability_unestablished",
+        "id": "328844"
+      },
+      {
+        "after": "applicability_unestablished",
+        "before": "research_present_applicability_unestablished",
+        "id": "333190"
+      },
+      {
+        "after": "evaluated_null",
+        "before": "research_present_applicability_unestablished",
+        "id": "333914"
+      },
+      {
+        "after": "applicability_unestablished",
+        "before": "research_present_applicability_unestablished",
+        "id": "334123"
+      },
+      {
+        "after": "applicability_unestablished",
+        "before": "research_present_applicability_unestablished",
+        "id": "334127"
+      },
+      {
+        "after": "applicability_unestablished",
+        "before": "evaluated_null",
+        "id": "334429"
+      },
+      {
+        "after": "applicability_unestablished",
+        "before": "research_present_applicability_unestablished",
+        "id": "44161"
+      },
+      {
+        "after": "applicability_unestablished",
+        "before": "research_present_applicability_unestablished",
+        "id": "44163"
+      },
+      {
+        "after": "applicability_unestablished",
+        "before": "research_present_applicability_unestablished",
+        "id": "45194"
+      },
+      {
+        "after": "applicability_unestablished",
+        "before": "research_present_applicability_unestablished",
+        "id": "60498"
+      },
+      {
+        "after": "applicability_unestablished",
+        "before": "research_present_applicability_unestablished",
+        "id": "62991"
+      },
+      {
+        "after": "evaluated_null",
+        "before": "research_present_applicability_unestablished",
+        "id": "64942"
+      },
+      {
+        "after": "applicability_unestablished",
+        "before": "research_present_applicability_unestablished",
+        "id": "65064"
+      },
+      {
+        "after": "applicability_unestablished",
+        "before": "research_present_applicability_unestablished",
+        "id": "74379"
+      },
+      {
+        "after": "applicability_unestablished",
+        "before": "research_present_applicability_unestablished",
+        "id": "74383"
+      },
+      {
+        "after": "applicability_unestablished",
+        "before": "research_present_applicability_unestablished",
+        "id": "76239"
+      },
+      {
+        "after": "evaluated_null",
+        "before": "research_present_applicability_unestablished",
+        "id": "77147"
+      },
+      {
+        "after": "applicability_unestablished",
+        "before": "research_present_applicability_unestablished",
+        "id": "80971"
+      },
+      {
+        "after": "evaluated_null",
+        "before": "research_present_applicability_unestablished",
+        "id": "83159"
+      }
+    ],
+    "labels": 1259,
+    "manifest_sha256": "cbe041440eb1eb565edf2564298e106adfc35175f413d1aab26782447a1e8286",
+    "mismatch_counts": {
+      "evidence_components": 0,
+      "evidence_score_max": 0,
+      "nonprobiotic_semantic_payload": 0,
+      "other_dimension_math": 0,
+      "pillar_scores": 0,
+      "route": 0,
+      "safety": 0,
+      "status": 0,
+      "tier": 0,
+      "total": 0
+    },
+    "mismatches": {
+      "evidence_components": [],
+      "evidence_score_max": [],
+      "nonprobiotic_semantic_payload": [],
+      "other_dimension_math": [],
+      "pillar_scores": [],
+      "route": [],
+      "safety": [],
+      "status": [],
+      "tier": [],
+      "total": []
+    },
+    "probiotic": 542,
+    "production_head": "b06be9802f8c6d91126ab6033880c25bd9c1c249",
+    "production_sha256": "a20cea182bc18ecb6eeff4dc7dc54232c6452a2631c22a53b5b11e2560c5ea72",
+    "source_unchanged": true,
+    "state_change_explanation": "24 applicable reviewed primary null states;95 zero-credit native assessments without applicable primary null evidence. All119 independently checked; no score, tier, route, status, Safety or confidence change.",
+    "state_transition_counts": {
+      "evaluated_null -> applicability_unestablished": 7,
+      "research_present_applicability_unestablished -> applicability_unestablished": 88,
+      "research_present_applicability_unestablished -> evaluated_null": 24
+    },
+    "verification": {
+      "focused": "4002 passed21 skipped;owner checks64 passed1 skipped;population fix746 passed;final4 regression failures4 passed --lf",
+      "fresh_review": "Source, clinical guards, migration semantics, all119 state changes, exact1259 parity and reconciled main independently approved; finalfast receipt supplied",
+      "full_fast": "17898 passed,167 skipped,1 known Ravage cinnamon xfail;627.94 seconds atb06be980",
+      "integration": "validated_for_local_merge",
+      "release": "not_authorized"
+    }
+  },
   "schema_version": 1,
-  "status": "measurement_reviewed_production_not_integrated",
+  "status": "policy_approved_measurement_complete_production_validated_local_integration_release_not_authorized",
   "strong_evidence_but_overall_poor": {
     "count": 94,
     "definition": "overall Poor with family certainty >=8 or consistency credit >0",
@@ -14018,6 +14697,8 @@
     "focused_current": "50 passed at145ff18c",
     "fresh_review": "Preparation guard and identical1259-row corrected replay independently confirmed; production remains a draft",
     "full_fast_current": "17886 passed,168 skipped,1 existing Ravage cinnamon xfail at145ff18c;536.28 seconds",
-    "full_fast_prior": "17885 passed,168 skipped,1 Ravage xfail ata5ab7029"
+    "full_fast_prior": "17885 passed,168 skipped,1 Ravage xfail ata5ab7029",
+    "production_fresh_review": "Source, clinical guards, migration semantics, all119 state changes, exact1259 parity and reconciled main independently approved; finalfast receipt supplied",
+    "production_full_fast": "17898 passed,167 skipped,1 known Ravage cinnamon xfail;627.94 seconds atb06be980"
   }
 }
