@@ -49,11 +49,10 @@ if str(SCRIPTS_DIR) not in sys.path:
     sys.path.insert(0, str(SCRIPTS_DIR))
 
 from release_safety.bundle_alignment import BundleAlignmentError, read_flutter_bundle_manifest  # noqa: E402
-from release_safety.quarantine import DEFAULT_BUCKET  # noqa: E402
 from scoring_v4.gate_safety import SAFETY_VERDICT_PRECEDENCE, safety_verdict_rank  # noqa: E402
 from scoring_v4.quality_score_config import config as quality_score_config  # noqa: E402
 from scoring_v4.scored_artifact import PUBLIC_VERDICT_PRECEDENCE  # noqa: E402
-from supabase_client import core_db_remote_path, fetch_current_manifest, get_supabase_client  # noqa: E402
+from supabase_client import STORAGE_BUCKET, core_db_remote_path, fetch_current_manifest, get_supabase_client  # noqa: E402
 
 APPROVALS_PATH = Path(__file__).with_name("catalog_change_approvals.json")
 BUNDLED_DB = Path("assets/db/pharmaguide_core.db")
@@ -407,7 +406,7 @@ def _live_baseline(bundle_sha256: str, workdir: Path) -> tuple[Path, dict] | Non
     if current["checksum"] == f"sha256:{bundle_sha256}":
         return None
     db = workdir / "live_pharmaguide_core.db"
-    db.write_bytes(client.storage.from_(DEFAULT_BUCKET).download(core_db_remote_path(current["db_version"])))
+    db.write_bytes(client.storage.from_(STORAGE_BUCKET).download(core_db_remote_path(current["db_version"])))
     if f"sha256:{_sha256(db)}" != current["checksum"]:
         raise ValueError(f"Live catalog {current['db_version']} does not match its manifest checksum")
     return db, {"db_version": current["db_version"], "source": "live catalog on Supabase"}

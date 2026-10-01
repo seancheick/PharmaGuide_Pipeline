@@ -42,10 +42,10 @@ from pathlib import Path
 from typing import Callable, Dict, Iterable, Optional, Sequence, Tuple
 
 from .transient import is_transient_error, retry_transient
+from supabase_client import STORAGE_BUCKET
 
 BLOB_STORAGE_PREFIX = "shared/details/sha256"
 HEX_BLOB_SHARDS: Tuple[str, ...] = tuple(f"{i:02x}" for i in range(256))
-DEFAULT_BUCKET = "pharmaguide"
 
 _HASH_RE = re.compile(r"^[0-9a-f]{64}$")
 
@@ -286,7 +286,7 @@ def _save_checkpoint(path: Optional[Path], prefix: str, shards: Sequence[str],
 def inventory_detail_blobs(
     client,
     *,
-    bucket: str = DEFAULT_BUCKET,
+    bucket: str = STORAGE_BUCKET,
     prefix: str = BLOB_STORAGE_PREFIX,
     shards: Iterable[str] = HEX_BLOB_SHARDS,
     max_workers: Optional[int] = None,

@@ -19,8 +19,8 @@ from release_safety.quarantine import (  # noqa: E402
     _object_exists,
     recover_blob,
 )
+from supabase_client import STORAGE_BUCKET  # noqa: E402
 
-BUCKET = "pharmaguide"
 ACTIVE_ROOT = "shared/details/sha256"
 QUARANTINE_ROOT = "shared/quarantine"
 HASH_RE = re.compile(r"^[0-9a-f]{64}$")
@@ -31,7 +31,7 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--blob-hash", required=True)
     parser.add_argument("--expected-sha256", required=True)
     parser.add_argument("--quarantine-date", required=True)
-    parser.add_argument("--bucket", default=BUCKET)
+    parser.add_argument("--bucket", default=STORAGE_BUCKET)
     parser.add_argument("--lock-path", type=Path, default=None)
     parser.add_argument(
         "--execute",

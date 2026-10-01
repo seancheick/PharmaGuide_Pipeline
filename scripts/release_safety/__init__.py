@@ -74,7 +74,6 @@ from .gates import (
 from .quarantine import (
     QUARANTINE_PREFIX,
     ACTIVE_PREFIX,
-    DEFAULT_BUCKET,
     ParsedActivePath,
     ParsedQuarantinePath,
     parse_active_path,
@@ -199,7 +198,6 @@ __all__ = [
     # P2.1a — quarantine primitive (move-to-quarantine + recover)
     "QUARANTINE_PREFIX",
     "ACTIVE_PREFIX",
-    "DEFAULT_BUCKET",
     "ParsedActivePath",
     "ParsedQuarantinePath",
     "parse_active_path",

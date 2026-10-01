@@ -21,10 +21,9 @@ SCRIPTS = Path(__file__).resolve().parent
 if str(SCRIPTS) not in sys.path:
     sys.path.insert(0, str(SCRIPTS))
 
-from supabase_client import CACHE_CONTROL_IMMUTABLE, get_supabase_client, upload_file
+from supabase_client import CACHE_CONTROL_IMMUTABLE, STORAGE_BUCKET, get_supabase_client, upload_file
 
 
-BUCKET = "pharmaguide"
 FEED_FILENAME = "safety_alerts.json"
 MANIFEST_FILENAME = "safety_alerts_manifest.json"
 
@@ -76,7 +75,7 @@ def sync(dist_dir: Path, *, dry_run: bool = False) -> Dict[str, Any]:
     client = get_supabase_client()
     upload_file(
         client,
-        BUCKET,
+        STORAGE_BUCKET,
         staged["remote_path"],
         staged["feed_path"],
         content_type="application/json",

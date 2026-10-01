@@ -146,3 +146,28 @@ def test_list_storage_paths_delegates_with_prefix_and_options():
     assert captured["bucket"] == "pharmaguide"
     assert captured["path"] == "shared/details/sha256/ab"
     assert captured["options"] == {"limit": 500, "offset": 1000}
+
+
+def test_storage_bucket_is_declared_once():
+    """The storage bucket name has one Python owner, mirroring Flutter
+    ``SupabaseContract.storageBucket``; every module imports it."""
+    import re
+    from pathlib import Path
+    from supabase_client import STORAGE_BUCKET
+
+    assert STORAGE_BUCKET == "pharmaguide"
+
+    scripts = Path(_scripts_dir).resolve()
+    literal = re.compile(r"""["']pharmaguide["']""")
+    # storage_audit's known top-level folder set names a folder inside the
+    # bucket, not the bucket.
+    allowed = {"supabase_client.py": 1, "release_safety/storage_audit.py": 1}
+    found = {}
+    for path in scripts.rglob("*.py"):
+        rel = path.relative_to(scripts).as_posix()
+        if rel.startswith("tests/"):
+            continue
+        count = len(literal.findall(path.read_text(encoding="utf-8")))
+        if count:
+            found[rel] = count
+    assert found == allowed

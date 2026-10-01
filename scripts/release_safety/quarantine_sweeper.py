@@ -36,7 +36,7 @@ Public API
 
     sweep_quarantine(client, *, ttl_days=30, dry_run=True, now=None,
                      quarantine_root=QUARANTINE_PREFIX,
-                     bucket=DEFAULT_BUCKET, lock_path=None) -> SweepResult
+                     bucket=STORAGE_BUCKET, lock_path=None) -> SweepResult
         Walk eligible quarantine date directories and (if not dry_run)
         hard-delete every blob inside under the global release lock.
 """
@@ -54,11 +54,11 @@ from .transient import retry_transient
 from .quarantine import (
     DEFAULT_REMOVE_BATCH_SIZE,
     remove_storage_batch,
-    DEFAULT_BUCKET,
     QUARANTINE_PREFIX,
     _remove_storage_object,    # reused for hard-delete
     list_quarantine_dates,
 )
+from supabase_client import STORAGE_BUCKET
 
 DEFAULT_QUARANTINE_TTL_DAYS = 30
 
@@ -190,7 +190,7 @@ def _list_blobs_under_quarantine_date(
     date_str: str,
     *,
     quarantine_root: str = QUARANTINE_PREFIX,
-    bucket: str = DEFAULT_BUCKET,
+    bucket: str = STORAGE_BUCKET,
 ) -> Tuple[List[str], List[str]]:
     """List every blob under ``shared/quarantine/{date_str}/``.
 
@@ -259,7 +259,7 @@ def sweep_quarantine(
     dry_run: bool = True,
     now: Optional[Union[date, datetime]] = None,
     quarantine_root: str = QUARANTINE_PREFIX,
-    bucket: str = DEFAULT_BUCKET,
+    bucket: str = STORAGE_BUCKET,
     lock_path: Optional[Path] = None,
 ) -> SweepResult:
     """Run a read-only preview or a globally locked destructive sweep."""

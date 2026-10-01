@@ -35,7 +35,7 @@ DEFAULT_PROGRESS_EVERY = 500
 # Ensure scripts/ is on the path for sibling imports (supabase_client)
 sys.path.insert(0, os.path.dirname(__file__))
 import env_loader  # noqa: F401
-from supabase_client import CACHE_CONTROL_IMMUTABLE, core_db_remote_path
+from supabase_client import CACHE_CONTROL_IMMUTABLE, STORAGE_BUCKET, core_db_remote_path
 from audit_source_of_truth_contract import check_v4_pillar_contract
 
 DETAIL_BLOB_STORAGE_PREFIX = "shared/details/sha256"
@@ -1130,7 +1130,7 @@ def sync(
         return {"status": "dry_run", "version": version, "blob_count": build_stats["blob_count"]}
 
     client = get_supabase_client()
-    bucket = "pharmaguide"
+    bucket = STORAGE_BUCKET
     print("Checking Supabase for current version...")
     remote = fetch_current_manifest(client)
 

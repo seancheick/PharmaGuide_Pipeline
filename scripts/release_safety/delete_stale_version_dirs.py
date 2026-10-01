@@ -27,12 +27,12 @@ Safety chain (every guard must pass before any deletion happens):
 
 Public API
 ==========
-    compute_delete_plan(client, *, bucket=DEFAULT_BUCKET,
+    compute_delete_plan(client, *, bucket=STORAGE_BUCKET,
                         manifest_table="export_manifest")
         -> DeletePlan
 
     execute_delete_plan(client, plan, *, expected_count, expected_bytes,
-                        bucket=DEFAULT_BUCKET,
+                        bucket=STORAGE_BUCKET,
                         audit_log=None, lock_path=None)
         -> DeleteResult
 
@@ -60,7 +60,7 @@ from .lock import (
     StaleLockError,
     acquire_release_lock,
 )
-from .quarantine import DEFAULT_BUCKET
+from supabase_client import STORAGE_BUCKET
 
 # _list_paginated logic re-implemented below — the storage-audit /
 # quarantine modules don't export an internal listing helper, and
@@ -147,7 +147,7 @@ class ManifestRaceConditionError(Exception):
 def compute_delete_plan(
     client,
     *,
-    bucket: str = DEFAULT_BUCKET,
+    bucket: str = STORAGE_BUCKET,
     manifest_table: str = DEFAULT_MANIFEST_TABLE,
 ) -> DeletePlan:
     """Build the deletion plan. STRICTLY READ-ONLY.
@@ -203,7 +203,7 @@ def execute_delete_plan(
     *,
     expected_count: int,
     expected_bytes: int,
-    bucket: str = DEFAULT_BUCKET,
+    bucket: str = STORAGE_BUCKET,
     manifest_table: str = DEFAULT_MANIFEST_TABLE,
     audit_log: Optional[AuditLog] = None,
     lock_path: Optional[Path] = None,
@@ -483,7 +483,7 @@ def execute_from_artifact(
     expected_count,
     expected_bytes,
     fingerprint,
-    bucket: str = DEFAULT_BUCKET,
+    bucket: str = STORAGE_BUCKET,
     manifest_table: str = DEFAULT_MANIFEST_TABLE,
     audit_log: Optional[AuditLog] = None,
     lock_path: Optional[Path] = None,
@@ -745,7 +745,7 @@ class VersionDirInventory:
 def inventory_version_dirs(
     client,
     *,
-    bucket: str = DEFAULT_BUCKET,
+    bucket: str = STORAGE_BUCKET,
     manifest_table: str = DEFAULT_MANIFEST_TABLE,
 ) -> VersionDirInventory:
     """Enumerate every v{version}/ directory with exact object/byte counts.
@@ -852,7 +852,7 @@ def _main(argv=None) -> int:
             "is NOT in the export_manifest table. Defaults to DRY-RUN."
         ),
     )
-    parser.add_argument("--bucket", default=DEFAULT_BUCKET)
+    parser.add_argument("--bucket", default=STORAGE_BUCKET)
     parser.add_argument("--manifest-table", default=DEFAULT_MANIFEST_TABLE)
     parser.add_argument("--execute", action="store_true",
                         help="Actually delete. Default is dry-run.")

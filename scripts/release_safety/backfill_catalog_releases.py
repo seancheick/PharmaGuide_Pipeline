@@ -107,9 +107,9 @@ from .registry import (
     ReleaseState,
     get_release,
 )
+from supabase_client import STORAGE_BUCKET
 
 
-DEFAULT_BUCKET = "pharmaguide"
 DEFAULT_MANIFEST_TABLE = "export_manifest"
 DEFAULT_BRANCH = "main"
 
@@ -187,7 +187,7 @@ def compute_backfill_plan(
     *,
     flutter_repo: Optional[str] = None,
     branch: str = DEFAULT_BRANCH,
-    bucket: str = DEFAULT_BUCKET,
+    bucket: str = STORAGE_BUCKET,
     manifest_table: str = DEFAULT_MANIFEST_TABLE,
     bundled_app_version: Optional[str] = None,
     registry_table: str = REGISTRY_TABLE,
@@ -587,8 +587,8 @@ def _build_arg_parser() -> argparse.ArgumentParser:
     )
     p.add_argument(
         "--bucket",
-        default=DEFAULT_BUCKET,
-        help=f"Supabase storage bucket (default: {DEFAULT_BUCKET})",
+        default=STORAGE_BUCKET,
+        help=f"Supabase storage bucket (default: {STORAGE_BUCKET})",
     )
     p.add_argument(
         "--manifest-table",
@@ -660,7 +660,6 @@ if __name__ == "__main__":  # pragma: no cover
 
 
 __all__ = [
-    "DEFAULT_BUCKET",
     "DEFAULT_MANIFEST_TABLE",
     "DEFAULT_BRANCH",
     "BackfillError",

@@ -24,9 +24,9 @@ from pathlib import Path
 from typing import Any, Callable, Iterable, Mapping, Sequence
 
 from release_safety.transient import retry_transient
+from supabase_client import STORAGE_BUCKET
 
 
-BUCKET = "pharmaguide"
 ACTIVE_BLOB_PREFIX = "shared/details/sha256"
 _HASH_RE = re.compile(r"^[0-9a-f]{64}$")
 
@@ -300,7 +300,7 @@ def _parser() -> argparse.ArgumentParser:
     parser.add_argument("--new-version", required=True)
     parser.add_argument("--output", type=Path, required=True)
     parser.add_argument("--pair-ledger", type=Path, required=True)
-    parser.add_argument("--bucket", default=BUCKET)
+    parser.add_argument("--bucket", default=STORAGE_BUCKET)
     parser.add_argument(
         "--quarantine-date",
         action="append",

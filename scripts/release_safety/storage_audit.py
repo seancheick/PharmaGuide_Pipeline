@@ -36,7 +36,7 @@ storage-pressure decision.
 Public API
 ==========
     run_storage_audit(client, *, flutter_repo_path, dist_dir,
-                       bucket=DEFAULT_BUCKET, ...)
+                       bucket=STORAGE_BUCKET, ...)
         -> StorageAuditReport
 
     StorageAuditReport
@@ -54,10 +54,10 @@ from typing import Callable, Dict, List, Optional, Tuple
 
 from .quarantine import (
     ACTIVE_PREFIX,
-    DEFAULT_BUCKET,
     QUARANTINE_PREFIX,
     list_quarantine_dates,
 )
+from supabase_client import STORAGE_BUCKET
 
 # ---------------------------------------------------------------------------
 # Constants
@@ -386,7 +386,7 @@ def run_storage_audit(
     *,
     flutter_repo_path: Path,
     dist_dir: Path,
-    bucket: str = DEFAULT_BUCKET,
+    bucket: str = STORAGE_BUCKET,
     bundled_manifest_relpath: str = "assets/db/export_manifest.json",
     bundled_catalog_relpath: str = "assets/db/pharmaguide_core.db",
     dist_index_filename: str = "detail_index.json",
@@ -780,8 +780,8 @@ def _main(argv=None) -> int:
                         help="Path to Flutter repo root.")
     parser.add_argument("--dist-dir", required=True, type=Path,
                         help="Path to local dist/ directory.")
-    parser.add_argument("--bucket", default=DEFAULT_BUCKET,
-                        help=f"Supabase bucket (default {DEFAULT_BUCKET}).")
+    parser.add_argument("--bucket", default=STORAGE_BUCKET,
+                        help=f"Supabase bucket (default {STORAGE_BUCKET}).")
     parser.add_argument("--orphan-sample-size", type=int,
                         default=DEFAULT_ORPHAN_SAMPLE_SIZE,
                         help="How many orphan hashes to print as a sample.")
