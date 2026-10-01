@@ -129,7 +129,7 @@ Scope, evidence and order: [product roadmap](../../../docs/plans/PHARMAGUIDE_PRO
 
 | # | Item | Owner / gate |
 |---|---|---|
-| S1.1 | Website claims match the engine (4 pillars, blend estimation, FAERS in-app, "never leaves your device", "PubMed verified", catalog size); later, site examples generated from the export contract. | Website repo; no pipeline owner touched. Catalog number is Sean's. |
+| S1.1 | Website claims match the engine (4 pillars, blend estimation, FAERS in-app, "never leaves your device", "PubMed verified", catalog size); later, site examples generated from the export contract. | First pass on website branch `claude/truth-reconciliation` (ba8da3c, not deployed). Open: privacy policy/HIPAA wording vs signed-in stack sync (Sean), catalog number (Sean), homepage ladder after the levothyroxine/grapefruit severity conflict between `ingredient_interaction_rules.json` and `curated_interactions_v1.json` is settled. |
 | S1.2 | App safety and accuracy: lookup before the guest scan limit so a recall always shows; exact privacy copy; fail closed on missing manifest keys and the legacy verdict fallback; accessibility; explicit "Amount not disclosed". | App repo. |
 | S1.3 | Analysis Coverage as one exported value composed from the existing owners; coverage taken out of the verdict (`scored_artifact.py::_public_verdict`) and out of the app's score-hiding rule. | New export field: Sean + ADR; `/pg-scoring-change`. After Phase 0. |
 | S1.4 | Three-part result header (personal card, PG Score, coverage) and page order; NOT_SCORED says what is missing. | App repo; needs S1.3 for the coverage part. |
