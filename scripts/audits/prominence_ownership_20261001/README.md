@@ -8,7 +8,7 @@ tracking only; final source `68cae99a`. Not merged to main, no catalog release.
 
 - **Branch** `claude/generic-prominence-ownership` (origin), worktree
   `~/Downloads/dsld_clean/.claude/worktrees/generic-prominence`, clean. **Base** `e8687b39` (origin/main,
-  unchanged since). **Final source** `68cae99a`; branch head `a803ceea` adds docs only. A strict
+  unchanged since). **Final source** `68cae99a`; every later commit on the branch is docs only. A strict
   descendant of main: a fast-forward. Not merged, not pushed to main, no release.
 - **Source commits, in order:** `eb70f424` role materiality; `2ce48b21` owner row view and consumers;
   `5c549d1a` organism guard (superseded by `68cae99a`); `2d9ede38` no re-stamp; `c4119d30`, `916d0c62`
