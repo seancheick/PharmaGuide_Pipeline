@@ -15761,18 +15761,16 @@
       "mechanism_of_harm": "Azo dye metabolized to aromatic amines in the GI tract. Associated with hyperactivity in children (McCann et al. 2007 Southampton study, Lancet). Cross-reactivity with aspirin in aspirin-sensitive individuals (urticaria, bronchospasm). Trace benzidine (IARC Group 1 carcinogen) present as manufacturing impurity in azo dyes; modern manufacturing limits this substantially. Some in vitro genotoxicity signals reported; EFSA 2009 re-evaluation found no confirmed in vivo genotoxicity at authorized food use levels. EFSA requested further Comet assay studies for sulfonated mono-azo dyes as a class.",
       "regulatory_status": {
         "US": "FDA approved as FD&C Yellow No. 5 (Tartrazine) — 21 CFR 74.705. Requires specific labeling on all products containing it (FALCPA). NOTE: E102 is the EU code — in the US this dye is designated FD&C Yellow No. 5, not E102. HHS/FDA April 2025 announced voluntary phase-out of all petroleum-based synthetic dyes by 2026.",
-        "EU": "Authorized as E102. ADI: 7.5 mg/kg bw/day (EFSA 2009 reduced from 10 mg/kg bw/day). EU Regulation 1333/2008 Annex V requires hyperactivity warning label on foods containing E102: 'may have an adverse effect on activity and attention in children.'",
+        "EU": "Authorized as E102. ADI: 7.5 mg/kg bw/day (EFSA 2009 re-evaluation kept the SCF/JECFA ADI). EU Regulation 1333/2008 Annex V requires hyperactivity warning label on foods containing E102: 'may have an adverse effect on activity and attention in children.'",
         "WHO": "JECFA ADI: 7.5 mg/kg bw/day."
       },
       "population_warnings": [
-        "Everyone - Potential carcinogen exposure from 4-MEI",
-        "Children - Higher exposure per body weight",
-        "People consuming cola beverages - High 4-MEI exposure"
+        "Children - Higher exposure per body weight"
       ],
-      "notes": "Synthetic azo dye (FD&C Yellow No. 5 in the US; E102 in the EU). Most extensively studied synthetic food dye. EU requires hyperactivity warning label. Cross-reactivity with aspirin documented. EFSA 2009 re-evaluation reduced ADI from 10 to 7.5 mg/kg bw/day. FDA/HHS announced voluntary phase-out of petroleum-based synthetic dyes (April 2025, target end of 2026). CORRECTION: Previous entry had caramel color (4-MEI/E150) content erroneously copied into this entry's mechanism and regulatory_status fields — both have been replaced with correct Tartrazine data.",
+      "notes": "Synthetic azo dye (FD&C Yellow No. 5 in the US; E102 in the EU). Most extensively studied synthetic food dye. EU requires hyperactivity warning label. Cross-reactivity with aspirin documented. EFSA's 2009 re-evaluation kept the ADI at 7.5 mg/kg bw/day. FDA/HHS announced voluntary phase-out of petroleum-based synthetic dyes (April 2025, target end of 2026).",
       "scientific_references": [
-        "PMID: 26404013 (Amchova et al. 2015 Reg Toxicol Pharmacol) - Health safety issues of synthetic food colorants - 4-MEI in beverages",
-        "EFSA Journal 2009:1330 — Re-evaluation of Tartrazine (E102); ADI revised to 7.5 mg/kg bw/day",
+        "PMID: 26404013 (Amchova et al. 2015 Reg Toxicol Pharmacol) - Health safety issues of synthetic food colorants",
+        "EFSA Journal 2009;7(11):1331 — Re-evaluation of Tartrazine (E 102); the database does not give reason to revise the ADI of 7.5 mg/kg bw/day",
         "McCann et al. Lancet 2007 (PMID 17825405) — Southampton study: hyperactivity association with food color mixtures including tartrazine",
         "FDA/HHS Press Release April 22, 2025 — HHS and FDA to Phase Out Petroleum-Based Synthetic Dyes"
       ],
@@ -15903,6 +15901,11 @@
             "date": "2026-10-02",
             "by": "claude-audit",
             "change": "LEDGER Q57: DOI citations content-checked (Crossref + PubMed, 2026-10-02). Removed 1 that resolve to an unrelated paper or to nothing: 10.1016/j.fct.2012.06.052. Receipt: scripts/audits/pending_items_20260926/research.md Q57."
+          },
+          {
+            "date": "2026-10-02",
+            "by": "claude-audit",
+            "change": "LEDGER Q60 (Sean 2026-10-02): 4-MEI/cola population warnings removed; 'EFSA 2009 reduced from 10' corrected (EFSA 2009 kept 7.5, opinion 1331, read 2026-10-02); tartrazine reference number 1330 -> 1331. Annex V child-label handling unchanged; caramel colour unchanged."
           }
         ]
       },
@@ -15911,7 +15914,7 @@
       "dose_thresholds": {
         "value": 7.5,
         "unit": "mg/kg/day",
-        "source": "EFSA/JECFA ADI (2009 reduced from 10)"
+        "source": "EFSA/JECFA ADI (EFSA 2009 kept 7.5)"
       },
       "cui": "C0039329",
       "external_ids": {
@@ -15963,17 +15966,16 @@
       "mechanism_of_harm": "Azo dye (Sunset Yellow FCF / E110) metabolized via azo bond cleavage to sulphanilic acid and 1-amino-2-naphthol-6-sulphonic acid by intestinal microflora. May contain trace benzidine (a known carcinogen) as a manufacturing impurity. Included in Southampton study mixtures (McCann et al. 2007) linked to hyperactivity in children. May cause hypersensitivity reactions including urticaria and angioedema in susceptible individuals.",
       "regulatory_status": {
         "US": "FDA approved color additive (21 CFR 74.706). Certified batch-by-batch. HHS/FDA announced April 22 2025 voluntary phase-out of all petroleum-based synthetic dyes (including Yellow 6 / Sunset Yellow) from food and dietary supplements by end of 2026.",
-        "EU": "Authorized as E110 (Sunset Yellow FCF) under Regulation (EC) No 1333/2008. ADI: 4 mg/kg bw/day (EFSA 2009 revision from 2.5 mg/kg bw/day for food use; Note: some sources cite 1 mg/kg bw/day — EFSA 2009 set group ADI for yellow dyes including E110). Mandatory EU hyperactivity warning label: 'may have an adverse effect on activity and attention in children' (Annex V of Regulation (EC) No 1333/2008).",
+        "EU": "Authorized as E110 (Sunset Yellow FCF) under Regulation (EC) No 1333/2008. ADI: 4 mg/kg bw/day (EFSA 2014, replacing the temporary ADI of 1 mg/kg bw/day set in 2009; in agreement with JECFA 2011). Mandatory EU hyperactivity warning label: 'may have an adverse effect on activity and attention in children' (Annex V of Regulation (EC) No 1333/2008).",
         "WHO": "JECFA ADI: 4 mg/kg bw/day. Synthetic azo dye; reviewed multiple times by JECFA with ADI revisions."
       },
       "population_warnings": [
-        "Everyone - Potential carcinogen exposure from 4-MEI",
-        "Children - Higher exposure per body weight",
-        "People consuming cola beverages - High 4-MEI exposure"
+        "Children - Higher exposure per body weight"
       ],
       "notes": "Synthetic azo dye used for color only. U.S. authorized; scored as B1 additive risk.",
       "scientific_references": [
-        "PMID: 26404013 (Amchova et al. 2015 Reg Toxicol Pharmacol) - Health safety issues of synthetic food colorants - 4-MEI in beverages"
+        "PMID: 26404013 (Amchova et al. 2015 Reg Toxicol Pharmacol) - Health safety issues of synthetic food colorants",
+        "EFSA Journal 2014;12(7):3765 (doi:10.2903/j.efsa.2014.3765) — Reconsideration of the temporary ADI for Sunset Yellow FCF (E 110): new ADI 4 mg/kg bw/day"
       ],
       "last_updated": "2026-03-28",
       "match_rules": {
@@ -16107,6 +16109,11 @@
             "date": "2026-10-02",
             "by": "claude-audit",
             "change": "LEDGER Q57: DOI citations content-checked (Crossref + PubMed, 2026-10-02). Removed 1 that resolve to an unrelated paper or to nothing: 10.1016/j.fct.2012.06.052. Receipt: scripts/audits/pending_items_20260926/research.md Q57."
+          },
+          {
+            "date": "2026-10-02",
+            "by": "claude-audit",
+            "change": "LEDGER Q60 (Sean 2026-10-02): 4-MEI/cola population warnings removed; EU ADI history corrected to EFSA 2014 (4 mg/kg, replacing the temporary 1 mg/kg of 2009; abstract read 2026-10-02). Annex V child-label handling unchanged; caramel colour unchanged."
           }
         ]
       },

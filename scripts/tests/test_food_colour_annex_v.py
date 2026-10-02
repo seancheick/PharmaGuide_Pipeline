@@ -50,3 +50,36 @@ def test_blue_dyes_carry_no_southampton_child_warning(entry_id, e_number):
 def test_blue_dyes_cite_the_annex_v_regulation(entry_id):
     urls = {r.get("url") for r in _entries()[entry_id]["references_structured"]}
     assert "https://eur-lex.europa.eu/eli/reg/2008/1333/oj" in urls
+
+
+# LEDGER Q60 (Sean 2026-10-02): 4-MEI is a caramel-colour (E150c/d) contaminant,
+# not a property of tartrazine or sunset yellow. EFSA 2009 kept tartrazine's ADI
+# at 7.5 mg/kg bw/day (EFSA Journal 2009;7(11):1331); EFSA 2014 set sunset
+# yellow's at 4 mg/kg bw/day, replacing the temporary 1 mg/kg of 2009
+# (EFSA Journal 2014;12(7):3765).
+def _without_review(entry: dict) -> str:
+    return json.dumps({k: v for k, v in entry.items() if k != "review"})
+
+
+@pytest.mark.parametrize("entry_id", ["ADD_YELLOW5", "ADD_YELLOW6"])
+def test_yellow_dyes_carry_no_caramel_colour_4mei_claims(entry_id):
+    text = _without_review(_entries()[entry_id]).lower()
+    for gone in ("4-mei", "methylimidazole", "cola"):
+        assert gone not in text, (entry_id, gone)
+
+
+def test_caramel_colour_keeps_its_4mei_warning():
+    assert "4-MEI" in _entries()["ADD_CARAMEL_COLOR"]["mechanism_of_harm"]
+
+
+@pytest.mark.parametrize(
+    "entry_id, gone",
+    [
+        ("ADD_YELLOW5", "reduced from 10"),
+        ("ADD_YELLOW5", "2009:1330"),
+        ("ADD_YELLOW6", "2.5 mg/kg"),
+        ("ADD_YELLOW6", "group ADI"),
+    ],
+)
+def test_yellow_dye_adi_history_matches_efsa(entry_id, gone):
+    assert gone not in _without_review(_entries()[entry_id])
