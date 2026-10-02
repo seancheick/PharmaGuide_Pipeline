@@ -1,7 +1,7 @@
 {
   "_comment": "Phase 0 scoring-snapshot fixtures. Each entry freezes the scoring-critical fields of one scored product so we can detect drift across pipeline runs (especially during Phase 3 enricher canonical_id work). See docs/HANDOFF_2026-04-20_PIPELINE_REFACTOR.md § Phase 0.",
   "schema_version": "2.0.0",
-  "frozen_on": "2026-09-29",
+  "frozen_on": "2026-10-02",
   "fixture_schema": {
     "frozen_fields": [
       "dsld_id",
@@ -10,6 +10,9 @@
       "score_100_equivalent",
       "quality_score_v4_100",
       "quality_score_status",
+      "quality_tier",
+      "product_safety_status",
+      "quality_assessment_status",
       "grade",
       "verdict",
       "safety_verdict",
@@ -33,7 +36,7 @@
       "percentile_category_confidence",
       "percentile_category_signals"
     ],
-    "excluded_rationale": "Percentiles recompute dataset-wide and drift with brand additions. Scoring metadata carries timestamps. Match ledger is a diagnostic trail. None of these affect user-visible correctness when the score_80 and verdict are stable."
+    "excluded_rationale": "Dataset-wide percentiles and timestamps are not stable canary fields. Public quality score/tier, assessment status and independent product safety are pinned; compatibility verdict remains covered."
   },
   "products": [
     {
@@ -203,6 +206,46 @@
     }
   ],
   "changelog": [
+    {
+      "date": "2026-10-02",
+      "phase": "Post-pipeline owner corrections and independent quality/safety pins",
+      "products_updated": [
+        182730,
+        12012,
+        288344,
+        245156,
+        183275,
+        278454,
+        270831,
+        180417,
+        18141,
+        239600,
+        204571,
+        223084,
+        270256,
+        306381,
+        239741,
+        241353,
+        269278,
+        274498,
+        293924,
+        293943,
+        294077,
+        298070,
+        298102,
+        306237,
+        321405,
+        321969,
+        323080,
+        327416,
+        336337,
+        337853,
+        74716,
+        288742,
+        12043
+      ],
+      "notes": "User-run 38 datasets / 15421 scored artifacts passed 114 stage fingerprint/hash checks but stopped at 7 snapshot failures (3 numeric, 4 compatibility-only). Independently traced 183275 +1.3 Formulation to cleaner-owned seed disclosure (Q40); retained legitimate 90.6. Corrected INGR_OMEGA3 applicability so plant ALA cannot inherit marine intervention evidence: 18141 remains 52.3 rather than accepting unsupported 62.7. Corrected botanical blend projection to carry its actual cleaner-owned child plantPart: 204571 remains 46.9 rather than accepting 44.3. Six retired POOR compatibility values become SAFE while quality_tier stays Poor and product_safety_status stays no_known_catalog_concern; this is not safer movement. All 33 fixtures now pin existing quality_tier, product_safety_status and quality_assessment_status independently through the canonical freezer. Candidate canaries are rescored stored inputs; bounded frozen-raw A/B receipts at ~/pg_quality/post_pipeline_20261002. Original user-run artifacts are preserved and become stale after these source corrections; no catalog/runtime publication."
+    },
     {
       "date": "2026-09-29",
       "action": "refrozen_reviewed_phase1_correctness_and_phase2_strict_form_outputs",

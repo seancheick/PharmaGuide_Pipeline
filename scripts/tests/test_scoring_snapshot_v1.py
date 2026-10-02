@@ -225,3 +225,11 @@ def test_manifest_schema_valid() -> None:
         assert "dsld_id" in p
         assert "brand_source" in p
         assert "label" in p
+
+
+def test_snapshots_pin_quality_and_safety_independently():
+    manifest = _load_manifest()
+    required = {"quality_tier", "product_safety_status", "quality_assessment_status"}
+    assert required <= set(manifest["fixture_schema"]["frozen_fields"])
+    for entry in manifest["products"]:
+        assert required <= _load_fixture(entry["dsld_id"]).keys()
