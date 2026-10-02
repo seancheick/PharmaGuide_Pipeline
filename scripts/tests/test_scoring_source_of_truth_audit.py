@@ -276,11 +276,22 @@ def test_scoring_audit_never_holds_a_confirmed_ban_or_recall_for_its_dose(
     # A banned or recalled ingredient decides the verdict at any amount, so its
     # dose decides nothing. The hold hid single-ingredient Sulbutiamine (252933):
     # no dose could be assessed, so a scan said "not found" instead of "Do not use".
-    for verdict, decision in (("BLOCKED", _confirmed_ban()), ("UNSAFE", _confirmed_recall())):
-        case_dir = tmp_path / verdict
+    # The EDTA chelator entries declare their own reason code; the policy tier
+    # is still a confirmed, verified ban.
+    edta = _confirmed_ban(
+        winning_rule="BANNED_NON_ROUTINE_CHELATOR_EDETATE_DISODIUM",
+        substance="Edetate Disodium",
+        reason_code="NON_ROUTINE_CHELATOR",
+    )
+    for name, verdict, decision in (
+        ("ban", "BLOCKED", _confirmed_ban()),
+        ("recall", "UNSAFE", _confirmed_recall()),
+        ("declared_reason", "BLOCKED", edta),
+    ):
+        case_dir = tmp_path / name
         case_dir.mkdir()
         codes = _codes_for_unassessed_dose(case_dir, verdict, decision)
-        assert "SCORING_SUPPRESSED_SAFETY_DOSE_INCOMPLETE" not in codes, verdict
+        assert "SCORING_SUPPRESSED_SAFETY_DOSE_INCOMPLETE" not in codes, name
 
 
 def test_scoring_audit_holds_every_other_suppressed_verdict_for_its_dose(

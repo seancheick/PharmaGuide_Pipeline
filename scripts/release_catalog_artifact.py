@@ -119,14 +119,21 @@ def is_confirmed_ban_or_recall(product: Dict[str, Any]) -> bool:
     ingredient name. Callers may exempt a typed incomplete dose assessment,
     but must still reject malformed readiness and legacy inference. Likely
     matches and unverified policies are not eligible for the exemption.
+
+    The tier is (policy status, verdict). ``reason_code`` is a per-entry
+    consumer label (``gate_safety`` ``verdict_reason_code``, e.g. the EDTA
+    chelators' ``NON_ROUTINE_CHELATOR``), so it must be present but never
+    decides eligibility.
     """
     decision = product.get("safety_decision")
     policy = decision.get("policy_basis") if isinstance(decision, dict) else None
+    reason_code = decision.get("reason_code") if isinstance(decision, dict) else None
     return (
         isinstance(policy, dict)
-        and (policy.get("status"), decision.get("verdict"), decision.get("reason_code"))
-        in (("banned", "BLOCKED", "banned_ingredient"),
-            ("recalled", "UNSAFE", "recalled_ingredient"))
+        and isinstance(reason_code, str)
+        and bool(reason_code.strip())
+        and (policy.get("status"), decision.get("verdict"))
+        in (("banned", "BLOCKED"), ("recalled", "UNSAFE"))
         and str(product.get("verdict") or "").upper() == decision.get("verdict")
         and decision.get("match_resolution") == "confirmed"
         and policy.get("policy_verification_status") == "verified"

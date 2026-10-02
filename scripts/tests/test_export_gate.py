@@ -1421,6 +1421,29 @@ _CONFIRMED_RECALL = {
     "reason_code": "recalled_ingredient",
     "policy_basis": {"status": "recalled", "policy_verification_status": "verified"},
 }
+# A registry entry may name its own consumer reason code (gate_safety
+# ``verdict_reason_code``); the EDTA chelator entries do. The policy tier is
+# still a confirmed, verified ban.
+_CONFIRMED_EDTA_BLOCK = {
+    **_CONFIRMED_BAN,
+    "winning_rule": "BANNED_NON_ROUTINE_CHELATOR_EDETATE_DISODIUM",
+    "substance": "Edetate Disodium",
+    "reason_code": "NON_ROUTINE_CHELATOR",
+    "policy_basis": {"status": "banned", "ban_context": "substance",
+                     "legal_status": "not_lawful_as_supplement",
+                     "policy_verification_status": "verified"},
+}
+
+
+def test_a_declared_reason_code_does_not_unconfirm_a_verified_ban():
+    from release_catalog_artifact import is_confirmed_ban_or_recall
+    product = {"verdict": "BLOCKED", "safety_decision": _CONFIRMED_EDTA_BLOCK}
+    assert is_confirmed_ban_or_recall(product)
+    unverified = {**_CONFIRMED_EDTA_BLOCK, "policy_basis": {
+        **_CONFIRMED_EDTA_BLOCK["policy_basis"], "policy_verification_status": "needs_review"}}
+    assert not is_confirmed_ban_or_recall({**product, "safety_decision": unverified})
+    likely = {**_CONFIRMED_EDTA_BLOCK, "match_resolution": "likely"}
+    assert not is_confirmed_ban_or_recall({**product, "safety_decision": likely})
 
 
 def _dose_hold_issues(verdict="BLOCKED", decision=_CONFIRMED_BAN, **dose):
@@ -1438,6 +1461,7 @@ def _dose_hold_issues(verdict="BLOCKED", decision=_CONFIRMED_BAN, **dose):
 @pytest.mark.parametrize("verdict, decision", [
     ("BLOCKED", _CONFIRMED_BAN),
     ("UNSAFE", _CONFIRMED_RECALL),
+    ("BLOCKED", _CONFIRMED_EDTA_BLOCK),
 ])
 def test_a_confirmed_ban_or_recall_ships_though_its_dose_was_never_assessed(verdict, decision):
     assert _dose_hold_issues(verdict, decision) == []
@@ -1465,7 +1489,7 @@ def test_confirmed_ban_does_not_excuse_missing_or_invalid_dose_status(readiness)
 
 
 @pytest.mark.parametrize("field", ["status", "verdict", "reason_code"])
-@pytest.mark.parametrize("value", [[], {}])
+@pytest.mark.parametrize("value", [[], {}, "", None])
 def test_malformed_ban_fields_are_held_without_crashing(field, value):
     decision = {**_CONFIRMED_BAN, "policy_basis": dict(_CONFIRMED_BAN["policy_basis"])}
     if field == "status":
@@ -1586,6 +1610,7 @@ def test_any_other_strict_contract_finding_still_blocks():
 @pytest.mark.parametrize("verdict, decision", [
     ("BLOCKED", _CONFIRMED_BAN),
     ("UNSAFE", _CONFIRMED_RECALL),
+    ("BLOCKED", _CONFIRMED_EDTA_BLOCK),
 ])
 def test_confirmed_safety_warning_ships_despite_unmapped_form(verdict, decision):
     scored = _base_scored(
