@@ -5413,6 +5413,11 @@
             "date": "2026-09-26",
             "by": "claude-audit",
             "change": "Regulatory terminology (register Q15; Sean's D10 standard 2026-09-26: a warning letter, recall or advisory is not a ban). regulatory_date 2000-01-01 'FDA ban effective' -> null: no government document states a status for IGF-1 LR3. legal_status_enum not_lawful_as_supplement -> under_review; US row not_lawful ('Unapproved new drug - never authorized', 2000-01-01) -> under_review. Reason: removed 'no human clinical trials completed' (unchecked). Receipt: scripts/audits/pending_items_20260926/research.md Q15."
+          },
+          {
+            "date": "2026-10-02",
+            "by": "claude-audit",
+            "change": "LEDGER Q64 (Sean 2026-10-02): copy claimed hypoglycemia, tumor growth and cardiovascular strain; no LR3 evidence (no class transfer from IGF-1)"
           }
         ]
       },
@@ -5437,7 +5442,7 @@
         "metabolites": []
       },
       "ban_context": "substance",
-      "safety_warning": "A long-acting synthetic IGF-1 analog — unapproved, with no recognized supplement status, and associated with hypoglycemia, tumor growth, and cardiovascular strain. Stop and consult a doctor.",
+      "safety_warning": "A long-acting synthetic IGF-1 analog — unapproved, with no recognized supplement status and no human safety data. Stop and consult a doctor.",
       "safety_warning_one_liner": "Unapproved peptide drug. Stop using and talk to your doctor."
     },
     {
@@ -7798,21 +7803,6 @@
           "jurisdiction_type": "country",
           "jurisdiction_code": "DE",
           "last_verified_date": "2026-01-08"
-        },
-        {
-          "region": "US",
-          "level": "federal",
-          "name": "Germany",
-          "status": "banned",
-          "effective_date": null,
-          "source": {
-            "type": "state_statute",
-            "citation": "Banned",
-            "accessed_date": "2026-01-08"
-          },
-          "jurisdiction_type": "country",
-          "jurisdiction_code": "US",
-          "last_verified_date": "2026-01-08"
         }
       ],
       "references_structured": [
@@ -7851,6 +7841,11 @@
             "date": "2026-01-08",
             "change": "Migrated to schema v3.1 with standardized fields",
             "by": "system"
+          },
+          {
+            "date": "2026-10-02",
+            "by": "claude-audit",
+            "change": "LEDGER Q64 (Sean 2026-10-02): copy said 'Not a lawful supplement ingredient' and a US row said 'Banned' with no source; the other US row records FDA warnings, not a ban"
           }
         ]
       },
@@ -7873,7 +7868,7 @@
         "metabolites": []
       },
       "ban_context": "substance",
-      "safety_warning": "A weight-loss botanical withdrawn in Europe after over 30 hepatitis cases and several deaths from liver failure. Not a lawful supplement ingredient. Stop and consult a doctor.",
+      "safety_warning": "A weight-loss botanical withdrawn in Europe after over 30 hepatitis cases and several deaths from liver failure. Stop and consult a doctor.",
       "safety_warning_one_liner": "Liver-toxic botanical withdrawn in Europe. Stop using and talk to your doctor.",
       "inactive_policy": "penalize_anyway",
       "inactive_policy_reason": "Hepatotoxic botanical — never an excipient"
@@ -11296,6 +11291,11 @@
             "date": "2026-10-02",
             "by": "claude-audit",
             "change": "LEDGER Q62 (Sean 2026-10-02): aliases removed ['ge labs']: the whole brand, not the one product FDA tested. Corpus 2026-10-02: no label in the 15,421-product corpus matched through them."
+          },
+          {
+            "date": "2026-10-02",
+            "by": "claude-audit",
+            "change": "LEDGER Q64 (Sean 2026-10-02): copy said 'recalled'; FDA issued an alert (2025-12-02), no recall was found"
           }
         ]
       },
@@ -11314,8 +11314,8 @@
       "cui_note": "Product recall record is intentionally null-CUI because a single UMLS ingredient or product concept would misrepresent this recalled branded product/formulation.",
       "external_ids": {},
       "ban_context": "adulterant_in_supplements",
-      "safety_warning": "A recalled product found to contain an undeclared designer anabolic steroid (trendione) in the supplement — linked in one case to a consumer stroke. Stop and consult a doctor.",
-      "safety_warning_one_liner": "Recalled product with hidden steroid. Stop using and talk to your doctor.",
+      "safety_warning": "FDA found an undeclared designer anabolic steroid (trendione) in this supplement after a consumer's stroke. Stop and consult a doctor.",
+      "safety_warning_one_liner": "Hidden steroid found by FDA. Stop using and talk to your doctor.",
       "policy_verification_status": "verified",
       "policy_verified_at": "2026-10-02"
     },
@@ -24274,7 +24274,7 @@
         "propyl-paraben",
         "propyl-parabens"
       ],
-      "reason": "Propylparaben (E216) had its EU food-additive authorisation WITHDRAWN by Directive 2006/52/EC, following the EFSA 2004 opinion that invalidated its ADI over adverse effects on sex hormones and the male reproductive system in juvenile rats. E216/E217 are no longer permitted EU food additives.",
+      "reason": "Propylparaben (E216) had its EU food-additive authorisation WITHDRAWN by Directive 2006/52/EC, following the EFSA 2004 opinion that invalidated its ADI over adverse effects on sex hormones and the male reproductive system in juvenile rats. E216/E217 are no longer permitted EU food additives. In the US, 21 CFR 184.1670 lists propylparaben as generally recognized as safe; good manufacturing practice results in a maximum level of 0.1 percent in food.",
       "status": "high_risk",
       "class_tags": [
         "high_risk_ingredients",
@@ -24318,6 +24318,16 @@
             "regulatory_action"
           ],
           "evidence_summary": "Authorisation withdrawn by Directive 2006/52/EC, following EFSA 2004 opinion (ADI invalidated)."
+        },
+        {
+          "type": "regulatory",
+          "title": "21 CFR 184.1670 Propylparaben",
+          "url": "https://www.govinfo.gov/content/pkg/CFR-2024-title21-vol3/pdf/CFR-2024-title21-vol3-sec184-1670.pdf",
+          "evidence_grade": "R",
+          "supports_claims": [
+            "regulatory_status"
+          ],
+          "evidence_summary": "GRAS antimicrobial; current good manufacturing practice results in a maximum level of 0.1 percent in food."
         }
       ],
       "entity_type": "ingredient",
@@ -24348,6 +24358,11 @@
             "date": "2026-09-18",
             "change": "Set source_category (sibling precedent: BANNED_ADD_FORMALDEHYDE)",
             "by": "claude-audit"
+          },
+          {
+            "date": "2026-10-02",
+            "by": "claude-audit",
+            "change": "LEDGER Q64 (Sean 2026-10-02): reason now states the US 0.1 percent limit its copy cites (21 CFR 184.1670(d), read 2026-10-02)"
           }
         ]
       },
@@ -25928,7 +25943,7 @@
         "country mallow",
         "bala"
       ],
-      "reason": "Sida cordifolia (country mallow, Ayurvedic 'bala') is named in FDA's 2004 final rule as a plant source of ephedrine alkaloids (69 FR 6788). Dietary supplements containing ephedrine alkaloids are adulterated (21 CFR 119.1), whatever the plant source. This rule is separate from Ephedra because it is a different plant.",
+      "reason": "Sida cordifolia (country mallow, Ayurvedic 'bala') is named in FDA's 2004 final rule as a plant source of ephedrine alkaloids (69 FR 6788). Dietary supplements containing ephedrine alkaloids are adulterated (21 CFR 119.1), whatever the plant source. This rule is separate from Ephedra because it is a different plant. FDA's rule found that ephedrine-alkaloid supplements raise blood pressure and heart rate and expose users to serious adverse events such as stroke, heart attack and death; strokes, heart attacks, seizures and deaths had been reported after their use.",
       "status": "banned",
       "class_tags": [
         "stimulant"
@@ -25985,6 +26000,11 @@
             "date": "2026-10-02",
             "by": "claude-audit",
             "change": "LEDGER Q62 (Sean 2026-10-02): own identity split out of the Ephedra aliases; verified from 69 FR 6788 (read 2026-10-02) and GSRS (UNII E6K1OK47SG, Sida cordifolia whole)."
+          },
+          {
+            "date": "2026-10-02",
+            "by": "claude-audit",
+            "change": "LEDGER Q64 (Sean 2026-10-02): reason now states the adverse events its copy names, from 69 FR 6788"
           }
         ]
       },
