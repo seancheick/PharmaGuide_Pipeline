@@ -170,3 +170,28 @@ def test_xos_identity_notes_do_not_claim_universal_low_dose_efficacy():
     assert '70%' in notes and '2015' in notes
     assert 'not establish' in notes and 'PreticX' in notes
     assert 'universal minimum effective dose' in notes
+
+
+def test_gos_notes_bound_bimuno_preparation_and_outcomes():
+    """Generic GOS must not inherit an unconditional branded efficacy claim."""
+    import json
+    from pathlib import Path
+    data = json.loads((Path(__file__).resolve().parents[1] / 'data' / 'ingredient_quality_map.json').read_text())
+    notes = data['prebiotics']['forms']['galactooligosaccharides (GOS)']['notes']
+    assert 'Well-tolerated and effective.' not in notes
+    assert 'PMID 30109908' in notes and 'PMID 26218845' in notes
+    assert '1.37 g' in notes and '48%' in notes
+    assert 'no significant' in notes and 'not a universal' in notes
+
+
+def test_phage_notes_do_not_transfer_combination_or_surrogate_benefits():
+    """No pathogenic-infection or phage-alone efficacy from microbial changes."""
+    import json
+    from pathlib import Path
+    data = json.loads((Path(__file__).resolve().parents[1] / 'data' / 'ingredient_quality_map.json').read_text())
+    notes = data['bacteriophages']['forms']['bacteriophage blend']['notes']
+    assert 'without disturbing beneficial flora' not in notes
+    assert 'Targets specific gut pathogens' not in notes
+    assert 'PMID 30897686' in notes and 'PMID 32824480' in notes
+    assert 'no phage-only arm' in notes and 'no significant between-group' in notes
+    assert 'same trial' in notes and 'not active phage mass' in notes

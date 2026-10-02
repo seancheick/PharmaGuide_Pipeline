@@ -18557,7 +18557,7 @@
           "by": "Product owner approval",
           "date": "2026-08-08"
         },
-        "notes": "Oligosaccharides derived from lactose that selectively promote beneficial bacteria growth, particularly Bifidobacterium. Well-tolerated and effective.",
+        "notes": "Lactose-derived galactooligosaccharides; clinical findings depend on preparation and population. Bimuno B-GOS in symptomatic adults improved bloating, flatulence and abdominal pain versus placebo over two weeks, with no significant changes in stool frequency/consistency, quality of life or mood (PMID 30109908). That study used 2.75 g powder/day containing 1.37 g active GOS. In healthy adults aged 65–80, 5.5 g/day Bimuno powder containing 48% GOS altered microbial and immune biomarkers over ten weeks, with no significant bowel-function or mood effects (PMID 26218845). Biomarker changes do not establish clinical immune protection. Both studies had Clasado support and overlapping investigators. These preparation-specific results are not a universal efficacy or tolerability guarantee for generic GOS; powder mass, active GOS and current marketed preparations must not be assumed interchangeable.",
         "aliases": [
           "GOS",
           "galactooligosaccharides",
@@ -69734,7 +69734,7 @@
           "by": "Product owner approval",
           "date": "2026-08-08"
         },
-        "notes": "Bacteriophage blend for selective antibacterial action in the gut microbiome. PreforPro is a common branded blend (LH01-Myoviridae, LL5-Siphoviridae, T4D-Myoviridae, LL12-Myoviridae). Targets specific gut pathogens (E. coli) without disturbing beneficial flora. Early clinical evidence for GI/immune applications. B34 audit 2026-04-25: bulk class-application (default fallback) — mechanical mapping from absorption + bio_score.",
+        "notes": "PreforPro is a studied four-phage preparation (LH01-Myoviridae, LL5-Siphoviridae, T4D-Myoviridae, LL12-Myoviridae), targeting E. coli. PHAGE safety/tolerability (PMID 30157383) and microbiome (PMID 30897686) reports describe the same trial, not independent replication. The 28-day crossover study in adults without diagnosed GI disease found selected microbial changes without significant global diversity changes; this does not establish pathogenic-infection treatment or absence of effects on every beneficial organism. Symptom improvements occurred with both placebo and treatment, with possible carryover. PHAGE-2 studied BL04 plus PreforPro, BL04 alone and placebo for four weeks, with no phage-only arm and no significant between-group symptom-score change (PMID 32824480). Its GI inflammation measure was a symptom questionnaire, not demonstrated biological inflammation reduction. Combination findings cannot establish phage-alone or arbitrary probiotic-formula efficacy. The studies used 15 mg capsules with carrier material, not active phage mass; PHAGE reported 10^6 phages/dose and PHAGE-2 10^6 PFU plus 10^9 CFU BL04. Dose applicability requires preparation and potency correspondence. Deerland funded these studies; investigators overlap. B34 audit 2026-04-25: bulk class-application (default fallback) — mechanical mapping from absorption + bio_score.",
         "aliases": [
           "bacteriophages",
           "phage blend",
