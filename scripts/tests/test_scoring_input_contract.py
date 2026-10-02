@@ -22,6 +22,37 @@ from scoring_input_contract import (  # noqa: E402
 )
 
 
+@pytest.mark.parametrize("declaration,expected", [
+    ("800,000 FCC (PU)", (800000.0, "FCCPU")),
+    ("800000 FCC(PU)", (800000.0, "FCCPU")),
+    ("800000 FCC PU", (800000.0, "FCCPU")),
+    ("800000 FCCPU", (800000.0, "FCCPU")),
+    ("50 GDU", (50.0, "GDU")),
+    ("2000 PU", (2000.0, "PU")),
+    ("800000 FCC", (None, None)),
+    ("800000 FCC (PUX)", (None, None)),
+    ("800000 FCC (PU", (None, None)),
+])
+def test_enzyme_activity_reads_explicit_fcc_pu_spelling_without_assay_conversion(declaration, expected):
+    assert scoring_contract._extract_enzyme_activity({"notes": declaration}) == expected
+
+
+def test_fcc_pu_label_activity_reaches_the_production_artifact_subject_owner():
+    from tests.test_evidence_prominence_ownership import _enrich
+    from scoring_v4.scored_artifact import build_scored_artifact
+    product = _enrich("probiotic_enzyme_232295_raw.json")
+    artifact = build_scored_artifact(product)
+    rows = [r for r in scoring_contract.get_evidence_subject_rows(product)
+            if r.get("canonical_id") == "bromelain"]
+    assert len(rows) == 1
+    assert rows[0]["raw_source_path"] == "ingredientRows[0].nestedRows[1]"
+    assert (rows[0]["quantity"], rows[0]["unit"]) == (800000.0, "FCCPU")
+    assert rows[0]["dose_class"] == "enzyme_activity"
+    evidence = artifact["_v4_module_breakdown"]["dimensions"]["evidence"]
+    assert set(evidence["metadata"]["ingredient_points"]) == {"bromelain"}
+    assert evidence["metadata"]["probiotic_component_evidence"]["evidence_score"] == 0.0
+
+
 def _row(**overrides):
     row = {
         "name": "Magnesium Glycinate",

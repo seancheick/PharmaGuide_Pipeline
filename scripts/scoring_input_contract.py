@@ -249,7 +249,7 @@ _ENZYME_UNITS = {
     "du", "pc", "agu", "bgu", "lu", "phy", "ftu", "su", "fu",
 }
 _ENZYME_ACTIVITY_RE = re.compile(
-    r"(?P<value>\d[\d,]*(?:\.\d+)?)\s*(?P<unit>ALU|PPI|BLGU|HUT|SAPU|FIP|CU|GDU|DPP[- ]?IV|LACU|FCCPU|GALU|AU|SKB|MWU|PU|DP|CKPU|AJU|USP|DU|PC|AGU|BGU|LU|PHY|FTU|SU|FU)(?:\b|$)",
+    r"(?P<value>\d[\d,]*(?:\.\d+)?)\s*(?P<unit>ALU|PPI|BLGU|HUT|SAPU|FIP|CU|GDU|DPP[- ]?IV|LACU|FCC(?:\s*\(\s*PU\s*\)|\s*PU)|GALU|AU|SKB|MWU|PU|DP|CKPU|AJU|USP|DU|PC|AGU|BGU|LU|PHY|FTU|SU|FU)(?![A-Za-z0-9_])",
     re.IGNORECASE,
 )
 _TITLE_MASS_RE = re.compile(
@@ -1270,6 +1270,10 @@ def _extract_enzyme_activity(row: Dict[str, Any]) -> tuple[Optional[float], Opti
         return None, None
     parsed = _as_float(match.group("value").replace(",", ""), None)
     unit_text = match.group("unit").upper().replace(" ", "-")
+    if unit_text.startswith("FCC"):
+        # Alternate label spellings of the existing FCCPU assay, not a
+        # conversion to another activity unit or to member mass.
+        unit_text = "FCCPU"
     if unit_text == "DPP-IV":
         unit_text = "DPPIV"
     return parsed, unit_text
