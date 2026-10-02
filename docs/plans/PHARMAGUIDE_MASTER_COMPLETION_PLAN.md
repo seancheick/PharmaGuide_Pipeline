@@ -72,6 +72,17 @@ Owner: `backed_clinical_studies.json::BRAND_SUNFIBER`; existing enrichment clini
 
 Owner: `backed_clinical_studies.json::INGR_INULIN`, `SupplementEnricherV3::_clinical_study_match`, existing clinical applicability, generic Evidence and route Dose. Evidence: indexed primary content, schema optional-count semantics, canonical batch check, production matcher regressions and frozen-label receipts. Will NOT create: registry/scorer/parser/public fields/status/benchmark/numerical policy. Baseline91884042; final source0bbcedc5. Receipts: `/Users/seancheick/pg_quality/inulin_clinical_review_20261002/`. Next bounded factual review: XOS/PreticX; inulin/PHGG cross-family calibration and D26/D24/omega/Q53/roles/serving/final corpus remain open.
 
+## XOS/PreticX source/preparation checkpoint — October 2
+
+- [x] Verify PMID24513849 and26300782 by live title/content; retrieve open2015primary full text and indexed2014publisher methods/results.2015authors distinguish nominal2gXOS from2.8g70%preparation. Do not transplant that purity to2014or currentPreticX labels.
+- [x] Correct only existing IQM XOS notes: remove universal comparative low-dose efficacy wording; distinguish microbiome/tolerability outcomes from symptom relief and metabolic benefit.2014Table3low-dose versus placebo week-eightP=.052 differs from stronger prose. Neither retrieved study namesPreticX brand/grade; supplier continuity is not proof of equivalence.
+- [x] One actual fail-first source-copy regression;241focused preparation/batch checks pass. Canonical one-parent patch0problems, only XOS notes differ inside parent. Changed-parent citation check4MATCH/0mismatch includes two unchanged sibling citations.15raw captures (six XOS matches plus nine controls) remain identical; Pure capsules61.5 and powder60.1 retain Evidence0/Dose7.2.
+- [x] Fresh source/measurement review accepted. Both snapshots and all15raw/output hashes checked;436committed source hashes verified. Five ignored FDAassets occur only in baseline manifest: do not claim full environment equivalence or release validation.
+- [x] Exact-source97cbff88 four-shard CI [37066989036](https://github.com/seancheick/PharmaGuide_Pipeline/actions/runs/37066989036): **18,222passed/183approved skips/zero failures**; local **527passed/24approved opt-in skips**, skip guard passed. Source integrated with this accompanying plan receipt; no runtime publication.
+- [ ] Close preparation-specific clinical-credit and Dose determinations:2014purity, explicitPreticX linkage, endpoint eligibility/clinical grading and studied-exposure applicability remain open. Published microbial research is not “no human research”; unchanged0Evidence is not a completed negative clinical review.
+
+Owner: `ingredient_quality_map.json::prebiotics.forms.xylooligosaccharides (XOS).notes`; existing prebiotic identity/preparation, backed clinical matcher/applicability and exposure/fiber Dose. Evidence: canonical matrix/schema, raw label rows, live citations and primary text,15-label frozen replay. Will NOT create: registry/scorer/parser/publicfield/status/benchmark/numerical policy. Baseline5938d487; source97cbff88. Receipts: `/Users/seancheick/pg_quality/xos_clinical_review_20261002/`. Existing fiber Dose mass table supplies current credit; it is not established XOS-specific trial adequacy. Keep this distinction in D24/calibration before release. GOS/Bimuno primary review is next; broader clinical/release boxes remain open.
+
 ## Execution discipline — October 2
 
 - [x] Align shared, scoring-change, clinical-data, curated-data and FDA-sync instructions around surgical iteration:
@@ -567,3 +578,22 @@ coverage, serving discrepancies, numerical calibration and the final fresh
 corpus/manifest/release sequence. This batch closes none of those broader
 items. The existing user-run corpus is preserved; no full corpus job or
 runtime publication was performed.
+
+## GOS/Bimuno and PreforPro source checkpoint — October 2
+
+- [x] Verify each preparation against primary methods/results: Bimuno powder versus active GOS; PreforPro capsule mass versus phage potency; populations, positive/null endpoints and funding.
+- [x] Correct the two existing IQM descriptions. Remove unconditional GOS efficacy/tolerability and phage infection/beneficial-flora/immune claims. Preserve the studies' bounded findings, including PHAGE-2's combination-only design and lack of significant between-group symptom changes.
+- [x] Reproduce both defects before correcting them; 243 focused checks pass. Canonical patch changes exactly the `prebiotics` and `bacteriophages` parents, and only their two notes. Citation verification: nine topic matches, zero mismatches (five newly cited reports, four unchanged sibling citations); primary reading supplies the clinical interpretation.
+- [x] Measure 39 frozen raw labels: all 30 source-text matches plus nine controls. Every scored capture is unchanged. GNC Bimuno/GOS labels 219246, 304444 and 318195 remain 55.3 with Evidence 0; Thorne 323127 remains 51.0 with Evidence 0.
+- [x] Independent source review finds no factual blocker; identity, numerical values and approved consumer notes remain unchanged.
+- [x] Combined checkpoint: source `c527c43c`, CI37069282386 all four shards green (18,224 passed /183 declared skips); local527 passed /24 approved opt-in skips,173.46s, skip guard passed. Integrated with this accompanying plan receipt; clinical and release gates remain open.
+- [ ] Complete clinical grading and preparation-specific Dose applicability. GOS and phage zero Evidence scores do not mean no human research. Current fiber-mass Dose credit is not proof that the product matches a studied preparation or potency.
+- [ ] Release validation/publication through the existing final corpus and approval gates.
+
+Owner: `scripts/data/ingredient_quality_map.json::prebiotics.forms.galactooligosaccharides (GOS).notes` and `bacteriophages.forms.bacteriophage blend.notes`. Evidence: matrix/glossary, primary trial methods/results, canonical patch, production replay and independent review. Will NOT create: a scorer, registry, parser, public field, benchmark or numerical policy. Baseline `bf12f605`; source `c527c43c`. Receipts: `/Users/seancheick/pg_quality/gos_phage_review_20261002/`.
+
+**Next:** finish the existing probiotic strain/formula clinical queue, then assemble one cross-family certainty/applicability and Dose policy packet using the completed PHGG, inulin, XOS, GOS and phage source reviews. Keep D26's uncovered amount safeguards until equivalent assessment exists in Dose. Numerical calibration and release remain separate, uncompleted gates.
+
+Measurement limit: baseline provenance includes five ignored FDA data/cache files absent from the candidate checkout. Independent review confirms matching raw hashes and all39 successful scored captures are byte-identical; this establishes bounded output equivalence, not identical full environments or release readiness. The existing research register now includes the cross-family decision-input table; it does not approve grades or Dose magnitudes.
+
+Next bounded source finding: primary PMID36198994 describes LA-5 alone versus fluconazole for candidiasis. The next reviewer must independently confirm that report and the current `STRAIN_ACIDOPHILUS_LA5` wording before correcting its combination-only description. It does not establish gut-health efficacy, treatment equivalence or Solgar preparation/dose correspondence. Research receipt: `/Users/seancheick/pg_quality/q53_followup_20261002/primary_review.md`. SD-5845 remains unresolved; Member's Mark Bioflora has no disclosed strain and must not inherit another manufacturer's formula evidence. These are research findings, not implemented registry corrections.

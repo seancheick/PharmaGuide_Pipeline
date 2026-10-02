@@ -127,13 +127,12 @@ def is_confirmed_ban_or_recall(product: Dict[str, Any]) -> bool:
     """
     decision = product.get("safety_decision")
     policy = decision.get("policy_basis") if isinstance(decision, dict) else None
-    reason_code = decision.get("reason_code") if isinstance(decision, dict) else None
     return (
         isinstance(policy, dict)
-        and isinstance(reason_code, str)
-        and bool(reason_code.strip())
         and (policy.get("status"), decision.get("verdict"))
         in (("banned", "BLOCKED"), ("recalled", "UNSAFE"))
+        and isinstance(decision.get("reason_code"), str)
+        and bool(decision["reason_code"].strip())
         and str(product.get("verdict") or "").upper() == decision.get("verdict")
         and decision.get("match_resolution") == "confirmed"
         and policy.get("policy_verification_status") == "verified"

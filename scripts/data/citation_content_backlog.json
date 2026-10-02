@@ -3,8 +3,8 @@
     "purpose": "Known citation-content backlog for verify_all_citations_content.py --baseline",
     "description": "Citations the first full-coverage run (2026-09-26) flagged: 'mismatch' means the live PubMed record shares no identity word with its entry (a heuristic; many are wrong papers, some are naming misses), 'not_found' means the PMID does not resolve. The release gate fails on any not_found and on any mismatch NOT listed here, so a new bad citation cannot hide in this backlog. Fix entries one at a time via /data-fix and delete each from this list in the same commit (register Q22). The 10 medication_depletions items are needs_revision records the app suppresses.",
     "schema_version": "5.0.0",
-    "last_updated": "2026-09-26",
-    "total_entries": 232,
+    "last_updated": "2026-10-02",
+    "total_entries": 253,
     "source_run": "verify_all_citations_content.py --report (after e349a2b7: every citation in scripts/data read)",
     "summary_by_file": {
       "timing_rules.json": {
@@ -3508,6 +3508,255 @@
         "japanese",
         "knotweed"
       ]
+    },
+    {
+      "file": "harmful_additives.json",
+      "entry_id": "ADD_BLUE1",
+      "pmid": "doi:10.1016/s0140-6736(07)61306-3",
+      "status": "mismatch",
+      "live_title": "Food additives and hyperactive behaviour in 3-year-old and 8/9-year-old children in the community: a randomised, double-blinded, placebo-controlled trial.",
+      "identity_words": [
+        "blue",
+        "lake",
+        "fd&c",
+        "3844",
+        "e133",
+        "aluminum"
+      ],
+      "note": "Q57 2026-10-02: correct citation, identity-word naming miss: McCann 2007, cited for the note that E133 was NOT in the Southampton mixes"
+    },
+    {
+      "file": "harmful_additives.json",
+      "entry_id": "ADD_BLUE2",
+      "pmid": "doi:10.1016/s0140-6736(07)61306-3",
+      "status": "mismatch",
+      "live_title": "Food additives and hyperactive behaviour in 3-year-old and 8/9-year-old children in the community: a randomised, double-blinded, placebo-controlled trial.",
+      "identity_words": [
+        "blue",
+        "lake",
+        "fd&c",
+        "indigo",
+        "73015",
+        "indigotine"
+      ],
+      "note": "Q57 2026-10-02: correct citation, identity-word naming miss: McCann 2007, cited for the note that E132 was NOT in the Southampton mixes"
+    },
+    {
+      "file": "harmful_additives.json",
+      "entry_id": "ADD_CALCIUM_ALUMINUM_PHOSPHATE",
+      "pmid": "doi:10.2903/j.efsa.2008.754",
+      "status": "mismatch",
+      "live_title": "Safety of aluminium from dietary intake - Scientific Opinion of the Panel on Food Additives, Flavourings, Processing Aids and Food Contact Materials (AFC).",
+      "identity_words": [
+        "aluminophosphate",
+        "calcium",
+        "phosphate",
+        "34767",
+        "aluminum"
+      ],
+      "note": "Q57 2026-10-02: correct citation, identity-word naming miss: EFSA 2008 dietary aluminium opinion (the aluminium in this additive)"
+    },
+    {
+      "file": "harmful_additives.json",
+      "entry_id": "ADD_FATTY_ACID_POLYGLYCEROL_ESTERS",
+      "pmid": "doi:10.1038/nature14232",
+      "status": "mismatch",
+      "live_title": "Dietary emulsifiers impact the mouse gut microbiota promoting colitis and metabolic syndrome.",
+      "identity_words": [
+        "e475",
+        "polyglycerol",
+        "esters",
+        "acids",
+        "fatty",
+        "acid"
+      ],
+      "note": "Q57 2026-10-02: correct citation, identity-word naming miss: Chassaing 2015, framed in the entry as class-level emulsifier evidence (CMC/P80 studied)"
+    },
+    {
+      "file": "harmful_additives.json",
+      "entry_id": "ADD_PALM_OIL",
+      "pmid": "doi:10.2903/j.efsa.2018.5083",
+      "status": "mismatch",
+      "live_title": "Update of the risk assessment on 3-monochloropropane diol and its fatty acid esters.",
+      "identity_words": [
+        "palm",
+        "elaeis",
+        "refined",
+        "stearin",
+        "kernel",
+        "vegetable"
+      ],
+      "note": "Q57 2026-10-02: correct citation, identity-word naming miss: EFSA 2018 3-MCPD ester opinion (palm oil is the main source)"
+    },
+    {
+      "file": "harmful_additives.json",
+      "entry_id": "ADD_RED40",
+      "pmid": "doi:10.1016/s0140-6736(07)61306-3",
+      "status": "mismatch",
+      "live_title": "Food additives and hyperactive behaviour in 3-year-old and 8/9-year-old children in the community: a randomised, double-blinded, placebo-controlled trial.",
+      "identity_words": [
+        "lake",
+        "fd&c",
+        "aluminum",
+        "allura",
+        "e129"
+      ],
+      "note": "Q57 2026-10-02: correct citation, identity-word naming miss: McCann 2007; Allura Red (E129) was in Mix B"
+    },
+    {
+      "file": "harmful_additives.json",
+      "entry_id": "ADD_SODIUM_HEXAMETAPHOSPHATE",
+      "pmid": "doi:10.1161/atvbaha.123.319198",
+      "status": "mismatch",
+      "live_title": "Phosphate in Cardiovascular Disease: From New Insights Into Molecular Mechanisms to Clinical Implications.",
+      "identity_words": [
+        "sodium",
+        "e452i",
+        "calgon",
+        "hexametaphosphate",
+        "hexametaphoshate",
+        "polyphosphate"
+      ],
+      "note": "Q57 2026-10-02: correct citation, identity-word naming miss: phosphate in cardiovascular disease review (phosphate additive)"
+    },
+    {
+      "file": "harmful_additives.json",
+      "entry_id": "ADD_SOY_MONOGLYCERIDES",
+      "pmid": "doi:10.1038/nature14232",
+      "status": "mismatch",
+      "live_title": "Dietary emulsifiers impact the mouse gut microbiota promoting colitis and metabolic syndrome.",
+      "identity_words": [
+        "diglycerides",
+        "monostearate",
+        "e471",
+        "glycerides",
+        "mono",
+        "monoglycerides"
+      ],
+      "note": "Q57 2026-10-02: correct citation, identity-word naming miss: Chassaing 2015, dietary emulsifier class evidence"
+    },
+    {
+      "file": "harmful_additives.json",
+      "entry_id": "ADD_CORN_OIL",
+      "pmid": "doi:10.2903/j.efsa.2010.1461",
+      "status": "mismatch",
+      "live_title": "Scientific Opinion on Dietary Reference Values for fats, including saturated fatty acids, polyunsaturated fatty acids, monounsaturated fatty acids, trans fatty acids, and cholesterol",
+      "identity_words": [
+        "corn",
+        "oil"
+      ],
+      "note": "Q57 2026-10-02: correct citation, identity-word naming miss: EFSA 2010 fats DRV opinion, the document the entry names (DOI corrected from the water DRV, 1459)"
+    },
+    {
+      "file": "harmful_additives.json",
+      "entry_id": "ADD_UNSPECIFIED_COLORS",
+      "pmid": "doi:10.2903/j.efsa.2015.4288",
+      "status": "mismatch",
+      "live_title": "Scientific Opinion on the re-evaluation of cochineal, carminic acid, carmines (E 120) as a food additive.",
+      "identity_words": [
+        "unspecified",
+        "colors"
+      ],
+      "note": "Q57 2026-10-02: correct citation, identity-word naming miss: EFSA 2015 carmine re-evaluation, the document the entry names (DOI corrected from a pesticide MRL opinion, 4037)"
+    },
+    {
+      "file": "banned_recalled_ingredients.json",
+      "entry_id": "ADULTERANT_RIMONABANT",
+      "pmid": "22150438",
+      "status": "mismatch",
+      "live_title": "Detection of hazardous weight-loss substances in adulterated slimming formulations using ultra-high-pressure liquid chromatography with diode-array detection.",
+      "identity_words": [],
+      "note": "Q57b 2026-10-02: correct citation, identity-word naming miss: slimming-formulation analysis; rimonabant is listed among detected substances past the verifier's 800-character abstract cut"
+    },
+    {
+      "file": "banned_recalled_ingredients.json",
+      "entry_id": "RECALLED_JACK3D",
+      "pmid": "23397688",
+      "status": "mismatch",
+      "live_title": "Case reports: Death of active duty soldiers following ingestion of dietary supplements containing 1,3-dimethylamylamine (DMAA).",
+      "identity_words": [],
+      "note": "Q57b 2026-10-02: correct citation, identity-word naming miss: two soldier deaths with DMAA-containing supplements; reason now says DMAA-containing, not Jack3d"
+    },
+    {
+      "file": "banned_recalled_ingredients.json",
+      "entry_id": "BANNED_S23",
+      "pmid": "18772237",
+      "status": "mismatch",
+      "live_title": "Preclinical characterization of a (S)-N-(4-cyano-3-trifluoromethyl-phenyl)-3-(3-fluoro, 4-chlorophenoxy)-2-hydroxy-2-methyl-propanamide: a selective androgen receptor modulator for hormonal male contraception.",
+      "identity_words": [],
+      "note": "Q57b 2026-10-02: correct citation, identity-word naming miss: S-23 named only by its chemical name in the title"
+    },
+    {
+      "file": "banned_recalled_ingredients.json",
+      "entry_id": "HIGH_RISK_CHAPARRAL",
+      "pmid": "17672511",
+      "status": "mismatch",
+      "live_title": "Oxidation of the lignan nordihydroguaiaretic acid.",
+      "identity_words": [],
+      "note": "Q57b 2026-10-02: correct citation, identity-word naming miss: NDGA (chaparral's lignan) oxidation study"
+    },
+    {
+      "file": "banned_recalled_ingredients.json",
+      "entry_id": "HIGH_RISK_PENNYROYAL",
+      "pmid": "26969934",
+      "status": "mismatch",
+      "live_title": "Tandem mass spectrometric analysis of S- and N-linked glutathione conjugates of pulegone and menthofuran and identification of P450 enzymes mediating their formation.",
+      "identity_words": [],
+      "note": "Q57b 2026-10-02: correct citation, identity-word naming miss: pulegone/menthofuran (pennyroyal oil constituents) P450 bioactivation"
+    },
+    {
+      "file": "banned_recalled_ingredients.json",
+      "entry_id": "NOOTROPIC_PHENYLPIRACETAM",
+      "pmid": "40047835",
+      "status": "mismatch",
+      "live_title": "[Efficacy and safety of fonturacetam in asthenia: a systematic review and meta-analysis].",
+      "identity_words": [],
+      "note": "Q57b 2026-10-02: correct citation, identity-word naming miss: fonturacetam is phenylpiracetam"
+    },
+    {
+      "file": "banned_recalled_ingredients.json",
+      "entry_id": "SARM_ANDARINE",
+      "pmid": "29183075",
+      "status": "mismatch",
+      "live_title": "Chemical Composition and Labeling of Substances Marketed as Selective Androgen Receptor Modulators and Sold via the Internet.",
+      "identity_words": [],
+      "note": "Q57b 2026-10-02: correct citation, identity-word naming miss: products sold as SARMs; andarine among those detected"
+    },
+    {
+      "file": "banned_recalled_ingredients.json",
+      "entry_id": "SARM_RAD140",
+      "pmid": "36561105",
+      "status": "mismatch",
+      "live_title": "RAD-140 Drug-Induced Liver Injury.",
+      "identity_words": [],
+      "note": "Q57b 2026-10-02: correct citation, identity-word naming miss: title spells RAD-140"
+    },
+    {
+      "file": "banned_recalled_ingredients.json",
+      "entry_id": "SCHED_AMANITA_MUSCARIA",
+      "pmid": "41955162",
+      "status": "mismatch",
+      "live_title": "Severe Illness Associated with Eating Mushroom-Containing Chocolate Products - United States, January-October 2024.",
+      "identity_words": [],
+      "note": "Q57b 2026-10-02: correct citation, identity-word naming miss: MMWR Diamond Shruumz outbreak; Amanita compounds named in full text (PMC13065088), read"
+    },
+    {
+      "file": "banned_recalled_ingredients.json",
+      "entry_id": "SCHED_PSILOCIN",
+      "pmid": "41955162",
+      "status": "mismatch",
+      "live_title": "Severe Illness Associated with Eating Mushroom-Containing Chocolate Products - United States, January-October 2024.",
+      "identity_words": [],
+      "note": "Q57b 2026-10-02: correct citation, identity-word naming miss: MMWR Diamond Shruumz outbreak; psilocin found in tested products per full text, read"
+    },
+    {
+      "file": "banned_recalled_ingredients.json",
+      "entry_id": "BANNED_MUSCIMOL",
+      "pmid": "41955162",
+      "status": "mismatch",
+      "live_title": "Severe Illness Associated with Eating Mushroom-Containing Chocolate Products - United States, January-October 2024.",
+      "identity_words": [],
+      "note": "Q57b 2026-10-02: correct citation, identity-word naming miss: MMWR Diamond Shruumz outbreak; muscimol found in products per full text, read"
     }
   ]
 }

@@ -355,6 +355,19 @@ def _authoritative_us_policy_sources(entry: Dict[str, Any]) -> List[Dict[str, An
     return sources
 
 
+def _harm_evidence_sources(entry: Dict[str, Any]) -> List[Dict[str, Any]]:
+    """Read sources tagged ``clinical_risk``: human harm or an authority's stated
+    safety risk. ``clinical_outcomes`` alone is not enough; it also tags efficacy
+    and product-analysis papers."""
+    return [
+        reference
+        for reference in _safe_list(entry.get("references_structured"))
+        if isinstance(reference, dict)
+        and reference.get("url")
+        and "clinical_risk" in {_norm(value) for value in _safe_list(reference.get("supports_claims"))}
+    ]
+
+
 def _explicit_us_jurisdictions(entry: Dict[str, Any]) -> List[Dict[str, Any]]:
     return [
         dict(item)
@@ -380,7 +393,13 @@ def _hard_policy_missing_requirements(
         missing.append("policy_verification_status")
     if not _explicit_us_jurisdictions(entry):
         missing.append("explicit_us_jurisdiction")
-    if not _authoritative_us_policy_sources(entry):
+    if _norm(entry.get("legal_status_enum")) == "under_review":
+        # "Unverified ingredient" (LEDGER Q58): no US determination exists, so
+        # human harm evidence carries the block. Regulatory uncertainty alone
+        # never blocks.
+        if not _harm_evidence_sources(entry):
+            missing.append("verified_harm_evidence")
+    elif not _authoritative_us_policy_sources(entry):
         missing.append("verified_authoritative_us_source")
     if not entry.get("legal_status_enum"):
         missing.append("legal_status")

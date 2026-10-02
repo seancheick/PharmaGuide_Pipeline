@@ -298,14 +298,26 @@ def test_sarm_records_state_what_fda_did_not_a_ban(banned_recalled, entry_id):
         assert entry["policy_verification_status"] == "verified"
 
 
+def _has_harm_source(entry) -> bool:
+    import sys
+    scripts = str(Path(__file__).resolve().parents[1])
+    if scripts not in sys.path:
+        sys.path.insert(0, scripts)
+    from scoring_v4.gate_safety import _harm_evidence_sources
+    return bool(_harm_evidence_sources(entry))
+
+
 def test_sr9009_has_no_fda_action_so_its_policy_stays_under_review(banned_recalled):
     """No fda.gov document names SR9009 (warning letters, recalls, Import Alert
-    66-41 searched 2026-09-26); the 2017-10-31 date had no source."""
+    66-41 searched 2026-09-26); the 2017-10-31 date had no source. LEDGER Q58
+    (Sean 2026-10-02): verified only as an "Unverified ingredient" on its human
+    liver-injury case report, never as a US determination."""
     entry = _find(banned_recalled, "BANNED_SR9009")
     assert entry["regulatory_date"] is None and entry["regulatory_date_label"] is None
     [us] = [j for j in entry["jurisdictions"] if j.get("jurisdiction_code") == "US"]
     assert us["status"] == "under_review"
-    assert entry.get("policy_verification_status") != "verified"
+    assert entry["legal_status_enum"] == "under_review"
+    assert entry.get("policy_verification_status") != "verified" or _has_harm_source(entry)
 
 
 def test_titan_sarms_record_is_a_warning_letter_not_a_recall(banned_recalled):
@@ -391,7 +403,7 @@ Q15_PRIMARY_SOURCES = {
 # safety gate routes a match to review, as for SR9009.
 Q15_NO_US_DETERMINATION = ["BANNED_FASORACETAM", "BANNED_IGF1", "BANNED_IGF1_LR3", "BANNED_SUNIFIRAM",
                            "NOOTROPIC_9MEBC", "NOOTROPIC_FLMODAFINIL", "NOOTROPIC_PIRACETAM"]
-_GENUINE_BANS = {"BANNED_EPHEDRA", "BANNED_FDC_RED_2_AMARANTH"}
+_GENUINE_BANS = {"BANNED_EPHEDRA", "BANNED_FDC_RED_2_AMARANTH", "BANNED_SIDA_CORDIFOLIA"}  # Sida: 21 CFR 119.1 (LEDGER Q62)
 
 
 @pytest.mark.parametrize("entry_id", sorted(Q15_PRIMARY_SOURCES))
@@ -420,7 +432,8 @@ def test_q15_records_without_a_us_determination_stay_under_review(banned_recalle
     [us] = [j for j in entry["jurisdictions"] if j.get("jurisdiction_code") == "US"]
     assert us["status"] in {"under_review", "not_approved"}
     assert entry["legal_status_enum"] == "under_review"
-    assert entry.get("policy_verification_status") != "verified"
+    # LEDGER Q58: verified only as an "Unverified ingredient" with human harm evidence.
+    assert entry.get("policy_verification_status") != "verified" or _has_harm_source(entry)
     assert "ban" not in (entry["regulatory_date_label"] or "").lower()
 
 

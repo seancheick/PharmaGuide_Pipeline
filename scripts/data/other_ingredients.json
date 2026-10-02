@@ -3,7 +3,7 @@
     "description": "Other/inactive ingredients database for supplement excipients and additives",
     "purpose": "inactive_ingredient_classification",
     "schema_version": "5.4.3",
-    "last_updated": "2026-09-22",
+    "last_updated": "2026-10-02",
     "total_entries": 729,
     "functional_roles_field": {
       "added_in": "5.1.0",
@@ -9986,7 +9986,7 @@
       "is_additive": false,
       "additive_type": "descriptor",
       "allergen": false,
-      "notes": "L-Arabinose — five-carbon aldose sugar found in plant cell walls. Inhibits intestinal sucrase enzyme, reducing sucrose absorption. GRAS. Studied for postprandial blood glucose modulation (doi:10.1017/S0007114510002060).",
+      "notes": "L-Arabinose — five-carbon aldose sugar found in plant cell walls. Inhibits intestinal sucrase enzyme, reducing sucrose absorption. GRAS. Studied for postprandial blood glucose modulation.",
       "common_uses": [
         "identity mapping"
       ],
@@ -9998,7 +9998,16 @@
       "cui": "C0003682",
       "functional_roles": [
         "filler"
-      ]
+      ],
+      "review": {
+        "change_log": [
+          {
+            "date": "2026-10-02",
+            "by": "claude-audit",
+            "change": "LEDGER Q57: DOI citations content-checked (Crossref + PubMed, 2026-10-02). Removed 1 that resolve to an unrelated paper or to nothing: 10.1017/s0007114510002060. Receipt: scripts/audits/pending_items_20260926/research.md Q57."
+          }
+        ]
+      }
     },
     {
       "id": "NHA_L_ASPARAGINE",
@@ -11634,7 +11643,7 @@
       "is_additive": false,
       "additive_type": "descriptor",
       "allergen": false,
-      "notes": "Mirtogenol — branded botanical blend of Pycnogenol (pine bark) + Mirtoselect (bilberry extract) by Horphag/Indena. Studied for intraocular pressure (doi:10.1159/000268121). Identity mapping for label tokens.",
+      "notes": "Mirtogenol — branded botanical blend of Pycnogenol (pine bark) + Mirtoselect (bilberry extract) by Horphag/Indena. Studied for intraocular pressure. Identity mapping for label tokens.",
       "common_uses": [
         "identity mapping"
       ],
@@ -11642,7 +11651,16 @@
       "external_ids": {},
       "cui": "C2603941",
       "functional_roles": [],
-      "is_active_only": true
+      "is_active_only": true,
+      "review": {
+        "change_log": [
+          {
+            "date": "2026-10-02",
+            "by": "claude-audit",
+            "change": "LEDGER Q57: DOI citations content-checked (Crossref + PubMed, 2026-10-02). Removed 1 that resolve to an unrelated paper or to nothing: 10.1159/000268121. Receipt: scripts/audits/pending_items_20260926/research.md Q57."
+          }
+        ]
+      }
     },
     {
       "id": "PII_MISC_FOODS_EXTRACTS_DESCRIPTOR",
@@ -18541,7 +18559,7 @@
       "is_additive": false,
       "additive_type": "dietary_fiber",
       "allergen": false,
-      "notes": "Soluble corn fiber (SCF) — resistant dextrin from corn starch. FDA GRAS (GRN 449, Tate & Lyle). Prebiotic fermentation increases Bifidobacteria and butyrate. Low glycemic. Well-tolerated at 12g/day (doi:10.1017/S0007114512001560).",
+      "notes": "Soluble corn fiber (SCF) — resistant dextrin from corn starch. FDA GRAS (GRN 449, Tate & Lyle). Prebiotic fermentation increases Bifidobacteria and butyrate. Low glycemic. Well-tolerated at 12g/day.",
       "common_uses": [
         "prebiotic fiber",
         "bulking agent"
@@ -18552,7 +18570,16 @@
       "functional_roles": [
         "filler",
         "prebiotic_fiber"
-      ]
+      ],
+      "review": {
+        "change_log": [
+          {
+            "date": "2026-10-02",
+            "by": "claude-audit",
+            "change": "LEDGER Q57: DOI citations content-checked (Crossref + PubMed, 2026-10-02). Removed 1 that resolve to an unrelated paper or to nothing: 10.1017/s0007114512001560. Receipt: scripts/audits/pending_items_20260926/research.md Q57."
+          }
+        ]
+      }
     },
     {
       "id": "NHA_SOLUBLE_FOOD_STARCH",

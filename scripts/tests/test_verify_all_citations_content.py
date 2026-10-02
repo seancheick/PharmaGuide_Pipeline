@@ -94,6 +94,61 @@ def test_scan_all_reads_free_text_pmc_links_and_skips_history() -> None:
     assert found == ["18425868", "PMC7583039", "31734734"]
 
 
+def test_scan_all_reads_dois_in_any_form_and_skips_history() -> None:
+    entry = {"id": "X",
+             "references_structured": [
+                 {"type": "doi", "id": "10.1016/S0140-6736(07)61306-3",
+                  "url": "https://doi.org/10.1016/S0140-6736(07)61306-3"}],
+             "notes": "EFSA opinion (DOI: 10.2903/j.efsa.2018.5090).",
+             "review": {"change_log": [{"change": "Removed ghost DOI 10.1000/ghost"}]}}
+    refs = vac.extract_pmids_from_entry(entry, vac._scan_all(file="x.json", array_key="x"))
+    assert [r["pmid"] for r in refs] == ["doi:10.1016/s0140-6736(07)61306-3",
+                                         "doi:10.2903/j.efsa.2018.5090"]
+
+
+def test_dois_resolve_through_pubmed_or_crossref(monkeypatch) -> None:
+    """A DOI indexed in PubMed is checked against the PubMed record; one that
+    is not is checked against Crossref's title and abstract; an unknown DOI
+    is not found (an unresolved citation fails the release gate)."""
+    efetch = (b'<?xml version="1.0" ?><PubmedArticleSet><PubmedArticle><MedlineCitation>'
+              b'<PMID Version="1">111</PMID><Article><ArticleTitle>Kava hepatotoxicity'
+              b'</ArticleTitle></Article></MedlineCitation></PubmedArticle></PubmedArticleSet>')
+    crossref = json.dumps({"message": {"title": ["Safety of hydroxyanthracene derivatives"],
+                                       "abstract": "<jats:p>Senna and aloe.</jats:p>"}}).encode()
+
+    def respond(req, *a, **k):
+        url = req.full_url if hasattr(req, "full_url") else req
+        if "esearch" in url:
+            body = b'{"esearchresult": {"idlist": ["111"]}}' if "10.1%2Fkava" in url \
+                else b'{"esearchresult": {"idlist": []}}'
+        elif "efetch" in url:
+            body = efetch
+        elif "api.crossref.org/works/10.2%2Fefsa" in url:
+            body = crossref
+        else:
+            raise vac.urllib.error.HTTPError(url, 404, "Not Found", {}, None)
+
+        class Response:
+            def __enter__(self):
+                return self
+
+            def __exit__(self, *exc):
+                return False
+
+            def read(self):
+                return body
+        return Response()
+
+    monkeypatch.setattr(vac.urllib.request, "urlopen", respond)
+    monkeypatch.setattr(vac.time, "sleep", lambda *_: None)
+    articles = vac.fetch_articles(["doi:10.1/kava", "doi:10.2/efsa", "doi:10.3/ghost"])
+
+    assert articles["doi:10.1/kava"]["title"] == "Kava hepatotoxicity"
+    assert articles["doi:10.2/efsa"]["title"] == "Safety of hydroxyanthracene derivatives"
+    assert articles["doi:10.2/efsa"]["abstract"] == "Senna and aloe."
+    assert "doi:10.3/ghost" not in articles
+
+
 def test_map_files_yield_entries_tagged_with_their_key() -> None:
     data = {"_metadata": {}, "vitamin_a": {"standard_name": "Vitamin A"}, "note": "not an entry"}
     assert vac.entries_of(data, {"map_key": ""}) == [{"standard_name": "Vitamin A", "_key": "vitamin_a"}]
@@ -115,6 +170,16 @@ NOT_CLAIMS = {
 _CITATION = re.compile(
     r"pubmed\.ncbi\.nlm\.nih\.gov/(\d+)|\bPMID[:\s#]*(\d{4,9})"
     r"|(?:ncbi\.nlm\.nih\.gov/pmc/articles|pmc\.ncbi\.nlm\.nih\.gov/articles)/(PMC\d+)", re.I)
+# Q57 (2026-10-02): DOIs were never read, and 106 registry DOIs pointed at
+# unrelated or nonexistent papers. A DOI is a citation like any other.
+_DOI = re.compile(r"\b(10\.\d{4,9}/[^\s\"<>,;]+)")
+
+
+def _doi_id(raw: str) -> str:
+    doi = raw.rstrip(".").lower()
+    while doi.endswith(")") and doi.count(")") > doi.count("("):
+        doi = doi[:-1].rstrip(".")
+    return "doi:" + doi
 
 
 def _every_citation(value, key: str = "") -> set[str]:
@@ -131,6 +196,7 @@ def _every_citation(value, key: str = "") -> set[str]:
     elif isinstance(value, (str, int)) and not isinstance(value, bool):
         text = str(value)
         hits = {a or b or c.upper() for a, b, c in _CITATION.findall(text)}
+        hits |= {_doi_id(doi) for doi in _DOI.findall(text)}
         if not hits and "pmid" in key.lower() and re.fullmatch(r"\s*(?:PMID:?\s*)?\d{4,9}\s*", text, re.I):
             hits = {re.sub(r"\D", "", text)}
         found |= hits

@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
-"""Flutter pickup smoke test — pins the 9 new RECALLED_ entries from the
+"""Flutter pickup smoke test — pins the still-active RECALLED_ entries from the
 2026-05-13 → 2026-05-14 sweep to the inactive_ingredient_resolver.
 
-What this test guarantees (for each of the 9 entries):
+What this test guarantees (for each active entry):
   1. Resolver matches by canonical product name → returns
      SOURCE_BANNED_RECALLED with the expected rule_id.
   2. severity_status = SEVERITY_CRITICAL.
@@ -41,12 +41,8 @@ from inactive_ingredient_resolver import (  # noqa: E402
 # (raw_name as a Flutter user might see on a label, expected_rule_id)
 NEW_RECALL_CASES = [
     ("SiluetaYa Mexican Tejocote Roots", "RECALLED_SILUETAYA_TEJOCOTE"),
-    ("Aonic Complete HERS", "RECALLED_AONIC_COMPLETE_HERS"),
-    ("Aonic Complete HIS", "RECALLED_AONIC_COMPLETE_HIS"),
-    ("Imu-Tek Colostrum-5 Capsules", "RECALLED_IMU_TEK_COLOSTRUM_5_CAPSULES"),
-    ("Imu-Tek Colostrum-5 Powder", "RECALLED_IMU_TEK_COLOSTRUM_5_POWDER"),
-    ("Divided Sunset Collagen Peptides",
-     "RECALLED_DIVIDED_SUNSET_COLLAGEN_PEPTIDES"),
+    # Aonic HERS/HIS, Imu-Tek Colostrum-5 and Divided Sunset left this list on
+    # 2026-10-02: their recalls ended (LEDGER Q58 rule C, match_mode historical).
     ("Blue Bull Extreme", "RECALLED_BLUE_BULL_EXTREME"),
     ("Red Bull Extreme", "RECALLED_RED_BULL_EXTREME"),
     ("Boner Bears Honey", "RECALLED_BONER_BEARS_HONEY"),
@@ -114,10 +110,10 @@ def test_new_recalled_entry_resolves_with_flutter_payload(
     )
 
 
-def test_smoke_count_pins_all_nine_entries() -> None:
+def test_smoke_count_pins_the_active_entries() -> None:
     """Guard: if the sweep added/removed entries, this list must change
-    deliberately rather than drift."""
-    assert len(NEW_RECALL_CASES) == 9, (
-        "Test pins the 9 RECALLED_ entries from the 2026-05-13 sweep. "
+    deliberately rather than drift. 9 entries; 5 ended (LEDGER Q58 rule C)."""
+    assert len(NEW_RECALL_CASES) == 4, (
+        "Test pins the 4 still-active RECALLED_ entries from the 2026-05-13 sweep. "
         "If the count changed, update NEW_RECALL_CASES explicitly."
     )

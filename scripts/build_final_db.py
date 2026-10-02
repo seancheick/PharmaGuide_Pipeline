@@ -1026,7 +1026,8 @@ _BANNED_TITLE_PREFIX_BY_LEGAL_STATUS = {
     "not_lawful_as_supplement": "Not lawful as a supplement",
     "controlled_substance": "Controlled substance",
     "wada_prohibited": "Prohibited in sport",
-    "under_review": "Unapproved ingredient",
+    # A verified harm basis with no US determination (LEDGER Q58 Category 1).
+    "under_review": "Unverified ingredient",
     "high_risk": "High-risk ingredient",
     "adulterant": "Unsafe ingredient",
 }
@@ -1045,6 +1046,8 @@ def _banned_warning_title_prefix_for_status(
         )
         if prefix:
             return prefix
+    if status == "recalled" and normalize_text(entry.get("entity_type")) == "product":
+        return "Recalled product"
     return {
         "banned": "Banned substance",
         "recalled": "Recalled ingredient",
@@ -5428,7 +5431,10 @@ def build_top_warnings(enriched: Dict, detail_blob: Optional[Dict] = None) -> Li
             )
             add_warning("banned_substance", "critical", f"{title_prefix}: {name}", rule_id)
         elif status == "recalled":
-            add_warning("recalled_ingredient", "high", f"Recalled ingredient: {name}", rule_id)
+            title_prefix = _banned_warning_title_prefix_for_status(
+                status, _registry_entry(rule_id, sub),
+            )
+            add_warning("recalled_ingredient", "high", f"{title_prefix}: {name}", rule_id)
         elif status == "high_risk":
             add_warning(
                 _banned_warning_type_for_status(status), "high",
@@ -7139,7 +7145,7 @@ def build_detail_blob(
         status = safe_str(policy.get("status"))
         name = safe_str(reference.get("standard_name")) or _safety_flag_display_name(flag)
         warning_type = _banned_warning_type_for_status(status)
-        title_prefix = _banned_warning_title_prefix_for_status(status)
+        title_prefix = _banned_warning_title_prefix_for_status(status, reference)
         severity = safe_str(policy.get("severity"))
         dm_default = safe_str(policy.get("display_mode_default"))
         jurisdiction_scope = safe_str(policy.get("jurisdiction_scope"))

@@ -424,3 +424,105 @@ Existing positive_strong classification and raw18floor remain pending cross-fami
 
 Sources verified live: https://pubmed.ncbi.nlm.nih.gov/35833477/ (chicory ITFs,50studies/2525participants,3–20g/day, bowel benefits healthy subjects, no significant GI-disorder bifidogenic subgroup); https://pubmed.ncbi.nlm.nih.gov/34555168/ (full healthy-adult review78publications;11/20stool-frequency positive and9null; calcium absorption/balance/serum concentrations distinct, preparation/chain-length caveats, General Mills support); https://pubmed.ncbi.nlm.nih.gov/38309832/ (55RCTs/2518participants; low/very-low-certainty LDL/triglyceride/body-weight risk-factor effects, no cardiovascular-event claim). Bibliographic BENEO affiliations/support verified for35833477; precise funder roles and inaccessible publisher details remain unresolved. FDA https://precision.fda.gov/uniisearch/srs/unii/JOS53KRJ01 identifies inulin, not FOS equivalence.
 Correction: remove generic prebiotic-fiber identity and unsupported tags/discovery fields; preserve ITF-family FOS applicability with explicit outcome/preparation bounds.420/224 originated as automated registry metadata with no NCT mapping; total_enrollment is optional largest-registry-trial per schema, not pooled meta-analysis count. Never add review totals because they overlap. Existing grading retained pending calibration, no universal dose benchmark supplied. Canonical one-entry patch, source/test/replay/review receipts under /Users/seancheick/pg_quality/inulin_clinical_review_20261002/.
+
+## XOS/PreticX bounded source correction — October2
+
+Existing IQM XOSnotes only. https://pubmed.ncbi.nlm.nih.gov/24513849/ verifies2014healthy-adult microbial/tolerability study; indexed primary https://pubs.rsc.org/en/content/articlehtml/2014/fo/c3fo60348b exposes Table3week-eight low/placeboP=.052 versus stronger prose. Directpublisher requests403; partial indexed retrieval is not full direct-access closure.2015 https://pubmed.ncbi.nlm.nih.gov/26300782/ and full https://www.frontiersin.org/journals/physiology/articles/10.3389/fphys.2015.00216/full explicitly distinguish2gXOS from2.8g70%preparation (1.96rounded2), with no significant metabolic benefit. Supplier LifeBridge/manufacturerShandongLonglive are not explicitPreticXbrand/grade proof. Shared authors are not independent-team replication. No cross-study purity borrowing or universal benchmark supplied. Registration/2014funding/detailedsource equivalence remain unverified.
+One-parent canonical patch contains only XOSnotes+metadata; allidentity/numerical/consumer-note values unchanged. Live changed-parentcitationcheck4MATCH/0mismatch, two new XOSclaims andtwo unchangedsiblings.15real raw/control captures identical; copied-primary sources/receipts in /Users/seancheick/pg_quality/xos_clinical_review_20261002/. Current0Evidence is a pending clinical-credit determination, not absence of human research. Current fiber-dose table credit is not XOS-specific studied-range proof. Remaining decisions stay in existing D24/calibration owners.
+
+## October 2 — GOS/Bimuno and PreforPro primary-source determinations
+
+Owner: existing IQM form `notes`; no new clinical registry, scorer, parser, benchmark or numerical policy. Source `c527c43c`, baseline `bf12f605`. Receipts: `/Users/seancheick/pg_quality/gos_phage_review_20261002/primary_dispositions.md`; complete primary texts in adjacent GOS and PreforPro research folders.
+
+| Entry | Verified finding | Correction | Still unresolved |
+|---|---|---|---|
+| GOS/Bimuno | PMID30109908: 2.75 g powder contains 1.37 g active GOS; selected symptomatic adults, two-week periods, bloating/flatulence/pain benefit versus placebo, stool/QOL/mood null. PMID26218845: 5.5 g powder at48% GOS; healthy65–80, ten-week periods, microbial/immune biomarkers, bowel/mood null. Clasado support and overlapping investigators. | Remove universal efficacy/tolerability claim; preserve preparation/population/outcome bounds and both positive/null findings. | Current label preparation correspondence, clinically meaningful outcome grading, independent replication and appropriate Dose benchmark. PMID19053980's full preparation details remain inaccessible; no purity borrowed from another trial. |
+| PreforPro/phage | PMID30157383 and30897686 report one PHAGE trial; 28-day periods, 15mg carrier-containing capsule and10^6 phages/dose. Selected microbial changes and global-diversity null do not establish infection treatment or no effect on every beneficial organism. PMID32824480: BL04+10^6PFU phages, no phage-only arm, no significant between-group symptom-score change; questionnaire GI inflammation is perceived symptoms. Deerland support and investigator overlap. | Remove overbroad pathogen/beneficial-flora/GI-immune claims; preserve trial identity, combination attribution and potency distinction. | Applicability to the exact marketed preparation, clinical outcome grade and phage-specific Dose assessment. Neither arbitrary formula benefit nor absence of human research is established. |
+
+The nine-match automated citation receipt includes four unchanged prebiotic sibling citations. It is a topic/identifier check, not proof of clinical grading. Thirty source-text matching labels plus nine controls yield identical scored captures; these are a text-match superset, not39 independently reviewed Evidence subjects. No new points awarded and no runtime publication.
+
+### Cross-family decision inputs after the source corrections
+
+This table is a clinical/calibration input, not an approved scoring change. Scores describe the named frozen labels, not universal category grades.
+
+| Family / example | Current Evidence /20 | What the source review establishes | Decision still needed before numerical change |
+|---|---:|---|---|
+| PHGG / Nature's Way227960 | 20 | Branded-preparation trials, bounded symptom/stool outcomes, null findings and commercial provenance retained. | Certainty/replication and preparation applicability must justify normalization of raw18/reference18 to20. |
+| Inulin / Nutricost306369 | 15.6 | Human chicory ITF studies; bowel, microbial and preparation-specific calcium findings; risk-factor certainty limits. | Which intervention/outcome legitimately applies to the label, and comparable clinical grade across families. |
+| XOS / Pure302463 and294036 | 0 | Human research exists; mostly microbial outcomes, no significant metabolic benefit in the retrieved2015 study,2014 table/prose discrepancy. | Exact PreticX grade/purity linkage and whether reviewed microbial outcomes merit any Evidence credit under approved policy. |
+| Bimuno GOS / GNC219246,304444,318195 | 0 | Preparation-specific human symptom benefits and null endpoints; declared label1.37g does not independently prove composition equivalence. | Preparation correspondence and clinical certainty/outcome credit; powder-versus-active Dose basis. |
+| PreforPro / Thorne323127 | 0 | One standalone trial with tolerance/microbial observations; PHAGE-2 combination has no significant between-group symptom-score improvement. | Standalone versus exact-formula applicability and eligible endpoint grade.15mg cannot become active-potency benchmark. |
+| Seed / previously preserved manual product | 14.5 | Existing source receipt retained; no new Seed replay in this39-label batch. | Compare its recorded outcome certainty/replication with the currently credited IS-2/LactoSpore families after exact strain/formula source checks. |
+
+Apply one certainty/applicability standard to every family. Positive within-group change is not controlled superiority; multiple papers from one trial are not replication; microbiome biomarkers are not automatically patient benefit. Funding is provenance under current policy. Missing benchmark is a knowledge state, not zero amount; generic fiber-mass credit is not preparation-specific trial adequacy. No arbitrary ceiling, rescale, sponsorship deduction, new benchmark or missing-benchmark withholding decision is approved by this table.
+
+Q53 queue refreshed through current Clean → Enrich → `build_scored_artifact` at `c527c43c`: all nine historical labels still have incomplete Evidence readiness (12091,1834,19171,19172,19890,264105,35694,46802,65049). Receipt: `/Users/seancheick/pg_quality/gos_phage_review_20261002/q53_current_readiness.json`. Their `quality_assessment_status=complete` reflects the currently enforced identity/Dose/route/verification dimensions; it is not completed clinical Evidence. The actual Evidence readiness remains incomplete. Preserve that distinction instead of marking the research queue closed from the overall assessment field. Named-strain SD-5845 and Bioflora/Advanced Acidophilus identity review is the first bounded follow-up; species-only labels must not inherit unrelated strain evidence.
+
+## Q56 DEA dates for α-PHP and CUMYL-PICA
+
+Checked 2026-10-02. Sources: Federal Register API (federalregister.gov/api/v1), eCFR 21 CFR 1308.11 as of 2026-09-30
+(api/versioner/v1/full/2026-09-30), PubChem PUG REST, Crossref, PubMed efetch.
+
+**STIM_ALPHA_PHP.** PubChem CID 102107923, 1-phenyl-2-pyrrolidin-1-ylhexan-1-one, matches the 1308.11 listing
+"alpha-Pyrrolidinohexanophenone (Other names: α-PHP; ... 1-phenyl-2-(pyrrolidin-1-yl)hexan-1-one) 7544".
+Federal Register: temporary scheduling order 84 FR 34291 (2019-07-18, effective 2019-07-18; doc 2019-15184),
+extension 86 FR 37672 (effective 2021-07-18), final rule 87 FR 32996 (2022-06-01, effective 2022-06-01;
+doc 2022-11740). The record's 2014-01-01 matches no document (2014 is when α-PHP appeared on the Japanese market,
+PMID 38672701). Result: date 2019-07-18 "DEA scheduling effective", controlled_substance, US row cites both rules,
+policy verified (federalregister.gov URL), as NOOTROPIC_MODAFINIL under Q15.
+
+**SYNTH_CUMYL_PICA.** PubChem CID 86273678, 1-pentyl-N-(2-phenylpropan-2-yl)indole-3-carboxamide (UNII H4APZ90T9U).
+Not in 1308.11 by name (searched "CUMYL-PICA", "1-pentyl", "phenylpropan-2-yl": the five hits are 4-CN-CUMYL-BUTINACA,
+5F-CUMYL-P7AICA, 5F-CUMYL-PINACA, CUMYL-PEGACLONE and mesocarb). Paragraph (g)(1)(i) classes A–E are
+hydroxycyclohexylphenols, naphthoylindoles/naphthylmethylindoles, naphthoylpyrroles, naphthylmethyleneindenes and
+phenylacetyl/benzoylindoles; an indole-3-carboxamide is none of them. Federal Register full-text search for
+"CUMYL-PICA" and for its systematic name: 0 documents. Prosecution as a controlled-substance analogue (21 U.S.C. 813)
+is a case-by-case court question, not a scheduling, and no document dates one. Result: date and label removed (not
+replaced), under_review, policy unverified (as BANNED_FASORACETAM under Q15).
+
+**Citations.** Removed: 10.1016/j.forsciint.2015.09.002 (Crossref: "Facial soft biometric features for forensic face
+recognition") and 10.1016/j.forsciint.2017.03.004 ("Toolmarks made by lathe chuck jaws"), plus two DEA references
+without a URL. Added, abstracts read: PMID 38672701 (α-PHP/α-PiHP review: no medical use, cardiac/psychiatric/
+neurologic effects, fatal intoxications); 39987764 (α-PHP mice plus Pavia Poison Centre cases: agitation,
+hallucinations, tachycardia, hyperthermia, rhabdomyolysis); 28792725 (CUMYL-PICA potent CB1/CB2 agonist, hypothermia
+and bradycardia in rats at 1 mg/kg); 29549157 (CUMYL-PICA high CB1 affinity, greater efficacy than THC).
+`verify_all_citations_content.py --file banned_recalled_ingredients.json --changed-since origin/main`: 4 MATCH.
+
+**Impact.** Warning titles: α-PHP "Not lawful as a supplement" → "Controlled substance"; CUMYL-PICA "Controlled
+substance" → "Unapproved ingredient". Neither rule matches any of the 15,133 detail blobs (catalog 2026-09-29) or the
+38 enriched brand outputs, so no shipped product changes. Safety copy: CUMYL-PICA safety_warning loses its regulatory clause ("Not a lawful
+supplement ingredient;"), keeping the harm statement and "Stop any product containing it and consult a doctor."
+No replacement regulatory phrase ("no approved use" was tried and dropped: it states a determination nobody made).
+
+## Q57 DOI citation integrity
+
+Checked 2026-10-02. Extraction: `verify_all_citations_content.py` (now DOI-aware), so the receipt and the gate use one
+definition of a citation. Each DOI resolved on Crossref (`api.crossref.org/works/<doi>`) and PubMed (`esearch <doi>[doi]`);
+the citing text (reference title/summary, `scientific_references` string, prose sentence) read against the resolved title,
+abstracts read where the title left doubt. Per-citation verdicts: `q57_doi_dispositions_20261002.json`.
+
+- **Inventory.** 206 DOI citations: banned_recalled 88, harmful_additives 113, other_ingredients 5. A first regex pass
+  found 175 and missed DOIs cited as bare text; the verifier's walker is the inventory of record. IQM's 44 DOIs all
+  resolve on topic (42 match, 2 partial) and are unchanged.
+- **Removed (127).** Unrelated paper (e.g. 10.1093/jat/bks078 for DMAA -> Moscow theatre siege casualties;
+  10.1124/jpet.116.232215 for 7-OH -> relaxin and lung injury; 10.1016/j.forsciint.2012.02.015 for yohimbe -> facial soft
+  tissue; 10.1093/jnci/djq516 for nitrite cancer risk, five entries -> osteonecrosis of the jaw), or nothing (19 Crossref
+  404s with no PubMed DOI hit), or wrong for the claim (EFSA chemical-mixtures statement for EDC health effects; the
+  enobosarm DILI case report filed under RAD140; "How bad is fructose?" cited for syrup glycemic effects; four audit notes
+  "REMOVED/NEEDS_VERIFICATION" stored as scientific_references).
+- **Corrected (6).** Mistyped DOI of the document the entry names, target checked on Crossref: fats DRV 1459 -> 1461
+  (canola, corn oil), E475 4743 (PGPR E476) -> 5089, nitrite 4787 (nitrate) -> 4786, nickel 4007 (Allura Red exposure) ->
+  4002, carmine 4037 (pesticide MRL) -> 2015;13(11):4288. E475 opinion (PMID 32625376): "no need for a numerical ADI";
+  the entry's "ADI 25 mg/kg bw/day retained" (regulatory_status.EU, notes, scientific_references) was the PGPR conclusion
+  and is corrected. No EFSA "Tin in food" 2016 opinion exists on Crossref; that citation was removed, not guessed.
+- **Added (5).** PMID 34368386 (Bedi 2021, cholestatic liver injury from ostarine) to SARM_OSTARINE; EFSA 2017;15(6):4786
+  to ADD_POTASSIUM_NITRITE and 4787 to ADD_POTASSIUM_NITRATE; NTP Report on Carcinogens BHA profile (NBK590883, title and
+  sections confirmed via NCBI E-utilities; the Bookshelf page is CAPTCHA-gated) to ADD_BHA; EFSA 2004;2(9):83 parabens
+  opinion to ADD_PROPYLPARABEN. Williams 1999 (BHA/BHT "pose no cancer hazard") was not used for BHA's harm claim.
+- **Kept (71)** including McCann 2007 on Blue 1/2 (cited for the note that E133/E132 were NOT in the Southampton mixes) and
+  Chassaing 2015 on two emulsifiers (framed as class-level evidence). Ten correct citations the identity-word heuristic
+  scores "mismatch" are in `citation_content_backlog.json` with a note.
+
+## Q57b harm sources
+
+Per-entry before/after, evidence, grades, sources and Sean flags: `q57b_harm_sources_20261002.md` (same folder). Regression: `scripts/tests/test_q57b_harm_sources.py`.

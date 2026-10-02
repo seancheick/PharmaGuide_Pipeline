@@ -115,6 +115,86 @@ class ValidationResult:
 
 
 # ---------------------------------------------------------------------------
+# Copy-versus-evidence facts (LEDGER Q64)
+# ---------------------------------------------------------------------------
+
+# Evidence -> factual ``reason`` -> simplified copy. A number, regulatory term
+# or named outcome in safety_warning / safety_warning_one_liner must be backed
+# by the record's own evidence text: reason, status, legal status, jurisdiction
+# citations, or read-source titles and summaries. Conservative token matching,
+# not semantic proof; each claim lists the stems that count as support.
+_COPY_NUMBER = re.compile(
+    r"(?<![\w.])(\d[\d,]*(?:\.\d+)?)\s*(%|percent|mg|mcg|µg|ppm|times|x\b|cases|reports|deaths|"
+    r"people|patients|children|hospitalizations|transplants)",
+    re.IGNORECASE,
+)
+_NOT_LAWFUL = ("illegal", "unlawful", "not lawful", "adulterat", "cannot be", "not a dietary ingredient",
+               "not meet the definition")
+_COPY_CLAIMS = {
+    "banned": ("ban", "prohibit", "not authoris", "not authoriz", "not permitted"),
+    "illegal": _NOT_LAWFUL,
+    "unlawful": _NOT_LAWFUL,
+    "not lawful": _NOT_LAWFUL,
+    "controlled": ("controlled", "schedule"),
+    "schedule i": ("schedule",),
+    "approved": ("approv", "permit", "authoris", "authoriz", "restricted to"),
+    "recalled": ("recall",),
+    "withdrawn": ("withdr", "removed", "ban"),
+    "prohibited": ("prohibit", "ban", "adulterat"),
+    "death": ("death", "fatal", "died", "lethal"),
+    "transplant": ("transplant",),
+    "stroke": ("stroke", "cerebral hemorrhage", "hemorrhagic"),
+    "heart attack": ("heart attack", "myocardial infarction", "cardiac arrest"),
+    "seizure": ("seizure", "convuls"),
+    "cancer": ("cancer", "carcino", "tumo", "malignan", "neoplas"),
+    "liver failure": ("liver failure", "hepatic failure", "fulminant"),
+    "kidney failure": ("kidney failure", "renal failure", "nephropathy"),
+    "myocarditis": ("myocarditis",),
+    "coma": ("coma",),
+    "vision": ("vision", "visual"),
+    "acromegaly": ("acromegaly",),
+    "hypoglycemia": ("hypoglyc", "low blood sugar"),
+    "overdose": ("overdose", "fatal", "death", "respiratory depression"),
+    "psychosis": ("psychosis", "psychotic"),
+    "suicid": ("suicid",),
+}
+
+
+def _norm_fact_text(text: str) -> str:
+    return re.sub(r"\s+", " ", (text or "").lower().replace(",", ""))
+
+
+def _evidence_has_number(evidence: str, value: str) -> bool:
+    """Return whether ``value`` occurs as a complete numeric token."""
+    return re.search(rf"(?<![\d.]){re.escape(value)}(?![\d.])", evidence) is not None
+
+
+def copy_claims_without_evidence(entry: Dict[str, Any]) -> List[str]:
+    """Factual tokens in the copy that the record's evidence text never states."""
+    # The registry tier (``status``) is not evidence; the legal status is.
+    pool = [entry.get("reason") or "", str(entry.get("legal_status_enum") or "").replace("_", " ")]
+    for jurisdiction in entry.get("jurisdictions") or []:
+        source = jurisdiction.get("source") if isinstance(jurisdiction, dict) else jurisdiction
+        pool.append(source.get("citation") or "" if isinstance(source, dict) else str(source or ""))
+    for ref in entry.get("references_structured") or []:
+        if isinstance(ref, dict):
+            pool += [ref.get("evidence_summary") or "", ref.get("title") or ""]
+    evidence = _norm_fact_text(" ".join(pool))
+    copy = _norm_fact_text(f"{entry.get('safety_warning') or ''} {entry.get('safety_warning_one_liner') or ''}")
+    copy_without_negatives = re.sub(r"\bun(approved|lawful)\b|\bnot approved\b", " ", copy)
+    missing = [
+        f"number '{m.group(0)}'"
+        for m in _COPY_NUMBER.finditer(copy)
+        if not _evidence_has_number(evidence, m.group(1).replace(",", ""))
+    ]
+    for claim, stems in _COPY_CLAIMS.items():
+        text = copy_without_negatives if claim == "approved" else copy
+        if claim in text and not any(stem in evidence for stem in stems):
+            missing.append(f"'{claim}'")
+    return missing
+
+
+# ---------------------------------------------------------------------------
 # banned_recalled_ingredients.json per-entry validator
 # ---------------------------------------------------------------------------
 
@@ -217,6 +297,11 @@ def validate_banned_recalled_entry(
             f"{canonical_id}: legacy derived 'warning_message' field present — "
             f"Flutter removed this in Sprint 27.6 (see HANDOFF_PIPELINE_SAFETY_DATA.md)"
         )
+
+    # Copy-only fixtures carry no evidence to compare; every registry record has a reason.
+    if entry.get("match_mode") != "disabled" and entry.get("reason"):
+        for claim in copy_claims_without_evidence(entry):
+            res.fail(f"{canonical_id}: copy states {claim} but the record's evidence does not (LEDGER Q64)")
 
     return res
 
