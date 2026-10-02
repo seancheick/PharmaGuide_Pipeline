@@ -4,7 +4,7 @@ Updated October 2, 2026. Pipeline integrator: Codex. Original scope: Sean's acce
 
 A checked implementation box means that specific deliverable is implemented, measured and independently reviewed where required. It does **not** mean the whole phase is finished or the catalog is released. Repository code pushed to GitHub and catalog publication are separate events.
 
-## October 2 — probiotic/prebiotic ranking corrections (Q58)
+## October 2 — probiotic/prebiotic ranking corrections (Q59)
 
 - [x] Reproduce the ranking audit against main `77cb8993`, inspect raw labels and official label images, and classify the findings before changing owners.
 - [x] Preserve PreticX/XOS as the declared preparation and parent amount; remove the erroneous generic complex alias. True blends and nutrition carriers remain distinct.
