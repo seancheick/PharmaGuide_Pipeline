@@ -22,10 +22,19 @@ Raw `python3 -m pytest` picks macOS Python 3.9 and runs every heavy test (~1 h).
 ```bash
 scripts/test.sh fast scripts/tests/test_<topic>.py::test_<case>  # one failure / one edit
 scripts/test.sh fast scripts/tests/test_<topic>.py -k <kw>      # affected defect class
-scripts/test.sh fast           # integrator's final combined-batch checkpoint
+scripts/test.sh local          # pipeline code or data changed: the corpus tests CI cannot run (~2 min)
+scripts/test.sh fast           # whole suite: CI runs it on every push; locally only if CI is down
 scripts/test.sh release        # release gates before a ship
 scripts/test.sh full           # post-pipeline backstop, never alongside a pipeline run
 ```
+
+- Never run the whole fast suite after an edit. Push the branch (`claude/*`, `codex/*`; Sean,
+  2026-10-02) and GitHub Actions `pipeline-tests` runs it in four parallel shards (~5 min).
+- CI has no product corpus, builds or raw DSLD datasets. A test that needs them goes in
+  `LOCAL_ONLY_TEST_FILES` (`scripts/test_profiles.py`); `scripts/ci_skip_guard.py` fails CI on any
+  other skip. CI checks out the app repo for the cross-repo tests (`FLUTTER_REPO`).
+- `scripts/test.sh` holds a machine-wide lock: one full/release/slow run at a time, alone; fast
+  runs share it and split the worker budget. A waiting run is queued, not hung.
 
 Pick the rung by what changed and say which rung ran. Documentation-only changes need no pytest;
 scoring, clinical-data and runtime configuration changes require their affected checks.
@@ -46,12 +55,12 @@ do not each require a broad checkpoint. Do not weaken an assertion merely to mak
 3. Check the fix on the affected labels plus unaffected controls with
    `scripts/audits/quality_redesign/replay.py` (freeze-raw, snapshot, compare), never by
    rerunning whole brands.
-4. The integrator schedules one whole `fast` checkpoint after the batch's source changes,
-   focused tests, measurements and required review are ready. If it fails, record all failures,
-   fix each class using explicit nodes/files (or `--lf` with the failing files), then rerun the
-   combined checkpoint after all fixes are ready. Do not restart it after each individual fix.
-   A passing CI run may satisfy this gate only for the exact candidate and canonical profile;
-   required corpus/artifact checks remain separate. Until CI is proven, use the local gate.
+4. The integrator schedules one combined checkpoint after the batch's source changes, focused
+   tests, measurements and required review are ready: green `pipeline-tests` CI on the exact
+   candidate commit, plus `scripts/test.sh local` when pipeline code or data changed. If it fails,
+   record all failures, fix each class using explicit nodes/files (or `--lf` with the failing
+   files), then rerun the combined checkpoint once after all fixes are ready. Do not restart it
+   after each individual fix. Run the whole fast suite locally only when CI is unavailable.
 5. After the last code change and the merge of main: one corpus pass from the earliest changed
    stage, then the release rung. Its preflight refuses output built by other data or code.
 
@@ -113,7 +122,7 @@ bug-fix notes are history, not specifications.
   history. Most "forks" already have a doctrinal answer — apply it, measure, record it in the handoff.
 - **Sean decides only:** a new semantic owner (new persisted or public/export field, new status or
   verdict meaning, new scoring/clinical policy or owner, new registry), deleting curated clinical
-  data, pushes, releases.
+  data, pushes to `main`, releases. Pushing a `claude/*` or `codex/*` branch for CI is routine.
 - Private helpers, local names, test utilities and internal files need no approval once the
   Owner Check passes.
 

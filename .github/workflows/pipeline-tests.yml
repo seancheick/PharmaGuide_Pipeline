@@ -1,0 +1,54 @@
+# Fast test rung on every push, so agents stop running it on the laptop.
+#
+# CI is a clean checkout: no 11 GB product corpus, no built exports. Tests that
+# need them are declared in scripts/test_profiles.py LOCAL_ONLY_TEST_FILES and
+# run on the Mac with `scripts/test.sh local`. scripts/ci_skip_guard.py fails
+# this job if any other test skips, so nothing passes here by not running.
+name: pipeline-tests
+
+on:
+  push:
+    branches: [main, "claude/**", "codex/**"]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+concurrency:
+  group: pipeline-tests-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  fast:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version-file: .python-version
+          cache: pip
+          cache-dependency-path: |
+            requirements-dev.txt
+            scripts/dashboard/requirements.txt
+
+      - name: Install dependencies
+        run: python -m pip install -r requirements-dev.txt
+
+      - name: Fast rung
+        run: |
+          export PG_PYTHON="$(command -v python)"
+          scripts/test.sh fast --junitxml=ci-junit.xml -rs
+
+      - name: Every skip is a declared local-only test
+        if: always()
+        run: python scripts/ci_skip_guard.py ci-junit.xml
+
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: junit-fast
+          path: ci-junit.xml

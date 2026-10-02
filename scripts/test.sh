@@ -7,6 +7,7 @@
 #   scripts/test.sh release    # release-critical pytest slice + strict artifact gates
 #   scripts/test.sh full       # full pytest suite; parallel when pytest-xdist is installed
 #   scripts/test.sh slow       # heavy integration tests only
+#   scripts/test.sh local      # only the tests CI cannot run (need the local corpus/builds)
 
 set -Eeuo pipefail
 
@@ -97,7 +98,9 @@ cores = os.cpu_count() or 2
 PER_WORKER_GB = 5.0   # conservative resident footprint per worker
 RESERVE_GB = 6.0      # OS + editor/Claude + browser headroom
 by_mem = int((mem_gb - RESERVE_GB) // PER_WORKER_GB)
-print(max(1, min(cores - 1, by_mem)))
+# Runs sharing the machine-wide lock (scripts/test_lock.py) split the budget.
+runs = max(1, int(os.environ.get("PG_TEST_CONCURRENT_RUNS") or 1))
+print(max(1, min(cores - 1, by_mem // runs)))
 PY
 }
 
@@ -404,6 +407,25 @@ TIMEOUT_HEAVY=(); while IFS= read -r _a; do TIMEOUT_HEAVY+=("$_a"); done < <(tim
 # can't starve the UI / freeze the machine. No-op if `nice` is unavailable.
 NICE=(); command -v nice >/dev/null 2>&1 && NICE=(nice -n 15)
 
+# Machine-wide lock (scripts/test_lock.py), shared by every worktree: one
+# full/release/slow run at a time and alone; any number of broad fast runs
+# share it. A single-file run is serial and small, so it needs no lock.
+if [[ -z "${PG_TEST_LOCK_HELD:-}" ]]; then
+  lock_mode=""
+  case "$PROFILE" in
+    full|release|slow) lock_mode=exclusive ;;
+    local) lock_mode=shared ;;
+    fast)
+      split_user_pytest_args "$@"
+      ((${#USER_TARGETS[@]} == 1)) || lock_mode=shared
+      ;;
+  esac
+  if [[ -n "$lock_mode" ]]; then
+    PG_TEST_LOCK_HELD=1 exec "$PG_PYTHON" "$SCRIPT_DIR/test_lock.py" "$lock_mode" -- \
+      bash "$SCRIPT_DIR/test.sh" "$PROFILE" "$@"
+  fi
+fi
+
 case "$PROFILE" in
   fast)
     split_user_pytest_args "$@"
@@ -459,6 +481,19 @@ case "$PROFILE" in
     done < <(pytest_args_for_parallel full)
     "${NICE[@]+"${NICE[@]}"}" "$PG_PYTHON" -m pytest "${files[@]}" -q --tb=line "${parallel_args[@]+"${parallel_args[@]}"}" "${TIMEOUT_HEAVY[@]+"${TIMEOUT_HEAVY[@]}"}" "${USER_OPTIONS[@]+"${USER_OPTIONS[@]}"}"
     ;;
+  local)
+    # CI's blind spot: the fast-profile files that skip without the local
+    # corpus/builds (scripts/test_profiles.py LOCAL_ONLY_TEST_FILES).
+    files=()
+    while IFS= read -r file; do
+      files+=("$file")
+    done < <(profile_test_files local)
+    parallel_args=()
+    while IFS= read -r _a; do
+      parallel_args+=("$_a")
+    done < <(pytest_args_for_parallel local)
+    "$PG_PYTHON" -m pytest "${files[@]}" -q --tb=line -rs "${parallel_args[@]+"${parallel_args[@]}"}" "${TIMEOUT_FAST[@]+"${TIMEOUT_FAST[@]}"}" "$@"
+    ;;
   slow)
     split_user_pytest_args "$@"
     if ((${#USER_TARGETS[@]} > 0)); then
@@ -477,6 +512,7 @@ Unknown test profile.
 
 Valid profiles:
   fast
+  local
   release
   full
   slow
