@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import sys
 from pathlib import Path
+import pytest
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
@@ -78,3 +79,19 @@ def test_invalid_shard_does_not_fall_back_to_the_whole_suite():
     for index, count in [(4, 4), (-1, 4), (0, 0), (0, None)]:
         with pytest.raises(ValueError):
             list(iter_profile_paths('fast', shard_index=index, shard_count=count))
+
+
+@pytest.mark.parametrize('shard,index', [('1/4', 0), ('4/4', 3)])
+def test_existing_shard_cli_uses_the_canonical_partition(monkeypatch, capsys, shard, index):
+    from test_profiles import main, iter_profile_paths
+    monkeypatch.setattr(sys, 'argv', ['test_profiles.py', 'fast', '--shard', shard])
+    assert main() == 0
+    repo = Path(__file__).resolve().parents[2]
+    assert capsys.readouterr().out.splitlines() == [str(p.relative_to(repo)) for p in iter_profile_paths('fast', shard_index=index, shard_count=4)]
+
+
+def test_conflicting_shard_interfaces_fail_closed(monkeypatch):
+    from test_profiles import main
+    monkeypatch.setattr(sys, 'argv', ['test_profiles.py', 'fast', '--shard', '1/4', '--shard-index', '0', '--shard-count', '4'])
+    with pytest.raises(SystemExit):
+        main()

@@ -389,8 +389,11 @@ run_release_artifact_gates() {
 
 fast_test_files() {
   local shard_args=()
+  if [[ -n "${PG_TEST_SHARD:-}" ]]; then
+    shard_args+=(--shard "$PG_TEST_SHARD")
+  fi
   if [[ -n "${PG_TEST_SHARD_INDEX:-}" || -n "${PG_TEST_SHARD_COUNT:-}" ]]; then
-    shard_args=(--shard-index "${PG_TEST_SHARD_INDEX:-}" --shard-count "${PG_TEST_SHARD_COUNT:-}")
+    shard_args+=(--shard-index "${PG_TEST_SHARD_INDEX:-}" --shard-count "${PG_TEST_SHARD_COUNT:-}")
   fi
   "$PG_PYTHON" "$REPO_ROOT/scripts/test_profiles.py" fast "${shard_args[@]+"${shard_args[@]}"}"
 }
