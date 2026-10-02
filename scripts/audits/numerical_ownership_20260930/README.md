@@ -184,3 +184,22 @@ python3 scripts/audit_dead_code.py keys
 No test was required for this documentation-only, read-only inventory. Before any scoring rule changes,
 the master acceptance sequence remains: failing production-boundary regression, owner fix, focused
 tests, frozen-raw replay with unaffected controls, fast checkpoint and independent review.
+
+
+## October 1 current-owner clarification
+
+The table above remains a historical draft at its named SHA; it is not current
+calibration approval. Q47 has since closed the probiotic Evidence transfer through
+`probiotic_evidence::score_evidence`: family certainty /10, identity/purpose
+applicability /6 and independent same-condition replication /4. CFU/trial amount
+is Dose-owned; `_score_native_clinical_strain_evidence` above is historical.
+
+| Fact | Judgment | Pillar | Numerical owner | Other pillars allowed to observe but not deduct |
+|---|---|---|---|---|
+| Reviewed probiotic study family | Certainty, identity/purpose applicability, independent same-condition confirmation | Evidence | `probiotic_evidence::score_evidence`, `_strongest_single_family_certainty`; `quality_score.json::evidence_magnitudes.probiotic` | Dose consumes study amounts; no Evidence amount deduction |
+| Label CFU count and its own warranty timing | Potency confidence adjustment, unchanged expiry1.0/manufacture0.9/unknown0.85 | Dose | `probiotic_dose::_cfu_guarantee_adjustment`, applied by `score_dose`; enrichment owns count/warranty facts | Other pillars may display the canonical fact; no duplicate warranty-timing deduction |
+
+The CFU source-binding correction changes the facts supplied to the existing
+numerical owner, not these magnitudes. The complete numerical inventory still
+requires refresh after D26 and policy approval; this amendment does not ratify
+other draft rows or establish final calibration.

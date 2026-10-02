@@ -1,6 +1,6 @@
 # Evidence → Dose responsibility transfer
 
-Status: all-route inventory complete; approved probiotic transfer Q47 and Q48/Q49/Q51/Q52/Q53 source corrections integrated on main through `0a24804f`. D26 preparation/source binding correction is measured at candidate `fe3d39a0`, with final fast and fresh review passed; source integration receipt below. Generic/omega transfer and D24 Dose policy remain open. No catalog release. Historical inventory and experiment figures below apply only to their named baseline, not the current candidate.
+Status: all-route inventory complete; approved probiotic transfer Q47 and Q48/Q49/Q51/Q52/Q53 source corrections integrated on main through `0a24804f`. D26 preparation/source binding correction is measured at `fe3d39a0` and integrated/pushed at `c8f53b46`, with final fast and fresh review passed. Generic/omega transfer and D24 Dose policy remain open. No catalog release. Historical inventory and experiment figures below apply only to their named baseline, not the current candidate.
 
 Inventory baseline: pipeline `880b17a7`; focused owner/role suite 103 passed, 7 skipped,
 1 strict xfail. The frozen 1,261-label audit sample is

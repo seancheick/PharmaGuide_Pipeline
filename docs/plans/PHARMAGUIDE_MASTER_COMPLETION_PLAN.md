@@ -6,6 +6,12 @@ A checked implementation box means that specific deliverable is implemented, mea
 
 ## Current checkpoint
 
+Latest accepted source is main/origin `c8f53b46`: D26 collagen source-binding
+fix passed18,018 fast checks (168 artifact skips), fresh review and a285-label
+identical replay. The CFU count/warranty continuation is under validation in its
+isolated lane; its preliminary replay was rejected and corrected. Earlier source
+checkpoints below remain historical receipts, not current final-corpus approval.
+
 - [x] Reconcile current main and the integration lane, including the release/storage changes on `d021061b`.
 - [x] Integrate and push the approved probiotic production model and Ravage correction to pipeline `main` (`0f695b19`; Q47/Q48); source and plan subsequently pushed through `3ee91eae`.
 - [x] Match the approved probiotic candidate across 1,259 frozen labels: 542 probiotics and 717 controls; no numerical/component/tier/route/status/Safety/confidence mismatch.
