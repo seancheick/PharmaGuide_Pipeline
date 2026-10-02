@@ -147,3 +147,13 @@ def test_partial_source_descriptor_cannot_establish_whole_preparation(pipeline, 
     row.update(category="botanical", ingredientGroup="chicory", forms=[dict(name="Inulin", category="fiber"), source])
     clean, _, _ = run(pipeline, row)
     assert clean["activeIngredients"][0]["canonical_id"] != "inulin"
+
+
+@pytest.mark.parametrize("marker", ["Proanthocyanidin", "Proanthocyanidins"])
+def test_declared_cranberry_marker_is_not_an_unknown_or_25_percent_form(pipeline, marker):
+    row = raw_row("Cranberry fruit extract", 25, "mg")
+    row.update(category="botanical", ingredientGroup="cranberry", forms=[dict(name=marker, percent=1, category="non-nutrient/non-botanical", ingredientGroup="Proanthocyanidins (unspecified)")])
+    _, enriched, artifact = run(pipeline, row)
+    assert artifact["quality_score_status"] == "scored"
+    rows = get_scoring_ingredients(enriched).rows
+    assert not any("25%" in str(x.get("matched_form")) for x in rows)

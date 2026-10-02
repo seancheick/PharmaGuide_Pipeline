@@ -9309,10 +9309,9 @@ class SupplementEnricherV3:
         # A recorded marker also reads as "Total Rosavins" or "Salidrosides",
         # and DSLD's own "standardized for" / "std. to 85%-" prefix marks one.
         unprefixed = token[len('total '):] if token.startswith('total ') else token
-        singular_marker = ' '.join(w[:-1] if len(w) > 3 and w.endswith('s') else w
-                                   for w in unprefixed.split())
         if (prefix.startswith(('standardized', 'std.'))
-                or {token, unprefixed, singular_marker} & self._standardization_marker_names()
+                or any(singular(unprefixed.split()) == singular(marker.split())
+                       for marker in self._standardization_marker_names())
                 or self._is_standardization_marker_token(source_text)):
             return 'marker'
         contains = {rel.get('target_id') for rel in
