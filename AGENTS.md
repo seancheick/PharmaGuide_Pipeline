@@ -28,13 +28,13 @@ scripts/test.sh release        # release gates before a ship
 scripts/test.sh full           # post-pipeline backstop, never alongside a pipeline run
 ```
 
-- Never run the whole fast suite after an edit. Push the branch (`claude/*`, `codex/*`; Sean,
-  2026-10-02) and GitHub Actions `pipeline-tests` runs it in four parallel shards (~5 min).
-- CI has no product corpus, builds or raw DSLD datasets. A test that needs them goes in
-  `LOCAL_ONLY_TEST_FILES` (`scripts/test_profiles.py`); `scripts/ci_skip_guard.py` fails CI on any
-  other skip. CI checks out the app repo for the cross-repo tests (`FLUTTER_REPO`).
-- `scripts/test.sh` holds a machine-wide lock: one full/release/slow run at a time, alone; fast
-  runs share it and split the worker budget. A waiting run is queued, not hung.
+- Use focused tests while iterating; run one final whole fast checkpoint in CI. Push the branch (`claude/*`, `codex/*`; Sean,
+  2026-10-02) and GitHub Actions `pipeline-tests` runs it. Merge on green CI, plus `local` when
+  pipeline code or data changed.
+- CI has no product corpus, builds or raw DSLD datasets; it checks out the app repo for cross-repo tests (FLUTTER_REPO). A test that needs them goes in `LOCAL_ONLY_TEST_FILES`
+  (`scripts/test_profiles.py`); `scripts/ci_skip_guard.py` fails CI on any other skip reason; the local rung rejects missing corpus/build skips.
+- `scripts/test.sh` holds a machine-wide lock: one test workload at a time across every profile,
+  including single-file checks that can load the enricher. A waiting run is queued, not hung.
 
 Pick the rung by what changed and say which rung ran. Documentation-only changes need no pytest;
 scoring, clinical-data and runtime configuration changes require their affected checks.

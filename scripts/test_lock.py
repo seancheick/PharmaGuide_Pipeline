@@ -1,16 +1,15 @@
 #!/usr/bin/env python3
-"""Machine-wide lock for scripts/test.sh, shared by every worktree.
+"""Machine-wide lock for scripts/test.sh, shared by every worktree; one active test workload.
 
 2026-10-02: three fast suites ran at once on a 16 GB Mac (each sized its
 xdist workers as if it were alone), swap hit 31 GB and a 15-minute suite
 took 50 minutes with ten timeout failures.
 
-    test_lock.py shared -- <cmd...>     # fast: any number at once
-    test_lock.py exclusive -- <cmd...>  # full/release/slow: one, and alone
+    test_lock.py shared -- <cmd...>     # accepted old spelling; still exclusive
+    test_lock.py exclusive -- <cmd...>  # all profiles: one workload at a time
 
-The OS releases a flock when its process dies, so a crashed run never leaves
-a stale lock. The command gets PG_TEST_CONCURRENT_RUNS (live holders,
-including itself) so test.sh can split its worker budget between runs.
+The command inherits the lock descriptor, so killing the wrapper does not
+release a still-running child workload. The OS releases it after the last holder exits. Run markers name active workloads in waiting diagnostics.
 """
 
 from __future__ import annotations
@@ -59,7 +58,7 @@ def main(argv: list[str]) -> int:
     runs_dir.mkdir(parents=True, exist_ok=True)
 
     lock_file = (LOCK_DIR / "suite.lock").open("a+")
-    flag = fcntl.LOCK_SH if mode == "shared" else fcntl.LOCK_EX
+    flag = fcntl.LOCK_EX  # Every run can load the enricher; serialize machine-wide.
     try:
         fcntl.flock(lock_file, flag | fcntl.LOCK_NB)
     except BlockingIOError:
@@ -72,11 +71,12 @@ def main(argv: list[str]) -> int:
         )
         fcntl.flock(lock_file, flag)
 
+    _live_runs(runs_dir)  # Clean dead diagnostics after acquiring exclusive ownership.
     marker = runs_dir / f"{os.getpid()}.run"
     marker.write_text(f"{mode} pid {os.getpid()} in {os.getcwd()}", encoding="utf-8")
     try:
-        env = dict(os.environ, PG_TEST_CONCURRENT_RUNS=str(len(_live_runs(runs_dir))))
-        return subprocess.call(command, env=env)
+        env = dict(os.environ)
+        return subprocess.call(command, env=env, pass_fds=(lock_file.fileno(),))
     except KeyboardInterrupt:
         return 130
     finally:
