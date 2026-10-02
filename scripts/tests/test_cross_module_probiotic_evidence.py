@@ -18,7 +18,7 @@ Pins the single canonical probiotic Evidence owner contract:
      may be 'evaluated_applicable', but the probiotic component disposition in
      metadata['probiotic_component_evidence'] is strictly preserved.
    - The digestive-enzyme labels (232295, 209440, 208587) are such products: their
-     undosed blend member Bromelain is an Evidence subject
+     named Bromelain blend member is an Evidence subject
      (``get_evidence_subject_rows``, 0d69eeb0 and 06b00bb3) and earns INGR_BROMELAIN
      points, while the probiotic component stays at 0.0.
 5. Invariants:
@@ -30,9 +30,12 @@ from __future__ import annotations
 
 import json
 from pathlib import Path
+from copy import deepcopy
+from types import SimpleNamespace
 import pytest
 
 from probiotic_measurements import is_probiotic_source_identity
+from scoring_input_contract import get_evidence_subject_rows
 from studied_formulas import assess_probiotic_component_disposition
 from scoring_v4.modules.generic_evidence import score_evidence as score_generic_evidence
 from scoring_v4.modules.fiber_digestive import score_fiber_digestive
@@ -76,20 +79,46 @@ def _load_enriched_product(brand_dir: str, target_id: str) -> dict | None:
 def _assert_companion_points_only(product: dict, ev) -> None:
     """Evidence points come from companion actives, never from the probiotic rows.
 
-    A disclosed member of an undosed blend is an Evidence subject with no dose
-    (``scoring_input_contract.get_evidence_subject_rows``), so a digestive-enzyme
-    label's Bromelain earns INGR_BROMELAIN points. The probiotic component keeps
-    its own disposition and earns nothing.
+    All three labels omit the member's mass, but declare enzyme activity in
+    label notes. The shared subject provider owns both the named member and
+    its activity projection; the old inactive_non_scorable mirror is not the
+    source-section or Evidence decision. No mass is inferred from activity.
     """
     rows = (product.get("ingredient_quality_data") or {}).get("ingredients", [])
     probiotic_ids = {r.get("canonical_id") for r in rows if is_probiotic_source_identity(r)}
     points = ev.metadata["ingredient_points"]
     assert probiotic_ids and not probiotic_ids & set(points)
-    assert ev.score > 0.0 and points
+    assert set(points) == {"bromelain"}
+    assert "bromelain" in {r.get("canonical_id") for r in get_evidence_subject_rows(product)}
+    assert points["bromelain"] > 0.0
+    assert ev.score == pytest.approx(points["bromelain"])
     assert ev.metadata["evidence_result_state"] == "evaluated_applicable"
     component = ev.metadata["probiotic_component_evidence"]
     assert component["disposition_state"] == "research_present_applicability_unestablished"
     assert component["evidence_score"] == 0.0
+
+
+@pytest.mark.parametrize("mutation", ["wrong_companion", "extra_points", "inactive_companion", "unaccounted_total"])
+def test_companion_assertion_rejects_wrong_owner_or_unaccounted_credit(mutation):
+    bromelain = _ingredient(name="Bromelain", canonical_id="bromelain", quantity=0, unit="NP")
+    probiotic = {**_ingredient(name="Bacillus subtilis", canonical_id="bacillus_subtilis", quantity=0, unit="NP"), "category": "probiotic"}
+    product = _product(ingredients=[bromelain, probiotic])
+    product["ingredient_quality_data"]["ingredients"] = [bromelain, probiotic]
+    metadata = {"ingredient_points": {"bromelain": 1.0}, "evidence_result_state": "evaluated_applicable",
+                "probiotic_component_evidence": {"disposition_state": "research_present_applicability_unestablished", "evidence_score": 0.0}}
+    ev = SimpleNamespace(score=1.0, metadata=deepcopy(metadata))
+    _assert_companion_points_only(product, ev)
+    if mutation == "wrong_companion":
+        ev.metadata["ingredient_points"] = {"caffeine": 1.0}
+    elif mutation == "extra_points":
+        ev.metadata["ingredient_points"]["bacillus_subtilis_alias"] = 1.0
+    elif mutation == "inactive_companion":
+        bromelain["source_section"] = "inactive"
+        product["ingredient_quality_data"]["ingredients_scorable"] = [probiotic]
+    else:
+        ev.score = 2.0
+    with pytest.raises(AssertionError):
+        _assert_companion_points_only(product, ev)
 
 
 class TestCrossModuleProbioticRowRoleAudit:
