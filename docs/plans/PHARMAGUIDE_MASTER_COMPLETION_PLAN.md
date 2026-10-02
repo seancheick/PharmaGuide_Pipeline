@@ -6,11 +6,12 @@ A checked implementation box means that specific deliverable is implemented, mea
 
 ## Current checkpoint
 
-Latest accepted source is main/origin `c8f53b46`: D26 collagen source-binding
-fix passed18,018 fast checks (168 artifact skips), fresh review and a285-label
-identical replay. The CFU count/warranty continuation is under validation in its
-isolated lane; its preliminary replay was rejected and corrected. Earlier source
-checkpoints below remain historical receipts, not current final-corpus approval.
+Latest validated pipeline source is `91987d74`: consolidated CFU ownership and
+independent quality/safety, including export copy. Final portable fast:
+**18,079 passed,168 skipped,zero failures or expected failures** (751.29s).
+Frozen replays and independent source review passed. App broad validation and
+main integration/push are pending. Earlier checkpoints remain historical receipts,
+not current final-corpus or runtime release approval.
 
 - [x] Reconcile current main and the integration lane, including the release/storage changes on `d021061b`.
 - [x] Integrate and push the approved probiotic production model and Ravage correction to pipeline `main` (`0f695b19`; Q47/Q48); source and plan subsequently pushed through `3ee91eae`.
@@ -251,7 +252,8 @@ Sean decisions under Phase4, rather than implicit choices by an implementer.
   equivalence through the existing serving-frequency owner.
 - [x] Consolidated CFU/structural/nutrition boundary: 1,632 passed,16 skipped; final allocation controls:172 passed,5 skipped. Earlier105-check receipt remains historical.
 - [x] Complete clean1,259-label CFU replay and classify all33 score movements;717 omega controls identical, no Evidence/Safety/Verification/route/status/purpose changes. Independent review accepted source.
-- [ ] Complete final portable full-fast checkpoint and main integration/push.
+- [x] Complete final portable full-fast checkpoint at `91987d74`:18,079 passed,168 skipped,zero failures/xfails.
+- [ ] Complete main integration/push and contained-lane cleanup.
 - [ ] Close remaining label/basis discrepancies before final calibration/release.
 
 Owner: `SupplementEnricherV3::_extract_cfu` / `_extract_guarantee_type` /
@@ -296,7 +298,8 @@ score, status field, safety classifier, quality ladder or app-side calculation.
 - [x] Independently review bounded source; all non-metadata numerical config
   values are identical. Version 1.22.1 preserves the earlier fingerprint.
 - [x] Complete final1,259-label separation replay: only four config-provenance paths change. All46 production-artifact probes retain scores, tiers and typed safety; zero newly emitted POOR.
-- [ ] Complete portable pipeline fast and app `make check`.
+- [x] Complete portable pipeline fast at `91987d74`:18,079 passed,168 skipped,zero failures/xfails.
+- [ ] Complete app `make check` (source `a58d81da`).
 - [ ] Integrate/push both repositories, update final receipts and remove contained
   worktrees/branches. No runtime catalog publication is authorized here.
 
