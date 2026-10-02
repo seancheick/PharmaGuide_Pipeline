@@ -44,8 +44,12 @@ jobs:
           # Memory every 30 s: a runner that runs out of RAM is cancelled
           # without a pytest summary, so this is the only trace it leaves.
           (while true; do free -m | awk 'NR==2 {print "ci-memory used=" $3 "MB free=" $4 "MB"}'; sleep 30; done) &
-          # -v names each test as it finishes, so failures survive a cut-off run.
-          scripts/test.sh fast --junitxml=ci-junit.xml -rs -v
+          # The 16 GB runner peaked at 15.6 GB with two workers and was
+          # cancelled (run 37020559843); one worker fits.
+          export PG_TEST_WORKERS=1
+          # test.sh passes -q; -vv nets verbose, naming each test as it
+          # finishes so failures survive a cut-off run.
+          scripts/test.sh fast --junitxml=ci-junit.xml -rs -vv
 
       - name: Every skip is a declared local-only test
         if: always()
