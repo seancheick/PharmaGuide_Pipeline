@@ -100,10 +100,10 @@ is called out explicitly rather than silently described as observation.
 
 - Generic Evidence rejects a match below `min_clinical_dose` in
   `generic_evidence.score_evidence` and uses amount in `_primary_mass_floor`.
-- Probiotic Evidence reserves up to eight points for dose applicability.
+- Probiotic Evidence was separated from CFU adequacy by the integrated redesign; its current family/applicability/replication components are amount-independent. The old eight-point dose-applicability description is superseded.
 - Omega Evidence selects/graduates purpose standards using EPA+DHA or DHA exposure.
 
-These are live. Their removal is blocked by the transfer invariant documented in
+The generic and omega amount gates remain live. Their removal is blocked by the transfer invariant documented in
 `../evidence_dose_transfer_20260930/`: Dose must own an equivalent assessment in the same change,
 and replacement magnitudes remain unapproved.
 
@@ -203,3 +203,17 @@ The CFU source-binding correction changes the facts supplied to the existing
 numerical owner, not these magnitudes. The complete numerical inventory still
 requires refresh after D26 and policy approval; this amendment does not ratify
 other draft rows or establish final calibration.
+
+
+## October 2 current remaining calibration boundary
+
+Whole clinical/Dose decision preparation is now in the existing transfer packet and research register. The former serial source tasks are completed as a combined bounded batch. This table remains a draft numerical audit, not approved calibration.
+
+| Fact | Judgment | Pillar | Existing numerical owner | Other pillars / boundary |
+|---|---|---|---|---|
+| Acetylated ALCAR preparation | Applicable-reference identity | Dose | `RDAULCalculator::_form_scoped_reference`; candidate1d62acbb excludes the parent L-carnitine reference | Evidence retains existing clinical gate until equivalent approved Dose transfer; no new amount or benchmark |
+| Native trial family | Awarded source provenance | Evidence | `probiotic_evidence::score_evidence`, existing eligibility and strongest-family selector | Shared identity/Dose assessment inventories research without asserting awarded citations |
+| Detox/cleanse title | Practicality component and separate fixed penalty | Formulation | `fiber_digestive_formulation::_practicality` plus `fiber_digestive_formulation::_fiber_penalties` | Live overlap:2→0.5 component plus−3 penalty; choose one approved judgment owner/magnitude before removal |
+| Stimulant laxative | Focus component and separate fixed penalty | Formulation | `fiber_digestive_formulation::_fiber_focus` plus `fiber_digestive_formulation::_fiber_penalties` | Live overlap:5→1 component plus−8 penalty; Safety risk is a distinct judgment, not an automatic duplicate |
+
+The original per-product receipt for35Q3 historical POOR→SAFE aliases has not been located in the current audit directories; the aggregate receipt is insufficient. Those were legacy quality-threshold crossings, not improved safety. Retain the individual inspection gate and make any reconstructed measurement identify exact source/input provenance. Do not substitute current-input movements for the original35. No calibration/full-rule audit or release checkbox closes from this packet.
