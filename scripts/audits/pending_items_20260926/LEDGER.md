@@ -325,3 +325,51 @@ generic identity chooser, cleaner plantPart and canonical freezer. Evidence:
 188 focused tests, 13 strict live citation claims, 1,496 frozen-raw A/B and
 46/33 artifact parity. Will NOT create: another scorer, subject set, role
 classifier, registry, amount parser or public field/status.
+
+
+### October 2 — probiotic companion regression and declared enzyme activity audit
+
+- [x] Independently reproduce the original three failures on `014c61e9`
+  (3 failed / 5 passed), inspect actual raw labels and frozen enriched drivers,
+  and integrate Claude's test correction `3e7e3cd7` as the baseline.
+- [x] Strengthen companion tests: only eligible bromelain may earn the entire
+  raw Evidence total; native probiotic credit remains zero. Four adversarial
+  cases reject unrelated credit, extra credit, inactive source and an
+  unaccounted total. The labels omit member mass, but declare activity; a
+  legacy `inactive_non_scorable` mirror is not an Other Ingredient section.
+- [x] Correct explicit `FCC (PU)`/`FCC PU` spelling at the existing activity
+  extractor, preserving the existing `FCCPU` assay and exact raw source path.
+  No assay-to-mass conversion, member-mass borrowing or registry change.
+  Unicode suffix rejection is retained; the two added malformed-unit
+  regressions failed before the final boundary correction and pass afterward.
+- [x] Verify 101 focused tests with the user's existing corpus; without the
+  corpus, companion tests retain 5 passed / 7 skipped. Twelve format/boundary
+  regressions pass. Freeze and replay 16 raw labels (15 initial + spaced-unit 322514) on baseline `3e7e3cd7`
+  and candidate `59ed4cea`: zero total, pillar, route or scoring-status
+  movements. Nine labels regain ten declared activity assessment rows;
+  related disclosure/readiness counts and existing completeness drivers
+  follow those facts. No unexplained metadata movement.
+- [x] Obtain fresh-context independent acceptance: initial two files
+  independently passed 92 tests / 7 corpus skips; final incremental review
+  passed all 11 extraction cases. Integrator final portable checkpoint:
+  94 passed / 7 corpus skips. Reviewer reproduced unchanged 15-label
+  public results. This is extraction/ownership validation, not clinical
+  ratification of the bromelain record or completion of Evidence research.
+- [x] Complete this batch's full fast checkpoint and source integration/push:
+  source `59ed4cea`, 18,133 passed / 168 skipped / zero failures or xfails,
+  937.94s. The interrupted earlier run is superseded, not passing evidence.
+
+Owner: `scripts/scoring_input_contract.py::_extract_enzyme_activity` and
+`get_evidence_subject_rows` — evidence: existing shared scoring-input matrix
+owner, production callers, explicit raw declarations and production-boundary
+regression. Will NOT create: another parser, scorer, subject list, registry,
+assay unit, dose conversion, public field/status or numerical policy.
+Receipts: `/Users/seancheick/pg_quality/probiotic_companion_audit_20261002/`
+(`baseline.jsonl`, `candidate_final.jsonl`, `delta_final.json`, `receipt.json`,
+`independent_review.md`, `fast_final.log`).
+
+Remaining: D26 Dose coverage, D24/omega policy decisions, Q53 clinical
+coverage, serving discrepancies, numerical calibration and the final fresh
+corpus/manifest/release sequence. This batch closes none of those broader
+items. The existing user-run corpus is preserved; no full corpus job or
+runtime publication was performed.
