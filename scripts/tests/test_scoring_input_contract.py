@@ -32,6 +32,8 @@ from scoring_input_contract import (  # noqa: E402
     ("800000 FCC", (None, None)),
     ("800000 FCC (PUX)", (None, None)),
     ("800000 FCC (PU", (None, None)),
+    ("50 GDUα", (None, None)),
+    ("800000 FCCPUα", (None, None)),
 ])
 def test_enzyme_activity_reads_explicit_fcc_pu_spelling_without_assay_conversion(declaration, expected):
     assert scoring_contract._extract_enzyme_activity({"notes": declaration}) == expected
