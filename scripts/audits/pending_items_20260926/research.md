@@ -478,3 +478,7 @@ abstracts read where the title left doubt. Per-citation verdicts: `q57_doi_dispo
 - **Kept (71)** including McCann 2007 on Blue 1/2 (cited for the note that E133/E132 were NOT in the Southampton mixes) and
   Chassaing 2015 on two emulsifiers (framed as class-level evidence). Ten correct citations the identity-word heuristic
   scores "mismatch" are in `citation_content_backlog.json` with a note.
+
+## Q57b harm sources
+
+Per-entry before/after, evidence, grades, sources and Sean flags: `q57b_harm_sources_20261002.md` (same folder). Regression: `scripts/tests/test_q57b_harm_sources.py`.
