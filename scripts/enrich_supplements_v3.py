@@ -16670,8 +16670,42 @@ class SupplementEnricherV3:
                 for blend in probiotic_blends
                 if blend.get('cfu_data', {}).get('guarantee_type')
             ])
-        row_total_cfu = total_cfu
-        row_guarantee_type = guarantee_type
+        # Rows state CFU per analysed panel serving, and total_cfu keeps that
+        # basis (the app shows it as "total per serving"). A statement may give
+        # the same potency for more units ("15 billion CFU in a 3 capsule
+        # serving" over a 1-capsule panel) or per day; restate it on the
+        # panel serving first. A basis that cannot be restated never replaces
+        # the rows.
+        statement_cfu_count = None
+        if product_level_cfu.get('has_cfu') and product_level_cfu.get("source") == "statements":
+            statement_cfu_count = product_level_cfu['cfu_count']
+            panel_quantities = {
+                float(value)
+                for blend in probiotic_blends
+                for value in (blend.get("serving_size_quantities") or [])
+            }
+            if len(panel_quantities) == 1:
+                panel_quantity = next(iter(panel_quantities))
+            else:
+                panel_quantity = canonical_serving
+                if panel_quantity is None:
+                    serving = select_canonical_serving(product.get("servingSizes")) or {}
+                    panel_quantity = next((
+                        serving.get(key) for key in ("quantity", "servingSizeQuantity", "maxQuantity", "minQuantity")
+                        if serving.get(key) is not None
+                    ), None)
+            per_serving = self._statement_cfu_per_serving(
+                statement_parts, statement_cfu_count, product, panel_quantity,
+            )
+            if per_serving is None:
+                if has_cfu:
+                    product_level_cfu = {**product_level_cfu, "has_cfu": False}
+            else:
+                product_level_cfu = {
+                    **product_level_cfu,
+                    "cfu_count": per_serving,
+                    "billion_count": per_serving / 1e9,
+                }
         # Use product-level CFU if it's a total claim and exceeds per-strain sum
         # (prevents overcounting when "50 Billion CFU" is a product total, not per-strain)
         if product_level_cfu.get('has_cfu'):
@@ -16700,13 +16734,20 @@ class SupplementEnricherV3:
         # The selected total can come from summed rows, a header or the name,
         # after the first statement count was parsed. Bind each statement to
         # that final count; the first count cannot censor a later matching one.
+        # A statement restated onto the panel serving warrants the final count
+        # through its own printed number.
+        statement_targets = [total_cfu if has_cfu else None]
+        if (statement_cfu_count is not None and has_cfu
+                and math.isclose(product_level_cfu.get("cfu_count") or 0, total_cfu)):
+            statement_targets.append(statement_cfu_count)
         final_guarantees = {
             self._extract_guarantee_type(
                 part, subject_is_probiotic=probiotic_only_product,
                 require_potency_claim=True,
-                target_cfu_count=total_cfu if has_cfu else None,
+                target_cfu_count=target,
             )
             for part in statement_parts
+            for target in statement_targets
         }
         # A row's explicit matching total can warrant a product count from
         # another label section. An unquantified individual-row warranty cannot.
@@ -16717,17 +16758,6 @@ class SupplementEnricherV3:
                 final_guarantees.add(self._extract_guarantee_type(
                     row_text, subject_is_probiotic=True, target_cfu_count=total_cfu,
                 ))
-        # A per-day total can restate a warranted per-serving sum. Only
-        # explicit daily wording and the canonical fixed serving frequency
-        # prove that equivalence; arbitrary numerical ratios do not.
-        daily_min, daily_max, _ = resolve_daily_serving_range(product)
-        if row_total_cfu > 0 and row_guarantee_type and math.isclose(daily_min, daily_max) and math.isclose(row_total_cfu * daily_min, total_cfu):
-            if any(
-                re.search(r"\bper\s+day\b", part, re.I)
-                and self._parse_cfu_text_count(part, target_count=total_cfu) is not None
-                for part in statement_parts
-            ):
-                final_guarantees.add(row_guarantee_type)
         if "at_expiration" in final_guarantees:
             guarantee_type = "at_expiration"
         elif not guarantee_type and "at_manufacture" in final_guarantees:
@@ -17334,6 +17364,75 @@ class SupplementEnricherV3:
 
     def _parse_cfu_text_count(self, text: str, target_count: Optional[float] = None) -> Optional[float]:
         """Return the first label-declared CFU count from supported notation."""
+        candidates = self._cfu_text_count_matches(text)
+        if target_count is not None:
+            candidates = [item for item in candidates if math.isclose(item[1], target_count)]
+        if not candidates:
+            return None
+        return candidates[0][1]
+
+    # "daily" is a basis only when it closes the count's clause ("15 Billion
+    # CFU Daily"), never as an adjective ("for daily digestive support").
+    _STATEMENT_CFU_BASIS = re.compile(
+        r"\b(?:(?:per|in(?:\s+(?:a|an|each|every|one))?)\s+"
+        r"(?:(\d+(?:\.\d+)?|one|two|three|four|five|six)[\s-]*)?"
+        r"(capsule|cap|vegcap|tablet|softgel|gumm(?:y|ie)|chewable|lozenge|packet|stick|scoop|serving|day)s?\b"
+        r"|(daily)\s*(?:$|[,)]))",
+        re.IGNORECASE,
+    )
+    _BASIS_COUNT_WORDS = {"one": 1.0, "two": 2.0, "three": 3.0, "four": 4.0, "five": 5.0, "six": 6.0}
+
+    def _statement_cfu_per_serving(
+        self, statement_parts: List[str], count: float, product: Dict,
+        panel_quantity: Any,
+    ) -> Optional[float]:
+        """Restate a statement CFU count on the analysed panel serving.
+
+        Returns the count unchanged when its sentence names no other basis,
+        the rebased count for an explicit unit count or a fixed daily
+        frequency, and None when that basis cannot be restated.
+        """
+        for part in statement_parts:
+            matches = self._cfu_text_count_matches(part)
+            for start, value in matches:
+                if not math.isclose(value, count):
+                    continue
+                stop = re.compile(r"[.;!?](?:\s|$)|[\r\n]").search(part, start)
+                next_count = min([s for s, _ in matches if s > start] + [len(part)])
+                end = min(next_count, stop.start() if stop else len(part), start + 90)
+                basis = self._STATEMENT_CFU_BASIS.search(part, start, end)
+                if basis is None and stop is not None and stop.group() in "\r\n":
+                    # A label line break can split the count from its basis
+                    # ("5 billion live probiotic cultures\nPer day"); only a
+                    # basis that opens the next line belongs to the count.
+                    line = re.compile(r"[\r\n]+[ \t]*").match(part, stop.start())
+                    line_end = re.compile(r"[\r\n]|$").search(part, line.end()).start()
+                    basis = self._STATEMENT_CFU_BASIS.match(part, line.end(), min(line_end, next_count))
+                if basis is None:
+                    return count
+                amount = basis.group(1)
+                units = (self._BASIS_COUNT_WORDS.get(amount.lower()) or float(amount)) if amount else 1.0
+                unit = "day" if basis.group(3) else basis.group(2).lower()
+                if units <= 0:
+                    return None
+                if unit == "serving":
+                    return count / units
+                if unit == "day":
+                    low, high, _ = resolve_daily_serving_range(product)
+                    return count / (units * low) if low > 0 and math.isclose(low, high) else None
+                serving = select_canonical_serving(product.get("servingSizes")) or {}
+                stem = "cap" if "cap" in unit else unit[:4]
+                try:
+                    quantity = float(panel_quantity)
+                except (TypeError, ValueError):
+                    return None
+                if quantity > 0 and stem in str(serving.get("unit") or "").lower():
+                    return count * quantity / units
+                return None
+        return count
+
+    def _cfu_text_count_matches(self, text: str) -> List[Tuple[int, float]]:
+        """All label-declared CFU counts in ``text`` as (position, count)."""
         candidates: List[Tuple[int, float]] = []
         for pattern_key, multiplier in (
             ("cfu_billion", 1e9),
@@ -17363,12 +17462,7 @@ class SupplementEnricherV3:
                 count = float(scientific.group("coefficient")) * (10 ** exponent)
                 if math.isfinite(count):
                     candidates.append((scientific.start(), count))
-
-        if target_count is not None:
-            candidates = [item for item in candidates if math.isclose(item[1], target_count)]
-        if not candidates:
-            return None
-        return min(candidates, key=lambda item: item[0])[1]
+        return sorted(candidates, key=lambda item: item[0])
 
     def _extract_cfu(
         self,
