@@ -241,7 +241,7 @@ unapproved magnitude. Benchmarks/denominators and omega magnitudes remain explic
 Sean decisions under Phase4, rather than implicit choices by an implementer.
 
 
-## October 1 CFU guarantee continuation — validation in progress
+## October 1 CFU guarantee continuation — source complete; release validation pending
 
 - [x] Reproduce raw12091: 5 billion at manufacture plus an unquantified effective
   level at expiry incorrectly became a 5-billion expiry guarantee.
@@ -253,6 +253,7 @@ Sean decisions under Phase4, rather than implicit choices by an implementer.
   CFU notation, explicitly probiotic Cell(s) rows, and fixed daily-serving
   equivalence through the existing serving-frequency owner.
 - [x] Consolidated CFU/structural/nutrition boundary: 1,632 passed,16 skipped; final allocation controls:172 passed,5 skipped. Earlier105-check receipt remains historical.
+- [x] Reconfirm all five published Transparency pillar scores restored:256934 (8.6),274061 (9.1),274094 (9.7),277033 (9.7),297668 (9.0). Receipt:`five_transparency_restoration_receipt.json` in the durable CFU folder. Mood+ retains9.1; its internal raw component is9.1127 versus baseline9.1021, so this is not a claim of byte-identical internal pillar objects.
 - [x] Complete clean1,259-label CFU replay and classify all33 score movements;717 omega controls identical, no Evidence/Safety/Verification/route/status/purpose changes. Independent review accepted source.
 - [x] Complete final portable full-fast checkpoint at `91987d74`:18,079 passed,168 skipped,zero failures/xfails.
 - [x] Complete pipeline main integration/push (`0f9ca406`) and contained-lane archive/branch cleanup; ignored handoff and frozen receipts preserved outside the worktree.
@@ -328,3 +329,5 @@ Final export followup `50a2fb7d`: existing `build_decision_highlights` no longer
 The stale quality-completion UI attachment is owned by another chat and cannot be archived from this chat. It has no current Git worktree or branch; it is not pending implementation. The archive tool refused cross-chat ownership, and no source was deleted to work around that limitation.
 
 Next remains D26 equivalent Dose benchmark ownership and D24/omega policy packets, the nine Q53 clinical determinations and the three raw serving/title discrepancies, then numerical calibration and one fresh final Clean corpus/release manifest. Those items remain explicitly open; source integration does not close them.
+
+Sean will run the full pipeline when ready; Codex will inspect its completed artifacts afterward. Do not start the hour-scale corpus job merely to keep this chat active. Source checks and the full runtime corpus remain distinct.
