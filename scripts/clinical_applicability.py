@@ -272,6 +272,13 @@ def assess_clinical_applicability(product: Mapping, entry: Mapping, *, assess_am
     reasons = []
     source_only = policy.get("require_source_label_form", False)
     excluded_canonicals = {_key(value) for value in policy.get("excluded_canonical_ids", [])}
+    exclusion_only = bool(excluded_canonicals or policy.get("excluded_form_terms")) and not any(
+        policy.get(field) for field in (
+            "required_form_terms", "require_source_label_form", "dosage_forms",
+            "minimum_daily_dose", "maximum_daily_dose", "dose_unit",
+        )
+    )
+    applicable_rows = []
     for row in _linked_rows(product, entry, source_only=source_only,
                             discriminating_terms=policy.get("required_form_terms")):
         text = _row_text(row, source_only=source_only)
@@ -311,8 +318,28 @@ def assess_clinical_applicability(product: Mapping, entry: Mapping, *, assess_am
             if maximum is not None and amount * upper > float(maximum):
                 reasons.append("above_applicable_clinical_dose")
                 continue
+        if exclusion_only:
+            applicable_rows.append(row)
+            continue
         return {"status": "applicable", "reason_code": "reviewed_scope_match",
                 "source_row_ref": row.get("raw_source_path") or row.get("source_row_ref"),
+                "supported_outcomes": policy.get("supported_outcomes", []),
+                "studied_population": policy.get("studied_population"),
+                "scope": "ingredient"}
+    if applicable_rows:
+        # Exclusion rejects identities/preparations, not legitimate siblings.
+        # Preserve every passing row rather than making label order choose
+        # the numerator later consumed by Evidence and Dose. Scoped form/dose
+        # decisions above retain their existing single-source binding.
+        return {"status": "applicable", "reason_code": "reviewed_scope_match",
+                "matched_source_row_refs": list(dict.fromkeys(
+                    row.get("raw_source_path") or row.get("source_row_ref")
+                    for row in applicable_rows
+                    if row.get("raw_source_path") or row.get("source_row_ref")
+                )),
+                "matched_canonical_ids": list(dict.fromkeys(
+                    row["canonical_id"] for row in applicable_rows if row.get("canonical_id")
+                )),
                 "supported_outcomes": policy.get("supported_outcomes", []),
                 "studied_population": policy.get("studied_population"),
                 "scope": "ingredient"}
@@ -330,7 +357,10 @@ def filter_clinical_matches(product: Mapping, matches: list[dict], *, assess_amo
                 accepted.append(entry)
                 continue
             scoped_entry = {**entry, "applicability_assessment": decision}
-            if decision.get("source_row_ref"):
+            if "matched_source_row_refs" in decision:
+                scoped_entry["matched_source_row_refs"] = decision["matched_source_row_refs"]
+                scoped_entry["matched_canonical_ids"] = decision["matched_canonical_ids"]
+            elif decision.get("source_row_ref"):
                 # Later dose and readiness consumers may use only the row that
                 # passed, not a sibling admitted by broad identity matching.
                 scoped_entry["matched_source_row_refs"] = [decision["source_row_ref"]]

@@ -355,7 +355,7 @@ def test_real_probiotic_inputs_respect_reviewed_species_applicability(fixture, r
 @pytest.mark.parametrize("fixture,record,floor_canonical", [
     # INGR_GARLIC already links the 1,000 mg powder and its Allicin/Alliin rows
     ("prominence_rerecovery_217818_raw.json", "INGR_GARLIC", "garlic extract"),
-    # INGR_OMEGA3 already links EPA, DHA and ALA
+    # Enrichment links EPA, DHA and ALA; reviewed marine scope excludes ALA
     ("prominence_rerecovery_1838_raw.json", "INGR_OMEGA3", "omega 3 fatty acids"),
 ])
 def test_real_recovery_never_restamps_a_record_onto_a_row_it_already_links(
@@ -370,7 +370,17 @@ def test_real_recovery_never_restamps_a_record_onto_a_row_it_already_links(
     matches, recovered = resolved_clinical_matches(product, owner_scoped=True)
     assert recovered == []
     entry = next(m for m in matches if m.get("id") == record)
-    assert len(entry.get("matched_source_row_refs") or []) > 1
+    if record == "INGR_OMEGA3":
+        # Reviewed applicability may bind a valid marine row. Recovery must
+        # still leave the record alone, and never rebind it to plant ALA.
+        assert entry["applicability_assessment"]["status"] == "applicable"
+        refs = entry["matched_source_row_refs"]
+        assert set(refs) == set(entry["applicability_assessment"]["matched_source_row_refs"])
+        assert len(refs) > 1
+        assert not any(row.get("canonical_id") == "alpha_linolenic_acid"
+                       for row in product["activeIngredients"] if row.get("raw_source_path") in refs)
+    else:
+        assert len(entry.get("matched_source_row_refs") or []) > 1
     assert _evidence(product)["metadata"]["primary_evidence_floor_canonical"] == floor_canonical
 
 

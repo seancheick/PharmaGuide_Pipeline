@@ -563,3 +563,52 @@ def test_probiotic_summary_claims_keep_trial_scope_and_endpoint_roles():
     ref = next(r for r in acidophilus["references_structured"] if r.get("nct_id") == "NCT02103972")
     assert ref["evidence_grade"] == "reference"
     assert "not acidophilus" in ref["note"].lower()
+
+
+@pytest.mark.parametrize("canonical,name", [("alpha_linolenic_acid", "Alpha-Linolenic Acid"), ("alpha_linolenic_acid", "ALA Omega-3")])
+def test_marine_omega_study_does_not_transfer_to_plant_ala(canonical, name):
+    from scoring_v4.scored_artifact import build_scored_artifact
+    from tests.test_v4_generic_evidence_p133 import _ingredient, _match, _product
+
+    row = _ingredient(name=name, canonical_id=canonical, quantity=1000, unit="mg")
+    row["raw_source_path"] = "ingredientRows[0]"
+    match = _match(id="INGR_OMEGA3", ingredient=name, standard_name="Omega-3 Fatty Acids",
+                   matched_canonical_ids=[canonical], matched_source_row_refs=["ingredientRows[0]"])
+    # Stale enriched success must not overrule the reviewed intervention.
+    match["applicability"] = {"scope": "ingredient"}
+    match["applicability_assessment"] = {"status": "applicable"}
+    product = _product(product_name=name, ingredients=[row], matches=[match])
+    assert assess_clinical_applicability(product, match)["status"] == "not_applicable"
+    artifact = build_scored_artifact(product)
+    assert artifact["quality_pillars_v4"]["evidence"]["score"] == 0
+
+
+@pytest.mark.parametrize("canonical,name", [("epa", "EPA"), ("dha", "DHA")])
+def test_marine_omega_identity_controls_remain_applicable(canonical, name):
+    product = zinc_product()
+    row = product["ingredient_quality_data"]["ingredients_scorable"][0]
+    row.update(name=name, standard_name=name, canonical_id=canonical, quantity=1000)
+    match = {"id": "INGR_OMEGA3", "ingredient": name, "matched_canonical_ids": [canonical],
+             "matched_source_row_refs": ["ingredientRows[0]"]}
+    assert assess_clinical_applicability(product, match)["status"] == "applicable"
+
+
+@pytest.mark.parametrize("reverse", [False, True])
+def test_exclusion_only_scope_retains_every_valid_marine_row_independent_of_order(reverse):
+    from tests.test_v4_generic_evidence_p133 import _ingredient, _match, _product
+    rows = []
+    for i, (canonical, name, amount) in enumerate([(
+            "epa", "EPA", 100), ("dha", "DHA", 1000),
+            ("alpha_linolenic_acid", "Alpha-Linolenic Acid", 1500)]):
+        row = _ingredient(name=name, canonical_id=canonical, quantity=amount, unit="mg")
+        row["raw_source_path"] = f"ingredientRows[{i}]"
+        rows.append(row)
+    match = _match(id="INGR_OMEGA3", ingredient="Omega-3 Fatty Acids",
+                   standard_name="Omega-3 Fatty Acids",
+                   matched_canonical_ids=[r["canonical_id"] for r in rows],
+                   matched_source_row_refs=[r["raw_source_path"] for r in rows])
+    product = _product(ingredients=rows[::-1] if reverse else rows, matches=[match])
+    accepted, rejected = filter_clinical_matches(product, [match])
+    assert not rejected
+    assert set(accepted[0]["matched_source_row_refs"]) == {"ingredientRows[0]", "ingredientRows[1]"}
+    assert set(accepted[0]["matched_canonical_ids"]) == {"epa", "dha"}
