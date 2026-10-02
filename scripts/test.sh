@@ -32,6 +32,16 @@ PYTEST_BASE=(scripts/tests -q --tb=line)
 USER_TARGETS=()
 USER_OPTIONS=()
 
+# Worker allocation belongs to this runner; pytest CLI overrides would bypass
+# the machine-wide budget. Use PG_TEST_WORKERS (capped for broad runs).
+for arg in "$@"; do
+  case "$arg" in
+    -n|--numprocesses|-n?*|--numprocesses=*)
+      echo "test.sh: worker overrides must use PG_TEST_WORKERS, not $arg" >&2
+      exit 2 ;;
+  esac
+done
+
 has_xdist() {
   "$PG_PYTHON" - <<'PY' >/dev/null 2>&1
 import xdist  # noqa: F401
@@ -74,11 +84,11 @@ split_user_pytest_args() {
 # CPU cores or how many workers physical RAM can hold after reserving headroom
 # for the OS + editor + browser. Override with PG_TEST_WORKERS=N.
 safe_worker_count() {
-  if [[ -n "${PG_TEST_WORKERS:-}" ]]; then
+  if [[ "${1:-}" != "capacity" && -n "${PG_TEST_WORKERS:-}" ]]; then
     printf '%s\n' "$PG_TEST_WORKERS"
     return
   fi
-  "$PG_PYTHON" - <<'PY'
+  "$PG_PYTHON" - "${1:-workers}" <<'PY'
 import os, sys
 mem_gb = 8.0
 try:
@@ -100,8 +110,7 @@ PER_WORKER_GB = 2.5   # resident footprint per worker, with margin
 RESERVE_GB = 6.0      # OS + editor/Claude + browser headroom
 by_mem = int((mem_gb - RESERVE_GB) // PER_WORKER_GB)
 # Broad runs sharing the machine-wide lock (scripts/test_lock.py) split the budget.
-runs = max(1, int(os.environ.get("PG_TEST_CONCURRENT_RUNS") or 1))
-print(max(1, min(cores - 1, by_mem // runs)))
+print(max(1, by_mem) if sys.argv[1] == "capacity" else max(1, min(cores - 1, by_mem)))
 PY
 }
 
@@ -424,15 +433,17 @@ NICE=(); command -v nice >/dev/null 2>&1 && NICE=(nice -n 15)
 if [[ -z "${PG_TEST_LOCK_HELD:-}" ]]; then
   split_user_pytest_args "$@"
   lock_mode=""
-  if ((${#USER_TARGETS[@]} == 0)); then
-    case "$PROFILE" in
-      full|release|slow) lock_mode=exclusive ;;
-      fast|local) lock_mode=shared ;;
-    esac
-  fi
+  case "$PROFILE" in
+    full|release|slow) lock_mode=exclusive ;;
+    local) lock_mode=shared ;;
+    fast) ((${#USER_TARGETS[@]} == 0)) && lock_mode=shared ;;
+  esac
   if [[ -n "$lock_mode" ]]; then
-    PG_TEST_LOCK_HELD=1 exec "$PG_PYTHON" "$SCRIPT_DIR/test_lock.py" "$lock_mode" -- \
+    PG_TEST_LOCK_CAPACITY="${PG_TEST_LOCK_CAPACITY:-$(safe_worker_count capacity)}" PG_TEST_LOCK_HELD=1 exec "$PG_PYTHON" "$SCRIPT_DIR/test_lock.py" "$lock_mode" -- \
       bash "$SCRIPT_DIR/test.sh" "$PROFILE" "$@"
+  else
+    # Focused checks never join the suite queue; keep each to one worker.
+    export PG_TEST_WORKERS=1
   fi
 fi
 

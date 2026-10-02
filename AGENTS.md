@@ -65,8 +65,10 @@ do not each require a broad checkpoint. Do not weaken an assertion merely to mak
 5. After the last code change and the merge of main: one corpus pass from the earliest changed
    stage, then the release rung. Its preflight refuses output built by other data or code.
 
-Before a broad job, check active jobs and lane handoffs. Only one memory-heavy test/corpus job
-may run on the Mac at a time; queue behind it, including a focused run that loads the enricher.
+Before a broad job, check active jobs and lane handoffs. Full/release/slow suites run
+one at a time; never run a broad suite alongside a corpus job. Broad fast/local suites
+share bounded one-worker slots, reserving headroom for focused checks. Focused fast
+checks naming files or nodes bypass the suite queue and use one worker.
 For timeouts, inspect contention first and rerun the affected nodes in isolation; a successful
 retry explains neither a source defect nor the interrupted checkpoint by itself. Reuse existing
 receipts only when their source/data fingerprints cover the candidate; otherwise revalidate.

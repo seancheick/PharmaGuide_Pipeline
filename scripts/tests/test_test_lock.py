@@ -16,7 +16,7 @@ LOCK = Path(__file__).resolve().parents[1] / "test_lock.py"
 
 
 def _start(tmp_path: Path, mode: str, code: str) -> subprocess.Popen:
-    env = dict(os.environ, PG_TEST_LOCK_DIR=str(tmp_path))
+    env = dict(os.environ, PG_TEST_LOCK_DIR=str(tmp_path), PG_TEST_LOCK_CAPACITY="4")
     return subprocess.Popen(
         [sys.executable, str(LOCK), mode, "--", sys.executable, "-c", code],
         env=env, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True,
@@ -112,3 +112,36 @@ def test_lock_survives_wrapper_death_while_child_is_running(tmp_path):
         release.touch()
         first.communicate(timeout=20)
         second.communicate(timeout=20)
+
+
+def test_broad_worker_slots_bound_overlap(tmp_path):
+    release = tmp_path / "release_slots"
+    code = f"from pathlib import Path; import os,time; print(os.environ['PG_TEST_WORKERS'], flush=True)\nwhile not Path({str(release)!r}).exists(): time.sleep(.02)"
+    holders = [_start(tmp_path, "shared", code) for _ in range(3)]
+    _wait_for_markers(tmp_path, 3)
+    queued = _start(tmp_path, "shared", "import os; print(os.environ['PG_TEST_WORKERS'])")
+    try:
+        time.sleep(.3)
+        assert queued.poll() is None, "fourth broad run exceeded the reserved budget"
+    finally:
+        release.touch()
+        outputs = [p.communicate(timeout=20)[0].strip() for p in holders]
+        out, err = queued.communicate(timeout=20)
+    assert outputs == ["1"] * 3
+    assert out.strip() == "1"
+    assert "waiting for a broad-worker slot" in err
+
+
+def test_exclusive_worker_override_is_capped(tmp_path):
+    env = dict(os.environ, PG_TEST_LOCK_DIR=str(tmp_path), PG_TEST_LOCK_CAPACITY="4", PG_TEST_WORKERS="99")
+    result = subprocess.run([sys.executable, str(LOCK), "exclusive", "--", sys.executable, "-c", "import os; print(os.environ['PG_TEST_WORKERS'])"], env=env, capture_output=True, text=True, timeout=20)
+    assert result.returncode == 0
+    assert result.stdout.strip() == "3"
+
+
+def test_cli_worker_override_cannot_bypass_runner_budget():
+    repo = Path(__file__).resolve().parents[2]
+    for option in ("-n", "-n99", "--numprocesses", "--numprocesses=auto"):
+        result = subprocess.run(["bash", "scripts/test.sh", "fast", "scripts/tests/test_ci_skip_guard.py", option], cwd=repo, capture_output=True, text=True, timeout=20)
+        assert result.returncode == 2
+        assert "worker overrides must use PG_TEST_WORKERS" in result.stderr
