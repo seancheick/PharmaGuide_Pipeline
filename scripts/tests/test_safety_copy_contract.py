@@ -10,10 +10,9 @@ and E1.2.3 (warning dedup) fixes ship.
 Each test auto-skips until its target pipeline change lands. Activation
 style is chosen per invariant:
 
-  - Invariants 1 and 4 auto-gate on the appearance of a new structural
-    field (``decision_highlights.danger`` / banned-substance preflight
-    copy propagation). They activate with zero code change here the
-    moment the matching phase lands.
+  - Invariant 1 always runs. Invariant 4 auto-gates on the appearance of
+    banned-substance preflight copy propagation and activates with zero
+    code change here the moment that phase lands.
 
   - Invariants 2, 3, and 5 have no clean structural signal (copy
     rewrites, validator additions, dedup collapse). They gate on a
@@ -170,18 +169,18 @@ def test_no_danger_in_positives(core_rows) -> None:
     """``decision_highlights.positive[]`` is the user-visible "reasons to
     feel good about this product" hero string. It cannot carry danger-
     valence copy like "Not lawful as a US dietary supplement" or "Some
-    can carry trace arsenic." Those belong in the new ``danger`` bucket
-    added by E1.1.1 and rendered red in Flutter. Putting danger copy
-    under a green thumbs-up is actively user-harmful.
+    can carry trace arsenic." Safety reaches users through the verdict and
+    warnings. Putting danger copy under a green thumbs-up is actively
+    user-harmful.
 
-    Fix in: E1.1.1 (decision_highlights re-classification + danger bucket).
+    Fix in: E1.1.1 (decision_highlights re-classification).
     """
     _build, rows = core_rows
     assert rows, "core DB has no products"
     violations = []
     for row in rows:
         dh = json.loads(row["decision_highlights"] or "{}")
-        assert isinstance(dh, dict) and "danger" in dh, f"[{row['dsld_id']}] decision_highlights has no danger bucket"
+        assert isinstance(dh, dict), f"[{row['dsld_id']}] decision_highlights is not an object"
         for s in _as_string_list(dh.get("positive")):
             m = DANGER_DENY_LIST.search(s)
             if m:

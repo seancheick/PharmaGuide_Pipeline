@@ -2615,9 +2615,9 @@ def build_interaction_summary_hint(enriched: Dict) -> Dict[str, Any]:
 
 # Sprint E1.1.1 — deny-list of tokens that must never appear in the
 # user-facing ``decision_highlights.positive`` bucket. These are danger-
-# valence phrases that belong under the new ``danger`` bucket (rendered
-# red in Flutter) rather than under a green thumbs-up. The validator
-# below enforces this invariant at build time.
+# valence phrases that never belong under a green thumbs-up; safety
+# reaches users through the verdict and warnings. The validator below
+# enforces this invariant at build time.
 _DECISION_HIGHLIGHTS_DENY_LIST_RE = re.compile(
     r"(not lawful|banned|talk to your doctor|arsenic|trace metals|"
     r"undisclosed|high glycemic|contraindicated)",
@@ -2851,22 +2851,16 @@ def v4_sub_clinical_canonicals(scored: Dict[str, Any]) -> set[str]:
     }
 
 
-def build_decision_highlights(
-    enriched: Dict, scored: Dict, blocking_reason: Optional[str]
-) -> Dict[str, Any]:
+def build_decision_highlights(enriched: Dict, scored: Dict) -> Dict[str, Any]:
     """Build concise hero highlights so Flutter doesn't need to improvise them.
 
-    Four buckets (Sprint E1.1.1):
+    Three buckets:
 
       * ``positive`` (str)      — green hero string, benign signal only.
-      * ``caution`` (str)       — caution or incomplete-assessment copy.
-      * ``danger`` (list[str])  — safety blocking-reason strings.
-        Exported separately; the current Flutter app does not render this bucket.
+      * ``caution`` (str)       — additive, typed-safety or incomplete-assessment copy.
       * ``trust`` (str)         — trust/certification signal.
 
-    Blocking-reason strings (banned / recalled / high-risk) route into
-    ``danger`` exclusively; ``caution`` then flows unchanged for the
-    non-blocking signals (additives, typed safety, assessment readiness).
+    Blocking reasons are not restated here; the verdict and warnings carry them.
     """
     from cert_resolver import normalize_program
     from scoring_v4.cert_evidence import claimed_programs, verified_programs
@@ -2896,14 +2890,6 @@ def build_decision_highlights(
     else:
         positive = "Some quality signals are present, but this product needs a closer look."
 
-    danger: List[str] = []
-    if blocking_reason == "banned_substance":
-        danger.append("Contains a banned substance match.")
-    elif blocking_reason == "recalled_ingredient":
-        danger.append("Contains a recalled ingredient match.")
-    elif blocking_reason == "high_risk_ingredient":
-        danger.append("Contains an ingredient flagged as high risk.")
-
     if safe_list(enriched.get("harmful_additives")):
         caution = "Includes additives with known safety concerns."
     elif safety_status in {"caution", "unsafe", "blocked"}:
@@ -2929,7 +2915,6 @@ def build_decision_highlights(
     return {
         "positive": positive,
         "caution": caution,
-        "danger": danger,
         "trust": trust,
     }
 
@@ -5270,8 +5255,8 @@ def _validate_decision_highlights(dh: Dict[str, Any], dsld_id: str) -> None:
         if m:
             raise ValueError(
                 f"[{dsld_id}] decision_highlights.positive leaks danger-"
-                f"valence token {m.group(0)!r}: {s!r}. Route this copy "
-                f"into the 'danger' bucket instead (Sprint E1.1.1)."
+                f"valence token {m.group(0)!r}: {s!r}. Safety copy belongs "
+                f"in caution or the warnings, never in positive (Sprint E1.1.1)."
             )
 
 
@@ -10110,7 +10095,7 @@ def build_core_row(
     )
     blocking = safe_str(effective_scored.get("blocking_reason")) or None
     interaction_hint = build_interaction_summary_hint(enriched)
-    decision_highlights = build_decision_highlights(enriched, effective_scored, blocking)
+    decision_highlights = build_decision_highlights(enriched, effective_scored)
     _validate_decision_highlights(decision_highlights, safe_str(enriched.get("dsld_id")))
 
     # ─── v1.1.0 Enhancements ───

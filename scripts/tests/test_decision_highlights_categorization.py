@@ -1,20 +1,20 @@
 """
 Sprint E1.1.1 — regression tests for decision_highlights re-classification.
 
-Exercises the 4-bucket contract (``positive``, ``caution``, ``danger``,
-``trust``) and the build-time validator that blocks deny-list tokens
+Exercises the 3-bucket contract (``positive``, ``caution``, ``trust``)
+and the build-time validator that blocks deny-list tokens
 from leaking into ``positive``.
 
 Covers the core symptoms from the 2026-04-21 Flutter device-testing
 handoff: "Not lawful as a US dietary supplement" and similar danger-
 valence strings rendered under a green thumbs-up. The categorization
-guarantee is structural: danger-valence content MUST route into the
-``danger`` bucket (rendered red by Flutter) and MUST NOT appear in
+guarantee is structural: danger-valence content MUST NOT appear in
 ``positive`` (rendered green).
 """
 
 from __future__ import annotations
 
+import re
 import sys
 from pathlib import Path
 
@@ -54,55 +54,24 @@ def _base_scored(evidence: float = 0.0, score_100: float = 50.0, verdict: str = 
 
 
 # ---------------------------------------------------------------------------
-# Shape contract — all 4 buckets always present.
+# Shape contract — three buckets. The danger bucket was removed 2026-10-02:
+# bans matched ``banned_substance``, a code the safety gate never emits, so
+# it shipped empty on all 15,133 products (73 BLOCKED), and no app reads it. Blocking reasons reach users
+# through the verdict and warnings, never through these hero strings.
 # ---------------------------------------------------------------------------
 
-def test_shape_always_has_four_buckets() -> None:
-    dh = build_decision_highlights(_base_enriched(), _base_scored(), None)
-    assert set(dh.keys()) == {"positive", "caution", "danger", "trust"}
-    assert isinstance(dh["positive"], str)
-    assert isinstance(dh["caution"], str)
-    assert isinstance(dh["danger"], list)
-    assert isinstance(dh["trust"], str)
+def test_shape_has_three_buckets() -> None:
+    dh = build_decision_highlights(_base_enriched(), _base_scored())
+    assert set(dh.keys()) == {"positive", "caution", "trust"}
+    assert all(isinstance(dh[key], str) for key in dh)
 
 
-def test_danger_is_empty_list_when_no_blocking_reason() -> None:
-    dh = build_decision_highlights(_base_enriched(), _base_scored(), None)
-    assert dh["danger"] == []
-
-
-# ---------------------------------------------------------------------------
-# Blocking-reason routing — banned / recalled / high_risk → danger bucket.
-# ---------------------------------------------------------------------------
-
-def test_banned_substance_routes_to_danger() -> None:
-    dh = build_decision_highlights(
-        _base_enriched(),
-        _base_scored(verdict="BLOCKED"),
-        "banned_substance",
-    )
-    assert any("banned" in s.lower() for s in dh["danger"]), dh
-    # Must not also appear in positive
-    assert "banned" not in dh["positive"].lower()
-
-
-def test_recalled_ingredient_routes_to_danger() -> None:
-    dh = build_decision_highlights(
-        _base_enriched(),
-        _base_scored(verdict="BLOCKED"),
-        "recalled_ingredient",
-    )
-    assert any("recalled" in s.lower() for s in dh["danger"]), dh
-    assert "recalled" not in dh["positive"].lower()
-
-
-def test_high_risk_ingredient_routes_to_danger() -> None:
-    dh = build_decision_highlights(
-        _base_enriched(),
-        _base_scored(verdict="UNSAFE"),
-        "high_risk_ingredient",
-    )
-    assert any("high risk" in s.lower() for s in dh["danger"]), dh
+def test_blocked_product_highlights_carry_caution_not_praise() -> None:
+    scored = _base_scored(verdict="BLOCKED")
+    scored["product_safety_status"] = "blocked"
+    dh = build_decision_highlights(_base_enriched(), scored)
+    assert dh["caution"] == "Catalog safety concerns require attention."
+    assert not re.search(r"banned|recalled", dh["positive"], re.I)
 
 
 # ---------------------------------------------------------------------------
@@ -112,21 +81,20 @@ def test_high_risk_ingredient_routes_to_danger() -> None:
 def test_caution_carries_additive_signal_when_not_blocked() -> None:
     enriched = _base_enriched()
     enriched["harmful_additives"] = [{"name": "Titanium Dioxide"}]
-    dh = build_decision_highlights(enriched, _base_scored(), None)
+    dh = build_decision_highlights(enriched, _base_scored())
     assert "additive" in dh["caution"].lower()
-    assert dh["danger"] == []
 
 
 def test_caution_does_not_carry_allergen_signal_when_not_personalized() -> None:
     enriched = _base_enriched()
     enriched["allergen_hits"] = [{"name": "Milk"}]
-    dh = build_decision_highlights(enriched, _base_scored(), None)
+    dh = build_decision_highlights(enriched, _base_scored())
     assert "allergen" not in dh["caution"].lower()
     assert "no major caution" in dh["caution"].lower()
 
 
 def test_no_caution_signal_message_on_clean_products() -> None:
-    dh = build_decision_highlights(_base_enriched(), _base_scored(), None)
+    dh = build_decision_highlights(_base_enriched(), _base_scored())
     assert "no major caution" in dh["caution"].lower()
 
 
@@ -142,16 +110,16 @@ def test_positive_never_contains_deny_list_tokens() -> None:
     e1 = _base_enriched()
     e1["is_trusted_manufacturer"] = True
     e1["has_full_disclosure"] = True
-    dh1 = build_decision_highlights(e1, _base_scored(), None)
+    dh1 = build_decision_highlights(e1, _base_scored())
 
     # Strong evidence branch
-    dh2 = build_decision_highlights(_base_enriched(), _base_scored(evidence=15.0), None)
+    dh2 = build_decision_highlights(_base_enriched(), _base_scored(evidence=15.0))
 
     # Score >= 75 branch (V4 /100)
-    dh3 = build_decision_highlights(_base_enriched(), _base_scored(score_100=80.0), None)
+    dh3 = build_decision_highlights(_base_enriched(), _base_scored(score_100=80.0))
 
     # Default branch
-    dh4 = build_decision_highlights(_base_enriched(), _base_scored(), None)
+    dh4 = build_decision_highlights(_base_enriched(), _base_scored())
 
     deny = ("not lawful", "banned", "talk to your doctor", "arsenic",
             "trace metals", "undisclosed", "high glycemic", "contraindicated")
@@ -164,18 +132,18 @@ def test_positive_never_contains_deny_list_tokens() -> None:
 def test_positive_strong_quality_uses_v4_score_100() -> None:
     """The 'strong overall quality' positive is gated on the V4 /100 score
     (score_100_equivalent >= 75), not the retired V3 score_80."""
-    dh = build_decision_highlights(_base_enriched(), _base_scored(score_100=80.0), None)
+    dh = build_decision_highlights(_base_enriched(), _base_scored(score_100=80.0))
     assert dh["positive"] == "Strong overall quality profile."
-    dh_low = build_decision_highlights(_base_enriched(), _base_scored(score_100=70.0), None)
+    dh_low = build_decision_highlights(_base_enriched(), _base_scored(score_100=70.0))
     assert "closer look" in dh_low["positive"].lower()
 
 
 def test_positive_evidence_uses_v4_evidence_pillar() -> None:
     """The 'meaningful clinical evidence' positive is gated on the V4 evidence
     pillar (>= 12 of /20), not the retired V3 section_scores.C."""
-    dh = build_decision_highlights(_base_enriched(), _base_scored(evidence=13.0), None)
+    dh = build_decision_highlights(_base_enriched(), _base_scored(evidence=13.0))
     assert dh["positive"] == "Backed by meaningful clinical evidence."
-    dh_low = build_decision_highlights(_base_enriched(), _base_scored(evidence=8.0), None)
+    dh_low = build_decision_highlights(_base_enriched(), _base_scored(evidence=8.0))
     assert "closer look" in dh_low["positive"].lower()
 
 
@@ -187,7 +155,6 @@ def test_validator_passes_on_clean_highlights() -> None:
     dh = {
         "positive": "Strong overall quality profile.",
         "caution": "No major caution signal surfaced.",
-        "danger": [],
         "trust": "Trust signals limited.",
     }
     _validate_decision_highlights(dh, "CLEAN-0001")  # no exception expected
@@ -204,7 +171,6 @@ def test_validator_raises_on_deny_list_in_positive(bad_string: str) -> None:
     dh = {
         "positive": bad_string,
         "caution": "",
-        "danger": [],
         "trust": "",
     }
     with pytest.raises(ValueError, match="decision_highlights.positive"):
@@ -217,7 +183,6 @@ def test_validator_handles_list_shape_positive() -> None:
     dh = {
         "positive": ["Safe baseline.", "Strong evidence."],
         "caution": "",
-        "danger": [],
         "trust": "",
     }
     _validate_decision_highlights(dh, "OK-LIST")  # no exception
@@ -225,7 +190,6 @@ def test_validator_handles_list_shape_positive() -> None:
     dh_bad = {
         "positive": ["Safe baseline.", "Not lawful as a US dietary supplement."],
         "caution": "",
-        "danger": [],
         "trust": "",
     }
     with pytest.raises(ValueError):
@@ -238,16 +202,16 @@ def test_highlights_ignore_legacy_quality_and_readiness_verdicts() -> None:
         scored = _base_scored(verdict=verdict)
         scored.update(product_safety_status="no_known_catalog_concern",
                       quality_assessment_status="complete", quality_tier="Poor")
-        results.append(build_decision_highlights(_base_enriched(), scored, None))
+        results.append(build_decision_highlights(_base_enriched(), scored))
     assert results[0] == results[1] == results[2]
 
 
 def test_highlights_use_typed_safety_and_assessment_independently() -> None:
     scored = _base_scored(verdict="SAFE")
     scored.update(product_safety_status="caution", quality_assessment_status="complete")
-    assert "safety" in build_decision_highlights(_base_enriched(), scored, None)["caution"].lower()
+    assert "safety" in build_decision_highlights(_base_enriched(), scored)["caution"].lower()
     scored.update(product_safety_status="no_known_catalog_concern", quality_assessment_status="partial")
-    copy = build_decision_highlights(_base_enriched(), scored, None)["caution"]
+    copy = build_decision_highlights(_base_enriched(), scored)["caution"]
     assert "assessment" in copy.lower() and "incomplete" in copy.lower()
     assert "safety" not in copy.lower()
 
@@ -256,14 +220,13 @@ def test_highlights_missing_safety_never_claims_no_caution() -> None:
     scored = _base_scored()
     for status in (None, "not_assessed", "unknown_status"):
         scored["product_safety_status"] = status
-        assert build_decision_highlights(_base_enriched(), scored, None)["caution"] == "Safety assessment is incomplete."
+        assert build_decision_highlights(_base_enriched(), scored)["caution"] == "Safety assessment is incomplete."
 
 
-def test_highlights_keep_additive_and_danger_reasons() -> None:
+def test_highlights_keep_additive_reason_on_a_blocked_product() -> None:
     enriched = _base_enriched()
     enriched["harmful_additives"] = [{"name": "Titanium dioxide"}]
     scored = _base_scored(verdict="SAFE")
     scored["product_safety_status"] = "blocked"
-    result = build_decision_highlights(enriched, scored, "recalled_ingredient")
+    result = build_decision_highlights(enriched, scored)
     assert result["caution"] == "Includes additives with known safety concerns."
-    assert result["danger"] == ["Contains a recalled ingredient match."]

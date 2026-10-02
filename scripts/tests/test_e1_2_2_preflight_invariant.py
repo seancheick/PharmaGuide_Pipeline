@@ -60,7 +60,7 @@ E1_2_2_NEW_INGREDIENT_FIELDS = {
 # present in the rebuild but NOT in the baseline (additive-only).
 
 # Known non-ingredient keys that have been added by earlier E1 tasks
-# (E1.1.1 danger bucket, E1.1.4 banned_substance_detail). These are
+# (E1.1.4 banned_substance_detail). These are
 # allowed to appear as new top-level keys in rebuilds; the pre-flight
 # only polices ingredient-level shape.
 E1_POST_E1_2_1_TOPLEVEL = {

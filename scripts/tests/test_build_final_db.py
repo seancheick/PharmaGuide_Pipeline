@@ -564,11 +564,9 @@ def test_build_core_row_includes_flutter_convenience_fields():
     assert interaction_hint["drug_class_ids"] == ["retinoids"]
 
     decision_highlights = json.loads(row["decision_highlights"])
-    # Sprint E1.1.1: added 'danger' bucket (list[str]) for red-banner routing.
-    assert set(decision_highlights.keys()) == {"positive", "caution", "danger", "trust"}
+    assert set(decision_highlights.keys()) == {"positive", "caution", "trust"}
     assert isinstance(decision_highlights["positive"], str)
     assert isinstance(decision_highlights["caution"], str)
-    assert isinstance(decision_highlights["danger"], list)
     assert isinstance(decision_highlights["trust"], str)
 
 

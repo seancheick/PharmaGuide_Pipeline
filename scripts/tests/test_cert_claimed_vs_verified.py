@@ -238,7 +238,7 @@ def test_verified_canonical_program_is_not_described_as_an_unverified_alias():
     from test_build_final_db import make_scored
 
     enriched = _export_enriched(["NSF Contents Certified"], [_verified_row("NSF Certified")])
-    trust = build_decision_highlights(enriched, make_scored(), None)["trust"]
+    trust = build_decision_highlights(enriched, make_scored())["trust"]
 
     assert trust == "Verified in official registries: NSF Certified."
 
@@ -260,7 +260,7 @@ def test_claim_only_export_has_no_verified_signal_anywhere():
     assert "third-party testing" not in share["share_description"]
     assert not any("USP Verified" in highlight for highlight in share["share_highlights"])
 
-    trust = build_decision_highlights(enriched, scored, None)["trust"]
+    trust = build_decision_highlights(enriched, scored)["trust"]
     assert "USP Verified" not in trust or "claimed on label" in trust.lower()
 
 

@@ -48,7 +48,6 @@ CLEAN_BLOB = {
     "decision_highlights": {
         "positive": "Strong overall quality profile.",
         "caution": "No major caution signal surfaced.",
-        "danger": [],
         "trust": "Trust signals limited.",
     },
     "warnings": [],
@@ -110,7 +109,6 @@ BAD_BLOB = {
         # Danger-valence string under positive — axis S1 violation
         "positive": ["Not lawful as a US dietary supplement."],
         "caution": "Check with your doctor.",
-        "danger": [],
         "trust": "",
     },
     "warnings": [

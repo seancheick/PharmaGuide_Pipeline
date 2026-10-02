@@ -242,7 +242,7 @@ def _axis_display_not_canonical(blob: dict) -> list[tuple]:
 def _axis_danger_in_positives(blob: dict) -> list[tuple]:
     """S1 — no danger-valence copy under decision_highlights.positive."""
     dh = blob.get("decision_highlights")
-    if not isinstance(dh, dict) or "danger" not in dh:
+    if not isinstance(dh, dict):
         return []
     violations = []
     pos = dh.get("positive")
