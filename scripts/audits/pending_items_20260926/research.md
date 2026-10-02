@@ -449,3 +449,32 @@ substance" → "Unapproved ingredient". Neither rule matches any of the 15,133 d
 38 enriched brand outputs, so no shipped product changes. Safety copy: CUMYL-PICA safety_warning loses its regulatory clause ("Not a lawful
 supplement ingredient;"), keeping the harm statement and "Stop any product containing it and consult a doctor."
 No replacement regulatory phrase ("no approved use" was tried and dropped: it states a determination nobody made).
+
+## Q57 DOI citation integrity
+
+Checked 2026-10-02. Extraction: `verify_all_citations_content.py` (now DOI-aware), so the receipt and the gate use one
+definition of a citation. Each DOI resolved on Crossref (`api.crossref.org/works/<doi>`) and PubMed (`esearch <doi>[doi]`);
+the citing text (reference title/summary, `scientific_references` string, prose sentence) read against the resolved title,
+abstracts read where the title left doubt. Per-citation verdicts: `q57_doi_dispositions_20261002.json`.
+
+- **Inventory.** 206 DOI citations: banned_recalled 88, harmful_additives 113, other_ingredients 5. A first regex pass
+  found 175 and missed DOIs cited as bare text; the verifier's walker is the inventory of record. IQM's 44 DOIs all
+  resolve on topic (42 match, 2 partial) and are unchanged.
+- **Removed (127).** Unrelated paper (e.g. 10.1093/jat/bks078 for DMAA -> Moscow theatre siege casualties;
+  10.1124/jpet.116.232215 for 7-OH -> relaxin and lung injury; 10.1016/j.forsciint.2012.02.015 for yohimbe -> facial soft
+  tissue; 10.1093/jnci/djq516 for nitrite cancer risk, five entries -> osteonecrosis of the jaw), or nothing (19 Crossref
+  404s with no PubMed DOI hit), or wrong for the claim (EFSA chemical-mixtures statement for EDC health effects; the
+  enobosarm DILI case report filed under RAD140; "How bad is fructose?" cited for syrup glycemic effects; four audit notes
+  "REMOVED/NEEDS_VERIFICATION" stored as scientific_references).
+- **Corrected (6).** Mistyped DOI of the document the entry names, target checked on Crossref: fats DRV 1459 -> 1461
+  (canola, corn oil), E475 4743 (PGPR E476) -> 5089, nitrite 4787 (nitrate) -> 4786, nickel 4007 (Allura Red exposure) ->
+  4002, carmine 4037 (pesticide MRL) -> 2015;13(11):4288. E475 opinion (PMID 32625376): "no need for a numerical ADI";
+  the entry's "ADI 25 mg/kg bw/day retained" (regulatory_status.EU, notes, scientific_references) was the PGPR conclusion
+  and is corrected. No EFSA "Tin in food" 2016 opinion exists on Crossref; that citation was removed, not guessed.
+- **Added (5).** PMID 34368386 (Bedi 2021, cholestatic liver injury from ostarine) to SARM_OSTARINE; EFSA 2017;15(6):4786
+  to ADD_POTASSIUM_NITRITE and 4787 to ADD_POTASSIUM_NITRATE; NTP Report on Carcinogens BHA profile (NBK590883, title and
+  sections confirmed via NCBI E-utilities; the Bookshelf page is CAPTCHA-gated) to ADD_BHA; EFSA 2004;2(9):83 parabens
+  opinion to ADD_PROPYLPARABEN. Williams 1999 (BHA/BHT "pose no cancer hazard") was not used for BHA's harm claim.
+- **Kept (71)** including McCann 2007 on Blue 1/2 (cited for the note that E133/E132 were NOT in the Southampton mixes) and
+  Chassaing 2015 on two emulsifiers (framed as class-level evidence). Ten correct citations the identity-word heuristic
+  scores "mismatch" are in `citation_content_backlog.json` with a note.
