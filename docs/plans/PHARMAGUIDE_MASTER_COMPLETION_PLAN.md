@@ -25,6 +25,23 @@ not current final-corpus or runtime release approval.
 
 No catalog release has occurred under this plan. Recorded checkpoints validate their named source and frozen samples, not the entire rebuilt corpus. The earlier combined source was pushed through `19d4f661` (tested production checkpoint `a3a2d904`). Q49 and Q51 remain separate integrated items. Q53 source correction `0acde33e`, its two benchmark follow-ups and Q52 source correction `6a15be14` are integrated on main. Final combined fast: **18,008 passed,168 skipped,zero failures/xfails**; source fingerprints match measured candidate bytes and fresh review accepted. D26, remaining identity/research cases and fresh candidate validation remain open. Source push and cleanup receipts are recorded below.
 
+## How to read the remaining Phase 0–2 boxes
+
+The October 1 source audit reconciled these boxes against current production and the existing receipts. An unchecked box means a real outstanding deliverable or an explicitly named later gate; it is not permission to skip it.
+
+| Item | Current status | What happens next |
+|---|---|---|
+| Phase 0 final baseline/artifact recheck | Current source reconciliation complete; final gate pending | Repeat at the exact candidate freeze, after the last scoring/data change |
+| Phase 1 generic amount transfer / D26 | Partial: preparation/source binding corrected; equivalent Dose coverage incomplete | Verify nine benchmark groups, prepare D24 policy packet, then transfer through existing Dose owners |
+| Phase 1 omega Evidence mapping | Open; blanket full-credit proposal rejected | Prepare purpose/applicability and magnitude packet for Sean before integration |
+| Phase 1 transfer-invariant audit | Probiotic bounded transfer validated; all-route closure pending | Check each remaining transfer, then close the complete owner inventory |
+| Phase 2 shared prominence owner | Implemented, measured, reviewed and integrated | Marked complete; retained amount guards stay under Phase 1/D26 |
+| Phase 2 remaining serving duplicates | Partly fixed; remaining raw variants open | Group by source defect, reproduce on frozen raw labels and fix canonical cleaner/serving owners |
+| Phase 2 dual-use ingredient roles | Ravage/trace-protein examples corrected; broader class open | Inspect current source/purpose facts and correct shared owners without amount-based demotion |
+| Phase 2 final subject census | Pending corrected subjects | Recompute after the remaining source corrections; classify holds and deltas |
+
+**Work can proceed now without a full corpus job:** prepare the Phase 1 benchmark/policy packets and fix the remaining Phase 2 source classes with focused tests and bounded raw replays. The final census and candidate gates follow those changes. Sean runs the full pipeline when the final source is ready; Codex reviews its artifacts afterward.
+
 ## Fixed boundaries and Owner Check
 
 | Decision | Existing production owner | Evidence |
@@ -47,7 +64,7 @@ No catalog release has occurred under this plan. Recorded checkpoints validate t
 - [x] Establish the reconciled baseline and preserve the rejected Dose draft as historical decision material.
 - [x] Confirm the missing interaction SQLite file is generated output; verify curated inputs before rebuilding with its canonical builder (Q42).
 - [x] Record focused/frozen replay provenance and current worktree ownership.
-- [ ] Recheck SHAs, surviving worktrees, inputs and artifact freshness at the final candidate freeze; this is a recurring requirement, not a one-time guarantee.
+- [ ] **FINAL-CANDIDATE GATE:** Recheck SHAs, surviving worktrees, inputs and artifact freshness at the final candidate freeze. Current source/branch reconciliation is complete; this later recheck stays open until the release candidate exists.
 
 ### Phase 1 — Evidence → Dose separation
 
@@ -55,19 +72,20 @@ No catalog release has occurred under this plan. Recorded checkpoints validate t
 - [x] Approve probiotic certainty **0–10**, applicability **0–6**, independent same-condition replication **0/2/4**. An applicable material conflict suppresses replication only. No companion Evidence or category ceiling.
 - [x] Migrate probiotics through existing owners; retain CFU/trial-amount assessment in Dose, preserve clinical guards and remove the experimental/retired 12+8 path.
 - [x] Prove exact approved-candidate numerical equivalence, migrate tests semantically, pass the full fast suite and obtain fresh review (Q47).
-- [ ] Transfer remaining generic clinical-amount judgments only after the existing Dose owner consumes their applicable benchmarks.
-- [ ] Settle and integrate omega purpose/applicability mapping; carrier oil mass supplies neither EPA/DHA exposure nor clinical credit. The blanket O1 proposal remains rejected (Q45).
-- [ ] Recheck every removed amount gate against the transfer inventory: no lost assessment and no duplicate deduction.
+- [x] Correct D26 collagen preparation/source binding through existing owners (`c8f53b46`);285 frozen controls identical,18,018 fast checks passed and fresh review accepted. This fixes source ownership, not the remaining amount transfer.
+- [ ] **PREPARE NOW / POLICY DEPENDENCY:** Transfer remaining generic clinical-amount judgments only after the existing Dose owner consumes their applicable benchmarks. First verify the nine uncovered benchmark groups and prepare D24 denominator/publication decisions; retain four D26 exposure stand-ins until equivalent assessment exists.
+- [ ] **PREPARE NOW / APPROVAL DEPENDENCY:** Settle and integrate omega purpose/applicability mapping; carrier oil mass supplies neither EPA/DHA exposure nor clinical credit. The blanket O1 proposal remains rejected (Q45).
+- [ ] **PHASE-1 EXIT CHECK:** Recheck every removed amount gate against the transfer inventory: no lost assessment and no duplicate deduction. Approved probiotic transfers already have their bounded review/replay receipts; the all-route closure waits for generic and omega transfers.
 
 **Invariant:** an amount judgment cannot leave Evidence until the same judgment is already in Dose or is added to the existing Dose owner in the same change. Removing amount gates must not automatically award full Evidence marks.
 
-### Phase 2 — Identity, roles and prominence — current lane
+### Phase 2 — Identity, roles and prominence — completed fixes and remaining source work
 
 - [x] Preserve landed Lane 2A subject ownership, Q3 single sugar/sweetener charging and Q40 cleaner-owned plant part.
 - [x] Fix Ravage cinnamon at the cleaner's functional attribution seam; retain explicit flavors, active/other membership, source paths and undisclosed member dose (Q48).
 - [x] Measure Ravage and five controls, then the extended 1,259-label cohort; obtain fresh review and **zero expected failures** in the full fast checkpoint.
 - [x] Correct trace-protein purpose for EAA product `66953` through shared roles and sports Evidence/Formulation/Dose consumers (Q39(b), source `3ee91eae`, pushed). Final fast suite passed; fresh review accepted clean replays. Total 49.1→37.0 is explained, Safety unchanged; five targeted and all 1,259 extended controls retain identical full payloads. EAA research remains open in Phase3.
-- [ ] Replace `_primary_mass_floor`'s private primary selection with shared role facts; inspect the related generic recovery/collagen prominence consumers together. Preserve identity, source-lineage, structural and deduplication guards.
+- [x] Route `_primary_mass_floor` and related generic recovery/collagen prominence decisions through existing shared role facts. Current production reads `evidence_prominent_row_keys` → the shared role owner; identity, source-lineage, structural and deduplication guards remain. Four retained amount comparisons are the separate Phase-1/D26 transfer dependency, not an unfinished prominence-owner replacement.
   - **Integrated on main (October 1); historical pinned audit:** Codex pinned Claude production `b43a048f`, independently reproduced member-named blend headings borrowing member amounts, and committed corrections through `9f7837e8` on `codex/quality-completion`. Source facts use the existing scoring-input contract; branded-floor eligibility rejects a multi-member total containing the named branded member. The broader prototype was rejected after raw replay exposed whole-preparation regressions. The narrowed implementation preserves Mirtogenol, phytosome, Relora and standalone UC-II preparation controls.
   - [x] Independently reproduce the heading/member defect, implement failing-first owner fixes and obtain fresh review of the narrowed correction.
   - [x] Measure the narrowed fix against pinned `b43a048f`: 185/186 real labels identical; product `321351` loses a UC-II floor borrowed from its 10 g mixed-collagen total (70.4→54.8, Evidence 20→4.4, clinical points unchanged). Fifteen adversarial/control cases: eleven identical, four edited member-heading variants lose only the invalid Evidence floor. See the [audit receipt](../../scripts/audits/prominence_ownership_20261001/README.md#codex-independent-audit--october-1).
@@ -77,10 +95,9 @@ No catalog release has occurred under this plan. Recorded checkpoints validate t
   - [x] Reconcile and independently validate Claude's later production `68cae99a` and Q51's record-unit amount reader, retaining the Codex member-total safeguards. Combined source `a3a2d904`: 17,994 fast tests passed, 167 skipped, zero failures/xfails; seven independent consumer probes passed. Latest-Claude control replay: all 1,259 captured payloads identical; narrow 186-label replay retains the single explained UC-II correction. Earlier pinned results alone do not validate this combined source.
   - [x] Claude latest-source implementation/cohort measurement validated on `68cae99a` (17,954 passed, 168 skipped); Codex independently reconciled and tested the combined source. This is sampling, not full-corpus release validation.
   - [x] Integrate the validated combined source on main, including Q49 safeguards and Q51 record-unit comparisons. Remaining Q49 follow-ups/D26 stay open; this does not close the Phase 2 umbrella or authorize catalog release.
-  - [ ] Decision D26 and Evidence→Dose transfer: relative mass comparisons remain legacy eligibility gates, not reviewed clinical benchmarks. Latest Claude source retains four comparisons (primary floor, ingredient recovery, authority and collagen recovery). Do not silently transplant these heuristics into Dose. Bind any reviewed minimum to its actual matched preparation/source row before assigning amount ownership.
-- [ ] Resolve remaining alternate-serving identity/duplicate cases from raw JSON (Q39); never merge materially different preparations or discard label variants.
-- [ ] Align dual-use active/excipient decisions without using amount as a substitute for purpose. Preserve genuine excipients and nutrition rollups.
-- [ ] Recompute the final Evidence-subject census after these corrections and classify all holds and changes.
+- [ ] **SOURCE WORK NEXT:** Resolve remaining alternate-serving identity/duplicate cases from raw JSON (Q39), including audience-only serving notes and inconsistent column contents. The earlier same-order merge and trace-protein fix are completed; they do not close all variants. Never merge materially different preparations or discard label variants.
+- [ ] **SOURCE WORK NEXT:** Align remaining dual-use active/excipient decisions without using amount as a substitute for purpose. Ravage and trace-protein corrections are completed examples; the broader class remains open. Preserve genuine excipients, source-section membership and nutrition rollups.
+- [ ] **AFTER SOURCE CORRECTIONS:** Recompute the final Evidence-subject census after the remaining serving/role corrections and classify all holds and changes. Earlier frozen cohort checks do not establish this final census.
 
 Do not introduce the rejected mass-based demotion of purpose ingredients. Keep source-section membership separate from efficacy ownership.
 
