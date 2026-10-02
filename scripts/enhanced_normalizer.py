@@ -5469,10 +5469,6 @@ class EnhancedDSLDNormalizer:
                 expected = entry.get("raw_quantity_value")
                 if expected is None:
                     return True
-                # Value corrections run first; the unit still belongs only to
-                # this exact reviewed raw/value pair, never another column.
-                if row.get("_pre_correction_quantity_value") == expected:
-                    expected = entry.get("corrected_quantity_value", expected)
                 try:
                     return float(value) == float(expected)
                 except (TypeError, ValueError):
@@ -5520,6 +5516,9 @@ class EnhancedDSLDNormalizer:
             ):
                 if matches(quantity_data, row.get("unit")):
                     row["quantity"] = corrected_value
+                    if entry.get("corrected_quantity_unit"):
+                        row["unit"] = entry["corrected_quantity_unit"]
+                        row["_pre_correction_quantity_unit"] = raw_unit
                     changed = True
             else:
                 quantities = (
@@ -5534,6 +5533,9 @@ class EnhancedDSLDNormalizer:
                         continue
                     if matches(quantity.get("quantity"), quantity.get("unit")):
                         quantity["quantity"] = corrected_value
+                        if entry.get("corrected_quantity_unit"):
+                            quantity["unit"] = entry["corrected_quantity_unit"]
+                            row["_pre_correction_quantity_unit"] = raw_unit
                         changed = True
 
             if changed:
@@ -5646,6 +5648,7 @@ class EnhancedDSLDNormalizer:
                     correction_applied = True
                 if (
                     has_quantity_unit_correction
+                    and not has_quantity_value_correction
                     and rewrite_quantity_units(row, entry)
                 ):
                     correction_applied = True

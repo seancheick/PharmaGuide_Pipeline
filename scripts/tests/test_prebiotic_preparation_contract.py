@@ -121,3 +121,11 @@ def test_reviewed_unit_correction_rejects_changed_quantity(pipeline):
     row = raw_row("Cranberry Fruit Extract", 2.4, "mg")
     corrected = normalizer._apply_label_corrections([copy.deepcopy(row)], "294036")
     assert corrected[0]["quantity"][0]["unit"] == "mg"
+
+
+def test_value_and_unit_correction_only_rewrites_matching_serving_column(pipeline):
+    normalizer, _ = pipeline
+    row = raw_row("SelenoExcell ", 640, "mg")
+    row["quantity"] += [dict(quantity=200, unit="mg", servingSizeOrder=2), dict(quantity=7, unit="mg", servingSizeOrder=3)]
+    corrected = normalizer._apply_label_corrections([copy.deepcopy(row)], "302650")
+    assert [(q["quantity"], q["unit"]) for q in corrected[0]["quantity"]] == [(200, "mcg"), (200, "mg"), (7, "mg")]
