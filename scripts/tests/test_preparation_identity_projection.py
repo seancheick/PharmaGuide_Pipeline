@@ -471,8 +471,7 @@ def test_safety_only_recognition_keeps_required_primary_identity_unresolved(
 @pytest.mark.parametrize("label,canonical,safety_source,safety_id", [
     ("Isomaltooligosaccharides", "NHA_ISOMALTOOLIGOSACCHARIDES",
      "harmful_additives", "ADD_ISOMALTOOLIGOSACCHARIDE"),
-    ("Adipic Acid", "OI_ADIPIC_ACID",
-     "banned_recalled_ingredients", "BANNED_ADD_SYNTHETIC_FOOD_ACIDS"),
+    # Adipic Acid left this list 2026-10-02: the synthetic-food-acids concept is retired (LEDGER Q63).
 ])
 def test_safety_recognition_preserves_a_validated_primary_without_form_credit(
     enricher: SupplementEnricherV3, label: str, canonical: str,

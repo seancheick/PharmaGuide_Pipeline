@@ -3,7 +3,7 @@
     "description": "Comprehensive database of harmful additives, contaminants, and concerning ingredients found in dietary supplements. Used for scoring penalties and consumer warnings.",
     "purpose": "penalty_scoring",
     "schema_version": "5.4.0",
-    "last_updated": "2026-09-25",
+    "last_updated": "2026-10-02",
     "total_entries": 116,
     "functional_roles_field": {
       "added_in": "5.2.0",
@@ -775,8 +775,7 @@
         "Children — higher vulnerability per kg body weight"
       ],
       "scientific_references": [
-        "IARC Monographs Vol 131 (2023) — Trivalent antimony upgraded to Group 2A",
-        "DOI: 10.1016/j.envint.2009.02.003 - Antimony toxicology review"
+        "IARC Monographs Vol 131 (2023) — Trivalent antimony upgraded to Group 2A"
       ],
       "match_rules": {
         "match_mode": "alias_and_fuzzy",
@@ -910,6 +909,11 @@
             "date": "2026-03-24",
             "change": "Added PubChem CID 5354495. Fixed jurisdictional statuses from 'approved' to 'restricted' (antimony is a contaminant, not an approved additive). Updated IARC structured reference from Vol 47 to Vol 131 (2023). Added dose_thresholds (EPA RfD, EFSA TDI). Fixed scientific_references IARC citation from Vol 47 to Vol 131.",
             "reason": "deep_audit_batch_1"
+          },
+          {
+            "date": "2026-10-02",
+            "by": "claude-audit",
+            "change": "LEDGER Q57: DOI citations content-checked (Crossref + PubMed, 2026-10-02). Removed 1 that resolve to an unrelated paper or to nothing: 10.1016/j.envint.2009.02.003. Receipt: scripts/audits/pending_items_20260926/research.md Q57."
           }
         ]
       },
@@ -1373,10 +1377,9 @@
       "mechanism_of_harm": "Triarylmethane dye (Brilliant Blue FCF / E133). May cause hypersensitivity reactions in susceptible individuals. Some in vitro studies suggest mitochondrial toxicity at high concentrations. Note: E133 was NOT included in the McCann et al. 2007 Southampton study mixtures (Mix A: E102, E110, E122, E124; Mix B: E104, E110, E122, E129).",
       "regulatory_status": {
         "US": "FDA approved under 21 CFR 74.101 for foods, drugs, and cosmetics. No specific ADI set by FDA.",
-        "EU": "E133 approved with ADI of 6 mg/kg bw/day (EFSA 2010 re-evaluation). Requires warning label for mixtures per Southampton study."
+        "EU": "E133 is approved in the EU with an ADI of 6 mg/kg body weight/day. It is not one of the six colours subject to the EU ‘activity and attention in children’ warning."
       },
       "population_warnings": [
-        "Children — included in Southampton study dye mixtures linked to hyperactivity; EU requires warning label",
         "Individuals with aspirin sensitivity — cross-reactivity with triarylmethane dyes reported",
         "People with dye allergies — may cause urticaria or bronchospasm in rare cases"
       ],
@@ -1421,6 +1424,16 @@
           "url": "https://doi.org/10.2903/j.efsa.2010.1853",
           "published_date": "2010-11-12",
           "evidence_grade": "A",
+          "supports_claims": []
+        },
+        {
+          "type": "regulation",
+          "authority": "EU",
+          "title": "Regulation (EC) No 1333/2008 on food additives, Annex V (colours requiring the 'activity and attention in children' statement)",
+          "citation": "Regulation (EC) No 1333/2008, Annex V: E110, E104, E122, E129, E102, E124",
+          "url": "https://eur-lex.europa.eu/eli/reg/2008/1333/oj",
+          "published_date": "2008-12-31",
+          "evidence_grade": "R",
           "supports_claims": []
         }
       ],
@@ -1529,6 +1542,11 @@
             "date": "2026-03-24",
             "change": "Added PubChem CID 19700. Added dose_thresholds: EFSA ADI 6 mg/kg/day. Fixed US jurisdictional status from 'warning_issued' to 'approved' (FDA approves Blue 1 under 21 CFR 74.101).",
             "reason": "deep_audit_batch_1"
+          },
+          {
+            "date": "2026-10-02",
+            "by": "claude-audit",
+            "change": "Annex V correction (Sean approved wording 2026-10-02). Regulation (EC) No 1333/2008 Annex V (EUR-Lex, read 2026-10-02) lists E110, E104, E122, E129, E102, E124; E133 is not among them. regulatory_status.EU no longer says the Southampton/Annex V label applies; removed population warning 'Children — included in Southampton study dye mixtures linked to hyperactivity; EU requires warning label'. Added the regulation as a source."
           }
         ]
       },
@@ -1593,11 +1611,10 @@
       "mechanism_of_harm": "Sulfonated indigo dye (Indigotine / E132). May cause hypersensitivity reactions including nausea, hypertension, and skin rash in susceptible individuals. NOTE: E132 was NOT included in the McCann et al. 2007 Southampton study. Mix A: E102, E110, E122, E124; Mix B: E104, E110, E122, E129. Some in vitro evidence of serotonin receptor binding at high concentrations, though clinical significance at dietary levels is unclear.",
       "regulatory_status": {
         "US": "FDA approved under 21 CFR 74.102 for foods, drugs, and cosmetics",
-        "EU": "E132 approved with ADI of 5 mg/kg bw/day (EFSA 2014 re-evaluation). Subject to Southampton study warning label requirements for dye mixtures.",
+        "EU": "E132 is approved in the EU with an ADI of 5 mg/kg body weight/day. It is not one of the six colours subject to the EU ‘activity and attention in children’ warning.",
         "WHO": "JECFA ADI of 5 mg/kg bw/day for indigotine"
       },
       "population_warnings": [
-        "Children — EU requires warning label on artificial color mixtures; E132 was not in the Southampton study itself but is subject to the same EU labeling rules",
         "Individuals with dye sensitivities — may cause nausea, skin rash, or hypertension in rare cases"
       ],
       "notes": "A synthetic sulfonated indigo dye (Indigotine / Indigo Carmine / E132) used as a colorant in supplement tablets and capsules. FDA-approved under 21 CFR 74.102; EU-approved with ADI of 5 mg/kg/day (EFSA 2014, confirmed 2023). NOTE: E132 was NOT included in the McCann et al. 2007 Southampton study mixtures. Tracked as a B1 additive-risk signal for label transparency rather than a hard ban.",
@@ -1642,6 +1659,16 @@
           "url": "https://doi.org/10.2903/j.efsa.2014.3768",
           "published_date": "2014-07-22",
           "evidence_grade": "A",
+          "supports_claims": []
+        },
+        {
+          "type": "regulation",
+          "authority": "EU",
+          "title": "Regulation (EC) No 1333/2008 on food additives, Annex V (colours requiring the 'activity and attention in children' statement)",
+          "citation": "Regulation (EC) No 1333/2008, Annex V: E110, E104, E122, E129, E102, E124",
+          "url": "https://eur-lex.europa.eu/eli/reg/2008/1333/oj",
+          "published_date": "2008-12-31",
+          "evidence_grade": "R",
           "supports_claims": []
         }
       ],
@@ -1698,6 +1725,11 @@
             "date": "2026-03-24",
             "change": "CRITICAL CORRECTION: E132 was NOT in the McCann 2007 Southampton study at all. Previous entry incorrectly claimed E132 was in Mix A. Verified: Mix A = E102, E110, E122, E124; Mix B = E104, E110, E122, E129. E132 not in either mixture. Updated mechanism_of_harm, population_warnings, and notes accordingly. Added PubChem CID 5284351. Added dose_thresholds: EFSA ADI 5 mg/kg/day (confirmed 2023), JECFA ADI 5 mg/kg/day.",
             "reason": "deep_audit_batch_1"
+          },
+          {
+            "date": "2026-10-02",
+            "by": "claude-audit",
+            "change": "Annex V correction (Sean approved wording 2026-10-02). Regulation (EC) No 1333/2008 Annex V (EUR-Lex, read 2026-10-02) lists E110, E104, E122, E129, E102, E124; E132 is not among them. regulatory_status.EU no longer says the Southampton/Annex V label applies; removed population warning 'Children — EU requires warning label on artificial color mixtures; E132 was not in the Southampton study itself but is subject to the same EU labeling rules'. Added the regulation as a source."
           }
         ]
       },
@@ -2917,9 +2949,9 @@
         {
           "type": "monograph",
           "authority": "EFSA",
-          "title": "EFSA Journal 2010;8(3):1459 - Scientific Opinion on dietary reference values for fats",
-          "citation": "EFSA Journal 2010;8(3):1459 - Scientific Opinion on dietary reference values for fats",
-          "url": "https://efsa.onlinelibrary.wiley.com/doi/10.2903/j.efsa.2010.1459",
+          "title": "EFSA Journal 2010;8(3):1461 - Scientific Opinion on dietary reference values for fats",
+          "citation": "EFSA Journal 2010;8(3):1461 - Scientific Opinion on dietary reference values for fats",
+          "url": "https://efsa.onlinelibrary.wiley.com/doi/10.2903/j.efsa.2010.1461",
           "published_date": null,
           "evidence_grade": "B",
           "supports_claims": []
@@ -2950,7 +2982,7 @@
             "start": "2025-11-14",
             "end": null
           },
-          "source_ref": "https://efsa.onlinelibrary.wiley.com/doi/10.2903/j.efsa.2010.1459"
+          "source_ref": "https://efsa.onlinelibrary.wiley.com/doi/10.2903/j.efsa.2010.1461"
         }
       ],
       "review": {
@@ -3014,6 +3046,11 @@
             "date": "2026-03-24",
             "change": "CRITICAL: Removed fabricated DOI 10.1016/j.fct.2017.07.055 (resolves to wound healing paper, not cooking oil aldehydes). Fixed wrong EU regulation: 2019/649 (trans fats) -> 2019/1870 (erucic acid max levels). Added correct FDA GRAS CFR 184.1555. Updated US regulatory_status with correct CFR section.",
             "reason": "batch_2_deep_audit"
+          },
+          {
+            "date": "2026-10-02",
+            "by": "claude-audit",
+            "change": "LEDGER Q57: DOI citations content-checked (Crossref + PubMed, 2026-10-02). Corrected mistyped DOI of the cited document: 10.2903/j.efsa.2010.1459 -> 10.2903/j.efsa.2010.1461. Citation text now names article 1461. Receipt: scripts/audits/pending_items_20260926/research.md Q57."
           }
         ]
       },
@@ -3823,8 +3860,7 @@
       ],
       "notes": "MODERATE RISK: Maltodextrin derived from cassava. Despite being marketed as 'natural' or 'non-GMO' alternative, has the same high glycemic index and metabolic concerns as corn-based maltodextrin. Used as cheap filler in supplements.",
       "scientific_references": [
-        "PMID: 30765332 (Laudisi et al. 2019 CMGH) - Food additive maltodextrin promotes ER stress, mucus depletion, intestinal inflammation",
-        "REMOVED: DOI 10.1093/ajcn/86.4.895 was MISATTRIBUTED (resolves to fructose paper, not glycemic effects of maltodextrin)"
+        "PMID: 30765332 (Laudisi et al. 2019 CMGH) - Food additive maltodextrin promotes ER stress, mucus depletion, intestinal inflammation"
       ],
       "last_updated": "2026-03-24",
       "match_rules": {
@@ -3921,6 +3957,11 @@
             "date": "2026-03-24",
             "change": "Deep audit: removed 2 fabricated/misattributed DOIs ((Nature 2018 DOI; resolved to unrelated bacterial ACIII paper — see Wave 6.X cleanup 2026-05-25 for verified replacement PMID 30765332), 10.1093/ajcn/86.4.895 = fructose paper). Downgraded confidence medium->low. Needs verified maltodextrin-specific references.",
             "reason": "batch_3_deep_audit"
+          },
+          {
+            "date": "2026-10-02",
+            "by": "claude-audit",
+            "change": "LEDGER Q57: DOI citations content-checked (Crossref + PubMed, 2026-10-02). Removed 1 that resolve to an unrelated paper or to nothing: 10.1093/ajcn/86.4.895. Receipt: scripts/audits/pending_items_20260926/research.md Q57."
           }
         ]
       },
@@ -3968,9 +4009,9 @@
         {
           "type": "monograph",
           "authority": "EFSA",
-          "title": "EFSA Journal 2010;8(3):1459 - Scientific Opinion on dietary reference values for fats",
-          "citation": "EFSA Journal 2010;8(3):1459 - Scientific Opinion on dietary reference values for fats",
-          "url": "https://efsa.onlinelibrary.wiley.com/doi/10.2903/j.efsa.2010.1459",
+          "title": "EFSA Journal 2010;8(3):1461 - Scientific Opinion on dietary reference values for fats",
+          "citation": "EFSA Journal 2010;8(3):1461 - Scientific Opinion on dietary reference values for fats",
+          "url": "https://efsa.onlinelibrary.wiley.com/doi/10.2903/j.efsa.2010.1461",
           "published_date": null,
           "evidence_grade": "B",
           "supports_claims": []
@@ -3997,7 +4038,7 @@
             "start": "2025-11-14",
             "end": null
           },
-          "source_ref": "https://efsa.onlinelibrary.wiley.com/doi/10.2903/j.efsa.2010.1459"
+          "source_ref": "https://efsa.onlinelibrary.wiley.com/doi/10.2903/j.efsa.2010.1461"
         }
       ],
       "review": {
@@ -4061,6 +4102,11 @@
             "date": "2026-03-24",
             "change": "Deep audit: severity moderate->low (quality signal, not toxicological hazard at supplement carrier oil quantities). Rewrote notes to reflect accurate risk level.",
             "reason": "batch_3_deep_audit"
+          },
+          {
+            "date": "2026-10-02",
+            "by": "claude-audit",
+            "change": "LEDGER Q57: DOI citations content-checked (Crossref + PubMed, 2026-10-02). Corrected mistyped DOI of the cited document: 10.2903/j.efsa.2010.1459 -> 10.2903/j.efsa.2010.1461. Citation text now names article 1461. Receipt: scripts/audits/pending_items_20260926/research.md Q57."
           }
         ]
       },
@@ -4112,10 +4158,7 @@
         "Everyone - Essentially sugar, should be minimized"
       ],
       "notes": "Corn syrup solids are dehydrated corn syrup — essentially pure glucose with a glycemic index near 100. FDA GRAS. In supplements, they serve as cheap fillers or binders adding empty calories and causing rapid blood-sugar spikes. While metabolically harmful in excess, this is a nutritional concern (like added sugar) rather than a toxicological hazard, so severity is low, matching other caloric sugar fillers. Diabetics and those with metabolic syndrome should avoid products containing this ingredient.",
-      "scientific_references": [
-        "REMOVED: DOI 10.1093/ajcn/86.4.895 was MISATTRIBUTED (resolves to fructose paper, not glycemic effects of glucose)",
-        "REMOVED: DOI 10.1016/j.numecd.2019.05.062 was MISATTRIBUTED (resolves to alcohol/mortality paper, not GI carbohydrates)"
-      ],
+      "scientific_references": [],
       "last_updated": "2026-07-04",
       "match_rules": {
         "match_mode": "alias_and_fuzzy",
@@ -4240,6 +4283,11 @@
             "date": "2026-07-04",
             "change": "Synchronized explanatory notes with low-severity classification so downstream blobs do not carry stale moderate-severity language.",
             "reason": "sugar_filler_severity_consistency"
+          },
+          {
+            "date": "2026-10-02",
+            "by": "claude-audit",
+            "change": "LEDGER Q57: DOI citations content-checked (Crossref + PubMed, 2026-10-02). Removed 2 that resolve to an unrelated paper or to nothing: 10.1093/ajcn/86.4.895, 10.1016/j.numecd.2019.05.062. Receipt: scripts/audits/pending_items_20260926/research.md Q57."
           }
         ]
       },
@@ -4295,9 +4343,7 @@
         "People with cellulose allergies - Rare but possible reactions"
       ],
       "notes": "A 'superdisintegrant' that swells rapidly in water to help tablets and capsules break apart in the digestive system. It is a synthetic polymer (modified cellulose) that may cause bloating or other digestive issues in sensitive individuals. Generally well-tolerated.",
-      "scientific_references": [
-        "NEEDS_VERIFICATION: DOI 10.1016/j.ijpharm.2016.11.018 resolves to manufacturing technology paper, not disintegrant mechanisms"
-      ],
+      "scientific_references": [],
       "last_updated": "2026-03-24",
       "match_rules": {
         "match_mode": "alias_and_fuzzy",
@@ -4402,6 +4448,11 @@
             "date": "2026-03-24",
             "change": "Deep audit: category filler->excipient (pharmaceutical superdisintegrant). Flagged DOI 10.1016/j.ijpharm.2016.11.018 as misattributed (manufacturing tech paper, not disintegrant review).",
             "reason": "batch_3_deep_audit"
+          },
+          {
+            "date": "2026-10-02",
+            "by": "claude-audit",
+            "change": "LEDGER Q57: DOI citations content-checked (Crossref + PubMed, 2026-10-02). Removed 1 that resolve to an unrelated paper or to nothing: 10.1016/j.ijpharm.2016.11.018. Receipt: scripts/audits/pending_items_20260926/research.md Q57."
           }
         ]
       },
@@ -4458,9 +4509,7 @@
         "No significant safety concerns at typical excipient doses"
       ],
       "notes": "A synthetic polymer and 'superdisintegrant' (cross-linked PVP) used to promote rapid tablet dissolution. It is largely unabsorbed and generally considered safe. FDA-approved inactive ingredient (21 CFR 172.375). CAS 9003-39-8. Low severity because no systemic absorption or toxicological concern at excipient quantities.",
-      "scientific_references": [
-        "NEEDS_VERIFICATION: DOI 10.1016/j.ijpharm.2016.11.018 resolves to manufacturing technology paper, not disintegrant review"
-      ],
+      "scientific_references": [],
       "last_updated": "2026-03-24",
       "match_rules": {
         "match_mode": "alias_and_fuzzy",
@@ -4565,6 +4614,11 @@
             "date": "2026-03-24",
             "change": "CRITICAL FIX: CAS 128073-16-5 was WRONG (ethyl chloropyridine compound). Corrected to 9003-39-8 (GSRS verified). PubChem CID 22013558 was WRONG (different compound). Removed CID, added UNII 2S7830E561. Category filler->excipient. Flagged misattributed DOI.",
             "reason": "batch_3_deep_audit"
+          },
+          {
+            "date": "2026-10-02",
+            "by": "claude-audit",
+            "change": "LEDGER Q57: DOI citations content-checked (Crossref + PubMed, 2026-10-02). Removed 1 that resolve to an unrelated paper or to nothing: 10.1016/j.ijpharm.2016.11.018. Receipt: scripts/audits/pending_items_20260926/research.md Q57."
           }
         ]
       },
@@ -5281,19 +5335,6 @@
         {
           "type": "primary_study",
           "authority": "OTHER",
-          "title": "Erythritol ingestion causes dose-dependent enhancement of thrombotic propensity in healthy volunteers",
-          "citation": "Witkowski M et al. Arterioscler Thromb Vasc Biol. 2024;44(8):1872-1882. PMID 39114916",
-          "url": "https://doi.org/10.1161/ATVBAHA.123.319909",
-          "published_date": "2024-06-20",
-          "evidence_grade": "C",
-          "supports_claims": [
-            "mechanism_of_harm",
-            "population_warnings"
-          ]
-        },
-        {
-          "type": "primary_study",
-          "authority": "OTHER",
           "title": "Erythritol and erythronate and risk of incident cardiovascular events in the ARIC study",
           "citation": "JACC Advances 2025. PMID 39983608",
           "url": "https://pubmed.ncbi.nlm.nih.gov/39983608/",
@@ -5418,6 +5459,11 @@
             "date": "2026-03-27",
             "change": "Deep audit batch 4: removed generic aliases (polyol sweetener, zero-calorie sweetener), added specific aliases (mesoerythritol, phycitol). Upgraded confidence medium->high (3 independent human studies). Replaced generic WHO reference with 3 key study refs + EFSA re-evaluation. Consolidated redundant population warnings. Populated dose_thresholds with EFSA ADI. Fixed jurisdictional dates and status codes. Sharpened mechanism_of_harm with specific biochemical pathway. All identifiers API-verified.",
             "reason": "harmful_additives_deep_audit_batch4"
+          },
+          {
+            "date": "2026-10-02",
+            "by": "claude-audit",
+            "change": "LEDGER Q57: DOI citations content-checked (Crossref + PubMed, 2026-10-02). Removed 1 that resolve to an unrelated paper or to nothing: 10.1161/atvbaha.123.319909. Receipt: scripts/audits/pending_items_20260926/research.md Q57."
           }
         ]
       },
@@ -5468,17 +5514,17 @@
       "mechanism_of_harm": "Synthetic emulsifier class implicated in gut microbiota disruption and intestinal barrier permeability in animal models. Evidence is extrapolated from studies on related emulsifiers (CMC, polysorbate 80) which promoted low-grade inflammation and metabolic syndrome in mice. Direct human data on polyglycerol esters specifically is limited.",
       "regulatory_status": {
         "US": "FDA: permitted as GRAS emulsifier in food. 21 CFR 172.854 (polyglycerol esters of fatty acids).",
-        "EU": "E475 authorized as food additive. EFSA 2017 re-evaluation (EFSA Journal 2017;15(3):4743) retained group ADI of 25 mg/kg bw/day.",
+        "EU": "E475 authorized as food additive. EFSA 2017 re-evaluation (EFSA Journal 2017;15(12):5089) found no safety concern at the reported uses and no need for a numerical ADI (the SCF had endorsed JECFA's 25 mg/kg bw/day ADI in 1978).",
         "WHO": "JECFA ADI 0-25 mg/kg bw/day (49th meeting, 1997)."
       },
       "population_warnings": [
         "IBD/IBS — emulsifier class linked to gut barrier disruption in animal models (Chassaing et al. 2015, Nature)",
         "Digestive sensitivity — may cause GI discomfort at high intake levels"
       ],
-      "notes": "Polyglycerol esters of fatty acids (E475) are synthetic emulsifiers used in supplements for texture and stability. The 2015 Nature study (Chassaing et al.) showed dietary emulsifiers CMC and P80 promoted colitis and metabolic syndrome in mice, but direct evidence for polyglycerol esters is limited. EFSA retained the 25 mg/kg bw/day ADI in 2017. Note: polyglycerol polyricinoleate (E476) is a distinct substance with its own CAS and regulatory status.",
+      "notes": "Polyglycerol esters of fatty acids (E475) are synthetic emulsifiers used in supplements for texture and stability. The 2015 Nature study (Chassaing et al.) showed dietary emulsifiers CMC and P80 promoted colitis and metabolic syndrome in mice, but direct evidence for polyglycerol esters is limited. EFSA's 2017 re-evaluation found no safety concern at the reported uses and set no numerical ADI. Note: polyglycerol polyricinoleate (E476) is a distinct substance with its own CAS and regulatory status.",
       "scientific_references": [
         "PMID 25731162 — Chassaing et al., Nature 2015: dietary emulsifiers promote colitis and metabolic syndrome in mice (CMC/P80 studied, class-level evidence)",
-        "DOI: 10.2903/j.efsa.2017.4743 — EFSA 2017 re-evaluation of E475, ADI 25 mg/kg bw/day retained"
+        "DOI: 10.2903/j.efsa.2017.5089 — EFSA 2017 re-evaluation of E475: no safety concern at reported uses, no numerical ADI needed"
       ],
       "last_updated": "2026-03-27",
       "match_rules": {
@@ -5504,8 +5550,8 @@
           "type": "regulatory",
           "authority": "EFSA",
           "title": "Re-evaluation of polyglycerol esters of fatty acids (E 475) as a food additive",
-          "citation": "EFSA Journal 2017;15(3):4743",
-          "url": "https://doi.org/10.2903/j.efsa.2017.4743",
+          "citation": "EFSA Journal 2017;15(12):5089",
+          "url": "https://doi.org/10.2903/j.efsa.2017.5089",
           "published_date": "2017-03-21",
           "evidence_grade": "A",
           "supports_claims": [
@@ -5539,7 +5585,7 @@
             "start": "1995-01-01",
             "end": null
           },
-          "source_ref": "https://doi.org/10.2903/j.efsa.2017.4743"
+          "source_ref": "https://doi.org/10.2903/j.efsa.2017.5089"
         },
         {
           "authority": "WHO",
@@ -5573,6 +5619,11 @@
             "date": "2026-03-27",
             "change": "Deep audit batch 4: decoupled E476/PGPR aliases (different substance, CAS 29894-35-7). Removed overly generic 'PGE' alias. Clarified mechanism is extrapolated from CMC/P80 studies, not direct PGE evidence. Added 21 CFR 172.854. Fixed EFSA ref evidence_grade to A. Populated dose_thresholds with JECFA ADI 25 mg/kg bw/day. GSRS/PubChem/UNII null (mixture/class). CUI C0982350 verified.",
             "reason": "harmful_additives_deep_audit_batch4"
+          },
+          {
+            "date": "2026-10-02",
+            "by": "claude-audit",
+            "change": "LEDGER Q57: DOI citations content-checked (Crossref + PubMed, 2026-10-02). Corrected mistyped DOI of the cited document: 10.2903/j.efsa.2017.4743 -> 10.2903/j.efsa.2017.5089. EFSA's E475 opinion (PMID 32625376) sets no numerical ADI; the 'ADI 25 mg/kg bw/day retained' wording in regulatory_status.EU, notes and scientific_references came from the PGPR (E476) opinion and is corrected. Receipt: scripts/audits/pending_items_20260926/research.md Q57."
           }
         ]
       },
@@ -5761,7 +5812,6 @@
         "Diabetic consumers — marketed as sugar-free but still contributes calories (2-3 kcal/g)"
       ],
       "scientific_references": [
-        "DOI: 10.1111/j.1365-2036.2012.05044.x — Nutrition Reviews: polyol fermentation and GI tolerance thresholds",
         "Regulation (EU) No 1169/2011 Annex III — mandatory polyol laxative effect labeling"
       ],
       "match_rules": {
@@ -5874,6 +5924,11 @@
             "date": "2026-08-07",
             "change": "Removed the 'maltitol syrup' alias added by batch 4, which collided with the identical alias already on ADD_MALTITOL_MALITOL — 18 rows across real products matched here while the enricher charged ADD_MALTITOL_MALITOL, decided only by index insertion order. Ownership assigned to ADD_MALTITOL_MALITOL on FDA substance-registry evidence, re-verified live: UNII D65DG142WK (Maltitol, class 'chemical') registers DRIED MALTITOL SYRUP / MALTITOL SYRUP POWDER / MALTITOL SOLUTION [NF] / HYDROGENATED HIGH MALTOSE-CONTENT GLUCOSE SYRUP, while this entry's own UNII 27F77DSJ5V (class 'mixture') registers only HYDROGENATED STARCH HYDROLYSATE [+ II]. Also the more protective route — maltitol carries a ~10 g single-dose laxative threshold vs the 20 g/day stored here. 'hydrogenated glucose syrup' and 'hsh' remain here for syrups not declared as maltitol; the 2 corpus rows labelled 'hydrogenated starch hydrolysate' are unaffected.",
             "reason": "alias_ownership_collision_resolution"
+          },
+          {
+            "date": "2026-10-02",
+            "by": "claude-audit",
+            "change": "LEDGER Q57: DOI citations content-checked (Crossref + PubMed, 2026-10-02). Removed 1 that resolve to an unrelated paper or to nothing: 10.1111/j.1365-2036.2012.05044.x. Receipt: scripts/audits/pending_items_20260926/research.md Q57."
           }
         ]
       },
@@ -6098,8 +6153,7 @@
       ],
       "notes": "Isomaltooligosaccharide (IMO) is a mixture of short-chain carbohydrates produced by enzymatic conversion of starch. Was widely marketed as a prebiotic fiber in protein bars and supplements until FDA excluded it from the dietary fiber definition in 2018. Low severity — not toxic, but a quality signal for misleading labeling in supplement formulations.",
       "scientific_references": [
-        "Federal Register 83 FR 28061 (2018) — FDA excluded IMO from dietary fiber definition",
-        "DOI: 10.1093/jn/nxy151 — IMO digestibility study showing >90% hydrolysis in small intestine"
+        "Federal Register 83 FR 28061 (2018) — FDA excluded IMO from dietary fiber definition"
       ],
       "last_updated": "2026-03-27",
       "match_rules": {
@@ -6167,6 +6221,11 @@
             "date": "2026-03-27",
             "change": "Deep audit batch 4: CUI C4306776 verified. GSRS/PubChem N/A (mixture). Sharpened mechanism with >90% small intestine hydrolysis data. Added Federal Register citation. Fixed jurisdictional dates. Clarified regulatory_status (GRAS as sweetener, excluded from fiber definition). All identifiers verified.",
             "reason": "harmful_additives_deep_audit_batch4"
+          },
+          {
+            "date": "2026-10-02",
+            "by": "claude-audit",
+            "change": "LEDGER Q57: DOI citations content-checked (Crossref + PubMed, 2026-10-02). Removed 1 that resolve to an unrelated paper or to nothing: 10.1093/jn/nxy151. Receipt: scripts/audits/pending_items_20260926/research.md Q57."
           }
         ]
       },
@@ -6423,8 +6482,7 @@
       ],
       "notes": "Magnesium stearate is an FDA GRAS flow agent present in the vast majority of supplement tablets and capsules. It prevents powders from sticking to manufacturing equipment. Internet claims that it blocks nutrient absorption are not supported by clinical evidence — the single study cited used unrealistic concentrations. Stearic acid (its main component) is a natural fatty acid found in chocolate, meat, and dairy. Penalized at low severity only as a non-nutritive processing aid, not as a health concern.",
       "scientific_references": [
-        "21 CFR 184.1440 - Magnesium stearate GRAS",
-        "DOI: 10.1016/j.ejpb.2008.09.017 - Dissolution study showing no significant bioavailability impact at normal levels"
+        "21 CFR 184.1440 - Magnesium stearate GRAS"
       ],
       "last_updated": "2026-03-27",
       "match_rules": {
@@ -6520,6 +6578,11 @@
             "date": "2026-03-27",
             "change": "Deep audit batch 4: CUI C0126791 verified. GSRS verified (UNII 70097M6I30, CAS 557-04-0). Fixed PubChem CID type (string->int). Fixed references_structured types and supports_claims. Fixed jurisdictional dates. All identifiers API-verified.",
             "reason": "harmful_additives_deep_audit_batch4"
+          },
+          {
+            "date": "2026-10-02",
+            "by": "claude-audit",
+            "change": "LEDGER Q57: DOI citations content-checked (Crossref + PubMed, 2026-10-02). Removed 1 that resolve to an unrelated paper or to nothing: 10.1016/j.ejpb.2008.09.017. Receipt: scripts/audits/pending_items_20260926/research.md Q57."
           }
         ]
       },
@@ -7693,7 +7756,6 @@
       "notes": "Umami flavor enhancer classified as FDA GRAS (21 CFR 182.1480). WHO/JECFA ADI: 'not specified' — safe at any realistic dietary intake. 'MSG symptom complex' (formerly 'Chinese restaurant syndrome'): multiple double-blind placebo-controlled trials have failed to consistently reproduce symptoms on rechallenge (PMID 9215242, PMID 11080723). This is largely a nocebo phenomenon in blinded conditions. Excitotoxicity at supplement doses is not supported by human pharmacokinetic data — dietary glutamate does not significantly raise plasma or brain glutamate at normal doses. Sodium content (12% by weight) may be relevant for hypertensive individuals at high food-level intake, not at typical supplement doses. SEVERITY DOWNGRADED FROM MODERATE TO LOW based on controlled trial evidence.",
       "scientific_references": [
         "PMID: 24927698 (Brosnan/Drewnowski/Friedman 2014 Amino Acids) - Dietary MSG and obesity in animals or humans?",
-        "DOI: 10.1016/j.lfs.2020.117659 - Neurotoxicity mechanisms",
         "PMID 9215242 — Yang et al. 1997: double-blind RCT — MSG symptoms not reproducibly distinct from placebo",
         "PMID 11080723 — Geha et al. 2000: multicenter double-blind rechallenge — no objectively confirmed MSG-specific reactions",
         "FDA GRAS 21 CFR 182.1480; WHO/JECFA ADI 'not specified'"
@@ -7712,18 +7774,6 @@
           "title": "DOI: PMID:24927698 - MSG safety review",
           "citation": "DOI: PMID:24927698 - MSG safety review",
           "url": "https://pubmed.ncbi.nlm.nih.gov/24927698",
-          "published_date": null,
-          "evidence_grade": "C",
-          "supports_claims": [
-            "mechanism_of_harm"
-          ]
-        },
-        {
-          "type": "primary_study",
-          "authority": "EU",
-          "title": "DOI: 10.1016/j.lfs.2020.117659 - Neurotoxicity mechanisms",
-          "citation": "DOI: 10.1016/j.lfs.2020.117659 - Neurotoxicity mechanisms",
-          "url": "https://doi.org/10.1016/j.lfs.2020.117659",
           "published_date": null,
           "evidence_grade": "C",
           "supports_claims": [
@@ -7817,6 +7867,11 @@
             "date": "2026-03-27",
             "change": "Deep audit batch 5: CUI C0037511 verified. All identifiers pre-verified. Added dose_thresholds (EFSA group ADI 30 mg/kg bw/day). Added GSRS cfr_sections 21 CFR 182.1480. Fixed jurisdictional dates.",
             "reason": "harmful_additives_deep_audit_batch5"
+          },
+          {
+            "date": "2026-10-02",
+            "by": "claude-audit",
+            "change": "LEDGER Q57: DOI citations content-checked (Crossref + PubMed, 2026-10-02). Removed 1 that resolve to an unrelated paper or to nothing: 10.1016/j.lfs.2020.117659. Receipt: scripts/audits/pending_items_20260926/research.md Q57."
           }
         ]
       },
@@ -8074,9 +8129,9 @@
         {
           "type": "monograph",
           "authority": "EFSA",
-          "title": "EFSA Journal 2015;13(2):4007 - Nickel in food",
-          "citation": "EFSA Journal 2015;13(2):4007 - Nickel in food",
-          "url": "https://efsa.onlinelibrary.wiley.com/doi/10.2903/j.efsa.2015.4007",
+          "title": "EFSA Journal 2015;13(2):4002 - Risks to public health related to the presence of nickel in food and drinking water",
+          "citation": "EFSA Journal 2015;13(2):4002 - Risks to public health related to the presence of nickel in food and drinking water",
+          "url": "https://efsa.onlinelibrary.wiley.com/doi/10.2903/j.efsa.2015.4002",
           "published_date": null,
           "evidence_grade": "B",
           "supports_claims": []
@@ -8113,7 +8168,7 @@
             "start": "2020-01-01",
             "end": null
           },
-          "source_ref": "https://efsa.onlinelibrary.wiley.com/doi/10.2903/j.efsa.2015.4007"
+          "source_ref": "https://efsa.onlinelibrary.wiley.com/doi/10.2903/j.efsa.2015.4002"
         }
       ],
       "review": {
@@ -8192,6 +8247,11 @@
             "date": "2026-03-27",
             "change": "Deep audit batch 5: CUI C0028013 verified. Added CAS 7440-02-0, PubChem 935, UNII 7OV03QG267, RxCUI 1311629. Replaced placeholder population warnings. Added dose_thresholds (EFSA TDI 13 ug/kg/day). Fixed jurisdictional dates.",
             "reason": "harmful_additives_deep_audit_batch5"
+          },
+          {
+            "date": "2026-10-02",
+            "by": "claude-audit",
+            "change": "LEDGER Q57: DOI citations content-checked (Crossref + PubMed, 2026-10-02). Corrected mistyped DOI of the cited document: 10.2903/j.efsa.2015.4007 -> 10.2903/j.efsa.2015.4002. Citation text now names article 4002. Receipt: scripts/audits/pending_items_20260926/research.md Q57."
           }
         ]
       },
@@ -8233,9 +8293,7 @@
         "Pregnant women - minimize exposure"
       ],
       "notes": "Nitrite preservative salt — child entry split from umbrella nitrites record for exact matching. Primary concerns are nitrosamine formation (carcinogenesis) and methemoglobinemia. High severity due to IARC 2A classification and well-established NOC formation pathway. Not expected in dietary supplements but tracked for completeness.",
-      "scientific_references": [
-        "DOI: 10.1093/jnci/djq516 - Nitrite/nitrate cancer risk"
-      ],
+      "scientific_references": [],
       "last_updated": "2026-03-27",
       "match_rules": {
         "match_mode": "alias_and_fuzzy",
@@ -8245,16 +8303,14 @@
       },
       "references_structured": [
         {
-          "type": "systematic_review",
-          "authority": "OTHER",
-          "title": "DOI: 10.1093/jnci/djq516 - Nitrite/nitrate cancer risk",
-          "citation": "DOI: 10.1093/jnci/djq516 - Nitrite/nitrate cancer risk",
-          "url": "https://doi.org/10.1093/jnci/djq516",
+          "type": "monograph",
+          "authority": "EFSA",
+          "title": "EFSA Journal 2017;15(6):4786 - Re-evaluation of potassium nitrite (E 249) and sodium nitrite (E 250) as food additives",
+          "citation": "EFSA Journal 2017;15(6):4786 - Re-evaluation of potassium nitrite (E 249) and sodium nitrite (E 250) as food additives",
+          "url": "https://doi.org/10.2903/j.efsa.2017.4786",
           "published_date": null,
           "evidence_grade": "B",
-          "supports_claims": [
-            "mechanism_of_harm"
-          ]
+          "supports_claims": []
         }
       ],
       "jurisdictional_statuses": [
@@ -8301,6 +8357,11 @@
             "date": "2026-03-27",
             "change": "Deep audit batch 5: CUI C0071773 verified. CAS 7758-09-0, PubChem 516910, UNII 794654G42L all pre-verified. Sharpened mechanism (NOC formation, methemoglobinemia). Added JECFA ADI and IARC 2A classification. Fixed jurisdictional statuses (restricted/permitted_with_limit, not warning_issued). Populated dose_thresholds.",
             "reason": "harmful_additives_deep_audit_batch5"
+          },
+          {
+            "date": "2026-10-02",
+            "by": "claude-audit",
+            "change": "LEDGER Q57: DOI citations content-checked (Crossref + PubMed, 2026-10-02). Removed 1 that resolve to an unrelated paper or to nothing: 10.1093/jnci/djq516. Its only structured reference was removed; added the EFSA 2017 nitrite opinion (E 249/E 250, 10.2903/j.efsa.2017.4786, Crossref-verified). Receipt: scripts/audits/pending_items_20260926/research.md Q57."
           }
         ]
       },
@@ -8366,9 +8427,7 @@
         "Pregnant women — minimize exposure due to fetal methemoglobin sensitivity"
       ],
       "notes": "Atomic potassium nitrate child entry split from the umbrella nitrites record for exact matching and audit traceability.",
-      "scientific_references": [
-        "DOI: 10.1093/jnci/djq516 - Nitrite/nitrate cancer risk"
-      ],
+      "scientific_references": [],
       "last_updated": "2026-03-27",
       "match_rules": {
         "match_mode": "alias_and_fuzzy",
@@ -8378,16 +8437,14 @@
       },
       "references_structured": [
         {
-          "type": "systematic_review",
-          "authority": "OTHER",
-          "title": "DOI: 10.1093/jnci/djq516 - Nitrite/nitrate cancer risk",
-          "citation": "DOI: 10.1093/jnci/djq516 - Nitrite/nitrate cancer risk",
-          "url": "https://doi.org/10.1093/jnci/djq516",
+          "type": "monograph",
+          "authority": "EFSA",
+          "title": "EFSA Journal 2017;15(6):4787 - Re-evaluation of sodium nitrate (E 251) and potassium nitrate (E 252) as food additives",
+          "citation": "EFSA Journal 2017;15(6):4787 - Re-evaluation of sodium nitrate (E 251) and potassium nitrate (E 252) as food additives",
+          "url": "https://doi.org/10.2903/j.efsa.2017.4787",
           "published_date": null,
           "evidence_grade": "B",
-          "supports_claims": [
-            "mechanism_of_harm"
-          ]
+          "supports_claims": []
         }
       ],
       "jurisdictional_statuses": [
@@ -8434,6 +8491,11 @@
             "date": "2026-03-27",
             "change": "Deep audit batch 6: CUI C0071772 verified. All identifiers pre-verified. Added JECFA ADI 3.7 mg/kg bw/day. Sharpened mechanism (nitrate→nitrite→NOC pathway). Fixed jurisdictional dates.",
             "reason": "harmful_additives_deep_audit_batch6"
+          },
+          {
+            "date": "2026-10-02",
+            "by": "claude-audit",
+            "change": "LEDGER Q57: DOI citations content-checked (Crossref + PubMed, 2026-10-02). Removed 1 that resolve to an unrelated paper or to nothing: 10.1093/jnci/djq516. Its only structured reference was removed; added the EFSA 2017 nitrate opinion (E 251/E 252, 10.2903/j.efsa.2017.4787, Crossref-verified), already its EU jurisdiction source. Receipt: scripts/audits/pending_items_20260926/research.md Q57."
           }
         ]
       },
@@ -8515,8 +8577,7 @@
       ],
       "notes": "Palm oil in supplements is typically present in small amounts (softgel fill, carrier oil). The primary concern is 3-MCPD/glycidyl ester contamination from refining, not saturated fat at supplement doses. Low severity: a processed-oil quality signal rather than a toxicological hazard.",
       "scientific_references": [
-        "DOI: 10.2903/j.efsa.2018.5083 - EFSA 3-MCPD assessment",
-        "DOI: 10.3390/nu12051347 - Palm oil health effects"
+        "DOI: 10.2903/j.efsa.2018.5083 - EFSA 3-MCPD assessment"
       ],
       "last_updated": "2026-03-27",
       "match_rules": {
@@ -8532,16 +8593,6 @@
           "title": "DOI: 10.2903/j.efsa.2018.5083 - EFSA 3-MCPD assessment",
           "citation": "DOI: 10.2903/j.efsa.2018.5083 - EFSA 3-MCPD assessment",
           "url": "https://doi.org/10.2903/j.efsa.2018.5083",
-          "published_date": null,
-          "evidence_grade": "C",
-          "supports_claims": []
-        },
-        {
-          "type": "systematic_review",
-          "authority": "OTHER",
-          "title": "DOI: 10.3390/nu12051347 - Palm oil health effects",
-          "citation": "DOI: 10.3390/nu12051347 - Palm oil health effects",
-          "url": "https://doi.org/10.3390/nu12051347",
           "published_date": null,
           "evidence_grade": "C",
           "supports_claims": []
@@ -8617,6 +8668,11 @@
             "date": "2026-03-27",
             "change": "Deep audit batch 6: CUI C0069962 verified. Added CAS 8002-75-3, RxCUI 32809. Sharpened mechanism (3-MCPD/glycidyl ester contamination pathway). Fixed jurisdictional dates.",
             "reason": "harmful_additives_deep_audit_batch6"
+          },
+          {
+            "date": "2026-10-02",
+            "by": "claude-audit",
+            "change": "LEDGER Q57: DOI citations content-checked (Crossref + PubMed, 2026-10-02). Removed 1 that resolve to an unrelated paper or to nothing: 10.3390/nu12051347. Receipt: scripts/audits/pending_items_20260926/research.md Q57."
           }
         ]
       },
@@ -8880,8 +8936,6 @@
       ],
       "notes": "FDA-approved food additive (21 CFR 172.820). EFSA concluded supplement film-coating formulations are not of safety concern. Primary concerns relate to trace contaminants and rare hypersensitivity, not the polymer itself at excipient doses. Moved from banned_recalled_ingredients Policy Watchlist to harmful_additives for proper B1 penalty scoring (2026-02-18).",
       "scientific_references": [
-        "DOI: 10.1016/j.jaci.2016.02.010 - PEG hypersensitivity and cross-reactivity",
-        "DOI: 10.1002/jps.23963 - Contamination in PEG batches",
         "21 CFR 172.820 - FDA food additive approval"
       ],
       "last_updated": "2026-03-27",
@@ -8892,30 +8946,6 @@
         "preferred_alias": "Polyethylene Glycol (PEG)"
       },
       "references_structured": [
-        {
-          "type": "clinical_trial",
-          "authority": "OTHER",
-          "title": "DOI: 10.1016/j.jaci.2016.02.010 - PEG hypersensitivity and cross-reactivity",
-          "citation": "DOI: 10.1016/j.jaci.2016.02.010 - PEG hypersensitivity and cross-reactivity",
-          "url": "https://doi.org/10.1016/j.jaci.2016.02.010",
-          "published_date": null,
-          "evidence_grade": "B",
-          "supports_claims": [
-            "mechanism_of_harm"
-          ]
-        },
-        {
-          "type": "systematic_review",
-          "authority": "OTHER",
-          "title": "DOI: 10.1002/jps.23963 - Contamination in PEG batches",
-          "citation": "DOI: 10.1002/jps.23963 - Contamination in PEG batches",
-          "url": "https://doi.org/10.1002/jps.23963",
-          "published_date": null,
-          "evidence_grade": "C",
-          "supports_claims": [
-            "mechanism_of_harm"
-          ]
-        },
         {
           "type": "regulation",
           "authority": "FDA",
@@ -8973,6 +9003,11 @@
             "date": "2026-03-27",
             "change": "Deep audit batch 6: CUI C0032483 verified. CAS 25322-68-3, UNII U95VVU3IDQ verified. PubChem N/A (polymer class). Fixed GSRS substance_name. Fixed refs supports_claims. Fixed jurisdictional dates.",
             "reason": "harmful_additives_deep_audit_batch6"
+          },
+          {
+            "date": "2026-10-02",
+            "by": "claude-audit",
+            "change": "LEDGER Q57: DOI citations content-checked (Crossref + PubMed, 2026-10-02). Removed 2 that resolve to an unrelated paper or to nothing: 10.1016/j.jaci.2016.02.010, 10.1002/jps.23963. Receipt: scripts/audits/pending_items_20260926/research.md Q57."
           }
         ]
       },
@@ -9741,8 +9776,6 @@
       ],
       "notes": "FDA-approved binder/coating agent (21 CFR 173.55). Not absorbed orally at supplement-grade molecular weights. Historical tissue accumulation concerns were from injectable low-MW PVP, not oral supplements. Low severity — tracked as non-nutritive excipient quality signal.",
       "scientific_references": [
-        "DOI: 10.1016/j.toxlet.2020.12.019 - Tissue accumulation studies",
-        "DOI: 10.1002/jps.24274 - Absorption interaction effects",
         "21 CFR 173.55 - FDA food additive approval"
       ],
       "last_updated": "2026-03-27",
@@ -9753,26 +9786,6 @@
         "preferred_alias": "Polyvinylpyrrolidone (PVP)"
       },
       "references_structured": [
-        {
-          "type": "systematic_review",
-          "authority": "OTHER",
-          "title": "DOI: 10.1016/j.toxlet.2020.12.019 - Tissue accumulation",
-          "citation": "DOI: 10.1016/j.toxlet.2020.12.019 - Tissue accumulation",
-          "url": "https://doi.org/10.1016/j.toxlet.2020.12.019",
-          "published_date": null,
-          "evidence_grade": "B",
-          "supports_claims": []
-        },
-        {
-          "type": "systematic_review",
-          "authority": "OTHER",
-          "title": "DOI: 10.1002/jps.24274 - Absorption effects",
-          "citation": "DOI: 10.1002/jps.24274 - Absorption effects",
-          "url": "https://doi.org/10.1002/jps.24274",
-          "published_date": null,
-          "evidence_grade": "B",
-          "supports_claims": []
-        },
         {
           "type": "regulation",
           "authority": "FDA",
@@ -9828,6 +9841,11 @@
             "date": "2026-03-27",
             "change": "Deep audit batch 6: CUI C0032856 verified (povidone). Fixed UNII to FZ989GH94E (povidone, was 68401960MK=crospovidone). Fixed GSRS substance_name. Corrected mechanism (tissue accumulation was injectable PVP, not oral). Upgraded confidence medium->high. Fixed jurisdictional dates.",
             "reason": "harmful_additives_deep_audit_batch6"
+          },
+          {
+            "date": "2026-10-02",
+            "by": "claude-audit",
+            "change": "LEDGER Q57: DOI citations content-checked (Crossref + PubMed, 2026-10-02). Removed 2 that resolve to an unrelated paper or to nothing: 10.1016/j.toxlet.2020.12.019, 10.1002/jps.24274. Receipt: scripts/audits/pending_items_20260926/research.md Q57."
           }
         ]
       },
@@ -10890,9 +10908,7 @@
         "Vegetarians/vegans — animal-derived (lac beetle secretion)"
       ],
       "notes": "Natural resin coating derived from lac beetle secretions. FDA and EFSA approved with no safety concern. Low severity — tracked as non-vegan quality signal and for rare insect protein allergenicity. Cross-reactivity with shellfish is NOT supported (different protein families).",
-      "scientific_references": [
-        "DOI: 10.1016/j.foodchem.2018.03.037 - Composition and safety"
-      ],
+      "scientific_references": [],
       "last_updated": "2026-03-27",
       "match_rules": {
         "match_mode": "alias_and_fuzzy",
@@ -11003,6 +11019,11 @@
             "date": "2026-03-27",
             "change": "Deep audit batch 7: CUI C0074445 verified. Added CAS 9000-59-3, UNII 46N107B71O, RxCUI 1368898 from GSRS. Upgraded confidence medium->high. Corrected mechanism (removed unsupported shellfish cross-reactivity). Fixed jurisdictional dates.",
             "reason": "harmful_additives_deep_audit_batch7"
+          },
+          {
+            "date": "2026-10-02",
+            "by": "claude-audit",
+            "change": "LEDGER Q57: DOI citations content-checked (Crossref + PubMed, 2026-10-02). Removed 1 that resolve to an unrelated paper or to nothing: 10.1016/j.foodchem.2018.03.037. Receipt: scripts/audits/pending_items_20260926/research.md Q57."
           }
         ]
       },
@@ -11063,9 +11084,7 @@
       ],
       "notes": "Amorphous silicon dioxide is the most common anti-caking agent in supplement manufacturing. FDA GRAS at ≤2%. EFSA 2018 data gap request was precautionary — no finding of harm. Low severity — tracked purely as non-nutritive excipient quality signal.",
       "scientific_references": [
-        "DOI: 10.2903/j.efsa.2018.5088 - EFSA 2018 re-evaluation",
-        "DOI: 10.1016/j.fct.2020.111617 - Nanoparticle toxicity",
-        "DOI: 10.3390/nano12030457 - Gut microbiome effects 2024"
+        "DOI: 10.2903/j.efsa.2018.5088 - EFSA 2018 re-evaluation"
       ],
       "last_updated": "2026-08-07",
       "match_rules": {
@@ -11081,26 +11100,6 @@
           "title": "DOI: 10.2903/j.efsa.2018.5088 - EFSA 2018 re-evaluation",
           "citation": "DOI: 10.2903/j.efsa.2018.5088 - EFSA 2018 re-evaluation",
           "url": "https://doi.org/10.2903/j.efsa.2018.5088",
-          "published_date": null,
-          "evidence_grade": "C",
-          "supports_claims": []
-        },
-        {
-          "type": "systematic_review",
-          "authority": "OTHER",
-          "title": "DOI: 10.1016/j.fct.2020.111617 - Nanoparticle toxicity",
-          "citation": "DOI: 10.1016/j.fct.2020.111617 - Nanoparticle toxicity",
-          "url": "https://doi.org/10.1016/j.fct.2020.111617",
-          "published_date": null,
-          "evidence_grade": "C",
-          "supports_claims": []
-        },
-        {
-          "type": "systematic_review",
-          "authority": "OTHER",
-          "title": "DOI: 10.3390/nano12030457 - Gut microbiome effects 2024",
-          "citation": "DOI: 10.3390/nano12030457 - Gut microbiome effects 2024",
-          "url": "https://doi.org/10.3390/nano12030457",
           "published_date": null,
           "evidence_grade": "C",
           "supports_claims": []
@@ -11194,6 +11193,11 @@
             "date": "2026-08-07",
             "change": "Added the exact label alias 'silica' after confirming PubChem CID 24261 and the existing silicon-dioxide identity; this aligns enrichment routing with bottle wording without creating a second additive identity.",
             "reason": "label_alias_identity_alignment"
+          },
+          {
+            "date": "2026-10-02",
+            "by": "claude-audit",
+            "change": "LEDGER Q57: DOI citations content-checked (Crossref + PubMed, 2026-10-02). Removed 2 that resolve to an unrelated paper or to nothing: 10.1016/j.fct.2020.111617, 10.3390/nano12030457. Receipt: scripts/audits/pending_items_20260926/research.md Q57."
           }
         ]
       },
@@ -11672,9 +11676,7 @@
         "Vegans — dairy-derived protein"
       ],
       "notes": "Ultra-processed dairy protein used as emulsifier and stabilizer in supplements. Contains one of the top 8 allergens (milk). Alkali-processed casein with denatured protein structure. Quality signal for ultra-processed formulation.",
-      "scientific_references": [
-        "DOI: 10.1016/j.foodchem.2018.12.057 - Sodium caseinate processing and allergenicity"
-      ],
+      "scientific_references": [],
       "last_updated": "2026-03-28",
       "match_rules": {
         "match_mode": "alias_and_fuzzy",
@@ -11753,6 +11755,11 @@
             "date": "2026-03-28",
             "change": "Deep audit batch 8: CUI C0037488 verified. CAS 9005-46-3 pre-verified. Added 21 CFR 182.1748 to GSRS cfr. Sharpened mechanism (hidden milk allergen risk). Fixed jurisdictional dates.",
             "reason": "harmful_additives_deep_audit_batch8"
+          },
+          {
+            "date": "2026-10-02",
+            "by": "claude-audit",
+            "change": "LEDGER Q57: DOI citations content-checked (Crossref + PubMed, 2026-10-02). Removed 1 that resolve to an unrelated paper or to nothing: 10.1016/j.foodchem.2018.12.057. Receipt: scripts/audits/pending_items_20260926/research.md Q57."
           }
         ]
       },
@@ -11979,8 +11986,7 @@
       "notes": "While SHMP has low acute toxicity, the inorganic phosphorus it contributes is a legitimate public health concern. EFSA's 2019 re-evaluation was the first time a numerical ADI was set for phosphates (previously 'not specified'), reflecting growing evidence of harm. A supplement intended to promote health should not add unnecessary inorganic phosphorus, especially given that the ADI is already exceeded in vulnerable populations.",
       "scientific_references": [
         "EFSA Journal 2019;17(6):5674 - Re-evaluation of phosphoric acid-phosphates-di-, tri- and polyphosphates (E 338-341, E 343, E 450-452) as food additives",
-        "DOI: 10.1161/ATVBAHA.123.319198 - Phosphate in cardiovascular disease (AHA)",
-        "DOI: 10.1053/j.ajkd.2013.08.005 - Phosphorus and the kidney"
+        "DOI: 10.1161/ATVBAHA.123.319198 - Phosphate in cardiovascular disease (AHA)"
       ],
       "last_updated": "2026-03-28",
       "match_rules": {
@@ -12007,16 +12013,6 @@
           "citation": "Phosphate in Cardiovascular Disease - Arteriosclerosis, Thrombosis, and Vascular Biology",
           "url": "https://doi.org/10.1161/ATVBAHA.123.319198",
           "published_date": "2024-01-01",
-          "evidence_grade": "B",
-          "supports_claims": []
-        },
-        {
-          "type": "peer_reviewed",
-          "authority": "AJKD",
-          "title": "Phosphorus and the Kidney - American Journal of Kidney Diseases",
-          "citation": "Phosphorus and the Kidney - American Journal of Kidney Diseases",
-          "url": "https://doi.org/10.1053/j.ajkd.2013.08.005",
-          "published_date": "2013-08-01",
           "evidence_grade": "B",
           "supports_claims": []
         }
@@ -12070,6 +12066,11 @@
             "date": "2026-03-28",
             "change": "Deep audit batch 8: CUI C0074759 verified. CAS 10124-56-8 pre-verified. Populated dose_thresholds (EFSA phosphate group ADI 40 mg P/kg). Replaced generic population warnings. Fixed jurisdictional dates.",
             "reason": "harmful_additives_deep_audit_batch8"
+          },
+          {
+            "date": "2026-10-02",
+            "by": "claude-audit",
+            "change": "LEDGER Q57: DOI citations content-checked (Crossref + PubMed, 2026-10-02). Removed 1 that resolve to an unrelated paper or to nothing: 10.1053/j.ajkd.2013.08.005. Receipt: scripts/audits/pending_items_20260926/research.md Q57."
           }
         ]
       },
@@ -12691,10 +12692,7 @@
         "Cardiovascular disease — excess inorganic phosphate linked to vascular calcification"
       ],
       "notes": "LOW RISK: Used as emulsifier, texturizer, and moisture-retention agent. Common in processed foods. Concern is cumulative phosphate intake from multiple sources. Occasional supplement use is generally safe, but indicates processed formulation.",
-      "scientific_references": [
-        "DOI: 10.1016/j.kint.2017.04.046 - Phosphate and cardiovascular disease",
-        "DOI: 10.1093/ndt/gfr268 - Dietary phosphate and CKD"
-      ],
+      "scientific_references": [],
       "last_updated": "2026-03-28",
       "match_rules": {
         "match_mode": "alias_and_fuzzy",
@@ -12788,6 +12786,11 @@
             "date": "2026-03-28",
             "change": "Deep audit batch 8: CUI C2827333 verified. CAS 7758-29-4 pre-verified. Populated dose_thresholds (EFSA phosphate group ADI 40 mg P/kg). Added specific population warnings. Fixed jurisdictional dates.",
             "reason": "harmful_additives_deep_audit_batch8"
+          },
+          {
+            "date": "2026-10-02",
+            "by": "claude-audit",
+            "change": "LEDGER Q57: DOI citations content-checked (Crossref + PubMed, 2026-10-02). Removed 2 that resolve to an unrelated paper or to nothing: 10.1016/j.kint.2017.04.046, 10.1093/ndt/gfr268. Receipt: scripts/audits/pending_items_20260926/research.md Q57."
           }
         ]
       },
@@ -12843,7 +12846,6 @@
       ],
       "notes": "Common preservative used to prevent mold and yeast growth. Generally recognized as safe at typical levels but indicates non-clean-label formulation. Preferred over synthetic alternatives like parabens. EFSA 2019 revised the group ADI from 25 to 11 mg/kg bw/day.",
       "scientific_references": [
-        "DOI: 10.1016/j.fct.2017.04.024 - Safety assessment of sorbic acid and sorbates",
         "EFSA Journal 2019:5625 — Follow-up re-evaluation of sorbic acid (E200) and potassium sorbate (E202): revised ADI 11 mg/kg bw/day"
       ],
       "last_updated": "2026-03-28",
@@ -12931,6 +12933,11 @@
             "date": "2026-03-28",
             "change": "Deep audit batch 8: CUI C0037686 verified. CAS 110-44-1 pre-verified. Added GSRS cfr 21 CFR 182.3089. Populated dose_thresholds (EFSA revised ADI 11 mg/kg). Fixed jurisdictional dates.",
             "reason": "harmful_additives_deep_audit_batch8"
+          },
+          {
+            "date": "2026-10-02",
+            "by": "claude-audit",
+            "change": "LEDGER Q57: DOI citations content-checked (Crossref + PubMed, 2026-10-02). Removed 1 that resolve to an unrelated paper or to nothing: 10.1016/j.fct.2017.04.024. Receipt: scripts/audits/pending_items_20260926/research.md Q57."
           }
         ]
       },
@@ -13455,10 +13462,7 @@
         "No specific population concerns at excipient levels — stearic acid is a common dietary fatty acid"
       ],
       "notes": "Stearic acid is a naturally occurring C18 saturated fatty acid present in cocoa butter (~34%), beef (~19%), and dairy. Used as flow agent in tablets at <2% w/w. Internet claims about immune suppression and absorption blocking are not supported by clinical evidence. Low severity — tracked as non-nutritive excipient quality signal.",
-      "scientific_references": [
-        "DOI: 10.1016/j.imlet.2012.11.006 - Immune effects",
-        "DOI: 10.1002/jps.24274 - Absorption effects"
-      ],
+      "scientific_references": [],
       "last_updated": "2026-03-28",
       "match_rules": {
         "match_mode": "alias_and_fuzzy",
@@ -13568,6 +13572,11 @@
             "date": "2026-03-28",
             "change": "Deep audit batch 9: CUI C0038229 verified. CAS 57-11-4 pre-verified. GSRS cfr verified. Corrected mechanism (T-cell/absorption claims unsupported at supplement doses). Upgraded confidence medium->high. Fixed jurisdictional dates.",
             "reason": "harmful_additives_deep_audit_batch9"
+          },
+          {
+            "date": "2026-10-02",
+            "by": "claude-audit",
+            "change": "LEDGER Q57: DOI citations content-checked (Crossref + PubMed, 2026-10-02). Removed 2 that resolve to an unrelated paper or to nothing: 10.1016/j.imlet.2012.11.006, 10.1002/jps.24274. Receipt: scripts/audits/pending_items_20260926/research.md Q57."
           }
         ]
       },
@@ -13718,8 +13727,7 @@
       ],
       "notes": "An artificial sweetener made by chlorinating sugar. 2024 studies show it disrupts the gut microbiome, inhibits bile acid metabolism, and may induce glucose intolerance. Releases harmful compounds when heated. May affect insulin response despite being non-caloric.",
       "scientific_references": [
-        "DOI: 10.3389/fnut.2024.1387646 - Metabolic effects 2024",
-        "DOI: 10.1016/j.scitotenv.2023.168233 - Gut microbiota disruption 2024"
+        "DOI: 10.3389/fnut.2024.1387646 - Metabolic effects 2024"
       ],
       "last_updated": "2026-03-28",
       "match_rules": {
@@ -13825,6 +13833,11 @@
             "date": "2026-03-28",
             "change": "Deep audit batch 9: CUI C0077046 verified. CAS 56038-13-2 pre-verified. GSRS cfr verified (172.831). Populated dose_thresholds (FDA ADI 5 mg/kg). Added WHO 2023 non-sugar sweetener guideline. Sharpened thermal degradation warning. Fixed jurisdictional dates.",
             "reason": "harmful_additives_deep_audit_batch9"
+          },
+          {
+            "date": "2026-10-02",
+            "by": "claude-audit",
+            "change": "LEDGER Q57: DOI citations content-checked (Crossref + PubMed, 2026-10-02). Removed 1 that resolve to an unrelated paper or to nothing: 10.1016/j.scitotenv.2023.168233. Receipt: scripts/audits/pending_items_20260926/research.md Q57."
           }
         ]
       },
@@ -14404,10 +14417,7 @@
         "Smokers — synthetic beta-carotene supplementation linked to increased lung cancer risk (ATBC/CARET trials)"
       ],
       "notes": "Synthetic vitamins often have lower bioavailability and may not provide the same benefits as natural forms. Some may accumulate in tissues or interfere with natural vitamin metabolism.",
-      "scientific_references": [
-        "DOI: 10.3945/ajcn.114.089284 - Synthetic vs natural folate",
-        "DOI: 10.1093/ajcn/84.1.18 - Vitamin E forms comparison"
-      ],
+      "scientific_references": [],
       "last_updated": "2026-03-28",
       "match_rules": {
         "match_mode": "alias_and_fuzzy",
@@ -14512,6 +14522,11 @@
             "date": "2026-03-28",
             "change": "Deep audit batch 9: CUI null (class entry, added cui_status/cui_note). Added ATBC/CARET beta-carotene smoker warning. Fixed jurisdictional dates.",
             "reason": "harmful_additives_deep_audit_batch9"
+          },
+          {
+            "date": "2026-10-02",
+            "by": "claude-audit",
+            "change": "LEDGER Q57: DOI citations content-checked (Crossref + PubMed, 2026-10-02). Removed 2 that resolve to an unrelated paper or to nothing: 10.3945/ajcn.114.089284, 10.1093/ajcn/84.1.18. Receipt: scripts/audits/pending_items_20260926/research.md Q57."
           }
         ]
       },
@@ -14569,8 +14584,7 @@
       ],
       "notes": "Concentrated liquid sugars used as sweeteners. They have the same metabolic effects as solid sugars, contributing to blood sugar spikes and related health issues. Brown rice syrup has additional concerns due to potential arsenic contamination. NOTE: Category corrected from 'sweetener_artificial' to 'sweetener_natural' — corn syrup and rice syrup are not synthetic/artificial sweeteners.",
       "scientific_references": [
-        "DOI: 10.1289/ehp.1104619 - Arsenic in rice syrup",
-        "DOI: 10.1093/ajcn/86.4.895 - Glycemic effects"
+        "DOI: 10.1289/ehp.1104619 - Arsenic in rice syrup"
       ],
       "last_updated": "2026-03-28",
       "match_rules": {
@@ -14686,6 +14700,11 @@
             "date": "2026-06-15",
             "change": "Cleared representative UNII 9G5L16BK6N from this class-level syrup umbrella. Live GSRS resolves that UNII to CORN SYRUP, so exact ownership stays with ADD_CORN_SYRUP_SOLIDS while this row continues matching syrup aliases by text.",
             "reason": "unii_same_tier_conflict_cleanup"
+          },
+          {
+            "date": "2026-10-02",
+            "by": "claude-audit",
+            "change": "LEDGER Q57: DOI citations content-checked (Crossref + PubMed, 2026-10-02). Removed 1 that resolve to an unrelated paper or to nothing: 10.1093/ajcn/86.4.895. Receipt: scripts/audits/pending_items_20260926/research.md Q57."
           }
         ]
       },
@@ -14885,10 +14904,7 @@
         "Cardiovascular disease — excess inorganic phosphate linked to vascular calcification"
       ],
       "notes": "LOW RISK: Used as emulsifier, buffering agent, and sequestrant. Found in processed cheeses, canned foods, and some supplements. Indicates processed formulation. Occasional exposure is generally safe.",
-      "scientific_references": [
-        "DOI: 10.1007/s00394-019-01961-2 - Food phosphate additives and health",
-        "DOI: 10.3390/nu12092798 - Phosphate additives review"
-      ],
+      "scientific_references": [],
       "last_updated": "2026-03-28",
       "match_rules": {
         "match_mode": "alias_and_fuzzy",
@@ -14982,6 +14998,11 @@
             "date": "2026-03-28",
             "change": "Deep audit batch 9: CUI C0074764 verified. CAS 7722-88-5 pre-verified. Populated dose_thresholds (EFSA phosphate group ADI 40 mg P/kg). Added EFSA 2019 reference. Fixed jurisdictional dates.",
             "reason": "harmful_additives_deep_audit_batch9"
+          },
+          {
+            "date": "2026-10-02",
+            "by": "claude-audit",
+            "change": "LEDGER Q57: DOI citations content-checked (Crossref + PubMed, 2026-10-02). Removed 2 that resolve to an unrelated paper or to nothing: 10.1007/s00394-019-01961-2, 10.3390/nu12092798. Receipt: scripts/audits/pending_items_20260926/research.md Q57."
           }
         ]
       },
@@ -15322,16 +15343,6 @@
       },
       "references_structured": [
         {
-          "type": "monograph",
-          "authority": "EFSA",
-          "title": "EFSA Journal 2016;14(9):4444 - Tin in food",
-          "citation": "EFSA Journal 2016;14(9):4444 - Tin in food",
-          "url": "https://efsa.onlinelibrary.wiley.com/doi/10.2903/j.efsa.2016.4444",
-          "published_date": null,
-          "evidence_grade": "B",
-          "supports_claims": []
-        },
-        {
           "type": "guidance",
           "authority": "WHO",
           "title": "Guidelines for drinking-water quality, 4th edition, incorporating the 1st addendum",
@@ -15362,8 +15373,7 @@
           "effective_range": {
             "start": "1988-01-01",
             "end": null
-          },
-          "source_ref": "https://efsa.onlinelibrary.wiley.com/doi/10.2903/j.efsa.2016.4444"
+          }
         }
       ],
       "review": {
@@ -15437,6 +15447,11 @@
             "date": "2026-03-28",
             "change": "Deep audit batch 10: CUI C0206446 verified (Tin Compounds). Added CAS 7440-31-5. Populated dose_thresholds (JECFA PTWI 14 mg/kg/week). Replaced single population warning. Fixed jurisdictional dates.",
             "reason": "harmful_additives_deep_audit_batch10"
+          },
+          {
+            "date": "2026-10-02",
+            "by": "claude-audit",
+            "change": "LEDGER Q57: DOI citations content-checked (Crossref + PubMed, 2026-10-02). Removed 1 that resolve to an unrelated paper or to nothing: 10.2903/j.efsa.2016.4444. Receipt: scripts/audits/pending_items_20260926/research.md Q57."
           }
         ]
       },
@@ -15491,9 +15506,9 @@
         {
           "type": "monograph",
           "authority": "EFSA",
-          "title": "EFSA Journal 2015;13(2):4037 - Re-evaluation of carmine (E 120)",
-          "citation": "EFSA Journal 2015;13(2):4037 - Re-evaluation of carmine (E 120)",
-          "url": "https://efsa.onlinelibrary.wiley.com/doi/10.2903/j.efsa.2015.4037",
+          "title": "EFSA Journal 2015;13(11):4288 - Re-evaluation of cochineal, carminic acid, carmines (E 120)",
+          "citation": "EFSA Journal 2015;13(11):4288 - Re-evaluation of cochineal, carminic acid, carmines (E 120)",
+          "url": "https://efsa.onlinelibrary.wiley.com/doi/10.2903/j.efsa.2015.4288",
           "published_date": null,
           "evidence_grade": "B",
           "supports_claims": []
@@ -15562,6 +15577,11 @@
             "date": "2026-03-28",
             "change": "Deep audit batch 10: CUI null (class entry for undisclosed colorants, added cui_status/cui_note). Added specific population warnings. Fixed jurisdictional dates.",
             "reason": "harmful_additives_deep_audit_batch10"
+          },
+          {
+            "date": "2026-10-02",
+            "by": "claude-audit",
+            "change": "LEDGER Q57: DOI citations content-checked (Crossref + PubMed, 2026-10-02). Corrected mistyped DOI of the cited document: 10.2903/j.efsa.2015.4037 -> 10.2903/j.efsa.2015.4288. Citation text now names the carmine opinion, 2015;13(11):4288. Receipt: scripts/audits/pending_items_20260926/research.md Q57."
           }
         ]
       },
@@ -15741,19 +15761,16 @@
       "mechanism_of_harm": "Azo dye metabolized to aromatic amines in the GI tract. Associated with hyperactivity in children (McCann et al. 2007 Southampton study, Lancet). Cross-reactivity with aspirin in aspirin-sensitive individuals (urticaria, bronchospasm). Trace benzidine (IARC Group 1 carcinogen) present as manufacturing impurity in azo dyes; modern manufacturing limits this substantially. Some in vitro genotoxicity signals reported; EFSA 2009 re-evaluation found no confirmed in vivo genotoxicity at authorized food use levels. EFSA requested further Comet assay studies for sulfonated mono-azo dyes as a class.",
       "regulatory_status": {
         "US": "FDA approved as FD&C Yellow No. 5 (Tartrazine) — 21 CFR 74.705. Requires specific labeling on all products containing it (FALCPA). NOTE: E102 is the EU code — in the US this dye is designated FD&C Yellow No. 5, not E102. HHS/FDA April 2025 announced voluntary phase-out of all petroleum-based synthetic dyes by 2026.",
-        "EU": "Authorized as E102. ADI: 7.5 mg/kg bw/day (EFSA 2009 reduced from 10 mg/kg bw/day). EU Regulation 1333/2008 Annex V requires hyperactivity warning label on foods containing E102: 'may have an adverse effect on activity and attention in children.'",
+        "EU": "Authorized as E102. ADI: 7.5 mg/kg bw/day (EFSA 2009 re-evaluation kept the SCF/JECFA ADI). EU Regulation 1333/2008 Annex V requires hyperactivity warning label on foods containing E102: 'may have an adverse effect on activity and attention in children.'",
         "WHO": "JECFA ADI: 7.5 mg/kg bw/day."
       },
       "population_warnings": [
-        "Everyone - Potential carcinogen exposure from 4-MEI",
-        "Children - Higher exposure per body weight",
-        "People consuming cola beverages - High 4-MEI exposure"
+        "Children - Higher exposure per body weight"
       ],
-      "notes": "Synthetic azo dye (FD&C Yellow No. 5 in the US; E102 in the EU). Most extensively studied synthetic food dye. EU requires hyperactivity warning label. Cross-reactivity with aspirin documented. EFSA 2009 re-evaluation reduced ADI from 10 to 7.5 mg/kg bw/day. FDA/HHS announced voluntary phase-out of petroleum-based synthetic dyes (April 2025, target end of 2026). CORRECTION: Previous entry had caramel color (4-MEI/E150) content erroneously copied into this entry's mechanism and regulatory_status fields — both have been replaced with correct Tartrazine data.",
+      "notes": "Synthetic azo dye (FD&C Yellow No. 5 in the US; E102 in the EU). Most extensively studied synthetic food dye. EU requires hyperactivity warning label. Cross-reactivity with aspirin documented. EFSA's 2009 re-evaluation kept the ADI at 7.5 mg/kg bw/day. FDA/HHS announced voluntary phase-out of petroleum-based synthetic dyes (April 2025, target end of 2026).",
       "scientific_references": [
-        "DOI: 10.1016/j.fct.2012.06.052 - 4-MEI carcinogenicity",
-        "PMID: 26404013 (Amchova et al. 2015 Reg Toxicol Pharmacol) - Health safety issues of synthetic food colorants - 4-MEI in beverages",
-        "EFSA Journal 2009:1330 — Re-evaluation of Tartrazine (E102); ADI revised to 7.5 mg/kg bw/day",
+        "PMID: 26404013 (Amchova et al. 2015 Reg Toxicol Pharmacol) - Health safety issues of synthetic food colorants",
+        "EFSA Journal 2009;7(11):1331 — Re-evaluation of Tartrazine (E 102); the database does not give reason to revise the ADI of 7.5 mg/kg bw/day",
         "McCann et al. Lancet 2007 (PMID 17825405) — Southampton study: hyperactivity association with food color mixtures including tartrazine",
         "FDA/HHS Press Release April 22, 2025 — HHS and FDA to Phase Out Petroleum-Based Synthetic Dyes"
       ],
@@ -15879,6 +15896,16 @@
             "date": "2026-03-28",
             "change": "Deep audit batch 10: CUI C0039329 verified (tartrazine). Added CAS 1934-21-0 from GSRS. Populated dose_thresholds (EFSA ADI 7.5 mg/kg). Fixed jurisdictional dates.",
             "reason": "harmful_additives_deep_audit_batch10"
+          },
+          {
+            "date": "2026-10-02",
+            "by": "claude-audit",
+            "change": "LEDGER Q57: DOI citations content-checked (Crossref + PubMed, 2026-10-02). Removed 1 that resolve to an unrelated paper or to nothing: 10.1016/j.fct.2012.06.052. Receipt: scripts/audits/pending_items_20260926/research.md Q57."
+          },
+          {
+            "date": "2026-10-02",
+            "by": "claude-audit",
+            "change": "LEDGER Q60 (Sean 2026-10-02): 4-MEI/cola population warnings removed; 'EFSA 2009 reduced from 10' corrected (EFSA 2009 kept 7.5, opinion 1331, read 2026-10-02); tartrazine reference number 1330 -> 1331. Annex V child-label handling unchanged; caramel colour unchanged."
           }
         ]
       },
@@ -15887,7 +15914,7 @@
       "dose_thresholds": {
         "value": 7.5,
         "unit": "mg/kg/day",
-        "source": "EFSA/JECFA ADI (2009 reduced from 10)"
+        "source": "EFSA/JECFA ADI (EFSA 2009 kept 7.5)"
       },
       "cui": "C0039329",
       "external_ids": {
@@ -15939,18 +15966,16 @@
       "mechanism_of_harm": "Azo dye (Sunset Yellow FCF / E110) metabolized via azo bond cleavage to sulphanilic acid and 1-amino-2-naphthol-6-sulphonic acid by intestinal microflora. May contain trace benzidine (a known carcinogen) as a manufacturing impurity. Included in Southampton study mixtures (McCann et al. 2007) linked to hyperactivity in children. May cause hypersensitivity reactions including urticaria and angioedema in susceptible individuals.",
       "regulatory_status": {
         "US": "FDA approved color additive (21 CFR 74.706). Certified batch-by-batch. HHS/FDA announced April 22 2025 voluntary phase-out of all petroleum-based synthetic dyes (including Yellow 6 / Sunset Yellow) from food and dietary supplements by end of 2026.",
-        "EU": "Authorized as E110 (Sunset Yellow FCF) under Regulation (EC) No 1333/2008. ADI: 4 mg/kg bw/day (EFSA 2009 revision from 2.5 mg/kg bw/day for food use; Note: some sources cite 1 mg/kg bw/day — EFSA 2009 set group ADI for yellow dyes including E110). Mandatory EU hyperactivity warning label: 'may have an adverse effect on activity and attention in children' (Annex V of Regulation (EC) No 1333/2008).",
+        "EU": "Authorized as E110 (Sunset Yellow FCF) under Regulation (EC) No 1333/2008. ADI: 4 mg/kg bw/day (EFSA 2014, replacing the temporary ADI of 1 mg/kg bw/day set in 2009; in agreement with JECFA 2011). Mandatory EU hyperactivity warning label: 'may have an adverse effect on activity and attention in children' (Annex V of Regulation (EC) No 1333/2008).",
         "WHO": "JECFA ADI: 4 mg/kg bw/day. Synthetic azo dye; reviewed multiple times by JECFA with ADI revisions."
       },
       "population_warnings": [
-        "Everyone - Potential carcinogen exposure from 4-MEI",
-        "Children - Higher exposure per body weight",
-        "People consuming cola beverages - High 4-MEI exposure"
+        "Children - Higher exposure per body weight"
       ],
       "notes": "Synthetic azo dye used for color only. U.S. authorized; scored as B1 additive risk.",
       "scientific_references": [
-        "DOI: 10.1016/j.fct.2012.06.052 - 4-MEI carcinogenicity",
-        "PMID: 26404013 (Amchova et al. 2015 Reg Toxicol Pharmacol) - Health safety issues of synthetic food colorants - 4-MEI in beverages"
+        "PMID: 26404013 (Amchova et al. 2015 Reg Toxicol Pharmacol) - Health safety issues of synthetic food colorants",
+        "EFSA Journal 2014;12(7):3765 (doi:10.2903/j.efsa.2014.3765) — Reconsideration of the temporary ADI for Sunset Yellow FCF (E 110): new ADI 4 mg/kg bw/day"
       ],
       "last_updated": "2026-03-28",
       "match_rules": {
@@ -16079,6 +16104,16 @@
             "date": "2026-03-28",
             "change": "Deep audit batch 10: CUI C0060120 verified (FD&C Yellow No. 6). Added CAS 2783-94-0 from GSRS. Populated dose_thresholds (EFSA ADI 4 mg/kg). Fixed jurisdictional dates.",
             "reason": "harmful_additives_deep_audit_batch10"
+          },
+          {
+            "date": "2026-10-02",
+            "by": "claude-audit",
+            "change": "LEDGER Q57: DOI citations content-checked (Crossref + PubMed, 2026-10-02). Removed 1 that resolve to an unrelated paper or to nothing: 10.1016/j.fct.2012.06.052. Receipt: scripts/audits/pending_items_20260926/research.md Q57."
+          },
+          {
+            "date": "2026-10-02",
+            "by": "claude-audit",
+            "change": "LEDGER Q60 (Sean 2026-10-02): 4-MEI/cola population warnings removed; EU ADI history corrected to EFSA 2014 (4 mg/kg, replacing the temporary 1 mg/kg of 2009; abstract read 2026-10-02). Annex V child-label handling unchanged; caramel colour unchanged."
           }
         ]
       },
@@ -16152,30 +16187,14 @@
       },
       "references_structured": [
         {
-          "type": "doi",
-          "authority": "OTHER",
-          "title": "IARC carcinogenicity assessment",
-          "citation": "",
-          "url": "https://doi.org/10.1093/jnci/djh184",
-          "published_date": null,
-          "evidence_grade": "B",
-          "supports_claims": [
-            "mechanism_of_harm",
-            "clinical_outcomes"
-          ]
-        },
-        {
-          "type": "doi",
-          "authority": "OTHER",
-          "title": "Toxicity mechanisms",
-          "citation": "",
-          "url": "https://doi.org/10.1016/j.fct.2020.111535",
-          "published_date": null,
-          "evidence_grade": "B",
-          "supports_claims": [
-            "mechanism_of_harm",
-            "clinical_outcomes"
-          ]
+          "type": "monograph",
+          "authority": "NTP",
+          "title": "NTP Report on Carcinogens, 15th ed. (2021): Butylated Hydroxyanisole, CAS No. 25013-16-5",
+          "citation": "National Toxicology Program. Report on Carcinogens, Fifteenth Edition: Butylated Hydroxyanisole. NCBI Bookshelf NBK590883.",
+          "url": "https://www.ncbi.nlm.nih.gov/books/NBK590883/",
+          "published_date": "2021-12-21",
+          "evidence_grade": "R",
+          "supports_claims": []
         }
       ],
       "review": {
@@ -16209,6 +16228,11 @@
             "date": "2026-03-28",
             "change": "Deep audit batch 10: CUI C0006506 verified. CAS 25013-16-5 pre-verified. Populated dose_thresholds (JECFA ADI 0.5 mg/kg). Fixed GSRS cfr (171.110->172.110). Added population warnings. Fixed jurisdictional dates.",
             "reason": "harmful_additives_deep_audit_batch10"
+          },
+          {
+            "date": "2026-10-02",
+            "by": "claude-audit",
+            "change": "LEDGER Q57: DOI citations content-checked (Crossref + PubMed, 2026-10-02). Removed 2 that resolve to an unrelated paper or to nothing: 10.1093/jnci/djh184, 10.1016/j.fct.2020.111535. Both structured references were removed; added the NTP Report on Carcinogens BHA profile (NBK590883, confirmed via NCBI E-utilities), which the entry's own text already names. Receipt: scripts/audits/pending_items_20260926/research.md Q57."
           }
         ]
       },
@@ -16308,19 +16332,6 @@
         {
           "type": "doi",
           "authority": "OTHER",
-          "title": "Toxicity review",
-          "citation": "",
-          "url": "https://doi.org/10.1016/j.fct.2020.111535",
-          "published_date": null,
-          "evidence_grade": "B",
-          "supports_claims": [
-            "mechanism_of_harm",
-            "clinical_outcomes"
-          ]
-        },
-        {
-          "type": "doi",
-          "authority": "OTHER",
           "title": "Safety Assessment of Butylated Hydroxyanisole and Butylated Hydroxytoluene as Antioxidant Food Additives",
           "citation": "Williams GM, Iatropoulos MJ, Whysner J. Food Chem Toxicol. 1999;37(9-10):1027-1038. DOI: 10.1016/S0278-6915(99)00085-X",
           "url": "https://doi.org/10.1016/S0278-6915(99)00085-X",
@@ -16363,6 +16374,11 @@
             "date": "2026-03-28",
             "change": "Deep audit batch 10: CUI C0006507 verified. CAS 128-37-0 pre-verified. Populated dose_thresholds (JECFA ADI 0.3 mg/kg). Upgraded confidence medium->high (IARC Group 3, well-characterized). Fixed jurisdictional dates.",
             "reason": "harmful_additives_deep_audit_batch10"
+          },
+          {
+            "date": "2026-10-02",
+            "by": "claude-audit",
+            "change": "LEDGER Q57: DOI citations content-checked (Crossref + PubMed, 2026-10-02). Removed 1 that resolve to an unrelated paper or to nothing: 10.1016/j.fct.2020.111535. Receipt: scripts/audits/pending_items_20260926/research.md Q57."
           }
         ]
       },
@@ -16754,30 +16770,14 @@
       },
       "references_structured": [
         {
-          "type": "doi",
-          "authority": "OTHER",
-          "title": "Endocrine disruption",
-          "citation": "",
-          "url": "https://doi.org/10.1016/j.fct.2013.07.016",
-          "published_date": null,
+          "type": "monograph",
+          "authority": "EFSA",
+          "title": "EFSA Journal 2004;2(9):83 - Opinion of the AFC Panel related to para hydroxybenzoates (E 214-219)",
+          "citation": "EFSA Journal 2004;2(9):83 - Opinion of the AFC Panel related to para hydroxybenzoates (E 214-219)",
+          "url": "https://doi.org/10.2903/j.efsa.2004.83",
+          "published_date": "2004-09",
           "evidence_grade": "B",
-          "supports_claims": [
-            "mechanism_of_harm",
-            "clinical_outcomes"
-          ]
-        },
-        {
-          "type": "doi",
-          "authority": "OTHER",
-          "title": "Reproductive effects",
-          "citation": "",
-          "url": "https://doi.org/10.1093/humrep/det428",
-          "published_date": null,
-          "evidence_grade": "B",
-          "supports_claims": [
-            "mechanism_of_harm",
-            "clinical_outcomes"
-          ]
+          "supports_claims": []
         }
       ],
       "review": {
@@ -16811,6 +16811,11 @@
             "date": "2026-03-28",
             "change": "Deep audit final: CUI C0072238 verified. CAS 94-13-3 pre-verified. Populated dose_thresholds (EMA PDE 2 mg/kg). Added specific population warnings including EU ban reason. Fixed jurisdictional dates.",
             "reason": "harmful_additives_deep_audit_final"
+          },
+          {
+            "date": "2026-10-02",
+            "by": "claude-audit",
+            "change": "LEDGER Q57: DOI citations content-checked (Crossref + PubMed, 2026-10-02). Removed 2 that resolve to an unrelated paper or to nothing: 10.1016/j.fct.2013.07.016, 10.1093/humrep/det428. Both structured references were removed; added the EFSA 2004 parabens opinion (10.2903/j.efsa.2004.83, Crossref-verified), which the entry's own text already names. Receipt: scripts/audits/pending_items_20260926/research.md Q57."
           }
         ]
       },
@@ -16911,19 +16916,6 @@
         {
           "type": "doi",
           "authority": "OTHER",
-          "title": "Toxicity mechanisms",
-          "citation": "",
-          "url": "https://doi.org/10.1016/j.fct.2020.111535",
-          "published_date": null,
-          "evidence_grade": "B",
-          "supports_claims": [
-            "mechanism_of_harm",
-            "clinical_outcomes"
-          ]
-        },
-        {
-          "type": "doi",
-          "authority": "OTHER",
           "title": "Safety Assessment of Butylated Hydroxyanisole and Butylated Hydroxytoluene as Antioxidant Food Additives",
           "citation": "Williams GM, Iatropoulos MJ, Whysner J. Food Chem Toxicol. 1999;37(9-10):1027-1038. DOI: 10.1016/S0278-6915(99)00085-X",
           "url": "https://doi.org/10.1016/S0278-6915(99)00085-X",
@@ -16971,6 +16963,11 @@
             "date": "2026-07-04",
             "change": "Removed wrong-topic PMCID pointer from umbrella mechanism; TBHQ immunotoxicity citations now live only on canonical ADD_TBHQ.",
             "reason": "citation_integrity_cleanup"
+          },
+          {
+            "date": "2026-10-02",
+            "by": "claude-audit",
+            "change": "LEDGER Q57: DOI citations content-checked (Crossref + PubMed, 2026-10-02). Removed 1 that resolve to an unrelated paper or to nothing: 10.1016/j.fct.2020.111535. Receipt: scripts/audits/pending_items_20260926/research.md Q57."
           }
         ]
       },
@@ -17033,19 +17030,6 @@
         "match_mode": "alias_and_fuzzy"
       },
       "references_structured": [
-        {
-          "type": "doi",
-          "authority": "OTHER",
-          "title": "Genotoxicity studies",
-          "citation": "",
-          "url": "https://doi.org/10.1016/j.fct.2018.09.045",
-          "published_date": null,
-          "evidence_grade": "B",
-          "supports_claims": [
-            "mechanism_of_harm",
-            "clinical_outcomes"
-          ]
-        },
         {
           "type": "doi",
           "authority": "OTHER",
@@ -17140,6 +17124,11 @@
             "date": "2026-07-04",
             "change": "Added content-verified TBHQ Th2-skewing citation PMID 22250088 and experimental food-allergy citation PMID 40115160; vaccine-efficacy wording remains excluded because no indexed citation supports it.",
             "reason": "citation_integrity_cleanup"
+          },
+          {
+            "date": "2026-10-02",
+            "by": "claude-audit",
+            "change": "LEDGER Q57: DOI citations content-checked (Crossref + PubMed, 2026-10-02). Removed 1 that resolve to an unrelated paper or to nothing: 10.1016/j.fct.2018.09.045. Receipt: scripts/audits/pending_items_20260926/research.md Q57."
           }
         ]
       },
@@ -17448,7 +17437,6 @@
       ],
       "notes": "Sodium nitrite is a preservative and curing agent that prevents botulism in processed meats. Primary safety concern is formation of carcinogenic N-nitroso compounds during digestion or cooking. Infants are particularly susceptible to methemoglobinemia.",
       "scientific_references": [
-        "DOI: 10.1093/jnci/djq516 - Nitrite cancer risk",
         "PMID: 32188080 (Karwowska & Kononiuk 2020 Antioxidants) - Nitrates/Nitrites in Food: nitrosative stress and benefits"
       ],
       "last_updated": "2026-03-28",
@@ -17462,16 +17450,6 @@
         {
           "type": "systematic_review",
           "authority": "OTHER",
-          "title": "DOI: 10.1093/jnci/djq516 - Nitrite cancer risk",
-          "citation": "DOI: 10.1093/jnci/djq516 - Nitrite cancer risk",
-          "url": "https://doi.org/10.1093/jnci/djq516",
-          "published_date": null,
-          "evidence_grade": "B",
-          "supports_claims": []
-        },
-        {
-          "type": "systematic_review",
-          "authority": "OTHER",
           "title": "DOI: PMID:32188080 - Nitrosamine formation",
           "citation": "DOI: PMID:32188080 - Nitrosamine formation",
           "url": "https://pubmed.ncbi.nlm.nih.gov/32188080",
@@ -17482,9 +17460,9 @@
         {
           "type": "monograph",
           "authority": "EFSA",
-          "title": "EFSA Journal 2017;15(6):4787 - Re-evaluation of nitrites (E 249-250) and nitrates (E 251-252)",
-          "citation": "EFSA Journal 2017;15(6):4787 - Re-evaluation of nitrites (E 249-250) and nitrates (E 251-252)",
-          "url": "https://doi.org/10.2903/j.efsa.2017.4787",
+          "title": "EFSA Journal 2017;15(6):4786 - Re-evaluation of potassium nitrite (E 249) and sodium nitrite (E 250) as food additives",
+          "citation": "EFSA Journal 2017;15(6):4786 - Re-evaluation of potassium nitrite (E 249) and sodium nitrite (E 250) as food additives",
+          "url": "https://doi.org/10.2903/j.efsa.2017.4786",
           "published_date": null,
           "evidence_grade": "B",
           "supports_claims": []
@@ -17537,8 +17515,7 @@
           "effective_range": {
             "start": "1979-01-01",
             "end": null
-          },
-          "source_ref": "https://doi.org/10.1093/jnci/djq516"
+          }
         }
       ],
       "review": {
@@ -17601,6 +17578,11 @@
             "date": "2026-03-28",
             "change": "Deep audit final: CUI C0037532 verified. CAS 7632-00-0 pre-verified. GSRS cfr verified. Populated dose_thresholds (JECFA ADI 0.07 mg/kg). Fixed jurisdictional dates.",
             "reason": "harmful_additives_deep_audit_final"
+          },
+          {
+            "date": "2026-10-02",
+            "by": "claude-audit",
+            "change": "LEDGER Q57: DOI citations content-checked (Crossref + PubMed, 2026-10-02). Removed 1 that resolve to an unrelated paper or to nothing: 10.1093/jnci/djq516. Corrected mistyped DOI of the cited document: 10.2903/j.efsa.2017.4787 -> 10.2903/j.efsa.2017.4786. Citation text now names the nitrite opinion, 4786. Receipt: scripts/audits/pending_items_20260926/research.md Q57."
           }
         ]
       },
@@ -17660,7 +17642,6 @@
       ],
       "notes": "Sodium nitrate is used as a curing agent and is converted to nitrite by bacteria during processing and digestion. Same carcinogenic concern as nitrite but with delayed mechanism. Also found naturally in vegetables (celery, beets) where co-occurring antioxidants may mitigate nitrosamine formation.",
       "scientific_references": [
-        "DOI: 10.1093/jnci/djq516 - Nitrite cancer risk",
         "PMID: 32188080 (Karwowska & Kononiuk 2020 Antioxidants) - Nitrates/Nitrites in Food: nitrosative stress and benefits"
       ],
       "last_updated": "2026-03-28",
@@ -17729,8 +17710,7 @@
           "effective_range": {
             "start": "1979-01-01",
             "end": null
-          },
-          "source_ref": "https://doi.org/10.1093/jnci/djq516"
+          }
         }
       ],
       "review": {
@@ -17793,6 +17773,11 @@
             "date": "2026-03-28",
             "change": "Deep audit final: CUI C0074748 verified. CAS 7631-99-4 pre-verified. GSRS cfr verified. Populated dose_thresholds (JECFA ADI 3.7 mg/kg). Fixed jurisdictional dates.",
             "reason": "harmful_additives_deep_audit_final"
+          },
+          {
+            "date": "2026-10-02",
+            "by": "claude-audit",
+            "change": "LEDGER Q57: DOI citations content-checked (Crossref + PubMed, 2026-10-02). Removed 1 that resolve to an unrelated paper or to nothing: 10.1093/jnci/djq516. Receipt: scripts/audits/pending_items_20260926/research.md Q57."
           }
         ]
       },
@@ -17852,10 +17837,7 @@
         "Everyone - Limit intake to prevent metabolic issues"
       ],
       "notes": "A simple monosaccharide naturally present in fruit. Concern is with added/crystalline fructose as a sweetener in supplements, not fructose from whole fruit (where fiber slows absorption). GI ~19 for pure fructose.",
-      "scientific_references": [
-        "DOI: 10.1016/j.jhep.2013.11.014 - Fructose and NAFLD",
-        "DOI: 10.1210/jc.2012-2750 - Metabolic effects"
-      ],
+      "scientific_references": [],
       "last_updated": "2026-03-28",
       "match_rules": {
         "match_mode": "alias_and_fuzzy",
@@ -17971,6 +17953,11 @@
             "date": "2026-03-28",
             "change": "Deep audit final: CUI C0016745 verified. CAS 57-48-7 pre-verified. Added GSRS cfr 21 CFR 184.1857. Populated dose_thresholds. Upgraded confidence medium->high. Fixed jurisdictional dates.",
             "reason": "harmful_additives_deep_audit_final"
+          },
+          {
+            "date": "2026-10-02",
+            "by": "claude-audit",
+            "change": "LEDGER Q57: DOI citations content-checked (Crossref + PubMed, 2026-10-02). Removed 2 that resolve to an unrelated paper or to nothing: 10.1016/j.jhep.2013.11.014, 10.1210/jc.2012-2750. Receipt: scripts/audits/pending_items_20260926/research.md Q57."
           }
         ]
       },
@@ -18029,10 +18016,7 @@
         "Everyone - Limit intake to prevent metabolic issues"
       ],
       "notes": "An industrially processed sweetener made by enzymatic conversion of corn starch glucose to fructose. HFCS-55 (55% fructose) is the most common form in beverages. Concern in supplements is as a hidden sweetener in liquid formulations and gummies. Higher glycemic impact than pure fructose.",
-      "scientific_references": [
-        "DOI: 10.1016/j.jhep.2013.11.014 - Fructose and NAFLD",
-        "DOI: 10.1210/jc.2012-2750 - Metabolic effects"
-      ],
+      "scientific_references": [],
       "last_updated": "2026-03-28",
       "match_rules": {
         "match_mode": "alias_and_fuzzy",
@@ -18148,6 +18132,11 @@
             "date": "2026-03-28",
             "change": "Deep audit final: CUI C2981326 verified. GSRS cfr verified (21 CFR 184.1866). Populated dose_thresholds. Upgraded confidence medium->high. Fixed jurisdictional dates.",
             "reason": "harmful_additives_deep_audit_final"
+          },
+          {
+            "date": "2026-10-02",
+            "by": "claude-audit",
+            "change": "LEDGER Q57: DOI citations content-checked (Crossref + PubMed, 2026-10-02). Removed 2 that resolve to an unrelated paper or to nothing: 10.1016/j.jhep.2013.11.014, 10.1210/jc.2012-2750. Receipt: scripts/audits/pending_items_20260926/research.md Q57."
           }
         ]
       },
@@ -18205,8 +18194,6 @@
       ],
       "notes": "BPS is the most common BPA replacement in 'BPA-free' products. Research shows comparable endocrine-disrupting activity to BPA. Found as a packaging contaminant rather than an intentional ingredient. EFSA 2023 TDI reduction for BPA (20,000×) has increased scrutiny of all bisphenol analogs.",
       "scientific_references": [
-        "DOI: 10.1016/j.envint.2020.105914 - BPS and BPF toxicity",
-        "DOI: 10.1289/EHP2716 - Comparative analysis of BPA alternatives",
         "DOI: 10.2903/j.efsa.2023.6857 - EFSA 2023 BPA re-evaluation (TDI context)",
         "EFSA Journal 2023 — BPA re-evaluation: TDI reduced to 0.2 ng/kg bw/day (20,000-fold reduction)",
         "Commission Regulation (EU) 2024/3190 — Ban on BPA and other bisphenols in food contact materials, effective January 2025"
@@ -18219,26 +18206,6 @@
         "preferred_alias": "Bisphenol S"
       },
       "references_structured": [
-        {
-          "type": "systematic_review",
-          "authority": "OTHER",
-          "title": "DOI: 10.1016/j.envint.2020.105914 - BPS and BPF toxicity",
-          "citation": "DOI: 10.1016/j.envint.2020.105914 - BPS and BPF toxicity",
-          "url": "https://doi.org/10.1016/j.envint.2020.105914",
-          "published_date": null,
-          "evidence_grade": "B",
-          "supports_claims": []
-        },
-        {
-          "type": "systematic_review",
-          "authority": "OTHER",
-          "title": "DOI: 10.1289/EHP2716 - Comparative analysis of BPA alternatives",
-          "citation": "DOI: 10.1289/EHP2716 - Comparative analysis of BPA alternatives",
-          "url": "https://doi.org/10.1289/EHP2716",
-          "published_date": null,
-          "evidence_grade": "B",
-          "supports_claims": []
-        },
         {
           "type": "regulatory_action",
           "authority": "EFSA",
@@ -18287,8 +18254,7 @@
           "effective_range": {
             "start": "2025-01-20",
             "end": null
-          },
-          "source_ref": "https://doi.org/10.1016/j.envint.2020.105914"
+          }
         }
       ],
       "review": {
@@ -18352,6 +18318,11 @@
             "date": "2026-03-28",
             "change": "Deep audit final: CUI C2742616 verified. CAS 80-09-1 pre-verified. Entry well-documented with EU 2024/3190 ban. Fixed jurisdictional dates.",
             "reason": "harmful_additives_deep_audit_final"
+          },
+          {
+            "date": "2026-10-02",
+            "by": "claude-audit",
+            "change": "LEDGER Q57: DOI citations content-checked (Crossref + PubMed, 2026-10-02). Removed 2 that resolve to an unrelated paper or to nothing: 10.1016/j.envint.2020.105914, 10.1289/ehp2716. Receipt: scripts/audits/pending_items_20260926/research.md Q57."
           }
         ]
       },
@@ -18403,8 +18374,6 @@
       ],
       "notes": "BPF is used in epoxy resins and as a BPA alternative. May be more genotoxic than BPS. Found as a packaging contaminant. Less studied than BPA/BPS but emerging evidence suggests comparable endocrine disruption with additional genotoxicity concerns.",
       "scientific_references": [
-        "DOI: 10.1016/j.envint.2020.105914 - BPS and BPF toxicity",
-        "DOI: 10.1289/EHP2716 - Comparative analysis of BPA alternatives",
         "DOI: 10.2903/j.efsa.2023.6857 - EFSA 2023 BPA re-evaluation (TDI context)",
         "EFSA Journal 2023 — BPA re-evaluation: TDI reduced to 0.2 ng/kg bw/day (20,000-fold reduction)",
         "Commission Regulation (EU) 2024/3190 — Ban on BPA and other bisphenols in food contact materials, effective January 2025"
@@ -18417,26 +18386,6 @@
         "preferred_alias": "Bisphenol F"
       },
       "references_structured": [
-        {
-          "type": "systematic_review",
-          "authority": "OTHER",
-          "title": "DOI: 10.1016/j.envint.2020.105914 - BPS and BPF toxicity",
-          "citation": "DOI: 10.1016/j.envint.2020.105914 - BPS and BPF toxicity",
-          "url": "https://doi.org/10.1016/j.envint.2020.105914",
-          "published_date": null,
-          "evidence_grade": "B",
-          "supports_claims": []
-        },
-        {
-          "type": "systematic_review",
-          "authority": "OTHER",
-          "title": "DOI: 10.1289/EHP2716 - Comparative analysis of BPA alternatives",
-          "citation": "DOI: 10.1289/EHP2716 - Comparative analysis of BPA alternatives",
-          "url": "https://doi.org/10.1289/EHP2716",
-          "published_date": null,
-          "evidence_grade": "B",
-          "supports_claims": []
-        },
         {
           "type": "regulatory_action",
           "authority": "EFSA",
@@ -18485,8 +18434,7 @@
           "effective_range": {
             "start": "2025-01-20",
             "end": null
-          },
-          "source_ref": "https://doi.org/10.1016/j.envint.2020.105914"
+          }
         }
       ],
       "review": {
@@ -18550,6 +18498,11 @@
             "date": "2026-03-28",
             "change": "Deep audit final: CUI C4309505 verified. CAS 620-92-8 pre-verified. Entry well-documented with EU 2024/3190 ban. Fixed jurisdictional dates.",
             "reason": "harmful_additives_deep_audit_final"
+          },
+          {
+            "date": "2026-10-02",
+            "by": "claude-audit",
+            "change": "LEDGER Q57: DOI citations content-checked (Crossref + PubMed, 2026-10-02). Removed 2 that resolve to an unrelated paper or to nothing: 10.1016/j.envint.2020.105914, 10.1289/ehp2716. Receipt: scripts/audits/pending_items_20260926/research.md Q57."
           }
         ]
       },
