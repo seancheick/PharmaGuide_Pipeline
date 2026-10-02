@@ -41,3 +41,5 @@ def test_inulin_references_bound_preparation_population_and_null_outcomes():
     assert {'low_or_very_low_certainty_cardiometabolic_risk_factors', 'not_cardiovascular_event_reduction'} <= refs['38309832']
     assert 'General Mills' in e['notes']
     assert 'calcium absorption ↑' not in e['key_endpoints']
+    assert 'absorption, balance and serum concentrations are distinct outcomes' in e['notable_studies']
+    assert 'BENEO' in e['notes']
