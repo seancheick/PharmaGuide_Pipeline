@@ -869,8 +869,13 @@ def resolve_identity(
         canonical_before
         and structured_canonical
         and structured_canonical != canonical_before
-        and canonical_parent_of
-        and canonical_parent_of(structured_canonical, canonical_before)
+        and (
+            (canonical_parent_of and canonical_parent_of(structured_canonical, canonical_before))
+            # The cleaner's bounded source-form resolver already establishes
+            # preparation identity. A source organism is provenance, not a
+            # competing preparation; require the actual declared form too.
+            or row.get("cleaner_match_method") == "single_declared_nutrient_form"
+        )
         and any(
             _canonical(resolve_candidate(candidate)) == canonical_before
             for item in form_evidence

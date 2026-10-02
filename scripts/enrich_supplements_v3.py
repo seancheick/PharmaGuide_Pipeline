@@ -2210,6 +2210,15 @@ class SupplementEnricherV3:
             # fallback in _botanical_source_identity back to the botanical the
             # override corrected (Barley -> barley_unspecified), vetoing it.
             return False
+        if (
+            ingredient.get("cleaner_match_method") == "single_declared_nutrient_form"
+            and ingredient.get("canonical_source_db") == "ingredient_quality_map"
+            and ingredient.get("canonical_id") == match_result.get("canonical_id")
+            and (self.databases.get("ingredient_quality_map", {}).get(ingredient.get("canonical_id")) or {}).get("category") == "fibers"
+        ):
+            # The cleaner establishes the declared fiber preparation; the
+            # retained botanical is its source, not an inferred marker.
+            return False
         source_identity = self._botanical_source_identity(ingredient)
         if not source_identity:
             # An invalid declared botanical record is not permission to score

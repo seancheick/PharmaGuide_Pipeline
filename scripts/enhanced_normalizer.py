@@ -3484,36 +3484,57 @@ class EnhancedDSLDNormalizer:
                     return hit
         return (None, None)
 
-    def _single_foodstate_nutrient_form_identity(
+    def _single_declared_source_form_identity(
         self, ingredient: Dict[str, Any]
     ) -> Optional[Tuple[str, str, str]]:
-        """Resolve a nutrient whose printed row name is a FoodState yeast carrier.
+        """Resolve an explicitly declared preparation while retaining its source.
 
-        MegaFood reuses ``FoodState S. cerevisiae`` for several nutrients and
-        declares the actual nutrient as one structured vitamin/mineral form.
-        A global carrier alias would collapse those different nutrients, so
-        only one explicitly typed, IQM-backed form may own the identity.
+        FoodState carriers name one nutrient; botanical source rows can name
+        one fiber preparation. Partial or mixed preparations do not own the
+        source row's whole amount. This is active-row identity, not child-dose
+        inheritance; raw text and all source forms remain attached.
         """
         carrier_name = re.sub(
-            r"[^a-z0-9]+",
-            " ",
-            str(ingredient.get("name") or "").casefold(),
+            r"[^a-z0-9]+", " ", str(ingredient.get("name") or "").casefold(),
         ).strip()
-        if carrier_name != "foodstate s cerevisiae":
+        raw_forms = ingredient.get("forms") or []
+        if any(not isinstance(form, dict) for form in raw_forms):
             return None
-        forms = [
-            form
-            for form in (ingredient.get("forms") or [])
-            if isinstance(form, dict)
-        ]
-        if len(forms) != 1:
-            return None
-        form = forms[0]
-        if str(form.get("category") or "").strip().casefold() not in {
-            "vitamin",
-            "mineral",
-        }:
-            return None
+        forms = list(raw_forms)
+        if carrier_name == "foodstate s cerevisiae":
+            if len(forms) != 1:
+                return None
+            form = forms[0]
+            if str(form.get("category") or "").strip().casefold() not in {"vitamin", "mineral"}:
+                return None
+        else:
+            # A declared fiber preparation can have botanical source descriptors
+            # beside it. Keep those descriptors on the same row; neither a
+            # botanical alone nor a partial/multiple preparation establishes
+            # the amount of an isolated fiber.
+            if str(ingredient.get("category") or "").casefold() != "botanical":
+                return None
+            preparations = [form for form in forms
+                            if str(form.get("category") or "").casefold() == "fiber"]
+            if len(preparations) != 1 or any(
+                str(form.get("category") or "").casefold() not in
+                {"fiber", "botanical", "plant part", "source material"}
+                for form in forms
+            ):
+                return None
+            form = preparations[0]
+            if (
+                form.get("percent") not in (None, 100)
+                or str(form.get("prefix") or "").strip().casefold() not in {"", "as"}
+                or form.get("quantity")
+                or ingredient.get("nestedRows")
+                or re.search(r"%|standardiz|contains?|provides?|yields?", " ".join(
+                    str(item.get(key) or "")
+                    for item in [ingredient, form]
+                    for key in ("name", "description", "notes")
+                ), re.I)
+            ):
+                return None
         form_name = str(form.get("name") or "").strip()
         if not form_name:
             return None
@@ -3528,6 +3549,8 @@ class EnhancedDSLDNormalizer:
             standard_name, raw_name=form_name
         )
         if not canonical_id or source_db != "ingredient_quality_map":
+            return None
+        if carrier_name != "foodstate s cerevisiae" and (self.ingredient_map.get(canonical_id) or {}).get("category") != "fibers":
             return None
         return standard_name, canonical_id, source_db
 
@@ -5442,7 +5465,20 @@ class EnhancedDSLDNormalizer:
             corrected_unit = entry.get("corrected_quantity_unit")
             changed = False
 
-            if row.get("unit") == raw_unit:
+            def matches_value(value):
+                expected = entry.get("raw_quantity_value")
+                if expected is None:
+                    return True
+                # Value corrections run first; the unit still belongs only to
+                # this exact reviewed raw/value pair, never another column.
+                if row.get("_pre_correction_quantity_value") == expected:
+                    expected = entry.get("corrected_quantity_value", expected)
+                try:
+                    return float(value) == float(expected)
+                except (TypeError, ValueError):
+                    return False
+
+            if row.get("unit") == raw_unit and matches_value(row.get("quantity")):
                 row["unit"] = corrected_unit
                 changed = True
 
@@ -5455,7 +5491,7 @@ class EnhancedDSLDNormalizer:
             for quantity in quantities:
                 if not isinstance(quantity, dict):
                     continue
-                if quantity.get("unit") == raw_unit:
+                if quantity.get("unit") == raw_unit and matches_value(quantity.get("quantity")):
                     quantity["unit"] = corrected_unit
                     changed = True
 
@@ -7282,7 +7318,7 @@ class EnhancedDSLDNormalizer:
         unii_canonical_id = None
         unii_canonical_source_db = None
         foodstate_nutrient_identity = (
-            self._single_foodstate_nutrient_form_identity(ing)
+            self._single_declared_source_form_identity(ing)
             if is_active
             else None
         )
@@ -11560,6 +11596,14 @@ class EnhancedDSLDNormalizer:
                     )
                     # Fall through to subsequent checks; do NOT exclude here.
                 elif ingredient_group_lower in _PANEL_CARRIER_GROUPS:
+                    # A typed, exact registered fiber preparation is not a
+                    # carrier merely because DSLD supplies a generic sugar
+                    # group. Preserve its own declared mass; never assign it
+                    # to its form children.
+                    identity = self._canonical_id_by_std_name.get(name.casefold().strip())
+                    parent = self.ingredient_map.get(identity[0], {}) if identity and identity[1] == "ingredient_quality_map" else {}
+                    if has_forms and parent.get("category") == "fibers":
+                        return False
                     logger.debug(
                         "D1.3: ingredientGroup %r is a panel-carrier — "
                         "filtering %s (cat=%s)",

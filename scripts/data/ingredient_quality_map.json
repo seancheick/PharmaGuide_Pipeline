@@ -27522,18 +27522,8 @@
         },
         "notes": "Standardized to 25% A-type proanthocyanidins (PACs). Polymeric PACs are too large to cross intestinal epithelium and have <1% systemic bioavailability as intact molecules. However, colonic microbiota degrade PACs into phenolic acids (hippuric acid, phenylacetic acid, valerolactones) which ARE absorbed — 6.2% urinary recovery of total phenolic metabolites (PMID:25172705). UTI prevention likely works through these urinary metabolites rather than intact PAC anti-adhesion (PMID:12058985). 36 mg PACs/day is the established effective dose. A-type PACs are unique to cranberry.",
         "aliases": [
-          "cranberry extract",
           "25% proanthocyanidins",
-          "cranberry PACs",
-          "vaccinium macrocarpon",
-          "standardized cranberry",
-          "cranberry proanthocyanidins",
-          "UTI support cranberry",
-          "cranberry PAC extract",
-          "high-potency cranberry",
-          "Vaccinium macrocarpon Fruit Extract",
-          "proanthocyanidin",
-          "proanthocyanidins"
+          "standardized to contain 25% proanthocyanidins"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -27545,6 +27535,10 @@
         "audit_trail": [
           "D3.4 (2026-04-20): PAC/proanthocyanidin aliases added — key cranberry active.",
           "D3.4 (2026-04-20) revised: generic PAC/proanthocyanidin aliases already live under the dedicated 'pac' IQM canonical — removed from cranberry form to avoid cross-canonical collision. Cranberry-specific PAC context handled via raw_source_text at enricher matching time."
+        ],
+        "source_form_aliases": [
+          "25% proanthocyanidins",
+          "standardized to contain 25% proanthocyanidins"
         ]
       },
       "whole cranberry powder": {
@@ -27619,7 +27613,16 @@
           "cranberry",
           "vitacran",
           "Cran-Max",
-          "Cran-Max Cranberry concentrate"
+          "Cran-Max Cranberry concentrate",
+          "cranberry extract",
+          "cranberry PACs",
+          "vaccinium macrocarpon",
+          "standardized cranberry",
+          "cranberry proanthocyanidins",
+          "UTI support cranberry",
+          "cranberry PAC extract",
+          "high-potency cranberry",
+          "Vaccinium macrocarpon Fruit Extract"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
