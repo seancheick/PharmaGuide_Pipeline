@@ -16188,7 +16188,8 @@ class SupplementEnricherV3:
         # Cleaner may emit a nested tree or flattened rows with the same source
         # paths. Prove allocation ownership from that ledger, not from which
         # representation happened to reach the CFU collector. Empty subheaders
-        # keep the parent unresolved; a sibling prebiotic never becomes a strain.
+        # keep the parent unresolved; a declared total is metadata, not an
+        # unnamed strain container. A sibling prebiotic never becomes a strain.
         source_rows = self._flatten_active_ingredients_for_analysis(active_ingredients)
         strain_allocation_owner_refs = set()
         for owner in source_rows:
@@ -16199,7 +16200,9 @@ class SupplementEnricherV3:
             if descendants:
                 members = [r for r in descendants if not _is_blend_header_total(r)]
                 incomplete = any(
-                    _is_blend_header_total(r) and not any(
+                    _is_blend_header_total(r)
+                    and r.get("dose_role") != "declared_total"
+                    and not any(
                         _row_path(child).startswith(_row_path(r) + ".nestedRows[")
                         for child in descendants)
                     for r in descendants)

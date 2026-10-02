@@ -1055,6 +1055,7 @@ def test_raw_total_cultures_is_metadata_not_nutrition_or_a_strain(enricher):
     data = enriched['probiotic_data']
     assert data['total_cfu'] == 30e9
     assert data['guarantee_type'] == 'at_expiration'
+    assert 'ingredientRows[1]' in data['strain_allocation_owner_refs']
     assert not any('Total Probiotic Cultures' in b.get('strains', []) for b in data['probiotic_blends'])
     assert not any(row.get('name') == 'Total Probiotic Cultures' for row in get_evidence_subject_rows(enriched))
 
@@ -1111,3 +1112,22 @@ def test_three_level_headers_count_members_once(enricher):
     data = enricher._collect_probiotic_data(product)
     assert data['total_cfu'] == 10e9
     assert data['guarantee_type'] == 'at_expiration'
+
+
+@pytest.mark.parametrize('total_count,declared_total,expected_owner', [
+    (0, True, True), (10, True, True), (0, False, False),
+])
+def test_terminal_total_metadata_does_not_make_strain_allocation_incomplete(enricher, total_count, declared_total, expected_owner):
+    product = _count_guarantee_product([
+        ('Probiotic Blend', 0, ''), ('Total Probiotic Cultures', total_count, ''),
+        ('Lactobacillus rhamnosus GG', 0, ''),
+    ])
+    parent, total, strain = product['activeIngredients']
+    for row in (parent, total):
+        row.update(cleaner_row_role='blend_header_total', score_eligible_by_cleaner=False)
+    total['raw_source_path'] = 'ingredientRows[0].nestedRows[1]'
+    strain['raw_source_path'] = 'ingredientRows[0].nestedRows[0]'
+    if declared_total:
+        total['dose_role'] = 'declared_total'
+    data = enricher._collect_probiotic_data(product)
+    assert ('ingredientRows[0]' in data['strain_allocation_owner_refs']) is expected_owner
