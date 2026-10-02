@@ -6,7 +6,7 @@ def field_help(field_name: str) -> str:
     dictionary = {
         "bio_score": "Bioavailability score (0-100%) based on ingredient form and clinical data.",
         "grade": "Letter grade based on the Final Score (A+, A, B, C, D, F).",
-        "verdict": "Overall product safety verdict (SAFE, CAUTION, POOR, UNSAFE, BLOCKED).",
+        "verdict": "Legacy disposition (SAFE, CAUTION, UNSAFE, BLOCKED; POOR only in old catalogs). Quality is quality_tier.",
         "score_100_equivalent": "Final score normalized to a 0-100 scale.",
         "mapped_coverage": "The percentage of product ingredients mapped to our internal clinical database.",
         "has_banned_substance": "Indicates if any ingredient is on a banned or recalled substance list.",

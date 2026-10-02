@@ -140,8 +140,8 @@ class SafetyResult:
     Attributes:
         verdict: 'BLOCKED' | 'UNSAFE' | 'CAUTION' | None. None means
             no safety trigger fired; the final verdict will be resolved
-            later by the score-band rules (POOR / SAFE) in the scoring
-            module.
+            later by the scoring module (SAFE; quality is quality_tier,
+            never a verdict).
         short_circuits_scoring: True when verdict is BLOCKED or UNSAFE.
             Caller must skip the scoring math entirely and emit the
             v4 score with score=None. The v4 `anchored` flag is

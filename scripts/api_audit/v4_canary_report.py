@@ -292,12 +292,6 @@ def summarize_records(rows: List[Dict[str, Any]]) -> Dict[str, Any]:
         omega_review_reasons.append("rank_order_drift")
     if any((_num(row.get("score_delta_vs_v3")) or 0.0) <= OMEGA_REVIEW_SCORE_DROP for row in omega_rows):
         omega_review_reasons.append("large_score_drop")
-    if any(
-        str(row.get("v3_shipped_verdict") or "").upper() == "SAFE"
-        and str(row.get("v4_verdict") or "").upper() == "POOR"
-        for row in omega_rows
-    ):
-        omega_review_reasons.append("safe_to_poor_transition")
 
     if len(omega_rows) < 2:
         omega_decision = "insufficient_omega_data"

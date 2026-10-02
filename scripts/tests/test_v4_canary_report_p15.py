@@ -156,42 +156,6 @@ def test_summarize_flags_omega_review_on_large_score_drop_even_when_rank_is_stab
     assert "large_score_drop" in summary["omega"]["review_reasons"]
 
 
-def test_summarize_flags_omega_review_on_safe_to_poor_transition() -> None:
-    from api_audit.v4_canary_report import summarize_records
-
-    rows = [
-        {
-            "dsld_id": "omega-a",
-            "primary_class": "fish_oil",
-            "v3_shipped_score": 80,
-            "v3_shipped_verdict": "SAFE",
-            "v4_score": 39,
-            "v4_verdict": "POOR",
-            "expected_rank_in_group": 1,
-            "actual_rank_in_group": 1,
-            "rank_delta": 0,
-            "score_delta_vs_v3": -41,
-        },
-        {
-            "dsld_id": "omega-b",
-            "primary_class": "fish_oil",
-            "v3_shipped_score": 70,
-            "v3_shipped_verdict": "SAFE",
-            "v4_score": 65,
-            "v4_verdict": "SAFE",
-            "expected_rank_in_group": 2,
-            "actual_rank_in_group": 2,
-            "rank_delta": 0,
-            "score_delta_vs_v3": -5,
-        },
-    ]
-
-    summary = summarize_records(rows)
-
-    assert summary["omega"]["decision"] == "review_omega_module"
-    assert "safe_to_poor_transition" in summary["omega"]["review_reasons"]
-
-
 def test_mark_missing_canary_when_no_enriched_product_exists() -> None:
     from api_audit.v4_canary_report import score_canaries
 

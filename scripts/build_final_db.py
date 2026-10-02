@@ -1666,7 +1666,7 @@ def validate_export_contract(enriched: Dict, scored: Dict) -> List[str]:
     Includes the Batch 3 data-integrity gate:
 
     Products SHIP (verdict appears in app, with reason) for verdicts:
-        SAFE, CAUTION, POOR, BLOCKED, UNSAFE
+        SAFE, CAUTION, BLOCKED, UNSAFE (POOR only in old catalogs)
 
     Products are QUARANTINED (excluded_by_gate; never reach Flutter) when:
       - verdict == NOT_SCORED  (mapping/dosage gate failure upstream)
