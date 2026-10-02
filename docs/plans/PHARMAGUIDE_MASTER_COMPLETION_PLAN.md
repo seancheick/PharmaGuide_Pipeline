@@ -6,6 +6,8 @@ A checked implementation box means that specific deliverable is implemented, mea
 
 ## October 2 — probiotic/prebiotic ranking corrections (Q59)
 
+**Closed for input-integrity remediation and bounded validation.** This closure does not establish completed clinical coverage, calibration, market-wide ranking eligibility or release readiness.
+
 - [x] Reproduce the ranking audit against main `77cb8993`, inspect raw labels and official label images, and classify the findings before changing owners.
 - [x] Preserve PreticX/XOS as the declared preparation and parent amount; remove the erroneous generic complex alias. True blends and nutrition carriers remain distinct.
 - [x] Resolve Nutricost's single declared chicory/inulin preparation through the existing cleaner and identity contract. Preserve source membership and forms; reject partial preparations, unrelated botanical companions and nested blends.
@@ -32,7 +34,18 @@ Representative corrections: Nutricost inulin71.5→87.1; Pure capsules38.0→61.
 
 Receipts: `/Users/seancheick/pg_quality/pro_prebiotic_rank_audit_20261002/`: final `*_complete.jsonl` plus metadata, four `*delta_complete.json` comparisons, official294036/306369 label images, canonical ConsumerLab receipt and `clinical_calibration_packet.md`. Earlier draft holds and near-final measurements are superseded.
 
-**Next:** finish per-entry XOS/PreticX and standalone/combination phage applicability, then review Seed/IS-2 outcome grading and PHGG route normalization alongside the existing calibration work. Seed's14.5 versus IS-2's16 comes from recorded outcome grading under current policy, not a funding deduction; PHGG's raw18/reference18 becomes public20. No new benchmark, positive clinical determination or magnitude was silently added. Continue D26 equivalent Dose ownership, D24/omega decisions, Q53 clinical coverage and remaining role/serving cases; then one user-run fresh Clean corpus, exact candidate manifest/approval and release verification. Existing corpus outputs are stale for these source corrections.
+**Next clinical-review sequence — no rank-fitting or numerical tuning:**
+
+1. [ ] PHGG/Sunfiber: exact preparation and population/outcome applicability, clinical certainty/replication and why the current raw18/reference18 becomes Evidence20/20. Studied amount matching is assessed by existing Dose, not charged again in Evidence.
+2. [ ] Inulin/FOS: exact preparation/source mapping and applicability for Nutricost, Jarrow and BulkSupplements; audit the current15.6 Evidence credit against verified interventions and endpoints.
+3. [ ] XOS/PreticX: preparation versus active-equivalent identity, generic versus branded evidence, clinically meaningful versus microbiome endpoints and existing Dose benchmark wiring.
+4. [ ] GOS: inspect GNC's low-end comparator and its actual preparation/intervention; unresolved research is not proof of no efficacy.
+5. [ ] PreforPro/bacteriophage: exact marketed intervention, standalone versus combination attribution, patient outcomes versus microbiome endpoints and studied-dose applicability.
+6. [ ] Probiotic strain/formula families: exact strains versus species records, blend/formula applicability, population/outcomes, replication/independent confirmation and sponsorship provenance. Total CFU never becomes a per-strain dose. Include Seed and the currently credited IS-2/LactoSpore families.
+
+Then compare certainty/applicability principles across PHGG20, inulin15.6, Seed14.5, PureXOS0 and Thornephage0 before approved Dose policy/calibration changes. Review funding descriptively under existing policy; do not invent sponsorship deductions. Keep Nutricost87.1 and all Q59 scores as the frozen baseline until a verified clinical finding or approved policy justifies a change.
+
+Freeze Q59 normalization/identity/routing work unless another defect is reproduced. This is not a prohibition on correcting already tracked D26 ownership defects or release-critical bugs; those need their existing fail-first/measurement gates. Seed's14.5 versus IS-2's16 comes from recorded outcome grading under current policy, not a funding deduction; PHGG's raw18/reference18 becomes public20. No new benchmark, positive clinical determination or magnitude was silently added. Continue D26 equivalent Dose ownership, D24/omega decisions, Q53 clinical coverage and remaining role/serving cases; then one user-run fresh Clean corpus, exact candidate manifest/approval and release verification. Existing corpus outputs are stale for these source corrections.
 
 ## Execution discipline — October 2
 
