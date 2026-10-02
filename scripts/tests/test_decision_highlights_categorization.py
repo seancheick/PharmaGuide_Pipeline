@@ -48,6 +48,8 @@ def _base_scored(evidence: float = 0.0, score_100: float = 50.0, verdict: str = 
         "quality_pillars_v4": {"evidence": {"score": evidence, "max": 20}},
         "score_100_equivalent": score_100,
         "verdict": verdict,
+        "product_safety_status": "no_known_catalog_concern",
+        "quality_assessment_status": "complete",
     }
 
 
@@ -228,3 +230,40 @@ def test_validator_handles_list_shape_positive() -> None:
     }
     with pytest.raises(ValueError):
         _validate_decision_highlights(dh_bad, "BAD-LIST")
+
+
+def test_highlights_ignore_legacy_quality_and_readiness_verdicts() -> None:
+    results = []
+    for verdict in ("SAFE", "POOR", "CAUTION"):
+        scored = _base_scored(verdict=verdict)
+        scored.update(product_safety_status="no_known_catalog_concern",
+                      quality_assessment_status="complete", quality_tier="Poor")
+        results.append(build_decision_highlights(_base_enriched(), scored, None))
+    assert results[0] == results[1] == results[2]
+
+
+def test_highlights_use_typed_safety_and_assessment_independently() -> None:
+    scored = _base_scored(verdict="SAFE")
+    scored.update(product_safety_status="caution", quality_assessment_status="complete")
+    assert "safety" in build_decision_highlights(_base_enriched(), scored, None)["caution"].lower()
+    scored.update(product_safety_status="no_known_catalog_concern", quality_assessment_status="partial")
+    copy = build_decision_highlights(_base_enriched(), scored, None)["caution"]
+    assert "assessment" in copy.lower() and "incomplete" in copy.lower()
+    assert "safety" not in copy.lower()
+
+
+def test_highlights_missing_safety_never_claims_no_caution() -> None:
+    scored = _base_scored()
+    for status in (None, "not_assessed", "unknown_status"):
+        scored["product_safety_status"] = status
+        assert build_decision_highlights(_base_enriched(), scored, None)["caution"] == "Safety assessment is incomplete."
+
+
+def test_highlights_keep_additive_and_danger_reasons() -> None:
+    enriched = _base_enriched()
+    enriched["harmful_additives"] = [{"name": "Titanium dioxide"}]
+    scored = _base_scored(verdict="SAFE")
+    scored["product_safety_status"] = "blocked"
+    result = build_decision_highlights(enriched, scored, "recalled_ingredient")
+    assert result["caution"] == "Includes additives with known safety concerns."
+    assert result["danger"] == ["Contains a recalled ingredient match."]

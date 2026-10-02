@@ -1593,8 +1593,8 @@ def _active_row_allowed_for_primary_export(
     # An "available" but EMPTY contract identifies no strict primary active (every
     # disclosed active was recognized-but-non-scorable / unmapped / additive, e.g.
     # a single-botanical BulkSupplements SKU). It provides no basis to filter, so a
-    # real LABEL row must still render — the product ships as opaque/POOR rather
-    # than being dropped to a 0-active blob the reconciliation gate then quarantines
+    # real LABEL row must still render, retaining its independent quality rating
+    # rather than a 0-active blob the reconciliation gate then quarantines
     # (see build_detail_blob gate intent: opaque actives SHIP). Nested blend
     # children fall through to the safety-signal check below so they never surface
     # as top-level actives unless they carry an explicit safety signal.
@@ -1979,7 +1979,7 @@ def validate_export_contract(enriched: Dict, scored: Dict) -> List[str]:
             "quarantine."
         )
     # NOTE: a product whose actives carry no canonical identity is OPAQUE, not
-    # unscoreable. The scorer rates it POOR/CAUTION via the transparency penalty,
+    # unscoreable. The transparency penalty informs its independent quality rating,
     # and that low rating IS the consumer-relevant signal ("we can't verify what's
     # in this product"). So it SHIPS (with a `proprietary_blend` or
     # `unverified_ingredient` flag set in build_detail_blob — split by why the
@@ -2826,14 +2826,14 @@ def build_decision_highlights(
     Four buckets (Sprint E1.1.1):
 
       * ``positive`` (str)      — green hero string, benign signal only.
-      * ``caution`` (str)       — yellow caution, quality-level signals.
-      * ``danger`` (list[str])  — red banner, safety blocking-reason
-        strings. Rendered by Flutter with red tint.
+      * ``caution`` (str)       — caution or incomplete-assessment copy.
+      * ``danger`` (list[str])  — safety blocking-reason strings.
+        Exported separately; the current Flutter app does not render this bucket.
       * ``trust`` (str)         — trust/certification signal.
 
     Blocking-reason strings (banned / recalled / high-risk) route into
     ``danger`` exclusively; ``caution`` then flows unchanged for the
-    non-blocking signals (additives, allergens, verdict).
+    non-blocking signals (additives, typed safety, assessment readiness).
     """
     from cert_resolver import normalize_program
     from scoring_v4.cert_evidence import claimed_programs, verified_programs
@@ -2844,7 +2844,8 @@ def build_decision_highlights(
         name for name in claimed_programs(enriched)
         if normalize_program(name) not in verified_keys
     ]
-    verdict = safe_str(scored.get("verdict")).upper()
+    safety_status = safe_str(scored.get("product_safety_status")).lower()
+    assessment_status = safe_str(scored.get("quality_assessment_status")).lower()
     # V4 cutover: the shipped /100 score (overlay sets score_100_equivalent
     # from quality_score_v4_100); 75/100 mirrors the retired V3 score_80>=60.
     # Thresholds read the whole number the app shows, not the one-decimal total.
@@ -2872,8 +2873,12 @@ def build_decision_highlights(
 
     if safe_list(enriched.get("harmful_additives")):
         caution = "Includes additives with known safety concerns."
-    elif verdict in {"CAUTION", "POOR", "UNSAFE", "BLOCKED"}:
-        caution = "Safety or quality signals lower confidence in this product."
+    elif safety_status in {"caution", "unsafe", "blocked"}:
+        caution = "Catalog safety concerns require attention."
+    elif safety_status != "no_known_catalog_concern":
+        caution = "Safety assessment is incomplete."
+    elif assessment_status != "complete":
+        caution = "Quality assessment is incomplete."
     else:
         caution = "No major caution signal surfaced in the quick review."
 
@@ -8034,8 +8039,8 @@ def build_detail_blob(
         blob["product_status"] = None
 
     # Opaque-product flags: split by WHY the active is unidentifiable so Flutter
-    # shows the correct consumer message. The product ships with its POOR/CAUTION
-    # verdict (the transparency penalty caps opaque labels low) instead of being
+    # shows the correct consumer message. The product retains its quality rating
+    # (the transparency penalty caps opaque labels low) instead of being
     # silently quarantined; the flag tells the app which copy to render.
     #
     #   • proprietary_blend     — a disclosed blend with undisclosed per-ingredient
