@@ -17361,11 +17361,13 @@ class SupplementEnricherV3:
     # serving", "in each capsule"); "in capsules" is the dosage form. "daily"
     # is a basis only when it closes the count's clause ("15 Billion CFU
     # Daily"), never as an adjective ("for daily digestive support").
+    # Capture unrecognized explicit units too: only the existing serving-unit
+    # owner can approve equivalence; an unknown basis must not become absent.
     _STATEMENT_CFU_BASIS = re.compile(
         r"\b(?:(?:per|each|every|in\s+(?:each|every)|in(?:\s+(?:a|an))?"
         r"(?=\s+(?:\d|(?:one|two|three|four|five|six|seven|eight|nine|ten)\b)))\s+"
         r"(?:(\d+(?:\.\d+)?|one|two|three|four|five|six|seven|eight|nine|ten)[\s-]*)?"
-        r"(capsule|cap|tablet|softgel|gumm(?:y|ie)|chewable|lozenge|packet|stick|scoop|serving|day)s?\b"
+        r"(capsule|cap|tablet|softgel|gumm(?:y|ie)|chewable|lozenge|packet|stick|scoop|serving|day|[a-z]+)s?\b"
         r"|(daily)\s*(?:$|[,)]))",
         re.IGNORECASE,
     )

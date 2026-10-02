@@ -1355,3 +1355,16 @@ def test_statement_guarantee_requires_the_same_per_serving_count(enricher, state
         'minDailyServings': 2, 'maxDailyServings': 2})
     enriched = enricher.enrich_product(product)[0]
     assert enriched['probiotic_data']['guarantee_type'] == expected
+
+
+@pytest.mark.parametrize('unit,statement', [
+    ('mL', '15 billion CFU per 3 mL'),
+    ('Teaspoon(s)', 'Per 3 teaspoons: 15 billion CFU'),
+    ('mL', '15 billion CFU per 3 mysteryunits'),
+])
+def test_explicit_liquid_or_unknown_basis_cannot_inflate_panel_count(enricher, unit, statement):
+    product = _serving_basis_product(5, '', statement, {
+        'minQuantity': 1, 'maxQuantity': 1, 'unit': unit,
+        'minDailyServings': 1, 'maxDailyServings': 1})
+    enriched = enricher.enrich_product(product)[0]
+    assert enriched['probiotic_data']['total_cfu'] == 5e9
