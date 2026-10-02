@@ -34,7 +34,10 @@ Curated data is medical-grade: one corrupt entry discredits the whole product.
 - **Keep `_metadata` accurate.** `data_batch.save` recounts `total_entries` and the IQM statistics
   and bumps `last_updated`; `schema_version` and file-specific counts are yours. Never hand-copy
   those values into docs. Data files are canonical JSON (`test_data_batch.py` pins it).
-- **Tests, once per batch:** `scripts/test.sh fast -k <topic>` after the batch is applied, fix every
-  failure, then `scripts/test.sh fast` before the commit. Report the output.
+- **Tests:** follow the targeted fix loop in `AGENTS.md`. Run explicit changed-entry/owner test
+  files or nodes while iterating; verify every changed clinical entry and fix each failure class.
+  Atomic commits do not require separate whole suites. The integrator owns the combined fast
+  checkpoint after the completed batch's verification, focused tests and measurements. Report
+  the tested source and results; entry verification is never replaced by a green suite.
 - A PreToolUse hook (`~/.claude/hooks/pharmaguide-data-guard.js`) prints this checklist the first
   time a session edits each data file. Treat it as a checklist, not noise.

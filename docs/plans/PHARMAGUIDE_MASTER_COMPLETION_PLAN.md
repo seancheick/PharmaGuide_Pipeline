@@ -4,6 +4,24 @@ Updated October 2, 2026. Pipeline integrator: Codex. Original scope: Sean's acce
 
 A checked implementation box means that specific deliverable is implemented, measured and independently reviewed where required. It does **not** mean the whole phase is finished or the catalog is released. Repository code pushed to GitHub and catalog publication are separate events.
 
+## Execution discipline — October 2
+
+- [x] Align shared, scoring-change, clinical-data, curated-data and FDA-sync instructions around surgical iteration:
+  failing node → defect-class edge cases → relevant owner/consumer checks → bounded measurement
+  and required review → one integrator-owned combined checkpoint. A checkpoint failure returns
+  to targeted fixes; it does not trigger a whole-suite run after each repair.
+- [x] Require each agent to resume from the current handoff and relevant plan/LEDGER items,
+  record owned files and evidence, and check off only the deliverable actually demonstrated.
+
+Owner: `AGENTS.md::Tests` defines the shared execution rule; existing scoring/clinical
+instructions reference it. This plan remains the readable checklist and LEDGER the execution
+register. Evidence: reviewed the conflicting keyword-only and per-commit test instructions,
+aligned their text, and checked the documentation diff. Will NOT create: another runner,
+profile manifest, tracker, scoring owner or release shortcut.
+
+These documentation changes do not validate automated scheduling or CI, complete a scoring
+phase, or replace the remaining corpus/release gates.
+
 ## Current checkpoint
 
 Latest validated pipeline source is `b7eeb178`: the October 2 post-pipeline

@@ -20,26 +20,54 @@ in `docs/adr/`, ownership in `scripts/contracts/source_of_truth_matrix.json`.
 Raw `python3 -m pytest` picks macOS Python 3.9 and runs every heavy test (~1 h).
 
 ```bash
-scripts/test.sh fast -k <kw>   # iterating, or once per applied data batch: the topic you touched
-scripts/test.sh fast           # checkpoint: completed batch or shared-code change
+scripts/test.sh fast scripts/tests/test_<topic>.py::test_<case>  # one failure / one edit
+scripts/test.sh fast scripts/tests/test_<topic>.py -k <kw>      # affected defect class
+scripts/test.sh fast           # integrator's final combined-batch checkpoint
 scripts/test.sh release        # release gates before a ship
 scripts/test.sh full           # post-pipeline backstop, never alongside a pipeline run
 ```
 
-Pick the rung by what changed and say which rung ran. Docs/config-only changes need no pytest.
+Pick the rung by what changed and say which rung ran. Documentation-only changes need no pytest;
+scoring, clinical-data and runtime configuration changes require their affected checks.
 "Done" without output from the rung that covers the change is not done.
 
-**Fix loop: the cheapest check that can fail runs first; the corpus runs once, last.**
+**Iteration is targeted; broad validation belongs to a finished batch, not an edit or commit.**
+Never run the whole fast/full/release suite after one edit or one failed test. A bare
+`fast -k <kw>` still collects the broad suite: name the test file or node first. Atomic commits
+do not each require a broad checkpoint. Do not weaken an assertion merely to make a test pass.
+
+**Fix loop: classify together, fix surgically, validate the combined candidate once.**
 1. Classify every finding first; write a failing test per class, with the edge cases existing
    policy implies.
-2. After a fix, run the tests that name each changed file:
-   `scripts/test.sh fast $(git grep -l -w -e <module> -e <data file> -- 'scripts/tests/test_*.py')`.
+2. Reproduce the failing node, fix its production owner, rerun that node, then the nearby edge
+   cases for the same defect class. Use `git grep`/`rg`, the ownership matrix and callers to
+   identify affected test files; that list is discovery, not a command to rerun every consumer
+   after every edit. Run the relevant owner/consumer slice when the class is stable.
 3. Check the fix on the affected labels plus unaffected controls with
    `scripts/audits/quality_redesign/replay.py` (freeze-raw, snapshot, compare), never by
    rerunning whole brands.
-4. `scripts/test.sh fast` once. If it fails, fix the whole set, confirm with `--lf`, rerun once.
+4. The integrator schedules one whole `fast` checkpoint after the batch's source changes,
+   focused tests, measurements and required review are ready. If it fails, record all failures,
+   fix each class using explicit nodes/files (or `--lf` with the failing files), then rerun the
+   combined checkpoint after all fixes are ready. Do not restart it after each individual fix.
+   A passing CI run may satisfy this gate only for the exact candidate and canonical profile;
+   required corpus/artifact checks remain separate. Until CI is proven, use the local gate.
 5. After the last code change and the merge of main: one corpus pass from the earliest changed
    stage, then the release rung. Its preflight refuses output built by other data or code.
+
+Before a broad job, check active jobs and lane handoffs. Only one memory-heavy test/corpus job
+may run on the Mac at a time; queue behind it, including a focused run that loads the enricher.
+For timeouts, inspect contention first and rerun the affected nodes in isolation; a successful
+retry explains neither a source defect nor the interrupted checkpoint by itself. Reuse existing
+receipts only when their source/data fingerprints cover the candidate; otherwise revalidate.
+
+**Progress and resume:** every agent first reads this file, its current handoff, the relevant
+master-plan boxes and LEDGER entries. Record goal, owned files, baseline and next unchecked item
+before editing. Update the existing LEDGER and master plan at batch handoff: findings, fixes,
+tested SHA, commands/results, measurements, review and remaining blockers. Check only the
+deliverable its evidence proves; distinguish implemented, measured, reviewed, integrated and
+release-validated. Never mark a whole phase complete from a focused test, or leave finished work
+looking pending. Keep one execution register and rewrite handoffs instead of stacking history.
 
 ## Pipeline map
 

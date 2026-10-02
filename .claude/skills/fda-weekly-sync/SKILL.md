@@ -445,13 +445,13 @@ Use `scripts/test.sh` — **never raw `pytest`.** It picks the wrong interpreter
 
 ```bash
 # 1. Targeted while iterating
-bash scripts/test.sh fast -k "banned or overlap or safety_alerts"
+bash scripts/test.sh fast scripts/tests/test_banned_recalled_identifier_integrity.py scripts/tests/test_cross_db_overlap_guard.py scripts/tests/test_safety_alerts_contract.py
 
 # 2. Populate CUIs for new entries
 "$PG_PYTHON" scripts/api_audit/verify_cui.py --file scripts/data/banned_recalled_ingredients.json --list-key ingredients --cui-field cui   # report only; set reviewed CUIs by hand
 
-# 3. Full fast tier before handing off
-bash scripts/test.sh fast
+# 3. Record focused results and request the integrator's combined checkpoint
+# Follow AGENTS.md: no whole-suite run after each edit, commit or failure fix.
 ```
 
 ⚠️ **Editing `banned_recalled_ingredients.json` does not by itself change the
@@ -481,7 +481,7 @@ force it, rather than assuming the edit propagated.
 - Increment `_metadata.governance.change_log` version on every run
 - Set `cui: null` for new entries (filled in after reviewing verify_cui.py's report)
 - Count and update `total_entries` after all changes
-- Run the targeted schema guards after all changes; run the full suite when the environment is provisioned
+- Run targeted schema guards after the batch changes; schedule broader validation through the integrator under AGENTS.md
 - Filter food product and device false positives before processing
 
 ### MUST NOT DO

@@ -2,6 +2,15 @@
 
 Readable phase checklist and preserved September 30 scope: [master completion plan](../../../docs/plans/PHARMAGUIDE_MASTER_COMPLETION_PLAN.md). This ledger remains the execution register. Pipeline source through `54a374cb` pushed to main on October 2 with Sean's approval; catalog release remains pending.
 
+October 2 execution-rule update: [x] shared instructions now require explicit failing nodes/files
+while iterating, one integrator-owned combined checkpoint after the batch is ready, and targeted
+repair of all failure classes before a checkpoint rerun. Scoring, clinical-data, curated-data and FDA-sync rules
+reference the same procedure. Agents resume from current handoffs and relevant plan/ledger items;
+completion requires named evidence, not an unqualified check mark. Documentation diff verified;
+no pytest needed, and no scoring/release/CI completion is implied.
+Owner: `AGENTS.md::Tests` and this existing register/master plan — evidence: reviewed and aligned
+their instructions. Will NOT create: another runner, profile manifest, tracker or release shortcut.
+
 One register for every open item found by the 2026-09-26 integration: the 25 lane handoffs (archived
 under `~/claude-attic/2026-09-26/worktree-state/`), the memory open-work index, Codex's v41 handoff and
 live API checks. Duplicates are merged. Every row was re-checked against pipeline main 8dbd621b and

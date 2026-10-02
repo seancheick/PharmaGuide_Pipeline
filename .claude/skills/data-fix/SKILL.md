@@ -25,9 +25,9 @@ inventing replacement facts or preserving an incorrect score.
 6. **Verify the changed entries.** `verify_all_citations_content.py --changed-since <ref>` and
    `verify_interaction_rules_citations.py --strict --changed-since <ref>` print one line per changed
    citation; `verify_cui.py` / `verify_unii.py` / `verify_pubchem.py` for each new identifier.
-7. **Test and fix once.** `scripts/test.sh fast -k <topic>` plus the tests that name the changed
-   file (AGENTS.md fix loop), fix every failure, then `scripts/test.sh fast` before the commit
-   (`--lf` confirms the fixes first).
+7. **Test surgically.** Follow `AGENTS.md`'s fix loop: explicit failing nodes, defect-class edge
+   cases, then relevant changed-entry/owner files. Fix every failure class before requesting the
+   integrator's combined checkpoint; do not run a whole suite for each edit or atomic commit.
 8. **Measure** when a score, warning or verdict can move: `scripts/audits/quality_redesign/replay.py`
    `freeze-raw` once, `snapshot` on both trees, `compare` (see `/pg-scoring-change`).
 9. **Commit once per batch.** The message lists the entries and anything left pending. Receipts go

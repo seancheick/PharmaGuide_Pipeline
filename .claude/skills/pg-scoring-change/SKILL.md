@@ -51,5 +51,9 @@ skill covers the steps.
 7. **Fresh-context review.** Give a reviewer only the requirement, the matrix owner, the diff and
    the measured deltas. It must answer: does the diff add a new name? Does a near-name already exist
    (`rg` the stem in `scripts/` and `/Users/seancheick/PharmaGuide ai/lib`)?
-8. **Tests.** Run `scripts/test.sh fast -k <topic>` while iterating and the full `scripts/test.sh fast`
-   once at the end. If shipped scores move, show Sean the measured deltas before any release.
+8. **Tests.** Follow the targeted fix loop in `AGENTS.md`: explicit failing node first, then its
+   defect-class edge cases and relevant owner/consumer files. Never collect the whole suite for
+   one edit or restart it after each failure fix. The integrator runs one combined fast checkpoint
+   when the batch is ready; a failed checkpoint returns to targeted fixes until all classes are
+   ready for the next combined gate. Required measurements and independent review still apply.
+   If shipped scores move, show Sean the measured deltas before any release.
