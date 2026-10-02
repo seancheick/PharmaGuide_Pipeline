@@ -60,6 +60,18 @@ Why227960 still has Evidence20: existing brand+multiple-RCT+positive_strong poli
 
 Owner: `backed_clinical_studies.json::BRAND_SUNFIBER`; existing enrichment clinical matcher/applicability, `generic_evidence::_primary_mass_floor`, existing fiber/generic Dose and scored artifact. Evidence: indexed primary papers, raw227960, canonical batch/citation tools, fail-first tests, frozen comparisons and independent review. Will NOT create: second registry/scorer/parser, public field/status, benchmark or numerical policy. Receipts: `/Users/seancheick/pg_quality/phgg_clinical_review_20261002/`. Continue inulin/FOS source review next; broader D26/D24/omega/Q53/calibration/release obligations stay open.
 
+## Inulin/FOS factual-source checkpoint — October 2
+
+- [x] Verify all three indexed PMID titles/content (35833477,34555168,38309832), healthy-adult review full text and FDA inulin UNII JOS53KRJ01. Generic “prebiotic fiber” does not establish inulin; FOS remains within the reviewed ITF family, without chemical or outcome equivalence claims.
+- [x] Correct existing `INGR_INULIN`: remove the overbroad alias, unrelated stress/muscle-recovery tags and untraceable automated420/224 discovery counts; distinguish surrogate microbiome results, healthy-subject bowel benefits, mixed preparation-specific calcium outcomes and low/very-low-certainty cardiometabolic risk factors. Do not sum overlapping review populations or create a benchmark.
+- [x] Four fail-first regressions;381 affected entry/batch/applicability/Evidence checks passed. Fresh review reproduced calcium-outcome conflation; fixed it and four final focused checks passed. Existing direction/tier/confidence retained as the pending calibration baseline, not re-ratified.
+- [x] Final238-label raw comparison: zero full scored-payload deltas; all132existing enriched matches covered. Baseline220 plus disjoint18 retain identical source and verified raw hashes. Nutricost87.1, Jarrow77.4, BulkSupplements73.1 and all15.6 Evidence results unchanged.
+- [x] Independent source/measurement review accepted; local527passed/24approved opt-in skips with passing skip guard.
+- [x] Final four-shard CI at`0bbcedc5` [37064447723](https://github.com/seancheick/PharmaGuide_Pipeline/actions/runs/37064447723): **18,221passed/183approved skips/zero failures**; source integrated with this accompanying plan receipt. No runtime publication.
+- [ ] Complete remaining preparation-specific certainty/Dose/calibration decisions; inaccessible full-text details, endpoint heterogeneity and precise funding roles remain explicit research limits. This factual checkpoint does not close the clinical phase or ratify15.6 Evidence.
+
+Owner: `backed_clinical_studies.json::INGR_INULIN`, `SupplementEnricherV3::_clinical_study_match`, existing clinical applicability, generic Evidence and route Dose. Evidence: indexed primary content, schema optional-count semantics, canonical batch check, production matcher regressions and frozen-label receipts. Will NOT create: registry/scorer/parser/public fields/status/benchmark/numerical policy. Baseline91884042; final source0bbcedc5. Receipts: `/Users/seancheick/pg_quality/inulin_clinical_review_20261002/`. Next bounded factual review: XOS/PreticX; inulin/PHGG cross-family calibration and D26/D24/omega/Q53/roles/serving/final corpus remain open.
+
 ## Execution discipline — October 2
 
 - [x] Align shared, scoring-change, clinical-data, curated-data and FDA-sync instructions around surgical iteration:
