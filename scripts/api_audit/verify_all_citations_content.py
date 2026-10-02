@@ -6,8 +6,9 @@ from PubMed, then checks whether the cited paper actually mentions the
 ingredients/drugs/nutrients claimed in the data entry.
 
 Every citation field is read: configured sources, plus (``scan_all``) every
-PubMed URL, "PMID n" and PMC link anywhere in an entry except the history keys
-in HISTORY_KEYS. Citations in ingredient_interaction_rules.json and
+PubMed URL, "PMID n", PMC link and DOI anywhere in an entry except the history
+keys in HISTORY_KEYS. A DOI is checked against its PubMed record when PubMed
+indexes it, otherwise against Crossref's title and abstract. Citations in ingredient_interaction_rules.json and
 backed_clinical_studies.json have their own verifiers.
 test_every_citation_in_the_data_folder_is_read_by_a_content_verifier fails on
 any citation in scripts/data that no verifier reads.
@@ -33,6 +34,8 @@ import re
 import ssl
 import sys
 import time
+import urllib.error
+import urllib.parse
 import urllib.request
 import xml.etree.ElementTree as ET
 from pathlib import Path
@@ -54,7 +57,12 @@ TEXT_CITATION_RE = re.compile(
     r"|(?:ncbi\.nlm\.nih\.gov/pmc/articles|pmc\.ncbi\.nlm\.nih\.gov/articles)/(PMC\d+)",
     re.I,
 )
+# A DOI in any form (doi.org URL, "DOI: 10...", a typed {"type": "doi", "id": ...}).
+# Q57 (2026-10-02): unread DOIs let 106 registry citations point at unrelated
+# or nonexistent papers.
+DOI_RE = re.compile(r"\b(10\.\d{4,9}/[^\s\"<>,;]+)")
 PMC_IDCONV = "https://www.ncbi.nlm.nih.gov/pmc/utils/idconv/v1.0/"
+CROSSREF_WORKS = "https://api.crossref.org/works/"
 RATE_LIMIT = 0.35  # seconds between API calls
 
 # SSL context — prefer verified; fall back to unverified if system certs are unavailable
@@ -225,6 +233,20 @@ FILE_CONFIGS = [
     _scan_all(file="interaction_orphan_allowlist.json", array_key="allowlist"),
     _scan_all(file="curated_overrides/product_context_canonical_overrides.json", map_key="overrides"),
 ]
+def doi_id(raw: str) -> str:
+    """Citation id of a DOI: "doi:" + the lowercased DOI, without the sentence
+    punctuation that free text leaves after it (an unbalanced ")" or a ".")."""
+    doi = raw.rstrip(".").lower()
+    while doi.endswith(")") and doi.count(")") > doi.count("("):
+        doi = doi[:-1].rstrip(".")
+    return "doi:" + doi
+
+
+def cite_label(cid: str) -> str:
+    """How a citation id prints: "PMID 123", "PMC123" or "doi:10..."."""
+    return cid if not cid.isdigit() else f"PMID {cid}"
+
+
 # ── PubMed API ─────────────────────────────────────────────────────────
 
 def resolve_pmc_ids(pmc_ids: list[str]) -> dict[str, str]:
@@ -244,16 +266,60 @@ def resolve_pmc_ids(pmc_ids: list[str]) -> dict[str, str]:
     return resolved
 
 
+def _get(url: str) -> bytes | None:
+    """GET a URL; None on HTTP 404 (and on other errors, which are logged)."""
+    req = urllib.request.Request(url, headers={"User-Agent": "pharmaguide-audit/1.0 (citation verification)"})
+    try:
+        with urllib.request.urlopen(req, timeout=20, context=SSL_CTX) as resp:
+            return resp.read()
+    except urllib.error.HTTPError as e:
+        if e.code != 404:
+            print(f"  HTTP {e.code} for {url}", file=sys.stderr)
+    except Exception as e:
+        print(f"  API error for {url}: {e}", file=sys.stderr)
+    return None
+
+
+def resolve_doi_ids(doi_ids: list[str]) -> tuple[dict[str, str], dict[str, dict]]:
+    """("doi:..." -> PMID for DOIs PubMed indexes, "doi:..." -> Crossref article
+    for the rest). A DOI neither knows is left out: it does not resolve."""
+    to_pmid, crossref = {}, {}
+    for cid in doi_ids:
+        doi = cid[len("doi:"):]
+        raw = _get("https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=pubmed&retmode=json&term="
+                   + urllib.parse.quote(doi + "[doi]", safe=""))
+        time.sleep(RATE_LIMIT)
+        ids = json.loads(raw).get("esearchresult", {}).get("idlist", []) if raw else []
+        if len(ids) == 1:
+            to_pmid[cid] = ids[0]
+            continue
+        raw = _get(CROSSREF_WORKS + urllib.parse.quote(doi, safe=""))
+        time.sleep(1)  # Crossref's public pool
+        if raw:
+            work = json.loads(raw).get("message", {})
+            crossref[cid] = {
+                "title": " ".join(work.get("title") or []),
+                "abstract": re.sub(r"<[^>]+>", "", work.get("abstract") or "").strip(),
+                "mesh_terms": [],
+            }
+    return to_pmid, crossref
+
+
 def fetch_articles(pmids: list[str], abstract_chars: int | None = 800) -> dict[str, dict]:
     """Fetch title + abstract for a batch of PMIDs via efetch.
 
     ``abstract_chars=None`` keeps the whole abstract. A PMC id ("PMC123") is
-    resolved to its PMID first and its article is returned under both ids.
+    resolved to its PMID first and its article is returned under both ids; a
+    DOI id ("doi:10...") likewise, or from Crossref when PubMed lacks it.
     """
     articles = {}
     pmc_ids = sorted({p for p in pmids if str(p).upper().startswith("PMC")})
     pmc_to_pmid = resolve_pmc_ids(pmc_ids) if pmc_ids else {}
-    pmids = list(dict.fromkeys([p for p in pmids if p not in pmc_ids] + list(pmc_to_pmid.values())))
+    doi_ids = sorted({p for p in pmids if str(p).startswith("doi:")})
+    doi_to_pmid, crossref = resolve_doi_ids(doi_ids) if doi_ids else ({}, {})
+    articles.update(crossref)
+    pmids = list(dict.fromkeys([p for p in pmids if p not in pmc_ids and p not in doi_ids]
+                               + list(pmc_to_pmid.values()) + list(doi_to_pmid.values())))
     for i in range(0, len(pmids), 8):
         batch = pmids[i:i + 8]
         ids_str = ",".join(batch)
@@ -312,9 +378,9 @@ def fetch_articles(pmids: list[str], abstract_chars: int | None = 800) -> dict[s
 
         time.sleep(RATE_LIMIT)
 
-    for pmc_id, pmid in pmc_to_pmid.items():
+    for alias, pmid in [*pmc_to_pmid.items(), *doi_to_pmid.items()]:
         if pmid in articles:
-            articles[pmc_id] = articles[pmid]
+            articles[alias] = articles[pmid]
     return articles
 
 
@@ -440,9 +506,9 @@ def content_matches(article: dict, topic_words: list[str]) -> tuple[str, float]:
 # ── Extract PMIDs from entries ─────────────────────────────────────────
 
 def scan_citations(value, exempt: set, key: str = "") -> list[str]:
-    """Every PubMed/PMC citation in a nested value, skipping ``exempt`` keys.
+    """Every PubMed/PMC/DOI citation in a nested value, skipping ``exempt`` keys.
 
-    Strings are read for PubMed URLs, "PMID 123" and PMC links; a bare number
+    Strings are read for PubMed URLs, "PMID 123", PMC links and DOIs; a bare number
     counts only under a key naming a PMID ("pmid", "source_pmids").
     """
     found = []
@@ -456,6 +522,7 @@ def scan_citations(value, exempt: set, key: str = "") -> list[str]:
     elif isinstance(value, (str, int)) and not isinstance(value, bool):
         text = str(value)
         here = [a or b or c.upper() for a, b, c in TEXT_CITATION_RE.findall(text)]
+        here += [doi_id(doi) for doi in DOI_RE.findall(text)]
         if not here and "pmid" in key.lower() and re.fullmatch(r"\s*(?:PMID:?\s*)?\d{4,9}\s*", text, re.I):
             here = [re.sub(r"\D", "", text)]
         found += here
@@ -722,10 +789,10 @@ def main():
         # Print mismatches (every citation when checking a batch)
         for entry in result.get("entries", []):
             if only_ids is not None:
-                print(f"    {entry['status'].upper():<9} {entry['entry_id']} PMID {entry['pmid']}: "
+                print(f"    {entry['status'].upper():<9} {entry['entry_id']} {cite_label(entry['pmid'])}: "
                       f"{entry['article_title'][:100]}")
             elif entry["status"] == "mismatch":
-                print(f"    ❌ {entry['entry_id']} PMID {entry['pmid']}: {entry['article_title']}")
+                print(f"    ❌ {entry['entry_id']} {cite_label(entry['pmid'])}: {entry['article_title']}")
 
     print(f"\n{'=' * 60}")
     print(f"TOTAL: ✅ {total_match} match  ❌ {total_mismatch} mismatch")
@@ -741,14 +808,13 @@ def main():
         print(f"BASELINE: {len(new)} new mismatch(es), {len(unresolved)} unresolved citation(s); "
               f"{total_mismatch - len(new)} backlog mismatch(es) reported, not blocking")
         for file, entry in unresolved:
-            print(f"  UNRESOLVED {file} {entry['entry_id']} PMID {entry['pmid']}")
+            print(f"  UNRESOLVED {file} {entry['entry_id']} {cite_label(entry['pmid'])}")
         for file, entry in new:
-            print(f"  NEW MISMATCH {file} {entry['entry_id']} PMID {entry['pmid']}: {entry['article_title']}")
+            print(f"  NEW MISMATCH {file} {entry['entry_id']} {cite_label(entry['pmid'])}: {entry['article_title']}")
         return 1 if new or unresolved else 0
 
     return 1 if total_mismatch > 0 else 0
 
 
 if __name__ == "__main__":
-    import urllib.parse
     sys.exit(main())
