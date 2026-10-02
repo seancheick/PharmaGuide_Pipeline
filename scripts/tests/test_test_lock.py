@@ -145,3 +145,11 @@ def test_cli_worker_override_cannot_bypass_runner_budget():
         result = subprocess.run(["bash", "scripts/test.sh", "fast", "scripts/tests/test_ci_skip_guard.py", option], cwd=repo, capture_output=True, text=True, timeout=20)
         assert result.returncode == 2
         assert "worker overrides must use PG_TEST_WORKERS" in result.stderr
+
+
+def test_focused_worker_budget_overrides_pytest_addopts(tmp_path):
+    repo = Path(__file__).resolve().parents[2]
+    env = dict(os.environ, PYTEST_ADDOPTS="-n 99")
+    result = subprocess.run(["bash", "scripts/test.sh", "fast", "scripts/tests/test_ci_skip_guard.py", "-o", "addopts=-n 99"], cwd=repo, env=env, capture_output=True, text=True, timeout=120)
+    assert result.returncode == 0, result.stdout[-2000:] + result.stderr[-2000:]
+    assert "bringing up nodes" not in result.stdout

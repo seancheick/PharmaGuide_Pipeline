@@ -462,12 +462,14 @@ case "$PROFILE" in
     # xdist startup costs more than it saves for a single targeted file.
     # Keep focused checks (including the release snapshot contract) serial;
     # parallelize the broad fast profile and explicit multi-file runs.
-    if ((${#USER_TARGETS[@]} != 1)); then
+    if ((${#USER_TARGETS[@]} == 1)) && has_xdist; then
+      parallel_args=(-n 0)
+    else
       while IFS= read -r _a; do
         parallel_args+=("$_a")
       done < <(pytest_args_for_parallel fast)
     fi
-    "$PG_PYTHON" -m pytest "${files[@]}" -q --tb=line "${parallel_args[@]+"${parallel_args[@]}"}" "${TIMEOUT_FAST[@]+"${TIMEOUT_FAST[@]}"}" "${USER_OPTIONS[@]+"${USER_OPTIONS[@]}"}"
+    "$PG_PYTHON" -m pytest "${files[@]}" -q --tb=line "${TIMEOUT_FAST[@]+"${TIMEOUT_FAST[@]}"}" "${USER_OPTIONS[@]+"${USER_OPTIONS[@]}"}" "${parallel_args[@]+"${parallel_args[@]}"}"
     ;;
   release)
     # Wave 6.Z release hardening: actionable staleness preflight runs
@@ -486,7 +488,8 @@ case "$PROFILE" in
         files+=("$file")
       done < <(profile_test_files release)
     fi
-    "$PG_PYTHON" -m pytest "${files[@]}" -q --tb=line "${TIMEOUT_HEAVY[@]+"${TIMEOUT_HEAVY[@]}"}" "${USER_OPTIONS[@]+"${USER_OPTIONS[@]}"}"
+    parallel_args=(); if has_xdist; then parallel_args=(-n 0); fi
+    "$PG_PYTHON" -m pytest "${files[@]}" -q --tb=line "${TIMEOUT_HEAVY[@]+"${TIMEOUT_HEAVY[@]}"}" "${USER_OPTIONS[@]+"${USER_OPTIONS[@]}"}" "${parallel_args[@]+"${parallel_args[@]}"}"
     run_release_artifact_gates
     ;;
   full)
@@ -500,7 +503,7 @@ case "$PROFILE" in
     while IFS= read -r arg; do
       parallel_args+=("$arg")
     done < <(pytest_args_for_parallel full)
-    "${NICE[@]+"${NICE[@]}"}" "$PG_PYTHON" -m pytest "${files[@]}" -q --tb=line "${parallel_args[@]+"${parallel_args[@]}"}" "${TIMEOUT_HEAVY[@]+"${TIMEOUT_HEAVY[@]}"}" "${USER_OPTIONS[@]+"${USER_OPTIONS[@]}"}"
+    "${NICE[@]+"${NICE[@]}"}" "$PG_PYTHON" -m pytest "${files[@]}" -q --tb=line "${TIMEOUT_HEAVY[@]+"${TIMEOUT_HEAVY[@]}"}" "${USER_OPTIONS[@]+"${USER_OPTIONS[@]}"}" "${parallel_args[@]+"${parallel_args[@]}"}"
     ;;
   local)
     # CI's blind spot: the fast-profile files that skip without the local
@@ -515,7 +518,7 @@ case "$PROFILE" in
     done < <(pytest_args_for_parallel local)
     report_dir="$(mktemp -d)"
     trap 'rm -rf "$report_dir"' EXIT
-    "$PG_PYTHON" -m pytest "${files[@]}" -q --tb=line -rs "${parallel_args[@]+"${parallel_args[@]}"}" "${TIMEOUT_FAST[@]+"${TIMEOUT_FAST[@]}"}" "$@" --junitxml="$report_dir/local.xml"
+    "$PG_PYTHON" -m pytest "${files[@]}" -q --tb=line -rs "${TIMEOUT_FAST[@]+"${TIMEOUT_FAST[@]}"}" "$@" --junitxml="$report_dir/local.xml" "${parallel_args[@]+"${parallel_args[@]}"}"
     "$PG_PYTHON" scripts/ci_skip_guard.py "$report_dir/local.xml" local
     ;;
   slow)
@@ -528,7 +531,8 @@ case "$PROFILE" in
         files+=("$file")
       done < <(profile_test_files slow)
     fi
-    "${NICE[@]+"${NICE[@]}"}" "$PG_PYTHON" -m pytest "${files[@]}" -q --tb=line "${TIMEOUT_HEAVY[@]+"${TIMEOUT_HEAVY[@]}"}" "${USER_OPTIONS[@]+"${USER_OPTIONS[@]}"}"
+    parallel_args=(); if has_xdist; then parallel_args=(-n 0); fi
+    "${NICE[@]+"${NICE[@]}"}" "$PG_PYTHON" -m pytest "${files[@]}" -q --tb=line "${TIMEOUT_HEAVY[@]+"${TIMEOUT_HEAVY[@]}"}" "${USER_OPTIONS[@]+"${USER_OPTIONS[@]}"}" "${parallel_args[@]+"${parallel_args[@]}"}"
     ;;
   *)
     cat >&2 <<'EOF'
