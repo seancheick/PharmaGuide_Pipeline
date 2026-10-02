@@ -44,7 +44,7 @@ sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
 DATA = REPO_ROOT / "scripts" / "data"
-FLUTTER_ROOT = Path("/Users/seancheick/PharmaGuide ai")
+FLUTTER_ROOT = Path(os.environ.get("FLUTTER_REPO", "/Users/seancheick/PharmaGuide ai"))
 
 
 # ============================================================================

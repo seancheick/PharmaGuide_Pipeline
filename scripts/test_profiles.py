@@ -74,6 +74,12 @@ ARTIFACT_TEST_FILES: FrozenSet[str] = frozenset({
 # scripts/ci_skip_guard.py fails CI when a test skips outside this list, so a
 # new local-only test cannot pass unseen.
 LOCAL_ONLY_TEST_FILES: FrozenSet[str] = frozenset({
+    # raw DSLD staging labels under ~/Downloads/PharmaGuide_Datasets
+    "test_context_canonical_overrides_2026_05_24.py",
+    "test_identity_unii_literal_proof.py",
+    "test_interaction_rule_every_declared_form.py",
+    "test_rc4_blend_header_total_contract.py",
+    # product corpus, built exports, canary baselines, or opt-in local tools
     "test_active_count_reconciliation.py",
     "test_canonical_id_delivers_markers_emit.py",
     "test_cert_needs_review_cluster_p171.py",

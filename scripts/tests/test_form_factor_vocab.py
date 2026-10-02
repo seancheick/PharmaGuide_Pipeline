@@ -102,7 +102,7 @@ class TestVocabSync:
         at runtime so individual IDs are not hardcoded in the .dart file —
         instead we verify (1) the JSON asset is present, (2) the Dart
         loader function exists, (3) the registry wires it in."""
-        flutter_root = Path("/Users/seancheick/PharmaGuide ai")
+        flutter_root = Path(os.environ.get("FLUTTER_REPO", "/Users/seancheick/PharmaGuide ai"))
         if not flutter_root.exists():
             pytest.skip("Flutter repo not checked out at expected location")
 

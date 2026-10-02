@@ -32,8 +32,17 @@ jobs:
       fail-fast: false
       matrix:
         shard: [1, 2, 3, 4]
+    env:
+      # Cross-repo contract tests compare pipeline vocabularies and schemas
+      # with the app's files; the app repo is public, so CI checks it out.
+      FLUTTER_REPO: ${{ github.workspace }}/app
     steps:
       - uses: actions/checkout@v4
+
+      - uses: actions/checkout@v4
+        with:
+          repository: seancheick/Pharmaguide.ai
+          path: app
 
       - uses: actions/setup-python@v5
         with:

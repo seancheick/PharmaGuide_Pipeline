@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+import os
+
 import hashlib
 import json
 from pathlib import Path
@@ -27,9 +29,9 @@ def test_manual_label_v1_fixture_contract_stays_checksum_pinned() -> None:
     assert hashlib.sha256(canonical).hexdigest() == FIXTURE_SHA256
 
 
-APP_FIXTURE_PATH = Path(
-    "/Users/seancheick/PharmaGuide ai/supabase/functions/"
-    "review-product-submissions/fixtures/manual_label_v1_cases.json"
+APP_FIXTURE_PATH = (
+    Path(os.environ.get("FLUTTER_REPO", "/Users/seancheick/PharmaGuide ai"))
+    / "supabase/functions/review-product-submissions/fixtures/manual_label_v1_cases.json"
 )
 
 

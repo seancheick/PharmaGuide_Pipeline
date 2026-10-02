@@ -6,12 +6,14 @@ fails here rather than at the first real run.
 """
 from __future__ import annotations
 
+import os
+
 import re
 from pathlib import Path
 
 import pytest
 
-APP_MIGRATIONS = Path("/Users/seancheick/PharmaGuide ai/supabase/migrations")
+APP_MIGRATIONS = Path(os.environ.get("FLUTTER_REPO", "/Users/seancheick/PharmaGuide ai")) / "supabase/migrations"
 CLIENT = (
     Path(__file__).parents[1]
     / "submission_review/extraction/queue_client.py"

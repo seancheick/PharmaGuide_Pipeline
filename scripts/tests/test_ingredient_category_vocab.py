@@ -216,7 +216,7 @@ class TestParityWithLegacy:
 class TestFlutterParity:
 
     def test_flutter_dart_vocab_when_repo_available(self):
-        flutter_root = Path("/Users/seancheick/PharmaGuide ai")
+        flutter_root = Path(os.environ.get("FLUTTER_REPO", "/Users/seancheick/PharmaGuide ai"))
         if not flutter_root.exists():
             pytest.skip("Flutter repo not checked out at expected location")
         asset_path = flutter_root / "assets" / "data" / "ingredient_category_vocab.json"
