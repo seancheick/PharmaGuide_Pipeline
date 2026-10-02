@@ -3,8 +3,8 @@
     "purpose": "Known citation-content backlog for verify_all_citations_content.py --baseline",
     "description": "Citations the first full-coverage run (2026-09-26) flagged: 'mismatch' means the live PubMed record shares no identity word with its entry (a heuristic; many are wrong papers, some are naming misses), 'not_found' means the PMID does not resolve. The release gate fails on any not_found and on any mismatch NOT listed here, so a new bad citation cannot hide in this backlog. Fix entries one at a time via /data-fix and delete each from this list in the same commit (register Q22). The 10 medication_depletions items are needs_revision records the app suppresses.",
     "schema_version": "5.0.0",
-    "last_updated": "2026-09-26",
-    "total_entries": 232,
+    "last_updated": "2026-10-02",
+    "total_entries": 242,
     "source_run": "verify_all_citations_content.py --report (after e349a2b7: every citation in scripts/data read)",
     "summary_by_file": {
       "timing_rules.json": {
@@ -3508,6 +3508,156 @@
         "japanese",
         "knotweed"
       ]
+    },
+    {
+      "file": "harmful_additives.json",
+      "entry_id": "ADD_BLUE1",
+      "pmid": "doi:10.1016/s0140-6736(07)61306-3",
+      "status": "mismatch",
+      "live_title": "Food additives and hyperactive behaviour in 3-year-old and 8/9-year-old children in the community: a randomised, double-blinded, placebo-controlled trial.",
+      "identity_words": [
+        "blue",
+        "lake",
+        "fd&c",
+        "3844",
+        "e133",
+        "aluminum"
+      ],
+      "note": "Q57 2026-10-02: correct citation, identity-word naming miss: McCann 2007, cited for the note that E133 was NOT in the Southampton mixes"
+    },
+    {
+      "file": "harmful_additives.json",
+      "entry_id": "ADD_BLUE2",
+      "pmid": "doi:10.1016/s0140-6736(07)61306-3",
+      "status": "mismatch",
+      "live_title": "Food additives and hyperactive behaviour in 3-year-old and 8/9-year-old children in the community: a randomised, double-blinded, placebo-controlled trial.",
+      "identity_words": [
+        "blue",
+        "lake",
+        "fd&c",
+        "indigo",
+        "73015",
+        "indigotine"
+      ],
+      "note": "Q57 2026-10-02: correct citation, identity-word naming miss: McCann 2007, cited for the note that E132 was NOT in the Southampton mixes"
+    },
+    {
+      "file": "harmful_additives.json",
+      "entry_id": "ADD_CALCIUM_ALUMINUM_PHOSPHATE",
+      "pmid": "doi:10.2903/j.efsa.2008.754",
+      "status": "mismatch",
+      "live_title": "Safety of aluminium from dietary intake - Scientific Opinion of the Panel on Food Additives, Flavourings, Processing Aids and Food Contact Materials (AFC).",
+      "identity_words": [
+        "aluminophosphate",
+        "calcium",
+        "phosphate",
+        "34767",
+        "aluminum"
+      ],
+      "note": "Q57 2026-10-02: correct citation, identity-word naming miss: EFSA 2008 dietary aluminium opinion (the aluminium in this additive)"
+    },
+    {
+      "file": "harmful_additives.json",
+      "entry_id": "ADD_FATTY_ACID_POLYGLYCEROL_ESTERS",
+      "pmid": "doi:10.1038/nature14232",
+      "status": "mismatch",
+      "live_title": "Dietary emulsifiers impact the mouse gut microbiota promoting colitis and metabolic syndrome.",
+      "identity_words": [
+        "e475",
+        "polyglycerol",
+        "esters",
+        "acids",
+        "fatty",
+        "acid"
+      ],
+      "note": "Q57 2026-10-02: correct citation, identity-word naming miss: Chassaing 2015, framed in the entry as class-level emulsifier evidence (CMC/P80 studied)"
+    },
+    {
+      "file": "harmful_additives.json",
+      "entry_id": "ADD_PALM_OIL",
+      "pmid": "doi:10.2903/j.efsa.2018.5083",
+      "status": "mismatch",
+      "live_title": "Update of the risk assessment on 3-monochloropropane diol and its fatty acid esters.",
+      "identity_words": [
+        "palm",
+        "elaeis",
+        "refined",
+        "stearin",
+        "kernel",
+        "vegetable"
+      ],
+      "note": "Q57 2026-10-02: correct citation, identity-word naming miss: EFSA 2018 3-MCPD ester opinion (palm oil is the main source)"
+    },
+    {
+      "file": "harmful_additives.json",
+      "entry_id": "ADD_RED40",
+      "pmid": "doi:10.1016/s0140-6736(07)61306-3",
+      "status": "mismatch",
+      "live_title": "Food additives and hyperactive behaviour in 3-year-old and 8/9-year-old children in the community: a randomised, double-blinded, placebo-controlled trial.",
+      "identity_words": [
+        "lake",
+        "fd&c",
+        "aluminum",
+        "allura",
+        "e129"
+      ],
+      "note": "Q57 2026-10-02: correct citation, identity-word naming miss: McCann 2007; Allura Red (E129) was in Mix B"
+    },
+    {
+      "file": "harmful_additives.json",
+      "entry_id": "ADD_SODIUM_HEXAMETAPHOSPHATE",
+      "pmid": "doi:10.1161/atvbaha.123.319198",
+      "status": "mismatch",
+      "live_title": "Phosphate in Cardiovascular Disease: From New Insights Into Molecular Mechanisms to Clinical Implications.",
+      "identity_words": [
+        "sodium",
+        "e452i",
+        "calgon",
+        "hexametaphosphate",
+        "hexametaphoshate",
+        "polyphosphate"
+      ],
+      "note": "Q57 2026-10-02: correct citation, identity-word naming miss: phosphate in cardiovascular disease review (phosphate additive)"
+    },
+    {
+      "file": "harmful_additives.json",
+      "entry_id": "ADD_SOY_MONOGLYCERIDES",
+      "pmid": "doi:10.1038/nature14232",
+      "status": "mismatch",
+      "live_title": "Dietary emulsifiers impact the mouse gut microbiota promoting colitis and metabolic syndrome.",
+      "identity_words": [
+        "diglycerides",
+        "monostearate",
+        "e471",
+        "glycerides",
+        "mono",
+        "monoglycerides"
+      ],
+      "note": "Q57 2026-10-02: correct citation, identity-word naming miss: Chassaing 2015, dietary emulsifier class evidence"
+    },
+    {
+      "file": "harmful_additives.json",
+      "entry_id": "ADD_CORN_OIL",
+      "pmid": "doi:10.2903/j.efsa.2010.1461",
+      "status": "mismatch",
+      "live_title": "Scientific Opinion on Dietary Reference Values for fats, including saturated fatty acids, polyunsaturated fatty acids, monounsaturated fatty acids, trans fatty acids, and cholesterol",
+      "identity_words": [
+        "corn",
+        "oil"
+      ],
+      "note": "Q57 2026-10-02: correct citation, identity-word naming miss: EFSA 2010 fats DRV opinion, the document the entry names (DOI corrected from the water DRV, 1459)"
+    },
+    {
+      "file": "harmful_additives.json",
+      "entry_id": "ADD_UNSPECIFIED_COLORS",
+      "pmid": "doi:10.2903/j.efsa.2015.4288",
+      "status": "mismatch",
+      "live_title": "Scientific Opinion on the re-evaluation of cochineal, carminic acid, carmines (E 120) as a food additive.",
+      "identity_words": [
+        "unspecified",
+        "colors"
+      ],
+      "note": "Q57 2026-10-02: correct citation, identity-word naming miss: EFSA 2015 carmine re-evaluation, the document the entry names (DOI corrected from a pesticide MRL opinion, 4037)"
     }
   ]
 }

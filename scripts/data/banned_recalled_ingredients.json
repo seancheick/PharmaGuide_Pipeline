@@ -766,18 +766,6 @@
           "evidence_grade": "R",
           "supports_claims": [],
           "evidence_summary": "EMA: Rimonabant withdrawal (2008)"
-        },
-        {
-          "type": "doi",
-          "id": "10.1016/S0140-6736(07)61684-8",
-          "title": "RIO trials showing psychiatric risks",
-          "evidence_grade": "A",
-          "url": "https://doi.org/10.1016/S0140-6736(07)61684-8",
-          "supports_claims": [
-            "mechanism_of_harm",
-            "clinical_outcomes"
-          ],
-          "evidence_summary": "RIO trials showing psychiatric risks"
         }
       ],
       "source_category": "pharmaceutical_adulterants",
@@ -792,6 +780,11 @@
             "date": "2026-01-08",
             "change": "Migrated to schema v3.1 with standardized fields",
             "by": "system"
+          },
+          {
+            "date": "2026-10-02",
+            "by": "claude-audit",
+            "change": "LEDGER Q57: DOI citations content-checked (Crossref + PubMed, 2026-10-02). Removed 1 that resolve to an unrelated paper or to nothing: 10.1016/s0140-6736(07)61684-8. Receipt: scripts/audits/pending_items_20260926/research.md Q57."
           }
         ]
       },
@@ -895,30 +888,6 @@
       ],
       "references_structured": [
         {
-          "type": "doi",
-          "id": "10.1093/jat/24.2.83",
-          "title": "1,4-BD metabolism to GHB",
-          "evidence_grade": "A",
-          "url": "https://doi.org/10.1093/jat/24.2.83",
-          "supports_claims": [
-            "mechanism_of_harm",
-            "clinical_outcomes"
-          ],
-          "evidence_summary": "1,4-BD metabolism to GHB"
-        },
-        {
-          "type": "doi",
-          "id": "10.1016/j.forsciint.2003.08.001",
-          "title": "1,4-BD deaths",
-          "evidence_grade": "B",
-          "url": "https://doi.org/10.1016/j.forsciint.2003.08.001",
-          "supports_claims": [
-            "mechanism_of_harm",
-            "clinical_outcomes"
-          ],
-          "evidence_summary": "1,4-BD deaths"
-        },
-        {
           "type": "fda_advisory",
           "title": "FDA Talk Paper T99-21: FDA Warns About GBL-Related Products (1999-05-11)",
           "evidence_grade": "R",
@@ -960,6 +929,11 @@
             "date": "2026-09-26",
             "by": "claude-audit",
             "change": "Regulatory terminology (register Q15; Sean's D10 standard 2026-09-26: a warning letter, recall or advisory is not a ban). regulatory_date 2000-02-01 'FDA ban effective' -> 1999-05-11 'FDA advisory publication date' (FDA Talk Paper T99-21). US row 'FDA banned in dietary supplements. DEA List I chemical...' -> not_lawful citing T99-21: FDA called 1,4-BD a Class I Health Hazard and its products unapproved new drugs; 1,4-BD is not scheduled or a List I chemical (only GBL is). Removed the 'States' row coded as federal US. Removed two references with no URL. Reason: 'import alerts' -> the 1999 hazard finding and seizures (no import alert naming 1,4-BD was found). Receipt: scripts/audits/pending_items_20260926/research.md Q15."
+          },
+          {
+            "date": "2026-10-02",
+            "by": "claude-audit",
+            "change": "LEDGER Q57: DOI citations content-checked (Crossref + PubMed, 2026-10-02). Removed 2 that resolve to an unrelated paper or to nothing: 10.1093/jat/24.2.83, 10.1016/j.forsciint.2003.08.001. Receipt: scripts/audits/pending_items_20260926/research.md Q57."
           }
         ]
       },
@@ -1048,18 +1022,6 @@
       ],
       "references_structured": [
         {
-          "type": "doi",
-          "id": "10.1124/jpet.116.232215",
-          "title": "7-OH opioid activity",
-          "evidence_grade": "B",
-          "url": "https://doi.org/10.1124/jpet.116.232215",
-          "supports_claims": [
-            "mechanism_of_harm",
-            "clinical_outcomes"
-          ],
-          "evidence_summary": "7-OH opioid activity"
-        },
-        {
           "type": "other",
           "title": "Texas DSHS Alert: August 2025 - 7-OH exposure surge",
           "evidence_grade": "R",
@@ -1120,6 +1082,11 @@
             "date": "2026-09-26",
             "by": "claude-audit",
             "change": "Regulatory terminology (register Q15; Sean's D10 standard 2026-09-26: a warning letter, recall or advisory is not a ban). regulatory_date 2025-07-15 'FDA ban effective' -> 2025-06-25 'FDA warning letter' (Hydroxie 709661; 2025-07-15 was the announcement). legal_status_enum banned_federal -> not_lawful_as_supplement. US row -> not_lawful citing the letter and FDA's release. Removed the 'States' row coded as federal US. Reason: removed the false claim that DEA made 7-HMG Schedule I in 2024; DEA published only a notice of intent (2026-07-06). References without URLs replaced by the letter, the release and the DEA notice. Receipt: scripts/audits/pending_items_20260926/research.md Q15."
+          },
+          {
+            "date": "2026-10-02",
+            "by": "claude-audit",
+            "change": "LEDGER Q57: DOI citations content-checked (Crossref + PubMed, 2026-10-02). Removed 1 that resolve to an unrelated paper or to nothing: 10.1124/jpet.116.232215. Receipt: scripts/audits/pending_items_20260926/research.md Q57."
           }
         ]
       },
@@ -1982,44 +1949,7 @@
         "confidence": "high",
         "negative_match_terms": []
       },
-      "references_structured": [
-        {
-          "type": "doi",
-          "id": "10.1016/j.envint.2020.105881",
-          "title": "Endocrine disruption",
-          "evidence_grade": "B",
-          "url": "https://doi.org/10.1016/j.envint.2020.105881",
-          "supports_claims": [
-            "mechanism_of_harm",
-            "clinical_outcomes"
-          ],
-          "evidence_summary": "Endocrine disruption"
-        },
-        {
-          "type": "doi",
-          "id": "10.1289/EHP10857",
-          "title": "Reproductive effects",
-          "evidence_grade": "B",
-          "url": "https://doi.org/10.1289/EHP10857",
-          "supports_claims": [
-            "mechanism_of_harm",
-            "clinical_outcomes"
-          ],
-          "evidence_summary": "Reproductive effects"
-        },
-        {
-          "type": "doi",
-          "id": "10.1021/acs.est.4c01234",
-          "title": "Supplement contamination 2024",
-          "evidence_grade": "B",
-          "url": "https://doi.org/10.1021/acs.est.4c01234",
-          "supports_claims": [
-            "mechanism_of_harm",
-            "clinical_outcomes"
-          ],
-          "evidence_summary": "Supplement contamination 2024"
-        }
-      ],
+      "references_structured": [],
       "review": {
         "status": "validated",
         "last_reviewed_at": "2026-02-16",
@@ -2030,6 +1960,11 @@
             "date": "2026-01-08",
             "change": "Migrated to schema v3.1 with standardized fields",
             "by": "system"
+          },
+          {
+            "date": "2026-10-02",
+            "by": "claude-audit",
+            "change": "LEDGER Q57: DOI citations content-checked (Crossref + PubMed, 2026-10-02). Removed 3 that resolve to an unrelated paper or to nothing: 10.1016/j.envint.2020.105881, 10.1289/ehp10857, 10.1021/acs.est.4c01234. Receipt: scripts/audits/pending_items_20260926/research.md Q57."
           }
         ]
       },
@@ -2273,18 +2208,6 @@
       "references_structured": [
         {
           "type": "doi",
-          "id": "10.1016/j.envint.2019.105267",
-          "title": "EDC effects on human health",
-          "evidence_grade": "B",
-          "url": "https://doi.org/10.1016/j.envint.2019.105267",
-          "supports_claims": [
-            "mechanism_of_harm",
-            "clinical_outcomes"
-          ],
-          "evidence_summary": "EDC effects on human health"
-        },
-        {
-          "type": "doi",
           "id": "10.1210/er.2015-1010",
           "title": "Endocrine disrupting chemicals review",
           "evidence_grade": "B",
@@ -2323,6 +2246,11 @@
             "date": "2026-09-26",
             "by": "claude-audit",
             "change": "Regulatory terminology (register Q15; Sean's D10 standard 2026-09-26: a warning letter, recall or advisory is not a ban). regulatory_date 1979-01-01 'FDA ban effective' -> null: no primary document bans synthetic estrogens in supplements. US row 'banned' ('Restricted - Requires prescription...') -> under_review. Removed the WHO row coded as US (an EDC classification is not a legal status). Safety warning: removed 'not lawful supplement ingredients' (no source). Receipt: scripts/audits/pending_items_20260926/research.md Q15."
+          },
+          {
+            "date": "2026-10-02",
+            "by": "claude-audit",
+            "change": "LEDGER Q57: DOI citations content-checked (Crossref + PubMed, 2026-10-02). Removed 1 that resolve to an unrelated paper or to nothing: 10.1016/j.envint.2019.105267. Receipt: scripts/audits/pending_items_20260926/research.md Q57."
           }
         ]
       },
@@ -2394,32 +2322,7 @@
           "no artificial colors"
         ]
       },
-      "references_structured": [
-        {
-          "type": "doi",
-          "id": "10.1016/j.foodchem.2020.127556",
-          "title": "Synthetic acids",
-          "evidence_grade": "B",
-          "url": "https://doi.org/10.1016/j.foodchem.2020.127556",
-          "supports_claims": [
-            "mechanism_of_harm",
-            "clinical_outcomes"
-          ],
-          "evidence_summary": "Synthetic acids"
-        },
-        {
-          "type": "doi",
-          "id": "10.3390/foods9020178",
-          "title": "Health effects",
-          "evidence_grade": "B",
-          "url": "https://doi.org/10.3390/foods9020178",
-          "supports_claims": [
-            "mechanism_of_harm",
-            "clinical_outcomes"
-          ],
-          "evidence_summary": "Health effects"
-        }
-      ],
+      "references_structured": [],
       "review": {
         "status": "validated",
         "last_reviewed_at": "2026-02-26",
@@ -2430,6 +2333,11 @@
             "date": "2026-01-08",
             "change": "Migrated to schema v3.1 with standardized fields",
             "by": "system"
+          },
+          {
+            "date": "2026-10-02",
+            "by": "claude-audit",
+            "change": "LEDGER Q57: DOI citations content-checked (Crossref + PubMed, 2026-10-02). Removed 2 that resolve to an unrelated paper or to nothing: 10.1016/j.foodchem.2020.127556, 10.3390/foods9020178. Receipt: scripts/audits/pending_items_20260926/research.md Q57."
           }
         ]
       },
@@ -2538,18 +2446,6 @@
       "references_structured": [
         {
           "type": "doi",
-          "id": "10.1093/jnci/djr085",
-          "title": "Aristolochic acid carcinogenicity",
-          "evidence_grade": "B",
-          "url": "https://doi.org/10.1093/jnci/djr085",
-          "supports_claims": [
-            "mechanism_of_harm",
-            "clinical_outcomes"
-          ],
-          "evidence_summary": "Aristolochic acid carcinogenicity"
-        },
-        {
-          "type": "doi",
           "id": "10.1073/pnas.1119920109",
           "title": "DNA damage mechanisms",
           "evidence_grade": "B",
@@ -2609,6 +2505,11 @@
             "date": "2026-09-26",
             "by": "claude-audit",
             "change": "Regulatory terminology (register Q15; Sean's D10 standard 2026-09-26: a warning letter, recall or advisory is not a ban). regulatory_date 2001-04-09 'FDA ban effective' -> 2000-07-06 'First FDA enforcement action' (Import Alert 54-10; 2001-04-09 is the letter to industry). legal_status_enum banned_federal -> adulterant. US row 'FDA Import Alert 54-12 (active). Completely banned...' -> not_lawful citing Import Alert 54-10 (54-12 is a ginseng alert) and FDA's adulteration position. Reason: 'over 100 kidney transplants' -> 'over 100 cases of nephropathy' (FDA's figure). Safety copy: 'banned' -> FDA's adulteration position. Receipt: scripts/audits/pending_items_20260926/research.md Q15."
+          },
+          {
+            "date": "2026-10-02",
+            "by": "claude-audit",
+            "change": "LEDGER Q57: DOI citations content-checked (Crossref + PubMed, 2026-10-02). Removed 1 that resolve to an unrelated paper or to nothing: 10.1093/jnci/djr085. Receipt: scripts/audits/pending_items_20260926/research.md Q57."
           }
         ]
       },
@@ -2687,18 +2588,6 @@
       ],
       "references_structured": [
         {
-          "type": "doi",
-          "id": "10.1016/j.drugalcdep.2015.01.027",
-          "title": "BMPEA not from Acacia",
-          "evidence_grade": "B",
-          "url": "https://doi.org/10.1016/j.drugalcdep.2015.01.027",
-          "supports_claims": [
-            "mechanism_of_harm",
-            "clinical_outcomes"
-          ],
-          "evidence_summary": "BMPEA not from Acacia"
-        },
-        {
           "type": "fda_warning_letter",
           "title": "FDA Constituent Update: Recent FDA Action on Dietary Supplements Labeled as Containing BMPEA (2015-04-23)",
           "evidence_grade": "R",
@@ -2745,6 +2634,11 @@
             "date": "2026-09-26",
             "by": "claude-audit",
             "change": "Regulatory terminology (register Q15; Sean's D10 standard 2026-09-26: a warning letter, recall or advisory is not a ban). regulatory_date 2015-04-01 'FDA ban effective' -> 2015-04-23 'FDA warning letter'. legal_status_enum banned_federal -> not_lawful_as_supplement. US row -> not_lawful citing FDA's constituent update (FDA calls the products misbranded, not adulterated). Reason: '4-amino-2-methylpentane' is a DMBA synonym, replaced with FDA's BMPEA synonym 1-amino-2-phenylpropane; the 9 of 21 finding is Pawar et al. 2013, not 2015. Safety copy: 'banned' -> not a dietary ingredient. Receipt: scripts/audits/pending_items_20260926/research.md Q15."
+          },
+          {
+            "date": "2026-10-02",
+            "by": "claude-audit",
+            "change": "LEDGER Q57: DOI citations content-checked (Crossref + PubMed, 2026-10-02). Removed 1 that resolve to an unrelated paper or to nothing: 10.1016/j.drugalcdep.2015.01.027. Receipt: scripts/audits/pending_items_20260926/research.md Q57."
           }
         ]
       },
@@ -3139,30 +3033,6 @@
       ],
       "references_structured": [
         {
-          "type": "doi",
-          "id": "10.1002/hep.1840190107",
-          "title": "Comfrey hepatotoxicity",
-          "evidence_grade": "B",
-          "url": "https://doi.org/10.1002/hep.1840190107",
-          "supports_claims": [
-            "mechanism_of_harm",
-            "clinical_outcomes"
-          ],
-          "evidence_summary": "Comfrey hepatotoxicity"
-        },
-        {
-          "type": "doi",
-          "id": "10.1093/jat/25.6.456",
-          "title": "Pyrrolizidine alkaloid toxicity",
-          "evidence_grade": "B",
-          "url": "https://doi.org/10.1093/jat/25.6.456",
-          "supports_claims": [
-            "mechanism_of_harm",
-            "clinical_outcomes"
-          ],
-          "evidence_summary": "Pyrrolizidine alkaloid toxicity"
-        },
-        {
           "type": "fda_advisory",
           "title": "FDA Advises Dietary Supplement Manufacturers to Remove Comfrey Products From the Market (2001-07-06)",
           "evidence_grade": "R",
@@ -3216,6 +3086,11 @@
             "date": "2026-09-26",
             "by": "claude-audit",
             "change": "Regulatory terminology (register Q15; Sean's D10 standard 2026-09-26: a warning letter, recall or advisory is not a ban). regulatory_date 2001-07-06 kept; label 'FDA ban effective' -> 'FDA advisory publication date' (FDA's letter to industry, not a ban). legal_status_enum banned_federal -> adulterant. US row 'FDA banned internal use (2001). FTC consent orders...' -> not_lawful citing the letter (FTC obtained a preliminary injunction against one firm, not industry consent orders). Removed the UK row coded as US and the unverified 'Germany banned internal comfrey use in 1992'. Safety copy: 'banned' -> FDA's adulteration position. Receipt: scripts/audits/pending_items_20260926/research.md Q15."
+          },
+          {
+            "date": "2026-10-02",
+            "by": "claude-audit",
+            "change": "LEDGER Q57: DOI citations content-checked (Crossref + PubMed, 2026-10-02). Removed 2 that resolve to an unrelated paper or to nothing: 10.1002/hep.1840190107, 10.1093/jat/25.6.456. Receipt: scripts/audits/pending_items_20260926/research.md Q57."
           }
         ]
       },
@@ -3579,30 +3454,6 @@
       ],
       "references_structured": [
         {
-          "type": "doi",
-          "id": "10.1016/j.drugalcdep.2012.12.011",
-          "title": "DMAA cardiovascular effects",
-          "evidence_grade": "B",
-          "url": "https://doi.org/10.1016/j.drugalcdep.2012.12.011",
-          "supports_claims": [
-            "mechanism_of_harm",
-            "clinical_outcomes"
-          ],
-          "evidence_summary": "DMAA cardiovascular effects"
-        },
-        {
-          "type": "doi",
-          "id": "10.1093/jat/bks078",
-          "title": "DMAA not from geranium",
-          "evidence_grade": "B",
-          "url": "https://doi.org/10.1093/jat/bks078",
-          "supports_claims": [
-            "mechanism_of_harm",
-            "clinical_outcomes"
-          ],
-          "evidence_summary": "DMAA not from geranium"
-        },
-        {
           "type": "fda_advisory",
           "title": "FDA: DMAA in Products Marketed as Dietary Supplements",
           "evidence_grade": "R",
@@ -3649,6 +3500,11 @@
             "date": "2026-09-26",
             "by": "claude-audit",
             "change": "Regulatory terminology (register Q15; Sean's D10 standard 2026-09-26: a warning letter, recall or advisory is not a ban). regulatory_date 2013-04-11 'FDA ban effective' -> 2012-04-24 'FDA warning letter' (first letters; 2013-04-11 is a consumer update). legal_status_enum banned_federal -> not_lawful_as_supplement. Two federal US rows ('FDA banned in dietary supplements (2013)', and a second dated 2025-08-01) -> one not_lawful row citing FDA's DMAA page. DoD row retyped from state_statute to the DoD list. State rows (CA, NY, MA) left for review: uncited (register Q15). Receipt: scripts/audits/pending_items_20260926/research.md Q15."
+          },
+          {
+            "date": "2026-10-02",
+            "by": "claude-audit",
+            "change": "LEDGER Q57: DOI citations content-checked (Crossref + PubMed, 2026-10-02). Removed 2 that resolve to an unrelated paper or to nothing: 10.1016/j.drugalcdep.2012.12.011, 10.1093/jat/bks078. Receipt: scripts/audits/pending_items_20260926/research.md Q57."
           }
         ]
       },
@@ -3847,18 +3703,6 @@
       ],
       "references_structured": [
         {
-          "type": "doi",
-          "id": "10.1016/j.drugalcdep.2019.01.026",
-          "title": "DMHA cardiovascular effects",
-          "evidence_grade": "B",
-          "url": "https://doi.org/10.1016/j.drugalcdep.2019.01.026",
-          "supports_claims": [
-            "mechanism_of_harm",
-            "clinical_outcomes"
-          ],
-          "evidence_summary": "DMHA cardiovascular effects"
-        },
-        {
           "type": "fda_warning_letter",
           "title": "FDA Constituent Update: FDA Acts on Dietary Supplements Containing DMHA and Phenibut",
           "evidence_grade": "R",
@@ -3900,6 +3744,11 @@
             "date": "2026-09-26",
             "by": "claude-audit",
             "change": "Regulatory terminology (register Q15; Sean's D10 standard 2026-09-26: a warning letter, recall or advisory is not a ban). regulatory_date 2019-10-01 'FDA ban effective' -> 2019-04-10 'FDA warning letter'. legal_status_enum banned_federal -> not_lawful_as_supplement. US row 'FDA determined not a dietary ingredient (2019)' -> not_lawful citing FDA's DMHA page (the not-a-dietary-ingredient conclusion came after the 2019 letters). Removed reference 'FDA: March 2023 - DMHA enforcement' (a page date, not an action). Receipt: scripts/audits/pending_items_20260926/research.md Q15."
+          },
+          {
+            "date": "2026-10-02",
+            "by": "claude-audit",
+            "change": "LEDGER Q57: DOI citations content-checked (Crossref + PubMed, 2026-10-02). Removed 1 that resolve to an unrelated paper or to nothing: 10.1016/j.drugalcdep.2019.01.026. Receipt: scripts/audits/pending_items_20260926/research.md Q57."
           }
         ]
       },
@@ -3996,30 +3845,6 @@
       ],
       "references_structured": [
         {
-          "type": "doi",
-          "id": "10.7326/0003-4819-140-8-200404200-00006",
-          "title": "Ephedra adverse events",
-          "evidence_grade": "B",
-          "url": "https://doi.org/10.7326/0003-4819-140-8-200404200-00006",
-          "supports_claims": [
-            "mechanism_of_harm",
-            "clinical_outcomes"
-          ],
-          "evidence_summary": "Ephedra adverse events"
-        },
-        {
-          "type": "doi",
-          "id": "10.1056/NEJMoa032648",
-          "title": "Cardiovascular risks",
-          "evidence_grade": "B",
-          "url": "https://doi.org/10.1056/NEJMoa032648",
-          "supports_claims": [
-            "mechanism_of_harm",
-            "clinical_outcomes"
-          ],
-          "evidence_summary": "Cardiovascular risks"
-        },
-        {
           "type": "fda_final_rule",
           "title": "Final Rule Declaring Dietary Supplements Containing Ephedrine Alkaloids Adulterated (69 FR 6788; 21 CFR 119.1)",
           "evidence_grade": "R",
@@ -4054,6 +3879,11 @@
             "date": "2026-09-26",
             "by": "claude-audit",
             "change": "Regulatory terminology (register Q15; Sean's D10 standard 2026-09-26: a warning letter, recall or advisory is not a ban). Genuine ban kept: 2004-04-12 'FDA ban effective' (final rule 69 FR 6788, 21 CFR 119.1). US row now cites the rule (type fda_final_rule, govinfo URL). Reason and safety copy: '155 deaths, 17,000 adverse event reports' are not in the rule, which cites 'more than 18,000 AERs'; replaced. Receipt: scripts/audits/pending_items_20260926/research.md Q15."
+          },
+          {
+            "date": "2026-10-02",
+            "by": "claude-audit",
+            "change": "LEDGER Q57: DOI citations content-checked (Crossref + PubMed, 2026-10-02). Removed 2 that resolve to an unrelated paper or to nothing: 10.7326/0003-4819-140-8-200404200-00006, 10.1056/nejmoa032648. Receipt: scripts/audits/pending_items_20260926/research.md Q57."
           }
         ]
       },
@@ -4112,20 +3942,7 @@
           "last_verified_date": "2026-09-26"
         }
       ],
-      "references_structured": [
-        {
-          "type": "doi",
-          "id": "10.1177/2045125316672135",
-          "title": "Fasoracetam clinical trial failure",
-          "evidence_grade": "A",
-          "url": "https://doi.org/10.1177/2045125316672135",
-          "supports_claims": [
-            "mechanism_of_harm",
-            "clinical_outcomes"
-          ],
-          "evidence_summary": "Fasoracetam clinical trial failure"
-        }
-      ],
+      "references_structured": [],
       "source_category": "nootropic_banned",
       "entity_type": "ingredient",
       "review": {
@@ -4143,6 +3960,11 @@
             "date": "2026-09-26",
             "by": "claude-audit",
             "change": "Regulatory terminology (register Q15; Sean's D10 standard 2026-09-26: a warning letter, recall or advisory is not a ban). regulatory_date 2019-11-25 'FDA ban effective' -> null: no government document names fasoracetam; 2019-11-25 is a non-FDA study's publication date. legal_status_enum not_lawful_as_supplement -> under_review; US row -> under_review. Removed the reference 'FDA: November 25, 2019 - Not a dietary ingredient' (it pointed at FDA's directory, which has no fasoracetam entry). Reason and safety copy no longer assert unlawfulness. Policy stays unverified, so the safety gate routes a match to review (as SR9009). Receipt: scripts/audits/pending_items_20260926/research.md Q15."
+          },
+          {
+            "date": "2026-10-02",
+            "by": "claude-audit",
+            "change": "LEDGER Q57: DOI citations content-checked (Crossref + PubMed, 2026-10-02). Removed 1 that resolve to an unrelated paper or to nothing: 10.1177/2045125316672135. Receipt: scripts/audits/pending_items_20260926/research.md Q57."
           }
         ]
       },
@@ -4242,18 +4064,6 @@
       ],
       "references_structured": [
         {
-          "type": "doi",
-          "id": "10.1016/0278-6915(94)90034-5",
-          "title": "Azo dye metabolism and toxicity",
-          "evidence_grade": "A",
-          "url": "https://doi.org/10.1016/0278-6915(94)90034-5",
-          "supports_claims": [
-            "mechanism_of_harm",
-            "clinical_outcomes"
-          ],
-          "evidence_summary": "Azo dye metabolism and toxicity"
-        },
-        {
           "type": "federal_register",
           "title": "Termination of Provisional Listing and Certification of FD&C Red No. 2 (41 FR 5823)",
           "evidence_grade": "R",
@@ -4307,6 +4117,11 @@
             "date": "2026-09-26",
             "by": "claude-audit",
             "change": "Regulatory terminology (register Q15; Sean's D10 standard 2026-09-26: a warning letter, recall or advisory is not a ban). Genuine prohibition by delisting kept as 'FDA ban effective'; regulatory_date 1976-01-19 -> 1976-02-12 (41 FR 5823 as changed by 41 FR 6774); US effective_date 1976-02-01 -> 1976-02-12. Reference '41 FR 41858' (not among FDA's citations; date field '4185') replaced by 41 FR 5823, 41 FR 6774 and 21 CFR 81.10(f). Removed Russia, Austria and Norway rows coded as US and the unverified EU claim (EUR-Lex was not readable). Receipt: scripts/audits/pending_items_20260926/research.md Q15."
+          },
+          {
+            "date": "2026-10-02",
+            "by": "claude-audit",
+            "change": "LEDGER Q57: DOI citations content-checked (Crossref + PubMed, 2026-10-02). Removed 1 that resolve to an unrelated paper or to nothing: 10.1016/0278-6915(94)90034-5. Receipt: scripts/audits/pending_items_20260926/research.md Q57."
           }
         ]
       },
@@ -4538,18 +4353,6 @@
       ],
       "references_structured": [
         {
-          "type": "doi",
-          "id": "10.1016/j.fct.2013.07.080",
-          "title": "Higenamine cardiovascular effects",
-          "evidence_grade": "B",
-          "url": "https://doi.org/10.1016/j.fct.2013.07.080",
-          "supports_claims": [
-            "mechanism_of_harm",
-            "clinical_outcomes"
-          ],
-          "evidence_summary": "Higenamine cardiovascular effects"
-        },
-        {
           "type": "wada_list",
           "title": "WADA: 2017 - Prohibited list addition",
           "evidence_grade": "R",
@@ -4603,6 +4406,11 @@
             "date": "2026-09-26",
             "by": "claude-audit",
             "change": "Regulatory terminology (register Q15; Sean's D10 standard 2026-09-26: a warning letter, recall or advisory is not a ban). regulatory_date 2019-04-01 'FDA ban effective' -> 2022-05-04 'FDA warning letter' (IronMag 622504); the Advisory List listing date (by 2019-06-24) is not exact. legal_status_enum not_lawful_as_supplement -> adulterant. US row -> not_lawful citing the letter. Reason: FDA treats higenamine as a new dietary ingredient without notification, not under the drug exclusion; no 2019 guidance naming it with vinpocetine was found. Receipt: scripts/audits/pending_items_20260926/research.md Q15."
+          },
+          {
+            "date": "2026-10-02",
+            "by": "claude-audit",
+            "change": "LEDGER Q57: DOI citations content-checked (Crossref + PubMed, 2026-10-02). Removed 1 that resolve to an unrelated paper or to nothing: 10.1016/j.fct.2013.07.080. Receipt: scripts/audits/pending_items_20260926/research.md Q57."
           }
         ]
       },
@@ -4832,20 +4640,7 @@
           "last_verified_date": "2026-09-26"
         }
       ],
-      "references_structured": [
-        {
-          "type": "doi",
-          "id": "10.1210/jc.2009-0491",
-          "title": "IGF-1 and cancer risk",
-          "evidence_grade": "B",
-          "url": "https://doi.org/10.1210/jc.2009-0491",
-          "supports_claims": [
-            "mechanism_of_harm",
-            "clinical_outcomes"
-          ],
-          "evidence_summary": "IGF-1 and cancer risk"
-        }
-      ],
+      "references_structured": [],
       "source_category": "permanently_banned",
       "entity_type": "ingredient",
       "review": {
@@ -4863,6 +4658,11 @@
             "date": "2026-09-26",
             "by": "claude-audit",
             "change": "Regulatory terminology (register Q15; Sean's D10 standard 2026-09-26: a warning letter, recall or advisory is not a ban). regulatory_date 1997-01-01 'FDA ban effective' -> null: no government document names IGF-1 as a supplement ingredient with a status. legal_status_enum banned_federal -> under_review; US row 'FDA banned synthetic/recombinant IGF-1 in dietary supplements (1997)' -> under_review. Removed reference 'FDA: 1997 - Dietary supplement ban' (no URL). Reason and safety copy no longer assert a dietary-ingredient finding. Receipt: scripts/audits/pending_items_20260926/research.md Q15."
+          },
+          {
+            "date": "2026-10-02",
+            "by": "claude-audit",
+            "change": "LEDGER Q57: DOI citations content-checked (Crossref + PubMed, 2026-10-02). Removed 1 that resolve to an unrelated paper or to nothing: 10.1210/jc.2009-0491. Receipt: scripts/audits/pending_items_20260926/research.md Q57."
           }
         ]
       },
@@ -5277,30 +5077,6 @@
       ],
       "references_structured": [
         {
-          "type": "doi",
-          "id": "10.15585/mmwr.mm6843a6",
-          "title": "Phenibut exposures reported to poison centers",
-          "evidence_grade": "B",
-          "year": 2019,
-          "supports_claims": [
-            "mechanism_of_harm",
-            "clinical_outcomes"
-          ],
-          "evidence_summary": "Phenibut exposures reported to poison centers"
-        },
-        {
-          "type": "doi",
-          "id": "10.1016/j.ajem.2019.03.029",
-          "title": "Phenibut withdrawal syndrome",
-          "evidence_grade": "C",
-          "year": 2019,
-          "supports_claims": [
-            "mechanism_of_harm",
-            "clinical_outcomes"
-          ],
-          "evidence_summary": "Phenibut withdrawal syndrome"
-        },
-        {
           "type": "fda_warning_letter",
           "title": "FDA Constituent Update: FDA Acts on Dietary Supplements Containing DMHA and Phenibut",
           "evidence_grade": "R",
@@ -5354,6 +5130,11 @@
             "date": "2026-09-26",
             "by": "claude-audit",
             "change": "Regulatory terminology (register Q15; Sean's D10 standard 2026-09-26: a warning letter, recall or advisory is not a ban). regulatory_date 2019-04-10 kept; label 'FDA ban effective' -> 'FDA warning letter'. legal_status_enum banned_federal -> not_lawful_as_supplement. US row ('FDA warnings issued 2019, 2023', dated 2019-01-01) -> not_lawful citing FDA's phenibut page. Reference that pointed the phenibut title at FDA's generic directory replaced. Reason: no FTC action naming phenibut was found; the 2023 actions were a court injunction and a DOJ plea. State rows (AL row says schedule_I but cites Schedule II) left for review. Receipt: scripts/audits/pending_items_20260926/research.md Q15."
+          },
+          {
+            "date": "2026-10-02",
+            "by": "claude-audit",
+            "change": "LEDGER Q57: DOI citations content-checked (Crossref + PubMed, 2026-10-02). Removed 2 that resolve to an unrelated paper or to nothing: 10.15585/mmwr.mm6843a6, 10.1016/j.ajem.2019.03.029. Receipt: scripts/audits/pending_items_20260926/research.md Q57."
           }
         ]
       },
@@ -5901,18 +5682,6 @@
       ],
       "references_structured": [
         {
-          "type": "doi",
-          "id": "10.1210/endo.140.12.7163",
-          "title": "S-23 as male contraceptive",
-          "evidence_grade": "B",
-          "url": "https://doi.org/10.1210/endo.140.12.7163",
-          "supports_claims": [
-            "mechanism_of_harm",
-            "clinical_outcomes"
-          ],
-          "evidence_summary": "S-23 as male contraceptive"
-        },
-        {
           "type": "fda_warning_letter",
           "title": "FDA Warning Letter 719433 to Prime Sports Nutrition (2025-12-12)",
           "evidence_grade": "R",
@@ -5942,6 +5711,11 @@
             "date": "2026-09-26",
             "by": "claude-audit",
             "change": "Regulatory terminology (Sean, D10, 2026-09-26: a warning letter, recall or advisory is not a ban). regulatory_date 2017-10-31 'FDA ban effective' -> 2025-12-12 'FDA warning letter'. S-23 is not named in FDA's 2017-10-31 material; the first FDA letter found naming it is 719433. Removed the 'Clinical Status' US jurisdiction row (status banned, type state_statute, citation 'Investigated as male contraceptive - causes complete testosterone suppression'): it is not a jurisdiction. Replaced US jurisdiction entries: US banned 2017-10-31 (fda_action: FDA banned in supplements (2017). Unapproved drug.); Clinical Status banned None (state_statute: Investigated as male contraceptive - causes complete testosterone suppression). FDA never used 'ban' for SARMs; no statute or DEA rule covers them (SARMs Control Acts S.2742/S.2895 not enacted). Receipt: scripts/audits/pending_items_20260926/research.md."
+          },
+          {
+            "date": "2026-10-02",
+            "by": "claude-audit",
+            "change": "LEDGER Q57: DOI citations content-checked (Crossref + PubMed, 2026-10-02). Removed 1 that resolve to an unrelated paper or to nothing: 10.1210/endo.140.12.7163. Receipt: scripts/audits/pending_items_20260926/research.md Q57."
           }
         ]
       },
@@ -6194,20 +5968,7 @@
           "last_verified_date": "2026-09-26"
         }
       ],
-      "references_structured": [
-        {
-          "type": "doi",
-          "id": "10.1038/nature11704",
-          "title": "Rev-ErbA agonist effects",
-          "evidence_grade": "B",
-          "url": "https://doi.org/10.1038/nature11704",
-          "supports_claims": [
-            "mechanism_of_harm",
-            "clinical_outcomes"
-          ],
-          "evidence_summary": "Rev-ErbA agonist effects"
-        }
-      ],
+      "references_structured": [],
       "source_category": "sarms_prohibited",
       "entity_type": "ingredient",
       "review": {
@@ -6225,6 +5986,11 @@
             "date": "2026-09-26",
             "by": "claude-audit",
             "change": "Regulatory terminology (Sean, D10). regulatory_date 2017-10-31 'FDA ban effective' -> null: no FDA document names SR9009, and FDA's 2017-10-31 material names only ostarine and LGD-4033. Removed reference 'FDA Warning: October 31, 2017' (no URL). US jurisdiction 'banned' 2017-10-31 ('FDA banned in supplements (2017)...') -> under_review. Policy stays unverified, so the safety gate routes a match to review. Receipt: scripts/audits/pending_items_20260926/research.md."
+          },
+          {
+            "date": "2026-10-02",
+            "by": "claude-audit",
+            "change": "LEDGER Q57: DOI citations content-checked (Crossref + PubMed, 2026-10-02). Removed 1 that resolve to an unrelated paper or to nothing: 10.1038/nature11704. Receipt: scripts/audits/pending_items_20260926/research.md Q57."
           }
         ]
       },
@@ -6578,18 +6344,6 @@
       ],
       "references_structured": [
         {
-          "type": "doi",
-          "id": "10.15585/mmwr.mm7316a4",
-          "title": "Tianeptine exposures",
-          "evidence_grade": "B",
-          "url": "https://doi.org/10.15585/mmwr.mm7316a4",
-          "supports_claims": [
-            "mechanism_of_harm",
-            "clinical_outcomes"
-          ],
-          "evidence_summary": "Tianeptine exposures"
-        },
-        {
           "type": "fda_warning_letter",
           "title": "FDA Warning Letter 566831 to MA Labs LLC (2018-11-07)",
           "evidence_grade": "R",
@@ -6643,6 +6397,11 @@
             "date": "2026-09-26",
             "by": "claude-audit",
             "change": "Regulatory terminology (register Q15; Sean's D10 standard 2026-09-26: a warning letter, recall or advisory is not a ban). regulatory_date 2025-01-01 'FDA ban effective' -> 2018-11-07 'FDA warning letter' (MA Labs 566831, FDA's first). legal_status_enum banned_federal -> not_lawful_as_supplement. US row ('not_approved', 'Proposed Schedule III') -> not_lawful citing the letter; DEA proposed Schedule I, not III (91 FR 42150), and it is not final. References without URLs replaced. State rows left for review: DEA's NPRM lists different control years for GA, IN, TN, OH and FL and does not list Utah. Receipt: scripts/audits/pending_items_20260926/research.md Q15."
+          },
+          {
+            "date": "2026-10-02",
+            "by": "claude-audit",
+            "change": "LEDGER Q57: DOI citations content-checked (Crossref + PubMed, 2026-10-02). Removed 1 that resolve to an unrelated paper or to nothing: 10.15585/mmwr.mm7316a4. Receipt: scripts/audits/pending_items_20260926/research.md Q57."
           }
         ]
       },
@@ -6756,18 +6515,6 @@
       ],
       "references_structured": [
         {
-          "type": "doi",
-          "id": "10.1016/j.toxicon.2018.11.434",
-          "title": "Yellow oleander cardiotoxicity",
-          "evidence_grade": "B",
-          "url": "https://doi.org/10.1016/j.toxicon.2018.11.434",
-          "supports_claims": [
-            "mechanism_of_harm",
-            "clinical_outcomes"
-          ],
-          "evidence_summary": "Yellow oleander cardiotoxicity"
-        },
-        {
           "type": "other",
           "title": "CDC Report: September 2023 - Tejocote root substitution investigation",
           "evidence_grade": "R",
@@ -6821,6 +6568,11 @@
             "date": "2026-09-26",
             "by": "claude-audit",
             "change": "Regulatory terminology (register Q15; Sean's D10 standard 2026-09-26: a warning letter, recall or advisory is not a ban). regulatory_date 2025-01-01 'FDA ban effective' -> 2024-01-26 'FDA advisory publication date' (tejocote substitution warning). legal_status_enum banned_federal -> adulterant. US row ('FDA Class I recalls ongoing (2023-2025), Import Alert active') -> not_lawful citing FDA's warning; no import alert or 2021 safety alert was found. Reference 'FDA Alert: November 3, 2025 - Final...' (dated on the Nuez de la India URL) replaced. Reason and safety copy: removed the 2021 alert, 2025 recalls and deaths claims; FDA's text reports adverse events but no deaths. Receipt: scripts/audits/pending_items_20260926/research.md Q15."
+          },
+          {
+            "date": "2026-10-02",
+            "by": "claude-audit",
+            "change": "LEDGER Q57: DOI citations content-checked (Crossref + PubMed, 2026-10-02). Removed 1 that resolve to an unrelated paper or to nothing: 10.1016/j.toxicon.2018.11.434. Receipt: scripts/audits/pending_items_20260926/research.md Q57."
           }
         ]
       },
@@ -6994,18 +6746,6 @@
       ],
       "references_structured": [
         {
-          "type": "doi",
-          "id": "10.1001/jama.1992.03490220089034",
-          "title": "Chaparral hepatotoxicity",
-          "evidence_grade": "B",
-          "url": "https://doi.org/10.1001/jama.1992.03490220089034",
-          "supports_claims": [
-            "mechanism_of_harm",
-            "clinical_outcomes"
-          ],
-          "evidence_summary": "Chaparral hepatotoxicity"
-        },
-        {
           "type": "fda_advisory",
           "title": "FDA: 1992 - Consumer advisory",
           "evidence_grade": "R",
@@ -7033,6 +6773,11 @@
             "date": "2026-09-26",
             "change": "CUI C1050700 -> C0697139 (species anchor chosen by Sean). UMLS: C1050700 is 'Larrea divaricata' (NCBI taxid 108399, the South American L. divaricata Cav.); C0697139 is 'Larrea tridentata' (Plant; NCBI taxid 66636, MSH, NCI), the species this entry's reason names. ITIS lists the North American usage 'Larrea divaricata auct. non Cav.' as a misapplied name for L. tridentata, so the 'larrea divaricata' alias stays for label matching. No shipped detail blob or frozen enriched product references this entry.",
             "by": "claude-audit"
+          },
+          {
+            "date": "2026-10-02",
+            "by": "claude-audit",
+            "change": "LEDGER Q57: DOI citations content-checked (Crossref + PubMed, 2026-10-02). Removed 1 that resolve to an unrelated paper or to nothing: 10.1001/jama.1992.03490220089034. Receipt: scripts/audits/pending_items_20260926/research.md Q57."
           }
         ]
       },
@@ -7242,18 +6987,6 @@
       ],
       "references_structured": [
         {
-          "type": "doi",
-          "id": "10.1016/S0140-6736(96)01471-5",
-          "title": "Pennyroyal oil fatality",
-          "evidence_grade": "B",
-          "url": "https://doi.org/10.1016/S0140-6736(96)01471-5",
-          "supports_claims": [
-            "mechanism_of_harm",
-            "clinical_outcomes"
-          ],
-          "evidence_summary": "Pennyroyal oil fatality"
-        },
-        {
           "type": "fda_advisory",
           "title": "FDA: Ongoing warnings",
           "evidence_grade": "R",
@@ -7275,6 +7008,11 @@
             "date": "2026-01-08",
             "change": "Migrated to schema v3.1 with standardized fields",
             "by": "system"
+          },
+          {
+            "date": "2026-10-02",
+            "by": "claude-audit",
+            "change": "LEDGER Q57: DOI citations content-checked (Crossref + PubMed, 2026-10-02). Removed 1 that resolve to an unrelated paper or to nothing: 10.1016/s0140-6736(96)01471-5. Receipt: scripts/audits/pending_items_20260926/research.md Q57."
           }
         ]
       },
@@ -7399,18 +7137,6 @@
           "evidence_summary": "IARC: Group 1 classification - Inorganic arsenic"
         },
         {
-          "type": "doi",
-          "id": "10.1289/ehp.1104494",
-          "title": "Arsenic in rice",
-          "evidence_grade": "B",
-          "url": "https://doi.org/10.1289/ehp.1104494",
-          "supports_claims": [
-            "mechanism_of_harm",
-            "clinical_outcomes"
-          ],
-          "evidence_summary": "Arsenic in rice"
-        },
-        {
           "type": "fda_advisory",
           "title": "FDA: Zaarah Herbals recall - March 13, 2025",
           "evidence_grade": "R",
@@ -7438,6 +7164,11 @@
             "date": "2026-02-16",
             "change": "Alias precision hardening for supplement label matching (reduced ambiguous aliases; added hydrogenated coconut reverse-label variants)",
             "by": "codex_alias_precision_pass"
+          },
+          {
+            "date": "2026-10-02",
+            "by": "claude-audit",
+            "change": "LEDGER Q57: DOI citations content-checked (Crossref + PubMed, 2026-10-02). Removed 1 that resolve to an unrelated paper or to nothing: 10.1289/ehp.1104494. Receipt: scripts/audits/pending_items_20260926/research.md Q57."
           }
         ]
       },
@@ -7545,18 +7276,6 @@
           "evidence_grade": "R",
           "supports_claims": [],
           "evidence_summary": "IARC: Group 1 classification - Cadmium"
-        },
-        {
-          "type": "doi",
-          "id": "10.1016/j.fct.2013.12.005",
-          "title": "Cadmium in chocolate",
-          "evidence_grade": "B",
-          "url": "https://doi.org/10.1016/j.fct.2013.12.005",
-          "supports_claims": [
-            "mechanism_of_harm",
-            "clinical_outcomes"
-          ],
-          "evidence_summary": "Cadmium in chocolate"
         }
       ],
       "source_category": "heavy_metal_limits",
@@ -7576,6 +7295,11 @@
             "date": "2026-02-16",
             "change": "Alias precision hardening for supplement label matching (reduced ambiguous aliases; added hydrogenated coconut reverse-label variants)",
             "by": "codex_alias_precision_pass"
+          },
+          {
+            "date": "2026-10-02",
+            "by": "claude-audit",
+            "change": "LEDGER Q57: DOI citations content-checked (Crossref + PubMed, 2026-10-02). Removed 1 that resolve to an unrelated paper or to nothing: 10.1016/j.fct.2013.12.005. Receipt: scripts/audits/pending_items_20260926/research.md Q57."
           }
         ]
       },
@@ -7677,18 +7401,6 @@
       ],
       "references_structured": [
         {
-          "type": "doi",
-          "id": "10.1016/S0140-6736(18)31310-2",
-          "title": "Lancet: Global burden of lead exposure",
-          "evidence_grade": "B",
-          "url": "https://doi.org/10.1016/S0140-6736(18)31310-2",
-          "supports_claims": [
-            "mechanism_of_harm",
-            "clinical_outcomes"
-          ],
-          "evidence_summary": "Lancet: Global burden of lead exposure"
-        },
-        {
           "type": "other",
           "title": "California Prop 65: Lead NSRL 0.5 mcg/day",
           "evidence_grade": "R",
@@ -7713,6 +7425,11 @@
             "date": "2026-02-16",
             "change": "Alias precision hardening for supplement label matching (reduced ambiguous aliases; added hydrogenated coconut reverse-label variants)",
             "by": "codex_alias_precision_pass"
+          },
+          {
+            "date": "2026-10-02",
+            "by": "claude-audit",
+            "change": "LEDGER Q57: DOI citations content-checked (Crossref + PubMed, 2026-10-02). Removed 1 that resolve to an unrelated paper or to nothing: 10.1016/s0140-6736(18)31310-2. Receipt: scripts/audits/pending_items_20260926/research.md Q57."
           }
         ]
       },
@@ -7946,18 +7663,6 @@
             "mechanism_of_harm"
           ],
           "evidence_summary": "PubMed 22380576 - 9-methyl-beta-carboline-induced cognitive enhancement is associated with elevated hippocampal dopamine levels"
-        },
-        {
-          "type": "doi",
-          "id": "10.1016/j.neuropharm.2015.08.025",
-          "title": "Beta-carboline neurotoxicity",
-          "evidence_grade": "B",
-          "url": "https://doi.org/10.1016/j.neuropharm.2015.08.025",
-          "supports_claims": [
-            "mechanism_of_harm",
-            "clinical_outcomes"
-          ],
-          "evidence_summary": "Beta-carboline neurotoxicity"
         }
       ],
       "source_category": "nootropic_banned",
@@ -7977,6 +7682,11 @@
             "date": "2026-09-26",
             "by": "claude-audit",
             "change": "Regulatory terminology (register Q15; Sean's D10 standard 2026-09-26: a warning letter, recall or advisory is not a ban). regulatory_date 2012-01-01 'FDA ban effective' -> null: no government document names 9-Me-BC. legal_status_enum not_lawful_as_supplement -> under_review; US row not_lawful -> under_review. Reason and safety copy no longer assert an FDA position. Receipt: scripts/audits/pending_items_20260926/research.md Q15."
+          },
+          {
+            "date": "2026-10-02",
+            "by": "claude-audit",
+            "change": "LEDGER Q57: DOI citations content-checked (Crossref + PubMed, 2026-10-02). Removed 1 that resolve to an unrelated paper or to nothing: 10.1016/j.neuropharm.2015.08.025. Receipt: scripts/audits/pending_items_20260926/research.md Q57."
           }
         ]
       },
@@ -8064,18 +7774,6 @@
       ],
       "references_structured": [
         {
-          "type": "doi",
-          "id": "10.1016/S0149-2918(99)80048-1",
-          "title": "Adrafinil pharmacology",
-          "evidence_grade": "B",
-          "url": "https://doi.org/10.1016/S0149-2918(99)80048-1",
-          "supports_claims": [
-            "mechanism_of_harm",
-            "clinical_outcomes"
-          ],
-          "evidence_summary": "Adrafinil pharmacology"
-        },
-        {
           "type": "wada_list",
           "title": "WADA: Prohibited list - Modafinil and prodrugs",
           "evidence_grade": "R",
@@ -8124,6 +7822,11 @@
             "date": "2026-09-26",
             "by": "claude-audit",
             "change": "Regulatory terminology (register Q15; Sean's D10 standard 2026-09-26: a warning letter, recall or advisory is not a ban). regulatory_date 2017-01-01 'FDA ban effective' -> 2019-02-04 'FDA warning letter' (Peak Nootropics 557887). US row 'FDA banned in supplements - unapproved drug' -> not_lawful citing the letter. DoD row retyped from state_statute to the DoD list. France row left (not a US claim; 'discontinued' is not 'banned'). Receipt: scripts/audits/pending_items_20260926/research.md Q15."
+          },
+          {
+            "date": "2026-10-02",
+            "by": "claude-audit",
+            "change": "LEDGER Q57: DOI citations content-checked (Crossref + PubMed, 2026-10-02). Removed 1 that resolve to an unrelated paper or to nothing: 10.1016/s0149-2918(99)80048-1. Receipt: scripts/audits/pending_items_20260926/research.md Q57."
           }
         ]
       },
@@ -8211,18 +7914,6 @@
       ],
       "references_structured": [
         {
-          "type": "doi",
-          "id": "10.1007/s002130050622",
-          "title": "Aniracetam pharmacology",
-          "evidence_grade": "B",
-          "url": "https://doi.org/10.1007/s002130050622",
-          "supports_claims": [
-            "mechanism_of_harm",
-            "clinical_outcomes"
-          ],
-          "evidence_summary": "Aniracetam pharmacology"
-        },
-        {
           "type": "fda_warning_letter",
           "title": "FDA Warning Letter 557887 to Peak Nootropics LLC (2019-02-04)",
           "evidence_grade": "R",
@@ -8264,6 +7955,11 @@
             "date": "2026-09-26",
             "by": "claude-audit",
             "change": "Regulatory terminology (register Q15; Sean's D10 standard 2026-09-26: a warning letter, recall or advisory is not a ban). regulatory_date 2019-11-25 'FDA ban effective' -> 2019-02-04 'FDA warning letter' (Peak Nootropics 557887); 2019-11-25 is a non-FDA study date. US row -> not_lawful citing the letter (FDA's basis is unapproved new drug, not adulteration). Removed Argentina and China rows coded as US ('banned' with citation 'Approved pharmaceutical'). The Japan row named 'Italy' is left for review. Receipt: scripts/audits/pending_items_20260926/research.md Q15."
+          },
+          {
+            "date": "2026-10-02",
+            "by": "claude-audit",
+            "change": "LEDGER Q57: DOI citations content-checked (Crossref + PubMed, 2026-10-02). Removed 1 that resolve to an unrelated paper or to nothing: 10.1007/s002130050622. Receipt: scripts/audits/pending_items_20260926/research.md Q57."
           }
         ]
       },
@@ -8359,18 +8055,6 @@
             "regulatory_action"
           ],
           "evidence_summary": "Center for Forensic Science Research and Education monograph on bromantane"
-        },
-        {
-          "type": "doi",
-          "id": "10.1007/s11055-013-9858-1",
-          "title": "Bromantane effects",
-          "evidence_grade": "B",
-          "url": "https://doi.org/10.1007/s11055-013-9858-1",
-          "supports_claims": [
-            "mechanism_of_harm",
-            "clinical_outcomes"
-          ],
-          "evidence_summary": "Bromantane effects"
         }
       ],
       "source_category": "nootropic_banned",
@@ -8385,6 +8069,11 @@
             "date": "2026-01-08",
             "change": "Migrated to schema v3.1 with standardized fields",
             "by": "system"
+          },
+          {
+            "date": "2026-10-02",
+            "by": "claude-audit",
+            "change": "LEDGER Q57: DOI citations content-checked (Crossref + PubMed, 2026-10-02). Removed 1 that resolve to an unrelated paper or to nothing: 10.1007/s11055-013-9858-1. Receipt: scripts/audits/pending_items_20260926/research.md Q57."
           }
         ]
       },
@@ -8457,20 +8146,7 @@
           "last_verified_date": "2026-09-26"
         }
       ],
-      "references_structured": [
-        {
-          "type": "doi",
-          "id": "10.1021/jm00346a004",
-          "title": "Flmodafinil pharmacology",
-          "evidence_grade": "B",
-          "url": "https://doi.org/10.1021/jm00346a004",
-          "supports_claims": [
-            "mechanism_of_harm",
-            "clinical_outcomes"
-          ],
-          "evidence_summary": "Flmodafinil pharmacology"
-        }
-      ],
+      "references_structured": [],
       "source_category": "nootropic_banned",
       "entity_type": "ingredient",
       "review": {
@@ -8488,6 +8164,11 @@
             "date": "2026-09-26",
             "by": "claude-audit",
             "change": "Regulatory terminology (register Q15; Sean's D10 standard 2026-09-26: a warning letter, recall or advisory is not a ban). regulatory_date 2025-08-15 'FDA ban effective' -> null: no FDA August 2025 action or any government document naming flmodafinil was found. legal_status_enum not_lawful_as_supplement -> under_review; US row -> under_review. Reason: removed the analog-of-a-Schedule-IV claim (the analogue law covers Schedule I and II only) and 'adulterated'. Removed reference 'FDA: August 2025 - Warning letters'. Receipt: scripts/audits/pending_items_20260926/research.md Q15."
+          },
+          {
+            "date": "2026-10-02",
+            "by": "claude-audit",
+            "change": "LEDGER Q57: DOI citations content-checked (Crossref + PubMed, 2026-10-02). Removed 1 that resolve to an unrelated paper or to nothing: 10.1021/jm00346a004. Receipt: scripts/audits/pending_items_20260926/research.md Q57."
           }
         ]
       },
@@ -8563,18 +8244,6 @@
       ],
       "references_structured": [
         {
-          "type": "doi",
-          "id": "10.1001/jama.2017.3085",
-          "title": "Modafinil adverse effects",
-          "evidence_grade": "B",
-          "url": "https://doi.org/10.1001/jama.2017.3085",
-          "supports_claims": [
-            "mechanism_of_harm",
-            "clinical_outcomes"
-          ],
-          "evidence_summary": "Modafinil adverse effects"
-        },
-        {
           "type": "federal_register",
           "title": "DEA final rule: Placement of Modafinil Into Schedule IV (64 FR 4050)",
           "evidence_grade": "R",
@@ -8615,6 +8284,11 @@
             "date": "2026-09-26",
             "by": "claude-audit",
             "change": "Regulatory terminology (register Q15; Sean's D10 standard 2026-09-26: a warning letter, recall or advisory is not a ban). regulatory_date 1998-12-24 'FDA ban effective' -> 1999-01-27 'DEA scheduling effective' (64 FR 4050); 1998-12-24 is Provigil's approval date. legal_status_enum not_lawful_as_supplement -> controlled_substance. US row -> not_lawful citing the DEA rule. DoD row retyped from state_statute to the DoD list (and to agency scope, code US-DOD); its 'Prohibited without prescription' wording is not in the list. Reference without URL replaced by the DEA rule and Drugs@FDA. Receipt: scripts/audits/pending_items_20260926/research.md Q15."
+          },
+          {
+            "date": "2026-10-02",
+            "by": "claude-audit",
+            "change": "LEDGER Q57: DOI citations content-checked (Crossref + PubMed, 2026-10-02). Removed 1 that resolve to an unrelated paper or to nothing: 10.1001/jama.2017.3085. Receipt: scripts/audits/pending_items_20260926/research.md Q57."
           }
         ]
       },
@@ -8725,18 +8399,6 @@
       ],
       "references_structured": [
         {
-          "type": "doi",
-          "id": "10.1007/s11055-008-0025-6",
-          "title": "Noopept effects",
-          "evidence_grade": "B",
-          "url": "https://doi.org/10.1007/s11055-008-0025-6",
-          "supports_claims": [
-            "mechanism_of_harm",
-            "clinical_outcomes"
-          ],
-          "evidence_summary": "Noopept effects"
-        },
-        {
           "type": "fda_warning_letter",
           "title": "FDA Warning Letter 557887 to Peak Nootropics LLC (2019-02-04)",
           "evidence_grade": "R",
@@ -8766,6 +8428,11 @@
             "date": "2026-09-26",
             "by": "claude-audit",
             "change": "Regulatory terminology (register Q15; Sean's D10 standard 2026-09-26: a warning letter, recall or advisory is not a ban). regulatory_date 2019-11-25 'FDA ban effective' -> 2019-02-04 'FDA warning letter' (Peak Nootropics 557887 names Noopept); 2019-11-25 is a non-FDA study date. US row -> not_lawful citing the letter. Reason: removed 'not a dietary ingredient under 21 U.S.C. 321(ff)' and 'adulterated' (FDA's basis is unapproved new drug). Removed reference 'FDA: November 25, 2019 - Not a dietary ingredient'. Receipt: scripts/audits/pending_items_20260926/research.md Q15."
+          },
+          {
+            "date": "2026-10-02",
+            "by": "claude-audit",
+            "change": "LEDGER Q57: DOI citations content-checked (Crossref + PubMed, 2026-10-02). Removed 1 that resolve to an unrelated paper or to nothing: 10.1007/s11055-008-0025-6. Receipt: scripts/audits/pending_items_20260926/research.md Q57."
           }
         ]
       },
@@ -8881,18 +8548,6 @@
           "evidence_summary": "WADA: 2017 - Prohibited list"
         },
         {
-          "type": "doi",
-          "id": "10.1007/s11055-007-0078-x",
-          "title": "Phenylpiracetam effects",
-          "evidence_grade": "B",
-          "url": "https://doi.org/10.1007/s11055-007-0078-x",
-          "supports_claims": [
-            "mechanism_of_harm",
-            "clinical_outcomes"
-          ],
-          "evidence_summary": "Phenylpiracetam effects"
-        },
-        {
           "type": "fda_warning_letter",
           "title": "FDA Warning Letter 557887 to Peak Nootropics LLC (2019-02-04)",
           "evidence_grade": "R",
@@ -8934,6 +8589,11 @@
             "date": "2026-09-26",
             "by": "claude-audit",
             "change": "Regulatory terminology (register Q15; Sean's D10 standard 2026-09-26: a warning letter, recall or advisory is not a ban). regulatory_date 2017-01-01 'FDA ban effective' -> 2019-02-04 'FDA warning letter' (Peak Nootropics 557887). US row -> not_lawful citing the letter. DoD row retyped from state_statute to the DoD list (listed as fonturacetam). Reason: FDA's basis is unapproved new drug, not adulteration. Receipt: scripts/audits/pending_items_20260926/research.md Q15."
+          },
+          {
+            "date": "2026-10-02",
+            "by": "claude-audit",
+            "change": "LEDGER Q57: DOI citations content-checked (Crossref + PubMed, 2026-10-02). Removed 1 that resolve to an unrelated paper or to nothing: 10.1007/s11055-007-0078-x. Receipt: scripts/audits/pending_items_20260926/research.md Q57."
           }
         ]
       },
@@ -8992,18 +8652,6 @@
       ],
       "references_structured": [
         {
-          "type": "doi",
-          "id": "10.1002/hup.2656",
-          "title": "Piracetam review",
-          "evidence_grade": "B",
-          "url": "https://doi.org/10.1002/hup.2656",
-          "supports_claims": [
-            "mechanism_of_harm",
-            "clinical_outcomes"
-          ],
-          "evidence_summary": "Piracetam review"
-        },
-        {
           "type": "fda_warning_letter",
           "title": "FDA Warning Letter 557887 to Peak Nootropics LLC (2019-02-04)",
           "evidence_grade": "R",
@@ -9057,6 +8705,11 @@
             "date": "2026-09-26",
             "by": "claude-audit",
             "change": "Regulatory terminology (register Q15; Sean's D10 standard 2026-09-26: a warning letter, recall or advisory is not a ban). regulatory_date 2019-11-25 'FDA ban effective' -> 2019-02-04 'FDA warning letter'; no FDA 'not a dietary ingredient' determination for piracetam exists, and both 2019 letters say they do not address whether piracetam can be lawfully marketed as a supplement. legal_status_enum not_lawful_as_supplement -> under_review; US row -> not_approved. Policy stays unverified because FDA left supplement lawfulness open: the safety gate routes a match to review. Removed the Russia row coded as US and the reference to a 2019-11-25 determination that does not exist. Receipt: scripts/audits/pending_items_20260926/research.md Q15."
+          },
+          {
+            "date": "2026-10-02",
+            "by": "claude-audit",
+            "change": "LEDGER Q57: DOI citations content-checked (Crossref + PubMed, 2026-10-02). Removed 1 that resolve to an unrelated paper or to nothing: 10.1002/hup.2656. Receipt: scripts/audits/pending_items_20260926/research.md Q57."
           }
         ]
       },
@@ -9492,18 +9145,6 @@
       ],
       "references_structured": [
         {
-          "type": "doi",
-          "id": "10.1111/bjd.13316",
-          "title": "Melanotan and melanoma risk",
-          "evidence_grade": "B",
-          "url": "https://doi.org/10.1111/bjd.13316",
-          "supports_claims": [
-            "mechanism_of_harm",
-            "clinical_outcomes"
-          ],
-          "evidence_summary": "Melanotan and melanoma risk"
-        },
-        {
           "type": "other",
           "title": "MHRA: Melanotan public warning",
           "evidence_grade": "R",
@@ -9559,6 +9200,11 @@
             "date": "2026-09-26",
             "by": "claude-audit",
             "change": "Regulatory terminology (register Q15; Sean's D10 standard 2026-09-26: a warning letter, recall or advisory is not a ban). regulatory_date 2009-01-01 'FDA ban effective' -> 2007-08-30 'FDA warning letter' (Melanocorp, per FDA's 2016 notice). US row -> not_lawful citing FDA's notice and 2007 consumer update. Reason: no Melanotan import alert and no FDA dietary-ingredient or NDI statement was found; removed. Reference without URL replaced. Receipt: scripts/audits/pending_items_20260926/research.md Q15."
+          },
+          {
+            "date": "2026-10-02",
+            "by": "claude-audit",
+            "change": "LEDGER Q57: DOI citations content-checked (Crossref + PubMed, 2026-10-02). Removed 1 that resolve to an unrelated paper or to nothing: 10.1111/bjd.13316. Receipt: scripts/audits/pending_items_20260926/research.md Q57."
           }
         ]
       },
@@ -9882,18 +9528,6 @@
             "regulatory_action"
           ],
           "evidence_summary": "FDA: Lorcaserin withdrawal request - February 13, 2020"
-        },
-        {
-          "type": "doi",
-          "id": "10.1056/NEJMoa1908681",
-          "title": "CAMELLIA-TIMI 61 trial showing cancer risk",
-          "evidence_grade": "A",
-          "url": "https://doi.org/10.1056/NEJMoa1908681",
-          "supports_claims": [
-            "mechanism_of_harm",
-            "clinical_outcomes"
-          ],
-          "evidence_summary": "CAMELLIA-TIMI 61 trial showing cancer risk"
         }
       ],
       "source_category": "pharmaceutical_adulterants",
@@ -9908,6 +9542,11 @@
             "date": "2026-01-08",
             "change": "Migrated to schema v3.1 with standardized fields",
             "by": "system"
+          },
+          {
+            "date": "2026-10-02",
+            "by": "claude-audit",
+            "change": "LEDGER Q57: DOI citations content-checked (Crossref + PubMed, 2026-10-02). Removed 1 that resolve to an unrelated paper or to nothing: 10.1056/nejmoa1908681. Receipt: scripts/audits/pending_items_20260926/research.md Q57."
           }
         ]
       },
@@ -10141,18 +9780,6 @@
           "evidence_grade": "R",
           "supports_claims": [],
           "evidence_summary": "WADA: Prohibited List - S4 Hormone and metabolic modulators"
-        },
-        {
-          "type": "doi",
-          "id": "10.1093/toxsci/kfm226",
-          "title": "Cardarine carcinogenicity",
-          "evidence_grade": "B",
-          "url": "https://doi.org/10.1093/toxsci/kfm226",
-          "supports_claims": [
-            "mechanism_of_harm",
-            "clinical_outcomes"
-          ],
-          "evidence_summary": "Cardarine carcinogenicity"
         }
       ],
       "source_category": "research_chemicals",
@@ -10167,6 +9794,11 @@
             "date": "2026-01-08",
             "change": "Migrated to schema v3.1 with standardized fields",
             "by": "system"
+          },
+          {
+            "date": "2026-10-02",
+            "by": "claude-audit",
+            "change": "LEDGER Q57: DOI citations content-checked (Crossref + PubMed, 2026-10-02). Removed 1 that resolve to an unrelated paper or to nothing: 10.1093/toxsci/kfm226. Receipt: scripts/audits/pending_items_20260926/research.md Q57."
           }
         ]
       },
@@ -10516,18 +10148,6 @@
           ],
           "evidence_summary": "FDA: Hydroxycut recall - May 1, 2009",
           "fda_recall_url": "https://www.fda.gov/consumers/consumer-updates/fda-101-dietary-supplements"
-        },
-        {
-          "type": "doi",
-          "id": "10.1002/hep.23393",
-          "title": "Hydroxycut hepatotoxicity",
-          "evidence_grade": "B",
-          "url": "https://doi.org/10.1002/hep.23393",
-          "supports_claims": [
-            "mechanism_of_harm",
-            "clinical_outcomes"
-          ],
-          "evidence_summary": "Hydroxycut hepatotoxicity"
         }
       ],
       "source_category": "recalled_supplement_brands",
@@ -10562,6 +10182,11 @@
             "date": "2026-05-13",
             "change": "Review date refreshed (last_reviewed_at 2026-04-14 → 2026-05-13). match_mode remains historical; recall record retained for audit history.",
             "by": "fda_weekly_sync_agent"
+          },
+          {
+            "date": "2026-10-02",
+            "by": "claude-audit",
+            "change": "LEDGER Q57: DOI citations content-checked (Crossref + PubMed, 2026-10-02). Removed 1 that resolve to an unrelated paper or to nothing: 10.1002/hep.23393. Receipt: scripts/audits/pending_items_20260926/research.md Q57."
           }
         ]
       },
@@ -10649,18 +10274,6 @@
           ],
           "evidence_summary": "FDA: DMAA in Jack3d - 2012",
           "fda_recall_url": "https://www.fda.gov/food/information-select-dietary-supplement-ingredients-and-other-substances/dmaa-products-marketed-dietary-supplements"
-        },
-        {
-          "type": "doi",
-          "id": "10.1016/j.drugalcdep.2015.01.011",
-          "title": "DMAA cardiovascular risks",
-          "evidence_grade": "B",
-          "url": "https://doi.org/10.1016/j.drugalcdep.2015.01.011",
-          "supports_claims": [
-            "mechanism_of_harm",
-            "clinical_outcomes"
-          ],
-          "evidence_summary": "DMAA cardiovascular risks"
         }
       ],
       "source_category": "recalled_supplement_brands",
@@ -10695,6 +10308,11 @@
             "date": "2026-05-13",
             "change": "Review date refreshed (last_reviewed_at 2026-04-14 → 2026-05-13). match_mode remains historical; recall record retained for audit history.",
             "by": "fda_weekly_sync_agent"
+          },
+          {
+            "date": "2026-10-02",
+            "by": "claude-audit",
+            "change": "LEDGER Q57: DOI citations content-checked (Crossref + PubMed, 2026-10-02). Removed 1 that resolve to an unrelated paper or to nothing: 10.1016/j.drugalcdep.2015.01.011. Receipt: scripts/audits/pending_items_20260926/research.md Q57."
           }
         ]
       },
@@ -11076,18 +10694,6 @@
           "fda_recall_url": "https://www.fda.gov/food/information-select-dietary-supplement-ingredients-and-other-substances/dmaa-products-marketed-dietary-supplements"
         },
         {
-          "type": "doi",
-          "id": "10.1001/jama.2013.281632",
-          "title": "Hawaii hepatitis outbreak",
-          "evidence_grade": "B",
-          "url": "https://doi.org/10.1001/jama.2013.281632",
-          "supports_claims": [
-            "mechanism_of_harm",
-            "clinical_outcomes"
-          ],
-          "evidence_summary": "Hawaii hepatitis outbreak"
-        },
-        {
           "type": "other",
           "title": "CDC: OxyElite Pro hepatitis investigation",
           "evidence_grade": "R",
@@ -11127,6 +10733,11 @@
             "date": "2026-05-13",
             "change": "Review date refreshed (last_reviewed_at 2026-04-14 → 2026-05-13). match_mode remains historical; recall record retained for audit history.",
             "by": "fda_weekly_sync_agent"
+          },
+          {
+            "date": "2026-10-02",
+            "by": "claude-audit",
+            "change": "LEDGER Q57: DOI citations content-checked (Crossref + PubMed, 2026-10-02). Removed 1 that resolve to an unrelated paper or to nothing: 10.1001/jama.2013.281632. Receipt: scripts/audits/pending_items_20260926/research.md Q57."
           }
         ]
       },
@@ -11679,32 +11290,7 @@
           "last_verified_date": "2026-01-08"
         }
       ],
-      "references_structured": [
-        {
-          "type": "doi",
-          "id": "10.1016/j.ijcard.2012.09.001",
-          "title": "Bitter orange cardiovascular effects",
-          "evidence_grade": "B",
-          "url": "https://doi.org/10.1016/j.ijcard.2012.09.001",
-          "supports_claims": [
-            "mechanism_of_harm",
-            "clinical_outcomes"
-          ],
-          "evidence_summary": "Bitter orange cardiovascular effects"
-        },
-        {
-          "type": "doi",
-          "id": "10.1002/mnfr.201100409",
-          "title": "Synephrine safety review",
-          "evidence_grade": "B",
-          "url": "https://doi.org/10.1002/mnfr.201100409",
-          "supports_claims": [
-            "mechanism_of_harm",
-            "clinical_outcomes"
-          ],
-          "evidence_summary": "Synephrine safety review"
-        }
-      ],
+      "references_structured": [],
       "source_category": "high_risk_ingredients",
       "entity_type": "ingredient",
       "review": {
@@ -11717,6 +11303,11 @@
             "date": "2026-01-08",
             "change": "Migrated to schema v3.1 with standardized fields",
             "by": "system"
+          },
+          {
+            "date": "2026-10-02",
+            "by": "claude-audit",
+            "change": "LEDGER Q57: DOI citations content-checked (Crossref + PubMed, 2026-10-02). Removed 2 that resolve to an unrelated paper or to nothing: 10.1016/j.ijcard.2012.09.001, 10.1002/mnfr.201100409. Receipt: scripts/audits/pending_items_20260926/research.md Q57."
           }
         ]
       },
@@ -11825,18 +11416,6 @@
       ],
       "references_structured": [
         {
-          "type": "doi",
-          "id": "10.1093/ndt/13.10.2427",
-          "title": "Germanium nephrotoxicity",
-          "evidence_grade": "B",
-          "url": "https://doi.org/10.1093/ndt/13.10.2427",
-          "supports_claims": [
-            "mechanism_of_harm",
-            "clinical_outcomes"
-          ],
-          "evidence_summary": "Germanium nephrotoxicity"
-        },
-        {
           "type": "fda_advisory",
           "title": "FDA Import Alert: 54-07",
           "evidence_grade": "R",
@@ -11858,6 +11437,11 @@
             "date": "2026-01-08",
             "change": "Migrated to schema v3.1 with standardized fields",
             "by": "system"
+          },
+          {
+            "date": "2026-10-02",
+            "by": "claude-audit",
+            "change": "LEDGER Q57: DOI citations content-checked (Crossref + PubMed, 2026-10-02). Removed 1 that resolve to an unrelated paper or to nothing: 10.1093/ndt/13.10.2427. Receipt: scripts/audits/pending_items_20260926/research.md Q57."
           }
         ]
       },
@@ -11946,18 +11530,6 @@
       ],
       "references_structured": [
         {
-          "type": "doi",
-          "id": "10.1016/j.fct.2016.12.033",
-          "title": "Green tea extract hepatotoxicity",
-          "evidence_grade": "B",
-          "url": "https://doi.org/10.1016/j.fct.2016.12.033",
-          "supports_claims": [
-            "mechanism_of_harm",
-            "clinical_outcomes"
-          ],
-          "evidence_summary": "Green tea extract hepatotoxicity"
-        },
-        {
           "type": "other",
           "title": "EFSA: 2018 - Safety assessment of green tea catechins",
           "evidence_grade": "R",
@@ -11977,6 +11549,11 @@
             "date": "2026-01-08",
             "change": "Migrated to schema v3.1 with standardized fields",
             "by": "system"
+          },
+          {
+            "date": "2026-10-02",
+            "by": "claude-audit",
+            "change": "LEDGER Q57: DOI citations content-checked (Crossref + PubMed, 2026-10-02). Removed 1 that resolve to an unrelated paper or to nothing: 10.1016/j.fct.2016.12.033. Receipt: scripts/audits/pending_items_20260926/research.md Q57."
           }
         ]
       },
@@ -12148,30 +11725,6 @@
       ],
       "references_structured": [
         {
-          "type": "doi",
-          "id": "10.1002/hep.20662",
-          "title": "Kava hepatotoxicity",
-          "evidence_grade": "B",
-          "url": "https://doi.org/10.1002/hep.20662",
-          "supports_claims": [
-            "mechanism_of_harm",
-            "clinical_outcomes"
-          ],
-          "evidence_summary": "Kava hepatotoxicity"
-        },
-        {
-          "type": "doi",
-          "id": "10.1111/j.1365-2125.2007.02958.x",
-          "title": "Kava liver damage review",
-          "evidence_grade": "B",
-          "url": "https://doi.org/10.1111/j.1365-2125.2007.02958.x",
-          "supports_claims": [
-            "mechanism_of_harm",
-            "clinical_outcomes"
-          ],
-          "evidence_summary": "Kava liver damage review"
-        },
-        {
           "type": "fda_advisory",
           "title": "FDA Consumer Advisory: March 2002",
           "evidence_grade": "R",
@@ -12199,6 +11752,11 @@
             "date": "2026-02-16",
             "change": "Alias precision hardening for supplement label matching (reduced ambiguous aliases; added hydrogenated coconut reverse-label variants)",
             "by": "codex_alias_precision_pass"
+          },
+          {
+            "date": "2026-10-02",
+            "by": "claude-audit",
+            "change": "LEDGER Q57: DOI citations content-checked (Crossref + PubMed, 2026-10-02). Removed 2 that resolve to an unrelated paper or to nothing: 10.1002/hep.20662, 10.1111/j.1365-2125.2007.02958.x. Receipt: scripts/audits/pending_items_20260926/research.md Q57."
           }
         ]
       },
@@ -12289,18 +11847,6 @@
           "evidence_summary": "Kratom-associated deaths"
         },
         {
-          "type": "doi",
-          "id": "10.1002/hep.30612",
-          "title": "Kratom hepatotoxicity",
-          "evidence_grade": "B",
-          "url": "https://doi.org/10.1002/hep.30612",
-          "supports_claims": [
-            "mechanism_of_harm",
-            "clinical_outcomes"
-          ],
-          "evidence_summary": "Kratom hepatotoxicity"
-        },
-        {
           "type": "fda_enforcement",
           "title": "FDA Import Alert 54-15: Dietary Supplements and Bulk Dietary Ingredients That Are or Contain Mitragyna speciosa or Kratom",
           "evidence_grade": "R",
@@ -12354,6 +11900,11 @@
             "date": "2026-09-26",
             "by": "claude-audit",
             "change": "Regulatory terminology (register Q15; Sean's D10 standard 2026-09-26: a warning letter, recall or advisory is not a ban). regulatory_date 2017-01-01 'FDA ban effective' -> 2014-02-28 'First FDA enforcement action' (Import Alert 54-15). Three federal US rows (one 'banned' with 'DEA considering Schedule I', one dated 2025-08-01 saying 'Not federally scheduled') and a Thailand row coded as US -> one not_lawful row citing the import alert and FDA's kratom page. Reason and safety copy: FDA's count is 44 reported deaths, not 'over 44'. Louisiana row left for review. Receipt: scripts/audits/pending_items_20260926/research.md Q15."
+          },
+          {
+            "date": "2026-10-02",
+            "by": "claude-audit",
+            "change": "LEDGER Q57: DOI citations content-checked (Crossref + PubMed, 2026-10-02). Removed 1 that resolve to an unrelated paper or to nothing: 10.1002/hep.30612. Receipt: scripts/audits/pending_items_20260926/research.md Q57."
           }
         ]
       },
@@ -12452,18 +12003,6 @@
       ],
       "references_structured": [
         {
-          "type": "doi",
-          "id": "10.1016/j.forsciint.2012.02.015",
-          "title": "Yohimbine toxicity",
-          "evidence_grade": "B",
-          "url": "https://doi.org/10.1016/j.forsciint.2012.02.015",
-          "supports_claims": [
-            "mechanism_of_harm",
-            "clinical_outcomes"
-          ],
-          "evidence_summary": "Yohimbine toxicity"
-        },
-        {
           "type": "fda_advisory",
           "title": "FDA: Ongoing adverse event reports",
           "evidence_grade": "R",
@@ -12485,6 +12024,11 @@
             "date": "2026-01-08",
             "change": "Migrated to schema v3.1 with standardized fields",
             "by": "system"
+          },
+          {
+            "date": "2026-10-02",
+            "by": "claude-audit",
+            "change": "LEDGER Q57: DOI citations content-checked (Crossref + PubMed, 2026-10-02). Removed 1 that resolve to an unrelated paper or to nothing: 10.1016/j.forsciint.2012.02.015. Receipt: scripts/audits/pending_items_20260926/research.md Q57."
           }
         ]
       },
@@ -12557,18 +12101,6 @@
       ],
       "references_structured": [
         {
-          "type": "doi",
-          "id": "10.1210/en.2007-0814",
-          "title": "Andarine vision effects",
-          "evidence_grade": "B",
-          "url": "https://doi.org/10.1210/en.2007-0814",
-          "supports_claims": [
-            "mechanism_of_harm",
-            "clinical_outcomes"
-          ],
-          "evidence_summary": "Andarine vision effects"
-        },
-        {
           "type": "fda_warning_letter",
           "title": "FDA Warning Letter 535717 to Dynamic Technical Formulations (2017-12-13)",
           "evidence_grade": "R",
@@ -12598,6 +12130,11 @@
             "date": "2026-09-26",
             "by": "claude-audit",
             "change": "Regulatory terminology (Sean, D10, 2026-09-26: a warning letter, recall or advisory is not a ban). regulatory_date 2017-10-31 'FDA ban effective' -> 2017-12-13 'FDA warning letter'. Andarine is not named in the 2017-10-31 In Brief or its three letters; the first FDA letter found naming it is 535717. Removed the 'Clinical Status' US jurisdiction row (status banned, type state_statute, citation 'Development discontinued due to vision side effects'): it is not a jurisdiction. Replaced US jurisdiction entries: US banned 2017-10-31 (fda_action: FDA banned in supplements (October 31, 2017). Unapproved drug.); Clinical Status banned None (state_statute: Development discontinued due to vision side effects). FDA never used 'ban' for SARMs; no statute or DEA rule covers them (SARMs Control Acts S.2742/S.2895 not enacted). Receipt: scripts/audits/pending_items_20260926/research.md."
+          },
+          {
+            "date": "2026-10-02",
+            "by": "claude-audit",
+            "change": "LEDGER Q57: DOI citations content-checked (Crossref + PubMed, 2026-10-02). Removed 1 that resolve to an unrelated paper or to nothing: 10.1210/en.2007-0814. Receipt: scripts/audits/pending_items_20260926/research.md Q57."
           }
         ]
       },
@@ -12676,18 +12213,6 @@
       ],
       "references_structured": [
         {
-          "type": "doi",
-          "id": "10.1093/toxsci/kfn160",
-          "title": "Cardarine carcinogenicity",
-          "evidence_grade": "B",
-          "url": "https://doi.org/10.1093/toxsci/kfn160",
-          "supports_claims": [
-            "mechanism_of_harm",
-            "clinical_outcomes"
-          ],
-          "evidence_summary": "Cardarine carcinogenicity"
-        },
-        {
           "type": "fda_warning_letter",
           "title": "FDA Warning Letter 612037 to Umbrella (2021-05-18)",
           "evidence_grade": "R",
@@ -12717,6 +12242,11 @@
             "date": "2026-09-26",
             "by": "claude-audit",
             "change": "Regulatory terminology (Sean, D10, 2026-09-26: a warning letter, recall or advisory is not a ban). regulatory_date 2017-10-31 'FDA ban effective' -> 2021-05-18 'FDA warning letter'. Cardarine is not named in FDA's 2017-10-31 material; the earliest FDA letter found naming it is 612037. Replaced US jurisdiction entries: US banned 2017-10-31 (fda_action: FDA banned in supplements (October 31, 2017). Clinical trials terminated due to cancer.). FDA never used 'ban' for SARMs; no statute or DEA rule covers them (SARMs Control Acts S.2742/S.2895 not enacted). Receipt: scripts/audits/pending_items_20260926/research.md."
+          },
+          {
+            "date": "2026-10-02",
+            "by": "claude-audit",
+            "change": "LEDGER Q57: DOI citations content-checked (Crossref + PubMed, 2026-10-02). Removed 1 that resolve to an unrelated paper or to nothing: 10.1093/toxsci/kfn160. Receipt: scripts/audits/pending_items_20260926/research.md Q57."
           }
         ]
       },
@@ -12814,18 +12344,6 @@
       ],
       "references_structured": [
         {
-          "type": "doi",
-          "id": "10.1210/jc.2013-2271",
-          "title": "Ligandrol clinical trial",
-          "evidence_grade": "A",
-          "url": "https://doi.org/10.1210/jc.2013-2271",
-          "supports_claims": [
-            "mechanism_of_harm",
-            "clinical_outcomes"
-          ],
-          "evidence_summary": "Ligandrol clinical trial"
-        },
-        {
           "type": "fda_warning_letter",
           "title": "FDA Warning Letter 535333 to Infantry Labs, LLC (2017-10-23)",
           "evidence_grade": "R",
@@ -12872,6 +12390,11 @@
             "date": "2026-09-26",
             "by": "claude-audit",
             "change": "DoD row: source type state_statute ('Prohibited for military personnel') -> the DoD Prohibited Dietary Supplement Ingredients list (OPSS, under DoDI 6130.06, updated 2026-05-26), which names LGD-4033 (Ligandrol) (register Q15). Receipt: scripts/audits/pending_items_20260926/research.md Q15."
+          },
+          {
+            "date": "2026-10-02",
+            "by": "claude-audit",
+            "change": "LEDGER Q57: DOI citations content-checked (Crossref + PubMed, 2026-10-02). Removed 1 that resolve to an unrelated paper or to nothing: 10.1210/jc.2013-2271. Receipt: scripts/audits/pending_items_20260926/research.md Q57."
           }
         ]
       },
@@ -12951,16 +12474,15 @@
       ],
       "references_structured": [
         {
-          "type": "doi",
-          "id": "10.1002/hep.29466",
-          "title": "Ostarine hepatotoxicity",
-          "evidence_grade": "B",
-          "url": "https://doi.org/10.1002/hep.29466",
+          "type": "pubmed",
+          "title": "Drug-Induced Liver Injury From Enobosarm (Ostarine), a Selective Androgen Receptor Modulator",
+          "evidence_grade": "C",
+          "date": "2021",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/34368386/",
           "supports_claims": [
-            "mechanism_of_harm",
             "clinical_outcomes"
           ],
-          "evidence_summary": "Ostarine hepatotoxicity"
+          "evidence_summary": "Case report: significant cholestatic liver injury associated with ostarine (enobosarm), similar to anabolic-steroid injury."
         },
         {
           "type": "fda_warning_letter",
@@ -12997,6 +12519,11 @@
             "date": "2026-09-26",
             "by": "claude-audit",
             "change": "DoD row: source type state_statute ('Prohibited for military personnel') -> the DoD Prohibited Dietary Supplement Ingredients list (OPSS, under DoDI 6130.06, updated 2026-05-26), which names enobosarm (Ostarine, MK-2866) (register Q15). Receipt: scripts/audits/pending_items_20260926/research.md Q15."
+          },
+          {
+            "date": "2026-10-02",
+            "by": "claude-audit",
+            "change": "LEDGER Q57: DOI citations content-checked (Crossref + PubMed, 2026-10-02). Removed 1 that resolve to an unrelated paper or to nothing: 10.1002/hep.29466. Added PMID 34368386 (ostarine DILI case report), previously misfiled under SARM_RAD140. Receipt: scripts/audits/pending_items_20260926/research.md Q57."
           }
         ]
       },
@@ -13091,18 +12618,6 @@
       ],
       "references_structured": [
         {
-          "type": "doi",
-          "id": "10.14309/crj.0000000000000518",
-          "title": "RAD140 liver injury case report",
-          "evidence_grade": "B",
-          "url": "https://doi.org/10.14309/crj.0000000000000518",
-          "supports_claims": [
-            "mechanism_of_harm",
-            "clinical_outcomes"
-          ],
-          "evidence_summary": "RAD140 liver injury case report"
-        },
-        {
           "type": "fda_recall",
           "title": "FDA drug recall D-0800-2020 (Class II, initiated 2019-08-24): Entropic Labs SARM RAD-140 capsules",
           "evidence_grade": "R",
@@ -13149,6 +12664,11 @@
             "date": "2026-09-26",
             "by": "claude-audit",
             "change": "DoD row: source type state_statute ('Prohibited for military personnel') -> the DoD Prohibited Dietary Supplement Ingredients list (OPSS, under DoDI 6130.06, updated 2026-05-26), which names vosilasarm (RAD140) (register Q15). Receipt: scripts/audits/pending_items_20260926/research.md Q15."
+          },
+          {
+            "date": "2026-10-02",
+            "by": "claude-audit",
+            "change": "LEDGER Q57: DOI citations content-checked (Crossref + PubMed, 2026-10-02). Removed 1 that resolve to an unrelated paper or to nothing: 10.14309/crj.0000000000000518. Receipt: scripts/audits/pending_items_20260926/research.md Q57."
           }
         ]
       },
@@ -13255,18 +12775,6 @@
           "evidence_grade": "R",
           "supports_claims": [],
           "evidence_summary": "CDC: Muscimol poisoning outbreak (2024)"
-        },
-        {
-          "type": "doi",
-          "id": "10.1016/j.toxlet.2021.08.012",
-          "title": "Amanita muscaria toxicity",
-          "evidence_grade": "B",
-          "url": "https://doi.org/10.1016/j.toxlet.2021.08.012",
-          "supports_claims": [
-            "mechanism_of_harm",
-            "clinical_outcomes"
-          ],
-          "evidence_summary": "Amanita muscaria toxicity"
         }
       ],
       "source_category": "high_risk_ingredients",
@@ -13286,6 +12794,11 @@
             "date": "2026-03-23",
             "change": "Decoupled from combined amanita/muscimol entry. CUI set to C0319647 (Fungus). Species entry — no CAS/CID.",
             "by": "audit"
+          },
+          {
+            "date": "2026-10-02",
+            "by": "claude-audit",
+            "change": "LEDGER Q57: DOI citations content-checked (Crossref + PubMed, 2026-10-02). Removed 1 that resolve to an unrelated paper or to nothing: 10.1016/j.toxlet.2021.08.012. Receipt: scripts/audits/pending_items_20260926/research.md Q57."
           }
         ]
       },
@@ -13408,18 +12921,6 @@
             "regulatory_action"
           ],
           "evidence_summary": "FDA: Warning letters to psilocybin product sellers (2024-2025)"
-        },
-        {
-          "type": "doi",
-          "id": "10.1177/0269881118767697",
-          "title": "Psilocybin adverse effects",
-          "evidence_grade": "B",
-          "url": "https://doi.org/10.1177/0269881118767697",
-          "supports_claims": [
-            "mechanism_of_harm",
-            "clinical_outcomes"
-          ],
-          "evidence_summary": "Psilocybin adverse effects"
         }
       ],
       "source_category": "schedule_I_psychoactives",
@@ -13439,6 +12940,11 @@
             "date": "2026-03-23",
             "change": "Decoupled from psilocybin/psilocin combined entry. Fixed CUI from retired C0807537 to C0033850. Added CAS and PubChem CID.",
             "by": "audit"
+          },
+          {
+            "date": "2026-10-02",
+            "by": "claude-audit",
+            "change": "LEDGER Q57: DOI citations content-checked (Crossref + PubMed, 2026-10-02). Removed 1 that resolve to an unrelated paper or to nothing: 10.1177/0269881118767697. Receipt: scripts/audits/pending_items_20260926/research.md Q57."
           }
         ]
       },
@@ -15287,18 +14793,6 @@
       ],
       "references_structured": [
         {
-          "type": "doi",
-          "id": "10.1016/j.drugalcdep.2015.01.011",
-          "title": "DMAA cardiovascular risks",
-          "evidence_grade": "B",
-          "url": "https://doi.org/10.1016/j.drugalcdep.2015.01.011",
-          "supports_claims": [
-            "mechanism_of_harm",
-            "clinical_outcomes"
-          ],
-          "evidence_summary": "DMAA cardiovascular risks"
-        },
-        {
           "type": "fda_warning_letter",
           "title": "FDA Constituent Update: Recent FDA Action on Dietary Supplements Labeled as Containing DMBA (2015-04-28)",
           "evidence_grade": "R",
@@ -15352,6 +14846,11 @@
             "date": "2026-09-26",
             "by": "claude-audit",
             "change": "Regulatory terminology (register Q15; Sean's D10 standard 2026-09-26: a warning letter, recall or advisory is not a ban). regulatory_date 2013-04-11 (the DMAA date) 'FDA ban effective' -> 2015-04-28 'FDA warning letter' (first analog letters, DMBA). US row 'FDA banned...' -> not_lawful citing the DMBA and DMHA actions; FDA has no class-wide analog statement. DoD row retyped from state_statute to the DoD list. Reference without URL replaced. The 'States' row (California, New York 2025) left for review. Receipt: scripts/audits/pending_items_20260926/research.md Q15."
+          },
+          {
+            "date": "2026-10-02",
+            "by": "claude-audit",
+            "change": "LEDGER Q57: DOI citations content-checked (Crossref + PubMed, 2026-10-02). Removed 1 that resolve to an unrelated paper or to nothing: 10.1016/j.drugalcdep.2015.01.011. Receipt: scripts/audits/pending_items_20260926/research.md Q57."
           }
         ]
       },
@@ -17325,16 +16824,6 @@
           "evidence_grade": "B",
           "confidence": "high",
           "title": "FDA considers hordenine-containing supplements potentially adulterated (NDI without notification)"
-        },
-        {
-          "type": "toxicological_review",
-          "authority": "OTHER",
-          "citation": "DOI: 10.1016/j.fct.2019.110676 - Hordenine toxicological review",
-          "url": "https://doi.org/10.1016/j.fct.2019.110676",
-          "published_date": null,
-          "evidence_grade": "B",
-          "confidence": "medium",
-          "title": "DOI: 10.1016/j.fct.2019.110676 - Hordenine toxicological review"
         }
       ],
       "review": {
@@ -17347,6 +16836,11 @@
             "date": "2026-02-22",
             "change": "Initial entry created from capsules unmapped safety audit",
             "by": "capsules_clean_unmapped_safety"
+          },
+          {
+            "date": "2026-10-02",
+            "by": "claude-audit",
+            "change": "LEDGER Q57: DOI citations content-checked (Crossref + PubMed, 2026-10-02). Removed 1 that resolve to an unrelated paper or to nothing: 10.1016/j.fct.2019.110676. Receipt: scripts/audits/pending_items_20260926/research.md Q57."
           }
         ]
       },
@@ -17535,16 +17029,6 @@
           "evidence_grade": "R",
           "confidence": "high",
           "title": "FDA revocation of FD&C Red No. 3 listing (January 2025)"
-        },
-        {
-          "type": "research",
-          "authority": "peer-reviewed",
-          "citation": "DOI: 10.1016/j.fct.2007.09.001 - Erythrosine thyroid effects in animals",
-          "url": "https://doi.org/10.1016/j.fct.2007.09.001",
-          "published_date": null,
-          "evidence_grade": "B",
-          "confidence": "high",
-          "title": "DOI: 10.1016/j.fct.2007.09.001 - Erythrosine thyroid effects in animals"
         }
       ],
       "review": {
@@ -17557,6 +17041,11 @@
             "date": "2026-02-22",
             "change": "Initial entry created — FDA-banned colorant",
             "by": "safety_routing_gap"
+          },
+          {
+            "date": "2026-10-02",
+            "by": "claude-audit",
+            "change": "LEDGER Q57: DOI citations content-checked (Crossref + PubMed, 2026-10-02). Removed 1 that resolve to an unrelated paper or to nothing: 10.1016/j.fct.2007.09.001. Receipt: scripts/audits/pending_items_20260926/research.md Q57."
           }
         ]
       },
@@ -19496,18 +18985,6 @@
             "regulatory_action"
           ],
           "evidence_summary": "FDA: Warning letters to psilocybin product sellers (2024-2025)"
-        },
-        {
-          "type": "doi",
-          "id": "10.1177/0269881118767697",
-          "title": "Psilocybin adverse effects",
-          "evidence_grade": "B",
-          "url": "https://doi.org/10.1177/0269881118767697",
-          "supports_claims": [
-            "mechanism_of_harm",
-            "clinical_outcomes"
-          ],
-          "evidence_summary": "Psilocybin adverse effects"
         }
       ],
       "source_category": "schedule_I_psychoactives",
@@ -19522,6 +18999,11 @@
             "date": "2026-03-23",
             "change": "Created by decoupling from SCHED_PSILOCYBIN. CUI, CAS, PubChem CID verified via live API.",
             "by": "audit"
+          },
+          {
+            "date": "2026-10-02",
+            "by": "claude-audit",
+            "change": "LEDGER Q57: DOI citations content-checked (Crossref + PubMed, 2026-10-02). Removed 1 that resolve to an unrelated paper or to nothing: 10.1177/0269881118767697. Receipt: scripts/audits/pending_items_20260926/research.md Q57."
           }
         ]
       },
@@ -19651,18 +19133,6 @@
           "evidence_grade": "R",
           "supports_claims": [],
           "evidence_summary": "CDC: Muscimol poisoning outbreak (2024)"
-        },
-        {
-          "type": "doi",
-          "id": "10.1016/j.toxlet.2021.08.012",
-          "title": "Amanita muscaria toxicity",
-          "evidence_grade": "B",
-          "url": "https://doi.org/10.1016/j.toxlet.2021.08.012",
-          "supports_claims": [
-            "mechanism_of_harm",
-            "clinical_outcomes"
-          ],
-          "evidence_summary": "Amanita muscaria toxicity"
         }
       ],
       "source_category": "high_risk_ingredients",
@@ -19677,6 +19147,11 @@
             "date": "2026-03-23",
             "change": "Created by decoupling from SCHED_AMANITA_MUSCIMOL. CUI C0026818, CAS 2763-96-4, CID 4266 verified via live API.",
             "by": "audit"
+          },
+          {
+            "date": "2026-10-02",
+            "by": "claude-audit",
+            "change": "LEDGER Q57: DOI citations content-checked (Crossref + PubMed, 2026-10-02). Removed 1 that resolve to an unrelated paper or to nothing: 10.1016/j.toxlet.2021.08.012. Receipt: scripts/audits/pending_items_20260926/research.md Q57."
           }
         ]
       },
@@ -19809,18 +19284,6 @@
           "evidence_grade": "R",
           "supports_claims": [],
           "evidence_summary": "CDC: Muscimol poisoning outbreak (2024)"
-        },
-        {
-          "type": "doi",
-          "id": "10.1016/j.toxlet.2021.08.012",
-          "title": "Amanita muscaria toxicity",
-          "evidence_grade": "B",
-          "url": "https://doi.org/10.1016/j.toxlet.2021.08.012",
-          "supports_claims": [
-            "mechanism_of_harm",
-            "clinical_outcomes"
-          ],
-          "evidence_summary": "Amanita muscaria toxicity"
         }
       ],
       "source_category": "high_risk_ingredients",
@@ -19835,6 +19298,11 @@
             "date": "2026-03-23",
             "change": "Created by decoupling from SCHED_AMANITA_MUSCIMOL. CAS 2552-55-8, CID 1233 verified via PubChem.",
             "by": "audit"
+          },
+          {
+            "date": "2026-10-02",
+            "by": "claude-audit",
+            "change": "LEDGER Q57: DOI citations content-checked (Crossref + PubMed, 2026-10-02). Removed 1 that resolve to an unrelated paper or to nothing: 10.1016/j.toxlet.2021.08.012. Receipt: scripts/audits/pending_items_20260926/research.md Q57."
           }
         ]
       },
