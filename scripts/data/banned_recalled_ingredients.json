@@ -1299,6 +1299,11 @@
             "date": "2026-10-02",
             "by": "claude-audit",
             "change": "LEDGER Q57b: harm claims checked against sources Claude read (2026-10-02); reason: 2 claim(s) weakened or removed to what the evidence supports; 7 verified source(s) added. Safety copy unchanged; flagged for Sean: safety_warning says 'estimated around 13 times morphine potency'; no source states 13x (only 'more potent than morphine' in animals).. Receipt: scripts/audits/pending_items_20260926/q57b_harm_sources_20261002.md."
+          },
+          {
+            "date": "2026-10-02",
+            "by": "claude-audit",
+            "change": "LEDGER Q61 (Sean 2026-10-02): safety copy brought to the evidence in reason; removed '13 times morphine' (no source states a multiple). Receipt: q61_safety_copy_20261002.md."
           }
         ]
       },
@@ -1338,8 +1343,8 @@
         ]
       },
       "ban_context": "substance",
-      "safety_warning": "A potent kratom alkaloid with opioid-like activity estimated around 13 times morphine potency. Associated with dependence, breathing suppression, and overdose risk. Stop and consult a doctor.",
-      "safety_warning_one_liner": "Opioid-potent kratom alkaloid. Stop using and talk to your doctor.",
+      "safety_warning": "A potent kratom alkaloid with opioid activity. Linked to dependence, breathing suppression, and overdose risk. Stop using and talk to your doctor.",
+      "safety_warning_one_liner": "Potent opioid-like kratom alkaloid. Stop using and talk to your doctor.",
       "policy_verification_status": "verified",
       "policy_verified_at": "2026-09-26"
     },
@@ -2214,6 +2219,11 @@
             "date": "2026-10-02",
             "by": "claude-audit",
             "change": "LEDGER Q57b: harm claims checked against sources Claude read (2026-10-02); reason: 1 claim(s) weakened or removed to what the evidence supports; 3 verified source(s) added. Safety copy unchanged; flagged for Sean: safety_warning says phthalates are packaging contaminants and 'presence reflects contamination rather than an added ingredient'; DEP/DBP are declared coating excipients in some products. Matching: check that 'phthalate' does not match HPMCP/CAP/PVAP.. Receipt: scripts/audits/pending_items_20260926/q57b_harm_sources_20261002.md."
+          },
+          {
+            "date": "2026-10-02",
+            "by": "claude-audit",
+            "change": "LEDGER Q61 (Sean 2026-10-02): safety copy brought to the evidence in reason; removed 'contamination rather than an added ingredient' (some are declared coating excipients). Receipt: q61_safety_copy_20261002.md."
           }
         ]
       },
@@ -2269,8 +2279,8 @@
         "unii": "2286E5R2KE"
       },
       "ban_context": "watchlist",
-      "safety_warning": "Packaging contaminants that leach from plastic into supplements — linked to endocrine disruption and reproductive harm. Presence reflects contamination rather than an added ingredient.",
-      "safety_warning_one_liner": "Endocrine-disrupting contaminants linked to plastics. Avoid.",
+      "safety_warning": "Phthalates can enter supplements through packaging, manufacturing, or certain formulation materials. Some have been linked to endocrine and reproductive concerns. Avoid when possible.",
+      "safety_warning_one_liner": "Plastics chemicals with reproductive concerns. Avoid.",
       "inactive_policy": "penalize_anyway",
       "inactive_policy_reason": "Plasticizer contamination — never an excipient"
     },
@@ -2939,6 +2949,11 @@
             "date": "2026-10-02",
             "by": "claude-audit",
             "change": "LEDGER Q57b: harm claims checked against sources Claude read (2026-10-02); reason: 2 claim(s) weakened or removed to what the evidence supports; 3 verified source(s) added. Safety copy unchanged; flagged for Sean: safety_warning says 'Linked to cardiovascular risk'; evidence is a rat blood-pressure study only.. Receipt: scripts/audits/pending_items_20260926/q57b_harm_sources_20261002.md."
+          },
+          {
+            "date": "2026-10-02",
+            "by": "claude-audit",
+            "change": "LEDGER Q61 (Sean 2026-10-02): safety copy brought to the evidence in reason; removed 'Linked to cardiovascular risk' (a rat blood-pressure study only). Receipt: q61_safety_copy_20261002.md."
           }
         ]
       },
@@ -2948,7 +2963,7 @@
       "cui": "C4041589",
       "external_ids": {},
       "ban_context": "substance",
-      "safety_warning": "An amphetamine-like synthetic compound found undeclared in supplements labeled as acacia. Linked to cardiovascular risk; FDA says it is not a dietary ingredient. Stop and consult a doctor.",
+      "safety_warning": "An amphetamine-like synthetic compound found undeclared in supplements labeled as acacia. In rats it raised blood pressure; FDA says it is not a dietary ingredient. Stop and consult a doctor.",
       "safety_warning_one_liner": "Amphetamine-like, not a lawful supplement. Stop using and talk to your doctor.",
       "policy_verification_status": "verified",
       "policy_verified_at": "2026-09-26"
@@ -4204,6 +4219,11 @@
             "date": "2026-10-02",
             "by": "claude-audit",
             "change": "LEDGER Q57b: harm claims checked against sources Claude read (2026-10-02); reason: 1 claim(s) weakened or removed to what the evidence supports; 3 verified source(s) added. Safety copy unchanged; flagged for Sean: safety_warning says 'associated with elevated blood pressure and cardiovascular risk'; only user-reported side effects exist. Aliases 'valerophenone' (a ketone) and '2-aminoheptane' (tuaminoheptane) are different compounds.. Receipt: scripts/audits/pending_items_20260926/q57b_harm_sources_20261002.md."
+          },
+          {
+            "date": "2026-10-02",
+            "by": "claude-audit",
+            "change": "LEDGER Q61 (Sean 2026-10-02): safety copy brought to the evidence in reason; removed 'associated with elevated blood pressure and cardiovascular risk' (user reports only). Receipt: q61_safety_copy_20261002.md."
           }
         ]
       },
@@ -4239,7 +4259,7 @@
         "metabolites": []
       },
       "ban_context": "substance",
-      "safety_warning": "A synthetic sympathomimetic stimulant with DMAA-like effects. FDA warning letters flagged it; associated with elevated blood pressure and cardiovascular risk. Stop and consult a doctor.",
+      "safety_warning": "A synthetic stimulant with DMAA-like effects that FDA says is not a dietary ingredient. Users have reported high blood pressure, breathing difficulty and overheating. Stop and consult a doctor.",
       "safety_warning_one_liner": "DMAA-like stimulant flagged by FDA. Stop using and talk to your doctor.",
       "policy_verification_status": "verified",
       "policy_verified_at": "2026-09-26"
@@ -4384,6 +4404,11 @@
             "date": "2026-10-02",
             "by": "claude-audit",
             "change": "LEDGER Q57b: harm claims checked against sources Claude read (2026-10-02); reason: 1 claim(s) weakened or removed to what the evidence supports; 4 verified source(s) added. Safety copy unchanged; flagged for Sean: safety_warning says 'heart attacks' and 'many in otherwise healthy users'; neither is in the sources read (strokes, seizures and deaths are). Alias 'sida cordifolia' is a different plant.. Receipt: scripts/audits/pending_items_20260926/q57b_harm_sources_20261002.md."
+          },
+          {
+            "date": "2026-10-02",
+            "by": "claude-audit",
+            "change": "LEDGER Q61 (Sean 2026-10-02): safety copy brought to the evidence in reason; removed 'heart attacks' and 'many in otherwise healthy users' (not in the sources read). Receipt: q61_safety_copy_20261002.md."
           }
         ]
       },
@@ -4396,8 +4421,8 @@
         "unii": "GN83C131XS"
       },
       "ban_context": "substance",
-      "safety_warning": "FDA banned ephedra in supplements in 2004 after it was linked to strokes, heart attacks, and deaths, many in otherwise healthy users. Stop and consult a doctor.",
-      "safety_warning_one_liner": "FDA-banned stimulant, stroke/heart risk. Stop using and talk to your doctor.",
+      "safety_warning": "FDA banned ephedra in supplements in 2004 after it was linked to strokes, seizures, and deaths. Stop and consult a doctor.",
+      "safety_warning_one_liner": "FDA-banned stimulant linked to strokes. Stop using and talk to your doctor.",
       "policy_verification_status": "verified",
       "policy_verified_at": "2026-09-26"
     },
@@ -4481,6 +4506,11 @@
             "date": "2026-10-02",
             "by": "claude-audit",
             "change": "LEDGER Q57b: harm claims checked against sources Claude read (2026-10-02); reason: 1 claim(s) weakened or removed to what the evidence supports; 1 verified source(s) added. Safety copy unchanged; flagged for Sean: safety_warning and one-liner say 'failed clinical trials' / 'Failed investigational drug'; posted results show no clear advantage over placebo, with no published analysis.. Receipt: scripts/audits/pending_items_20260926/q57b_harm_sources_20261002.md."
+          },
+          {
+            "date": "2026-10-02",
+            "by": "claude-audit",
+            "change": "LEDGER Q61 (Sean 2026-10-02): safety copy brought to the evidence in reason; removed 'failed clinical trials'. Receipt: q61_safety_copy_20261002.md."
           }
         ]
       },
@@ -4509,8 +4539,8 @@
         "metabolites": []
       },
       "ban_context": "substance",
-      "safety_warning": "An investigational ADHD drug that failed clinical trials and was never approved. It has no recognized US supplement status. Stop and consult a doctor.",
-      "safety_warning_one_liner": "Failed investigational drug. Stop using and talk to your doctor."
+      "safety_warning": "An investigational drug that did not show a clear benefit over placebo in the reviewed trials and was never approved. It has no recognized US supplement status. Stop and consult a doctor.",
+      "safety_warning_one_liner": "Unapproved investigational drug. Stop using and talk to your doctor."
     },
     {
       "id": "BANNED_FDC_RED_2_AMARANTH",
@@ -4988,6 +5018,11 @@
             "date": "2026-10-02",
             "by": "claude-audit",
             "change": "LEDGER Q57b: harm claims checked against sources Claude read (2026-10-02); reason: 1 claim(s) weakened or removed to what the evidence supports; 4 verified source(s) added. Safety copy unchanged; flagged for Sean: safety_warning says 'linked to cardiovascular stimulation risk'; oral trials found no heart-rate or blood-pressure change.. Receipt: scripts/audits/pending_items_20260926/q57b_harm_sources_20261002.md."
+          },
+          {
+            "date": "2026-10-02",
+            "by": "claude-audit",
+            "change": "LEDGER Q61 (Sean 2026-10-02): safety copy brought to the evidence in reason; removed 'linked to cardiovascular stimulation risk' (oral trials found no heart-rate or blood-pressure change). Receipt: q61_safety_copy_20261002.md."
           }
         ]
       },
@@ -5016,7 +5051,7 @@
         "metabolites": []
       },
       "ban_context": "substance",
-      "safety_warning": "A beta-agonist plant alkaloid. FDA has stated it is not a lawful dietary supplement ingredient; linked to cardiovascular stimulation risk. Stop and consult a doctor.",
+      "safety_warning": "A beta-agonist plant alkaloid that FDA treats as an unnotified new dietary ingredient, so supplements with it are adulterated. Given intravenously it raises heart rate. Stop and consult a doctor.",
       "safety_warning_one_liner": "Not a lawful supplement ingredient. Stop using and talk to your doctor.",
       "policy_verification_status": "verified",
       "policy_verified_at": "2026-09-26"
@@ -6330,7 +6365,7 @@
         "S23 SARM",
         "S-23"
       ],
-      "reason": "S-23 is a synthetic non-steroidal selective androgen receptor modulator (SARM) developed as an investigational male contraceptive candidate; in male rats it suppressed LH and FSH and, combined with estradiol, reversibly stopped sperm production; no human data were found. It is not approved by any regulatory agency, not a dietary ingredient,  No NDI notification is on file. WADA prohibits it. FDA treats S-23 products as unapproved new drugs, and their contraceptive and androgenic effects are not declared on labels.",
+      "reason": "S-23 is a synthetic non-steroidal selective androgen receptor modulator (SARM) developed as an investigational male contraceptive candidate; in male rats it suppressed LH and FSH and, combined with estradiol, reversibly stopped sperm production; no human data were found. It is not approved by any regulatory agency, not a dietary ingredient. No NDI notification is on file. WADA prohibits it. FDA treats S-23 products as unapproved new drugs, and their contraceptive and androgenic effects are not declared on labels.",
       "status": "banned",
       "class_tags": [
         "sarms_prohibited",
@@ -6414,6 +6449,11 @@
             "date": "2026-10-02",
             "by": "claude-audit",
             "change": "LEDGER Q57b: harm claims checked against sources Claude read (2026-10-02); reason: 2 claim(s) weakened or removed to what the evidence supports; 1 verified source(s) added. Safety copy unchanged; flagged for Sean: safety_warning says 'testicular suppression, liver strain, and cardiovascular risk'; only rat hormone/sperm data exist.. Receipt: scripts/audits/pending_items_20260926/q57b_harm_sources_20261002.md."
+          },
+          {
+            "date": "2026-10-02",
+            "by": "claude-audit",
+            "change": "LEDGER Q61 (Sean 2026-10-02): safety copy brought to the evidence in reason; removed 'testicular suppression, liver strain, and cardiovascular risk' (rat hormone and sperm data only). Receipt: q61_safety_copy_20261002.md."
           }
         ]
       },
@@ -6436,7 +6476,7 @@
         "metabolites": []
       },
       "ban_context": "substance",
-      "safety_warning": "An investigational SARM-class drug — unapproved and not a lawful supplement. Linked to testicular suppression, liver strain, and cardiovascular risk. Stop and consult a doctor.",
+      "safety_warning": "An unapproved SARM-class drug, not a lawful supplement. In rats it suppressed reproductive hormones and sperm production; it has not been studied in people. Stop and consult a doctor.",
       "safety_warning_one_liner": "Unapproved SARM drug. Stop using and talk to your doctor.",
       "policy_verification_status": "verified",
       "policy_verified_at": "2026-09-26"
@@ -7684,6 +7724,11 @@
             "date": "2026-10-02",
             "by": "claude-audit",
             "change": "LEDGER Q57b: harm claims checked against sources Claude read (2026-10-02); reason: 2 claim(s) weakened or removed to what the evidence supports; 4 verified source(s) added. Safety copy unchanged; flagged for Sean: safety_warning says 'at least 18 reported cases of severe liver injury'; the source reports 13 of 18 FDA reports with liver toxicity.. Receipt: scripts/audits/pending_items_20260926/q57b_harm_sources_20261002.md."
+          },
+          {
+            "date": "2026-10-02",
+            "by": "claude-audit",
+            "change": "LEDGER Q61 (Sean 2026-10-02): safety copy brought to the evidence in reason; removed 'at least 18 reported cases of severe liver injury' (13 of 18) and 'Not a lawful supplement ingredient' (no determination). Receipt: q61_safety_copy_20261002.md."
           }
         ]
       },
@@ -7693,7 +7738,7 @@
       "cui": "C0697139",
       "external_ids": {},
       "ban_context": "substance",
-      "safety_warning": "A botanical linked to at least 18 reported cases of severe liver injury, including transplants. Not a lawful supplement ingredient; stop and consult a doctor if you have used a product containing it.",
+      "safety_warning": "A botanical linked to liver injury: 13 of 18 adverse-event reports FDA reviewed showed liver toxicity, including transplants. Stop and consult a doctor if you have used a product containing it.",
       "safety_warning_one_liner": "Liver-toxic botanical. Stop using and talk to your doctor.",
       "inactive_policy": "penalize_anyway",
       "inactive_policy_reason": "Hepatotoxic botanical — never an excipient"
@@ -8456,6 +8501,11 @@
             "date": "2026-10-02",
             "by": "claude-audit",
             "change": "LEDGER Q57b: harm claims checked against sources Claude read (2026-10-02); reason: 2 claim(s) weakened or removed to what the evidence supports; 3 verified source(s) added. Safety copy unchanged; flagged for Sean: safety_warning says 'no safe blood level' and 'kidney ... harm'; the sources read show deficits below 7.5 µg/dL without stating no safe level, and no kidney source was read. 40020868 is Clean Label Project funded (graded C).. Receipt: scripts/audits/pending_items_20260926/q57b_harm_sources_20261002.md."
+          },
+          {
+            "date": "2026-10-02",
+            "by": "claude-audit",
+            "change": "LEDGER Q61 (Sean 2026-10-02): safety copy brought to the evidence in reason; removed 'no safe blood level' and 'kidney harm' (not in the sources read). Receipt: q61_safety_copy_20261002.md."
           }
         ]
       },
@@ -8481,8 +8531,8 @@
         "metabolites": []
       },
       "ban_context": "substance",
-      "safety_warning": "A cumulative neurotoxin with no safe blood level, especially for children. Linked to cognitive, kidney, and cardiovascular harm. Avoid supplements without verified lead-limit testing.",
-      "safety_warning_one_liner": "Neurotoxic contaminant with no safe level. Avoid untested products.",
+      "safety_warning": "A cumulative neurotoxin that is harmful even at low blood levels, especially for children. Linked to cognitive and cardiovascular harm. Avoid supplements without verified lead-limit testing.",
+      "safety_warning_one_liner": "Neurotoxic contaminant, harmful at low levels. Avoid untested products.",
       "inactive_policy": "penalize_anyway",
       "inactive_policy_reason": "Heavy-metal contamination — never an excipient"
     },
@@ -9083,7 +9133,7 @@
         "ADK-709",
         "bromantane"
       ],
-      "reason": "Bromantane (Ladasten) is a synthetic actoprotective compound with stimulant and anxiolytic properties developed in the Soviet Union. FDA has not approved it and has not accepted it as a dietary ingredient. No NDI notification is on file. WADA prohibits it as a stimulant. In rats it increases dopamine synthesis and release. Human data come mainly from Russian clinical studies of 50-100 mg a day for about four weeks, so long-term and high-dose safety is not established. Products marketing it as a US supplement are adulterated.",
+      "reason": "Bromantane (Ladasten) is a synthetic actoprotective compound with stimulant and anxiolytic properties developed in the Soviet Union. FDA has not approved it and has not accepted it as a dietary ingredient. No NDI notification is on file. WADA prohibits it as a stimulant. In rats it increases dopamine synthesis and release. Human data come mainly from Russian clinical studies of 50-100 mg a day for about four weeks, so long-term and high-dose safety is not established.",
       "status": "banned",
       "class_tags": [
         "nootropic_banned",
@@ -9195,6 +9245,11 @@
             "date": "2026-10-02",
             "by": "claude-audit",
             "change": "LEDGER Q57b: harm claims checked against sources Claude read (2026-10-02); reason: 1 claim(s) weakened or removed to what the evidence supports; 3 verified source(s) added. Safety copy unchanged; flagged for Sean: safety_warning says 'FDA has stated is not a lawful supplement ingredient'; no FDA document naming bromantane was found (Q58 Cat 1).. Receipt: scripts/audits/pending_items_20260926/q57b_harm_sources_20261002.md."
+          },
+          {
+            "date": "2026-10-02",
+            "by": "claude-audit",
+            "change": "LEDGER Q61 (Sean 2026-10-02): safety copy brought to the evidence in reason; removed 'FDA has stated is not a lawful supplement ingredient' (no FDA document found). Receipt: q61_safety_copy_20261002.md."
           }
         ]
       },
@@ -9217,8 +9272,8 @@
         "metabolites": []
       },
       "ban_context": "substance",
-      "safety_warning": "A Soviet-era stimulant-anxiolytic drug that FDA has stated is not a lawful supplement ingredient. Safety in US consumers is poorly characterized. Stop and consult a doctor.",
-      "safety_warning_one_liner": "Not a lawful US supplement ingredient. Stop using and talk to your doctor."
+      "safety_warning": "A Soviet-era stimulant-anxiolytic drug that FDA has not approved. Its safety in US consumers is poorly characterized. Stop and consult a doctor.",
+      "safety_warning_one_liner": "Unapproved stimulant drug. Stop using and talk to your doctor."
     },
     {
       "id": "NOOTROPIC_FLMODAFINIL",
@@ -11137,6 +11192,11 @@
             "date": "2026-10-02",
             "by": "claude-audit",
             "change": "LEDGER Q58 (Sean 2026-10-02): unsupported 'FDA banned' rows and 'FDA considers all such analogs to be adulterants' removed; stays quarantined (Category 3)"
+          },
+          {
+            "date": "2026-10-02",
+            "by": "claude-audit",
+            "change": "LEDGER Q61 (Sean 2026-10-02): safety copy brought to the evidence in reason; removed 'Not lawful as supplements' (no FDA source names the analogues) and 'rapid multi-tissue' (overstated). Receipt: q61_safety_copy_20261002.md."
           }
         ]
       },
@@ -11147,7 +11207,7 @@
       "cui_note": "Analogue watchlist spans multiple cardarine derivatives; no single ingredient-level UMLS concept is appropriate.",
       "external_ids": {},
       "ban_context": "substance",
-      "safety_warning": "Designer derivatives of cardarine — whose parent compound caused rapid multi-tissue cancer in animal studies. Not lawful as supplements; avoid any product labeled with these analogs.",
+      "safety_warning": "Designer derivatives of cardarine, whose parent compound caused cancer in animal studies. Avoid any product labeled with these analogs.",
       "safety_warning_one_liner": "Cancer-linked designer drug. Stop using and talk to your doctor."
     },
     {
@@ -11586,7 +11646,7 @@
         "usplabs jack3d",
         "jack3d micro"
       ],
-      "reason": "Jack3d (USPlabs) contained DMAA (1,3-dimethylamylamine) and was recalled. Two US soldiers who collapsed and died during exercise had been taking DMAA-containing supplements, and case reports describe a hemorrhagic stroke and a heart attack in young men taking Jack3d. The US Army banned Jack3d from military installations in 2012. The Department of Defense subsequently launched a comprehensive supplement safety review. FDA issued warning letters and worked with USPlabs to remove DMAA-containing products. This case drove DMAA's formal classification as an unlawful dietary ingredient.",
+      "reason": "Jack3d (USPlabs) contained DMAA (1,3-dimethylamylamine). Two US soldiers who collapsed and died during exercise had been taking DMAA-containing supplements, and case reports describe a hemorrhagic stroke and a heart attack in young men taking Jack3d. The US Army banned Jack3d from military installations in 2012. The Department of Defense subsequently launched a comprehensive supplement safety review. FDA issued warning letters and worked with USPlabs to remove DMAA-containing products. This case drove DMAA's formal classification as an unlawful dietary ingredient.",
       "status": "recalled",
       "class_tags": [
         "recalled_supplement_brands",
@@ -11718,6 +11778,11 @@
             "date": "2026-10-02",
             "by": "claude-audit",
             "change": "LEDGER Q57b: harm claims checked against sources Claude read (2026-10-02); reason: 1 claim(s) weakened or removed to what the evidence supports; 3 verified source(s) added. Safety copy unchanged; flagged for Sean: safety_warning says Jack3d's DMAA 'was linked to two deaths'; the case report names DMAA-containing supplements, not Jack3d.. Receipt: scripts/audits/pending_items_20260926/q57b_harm_sources_20261002.md."
+          },
+          {
+            "date": "2026-10-02",
+            "by": "claude-audit",
+            "change": "LEDGER Q61 (Sean 2026-10-02): safety copy brought to the evidence in reason; removed 'recalled after its DMAA content was linked to two deaths' (the deaths case report names DMAA supplements, not Jack3d; no Jack3d recall found). Receipt: q61_safety_copy_20261002.md."
           }
         ]
       },
@@ -11736,8 +11801,8 @@
       "cui_note": "Product recall record is intentionally null-CUI because a single UMLS ingredient or product concept would misrepresent this recalled branded product/formulation.",
       "external_ids": {},
       "ban_context": "contamination_recall",
-      "safety_warning": "Jack3d was recalled after its DMAA content was linked to two deaths in US military personnel. Stop any remaining product and consult a doctor.",
-      "safety_warning_one_liner": "Recalled DMAA product linked to deaths. Do not use this recalled product."
+      "safety_warning": "Jack3d's DMAA formula was removed from market after FDA enforcement. Case reports describe a stroke and a heart attack in young men taking it. Stop any remaining product.",
+      "safety_warning_one_liner": "DMAA product linked to strokes. Do not use it."
     },
     {
       "id": "RECALLED_LIVE_IT_UP_SUPER_GREENS",
@@ -12231,6 +12296,11 @@
             "date": "2026-10-02",
             "by": "claude-audit",
             "change": "LEDGER Q57b: harm claims checked against sources Claude read (2026-10-02); reason: 1 claim(s) weakened or removed to what the evidence supports; 4 verified source(s) added. Safety copy unchanged; flagged for Sean: safety_warning says '97 cases, three liver transplants, and one death'; no source gives 97.. Receipt: scripts/audits/pending_items_20260926/q57b_harm_sources_20261002.md."
+          },
+          {
+            "date": "2026-10-02",
+            "by": "claude-audit",
+            "change": "LEDGER Q61 (Sean 2026-10-02): safety copy brought to the evidence in reason; removed '97 cases' (no source gives 97). Receipt: q61_safety_copy_20261002.md."
           }
         ]
       },
@@ -12249,7 +12319,7 @@
       "cui_note": "Product recall record is intentionally null-CUI because a single UMLS ingredient or product concept would misrepresent this recalled branded product/formulation.",
       "external_ids": {},
       "ban_context": "contamination_recall",
-      "safety_warning": "OxyElite Pro was recalled in 2013 after being linked to an acute liver injury outbreak with 97 cases, three liver transplants, and one death. Stop any remaining product and consult a doctor.",
+      "safety_warning": "OxyElite Pro was recalled in 2013 after it was linked to an outbreak of serious liver injury, including liver transplants and a death. Stop any remaining product and consult a doctor.",
       "safety_warning_one_liner": "Recalled product linked to liver transplants. Do not use this recalled product."
     },
     {
@@ -12469,7 +12539,7 @@
         "rheumacare capsules",
         "navafresh rheumacare"
       ],
-      "reason": "Rheumacare Capsules were found to contain extreme lead contamination — up to 11,100 ppm (milligrams per kilogram) of lead — thousands of times above any acceptable level for a dietary supplement. Lead at this concentration causes acute and chronic lead poisoning: neurological damage, kidney injury, bone disruption, and in children severe developmental harm. California Prop 65's maximum level is 0.5 mcg/day total lead; a single capsule of this product would deliver a catastrophically toxic dose. FDA issued an urgent recall.",
+      "reason": "Rheumacare Capsules were found to contain lead at up to 11,100 ppm (milligrams per kilogram) in FDA testing. Lead at this concentration causes acute and chronic lead poisoning: neurological damage, kidney injury, bone disruption, and in children severe developmental harm. California Prop 65's maximum level is 0.5 mcg/day total lead; a single capsule of this product would deliver a catastrophically toxic dose. The distributor recalled lots CAM040 and CAL079-N after FDA testing.",
       "status": "recalled",
       "class_tags": [
         "recalled_supplement_brands",
@@ -12526,8 +12596,9 @@
           "supports_claims": [
             "regulatory_action"
           ],
-          "evidence_summary": "FDA Recall: December 25-29, 2025 - Rheumacare Capsules lead contamination",
-          "fda_recall_url": "https://www.fda.gov/safety/recalls-market-withdrawals-safety-alerts/handelnine-global-limited-dba-navafresh-issues-nationwide-recall-rheumacare-capsules-virgo-uap"
+          "evidence_summary": "In FDA testing the product contained lead at up to 11,100 ppm; lots CAM040 and CALO79-N recalled to the consumer level.",
+          "fda_recall_url": "https://www.fda.gov/safety/recalls-market-withdrawals-safety-alerts/handelnine-global-limited-dba-navafresh-issues-nationwide-recall-rheumacare-capsules-virgo-uap",
+          "url": "https://www.fda.gov/safety/recalls-market-withdrawals-safety-alerts/handelnine-global-limited-dba-navafresh-issues-nationwide-recall-rheumacare-capsules-virgo-uap"
         },
         {
           "type": "fda_recall",
@@ -12557,6 +12628,11 @@
             "date": "2026-10-02",
             "by": "claude-audit",
             "change": "LEDGER Q58 (Sean 2026-10-02): policy verified from openFDA enforcement report D-0332-2026 (Ongoing)"
+          },
+          {
+            "date": "2026-10-02",
+            "by": "claude-audit",
+            "change": "LEDGER Q61 (Sean 2026-10-02): safety copy brought to the evidence in reason; removed 'thousands of times above any safe threshold' (not on FDA's page) and 'Stop and test'. Receipt: q61_safety_copy_20261002.md."
           }
         ]
       },
@@ -12575,8 +12651,8 @@
       "cui_note": "Product recall record is intentionally null-CUI because a single UMLS ingredient or product concept would misrepresent this recalled branded product/formulation.",
       "external_ids": {},
       "ban_context": "contamination_recall",
-      "safety_warning": "Rheumacare Capsules were recalled after tests found extreme lead levels — thousands of times above any safe threshold. Stop any remaining product and consult a doctor to check blood lead.",
-      "safety_warning_one_liner": "Recalled for extreme lead levels. Stop and test.",
+      "safety_warning": "Rheumacare Capsules were recalled after FDA testing found lead up to 11,100 ppm. Stop any remaining product and consult a doctor to check blood lead.",
+      "safety_warning_one_liner": "Recalled for very high lead levels. Stop using and talk to your doctor.",
       "policy_verification_status": "verified",
       "policy_verified_at": "2026-10-02"
     },
@@ -12948,6 +13024,11 @@
             "date": "2026-10-02",
             "by": "claude-audit",
             "change": "LEDGER Q57b: harm claims checked against sources Claude read (2026-10-02); reason: 2 claim(s) weakened or removed to what the evidence supports; 8 verified source(s) added. Safety copy unchanged; flagged for Sean: safety_warning says 'ephedrine-like cardiovascular effects'; that equivalence is disputed in the literature. Alias 'citrus bioflavonoids' may not contain synephrine.. Receipt: scripts/audits/pending_items_20260926/q57b_harm_sources_20261002.md."
+          },
+          {
+            "date": "2026-10-02",
+            "by": "claude-audit",
+            "change": "LEDGER Q61 (Sean 2026-10-02): safety copy brought to the evidence in reason; removed 'ephedrine-like cardiovascular effects' (equivalence is debated). Receipt: q61_safety_copy_20261002.md."
           }
         ]
       },
@@ -12971,8 +13052,8 @@
         "metabolites": []
       },
       "ban_context": "substance",
-      "safety_warning": "A citrus extract containing synephrine, with ephedrine-like cardiovascular effects. Linked to blood-pressure elevation and heart events, especially when combined with caffeine. Stop and consult.",
-      "safety_warning_one_liner": "Ephedrine-like stimulant, cardiac risk. Stop using and talk to your doctor.",
+      "safety_warning": "Contains synephrine, a stimulant related to ephedrine. Products with it, usually with caffeine, raised heart rate and blood pressure and are linked to heart events in case reports. Stop and consult.",
+      "safety_warning_one_liner": "Stimulant related to ephedrine, heart risk. Stop using and talk to your doctor.",
       "inactive_policy": "penalize_anyway",
       "inactive_policy_reason": "Synephrine-bearing stimulant — never an excipient"
     },
@@ -13107,6 +13188,11 @@
             "date": "2026-10-02",
             "by": "claude-audit",
             "change": "LEDGER Q57b: harm claims checked against sources Claude read (2026-10-02); reason: 3 claim(s) weakened or removed to what the evidence supports; 2 verified source(s) added. Safety copy unchanged; flagged for Sean: safety_warning says 'Inorganic germanium compounds'; the case reports include organic forms (Ge-132, germanium lactate-citrate).. Receipt: scripts/audits/pending_items_20260926/q57b_harm_sources_20261002.md."
+          },
+          {
+            "date": "2026-10-02",
+            "by": "claude-audit",
+            "change": "LEDGER Q61 (Sean 2026-10-02): safety copy brought to the evidence in reason; removed 'Inorganic' only (case reports include organic forms) and 'Not a lawful supplement ingredient' (no determination read). Receipt: q61_safety_copy_20261002.md."
           }
         ]
       },
@@ -13119,7 +13205,7 @@
         "unii": "5O6CM4W76A"
       },
       "ban_context": "substance",
-      "safety_warning": "Inorganic germanium compounds marketed in the 1980s as immune tonics — associated with fatal kidney failure in case reports. Not a lawful supplement ingredient. Stop and consult a doctor.",
+      "safety_warning": "Germanium compounds, inorganic and organic, marketed in the 1980s as immune tonics — associated with fatal kidney failure in case reports. Stop and consult a doctor.",
       "safety_warning_one_liner": "Associated with fatal kidney failure. Stop using and talk to your doctor.",
       "inactive_policy": "penalize_anyway",
       "inactive_policy_reason": "Inorganic germanium — heavy-metal-tier toxicity, never legitimate"
@@ -13257,6 +13343,11 @@
             "date": "2026-10-02",
             "by": "claude-audit",
             "change": "LEDGER Q57b: harm claims checked against sources Claude read (2026-10-02); reason: 3 claim(s) weakened or removed to what the evidence supports; 3 verified source(s) added. Safety copy unchanged; flagged for Sean: Possible under-warning: safety_warning says 'particularly above 800 mg EGCG per day', but liver-injury case reports start near 140 mg/day; 800 mg is the trial enzyme-rise level, not a safe floor. Any change to the Q24 800 mg threshold is Sean's decision.. Receipt: scripts/audits/pending_items_20260926/q57b_harm_sources_20261002.md."
+          },
+          {
+            "date": "2026-10-02",
+            "by": "claude-audit",
+            "change": "LEDGER Q61 (Sean 2026-10-02): safety copy brought to the evidence in reason; removed 'particularly above 800 mg' implied a safe floor (case reports from about 140 mg/day; Q24's 800 mg threshold unchanged). Receipt: q61_safety_copy_20261002.md."
           }
         ]
       },
@@ -13267,7 +13358,7 @@
       "cui_note": "Dose-conditioned green tea extract risk entry is broader than one ingredient concept; no single ingredient-level UMLS concept is appropriate.",
       "external_ids": {},
       "ban_context": "watchlist",
-      "safety_warning": "High-dose green tea extract standardized to concentrated EGCG has been linked to drug-induced liver injury, particularly above 800 mg EGCG per day. Talk to your doctor before using concentrated forms.",
+      "safety_warning": "Green tea extract has been linked to rare liver injury, including at lower doses in susceptible people. Risk may increase with higher EGCG exposure. Talk to your doctor before using it.",
       "safety_warning_one_liner": "High-dose EGCG linked to liver injury. Talk to your doctor.",
       "inactive_policy": "penalize_anyway",
       "inactive_policy_reason": "High-dose extract = hepatotoxicity risk; flag in any panel"
@@ -13435,7 +13526,8 @@
           "supports_claims": [
             "regulatory_action"
           ],
-          "evidence_summary": "FDA Consumer Advisory: March 2002"
+          "evidence_summary": "FDA (2002-03-25): kava supplements may be associated with severe liver injury; symptoms include jaundice, brown urine, nausea, unusual tiredness and abdominal pain.",
+          "url": "http://web.archive.org/web/20171104181553/https://www.fda.gov/Food/RecallsOutbreaksEmergencies/SafetyAlertsAdvisories/ucm085482.htm"
         },
         {
           "type": "pubmed",
@@ -13515,6 +13607,11 @@
             "date": "2026-10-02",
             "by": "claude-audit",
             "change": "LEDGER Q57b: harm claims checked against sources Claude read (2026-10-02); reason: 3 claim(s) weakened or removed to what the evidence supports; 5 verified source(s) added. Safety copy unchanged; flagged for Sean: safety_warning says 'over 100 cases of severe liver injury'; the largest series found has 36.. Receipt: scripts/audits/pending_items_20260926/q57b_harm_sources_20261002.md."
+          },
+          {
+            "date": "2026-10-02",
+            "by": "claude-audit",
+            "change": "LEDGER Q61 (Sean 2026-10-02): safety copy brought to the evidence in reason; removed 'over 100 cases' (largest series found: 36); symptoms from FDA's 2002 advisory. Receipt: q61_safety_copy_20261002.md."
           }
         ]
       },
@@ -13526,7 +13623,7 @@
         "unii": "W1ES06373M"
       },
       "ban_context": "substance",
-      "safety_warning": "Kava root extracts have been linked to over 100 cases of severe liver injury globally, including transplants. Restricted or banned in several countries. Stop and consult a doctor.",
+      "safety_warning": "Kava has been linked to rare but potentially serious liver injury. Stop using it and seek medical advice if you develop jaundice, brown urine, nausea, unusual tiredness or abdominal pain.",
       "safety_warning_one_liner": "Botanical associated with liver injury. Stop using and talk to your doctor.",
       "inactive_policy": "penalize_anyway",
       "inactive_policy_reason": "Hepatotoxic botanical — never an excipient"
@@ -13954,6 +14051,11 @@
             "date": "2026-10-02",
             "by": "claude-audit",
             "change": "LEDGER Q57b: harm claims checked against sources Claude read (2026-10-02); reason: 1 claim(s) weakened or removed to what the evidence supports; 1 verified source(s) added. Safety copy unchanged; flagged for Sean: safety_warning says 'linked to vision disturbances and hormonal suppression'; no peer-reviewed source found.. Receipt: scripts/audits/pending_items_20260926/q57b_harm_sources_20261002.md."
+          },
+          {
+            "date": "2026-10-02",
+            "by": "claude-audit",
+            "change": "LEDGER Q61 (Sean 2026-10-02): safety copy brought to the evidence in reason; removed 'vision disturbances and hormonal suppression' (no peer-reviewed source). Receipt: q61_safety_copy_20261002.md."
           }
         ]
       },
@@ -13982,7 +14084,7 @@
         "metabolites": []
       },
       "ban_context": "substance",
-      "safety_warning": "An unapproved investigational SARM. Not a lawful US supplement; linked to vision disturbances and hormonal suppression. Stop and consult a doctor.",
+      "safety_warning": "An unapproved investigational SARM. Not a lawful US supplement; its safety in people has not been established. Stop and consult a doctor.",
       "safety_warning_one_liner": "Unapproved SARM drug. Stop using and talk to your doctor.",
       "policy_verification_status": "verified",
       "policy_verified_at": "2026-09-26"
@@ -14439,6 +14541,11 @@
             "date": "2026-10-02",
             "by": "claude-audit",
             "change": "LEDGER Q57b: harm claims checked against sources Claude read (2026-10-02); reason: 1 claim(s) weakened or removed to what the evidence supports; 2 verified source(s) added. Safety copy unchanged; flagged for Sean: safety_warning says it 'failed cancer-cachexia trials' and 'hormonal suppression'; neither is in the sources read (liver injury is).. Receipt: scripts/audits/pending_items_20260926/q57b_harm_sources_20261002.md."
+          },
+          {
+            "date": "2026-10-02",
+            "by": "claude-audit",
+            "change": "LEDGER Q61 (Sean 2026-10-02): safety copy brought to the evidence in reason; removed 'failed cancer-cachexia trials' and 'hormonal suppression' (not in the sources read). Receipt: q61_safety_copy_20261002.md."
           }
         ]
       },
@@ -14468,7 +14575,7 @@
         "metabolites": []
       },
       "ban_context": "substance",
-      "safety_warning": "An investigational SARM that failed cancer-cachexia trials. Linked to liver injury and hormonal suppression. Not a lawful supplement. Stop and consult a doctor.",
+      "safety_warning": "An investigational SARM that was never approved. Linked to liver injury in case reports. Not a lawful supplement. Stop and consult a doctor.",
       "safety_warning_one_liner": "Unapproved SARM with liver risk. Stop using and talk to your doctor.",
       "policy_verification_status": "verified",
       "policy_verified_at": "2026-09-26"
@@ -14639,6 +14746,11 @@
             "date": "2026-10-02",
             "by": "claude-audit",
             "change": "LEDGER Q57b: harm claims checked against sources Claude read (2026-10-02); reason unchanged; 5 verified source(s) added. Safety copy unchanged; flagged for Sean: safety_warning says 'cardiovascular strain, and hormonal suppression'; evidence is two myocarditis case reports and an SHBG fall in a cancer trial.. Receipt: scripts/audits/pending_items_20260926/q57b_harm_sources_20261002.md."
+          },
+          {
+            "date": "2026-10-02",
+            "by": "claude-audit",
+            "change": "LEDGER Q61 (Sean 2026-10-02): safety copy brought to the evidence in reason; removed 'cardiovascular strain, and hormonal suppression' (evidence is case reports of liver injury and myocarditis). Receipt: q61_safety_copy_20261002.md."
           }
         ]
       },
@@ -14648,7 +14760,7 @@
       "cui": "C0601132",
       "external_ids": {},
       "ban_context": "substance",
-      "safety_warning": "An investigational SARM linked to liver injury, cardiovascular strain, and hormonal suppression. Not a lawful supplement ingredient. Stop and consult a doctor.",
+      "safety_warning": "An investigational SARM linked in case reports to liver injury and heart inflammation. Not a lawful supplement ingredient. Stop and consult a doctor.",
       "safety_warning_one_liner": "Unapproved SARM with liver and heart risks. Stop using and talk to your doctor.",
       "policy_verification_status": "verified",
       "policy_verified_at": "2026-09-26"
@@ -16997,6 +17109,11 @@
             "date": "2026-10-02",
             "by": "claude-audit",
             "change": "LEDGER Q57b: harm claims checked against sources Claude read (2026-10-02); reason: 1 claim(s) weakened or removed to what the evidence supports; 3 verified source(s) added. Safety copy unchanged; flagged for Sean: safety_warning says 'Linked to the same cardiovascular risks as DMAA'; that is class transfer with no analog data.. Receipt: scripts/audits/pending_items_20260926/q57b_harm_sources_20261002.md."
+          },
+          {
+            "date": "2026-10-02",
+            "by": "claude-audit",
+            "change": "LEDGER Q61 (Sean 2026-10-02): safety copy brought to the evidence in reason; removed 'the same cardiovascular risks as DMAA' (class transfer, no analogue data). Receipt: q61_safety_copy_20261002.md."
           }
         ]
       },
@@ -17007,7 +17124,7 @@
       "cui_note": "Policy watchlist spans multiple methylhexanamine analogues; no single ingredient-level UMLS concept is appropriate.",
       "external_ids": {},
       "ban_context": "substance",
-      "safety_warning": "Designer DMAA-family stimulants engineered to evade enforcement. Linked to the same cardiovascular risks as DMAA. Stop and consult a doctor.",
+      "safety_warning": "Designer DMAA-family stimulants engineered to evade enforcement. Their safety in people has not been studied. Stop and consult a doctor.",
       "safety_warning_one_liner": "Designer DMAA-class stimulants. Stop using and talk to your doctor.",
       "policy_verification_status": "verified",
       "policy_verified_at": "2026-09-26"
@@ -19125,6 +19242,11 @@
             "date": "2026-10-02",
             "by": "claude-audit",
             "change": "LEDGER Q58 (Sean 2026-10-02): policy verified from FDA warning letters (May 2022) and the ingredient directory; generic ref replaced; legal status adulterant -> not_lawful_as_supplement (FDA's basis is the missing NDI notification)"
+          },
+          {
+            "date": "2026-10-02",
+            "by": "claude-audit",
+            "change": "LEDGER Q61 (Sean 2026-10-02): safety copy brought to the evidence in reason; removed 'drug-strength doses' and 'cardiovascular strain' (animal evidence only). Receipt: q61_safety_copy_20261002.md."
           }
         ]
       },
@@ -19156,8 +19278,8 @@
         "metabolites": []
       },
       "ban_context": "substance",
-      "safety_warning": "A plant alkaloid sold in supplement products at drug-strength doses. Linked to blood-pressure elevation and cardiovascular strain, especially when stacked with other stimulants. Stop using.",
-      "safety_warning_one_liner": "Stimulant at supplement doses. Stop using this product.",
+      "safety_warning": "A plant alkaloid in sports supplements, sometimes with other stimulants. FDA says supplements declaring it are adulterated; in animals, high doses raise blood pressure and heart rate. Stop using.",
+      "safety_warning_one_liner": "Stimulant alkaloid, not allowed in supplements. Stop using this product.",
       "policy_verification_status": "verified",
       "policy_verified_at": "2026-10-02"
     },
@@ -19236,6 +19358,11 @@
             "date": "2026-10-02",
             "by": "claude-audit",
             "change": "LEDGER Q58 (Sean 2026-10-02): unsupported 'not a lawful dietary ingredient' and 'FDA has identified it as an adulterant' removed from reason; stays quarantined (Category 3)"
+          },
+          {
+            "date": "2026-10-02",
+            "by": "claude-audit",
+            "change": "LEDGER Q61 (Sean 2026-10-02): safety copy brought to the evidence in reason; removed 'cardiovascular strain' and 'not a lawful supplement ingredient' (no source). Receipt: q61_safety_copy_20261002.md."
           }
         ]
       },
@@ -19245,7 +19372,7 @@
         "unii": "I4C10U12C8"
       },
       "ban_context": "substance",
-      "safety_warning": "A designer phenethylamine-class stimulant found in weight-loss and pre-workout products. Associated with cardiovascular strain; not a lawful supplement ingredient. Stop using and talk to your doctor.",
+      "safety_warning": "A designer phenethylamine-class stimulant found in weight-loss and pre-workout products. Its safety in people has not been studied. Stop using and talk to your doctor.",
       "safety_warning_one_liner": "Designer stimulant. Stop using this product and talk to your doctor."
     },
     {
