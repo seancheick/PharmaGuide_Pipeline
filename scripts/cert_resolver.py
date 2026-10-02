@@ -1161,7 +1161,9 @@ def _record_to_resolution(
     recency_status = record.get("_recency_status", "unknown")
 
     scoring_blocked_reason: str | None = None
-    if not str(record.get("record_id") or "").strip():
+    if record.get("current_certification") is False:
+        scoring_blocked_reason = "historical certification; current certification is not established"
+    elif not str(record.get("record_id") or "").strip():
         scoring_blocked_reason = "registry record id missing; refresh registry before granting points"
     elif not str(record.get("source_url") or "").strip():
         scoring_blocked_reason = "registry source url missing; refresh registry before granting points"

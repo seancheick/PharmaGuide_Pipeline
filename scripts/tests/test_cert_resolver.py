@@ -1450,3 +1450,10 @@ def test_multivitamin_record_never_names_a_single_nutrient_label(query, register
     result = resolve("Nature Made", query, ["USP Verified"], registry,
                      label_context={"form_factor_canonical": "tablet"})[0]
     assert result.scores_points() is scores
+
+
+def test_historical_certification_never_grants_points():
+    registry = _make_registry(records=[dict(program="ConsumerLab", brand="Example", product="Example Probiotic", scope="sku", current_certification=False)])
+    resolutions = resolve("Example", "Example Probiotic", ["ConsumerLab"], registry=registry)
+    assert resolutions
+    assert all(not item.scores_points() for item in resolutions)
