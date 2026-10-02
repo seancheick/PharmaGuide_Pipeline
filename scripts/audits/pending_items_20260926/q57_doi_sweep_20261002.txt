@@ -1,0 +1,85 @@
+ADULTERANT_RIMONABANT | Rimonabant | 10.1016/S0140-6736(07)61684-8 | ref:RIO trials showing psychiatric risks || CROSSREF: ERROR HTTP Error 404: Not Found
+BANNED_14_BUTANEDIOL | 1,4-Butanediol | 10.1093/jat/24.2.83 | ref:1,4-BD metabolism to GHB || CROSSREF: ERROR HTTP Error 404: Not Found
+BANNED_14_BUTANEDIOL | 1,4-Butanediol | 10.1016/j.forsciint.2003.08.001 | ref:1,4-BD deaths || CROSSREF: Bone as a biomarker of acute fluoride toxicity
+BANNED_7_HYDROXYMITRAGYNINE | 7-Hydroxymitragynine | 10.1124/jpet.116.232215 | ref:7-OH opioid activity || CROSSREF: Protection from Cigarette Smoke–Induced Lung Dysfunction and Damage by H2 Relaxin (Serelaxin)
+BANNED_ADD_PHTHALATES | Phthalates | 10.1016/j.envint.2020.105881 | ref:Endocrine disruption || CROSSREF: ERROR <urlopen error [Errno 8] nodename nor se
+BANNED_ADD_PHTHALATES | Phthalates | 10.1289/EHP10857 | ref:Reproductive effects || CROSSREF: Perfluoroalkyl Acids in Follicular Fluid and Embryo Quality during IVF: A Prospective IVF Cohort in China
+BANNED_ADD_PHTHALATES | Phthalates | 10.1021/acs.est.4c01234 | ref:Supplement contamination 2024 || CROSSREF: ERROR HTTP Error 404: Not Found
+BANNED_ADD_SYNTHETIC_ESTROGENS | Synthetic Estrogens | 10.1016/j.envint.2019.105267 | ref:EDC effects on human health || CROSSREF: Statement on advancing the assessment of chemical mixtures and their risks for human health and the environmen
+BANNED_ADD_SYNTHETIC_ESTROGENS | Synthetic Estrogens | 10.1210/er.2015-1010 | ref:Endocrine disrupting chemicals review || CROSSREF: EDC-2: The Endocrine Society's Second Scientific Statement on Endocrine-Disrupting Chemicals
+BANNED_ADD_SYNTHETIC_FOOD_ACIDS | Policy Watchlist: Synthetic Food Acids | 10.1016/j.foodchem.2020.127556 | ref:Synthetic acids || CROSSREF: Diverse effects of rutin and quercetin on the pasting, rheological and structural properties of Tartary buckwh
+BANNED_ADD_SYNTHETIC_FOOD_ACIDS | Policy Watchlist: Synthetic Food Acids | 10.3390/foods9020178 | ref:Health effects || CROSSREF: Table Olives More than a Fermented Food
+BANNED_ARISTOLOCHIC_ACID | Aristolochic Acid | 10.1093/jnci/djr085 | ref:Aristolochic acid carcinogenicity || CROSSREF: ERROR HTTP Error 404: Not Found
+BANNED_ARISTOLOCHIC_ACID | Aristolochic Acid | 10.1073/pnas.1119920109 | ref:DNA damage mechanisms || CROSSREF: Aristolochic acid-associated urothelial cancer in Taiwan
+BANNED_BMPEA | BMPEA | 10.1016/j.drugalcdep.2015.01.027 | ref:BMPEA not from Acacia || CROSSREF: Trends in abuse and misuse of prescription opioids among older adults
+BANNED_COMFREY_INTERNAL | Comfrey (Internal Use) | 10.1002/hep.1840190107 | ref:Comfrey hepatotoxicity || CROSSREF: Flumazenil in cirrhotic patients in hepatic coma: A randomized double-blind placebo-controlled crossover trial
+BANNED_COMFREY_INTERNAL | Comfrey (Internal Use) | 10.1093/jat/25.6.456 | ref:Pyrrolizidine alkaloid toxicity || CROSSREF: A Detection Scheme for Paraquat Poisoning: Validation and a Five-Year Experience in Australia
+BANNED_DMAA | DMAA | 10.1016/j.drugalcdep.2012.12.011 | ref:DMAA cardiovascular effects || CROSSREF: Synthetic cannabis: A comparison of patterns of use and effect profile with natural cannabis in a large global
+BANNED_DMAA | DMAA | 10.1093/jat/bks078 | ref:DMAA not from geranium || CROSSREF: Analysis of Clothing and Urine from Moscow Theatre Siege Casualties Reveals Carfentanil and Remifentanil Use
+BANNED_DMHA | DMHA | 10.1016/j.drugalcdep.2019.01.026 | ref:DMHA cardiovascular effects || CROSSREF: Illicit drug use and prescription drug misuse among young adult medical cannabis patients and non-patient user
+BANNED_EPHEDRA | Ephedra | 10.7326/0003-4819-140-8-200404200-00006 | ref:Ephedra adverse events || CROSSREF: ERROR HTTP Error 404: Not Found
+BANNED_EPHEDRA | Ephedra | 10.1056/NEJMoa032648 | ref:Cardiovascular risks || CROSSREF: ERROR HTTP Error 404: Not Found
+BANNED_FASORACETAM | Fasoracetam | 10.1177/2045125316672135 | ref:Fasoracetam clinical trial failure || CROSSREF: Dosing patterns and medication adherence in bipolar disorder patients treated with lurasidone: a US retrospect
+BANNED_FDC_RED_2_AMARANTH | FD&C Red No. 2 (Amaranth) | 10.1016/0278-6915(94)90034-5 | ref:Azo dye metabolism and toxicity || CROSSREF: ERROR HTTP Error 404: Not Found
+BANNED_HIGENAMINE | Higenamine | 10.1016/j.fct.2013.07.080 | ref:Higenamine cardiovascular effects || CROSSREF: Imidacloprid does not induce Cyp genes involved in insecticide resistance of a mutant Drosophila melanogaster 
+BANNED_IGF1 | IGF-1 (Insulin-like Growth Factor 1) | 10.1210/jc.2009-0491 | ref:IGF-1 and cancer risk || CROSSREF: ERROR HTTP Error 404: Not Found
+BANNED_PEDIATRIC_FLUORIDE | Fluoride Supplements (Children) | 10.1001/jamapediatrics.2019.1729 | ref:Fluoride and IQ || CROSSREF: Association Between Maternal Fluoride Exposure During Pregnancy and IQ Scores in Offspring in Canada
+BANNED_PHENIBUT | Phenibut | 10.15585/mmwr.mm6843a6 | ref:Phenibut exposures reported to poison centers || CROSSREF: ERROR HTTP Error 429: Too Many Requests
+BANNED_PHENIBUT | Phenibut | 10.1016/j.ajem.2019.03.029 | ref:Phenibut withdrawal syndrome || CROSSREF: Tetratrichomonas in pyopneumothorax
+BANNED_S23 | S-23 | 10.1210/endo.140.12.7163 | ref:S-23 as male contraceptive || CROSSREF: Selective Expression of Neuropeptides in the Rat Mammary Gland: Somatostatin Gene Is Expressed During Lactatio
+BANNED_SIBUTRAMINE | Sibutramine | 10.1056/NEJMoa1003114 | ref:SCOUT trial cardiovascular risks || CROSSREF: Effect of Sibutramine on Cardiovascular Outcomes in Overweight and Obese Subjects
+BANNED_SR9009 | SR9009 | 10.1038/nature11704 | ref:Rev-ErbA agonist effects || CROSSREF: ERROR HTTP Error 429: Too Many Requests
+BANNED_TIANEPTINE | Tianeptine | 10.15585/mmwr.mm7316a4 | ref:Tianeptine exposures || CROSSREF: Use of an Additional Updated 2023–2024 COVID-19 Vaccine Dose for Adults Aged ≥65 Years: Recommendations of the
+BANNED_YELLOW_OLEANDER_RECENT | Yellow Oleander (Recent Recalls 2025) | 10.1016/j.toxicon.2018.11.434 | ref:Yellow oleander cardiotoxicity || CROSSREF: ERROR HTTP Error 404: Not Found
+HIGH_RISK_CHAPARRAL | Chaparral | 10.1001/jama.1992.03490220089034 | ref:Chaparral hepatotoxicity || CROSSREF: ERROR HTTP Error 429: Too Many Requests
+HIGH_RISK_GERMANDER | Germander | 10.7326/0003-4819-117-2-129 | ref:Germander hepatotoxicity || CROSSREF: ERROR HTTP Error 429: Too Many Requests
+HIGH_RISK_PENNYROYAL | Pennyroyal Oil | 10.1016/S0140-6736(96)01471-5 | ref:Pennyroyal oil fatality || CROSSREF: ERROR HTTP Error 429: Too Many Requests
+HM_ARSENIC | Arsenic (Inorganic) | 10.1289/ehp.1104494 | ref:Arsenic in rice || CROSSREF: ERROR HTTP Error 429: Too Many Requests
+HM_CADMIUM | Cadmium | 10.1016/j.fct.2013.12.005 | ref:Cadmium in chocolate || CROSSREF: ERROR HTTP Error 429: Too Many Requests
+HM_LEAD | Lead | 10.1016/S0140-6736(18)31310-2 | ref:Lancet: Global burden of lead exposure || CROSSREF: ERROR HTTP Error 429: Too Many Requests
+HM_MERCURY | Mercury | 10.1289/ehp.1104494 | ref:Mercury neurotoxicity || CROSSREF: ERROR HTTP Error 429: Too Many Requests
+NOOTROPIC_9MEBC | 9-Methyl-β-carboline | 10.1016/j.neuropharm.2015.08.025 | ref:Beta-carboline neurotoxicity || CROSSREF: ERROR HTTP Error 429: Too Many Requests
+NOOTROPIC_ADRAFINIL | Adrafinil | 10.1016/S0149-2918(99)80048-1 | ref:Adrafinil pharmacology || CROSSREF: ERROR HTTP Error 429: Too Many Requests
+NOOTROPIC_ANIRACETAM | Aniracetam | 10.1007/s002130050622 | ref:Aniracetam pharmacology || CROSSREF: ERROR HTTP Error 429: Too Many Requests
+NOOTROPIC_BROMANTANE | Bromantane | 10.1007/s11055-013-9858-1 | ref:Bromantane effects || CROSSREF: ERROR HTTP Error 429: Too Many Requests
+NOOTROPIC_FLMODAFINIL | Flmodafinil | 10.1021/jm00346a004 | ref:Flmodafinil pharmacology || CROSSREF: ERROR HTTP Error 429: Too Many Requests
+NOOTROPIC_MODAFINIL | Modafinil | 10.1001/jama.2017.3085 | ref:Modafinil adverse effects || CROSSREF: ERROR HTTP Error 429: Too Many Requests
+NOOTROPIC_OMBERACETAM | Omberacetam | 10.1007/s11055-008-0025-6 | ref:Noopept effects || CROSSREF: ERROR HTTP Error 429: Too Many Requests
+NOOTROPIC_PHENYLPIRACETAM | Phenylpiracetam | 10.1007/s11055-007-0078-x | ref:Phenylpiracetam effects || CROSSREF: ERROR HTTP Error 429: Too Many Requests
+NOOTROPIC_PIRACETAM | Piracetam | 10.1002/hup.2656 | ref:Piracetam review || CROSSREF: ERROR HTTP Error 429: Too Many Requests
+PEPTIDE_MELANOTAN_II | Melanotan II | 10.1111/bjd.13316 | ref:Melanotan and melanoma risk || CROSSREF: ERROR HTTP Error 429: Too Many Requests
+PHARMA_LORCASERIN | Lorcaserin | 10.1056/NEJMoa1908681 | ref:CAMELLIA-TIMI 61 trial showing cancer risk || CROSSREF: ERROR HTTP Error 429: Too Many Requests
+RC_CARDARINE_ANALOGS | Policy Watchlist: Cardarine Derivatives | 10.1093/toxsci/kfm226 | ref:Cardarine carcinogenicity || CROSSREF: ERROR HTTP Error 429: Too Many Requests
+RECALLED_HYDROXYCUT | Hydroxycut (Multiple Formulations) | 10.1002/hep.23393 | ref:Hydroxycut hepatotoxicity || CROSSREF: ERROR HTTP Error 429: Too Many Requests
+RECALLED_JACK3D | Jack3d | 10.1016/j.drugalcdep.2015.01.011 | ref:DMAA cardiovascular risks || CROSSREF: ERROR HTTP Error 429: Too Many Requests
+RECALLED_OXYELITE_PRO | OxyElite Pro | 10.1001/jama.2013.281632 | ref:Hawaii hepatitis outbreak || CROSSREF: ERROR HTTP Error 429: Too Many Requests
+RISK_BITTER_ORANGE | Bitter Orange | 10.1016/j.ijcard.2012.09.001 | ref:Bitter orange cardiovascular effects || CROSSREF: ERROR HTTP Error 429: Too Many Requests
+RISK_BITTER_ORANGE | Bitter Orange | 10.1002/mnfr.201100409 | ref:Synephrine safety review || CROSSREF: ERROR HTTP Error 429: Too Many Requests
+RISK_GERMANIUM | Germanium | 10.1093/ndt/13.10.2427 | ref:Germanium nephrotoxicity || CROSSREF: ERROR HTTP Error 429: Too Many Requests
+RISK_GREEN_TEA_EXTRACT_HIGH | Green Tea Extract (High Dose) | 10.1016/j.fct.2016.12.033 | ref:Green tea extract hepatotoxicity || CROSSREF: ERROR HTTP Error 429: Too Many Requests
+RISK_KAVA | Kava | 10.1002/hep.20662 | ref:Kava hepatotoxicity || CROSSREF: ERROR HTTP Error 429: Too Many Requests
+RISK_KAVA | Kava | 10.1111/j.1365-2125.2007.02958.x | ref:Kava liver damage review || CROSSREF: ERROR HTTP Error 429: Too Many Requests
+RISK_KRATOM_NATURAL | Kratom (Natural Leaf) | 10.15585/mmwr.mm6814a2 | ref:Kratom-associated deaths || CROSSREF: ERROR HTTP Error 429: Too Many Requests
+RISK_KRATOM_NATURAL | Kratom (Natural Leaf) | 10.1002/hep.30612 | ref:Kratom hepatotoxicity || CROSSREF: ERROR HTTP Error 429: Too Many Requests
+RISK_YOHIMBE | Yohimbe | 10.1016/j.forsciint.2012.02.015 | ref:Yohimbine toxicity || CROSSREF: ERROR HTTP Error 429: Too Many Requests
+SARM_ANDARINE | Andarine | 10.1210/en.2007-0814 | ref:Andarine vision effects || CROSSREF: ERROR HTTP Error 429: Too Many Requests
+SARM_CARDARINE | Cardarine | 10.1093/toxsci/kfn160 | ref:Cardarine carcinogenicity || CROSSREF: ERROR HTTP Error 429: Too Many Requests
+SARM_LIGANDROL | Ligandrol | 10.1210/jc.2013-2271 | ref:Ligandrol clinical trial || CROSSREF: ERROR HTTP Error 429: Too Many Requests
+SARM_OSTARINE | Ostarine | 10.1002/hep.29466 | ref:Ostarine hepatotoxicity || CROSSREF: ERROR HTTP Error 429: Too Many Requests
+SARM_RAD140 | RAD140 | 10.14309/crj.0000000000000518 | ref:RAD140 liver injury case report || CROSSREF: ERROR HTTP Error 429: Too Many Requests
+SCHED_AMANITA_MUSCARIA | Amanita Muscaria | 10.1016/j.toxlet.2021.08.012 | ref:Amanita muscaria toxicity || CROSSREF: ERROR HTTP Error 429: Too Many Requests
+SCHED_PSILOCYBIN | Psilocybin | 10.1177/0269881118767697 | ref:Psilocybin adverse effects || CROSSREF: ERROR HTTP Error 429: Too Many Requests
+STIM_METHYLHEXANAMINE_ANALOGS | Policy Watchlist: DMAA Analogs | 10.1016/j.drugalcdep.2015.01.011 | ref:DMAA cardiovascular risks || CROSSREF: ERROR HTTP Error 429: Too Many Requests
+ADD_CASCARA_SAGRADA | Cascara Sagrada | 10.2903/j.efsa.2018.5090 | ref:EFSA Journal 2018;16(1):5090 - Safety of hydroxyanthracene derivatives for use in food || CROSSREF: ERROR HTTP Error 429: Too Many Requests
+RISK_ALOE_LATEX | Aloe Latex | 10.2903/j.efsa.2018.5090 | ref:EFSA Journal 2018;16(1):5090 - Safety of hydroxyanthracene derivatives for use in food || CROSSREF: ERROR HTTP Error 429: Too Many Requests
+WATCH_SENNA | Senna | 10.2903/j.efsa.2018.5090 | ref:EFSA Journal 2018;16(1):5090 - Safety of hydroxyanthracene derivatives for use in food || CROSSREF: ERROR HTTP Error 429: Too Many Requests
+WATCH_SENNA | Senna | 10.2903/j.efsa.2024.8766 | ref:EFSA Journal 2024;22(5):e8766 - Safety of Rheum, Rhamnus and Cassia senna preparations under Union scrutiny || CROSSREF: ERROR HTTP Error 429: Too Many Requests
+WATCH_FRANGULA | Frangula Bark | 10.2903/j.efsa.2024.8766 | ref:EFSA Journal 2024;22(5):e8766 - Safety of Rheum, Rhamnus and Cassia senna preparations under Union scrutiny || CROSSREF: ERROR HTTP Error 429: Too Many Requests
+WATCH_FRANGULA | Frangula Bark | 10.2903/j.efsa.2018.5090 | ref:EFSA Journal 2018;16(1):5090 - Safety of hydroxyanthracene derivatives for use in food || CROSSREF: ERROR HTTP Error 429: Too Many Requests
+WATCH_RHUBARB_ROOT | Rhubarb Root (Rheum palmatum / Rheum officinale) | 10.2903/j.efsa.2024.8766 | ref:EFSA Journal 2024;22(5):e8766 - Safety of Rheum, Rhamnus and Cassia senna preparations under Union scrutiny || CROSSREF: ERROR HTTP Error 429: Too Many Requests
+WATCH_RHUBARB_ROOT | Rhubarb Root (Rheum palmatum / Rheum officinale) | 10.2903/j.efsa.2018.5090 | ref:EFSA Journal 2018;16(1):5090 - Safety of hydroxyanthracene derivatives for use in food || CROSSREF: ERROR HTTP Error 429: Too Many Requests
+ADD_HORDENINE | Hordenine | 10.1016/j.fct.2019.110676 | ref:DOI: 10.1016/j.fct.2019.110676 - Hordenine toxicological review || CROSSREF: ERROR HTTP Error 429: Too Many Requests
+ADD_RED3 | FD&C Red No. 3 | 10.1016/j.fct.2007.09.001 | ref:DOI: 10.1016/j.fct.2007.09.001 - Erythrosine thyroid effects in animals || CROSSREF: ERROR HTTP Error 429: Too Many Requests
+SCHED_PSILOCIN | Psilocin | 10.1177/0269881118767697 | ref:Psilocybin adverse effects || CROSSREF: ERROR HTTP Error 404: Not Found
+BANNED_MUSCIMOL | Muscimol | 10.1016/j.toxlet.2021.08.012 | ref:Amanita muscaria toxicity || CROSSREF: ERROR HTTP Error 429: Too Many Requests
+BANNED_IBOTENIC_ACID | Ibotenic Acid | 10.1016/j.toxlet.2021.08.012 | ref:Amanita muscaria toxicity || CROSSREF: ERROR HTTP Error 429: Too Many Requests

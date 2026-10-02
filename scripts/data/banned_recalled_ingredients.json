@@ -15098,7 +15098,7 @@
         "α-pyrrolidinohexanophenone",
         "α-php"
       ],
-      "reason": "α-PHP (alpha-pyrrolidinohexanophenone) is a Schedule I synthetic cathinone ('bath salt') with potent stimulant effects comparable to methamphetamine. It is a DEA emergency Schedule I substance. It has absolutely no legitimate dietary supplement use — any product containing α-PHP is either mislabeled or fraudulently marketed. Known effects include severe tachycardia, hyperthermia, paranoia, psychosis, and cardiovascular collapse. Multiple overdose deaths have been attributed to synthetic cathinones in this class.",
+      "reason": "α-PHP (alpha-pyrrolidinohexanophenone) is a Schedule I synthetic cathinone ('bath salt') with potent stimulant effects comparable to methamphetamine. DEA placed it in Schedule I temporarily on 2019-07-18 (84 FR 34291) and permanently on 2022-06-01 (87 FR 32996). It has absolutely no legitimate dietary supplement use — any product containing α-PHP is either mislabeled or fraudulently marketed. Known effects include severe tachycardia, hyperthermia, paranoia, psychosis, and cardiovascular collapse. Multiple overdose deaths have been attributed to synthetic cathinones in this class.",
       "status": "banned",
       "class_tags": [
         "designer_stimulants",
@@ -15112,43 +15112,72 @@
         "confidence": "high",
         "negative_match_terms": []
       },
-      "legal_status_enum": "not_lawful_as_supplement",
+      "legal_status_enum": "controlled_substance",
       "clinical_risk_enum": "critical",
       "jurisdictions": [
         {
           "region": "US",
           "level": "federal",
-          "status": "banned",
+          "status": "not_lawful",
           "effective_date": null,
           "source": {
-            "type": "fda_action",
-            "citation": "DEA Schedule I (controlled substance). Illegal in supplements.",
-            "accessed_date": "2026-01-08"
+            "type": "federal_register",
+            "citation": "DEA placed alpha-pyrrolidinohexanophenone (α-PHP) in Schedule I temporarily (84 FR 34291, effective 2019-07-18) and permanently (87 FR 32996, effective 2022-06-01); 21 CFR 1308.11, DEA code 7544.",
+            "accessed_date": "2026-10-02",
+            "url": "https://www.federalregister.gov/documents/2022/06/01/2022-11740/schedules-of-controlled-substances-placement-of-n-ethylhexedrone-alpha-pyrrolidinohexanophenone"
           },
           "jurisdiction_type": "country",
           "jurisdiction_code": "US",
-          "last_verified_date": "2026-01-08"
+          "last_verified_date": "2026-10-02"
         }
       ],
       "references_structured": [
         {
-          "type": "other",
-          "title": "DEA: α-PHP Schedule I classification",
+          "type": "federal_register",
+          "title": "DEA temporary scheduling order: N-Ethylhexedrone, α-PHP, 4-MEAP, MPHP, PV8 and 4-Chloro-α-PVP in Schedule I (84 FR 34291)",
           "evidence_grade": "R",
-          "supports_claims": [],
-          "evidence_summary": "DEA: α-PHP Schedule I classification"
+          "date": "2019-07-18",
+          "url": "https://www.federalregister.gov/documents/2019/07/18/2019-15184/schedules-of-controlled-substances-temporary-placement-of-n-ethylhexedrone--php-4-meap-mphp-pv8-and",
+          "supports_claims": [
+            "regulatory_action",
+            "legal_status"
+          ],
+          "evidence_summary": "Temporarily places α-PHP in Schedule I, effective 2019-07-18."
         },
         {
-          "type": "doi",
-          "id": "10.1016/j.forsciint.2015.09.002",
-          "title": "α-PHP toxicity",
+          "type": "federal_register",
+          "title": "DEA final rule: Placement of N-Ethylhexedrone, α-PHP, 4-MEAP, MPHP, PV8 and 4-Chloro-α-PVP in Schedule I (87 FR 32996)",
+          "evidence_grade": "R",
+          "date": "2022-06-01",
+          "url": "https://www.federalregister.gov/documents/2022/06/01/2022-11740/schedules-of-controlled-substances-placement-of-n-ethylhexedrone-alpha-pyrrolidinohexanophenone",
+          "supports_claims": [
+            "regulatory_action",
+            "legal_status"
+          ],
+          "evidence_summary": "Permanently places α-PHP in Schedule I, effective 2022-06-01."
+        },
+        {
+          "type": "pubmed",
+          "title": "α-Pyrrolidinohexanophenone (α-PHP) and α-Pyrrolidinoisohexanophenone (α-PiHP): A Review",
           "evidence_grade": "B",
-          "url": "https://doi.org/10.1016/j.forsciint.2015.09.002",
+          "date": "2024",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/38672701/",
+          "supports_claims": [
+            "clinical_outcomes"
+          ],
+          "evidence_summary": "Forensic-toxicology review: no medical use; cardiac, psychiatric and neurologic adverse effects most frequent; fatal intoxications described."
+        },
+        {
+          "type": "pubmed",
+          "title": "α-PHP: Acute effects and pharmacokinetic in male and female mice, and clinical data on related intoxications",
+          "evidence_grade": "B",
+          "date": "2025",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/39987764/",
           "supports_claims": [
             "mechanism_of_harm",
             "clinical_outcomes"
           ],
-          "evidence_summary": "α-PHP toxicity"
+          "evidence_summary": "Pavia Poison Centre cases: psychomotor agitation, hallucinations, tachycardia, chest pain, hyperthermia, rhabdomyolysis; stimulant profile like α-PVP and MDPV."
         }
       ],
       "source_category": "designer_stimulants",
@@ -15163,17 +15192,24 @@
             "date": "2026-01-08",
             "change": "Migrated to schema v3.1 with standardized fields",
             "by": "system"
+          },
+          {
+            "date": "2026-10-02",
+            "by": "claude-audit",
+            "change": "LEDGER Q56. regulatory_date 2014-01-01 (placeholder) -> 2019-07-18 'DEA scheduling effective' (84 FR 34291 temporary order; permanent 87 FR 32996, 2022-06-01; 21 CFR 1308.11 code 7544, eCFR 2026-09-30). legal_status_enum not_lawful_as_supplement -> controlled_substance (as modafinil). US row -> not_lawful citing the DEA rules; policy verified. Reason no longer calls the scheduling 'emergency'. References: the DEA reference without a URL and a DOI that resolves to an unrelated forensic face-recognition paper replaced by both DEA rules and PMIDs 38672701, 39987764 (content-checked). Receipt: scripts/audits/pending_items_20260926/research.md Q56."
           }
         ]
       },
-      "regulatory_date": "2014-01-01",
+      "regulatory_date": "2019-07-18",
       "regulatory_date_label": "DEA scheduling effective",
       "match_mode": "active",
       "cui": "C4743057",
       "external_ids": {},
       "ban_context": "substance",
       "safety_warning": "A Schedule I synthetic cathinone (bath-salt class) with stimulant effects comparable to methamphetamine. Associated with cardiovascular and psychiatric emergencies. Stop and consult a doctor.",
-      "safety_warning_one_liner": "Schedule I synthetic stimulant. Stop using and talk to your doctor."
+      "safety_warning_one_liner": "Schedule I synthetic stimulant. Stop using and talk to your doctor.",
+      "policy_verification_status": "verified",
+      "policy_verified_at": "2026-10-02"
     },
     {
       "id": "STIM_METHYLHEXANAMINE_ANALOGS",
@@ -15338,7 +15374,7 @@
         "SGT-263",
         "cumyl-pica"
       ],
-      "reason": "CUMYL-PICA is a synthetic cannabinoid receptor agonist (SCB) — a 'designer drug' engineered to activate CB1 and CB2 receptors with far greater potency than natural THC. Synthetic cannabinoids have caused mass poisoning events, hospitalizations, and deaths globally. They are DEA Schedule I controlled substance analogs. CUMYL-PICA and related SCBs are not dietary ingredients, have no approved human use, and their presence in any product constitutes an adulterated controlled substance. Effects include agitation, tachycardia, seizures, acute kidney injury, and cardiovascular events.",
+      "reason": "CUMYL-PICA is a synthetic cannabinoid receptor agonist (SCB) — a 'designer drug' engineered to activate CB1 and CB2 receptors with far greater potency than natural THC. Synthetic cannabinoids have caused mass poisoning events, hospitalizations, and deaths globally. Many related synthetic cannabinoids are in Schedule I, but CUMYL-PICA itself is not named in the federal schedules and no FDA or DEA document names it. It has no approved human use. Effects include agitation, tachycardia, seizures, acute kidney injury, and cardiovascular events.",
       "status": "banned",
       "class_tags": [
         "synthetic_cannabinoids",
@@ -15352,43 +15388,47 @@
         "confidence": "high",
         "negative_match_terms": []
       },
-      "legal_status_enum": "controlled_substance",
+      "legal_status_enum": "under_review",
       "clinical_risk_enum": "critical",
       "jurisdictions": [
         {
           "region": "US",
           "level": "federal",
-          "status": "banned",
+          "status": "under_review",
           "effective_date": null,
           "source": {
-            "type": "fda_action",
-            "citation": "DEA Schedule I (controlled substance). Illegal in supplements.",
-            "accessed_date": "2026-01-08"
+            "type": "regulatory",
+            "citation": "No FDA or DEA document naming CUMYL-PICA was found. It is not listed in 21 CFR 1308.11 (eCFR as of 2026-09-30), and as an indole-3-carboxamide it is outside the paragraph (g) cannabimimetic structural classes; the Federal Register has no document naming it (searched 2026-10-02). Related cumyl carboxamides (5F-CUMYL-PINACA, 4-CN-CUMYL-BUTINACA, 5F-CUMYL-P7AICA) are Schedule I.",
+            "accessed_date": "2026-10-02",
+            "url": "https://www.ecfr.gov/current/title-21/chapter-II/part-1308/section-1308.11"
           },
           "jurisdiction_type": "country",
           "jurisdiction_code": "US",
-          "last_verified_date": "2026-01-08"
+          "last_verified_date": "2026-10-02"
         }
       ],
       "references_structured": [
         {
-          "type": "other",
-          "title": "DEA: Synthetic cannabinoids Schedule I",
-          "evidence_grade": "R",
-          "supports_claims": [],
-          "evidence_summary": "DEA: Synthetic cannabinoids Schedule I"
+          "type": "pubmed",
+          "title": "Pharmacology of Cumyl-Carboxamide Synthetic Cannabinoid New Psychoactive Substances (NPS) CUMYL-BICA, CUMYL-PICA, CUMYL-5F-PICA, CUMYL-5F-PINACA, and Their Analogues",
+          "evidence_grade": "B",
+          "date": "2017",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/28792725/",
+          "supports_claims": [
+            "mechanism_of_harm"
+          ],
+          "evidence_summary": "CUMYL-PICA is a potent, efficacious CB1/CB2 agonist; 1 mg/kg induced CB1-mediated hypothermia and bradycardia in rats."
         },
         {
-          "type": "doi",
-          "id": "10.1016/j.forsciint.2017.03.004",
-          "title": "CUMYL-PICA toxicity",
+          "type": "pubmed",
+          "title": "Molecular and Behavioral Pharmacological Characterization of Abused Synthetic Cannabinoids MMB- and MDMB-FUBINACA, MN-18, NNEI, CUMYL-PICA, and 5-Fluoro-CUMYL-PICA",
           "evidence_grade": "B",
-          "url": "https://doi.org/10.1016/j.forsciint.2017.03.004",
+          "date": "2018",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/29549157/",
           "supports_claims": [
-            "mechanism_of_harm",
-            "clinical_outcomes"
+            "mechanism_of_harm"
           ],
-          "evidence_summary": "CUMYL-PICA toxicity"
+          "evidence_summary": "CUMYL-PICA binds CB1/CB2 with high affinity and has greater maximal efficacy than THC; the class is associated with cardiotoxicity, seizures, kidney damage and death."
         }
       ],
       "source_category": "synthetic_cannabinoids",
@@ -15403,11 +15443,16 @@
             "date": "2026-01-08",
             "change": "Migrated to schema v3.1 with standardized fields",
             "by": "system"
+          },
+          {
+            "date": "2026-10-02",
+            "by": "claude-audit",
+            "change": "LEDGER Q56. regulatory_date 2017-01-01 'DEA scheduling effective' -> null: CUMYL-PICA is not in 21 CFR 1308.11 (eCFR 2026-09-30) by name or by the paragraph (g) structural classes, and no Federal Register document names it. legal_status_enum controlled_substance -> under_review; US row -> under_review (as fasoracetam under Q15). Reason and safety_warning no longer assert Schedule I or unlawfulness. References: the 'Synthetic cannabinoids Schedule I' reference without a URL and a DOI that resolves to an unrelated toolmark paper replaced by PMIDs 28792725, 29549157 (content-checked). Policy stays unverified, so the safety gate routes a match to review. Receipt: scripts/audits/pending_items_20260926/research.md Q56."
           }
         ]
       },
-      "regulatory_date": "2017-01-01",
-      "regulatory_date_label": "DEA scheduling effective",
+      "regulatory_date": null,
+      "regulatory_date_label": null,
       "match_mode": "active",
       "cui": "C5198249",
       "external_ids": {
@@ -15436,7 +15481,7 @@
         "metabolites": []
       },
       "ban_context": "substance",
-      "safety_warning": "A synthetic cannabinoid linked to acute psychiatric emergencies, seizures, and deaths. Not a lawful supplement ingredient; stop any product containing it and consult a doctor.",
+      "safety_warning": "A synthetic cannabinoid linked to acute psychiatric emergencies, seizures, and deaths. It has no approved use; stop any product containing it and consult a doctor.",
       "safety_warning_one_liner": "Synthetic cannabinoid linked to deaths. Stop using and talk to your doctor."
     },
     {

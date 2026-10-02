@@ -413,3 +413,38 @@ dietary supplements"); Melanotan II consumer update (Wayback 2008-12-19 capture)
 - Corrected branch HEAD `d173ca14`: `scripts/test.sh fast` passed 16,759 tests, skipped 170, exit 0 in 434.51 seconds.
 - The first combined run exposed stale omega cap fixtures, a second dandelion rule owner, and one raw-serving fallback test. Those contracts were corrected before this passing run; none was waived.
 - Owner Check: Evidence headline `scripts/scoring_v4/modules/generic_evidence.py::_evidence_result_state`; omega score magnitudes `scripts/scoring_v4/config/quality_score.json`; interaction policy `scripts/data/ingredient_interaction_rules.json`; export brand/serving `scripts/build_final_db.py::resolve_catalog_brand` and `generate_dosing_summary`. Evidence: source-of-truth matrix plus focused `rg` traces recorded in the commits above. Will NOT create another evidence state, scorer, interaction registry, brand resolver, serving owner, or export field.
+
+## Q56 DEA dates for α-PHP and CUMYL-PICA
+
+Checked 2026-10-02. Sources: Federal Register API (federalregister.gov/api/v1), eCFR 21 CFR 1308.11 as of 2026-09-30
+(api/versioner/v1/full/2026-09-30), PubChem PUG REST, Crossref, PubMed efetch.
+
+**STIM_ALPHA_PHP.** PubChem CID 102107923, 1-phenyl-2-pyrrolidin-1-ylhexan-1-one, matches the 1308.11 listing
+"alpha-Pyrrolidinohexanophenone (Other names: α-PHP; ... 1-phenyl-2-(pyrrolidin-1-yl)hexan-1-one) 7544".
+Federal Register: temporary scheduling order 84 FR 34291 (2019-07-18, effective 2019-07-18; doc 2019-15184),
+extension 86 FR 37672 (effective 2021-07-18), final rule 87 FR 32996 (2022-06-01, effective 2022-06-01;
+doc 2022-11740). The record's 2014-01-01 matches no document (2014 is when α-PHP appeared on the Japanese market,
+PMID 38672701). Result: date 2019-07-18 "DEA scheduling effective", controlled_substance, US row cites both rules,
+policy verified (federalregister.gov URL), as NOOTROPIC_MODAFINIL under Q15.
+
+**SYNTH_CUMYL_PICA.** PubChem CID 86273678, 1-pentyl-N-(2-phenylpropan-2-yl)indole-3-carboxamide (UNII H4APZ90T9U).
+Not in 1308.11 by name (searched "CUMYL-PICA", "1-pentyl", "phenylpropan-2-yl": the five hits are 4-CN-CUMYL-BUTINACA,
+5F-CUMYL-P7AICA, 5F-CUMYL-PINACA, CUMYL-PEGACLONE and mesocarb). Paragraph (g)(1)(i) classes A–E are
+hydroxycyclohexylphenols, naphthoylindoles/naphthylmethylindoles, naphthoylpyrroles, naphthylmethyleneindenes and
+phenylacetyl/benzoylindoles; an indole-3-carboxamide is none of them. Federal Register full-text search for
+"CUMYL-PICA" and for its systematic name: 0 documents. Prosecution as a controlled-substance analogue (21 U.S.C. 813)
+is a case-by-case court question, not a scheduling, and no document dates one. Result: date and label removed (not
+replaced), under_review, policy unverified (as BANNED_FASORACETAM under Q15).
+
+**Citations.** Removed: 10.1016/j.forsciint.2015.09.002 (Crossref: "Facial soft biometric features for forensic face
+recognition") and 10.1016/j.forsciint.2017.03.004 ("Toolmarks made by lathe chuck jaws"), plus two DEA references
+without a URL. Added, abstracts read: PMID 38672701 (α-PHP/α-PiHP review: no medical use, cardiac/psychiatric/
+neurologic effects, fatal intoxications); 39987764 (α-PHP mice plus Pavia Poison Centre cases: agitation,
+hallucinations, tachycardia, hyperthermia, rhabdomyolysis); 28792725 (CUMYL-PICA potent CB1/CB2 agonist, hypothermia
+and bradycardia in rats at 1 mg/kg); 29549157 (CUMYL-PICA high CB1 affinity, greater efficacy than THC).
+`verify_all_citations_content.py --file banned_recalled_ingredients.json --changed-since origin/main`: 4 MATCH.
+
+**Impact.** Warning titles: α-PHP "Not lawful as a supplement" → "Controlled substance"; CUMYL-PICA "Controlled
+substance" → "Unapproved ingredient". Neither rule matches any of the 15,133 detail blobs (catalog 2026-09-29) or the
+38 enriched brand outputs, so no shipped product changes. Safety copy: CUMYL-PICA safety_warning "Not a lawful
+supplement ingredient;" → "It has no approved use;" (structured value changed; Sean to confirm wording).

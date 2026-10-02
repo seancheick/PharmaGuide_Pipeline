@@ -14,6 +14,7 @@ a real federal ban (BVO, PHO) keeps "Banned substance: <name>".
 
 from __future__ import annotations
 
+import json
 import sys
 from pathlib import Path
 
@@ -122,3 +123,75 @@ def _registry():
     return json.loads(
         (ROOT / "scripts/data/banned_recalled_ingredients.json").read_text()
     )
+
+
+# LEDGER Q56 (2026-10-02): two DEA dates looked like placeholders. Checked
+# against the Federal Register and 21 CFR 1308.11 as published 2026-09-30.
+@pytest.mark.parametrize(
+    "rule_id, expected_prefix",
+    [
+        # Schedule I, DEA code 7544: temporary 84 FR 34291, permanent 87 FR 32996.
+        ("STIM_ALPHA_PHP", "Controlled substance"),
+        # Not named in 21 CFR 1308.11 and outside the paragraph (g)
+        # cannabimimetic structural classes; no US document names it.
+        ("SYNTH_CUMYL_PICA", "Unapproved ingredient"),
+    ],
+)
+def test_q56_dea_titles(rule_id, expected_prefix):
+    enriched = make_enriched()
+    enriched["contaminant_data"]["banned_substances"]["substances"] = [{
+        "ingredient": "X", "id": rule_id, "status": "banned", "match_type": "exact",
+    }]
+
+    assert _ban_titles(build_top_warnings(enriched)) == [f"{expected_prefix}: X"]
+
+
+def test_alpha_php_dates_its_dea_scheduling_from_the_federal_register():
+    entry = _entry("STIM_ALPHA_PHP")
+    urls = {r.get("url") for r in entry["references_structured"]}
+
+    assert entry["legal_status_enum"] == "controlled_substance"
+    assert entry["regulatory_date"] == "2019-07-18"
+    assert entry["regulatory_date_label"] == "DEA scheduling effective"
+    assert entry["policy_verification_status"] == "verified"
+    assert any("2019-15184" in (u or "") for u in urls)  # 84 FR 34291
+    assert any("2022-11740" in (u or "") for u in urls)  # 87 FR 32996
+    assert "emergency Schedule I" not in entry["reason"]
+
+
+def test_cumyl_pica_claims_no_dea_scheduling():
+    entry = _entry("SYNTH_CUMYL_PICA")
+
+    assert entry["legal_status_enum"] == "under_review"
+    assert entry.get("regulatory_date") is None
+    assert entry.get("regulatory_date_label") is None
+    assert entry.get("policy_verification_status") is None
+    text = json.dumps(
+        [entry["reason"], entry["jurisdictions"], entry["references_structured"],
+         entry["safety_warning"]]
+    )
+    for false_claim in (
+        "DEA Schedule I controlled substance analogs",
+        "DEA Schedule I (controlled substance)",
+        "Synthetic cannabinoids Schedule I",
+        "constitutes an adulterated controlled substance",
+        "Not a lawful supplement ingredient",
+    ):
+        assert false_claim not in text
+    assert "not named in the federal schedules" in entry["reason"]
+
+
+@pytest.mark.parametrize(
+    "rule_id, ghost_doi",
+    [
+        # Resolve to a face-recognition paper and a lathe toolmark paper.
+        ("STIM_ALPHA_PHP", "10.1016/j.forsciint.2015.09.002"),
+        ("SYNTH_CUMYL_PICA", "10.1016/j.forsciint.2017.03.004"),
+    ],
+)
+def test_q56_wrong_topic_dois_are_gone(rule_id, ghost_doi):
+    assert ghost_doi not in json.dumps(_entry(rule_id))
+
+
+def _entry(rule_id):
+    return next(e for e in _registry()["ingredients"] if e["id"] == rule_id)
