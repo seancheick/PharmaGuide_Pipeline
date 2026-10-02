@@ -284,33 +284,33 @@ Owner: existing master-plan checklist + this ledger; technical owners `classify_
 
 ### October 2 user-run checkpoint — Q40/Q45 ownership follow-ups
 
-- [x] Audit actual Clean/Enrich/Score outputs on `fa8c50bc`:38 datasets,15,421
-  products,114 matching stage/code/input/owned-content manifests. Snapshot guard
-  stopped7failed/28passed; no current catalog was rebuilt/published.
-- [x] Verify46 prior CFU/Transparency controls against actual run and corrected
+- [x] Audit actual Clean/Enrich/Score outputs on `fa8c50bc`: 38 datasets, 15,421
+  products, 114 matching stage/code/input/owned-content manifests. Snapshot guard
+  stopped at 7 failed / 28 passed; no current catalog was rebuilt/published.
+- [x] Verify 46 prior CFU/Transparency controls against actual run and corrected
   stored-input artifacts: public scores/pillars/tiers/typed safety unchanged.
 - [x] Correct unsupported ALA marine aliases/applicability and retain all valid
   marine siblings. The unique existing subject identity owns the exact source
   reference even when populated raw/resolved canonical namespaces differ.
   Source-only scopes, ambiguous identities, forms and amounts stay protected.
 - [x] Correct lost cleaner plantPart in linked botanical projection (Q40).
-  Silymarin183275 keeps justified90.6; Adrenal204571 restores46.9.
+  Silymarin 183275 keeps justified 90.6; Adrenal 204571 restores 46.9.
 - [x] Pin independent quality tier/safety/readiness via the existing canary
-  freezer. CVS18141 restores52.3/Poor/clear safety and legitimately becomes
-  partial: its ALA clinical review remains pending. All36 canary checks pass.
-- [x] Measure corrected source `b7eeb178` on1496 frozen raw labels:1472 totals
-  unchanged,24 score movements (13 Formulation,11 Evidence),0 unexplained
+  freezer. CVS 18141 restores 52.3/Poor/clear safety and legitimately becomes
+  partial: its ALA clinical review remains pending. All 36 canary checks pass.
+- [x] Measure corrected source `b7eeb178` on 1,496 frozen raw labels: 1,472 totals
+  unchanged, 24 score movements (13 Formulation, 11 Evidence), 0 unexplained
   score/other-pillar/route/subroute/purpose/scoring-status movement. Six valid
   marine namespace controls and three mixed EPA/DHA controls retain baseline
-  totals. Ten ALA credits lose inapplicable marine evidence;70588 retains EPA
-  credit and loses its ALA-derived floor. Quality crossings are2 up/9 down;
+  totals. Ten ALA credits lose inapplicable marine evidence; 70588 retains EPA
+  credit and loses its ALA-derived floor. Quality crossings are 2 up / 9 down;
   none is described as a safety improvement.
 - [x] Complete final fast gate, independent receipt and integrate/push this
-  source batch on main through `54a374cb`:18,101 passed/168 skipped/zero
-  failures or xfails,976.12s. Source fingerprint matches measured `b7eeb178`.
+  source batch on main through `54a374cb`: 18,101 passed/168 skipped/zero
+  failures or xfails, 976.12s. Source fingerprint matches measured `b7eeb178`.
   Runtime publication remains unapproved.
 
-Intermediate27/30-mover captures are superseded/rejected, not accepted
+Intermediate 27/30-mover captures are superseded/rejected, not accepted
 calibration inputs. Current durable receipts:
 `/Users/seancheick/pg_quality/post_pipeline_20261002/candidate_verified.jsonl`
 and `numerical_delta_receipt_verified.json`. The original user outputs remain
@@ -321,6 +321,6 @@ Phase3 corrected-subject census to ALA; an inapplicable marine record is not a
 completed ALA clinical determination. No new magnitude, owner or registry was
 introduced. Owner: existing clinical applicability, shared subject provider,
 generic identity chooser, cleaner plantPart and canonical freezer. Evidence:
-188 focused tests,13 strict live citation claims,1496 frozen-raw A/B and
+188 focused tests, 13 strict live citation claims, 1,496 frozen-raw A/B and
 46/33 artifact parity. Will NOT create: another scorer, subject set, role
 classifier, registry, amount parser or public field/status.

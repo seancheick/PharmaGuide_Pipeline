@@ -275,10 +275,10 @@ valid marine records because applicability and scoring used different
 canonical namespaces. They are diagnostic history, not calibration inputs.
 Use only the final `candidate_verified.jsonl` and its source-unchanged receipt
 for acceptance. Final source `b7eeb178` is measured/reviewed/integrated and
-pushed on main through `54a374cb`:1496 raw labels,24 explained movements
-(13 Formulation,11 Evidence),1472 totals unchanged,zero other-pillar/route/
-purpose/scoring-status changes;46 controls/33 canaries match. Final fast:
-18,101 passed,168 skipped,zero failures or xfails in976.12s. No runtime
+pushed on main through `54a374cb`:1496 raw labels, 24 explained movements
+(13 Formulation, 11 Evidence),1472 totals unchanged, zero other-pillar/route/
+purpose/scoring-status changes; 46 controls/33 canaries match. Final fast:
+18,101 passed, 168 skipped, zero failures or xfails in 976.12s. No runtime
 catalog publication occurred. ALA clinical review remains open where the
 marine match was rejected; rejection is not a completed negative assessment.
 
@@ -286,7 +286,7 @@ Owner: existing `clinical_applicability::_rows` and
 `assess_clinical_applicability`, `get_evidence_subject_rows`,
 `generic_evidence::_matched_active_canonical`, existing curated INGR_OMEGA3,
 cleaner plantPart projection and canonical canary freezer. Evidence: raw
-18141/204571/70588/304676/179650/315698, live marine source31567003, strict
+18141/204571/70588/304676/179650/315698, live marine source 31567003, strict
 13-claim citation verification, 188 focused checks and independent review.
 Will NOT create: another scorer, subject list, prominence provider, registry,
 count parser, public field/status or numerical magnitude.

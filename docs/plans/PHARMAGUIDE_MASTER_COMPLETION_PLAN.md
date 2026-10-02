@@ -7,12 +7,12 @@ A checked implementation box means that specific deliverable is implemented, mea
 ## Current checkpoint
 
 Latest validated pipeline source is `b7eeb178`: the October 2 post-pipeline
-owner corrections. Final fast: **18,101 passed,168 skipped,zero failures or
-expected failures** (976.12s). Independent review accepts all24 score changes
-across1496 frozen raw labels;46 public controls and33 canaries preserve their
+owner corrections. Final fast: **18,101 passed, 168 skipped, zero failures or
+expected failures** (976.12s). Independent review accepts all 24 score changes
+across 1,496 frozen raw labels; 46 public controls and 33 canaries preserve their
 accepted results. Source integrated and pushed on main through `54a374cb`.
 App source remains `63eeabff`; this batch changes no app code or public fields.
-Sean's38-dataset/15421-product run validates its `fa8c50bc` baseline and the
+Sean's run of 38 datasets and 15,421 products validates its `fa8c50bc` baseline and the
 previous CFU/Transparency repairs, but its outputs are stale for the corrected
 source. Final calibration/corpus/catalog/runtime acceptance remains open.
 Earlier source gates are historical receipts, not release approval.
@@ -384,14 +384,14 @@ run did not rebuild or publish the current catalog.
   Legacy POOR→SAFE compatibility changes are not improvements in safety.
 - [x] Complete the bounded raw replay, final fast gate, final independent
   receipt and source integration/push for this batch: source `b7eeb178`,
-  pushed main `54a374cb`;18,101 passed/168 skipped/zero failures or xfails.
-  Final1496-label replay:1472 totals unchanged;13 Formulation increases and
+  pushed main `54a374cb`; 18,101 passed/168 skipped/zero failures or xfails.
+  Final 1,496-label replay: 1,472 totals unchanged; 13 Formulation increases and
   11 Evidence decreases, all individually explained. Other pillars, route,
   subroute, purpose and scoring status remain unchanged. Six valid marine
   namespace controls and three mixed EPA/DHA controls retain baseline scores.
- 46 public controls and33 canaries match;36 snapshot checks pass. Two quality
+  46 public controls and 33 canaries match; 36 snapshot checks pass. Two quality
   tier crossings improve and nine decline; these are not safety changes.
-  Intermediate27/30-mover captures are superseded/rejected, not calibration
+  Intermediate 27/30-mover captures are superseded/rejected, not calibration
   inputs. Current receipts: `candidate_verified.jsonl`,
   `numerical_delta_receipt_verified.json`, `final_fast_verified.log` and
   `independent_review_final.json` in the durable audit folder.
@@ -411,6 +411,6 @@ registry, count parser, public field/status or numerical policy.
 Remaining unchecked Phase 0–2 items retain their existing dependencies.
 D26 equivalent Dose coverage, D24/omega decisions, Q39 serving variants,
 dual-use roles, final subject census and the Q53 clinical queue are not
-completed by this run. Raw CFU/serving/title cases242637/242654/327966 remain
+completed by this run. Raw CFU/serving/title cases 242637/242654/327966 remain
 explicitly open; do not infer serving-basis agreement from a count alone.
 Detailed measured receipts: `/Users/seancheick/pg_quality/post_pipeline_20261002/`.
