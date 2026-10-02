@@ -203,17 +203,14 @@ class TestProductRecallFalsePositives:
         assert "RECALLED_LIVE_IT_UP_SUPER_GREENS" not in banned_ids, \
             "Organifi product should not match Live it Up recall due to negative_match_terms"
 
-    def test_actual_recalled_product_still_matches(self, enricher):
-        """Actual recalled product should still match."""
-        banned_ids = _banned_ids(enricher, "Live it Up Super Greens Original")
-        assert "RECALLED_LIVE_IT_UP_SUPER_GREENS" in banned_ids, \
-            "Actual Live it Up product should still match the recall entry"
-
-    def test_live_it_up_wild_berry_matches(self, enricher):
-        """Live it Up Wild Berry variant should match recall."""
-        banned_ids = _banned_ids(enricher, "Live it Up Super Greens Wild Berry")
-        assert "RECALLED_LIVE_IT_UP_SUPER_GREENS" in banned_ids, \
-            "Live it Up Wild Berry product should match the recall entry"
+    @pytest.mark.parametrize("product_name", [
+        "Live it Up Super Greens Original", "Live it Up Super Greens Wild Berry",
+    ])
+    def test_ended_lot_recall_no_longer_blocks_by_product_name(self, enricher, product_name):
+        """LEDGER Q58 rule C (Sean 2026-10-02): the Salmonella recall (H-0433/0434-2026)
+        is Completed and covered listed lots; labels carry no lot numbers, so the
+        product name alone no longer matches."""
+        assert "RECALLED_LIVE_IT_UP_SUPER_GREENS" not in _banned_ids(enricher, product_name)
 
     def test_flonase_not_matched_as_reboost(self, enricher):
         """Flonase nasal spray should NOT match ReBoost/ClearLife recall."""

@@ -851,5 +851,371 @@
     "attached source is a company recall announcement; an FDA laboratory notice exists"
    ]
   }
- ]
+ ],
+ "routes_20261002": {
+  "ADD_HEXADRONE": {
+   "route": "BLOCKED",
+   "label": "Not lawful as a supplement"
+  },
+  "ADD_HORDENINE": {
+   "route": "BLOCKED",
+   "label": "Not lawful as a supplement"
+  },
+  "ADD_N_PHENETHYL_DIMETHYLAMINE": {
+   "route": "QUARANTINE (not found on scan)",
+   "label": "Unsafe ingredient"
+  },
+  "ADD_THYROGEN": {
+   "route": "BLOCKED",
+   "label": "Not lawful as a supplement"
+  },
+  "ADULTERANT_MELOXICAM": {
+   "route": "BLOCKED",
+   "label": "Hidden drug"
+  },
+  "ADULTERANT_METFORMIN": {
+   "route": "BLOCKED",
+   "label": "Hidden drug"
+  },
+  "ADULTERANT_RIMONABANT": {
+   "route": "BLOCKED",
+   "label": "Hidden drug"
+  },
+  "ADULTERANT_TESTOSTERONE_PROPIONATE": {
+   "route": "BLOCKED",
+   "label": "Hidden drug"
+  },
+  "BANNED_ACONITE": {
+   "route": "BLOCKED",
+   "label": "Unverified ingredient"
+  },
+  "BANNED_CALAMUS_ACORUS_CALAMUS": {
+   "route": "BLOCKED",
+   "label": "Not lawful as a supplement"
+  },
+  "BANNED_CLENBUTEROL": {
+   "route": "BLOCKED",
+   "label": "Unverified ingredient"
+  },
+  "BANNED_DETERENOL_ISOPROPYLNORSYNEPHRINE": {
+   "route": "BLOCKED",
+   "label": "Unverified ingredient"
+  },
+  "BANNED_DMSA_SUCCIMER": {
+   "route": "BLOCKED",
+   "label": "Not lawful as a supplement"
+  },
+  "BANNED_DNP": {
+   "route": "BLOCKED",
+   "label": "Not lawful as a supplement"
+  },
+  "BANNED_FASORACETAM": {
+   "route": "QUARANTINE (not found on scan)",
+   "label": "Unverified ingredient"
+  },
+  "BANNED_IBOTENIC_ACID": {
+   "route": "BLOCKED",
+   "label": "Unverified ingredient"
+  },
+  "BANNED_IGF1": {
+   "route": "BLOCKED",
+   "label": "Unverified ingredient"
+  },
+  "BANNED_IGF1_LR3": {
+   "route": "QUARANTINE (not found on scan)",
+   "label": "Unverified ingredient"
+  },
+  "BANNED_MUSCIMOL": {
+   "route": "BLOCKED",
+   "label": "Unverified ingredient"
+  },
+  "BANNED_SR9009": {
+   "route": "BLOCKED",
+   "label": "Unverified ingredient"
+  },
+  "BANNED_SUNIFIRAM": {
+   "route": "QUARANTINE (not found on scan)",
+   "label": "Unverified ingredient"
+  },
+  "BANNED_USNIC_ACID": {
+   "route": "BLOCKED",
+   "label": "Unverified ingredient"
+  },
+  "NOOTROPIC_9MEBC": {
+   "route": "QUARANTINE (not found on scan)",
+   "label": "Unverified ingredient"
+  },
+  "NOOTROPIC_BROMANTANE": {
+   "route": "QUARANTINE (not found on scan)",
+   "label": "Not lawful as a supplement"
+  },
+  "NOOTROPIC_FLMODAFINIL": {
+   "route": "QUARANTINE (not found on scan)",
+   "label": "Unverified ingredient"
+  },
+  "NOOTROPIC_PIRACETAM": {
+   "route": "QUARANTINE (not found on scan)",
+   "label": "Unverified ingredient"
+  },
+  "PEPTIDE_BPC157": {
+   "route": "BLOCKED",
+   "label": "Unverified ingredient"
+  },
+  "PEPTIDE_TB500": {
+   "route": "BLOCKED",
+   "label": "Unverified ingredient"
+  },
+  "PHARMA_DAPOXETINE": {
+   "route": "BLOCKED",
+   "label": "Hidden drug"
+  },
+  "PHARMA_LORCASERIN": {
+   "route": "BLOCKED",
+   "label": "Hidden drug"
+  },
+  "RC_CARDARINE_ANALOGS": {
+   "route": "QUARANTINE (not found on scan)",
+   "label": "Not lawful as a supplement"
+  },
+  "RECALLED_AONIC_COMPLETE_HERS": {
+   "route": "never matches (historical)",
+   "label": null
+  },
+  "RECALLED_AONIC_COMPLETE_HIS": {
+   "route": "never matches (historical)",
+   "label": null
+  },
+  "RECALLED_BEAUTY_911": {
+   "route": "BLOCKED",
+   "label": "Hidden drug"
+  },
+  "RECALLED_BIG_DICK_ENERGY": {
+   "route": "BLOCKED",
+   "label": "Hidden drug"
+  },
+  "RECALLED_BIQ_FEL": {
+   "route": "UNSAFE (recall)",
+   "label": "Recalled product"
+  },
+  "RECALLED_BLUE_BULL_EXTREME": {
+   "route": "UNSAFE (recall)",
+   "label": "Recalled product"
+  },
+  "RECALLED_BONER_BEARS_HONEY": {
+   "route": "UNSAFE (recall)",
+   "label": "Recalled product"
+  },
+  "RECALLED_CANDY_POWER_FOR_MAN": {
+   "route": "BLOCKED",
+   "label": "Hidden drug"
+  },
+  "RECALLED_DEEP": {
+   "route": "BLOCKED",
+   "label": "Hidden drug"
+  },
+  "RECALLED_DIVIDED_SUNSET_COLLAGEN_PEPTIDES": {
+   "route": "never matches (historical)",
+   "label": null
+  },
+  "RECALLED_ERECTUS_PLUS": {
+   "route": "BLOCKED",
+   "label": "Hidden drug"
+  },
+  "RECALLED_GE_LABS_YKARINE": {
+   "route": "BLOCKED",
+   "label": "Hidden drug"
+  },
+  "RECALLED_GOLD_STAR_DISTRIBUTION": {
+   "route": "never matches (historical)",
+   "label": null
+  },
+  "RECALLED_GREEN_LUMBER": {
+   "route": "UNSAFE (recall)",
+   "label": "Recalled product"
+  },
+  "RECALLED_HYDROXYCUT": {
+   "route": "never matches (historical)",
+   "label": null
+  },
+  "RECALLED_IMU_TEK_COLOSTRUM_5_CAPSULES": {
+   "route": "never matches (historical)",
+   "label": null
+  },
+  "RECALLED_IMU_TEK_COLOSTRUM_5_POWDER": {
+   "route": "never matches (historical)",
+   "label": null
+  },
+  "RECALLED_JACK3D": {
+   "route": "never matches (historical)",
+   "label": null
+  },
+  "RECALLED_LIVE_IT_UP_SUPER_GREENS": {
+   "route": "never matches (historical)",
+   "label": null
+  },
+  "RECALLED_LUZE_FIT_INTENSITY": {
+   "route": "BLOCKED",
+   "label": "Hidden drug"
+  },
+  "RECALLED_MAXMAN_COFFEE": {
+   "route": "BLOCKED",
+   "label": "Hidden drug"
+  },
+  "RECALLED_MIRACLE_POWER_OF_KING_KONG_HONEY": {
+   "route": "BLOCKED",
+   "label": "Hidden drug"
+  },
+  "RECALLED_MODERN_WARRIOR": {
+   "route": "UNSAFE (recall)",
+   "label": "Recalled product"
+  },
+  "RECALLED_MR7_SUPER_700000": {
+   "route": "UNSAFE (recall)",
+   "label": "Recalled product"
+  },
+  "RECALLED_OXYELITE_PRO": {
+   "route": "never matches (historical)",
+   "label": null
+  },
+  "RECALLED_PURITY_PRODUCTS_MY_BLADDER": {
+   "route": "never matches (historical)",
+   "label": null
+  },
+  "RECALLED_REBOOST_CLEARLIFE_NASAL_SPRAY": {
+   "route": "UNSAFE (recall)",
+   "label": "Recalled product"
+  },
+  "RECALLED_RED_BULL_EXTREME": {
+   "route": "UNSAFE (recall)",
+   "label": "Recalled product"
+  },
+  "RECALLED_RHEUMACARE_CAPSULES": {
+   "route": "UNSAFE (recall)",
+   "label": "Recalled product"
+  },
+  "RECALLED_ROSABELLA_MORINGA": {
+   "route": "never matches (historical)",
+   "label": null
+  },
+  "RECALLED_SENSUAL_MIRACLE_HONEY": {
+   "route": "BLOCKED",
+   "label": "Hidden drug"
+  },
+  "RECALLED_SILINTAN": {
+   "route": "UNSAFE (recall)",
+   "label": "Recalled product"
+  },
+  "RECALLED_SILUETAYA_TEJOCOTE": {
+   "route": "UNSAFE (recall)",
+   "label": "Recalled product"
+  },
+  "RECALLED_X10_NATURAL_ENHANCEMENT": {
+   "route": "UNSAFE (recall)",
+   "label": "Recalled product"
+  },
+  "RECALLED_ZUBB": {
+   "route": "BLOCKED",
+   "label": "Hidden drug"
+  },
+  "SCHED_AMANITA_MUSCARIA": {
+   "route": "BLOCKED",
+   "label": "Unverified ingredient"
+  },
+  "SCHED_PSILOCIN": {
+   "route": "BLOCKED",
+   "label": "Controlled substance"
+  },
+  "SCHED_PSILOCYBIN": {
+   "route": "BLOCKED",
+   "label": "Controlled substance"
+  },
+  "SPIKE_AMINOTADALAFIL": {
+   "route": "BLOCKED",
+   "label": "Hidden drug"
+  },
+  "SPIKE_CHLOROPRETADALAFIL": {
+   "route": "BLOCKED",
+   "label": "Hidden drug"
+  },
+  "SPIKE_DEXAMETHASONE": {
+   "route": "BLOCKED",
+   "label": "Hidden drug"
+  },
+  "SPIKE_DICLOFENAC": {
+   "route": "BLOCKED",
+   "label": "Hidden drug"
+  },
+  "SPIKE_FLUOXETINE": {
+   "route": "BLOCKED",
+   "label": "Hidden drug"
+  },
+  "SPIKE_METHOCARBAMOL": {
+   "route": "BLOCKED",
+   "label": "Hidden drug"
+  },
+  "SPIKE_METHYL7K": {
+   "route": "never matches (disabled)",
+   "label": null
+  },
+  "SPIKE_PHENOLPHTHALEIN": {
+   "route": "BLOCKED",
+   "label": "Hidden drug"
+  },
+  "SPIKE_PROPOXYPHENYLSILDENAFIL": {
+   "route": "BLOCKED",
+   "label": "Hidden drug"
+  },
+  "SPIKE_SILDENAFIL": {
+   "route": "BLOCKED",
+   "label": "Hidden drug"
+  },
+  "SPIKE_TADALAFIL": {
+   "route": "BLOCKED",
+   "label": "Hidden drug"
+  },
+  "SPIKE_TIANEPTINE_ANALOGUES": {
+   "route": "QUARANTINE (not found on scan)",
+   "label": "Unsafe ingredient"
+  },
+  "SYNTH_CUMYL_PICA": {
+   "route": "QUARANTINE (not found on scan)",
+   "label": "Unverified ingredient"
+  },
+  "WADA_CANNABIS": {
+   "route": "QUARANTINE (not found on scan)",
+   "label": "Prohibited in sport"
+  },
+  "WADA_TRAMADOL": {
+   "route": "BLOCKED",
+   "label": "Controlled substance"
+  }
+ },
+ "category_1_review_20261002": {
+  "definition": "Sean 2026-10-02: identity confident + enough evidence of a meaningful safety concern + supplement regulatory status uncertain. Regulatory uncertainty alone is not enough.",
+  "kept": {
+   "BANNED_ACONITE": "PMID 40315779: 35 aconitine poisonings, cardiotoxic and neurotoxic, some fatal.",
+   "BANNED_CLENBUTEROL": "PMIDs 40575216 (abuse review: arrhythmias, hypertension), 35288432 (myocarditis), 30546764 (cardiac toxicity case).",
+   "BANNED_DETERENOL_ISOPROPYLNORSYNEPHRINE": "PMID 24802503: Dexaprine (deterenol with other stimulants) poison-centre reports incl. one cardiac arrest; borderline, effects not attributable to deterenol alone.",
+   "BANNED_IBOTENIC_ACID": "PMID 30073844: poison-centre series of muscimol/ibotenic acid mushroom ingestions (GI upset, CNS excitation and depression, 5 intubated). Louisiana R.S. 40:989.5 (Act 154 of 2025).",
+   "BANNED_IGF1": "INCRELEX label: hypoglycemia, malignant neoplasia in treated children (injected drug; applicability limit stated).",
+   "BANNED_MUSCIMOL": "PMIDs 30073844, 41441606, 41955162; Diamond Shruumz recall posted by FDA (39 illnesses). Louisiana R.S. 40:989.5.",
+   "BANNED_SR9009": "PMID 40765588: one case of hepatocellular injury attributed to Stenabolic; borderline.",
+   "BANNED_USNIC_ACID": "PMID 16610575 (two severe hepatotoxicity cases, one transplant); LiverTox NBK548493.",
+   "PEPTIDE_BPC157": "FDA compounding category 2 list: immunogenicity and impurity risk, insufficient safety information.",
+   "PEPTIDE_TB500": "FDA compounding category 2 list (thymosin beta-4 fragment LKKTETQ).",
+   "SCHED_AMANITA_MUSCARIA": "PMIDs 30073844, 41441606, 41955162. Louisiana R.S. 40:989.1 (2005)."
+  },
+  "moved_to_quarantine": {
+   "BANNED_FASORACETAM": "PMID 29339723: no difference in adverse events vs placebo; no harm evidence.",
+   "BANNED_IGF1_LR3": "only a WADA list; no harm evidence for the analogue (no class transfer).",
+   "BANNED_SUNIFIRAM": "only a DoD list; no harm evidence.",
+   "NOOTROPIC_9MEBC": "animal/mechanism only.",
+   "NOOTROPIC_BROMANTANE": "animal studies and an efficacy study; no harm evidence.",
+   "NOOTROPIC_FLMODAFINIL": "metabolism and product-content studies; no harm evidence.",
+   "SYNTH_CUMYL_PICA": "receptor pharmacology only; no human harm report for this compound (no class transfer)."
+  },
+  "moved_to_regulatory": {
+   "BANNED_DNP": "FDA notice 2026-06-04 (Lipofit Extreme 2.0): DNP 'illegally marketed as a weight-loss product and is not approved by the FDA for any use'."
+  }
+ }
 }

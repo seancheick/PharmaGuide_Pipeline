@@ -87,12 +87,13 @@ def test_not_lawful_title_still_yields_the_substance_name():
         ("SPIKE_SILDENAFIL", "Hidden drug"),
         ("BANNED_CBD_US", "Not lawful as a supplement"),
         ("NOOTROPIC_MODAFINIL", "Controlled substance"),
-        ("WADA_TRAMADOL", "Prohibited in sport"),
-        ("NOOTROPIC_PIRACETAM", "Unapproved ingredient"),
-        ("BANNED_ACONITE", "High-risk ingredient"),
+        ("WADA_CANNABIS", "Prohibited in sport"),
+        ("WADA_TRAMADOL", "Controlled substance"),
+        ("NOOTROPIC_PIRACETAM", "Unverified ingredient"),
+        ("BANNED_ACONITE", "Unverified ingredient"),
         ("BANNED_ARISTOLOCHIC_ACID", "Unsafe ingredient"),
         ("BANNED_BVO_2024", "Banned substance"),
-        ("SCHED_AMANITA_MUSCARIA", "High-risk ingredient"),
+        ("SCHED_AMANITA_MUSCARIA", "Unverified ingredient"),
     ],
 )
 def test_each_legal_status_gets_its_own_title(rule_id, expected_prefix):
@@ -112,7 +113,7 @@ def test_amanita_entries_claim_no_dea_scheduling(rule_id):
     # 2026-10-02); the records had a 2024-01-01 "DEA scheduling effective" date.
     entry = next(e for e in _registry()["ingredients"] if e["id"] == rule_id)
 
-    assert entry["legal_status_enum"] == "high_risk"
+    assert entry["legal_status_enum"] == "under_review"  # LEDGER Q58 Category 1
     assert entry.get("regulatory_date_label") != "DEA scheduling effective"
     assert entry.get("regulatory_date") is None
     assert entry["source_category"] != "schedule_I_psychoactives"
@@ -134,7 +135,7 @@ def _registry():
         ("STIM_ALPHA_PHP", "Controlled substance"),
         # Not named in 21 CFR 1308.11 and outside the paragraph (g)
         # cannabimimetic structural classes; no US document names it.
-        ("SYNTH_CUMYL_PICA", "Unapproved ingredient"),
+        ("SYNTH_CUMYL_PICA", "Unverified ingredient"),
     ],
 )
 def test_q56_dea_titles(rule_id, expected_prefix):

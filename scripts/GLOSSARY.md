@@ -188,6 +188,7 @@ never be reintroduced. Final export rejects any non-v4 Stage-3 artifact.
 |---|---|
 | **Profile capture mode** | Taxonomy-owned rule for how a `profile_flags[]` value reaches the evaluator: `derived_from_condition`, `user_selectable`, or `reserved`. Flutter must not maintain a separate selectable list. A `reserved` flag cannot be referenced by an active rule. |
 | **Safety signal** | Canonical identity + applicability + confidence evidence consumed by the v4 safety gate. Raw matcher implementation details do not own verdict policy. |
+| **Unverified ingredient** | A banned-registry rule with `legal_status_enum: under_review` and verified policy: identity is confident and a read source documents human harm or an authority's stated safety risk (`supports_claims` includes `clinical_risk`), but no US regulator has determined its supplement status. It blocks with that label (`gate_safety._hard_policy_missing_requirements`, LEDGER Q58). Regulatory uncertainty without harm evidence is not enough: such a rule stays quarantined. |
 | **US applicable** | Whether the regulatory evidence applies to the primary shipped US verdict. Other jurisdictions remain as regional advisories. |
 | **Ingredient-level recall flag** | `has_banned_substance` or `has_recalled_ingredient`. Never use `is_recalled`, which implies an unsupported product-level recall. |
 | **Ghost reference / phantom citation** | A real identifier whose content does not support the claim. Existence alone is not verification. |
