@@ -68,6 +68,42 @@ ARTIFACT_TEST_FILES: FrozenSet[str] = frozenset({
 })
 
 
+# Fast-profile files whose tests need what only Sean's Mac has: the 11 GB
+# product corpus, built exports, canary baselines, or an opt-in local tool.
+# CI (a clean checkout) skips them; `scripts/test.sh local` runs exactly these.
+# scripts/ci_skip_guard.py fails CI when a test skips outside this list, so a
+# new local-only test cannot pass unseen.
+LOCAL_ONLY_TEST_FILES: FrozenSet[str] = frozenset({
+    "test_active_count_reconciliation.py",
+    "test_canonical_id_delivers_markers_emit.py",
+    "test_cert_needs_review_cluster_p171.py",
+    "test_cert_population_identity.py",
+    "test_cleaner_forms_preservation.py",
+    "test_condition_id_shape_consistency.py",
+    "test_cross_module_probiotic_evidence.py",
+    "test_e1_2_2_preflight_invariant.py",
+    "test_e1_5_x_4_ul_fallback_and_status.py",
+    "test_inactive_ingredient_preservation.py",
+    "test_inactive_penalty_ledger_parity.py",
+    "test_inactive_role_label_from_functional_roles.py",
+    "test_no_silently_mapped_rows.py",
+    "test_plant_part_preservation_closeout.py",
+    "test_probiotic_cfu_adequacy.py",
+    "test_probiotic_confidence_hybrid.py",
+    "test_probiotic_structured_form_identity.py",
+    "test_reviewer_doc_constituent_forms.py",
+    "test_submission_extraction_live_stack.py",
+    "test_submission_print_fidelity.py",
+    "test_submission_review_live_stack.py",
+})
+
+# Files that skip on every machine by design, not for missing local data.
+CI_SKIP_ALLOWED_FILES: FrozenSet[str] = frozenset({
+    # per-file _metadata conventions the universal count check cannot read
+    "test_data_file_metadata_contract.py",
+})
+
+
 def iter_profile_paths(profile: str, tests_dir: Path | None = None) -> Iterable[Path]:
     """Yield deterministic test paths owned by one named profile."""
     root = tests_dir or Path(__file__).resolve().parent / "tests"
@@ -85,6 +121,8 @@ def iter_profile_paths(profile: str, tests_dir: Path | None = None) -> Iterable[
         owned = RELEASE_TEST_FILES
     elif profile == "artifact":
         owned = ARTIFACT_TEST_FILES
+    elif profile == "local":
+        owned = LOCAL_ONLY_TEST_FILES
     else:
         raise ValueError(f"Unknown test profile: {profile}")
     return (path for path in all_tests if path.name in owned)
@@ -92,7 +130,7 @@ def iter_profile_paths(profile: str, tests_dir: Path | None = None) -> Iterable[
 
 def main() -> int:
     parser = argparse.ArgumentParser()
-    parser.add_argument("profile", choices=("fast", "slow", "release", "artifact"))
+    parser.add_argument("profile", choices=("fast", "slow", "release", "artifact", "local"))
     args = parser.parse_args()
     repo_root = Path(__file__).resolve().parent.parent
     for path in iter_profile_paths(args.profile):

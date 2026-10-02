@@ -20,11 +20,20 @@ in `docs/adr/`, ownership in `scripts/contracts/source_of_truth_matrix.json`.
 Raw `python3 -m pytest` picks macOS Python 3.9 and runs every heavy test (~1 h).
 
 ```bash
-scripts/test.sh fast -k <kw>   # iterating, or once per applied data batch: the topic you touched
-scripts/test.sh fast           # checkpoint: completed batch or shared-code change
-scripts/test.sh release        # release gates before a ship
-scripts/test.sh full           # post-pipeline backstop, never alongside a pipeline run
+scripts/test.sh fast <test files>  # every edit: the tests that name what you changed (fix loop step 2)
+scripts/test.sh local              # pipeline code or data changed: the corpus tests CI cannot run (~2 min)
+scripts/test.sh fast               # whole fast suite: CI runs it on every push; locally only if CI is down
+scripts/test.sh release            # release gates before a ship
+scripts/test.sh full               # post-pipeline backstop only
 ```
+
+- Never run the whole fast suite after an edit. Push the branch (`claude/*`, `codex/*`; Sean,
+  2026-10-02) and GitHub Actions `pipeline-tests` runs it. Merge on green CI, plus `local` when
+  pipeline code or data changed.
+- CI has no product corpus or builds. A test that needs them goes in `LOCAL_ONLY_TEST_FILES`
+  (`scripts/test_profiles.py`); `scripts/ci_skip_guard.py` fails CI on any other skip.
+- `scripts/test.sh` holds a machine-wide lock: one full/release/slow run at a time, alone; fast
+  runs share it and split the worker budget. A waiting run is queued, not hung.
 
 Pick the rung by what changed and say which rung ran. Docs/config-only changes need no pytest.
 "Done" without output from the rung that covers the change is not done.
@@ -37,7 +46,8 @@ Pick the rung by what changed and say which rung ran. Docs/config-only changes n
 3. Check the fix on the affected labels plus unaffected controls with
    `scripts/audits/quality_redesign/replay.py` (freeze-raw, snapshot, compare), never by
    rerunning whole brands.
-4. `scripts/test.sh fast` once. If it fails, fix the whole set, confirm with `--lf`, rerun once.
+4. Push; CI runs the fast suite. If it fails, fix the whole set, rerun the failing files locally,
+   push once. Run `scripts/test.sh local` when pipeline code or data changed.
 5. After the last code change and the merge of main: one corpus pass from the earliest changed
    stage, then the release rung. Its preflight refuses output built by other data or code.
 
@@ -85,7 +95,7 @@ bug-fix notes are history, not specifications.
   history. Most "forks" already have a doctrinal answer — apply it, measure, record it in the handoff.
 - **Sean decides only:** a new semantic owner (new persisted or public/export field, new status or
   verdict meaning, new scoring/clinical policy or owner, new registry), deleting curated clinical
-  data, pushes, releases.
+  data, pushes to `main`, releases. Pushing a `claude/*` or `codex/*` branch for CI is routine.
 - Private helpers, local names, test utilities and internal files need no approval once the
   Owner Check passes.
 
