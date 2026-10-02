@@ -16676,23 +16676,21 @@ class SupplementEnricherV3:
         # serving" over a 1-capsule panel) or per day; restate it on the
         # panel serving first. A basis that cannot be restated never replaces
         # the rows.
-        statement_cfu_count = None
+        panel_quantities = {
+            float(value)
+            for blend in probiotic_blends
+            for value in (blend.get("serving_size_quantities") or [])
+        }
+        panel_quantity = next(iter(panel_quantities)) if len(panel_quantities) == 1 else canonical_serving
         if product_level_cfu.get('has_cfu') and product_level_cfu.get("source") == "statements":
             statement_cfu_count = product_level_cfu['cfu_count']
-            panel_quantities = {
-                float(value)
-                for blend in probiotic_blends
-                for value in (blend.get("serving_size_quantities") or [])
-            }
-            panel_quantity = (
-                next(iter(panel_quantities)) if len(panel_quantities) == 1 else canonical_serving
-            )
             per_serving = self._statement_cfu_per_serving(
                 statement_parts, statement_cfu_count, product, panel_quantity,
             )
             if per_serving is None:
-                if has_cfu:
-                    product_level_cfu = {**product_level_cfu, "has_cfu": False}
+                # An unresolved daily/unit basis is not a per-serving amount,
+                # even when no panel count is available. Keep the raw statement.
+                product_level_cfu = {**product_level_cfu, "has_cfu": False}
             else:
                 product_level_cfu = {
                     **product_level_cfu,
@@ -16727,20 +16725,15 @@ class SupplementEnricherV3:
         # The selected total can come from summed rows, a header or the name,
         # after the first statement count was parsed. Bind each statement to
         # that final count; the first count cannot censor a later matching one.
-        # A statement restated onto the panel serving warrants the final count
-        # through its own printed number.
-        statement_targets = [total_cfu if has_cfu else None]
-        if (statement_cfu_count is not None and has_cfu
-                and math.isclose(product_level_cfu.get("cfu_count") or 0, total_cfu)):
-            statement_targets.append(statement_cfu_count)
         final_guarantees = {
             self._extract_guarantee_type(
                 part, subject_is_probiotic=probiotic_only_product,
                 require_potency_claim=True,
-                target_cfu_count=target,
+                target_cfu_count=total_cfu if has_cfu else None,
+                serving_product=product, panel_quantity=panel_quantity,
             )
             for part in statement_parts
-            for target in statement_targets
+            if has_cfu
         }
         # A row's explicit matching total can warrant a product count from
         # another label section. An unquantified individual-row warranty cannot.
@@ -17369,7 +17362,7 @@ class SupplementEnricherV3:
     # is a basis only when it closes the count's clause ("15 Billion CFU
     # Daily"), never as an adjective ("for daily digestive support").
     _STATEMENT_CFU_BASIS = re.compile(
-        r"\b(?:(?:per|in\s+(?:each|every)|in(?:\s+(?:a|an))?"
+        r"\b(?:(?:per|each|every|in\s+(?:each|every)|in(?:\s+(?:a|an))?"
         r"(?=\s+(?:\d|(?:one|two|three|four|five|six|seven|eight|nine|ten)\b)))\s+"
         r"(?:(\d+(?:\.\d+)?|one|two|three|four|five|six|seven|eight|nine|ten)[\s-]*)?"
         r"(capsule|cap|tablet|softgel|gumm(?:y|ie)|chewable|lozenge|packet|stick|scoop|serving|day)s?\b"
@@ -17395,8 +17388,15 @@ class SupplementEnricherV3:
                 stop = re.compile(r"[.;!?](?:\s|$)|[\r\n]").search(part, start)
                 next_count = min([s for s, _ in matches if s > start] + [len(part)])
                 end = min(next_count, stop.start() if stop else len(part))
-                basis = self._STATEMENT_CFU_BASIS.search(part, start, end)
-                if basis is not None and basis.start() > start + 90:
+                # Only this count's sentence can supply a prefix basis. Never
+                # borrow a basis from an earlier count or another sentence.
+                preceding = list(_GUARANTEE_UNIT_SPLIT_RE.finditer(part, 0, start))
+                clause_start = preceding[-1].end() if preceding else 0
+                earlier_counts = [pos for pos, _ in matches if pos < start]
+                if earlier_counts and max(earlier_counts) >= clause_start:
+                    clause_start = start
+                basis = self._STATEMENT_CFU_BASIS.search(part, clause_start, end)
+                if basis is not None and abs(basis.start() - start) > 90:
                     basis = None
                 if basis is None and stop is not None and stop.group() in "\r\n":
                     # A label line break can split the count from its basis
@@ -17540,6 +17540,7 @@ class SupplementEnricherV3:
     def _extract_guarantee_type(
         self, text: str, subject_is_probiotic: bool = False,
         target_cfu_count: Optional[float] = None, require_potency_claim: bool = False,
+        serving_product: Optional[Dict] = None, panel_quantity: Any = None,
     ) -> Optional[str]:
         """
         P1.1: Extract CFU guarantee type from text.
@@ -17623,8 +17624,13 @@ class SupplementEnricherV3:
                 # their own timing facts; standalone statements need a claim.
                 continue
             if count is not None and target_cfu_count is not None:
-                count = self._parse_cfu_text_count(unit, target_count=target_cfu_count)
-                if count is None:
+                if serving_product is not None:
+                    per_serving = self._statement_cfu_per_serving(
+                        [unit], count, serving_product, panel_quantity,
+                    )
+                    if per_serving is None or not math.isclose(per_serving, target_cfu_count):
+                        continue
+                elif self._parse_cfu_text_count(unit, target_count=target_cfu_count) is None:
                     continue
             # An unspecified "effective amount/level" is not a quantified
             # guarantee for a count stated elsewhere at manufacture.
