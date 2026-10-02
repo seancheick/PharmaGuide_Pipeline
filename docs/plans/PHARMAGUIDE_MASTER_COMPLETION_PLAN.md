@@ -4,6 +4,29 @@ Updated October 2, 2026. Pipeline integrator: Codex. Original scope: Sean's acce
 
 A checked implementation box means that specific deliverable is implemented, measured and independently reviewed where required. It does **not** mean the whole phase is finished or the catalog is released. Repository code pushed to GitHub and catalog publication are separate events.
 
+## October 2 — probiotic/prebiotic ranking corrections (Q58)
+
+- [x] Reproduce the ranking audit against main `77cb8993`, inspect raw labels and official label images, and classify the findings before changing owners.
+- [x] Preserve PreticX/XOS as the declared preparation and parent amount; remove the erroneous generic complex alias. True blends and nutrition carriers remain distinct.
+- [x] Resolve Nutricost's single declared chicory/inulin preparation through the existing cleaner and identity contract. Preserve source membership and forms; reject partial preparations, unrelated botanical companions and nested blends.
+- [x] Stop generic cranberry/PAC names from inheriting a 25% PAC form. Keep explicit concentrations, whole powder, juice and marker provenance distinct. Correct singular/plural marker recognition at the existing descriptor owner.
+- [x] Correct exact DSLD294036's printed 1.2g unit using the existing reviewed correction register. Apply combined value/unit corrections to the matching original serving column only; protect other columns and earlier corrections.
+- [x] Route genuine digestive-enzyme hybrids using the existing shared feature vector. Explicit probiotic products keep their probiotic route.
+- [x] Send non-fiber purpose ingredients to existing generic Dose; neither a prebiotic marketing title nor incidental nutrition fiber supplies a fiber amount or a new clinical benchmark.
+- [x] Refresh existing ConsumerLab records through the canonical source parser. Historical certification earns no current credit; a fresh, sourced completed absence remains scoreable, while incomplete/stale provenance remains held.
+- [x] Freeze and replay final production source `b8d298ac` across **1,544 unique products**:887 primary labels,604 expanded cranberry/chicory controls,51 prior correction controls and2 manual submissions. All captures succeed with unchanged source/input provenance;23 score movements and2 route movements are explained. No scoring-status or safety-gate movements;51 correction controls and both manual submissions are unchanged.
+- [x] Complete exact-source four-shard CI ([run37054020556](https://github.com/seancheick/PharmaGuide_Pipeline/actions/runs/37054020556)): **18,213 passed/183 approved skips**, all shards green. Local corpus/artifact gate: **527 passed/24 approved opt-in skips**, skip guard passed. Fresh final measured review accepted `b8d298ac`.
+- [ ] Integrate and push this reviewed source/documentation batch to main; runtime publication remains pending.
+- [ ] Complete the remaining preparation-specific clinical reviews and numerical calibration; this input batch does not close Phase3/Phase5 or release acceptance.
+
+Owner: `enhanced_normalizer.py::EnhancedDSLDNormalizer` (nutrition and single declared source form), `identity_integrity.py::resolve_identity`, `enrich_supplements_v3.py::_is_source_descriptor_form`, `scoring_input_contract.py::_route_is_probiotic_class`, `fiber_digestive_dose.py::score_dose`, `cert_resolver.py::_record_to_resolution`, existing verification assessment and existing label-correction register/applier. Evidence: fail-first production-boundary regressions, existing matrix/callers, official raw-label trace, final frozen replay and source reviews. Will NOT create: another scorer, normalizer, form parser, registry, route list, public field/status, benchmark or numerical policy.
+
+Representative corrections: Nutricost inulin71.5→87.1; Pure powder38.0→61.5; exact cranberry label48.7→60.1; Thorne38.2→51.0 through existing Dose credit, without a new phage benchmark; two Nature's Way historical-certification products83→78. Seed's preserved manual result remains84.5. Quality movements are not safety movements. The additional14 score decreases remove unsupported cranberry form/quality credit; they are not new deductions.
+
+Receipts: `/Users/seancheick/pg_quality/pro_prebiotic_rank_audit_20261002/`: final `*_complete.jsonl` plus metadata, four `*delta_complete.json` comparisons, official294036/306369 label images, canonical ConsumerLab receipt and `clinical_calibration_packet.md`. Earlier draft holds and near-final measurements are superseded.
+
+**Next:** finish per-entry XOS/PreticX and standalone/combination phage applicability, then review Seed/IS-2 outcome grading and PHGG route normalization alongside the existing calibration work. Seed's14.5 versus IS-2's16 comes from recorded outcome grading under current policy, not a funding deduction; PHGG's raw18/reference18 becomes public20. No new benchmark, positive clinical determination or magnitude was silently added. Continue D26 equivalent Dose ownership, D24/omega decisions, Q53 clinical coverage and remaining role/serving cases; then one user-run fresh Clean corpus, exact candidate manifest/approval and release verification. Existing corpus outputs are stale for these source corrections.
+
 ## Execution discipline — October 2
 
 - [x] Align shared, scoring-change, clinical-data, curated-data and FDA-sync instructions around surgical iteration:
@@ -42,7 +65,7 @@ The unrelated DEA-date review is **Q56**, not Q54: Q54 already identifies the in
 
 ## Earlier validated scoring checkpoint
 
-Latest validated pipeline source is `b7eeb178`: the October 2 post-pipeline
+Earlier validated pipeline source was `b7eeb178`: the October 2 post-pipeline
 owner corrections. Final fast: **18,101 passed, 168 skipped, zero failures or
 expected failures** (976.12s). Independent review accepts all 24 score changes
 across 1,496 frozen raw labels; 46 public controls and 33 canaries preserve their
