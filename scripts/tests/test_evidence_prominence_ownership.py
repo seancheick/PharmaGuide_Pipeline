@@ -619,10 +619,26 @@ def test_reviewed_marine_evidence_on_anonymous_aggregate_cannot_return_to_ala():
     assert "epa" in evidence["metadata"]["ingredient_points"]
 
 
-def test_reviewed_accepted_identity_prefers_an_actual_purpose_over_structural_parent():
+def test_reviewed_mixed_marine_record_uses_an_accepted_purpose_identity_not_ala():
     evidence = _evidence(_enrich("prominence_mixed_marine_304676_raw.json"))
     assert evidence["metadata"]["matched_entries"] == 1
-    assert set(evidence["metadata"]["ingredient_points"]) <= {"epa", "dha"}
+    assert set(evidence["metadata"]["ingredient_points"]) <= {"fish_oil", "epa", "dha"}
+    assert evidence["score"] == pytest.approx(9.35)
+    assert evidence["metadata"]["primary_evidence_floor"] == pytest.approx(9.35)
+
+
+def test_reviewed_accepted_identity_prefers_purpose_over_unowned_structural_parent():
+    from scoring_v4.modules.generic_evidence import _matched_active_canonical
+    entry = {"applicability_assessment": {"matched_canonical_ids": ["omega_3", "epa"]}}
+    assert _matched_active_canonical(entry, {"omega": "omega_3", "epa": "epa"},
+                                     use_structured_identity=True, owner_canonicals={"epa"}) == "epa"
+
+
+@pytest.mark.parametrize("identifier", ["179650", "315698"])
+def test_reviewed_marine_source_uses_the_shared_subjects_resolved_namespace(identifier):
+    evidence = _evidence(_enrich(f"prominence_marine_namespace_{identifier}_raw.json"))
+    assert evidence["metadata"]["matched_entries"] == 1
+    assert set(evidence["metadata"]["ingredient_points"]) == {"fish_oil"}
     assert evidence["score"] > 0
 
 

@@ -13,6 +13,23 @@ from clinical_applicability import (
 from scoring_v4.modules.generic_evidence import resolved_clinical_matches, score_evidence
 
 
+@pytest.mark.parametrize("ambiguous", [False, True])
+def test_applicability_reconciles_only_unique_exact_subject_identity_without_borrowing_amount(monkeypatch, ambiguous):
+    from clinical_applicability import _rows
+    import scoring_input_contract
+    row = {"name": "Omega-3 Fatty Acids", "canonical_id": "omega_3", "quantity": 100,
+           "unit": "mg", "raw_source_path": "ingredientRows[0]"}
+    subjects = [{**row, "canonical_id": "fish_oil", "quantity": 999}]
+    if ambiguous:
+        subjects.append({**row, "canonical_id": "alpha_linolenic_acid"})
+    monkeypatch.setattr(scoring_input_contract, "get_evidence_subject_rows", lambda product: subjects)
+    product = {"activeIngredients": [row], "ingredient_quality_data": {"ingredients": [{**row, "canonical_id": "fish_oil"}]}}
+    resolved = list(_rows(product))[0]
+    assert resolved["canonical_id"] == ("omega_3" if ambiguous else "fish_oil")
+    assert resolved["quantity"] == 100
+    assert list(_rows(product, source_only=True))[0] == row
+
+
 def zinc_product(form="zinc bisglycinate", amount=2.4, dosage_form="capsule"):
     row = {"name": f"Zinc (as {form})", "standard_name": "Zinc",
            "canonical_id": "zinc", "mapped": True, "quantity": amount,

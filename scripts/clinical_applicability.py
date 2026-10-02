@@ -142,7 +142,7 @@ def _valid_policy(policy: Any) -> bool:
 
 
 def _resolved_identity_by_ref(product: Mapping) -> dict:
-    """Enrichment's resolved form identity, keyed by the label row it belongs to.
+    """Resolved form and shared Evidence identity at an exact label reference.
 
     The same printed row reaches this module twice: once as the label projection
     (``activeIngredients``) and once as the enriched projection, which is the only
@@ -160,7 +160,7 @@ def _resolved_identity_by_ref(product: Mapping) -> dict:
             ref = row.get("raw_source_path") or row.get("source_row_ref")
             if not isinstance(ref, str) or not ref.strip() or ref in resolved:
                 continue
-            identity = {key: row.get(key) for key in ("form_id", "matched_form", "canonical_id") if row.get(key)}
+            identity = {key: row.get(key) for key in ("form_id", "matched_form") if row.get(key)}
             if identity:
                 resolved[ref] = identity
     from scoring_input_contract import get_evidence_subject_rows
@@ -173,7 +173,7 @@ def _resolved_identity_by_ref(product: Mapping) -> dict:
         if len(identities) == 1:
             # The subject provider already resolved this label identity. Carry
             # only identity, never its projected blend/member amount.
-            resolved.setdefault(ref, {}).setdefault("canonical_id", next(iter(identities)))
+            resolved.setdefault(ref, {})["canonical_id"] = next(iter(identities))
     return resolved
 
 
@@ -200,11 +200,14 @@ def _rows(product: Mapping, *, source_only: bool = False):
             )
             if valid_reference and identity not in seen and (exposure or projected):
                 seen.add(identity)
-                missing = {key: value for key, value in (resolved.get(ref) or {}).items()
-                           if not row.get(key)}
+                # Raw and resolved projections may use different canonical
+                # namespaces for this exact row. The subject provider owns the
+                # Evidence identity; label text, form and amount remain local.
+                identity_fields = {key: value for key, value in (resolved.get(ref) or {}).items()
+                                   if key == "canonical_id" or not row.get(key)}
                 if projected:
-                    missing["quantity"] = None
-                yield {**row, **missing} if missing else row
+                    identity_fields["quantity"] = None
+                yield {**row, **identity_fields} if identity_fields else row
             yield from walk(row.get("nestedIngredients"))
 
     originals = product.get("activeIngredients") or []
