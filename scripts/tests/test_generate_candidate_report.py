@@ -211,10 +211,10 @@ def test_baseline_section_reports_the_release_gate_diff(tmp_path: Path) -> None:
         con.close()
         return path
 
-    before = db("before.db", [("1", "A", "B", "CAUTION", 70.0, "Good", "scored", None),
-                              ("2", "C", "B", "SAFE", 70.0, "Good", "scored", None)])
-    after = db("after.db", [("1", "A", "B", "SAFE", 70.0, "Good", "scored", None),
-                            ("3", "D", "B", "SAFE", 70.0, "Good", "scored", None)])
+    before = db("before.db", [("1", "A", "B", "CAUTION", 70.0, "Good", "scored", None, "caution"),
+                              ("2", "C", "B", "SAFE", 70.0, "Good", "scored", None, "no_known_catalog_concern")])
+    after = db("after.db", [("1", "A", "B", "SAFE", 70.0, "Good", "scored", None, "no_known_catalog_concern"),
+                            ("3", "D", "B", "SAFE", 70.0, "Good", "scored", None, "no_known_catalog_concern")])
     report = _report()
     report["baseline_candidate_diff"] = diff_catalogs(before, after, [])
 
@@ -222,4 +222,4 @@ def test_baseline_section_reports_the_release_gate_diff(tmp_path: Path) -> None:
     assert "- added live: 1" in text and "- removed live: 1" in text
     assert "- `blocking_reason` changed: 0" in text
     assert "stops on until approved: 1" in text
-    assert "- CAUTION → SAFE: 1 (milder safety warning)" in text
+    assert "- CAUTION → NO_KNOWN_CATALOG_CONCERN: 1 (milder safety warning)" in text
