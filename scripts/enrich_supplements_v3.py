@@ -16654,6 +16654,8 @@ class SupplementEnricherV3:
                 for blend in probiotic_blends
                 if blend.get('cfu_data', {}).get('guarantee_type')
             ])
+        row_total_cfu = total_cfu
+        row_guarantee_type = guarantee_type
         # Use product-level CFU if it's a total claim and exceeds per-strain sum
         # (prevents overcounting when "50 Billion CFU" is a product total, not per-strain)
         if product_level_cfu.get('has_cfu'):
@@ -16679,13 +16681,40 @@ class SupplementEnricherV3:
         # ("Guarantees 50 billion live cultures through the date of
         # expiration"); reading the guarantee only when the statement also won
         # the count dropped it whenever the rows carried the same total.
-        product_guarantee = product_level_cfu.get('guarantee_type')
-        if product_guarantee and (
-            not product_level_cfu.get('has_cfu')
-            or math.isclose(product_level_cfu.get('cfu_count', 0), total_cfu)
-        ):
-            if product_guarantee == "at_expiration" or not guarantee_type:
-                guarantee_type = product_guarantee
+        # The selected total can come from summed rows, a header or the name,
+        # after the first statement count was parsed. Bind each statement to
+        # that final count; the first count cannot censor a later matching one.
+        final_guarantees = {
+            self._extract_guarantee_type(
+                part, subject_is_probiotic=probiotic_only_product,
+                target_cfu_count=total_cfu if has_cfu else None,
+            )
+            for part in statement_parts
+        }
+        # A row's explicit matching total can warrant a product count from
+        # another label section. An unquantified individual-row warranty cannot.
+        for blend in probiotic_blends:
+            row = next((r for r in source_rows if _row_path(r) == str(blend.get("raw_source_path") or "")), {})
+            row_text = str(row.get("harvestMethod") or "") + " " + str(row.get("notes") or "")
+            if total_cfu > 0 and self._parse_cfu_text_count(row_text, target_count=total_cfu) is not None:
+                final_guarantees.add(self._extract_guarantee_type(
+                    row_text, subject_is_probiotic=True, target_cfu_count=total_cfu,
+                ))
+        # A per-day total can restate a warranted per-serving sum. Only
+        # explicit daily wording and the canonical fixed serving frequency
+        # prove that equivalence; arbitrary numerical ratios do not.
+        daily_min, daily_max, _ = resolve_daily_serving_range(product)
+        if row_total_cfu > 0 and row_guarantee_type and math.isclose(daily_min, daily_max) and math.isclose(row_total_cfu * daily_min, total_cfu):
+            if any(
+                re.search(r"\bper\s+day\b", part, re.I)
+                and self._parse_cfu_text_count(part, target_count=total_cfu) is not None
+                for part in statement_parts
+            ):
+                final_guarantees.add(row_guarantee_type)
+        if "at_expiration" in final_guarantees:
+            guarantee_type = "at_expiration"
+        elif not guarantee_type and "at_manufacture" in final_guarantees:
+            guarantee_type = "at_manufacture"
 
         self.logger.debug(
             "Returning probiotic_data with has_cfu=%s, first_blend_cfu_data=%s",
@@ -17286,7 +17315,7 @@ class SupplementEnricherV3:
         """
         return self._cfu_unit_multiplier(unit) is not None
 
-    def _parse_cfu_text_count(self, text: str) -> Optional[float]:
+    def _parse_cfu_text_count(self, text: str, target_count: Optional[float] = None) -> Optional[float]:
         """Return the first label-declared CFU count from supported notation."""
         candidates: List[Tuple[int, float]] = []
         for pattern_key, multiplier in (
@@ -17294,12 +17323,15 @@ class SupplementEnricherV3:
             ("cfu_billion_abbrev", 1e9),
             ("cfu_million", 1e6),
         ):
-            match = self.compiled_patterns[pattern_key].search(text)
-            if match:
+            for match in self.compiled_patterns[pattern_key].finditer(text):
                 candidates.append((match.start(), float(match.group(1)) * multiplier))
 
-        scientific = self.compiled_patterns["cfu_scientific"].search(text)
-        if scientific:
+        # Fully expanded label counts use the same count owner as scaled
+        # notation; commas are formatting, not a different potency fact.
+        for match in re.finditer(r"\b([0-9][0-9,]{3,}(?:\.[0-9]+)?)\s+CFUs?\b", text, re.I):
+            candidates.append((match.start(), float(match.group(1).replace(",", ""))))
+
+        for scientific in self.compiled_patterns["cfu_scientific"].finditer(text):
             raw_exponent = scientific.group("ascii_exponent") or scientific.group("e_exponent")
             if raw_exponent is None:
                 superscript_digits = "⁰¹²³⁴⁵⁶⁷⁸⁹"
@@ -17315,6 +17347,8 @@ class SupplementEnricherV3:
                 if math.isfinite(count):
                     candidates.append((scientific.start(), count))
 
+        if target_count is not None:
+            candidates = [item for item in candidates if math.isclose(item[1], target_count)]
         if not candidates:
             return None
         return min(candidates, key=lambda item: item[0])[1]
@@ -17355,6 +17389,12 @@ class SupplementEnricherV3:
             unit = (ingredient.get('unit', '') or '')
 
             unit_multiplier = self._cfu_unit_multiplier(unit)
+            if unit_multiplier is None and re.fullmatch(r"cell(?:\(s\)|s)?", unit.strip(), re.I):
+                # DSLD's plain Cell(s) is meaningful only on a row explicitly
+                # identified as probiotic. Keep the global unit predicate strict.
+                from probiotic_measurements import has_probiotic_identity_text
+                if has_probiotic_identity_text(str(ingredient.get("name") or "")):
+                    unit_multiplier = 1.0
             if unit_multiplier is not None:
                 if quantity and quantity > 0:
                     normalized_quantity = float(quantity) * unit_multiplier
@@ -17430,7 +17470,25 @@ class SupplementEnricherV3:
                 units.append(part)
             else:
                 units[-1] += separator + part
-        for unit in (part for clause in units for part in _GUARANTEE_UNIT_SPLIT_RE.split(clause)):
+        # Parenthetical amounts and explicitly named subtotal/total amounts
+        # are separate claims too. An unquantified parenthetical timing suffix
+        # stays attached to its count, e.g. "(2.5 billion)(CFUs ... expiry)".
+        scoped_units = []
+        for clause in units:
+            local_units = []
+            claim_parts = re.split(
+                r"(?=\()|(?=\bTotal\s+(?:Lacto|Bifido|Probiotic)\s+Cultures\b)",
+                clause, flags=re.I,
+            )
+            for part in claim_parts:
+                if not part:
+                    continue
+                if local_units and self._parse_cfu_text_count(part) is None:
+                    local_units[-1] += part
+                else:
+                    local_units.append(part)
+            scoped_units.extend(local_units)
+        for unit in (part for clause in scoped_units for part in _GUARANTEE_UNIT_SPLIT_RE.split(clause)):
             unit = unit.strip()
             if not unit:
                 continue
@@ -17443,8 +17501,10 @@ class SupplementEnricherV3:
             if not names_probiotic and not subject_is_probiotic:
                 continue
             count = self._parse_cfu_text_count(unit)
-            if count is not None and target_cfu_count is not None and not math.isclose(count, target_cfu_count):
-                continue
+            if count is not None and target_cfu_count is not None:
+                count = self._parse_cfu_text_count(unit, target_count=target_cfu_count)
+                if count is None:
+                    continue
             # An unspecified "effective amount/level" is not a quantified
             # guarantee for a count stated elsewhere at manufacture.
             if count is None and re.search(r"\b(?:effective|adequate|sufficient)\s+(?:amount|level|count|number)s?\b", unit, re.I):

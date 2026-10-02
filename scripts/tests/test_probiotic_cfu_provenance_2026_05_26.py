@@ -918,3 +918,84 @@ def test_independent_statements_cannot_recombine_count_and_warranty(enricher):
     data = enricher._collect_probiotic_data(product)
     assert data['total_cfu'] == 10e9
     assert data['guarantee_type'] == 'at_manufacture'
+
+
+@pytest.mark.parametrize('notes,count', [
+    ('Total Lacto cultures (35 billion CFU) Total Bifido cultures (15 billion CFU) Total Probiotic Cultures 50 billion CFU at expiration date.', 50),
+    ('Total Lacto cultures (30 billion CFU) Total Bifido cultures (60 billion CFU) Total Probiotic Cultures 90 billion CFU at expiration date.', 90),
+])
+def test_explicit_header_total_warranty_uses_matching_count(enricher, notes, count):
+    assert enricher._extract_guarantee_type(notes, subject_is_probiotic=True, target_cfu_count=count * 1e9) == 'at_expiration'
+
+
+def test_statement_warranty_is_bound_after_final_count_selection(enricher):
+    product = _count_guarantee_product([
+        ('Lactobacillus rhamnosus GG', 1, ''),
+        ('Bifidobacterium longum BB536', 1, ''),
+    ], [
+        '1 billion each of two probiotic strains',
+        'Each packet is guaranteed to deliver 2 billion live active cultures and a boost of 250 mg of Vitamin C through the expiration date.',
+    ])
+    data = enricher._collect_probiotic_data(product)
+    assert data['total_cfu'] == 2e9
+    assert data['guarantee_type'] == 'at_expiration'
+
+
+def test_product_count_replacement_keeps_matching_explicit_header_warranty(enricher):
+    product = _count_guarantee_product([
+        ('Probiotic Blend', 50, 'Total Lacto cultures (35 billion CFU) Total Bifido cultures (15 billion CFU) Total Probiotic Cultures 50 billion CFU at expiration date.'),
+    ])
+    data = enricher._collect_probiotic_data(product)
+    assert data['total_cfu'] == 50e9
+    assert data['guarantee_type'] == 'at_expiration'
+
+
+def test_literal_header_count_keeps_its_manufacture_warranty(enricher):
+    data = enricher._collect_probiotic_data(_count_guarantee_product([
+        ('Probiotic Blend', 0, '(2,000,000,000 CFUs) (at time of manufacture)'),
+    ], ['2 billion live cultures']))
+    assert data['total_cfu'] == 2e9
+    assert data['guarantee_type'] == 'at_manufacture'
+
+
+def test_daily_statement_keeps_equivalent_capsule_count_warranty(enricher):
+    product = _count_guarantee_product([
+        ('Lactobacillus reuteri NCIMB 30242', 2.5, '2.5 billion live cultures guaranteed through expiration'),
+    ], ['5 billion live probiotic cultures per day'])
+    product['servingSizes'] = [{'quantity': 1, 'unit': 'capsules', 'minDailyServings': 2, 'maxDailyServings': 2}]
+    data = enricher._collect_probiotic_data(product)
+    assert data['total_cfu'] == 5e9
+    assert data['guarantee_type'] == 'at_expiration'
+
+
+def test_explicit_probiotic_cell_unit_owns_qualitative_header_warranty(enricher):
+    product = _count_guarantee_product([
+        ('Probiotic Blend', 1e9, 'at time of manufacture'),
+    ], ['1 billion cells'])
+    product['activeIngredients'][0]['unit'] = 'Cell(s)'
+    data = enricher._collect_probiotic_data(product)
+    assert data['total_cfu'] == 1e9
+    assert data['guarantee_type'] == 'at_manufacture'
+
+
+@pytest.mark.parametrize('statement,low,high', [
+    ('5 billion live probiotic cultures', 2, 2),
+    ('5 billion live probiotic cultures per day', 1, 2),
+    ('5 billion live probiotic cultures per day', 1, 1),
+])
+def test_unproven_daily_equivalence_does_not_warrant_larger_count(enricher, statement, low, high):
+    product = _count_guarantee_product([
+        ('Lactobacillus reuteri NCIMB 30242', 2.5, '2.5 billion live cultures guaranteed through expiration'),
+    ], [statement])
+    product['servingSizes'] = [{'quantity': 1, 'unit': 'capsules', 'minDailyServings': low, 'maxDailyServings': high}]
+    assert enricher._collect_probiotic_data(product)['guarantee_type'] is None
+
+
+@pytest.mark.parametrize('text,count,expected', [
+    ('Contains 10 billion CFU at manufacture (5 billion CFU guaranteed through expiration)', 10, 'at_manufacture'),
+    ('(10 billion CFU at manufacture)(5 billion CFU at expiration)', 10, 'at_manufacture'),
+    ('Total Lacto Cultures (30 billion CFU) Total Bifido Cultures (60 billion CFU) Total Probiotic Cultures 90 billion CFU at expiration date.', 30, None),
+    ('(providing 2.5 billion live cultures) (CFUs guaranteed through printed expiration date.)', 2.5, 'at_expiration'),
+])
+def test_parenthetical_and_total_claims_keep_their_own_warranty(enricher, text, count, expected):
+    assert enricher._extract_guarantee_type(text, subject_is_probiotic=True, target_cfu_count=count * 1e9) == expected
