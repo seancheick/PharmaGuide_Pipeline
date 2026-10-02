@@ -1368,3 +1368,24 @@ def test_explicit_liquid_or_unknown_basis_cannot_inflate_panel_count(enricher, u
         'minDailyServings': 1, 'maxDailyServings': 1})
     enriched = enricher.enrich_product(product)[0]
     assert enriched['probiotic_data']['total_cfu'] == 5e9
+
+
+@pytest.mark.parametrize('quantity,unit,note,statement', [
+    (5.4, 'Gram(s)', '1 packet', 'Each packet is guaranteed to deliver 2 billion live active cultures through expiration.'),
+    (900, 'mg', '1 scoop', 'Every scoop includes 2 billion CFU guaranteed through expiration.'),
+])
+def test_canonical_serving_notes_preserve_matching_physical_unit_guarantee(enricher, quantity, unit, note, statement):
+    product = _serving_basis_product(2, '', statement, {
+        'minQuantity': quantity, 'maxQuantity': quantity, 'unit': unit, 'notes': note,
+        'minDailyServings': 1, 'maxDailyServings': 1})
+    enriched = enricher.enrich_product(product)[0]
+    assert enriched['probiotic_data']['total_cfu'] == 2e9
+    assert enriched['probiotic_data']['guarantee_type'] == 'at_expiration'
+
+
+def test_each_product_name_is_not_an_unknown_serving_unit(enricher):
+    product = _serving_basis_product(0, '', '6 Probiotic Strains (1 Billion Potency)\nEach Probiotic Pearls Complete softgel provides live probiotics.', {
+        'minQuantity': 1, 'maxQuantity': 1, 'unit': 'Softgel(s)',
+        'minDailyServings': 1, 'maxDailyServings': 1})
+    enriched = enricher.enrich_product(product)[0]
+    assert enriched['probiotic_data']['total_cfu'] == 1e9

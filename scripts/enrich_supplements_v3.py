@@ -17367,7 +17367,7 @@ class SupplementEnricherV3:
         r"\b(?:(?:per|each|every|in\s+(?:each|every)|in(?:\s+(?:a|an))?"
         r"(?=\s+(?:\d|(?:one|two|three|four|five|six|seven|eight|nine|ten)\b)))\s+"
         r"(?:(\d+(?:\.\d+)?|one|two|three|four|five|six|seven|eight|nine|ten)[\s-]*)?"
-        r"(capsule|cap|tablet|softgel|gumm(?:y|ie)|chewable|lozenge|packet|stick|scoop|serving|day|[a-z]+)s?\b"
+        r"(capsule|cap|tablet|softgel|gumm(?:y|ie)|chewable|lozenge|packet|stick|scoop|serving|day|(?(1)[a-z]+|(?!)))s?\b"
         r"|(daily)\s*(?:$|[,)]))",
         re.IGNORECASE,
     )
@@ -17423,9 +17423,22 @@ class SupplementEnricherV3:
                         return None
                     return count / (units * low)
                 serving = select_canonical_serving(product.get("servingSizes")) or {}
+                panel_unit = serving.get("unit")
+                if (self._normalize_serving_unit_label(unit)
+                        != self._normalize_serving_unit_label(panel_unit)):
+                    # DSLD can declare a mass serving with its physical equivalent
+                    # in notes (5.4 g, "1 packet"). Read only the selected panel's
+                    # complete equivalent through this same basis parser.
+                    note_basis = self._STATEMENT_CFU_BASIS.fullmatch(
+                        "per " + str(serving.get("notes") or "").strip())
+                    if not note_basis or not note_basis.group(1):
+                        return None
+                    panel_unit = note_basis.group(2)
+                    amount = note_basis.group(1)
+                    panel_quantity = self.WORD_TO_NUM.get(amount.lower()) or float(amount)
                 servings = self._serving_units_to_servings(units, panel_quantity)
                 if servings and (self._normalize_serving_unit_label(unit)
-                                 == self._normalize_serving_unit_label(serving.get("unit"))):
+                                 == self._normalize_serving_unit_label(panel_unit)):
                     return count / servings
                 return None
         return count
