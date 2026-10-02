@@ -1,5 +1,8 @@
 """Ban warning titles say what the registry's legal status says.
 
+Extended 2026-10-02 (Sean): every banned legal status gets its own title, and
+the three Amanita entries lose a DEA scheduling the DEA list does not have.
+
 Simulator walkthrough 2026-10-01: a CBD product read "Banned substance:
 organic Hemp Oil extract" offline, but the registry records CBD as
 ``legal_status_enum: not_lawful_as_supplement`` (excluded from the
@@ -75,3 +78,47 @@ def test_not_lawful_title_still_yields_the_substance_name():
     )
 
     assert blob["banned_substance_detail"]["substance_name"] == "CBD (Cannabidiol)"
+
+
+@pytest.mark.parametrize(
+    "rule_id, expected_prefix",
+    [
+        ("SPIKE_SILDENAFIL", "Hidden drug"),
+        ("BANNED_CBD_US", "Not lawful as a supplement"),
+        ("NOOTROPIC_MODAFINIL", "Controlled substance"),
+        ("WADA_TRAMADOL", "Prohibited in sport"),
+        ("NOOTROPIC_PIRACETAM", "Unapproved ingredient"),
+        ("BANNED_ACONITE", "High-risk ingredient"),
+        ("BANNED_ARISTOLOCHIC_ACID", "Unsafe ingredient"),
+        ("BANNED_BVO_2024", "Banned substance"),
+        ("SCHED_AMANITA_MUSCARIA", "High-risk ingredient"),
+    ],
+)
+def test_each_legal_status_gets_its_own_title(rule_id, expected_prefix):
+    enriched = make_enriched()
+    enriched["contaminant_data"]["banned_substances"]["substances"] = [{
+        "ingredient": "X", "id": rule_id, "status": "banned", "match_type": "exact",
+    }]
+
+    assert _ban_titles(build_top_warnings(enriched)) == [f"{expected_prefix}: X"]
+
+
+@pytest.mark.parametrize(
+    "rule_id", ["SCHED_AMANITA_MUSCARIA", "BANNED_MUSCIMOL", "BANNED_IBOTENIC_ACID"],
+)
+def test_amanita_entries_claim_no_dea_scheduling(rule_id):
+    # Not on the DEA controlled-substances list (orange book, checked
+    # 2026-10-02); the records had a 2024-01-01 "DEA scheduling effective" date.
+    entry = next(e for e in _registry()["ingredients"] if e["id"] == rule_id)
+
+    assert entry["legal_status_enum"] == "high_risk"
+    assert entry.get("regulatory_date_label") != "DEA scheduling effective"
+    assert entry.get("regulatory_date") is None
+    assert entry["source_category"] != "schedule_I_psychoactives"
+
+
+def _registry():
+    import json
+    return json.loads(
+        (ROOT / "scripts/data/banned_recalled_ingredients.json").read_text()
+    )

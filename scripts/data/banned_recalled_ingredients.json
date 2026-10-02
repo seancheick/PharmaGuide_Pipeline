@@ -3,7 +3,7 @@
     "description": "Banned and recalled ingredients database for regulatory compliance and safety (v3.0)",
     "purpose": "safety_disqualification_and_regulatory_compliance",
     "schema_version": "5.5.3",
-    "last_updated": "2026-09-30",
+    "last_updated": "2026-10-02",
     "total_entries": 187,
     "data_source_metadata": {
       "sources": [
@@ -13190,7 +13190,7 @@
         "confidence": "high",
         "negative_match_terms": []
       },
-      "legal_status_enum": "controlled_substance",
+      "legal_status_enum": "high_risk",
       "clinical_risk_enum": "critical",
       "jurisdictions": [
         {
@@ -13269,7 +13269,7 @@
           "evidence_summary": "Amanita muscaria toxicity"
         }
       ],
-      "source_category": "schedule_I_psychoactives",
+      "source_category": "high_risk_ingredients",
       "entity_type": "ingredient",
       "review": {
         "status": "validated",
@@ -13289,8 +13289,8 @@
           }
         ]
       },
-      "regulatory_date": "2024-01-01",
-      "regulatory_date_label": "DEA scheduling effective",
+      "regulatory_date": null,
+      "regulatory_date_label": null,
       "match_mode": "active",
       "cui": "C0319647",
       "external_ids": {
@@ -19541,7 +19541,7 @@
         "confidence": "high",
         "negative_match_terms": []
       },
-      "legal_status_enum": "controlled_substance",
+      "legal_status_enum": "high_risk",
       "clinical_risk_enum": "critical",
       "jurisdictions": [
         {
@@ -19620,7 +19620,7 @@
           "evidence_summary": "Amanita muscaria toxicity"
         }
       ],
-      "source_category": "schedule_I_psychoactives",
+      "source_category": "high_risk_ingredients",
       "entity_type": "ingredient",
       "review": {
         "status": "validated",
@@ -19635,8 +19635,8 @@
           }
         ]
       },
-      "regulatory_date": "2024-01-01",
-      "regulatory_date_label": "DEA scheduling effective",
+      "regulatory_date": null,
+      "regulatory_date_label": null,
       "match_mode": "active",
       "cui": "C0026818",
       "external_ids": {
@@ -19699,7 +19699,7 @@
         "confidence": "high",
         "negative_match_terms": []
       },
-      "legal_status_enum": "controlled_substance",
+      "legal_status_enum": "high_risk",
       "clinical_risk_enum": "critical",
       "jurisdictions": [
         {
@@ -19778,7 +19778,7 @@
           "evidence_summary": "Amanita muscaria toxicity"
         }
       ],
-      "source_category": "schedule_I_psychoactives",
+      "source_category": "high_risk_ingredients",
       "entity_type": "ingredient",
       "review": {
         "status": "validated",
@@ -19793,8 +19793,8 @@
           }
         ]
       },
-      "regulatory_date": "2024-01-01",
-      "regulatory_date_label": "DEA scheduling effective",
+      "regulatory_date": null,
+      "regulatory_date_label": null,
       "match_mode": "active",
       "cui": "C0020738",
       "external_ids": {

@@ -1019,12 +1019,32 @@ def _banned_warning_type_for_status(status: str) -> str:
     }.get(status, "safety")
 
 
-def _banned_warning_title_prefix_for_status(status: str, legal_status: str = "") -> str:
-    # A "banned" registry entry is often not a federal ban: CBD, sulbutiamine
-    # and similar are excluded from the supplement definition. The title says
-    # what the registry's legal status says.
-    if status == "banned" and normalize_text(legal_status) == "not_lawful_as_supplement":
-        return "Not lawful as a supplement"
+# A "banned" registry entry is often not a federal ban, so a ban title says
+# what the entry's legal status says. "Banned substance" stays for real
+# federal bans (banned_federal) and anything unmapped.
+_BANNED_TITLE_PREFIX_BY_LEGAL_STATUS = {
+    "not_lawful_as_supplement": "Not lawful as a supplement",
+    "controlled_substance": "Controlled substance",
+    "wada_prohibited": "Prohibited in sport",
+    "under_review": "Unapproved ingredient",
+    "high_risk": "High-risk ingredient",
+    "adulterant": "Unsafe ingredient",
+}
+
+
+def _banned_warning_title_prefix_for_status(
+    status: str, entry: Optional[Dict[str, Any]] = None,
+) -> str:
+    entry = entry if isinstance(entry, dict) else {}
+    if status == "banned":
+        # Every undeclared-drug entry is a drug, whatever its legal status.
+        if normalize_text(entry.get("ban_context")) == "adulterant_in_supplements":
+            return "Hidden drug"
+        prefix = _BANNED_TITLE_PREFIX_BY_LEGAL_STATUS.get(
+            normalize_text(entry.get("legal_status_enum")),
+        )
+        if prefix:
+            return prefix
     return {
         "banned": "Banned substance",
         "recalled": "Recalled ingredient",
@@ -1033,14 +1053,12 @@ def _banned_warning_title_prefix_for_status(status: str, legal_status: str = "")
     }.get(status, "Safety issue")
 
 
-def _registry_legal_status(rule_id: str, fallback_entry: Dict[str, Any]) -> str:
+def _registry_entry(rule_id: str, fallback_entry: Dict[str, Any]) -> Dict[str, Any]:
     entry = _banned_recalled_reference_for_rule_id(
         rule_id,
         banned_recalled_index=_get_active_banned_recalled_index(),
     )
-    if not isinstance(entry, dict):
-        entry = fallback_entry
-    return safe_str(entry.get("legal_status_enum"))
+    return entry if isinstance(entry, dict) else fallback_entry
 
 
 def _safety_warning_policy_projection(
@@ -5421,7 +5439,7 @@ def build_top_warnings(enriched: Dict, detail_blob: Optional[Dict] = None) -> Li
         rule_id = _contaminant_rule_id(sub)
         if status == "banned":
             title_prefix = _banned_warning_title_prefix_for_status(
-                status, _registry_legal_status(rule_id, sub),
+                status, _registry_entry(rule_id, sub),
             )
             add_warning("banned_substance", "critical", f"{title_prefix}: {name}", rule_id)
         elif status == "recalled":
@@ -5447,7 +5465,7 @@ def build_top_warnings(enriched: Dict, detail_blob: Optional[Dict] = None) -> Li
         name = _safety_flag_display_name(flag)
         warning_type = _banned_warning_type_for_status(status)
         title_prefix = _banned_warning_title_prefix_for_status(
-            status, _registry_legal_status(_safety_flag_rule_id(flag), flag),
+            status, _registry_entry(_safety_flag_rule_id(flag), flag),
         )
         severity = safe_str(
             flag.get("severity"),
@@ -7086,9 +7104,7 @@ def build_detail_blob(
             "high_risk": "high_risk_ingredient",
             "watchlist": "watchlist_substance",
         }.get(status, "safety")
-        title_prefix = _banned_warning_title_prefix_for_status(
-            status, safe_str(reference.get("legal_status_enum")),
-        )
+        title_prefix = _banned_warning_title_prefix_for_status(status, reference)
         # Build references list from references_structured (FDA URLs, etc.)
         refs = reference.get("references_structured") or sub.get("references_structured")
         source_urls = []
@@ -7473,7 +7489,7 @@ def build_detail_blob(
                 w_type = "banned_substance"
                 w_severity = "critical"
                 title_prefix = _banned_warning_title_prefix_for_status(
-                    "banned", safe_str(reference.get("legal_status_enum")),
+                    "banned", reference,
                 )
                 w_title = f"{title_prefix}: {name}"
                 dm_default = safe_str(policy.get("display_mode_default"), "critical")
