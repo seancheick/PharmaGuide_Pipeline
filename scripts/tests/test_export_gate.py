@@ -1443,6 +1443,11 @@ def test_a_confirmed_ban_or_recall_ships_though_its_dose_was_never_assessed(verd
     assert _dose_hold_issues(verdict, decision) == []
 
 
+def test_a_confirmed_ban_with_a_declared_policy_reason_still_ships():
+    decision = {**_CONFIRMED_BAN, "reason_code": "NON_ROUTINE_CHELATOR"}
+    assert _dose_hold_issues("BLOCKED", decision) == []
+
+
 @pytest.mark.parametrize("verdict, decision", [
     ("BLOCKED", None),
     ("BLOCKED", {**_CONFIRMED_BAN, "match_resolution": "likely"}),

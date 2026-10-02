@@ -315,9 +315,12 @@ def test_disodium_as_an_inactive_form_is_out_of_scope() -> None:
 
 def test_blocked_edta_ships_without_a_quality_score() -> None:
     """The v4 entry point must suppress the score and keep the product visible."""
+    from release_catalog_artifact import is_confirmed_ban_or_recall
     from score_supplements_v4 import score_product_v4
+    from scoring_v4.scored_artifact import build_scored_artifact
 
-    result = score_product_v4(_product([_active_row("EDTA Disodium")]))
+    product = _product([_active_row("EDTA Disodium")])
+    result = score_product_v4(product)
 
     assert result["v4_verdict"] == "BLOCKED"
     assert result["score_unavailable_reason"] == "blocked_by_safety_gate"
@@ -325,6 +328,7 @@ def test_blocked_edta_ships_without_a_quality_score() -> None:
     safety_breakdown = result["v4_breakdown"]["safety_gate"]
     assert safety_breakdown["short_circuits_scoring"] is True
     assert safety_breakdown["quarantine_required"] is False
+    assert is_confirmed_ban_or_recall(build_scored_artifact(product)) is True
 
 
 # ---------------------------------------------------------------------------
