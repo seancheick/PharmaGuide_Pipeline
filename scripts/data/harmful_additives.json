@@ -1377,10 +1377,9 @@
       "mechanism_of_harm": "Triarylmethane dye (Brilliant Blue FCF / E133). May cause hypersensitivity reactions in susceptible individuals. Some in vitro studies suggest mitochondrial toxicity at high concentrations. Note: E133 was NOT included in the McCann et al. 2007 Southampton study mixtures (Mix A: E102, E110, E122, E124; Mix B: E104, E110, E122, E129).",
       "regulatory_status": {
         "US": "FDA approved under 21 CFR 74.101 for foods, drugs, and cosmetics. No specific ADI set by FDA.",
-        "EU": "E133 approved with ADI of 6 mg/kg bw/day (EFSA 2010 re-evaluation). Requires warning label for mixtures per Southampton study."
+        "EU": "E133 is approved in the EU with an ADI of 6 mg/kg body weight/day. It is not one of the six colours subject to the EU ‘activity and attention in children’ warning."
       },
       "population_warnings": [
-        "Children — included in Southampton study dye mixtures linked to hyperactivity; EU requires warning label",
         "Individuals with aspirin sensitivity — cross-reactivity with triarylmethane dyes reported",
         "People with dye allergies — may cause urticaria or bronchospasm in rare cases"
       ],
@@ -1425,6 +1424,16 @@
           "url": "https://doi.org/10.2903/j.efsa.2010.1853",
           "published_date": "2010-11-12",
           "evidence_grade": "A",
+          "supports_claims": []
+        },
+        {
+          "type": "regulation",
+          "authority": "EU",
+          "title": "Regulation (EC) No 1333/2008 on food additives, Annex V (colours requiring the 'activity and attention in children' statement)",
+          "citation": "Regulation (EC) No 1333/2008, Annex V: E110, E104, E122, E129, E102, E124",
+          "url": "https://eur-lex.europa.eu/eli/reg/2008/1333/oj",
+          "published_date": "2008-12-31",
+          "evidence_grade": "R",
           "supports_claims": []
         }
       ],
@@ -1533,6 +1542,11 @@
             "date": "2026-03-24",
             "change": "Added PubChem CID 19700. Added dose_thresholds: EFSA ADI 6 mg/kg/day. Fixed US jurisdictional status from 'warning_issued' to 'approved' (FDA approves Blue 1 under 21 CFR 74.101).",
             "reason": "deep_audit_batch_1"
+          },
+          {
+            "date": "2026-10-02",
+            "by": "claude-audit",
+            "change": "Annex V correction (Sean approved wording 2026-10-02). Regulation (EC) No 1333/2008 Annex V (EUR-Lex, read 2026-10-02) lists E110, E104, E122, E129, E102, E124; E133 is not among them. regulatory_status.EU no longer says the Southampton/Annex V label applies; removed population warning 'Children — included in Southampton study dye mixtures linked to hyperactivity; EU requires warning label'. Added the regulation as a source."
           }
         ]
       },
@@ -1597,11 +1611,10 @@
       "mechanism_of_harm": "Sulfonated indigo dye (Indigotine / E132). May cause hypersensitivity reactions including nausea, hypertension, and skin rash in susceptible individuals. NOTE: E132 was NOT included in the McCann et al. 2007 Southampton study. Mix A: E102, E110, E122, E124; Mix B: E104, E110, E122, E129. Some in vitro evidence of serotonin receptor binding at high concentrations, though clinical significance at dietary levels is unclear.",
       "regulatory_status": {
         "US": "FDA approved under 21 CFR 74.102 for foods, drugs, and cosmetics",
-        "EU": "E132 approved with ADI of 5 mg/kg bw/day (EFSA 2014 re-evaluation). Subject to Southampton study warning label requirements for dye mixtures.",
+        "EU": "E132 is approved in the EU with an ADI of 5 mg/kg body weight/day. It is not one of the six colours subject to the EU ‘activity and attention in children’ warning.",
         "WHO": "JECFA ADI of 5 mg/kg bw/day for indigotine"
       },
       "population_warnings": [
-        "Children — EU requires warning label on artificial color mixtures; E132 was not in the Southampton study itself but is subject to the same EU labeling rules",
         "Individuals with dye sensitivities — may cause nausea, skin rash, or hypertension in rare cases"
       ],
       "notes": "A synthetic sulfonated indigo dye (Indigotine / Indigo Carmine / E132) used as a colorant in supplement tablets and capsules. FDA-approved under 21 CFR 74.102; EU-approved with ADI of 5 mg/kg/day (EFSA 2014, confirmed 2023). NOTE: E132 was NOT included in the McCann et al. 2007 Southampton study mixtures. Tracked as a B1 additive-risk signal for label transparency rather than a hard ban.",
@@ -1646,6 +1659,16 @@
           "url": "https://doi.org/10.2903/j.efsa.2014.3768",
           "published_date": "2014-07-22",
           "evidence_grade": "A",
+          "supports_claims": []
+        },
+        {
+          "type": "regulation",
+          "authority": "EU",
+          "title": "Regulation (EC) No 1333/2008 on food additives, Annex V (colours requiring the 'activity and attention in children' statement)",
+          "citation": "Regulation (EC) No 1333/2008, Annex V: E110, E104, E122, E129, E102, E124",
+          "url": "https://eur-lex.europa.eu/eli/reg/2008/1333/oj",
+          "published_date": "2008-12-31",
+          "evidence_grade": "R",
           "supports_claims": []
         }
       ],
@@ -1702,6 +1725,11 @@
             "date": "2026-03-24",
             "change": "CRITICAL CORRECTION: E132 was NOT in the McCann 2007 Southampton study at all. Previous entry incorrectly claimed E132 was in Mix A. Verified: Mix A = E102, E110, E122, E124; Mix B = E104, E110, E122, E129. E132 not in either mixture. Updated mechanism_of_harm, population_warnings, and notes accordingly. Added PubChem CID 5284351. Added dose_thresholds: EFSA ADI 5 mg/kg/day (confirmed 2023), JECFA ADI 5 mg/kg/day.",
             "reason": "deep_audit_batch_1"
+          },
+          {
+            "date": "2026-10-02",
+            "by": "claude-audit",
+            "change": "Annex V correction (Sean approved wording 2026-10-02). Regulation (EC) No 1333/2008 Annex V (EUR-Lex, read 2026-10-02) lists E110, E104, E122, E129, E102, E124; E132 is not among them. regulatory_status.EU no longer says the Southampton/Annex V label applies; removed population warning 'Children — EU requires warning label on artificial color mixtures; E132 was not in the Southampton study itself but is subject to the same EU labeling rules'. Added the regulation as a source."
           }
         ]
       },
