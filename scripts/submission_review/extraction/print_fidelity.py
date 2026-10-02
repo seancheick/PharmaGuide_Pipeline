@@ -26,6 +26,7 @@ import io
 import json
 import re
 import sys
+from pathlib import Path
 from dataclasses import dataclass
 from typing import Any, Iterable, Sequence
 
@@ -82,8 +83,18 @@ TITLE = "Supplement Facts"
 #: Rows whose indentation the reader must not confuse with a top-level row.
 _INDENTED = frozenset({9, 10})
 
-_REGULAR_FONT = "/System/Library/Fonts/Supplemental/Arial.ttf"
-_BOLD_FONT = "/System/Library/Fonts/Supplemental/Arial Bold.ttf"
+# Use a complete regular/bold pair from the host, never Pillow's tiny
+# fallback font. Linux CI installs Liberation Sans explicitly; macOS retains
+# Arial. Panel geometry always comes from the selected pair's own metrics.
+_FONT_PAIRS = (
+    ("/System/Library/Fonts/Supplemental/Arial.ttf", "/System/Library/Fonts/Supplemental/Arial Bold.ttf"),
+    ("/usr/share/fonts/truetype/liberation2/LiberationSans-Regular.ttf", "/usr/share/fonts/truetype/liberation2/LiberationSans-Bold.ttf"),
+    ("/usr/share/fonts/truetype/liberation/LiberationSans-Regular.ttf", "/usr/share/fonts/truetype/liberation/LiberationSans-Bold.ttf"),
+)
+_REGULAR_FONT, _BOLD_FONT = next(
+    (pair for pair in _FONT_PAIRS if all(Path(font).is_file() for font in pair)),
+    _FONT_PAIRS[0],
+)
 
 _DIGIT_TOKEN = re.compile(r"[0-9][0-9.,]*\s*(?:mcg|mg|g|iu|cfu|%)?")
 _SPACE = re.compile(r"\s+")
