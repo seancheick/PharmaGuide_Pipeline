@@ -390,7 +390,8 @@ run_release_artifact_gates() {
 }
 
 fast_test_files() {
-  "$PG_PYTHON" "$REPO_ROOT/scripts/test_profiles.py" fast
+  # PG_TEST_SHARD=i/n (CI): one of n disjoint slices of the fast profile.
+  "$PG_PYTHON" "$REPO_ROOT/scripts/test_profiles.py" fast ${PG_TEST_SHARD:+--shard "$PG_TEST_SHARD"}
 }
 
 profile_test_files() {

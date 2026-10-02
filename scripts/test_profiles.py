@@ -131,9 +131,19 @@ def iter_profile_paths(profile: str, tests_dir: Path | None = None) -> Iterable[
 def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("profile", choices=("fast", "slow", "release", "artifact", "local"))
+    # CI splits the fast profile into parallel jobs ("2/4" = second of four).
+    # Memory grows with every module one process imports (15.6 GB on a 16 GB
+    # runner for the whole fast profile), so a shard also bounds memory.
+    parser.add_argument("--shard", help="i/n: keep every n-th file, starting at the i-th")
     args = parser.parse_args()
     repo_root = Path(__file__).resolve().parent.parent
-    for path in iter_profile_paths(args.profile):
+    paths = list(iter_profile_paths(args.profile))
+    if args.shard:
+        index, count = (int(part) for part in args.shard.split("/"))
+        if not 1 <= index <= count:
+            parser.error(f"--shard {args.shard}: need 1 <= i <= n")
+        paths = paths[index - 1::count]
+    for path in paths:
         print(path.relative_to(repo_root))
     return 0
 

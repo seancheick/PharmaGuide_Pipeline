@@ -23,7 +23,15 @@ permissions:
 jobs:
   fast:
     runs-on: ubuntu-latest
-    timeout-minutes: 90
+    timeout-minutes: 60
+    # Memory grows with every module one process imports: the whole fast
+    # profile reached 15.6 GB on the 16 GB runner even with one worker and was
+    # cancelled (run 37022949990). Four shards, each a fresh runner, bound
+    # memory and run in parallel.
+    strategy:
+      fail-fast: false
+      matrix:
+        shard: [1, 2, 3, 4]
     steps:
       - uses: actions/checkout@v4
 
@@ -44,9 +52,7 @@ jobs:
           # Memory every 30 s: a runner that runs out of RAM is cancelled
           # without a pytest summary, so this is the only trace it leaves.
           (while true; do free -m | awk 'NR==2 {print "ci-memory used=" $3 "MB free=" $4 "MB"}'; sleep 30; done) &
-          # The 16 GB runner peaked at 15.6 GB with two workers and was
-          # cancelled (run 37020559843); one worker fits.
-          export PG_TEST_WORKERS=1
+          export PG_TEST_SHARD="${{ matrix.shard }}/4"
           # test.sh passes -q; -vv nets verbose, naming each test as it
           # finishes so failures survive a cut-off run.
           scripts/test.sh fast --junitxml=ci-junit.xml -rs -vv
@@ -58,5 +64,5 @@ jobs:
       - uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: junit-fast
+          name: junit-fast-${{ matrix.shard }}
           path: ci-junit.xml

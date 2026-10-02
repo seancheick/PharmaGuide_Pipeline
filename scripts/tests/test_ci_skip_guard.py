@@ -44,3 +44,19 @@ def test_a_skip_in_an_undeclared_file_fails(tmp_path):
 def test_every_local_only_file_exists():
     tests_dir = Path(__file__).resolve().parent
     assert all((tests_dir / name).exists() for name in LOCAL_ONLY_TEST_FILES)
+
+
+def test_ci_shards_cover_the_fast_profile_exactly_once():
+    import subprocess
+
+    profiles = Path(__file__).resolve().parents[1] / "test_profiles.py"
+
+    def files(*extra):
+        out = subprocess.run(
+            [sys.executable, str(profiles), "fast", *extra],
+            check=True, capture_output=True, text=True,
+        ).stdout.split()
+        return out
+
+    shards = [files("--shard", f"{i}/4") for i in range(1, 5)]
+    assert sorted(sum(shards, [])) == sorted(files())
