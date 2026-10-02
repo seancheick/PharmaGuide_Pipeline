@@ -694,10 +694,23 @@ BANNED_STATUS_SEVERITY = {
 }
 
 
+def _install_instance_caches(owner: Any, sizes: Dict[str, int]) -> None:
+    """Give each instance its own lru_cache over the named methods.
+
+    A class-level @lru_cache keys on self, so it keeps every instance, and all
+    the reference data the instance loaded, alive for the whole process: one
+    test shard held 43.8 million live allocations (15.6 GB) that way. A
+    per-instance cache dies with its instance.
+    """
+    for name, maxsize in sizes.items():
+        setattr(owner, name, functools.lru_cache(maxsize=maxsize)(getattr(owner, name)))
+
+
 class EnhancedIngredientMatcher:
     """Enhanced ingredient matching with fuzzy logic and comprehensive preprocessing"""
 
     def __init__(self):
+        _install_instance_caches(self, {"_safe_fuzzy_match_cached": 5000})
         # SAFETY FIRST: Increased thresholds for critical ingredient matching
         self.fuzzy_threshold = FUZZY_MATCHING_THRESHOLDS["fuzzy_threshold"]
         self.partial_threshold = FUZZY_MATCHING_THRESHOLDS["partial_threshold"]
@@ -984,7 +997,6 @@ class EnhancedIngredientMatcher:
         targets_tuple = tuple(targets)
         return self._safe_fuzzy_match_cached(query, targets_tuple, category)
 
-    @functools.lru_cache(maxsize=5000)
     def _safe_fuzzy_match_cached(self, query: str, targets_tuple: tuple, category: str = None) -> Tuple[Optional[str], int]:
         """Thread-safe cached version of fuzzy matching"""
         # Convert tuple back to list for processing
@@ -1228,6 +1240,12 @@ class EnhancedDSLDNormalizer:
     _Z1_ENZYME_HEADER_TOKENS = ("enzyme", "enzymes", "pancreatin", "digezyme", "vegenzyme")
 
     def __init__(self):
+        _install_instance_caches(self, {
+            "_enhanced_ingredient_mapping_cached": 10000,
+            "_enhanced_allergen_check_cached": 5000,
+            "_enhanced_harmful_check_cached": 5000,
+            "_enhanced_non_harmful_check_cached": 5000,
+        })
         # Reverse index: lowercased standard_name → (canonical_id, source_db).
         # Populated by _build_canonical_id_reverse_index() after fast lookups
         # are built. Guarded to an empty dict here so any early access is safe.
@@ -3754,7 +3772,6 @@ class EnhancedDSLDNormalizer:
             validated_name, forms_tuple, validated_group
         )
 
-    @functools.lru_cache(maxsize=10000)
     def _enhanced_ingredient_mapping_cached(
         self, name: str, forms_tuple: tuple, ingredient_group: str
     ) -> Tuple[str, bool, List[str]]:
@@ -4214,7 +4231,6 @@ class EnhancedDSLDNormalizer:
         forms_tuple = tuple(sorted(forms)) if forms else ()
         return self._enhanced_allergen_check_cached(name, forms_tuple)
 
-    @functools.lru_cache(maxsize=5000)
     def _enhanced_allergen_check_cached(self, name: str, forms_tuple: tuple) -> Dict[str, Any]:
         """Thread-safe cached allergen checking"""
         forms = list(forms_tuple) if forms_tuple else []
@@ -4262,7 +4278,6 @@ class EnhancedDSLDNormalizer:
         self._cache_stats["harmful_calls"] += 1
         return self._enhanced_harmful_check_cached(name)
 
-    @functools.lru_cache(maxsize=5000)
     def _enhanced_harmful_check_cached(self, name: str) -> Dict[str, Any]:
         """Thread-safe cached harmful checking"""
         result = {
@@ -4296,7 +4311,6 @@ class EnhancedDSLDNormalizer:
         self._cache_stats["non_harmful_calls"] += 1
         return self._enhanced_non_harmful_check_cached(name)
 
-    @functools.lru_cache(maxsize=5000)
     def _enhanced_non_harmful_check_cached(self, name: str) -> Dict[str, Any]:
         """Thread-safe cached non-harmful checking"""
         result = {
