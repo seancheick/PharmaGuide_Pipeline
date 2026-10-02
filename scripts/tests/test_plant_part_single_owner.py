@@ -52,3 +52,43 @@ def test_label_disclosed_plant_part_earns_the_credit(scored, dsld_id):
 def test_database_form_name_is_not_label_disclosure(scored):
     # 251625: the Supplement Facts row is "Licorice"; only IQM's form name says root.
     assert "plant_part_disclosed" not in _botanical_components(scored["251625"])
+
+
+@pytest.mark.parametrize("keep_part", [True, False])
+def test_botanical_blend_projection_preserves_only_cleaner_owned_child_part(keep_part):
+    from enhanced_normalizer import EnhancedDSLDNormalizer
+    from enrich_supplements_v3 import SupplementEnricherV3
+    from scoring_v4.scored_artifact import build_scored_artifact
+
+    raw = json.loads((FIXTURES / "plant_part_204571_raw.json").read_text())
+    cleaned = EnhancedDSLDNormalizer().normalize_product(raw)
+    if not keep_part:
+        # Root wording remains. Neither the bridge nor scorer may reparse it.
+        for row in cleaned["activeIngredients"]:
+            row.pop("plantPart", None)
+    enriched, _ = SupplementEnricherV3().enrich_product(cleaned)
+    components = _botanical_components(build_scored_artifact(enriched))
+    assert components.get("plant_part_disclosed", 0) == (2.0 if keep_part else 0)
+
+
+@pytest.mark.parametrize("case,expected", [("linked", "root"), ("unrelated", None), ("conflicting", None)])
+def test_blend_projection_cannot_borrow_another_childs_plant_part(case, expected):
+    from scoring_input_contract import _derive_top_level_botanical_blend_evidence
+
+    name = "organic Ashwagandha root extract"
+    active = {"name": name, "plantPart": "root", "raw_source_path": "ingredientRows[0].nestedRows[0]"}
+    blend = {"name": "Botanical Blend", "total_weight": 850, "unit": "mg",
+             "source_path": "activeIngredients[0]", "source_fields": ["activeIngredients[0]", "activeIngredients[1]"],
+             "source_row_ref": "ingredientRows[0]", "child_ingredients": [{"name": name}]}
+    if case == "unrelated":
+        active["raw_source_path"] = "ingredientRows[3].nestedRows[0]"
+        blend["source_fields"] = ["activeIngredients[0]"]
+    product = {"activeIngredients": [{"name": "Botanical Blend"}, active], "proprietary_blends": [blend]}
+    if case == "conflicting":
+        product["activeIngredients"].append({**active, "plantPart": "leaf",
+                                            "raw_source_path": "ingredientRows[0].nestedRows[1]"})
+    rows = _derive_top_level_botanical_blend_evidence(product, set())
+    assert len(rows) == 1
+    assert rows[0].get("plantPart") == expected
+    assert rows[0]["dose_value"] == 850
+    assert rows[0]["evidence_scope"] == "blend_level"

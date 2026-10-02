@@ -1698,6 +1698,28 @@ def _derive_top_level_botanical_blend_evidence(
             },
             "forms": [{"name": child_name or botanical_child["name"], "category": "botanical"}],
         }
+        # The cleaner owns disclosure. This compatibility projection carries
+        # a blend's amount, but its named child's already-declared plant part
+        # must survive. Link within this blend; never borrow from a same-name
+        # ingredient elsewhere or infer a part from registry/form text.
+        child_parts = {
+            str(active["plantPart"]).strip()
+            for active_index, active in enumerate(_safe_list(product.get("activeIngredients")))
+            if isinstance(active, dict)
+            and _norm(active.get("name")) == _norm(child_name)
+            and active.get("plantPart")
+            and (
+                f"activeIngredients[{active_index}]" in linked_paths
+                or (
+                    blend.get("source_row_ref")
+                    and str(active.get("raw_source_path") or "").startswith(
+                        str(blend["source_row_ref"]) + ".nestedRows["
+                    )
+                )
+            )
+        }
+        if len(child_parts) == 1:
+            row["plantPart"] = child_parts.pop()
         item = _evidence_base(
             row=row,
             evidence_type="blend_anchor_mass",
