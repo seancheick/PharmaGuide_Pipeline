@@ -236,9 +236,18 @@ def iter_profile_paths(profile: str, tests_dir: Path | None = None, *,
 def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("profile", choices=("fast", "slow", "release", "artifact", "local"))
+    parser.add_argument("--shard", help="Existing one-based i/n shard selector")
     parser.add_argument("--shard-index", type=int)
     parser.add_argument("--shard-count", type=int)
     args = parser.parse_args()
+    if args.shard is not None:
+        if args.shard_index is not None or args.shard_count is not None:
+            parser.error("choose --shard or --shard-index/--shard-count")
+        try:
+            index, count = map(int, args.shard.split("/"))
+        except ValueError:
+            parser.error("--shard must be i/n")
+        args.shard_index, args.shard_count = index - 1, count
     repo_root = Path(__file__).resolve().parent.parent
     for path in iter_profile_paths(args.profile, shard_index=args.shard_index, shard_count=args.shard_count):
         print(path.relative_to(repo_root))
