@@ -999,3 +999,11 @@ def test_unproven_daily_equivalence_does_not_warrant_larger_count(enricher, stat
 ])
 def test_parenthetical_and_total_claims_keep_their_own_warranty(enricher, text, count, expected):
     assert enricher._extract_guarantee_type(text, subject_is_probiotic=True, target_cfu_count=count * 1e9) == expected
+
+
+@pytest.mark.parametrize('text', [
+    'Contains 10 billion CFU at manufacture (guaranteed effective levels through expiration).',
+    'Contains 10 billion CFU at manufacture / 5 billion CFU guaranteed through expiration.',
+])
+def test_renewed_parenthetical_or_slash_claim_cannot_warrant_selected_amount(enricher, text):
+    assert enricher._extract_guarantee_type(text, True, 10e9) == 'at_manufacture'

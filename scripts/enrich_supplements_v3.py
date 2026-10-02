@@ -17477,13 +17477,15 @@ class SupplementEnricherV3:
         for clause in units:
             local_units = []
             claim_parts = re.split(
-                r"(?=\()|(?=\bTotal\s+(?:Lacto|Bifido|Probiotic)\s+Cultures\b)",
+                r"(?=\()|(?=/\s*\d)|(?=\bTotal\s+(?:Lacto|Bifido|Probiotic)\s+Cultures\b)",
                 clause, flags=re.I,
             )
             for part in claim_parts:
                 if not part:
                     continue
-                if local_units and self._parse_cfu_text_count(part) is None:
+                if local_units and self._parse_cfu_text_count(part) is None and not re.search(
+                    r"\b(?:effective|adequate|sufficient)\s+(?:amount|level|count|number)s?\b", part, re.I,
+                ):
                     local_units[-1] += part
                 else:
                     local_units.append(part)
