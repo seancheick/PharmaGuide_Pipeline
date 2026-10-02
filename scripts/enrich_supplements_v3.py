@@ -16684,16 +16684,9 @@ class SupplementEnricherV3:
                 for blend in probiotic_blends
                 for value in (blend.get("serving_size_quantities") or [])
             }
-            if len(panel_quantities) == 1:
-                panel_quantity = next(iter(panel_quantities))
-            else:
-                panel_quantity = canonical_serving
-                if panel_quantity is None:
-                    serving = select_canonical_serving(product.get("servingSizes")) or {}
-                    panel_quantity = next((
-                        serving.get(key) for key in ("quantity", "servingSizeQuantity", "maxQuantity", "minQuantity")
-                        if serving.get(key) is not None
-                    ), None)
+            panel_quantity = (
+                next(iter(panel_quantities)) if len(panel_quantities) == 1 else canonical_serving
+            )
             per_serving = self._statement_cfu_per_serving(
                 statement_parts, statement_cfu_count, product, panel_quantity,
             )
@@ -17371,16 +17364,18 @@ class SupplementEnricherV3:
             return None
         return candidates[0][1]
 
-    # "daily" is a basis only when it closes the count's clause ("15 Billion
-    # CFU Daily"), never as an adjective ("for daily digestive support").
+    # "in" names a basis only with a unit count or each/every ("in a 3 capsule
+    # serving", "in each capsule"); "in capsules" is the dosage form. "daily"
+    # is a basis only when it closes the count's clause ("15 Billion CFU
+    # Daily"), never as an adjective ("for daily digestive support").
     _STATEMENT_CFU_BASIS = re.compile(
-        r"\b(?:(?:per|in(?:\s+(?:a|an|each|every|one))?)\s+"
-        r"(?:(\d+(?:\.\d+)?|one|two|three|four|five|six)[\s-]*)?"
-        r"(capsule|cap|vegcap|tablet|softgel|gumm(?:y|ie)|chewable|lozenge|packet|stick|scoop|serving|day)s?\b"
+        r"\b(?:(?:per|in\s+(?:each|every)|in(?:\s+(?:a|an))?"
+        r"(?=\s+(?:\d|(?:one|two|three|four|five|six|seven|eight|nine|ten)\b)))\s+"
+        r"(?:(\d+(?:\.\d+)?|one|two|three|four|five|six|seven|eight|nine|ten)[\s-]*)?"
+        r"(capsule|cap|tablet|softgel|gumm(?:y|ie)|chewable|lozenge|packet|stick|scoop|serving|day)s?\b"
         r"|(daily)\s*(?:$|[,)]))",
         re.IGNORECASE,
     )
-    _BASIS_COUNT_WORDS = {"one": 1.0, "two": 2.0, "three": 3.0, "four": 4.0, "five": 5.0, "six": 6.0}
 
     def _statement_cfu_per_serving(
         self, statement_parts: List[str], count: float, product: Dict,
@@ -17399,8 +17394,10 @@ class SupplementEnricherV3:
                     continue
                 stop = re.compile(r"[.;!?](?:\s|$)|[\r\n]").search(part, start)
                 next_count = min([s for s, _ in matches if s > start] + [len(part)])
-                end = min(next_count, stop.start() if stop else len(part), start + 90)
+                end = min(next_count, stop.start() if stop else len(part))
                 basis = self._STATEMENT_CFU_BASIS.search(part, start, end)
+                if basis is not None and basis.start() > start + 90:
+                    basis = None
                 if basis is None and stop is not None and stop.group() in "\r\n":
                     # A label line break can split the count from its basis
                     # ("5 billion live probiotic cultures\nPer day"); only a
@@ -17411,23 +17408,23 @@ class SupplementEnricherV3:
                 if basis is None:
                     return count
                 amount = basis.group(1)
-                units = (self._BASIS_COUNT_WORDS.get(amount.lower()) or float(amount)) if amount else 1.0
-                unit = "day" if basis.group(3) else basis.group(2).lower()
+                units = (self.WORD_TO_NUM.get(amount.lower()) or float(amount)) if amount else 1.0
                 if units <= 0:
                     return None
+                unit = "day" if basis.group(3) else basis.group(2).lower()
                 if unit == "serving":
                     return count / units
                 if unit == "day":
-                    low, high, _ = resolve_daily_serving_range(product)
-                    return count / (units * low) if low > 0 and math.isclose(low, high) else None
+                    # A defaulted frequency is not the label's statement.
+                    low, high, defaulted = resolve_daily_serving_range(product)
+                    if defaulted or low <= 0 or not math.isclose(low, high):
+                        return None
+                    return count / (units * low)
                 serving = select_canonical_serving(product.get("servingSizes")) or {}
-                stem = "cap" if "cap" in unit else unit[:4]
-                try:
-                    quantity = float(panel_quantity)
-                except (TypeError, ValueError):
-                    return None
-                if quantity > 0 and stem in str(serving.get("unit") or "").lower():
-                    return count * quantity / units
+                servings = self._serving_units_to_servings(units, panel_quantity)
+                if servings and (self._normalize_serving_unit_label(unit)
+                                 == self._normalize_serving_unit_label(serving.get("unit"))):
+                    return count / servings
                 return None
         return count
 
