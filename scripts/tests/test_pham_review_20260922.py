@@ -163,7 +163,16 @@ def test_withdrawn_citations_end_as_reviewed_no_single_strain_evidence(sid):
     assert thresholds["dr_pham_signoff"] is False
     assert thresholds["dr_pham_signoff_verified_by"].startswith("Dr Pham (2026-09-22")
     assert thresholds["evidence"] is None
-    assert entry["literature_review"]["reviewer"].startswith("Dr Pham")
+    if sid == "STRAIN_ACIDOPHILUS_LA5":
+        # New source qualification is attributed to its actual reviewer;
+        # it does not replace the clinician's withdrawal or create signoff.
+        assert entry["literature_review"]["reviewer"].startswith("Codex source qualification")
+        withdrawn = entry["literature_review"]["withdrawn_citation"]
+        assert withdrawn["withdrawn_by"].startswith("Dr Pham")
+        assert withdrawn["pmid"] == WITHDRAWN[sid]
+        assert "36198994" in entry["literature_review"]["ineligible_single_strain_pmids"]
+    else:
+        assert entry["literature_review"]["reviewer"].startswith("Dr Pham")
     assert WITHDRAWN[sid] in entry["literature_review"]["pmids_screened"]
     if sid == "STRAIN_PLANTARUM_HEAL9":
         # Reopened by the Codex audit: a single-strain HEAL9 RCT exists. The withdrawal stands.

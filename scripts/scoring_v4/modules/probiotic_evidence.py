@@ -90,6 +90,17 @@ def score_evidence(product: Any) -> Dict[str, Any]:
         or any(row["status"] == "strain_identity_or_review_unresolved"
                for row in assessment["strain_assessments"]))
     eligible = _eligible_native_contexts(family_assessment, relevance)
+    # The shared assessment inventories research, including legacy reference
+    # citations. Report scoring provenance from the family that actually won
+    # this pillar; inventory sources must not masquerade as awarded evidence.
+    for strain in assessment["strain_assessments"]:
+        strain["scoring_source_pmids"] = sorted({
+            pmid for clinical_id, context in eligible
+            if family["source"] == "native_context" and score > 0
+            and clinical_id == strain.get("clinical_id")
+            and (context.get("trial_family") or context.get("context_id")) == family["family"]
+            for pmid in context.get("source_pmids") or []
+        })
     directions = [outcome.get("direction") for _, context in eligible
                   for outcome in _qualifying_outcomes(context)]
     directions += [_norm_text(row.get("effect_direction")) for row in owned]

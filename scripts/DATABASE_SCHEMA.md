@@ -335,9 +335,12 @@ fallback is accepted. Combination research is authored once and joined only to
 its listed components; it never grants individual-strain dose credit.
 
 `assess_probiotic_evidence` owns label comparison and review status.
-`source_pmids` inventories known references/contexts; `scoring_source_pmids`
-identifies the existing scoring reference only. Pending contexts cannot inherit
-historical clinician approval. `native_context_review` is independent of the
+`source_pmids` inventories known references/contexts. `scoring_source_pmids`
+is empty in the shared identity/dose assessment, which awards no Evidence.
+The Evidence pillar fills it from its actual credited native family using the
+same eligibility and family selection that own the points; zero credit or a
+generic/formula winner leaves native scoring citations empty. Pending contexts
+cannot inherit historical clinician approval. `native_context_review` is independent of the
 effect direction and score. Citation retrieval alone does not approve a claim.
 
 ---

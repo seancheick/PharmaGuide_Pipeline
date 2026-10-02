@@ -3,7 +3,7 @@
     "description": "Clinically relevant probiotic strains and prebiotic compounds",
     "purpose": "probiotic_strain_validation",
     "schema_version": "5.1.0",
-    "last_updated": "2026-09-22",
+    "last_updated": "2026-10-02",
     "total_entries": 132,
     "data_source": null,
     "version": "2.4.0",
@@ -1602,7 +1602,7 @@
           "review_status": "clinician_approved",
           "study_design": "rct",
           "sample_size": 36,
-          "blinding": "unreported",
+          "blinding": "double",
           "funding": "industry",
           "source_tier": "D",
           "trial_registration": null,
@@ -1697,7 +1697,7 @@
           "review_status": "clinician_approved",
           "study_design": "rct",
           "sample_size": 40,
-          "blinding": "unreported",
+          "blinding": "double",
           "funding": "industry",
           "source_tier": "D",
           "trial_registration": null,
@@ -1768,13 +1768,13 @@
           ],
           "trial_family": "sabinsa_mtcc5856_bloating_36862903",
           "limitations": [
-            "Manufacturer-run; four-week duration; endpoint hierarchy not stated in the abstract."
+            "Manufacturer-associated authors; four-week duration; GSRS indigestion and patient global assessment were declared primary outcomes, with positive between-group findings. Authors declared no funding to disclose."
           ],
           "review_status": "clinician_approved",
           "study_design": "rct",
           "sample_size": 70,
-          "blinding": "unreported",
-          "funding": "industry",
+          "blinding": "double",
+          "funding": "unreported",
           "source_tier": "D",
           "trial_registration": null,
           "authored_on": "2026-09-14",
@@ -1853,7 +1853,7 @@
           "review_status": "clinician_approved",
           "study_design": "rct",
           "sample_size": 110,
-          "blinding": "unreported",
+          "blinding": "double",
           "funding": "industry",
           "source_tier": "C",
           "trial_registration": "CTRI/2022/06/043239",
@@ -1887,7 +1887,7 @@
           "purpose": "physiology",
           "condition": "gut_microbiome_composition",
           "dose": {
-            "basis": "unresolved",
+            "basis": "discrete_daily_arms",
             "unit": "CFU",
             "values": [
               2000000000.0
@@ -1917,13 +1917,13 @@
           ],
           "trial_family": "sabinsa_mtcc5856_microbiome_37335737",
           "limitations": [
-            "Gut microbiome composition essentially unchanged; the abstract states 2 x 10^9 CFU per capsule without capsules/day, so the daily dose is unresolved."
+            "Gut microbiome composition essentially unchanged; 30 randomized, 26 completed; one capsule containing 2 x 10^9 CFU was taken orally once daily after dinner for 28 days. Authors declared no funding to disclose; five authors were affiliated with Sami-Sabinsa/Sabinsa."
           ],
           "review_status": "clinician_approved",
           "study_design": "rct",
           "sample_size": 30,
-          "blinding": "unreported",
-          "funding": "industry",
+          "blinding": "double",
+          "funding": "unreported",
           "source_tier": "D",
           "trial_registration": null,
           "authored_on": "2026-09-14",
@@ -2726,7 +2726,7 @@
           ],
           "population": {
             "age_group": "adult",
-            "description": "56 adults with moderate COVID-19 on standard treatment; three arms (B. coagulans UBBC-07, IS-2, placebo)"
+            "description": "56 adults analyzed with moderate COVID-19 on standard treatment after 60 randomized; three arms (Bacillus clausii UBBC-07, Bacillus coagulans Unique IS-2, placebo)."
           },
           "purpose": "treatment",
           "condition": "moderate_covid19_adjunctive_care",
@@ -2776,14 +2776,14 @@
           ],
           "trial_family": "is2_covid_adjunct_39866999",
           "limitations": [
-            "Small three-arm trial (about 19 per arm) with inflammatory-marker surrogates only; ferritin fell in both probiotic arms, D-dimer only in the IS-2 arm.",
-            "The UBBC-07 arm is a different, non-registry strain; published in Cureus.",
-            "2 x 10^9 spores twice daily (4 x 10^9/day)."
+            "Small three-arm trial (56 analyzed after 60 randomized); serum ferritin fell in both probiotic arms and D-dimer in the IS-2 arm, while CRP, LDH and IL-6 between-group differences were not significant. Clinical recovery and respiratory parameters were assessed; oxygen saturation and respiratory rate did not differ significantly between groups.",
+            "The Bacillus clausii UBBC-07 arm is a different, non-registry strain; published in Cureus.",
+            "2 x 10^9 spores twice daily (4 x 10^9/day), adjunctive to standard COVID-19 treatment. Authors declared no financial support for the submitted work."
           ],
           "review_status": "clinician_approved",
           "study_design": "rct",
           "sample_size": 56,
-          "blinding": "unreported",
+          "blinding": "double",
           "funding": "unreported",
           "source_tier": "D",
           "trial_registration": null,
@@ -8913,7 +8913,7 @@
       ],
       "evidence_level": "none",
       "key_benefits": [],
-      "notable_studies": "Dr Pham review 2026-09-22: no qualifying single-strain human evidence. Human trials test it only in combination with B. lactis BB-12 (and in some trials LGG or other strains); those are recorded as combination studies and credit no single strain.",
+      "notable_studies": "Source-scope correction, Codex 2026-10-02: PMID 36198994 reports a monostrain LA-5 trial for vulvovaginal candidiasis against fluconazole. It does not establish gut-health efficacy or equivalence to fluconazole; later negative-culture results favored fluconazole. Combination digestive studies cannot establish efficacy of LA-5 alone. The clinician evidence grade and signoff remain unchanged.",
       "cfu_thresholds": {
         "indication_primary": "gut health and diarrhea",
         "tiers_cfu_per_day": {
@@ -9575,9 +9575,9 @@
       "literature_review": {
         "conclusion": "no_qualifying_human_evidence",
         "reason": "combination_only_human_research",
-        "reviewed_on": "2026-09-22",
-        "reviewer": "Dr Pham (clinical review 2026-09-22)",
-        "search_query": "Clinical adjudication of the cited record and the strain's recorded human studies, with a PubMed search for a direct single-strain human trial (Dr Pham, 2026-09-22)",
+        "reviewed_on": "2026-10-02",
+        "reviewer": "Codex source qualification; historical clinician adjudication by Dr Pham on 2026-09-22 retained, with no new clinician signoff",
+        "search_query": "LA-5 monostrain human studies and applicability to digestive indications; PMID 36198994 candidiasis comparator full text checked on 2026-10-02. Historical clinical adjudication is preserved in the basis and withdrawn-citation receipt.",
         "pmids_screened": [
           "17356555",
           "21871144",
@@ -9587,7 +9587,8 @@
           "34405373",
           "39102225",
           "41255078",
-          "41748464"
+          "41748464",
+          "36198994"
         ],
         "combination_pmids": [
           "17356555",
@@ -9599,9 +9600,11 @@
           "41255078",
           "41748464"
         ],
-        "ineligible_single_strain_pmids": [],
-        "basis": "scripts/audits/closure_20260921/PHAM_REVIEW_20260922.json",
-        "note": "PMID 34405373 is ex vivo work on isolated human monocytes cultured with LA-5, not a supplementation trial; the human LA-5 evidence found is combination evidence, which cannot credit LA-5 alone. Tested with B. lactis BB-12 (and in some trials LGG or other strains).",
+        "ineligible_single_strain_pmids": [
+          "36198994"
+        ],
+        "basis": "scripts/audits/pending_items_20260926/research.md (2026-10-02 combined clinical completion); historical clinician receipt scripts/audits/closure_20260921/PHAM_REVIEW_20260922.json",
+        "note": "Historical clinician adjudication (2026-09-22): PMID 34405373 is ex vivo work on isolated human monocytes, not a supplementation trial; recorded digestive trials combine LA-5 with BB-12 and sometimes other strains. Codex source qualification (2026-10-02): PMID 36198994 is a monostrain candidiasis comparator trial, not gut-health evidence. The no-qualifying-evidence conclusion and combination-only reason concern the reviewed digestive indication; they do not assert that no monostrain human trial exists. This source correction is not a new clinician signoff or efficacy grade.",
         "withdrawn_citation": {
           "pmid": "34405373",
           "source_short": "Probiotics and antimicrobial proteins — Effect of Probiotics Lactobacillus acidophilus and Lacticaseibacillus rhamnosus on Antibacterial Response Gene Transcription of Human Peripheral Monocytes.",

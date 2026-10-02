@@ -681,9 +681,9 @@ def assess_probiotic_evidence(product: Mapping) -> dict:
                   "source_pmids": [p for p in [evidence.get("pmid"), *evidence.get("additional_pmids", [])] if p],
                   "supported_outcomes": [], "studied_population": None}
         result.update(clinical_strain_research_scope(reference))
-        # Point-producing reference provenance is distinct from the inventory
-        # of known research. Newly found sources do not inherit its approval.
-        result["scoring_source_pmids"] = list(result["source_pmids"])
+        # This shared identity/dose assessment does not award Evidence points.
+        # The Evidence owner fills provenance from its actual winning family.
+        result["scoring_source_pmids"] = []
         result["study_contexts"] = _assess_native_study_contexts(product, row, reference)
         result["source_pmids"] = sorted(set(result["source_pmids"]) | {
             pmid for context in result["study_contexts"]

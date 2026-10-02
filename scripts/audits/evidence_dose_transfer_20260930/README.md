@@ -295,3 +295,151 @@ D26 transfer remains open: no amount gate was deleted in this correction.
 The nine benchmark groups, D24 denominator/publication policy, omega purpose
 magnitudes, Q53 research queue, remaining serving cases and calibration stay
 on the master plan. Durable receipts: `/Users/seancheick/pg_quality/post_pipeline_20261002/`.
+
+
+## October 2 whole remaining Dose decision packet
+
+This current baseline packet supersedes serial preparation tasks; implementation remains gated by explicit numerical/clinical decisions. The ALCAR parent-reference defect it identifies is fixed in the combined candidate: current500mg reference is excluded for ALCAR, without adding a new range. Candidate deltas are in the existing execution register. Other displayed numbers below are baseline753aa5cf probes, not post-fix candidate scores.
+
+# Complete remaining Dose / omega decision packet — October 2, 2026
+
+Baseline and all current probes: `753aa5cf3a9062695c362133cff753975cb305da`. Read-only; no source/config/registry edits, no new owner, no corpus run, no release. This packet prepares the whole remaining Phase 1/4 batch; it does not approve the numerical policy or close transfer/calibration/release.
+
+## Owner Check
+
+Owner: `scoring_input_contract::get_evidence_subject_rows`, `classify_ingredient_roles`, `epa_dha_amounts_per_serving`; `scoring_v4/exposure::row_exposure`; `SupplementEnricherV3::_collect_rda_ul_data` → `RDAULCalculator::_find_nutrient` / `_form_scoped_reference` → existing `rda_ul_data.adequacy_results`; existing route `score_dose` modules. Evidence gates: `clinical_applicability::assess_clinical_applicability`, `evidence_resolver::resolve_evidence_for_row` / `resolve_omega_evidence_standard`, `generic_evidence::score_evidence`. Public normalization/status: `quality_score::_pillar_dose` / `assemble_quality_score`, `scored_artifact::build_scored_artifact`; publication: `build_final_db::validate_export_contract` (see current export validation below). Evidence: current source searches, matrix concepts dose_class/public_quality_score/verdict_contract, glossary material active/assessment readiness/adequacy exposure, current probes and file hashes in the JSON. Will NOT create: second Dose engine, benchmark registry, parser, public status/field, role owner or clinical policy.
+
+## Current measurements and limits
+
+[Current measurements JSON](dose_current_measurements.json) contains 86 synthetic production-boundary probes, 16 fresh real-label Clean → Enrich → Score results, full inputs, per-ingredient adequacy/dose assessments, module details, six pillars, total/tier/status/safety/readiness and source fingerprints. The synthetic matrix measures numerical/publication contracts; it is not evidence that a marketed formula or clinical benefit exists. Registry records copied into JSON are current source facts, not a new primary-source review. No historical receipt is reused as current candidate validation. Historical replay statistics below retain their exact source/baseline label.
+
+All source fingerprints were rechecked after measurement; True. HEAD after real probes: `753aa5cf3a9062695c362133cff753975cb305da`. No pytest rung is needed for a read-only packet; safe probes ran in the selected Python 3.13 runtime, with no broad test/corpus job.
+
+## Nine generic benchmark groups — current coverage and missing judgment
+
+| Group / existing record | Existing clinical source amount | Current Dose owner / actual gap |
+|---|---|---|
+| `INGR_LACTOFERRIN` (positive_strong) | 200 mg/day | Generic disclosed-dose fallback; no lactoferrin trial comparison. A probiotic route containing lactoferrin also needs this comparison through its existing route result, not generic-only insertion. |
+| `BRAND_CARNIPURE` (positive_weak) | 2000 mg/day | Same parent as generic L-carnitine. Parent legacy reference is not the 2 g tartrate recovery intervention. Branded/generic siblings must assess the same group once; precedence remains unapproved. |
+| `INGR_L_CARNITINE` (mixed) | 1000 mg/day | Legacy parent reference already produces amount credit, but it is not the verified 1 g scoped clinical comparison. Existing clinical-anchor allowlist omits L-carnitine. |
+| `INGR_ZINC_PICOLINATE` (positive_strong) | 80–207 mg/day | DRI zinc RDA/UL credit exists; no short-term zinc acetate/gluconate lozenge80–207mg clinical intervention comparison. Delivery, acute-cold purpose/population and UL appropriateness are distinct. |
+| `INGR_ACETYL_L_CARNITINE` (mixed) | 1000 mg/day | Raw ALCAR rows use IQM parent l_carnitine and matched_form acetyl-l-carnitine (alcar); 500 mg earns public Dose 20 via parent pct_rda100%. This is not the separate ALCAR 1 g intervention. Form-reference binding needs explicit resolution, not claiming coverage. |
+| `INGR_L_ARGININE` (mixed) | 1500 mg/day | Generic fallback; no free/base arginine1.5g comparison. Different arginine preparations remain excluded. |
+| `INGR_D_MANNOSE` (null) | 2000 mg/day | Fallback; 2g source is a reviewed-null trial amount, not an established effective benchmark. Sean must decide whether/how a null intervention amount receives Dose adequacy credit. |
+| `INGR_D_ASPARTIC_ACID` (null) | 3000 mg/day | Fallback; 3g source is reviewed-null and population-specific. No positive benchmark may be inferred from the studied amount. |
+| `BRAND_TESNOR` (positive_weak) | 200 mg/day | Whole named preparation total is available in product_scoring_evidence, botanical adapter blend_total_only raw10/public9.5; botanical Dose does not compare its 200 mg intervention. Luteolin is not a substitute for Tesnor whole-formula exposure. |
+| `BRAND_SYTRINOL` (mixed) | 300 mg/day | Whole named preparation150mg exists, botanical adapter blend_total_only raw10/public9.5; no 300 mg trial comparison. Whole-preparation total must not become citrus/member dose. |
+
+Current generic Dose reads `quality_score.json::dose_magnitudes.generic`: raw cap 25, supplemental-window cap 22, no-reference individual 16/product-evidence 12. Public normalization uses `dose_subscale.archetype_reference`: generic single 22 → fallback 14.5/20; named botanical blend 21 → botanical_dose_blend_total_only10 produces 9.5/20; generic product-evidence fallback12 is a distinct path. `_band_credit` classifies DRI/approved clinical anchors/legacy references; current nine groups are not in `_clinical_anchor_reference_by_canonical`. A legacy amount reference is an amount judgment, but not automatically equivalent to the clinical gate being transferred.
+
+Existing covered families remain owned by current adapters: botanical `score_botanical_dose` and `rda_therapeutic_dosing.json` (KSM-66, white kidney bean, amla), joint `score_joint_support_dose` and `category_magnitudes.joint_support.target_dose_mg` (MSM), sports `score_dose` / `group_bcaa` / `group_eaa` (complete sets only), collagen `score_collagen_dose` / subtype therapeutic ranges, multi/prenatal `score_dose` / `dose_magnitudes.multi_prenatal`, fiber `score_dose` / hard-coded gram/type bands. Generic-only clinical insertion cannot cover lactoferrin on probiotic or nutrient authority on sports/fiber.
+
+## Fresh real-label consequences
+
+| Label | Source-owned amount / identity | F / D / E / T / V / S | Total | Tier | Status |
+|---|---|---|---:|---|---|
+| 315654 Lactoferrin 250 mg | Bioferrin Lactoferrin: 250.0 mg | 8.0 / 14.5 / 15.6 / 15.0 / 8.0 / 10.0 | 71.1 | Good | scored |
+| 33684 Carnitine 500 | Carnipure(TM): 500.0 mg | 20.0 / 20.0 / 0.0 / 15.0 / 8.0 / 10.0 | 73.0 | Good | scored |
+| 293877 Acetyl-L-Carnitine 500 mg | Acetyl-L-Carnitine Hydrochloride: 500.0 mg | 20.0 / 20.0 / 0.0 / 15.0 / 10.0 / 10.0 | 75.0 | Good | scored |
+| 307547 Acetyl L-Carnitine 500 mg | Acetyl-L-Carnitine: 500.0 mg | 18.0 / 20.0 / 0.0 / 15.0 / 5.5 / 10.0 | 68.5 | Needs improvement | scored |
+| 332955 Zinc Lozenges Wild Berry Flavored | Vitamin C: 100.0 mg; Zinc: 23.0 mg; Echinacea purpurea: 20.0 mg | 17.3 / 8.2 / 11.1 / 15.0 / 10.0 / 7.0 | 68.6 | Needs improvement | scored |
+| 318194 L-Arginine 500 mg | L-Arginine: 500.0 mg | 11.6 / 14.5 / 0.0 / 15.0 / 8.0 / 9.0 | 58.1 | Needs improvement | scored |
+| 330006 D-Mannose 2000 mg Veg Capsules | D-Mannose: 2000.0 mg | 20.0 / 14.5 / 0.0 / 15.0 / 6.0 / 10.0 | 65.5 | Needs improvement | scored |
+| 183352 D-Aspartic Acid | D-Aspartic Acid: 3.0 Gram(s) | 20.0 / 14.5 / 0.0 / 15.0 / 8.0 / 10.0 | 67.5 | Needs improvement | scored |
+| 328726 Testosterone Elite | Luteolin: 275.0 mg | 0.0 / 9.5 / 10.4 / 6.0 / 10.0 / 10.0 | 45.9 | Poor | scored |
+| 54775 Sytrinol | Sytrinol: 150.0 mg; Citrus sinensis L extract: 150.0 mg | 20.0 / 9.5 / 0.0 / 0.0 / 10.0 / 10.0 | 49.5 | Poor | scored |
+| 224615 Ultimate Omega 2X Mini Soft Gels Strawberry | Eicosapentaenoic Acid: 586.0 mg; Docosahexaenoic Acid: 456.0 mg | 10.5 / 18.2 / 15.8 / 15.0 / 10.0 / 10.0 | 79.5 | Very good | scored |
+| 206295 Baby DHA Drops Unflavored | Marinol Fish Oil: 588.0 mg; Docosahexaenoic Acid: 200.0 mg | 10.9 / 6.5 / 0.0 / 10.9 / 8.0 / 10.0 | 46.3 | Poor | scored |
+| 35718 Dual Spectrum Omega-3 Krill & Fish Oil 1085 mg | Krill Oil: 500.0 mg; Eicosapentaenoic Acid: 40.0 mg; Docosahexaenoic Acid: 25.0 mg | 10.9 / 14.6 / 10.4 / 15.0 / 8.0 / 10.0 | 68.9 | Needs improvement | scored |
+| 77225 Naturally Sourced Omega-3 Vegetarian DHA 200 mg | Docosahexaenoic Acid: 200.0 mg; life'sDHA Oil: 600.0 mg | 9.7 / 4.0 / 0.0 / 10.9 / 8.0 / 7.0 | 39.6 | Poor | scored |
+| 305203 KSM-66 | KSM-66: 600.0 mg | 19.3 / 20.0 / 20.0 / 15.0 / 8.0 / 10.0 | 92.3 | Excellent | scored |
+| 182940 Glucosamine/MSM | Glucosamine Sulfate: 500.0 mg; MSM: 500.0 mg; Ginger (Zingiber officinale) extract: 250.0 mg | 18.2 / 6.1 / 7.3 / 15.0 / 10.0 / 10.0 | 66.6 | Needs improvement | scored |
+
+The ALCAR 500 mg/Dose 20 and Carnipure 500 mg/Dose 20 examples establish that current Dose can be numerically full while the distinct applicable clinical minimum still blocks Evidence. These are current observations, not proposals to fix them by raising Evidence. Zinc332955 directed use1–4lozenges gives benefit exposure23mg and maximum92mg; RDA/UL assessment exists, but neither amount establishes the short-term clinical intervention. Tesnor328726 has a400mg own-preparation exposure despite the individual scorable list containing luteolin275mg. Sytrinol54775 carries150mg named formula, with member amounts undisclosed.
+
+## Four retained D26 stand-ins — all remain live
+
+| Current production symbol | Amount judgment retained | Missing equivalent / transfer condition |
+|---|---|---|
+| `generic_evidence::_primary_mass_floor` | Own anchor amount ≥ `evidence_magnitudes.generic.primary_mass_fraction`0.5 × heaviest competing active | Every applicable purpose row must receive its own amount/reference assessment before removing this guard; preserve reviewed research and source/identity guards. |
+| `generic_evidence::_recover_verified_primary_ingredient_matches` | Recovered owner amount ≥0.5×heaviest competing active | Existing shared role selection is already integrated; recovering an Evidence match still must not lose the retained exposure assessment. |
+| `generic_evidence::_collagen_peptide_recovery_row` | Peptide preparation itself ≥0.5×heaviest active; linked dose supplied to recovered2500mg study | Existing source binding is corrected. Different collagen preparation/protein/borrowed heading must not donate amount; collagen route adapter alone does not prove all-route coverage. |
+| `generic_evidence::_mass_dominant_essential_canonical` | Heaviest selected owner must be a DRI essential | Generic RDA Dose exists, but sports/fiber do not consume the same essential adequacy. Shared-purpose selection is not this amount assessment. |
+
+Do not reinterpret these as approved long-term mass policy: 25%-of-heaviest purpose demotion was rejected under D24. The retained50% comparisons are temporary transfer safeguards, not purpose owners. Historical D26 deletion sensitivity (Q49 source, not753aa5cf):793/2781targeted and22/2964raw-coverage labels rose; median+4.4/+5.9;347+12tier crossings, none fell. OptionC record allowlists/route exceptions was rejected; all four cannot simply be deleted. No current all-corpus deletion sensitivity is claimed.
+
+## Missing-benchmark matrix, one through four purpose ingredients
+
+For eachN, the typed fixture starts withN declared purpose rows: Vitamin C90mg, then Magnesium100mg, Zinc8mg, Vitamin B120.0024mg as applicable. The last row becomes the tested missing-benchmark/wiring/preparation/missing-amount case. Incidental adds Lactoferrin1mg outside the title. Unbenchmarked last row is Lactoferrin500mg; preparation mismatch is Betaine HCl500mg carrying the TMG parent and its exact matched form. Known benchmark controls distinguish a wiring failure from absence of an applicable reference. All inputs and typed readiness are retained.
+
+| N | Defect class | Assessable denominator (known bands/declared purposeN) | Raw Dose | F / D / E / T / V / S | Total | Tier / status |
+|---:|---|---|---:|---|---:|---|
+| 1 | unbenchmarked | 0/1; 1 source adequacy rows | 16.0 | 12.0 / 14.5 / 15.6 / 15.0 / 6.0 / 10.0 | 73.1 | Good / scored |
+| 1 | wiring_miss | 0/1; 0 source adequacy rows | 16.0 | 12.0 / 14.5 / 11.1 / 15.0 / 6.0 / 10.0 | 68.6 | Needs improvement / scored |
+| 1 | preparation_mismatch | 0/1; 1 source adequacy rows | 16.0 | 12.0 / 14.5 / 12.2 / 15.0 / 6.0 / 10.0 | 69.7 | Good / scored |
+| 1 | missing_amount | 0/1; 0 source adequacy rows | None | None / None / None / None / None / None | None | None / not_scored |
+| 1 | incidental | 1/1; 1 source adequacy rows | 22.0 | 12.0 / 20.0 / 11.1 / 15.0 / 6.0 / 10.0 | 74.1 | Good / scored |
+| 2 | unbenchmarked | 1/2; 2 source adequacy rows | 16.0 | 12.0 / 14.5 / 15.6 / 15.0 / 6.0 / 10.0 | 73.1 | Good / scored |
+| 2 | wiring_miss | 1/2; 1 source adequacy rows | 16.0 | 12.0 / 14.5 / 11.1 / 15.0 / 6.0 / 10.0 | 68.6 | Needs improvement / scored |
+| 2 | preparation_mismatch | 1/2; 2 source adequacy rows | 16.0 | 12.0 / 14.5 / 12.2 / 15.0 / 6.0 / 10.0 | 69.7 | Good / scored |
+| 2 | missing_amount | 1/2; 1 source adequacy rows | 22.0 | None / None / None / None / None / None | None | None / not_scored |
+| 2 | incidental | 2/2; 2 source adequacy rows | 22.0 | 12.0 / 20.0 / 11.1 / 15.0 / 6.0 / 10.0 | 74.1 | Good / scored |
+| 3 | unbenchmarked | 2/3; 3 source adequacy rows | 16.0 | 12.0 / 14.5 / 15.6 / 15.0 / 6.0 / 10.0 | 73.1 | Good / scored |
+| 3 | wiring_miss | 2/3; 2 source adequacy rows | 22.0 | 12.0 / 20.0 / 11.1 / 15.0 / 6.0 / 10.0 | 74.1 | Good / scored |
+| 3 | preparation_mismatch | 2/3; 3 source adequacy rows | 16.0 | 12.0 / 14.5 / 12.2 / 15.0 / 6.0 / 10.0 | 69.7 | Good / scored |
+| 3 | missing_amount | 2/3; 2 source adequacy rows | 22.0 | None / None / None / None / None / None | None | None / not_scored |
+| 3 | incidental | 3/3; 3 source adequacy rows | 20.75 | 12.0 / 18.9 / 11.1 / 15.0 / 6.0 / 10.0 | 73.0 | Good / scored |
+| 4 | unbenchmarked | 3/4; 4 source adequacy rows | 16.0 | 12.0 / 14.5 / 15.6 / 15.0 / 6.0 / 10.0 | 73.1 | Good / scored |
+| 4 | wiring_miss | 3/4; 3 source adequacy rows | 20.75 | 12.0 / 18.9 / 11.1 / 15.0 / 6.0 / 10.0 | 73.0 | Good / scored |
+| 4 | preparation_mismatch | 3/4; 4 source adequacy rows | 16.0 | 12.0 / 14.5 / 12.2 / 15.0 / 6.0 / 10.0 | 69.7 | Good / scored |
+| 4 | missing_amount | 3/4; 3 source adequacy rows | 20.75 | None / None / None / None / None / None | None | None / not_scored |
+| 4 | incidental | 4/4; 4 source adequacy rows | 21.0625 | 12.0 / 19.1 / 11.1 / 15.0 / 6.0 / 10.0 | 73.2 | Good / scored |
+
+Current denominator is the number of non-None `_band_credit` results, not all purpose rows. Missing benchmark rows are skipped; when no reference remains, disclosed individual fallback16 applies once regardless of1–4unbenchmarked purpose ingredients. When an unassessed row is mass-primary, `_mass_primary_without_reference` caps window credit at16; lighter unassessed purpose rows can be skipped without that cap. The wiring-miss3/4cases therefore retain near/full Dose even though a known row is absent from the input assessment. These injected misses are diagnostic controls, not evidence that the real producer currently drops these rows.
+
+Typed missing amounts produce `not_scored`, null total/tier and null public pillars for allN. The direct route result remains available in JSON for diagnosis; null public pillars must not be presented as a numeric zero quality grade. Untyped legacy synthetic controls can remain scored with zero Dose; this is why readiness/provenance must be retained when measuring publication. Explicit unresolved VitaminA conversion control also returns `not_scored`; it is not an unbenchmarked ingredient.
+
+`quality_score::assemble_quality_score` removes public number/tier/pillars for NOT_SCORED. `build_final_db.py` current integrity/readiness checks quarantine not_scored/incomplete products rather than inventing a live numeric score; confirmed banned/recalled products have a separate ship-with-warning contract. This packet probes scorer publication status and inspects export source; it does not build or publish a catalog.
+
+Decisions prepared for Sean, not encoded: (1) applicable clinical benchmark eligibility, including null interventions and brand/generic precedence; (2) whether purpose-only assessment is an unweighted mean or another approved denominator, and whether supporting ingredients participate—70/30 remains unapproved; (3) whether missing applicable benchmark retains an ordinary numeric total/tier with explicit limitation or uses the existing not_scored publication gate; (4) explanations must distinguish missing knowledge, missing amount, preparation mismatch and wiring failure. Do not count missing knowledge as demonstrated0dose, and do not rescale known rows to a high grade silently. A new public meaning requires Sean.
+
+Historical D24 A/B/C/R sensitivities in DOSE_PROPOSAL are evidence of consequences, not current measurements: zero missing knowledgeA mean−3.68/85crossings; omit/rescaleB−0.22/52; existing fixed fallbackC−0.09/63; primary0/supportskipR−1.13/61 on339scored labels. The proportional_dose draft was rejected: second post-route engine, unjustified mass demotion, unapproved70/30, literal invented benchmarks and excess caps.
+
+## Excess: Dose appropriateness and Safety risk are separate judgments
+
+Exposure owner uses minimum directed use for benefit and maximum for excess. Dose safety uses `dose_safety::evaluate_dose_safety` / `_classify` / `_resolve_pct_ul`, `quality_score.json::dose_safety_policy` (150%UL threshold,2perflag, cap3), and generic `_band_credit` (above100%UL →11raw; at/above150%→0). Public `quality_score::_dose_safety_penalty` separately mirrors capped B7 to Safety/Hygiene (`safety_hygiene_subscale.over_ul_max_penalty`3). Existing code therefore has two deductions/judgments; calibration must explicitly justify their distinct purposes, not call the same deduction new policy.
+
+Current Zinc60mg/day and90mg/day synthetic probes use adult-neutral compatibility reference RDA11mg/UL40mg and150%/225%UL. Both give F12/D0/E11.1/T15/V6/S8, total52.1/Poor/scored. Appropriateness raw Dose 0 and B7flag2 coexist with Safety −2. The amount does not establish individual patient risk or supervised short-term cold treatment: exact preparation, intended adult/child/pregnancy population, duration, total dietary/other-product exposure and UL basis stay explicit. Source typed assessment records preserve population/age/sex/UL basis. General adult UL cannot be silently relabeled a studied short-course lozenge threshold; absence of an official UL cannot be silently treated as safe/full Dose. Sean’s later accepted preference permits considering both Dose appropriateness and Safety risk; the old Safety-only D24 wording is superseded. E1.75/E2.5caps and numerical deduplication remain unapproved.
+
+## Omega: current amount coupling and complete decision inputs
+
+Current source `evidence_resolver::resolve_omega_evidence_standard` joins INGR_OMEGA3 purpose records to `quality_score.json::evidence_magnitudes.omega.purpose_standards`: ordinary10.4only at≥376mg EPA+DHA/day; non-prenatal1000–2000mg linearly graduates10.4→20 and≥2000mg selects triglyceride_strong regardless of explicit outcome purpose; prenatal DHA≥200mg gets intake-authority11.1, otherwise0. `omega_evidence::score_evidence` uses this result only; generic adjunct studies remain metadata. `omega_dose::score_dose` separately reads explicit EPA/DHA and `omega_rubric.json::dose.epa_dha_bands`, existing cap/pregnancy bands; certification does not create EPA/DHA/formulation credit.
+
+| Ordinary explicit EPA+DHA/day | Public Dose | Evidence | Total | Tier/status |
+|---:|---:|---:|---:|---|
+| 100 | 2.5 | 0.0 | 25.3 | Poor / scored |
+| 500 | 10.0 | 10.4 | 43.2 | Poor / scored |
+| 1000 | 16.0 | 10.4 | 49.2 | Poor / scored |
+| 1500 | 18.0 | 15.2 | 56.0 | Needs improvement / scored |
+| 2000 | 20.0 | 20.0 | 62.8 | Needs improvement / scored |
+| 4500 | 20.0 | 20.0 | 62.8 | Needs improvement / scored |
+
+All positive-amount ordinary fixtures otherwise retain F0/T6.8/V6/S10. Changing title to explicit Triglyceride Support does not change the amount-driven Evidence/Dose sequence today; Transparency changes to10.9, so totals differ by4.1. Prenatal fixtures at500mgcombined/250mgDHA get Dose 20/Evidence11.1/total53.9/Poor; at100mgcombined/50mgDHA get Dose10/Evidence0/total32.8/Poor. Purpose-independent Evidence should not be implemented by removing these thresholds and awarding20.
+
+Omega decisions ready as one batch: ordinary marine EPA+DHA applicable evidence magnitude; explicit triglyceride-outcome purpose and population (not molecular triglyceride form) and magnitude; prenatal intake authority distinct from conditional pregnancy outcome evidence; DHA-only non-prenatal, child/baby, mixed-purpose, specialized delivery/unit and carrier-only identities each need an applicable determination/hold. Dose must retain the existing exposure interval and rejected-carrier boundary while Evidence uses supported identity/preparation/population/purpose/outcome. Existing shared role/purpose result must retain efficacy purpose alongside route prominence; no separate parser.
+
+Rejected/unapproved historical alternatives: O1ordinary10.4/explicitTG20/prenatal11.1 was not approved blanket mapping; identity-gated717label replay301moved,−9.6to+10.4,56Poor→Needs improvement; Q45individually reviewed56versions/36names:38plausible ordinary crossings and18holds (4identity,7child/baby,4DHA-only,1specialized,2mixed-purpose). O2ordinary9.35/TG14/prenatal10was illustrative, not recommendation:655/717moved,−10.7to+9.3. Initial carrier-only58false awards were rejected. Historic tier counts use shipped half-up whole-score tier rules; legacyPOOR→SAFE is a quality alias, not safer risk. Neither sensitivity is current candidate approval.
+
+## Whole-batch next implementation gate
+
+Prepared now: nine-group current owner coverage; four current stand-ins;1–4 purpose cases for all five classes; current per-ingredient denominator/pillars/total/tier/status/publication consequences; excess Dose/Safety separation; omega mapping alternatives and18hold classes. Await explicit policy decisions, then extend existing producer/route consumers in the same change before removing shared Evidence amount gates. Preserve subject/purpose/preparation/source/population guards. Assert amount-independent Evidence but distinct Dose at low/studied/undisclosed exposure, complete BCAA/EAA once, no blended member borrowing, same-condition evidence independence, controls/safety unchanged where policy does not change them. Finished batch gets focused fail-first tests, bounded frozen raw measurements, independent review, exact-candidateCI/local as applicable, then approved corpus/release sequence. No phase marked implementation/measurement/integration/release complete by this preparation.
+
+## Source index
+
+* Current `docs/plans/PHARMAGUIDE_MASTER_COMPLETION_PLAN.md` Phases1/4/5, accepted excess refinement lines374–378; `scripts/audits/pending_items_20260926/LEDGER.md` D24,D26,Q45 and current continuation.
+* `scripts/contracts/source_of_truth_matrix.json`; `scripts/GLOSSARY.md`; current production symbols/config/data named above, SHA256 in JSON.
+* `scripts/audits/evidence_dose_transfer_20260930/README.md`, `MEASUREMENT.md`, `OMEGA_O1_CROSSING_REVIEW.md` (historical alternatives / transfer invariant).
+* `scripts/audits/numerical_ownership_20260930/README.md` (draft numerical inventory, superseded probiotic and prominence details explicitly excluded).
+* `scripts/audits/rr_correctness_20260928/DOSE_PROPOSAL.md` (accepted/rejected D24 rules; historical sensitivities, not specification).
+* Current `backed_clinical_studies.json` exact ten records across nine groups plus source references/applicability in JSON; `rda_optimal_uls.json`, `rda_therapeutic_dosing.json`, `omega_rubric.json`. Their stored citations are not freshly content-verified in this Dose packet; primary clinical determinations remain separately required.
+* Raw label paths and SHA256 per 16 current probes in JSON. Probe scripts/logs are local diagnostic support only, no production policy.

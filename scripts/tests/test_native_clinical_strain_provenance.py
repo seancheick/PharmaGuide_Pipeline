@@ -532,3 +532,60 @@ def test_producer_keeps_verified_alias_and_exact_pending_identity(
     assert rows[0]["clinical_id"] == clinical_id
     assert rows[0]["research_match_status"] == status
     assert rows[0]["cfu_per_day"] == 10_000_000_000
+
+
+def test_la5_source_scope_does_not_deny_the_monostrain_comparator_trial():
+    """A non-gut comparator trial corrects source scope without granting efficacy."""
+    import json
+    entry = next(e for e in json.loads((SCRIPTS_ROOT / 'data' / 'clinically_relevant_strains.json').read_text())['clinically_relevant_strains']
+                 if e['id'] == 'STRAIN_ACIDOPHILUS_LA5')
+    assert 'Human trials test it only in combination' not in entry['notable_studies']
+    assert 'PMID 36198994' in entry['notable_studies']
+    assert 'fluconazole' in entry['notable_studies'] and 'gut-health' in entry['notable_studies']
+    assert entry['evidence_level'] == 'none'
+    assert entry['cfu_thresholds']['dr_pham_signoff'] is False
+    assert '36198994' in entry['literature_review']['pmids_screened']
+    assert '36198994' in entry['literature_review']['ineligible_single_strain_pmids']
+
+
+def test_combined_native_sources_keep_trial_facts_and_clinical_holds():
+    import json
+    entries = {e['id']: e for e in json.loads((SCRIPTS_ROOT / 'data' / 'clinically_relevant_strains.json').read_text())['clinically_relevant_strains']}
+    contexts = {c['context_id']: c for c in entries['STRAIN_COAGULANS_MTCC5856']['study_contexts']}
+    for context_id in ['mtcc5856_ibs_d_pilot_26922379', 'mtcc5856_mdd_with_ibs_29997457', 'mtcc5856_functional_gas_bloating_36862903', 'mtcc5856_pediatric_acute_diarrhea_38269290', 'mtcc5856_healthy_microbiome_37335737']:
+        assert contexts[context_id]['blinding'] == 'double'
+    healthy = contexts['mtcc5856_healthy_microbiome_37335737']
+    assert healthy['dose']['basis'] == 'discrete_daily_arms'
+    assert healthy['dose']['values'] == [2_000_000_000]
+    assert 'daily dose is unresolved' not in ' '.join(healthy['limitations'])
+    assert 'Sami-Sabinsa' in ' '.join(healthy['limitations'])
+    gas = contexts['mtcc5856_functional_gas_bloating_36862903']
+    assert 'declared primary outcomes' in ' '.join(gas['limitations'])
+    covid = next(c for c in entries['STRAIN_COAGULANS_IS2']['study_contexts'] if c['context_id'] == 'is2_moderate_covid19_adjunct_39866999')
+    assert 'Bacillus clausii UBBC-07' in covid['population']['description']
+    assert 'B. coagulans UBBC-07' not in covid['population']['description']
+    assert 'surrogates only' not in ' '.join(covid['limitations'])
+    assert covid['blinding'] == 'double'
+
+
+def test_lactospore_indexed_trials_do_not_claim_clinical_immune_support():
+    import json
+    entries = json.loads((SCRIPTS_ROOT / 'data' / 'backed_clinical_studies.json').read_text())['backed_clinical_studies']
+    entry = next(e for e in entries if e['id'] == 'BRAND_LACTOSPORE')
+    assert entry['health_goals_supported'] == ['Digestive Health']
+
+
+@pytest.mark.parametrize('quantity', [None, 1_000_000_000, 2_000_000_000])
+def test_is2_scoring_provenance_uses_the_actual_digestive_family(quantity):
+    product = _owned_product(
+        owner_name='Bacillus coagulans Unique IS-2', include_source_ref=True,
+        quantity=quantity, clinical_id='STRAIN_COAGULANS_IS2',
+        strain='Bacillus coagulans Unique IS-2', dr_pham_signoff=True,
+        research_match_status='exact_strain', review_status='clinician_verified',
+    )
+    result = score_evidence(product)
+    assert result['score'] == 16
+    assert 'unique_is2_adult_ibs_31434935' in result['metadata']['notes']
+    rows = result['metadata']['evidence_assessment']['strain_assessments']
+    assert rows[0]['scoring_source_pmids'] == ['31434935']
+    assert '35249118' in rows[0]['source_pmids']  # Inventory keeps the other research.

@@ -195,3 +195,15 @@ def test_phage_notes_do_not_transfer_combination_or_surrogate_benefits():
     assert 'PMID 30897686' in notes and 'PMID 32824480' in notes
     assert 'no phage-only arm' in notes and 'no significant between-group' in notes
     assert 'same trial' in notes and 'not active phage mass' in notes
+
+
+def test_prebiotic_copy_preserves_active_fiber_basis_and_specific_response():
+    from pathlib import Path
+    import json
+    iqm = json.loads((Path(__file__).resolve().parents[1] / 'data' / 'ingredient_quality_map.json').read_text())
+    assert '3 g/day of beta-glucan soluble fiber' in iqm['oat_bran']['description']
+    assert 'FDA-approved heart health claim at 3g/day' not in iqm['oat_bran']['description']
+    fos = iqm['prebiotics']['forms']['fructooligosaccharides (FOS)']
+    assert 'PMID 16569219' in fos['notes']
+    assert 'Lactobacillus counts did not significantly change' in fos['notes']
+    assert 'preferentially feeding Bifidobacterium and Lactobacillus' not in fos['notes']

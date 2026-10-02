@@ -279,7 +279,7 @@ def test_lpc37_sources_join_without_new_approval_or_interpolated_dose():
     # Exact-strain sources plus the Wave 1 combination contexts that join Lpc-37
     # through `components`; joining never lends approval or an individual dose.
     assert {"33385020", "37662485"} <= set(result["source_pmids"])
-    assert result["scoring_source_pmids"] == ["33385020"]
+    assert result["scoring_source_pmids"] == []  # Shared assessment awards no Evidence.
     assert result["dose_applicable"] is False
     assert {c["dose_comparison"] for c in result["study_contexts"]} == {
         "study_daily_dose_unresolved", "combination_not_individual_dose"}
@@ -433,11 +433,12 @@ def test_research_summary_includes_new_sources_without_lending_them_approval():
     p = strain_product(clinical_id="STRAIN_ACIDOPHILUS_NCFM", name="Lactobacillus acidophilus NCFM")
     row = assessment(p)
     assert {"28082816", "19651563", "21436726"} <= set(row["source_pmids"])
-    # Scoring cites only the approved exact-strain human record (it owns NCFM's
-    # human evidence); newly found sources and the nonhuman anchor lend nothing.
+    # The shared assessment inventories reviewed research but awards no points.
+    # Actual scoring provenance is selected by the Evidence owner below.
     from probiotic_measurements import derived_context_evidence
     human = derived_context_evidence(studied_formulas._clinical_strain_registry()["STRAIN_ACIDOPHILUS_NCFM"])
-    assert row["scoring_source_pmids"] == [human["pmid"], *human["additional_pmids"]]
+    assert {human["pmid"], *human["additional_pmids"]} <= set(row["source_pmids"])
+    assert row["scoring_source_pmids"] == []
     assert "21436726" not in row["scoring_source_pmids"] and "24717228" not in row["scoring_source_pmids"]
     evidence = score_evidence(p)
     assert evidence["score"] == 0  # the approved trials are null

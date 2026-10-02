@@ -18521,7 +18521,7 @@
           "by": "Product owner approval",
           "date": "2026-08-08"
         },
-        "notes": "Short-chain fructo-oligosaccharides (DP 2-20) that rapidly ferment in the proximal colon, preferentially feeding Bifidobacterium and Lactobacillus.",
+        "notes": "Fructooligosaccharides are fermentable fructose-containing carbohydrates. Human findings depend on preparation, population and outcome. PMID 16569219 studied Actilight short-chain FOS: Bifidobacterium increased, while Lactobacillus counts did not significantly change. A microbiome response does not by itself establish symptom benefit, and that preparation cannot supply an automatic efficacy or dose benchmark for unspecified FOS.",
         "aliases": [
           "FOS",
           "fructooligosaccharides",
@@ -67207,7 +67207,7 @@
     "standard_name": "Oat Bran",
     "severity_level": "none",
     "category": "fibers",
-    "description": "Oat bran (Avena sativa) — outer layer of the oat groat, rich in soluble beta-glucan fiber. FDA-approved heart health claim at 3g/day. Distinct from oat straw (aerial parts).",
+    "description": "Oat bran (Avena sativa) — outer layer of the oat groat, rich in soluble beta-glucan fiber. The FDA-authorized heart-health claim requires 3 g/day of beta-glucan soluble fiber from eligible oat/barley sources, not 3 g of oat bran powder (21 CFR 101.81). Distinct from oat straw (aerial parts).",
     "dosage_importance": 1.0,
     "forms": {
       "oat bran (unspecified)": {
