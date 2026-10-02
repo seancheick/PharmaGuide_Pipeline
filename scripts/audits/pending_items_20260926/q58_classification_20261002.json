@@ -1,0 +1,1456 @@
+{
+ "_metadata": {
+  "purpose": "LEDGER Q58: classify banned/recalled records whose policy is unverified (a confirmed match is quarantined, so a scan answers 'not found'). No routing changed.",
+  "date": "2026-10-02",
+  "categories": {
+   "1": "identity verified, safety concern evidenced (Q57b), no US regulatory determination: candidate BLOCKED with 'Unverified ingredient' (or the label its legal status supports)",
+   "2": "regulatory action evidenced by an authoritative source naming the record: candidate policy-verified BLOCKED with the specific reason",
+   "2-pending": "regulatory action known to exist but the record lacks the source that names it: attach and read it, then category 2",
+   "3": "identity, match scope or basis not sufficient: stay quarantined until reviewed",
+   "4": "recall claimed but no recall record found: stay quarantined until verified"
+  },
+  "method": "scoring_v4.gate_safety requirement functions; each attached authoritative URL fetched and searched for the record's names; recalls looked up in openFDA food/drug enforcement by recall number, else by product name",
+  "today_impact": "0 of the 38 brand scored outputs are quarantined for safety_policy_review_required; all 73 shipped BLOCKED products come from verified records",
+  "open_policy_questions": [
+   "8 recall records are lot-specific contamination recalls already Completed/Terminated: show 'Recalled product' permanently by name?",
+   "WADA_CANNABIS / WADA_TRAMADOL are status=banned for a sport-only rule: BLOCK every consumer?"
+  ]
+ },
+ "records": [
+  {
+   "id": "ADULTERANT_MELOXICAM",
+   "status": "banned",
+   "entity": "contaminant",
+   "legal": "adulterant",
+   "category": "2",
+   "evidence": "attached FDA source names it: meloxicam",
+   "proposed_label": "Hidden drug",
+   "sources_checked": [
+    {
+     "url": "https://www.fda.gov/drugs/medication-health-fraud/pain-and-arthritis-products-containing-hidden-ingredients",
+     "names_found": []
+    },
+    {
+     "url": "https://www.fda.gov/safety/recalls-market-withdrawals-safety-alerts/anthony-trinh-123herbals-llc-123herbalscom-issues-nationwide-recall-silintan-capsules-due-presence",
+     "names_found": [
+      "meloxicam"
+     ]
+    }
+   ],
+   "openfda": [],
+   "confirm_before_routing": "read the named source once and record it (Q15 standard)"
+  },
+  {
+   "id": "ADULTERANT_METFORMIN",
+   "status": "banned",
+   "entity": "contaminant",
+   "legal": "adulterant",
+   "category": "2-pending",
+   "evidence": "FDA source attached but page is a list/JS shell; needs the notice that names it",
+   "proposed_label": "Hidden drug",
+   "sources_checked": [
+    {
+     "url": "https://www.fda.gov/drugs/frequently-asked-questions-popular-topics/questions-and-answers-about-fdas-initiative-against-contaminated-weight-loss-products",
+     "names_found": []
+    }
+   ],
+   "openfda": []
+  },
+  {
+   "id": "ADULTERANT_RIMONABANT",
+   "status": "banned",
+   "entity": "contaminant",
+   "legal": "adulterant",
+   "category": "2-pending",
+   "evidence": "action exists; attach primary source: FDA tainted-product notices naming rimonabant",
+   "proposed_label": "Hidden drug",
+   "sources_checked": [],
+   "openfda": []
+  },
+  {
+   "id": "BANNED_FASORACETAM",
+   "status": "banned",
+   "entity": "ingredient",
+   "legal": "under_review",
+   "category": "1",
+   "evidence": "no US document names it; identity ids: cui,unii; harm source: pending Q57b",
+   "proposed_label": "Unverified ingredient",
+   "sources_checked": [],
+   "openfda": []
+  },
+  {
+   "id": "BANNED_IGF1",
+   "status": "banned",
+   "entity": "ingredient",
+   "legal": "under_review",
+   "category": "1",
+   "evidence": "no US document names it; identity ids: cui; harm source: pending Q57b",
+   "proposed_label": "Unverified ingredient",
+   "sources_checked": [],
+   "openfda": []
+  },
+  {
+   "id": "BANNED_IGF1_LR3",
+   "status": "banned",
+   "entity": "ingredient",
+   "legal": "under_review",
+   "category": "1",
+   "evidence": "no US document names it; identity ids: unii; harm source: pending Q57b",
+   "proposed_label": "Unverified ingredient",
+   "sources_checked": [],
+   "openfda": []
+  },
+  {
+   "id": "BANNED_SR9009",
+   "status": "banned",
+   "entity": "ingredient",
+   "legal": "not_lawful_as_supplement",
+   "category": "1",
+   "evidence": "no US document names it; identity ids: cui,unii; harm source: pending Q57b",
+   "proposed_label": "Not allowed in supplements",
+   "sources_checked": [],
+   "openfda": []
+  },
+  {
+   "id": "BANNED_SUNIFIRAM",
+   "status": "banned",
+   "entity": "ingredient",
+   "legal": "under_review",
+   "category": "1",
+   "evidence": "no US document names it; identity ids: cui,unii; harm source: pending Q57b",
+   "proposed_label": "Unverified ingredient",
+   "sources_checked": [],
+   "openfda": []
+  },
+  {
+   "id": "NOOTROPIC_9MEBC",
+   "status": "banned",
+   "entity": "ingredient",
+   "legal": "under_review",
+   "category": "1",
+   "evidence": "no US document names it; identity ids: cui; harm source: cited",
+   "proposed_label": "Unverified ingredient",
+   "sources_checked": [],
+   "openfda": []
+  },
+  {
+   "id": "NOOTROPIC_BROMANTANE",
+   "status": "banned",
+   "entity": "ingredient",
+   "legal": "not_lawful_as_supplement",
+   "category": "1",
+   "evidence": "no US document names it; identity ids: cui,unii; harm source: cited",
+   "proposed_label": "Not allowed in supplements",
+   "sources_checked": [],
+   "openfda": []
+  },
+  {
+   "id": "NOOTROPIC_FLMODAFINIL",
+   "status": "banned",
+   "entity": "ingredient",
+   "legal": "under_review",
+   "category": "1",
+   "evidence": "no US document names it; identity ids: unii; harm source: pending Q57b",
+   "proposed_label": "Unverified ingredient",
+   "sources_checked": [],
+   "openfda": []
+  },
+  {
+   "id": "NOOTROPIC_PIRACETAM",
+   "status": "banned",
+   "entity": "ingredient",
+   "legal": "under_review",
+   "category": "2",
+   "evidence": "attached FDA source names it: piracetam",
+   "proposed_label": "Unverified ingredient",
+   "sources_checked": [
+    {
+     "url": "https://www.fda.gov/inspections-compliance-enforcement-and-criminal-investigations/warning-letters/peak-nootropics-llc-aka-advanced-nootropics-557887-02052019",
+     "names_found": [
+      "piracetam"
+     ]
+    },
+    {
+     "url": "https://www.fda.gov/inspections-compliance-enforcement-and-criminal-investigations/warning-letters/pure-nootropics-llc-565425-02052019",
+     "names_found": [
+      "piracetam"
+     ]
+    },
+    {
+     "url": "https://www.fda.gov/inspections-compliance-enforcement-and-criminal-investigations/doj-press-releases-involving-fda-oci/arizona-company-and-ceo-plead-guilty-distribution-drugs-not-approved-fda-and-will-pay-24-million",
+     "names_found": [
+      "piracetam"
+     ]
+    },
+    {
+     "url": "https://www.fda.gov/inspections-compliance-enforcement-and-criminal-investigations/warning-letters/peak-nootropics-llc-aka-advanced-nootropics-557887-02052019",
+     "names_found": [
+      "piracetam"
+     ]
+    }
+   ],
+   "openfda": [],
+   "confirm_before_routing": "letters name piracetam but Q15 set under_review; read the letters for a dietary-ingredient determination"
+  },
+  {
+   "id": "PEPTIDE_BPC157",
+   "status": "banned",
+   "entity": "ingredient",
+   "legal": "not_lawful_as_supplement",
+   "category": "2-pending",
+   "evidence": "FDA source attached but page is a list/JS shell; needs the notice that names it",
+   "proposed_label": "Not allowed in supplements",
+   "sources_checked": [
+    {
+     "url": "https://www.fda.gov/food/dietary-supplements/dietary-supplement-ingredient-directory",
+     "names_found": []
+    }
+   ],
+   "openfda": []
+  },
+  {
+   "id": "PEPTIDE_TB500",
+   "status": "banned",
+   "entity": "ingredient",
+   "legal": "not_lawful_as_supplement",
+   "category": "2",
+   "evidence": "attached FDA source names it: tb-500, tb500, thymosin beta 4",
+   "proposed_label": "Not allowed in supplements",
+   "sources_checked": [
+    {
+     "url": "https://precision.fda.gov/uniisearch/srs/unii/QHK6Z47GTG",
+     "names_found": [
+      "tb-500",
+      "tb500",
+      "thymosin beta 4"
+     ]
+    }
+   ],
+   "openfda": [],
+   "confirm_before_routing": "read the named source once and record it (Q15 standard)"
+  },
+  {
+   "id": "PHARMA_DAPOXETINE",
+   "status": "banned",
+   "entity": "ingredient",
+   "legal": "adulterant",
+   "category": "2-pending",
+   "evidence": "FDA source attached but page is a list/JS shell; needs the notice that names it",
+   "proposed_label": "Hidden drug",
+   "sources_checked": [
+    {
+     "url": "https://www.fda.gov/drugs/medication-health-fraud-notifications/sexual-enhancement-and-energy-product-notifications",
+     "names_found": []
+    }
+   ],
+   "openfda": []
+  },
+  {
+   "id": "PHARMA_LORCASERIN",
+   "status": "banned",
+   "entity": "ingredient",
+   "legal": "adulterant",
+   "category": "2-pending",
+   "evidence": "action exists; attach primary source: FDA 2020 withdrawal request",
+   "proposed_label": "Hidden drug",
+   "sources_checked": [],
+   "openfda": []
+  },
+  {
+   "id": "RC_CARDARINE_ANALOGS",
+   "status": "banned",
+   "entity": "class",
+   "legal": "not_lawful_as_supplement",
+   "category": "3",
+   "evidence": "class entry; identity by class, not compound",
+   "proposed_label": "(stay quarantined; needs review)",
+   "sources_checked": [],
+   "openfda": []
+  },
+  {
+   "id": "RECALLED_GE_LABS_YKARINE",
+   "status": "banned",
+   "entity": "product",
+   "legal": "adulterant",
+   "category": "3",
+   "evidence": "product record with no authoritative source",
+   "proposed_label": "(stay quarantined; needs review)",
+   "sources_checked": [],
+   "openfda": []
+  },
+  {
+   "id": "RECALLED_GOLD_STAR_DISTRIBUTION",
+   "status": "recalled",
+   "entity": "product",
+   "legal": "contaminant_risk",
+   "category": "4",
+   "evidence": "no recall record found (openFDA from 2012; name search)",
+   "proposed_label": "(stay quarantined until recall verified)",
+   "sources_checked": [],
+   "openfda": []
+  },
+  {
+   "id": "RECALLED_GREEN_LUMBER",
+   "status": "recalled",
+   "entity": "product",
+   "legal": "adulterant",
+   "category": "2",
+   "evidence": "openFDA enforcement record matches",
+   "proposed_label": "Hidden drug",
+   "sources_checked": [],
+   "openfda": [
+    {
+     "ep": "drug",
+     "recall_number": "D-0304-2026",
+     "firm": "Green Lumber Holdings, LLC",
+     "product": "Green Lumber Natural Fuel For Men capsule, packaged in 2, 4, 10, and 30-count blister pack",
+     "reason": "Marketed without an Approved NDA/ANDA: FDA analysis found this product to contain tadalafil",
+     "class": "Class I",
+     "status": "Ongoing",
+     "start": "20250828"
+    }
+   ],
+   "confirm_before_routing": "read the named source once and record it (Q15 standard)"
+  },
+  {
+   "id": "RECALLED_HYDROXYCUT",
+   "status": "recalled",
+   "entity": "product",
+   "legal": "contaminant_risk",
+   "category": "4",
+   "evidence": "no recall record found (openFDA from 2012; name search)",
+   "proposed_label": "(stay quarantined until recall verified)",
+   "sources_checked": [],
+   "openfda": []
+  },
+  {
+   "id": "RECALLED_JACK3D",
+   "status": "recalled",
+   "entity": "product",
+   "legal": "contaminant_risk",
+   "category": "2",
+   "evidence": "openFDA enforcement record matches",
+   "proposed_label": "Recalled product",
+   "sources_checked": [],
+   "openfda": [
+    "food:F-1370-2014 Class I Terminated 20131109 | USPlabs, LLC | USPlabs, LLC received a 423(a), Notification of Opportunity to Initiat",
+    "food:F-1372-2014 Class I Terminated 20131109 | USPlabs, LLC | USPlabs, LLC received a 423(a), Notification of Opportunity to Initiat",
+    "food:F-1374-2014 Class I Terminated 20131109 | USPlabs, LLC | USPlabs, LLC received a 423(a), Notification of Opportunity to Initiat",
+    "food:F-1375-2014 Class I Terminated 20131109 | USPlabs, LLC | USPlabs, LLC received a 423(a), Notification of Opportunity to Initiat",
+    "food:F-1376-2014 Class I Terminated 20131109 | USPlabs, LLC | USPlabs, LLC received a 423(a), Notification of Opportunity to Initiat"
+   ],
+   "confirm_before_routing": "read the named source once and record it (Q15 standard)"
+  },
+  {
+   "id": "RECALLED_LIVE_IT_UP_SUPER_GREENS",
+   "status": "recalled",
+   "entity": "product",
+   "legal": "contaminant_risk",
+   "category": "2",
+   "evidence": "openFDA enforcement record matches; recall Completed/Terminated (lot-specific)",
+   "proposed_label": "Recalled product",
+   "sources_checked": [],
+   "openfda": [
+    "food:H-0433-2026 Class I Completed 20260115 | SUPERFOODS, INC. | Products may be contaminated with Salmonella Typhimurium",
+    "food:H-0434-2026 Class I Completed 20260115 | SUPERFOODS, INC. | Products may be contaminated with Salmonella Typhimurium"
+   ],
+   "confirm_before_routing": "read the named source once and record it (Q15 standard)"
+  },
+  {
+   "id": "RECALLED_MODERN_WARRIOR",
+   "status": "recalled",
+   "entity": "product",
+   "legal": "adulterant",
+   "category": "2",
+   "evidence": "openFDA enforcement record matches",
+   "proposed_label": "Hidden drug",
+   "sources_checked": [],
+   "openfda": [
+    "food:H-1178-2026 Class I Ongoing 20260109 | Modern Warrior Life, LLC | FDA analysis revealed the presence of unapproved ingredients including"
+   ],
+   "confirm_before_routing": "read the named source once and record it (Q15 standard)"
+  },
+  {
+   "id": "RECALLED_MR7_SUPER_700000",
+   "status": "recalled",
+   "entity": "product",
+   "legal": "contaminant_risk",
+   "category": "2",
+   "evidence": "openFDA enforcement record matches",
+   "proposed_label": "Hidden drug",
+   "sources_checked": [],
+   "openfda": [
+    "drug:D-0397-2026 Class I Ongoing 20251215 | StuffbyNainax | Marketed Without an Approved NDA/ANDA: FDA analysis revealed the prese"
+   ],
+   "confirm_before_routing": "read the named source once and record it (Q15 standard)"
+  },
+  {
+   "id": "RECALLED_OXYELITE_PRO",
+   "status": "recalled",
+   "entity": "product",
+   "legal": "contaminant_risk",
+   "category": "2",
+   "evidence": "openFDA enforcement record matches",
+   "proposed_label": "Recalled product",
+   "sources_checked": [],
+   "openfda": [
+    "food:F-1370-2014 Class I Terminated 20131109 | USPlabs, LLC | USPlabs, LLC received a 423(a), Notification of Opportunity to Initiat",
+    "food:F-1372-2014 Class I Terminated 20131109 | USPlabs, LLC | USPlabs, LLC received a 423(a), Notification of Opportunity to Initiat",
+    "food:F-1374-2014 Class I Terminated 20131109 | USPlabs, LLC | USPlabs, LLC received a 423(a), Notification of Opportunity to Initiat",
+    "food:F-1375-2014 Class I Terminated 20131109 | USPlabs, LLC | USPlabs, LLC received a 423(a), Notification of Opportunity to Initiat",
+    "food:F-1376-2014 Class I Terminated 20131109 | USPlabs, LLC | USPlabs, LLC received a 423(a), Notification of Opportunity to Initiat"
+   ],
+   "confirm_before_routing": "read the named source once and record it (Q15 standard)"
+  },
+  {
+   "id": "RECALLED_PURITY_PRODUCTS_MY_BLADDER",
+   "status": "recalled",
+   "entity": "product",
+   "legal": "contaminant_risk",
+   "category": "2",
+   "evidence": "openFDA enforcement record matches; recall Completed/Terminated (lot-specific)",
+   "proposed_label": "Recalled product",
+   "sources_checked": [],
+   "openfda": [
+    "food:H-0213-2026 Class II Terminated 20251024 | Water Pure, Inc. | Product may be contaminated with E. coli O7:K1 (IAI39/ExPEC) and E. co"
+   ],
+   "confirm_before_routing": "read the named source once and record it (Q15 standard)"
+  },
+  {
+   "id": "RECALLED_REBOOST_CLEARLIFE_NASAL_SPRAY",
+   "status": "recalled",
+   "entity": "product",
+   "legal": "contaminant_risk",
+   "category": "2",
+   "evidence": "openFDA enforcement record matches",
+   "proposed_label": "Recalled product",
+   "sources_checked": [],
+   "openfda": [
+    "drug:D-0288-2026 Class I Ongoing 20251212 | Medinatura New Mexico, inc. | Microbial Contamination of Non-Sterile Products: The products have bee",
+    "drug:D-0289-2026 Class I Ongoing 20251212 | Medinatura New Mexico, inc. | Microbial Contamination of Non-Sterile Products: The products have bee"
+   ],
+   "confirm_before_routing": "read the named source once and record it (Q15 standard)"
+  },
+  {
+   "id": "RECALLED_RHEUMACARE_CAPSULES",
+   "status": "recalled",
+   "entity": "product",
+   "legal": "contaminant_risk",
+   "category": "2",
+   "evidence": "openFDA enforcement record matches",
+   "proposed_label": "Recalled product",
+   "sources_checked": [],
+   "openfda": [
+    "drug:D-0332-2026 Class I Ongoing 20251222 | HANDELNINE GLOBAL LLC | CGMP Deviations: product found to contain lead."
+   ],
+   "confirm_before_routing": "read the named source once and record it (Q15 standard)"
+  },
+  {
+   "id": "RECALLED_SILINTAN",
+   "status": "recalled",
+   "entity": "product",
+   "legal": "adulterant",
+   "category": "2",
+   "evidence": "openFDA enforcement record matches",
+   "proposed_label": "Hidden drug",
+   "sources_checked": [],
+   "openfda": [
+    "drug:D-0388-2026 Class I Ongoing 20251020 | ANTHONY TRINH, 123Herbals LLC | Marketed Without an Approved NDA/ANDA: FDA analysis  revealed the pres"
+   ],
+   "confirm_before_routing": "read the named source once and record it (Q15 standard)"
+  },
+  {
+   "id": "SCHED_AMANITA_MUSCARIA",
+   "status": "banned",
+   "entity": "ingredient",
+   "legal": "high_risk",
+   "category": "1",
+   "evidence": "no US document names it; identity ids: cui,unii; harm source: pending Q57b",
+   "proposed_label": "High-risk ingredient",
+   "sources_checked": [],
+   "openfda": []
+  },
+  {
+   "id": "SCHED_PSILOCYBIN",
+   "status": "banned",
+   "entity": "ingredient",
+   "legal": "controlled_substance",
+   "category": "2-pending",
+   "evidence": "action exists; attach primary source: 21 CFR 1308.11(d) Schedule I",
+   "proposed_label": "Controlled substance",
+   "sources_checked": [],
+   "openfda": []
+  },
+  {
+   "id": "SPIKE_CHLOROPRETADALAFIL",
+   "status": "banned",
+   "entity": "contaminant",
+   "legal": "adulterant",
+   "category": "2-pending",
+   "evidence": "FDA source attached but page is a list/JS shell; needs the notice that names it",
+   "proposed_label": "Hidden drug",
+   "sources_checked": [
+    {
+     "url": "https://www.fda.gov/drugs/medication-health-fraud-notifications/health-fixer-and-health-fixer-plus-may-be-harmful-due-hidden-drug-ingredients",
+     "names_found": []
+    }
+   ],
+   "openfda": []
+  },
+  {
+   "id": "SPIKE_DEXAMETHASONE",
+   "status": "banned",
+   "entity": "contaminant",
+   "legal": "adulterant",
+   "category": "2-pending",
+   "evidence": "FDA source attached but page is a list/JS shell; needs the notice that names it",
+   "proposed_label": "Hidden drug",
+   "sources_checked": [
+    {
+     "url": "https://www.fda.gov/drugs/medication-health-fraud/avoiding-products-contaminated-hidden-ingredients",
+     "names_found": []
+    }
+   ],
+   "openfda": []
+  },
+  {
+   "id": "SPIKE_DICLOFENAC",
+   "status": "banned",
+   "entity": "contaminant",
+   "legal": "adulterant",
+   "category": "2-pending",
+   "evidence": "FDA source attached but page is a list/JS shell; needs the notice that names it",
+   "proposed_label": "Hidden drug",
+   "sources_checked": [
+    {
+     "url": "https://www.fda.gov/drugs/medication-health-fraud/pain-and-arthritis-products-containing-hidden-ingredients",
+     "names_found": []
+    }
+   ],
+   "openfda": []
+  },
+  {
+   "id": "SPIKE_FLUOXETINE",
+   "status": "banned",
+   "entity": "contaminant",
+   "legal": "adulterant",
+   "category": "2",
+   "evidence": "attached FDA source names it: fluoxetine, prozac",
+   "proposed_label": "Hidden drug",
+   "sources_checked": [
+    {
+     "url": "https://www.fda.gov/drugs/frequently-asked-questions-popular-topics/questions-and-answers-about-fdas-initiative-against-contaminated-weight-loss-products",
+     "names_found": [
+      "fluoxetine",
+      "prozac"
+     ]
+    }
+   ],
+   "openfda": [],
+   "confirm_before_routing": "read the named source once and record it (Q15 standard)"
+  },
+  {
+   "id": "SPIKE_METHYL7K",
+   "status": "banned",
+   "entity": "contaminant",
+   "legal": "adulterant",
+   "category": "2-pending",
+   "evidence": "action exists; attach primary source: FDA 7-OH actions (2025-2026)",
+   "proposed_label": "Hidden drug / Unsafe ingredient",
+   "sources_checked": [
+    {
+     "url": "https://www.fda.gov/news-events/press-announcements/fda-seizes-7-oh-opioids-protect-american-consumers",
+     "names_found": []
+    }
+   ],
+   "openfda": []
+  },
+  {
+   "id": "SPIKE_PHENOLPHTHALEIN",
+   "status": "banned",
+   "entity": "contaminant",
+   "legal": "adulterant",
+   "category": "2",
+   "evidence": "attached FDA source names it: phenolphthalein",
+   "proposed_label": "Hidden drug",
+   "sources_checked": [
+    {
+     "url": "https://www.fda.gov/drugs/frequently-asked-questions-popular-topics/questions-and-answers-about-fdas-initiative-against-contaminated-weight-loss-products",
+     "names_found": [
+      "phenolphthalein"
+     ]
+    }
+   ],
+   "openfda": [],
+   "confirm_before_routing": "read the named source once and record it (Q15 standard)"
+  },
+  {
+   "id": "SPIKE_PROPOXYPHENYLSILDENAFIL",
+   "status": "banned",
+   "entity": "contaminant",
+   "legal": "adulterant",
+   "category": "2-pending",
+   "evidence": "FDA source attached but page is a list/JS shell; needs the notice that names it",
+   "proposed_label": "Hidden drug",
+   "sources_checked": [
+    {
+     "url": "https://www.fda.gov/drugs/medication-health-fraud-notifications/health-fixer-and-health-fixer-plus-may-be-harmful-due-hidden-drug-ingredients",
+     "names_found": []
+    }
+   ],
+   "openfda": []
+  },
+  {
+   "id": "SPIKE_SILDENAFIL",
+   "status": "banned",
+   "entity": "contaminant",
+   "legal": "adulterant",
+   "category": "2",
+   "evidence": "attached FDA source names it: viagra",
+   "proposed_label": "Hidden drug",
+   "sources_checked": [
+    {
+     "url": "https://www.fda.gov/drugs/medication-health-fraud-notifications/sexual-enhancement-and-energy-product-notifications",
+     "names_found": [
+      "viagra"
+     ]
+    }
+   ],
+   "openfda": [],
+   "confirm_before_routing": "matched only 'viagra' on a notification list page"
+  },
+  {
+   "id": "SPIKE_TADALAFIL",
+   "status": "banned",
+   "entity": "contaminant",
+   "legal": "adulterant",
+   "category": "2-pending",
+   "evidence": "FDA source attached but page is a list/JS shell; needs the notice that names it",
+   "proposed_label": "Hidden drug",
+   "sources_checked": [
+    {
+     "url": "https://www.fda.gov/drugs/medication-health-fraud-notifications/sexual-enhancement-and-energy-product-notifications",
+     "names_found": []
+    }
+   ],
+   "openfda": []
+  },
+  {
+   "id": "SPIKE_TIANEPTINE_ANALOGUES",
+   "status": "banned",
+   "entity": "class",
+   "legal": "adulterant",
+   "category": "3",
+   "evidence": "class entry; identity by class, not compound",
+   "proposed_label": "(stay quarantined; needs review)",
+   "sources_checked": [
+    {
+     "url": "https://www.fda.gov/food/information-select-dietary-supplement-ingredients-and-other-substances/tianeptine-dietary-supplements",
+     "names_found": []
+    }
+   ],
+   "openfda": []
+  },
+  {
+   "id": "SYNTH_CUMYL_PICA",
+   "status": "banned",
+   "entity": "ingredient",
+   "legal": "under_review",
+   "category": "1",
+   "evidence": "no US document names it; identity ids: cui,unii; harm source: cited",
+   "proposed_label": "Unverified ingredient",
+   "sources_checked": [],
+   "openfda": []
+  },
+  {
+   "id": "WADA_CANNABIS",
+   "status": "banned",
+   "entity": "ingredient",
+   "legal": "wada_prohibited",
+   "category": "3",
+   "evidence": "WADA-only prohibition routed as status=banned: BLOCKs every consumer for a sport rule",
+   "proposed_label": "(stay quarantined; needs review)",
+   "sources_checked": [],
+   "openfda": []
+  },
+  {
+   "id": "WADA_TRAMADOL",
+   "status": "banned",
+   "entity": "ingredient",
+   "legal": "wada_prohibited",
+   "category": "3",
+   "evidence": "WADA-only prohibition routed as status=banned: BLOCKs every consumer for a sport rule",
+   "proposed_label": "(stay quarantined; needs review)",
+   "sources_checked": [],
+   "openfda": []
+  },
+  {
+   "id": "SPIKE_METHOCARBAMOL",
+   "status": "banned",
+   "entity": "contaminant",
+   "legal": "adulterant",
+   "category": "2",
+   "evidence": "attached FDA source names it: methocarbamol",
+   "proposed_label": "Hidden drug",
+   "sources_checked": [
+    {
+     "url": "https://www.fda.gov/drugs/medication-health-fraud-notifications/ultra-advanc3-and-ultra-advanc3-gold-may-be-harmful-due-hidden-drug-ingredients",
+     "names_found": [
+      "methocarbamol"
+     ]
+    }
+   ],
+   "openfda": [],
+   "confirm_before_routing": "read the named source once and record it (Q15 standard)"
+  },
+  {
+   "id": "ADD_HORDENINE",
+   "status": "banned",
+   "entity": "ingredient",
+   "legal": "adulterant",
+   "category": "3",
+   "evidence": "no US row; FDA has not determined hordenine unlawful as far as the record shows",
+   "proposed_label": "(stay quarantined; needs review)",
+   "sources_checked": [],
+   "openfda": []
+  },
+  {
+   "id": "ADD_N_PHENETHYL_DIMETHYLAMINE",
+   "status": "banned",
+   "entity": "ingredient",
+   "legal": "adulterant",
+   "category": "3",
+   "evidence": "no US row; regulatory basis not recorded",
+   "proposed_label": "(stay quarantined; needs review)",
+   "sources_checked": [],
+   "openfda": []
+  },
+  {
+   "id": "BANNED_DMSA_SUCCIMER",
+   "status": "banned",
+   "entity": "ingredient",
+   "legal": "not_lawful_as_supplement",
+   "category": "2",
+   "evidence": "attached FDA source names it: succimer",
+   "proposed_label": "Hidden drug",
+   "sources_checked": [
+    {
+     "url": "https://www.accessdata.fda.gov/drugsatfda_docs/label/2018/019998s021lbl.pdf",
+     "names_found": [
+      "succimer"
+     ]
+    }
+   ],
+   "openfda": [],
+   "confirm_before_routing": "read the named source once and record it (Q15 standard)"
+  },
+  {
+   "id": "BANNED_DNP",
+   "status": "banned",
+   "entity": "ingredient",
+   "legal": "not_lawful_as_supplement",
+   "category": "1",
+   "evidence": "no US document names it; identity ids: cui,unii; harm source: pending Q57b",
+   "proposed_label": "Not allowed in supplements",
+   "sources_checked": [],
+   "openfda": []
+  },
+  {
+   "id": "BANNED_USNIC_ACID",
+   "status": "banned",
+   "entity": "ingredient",
+   "legal": "high_risk",
+   "category": "1",
+   "evidence": "no US document names it; identity ids: cui,unii; harm source: pending Q57b",
+   "proposed_label": "High-risk ingredient",
+   "sources_checked": [],
+   "openfda": []
+  },
+  {
+   "id": "BANNED_CLENBUTEROL",
+   "status": "banned",
+   "entity": "ingredient",
+   "legal": "adulterant",
+   "category": "2-pending",
+   "evidence": "action exists; attach primary source: FDA tainted-product notices / 21 CFR 530.41",
+   "proposed_label": "Hidden drug",
+   "sources_checked": [],
+   "openfda": []
+  },
+  {
+   "id": "BANNED_ACONITE",
+   "status": "banned",
+   "entity": "ingredient",
+   "legal": "high_risk",
+   "category": "1",
+   "evidence": "no US document names it; identity ids: cui,unii; harm source: pending Q57b",
+   "proposed_label": "High-risk ingredient",
+   "sources_checked": [],
+   "openfda": []
+  },
+  {
+   "id": "ADD_THYROGEN",
+   "status": "banned",
+   "entity": "ingredient",
+   "legal": "not_lawful_as_supplement",
+   "category": "2-pending",
+   "evidence": "action exists; attach primary source: Drugs@FDA NDA 020898",
+   "proposed_label": "Hidden drug",
+   "sources_checked": [
+    {
+     "url": "https://www.accessdata.fda.gov/drugsatfda_docs/nda/98/20898_Thyrogen.cfm",
+     "names_found": []
+    }
+   ],
+   "openfda": []
+  },
+  {
+   "id": "ADD_HEXADRONE",
+   "status": "banned",
+   "entity": "ingredient",
+   "legal": "controlled_substance",
+   "category": "2-pending",
+   "evidence": "action exists; attach primary source: Designer Anabolic Steroid Control Act 2014 (21 U.S.C. 802(41))",
+   "proposed_label": "Controlled substance",
+   "sources_checked": [],
+   "openfda": []
+  },
+  {
+   "id": "BANNED_DETERENOL_ISOPROPYLNORSYNEPHRINE",
+   "status": "banned",
+   "entity": "ingredient",
+   "legal": "not_lawful_as_supplement",
+   "category": "3",
+   "evidence": "only a PubMed source; FDA action not cited",
+   "proposed_label": "(stay quarantined; needs review)",
+   "sources_checked": [
+    {
+     "url": "https://pubmed.ncbi.nlm.nih.gov/32927348/",
+     "names_found": []
+    }
+   ],
+   "openfda": []
+  },
+  {
+   "id": "BANNED_CALAMUS_ACORUS_CALAMUS",
+   "status": "banned",
+   "entity": "ingredient",
+   "legal": "banned_federal",
+   "category": "2-pending",
+   "evidence": "action exists; attach primary source: 21 CFR 189.110",
+   "proposed_label": "Banned ingredient",
+   "sources_checked": [],
+   "openfda": []
+  },
+  {
+   "id": "RECALLED_ROSABELLA_MORINGA",
+   "status": "recalled",
+   "entity": "product",
+   "legal": "contaminant_risk",
+   "category": "2",
+   "evidence": "openFDA enforcement record matches; recall Completed/Terminated (lot-specific)",
+   "proposed_label": "Recalled product",
+   "sources_checked": [
+    {
+     "url": "https://www.accessdata.fda.gov/scripts/ires/?action=Redirect&recall_number=H-0546-2026",
+     "names_found": []
+    }
+   ],
+   "openfda": [
+    {
+     "ep": "food",
+     "recall_number": "H-0546-2026",
+     "firm": "Ambrosia Brands LLC",
+     "product": "Rosabella brand MORINGA; DIETARY SUPPLEMENT CAPSULES; 60 capsules per bottle; Distributed ",
+     "reason": "Product may be contaminated with Salmonella",
+     "class": "Class I",
+     "status": "Terminated",
+     "start": "20260213"
+    }
+   ],
+   "confirm_before_routing": "read the named source once and record it (Q15 standard)"
+  },
+  {
+   "id": "SCHED_PSILOCIN",
+   "status": "banned",
+   "entity": "ingredient",
+   "legal": "controlled_substance",
+   "category": "2-pending",
+   "evidence": "action exists; attach primary source: 21 CFR 1308.11(d) Schedule I",
+   "proposed_label": "Controlled substance",
+   "sources_checked": [],
+   "openfda": []
+  },
+  {
+   "id": "BANNED_MUSCIMOL",
+   "status": "banned",
+   "entity": "ingredient",
+   "legal": "high_risk",
+   "category": "1",
+   "evidence": "no US document names it; identity ids: cas,cui,pubchem_cid,unii; harm source: pending Q57b",
+   "proposed_label": "High-risk ingredient",
+   "sources_checked": [],
+   "openfda": []
+  },
+  {
+   "id": "BANNED_IBOTENIC_ACID",
+   "status": "banned",
+   "entity": "ingredient",
+   "legal": "high_risk",
+   "category": "1",
+   "evidence": "no US document names it; identity ids: cas,cui,pubchem_cid,unii; harm source: pending Q57b",
+   "proposed_label": "High-risk ingredient",
+   "sources_checked": [],
+   "openfda": []
+  },
+  {
+   "id": "RECALLED_BLUE_BULL_EXTREME",
+   "status": "recalled",
+   "entity": "product",
+   "legal": "adulterant",
+   "category": "2",
+   "evidence": "openFDA enforcement record matches",
+   "proposed_label": "Hidden drug",
+   "sources_checked": [
+    {
+     "url": "https://www.accessdata.fda.gov/scripts/ires/?action=Redirect&recall_number=H-0654-2026",
+     "names_found": []
+    }
+   ],
+   "openfda": [
+    {
+     "ep": "food",
+     "recall_number": "H-0654-2026",
+     "firm": "Pure Vitamins and Natural Supplements, LLC",
+     "product": "Blue Bull Extreme Male Enhancement Supplement, total of 15 pouches per box, Net Wt 15 G ea",
+     "reason": "FDA analysis revealed the presence of undeclared sildenafil",
+     "class": "Class I",
+     "status": "Ongoing",
+     "start": "20260313"
+    }
+   ],
+   "confirm_before_routing": "read the named source once and record it (Q15 standard)"
+  },
+  {
+   "id": "RECALLED_RED_BULL_EXTREME",
+   "status": "recalled",
+   "entity": "product",
+   "legal": "adulterant",
+   "category": "2",
+   "evidence": "openFDA enforcement record matches",
+   "proposed_label": "Hidden drug",
+   "sources_checked": [
+    {
+     "url": "https://www.accessdata.fda.gov/scripts/ires/?action=Redirect&recall_number=H-0655-2026",
+     "names_found": []
+    }
+   ],
+   "openfda": [
+    {
+     "ep": "food",
+     "recall_number": "H-0655-2026",
+     "firm": "Pure Vitamins and Natural Supplements, LLC",
+     "product": "Red Bull Extreme Male Enhancement Supplement, total of 15 pouches per box, Net Wt 15 G eac",
+     "reason": "FDA analysis revealed the presence of undeclared sildenafil",
+     "class": "Class I",
+     "status": "Ongoing",
+     "start": "20260313"
+    }
+   ],
+   "confirm_before_routing": "read the named source once and record it (Q15 standard)"
+  },
+  {
+   "id": "RECALLED_BONER_BEARS_HONEY",
+   "status": "recalled",
+   "entity": "product",
+   "legal": "adulterant",
+   "category": "2",
+   "evidence": "openFDA enforcement record matches",
+   "proposed_label": "Hidden drug",
+   "sources_checked": [
+    {
+     "url": "https://www.accessdata.fda.gov/scripts/ires/?action=Redirect&recall_number=H-0653-2026",
+     "names_found": []
+    }
+   ],
+   "openfda": [
+    {
+     "ep": "food",
+     "recall_number": "H-0653-2026",
+     "firm": "Pure Vitamins and Natural Supplements, LLC",
+     "product": "Boner Bears Honey Male Enhancement 100% Wildflower Honey, total of 15 pouches per box, Net",
+     "reason": "FDA analysis revealed the presence of undeclared sildenafil and Tadalafil",
+     "class": "Class I",
+     "status": "Ongoing",
+     "start": "20260313"
+    }
+   ],
+   "confirm_before_routing": "read the named source once and record it (Q15 standard)"
+  },
+  {
+   "id": "RECALLED_AONIC_COMPLETE_HERS",
+   "status": "recalled",
+   "entity": "product",
+   "legal": "contaminant_risk",
+   "category": "2",
+   "evidence": "openFDA enforcement record matches; recall Completed/Terminated (lot-specific)",
+   "proposed_label": "Recalled product",
+   "sources_checked": [
+    {
+     "url": "https://www.accessdata.fda.gov/scripts/ires/?action=Redirect&recall_number=H-0520-2026",
+     "names_found": []
+    }
+   ],
+   "openfda": [
+    {
+     "ep": "food",
+     "recall_number": "H-0520-2026",
+     "firm": "TKS Co-pack Manufacturing, LLC",
+     "product": "Aonic Complete Hers. Dosage: Single serving liquid dietary supplement drink shot, 34 ml (1",
+     "reason": "Possible coliforms, E.coli, and/or Pseudomonas aeruginosa contamination.",
+     "class": "Class II",
+     "status": "Completed",
+     "start": "20260115"
+    }
+   ],
+   "confirm_before_routing": "read the named source once and record it (Q15 standard)"
+  },
+  {
+   "id": "RECALLED_AONIC_COMPLETE_HIS",
+   "status": "recalled",
+   "entity": "product",
+   "legal": "contaminant_risk",
+   "category": "2",
+   "evidence": "openFDA enforcement record matches; recall Completed/Terminated (lot-specific)",
+   "proposed_label": "Recalled product",
+   "sources_checked": [
+    {
+     "url": "https://www.accessdata.fda.gov/scripts/ires/?action=Redirect&recall_number=H-0521-2026",
+     "names_found": []
+    }
+   ],
+   "openfda": [
+    {
+     "ep": "food",
+     "recall_number": "H-0521-2026",
+     "firm": "TKS Co-pack Manufacturing, LLC",
+     "product": "Aonic Complete His. Dosage: Single serving liquid dietary supplement drink shot, 34 ml (1.",
+     "reason": "Possible coliforms, E.coli, and/or Pseudomonas aeruginosa contamination.",
+     "class": "Class II",
+     "status": "Completed",
+     "start": "20260115"
+    }
+   ],
+   "confirm_before_routing": "read the named source once and record it (Q15 standard)"
+  },
+  {
+   "id": "RECALLED_SILUETAYA_TEJOCOTE",
+   "status": "recalled",
+   "entity": "product",
+   "legal": "adulterant",
+   "category": "2",
+   "evidence": "openFDA enforcement record matches",
+   "proposed_label": "Recalled product",
+   "sources_checked": [
+    {
+     "url": "https://www.accessdata.fda.gov/scripts/ires/?action=Redirect&recall_number=H-0647-2026",
+     "names_found": []
+    },
+    {
+     "url": "https://www.fda.gov/food/alerts-advisories-safety-information/fda-issues-advisory-tejocote-root-supplements",
+     "names_found": []
+    }
+   ],
+   "openfda": [
+    {
+     "ep": "food",
+     "recall_number": "H-0647-2026",
+     "firm": "Siluetaya, LLC",
+     "product": "SiluetaYa Mexican Tejocote Roots Supplement Pieces; 7g/bottle; Dietary Supplement,  UPC#: ",
+     "reason": "Product contains yellow oleander",
+     "class": "Class I",
+     "status": "Ongoing",
+     "start": "20251029"
+    }
+   ],
+   "confirm_before_routing": "read the named source once and record it (Q15 standard)"
+  },
+  {
+   "id": "RECALLED_IMU_TEK_COLOSTRUM_5_CAPSULES",
+   "status": "recalled",
+   "entity": "product",
+   "legal": "contaminant_risk",
+   "category": "2",
+   "evidence": "openFDA enforcement record matches; recall Completed/Terminated (lot-specific)",
+   "proposed_label": "Recalled product",
+   "sources_checked": [
+    {
+     "url": "https://www.accessdata.fda.gov/scripts/ires/?action=Redirect&recall_number=H-0660-2026",
+     "names_found": []
+    }
+   ],
+   "openfda": [
+    {
+     "ep": "food",
+     "recall_number": "H-0660-2026",
+     "firm": "Imu-Tek Animal Health, Incorporated",
+     "product": "Imu-Tek Colostrum-5 120 Capsules; 30% IgG, 2 capsules 2x/day, orally with 8 ounces of wate",
+     "reason": "Product is potentially under-processed.",
+     "class": "Class II",
+     "status": "Completed",
+     "start": "20260224"
+    }
+   ],
+   "confirm_before_routing": "read the named source once and record it (Q15 standard)"
+  },
+  {
+   "id": "RECALLED_IMU_TEK_COLOSTRUM_5_POWDER",
+   "status": "recalled",
+   "entity": "product",
+   "legal": "contaminant_risk",
+   "category": "2",
+   "evidence": "openFDA enforcement record matches; recall Completed/Terminated (lot-specific)",
+   "proposed_label": "Recalled product",
+   "sources_checked": [
+    {
+     "url": "https://www.accessdata.fda.gov/scripts/ires/?action=Redirect&recall_number=H-0661-2026",
+     "names_found": []
+    }
+   ],
+   "openfda": [
+    {
+     "ep": "food",
+     "recall_number": "H-0661-2026",
+     "firm": "Imu-Tek Animal Health, Incorporated",
+     "product": "Imu-Tek Colostrum-5 Powder; 30% IgG,1,000 mg 2x/day, orally with 8 ounces of water, suppor",
+     "reason": "Product is potentially under-processed.",
+     "class": "Class II",
+     "status": "Completed",
+     "start": "20260224"
+    }
+   ],
+   "confirm_before_routing": "read the named source once and record it (Q15 standard)"
+  },
+  {
+   "id": "RECALLED_DIVIDED_SUNSET_COLLAGEN_PEPTIDES",
+   "status": "recalled",
+   "entity": "product",
+   "legal": "contaminant_risk",
+   "category": "2",
+   "evidence": "openFDA enforcement record matches; recall Completed/Terminated (lot-specific)",
+   "proposed_label": "Recalled product",
+   "sources_checked": [
+    {
+     "url": "https://www.accessdata.fda.gov/scripts/ires/?action=Redirect&recall_number=H-0637-2026",
+     "names_found": []
+    }
+   ],
+   "openfda": [
+    {
+     "ep": "food",
+     "recall_number": "H-0637-2026",
+     "firm": "TG FOODS INC",
+     "product": "Divided Sunset Multi Collagen Peptides, 8 Ounce, Stand-up Pouch, UPC Code: 8 50005 60689 5",
+     "reason": "The product states wild caught marine collagen and eggshell membrane collagen in ingredient statement but does",
+     "class": "Class II",
+     "status": "Terminated",
+     "start": "20260227"
+    }
+   ],
+   "confirm_before_routing": "read the named source once and record it (Q15 standard)"
+  },
+  {
+   "id": "ADULTERANT_TESTOSTERONE_PROPIONATE",
+   "status": "banned",
+   "entity": "ingredient",
+   "legal": "controlled_substance",
+   "category": "2",
+   "evidence": "attached FDA source names it: testosterone propionate",
+   "proposed_label": "Hidden drug",
+   "sources_checked": [
+    {
+     "url": "http://www.fda.gov/drugs/medication-health-fraud-notifications/erectus-plus-may-be-harmful-due-hidden-drug-ingredients",
+     "names_found": [
+      "testosterone propionate"
+     ]
+    }
+   ],
+   "openfda": [],
+   "confirm_before_routing": "read the named source once and record it (Q15 standard)"
+  },
+  {
+   "id": "RECALLED_X10_NATURAL_ENHANCEMENT",
+   "status": "recalled",
+   "entity": "product",
+   "legal": "adulterant",
+   "category": "4",
+   "evidence": "no recall record found (openFDA from 2012; name search)",
+   "proposed_label": "(stay quarantined until recall verified)",
+   "sources_checked": [
+    {
+     "url": "http://www.fda.gov/drugs/medication-health-fraud-notifications/x10-natural-enhancement-supplement-may-be-harmful-due-hidden-drug-ingredients",
+     "names_found": [
+      "x10 natural enhancement",
+      "x10 natural enhancement supplement"
+     ]
+    },
+    {
+     "url": "https://www.fda.gov/safety/recalls-market-withdrawals-safety-alerts/ap-creations-llc-issues-nationwide-recall-x10-natural-enhancement-supplement-due-undeclared",
+     "names_found": [
+      "x10 natural enhancement",
+      "x10 natural enhancement supplement"
+     ]
+    }
+   ],
+   "openfda": [
+    "drug:D-0074-2021 Class II Terminated 20201027 | Zydus Pharmaceuticals (USA) In | Failed Dissolution Specification",
+    "drug:D-0075-2021 Class II Terminated 20201027 | Zydus Pharmaceuticals (USA) In | Failed Dissolution Specification",
+    "drug:D-0143-2023 Class II Ongoing 20221013 | Akorn, Inc. | CGMP Deviations:",
+    "drug:D-0495-2021 Class II Terminated 20210315 | Cardinal Health Inc. | CGMP Deviations: Intermittent exposure to temperature excursion during",
+    "drug:D-1037-2022 Class II Terminated 20220413 | Mckesson Medical-Surgical Inc. | cGMP deviations: Temperature abuse",
+    "food:F-0301-2020 Class I Terminated 20191103 | Mann Packing Company, Inc. | CFIA notified FDA of positive result for Listeria monocytogenes with v"
+   ]
+  },
+  {
+   "id": "RECALLED_BIG_DICK_ENERGY",
+   "status": "banned",
+   "entity": "product",
+   "legal": "adulterant",
+   "category": "2",
+   "evidence": "attached FDA source names it: big dick energy, big dick energy!",
+   "proposed_label": "Hidden drug",
+   "sources_checked": [
+    {
+     "url": "http://www.fda.gov/drugs/medication-health-fraud-notifications/big-dick-energy-may-be-harmful-due-hidden-drug-ingredient",
+     "names_found": [
+      "big dick energy",
+      "big dick energy!"
+     ]
+    }
+   ],
+   "openfda": [],
+   "confirm_before_routing": "read the named source once and record it (Q15 standard)"
+  },
+  {
+   "id": "RECALLED_ERECTUS_PLUS",
+   "status": "banned",
+   "entity": "product",
+   "legal": "adulterant",
+   "category": "2",
+   "evidence": "attached FDA source names it: erectus plus",
+   "proposed_label": "Hidden drug",
+   "sources_checked": [
+    {
+     "url": "http://www.fda.gov/drugs/medication-health-fraud-notifications/erectus-plus-may-be-harmful-due-hidden-drug-ingredients",
+     "names_found": [
+      "erectus plus"
+     ]
+    }
+   ],
+   "openfda": [],
+   "confirm_before_routing": "read the named source once and record it (Q15 standard)"
+  },
+  {
+   "id": "RECALLED_SENSUAL_MIRACLE_HONEY",
+   "status": "banned",
+   "entity": "product",
+   "legal": "adulterant",
+   "category": "2",
+   "evidence": "attached FDA source names it: sensual miracle honey, sensualhoneyusa",
+   "proposed_label": "Hidden drug",
+   "sources_checked": [
+    {
+     "url": "http://www.fda.gov/drugs/medication-health-fraud-notifications/sensual-miracle-honey-may-be-harmful-due-hidden-drug-ingredients",
+     "names_found": [
+      "sensual miracle honey",
+      "sensualhoneyusa"
+     ]
+    }
+   ],
+   "openfda": [],
+   "confirm_before_routing": "read the named source once and record it (Q15 standard)"
+  },
+  {
+   "id": "RECALLED_BIQ_FEL",
+   "status": "recalled",
+   "entity": "product",
+   "legal": "adulterant",
+   "category": "4",
+   "evidence": "no recall record found (openFDA from 2012; name search)",
+   "proposed_label": "(stay quarantined until recall verified)",
+   "sources_checked": [
+    {
+     "url": "https://www.fda.gov/drugs/medication-health-fraud-notifications/biq-fel-may-be-harmful-due-hidden-drug-ingredients",
+     "names_found": [
+      "biq-fel",
+      "biqfel"
+     ]
+    },
+    {
+     "url": "https://www.fda.gov/safety/recalls-market-withdrawals-safety-alerts/ap-creations-llc-issues-nationwide-recall-biq-fel-due-undeclared-sildenafil-and-tadalafil",
+     "names_found": [
+      "biq-fel"
+     ]
+    }
+   ],
+   "openfda": []
+  },
+  {
+   "id": "RECALLED_ZUBB",
+   "status": "banned",
+   "entity": "product",
+   "legal": "adulterant",
+   "category": "2",
+   "evidence": "attached FDA source names it: zubb, zubb dietary supplement",
+   "proposed_label": "Hidden drug",
+   "sources_checked": [
+    {
+     "url": "https://www.fda.gov/drugs/medication-health-fraud-notifications/zubb-dietary-supplement-may-be-harmful-due-hidden-ingredient",
+     "names_found": [
+      "zubb",
+      "zubb dietary supplement"
+     ]
+    }
+   ],
+   "openfda": [],
+   "confirm_before_routing": "read the named source once and record it (Q15 standard)"
+  },
+  {
+   "id": "SPIKE_AMINOTADALAFIL",
+   "status": "banned",
+   "entity": "contaminant",
+   "legal": "adulterant",
+   "category": "2",
+   "evidence": "attached FDA source names it: amino tadalafil",
+   "proposed_label": "Hidden drug",
+   "sources_checked": [
+    {
+     "url": "https://www.fda.gov/drugs/medication-health-fraud-notifications/deep-may-be-harmful-due-hidden-ingredient",
+     "names_found": [
+      "amino tadalafil"
+     ]
+    }
+   ],
+   "openfda": [],
+   "confirm_before_routing": "read the named source once and record it (Q15 standard)"
+  },
+  {
+   "id": "RECALLED_LUZE_FIT_INTENSITY",
+   "status": "banned",
+   "entity": "product",
+   "legal": "adulterant",
+   "category": "2",
+   "evidence": "attached FDA source names it: luze, luze fit, luze fit intensity",
+   "proposed_label": "Hidden drug",
+   "sources_checked": [
+    {
+     "url": "https://www.fda.gov/drugs/medication-health-fraud-notifications/luze-fit-intensity-may-be-harmful-due-hidden-ingredient",
+     "names_found": [
+      "luze",
+      "luze fit",
+      "luze fit intensity"
+     ]
+    }
+   ],
+   "openfda": [],
+   "confirm_before_routing": "read the named source once and record it (Q15 standard)"
+  },
+  {
+   "id": "RECALLED_BEAUTY_911",
+   "status": "banned",
+   "entity": "product",
+   "legal": "adulterant",
+   "category": "2",
+   "evidence": "attached FDA source names it: beauty 911",
+   "proposed_label": "Hidden drug",
+   "sources_checked": [
+    {
+     "url": "https://www.fda.gov/drugs/medication-health-fraud-notifications/beauty-911-may-be-harmful-due-hidden-ingredient",
+     "names_found": [
+      "beauty 911"
+     ]
+    }
+   ],
+   "openfda": [],
+   "confirm_before_routing": "read the named source once and record it (Q15 standard)"
+  },
+  {
+   "id": "RECALLED_DEEP",
+   "status": "banned",
+   "entity": "product",
+   "legal": "adulterant",
+   "category": "2",
+   "evidence": "attached FDA source names it: deep",
+   "proposed_label": "Hidden drug",
+   "sources_checked": [
+    {
+     "url": "https://www.fda.gov/drugs/medication-health-fraud-notifications/deep-may-be-harmful-due-hidden-ingredient",
+     "names_found": [
+      "deep"
+     ]
+    }
+   ],
+   "openfda": [],
+   "confirm_before_routing": "matched the common word 'deep'"
+  },
+  {
+   "id": "RECALLED_MAXMAN_COFFEE",
+   "status": "banned",
+   "entity": "product",
+   "legal": "adulterant",
+   "category": "2",
+   "evidence": "attached FDA source names it: maxman, maxman coffee",
+   "proposed_label": "Hidden drug",
+   "sources_checked": [
+    {
+     "url": "https://www.fda.gov/drugs/medication-health-fraud-notifications/maxman-coffee-may-be-harmful-due-hidden-drug-ingredients",
+     "names_found": [
+      "maxman",
+      "maxman coffee"
+     ]
+    }
+   ],
+   "openfda": [],
+   "confirm_before_routing": "read the named source once and record it (Q15 standard)"
+  },
+  {
+   "id": "RECALLED_MIRACLE_POWER_OF_KING_KONG_HONEY",
+   "status": "banned",
+   "entity": "product",
+   "legal": "adulterant",
+   "category": "2",
+   "evidence": "attached FDA source names it: king kong honey, miracle power of king kong honey",
+   "proposed_label": "Hidden drug",
+   "sources_checked": [
+    {
+     "url": "https://www.fda.gov/drugs/medication-health-fraud-notifications/miracle-power-king-kong-honey-may-be-harmful-due-hidden-ingredient",
+     "names_found": [
+      "king kong honey",
+      "miracle power of king kong honey"
+     ]
+    }
+   ],
+   "openfda": [],
+   "confirm_before_routing": "read the named source once and record it (Q15 standard)"
+  },
+  {
+   "id": "RECALLED_CANDY_POWER_FOR_MAN",
+   "status": "banned",
+   "entity": "product",
+   "legal": "adulterant",
+   "category": "2",
+   "evidence": "attached FDA source names it: candy power for man",
+   "proposed_label": "Hidden drug",
+   "sources_checked": [
+    {
+     "url": "https://www.fda.gov/drugs/medication-health-fraud-notifications/candy-power-man-may-be-harmful-due-hidden-ingredient",
+     "names_found": [
+      "candy power for man"
+     ]
+    }
+   ],
+   "openfda": [],
+   "confirm_before_routing": "read the named source once and record it (Q15 standard)"
+  }
+ ]
+}
