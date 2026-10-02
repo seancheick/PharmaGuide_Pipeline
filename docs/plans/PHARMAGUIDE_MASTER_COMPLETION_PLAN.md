@@ -22,7 +22,25 @@ profile manifest, tracker, scoring owner or release shortcut.
 These documentation changes do not validate automated scheduling or CI, complete a scoring
 phase, or replace the remaining corpus/release gates.
 
-## Current checkpoint
+## October 2 — CI and CFU audit checkpoint
+
+- [x] Preserve Claude's four-shard CI and real Flutter-repository checks, with one canonical test-profile manifest.
+- [x] Correct machine-wide scheduling: focused fast file/node checks bypass the queue; broad fast/local runs share bounded one-worker slots; full/release/slow remain exclusive. Child workloads retain lock lifetime, including worker slots.
+- [x] Reject unrelated skips even inside declared files; the local rung rejects absent corpus/build/raw inputs. Real local gate: **527 passed / 24 declared opt-in skips**.
+- [x] Execute Linux print geometry/render tests with installed fonts instead of excusing them through a platform skip.
+- [x] Independently reproduce and correct CFU prefix, liquid, daily exposure, unknown-unit and warranty ownership defects at the existing enrichment/serving owners. Preserve physical equivalents printed in the selected panel notes; product-name prose is not a serving basis. CFU combined focused gate: **151 passed / one declared OCR opt-in skip**; final harness/memory gate: **24 passed**; fresh review: **248 converter cases and 20 full-enrichment cases passed**.
+- [x] Freeze the final 455-label replay: nine explained changes, 446 unchanged; six totals decrease 0.8–1.0, three CFU metadata changes only. No tier, route, status or Safety changes.
+- [x] Integrate and independently validate the normalizer instance-cache memory fix; 16 frozen production controls remain byte-equivalent.
+- [x] Pass exact-source four-shard CI at `31f41e56` (run 37033681364).
+- [ ] Pass final scheduling CI and integrate/push main. Superseded Claude worktrees/branches and the rejected audit branch are removed; recovery tags and ignored handoff copies are preserved.
+
+Owner: `SupplementEnricherV3::_collect_probiotic_data`, `_statement_cfu_per_serving`, `_extract_guarantee_type`, existing serving-unit/selection helpers; `scripts/test.sh`, `test_profiles.py`, `test_lock.py`, `ci_skip_guard.py` own validation. Evidence: fail-first probes, production-boundary regressions, frozen raw replay and independent review. Will NOT create: another count/parser/serving owner, scorer, public field/status, scoring policy or test manifest. Earlier rejected measurements are not acceptance evidence.
+
+Next scoring batch remains **D26**: validate equivalent existing Dose ownership for lactoferrin, Carnipure/L-carnitine, ALCAR, zinc-lozenge intervention, L-arginine, D-mannose, D-aspartic acid, Tesnor and Sytrinol. Do not remove an Evidence amount gate until Dose owns that judgment. Prepare D24 missing-benchmark/denominator/publication and omega applicability/magnitude decisions for Sean; keep broader Q39 roles/serving cases and clinical coverage open. Calibration follows factual ownership closure; the final user-run Clean corpus, exact manifest approval and runtime publication remain later gates.
+
+The unrelated DEA-date review is **Q56**, not Q54: Q54 already identifies the integrated CFU consolidation. No clinical record was changed in this infrastructure/CFU batch.
+
+## Earlier validated scoring checkpoint
 
 Latest validated pipeline source is `b7eeb178`: the October 2 post-pipeline
 owner corrections. Final fast: **18,101 passed, 168 skipped, zero failures or
