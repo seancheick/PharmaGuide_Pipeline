@@ -1,6 +1,6 @@
 # Evidence → Dose responsibility transfer
 
-Status: all-route owner inventory complete; approved probiotic transfer integrated and source pushed to main (Q47). Generic/omega transfer and wider Dose-policy decisions remain open. Phase2 Ravage closure is Q48; final prominence/serving corrections remain pending. Source through `3ee91eae` is pushed with Sean's approval; no catalog release.
+Status: all-route inventory complete; approved probiotic transfer Q47 and Q48/Q49/Q51/Q52/Q53 source corrections integrated on main through `0a24804f`. D26 preparation/source binding correction is measured at candidate `fe3d39a0`, with final fast and fresh review passed; source integration receipt below. Generic/omega transfer and D24 Dose policy remain open. No catalog release. Historical inventory and experiment figures below apply only to their named baseline, not the current candidate.
 
 Inventory baseline: pipeline `880b17a7`; focused owner/role suite 103 passed, 7 skipped,
 1 strict xfail. The frozen 1,261-label audit sample is
@@ -165,3 +165,68 @@ Transfer invariant: four amount comparisons in `generic_evidence` stay unchanged
 Boundary applied: a blend total is never a member's dose. Floors and recoveries that read a multi-member blend heading's total (or a total lent to a member) as an undisclosed member's amount are removed; a heading that the input contract resolves to its own identity, or whose own text names a verified branded record (Relora, UC-II), keeps its floor.
 
 Branch `claude/generic-prominence-ownership`. Frozen raw replays of `9d65403f` against `e8687b39` first showed 67 movers. The full fast checkpoint then found that the approved probiotic model's inputs had changed (receipt defect 19); final source `68cae99a` keeps them unchanged: 66 distinct products move, all down, Evidence only; 0 of 1,259 controls move. Final full fast: 17,954 passed, 168 skipped, 0 failed. Receipt with every defect, regression, hash and mover: `scripts/audits/prominence_ownership_20261001/README.md`. Claude validation complete; Codex audit/integration pending; no catalog release.
+
+
+## D26 preparation/source binding — October 1 continuation
+
+Owner: `scripts/scoring_v4/modules/generic_evidence.py::_recover_contract_evidence_matches`,
+`_stamp_recovery_source_ref` and `_converted_product_dose` — evidence: production
+`resolved_clinical_matches` consumers, source-ref converter, failing production-artifact
+regressions and raw `269490` trace. Private `_recovery_source_ref` factors the existing
+stamp's whitespace validation; it creates no persisted field or policy.
+Will NOT create: another scorer, preparation parser, prominence owner, Dose engine,
+clinical registry, public field/status or numerical configuration.
+
+- [x] Reproduce: 2 g peptides beside 3 g non-peptide collagen borrowed the sibling's
+  amount for the existing 2,500 mg study minimum. Initial regressions: four failures.
+- [x] Bind the recovered study to its actual peptide preparation through existing
+  match provenance fields. Keep the four D26 safeguards and all magnitudes unchanged.
+- [x] Contain ambiguous unreferenced/shared-name recovery. Blank references use the
+  same validity rule as stamping; equal-dose ties prefer valid lineage. Review
+  regressions reproduced two failures for missing refs and two for blank refs.
+- [x] Preserve duplicate declarations of the same exactly named strict peptide
+  preparation. Raw `269490` declares protein from that preparation (6 g) and the
+  preparation itself (6.6 g); both retain reviewed Evidence linkage. Dose conversion
+  takes the largest applicable amount, never their sum. Different preparations and
+  lent blend mass remain excluded. The intermediate replay's one readiness regression
+  was reproduced, fixed, and eliminated before acceptance.
+- [x] Measure clean committed source: baseline `0a24804f`, candidate `fe3d39a0`;
+  275 frozen collagen-containing labels and 10 distinct controls through Clean →
+  Enrich → Score. **All 285 captures identical**, including scores, pillars, routes,
+  statuses, readiness and confidence. This is bounded source validation, not a corpus
+  or exported-verdict audit. Additional ignored FDA inputs in the primary baseline
+  remain preserved; final release provenance must account for their input inventory.
+- [x] Related owner sweep: **794 passed,14 skipped**; skips require enriched/catalog
+  artifacts absent from this isolated lane. Ten focused defect/edge regressions pass.
+- [x] Final fast checkpoint: **18,018 passed,168 skipped,zero failures/xfails** (exit0,749.09s). Fresh reviewer verified all285 frozen hashes and byte-identical captures and accepted bounded integration. Source integration/push recorded below.
+
+Edited production-boundary probes (not real product score claims): a referenced
+2 g peptide + 3 g other-collagen example changes total81.3→66.0, internal Evidence
+14→0.25, with subclinical flag and no floor. A 3 g peptide control stays81.3;
+ambiguous missing lineage loses unsupported recovery77.3→61.7. The residual0.25
+is the unchanged depth component, not study efficacy credit. No thresholds or other
+pillars are tuned. Probe and raw receipts: `/Users/seancheick/pg_quality/d26_peptide_20261001/`.
+
+### Remaining critical path (not completed by this correction)
+
+1. Research the nine uncovered benchmark groups listed in the original inventory;
+   verify preparation-specific intervention and source amounts before reuse. Extend
+   existing Dose owners/results, not a post-route override. Missing knowledge must
+   remain unassessable rather than zero dose.
+2. Produce the D24 one/two/three/four-purpose-ingredient decision packet, including
+   wrong-preparation benchmarks, missing amounts and incidental ingredients. Decide
+   denominators, publication behavior and exact numerical treatment with Sean.
+3. Produce the purpose-based omega Evidence packet, preserving applicable literature
+   and explicit EPA/DHA Dose ownership. Existing amount-triggered marks cannot simply
+   become full Evidence credit. Approved purpose/magnitude mapping is still absent.
+4. Transfer generic/resolver amount judgments only alongside equivalent existing
+   Dose assessments; retire the four stand-ins only with coverage or an explicitly
+   approved replacement. Relative mass is not a clinical benchmark.
+5. Then calibrate with the required per-judgment numerical-owner table and inspect
+   Q3's35 quality-threshold crossings plus every subsequent safer verdict change.
+6. After the last integrated change, run one fresh Clean corpus without publishing,
+   build the candidate/manifest, and run sequential release/full gates. Sean approves
+   that exact candidate before runtime publication.
+
+Q53 source attribution is fixed; its bounded nine-label research queue is still
+clinical coverage work, not a reason to revive the invalid species credits.

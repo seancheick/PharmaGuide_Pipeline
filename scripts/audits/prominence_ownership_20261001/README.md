@@ -5,6 +5,12 @@ Current source checkpoint: pipeline main/origin `b575104c` (production `6a15be14
 
 Historical lane baseline: Codex `9f7837e8` extended Claude `b43a048f`; later Claude `68cae99a`/feature `002d2683` required reconciliation. That reconciliation and source push are complete in the dated receipts below. Older baseline statements and counts apply only to their named candidate.
 
+Current D26 continuation: the recovered peptide study now reads its actual
+preparation/source row (`fe3d39a0`), while all four legacy exposure safeguards stay.
+See the [current transfer receipt](../evidence_dose_transfer_20260930/README.md#d26-preparationsource-binding--october-1-continuation).
+Historical mentions below of the peptide minimum borrowing the heaviest collagen
+row describe the pre-correction candidate, not current source behavior.
+
 ## Owner Check
 
 - Owner: `scripts/scoring_input_contract.py::classify_ingredient_roles` (roles) read through

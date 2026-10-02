@@ -195,3 +195,38 @@ Durable replay, logs, simulator capture and cleanup archives: `/Users/seancheick
 Final October1 source batch: Q53 and Q52 are implemented, measured, independently reviewed and integrated on main; source checkpoint `b575104c` is pushed and verified equal origin with a clean checkout. Full frozen corpus, final exported-verdict review, generated interaction artifact, release/full gates, exact candidate approval and runtime publication remain open. The current source gate does not replace those stages.
 
 - [x] Verify pipeline/app source mains equal origin and clean; archive/remove the finished clinical/reference worktrees and delete their contained branches. Actual worktree inventories now contain primary mains only. Preserve private handoffs, measured inputs/reports and rejected experiments; retain unreviewed dependency proposals and the user-owned website CSV.
+
+
+## October 1 D26 continuation — current working checkpoint
+
+- [x] Reconfirm Q53/Q52 source corrections are already integrated on main `0a24804f`;
+  preserve reference-only species records and exact-strain boundaries.
+- [x] Fix D26's recovered collagen study binding at the existing Evidence recovery/
+  source-reference owners (`040db5c4`, `0c4fb894`, `fe3d39a0`). Peptide exposure cannot
+  borrow another preparation's amount; ambiguous or blank provenance fails closed.
+- [x] Preserve both declarations of one exactly named peptide preparation (raw269490),
+  with maximum applicable amount rather than summed duplicate quantities.
+- [x] Measure285 frozen raw labels with zero capture deltas; owner sweep794passed/
+  14artifact skips. All existing magnitudes and four retained D26 safeguards unchanged.
+- [x] Fullfast18,018passed/168skipped/zero failures or xfails,749.09s; fresh reviewer accepted source and verified byte-identical285-label captures. Integrate/push receipt below.
+- [ ] Complete broader D26: verified Dose coverage + D24 decision packet + approved
+  omega purpose/magnitude mapping → equivalent Dose assessments → remove Evidence
+  amount gates/stand-ins. **This source-binding fix does not close D26.**
+- [ ] Complete Q53's nine-label clinical coverage queue; priority12091 SD-5845 trace.
+- [ ] Calibrate only after ownership/policy stabilizes; finish numerical ownership
+  table, individual35 Q3 crossing reviews and all unexplained-delta classifications.
+- [ ] Run fresh final Clean corpus, rebuild candidate artifacts, sequential gates,
+  frozen manifest, exact candidate approval, publication and live verification.
+
+Owner: `generic_evidence::_recover_contract_evidence_matches` / `_stamp_recovery_source_ref`
+/ `_converted_product_dose` — evidence: failing artifact regressions, frozen raw269490
+and285-label replay. Will NOT create: scorer, registry, preparation parser, Dose engine,
+public field/status or app calculation. Detailed current packet:
+[Evidence→Dose continuation](../../scripts/audits/evidence_dose_transfer_20260930/README.md#d26-preparationsource-binding--october-1-continuation).
+Current durable receipts: `/Users/seancheick/pg_quality/d26_peptide_20261001/`.
+
+The accepted master plan retains Sean's preference to consider distinct Dose
+appropriateness and Safety risk consequences for excess. Older D24 prose favoring
+Safety alone is historical; neither formulation authorizes a duplicate charge or
+unapproved magnitude. Benchmarks/denominators and omega magnitudes remain explicit
+Sean decisions under Phase4, rather than implicit choices by an implementer.
