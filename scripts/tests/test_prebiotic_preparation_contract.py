@@ -48,6 +48,8 @@ def test_declared_inulin_preparation_preserves_botanical_source(pipeline):
     assert active['quantity'] == 8100
     assert any(x['name'] == 'Cichorium intybus' for x in active['forms'])
     assert any(x['canonical_id'] == 'inulin' for x in get_scoring_ingredients(enriched).rows)
+    assert artifact['quality_score_status'] == 'scored'
+    assert artifact['quality_pillars_v4']['evidence']['score'] == 15.6
 
 @pytest.mark.parametrize('forms', [[], [dict(name='Inulin', category='fiber', percent=20)],
                                    [dict(name='Inulin', category='fiber'),dict(name='Pectin', category='fiber')]])
@@ -129,3 +131,19 @@ def test_value_and_unit_correction_only_rewrites_matching_serving_column(pipelin
     row["quantity"] += [dict(quantity=200, unit="mg", servingSizeOrder=2), dict(quantity=7, unit="mg", servingSizeOrder=3)]
     corrected = normalizer._apply_label_corrections([copy.deepcopy(row)], "302650")
     assert [(q["quantity"], q["unit"]) for q in corrected[0]["quantity"]] == [(200, "mcg"), (200, "mg"), (7, "mg")]
+
+
+def test_unrelated_botanical_companion_is_not_preparation_source(pipeline):
+    row = raw_row("Chicory", 1000, "mg")
+    row.update(category="botanical", ingredientGroup="chicory", forms=[dict(name="Inulin", category="fiber"), dict(name="Senna", category="botanical")])
+    clean, _, _ = run(pipeline, row)
+    assert clean["activeIngredients"][0]["canonical_id"] != "inulin"
+
+
+@pytest.mark.parametrize("qualification", [dict(percent=20), dict(notes="20% of row"), dict(quantity=[dict(quantity=20, unit="mg")])])
+def test_partial_source_descriptor_cannot_establish_whole_preparation(pipeline, qualification):
+    row = raw_row("Chicory", 1000, "mg")
+    source = dict(name="Cichorium intybus", category="botanical", **qualification)
+    row.update(category="botanical", ingredientGroup="chicory", forms=[dict(name="Inulin", category="fiber"), source])
+    clean, _, _ = run(pipeline, row)
+    assert clean["activeIngredients"][0]["canonical_id"] != "inulin"

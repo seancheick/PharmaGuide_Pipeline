@@ -266,3 +266,33 @@ def test_program_claims_are_detected_without_quality_flags(
 
     assert _program_names(certification) == expected_programs
     _assert_no_claim_derived_flags(certification)
+
+
+def test_current_source_historical_record_is_completed_absence():
+    from cert_resolver import CertResolution, HISTORICAL_CERTIFICATION_BLOCK_REASON
+    enricher = _enricher()
+    enricher._cert_registry_cache = CertRegistry(
+        metadata={"schema_version": "fixture-registry"},
+        recency_by_program={"ConsumerLab": {"status": "fresh"}},
+    )
+    historical = CertResolution(
+        program="ConsumerLab", scope="sku", record_id="historic-record",
+        source_url="https://registry.example/list", snapshot_date="2026-10-02",
+        recency_status="fresh", scoring_blocked_reason=HISTORICAL_CERTIFICATION_BLOCK_REASON,
+    ).to_dict()
+    result = enricher._build_verification_assessment([historical], {"brandName": "Test Brand"})
+    assert result["state"] == "verified_absent"
+    assert result["readiness"] == "complete"
+    assert result["matched_programs"] == []
+
+
+@pytest.mark.parametrize("missing", ["record_id", "source_url", "snapshot_date"])
+def test_historical_record_with_missing_provenance_stays_incomplete(missing):
+    from cert_resolver import HISTORICAL_CERTIFICATION_BLOCK_REASON
+    enricher = _enricher()
+    enricher._cert_registry_cache = CertRegistry(metadata={}, recency_by_program={"ConsumerLab": {"status": "fresh"}})
+    entry = dict(program="ConsumerLab", scope="sku", record_id="record", source_url="https://registry.example/list", snapshot_date="2026-10-02", recency_status="fresh", scoring_blocked_reason=HISTORICAL_CERTIFICATION_BLOCK_REASON)
+    entry.pop(missing)
+    result = enricher._build_verification_assessment([entry], {"brandName": "Test Brand"})
+    assert result["state"] == "not_evaluated"
+    assert result["readiness"] == "incomplete"

@@ -3523,14 +3523,28 @@ class EnhancedDSLDNormalizer:
             ):
                 return None
             form = preparations[0]
+            source_identity = self._resolve_canonical_identity(
+                str(ingredient.get("name") or ""), raw_name=str(ingredient.get("name") or "")
+            )
+            for descriptor in forms:
+                if descriptor is form:
+                    continue
+                descriptor_name = str(descriptor.get("name") or "")
+                descriptor_identity = self._resolve_canonical_identity(descriptor_name, raw_name=descriptor_name)
+                # Another botanical is a mixture member, not proof of source.
+                # Unresolved botanical identity is not sufficient provenance.
+                if (
+                    (str(descriptor.get("category") or "").casefold() == "botanical" and not descriptor_identity[0])
+                    or (descriptor_identity[0] and descriptor_identity != source_identity)
+                ):
+                    return None
             if (
-                form.get("percent") not in (None, 100)
+                any(item.get("percent") not in (None, 100) or item.get("quantity") for item in forms)
                 or str(form.get("prefix") or "").strip().casefold() not in {"", "as"}
-                or form.get("quantity")
                 or ingredient.get("nestedRows")
                 or re.search(r"%|standardiz|contains?|provides?|yields?", " ".join(
                     str(item.get(key) or "")
-                    for item in [ingredient, form]
+                    for item in [ingredient, *forms]
                     for key in ("name", "description", "notes")
                 ), re.I)
             ):

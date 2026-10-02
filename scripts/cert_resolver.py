@@ -47,6 +47,7 @@ REPO_ROOT = Path(__file__).resolve().parents[1]
 DATA_DIR = REPO_ROOT / "scripts" / "data"
 REGISTRY_PATH = DATA_DIR / "cert_registry.json"
 OVERRIDES_PATH = DATA_DIR / "curated_overrides" / "cert_verification_overrides.json"
+HISTORICAL_CERTIFICATION_BLOCK_REASON = "historical certification; current certification is not established"
 
 
 # Conservative thresholds — see docstring + v4 spec §10.
@@ -1162,7 +1163,7 @@ def _record_to_resolution(
 
     scoring_blocked_reason: str | None = None
     if record.get("current_certification") is False:
-        scoring_blocked_reason = "historical certification; current certification is not established"
+        scoring_blocked_reason = HISTORICAL_CERTIFICATION_BLOCK_REASON
     elif not str(record.get("record_id") or "").strip():
         scoring_blocked_reason = "registry record id missing; refresh registry before granting points"
     elif not str(record.get("source_url") or "").strip():

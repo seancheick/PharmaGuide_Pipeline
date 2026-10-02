@@ -254,3 +254,10 @@ def test_phage_title_cannot_create_a_fiber_dose():
     result=score_dose(product)
     assert result==generic_dose(product)
     assert "fiber_grams_daily_benchmark" not in result.get("metadata",{})
+
+
+def test_incidental_nutrition_fiber_does_not_replace_digestive_ingredient_dose():
+    from scoring_v4.modules.fiber_digestive_dose import score_dose
+    from scoring_v4.modules.generic_dose import score_dose as generic_dose
+    product = {"fullName": "Digestive Enzymes", "nutrition_summary": {"dietary_fiber_g": 1}, "activeIngredients": [{"name": "Protease", "canonical_id": "protease", "quantity": 1000, "unit": "HUT"}]}
+    assert score_dose(product) == generic_dose(product)

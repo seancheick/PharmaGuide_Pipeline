@@ -3864,7 +3864,11 @@ class SupplementEnricherV3:
 
         if category in _SOURCE_DESCRIPTOR_FORM_CATEGORIES:
             return True
-        if category == "botanical" and parent_category != "botanical":
+        declared_preparation = (
+            parent_row.get("cleaner_match_method") == "single_declared_nutrient_form"
+            and ((self.databases.get("ingredient_quality_map") or {}).get(parent_row.get("canonical_id")) or {}).get("category") == "fibers"
+        )
+        if category == "botanical" and (parent_category != "botanical" or declared_preparation):
             return True
         return bool(
             prefix in _SOURCE_DESCRIPTOR_FORM_PREFIXES
@@ -4837,6 +4841,9 @@ class SupplementEnricherV3:
             # Scorable ingredient - try to match against quality map
             # Pass cleaned forms[] to enable form-aware matching (P0 form-loss fix)
             ingredient_forms = ingredient.get('forms') or []
+            if ingredient.get("cleaner_match_method") == "single_declared_nutrient_form":
+                ingredient_forms = [form for form in ingredient_forms
+                                    if not self._is_source_descriptor_form(form, parent_row=ingredient)]
             authoritative_cleaner_context = ingredient.get(
                 "cleaner_match_method"
             ) in {
@@ -7609,7 +7616,11 @@ class SupplementEnricherV3:
         # form this row's reading dropped, is unresolved like any other.
         unresolved = self._identity_mismatch_forms(entry)
         if not unresolved and entry["form_match_status"] == "n/a" and entry.get("role_classification") == "active_scorable":
-            unresolved = self._dropped_label_forms(ing_name, entry.get("canonical_id"), ingredient.get("forms"))
+            label_forms = ingredient.get("forms")
+            if ingredient.get("cleaner_match_method") == "single_declared_nutrient_form":
+                label_forms = [form for form in (label_forms or [])
+                               if not self._is_source_descriptor_form(form, parent_row=ingredient)]
+            unresolved = self._dropped_label_forms(ing_name, entry.get("canonical_id"), label_forms)
         if unresolved:
             entry["form_match_status"] = "unmapped"
             entry["unmapped_forms"] = unresolved
@@ -13630,6 +13641,8 @@ class SupplementEnricherV3:
             is_verified_product_cert_entry,
         )
 
+        from cert_resolver import HISTORICAL_CERTIFICATION_BLOCK_REASON
+
         verified = []
         product_scope_candidates = []
         for entry in verified_cert_programs or []:
@@ -13638,7 +13651,17 @@ class SupplementEnricherV3:
             # Another brand's listing is an evaluated no-match, not this
             # product's incomplete evidence.
             if entry.get("scope") in {"sku", "product_line"} and cert_entry_brand_matches_product(product, entry):
-                product_scope_candidates.append(entry)
+                # A current source's explicit historical determination is a
+                # completed absence of current certification, not an unfinished
+                # check. Other blocked or unsourced matches remain incomplete.
+                reviewed_historical = (
+                    entry.get("scoring_blocked_reason") == HISTORICAL_CERTIFICATION_BLOCK_REASON
+                    and entry.get("record_id") and entry.get("source_url")
+                    and entry.get("snapshot_date")
+                    and entry.get("recency_status") in {"fresh", "warn"}
+                )
+                if not reviewed_historical:
+                    product_scope_candidates.append(entry)
             if not is_verified_product_cert_entry(product, entry):
                 continue
             program = str(entry.get("program") or "").strip()
