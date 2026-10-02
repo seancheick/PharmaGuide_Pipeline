@@ -8,10 +8,9 @@ Branch `claude/q58-routing`. Not released. Stops here for Sean's review.
 - Warning titles for all 9,875 products with any safety flag: **0** changed between the old tree (`claude/q58-verification`) and the new tree.
 - So today: 0 products newly BLOCKED, 0 no longer BLOCKED, 0 moved to or out of quarantine, 0 label changes, 0 recall changes, 0 cannabis/THC changes. Every change below is latent: it decides what the next label that names one of these substances gets.
 
-## Route per record (synthetic label through the real gate and export)
+## Route per record (synthetic label through the real gate and export; final after Sean's second review)
 
-Before: 81 QUARANTINE (not found on scan), 3 never matches (historical).  
-After: 47 BLOCKED, 12 QUARANTINE (not found on scan), 12 never matches (historical), 12 UNSAFE (recall), 1 never matches (disabled).
+After: 46 BLOCKED, 13 QUARANTINE (not found on scan), 12 never matches (historical), 12 UNSAFE (recall), 1 never matches (disabled) (84). Before: 81 quarantine, 3 historical.
 
 | Record | Route | Reader label | One-liner |
 |---|---|---|---|
@@ -25,13 +24,11 @@ After: 47 BLOCKED, 12 QUARANTINE (not found on scan), 12 never matches (historic
 | BANNED_ACONITE | BLOCKED | Unverified ingredient | Cardiotoxic botanical. Stop using and talk to your doctor. |
 | BANNED_CALAMUS_ACORUS_CALAMUS | BLOCKED | Not lawful as a supplement | US-prohibited botanical, cancer concerns. Stop using and talk to your doctor. |
 | BANNED_CLENBUTEROL | BLOCKED | Unverified ingredient | Unapproved beta-agonist drug. Stop using and talk to your doctor. |
-| BANNED_DETERENOL_ISOPROPYLNORSYNEPHRINE | BLOCKED | Unverified ingredient | Stimulant linked to heart risk. Stop using and talk to your doctor. |
 | BANNED_DMSA_SUCCIMER | BLOCKED | Not lawful as a supplement | Prescription chelator, not a supplement. Stop using and talk to your doctor. |
 | BANNED_DNP | BLOCKED | Not lawful as a supplement | Industrial chemical linked to deaths. Stop using and talk to your doctor. |
 | BANNED_IBOTENIC_ACID | BLOCKED | Unverified ingredient | Neurotoxic mushroom compound. Stop using and talk to your doctor. |
 | BANNED_IGF1 | BLOCKED | Unverified ingredient | Prescription growth-factor drug. Stop using and talk to your doctor. |
 | BANNED_MUSCIMOL | BLOCKED | Unverified ingredient | Psychoactive mushroom compound. Stop using and talk to your doctor. |
-| BANNED_SR9009 | BLOCKED | Unverified ingredient | Unapproved research compound. Stop using and talk to your doctor. |
 | BANNED_USNIC_ACID | BLOCKED | Unverified ingredient | Liver-toxic compound. Stop using and talk to your doctor. |
 | PEPTIDE_BPC157 | BLOCKED | Unverified ingredient | Unapproved experimental peptide. Stop using and talk to your doctor. |
 | PEPTIDE_TB500 | BLOCKED | Unverified ingredient | Unapproved synthetic peptide. Stop using and talk to your doctor. |
@@ -48,7 +45,7 @@ After: 47 BLOCKED, 12 QUARANTINE (not found on scan), 12 never matches (historic
 | RECALLED_MIRACLE_POWER_OF_KING_KONG_HONEY | BLOCKED | Hidden drug | Contains a hidden prescription drug — stop using and talk to your doctor. |
 | RECALLED_SENSUAL_MIRACLE_HONEY | BLOCKED | Hidden drug | Contains hidden prescription drugs — stop using and talk to your doctor. |
 | RECALLED_ZUBB | BLOCKED | Hidden drug | Contains a hidden prescription drug — stop using and talk to your doctor. |
-| SCHED_AMANITA_MUSCARIA | BLOCKED | Unverified ingredient | Psychoactive mushroom, 2024 outbreak. Stop using and talk to your doctor. |
+| SCHED_AMANITA_MUSCARIA | BLOCKED | Unverified ingredient | Psychoactive mushroom linked to poisonings. Stop using and talk to your doctor. |
 | SCHED_PSILOCIN | BLOCKED | Controlled substance | DEA Schedule I substance. Stop using and talk to your doctor. |
 | SCHED_PSILOCYBIN | BLOCKED | Controlled substance | DEA Schedule I controlled substance. Stop using and talk to your doctor. |
 | SPIKE_AMINOTADALAFIL | BLOCKED | Hidden drug | Designer ED drug hidden in supplements — stop using and talk to your doctor. |
@@ -61,10 +58,13 @@ After: 47 BLOCKED, 12 QUARANTINE (not found on scan), 12 never matches (historic
 | SPIKE_PROPOXYPHENYLSILDENAFIL | BLOCKED | Hidden drug | Designer ED drug hidden in supplements. Stop using and talk to your doctor. |
 | SPIKE_SILDENAFIL | BLOCKED | Hidden drug | Prescription drug hidden in supplements. Stop using and talk to your doctor. |
 | SPIKE_TADALAFIL | BLOCKED | Hidden drug | Prescription drug hidden in supplements. Stop using and talk to your doctor. |
+| WADA_CANNABIS | BLOCKED | Not lawful as a supplement | THC, not allowed in supplements. Stop using and talk to your doctor. |
 | WADA_TRAMADOL | BLOCKED | Controlled substance | Prescription opioid, federally controlled. Stop using and talk to your doctor. |
 | ADD_N_PHENETHYL_DIMETHYLAMINE | QUARANTINE (not found on scan) | Unsafe ingredient | Designer stimulant. Stop using this product and talk to your doctor. |
+| BANNED_DETERENOL_ISOPROPYLNORSYNEPHRINE | QUARANTINE (not found on scan) | Unverified ingredient | Stimulant linked to heart risk. Stop using and talk to your doctor. |
 | BANNED_FASORACETAM | QUARANTINE (not found on scan) | Unverified ingredient | Failed investigational drug. Stop using and talk to your doctor. |
 | BANNED_IGF1_LR3 | QUARANTINE (not found on scan) | Unverified ingredient | Unapproved peptide drug. Stop using and talk to your doctor. |
+| BANNED_SR9009 | QUARANTINE (not found on scan) | Unverified ingredient | Unapproved research compound. Stop using and talk to your doctor. |
 | BANNED_SUNIFIRAM | QUARANTINE (not found on scan) | Unverified ingredient | Untested synthetic nootropic. Stop using and talk to your doctor. |
 | NOOTROPIC_9MEBC | QUARANTINE (not found on scan) | Unverified ingredient | Untested synthetic compound. Stop using and talk to your doctor. |
 | NOOTROPIC_BROMANTANE | QUARANTINE (not found on scan) | Not lawful as a supplement | Not a lawful US supplement ingredient. Stop using and talk to your doctor. |
@@ -73,7 +73,6 @@ After: 47 BLOCKED, 12 QUARANTINE (not found on scan), 12 never matches (historic
 | RC_CARDARINE_ANALOGS | QUARANTINE (not found on scan) | Not lawful as a supplement | Cancer-linked designer drug. Stop using and talk to your doctor. |
 | SPIKE_TIANEPTINE_ANALOGUES | QUARANTINE (not found on scan) | Unsafe ingredient | Designer opioid-like substances. Stop using and talk to your doctor. |
 | SYNTH_CUMYL_PICA | QUARANTINE (not found on scan) | Unverified ingredient | Synthetic cannabinoid linked to deaths. Stop using and talk to your doctor. |
-| WADA_CANNABIS | QUARANTINE (not found on scan) | Prohibited in sport | WADA-prohibited in competition. Talk to your team physician. |
 | RECALLED_BIQ_FEL | UNSAFE (recall) | Recalled product | Contains hidden prescription drugs — stop using and talk to your doctor. |
 | RECALLED_BLUE_BULL_EXTREME | UNSAFE (recall) | Recalled product | Class I recall — sildenafil-spiked. Stop using and talk to your doctor. |
 | RECALLED_BONER_BEARS_HONEY | UNSAFE (recall) | Recalled product | Class I recall — sildenafil + tadalafil. Stop using and talk to your doctor. |
@@ -100,9 +99,9 @@ After: 47 BLOCKED, 12 QUARANTINE (not found on scan), 12 never matches (historic
 | RECALLED_PURITY_PRODUCTS_MY_BLADDER | never matches (historical) |  | Recalled for E. coli contamination. Do not use this recalled product. |
 | RECALLED_ROSABELLA_MORINGA | never matches (historical) |  | Recalled for potential Salmonella. Do not use this recalled product. |
 
-## Cannabis / THC measurement (route held for Sean)
+## Cannabis / THC (approved by Sean 2026-10-02: explicit THC identity only)
 
-Proposed route: `WADA_CANNABIS` blocks as "Not lawful as a supplement" (FDA: THC products are excluded from the supplement definition, 21 U.S.C. 321(ff)(3)(B); hemp THC is excepted from Schedule I) with "Prohibited in sport" as information. Matching is exact on its aliases (THC, tetrahydrocannabinol, delta-9 forms, marijuana); hemp seed, hemp protein and hemp extract strings do not match. CBD is a separate, already-verified record (BANNED_CBD_US).
+Route: `WADA_CANNABIS` (standard name now "Tetrahydrocannabinol (THC)") blocks as "Not lawful as a supplement" (FDA: THC products are excluded from the supplement definition, 21 U.S.C. 321(ff)(3)(B); hemp THC is excepted from Schedule I) with "Prohibited in sport" as information. Matching: THC, tetrahydrocannabinol and delta-9 forms only; "marijuana" and "cannabis/thc" removed; hemp, hemp hearts, hemp protein, hemp extract, full/broad-spectrum and <0.3% phrases are negative match terms. `test_q58_ban_routing.py` replays the corpus hemp strings (never match) and explicit THC strings (match). CBD is a separate, already-verified record (BANNED_CBD_US).
 
 | Label text category | Products | Distinct strings (top) |
 |---|---|---|
@@ -177,3 +176,9 @@ Cannabis route (waits for Sean's review of the measurement above); Q61 copy, Q62
 ## Fresh-context review (independent agent, 2026-10-02)
 
 Verdict: merge after fixes. Narrow and deterministic; 0 changed outcomes outside Q58 (old vs new code on the new data, every banned/recalled record, active and inactive roles). Resolved: (1) unsupported copy that would now ship was corrected (table above); (2) Amanita aliases for another species and a marketing phrase removed; IGF-1 already excludes deer antler, velvet and colostrum labels by negative match terms; (3) the harm check now keys on `clinical_risk` only, and each Category 1 harm source was tagged after reading; (6) test nits fixed (Amanita pins `under_review`; the identifier test calls the gate's own harm check). Left for Sean: deterenol (only harm source is a multi-stimulant product; the reason now says so) and SR9009 (one case report) are the two borderline Category 1 records. Not changed: empty `verified_sources` on Category 1 decisions (the field lists government sources only; no reader); internal `source_category` values (not exported); Live it Up negative-match tests now pass trivially because the record is historical.
+
+## Second review (Sean 2026-10-02)
+
+Approved the routing model. Deterenol and SR9009 moved to quarantine (multi-stimulant exposure; a single case report). THC routed on explicit identity only. Recalls stay UNSAFE (documented in GLOSSARY "Recall verdict (UNSAFE)"); rule B documented as not implemented (GLOSSARY "Recall scope"). Copy: the edits in this batch are factual corrections tied to the routing or directed by Sean (no legal-status claims on Category 1; reviewer-flagged claims that would newly ship; Gold Star, Hydroxycut, lorcaserin, hexadrone, tramadol, THC); the systematic copy-versus-evidence pass is Q61.
+
+Acceptance rerun after the amendments: routes 46 BLOCKED, 12 UNSAFE, 13 quarantine, 13 never match (84); corpus 0 of 15,421 products match any of the 84; warning titles 0 of 9,875 change against the old tree; consumer slice (83 files) exit 0; citation check 0 new mismatches. Remaining before merge: CI on the final commit; `scripts/test.sh local` from the main checkout at integration.

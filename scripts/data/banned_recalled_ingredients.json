@@ -6736,6 +6736,11 @@
             "date": "2026-10-02",
             "by": "claude-audit",
             "change": "LEDGER Q58 (Sean 2026-10-02): fresh review: harm sources tagged clinical_risk; copy that now ships brought to the evidence (ibotenic acid without 'excitotoxic brain injury', IGF-1 without 'acromegaly' and with the injected-drug limit, SR9009 without 'poor oral bioavailability', clenbuterol without 'undeclared in supplements'/'illicitly', deterenol harm attributed to a multi-stimulant product, Amanita one-liner without the outbreak attribution; A. pantherina, 'panther cap' and 'legal shrooms' removed from Amanita muscaria aliases: different species / no identity)"
+          },
+          {
+            "date": "2026-10-02",
+            "by": "claude-audit",
+            "change": "LEDGER Q58 (Sean 2026-10-02, second review): quarantined (Category 3): a single liver-injury case report is a signal, not enough for a deterministic block without corroboration; the evidence stays recorded for future escalation"
           }
         ]
       },
@@ -6760,8 +6765,7 @@
       "ban_context": "substance",
       "safety_warning": "An experimental research compound never approved for human use. Its safety in people is unknown, and one case of liver injury has been reported. Stop and consult a doctor.",
       "safety_warning_one_liner": "Unapproved research compound. Stop using and talk to your doctor.",
-      "policy_verification_status": "verified",
-      "policy_verified_at": "2026-10-02"
+      "policy_verification_status": null
     },
     {
       "id": "BANNED_SUNIFIRAM",
@@ -17127,9 +17131,8 @@
     },
     {
       "id": "WADA_CANNABIS",
-      "standard_name": "Cannabis/THC",
+      "standard_name": "Tetrahydrocannabinol (THC)",
       "aliases": [
-        "marijuana",
         "THC",
         "delta-9-THC",
         "tetrahydrocannabinol",
@@ -17139,10 +17142,9 @@
         "d9 thc",
         "d9-thc",
         "delta9-thc",
-        "delta 9 tetrahydrocannabinol",
-        "cannabis/thc"
+        "delta 9 tetrahydrocannabinol"
       ],
-      "reason": "Cannabis and THC are prohibited by the World Anti-Doping Agency (WADA) in competition under the Prohibited List (S8 Cannabinoids). Athletes testing positive for THC metabolites above the WADA threshold (150 ng/mL urinary 11-nor-9-carboxy-THC) face potential sanctions. CBD was removed from the WADA Prohibited List in 2018, but other cannabinoids including synthetic delta-8 THC and CBN remain prohibited. Athletes using CBD supplements face contamination risk — many CBD products contain detectable levels of THC that can result in a positive doping test.",
+      "reason": "Tetrahydrocannabinol (THC) is the main intoxicating compound in cannabis. FDA has concluded that THC products cannot be sold as dietary supplements because THC (as dronabinol) is the active ingredient of approved drugs (21 U.S.C. 321(ff)(3)(B)); delta-9-THC outside hemp is also Schedule I. WADA prohibits cannabinoids in competition. This rule matches an explicitly declared THC only, never hemp seed, hemp protein or a hemp extract without a THC declaration.",
       "status": "banned",
       "class_tags": [
         "wada_prohibited_2024",
@@ -17164,25 +17166,37 @@
           "undetectable thc",
           "thc nd",
           "hemp seed",
-          "hemp seed oil"
+          "hemp seed oil",
+          "hemp",
+          "hemp hearts",
+          "hemp protein",
+          "hemp extract",
+          "full spectrum",
+          "full-spectrum",
+          "broad spectrum",
+          "broad-spectrum",
+          "0.3%",
+          "<0.3",
+          "less than 0.3"
         ]
       },
-      "legal_status_enum": "wada_prohibited",
+      "legal_status_enum": "not_lawful_as_supplement",
       "clinical_risk_enum": "high",
       "jurisdictions": [
         {
           "region": "US",
           "level": "federal",
-          "status": "banned",
+          "status": "not_lawful",
           "effective_date": null,
           "source": {
-            "type": "fda_action",
-            "citation": "DEA Schedule I (federal). State laws vary. CBD legal if THC <0.3%.",
-            "accessed_date": "2026-01-08"
+            "type": "fda_advisory",
+            "citation": "FDA has concluded that THC products are excluded from the dietary supplement definition (21 U.S.C. 321(ff)(3)(B)): dronabinol, a synthetic delta-9-THC, is the active ingredient of the approved drugs Marinol and Syndros. Delta-9-THC outside hemp is also Schedule I (21 U.S.C. 812(c) Schedule I(c)(17)).",
+            "url": "https://www.fda.gov/news-events/public-health-focus/fda-regulation-cannabis-and-cannabis-derived-products-including-cannabidiol-cbd",
+            "accessed_date": "2026-10-02"
           },
           "jurisdiction_type": "country",
           "jurisdiction_code": "US",
-          "last_verified_date": "2026-01-08"
+          "last_verified_date": "2026-10-02"
         },
         {
           "region": "WADA",
@@ -17208,6 +17222,25 @@
           "evidence_grade": "R",
           "supports_claims": [],
           "evidence_summary": "WADA: Prohibited List - Cannabis"
+        },
+        {
+          "type": "fda_advisory",
+          "title": "FDA Regulation of Cannabis and Cannabis-Derived Products, Including Cannabidiol (CBD) (Q&A 9)",
+          "url": "https://www.fda.gov/news-events/public-health-focus/fda-regulation-cannabis-and-cannabis-derived-products-including-cannabidiol-cbd",
+          "evidence_grade": "R",
+          "supports_claims": [
+            "regulatory_status"
+          ],
+          "evidence_summary": "FDA has concluded that THC products are excluded from the dietary supplement definition (21 U.S.C. 321(ff)(3)(B)): dronabinol, a synthetic delta-9-THC, is the active ingredient of the approved drugs Marinol and Syndros."
+        },
+        {
+          "type": "regulatory",
+          "title": "21 U.S.C. 812(c) Schedule I(c)(17): tetrahydrocannabinols, except in hemp",
+          "url": "https://www.govinfo.gov/link/uscode/21/812?link-type=html",
+          "evidence_grade": "R",
+          "supports_claims": [
+            "regulatory_status"
+          ]
         }
       ],
       "source_category": "wada_prohibited_2024",
@@ -17222,18 +17255,25 @@
             "date": "2026-01-08",
             "change": "Migrated to schema v3.1 with standardized fields",
             "by": "system"
+          },
+          {
+            "date": "2026-10-02",
+            "by": "claude-audit",
+            "change": "LEDGER Q58 (Sean 2026-10-02, second review): routed on explicit THC identity only: FDA's THC drug-exclusion conclusion is the reason (label Not lawful as a supplement), WADA stays information; 'marijuana' and 'cannabis/thc' aliases removed and hemp terms added to negative_match_terms so hemp seed, protein and extract labels without a THC declaration never match (corpus 2026-10-02: 0 labels declare THC)"
           }
         ]
       },
-      "regulatory_date": "2004-01-01",
-      "regulatory_date_label": "WADA prohibition effective",
+      "regulatory_date": null,
+      "regulatory_date_label": null,
       "match_mode": "active",
       "cui_status": "no_single_umls_concept",
       "cui_note": "Entry combines cannabis and THC policy coverage; no single ingredient-level UMLS concept is appropriate.",
       "external_ids": {},
       "ban_context": "substance",
-      "safety_warning": "Prohibited in competition by the World Anti-Doping Agency. Competitive athletes should avoid cannabis and THC products to prevent failed drug tests; talk to your team physician.",
-      "safety_warning_one_liner": "WADA-prohibited in competition. Talk to your team physician."
+      "safety_warning": "THC cannot be sold as a dietary supplement under FDA's drug-exclusion rule, and WADA prohibits it in competition. Stop using the product and talk to your doctor.",
+      "safety_warning_one_liner": "THC, not allowed in supplements. Stop using and talk to your doctor.",
+      "policy_verification_status": "verified",
+      "policy_verified_at": "2026-10-02"
     },
     {
       "id": "WADA_TRAMADOL",
@@ -21011,6 +21051,11 @@
             "date": "2026-10-02",
             "by": "claude-audit",
             "change": "LEDGER Q58 (Sean 2026-10-02): fresh review: harm sources tagged clinical_risk; copy that now ships brought to the evidence (ibotenic acid without 'excitotoxic brain injury', IGF-1 without 'acromegaly' and with the injected-drug limit, SR9009 without 'poor oral bioavailability', clenbuterol without 'undeclared in supplements'/'illicitly', deterenol harm attributed to a multi-stimulant product, Amanita one-liner without the outbreak attribution; A. pantherina, 'panther cap' and 'legal shrooms' removed from Amanita muscaria aliases: different species / no identity)"
+          },
+          {
+            "date": "2026-10-02",
+            "by": "claude-audit",
+            "change": "LEDGER Q58 (Sean 2026-10-02, second review): quarantined (Category 3): the only human harm evidence is a multi-stimulant product, which does not isolate deterenol; the evidence stays recorded for future escalation"
           }
         ]
       },
@@ -21085,8 +21130,7 @@
       "ban_context": "substance",
       "safety_warning": "A stimulant that mimics adrenaline, found in weight-loss products. Associated with cardiovascular risk. Stop and consult a doctor.",
       "safety_warning_one_liner": "Stimulant linked to heart risk. Stop using and talk to your doctor.",
-      "policy_verification_status": "verified",
-      "policy_verified_at": "2026-10-02",
+      "policy_verification_status": null,
       "jurisdictions": [
         {
           "region": "US",

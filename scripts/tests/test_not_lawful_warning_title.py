@@ -87,7 +87,7 @@ def test_not_lawful_title_still_yields_the_substance_name():
         ("SPIKE_SILDENAFIL", "Hidden drug"),
         ("BANNED_CBD_US", "Not lawful as a supplement"),
         ("NOOTROPIC_MODAFINIL", "Controlled substance"),
-        ("WADA_CANNABIS", "Prohibited in sport"),
+        ("WADA_CANNABIS", "Not lawful as a supplement"),
         ("WADA_TRAMADOL", "Controlled substance"),
         ("NOOTROPIC_PIRACETAM", "Unverified ingredient"),
         ("BANNED_ACONITE", "Unverified ingredient"),

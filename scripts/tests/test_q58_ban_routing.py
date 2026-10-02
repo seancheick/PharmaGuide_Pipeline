@@ -50,6 +50,8 @@ REGULATORY_BLOCK = (
     "RECALLED_CANDY_POWER_FOR_MAN", "RECALLED_ERECTUS_PLUS", "RECALLED_LUZE_FIT_INTENSITY",
     "RECALLED_MAXMAN_COFFEE", "RECALLED_MIRACLE_POWER_OF_KING_KONG_HONEY",
     "RECALLED_SENSUAL_MIRACLE_HONEY", "RECALLED_ZUBB", "RECALLED_GE_LABS_YKARINE",
+    # Explicit THC only (FDA drug exclusion); WADA is information.
+    "WADA_CANNABIS",
 )
 ACTIVE_RECALL = (  # rule A: openFDA status Ongoing or a current FDA recall notice
     "RECALLED_BIQ_FEL", "RECALLED_X10_NATURAL_ENHANCEMENT", "RECALLED_BLUE_BULL_EXTREME",
@@ -59,8 +61,8 @@ ACTIVE_RECALL = (  # rule A: openFDA status Ongoing or a current FDA recall noti
     "RECALLED_SILINTAN", "RECALLED_SILUETAYA_TEJOCOTE",
 )
 UNVERIFIED_INGREDIENT = (  # Category 1
-    "BANNED_ACONITE", "BANNED_CLENBUTEROL", "BANNED_DETERENOL_ISOPROPYLNORSYNEPHRINE",
-    "BANNED_IBOTENIC_ACID", "BANNED_IGF1", "BANNED_MUSCIMOL", "BANNED_SR9009",
+    "BANNED_ACONITE", "BANNED_CLENBUTEROL",
+    "BANNED_IBOTENIC_ACID", "BANNED_IGF1", "BANNED_MUSCIMOL",
     "BANNED_USNIC_ACID", "PEPTIDE_BPC157", "PEPTIDE_TB500", "SCHED_AMANITA_MUSCARIA",
 )
 ENDED_RECALL = (  # rule C (Jack3D: rule D, DMAA blocks on its own)
@@ -71,11 +73,12 @@ ENDED_RECALL = (  # rule C (Jack3D: rule D, DMAA blocks on its own)
     "RECALLED_JACK3D", "RECALLED_GOLD_STAR_DISTRIBUTION",
 )
 RETIRED = ("SPIKE_METHYL7K",)
-QUARANTINE = (  # Category 3; cannabis waits for the THC measurement
+QUARANTINE = (  # Category 3: neither a verified regulatory nor a verified harm basis
     "NOOTROPIC_PIRACETAM", "ADD_N_PHENETHYL_DIMETHYLAMINE", "RC_CARDARINE_ANALOGS",
     "SPIKE_TIANEPTINE_ANALOGUES", "BANNED_FASORACETAM", "BANNED_IGF1_LR3", "BANNED_SUNIFIRAM",
     "NOOTROPIC_9MEBC", "NOOTROPIC_BROMANTANE", "NOOTROPIC_FLMODAFINIL", "SYNTH_CUMYL_PICA",
-    "WADA_CANNABIS",
+    # Multi-stimulant exposure only; a single case report (Sean 2026-10-02).
+    "BANNED_DETERENOL_ISOPROPYLNORSYNEPHRINE", "BANNED_SR9009",
 )
 
 
@@ -225,6 +228,7 @@ def test_tramadol_blocks_for_its_us_schedule_not_for_wada(entries):
         ("ADD_HEXADRONE", "banned", "Not lawful as a supplement"),
         ("WADA_TRAMADOL", "banned", "Controlled substance"),
         ("SPIKE_SILDENAFIL", "banned", "Hidden drug"),
+        ("WADA_CANNABIS", "banned", "Not lawful as a supplement"),
         ("RECALLED_BIQ_FEL", "recalled", "Recalled product"),
     ],
 )
@@ -239,3 +243,36 @@ def test_core_row_title_states_the_route(rule_id, status, expected_prefix):
     titles = [w["title"] for w in build_top_warnings(enriched)
               if w.get("type") in ("banned_substance", "recalled_ingredient")]
     assert titles == [f"{expected_prefix}: X"]
+
+
+# --- THC: explicit identity only; ordinary hemp never inherits the block ------
+# Corpus hemp strings measured 2026-10-02 (0 labels declared THC).
+HEMP_LABEL_STRINGS = (
+    "Hemp Seed Oil", "Hemp seed Protein", "Hemp Protein", "organic Hemp Protein", "Hemp Hearts",
+    "Hemp Extract", "Broad Spectrum Hemp extract blend", "Broad Spectrum Hemp Oil extract",
+    "Broad Spectrum Hemp Whole Plant Oil Extract", "Hemp Oil (aerial plant parts) extract",
+    "Full Spectrum Hemp Extract", "Full Spectrum Hemp Extract (<0.3% THC)", "Hemp extract, THC-free",
+    "Broad Spectrum Phytocannabinoids", "Cannabidiol",
+)
+THC_LABEL_STRINGS = ("THC", "Delta-9-Tetrahydrocannabinol", "delta 9 thc", "Tetrahydrocannabinol")
+
+
+@pytest.fixture(scope="module")
+def enricher():
+    from enrich_supplements_v3 import SupplementEnricherV3
+    return SupplementEnricherV3()
+
+
+def _banned_ids(enricher, name):
+    result = enricher._check_banned_substances([{"name": name, "standardName": name}])
+    return {s.get("banned_id") for s in result.get("substances", [])}
+
+
+@pytest.mark.parametrize("label", HEMP_LABEL_STRINGS)
+def test_hemp_labels_never_match_the_thc_rule(enricher, label):
+    assert "WADA_CANNABIS" not in _banned_ids(enricher, label)
+
+
+@pytest.mark.parametrize("label", THC_LABEL_STRINGS)
+def test_explicit_thc_matches_the_thc_rule(enricher, label):
+    assert "WADA_CANNABIS" in _banned_ids(enricher, label)

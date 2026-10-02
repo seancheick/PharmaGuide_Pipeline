@@ -898,7 +898,7 @@
    "label": "Unverified ingredient"
   },
   "BANNED_DETERENOL_ISOPROPYLNORSYNEPHRINE": {
-   "route": "BLOCKED",
+   "route": "QUARANTINE (not found on scan)",
    "label": "Unverified ingredient"
   },
   "BANNED_DMSA_SUCCIMER": {
@@ -930,7 +930,7 @@
    "label": "Unverified ingredient"
   },
   "BANNED_SR9009": {
-   "route": "BLOCKED",
+   "route": "QUARANTINE (not found on scan)",
    "label": "Unverified ingredient"
   },
   "BANNED_SUNIFIRAM": {
@@ -1182,8 +1182,8 @@
    "label": "Unverified ingredient"
   },
   "WADA_CANNABIS": {
-   "route": "QUARANTINE (not found on scan)",
-   "label": "Prohibited in sport"
+   "route": "BLOCKED",
+   "label": "Not lawful as a supplement"
   },
   "WADA_TRAMADOL": {
    "route": "BLOCKED",
@@ -1195,11 +1195,9 @@
   "kept": {
    "BANNED_ACONITE": "PMID 40315779: 35 aconitine poisonings, cardiotoxic and neurotoxic, some fatal.",
    "BANNED_CLENBUTEROL": "PMIDs 40575216 (abuse review: arrhythmias, hypertension), 35288432 (myocarditis), 30546764 (cardiac toxicity case).",
-   "BANNED_DETERENOL_ISOPROPYLNORSYNEPHRINE": "PMID 24802503: Dexaprine (deterenol with other stimulants) poison-centre reports incl. one cardiac arrest; borderline, effects not attributable to deterenol alone.",
    "BANNED_IBOTENIC_ACID": "PMID 30073844: poison-centre series of muscimol/ibotenic acid mushroom ingestions (GI upset, CNS excitation and depression, 5 intubated). Louisiana R.S. 40:989.5 (Act 154 of 2025).",
    "BANNED_IGF1": "INCRELEX label: hypoglycemia, malignant neoplasia in treated children (injected drug; applicability limit stated).",
    "BANNED_MUSCIMOL": "PMIDs 30073844, 41441606, 41955162; Diamond Shruumz recall posted by FDA (39 illnesses). Louisiana R.S. 40:989.5.",
-   "BANNED_SR9009": "PMID 40765588: one case of hepatocellular injury attributed to Stenabolic; borderline.",
    "BANNED_USNIC_ACID": "PMID 16610575 (two severe hepatotoxicity cases, one transplant); LiverTox NBK548493.",
    "PEPTIDE_BPC157": "FDA compounding category 2 list: immunogenicity and impurity risk, insufficient safety information.",
    "PEPTIDE_TB500": "FDA compounding category 2 list (thymosin beta-4 fragment LKKTETQ).",
@@ -1212,7 +1210,9 @@
    "NOOTROPIC_9MEBC": "animal/mechanism only.",
    "NOOTROPIC_BROMANTANE": "animal studies and an efficacy study; no harm evidence.",
    "NOOTROPIC_FLMODAFINIL": "metabolism and product-content studies; no harm evidence.",
-   "SYNTH_CUMYL_PICA": "receptor pharmacology only; no human harm report for this compound (no class transfer)."
+   "SYNTH_CUMYL_PICA": "receptor pharmacology only; no human harm report for this compound (no class transfer).",
+   "BANNED_DETERENOL_ISOPROPYLNORSYNEPHRINE": "PMID 24802503: Dexaprine (deterenol with other stimulants) poison-centre reports incl. one cardiac arrest; borderline, effects not attributable to deterenol alone. Sean 2026-10-02: quarantine (not enough for a deterministic block).",
+   "BANNED_SR9009": "PMID 40765588: one case of hepatocellular injury attributed to Stenabolic; borderline. Sean 2026-10-02: quarantine (not enough for a deterministic block)."
   },
   "moved_to_regulatory": {
    "BANNED_DNP": "FDA notice 2026-06-04 (Lipofit Extreme 2.0): DNP 'illegally marketed as a weight-loss product and is not approved by the FDA for any use'."
