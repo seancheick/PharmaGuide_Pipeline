@@ -16088,19 +16088,9 @@ class SupplementEnricherV3:
         # probiotic potency when the product has no non-probiotic actives
         # (same owner that decides whether CFU evidence is accessory).
         probiotic_only_product = not self._has_non_probiotic_active_for_cfu_evidence(product)
-        statement_guarantees = {
-            self._extract_guarantee_type(
-                part, subject_is_probiotic=probiotic_only_product,
-                require_potency_claim=True,
-                target_cfu_count=product_level_cfu.get("cfu_count") if product_level_cfu.get("has_cfu") else None,
-            )
-            for part in statement_parts
-        }
-        product_level_cfu["guarantee_type"] = (
-            "at_expiration" if "at_expiration" in statement_guarantees
-            else "at_manufacture" if "at_manufacture" in statement_guarantees
-            else None
-        )
+        # Statement warranties are evaluated once, after count selection.
+        # Joined statements may identify a count, never its warranty scope.
+        product_level_cfu["guarantee_type"] = None
         if not product_level_cfu.get("has_cfu"):
             for field_name in ("product_name", "fullName", "bundleName"):
                 field_text = str(product.get(field_name) or "").strip()
@@ -16273,6 +16263,7 @@ class SupplementEnricherV3:
                 strain_rows = [
                     row for row in (nested or form_strains)
                     if not has_nonlive_microbial_derivative_evidence(row)
+                    and not _is_blend_header_total(row)
                 ]
                 # A header is not a strain. Its source-derived components
                 # cannot turn it into an organism through the header name.
@@ -16573,13 +16564,19 @@ class SupplementEnricherV3:
             if blend.get("is_blend_header_total")
         }
         child_blends_by_parent: Dict[str, List[Dict]] = {}
+        grouped_paths = set()
         for blend in probiotic_blends:
-            parent = _parent_path(str(blend.get("raw_source_path") or ""))
-            if parent and parent in header_blends:
+            path = str(blend.get("raw_source_path") or "")
+            parent = max(
+                (ref for ref in header_blends if ref and path.startswith(ref + ".nestedRows[")),
+                key=len, default=None,
+            )
+            if parent:
                 child_blends_by_parent.setdefault(parent, []).append(blend)
+                grouped_paths.add(path)
 
         def _add_cfu_source(cfu_data: Dict, blend: Dict) -> None:
-            nonlocal has_cfu, guarantee_type, cfu_source, cfu_raw_source_path, cfu_evidence_scope
+            nonlocal has_cfu, cfu_source, cfu_raw_source_path, cfu_evidence_scope
             if cfu_data.get('has_cfu'):
                 has_cfu = True
                 if not cfu_source:
@@ -16599,52 +16596,67 @@ class SupplementEnricherV3:
                 return "at_manufacture"
             return None
 
-        counted_guarantees: List[Optional[str]] = []
-        handled_child_paths = set()
-        for header_path, header in header_blends.items():
-            header_cfu = header.get('cfu_data', {}) or {}
-            _add_cfu_source(header_cfu, header)
-            header_count = header_cfu.get('cfu_count', 0) if header_cfu.get('has_cfu') else 0
-            header_billion = header_cfu.get('billion_count', 0) if header_cfu.get('has_cfu') else 0
+        source_by_path = {_row_path(row): row for row in source_rows}
 
-            child_count = 0
-            child_billion = 0.0
-            child_guarantees: List[Optional[str]] = []
+        def _header_cfu(header: Dict) -> Tuple[float, Optional[str]]:
+            """Each physical subtree has one total and one complete warranty."""
+            header_path = str(header.get("raw_source_path") or "")
+            header_data = header.get('cfu_data', {}) or {}
+            _add_cfu_source(header_data, header)
+            declared = header_data.get('cfu_count', 0) if header_data.get('has_cfu') else 0
+            declared_warranties = [header_data.get('guarantee_type')]
+            children_count = 0.0
+            children_warranties = []
             for child in child_blends_by_parent.get(header_path, []):
-                handled_child_paths.add(child.get("raw_source_path"))
-                child_cfu = child.get('cfu_data', {}) or {}
-                _add_cfu_source(child_cfu, child)
-                if child_cfu.get('has_cfu'):
-                    child_count += child_cfu.get('cfu_count', 0)
-                    child_billion += child_cfu.get('billion_count', 0)
-                    if child_cfu.get('cfu_count', 0) > 0:
-                        child_guarantees.append(child_cfu.get('guarantee_type'))
+                child_path = str(child.get("raw_source_path") or "")
+                child_data = child.get('cfu_data', {}) or {}
+                if child_path in header_blends:
+                    count, warranty = _header_cfu(child)
+                else:
+                    _add_cfu_source(child_data, child)
+                    count = child_data.get('cfu_count', 0) if child_data.get('has_cfu') else 0
+                    warranty = child_data.get('guarantee_type')
+                if source_by_path.get(child_path, {}).get("dose_role") == "declared_total":
+                    # A total beside its measured members is the same
+                    # exposure, not another amount to add to them.
+                    if count > declared:
+                        declared, declared_warranties = count, [warranty]
+                    elif count > 0 and math.isclose(count, declared):
+                        declared_warranties.append(warranty)
+                elif count > 0:
+                    children_count += count
+                    children_warranties.append(warranty)
+            count = max(declared or 0, children_count)
+            providers = []
+            if count > 0 and math.isclose(declared, count):
+                providers.extend(declared_warranties)
+            if count > 0 and math.isclose(children_count, count):
+                providers.append(_aggregate_guarantee(children_warranties))
+            warranty = (
+                "at_expiration" if "at_expiration" in providers
+                else "at_manufacture" if "at_manufacture" in providers else None
+            )
+            return count, warranty
 
-            group_count = max(header_count or 0, child_count or 0)
-            group_billion = max(header_billion or 0, child_billion or 0)
-            total_cfu += group_count
-            total_billion_count += group_billion
-            if group_count > 0:
-                providers = []
-                if math.isclose(header_count, group_count):
-                    providers.append(header_cfu.get('guarantee_type'))
-                if math.isclose(child_count, group_count):
-                    providers.append(_aggregate_guarantee(child_guarantees))
-                counted_guarantees.append(
-                    "at_expiration" if "at_expiration" in providers
-                    else "at_manufacture" if "at_manufacture" in providers else None
-                )
-
-        for blend in probiotic_blends:
-            if blend.get("is_blend_header_total") or blend.get("raw_source_path") in handled_child_paths:
+        counted_guarantees: List[Optional[str]] = []
+        for path, header in header_blends.items():
+            if path in grouped_paths:
                 continue
-            cfu_data = blend.get('cfu_data', {})
+            count, warranty = _header_cfu(header)
+            total_cfu += count
+            if count > 0:
+                counted_guarantees.append(warranty)
+        for blend in probiotic_blends:
+            if blend.get("is_blend_header_total") or blend.get("raw_source_path") in grouped_paths:
+                continue
+            cfu_data = blend.get('cfu_data', {}) or {}
             if cfu_data.get('has_cfu'):
-                total_cfu += cfu_data.get('cfu_count', 0)
-                total_billion_count += cfu_data.get('billion_count', 0)
-                if cfu_data.get('cfu_count', 0) > 0:
+                count = cfu_data.get('cfu_count', 0)
+                total_cfu += count
+                if count > 0:
                     counted_guarantees.append(cfu_data.get('guarantee_type'))
             _add_cfu_source(cfu_data, blend)
+        total_billion_count = total_cfu / 1e9
 
         guarantee_type = _aggregate_guarantee(counted_guarantees)
         if not counted_guarantees:
@@ -16696,7 +16708,7 @@ class SupplementEnricherV3:
         # A row's explicit matching total can warrant a product count from
         # another label section. An unquantified individual-row warranty cannot.
         for blend in probiotic_blends:
-            row = next((r for r in source_rows if _row_path(r) == str(blend.get("raw_source_path") or "")), {})
+            row = source_by_path.get(str(blend.get("raw_source_path") or ""), {})
             row_text = str(row.get("harvestMethod") or "") + " " + str(row.get("notes") or "")
             if total_cfu > 0 and self._parse_cfu_text_count(row_text, target_count=total_cfu) is not None:
                 final_guarantees.add(self._extract_guarantee_type(
@@ -17457,6 +17469,9 @@ class SupplementEnricherV3:
             return None
         from probiotic_measurements import _PROBIOTIC_VIABILITY_RE, has_probiotic_identity_text
 
+        unspecified_amount = re.compile(
+            r"\b(?:effective|adequate|sufficient)\s+(?:amount|level|count|number)s?\b", re.I,
+        )
         found = None
         if target_cfu_count is None:
             target_cfu_count = self._parse_cfu_text_count(str(text))
@@ -17466,9 +17481,7 @@ class SupplementEnricherV3:
         parts = re.split(r"(,\s+|\b(?:and|but|with)\b\s*)", str(text), flags=re.I)
         units = [parts[0]]
         for separator, part in zip(parts[1::2], parts[2::2]):
-            if self._parse_cfu_text_count(part) is not None or re.search(
-                r"\b(?:effective|adequate|sufficient)\s+(?:amount|level|count|number)s?\b", part, re.I,
-            ):
+            if self._parse_cfu_text_count(part) is not None or unspecified_amount.search(part):
                 units.append(part)
             else:
                 units[-1] += separator + part
@@ -17485,9 +17498,7 @@ class SupplementEnricherV3:
             for part in claim_parts:
                 if not part:
                     continue
-                if local_units and self._parse_cfu_text_count(part) is None and not re.search(
-                    r"\b(?:effective|adequate|sufficient)\s+(?:amount|level|count|number)s?\b", part, re.I,
-                ):
+                if local_units and self._parse_cfu_text_count(part) is None and not unspecified_amount.search(part):
                     local_units[-1] += part
                 else:
                     local_units.append(part)
@@ -17505,7 +17516,14 @@ class SupplementEnricherV3:
             if not names_probiotic and not subject_is_probiotic:
                 continue
             count = self._parse_cfu_text_count(unit)
-            if require_potency_claim and count is None and not re.search(r"\b(?:guarantee\w*|potency)\b", unit, re.I):
+            explicit_viability_subject = any(
+                match.group(0).lower() not in {"probiotic", "probiotics"}
+                for match in _PROBIOTIC_VIABILITY_RE.finditer(unit)
+            )
+            if (
+                require_potency_claim and count is None and not explicit_viability_subject
+                and not re.search(r"\b(?:guarantee\w*|potency)\b", unit, re.I)
+            ):
                 # A product's ordinary lot/best-by or storage date is not a
                 # quantified potency warranty. Scoped ingredient rows retain
                 # their own timing facts; standalone statements need a claim.
@@ -17516,7 +17534,7 @@ class SupplementEnricherV3:
                     continue
             # An unspecified "effective amount/level" is not a quantified
             # guarantee for a count stated elsewhere at manufacture.
-            if count is None and re.search(r"\b(?:effective|adequate|sufficient)\s+(?:amount|level|count|number)s?\b", unit, re.I):
+            if count is None and unspecified_amount.search(unit):
                 continue
             timing = self._guarantee_timing(unit)
             if timing == "at_expiration":

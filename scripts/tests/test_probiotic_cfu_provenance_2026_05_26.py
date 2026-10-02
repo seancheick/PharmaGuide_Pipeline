@@ -1030,3 +1030,84 @@ def test_raw_literal_cfu_count_preserves_label_ownership_and_safety(enricher):
     assert data['cfu_raw_source_path'] == 'ingredientRows[0]'
     artifact = build_scored_artifact(enriched)
     assert artifact['product_safety_status'] == 'no_known_catalog_concern'
+
+
+@pytest.mark.parametrize('statement', ['CFU count at time of manufacture.', 'Colony Forming Units at time of manufacture.'])
+def test_explicit_unquantified_cfu_subject_keeps_its_timing(enricher, statement):
+    product = _count_guarantee_product([('Lactobacillus rhamnosus GG', 1, '')], [statement])
+    assert enricher._collect_probiotic_data(product)['guarantee_type'] == 'at_manufacture'
+
+
+
+def test_raw_total_cultures_is_metadata_not_nutrition_or_a_strain(enricher):
+    import json
+    from pathlib import Path
+    from enhanced_normalizer import EnhancedDSLDNormalizer
+    from scoring_input_contract import get_evidence_subject_rows
+    raw = json.loads((Path(__file__).parent / 'fixtures' / 'probiotic_cfu_total_297668_raw.json').read_text())
+    cleaned = EnhancedDSLDNormalizer().normalize_product(raw)
+    total = next(row for row in enricher._flatten_active_ingredients_for_analysis(cleaned['activeIngredients'])
+                 if row.get('raw_source_path') == 'ingredientRows[1].nestedRows[16]')
+    assert total['cleaner_row_role'] == 'blend_header_total'
+    assert total['score_eligible_by_cleaner'] is False
+    assert '30 Billion CFU' in total['notes']
+    enriched = enricher.enrich_product(cleaned)[0]
+    data = enriched['probiotic_data']
+    assert data['total_cfu'] == 30e9
+    assert data['guarantee_type'] == 'at_expiration'
+    assert not any('Total Probiotic Cultures' in b.get('strains', []) for b in data['probiotic_blends'])
+    assert not any(row.get('name') == 'Total Probiotic Cultures' for row in get_evidence_subject_rows(enriched))
+
+
+def test_nested_cfu_total_has_one_aggregate_owner(enricher):
+    product = _count_guarantee_product([
+        ('Probiotic Blend', 0, ''), ('Total Probiotic Cultures', 10, '10 billion CFU through expiration'),
+        ('Lactobacillus rhamnosus GG', 4, '4 billion CFU through expiration'),
+    ])
+    parent, total, strain = product['activeIngredients']
+    parent.update(cleaner_row_role='blend_header_total', score_eligible_by_cleaner=False)
+    total.update(raw_source_path='ingredientRows[0].nestedRows[1]', cleaner_row_role='blend_header_total', score_eligible_by_cleaner=False, dose_role='declared_total')
+    strain['raw_source_path'] = 'ingredientRows[0].nestedRows[0]'
+    data = enricher._collect_probiotic_data(product)
+    assert data['total_cfu'] == 10e9
+    assert data['guarantee_type'] == 'at_expiration'
+
+
+@pytest.mark.parametrize('nested_count,expected_count,expected_timing', [
+    (50, 70, 'at_expiration'),
+    (40, 70, None),
+    (60, 80, 'at_expiration'),
+])
+def test_nested_total_warranty_matches_its_counted_subtree(enricher, nested_count, expected_count, expected_timing):
+    product = _count_guarantee_product([
+        ('Probiotic Blend', 50, ''),
+        ('Total Probiotic Cultures', nested_count, 'through expiration'),
+        ('Lactobacillus rhamnosus GG', 20, '20 billion CFU through expiration'),
+    ])
+    parent, total, _ = product['activeIngredients']
+    parent.update(cleaner_row_role='blend_header_total', score_eligible_by_cleaner=False)
+    total.update(raw_source_path='ingredientRows[0].nestedRows[0]',
+                 cleaner_row_role='blend_header_total', score_eligible_by_cleaner=False,
+                 dose_role='declared_total')
+    data = enricher._collect_probiotic_data(product)
+    assert data['total_cfu'] == expected_count * 1e9
+    assert data['guarantee_type'] == expected_timing
+
+
+def test_three_level_headers_count_members_once(enricher):
+    product = _count_guarantee_product([
+        ('Probiotic Blend', 0, ''), ('Probiotic Blend', 6, '6 billion CFU through expiration'),
+        ('Lactobacillus rhamnosus GG', 3, '3 billion CFU through expiration'),
+        ('Bifidobacterium longum BB536', 3, '3 billion CFU through expiration'),
+        ('Lactobacillus reuteri NCIMB 30242', 4, '4 billion CFU through expiration'),
+    ])
+    outer, inner, first, second, sibling = product['activeIngredients']
+    for header in (outer, inner):
+        header.update(cleaner_row_role='blend_header_total', score_eligible_by_cleaner=False)
+    inner['raw_source_path'] = 'ingredientRows[0].nestedRows[0]'
+    first['raw_source_path'] = 'ingredientRows[0].nestedRows[0].nestedRows[0]'
+    second['raw_source_path'] = 'ingredientRows[0].nestedRows[0].nestedRows[1]'
+    sibling['raw_source_path'] = 'ingredientRows[0].nestedRows[1]'
+    data = enricher._collect_probiotic_data(product)
+    assert data['total_cfu'] == 10e9
+    assert data['guarantee_type'] == 'at_expiration'

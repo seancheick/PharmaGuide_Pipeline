@@ -5091,7 +5091,7 @@ class EnhancedDSLDNormalizer:
                 parent_mass, parent_unit = self._extract_primary_mass_unit(ing)
                 for nested_ing in self._lift_decomposition_members(nested):
                     nested_name = nested_ing.get("name", "")
-                    if self._should_skip_ingredient(nested_name):
+                    if self._should_skip_ingredient(nested_name) and not self._is_probiotic_cfu_total_row(nested_ing):
                         continue
                     if self._is_chemical_decomposition_leaf(nested_ing):
                         logger.debug(
@@ -5132,7 +5132,7 @@ class EnhancedDSLDNormalizer:
                 parent_mass, parent_unit = self._extract_primary_mass_unit(ing)
                 for nested_ing in self._lift_decomposition_members(nested):
                     nested_name = nested_ing.get("name", "")
-                    if self._should_skip_ingredient(nested_name):
+                    if self._should_skip_ingredient(nested_name) and not self._is_probiotic_cfu_total_row(nested_ing):
                         continue
                     if self._is_chemical_decomposition_leaf(nested_ing):
                         logger.debug(
@@ -5166,6 +5166,7 @@ class EnhancedDSLDNormalizer:
 
             if (
                 self._is_structural_active_display_only_leaf(ing)
+                and not self._is_probiotic_cfu_total_row(ing)
                 and not self._is_dosed_explicit_amino_aggregate_owner(ing)
             ):
                 logger.debug(f"Skipping structural active display-only leaf: {name}")
@@ -5182,7 +5183,8 @@ class EnhancedDSLDNormalizer:
             # SKIP ENFORCEMENT: Skip items from skip list during flattening
             # This runs after label header check so we don't skip headers with forms
             if self._should_skip_ingredient(name) and not (
-                self._is_dosed_explicit_amino_aggregate_owner(ing)
+                self._is_probiotic_cfu_total_row(ing)
+                or self._is_dosed_explicit_amino_aggregate_owner(ing)
                 or self._is_dosed_omega_aggregate_owner(
                     ing,
                     ing.get("raw_source_path") or "activeIngredients",
@@ -5223,7 +5225,7 @@ class EnhancedDSLDNormalizer:
                     parent_mass, parent_unit = self._extract_primary_mass_unit(ing)
                     for nested_ing in self._lift_decomposition_members(nested):
                         nested_name = nested_ing.get("name", "")
-                        if self._should_skip_ingredient(nested_name):
+                        if self._should_skip_ingredient(nested_name) and not self._is_probiotic_cfu_total_row(nested_ing):
                             # Recurse into skip-listed children that have
                             # their own nestedRows (same rescue pattern as
                             # the default-path nested skip block below).
@@ -5290,7 +5292,7 @@ class EnhancedDSLDNormalizer:
                     # Without this, EPA/DHA nested under "Total EPA and DHA"
                     # (which is skip-listed) are silently dropped — affecting
                     # ~40 omega-3/tocopherol products.
-                    if self._should_skip_ingredient(nested_name):
+                    if self._should_skip_ingredient(nested_name) and not self._is_probiotic_cfu_total_row(nested_ing):
                         logger.debug(f"Skipping nested ingredient: {nested_name}")
                         grand_nested = nested_ing.get("nestedRows") or []
                         is_nutrition_fact = self._is_nutrition_fact(
@@ -5326,7 +5328,7 @@ class EnhancedDSLDNormalizer:
                             skipped_mass, skipped_unit = self._extract_primary_mass_unit(nested_ing)
                             for grand_ing in self._lift_decomposition_members(grand_nested):
                                 grand_name = grand_ing.get("name", "")
-                                if self._should_skip_ingredient(grand_name):
+                                if self._should_skip_ingredient(grand_name) and not self._is_probiotic_cfu_total_row(grand_ing):
                                     # Recursively flatten skip-listed
                                     # grandchildren that themselves have
                                     # children (handles arbitrary depth).
@@ -6833,6 +6835,7 @@ class EnhancedDSLDNormalizer:
             if (
                 is_active
                 and self._is_structural_active_display_only_leaf(ing)
+                and not self._is_probiotic_cfu_total_row(ing)
                 and not self._is_dosed_explicit_amino_aggregate_owner(ing)
             ):
                 self._queue_display_ingredient(
@@ -7145,6 +7148,7 @@ class EnhancedDSLDNormalizer:
         if (
             is_active
             and self._is_structural_active_display_only_leaf(ing)
+            and not self._is_probiotic_cfu_total_row(ing)
             and not self._is_dosed_explicit_amino_aggregate_owner(ing)
         ):
             self._queue_display_ingredient(
@@ -7192,9 +7196,11 @@ class EnhancedDSLDNormalizer:
             quantity_g=_quantity_g,
         ) and not (
             is_active
-            and self._is_dosed_omega_aggregate_owner(
-                ing,
-                ing.get("raw_source_path") or "activeIngredients",
+            and (
+                self._is_probiotic_cfu_total_row(ing)
+                or self._is_dosed_omega_aggregate_owner(
+                    ing, ing.get("raw_source_path") or "activeIngredients",
+                )
             )
         ):
             logger.debug(f"Skipping nutrition fact: {name} (group: {ingredient_group}, unit: {unit_raw})")
@@ -8040,9 +8046,11 @@ class EnhancedDSLDNormalizer:
         }
         if ing.get("parent_source_path"):
             result["parent_source_path"] = ing["parent_source_path"]
-        if is_active and self._is_dosed_omega_aggregate_owner(
-            ing,
-            ing.get("raw_source_path") or "activeIngredients",
+        if is_active and (
+            self._is_probiotic_cfu_total_row(ing)
+            or self._is_dosed_omega_aggregate_owner(
+                ing, ing.get("raw_source_path") or "activeIngredients",
+            )
         ):
             result["dose_role"] = "declared_total"
         if dose_data_quality:
@@ -11649,6 +11657,17 @@ class EnhancedDSLDNormalizer:
             return False
         processed_name = self.matcher.preprocess_text(name)
         return processed_name in STRUCTURAL_ACTIVE_BLEND_LEAF_NAMES
+
+    def _is_probiotic_cfu_total_row(self, ing: Dict[str, Any]) -> bool:
+        """Preserve an explicit DSLD overall culture total as excluded metadata.
+
+        Enrichment owns CFU parsing. This identifies the label's structural
+        total only; it creates neither a strain identity nor a member dose.
+        """
+        return (
+            self.matcher.preprocess_text(ing.get("name") or "") == "total probiotic cultures"
+            and self._is_dsld_active_blend_total_row(ing)
+        )
 
     def _is_dsld_active_blend_total_row(self, ing: Dict[str, Any]) -> bool:
         """Identify DSLD blend rows whose quantity is a blend total."""
