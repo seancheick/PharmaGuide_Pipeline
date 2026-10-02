@@ -1389,3 +1389,16 @@ def test_each_product_name_is_not_an_unknown_serving_unit(enricher):
         'minDailyServings': 1, 'maxDailyServings': 1})
     enriched = enricher.enrich_product(product)[0]
     assert enriched['probiotic_data']['total_cfu'] == 1e9
+
+
+@pytest.mark.parametrize('unit,quantity,statement,expected', [
+    ('mL', 2, '3 billion CFU per mL', 6e9),
+    ('mL', 2, 'Each mL provides 3 billion CFU', 6e9),
+    ('Capsule(s)', 1, '15 billion CFU per mysteryunit', 2e9),
+])
+def test_unprinted_unit_count_is_one_and_unknown_explicit_basis_is_rejected(enricher, unit, quantity, statement, expected):
+    product = _serving_basis_product(2, '', statement, {
+        'minQuantity': quantity, 'maxQuantity': quantity, 'unit': unit,
+        'minDailyServings': 1, 'maxDailyServings': 1})
+    enriched = enricher.enrich_product(product)[0]
+    assert enriched['probiotic_data']['total_cfu'] == expected
