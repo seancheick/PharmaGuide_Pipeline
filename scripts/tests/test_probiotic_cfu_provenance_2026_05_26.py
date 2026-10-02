@@ -1007,3 +1007,26 @@ def test_parenthetical_and_total_claims_keep_their_own_warranty(enricher, text, 
 ])
 def test_renewed_parenthetical_or_slash_claim_cannot_warrant_selected_amount(enricher, text):
     assert enricher._extract_guarantee_type(text, True, 10e9) == 'at_manufacture'
+
+
+def test_best_by_date_alone_does_not_warrant_probiotic_only_product(enricher):
+    product = _count_guarantee_product([
+        ('Lactobacillus rhamnosus GG', 1.5, ''),
+    ], ['Lot No.: Y20574\nBest By Date: 09/14'])
+    assert enricher._collect_probiotic_data(product)['guarantee_type'] is None
+
+
+
+def test_raw_literal_cfu_count_preserves_label_ownership_and_safety(enricher):
+    import json
+    from pathlib import Path
+    from enhanced_normalizer import EnhancedDSLDNormalizer
+    from scoring_v4.scored_artifact import build_scored_artifact
+    raw = json.loads((Path(__file__).parent / 'fixtures' / 'probiotic_literal_cfu_232059_raw.json').read_text())
+    enriched = enricher.enrich_product(EnhancedDSLDNormalizer().normalize_product(raw))[0]
+    data = enriched['probiotic_data']
+    assert data['total_cfu'] == 2e9
+    assert data['guarantee_type'] == 'at_manufacture'
+    assert data['cfu_raw_source_path'] == 'ingredientRows[0]'
+    artifact = build_scored_artifact(enriched)
+    assert artifact['product_safety_status'] == 'no_known_catalog_concern'

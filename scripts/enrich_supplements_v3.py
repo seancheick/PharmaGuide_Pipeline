@@ -16091,6 +16091,7 @@ class SupplementEnricherV3:
         statement_guarantees = {
             self._extract_guarantee_type(
                 part, subject_is_probiotic=probiotic_only_product,
+                require_potency_claim=True,
                 target_cfu_count=product_level_cfu.get("cfu_count") if product_level_cfu.get("has_cfu") else None,
             )
             for part in statement_parts
@@ -16687,6 +16688,7 @@ class SupplementEnricherV3:
         final_guarantees = {
             self._extract_guarantee_type(
                 part, subject_is_probiotic=probiotic_only_product,
+                require_potency_claim=True,
                 target_cfu_count=total_cfu if has_cfu else None,
             )
             for part in statement_parts
@@ -17431,7 +17433,7 @@ class SupplementEnricherV3:
 
     def _extract_guarantee_type(
         self, text: str, subject_is_probiotic: bool = False,
-        target_cfu_count: Optional[float] = None,
+        target_cfu_count: Optional[float] = None, require_potency_claim: bool = False,
     ) -> Optional[str]:
         """
         P1.1: Extract CFU guarantee type from text.
@@ -17503,6 +17505,11 @@ class SupplementEnricherV3:
             if not names_probiotic and not subject_is_probiotic:
                 continue
             count = self._parse_cfu_text_count(unit)
+            if require_potency_claim and count is None and not re.search(r"\b(?:guarantee\w*|potency)\b", unit, re.I):
+                # A product's ordinary lot/best-by or storage date is not a
+                # quantified potency warranty. Scoped ingredient rows retain
+                # their own timing facts; standalone statements need a claim.
+                continue
             if count is not None and target_cfu_count is not None:
                 count = self._parse_cfu_text_count(unit, target_count=target_cfu_count)
                 if count is None:
