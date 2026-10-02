@@ -42,6 +42,17 @@ def test_a_copy_fact_missing_from_the_evidence_is_flagged(reason, warning, flagg
 
 
 @pytest.mark.parametrize(
+    "reason, warning, flagged",
+    [
+        ("A 2013 report described opioid activity.", "Estimated 13 times morphine potency. Stop.", "number '13 times'"),
+        ("A product contained 1800 mcg per serving.", "Particularly above 800 mg. Stop.", "number '800 mg'"),
+    ],
+)
+def test_a_number_inside_another_number_is_not_support(reason, warning, flagged):
+    assert flagged in copy_claims_without_evidence(_entry(reason, warning))
+
+
+@pytest.mark.parametrize(
     "reason, warning",
     [
         ("Multiple fatalities have been reported.", "Linked to deaths. Stop."),

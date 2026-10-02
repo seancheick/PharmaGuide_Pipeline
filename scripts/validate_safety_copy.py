@@ -164,6 +164,11 @@ def _norm_fact_text(text: str) -> str:
     return re.sub(r"\s+", " ", (text or "").lower().replace(",", ""))
 
 
+def _evidence_has_number(evidence: str, value: str) -> bool:
+    """Return whether ``value`` occurs as a complete numeric token."""
+    return re.search(rf"(?<![\d.]){re.escape(value)}(?![\d.])", evidence) is not None
+
+
 def copy_claims_without_evidence(entry: Dict[str, Any]) -> List[str]:
     """Factual tokens in the copy that the record's evidence text never states."""
     # The registry tier (``status``) is not evidence; the legal status is.
@@ -177,7 +182,11 @@ def copy_claims_without_evidence(entry: Dict[str, Any]) -> List[str]:
     evidence = _norm_fact_text(" ".join(pool))
     copy = _norm_fact_text(f"{entry.get('safety_warning') or ''} {entry.get('safety_warning_one_liner') or ''}")
     copy_without_negatives = re.sub(r"\bun(approved|lawful)\b|\bnot approved\b", " ", copy)
-    missing = [f"number '{m.group(0)}'" for m in _COPY_NUMBER.finditer(copy) if m.group(1).replace(",", "") not in evidence]
+    missing = [
+        f"number '{m.group(0)}'"
+        for m in _COPY_NUMBER.finditer(copy)
+        if not _evidence_has_number(evidence, m.group(1).replace(",", ""))
+    ]
     for claim, stems in _COPY_CLAIMS.items():
         text = copy_without_negatives if claim == "approved" else copy
         if claim in text and not any(stem in evidence for stem in stems):
