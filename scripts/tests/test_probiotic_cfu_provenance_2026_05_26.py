@@ -1186,13 +1186,15 @@ def test_per_unit_statement_is_rebased_onto_the_panel_serving(enricher):
 def test_statement_for_the_selected_audience_column_still_owns_the_count(enricher):
     # Raw 267658: the analysed column is 2 gummies; "2 billion CFU's in 2
     # gummies" is that column's count and exceeds the shared 1 billion note.
-    data = enricher._collect_probiotic_data(_serving_basis_product(
+    product = _serving_basis_product(
         1, '1 Billion CFUs', "2 billion CFU's in 2 gummies at time of expiration",
         {'minQuantity': 2, 'maxQuantity': 2, 'unit': 'Gummy(ies)',
          'minDailyServings': 1, 'maxDailyServings': 1},
         [{'serving_size_quantity': 1, 'serving_size_unit': 'Gummy(ies)'},
          {'serving_size_quantity': 2, 'serving_size_unit': 'Gummy(ies)',
-          'selected_for_analysis': True}]))
+          'selected_for_analysis': True}])
+    product['serving_basis'] = {'canonical_serving_size_quantity': 2.0}
+    data = enricher._collect_probiotic_data(product)
     assert data['total_cfu'] == 2e9
     assert data['guarantee_type'] == 'at_expiration'
 
@@ -1274,5 +1276,40 @@ def test_zero_unit_basis_cannot_replace_rows(enricher):
         5, '', '15 billion CFU per 0 capsules',
         {'minQuantity': 1, 'maxQuantity': 1, 'unit': 'Capsule(s)',
          'minDailyServings': 1, 'maxDailyServings': 1},
+        [{'serving_size_quantity': 1, 'serving_size_unit': 'Capsule(s)'}]))
+    assert data['total_cfu'] == 5e9
+
+
+
+@pytest.mark.parametrize('statement', [
+    'Provides 50 billion CFU in capsules',
+    '50 billion CFU in capsule form',
+    'Delivers 50 billion CFU in a capsule designed to survive stomach acid',
+])
+def test_dosage_form_wording_is_not_a_per_unit_basis(enricher, statement):
+    data = enricher._collect_probiotic_data(_serving_basis_product(
+        30, '', statement,
+        {'minQuantity': 2, 'maxQuantity': 2, 'unit': 'Capsule(s)',
+         'minDailyServings': 1, 'maxDailyServings': 1},
+        [{'serving_size_quantity': 2, 'serving_size_unit': 'Capsule(s)'}]))
+    assert data['total_cfu'] == 50e9
+
+
+def test_daily_adjective_at_the_window_edge_is_not_a_basis(enricher):
+    # The old 90-character cutoff ended the search right after "daily".
+    head, tail = '15 billion live cultures ', ' a daily'
+    statement = head + 'x' * (90 - len(head) - len(tail)) + tail + ' digestive routine'
+    data = enricher._collect_probiotic_data(_serving_basis_product(
+        5, '', statement,
+        {'minQuantity': 1, 'maxQuantity': 1, 'unit': 'Capsule(s)',
+         'minDailyServings': 1, 'maxDailyServings': 3},
+        [{'serving_size_quantity': 1, 'serving_size_unit': 'Capsule(s)'}]))
+    assert data['total_cfu'] == 15e9
+
+
+def test_defaulted_daily_frequency_cannot_restate_a_per_day_count(enricher):
+    data = enricher._collect_probiotic_data(_serving_basis_product(
+        5, '', '15 billion CFU per day',
+        {'minQuantity': 1, 'maxQuantity': 1, 'unit': 'Capsule(s)'},
         [{'serving_size_quantity': 1, 'serving_size_unit': 'Capsule(s)'}]))
     assert data['total_cfu'] == 5e9
