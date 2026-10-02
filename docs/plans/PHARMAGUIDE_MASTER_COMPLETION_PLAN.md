@@ -9,8 +9,10 @@ A checked implementation box means that specific deliverable is implemented, mea
 Latest validated pipeline source is `91987d74`: consolidated CFU ownership and
 independent quality/safety, including export copy. Final portable fast:
 **18,079 passed,168 skipped,zero failures or expected failures** (751.29s).
-Frozen replays and independent source review passed. App broad validation and
-main integration/push are pending. Earlier checkpoints remain historical receipts,
+Frozen replays and independent source review passed. Source integrated/pushed to
+pipeline main `0f9ca406` and app main `63eeabff`; combined app analysis is clean
+and **3,742 tests passed**. Contained worktrees/branches are cleaned up.
+Earlier checkpoints remain historical receipts,
 not current final-corpus or runtime release approval.
 
 - [x] Reconcile current main and the integration lane, including the release/storage changes on `d021061b`.
@@ -253,14 +255,14 @@ Sean decisions under Phase4, rather than implicit choices by an implementer.
 - [x] Consolidated CFU/structural/nutrition boundary: 1,632 passed,16 skipped; final allocation controls:172 passed,5 skipped. Earlier105-check receipt remains historical.
 - [x] Complete clean1,259-label CFU replay and classify all33 score movements;717 omega controls identical, no Evidence/Safety/Verification/route/status/purpose changes. Independent review accepted source.
 - [x] Complete final portable full-fast checkpoint at `91987d74`:18,079 passed,168 skipped,zero failures/xfails.
-- [ ] Complete main integration/push and contained-lane cleanup.
+- [x] Complete pipeline main integration/push (`0f9ca406`) and contained-lane archive/branch cleanup; ignored handoff and frozen receipts preserved outside the worktree.
 - [ ] Close remaining label/basis discrepancies before final calibration/release.
 
 Owner: `SupplementEnricherV3::_extract_cfu` / `_extract_guarantee_type` /
 `_collect_probiotic_data`; `serving_frequency::resolve_daily_serving_range` for
 frequency. Evidence: raw12091, failing source regressions,105 focused checks and
 production Dose consumers. Will NOT create: CFU parser/registry, scoring engine,
-public field/status, or numerical policy. Working source `83fc2ae5`; initial
+public field/status, or numerical policy. Historical isolated source `83fc2ae5`; initial
 candidate `99aa837b` was rejected after replay/review and is not accepted by itself.
 Durable receipts: `/Users/seancheick/pg_quality/cfu_guarantee_20261001/`.
 
@@ -299,9 +301,10 @@ score, status field, safety classifier, quality ladder or app-side calculation.
   values are identical. Version 1.22.1 preserves the earlier fingerprint.
 - [x] Complete final1,259-label separation replay: only four config-provenance paths change. All46 production-artifact probes retain scores, tiers and typed safety; zero newly emitted POOR.
 - [x] Complete portable pipeline fast at `91987d74`:18,079 passed,168 skipped,zero failures/xfails.
-- [ ] Complete app `make check` (source `a58d81da`).
-- [ ] Integrate/push both repositories, update final receipts and remove contained
-  worktrees/branches. No runtime catalog publication is authorized here.
+- [x] Complete app `make check` at merged source `63eeabff`: analysis no issues;3,742 passed,zero failures,1:56. Concurrent main `f8c08d80` preserved and reviewed;12 focused stack-action checks passed. No golden images updated.
+- [x] Integrate/push both repositories and remove contained Git worktrees/branches.
+  Pipeline `0f9ca406`, app `63eeabff`; final documentation receipt follows.
+  No runtime catalog publication is authorized here.
 
 Process correction: consolidate each defect class across source preservation,
 selection and consumers; run focused tests first, then freeze the completed batch
@@ -310,3 +313,18 @@ measurement must be corrected before integration. Do not expand a source cleanup
 into unapproved numerical policy or clinical coverage claims.
 
 Final export followup `50a2fb7d`: existing `build_decision_highlights` no longer selects caution copy from legacy SAFE/POOR/CAUTION. It reads typed safety and quality-assessment readiness independently; additive/danger copy is retained. Two reproduced failures plus missing/unknown-safety and retained-danger controls cover this class. Export-owner sweep:2,766 passed,72 generated-artifact skips. Independent review accepted the narrow fix. The interrupted broad rerun (8,894 passed,131 skipped) is not a final acceptance receipt; the final broad gate follows this last production change.
+
+
+## October 1 final source integration receipt
+
+- [x] Q54 CFU producer/parser/aggregate/warranty consolidation implemented, measured, independently reviewed and integrated.33 frozen score movements explained;717 omega controls unchanged.
+- [x] Q55 quality/safety separation implemented across scoring, public artifact, export copy, release comparison, Flutter consumers and current agent doctrine. Scores/maxima unchanged by separation; no newly emitted POOR.
+- [x] Final pipeline fast:18,079 passed,168 generated/live-opt-in skips,zero failures or expected failures (751.29s), source91987d74.
+- [x] Final merged app make check:analysis zero issues,3,742 passed,zero failures (1:56), source63eeabff. One derived vocabulary-manifest checksum fixed through its canonical builder; no golden images changed.
+- [x] Independent review accepts both source candidates. Both main branches pushed; each repository has only its main checkout and local main branch. Fresh Dependabot branches remain because they contain real work.
+- [x] Managed pipeline lane archived and contained branch removed; app lane removed after integration. Ignored handoffs and all historical/final evidence preserved in `/Users/seancheick/pg_quality/cfu_guarantee_20261001/`.
+- [ ] Final runtime candidate and release acceptance: incomplete; no catalog/Supabase/OTA publication in this batch.
+
+The stale quality-completion UI attachment is owned by another chat and cannot be archived from this chat. It has no current Git worktree or branch; it is not pending implementation. The archive tool refused cross-chat ownership, and no source was deleted to work around that limitation.
+
+Next remains D26 equivalent Dose benchmark ownership and D24/omega policy packets, the nine Q53 clinical determinations and the three raw serving/title discrepancies, then numerical calibration and one fresh final Clean corpus/release manifest. Those items remain explicitly open; source integration does not close them.
