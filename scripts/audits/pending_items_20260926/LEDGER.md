@@ -384,7 +384,7 @@ items. The existing user-run corpus is preserved; no full corpus job or
 runtime publication was performed.
 
 
-### October 2 — CI/CFU integration audit (final CI pending)
+### October 2 — CI/CFU integration audit (source integrated; release pending)
 
 - [x] Preserve main's CI/Flutter cross-repo checks; the canonical fast file set forms four disjoint shards, with all local files retained.
 - [x] Correct broad-worker overcommit and wrapper-death lifetime. Focused fast file/node checks never wait; broad fast/local share bounded one-worker slots; full/release/slow are exclusive.
@@ -393,6 +393,6 @@ runtime publication was performed.
 - [x] Correct CFU count/exposure/warranty binding at existing owners, including explicit prefixes, liquids, unknown units, no-panel unresolved daily counts and exact panel-note equivalents. Focused151 passed/one OCR opt-in skip; fresh review248 converter/20 full-enrichment checks passed.
 - [x] Final 455-label measurement: nine explained changes, 446 identical; no tier/route/status/Safety movements. Memory-fix replay: 16 identical production controls.
 - [x] Four-shard exact-source CI at `31f41e56`, run 37033681364.
-- [ ] Final scheduling CI and main integration/push. Completed Claude worktrees/branches removed with recovery tags and preserved handoffs.
+- [x] Final exact-source four-shard CI at `913fc9fe`, run 37036894025 passed; integrated/pushed to main. Completed Claude worktrees/branches removed with recovery tags and preserved handoffs.
 
 Q39's three CFU-source discrepancies242637/242654/327966 are closed for source/sample validation; broader Q39 remains open. Q56 is the separate DEA-date review, renumbered because Q54 already denotes integrated CFU consolidation. No new clinical/scoring policy, public status/field, magnitude or registry. Owner: existing CFU/serving/warranty producer and existing test runner/manifest; Will NOT create: second parser, scorer, profile list or execution register. Receipt folder: `/Users/seancheick/pg_quality/ci_cfu_integrator_audit_20261002/`. D26/D24/omega/Q53 clinical coverage, remaining role/serving classes, calibration and final corpus/manifest/runtime publication remain open.

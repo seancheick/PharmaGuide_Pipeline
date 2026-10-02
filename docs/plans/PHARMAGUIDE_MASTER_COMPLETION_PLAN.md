@@ -32,7 +32,7 @@ phase, or replace the remaining corpus/release gates.
 - [x] Freeze the final 455-label replay: nine explained changes, 446 unchanged; six totals decrease 0.8–1.0, three CFU metadata changes only. No tier, route, status or Safety changes.
 - [x] Integrate and independently validate the normalizer instance-cache memory fix; 16 frozen production controls remain byte-equivalent.
 - [x] Pass exact-source four-shard CI at `31f41e56` (run 37033681364).
-- [ ] Pass final scheduling CI and integrate/push main. Superseded Claude worktrees/branches and the rejected audit branch are removed; recovery tags and ignored handoff copies are preserved.
+- [x] Pass final exact-source four-shard CI at `913fc9fe` ([run 37036894025](https://github.com/seancheick/PharmaGuide_Pipeline/actions/runs/37036894025)); integrate/push to main and remove equivalent branches/worktrees. Recovery tags and ignored handoff copies are preserved.
 
 Owner: `SupplementEnricherV3::_collect_probiotic_data`, `_statement_cfu_per_serving`, `_extract_guarantee_type`, existing serving-unit/selection helpers; `scripts/test.sh`, `test_profiles.py`, `test_lock.py`, `ci_skip_guard.py` own validation. Evidence: fail-first probes, production-boundary regressions, frozen raw replay and independent review. Will NOT create: another count/parser/serving owner, scorer, public field/status, scoring policy or test manifest. Earlier rejected measurements are not acceptance evidence.
 
@@ -120,6 +120,7 @@ The October 1 source audit reconciled these boxes against current production and
 ### Phase 2 — Identity, roles and prominence — completed fixes and remaining source work
 
 - [x] Preserve landed Lane 2A subject ownership, Q3 single sugar/sweetener charging and Q40 cleaner-owned plant part.
+- [x] Close the bounded CFU source cases `242637` / `242654` / `327966`: statement exposure and guarantee use the selected panel serving; `327966` remains 50 B through expiration. Final 455-label replay explains all nine changed payloads and preserves 446 controls. Broader alternate-serving and role classes remain open.
 - [x] Fix Ravage cinnamon at the cleaner's functional attribution seam; retain explicit flavors, active/other membership, source paths and undisclosed member dose (Q48).
 - [x] Measure Ravage and five controls, then the extended 1,259-label cohort; obtain fresh review and **zero expected failures** in the full fast checkpoint.
 - [x] Correct trace-protein purpose for EAA product `66953` through shared roles and sports Evidence/Formulation/Dose consumers (Q39(b), source `3ee91eae`, pushed). Final fast suite passed; fresh review accepted clean replays. Total 49.1→37.0 is explained, Safety unchanged; five targeted and all 1,259 extended controls retain identical full payloads. EAA research remains open in Phase3.
