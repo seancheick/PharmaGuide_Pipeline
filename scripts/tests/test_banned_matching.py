@@ -72,9 +72,11 @@ def test_7keto_dhea_alias_variants_match(enricher, variant):
 
 
 @pytest.mark.parametrize("variant", ["2-Amino-5 Methylhexane", "2-amino-5-methylhexane"])
-def test_dmha_analog_variant_matches(enricher, variant):
+def test_dmaa_positional_isomer_matches_the_analog_rule(enricher, variant):
+    """5-methylhexan-2-amine is a positional isomer of DMAA, not DMHA (LEDGER Q62)."""
     banned_ids = _banned_ids(enricher, variant)
-    assert "BANNED_DMHA" in banned_ids
+    assert "STIM_METHYLHEXANAMINE_ANALOGS" in banned_ids
+    assert "BANNED_DMHA" not in banned_ids
 
 
 @pytest.mark.parametrize("variant", ["IGF binding protein", "IGFBP", "IGFBP3"])

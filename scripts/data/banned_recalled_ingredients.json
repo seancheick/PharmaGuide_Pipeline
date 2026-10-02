@@ -4,7 +4,7 @@
     "purpose": "safety_disqualification_and_regulatory_compliance",
     "schema_version": "5.5.3",
     "last_updated": "2026-10-02",
-    "total_entries": 187,
+    "total_entries": 188,
     "data_source_metadata": {
       "sources": [
         "FDA",
@@ -450,7 +450,7 @@
     "risk_breakdown": {
       "critical": 114,
       "dose_dependent": 3,
-      "high": 46,
+      "high": 47,
       "low": 1,
       "moderate": 23
     },
@@ -4092,15 +4092,9 @@
       "aliases": [
         "2-aminoisoheptane",
         "octodrine",
-        "valerophenone",
         "2-amino-6-methylheptane",
         "dimethylhexylamine",
         "DMHA",
-        "2-aminoheptane",
-        "amidrine",
-        "2-amino-5-methylhexane",
-        "2 amino 5 methylhexane",
-        "2-amino-5 methylhexane",
         "octodrine hcl"
       ],
       "reason": "DMHA (2-amino-6-methylheptane, also called 2-aminoisoheptane or Octodrine) is a synthetic aliphatic amine with sympathomimetic stimulant effects similar to DMAA. FDA issued warning letters in 2019 and now states that DMHA does not meet the definition of a dietary ingredient and is an unsafe food additive, so products containing it are adulterated. Its human pharmacology has barely been studied; side effects reported, mostly by users online, include high blood pressure, breathing difficulty and overheating, and it has been found in supplements at about twice its former pharmaceutical dose. It was widely used as a DMAA replacement after FDA's DMAA enforcement actions began. None of the DMAA class analogs are lawful supplement ingredients.",
@@ -4224,6 +4218,11 @@
             "date": "2026-10-02",
             "by": "claude-audit",
             "change": "LEDGER Q61 (Sean 2026-10-02): safety copy brought to the evidence in reason; removed 'associated with elevated blood pressure and cardiovascular risk' (user reports only). Receipt: q61_safety_copy_20261002.md."
+          },
+          {
+            "date": "2026-10-02",
+            "by": "claude-audit",
+            "change": "LEDGER Q62 (Sean 2026-10-02): aliases removed ['valerophenone', '2-aminoheptane', 'amidrine', '2-amino-5-methylhexane', '2 amino 5 methylhexane', '2-amino-5 methylhexane']: PubChem: DMHA is 6-methylheptan-2-amine (CID 10982); valerophenone is a ketone (CID 66093), 2-aminoheptane is tuaminoheptane (CID 5603), 2-amino-5-methylhexane is 5-methylhexan-2-amine (CID 34204); 'amidrine' is not among octodrine's 112 PubChem synonyms. Corpus 2026-10-02: no label in the 15,421-product corpus matched through them."
           }
         ]
       },
@@ -4272,7 +4271,6 @@
         "ephedra sinica",
         "ephedrine alkaloids",
         "ephedra extract",
-        "sida cordifolia",
         "ephedra vulgaris",
         "ephedra equisetina",
         "ephedra distachya",
@@ -4409,6 +4407,11 @@
             "date": "2026-10-02",
             "by": "claude-audit",
             "change": "LEDGER Q61 (Sean 2026-10-02): safety copy brought to the evidence in reason; removed 'heart attacks' and 'many in otherwise healthy users' (not in the sources read). Receipt: q61_safety_copy_20261002.md."
+          },
+          {
+            "date": "2026-10-02",
+            "by": "claude-audit",
+            "change": "LEDGER Q62 (Sean 2026-10-02): aliases removed ['sida cordifolia']: Sida cordifolia is a different plant; it now has its own rule (BANNED_SIDA_CORDIFOLIA) under the same ephedrine-alkaloid ban. Corpus 2026-10-02: no label in the 15,421-product corpus matched through them."
           }
         ]
       },
@@ -9285,8 +9288,6 @@
         "bisfluoromodafinil",
         "fl-modafinil",
         "lauflumide",
-        "fluoromodafinil",
-        "4′-fluoromodafinil",
         "CRL-40940",
         "flmodafinil"
       ],
@@ -9371,6 +9372,11 @@
             "date": "2026-10-02",
             "by": "claude-audit",
             "change": "LEDGER Q57b: harm claims checked against sources Claude read (2026-10-02); reason: 2 claim(s) weakened or removed to what the evidence supports; 2 verified source(s) added. Safety copy unchanged; flagged for Sean: aliases may include mono-fluoro 'fluoromodafinil'/'4-fluoromodafinil', a different compound (identity check).. Receipt: scripts/audits/pending_items_20260926/q57b_harm_sources_20261002.md."
+          },
+          {
+            "date": "2026-10-02",
+            "by": "claude-audit",
+            "change": "LEDGER Q62 (Sean 2026-10-02): aliases removed ['fluoromodafinil', '4′-fluoromodafinil']: flmodafinil is the bis(4-fluorophenyl) compound (CID 13271852); the mono-fluoro names are a different molecule. Corpus 2026-10-02: no label in the 15,421-product corpus matched through them."
           }
         ]
       },
@@ -10706,7 +10712,6 @@
       "aliases": [
         "priligy",
         "westoxetin",
-        "SSRIs in supplements",
         "dapoxetine hydrochloride",
         "dapoxetine"
       ],
@@ -10773,6 +10778,11 @@
             "date": "2026-10-02",
             "by": "claude-audit",
             "change": "LEDGER Q58 (Sean 2026-10-02): policy verified from the FDA notice read 2026-10-02 (https://www.fda.gov/drugs/medication-health-fraud/public-notification-super-platinum-30000-stallion-contains-hidden-drug-ingredients); US row replaced by that source"
+          },
+          {
+            "date": "2026-10-02",
+            "by": "claude-audit",
+            "change": "LEDGER Q62 (Sean 2026-10-02): aliases removed ['SSRIs in supplements']: a class phrase, not dapoxetine. Corpus 2026-10-02: no label in the 15,421-product corpus matched through them."
           }
         ]
       },
@@ -10806,7 +10816,6 @@
       "aliases": [
         "belviq",
         "lorqess",
-        "hidden weight loss drug",
         "lorcaserin hydrochloride",
         "lorcaserin"
       ],
@@ -10923,6 +10932,11 @@
             "date": "2026-10-02",
             "by": "claude-audit",
             "change": "LEDGER Q58 (Sean 2026-10-02): policy verified from the FDA notice read 2026-10-02 (https://www.fda.gov/drugs/medication-health-fraud/public-notification-green-algae-combination-crane-beauty-contains-hidden-drug-ingredient); US row replaced by that source"
+          },
+          {
+            "date": "2026-10-02",
+            "by": "claude-audit",
+            "change": "LEDGER Q62 (Sean 2026-10-02): aliases removed ['hidden weight loss drug']: not a name for lorcaserin. Corpus 2026-10-02: no label in the 15,421-product corpus matched through them."
           }
         ]
       },
@@ -11215,8 +11229,7 @@
       "standard_name": "GE Labs Ykarine",
       "aliases": [
         "ge labs ykarine",
-        "ykarine",
-        "ge labs"
+        "ykarine"
       ],
       "reason": "GE Labs Ykarine was found to contain undeclared trendione (trenbolone ketone / dione) — a designer anabolic steroid prohormone. The product was linked to a consumer stroke, which is a known risk of high-dose androgenic-anabolic steroids due to erythrocytosis, thrombosis, and dyslipidemia. Anabolic steroids are DEA Schedule III controlled substances when synthetic. The presence of undeclared trendione makes this product an adulterated, misbranded, and illegally marketed controlled substance analog.",
       "status": "banned",
@@ -11281,6 +11294,11 @@
             "date": "2026-10-02",
             "by": "claude-audit",
             "change": "LEDGER Q58 (Sean 2026-10-02): policy verified from FDA's 2025-12-02 alert; refs without URLs replaced by the alert"
+          },
+          {
+            "date": "2026-10-02",
+            "by": "claude-audit",
+            "change": "LEDGER Q62 (Sean 2026-10-02): aliases removed ['ge labs']: the whole brand, not the one product FDA tested. Corpus 2026-10-02: no label in the 15,421-product corpus matched through them."
           }
         ]
       },
@@ -13798,18 +13816,12 @@
         "quebrachine",
         "yohimbe bark",
         "pausinystalia yohimbe",
-        "alpha-yohimbine",
-        "rauwolscine",
-        "corynanthine",
         "yohimbine HCl",
         "yohimbine hydrochloride",
         "yohimbe extract",
         "yohimbe 2% extract",
         "yohimbe standardized extract",
         "yohimbe bark extract 2%",
-        "alpha yohimbine hydrochloride",
-        "alpha-yohimbine hydrochloride",
-        "alpha yohimbe",
         "yohimbines",
         "yohimbine alkaloids",
         "yohimbe alkaloids",
@@ -13835,7 +13847,11 @@
         "confidence": "high",
         "negative_match_terms": [
           "yohimbe-free",
-          "yohimbine-free"
+          "yohimbine-free",
+          "alpha-yohimbine",
+          "alpha yohimbine",
+          "rauwolscine",
+          "corynanthine"
         ]
       },
       "legal_status_enum": "high_risk",
@@ -13930,6 +13946,11 @@
             "date": "2026-10-02",
             "by": "claude-audit",
             "change": "LEDGER Q57b: harm claims checked against sources Claude read (2026-10-02); reason: 1 claim(s) weakened or removed to what the evidence supports; 4 verified source(s) added. Safety copy unchanged; flagged for Sean: Aliases rauwolscine and corynanthine are distinct stereoisomers. BfArM restriction in the reason is unsourced (regulatory).. Receipt: scripts/audits/pending_items_20260926/q57b_harm_sources_20261002.md."
+          },
+          {
+            "date": "2026-10-02",
+            "by": "claude-audit",
+            "change": "LEDGER Q62 (Sean 2026-10-02): aliases removed ['rauwolscine', 'corynanthine', 'alpha-yohimbine', 'alpha yohimbine hydrochloride', 'alpha-yohimbine hydrochloride', 'alpha yohimbe']: PubChem: rauwolscine (alpha-yohimbine, CID 643606) and corynanthine (CID 92766) are stereoisomers distinct from yohimbine (CID 8969). Corpus 2026-10-02: no label in the 15,421-product corpus matched through them."
           }
         ]
       },
@@ -14771,8 +14792,6 @@
       "aliases": [
         "amanita muscaria",
         "fly agaric",
-        "amanita extract",
-        "amanita gummies",
         "amanita muscaria extract"
       ],
       "reason": "Amanita muscaria is a psychoactive mushroom containing muscimol and ibotenic acid. Eating it can cause confusion, agitation, hallucinations and deep sedation, and seizures have been reported. In 2024, Diamond Shruumz mushroom edibles (mainly chocolate bars) were linked to a multistate outbreak of 180 illnesses, 73 hospitalizations and two deaths; the products contained several psychoactive substances, and FDA found muscimol and ibotenic acid in a raw ingredient reportedly used in some of them. FDA issued urgent safety alerts and coordinated a Class I recall.",
@@ -14912,6 +14931,11 @@
             "date": "2026-10-02",
             "by": "claude-audit",
             "change": "LEDGER Q58 (Sean 2026-10-02): fresh review: harm sources tagged clinical_risk; copy that now ships brought to the evidence (ibotenic acid without 'excitotoxic brain injury', IGF-1 without 'acromegaly' and with the injected-drug limit, SR9009 without 'poor oral bioavailability', clenbuterol without 'undeclared in supplements'/'illicitly', deterenol harm attributed to a multi-stimulant product, Amanita one-liner without the outbreak attribution; A. pantherina, 'panther cap' and 'legal shrooms' removed from Amanita muscaria aliases: different species / no identity)"
+          },
+          {
+            "date": "2026-10-02",
+            "by": "claude-audit",
+            "change": "LEDGER Q62 (Sean 2026-10-02): aliases removed ['amanita extract', 'amanita gummies']: genus-level names; the record is the species Amanita muscaria. Corpus 2026-10-02: no label in the 15,421-product corpus matched through them."
           }
         ]
       },
@@ -14951,7 +14975,6 @@
         "indocybin",
         "O-phosphoryl-4-hydroxy-N,N-dimethyltryptamine",
         "magic mushrooms",
-        "shrooms",
         "psilocybe cubensis",
         "psilocybe semilanceata",
         "liberty caps",
@@ -15093,6 +15116,11 @@
             "date": "2026-10-02",
             "by": "claude-audit",
             "change": "LEDGER Q58 (Sean 2026-10-02): policy verified from 21 U.S.C. 812 and the DEA list; 'DEA scheduling effective' relabelled (1970-10-27 is the CSA's enactment); unsourced FDA warning-letter ref and claim removed"
+          },
+          {
+            "date": "2026-10-02",
+            "by": "claude-audit",
+            "change": "LEDGER Q62 (Sean 2026-10-02): aliases removed ['shrooms']: generic slang that also names functional-mushroom products ('Mushroom Blend (shrooms)' matched). Corpus 2026-10-02: no label in the 15,421-product corpus matched through them."
           }
         ]
       },
@@ -15570,7 +15598,6 @@
         "chloro-tadalafil",
         "chloro pretadalafil",
         "chloropre tadalafil",
-        "designer tadalafil analog",
         "chloropretadalafil"
       ],
       "reason": "Chloropretadalafil is a synthetic analog of tadalafil designed to evade detection while delivering PDE5 inhibitor activity equivalent to the prescription drug. Its presence in supplements is always undeclared. The same cardiovascular risks apply as with tadalafil — life-threatening hypotension with nitrates — but standard screening may not identify it. FDA considers chloropretadalafil an undeclared pharmaceutical adulterant. No safety or efficacy data exists for this specific analog in humans.",
@@ -15636,6 +15663,11 @@
             "date": "2026-10-02",
             "by": "claude-audit",
             "change": "LEDGER Q58 (Sean 2026-10-02): policy verified from the Health Fixer recall posted by FDA; the 404 notification URL removed; placeholder date 2025-01-01 replaced by the recall date"
+          },
+          {
+            "date": "2026-10-02",
+            "by": "claude-audit",
+            "change": "LEDGER Q62 (Sean 2026-10-02): aliases removed ['designer tadalafil analog']: a class phrase, not chloropretadalafil. Corpus 2026-10-02: no label in the 15,421-product corpus matched through them."
           }
         ]
       },
@@ -16367,8 +16399,6 @@
       "id": "SPIKE_PROPOXYPHENYLSILDENAFIL",
       "standard_name": "Propoxyphenylsildenafil",
       "aliases": [
-        "modified sildenafil",
-        "designer sildenafil",
         "propoxyphenyl-sildenafil",
         "propoxyphenyl sildenafil",
         "propoxyphenylsildenafil"
@@ -16447,6 +16477,11 @@
             "date": "2026-10-02",
             "by": "claude-audit",
             "change": "LEDGER Q58 (Sean 2026-10-02): policy verified from the FDA notice read 2026-10-02 (https://www.fda.gov/drugs/medication-health-fraud/public-notification-full-throttle-demand-contains-hidden-drug-ingredient); US row replaced by that source"
+          },
+          {
+            "date": "2026-10-02",
+            "by": "claude-audit",
+            "change": "LEDGER Q62 (Sean 2026-10-02): aliases removed ['modified sildenafil', 'designer sildenafil']: class phrases, not propoxyphenylsildenafil. Corpus 2026-10-02: no label in the 15,421-product corpus matched through them."
           }
         ]
       },
@@ -16470,7 +16505,6 @@
       "aliases": [
         "viagra",
         "revatio",
-        "PDE5 inhibitor",
         "sildenafil citrate",
         "sildenafil",
         "Sildenafil Citrate"
@@ -16538,6 +16572,11 @@
             "date": "2026-10-02",
             "by": "claude-audit",
             "change": "LEDGER Q58 (Sean 2026-10-02): policy verified from the FDA notice read 2026-10-02 (https://www.fda.gov/drugs/medication-health-fraud-notifications/zubb-dietary-supplement-may-be-harmful-due-hidden-ingredient); US row replaced by that source"
+          },
+          {
+            "date": "2026-10-02",
+            "by": "claude-audit",
+            "change": "LEDGER Q62 (Sean 2026-10-02): aliases removed ['PDE5 inhibitor']: a drug class, not sildenafil. Corpus 2026-10-02: no label in the 15,421-product corpus matched through them."
           }
         ]
       },
@@ -16948,7 +16987,10 @@
         "1,4-dmaa",
         "1,3-dmaa analogs",
         "octodrine derivatives",
-        "2-amino-6-methylheptane analogs"
+        "2-amino-6-methylheptane analogs",
+        "2-amino-5-methylhexane",
+        "2 amino 5 methylhexane",
+        "2-amino-5 methylhexane"
       ],
       "reason": "This watchlist covers designer stimulant analogs of DMAA (1,3-dimethylamylamine), engineered to maintain sympathomimetic effects while evading DMAA's specific FDA enforcement action. Analogs include DMBA (1,3-dimethylbutylamine), DMHA (2-amino-6-methylheptane), and their structural variants. Their safety in humans has not been studied; DMBA has been found in supplements at up to 214 mg per daily dose. FDA has issued warning letters naming DMBA (2015) and DMHA (2019) and considers products containing them adulterated.",
       "status": "banned",
@@ -17114,6 +17156,11 @@
             "date": "2026-10-02",
             "by": "claude-audit",
             "change": "LEDGER Q61 (Sean 2026-10-02): safety copy brought to the evidence in reason; removed 'the same cardiovascular risks as DMAA' (class transfer, no analogue data). Receipt: q61_safety_copy_20261002.md."
+          },
+          {
+            "date": "2026-10-02",
+            "by": "claude-audit",
+            "change": "LEDGER Q62 (Sean 2026-10-02): 2-amino-5-methylhexane (5-methylhexan-2-amine, PubChem CID 34204), a positional isomer of DMAA (4-methylhexan-2-amine), moved here from the DMHA aliases: it is a DMAA structural variant, not DMHA."
           }
         ]
       },
@@ -19291,8 +19338,6 @@
         "n phenethyl dimethylamine",
         "n,n-dimethylphenethylamine",
         "n,n dimethylphenethylamine",
-        "eria jarensis extract",
-        "eria jarensis",
         "n-phenethyldimethylamine",
         "n-phenethyl dimethylamine citrate",
         "n-phenethyl dimethylamine hydrochloride",
@@ -19363,6 +19408,11 @@
             "date": "2026-10-02",
             "by": "claude-audit",
             "change": "LEDGER Q61 (Sean 2026-10-02): safety copy brought to the evidence in reason; removed 'cardiovascular strain' and 'not a lawful supplement ingredient' (no source). Receipt: q61_safety_copy_20261002.md."
+          },
+          {
+            "date": "2026-10-02",
+            "by": "claude-audit",
+            "change": "LEDGER Q62 (Sean 2026-10-02): aliases removed ['eria jarensis extract', 'eria jarensis']: an orchid sold as a source of the compound, not the compound. Corpus 2026-10-02: no label in the 15,421-product corpus matched through them."
           }
         ]
       },
@@ -25871,6 +25921,88 @@
       },
       "policy_verification_status": "verified",
       "policy_verified_at": "2026-10-02"
+    },
+    {
+      "id": "BANNED_SIDA_CORDIFOLIA",
+      "standard_name": "Sida cordifolia (country mallow)",
+      "aliases": [
+        "sida cordifolia",
+        "sida cordifolia extract",
+        "country mallow",
+        "bala"
+      ],
+      "reason": "Sida cordifolia (country mallow, Ayurvedic 'bala') is named in FDA's 2004 final rule as a plant source of ephedrine alkaloids (69 FR 6788). Dietary supplements containing ephedrine alkaloids are adulterated (21 CFR 119.1), whatever the plant source. This rule is separate from Ephedra because it is a different plant.",
+      "status": "banned",
+      "class_tags": [
+        "stimulant"
+      ],
+      "match_rules": {
+        "exclusions": [],
+        "case_sensitive": false,
+        "priority": 1,
+        "match_type": "exact",
+        "confidence": "high",
+        "negative_match_terms": []
+      },
+      "legal_status_enum": "banned_federal",
+      "clinical_risk_enum": "high",
+      "jurisdictions": [
+        {
+          "region": "US",
+          "level": "federal",
+          "status": "banned",
+          "effective_date": "2004-04-12",
+          "source": {
+            "type": "fda_final_rule",
+            "citation": "69 FR 6788 (2004-02-11): supplements containing ephedrine alkaloids are adulterated; the rule names Sida cordifolia L. as a plant source of ephedrine alkaloids. 21 CFR 119.1.",
+            "url": "https://www.govinfo.gov/content/pkg/FR-2004-02-11/pdf/04-2912.pdf",
+            "accessed_date": "2026-10-02"
+          },
+          "jurisdiction_type": "country",
+          "jurisdiction_code": "US",
+          "last_verified_date": "2026-10-02"
+        }
+      ],
+      "references_structured": [
+        {
+          "type": "fda_final_rule",
+          "title": "Final Rule Declaring Dietary Supplements Containing Ephedrine Alkaloids Adulterated (69 FR 6788; 21 CFR 119.1)",
+          "url": "https://www.govinfo.gov/content/pkg/FR-2004-02-11/pdf/04-2912.pdf",
+          "evidence_grade": "R",
+          "supports_claims": [
+            "regulatory_action",
+            "legal_status"
+          ],
+          "evidence_summary": "Other plant sources that contain ephedrine alkaloids include Sida cordifolia L. and Pinellia ternata; supplements containing ephedrine alkaloids are adulterated."
+        }
+      ],
+      "source_category": "permanently_banned",
+      "entity_type": "ingredient",
+      "review": {
+        "status": "validated",
+        "last_reviewed_at": "2026-10-02",
+        "next_review_due": "2027-04-02",
+        "reviewed_by": "claude-audit",
+        "change_log": [
+          {
+            "date": "2026-10-02",
+            "by": "claude-audit",
+            "change": "LEDGER Q62 (Sean 2026-10-02): own identity split out of the Ephedra aliases; verified from 69 FR 6788 (read 2026-10-02) and GSRS (UNII E6K1OK47SG, Sida cordifolia whole)."
+          }
+        ]
+      },
+      "regulatory_date": "2004-04-12",
+      "regulatory_date_label": "FDA ban effective",
+      "match_mode": "active",
+      "cui": null,
+      "external_ids": {
+        "unii": "E6K1OK47SG"
+      },
+      "ban_context": "substance",
+      "policy_verification_status": "verified",
+      "policy_verified_at": "2026-10-02",
+      "safety_warning": "A plant source of ephedrine alkaloids. FDA banned supplements containing ephedrine alkaloids in 2004 after strokes, seizures and deaths. Stop and consult a doctor.",
+      "safety_warning_one_liner": "Ephedrine-alkaloid plant, FDA-banned. Stop using and talk to your doctor."
     }
   ]
 }
