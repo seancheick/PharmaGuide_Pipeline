@@ -964,7 +964,9 @@ def test_daily_statement_keeps_equivalent_capsule_count_warranty(enricher):
     ], ['5 billion live probiotic cultures per day'])
     product['servingSizes'] = [{'quantity': 1, 'unit': 'capsules', 'minDailyServings': 2, 'maxDailyServings': 2}]
     data = enricher._collect_probiotic_data(product)
-    assert data['total_cfu'] == 5e9
+    # total_cfu is the per-serving panel count (the app shows "total per
+    # serving"); the per-day statement restates it, it does not replace it.
+    assert data['total_cfu'] == 2.5e9
     assert data['guarantee_type'] == 'at_expiration'
 
 
@@ -980,7 +982,6 @@ def test_explicit_probiotic_cell_unit_owns_qualitative_header_warranty(enricher)
 
 @pytest.mark.parametrize('statement,low,high', [
     ('5 billion live probiotic cultures', 2, 2),
-    ('5 billion live probiotic cultures per day', 1, 2),
     ('5 billion live probiotic cultures per day', 1, 1),
 ])
 def test_unproven_daily_equivalence_does_not_warrant_larger_count(enricher, statement, low, high):
@@ -1131,3 +1132,147 @@ def test_terminal_total_metadata_does_not_make_strain_allocation_incomplete(enri
         total['dose_role'] = 'declared_total'
     data = enricher._collect_probiotic_data(product)
     assert ('ingredientRows[0]' in data['strain_allocation_owner_refs']) is expected_owner
+
+
+def _serving_basis_product(row_count, row_notes, statement, serving, variants=None):
+    product = _count_guarantee_product(
+        [('Lactobacillus rhamnosus GG', row_count, row_notes)], [statement])
+    product['servingSizes'] = [serving]
+    if variants is not None:
+        product['activeIngredients'][0]['quantityVariants'] = variants
+    return product
+
+
+_ONE_CAPSULE_UP_TO_THREE = {'minQuantity': 1, 'maxQuantity': 1, 'unit': 'Capsule(s)',
+                            'minDailyServings': 1, 'maxDailyServings': 3}
+
+
+def test_statement_count_for_more_units_does_not_replace_per_serving_rows(enricher):
+    # Raw 242637: 5 billion per 1-capsule panel serving; "15 billion CFU in a
+    # 3 capsule serving" is the same potency stated for three capsules.
+    data = enricher._collect_probiotic_data(_serving_basis_product(
+        5, '(5 Billion CFU) (CFU count at time of manufacture)',
+        'made to provide 15 billion CFU in a 3 capsule serving with 13 species',
+        _ONE_CAPSULE_UP_TO_THREE,
+        [{'serving_size_quantity': 1, 'serving_size_unit': 'Capsule(s)'}]))
+    assert data['total_cfu'] == 5e9
+    assert data['guarantee_type'] == 'at_manufacture'
+
+
+@pytest.mark.parametrize('statement,low,high', [
+    ('5 billion live probiotic cultures per day', 1, 2),
+    ('5 billion live probiotic cultures per day', 1, 3),
+    # Raw 321379/322603: "15 Billion CFU Daily" over 1-3 servings a day.
+    ('5 Billion CFU Daily\r\nCFU count at time of manufacture', 1, 3),
+])
+def test_unresolvable_daily_basis_never_replaces_per_serving_rows(enricher, statement, low, high):
+    data = enricher._collect_probiotic_data(_serving_basis_product(
+        2.5, '2.5 billion live cultures guaranteed through expiration', statement,
+        {'quantity': 1, 'unit': 'capsules', 'minDailyServings': low, 'maxDailyServings': high}))
+    assert data['total_cfu'] == 2.5e9
+    assert data['guarantee_type'] == 'at_expiration'
+
+
+def test_per_unit_statement_is_rebased_onto_the_panel_serving(enricher):
+    # 3 billion per capsule on a 2-capsule serving is 6 billion per serving.
+    data = enricher._collect_probiotic_data(_serving_basis_product(
+        4, '', '3 billion active cultures per capsule',
+        {'minQuantity': 2, 'maxQuantity': 2, 'unit': 'Capsule(s)',
+         'minDailyServings': 1, 'maxDailyServings': 1},
+        [{'serving_size_quantity': 2, 'serving_size_unit': 'Capsule(s)'}]))
+    assert data['total_cfu'] == 6e9
+
+
+def test_statement_for_the_selected_audience_column_still_owns_the_count(enricher):
+    # Raw 267658: the analysed column is 2 gummies; "2 billion CFU's in 2
+    # gummies" is that column's count and exceeds the shared 1 billion note.
+    data = enricher._collect_probiotic_data(_serving_basis_product(
+        1, '1 Billion CFUs', "2 billion CFU's in 2 gummies at time of expiration",
+        {'minQuantity': 2, 'maxQuantity': 2, 'unit': 'Gummy(ies)',
+         'minDailyServings': 1, 'maxDailyServings': 1},
+        [{'serving_size_quantity': 1, 'serving_size_unit': 'Gummy(ies)'},
+         {'serving_size_quantity': 2, 'serving_size_unit': 'Gummy(ies)',
+          'selected_for_analysis': True}]))
+    assert data['total_cfu'] == 2e9
+    assert data['guarantee_type'] == 'at_expiration'
+
+
+@pytest.mark.parametrize('statement', [
+    '15 billion live cultures per serving',
+    '15 billion live cultures',
+])
+def test_same_basis_statement_keeps_replacing_a_smaller_row_sum(enricher, statement):
+    data = enricher._collect_probiotic_data(_serving_basis_product(
+        5, '', statement,
+        {'minQuantity': 2, 'maxQuantity': 2, 'unit': 'Capsule(s)',
+         'minDailyServings': 1, 'maxDailyServings': 1}))
+    assert data['total_cfu'] == 15e9
+
+
+def test_raw_242637_total_is_the_panel_serving_count(enricher):
+    import json
+    from pathlib import Path
+    from enhanced_normalizer import EnhancedDSLDNormalizer
+    from scoring_v4.scored_artifact import build_scored_artifact
+    raw = json.loads((Path(__file__).parent / 'fixtures' / 'probiotic_cfu_serving_basis_242637_raw.json').read_text())
+    enriched = enricher.enrich_product(EnhancedDSLDNormalizer().normalize_product(raw))[0]
+    assert enriched['probiotic_data']['total_cfu'] == 5e9
+    assert enriched['probiotic_data']['guarantee_type'] == 'at_manufacture'
+    artifact = build_scored_artifact(enriched)
+    assert artifact['_v4_module_breakdown']['dimensions']['dose']['metadata']['cfu_guarantee']['type'] == 'at_manufacture'
+
+
+def test_daily_statement_warranty_binds_to_the_restated_row_count(enricher):
+    data = enricher._collect_probiotic_data(_serving_basis_product(
+        2.5, '', '5 billion live cultures per day guaranteed through expiration',
+        {'quantity': 1, 'unit': 'capsules', 'minDailyServings': 2, 'maxDailyServings': 2}))
+    assert data['total_cfu'] == 2.5e9
+    assert data['guarantee_type'] == 'at_expiration'
+
+
+@pytest.mark.parametrize('statement', [
+    '15 billion CFU in a 3 capsule serving. Take 1 capsule per day.',
+    '15 billion CFU per serving and 2 billion CFU per capsule',
+])
+def test_basis_is_read_only_from_the_counts_own_clause(enricher, statement):
+    data = enricher._collect_probiotic_data(_serving_basis_product(
+        5, '', statement,
+        {'minQuantity': 3, 'maxQuantity': 3, 'unit': 'Capsule(s)',
+         'minDailyServings': 1, 'maxDailyServings': 1},
+        [{'serving_size_quantity': 3, 'serving_size_unit': 'Capsule(s)'}]))
+    assert data['total_cfu'] == 15e9
+
+
+def test_daily_adjective_is_not_a_basis(enricher):
+    data = enricher._collect_probiotic_data(_serving_basis_product(
+        5, '', '15 billion live cultures for daily digestive support',
+        {'minQuantity': 1, 'maxQuantity': 1, 'unit': 'Capsule(s)',
+         'minDailyServings': 1, 'maxDailyServings': 3},
+        [{'serving_size_quantity': 1, 'serving_size_unit': 'Capsule(s)'}]))
+    assert data['total_cfu'] == 15e9
+
+
+def test_basis_opening_the_next_label_line_belongs_to_the_count(enricher):
+    # Raw 74379: 2.5 billion per capsule, 2 capsules a day.
+    data = enricher._collect_probiotic_data(_serving_basis_product(
+        2.5, '(providing 2.5 billion live cultures) (CFUs guaranteed through printed expiration date.)',
+        '5 billion live probiotic cultures\nPer day\n#1 cardiologist preferred probiotic strain',
+        {'quantity': 1, 'unit': 'capsules', 'minDailyServings': 2, 'maxDailyServings': 2}))
+    assert data['total_cfu'] == 2.5e9
+    assert data['guarantee_type'] == 'at_expiration'
+
+
+def test_directions_on_the_next_line_are_not_the_counts_basis(enricher):
+    data = enricher._collect_probiotic_data(_serving_basis_product(
+        5, '', '15 billion live cultures\nTake 1 capsule per day',
+        {'quantity': 1, 'unit': 'capsules', 'minDailyServings': 2, 'maxDailyServings': 2}))
+    assert data['total_cfu'] == 15e9
+
+
+def test_zero_unit_basis_cannot_replace_rows(enricher):
+    data = enricher._collect_probiotic_data(_serving_basis_product(
+        5, '', '15 billion CFU per 0 capsules',
+        {'minQuantity': 1, 'maxQuantity': 1, 'unit': 'Capsule(s)',
+         'minDailyServings': 1, 'maxDailyServings': 1},
+        [{'serving_size_quantity': 1, 'serving_size_unit': 'Capsule(s)'}]))
+    assert data['total_cfu'] == 5e9
