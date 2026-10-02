@@ -273,9 +273,8 @@ def test_watchlist_inactive_fires_b0_watchlist_5pt(enricher, ing_name, expected_
 
 def test_synthetic_food_acids_inactive_does_not_fire_b0(enricher):
     """Synthetic food acids (fumaric/adipic/citric/E297/E355) must NOT
-    fire B0 when listed as inactives. The watchlist data entry stays in
-    place so warnings layer can still surface it for any unusual context,
-    but ubiquitous pH-buffer excipient use does not penalize the score.
+    fire B0 when listed as inactives. The concept was retired 2026-10-02
+    (LEDGER Q63): the record no longer names these acids at all.
     """
     # Use a real alias from the entry
     product = _minimal_enriched_inactive("fumaric acid")

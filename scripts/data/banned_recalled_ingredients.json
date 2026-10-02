@@ -2560,14 +2560,7 @@
       "id": "BANNED_ADD_SYNTHETIC_FOOD_ACIDS",
       "standard_name": "Policy Watchlist: Synthetic Food Acids",
       "aliases": [
-        "synthetic food acids",
-        "fumaric acid",
-        "e297",
-        "adipic acid",
-        "e355",
-        "synthetic citric acid",
-        "artificial food acids",
-        "manufactured acids"
+        "synthetic food acids"
       ],
       "match_rules": {
         "exclusions": [],
@@ -2613,11 +2606,16 @@
             "date": "2026-10-02",
             "by": "claude-audit",
             "change": "LEDGER Q57b: harm claims checked against sources Claude read (2026-10-02); reason: 1 claim(s) weakened or removed to what the evidence supports; 1 verified source(s) added. Safety copy unchanged; flagged for Sean: No defensible harm basis found for this watchlist entry; safety_warning cites 'labeling and tolerability concerns'. Keep or retire is Sean's decision.. Receipt: scripts/audits/pending_items_20260926/q57b_harm_sources_20261002.md."
+          },
+          {
+            "date": "2026-10-02",
+            "by": "claude-audit",
+            "change": "LEDGER Q63 (Sean 2026-10-02): concept retired. Chemical aliases (fumaric acid, E297, adipic acid, E355, synthetic citric acid, artificial/manufactured acids) removed so the record can no longer recognize a real ingredient (an adipic acid active was still tagged with it through identity recognition); legal status restricted -> lawful; copy no longer says to avoid these acids. Kept as the target of the ADD_SYNTHETIC_FOOD_ACIDS redirect."
           }
         ]
       },
       "status": "watchlist",
-      "reason": "No evidence shows that synthetic food acids act differently from the same acids from natural sources. Like other acids, frequent exposure can contribute to dental erosion.",
+      "reason": "Retired 2026-10-02 (Sean): synthetic and naturally sourced food acids such as citric, fumaric and adipic acid are the same molecules, and no evidence shows a difference in safety. This record generates no warning, affects no score and names no ingredient; it is kept only because a migration redirect (ADD_SYNTHETIC_FOOD_ACIDS) points to it.",
       "jurisdictions": [
         {
           "region": "US",
@@ -2634,10 +2632,9 @@
           "last_verified_date": "2026-01-08"
         }
       ],
-      "legal_status_enum": "restricted",
+      "legal_status_enum": "lawful",
       "clinical_risk_enum": "dose_dependent",
       "class_tags": [
-        "high_risk_ingredients",
         "acidity_regulator"
       ],
       "source_category": "high_risk_ingredients",
@@ -2652,8 +2649,8 @@
       "cui_note": "Policy watchlist spans multiple synthetic food acids; no single ingredient-level UMLS concept is appropriate.",
       "unii_note": "No exact UNII: policy watchlist spans multiple food acids. GSRS UNII 88XHZ13131 is exact Fumaric acid and belongs to OI_FUMARIC_ACID, not this umbrella class.",
       "ban_context": "watchlist",
-      "safety_warning": "Synthetic food acids on a regulatory watchlist — presence in a supplement is associated with labeling and tolerability concerns. Avoid products that list these as ingredients.",
-      "safety_warning_one_liner": "Watchlist food acids in supplements. Avoid.",
+      "safety_warning": "Retired record. Synthetic and natural food acids are the same molecules, and no added risk from synthetic sources is recorded.",
+      "safety_warning_one_liner": "Retired record. No safety concern is recorded.",
       "inactive_policy": "excipient_acceptable",
       "inactive_policy_reason": "Aliases (fumaric/adipic/citric acid, E297, E355) are FDA GRAS pH-buffer excipients universally used in gummies/effervescents/chewables. Synthetic-vs-natural distinction is chemically unsupported (identical molecules). Penalize_anyway would generate ~thousands of FPs. Watchlist visibility preserved at warnings layer.",
       "inactive_policy_reviewed_on": "2026-05-12"
