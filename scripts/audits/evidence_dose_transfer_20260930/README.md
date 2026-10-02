@@ -198,7 +198,7 @@ clinical registry, public field/status or numerical configuration.
   remain preserved; final release provenance must account for their input inventory.
 - [x] Related owner sweep: **794 passed,14 skipped**; skips require enriched/catalog
   artifacts absent from this isolated lane. Ten focused defect/edge regressions pass.
-- [x] Final fast checkpoint: **18,018 passed,168 skipped,zero failures/xfails** (exit0,749.09s). Fresh reviewer verified all285 frozen hashes and byte-identical captures and accepted bounded integration. Source integration/push recorded below.
+- [x] Final fast checkpoint: **18,018 passed,168 skipped,zero failures/xfails** (exit0,749.09s). Fresh reviewer verified all285 frozen hashes and byte-identical captures and accepted bounded integration. Source integrated/pushed at `c8f53b46`; main/origin verified equal and clean.
 
 Edited production-boundary probes (not real product score claims): a referenced
 2 g peptide + 3 g other-collagen example changes total81.3→66.0, internal Evidence

@@ -208,7 +208,7 @@ Final October1 source batch: Q53 and Q52 are implemented, measured, independentl
   with maximum applicable amount rather than summed duplicate quantities.
 - [x] Measure285 frozen raw labels with zero capture deltas; owner sweep794passed/
   14artifact skips. All existing magnitudes and four retained D26 safeguards unchanged.
-- [x] Fullfast18,018passed/168skipped/zero failures or xfails,749.09s; fresh reviewer accepted source and verified byte-identical285-label captures. Integrate/push receipt below.
+- [x] Fullfast18,018passed/168skipped/zero failures or xfails,749.09s; fresh reviewer accepted source and verified byte-identical285-label captures. Source integrated/pushed at `c8f53b46`; main/origin verified equal and clean.
 - [ ] Complete broader D26: verified Dose coverage + D24 decision packet + approved
   omega purpose/magnitude mapping → equivalent Dose assessments → remove Evidence
   amount gates/stand-ins. **This source-binding fix does not close D26.**
@@ -230,3 +230,32 @@ appropriateness and Safety risk consequences for excess. Older D24 prose favorin
 Safety alone is historical; neither formulation authorizes a duplicate charge or
 unapproved magnitude. Benchmarks/denominators and omega magnitudes remain explicit
 Sean decisions under Phase4, rather than implicit choices by an implementer.
+
+
+## October 1 CFU guarantee continuation — validation in progress
+
+- [x] Reproduce raw12091: 5 billion at manufacture plus an unquantified effective
+  level at expiry incorrectly became a 5-billion expiry guarantee.
+- [x] Fix the existing enrichment count/warranty owner; preserve numerical Dose
+  multipliers and the approved Evidence model. Boundaries include differing counts,
+  multiple statements, replaced totals, every counted aggregate contributor,
+  parenthetical claims and explicit subgroup versus total declarations.
+- [x] Preserve matching guarantees after final total selection, fully expanded
+  CFU notation, explicitly probiotic Cell(s) rows, and fixed daily-serving
+  equivalence through the existing serving-frequency owner.
+- [x] Focused source checks:105 passed,1 generated-canary skip.
+- [ ] Complete the full fast checkpoint, final clean1259-label replay, classify all
+  public verdict/Safety changes and obtain independent acceptance before main push.
+- [ ] Close remaining label/basis discrepancies before final calibration/release.
+
+Owner: `SupplementEnricherV3::_extract_cfu` / `_extract_guarantee_type` /
+`_collect_probiotic_data`; `serving_frequency::resolve_daily_serving_range` for
+frequency. Evidence: raw12091, failing source regressions,105 focused checks and
+production Dose consumers. Will NOT create: CFU parser/registry, scoring engine,
+public field/status, or numerical policy. Working source `83fc2ae5`; initial
+candidate `99aa837b` was rejected after replay/review and is not accepted by itself.
+Durable receipts: `/Users/seancheick/pg_quality/cfu_guarantee_20261001/`.
+
+The bounded SD-5845 source search remains a research receipt, not a completed
+negative Evidence determination. The nine-label Q53 clinical queue stays open.
+D26, D24/omega approvals, calibration and final corpus/release remain unchecked.
