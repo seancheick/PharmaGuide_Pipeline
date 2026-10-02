@@ -9,7 +9,6 @@ from scoring_v4.exposure import row_exposure
 
 from scoring_v4.modules.fiber_digestive_helpers import (
     fiber_rows,
-    has_fiber_context,
     nutrition_fiber_exposure,
 )
 from scoring_v4.modules.generic_dose import score_dose as score_generic_dose
@@ -35,10 +34,11 @@ def score_dose(product: Dict[str, Any]) -> Dict[str, Any]:
         product = {}
 
     rows = fiber_rows(product)
-    if not rows and not has_fiber_context(product):
-        return score_generic_dose(product)
-
     nutrition_exposure = nutrition_fiber_exposure(product)
+    # A marketing title cannot establish fiber mass or a fiber benchmark.
+    # Nonfiber digestive preparations use the existing ingredient Dose owner.
+    if not rows and nutrition_exposure is None:
+        return score_generic_dose(product)
     # Preserve the distinction between
     # total dietary fiber and ingredient mass (neither implies soluble fiber).
     exposures = ([nutrition_exposure] if nutrition_exposure is not None else

@@ -244,3 +244,13 @@ def test_fiber_canonical_identity_has_one_declaration() -> None:
     assert route_features.MATERIAL_FIBER_CANONICALS <= route_features.FIBER_CANONICALS
     source = Path(fiber_digestive_formulation.__file__).read_text(encoding="utf-8")
     assert '{"", "fiber"}' not in source, "use fiber_digestive_helpers.COMPATIBLE_GUAR_CANONICALS"
+
+
+def test_phage_title_cannot_create_a_fiber_dose():
+    from scoring_v4.modules.fiber_digestive_dose import score_dose
+    from scoring_v4.modules.generic_dose import score_dose as generic_dose
+    product={"product_name":"Prebiotic +","primary_type":"digestive",
+             "ingredient_quality_data":{"ingredients_scorable":[{"name":"PreforPro","canonical_id":"bacteriophages","quantity":15,"unit":"mg","mapped":True}]}}
+    result=score_dose(product)
+    assert result==generic_dose(product)
+    assert "fiber_grams_daily_benchmark" not in result.get("metadata",{})

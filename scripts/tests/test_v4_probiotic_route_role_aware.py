@@ -182,3 +182,10 @@ def test_probiotic_titles_keep_the_probiotic_route_despite_a_vitamin_panel():
     for name in ("Triple Probiotic", "Multi-Strain Probiotic 50 Billion", "Probiotic Solutions Energy 25 Billion CFUs"):
         p = _prod(name, "probiotic", _vit_rows(14), strains=8, has_cfu=True)
         assert class_for_product(p) == "probiotic", name
+
+def test_digestive_enzyme_title_does_not_become_a_probiotic_from_adjunct_taxonomy():
+    rows=[dict(name='Protease', canonical_id='protease', mapped=True, quantity=1000,unit='HUT'),
+          dict(name='Lipase', canonical_id='lipase', mapped=True, quantity=1000,unit='FIP')]
+    product=_prod('Break it Down', 'probiotic', rows, strains=1,has_cfu=True)
+    product['probiotic_data']['probiotic_blends']=[dict(name='Bacillus subtilis',strain='DE111')]
+    assert class_for_product(product)=='fiber_digestive'

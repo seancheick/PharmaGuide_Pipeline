@@ -4119,6 +4119,16 @@ def _route_is_probiotic_class(product: Dict[str, Any], name_text: str) -> bool:
     high_cfu = total_cfu >= (_ROUTE_PROBIOTIC_HIGH_CFU_BILLIONS * 1_000_000_000)
     name_signal = bool(_ROUTE_PROBIOTIC_NAME_RE.search(name_text or ""))
     primary_type = _primary_type(product)
+    facts = _route_feature_vector(product)
+    if (
+        not name_signal
+        and facts.get("title_digestive_intent")
+        and int(facts.get("observed_digestive_enzyme_row_count") or 0) > 0
+    ):
+        # Canonical digestive intent plus enzyme label facts outrank taxonomy
+        # inferred from an adjunct culture. Genuine explicitly named probiotic
+        # products keep the existing strain/adjunct decisions below.
+        return False
 
     # A cleaner-owned probiotic taxonomy plus real named strain identity owns
     # the peer class even when the product includes a disclosed adjunct such as
