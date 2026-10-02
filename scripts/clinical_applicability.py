@@ -160,9 +160,20 @@ def _resolved_identity_by_ref(product: Mapping) -> dict:
             ref = row.get("raw_source_path") or row.get("source_row_ref")
             if not isinstance(ref, str) or not ref.strip() or ref in resolved:
                 continue
-            identity = {key: row.get(key) for key in ("form_id", "matched_form") if row.get(key)}
+            identity = {key: row.get(key) for key in ("form_id", "matched_form", "canonical_id") if row.get(key)}
             if identity:
                 resolved[ref] = identity
+    from scoring_input_contract import get_evidence_subject_rows
+    subject_ids: dict[str, set[str]] = {}
+    for row in get_evidence_subject_rows(product):
+        ref, canonical = row.get("raw_source_path"), row.get("canonical_id")
+        if isinstance(ref, str) and ref.strip() and canonical:
+            subject_ids.setdefault(ref, set()).add(canonical)
+    for ref, identities in subject_ids.items():
+        if len(identities) == 1:
+            # The subject provider already resolved this label identity. Carry
+            # only identity, never its projected blend/member amount.
+            resolved.setdefault(ref, {}).setdefault("canonical_id", next(iter(identities)))
     return resolved
 
 

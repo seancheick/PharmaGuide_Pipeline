@@ -6,7 +6,7 @@
     "last_updated": "2026-10-02",
     "total_entries": 210,
     "changelog": [
-      "2026-10-02: INGR_OMEGA3 reviewed applicability excludes plant alpha-linolenic acid from marine EPA/DHA intervention evidence; existing clinical-applicability owner rejects stale positive matches. No dose thresholds or numerical magnitudes changed.",
+      "2026-10-02: INGR_OMEGA3 removes unsupported plant ALA intervention aliases and excludes stale ALA matches from marine EPA/DHA evidence through the existing clinical-applicability owner. No dose thresholds or numerical magnitudes changed.",
       "5.6.3 (2026-10-01): Correct INGR_BIFIDOBACTERIUM_LONGUM and INGR_LACTOBACILLUS_ACIDOPHILUS source attribution, strain/formula scopes, endpoint roles and unverifiable aggregate counts. Retain both as non-scoring reference context; existing exact-strain evidence remains authoritative. No numerical config, strain registry or Dose benchmark changed.",
       "5.6.2 (2026-09-26): INGR_OMEGA3 purpose_evidence retains factual scope and sources only. Numerical points, operational exposure cutoffs, interpolation and eligibility are owned by quality_score.json. Scientific boundaries rechecked against live source content; no clinician sign-off asserted and no score values changed.",
       "5.6.1 (2026-09-26): INGR_WHEY_PROTEIN no longer aliases generic Protein macro declarations, unspecified powders/blends, or rice/hemp sources absent from its cited 49-trial source inventory. Known whey, casein, milk, soy and pea source identities remain. Fresh-enrichment regressions cover two collagen labels and greens coffee; source-free macro recovery is intentionally rejected.",
@@ -7219,8 +7219,6 @@
         "epa+dha",
         "epa & dha",
         "epa and dha",
-        "alpha-linolenic acid",
-        "ala omega-3",
         "krill oil",
         "algal oil",
         "marine omega-3"
@@ -7244,7 +7242,7 @@
         "Reduce Stress/Anxiety",
         "Focus & Mental Clarity"
       ],
-      "notes": "Extensive systematic review evidence supports omega-3 for cardiovascular health, triglyceride reduction, and mood. High-dose EPA particularly effective for CV risk reduction. Quality and formulation affect bioavailability. Applicability: marine EPA/DHA intervention evidence does not establish efficacy for plant alpha-linolenic acid; retain any ALA alias match only as rejected clinical context through the shared applicability owner.",
+      "notes": "Extensive systematic review evidence supports omega-3 for cardiovascular health, triglyceride reduction, and mood. High-dose EPA particularly effective for CV risk reduction. Quality and formulation affect bioavailability. Applicability: marine EPA/DHA intervention evidence does not establish efficacy for plant alpha-linolenic acid; unsupported ALA intervention aliases are removed, and the shared applicability owner rejects stale ALA matches.",
       "notable_studies": "Hu et al. (2019, PMID 31567003) meta-analysis of 13 RCTs found marine omega-3 supplementation reduced CHD death, MI, and total CHD events. Abdelhamid et al. (2020) Cochrane also reported modest benefit for some long-chain omega-3 cardiovascular outcomes.",
       "study_type": "systematic_review_meta",
       "last_updated": "2026-10-02",

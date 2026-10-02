@@ -285,6 +285,7 @@ def score_evidence(product: Dict[str, Any], *, apply_primary_floor: bool = False
             entry,
             active_canonical_index,
             use_structured_identity=owner_scoped,
+            owner_canonicals=owner_canonicals if owner_scoped else None,
         )
         if owner_canonicals and matched_owner not in owner_canonicals:
             continue
@@ -412,6 +413,7 @@ def score_evidence(product: Dict[str, Any], *, apply_primary_floor: bool = False
             entry,
             active_canonical_index,
             use_structured_identity=owner_scoped,
+            owner_canonicals=owner_canonicals if owner_scoped else None,
         ) in owner_canonicals
     } | {_entry_id(entry) for entry in scoped_matches}
     from studied_formulas import assess_probiotic_component_disposition
@@ -1595,13 +1597,21 @@ def _matched_active_canonical(
     canon_index: Dict[str, str],
     *,
     use_structured_identity: bool = False,
+    owner_canonicals: Optional[set] = None,
 ) -> str:
     """Raw canonical_id of the active an evidence match links to ('' if unknown)."""
+    reviewed_identity = "matched_canonical_ids" in _safe_dict(entry.get("applicability_assessment"))
     if use_structured_identity:
         for canonical_id in _matched_canonical_ids(entry):
             direct = str(canonical_id or "").strip().lower()
-            if direct in canon_index.values():
+            if direct in canon_index.values() and (
+                not reviewed_identity or not owner_canonicals or direct in owner_canonicals
+            ):
                 return direct
+        if reviewed_identity:
+            # An accepted source identity set (even an empty one) is final.
+            # Legacy alias text cannot revive an identity applicability rejected.
+            return ""
     for tok in (_canonical_from_entry(entry), entry.get("ingredient"),
                 entry.get("standard_name"), entry.get("matched_term")):
         key = _norm_text(tok)
@@ -1878,15 +1888,15 @@ def _canonical_from_entry(entry: Dict[str, Any]) -> str:
 def _matched_canonical_ids(entry: Dict[str, Any]) -> List[str]:
     """Return the exact enriched label identities owned by an evidence match."""
     values: List[Any] = []
-    values.extend(_safe_list(entry.get("matched_canonical_ids")))
-    values.extend(_safe_list(entry.get("aggregate_canonical_ids")))
-    for key in (
-        "matched_canonical_id",
-        "canonical_id",
-        "ingredient_canonical_id",
-    ):
-        if entry.get(key):
-            values.append(entry.get(key))
+    assessment = _safe_dict(entry.get("applicability_assessment"))
+    if "matched_canonical_ids" in assessment:
+        values.extend(_safe_list(assessment.get("matched_canonical_ids")))
+    else:
+        values.extend(_safe_list(entry.get("matched_canonical_ids")))
+        values.extend(_safe_list(entry.get("aggregate_canonical_ids")))
+        for key in ("matched_canonical_id", "canonical_id", "ingredient_canonical_id"):
+            if entry.get(key):
+                values.append(entry.get(key))
 
     canonical_ids: List[str] = []
     for value in values:

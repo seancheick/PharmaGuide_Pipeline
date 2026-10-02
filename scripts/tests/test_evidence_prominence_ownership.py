@@ -611,3 +611,25 @@ def test_same_named_peptide_preparation_links_its_separate_declarations():
     from assessment_readiness import evaluate_assessment_readiness
     readiness = evaluate_assessment_readiness(product, module="generic")
     assert readiness["evidence"]["readiness"] == "complete"
+
+
+def test_reviewed_marine_evidence_on_anonymous_aggregate_cannot_return_to_ala():
+    evidence = _evidence(_enrich("prominence_marine_aggregate_70588_raw.json"))
+    assert "alpha_linolenic_acid" not in evidence["metadata"]["ingredient_points"]
+    assert "epa" in evidence["metadata"]["ingredient_points"]
+
+
+def test_reviewed_accepted_identity_prefers_an_actual_purpose_over_structural_parent():
+    evidence = _evidence(_enrich("prominence_mixed_marine_304676_raw.json"))
+    assert evidence["metadata"]["matched_entries"] == 1
+    assert set(evidence["metadata"]["ingredient_points"]) <= {"epa", "dha"}
+    assert evidence["score"] > 0
+
+
+def test_reviewed_empty_identity_cannot_resurrect_legacy_name_or_singular_canonical():
+    from scoring_v4.modules.generic_evidence import _matched_active_canonical
+    entry = _match(id="INGR_OMEGA3", ingredient="Alpha-Linolenic Acid",
+                   canonical_id="alpha_linolenic_acid", matched_canonical_ids=[],
+                   applicability_assessment={"status": "applicable", "matched_canonical_ids": []})
+    assert _matched_active_canonical(entry, {"alpha linolenic acid": "alpha_linolenic_acid"},
+                                     use_structured_identity=True) == ""
