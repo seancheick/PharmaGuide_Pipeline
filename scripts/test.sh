@@ -68,12 +68,11 @@ split_user_pytest_args() {
   done
 }
 
-# RAM-aware xdist worker cap. Each pytest worker loads the heavy enricher
-# (~13k lines) + the large data JSONs and holds ~4-5 GB resident. `-n auto`
-# (one worker PER CORE) therefore demanded ~60 GB on a 16 GB / high-core box and
-# swap-thrashed the machine into a freeze. Cap workers by whichever is smaller:
-# CPU cores or how many ~5 GB workers physical RAM can hold after reserving
-# headroom for the OS + editor + browser. Override with PG_TEST_WORKERS=N.
+# RAM-aware xdist worker cap. Each pytest worker loads the heavy enricher and
+# the large data JSONs. `-n auto` (one worker PER CORE) once swap-thrashed a
+# 16 GB / high-core box into a freeze. Cap workers by whichever is smaller:
+# CPU cores or how many workers physical RAM can hold after reserving headroom
+# for the OS + editor + browser. Override with PG_TEST_WORKERS=N.
 safe_worker_count() {
   if [[ -n "${PG_TEST_WORKERS:-}" ]]; then
     printf '%s\n' "$PG_TEST_WORKERS"
@@ -95,10 +94,14 @@ try:
 except Exception:
     pass
 cores = os.cpu_count() or 2
-PER_WORKER_GB = 5.0   # conservative resident footprint per worker
+# Measured 2026-10-02 after the normalizer stopped retaining instances: the
+# whole fast profile in one process peaked at 1.8 GB (it was 15.6 GB).
+PER_WORKER_GB = 2.5   # resident footprint per worker, with margin
 RESERVE_GB = 6.0      # OS + editor/Claude + browser headroom
 by_mem = int((mem_gb - RESERVE_GB) // PER_WORKER_GB)
-print(max(1, min(cores - 1, by_mem)))
+# Broad runs sharing the machine-wide lock (scripts/test_lock.py) split the budget.
+runs = max(1, int(os.environ.get("PG_TEST_CONCURRENT_RUNS") or 1))
+print(max(1, min(cores - 1, by_mem // runs)))
 PY
 }
 
@@ -412,15 +415,25 @@ TIMEOUT_HEAVY=(); while IFS= read -r _a; do TIMEOUT_HEAVY+=("$_a"); done < <(tim
 # can't starve the UI / freeze the machine. No-op if `nice` is unavailable.
 NICE=(); command -v nice >/dev/null 2>&1 && NICE=(nice -n 15)
 
-# A single targeted file can load the same large databases as the full suite.
-# Serialize all supported profiles across worktrees, not just broad runs.
+# Machine-wide lock (scripts/test_lock.py), shared by every worktree (Sean,
+# 2026-10-02): one full/release/slow suite at a time, alone; broad fast/local
+# suites share it. A focused run (named test files or nodes) takes no lock and
+# never waits: iteration must keep moving while a suite runs. Since the
+# normalizer stopped retaining instances, a whole fast suite peaks near 2 GB in
+# one process, so a focused run beside a suite fits in memory.
 if [[ -z "${PG_TEST_LOCK_HELD:-}" ]]; then
-  case "$PROFILE" in
-    full|release|slow|local|fast)
-      PG_TEST_LOCK_HELD=1 exec "$PG_PYTHON" "$SCRIPT_DIR/test_lock.py" exclusive -- \
-        bash "$SCRIPT_DIR/test.sh" "$PROFILE" "$@"
-      ;;
-  esac
+  split_user_pytest_args "$@"
+  lock_mode=""
+  if ((${#USER_TARGETS[@]} == 0)); then
+    case "$PROFILE" in
+      full|release|slow) lock_mode=exclusive ;;
+      fast|local) lock_mode=shared ;;
+    esac
+  fi
+  if [[ -n "$lock_mode" ]]; then
+    PG_TEST_LOCK_HELD=1 exec "$PG_PYTHON" "$SCRIPT_DIR/test_lock.py" "$lock_mode" -- \
+      bash "$SCRIPT_DIR/test.sh" "$PROFILE" "$@"
+  fi
 fi
 
 case "$PROFILE" in
