@@ -626,10 +626,12 @@ def test_reviewed_accepted_identity_prefers_an_actual_purpose_over_structural_pa
     assert evidence["score"] > 0
 
 
-def test_reviewed_empty_identity_cannot_resurrect_legacy_name_or_singular_canonical():
-    from scoring_v4.modules.generic_evidence import _matched_active_canonical
+@pytest.mark.parametrize("structured", [False, True])
+@pytest.mark.parametrize("accepted,expected", [([], ""), (["epa"], "epa")])
+def test_reviewed_identity_cannot_resurrect_legacy_name_or_singular_canonical(structured, accepted, expected):
+    from scoring_v4.modules.generic_evidence import _matched_active_canonical, _norm_text
     entry = _match(id="INGR_OMEGA3", ingredient="Alpha-Linolenic Acid",
                    canonical_id="alpha_linolenic_acid", matched_canonical_ids=[],
-                   applicability_assessment={"status": "applicable", "matched_canonical_ids": []})
-    assert _matched_active_canonical(entry, {"alpha linolenic acid": "alpha_linolenic_acid"},
-                                     use_structured_identity=True) == ""
+                   applicability_assessment={"status": "applicable", "matched_canonical_ids": accepted})
+    index = {_norm_text("Alpha-Linolenic Acid"): "alpha_linolenic_acid", "epa": "epa"}
+    assert _matched_active_canonical(entry, index, use_structured_identity=structured) == expected

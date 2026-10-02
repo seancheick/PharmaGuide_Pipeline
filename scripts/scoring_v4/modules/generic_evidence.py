@@ -1601,7 +1601,7 @@ def _matched_active_canonical(
 ) -> str:
     """Raw canonical_id of the active an evidence match links to ('' if unknown)."""
     reviewed_identity = "matched_canonical_ids" in _safe_dict(entry.get("applicability_assessment"))
-    if use_structured_identity:
+    if use_structured_identity or reviewed_identity:
         for canonical_id in _matched_canonical_ids(entry):
             direct = str(canonical_id or "").strip().lower()
             if direct in canon_index.values() and (
