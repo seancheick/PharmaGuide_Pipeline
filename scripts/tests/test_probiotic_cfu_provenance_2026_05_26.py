@@ -936,6 +936,8 @@ def test_statement_warranty_is_bound_after_final_count_selection(enricher):
         '1 billion each of two probiotic strains',
         'Each packet is guaranteed to deliver 2 billion live active cultures and a boost of 250 mg of Vitamin C through the expiration date.',
     ])
+    product['servingSizes'] = [{'quantity': 1, 'unit': 'packet'}]
+    product['serving_basis'] = {'canonical_serving_size_quantity': 1}
     data = enricher._collect_probiotic_data(product)
     assert data['total_cfu'] == 2e9
     assert data['guarantee_type'] == 'at_expiration'
@@ -1313,3 +1315,43 @@ def test_defaulted_daily_frequency_cannot_restate_a_per_day_count(enricher):
         {'minQuantity': 1, 'maxQuantity': 1, 'unit': 'Capsule(s)'},
         [{'serving_size_quantity': 1, 'serving_size_unit': 'Capsule(s)'}]))
     assert data['total_cfu'] == 5e9
+
+
+@pytest.mark.parametrize('statement,expected', [
+    ('Per 3 capsules: 15 billion CFU', 5e9),
+    ('Each 3-capsule serving provides 15 billion CFU', 5e9),
+    ('Per day: 15 billion CFU', 7.5e9),
+])
+def test_statement_prefix_basis_reaches_production_artifact(enricher, statement, expected):
+    from scoring_v4.scored_artifact import build_scored_artifact
+    product = _serving_basis_product(5, '', statement, {
+        'minQuantity': 1, 'maxQuantity': 1, 'unit': 'Capsule(s)',
+        'minDailyServings': 2, 'maxDailyServings': 2})
+    enriched = enricher.enrich_product(product)[0]
+    assert enriched['probiotic_data']['total_cfu'] == expected
+    artifact = build_scored_artifact(enriched)
+    disclosure = artifact['_v4_module_breakdown']['dimensions']['transparency']['metadata']['aggregate_cfu_disclosure']
+    assert disclosure['total_billion_count'] == expected / 1e9
+
+
+def test_unresolved_daily_statement_without_panel_cfu_has_no_per_serving_total(enricher):
+    from scoring_v4.scored_artifact import build_scored_artifact
+    product = _serving_basis_product(0, '', '15 billion CFU per day', _ONE_CAPSULE_UP_TO_THREE)
+    enriched = enricher.enrich_product(product)[0]
+    assert enriched['probiotic_data']['has_cfu'] is False
+    assert enriched['probiotic_data']['total_cfu'] == 0
+    artifact = build_scored_artifact(enriched)
+    disclosure = artifact['_v4_module_breakdown']['dimensions']['transparency']['metadata']['aggregate_cfu_disclosure']
+    assert disclosure['total_billion_count'] == 0
+
+
+@pytest.mark.parametrize('statement,expected', [
+    ('5 billion CFU per day guaranteed through expiration', None),
+    ('15 billion CFU per 3 capsules at manufacture. 15 billion CFU per capsule guaranteed through expiration.', 'at_manufacture'),
+])
+def test_statement_guarantee_requires_the_same_per_serving_count(enricher, statement, expected):
+    product = _serving_basis_product(5, '', statement, {
+        'minQuantity': 1, 'maxQuantity': 1, 'unit': 'Capsule(s)',
+        'minDailyServings': 2, 'maxDailyServings': 2})
+    enriched = enricher.enrich_product(product)[0]
+    assert enriched['probiotic_data']['guarantee_type'] == expected
