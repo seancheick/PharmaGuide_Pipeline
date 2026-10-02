@@ -248,7 +248,7 @@ CREATE INDEX idx_products_core_contains_nootropics ON products_core(contains_noo
 | `score_display_100_equivalent` | `quality_score_v4_100` → "NN/100"                         | /100 compat mirror (was `scored.display_100`)                                           |
 | `score_100_equivalent`         | `quality_score_v4_100`                                    | /100 compat mirror                                                                      |
 | `grade`                        | derived from `quality_tier`                               | v2.0.0 (legacy /80 `score_quality_80`/`score_display_80` columns dropped)               |
-| `verdict`                      | `scored.verdict`                                          | SAFE/CAUTION/POOR/UNSAFE/BLOCKED/NOT_SCORED                                             |
+| `verdict`                      | `scored.verdict`                                          | SAFE/CAUTION/UNSAFE/BLOCKED/NOT_SCORED; POOR readable only in older catalogs                                             |
 | `safety_verdict`               | `scored.safety_verdict`                                   | Backward-compat                                                                         |
 | `mapped_coverage`              | `scored.mapped_coverage`                                  | 0.0-1.0                                                                                 |
 | `score_ingredient_quality`, `score_safety_purity`, `score_evidence_research`, `score_brand_trust` (+ `_max`) | none — always NULL | V3 sections retired; deprecated compatibility, schema 3 drops them |

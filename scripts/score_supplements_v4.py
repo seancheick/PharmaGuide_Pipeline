@@ -361,8 +361,8 @@ def _score_v4_core(enriched_product: Dict[str, Any]) -> Dict[str, Any]:
 
     if safety.verdict == "CAUTION":
         # CAUTION carries forward but does not short-circuit. Scoring
-        # math still runs in P1.3+; the verdict will be reconciled with
-        # the score-band rules (CAUTION > POOR > SAFE) at output time.
+        # math still runs in P1.3+; the safety caution remains independent
+        # of the quality tier at output time.
         result["v4_verdict"] = "CAUTION"
 
     # Layer 2 — Completeness Gate.

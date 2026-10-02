@@ -249,3 +249,18 @@ or benchmark/denominator policy has been implemented by this batch.
 Next: complete equivalent Dose benchmark ownership and D24/omega decision packets;
 then transfer, calibrate and perform one fresh final corpus/release validation.
 Q53 source attribution is corrected; nine-label clinical coverage queue remains.
+
+
+## October 1 consolidated CFU and quality/safety ownership
+
+- Q54 — Implemented/measured/independently reviewed; final fast and integration pending. Normalizer preserves declared probiotic total rows; existing enrichment owner parses counts, chooses physical-subtree totals without double counting, and binds guarantees to the final count's own statement. Dose multipliers unchanged. Accepted source3ec556cb:1,259 frozen labels,33 score movements,717 omega controls byte-identical; no Evidence/Safety/Verification/route/status/purpose changes. Intermediate captures with five Transparency regressions are rejected; all five restored. Remaining release-source discrepancies242637/242654 (serving basis) and327966 (90B title versus50B panel) remain open.
+- Q55 — Sean-approved quality/safety independence, implemented/measured/independently reviewed; final gates and integration pending. `quality_tier` owns Poor/Needs improvement/Good/Very good/Excellent/Exceptional; `product_safety_status` independently owns safety. Remove quality-to-POOR/SAFE mutation and release comparison of combined legacy verdict. Banned/recalled reasons remain blocked. Cached POOR remains readable only for compatibility. Source4f894a43 replay changes only provenance;46 public probes retain scores/tiers/safety. Appa5b705ad analyzer clean and92 focused checks passed; canonical-format followupea95d171 only changes whitespace.
+
+The old Q3 phrase “35 POOR→SAFE” describes combined-verdict quality-threshold crossings, **not proven safety improvements**. Review those products' quality movement and typed safety independently during calibration. Do not inherit that mixed terminology into new reports.
+
+Full-fast4f894a43:18,073passed168skipped2failed. Both integration defects (9-column report fixture; canonical vocabulary JSON) fixedcdf6b6db;222focused checks passed. Final broad receipt pending. No scoring policy changed by this followup. All receipts: `/Users/seancheick/pg_quality/cfu_guarantee_20261001/`.
+Owner: normalizer declared-total preservation; `SupplementEnricherV3::_collect_probiotic_data`; `quality_score::assemble_quality_score`; `scored_artifact::_product_safety_status`; `catalog_diff::_products`; Flutter `catalogProductSafetyStatus` and `ScoreTier`. Evidence: source regressions, frozen captures, production artifact probes and fresh review. Will NOT create: second parser/scorer/status/clinical registry or app-side calculation.
+
+D26 equivalent benchmark transfer, D24/omega decisions, nine Q53 clinical determinations, calibration and final Clean corpus/release remain open. Source publication and runtime catalog release are separate.
+
+Final export followup `50a2fb7d`: existing `build_decision_highlights` no longer selects caution copy from legacy SAFE/POOR/CAUTION. It reads typed safety and quality-assessment readiness independently; additive/danger copy is retained. Two reproduced failures plus missing/unknown-safety and retained-danger controls cover this class. Export-owner sweep:2,766 passed,72 generated-artifact skips. Independent review accepted the narrow fix. The interrupted broad rerun (8,894 passed,131 skipped) is not a final acceptance receipt; the final broad gate follows this last production change.

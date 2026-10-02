@@ -249,9 +249,9 @@ Sean decisions under Phase4, rather than implicit choices by an implementer.
 - [x] Preserve matching guarantees after final total selection, fully expanded
   CFU notation, explicitly probiotic Cell(s) rows, and fixed daily-serving
   equivalence through the existing serving-frequency owner.
-- [x] Focused source checks:105 passed,1 generated-canary skip.
-- [ ] Complete the full fast checkpoint, final clean1259-label replay, classify all
-  public verdict/Safety changes and obtain independent acceptance before main push.
+- [x] Consolidated CFU/structural/nutrition boundary: 1,632 passed,16 skipped; final allocation controls:172 passed,5 skipped. Earlier105-check receipt remains historical.
+- [x] Complete clean1,259-label CFU replay and classify all33 score movements;717 omega controls identical, no Evidence/Safety/Verification/route/status/purpose changes. Independent review accepted source.
+- [ ] Complete final portable full-fast checkpoint and main integration/push.
 - [ ] Close remaining label/basis discrepancies before final calibration/release.
 
 Owner: `SupplementEnricherV3::_extract_cfu` / `_extract_guarantee_type` /
@@ -295,7 +295,8 @@ score, status field, safety classifier, quality ladder or app-side calculation.
   clean; 92 focused checks passed at `a5b705ad` (not integrated yet).
 - [x] Independently review bounded source; all non-metadata numerical config
   values are identical. Version 1.22.1 preserves the earlier fingerprint.
-- [ ] Complete final frozen replay, portable pipeline fast and app `make check`.
+- [x] Complete final1,259-label separation replay: only four config-provenance paths change. All46 production-artifact probes retain scores, tiers and typed safety; zero newly emitted POOR.
+- [ ] Complete portable pipeline fast and app `make check`.
 - [ ] Integrate/push both repositories, update final receipts and remove contained
   worktrees/branches. No runtime catalog publication is authorized here.
 
@@ -304,3 +305,5 @@ selection and consumers; run focused tests first, then freeze the completed batc
 for measurement and one final broad checkpoint. A real regression found in that
 measurement must be corrected before integration. Do not expand a source cleanup
 into unapproved numerical policy or clinical coverage claims.
+
+Final export followup `50a2fb7d`: existing `build_decision_highlights` no longer selects caution copy from legacy SAFE/POOR/CAUTION. It reads typed safety and quality-assessment readiness independently; additive/danger copy is retained. Two reproduced failures plus missing/unknown-safety and retained-danger controls cover this class. Export-owner sweep:2,766 passed,72 generated-artifact skips. Independent review accepted the narrow fix. The interrupted broad rerun (8,894 passed,131 skipped) is not a final acceptance receipt; the final broad gate follows this last production change.

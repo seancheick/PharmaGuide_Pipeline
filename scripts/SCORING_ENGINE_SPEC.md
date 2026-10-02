@@ -268,24 +268,25 @@ round of the one-decimal total), never from the decimal total, so the hero-card
 number and its tier can never disagree. Tier is null when the public score is
 suppressed or not scored.
 
-## 10. Verdict and status
+## 10. Independent quality, safety and publication status
 
-Verdict precedence is deterministic:
+`quality_tier` owns the quality rating shown above. `product_safety_status`
+independently reports `blocked`, `unsafe`, `caution`,
+`no_known_catalog_concern` or `not_assessed`. A quality tier never changes safety;
+banned/recalled reasons remain attached to blocked products. The production
+owners are `quality_score::assemble_quality_score` and
+`scored_artifact::_product_safety_status`, respectively.
 
-```text
-BLOCKED > UNSAFE > NOT_SCORED > CAUTION > POOR > SAFE
-```
+Legacy `verdict` remains a compatibility/readiness field. Its declared reader
+precedence still includes POOR for older cached catalogs; current scoring never
+emits POOR or converts a quality threshold crossing into a safety change.
+Completeness policy may impose a tested cap or legacy CAUTION readiness ceiling
+without becoming a safety finding. Release safety comparisons and Flutter safety
+rendering consume the typed `product_safety_status` field.
 
-POOR is not decided from the module raw score. It is owned by the shipped
-public tier (the `Poor` band in `scoring_v4/config/quality_score.json` tiers,
-applied by `scoring_v4/quality_score.py`); a carried CAUTION outranks POOR/SAFE
-and the module raw score must never decide the verdict.
-Completeness policy may impose a tested cap or CAUTION ceiling without changing
-the underlying module breakdown.
-
-| Status | Allowed verdicts | Public number |
+| Status | Current compatibility verdicts | Public number |
 |---|---|---|
-| `scored` | SAFE, POOR, CAUTION | finite |
+| `scored` | SAFE, CAUTION | finite |
 | `suppressed_safety` | BLOCKED, UNSAFE | null |
 | `not_scored` | NOT_SCORED | null |
 

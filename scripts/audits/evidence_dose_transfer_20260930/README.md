@@ -230,3 +230,14 @@ pillars are tuned. Probe and raw receipts: `/Users/seancheick/pg_quality/d26_pep
 
 Q53 source attribution is fixed; its bounded nine-label research queue is still
 clinical coverage work, not a reason to revive the invalid species credits.
+
+
+## October 1 CFU consolidation and independent quality/safety
+
+The existing CFU source owner now preserves declared totals, avoids subtree/member double counting, and binds warranty to the selected count's own statement. Accepted source3ec556cb gives33 score movements across1,259 frozen labels, with717 omega controls byte-identical and no Evidence/Safety/Verification/route/status/purpose changes. Final separation source4f894a43 changes only four config-provenance paths in that cohort;46 actual production artifact probes preserve numerical results and typed safety. No quality improvement is a safety improvement.
+
+Owner: normalizer source-total preservation → enrichment count/warranty result → existing probiotic Dose; `quality_score::assemble_quality_score` for quality and `scored_artifact::_product_safety_status` for safety, consumed by the release gate and Flutter. Evidence: durable frozen source and public-artifact receipts in `/Users/seancheick/pg_quality/cfu_guarantee_20261001/`. Will NOT create: another count parser, scoring engine, persisted status, clinical registry or app calculation.
+
+Final source gates/integration pending. The three raw label conflicts242637/242654/327966 and broader D26/D24/omega/clinical/calibration decisions remain open. None is hidden by this ownership correction.
+
+Final export followup `50a2fb7d`: existing `build_decision_highlights` no longer selects caution copy from legacy SAFE/POOR/CAUTION. It reads typed safety and quality-assessment readiness independently; additive/danger copy is retained. Two reproduced failures plus missing/unknown-safety and retained-danger controls cover this class. Export-owner sweep:2,766 passed,72 generated-artifact skips. Independent review accepted the narrow fix. The interrupted broad rerun (8,894 passed,131 skipped) is not a final acceptance receipt; the final broad gate follows this last production change.

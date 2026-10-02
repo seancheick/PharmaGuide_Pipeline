@@ -25,8 +25,9 @@ paths:
   the config and reports `fail_open_neutral`. Read the driver field before calling any pillar a bug.
 - **Retiring a component moves its explanation too.** Scoring it 0 while leaving its copy and
   pins behind ships a contradiction.
-- Safety verdicts (BLOCKED/UNSAFE) are separate from quality. Never let a quality change hide or
-  soften a safety verdict.
+- `quality_tier` is quality; `product_safety_status` is safety. Never convert a quality tier into
+  a safety verdict. Legacy POOR is readable only in old catalogs and never newly emitted.
+  Never let a quality change hide or soften a safety finding; banned/recalled reasons remain blocked.
 
 **Changing a score:** follow the `/pg-scoring-change` skill. It covers the Owner Check, the
 one-product probe, a failing test, the brand probe, `shadow-diff` before/after on stored inputs,
