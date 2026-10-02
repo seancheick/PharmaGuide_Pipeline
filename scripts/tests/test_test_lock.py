@@ -30,14 +30,14 @@ def _wait_for_markers(tmp_path: Path, count: int) -> None:
         time.sleep(0.05)
 
 
-def test_shared_compatibility_mode_serializes_runs(tmp_path):
-    first = _start(tmp_path, "shared", "import time; time.sleep(.5)")
+def test_shared_runs_overlap_and_see_each_other(tmp_path):
+    report = "import os,time; time.sleep(1); print(os.environ['PG_TEST_CONCURRENT_RUNS'])"
+    first = _start(tmp_path, "shared", report)
     _wait_for_markers(tmp_path, 1)
-    second = _start(tmp_path, "shared", "print('ran')")
-    out, err = second.communicate(timeout=20)
-    first.communicate(timeout=20)
-    assert out.strip() == "ran"
-    assert "waiting for the machine-wide test lock" in err
+    second = _start(tmp_path, "shared", report)
+    outputs = [p.communicate(timeout=20)[0].strip() for p in (first, second)]
+
+    assert "2" in outputs  # the later run saw both, so it was not blocked
 
 
 def test_exclusive_waits_for_a_shared_run(tmp_path):
@@ -70,19 +70,28 @@ def test_the_command_exit_code_is_returned(tmp_path):
     assert run.returncode == 3
 
 
-def test_shared_mode_cannot_start_another_memory_heavy_run(tmp_path):
-    ready, release = tmp_path / 'ready', tmp_path / 'release'
-    code = f"from pathlib import Path; import time; Path({str(ready)!r}).touch();\nwhile not Path({str(release)!r}).exists(): time.sleep(.02)"
-    first = _start(tmp_path, 'shared', code)
+def test_a_focused_run_does_not_wait_for_a_heavy_suite(tmp_path):
+    # Sean, 2026-10-02: focused checks were queued behind a profiling suite.
+    release = tmp_path / "release"
+    holder = _start(
+        tmp_path, "exclusive",
+        f"from pathlib import Path; import time\nwhile not Path({str(release)!r}).exists(): time.sleep(.05)",
+    )
     _wait_for_markers(tmp_path, 1)
-    second = _start(tmp_path, 'shared', "print('second')")
+    repo = Path(__file__).resolve().parents[2]
+    env = {k: v for k, v in os.environ.items() if k != "PG_TEST_LOCK_HELD"}
+    env["PG_TEST_LOCK_DIR"] = str(tmp_path)
     try:
-        time.sleep(.2)
-        assert second.poll() is None, 'second heavy run overlapped the first'
+        focused = subprocess.run(
+            ["bash", "scripts/test.sh", "fast", "scripts/tests/test_ci_skip_guard.py"],
+            cwd=repo, env=env, capture_output=True, text=True, timeout=120,
+        )
     finally:
         release.touch()
-        first.communicate(timeout=20)
-        second.communicate(timeout=20)
+        holder.communicate(timeout=20)
+
+    assert focused.returncode == 0, focused.stdout[-2000:] + focused.stderr[-2000:]
+    assert "waiting for the machine-wide test lock" not in focused.stderr
 
 
 def test_lock_survives_wrapper_death_while_child_is_running(tmp_path):

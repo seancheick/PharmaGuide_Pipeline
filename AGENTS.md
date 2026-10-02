@@ -33,8 +33,9 @@ scripts/test.sh full           # post-pipeline backstop, never alongside a pipel
   pipeline code or data changed.
 - CI has no product corpus, builds or raw DSLD datasets; it checks out the app repo for cross-repo tests (FLUTTER_REPO). A test that needs them goes in `LOCAL_ONLY_TEST_FILES`
   (`scripts/test_profiles.py`); `scripts/ci_skip_guard.py` fails CI on any other skip reason; the local rung rejects missing corpus/build skips.
-- `scripts/test.sh` holds a machine-wide lock: one test workload at a time across every profile,
-  including single-file checks that can load the enricher. A waiting run is queued, not hung.
+- `scripts/test.sh` holds a machine-wide lock: one full/release/slow suite at a time, alone;
+  broad fast/local suites share it and split the worker budget. Focused runs (named files or
+  nodes) take no lock and never wait. A waiting broad run is queued, not hung.
 
 Pick the rung by what changed and say which rung ran. Documentation-only changes need no pytest;
 scoring, clinical-data and runtime configuration changes require their affected checks.
