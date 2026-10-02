@@ -74,12 +74,10 @@ ARTIFACT_TEST_FILES: FrozenSet[str] = frozenset({
 # scripts/ci_skip_guard.py fails CI when a test skips outside this list, so a
 # new local-only test cannot pass unseen.
 LOCAL_ONLY_TEST_FILES: FrozenSet[str] = frozenset({
-    # raw DSLD staging labels under ~/Downloads/PharmaGuide_Datasets
     "test_context_canonical_overrides_2026_05_24.py",
     "test_identity_unii_literal_proof.py",
     "test_interaction_rule_every_declared_form.py",
     "test_rc4_blend_header_total_contract.py",
-    # product corpus, built exports, canary baselines, or opt-in local tools
     "test_active_count_reconciliation.py",
     "test_canonical_id_delivers_markers_emit.py",
     "test_cert_needs_review_cluster_p171.py",
@@ -103,24 +101,118 @@ LOCAL_ONLY_TEST_FILES: FrozenSet[str] = frozenset({
     "test_submission_review_live_stack.py",
 })
 
-# Files that skip on every machine by design, not for missing local data.
-CI_SKIP_ALLOWED_FILES: FrozenSet[str] = frozenset({
-    # per-file _metadata conventions the universal count check cannot read
-    "test_data_file_metadata_contract.py",
-})
+# Exact observed skip reasons; a declared file never excuses another failure.
+CI_SKIP_ALLOWED_REASONS = {
+    'test_active_count_reconciliation.py': (
+        '\\d+\\ canary\\ missing',
+        '\\d+\\ canary\\ not\\ rebuilt\\ yet',
+    ),
+    'test_canonical_id_delivers_markers_emit.py': (
+        'no\\ build\\ directory\\ available',
+        'no\\ build\\ directory\\ available\\ —\\ run\\ targeted\\ rebuild\\ first',
+    ),
+    'test_cert_needs_review_cluster_p171.py': (
+        'no\\ enriched\\ products\\ dir\\ present\\ in\\ this\\ checkout',
+    ),
+    'test_cert_population_identity.py': (
+        'local\\ cleaned\\ corpus\\ not\\ available',
+        'local\\ enriched\\ corpus\\ not\\ available',
+    ),
+    'test_cleaner_forms_preservation.py': (
+        'No\\ pipeline\\ output',
+    ),
+    'test_condition_id_shape_consistency.py': (
+        '\\d+\\ canary\\ not\\ rebuilt\\ yet',
+    ),
+    'test_cross_module_probiotic_evidence.py': (
+        'enriched\\ corpus\\ not\\ present\\ \\(output_Doctors_Best_enriched\\)',
+        'enriched\\ corpus\\ not\\ present\\ \\(output_Garden_of_life_enriched\\)',
+        'enriched\\ corpus\\ not\\ present\\ \\(output_Jarrow_Formulas_enriched\\)',
+        'enriched\\ corpus\\ not\\ present\\ \\(output_Life_Extension_enriched\\)',
+        'enriched\\ corpus\\ not\\ present\\ \\(output_MegaFood_enriched\\)',
+        'enriched\\ corpus\\ not\\ present\\ \\(output_Ora_enriched\\)',
+    ),
+    'test_data_file_metadata_contract.py': (
+        'banned_match_allowlist\\.json:\\ total_entries\\ tracks\\ allowlist\\ only;\\ denylist\\ is\\ auxiliary\\ and\\ tracked\\ separately\\.\\ Pinned\\ by\\ test_banned_match_allowlist_contract\\.py\\.',
+        'canary_products\\.json:\\ _metadata\\ has\\ no\\ total_entries\\ field',
+        'canonical_equivalences\\.json:\\ shape\\ not\\ recognized\\ by\\ universal\\ classifier\\ \\(needs\\ a\\ bespoke\\ per\\-file\\ test;\\ add\\ to\\ INTENTIONAL_EXCEPTIONS\\ with\\ a\\ pointer\\ to\\ that\\ test\\)\\.',
+        'catalog_brand_registry\\.json:\\ total_entries\\ tracks\\ canonical\\ brand\\-family\\ records;\\ wave_1\\ is\\ an\\ execution\\ manifest,\\ not\\ another\\ brand\\ catalog\\.\\ Pinned\\ by\\ test_brand_identity\\.py\\.',
+        "cert_claim_rules\\.json:\\ total_entries\\ =\\ Σ\\(non\\-_\\-prefixed\\ rule\\ keys\\ across\\ rules\\.\\*\\),\\ excluding\\ each\\ category's\\ _metadata\\ config\\ sub\\-key\\.\\ Pinned\\ by\\ test_cert_claim_rules_contract\\.py\\.",
+        'cert_registry\\.json:\\ _metadata\\ has\\ no\\ total_entries\\ field',
+        'clinical_risk_taxonomy\\.json:\\ UNIQUE\\ convention\\ —\\ total_entries\\ =\\ SUM\\ of\\ all\\ 7\\ taxonomy\\ arrays\\ \\(conditions\\ \\+\\ drug_classes\\ \\+\\ severity_levels\\ \\+\\ evidence_levels\\ \\+\\ profile_flags\\ \\+\\ product_forms\\ \\+\\ sources\\)\\.\\ Pinned\\ by\\ test_clinical_risk_taxonomy_contract\\.py\\.',
+        'color_indicators\\.json:\\ total_entries\\ tracks\\ natural_indicators\\ only;\\ artificial_indicators\\ \\+\\ explicit_natural_dyes\\ \\+\\ explicit_artificial_dyes\\ are\\ auxiliary\\.\\ Pinned\\ by\\ test_color_indicators_contract\\.py\\.',
+        'functional_ingredient_groupings\\.json:\\ total_entries\\ tracks\\ functional_groupings\\ only;\\ vague_terms_to_flag\\ \\+\\ transparency_bonuses\\ are\\ auxiliary\\.\\ Pinned\\ by\\ test_functional_ingredient_groupings_contract\\.py\\.',
+        'high_dose_rule_exemptions\\.json:\\ _metadata\\ has\\ no\\ total_entries\\ field',
+        'iqm_excellent_evidence_backlog\\.json:\\ shape\\ not\\ recognized\\ by\\ universal\\ classifier\\ \\(needs\\ a\\ bespoke\\ per\\-file\\ test;\\ add\\ to\\ INTENTIONAL_EXCEPTIONS\\ with\\ a\\ pointer\\ to\\ that\\ test\\)\\.',
+        'manufacture_deduction_expl\\.json:\\ Structural\\ config\\ file\\ \\(1\\ scalar\\ total_deduction_cap\\ \\+\\ 4\\ nested\\ dicts\\ for\\ violation_categories\\ /\\ modifiers\\ /\\ calculation_rules\\ /\\ score_thresholds\\)\\.\\ total_entries=5\\ tracks\\ count\\ of\\ top\\-level\\ non\\-_metadata\\ sub\\-sections\\ —\\ meaningful\\ but\\ not\\ entry\\-shaped\\.\\ Pinned\\ by\\ test_manufacture_deduction_expl_contract\\.py\\.',
+        'migration_report\\.json:\\ total_entries\\ tracks\\ alias_collisions_resolved\\ \\(the\\ headline\\ number\\ of\\ this\\ migration\\);\\ other\\ arrays/dicts\\ are\\ scaffolding\\.\\ Pinned\\ by\\ test_migration_report_contract\\.py\\.',
+        'omega_rubric\\.json:\\ _metadata\\ has\\ no\\ total_entries\\ field',
+        'unit_conversions\\.json:\\ total_entries\\ tracks\\ vitamin_conversions\\ only;\\ mass_conversions\\ and\\ form_detection_patterns\\ are\\ static\\ rule\\ config,\\ not\\ vitamin\\ entries\\.\\ Pinned\\ by\\ test_unit_conversions_contract\\.py\\.',
+    ),
+    'test_e1_2_2_preflight_invariant.py': (
+        'baseline\\ \\d+\\.json\\ missing',
+    ),
+    'test_e1_5_x_4_ul_fallback_and_status.py': (
+        'dist/detail_blobs\\ not\\ present\\ —\\ run\\ rebuild\\ first',
+    ),
+    'test_inactive_ingredient_preservation.py': (
+        '\\d+\\ canary\\ not\\ rebuilt\\ yet',
+    ),
+    'test_inactive_penalty_ledger_parity.py': (
+        'enriched\\ corpus\\ not\\ available',
+    ),
+    'test_inactive_role_label_from_functional_roles.py': (
+        'no\\ build\\ directory\\ available\\ —\\ run\\ targeted\\ rebuild\\ first',
+    ),
+    'test_no_silently_mapped_rows.py': (
+        'No\\ pipeline\\ output\\ directory\\ present',
+    ),
+    'test_plant_part_preservation_closeout.py': (
+        'canary\\ \\d+\\ not\\ rebuilt\\ yet',
+    ),
+    'test_probiotic_cfu_adequacy.py': (
+        '\\d+\\ canary\\ not\\ rebuilt\\ yet',
+    ),
+    'test_probiotic_confidence_hybrid.py': (
+        '\\d+\\ canary\\ not\\ rebuilt\\ yet',
+    ),
+    'test_probiotic_structured_form_identity.py': (
+        'Local\\ Fortify\\ source\\ unavailable;\\ synthetic\\ ownership\\ cases\\ remain\\ unconditional',
+        "Local\\ Nature's\\ Way\\ cleaned\\ corpus\\ is\\ absent;\\ synthetic\\ ownership\\ cases\\ are\\ unconditional",
+        'Local\\ manifest\\-owned\\ direct\\-strain\\ control\\ is\\ absent',
+    ),
+    'test_reviewer_doc_constituent_forms.py': (
+        'shipped\\ detail\\ blobs\\ not\\ built',
+    ),
+    'test_submission_extraction_live_stack.py': (
+        'explicitly\\ opt\\ in\\ with\\ PG_RUN_LOCAL_EXTRACTION_TESTS=\\d+',
+    ),
+    'test_submission_print_fidelity.py': (
+        'needs\\ PG_RUN_OCR_FIDELITY_TESTS=\\d+\\ and\\ the\\ OCR\\ engine',
+    ),
+    'test_submission_review_live_stack.py': (
+        'explicitly\\ opt\\ in\\ with\\ PG_RUN_LOCAL_REVIEW_TESTS=\\d+',
+    ),
+}
 
-
-def iter_profile_paths(profile: str, tests_dir: Path | None = None) -> Iterable[Path]:
+def iter_profile_paths(profile: str, tests_dir: Path | None = None, *,
+                       shard_index: int | None = None, shard_count: int | None = None) -> Iterable[Path]:
     """Yield deterministic test paths owned by one named profile."""
     root = tests_dir or Path(__file__).resolve().parent / "tests"
     all_tests = sorted(root.glob("test_*.py"))
 
     if profile == "fast":
         excluded = SLOW_TEST_FILES | RELEASE_TEST_FILES | ARTIFACT_TEST_FILES
-        return (
-            path for path in all_tests
-            if path.name not in excluded and not path.name.endswith("_live.py")
-        )
+        paths = [path for path in all_tests
+                 if path.name not in excluded and not path.name.endswith("_live.py")]
+        if shard_index is None and shard_count is None:
+            return iter(paths)
+        if (shard_index is None or shard_count is None or shard_count < 1
+                or not 0 <= shard_index < shard_count):
+            raise ValueError("shard requires 0 <= index < positive count")
+        return iter(paths[shard_index::shard_count])
+    if shard_index is not None or shard_count is not None:
+        raise ValueError("only the fast profile can be sharded")
     if profile == "slow":
         owned = SLOW_TEST_FILES
     elif profile == "release":
@@ -137,19 +229,11 @@ def iter_profile_paths(profile: str, tests_dir: Path | None = None) -> Iterable[
 def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("profile", choices=("fast", "slow", "release", "artifact", "local"))
-    # CI splits the fast profile into parallel jobs ("2/4" = second of four).
-    # Memory grows with every module one process imports (15.6 GB on a 16 GB
-    # runner for the whole fast profile), so a shard also bounds memory.
-    parser.add_argument("--shard", help="i/n: keep every n-th file, starting at the i-th")
+    parser.add_argument("--shard-index", type=int)
+    parser.add_argument("--shard-count", type=int)
     args = parser.parse_args()
     repo_root = Path(__file__).resolve().parent.parent
-    paths = list(iter_profile_paths(args.profile))
-    if args.shard:
-        index, count = (int(part) for part in args.shard.split("/"))
-        if not 1 <= index <= count:
-            parser.error(f"--shard {args.shard}: need 1 <= i <= n")
-        paths = paths[index - 1::count]
-    for path in paths:
+    for path in iter_profile_paths(args.profile, shard_index=args.shard_index, shard_count=args.shard_count):
         print(path.relative_to(repo_root))
     return 0
 

@@ -37,12 +37,6 @@ from submission_review.extraction.print_fidelity import (  # noqa: E402
 
 RUN_OCR = os.environ.get("PG_RUN_OCR_FIDELITY_TESTS") == "1"
 
-# The panel renderer draws with macOS Arial; Linux CI has no such font and
-# runs this file as local-only (scripts/test_profiles.py LOCAL_ONLY_TEST_FILES).
-_needs_macos_fonts = pytest.mark.skipif(
-    not Path("/System/Library/Fonts/Supplemental/Arial.ttf").exists(),
-    reason="needs the macOS Arial fonts the panel renderer draws with",
-)
 
 
 def _flat(width: int, height: int) -> bytes:
@@ -116,13 +110,11 @@ def test_device_encode_only_ever_shrinks():
     assert _size(device_encode(_flat(3024, 4032))) == (DEVICE_SHORT_EDGE, 3200)
 
 
-@_needs_macos_fonts
 def test_the_panel_is_sized_from_its_own_type():
     """A fixed panel width would clip the longest row and blame preparation."""
     assert 2.0 < panel_ems() * 6.0 / 72.0 < 3.0
 
 
-@_needs_macos_fonts
 def test_an_unphotographable_geometry_is_refused_not_cropped():
     # Wide and short: the panel is about 29 ems across and 18 tall, so only
     # a letterbox frame can fail to hold it.
@@ -154,7 +146,6 @@ def test_scoring_refuses_a_line_whose_dose_is_missing():
     assert "25mcg" in partial.missing_digits
 
 
-@_needs_macos_fonts
 def test_a_six_point_render_is_rasterised_at_six_points():
     """Rendering large and scaling down would hide the loss under test."""
     from PIL import Image

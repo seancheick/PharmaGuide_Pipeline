@@ -12,7 +12,7 @@ from test_profiles import LOCAL_ONLY_TEST_FILES  # noqa: E402
 
 _JUNIT = """<?xml version="1.0"?>
 <testsuites><testsuite>
-  <testcase classname="scripts.tests.{local}" name="test_corpus"><skipped message="local enriched corpus not available"/></testcase>
+  <testcase classname="scripts.tests.{local}" name="test_corpus"><skipped message="35491 canary not rebuilt yet"/></testcase>
   <testcase classname="scripts.tests.test_ran.TestThing" name="test_ok"/>
   {extra}
 </testsuite></testsuites>
@@ -20,7 +20,7 @@ _JUNIT = """<?xml version="1.0"?>
 
 
 def _write(tmp_path, extra=""):
-    local = sorted(LOCAL_ONLY_TEST_FILES)[0].removesuffix(".py")
+    local = "test_active_count_reconciliation"
     path = tmp_path / "junit.xml"
     path.write_text(_JUNIT.format(local=local, extra=extra))
     return path
@@ -46,17 +46,35 @@ def test_every_local_only_file_exists():
     assert all((tests_dir / name).exists() for name in LOCAL_ONLY_TEST_FILES)
 
 
-def test_ci_shards_cover_the_fast_profile_exactly_once():
-    import subprocess
+def test_unrelated_skip_in_a_declared_file_is_rejected(tmp_path):
+    p = _write(tmp_path)
+    p.write_text(p.read_text().replace('35491 canary not rebuilt yet', 'optional dependency unexpectedly missing'))
+    assert undeclared_skips(p)
 
-    profiles = Path(__file__).resolve().parents[1] / "test_profiles.py"
 
-    def files(*extra):
-        out = subprocess.run(
-            [sys.executable, str(profiles), "fast", *extra],
-            check=True, capture_output=True, text=True,
-        ).stdout.split()
-        return out
+def test_local_profile_rejects_missing_corpus_skip(tmp_path):
+    assert undeclared_skips(_write(tmp_path), profile='local')
 
-    shards = [files("--shard", f"{i}/4") for i in range(1, 5)]
-    assert sorted(sum(shards, [])) == sorted(files())
+
+def test_empty_junit_is_not_evidence_of_a_completed_suite(tmp_path):
+    p = tmp_path / 'empty.xml'
+    p.write_text('<testsuites/>')
+    assert undeclared_skips(p)
+
+
+def test_shards_cover_every_fast_file_exactly_once():
+    from test_profiles import iter_profile_paths
+    expected = set(iter_profile_paths('fast'))
+    shards = [list(iter_profile_paths('fast', shard_index=i, shard_count=4)) for i in range(4)]
+    assert all(shards)
+    flattened = [p for shard in shards for p in shard]
+    assert len(flattened) == len(set(flattened))
+    assert set(flattened) == expected
+
+
+def test_invalid_shard_does_not_fall_back_to_the_whole_suite():
+    import pytest
+    from test_profiles import iter_profile_paths
+    for index, count in [(4, 4), (-1, 4), (0, 0), (0, None)]:
+        with pytest.raises(ValueError):
+            list(iter_profile_paths('fast', shard_index=index, shard_count=count))

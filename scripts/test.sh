@@ -98,9 +98,7 @@ cores = os.cpu_count() or 2
 PER_WORKER_GB = 5.0   # conservative resident footprint per worker
 RESERVE_GB = 6.0      # OS + editor/Claude + browser headroom
 by_mem = int((mem_gb - RESERVE_GB) // PER_WORKER_GB)
-# Runs sharing the machine-wide lock (scripts/test_lock.py) split the budget.
-runs = max(1, int(os.environ.get("PG_TEST_CONCURRENT_RUNS") or 1))
-print(max(1, min(cores - 1, by_mem // runs)))
+print(max(1, min(cores - 1, by_mem)))
 PY
 }
 
@@ -390,8 +388,11 @@ run_release_artifact_gates() {
 }
 
 fast_test_files() {
-  # PG_TEST_SHARD=i/n (CI): one of n disjoint slices of the fast profile.
-  "$PG_PYTHON" "$REPO_ROOT/scripts/test_profiles.py" fast ${PG_TEST_SHARD:+--shard "$PG_TEST_SHARD"}
+  local shard_args=()
+  if [[ -n "${PG_TEST_SHARD_INDEX:-}" || -n "${PG_TEST_SHARD_COUNT:-}" ]]; then
+    shard_args=(--shard-index "${PG_TEST_SHARD_INDEX:-}" --shard-count "${PG_TEST_SHARD_COUNT:-}")
+  fi
+  "$PG_PYTHON" "$REPO_ROOT/scripts/test_profiles.py" fast "${shard_args[@]+"${shard_args[@]}"}"
 }
 
 profile_test_files() {
@@ -408,23 +409,15 @@ TIMEOUT_HEAVY=(); while IFS= read -r _a; do TIMEOUT_HEAVY+=("$_a"); done < <(tim
 # can't starve the UI / freeze the machine. No-op if `nice` is unavailable.
 NICE=(); command -v nice >/dev/null 2>&1 && NICE=(nice -n 15)
 
-# Machine-wide lock (scripts/test_lock.py), shared by every worktree: one
-# full/release/slow run at a time and alone; any number of broad fast runs
-# share it. A single-file run is serial and small, so it needs no lock.
+# A single targeted file can load the same large databases as the full suite.
+# Serialize all supported profiles across worktrees, not just broad runs.
 if [[ -z "${PG_TEST_LOCK_HELD:-}" ]]; then
-  lock_mode=""
   case "$PROFILE" in
-    full|release|slow) lock_mode=exclusive ;;
-    local) lock_mode=shared ;;
-    fast)
-      split_user_pytest_args "$@"
-      ((${#USER_TARGETS[@]} == 1)) || lock_mode=shared
+    full|release|slow|local|fast)
+      PG_TEST_LOCK_HELD=1 exec "$PG_PYTHON" "$SCRIPT_DIR/test_lock.py" exclusive -- \
+        bash "$SCRIPT_DIR/test.sh" "$PROFILE" "$@"
       ;;
   esac
-  if [[ -n "$lock_mode" ]]; then
-    PG_TEST_LOCK_HELD=1 exec "$PG_PYTHON" "$SCRIPT_DIR/test_lock.py" "$lock_mode" -- \
-      bash "$SCRIPT_DIR/test.sh" "$PROFILE" "$@"
-  fi
 fi
 
 case "$PROFILE" in
@@ -434,9 +427,9 @@ case "$PROFILE" in
       files=("${USER_TARGETS[@]}")
     else
       files=()
-      while IFS= read -r file; do
-        files+=("$file")
-      done < <(fast_test_files)
+      file_list="$(fast_test_files)"  # Propagate invalid shard/profile errors.
+      [[ -n "$file_list" ]] || { echo "fast profile selected no files" >&2; exit 2; }
+      while IFS= read -r file; do files+=("$file"); done <<< "$file_list"
     fi
     parallel_args=()
     # xdist startup costs more than it saves for a single targeted file.
@@ -493,7 +486,10 @@ case "$PROFILE" in
     while IFS= read -r _a; do
       parallel_args+=("$_a")
     done < <(pytest_args_for_parallel local)
-    "$PG_PYTHON" -m pytest "${files[@]}" -q --tb=line -rs "${parallel_args[@]+"${parallel_args[@]}"}" "${TIMEOUT_FAST[@]+"${TIMEOUT_FAST[@]}"}" "$@"
+    report_dir="$(mktemp -d)"
+    trap 'rm -rf "$report_dir"' EXIT
+    "$PG_PYTHON" -m pytest "${files[@]}" -q --tb=line -rs "${parallel_args[@]+"${parallel_args[@]}"}" "${TIMEOUT_FAST[@]+"${TIMEOUT_FAST[@]}"}" "$@" --junitxml="$report_dir/local.xml"
+    "$PG_PYTHON" scripts/ci_skip_guard.py "$report_dir/local.xml" local
     ;;
   slow)
     split_user_pytest_args "$@"
