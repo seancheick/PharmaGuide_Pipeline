@@ -1341,8 +1341,8 @@ def test_unresolved_daily_statement_without_panel_cfu_has_no_per_serving_total(e
     assert enriched['probiotic_data']['has_cfu'] is False
     assert enriched['probiotic_data']['total_cfu'] == 0
     artifact = build_scored_artifact(enriched)
-    disclosure = artifact['_v4_module_breakdown']['dimensions']['transparency']['metadata']['aggregate_cfu_disclosure']
-    assert disclosure['total_billion_count'] == 0
+    assert artifact['quality_score_status'] == 'not_scored'
+    assert artifact['quality_score_v4_100'] is None
 
 
 @pytest.mark.parametrize('statement,expected', [
