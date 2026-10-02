@@ -10465,7 +10465,6 @@
       "standard_name": "Inulin",
       "aliases": [
         "chicory root fiber",
-        "prebiotic fiber",
         "fos"
       ],
       "category": "digestive_gut",
@@ -10476,17 +10475,17 @@
       ],
       "score_contribution": "tier_1",
       "key_endpoints": [
-        "beneficial bacteria ↑",
-        "bowel regularity ↑",
-        "calcium absorption ↑"
+        "Bifidobacterium abundance ↑ (microbiome surrogate)",
+        "bowel function benefit in healthy subjects; mixed across trials",
+        "calcium absorption: preparation-dependent positive and null findings"
       ],
       "health_goals_supported": [
         "Digestive Health"
       ],
-      "notes": "Human evidence supports inulin-type fructans most clearly for bifidogenic effects and laxation-related outcomes, with additional but more variable evidence for mineral absorption and cardiometabolic endpoints.",
+      "notes": "Human evidence supports the inulin-type fructan family (inulin, oligofructose and short-chain FOS), not every unspecified prebiotic fiber. PMID 35833477 evaluates chicory-derived preparations: 3–20 g/day, 50 studies/2525 participants, with bowel-function benefits in healthy subjects and no significant bifidogenic benefit in the gastrointestinal-disorder subgroup. PMID 34555168 reviews healthy adults and mixed chain lengths/preparations, with positive and null laxation/calcium findings; support from General Mills is disclosed. Those outcomes cannot be transferred uniformly between inulin and FOS or treated as whole retail-formula trials. PMID 38309832 reports small cardiometabolic risk-factor effects with low or very low certainty, not cardiovascular-event prevention. Review populations overlap and must not be summed as unique enrollment. Historic automated registry discovery supplied 420 enrollment/224 completed trials without an identified NCT receipt; neither is retained as verified evidence metadata. Trial exposure remains a source fact for existing Dose review; no universal studied-dose benchmark is established.",
       "study_type": "systematic_review_meta",
-      "last_updated": "2026-03-07",
-      "notable_studies": "Recent systematic reviews include PMID 35833477 and PMID 34555168, both supporting consistent increases in Bifidobacterium and favorable bowel-function effects with inulin-type fructans. Cardiometabolic effects are smaller and less uniform, as reflected in PMID 38309832.",
+      "last_updated": "2026-10-02",
+      "notable_studies": "PMID 35833477: chicory-derived inulin-type fructans increase Bifidobacterium (surrogate), with bowel-function benefits in healthy subjects; gastrointestinal-disorder bifidogenic subgroup was not significant. PMID 34555168: healthy-adult ITF review; 11 of 20 stool-frequency studies positive and nine null, calcium absorption positive in four studies and null in three; effects depend on preparation/chain length. PMID 38309832: 55 RCTs/2518 participants, small LDL/triglyceride/body-weight changes with low to very low certainty and little to no significant effect on other risk factors. These review totals are not unique trial-enrollment or published-replication counts for this entry.",
       "references_structured": [
         {
           "type": "pubmed",
@@ -10524,7 +10523,11 @@
           "supplementary_concepts": [],
           "evidence_grade": "systematic_review",
           "retracted": false,
-          "supports_claims": [],
+          "supports_claims": [
+            "chicory_itf_bifidobacterium_surrogate",
+            "healthy_subject_bowel_function",
+            "not_gi_disorder_bifidogenic_benefit"
+          ],
           "verification_source": "pubmed_eutils"
         },
         {
@@ -10553,7 +10556,11 @@
           "supplementary_concepts": [],
           "evidence_grade": "systematic_review",
           "retracted": false,
-          "supports_claims": [],
+          "supports_claims": [
+            "healthy_adult_itf_review",
+            "mixed_laxation_and_calcium_results",
+            "preparation_and_chain_length_limitations"
+          ],
           "verification_source": "pubmed_eutils"
         },
         {
@@ -10585,7 +10592,10 @@
           "supplementary_concepts": [],
           "evidence_grade": "systematic_review",
           "retracted": false,
-          "supports_claims": [],
+          "supports_claims": [
+            "low_or_very_low_certainty_cardiometabolic_risk_factors",
+            "not_cardiovascular_event_reduction"
+          ],
           "verification_source": "pubmed_eutils"
         }
       ],
@@ -10594,14 +10604,10 @@
       },
       "effect_direction": "positive_strong",
       "primary_outcome": "Digestive Health",
-      "total_enrollment": 420,
-      "registry_completed_trials_count": 224,
       "effect_direction_confidence": "high",
-      "effect_direction_rationale": "Retained positive_strong classification; study_type=systematic_review_meta; evidence_level=ingredient-human; primary_outcome=Digestive Health; published_tags=RCT,meta-analysis; registry_completed_trials_count=224; total_enrollment=420; endpoint_tags=stress_mood,glycemic_control,muscle_recovery; notes/citations contain no automated downgrade signals.",
+      "effect_direction_rationale": "Existing positive_strong/tier_1 grading retained as the cross-family calibration baseline, not re-ratified by this factual correction. Digestive-health literature supports bifidogenic surrogate and bounded bowel-function findings; mixed preparation/population outcomes and low-certainty cardiometabolic findings are recorded separately. Unverified registry discovery counts and unrelated endpoint tags are not clinical grading evidence.",
       "endpoint_relevance_tags": [
-        "stress_mood",
-        "glycemic_control",
-        "muscle_recovery"
+        "digestive_health"
       ]
     },
     {
