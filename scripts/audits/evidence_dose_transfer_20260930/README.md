@@ -250,3 +250,48 @@ Final portable pipeline checkpoint at clean `91987d74`: **18,079 passed,168 skip
 Q54 and Q55 are **implemented / measured / independently reviewed / integrated and pushed**, not runtime-published. Pipeline source91987d74:18,079 passed168 skippedzero failures/xfails751.29s; integrated/pushed main0f9ca406 plus this documentation receipt. App merged source63eeabff preserves concurrentmainf8c08d80; analysis zero issues and3,742 tests passed1:56, focusedstack12passed. Canonical builder corrected only the derived verdict-vocabulary manifest hash; no golden images changed. Independent review accepts both. Git worktrees/contained branches cleaned; ignored handoffs and exact logs/replays preserved outside them. The old quality-completion UI attachment belongs to another chat but has no live Git worktree/branch.
 
 Remaining: Q53 nine clinical determinations; D26 missing equivalent Dose benchmarks/retained stand-ins; D24/omega unapproved numerical decisions; raw242637/242654/327966; calibration (quality movements and typed safety independently); final Clean corpus/manifest/approval/runtime publication. No release closure is claimed.
+
+
+## October 2 user-run audit — source accepted; release validation pending
+
+Sean's Clean/Enrich/Score run used `fa8c50bc` and completed 38 datasets /
+15,421 unique scored artifacts. All 114 owned stage manifests/hashes match.
+The strict canary guard stopped at 7 failures; the run did not publish or
+rebuild distribution artifacts. All 46 prior CFU/Transparency controls match
+actual run scores, pillars, quality tiers and typed safety, including all five
+Transparency repairs.
+
+The production corrections preserve existing policy: INGR_OMEGA3 cannot
+credit plant ALA; rejected names/aliases cannot revive it; all valid marine
+siblings retain their identities. Applicability consumes the shared subject
+provider's unique identity at the exact raw reference, including populated raw
+canonical values in a different namespace. Source-only scopes, raw amount and
+forms are preserved, and ambiguous subject identities do not override. Q40
+projection preserves only its cleaner-owned linked plant part.
+
+The intermediate 27- and 30-mover captures are **superseded/rejected**: the
+former wrongly lost mixed marine credit, and the latter wrongly dropped six
+valid marine records because applicability and scoring used different
+canonical namespaces. They are diagnostic history, not calibration inputs.
+Use only the final `candidate_verified.jsonl` and its source-unchanged receipt
+for acceptance. Final source `b7eeb178` is measured/reviewed/integrated and
+pushed on main through `54a374cb`:1496 raw labels,24 explained movements
+(13 Formulation,11 Evidence),1472 totals unchanged,zero other-pillar/route/
+purpose/scoring-status changes;46 controls/33 canaries match. Final fast:
+18,101 passed,168 skipped,zero failures or xfails in976.12s. No runtime
+catalog publication occurred. ALA clinical review remains open where the
+marine match was rejected; rejection is not a completed negative assessment.
+
+Owner: existing `clinical_applicability::_rows` and
+`assess_clinical_applicability`, `get_evidence_subject_rows`,
+`generic_evidence::_matched_active_canonical`, existing curated INGR_OMEGA3,
+cleaner plantPart projection and canonical canary freezer. Evidence: raw
+18141/204571/70588/304676/179650/315698, live marine source31567003, strict
+13-claim citation verification, 188 focused checks and independent review.
+Will NOT create: another scorer, subject list, prominence provider, registry,
+count parser, public field/status or numerical magnitude.
+
+D26 transfer remains open: no amount gate was deleted in this correction.
+The nine benchmark groups, D24 denominator/publication policy, omega purpose
+magnitudes, Q53 research queue, remaining serving cases and calibration stay
+on the master plan. Durable receipts: `/Users/seancheick/pg_quality/post_pipeline_20261002/`.

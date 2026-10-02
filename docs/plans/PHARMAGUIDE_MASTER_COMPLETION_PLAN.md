@@ -1,19 +1,21 @@
 # PharmaGuide master completion plan
 
-Updated October 1, 2026. Pipeline integrator: Codex. Original scope: Sean's accepted September 30 master plan. This document is the readable checklist; [LEDGER.md](../../scripts/audits/pending_items_20260926/LEDGER.md) remains the execution register, and the [ownership matrix](../../scripts/contracts/source_of_truth_matrix.json) defines production owners. Historical descriptions below do not override current code or approved decisions.
+Updated October 2, 2026. Pipeline integrator: Codex. Original scope: Sean's accepted September 30 master plan. This document is the readable checklist; [LEDGER.md](../../scripts/audits/pending_items_20260926/LEDGER.md) remains the execution register, and the [ownership matrix](../../scripts/contracts/source_of_truth_matrix.json) defines production owners. Historical descriptions below do not override current code or approved decisions.
 
 A checked implementation box means that specific deliverable is implemented, measured and independently reviewed where required. It does **not** mean the whole phase is finished or the catalog is released. Repository code pushed to GitHub and catalog publication are separate events.
 
 ## Current checkpoint
 
-Latest validated pipeline source is `91987d74`: consolidated CFU ownership and
-independent quality/safety, including export copy. Final portable fast:
-**18,079 passed,168 skipped,zero failures or expected failures** (751.29s).
-Frozen replays and independent source review passed. Source integrated/pushed to
-pipeline main `0f9ca406` and app main `63eeabff`; combined app analysis is clean
-and **3,742 tests passed**. Contained worktrees/branches are cleaned up.
-Earlier checkpoints remain historical receipts,
-not current final-corpus or runtime release approval.
+Latest validated pipeline source is `b7eeb178`: the October 2 post-pipeline
+owner corrections. Final fast: **18,101 passed,168 skipped,zero failures or
+expected failures** (976.12s). Independent review accepts all24 score changes
+across1496 frozen raw labels;46 public controls and33 canaries preserve their
+accepted results. Source integrated and pushed on main through `54a374cb`.
+App source remains `63eeabff`; this batch changes no app code or public fields.
+Sean's38-dataset/15421-product run validates its `fa8c50bc` baseline and the
+previous CFU/Transparency repairs, but its outputs are stale for the corrected
+source. Final calibration/corpus/catalog/runtime acceptance remains open.
+Earlier source gates are historical receipts, not release approval.
 
 - [x] Reconcile current main and the integration lane, including the release/storage changes on `d021061b`.
 - [x] Integrate and push the approved probiotic production model and Ravage correction to pipeline `main` (`0f695b19`; Q47/Q48); source and plan subsequently pushed through `3ee91eae`.
@@ -109,7 +111,7 @@ Do not introduce the rejected mass-based demotion of purpose ingredients. Keep s
 - [x] Correct Q53 through the existing registry/applicability owners: two per-entry source reviews, canonical reference-only veto, 536 frozen raw labels plus one preserved submission, and fresh independent review. All 54 DSLD score decreases are Evidence-only; existing native-strain assessments are unchanged.
 - [x] Integrate Q53 final source checkpoint on main through `6a15be14`, including the corrected BB536 preservation canary; combined fast18,008passed/168skipped/zero failures or xfails.
 - [ ] Validate broader Evidence coverage on the fresh release candidate. Eight labels now expose incomplete Evidence coverage; one already-incomplete label adds an unresolved subject. Research queue:12091,1834,19171,19172,19890,264105,35694,46802,65049 (`probiotic_q53_20261001/research_queue.json`). These are research/identity checks, not a reason to restore unsupported species credit.
-- [ ] Audit coverage against the **corrected release subject set**, not just the earlier registry census.
+- [ ] Audit coverage against the **corrected release subject set**, not just the earlier registry census. October 2 marine-attribution correction exposes ALA determinations that remain unreviewed; rejection of a marine record is not a completed negative ALA assessment. Recheck every release-eligible ALA subject; affected examples12315,18141,241665,293406,295103,295198,295470,328010,328011,840.
 - [ ] Finish omega preparation/purpose applicability and the remaining generic/branded-formula coverage, including Tesnor/Sytrinol.
 - [ ] Verify each remaining identity, preparation, intervention, population, outcome and identifier against live primary sources; document negative searches.
 - [ ] Ensure no release-eligible subject has a pending Evidence determination; insufficient identity remains a justified hold.
@@ -144,6 +146,8 @@ A completed determination may be applicable positive evidence, reviewed null/no 
 - [ ] Confirm no app calculation recreates a pipeline score, verdict, role or Evidence determination.
 
 ### Phase 7 — Candidate, approval, release and live verification
+
+- [x] Audit Sean's October 1–2 intermediate Clean/Enrich/Score run: 38 datasets, 15,421 scored artifacts, 114 matching input/code/content manifests; 46 accepted CFU/control products retain all public pillars, totals, tiers and typed safety. This is a completed checkpoint, not the final candidate: downstream snapshot guard exposed two source defects, corrected in the October 2 batch below.
 
 - [ ] After the last source/data change, run one fresh corpus from **Clean**, publication disabled; no competing full suite.
 - [ ] Rebuild catalog, interaction output and canaries; run release gates and the full backstop sequentially.
@@ -348,3 +352,65 @@ The stale quality-completion UI attachment is owned by another chat and cannot b
 Next remains D26 equivalent Dose benchmark ownership and D24/omega policy packets, the nine Q53 clinical determinations and the three raw serving/title discrepancies, then numerical calibration and one fresh final Clean corpus/release manifest. Those items remain explicitly open; source integration does not close them.
 
 Sean will run the full pipeline when ready; Codex will inspect its completed artifacts afterward. Do not start the hour-scale corpus job merely to keep this chat active. Source checks and the full runtime corpus remain distinct.
+
+
+## October 2 — Audit of Sean's pipeline and owner corrections
+
+The run `batch_run_summary_20261001_231906.txt` completed Clean/Enrich/Score
+from 23:19 EDT October 1 to 00:20 EDT October 2 on baseline `fa8c50bc`.
+All 114 manifests and owned-file hashes match across 38 datasets / 15,421
+unique scored products. The strict snapshot guard stopped with **7 failed,
+28 passed**; three numerical changes and four compatibility-only changes were
+independently investigated. Distribution artifacts remain September 29; this
+run did not rebuild or publish the current catalog.
+
+- [x] Confirm the prior 46-product CFU/Transparency/control acceptance receipt
+  against actual run outputs, with zero public pillar/total/tier/typed-safety
+  differences. All five Transparency repairs survive the actual pipeline.
+- [x] Explain Silymarin `183275`: its label's cleaner-owned seed disclosure
+  justifies Formulation 18.7→20 and quality 89.3→90.6 under existing Q40 rules.
+- [x] Reproduce and correct CVS `18141`'s unsupported ALA→marine omega
+  attribution at the existing curated applicability owner. Preserve all valid
+  marine sibling rows and their identities, independently of label order.
+  Restore quality 52.3 rather than accepting unsupported 62.7. This identity
+  correction does not remove an amount gate or complete the omega policy lane.
+- [x] Close the same marine attribution class on anonymous EPA/DHA aggregates and mixed ALA/EPA/DHA headings: remove unsupported ALA aliases, carry only the existing provider's exact-reference identity, and honor reviewed accepted identities in all Evidence routes. Stale names and singular IDs cannot revive rejected credit; valid marine siblings keep their applicable Evidence. The exact-reference provider identity also reconciles populated raw canonical namespaces, without changing label text, form or quantity. Source-only and ambiguous identities are protected. No member amount is borrowed.
+- [x] Reproduce and correct Q40's lost cleaner plantPart in a botanical blend
+  projection: Adrenal `204571` restores quality 46.9 rather than accepting
+  44.3. Exact linked child facts survive; unrelated/conflicting facts and text
+  inference earn no credit. Blend totals remain blend totals.
+- [x] Extend the existing canary freezer/manifest to pin `quality_tier`,
+  `product_safety_status` and `quality_assessment_status` independently.
+  Legacy POOR→SAFE compatibility changes are not improvements in safety.
+- [x] Complete the bounded raw replay, final fast gate, final independent
+  receipt and source integration/push for this batch: source `b7eeb178`,
+  pushed main `54a374cb`;18,101 passed/168 skipped/zero failures or xfails.
+  Final1496-label replay:1472 totals unchanged;13 Formulation increases and
+  11 Evidence decreases, all individually explained. Other pillars, route,
+  subroute, purpose and scoring status remain unchanged. Six valid marine
+  namespace controls and three mixed EPA/DHA controls retain baseline scores.
+ 46 public controls and33 canaries match;36 snapshot checks pass. Two quality
+  tier crossings improve and nine decline; these are not safety changes.
+  Intermediate27/30-mover captures are superseded/rejected, not calibration
+  inputs. Current receipts: `candidate_verified.jsonl`,
+  `numerical_delta_receipt_verified.json`, `final_fast_verified.log` and
+  `independent_review_final.json` in the durable audit folder.
+- [ ] Regenerate the final candidate after the remaining source/policy work.
+  Preserved user-run outputs become stale after this source correction;
+  neither this intermediate run nor rescored canaries close Phase 7.
+
+Owner: `clinical_applicability::assess_clinical_applicability` and
+`backed_clinical_studies/INGR_OMEGA3` for intervention scope;
+`scoring_input_contract::_derive_top_level_botanical_blend_evidence` carries
+the cleaner's existing plantPart; existing snapshot manifest/freezer owns
+internal regression pins. Evidence: raw DSLD `204571`, live PMID31567003,
+strict 13-citation entry check, production-boundary regressions and independent
+review. Will NOT create: another scorer, normalizer, role classifier, clinical
+registry, count parser, public field/status or numerical policy.
+
+Remaining unchecked Phase 0–2 items retain their existing dependencies.
+D26 equivalent Dose coverage, D24/omega decisions, Q39 serving variants,
+dual-use roles, final subject census and the Q53 clinical queue are not
+completed by this run. Raw CFU/serving/title cases242637/242654/327966 remain
+explicitly open; do not infer serving-basis agreement from a count alone.
+Detailed measured receipts: `/Users/seancheick/pg_quality/post_pipeline_20261002/`.

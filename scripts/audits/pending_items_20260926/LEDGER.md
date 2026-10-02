@@ -1,6 +1,6 @@
 # Pending items register, 2026-09-26
 
-Readable phase checklist and preserved September 30 scope: [master completion plan](../../../docs/plans/PHARMAGUIDE_MASTER_COMPLETION_PLAN.md). This ledger remains the execution register. Pipeline source through `3ee91eae` pushed to main on October 1 with Sean's approval; catalog release remains pending.
+Readable phase checklist and preserved September 30 scope: [master completion plan](../../../docs/plans/PHARMAGUIDE_MASTER_COMPLETION_PLAN.md). This ledger remains the execution register. Pipeline source through `54a374cb` pushed to main on October 2 with Sean's approval; catalog release remains pending.
 
 One register for every open item found by the 2026-09-26 integration: the 25 lane handoffs (archived
 under `~/claude-attic/2026-09-26/worktree-state/`), the memory open-work index, Codex's v41 handoff and
@@ -253,8 +253,8 @@ Q53 source attribution is corrected; nine-label clinical coverage queue remains.
 
 ## October 1 consolidated CFU and quality/safety ownership
 
-- Q54 — Implemented/measured/independently reviewed; final fast and integration pending. Normalizer preserves declared probiotic total rows; existing enrichment owner parses counts, chooses physical-subtree totals without double counting, and binds guarantees to the final count's own statement. Dose multipliers unchanged. Accepted source3ec556cb:1,259 frozen labels,33 score movements,717 omega controls byte-identical; no Evidence/Safety/Verification/route/status/purpose changes. Intermediate captures with five Transparency regressions are rejected; all five restored. Remaining release-source discrepancies242637/242654 (serving basis) and327966 (90B title versus50B panel) remain open.
-- Q55 — Sean-approved quality/safety independence, implemented/measured/independently reviewed; final gates and integration pending. `quality_tier` owns Poor/Needs improvement/Good/Very good/Excellent/Exceptional; `product_safety_status` independently owns safety. Remove quality-to-POOR/SAFE mutation and release comparison of combined legacy verdict. Banned/recalled reasons remain blocked. Cached POOR remains readable only for compatibility. Source4f894a43 replay changes only provenance;46 public probes retain scores/tiers/safety. Appa5b705ad analyzer clean and92 focused checks passed; canonical-format followupea95d171 only changes whitespace.
+- Q54 — Implemented/measured/independently reviewed/integrated and pushed on October 1; runtime validation pending (see final integrated source receipt below). Normalizer preserves declared probiotic total rows; existing enrichment owner parses counts, chooses physical-subtree totals without double counting, and binds guarantees to the final count's own statement. Dose multipliers unchanged. Accepted source3ec556cb:1,259 frozen labels,33 score movements,717 omega controls byte-identical; no Evidence/Safety/Verification/route/status/purpose changes. Intermediate captures with five Transparency regressions are rejected; all five restored. Remaining release-source discrepancies242637/242654 (serving basis) and327966 (90B title versus50B panel) remain open.
+- Q55 — Sean-approved quality/safety independence, implemented/measured/independently reviewed/integrated and pushed on October 1; final runtime gates pending (see final integrated source receipt below). `quality_tier` owns Poor/Needs improvement/Good/Very good/Excellent/Exceptional; `product_safety_status` independently owns safety. Remove quality-to-POOR/SAFE mutation and release comparison of combined legacy verdict. Banned/recalled reasons remain blocked. Cached POOR remains readable only for compatibility. Source4f894a43 replay changes only provenance;46 public probes retain scores/tiers/safety. Appa5b705ad analyzer clean and92 focused checks passed; canonical-format followupea95d171 only changes whitespace.
 
 The old Q3 phrase “35 POOR→SAFE” describes combined-verdict quality-threshold crossings, **not proven safety improvements**. Review those products' quality movement and typed safety independently during calibration. Do not inherit that mixed terminology into new reports.
 
@@ -280,3 +280,47 @@ Remaining: Q53 nine clinical determinations; D26 missing equivalent Dose benchma
 Master-plan boxes audited against current production and integrated receipts. Phase 0's final baseline/artifact recheck is a release-time gate, not missed source work. Phase 1 generic/omega transfers and their all-route invariant audit remain open; collagen preparation/source binding is separately completed. Phase 2 shared prominence ownership is completed (`generic_evidence::_primary_mass_floor` → `evidence_resolver::evidence_prominent_row_keys` → existing shared roles); its four retained D26 amount guards are tracked under Phase 1, not an unfinished role replacement. Remaining Q39 serving variants, broader dual-use role corrections and final subject census remain open. Do not mark them done from isolated examples or old cohort counts.
 
 Owner: existing master-plan checklist + this ledger; technical owners `classify_ingredient_roles`, `get_evidence_subject_rows`, canonical cleaner/serving owners and existing route Dose results. Evidence: production symbol reads, Q49/Q51/c8f53b46 receipts and latest accepted source checks. Will NOT create: another tracker, scorer, role classifier, status, registry or public field. This reconciliation changes documentation only; no numerical rule or clinical data changes.
+
+
+### October 2 user-run checkpoint — Q40/Q45 ownership follow-ups
+
+- [x] Audit actual Clean/Enrich/Score outputs on `fa8c50bc`:38 datasets,15,421
+  products,114 matching stage/code/input/owned-content manifests. Snapshot guard
+  stopped7failed/28passed; no current catalog was rebuilt/published.
+- [x] Verify46 prior CFU/Transparency controls against actual run and corrected
+  stored-input artifacts: public scores/pillars/tiers/typed safety unchanged.
+- [x] Correct unsupported ALA marine aliases/applicability and retain all valid
+  marine siblings. The unique existing subject identity owns the exact source
+  reference even when populated raw/resolved canonical namespaces differ.
+  Source-only scopes, ambiguous identities, forms and amounts stay protected.
+- [x] Correct lost cleaner plantPart in linked botanical projection (Q40).
+  Silymarin183275 keeps justified90.6; Adrenal204571 restores46.9.
+- [x] Pin independent quality tier/safety/readiness via the existing canary
+  freezer. CVS18141 restores52.3/Poor/clear safety and legitimately becomes
+  partial: its ALA clinical review remains pending. All36 canary checks pass.
+- [x] Measure corrected source `b7eeb178` on1496 frozen raw labels:1472 totals
+  unchanged,24 score movements (13 Formulation,11 Evidence),0 unexplained
+  score/other-pillar/route/subroute/purpose/scoring-status movement. Six valid
+  marine namespace controls and three mixed EPA/DHA controls retain baseline
+  totals. Ten ALA credits lose inapplicable marine evidence;70588 retains EPA
+  credit and loses its ALA-derived floor. Quality crossings are2 up/9 down;
+  none is described as a safety improvement.
+- [x] Complete final fast gate, independent receipt and integrate/push this
+  source batch on main through `54a374cb`:18,101 passed/168 skipped/zero
+  failures or xfails,976.12s. Source fingerprint matches measured `b7eeb178`.
+  Runtime publication remains unapproved.
+
+Intermediate27/30-mover captures are superseded/rejected, not accepted
+calibration inputs. Current durable receipts:
+`/Users/seancheick/pg_quality/post_pipeline_20261002/candidate_verified.jsonl`
+and `numerical_delta_receipt_verified.json`. The original user outputs remain
+untouched and are stale for the corrected source.
+
+Open: existing D26/D24/omega/Q53/serving/calibration/release gates. Extend the
+Phase3 corrected-subject census to ALA; an inapplicable marine record is not a
+completed ALA clinical determination. No new magnitude, owner or registry was
+introduced. Owner: existing clinical applicability, shared subject provider,
+generic identity chooser, cleaner plantPart and canonical freezer. Evidence:
+188 focused tests,13 strict live citation claims,1496 frozen-raw A/B and
+46/33 artifact parity. Will NOT create: another scorer, subject set, role
+classifier, registry, amount parser or public field/status.
