@@ -3,14 +3,14 @@
 Contract tests for `data/verdict_vocab.json` (clinician-locked v1.0.0,
 2026-04-30).
 
-This vocab is the single source of truth for the 5 live product-quality verdicts
+This vocab is the single source of truth for the 4 live dispositions plus a retired quality alias
 shipped to Flutter. It carries the full DISPLAY CONTRACT (name + short_label
 + tone + ui_color + ui_icon + action + notes) per the cross-cutting rule in
 REFERENCE_DATA_LOOKUP_OPPORTUNITIES.md — Flutter is a renderer, not a
 decision-maker for tone/color/icon/action.
 
 Locked decisions captured by these tests:
-  - Exactly 5 shipped verdicts: SAFE, CAUTION, POOR, BLOCKED, UNSAFE
+  - Four current disposition IDs: SAFE, CAUTION, BLOCKED, UNSAFE; POOR is old-catalog compatibility only
   - NOT_SCORED is intentionally excluded (review-queue-only per doc spec)
   - Display contract: 8 required fields per entry
   - tone enum: positive | neutral | info | warning | danger
@@ -53,7 +53,7 @@ def verdicts(vocab):
 def test_metadata_block_present(vocab):
     assert "_metadata" in vocab
     md = vocab["_metadata"]
-    assert md["schema_version"] == "1.1.0"
+    assert md["schema_version"] == "1.1.1"
     assert md["total_entries"] == 5
     assert "LOCKED" in md["status"]
     assert md["char_limit_short_label"] == 12
@@ -61,7 +61,7 @@ def test_metadata_block_present(vocab):
     assert md["char_limit_notes"] == 200
 
 
-def test_exactly_5_shipped_verdicts_locked(verdicts):
+def test_compatibility_vocabulary_keeps_5_readable_ids(verdicts):
     """Adding/removing verdicts requires pipeline + Flutter coordination.
     NOT_SCORED is deliberately excluded per doc spec (review-queue-only)."""
     assert len(verdicts) == 5, (
@@ -110,7 +110,7 @@ def test_every_id_unique_and_uppercase_snake(verdicts):
         )
 
 
-def test_canonical_5_shipped_ids_present(verdicts):
+def test_canonical_compatibility_ids_present(verdicts):
     """The locked canonical set per REFERENCE_DATA_LOOKUP_OPPORTUNITIES.md §1."""
     expected = {"SAFE", "CAUTION", "POOR", "BLOCKED", "UNSAFE"}
     actual = {v["id"] for v in verdicts}
@@ -201,7 +201,7 @@ def test_ui_icon_in_allowed_enum(verdicts):
 SEED_DISPLAY_CONTRACT = {
     "SAFE":    {"tone": "positive", "ui_color": "green",  "ui_icon": "check",   "short_label": "Safe"},
     "CAUTION": {"tone": "warning",  "ui_color": "yellow", "ui_icon": "warning", "short_label": "Caution"},
-    "POOR":    {"tone": "warning",  "ui_color": "orange", "ui_icon": "warning", "short_label": "Poor"},
+    "POOR":    {"tone": "neutral",  "ui_color": "gray", "ui_icon": "info",    "short_label": "Poor"},
     "BLOCKED": {"tone": "danger",   "ui_color": "red",    "ui_icon": "block",   "short_label": "Blocked"},
     "UNSAFE":  {"tone": "danger",   "ui_color": "red",    "ui_icon": "alert",   "short_label": "Unsafe"},
 }
@@ -218,3 +218,10 @@ def test_seed_display_contract_locked(verdicts):
                 f"verdict {vid} field {field}: expected {want!r}, got {v[field]!r}. "
                 "Seed display contract is locked per REFERENCE_DATA_LOOKUP_OPPORTUNITIES.md §1."
             )
+
+
+def test_safety_display_contract_makes_no_quality_threshold_claim(verdicts):
+    entries = {entry["id"]: entry for entry in verdicts}
+    assert "quality threshold" not in entries["SAFE"]["notes"].lower()
+    assert "quality issues" not in entries["CAUTION"]["notes"].lower()
+    assert "safe to use" not in entries["POOR"]["notes"].lower()

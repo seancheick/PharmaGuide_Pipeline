@@ -23,9 +23,9 @@ from supplement_taxonomy import percentile_label_for
 SCORED_ARTIFACT_SCHEMA_VERSION = "4.3.0"
 LOW_COVERAGE_TRUST_FLOOR = 0.3
 
-#: Public verdict precedence, most restrictive first (GLOSSARY "Verdict
-#: precedence"). ``_public_verdict`` returns one of these. Code that compares
-#: two verdicts ranks them by this tuple instead of keeping its own order.
+#: Compatibility disposition precedence, including retired POOR for reading
+#: existing catalogs. New artifacts never emit POOR; quality_tier owns quality.
+#: Consumer safety is exclusively product_safety_status, not this legacy field.
 PUBLIC_VERDICT_PRECEDENCE = ("BLOCKED", "UNSAFE", "NOT_SCORED", "CAUTION", "POOR", "SAFE")
 
 
@@ -72,7 +72,7 @@ def _public_verdict(v4: Dict[str, Any], mapped_coverage: float) -> str:
         return "NOT_SCORED"
     if status != "scored":
         return "NOT_SCORED"
-    if verdict in {"BLOCKED", "UNSAFE", "CAUTION", "POOR"}:
+    if verdict in {"BLOCKED", "UNSAFE", "CAUTION"}:
         return verdict
     if mapped_coverage < LOW_COVERAGE_TRUST_FLOOR:
         return "CAUTION"

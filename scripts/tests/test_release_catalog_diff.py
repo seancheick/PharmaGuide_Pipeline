@@ -39,8 +39,9 @@ def make_db(path: Path, rows: list[tuple]) -> Path:
     return path
 
 
-def row(pid, verdict="SAFE", score=72.0, tier="Good", name=None, status="scored", reason=None):
-    return (pid, name or f"Product {pid}", "Brand", verdict, score, tier, status, reason)
+def row(pid, verdict="SAFE", score=72.0, tier="Good", name=None, status="scored", reason=None, safety=None):
+    safety = safety or {"BLOCKED": "blocked", "UNSAFE": "unsafe", "CAUTION": "caution"}.get(verdict, "no_known_catalog_concern")
+    return (pid, name or f"Product {pid}", "Brand", verdict, score, tier, status, reason, safety)
 
 
 def blocked(pid, name=None):
@@ -60,7 +61,7 @@ def gated(result):
 
 
 def state(verdict="SAFE", tier="Good", score=72.0):
-    return {"verdict": verdict, "tier": tier, "score": score}
+    return {"verdict": "NO_KNOWN_CATALOG_CONCERN" if verdict in {"SAFE", "POOR"} else verdict, "tier": tier, "score": score}
 
 
 def approval(changes, reason="Reviewed: dose calibration", approved_by="Sean"):
@@ -82,9 +83,9 @@ def test_a_milder_safety_warning_stops_and_poor_counts_as_no_warning(tmp_path):
     result = diff(tmp_path, before, after)
     assert gated(result) == {"1": ["milder_safety"], "2": ["milder_safety"], "3": ["milder_safety"]}
     rows = {(t["from"], t["to"]): t["safety"] for t in result["verdict_transitions"]}
-    assert rows[("CAUTION", "SAFE")] == "milder"
-    assert rows[("SAFE", "CAUTION")] == "stricter"
-    assert rows[("POOR", "SAFE")] == "none"
+    assert rows[("CAUTION", "NO_KNOWN_CATALOG_CONCERN")] == "milder"
+    assert rows[("NO_KNOWN_CATALOG_CONCERN", "CAUTION")] == "stricter"
+    assert not any("POOR" in pair for pair in rows)
 
 
 def test_a_warned_product_leaving_the_catalog_stops_but_a_safe_or_poor_one_does_not(tmp_path):
@@ -205,7 +206,8 @@ def test_report_and_draft_approvals_close_the_loop(tmp_path):
     assert "CAUTION → no safety warning" in report
     assert "| 2 | Two / Lines | Brand | CAUTION · Good · 72 | not in catalog |" in report
     assert "score -30.0" in report and "grade Poor → Needs improvement (+8.0)" in report
-    assert "| POOR → SAFE | 1 | no: quality grade only |" in report
+    assert "POOR → SAFE" not in report
+    assert "Catalog safety changes" in report
 
     draft = catalog_diff.draft_approvals(result)
     for group in draft["approvals"]:
@@ -352,3 +354,46 @@ def test_cli_fails_closed_when_the_live_catalog_cannot_be_read(tmp_path, monkeyp
         "--report", str(tmp_path / "r.md"), "--draft-approvals", str(tmp_path / "d.json"),
     ])
     assert code == 2
+
+
+@pytest.mark.parametrize('legacy_before,safety_before,expected_gate', [
+    ('CAUTION', 'no_known_catalog_concern', []),
+    ('POOR', 'caution', ['milder_safety']),
+])
+def test_release_safety_uses_independent_catalog_status(tmp_path, legacy_before, safety_before, expected_gate):
+    before = make_db(tmp_path / 'baseline.db', [row('1', legacy_before)])
+    after = make_db(tmp_path / 'candidate.db', [row('1', 'SAFE')])
+    for path, safety in [(before, safety_before), (after, 'no_known_catalog_concern')]:
+        con = sqlite3.connect(path)
+        if 'product_safety_status' not in {r[1] for r in con.execute('pragma table_info(products_core)')}:
+            con.execute('alter table products_core add column product_safety_status TEXT')
+        con.execute('update products_core set product_safety_status = ?', (safety,))
+        con.commit()
+        con.close()
+    result = catalog_diff.diff_catalogs(before, after, [])
+    assert gated(result).get('1', []) == expected_gate
+    assert all('POOR' not in (t['from'], t['to']) for t in result['verdict_transitions'])
+
+
+@pytest.mark.parametrize('safety', [None, '', 'safe', 'poor', 'unrecognized'])
+def test_release_gate_refuses_missing_or_unknown_typed_safety(tmp_path, safety):
+    before = make_db(tmp_path / 'baseline.db', [row('1')])
+    after = make_db(tmp_path / 'candidate.db', [row('1')])
+    con = sqlite3.connect(after)
+    con.execute('update products_core set product_safety_status = ?', (safety,))
+    con.commit()
+    con.close()
+    with pytest.raises(ValueError, match='unknown catalog safety status'):
+        catalog_diff.diff_catalogs(before, after, [])
+
+
+def test_release_gate_refuses_a_catalog_without_independent_safety_column(tmp_path):
+    before = make_db(tmp_path / 'baseline.db', [row('1')])
+    after = tmp_path / 'candidate.db'
+    con = sqlite3.connect(after)
+    con.execute(f"create table products_core ({', '.join(catalog_diff.COLUMNS[:-1])})")
+    con.execute(f"insert into products_core values ({', '.join('?' * (len(catalog_diff.COLUMNS) - 1))})", row('1')[:-1])
+    con.commit()
+    con.close()
+    with pytest.raises(ValueError, match='lacks product_safety_status'):
+        catalog_diff.diff_catalogs(before, after, [])

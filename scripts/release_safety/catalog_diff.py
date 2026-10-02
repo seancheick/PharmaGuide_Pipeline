@@ -62,7 +62,7 @@ SCORE_MOVE_LIMIT = 10.0
 TIER_UP_MIN_RISE = 5.0
 KINDS = ("milder_safety", "removed", "score_drop", "score_rise", "tier_up")
 COLUMNS = ("dsld_id", "product_name", "brand_name", "verdict", "quality_score_v4_100",
-           "quality_tier", "quality_score_status", "blocking_reason")
+           "quality_tier", "quality_score_status", "blocking_reason", "product_safety_status")
 STATE_KEYS = ("verdict", "tier", "score")
 NO_WARNING = len(SAFETY_VERDICT_PRECEDENCE)
 
@@ -102,7 +102,12 @@ def _products(db: Path) -> dict[str, dict]:
             raise ValueError(f"{db}: product {pid} has unknown verdict {product['verdict']!r}")
         if product["quality_tier"] is not None and product["quality_tier"] not in tiers:
             raise ValueError(f"{db}: product {pid} has unknown grade {product['quality_tier']!r}")
-        product["state"] = {"verdict": product["verdict"], "tier": product["quality_tier"],
+        safety_status = product["product_safety_status"]
+        if safety_status not in {"blocked", "unsafe", "caution", "no_known_catalog_concern", "not_assessed"}:
+            raise ValueError(f"{db}: product {pid} has unknown catalog safety status {safety_status!r}")
+        # The existing approval-state key is a safety disposition, never the
+        # legacy combined quality/coverage verdict. No scorer runs here.
+        product["state"] = {"verdict": safety_status.upper(), "tier": product["quality_tier"],
                             "score": _score(product["quality_score_v4_100"])}
         products[pid] = product
     return products
@@ -234,8 +239,8 @@ def diff_catalogs(baseline_db: Path, candidate_db: Path, approvals: list[dict]) 
         "shared": len(shared),
         "added": len(added),
         "removed": len(removed),
-        "added_by_verdict": dict(Counter(after[p]["verdict"] for p in added)),
-        "removed_by_verdict": dict(Counter(before[p]["verdict"] for p in removed)),
+        "added_by_verdict": dict(Counter(after[p]["state"]["verdict"] for p in added)),
+        "removed_by_verdict": dict(Counter(before[p]["state"]["verdict"] for p in removed)),
         "verdict_transitions": [
             {"from": old, "to": new, "products": n, "safety": safety(old, new)}
             for (old, new), n in sorted(verdicts.items(), key=lambda t: (-t[1], t[0]))
@@ -317,17 +322,17 @@ def render_markdown(result: dict) -> str:
         f"| Score went up | {result['score_changes']['up']:,} |",
         f"| Blocking reason changed | {result['column_changes']['blocking_reason']:,} |",
         f"| Score status changed | {result['column_changes']['quality_score_status']:,} |", "",
-        "## Verdict changes", "",
-        "Safety ladder: BLOCKED > UNSAFE > CAUTION > no warning. POOR is a quality grade, not a "
-        "safety warning; its moves are in the grade table below.", "",
+        "## Catalog safety changes", "",
+        "Safety uses product_safety_status only: BLOCKED > UNSAFE > CAUTION > no catalog concern. "
+        "Quality ratings appear in the separate table below; a quality change cannot change safety.", "",
     ]
-    stops = {"milder": "yes, unless approved", "stricter": "no (stricter)", "none": "no: quality grade only"}
+    stops = {"milder": "yes, unless approved", "stricter": "no (stricter)", "none": "no: safety severity unchanged"}
     if result["verdict_transitions"]:
         lines += ["| Change | Products | Stops the release? |", "|---|---|---|"]
         lines += [f"| {t['from']} → {t['to']} | {t['products']:,} | {stops[t['safety']]} |"
                   for t in result["verdict_transitions"]]
     else:
-        lines.append("No product changed verdict.")
+        lines.append("No product changed catalog safety status.")
     lines += ["", "## Quality grade changes", ""]
     if result["tier_transitions"]:
         lines += [f"| Change | Products | Stop the release (grade up with a {TIER_UP_MIN_RISE:g}+ point rise) |",
@@ -339,7 +344,7 @@ def render_markdown(result: dict) -> str:
         lines.append("No product changed grade.")
     for side, name in (("removed_by_verdict", "Gone"), ("added_by_verdict", "New")):
         if result[side]:
-            lines += ["", f"{name} products by verdict: "
+            lines += ["", f"{name} products by catalog safety status: "
                       + ", ".join(f"{v} {n:,}" for v, n in sorted(result[side].items()))]
 
     lines += ["", f"## Needs approval ({len(unapproved):,} products)", ""]

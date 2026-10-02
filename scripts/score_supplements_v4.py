@@ -186,9 +186,8 @@ def _verdict_from_score(
     """Resolve the provisional non-blocking verdict after module assembly.
 
     BLOCKED/UNSAFE/NOT_SCORED return earlier. CAUTION from Layer 1 wins.
-    POOR is not decided here: it is a quality verdict owned by the shipped
-    public tier (scoring_v4.quality_score.assemble_quality_score). The module
-    raw score is not the score users see and must not decide it.
+    Quality is reported only by quality_tier. Neither this provisional
+    disposition nor the public adapter derives a safety finding from a score.
     """
     if carried_verdict == "CAUTION":
         return "CAUTION"

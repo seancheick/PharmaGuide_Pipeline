@@ -504,3 +504,14 @@ def test_artifact_states_each_fact_once():
     ):
         assert mirror not in artifact, mirror
     assert set(artifact["scoring_metadata"]) == {"scoring_version", "scored_date"}
+
+
+@pytest.mark.parametrize("tier,score", [("Poor", 40), ("Needs improvement", 61), ("Exceptional", 97)])
+def test_legacy_quality_verdict_cannot_become_public_safety(tier, score):
+    result = _canned_v4(verdict="POOR")
+    result["quality_tier"] = tier
+    result["quality_score_v4_100"] = score
+    artifact = scored_artifact.assemble_scored_artifact(_product(), result)
+    assert artifact["quality_tier"] == tier
+    assert artifact["verdict"] == "SAFE"
+    assert artifact["product_safety_status"] == "no_known_catalog_concern"

@@ -398,15 +398,13 @@ def test_shadow_poor_threshold_is_40_on_v4_100_scale() -> None:
 
     out = score_product_v4(product)
 
-    # A -25 manufacturer violation is a weak profile. POOR follows the shipped
-    # public tier, not the module raw score.
+    # A weak quality profile cannot invent a catalog safety concern.
     assert out["quality_tier"] == "Poor"
-    assert out["v4_verdict"] == "POOR"
+    assert out["v4_verdict"] == "SAFE"
 
 
 def test_provisional_verdict_never_uses_the_module_raw_floor() -> None:
-    """POOR belongs to the shipped tier (quality_score.assemble_quality_score);
-    the module raw score users never see cannot decide it."""
+    """Quality scores never decide the independent safety disposition."""
     from score_supplements_v4 import _verdict_from_score
 
     assert _verdict_from_score(48.2, raw_score_100=31.0) == "SAFE"

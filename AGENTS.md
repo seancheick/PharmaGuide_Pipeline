@@ -63,7 +63,7 @@ block — read counts and versions from it; never copy them into docs.
 - Frozen fields: `quality_score_v4_100`, `quality_score_status` (`scored` / `suppressed_safety` /
   `not_scored`), `quality_pillars_v4`; `score_100_equivalent` and `score_display_100_equivalent` are
   compatibility mirrors. Never reintroduce `score_quality_80` / `score_display_80`.
-- Verdict precedence: BLOCKED > UNSAFE > NOT_SCORED > CAUTION > POOR > SAFE.
+- Consumer quality: `quality_tier` / `quality_score_status`. Consumer safety: `product_safety_status`, with banned/recalled reasons retained. A quality tier never changes safety. Legacy `verdict` is compatibility/readiness only; POOR is readable in old catalogs but never newly emitted.
 - Ingredient-level safety flags are `has_banned_substance` / `has_recalled_ingredient`; never
   `is_recalled`.
 - Scoring invariants: `.claude/rules/scoring.md`. Changing a score: the `/pg-scoring-change` skill.

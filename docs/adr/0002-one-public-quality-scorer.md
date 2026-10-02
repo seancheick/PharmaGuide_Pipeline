@@ -31,3 +31,14 @@ export.
 ## Rejected
 
 Keeping v3 as a fallback; per-product fallback between scorers; app-side score adjustments.
+
+
+## October 1, 2026 — independent quality and safety (Sean-approved)
+
+`quality_tier` rates product quality. `product_safety_status` reports assessed
+catalog safety; banned/recalled reasons remain attached to hard findings.
+Quality assembly never rewrites a safety disposition when a score crosses a tier.
+Legacy `verdict` remains a compatibility/readiness field, with POOR readable only
+in older catalogs and never newly emitted. Flutter and release comparison consume
+the independent owners. A quality improvement cannot be called a safer product.
+This extends existing owners and fields; it creates no second scorer or registry.

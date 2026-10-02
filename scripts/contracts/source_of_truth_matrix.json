@@ -352,7 +352,7 @@
       "field_kind": "scored",
       "source_data_files": ["scripts/scoring_v4/config/quality_score.json", "scripts/data/banned_recalled_ingredients.json"],
       "consumers": ["scripts/build_final_db.py", "scripts/release_safety/catalog_diff.py", "Flutter app"],
-      "forbidden_recomputation": ["verdict precedence is scorer-owned; export and Flutter preserve verdict/scoring_status/score_basis without remapping safety meaning"],
+      "forbidden_recomputation": ["consumer safety is scored_artifact-owned product_safety_status; consumer quality is quality_tier/quality_score_status; quality assembly must not convert a quality tier into POOR or SAFE, and catalog diffs must compare product_safety_status, not legacy verdict; legacy verdict/readiness precedence remains compatibility only, including POOR for reading old catalogs"],
       "fallback_class": "clinical_fail_safe",
       "release_gate": "scripts/audit_source_of_truth_contract.py scoring",
       "tests": ["scripts/tests/test_verdict_vocab_contract.py", "scripts/tests/test_v4_scored_artifact.py"],

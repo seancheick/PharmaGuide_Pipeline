@@ -52,7 +52,7 @@ V4_CANARIES = {
     "241684": {
         "label": "HUM Flatter Me",
         "module": "fiber_digestive",
-        "verdict": "POOR",
+        "verdict": "SAFE",
         "confidence": "low",
         "score_unavailable_reason": None,
         "score": 24.1,
@@ -63,7 +63,7 @@ V4_CANARIES = {
     "241707": {
         "label": "HUM Skin Squad Pre + Probiotic",
         "module": "probiotic",
-        "verdict": "POOR",
+        "verdict": "SAFE",
         "confidence": "low",
         "score_range": (27.5, 28.9),
     },
@@ -75,7 +75,7 @@ V4_CANARIES = {
     "239467": {
         "label": "CVS Health Fish Oil 1000 mg",
         "module": "omega",
-        "verdict": "POOR",
+        "verdict": "SAFE",
         "confidence": "low",
         # Schema 2.4's canonical EPA/DHA projection proves the parent fish-oil
         # row is not an undisclosed active, restoring the 1-point disclosure
@@ -97,7 +97,7 @@ V4_CANARIES = {
     "12932": {
         "label": "vitafusion Fiber Gummies",
         "module": "fiber_digestive",
-        "verdict": "POOR",
+        "verdict": "SAFE",
         "confidence": "moderate",
         "score_unavailable_reason": None,
         "score": 50.0,
@@ -150,7 +150,7 @@ V4_CANARIES = {
     "206362": {
         "label": "GNC Kids Probiotic Fast Stix",
         "module": "probiotic",
-        "verdict": "POOR",
+        "verdict": "SAFE",
         "confidence": "moderate",
         "score_range": (41.2, 42.2),
     },
@@ -253,5 +253,6 @@ def test_v4_canaries_cover_gate_and_confidence_bands() -> None:
     verdicts = {c["verdict"] for c in V4_CANARIES.values()}
     confidences = {c["confidence"] for c in V4_CANARIES.values()}
 
-    assert {"BLOCKED", "CAUTION", "POOR", "SAFE"}.issubset(verdicts)
+    assert {"BLOCKED", "CAUTION", "SAFE"}.issubset(verdicts)
+    assert "POOR" not in verdicts
     assert {None, "high", "moderate", "low"}.issubset(confidences)

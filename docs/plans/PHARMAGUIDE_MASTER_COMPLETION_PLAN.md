@@ -265,3 +265,42 @@ Durable receipts: `/Users/seancheick/pg_quality/cfu_guarantee_20261001/`.
 The bounded SD-5845 source search remains a research receipt, not a completed
 negative Evidence determination. The nine-label Q53 clinical queue stays open.
 D26, D24/omega approvals, calibration and final corpus/release remain unchecked.
+
+
+## October 1 execution correction — independent quality and safety
+
+Sean explicitly approved removing the mixed quality/safety ladder. This supersedes
+older instructions that make POOR the public verdict of the lowest quality tier.
+Quality ratings are Poor → Needs improvement → Good → Very good → Excellent →
+Exceptional. Safety is `product_safety_status`: not assessed, no known catalog
+concern, caution, unsafe or blocked, with banned/recalled reasons preserved.
+An improvement in quality is never described as an improvement in safety.
+
+Owner: `quality_score::assemble_quality_score` for quality, `scored_artifact::_product_safety_status`
+for safety, `release_safety/catalog_diff::_products` for release comparison, and
+Flutter `catalog_product_semantics::catalogProductSafetyStatus` / `ScoreTier` for
+rendering. Evidence: production consumers, ownership matrix, failing boundary
+regressions and independent cross-repository review. Will NOT create: another
+score, status field, safety classifier, quality ladder or app-side calculation.
+
+- [x] Remove quality-tier conversion into POOR/SAFE. Retain hard safety and
+  publication/readiness gates; current scoring never emits POOR.
+- [x] Correct shared vocabulary. Keep POOR only to read older cached catalogs,
+  with no safety claim; preserve independent quality and safety readers.
+- [x] Make release comparison consume existing `product_safety_status`; keep
+  exact safety, tier and score approval states and fail closed on missing or
+  unknown typed safety. Safety tables no longer show POOR → SAFE.
+- [x] Remove obsolete Flutter scanner verdict-color and duplicate quality-color
+  helpers. Quality 39/60/97 cannot alter any typed safety status. App analysis
+  clean; 92 focused checks passed at `a5b705ad` (not integrated yet).
+- [x] Independently review bounded source; all non-metadata numerical config
+  values are identical. Version 1.22.1 preserves the earlier fingerprint.
+- [ ] Complete final frozen replay, portable pipeline fast and app `make check`.
+- [ ] Integrate/push both repositories, update final receipts and remove contained
+  worktrees/branches. No runtime catalog publication is authorized here.
+
+Process correction: consolidate each defect class across source preservation,
+selection and consumers; run focused tests first, then freeze the completed batch
+for measurement and one final broad checkpoint. A real regression found in that
+measurement must be corrected before integration. Do not expand a source cleanup
+into unapproved numerical policy or clinical coverage claims.
