@@ -831,3 +831,90 @@ def test_unqualified_potency_guarantee_abstains_on_a_combination_product(enriche
 def test_a_named_non_probiotic_potency_never_counts(enricher):
     product = _probiotic_statement_product("Vitamin potency guaranteed through expiration")
     assert enricher._collect_probiotic_data(product)["guarantee_type"] is None
+
+
+def test_raw_12091_manufacture_count_does_not_inherit_effective_expiry_level(enricher):
+    import json
+    from pathlib import Path
+    from enhanced_normalizer import EnhancedDSLDNormalizer
+    from scoring_v4.scored_artifact import build_scored_artifact
+    raw = json.loads((Path(__file__).parent / 'fixtures' / 'probiotic_cfu_guarantee_12091_raw.json').read_text())
+    enriched = enricher.enrich_product(EnhancedDSLDNormalizer().normalize_product(raw))[0]
+    assert enriched['probiotic_data']['total_cfu'] == 5e9
+    assert enriched['probiotic_data']['guarantee_type'] == 'at_manufacture'
+    artifact = build_scored_artifact(enriched)
+    assert artifact['_v4_module_breakdown']['dimensions']['dose']['metadata']['cfu_guarantee']['type'] == 'at_manufacture'
+
+
+@pytest.mark.parametrize('text,expected', [
+    ('Contains 5 billion live cells when manufactured and an effective level at time of expiration.', 'at_manufacture'),
+    ('Contains 1 billion live bacteria when manufactured. Provides an effective amount through expiration date.', 'at_manufacture'),
+    ('Contains 10 billion CFU at manufacture and provides 5 billion CFU through expiration.', 'at_manufacture'),
+    ('Contains 5 billion CFU at manufacture and provides 5 billion CFU through expiration.', 'at_expiration'),
+    ('Contains 5 billion CFU at manufacture and at time of expiration.', 'at_expiration'),
+    ('Contains 10 billion CFU at manufacture and guarantees 5 billion CFU through expiration.', 'at_manufacture'),
+    ('Contains 10 billion CFU at manufacture, provides 5 billion CFU through expiration.', 'at_manufacture'),
+    ('Contains 5 billion live cells when manufactured and effective levels through expiration.', 'at_manufacture'),
+    ('Contains 5 billion live cells when manufactured, with an effective level through expiration.', 'at_manufacture'),
+])
+def test_guarantee_stays_bound_to_selected_count(enricher, text, expected):
+    assert enricher._extract_cfu(text, ingredient={'name': 'Probiotic Blend'})['guarantee_type'] == expected
+
+
+def _count_guarantee_product(rows, statements=()):
+    return {
+        'id': 'cfu_count_warranty_binding', 'product_name': 'Daily Probiotic',
+        'fullName': 'Daily Probiotic', 'bundleName': '', 'inactiveIngredients': [],
+        'activeIngredients': [
+            {'name': name, 'standardName': name, 'category': 'probiotic',
+             'quantity': count, 'unit': 'billion CFU',
+             'raw_source_path': f'ingredientRows[{i}]', 'notes': notes}
+            for i, (name, count, notes) in enumerate(rows)
+        ],
+        'statements': [{'type': 'Formula re: Contains', 'notes': s} for s in statements],
+    }
+
+
+def test_larger_product_count_replaces_the_smaller_rows_warranty(enricher):
+    product = _count_guarantee_product(
+        [('Lactobacillus rhamnosus GG', 1, '1 billion CFU guaranteed through expiration')],
+        ['10 billion live cultures at manufacture'],
+    )
+    data = enricher._collect_probiotic_data(product)
+    assert data['total_cfu'] == 10e9
+    assert data['guarantee_type'] == 'at_manufacture'
+
+
+def test_smaller_statement_count_cannot_warranty_a_larger_total(enricher):
+    product = _count_guarantee_product(
+        [('Lactobacillus rhamnosus GG', 10, '')],
+        ['5 billion live cultures guaranteed through expiration'],
+    )
+    data = enricher._collect_probiotic_data(product)
+    assert data['total_cfu'] == 10e9
+    assert data['guarantee_type'] is None
+
+
+@pytest.mark.parametrize('second_notes,expected', [
+    ('', None),
+    ('5 billion CFU at manufacture', 'at_manufacture'),
+    ('5 billion CFU guaranteed through expiration', 'at_expiration'),
+])
+def test_aggregate_warranty_covers_every_counted_row(enricher, second_notes, expected):
+    product = _count_guarantee_product([
+        ('Lactobacillus rhamnosus GG', 5, '5 billion CFU guaranteed through expiration'),
+        ('Bifidobacterium longum BB536', 5, second_notes),
+    ])
+    data = enricher._collect_probiotic_data(product)
+    assert data['total_cfu'] == 10e9
+    assert data['guarantee_type'] == expected
+
+
+def test_independent_statements_cannot_recombine_count_and_warranty(enricher):
+    product = _count_guarantee_product([('Lactobacillus rhamnosus GG', 0, '')], [
+        '10 billion live cultures at manufacture',
+        '5 billion live cultures guaranteed through expiration',
+    ])
+    data = enricher._collect_probiotic_data(product)
+    assert data['total_cfu'] == 10e9
+    assert data['guarantee_type'] == 'at_manufacture'

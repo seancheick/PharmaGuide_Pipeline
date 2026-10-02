@@ -16089,7 +16089,10 @@ class SupplementEnricherV3:
         # (same owner that decides whether CFU evidence is accessory).
         probiotic_only_product = not self._has_non_probiotic_active_for_cfu_evidence(product)
         statement_guarantees = {
-            self._extract_guarantee_type(part, subject_is_probiotic=probiotic_only_product)
+            self._extract_guarantee_type(
+                part, subject_is_probiotic=probiotic_only_product,
+                target_cfu_count=product_level_cfu.get("cfu_count") if product_level_cfu.get("has_cfu") else None,
+            )
             for part in statement_parts
         }
         product_level_cfu["guarantee_type"] = (
@@ -16586,9 +16589,16 @@ class SupplementEnricherV3:
                     cfu_evidence_scope = cfu_data.get("evidence_scope") or "row_level"
                 linked = cfu_data.get("linked_rows") or [blend.get("raw_source_path")]
                 cfu_linked_rows.extend(str(path) for path in linked if path)
-            if not guarantee_type and cfu_data.get('guarantee_type'):
-                guarantee_type = cfu_data.get('guarantee_type')
 
+        def _aggregate_guarantee(guarantees: List[Optional[str]]) -> Optional[str]:
+            # A sum is warranted only when every contributing count is.
+            if guarantees and all(value == "at_expiration" for value in guarantees):
+                return "at_expiration"
+            if guarantees and all(value in {"at_expiration", "at_manufacture"} for value in guarantees):
+                return "at_manufacture"
+            return None
+
+        counted_guarantees: List[Optional[str]] = []
         handled_child_paths = set()
         for header_path, header in header_blends.items():
             header_cfu = header.get('cfu_data', {}) or {}
@@ -16598,6 +16608,7 @@ class SupplementEnricherV3:
 
             child_count = 0
             child_billion = 0.0
+            child_guarantees: List[Optional[str]] = []
             for child in child_blends_by_parent.get(header_path, []):
                 handled_child_paths.add(child.get("raw_source_path"))
                 child_cfu = child.get('cfu_data', {}) or {}
@@ -16605,11 +16616,23 @@ class SupplementEnricherV3:
                 if child_cfu.get('has_cfu'):
                     child_count += child_cfu.get('cfu_count', 0)
                     child_billion += child_cfu.get('billion_count', 0)
+                    if child_cfu.get('cfu_count', 0) > 0:
+                        child_guarantees.append(child_cfu.get('guarantee_type'))
 
             group_count = max(header_count or 0, child_count or 0)
             group_billion = max(header_billion or 0, child_billion or 0)
             total_cfu += group_count
             total_billion_count += group_billion
+            if group_count > 0:
+                providers = []
+                if math.isclose(header_count, group_count):
+                    providers.append(header_cfu.get('guarantee_type'))
+                if math.isclose(child_count, group_count):
+                    providers.append(_aggregate_guarantee(child_guarantees))
+                counted_guarantees.append(
+                    "at_expiration" if "at_expiration" in providers
+                    else "at_manufacture" if "at_manufacture" in providers else None
+                )
 
         for blend in probiotic_blends:
             if blend.get("is_blend_header_total") or blend.get("raw_source_path") in handled_child_paths:
@@ -16618,8 +16641,19 @@ class SupplementEnricherV3:
             if cfu_data.get('has_cfu'):
                 total_cfu += cfu_data.get('cfu_count', 0)
                 total_billion_count += cfu_data.get('billion_count', 0)
+                if cfu_data.get('cfu_count', 0) > 0:
+                    counted_guarantees.append(cfu_data.get('guarantee_type'))
             _add_cfu_source(cfu_data, blend)
 
+        guarantee_type = _aggregate_guarantee(counted_guarantees)
+        if not counted_guarantees:
+            # Preserve an unquantified row-local timing fact when there is no
+            # count to warrant. It cannot supply another row's counted total.
+            guarantee_type = _aggregate_guarantee([
+                blend.get('cfu_data', {}).get('guarantee_type')
+                for blend in probiotic_blends
+                if blend.get('cfu_data', {}).get('guarantee_type')
+            ])
         # Use product-level CFU if it's a total claim and exceeds per-strain sum
         # (prevents overcounting when "50 Billion CFU" is a product total, not per-strain)
         if product_level_cfu.get('has_cfu'):
@@ -16627,6 +16661,7 @@ class SupplementEnricherV3:
             if product_billion > total_billion_count and total_billion_count > 0:
                 total_cfu = product_level_cfu['cfu_count']
                 total_billion_count = product_billion
+                guarantee_type = product_level_cfu.get('guarantee_type')
                 cfu_source = product_level_cfu.get("source")
                 cfu_raw_source_path = product_level_cfu.get("raw_source_path")
                 cfu_evidence_scope = product_level_cfu.get("evidence_scope")
@@ -16635,7 +16670,7 @@ class SupplementEnricherV3:
                 has_cfu = True
                 total_cfu = product_level_cfu['cfu_count']
                 total_billion_count = product_billion
-                guarantee_type = product_level_cfu.get('guarantee_type') or guarantee_type
+                guarantee_type = product_level_cfu.get('guarantee_type')
                 cfu_source = product_level_cfu.get("source")
                 cfu_raw_source_path = product_level_cfu.get("raw_source_path")
                 cfu_evidence_scope = product_level_cfu.get("evidence_scope")
@@ -16644,8 +16679,13 @@ class SupplementEnricherV3:
         # ("Guarantees 50 billion live cultures through the date of
         # expiration"); reading the guarantee only when the statement also won
         # the count dropped it whenever the rows carried the same total.
-        if not guarantee_type and product_level_cfu.get('guarantee_type'):
-            guarantee_type = product_level_cfu.get('guarantee_type')
+        product_guarantee = product_level_cfu.get('guarantee_type')
+        if product_guarantee and (
+            not product_level_cfu.get('has_cfu')
+            or math.isclose(product_level_cfu.get('cfu_count', 0), total_cfu)
+        ):
+            if product_guarantee == "at_expiration" or not guarantee_type:
+                guarantee_type = product_guarantee
 
         self.logger.debug(
             "Returning probiotic_data with has_cfu=%s, first_blend_cfu_data=%s",
@@ -17343,12 +17383,16 @@ class SupplementEnricherV3:
             # P1.1: Enhanced guarantee type parsing. A probiotic ingredient
             # row's own text is its probiotic context.
             result["guarantee_type"] = self._extract_guarantee_type(
-                text, subject_is_probiotic=ingredient is not None
+                text, subject_is_probiotic=ingredient is not None,
+                target_cfu_count=result["cfu_count"] if result["has_cfu"] else None,
             )
 
         return result
 
-    def _extract_guarantee_type(self, text: str, subject_is_probiotic: bool = False) -> Optional[str]:
+    def _extract_guarantee_type(
+        self, text: str, subject_is_probiotic: bool = False,
+        target_cfu_count: Optional[float] = None,
+    ) -> Optional[str]:
         """
         P1.1: Extract CFU guarantee type from text.
 
@@ -17372,7 +17416,21 @@ class SupplementEnricherV3:
         from probiotic_measurements import _PROBIOTIC_VIABILITY_RE, has_probiotic_identity_text
 
         found = None
-        for unit in _GUARANTEE_UNIT_SPLIT_RE.split(str(text)):
+        if target_cfu_count is None:
+            target_cfu_count = self._parse_cfu_text_count(str(text))
+        # A second parsed count or an explicitly unquantified amount begins
+        # another claim. Other conjunctions stay attached to the same warranty
+        # (e.g. cultures and vitamin C, or manufacture and expiration).
+        parts = re.split(r"(,\s+|\b(?:and|but|with)\b\s*)", str(text), flags=re.I)
+        units = [parts[0]]
+        for separator, part in zip(parts[1::2], parts[2::2]):
+            if self._parse_cfu_text_count(part) is not None or re.search(
+                r"\b(?:effective|adequate|sufficient)\s+(?:amount|level|count|number)s?\b", part, re.I,
+            ):
+                units.append(part)
+            else:
+                units[-1] += separator + part
+        for unit in (part for clause in units for part in _GUARANTEE_UNIT_SPLIT_RE.split(clause)):
             unit = unit.strip()
             if not unit:
                 continue
@@ -17383,6 +17441,13 @@ class SupplementEnricherV3:
             if _NON_PROBIOTIC_POTENCY_SUBJECT_RE.search(unit):
                 continue
             if not names_probiotic and not subject_is_probiotic:
+                continue
+            count = self._parse_cfu_text_count(unit)
+            if count is not None and target_cfu_count is not None and not math.isclose(count, target_cfu_count):
+                continue
+            # An unspecified "effective amount/level" is not a quantified
+            # guarantee for a count stated elsewhere at manufacture.
+            if count is None and re.search(r"\b(?:effective|adequate|sufficient)\s+(?:amount|level|count|number)s?\b", unit, re.I):
                 continue
             timing = self._guarantee_timing(unit)
             if timing == "at_expiration":
