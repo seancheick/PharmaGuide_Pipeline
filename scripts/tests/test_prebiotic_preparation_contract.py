@@ -157,3 +157,16 @@ def test_declared_cranberry_marker_is_not_an_unknown_or_25_percent_form(pipeline
     assert artifact["quality_score_status"] == "scored"
     rows = get_scoring_ingredients(enriched).rows
     assert not any("25%" in str(x.get("matched_form")) for x in rows)
+
+
+def test_xos_identity_notes_do_not_claim_universal_low_dose_efficacy():
+    """Identity copy must preserve trial/preparation limits, not invent a benchmark."""
+    import json
+    from pathlib import Path
+    data = json.loads((Path(__file__).resolve().parents[1] / 'data' / 'ingredient_quality_map.json').read_text())
+    notes = data['prebiotics']['forms']['xylooligosaccharides (XOS)']['notes']
+    assert 'Effective at lower doses compared to other prebiotics.' not in notes
+    assert 'PMID 24513849' in notes and 'PMID 26300782' in notes
+    assert '70%' in notes and '2015' in notes
+    assert 'not establish' in notes and 'PreticX' in notes
+    assert 'universal minimum effective dose' in notes
