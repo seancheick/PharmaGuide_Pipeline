@@ -446,5 +446,6 @@ and bradycardia in rats at 1 mg/kg); 29549157 (CUMYL-PICA high CB1 affinity, gre
 
 **Impact.** Warning titles: α-PHP "Not lawful as a supplement" → "Controlled substance"; CUMYL-PICA "Controlled
 substance" → "Unapproved ingredient". Neither rule matches any of the 15,133 detail blobs (catalog 2026-09-29) or the
-38 enriched brand outputs, so no shipped product changes. Safety copy: CUMYL-PICA safety_warning "Not a lawful
-supplement ingredient;" → "It has no approved use;" (structured value changed; Sean to confirm wording).
+38 enriched brand outputs, so no shipped product changes. Safety copy: CUMYL-PICA safety_warning loses its regulatory clause ("Not a lawful
+supplement ingredient;"), keeping the harm statement and "Stop any product containing it and consult a doctor."
+No replacement regulatory phrase ("no approved use" was tried and dropped: it states a determination nobody made).

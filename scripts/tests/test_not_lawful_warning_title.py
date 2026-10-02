@@ -176,6 +176,7 @@ def test_cumyl_pica_claims_no_dea_scheduling():
         "Synthetic cannabinoids Schedule I",
         "constitutes an adulterated controlled substance",
         "Not a lawful supplement ingredient",
+        "no approved use",
     ):
         assert false_claim not in text
     assert "not named in the federal schedules" in entry["reason"]
