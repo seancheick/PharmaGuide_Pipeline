@@ -115,3 +115,9 @@ def test_scoring_reference_maps_agree_with_the_lookup(calculator) -> None:
         if resolved not in (reference, None):
             mismatches[canonical] = (name, resolved, reference)
     assert mismatches == {}
+
+
+@pytest.mark.parametrize('form', ['acetyl-l-carnitine (alcar)', 'acetyl-l-carnitine', 'acetyl-l-carnitine hydrochloride'])
+def test_alcar_does_not_borrow_the_nonacetylated_carnitine_reference(calculator, form):
+    assert calculator._find_nutrient('L-Carnitine', form_name=form) is None
+    assert calculator._find_nutrient('L-Carnitine', form_name='l-carnitine (free base)')['id'] == 'l_carnitine'

@@ -514,6 +514,10 @@ class RDAULCalculator:
         excluded = {
             "betaine_tmg": {"betaine hydrochloride", "betaine hcl"},
             "l_glutamine": {"n-acetyl-l-glutamine", "l-alanyl-l-glutamine"},
+            # ALCAR is an acetylated preparation, not the parent's L-carnitine
+            # supplemental reference. Its clinical range has a separate owner.
+            "l_carnitine": {"acetyl-l-carnitine (alcar)", "acetyl-l-carnitine",
+                           "acetyl-l-carnitine hydrochloride"},
             # The anchor's PMID 30566740 reviews sulfate, not HCl or NAG.
             "glucosamine_sulfate": {"glucosamine hydrochloride", "glucosamine hcl",
                                     "n-acetyl glucosamine (NAG)"},
