@@ -15815,30 +15815,26 @@
       "aliases": [
         "sunfiber",
         "phgg",
-        "partially hydrolyzed guar gum",
-        "guar fiber"
+        "partially hydrolyzed guar gum"
       ],
       "category": "digestive_gut",
       "evidence_level": "branded-rct",
       "study_type": "rct_multiple",
       "published_studies": [
-        "RCT",
-        "meta-analysis"
+        "RCT"
       ],
       "score_contribution": "tier_1",
       "key_endpoints": [
-        "IBS symptoms ↓",
-        "gut microbiome ↑",
-        "regularity ↑",
-        "SCFA production ↑"
+        "IBS bloating and gas symptoms: selective benefit (PMID 26855665)",
+        "Loose-stool form normalization: benefit; stool frequency unchanged (PMID 31509971)",
+        "Bifidobacterium relative abundance: secondary microbiome surrogate (PMID 31509971)"
       ],
       "health_goals_supported": [
-        "Digestive Health",
-        "Immune Support"
+        "Digestive Health"
       ],
-      "notes": "Human evidence supports partially hydrolyzed guar gum for IBS-type symptoms, stool normalization, and microbiome effects, but the indexed trials are on PHGG as an ingredient rather than explicitly on the Sunfiber retail brand.",
-      "last_updated": "2026-03-06",
-      "notable_studies": "Niv et al. (2016, PMID 26855665) randomized adults with IBS and found improved bloating outcomes with PHGG versus placebo. Takahashi et al. (2019, PMID 31509971) reported better stool form and more Bifidobacterium after 3 months of PHGG. These findings support PHGG ingredient use, while the branded Sunfiber linkage is inferential rather than explicitly trial-labeled.",
+      "notes": "Both indexed randomized trials explicitly used Sunfiber PHGG supplied by Taiyo Kagaku; the evidence is for that ingredient preparation, not for a complete Nature's Way retail formula. Niv 2016 found selective improvement in bloating/gas, but not overall IBS severity, abdominal pain, stool frequency or quality of life; 121 randomized and 108 entered the reported intention-to-treat analysis, with substantial differential attrition. Yasukawa 2019 studied healthy adults with loose stools, excluding diagnosed IBS; 44 randomized, 42 stool-efficacy and 40 microbiome analyses. Stool form improved but frequency, GI symptom journals and overall physical/mental quality-of-life summaries did not. Microbiome composition is secondary surrogate evidence; neither indexed trial measured clinical immune benefits or increased SCFA production. The 2016 study received commercial support from Pro Natura and Sunwic AB with declared investigator independence. Taiyo funded and supplied the 2019 study, participated in protocol preparation and employed three authors; these are not independently funded replications. These outcome and funding limitations remain explicit for the pending cross-family certainty/calibration review.",
+      "last_updated": "2026-10-02",
+      "notable_studies": "Niv et al. (2016, PMID 26855665) explicitly tested Sunfiber PHGG in adults with Rome III IBS: 3 g/day for the first week, then 6 g/day for 11 weeks; bloating/gas improved, overall severity and quality of life did not. Yasukawa et al. (2019, PMID 31509971) explicitly tested Sunfiber PHGG at 5 g/day for 12 weeks in healthy adults with loose stools; stool form improved, stool frequency did not, and Bifidobacterium relative abundance was a secondary surrogate. PHGG preparation grams are not dietary-fiber assay grams. Trial amounts are source facts for the existing Dose owner, not additional Evidence deductions.",
       "references_structured": [
         {
           "type": "pubmed",
@@ -15846,9 +15842,9 @@
           "pmid": "26855665",
           "doi": "10.1186/s12986-016-0070-5",
           "title": "Randomized clinical study: Partially hydrolyzed guar gum (PHGG) versus placebo in the treatment of patients with irritable bowel syndrome.",
-          "citation": "Nutrition & metabolism (2016-01-01)",
+          "citation": "Niv et al. Nutrition & Metabolism. 2016 Feb 6;13:10.",
           "url": "https://pubmed.ncbi.nlm.nih.gov/26855665/",
-          "published_date": "2016-01-01",
+          "published_date": "2016-02-06",
           "publication_types": [
             "Journal Article"
           ],
@@ -15856,7 +15852,12 @@
           "supplementary_concepts": [],
           "evidence_grade": "journal_article",
           "retracted": false,
-          "supports_claims": [],
+          "supports_claims": [
+            "explicit_sunfiber_phgg_intervention",
+            "ibs_bloating_and_gas",
+            "not_overall_ibs_severity_or_quality_of_life",
+            "not_stool_frequency"
+          ],
           "verification_source": "pubmed_eutils"
         },
         {
@@ -15865,7 +15866,7 @@
           "pmid": "31509971",
           "doi": "10.3390/nu11092170",
           "title": "Effect of Repeated Consumption of Partially Hydrolyzed Guar Gum on Fecal Characteristics and Gut Microbiota: A Randomized, Double-Blind, Placebo-Controlled, and Parallel-Group Clinical Trial.",
-          "citation": "Nutrients (2019-09-10)",
+          "citation": "Yasukawa et al. Nutrients. 2019 Sep 10;11(9):2170.",
           "url": "https://pubmed.ncbi.nlm.nih.gov/31509971/",
           "published_date": "2019-09-10",
           "publication_types": [
@@ -15900,7 +15901,13 @@
           "supplementary_concepts": [],
           "evidence_grade": "rct",
           "retracted": false,
-          "supports_claims": [],
+          "supports_claims": [
+            "explicit_sunfiber_phgg_intervention",
+            "loose_stool_form",
+            "microbiome_secondary_surrogate",
+            "not_stool_frequency",
+            "not_overall_mental_or_physical_quality_of_life"
+          ],
           "verification_source": "pubmed_eutils"
         }
       ],
@@ -15909,13 +15916,14 @@
       },
       "effect_direction": "positive_strong",
       "primary_outcome": "Digestive Health",
-      "total_enrollment": 60,
+      "total_enrollment": 165,
       "registry_completed_trials_count": 1,
       "effect_direction_confidence": "medium",
-      "effect_direction_rationale": "Retained positive_strong classification; study_type=rct_multiple; evidence_level=branded-rct; primary_outcome=Digestive Health; published_tags=RCT,meta-analysis; registry_completed_trials_count=1; total_enrollment=60; endpoint_tags=stress_mood; notes/citations contain no automated downgrade signals.",
+      "effect_direction_rationale": "The existing positive_strong numerical classification is retained as a frozen calibration baseline, not re-ratified by this factual correction. The two indexed Sunfiber RCTs randomized 165 participants in total (121 plus 44); analyzed populations differ. Clinical benefits were outcome-specific with important null results and attrition/commercial-support limitations. No meta-analysis, immune benefit, stress/mood treatment, measured SCFA increase, whole-retail-formula trial or independent funding is established by these references. Cross-family certainty grading remains pending; no new magnitude or sponsorship deduction is applied.",
       "endpoint_relevance_tags": [
-        "stress_mood"
-      ]
+        "digestive_health"
+      ],
+      "published_rct_count": 2
     },
     {
       "id": "BRAND_CYNATINE_HNS",
