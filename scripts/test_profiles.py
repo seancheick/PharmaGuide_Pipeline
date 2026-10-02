@@ -103,6 +103,13 @@ LOCAL_ONLY_TEST_FILES: FrozenSet[str] = frozenset({
 
 # Exact observed skip reasons; a declared file never excuses another failure.
 CI_SKIP_ALLOWED_REASONS = {
+    'test_identity_unii_literal_proof.py': ('local\\ staging\\ label\\ unavailable;\\ the\\ fixture\\ test\\ covers\\ CI',),
+    'test_interaction_rule_every_declared_form.py': ('raw\\ reference\\ label\\ unavailable',),
+    'test_rc4_blend_header_total_contract.py': ('Staging\\ dir\\ not\\ available\\ on\\ this\\ machine',),
+    'test_context_canonical_overrides_2026_05_24.py': (
+        r'raw DSLD staging dataset not mounted at /[^ ]+/Downloads/PharmaGuide_Datasets/staging/brands(?: or (?:Jarrow_Formulas/265081|Pure_Encapsulations/317962|Natures_Way/25930[46])\.json missing)?',
+        r'raw DSLD (?:Jarrow_Formulas/265081|Pure_Encapsulations/317962|Natures_Way/25930[46])\.json not mounted at /[^ ]+/Downloads/PharmaGuide_Datasets/staging/brands',
+    ),
     'test_active_count_reconciliation.py': (
         '\\d+\\ canary\\ missing',
         '\\d+\\ canary\\ not\\ rebuilt\\ yet',

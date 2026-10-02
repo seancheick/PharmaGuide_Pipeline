@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Fail CI when a test skips outside the declared local-only files.
+"""Reject skips whose reason is not declared for the execution profile.
 
 CI runs a clean checkout without the 11 GB product corpus or built exports,
 so the tests that need them skip there. Those files are declared in
@@ -63,7 +63,7 @@ def main(argv: list[str]) -> int:
         return 2
     found = undeclared_skips(Path(argv[0]), argv[1] if len(argv) == 2 else "ci")
     if found:
-        print(f"{len(found)} test(s) skipped outside the declared local-only files:")
+        print(f"{len(found)} test(s) have undeclared or disallowed skip reasons:")
         for line in found:
             print(f"  {line}")
         print(
