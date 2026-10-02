@@ -1019,13 +1019,28 @@ def _banned_warning_type_for_status(status: str) -> str:
     }.get(status, "safety")
 
 
-def _banned_warning_title_prefix_for_status(status: str) -> str:
+def _banned_warning_title_prefix_for_status(status: str, legal_status: str = "") -> str:
+    # A "banned" registry entry is often not a federal ban: CBD, sulbutiamine
+    # and similar are excluded from the supplement definition. The title says
+    # what the registry's legal status says.
+    if status == "banned" and normalize_text(legal_status) == "not_lawful_as_supplement":
+        return "Not lawful as a supplement"
     return {
         "banned": "Banned substance",
         "recalled": "Recalled ingredient",
         "high_risk": "High-risk ingredient",
         "watchlist": "Watchlist ingredient",
     }.get(status, "Safety issue")
+
+
+def _registry_legal_status(rule_id: str, fallback_entry: Dict[str, Any]) -> str:
+    entry = _banned_recalled_reference_for_rule_id(
+        rule_id,
+        banned_recalled_index=_get_active_banned_recalled_index(),
+    )
+    if not isinstance(entry, dict):
+        entry = fallback_entry
+    return safe_str(entry.get("legal_status_enum"))
 
 
 def _safety_warning_policy_projection(
@@ -5405,7 +5420,10 @@ def build_top_warnings(enriched: Dict, detail_blob: Optional[Dict] = None) -> Li
         name = safe_str(sub.get("ingredient") or sub.get("banned_name") or sub.get("name"))
         rule_id = _contaminant_rule_id(sub)
         if status == "banned":
-            add_warning("banned_substance", "critical", f"Banned substance: {name}", rule_id)
+            title_prefix = _banned_warning_title_prefix_for_status(
+                status, _registry_legal_status(rule_id, sub),
+            )
+            add_warning("banned_substance", "critical", f"{title_prefix}: {name}", rule_id)
         elif status == "recalled":
             add_warning("recalled_ingredient", "high", f"Recalled ingredient: {name}", rule_id)
         elif status == "high_risk":
@@ -5428,7 +5446,9 @@ def build_top_warnings(enriched: Dict, detail_blob: Optional[Dict] = None) -> Li
         status = safe_str(flag.get("status")).lower()
         name = _safety_flag_display_name(flag)
         warning_type = _banned_warning_type_for_status(status)
-        title_prefix = _banned_warning_title_prefix_for_status(status)
+        title_prefix = _banned_warning_title_prefix_for_status(
+            status, _registry_legal_status(_safety_flag_rule_id(flag), flag),
+        )
         severity = safe_str(
             flag.get("severity"),
             "critical" if status == "banned" else "high" if status == "recalled" else "moderate",
@@ -7066,12 +7086,9 @@ def build_detail_blob(
             "high_risk": "high_risk_ingredient",
             "watchlist": "watchlist_substance",
         }.get(status, "safety")
-        title_prefix = {
-            "banned": "Banned substance",
-            "recalled": "Recalled ingredient",
-            "high_risk": "High-risk ingredient",
-            "watchlist": "Watchlist ingredient",
-        }.get(status, "Safety issue")
+        title_prefix = _banned_warning_title_prefix_for_status(
+            status, safe_str(reference.get("legal_status_enum")),
+        )
         # Build references list from references_structured (FDA URLs, etc.)
         refs = reference.get("references_structured") or sub.get("references_structured")
         source_urls = []
@@ -7455,7 +7472,10 @@ def build_detail_blob(
             elif safe_str(policy.get("status")) == "banned":
                 w_type = "banned_substance"
                 w_severity = "critical"
-                w_title = f"Banned substance: {name}"
+                title_prefix = _banned_warning_title_prefix_for_status(
+                    "banned", safe_str(reference.get("legal_status_enum")),
+                )
+                w_title = f"{title_prefix}: {name}"
                 dm_default = safe_str(policy.get("display_mode_default"), "critical")
             else:
                 inactive_policy = normalize_text(ing.get("inactive_policy"))
