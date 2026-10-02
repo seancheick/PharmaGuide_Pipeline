@@ -1,0 +1,855 @@
+{
+ "_metadata": {
+  "purpose": "LEDGER Q58 verification: every record the classification left weak, pending, insufficient or unfound was checked against primary sources (FDA notices, FDA tainted-products database, eCFR 2026-09-30, US Code, openFDA, archived FDA release). No data or routing changed.",
+  "date": "2026-10-02",
+  "supersedes_categories_in": "q58_classification_20261002.json (Category 1 list unchanged)",
+  "rules_applied": "Sean 2026-10-02: A active recall -> Recalled product; B ended recall with known lot -> Recalled lot; C product-name-only match on an ended recall -> no permanent block; D an ingredient that triggers its own rule blocks for that reason; WADA-only never blocks; shared hazard is not shared identity.",
+  "label_note": "proposed_label is the plain reader label; mapping to legal_status_enum and title prefix happens in the routing step after Sean's review."
+ },
+ "records": [
+  {
+   "id": "SPIKE_SILDENAFIL",
+   "category_before": "2 (weak)",
+   "category_verified": "2",
+   "proposed_label": "Hidden drug",
+   "sources_read": [
+    {
+     "url": "https://www.fda.gov/drugs/medication-health-fraud-notifications/zubb-dietary-supplement-may-be-harmful-due-hidden-ingredient",
+     "says": "FDA laboratory analysis confirmed ZUBB Dietary Supplement contains sildenafil not listed on the label (2026-09-04); sildenafil is the active ingredient in the FDA-approved drug Viagra."
+    },
+    {
+     "url": "https://www.accessdata.fda.gov/scripts/sda/sdNavigation.cfm?sd=tainted_supplements_cder",
+     "says": "FDA tainted-products database: 274 products with sildenafil as the only undeclared drug."
+    }
+   ],
+   "data_defects": [
+    "attached source is the notifications list page (matched only the word 'viagra'); replace with a notice that names sildenafil",
+    "alias 'PDE5 inhibitor' is a drug class, not sildenafil (Q62)",
+    "regulatory_date 2003-01-01 'First FDA enforcement action' unsourced"
+   ]
+  },
+  {
+   "id": "RECALLED_DEEP",
+   "category_before": "2 (weak)",
+   "category_verified": "2",
+   "proposed_label": "Hidden drug",
+   "sources_read": [
+    {
+     "url": "https://www.fda.gov/drugs/medication-health-fraud-notifications/deep-may-be-harmful-due-hidden-ingredient",
+     "says": "FDA advises not to buy or use DEEP (sexual enhancement); FDA laboratory analysis confirmed undeclared amino tadalafil (2026-09-15)."
+    }
+   ],
+   "data_defects": [
+    "matching: product entries match the exact product name or an alias only (enrich_supplements_v3 product branch: no token match, brand ignored when recall_scope exists), so any product named exactly 'Deep' would match regardless of brand; 0 such products in the 38-brand corpus. Proposal: match the three 'deep ...' aliases only, or require the brand once FDA names one"
+   ]
+  },
+  {
+   "id": "NOOTROPIC_PIRACETAM",
+   "category_before": "2 (weak)",
+   "category_verified": "3",
+   "proposed_label": null,
+   "sources_read": [
+    {
+     "url": "https://www.fda.gov/inspections-compliance-enforcement-and-criminal-investigations/warning-letters/peak-nootropics-llc-aka-advanced-nootropics-557887-02052019",
+     "says": "Piracetam sold with drug claims = unapproved drug; footnote: 'this letter does not address the issue of whether products containing piracetam can be lawfully marketed as dietary supplements.'"
+    },
+    {
+     "url": "https://www.fda.gov/inspections-compliance-enforcement-and-criminal-investigations/doj-press-releases-involving-fda-oci/arizona-company-and-ceo-plead-guilty-distribution-drugs-not-approved-fda-and-will-pay-24-million",
+     "says": "DOJ 2023: FDA has not approved drugs containing racetams (piracetam included); nothing on supplement lawfulness."
+    }
+   ],
+   "data_defects": [],
+   "sean_decision": "No US determination on supplement use and no harm claim (Q57b found none to source). Keep quarantined, or downgrade to watchlist so a scan shows the product with a warning?"
+  },
+  {
+   "id": "ADULTERANT_METFORMIN",
+   "category_before": "2-pending",
+   "category_verified": "2",
+   "proposed_label": "Hidden drug",
+   "sources_read": [
+    {
+     "url": "https://www.fda.gov/drugs/medication-health-fraud/fouzee-sugarlin-herbal-formula-may-be-harmful-due-hidden-drug-ingredients",
+     "says": "FDA laboratory analysis confirmed Fouzee SugarLin Herbal Formula contains undeclared metformin and glyburide (2024-12-10)."
+    },
+    {
+     "url": "https://www.accessdata.fda.gov/scripts/sda/sdNavigation.cfm?sd=tainted_supplements_cder",
+     "says": "3 products with undeclared metformin (2023-11-03 to 2024-12-10)."
+    }
+   ],
+   "data_defects": [
+    "attached FAQ page does not name metformin",
+    "regulatory_date 2009-01-01 'First FDA enforcement action' unsourced (earliest FDA notice found: 2023-11-03)"
+   ]
+  },
+  {
+   "id": "ADULTERANT_RIMONABANT",
+   "category_before": "2-pending",
+   "category_verified": "2",
+   "proposed_label": "Hidden drug",
+   "sources_read": [
+    {
+     "url": "https://www.fda.gov/drugs/frequently-asked-questions-popular-topics/questions-and-answers-about-fdas-initiative-against-contaminated-weight-loss-products",
+     "says": "FDA laboratory tests revealed rimonabant (among others) in weight-loss products sold OTC; list includes 'Phyto Shape - rimonabant' (2008-12-22; same text on the archived 2019 copy)."
+    }
+   ],
+   "data_defects": [
+    "first ref has no URL ('EMA: Rimonabant withdrawal (2008)')"
+   ]
+  },
+  {
+   "id": "PEPTIDE_BPC157",
+   "category_before": "2-pending",
+   "category_verified": "1",
+   "proposed_label": "Unverified ingredient",
+   "sources_read": [
+    {
+     "url": "https://www.fda.gov/drugs/human-drug-compounding/certain-bulk-drug-substances-use-compounding-may-present-significant-safety-risks",
+     "says": "FDA (compounding category 2): BPC-157 may pose risk for immunogenicity and impurity problems; FDA 'lacks sufficient information to know whether the drug would cause harm when administered to humans.'"
+    },
+    {
+     "url": "https://www.fda.gov/inspections-compliance-enforcement-and-criminal-investigations/warning-letters/predator-nutrition-607136-10232020",
+     "says": "Warning letter: 'Unbreakable (labeled to contain BPC-157)' sold with COVID-19 claims = unapproved drug. No statement that BPC-157 is not a dietary ingredient."
+    }
+   ],
+   "data_defects": [
+    "recall_scope is a copy of GE Labs Ykarine's (brand 'GE Labs Ykarine', trendione note): wrong record",
+    "reason claims 'not a dietary ingredient under 21 U.S.C. §321(ff)' and 'import alerts': no FDA source found",
+    "second US jurisdiction row has source type 'state_statute' for FDA warning letters; first cites no URL"
+   ]
+  },
+  {
+   "id": "PHARMA_DAPOXETINE",
+   "category_before": "2-pending",
+   "category_verified": "2",
+   "proposed_label": "Hidden drug",
+   "sources_read": [
+    {
+     "url": "https://www.fda.gov/drugs/medication-health-fraud/public-notification-super-platinum-30000-stallion-contains-hidden-drug-ingredients",
+     "says": "FDA laboratory analysis confirmed SUPER Platinum 30000 STALLION contains sildenafil, tadalafil and dapoxetine (2019-12-17)."
+    },
+    {
+     "url": "https://www.accessdata.fda.gov/scripts/sda/sdNavigation.cfm?sd=tainted_supplements_cder",
+     "says": "24 products with undeclared dapoxetine."
+    }
+   ],
+   "data_defects": [
+    "alias 'SSRIs in supplements' is a class phrase, not dapoxetine (Q62)",
+    "regulatory_date 2012-01-01 unsourced"
+   ]
+  },
+  {
+   "id": "PHARMA_LORCASERIN",
+   "category_before": "2-pending",
+   "category_verified": "2",
+   "proposed_label": "Hidden drug",
+   "sources_read": [
+    {
+     "url": "https://www.fda.gov/drugs/medication-health-fraud/public-notification-green-algae-combination-crane-beauty-contains-hidden-drug-ingredient",
+     "says": "FDA laboratory analysis confirmed Green Algae Combination contains lorcaserin, 'a controlled substance and the active ingredient in ... Belviq' (2015-03-26)."
+    },
+    {
+     "url": "https://www.fda.gov/drugs/drug-safety-and-availability/fda-requests-withdrawal-weight-loss-drug-belviq-belviq-xr-lorcaserin-market",
+     "says": "2020-02-13: FDA requested that the manufacturer voluntarily withdraw Belviq; Eisai submitted the request."
+    },
+    {
+     "url": "https://www.ecfr.gov/current/title-21/chapter-II/part-1308/section-1308.14",
+     "says": "Lorcaserin remains in Schedule IV, 21 CFR 1308.14(e)."
+    }
+   ],
+   "data_defects": [
+    "reason says FDA 'voluntarily withdrew' the drug: FDA requested the withdrawal and Eisai withdrew it",
+    "regulatory_date 2020-02-13 labelled 'First FDA enforcement action': that is the drug withdrawal; the first supplement notice in FDA's database is 2014-12-19 (B-Lipo)",
+    "alias 'hidden weight loss drug' is not a name for lorcaserin (Q62)"
+   ]
+  },
+  {
+   "id": "SCHED_PSILOCYBIN",
+   "category_before": "2-pending",
+   "category_verified": "2",
+   "proposed_label": "Controlled substance",
+   "sources_read": [
+    {
+     "url": "https://www.govinfo.gov/link/uscode/21/812?link-type=html",
+     "says": "21 U.S.C. 812(c) Schedule I(c)(15) Psilocybin (Pub. L. 91-513, enacted 1970-10-27)."
+    },
+    {
+     "url": "https://www.ecfr.gov/current/title-21/chapter-II/part-1308/section-1308.11",
+     "says": "21 CFR 1308.11(d)(29), DEA code 7437 (eCFR as of 2026-09-30)."
+    }
+   ],
+   "data_defects": [
+    "regulatory_date_label 'DEA scheduling effective' is wrong for 1970-10-27: that is the Controlled Substances Act's enactment (Schedule I by statute; DEA was formed in 1973)",
+    "the DEA and FDA refs have no URL",
+    "US row source type is 'fda_action' for a DEA schedule"
+   ]
+  },
+  {
+   "id": "SCHED_PSILOCIN",
+   "category_before": "2-pending",
+   "category_verified": "2",
+   "proposed_label": "Controlled substance",
+   "sources_read": [
+    {
+     "url": "https://www.govinfo.gov/link/uscode/21/812?link-type=html",
+     "says": "21 U.S.C. 812(c) Schedule I(c)(16) Psilocyn (Pub. L. 91-513, enacted 1970-10-27)."
+    },
+    {
+     "url": "https://www.ecfr.gov/current/title-21/chapter-II/part-1308/section-1308.11",
+     "says": "21 CFR 1308.11(d)(30), DEA code 7438 (eCFR as of 2026-09-30)."
+    }
+   ],
+   "data_defects": [
+    "regulatory_date_label 'DEA scheduling effective' is wrong for 1970-10-27: that is the Controlled Substances Act's enactment (Schedule I by statute; DEA was formed in 1973)",
+    "the DEA and FDA refs have no URL",
+    "US row source type is 'fda_action' for a DEA schedule"
+   ]
+  },
+  {
+   "id": "SPIKE_CHLOROPRETADALAFIL",
+   "category_before": "2-pending",
+   "category_verified": "2",
+   "proposed_label": "Hidden drug",
+   "sources_read": [
+    {
+     "url": "https://www.fda.gov/safety/recalls-market-withdrawals-safety-alerts/health-fixer-issues-voluntary-nationwide-recall-male-ultra-malextra-electro-buzz-ultra-armor-and",
+     "says": "Company recall posted by FDA (2025-04-25): laboratory analysis found chloropretadalafil, propoxyphenylsildenafil and sildenafil; 'cannot be marketed as dietary supplements'. Listed in FDA's tainted-products database."
+    }
+   ],
+   "data_defects": [
+    "attached Health Fixer notification URL returns 404",
+    "only source is a company announcement (FDA posts it, does not endorse); no FDA laboratory notice found",
+    "regulatory_date 2025-01-01 placeholder-like (announcement 2025-04-25)",
+    "alias 'designer tadalafil analog' is a class phrase (Q62)"
+   ]
+  },
+  {
+   "id": "SPIKE_PROPOXYPHENYLSILDENAFIL",
+   "category_before": "2-pending",
+   "category_verified": "2",
+   "proposed_label": "Hidden drug",
+   "sources_read": [
+    {
+     "url": "https://www.fda.gov/drugs/medication-health-fraud/public-notification-full-throttle-demand-contains-hidden-drug-ingredient",
+     "says": "FDA laboratory analysis confirmed Full Throttle On Demand contains propoxyphenyl sildenafil, structurally similar to sildenafil (2014-06-02)."
+    },
+    {
+     "url": "https://www.fda.gov/safety/recalls-market-withdrawals-safety-alerts/health-fixer-issues-voluntary-nationwide-recall-male-ultra-malextra-electro-buzz-ultra-armor-and",
+     "says": "Health Fixer recall 2025-04-25 names propoxyphenylsildenafil."
+    }
+   ],
+   "data_defects": [
+    "attached Health Fixer notification URL returns 404",
+    "regulatory_date 2025-01-01 'First FDA enforcement action': FDA's database has 2014-06-02",
+    "aliases 'modified sildenafil', 'designer sildenafil' are class phrases (Q62)"
+   ]
+  },
+  {
+   "id": "SPIKE_DEXAMETHASONE",
+   "category_before": "2-pending",
+   "category_verified": "2",
+   "proposed_label": "Hidden drug",
+   "sources_read": [
+    {
+     "url": "https://www.fda.gov/drugs/medication-health-fraud-notifications/qu-feng-huo-lou-dan-may-be-harmful-due-hidden-ingredient",
+     "says": "FDA laboratory analysis confirmed Qu Feng Huo Luo Dan contains dexamethasone not listed on the label (2026-08-25)."
+    },
+    {
+     "url": "https://www.fda.gov/drugs/medication-health-fraud-notifications/ultra-advanc3-and-ultra-advanc3-gold-may-be-harmful-due-hidden-drug-ingredients",
+     "says": "ULTRA ADVANC3 products contain dexamethasone, diclofenac and methocarbamol."
+    }
+   ],
+   "data_defects": [
+    "attached page is a general consumer page",
+    "regulatory_date 2024-01-01 placeholder-like"
+   ]
+  },
+  {
+   "id": "SPIKE_DICLOFENAC",
+   "category_before": "2-pending",
+   "category_verified": "2",
+   "proposed_label": "Hidden drug",
+   "sources_read": [
+    {
+     "url": "https://www.fda.gov/drugs/medication-health-fraud-notifications/kuka-flex-cbd-may-be-harmful-due-hidden-drug-ingredient",
+     "says": "FDA laboratory analysis confirmed KUKA FLEX CBD contains diclofenac not listed on the label (2026-04-07)."
+    },
+    {
+     "url": "https://www.accessdata.fda.gov/scripts/sda/sdNavigation.cfm?sd=tainted_supplements_cder",
+     "says": "59 products list diclofenac among undeclared drugs."
+    }
+   ],
+   "data_defects": [
+    "second US row: source type 'state_statute', citation 'Black box warning for cardiovascular and GI risks' (not a jurisdiction)",
+    "regulatory_date 2013-01-01 placeholder-like"
+   ]
+  },
+  {
+   "id": "SPIKE_METHYL7K",
+   "category_before": "2-pending",
+   "category_verified": "3",
+   "proposed_label": null,
+   "sources_read": [
+    {
+     "url": "https://www.fda.gov/news-events/press-announcements/fda-seizes-7-oh-opioids-protect-american-consumers",
+     "says": "FDA 7-OH seizure (2025-12-02): no mention of '7-methylkratom'."
+    },
+    {
+     "url": "https://pubchem.ncbi.nlm.nih.gov/rest/pug/compound/name/7-methylkratom/cids/JSON",
+     "says": "PubChem: no compound for '7-methylkratom' or '7-methyl mitragynine'."
+    }
+   ],
+   "data_defects": [
+    "identity unresolved: no chemical or regulatory record for '7-methylkratom'; the reason describes 7-hydroxymitragynine (its own record, BANNED_7_HYDROXYMITRAGYNINE)",
+    "aliases 'enhanced kratom', 'methylated kratom extract' are marketing phrases"
+   ],
+   "sean_decision": "Retire this record or fold it into BANNED_7_HYDROXYMITRAGYNINE (Q62 identity task)?"
+  },
+  {
+   "id": "SPIKE_TADALAFIL",
+   "category_before": "2-pending",
+   "category_verified": "2",
+   "proposed_label": "Hidden drug",
+   "sources_read": [
+    {
+     "url": "https://www.fda.gov/drugs/medication-health-fraud-notifications/anaconda-premium-500k-may-be-harmful-due-hidden-ingredient",
+     "says": "FDA laboratory analysis confirmed Anaconda Premium 500K contains tadalafil not listed on the label (2026-08-12); tadalafil is the active ingredient in Cialis."
+    },
+    {
+     "url": "https://www.accessdata.fda.gov/scripts/sda/sdNavigation.cfm?sd=tainted_supplements_cder",
+     "says": "113 products with tadalafil as the only undeclared drug."
+    }
+   ],
+   "data_defects": [
+    "alias 'tadalafil citrate' names no known salt (Q62)",
+    "regulatory_date 2006-01-01 placeholder-like"
+   ]
+  },
+  {
+   "id": "BANNED_CLENBUTEROL",
+   "category_before": "2-pending",
+   "category_verified": "1",
+   "proposed_label": "Unverified ingredient",
+   "sources_read": [
+    {
+     "url": "https://www.accessdata.fda.gov/scripts/sda/sdNavigation.cfm?sd=tainted_supplements_cder",
+     "says": "No product with clenbuterol in FDA's tainted-products database."
+    },
+    {
+     "url": "https://api.fda.gov/drug/drugsfda.json?search=openfda.generic_name:%22clenbuterol%22",
+     "says": "Drugs@FDA: no human approval."
+    },
+    {
+     "url": "https://pubmed.ncbi.nlm.nih.gov/35288432/",
+     "says": "Case report: clenbuterol-induced myocarditis in a young man using it for weight loss."
+    },
+    {
+     "url": "https://pubmed.ncbi.nlm.nih.gov/30546764/",
+     "says": "Case report and review of clenbuterol cardiac toxicity."
+    }
+   ],
+   "data_defects": [
+    "PMID 31887249 is titled in the record 'Clenbuterol use and human toxicity outcomes' (type case_report); it is a trial of energy expenditure and fat oxidation in healthy men",
+    "no US jurisdiction row; 21 CFR 530.41 (food-animal extralabel ban) is not a supplement rule"
+   ],
+   "note": "No FDA action naming clenbuterol in a supplement was found, so 'Not allowed in supplements' is not proven; harm evidence is case reports."
+  },
+  {
+   "id": "ADD_THYROGEN",
+   "category_before": "2-pending",
+   "category_verified": "2",
+   "proposed_label": "Not allowed in supplements",
+   "sources_read": [
+    {
+     "url": "https://api.fda.gov/drug/drugsfda.json?search=openfda.generic_name:%22thyrotropin%22",
+     "says": "THYROGEN (thyrotropin alfa), Genzyme, BLA020898, original approval 1998-11-30."
+    },
+    {
+     "url": "https://www.fda.gov/news-events/public-health-focus/fda-regulation-cannabis-and-cannabis-derived-products-including-cannabidiol-cbd",
+     "says": "FDA explains 21 U.S.C. 321(ff)(3)(B): a substance approved as a drug (or licensed biologic) first is excluded from the dietary supplement definition."
+    }
+   ],
+   "data_defects": [
+    "the ref title says 'BLA 125104'; the application is BLA020898",
+    "reason and one-liner say it is 'hidden in supplements': no FDA notice or study found showing that (Sean-owned copy; item 6)"
+   ],
+   "note": "Statutory exclusion only; no product with thyrotropin has been reported."
+  },
+  {
+   "id": "ADD_HEXADRONE",
+   "category_before": "2-pending",
+   "category_verified": "2",
+   "proposed_label": "Not allowed in supplements",
+   "sources_read": [
+    {
+     "url": "https://www.fda.gov/inspections-compliance-enforcement-and-criminal-investigations/warning-letters/big-dans-fitness-nutrition-llc-494626-05252017",
+     "says": "FDA warning letter (2017-05-25): 'Titan' and 'Titan Two' contain '6-chloro-androst-4-ene-3-one-17b-ol (Hexadrone)'; the products are not dietary supplements and are anabolic steroid drugs."
+    },
+    {
+     "url": "https://www.govinfo.gov/link/uscode/21/802?link-type=html",
+     "says": "21 U.S.C. 802(41)(A) does not list hexadrone; 802(41)(C) treats an unlisted, structurally similar steroid as an anabolic steroid only if made or marketed to promote muscle growth."
+    }
+   ],
+   "data_defects": [
+    "reason and one-liner say 'Schedule III controlled substance': hexadrone is not named in the schedule (controlled only by a case-by-case reading of 802(41)(C)); legal_status_enum controlled_substance should be not_lawful_as_supplement",
+    "identity: UNII 495G1O8XSK (GSRS 'HEXADRONE', 6β-chloro-17β-hydroxyandrost-4-en-3-one); PubChem CID 112500447 carries the name with a 3,17-diol structure, so do not use that CID"
+   ]
+  },
+  {
+   "id": "BANNED_CALAMUS_ACORUS_CALAMUS",
+   "category_before": "2-pending",
+   "category_verified": "2",
+   "proposed_label": "Not allowed in supplements",
+   "sources_read": [
+    {
+     "url": "https://www.ecfr.gov/current/title-21/chapter-I/subchapter-B/part-189/section-189.110",
+     "says": "21 CFR 189.110: food containing any added calamus, oil of calamus or extract of calamus is adulterated (order of 1968-05-09, 33 FR 6967)."
+    }
+   ],
+   "data_defects": [
+    "reason, US row and ref cite 21 CFR 189.140, which is diethylpyrocarbonate (DEPC); the calamus section is 189.110",
+    "regulatory_date null although 1968-05-09 is sourced",
+    "ref 2 is a PubMed search URL, not a source"
+   ]
+  },
+  {
+   "id": "RC_CARDARINE_ANALOGS",
+   "category_before": "3",
+   "category_verified": "3",
+   "proposed_label": null,
+   "sources_read": [],
+   "data_defects": [
+    "US rows say 'FDA banned' and cite no source"
+   ],
+   "note": "Class entry; no FDA source names the analogues."
+  },
+  {
+   "id": "SPIKE_TIANEPTINE_ANALOGUES",
+   "category_before": "3",
+   "category_verified": "3",
+   "proposed_label": null,
+   "sources_read": [
+    {
+     "url": "https://www.fda.gov/food/information-select-dietary-supplement-ingredients-and-other-substances/tianeptine-dietary-supplements",
+     "says": "FDA tianeptine page does not mention analogues."
+    }
+   ],
+   "data_defects": [
+    "ref title 'FDA: 2025 warnings on tianeptine analogs' misdescribes the page"
+   ]
+  },
+  {
+   "id": "RECALLED_GE_LABS_YKARINE",
+   "category_before": "3",
+   "category_verified": "2",
+   "proposed_label": "Hidden drug",
+   "sources_read": [
+    {
+     "url": "https://www.fda.gov/drugs/fraudulent-products/certain-bodybuilding-products-put-consumers-risk-heart-attack-stroke-serious-liver-damage-and-more",
+     "says": "FDA laboratory tested GE Labs Ykarine: undeclared trendione, an anabolic steroid in DEA Schedule III; testing followed an adverse event report of a consumer who had a stroke; FDA urges consumers not to use it (2025-12-02)."
+    }
+   ],
+   "data_defects": [
+    "alias 'ge labs' names the whole brand (Q62)",
+    "refs have no URL"
+   ]
+  },
+  {
+   "id": "WADA_CANNABIS",
+   "category_before": "3",
+   "category_verified": "2",
+   "proposed_label": "Not allowed in supplements (plus 'Prohibited in sport' as information)",
+   "sources_read": [
+    {
+     "url": "https://www.fda.gov/news-events/public-health-focus/fda-regulation-cannabis-and-cannabis-derived-products-including-cannabidiol-cbd",
+     "says": "Q9: 'Based on available evidence, FDA has concluded that THC and CBD products are excluded from the dietary supplement definition under section 201(ff)(3)(B).'"
+    },
+    {
+     "url": "https://www.govinfo.gov/link/uscode/21/812?link-type=html",
+     "says": "Schedule I(c)(17): tetrahydrocannabinols, except THC in hemp (7 U.S.C. 1639o)."
+    }
+   ],
+   "data_defects": [
+    "legal_status_enum wada_prohibited hides the independent US reason",
+    "US row cites 'DEA Schedule I' without the hemp exception"
+   ],
+   "sean_decision": "Independent US reason exists. Route as 'Not allowed in supplements' (not 'Controlled substance', because hemp THC is excepted) and show WADA as information? Measure first: hemp extracts that declare THC would block."
+  },
+  {
+   "id": "WADA_TRAMADOL",
+   "category_before": "3",
+   "category_verified": "2",
+   "proposed_label": "Controlled substance (plus 'Prohibited in sport' as information)",
+   "sources_read": [
+    {
+     "url": "https://www.ecfr.gov/current/title-21/chapter-II/part-1308/section-1308.14",
+     "says": "21 CFR 1308.14(b)(3): tramadol, Schedule IV, DEA code 9752."
+    }
+   ],
+   "data_defects": [
+    "US row effective_date 2024-01-01 is WADA's date, not a US date",
+    "no FDA notice naming tramadol in a supplement was found (tainted-products database: 0)"
+   ],
+   "sean_decision": "Route as 'Controlled substance' with WADA as information?"
+  },
+  {
+   "id": "ADD_HORDENINE",
+   "category_before": "3",
+   "category_verified": "2",
+   "proposed_label": "Not allowed in supplements",
+   "sources_read": [
+    {
+     "url": "https://www.fda.gov/inspections-compliance-enforcement-and-criminal-investigations/warning-letters/ironmag-labs-622504-05042022",
+     "says": "Warning letter (2022-05-04): hordenine is a dietary ingredient but a new dietary ingredient with no premarket notification, so the products are adulterated."
+    },
+    {
+     "url": "https://www.fda.gov/food/hfp-constituent-updates/fda-sends-warning-letters-multiple-companies-illegally-selling-adulterated-dietary-supplements",
+     "says": "Constituent update (2022-05-09) names hordenine and hordenine HCl."
+    },
+    {
+     "url": "https://www.fda.gov/food/dietary-supplements/dietary-supplement-ingredient-directory",
+     "says": "Directory lists hordenine and hordenine HCl under category 7 (NDI without the required notification)."
+    }
+   ],
+   "data_defects": [
+    "legal_status_enum 'adulterant' renders as 'Unsafe ingredient'; FDA's basis is the missing NDI notification, not a safety finding",
+    "attached ref is the generic dietary-supplements page"
+   ]
+  },
+  {
+   "id": "ADD_N_PHENETHYL_DIMETHYLAMINE",
+   "category_before": "3",
+   "category_verified": "3",
+   "proposed_label": null,
+   "sources_read": [
+    {
+     "url": "https://www.accessdata.fda.gov/scripts/sda/sdNavigation.cfm?sd=tainted_supplements_cder",
+     "says": "No FDA notice names N,N-dimethylphenethylamine."
+    },
+    {
+     "url": "https://www.fda.gov/food/dietary-supplements/dietary-supplement-ingredient-directory",
+     "says": "Not listed."
+    }
+   ],
+   "data_defects": [
+    "reason says 'FDA has identified it as an adulterant' and 'not a lawful dietary ingredient': no source found",
+    "alias 'eria jarensis' / 'eria jarensis extract' is an orchid, not the compound (Q62)",
+    "refs are generic WADA and warning-letter index pages"
+   ],
+   "sean_decision": "No US determination and no human harm evidence. Keep quarantined or downgrade to watchlist?"
+  },
+  {
+   "id": "BANNED_DETERENOL_ISOPROPYLNORSYNEPHRINE",
+   "category_before": "3",
+   "category_verified": "1",
+   "proposed_label": "Unverified ingredient",
+   "sources_read": [
+    {
+     "url": "https://pubmed.ncbi.nlm.nih.gov/24802503/",
+     "says": "Dexaprine (synephrine, oxilofrine, deterenol, yohimbine, caffeine, theophylline): Dutch poison-centre reports of tachycardia, palpitations and one cardiac arrest; effects not attributable to deterenol alone."
+    },
+    {
+     "url": "https://pubmed.ncbi.nlm.nih.gov/33755516/",
+     "says": "Deterenol found in US sports and weight-loss supplements."
+    }
+   ],
+   "data_defects": [
+    "PMID 32927348, titled in the record 'Deterenol and octodrine in sports and dietary supplements', is an exosomal microRNA biosensor paper (ghost reference)",
+    "reason says it 'is not a lawful dietary supplement ingredient': no FDA source found"
+   ]
+  },
+  {
+   "id": "RECALLED_HYDROXYCUT",
+   "category_before": "4",
+   "category_verified": "2 (ended recall, rule C)",
+   "proposed_label": "Past recall (information) or none",
+   "sources_read": [
+    {
+     "url": "http://web.archive.org/web/20090515100453/http://www.fda.gov:80/bbs/topics/news/2009/new02006.html",
+     "says": "FDA news release 2009-05-01: stop using 14 named Hydroxycut products; Iovate agreed to recall them; 23 reports of serious health problems ranging from jaundice and elevated liver enzymes to liver damage requiring transplant; one death; Hydroxycut Cleanse and Hoodia not affected."
+    }
+   ],
+   "data_defects": [
+    "safety_warning '23 reports of severe liver injury' overstates FDA's '23 reports of serious health problems ranging from jaundice and elevated liver enzymes ... to liver damage requiring liver transplant' (item 6)"
+   ],
+   "note": "match_mode is 'historical', so the record never matches today; that already fits rule C (reformulated brand, formulation-specific 2009 recall)."
+  },
+  {
+   "id": "RECALLED_GOLD_STAR_DISTRIBUTION",
+   "category_before": "4",
+   "category_verified": "3",
+   "proposed_label": null,
+   "sources_read": [
+    {
+     "url": "https://www.fda.gov/safety/recalls-market-withdrawals-safety-alerts/gold-star-distribution-inc-issues-recall-certain-fda-regulated-products-three-states-including-drugs",
+     "says": "Company recall posted by FDA (2025-12-26): all FDA-regulated products held at the Minneapolis facility, multiple brands, three states; rodent and avian contamination; 'potential Salmonella contamination'."
+    }
+   ],
+   "data_defects": [
+    "scope is a distributor's warehouse stock of many brands; no label names Gold Star, so the record cannot match a product",
+    "reason says products were 'contaminated with Salmonella' and the one-liner says 'Salmonella contamination recall'; FDA says potential Salmonella (item 6)",
+    "regulatory_date_label 'Regulatory limit established' is wrong for a recall"
+   ],
+   "sean_decision": "Set match_mode historical (no product can be identified)?"
+  },
+  {
+   "id": "RECALLED_X10_NATURAL_ENHANCEMENT",
+   "category_before": "4",
+   "category_verified": "2 (active recall, rule A)",
+   "proposed_label": "Recalled product",
+   "sources_read": [
+    {
+     "url": "https://www.fda.gov/safety/recalls-market-withdrawals-safety-alerts/ap-creations-llc-issues-nationwide-recall-x10-natural-enhancement-supplement-due-undeclared",
+     "says": "Recall of lots F090824LN16, F170325LN19, F300326LN28 (UPC 7708075247094) for undeclared sildenafil and tadalafil; distributed 2024-12-15 to 2026-06-11."
+    },
+    {
+     "url": "https://www.fda.gov/drugs/medication-health-fraud-notifications/x10-natural-enhancement-supplement-may-be-harmful-due-hidden-drug-ingredients",
+     "says": "FDA notification 2026-05-29."
+    }
+   ],
+   "data_defects": [
+    "first ref URL uses http://"
+   ],
+   "note": "openFDA had no enforcement record yet; the FDA recall page is the primary source."
+  },
+  {
+   "id": "RECALLED_BIQ_FEL",
+   "category_before": "4",
+   "category_verified": "2 (active recall, rule A)",
+   "proposed_label": "Recalled product",
+   "sources_read": [
+    {
+     "url": "https://www.fda.gov/safety/recalls-market-withdrawals-safety-alerts/ap-creations-llc-issues-nationwide-recall-biq-fel-due-undeclared-sildenafil-and-tadalafil",
+     "says": "A&P Creations recalls certain lots of biQ-FEL 500 mL for undeclared sildenafil and tadalafil (FDA publish 2026-09-15)."
+    },
+    {
+     "url": "https://www.fda.gov/drugs/medication-health-fraud-notifications/biq-fel-may-be-harmful-due-hidden-drug-ingredients",
+     "says": "FDA laboratory analysis confirmed sildenafil and tadalafil."
+    }
+   ],
+   "data_defects": []
+  },
+  {
+   "id": "RECALLED_ROSABELLA_MORINGA",
+   "category_before": "2",
+   "category_verified": "2 (ended recall, rule C)",
+   "proposed_label": "Past recall (information) or none",
+   "sources_read": [
+    {
+     "url": "https://api.fda.gov/food/enforcement.json?search=recall_number:%22H-0546-2026%22",
+     "says": "H-0546-2026: Class I, Terminated 2026-08-13; code info: lots 5020591-5020596, 5030246, 5030247 ... (exp 03-04/2027); reason: Salmonella."
+    }
+   ],
+   "data_defects": [
+    "recall_scope.lots is null although openFDA lists the lots",
+    "recall_scope.effective_to is null although the recall has ended"
+   ],
+   "note": "Rule B cannot apply: the matcher reads recall_scope only as a yes/no switch (enrich_supplements_v3 product branch) and labels carry no lot numbers, so every match is by product name. Rule D: no ingredient in these products triggers its own rule."
+  },
+  {
+   "id": "RECALLED_AONIC_COMPLETE_HERS",
+   "category_before": "2",
+   "category_verified": "2 (ended recall, rule C)",
+   "proposed_label": "Past recall (information) or none",
+   "sources_read": [
+    {
+     "url": "https://api.fda.gov/food/enforcement.json?search=recall_number:%22H-0520-2026%22",
+     "says": "H-0520-2026: Class II, Completed; code info: lots 5349A, 5363A (BB 12/27); reason: possible coliforms, E. coli, Pseudomonas."
+    }
+   ],
+   "data_defects": [
+    "recall_scope.lots is null although openFDA lists the lots",
+    "recall_scope.effective_to is null although the recall has ended"
+   ],
+   "note": "Rule B cannot apply: the matcher reads recall_scope only as a yes/no switch (enrich_supplements_v3 product branch) and labels carry no lot numbers, so every match is by product name. Rule D: no ingredient in these products triggers its own rule."
+  },
+  {
+   "id": "RECALLED_AONIC_COMPLETE_HIS",
+   "category_before": "2",
+   "category_verified": "2 (ended recall, rule C)",
+   "proposed_label": "Past recall (information) or none",
+   "sources_read": [
+    {
+     "url": "https://api.fda.gov/food/enforcement.json?search=recall_number:%22H-0521-2026%22",
+     "says": "H-0521-2026: Class II, Completed; code info: lots 5349A, 5363A (BB 12/27); reason: possible coliforms, E. coli, Pseudomonas."
+    }
+   ],
+   "data_defects": [
+    "recall_scope.lots is null although openFDA lists the lots",
+    "recall_scope.effective_to is null although the recall has ended"
+   ],
+   "note": "Rule B cannot apply: the matcher reads recall_scope only as a yes/no switch (enrich_supplements_v3 product branch) and labels carry no lot numbers, so every match is by product name. Rule D: no ingredient in these products triggers its own rule."
+  },
+  {
+   "id": "RECALLED_IMU_TEK_COLOSTRUM_5_CAPSULES",
+   "category_before": "2",
+   "category_verified": "2 (ended recall, rule C)",
+   "proposed_label": "Past recall (information) or none",
+   "sources_read": [
+    {
+     "url": "https://api.fda.gov/food/enforcement.json?search=recall_number:%22H-0660-2026%22",
+     "says": "H-0660-2026: Class II, Completed; code info: lot #013 (exp 09/28/26); reason: potentially under-processed."
+    }
+   ],
+   "data_defects": [
+    "recall_scope.lots is null although openFDA lists the lots",
+    "recall_scope.effective_to is null although the recall has ended"
+   ],
+   "note": "Rule B cannot apply: the matcher reads recall_scope only as a yes/no switch (enrich_supplements_v3 product branch) and labels carry no lot numbers, so every match is by product name. Rule D: no ingredient in these products triggers its own rule."
+  },
+  {
+   "id": "RECALLED_IMU_TEK_COLOSTRUM_5_POWDER",
+   "category_before": "2",
+   "category_verified": "2 (ended recall, rule C)",
+   "proposed_label": "Past recall (information) or none",
+   "sources_read": [
+    {
+     "url": "https://api.fda.gov/food/enforcement.json?search=recall_number:%22H-0661-2026%22",
+     "says": "H-0661-2026: Class II, Completed; code info: lot #22 (exp 02/05/28); reason: potentially under-processed."
+    }
+   ],
+   "data_defects": [
+    "recall_scope.lots is null although openFDA lists the lots",
+    "recall_scope.effective_to is null although the recall has ended"
+   ],
+   "note": "Rule B cannot apply: the matcher reads recall_scope only as a yes/no switch (enrich_supplements_v3 product branch) and labels carry no lot numbers, so every match is by product name. Rule D: no ingredient in these products triggers its own rule."
+  },
+  {
+   "id": "RECALLED_DIVIDED_SUNSET_COLLAGEN_PEPTIDES",
+   "category_before": "2",
+   "category_verified": "2 (ended recall, rule C)",
+   "proposed_label": "Past recall (information) or none",
+   "sources_read": [
+    {
+     "url": "https://api.fda.gov/food/enforcement.json?search=recall_number:%22H-0637-2026%22",
+     "says": "H-0637-2026: Class II, Terminated 2026-04-16; code info: all product in distribution as of 2026-02-27; reason: egg and fish species not declared (allergen labelling)."
+    }
+   ],
+   "data_defects": [
+    "recall_scope.lots is null although openFDA lists the lots",
+    "recall_scope.effective_to is null although the recall has ended"
+   ],
+   "note": "Rule B cannot apply: the matcher reads recall_scope only as a yes/no switch (enrich_supplements_v3 product branch) and labels carry no lot numbers, so every match is by product name. Rule D: no ingredient in these products triggers its own rule."
+  },
+  {
+   "id": "RECALLED_LIVE_IT_UP_SUPER_GREENS",
+   "category_before": "2",
+   "category_verified": "2 (ended recall, rule C)",
+   "proposed_label": "Past recall (information) or none",
+   "sources_read": [
+    {
+     "url": "https://api.fda.gov/food/enforcement.json?search=recall_number:%22H-0433-2026%22",
+     "says": "H-0433-2026 / H-0434-2026: Class I, Completed; code info: lots beginning 'A', exp 08/2026-01/2028 (listed by lot); reason: Salmonella Typhimurium."
+    }
+   ],
+   "data_defects": [
+    "recall_scope.lots is null although openFDA lists the lots",
+    "recall_scope.effective_to is null although the recall has ended"
+   ],
+   "note": "Rule B cannot apply: the matcher reads recall_scope only as a yes/no switch (enrich_supplements_v3 product branch) and labels carry no lot numbers, so every match is by product name. Rule D: no ingredient in these products triggers its own rule."
+  },
+  {
+   "id": "RECALLED_PURITY_PRODUCTS_MY_BLADDER",
+   "category_before": "2",
+   "category_verified": "2 (ended recall, rule C)",
+   "proposed_label": "Past recall (information) or none",
+   "sources_read": [
+    {
+     "url": "https://api.fda.gov/food/enforcement.json?search=recall_number:%22H-0213-2026%22",
+     "says": "H-0213-2026: Class II, Terminated 2026-04-13; code info: lot 03042517; reason: E. coli."
+    }
+   ],
+   "data_defects": [
+    "recall_scope.lots is null although openFDA lists the lots",
+    "recall_scope.effective_to is null although the recall has ended"
+   ],
+   "note": "Rule B cannot apply: the matcher reads recall_scope only as a yes/no switch (enrich_supplements_v3 product branch) and labels carry no lot numbers, so every match is by product name. Rule D: no ingredient in these products triggers its own rule."
+  },
+  {
+   "id": "RECALLED_OXYELITE_PRO",
+   "category_before": "2",
+   "category_verified": "2 (ended recall, rule C)",
+   "proposed_label": "Past recall (information) or none",
+   "sources_read": [
+    {
+     "url": "https://api.fda.gov/food/enforcement.json?search=recall_number:%22F-1370-2014%22",
+     "says": "F-1370/1372/1374/1375/1376-2014: OxyELITE Pro Super Thermo capsules and powders recalled after FDA's 423(a) notification, products containing aegeline associated with serious adverse events; Class I, Terminated 2015-10-13."
+    }
+   ],
+   "data_defects": [],
+   "note": "match_mode is already 'historical' (never matches), which fits rule C. No aegeline rule exists in the registry, so rule D does not apply."
+  },
+  {
+   "id": "RECALLED_JACK3D",
+   "category_before": "2",
+   "category_verified": "2 (ended, rule D via BANNED_DMAA)",
+   "proposed_label": "None for the product name; DMAA blocks on its own",
+   "sources_read": [
+    {
+     "url": "https://api.fda.gov/food/enforcement.json?search=recall_number:%22F-1370-2014%22",
+     "says": "The five openFDA recalls attached to Jack3D are all OxyELITE Pro (aegeline); none names Jack3D."
+    }
+   ],
+   "data_defects": [
+    "the attached openFDA recall numbers belong to OxyElite Pro, not Jack3D",
+    "effective_from 2012-01-01 unsourced"
+   ],
+   "note": "match_mode 'historical'. A label that lists DMAA is blocked by the verified BANNED_DMAA rule regardless of product name (rule D)."
+  },
+  {
+   "id": "PEPTIDE_TB500",
+   "category_before": "2",
+   "category_verified": "1",
+   "proposed_label": "Unverified ingredient",
+   "sources_read": [
+    {
+     "url": "https://precision.fda.gov/uniisearch/srs/unii/QHK6Z47GTG",
+     "says": "GSRS identity record only (UNII QHK6Z47GTG); not a regulatory action."
+    },
+    {
+     "url": "https://www.fda.gov/drugs/human-drug-compounding/certain-bulk-drug-substances-use-compounding-may-present-significant-safety-risks",
+     "says": "TB-500 (thymosin beta-4 fragment LKKTETQ): may pose risk for immunogenicity; insufficient safety information."
+    },
+    {
+     "url": "https://www.fda.gov/inspections-compliance-enforcement-and-criminal-investigations/warning-letters/warrior-labz-sarms-655280-06122023",
+     "says": "Lists 'TB-500' (injectable, nasal spray) among products sold by a SARMs seller."
+    }
+   ],
+   "data_defects": [
+    "the only attached 'authoritative' source is an identity record"
+   ]
+  },
+  {
+   "id": "BANNED_DMSA_SUCCIMER",
+   "category_before": "2",
+   "category_verified": "2",
+   "proposed_label": "Not allowed in supplements",
+   "sources_read": [
+    {
+     "url": "https://www.accessdata.fda.gov/drugsatfda_docs/label/2018/019998s021lbl.pdf",
+     "says": "Chemet (succimer) FDA-approved label, NDA 019998."
+    },
+    {
+     "url": "https://www.fda.gov/news-events/public-health-focus/fda-regulation-cannabis-and-cannabis-derived-products-including-cannabidiol-cbd",
+     "says": "FDA's explanation of the 21 U.S.C. 321(ff)(3)(B) drug exclusion."
+    }
+   ],
+   "data_defects": [],
+   "note": "Statutory exclusion (approved drug); the label PDF proves approval, not a supplement action."
+  },
+  {
+   "id": "ADULTERANT_MELOXICAM",
+   "category_before": "2",
+   "category_verified": "2",
+   "proposed_label": "Hidden drug",
+   "sources_read": [
+    {
+     "url": "https://www.fda.gov/drugs/medication-health-fraud-notifications/xian-ling-may-be-harmful-due-hidden-drug-ingredients",
+     "says": "FDA laboratory analysis confirmed Xian Ling contains tapentadol and meloxicam not listed on the label (2026-07-14)."
+    }
+   ],
+   "data_defects": [
+    "attached source is a company recall announcement; an FDA laboratory notice exists"
+   ]
+  }
+ ]
+}

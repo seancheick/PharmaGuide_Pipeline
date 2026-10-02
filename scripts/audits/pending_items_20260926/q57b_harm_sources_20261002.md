@@ -431,7 +431,7 @@ Sources added (grade · what it supports · finding):
 
 Sources added (grade · what it supports · finding):
 - **C** · clinical_outcomes · [Hepatotoxicity due to hydroxycut: a case series](https://pubmed.ncbi.nlm.nih.gov/20104221/) · All 8 hospitalized, 3 transplants; one fatal acute liver failure among MedWatch cases; 8 definite, 5 highly likely causality; recalled May 2009.
-- **Flag for Sean:** safety_warning says '23 reports of severe liver injury and one death'; the 23 is FDA's 2009 figure, not verified here (Hydroxycut recall is Q58 Cat 4).
+- **Flag for Sean:** safety_warning says '23 reports of severe liver injury and one death'. Q58 verification read FDA's 2009-05-01 release (archived): 23 reports of serious health problems ranging from jaundice and elevated liver enzymes to liver damage requiring transplant, and one death. The count is supported; 'severe liver injury' for all 23 overstates it (Q61).
 
 ## RECALLED_JACK3D (recalled)
 | Before (removed or reworded) | Final claim |
@@ -631,7 +631,7 @@ Sources added (grade · what it supports · finding):
 - **HM_LEAD**: safety_warning says 'no safe blood level' and 'kidney ... harm'; the sources read show deficits below 7.5 µg/dL without stating no safe level, and no kidney source was read. 40020868 is Clean Label Project funded (graded C).
 - **NOOTROPIC_BROMANTANE**: safety_warning says 'FDA has stated is not a lawful supplement ingredient'; no FDA document naming bromantane was found (Q58 Cat 1).
 - **NOOTROPIC_FLMODAFINIL**: aliases may include mono-fluoro 'fluoromodafinil'/'4-fluoromodafinil', a different compound (identity check).
-- **RECALLED_HYDROXYCUT**: safety_warning says '23 reports of severe liver injury and one death'; the 23 is FDA's 2009 figure, not verified here (Hydroxycut recall is Q58 Cat 4).
+- **RECALLED_HYDROXYCUT**: safety_warning says '23 reports of severe liver injury and one death'. Q58 verification read FDA's 2009-05-01 release (archived): 23 reports of serious health problems ranging from jaundice and elevated liver enzymes to liver damage requiring transplant, and one death. The count is supported; 'severe liver injury' for all 23 overstates it (Q61).
 - **RECALLED_JACK3D**: safety_warning says Jack3d's DMAA 'was linked to two deaths'; the case report names DMAA-containing supplements, not Jack3d.
 - **RECALLED_OXYELITE_PRO**: safety_warning says '97 cases, three liver transplants, and one death'; no source gives 97.
 - **RISK_BITTER_ORANGE**: safety_warning says 'ephedrine-like cardiovascular effects'; that equivalence is disputed in the literature. Alias 'citrus bioflavonoids' may not contain synephrine.
