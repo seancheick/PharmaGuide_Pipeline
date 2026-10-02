@@ -73,34 +73,20 @@ def iqm() -> dict:
 
 
 class TestCranberryProanthocyanidinFormMatch:
-    """The cranberry standardized form must contain generic proanthocyanidin
-    aliases so form-text "Proanthocyanidin" (parent-resolved to cranberry)
-    matches the standardized form (bio=11) instead of falling to unspecified
-    (bio=5)."""
+    """A generic marker does not establish cranberry identity or 25% potency."""
 
-    def test_cranberry_standardized_form_has_proanthocyanidin_aliases(self, iqm) -> None:
-        cran = iqm.get("cranberry", {}).get("forms", {}).get(
-            "cranberry extract (25% proanthocyanidins)", {}
-        )
-        aliases = [a.lower() for a in cran.get("aliases", [])]
-        for req in (
-            "proanthocyanidin",
-            "proanthocyanidins",
-            "cranberry proanthocyanidins",
-            "cranberry pacs",
-        ):
-            assert req in aliases, (
-                f"D2.9.1 regression: {req!r} missing from cranberry "
-                f"standardized form aliases."
-            )
+    def test_cranberry_specific_form_requires_declared_concentration(self, iqm) -> None:
+        aliases = {a.lower() for a in iqm["cranberry"]["forms"][
+            "cranberry extract (25% proanthocyanidins)"
+        ]["aliases"]}
+        assert "25% proanthocyanidins" in aliases
+        assert not aliases & {"proanthocyanidin", "proanthocyanidins", "cranberry pacs"}
 
-    def test_proanthocyanidin_resolves_to_cranberry_canonical(self, normalizer) -> None:
-        """Bare 'Proanthocyanidin' is ambiguous — but cranberry is the most
-        commercially relevant canonical (UTI support). This verifies the
-        alias routing without asserting a specific form resolution (that
-        happens in the enricher's parent-scoped form match)."""
-        r = normalizer._resolve_canonical_identity("Proanthocyanidin", raw_name="Proanthocyanidin")
-        assert r is not None and r[0] == "cranberry"
+    def test_bare_proanthocyanidin_cannot_establish_cranberry(self, normalizer) -> None:
+        result = normalizer._resolve_canonical_identity("Proanthocyanidin", raw_name="Proanthocyanidin")
+        assert result[0] != "cranberry"
+        pac = normalizer._resolve_canonical_identity("PAC", raw_name="PAC")
+        assert pac[0] == "pac"
 
 
 # ---------------------------------------------------------------------------

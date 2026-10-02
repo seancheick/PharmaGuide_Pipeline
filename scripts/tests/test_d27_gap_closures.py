@@ -144,36 +144,16 @@ class TestD34FormAliases:
                 f"D3.4 regression: {req!r} missing from ginger.forms['ginger extract standardized']."
             )
 
-    def test_pac_canonical_exists_with_cranberry_crosslink(self) -> None:
-        """Generic PAC aliases live on the dedicated `pac` IQM canonical AND
-        on cranberry's standardized form (pac is cranberry's standardization
-        marker — same pattern as vitexin/hawthorn, silymarin/milk_thistle).
-        The cross-ingredient allowlist in test_ingredient_quality_map_schema.py
-        permits this overlap because form lookup is parent-scoped after
-        canonical resolution."""
+    def test_pac_canonical_does_not_imply_cranberry_concentration(self) -> None:
         iqm = json.loads((DATA_DIR / "ingredient_quality_map.json").read_text())
-        # Dedicated pac canonical must exist and cover the generic terms
-        pac = iqm.get("pac", {})
-        pac_aliases = [a.lower() for a in pac.get("forms", {}).get("pac (unspecified)", {}).get("aliases", [])]
-        for req in ("pac", "proanthocyanidins type a", "cranberry pacs"):
-            assert req in pac_aliases, (
-                f"{req!r} missing from pac canonical — generic PAC aliases "
-                f"must live here."
-            )
-        # Cranberry form: cranberry-specific PAC aliases + generic singular/plural
-        # (needed for label-text "Proanthocyanidin" to form-match when parent
-        # is already resolved to cranberry by the cleaner).
-        cran = iqm.get("cranberry", {}).get("forms", {}).get("cranberry extract (25% proanthocyanidins)", {})
-        cran_aliases = [a.lower() for a in cran.get("aliases", [])]
-        for req in (
-            "cranberry pacs",
-            "cranberry proanthocyanidins",
-            "proanthocyanidin",
-            "proanthocyanidins",
-        ):
-            assert req in cran_aliases, (
-                f"D2.9.1 regression: {req!r} missing from cranberry extract form."
-            )
+        pac_aliases = {a.lower() for a in iqm["pac"]["forms"]["pac (unspecified)"]["aliases"]}
+        assert {"pac", "proanthocyanidins type a", "cranberry pacs"} <= pac_aliases
+        forms = iqm["cranberry"]["forms"]
+        specific = {a.lower() for a in forms["cranberry extract (25% proanthocyanidins)"]["aliases"]}
+        unspecified = {a.lower() for a in forms["cranberry (unspecified)"]["aliases"]}
+        assert "cranberry pacs" in unspecified
+        assert not specific & {"cranberry pacs", "proanthocyanidin", "proanthocyanidins"}
+
 
     def test_piperine_bioperinie_ocr_alias_present(self) -> None:
         iqm = json.loads((DATA_DIR / "ingredient_quality_map.json").read_text())
