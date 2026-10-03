@@ -96,9 +96,9 @@ from scoring_input_contract import (
 )
 from scoring_v4.dose_safety import resolve_dose_safety
 from dose_assessment import positive_clinical_benchmark
-from scoring_v4.modules.immune_support import score_immune_support_dose
-from scoring_v4.modules.joint_support import score_joint_support_dose
-from scoring_v4.modules.sleep_support import score_sleep_support_dose
+from scoring_v4.modules.immune_support import score_immune_purpose_dose, score_immune_support_dose
+from scoring_v4.modules.joint_support import score_joint_purpose_dose, score_joint_support_dose
+from scoring_v4.modules.sleep_support import score_sleep_purpose_dose, score_sleep_support_dose
 
 
 # --- Dose 25 weights ------------------------------------------------------
@@ -305,6 +305,27 @@ def _score_declared_purpose_window(
     specialized_assessments: List[Dict[str, Any]] = []
     for key, purpose in sorted(purposes.items()):
         identities = _row_identity_keys(purpose)
+        specialized = score_collagen_purpose_dose(product, purpose)
+        specialized_owner = "collagen_profile"
+        if specialized is None and is_botanical_product(product):
+            specialized = score_botanical_purpose_dose(product, purpose)
+            specialized_owner = "botanical_profile"
+        if specialized is None:
+            specialized = score_sleep_purpose_dose(product, purpose)
+            specialized_owner = "sleep_support"
+        if specialized is None:
+            specialized = score_joint_purpose_dose(product, purpose)
+            specialized_owner = "joint_support"
+        if specialized is None:
+            specialized = score_immune_purpose_dose(product, purpose)
+            specialized_owner = "immune_support"
+        if specialized is not None:
+            contributions.append(float(specialized["score"]))
+            specialized_assessments.append({
+                "assessment_owner": specialized_owner,
+                **specialized,
+            })
+            continue
         credits = []
         for assessment in adequacy:
             if not (identities & _row_identity_keys(assessment)):
@@ -321,18 +342,6 @@ def _score_declared_purpose_window(
             # compatibility artifact has duplicates, one purpose still gets
             # one conservative vote rather than extra denominator weight.
             contributions.append(min(credits))
-            continue
-        specialized = score_collagen_purpose_dose(product, purpose)
-        specialized_owner = "collagen_profile"
-        if specialized is None and is_botanical_product(product):
-            specialized = score_botanical_purpose_dose(product, purpose)
-            specialized_owner = "botanical_profile"
-        if specialized is not None:
-            contributions.append(float(specialized["score"]))
-            specialized_assessments.append({
-                "assessment_owner": specialized_owner,
-                **specialized,
-            })
             continue
         clinical = positive_clinical_benchmark(product, purpose)
         if clinical is not None:

@@ -211,12 +211,18 @@ def test_clean_daily_immune_formula_reaches_realistic_high_80s() -> None:
 def test_gummy_high_zinc_immune_formula_not_benchmark_clean() -> None:
     out = score_product_v4(_immune_product(high_zinc=True, gummy=True))
     pillars = out["quality_pillars_v4"]
+    dose = out["v4_breakdown"]["module"]["dimensions"]["dose"]
 
     # Guard the owning pillars, not a tuned total-score cutoff. The gummy form
     # itself is neutral; excess zinc and added sugar remain visible where they
     # belong.
     assert pillars["safety_hygiene"]["score"] < 10.0
-    assert pillars["dose"]["score"] < 17.0
+    assert pillars["dose"]["score"] < 20.0
+    zinc = next(
+        item for item in dose["metadata"]["specialized_purpose_assessments"]
+        if item.get("active") == "zinc"
+    )
+    assert zinc["score"] == 0.0
 
 
 def test_high_zinc_changes_dose_not_formulation_quality() -> None:

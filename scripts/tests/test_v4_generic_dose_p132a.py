@@ -857,6 +857,48 @@ def test_multi_purpose_average_retains_collagen_preparation_benchmark() -> None:
     assert below["metadata"]["unbenchmarked_purpose_ingredients"] == []
 
 
+@pytest.mark.parametrize(
+    "primary_type,active_name,canonical,low_amount,high_amount,expected_low,expected_high,owner",
+    [
+        ("sleep_support", "Melatonin", "melatonin", 0.5, 20.0, 22.0, 13.5, "sleep_support"),
+        ("joint_support", "Glucosamine", "glucosamine", 750.0, 1500.0, 16.0, 21.0, "joint_support"),
+        ("immune_support", "Beta Glucan", "beta_glucan", 50.0, 200.0, 15.4, 20.9, "immune_support"),
+    ],
+)
+def test_multi_purpose_average_retains_category_purpose_benchmark(
+    primary_type, active_name, canonical, low_amount, high_amount,
+    expected_low, expected_high, owner,
+) -> None:
+    from scoring_v4.modules.generic_dose import score_dose
+
+    def assessed(quantity: float) -> dict:
+        active = _ingredient(
+            name=active_name, canonical_id=canonical, quantity=quantity, unit="mg",
+            raw_source_path="ingredientRows[0]", bio_score=None,
+        )
+        vitamin = _ingredient(
+            name="Vitamin C", canonical_id="vitamin_c", quantity=90, unit="mg",
+            raw_source_path="ingredientRows[1]",
+        )
+        return score_dose(_product(
+            ingredients=[active, vitamin],
+            adequacy_results=[{
+                "canonical_id": "vitamin_c", "nutrient": "Vitamin C",
+                "pct_rda": 100.0, "pct_ul": 4.5,
+            }],
+            product_name=f"{active_name} and Vitamin C",
+            supplement_taxonomy={"primary_type": primary_type},
+        ))
+
+    low = assessed(low_amount)
+    high = assessed(high_amount)
+
+    assert low["components"]["supplemental_window_proxy"] == expected_low
+    assert high["components"]["supplemental_window_proxy"] == expected_high
+    assert low["metadata"]["specialized_purpose_assessments"][0]["assessment_owner"] == owner
+    assert low["metadata"]["unbenchmarked_purpose_ingredients"] == []
+
+
 def test_exact_positive_lactoferrin_benchmark_is_owned_by_dose() -> None:
     from scoring_v4.modules.generic_dose import score_dose
 

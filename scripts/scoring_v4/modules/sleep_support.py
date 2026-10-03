@@ -57,6 +57,31 @@ def score_sleep_support_dose(product: Dict[str, Any]) -> Optional[Dict[str, Any]
     return None
 
 
+def score_sleep_purpose_dose(
+    product: Dict[str, Any], row: Dict[str, Any],
+) -> Optional[Dict[str, Any]]:
+    """Assess one declared sleep-active purpose on the shared 0..22 scale."""
+    if not is_sleep_support_product(product):
+        return None
+    for active, canonicals, band in (
+        ("melatonin", MELATONIN_CANONICALS, _melatonin_score),
+        ("5_htp", FIVE_HTP_CANONICALS, _five_htp_sleep_score),
+    ):
+        canonical_set = {_norm_text(value) for value in canonicals}
+        if not _row_matches(row, canonical_set):
+            continue
+        mg = _row_quantity_mg(row)
+        if mg is None:
+            return None
+        daily_mg = mg * _daily_serving_multiplier(product)
+        daily_mg_max = mg * daily_serving_range(product)[1]
+        score, label = min(band(daily_mg_max), band(daily_mg), key=lambda scored: scored[0])
+        payload = _payload(active, daily_mg, score, label)
+        payload["daily_mg_max"] = round(daily_mg_max, 4)
+        return payload
+    return None
+
+
 def active_daily_mg(product: Dict[str, Any], canonicals: Iterable[str], *, top: bool = False) -> Optional[float]:
     """Daily amount at the minimum directed use, or at the maximum (``top``)."""
     canonical_set = {_norm_text(c) for c in canonicals}

@@ -77,6 +77,29 @@ def score_joint_support_dose(product: Dict[str, Any]) -> Optional[Dict[str, Any]
     }
 
 
+def score_joint_purpose_dose(
+    product: Dict[str, Any], row: Dict[str, Any],
+) -> Optional[Dict[str, Any]]:
+    """Assess one declared joint-active purpose through the joint Dose owner."""
+    if not is_joint_support_product(product):
+        return None
+    active = _joint_active_id(row)
+    mg = _row_quantity_mg(row)
+    if active is None or mg is None:
+        return None
+    daily_mg = mg * _daily_serving_multiplier(product)
+    target = JOINT_TARGET_DOSE_MG[active]
+    ratio = daily_mg / target
+    return {
+        "score": round(max(0.0, min(1.0, ratio)) * 20.0, 4),
+        "band": "single_active_clinical_dose" if ratio >= 1.0 else "below_joint_support_range",
+        "active": active,
+        "daily_mg": round(daily_mg, 4),
+        "target_mg": target,
+        "ratio": round(ratio, 4),
+    }
+
+
 def joint_active_doses(product: Dict[str, Any]) -> list[Dict[str, Any]]:
     daily_multiplier = _daily_serving_multiplier(product)
     by_active: Dict[str, Dict[str, Any]] = {}

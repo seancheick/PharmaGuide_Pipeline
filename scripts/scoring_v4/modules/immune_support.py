@@ -103,6 +103,48 @@ def score_immune_support_dose(product: Dict[str, Any]) -> Optional[Dict[str, Any
     }
 
 
+def score_immune_purpose_dose(
+    product: Dict[str, Any], row: Dict[str, Any],
+) -> Optional[Dict[str, Any]]:
+    """Assess one declared immune-active purpose on the shared 0..22 scale."""
+    if not is_immune_support_product(product):
+        return None
+    active = _active_id(row)
+    if active is None:
+        return None
+    amount = _row_amount(row, active)
+    if amount is None:
+        return None
+    key = {
+        "vitamin_c": "vitamin_c_mg",
+        "vitamin_d": "vitamin_d_mcg",
+        "zinc": "zinc_mg",
+        "copper": "copper_mg",
+        "selenium": "selenium_mcg",
+        "beta_glucan": "beta_glucan_mg",
+        "quercetin": "quercetin_mg",
+        "elderberry": "elderberry_mg",
+    }[active]
+    daily = amount * _daily_serving_multiplier(product)
+    daily_max = amount * daily_serving_range(product)[1]
+    band = IMMUNE_DOSE_BANDS[key]
+    score = min(
+        _range_score(daily, band["low"], band["high"], 22.0),
+        _range_score(daily_max, band["low"], band["high"], 22.0),
+    )
+    if active == "zinc" and daily_max > HIGH_ZINC_THRESHOLD_MG:
+        score = 0.0
+    if active == "vitamin_d" and daily_max > HIGH_VITAMIN_D_THRESHOLD_MCG:
+        score = 0.0
+    return {
+        "score": round(score, 4),
+        "active": active,
+        "daily_amount": round(daily, 4),
+        "daily_amount_max": round(daily_max, 4),
+        "target_range": [band["low"], band["high"]],
+    }
+
+
 def immune_support_formulation_adjustment(product: Dict[str, Any]) -> Optional[Dict[str, Any]]:
     """Return immune-specific design diagnostics and true complexity penalties.
 
