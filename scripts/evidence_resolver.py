@@ -564,18 +564,6 @@ def resolve_evidence_for_canonical(
     return resolve_evidence_for_row(row, product=None)
 
 
-def _reviewed_row_dose(row: Mapping[str, Any], product: Optional[Mapping[str, Any]], record: Mapping[str, Any]) -> Optional[float]:
-    """Use the scorer's unit/daily exposure owner, bounded to this exact row."""
-    from scoring_v4.modules.generic_evidence import _dose_map, _converted_product_dose
-    entry = dict(record)
-    entry["matched_canonical_id"] = row.get("canonical_id")
-    entry["ingredient"] = row.get("name") or row.get("canonical_id")
-    ref = row.get("raw_source_path") or row.get("source_row_ref")
-    entry["matched_source_row_refs"] = [ref] if ref else []
-    dose, _ = _converted_product_dose(entry, _dose_map(dict(product or {}), rows=[dict(row)]))
-    return dose
-
-
 def resolve_evidence_for_row(
     row: Mapping[str, Any],
     product: Optional[Mapping[str, Any]] = None,

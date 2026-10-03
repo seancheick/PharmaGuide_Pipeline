@@ -509,25 +509,6 @@ def test_clinical_dose_guard_compares_against_label_directed_daily_dose() -> Non
     assert "SUB_CLINICAL_DOSE_DETECTED" not in payload["metadata"]["flags"]
 
 
-def test_unparsed_fractional_serving_inference_cannot_shrink_label_dose() -> None:
-    """Net-contents inference can emit a fractional daily serving even when
-    no directions were parsed.  A clinical comparator must never turn one
-    labeled serving into less than one on that unverified basis.
-    """
-    from scoring_v4.modules.generic_evidence import _daily_serving_multiplier
-
-    assert _daily_serving_multiplier(
-        {
-            "serving_basis": {
-                "min_servings_per_day": 0.1,
-                "max_servings_per_day": 0.1,
-                "parsed_from_directions": False,
-                "servings_per_day_source": "servingSizes",
-            }
-        }
-    ) == 1.0
-
-
 def test_supra_clinical_amount_is_not_an_evidence_flag() -> None:
     from scoring_v4.modules.generic_evidence import score_evidence
 

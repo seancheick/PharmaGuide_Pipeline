@@ -34,8 +34,6 @@ from scoring_v4.modules.generic_helpers import (
     _norm_text,
     _safe_dict,
     _safe_list,
-    daily_serving_multiplier,
-    daily_serving_range,
     get_active_ingredients,
     nutrient_delivering_rows,
     delivers_its_nutrient,
@@ -185,9 +183,6 @@ PRIMARY_FLOOR_ENABLED = True
 # This is intentionally scoped to evidence matching. Other IU nutrients have
 # different, sometimes form-dependent conversions and must remain unresolved.
 _VITAMIN_D_IU_PER_MCG = 40.0
-_VITAMIN_D_EVIDENCE_KEYS = frozenset(
-    {"vitamin d", "vitamin d3", "cholecalciferol"}
-)
 
 _RECOVERED_COLLAGEN_PEPTIDES_MATCH = {
     "id": "RECOVERED_COLLAGEN_PEPTIDES_V1",
@@ -1800,143 +1795,6 @@ def _enrollment_multiplier(enrollment: float) -> float:
         if enrollment < threshold:
             return multiplier
     return ENROLLMENT_DEFAULT_MULTIPLIER
-
-
-def _dose_map(product: Dict[str, Any], *, rows=None) -> Dict[str, List[Tuple[float, str]]]:
-    """Daily label amounts by source row and by every identity a row names.
-
-    An identity key keeps each amount in its own unit: raw numbers are not
-    comparable across units (300 mg vs 10 g, mg vs FU), so the reader converts
-    every amount to the evidence record's unit before taking the largest.
-    """
-    from scoring_input_contract import _positive_quantity, _row_unit
-    doses: Dict[str, List[Tuple[float, str]]] = {}
-    daily_multiplier = _daily_serving_multiplier(product)
-    for ing in nutrient_delivering_rows(product) if rows is None else rows:
-        if is_lent_blend_mass(ing):
-            # A blend total lent to one child is not that child's amount.
-            continue
-        quantity = _positive_quantity(ing)
-        if quantity is None:
-            continue
-        quantity *= daily_multiplier
-        unit = _norm_text(ing.get("unit_normalized") or _row_unit(ing))
-        source_ref = ing.get("raw_source_path") or ing.get("source_row_ref")
-        if source_ref:
-            doses[f"source:{source_ref}"] = [(quantity, unit)]
-        for name in (
-            ing.get("standard_name"),
-            ing.get("name"),
-            ing.get("raw_source_text"),
-            ing.get("canonical_id"),
-        ):
-            key = _canonical_text(name)
-            if not key:
-                continue
-            amounts = doses.setdefault(key, [])
-            if (quantity, unit) not in amounts:
-                amounts.append((quantity, unit))
-    return doses
-
-
-def _daily_serving_multiplier(product: Dict[str, Any]) -> float:
-    """Return the minimum label-directed daily serving count.
-
-    Scoring rows carry the amount per canonical label serving, while clinical
-    evidence minima and maxima are daily doses. Delegates to the shared v4
-    resolver so this reads the same policy as the dose and safety modules.
-
-    This used to read `serving_basis` alone, which never consulted the label's
-    own `servingSizes`, and licensed below-one values on
-    `parsed_from_directions` — a flag the enricher sets whenever it parsed the
-    directions text at all, not one that says where these values came from.
-    """
-    return daily_serving_multiplier(product)
-
-
-def _largest_converted_amount(
-    entry: Dict[str, Any],
-    amounts: List[Tuple[float, str]],
-    dose_unit: str,
-) -> Optional[float]:
-    # Multiple eligible rows are not summed without an explicit aggregate
-    # contract. The largest individually disclosed matching amount wins, judged
-    # in the record's unit; an amount that cannot be converted never competes.
-    converted = []
-    for quantity, unit in amounts:
-        value = _convert_unit(quantity, unit, dose_unit)
-        if value is None and _is_vitamin_d_evidence_entry(entry):
-            value = _convert_vitamin_d_evidence_unit(quantity, unit, dose_unit)
-        if value is not None:
-            converted.append(value)
-    return max(converted, default=None)
-
-
-def _converted_product_dose(
-    entry: Dict[str, Any],
-    dose_map: Dict[str, List[Tuple[float, str]]],
-) -> tuple[Optional[float], str]:
-    # The evidence record's standard name can be less form-specific than the
-    # exact label row that enrichment matched.  Resolve the exact match
-    # provenance first (e.g. acetyl-L-carnitine hydrochloride), then fall back
-    # through structured canonical and study identities.
-    refs = entry.get("matched_source_row_refs") or []
-    dose_unit = _norm_text(entry.get("dose_unit") or "mg")
-    if refs and not entry.get("aggregate_canonical_ids"):
-        # Source lineage is authoritative. Never borrow a larger amount from
-        # a differently formulated sibling just because canonical IDs agree.
-        amounts = [amount for ref in refs for amount in dose_map.get(f"source:{ref}", [])]
-        return _largest_converted_amount(entry, amounts, dose_unit), _canonical_from_entry(entry) or ""
-    lookup_keys: List[str] = []
-    for lookup_name in (
-        entry.get("matched_term"),
-        entry.get("ingredient"),
-        entry.get("matched_canonical_id"),
-        entry.get("canonical_id"),
-        entry.get("ingredient_canonical_id"),
-        entry.get("standard_name"),
-        entry.get("study_name"),
-    ):
-        lookup_key = _canonical_text(lookup_name)
-        if lookup_key and lookup_key not in lookup_keys:
-            lookup_keys.append(lookup_key)
-
-    product_amounts = None
-    resolved_key = lookup_keys[0] if lookup_keys else ""
-    for lookup_key in lookup_keys:
-        product_amounts = dose_map.get(lookup_key)
-        if product_amounts is not None:
-            resolved_key = lookup_key
-            break
-    if product_amounts is not None:
-        return _largest_converted_amount(entry, product_amounts, dose_unit), resolved_key
-
-    aggregate_ids = [
-        _canonical_text(value)
-        for value in _safe_list(entry.get("aggregate_canonical_ids"))
-        if _canonical_text(value)
-    ]
-    if aggregate_ids:
-        aggregate_dose = 0.0
-        for canonical_id in aggregate_ids:
-            converted_component = _largest_converted_amount(
-                entry, dose_map.get(canonical_id, []), dose_unit
-            )
-            if converted_component is None:
-                return None, resolved_key
-            aggregate_dose += converted_component
-        return (
-            aggregate_dose,
-            _canonical_text(entry.get("evidence_group_id"))
-            or _canonical_text(entry.get("standard_name"))
-            or resolved_key,
-        )
-
-    return None, resolved_key
-
-
-def _is_vitamin_d_evidence_entry(entry: Dict[str, Any]) -> bool:
-    return bool(_entry_identity_keys(entry) & _VITAMIN_D_EVIDENCE_KEYS)
 
 
 def _convert_vitamin_d_evidence_unit(

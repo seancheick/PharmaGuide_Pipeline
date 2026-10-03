@@ -75,8 +75,6 @@ ALLOWLIST: dict[str, str] = {
     "scripts/scoring_v4/modules/botanical_profile.py|_range_mg|get|unit|83418ab1801f": "pass_a_known_pending_native_evidence_contract",
     "scripts/scoring_v4/modules/brand_testing_posture.py|score_brand_testing_posture|get|match_type|2d68ef6686e9": "pass_a_known_pending_native_safety_signal_contract",
     "scripts/scoring_v4/modules/collagen_profile.py|_range_mg|get|unit|83418ab1801f": "pass_a_known_pending_native_evidence_contract",
-    "scripts/scoring_v4/modules/generic_evidence.py|_dose_map|get|unit_normalized|320965a122ab": "pass_a_known_pending_native_evidence_contract",
-    "scripts/scoring_v4/modules/generic_evidence.py|_dose_map|get|raw_source_text|0fe1043d3c32": "pass_a_known_pending_native_evidence_contract",
     "scripts/scoring_v4/modules/generic_helpers.py|has_usable_individual_dose|get|quantity|3fd4e11ae842": "pass_a_known_pending_native_evidence_contract",
     "scripts/scoring_v4/modules/generic_helpers.py|has_usable_individual_dose|get|unit_normalized|dcf5fcc7cc91": "pass_a_known_pending_native_evidence_contract",
     "scripts/scoring_v4/modules/generic_helpers.py|has_usable_individual_dose|get|unit|30c24beac47d": "pass_a_known_pending_native_evidence_contract",
