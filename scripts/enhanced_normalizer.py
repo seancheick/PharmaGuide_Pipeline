@@ -4787,6 +4787,7 @@ class EnhancedDSLDNormalizer:
     @staticmethod
     def _merge_alternate_serving_rows(
         ingredient_rows: List[Dict[str, Any]],
+        serving_sizes: Optional[List[Dict[str, Any]]] = None,
     ) -> List[Dict[str, Any]]:
         """Merge repeated Supplement Facts columns into one analysis row.
 
@@ -4820,6 +4821,19 @@ class EnhancedDSLDNormalizer:
             if order is None and size is None:
                 return None
             return (order, size, unit)
+
+        serving_note_by_order = {
+            serving.get("order"): normalized_text(serving.get("notes"))
+            for serving in serving_sizes or []
+            if isinstance(serving, dict) and serving.get("order") is not None
+        }
+
+        def audience_note(order: Any) -> str:
+            note = serving_note_by_order.get(order, "")
+            return note if note and re.search(
+                r"\b(?:age|ages|year|years|adult|adults|child|children|kid|kids|infant|toddler)\b",
+                note,
+            ) else ""
 
         def form_signature(row: Dict[str, Any]) -> tuple:
             return tuple(
@@ -4862,8 +4876,46 @@ class EnhancedDSLDNormalizer:
             nested = row.get("nestedRows") if isinstance(row, dict) else None
             if isinstance(nested, list):
                 row["nestedRows"] = EnhancedDSLDNormalizer._merge_alternate_serving_rows(
-                    nested
+                    nested,
+                    serving_sizes,
                 )
+
+        # DSLD occasionally repeats the exact same source row in one printed
+        # column (220125 repeats Zinc and Copper with the same ingredient id,
+        # amount, form and context). It is one source fact, not two additive
+        # sources. Keep same-column rows with different source identities.
+        def source_fact(value: Any) -> Any:
+            if isinstance(value, dict):
+                return tuple(
+                    (key, source_fact(item))
+                    for key, item in sorted(value.items())
+                    if key not in {"order", "raw_source_path"}
+                )
+            if isinstance(value, list):
+                return tuple(source_fact(item) for item in value)
+            return value
+
+        exact_rows: List[Dict[str, Any]] = []
+        for row in ingredient_rows:
+            if not isinstance(row, dict):
+                exact_rows.append(row)
+                continue
+            duplicate = next(
+                (
+                    prior
+                    for prior in exact_rows
+                    if isinstance(prior, dict)
+                    and row.get("ingredientId") is not None
+                    and prior.get("ingredientId") == row.get("ingredientId")
+                    and source_fact(prior) == source_fact(row)
+                ),
+                None,
+            )
+            if duplicate is None:
+                exact_rows.append(row)
+            else:
+                logger.info("Removed literal duplicate source row '%s'", row.get("name"))
+        ingredient_rows = exact_rows
 
         groups: Dict[tuple, List[Dict[str, Any]]] = {}
         for row in ingredient_rows:
@@ -4938,6 +4990,27 @@ class EnhancedDSLDNormalizer:
                 tuple(sorted(name_tree(child, column) for child in placed_children(row, column))),
             )
 
+        def loose_identity(row: Dict[str, Any]) -> tuple:
+            category = normalized_text(row.get("category"))
+            return normalized_text(row.get("name")), category
+
+        def rows_match(left: Dict[str, Any], right: Dict[str, Any]) -> bool:
+            if loose_identity(left) == loose_identity(right):
+                return True
+            left_group = normalized_text(left.get("ingredientGroup"))
+            right_group = normalized_text(right.get("ingredientGroup"))
+            generic_groups = {"", "proprietary blend", "blend", "other", "creatine"}
+            return bool(
+                left_group == right_group
+                and left_group not in generic_groups
+                and not left_group.startswith("proprietary blend")
+                and normalized_text(left.get("category")) == normalized_text(right.get("category"))
+                and fuzz.ratio(
+                    normalized_text(left.get("name")),
+                    normalized_text(right.get("name")),
+                ) >= 90
+            )
+
         def declared_forms(row: Dict[str, Any]) -> frozenset:
             return frozenset(
                 norm_module.make_normalized_key(form.get("name") or "")
@@ -4956,13 +5029,41 @@ class EnhancedDSLDNormalizer:
             owner_children = placed_children(owner_row, owner_column)
             for child in placed_children(alternate, alternate_column):
                 match = next(
-                    c for c in owner_children
-                    if name_tree(c, owner_column) == name_tree(child, alternate_column)
+                    (c for c in owner_children if rows_match(c, child)),
+                    None,
                 )
+                if match is None:
+                    continue
                 owner_children.remove(match)
                 if not forms_agree(match, child, owner_column, alternate_column):
                     return False
             return True
+
+        def trees_compatible(owner_row: Dict[str, Any], alternate: Dict[str, Any],
+                             owner_column: Set[tuple], alternate_column: Set[tuple]) -> bool:
+            if not rows_match(owner_row, alternate):
+                return False
+            if not forms_agree(owner_row, alternate, owner_column, alternate_column):
+                return False
+            owner_children = placed_children(owner_row, owner_column)
+            alternate_children = placed_children(alternate, alternate_column)
+            pairs = [
+                (owner_child, alternate_child)
+                for owner_child in owner_children
+                for alternate_child in alternate_children
+                if rows_match(owner_child, alternate_child)
+            ]
+            owner_matched = {id(owner_child) for owner_child, _ in pairs}
+            alternate_matched = {id(alternate_child) for _, alternate_child in pairs}
+            if owner_children and alternate_children and not (
+                len(owner_matched) == len(owner_children)
+                or len(alternate_matched) == len(alternate_children)
+            ):
+                return False
+            return all(
+                trees_compatible(owner_child, alternate_child, owner_column, alternate_column)
+                for owner_child, alternate_child in pairs
+            )
 
         def merge_by_name(owner_row: Dict[str, Any], alternate: Dict[str, Any],
                           owner_column: Set[tuple], alternate_column: Set[tuple]) -> None:
@@ -4976,11 +5077,14 @@ class EnhancedDSLDNormalizer:
                     continue
                 if id(child) in placed:
                     match = next(
-                        c for c in owner_children
-                        if name_tree(c, owner_column) == name_tree(child, alternate_column)
+                        (c for c in owner_children if rows_match(c, child)),
+                        None,
                     )
-                    owner_children.remove(match)
-                    merge_by_name(match, child, owner_column, alternate_column)
+                    if match is None:
+                        owner_row.setdefault("nestedRows", []).append(child)
+                    else:
+                        owner_children.remove(match)
+                        merge_by_name(match, child, owner_column, alternate_column)
                 else:
                     owner_row.setdefault("nestedRows", []).append(child)
 
@@ -4988,46 +5092,62 @@ class EnhancedDSLDNormalizer:
         for row in ingredient_rows:
             if not isinstance(row, dict) or id(row) in merged_ids or not own_contexts(row):
                 continue
-            key = (
-                normalized_text(row.get("name")),
-                normalized_text(row.get("ingredientGroup")),
-                normalized_text(row.get("category")),
-            )
+            key = loose_identity(row)
             if key[0]:
                 sizes.setdefault(key, []).append(row)
+
+        def columns_are_alternatives(
+            alternatives: List[Dict[str, Any]],
+            columns: List[Set[tuple]],
+        ) -> bool:
+            orders = {order for column in columns for order, _size, _unit in column}
+            if len(orders) == 1:
+                return True
+            # Different serving orders are alternatives only when each column
+            # names one audience and the audiences differ (241222: children
+            # under four / adults and children four or older). AM/PM packs
+            # share one audience or name none and remain additive.
+            audiences = [
+                {
+                    normalized_text(group.get("name") or group.get("targetGroup"))
+                    for q in quantity_rows(row)
+                    for group in q.get("dailyValueTargetGroup") or []
+                    if isinstance(group, dict)
+                } - {""}
+                for row in alternatives
+            ]
+            row_notes = [
+                {audience_note(order) for order, _size, _unit in column} - {""}
+                for column in columns
+            ]
+            dv_audiences_differ = all(len(a) == 1 for a in audiences) and len(
+                set().union(*audiences)
+            ) == len(audiences)
+            serving_notes_differ = all(len(a) == 1 for a in row_notes) and len(
+                set().union(*row_notes)
+            ) == len(row_notes)
+            return dv_audiences_differ or serving_notes_differ
 
         for alternatives in sizes.values():
             if len(alternatives) < 2:
                 continue
+            analysis_row = max(
+                alternatives,
+                key=lambda row: max(
+                    (float(size) for _order, size, _unit in own_contexts(row)
+                     if isinstance(size, (int, float))),
+                    default=0.0,
+                ),
+            )
             columns = [own_contexts(row) for row in alternatives]
-            orders = {order for column in columns for order, _size, _unit in column}
             disjoint = all(
                 not (columns[i] & columns[j])
                 for i in range(len(columns)) for j in range(i + 1, len(columns))
             )
-            trees = {name_tree(row, column) for row, column in zip(alternatives, columns)}
-            if len(orders) != 1:
-                # Different serving orders are alternatives only when each
-                # column names one audience and the audiences differ (241222:
-                # "Children less than 4 years of age" / "Adults and children 4
-                # or more years of age"); AM/PM packs share one or name none.
-                audiences = [
-                    {
-                        normalized_text(group.get("name") or group.get("targetGroup"))
-                        for q in quantity_rows(row)
-                        for group in q.get("dailyValueTargetGroup") or []
-                        if isinstance(group, dict)
-                    } - {""}
-                    for row in alternatives
-                ]
-                if not all(len(a) == 1 for a in audiences) or len(
-                    set().union(*audiences)
-                ) != len(audiences):
-                    continue
-            if not disjoint or len(trees) != 1:
+            if not disjoint or not columns_are_alternatives(alternatives, columns):
                 continue
             if not all(
-                forms_agree(alternatives[0], alternate, columns[0], column)
+                trees_compatible(alternatives[0], alternate, columns[0], column)
                 for alternate, column in zip(alternatives[1:], columns[1:])
             ):
                 continue
@@ -5035,11 +5155,94 @@ class EnhancedDSLDNormalizer:
             for alternate, column in zip(alternatives[1:], columns[1:]):
                 merge_by_name(owner, alternate, columns[0], column)
                 merged_ids.add(id(alternate))
+            if analysis_row is not owner and analysis_row.get("notes") not in {None, ""}:
+                owner["notes"] = analysis_row.get("notes")
             logger.info(
                 "Merged %d serving size(s) of '%s'", len(alternatives), owner.get("name")
             )
 
-        return [row for row in ingredient_rows if id(row) not in merged_ids]
+        result = [row for row in ingredient_rows if id(row) not in merged_ids]
+
+        # Some DSLD multi-size panels interleave a row beneath the other
+        # column's parent (220082 puts the 2-scoop caffeine beneath the
+        # 1-scoop Velositol row). Reconcile the same typed identity across the
+        # whole panel after parent merges. Work deepest-first so a correctly
+        # placed child survives before an incorrectly placed parent is removed.
+        locations: List[tuple] = []
+
+        def collect_locations(container: List[Dict[str, Any]], ancestors: List[Set[tuple]], depth: int) -> None:
+            for node in list(container):
+                if not isinstance(node, dict):
+                    continue
+                locations.append((node, container, list(ancestors), depth))
+                children = node.get("nestedRows")
+                if isinstance(children, list):
+                    collect_locations(children, ancestors + [own_contexts(node)], depth + 1)
+
+        collect_locations(result, [], 0)
+        cross_groups: Dict[tuple, List[tuple]] = {}
+        for location in locations:
+            node = location[0]
+            if own_contexts(node):
+                cross_groups.setdefault(loose_identity(node), []).append(location)
+
+        removed_cross_ids: Set[int] = set()
+        for group in sorted(cross_groups.values(), key=lambda items: max(item[3] for item in items), reverse=True):
+            live = [item for item in group if id(item[0]) not in removed_cross_ids]
+            if len(live) < 2:
+                continue
+            contexts = [own_contexts(item[0]) for item in live]
+            if any(
+                contexts[i] & contexts[j]
+                for i in range(len(contexts)) for j in range(i + 1, len(contexts))
+            ):
+                continue
+            nodes = [item[0] for item in live]
+            if not columns_are_alternatives(nodes, contexts):
+                continue
+            sizes_seen = {size for context in contexts for _order, size, _unit in context}
+            if len(sizes_seen) < 2:
+                continue
+            if not all(
+                forms_agree(live[0][0], item[0], contexts[0], context)
+                for item, context in zip(live[1:], contexts[1:])
+            ):
+                continue
+            if not all(
+                trees_compatible(live[0][0], item[0], contexts[0], context)
+                for item, context in zip(live[1:], contexts[1:])
+            ):
+                continue
+
+            def correctly_placed(item: tuple) -> bool:
+                node_context = own_contexts(item[0])
+                return all(not ancestor or bool(node_context & ancestor) for ancestor in item[2])
+
+            live.sort(
+                key=lambda item: (
+                    correctly_placed(item),
+                    item[3] > 0,
+                    max(
+                        (float(size) for _order, size, _unit in own_contexts(item[0])
+                         if isinstance(size, (int, float))),
+                        default=0.0,
+                    ),
+                ),
+                reverse=True,
+            )
+            owner, _owner_container, _ancestors, _depth = live[0]
+            for alternate, container, _alternate_ancestors, _alternate_depth in live[1:]:
+                merge_by_name(owner, alternate, own_contexts(owner), own_contexts(alternate))
+                if alternate in container:
+                    container.remove(alternate)
+                removed_cross_ids.add(id(alternate))
+            logger.info(
+                "Merged %d interleaved serving row(s) for '%s'",
+                len(live),
+                owner.get("name"),
+            )
+
+        return result
 
     def _flatten_nested_ingredients(self, ingredient_rows: List[Dict], _depth: int = 0) -> List[Dict]:
         """Flatten nested ingredients from blends for better scoring, preserving blend structure"""
@@ -6056,7 +6259,10 @@ class EnhancedDSLDNormalizer:
                     raw_ingredients, product_id
                 )
 
-            raw_ingredients = self._merge_alternate_serving_rows(raw_ingredients)
+            raw_ingredients = self._merge_alternate_serving_rows(
+                raw_ingredients,
+                raw_data.get("servingSizes"),
+            )
 
             flattened_ingredients = self._flatten_nested_ingredients(raw_ingredients)
 

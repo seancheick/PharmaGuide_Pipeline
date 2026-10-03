@@ -41,6 +41,14 @@ def _names(rows):
     return collections.Counter(r["name"] for r in rows)
 
 
+def _all_names(rows):
+    names = collections.Counter()
+    for row in rows:
+        names[row["name"]] += 1
+        names.update(_all_names(row.get("nestedRows") or []))
+    return names
+
+
 @pytest.mark.parametrize("pid, name", [
     ("221108", "Protein"),
     ("49630", "Advanced Creatine Complex"),
@@ -197,3 +205,62 @@ def test_merged_protein_column_still_reads_the_declared_protein():
     protein = [r for r in get_scoring_ingredients(enriched, strict=True).rows
                if r.get("canonical_id") == "protein" and r.get("evidence_type") == "sports_primary_dose"]
     assert [r.get("quantity") for r in protein] == [40.0]
+
+@pytest.mark.parametrize("pid,name,expected_quantity", [
+    ("219982", "Bilberry Fruit Powder", 100.0),
+    ("304687", "Melatonin", 1.0),
+    ("266727", "Folate", 200.0),
+    ("184730", "Probiotic Blend", 0.0),
+    ("278251", "Probiotic Blend", 0.0),
+    ("287473", "Probiotic Blend", 0.0),
+])
+def test_audience_note_columns_merge_even_without_row_dv_groups(pid, name, expected_quantity):
+    rows = _clean(pid)
+    matching = [row for row in rows if row["name"].casefold() == name.casefold()]
+    assert len(matching) == 1
+    assert matching[0]["quantity"] == expected_quantity
+    assert len(matching[0]["raw_taxonomy"]["quantityVariants"]) == 2
+
+
+def test_misspelled_child_in_alternate_column_merges_by_dsld_identity_group():
+    rows = _clean("33341")
+    dim = [row for row in rows if "diindol" in row["name"].casefold()]
+    assert len(dim) == 1
+    assert dim[0]["quantity"] == 2000.0
+    assert len(dim[0]["raw_taxonomy"]["quantityVariants"]) == 2
+
+
+def test_interleaved_wheybolic_columns_do_not_duplicate_formula_rows():
+    rows = _clean("220082")
+    counts = _names(rows)
+    for name in (
+        "Wheybolic Complex",
+        "Branched-Chain Amino Acids",
+        "Velositol Amylopectin Chromium Complex",
+        "ProHydrolase Protease Enzyme Blend",
+        "Thermo Ripped Matrix",
+        "Caffeine Anhydrous",
+        "Water Balance Blend",
+        "L-Carnitine",
+    ):
+        assert counts[name] == 1, name
+
+
+def test_macros_column_variants_merge_despite_dsld_group_drift_and_literal_duplicates():
+    rows = _clean("220125")
+    top_counts = _names(rows)
+    for name in ("Vitamin A", "Zinc", "Copper"):
+        assert top_counts[name] == 1, name
+    assert _all_names(rows)["Dietary Fats Blend"] == 1
+
+
+def test_interleaved_nested_and_top_level_variants_keep_one_ingredient():
+    rows = _clean("228714")
+    assert _all_names(rows)["L-Carnitine"] == 1
+
+
+def test_literal_same_source_row_is_not_counted_twice():
+    from enhanced_normalizer import EnhancedDSLDNormalizer
+
+    row = _row("Zinc", 1, 2, 5, 44)
+    assert len(EnhancedDSLDNormalizer._merge_alternate_serving_rows([row, dict(row)])) == 1

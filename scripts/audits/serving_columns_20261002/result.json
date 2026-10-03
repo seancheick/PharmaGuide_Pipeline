@@ -1,0 +1,3152 @@
+{
+  "files_total": 15414,
+  "multi_column": 323,
+  "top_duplicate_before": [
+    {
+      "id": "69507",
+      "duplicates": [
+        "acetyl l carnitine",
+        "prohydrolase protease enzyme blend"
+      ]
+    },
+    {
+      "id": "220191",
+      "duplicates": [
+        "chloride",
+        "magnesium",
+        "thermo ripped matrix",
+        "vitamin d",
+        "wheybolic complex"
+      ]
+    },
+    {
+      "id": "302506",
+      "duplicates": [
+        "calcium",
+        "calories",
+        "phosphorous",
+        "total carbohydrate",
+        "vitamin d"
+      ]
+    },
+    {
+      "id": "317636",
+      "duplicates": [
+        "bromelain"
+      ]
+    },
+    {
+      "id": "206312",
+      "duplicates": [
+        "calories",
+        "cholesterol",
+        "marinol fish oil",
+        "total fat",
+        "vitamin a",
+        "vitamin d",
+        "vitamin e"
+      ]
+    },
+    {
+      "id": "228714",
+      "duplicates": [
+        "calcium",
+        "calories",
+        "chloride",
+        "cholesterol",
+        "chromium",
+        "iron",
+        "magnesium",
+        "potassium",
+        "protein",
+        "sodium",
+        "thermo ripped matrix",
+        "total carbohydrates",
+        "total fat",
+        "vitamin d",
+        "wheybolic complex"
+      ]
+    },
+    {
+      "id": "221108",
+      "duplicates": [
+        "alpha matrix",
+        "calcium",
+        "calories",
+        "cholesterol",
+        "chromium",
+        "potassium",
+        "protein",
+        "sodium",
+        "total carbohydrates",
+        "total fat",
+        "wheybolic complex"
+      ]
+    },
+    {
+      "id": "220125",
+      "duplicates": [
+        "biotin",
+        "calcium",
+        "calories",
+        "cholesterol",
+        "choline",
+        "complex carb blend",
+        "copper",
+        "folate",
+        "iodine",
+        "iron",
+        "magnesium",
+        "manganese",
+        "molybdenum",
+        "niacin",
+        "pantothenic acid",
+        "phosphorus",
+        "potassium",
+        "protein",
+        "protein blend",
+        "riboflavin",
+        "sodium",
+        "thiamine",
+        "total carbohydrates",
+        "total fat",
+        "vitamin a",
+        "vitamin b12",
+        "vitamin b6",
+        "vitamin c",
+        "vitamin d",
+        "vitamin e",
+        "vitamin k",
+        "zinc"
+      ]
+    },
+    {
+      "id": "317420",
+      "duplicates": [
+        "bromelain"
+      ]
+    },
+    {
+      "id": "206295",
+      "duplicates": [
+        "calories",
+        "cholesterol",
+        "marinol fish oil",
+        "total fat"
+      ]
+    },
+    {
+      "id": "220132",
+      "duplicates": [
+        "vitamin d"
+      ]
+    },
+    {
+      "id": "210510",
+      "duplicates": [
+        "alpha matrix",
+        "calcium",
+        "calories",
+        "cholesterol",
+        "chromium",
+        "iron",
+        "potassium",
+        "protein",
+        "sodium",
+        "total carbohydrates",
+        "total fat",
+        "wheybolic complex"
+      ]
+    },
+    {
+      "id": "220108",
+      "duplicates": [
+        "chloride",
+        "magnesium",
+        "thermo ripped matrix",
+        "vitamin d",
+        "wheybolic complex"
+      ]
+    },
+    {
+      "id": "317637",
+      "duplicates": [
+        "bromelain"
+      ]
+    },
+    {
+      "id": "220082",
+      "duplicates": [
+        "chloride",
+        "magnesium",
+        "thermo ripped matrix",
+        "vitamin d",
+        "wheybolic complex"
+      ]
+    },
+    {
+      "id": "49630",
+      "duplicates": [
+        "advanced creatine complex",
+        "calcium",
+        "calories",
+        "creatine precursor compound",
+        "niacin",
+        "potassium",
+        "power complex",
+        "sodium",
+        "total carbohydrates",
+        "total fat",
+        "vitamin b12"
+      ]
+    },
+    {
+      "id": "49626",
+      "duplicates": [
+        "calcium",
+        "calories",
+        "chloride",
+        "creatine complex",
+        "creatine precursor blend",
+        "potassium",
+        "ripped blend",
+        "sodium",
+        "total carbohydrates",
+        "total fat"
+      ]
+    },
+    {
+      "id": "221113",
+      "duplicates": [
+        "alpha matrix",
+        "calcium",
+        "calories",
+        "cholesterol",
+        "chromium",
+        "potassium",
+        "protein",
+        "sodium",
+        "total carbohydrates",
+        "total fat",
+        "wheybolic complex"
+      ]
+    },
+    {
+      "id": "317626",
+      "duplicates": [
+        "lactase"
+      ]
+    },
+    {
+      "id": "228817",
+      "duplicates": [
+        "calcium",
+        "calories",
+        "chloride",
+        "cholesterol",
+        "chromium",
+        "iron",
+        "magnesium",
+        "potassium",
+        "protein",
+        "sodium",
+        "thermo ripped matrix",
+        "total carbohydrates",
+        "total fat",
+        "vitamin d",
+        "wheybolic complex"
+      ]
+    },
+    {
+      "id": "70297",
+      "duplicates": [
+        "amino acceleration system",
+        "amino acids",
+        "calcium",
+        "calories",
+        "cholesterol",
+        "l carnitine",
+        "leucine",
+        "potassium",
+        "protein",
+        "sodium",
+        "total carbohydrates",
+        "total fat"
+      ]
+    },
+    {
+      "id": "206267",
+      "duplicates": [
+        "vitamin d"
+      ]
+    },
+    {
+      "id": "219982",
+      "duplicates": [
+        "bilberry fruit powder",
+        "calories",
+        "lutein",
+        "total carbohydrates",
+        "vitamin a",
+        "zeaxanthin"
+      ]
+    },
+    {
+      "id": "220211",
+      "duplicates": [
+        "chloride",
+        "magnesium",
+        "thermo ripped matrix",
+        "vitamin d",
+        "wheybolic complex"
+      ]
+    },
+    {
+      "id": "206354",
+      "duplicates": [
+        "vitamin a",
+        "vitamin c",
+        "vitamin d"
+      ]
+    },
+    {
+      "id": "221123",
+      "duplicates": [
+        "alpha matrix",
+        "calcium",
+        "calories",
+        "cholesterol",
+        "chromium",
+        "iron",
+        "potassium",
+        "protein",
+        "sodium",
+        "total carbohydrates",
+        "total fat",
+        "wheybolic complex"
+      ]
+    },
+    {
+      "id": "317631",
+      "duplicates": [
+        "bromelain"
+      ]
+    },
+    {
+      "id": "220137",
+      "duplicates": [
+        "vitamin d"
+      ]
+    },
+    {
+      "id": "229510",
+      "duplicates": [
+        "calcium",
+        "calories",
+        "cholesterol",
+        "chromium",
+        "iron",
+        "potassium",
+        "protein",
+        "sodium",
+        "total carbohydrates",
+        "total fat",
+        "wheybolic complex"
+      ]
+    },
+    {
+      "id": "317632",
+      "duplicates": [
+        "bromelain"
+      ]
+    },
+    {
+      "id": "219942",
+      "duplicates": [
+        "calories",
+        "life sdha algal oil",
+        "total fat"
+      ]
+    },
+    {
+      "id": "228822",
+      "duplicates": [
+        "calcium",
+        "calories",
+        "chloride",
+        "cholesterol",
+        "chromium",
+        "iron",
+        "magnesium",
+        "potassium",
+        "protein",
+        "sodium",
+        "thermo ripped matrix",
+        "total carbohydrates",
+        "total fat",
+        "vitamin d",
+        "wheybolic complex"
+      ]
+    },
+    {
+      "id": "213508",
+      "duplicates": [
+        "apple cider vinegar powder",
+        "bimuno b gos galactooligosaccharides",
+        "calories",
+        "litesse polydextrose fiber",
+        "total carbohydrates"
+      ]
+    },
+    {
+      "id": "199513",
+      "duplicates": [
+        "wheybolic protein complex"
+      ]
+    },
+    {
+      "id": "33341",
+      "duplicates": [
+        "anabolic density compound",
+        "calories",
+        "chloride",
+        "hyper vascular matrix",
+        "magnesium",
+        "niacin",
+        "potassium",
+        "sodium",
+        "thermo metabolic activator",
+        "total carbohydrates",
+        "total fat",
+        "zinc"
+      ]
+    },
+    {
+      "id": "33623",
+      "duplicates": [
+        "calories",
+        "cholesterol",
+        "joint recovery complex",
+        "muscle nutrient maximizer",
+        "potassium",
+        "protein",
+        "sodium",
+        "total carbohydrates",
+        "total fat",
+        "vitamin d3"
+      ]
+    },
+    {
+      "id": "317625",
+      "duplicates": [
+        "lactase"
+      ]
+    },
+    {
+      "id": "228711",
+      "duplicates": [
+        "alpha matrix",
+        "calcium",
+        "calories",
+        "cholesterol",
+        "chromium",
+        "potassium",
+        "protein",
+        "sodium",
+        "total carbohydrates",
+        "total fat",
+        "wheybolic complex"
+      ]
+    },
+    {
+      "id": "74605",
+      "duplicates": [
+        "prohydrolase protease enzyme blend"
+      ]
+    },
+    {
+      "id": "315321",
+      "duplicates": [
+        "beta alanine"
+      ]
+    },
+    {
+      "id": "259900",
+      "duplicates": [
+        "bromelain"
+      ]
+    },
+    {
+      "id": "317643",
+      "duplicates": [
+        "iron"
+      ]
+    },
+    {
+      "id": "220003",
+      "duplicates": [
+        "biotin",
+        "calcium",
+        "calories",
+        "choline",
+        "folate",
+        "inositol",
+        "iodine",
+        "iron",
+        "magnesium",
+        "manganese",
+        "niacin",
+        "pantothenic acid",
+        "riboflavin",
+        "thiamine",
+        "total carbohydrates",
+        "vitamin a",
+        "vitamin b12",
+        "vitamin b6",
+        "vitamin c",
+        "vitamin d",
+        "vitamin e",
+        "zinc"
+      ]
+    },
+    {
+      "id": "69374",
+      "duplicates": [
+        "amino acceleration system",
+        "amino acid blend",
+        "calcium",
+        "calories",
+        "cholesterol",
+        "energizing thermogenic shred complex",
+        "metabolizer matrix",
+        "niacin",
+        "potassium",
+        "protein",
+        "sodium",
+        "total carbohydrates",
+        "total fat"
+      ]
+    },
+    {
+      "id": "220023",
+      "duplicates": [
+        "iron"
+      ]
+    },
+    {
+      "id": "33608",
+      "duplicates": [
+        "calcium",
+        "calories",
+        "chloride",
+        "creatine complex",
+        "creatine precursor blend",
+        "potassium",
+        "ripped blend",
+        "sodium",
+        "total carbohydrates",
+        "total fat"
+      ]
+    },
+    {
+      "id": "33624",
+      "duplicates": [
+        "amino acceleration system",
+        "amino acids",
+        "calcium",
+        "calories",
+        "cholesterol",
+        "l carnitine",
+        "leucine",
+        "potassium",
+        "protein",
+        "sodium",
+        "total carbohydrates",
+        "total fat"
+      ]
+    },
+    {
+      "id": "33327",
+      "duplicates": [
+        "anabolic density compound",
+        "calories",
+        "chloride",
+        "hyper vascular matrix",
+        "magnesium",
+        "niacin",
+        "potassium",
+        "sodium",
+        "thermo metabolic activator",
+        "total carbohydrates",
+        "total fat",
+        "zinc"
+      ]
+    },
+    {
+      "id": "33665",
+      "duplicates": [
+        "amino acceleration system",
+        "amino acids",
+        "calcium",
+        "calories",
+        "cholesterol",
+        "l carnitine",
+        "leucine",
+        "potassium",
+        "protein",
+        "sodium",
+        "total carbohydrates",
+        "total fat"
+      ]
+    },
+    {
+      "id": "220019",
+      "duplicates": [
+        "iron"
+      ]
+    },
+    {
+      "id": "221166",
+      "duplicates": [
+        "chloride",
+        "magnesium",
+        "thermo ripped matrix",
+        "vitamin d",
+        "wheybolic complex"
+      ]
+    },
+    {
+      "id": "69334",
+      "duplicates": [
+        "advanced creatine complex",
+        "calcium",
+        "calories",
+        "creatine precursor compound",
+        "niacin",
+        "potassium",
+        "power complex",
+        "sodium",
+        "total carbohydrates",
+        "total fat",
+        "vitamin b12"
+      ]
+    },
+    {
+      "id": "228812",
+      "duplicates": [
+        "calcium",
+        "calories",
+        "chloride",
+        "cholesterol",
+        "chromium",
+        "iron",
+        "magnesium",
+        "potassium",
+        "protein",
+        "sodium",
+        "thermo ripped matrix",
+        "total carbohydrates",
+        "total fat",
+        "vitamin d",
+        "wheybolic complex"
+      ]
+    },
+    {
+      "id": "317639",
+      "duplicates": [
+        "bromelain"
+      ]
+    },
+    {
+      "id": "199515",
+      "duplicates": [
+        "wheybolic protein complex"
+      ]
+    },
+    {
+      "id": "220215",
+      "duplicates": [
+        "alpha matrix",
+        "calcium",
+        "calories",
+        "cholesterol",
+        "chromium",
+        "iron",
+        "potassium",
+        "protein",
+        "sodium",
+        "total carbohydrates",
+        "total fat",
+        "wheybolic complex"
+      ]
+    },
+    {
+      "id": "317642",
+      "duplicates": [
+        "bromelain"
+      ]
+    },
+    {
+      "id": "178562",
+      "duplicates": [
+        "bacillus coagulans is 2"
+      ]
+    },
+    {
+      "id": "178713",
+      "duplicates": [
+        "bacillus coagulans is 2"
+      ]
+    },
+    {
+      "id": "250086",
+      "duplicates": [
+        "calories",
+        "protein",
+        "sodium",
+        "total carbohydrates",
+        "verisol bioactive collagen peptides",
+        "vitamin a",
+        "vitamin e"
+      ]
+    },
+    {
+      "id": "273855",
+      "duplicates": [
+        "biotin",
+        "calories",
+        "folate",
+        "iodine",
+        "pantothenic acid",
+        "vitamin a",
+        "vitamin b12",
+        "vitamin c",
+        "vitamin d",
+        "vitamin e",
+        "zinc"
+      ]
+    },
+    {
+      "id": "178781",
+      "duplicates": [
+        "bacillus coagulans"
+      ]
+    },
+    {
+      "id": "273865",
+      "duplicates": [
+        "calories",
+        "iron",
+        "potassium",
+        "sodium",
+        "total carbohydrates"
+      ]
+    },
+    {
+      "id": "239862",
+      "duplicates": [
+        "biotin",
+        "calcium",
+        "copper",
+        "folic acid",
+        "iodine",
+        "iron",
+        "niacin",
+        "pantothenic acid",
+        "riboflavin",
+        "sodium",
+        "thiamine",
+        "total carbohydrates",
+        "vitamin a",
+        "vitamin b12",
+        "vitamin b6",
+        "vitamin c",
+        "vitamin d3",
+        "vitamin e",
+        "vitamin k",
+        "zinc"
+      ]
+    },
+    {
+      "id": "223369",
+      "duplicates": [
+        "bacillus coagulans",
+        "calories",
+        "prebiotic",
+        "sodium",
+        "total carbohydrates"
+      ]
+    },
+    {
+      "id": "224615",
+      "duplicates": [
+        "calories",
+        "total fat",
+        "total omega 3 fatty acids"
+      ]
+    },
+    {
+      "id": "206489",
+      "duplicates": [
+        "olly phytonutrient rich super foods blend",
+        "vitamin b12"
+      ]
+    },
+    {
+      "id": "273629",
+      "duplicates": [
+        "bacillus coagulans"
+      ]
+    },
+    {
+      "id": "291234",
+      "duplicates": [
+        "vitamin d"
+      ]
+    },
+    {
+      "id": "299056",
+      "duplicates": [
+        "tolerase g",
+        "vitamin d"
+      ]
+    },
+    {
+      "id": "317964",
+      "duplicates": [
+        "vitamin d"
+      ]
+    },
+    {
+      "id": "246434",
+      "duplicates": [
+        "vitamin d"
+      ]
+    },
+    {
+      "id": "287473",
+      "duplicates": [
+        "probiotic blend"
+      ]
+    },
+    {
+      "id": "294050",
+      "duplicates": [
+        "vitamin b6",
+        "vitamin d"
+      ]
+    },
+    {
+      "id": "184730",
+      "duplicates": [
+        "probiotic blend"
+      ]
+    },
+    {
+      "id": "278251",
+      "duplicates": [
+        "probiotic blend"
+      ]
+    },
+    {
+      "id": "294051",
+      "duplicates": [
+        "vitamin d"
+      ]
+    },
+    {
+      "id": "278332",
+      "duplicates": [
+        "berry fruit blend",
+        "biotin",
+        "calories",
+        "choline",
+        "chromium",
+        "folate",
+        "iodine",
+        "niacin",
+        "pantothenic acid",
+        "riboflavin",
+        "sodium",
+        "thiamine",
+        "total carbohydrates",
+        "vitamin a",
+        "vitamin b12",
+        "vitamin b6",
+        "vitamin c",
+        "vitamin d",
+        "vitamin e",
+        "vitamin k",
+        "zinc"
+      ]
+    },
+    {
+      "id": "241211",
+      "duplicates": [
+        "vitamin d"
+      ]
+    },
+    {
+      "id": "241216",
+      "duplicates": [
+        "vitamin d"
+      ]
+    },
+    {
+      "id": "241222",
+      "duplicates": [
+        "calcium",
+        "folate",
+        "inositol",
+        "iodine",
+        "magnesium",
+        "pantothenic acid",
+        "vitamin b12",
+        "vitamin b6",
+        "vitamin c",
+        "vitamin d",
+        "vitamin e",
+        "zinc"
+      ]
+    },
+    {
+      "id": "241208",
+      "duplicates": [
+        "vitamin d"
+      ]
+    },
+    {
+      "id": "228405",
+      "duplicates": [
+        "calories",
+        "sodium",
+        "total carbohydrates",
+        "vitamin c"
+      ]
+    },
+    {
+      "id": "218010",
+      "duplicates": [
+        "sodium"
+      ]
+    },
+    {
+      "id": "270561",
+      "duplicates": [
+        "vitamin e"
+      ]
+    },
+    {
+      "id": "178024",
+      "duplicates": [
+        "vitamin e"
+      ]
+    },
+    {
+      "id": "337436",
+      "duplicates": [
+        "vitamin d"
+      ]
+    },
+    {
+      "id": "178052",
+      "duplicates": [
+        "vitamin e"
+      ]
+    },
+    {
+      "id": "266727",
+      "duplicates": [
+        "folate",
+        "vitamin e"
+      ]
+    },
+    {
+      "id": "269892",
+      "duplicates": [
+        "magnesium",
+        "vitamin b6",
+        "zinc"
+      ]
+    },
+    {
+      "id": "328138",
+      "duplicates": [
+        "calories",
+        "sodium",
+        "total carbohydrate",
+        "zinc"
+      ]
+    },
+    {
+      "id": "337259",
+      "duplicates": [
+        "black elderberry extract",
+        "calories",
+        "proprietary blend",
+        "total carbohydrates",
+        "vitamin c",
+        "zinc"
+      ]
+    },
+    {
+      "id": "304671",
+      "duplicates": [
+        "calcium",
+        "calories",
+        "ginger",
+        "total carbohydrates"
+      ]
+    },
+    {
+      "id": "273480",
+      "duplicates": [
+        "calories",
+        "total carbohydrates",
+        "vitamin d3"
+      ]
+    },
+    {
+      "id": "293397",
+      "duplicates": [
+        "vitamin d3"
+      ]
+    },
+    {
+      "id": "67530",
+      "duplicates": [
+        "calories",
+        "total carbohydrates"
+      ]
+    },
+    {
+      "id": "293405",
+      "duplicates": [
+        "calories",
+        "sodium",
+        "total carbohydrates",
+        "zinc"
+      ]
+    },
+    {
+      "id": "317116",
+      "duplicates": [
+        "black elderberry extract",
+        "calories",
+        "proprietary blend",
+        "total carbohydrates",
+        "vitamin c",
+        "zinc"
+      ]
+    },
+    {
+      "id": "304687",
+      "duplicates": [
+        "apple cider vinegar",
+        "black elder berry extract",
+        "calories",
+        "english ivy leaf extract",
+        "honey",
+        "melatonin",
+        "total carbohydrate",
+        "vitamin c",
+        "zinc"
+      ]
+    },
+    {
+      "id": "326761",
+      "duplicates": [
+        "bacillus subtilis de 111"
+      ]
+    },
+    {
+      "id": "297681",
+      "duplicates": [
+        "bacillus subtilis de 111"
+      ]
+    },
+    {
+      "id": "326701",
+      "duplicates": [
+        "bacillus subtilis de 111",
+        "vitamin d"
+      ]
+    },
+    {
+      "id": "4283",
+      "duplicates": [
+        "vitamin a",
+        "vitamin d"
+      ]
+    },
+    {
+      "id": "239545",
+      "duplicates": [
+        "bacillus coagulans"
+      ]
+    },
+    {
+      "id": "239778",
+      "duplicates": [
+        "biotin",
+        "calcium",
+        "copper",
+        "folic acid",
+        "iodine",
+        "iron",
+        "niacin",
+        "pantothenic acid",
+        "riboflavin",
+        "sodium",
+        "thiamine",
+        "total carbohydrates",
+        "vitamin a",
+        "vitamin b12",
+        "vitamin b6",
+        "vitamin c",
+        "vitamin d",
+        "vitamin e",
+        "vitamin k",
+        "zinc"
+      ]
+    },
+    {
+      "id": "277405",
+      "duplicates": [
+        "vitamin d"
+      ]
+    },
+    {
+      "id": "302761",
+      "duplicates": [
+        "calcium",
+        "vitamin d3",
+        "vitamin k"
+      ]
+    },
+    {
+      "id": "321606",
+      "duplicates": [
+        "vitamin d"
+      ]
+    }
+  ],
+  "top_duplicate_after": [
+    {
+      "id": "250086",
+      "duplicates": [
+        "vitamin e"
+      ]
+    }
+  ],
+  "all_tree_duplicate_before": [
+    {
+      "id": "69507",
+      "duplicates": [
+        "acetyl l carnitine",
+        "bacillus subtilis",
+        "prohydrolase protease enzyme blend"
+      ]
+    },
+    {
+      "id": "220191",
+      "duplicates": [
+        "branched chain amino acids",
+        "caffeine anhydrous",
+        "chloride",
+        "dandelion extract",
+        "hawthorne extract",
+        "hibiscus flower powder",
+        "l carnitine",
+        "magnesium",
+        "potassium chloride",
+        "prohydrolase protease enzyme blend",
+        "thermo ripped matrix",
+        "uva ursi leaves powder",
+        "velositol amylopectin chromium complex",
+        "vitamin d",
+        "water balance blend",
+        "wheybolic complex"
+      ]
+    },
+    {
+      "id": "302506",
+      "duplicates": [
+        "added sugars",
+        "calcium",
+        "calories",
+        "phosphorous",
+        "total carbohydrate",
+        "total sugars",
+        "vitamin d"
+      ]
+    },
+    {
+      "id": "317636",
+      "duplicates": [
+        "bromelain"
+      ]
+    },
+    {
+      "id": "27809",
+      "duplicates": [
+        "as whey protein isolate",
+        "hydrolyzed whey protein"
+      ]
+    },
+    {
+      "id": "206312",
+      "duplicates": [
+        "calories",
+        "cholesterol",
+        "docosahexaenoic acid",
+        "marinol fish oil",
+        "total fat",
+        "total omega 3 fatty acids",
+        "vitamin a",
+        "vitamin d",
+        "vitamin e"
+      ]
+    },
+    {
+      "id": "228714",
+      "duplicates": [
+        "added sugars",
+        "branched chain amino acids",
+        "caffeine anhydrous",
+        "calcium",
+        "calories",
+        "chloride",
+        "cholesterol",
+        "chromium",
+        "dandelion extract",
+        "glutamic acid and glutamine",
+        "hawthorne extract",
+        "hibiscus flower powder",
+        "iron",
+        "l carnitine",
+        "l isoleucine",
+        "l leucine",
+        "l valine",
+        "magnesium",
+        "potassium",
+        "potassium chloride",
+        "prohydrolase protease enzyme blend",
+        "protein",
+        "saturated fat",
+        "sodium",
+        "thermo ripped matrix",
+        "total carbohydrates",
+        "total fat",
+        "total sugars",
+        "uva ursi leaves powder",
+        "velositol amylopectin chromium complex",
+        "vitamin d",
+        "water balance blend",
+        "wheybolic complex"
+      ]
+    },
+    {
+      "id": "221108",
+      "duplicates": [
+        "alpha matrix",
+        "betapower betaine anhydrous",
+        "branched chain amino acids",
+        "calcium",
+        "calories",
+        "cholesterol",
+        "chromium",
+        "creatine",
+        "glutamic acid and glutamine",
+        "l isoleucine",
+        "l leucine",
+        "l valine",
+        "potassium",
+        "prohydrolase protease enzyme blend",
+        "protein",
+        "saturated fat",
+        "sodium",
+        "testofen fenugreek seed extract",
+        "total carbohydrates",
+        "total fat",
+        "total sugars",
+        "velositol amylopectin chromium complex",
+        "wheybolic complex"
+      ]
+    },
+    {
+      "id": "220125",
+      "duplicates": [
+        "acerola fruit juice powder extract",
+        "added sugars",
+        "amaranth powder",
+        "animal proteins",
+        "banana powder",
+        "beef protein isolate",
+        "biotin",
+        "broccoli powder",
+        "brown rice protein",
+        "calcium",
+        "calories",
+        "chicken protein isolate",
+        "chickpea protein",
+        "cholesterol",
+        "choline",
+        "complex carb blend",
+        "copper",
+        "dietary fats blend",
+        "dietary fiber",
+        "egg albumin",
+        "fat blend",
+        "flavors",
+        "flaxseed powder",
+        "folate",
+        "folic acid",
+        "fruit blend",
+        "grains legumes",
+        "iodine",
+        "iron",
+        "kale powder",
+        "magnesium",
+        "manganese",
+        "mct oil",
+        "molybdenum",
+        "niacin",
+        "oat flour",
+        "other carbohydrates",
+        "other fats",
+        "pantothenic acid",
+        "pea protein",
+        "pea starch",
+        "phosphorus",
+        "plant proteins",
+        "potassium",
+        "protein",
+        "protein blend",
+        "quinoa powder",
+        "raspberry powder",
+        "riboflavin",
+        "saturated fat",
+        "sodium",
+        "sweet potato powder",
+        "thiamine",
+        "total carbohydrates",
+        "total fat",
+        "total sugars",
+        "trans fat",
+        "veggie blend",
+        "vitamin a",
+        "vitamin b12",
+        "vitamin b6",
+        "vitamin c",
+        "vitamin d",
+        "vitamin e",
+        "vitamin k",
+        "wild blueberry powder",
+        "zinc"
+      ]
+    },
+    {
+      "id": "317420",
+      "duplicates": [
+        "bromelain",
+        "dietary fiber"
+      ]
+    },
+    {
+      "id": "206295",
+      "duplicates": [
+        "calories",
+        "cholesterol",
+        "docosahexaenoic acid",
+        "marinol fish oil",
+        "total fat",
+        "total omega 3 fatty acids"
+      ]
+    },
+    {
+      "id": "47225",
+      "duplicates": [
+        "glutamic acid"
+      ]
+    },
+    {
+      "id": "220132",
+      "duplicates": [
+        "protein blend",
+        "quinoa powder",
+        "vitamin d"
+      ]
+    },
+    {
+      "id": "210510",
+      "duplicates": [
+        "alpha matrix",
+        "betapower betaine anhydrous",
+        "branched chain amino acids",
+        "calcium",
+        "calories",
+        "cholesterol",
+        "chromium",
+        "creatine",
+        "dietary fiber",
+        "glutamic acid and glutamine",
+        "iron",
+        "l isoleucine",
+        "l leucine",
+        "l valine",
+        "potassium",
+        "prohydrolase protease enzyme blend",
+        "protein",
+        "saturated fat",
+        "sodium",
+        "testofen fenugreek seed extract",
+        "total carbohydrates",
+        "total fat",
+        "total sugars",
+        "velositol amylopectin chromium complex",
+        "wheybolic complex"
+      ]
+    },
+    {
+      "id": "220108",
+      "duplicates": [
+        "branched chain amino acids",
+        "caffeine anhydrous",
+        "chloride",
+        "dandelion extract",
+        "hawthorne extract",
+        "hibiscus flower powder",
+        "l carnitine",
+        "magnesium",
+        "potassium chloride",
+        "prohydrolase protease enzyme blend",
+        "thermo ripped matrix",
+        "uva ursi leaves powder",
+        "velositol amylopectin chromium complex",
+        "vitamin d",
+        "water balance blend",
+        "wheybolic complex"
+      ]
+    },
+    {
+      "id": "317637",
+      "duplicates": [
+        "bromelain"
+      ]
+    },
+    {
+      "id": "317640",
+      "duplicates": [
+        "added sugars"
+      ]
+    },
+    {
+      "id": "220082",
+      "duplicates": [
+        "branched chain amino acids",
+        "caffeine anhydrous",
+        "chloride",
+        "dandelion extract",
+        "hawthorne extract",
+        "hibiscus flower powder",
+        "l carnitine",
+        "magnesium",
+        "potassium chloride",
+        "prohydrolase protease enzyme blend",
+        "thermo ripped matrix",
+        "uva ursi leaves powder",
+        "velositol amylopectin chromium complex",
+        "vitamin d",
+        "water balance blend",
+        "wheybolic complex"
+      ]
+    },
+    {
+      "id": "49630",
+      "duplicates": [
+        "advanced creatine complex",
+        "agmatine sulfate",
+        "alpha ketoglutarate",
+        "betaine",
+        "calcium",
+        "calories",
+        "calories from fat",
+        "carnosyn",
+        "choline",
+        "coq 10",
+        "creatine citrate",
+        "creatine ethyl ester",
+        "creatine hydrochloride",
+        "creatine precursor compound",
+        "fenugreek seed extract",
+        "glycine",
+        "guanidinoacetate",
+        "l methionine",
+        "niacin",
+        "ot2 creatine monohydrate",
+        "potassium",
+        "power complex",
+        "saturated fat",
+        "sodium",
+        "total carbohydrates",
+        "total fat",
+        "vitamin b12"
+      ]
+    },
+    {
+      "id": "69455",
+      "duplicates": [
+        "protease"
+      ]
+    },
+    {
+      "id": "49626",
+      "duplicates": [
+        "alpha ketoglutaric acid",
+        "calcium",
+        "calories",
+        "calories from fat",
+        "chloride",
+        "conjugated linoleic acid",
+        "creatine citrate",
+        "creatine complex",
+        "creatine ethyl ester hydrochloride",
+        "creatine hydrochloride",
+        "creatine precursor blend",
+        "dandelion root powder",
+        "glycine",
+        "green coffee extract",
+        "guanidinoacetate",
+        "l methionine",
+        "lychee fruit extract",
+        "ot2 tm creatine",
+        "potassium",
+        "prickly pear",
+        "ripped blend",
+        "sodium",
+        "sugar",
+        "total carbohydrates",
+        "total fat"
+      ]
+    },
+    {
+      "id": "221113",
+      "duplicates": [
+        "added sugars",
+        "alpha matrix",
+        "betapower betaine anhydrous",
+        "branched chain amino acids",
+        "calcium",
+        "calories",
+        "cholesterol",
+        "chromium",
+        "creatine",
+        "glutamic acid and glutamine",
+        "l isoleucine",
+        "l leucine",
+        "l valine",
+        "potassium",
+        "prohydrolase protease enzyme blend",
+        "protein",
+        "saturated fat",
+        "sodium",
+        "testofen fenugreek seed extract",
+        "total carbohydrates",
+        "total fat",
+        "total sugars",
+        "velositol amylopectin chromium complex",
+        "wheybolic complex"
+      ]
+    },
+    {
+      "id": "69425",
+      "duplicates": [
+        "protease"
+      ]
+    },
+    {
+      "id": "317626",
+      "duplicates": [
+        "lactase"
+      ]
+    },
+    {
+      "id": "47234",
+      "duplicates": [
+        "glutamic acid"
+      ]
+    },
+    {
+      "id": "219937",
+      "duplicates": [
+        "added sugars"
+      ]
+    },
+    {
+      "id": "315322",
+      "duplicates": [
+        "calcium caseinate",
+        "egg albumen",
+        "glutamine peptides",
+        "milk protein isolate",
+        "whey protein concentrate",
+        "whey protein isolate"
+      ]
+    },
+    {
+      "id": "228817",
+      "duplicates": [
+        "added sugars",
+        "branched chain amino acids",
+        "caffeine anhydrous",
+        "calcium",
+        "calories",
+        "chloride",
+        "cholesterol",
+        "chromium",
+        "dandelion extract",
+        "glutamic acid and glutamine",
+        "hawthorne extract",
+        "hibiscus flower powder",
+        "iron",
+        "l carnitine",
+        "l isoleucine",
+        "l leucine",
+        "l valine",
+        "magnesium",
+        "potassium",
+        "potassium chloride",
+        "prohydrolase protease enzyme blend",
+        "protein",
+        "saturated fat",
+        "sodium",
+        "thermo ripped matrix",
+        "total carbohydrates",
+        "total fat",
+        "total sugars",
+        "uva ursi leaves powder",
+        "velositol amylopectin chromium complex",
+        "vitamin d",
+        "water balance blend",
+        "wheybolic complex"
+      ]
+    },
+    {
+      "id": "70297",
+      "duplicates": [
+        "alpha galactosidase",
+        "amino acceleration system",
+        "amino acids",
+        "aminogen",
+        "amylase",
+        "arginine",
+        "bromelain",
+        "calcium",
+        "calories",
+        "calories from fat",
+        "carbogen",
+        "cerecalase",
+        "cholesterol",
+        "dietary fiber",
+        "enzyme matrix blend",
+        "glucoamylase",
+        "glutamine",
+        "invertase",
+        "l carnitine",
+        "lactase",
+        "leucine",
+        "lipase",
+        "peptidase",
+        "potassium",
+        "protease",
+        "protease 3",
+        "protease 4 5",
+        "protease 6",
+        "protein",
+        "saturated fat",
+        "sodium",
+        "sugar",
+        "total carbohydrates",
+        "total fat"
+      ]
+    },
+    {
+      "id": "206267",
+      "duplicates": [
+        "vitamin d"
+      ]
+    },
+    {
+      "id": "211331",
+      "duplicates": [
+        "protein blend",
+        "quinoa powder"
+      ]
+    },
+    {
+      "id": "219982",
+      "duplicates": [
+        "bilberry fruit powder",
+        "calories",
+        "lutein",
+        "total carbohydrates",
+        "vitamin a",
+        "zeaxanthin"
+      ]
+    },
+    {
+      "id": "220211",
+      "duplicates": [
+        "branched chain amino acids",
+        "caffeine anhydrous",
+        "chloride",
+        "dandelion extract",
+        "hawthorne extract",
+        "hibiscus flower powder",
+        "l carnitine",
+        "magnesium",
+        "potassium chloride",
+        "prohydrolase protease enzyme blend",
+        "thermo ripped matrix",
+        "uva ursi leaves powder",
+        "velositol amylopectin chromium complex",
+        "vitamin d",
+        "water balance blend",
+        "wheybolic complex"
+      ]
+    },
+    {
+      "id": "199511",
+      "duplicates": [
+        "glutamic acid",
+        "glutamic acid and glutamine",
+        "glutamine",
+        "l isoleucine",
+        "l leucine",
+        "l valine"
+      ]
+    },
+    {
+      "id": "219941",
+      "duplicates": [
+        "added sugars"
+      ]
+    },
+    {
+      "id": "42349",
+      "duplicates": [
+        "as whey protein isolate",
+        "hydrolyzed whey"
+      ]
+    },
+    {
+      "id": "206354",
+      "duplicates": [
+        "vitamin a",
+        "vitamin c",
+        "vitamin d"
+      ]
+    },
+    {
+      "id": "221123",
+      "duplicates": [
+        "added sugars",
+        "alpha matrix",
+        "betapower betaine anhydrous",
+        "branched chain amino acids",
+        "calcium",
+        "calories",
+        "cholesterol",
+        "chromium",
+        "creatine",
+        "glutamic acid and glutamine",
+        "iron",
+        "l isoleucine",
+        "l leucine",
+        "l valine",
+        "potassium",
+        "prohydrolase protease enzyme blend",
+        "protein",
+        "saturated fat",
+        "sodium",
+        "testofen fenugreek seed extract",
+        "total carbohydrates",
+        "total fat",
+        "total sugars",
+        "velositol amylopectin chromium complex",
+        "wheybolic complex"
+      ]
+    },
+    {
+      "id": "317631",
+      "duplicates": [
+        "bromelain"
+      ]
+    },
+    {
+      "id": "220137",
+      "duplicates": [
+        "protein blend",
+        "quinoa powder",
+        "vitamin d"
+      ]
+    },
+    {
+      "id": "229510",
+      "duplicates": [
+        "branched chain amino acids",
+        "calcium",
+        "calories",
+        "cholesterol",
+        "chromium",
+        "glutamic acid and glutamine",
+        "iron",
+        "l isoleucine",
+        "l leucine",
+        "l valine",
+        "potassium",
+        "prohydrolase protease enzyme blend",
+        "protein",
+        "saturated fat",
+        "sodium",
+        "total carbohydrates",
+        "total fat",
+        "total sugars",
+        "velositol amylopectin chromium complex",
+        "wheybolic complex"
+      ]
+    },
+    {
+      "id": "317632",
+      "duplicates": [
+        "bromelain"
+      ]
+    },
+    {
+      "id": "219942",
+      "duplicates": [
+        "calories",
+        "docosahexaenoic acid",
+        "life sdha algal oil",
+        "total fat"
+      ]
+    },
+    {
+      "id": "228822",
+      "duplicates": [
+        "added sugars",
+        "branched chain amino acids",
+        "caffeine anhydrous",
+        "calcium",
+        "calories",
+        "chloride",
+        "cholesterol",
+        "chromium",
+        "dandelion extract",
+        "glutamic acid and glutamine",
+        "hawthorne extract",
+        "hibiscus flower powder",
+        "iron",
+        "l carnitine",
+        "l isoleucine",
+        "l leucine",
+        "l valine",
+        "magnesium",
+        "potassium",
+        "potassium chloride",
+        "prohydrolase protease enzyme blend",
+        "protein",
+        "saturated fat",
+        "sodium",
+        "thermo ripped matrix",
+        "total carbohydrates",
+        "total fat",
+        "total sugars",
+        "uva ursi leaves powder",
+        "velositol amylopectin chromium complex",
+        "vitamin d",
+        "water balance blend",
+        "wheybolic complex"
+      ]
+    },
+    {
+      "id": "213508",
+      "duplicates": [
+        "added sugars",
+        "apple cider vinegar powder",
+        "bimuno b gos galactooligosaccharides",
+        "calories",
+        "dietary fiber",
+        "litesse polydextrose fiber",
+        "total carbohydrates",
+        "total sugars"
+      ]
+    },
+    {
+      "id": "199513",
+      "duplicates": [
+        "glutamic acid",
+        "glutamine",
+        "hydrolyzed whey protein",
+        "whey protein isolate",
+        "wheybolic protein complex"
+      ]
+    },
+    {
+      "id": "33341",
+      "duplicates": [
+        "agmatine sulfate",
+        "anabolic density compound",
+        "betaine",
+        "caffeine",
+        "calories",
+        "calories from fat",
+        "capsimax capsicum fruit extract",
+        "chloride",
+        "clarinol r cla isomers",
+        "egcg",
+        "glycerol",
+        "green coffee seed extract",
+        "hyper vascular matrix",
+        "l carnitine",
+        "l citrulline",
+        "l leucine",
+        "magnesium",
+        "niacin",
+        "piperine",
+        "potassium",
+        "prickly pear extract",
+        "resvida trans resveratrol",
+        "sodium",
+        "thermo metabolic activator",
+        "total carbohydrates",
+        "total fat",
+        "zinc"
+      ]
+    },
+    {
+      "id": "33623",
+      "duplicates": [
+        "calories",
+        "calories from fat",
+        "chinese skullcap root extract",
+        "cholesterol",
+        "cutch tree bark extract",
+        "dietary fiber",
+        "fast acting proprietary blend herb botanical",
+        "glutamine",
+        "hyaluronic acid",
+        "joint recovery complex",
+        "leucine",
+        "muscle nutrient maximizer",
+        "potassium",
+        "protein",
+        "saturated fat",
+        "sodium",
+        "sugar",
+        "total carbohydrates",
+        "total fat",
+        "trans fat",
+        "vitamin d3"
+      ]
+    },
+    {
+      "id": "317625",
+      "duplicates": [
+        "lactase"
+      ]
+    },
+    {
+      "id": "228711",
+      "duplicates": [
+        "alpha matrix",
+        "betapower betaine anhydrous",
+        "branched chain amino acids",
+        "calcium",
+        "calories",
+        "cholesterol",
+        "chromium",
+        "creatine",
+        "glutamic acid and glutamine",
+        "l isoleucine",
+        "l leucine",
+        "l valine",
+        "potassium",
+        "prohydrolase protease enzyme blend",
+        "protein",
+        "saturated fat",
+        "sodium",
+        "testofen fenugreek seed extract",
+        "total carbohydrates",
+        "total fat",
+        "total sugars",
+        "velositol amylopectin chromium complex",
+        "wheybolic complex"
+      ]
+    },
+    {
+      "id": "74605",
+      "duplicates": [
+        "ananas comosus",
+        "bacillus subtilis",
+        "prohydrolase protease enzyme blend"
+      ]
+    },
+    {
+      "id": "67394",
+      "duplicates": [
+        "micellar casein",
+        "whey protein isolate"
+      ]
+    },
+    {
+      "id": "315321",
+      "duplicates": [
+        "beta alanine"
+      ]
+    },
+    {
+      "id": "259900",
+      "duplicates": [
+        "bromelain"
+      ]
+    },
+    {
+      "id": "317643",
+      "duplicates": [
+        "iron"
+      ]
+    },
+    {
+      "id": "199514",
+      "duplicates": [
+        "glutamic acid",
+        "glutamine"
+      ]
+    },
+    {
+      "id": "220003",
+      "duplicates": [
+        "biotin",
+        "calcium",
+        "calories",
+        "choline",
+        "folate",
+        "folic acid",
+        "inositol",
+        "iodine",
+        "iron",
+        "magnesium",
+        "manganese",
+        "niacin",
+        "pantothenic acid",
+        "riboflavin",
+        "sugar",
+        "thiamine",
+        "total carbohydrates",
+        "vitamin a",
+        "vitamin b12",
+        "vitamin b6",
+        "vitamin c",
+        "vitamin d",
+        "vitamin e",
+        "zinc"
+      ]
+    },
+    {
+      "id": "259966",
+      "duplicates": [
+        "added sugars"
+      ]
+    },
+    {
+      "id": "69374",
+      "duplicates": [
+        "alanine",
+        "alpha galactosidase",
+        "amino acceleration system",
+        "amino acid blend",
+        "aminogen",
+        "amylase",
+        "arginine",
+        "beta glucanase",
+        "bromelain",
+        "caffeine",
+        "calcium",
+        "calories",
+        "calories from fat",
+        "capsimax fruit extract",
+        "carbogen",
+        "cerecalase",
+        "cholesterol",
+        "energizing thermogenic shred complex",
+        "enzyme matrix blend",
+        "glucoamylase",
+        "glutamine",
+        "hemicellulase",
+        "invertase",
+        "l carnitine",
+        "lactase",
+        "leucine",
+        "lipase",
+        "metabolizer matrix",
+        "methionine",
+        "niacin",
+        "peptidase",
+        "phytase",
+        "piperine",
+        "potassium",
+        "protease",
+        "protein",
+        "saturated fat",
+        "sodium",
+        "sugar",
+        "svetol green coffee extract",
+        "total carbohydrates",
+        "total fat",
+        "tyrosine"
+      ]
+    },
+    {
+      "id": "219925",
+      "duplicates": [
+        "added sugars"
+      ]
+    },
+    {
+      "id": "220023",
+      "duplicates": [
+        "added sugars",
+        "iron"
+      ]
+    },
+    {
+      "id": "33608",
+      "duplicates": [
+        "alpha ketoglutaric acid",
+        "calcium",
+        "calories",
+        "calories from fat",
+        "chloride",
+        "conjugated linoleic acid",
+        "creatine citrate",
+        "creatine complex",
+        "creatine ethyl ester hydrochloride",
+        "creatine hydrochloride",
+        "creatine precursor blend",
+        "dandelion root powder",
+        "glycine",
+        "green coffee extract",
+        "guanidinoacetate",
+        "l methionine",
+        "lychee fruit extract",
+        "ot2 tm creatine",
+        "potassium",
+        "prickly pear",
+        "ripped blend",
+        "sodium",
+        "sugar",
+        "total carbohydrates",
+        "total fat"
+      ]
+    },
+    {
+      "id": "42360",
+      "duplicates": [
+        "as whey protein isolate",
+        "hydrolyzed whey protein"
+      ]
+    },
+    {
+      "id": "33624",
+      "duplicates": [
+        "amino acceleration system",
+        "amino acids",
+        "arginine",
+        "bromelain",
+        "calcium",
+        "calories",
+        "calories from fat",
+        "cholesterol",
+        "dietary fiber",
+        "glutamine",
+        "l carnitine",
+        "leucine",
+        "papain",
+        "potassium",
+        "protein",
+        "saturated fat",
+        "sodium",
+        "sugar",
+        "total carbohydrates",
+        "total fat"
+      ]
+    },
+    {
+      "id": "317419",
+      "duplicates": [
+        "dietary fiber"
+      ]
+    },
+    {
+      "id": "33327",
+      "duplicates": [
+        "agmatine sulfate",
+        "anabolic density compound",
+        "betaine",
+        "caffeine",
+        "calories",
+        "calories from fat",
+        "capsimax capsicum fruit extract",
+        "chloride",
+        "clarinol r cla isomers",
+        "egcg",
+        "glycerol",
+        "green coffee seed extract",
+        "hyper vascular matrix",
+        "l carnitine",
+        "l citrulline",
+        "l leucine",
+        "magnesium",
+        "niacin",
+        "piperine",
+        "potassium",
+        "prickly pear extract",
+        "resvida trans resveratrol",
+        "sodium",
+        "thermo metabolic activator",
+        "total carbohydrates",
+        "total fat",
+        "zinc"
+      ]
+    },
+    {
+      "id": "33665",
+      "duplicates": [
+        "amino acceleration system",
+        "amino acids",
+        "arginine",
+        "bromelain",
+        "calcium",
+        "calories",
+        "calories from fat",
+        "cholesterol",
+        "dietary fiber",
+        "glutamine",
+        "l carnitine",
+        "leucine",
+        "papain",
+        "potassium",
+        "protein",
+        "saturated fat",
+        "sodium",
+        "sugar",
+        "total carbohydrates",
+        "total fat"
+      ]
+    },
+    {
+      "id": "220019",
+      "duplicates": [
+        "added sugars",
+        "dietary fiber",
+        "iron"
+      ]
+    },
+    {
+      "id": "31064",
+      "duplicates": [
+        "hydrolyzed whey protein",
+        "whey protein isolate"
+      ]
+    },
+    {
+      "id": "221166",
+      "duplicates": [
+        "branched chain amino acids",
+        "caffeine anhydrous",
+        "chloride",
+        "dandelion extract",
+        "hawthorne extract",
+        "hibiscus flower powder",
+        "l carnitine",
+        "magnesium",
+        "potassium chloride",
+        "prohydrolase protease enzyme blend",
+        "thermo ripped matrix",
+        "uva ursi leaves powder",
+        "velositol amylopectin chromium complex",
+        "vitamin d",
+        "water balance blend",
+        "wheybolic complex"
+      ]
+    },
+    {
+      "id": "219898",
+      "duplicates": [
+        "added sugars"
+      ]
+    },
+    {
+      "id": "69334",
+      "duplicates": [
+        "advanced creatine complex",
+        "agmatine sulfate",
+        "alpha ketoglutarate",
+        "betaine",
+        "calcium",
+        "calories",
+        "calories from fat",
+        "carnosyn",
+        "choline",
+        "coq 10",
+        "creatine citrate",
+        "creatine ethyl ester",
+        "creatine precursor compound",
+        "fenugreek seed extract",
+        "glycine",
+        "guanidinoacetate",
+        "l methionine",
+        "niacin",
+        "ot2 creatine monohydrate",
+        "potassium",
+        "power complex",
+        "saturated fat",
+        "sodium",
+        "total carbohydrates",
+        "total fat",
+        "vitamin b12"
+      ]
+    },
+    {
+      "id": "228812",
+      "duplicates": [
+        "added sugars",
+        "branched chain amino acids",
+        "caffeine anhydrous",
+        "calcium",
+        "calories",
+        "chloride",
+        "cholesterol",
+        "chromium",
+        "dandelion extract",
+        "glutamic acid and glutamine",
+        "hawthorne extract",
+        "hibiscus flower powder",
+        "iron",
+        "l carnitine",
+        "l isoleucine",
+        "l leucine",
+        "l valine",
+        "magnesium",
+        "potassium",
+        "potassium chloride",
+        "prohydrolase protease enzyme blend",
+        "protein",
+        "saturated fat",
+        "sodium",
+        "thermo ripped matrix",
+        "total carbohydrates",
+        "total fat",
+        "total sugars",
+        "uva ursi leaves powder",
+        "velositol amylopectin chromium complex",
+        "vitamin d",
+        "water balance blend",
+        "wheybolic complex"
+      ]
+    },
+    {
+      "id": "317422",
+      "duplicates": [
+        "dietary fiber"
+      ]
+    },
+    {
+      "id": "317639",
+      "duplicates": [
+        "bromelain"
+      ]
+    },
+    {
+      "id": "219791",
+      "duplicates": [
+        "added sugars"
+      ]
+    },
+    {
+      "id": "25712",
+      "duplicates": [
+        "as whey protein isolate",
+        "hydrolyzed whey protein"
+      ]
+    },
+    {
+      "id": "27810",
+      "duplicates": [
+        "as whey protein isolate",
+        "hydrolyzed whey protein"
+      ]
+    },
+    {
+      "id": "199515",
+      "duplicates": [
+        "glutamic acid",
+        "glutamine",
+        "hydrolyzed whey protein",
+        "whey protein isolate",
+        "wheybolic protein complex"
+      ]
+    },
+    {
+      "id": "220215",
+      "duplicates": [
+        "alpha matrix",
+        "betapower betaine anhydrous",
+        "branched chain amino acids",
+        "calcium",
+        "calories",
+        "cholesterol",
+        "chromium",
+        "creatine",
+        "dietary fiber",
+        "glutamic acid and glutamine",
+        "iron",
+        "l isoleucine",
+        "l leucine",
+        "l valine",
+        "potassium",
+        "prohydrolase protease enzyme blend",
+        "protein",
+        "saturated fat",
+        "sodium",
+        "testofen fenugreek seed extract",
+        "total carbohydrates",
+        "total fat",
+        "total sugars",
+        "velositol amylopectin chromium complex",
+        "wheybolic complex"
+      ]
+    },
+    {
+      "id": "42357",
+      "duplicates": [
+        "as whey protein isolate",
+        "hydrolyzed whey protein"
+      ]
+    },
+    {
+      "id": "317642",
+      "duplicates": [
+        "bromelain"
+      ]
+    },
+    {
+      "id": "178562",
+      "duplicates": [
+        "bacillus coagulans is 2"
+      ]
+    },
+    {
+      "id": "178713",
+      "duplicates": [
+        "bacillus coagulans is 2"
+      ]
+    },
+    {
+      "id": "250086",
+      "duplicates": [
+        "added sugars",
+        "calories",
+        "protein",
+        "sodium",
+        "total carbohydrates",
+        "total sugars",
+        "type i and type iii collagen",
+        "verisol bioactive collagen peptides",
+        "vitamin a",
+        "vitamin e"
+      ]
+    },
+    {
+      "id": "273855",
+      "duplicates": [
+        "added sugars",
+        "biotin",
+        "calories",
+        "folate",
+        "folic acid",
+        "iodine",
+        "pantothenic acid",
+        "total sugars",
+        "vitamin a",
+        "vitamin b12",
+        "vitamin c",
+        "vitamin d",
+        "vitamin e",
+        "zinc"
+      ]
+    },
+    {
+      "id": "178781",
+      "duplicates": [
+        "bacillus coagulans"
+      ]
+    },
+    {
+      "id": "273865",
+      "duplicates": [
+        "added sugars",
+        "calories",
+        "dietary fiber",
+        "iron",
+        "potassium",
+        "sodium",
+        "soluble fiber",
+        "total carbohydrates",
+        "total sugars"
+      ]
+    },
+    {
+      "id": "178679",
+      "duplicates": [
+        "sugar"
+      ]
+    },
+    {
+      "id": "239862",
+      "duplicates": [
+        "biotin",
+        "calcium",
+        "copper",
+        "folic acid",
+        "iodine",
+        "iron",
+        "niacin",
+        "pantothenic acid",
+        "riboflavin",
+        "sodium",
+        "sugar",
+        "thiamine",
+        "total carbohydrates",
+        "vitamin a",
+        "vitamin b12",
+        "vitamin b6",
+        "vitamin c",
+        "vitamin d3",
+        "vitamin e",
+        "vitamin k",
+        "zinc"
+      ]
+    },
+    {
+      "id": "178520",
+      "duplicates": [
+        "sugar"
+      ]
+    },
+    {
+      "id": "223369",
+      "duplicates": [
+        "added sugars",
+        "bacillus coagulans",
+        "calories",
+        "dietary fiber",
+        "prebiotic",
+        "sodium",
+        "total carbohydrates",
+        "total sugars"
+      ]
+    },
+    {
+      "id": "224615",
+      "duplicates": [
+        "calories",
+        "docosahexaenoic acid",
+        "eicosapentaenoic acid",
+        "other omega 3 fatty acids",
+        "saturated fat",
+        "total fat",
+        "total omega 3 fatty acids",
+        "trans fat"
+      ]
+    },
+    {
+      "id": "206489",
+      "duplicates": [
+        "acai juice powder",
+        "beet juice powder",
+        "blueberry juice powder",
+        "elderberry juice powder",
+        "grape extract",
+        "juice powders",
+        "olly phytonutrient rich super foods blend",
+        "organic wheat grass juice powder",
+        "papaya juice powder",
+        "pomegranate juice powder",
+        "tamarind juice powder",
+        "vitamin b12",
+        "watercress juice powder"
+      ]
+    },
+    {
+      "id": "273629",
+      "duplicates": [
+        "bacillus coagulans"
+      ]
+    },
+    {
+      "id": "291234",
+      "duplicates": [
+        "vitamin d"
+      ]
+    },
+    {
+      "id": "299056",
+      "duplicates": [
+        "l 5 methyltetrahydrofolate",
+        "tolerase g",
+        "vitamin d"
+      ]
+    },
+    {
+      "id": "293904",
+      "duplicates": [
+        "added sugars"
+      ]
+    },
+    {
+      "id": "317964",
+      "duplicates": [
+        "vitamin d"
+      ]
+    },
+    {
+      "id": "246434",
+      "duplicates": [
+        "vitamin d"
+      ]
+    },
+    {
+      "id": "287473",
+      "duplicates": [
+        "probiotic blend"
+      ]
+    },
+    {
+      "id": "294050",
+      "duplicates": [
+        "sugar alcohol",
+        "vitamin b6",
+        "vitamin d"
+      ]
+    },
+    {
+      "id": "184730",
+      "duplicates": [
+        "probiotic blend"
+      ]
+    },
+    {
+      "id": "278251",
+      "duplicates": [
+        "probiotic blend"
+      ]
+    },
+    {
+      "id": "294051",
+      "duplicates": [
+        "vitamin d"
+      ]
+    },
+    {
+      "id": "278332",
+      "duplicates": [
+        "added sugars",
+        "berry fruit blend",
+        "biotin",
+        "blueberry",
+        "calories",
+        "choline",
+        "chromium",
+        "cranberry",
+        "folate",
+        "iodine",
+        "l 5 mthf",
+        "lemon",
+        "niacin",
+        "orange",
+        "pantothenic acid",
+        "pomegranate",
+        "raspberry",
+        "riboflavin",
+        "sodium",
+        "strawberry",
+        "tart cherry",
+        "thiamine",
+        "total carbohydrates",
+        "total sugars",
+        "vitamin a",
+        "vitamin b12",
+        "vitamin b6",
+        "vitamin c",
+        "vitamin d",
+        "vitamin e",
+        "vitamin k",
+        "zinc"
+      ]
+    },
+    {
+      "id": "241211",
+      "duplicates": [
+        "vitamin d"
+      ]
+    },
+    {
+      "id": "241216",
+      "duplicates": [
+        "vitamin d"
+      ]
+    },
+    {
+      "id": "241222",
+      "duplicates": [
+        "calcium",
+        "folate",
+        "folic acid",
+        "inositol",
+        "iodine",
+        "magnesium",
+        "pantothenic acid",
+        "vitamin b12",
+        "vitamin b6",
+        "vitamin c",
+        "vitamin d",
+        "vitamin e",
+        "zinc"
+      ]
+    },
+    {
+      "id": "241208",
+      "duplicates": [
+        "vitamin d"
+      ]
+    },
+    {
+      "id": "228405",
+      "duplicates": [
+        "added sugars",
+        "calories",
+        "sodium",
+        "total carbohydrates",
+        "total sugars",
+        "vitamin c"
+      ]
+    },
+    {
+      "id": "218010",
+      "duplicates": [
+        "sodium"
+      ]
+    },
+    {
+      "id": "270561",
+      "duplicates": [
+        "added sugars",
+        "folic acid",
+        "vitamin e"
+      ]
+    },
+    {
+      "id": "178024",
+      "duplicates": [
+        "vitamin e"
+      ]
+    },
+    {
+      "id": "337436",
+      "duplicates": [
+        "vitamin d"
+      ]
+    },
+    {
+      "id": "178052",
+      "duplicates": [
+        "vitamin e"
+      ]
+    },
+    {
+      "id": "266727",
+      "duplicates": [
+        "added sugars",
+        "folate",
+        "vitamin e"
+      ]
+    },
+    {
+      "id": "269892",
+      "duplicates": [
+        "magnesium",
+        "vitamin b6",
+        "zinc"
+      ]
+    },
+    {
+      "id": "328138",
+      "duplicates": [
+        "added sugars",
+        "calories",
+        "sodium",
+        "total carbohydrate",
+        "total sugars",
+        "zinc"
+      ]
+    },
+    {
+      "id": "337259",
+      "duplicates": [
+        "added sugars",
+        "black elderberry extract",
+        "calories",
+        "echinacea angustifolia root extract",
+        "echinacea purpurea flower extract",
+        "propolis",
+        "proprietary blend",
+        "total carbohydrates",
+        "total sugars",
+        "vitamin c",
+        "zinc"
+      ]
+    },
+    {
+      "id": "304671",
+      "duplicates": [
+        "added sugars",
+        "calcium",
+        "calories",
+        "ginger",
+        "total carbohydrates",
+        "total sugars"
+      ]
+    },
+    {
+      "id": "273480",
+      "duplicates": [
+        "added sugars",
+        "calories",
+        "total carbohydrates",
+        "total sugars",
+        "vitamin d3"
+      ]
+    },
+    {
+      "id": "293397",
+      "duplicates": [
+        "vitamin d3"
+      ]
+    },
+    {
+      "id": "317115",
+      "duplicates": [
+        "elderberry"
+      ]
+    },
+    {
+      "id": "295205",
+      "duplicates": [
+        "elderberry"
+      ]
+    },
+    {
+      "id": "67530",
+      "duplicates": [
+        "calories",
+        "dietary fiber",
+        "soluble fiber",
+        "sugar",
+        "total carbohydrates"
+      ]
+    },
+    {
+      "id": "293405",
+      "duplicates": [
+        "added sugars",
+        "calories",
+        "sodium",
+        "total carbohydrates",
+        "total sugars",
+        "zinc"
+      ]
+    },
+    {
+      "id": "317116",
+      "duplicates": [
+        "added sugars",
+        "black elderberry extract",
+        "calories",
+        "echinacea angustifolia root extract",
+        "echinacea purpurea flower extract",
+        "elderberry",
+        "propolis",
+        "proprietary blend",
+        "total carbohydrates",
+        "total sugars",
+        "vitamin c",
+        "zinc"
+      ]
+    },
+    {
+      "id": "242865",
+      "duplicates": [
+        "added sugars"
+      ]
+    },
+    {
+      "id": "317121",
+      "duplicates": [
+        "elderberry"
+      ]
+    },
+    {
+      "id": "317117",
+      "duplicates": [
+        "elderberry"
+      ]
+    },
+    {
+      "id": "304687",
+      "duplicates": [
+        "added sugars",
+        "apple cider vinegar",
+        "black elder berry extract",
+        "calories",
+        "elderberries",
+        "english ivy leaf extract",
+        "honey",
+        "melatonin",
+        "total carbohydrate",
+        "total sugars",
+        "vitamin c",
+        "zinc"
+      ]
+    },
+    {
+      "id": "326761",
+      "duplicates": [
+        "bacillus subtilis de 111"
+      ]
+    },
+    {
+      "id": "297681",
+      "duplicates": [
+        "bacillus subtilis de 111"
+      ]
+    },
+    {
+      "id": "326701",
+      "duplicates": [
+        "bacillus subtilis de 111",
+        "vitamin d"
+      ]
+    },
+    {
+      "id": "4283",
+      "duplicates": [
+        "alpha linolenic acid",
+        "vitamin a",
+        "vitamin d"
+      ]
+    },
+    {
+      "id": "239545",
+      "duplicates": [
+        "bacillus coagulans"
+      ]
+    },
+    {
+      "id": "239778",
+      "duplicates": [
+        "biotin",
+        "calcium",
+        "copper",
+        "folic acid",
+        "iodine",
+        "iron",
+        "niacin",
+        "pantothenic acid",
+        "riboflavin",
+        "sodium",
+        "thiamine",
+        "total carbohydrates",
+        "vitamin a",
+        "vitamin b12",
+        "vitamin b6",
+        "vitamin c",
+        "vitamin d",
+        "vitamin e",
+        "vitamin k",
+        "zinc"
+      ]
+    },
+    {
+      "id": "277405",
+      "duplicates": [
+        "vitamin d"
+      ]
+    },
+    {
+      "id": "302761",
+      "duplicates": [
+        "calcium",
+        "vitamin d3",
+        "vitamin k"
+      ]
+    },
+    {
+      "id": "321606",
+      "duplicates": [
+        "vitamin d"
+      ]
+    }
+  ],
+  "all_tree_duplicate_after": [
+    {
+      "id": "27809",
+      "duplicates": [
+        "as whey protein isolate",
+        "hydrolyzed whey protein"
+      ]
+    },
+    {
+      "id": "220125",
+      "duplicates": [
+        "protein blend",
+        "quinoa powder"
+      ]
+    },
+    {
+      "id": "47225",
+      "duplicates": [
+        "glutamic acid"
+      ]
+    },
+    {
+      "id": "220132",
+      "duplicates": [
+        "protein blend",
+        "quinoa powder"
+      ]
+    },
+    {
+      "id": "69455",
+      "duplicates": [
+        "protease"
+      ]
+    },
+    {
+      "id": "69425",
+      "duplicates": [
+        "protease"
+      ]
+    },
+    {
+      "id": "47234",
+      "duplicates": [
+        "glutamic acid"
+      ]
+    },
+    {
+      "id": "315322",
+      "duplicates": [
+        "calcium caseinate",
+        "egg albumen",
+        "glutamine peptides",
+        "milk protein isolate",
+        "whey protein concentrate",
+        "whey protein isolate"
+      ]
+    },
+    {
+      "id": "211331",
+      "duplicates": [
+        "protein blend",
+        "quinoa powder"
+      ]
+    },
+    {
+      "id": "42349",
+      "duplicates": [
+        "as whey protein isolate",
+        "hydrolyzed whey"
+      ]
+    },
+    {
+      "id": "220137",
+      "duplicates": [
+        "protein blend",
+        "quinoa powder"
+      ]
+    },
+    {
+      "id": "67394",
+      "duplicates": [
+        "micellar casein",
+        "whey protein isolate"
+      ]
+    },
+    {
+      "id": "69374",
+      "duplicates": [
+        "protease"
+      ]
+    },
+    {
+      "id": "42360",
+      "duplicates": [
+        "as whey protein isolate",
+        "hydrolyzed whey protein"
+      ]
+    },
+    {
+      "id": "31064",
+      "duplicates": [
+        "hydrolyzed whey protein",
+        "whey protein isolate"
+      ]
+    },
+    {
+      "id": "25712",
+      "duplicates": [
+        "as whey protein isolate",
+        "hydrolyzed whey protein"
+      ]
+    },
+    {
+      "id": "27810",
+      "duplicates": [
+        "as whey protein isolate",
+        "hydrolyzed whey protein"
+      ]
+    },
+    {
+      "id": "42357",
+      "duplicates": [
+        "as whey protein isolate",
+        "hydrolyzed whey protein"
+      ]
+    },
+    {
+      "id": "250086",
+      "duplicates": [
+        "vitamin e"
+      ]
+    }
+  ],
+  "counts": {
+    "top_duplicate_before": 108,
+    "top_duplicate_after": 1,
+    "all_tree_duplicate_before": 141,
+    "all_tree_duplicate_after": 19
+  }
+}
