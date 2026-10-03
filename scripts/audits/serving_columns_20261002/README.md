@@ -24,8 +24,8 @@ The census reads all 15,414 staged DSLD JSON files and calls the production merg
 | Labels with repeated names anywhere in the ingredient tree | 141 | 18 |
 
 Product `250086` is now reconciled as one Vitamin E row because both printed
-wording variants carry the same nonempty form UNII (`WR1WPI7EW8`). Its 15 IU
-and 30 IU values remain in `quantityVariants`. Name wording alone does not
+wording variants carry the same nonempty form UNII (`WR1WPI7EW8`). Its 15 mg
+and 30 mg values remain in `quantityVariants`. Name wording alone does not
 authorize this merge: the normalizer still preserves D-alpha and DL-alpha as
 different forms.
 
