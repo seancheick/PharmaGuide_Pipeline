@@ -4984,12 +4984,6 @@ class EnhancedDSLDNormalizer:
                 and not (own_contexts(child) and not own_contexts(child) & column)
             ]
 
-        def name_tree(row: Dict[str, Any], column: Set[tuple]) -> tuple:
-            return (
-                normalized_text(row.get("name")),
-                tuple(sorted(name_tree(child, column) for child in placed_children(row, column))),
-            )
-
         def loose_identity(row: Dict[str, Any]) -> tuple:
             category = normalized_text(row.get("category"))
             return normalized_text(row.get("name")), category
