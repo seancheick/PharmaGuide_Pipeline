@@ -71,10 +71,12 @@ from typing import Any, Dict, List, Optional
 from scoring_v4.modules.botanical_profile import (
     is_botanical_product,
     score_botanical_dose,
+    score_botanical_purpose_dose,
 )
 from scoring_v4.modules.collagen_profile import (
     is_collagen_product,
     score_collagen_dose,
+    score_collagen_purpose_dose,
 )
 from scoring_v4.modules.generic_helpers import (
     get_active_ingredients,
@@ -259,7 +261,7 @@ def _row_identity_keys(row: Dict[str, Any]) -> set[str]:
 
 def _score_declared_purpose_window(
     product: Dict[str, Any],
-) -> tuple[Optional[float], List[str], int, List[Dict[str, Any]]]:
+) -> tuple[Optional[float], List[str], int, List[Dict[str, Any]], List[Dict[str, Any]]]:
     """Score each explicitly declared purpose once, using one equal vote.
 
     The shared role owner establishes purpose from the route, product title or
@@ -281,7 +283,7 @@ def _score_declared_purpose_window(
         and not row.get("is_parent_total")
     ]
     if not purpose_rows:
-        return None, [], 0, []
+        return None, [], 0, [], []
 
     # A physical purpose may have a compatibility projection of the same
     # source row.  Count it once by canonical identity, falling back to source.
@@ -300,6 +302,7 @@ def _score_declared_purpose_window(
     contributions: List[float] = []
     unbenchmarked: List[str] = []
     clinical_assessments: List[Dict[str, Any]] = []
+    specialized_assessments: List[Dict[str, Any]] = []
     for key, purpose in sorted(purposes.items()):
         identities = _row_identity_keys(purpose)
         credits = []
@@ -319,6 +322,18 @@ def _score_declared_purpose_window(
             # one conservative vote rather than extra denominator weight.
             contributions.append(min(credits))
             continue
+        specialized = score_collagen_purpose_dose(product, purpose)
+        specialized_owner = "collagen_profile"
+        if specialized is None and is_botanical_product(product):
+            specialized = score_botanical_purpose_dose(product, purpose)
+            specialized_owner = "botanical_profile"
+        if specialized is not None:
+            contributions.append(float(specialized["score"]))
+            specialized_assessments.append({
+                "assessment_owner": specialized_owner,
+                **specialized,
+            })
+            continue
         clinical = positive_clinical_benchmark(product, purpose)
         if clinical is not None:
             if clinical.benchmark_maximum and clinical.exposure_value > clinical.benchmark_maximum:
@@ -332,12 +347,13 @@ def _score_declared_purpose_window(
             unbenchmarked.append(key)
 
     if not contributions:
-        return 0.0, sorted(unbenchmarked), len(purposes), clinical_assessments
+        return 0.0, sorted(unbenchmarked), len(purposes), clinical_assessments, specialized_assessments
     return (
         round(_clamp(0.0, CAP_SUPPLEMENTAL_WINDOW, sum(contributions) / len(contributions)), 4),
         sorted(unbenchmarked),
         len(purposes),
         clinical_assessments,
+        specialized_assessments,
     )
 
 
@@ -481,7 +497,13 @@ def score_dose(product: Dict[str, Any]) -> Dict[str, Any]:
     )
     b7 = b7_evaluation.penalty
     b7_metadata = b7_evaluation.audit_metadata()
-    purpose_credit, unbenchmarked_purposes, purpose_count, clinical_benchmarks = (
+    (
+        purpose_credit,
+        unbenchmarked_purposes,
+        purpose_count,
+        clinical_benchmarks,
+        specialized_purpose_assessments,
+    ) = (
         _score_declared_purpose_window(product)
     )
 
@@ -661,6 +683,7 @@ def score_dose(product: Dict[str, Any]) -> Dict[str, Any]:
         metadata["purpose_ingredient_count"] = purpose_count
         metadata["unbenchmarked_purpose_ingredients"] = unbenchmarked_purposes
         metadata["positive_clinical_benchmark_assessments"] = clinical_benchmarks
+        metadata["specialized_purpose_assessments"] = specialized_purpose_assessments
         if unbenchmarked_purposes:
             metadata["window_proxy_status"] = "limited_assessability_unbenchmarked_purpose"
             metadata["partial_credit_value"] = NO_REFERENCE_INDIVIDUAL_DOSE_CREDIT

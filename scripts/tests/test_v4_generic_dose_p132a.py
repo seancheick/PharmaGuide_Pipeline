@@ -824,6 +824,39 @@ def test_specialized_adapter_does_not_bypass_equal_multi_purpose_average(adapter
     assert payload["metadata"]["method"] == "rda_ul_proxy_until_dietary_intake_table"
 
 
+def test_multi_purpose_average_retains_collagen_preparation_benchmark() -> None:
+    from scoring_v4.modules.generic_dose import score_dose
+
+    def assessed(quantity: float) -> dict:
+        collagen = _ingredient(
+            name="Hydrolyzed Collagen Peptides", standard_name="Collagen",
+            canonical_id="collagen", quantity=quantity, unit="mg",
+            raw_source_path="ingredientRows[0]",
+            matched_form="hydrolyzed collagen peptides",
+        )
+        vitamin = _ingredient(
+            name="Vitamin C", canonical_id="vitamin_c", quantity=90, unit="mg",
+            raw_source_path="ingredientRows[1]",
+        )
+        return score_dose(_product(
+            ingredients=[collagen, vitamin],
+            adequacy_results=[{
+                "canonical_id": "vitamin_c", "nutrient": "Vitamin C",
+                "pct_rda": 100.0, "pct_ul": 4.5,
+            }],
+            product_name="Hydrolyzed Collagen Peptides and Vitamin C",
+        ))
+
+    below = assessed(100.0)
+    within = assessed(5000.0)
+
+    assert below["components"]["supplemental_window_proxy"] == 16.0
+    assert within["components"]["supplemental_window_proxy"] == 21.5
+    assert below["metadata"]["specialized_purpose_assessments"][0]["score"] == 10.0
+    assert within["metadata"]["specialized_purpose_assessments"][0]["score"] == 21.0
+    assert below["metadata"]["unbenchmarked_purpose_ingredients"] == []
+
+
 def test_exact_positive_lactoferrin_benchmark_is_owned_by_dose() -> None:
     from scoring_v4.modules.generic_dose import score_dose
 

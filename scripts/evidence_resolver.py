@@ -309,19 +309,20 @@ def resolve_omega_evidence_standard(product: Mapping[str, Any]) -> Dict[str, Any
         re.compile(r"\btriglycerides?\b.{0,45}\b(?:lower|lowers|lowering|reduce|reduces|reducing)\b"),
     )
     negated_claim = re.compile(
-        r"\b(?:no|not|never|neither|without|unable|cannot|cant|doesnt|dont|fails?|failed|failure|lacks?|lacking)\b"
+        r"\b(?:no|not|never|neither|without|unable|cannot|cant|can t|doesnt|doesn t|dont|don t|fails?|failed|failure|lacks?|lacking)\b"
     )
 
     def affirmative_triglyceride_lowering(text: str) -> bool:
         normalized = _canonical_text(text)
+        # Claims arrive as short title/statement segments. Any explicit
+        # negation in that segment makes the therapeutic-purpose reading
+        # ambiguous, including contractions and trailing qualifiers such as
+        # "is not supported". Ambiguous claims stay on the ordinary standard.
+        if negated_claim.search(normalized):
+            return False
         for pattern in triglyceride_patterns:
             for match in pattern.finditer(normalized):
-                # A negated or explicitly unsupported statement is not a
-                # declared lowering purpose. Keep the scope conservative: an
-                # ambiguous claim stays on the ordinary-adult standard.
-                scope = normalized[max(0, match.start() - 80):match.end()]
-                if not negated_claim.search(scope):
-                    return True
+                return True
         return False
 
     triglyceride_lowering = any(

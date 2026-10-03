@@ -250,6 +250,22 @@ def score_collagen_dose(product: Dict[str, Any]) -> Dict[str, Any]:
     }
 
 
+def score_collagen_purpose_dose(
+    product: Dict[str, Any], row: Dict[str, Any],
+) -> Optional[Dict[str, Any]]:
+    """Assess one declared collagen purpose through the collagen Dose owner."""
+    if not _is_collagen_active(row):
+        return None
+    assessment = _score_collagen_row(row, product)
+    return {
+        "name": row.get("name") or row.get("standard_name"),
+        "canonical_id": row.get("canonical_id"),
+        "band": assessment["band"],
+        "score": assessment["score"],
+        **assessment.get("metadata", {}),
+    }
+
+
 def score_collagen_formulation(product: Dict[str, Any]) -> Dict[str, Any]:
     """Collagen formulation adapter (max 15). Replaces A1/A2 for collagen."""
     row = _primary_collagen_active(product)

@@ -123,8 +123,10 @@ def test_triglyceride_form_wording_is_not_a_lowering_purpose() -> None:
 
 @pytest.mark.parametrize("claim", [
     "This product does not lower triglycerides.",
+    "This product doesn't lower triglycerides.",
     "No evidence shows that EPA and DHA reduce triglycerides.",
     "Not intended to reduce triglyceride levels.",
+    "Triglyceride lowering is not supported by evidence.",
 ])
 def test_negated_triglyceride_claim_does_not_create_strong_evidence(claim: str) -> None:
     from scoring_v4.modules.omega_evidence import score_evidence

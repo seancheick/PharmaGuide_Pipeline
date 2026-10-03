@@ -803,6 +803,15 @@ def score_botanical_dose(product: Dict[str, Any]) -> Dict[str, Any]:
     row = _primary_botanical_active(product)
     if row is None:
         return {"score": BOTANICAL_DOSE_NO_ACTIVE, "band": "no_botanical_active", "metadata": {}}
+    return score_botanical_purpose_dose(product, row)
+
+
+def score_botanical_purpose_dose(
+    product: Dict[str, Any], row: Dict[str, Any],
+) -> Optional[Dict[str, Any]]:
+    """Assess one declared botanical purpose through the botanical Dose owner."""
+    if not _is_botanical_active(row):
+        return None
 
     # Exact positive branded whole-preparation benchmarks are Dose facts even
     # when the cleaner represents the named preparation as product-level
