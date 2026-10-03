@@ -597,3 +597,14 @@ Owner: `scripts/data/ingredient_quality_map.json::prebiotics.forms.galactooligos
 Measurement limit: baseline provenance includes five ignored FDA data/cache files absent from the candidate checkout. Independent review confirms matching raw hashes and all39 successful scored captures are byte-identical; this establishes bounded output equivalence, not identical full environments or release readiness. The existing research register now includes the cross-family decision-input table; it does not approve grades or Dose magnitudes.
 
 Next bounded source finding: primary PMID36198994 describes LA-5 alone versus fluconazole for candidiasis. The next reviewer must independently confirm that report and the current `STRAIN_ACIDOPHILUS_LA5` wording before correcting its combination-only description. It does not establish gut-health efficacy, treatment equivalence or Solgar preparation/dose correspondence. Research receipt: `/Users/seancheick/pg_quality/q53_followup_20261002/primary_review.md`. SD-5845 remains unresolved; Member's Mark Bioflora has no disclosed strain and must not inherit another manufacturer's formula evidence. These are research findings, not implemented registry corrections.
+
+
+## October 2 — Q65 integration and stale-branch cleanup
+
+- [x] Independently compare Claude31113c16 with main dedc6b8e: retain main's policy-specific ban/recall owner; additional coverage and dead, unconsumed decision_highlights.danger removal retained.
+- [x] Exact candidate CI37080103407 passed; main-checkout local gate527passed/24declared opt-in skips, skip guard passed136.52s. Main fast-forwarded and pushed to31113c16. No catalog release.
+- [x] Delete local/remote codex/edta-release-exemption, codex/q64-number-boundary and claude/jolly-pike-10e4ca after containment checks. Preserve Claude state/config before removing its clean completed worktree.
+- [x] Archive the superseded clinical-completion-batch worktree recoverably and delete its local/remote branch. Four commits are retained in codex/q53-calibration-completion; range-diff and production-file comparison establish preservation, not release validation.
+- [ ] Integrate the active codex/q53-calibration-completion lane after validation on current main. It is not stale: its clinical fixes remain absent from main. Its earlier local gate rejected missing artifacts; do not mark it accepted from green CI alone.
+
+Cleanup receipts: /Users/seancheick/pg_quality/branch_cleanup_20261002/; accepted local log: /Users/seancheick/pg_quality/q65_cleanup_local_20261002.log. Main checkout is clean; only the active calibration worktree/branch remains besides main. S1 detail-blob versus core-column observation remains in Q65; removal of danger does not establish that every report axis is live.
