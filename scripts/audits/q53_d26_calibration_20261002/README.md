@@ -172,6 +172,11 @@ remains a post-Clean validation gate.
 - Frozen raw replay completed 344/344 with matching input manifest and no
   route, purpose, scoring-status or safety-status movement.
 
-The final broad local rung and exact-candidate CI are recorded in the handoff
-after documentation integration. The fresh full Clean corpus is intentionally
-not run here.
+The final local rung ran after documentation integration: **398 passed and 129
+skipped**, then correctly exited nonzero because this worktree does not contain
+the rebuilt corpus, canaries or distribution artifacts. It is not an accepted
+local gate; those skips are exactly what Sean's fresh Clean run supplies. The
+dead-code/source-of-truth slice then found one obsolete private serving helper;
+it was deleted and its failing node plus all 28 serving checks passed. Exact
+candidate CI is recorded in the handoff after the branch push. The fresh full
+Clean corpus is intentionally not run here.

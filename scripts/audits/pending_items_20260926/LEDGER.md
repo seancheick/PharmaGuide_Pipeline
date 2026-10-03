@@ -535,8 +535,12 @@ Candidate production source `374fb4b6` on
   source with no remaining findings. App contract needs no source change:
   canonical `display_ingredients` partitions Nutrition Facts, active and other
   ingredients.
-- [ ] Run final local rung and exact-candidate branch CI after documentation
-  integration.
+- [x] Run final local rung after documentation integration:398passed/129skipped;
+  gate correctly rejected missing rebuilt corpus/canaries/dist artifacts. This
+  is diagnostic, not accepted. Dead-code/source-owner slice then found and
+  removed one obsolete private serving helper; focused node1passed and serving
+  checks28passed.
+- [ ] Push the exact candidate branch and obtain green `pipeline-tests` CI.
 - [ ] Sean runs fresh full Clean/Enrich/Score. Then validate catalog/export,
   release rung, real app Nutrition Facts/active/other rendering, manifest and
   live parity before publication.
