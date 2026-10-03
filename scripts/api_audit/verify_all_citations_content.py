@@ -64,6 +64,8 @@ DOI_RE = re.compile(r"\b(10\.\d{4,9}/[^\s\"<>,;]+)")
 PMC_IDCONV = "https://www.ncbi.nlm.nih.gov/pmc/utils/idconv/v1.0/"
 CROSSREF_WORKS = "https://api.crossref.org/works/"
 RATE_LIMIT = 0.35  # seconds between API calls
+PMC_IDCONV_MAX_ATTEMPTS = 3
+PMC_IDCONV_RETRYABLE_HTTP = {429, 500, 502, 503, 504}
 
 # SSL context — prefer verified; fall back to unverified if system certs are unavailable
 try:
@@ -254,14 +256,33 @@ def resolve_pmc_ids(pmc_ids: list[str]) -> dict[str, str]:
     resolved = {}
     for i in range(0, len(pmc_ids), 100):
         url = f"{PMC_IDCONV}?ids={','.join(pmc_ids[i:i + 100])}&format=json&tool=pharmaguide-audit"
-        try:
-            req = urllib.request.Request(url, headers={"User-Agent": "pharmaguide-audit/1.0"})
-            with urllib.request.urlopen(req, timeout=20, context=SSL_CTX) as resp:
-                for record in json.loads(resp.read().decode("utf-8")).get("records", []):
-                    if record.get("pmcid") and record.get("pmid"):
-                        resolved[record["pmcid"].upper()] = str(record["pmid"])
-        except Exception as e:
-            print(f"  PMC ID converter error: {e}", file=sys.stderr)
+        req = urllib.request.Request(url, headers={"User-Agent": "pharmaguide-audit/1.0"})
+        for attempt in range(1, PMC_IDCONV_MAX_ATTEMPTS + 1):
+            try:
+                with urllib.request.urlopen(req, timeout=20, context=SSL_CTX) as resp:
+                    for record in json.loads(resp.read().decode("utf-8")).get("records", []):
+                        if record.get("pmcid") and record.get("pmid"):
+                            resolved[record["pmcid"].upper()] = str(record["pmid"])
+                break
+            except urllib.error.HTTPError as error:
+                retryable = error.code in PMC_IDCONV_RETRYABLE_HTTP
+                if not retryable or attempt == PMC_IDCONV_MAX_ATTEMPTS:
+                    print(f"  PMC ID converter error: {error}", file=sys.stderr)
+                    break
+                retry_after = error.headers.get("Retry-After") if error.headers else None
+                try:
+                    delay = max(float(retry_after), 0.0) if retry_after is not None else float(attempt)
+                except ValueError:
+                    delay = float(attempt)
+                print(
+                    f"  PMC ID converter HTTP {error.code}; retrying "
+                    f"({attempt}/{PMC_IDCONV_MAX_ATTEMPTS}) in {delay:g}s",
+                    file=sys.stderr,
+                )
+                time.sleep(delay)
+            except Exception as error:
+                print(f"  PMC ID converter error: {error}", file=sys.stderr)
+                break
         time.sleep(RATE_LIMIT)
     return resolved
 
