@@ -94,6 +94,40 @@ def test_scan_all_reads_free_text_pmc_links_and_skips_history() -> None:
     assert found == ["18425868", "PMC7583039", "31734734"]
 
 
+def test_pmc_id_converter_retries_rate_limit(monkeypatch) -> None:
+    """A transient NCBI 429 must not turn a valid reviewed PMC source into an
+    unresolved release-blocking citation.
+    """
+    calls = 0
+
+    class Response:
+        def __enter__(self):
+            return self
+
+        def __exit__(self, *exc):
+            return False
+
+        def read(self):
+            return json.dumps({"records": [
+                {"pmcid": "PMC7583039", "pmid": "32992959"},
+            ]}).encode()
+
+    def respond(request, *args, **kwargs):
+        nonlocal calls
+        calls += 1
+        if calls == 1:
+            raise vac.urllib.error.HTTPError(
+                request.full_url, 429, "Too Many Requests", {"Retry-After": "0"}, None,
+            )
+        return Response()
+
+    monkeypatch.setattr(vac.urllib.request, "urlopen", respond)
+    monkeypatch.setattr(vac.time, "sleep", lambda *_: None)
+
+    assert vac.resolve_pmc_ids(["PMC7583039"]) == {"PMC7583039": "32992959"}
+    assert calls == 2
+
+
 def test_scan_all_reads_dois_in_any_form_and_skips_history() -> None:
     entry = {"id": "X",
              "references_structured": [
