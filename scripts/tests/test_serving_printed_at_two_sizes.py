@@ -12,10 +12,10 @@ analysis: 49630 counted every creatine ingredient twice (2.5 g and 5 g blocks),
 Columns for different audiences (serving orders whose DV target groups
 differ, 241222 "2-3 years" / "4 years and older") merge the same way; each
 audience's amount stays a variant and analysis reads the adult/largest column.
-Declared forms must agree (the same normalized form names, or no form on one
-side): D-alpha and DL-alpha tocopherol are different declarations, and a
-respelling (250086 "Tocopheryl" / "Tocopherol" Acetate) is not proven the
-same, so those rows stay separate rather than lose a declaration. Serving
+Declared forms must agree (the same normalized form name or the same nonempty
+form UNII, or no form on one side): D-alpha and DL-alpha tocopherol are
+different declarations. DSLD 250086's "Tocopheryl" / "Tocopherol" Acetate
+wording carries the same form UNII, so those two serving columns merge. Serving
 orders for one audience (AM/PM packs) or none keep the exact rule, and two
 blocks whose own children differ stay two panels.
 """
@@ -105,11 +105,12 @@ def test_columns_of_one_audience_or_none_keep_the_exact_rule():
     assert len(merge([_audience_row("Zinc", 1, 2, 5, 1, kids), _audience_row("Zinc", 2, 4, 10, 2, adults)])) == 1
 
 
-def _row(name, order, size, qty, ingredient_id, children=(), form=None):
+def _row(name, order, size, qty, ingredient_id, children=(), form=None, form_unii=None):
     return {
         "name": name, "category": "vitamin", "ingredientGroup": name, "ingredientId": ingredient_id,
         "uniiCode": None, "alternateNames": [],
-        "forms": [{"name": form, "ingredientId": ingredient_id + 100}] if form else [],
+        "forms": [{"name": form, "ingredientId": ingredient_id + 100,
+                   "uniiCode": form_unii}] if form else [],
         "quantity": [{"servingSizeOrder": order, "servingSizeQuantity": size,
                       "servingSizeUnit": "Scoop(s)", "quantity": qty, "unit": "mg"}],
         "nestedRows": list(children),
@@ -138,7 +139,6 @@ def test_a_form_declared_in_one_column_only_is_kept():
 
 @pytest.mark.parametrize("first, second", [
     ("D-Alpha-Tocopherol", "DL-Alpha-Tocopherol"),
-    ("DL-Alpha-Tocopheryl Acetate", "DL-Alpha-Tocopherol Acetate"),
 ])
 def test_conflicting_form_declarations_are_not_merged(first, second):
     from enhanced_normalizer import EnhancedDSLDNormalizer
@@ -156,9 +156,23 @@ def test_conflicting_child_forms_keep_the_blocks_apart():
     assert len(EnhancedDSLDNormalizer._merge_alternate_serving_rows([a, b])) == 2
 
 
-def test_the_respelled_real_label_keeps_both_declarations():
+def test_matching_form_unii_merges_dsld_wording_variants():
+    from enhanced_normalizer import EnhancedDSLDNormalizer
+
+    rows = [
+        _row("Vitamin E", 1, 4, 30, 1, form="DL-Alpha-Tocopheryl Acetate", form_unii="WR1WPI7EW8"),
+        _row("Vitamin E", 1, 2, 15, 2, form="DL-Alpha-Tocopherol Acetate", form_unii="WR1WPI7EW8"),
+    ]
+    merged = EnhancedDSLDNormalizer._merge_alternate_serving_rows(rows)
+    assert len(merged) == 1
+    assert [q["quantity"] for q in merged[0]["quantity"]] == [30, 15]
+
+
+def test_the_respelled_real_label_is_one_declaration():
     rows = [r for r in _clean("250086") if r["name"] == "Vitamin E"]
-    assert len(rows) == 2
+    assert len(rows) == 1
+    variants = rows[0]["raw_taxonomy"]["quantityVariants"]
+    assert sorted((v["quantity"], v["serving_size_quantity"]) for v in variants) == [(15, 2), (30, 4)]
 
 
 def test_different_orders_or_different_children_stay_separate():

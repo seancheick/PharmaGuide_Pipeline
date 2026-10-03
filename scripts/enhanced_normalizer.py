@@ -5018,14 +5018,26 @@ class EnhancedDSLDNormalizer:
                 if isinstance(form, dict) and form.get("name")
             )
 
+        def declared_form_uniis(row: Dict[str, Any]) -> frozenset:
+            return frozenset(
+                str(form.get("uniiCode") or "").strip().upper()
+                for form in row.get("forms") or []
+                if isinstance(form, dict) and str(form.get("uniiCode") or "").strip()
+            )
+
         def forms_agree(owner_row: Dict[str, Any], alternate: Dict[str, Any],
                         owner_column: Set[tuple], alternate_column: Set[tuple]) -> bool:
             """Both columns declare the same forms, node by node, or one declares
-            none. D-alpha against DL-alpha tocopherol is two declarations; a
-            respelling is not proven the same, so neither merges."""
+            none. Matching nonempty form UNIIs establish identity when DSLD's
+            names drift (250086 Tocopheryl/Tocopherol Acetate). D-alpha against
+            DL-alpha tocopherol remains two declarations because its identities
+            differ."""
             owner_forms, alternate_forms = declared_forms(owner_row), declared_forms(alternate)
             if owner_forms and alternate_forms and owner_forms != alternate_forms:
-                return False
+                owner_uniis = declared_form_uniis(owner_row)
+                alternate_uniis = declared_form_uniis(alternate)
+                if not owner_uniis or owner_uniis != alternate_uniis:
+                    return False
             owner_children = placed_children(owner_row, owner_column)
             for child in placed_children(alternate, alternate_column):
                 match = next(

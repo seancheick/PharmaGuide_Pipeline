@@ -1131,14 +1131,7 @@
       ]
     }
   ],
-  "top_duplicate_after": [
-    {
-      "id": "250086",
-      "duplicates": [
-        "vitamin e"
-      ]
-    }
-  ],
+  "top_duplicate_after": [],
   "all_tree_duplicate_before": [
     {
       "id": "69507",
@@ -3135,18 +3128,12 @@
         "as whey protein isolate",
         "hydrolyzed whey protein"
       ]
-    },
-    {
-      "id": "250086",
-      "duplicates": [
-        "vitamin e"
-      ]
     }
   ],
   "counts": {
     "top_duplicate_before": 108,
-    "top_duplicate_after": 1,
+    "top_duplicate_after": 0,
     "all_tree_duplicate_before": 141,
-    "all_tree_duplicate_after": 19
+    "all_tree_duplicate_after": 18
   }
 }

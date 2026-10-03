@@ -20,12 +20,20 @@ The census reads all 15,414 staged DSLD JSON files and calls the production merg
 | Measure | Before | Candidate |
 |---|---:|---:|
 | Multi-column labels inspected | 323 | 323 |
-| Labels with repeated top-level normalized names | 108 | 1 |
-| Labels with repeated names anywhere in the ingredient tree | 141 | 19 |
+| Labels with repeated top-level normalized names | 108 | 0 |
+| Labels with repeated names anywhere in the ingredient tree | 141 | 18 |
 
-The one retained top-level repeat is product `250086`: vitamin E is declared once as DL-alpha-tocopheryl acetate and once as DL-alpha-tocopherol acetate. The forms conflict, so the cleaner preserves both declarations.
+Product `250086` is now reconciled as one Vitamin E row because both printed
+wording variants carry the same nonempty form UNII (`WR1WPI7EW8`). Its 15 IU
+and 30 IU values remain in `quantityVariants`. Name wording alone does not
+authorize this merge: the normalizer still preserves D-alpha and DL-alpha as
+different forms.
 
-The 19 retained all-tree cases are not unresolved serving alternatives. Apart from `250086`, every repeated name has overlapping serving contexts and occurs in distinct authored branches, such as source forms repeated beneath several amino acids or quinoa listed in both carbohydrate and protein blends. Merging them would discard label structure. The census output is `result.json`.
+The 18 retained all-tree cases are not unresolved serving alternatives. Every
+repeated name has overlapping serving contexts and occurs in distinct authored
+branches, such as source forms repeated beneath several amino acids or quinoa
+listed in both carbohydrate and protein blends. Merging them would discard
+label structure. The census output is `result.json`.
 
 ## Corrected defect classes
 
@@ -36,5 +44,6 @@ The 19 retained all-tree cases are not unresolved serving alternatives. Apart fr
 - Top-level and nested placements reconcile when their serving contexts are disjoint alternatives.
 - Literal duplicate source rows with the same DSLD ingredient identity and source fact count once.
 - Ingredient-group wording drift between columns does not split an otherwise identical name, category, forms, and tree.
+- DSLD wording variants with the same nonempty form UNII reconcile while chemically distinct forms remain separate.
 
 The analysis row remains the largest/adult serving selected by the existing serving owner. All printed quantities remain in `quantityVariants`, and the immutable display-source ledger still carries the original rows and source paths.
