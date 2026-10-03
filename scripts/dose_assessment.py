@@ -142,6 +142,20 @@ def positive_clinical_benchmark(
     ]
     candidates: list[Dict[str, Any]] = []
     eligible_by_id = {str(record.get("id")): record for record in _positive_clinical_benchmark_records()}
+
+    def applicable_record(record: Dict[str, Any], *, source_refs: Iterable[str] = ()) -> bool:
+        from clinical_applicability import assess_clinical_applicability
+        from evidence_resolver import evidence_record_matches_declared_purpose
+
+        scoped_record = {**record, "matched_source_row_refs": [
+            ref for ref in source_refs if ref
+        ]}
+        decision = assess_clinical_applicability(product, scoped_record, assess_amount=False)
+        return (
+            decision.get("status") in {"applicable", "not_curated"}
+            and evidence_record_matches_declared_purpose(product, row, record)
+        )
+
     for match in matches:
         record = eligible_by_id.get(str(match.get("id") or ""))
         if record is None:
@@ -153,12 +167,16 @@ def positive_clinical_benchmark(
             # branded preparation on this row.
             continue
         refs = {str(ref).strip() for ref in match.get("matched_source_row_refs") or [] if str(ref).strip()}
-        if row_ref and row_ref in refs:
+        if row_ref and row_ref in refs and applicable_record(record, source_refs=refs):
             candidates.append(record)
     for record in _positive_clinical_benchmark_records():
         if not str(record.get("id") or "").upper().startswith("BRAND_"):
             continue
-        if row_names & _record_names(record) and record not in candidates:
+        if (
+            row_names & _record_names(record)
+            and record not in candidates
+            and applicable_record(record, source_refs=[row_ref] if row_ref else [])
+        ):
             candidates.append(record)
 
     exact_branded = [

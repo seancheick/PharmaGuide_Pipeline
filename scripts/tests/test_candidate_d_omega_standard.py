@@ -121,6 +121,23 @@ def test_triglyceride_form_wording_is_not_a_lowering_purpose() -> None:
     assert payload["metadata"]["evidence_standard"] == "omega_reviewed_weak"
 
 
+@pytest.mark.parametrize("claim", [
+    "This product does not lower triglycerides.",
+    "No evidence shows that EPA and DHA reduce triglycerides.",
+    "Not intended to reduce triglyceride levels.",
+])
+def test_negated_triglyceride_claim_does_not_create_strong_evidence(claim: str) -> None:
+    from scoring_v4.modules.omega_evidence import score_evidence
+
+    product = _product(epa=150, dha=100, name="Adult Omega-3")
+    product["statements"] = [{"notes": claim}]
+
+    payload = score_evidence(product)
+
+    assert payload["score"] == pytest.approx(10.4)
+    assert payload["metadata"]["evidence_standard"] == "omega_reviewed_weak"
+
+
 @pytest.mark.parametrize("name", ["Children's Omega-3", "Baby Omega-3 Drops"])
 def test_child_and_baby_products_do_not_borrow_adult_evidence(name: str) -> None:
     from scoring_v4.modules.omega_evidence import score_evidence

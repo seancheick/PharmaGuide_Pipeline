@@ -481,11 +481,14 @@ def score_dose(product: Dict[str, Any]) -> Dict[str, Any]:
     )
     b7 = b7_evaluation.penalty
     b7_metadata = b7_evaluation.audit_metadata()
+    purpose_credit, unbenchmarked_purposes, purpose_count, clinical_benchmarks = (
+        _score_declared_purpose_window(product)
+    )
 
     # Phase 7 — Collagen Profile: per-subtype clinical dose range (unit-aware) so an
     # underdosed collagen no longer borrows its co-formulated vitamins' RDA dose.
     # Checked before botanical (mass-dominance makes them mutually exclusive).
-    if is_collagen_product(product):
+    if purpose_count <= 1 and is_collagen_product(product):
         col = score_collagen_dose(product)
         components = {
             "collagen_clinical_dose": round(float(col["score"]), 4),
@@ -511,7 +514,7 @@ def score_dose(product: Dict[str, Any]) -> Dict[str, Any]:
     # rda_therapeutic_dosing.json) instead of the RDA/UL proxy. Always evaluable
     # (never None), so the dose dimension is no longer excluded for botanicals
     # and the Phase-4 botanical_dose_deferred floor guard is superseded.
-    if is_botanical_product(product):
+    if purpose_count <= 1 and is_botanical_product(product):
         bot = score_botanical_dose(product)
         components = {
             "botanical_clinical_dose": round(float(bot["score"]), 4),
@@ -533,7 +536,7 @@ def score_dose(product: Dict[str, Any]) -> Dict[str, Any]:
             },
         }
 
-    sleep = score_sleep_support_dose(product)
+    sleep = score_sleep_support_dose(product) if purpose_count <= 1 else None
     if sleep is not None:
         components = {
             "sleep_support_dose": round(float(sleep["score"]), 4),
@@ -554,7 +557,7 @@ def score_dose(product: Dict[str, Any]) -> Dict[str, Any]:
             },
         }
 
-    immune = score_immune_support_dose(product)
+    immune = score_immune_support_dose(product) if purpose_count <= 1 else None
     if immune is not None:
         components = dict(immune["components"])
         penalties = {"B7_dose_safety": round(-b7, 4)}
@@ -573,7 +576,7 @@ def score_dose(product: Dict[str, Any]) -> Dict[str, Any]:
             },
         }
 
-    joint = score_joint_support_dose(product)
+    joint = score_joint_support_dose(product) if purpose_count <= 1 else None
     if joint is not None:
         components = {
             "joint_support_dose": round(float(joint["score"]), 4),
@@ -594,7 +597,6 @@ def score_dose(product: Dict[str, Any]) -> Dict[str, Any]:
             },
         }
 
-    purpose_credit, unbenchmarked_purposes, purpose_count, clinical_benchmarks = _score_declared_purpose_window(product)
     window_credit, window_reason = _score_supplemental_window_proxy(product)
     if purpose_credit is not None:
         window_credit = purpose_credit

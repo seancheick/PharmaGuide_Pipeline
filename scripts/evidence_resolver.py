@@ -299,18 +299,33 @@ def resolve_omega_evidence_standard(product: Mapping[str, Any]) -> Dict[str, Any
         owners = set()
     mixed_purpose = bool(owners and any(owner not in omega_owner_ids for owner in owners))
 
-    claim_text = " ".join(
-        [title]
-        + [
-            str(statement.get("notes") or statement.get("text") or "")
-            for statement in (prod.get("statements") or [])
-            if isinstance(statement, dict)
-        ]
+    claim_segments = [title] + [
+        str(statement.get("notes") or statement.get("text") or "")
+        for statement in (prod.get("statements") or [])
+        if isinstance(statement, dict)
+    ]
+    triglyceride_patterns = (
+        re.compile(r"\b(?:lower|lowers|lowering|reduce|reduces|reducing)\b.{0,45}\btriglycerides?\b"),
+        re.compile(r"\btriglycerides?\b.{0,45}\b(?:lower|lowers|lowering|reduce|reduces|reducing)\b"),
     )
-    normalized_claim = _canonical_text(claim_text)
-    triglyceride_lowering = bool(
-        re.search(r"\b(?:lower|lowers|lowering|reduce|reduces|reducing)\b.{0,45}\btriglycerides?\b", normalized_claim)
-        or re.search(r"\btriglycerides?\b.{0,45}\b(?:lower|lowers|lowering|reduce|reduces|reducing)\b", normalized_claim)
+    negated_claim = re.compile(
+        r"\b(?:no|not|never|neither|without|unable|cannot|cant|doesnt|dont|fails?|failed|failure|lacks?|lacking)\b"
+    )
+
+    def affirmative_triglyceride_lowering(text: str) -> bool:
+        normalized = _canonical_text(text)
+        for pattern in triglyceride_patterns:
+            for match in pattern.finditer(normalized):
+                # A negated or explicitly unsupported statement is not a
+                # declared lowering purpose. Keep the scope conservative: an
+                # ambiguous claim stays on the ordinary-adult standard.
+                scope = normalized[max(0, match.start() - 80):match.end()]
+                if not negated_claim.search(scope):
+                    return True
+        return False
+
+    triglyceride_lowering = any(
+        affirmative_triglyceride_lowering(segment) for segment in claim_segments
     )
 
     selected = None
@@ -1317,6 +1332,22 @@ def _evidence_entry_purposes(entry: Mapping[str, Any]) -> Set[str]:
         if isinstance(values, list):
             parts.extend(str(value) for value in values)
     return evidence_indication_categories(" ".join(parts))
+
+
+def evidence_record_matches_declared_purpose(
+    product: Mapping[str, Any], row: Mapping[str, Any], entry: Mapping[str, Any],
+) -> bool:
+    """Return whether a clinical record supports this row's declared purpose.
+
+    The shared role result is the single source of label-purpose provenance.
+    An ingredient without an ingredient-scoped purpose claim keeps the normal
+    identity/preparation applicability path. When the label does declare a
+    purpose, the record must support at least one of those same indication
+    categories before Evidence or Dose may use it.
+    """
+    canonical = _norm(row.get("canonical_id"))
+    claimed = _evidence_claim_purposes(product).get(canonical)
+    return not claimed or bool(claimed & _evidence_entry_purposes(entry))
 
 
 def resolve_product_evidence(

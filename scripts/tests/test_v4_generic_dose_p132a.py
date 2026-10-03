@@ -790,6 +790,40 @@ def test_incidental_unbenchmarked_row_does_not_enter_purpose_average() -> None:
     assert payload["metadata"]["unbenchmarked_purpose_ingredients"] == []
 
 
+@pytest.mark.parametrize("adapter,primary", [
+    ("botanical", _ingredient(
+        name="KSM-66 Ashwagandha", standard_name="Ashwagandha",
+        canonical_id="ashwagandha", quantity=600, unit="mg",
+        raw_source_path="ingredientRows[0]", matched_form="KSM-66 root extract",
+    )),
+    ("collagen", _ingredient(
+        name="Hydrolyzed Collagen Peptides", standard_name="Collagen",
+        canonical_id="collagen", quantity=3000, unit="mg",
+        raw_source_path="ingredientRows[0]", matched_form="hydrolyzed collagen peptides",
+    )),
+])
+def test_specialized_adapter_does_not_bypass_equal_multi_purpose_average(adapter, primary) -> None:
+    from scoring_v4.modules.generic_dose import score_dose
+
+    vitamin = _ingredient(
+        name="Vitamin C", canonical_id="vitamin_c", quantity=1, unit="mg",
+        raw_source_path="ingredientRows[1]",
+    )
+    product = _product(
+        ingredients=[primary, vitamin],
+        adequacy_results=[
+            {"canonical_id": "vitamin_c", "nutrient": "Vitamin C", "pct_rda": 1.1, "pct_ul": 0.05},
+        ],
+        product_name=f"{primary['name']} and Vitamin C",
+    )
+
+    payload = score_dose(product)
+
+    assert payload["metadata"]["dose_participation_basis"] == "declared_purpose_equal_weight"
+    assert payload["metadata"]["purpose_ingredient_count"] == 2
+    assert payload["metadata"]["method"] == "rda_ul_proxy_until_dietary_intake_table"
+
+
 def test_exact_positive_lactoferrin_benchmark_is_owned_by_dose() -> None:
     from scoring_v4.modules.generic_dose import score_dose
 
@@ -811,6 +845,25 @@ def test_exact_positive_lactoferrin_benchmark_is_owned_by_dose() -> None:
     assessment = payload["metadata"]["positive_clinical_benchmark_assessments"][0]
     assert assessment["record_id"] == "INGR_LACTOFERRIN"
     assert assessment["benchmark_value"] == 200.0
+
+
+def test_positive_benchmark_requires_label_purpose_applicability() -> None:
+    from dose_assessment import positive_clinical_benchmark
+
+    row = _ingredient(
+        name="Lactoferrin", canonical_id="lactoferrin", quantity=200, unit="mg",
+        raw_source_path="ingredientRows[0]", bio_score=None,
+    )
+    product = _product(
+        ingredients=[row], adequacy_results=[], product_name="Night Formula",
+        statements=[{"type": "Formula re: Contains", "notes": "Lactoferrin supports sleep."}],
+        evidence_data={"clinical_matches": [{
+            "id": "INGR_LACTOFERRIN",
+            "matched_source_row_refs": ["ingredientRows[0]"],
+        }]},
+    )
+
+    assert positive_clinical_benchmark(product, row) is None
 
 
 @pytest.mark.parametrize("record_id", ["INGR_D_MANNOSE", "INGR_L_CARNITINE"])

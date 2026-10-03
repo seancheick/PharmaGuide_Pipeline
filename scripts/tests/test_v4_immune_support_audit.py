@@ -236,7 +236,9 @@ def test_high_zinc_gummy_does_not_receive_clean_daily_immune_evidence_floor() ->
     out = score_product_v4(_emergency_gummy_product())
     evidence = out["v4_breakdown"]["module"]["dimensions"]["evidence"]
 
-    assert out["quality_score_v4_100"] < 60.0
+    # The approved equal-purpose Dose policy can move the aggregate score.
+    # This regression owns only the immune Evidence floor and therefore pins
+    # the raw Evidence result instead of an unrelated total-score threshold.
     assert evidence["score"] < 14.0
     assert evidence["metadata"]["immune_support_evidence_floor_applied"] is False
 
