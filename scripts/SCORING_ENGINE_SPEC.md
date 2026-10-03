@@ -1,6 +1,6 @@
 # PharmaGuide Scoring Engine Specification
 
-> Production scoring engine: **4.4.0**
+> Production scoring engine: **4.5.0**
 > V4 quality configuration: **1.21.2-omega-evidence-ownership**
 > Export schema: **2.5.0** / **117 core columns**
 > Stage-3 artifact schema: **4.3.0**
@@ -356,6 +356,11 @@ it does not rescore or overlay another result.
   owner decisions (null earns no affirmative credit), primary-mass-floor
   calibration for Evidence norms, and the vitamin-D bone-goal ownership change
   (bone goal is synergy-owned, not Evidence-owned).
+- **4.4.0 → 4.5.0** (2026-10-03): clinical amount adequacy moved to Dose;
+  declared-purpose Dose votes are equal; omega Evidence is selected by applicable
+  purpose and population instead of EPA+DHA amount; duplicate fiber detox/laxative
+  deductions were removed; held omega results now carry their canonical public
+  applicability or identity state.
 - **Config 1.12.0** (2026-09-18): omega semantics + null-no-credit; see the
   config `_metadata.description` for the full authored rationale.
 

@@ -69,6 +69,7 @@ def test_evidence_keeps_reviewed_weak_record_below_one_gram() -> None:
     assert payload["metadata"]["evidence_standard"] == "omega_reviewed_weak"
     assert payload["metadata"]["disclosed_epa_dha_clinical_floor_awarded"] is False
     assert payload["metadata"]["applicability_qualified"] is True
+    assert payload["metadata"]["evidence_result_state"] == "evaluated_applicable"
 
 
 def test_evidence_does_not_use_the_reviewed_trial_amount_as_a_threshold() -> None:
@@ -94,6 +95,7 @@ def test_prenatal_intake_authority_is_not_preterm_outcome_credit() -> None:
     assert payload["score"] == 11.1
     assert payload["metadata"]["evidence_standard"] == "prenatal_dha_intake_authority"
     assert payload["metadata"]["prenatal_outcome_credit_awarded"] is False
+    assert payload["metadata"]["evidence_result_state"] == "evaluated_authority"
 
 
 def test_explicit_adult_triglyceride_lowering_purpose_owns_strong_evidence() -> None:
@@ -148,6 +150,7 @@ def test_child_and_baby_products_do_not_borrow_adult_evidence(name: str) -> None
 
     assert payload["score"] == 0.0
     assert payload["metadata"]["applicability_qualified"] is False
+    assert payload["metadata"]["evidence_result_state"] == "applicability_unestablished"
 
 
 def test_dha_only_non_prenatal_product_does_not_borrow_epa_dha_evidence() -> None:
@@ -157,6 +160,7 @@ def test_dha_only_non_prenatal_product_does_not_borrow_epa_dha_evidence() -> Non
 
     assert payload["score"] == 0.0
     assert payload["metadata"]["applicability_qualified"] is False
+    assert payload["metadata"]["evidence_result_state"] == "identity_material_unresolved"
 
 
 def test_epa_only_product_does_not_borrow_combined_epa_dha_evidence() -> None:
@@ -166,6 +170,7 @@ def test_epa_only_product_does_not_borrow_combined_epa_dha_evidence() -> None:
 
     assert payload["score"] == 0.0
     assert payload["metadata"]["applicability_qualified"] is False
+    assert payload["metadata"]["evidence_result_state"] == "identity_material_unresolved"
 
 
 @pytest.mark.parametrize("name", ["Pro-Resolving Mediator Formula", "SPM Active Omega"])
@@ -177,6 +182,7 @@ def test_specialized_omega_delivery_does_not_borrow_ordinary_fish_oil_evidence(n
     assert payload["score"] == 0.0
     assert payload["metadata"]["applicability_qualified"] is False
     assert payload["metadata"]["applicability_reason"] == "held_specialized_preparation"
+    assert payload["metadata"]["evidence_result_state"] == "applicability_unestablished"
 
 
 def test_mixed_purpose_product_does_not_borrow_omega_only_evidence() -> None:
@@ -194,6 +200,24 @@ def test_mixed_purpose_product_does_not_borrow_omega_only_evidence() -> None:
     assert payload["score"] == 0.0
     assert payload["metadata"]["applicability_qualified"] is False
     assert payload["metadata"]["applicability_reason"] == "held_mixed_purpose_ownership"
+    assert payload["metadata"]["evidence_result_state"] == "applicability_unestablished"
+
+
+def test_held_omega_evidence_public_copy_does_not_claim_applicable_research() -> None:
+    from scoring_v4.modules.omega_evidence import score_evidence
+    from scoring_v4.quality_score import _config, _pillar_evidence
+
+    dimension = score_evidence(_product(epa=500, dha=0, name="EPA Concentrate"))
+    pillar = _pillar_evidence(dimension, 20.0, "omega", _config())
+
+    assert pillar["score"] == 0.0
+    assert pillar["evidence_result_state"] == "identity_material_unresolved"
+    assert pillar["display_state"] == "not_yet_reviewed"
+    assert pillar["reason"] == (
+        "Active ingredient identity or material form requires further scientific "
+        "clarification before evidence can be assessed."
+    )
+    assert "Limited human evidence" not in pillar["reason"]
 
 
 def test_unknown_frequency_records_default_without_inventing_a_range() -> None:

@@ -37,6 +37,21 @@ def _as_float(value: Any, default: float = 0.0) -> float:
         return default
 
 
+def _evidence_result_state(resolved: Dict[str, Any]) -> str:
+    """Translate the omega resolver's decision into the shared Evidence state."""
+    reason = str(resolved.get("applicability_reason") or "")
+    if reason == "prenatal_dha_intake_authority":
+        return "evaluated_authority"
+    if bool(resolved.get("applicability_qualified")):
+        return "evaluated_applicable"
+    if reason in {
+        "held_uncertain_identity",
+        "held_dha_only_or_incomplete_epa_dha_identity",
+    }:
+        return "identity_material_unresolved"
+    return "applicability_unestablished"
+
+
 def score_evidence(product: Any) -> Dict[str, Any]:
     """Score omega-class Evidence dimension."""
     if not isinstance(product, dict):
@@ -87,6 +102,7 @@ def score_evidence(product: Any) -> Dict[str, Any]:
         "indication_relevance_awarded": prenatal_authority,
         "indication_relevance_reason": "prenatal_dha_intake_authority" if prenatal_authority else "none",
         "applicability_reason": resolved.get("applicability_reason"),
+        "evidence_result_state": _evidence_result_state(resolved),
         "generic_evidence_metadata": generic_payload.get("metadata", {}),
     }
 

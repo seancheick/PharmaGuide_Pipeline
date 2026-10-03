@@ -1,6 +1,6 @@
 # PharmaGuide Scoring README
 
-> Operational summary | Last verified against code: 2026-09-18 | Engine 4.4.0
+> Operational summary | Last verified against code: 2026-10-03 | Engine 4.5.0
 
 ## The short version
 

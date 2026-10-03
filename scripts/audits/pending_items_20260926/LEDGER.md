@@ -551,6 +551,21 @@ Candidate production source `aca66621` on
   stale cross-module assertion; accepted232295 Evidence58.6→64.9 reproduced,
   the assertion now permits only Bromelain's named evidence-strength floor,
   and12focused checks plus the combined local rerun passed.
+- [x] The first local release-build attempt stopped before promotion at the
+  scoring snapshot gate. It exposed held omega `74716` carrying zero Evidence
+  but the generic fallback state `evaluated_applicable`. The existing omega
+  Evidence owner now emits the shared canonical result state: unresolved
+  EPA/DHA identity maps to `identity_material_unresolved`; child/baby,
+  specialized-delivery and mixed-purpose holds map to
+  `applicability_unestablished`; applicable ordinary/strong results and prenatal
+  authority retain assessed states. Product `74716` remains47.4 with Evidence0,
+  but its public reason now says identity requires clarification. Focused omega
+  slice98passed; local527passed/24declared opt-in skips. Material calibration is
+  now correctly identified as scoring engine4.5.0. Raw omega canary expectations
+  were re-pinned to already-approved behavior; no magnitude changed in this fix.
+- [ ] Sean must run Score only across the38 current enriched datasets after this
+  source correction; the completed Clean/Enrich stages remain usable, but the
+  existing scored artifacts have the prior source/version fingerprint.
 - [ ] Rebuild and validate catalog/export/interactions and Flutter bundle; run
   release/full backstops, verify real Nutrition Facts/active/other rendering,
   freeze the exact manifest and confirm live parity before publication.

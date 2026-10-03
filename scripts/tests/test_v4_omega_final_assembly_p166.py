@@ -276,15 +276,20 @@ def _load_canaries(ids):
 # transparency 9/13. Its PUBLIC six-pillar score is 82.0 (Very good) - the raw module
 # scale is where the removals bite hardest. No scoring change was made to satisfy an
 # old snapshot; the old ranges were pre-batch and are superseded by the locked policy.
+# Re-pinned 2026-10-03 after the approved Evidence-to-Dose transfer. Ordinary adult
+# labels receive the purpose-specific 10.4 Evidence result independent of amount;
+# the mixed-purpose Nordic label is held at zero instead of borrowing omega-only
+# credit. Dose continues to own EPA+DHA exposure. These are expectation updates for
+# the already-measured policy; no production magnitude changed here.
 @pytest.mark.parametrize("dsld_id,brand,expected_score_min,expected_score_max", [
-    ("327776", "Sports Research", 63.9, 64.9),
-    ("326270", "Sports Research", 63.9, 64.9),
-    ("288740", "Nordic Naturals", 56.1, 57.1),
+    ("327776", "Sports Research", 63.3, 64.3),
+    ("326270", "Sports Research", 63.3, 64.3),
+    ("288740", "Nordic Naturals", 41.7, 42.7),
     # Sep-08 canonical-form ordering restores the verified exact-SKU NSF match;
     # the approved audit already carries its verification15 (not brand-only2).
-    ("273630", "Garden of Life", 63.6, 64.6),
+    ("273630", "Garden of Life", 62.9, 63.9),
     ("239592", "CVS Health", 32.9, 33.9),
-    ("184654", "Pure Encapsulations",  42.4, 43.4),
+    ("184654", "Pure Encapsulations", 44.8, 45.8),
 ])
 def test_canary_final_score_in_range(dsld_id, brand, expected_score_min, expected_score_max):
     """Real-catalog raw-rubric omega scores lock in expected ranges.

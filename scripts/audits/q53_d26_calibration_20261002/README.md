@@ -204,3 +204,18 @@ permits only Bromelain's named evidence-strength floor and still rejects
 probiotic or unexplained credit; its 12 focused checks and the combined local
 rerun passed. Catalog build, release rung, app bundle rendering and publication
 remain separate gates.
+
+The first local release-build attempt then stopped before artifact promotion at
+the scoring snapshot gate. Four expected approved score movements were exposed,
+along with one real public-state defect: held omega product `74716` correctly
+had zero Evidence credit but inherited `evaluated_applicable` from generic audit
+metadata. The existing omega Evidence owner now emits the shared canonical
+result state. `74716` remains 47.4 with Evidence 0, while its public explanation
+now states that identity/material form requires clarification; it no longer says
+the product has limited applicable human evidence. Twenty-three direct omega
+state checks and the 98-check omega owner/consumer slice pass. The already
+approved material calibration is now identified as scoring engine `4.5.0`, and
+stale raw omega canary ranges were re-pinned without changing production
+magnitudes. The combined local gate passes 527 checks with 24 declared opt-in
+skips. A Score-only corpus rerun is required before snapshot freezing, catalog
+rebuild, app rendering verification or release gates continue.
