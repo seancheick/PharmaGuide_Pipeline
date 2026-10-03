@@ -5983,7 +5983,13 @@ def _role_is_blend_member(row: Dict[str, Any]) -> bool:
 def _role_is_probiotic_strain(row: Dict[str, Any]) -> bool:
     if _norm(row.get("dose_class")) == "probiotic_cfu":
         return True
-    return "cfu" in _norm(_row_unit(row))
+    # A strain disclosed under an aggregate blend often has NP/Not Present as
+    # its individual amount.  Its organism identity still makes it a declared
+    # probiotic purpose; the aggregate projection owns dose only.  Reuse the
+    # shared source-identity decision so roles cannot invent a second parser.
+    from probiotic_measurements import is_probiotic_source_identity
+
+    return is_probiotic_source_identity(row)
 
 
 def _named_in_title(row: Dict[str, Any], title_norm: str) -> bool:

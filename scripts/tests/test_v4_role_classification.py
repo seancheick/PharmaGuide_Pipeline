@@ -79,6 +79,40 @@ def test_product_level_protein_projection_is_a_sports_driver():
     assert roles["calcium"]["role"] == "adjunct"
 
 
+def test_named_probiotic_strains_are_route_drivers_without_individual_cfu_amounts():
+    """A blend's aggregate CFU is a dose owner, not the only purpose owner."""
+    product = _product("Daily Probiotic 10 Billion", "probiotic", [
+        _row(
+            "probiotic_cfu_total",
+            "Total Probiotic CFU",
+            10_000_000_000,
+            "CFU",
+            dose_class="probiotic_cfu",
+            scoring_input_kind="product_level_evidence",
+        ),
+        _row(
+            "lactobacillus_acidophilus",
+            "Lactobacillus acidophilus",
+            0,
+            "Not Present",
+            raw_category="bacteria",
+        ),
+        _row(
+            "bifidobacterium_bifidum",
+            "Bifidobacterium bifidum",
+            0,
+            "NP",
+            raw_category="bacteria",
+        ),
+    ])
+
+    roles = _by_canonical(product, module="probiotic")
+
+    assert roles["probiotic_cfu_total"]["role"] == "primary"
+    assert roles["lactobacillus_acidophilus"]["role"] == "primary"
+    assert roles["bifidobacterium_bifidum"]["role"] == "primary"
+
+
 def test_botanical_named_in_title_is_claim_prominent():
     product = _product("Organic Ashwagandha Extract", "herbal_botanical", [
         _row("ashwagandha", "Ashwagandha Root Extract", 600, "mg"),

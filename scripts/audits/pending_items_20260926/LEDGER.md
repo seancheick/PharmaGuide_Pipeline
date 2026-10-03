@@ -571,6 +571,17 @@ Candidate production source `aca66621` on
   12043 moving assessment complete→partial with unchanged score27.7; this is the
   expected identity-material-unresolved state, not a numeric or safety movement.
   All36 snapshots pass; local527passed/24declared opt-in skips and skip guard.
+- [x] The following release attempt stopped at strict clinical-match
+  reachability:137stored enriched artifacts differed from canonical replay.
+  Fail-first tracing proved Evidence ran before final probiotic/Nutrition Facts/
+  taxonomy/role owners. The existing matcher now runs after those projections;
+  the shared role owner recognizes NP/Not Present organism rows through
+  `probiotic_measurements.is_probiotic_source_identity`, so aggregate CFU owns
+  dose without erasing declared strain purpose. Frozen raw137+35control replay:
+  fresh reachability0findings;10Evidence-only increases,4Poor→Needs improvement,
+  zero decreases/non-Evidence/route/status/safety movements;546focused checks
+  pass. Receipt:`/Users/seancheick/pg_quality/q53_release_20261003/evidence_reachability_order/`.
+  Enrich+Score regeneration is required before release resumes.
 - [ ] Rebuild and validate catalog/export/interactions and Flutter bundle; run
   release/full backstops, verify real Nutrition Facts/active/other rendering,
   freeze the exact manifest and confirm live parity before publication.

@@ -23539,14 +23539,6 @@ class SupplementEnricherV3:
             enriched["certification_data"] = self._collect_certification_data(certification_input)
             enriched["proprietary_data"] = self._collect_proprietary_data(product)
 
-            # Section C: Evidence & Research
-            # Pass ingredient_quality_data so delivers_markers can drive
-            # marker-via-ingredient clinical matches (identity_bioactivity_split
-            # Phase 4 + Phase 5).
-            enriched["evidence_data"] = self._collect_evidence_data(
-                enriched, ingredient_quality_data=enriched.get("ingredient_quality_data")
-            )
-
             # Section D: Brand Trust
             manufacturer_data = self._collect_manufacturer_data(product)
             enriched["manufacturer_data"] = manufacturer_data
@@ -23573,15 +23565,13 @@ class SupplementEnricherV3:
                 enriched["rda_ul_data"] = self._empty_rda_ul_payload("disabled_by_config")
 
             # Probiotic-specific data
+            formula_match = None
             enriched["probiotic_data"] = self._collect_probiotic_data(enriched)
             if enriched["probiotic_data"].get("afu_measurements"):
                 from studied_formulas import assess_studied_formula, formula_clinical_match
                 formula_assessment = assess_studied_formula(enriched)
                 enriched["probiotic_data"]["studied_formula_assessment"] = formula_assessment
                 formula_match = formula_clinical_match(enriched)
-                if formula_match:
-                    enriched["evidence_data"]["clinical_matches"].append(formula_match)
-                    enriched["evidence_data"]["match_count"] = len(enriched["evidence_data"]["clinical_matches"])
 
             # Nutrition amounts are canonical routing inputs for products whose
             # protein identity is declared only in the Nutrition Facts panel.
@@ -23594,6 +23584,20 @@ class SupplementEnricherV3:
             # so the NP exemption gate for probiotic strains (is_probiotic_product)
             # can fire correctly. See apply_taxonomy_projection's precondition.
             self.apply_taxonomy_projection(enriched)
+
+            # Section C: Evidence & Research. The matcher and scorer share the
+            # final role owners, so evidence must run after probiotic,
+            # nutrition, taxonomy, and native scoring-classification
+            # projections. Running earlier stamps a different decision from a
+            # replay on the completed enriched artifact.
+            enriched["evidence_data"] = self._collect_evidence_data(
+                enriched, ingredient_quality_data=enriched.get("ingredient_quality_data")
+            )
+            if formula_match:
+                enriched["evidence_data"]["clinical_matches"].append(formula_match)
+                enriched["evidence_data"]["match_count"] = len(
+                    enriched["evidence_data"]["clinical_matches"]
+                )
 
             # Percentile category (cohort ranking). MUST run AFTER the taxonomy:
             # this projects the canonical classification, it does not compete

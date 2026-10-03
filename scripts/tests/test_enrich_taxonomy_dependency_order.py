@@ -142,6 +142,35 @@ def test_taxonomy_runs_after_ingredient_quality_data(monkeypatch, enricher, prod
     assert seen.get("has_iqd"), "the taxonomy ran before ingredient_quality_data"
 
 
+def test_clinical_evidence_runs_after_final_role_and_route_owners(
+    monkeypatch, enricher, product
+):
+    """Evidence matching must see the same canonical owners as scoring.
+
+    Protein, fiber, probiotic, and mixed-purpose routes can change the declared
+    purpose owners after taxonomy and native scoring classification.  Stamping
+    matches before those projections makes the enriched artifact disagree with
+    a replay of the same matcher on its final state.
+    """
+    seen: Dict[str, Any] = {}
+    real = enricher._collect_evidence_data
+
+    def spy(enriched, ingredient_quality_data=None):
+        seen["has_taxonomy"] = "supplement_taxonomy" in enriched
+        seen["has_product_evidence"] = "product_scoring_evidence" in enriched
+        seen["has_classification"] = "product_scoring_classification" in enriched
+        return real(enriched, ingredient_quality_data)
+
+    monkeypatch.setattr(enricher, "_collect_evidence_data", spy)
+    enricher.enrich_product(product)
+
+    assert seen == {
+        "has_taxonomy": True,
+        "has_product_evidence": True,
+        "has_classification": True,
+    }
+
+
 def test_route_classification_runs_after_nutrition_summary(monkeypatch, enricher, product):
     """Protein intent may be proven only by the declared nutrition amount.
 

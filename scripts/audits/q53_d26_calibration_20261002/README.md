@@ -229,3 +229,25 @@ score 27.7 and typed safety are unchanged, while quality assessment correctly
 moves complete to partial because EPA+DHA identity is unresolved. All 36
 snapshot checks and the local corpus gate (527 passed / 24 declared opt-in
 skips) now pass. Catalog, app bundle and release/full gates remain next.
+
+The next local release attempt reached the strict clinical-evidence match
+reachability gate and stopped before publication. It found 137 artifacts whose
+stored native matches differed from replay on the completed enriched record.
+The production defect was stage order: Evidence matched before probiotic,
+Nutrition Facts, taxonomy and native route/role projections existed. Moving the
+existing matcher after those owners initially exposed a second defect: NP/Not
+Present strain rows were treated as adjuncts when the aggregate CFU projection
+appeared. The shared role owner now reuses
+`probiotic_measurements.is_probiotic_source_identity`; aggregate CFU remains the
+dose owner and declared strains remain equal purpose owners.
+
+Frozen raw replay covers all 137 affected labels plus 35 controls. Fresh
+enrichment is reachability-clean (0 added, stale, unlinked or errored matches).
+Ten products gain Evidence-only scores, from +9.6 to +13.0; four cross
+Poor→Needs improvement. There are zero score decreases and zero non-Evidence
+pillar, route, scoring-status or typed-safety movements. Controls have zero
+score movement; one has role-provenance metadata only. Focused owner/consumer
+validation passes 546 checks. Receipt:
+`/Users/seancheick/pg_quality/q53_release_20261003/evidence_reachability_order/`.
+The manifest-owned enriched/scored corpus predates the correction, so Enrich
+and Score must be regenerated before release validation resumes.
