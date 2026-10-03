@@ -3,7 +3,7 @@
     "description": "Banned and recalled ingredients database for regulatory compliance and safety (v3.0)",
     "purpose": "safety_disqualification_and_regulatory_compliance",
     "schema_version": "5.5.3",
-    "last_updated": "2026-10-02",
+    "last_updated": "2026-10-03",
     "total_entries": 188,
     "data_source_metadata": {
       "sources": [
@@ -484,6 +484,11 @@
         "version": "5.5.3",
         "date": "2026-09-30",
         "change": "FDA weekly sync (30-day scan): added RECALLED_MIRACLE_POWER_OF_KING_KONG_HONEY and RECALLED_CANDY_POWER_FOR_MAN (undeclared tadalafil, FDA Health Fraud notices 2026-09-25); RECALLED_GREEN_LUMBER re-verified ongoing. Food recalls and allergen-only (Byron White walnut) records skipped."
+      },
+      {
+        "version": "5.5.3",
+        "date": "2026-10-03",
+        "change": "Verified BANNED_SIDA_CORDIFOLIA against live UMLS and assigned exact plant concept C1050672; retained UNII E6K1OK47SG as the substance identifier."
       }
     ]
   },
@@ -26005,13 +26010,18 @@
             "date": "2026-10-02",
             "by": "claude-audit",
             "change": "LEDGER Q64 (Sean 2026-10-02): reason now states the adverse events its copy names, from 69 FR 6788"
+          },
+          {
+            "date": "2026-10-03",
+            "by": "codex-release-audit",
+            "change": "Verified the exact UMLS plant concept C1050672 for Sida cordifolia; live lookup name and semantic type match the existing UNII-backed identity."
           }
         ]
       },
       "regulatory_date": "2004-04-12",
       "regulatory_date_label": "FDA ban effective",
       "match_mode": "active",
-      "cui": null,
+      "cui": "C1050672",
       "external_ids": {
         "unii": "E6K1OK47SG"
       },

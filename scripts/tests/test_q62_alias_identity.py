@@ -76,4 +76,5 @@ def test_sida_cordifolia_has_its_own_verified_rule():
     signal = SafetySignal(entry_id=entry["id"], source_db="banned_recalled_ingredients", status="banned", severity="critical",
                           subject_role="active", match_resolution="confirmed", match_confidence=1.0, policy_eligible=True,
                           review_required=False, inactive_policy="", evidence_text="Sida cordifolia")
+    assert entry["cui"] == "C1050672"
     assert _hard_policy_missing_requirements(entry, signal) == []
