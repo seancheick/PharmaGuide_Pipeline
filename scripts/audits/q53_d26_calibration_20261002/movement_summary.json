@@ -1,0 +1,109 @@
+{
+  "baseline_head": "e250cd679a30241b5a08f9bad4c396649303dc39",
+  "candidate_head": "374fb4b6aa7b153643e6262e0e45b13e13b99e3f",
+  "products": 344,
+  "movers": 71,
+  "score_movers": 71,
+  "direction": {
+    "up": 67,
+    "down": 4
+  },
+  "pillar_movers": {
+    "formulation": 2,
+    "dose": 17,
+    "evidence": 61,
+    "transparency": 2,
+    "verification": 0,
+    "safety_hygiene": 0
+  },
+  "pillar_direction": {
+    "formulation": {
+      "up": 2
+    },
+    "dose": {
+      "up": 7,
+      "down": 10
+    },
+    "evidence": {
+      "up": 61
+    },
+    "transparency": {
+      "up": 2
+    },
+    "verification": {},
+    "safety_hygiene": {}
+  },
+  "tier_transitions": {
+    "Needs improvement -> Good": 30,
+    "Poor -> Needs improvement": 6,
+    "Good -> Very good": 6,
+    "Good -> Needs improvement": 2
+  },
+  "status_movements": 0,
+  "safety_status_movements": 0,
+  "route_movements": 0,
+  "subroute_movements": 0,
+  "subtype_movements": 0,
+  "purpose_movements": 0,
+  "total_delta": {
+    "min": -5.5,
+    "max": 12.8,
+    "mean": 5.3803
+  },
+  "other_pillar_movers": [
+    {
+      "id": "227922",
+      "name": "Thisilyn Cleanse Part II",
+      "route": "fiber_digestive",
+      "baseline_total": 54.9,
+      "candidate_total": 57.0,
+      "total_delta": 2.1,
+      "pillar_deltas": {
+        "formulation": 2.1
+      },
+      "field_movements": {
+        "quality_tier": [
+          "Poor",
+          "Needs improvement"
+        ]
+      }
+    },
+    {
+      "id": "69507",
+      "name": "Women's Advanced Protein Cinnamon Bun",
+      "route": "sports",
+      "baseline_total": 44.0,
+      "candidate_total": 47.0,
+      "total_delta": 3.0,
+      "pillar_deltas": {
+        "transparency": 3.0
+      },
+      "field_movements": {}
+    },
+    {
+      "id": "74605",
+      "name": "Women's Advanced Protein Vanilla Ice Cream",
+      "route": "sports",
+      "baseline_total": 42.0,
+      "candidate_total": 45.0,
+      "total_delta": 3.0,
+      "pillar_deltas": {
+        "transparency": 3.0
+      },
+      "field_movements": {}
+    },
+    {
+      "id": "79233",
+      "name": "Thisilyn Daily Cleanse",
+      "route": "fiber_digestive",
+      "baseline_total": 58.8,
+      "candidate_total": 66.4,
+      "total_delta": 7.6,
+      "pillar_deltas": {
+        "formulation": 2.2,
+        "evidence": 5.4
+      },
+      "field_movements": {}
+    }
+  ]
+}

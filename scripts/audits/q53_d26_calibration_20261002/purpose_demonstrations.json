@@ -1,0 +1,72 @@
+[
+  {
+    "case": "1_declared_purpose",
+    "declared_purpose_count": 1,
+    "votes": [
+      22.0
+    ],
+    "unbenchmarked": [],
+    "dose_score": 22.0,
+    "participation_basis": "declared_purpose_equal_weight"
+  },
+  {
+    "case": "2_declared_purposes",
+    "declared_purpose_count": 2,
+    "votes": [
+      22.0,
+      16.0
+    ],
+    "unbenchmarked": [
+      "lactoferrin"
+    ],
+    "dose_score": 19.0,
+    "participation_basis": "declared_purpose_equal_weight"
+  },
+  {
+    "case": "3_declared_purposes",
+    "declared_purpose_count": 3,
+    "votes": [
+      22.0,
+      22.0,
+      16.0
+    ],
+    "unbenchmarked": [
+      "lactoferrin"
+    ],
+    "dose_score": 20.0,
+    "participation_basis": "declared_purpose_equal_weight"
+  },
+  {
+    "case": "4_declared_purposes",
+    "declared_purpose_count": 4,
+    "votes": [
+      22.0,
+      22.0,
+      22.0,
+      16.0
+    ],
+    "unbenchmarked": [
+      "lactoferrin"
+    ],
+    "dose_score": 20.5,
+    "participation_basis": "declared_purpose_equal_weight"
+  },
+  {
+    "case": "incidental_unbenchmarked_excluded",
+    "declared_purpose_count": 1,
+    "incidental": "lactoferrin",
+    "unbenchmarked": [],
+    "dose_score": 22.0,
+    "participation_basis": "declared_purpose_equal_weight"
+  },
+  {
+    "case": "required_amounts_hidden",
+    "hidden_amount_count": 8,
+    "is_live_eligible": false,
+    "quality_score_status": "not_scored",
+    "verdict": "NOT_SCORED",
+    "missing_fields": [
+      "micronutrient_amounts_missing_from_source"
+    ]
+  }
+]

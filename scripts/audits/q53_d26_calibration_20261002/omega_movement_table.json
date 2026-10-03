@@ -1,0 +1,90 @@
+[
+  {
+    "case": "ordinary_adult_epa_dha",
+    "baseline_evidence": 10.4,
+    "candidate_evidence": 10.4,
+    "evidence_delta": 0.0,
+    "baseline_dose": 16.0,
+    "candidate_dose": 16.0,
+    "dose_delta": 0.0,
+    "candidate_standard": "omega_reviewed_weak",
+    "candidate_applicability": "ordinary_adult_explicit_epa_dha"
+  },
+  {
+    "case": "triglyceride_purpose_adult",
+    "baseline_evidence": 10.4,
+    "candidate_evidence": 20.0,
+    "evidence_delta": 9.6,
+    "baseline_dose": 16.0,
+    "candidate_dose": 16.0,
+    "dose_delta": 0.0,
+    "candidate_standard": "triglyceride_strong",
+    "candidate_applicability": "explicit_adult_triglyceride_lowering_purpose"
+  },
+  {
+    "case": "prenatal",
+    "baseline_evidence": 11.1,
+    "candidate_evidence": 11.1,
+    "evidence_delta": 0.0,
+    "baseline_dose": 20.0,
+    "candidate_dose": 20.0,
+    "dose_delta": 0.0,
+    "candidate_standard": "prenatal_dha_intake_authority",
+    "candidate_applicability": "prenatal_dha_intake_authority"
+  },
+  {
+    "case": "dha_only",
+    "baseline_evidence": 10.4,
+    "candidate_evidence": 0.0,
+    "evidence_delta": -10.4,
+    "baseline_dose": 10.0,
+    "candidate_dose": 10.0,
+    "dose_delta": 0.0,
+    "candidate_standard": null,
+    "candidate_applicability": "held_dha_only_or_incomplete_epa_dha_identity"
+  },
+  {
+    "case": "child_baby",
+    "baseline_evidence": 10.4,
+    "candidate_evidence": 0.0,
+    "evidence_delta": -10.4,
+    "baseline_dose": 10.0,
+    "candidate_dose": 10.0,
+    "dose_delta": 0.0,
+    "candidate_standard": null,
+    "candidate_applicability": "held_child_or_baby_population"
+  },
+  {
+    "case": "mixed_purpose",
+    "baseline_evidence": 10.4,
+    "candidate_evidence": 0.0,
+    "evidence_delta": -10.4,
+    "baseline_dose": 10.0,
+    "candidate_dose": 10.0,
+    "dose_delta": 0.0,
+    "candidate_standard": null,
+    "candidate_applicability": "held_mixed_purpose_ownership"
+  },
+  {
+    "case": "specialized_preparation",
+    "baseline_evidence": 10.4,
+    "candidate_evidence": 0.0,
+    "evidence_delta": -10.4,
+    "baseline_dose": 10.0,
+    "candidate_dose": 10.0,
+    "dose_delta": 0.0,
+    "candidate_standard": null,
+    "candidate_applicability": "held_specialized_preparation"
+  },
+  {
+    "case": "unresolved_identity",
+    "baseline_evidence": 0.0,
+    "candidate_evidence": 0.0,
+    "evidence_delta": 0.0,
+    "baseline_dose": 0.0,
+    "candidate_dose": 0.0,
+    "dose_delta": 0.0,
+    "candidate_standard": null,
+    "candidate_applicability": "held_uncertain_identity"
+  }
+]

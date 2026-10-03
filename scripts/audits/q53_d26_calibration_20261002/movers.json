@@ -1,0 +1,1085 @@
+[
+  {
+    "id": "12160",
+    "name": "Acetyl L-Carnitine 400 mg Plus Alpha Lipoic Acid 200 mg",
+    "route": "generic",
+    "baseline_total": 69.7,
+    "candidate_total": 72.5,
+    "total_delta": 2.8,
+    "pillar_deltas": {
+      "dose": 2.8
+    },
+    "field_movements": {
+      "quality_tier": [
+        "Needs improvement",
+        "Good"
+      ]
+    }
+  },
+  {
+    "id": "175409",
+    "name": "Complete Vegan Gainer Natural Chocolate",
+    "route": "sports",
+    "baseline_total": 45.6,
+    "candidate_total": 54.4,
+    "total_delta": 8.8,
+    "pillar_deltas": {
+      "evidence": 8.8
+    },
+    "field_movements": {}
+  },
+  {
+    "id": "18453",
+    "name": "Healthy Digestion Formula Refreshing Citrus",
+    "route": "fiber_digestive",
+    "baseline_total": 53.0,
+    "candidate_total": 59.3,
+    "total_delta": 6.3,
+    "pillar_deltas": {
+      "evidence": 6.3
+    },
+    "field_movements": {
+      "quality_tier": [
+        "Poor",
+        "Needs improvement"
+      ]
+    }
+  },
+  {
+    "id": "187545",
+    "name": "Ribo Carnitine-Q10",
+    "route": "generic",
+    "baseline_total": 66.9,
+    "candidate_total": 79.7,
+    "total_delta": 12.8,
+    "pillar_deltas": {
+      "dose": 5.5,
+      "evidence": 7.3
+    },
+    "field_movements": {
+      "quality_tier": [
+        "Needs improvement",
+        "Good"
+      ]
+    }
+  },
+  {
+    "id": "211339",
+    "name": "Re-Built Mass XP Chocolate",
+    "route": "generic",
+    "baseline_total": 51.4,
+    "candidate_total": 55.6,
+    "total_delta": 4.2,
+    "pillar_deltas": {
+      "evidence": 4.2
+    },
+    "field_movements": {
+      "quality_tier": [
+        "Poor",
+        "Needs improvement"
+      ]
+    }
+  },
+  {
+    "id": "212977",
+    "name": "Cognitive Focus",
+    "route": "generic",
+    "baseline_total": 75.0,
+    "candidate_total": 82.3,
+    "total_delta": 7.3,
+    "pillar_deltas": {
+      "evidence": 7.3
+    },
+    "field_movements": {
+      "quality_tier": [
+        "Good",
+        "Very good"
+      ]
+    }
+  },
+  {
+    "id": "213912",
+    "name": "Advanced Acetyl-L-Carnitine",
+    "route": "generic",
+    "baseline_total": 66.5,
+    "candidate_total": 73.8,
+    "total_delta": 7.3,
+    "pillar_deltas": {
+      "evidence": 7.3
+    },
+    "field_movements": {
+      "quality_tier": [
+        "Needs improvement",
+        "Good"
+      ]
+    }
+  },
+  {
+    "id": "217568",
+    "name": "Carnitine Complex",
+    "route": "generic",
+    "baseline_total": 70.0,
+    "candidate_total": 66.4,
+    "total_delta": -3.6,
+    "pillar_deltas": {
+      "dose": -3.6
+    },
+    "field_movements": {
+      "quality_tier": [
+        "Good",
+        "Needs improvement"
+      ]
+    }
+  },
+  {
+    "id": "220140",
+    "name": "Re-Built Mass XP Vanilla",
+    "route": "sports",
+    "baseline_total": 61.6,
+    "candidate_total": 66.0,
+    "total_delta": 4.4,
+    "pillar_deltas": {
+      "evidence": 4.4
+    },
+    "field_movements": {}
+  },
+  {
+    "id": "220238",
+    "name": "Re-Built Mass XP Strawberry",
+    "route": "sports",
+    "baseline_total": 59.1,
+    "candidate_total": 63.5,
+    "total_delta": 4.4,
+    "pillar_deltas": {
+      "evidence": 4.4
+    },
+    "field_movements": {}
+  },
+  {
+    "id": "220239",
+    "name": "Re-Built Mass XP Peanut Butter",
+    "route": "sports",
+    "baseline_total": 63.6,
+    "candidate_total": 68.0,
+    "total_delta": 4.4,
+    "pillar_deltas": {
+      "evidence": 4.4
+    },
+    "field_movements": {}
+  },
+  {
+    "id": "227837",
+    "name": "Acetyl L-Carnitine 500 mg",
+    "route": "generic",
+    "baseline_total": 65.5,
+    "candidate_total": 72.8,
+    "total_delta": 7.3,
+    "pillar_deltas": {
+      "evidence": 7.3
+    },
+    "field_movements": {
+      "quality_tier": [
+        "Needs improvement",
+        "Good"
+      ]
+    }
+  },
+  {
+    "id": "227922",
+    "name": "Thisilyn Cleanse Part II",
+    "route": "fiber_digestive",
+    "baseline_total": 54.9,
+    "candidate_total": 57.0,
+    "total_delta": 2.1,
+    "pillar_deltas": {
+      "formulation": 2.1
+    },
+    "field_movements": {
+      "quality_tier": [
+        "Poor",
+        "Needs improvement"
+      ]
+    }
+  },
+  {
+    "id": "232295",
+    "name": "Enhanced Super Digestive Enzymes With Probiotics",
+    "route": "fiber_digestive",
+    "baseline_total": 58.6,
+    "candidate_total": 64.9,
+    "total_delta": 6.3,
+    "pillar_deltas": {
+      "evidence": 6.3
+    },
+    "field_movements": {}
+  },
+  {
+    "id": "232618",
+    "name": "Acetyl-L-Carnitine Arginate",
+    "route": "generic",
+    "baseline_total": 69.5,
+    "candidate_total": 76.8,
+    "total_delta": 7.3,
+    "pillar_deltas": {
+      "evidence": 7.3
+    },
+    "field_movements": {
+      "quality_tier": [
+        "Needs improvement",
+        "Good"
+      ]
+    }
+  },
+  {
+    "id": "232634",
+    "name": "Optimized Carnitine",
+    "route": "generic",
+    "baseline_total": 75.0,
+    "candidate_total": 79.6,
+    "total_delta": 4.6,
+    "pillar_deltas": {
+      "dose": -2.7,
+      "evidence": 7.3
+    },
+    "field_movements": {}
+  },
+  {
+    "id": "239865",
+    "name": "Vision Formula 50+",
+    "route": "generic",
+    "baseline_total": 58.7,
+    "candidate_total": 59.4,
+    "total_delta": 0.7,
+    "pillar_deltas": {
+      "evidence": 0.7
+    },
+    "field_movements": {}
+  },
+  {
+    "id": "239878",
+    "name": "Vision Formula 50+",
+    "route": "generic",
+    "baseline_total": 59.4,
+    "candidate_total": 60.1,
+    "total_delta": 0.7,
+    "pillar_deltas": {
+      "evidence": 0.7
+    },
+    "field_movements": {}
+  },
+  {
+    "id": "242997",
+    "name": "Acetyl-L-Carnitine Alpha-Lipoic Acid 500 mg/200 mg",
+    "route": "generic",
+    "baseline_total": 53.1,
+    "candidate_total": 62.1,
+    "total_delta": 9.0,
+    "pillar_deltas": {
+      "dose": 3.7,
+      "evidence": 5.3
+    },
+    "field_movements": {
+      "quality_tier": [
+        "Poor",
+        "Needs improvement"
+      ]
+    }
+  },
+  {
+    "id": "244298",
+    "name": "Re-Built Mass XP Strawberry",
+    "route": "sports",
+    "baseline_total": 63.0,
+    "candidate_total": 67.4,
+    "total_delta": 4.4,
+    "pillar_deltas": {
+      "evidence": 4.4
+    },
+    "field_movements": {}
+  },
+  {
+    "id": "244301",
+    "name": "Re-Built Mass XP Peanut Butter",
+    "route": "sports",
+    "baseline_total": 65.5,
+    "candidate_total": 69.9,
+    "total_delta": 4.4,
+    "pillar_deltas": {
+      "evidence": 4.4
+    },
+    "field_movements": {}
+  },
+  {
+    "id": "247312",
+    "name": "RevitalAge Ultra",
+    "route": "generic",
+    "baseline_total": 69.1,
+    "candidate_total": 71.9,
+    "total_delta": 2.8,
+    "pillar_deltas": {
+      "evidence": 2.8
+    },
+    "field_movements": {
+      "quality_tier": [
+        "Needs improvement",
+        "Good"
+      ]
+    }
+  },
+  {
+    "id": "252601",
+    "name": "ALCAR (Acetyl L-Carnitine) 600 mg",
+    "route": "generic",
+    "baseline_total": 65.5,
+    "candidate_total": 72.8,
+    "total_delta": 7.3,
+    "pillar_deltas": {
+      "evidence": 7.3
+    },
+    "field_movements": {
+      "quality_tier": [
+        "Needs improvement",
+        "Good"
+      ]
+    }
+  },
+  {
+    "id": "253517",
+    "name": "ALCAR (Acetyl L-Carnitine) 600 mg",
+    "route": "generic",
+    "baseline_total": 65.5,
+    "candidate_total": 72.8,
+    "total_delta": 7.3,
+    "pillar_deltas": {
+      "evidence": 7.3
+    },
+    "field_movements": {
+      "quality_tier": [
+        "Needs improvement",
+        "Good"
+      ]
+    }
+  },
+  {
+    "id": "253523",
+    "name": "ALCAR (Acetyl L-Carnitine) 600 mg",
+    "route": "generic",
+    "baseline_total": 65.5,
+    "candidate_total": 72.8,
+    "total_delta": 7.3,
+    "pillar_deltas": {
+      "evidence": 7.3
+    },
+    "field_movements": {
+      "quality_tier": [
+        "Needs improvement",
+        "Good"
+      ]
+    }
+  },
+  {
+    "id": "253560",
+    "name": "ALCAR (Acetyl L-Carnitine) 600 mg",
+    "route": "generic",
+    "baseline_total": 65.5,
+    "candidate_total": 72.8,
+    "total_delta": 7.3,
+    "pillar_deltas": {
+      "evidence": 7.3
+    },
+    "field_movements": {
+      "quality_tier": [
+        "Needs improvement",
+        "Good"
+      ]
+    }
+  },
+  {
+    "id": "268231",
+    "name": "Keto +Plus Fruit Punch",
+    "route": "generic",
+    "baseline_total": 51.9,
+    "candidate_total": 46.5,
+    "total_delta": -5.4,
+    "pillar_deltas": {
+      "dose": -5.4
+    },
+    "field_movements": {}
+  },
+  {
+    "id": "269270",
+    "name": "Acetyl L-Carnitine 500 mg",
+    "route": "generic",
+    "baseline_total": 65.5,
+    "candidate_total": 72.8,
+    "total_delta": 7.3,
+    "pillar_deltas": {
+      "evidence": 7.3
+    },
+    "field_movements": {
+      "quality_tier": [
+        "Needs improvement",
+        "Good"
+      ]
+    }
+  },
+  {
+    "id": "273859",
+    "name": "Vision Formula 50+",
+    "route": "generic",
+    "baseline_total": 56.0,
+    "candidate_total": 56.7,
+    "total_delta": 0.7,
+    "pillar_deltas": {
+      "evidence": 0.7
+    },
+    "field_movements": {}
+  },
+  {
+    "id": "277771",
+    "name": "Memory Pro",
+    "route": "generic",
+    "baseline_total": 75.8,
+    "candidate_total": 83.6,
+    "total_delta": 7.8,
+    "pillar_deltas": {
+      "evidence": 7.8
+    },
+    "field_movements": {
+      "quality_tier": [
+        "Good",
+        "Very good"
+      ]
+    }
+  },
+  {
+    "id": "277772",
+    "name": "Memory Pro",
+    "route": "generic",
+    "baseline_total": 75.8,
+    "candidate_total": 83.6,
+    "total_delta": 7.8,
+    "pillar_deltas": {
+      "evidence": 7.8
+    },
+    "field_movements": {
+      "quality_tier": [
+        "Good",
+        "Very good"
+      ]
+    }
+  },
+  {
+    "id": "287467",
+    "name": "RevitalAge Ultra",
+    "route": "generic",
+    "baseline_total": 69.1,
+    "candidate_total": 71.9,
+    "total_delta": 2.8,
+    "pillar_deltas": {
+      "evidence": 2.8
+    },
+    "field_movements": {
+      "quality_tier": [
+        "Needs improvement",
+        "Good"
+      ]
+    }
+  },
+  {
+    "id": "293876",
+    "name": "Acetyl-L-Carnitine 250 mg",
+    "route": "generic",
+    "baseline_total": 69.5,
+    "candidate_total": 76.8,
+    "total_delta": 7.3,
+    "pillar_deltas": {
+      "evidence": 7.3
+    },
+    "field_movements": {
+      "quality_tier": [
+        "Needs improvement",
+        "Good"
+      ]
+    }
+  },
+  {
+    "id": "293877",
+    "name": "Acetyl-L-Carnitine 500 mg",
+    "route": "generic",
+    "baseline_total": 69.5,
+    "candidate_total": 76.8,
+    "total_delta": 7.3,
+    "pillar_deltas": {
+      "evidence": 7.3
+    },
+    "field_movements": {
+      "quality_tier": [
+        "Needs improvement",
+        "Good"
+      ]
+    }
+  },
+  {
+    "id": "294054",
+    "name": "RevitalAge Ultra",
+    "route": "generic",
+    "baseline_total": 67.3,
+    "candidate_total": 70.1,
+    "total_delta": 2.8,
+    "pillar_deltas": {
+      "evidence": 2.8
+    },
+    "field_movements": {
+      "quality_tier": [
+        "Needs improvement",
+        "Good"
+      ]
+    }
+  },
+  {
+    "id": "299038",
+    "name": "CogniPhos",
+    "route": "generic",
+    "baseline_total": 71.9,
+    "candidate_total": 80.6,
+    "total_delta": 8.7,
+    "pillar_deltas": {
+      "evidence": 8.7
+    },
+    "field_movements": {
+      "quality_tier": [
+        "Good",
+        "Very good"
+      ]
+    }
+  },
+  {
+    "id": "299752",
+    "name": "RevitalAge Ultra",
+    "route": "generic",
+    "baseline_total": 67.3,
+    "candidate_total": 70.1,
+    "total_delta": 2.8,
+    "pillar_deltas": {
+      "evidence": 2.8
+    },
+    "field_movements": {
+      "quality_tier": [
+        "Needs improvement",
+        "Good"
+      ]
+    }
+  },
+  {
+    "id": "307547",
+    "name": "Acetyl L-Carnitine 500 mg",
+    "route": "generic",
+    "baseline_total": 63.0,
+    "candidate_total": 70.3,
+    "total_delta": 7.3,
+    "pillar_deltas": {
+      "evidence": 7.3
+    },
+    "field_movements": {
+      "quality_tier": [
+        "Needs improvement",
+        "Good"
+      ]
+    }
+  },
+  {
+    "id": "307548",
+    "name": "Acetyl L-Carnitine 500 mg",
+    "route": "generic",
+    "baseline_total": 63.0,
+    "candidate_total": 70.3,
+    "total_delta": 7.3,
+    "pillar_deltas": {
+      "evidence": 7.3
+    },
+    "field_movements": {
+      "quality_tier": [
+        "Needs improvement",
+        "Good"
+      ]
+    }
+  },
+  {
+    "id": "307705",
+    "name": "Neuro Optimizer",
+    "route": "generic",
+    "baseline_total": 71.2,
+    "candidate_total": 71.9,
+    "total_delta": 0.7,
+    "pillar_deltas": {
+      "evidence": 0.7
+    },
+    "field_movements": {}
+  },
+  {
+    "id": "309486",
+    "name": "CogniPhos",
+    "route": "generic",
+    "baseline_total": 71.9,
+    "candidate_total": 80.6,
+    "total_delta": 8.7,
+    "pillar_deltas": {
+      "evidence": 8.7
+    },
+    "field_movements": {
+      "quality_tier": [
+        "Good",
+        "Very good"
+      ]
+    }
+  },
+  {
+    "id": "309959",
+    "name": "Preseries Lean Pre-Workout Tropical Punch",
+    "route": "sports",
+    "baseline_total": 75.1,
+    "candidate_total": 82.2,
+    "total_delta": 7.1,
+    "pillar_deltas": {
+      "evidence": 7.1
+    },
+    "field_movements": {
+      "quality_tier": [
+        "Good",
+        "Very good"
+      ]
+    }
+  },
+  {
+    "id": "310613",
+    "name": "Acetyl L-Carnitine HCl (ALCAR HCl)",
+    "route": "generic",
+    "baseline_total": 65.5,
+    "candidate_total": 72.8,
+    "total_delta": 7.3,
+    "pillar_deltas": {
+      "evidence": 7.3
+    },
+    "field_movements": {
+      "quality_tier": [
+        "Needs improvement",
+        "Good"
+      ]
+    }
+  },
+  {
+    "id": "310614",
+    "name": "Acetyl L-Carnitine HCl (ALCAR HCl)",
+    "route": "generic",
+    "baseline_total": 65.5,
+    "candidate_total": 72.8,
+    "total_delta": 7.3,
+    "pillar_deltas": {
+      "evidence": 7.3
+    },
+    "field_movements": {
+      "quality_tier": [
+        "Needs improvement",
+        "Good"
+      ]
+    }
+  },
+  {
+    "id": "310615",
+    "name": "Acetyl L-Carnitine HCl (ALCAR HCl)",
+    "route": "generic",
+    "baseline_total": 65.5,
+    "candidate_total": 72.8,
+    "total_delta": 7.3,
+    "pillar_deltas": {
+      "evidence": 7.3
+    },
+    "field_movements": {
+      "quality_tier": [
+        "Needs improvement",
+        "Good"
+      ]
+    }
+  },
+  {
+    "id": "310616",
+    "name": "Acetyl L-Carnitine HCl (ALCAR HCl)",
+    "route": "generic",
+    "baseline_total": 65.5,
+    "candidate_total": 72.8,
+    "total_delta": 7.3,
+    "pillar_deltas": {
+      "evidence": 7.3
+    },
+    "field_movements": {
+      "quality_tier": [
+        "Needs improvement",
+        "Good"
+      ]
+    }
+  },
+  {
+    "id": "310727",
+    "name": "ALCAR 600 mg",
+    "route": "generic",
+    "baseline_total": 65.5,
+    "candidate_total": 72.8,
+    "total_delta": 7.3,
+    "pillar_deltas": {
+      "evidence": 7.3
+    },
+    "field_movements": {
+      "quality_tier": [
+        "Needs improvement",
+        "Good"
+      ]
+    }
+  },
+  {
+    "id": "326259",
+    "name": "Keto +Plus Raspberry Lemonade",
+    "route": "generic",
+    "baseline_total": 52.5,
+    "candidate_total": 47.0,
+    "total_delta": -5.5,
+    "pillar_deltas": {
+      "dose": -5.5
+    },
+    "field_movements": {}
+  },
+  {
+    "id": "326278",
+    "name": "Organic Elderberry Vitamin C + Zinc Gummies",
+    "route": "generic",
+    "baseline_total": 52.6,
+    "candidate_total": 57.7,
+    "total_delta": 5.1,
+    "pillar_deltas": {
+      "dose": 2.0,
+      "evidence": 3.1
+    },
+    "field_movements": {
+      "quality_tier": [
+        "Poor",
+        "Needs improvement"
+      ]
+    }
+  },
+  {
+    "id": "326706",
+    "name": "Gummies Vitamins D3 50 mcg (2,000 IU) & K2 100 mcg Raspberry Lemon Flavor",
+    "route": "generic",
+    "baseline_total": 60.9,
+    "candidate_total": 70.8,
+    "total_delta": 9.9,
+    "pillar_deltas": {
+      "dose": 1.0,
+      "evidence": 8.9
+    },
+    "field_movements": {
+      "quality_tier": [
+        "Needs improvement",
+        "Good"
+      ]
+    }
+  },
+  {
+    "id": "327409",
+    "name": "Probiotics 10 Billion Gummies Orange Dream Flavor",
+    "route": "generic",
+    "baseline_total": 70.6,
+    "candidate_total": 79.5,
+    "total_delta": 8.9,
+    "pillar_deltas": {
+      "evidence": 8.9
+    },
+    "field_movements": {}
+  },
+  {
+    "id": "328273",
+    "name": "Acetyl-L-Carnitine 500 mg",
+    "route": "generic",
+    "baseline_total": 69.0,
+    "candidate_total": 72.1,
+    "total_delta": 3.1,
+    "pillar_deltas": {
+      "dose": 3.1
+    },
+    "field_movements": {
+      "quality_tier": [
+        "Needs improvement",
+        "Good"
+      ]
+    }
+  },
+  {
+    "id": "328274",
+    "name": "Acetyl-L-Carnitine Arginate",
+    "route": "generic",
+    "baseline_total": 69.5,
+    "candidate_total": 76.8,
+    "total_delta": 7.3,
+    "pillar_deltas": {
+      "evidence": 7.3
+    },
+    "field_movements": {
+      "quality_tier": [
+        "Needs improvement",
+        "Good"
+      ]
+    }
+  },
+  {
+    "id": "328448",
+    "name": "Enhanced Super Digestive Enzymes and Probiotics",
+    "route": "fiber_digestive",
+    "baseline_total": 54.6,
+    "candidate_total": 60.9,
+    "total_delta": 6.3,
+    "pillar_deltas": {
+      "evidence": 6.3
+    },
+    "field_movements": {
+      "quality_tier": [
+        "Poor",
+        "Needs improvement"
+      ]
+    }
+  },
+  {
+    "id": "328611",
+    "name": "Optimized Carnitine",
+    "route": "generic",
+    "baseline_total": 75.0,
+    "candidate_total": 79.6,
+    "total_delta": 4.6,
+    "pillar_deltas": {
+      "dose": -2.7,
+      "evidence": 7.3
+    },
+    "field_movements": {}
+  },
+  {
+    "id": "330687",
+    "name": "Probiotics 10 Billion Gummies Orange Dream Flavor",
+    "route": "generic",
+    "baseline_total": 70.6,
+    "candidate_total": 79.5,
+    "total_delta": 8.9,
+    "pillar_deltas": {
+      "evidence": 8.9
+    },
+    "field_movements": {}
+  },
+  {
+    "id": "336897",
+    "name": "Vitamin D3 + K2",
+    "route": "generic",
+    "baseline_total": 57.1,
+    "candidate_total": 64.6,
+    "total_delta": 7.5,
+    "pillar_deltas": {
+      "dose": -1.4,
+      "evidence": 8.9
+    },
+    "field_movements": {}
+  },
+  {
+    "id": "47811",
+    "name": "Mitochondrial Basics With BioPQQ",
+    "route": "generic",
+    "baseline_total": 59.9,
+    "candidate_total": 71.7,
+    "total_delta": 11.8,
+    "pillar_deltas": {
+      "dose": -0.4,
+      "evidence": 12.2
+    },
+    "field_movements": {
+      "quality_tier": [
+        "Needs improvement",
+        "Good"
+      ]
+    }
+  },
+  {
+    "id": "59032",
+    "name": "Optimized Carnitine With GlycoCarn",
+    "route": "generic",
+    "baseline_total": 75.0,
+    "candidate_total": 79.6,
+    "total_delta": 4.6,
+    "pillar_deltas": {
+      "dose": -2.7,
+      "evidence": 7.3
+    },
+    "field_movements": {}
+  },
+  {
+    "id": "59033",
+    "name": "Optimized Carnitine With GlycoCarn",
+    "route": "generic",
+    "baseline_total": 75.0,
+    "candidate_total": 79.6,
+    "total_delta": 4.6,
+    "pillar_deltas": {
+      "dose": -2.7,
+      "evidence": 7.3
+    },
+    "field_movements": {}
+  },
+  {
+    "id": "59197",
+    "name": "Mitochodrial Basics",
+    "route": "generic",
+    "baseline_total": 68.3,
+    "candidate_total": 73.6,
+    "total_delta": 5.3,
+    "pillar_deltas": {
+      "evidence": 5.3
+    },
+    "field_movements": {
+      "quality_tier": [
+        "Needs improvement",
+        "Good"
+      ]
+    }
+  },
+  {
+    "id": "59709",
+    "name": "Acetyl-L-Carnitine Arginate",
+    "route": "generic",
+    "baseline_total": 69.5,
+    "candidate_total": 76.8,
+    "total_delta": 7.3,
+    "pillar_deltas": {
+      "evidence": 7.3
+    },
+    "field_movements": {
+      "quality_tier": [
+        "Needs improvement",
+        "Good"
+      ]
+    }
+  },
+  {
+    "id": "60308",
+    "name": "Acetyl L-Carnitine HCl 400 mg With Alpha Lipoic Acid 200 mg",
+    "route": "generic",
+    "baseline_total": 72.7,
+    "candidate_total": 75.5,
+    "total_delta": 2.8,
+    "pillar_deltas": {
+      "dose": 2.8
+    },
+    "field_movements": {}
+  },
+  {
+    "id": "64800",
+    "name": "Acetyl-L-Carnitine Arginate",
+    "route": "generic",
+    "baseline_total": 69.5,
+    "candidate_total": 76.8,
+    "total_delta": 7.3,
+    "pillar_deltas": {
+      "evidence": 7.3
+    },
+    "field_movements": {
+      "quality_tier": [
+        "Needs improvement",
+        "Good"
+      ]
+    }
+  },
+  {
+    "id": "64842",
+    "name": "Enhanced Super Digestive Enzymes With Probiotics",
+    "route": "fiber_digestive",
+    "baseline_total": 58.6,
+    "candidate_total": 64.9,
+    "total_delta": 6.3,
+    "pillar_deltas": {
+      "evidence": 6.3
+    },
+    "field_movements": {}
+  },
+  {
+    "id": "69507",
+    "name": "Women's Advanced Protein Cinnamon Bun",
+    "route": "sports",
+    "baseline_total": 44.0,
+    "candidate_total": 47.0,
+    "total_delta": 3.0,
+    "pillar_deltas": {
+      "transparency": 3.0
+    },
+    "field_movements": {}
+  },
+  {
+    "id": "74605",
+    "name": "Women's Advanced Protein Vanilla Ice Cream",
+    "route": "sports",
+    "baseline_total": 42.0,
+    "candidate_total": 45.0,
+    "total_delta": 3.0,
+    "pillar_deltas": {
+      "transparency": 3.0
+    },
+    "field_movements": {}
+  },
+  {
+    "id": "79233",
+    "name": "Thisilyn Daily Cleanse",
+    "route": "fiber_digestive",
+    "baseline_total": 58.8,
+    "candidate_total": 66.4,
+    "total_delta": 7.6,
+    "pillar_deltas": {
+      "formulation": 2.2,
+      "evidence": 5.4
+    },
+    "field_movements": {}
+  },
+  {
+    "id": "81808",
+    "name": "Carnitine Complex",
+    "route": "generic",
+    "baseline_total": 70.0,
+    "candidate_total": 66.4,
+    "total_delta": -3.6,
+    "pillar_deltas": {
+      "dose": -3.6
+    },
+    "field_movements": {
+      "quality_tier": [
+        "Good",
+        "Needs improvement"
+      ]
+    }
+  },
+  {
+    "id": "82601",
+    "name": "Enzyme Blend - AM Packet",
+    "route": "fiber_digestive",
+    "baseline_total": 48.4,
+    "candidate_total": 54.7,
+    "total_delta": 6.3,
+    "pillar_deltas": {
+      "evidence": 6.3
+    },
+    "field_movements": {}
+  },
+  {
+    "id": "83268",
+    "name": "Re-Built Mass XP Strawberry",
+    "route": "generic",
+    "baseline_total": 47.3,
+    "candidate_total": 51.5,
+    "total_delta": 4.2,
+    "pillar_deltas": {
+      "evidence": 4.2
+    },
+    "field_movements": {}
+  }
+]

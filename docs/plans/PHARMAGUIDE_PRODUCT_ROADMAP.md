@@ -56,6 +56,13 @@ The [master completion plan](PHARMAGUIDE_MASTER_COMPLETION_PLAN.md), Phases 1–
 integrator. No export-schema change mixes into it. Work that can run beside it because it touches
 no shared pipeline owner: items 1.1, 1.2 and authoring the benchmark scenarios for 1.10.
 
+Current checkpoint (October 2): D26/D24/omega source implementation and bounded
+calibration are complete at `374fb4b6`; independent review found no remaining
+code finding. The 344-label replay explains all 71 movers and has zero typed
+safety, scoring-status, route or purpose movement. Alternate-serving raw census
+is closed for the current source. Phase 0 now waits on the fresh full Clean run,
+release gates, rebuilt app rendering verification and exact candidate approval.
+
 ### Phase 1 — truth reconciliation
 
 - [ ] **1.1 Website claims match the engine.** Verified over-claims at `web:` commit `8bfb775` [V]:
@@ -96,7 +103,8 @@ no shared pipeline owner: items 1.1, 1.2 and authoring the benchmark scenarios f
   The app already has the compact six-bar card (`app:lib/core/components/pg_score_breakdown_card.dart`)
   and a built-but-unmounted label-confidence section (`buildLabelConfidenceSection`, defined and
   never called) [V].
-  NOT_SCORED must say what is missing.
+  `not_scored` products remain excluded from the shipped catalog, so no new
+  public explanation contract is required for them.
 - [ ] **1.5 Personal card.** Today `app:lib/features/product_detail/v2/sections/review_before_use_section.dart::buildProfileRelevanceSummary`
   already leads with safety and caps goal tiers under a caution [V]. Add: a separate goal line shown
   only on a match; the trigger trail ("your medication + this ingredient + this dose") by wiring the

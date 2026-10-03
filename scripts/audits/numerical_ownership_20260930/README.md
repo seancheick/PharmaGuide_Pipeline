@@ -1,10 +1,11 @@
 # Six-pillar numerical ownership inventory
 
-Status: **DRAFT — inventory only.** This artifact records the numerical rules reachable from the
-production v4 scorer at `7cf7100d22276e430981333b275a36718475bc2c`. It changes no score, config,
-test, catalog or release artifact. Rows marked **DRAFT POLICY** depend on the unresolved Phase 1
-Evidence-to-Dose transfer or Phase 5 calibration/overlap decision. Their present implementation is
-reported as fact; it is not ratified by this document.
+Status: **current ownership decisions closed for the pre-Clean candidate.** The
+original table below records the numerical rules reachable from the production
+v4 scorer at `7cf7100d22276e430981333b275a36718475bc2c`; its `DRAFT POLICY`
+labels are historical. The October 2 closure amendment at the end records the
+approved current dispositions and links the measured candidate. Catalog and
+release validation remain pending.
 
 ## Owner check and production reachability
 
@@ -217,3 +218,47 @@ Whole clinical/Dose decision preparation is now in the existing transfer packet 
 | Stimulant laxative | Focus component and separate fixed penalty | Formulation | `fiber_digestive_formulation::_fiber_focus` plus `fiber_digestive_formulation::_fiber_penalties` | Live overlap:5→1 component plus−8 penalty; Safety risk is a distinct judgment, not an automatic duplicate |
 
 The original per-product receipt for35Q3 historical POOR→SAFE aliases has not been located in the current audit directories; the aggregate receipt is insufficient. Those were legacy quality-threshold crossings, not improved safety. Retain the individual inspection gate and make any reconstructed measurement identify exact source/input provenance. Do not substitute current-input movements for the original35. No calibration/full-rule audit or release checkbox closes from this packet.
+
+## October 2 approved implementation and calibration closure
+
+The previously open D26/D24/omega and overlap decisions are now implemented and
+measured at production source `374fb4b6`. The complete receipt is
+[`q53_d26_calibration_20261002`](../q53_d26_calibration_20261002/README.md).
+
+Current dispositions supersede the historical `DRAFT POLICY` labels above:
+
+- Generic, branded-preparation and omega amount adequacy are Dose-owned.
+  Evidence retains identity, preparation, population, purpose, outcome and
+  study-strength judgments without an amount threshold.
+- Declared-purpose ingredients vote equally through the shared role owner.
+  Incidental/supporting ingredients do not enter without their own purpose.
+- Disclosed but unbenchmarked Dose keeps the existing limited-assessability
+  fallback. Required missing panel amounts remain `not_scored`.
+- The four retained D26 Evidence amount/prominence safeguards are removed only
+  after the same preparation rows are assessed by existing Dose owners.
+- Omega Evidence is fixed at 10.4 ordinary applicable adult EPA+DHA, 20 explicit
+  applicable adult triglyceride-lowering purpose and 11.1 prenatal intake
+  authority. Child/baby, non-prenatal DHA-only, mixed-purpose, specialized and
+  unresolved identities remain held.
+- Dose useful-range appropriateness and Safety threshold risk remain distinct
+  approved judgments. Form, population, daily exposure and reference basis are
+  retained in their owner payloads.
+- Fiber detox/cleanse and stimulant-laxative fixed duplicate penalties are
+  removed. Each source fact retains one Formulation judgment.
+- Additive/sugar formula quality versus capped Safety/Hygiene consequence,
+  restricted-material preference versus B1 severity, Transparency blend
+  disclosure versus Dose unassessability, and Verification certification versus
+  zero-point sustainability metadata are reviewed distinct judgments rather
+  than numerical duplicates.
+- Purpose/prominence now comes from `classify_ingredient_roles`; no independent
+  mass-derived Evidence or Dose purpose owner remains.
+
+The original Q3 receipt was recovered. All 35 legacy `POOR → SAFE` aliases are
+Poor→Needs improvement quality crossings; Safety/Hygiene and B1 are unchanged
+in all 35. The per-product reconstruction is preserved in
+`q53_d26_calibration_20261002/q3_legacy_crossings.json`.
+
+The frozen 344-label replay has 71 score movers, all explained; no scoring
+status, typed safety, route, subroute, subtype or purpose changes. A full Clean
+corpus, release rung and runtime publication are still required before this
+calibration ships.

@@ -499,3 +499,50 @@ Remaining Q53 identity projection probe: candidate264105 retains explicit raw LA
 - [ ] Integrate the active codex/q53-calibration-completion lane after validation on current main. It is not stale: its clinical fixes remain absent from main. Its earlier local gate rejected missing artifacts; do not mark it accepted from green CI alone.
 
 Cleanup receipts: /Users/seancheick/pg_quality/branch_cleanup_20261002/; accepted local log: /Users/seancheick/pg_quality/q65_cleanup_local_20261002.log. Main checkout is clean; only the active calibration worktree/branch remains besides main. S1 detail-blob versus core-column observation remains in Q65; removal of danger does not establish that every report axis is live.
+
+
+## October 2 — approved D26/D24/omega implementation and calibration
+
+Candidate production source `374fb4b6` on
+`codex/q53-calibration-completion`; not merged to main and not runtime-published.
+
+- [x] Exact positive applicable preparation benchmarks are Dose-owned. Null,
+  mixed and inapplicable trials do not establish adequacy.
+- [x] Declared-purpose ingredients vote equally through the shared role owner;
+  existing collagen, botanical, sleep, joint and immune per-purpose Dose owners
+  remain active. Incidental rows are excluded without their own purpose.
+- [x] Disclosed/unbenchmarked amounts retain limited-assessability credit;
+  required missing panel amounts retain `not_scored`.
+- [x] Remove the four D26 Evidence amount/prominence safeguards after equivalent
+  Dose assessment exists. Identity/preparation/population/purpose guards remain.
+- [x] Omega Evidence is amount-independent at ordinary adult10.4, explicit
+  adult triglyceride-purpose20 and prenatal11.1; DHA-only, child/baby, mixed,
+  specialized and unresolved identities are held.
+- [x] Retain separate Dose useful-range and Safety threshold-risk judgments.
+- [x] Remove duplicate fixed fiber detox/laxative penalties; retain one
+  Formulation judgment for each source fact.
+- [x] Close current alternate-serving duplicate class:15,414 raw labels,
+  323multi-column, top-level repeats108→0, all-tree141→18 distinct branches.
+- [x] Recover and inspect all35 historical Q3 legacy POOR→SAFE aliases. Every
+  case is Poor→Needs improvement quality movement; Safety/Hygiene and B1 are
+  unchanged35/35.
+- [x] Frozen raw replay baseline`e250cd67`→candidate`374fb4b6`,344/344 same
+  manifest.71score movers:67up/4down; Evidence61up; Dose7up/10down;
+  Formulation2up; Transparency2up; zero Verification/Safety-Hygiene/status/
+  typed-safety/route/subroute/subtype/purpose movement. Tier transitions:
+  NI→Good30, Poor→NI6, Good→Very good6, Good→NI2. All movements explained.
+- [x] Independent scoring-policy and serving/app reviews accepted the final
+  source with no remaining findings. App contract needs no source change:
+  canonical `display_ingredients` partitions Nutrition Facts, active and other
+  ingredients.
+- [ ] Run final local rung and exact-candidate branch CI after documentation
+  integration.
+- [ ] Sean runs fresh full Clean/Enrich/Score. Then validate catalog/export,
+  release rung, real app Nutrition Facts/active/other rendering, manifest and
+  live parity before publication.
+
+Owner: existing Dose/Evidence/role/serving/public-score owners named in the
+master plan. Will NOT create: scorer, registry, parser, public field/status,
+role classifier, serving selector or app calculation. Durable receipt:
+`scripts/audits/q53_d26_calibration_20261002/`; external replay artifacts:
+`/Users/seancheick/pg_quality/q53_calibration_final_20261002/`.

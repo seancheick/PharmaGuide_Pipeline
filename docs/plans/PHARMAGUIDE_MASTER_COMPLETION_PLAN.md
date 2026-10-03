@@ -20,8 +20,8 @@ This is the current checkpoint. It replaces the older “next ingredient” inst
 - [x] Repair the stale Wave 2 authoring facts found by CI. Exact rerun, identity, source and status guards remain; all 59 contexts verify without writing, and three deliberate factual mutations are rejected. Runtime scoring/data fingerprints remain identical to the accepted replay.
 - [x] Complete exact-source `59d96720` CI: [run37074275969](https://github.com/seancheick/PharmaGuide_Pipeline/actions/runs/37074275969), 18,237 passed, 183 declared skips, all four shards green. The earlier fixture-failing run is superseded.
 - [ ] Integrate the reviewed source and documentation with current main through the active integrator. Main advanced during this batch; baseline validation does not establish the combined safety/clinical candidate.
-- [ ] Decide the remaining clinical/numerical policies as one packet, then implement D26/D24/omega and calibration through existing owners in one combined batch. Source qualification does not approve a positive grade, universal benchmark, denominator, withholding rule or deduction.
-- [ ] Finish the remaining role/serving/subject census and every live numerical-rule ownership row. Inspect all 35 historical Q3 quality crossings individually; the original per-product receipt has not been located, so aggregate counts do not close that gate.
+- [x] Decide and implement the approved D26/D24/omega policy through existing owners; complete bounded calibration, independent review and the 344-label frozen replay (`374fb4b6`; [receipt](../../scripts/audits/q53_d26_calibration_20261002/README.md)).
+- [x] Close the remaining alternate-serving duplicate class and every live numerical-rule ownership row. The 15,414-label raw census has zero repeated top-level names after reconciliation. Recover and inspect all 35 historical Q3 quality crossings individually; all are quality-tier aliases with unchanged Safety/Hygiene and B1.
 - [ ] After final integration, Sean runs the fresh pipeline. Check catalog, interactions, canaries, release gates, full backstop, frozen manifest, exact approval and live parity before publication.
 
 Owner: existing clinical registries and IQM; `RDAULCalculator::_form_scoped_reference`; `studied_formulas::assess_probiotic_evidence`; and `probiotic_evidence::score_evidence` with its existing eligibility/family selector. Evidence: source regressions, primary receipts, consumer searches and independent production probes. Will NOT create: another registry, scorer, parser, public field/status, grade, benchmark or numerical policy.
@@ -173,11 +173,11 @@ The October 1 source audit reconciled these boxes against current production and
 | Item | Current status | What happens next |
 |---|---|---|
 | Phase 0 final baseline/artifact recheck | Current source reconciliation complete; final gate pending | Repeat at the exact candidate freeze, after the last scoring/data change |
-| Phase 1 generic amount transfer / D26 | Partial: preparation/source binding corrected; equivalent Dose coverage incomplete | Verify nine benchmark groups, prepare D24 policy packet, then transfer through existing Dose owners |
-| Phase 1 omega Evidence mapping | Open; blanket full-credit proposal rejected | Prepare purpose/applicability and magnitude packet for Sean before integration |
-| Phase 1 transfer-invariant audit | Probiotic bounded transfer validated; all-route closure pending | Check each remaining transfer, then close the complete owner inventory |
+| Phase 1 generic amount transfer / D26 | Implemented, measured and independently reviewed | Validate on Sean's fresh full corpus before release |
+| Phase 1 omega Evidence mapping | Implemented with applicability holds | Validate all eight classes on the fresh full corpus |
+| Phase 1 transfer-invariant audit | Closed for current source | Recheck rebuilt artifacts at release gate |
 | Phase 2 shared prominence owner | Implemented, measured, reviewed and integrated | Marked complete; retained amount guards stay under Phase 1/D26 |
-| Phase 2 remaining serving duplicates | Partly fixed; remaining raw variants open | Group by source defect, reproduce on frozen raw labels and fix canonical cleaner/serving owners |
+| Phase 2 remaining serving duplicates | Closed for current raw corpus | Recheck canonical output and app rendering after fresh Clean |
 | Phase 2 dual-use ingredient roles | Ravage/trace-protein examples corrected; broader class open | Inspect current source/purpose facts and correct shared owners without amount-based demotion |
 | Phase 2 final subject census | Pending corrected subjects | Recompute after the remaining source corrections; classify holds and deltas |
 
@@ -215,9 +215,9 @@ The October 1 source audit reconciled these boxes against current production and
 - [x] Prove exact approved-candidate numerical equivalence, migrate tests semantically, pass the full fast suite and obtain fresh review (Q47).
 - [x] Correct D26 collagen preparation/source binding through existing owners (`c8f53b46`);285 frozen controls identical,18,018 fast checks passed and fresh review accepted. This fixes source ownership, not the remaining amount transfer.
 - [x] Verify all nine uncovered benchmark groups/four retained D26 stand-ins and prepare the whole D24 denominator/publication/excess and omega decision packet (October2 combined batch,86synthetic/16real probes).
-- [ ] **POLICY / IMPLEMENTATION DEPENDENCY:** Transfer remaining generic clinical-amount judgments only after approval and equivalent existing-Dose ownership. Preserve the four D26 safeguards until their replacement exists; do not delete amount gates based on packet completion.
-- [ ] **APPROVAL / IMPLEMENTATION DEPENDENCY:** Settle and integrate omega purpose/applicability mapping; carrier oil mass supplies neither EPA/DHA exposure nor clinical credit. The blanket O1 proposal remains rejected (Q45).
-- [ ] **PHASE-1 EXIT CHECK:** Recheck every removed amount gate against the transfer inventory: no lost assessment and no duplicate deduction. Approved probiotic transfers already have their bounded review/replay receipts; the all-route closure waits for generic and omega transfers.
+- [x] Transfer remaining generic clinical-amount judgments after approval and equivalent existing-Dose ownership. Exact positive applicable preparation benchmarks only; the four D26 safeguards were removed only after Dose coverage existed.
+- [x] Integrate omega purpose/applicability mapping; carrier oil mass supplies neither EPA/DHA exposure nor clinical credit. Ordinary adult / triglyceride-purpose / prenatal map to 10.4 / 20 / 11.1 and the five excluded classes remain held.
+- [x] **PHASE-1 EXIT CHECK:** Recheck every removed amount gate against the transfer inventory: no lost assessment and no duplicate deduction. The 344-label replay has zero status, safety, route or purpose movement.
 
 **Invariant:** an amount judgment cannot leave Evidence until the same judgment is already in Dose or is added to the existing Dose owner in the same change. Removing amount gates must not automatically award full Evidence marks.
 
@@ -238,7 +238,7 @@ The October 1 source audit reconciled these boxes against current production and
   - [x] Reconcile and independently validate Claude's later production `68cae99a` and Q51's record-unit amount reader, retaining the Codex member-total safeguards. Combined source `a3a2d904`: 17,994 fast tests passed, 167 skipped, zero failures/xfails; seven independent consumer probes passed. Latest-Claude control replay: all 1,259 captured payloads identical; narrow 186-label replay retains the single explained UC-II correction. Earlier pinned results alone do not validate this combined source.
   - [x] Claude latest-source implementation/cohort measurement validated on `68cae99a` (17,954 passed, 168 skipped); Codex independently reconciled and tested the combined source. This is sampling, not full-corpus release validation.
   - [x] Integrate the validated combined source on main, including Q49 safeguards and Q51 record-unit comparisons. Remaining Q49 follow-ups/D26 stay open; this does not close the Phase 2 umbrella or authorize catalog release.
-- [ ] **SOURCE WORK NEXT:** Resolve remaining alternate-serving identity/duplicate cases from raw JSON (Q39), including audience-only serving notes and inconsistent column contents. The earlier same-order merge and trace-protein fix are completed; they do not close all variants. Never merge materially different preparations or discard label variants.
+- [x] Resolve remaining alternate-serving identity/duplicate cases from raw JSON (Q39), including audience-only serving notes, inconsistent column contents and shared-form-UNII wording drift. Raw census: 108→0 repeated top-level names; 141→18 all-tree names, with all 18 retained as distinct authored branches. Never merge materially different preparations or discard label variants.
 - [ ] **SOURCE WORK NEXT:** Align remaining dual-use active/excipient decisions without using amount as a substitute for purpose. Ravage and trace-protein corrections are completed examples; the broader class remains open. Preserve genuine excipients, source-section membership and nutrition rollups.
 - [ ] **AFTER SOURCE CORRECTIONS:** Recompute the final Evidence-subject census after the remaining serving/role corrections and classify all holds and changes. Earlier frozen cohort checks do not establish this final census.
 
@@ -260,23 +260,23 @@ Do not introduce the rejected mass-based demotion of purpose ingredients. Keep s
 
 A completed determination may be applicable positive evidence, reviewed null/no effect, inapplicable or combination-only evidence, or a bounded no-qualifying-human-evidence review. It does not mean every ingredient gets positive points.
 
-### Phase 4 — Dose policy packets — decisions still required
+### Phase 4 — Dose policy packets — approved and implemented
 
 - [x] Preserve accepted rules: known amount/applicable benchmark receives proportionate treatment; undisclosed amount has its correct zero reason; missing benchmark is not zero dose; BCAA/EAA sets are assessed once.
 - [x] Produce missing-benchmark cases for one through four purpose ingredients: wiring miss, unsupported benchmark, preparation mismatch, missing amount and incidental unbenchmarked ingredient (October2 whole-batch packet;20typed cases plus unbenchmarked controls).
 - [x] Show per-ingredient assessment, denominator, pillars, total, tier and publication behavior, including current `not_scored` consequences (October2 packet:all1–4typed missing-amount cases suppress public totals/pillars; export quarantine distinguished from blocked warning publication).
 - [x] Produce the excess packet separating appropriateness from Safety risk, with exposure basis, form, population, duration and UL basis (October2 existing60/90mgZinc probes and current owner/config consequences; no new approved deductions).
-- [ ] Obtain Sean's approval for magnitudes, denominator treatment, explanations and publication behavior before implementation.
-- [ ] Implement only the approved decisions in existing owners and measure their effects.
+- [x] Obtain Sean's approval for magnitudes, denominator treatment, explanations and publication behavior before implementation.
+- [x] Implement only the approved decisions in existing owners and measure their effects. One-to-four-purpose demonstrations, the eight-class omega table and all frozen movers are in the final calibration receipt.
 
 ### Phase 5 — Numerical calibration and overlap
 
 - [x] Produce the initial six-pillar numerical-ownership inventory ([inventory](../../scripts/audits/numerical_ownership_20260930/README.md)). Inventory is not calibration approval.
-- [ ] Finalize `fact → judgment → pillar → production symbol/config key → other observing pillars` for every live numerical rule.
-- [ ] Inspect all 35 Q3 legacy `POOR → SAFE` crossings individually, preserving the distinction between quality threshold and safety concern. Inspect subsequent safer Safety-verdict changes equivalently.
-- [ ] Resolve remaining duplicate deductions, floors/caps, certification/disclosure overlap and fiber detox/laxative overlap.
-- [ ] Ratify the reviewer brief, freeze the new benchmark and obtain independent review/approval for final magnitudes.
-- [ ] Explain every score/tier/verdict movement. Seed and the BB12 anchors are canaries, not target scores.
+- [x] Finalize `fact → judgment → pillar → production symbol/config key → other observing pillars` for every live numerical rule.
+- [x] Inspect all 35 Q3 legacy `POOR → SAFE` crossings individually. All 35 are Poor→Needs improvement quality aliases; Safety/Hygiene and B1 are unchanged.
+- [x] Resolve duplicate deductions and ratify distinct cross-pillar judgments. Fiber fixed duplicates are removed; certification/disclosure, clean-label/B1, additive/hygiene and Dose/Safety owners are explicitly separated.
+- [x] Ratify the approved magnitudes and obtain independent review of the final implementation and replay. The frozen baseline and candidate use the same 344-label raw manifest.
+- [x] Explain every score/tier/verdict movement. The receipt lists all 71 movers; no typed safety/status/route/purpose movement occurred.
 
 ### Phase 6 — Flutter parity and nutrition
 

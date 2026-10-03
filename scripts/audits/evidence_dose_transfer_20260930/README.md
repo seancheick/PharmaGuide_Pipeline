@@ -443,3 +443,28 @@ Prepared now: nine-group current owner coverage; four current stand-ins;1–4 pu
 * `scripts/audits/rr_correctness_20260928/DOSE_PROPOSAL.md` (accepted/rejected D24 rules; historical sensitivities, not specification).
 * Current `backed_clinical_studies.json` exact ten records across nine groups plus source references/applicability in JSON; `rda_optimal_uls.json`, `rda_therapeutic_dosing.json`, `omega_rubric.json`. Their stored citations are not freshly content-verified in this Dose packet; primary clinical determinations remain separately required.
 * Raw label paths and SHA256 per 16 current probes in JSON. Probe scripts/logs are local diagnostic support only, no production policy.
+
+## October 2 approved transfer implementation
+
+The decision gate above is complete for the pre-Clean candidate. Approved
+production source `374fb4b6`:
+
+- accepts only exact, positive and applicable preparation Dose benchmarks;
+- uses one equal vote per shared-owner declared purpose and preserves existing
+  collagen, botanical, sleep, joint and immune per-purpose Dose assessments;
+- retains the disclosed-but-unbenchmarked fallback and existing required-amount
+  `not_scored` gate;
+- removes the four D26 Evidence amount/prominence safeguards after equivalent
+  Dose ownership exists;
+- makes omega Evidence amount-independent at 10.4 / 20 / 11.1 for the three
+  approved applicable classes while holding the five excluded classes;
+- retains separate Dose appropriateness and Safety threshold-risk judgments;
+- removes the duplicate fixed fiber detox/laxative penalties.
+
+The eight-class omega table, one-to-four-purpose denominator demonstrations,
+all 71 frozen score movers and the recovered 35-product Q3 receipt are in
+[`q53_d26_calibration_20261002`](../q53_d26_calibration_20261002/README.md).
+Independent review found no remaining code finding. The transfer is implemented,
+measured and reviewed; it is not full-corpus or release validated. The next gate
+is Sean's fresh Clean/Enrich/Score run, followed by release and app rendering
+verification against those rebuilt artifacts.
