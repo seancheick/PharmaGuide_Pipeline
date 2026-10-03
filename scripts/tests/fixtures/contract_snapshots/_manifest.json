@@ -1,7 +1,7 @@
 {
   "_comment": "Phase 0 scoring-snapshot fixtures. Each entry freezes the scoring-critical fields of one scored product so we can detect drift across pipeline runs (especially during Phase 3 enricher canonical_id work). See docs/HANDOFF_2026-04-20_PIPELINE_REFACTOR.md § Phase 0.",
   "schema_version": "2.0.0",
-  "frozen_on": "2026-10-02",
+  "frozen_on": "2026-10-03",
   "fixture_schema": {
     "frozen_fields": [
       "dsld_id",
@@ -206,6 +206,18 @@
     }
   ],
   "changelog": [
+    {
+      "date": "2026-10-03",
+      "phase": "Approved D26/D24/omega calibration and held-state correction",
+      "products_updated": [
+        18141,
+        321405,
+        74716,
+        288742,
+        12043
+      ],
+      "notes": "Fresh 38-dataset Score pass at source 18bfdcfb produced 15,421 artifacts with one shared reference fingerprint, one shared stage-code fingerprint and scoring engine 4.5.0. Four numerical snapshot movements and one state-only movement are reviewed consequences of the approved policy: 18141 gains the disclosed-unbenchmarked Dose fallback while unreviewed ALA keeps Evidence 0; 321405 gains the named Bromelain primary evidence-strength floor; 288742 ordinary adult explicit EPA+DHA receives 10.4 Evidence independent of amount; 74716 uncertain EPA/DHA identity remains Evidence 0 and moves down after borrowed credit is withheld. The omega state fix changes 74716 public explanation to identity_material_unresolved as part of its approved score correction; carrier-mass-only control 12043 keeps score 27.7 but correctly moves quality assessment complete to partial for the same unresolved identity state. No safety status changes. Fixtures were generated from fresh scored artifacts with freeze_contract_snapshots.py, not hand-entered."
+    },
     {
       "date": "2026-10-02",
       "phase": "Post-pipeline owner corrections and independent quality/safety pins",

@@ -563,9 +563,14 @@ Candidate production source `aca66621` on
   slice98passed; local527passed/24declared opt-in skips. Material calibration is
   now correctly identified as scoring engine4.5.0. Raw omega canary expectations
   were re-pinned to already-approved behavior; no magnitude changed in this fix.
-- [ ] Sean must run Score only across the38 current enriched datasets after this
-  source correction; the completed Clean/Enrich stages remain usable, but the
-  existing scored artifacts have the prior source/version fingerprint.
+- [x] Sean ran Score only across the38 current enriched datasets from corrected
+  source18bfdcfb. All38 manifests complete with one shared reference fingerprint
+  and one shared scoring-code fingerprint; all15,421 artifacts identify engine
+  4.5.0. The four approved numerical movers were frozen through the canonical
+  freezer. Snapshot validation additionally surfaced carrier-mass-only control
+  12043 moving assessment complete→partial with unchanged score27.7; this is the
+  expected identity-material-unresolved state, not a numeric or safety movement.
+  All36 snapshots pass; local527passed/24declared opt-in skips and skip guard.
 - [ ] Rebuild and validate catalog/export/interactions and Flutter bundle; run
   release/full backstops, verify real Nutrition Facts/active/other rendering,
   freeze the exact manifest and confirm live parity before publication.

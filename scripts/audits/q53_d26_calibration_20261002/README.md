@@ -219,3 +219,13 @@ stale raw omega canary ranges were re-pinned without changing production
 magnitudes. The combined local gate passes 527 checks with 24 declared opt-in
 skips. A Score-only corpus rerun is required before snapshot freezing, catalog
 rebuild, app rendering verification or release gates continue.
+
+Sean completed that Score-only rerun from source `18bfdcfb`. All 38 Score
+manifests are complete with one shared reference fingerprint and one shared
+scoring-code fingerprint; all 15,421 scored artifacts report engine `4.5.0`.
+The canonical freezer updated the four reviewed numerical movers. The snapshot
+gate also exposed one state-only movement on carrier-mass-only control `12043`:
+score 27.7 and typed safety are unchanged, while quality assessment correctly
+moves complete to partial because EPA+DHA identity is unresolved. All 36
+snapshot checks and the local corpus gate (527 passed / 24 declared opt-in
+skips) now pass. Catalog, app bundle and release/full gates remain next.
