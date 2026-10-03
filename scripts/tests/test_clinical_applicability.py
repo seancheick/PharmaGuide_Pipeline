@@ -81,7 +81,7 @@ def test_formula_context_reference_is_not_an_individual_vitamin_trial():
     assert resolved_clinical_matches(product)[0] == []
 
 
-def test_primary_floor_requires_known_studied_dose_not_unknown_unit():
+def test_evidence_floor_is_amount_independent_when_dose_benchmark_is_unusable():
     row = {"name": "KSM-66", "standard_name": "KSM-66", "canonical_id": "ashwagandha",
            "mapped": True, "bio_score": 12, "quantity": 600, "unit": "mg"}
     product = {"ingredient_quality_data": {"ingredients_scorable": [row]},
@@ -91,8 +91,11 @@ def test_primary_floor_requires_known_studied_dose_not_unknown_unit():
                    "effect_direction": "positive_strong", "dose_unit": "unknown",
                    "min_clinical_dose": 250,
                }]}}
-    # Unknown/incompatible dose evidence may not earn a clinically-dosed floor.
-    assert score_evidence(product, apply_primary_floor=True)["metadata"]["primary_evidence_floor"] == 0
+    # Evidence grades the applicable positive research. Dose independently
+    # refuses this stale, unitless benchmark.
+    assert score_evidence(product, apply_primary_floor=True)["metadata"]["primary_evidence_floor"] > 0
+    from dose_assessment import positive_clinical_benchmark
+    assert positive_clinical_benchmark(product, row) is None
 
 
 def scoped_entry(policy: object) -> dict:

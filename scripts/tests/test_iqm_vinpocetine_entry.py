@@ -183,7 +183,8 @@ def test_real_single_active_label_reaches_the_scored_artifact():
     assert artifact['verdict'] == 'CAUTION'
     assert artifact['blocking_reason'] is None
     dose = artifact['quality_pillars_v4']['dose']
-    assert 'benchmark is unavailable' in dose['reason']
+    assert 'no applicable dose benchmark' in dose['reason']
+    assert 'partial credit' in dose['reason']
     assert 'studied range' not in dose['reason']
 
 

@@ -66,7 +66,7 @@ def test_tesnor_and_sytrinol_resolve_to_their_reviewed_trials(enriched):
     ("1179", "cinnamon"),
     ("243271", "turmeric"),
 ])
-def test_a_lent_blend_total_is_no_evidence_dose(enriched, pid, canonical):
+def test_a_lent_blend_total_is_not_a_member_dose(enriched, pid, canonical):
     """Ravage's cinnamon and Golden Milk's turmeric carry only their blend's
     total (3.2 g), lent to them as a blend-level anchor. The Evidence dose map
     read that total as their own dose, so the trials looked applicable. Their
@@ -80,7 +80,12 @@ def test_a_lent_blend_total_is_no_evidence_dose(enriched, pid, canonical):
         if r.get("canonical_id") == canonical
     )
     resolution = resolve_evidence_for_row(row, enriched[pid])
-    assert resolution.applicability_status == "dose_undisclosed"
+    assert resolution.applicability_status == "applicable_reviewed_trials"
+
+    # Evidence now grades the applicable research without reading amount. Dose
+    # still refuses to borrow the blend total as this member's exposure.
+    from dose_assessment import positive_clinical_benchmark
+    assert positive_clinical_benchmark(enriched[pid], row) is None
 
 
 def test_golden_milk_piperine_uses_the_absorption_aid_owner(enriched):

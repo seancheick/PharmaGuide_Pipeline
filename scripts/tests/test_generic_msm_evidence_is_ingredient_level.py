@@ -46,5 +46,14 @@ def test_500_mg_msm_is_below_the_studied_dose_and_not_branded():
     enriched, _ = SupplementEnricherV3().enrich_product(EnhancedDSLDNormalizer().normalize_product(raw))
     matches = {m.get("id") for m in (enriched.get("evidence_data") or {}).get("clinical_matches") or []}
     assert "INGR_MSM" in matches and "BRAND_OPTIMSM" not in matches
-    evidence = build_scored_artifact(enriched)["_v4_module_breakdown"]["dimensions"]["evidence"]
-    assert "SUB_CLINICAL_DOSE_DETECTED" in json.dumps(evidence)
+    artifact = build_scored_artifact(enriched)
+    evidence = artifact["_v4_module_breakdown"]["dimensions"]["evidence"]
+    dose = artifact["_v4_module_breakdown"]["dimensions"]["dose"]
+    assert "SUB_CLINICAL_DOSE_DETECTED" not in json.dumps(evidence)
+    msm = next(
+        item for item in dose["metadata"]["specialized_purpose_assessments"]
+        if item.get("active") == "msm"
+    )
+    assert msm["assessment_owner"] == "joint_support"
+    assert msm["band"] == "below_joint_support_range"
+    assert msm["daily_mg"] == 500.0

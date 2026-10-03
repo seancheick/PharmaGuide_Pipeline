@@ -14,6 +14,10 @@ sys.path.insert(0, str(SCRIPTS_DIR))
 
 from enrich_supplements_v3 import SupplementEnricherV3  # noqa: E402
 from scoring_v4.modules.generic_evidence import score_evidence  # noqa: E402
+from scoring_v4.modules.generic_dose import (  # noqa: E402
+    NO_REFERENCE_INDIVIDUAL_DOSE_CREDIT,
+    score_dose,
+)
 
 
 DATA_PATH = SCRIPTS_DIR / "data" / "backed_clinical_studies.json"
@@ -59,7 +63,12 @@ def _bcaa_matches(enricher: SupplementEnricherV3, name: str, rows: list[dict]) -
     ]
 
 
-def _scoring_product(rows: list[dict], match: dict, servings_per_day: float = 1.0) -> dict:
+def _scoring_product(
+    rows: list[dict],
+    match: dict,
+    servings_per_day: float = 1.0,
+    name: str = "BCAA test product",
+) -> dict:
     scoring_rows = [
         {
             "name": row["name"],
@@ -74,7 +83,7 @@ def _scoring_product(rows: list[dict], match: dict, servings_per_day: float = 1.
     ]
     return {
         "status": "active",
-        "product_name": "BCAA test product",
+        "product_name": name,
         "form_factor": "powder",
         "supplement_type": {"type": "sports_nutrition"},
         "serving_basis": {
@@ -177,16 +186,44 @@ def test_scoring_sums_the_complete_daily_bcaa_dose(entries: dict[str, dict]) -> 
     })
     rows = [_active("l_leucine", 1500), _active("l_isoleucine", 750), _active("l_valine", 750)]
 
-    once = score_evidence(_scoring_product(rows, match, servings_per_day=1))
-    twice = score_evidence(_scoring_product(rows, match, servings_per_day=2))
+    once_product = _scoring_product(rows, match, servings_per_day=1)
+    twice_product = _scoring_product(rows, match, servings_per_day=2)
+    once = score_dose(once_product)
+    twice = score_dose(twice_product)
 
-    assert "SUB_CLINICAL_DOSE_DETECTED" in once["metadata"]["flags"]
-    assert set(once["metadata"]["sub_clinical_canonicals"]) == BCAA_IDS
-    assert "SUB_CLINICAL_DOSE_DETECTED" not in twice["metadata"]["flags"]
-    # 3 g/day is below the studied 5 g minimum: those trials do not apply (0);
-    # 6 g/day reaches them.
-    assert twice["score"] > once["score"] == 0.0
-    assert once["metadata"]["evidence_result_state"] == "applicability_unestablished"
+    assert once["metadata"]["aggregate_dose_band"] == "below_studied_range"
+    assert twice["metadata"]["aggregate_dose_band"] == "within_studied_range"
+    assert once["metadata"]["aggregate_clinical_benchmark"]["exposure_value"] == 3000
+    assert twice["metadata"]["aggregate_clinical_benchmark"]["exposure_value"] == 6000
+    assert set(once["metadata"]["aggregate_clinical_benchmark"]["member_canonical_ids"]) == BCAA_IDS
+    assert twice["score"] > once["score"]
+    # Evidence strength is independent of the formula amount.
+    assert score_evidence(once_product)["score"] == score_evidence(twice_product)["score"]
+
+
+def test_bcaa_formula_and_another_declared_purpose_are_averaged_equally(
+    entries: dict[str, dict],
+) -> None:
+    match = dict(entries["INGR_BRANCHED_CHAIN_AMINO_ACIDS"])
+    match.update({
+        "matched_term": "Branched Chain Amino Acids",
+        "ingredient": "Branched Chain Amino Acids",
+    })
+    rows = [
+        _active("l_leucine", 3000),
+        _active("l_isoleucine", 1500),
+        _active("l_valine", 1500),
+        _active("l_glutamine", 1000),
+    ]
+
+    payload = score_dose(_scoring_product(rows, match, name="BCAA + L-Glutamine"))
+
+    assert payload["metadata"]["purpose_ingredient_count"] == 2
+    assert payload["metadata"]["aggregate_dose_band"] == "within_studied_range"
+    assert payload["metadata"]["unbenchmarked_purpose_ingredients"] == ["l_glutamine"]
+    assert payload["score"] == pytest.approx(
+        (22.0 + NO_REFERENCE_INDIVIDUAL_DOSE_CREDIT) / 2.0
+    )
 
 
 def test_scoring_receives_the_reviewed_bcaa_upper_range(entries: dict[str, dict]) -> None:
@@ -201,6 +238,7 @@ def test_scoring_receives_the_reviewed_bcaa_upper_range(entries: dict[str, dict]
         _active("l_valine", 22500),
     ]
 
-    payload = score_evidence(_scoring_product(rows, match))
+    payload = score_dose(_scoring_product(rows, match))
 
-    assert "SUPRA_CLINICAL_DOSE" in payload["metadata"]["flags"]
+    assert payload["metadata"]["aggregate_dose_band"] == "above_studied_range"
+    assert payload["metadata"]["aggregate_clinical_benchmark"]["benchmark_maximum"] == 29300

@@ -122,10 +122,12 @@ def test_dimension_skeleton_has_components_and_penalties_subdicts() -> None:
     assert dose["metadata"]["method"] == "rda_ul_proxy_until_dietary_intake_table"
     assert dose["metadata"]["window_proxy_status"] == "not_evaluable_by_rda_proxy"
 
-    # Evidence is online at P1.3.3. This fixture has no evidence matches, so
-    # the score is a real 0, not skeleton/unknown.
+    # Evidence is online at P1.3.3. Magnesium has nutrition-authority evidence
+    # even without a product-specific clinical match; amount stays in Dose.
     evidence = breakdown["dimensions"]["evidence"]
-    assert evidence["score"] == 0.0
+    assert evidence["score"] == 10.0
+    assert evidence["metadata"]["evidence_result_state"] == "evaluated_authority"
+    assert evidence["metadata"]["nutrition_authority_floor_applied"] is True
     assert "clinical_evidence_pipeline" in evidence["components"]
     assert evidence["metadata"]["phase"] == "P1.3.3_evidence_pipeline"
 

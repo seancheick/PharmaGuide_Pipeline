@@ -242,9 +242,9 @@ def test_fixture_a_blend_header_named_children_no_doses():
     -> header excluded
     -> children retained
     -> applicable research identified
-    -> dose/applicability unresolved as appropriate
+    -> Evidence applicability is amount-independent
     -> terminal Evidence assessment
-    -> zero dose-dependent credit
+    -> Dose remains unassessable from undisclosed child amounts
     """
     blend_header = {
         "name": "Proprietary Adaptogen Blend",
@@ -286,7 +286,7 @@ def test_fixture_a_blend_header_named_children_no_doses():
     # 2. Terminal evidence assessment (is_assessment_complete is True)
     res = resolve_product_evidence(prod)
     assert res.is_assessment_complete is True
-    assert res.overall_disposition == EvidenceDisposition.RESEARCH_PRESENT_APPLICABILITY_UNESTABLISHED.value
+    assert res.overall_disposition == EvidenceDisposition.RESOLVED_BY_REVIEWED_CLINICAL_EVIDENCE.value
 
     # 3. Scorer output: zero credit, applicability_unestablished state, terminal display
     ev = score_evidence(prod)
@@ -294,6 +294,10 @@ def test_fixture_a_blend_header_named_children_no_doses():
     assert ev["metadata"]["evidence_result_state"] == "applicability_unestablished"
     display = evidence_display_state(ev["metadata"]["evidence_result_state"])
     assert display == "applicability_unestablished"
+    from scoring_v4.modules.generic_dose import score_dose
+    dose = score_dose(prod)
+    assert dose["score"] is None
+    assert dose["metadata"]["window_proxy_status"] == "not_evaluable_by_rda_proxy"
 
 
 def test_fixture_b_blend_with_unidentified_unnamed_components():

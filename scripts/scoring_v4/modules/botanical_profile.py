@@ -399,7 +399,17 @@ def _primary_botanical_active(product: Dict[str, Any]) -> Optional[Dict[str, Any
     # total, prefer a recognized botanical anchor over the generic/unmapped
     # blend header. This keeps opaque blend headers conservative without
     # suppressing the known child identity carried by blend_anchor_mass.
+    def exact_branded_preparation(row: Dict[str, Any]) -> bool:
+        if not _branded_studied_row(product, row):
+            return False
+        text = " ".join(_ingredient_identity_keys(row))
+        return any(
+            any(name and name in text for name in names)
+            for names, _tokens in _branded_studied_entries()
+        )
+
     return max(candidates, key=lambda r: (
+        exact_branded_preparation(r),
         _mass_mg(r) or 0.0,
         _recognized_botanical_identity(r),
         bio_score_of(r) or 0.0,

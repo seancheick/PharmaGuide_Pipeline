@@ -87,6 +87,22 @@ class ClinicalBenchmarkAssessment:
         return asdict(self)
 
 
+@dataclass(frozen=True)
+class AggregateClinicalBenchmarkAssessment:
+    record_id: str
+    benchmark_value: float
+    benchmark_maximum: Optional[float]
+    benchmark_unit: str
+    exposure_value: float
+    ratio: float
+    member_canonical_ids: tuple[str, ...]
+
+    def to_dict(self) -> Dict[str, Any]:
+        payload = asdict(self)
+        payload["member_canonical_ids"] = list(self.member_canonical_ids)
+        return payload
+
+
 @lru_cache(maxsize=1)
 def _positive_clinical_benchmark_records() -> tuple[Dict[str, Any], ...]:
     raw = json.loads(_CLINICAL_RECORDS_PATH.read_text(encoding="utf-8"))
@@ -233,6 +249,68 @@ def positive_clinical_benchmark(
             exposure_value=exposure,
             ratio=exposure / benchmark,
             source_row_ref=row_ref,
+        ))
+    return min(assessments, key=lambda item: (item.benchmark_value, item.record_id), default=None)
+
+
+def positive_aggregate_clinical_benchmark(
+    product: Dict[str, Any], rows: Iterable[Dict[str, Any]],
+) -> Optional[AggregateClinicalBenchmarkAssessment]:
+    """Return one exact benchmark for a reviewed multi-ingredient formula.
+
+    Aggregate records such as the complete BCAA triad describe one intervention,
+    so Dose must sum its required members once.  Every required identity must be
+    present exactly once with a compatible disclosed exposure, and the curated
+    aggregate record must already be projected into the product's clinical
+    matches.  Individual members never borrow the formula benchmark.
+    """
+    eligible_by_id = {
+        str(record.get("id")): record
+        for record in _positive_clinical_benchmark_records()
+        if isinstance(record.get("aggregate_canonical_ids"), list)
+        and record.get("aggregate_canonical_ids")
+    }
+    matches = [
+        match for match in ((product.get("evidence_data") or {}).get("clinical_matches") or [])
+        if isinstance(match, dict) and str(match.get("id") or "") in eligible_by_id
+    ]
+    rows_by_canonical: Dict[str, list[Dict[str, Any]]] = {}
+    for row in rows:
+        if not isinstance(row, dict):
+            continue
+        canonical = str(row.get("canonical_id") or "").strip().lower()
+        if canonical:
+            rows_by_canonical.setdefault(canonical, []).append(row)
+
+    assessments: list[AggregateClinicalBenchmarkAssessment] = []
+    for match in matches:
+        record = eligible_by_id[str(match.get("id"))]
+        members = tuple(
+            str(value).strip().lower()
+            for value in record.get("aggregate_canonical_ids") or []
+            if str(value).strip()
+        )
+        if not members or any(len(rows_by_canonical.get(member, [])) != 1 for member in members):
+            continue
+        benchmark = _finite_number(record.get("min_clinical_dose"))
+        unit = str(record.get("dose_unit") or "mg").strip().lower()
+        if benchmark is None or benchmark <= 0:
+            continue
+        exposures = [
+            row_exposure(product, rows_by_canonical[member][0], basis="daily", unit=unit).benchmark_amount
+            for member in members
+        ]
+        if any(value is None or value <= 0 for value in exposures):
+            continue
+        exposure = sum(float(value) for value in exposures if value is not None)
+        assessments.append(AggregateClinicalBenchmarkAssessment(
+            record_id=str(record.get("id") or ""),
+            benchmark_value=benchmark,
+            benchmark_maximum=_finite_number(record.get("max_studied_clinical_dose")),
+            benchmark_unit=unit,
+            exposure_value=exposure,
+            ratio=exposure / benchmark,
+            member_canonical_ids=members,
         ))
     return min(assessments, key=lambda item: (item.benchmark_value, item.record_id), default=None)
 

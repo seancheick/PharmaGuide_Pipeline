@@ -95,7 +95,7 @@ from scoring_input_contract import (
     source_linked_rows,
 )
 from scoring_v4.dose_safety import resolve_dose_safety
-from dose_assessment import positive_clinical_benchmark
+from dose_assessment import positive_aggregate_clinical_benchmark, positive_clinical_benchmark
 from scoring_v4.modules.immune_support import score_immune_purpose_dose, score_immune_support_dose
 from scoring_v4.modules.joint_support import score_joint_purpose_dose, score_joint_support_dose
 from scoring_v4.modules.sleep_support import score_sleep_purpose_dose, score_sleep_support_dose
@@ -276,13 +276,16 @@ def _score_declared_purpose_window(
     compatibility path for products whose source has not yet supplied one.
     """
     rows = [row for row in nutrient_delivering_rows(product) if isinstance(row, dict)]
+    aggregate = positive_aggregate_clinical_benchmark(product, rows)
+    aggregate_members = set(aggregate.member_canonical_ids) if aggregate is not None else set()
     roles = classify_ingredient_roles(product, module="generic", rows=rows)
     purpose_rows = [
         row for row, role in zip(rows, roles)
         if role.get("role") in {ROLE_PRIMARY, ROLE_CLAIM_PROMINENT}
         and not row.get("is_parent_total")
+        and _norm_text(row.get("canonical_id")) not in aggregate_members
     ]
-    if not purpose_rows:
+    if not purpose_rows and aggregate is None:
         return None, [], 0, [], []
 
     # A physical purpose may have a compatibility projection of the same
@@ -303,6 +306,22 @@ def _score_declared_purpose_window(
     unbenchmarked: List[str] = []
     clinical_assessments: List[Dict[str, Any]] = []
     specialized_assessments: List[Dict[str, Any]] = []
+    if aggregate is not None:
+        if aggregate.benchmark_maximum and aggregate.exposure_value > aggregate.benchmark_maximum:
+            aggregate_credit = WINDOW_OVERDOSE_CREDIT
+            aggregate_band = "above_studied_range"
+        elif aggregate.ratio >= 1.0:
+            aggregate_credit = CAP_SUPPLEMENTAL_WINDOW
+            aggregate_band = "within_studied_range"
+        else:
+            aggregate_credit = aggregate.ratio * CAP_SUPPLEMENTAL_WINDOW
+            aggregate_band = "below_studied_range"
+        contributions.append(_clamp(0.0, CAP_SUPPLEMENTAL_WINDOW, aggregate_credit))
+        clinical_assessments.append({
+            "assessment_kind": "aggregate_formula",
+            "dose_band": aggregate_band,
+            **aggregate.to_dict(),
+        })
     for key, purpose in sorted(purposes.items()):
         identities = _row_identity_keys(purpose)
         specialized = score_collagen_purpose_dose(product, purpose)
@@ -356,11 +375,11 @@ def _score_declared_purpose_window(
             unbenchmarked.append(key)
 
     if not contributions:
-        return 0.0, sorted(unbenchmarked), len(purposes), clinical_assessments, specialized_assessments
+        return 0.0, sorted(unbenchmarked), len(purposes) + int(aggregate is not None), clinical_assessments, specialized_assessments
     return (
         round(_clamp(0.0, CAP_SUPPLEMENTAL_WINDOW, sum(contributions) / len(contributions)), 4),
         sorted(unbenchmarked),
-        len(purposes),
+        len(purposes) + int(aggregate is not None),
         clinical_assessments,
         specialized_assessments,
     )
@@ -546,7 +565,11 @@ def score_dose(product: Dict[str, Any]) -> Dict[str, Any]:
     # (never None), so the dose dimension is no longer excluded for botanicals
     # and the Phase-4 botanical_dose_deferred floor guard is superseded.
     if purpose_count <= 1 and is_botanical_product(product):
-        bot = score_botanical_dose(product)
+        purpose_botanical = next((
+            assessment for assessment in specialized_purpose_assessments
+            if assessment.get("assessment_owner") == "botanical_profile"
+        ), None)
+        bot = purpose_botanical or score_botanical_dose(product)
         components = {
             "botanical_clinical_dose": round(float(bot["score"]), 4),
         }
@@ -693,6 +716,16 @@ def score_dose(product: Dict[str, Any]) -> Dict[str, Any]:
         metadata["unbenchmarked_purpose_ingredients"] = unbenchmarked_purposes
         metadata["positive_clinical_benchmark_assessments"] = clinical_benchmarks
         metadata["specialized_purpose_assessments"] = specialized_purpose_assessments
+        aggregate_assessment = next((
+            assessment for assessment in clinical_benchmarks
+            if assessment.get("assessment_kind") == "aggregate_formula"
+        ), None)
+        if aggregate_assessment is not None:
+            metadata["aggregate_dose_band"] = aggregate_assessment["dose_band"]
+            metadata["aggregate_clinical_benchmark"] = {
+                key: value for key, value in aggregate_assessment.items()
+                if key not in {"assessment_kind", "dose_band"}
+            }
         if unbenchmarked_purposes:
             metadata["window_proxy_status"] = "limited_assessability_unbenchmarked_purpose"
             metadata["partial_credit_value"] = NO_REFERENCE_INDIVIDUAL_DOSE_CREDIT

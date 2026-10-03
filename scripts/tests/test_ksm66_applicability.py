@@ -7,6 +7,7 @@ import pytest
 
 from clinical_applicability import reviewed_entries
 from scoring_v4.modules.generic_evidence import resolved_clinical_matches, score_evidence
+from scoring_v4.modules.generic_dose import score_dose
 
 
 def ksm_product(amount: float, *, with_powder: bool = False, multiple_refs: bool = False) -> dict:
@@ -63,10 +64,15 @@ def test_subclinical_ksm66_dose_does_not_borrow_plain_ashwagandha_powder(
     matches, _ = resolved_clinical_matches(product)
     assert len(matches) == 1  # A known low dose is graded, not erased as an unknown form.
     assert matches[0]["matched_source_row_refs"] == ["ingredientRows[0]"]
-    scored = score_evidence(product, apply_primary_floor=True)
-    assert "SUB_CLINICAL_DOSE_DETECTED" in scored["metadata"]["flags"]
-    assert "ashwagandha" in scored["metadata"]["sub_clinical_canonicals"]
-    assert scored["metadata"]["primary_evidence_floor"] == 0
+    evidence = score_evidence(product, apply_primary_floor=True)
+    dose = score_dose(product)
+    assert evidence["score"] > 0
+    assert not evidence["metadata"]["flags"]
+    assert dose["metadata"]["botanical_dose_band"] == "below_studied_range"
+    assert dose["metadata"]["botanical_dose"] == {
+        "dose_mg": 100.0,
+        "range_mg": [250.0, 600.0],
+    }
 
 
 @pytest.mark.parametrize("amount", [250, 600])
@@ -74,9 +80,8 @@ def test_studied_ksm66_dose_remains_eligible(amount: float) -> None:
     product = ksm_product(amount)
     matches, _ = resolved_clinical_matches(product)
     assert matches[0]["applicability_assessment"]["status"] == "applicable"
-    scored = score_evidence(product, apply_primary_floor=True)
-    assert "SUB_CLINICAL_DOSE_DETECTED" not in scored["metadata"]["flags"]
-    assert scored["metadata"]["primary_evidence_floor"] > 0
+    scored = score_dose(product)
+    assert scored["metadata"]["botanical_dose_band"] == "within_studied_range"
 
 
 def test_branded_study_cannot_apply_to_plain_powder_source_row() -> None:

@@ -197,6 +197,11 @@ def _unassessed_primary_dose_reason(dim: Dict[str, Any]) -> Optional[str]:
             "The main ingredient's dose benchmark is unavailable, so dose "
             "credit is partial."
         )
+    if metadata.get("window_proxy_status") == "limited_assessability_unbenchmarked_purpose":
+        return (
+            "At least one declared-purpose ingredient has no applicable dose "
+            "benchmark, so disclosed amounts receive partial credit."
+        )
     return None
 
 

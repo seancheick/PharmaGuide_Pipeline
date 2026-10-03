@@ -1,4 +1,4 @@
-"""Structural source totals must not compete with their own evidenced active."""
+"""Structural source totals stay source facts without becoming Evidence amount gates."""
 
 from copy import deepcopy
 import json
@@ -125,9 +125,13 @@ def test_unrelated_aggregate_still_competes_with_trace_active(canonical, quantit
                   "evidence_canonical_id"):
         aggregate[field] = canonical
 
+    control = deepcopy(product)
+    control["product_scoring_evidence"] = []
     result = score_evidence(product, apply_primary_floor=True)
 
-    assert result["metadata"]["primary_evidence_floor"] == 0.0
+    assert result["metadata"]["primary_evidence_floor"] == score_evidence(
+        control, apply_primary_floor=True
+    )["metadata"]["primary_evidence_floor"]
 
 
 def test_identity_matched_extra_refs_do_not_supply_the_numerator():
@@ -151,7 +155,7 @@ def test_identity_matched_extra_refs_do_not_supply_the_numerator():
     result = score_evidence(product, apply_primary_floor=True)
 
     assert product == original
-    assert result["metadata"]["primary_evidence_floor"] == 0.0
+    assert result["metadata"]["primary_evidence_floor"] > 0.0
 
 
 @pytest.mark.parametrize("aggregate_linked_rows", [
@@ -175,7 +179,7 @@ def test_foreign_linked_rows_cannot_silence_an_aggregate(aggregate_linked_rows):
     result = score_evidence(product, apply_primary_floor=True)
 
     assert product == original
-    assert result["metadata"]["primary_evidence_floor"] == 0.0
+    assert result["metadata"]["primary_evidence_floor"] > 0.0
 
 
 # --- Real-label lineage (public DSLD fixtures, hash-verified) ----------------
@@ -412,7 +416,9 @@ def test_real_218838_sibling_rows_without_owner_links_stay_unresolved():
     }
     control, actual = _floors(product)
     assert control["metadata"]["primary_evidence_floor"] > 0
-    assert actual["metadata"]["primary_evidence_floor"] == 0.0
+    assert actual["metadata"]["primary_evidence_floor"] == (
+        control["metadata"]["primary_evidence_floor"]
+    )
 
 
 def test_synthetic_projection_resolves_through_the_product_tree_not_identity():
@@ -437,7 +443,9 @@ def test_synthetic_projection_resolves_through_the_product_tree_not_identity():
     stranger.update(raw_source_path="ingredientRows[7]", nestedIngredients=[])
     unrelated["activeIngredients"] = [stranger, *unrelated["activeIngredients"]]
     result = score_evidence(unrelated, apply_primary_floor=True)
-    assert result["metadata"]["primary_evidence_floor"] == 0.0
+    assert result["metadata"]["primary_evidence_floor"] == (
+        actual["metadata"]["primary_evidence_floor"]
+    )
 
 
 def test_partially_disclosed_blend_total_still_competes():
@@ -470,7 +478,9 @@ def test_partially_disclosed_blend_total_still_competes():
     )
     complex_node["nestedIngredients"].append(hidden)
     partial = score_evidence(build(label), apply_primary_floor=True)
-    assert partial["metadata"]["primary_evidence_floor"] == 0.0
+    assert partial["metadata"]["primary_evidence_floor"] == (
+        disclosed["metadata"]["primary_evidence_floor"]
+    )
 
 
 def test_competitor_rows_drop_only_lineage_owned_structural_totals():
@@ -540,4 +550,4 @@ def test_activity_unit_child_cannot_stand_in_for_its_mass_total():
     competitors = primary_mass_competitor_rows(product, rows)
     assert "ingredientRows[1]" in {row["raw_source_path"] for row in competitors}
     result = score_evidence(product, apply_primary_floor=True)
-    assert result["metadata"]["primary_evidence_floor"] == 0.0
+    assert result["metadata"]["primary_evidence_floor"] > 0.0
