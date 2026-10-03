@@ -544,9 +544,16 @@ Candidate production source `aca66621` on
   `aca66621`, run37091524920,18,717passed/183declared skips across four
   shards; every skip guard passed. Runs37089000275 and37090968501 are
   superseded after all shard failures were classified and corrected.
-- [ ] Sean runs fresh full Clean/Enrich/Score. Then validate catalog/export,
-  release rung, real app Nutrition Facts/active/other rendering, manifest and
-  live parity before publication.
+- [x] Sean ran fresh full Clean/Enrich/Score from integrated `main` `2090d2b3`:
+  all38 datasets and all38 Clean/Enrich/Score manifest chains completed with
+  consistent reference/code fingerprints. Local corpus gate:527passed/
+  24declared opt-in skips, skip guard passed. Initial3 failures were the same
+  stale cross-module assertion; accepted232295 Evidence58.6→64.9 reproduced,
+  the assertion now permits only Bromelain's named evidence-strength floor,
+  and12focused checks plus the combined local rerun passed.
+- [ ] Rebuild and validate catalog/export/interactions and Flutter bundle; run
+  release/full backstops, verify real Nutrition Facts/active/other rendering,
+  freeze the exact manifest and confirm live parity before publication.
 
 Owner: existing Dose/Evidence/role/serving/public-score owners named in the
 master plan. Will NOT create: scorer, registry, parser, public field/status,

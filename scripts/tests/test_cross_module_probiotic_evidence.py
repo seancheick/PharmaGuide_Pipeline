@@ -83,6 +83,8 @@ def _assert_companion_points_only(product: dict, ev) -> None:
     label notes. The shared subject provider owns both the named member and
     its activity projection; the old inactive_non_scorable mirror is not the
     source-section or Evidence decision. No mass is inferred from activity.
+    The product total may be raised only by Bromelain's separately declared
+    evidence-strength floor; Dose still owns the missing amount assessment.
     """
     rows = (product.get("ingredient_quality_data") or {}).get("ingredients", [])
     probiotic_ids = {r.get("canonical_id") for r in rows if is_probiotic_source_identity(r)}
@@ -91,7 +93,11 @@ def _assert_companion_points_only(product: dict, ev) -> None:
     assert set(points) == {"bromelain"}
     assert "bromelain" in {r.get("canonical_id") for r in get_evidence_subject_rows(product)}
     assert points["bromelain"] > 0.0
-    assert ev.score == pytest.approx(points["bromelain"])
+    floor = ev.metadata.get("primary_evidence_floor") or 0.0
+    assert ev.score == pytest.approx(max(points["bromelain"], floor))
+    if floor > points["bromelain"]:
+        assert ev.metadata["primary_evidence_floor_canonical"] == "bromelain"
+        assert ev.metadata["primary_evidence_floor_decisive"] is True
     assert ev.metadata["evidence_result_state"] == "evaluated_applicable"
     component = ev.metadata["probiotic_component_evidence"]
     assert component["disposition_state"] == "research_present_applicability_unestablished"

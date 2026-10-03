@@ -1,7 +1,7 @@
 # Q53 / D26 / D24 / omega calibration closure
 
-Status: **implemented, measured and independently reviewed; fresh full-corpus
-Clean and release validation remain pending.** Production source was measured at
+Status: **implemented, measured, independently reviewed and verified on the
+fresh full corpus; catalog/release validation remains pending.** Production source was measured at
 `aca666213960dd0a42f49fcd49f65b9ee7a96a17` against the accepted baseline
 `e250cd679a30241b5a08f9bad4c396649303dc39`. The input manifest contains 344
 frozen raw DSLD labels and has SHA-256
@@ -194,4 +194,13 @@ tests importing the retired Evidence mass helper; their structural assertions
 remain and the amount assertions were deleted. Exact corrected-source CI at
 `aca66621` passed all four shards and skip guards: **18,717 passed / 183 declared skips**
 ([run 37091524920](https://github.com/seancheick/PharmaGuide_Pipeline/actions/runs/37091524920)).
-The fresh full Clean corpus is intentionally not run here.
+Sean ran the fresh full Clean/Enrich/Score corpus from integrated `main`
+`2090d2b3` on October 3. All 38 dataset stage chains completed with consistent
+reference/code fingerprints. The local corpus gate passed 527 checks with 24
+declared opt-in skips and a green skip guard. Three initial failures were one
+stale companion-Evidence assertion: the accepted product `232295` movement
+(58.6 to 64.9, Evidence +6.3) reproduced exactly. The corrected assertion
+permits only Bromelain's named evidence-strength floor and still rejects
+probiotic or unexplained credit; its 12 focused checks and the combined local
+rerun passed. Catalog build, release rung, app bundle rendering and publication
+remain separate gates.
