@@ -13,7 +13,7 @@ Required test cases pinned:
 5. Total Carbohydrate / Calories only -> no Evidence identities created.
 6. Same words appearing as a genuine Supplement Facts/ingredient row -> do NOT exclude just because of name.
 7. Multiple source ingredients -> assess actual disclosed sources; no invented allocation or inferred dose split.
-8. Mass competition and score isolation -> Nutrition Facts declarations never compete for primary mass.
+8. Structural score isolation -> Nutrition Facts declarations never enter the Evidence active-row set.
 """
 
 from __future__ import annotations
@@ -21,7 +21,6 @@ from __future__ import annotations
 import pytest
 
 from scoring_v4.modules.generic_evidence import (
-    _heaviest_competing_mass,
     _assessable_active_ingredients,
     _competing_active_rows,
     _is_nutrition_fact_declaration,
@@ -240,10 +239,10 @@ def test_multiple_source_ingredients_assesses_disclosed_sources_no_invented_allo
         assert r["quantity"] is None
 
 
-# 8. Nutrition Facts declarations never compete for primary mass dominance
-def test_nutrition_facts_declaration_never_competes_for_primary_mass():
-    """Nutrition Facts declarations (e.g. Protein 25 g) must never compete in
-    _competing_active_rows or set the heaviest competing mass."""
+# 8. Nutrition Facts declarations stay outside Evidence's structural row set
+def test_nutrition_facts_declaration_never_enters_evidence_active_rows():
+    """Nutrition Facts declarations (e.g. Protein 25 g) stay out of the
+    structural Evidence input. Amount comparison belongs to Dose."""
     protein_decl = _nutrition_fact_row("Protein", canonical_id="protein", quantity=25.0, unit="g")
     creatine = _supplement_active_row("Creatine Monohydrate", canonical_id="creatine_monohydrate", quantity=5.0, unit="g")
 
@@ -253,7 +252,3 @@ def test_nutrition_facts_declaration_never_competes_for_primary_mass():
     # Only creatine competes; protein declaration does not compete
     assert len(competing) == 1
     assert competing[0]["canonical_id"] == "creatine_monohydrate"
-
-    # The heaviest competing mass is creatine's 5000 mg, not protein's 25000 mg
-    max_mass = _heaviest_competing_mass(product)
-    assert max_mass == 5000.0

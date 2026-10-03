@@ -6,7 +6,7 @@ This test suite pins:
 1. Candidate rows with only blend headers/parent totals yield 'no_assessable_actives'.
 2. Proprietary blend containing child actives (e.g. ashwagandha + rhodiola) ignores the
    parent header row and assesses the child actives.
-3. Blend headers never compete for mass dominance in _competing_active_rows / _heaviest_competing_mass.
+3. Blend headers never enter the structural active-row set used by Evidence.
 """
 
 from __future__ import annotations
@@ -14,7 +14,6 @@ from __future__ import annotations
 import pytest
 
 from scoring_v4.modules.generic_evidence import (
-    _heaviest_competing_mass,
     _competing_active_rows,
     score_evidence,
 )
@@ -157,29 +156,6 @@ def test_blend_headers_excluded_from_competing_active_rows():
     assert "Vitamin C" in competing_names
 
 
-def test_blend_header_does_not_inflate_max_mass():
-    """A 1000 mg blend header must not set the heaviest competing mass (_heaviest_competing_mass)."""
-    blend_header = {
-        "name": "Proprietary Blend",
-        "canonical_id": "blend_general",
-        "cleaner_row_role": "blend_header_total",
-        "is_proprietary_blend": True,
-        "quantity": 1000.0,
-        "unit": "mg",
-        "mapped": True,
-    }
-    active_row = {
-        "name": "Vitamin C",
-        "canonical_id": "vitamin_c",
-        "quantity": 500.0,
-        "unit": "mg",
-        "mapped": True,
-    }
-    product = _product(ingredients=[blend_header, active_row], matches=[])
-    max_mass = _heaviest_competing_mass(product)
-    assert max_mass == 500.0
-
-
 def test_proprietary_blend_ashwagandha_rhodiola_canary():
     """Canary: Proprietary Blend 1000 mg with Ashwagandha and Rhodiola (no child doses).
 
@@ -231,12 +207,11 @@ def test_proprietary_blend_ashwagandha_rhodiola_canary():
     assert "ashwagandha" in assessable_cids
     assert "rhodiola" in assessable_cids
 
-    # 2. Check mass competition: parent is excluded, children have no mass
+    # 2. The structural Evidence row set excludes the parent. Amount adequacy
+    # belongs to Dose and is deliberately not recomputed here.
     competing = _competing_active_rows(product_bare)
     competing_names = {r.get("name") for r in competing}
     assert "Proprietary Blend" not in competing_names
-    max_mass = _heaviest_competing_mass(product_bare)
-    assert max_mass == 0.0  # no dose invented
 
     # 3. State without matches is applicability_unestablished (terminal, no unearned credit)
     res_no_match = score_evidence(product_bare)
@@ -262,4 +237,3 @@ def test_proprietary_blend_ashwagandha_rhodiola_canary():
     res_match = score_evidence(product_with_match)
     assert res_match["score"] == 0.0
     assert res_match["metadata"]["evidence_result_state"] == "applicability_unestablished"
-
