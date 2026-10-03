@@ -64,6 +64,5 @@ def test_sugar_free_maltodextrin_carrier_costs_nothing(score):
 def test_no_route_owned_sweetener_or_sugar_charge_remains():
     for payload in (_whey(**LABELS["sucralose"]), _psyllium(**LABELS["sucralose"])):
         assert set(payload["penalties"]) <= ROUTE_PENALTIES | {
-            "sports_opaque_protein_blend", "sports_amino_spiking_risk", "sports_collagen_not_complete_protein",
-            "fiber_cleanse_detox_penalty", "fiber_stimulant_laxative_penalty"}
+            "sports_opaque_protein_blend", "sports_amino_spiking_risk", "sports_collagen_not_complete_protein"}
         assert not any("clean_daily_use" in key for key in payload["components"])

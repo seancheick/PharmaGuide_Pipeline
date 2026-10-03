@@ -3,7 +3,7 @@
 Per `docs/plans/SCORING_V4_PROPOSAL.md` §6 generic rubric, Evidence 20
 preserves the Section C multiplicative pipeline:
 
-    study_type × evidence_level × effect_direction × enrollment × dose_guard
+    study_type × evidence_level × effect_direction × enrollment
     → cap per ingredient → top-N diminishing returns → depth bonus → cap 20
 
 This is a v4-owned implementation. It intentionally does not import the
@@ -62,7 +62,6 @@ _EM = _cfg_block("evidence_magnitudes", "generic")["generic"]
 
 CAP_TOTAL = _EM["cap_total"]
 CAP_PER_INGREDIENT = _EM["cap_per_ingredient"]
-SUPRA_CLINICAL_MULTIPLE = _EM["supra_clinical_multiple"]
 
 STUDY_TYPE_BASE_POINTS: Dict[str, float] = {
     "systematic_review_meta": 6.0,
@@ -116,8 +115,7 @@ DEPTH_BONUS_BANDS = tuple(tuple(b) for b in _EM["depth_bonus_bands"])
 # must link to a dosed label row the shared role owner names as the product's
 # purpose), NOT merely the top evidence-points contributor — otherwise a well-studied
 # TRACE co-ingredient (calcium in a protein powder) would wrongly float the product.
-# The anchor must also carry PRIMARY_MASS_FRACTION of the heaviest competing active
-# (see below): an exposure stand-in retained until Dose owns that judgment.
+# Amount adequacy is owned independently by Dose.
 PRIMARY_FLOOR_STRONG = _EM["primary_floor_strong"]     # systematic review / multi-RCT, positive, clinical dose
 PRIMARY_FLOOR_MODERATE = _EM["primary_floor_moderate"]   # single RCT / clinical strain, positive, clinical dose
 # v4.1 branded-RCT tier: a branded clinically-studied extract (Sensoril, KSM-66,
@@ -183,11 +181,6 @@ _EFFECT_FLOOR_MULTIPLIER = EFFECT_DIRECTION_MULTIPLIERS
 # floats a product on a well-studied TRACE co-ingredient (calcium in a protein
 # powder) — the failure the focus-gate benchmark surfaced.
 PRIMARY_FLOOR_ENABLED = True
-# Retained exposure stand-in, not prominence: a prominent anchor must still carry
-# this fraction of the heaviest competing active's mass, because no existing owner
-# yet judges the exposure of anchors whose record has no studied minimum.
-PRIMARY_MASS_FRACTION = _EM["primary_mass_fraction"]
-
 # NIH ODS/FNB conversion for Vitamin D label quantities: 1 mcg = 40 IU.
 # This is intentionally scoped to evidence matching. Other IU nutrients have
 # different, sometimes form-dependent conversions and must remain unresolved.
@@ -261,11 +254,6 @@ def score_evidence(product: Dict[str, Any], *, apply_primary_floor: bool = False
         else set()
     )
     active_canonical_index = _active_canonical_index(product)
-    dose_map = _dose_map(product)
-    servings_low, servings_high, _ = daily_serving_range(product)
-    # The dose map is at the minimum directed daily use; the supra-clinical
-    # flag is an excess check, so it reads the maximum.
-    top_ratio = servings_high / servings_low if servings_low > 0 else 1.0
     ingredient_points: Dict[str, float] = defaultdict(float)
     matched_entry_ids: set[str] = set()
     scoped_matches: List[Dict[str, Any]] = []
@@ -276,7 +264,7 @@ def score_evidence(product: Dict[str, Any], *, apply_primary_floor: bool = False
         for role in classify_ingredient_roles(product):
             if str(role.get("role_reason", "")).startswith("named_in_label_function_claim:"):
                 _append_once(flags, "EXPLICIT_LABEL_PURPOSE_OWNER:" + str(role["canonical_id"]) + ":" + role["role_reason"].split(":", 1)[1])
-    sub_clinical_canonicals: set[str] = set()
+    sub_clinical_canonicals: set[str] = set()  # compatibility metadata; Dose owns this assessment
 
     for entry in matches:
         if not isinstance(entry, dict):
@@ -304,35 +292,6 @@ def score_evidence(product: Dict[str, Any], *, apply_primary_floor: bool = False
         raw = _entry_raw_points(entry)
         if raw <= 0:
             continue
-
-        converted_dose, lookup_key = _converted_product_dose(entry, dose_map)
-        min_clinical_dose = _as_float(entry.get("min_clinical_dose"), None)
-        if (
-            min_clinical_dose is not None
-            and converted_dose is not None
-            and converted_dose < min_clinical_dose
-        ):
-            # Applicability gate, not a dose gradient: trials run at doses the
-            # label never reaches do not apply to it, so they earn nothing here.
-            # How well the product is dosed belongs to the Dose pillar.
-            _append_once(flags, "SUB_CLINICAL_DOSE_DETECTED")
-            canonical_ids = _matched_canonical_ids(entry)
-            if canonical_ids:
-                sub_clinical_canonicals.update(canonical_ids)
-            else:
-                canonical = _canonical_from_entry(entry) or lookup_key
-                if canonical:
-                    sub_clinical_canonicals.add(canonical)
-            continue
-
-        max_studied_dose = _as_float(entry.get("max_studied_clinical_dose"), None)
-        if (
-            converted_dose is not None
-            and max_studied_dose is not None
-            and max_studied_dose > 0
-            and converted_dose * top_ratio > (SUPRA_CLINICAL_MULTIPLE * max_studied_dose)
-        ):
-            _append_once(flags, "SUPRA_CLINICAL_DOSE")
 
         marker_confidence = entry.get("marker_confidence_scale")
         if marker_confidence is not None:
@@ -372,14 +331,31 @@ def score_evidence(product: Dict[str, Any], *, apply_primary_floor: bool = False
         from evidence_resolver import evidence_prominent_row_keys
         prominent = evidence_prominent_row_keys(product)
         primary_floor, floor_canonical = _primary_mass_floor(
-            product, scoped_matches, sub_clinical_canonicals, prominent=prominent
+            product, scoped_matches, prominent=prominent
         )
         # P5: DRI-essential nutrient authority floor. An essential vitamin/mineral
         # with established RDA/AI has evidence of necessity even without a strong
         # RCT match. Floor (never cap) — it only lifts, never lowers the clinical
         # floor above it (e.g. a consensus/branded 18 stays 18).
-        auth_canon = _mass_dominant_essential_canonical(
-            product, owner_canonicals=owner_canonicals if owner_scoped else None
+        explicit_purpose_canonicals = {canonical for _, canonical in prominent}
+        if not explicit_purpose_canonicals:
+            # A label with one assessable active still has an unambiguous
+            # Evidence subject even when the shared role owner has no title or
+            # claim signal to mark prominent.  Multiple active identities stay
+            # unresolved here: Evidence must not recreate the removed
+            # heaviest-mass fallback to choose among them.
+            subject_canonicals = {
+                str(row.get("canonical_id") or "").strip().lower()
+                for row in _competing_active_rows(product)
+                if isinstance(row, dict)
+                and str(row.get("canonical_id") or "").strip()
+                and not is_lent_blend_mass(row)
+            }
+            if len(subject_canonicals) == 1:
+                explicit_purpose_canonicals = subject_canonicals
+        auth_canon = _purpose_essential_canonical(
+            product,
+            owner_canonicals=explicit_purpose_canonicals if explicit_purpose_canonicals else set(),
         )
         if (auth_canon and (not owner_scoped or auth_canon in owner_canonicals)
                 and primary_floor < NUTRITION_AUTHORITY_FLOOR):
@@ -799,9 +775,6 @@ def _recover_verified_product_level_matches(
             continue
         if (row.get("evidence_type") or "") != "blend_anchor_mass":
             continue
-        mass = _mass_mg(row) or 0.0
-        if mass <= 0.0:
-            continue
         row_text = _row_identity_text(product, row)
         if not row_text:
             continue
@@ -868,9 +841,8 @@ def _recover_verified_primary_ingredient_matches(
       one named in the title (``_is_clear_primary_recovery_row``). Moving them
       to the role owner changes the approved probiotic model's inputs, which
       needs its own measured decision;
-    - either way the row still holds half the heaviest competing active's mass,
-      the retained exposure stand-in (decision D26), so trace amounts never
-      borrow evidence.
+    Amount adequacy is owned by Dose. Evidence retains identity, purpose,
+    preparation, source-lineage and applicability guards only.
     """
     if matches and not allow_with_existing_matches:
         return []
@@ -896,14 +868,6 @@ def _recover_verified_primary_ingredient_matches(
                 if str(ref or "").strip()
             )
     existing_identity_keys = _existing_match_identity_keys(matches)
-    # Retained exposure stand-in (decision D26), unchanged from the previous
-    # rule: most records carry no studied minimum, so a recovered row must
-    # still hold half the heaviest competing active's mass. Prominence, not
-    # this comparison, decides which rows are the product's purpose.
-    heaviest = _heaviest_competing_mass(product)
-    if heaviest <= 0.0:
-        return []
-    threshold = PRIMARY_MASS_FRACTION * heaviest
     active_canonical_index = _active_canonical_index(product)
     matched_active_canonicals = {
         canonical
@@ -942,12 +906,10 @@ def _recover_verified_primary_ingredient_matches(
         if allow_with_existing_matches:
             if evidence_row_key(row) not in prominent:
                 continue
-            if (_mass_mg(row) or 0.0) <= 0.0 or is_lent_blend_mass(row):
-                # Only a row with its own amount: an undisclosed amount, or a
-                # blend total lent to one member, recovers nothing.
+            if is_lent_blend_mass(row):
+                # A blend total lent to one member establishes neither that
+                # member's preparation nor its individual exposure.
                 continue
-        if (_mass_mg(row) or 0.0) < threshold:
-            continue
         row_canonical_id = str(row.get("canonical_id") or "").strip().lower()
         if row_canonical_id in matched_active_canonicals:
             continue
@@ -1345,36 +1307,24 @@ def _collagen_peptide_recovery_row(
 ) -> Optional[Dict[str, Any]]:
     """Return the peptide row supplying a recovered study's exposure.
 
-    Keep the half-of-heaviest exposure stand-in pending D26 policy approval.
-    Owner-scoped recovery still requires shared prominence and the row's own
-    amount. Returning that row binds the study minimum to its preparation;
-    another collagen preparation must never supply this peptide dose.
+    Owner-scoped recovery requires shared prominence and the exact peptide
+    preparation. Amount adequacy belongs to Dose; another collagen preparation
+    must never supply this preparation's identity or source binding.
     """
     from evidence_resolver import evidence_row_key
 
-    max_active_mass = 0.0
-    max_peptide_mass = 0.0
     peptide_row = None
     for row in _competing_active_rows(product):
         if not isinstance(row, dict):
             continue
-        mass = _mass_mg(row) or 0.0
-        max_active_mass = max(max_active_mass, mass)
         if _is_collagen_peptide_row(row) and (
             prominent is None
             or (evidence_row_key(row) in prominent and not is_lent_blend_mass(row))
         ) and (
-            mass > max_peptide_mass
-            or (mass == max_peptide_mass and peptide_row is not None
-                and not _recovery_source_ref(peptide_row)
-                and _recovery_source_ref(row))
+            peptide_row is None
+            or (not _recovery_source_ref(peptide_row) and _recovery_source_ref(row))
         ):
-            max_peptide_mass = mass
             peptide_row = row
-    if max_peptide_mass <= 0.0:
-        return None
-    if max_peptide_mass < (PRIMARY_MASS_FRACTION * max_active_mass):
-        return None
     return peptide_row
 
 
@@ -1465,40 +1415,17 @@ def _competing_active_rows(
         role = _norm_text(row.get("cleaner_row_role"))
         if role in {"blend_header_total", "parent_total", "compound_duplicate"}:
             continue
-        # Stricter dose/scoring eligibility: undosed children where mass is not known do not compete
-        mass = _evidence_matching_mass_mg(row) or 0.0
-        if mass <= 0.0 and not has_usable_individual_dose(row):
-            continue
         competing.append(row)
     return competing
-
-
-def _heaviest_competing_mass(product: Dict[str, Any]) -> float:
-    """The heaviest evidence-matching mass among actives that compete for mass.
-
-    Only the primary floor's retained exposure stand-in reads this; it never
-    decides which row is the product's purpose.
-    """
-    rows = nutrient_delivering_rows(product)
-    # Projected rows are rebuilt on every contract call, so the competitor
-    # set must be derived from this same row list.
-    return max(
-        (
-            _evidence_matching_mass_mg(row) or 0.0
-            for row in _competing_active_rows(product, rows)
-            if not (_is_nutrition_fact_declaration(row) or is_lent_blend_mass(row))
-        ),
-        default=0.0,
-    )
 
 
 def _evidence_anchor_rows(
     product: Dict[str, Any], entry: Dict[str, Any]
 ) -> List[Dict[str, Any]]:
-    """The label rows with a positive amount that an evidence match links to.
+    """The label identity rows that an evidence match links to.
 
-    Only rows with a positive evidence-matching amount qualify; a Nutrition
-    Facts declaration or a blend total lent to one child never does. Linkage
+    A Nutrition Facts declaration or a blend total lent to one child never
+    establishes the clinical identity. Linkage
     is the match's single non-structural source row when it names one, else
     every referenced row, else the rows sharing the first identity token
     (canonical, ingredient, standard name, matched term) that names any row.
@@ -1507,7 +1434,6 @@ def _evidence_anchor_rows(
         row for row in nutrient_delivering_rows(product)
         if isinstance(row, dict)
         and not (_is_nutrition_fact_declaration(row) or is_lent_blend_mass(row))
-        and (_evidence_matching_mass_mg(row) or 0.0) > 0.0
     ]
     anchor_ref = _unambiguous_non_structural_source_ref(product, entry)
     refs = {anchor_ref} if anchor_ref is not None else {
@@ -1538,7 +1464,7 @@ def _evidence_anchor_rows(
 def _unambiguous_non_structural_source_ref(
     product: Dict[str, Any], entry: Dict[str, Any]
 ) -> Optional[str]:
-    """Return the one massed label row directly referenced by an evidence match.
+    """Return the one identity label row directly referenced by an evidence match.
 
     ``matched_source_row_refs`` records identity matches and may also contain a
     structural total with the same identity. Only a single referenced,
@@ -1558,8 +1484,6 @@ def _unambiguous_non_structural_source_ref(
         if not isinstance(row, dict):
             continue
         if _norm_text(row.get("scoring_input_kind")) == "product_level_evidence":
-            continue
-        if (_evidence_matching_mass_mg(row) or 0.0) <= 0.0:
             continue
         source_ref = str(
             row.get("raw_source_path") or row.get("source_row_ref") or ""
@@ -1620,40 +1544,24 @@ def _matched_active_canonical(
     return ""
 
 
-def _mass_dominant_essential_canonical(
+def _purpose_essential_canonical(
     product: Dict[str, Any], *, owner_canonicals: Optional[set] = None,
 ) -> Optional[str]:
-    """Canonical_id of the heaviest active IFF it is a DRI-essential vitamin/mineral
-    (established RDA/AI). Anchors the P5 nutrition-authority evidence floor — keyed
-    on the mass-dominant active so a trace essential co-ingredient never floats a
-    product, only a product whose PRIMARY ingredient is the essential nutrient.
-    Scoped callers restrict the competitors to their existing purpose owners
-    (the shared role owner's identities).
+    """Stable purpose-owned DRI essential for the authority floor.
 
-    Mass dominance here is not the purpose decision but the retained exposure
-    stand-in (decision D26): only generic Dose judges DRI adequacy, sports and
-    fiber Dose do not, and the transfer packet forbids a route-specific
-    exception. A blend total lent to a child is never that child's amount.
+    The shared role owner supplies ``owner_canonicals``. Amount adequacy and
+    excess are independent Dose/Safety judgments and do not decide Evidence.
     """
-    best_row: Optional[Dict[str, Any]] = None
-    best_cid: Optional[str] = None
-    best_mass = 0.0
+    candidates = set()
     for row in _competing_active_rows(product):
         if not isinstance(row, dict):
             continue
         canonical = str(row.get("canonical_id") or "").strip().lower()
         if owner_canonicals is not None and canonical not in owner_canonicals:
             continue
-        mass = _mass_mg(row) or 0.0
-        if mass > best_mass:
-            best_mass = mass
-            best_cid = canonical
-            best_row = row
-    if best_row is not None and is_lent_blend_mass(best_row):
-        return None
-    if best_mass > 0 and best_cid in DRI_ESSENTIAL_NUTRIENTS:
-        return best_cid
-    return None
+        if canonical in DRI_ESSENTIAL_NUTRIENTS and not is_lent_blend_mass(row):
+            candidates.add(canonical)
+    return sorted(candidates)[0] if candidates else None
 
 
 def _is_prominent_anchor(
@@ -1728,7 +1636,6 @@ def _evidence_matching_mass_mg(row: Dict[str, Any]) -> Optional[float]:
 def _primary_mass_floor(
     product: Dict[str, Any],
     matches: List[Any],
-    sub_clinical_canonicals: set,
     *,
     prominent: Optional[set] = None,
 ) -> Tuple[float, Optional[str]]:
@@ -1745,20 +1652,14 @@ def _primary_mass_floor(
     owner names no purpose at all (its retain-everything fallback), there is no
     prominence to read and the previous behavior stands unchanged.
 
-    The relative-mass check that follows is NOT prominence. Records without a
-    studied minimum have no other amount judgment in Evidence, and Dose does not
-    yet assess every anchor's exposure, so the check is retained as the
-    uncovered exposure stand-in (transfer invariant) until Dose covers it.
+    Amount and studied-dose comparisons are intentionally absent: Dose owns
+    adequacy, while this floor owns evidence strength and applicability.
     """
     from evidence_resolver import evidence_prominent_row_keys
 
     if prominent is None:
         prominent = evidence_prominent_row_keys(product)
-    heaviest = _heaviest_competing_mass(product)
-    if heaviest <= 0.0:
-        return 0.0, None
     canon_index = _active_canonical_index(product)
-    dose_map = _dose_map(product)
     floor = 0.0
     floor_canon: Optional[str] = None
     for entry in matches:
@@ -1771,11 +1672,6 @@ def _primary_mass_floor(
         canonical = _canonical_from_entry(entry)
         if not canonical:
             continue  # can't identify the ingredient -> don't anchor a floor on it
-        if (
-            canonical in sub_clinical_canonicals
-            or bool(set(_matched_canonical_ids(entry)) & sub_clinical_canonicals)
-        ):
-            continue
         linked = _evidence_anchor_rows(product, entry)
         if prominent:
             anchors = [row for row in linked if _is_prominent_anchor(product, entry, row, prominent)]
@@ -1786,17 +1682,6 @@ def _primary_mass_floor(
                 row for row in linked
                 if str(row.get("canonical_id") or "").strip().lower() in identities
             ]
-        # Retained exposure stand-in (see docstring): the amount of the anchor's
-        # own identity rows (as before, e.g. an extract and its source berries)
-        # against the heaviest competing active, never another identity's row
-        # the same match also references.
-        anchor_mass = max((_evidence_matching_mass_mg(row) or 0.0 for row in linked), default=0.0)
-        if anchor_mass < PRIMARY_MASS_FRACTION * heaviest:
-            continue
-        if entry.get("min_clinical_dose") is not None:
-            dose, _ = _converted_product_dose(entry, dose_map)
-            if dose is None:
-                continue  # an unconvertible amount cannot establish a studied dose
         st = _norm_text(entry.get("study_type"))
         branded = (
             _norm_text(entry.get("evidence_level")) in _BRANDED_EVIDENCE_LEVELS

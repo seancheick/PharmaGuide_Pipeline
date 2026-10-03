@@ -191,14 +191,12 @@
     "generic": {
       "cap_total": 20.0,
       "cap_per_ingredient": 7.0,
-      "supra_clinical_multiple": 3.0,
       "enrollment_default_multiplier": 1.2,
       "primary_floor_strong": 14.0,
       "primary_floor_moderate": 11.0,
       "primary_floor_branded_strong": 18.0,
       "primary_floor_branded_moderate": 17.0,
       "nutrition_authority_floor": 10.0,
-      "primary_mass_fraction": 0.5,
       "enrollment_quality_bands": [[50.0, 0.6], [200.0, 0.8], [500.0, 1.0], [1000.0, 1.1]],
       "effect_direction_multipliers": { "positive_strong": 1.0, "positive_weak": 0.85, "mixed": 0.6, "null": 0.0, "negative": 0.0 },
       "top_n_weights": [1.0, 0.7, 0.5, 0.3],
@@ -234,20 +232,16 @@
     "multi_prenatal": { "cap_evidence": 20.0, "generic_cap_evidence": 20.0 },
     "omega": {
       "cap_evidence": 20.0,
-      "_doc": "Editorial mapping, not study-derived point values. Clinical facts and source identifiers live in INGR_OMEGA3.purpose_evidence. The 376 mg floor is a conservative studied-range boundary, not a proven efficacy threshold. The 1000-2000 mg interpolation and 10.4/20/11.1 allocations are rubric choices. No prescription-equivalence, universal cardiovascular protection or preterm-birth efficacy claim is made. Personal baseline status does not change product quality. Safety remains outside this pillar.",
+      "_doc": "Editorial, amount-independent Evidence mapping. Clinical facts and source identifiers live in INGR_OMEGA3.purpose_evidence; omega amount is judged only by Dose. Ordinary adult explicit EPA+DHA receives 10.4, explicit adult triglyceride-lowering purpose receives 20, and prenatal DHA intake authority receives 11.1. Child/baby, DHA-only, uncertain identity, specialized preparation and unresolved mixed-purpose labels are held. No prescription-equivalence, universal cardiovascular protection or preterm-birth efficacy claim is made. Safety remains outside this pillar.",
       "purpose_standards": {
         "omega_reviewed_weak": {
-          "pillar_score": 10.4,
-          "minimum_daily_epa_dha_mg": 376
+          "pillar_score": 10.4
         },
         "triglyceride_strong": {
-          "pillar_score": 20.0,
-          "minimum_daily_epa_dha_mg": 2000,
-          "graduated_from_daily_epa_dha_mg": 1000
+          "pillar_score": 20.0
         },
         "prenatal_dha_intake_authority": {
-          "pillar_score": 11.1,
-          "minimum_daily_dha_mg": 200
+          "pillar_score": 11.1
         },
         "prenatal_preterm_birth_outcome": {
           "score_eligible": false

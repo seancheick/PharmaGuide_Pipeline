@@ -66,7 +66,6 @@ def score_formulation(product: Dict[str, Any]) -> Dict[str, Any]:
 
     shared = shared_formulation_penalty_detail(product)
     penalties: Dict[str, float] = dict(shared["penalties"])
-    penalties.update(_fiber_penalties(product, all_rows))
 
     positive = sum(components.values())
     penalty_total = sum(abs(float(v or 0.0)) for v in penalties.values())
@@ -169,16 +168,6 @@ def _practicality(product: Dict[str, Any]) -> float:
     if any(term in text for term in ("cleanse", "detox")):
         return 0.5
     return 2.0
-
-
-def _fiber_penalties(product: Dict[str, Any], rows: List[Dict[str, Any]]) -> Dict[str, float]:
-    text = product_name_text(product)
-    penalties: Dict[str, float] = {}
-    if any(term in text for term in ("cleanse", "detox")):
-        penalties["fiber_cleanse_detox_penalty"] = -3.0
-    if _has_stimulant_laxative(rows):
-        penalties["fiber_stimulant_laxative_penalty"] = -8.0
-    return penalties
 
 
 def _has_stimulant_laxative(rows: List[Dict[str, Any]]) -> bool:

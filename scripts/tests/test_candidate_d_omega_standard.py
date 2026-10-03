@@ -46,18 +46,18 @@ def _product(
     }
 
 
-def test_evidence_uses_minimum_directed_exposure_for_full_applicability() -> None:
+def test_evidence_amount_is_owned_only_by_dose() -> None:
     from scoring_v4.modules.omega_evidence import score_evidence
 
     crossing = score_evidence(_product(epa=1200, dha=300, minimum=1, maximum=2))
     exact = score_evidence(_product(epa=1600, dha=400, minimum=1, maximum=1))
 
-    assert crossing["score"] == pytest.approx(15.2)
+    assert crossing["score"] == pytest.approx(10.4)
     assert crossing["metadata"]["per_day_epa_dha_min_mg"] == 1500.0
     assert crossing["metadata"]["per_day_epa_dha_max_mg"] == 3000.0
     assert crossing["metadata"]["applicability_qualified"] is True
-    assert exact["score"] == 20.0
-    assert exact["metadata"]["evidence_standard"] == "triglyceride_strong"
+    assert exact["score"] == pytest.approx(10.4)
+    assert exact["metadata"]["evidence_standard"] == "omega_reviewed_weak"
 
 
 def test_evidence_keeps_reviewed_weak_record_below_one_gram() -> None:
@@ -71,15 +71,15 @@ def test_evidence_keeps_reviewed_weak_record_below_one_gram() -> None:
     assert payload["metadata"]["applicability_qualified"] is True
 
 
-def test_evidence_requires_the_reviewed_weak_record_minimum_exposure() -> None:
+def test_evidence_does_not_use_the_reviewed_trial_amount_as_a_threshold() -> None:
     from scoring_v4.modules.omega_evidence import score_evidence
 
     below_reviewed_range = score_evidence(_product(epa=200, dha=175))
     at_reviewed_range = score_evidence(_product(epa=200, dha=176))
 
-    assert below_reviewed_range["score"] == 0.0
-    assert below_reviewed_range["metadata"]["evidence_standard"] is None
-    assert below_reviewed_range["metadata"]["applicability_qualified"] is False
+    assert below_reviewed_range["score"] == 10.4
+    assert below_reviewed_range["metadata"]["evidence_standard"] == "omega_reviewed_weak"
+    assert below_reviewed_range["metadata"]["applicability_qualified"] is True
     assert at_reviewed_range["score"] == 10.4
     assert at_reviewed_range["metadata"]["evidence_standard"] == "omega_reviewed_weak"
 
@@ -96,6 +96,87 @@ def test_prenatal_intake_authority_is_not_preterm_outcome_credit() -> None:
     assert payload["metadata"]["prenatal_outcome_credit_awarded"] is False
 
 
+def test_explicit_adult_triglyceride_lowering_purpose_owns_strong_evidence() -> None:
+    from scoring_v4.modules.omega_evidence import score_evidence
+
+    product = _product(epa=150, dha=100, name="Adult Omega-3 Triglyceride Support")
+    product["statements"] = [{
+        "type": "Formula re: Contains",
+        "notes": "EPA and DHA help lower triglyceride levels.",
+    }]
+    payload = score_evidence(product)
+
+    assert payload["score"] == 20.0
+    assert payload["metadata"]["evidence_standard"] == "triglyceride_strong"
+
+
+def test_triglyceride_form_wording_is_not_a_lowering_purpose() -> None:
+    from scoring_v4.modules.omega_evidence import score_evidence
+
+    payload = score_evidence(
+        _product(epa=150, dha=100, name="Natural Triglyceride Form Omega-3")
+    )
+
+    assert payload["score"] == 10.4
+    assert payload["metadata"]["evidence_standard"] == "omega_reviewed_weak"
+
+
+@pytest.mark.parametrize("name", ["Children's Omega-3", "Baby Omega-3 Drops"])
+def test_child_and_baby_products_do_not_borrow_adult_evidence(name: str) -> None:
+    from scoring_v4.modules.omega_evidence import score_evidence
+
+    payload = score_evidence(_product(epa=300, dha=200, name=name))
+
+    assert payload["score"] == 0.0
+    assert payload["metadata"]["applicability_qualified"] is False
+
+
+def test_dha_only_non_prenatal_product_does_not_borrow_epa_dha_evidence() -> None:
+    from scoring_v4.modules.omega_evidence import score_evidence
+
+    payload = score_evidence(_product(epa=0, dha=500, name="Vegetarian DHA"))
+
+    assert payload["score"] == 0.0
+    assert payload["metadata"]["applicability_qualified"] is False
+
+
+def test_epa_only_product_does_not_borrow_combined_epa_dha_evidence() -> None:
+    from scoring_v4.modules.omega_evidence import score_evidence
+
+    payload = score_evidence(_product(epa=500, dha=0, name="EPA Concentrate"))
+
+    assert payload["score"] == 0.0
+    assert payload["metadata"]["applicability_qualified"] is False
+
+
+@pytest.mark.parametrize("name", ["Pro-Resolving Mediator Formula", "SPM Active Omega"])
+def test_specialized_omega_delivery_does_not_borrow_ordinary_fish_oil_evidence(name: str) -> None:
+    from scoring_v4.modules.omega_evidence import score_evidence
+
+    payload = score_evidence(_product(epa=300, dha=200, name=name))
+
+    assert payload["score"] == 0.0
+    assert payload["metadata"]["applicability_qualified"] is False
+    assert payload["metadata"]["applicability_reason"] == "held_specialized_preparation"
+
+
+def test_mixed_purpose_product_does_not_borrow_omega_only_evidence() -> None:
+    from scoring_v4.modules.omega_evidence import score_evidence
+
+    product = _product(epa=300, dha=200, name="Omega-3 + Lutein Eye Formula")
+    product["ingredient_quality_data"]["ingredients_scorable"].append({
+        "name": "Lutein",
+        "canonical_id": "lutein",
+        "quantity": 10,
+        "unit": "mg",
+    })
+    payload = score_evidence(product)
+
+    assert payload["score"] == 0.0
+    assert payload["metadata"]["applicability_qualified"] is False
+    assert payload["metadata"]["applicability_reason"] == "held_mixed_purpose_ownership"
+
+
 def test_unknown_frequency_records_default_without_inventing_a_range() -> None:
     from scoring_v4.modules.omega_evidence import score_evidence
 
@@ -103,7 +184,7 @@ def test_unknown_frequency_records_default_without_inventing_a_range() -> None:
     product.pop("servingSizes")
     payload = score_evidence(product)
 
-    assert payload["score"] == 20.0
+    assert payload["score"] == 10.4
     assert payload["metadata"]["servings_defaulted"] is True
     assert payload["metadata"]["applicability_qualified"] is True
 

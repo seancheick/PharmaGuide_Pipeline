@@ -133,6 +133,40 @@ def test_dose_peptide_below_2g_is_below_range():
     assert out["band"] == "below_studied_range"
 
 
+def test_bare_collagen_does_not_borrow_the_peptide_benchmark():
+    row = _collagen(
+        name="Bovine Hide Collagen",
+        standard_name="Collagen",
+        form="collagen",
+        quantity=3,
+        unit="Gram(s)",
+    )
+    out = score_collagen_dose(_product([row]))
+    assert out["score"] == 10.0
+    assert out["band"] == "disclosed_no_reference"
+
+
+def test_declared_collagen_preparations_are_averaged_equally():
+    generic = _collagen(
+        name="Bovine Hide Collagen",
+        standard_name="Collagen",
+        form="collagen",
+        quantity=3,
+        unit="Gram(s)",
+        raw_source_path="ingredientRows[0]",
+    )
+    peptides = _collagen(
+        name="Hydrolyzed Collagen Peptides Type I & III",
+        quantity=2,
+        unit="Gram(s)",
+        raw_source_path="ingredientRows[1]",
+    )
+    out = score_collagen_dose(_product([generic, peptides]))
+    assert out["score"] == 13.0
+    assert out["band"] == "mixed_purpose_average"
+    assert out["metadata"]["purpose_ingredient_count"] == 2
+
+
 def test_dose_uc2_40mg_is_within_range():
     # UC-II / undenatured Type II is clinically dosed at 40 mg (PMID 26822714),
     # NOT the 10-20 g hydrolyzed-peptide range.

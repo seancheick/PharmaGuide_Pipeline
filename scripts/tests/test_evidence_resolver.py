@@ -106,14 +106,14 @@ def test_reviewed_clinical_study_resolution():
     assert res.reason_code == "reviewed_human_clinical_evidence_matched"
 
 
-def test_subclinical_dose_applicability_guard():
-    """If an ingredient dose is below the studied clinical range, applicability is unestablished."""
+def test_studied_amount_is_not_an_evidence_applicability_guard():
+    """Evidence resolves the reviewed preparation; Dose owns amount adequacy."""
     # L-Carnitine minimum clinical dose in backed studies is 1000 mg
     res = er.resolve_evidence_for_canonical("l_carnitine", dose_value=50.0, dose_unit="mg")
-    assert res.disposition == EvidenceDisposition.RESEARCH_PRESENT_APPLICABILITY_UNESTABLISHED.value
+    assert res.disposition == EvidenceDisposition.RESOLVED_BY_REVIEWED_CLINICAL_EVIDENCE.value
     assert "backed_clinical_studies" in res.matched_owners
-    assert res.applicability_status == "sub_clinical_dose"
-    assert "dose_below_clinical_trial_minimum" in res.blocking_reasons
+    assert res.applicability_status == "applicable_reviewed_trials"
+    assert "dose_below_clinical_trial_minimum" not in res.blocking_reasons
 
 
 def test_form_mismatch_applicability_guard():
@@ -219,10 +219,10 @@ def test_carotenoid_policy_zeaxanthin_areds2():
     assert "backed_clinical_studies" in res.matched_owners
     assert res.points_eligible is False  # Shadow mode: resolver does not award points directly
 
-    # Zeaxanthin at sub-clinical dose (e.g. 0.5 mg) fails dose applicability
+    # Amount does not change Evidence applicability; Dose owns the 2 mg comparison.
     res_sub = er.resolve_evidence_for_canonical("zeaxanthin", dose_value=0.5, dose_unit="mg")
-    assert res_sub.disposition == EvidenceDisposition.RESEARCH_PRESENT_APPLICABILITY_UNESTABLISHED.value
-    assert "dose_below_clinical_trial_minimum" in res_sub.blocking_reasons
+    assert res_sub.disposition == EvidenceDisposition.RESOLVED_BY_REVIEWED_CLINICAL_EVIDENCE.value
+    assert "dose_below_clinical_trial_minimum" not in res_sub.blocking_reasons
 
 
 def test_carotenoid_policy_lycopene():
@@ -233,9 +233,9 @@ def test_carotenoid_policy_lycopene():
     assert "backed_clinical_studies" in res.matched_owners
     assert res.points_eligible is False
 
-    # Lycopene at 1 mg is sub-clinical
+    # Lycopene at 1 mg keeps the same Evidence disposition.
     res_sub = er.resolve_evidence_for_canonical("lycopene", dose_value=1.0, dose_unit="mg")
-    assert res_sub.disposition == EvidenceDisposition.RESEARCH_PRESENT_APPLICABILITY_UNESTABLISHED.value
+    assert res_sub.disposition == EvidenceDisposition.RESOLVED_BY_REVIEWED_CLINICAL_EVIDENCE.value
 
 
 def test_bcaa_sports_amino_dose_applicability_not_points():
@@ -245,10 +245,10 @@ def test_bcaa_sports_amino_dose_applicability_not_points():
     assert res_high.disposition == EvidenceDisposition.RESOLVED_BY_REVIEWED_CLINICAL_EVIDENCE.value
     assert res_high.points_eligible is False  # Does NOT award points; existing scorer decides
 
-    # L-Leucine below 2500 mg (e.g. 500 mg) is applicability unestablished (sub-clinical)
+    # L-Leucine below 2500 mg keeps Evidence; sports Dose owns adequacy.
     res_low = er.resolve_evidence_for_canonical("l_leucine", dose_value=500.0, dose_unit="mg")
-    assert res_low.disposition == EvidenceDisposition.RESEARCH_PRESENT_APPLICABILITY_UNESTABLISHED.value
-    assert res_low.applicability_status == "sub_clinical_dose"
+    assert res_low.disposition == EvidenceDisposition.RESOLVED_BY_REVIEWED_CLINICAL_EVIDENCE.value
+    assert res_low.applicability_status == "applicable_reviewed_trials"
 
 
 def test_silica_provenance_context_handling():
@@ -850,7 +850,7 @@ def test_resolver_uses_shared_daily_units_and_any_applicable_record(monkeypatch,
     result = er.resolve_evidence_for_row(row, product)
     assert result.disposition == EvidenceDisposition.RESOLVED_BY_REVIEWED_CLINICAL_EVIDENCE.value
     row['quantity'] = quantity / 10
-    assert er.resolve_evidence_for_row(row, product).applicability_status == 'sub_clinical_dose'
+    assert er.resolve_evidence_for_row(row, product).applicability_status == 'applicable_reviewed_trials'
     row['is_proprietary_blend'] = True
     assert er.resolve_evidence_for_row(row, product).disposition == EvidenceDisposition.IDENTITY_INSUFFICIENT.value
 

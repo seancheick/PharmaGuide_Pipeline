@@ -85,8 +85,15 @@ from scoring_v4.modules.generic_helpers import (
     _safe_dict,
     _safe_list,
 )
-from scoring_input_contract import mass_primary_label_actives, source_linked_rows
+from scoring_input_contract import (
+    ROLE_CLAIM_PROMINENT,
+    ROLE_PRIMARY,
+    classify_ingredient_roles,
+    mass_primary_label_actives,
+    source_linked_rows,
+)
 from scoring_v4.dose_safety import resolve_dose_safety
+from dose_assessment import positive_clinical_benchmark
 from scoring_v4.modules.immune_support import score_immune_support_dose
 from scoring_v4.modules.joint_support import score_joint_support_dose
 from scoring_v4.modules.sleep_support import score_sleep_support_dose
@@ -240,6 +247,98 @@ def _score_supplemental_window_proxy(product: Dict[str, Any]) -> tuple[float, Op
 
     avg = sum(contributions) / len(contributions)
     return round(_clamp(0.0, CAP_SUPPLEMENTAL_WINDOW, avg), 4), None
+
+
+def _row_identity_keys(row: Dict[str, Any]) -> set[str]:
+    return {
+        _norm_text(row.get(key))
+        for key in ("canonical_id", "standard_name", "standardName", "name", "nutrient")
+        if _norm_text(row.get(key))
+    }
+
+
+def _score_declared_purpose_window(
+    product: Dict[str, Any],
+) -> tuple[Optional[float], List[str], int, List[Dict[str, Any]]]:
+    """Score each explicitly declared purpose once, using one equal vote.
+
+    The shared role owner establishes purpose from the route, product title or
+    an ingredient-scoped label function claim.  A disclosed purpose with no
+    applicable benchmark receives the existing limited-assessability credit;
+    an incidental/supporting row does not enter merely because it is present or
+    heavy.  Missing required amounts are handled by assessment readiness before
+    this route scorer is published.
+
+    Returns ``(score, unbenchmarked identities, purpose count)``. ``score`` is
+    ``None`` when the label declares no purpose row, preserving the legacy
+    compatibility path for products whose source has not yet supplied one.
+    """
+    rows = [row for row in nutrient_delivering_rows(product) if isinstance(row, dict)]
+    roles = classify_ingredient_roles(product, module="generic", rows=rows)
+    purpose_rows = [
+        row for row, role in zip(rows, roles)
+        if role.get("role") in {ROLE_PRIMARY, ROLE_CLAIM_PROMINENT}
+        and not row.get("is_parent_total")
+    ]
+    if not purpose_rows:
+        return None, [], 0, []
+
+    # A physical purpose may have a compatibility projection of the same
+    # source row.  Count it once by canonical identity, falling back to source.
+    purposes: Dict[str, Dict[str, Any]] = {}
+    for row in purpose_rows:
+        identity = _norm_text(row.get("canonical_id"))
+        source = str(row.get("raw_source_path") or row.get("source_row_ref") or "").strip()
+        key = identity or source or _norm_text(row.get("name"))
+        if key:
+            purposes.setdefault(key, row)
+
+    adequacy = [
+        row for row in _safe_list(_safe_dict(product.get("rda_ul_data")).get("adequacy_results"))
+        if isinstance(row, dict)
+    ]
+    contributions: List[float] = []
+    unbenchmarked: List[str] = []
+    clinical_assessments: List[Dict[str, Any]] = []
+    for key, purpose in sorted(purposes.items()):
+        identities = _row_identity_keys(purpose)
+        credits = []
+        for assessment in adequacy:
+            if not (identities & _row_identity_keys(assessment)):
+                continue
+            credit = _band_credit(
+                _as_float(assessment.get("pct_rda"), None),
+                _as_float(assessment.get("pct_ul"), None),
+                assessment.get("canonical_id"),
+            )
+            if credit is not None:
+                credits.append(credit)
+        if credits:
+            # The producer normally emits one canonical assessment.  If a
+            # compatibility artifact has duplicates, one purpose still gets
+            # one conservative vote rather than extra denominator weight.
+            contributions.append(min(credits))
+            continue
+        clinical = positive_clinical_benchmark(product, purpose)
+        if clinical is not None:
+            if clinical.benchmark_maximum and clinical.exposure_value > clinical.benchmark_maximum:
+                contributions.append(WINDOW_OVERDOSE_CREDIT)
+            else:
+                contributions.append(min(CAP_SUPPLEMENTAL_WINDOW, clinical.ratio * CAP_SUPPLEMENTAL_WINDOW))
+            clinical_assessments.append(clinical.to_dict())
+            continue
+        if has_usable_individual_dose(purpose):
+            contributions.append(NO_REFERENCE_INDIVIDUAL_DOSE_CREDIT)
+            unbenchmarked.append(key)
+
+    if not contributions:
+        return 0.0, sorted(unbenchmarked), len(purposes), clinical_assessments
+    return (
+        round(_clamp(0.0, CAP_SUPPLEMENTAL_WINDOW, sum(contributions) / len(contributions)), 4),
+        sorted(unbenchmarked),
+        len(purposes),
+        clinical_assessments,
+    )
 
 
 def _score_no_reference_quantified_dose(product: Dict[str, Any]) -> tuple[float, Optional[str]]:
@@ -495,7 +594,11 @@ def score_dose(product: Dict[str, Any]) -> Dict[str, Any]:
             },
         }
 
+    purpose_credit, unbenchmarked_purposes, purpose_count, clinical_benchmarks = _score_declared_purpose_window(product)
     window_credit, window_reason = _score_supplemental_window_proxy(product)
+    if purpose_credit is not None:
+        window_credit = purpose_credit
+        window_reason = None
     no_rda_reference = window_reason in {
         "no_rda_reference_data",
         "dietary_intake_dominant_reference_excluded",
@@ -505,7 +608,7 @@ def score_dose(product: Dict[str, Any]) -> Dict[str, Any]:
     if no_rda_reference:
         no_reference_credit, no_reference_credit_reason = _score_no_reference_quantified_dose(product)
     unassessed_primary: Optional[str] = None
-    if not no_rda_reference:
+    if not no_rda_reference and purpose_credit is None:
         unassessed_primary = _mass_primary_without_reference(product)
         if unassessed_primary and window_credit > NO_REFERENCE_INDIVIDUAL_DOSE_CREDIT:
             # The assessed nutrients' window average must not present a
@@ -551,6 +654,14 @@ def score_dose(product: Dict[str, Any]) -> Dict[str, Any]:
         "deferred_data_dependency": DEFERRED_DATA,
         "B7_safety_evaluation": b7_metadata,
     }
+    if purpose_credit is not None:
+        metadata["dose_participation_basis"] = "declared_purpose_equal_weight"
+        metadata["purpose_ingredient_count"] = purpose_count
+        metadata["unbenchmarked_purpose_ingredients"] = unbenchmarked_purposes
+        metadata["positive_clinical_benchmark_assessments"] = clinical_benchmarks
+        if unbenchmarked_purposes:
+            metadata["window_proxy_status"] = "limited_assessability_unbenchmarked_purpose"
+            metadata["partial_credit_value"] = NO_REFERENCE_INDIVIDUAL_DOSE_CREDIT
     if window_reason is not None:
         metadata["window_proxy_reason"] = window_reason
     if unassessed_primary:

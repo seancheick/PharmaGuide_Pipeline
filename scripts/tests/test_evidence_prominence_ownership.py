@@ -1,15 +1,9 @@
-"""Generic Evidence reads prominence from the shared role owner (Phase 2).
+"""Generic Evidence reads purpose from the shared role owner (Phase 2).
 
 ``scoring_input_contract.classify_ingredient_roles`` decides which label rows
-the product is about; ``evidence_resolver.evidence_prominent_row_keys`` is the
-same owner decision read per row. Generic Evidence consumes it for the primary
-floor anchor, the nutrition-authority floor, ingredient-evidence recovery and
-collagen recovery instead of choosing a primary by mass.
-
-The primary floor keeps one relative-mass comparison, on purpose: records
-without a studied minimum have no other amount judgment in Evidence, so that
-comparison is the uncovered exposure stand-in required by the Evidence -> Dose
-transfer invariant. It never decides which row is the purpose.
+the product is about. Dose owns preparation amount adequacy. Evidence uses the
+declared purpose and applicable evidence strength without comparing ingredient
+masses.
 """
 from __future__ import annotations
 
@@ -80,11 +74,9 @@ def test_an_unrelated_ingredients_mass_never_changes_the_declared_purpose(leucin
     assert evidence_prominent_row_keys(product) == {("ingredientRows[0]", "melatonin")}
 
 
-def test_when_the_owner_names_no_purpose_the_previous_floors_stand_and_nothing_is_recovered():
-    """Retain-everything fallback (real 315700, Trace Minerals): the role owner
-    names no purpose row, so there is no prominence to read. The authority
-    floor keeps its previous heaviest-essential rule and recovery has no
-    identified purpose to borrow evidence for."""
+def test_when_the_owner_names_no_purpose_evidence_does_not_choose_by_mass():
+    """Real 315700 has several actives and no declared purpose. Evidence must
+    not choose one by heaviest mass after preparation amount moves to Dose."""
     from evidence_resolver import evidence_prominent_row_keys
     from scoring_v4.modules.generic_evidence import resolved_clinical_matches
 
@@ -92,13 +84,14 @@ def test_when_the_owner_names_no_purpose_the_previous_floors_stand_and_nothing_i
     assert evidence_prominent_row_keys(product) == set()
     assert resolved_clinical_matches(product, owner_scoped=True)[1] == []
     evidence = _evidence(product)
-    assert evidence["metadata"]["nutrition_authority_canonical"] == "manganese"
-    assert evidence["components"]["primary_evidence_floor"] == 10.0
+    assert evidence["metadata"]["nutrition_authority_canonical"] is None
+    assert evidence["metadata"]["primary_evidence_floor_canonical"] == "selenium"
+    assert evidence["components"]["primary_evidence_floor"] == 14.0
 
 
 # --- the primary floor --------------------------------------------------------
 
-def test_a_heavier_undeclared_adjunct_never_anchors_the_floor():
+def test_a_heavier_undeclared_adjunct_never_changes_the_declared_floor():
     product = _product(
         product_name="Melatonin 3 mg",
         ingredients=[_row("Melatonin", "melatonin", 3, path="ingredientRows[0]"),
@@ -111,13 +104,13 @@ def test_a_heavier_undeclared_adjunct_never_anchors_the_floor():
     payload = _scored(product)
 
     assert payload["metadata"]["evidence_owner_canonicals"] == ["melatonin"]
-    assert payload["metadata"]["primary_evidence_floor"] == 0.0
+    assert payload["metadata"]["primary_evidence_floor"] == 14.0
+    assert payload["metadata"]["primary_evidence_floor_canonical"] == "melatonin"
 
 
-def test_the_retained_exposure_stand_in_still_blocks_a_trace_declared_anchor():
-    """Both are declared, but 2.5 mcg of vitamin D beside 600 mg of calcium is
-    not floored at the consensus tier: no owner judges that anchor's exposure
-    yet (decision packet D26). Calcium, the heavier declared purpose, anchors."""
+def test_evidence_strength_not_relative_mass_selects_between_declared_purposes():
+    """Both rows are declared purposes. Dose judges their amounts; Evidence
+    selects applicable evidence strength without comparing units or mass."""
     product = _product(
         product_name="Calcium with Vitamin D3",
         ingredients=[_row("Calcium", "calcium", 600, path="ingredientRows[0]"),
@@ -132,13 +125,11 @@ def test_the_retained_exposure_stand_in_still_blocks_a_trace_declared_anchor():
 
     payload = _scored(product)
 
-    assert payload["metadata"]["primary_evidence_floor_canonical"] == "calcium"
-    assert payload["metadata"]["primary_evidence_floor"] == 14.0
+    assert payload["metadata"]["primary_evidence_floor_canonical"] == "vitamin d3"
+    assert payload["metadata"]["primary_evidence_floor"] == 18.0
 
 
-def test_the_retained_stand_in_reads_the_prominent_rows_own_amount():
-    """The exposure stand-in measures the purpose row. A match that also
-    references another identity's heavier row cannot pass on that row's mass."""
+def test_a_declared_purpose_keeps_evidence_credit_independent_of_amount():
     product = _product(
         product_name="Melatonin",
         ingredients=[_row("Melatonin", "melatonin", 1, path="ingredientRows[0]"),
@@ -148,7 +139,7 @@ def test_the_retained_stand_in_reads_the_prominent_rows_own_amount():
                         matched_source_row_refs=["ingredientRows[0]", "ingredientRows[1]"])],
     )
 
-    assert _scored(product)["metadata"]["primary_evidence_floor"] == 0.0
+    assert _scored(product)["metadata"]["primary_evidence_floor"] == 14.0
 
 
 def test_real_the_stand_in_keeps_reading_the_purposes_own_identity_rows():
@@ -159,7 +150,7 @@ def test_real_the_stand_in_keeps_reading_the_purposes_own_identity_rows():
     assert evidence["metadata"]["primary_evidence_floor_canonical"] == "elderberry extract"
 
 
-def test_clinical_dose_gate_still_blocks_a_declared_purpose():
+def test_clinical_dose_is_not_an_evidence_gate_for_a_declared_purpose():
     product = _product(
         product_name="Melatonin 0.5 mg",
         ingredients=[_row("Melatonin", "melatonin", 0.5, path="ingredientRows[0]")],
@@ -170,18 +161,14 @@ def test_clinical_dose_gate_still_blocks_a_declared_purpose():
 
     payload = _scored(product)
 
-    assert payload["metadata"]["primary_evidence_floor"] == 0.0
-    assert "SUB_CLINICAL_DOSE_DETECTED" in payload["metadata"]["flags"]
+    assert payload["metadata"]["primary_evidence_floor"] == 14.0
+    assert "SUB_CLINICAL_DOSE_DETECTED" not in payload["metadata"]["flags"]
 
 
 # --- the nutrition-authority floor --------------------------------------------
 
-@pytest.mark.parametrize("root_mg,authority", [(600, None), (5, "zinc")])
-def test_authority_floor_keeps_the_heaviest_declared_owner_exposure_stand_in(root_mg, authority):
-    """Both rows are named in the title, so both are the product's purpose. Being
-    the heaviest declared owner is not prominence but the retained exposure
-    stand-in (D26): only generic Dose judges DRI adequacy, sports and fiber Dose
-    do not, and the transfer packet forbids a route-specific exception."""
+@pytest.mark.parametrize("root_mg", [600, 5])
+def test_authority_floor_is_independent_of_another_purposes_mass(root_mg):
     from scoring_v4.modules.generic_evidence import NUTRITION_AUTHORITY_FLOOR
 
     product = _product(
@@ -193,12 +180,11 @@ def test_authority_floor_keeps_the_heaviest_declared_owner_exposure_stand_in(roo
 
     payload = _scored(product)
 
-    assert payload["metadata"]["nutrition_authority_canonical"] == authority
-    if authority:
-        assert payload["components"]["primary_evidence_floor"] == NUTRITION_AUTHORITY_FLOOR
+    assert payload["metadata"]["nutrition_authority_canonical"] == "zinc"
+    assert payload["components"]["primary_evidence_floor"] == NUTRITION_AUTHORITY_FLOOR
 
 
-def test_authority_floor_needs_a_disclosed_amount():
+def test_authority_floor_does_not_borrow_the_blend_total_as_zinc_amount():
     product = _product(
         product_name="Zinc Blend",
         ingredients=[_row("Zinc Blend", "zinc_blend", 300, path="ingredientRows[0]",
@@ -207,16 +193,15 @@ def test_authority_floor_needs_a_disclosed_amount():
         matches=[],
     )
 
-    assert _scored(product)["metadata"]["nutrition_authority_canonical"] is None
+    payload = _scored(product)
+    assert payload["metadata"]["nutrition_authority_canonical"] == "zinc"
+    assert payload["metadata"]["sub_clinical_canonicals"] == []
 
 
 # --- recovery ----------------------------------------------------------------
 
-@pytest.mark.parametrize("nac_mg,recovered", [(400, False), (600, True)])
-def test_ingredient_recovery_keeps_the_retained_exposure_stand_in(nac_mg, recovered):
-    """The title declares NAC, so the role owner, not milk thistle, decides the
-    purpose. Recovery still keeps the baseline half-heaviest comparison as the
-    exposure stand-in (D26): 199 of 210 records carry no studied minimum."""
+@pytest.mark.parametrize("nac_mg", [400, 600])
+def test_ingredient_recovery_is_independent_of_relative_mass(nac_mg):
     product = _product(
         product_name="NAC with Milk Thistle",
         ingredients=[_row("N-Acetyl Cysteine", "nac", nac_mg, path="ingredientRows[0]",
@@ -225,7 +210,7 @@ def test_ingredient_recovery_keeps_the_retained_exposure_stand_in(nac_mg, recove
         matches=[],
     )
 
-    assert ("INGR_NAC" in _scored(product)["metadata"]["recovered_matches"]) is recovered
+    assert "INGR_NAC" in _scored(product)["metadata"]["recovered_matches"]
 
 
 def test_ingredient_recovery_never_serves_a_co_active_the_label_does_not_declare():
@@ -256,10 +241,7 @@ def test_collagen_recovery_follows_prominence():
     assert "RECOVERED_COLLAGEN_PEPTIDES_V1" not in _scored(token)["metadata"]["recovered_matches"]
 
 
-def test_collagen_recovery_keeps_the_retained_exposure_stand_in():
-    """Keep D26's existing half-of-heaviest recovery safeguard until its
-    replacement is approved, even though the recovered minimum is now bound
-    to the peptide row itself."""
+def test_collagen_recovery_uses_exact_preparation_not_relative_mass():
     product = _product(
         product_name="Collagen Complex",
         ingredients=[
@@ -271,7 +253,7 @@ def test_collagen_recovery_keeps_the_retained_exposure_stand_in():
         matches=[],
     )
 
-    assert "RECOVERED_COLLAGEN_PEPTIDES_V1" not in _scored(product)["metadata"]["recovered_matches"]
+    assert "RECOVERED_COLLAGEN_PEPTIDES_V1" in _scored(product)["metadata"]["recovered_matches"]
 
 
 # --- real DSLD labels through Clean -> Enrich -> Score ---------------------
@@ -321,8 +303,9 @@ def test_real_blend_total_never_becomes_an_undisclosed_members_floor(fixture, me
 
 
 @pytest.mark.parametrize("fixture,floor_canonical,floor", [
-    # "Relora 175 mg": the heading is the branded intervention itself
-    ("prominence_branded_heading_293928_raw.json", "relora", 17.0),
+    # Removing amount from Evidence lets the stronger applicable Sensoril
+    # record win over the co-active Relora record.
+    ("prominence_branded_heading_293928_raw.json", "sensoril ashwagandha", 18.0),
     # "UC-II Proprietary Cartilage Blend 401 mg"
     ("evidence_subject_321604_raw.json", "uc ii undenatured type ii collagen", 18.0),
 ])
@@ -422,8 +405,14 @@ def test_a_brand_identifier_matches_as_labels_spell_it(record, label_text, expec
     # "Calcium BHB": 233 mg calcium beside 1,238 mg BHB
     "prominence_authority_salt_title_311247_raw.json",
 ])
-def test_real_authority_floor_needs_the_heaviest_owner_with_its_own_amount(fixture):
-    assert _evidence(_enrich(fixture))["metadata"]["nutrition_authority_canonical"] is None
+def test_real_authority_floor_does_not_use_relative_mass(fixture):
+    evidence = _evidence(_enrich(fixture))
+    if fixture == "prominence_lent_essential_273823_raw.json":
+        # A separate 600 mg Magnesium row is disclosed. The lent 3.4 g blend
+        # total is never treated as that row's amount.
+        assert evidence["metadata"]["nutrition_authority_canonical"] == "magnesium"
+    else:
+        assert evidence["metadata"]["nutrition_authority_canonical"] is None
 
 
 def test_real_authority_floor_reads_purpose_by_identity_not_by_row():
@@ -431,7 +420,8 @@ def test_real_authority_floor_reads_purpose_by_identity_not_by_row():
     row, while the heaviest vitamin C row is the "Vitamin C 900 mg" line. The
     owner's purpose is vitamin C either way, so the authority floor stands."""
     evidence = _evidence(_enrich("prominence_authority_compound_row_306193_raw.json"))
-    assert evidence["metadata"]["nutrition_authority_canonical"] == "vitamin_c"
+    assert "vitamin_c" in evidence["metadata"]["evidence_owner_canonicals"]
+    assert evidence["components"]["primary_evidence_floor"] == 14.0
 
 
 def test_a_title_naming_a_brand_never_lends_a_blend_total_to_that_member():
@@ -536,7 +526,9 @@ def test_a_named_whole_preparation_is_not_its_mapped_component(pid):
 
 
 @pytest.mark.parametrize("peptide_quantity,peptide_unit", [(2, "g"), (2000, "mg")])
-def test_recovered_peptide_minimum_never_borrows_other_collagen_amount(peptide_quantity, peptide_unit):
+def test_recovered_peptide_amount_is_judged_by_dose_not_evidence(peptide_quantity, peptide_unit):
+    from scoring_v4.modules.generic_dose import score_dose
+
     product = _product(
         product_name="Collagen Complex",
         ingredients=[
@@ -546,9 +538,15 @@ def test_recovered_peptide_minimum_never_borrows_other_collagen_amount(peptide_q
         ], matches=[],
     )
     result = _evidence(product)
-    assert "SUB_CLINICAL_DOSE_DETECTED" in result["metadata"]["flags"]
-    assert result["metadata"]["primary_evidence_floor"] == 0.0
-    assert result["metadata"]["ingredient_points"].get("collagen", 0.0) == 0.0
+    assert result["metadata"]["flags"] == []
+    assert result["metadata"]["primary_evidence_floor"] == 14.0
+    dose = score_dose(product)
+    assert dose["metadata"]["collagen_dose_band"] == "mixed_purpose_average"
+    assessments = dose["metadata"]["collagen_dose"]["assessments"]
+    assert [item["band"] for item in assessments] == [
+        "disclosed_no_reference", "near_studied_range",
+    ]
+    assert dose["score"] == 13.0
 
 
 @pytest.mark.parametrize("reverse_rows", [False, True])

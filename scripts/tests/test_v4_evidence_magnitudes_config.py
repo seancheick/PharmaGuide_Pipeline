@@ -24,11 +24,11 @@ EM = json.loads((SCRIPTS_ROOT / "scoring_v4" / "config" / "quality_score.json").
 
 EXPECTED = {
     "generic": {
-        "cap_total": 20.0, "cap_per_ingredient": 7.0, "supra_clinical_multiple": 3.0,
+        "cap_total": 20.0, "cap_per_ingredient": 7.0,
         "enrollment_default_multiplier": 1.2,
         "primary_floor_strong": 14.0, "primary_floor_moderate": 11.0,
         "primary_floor_branded_strong": 18.0, "primary_floor_branded_moderate": 17.0,
-        "nutrition_authority_floor": 10.0, "primary_mass_fraction": 0.5,
+        "nutrition_authority_floor": 10.0,
         # ONE owner for what a direction is worth; generic_evidence reads this rather than
         # hard-coding it, and its primary-floor path reads the same map. null = 0.0 since
         # 2026-09-18: evidence that did not show a benefit earns no affirmative credit.
@@ -53,10 +53,9 @@ EXPECTED = {
     "omega": {
         "cap_evidence": 20.0,
         "purpose_standards": {
-            "omega_reviewed_weak": {"pillar_score": 10.4, "minimum_daily_epa_dha_mg": 376},
-            "triglyceride_strong": {"pillar_score": 20.0, "minimum_daily_epa_dha_mg": 2000,
-                                   "graduated_from_daily_epa_dha_mg": 1000},
-            "prenatal_dha_intake_authority": {"pillar_score": 11.1, "minimum_daily_dha_mg": 200},
+            "omega_reviewed_weak": {"pillar_score": 10.4},
+            "triglyceride_strong": {"pillar_score": 20.0},
+            "prenatal_dha_intake_authority": {"pillar_score": 11.1},
             "prenatal_preterm_birth_outcome": {"score_eligible": False},
             "epa_predominant_depression": {"score_eligible": False},
             "high_dose_atrial_fibrillation_context": {"score_eligible": False,

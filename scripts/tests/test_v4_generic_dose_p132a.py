@@ -744,6 +744,187 @@ def test_unassessed_mass_primary_caps_window_credit_at_partial() -> None:
     assert payload["metadata"]["partial_credit_value"] == NO_REFERENCE_INDIVIDUAL_DOSE_CREDIT
 
 
+def test_declared_purpose_rows_are_averaged_equally_with_unbenchmarked_fallback() -> None:
+    from scoring_v4.modules.generic_dose import score_dose, NO_REFERENCE_INDIVIDUAL_DOSE_CREDIT
+
+    product = _product(
+        ingredients=[
+            _ingredient(name="Vitamin C", canonical_id="vitamin_c", quantity=90, unit="mg", raw_source_path="ingredientRows[0]"),
+            _ingredient(name="Lactoferrin", canonical_id="lactoferrin", quantity=500, unit="mg", raw_source_path="ingredientRows[1]", bio_score=None),
+        ],
+        adequacy_results=[
+            {"canonical_id": "vitamin_c", "nutrient": "Vitamin C", "pct_rda": 100.0, "pct_ul": 4.5},
+            {"canonical_id": "lactoferrin", "nutrient": "Lactoferrin", "pct_rda": None, "pct_ul": None},
+        ],
+        product_name="Vitamin C and Lactoferrin",
+    )
+
+    payload = score_dose(product)
+
+    assert payload["components"]["supplemental_window_proxy"] == pytest.approx(
+        (22.0 + NO_REFERENCE_INDIVIDUAL_DOSE_CREDIT) / 2.0
+    )
+    assert payload["metadata"]["purpose_ingredient_count"] == 2
+    assert payload["metadata"]["unbenchmarked_purpose_ingredients"] == ["lactoferrin"]
+
+
+def test_incidental_unbenchmarked_row_does_not_enter_purpose_average() -> None:
+    from scoring_v4.modules.generic_dose import score_dose
+
+    product = _product(
+        ingredients=[
+            _ingredient(name="Vitamin C", canonical_id="vitamin_c", quantity=90, unit="mg", raw_source_path="ingredientRows[0]"),
+            _ingredient(name="Lactoferrin", canonical_id="lactoferrin", quantity=1, unit="mg", raw_source_path="ingredientRows[1]", bio_score=None),
+        ],
+        adequacy_results=[
+            {"canonical_id": "vitamin_c", "nutrient": "Vitamin C", "pct_rda": 100.0, "pct_ul": 4.5},
+            {"canonical_id": "lactoferrin", "nutrient": "Lactoferrin", "pct_rda": None, "pct_ul": None},
+        ],
+        product_name="Vitamin C",
+    )
+
+    payload = score_dose(product)
+
+    assert payload["components"]["supplemental_window_proxy"] == 22.0
+    assert payload["metadata"]["purpose_ingredient_count"] == 1
+    assert payload["metadata"]["unbenchmarked_purpose_ingredients"] == []
+
+
+def test_exact_positive_lactoferrin_benchmark_is_owned_by_dose() -> None:
+    from scoring_v4.modules.generic_dose import score_dose
+
+    row = _ingredient(
+        name="Lactoferrin", canonical_id="lactoferrin", quantity=100, unit="mg",
+        raw_source_path="ingredientRows[0]", bio_score=None,
+    )
+    product = _product(
+        ingredients=[row], adequacy_results=[], product_name="Lactoferrin",
+        evidence_data={"clinical_matches": [{
+            "id": "INGR_LACTOFERRIN",
+            "matched_source_row_refs": ["ingredientRows[0]"],
+        }]},
+    )
+
+    payload = score_dose(product)
+
+    assert payload["components"]["supplemental_window_proxy"] == 11.0
+    assessment = payload["metadata"]["positive_clinical_benchmark_assessments"][0]
+    assert assessment["record_id"] == "INGR_LACTOFERRIN"
+    assert assessment["benchmark_value"] == 200.0
+
+
+@pytest.mark.parametrize("record_id", ["INGR_D_MANNOSE", "INGR_L_CARNITINE"])
+def test_null_or_mixed_trial_amount_is_not_a_dose_benchmark(record_id: str) -> None:
+    from scoring_v4.modules.generic_dose import score_dose, NO_REFERENCE_INDIVIDUAL_DOSE_CREDIT
+
+    row = _ingredient(
+        name="D-Mannose" if record_id == "INGR_D_MANNOSE" else "L-Carnitine",
+        canonical_id="d_mannose" if record_id == "INGR_D_MANNOSE" else "l_carnitine",
+        quantity=2000, unit="mg", raw_source_path="ingredientRows[0]", bio_score=None,
+    )
+    product = _product(
+        ingredients=[row], adequacy_results=[], product_name=row["name"],
+        evidence_data={"clinical_matches": [{"id": record_id, "matched_source_row_refs": ["ingredientRows[0]"]}]},
+    )
+
+    payload = score_dose(product)
+
+    assert payload["components"]["supplemental_window_proxy"] == NO_REFERENCE_INDIVIDUAL_DOSE_CREDIT
+    assert payload["metadata"]["positive_clinical_benchmark_assessments"] == []
+
+
+def test_carnipure_uses_its_exact_positive_preparation_benchmark() -> None:
+    from dose_assessment import positive_clinical_benchmark
+
+    row = _ingredient(
+        name="Carnipure L-Carnitine Tartrate",
+        standard_name="Carnipure L-Carnitine",
+        canonical_id="l_carnitine",
+        quantity=1000,
+        unit="mg",
+        raw_source_path="ingredientRows[0]",
+    )
+    assessment = positive_clinical_benchmark(
+        _product(
+            ingredients=[row],
+            product_name="Carnipure L-Carnitine",
+            evidence_data={"clinical_matches": [
+                {"id": "BRAND_CARNIPURE", "matched_source_row_refs": ["ingredientRows[0]"]},
+                {"id": "INGR_L_CARNITINE", "matched_source_row_refs": ["ingredientRows[0]"]},
+            ]},
+        ),
+        row,
+    )
+
+    assert assessment is not None
+    assert assessment.record_id == "BRAND_CARNIPURE"
+    assert assessment.benchmark_value == 2000.0
+    assert assessment.ratio == 0.5
+
+
+def test_acetyl_l_carnitine_does_not_borrow_the_carnipure_benchmark() -> None:
+    from dose_assessment import positive_clinical_benchmark
+
+    row = _ingredient(
+        name="Acetyl-L-Carnitine",
+        standard_name="Acetyl-L-Carnitine",
+        canonical_id="acetyl_l_carnitine",
+        quantity=1000,
+        unit="mg",
+        raw_source_path="ingredientRows[0]",
+    )
+
+    assert positive_clinical_benchmark(
+        _product(ingredients=[row], product_name="Acetyl-L-Carnitine"), row,
+    ) is None
+
+
+@pytest.mark.parametrize("quantity,ratio", [(200, 1.0), (400, 2.0)])
+def test_tesnor_uses_its_exact_positive_whole_preparation_range(quantity: float, ratio: float) -> None:
+    from dose_assessment import positive_clinical_benchmark
+
+    row = _ingredient(
+        name="Tesnor",
+        standard_name="Tesnor",
+        canonical_id="tesnor",
+        quantity=quantity,
+        unit="mg",
+        raw_source_path="ingredientRows[0]",
+    )
+    assessment = positive_clinical_benchmark(
+        _product(ingredients=[row], product_name="Tesnor"), row,
+    )
+
+    assert assessment is not None
+    assert assessment.record_id == "BRAND_TESNOR"
+    assert assessment.benchmark_value == 200.0
+    assert assessment.benchmark_maximum == 400.0
+    assert assessment.ratio == ratio
+
+
+@pytest.mark.parametrize(
+    "name,canonical_id",
+    [("Sytrinol", "sytrinol"), ("Zinc Picolinate", "zinc")],
+)
+def test_mixed_or_unbenchmarked_preparations_do_not_create_positive_benchmarks(
+    name: str, canonical_id: str,
+) -> None:
+    from dose_assessment import positive_clinical_benchmark
+
+    row = _ingredient(
+        name=name,
+        standard_name=name,
+        canonical_id=canonical_id,
+        quantity=300,
+        unit="mg",
+        raw_source_path="ingredientRows[0]",
+    )
+
+    assert positive_clinical_benchmark(
+        _product(ingredients=[row], product_name=name), row,
+    ) is None
+
+
 def test_trace_unassessed_active_does_not_cap_window_credit() -> None:
     # A 1 mg unreferenced co-active is not the mass-primary; the assessed
     # vitamins own the dose story and full window credit stands.

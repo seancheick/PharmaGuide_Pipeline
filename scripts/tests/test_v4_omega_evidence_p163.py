@@ -70,25 +70,22 @@ def test_none_input_scores_zero_safely() -> None:
 # --- Indication relevance bonus -----------------------------------------
 
 
-def test_one_to_two_grams_graduates_reviewed_record_applicability() -> None:
-    """Exposure gates which reviewed record applies; it is not a Dose bonus."""
+def test_one_to_two_grams_does_not_change_amount_independent_evidence() -> None:
     from scoring_v4.modules.omega_evidence import score_evidence
 
     below = score_evidence(_epa_dha_product(epa=599, dha=400))   # 999 mg/day
     at = score_evidence(_epa_dha_product(epa=700, dha=400))      # 1100 mg/day
     assert "indication_relevance" not in at["components"]
     assert at["metadata"]["indication_relevance_awarded"] is False
-    assert at["score"] > below["score"]
+    assert at["score"] == below["score"] == 10.4
 
 
-def test_evidence_applicability_is_monotonic_across_reviewed_exposure_range() -> None:
+def test_evidence_is_constant_across_reviewed_exposure_range() -> None:
     from scoring_v4.modules.omega_evidence import score_evidence
 
     scores = [score_evidence(_epa_dha_product(epa=mg / 2, dha=mg / 2))["score"]
               for mg in (600, 1000, 1500, 2400, 4500)]
-    assert scores == sorted(scores)
-    assert scores[0] == 10.4
-    assert scores[-1] == 20.0
+    assert scores == [10.4] * 5
 
 
 def test_indication_relevance_not_awarded_below_threshold() -> None:
@@ -169,8 +166,8 @@ def test_generic_addin_evidence_cannot_own_omega_evidence(monkeypatch) -> None:
     )
 
     payload = omega_evidence.score_evidence(_epa_dha_product(epa=1600, dha=400))
-    assert payload["components"] == {"clinical_evidence": 20.0}
-    assert payload["score"] == 20.0
+    assert payload["components"] == {"clinical_evidence": 10.4}
+    assert payload["score"] == 10.4
 
 
 def test_reviewed_record_is_resolved_without_enrichment_match() -> None:
@@ -178,7 +175,7 @@ def test_reviewed_record_is_resolved_without_enrichment_match() -> None:
 
     product = _epa_dha_product(epa=700, dha=400)  # 1100 mg/day, no evidence
     payload = score_evidence(product)
-    assert payload["components"]["clinical_evidence"] == 11.36
+    assert payload["components"]["clinical_evidence"] == 10.4
     assert "indication_relevance" not in payload["components"]
     assert payload["metadata"]["generic_evidence_raw_score"] == 0.0
     assert payload["metadata"]["disclosed_epa_dha_clinical_floor_awarded"] is False

@@ -179,8 +179,8 @@ def test_title_owner_prevents_incidental_ingredient_breadth_from_owning_evidence
 
     assert payload["metadata"]["evidence_owner_canonicals"] == ["melatonin"]
     assert payload["metadata"]["ingredient_points"] == {"melatonin": 2.16}
-    assert payload["score"] == 2.16
-    assert "primary_evidence_floor" not in payload["components"]
+    assert payload["score"] == 11.0
+    assert payload["components"]["primary_evidence_floor"] == 11.0
 
 
 def test_owner_gap_does_not_fall_back_to_adjunct_evidence() -> None:
@@ -416,7 +416,7 @@ def test_enrollment_multiplier_only_for_rct_and_meta() -> None:
     assert observational["score"] == 2.0  # no enrollment penalty
 
 
-def test_subclinical_dose_guard_applies_when_product_dose_below_minimum() -> None:
+def test_studied_minimum_does_not_gate_evidence() -> None:
     from scoring_v4.modules.generic_evidence import score_evidence
 
     payload = score_evidence(
@@ -426,12 +426,10 @@ def test_subclinical_dose_guard_applies_when_product_dose_below_minimum() -> Non
         )
     )
 
-    # An applicability gate, not a dose gradient: trials at 200 mg do not apply to
-    # a 100 mg label, so they earn nothing (the Dose pillar owns adequacy).
-    assert payload["score"] == 0.0
-    assert payload["metadata"]["evidence_result_state"] == "applicability_unestablished"
-    assert payload["metadata"]["flags"] == ["SUB_CLINICAL_DOSE_DETECTED"]
-    assert payload["metadata"]["sub_clinical_canonicals"] == ["magnesium"]
+    assert payload["score"] == 6.48
+    assert payload["metadata"]["evidence_result_state"] == "evaluated_applicable"
+    assert payload["metadata"]["flags"] == []
+    assert payload["metadata"]["sub_clinical_canonicals"] == []
 
 
 def test_subclinical_guard_uses_the_exact_matched_label_identity() -> None:
@@ -471,8 +469,8 @@ def test_subclinical_guard_uses_the_exact_matched_label_identity() -> None:
         )
     )
 
-    assert payload["metadata"]["flags"] == ["SUB_CLINICAL_DOSE_DETECTED"]
-    assert payload["metadata"]["sub_clinical_canonicals"] == ["l_carnitine"]
+    assert payload["metadata"]["flags"] == []
+    assert payload["metadata"]["sub_clinical_canonicals"] == []
 
 
 def test_clinical_dose_guard_compares_against_label_directed_daily_dose() -> None:
@@ -530,7 +528,7 @@ def test_unparsed_fractional_serving_inference_cannot_shrink_label_dose() -> Non
     ) == 1.0
 
 
-def test_supra_clinical_dose_records_flag_without_penalty() -> None:
+def test_supra_clinical_amount_is_not_an_evidence_flag() -> None:
     from scoring_v4.modules.generic_evidence import score_evidence
 
     payload = score_evidence(
@@ -541,7 +539,7 @@ def test_supra_clinical_dose_records_flag_without_penalty() -> None:
     )
 
     assert payload["score"] == 6.48
-    assert payload["metadata"]["flags"] == ["SUPRA_CLINICAL_DOSE"]
+    assert payload["metadata"]["flags"] == []
 
 
 def test_marker_confidence_scale_reduces_secondary_marker_credit() -> None:
@@ -988,14 +986,13 @@ def test_vitamin_d_iu_without_clinical_match_gets_no_evidence_sentinel() -> None
         apply_primary_floor=True,
     )
 
-    assert payload["score"] == 0.0
-    assert "primary_evidence_floor" not in payload["components"]
-    assert payload["metadata"]["nutrition_authority_canonical"] is None
+    assert payload["score"] == 10.0
+    assert payload["components"]["primary_evidence_floor"] == 10.0
+    assert payload["metadata"]["nutrition_authority_canonical"] == "vitamin_d"
     assert payload["metadata"]["recovered_matches"] == []
 
 
-def test_vitamin_d_iu_and_mcg_apply_same_subclinical_dose_guard() -> None:
-    """1,000 IU and 25 mcg are both below a 50 mcg evidence threshold."""
+def test_vitamin_d_iu_and_mcg_have_amount_independent_evidence() -> None:
     from scoring_v4.modules.generic_evidence import score_evidence
 
     def score(quantity: float, unit: str) -> dict:
@@ -1007,18 +1004,15 @@ def test_vitamin_d_iu_and_mcg_apply_same_subclinical_dose_guard() -> None:
     iu_payload = score(1000, "IU")
     mcg_payload = score(25, "mcg")
 
-    assert iu_payload["score"] == 0.0  # below the studied dose: the trials do not apply
-    # This independent mass-backed nutrition-authority floor is intentionally
-    # unavailable to the IU-only row; IU conversion remains evidence-match-only.
-    assert mcg_payload["score"] == 10.0
+    assert iu_payload["score"] == mcg_payload["score"] == 18.0
     assert iu_payload["metadata"]["flags"] == mcg_payload["metadata"]["flags"]
-    assert iu_payload["metadata"]["flags"] == ["SUB_CLINICAL_DOSE_DETECTED"]
+    assert iu_payload["metadata"]["flags"] == []
     assert (
         iu_payload["metadata"]["sub_clinical_canonicals"]
         == mcg_payload["metadata"]["sub_clinical_canonicals"]
     )
-    assert iu_payload["metadata"]["sub_clinical_canonicals"] == ["vitamin d3"]
-    assert "primary_evidence_floor" not in iu_payload["components"]
+    assert iu_payload["metadata"]["sub_clinical_canonicals"] == []
+    assert iu_payload["components"]["primary_evidence_floor"] == 18.0
 
 
 def test_vitamin_d_iu_and_mcg_both_pass_at_clinical_threshold() -> None:
@@ -1072,8 +1066,8 @@ def test_non_vitamin_d_iu_is_not_given_a_generic_primary_sentinel() -> None:
         apply_primary_floor=True,
     )
 
-    assert payload["score"] == 5.94
-    assert "primary_evidence_floor" not in payload["components"]
+    assert payload["score"] == 14.0
+    assert payload["components"]["primary_evidence_floor"] == 14.0
     assert payload["metadata"]["nutrition_authority_canonical"] is None
     assert payload["metadata"]["flags"] == []
 

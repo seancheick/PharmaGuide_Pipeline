@@ -226,7 +226,7 @@ class ProductEvidenceResolution:
 
 
 def resolve_omega_evidence_standard(product: Mapping[str, Any]) -> Dict[str, Any]:
-    """Resolve the reviewed omega purpose record against directed exposure.
+    """Resolve the reviewed omega purpose record without judging its amount.
 
     The evidence registry owns clinical facts; quality_score.json owns points
     and operational applicability policy. The
@@ -274,49 +274,81 @@ def resolve_omega_evidence_standard(product: Mapping[str, Any]) -> Dict[str, Any
     prenatal = bool(PRENATAL_TITLE_RE.search(title))
 
     # Read magnitudes only from the shared config, never from clinical data.
-    weak = policy["omega_reviewed_weak"]
-    strong = policy["triglyceride_strong"]
-    prenatal_intake = policy["prenatal_dha_intake_authority"]
-    weak_score = float(weak["pillar_score"])
-    weak_minimum = float(weak["minimum_daily_epa_dha_mg"])
-    strong_score = float(strong["pillar_score"])
-    strong_minimum = float(strong["minimum_daily_epa_dha_mg"])
-    graduated_minimum = float(strong["graduated_from_daily_epa_dha_mg"])
+    weak_score = float(policy["omega_reviewed_weak"]["pillar_score"])
+    strong_score = float(policy["triglyceride_strong"]["pillar_score"])
+    prenatal_score = float(policy["prenatal_dha_intake_authority"]["pillar_score"])
 
-    selected = standards["omega_reviewed_weak"]
-    score = weak_score if minimum >= weak_minimum else 0.0
-    # The weak record starts at the lowest exposure represented in its cited
-    # trials. A disclosed trace amount cannot inherit that evidence. Defaulted
-    # frequency remains explicitly marked but does not itself make a qualifying
-    # exposure ineligible. Prenatal intake is handled below by its own floor.
-    qualified = bool(minimum >= weak_minimum)
-    if prenatal:
-        if dha_minimum >= float(prenatal_intake["minimum_daily_dha_mg"]):
-            selected = standards["prenatal_dha_intake_authority"]
-            score = float(prenatal_intake["pillar_score"])
-        else:
-            score = 0.0
-    elif minimum >= strong_minimum:
+    normalized_title = _canonical_text(title)
+    child_or_baby = bool(re.search(
+        r"\b(?:baby|babies|infant|infants|child|children|children s|kids?|toddler|toddlers|pediatric)\b",
+        normalized_title,
+    ))
+    specialized = bool(re.search(
+        r"\b(?:spm|specialized pro resolving|pro resolving|resolvin|protectin|maresin|pro resolve)\b",
+        normalized_title,
+    ))
+
+    omega_owner_ids = {
+        "epa", "dha", "epa_dha", "fish_oil", "fish_liver_oil", "cod_liver_oil",
+        "krill_oil", "algal_oil", "algae_oil", "omega3", "omega_3",
+        "omega_3_fatty_acids", "omega_fatty_acid_blend",
+    }
+    try:
+        owners = evidence_owner_canonicals(prod, module="omega")
+    except (KeyError, TypeError, ValueError):
+        owners = set()
+    mixed_purpose = bool(owners and any(owner not in omega_owner_ids for owner in owners))
+
+    claim_text = " ".join(
+        [title]
+        + [
+            str(statement.get("notes") or statement.get("text") or "")
+            for statement in (prod.get("statements") or [])
+            if isinstance(statement, dict)
+        ]
+    )
+    normalized_claim = _canonical_text(claim_text)
+    triglyceride_lowering = bool(
+        re.search(r"\b(?:lower|lowers|lowering|reduce|reduces|reducing)\b.{0,45}\btriglycerides?\b", normalized_claim)
+        or re.search(r"\btriglycerides?\b.{0,45}\b(?:lower|lowers|lowering|reduce|reduces|reducing)\b", normalized_claim)
+    )
+
+    selected = None
+    score = 0.0
+    applicability_reason = "held_uncertain_identity"
+    explicit_epa_dha = epa_ps > 0 and dha_ps > 0
+    if child_or_baby:
+        applicability_reason = "held_child_or_baby_population"
+    elif specialized:
+        applicability_reason = "held_specialized_preparation"
+    elif mixed_purpose:
+        applicability_reason = "held_mixed_purpose_ownership"
+    elif prenatal and dha_ps > 0:
+        selected = standards["prenatal_dha_intake_authority"]
+        score = prenatal_score
+        applicability_reason = "prenatal_dha_intake_authority"
+    elif not explicit_epa_dha:
+        applicability_reason = "held_dha_only_or_incomplete_epa_dha_identity" if dha_ps > 0 else "held_uncertain_identity"
+    elif triglyceride_lowering:
         selected = standards["triglyceride_strong"]
         score = strong_score
-    elif minimum >= graduated_minimum:
-        selected = standards["triglyceride_strong"]
-        fraction = (minimum - graduated_minimum) / (strong_minimum - graduated_minimum)
-        score = weak_score + fraction * (strong_score - weak_score)
-        qualified = True
-
-    if maximum >= strong_minimum > minimum:
-        qualified = True
+        applicability_reason = "explicit_adult_triglyceride_lowering_purpose"
+    else:
+        selected = standards["omega_reviewed_weak"]
+        score = weak_score
+        applicability_reason = "ordinary_adult_explicit_epa_dha"
+    qualified = score > 0
 
     return {
         "score": round(score, 4),
-        "record_id": selected.get("id") if score > 0 else None,
-        "record_source_pmids": list(selected.get("source_pmids") or []) if score > 0 else [],
+        "record_id": selected.get("id") if selected is not None else None,
+        "record_source_pmids": list(selected.get("source_pmids") or []) if selected is not None else [],
         "minimum_daily_epa_dha_mg": round(minimum, 4),
         "maximum_daily_epa_dha_mg": round(maximum, 4),
         "minimum_daily_dha_mg": round(dha_minimum, 4),
         "servings_defaulted": bool(defaulted),
         "applicability_qualified": qualified,
+        "applicability_reason": applicability_reason,
         "prenatal": prenatal,
         # The reviewed outcome evidence is population-dependent (notably
         # baseline DHA status), which a product label cannot establish.  It is
@@ -875,7 +907,9 @@ def resolve_evidence_for_row(
             "pmids": [pmid for s in valid_studies for pmid in s.get("published_studies", [])],
         }
 
-        # Check applicability: dose and form exclusions
+        # Check applicability: preparation/form only. Amount adequacy is owned
+        # by Dose; assessment readiness separately withholds a required missing
+        # amount, so Evidence must not turn an amount into efficacy eligibility.
         form_val = _canonical_text(matched_form)
         record_states = []
         for study in valid_studies:
@@ -883,20 +917,11 @@ def resolve_evidence_for_row(
             if form_val and any(ef and ef in form_val for ef in excluded_forms):
                 record_states.append("form_mismatch")
                 continue
-            dose = _reviewed_row_dose(row_dict, product, study)
-            minimum = _as_float(study.get("min_clinical_dose"))
-            if dose is None and product is not None:
-                record_states.append("dose_undisclosed")
-            elif minimum is not None and dose is not None and dose < minimum:
-                record_states.append("sub_clinical_dose")
-            else:
-                record_states.append("applicable")
+            record_states.append("applicable")
         # A second record's higher dose or different form cannot veto an
         # applicable record. The scorer assesses each clinical record too.
         has_applicable = "applicable" in record_states
         is_form_excluded = bool(record_states) and all(state == "form_mismatch" for state in record_states)
-        is_sub_clinical = not has_applicable and "sub_clinical_dose" in record_states
-        dose_missing = not has_applicable and not is_sub_clinical
 
         if is_form_excluded:
             blocking_reasons.append("form_mismatch_with_clinical_trials")
@@ -908,33 +933,6 @@ def resolve_evidence_for_row(
                 points_eligible=False,
                 applicability_status="form_mismatch",
                 reason_code="clinical_form_mismatch",
-                owner_facts=owner_facts,
-                blocking_reasons=blocking_reasons,
-            )
-
-        if dose_missing and product is not None:
-            return EvidenceResolution(
-                canonical_id=canonical,
-                ingredient_name=name,
-                matched_owners=matched_owners,
-                disposition=EvidenceDisposition.RESEARCH_PRESENT_APPLICABILITY_UNESTABLISHED.value,
-                points_eligible=False,
-                applicability_status="dose_undisclosed",
-                reason_code="constituent_dose_undisclosed_applicability_unestablished",
-                owner_facts=owner_facts,
-                blocking_reasons=[],
-            )
-
-        if is_sub_clinical:
-            blocking_reasons.append("dose_below_clinical_trial_minimum")
-            return EvidenceResolution(
-                canonical_id=canonical,
-                ingredient_name=name,
-                matched_owners=matched_owners,
-                disposition=EvidenceDisposition.RESEARCH_PRESENT_APPLICABILITY_UNESTABLISHED.value,
-                points_eligible=False,
-                applicability_status="sub_clinical_dose",
-                reason_code="dose_below_studied_clinical_range",
                 owner_facts=owner_facts,
                 blocking_reasons=blocking_reasons,
             )
@@ -1137,46 +1135,6 @@ def resolve_evidence_for_row(
                 points_eligible=False, applicability_status="applicability_unestablished",
                 reason_code="label_purpose_evidence_mismatch", owner_facts=owner_facts,
                 blocking_reasons=["label_purpose_evidence_mismatch"],
-            )
-
-        # Check dose applicability against studied exposure
-        studied_dose = lit_entry.get("studied_dose_exposure")
-        dose_record = dict(lit_entry)
-        if isinstance(studied_dose, dict):
-            dose_record["dose_unit"] = studied_dose.get("unit") or lit_entry.get("dose_unit") or "mg"
-        dose_val = _reviewed_row_dose(row_dict, product, dose_record)
-        if isinstance(studied_dose, dict):
-            min_dose = min(studied_dose.get("values", [])) if studied_dose.get("values") else None
-        elif isinstance(studied_dose, list) and studied_dose:
-            min_dose = min(studied_dose)
-        else:
-            min_dose = None
-
-        if dose_val is None and product is not None:
-            return EvidenceResolution(
-                canonical_id=canonical,
-                ingredient_name=name,
-                matched_owners=matched_owners,
-                disposition=EvidenceDisposition.RESEARCH_PRESENT_APPLICABILITY_UNESTABLISHED.value,
-                points_eligible=False,
-                applicability_status="dose_undisclosed",
-                reason_code="constituent_dose_undisclosed_applicability_unestablished",
-                owner_facts=owner_facts,
-                blocking_reasons=[],
-            )
-
-        if min_dose is not None and dose_val is not None and dose_val < min_dose:
-            blocking_reasons.append("dose_below_clinical_trial_minimum")
-            return EvidenceResolution(
-                canonical_id=canonical,
-                ingredient_name=name,
-                matched_owners=matched_owners,
-                disposition=EvidenceDisposition.RESEARCH_PRESENT_APPLICABILITY_UNESTABLISHED.value,
-                points_eligible=False,
-                applicability_status="sub_clinical_dose",
-                reason_code="dose_below_studied_clinical_range",
-                owner_facts=owner_facts,
-                blocking_reasons=blocking_reasons,
             )
 
         return EvidenceResolution(

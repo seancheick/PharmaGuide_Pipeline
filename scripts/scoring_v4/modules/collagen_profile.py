@@ -38,7 +38,17 @@ from __future__ import annotations
 import re
 from typing import Any, Dict, Optional
 
-from collagen_taxonomy import classify_collagen_subtype, SUBTYPE_TO_DOSING_ALIAS
+from collagen_taxonomy import (
+    HYDROLYZED_TYPE_II,
+    SUBTYPE_TO_DOSING_ALIAS,
+    classify_collagen_subtype,
+    classify_collagen_subtype_strict,
+)
+from scoring_input_contract import (
+    ROLE_CLAIM_PROMINENT,
+    ROLE_PRIMARY,
+    classify_ingredient_roles,
+)
 from scoring_v4.modules.botanical_profile import (
     _norm,
     _mass_mg,
@@ -129,8 +139,18 @@ def _collagen_dosing_entry(row: Dict[str, Any],
     index = _dosing_index()
     subtype = _norm(row.get("collagen_subtype"))
     if subtype not in SUBTYPE_TO_DOSING_ALIAS:
-        product_name = product.get("product_name") if isinstance(product, dict) else None
-        subtype = classify_collagen_subtype(_identity_text(row), product_name)
+        row_text = _identity_text(row)
+        subtype = classify_collagen_subtype_strict(row_text)
+        if subtype is None:
+            # Product context may disambiguate a generic row as the explicitly
+            # named Type-II preparation. A bare collagen identity does not
+            # establish the hydrolyzed-peptide benchmark.
+            product_name = product.get("product_name") if isinstance(product, dict) else None
+            contextual = classify_collagen_subtype(row_text, product_name)
+            if contextual == HYDROLYZED_TYPE_II:
+                subtype = contextual
+    if subtype not in SUBTYPE_TO_DOSING_ALIAS:
+        return None
     return index.get(SUBTYPE_TO_DOSING_ALIAS[subtype])
 
 
@@ -158,13 +178,7 @@ def _range_mg(entry: Dict[str, Any]) -> Optional[tuple]:
     return rng[0] * factor, rng[1] * factor
 
 
-def score_collagen_dose(product: Dict[str, Any]) -> Dict[str, Any]:
-    """Collagen dose adapter via the per-subtype clinical range. Never returns None
-    (a primary collagen with no dose is 0, not denominator-excluded)."""
-    row = _primary_collagen_active(product)
-    if row is None:
-        return {"score": 0.0, "band": "no_collagen_active", "metadata": {}}
-
+def _score_collagen_row(row: Dict[str, Any], product: Dict[str, Any]) -> Dict[str, Any]:
     if row.get("is_blend_header") or row.get("blend_total_weight_only") or row.get("is_parent_total"):
         return {"score": 7.0, "band": "blend_total_only", "metadata": {}}
     # anchor / product-level total is not a verified per-ingredient dose
@@ -190,6 +204,50 @@ def score_collagen_dose(product: Dict[str, Any]) -> Dict[str, Any]:
     if mass < 0.8 * lo:
         return {"score": 10.0, "band": "below_studied_range", "metadata": meta}
     return {"score": 12.0, "band": "above_studied_range", "metadata": meta}
+
+
+def score_collagen_dose(product: Dict[str, Any]) -> Dict[str, Any]:
+    """Average each declared collagen preparation's own Dose assessment.
+
+    Incidental collagen rows do not join the denominator. A generic disclosed
+    collagen preparation without an exact subtype keeps the established
+    limited-assessability credit rather than borrowing the peptide range.
+    """
+    rows = [row for row in _scoring_actives(product) if _is_collagen_active(row)]
+    if not rows:
+        return {"score": 0.0, "band": "no_collagen_active", "metadata": {}}
+
+    roles = classify_ingredient_roles(product, rows=rows)
+    purpose_rows = [
+        row
+        for row, role in zip(rows, roles)
+        if role.get("role") in {ROLE_PRIMARY, ROLE_CLAIM_PROMINENT}
+    ]
+    if not purpose_rows:
+        purpose_rows = [_primary_collagen_active(product)]
+    purpose_rows = [row for row in purpose_rows if isinstance(row, dict)]
+
+    assessments = [_score_collagen_row(row, product) for row in purpose_rows]
+    score = sum(float(item["score"]) for item in assessments) / len(assessments)
+    bands = [str(item["band"]) for item in assessments]
+    band = bands[0] if len(set(bands)) == 1 else "mixed_purpose_average"
+    return {
+        "score": round(score, 4),
+        "band": band,
+        "metadata": {
+            "purpose_ingredient_count": len(purpose_rows),
+            "assessments": [
+                {
+                    "name": row.get("name") or row.get("standard_name"),
+                    "canonical_id": row.get("canonical_id"),
+                    "band": assessment["band"],
+                    "score": assessment["score"],
+                    **assessment.get("metadata", {}),
+                }
+                for row, assessment in zip(purpose_rows, assessments)
+            ],
+        },
+    }
 
 
 def score_collagen_formulation(product: Dict[str, Any]) -> Dict[str, Any]:

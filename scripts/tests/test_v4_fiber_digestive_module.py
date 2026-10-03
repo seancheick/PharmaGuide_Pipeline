@@ -206,8 +206,10 @@ def test_stimulant_laxative_cleanse_is_not_rewarded_as_fiber() -> None:
     result = score_fiber_digestive(product)
     formulation = result.to_breakdown()["dimensions"]["formulation"]
 
-    assert result.score_100 < 65.0
-    assert formulation["penalties"]["fiber_stimulant_laxative_penalty"] < 0
+    assert "fiber_stimulant_laxative_penalty" not in formulation["penalties"]
+    assert "fiber_cleanse_detox_penalty" not in formulation["penalties"]
+    assert formulation["components"]["fiber_formula_focus"] == 1.0
+    assert formulation["components"]["fiber_practicality"] == 0.5
     assert formulation["metadata"]["fiber_profile_applied"] is True
 
 

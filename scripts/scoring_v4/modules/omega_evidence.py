@@ -1,4 +1,4 @@
-"""Omega Evidence: purpose-specific support at minimum directed daily exposure.
+"""Omega Evidence: purpose-specific, amount-independent support.
 
 The existing evidence resolver joins clinical source records to the scoring
 policy in quality_score.json. Generic Evidence is retained as audit metadata
@@ -83,9 +83,10 @@ def score_evidence(product: Any) -> Dict[str, Any]:
         "evidence_standard": resolved.get("record_id"),
         "evidence_source_pmids": list(resolved.get("record_source_pmids") or []),
         "prenatal_outcome_credit_awarded": bool(resolved.get("prenatal_outcome_credit_awarded")),
-        "indication_threshold_mg_day": float(_EM["purpose_standards"]["prenatal_dha_intake_authority"]["minimum_daily_dha_mg"]) if prenatal_authority else None,
+        "indication_threshold_mg_day": None,
         "indication_relevance_awarded": prenatal_authority,
         "indication_relevance_reason": "prenatal_dha_intake_authority" if prenatal_authority else "none",
+        "applicability_reason": resolved.get("applicability_reason"),
         "generic_evidence_metadata": generic_payload.get("metadata", {}),
     }
 

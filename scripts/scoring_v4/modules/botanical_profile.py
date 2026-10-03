@@ -804,6 +804,21 @@ def score_botanical_dose(product: Dict[str, Any]) -> Dict[str, Any]:
     if row is None:
         return {"score": BOTANICAL_DOSE_NO_ACTIVE, "band": "no_botanical_active", "metadata": {}}
 
+    # Exact positive branded whole-preparation benchmarks are Dose facts even
+    # when the cleaner represents the named preparation as product-level
+    # evidence. A member amount never substitutes for the preparation total.
+    from dose_assessment import positive_clinical_benchmark
+    clinical = positive_clinical_benchmark(product, row)
+    if clinical is not None:
+        meta = {"positive_clinical_benchmark": clinical.to_dict()}
+        if clinical.benchmark_maximum and clinical.exposure_value > clinical.benchmark_maximum:
+            return {"score": BOTANICAL_DOSE_ABOVE, "band": "above_studied_range", "metadata": meta}
+        if clinical.ratio >= 1.0:
+            return {"score": BOTANICAL_DOSE_WITHIN, "band": "within_studied_range", "metadata": meta}
+        if clinical.ratio >= 0.8:
+            return {"score": BOTANICAL_DOSE_NEAR, "band": "near_studied_range", "metadata": meta}
+        return {"score": BOTANICAL_DOSE_BELOW, "band": "below_studied_range", "metadata": meta}
+
     if row.get("is_blend_header") or row.get("blend_total_weight_only"):
         return {"score": BOTANICAL_DOSE_BLEND_TOTAL, "band": "blend_total_only", "metadata": {}}
     if row.get("is_parent_total") and not _is_named_standardized_botanical_complex(product, row):

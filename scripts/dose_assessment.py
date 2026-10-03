@@ -8,10 +8,14 @@ free-text skip reasons.
 from __future__ import annotations
 
 import math
+import json
 from dataclasses import asdict, dataclass
+from functools import lru_cache
+from pathlib import Path
 from typing import Any, Dict, Iterable, Optional
 
 from normalization import canonicalize_mass_unit
+from scoring_v4.exposure import row_exposure
 
 
 ASSESSED_WITHIN_LIMIT = "assessed_within_limit"
@@ -64,6 +68,155 @@ _UNRESOLVED_UNIT_REASONS = {
     "no_conversion_rule",
     "conversion_exception",
 }
+
+_POSITIVE_BENCHMARK_DIRECTIONS = {"positive_strong", "positive_moderate", "positive_weak"}
+_CLINICAL_RECORDS_PATH = Path(__file__).resolve().parent / "data" / "backed_clinical_studies.json"
+
+
+@dataclass(frozen=True)
+class ClinicalBenchmarkAssessment:
+    record_id: str
+    benchmark_value: float
+    benchmark_maximum: Optional[float]
+    benchmark_unit: str
+    exposure_value: float
+    ratio: float
+    source_row_ref: str
+
+    def to_dict(self) -> Dict[str, Any]:
+        return asdict(self)
+
+
+@lru_cache(maxsize=1)
+def _positive_clinical_benchmark_records() -> tuple[Dict[str, Any], ...]:
+    raw = json.loads(_CLINICAL_RECORDS_PATH.read_text(encoding="utf-8"))
+    return tuple(
+        record for record in raw.get("backed_clinical_studies", [])
+        if isinstance(record, dict)
+        and str(record.get("effect_direction") or "").strip().lower() in _POSITIVE_BENCHMARK_DIRECTIONS
+        and (_finite_number(record.get("min_clinical_dose")) or 0) > 0
+    )
+
+
+def _identity_text(value: Any) -> str:
+    import re
+    return re.sub(r"[^a-z0-9]+", " ", str(value or "").lower()).strip()
+
+
+def _record_names(record: Dict[str, Any]) -> set[str]:
+    return {
+        text for text in (
+            _identity_text(record.get("standard_name")),
+            *(_identity_text(alias) for alias in record.get("aliases") or []),
+        ) if text
+    }
+
+
+def _row_names(row: Dict[str, Any]) -> set[str]:
+    return {
+        text for text in (
+            _identity_text(row.get("canonical_id")),
+            _identity_text(row.get("standard_name") or row.get("standardName")),
+            _identity_text(row.get("name")),
+            _identity_text(row.get("matched_form")),
+        ) if text
+    }
+
+
+def positive_clinical_benchmark(
+    product: Dict[str, Any], row: Dict[str, Any],
+) -> Optional[ClinicalBenchmarkAssessment]:
+    """Return an exact, positive, applicable preparation benchmark for ``row``.
+
+    Clinical records remain the source of the reviewed benchmark.  Exact
+    enrichment source linkage is authoritative.  A branded whole-preparation
+    row may also match its own registry name/alias; generic parent or member
+    identity never borrows that branded benchmark.  Null/mixed/inapplicable
+    records are absent from the eligible record set.
+    """
+    row_ref = str(row.get("raw_source_path") or row.get("source_row_ref") or "").strip()
+    row_names = _row_names(row)
+    matches = [
+        match for match in ((product.get("evidence_data") or {}).get("clinical_matches") or [])
+        if isinstance(match, dict)
+    ]
+    candidates: list[Dict[str, Any]] = []
+    eligible_by_id = {str(record.get("id")): record for record in _positive_clinical_benchmark_records()}
+    for match in matches:
+        record = eligible_by_id.get(str(match.get("id") or ""))
+        if record is None:
+            continue
+        is_brand = str(record.get("id") or "").upper().startswith("BRAND_")
+        if is_brand and not (row_names & _record_names(record)):
+            # Source linkage can associate a blend member or generic parent
+            # with the whole branded intervention. Dose requires the exact
+            # branded preparation on this row.
+            continue
+        refs = {str(ref).strip() for ref in match.get("matched_source_row_refs") or [] if str(ref).strip()}
+        if row_ref and row_ref in refs:
+            candidates.append(record)
+    for record in _positive_clinical_benchmark_records():
+        if not str(record.get("id") or "").upper().startswith("BRAND_"):
+            continue
+        if row_names & _record_names(record) and record not in candidates:
+            candidates.append(record)
+
+    exact_branded = [
+        record for record in candidates
+        if str(record.get("id") or "").upper().startswith("BRAND_")
+        and row_names & _record_names(record)
+    ]
+    if exact_branded:
+        candidates = exact_branded
+
+    if not candidates:
+        # The verified literature registry has structured material/purpose
+        # applicability but stores its studied range separately from the
+        # backed-study registry. Reuse the canonical resolver's applicability
+        # decision, then project only a positive exact range into Dose.
+        from evidence_resolver import (
+            EvidenceDisposition,
+            resolve_evidence_for_row,
+        )
+        resolution = resolve_evidence_for_row(row, product=product)
+        literature = (resolution.owner_facts or {}).get("literature_evidence") or {}
+        studied = literature.get("studied_dose") or {}
+        values = studied.get("values") if isinstance(studied, dict) else None
+        if (
+            resolution.disposition == EvidenceDisposition.RESOLVED_BY_REVIEWED_CLINICAL_EVIDENCE.value
+            and str(literature.get("effect_direction") or "").strip().lower() in _POSITIVE_BENCHMARK_DIRECTIONS
+            and isinstance(values, list) and values
+            and str(studied.get("basis") or "").strip().lower() in {"daily_intake", "per_serving_threshold"}
+        ):
+            positive_values = [value for value in (_finite_number(item) for item in values) if value and value > 0]
+            if positive_values:
+                candidates.append({
+                    "id": "LIT_" + str(row.get("canonical_id") or row.get("name") or "").upper(),
+                    "effect_direction": literature.get("effect_direction"),
+                    "min_clinical_dose": min(positive_values),
+                    "max_studied_clinical_dose": max(positive_values),
+                    "dose_unit": studied.get("unit") or "mg",
+                })
+
+    assessments = []
+    for record in candidates:
+        benchmark = _finite_number(record.get("min_clinical_dose"))
+        unit = str(record.get("dose_unit") or "mg").strip().lower()
+        if benchmark is None or benchmark <= 0:
+            continue
+        exposure = row_exposure(product, row, basis="daily", unit=unit).benchmark_amount
+        if exposure is None or exposure <= 0:
+            continue
+        assessments.append(ClinicalBenchmarkAssessment(
+            record_id=str(record.get("id") or ""),
+            benchmark_value=benchmark,
+            benchmark_maximum=_finite_number(record.get("max_studied_clinical_dose")),
+            benchmark_unit=unit,
+            exposure_value=exposure,
+            ratio=exposure / benchmark,
+            source_row_ref=row_ref,
+        ))
+    return min(assessments, key=lambda item: (item.benchmark_value, item.record_id), default=None)
 
 
 def _finite_number(value: Any) -> Optional[float]:

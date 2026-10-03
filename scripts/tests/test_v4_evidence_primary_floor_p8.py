@@ -190,13 +190,12 @@ def test_consensus_excludes_form_dependent_minerals():
     assert out["metadata"]["primary_evidence_floor"] == 14.0
 
 
-def test_branded_subclinical_dose_still_blocks_floor():
-    """Even a branded extract below its min clinical dose cannot float the floor."""
+def test_branded_studied_amount_does_not_gate_evidence_floor():
     p = _product([_ing(quantity=50)],
                  [_match(study_type="rct_multiple", evidence_level="branded-rct",
                          min_clinical_dose=300.0)])
     out = score_evidence(p, apply_primary_floor=True)
-    assert out["metadata"]["primary_evidence_floor"] == 0.0
+    assert out["metadata"]["primary_evidence_floor"] == 18.0
 
 
 def test_branded_trace_ingredient_does_not_float_product():
