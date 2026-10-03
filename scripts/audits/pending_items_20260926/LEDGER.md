@@ -503,7 +503,7 @@ Cleanup receipts: /Users/seancheick/pg_quality/branch_cleanup_20261002/; accepte
 
 ## October 2 — approved D26/D24/omega implementation and calibration
 
-Candidate production source `374fb4b6` on
+Candidate production source `aca66621` on
 `codex/q53-calibration-completion`; not merged to main and not runtime-published.
 
 - [x] Exact positive applicable preparation benchmarks are Dose-owned. Null,
@@ -540,7 +540,10 @@ Candidate production source `374fb4b6` on
   is diagnostic, not accepted. Dead-code/source-owner slice then found and
   removed one obsolete private serving helper; focused node1passed and serving
   checks28passed.
-- [ ] Push the exact candidate branch and obtain green `pipeline-tests` CI.
+- [x] Push the exact candidate branch and obtain green `pipeline-tests` CI:
+  `aca66621`, run37091524920,18,717passed/183declared skips across four
+  shards; every skip guard passed. Runs37089000275 and37090968501 are
+  superseded after all shard failures were classified and corrected.
 - [ ] Sean runs fresh full Clean/Enrich/Score. Then validate catalog/export,
   release rung, real app Nutrition Facts/active/other rendering, manifest and
   live parity before publication.

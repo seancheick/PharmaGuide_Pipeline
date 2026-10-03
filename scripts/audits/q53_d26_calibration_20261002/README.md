@@ -2,7 +2,7 @@
 
 Status: **implemented, measured and independently reviewed; fresh full-corpus
 Clean and release validation remain pending.** Production source was measured at
-`374fb4b6aa7b153643e6262e0e45b13e13b99e3f` against the accepted baseline
+`aca666213960dd0a42f49fcd49f65b9ee7a96a17` against the accepted baseline
 `e250cd679a30241b5a08f9bad4c396649303dc39`. The input manifest contains 344
 frozen raw DSLD labels and has SHA-256
 `6c7c6c7e4080487830f5b0acd474204f75119b6b6c9bfe77e898c73009e6b764`.
@@ -67,6 +67,7 @@ disclosed-but-unbenchmarked fallback.
 | Three declared purposes, one unbenchmarked | 22, 22, 16 | 3 | 20.0 |
 | Four declared purposes, one unbenchmarked | 22, 22, 22, 16 | 4 | 20.5 |
 | Vitamin C purpose plus incidental 1 mg lactoferrin | 22; lactoferrin excluded | 1 | 22.0 |
+| BCAA formula plus another unbenchmarked declared purpose | 22, 16 | 2 | 19.0 |
 | Required micronutrient panel amounts hidden | no assessable Dose | — | `not_scored` |
 
 The exact payloads are in `purpose_demonstrations.json`. Separate regressions
@@ -162,21 +163,35 @@ remains a post-Clean validation gate.
 
 ## Verification
 
-- 218 affected generic Dose, omega, collagen, botanical, immune and assembly
-  checks passed after the final source change.
+- The corrected owner/consumer slice passes 471 checks with 26 expected
+  absent-corpus canary skips. Earlier correction slices passed 244 and 635
+  checks respectively. A new BCAA regression proves an aggregate formula is
+  one equal purpose vote alongside another declared purpose.
 - 28 alternate-serving checks passed; raw census is 108→0 top-level and
   141→18 all-tree.
-- Independent policy review at `374fb4b6` found no remaining code findings;
+- Independent policy review at `374fb4b6` found no remaining policy findings;
   independent serving/app review found no remaining findings after the unit
   correction.
 - Frozen raw replay completed 344/344 with matching input manifest and no
-  route, purpose, scoring-status or safety-status movement.
+  route, purpose, scoring-status or safety-status movement. The exact
+  `aca66621` replay is numerically and semantically identical to the corrected
+  candidate: zero score, pillar, route, status, Evidence-state or explanation
+  changes; output SHA-256 is
+  `6b4a14de0d5f55e600b52591fd593482ed92f04d08616587252f9f65f66473b2`.
+  The prior CI correction changed only the intended limited-assessability
+  explanation on 49 products, with zero numeric movement.
 
 The final local rung ran after documentation integration: **398 passed and 129
 skipped**, then correctly exited nonzero because this worktree does not contain
 the rebuilt corpus, canaries or distribution artifacts. It is not an accepted
 local gate; those skips are exactly what Sean's fresh Clean run supplies. The
 dead-code/source-of-truth slice then found one obsolete private serving helper;
-it was deleted and its failing node plus all 28 serving checks passed. Exact
-candidate CI is recorded in the handoff after the branch push. The fresh full
-Clean corpus is intentionally not run here.
+it was deleted and its failing node plus all 28 serving checks passed. The first
+exact post-rebase CI run (`28837e08`, run 37089000275) exposed the remaining
+stale expectations and two real Dose-owner gaps; all four shards were classified
+before correction. The next run (`a9eee377`, run 37090968501) found two remaining
+tests importing the retired Evidence mass helper; their structural assertions
+remain and the amount assertions were deleted. Exact corrected-source CI at
+`aca66621` passed all four shards and skip guards: **18,717 passed / 183 declared skips**
+([run 37091524920](https://github.com/seancheick/PharmaGuide_Pipeline/actions/runs/37091524920)).
+The fresh full Clean corpus is intentionally not run here.

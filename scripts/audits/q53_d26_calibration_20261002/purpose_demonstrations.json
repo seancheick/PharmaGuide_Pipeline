@@ -60,6 +60,28 @@
     "participation_basis": "declared_purpose_equal_weight"
   },
   {
+    "case": "bcaa_formula_plus_unbenchmarked_declared_purpose",
+    "declared_purpose_count": 2,
+    "votes": [
+      22.0,
+      16.0
+    ],
+    "aggregate_formula": {
+      "record_id": "INGR_BRANCHED_CHAIN_AMINO_ACIDS",
+      "member_canonical_ids": [
+        "l_leucine",
+        "l_isoleucine",
+        "l_valine"
+      ],
+      "dose_band": "within_studied_range"
+    },
+    "unbenchmarked": [
+      "l_glutamine"
+    ],
+    "dose_score": 19.0,
+    "participation_basis": "declared_purpose_equal_weight"
+  },
+  {
     "case": "required_amounts_hidden",
     "hidden_amount_count": 8,
     "is_live_eligible": false,

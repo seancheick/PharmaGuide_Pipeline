@@ -57,8 +57,9 @@ integrator. No export-schema change mixes into it. Work that can run beside it b
 no shared pipeline owner: items 1.1, 1.2 and authoring the benchmark scenarios for 1.10.
 
 Current checkpoint (October 2): D26/D24/omega source implementation and bounded
-calibration are complete at `374fb4b6`; independent review found no remaining
-code finding. The 344-label replay explains all 71 movers and has zero typed
+calibration are complete at `aca66621`; exact-source four-shard CI is green and
+independent review found no remaining code finding. The 344-label replay explains
+all 71 movers and has zero typed
 safety, scoring-status, route or purpose movement. Alternate-serving raw census
 is closed for the current source. Phase 0 now waits on the fresh full Clean run,
 release gates, rebuilt app rendering verification and exact candidate approval.
