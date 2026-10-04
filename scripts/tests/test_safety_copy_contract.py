@@ -332,39 +332,6 @@ def test_banned_substance_has_preflight_copy(core_rows) -> None:
 # Invariant 5 — no_duplicate_warnings (E1.2.3)
 # ---------------------------------------------------------------------------
 
-def _warning_key(w: dict) -> tuple:
-    """Dedup key — mirrors build_final_db._warning_dedup_key() exactly.
-
-    Sprint E1.2.3 follow-up (2026-05-13): the per-ingredient component
-    (matched_rule_id / ingredient_name) is REQUIRED to keep this test in
-    sync with the build's correct per-ingredient dedup. Without it,
-    legitimately-distinct warnings (e.g. EPA-pregnancy + DHA-pregnancy +
-    Fish-Body-Oil-pregnancy + Borage-Oil-pregnancy on a single fish-oil
-    product) collapse into one key and the test fires a false positive.
-
-    The build is the source of truth: same key shape, same normalization,
-    same fallback chain. Drift here breaks E1.0.2 #5 by misidentifying
-    the build's correct per-ingredient output as a contract violation.
-    """
-
-    def _norm(v) -> tuple:
-        if v is None:
-            return ()
-        if isinstance(v, (list, tuple)):
-            return tuple(sorted(str(x) for x in v if x not in (None, "")))
-        s = str(v)
-        return (s,) if s else ()
-
-    return (
-        _norm(w.get("severity")),
-        _norm(w.get("canonical_id") or w.get("type")),
-        _norm(w.get("condition_id") or w.get("condition_ids")),
-        _norm(w.get("drug_class_id") or w.get("drug_class_ids")),
-        _norm(w.get("source_rule") or w.get("source")),
-        _norm(w.get("matched_rule_id") or w.get("ingredient_name")),
-    )
-
-
 def test_no_duplicate_warnings(sample_blobs) -> None:
     """Within ``warnings[]`` and within ``warnings_profile_gated[]``, no
     two entries may share the full dedup key. VitaFusion CBD Mixed Berry
@@ -378,6 +345,8 @@ def test_no_duplicate_warnings(sample_blobs) -> None:
     if not SPRINT_E1_2_3_LANDED:
         pytest.skip("waiting on E1.2.3 — warning dedup not yet landed")
 
+    from build_final_db import _warning_dedup_key
+
     violations = []
     for blob in sample_blobs:
         for key in ("warnings", "warnings_profile_gated"):
@@ -385,7 +354,7 @@ def test_no_duplicate_warnings(sample_blobs) -> None:
             for w in blob.get(key) or []:
                 if not isinstance(w, dict):
                     continue
-                k = _warning_key(w)
+                k = _warning_dedup_key(w)
                 seen[k] = seen.get(k, 0) + 1
             dups = {k: n for k, n in seen.items() if n > 1}
             if dups:
@@ -405,6 +374,8 @@ def test_one_critical_card_per_rule(sample_blobs) -> None:
     condition / drug class / ban context), whatever label spelling or
     producer surfaced it. Keying on the spelling showed "Yohimbe" and
     "Yohimbe bark extract" as two RISK_YOHIMBE cards on 270 products."""
+    from build_final_db import _warning_dedup_key
+
     violations = []
     for blob in sample_blobs:
         for key in ("warnings", "warnings_profile_gated"):
