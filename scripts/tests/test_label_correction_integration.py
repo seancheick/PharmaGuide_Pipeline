@@ -135,6 +135,24 @@ def test_verified_unit_correction_is_used_by_label_ledger(normalizer):
     assert normalized["display_ingredients"][0]["exact_dose_text"] == "150 mcg"
 
 
+def test_copper_gram_transcription_is_corrected_to_the_printed_milligram(normalizer):
+    """DSLD 5862 transcribes the printed 'Copper 1 mg 50%' as 1 g."""
+    raw = _make_raw_product(dsld_id=5862, ingredient_names=[])
+    raw["ingredientRows"] = [
+        {
+            **_make_ingredient_row("Copper", category="mineral"),
+            "quantity": [{"quantity": 1, "unit": "g"}],
+            "nestedRows": [],
+            "forms": [],
+        }
+    ]
+
+    normalized = normalizer.normalize_product(raw)
+
+    assert normalized["activeIngredients"][0]["unit"] == "mg"
+    assert normalized["display_ingredients"][0]["exact_dose_text"] == "1 mg"
+
+
 def test_alternate_serving_rows_are_one_scoring_ingredient(normalizer):
     """Repeated columns are serving alternatives, never additive doses."""
     raw = _make_raw_product(dsld_id=99999996, ingredient_names=[])

@@ -389,6 +389,9 @@ def test_statement_backed_missing_form_doses_are_product_scoped(
         ("19916", "Adults' 50+ Multivitamin/Multimineral", "Boron", "mg", "mcg"),
         ("265197", "Men Over 40 One Daily", "Boron", "mg", "mcg"),
         ("76510", "Triple Strength Glucosamine Chondroitin MSM with Vitamin D", "Vitamin D", "NP", "IU"),
+        ("5862", "Amplified Endurance Booster Blue Raspberry", "Copper", "g", "mg"),
+        ("5864", "Amplified Endurance Booster Orange", "Copper", "g", "mg"),
+        ("18529", "Amplified Endurance Booster Blue Raspberry", "Copper", "g", "mg"),
     ],
 )
 def test_verified_source_unit_corrections_are_product_scoped(
