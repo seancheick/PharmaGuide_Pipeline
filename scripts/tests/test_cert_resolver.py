@@ -1459,13 +1459,14 @@ def test_historical_certification_never_grants_points():
     assert all(not item.scores_points() for item in resolutions)
 
 
-@pytest.mark.parametrize("dsld_id", ["310116", "322551"])
+@pytest.mark.parametrize("dsld_id", ["310116", "322551", "999991"])
 def test_reviewed_magnesium_capsule_alias_reaches_public_verification(dsld_id):
     from enhanced_normalizer import EnhancedDSLDNormalizer
     from enrich_supplements_v3 import SupplementEnricherV3
     from scoring_v4.scored_artifact import build_scored_artifact
 
-    # Source facts shared by the two NIH labels; no USP claim on either label.
+    # Source facts shared by the NIH labels; an unseen ID must resolve by
+    # the reviewed SKU identity, not by a list of handpicked product IDs.
     raw = {
         "id": int(dsld_id), "brandName": "Nature Made",
         "fullName": "Magnesium Glycinate 200 mg",
@@ -1498,7 +1499,9 @@ def test_reviewed_magnesium_capsule_alias_reaches_public_verification(dsld_id):
     ("Nature Made", "Magnesium Glycinate 200 mg", "gummy", None),
     ("Nature Made", "Magnesium Glycinate 200 mg", "softgel", None),
     ("Other Brand", "Magnesium Glycinate 200 mg", "capsule", None),
-    ("Nature Made", "Magnesium Glycinate 200 mg", "capsule", "unreviewed-label"),
+    ("Nature Made", "Magnesium Glycinate 200 mg Immune", "capsule", None),
+    ("Nature Made", "Magnesium Glycinate 200 mg Kids", "capsule", None),
+    ("Nature Made", "Magnesium Citrate 200 mg", "capsule", None),
     ("Nature Made", "Magnesium Glycinate 200 mg", None, None),
 ])
 def test_reviewed_magnesium_alias_does_not_cross_identity(brand, title, form, requested_id, dsld_id):
@@ -1507,3 +1510,107 @@ def test_reviewed_magnesium_alias_does_not_cross_identity(brand, title, form, re
         dsld_id=requested_id or dsld_id, label_context={"form_factor": form})
     assert not any(row.record_id == "USP_VERIFIED_EED67511C424" and row.scores_points()
                    for row in discovered)
+
+
+@pytest.mark.parametrize("program,product", [
+    ("USP Verified", "Magnesium Glycinate 100 mg Capsules"),
+    ("USP Verified", "Magnesium Glycinate 200 mg Gummies"),
+    ("USP Verified", "Magnesium Citrate 200 mg Capsules"),
+    ("USP Verified", "Magnesium Glycinate 200 mg Capsules Immune"),
+    ("NSF Sport", "Magnesium Glycinate 200 mg Capsules"),
+])
+def test_reviewed_alias_cannot_follow_changed_record_identity(program, product):
+    # A stable official listing ID can survive a corrected source title;
+    # its old reviewed alias must not certify a materially changed product.
+    registry = _make_registry(records=[{
+        "program": program, "brand": "Example", "product": product,
+        "record_id": "STABLE_LISTING",
+    }], overrides=[{
+        "brand": "Example", "product": "Magnesium Glycinate 200 mg Capsules",
+        "program": "USP Verified", "record_id": "STABLE_LISTING",
+        "scope": "sku", "status": "verified", "matched_brand": "Example",
+        "matched_product": "Magnesium Glycinate 200 mg Capsules",
+    }])
+    result = resolve("Example", "Magnesium Glycinate 200 mg Capsules",
+                     ["USP Verified"], registry)[0]
+    assert not result.scores_points()
+    assert result.scope == "needs_review"
+
+
+@pytest.mark.parametrize("scope", ["facility", "lot", "batch", "brand"])
+def test_non_product_source_scope_cannot_be_promoted_by_name_match(scope):
+    registry = _make_registry(records=[{
+        "program": "USP Verified", "brand": "Example",
+        "product": "Magnesium Glycinate 200 mg Capsules", "scope": scope,
+        "lot_numbers_tested": ["LOT-A"],
+    }])
+    result = resolve("Example", "Magnesium Glycinate 200 mg Capsules",
+                     ["USP Verified"], registry)[0]
+    assert not result.scores_points()
+
+
+@pytest.mark.parametrize("source_form", ["Capsule", "Powder", "Softgel"])
+def test_unchanged_reviewed_listing_name_is_not_a_form_metadata_change(source_form):
+    registry = _make_registry(records=[{
+        "program": "NSF Certified", "brand": "Example", "product": "Daily Care",
+        "record_id": "REVIEWED_SOURCE", "product_form": source_form, "scope": "sku",
+    }], overrides=[{
+        "brand": "Example", "product": "Daily Care", "program": "NSF Certified",
+        "record_id": "REVIEWED_SOURCE", "scope": "product_line", "status": "verified",
+        "matched_brand": "Example", "matched_product": "Daily Care",
+    }])
+    result = resolve("Example", "Daily Care", ["NSF Certified"], registry,
+                     label_context={"form_factor": source_form.lower()})[0]
+    assert result.scores_points()
+
+
+def _trade_designation_registry(product='Centrum Silver Women 50+ Tablets', *, brand='Haleon US Holdings LLC', scope='sku', source=True):
+    return _make_registry(records=[{
+        'program': 'NSF Certified', 'brand': brand, 'product': product, 'scope': scope,
+        'record_id': 'SOURCE_TRADE_DESIGNATION', 'product_form': 'Tablet',
+        'source_listing_rows': [{'trade_designation': product, 'brand': brand, 'product_form': 'Tablet'}] if source else [],
+    }])
+
+
+@pytest.mark.parametrize('dsld_id', ['18918', '18935', 'never-seen-label'])
+def test_official_trade_designation_recognizes_exact_consumer_brand(dsld_id):
+    result = discover_verified_programs('Centrum', 'Centrum Silver Women 50+', _trade_designation_registry(),
+        dsld_id=dsld_id, label_context={'form_factor': 'tablet'})
+    assert len(result) == 1
+    assert result[0].record_id == 'SOURCE_TRADE_DESIGNATION'
+    assert result[0].scores_points()
+
+
+@pytest.mark.parametrize('brand,title,form', [
+    ('Centrum', 'Centrum Silver Women 50+ Immune', 'tablet'),
+    ('Centrum', 'Centrum Silver Women 50+', 'gummy'),
+    ('Centrum', 'Centrum Silver Men 50+', 'tablet'),
+    ('Centrum', 'Centrum Silver Women Under 50', 'tablet'),
+    ('Centrum', 'Centrum Women 50+', 'tablet'),
+    ('Other Brand', 'Centrum Silver Women 50+', 'tablet'),
+    ('Cent', 'Centrum Silver Women 50+', 'tablet'),
+])
+def test_trade_designation_does_not_transfer_to_variant(brand, title, form):
+    result = discover_verified_programs(brand, title, _trade_designation_registry(), label_context={'form_factor': form})
+    assert not any(row.scores_points() for row in result)
+
+
+@pytest.mark.parametrize('scope', ['facility', 'brand', 'batch', 'lot'])
+def test_trade_designation_does_not_upgrade_non_product_scope(scope):
+    result = discover_verified_programs('Centrum', 'Centrum Silver Women 50+', _trade_designation_registry(scope=scope),
+        label_context={'form_factor': 'tablet'})
+    assert not any(row.scores_points() for row in result)
+
+
+def test_trade_designation_requires_original_source_row():
+    result = discover_verified_programs('Centrum', 'Centrum Silver Women 50+', _trade_designation_registry(source=False),
+        label_context={'form_factor': 'tablet'})
+    assert not result
+
+
+def test_trade_designation_keeps_strength_and_short_brand_boundaries():
+    registry = _trade_designation_registry('Centrum Magnesium 200 mg Tablets')
+    assert not discover_verified_programs('Centrum', 'Centrum Magnesium 100 mg Tablets', registry)
+    for brand, title in [('LTH', 'Health Magnesium 200 mg Tablets'), ('VITAL', 'Vitafusion Magnesium 200 mg Tablets')]:
+        registry = _trade_designation_registry(title)
+        assert not discover_verified_programs(brand, title, registry)

@@ -737,6 +737,28 @@ def _keyword_overlap(a: str, b: str) -> float:
 _DELISTED_OVERRIDE_NOTE = "curated override record absent from current registry"
 
 
+def _reviewed_override_identity_conflict(override: dict[str, Any], record: dict[str, Any]) -> bool:
+    """One identity check for reviewed mappings after an official refresh."""
+    if normalize_program(record.get("program", "")) != normalize_program(override.get("program", "")):
+        return True
+    reviewed_product = override.get("matched_product")
+    if not reviewed_product:
+        return False
+    reviewed_brand = override.get("matched_brand") or override.get("brand", "")
+    current_brand = record.get("brand", "")
+    # matched_product stores the reviewed registry's printed name, not an
+    # augmented label title. Compare the same source fields on both sides;
+    # appending form metadata only to today's name fabricates identity drift.
+    current_product = record.get("product", "")
+    brand_tokens = set(normalize_product(f"{reviewed_brand} {current_brand}").split())
+    return (
+        not _brands_likely_same(normalize_brand(reviewed_brand), normalize_brand(current_brand))
+        or _sku_variant_conflict(reviewed_product, current_product,
+                                 brand_a=reviewed_brand, brand_b=current_brand)
+        or _sku_identity_tokens(reviewed_product, brand_tokens) != _sku_identity_tokens(current_product, brand_tokens)
+    )
+
+
 def _check_override(
     brand_norm: str,
     product_norm: str,
@@ -821,6 +843,15 @@ def _check_override(
             # certification.
             record = registry.record_by_id(override.get("record_id"))
             if record is not None:
+                # A listing ID can survive a source correction or rename. Its
+                # reviewed alias cannot silently follow a different strength,
+                # form, preparation, population, or certification program.
+                if _reviewed_override_identity_conflict(override, record):
+                    return CertResolution(
+                        program=program_canon, scope="needs_review", record_id=record.get("record_id"),
+                        notes="curated override current registry identity changed; review required",
+                        matched_brand=record.get("brand"), matched_product=record.get("product"),
+                    ), frozenset(rejected_record_ids)
                 resolution = replace(
                     _record_to_resolution(record, program_canon, scope, 1.0),
                     notes="curated override",
@@ -875,6 +906,28 @@ def _check_override(
                 matched_product=override.get("matched_product") or override.get("product"),
             ), frozenset(rejected_record_ids)
     return None, frozenset(rejected_record_ids)
+
+
+def _trade_designation_brand_match(brand_norm: str, record: dict[str, Any]) -> bool:
+    """Recognize a consumer brand printed in an authoritative trade designation.
+
+    This is not a manufacturer alias. Product matching must additionally be
+    exact and pass the existing material-identity guards before any credit.
+    """
+    brand_tokens = brand_norm.split()
+    if not brand_tokens or record.get("scope") not in {"sku", "product_line"}:
+        return False
+    product = record.get("product", "")
+    if normalize_product(product).split()[:len(brand_tokens)] != brand_tokens:
+        return False
+    for row in record.get("source_listing_rows", []) or []:
+        designation = row.get("trade_designation", "")
+        if (designation and normalize_product(designation) == normalize_product(product)
+                and not _sku_variant_conflict(designation, product)
+                and _brands_likely_same(normalize_brand(row.get("brand", "")),
+                                        normalize_brand(record.get("brand", "")))):
+            return True
+    return False
 
 
 def resolve(
@@ -939,7 +992,7 @@ def resolve(
         rejected_brand_matches: list[str] = []
         for c in candidates:
             c_brand = normalize_brand(c.get("brand_normalized", c.get("brand", "")))
-            if _brands_likely_same(brand_norm, c_brand):
+            if _brands_likely_same(brand_norm, c_brand) or _trade_designation_brand_match(brand_norm, c):
                 if c.get("record_id") in rejected_record_ids:
                     rejected_brand_matches.append(str(c["record_id"]))
                 else:
@@ -1010,8 +1063,10 @@ def resolve(
             )
             unsupported_edition = bool(query_additions) and c.get("scope") != "product_line"
             multivitamin_mismatch = _multivitamin_addon_conflict(product, raw_candidate_product, brand_tokens)
+            cross_brand_designation = not _brands_likely_same(brand_norm, normalize_brand(registry_brand))
             variant_conflict = (
                 variant_conflict or insufficient_identity or unsupported_edition or multivitamin_mismatch
+                or (cross_brand_designation and not exact_identity)
             )
 
             # SKU exact-ish match via token_set_ratio
@@ -1164,6 +1219,8 @@ def _record_to_resolution(
     scoring_blocked_reason: str | None = None
     if record.get("current_certification") is False:
         scoring_blocked_reason = HISTORICAL_CERTIFICATION_BLOCK_REASON
+    elif scope in {"sku", "product_line"} and record.get("scope") not in {None, "sku", "product_line"}:
+        scoring_blocked_reason = "registry scope does not establish current product certification"
     elif not str(record.get("record_id") or "").strip():
         scoring_blocked_reason = "registry record id missing; refresh registry before granting points"
     elif not str(record.get("source_url") or "").strip():
