@@ -184,6 +184,28 @@ def test_shared_fixture_every_case_evaluates_correctly(fixture_cases):
     assert not failures, "\n  - ".join([f"{len(failures)} fixture mismatch(es):"] + failures)
 
 
+def _live_gate_keys(live_rules):
+    keys = set()
+    for rule in live_rules:
+        subs = (rule.get("condition_rules") or []) + (rule.get("drug_class_rules") or []) \
+            + (rule.get("dose_thresholds") or []) + [rule.get("pregnancy_lactation") or {}]
+        for sub in subs:
+            if isinstance(sub, dict) and sub.get("profile_gate"):
+                keys.add(json.dumps(sub["profile_gate"], sort_keys=True))
+    return keys
+
+
+def test_gold_benchmark_cases_use_live_rule_gates(fixture_cases, live_rules):
+    """Roadmap 1.10: every gold_ scenario pins a gate that ships in a live rule, so a
+    threshold or exclusion edit in the rules cannot leave the benchmark testing a gate
+    that no longer exists."""
+    live = _live_gate_keys(live_rules)
+    gold = [c for c in fixture_cases if c["name"].startswith("gold_")]
+    assert len(gold) >= 50
+    orphaned = [c["name"] for c in gold if json.dumps(c["gate"], sort_keys=True) not in live]
+    assert not orphaned, f"gold cases whose gate is in no live rule: {orphaned}"
+
+
 # --- Live rule file invariants ---
 
 
