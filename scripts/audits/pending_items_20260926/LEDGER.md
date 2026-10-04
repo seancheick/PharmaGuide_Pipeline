@@ -703,3 +703,10 @@ Remaining: next agent starts from integrated main, resumes only requested valida
 
 
 October4 alignment check: main Phase0–7 deliverable count50/68 (73.5%); historical repeated checkpoint boxes excluded. Master plan now records the integrated38-failure remediation and distinguishes historical6ea receipts from pending current-source acceptance. Main handoff links the same plan/LEDGER/owners; no jobs restarted.
+
+
+### October4 — development workflow instruction alignment
+
+Sean clarified that he is the only app user during development: expected score changes are reviewed by shared cause, not individually approved. Updated shared AGENTS, Claude session flow, scoring rule and existing scoring/data-fix/release skills. Keep source-grounded regression/controls, clinical honesty, warning preservation and external publication authority. One bounded batch, stage-fingerprint preflight, one necessary corpus pass; no mandatory session restart or extra full-corpus measurement run.
+
+Owner: AGENTS.md::Development workflow and existing workflow skills; evidence: instruction audit and current scripts/release_safety/catalog_diff.py approval consumer. Will NOT create a tracker, scorer, registry, approval signature or silent gate bypass. **Remaining executable mismatch:** catalog_diff.py still gates ordinary large score/tier changes with per-product approval. The active implementation agent should align this existing owner with the newly authorized development review policy; this documentation batch does not change the gate or touch its active code lane. Documentation diff checked; no tests/pipeline run required or started.

@@ -29,6 +29,11 @@ paths:
   a safety verdict. Legacy POOR is readable only in old catalogs and never newly emitted.
   Never let a quality change hide or soften a safety finding; banned/recalled reasons remain blocked.
 
+**Development movement:** expected score/tier changes are reviewed by shared cause, raw-label
+traces and controls; obsolete frozen values are not truth and do not need individual human
+approval. Investigate safety changes, lost warnings and unsupported clinical credit. Follow
+AGENTS.md Development workflow; do not expand a bounded batch into hypothetical audits.
+
 **Changing a score:** follow the `/pg-scoring-change` skill. It covers the Owner Check, the
 one-product probe, a failing test, the brand probe, `shadow-diff` before/after on stored inputs,
 and a fresh-context review. Never re-run the ~45-minute full pipeline just to measure, and never run

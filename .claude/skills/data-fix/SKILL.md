@@ -60,7 +60,7 @@ Search siblings once and record dispositions: fixed, confirmed unaffected, uncer
 
 From the active checkout use `scripts/test.sh` (never raw pytest or an unverified system interpreter) and `$PG_PYTHON` from `scripts/python_env.sh` for verifiers; inspect their supported arguments and write reports to explicit paths. Verifier availability does not prove the particular claim was checked.
 
-For aliases/routing: test cleaner and enricher, explicit versus generic forms, parent/child quantity ownership and source preservation. For shared precedence/conversion changes, inspect all changed lookup owners and measure a full-corpus diff at the batch checkpoint. Verify real affected labels; stale enriched rows do not change merely because the source registry changed. Record required regeneration separately.
+For aliases/routing: test cleaner and enricher, explicit versus generic forms, parent/child quantity ownership and source preservation. For shared precedence/conversion changes, inspect all changed lookup owners and use bounded affected-label/control replays while fixing. Measure the full-corpus diff from the one required final batch run; do not launch an additional corpus job solely for this step. Group ordinary development movements by cause, not individual approval. Verify real affected labels; stale enriched rows do not change merely because the source registry changed. Record required regeneration separately.
 
 Synthetic green and a broad pass do not establish clinical correctness or release readiness. Full/release gates and fresh-corpus review still apply before release; never run the full backstop alongside a corpus run.
 

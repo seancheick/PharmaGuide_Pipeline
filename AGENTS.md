@@ -62,8 +62,9 @@ do not each require a broad checkpoint. Do not weaken an assertion merely to mak
    record all failures, fix each class using explicit nodes/files (or `--lf` with the failing
    files), then rerun the combined checkpoint once after all fixes are ready. Do not restart it
    after each individual fix. Run the whole fast suite locally only when CI is unavailable.
-5. After the last code change and the merge of main: one corpus pass from the earliest changed
-   stage, then the release rung. Its preflight refuses output built by other data or code.
+5. After the last code change and the merge of main: inspect every stage code/reference fingerprint
+   first, then one corpus pass from the earliest required stage and the release rung. Check Clean
+   provenance before choosing Enrich-only; preflight refuses output built by other data or code.
 
 Before a broad job, check active jobs and lane handoffs. Full/release/slow suites run
 one at a time; never run a broad suite alongside a corpus job. Broad fast/local suites
@@ -80,6 +81,29 @@ tested SHA, commands/results, measurements, review and remaining blockers. Check
 deliverable its evidence proves; distinguish implemented, measured, reviewed, integrated and
 release-validated. Never mark a whole phase complete from a focused test, or leave finished work
 looking pending. Keep one execution register and rewrite handoffs instead of stacking history.
+
+## Development workflow — Sean, October 4, 2026
+
+The app currently has no external users; Sean is developing it himself. Reconfirm that before
+applying development-only assumptions to a future public release. Expected score/tier changes
+are normal: an old score or frozen fixture can be wrong. Trace raw labels through canonical owners
+and consumers; do not preserve obsolete values or require Sean to approve ordinary movements one
+product at a time. Review movements by shared cause, with representative affected labels and
+unaffected controls. Investigate changed safety outcomes, lost warnings, incorrect identities or
+amounts, unsupported clinical credit and unexplained deltas; keep honest unknowns explicit.
+
+Bound the batch to known output-changing defects. Do not keep expanding into hypothetical bugs
+or future features. Finish fixes, focused tests, measurements and review, then check actual stage
+code/reference fingerprints BEFORE scheduling one necessary corpus pass. Post-run catalog parity
+and real app checks use those new artifacts. Another corpus pass requires an actual new defect or
+invalid provenance, not a new agent/session, documentation edit or expected score movement.
+
+Stale tests must be corrected against source and accepted policy, with meaningful assertions and
+controls; never change production to satisfy an obsolete pin or weaken a valid safety assertion.
+Development movement review is cause-based, not a per-product human approval queue. Explicit
+clinical holds, new policy/owner decisions and external publication authorization still apply.
+An existing executable release gate may enforce stricter historical approvals: report that owner
+conflict and fix it within authorized scope, never forge approvals or quietly bypass the gate.
 
 ## Pipeline map
 

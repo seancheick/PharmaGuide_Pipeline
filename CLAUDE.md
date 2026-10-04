@@ -10,9 +10,9 @@ AGENTS.md; this file holds only Claude-specific material. Don't grow it into a s
 
 - **Starting a session on existing work:** the SessionStart hook prints the branch, HEAD and
   handoff age. If a handoff exists, run `/pg-resume` before editing anything.
-- **At a phase boundary** (audit → implement → review → release, or after two wrong architecture
-  assumptions): run `/handoff`, then recommend a fresh session to Sean over continuing a
-  compacted one.
+- **At a phase boundary**, update the existing handoff and continue the authorized batch. A new
+  session is optional when context is unreliable (for example, repeated wrong owner assumptions),
+  not a required interruption or a reason to repeat completed validation.
 - **Reviews of important changes** go to a fresh-context subagent (or Codex). It gets only the
   requirement, the matrix owners and the diff, never the builder's reasoning.
 
