@@ -848,21 +848,19 @@ new numerical policy, changed backlog exemptions or release bypass.
 - [x] **Implemented reporting:** JSON retains every finding; console separates new
   mismatches, unresolved retrieval and known backlog, with cache/live counts.
   Old251backlog count was not251new failures and remains clinical work.
-- [ ] **Validated/integrated:** focused gates, full-diff review and exact-source CI
-  receipt to be recorded at integration; no corpus or publication started here.
+- [x] **Reviewed/measured:** full diff and owner/consumer contracts inspected;146focused
+  checks pass before expiry pruning,52post-pruning checks pass with3local I/O scan
+  timeouts explicitly rejected. Complete production citation gate passes;1,965
+  occurrences,0new mismatches/0unresolved,252known backlog. Warm complete repeat
+  1.57s/0live requests/identical decisions. Expired-cache cleanup344MB→39.6MB;
+  renewed valid records later bring cache to55.8MB. No clinical signoff or publication.
+- [x] **Integrated:**2cb0f9e1/99ea3f6d merged and pushed to main, origin containment
+  verified. Final whole-fast CI37235340132 passes all4groups on exact source99ea3f6d;
+  first checkpoint37233972615 also passed2cb0f9e1. Receipt-only documentation does
+  not require a duplicate broad checkpoint. No corpus or publication started here.
 - [ ] **Release-validated:** final rebuilt candidate and release checks remain open.
   Audit-client imports are included in all three stage fingerprints; this change
   invalidates existing stage stamps despite unchanged scoring/reference data. Combine
   with the already-required certification rebuild in one main-based pipeline-only run.
 
 Receipts: `/Users/seancheick/pg_quality/citation_cache_20261004/`.
-
-Citation-cache validation update: first source2cb0f9e1 passes whole-fast CI37233972615,
-all4shards. Focused owner/consumer/ratchet slice146passed24.20s before cache pruning.
-A real second bottleneck surfaced:344MBcache/2289receipts,1217expired; valid payloads
-~38.8MB. Fail-first pruning regression reproduced, existing cache owner now drops only
-expired receipts during load/persistence. Post-fix slice52passed with3file-scanning
-timeouts (one failure/two setup errors) under local I/O contention; not a passing
-checkpoint. Completed final source needs one new exact-source CI checkpoint.
-The interrupted full-network report is rejected, not recorded as passing. Bounded
-56citation current-content check remains0new mismatches/0unresolved.

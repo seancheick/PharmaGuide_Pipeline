@@ -822,17 +822,15 @@ mismatch,0new mismatches/0unresolved. omega3_niacin_lipid/PMC10600480 remains a 
 mismatch and STRAIN_PLANTARUM_LP01/PMC6073678 partial; neither is newly approved.
 [x] Reporting: full JSON findings preserved, backlog distinguished from new/unresolved,
 per-file reuse/live metrics. No clinical data/config/score/export/publication change.
-[ ] Validated/integrated: pending final focused slice/full-diff review/exact-source CI.
+[x] Reviewed/measured: full diff/owner contracts inspected; complete production
+citation gate1,965occurrences/0new/0unresolved/252known backlog. Warm full repeat
+1.57s/0requests/identical decisions. Cache344MB→39.6MB after expiry pruning;55.8MB
+after retaining fresh complete-source receipts. No clinical signoff.
+[x] Integrated:2cb0f9e1/99ea3f6d merged/pushed to main; origin containment verified.
+Final exact-source CI37235340132 passes all4groups on99ea3f6d; earlier37233972615
+passes2cb0f9e1. Focused146beforepruning/52after;3local I/O scan timeouts rejected,
+covered by final green CI. No corpus dependency for these audit-infrastructure checks.
+Receipt-only docs need no duplicate whole-fast checkpoint; external release stays open.
 [ ] Release-validated: stage fingerprints changed through imported audit modules;
 combine with certification rebuild, then new catalog/app/release verification.
 Receipts: /Users/seancheick/pg_quality/citation_cache_20261004/ .
-
-Citation-cache validation update: first source2cb0f9e1 passes whole-fast CI37233972615,
-all4shards. Focused owner/consumer/ratchet slice146passed24.20s before cache pruning.
-A real second bottleneck surfaced:344MBcache/2289receipts,1217expired; valid payloads
-~38.8MB. Fail-first pruning regression reproduced, existing cache owner now drops only
-expired receipts during load/persistence. Post-fix slice52passed with3file-scanning
-timeouts (one failure/two setup errors) under local I/O contention; not a passing
-checkpoint. Completed final source needs one new exact-source CI checkpoint.
-The interrupted full-network report is rejected, not recorded as passing. Bounded
-56citation current-content check remains0new mismatches/0unresolved.
