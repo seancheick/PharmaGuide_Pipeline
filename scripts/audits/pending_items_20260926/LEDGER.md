@@ -834,3 +834,7 @@ Receipt-only docs need no duplicate whole-fast checkpoint; external release stay
 [ ] Release-validated: stage fingerprints changed through imported audit modules;
 combine with certification rebuild, then new catalog/app/release verification.
 Receipts: /Users/seancheick/pg_quality/citation_cache_20261004/ .
+
+Citation lane cleanup: local/remote `codex/citation-cache` deleted after verified
+main containment; managed citation worktree archived. Main is the only local/remote
+branch. Unrelated detached catalog-form-remediation worktree is preserved.

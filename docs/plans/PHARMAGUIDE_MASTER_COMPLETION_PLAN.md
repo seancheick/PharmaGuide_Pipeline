@@ -864,3 +864,7 @@ new numerical policy, changed backlog exemptions or release bypass.
   with the already-required certification rebuild in one main-based pipeline-only run.
 
 Receipts: `/Users/seancheick/pg_quality/citation_cache_20261004/`.
+
+Citation lane cleanup: local/remote `codex/citation-cache` deleted after verified
+main containment; managed citation worktree archived. Main is the only local/remote
+branch. Unrelated detached catalog-form-remediation worktree is preserved.
