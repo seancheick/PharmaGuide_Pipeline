@@ -319,3 +319,6 @@ Checked on October 1, 2026.
 ### October 4 exact-candidate checkpoint
 
 Reviewed preparation/source remediation and structural-total Formulation eligibility are integrated and green on exact CI/local checks. The4f2a6509 fullcorpus/114manifest and15,421-product strictreachability receipts passed. Latermain dd2769ad adds nutrient-conversion and safety-reason fixes plus Dose/UL and regulatory benchmark coverage; its CI passed. Fresh final artifacts, snapshot movement review, local release/full gates and real Flutter rendering remain open. These focused gold sets do not establish the entire300–500scenario beta benchmark or beta readiness. Phase0 source implementation/calibration and final release validation remain distinct. See the master plan and existing LEDGER for exact receipts. No external catalog publication.
+
+
+October 4 handoff: current runtime6ea851dc corpus and strict reachability are verified; local candidate2026.10.04.133540 is imported for development. Release backstop124 passed. Full backstop found38 failures; all classes now have focused test-only remediation receipts in the LEDGER. Sean stopped broad validation; automation is paused. Replacement full validation, completed Flutter checks, actual-device rendering and human movement/publication approval remain open. No new corpus run is needed for the test/docs batch.
