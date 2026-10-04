@@ -4,7 +4,7 @@
     "purpose": "claims_scoring",
     "schema_version": "5.0.0",
     "contract_test": "scripts/tests/test_cert_claim_rules_contract.py",
-    "last_updated": "2026-09-16",
+    "last_updated": "2026-10-04",
     "scoring_rule": "Only award points when evidence_strength >= 'medium' AND score_eligible=true AND feature gate enabled",
     "design_principles": [
       "Separation of concerns: Enrichment extracts claims, Scoring computes points",
@@ -455,7 +455,8 @@
         "scope_rule": "product_level_only",
         "approved_field_group": "product_level_fields",
         "points_if_eligible": 5,
-        "notes": "Labdoor is an independent lab that buys supplements off the shelf, tests them for purity and label accuracy, and publishes public rankings. Unlike USP or NSF, Labdoor doesn't issue a formal certification — but a high Labdoor grade means the product was independently verified."
+        "notes": "Labdoor publishes supplement testing results and rankings and also offers distinct Quality (Purity + Accuracy), Sport and Quality THC-Free certifications. A ranking, grade or testing claim alone does not establish current certification of the exact product or lot.",
+        "verification_url": "https://labdoor.com/enterprise/certifications/standards"
       },
       "friend_of_the_sea": {
         "id": "CERT_FRIEND_OF_THE_SEA",
@@ -584,8 +585,8 @@
         "scope_rule": "product_level_only",
         "approved_field_group": "product_level_fields",
         "points_if_eligible": 5,
-        "verification_url": "https://www.tga.gov.au/",
-        "notes": "Listed with Australia's Therapeutic Goods Administration (TGA) — one of the strictest supplement regulators in the world. Before a product gets a TGA listing, it must pass a review of safety, quality, and manufacturing standards similar to pharmaceutical drugs."
+        "verification_url": "https://www.tga.gov.au/products/medicines/listed-medicines/application-and-market-authorisation/certifying-your-listed-or-assessed-listed-medicines-meet-all-regulatory-requirements",
+        "notes": "AUST L denotes an Australian Register of Therapeutic Goods listing based on sponsor certification of regulatory requirements. Listed medicines are not individually evaluated by the TGA for quality, safety or efficacy before supply. Assessed listed medicines are evaluated for efficacy, while safety and quality remain sponsor-certified; listing is not independent product-testing certification."
       },
       "ecocert": {
         "id": "CERT_ECOCERT",
@@ -618,8 +619,8 @@
         "scope_rule": "product_level_only",
         "approved_field_group": "product_level_fields",
         "points_if_eligible": 5,
-        "verification_url": "https://www.nsf.org/",
-        "notes": "The most comprehensive NSF certification for supplements. NSF/ANSI 455 covers the full chain — manufacturing facility audits, label accuracy verification, and contaminant testing. Broader and more rigorous than NSF Contents Certified alone."
+        "verification_url": "https://www.nsf.org/nutrition-wellness/gmp-certification",
+        "notes": "NSF/ANSI455-2 audits manufacturing, packaging, warehousing and distribution facilities against dietary supplement Good Manufacturing Practices. This establishes facility GMP evidence, not product label-accuracy or contaminant-testing certification; NSF product certification is a separate program."
       },
       "soil_association": {
         "id": "CERT_SOIL_ASSOCIATION",
@@ -670,7 +671,7 @@
         "approved_field_group": "product_level_fields",
         "points_if_eligible": 5,
         "verification_url": "https://www.gmpplus.org/",
-        "notes": "GMP+ is a European manufacturing quality certification recognized across the EU. It means the facility where this product was made passed independent audits for cleanliness, consistency, and process control — similar to pharmaceutical manufacturing standards."
+        "notes": "GMP+ is a certification scheme for safe and sustainable animal feed and feed-chain companies. It does not establish human dietary supplement GMP or independent testing of a supplement product."
       },
       "isura": {
         "id": "CERT_ISURA",

@@ -66,3 +66,15 @@ def test_each_category_carries_its_own_metadata_block(blob):
         if isinstance(items, dict) and "_metadata" not in items
     ]
     assert not missing, f"categories missing _metadata block: {missing}"
+
+
+def test_certification_notes_preserve_program_scope():
+    from pathlib import Path
+    import json
+    rules = json.loads((Path(__file__).resolve().parents[1] / "data/cert_claim_rules.json").read_text())["rules"]["third_party_programs"]
+    assert "facility" in rules["nsf_ansi_455"]["notes"].lower()
+    assert "not product" in rules["nsf_ansi_455"]["notes"].lower()
+    assert "animal feed" in rules["eu_gmp_plus"]["notes"].lower()
+    assert "rankings" in rules["labdoor"]["notes"].lower()
+    assert "doesn't issue a formal certification" not in rules["labdoor"]["notes"]
+    assert "not individually evaluated" in rules["tga_listed"]["notes"].lower()
