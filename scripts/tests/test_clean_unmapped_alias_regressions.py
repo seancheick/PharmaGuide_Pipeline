@@ -1277,7 +1277,8 @@ def test_nordic_softgels_inactive_unmapped_labels_map(
         ("NEM Natural Eggshell Membrane", "nem"),
         ("Mythocondro", "mythocondro"),
         ("Mobilee", "mobilee"),
-        ("Mirtogenol", "Bilberry"),
+        # A complete preparation (Pycnogenol + Mirtoselect), not a bilberry form (3d002d99).
+        ("Mirtogenol", "mirtogenol"),
         ("Minor Cannabinoids", "minor cannabinoids"),
         ("Micronized Purified Flavonoid Fraction", "Diosmin"),
         ("ReceptoMax Precision Release Profile", "receptomax precision release profile"),
