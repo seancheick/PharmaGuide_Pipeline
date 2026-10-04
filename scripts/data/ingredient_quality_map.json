@@ -40033,7 +40033,7 @@
       "generic lactobacillus salivarius": {
         "bio_score": 6,
         "absorption": "variable",
-        "consumer_note": "This label identifies L. salivarius at species level without a strain code.",
+        "consumer_note": "This form provides species-level information. Strain-specific identity and clinical evidence are assessed separately.",
         "consumer_note_review": {
           "by": "Product owner approval",
           "date": "2026-08-08"
@@ -43111,7 +43111,7 @@
       "lactobacillus acidophilus (unspecified)": {
         "bio_score": 11,
         "absorption": "low (live organism class; B18 framework)",
-        "consumer_note": "This label identifies L. acidophilus at species level without a strain code.",
+        "consumer_note": "This form provides species-level information. Strain-specific identity and clinical evidence are assessed separately.",
         "consumer_note_review": {
           "by": "Product owner approval",
           "date": "2026-08-08"
@@ -43336,7 +43336,7 @@
       "bifidobacterium lactis (unspecified)": {
         "bio_score": 11,
         "absorption": "live organism; F = gut survival not classical absorption; CFU dose-dependent",
-        "consumer_note": "This label identifies B. lactis at species level without a strain code.",
+        "consumer_note": "This form provides species-level information. Strain-specific identity and clinical evidence are assessed separately.",
         "consumer_note_review": {
           "by": "Product owner approval",
           "date": "2026-08-08"
@@ -43425,7 +43425,7 @@
       "bifidobacterium animalis subsp. lactis": {
         "bio_score": 12,
         "absorption": "very good",
-        "consumer_note": "This identifies the lactis subspecies of Bifidobacterium animalis without a strain code.",
+        "consumer_note": "This form provides species-level information. Strain-specific identity and clinical evidence are assessed separately.",
         "consumer_note_review": {
           "by": "Product owner approval",
           "date": "2026-08-08"
@@ -43541,7 +43541,7 @@
       "lactobacillus rhamnosus (unspecified)": {
         "bio_score": 10,
         "absorption": "L. rhamnosus; live organism gut-survival F",
-        "consumer_note": "This label identifies L. rhamnosus at species level without a strain code.",
+        "consumer_note": "This form provides species-level information. Strain-specific identity and clinical evidence are assessed separately.",
         "consumer_note_review": {
           "by": "Product owner approval",
           "date": "2026-08-08"
@@ -43732,7 +43732,7 @@
       "lactobacillus plantarum (unspecified)": {
         "bio_score": 9,
         "absorption": "L. plantarum; live organism gut-survival F",
-        "consumer_note": "This label identifies L. plantarum at species level without a strain code.",
+        "consumer_note": "This form provides species-level information. Strain-specific identity and clinical evidence are assessed separately.",
         "consumer_note_review": {
           "by": "Product owner approval",
           "date": "2026-08-08"
@@ -43882,7 +43882,7 @@
       "bifidobacterium longum (unspecified)": {
         "bio_score": 6,
         "absorption": "very good",
-        "consumer_note": "This label identifies B. longum at species level without a strain code.",
+        "consumer_note": "This form provides species-level information. Strain-specific identity and clinical evidence are assessed separately.",
         "consumer_note_review": {
           "by": "Product owner approval",
           "date": "2026-08-08"
@@ -43912,7 +43912,7 @@
       "bifidobacterium longum subsp. infantis": {
         "bio_score": 12,
         "absorption": "very good",
-        "consumer_note": "This identifies the infantis subspecies of Bifidobacterium longum without a strain code.",
+        "consumer_note": "This form provides species-level information. Strain-specific identity and clinical evidence are assessed separately.",
         "consumer_note_review": {
           "by": "Product owner approval",
           "date": "2026-08-08"
@@ -44134,7 +44134,7 @@
       "lactobacillus casei (unspecified)": {
         "bio_score": 10,
         "absorption": "moderate species-level survivability; strain not specified",
-        "consumer_note": "This label identifies L. casei at species level without a strain code.",
+        "consumer_note": "This form provides species-level information. Strain-specific identity and clinical evidence are assessed separately.",
         "consumer_note_review": {
           "by": "Product owner approval",
           "date": "2026-08-08"
@@ -44248,7 +44248,7 @@
       "bifidobacterium bifidum (unspecified)": {
         "bio_score": 10,
         "absorption": "very good",
-        "consumer_note": "This label identifies B. bifidum at species level without a strain code.",
+        "consumer_note": "This form provides species-level information. Strain-specific identity and clinical evidence are assessed separately.",
         "consumer_note_review": {
           "by": "Product owner approval",
           "date": "2026-08-08"
@@ -44365,7 +44365,7 @@
       "saccharomyces boulardii (unspecified)": {
         "bio_score": 11,
         "absorption": "good organism-level survivability; strain not specified",
-        "consumer_note": "This label identifies S. boulardii at species level without a strain or deposit code.",
+        "consumer_note": "This form provides species-level information. Strain-specific identity and clinical evidence are assessed separately.",
         "consumer_note_review": {
           "by": "Product owner approval",
           "date": "2026-08-08"
@@ -44441,7 +44441,7 @@
       "lactobacillus paracasei (unspecified)": {
         "bio_score": 10,
         "absorption": "moderate species-level survivability; strain not specified",
-        "consumer_note": "This label identifies L. paracasei at species level without a strain code.",
+        "consumer_note": "This form provides species-level information. Strain-specific identity and clinical evidence are assessed separately.",
         "consumer_note_review": {
           "by": "Product owner approval",
           "date": "2026-08-08"
@@ -44552,7 +44552,7 @@
         ],
         "bio_score": 10,
         "absorption": "unknown",
-        "consumer_note": "This label identifies S. thermophilus at species level without a strain code.",
+        "consumer_note": "This form provides species-level information. Strain-specific identity and clinical evidence are assessed separately.",
         "consumer_note_review": {
           "by": "Product owner approval",
           "date": "2026-08-08"
@@ -64964,7 +64964,7 @@
       "streptococcus salivarius (unspecified)": {
         "bio_score": 10,
         "absorption": "moderate species-level survivability; strain not specified",
-        "consumer_note": "This label identifies S. salivarius at species level without a strain code.",
+        "consumer_note": "This form provides species-level information. Strain-specific identity and clinical evidence are assessed separately.",
         "consumer_note_review": {
           "by": "Product owner approval",
           "date": "2026-08-08"
@@ -65022,7 +65022,7 @@
       "lactobacillus reuteri (unspecified)": {
         "bio_score": 10,
         "absorption": "moderate species-level survivability; strain not specified",
-        "consumer_note": "This label identifies L. reuteri at species level without a strain code.",
+        "consumer_note": "This form provides species-level information. Strain-specific identity and clinical evidence are assessed separately.",
         "consumer_note_review": {
           "by": "Product owner approval",
           "date": "2026-08-08"
@@ -65158,7 +65158,7 @@
       "lactobacillus gasseri (unspecified)": {
         "bio_score": 10,
         "absorption": "moderate species-level survivability; strain not specified",
-        "consumer_note": "This label identifies L. gasseri at species level without a strain code.",
+        "consumer_note": "This form provides species-level information. Strain-specific identity and clinical evidence are assessed separately.",
         "consumer_note_review": {
           "by": "Product owner approval",
           "date": "2026-08-08"
@@ -65219,7 +65219,7 @@
       "lactobacillus helveticus (unspecified)": {
         "bio_score": 11,
         "absorption": "good",
-        "consumer_note": "This label identifies L. helveticus at species level without a strain code.",
+        "consumer_note": "This form provides species-level information. Strain-specific identity and clinical evidence are assessed separately.",
         "consumer_note_review": {
           "by": "Product owner approval",
           "date": "2026-08-08"
@@ -65285,7 +65285,7 @@
       "lactobacillus fermentum (unspecified)": {
         "bio_score": 11,
         "absorption": "good",
-        "consumer_note": "This label identifies L. fermentum at species level without a strain code.",
+        "consumer_note": "This form provides species-level information. Strain-specific identity and clinical evidence are assessed separately.",
         "consumer_note_review": {
           "by": "Product owner approval",
           "date": "2026-08-08"
@@ -65370,7 +65370,7 @@
       "bifidobacterium breve (unspecified)": {
         "bio_score": 10,
         "absorption": "moderate species-level survivability; strain not specified",
-        "consumer_note": "This label identifies B. breve at species level without a strain code.",
+        "consumer_note": "This form provides species-level information. Strain-specific identity and clinical evidence are assessed separately.",
         "consumer_note_review": {
           "by": "Product owner approval",
           "date": "2026-08-08"
@@ -65604,7 +65604,7 @@
       "bacillus subtilis (unspecified)": {
         "bio_score": 10,
         "absorption": "good spore survivability; strain not specified",
-        "consumer_note": "This label identifies B. subtilis at species level without a strain code.",
+        "consumer_note": "This form provides species-level information. Strain-specific identity and clinical evidence are assessed separately.",
         "consumer_note_review": {
           "by": "Product owner approval",
           "date": "2026-08-08"
@@ -65696,7 +65696,7 @@
       "bacillus clausii (unspecified)": {
         "bio_score": 11,
         "absorption": "good spore survivability; strain not specified",
-        "consumer_note": "This label identifies B. clausii at species level without a strain code.",
+        "consumer_note": "This form provides species-level information. Strain-specific identity and clinical evidence are assessed separately.",
         "consumer_note_review": {
           "by": "Product owner approval",
           "date": "2026-08-08"
@@ -65754,7 +65754,7 @@
       "bacillus indicus (unspecified)": {
         "bio_score": 11,
         "absorption": "very good",
-        "consumer_note": "This label identifies B. indicus at species level without a strain code.",
+        "consumer_note": "This form provides species-level information. Strain-specific identity and clinical evidence are assessed separately.",
         "consumer_note_review": {
           "by": "Product owner approval",
           "date": "2026-08-08"
@@ -69955,7 +69955,7 @@
       "lactobacillus brevis (unspecified)": {
         "bio_score": 8,
         "absorption": "gut colonization",
-        "consumer_note": "This label identifies L. brevis at species level without a strain code.",
+        "consumer_note": "This form provides species-level information. Strain-specific identity and clinical evidence are assessed separately.",
         "consumer_note_review": {
           "by": "Product owner approval",
           "date": "2026-08-08"
@@ -70030,7 +70030,7 @@
       "lactobacillus kefiranofaciens (unspecified)": {
         "bio_score": 7,
         "absorption": "gut colonization",
-        "consumer_note": "This label identifies L. kefiranofaciens at species level without a strain code.",
+        "consumer_note": "This form provides species-level information. Strain-specific identity and clinical evidence are assessed separately.",
         "consumer_note_review": {
           "by": "Product owner approval",
           "date": "2026-08-08"
@@ -70095,7 +70095,7 @@
       "lactobacillus kefirgranum (unspecified)": {
         "bio_score": 7,
         "absorption": "gut colonization",
-        "consumer_note": "This label identifies L. kefirgranum at species level without a strain code.",
+        "consumer_note": "This form provides species-level information. Strain-specific identity and clinical evidence are assessed separately.",
         "consumer_note_review": {
           "by": "Product owner approval",
           "date": "2026-08-08"
@@ -70158,7 +70158,7 @@
       "lactobacillus parakefir (unspecified)": {
         "bio_score": 7,
         "absorption": "gut colonization",
-        "consumer_note": "This label identifies L. parakefir at species level without a strain code.",
+        "consumer_note": "This form provides species-level information. Strain-specific identity and clinical evidence are assessed separately.",
         "consumer_note_review": {
           "by": "Product owner approval",
           "date": "2026-08-08"
@@ -70221,7 +70221,7 @@
       "lactococcus cremoris (unspecified)": {
         "bio_score": 7,
         "absorption": "gut colonization",
-        "consumer_note": "This label identifies Lactococcus cremoris at species level without a strain code.",
+        "consumer_note": "This form provides species-level information. Strain-specific identity and clinical evidence are assessed separately.",
         "consumer_note_review": {
           "by": "Product owner approval",
           "date": "2026-08-08"
@@ -70289,7 +70289,7 @@
       "leuconostoc mesenteroides (unspecified)": {
         "bio_score": 7,
         "absorption": "gut colonization",
-        "consumer_note": "This label identifies Leuconostoc mesenteroides at species level without a strain code.",
+        "consumer_note": "This form provides species-level information. Strain-specific identity and clinical evidence are assessed separately.",
         "consumer_note_review": {
           "by": "Product owner approval",
           "date": "2026-08-08"
@@ -70352,7 +70352,7 @@
       "leuconostoc lactis (unspecified)": {
         "bio_score": 7,
         "absorption": "gut colonization",
-        "consumer_note": "This label identifies Leuconostoc lactis at species level without a strain code.",
+        "consumer_note": "This form provides species-level information. Strain-specific identity and clinical evidence are assessed separately.",
         "consumer_note_review": {
           "by": "Product owner approval",
           "date": "2026-08-08"
@@ -70415,7 +70415,7 @@
       "leuconostoc cremoris (unspecified)": {
         "bio_score": 7,
         "absorption": "gut colonization",
-        "consumer_note": "This label identifies Leuconostoc cremoris at species level without a strain code.",
+        "consumer_note": "This form provides species-level information. Strain-specific identity and clinical evidence are assessed separately.",
         "consumer_note_review": {
           "by": "Product owner approval",
           "date": "2026-08-08"
@@ -70478,7 +70478,7 @@
       "kluyveromyces marxianus (unspecified)": {
         "bio_score": 7,
         "absorption": "gut colonization",
-        "consumer_note": "This label identifies the yeast Kluyveromyces marxianus at species level without a strain code.",
+        "consumer_note": "This form provides species-level information. Strain-specific identity and clinical evidence are assessed separately.",
         "consumer_note_review": {
           "by": "Product owner approval",
           "date": "2026-08-08"
@@ -70540,7 +70540,7 @@
       "brettanomyces anomalus (unspecified)": {
         "bio_score": 7,
         "absorption": "gut colonization",
-        "consumer_note": "This label identifies the yeast Brettanomyces anomalus at species level without a strain code.",
+        "consumer_note": "This form provides species-level information. Strain-specific identity and clinical evidence are assessed separately.",
         "consumer_note_review": {
           "by": "Product owner approval",
           "date": "2026-08-08"
@@ -70603,7 +70603,7 @@
       "debaryomyces hansenii (unspecified)": {
         "bio_score": 7,
         "absorption": "gut colonization",
-        "consumer_note": "This label identifies the yeast Debaryomyces hansenii at species level without a strain code.",
+        "consumer_note": "This form provides species-level information. Strain-specific identity and clinical evidence are assessed separately.",
         "consumer_note_review": {
           "by": "Product owner approval",
           "date": "2026-08-08"
@@ -70665,7 +70665,7 @@
       "saccharomyces unisporus (unspecified)": {
         "bio_score": 7,
         "absorption": "gut colonization",
-        "consumer_note": "This label identifies the yeast Saccharomyces unisporus at species level without a strain code.",
+        "consumer_note": "This form provides species-level information. Strain-specific identity and clinical evidence are assessed separately.",
         "consumer_note_review": {
           "by": "Product owner approval",
           "date": "2026-08-08"
@@ -70728,7 +70728,7 @@
       "saccharomyces turicensis (unspecified)": {
         "bio_score": 7,
         "absorption": "gut colonization",
-        "consumer_note": "This label identifies the yeast Saccharomyces turicensis at species level without a strain code.",
+        "consumer_note": "This form provides species-level information. Strain-specific identity and clinical evidence are assessed separately.",
         "consumer_note_review": {
           "by": "Product owner approval",
           "date": "2026-08-08"
@@ -70792,7 +70792,7 @@
       "saccharomyces exiguus (unspecified)": {
         "bio_score": 7,
         "absorption": "gut colonization",
-        "consumer_note": "This label identifies the yeast Saccharomyces exiguus at species level without a strain code.",
+        "consumer_note": "This form provides species-level information. Strain-specific identity and clinical evidence are assessed separately.",
         "consumer_note_review": {
           "by": "Product owner approval",
           "date": "2026-08-08"
@@ -70857,7 +70857,7 @@
       "torulaspora delbrueckii (unspecified)": {
         "bio_score": 7,
         "absorption": "gut colonization",
-        "consumer_note": "This label identifies the yeast Torulaspora delbrueckii at species level without a strain code.",
+        "consumer_note": "This form provides species-level information. Strain-specific identity and clinical evidence are assessed separately.",
         "consumer_note_review": {
           "by": "Product owner approval",
           "date": "2026-08-08"
@@ -70919,7 +70919,7 @@
       "leuconostoc dextranicum (unspecified)": {
         "bio_score": 7,
         "absorption": "gut colonization",
-        "consumer_note": "This label identifies Leuconostoc dextranicum at species level without a strain code.",
+        "consumer_note": "This form provides species-level information. Strain-specific identity and clinical evidence are assessed separately.",
         "consumer_note_review": {
           "by": "Product owner approval",
           "date": "2026-08-08"
@@ -70982,7 +70982,7 @@
       "lactobacillus kefir (unspecified)": {
         "bio_score": 7,
         "absorption": "gut colonization",
-        "consumer_note": "This label identifies L. kefir at species level without a strain code.",
+        "consumer_note": "This form provides species-level information. Strain-specific identity and clinical evidence are assessed separately.",
         "consumer_note_review": {
           "by": "Product owner approval",
           "date": "2026-08-08"
@@ -71045,7 +71045,7 @@
       "lactobacillus bulgaricus (unspecified)": {
         "bio_score": 9,
         "absorption": "gut colonization",
-        "consumer_note": "This label identifies L. bulgaricus at species level without a strain code.",
+        "consumer_note": "This form provides species-level information. Strain-specific identity and clinical evidence are assessed separately.",
         "consumer_note_review": {
           "by": "Product owner approval",
           "date": "2026-08-08"
@@ -71168,7 +71168,7 @@
       "lactococcus lactis (unspecified)": {
         "bio_score": 8,
         "absorption": "moderate colonization (~50%)",
-        "consumer_note": "This label identifies Lactococcus lactis at species level without a strain code.",
+        "consumer_note": "This form provides species-level information. Strain-specific identity and clinical evidence are assessed separately.",
         "consumer_note_review": {
           "by": "Product owner approval",
           "date": "2026-08-08"
@@ -71221,7 +71221,7 @@
       "lactobacillus crispatus (unspecified)": {
         "bio_score": 9,
         "absorption": "moderate colonization vagina/gut",
-        "consumer_note": "This label identifies L. crispatus at species level without a strain code.",
+        "consumer_note": "This form provides species-level information. Strain-specific identity and clinical evidence are assessed separately.",
         "consumer_note_review": {
           "by": "Product owner approval",
           "date": "2026-08-08"
@@ -71270,7 +71270,7 @@
       "lactobacillus jensenii (unspecified)": {
         "bio_score": 7,
         "absorption": "moderate vaginal colonization",
-        "consumer_note": "This label identifies L. jensenii at species level without a strain code.",
+        "consumer_note": "This form provides species-level information. Strain-specific identity and clinical evidence are assessed separately.",
         "consumer_note_review": {
           "by": "Product owner approval",
           "date": "2026-08-08"
@@ -71319,7 +71319,7 @@
       "pediococcus pentosaceus (unspecified)": {
         "bio_score": 7,
         "absorption": "moderate gut colonization",
-        "consumer_note": "This label identifies Pediococcus pentosaceus at species level without a strain code.",
+        "consumer_note": "This form provides species-level information. Strain-specific identity and clinical evidence are assessed separately.",
         "consumer_note_review": {
           "by": "Product owner approval",
           "date": "2026-08-08"

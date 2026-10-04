@@ -486,3 +486,22 @@ def test_export_resolves_the_axis_from_the_owning_form():
         "form_evidence_axis"
     ]
     assert _derive_form_evidence(_match(), no_axis) is None
+
+
+def test_species_fallback_note_does_not_claim_the_label_omits_a_printed_strain():
+    """A scoring-form fallback is not a determination about the printed label."""
+    import json
+
+    iqm = json.loads((Path(__file__).parents[1] / "data/ingredient_quality_map.json").read_text())
+    match = {
+        "canonical_id": "lactobacillus_reuteri",
+        "matched_form": "lactobacillus reuteri (unspecified)",
+        "bio_score": 10.0,
+        "matched_forms": [],
+        "source_label_form": "Lactobacillus reuteri NCIMB 30242",
+    }
+    note, _ = _derive_form_note(match, iqm)
+    assert note
+    assert "This label" not in note
+    assert "without a strain" not in note
+    assert "species" in note.lower()
