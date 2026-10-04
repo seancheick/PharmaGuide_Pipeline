@@ -19,7 +19,10 @@ A release is Sean's decision (AGENTS.md); run it only when asked.
 cd /Users/seancheick/Downloads/dsld_clean && git status -s && git log --oneline -3
 ```
 
-Stop and ask if the tree is dirty in `scripts/` — a release off uncommitted data is unreproducible.
+Do not build a release from uncommitted runtime/data edits. Inspect who owns dirty paths:
+finish and commit your authorized batch, or preserve another agent's work and wait for its source
+handoff. Documentation-only or unrelated changes do not justify a new approval question, reset,
+stash or pipeline run. Ask Sean only for a genuinely missing decision/authorization.
 
 ```bash
 bash scripts/test.sh release

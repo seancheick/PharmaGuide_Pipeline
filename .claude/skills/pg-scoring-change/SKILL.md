@@ -53,7 +53,9 @@ skill covers the steps.
    not blindly revert a source-grounded correction merely because old output differs.
    Reuse bounded captures within the batch; the final corpus comparison belongs to the one
    necessary post-batch run, not an additional measurement pipeline. Run one corpus job at a time.
-7. **Fresh-context review.** Give a reviewer only the requirement, the matrix owner, the diff and
+7. **Fresh-context review once per completed output-changing batch.** Do not restart review for
+   every atomic commit or re-review unchanged code when only documentation changed. Give a
+   reviewer only the requirement, the matrix owner, the diff and
    the measured deltas. It must answer: does the diff add a new name? Does a near-name already exist
    (`rg` the stem in `scripts/` and `/Users/seancheick/PharmaGuide ai/lib`)?
 8. **Tests.** Follow the targeted fix loop in `AGENTS.md`: explicit failing node first, then its
