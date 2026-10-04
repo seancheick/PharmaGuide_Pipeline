@@ -642,7 +642,6 @@ Preserved master-plan audit1c7e5383 reconciled into existing master/roadmap/LEDG
 - Regression failed before fix; named input-fingerprint test file20passed1.77s after fix, including real-reference change rejection. Review/CI/local/integration pending. Clean code fingerprint changes, so corrected exact source requires one full pipeline regeneration; Enrich/Score code stamps unchanged. Final release/app verification remains open.
 
 
-<<<<<<< HEAD
 ## October 4 — independent audit of Claude dose/UL and safety benchmark batches
 
 - [x] Verify landed batches against current main6ea851dc: ef893234 dose/UL source, caption/aggregation and exact copper correction changes; dd2769ad declared-nutrient conversion, safety reason and Mirtogenol/gold tests. No scorer, status, threshold or clinical policy added by this audit.
@@ -654,7 +653,7 @@ Preserved master-plan audit1c7e5383 reconciled into existing master/roadmap/LEDG
 - [x] Measure projection on15459local stored records/96files:107reasonchanges (43caution dose explanations:42ordinary/onecritical;64advisory fallback reorders). This is not a frozen complete shipped-corpus census. Frozen9raw-label replay versus6ea851dc has identical captured scores/pillars/roles/routes/statuses/safety-gate/dose-safety objects; the replay capture omits safety_signal_reason, so its separate projection census and scored regressions verify that field.
 - [x] Reason-only exact branch CI37210341807 passed at e6937db5.
 - [x] Combined Vitamin E source candidate103b699e pipelineCI and final local checkpoint passed (receipts below); earlier pre-edit queue stopped without a pass.
-- [ ] Integrate through the existing release integrator after candidate reconciliation. Main6ea851dc is validating a frozen release candidate; audit changes were kept isolated. A new source integration requires current provenance and candidate freeze, never silent publication.
+- [x] Integrate the audited changes on Sean's explicit instruction: pipelinefed96040/app3553342c pushed to main after exactCI. Prior6ea851dc catalog receipts remain historical; new source requires a fresh candidate freeze, never silent publication.
 
 Owner: scripts/unit_converter.py::UnitConverter.convert_nutrient / _find_conversion_rule; existing enricher RDA/UL producer; scripts/scoring_v4/gate_safety.py::stated_safety_signal; canonical reference sync; existing curated corrections and gold fixtures. Evidence: source diffs/callers, live primary texts/PDFs, fail-first production tests, frozen replay and independent review. Will NOT create: another scorer/converter/reason selector, public field/status, registry or scoring policy. Receipts: /Users/seancheick/pg_quality/claude_dose_safety_audit_20261004/; audit preserved active release/app files; subsequent main integration is recorded above.
 
@@ -671,16 +670,22 @@ Next: finish exact release/full/app gates and individually explain frozen catalo
 - [x] Local corpus checkpoint at103b699e:527passed24declaredoptional skips136.74s; skip guard passed. An earlier attempt terminated with SIGTERM near completion and is retained as an interruption, not a pass or assertion defect.
 - [x] Combined pipeline CI37214645369 passed on exact103b699e (all4groups), covering final runtime/data source27d9b751.
 - [x] Whole-app CI37214557986 passed at3553342c/draftPR92:analysis,CI-scoped tests and changed-Dart formatting green. Bundle/device/candidate-release acceptance remains separate.
-- [ ] Latest docs-only pipeline branch tip requires exact CI before main integration; runtime/data are unchanged from green103b699e and the passing local checkpoint. Earlier reason-only CI37210341807 passed at e6937db5; final combined CI37214645369 at103b699e separately validates the Vitamin E extension. The initial local queue was stopped before source edits. After the main lane's exclusive full process exited, the audit local checkpoint ran and passed as recorded above; no competing broad suite was started.
-- [ ] Integrate both reviewed branches through the existing integrator, run fresh corpus from Enrich after integration, rebuild/check the app catalog, then freeze and review the new candidate. Existing6ea851dc release artifacts do not validate this correction. No catalog publication occurred; app main integration is recorded above.
+- [x] Exact final branchCI37215506742 passed atfed96040; pipeline main fast-forwarded/pushed tofed96040 and app main3553342c on Sean's explicit instruction. Runtime/data unchanged from green103b699e/local; integration complete, release validation remains open. Earlier reason-only CI37210341807 passed at e6937db5; final combined CI37214645369 at103b699e separately validates the Vitamin E extension. The initial local queue was stopped before source edits. After the main lane's exclusive full process exited, the audit local checkpoint ran and passed as recorded above; no competing broad suite was started.
+- [x] Both reviewed branches merged/pushed to main: pipelinefed96040/app3553342c.
+- [ ] Run fresh corpus from Enrich, rebuild/check the app catalog, then freeze and review the new candidate. Existing6ea851dc release artifacts do not validate this correction. No external publication or app-main mutation occurred.
 
 Owner: scripts/unit_converter.py::UnitConverter.convert_nutrient/_ul_exposure_amount; scripts/enrich_supplements_v3.py existing RDA/UL producer and canonical nutrient aggregate; Flutter IngredientRowFields UL readers, StackNutrientAggregator and DoseSafetyHelper. Evidence: live NIH ODS Vitamin E factsheet, source-linked failing regressions, focused receipts, committed frozen replay and consumer tests. Will NOT create: a second form detector/converter, field, clinical registry, scoring/status policy or app scorer. Receipts: /Users/seancheick/pg_quality/claude_dose_safety_audit_20261004/.
 
-Next unchecked work: close this exact-candidate review/CI/local integration checkpoint, then fresh candidate validation and gold coverage for blends/missing data, scoring controls, strain identity and explicit recalls. The three Copper label corrections still need recorded human owner sign-off. A passing226-case benchmark does not close the remaining families or final release.
-=======
+Next unchecked work: fresh candidate validation after completed review/CI/local/integration and gold coverage for blends/missing data, scoring controls, strain identity and explicit recalls. The three Copper label corrections still need recorded human owner sign-off. A passing226-case benchmark does not close the remaining families or final release.
+
+### October 4 — authorized audit integration
+
+- [x] Sean explicitly requested commit/merge/push and own stale-branch cleanup. Pipelinefed96040/app3553342c integrated on main; exact branchCI37215506742/appCI37214557986 green. Local/runtime source/data fingerprints cover final source; no broad test repeated for the documentation-only receipt.
+- [ ] Fresh Enrich→Score/candidate/release and real-device gates remain open. Frozen6ea catalog is historical for the integrated Vitamin E/safety corrections; nothing externally released. Keep the active catalog-form-remediation lane.
+
 ### October 4 — stopped validation and focused failure remediation
 
-Sean requested stopping tests, fixing failures and handing off to another agent. Automation `continue-pharmaguide-validation` is PAUSED. This lane stopped its broad/queued pipeline and Flutter validation processes; no new broad checkpoint, CI, corpus run or publication was started.
+Sean requested stopping tests, fixing failures and handing off to another agent. Automation `continue-pharmaguide-validation` was deleted on Sean’s instruction. This lane stopped its broad/queued pipeline and Flutter validation processes; no new broad checkpoint, CI, corpus run or publication was started.
 
 Owner: existing production `build_final_db::_warning_dedup_key`, `project_export_scored_artifact`, `quality_score::shipped_whole_score`, confidence/Evidence/Dose/preparation owners; edits confined to their existing tests. Evidence: completed full-run trace, current manifest-owned label measurements, source-owner inspection and independent review. Will NOT create: a scorer, warning policy, registry, status, field, duplicate rounding/dedup owner or relaxed scoring policy.
 
@@ -692,7 +697,6 @@ Owner: existing production `build_final_db::_warning_dedup_key`, `project_export
 - Runtime/data/export unchanged from main6ea851dc (git path diff excludes tests/docs and is empty). **No pipeline rerun is required for this batch.** Local commits are saved but not pushed/integrated; no green replacement full suite or completed Flutter check is claimed.
 
 Remaining: next agent reviews/integrates this test/docs batch under Sean's authorization; resumes only requested validation, completes Flutter checks and actual-device audit, and resolves human catalog movement/publication review. Frozen original movement baseline remains authoritative: 3,046 distinct flagged products, including 37 removed caution products. No publication approval fabricated.
->>>>>>> codex/catalog-form-remediation
 
 - [x] Cleanup complete: removed own merged pipeline audit and app consumer branches locally/remotely; removed merged pmc-idconv-retry/sida-cui-release-gate branches locally/remotely and superseded local master-plan-audit branch (preservation receipt already in this ledger). Archived the managed pipeline audit worktree with recoverable snapshot; removed own app worktree after committed-source checks and saved handoffs in durable receipts. Active release lane and independent review worktree were retained.
 - [x] Preserve concurrent Claude9f9a391c correction: three Vitamin E gold basis descriptions now state UL-mass arithmetic directly, with activity labelled separately. Numeric expectations unchanged; final named gold benchmark45passed2.82s. This copy-only correction does not change runtime/data fingerprints or invalidate source measurement.
