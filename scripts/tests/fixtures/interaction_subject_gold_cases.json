@@ -1,0 +1,1617 @@
+{
+ "_metadata": {
+  "description": "Gold benchmark (roadmap 1.10) for interaction-subject reachability: real DSLD label rows through the production enricher must reach the interaction rules their chemistry names.",
+  "expectation_basis": "must_fire lists the rules authored on the ingredient the label row chemically is (chosen from the label, before the enricher ran). must_not_fire pins false-severe controls: a form-scoped or provitamin rule that a different form must not inherit.",
+  "case_count": 55,
+  "last_updated": "2026-10-03"
+ },
+ "cases": [
+  {
+   "id": "st-johns-wort-powder",
+   "dsld_id": "184354",
+   "brand": "Nature's Way",
+   "product": "Relax Powder",
+   "active_ingredients": [
+    {
+     "name": "St. John's Wort",
+     "standardName": "St. John's Wort",
+     "ingredientGroup": "St. John's Wort",
+     "canonical_id": "st_johns_wort",
+     "canonical_source_db": "ingredient_quality_map",
+     "quantity": 150.0,
+     "unit": "mg",
+     "forms": [],
+     "notes": null,
+     "order": 6
+    }
+   ],
+   "must_fire": [
+    "RULE_INGREDIENT_ST_JOHNS_WORT"
+   ],
+   "must_not_fire": []
+  },
+  {
+   "id": "st-johns-wort-hypericin-extract",
+   "dsld_id": "74615",
+   "brand": "GNC Herbal Plus",
+   "product": "St. John's Wort Extract 300 mg",
+   "active_ingredients": [
+    {
+     "name": "St. John's Wort herb extract",
+     "standardName": "St. John's Wort",
+     "ingredientGroup": "St. John's Wort",
+     "canonical_id": "st_john_s_wort",
+     "canonical_source_db": "botanical_ingredients",
+     "quantity": 300.0,
+     "unit": "mg",
+     "forms": [
+      {
+       "name": "Hypericin",
+       "prefix": null,
+       "percent": 0.3
+      }
+     ],
+     "notes": "St. John's Wort herb extract (Form: 0.3% Hypericin Note: = 0.9 mg) PlantPart: herb Genus: Hypericum Species: perforatum ",
+     "order": 1
+    }
+   ],
+   "must_fire": [
+    "RULE_INGREDIENT_ST_JOHNS_WORT"
+   ],
+   "must_not_fire": []
+  },
+  {
+   "id": "ginkgo-leaf-extract",
+   "dsld_id": "330947",
+   "brand": "BulkSupplements.com",
+   "product": "Ginkgo biloba Extract Powder 120 mg",
+   "active_ingredients": [
+    {
+     "name": "Ginkgo biloba Leaf Extract",
+     "standardName": "Ginkgo",
+     "ingredientGroup": "Ginkgo ",
+     "canonical_id": "ginkgo",
+     "canonical_source_db": "ingredient_quality_map",
+     "quantity": 120.0,
+     "unit": "mg",
+     "forms": [
+      {
+       "name": "extract",
+       "prefix": null,
+       "percent": null
+      }
+     ],
+     "notes": "10:1",
+     "order": 1
+    }
+   ],
+   "must_fire": [
+    "RULE_IQM_GINKGO_HYPERTENSION"
+   ],
+   "must_not_fire": []
+  },
+  {
+   "id": "green-tea-leaf-extract",
+   "dsld_id": "252526",
+   "brand": "BulkSupplements.com",
+   "product": "Green Tea Extract (EGCG 50%) 500 mg",
+   "active_ingredients": [
+    {
+     "name": "Green Tea leaf extract",
+     "standardName": "Green Tea Extract",
+     "ingredientGroup": "Green Tea",
+     "canonical_id": "green_tea_extract",
+     "canonical_source_db": "ingredient_quality_map",
+     "quantity": 500.0,
+     "unit": "mg",
+     "forms": [
+      {
+       "name": "EGCG",
+       "prefix": "and",
+       "percent": 50
+      },
+      {
+       "name": "Total Catechins",
+       "prefix": null,
+       "percent": 80
+      },
+      {
+       "name": "total Polyphenols",
+       "prefix": "standardized to contain",
+       "percent": 98
+      }
+     ],
+     "notes": null,
+     "order": 1
+    }
+   ],
+   "must_fire": [
+    "RULE_IQM_GREEN_TEA_HYPERTENSION"
+   ],
+   "must_not_fire": []
+  },
+  {
+   "id": "vitamin-k1-phylloquinone",
+   "dsld_id": "297216",
+   "brand": "CVS Health",
+   "product": "Women's Daily Multivitamin",
+   "active_ingredients": [
+    {
+     "name": "Vitamin K",
+     "standardName": "Vitamin K1",
+     "ingredientGroup": "Vitamin K (unspecified)",
+     "canonical_id": "vitamin_k1",
+     "canonical_source_db": "ingredient_quality_map",
+     "quantity": 50.0,
+     "unit": "mcg",
+     "forms": [
+      {
+       "name": "Phylloquinone",
+       "prefix": null,
+       "percent": null
+      }
+     ],
+     "notes": null,
+     "order": 5
+    }
+   ],
+   "must_fire": [
+    "RULE_INGREDIENT_VITAMIN_K"
+   ],
+   "must_not_fire": [
+    "RULE_IQM_VITAMIN_K_MK7_FORM_ONLY"
+   ]
+  },
+  {
+   "id": "vitamin-k2-mk7",
+   "dsld_id": "294331",
+   "brand": "BulkSupplements.com",
+   "product": "Vitamin K2 1% (MK-7)",
+   "active_ingredients": [
+    {
+     "name": "Vitamin K2",
+     "standardName": "Vitamin K2",
+     "ingredientGroup": "Vitamin K",
+     "canonical_id": "vitamin_k2",
+     "canonical_source_db": "ingredient_quality_map",
+     "quantity": 100.0,
+     "unit": "mcg",
+     "forms": [
+      {
+       "name": "Menaquinone-7",
+       "prefix": null,
+       "percent": null
+      }
+     ],
+     "notes": null,
+     "order": 1
+    }
+   ],
+   "must_fire": [
+    "RULE_INGREDIENT_VITAMIN_K",
+    "RULE_IQM_VITAMIN_K_MK7_FORM_ONLY"
+   ],
+   "must_not_fire": []
+  },
+  {
+   "id": "vitamin-k2-mk4",
+   "dsld_id": "182362",
+   "brand": "Life Extension",
+   "product": "Super K with Advanced K2 Complex",
+   "active_ingredients": [
+    {
+     "name": "Vitamin K2",
+     "standardName": "Vitamin K2",
+     "ingredientGroup": "Vitamin K (menaquinone)",
+     "canonical_id": "vitamin_k2",
+     "canonical_source_db": "ingredient_quality_map",
+     "quantity": 1000.0,
+     "unit": "mcg",
+     "forms": [
+      {
+       "name": "Menaquinone-4",
+       "prefix": "as",
+       "percent": null
+      }
+     ],
+     "notes": "Vitamin K2 (Form: as Menaquinone-4) ",
+     "order": 4
+    }
+   ],
+   "must_fire": [
+    "RULE_INGREDIENT_VITAMIN_K"
+   ],
+   "must_not_fire": [
+    "RULE_IQM_VITAMIN_K_MK7_FORM_ONLY"
+   ]
+  },
+  {
+   "id": "vitamin-e",
+   "dsld_id": "178352",
+   "brand": "Airborne Plus",
+   "product": "Beta-Immune Booster Zesty Orange",
+   "active_ingredients": [
+    {
+     "name": "Vitamin E",
+     "standardName": "Vitamin E",
+     "ingredientGroup": "Vitamin E",
+     "canonical_id": "vitamin_e",
+     "canonical_source_db": "ingredient_quality_map",
+     "quantity": 13.5,
+     "unit": "mg",
+     "forms": [
+      {
+       "name": "DL-Alpha-Tocopheryl Acetate",
+       "prefix": null,
+       "percent": null
+      }
+     ],
+     "notes": "Vitamin E (Form: as DL-Alpha Tocopheryl Acetate) ",
+     "order": 5
+    }
+   ],
+   "must_fire": [
+    "RULE_IQM_VITAMIN_E_PREGNANCY_EXCESS"
+   ],
+   "must_not_fire": []
+  },
+  {
+   "id": "vitamin-a-retinyl",
+   "dsld_id": "294348",
+   "brand": "BulkSupplements.com",
+   "product": "Vitamin A Softgels 25000 IU",
+   "active_ingredients": [
+    {
+     "name": "Vitamin A",
+     "standardName": "Vitamin A",
+     "ingredientGroup": "Vitamin A",
+     "canonical_id": "vitamin_a",
+     "canonical_source_db": "ingredient_quality_map",
+     "quantity": 7500.0,
+     "unit": "mcg RAE",
+     "forms": [
+      {
+       "name": "Retinyl Palmitate",
+       "prefix": null,
+       "percent": null
+      }
+     ],
+     "notes": null,
+     "order": 1
+    }
+   ],
+   "must_fire": [
+    "RULE_IQM_VITAMIN_A_PREGNANCY_DOSE"
+   ],
+   "must_not_fire": [
+    "RULE_IQM_VITAMIN_A_BETA_CAROTENE_LUNG_CANCER"
+   ]
+  },
+  {
+   "id": "beta-carotene-alone",
+   "dsld_id": "178767",
+   "brand": "Spring Valley",
+   "product": "Adults And Children 3+ Gummies Vitamin C Supplement 180 mg Natural Orange Extract Flavor",
+   "active_ingredients": [
+    {
+     "name": "Beta-Carotene",
+     "standardName": "Beta-Carotene",
+     "ingredientGroup": "Vitamin A",
+     "canonical_id": "beta_carotene",
+     "canonical_source_db": "ingredient_quality_map",
+     "quantity": 90.0,
+     "unit": "IU",
+     "forms": [
+      {
+       "name": "beta-carotene",
+       "prefix": null,
+       "percent": null
+      }
+     ],
+     "notes": null,
+     "order": 7
+    }
+   ],
+   "must_fire": [
+    "RULE_IQM_BETA_CAROTENE_LUNG_CANCER"
+   ],
+   "must_not_fire": [
+    "RULE_IQM_VITAMIN_A_PREGNANCY_DOSE"
+   ]
+  },
+  {
+   "id": "vitamin-d",
+   "dsld_id": "240372",
+   "brand": "Airborne",
+   "product": "Airborne Elderberry",
+   "active_ingredients": [
+    {
+     "name": "Vitamin D",
+     "standardName": "Vitamin D",
+     "ingredientGroup": "Vitamin D",
+     "canonical_id": "vitamin_d",
+     "canonical_source_db": "ingredient_quality_map",
+     "quantity": 6.3,
+     "unit": "mcg",
+     "forms": [
+      {
+       "name": "Cholecalciferol",
+       "prefix": null,
+       "percent": null
+      }
+     ],
+     "notes": "Vitamin D (Form: as Cholecalciferol) ",
+     "order": 6
+    }
+   ],
+   "must_fire": [
+    "RULE_INGREDIENT_VITAMIN_D"
+   ],
+   "must_not_fire": []
+  },
+  {
+   "id": "iron-bisglycinate",
+   "dsld_id": "299926",
+   "brand": "MegaFood",
+   "product": "Blood Builder Iron",
+   "active_ingredients": [
+    {
+     "name": "Iron",
+     "standardName": "Iron",
+     "ingredientGroup": "Iron",
+     "canonical_id": "iron",
+     "canonical_source_db": "ingredient_quality_map",
+     "quantity": 26.0,
+     "unit": "mg",
+     "forms": [
+      {
+       "name": "Iron Bisglycinate",
+       "prefix": null,
+       "percent": null
+      }
+     ],
+     "notes": "fermented",
+     "order": 5
+    }
+   ],
+   "must_fire": [
+    "RULE_IQM_IRON_HYPERTENSION"
+   ],
+   "must_not_fire": []
+  },
+  {
+   "id": "calcium-carbonate",
+   "dsld_id": "294476",
+   "brand": "BulkSupplements.com",
+   "product": "Calcium Carbonate & Vitamin D3 Softgels",
+   "active_ingredients": [
+    {
+     "name": "Calcium",
+     "standardName": "Calcium",
+     "ingredientGroup": "Calcium",
+     "canonical_id": "calcium",
+     "canonical_source_db": "ingredient_quality_map",
+     "quantity": 480.0,
+     "unit": "mg",
+     "forms": [
+      {
+       "name": "Calcium Carbonate",
+       "prefix": null,
+       "percent": null
+      }
+     ],
+     "notes": null,
+     "order": 2
+    }
+   ],
+   "must_fire": [
+    "RULE_IQM_CALCIUM"
+   ],
+   "must_not_fire": []
+  },
+  {
+   "id": "magnesium-oxide",
+   "dsld_id": "178352",
+   "brand": "Airborne Plus",
+   "product": "Beta-Immune Booster Zesty Orange",
+   "active_ingredients": [
+    {
+     "name": "Magnesium",
+     "standardName": "Magnesium",
+     "ingredientGroup": "Magnesium",
+     "canonical_id": "magnesium",
+     "canonical_source_db": "ingredient_quality_map",
+     "quantity": 40.0,
+     "unit": "mg",
+     "forms": [
+      {
+       "name": "Magnesium Oxide",
+       "prefix": "as",
+       "percent": null
+      },
+      {
+       "name": "Magnesium Sulfate",
+       "prefix": "and",
+       "percent": null
+      }
+     ],
+     "notes": "Magnesium (Form: as Magnesium Oxide, and Magnesium Sulfate) ",
+     "order": 6
+    }
+   ],
+   "must_fire": [
+    "RULE_IQM_MAGNESIUM_HYPERTENSION"
+   ],
+   "must_not_fire": []
+  },
+  {
+   "id": "potassium",
+   "dsld_id": "178352",
+   "brand": "Airborne Plus",
+   "product": "Beta-Immune Booster Zesty Orange",
+   "active_ingredients": [
+    {
+     "name": "Potassium",
+     "standardName": "Potassium",
+     "ingredientGroup": "Potassium",
+     "canonical_id": "potassium",
+     "canonical_source_db": "ingredient_quality_map",
+     "quantity": 210.0,
+     "unit": "mg",
+     "forms": [
+      {
+       "name": "Potassium Bicarbonate",
+       "prefix": "from",
+       "percent": null
+      },
+      {
+       "name": "Saccharomyces cerevisiae",
+       "prefix": "and",
+       "percent": null
+      }
+     ],
+     "notes": "Potassium (Form: from Potassium Bicarbonate, and Saccharomyces cerevisiae Genus: Saccharomyces Species: cerevisiae) ",
+     "order": 11
+    }
+   ],
+   "must_fire": [
+    "RULE_IQM_POTASSIUM_HYPERTENSION"
+   ],
+   "must_not_fire": []
+  },
+  {
+   "id": "zinc-picolinate",
+   "dsld_id": "294316",
+   "brand": "BulkSupplements.com",
+   "product": "Zinc Picolinate",
+   "active_ingredients": [
+    {
+     "name": "Zinc",
+     "standardName": "Zinc",
+     "ingredientGroup": "Zinc",
+     "canonical_id": "zinc",
+     "canonical_source_db": "ingredient_quality_map",
+     "quantity": 11.0,
+     "unit": "mg",
+     "forms": [
+      {
+       "name": "Zinc Picolinate",
+       "prefix": null,
+       "percent": null
+      }
+     ],
+     "notes": null,
+     "order": 1
+    }
+   ],
+   "must_fire": [
+    "RULE_IQM_ZINC"
+   ],
+   "must_not_fire": []
+  },
+  {
+   "id": "selenium",
+   "dsld_id": "230157",
+   "brand": "OLLY",
+   "product": "Flawless Complexion Berry Fresh",
+   "active_ingredients": [
+    {
+     "name": "Selenium",
+     "standardName": "Selenium",
+     "ingredientGroup": "Selenium",
+     "canonical_id": "selenium",
+     "canonical_source_db": "ingredient_quality_map",
+     "quantity": 75.0,
+     "unit": "mcg",
+     "forms": [
+      {
+       "name": "Selenomethionine",
+       "prefix": null,
+       "percent": null
+      }
+     ],
+     "notes": "Selenium (Form: as Selenomethionine) ",
+     "order": 10
+    }
+   ],
+   "must_fire": [
+    "RULE_IQM_SELENIUM"
+   ],
+   "must_not_fire": []
+  },
+  {
+   "id": "copper",
+   "dsld_id": "252568",
+   "brand": "BulkSupplements.com",
+   "product": "Copper Gluconate",
+   "active_ingredients": [
+    {
+     "name": "Copper",
+     "standardName": "Copper",
+     "ingredientGroup": "Copper",
+     "canonical_id": "copper",
+     "canonical_source_db": "ingredient_quality_map",
+     "quantity": 2.0,
+     "unit": "mg",
+     "forms": [
+      {
+       "name": "Copper Gluconate",
+       "prefix": "as",
+       "percent": null
+      }
+     ],
+     "notes": null,
+     "order": 1
+    }
+   ],
+   "must_fire": [
+    "RULE_IQM_COPPER_LIVER"
+   ],
+   "must_not_fire": []
+  },
+  {
+   "id": "manganese",
+   "dsld_id": "178352",
+   "brand": "Airborne Plus",
+   "product": "Beta-Immune Booster Zesty Orange",
+   "active_ingredients": [
+    {
+     "name": "Manganese",
+     "standardName": "Manganese",
+     "ingredientGroup": "Manganese",
+     "canonical_id": "manganese",
+     "canonical_source_db": "ingredient_quality_map",
+     "quantity": 0.5,
+     "unit": "mg",
+     "forms": [
+      {
+       "name": "Manganese Gluconate",
+       "prefix": "as",
+       "percent": null
+      }
+     ],
+     "notes": "Manganese (Form: as Manganese Gluconate) ",
+     "order": 9
+    }
+   ],
+   "must_fire": [
+    "RULE_IQM_MANGANESE_LIVER"
+   ],
+   "must_not_fire": []
+  },
+  {
+   "id": "chromium",
+   "dsld_id": "329969",
+   "brand": "BulkSupplements.com",
+   "product": "Chromium Picolinate Powder 200 mcg",
+   "active_ingredients": [
+    {
+     "name": "Chromium",
+     "standardName": "Chromium",
+     "ingredientGroup": "Chromium",
+     "canonical_id": "chromium",
+     "canonical_source_db": "ingredient_quality_map",
+     "quantity": 200.0,
+     "unit": "mcg",
+     "forms": [
+      {
+       "name": "Chromium Picolinate",
+       "prefix": null,
+       "percent": null
+      }
+     ],
+     "notes": null,
+     "order": 1
+    }
+   ],
+   "must_fire": [
+    "RULE_IQM_CHROMIUM_GLUCOSE"
+   ],
+   "must_not_fire": []
+  },
+  {
+   "id": "iodine",
+   "dsld_id": "239580",
+   "brand": "CVS Health",
+   "product": "Children's Jelly Bean Multivitamin",
+   "active_ingredients": [
+    {
+     "name": "Iodine",
+     "standardName": "Iodine",
+     "ingredientGroup": "Iodine",
+     "canonical_id": "iodine",
+     "canonical_source_db": "ingredient_quality_map",
+     "quantity": 42.0,
+     "unit": "mcg",
+     "forms": [
+      {
+       "name": "Potassium Iodide",
+       "prefix": "as",
+       "percent": null
+      }
+     ],
+     "notes": "Iodine (Form: as Potassium Iodide) ",
+     "order": 12
+    }
+   ],
+   "must_fire": [
+    "RULE_IQM_IODINE_PREGNANCY_EXCESS"
+   ],
+   "must_not_fire": []
+  },
+  {
+   "id": "coq10",
+   "dsld_id": "329976",
+   "brand": "BulkSupplements.com",
+   "product": "Coenzyme Q10 Softgels 100 mg",
+   "active_ingredients": [
+    {
+     "name": "Coenzyme Q10",
+     "standardName": "Coenzyme Q10",
+     "ingredientGroup": "Coenzyme Q-10",
+     "canonical_id": "coq10",
+     "canonical_source_db": "ingredient_quality_map",
+     "quantity": 100.0,
+     "unit": "mg",
+     "forms": [],
+     "notes": null,
+     "order": 1
+    }
+   ],
+   "must_fire": [
+    "RULE_IQM_COQ10_HEART_DISEASE_STATINS"
+   ],
+   "must_not_fire": []
+  },
+  {
+   "id": "berberine-hcl",
+   "dsld_id": "315592",
+   "brand": "Double Wood Supplements",
+   "product": "Berberine 500 mg",
+   "active_ingredients": [
+    {
+     "name": "Berberine Hydrochloride",
+     "standardName": "Berberine",
+     "ingredientGroup": "Berberine",
+     "canonical_id": "berberine_supplement",
+     "canonical_source_db": "ingredient_quality_map",
+     "quantity": 500.0,
+     "unit": "mg",
+     "forms": [
+      {
+       "name": "hydrochloride",
+       "prefix": null,
+       "percent": null
+      }
+     ],
+     "notes": null,
+     "order": 1
+    }
+   ],
+   "must_fire": [
+    "RULE_IQM_BERBERINE_DIABETES"
+   ],
+   "must_not_fire": []
+  },
+  {
+   "id": "melatonin",
+   "dsld_id": "294404",
+   "brand": "BulkSupplements.com",
+   "product": "Melatonin Softgels",
+   "active_ingredients": [
+    {
+     "name": "Melatonin",
+     "standardName": "Melatonin",
+     "ingredientGroup": "Melatonin",
+     "canonical_id": "melatonin",
+     "canonical_source_db": "ingredient_quality_map",
+     "quantity": 10.0,
+     "unit": "mg",
+     "forms": [],
+     "notes": null,
+     "order": 1
+    }
+   ],
+   "must_fire": [
+    "RULE_INGREDIENT_MELATONIN__SEIZURE_SEDATIVE"
+   ],
+   "must_not_fire": []
+  },
+  {
+   "id": "5-htp",
+   "dsld_id": "329635",
+   "brand": "BulkSupplements.com",
+   "product": "5-HTP Capsules 100 mg",
+   "active_ingredients": [
+    {
+     "name": "5-HTP",
+     "standardName": "5-HTP",
+     "ingredientGroup": "5-HTP",
+     "canonical_id": "5_htp",
+     "canonical_source_db": "ingredient_quality_map",
+     "quantity": 100.0,
+     "unit": "mg",
+     "forms": [],
+     "notes": null,
+     "order": 1
+    }
+   ],
+   "must_fire": [
+    "RULE_IQM_5HTP_SEROTONIN"
+   ],
+   "must_not_fire": []
+  },
+  {
+   "id": "curcumin-extract",
+   "dsld_id": "209396",
+   "brand": "Doctor's Best",
+   "product": "High Absorption Joint Support",
+   "active_ingredients": [
+    {
+     "name": "Curcumin C3 Complex",
+     "standardName": "Curcumin",
+     "ingredientGroup": "Turmeric",
+     "canonical_id": "curcumin",
+     "canonical_source_db": "ingredient_quality_map",
+     "quantity": 500.0,
+     "unit": "mg",
+     "forms": [
+      {
+       "name": "Curcuminoids",
+       "prefix": "standardized to contain",
+       "percent": 95
+      },
+      {
+       "name": "Turmeric extract",
+       "prefix": null,
+       "percent": null
+      }
+     ],
+     "notes": "Curcumin C3 Complex (Form: Turmeric extract PlantPart: root Genus: Curcuma Species: longa, standardized to contain 95% Curcuminoids) ",
+     "order": 3
+    }
+   ],
+   "must_fire": [
+    "RULE_INGREDIENT_CURCUMIN"
+   ],
+   "must_not_fire": []
+  },
+  {
+   "id": "turmeric-root",
+   "dsld_id": "18392",
+   "brand": "GNC Herbal Plus Formula",
+   "product": "Turmeric Complex",
+   "active_ingredients": [
+    {
+     "name": "Turmeric root powder",
+     "standardName": "Turmeric",
+     "ingredientGroup": "Turmeric",
+     "canonical_id": "turmeric",
+     "canonical_source_db": "ingredient_quality_map",
+     "quantity": 100.0,
+     "unit": "mg",
+     "forms": [],
+     "notes": null,
+     "order": 2
+    }
+   ],
+   "must_fire": [
+    "RULE_IQM_TURMERIC_LIVER"
+   ],
+   "must_not_fire": []
+  },
+  {
+   "id": "garlic",
+   "dsld_id": "12009",
+   "brand": "CVS Pharmacy",
+   "product": "Odorless Garlic",
+   "active_ingredients": [
+    {
+     "name": "Garlic",
+     "standardName": "Garlic",
+     "ingredientGroup": "Garlic",
+     "canonical_id": "garlic",
+     "canonical_source_db": "ingredient_quality_map",
+     "quantity": 500.0,
+     "unit": "mg",
+     "forms": [],
+     "notes": null,
+     "order": 1
+    }
+   ],
+   "must_fire": [
+    "RULE_INGREDIENT_GARLIC"
+   ],
+   "must_not_fire": []
+  },
+  {
+   "id": "ginger-root",
+   "dsld_id": "302632",
+   "brand": "Centrum",
+   "product": "Morning Sickness",
+   "active_ingredients": [
+    {
+     "name": "Ginger",
+     "standardName": "Ginger",
+     "ingredientGroup": "Ginger ",
+     "canonical_id": "ginger",
+     "canonical_source_db": "ingredient_quality_map",
+     "quantity": 25.0,
+     "unit": "mg",
+     "forms": [],
+     "notes": null,
+     "order": 6
+    }
+   ],
+   "must_fire": [
+    "RULE_IQM_GINGER_BLEEDING"
+   ],
+   "must_not_fire": []
+  },
+  {
+   "id": "ashwagandha-root",
+   "dsld_id": "252644",
+   "brand": "BulkSupplements.com",
+   "product": "Ashwagandha Extract (450 mg)",
+   "active_ingredients": [
+    {
+     "name": "Ashwagandha extract",
+     "standardName": "Ashwagandha",
+     "ingredientGroup": "Ashwagandha",
+     "canonical_id": "ashwagandha",
+     "canonical_source_db": "ingredient_quality_map",
+     "quantity": 450.0,
+     "unit": "mg",
+     "forms": [
+      {
+       "name": "extract",
+       "prefix": null,
+       "percent": null
+      }
+     ],
+     "notes": null,
+     "order": 1
+    }
+   ],
+   "must_fire": [
+    "RULE_IQM_ASHWAGANDHA"
+   ],
+   "must_not_fire": []
+  },
+  {
+   "id": "valerian-root",
+   "dsld_id": "294511",
+   "brand": "BulkSupplements.com",
+   "product": "Valerian Root Extract",
+   "active_ingredients": [
+    {
+     "name": "Valerian root extract",
+     "standardName": "Valerian",
+     "ingredientGroup": "Valerian",
+     "canonical_id": "valerian",
+     "canonical_source_db": "ingredient_quality_map",
+     "quantity": 500.0,
+     "unit": "mg",
+     "forms": [
+      {
+       "name": "extract",
+       "prefix": null,
+       "percent": null
+      }
+     ],
+     "notes": null,
+     "order": 1
+    }
+   ],
+   "must_fire": [
+    "RULE_IQM_VALERIAN_LIVER"
+   ],
+   "must_not_fire": []
+  },
+  {
+   "id": "licorice-root",
+   "dsld_id": "252772",
+   "brand": "BulkSupplements.com",
+   "product": "Licorice Root Extract",
+   "active_ingredients": [
+    {
+     "name": "Licorice Root Extract",
+     "standardName": "Licorice",
+     "ingredientGroup": "Licorice ",
+     "canonical_id": "licorice",
+     "canonical_source_db": "ingredient_quality_map",
+     "quantity": 500.0,
+     "unit": "mg",
+     "forms": [
+      {
+       "name": "extract",
+       "prefix": null,
+       "percent": null
+      }
+     ],
+     "notes": null,
+     "order": 1
+    }
+   ],
+   "must_fire": [
+    "RULE_IQM_LICORICE_HYPERTENSION"
+   ],
+   "must_not_fire": []
+  },
+  {
+   "id": "milk-thistle",
+   "dsld_id": "311048",
+   "brand": "BulkSupplements.com",
+   "product": "Milk Thistle Extract",
+   "active_ingredients": [
+    {
+     "name": "Milk Thistle Seed Extract",
+     "standardName": "Milk Thistle",
+     "ingredientGroup": "Milk Thistle",
+     "canonical_id": "milk_thistle",
+     "canonical_source_db": "ingredient_quality_map",
+     "quantity": 250.0,
+     "unit": "mg",
+     "forms": [
+      {
+       "name": "extract",
+       "prefix": null,
+       "percent": null
+      }
+     ],
+     "notes": null,
+     "order": 1
+    }
+   ],
+   "must_fire": [
+    "RULE_IQM_MILK_THISTLE_LIVER",
+    "RULE_IQM_SILYMARIN_LIVER"
+   ],
+   "must_not_fire": []
+  },
+  {
+   "id": "kava-kavalactones",
+   "dsld_id": "255598",
+   "brand": "Double Wood Supplements",
+   "product": "Kava Kava Extract 1000 mg",
+   "active_ingredients": [
+    {
+     "name": "Kava Kava extract",
+     "standardName": "Kavalactones",
+     "ingredientGroup": "Kava kava ",
+     "canonical_id": "kavalactones",
+     "canonical_source_db": "ingredient_quality_map",
+     "quantity": 1000.0,
+     "unit": "mg",
+     "forms": [
+      {
+       "name": "Total Kavalactones",
+       "prefix": "std. to 3-5%",
+       "percent": null
+      }
+     ],
+     "notes": null,
+     "order": 1
+    }
+   ],
+   "must_fire": [
+    "RULE_IQM_KAVALACTONES_LIVER"
+   ],
+   "must_not_fire": []
+  },
+  {
+   "id": "l-tryptophan",
+   "dsld_id": "252841",
+   "brand": "BulkSupplements.com",
+   "product": "L-Tryptophan",
+   "active_ingredients": [
+    {
+     "name": "L-Tryptophan",
+     "standardName": "L-Tryptophan",
+     "ingredientGroup": "Tryptophan",
+     "canonical_id": "l_tryptophan",
+     "canonical_source_db": "ingredient_quality_map",
+     "quantity": 500.0,
+     "unit": "mg",
+     "forms": [],
+     "notes": null,
+     "order": 1
+    }
+   ],
+   "must_fire": [
+    "RULE_IQM_L_TRYPTOPHAN"
+   ],
+   "must_not_fire": []
+  },
+  {
+   "id": "caffeine",
+   "dsld_id": "253281",
+   "brand": "BulkSupplements.com",
+   "product": "Caffeine 200 mg",
+   "active_ingredients": [
+    {
+     "name": "Caffeine Anhydrous",
+     "standardName": "Caffeine",
+     "ingredientGroup": "Caffeine",
+     "canonical_id": "caffeine",
+     "canonical_source_db": "ingredient_quality_map",
+     "quantity": 200.0,
+     "unit": "mg",
+     "forms": [],
+     "notes": null,
+     "order": 1
+    }
+   ],
+   "must_fire": [
+    "RULE_INGREDIENT_CAFFEINE"
+   ],
+   "must_not_fire": []
+  },
+  {
+   "id": "creatine-monohydrate",
+   "dsld_id": "243026",
+   "brand": "GNC AMP Advanced Muscle Performance",
+   "product": "Wheybolic Alpha Cookies and Cream",
+   "active_ingredients": [
+    {
+     "name": "Creatine",
+     "standardName": "Creatine",
+     "ingredientGroup": "Creatine",
+     "canonical_id": "creatine_monohydrate",
+     "canonical_source_db": "ingredient_quality_map",
+     "quantity": 1.5,
+     "unit": "Gram(s)",
+     "forms": [
+      {
+       "name": "Creatine Hydrochloride",
+       "prefix": "&",
+       "percent": null
+      },
+      {
+       "name": "Creatine Monohydrate",
+       "prefix": "as",
+       "percent": null
+      }
+     ],
+     "notes": "Creatine (Form: as Creatine Monohydrate, & Creatine Hydrochloride) ",
+     "order": 13
+    }
+   ],
+   "must_fire": [
+    "RULE_IQM_CREATINE_KIDNEY"
+   ],
+   "must_not_fire": []
+  },
+  {
+   "id": "niacin-nicotinic",
+   "dsld_id": "25539",
+   "brand": "Doctor's Best",
+   "product": "Real Niacin (As Nicotinic Acid) 500 mg",
+   "active_ingredients": [
+    {
+     "name": "Niacin",
+     "standardName": "Vitamin B3 (Niacin)",
+     "ingredientGroup": "Niacin",
+     "canonical_id": "vitamin_b3_niacin",
+     "canonical_source_db": "ingredient_quality_map",
+     "quantity": 500.0,
+     "unit": "mg",
+     "forms": [
+      {
+       "name": "Nicotinic Acid",
+       "prefix": null,
+       "percent": null
+      }
+     ],
+     "notes": "Niacin (Form: as Nicotinic Acid) ",
+     "order": 1
+    }
+   ],
+   "must_fire": [
+    "RULE_IQM_NIACIN_DIABETES"
+   ],
+   "must_not_fire": []
+  },
+  {
+   "id": "vitamin-b6",
+   "dsld_id": "311810",
+   "brand": "BulkSupplements.com",
+   "product": "Pyridoxine HCl (Vitamin B6)",
+   "active_ingredients": [
+    {
+     "name": "Vitamin B6",
+     "standardName": "Vitamin B6 (Pyridoxine)",
+     "ingredientGroup": "Vitamin B6",
+     "canonical_id": "vitamin_b6_pyridoxine",
+     "canonical_source_db": "ingredient_quality_map",
+     "quantity": 50.0,
+     "unit": "mg",
+     "forms": [
+      {
+       "name": "Pyridoxine Hydrochloride",
+       "prefix": null,
+       "percent": null
+      }
+     ],
+     "notes": null,
+     "order": 1
+    }
+   ],
+   "must_fire": [
+    "RULE_IQM_VITAMIN_B6_LACTATION"
+   ],
+   "must_not_fire": []
+  },
+  {
+   "id": "biotin",
+   "dsld_id": "19173",
+   "brand": "CVS Pharmacy",
+   "product": "Balanced B-100",
+   "active_ingredients": [
+    {
+     "name": "Biotin",
+     "standardName": "Vitamin B7 (Biotin)",
+     "ingredientGroup": "Biotin",
+     "canonical_id": "vitamin_b7_biotin",
+     "canonical_source_db": "ingredient_quality_map",
+     "quantity": 100.0,
+     "unit": "mcg",
+     "forms": [
+      {
+       "name": "D-Biotin",
+       "prefix": null,
+       "percent": null
+      }
+     ],
+     "notes": "Biotin (Form: as D-Biotin) ",
+     "order": 7
+    }
+   ],
+   "must_fire": [
+    "RULE_IQM_VITAMIN_B7_BIOTIN"
+   ],
+   "must_not_fire": []
+  },
+  {
+   "id": "folate-folic-acid",
+   "dsld_id": "312501",
+   "brand": "BulkSupplements.com",
+   "product": "Folic Acid",
+   "active_ingredients": [
+    {
+     "name": "Folic Acid",
+     "standardName": "Vitamin B9 (Folate)",
+     "ingredientGroup": "Folate",
+     "canonical_id": "vitamin_b9_folate",
+     "canonical_source_db": "ingredient_quality_map",
+     "quantity": 800.0,
+     "unit": "mcg DFE",
+     "forms": [
+      {
+       "name": "folic acid",
+       "prefix": null,
+       "percent": null
+      }
+     ],
+     "notes": null,
+     "order": 1
+    }
+   ],
+   "must_fire": [
+    "RULE_IQM_FOLATE_TTC"
+   ],
+   "must_not_fire": []
+  },
+  {
+   "id": "vitamin-c",
+   "dsld_id": "178352",
+   "brand": "Airborne Plus",
+   "product": "Beta-Immune Booster Zesty Orange",
+   "active_ingredients": [
+    {
+     "name": "Vitamin C",
+     "standardName": "Vitamin C",
+     "ingredientGroup": "Vitamin C",
+     "canonical_id": "vitamin_c",
+     "canonical_source_db": "ingredient_quality_map",
+     "quantity": 500.0,
+     "unit": "mg",
+     "forms": [
+      {
+       "name": "Ascorbic Acid",
+       "prefix": null,
+       "percent": null
+      }
+     ],
+     "notes": null,
+     "order": 4
+    }
+   ],
+   "must_fire": [
+    "RULE_IQM_VITAMIN_C_PREGNANCY_EXCESS"
+   ],
+   "must_not_fire": []
+  },
+  {
+   "id": "fish-oil",
+   "dsld_id": "252496",
+   "brand": "BulkSupplements.com",
+   "product": "Fish Oil Softgels 1000 mg",
+   "active_ingredients": [
+    {
+     "name": "Fish Oil",
+     "standardName": "Fish Oil",
+     "ingredientGroup": "Fish Oil",
+     "canonical_id": "fish_oil",
+     "canonical_source_db": "ingredient_quality_map",
+     "quantity": 1.0,
+     "unit": "Gram(s)",
+     "forms": [
+      {
+       "name": "fish oil",
+       "prefix": null,
+       "percent": null
+      }
+     ],
+     "notes": null,
+     "order": 4
+    }
+   ],
+   "must_fire": [
+    "RULE_INGREDIENT_FISH_OIL"
+   ],
+   "must_not_fire": []
+  },
+  {
+   "id": "dha-algal-or-fish",
+   "dsld_id": "252500",
+   "brand": "BulkSupplements.com",
+   "product": "Fish Oil Softgel 1000 mg",
+   "active_ingredients": [
+    {
+     "name": "Docosahexaenoic Acid",
+     "standardName": "DHA (Docosahexaenoic Acid)",
+     "ingredientGroup": "DHA (Docosahexaenoic Acid)",
+     "canonical_id": "dha",
+     "canonical_source_db": "ingredient_quality_map",
+     "quantity": 233.0,
+     "unit": "mg",
+     "forms": [
+      {
+       "name": "DHA",
+       "prefix": null,
+       "percent": null
+      }
+     ],
+     "notes": null,
+     "order": 11
+    }
+   ],
+   "must_fire": [
+    "RULE_IQM_DHA_BLEEDING"
+   ],
+   "must_not_fire": []
+  },
+  {
+   "id": "epa",
+   "dsld_id": "252500",
+   "brand": "BulkSupplements.com",
+   "product": "Fish Oil Softgel 1000 mg",
+   "active_ingredients": [
+    {
+     "name": "Eicosapentaenoic Acid",
+     "standardName": "EPA (Eicosapentaenoic Acid)",
+     "ingredientGroup": "EPA (Eicosapentaenoic Acid)",
+     "canonical_id": "epa",
+     "canonical_source_db": "ingredient_quality_map",
+     "quantity": 330.0,
+     "unit": "mg",
+     "forms": [
+      {
+       "name": "EPA",
+       "prefix": null,
+       "percent": null
+      }
+     ],
+     "notes": null,
+     "order": 10
+    }
+   ],
+   "must_fire": [
+    "RULE_IQM_EPA_BLEEDING"
+   ],
+   "must_not_fire": []
+  },
+  {
+   "id": "quercetin",
+   "dsld_id": "322516",
+   "brand": "Doctor's Best",
+   "product": "Quercetin Bromelain",
+   "active_ingredients": [
+    {
+     "name": "Quercetin",
+     "standardName": "Quercetin",
+     "ingredientGroup": "Quercetin",
+     "canonical_id": "quercetin",
+     "canonical_source_db": "ingredient_quality_map",
+     "quantity": 500.0,
+     "unit": "mg",
+     "forms": [
+      {
+       "name": "Quercetin Dihydrate",
+       "prefix": null,
+       "percent": null
+      }
+     ],
+     "notes": "seed pod",
+     "order": 1
+    }
+   ],
+   "must_fire": [
+    "RULE_IQM_QUERCETIN_THYROID"
+   ],
+   "must_not_fire": []
+  },
+  {
+   "id": "resveratrol",
+   "dsld_id": "294551",
+   "brand": "BulkSupplements.com",
+   "product": "Resveratrol (500 mg)",
+   "active_ingredients": [
+    {
+     "name": "Resveratrol",
+     "standardName": "Resveratrol",
+     "ingredientGroup": "Resveratrol",
+     "canonical_id": "resveratrol",
+     "canonical_source_db": "ingredient_quality_map",
+     "quantity": 500.0,
+     "unit": "mg",
+     "forms": [
+      {
+       "name": "Polygonum cuspidatum",
+       "prefix": null,
+       "percent": null
+      }
+     ],
+     "notes": null,
+     "order": 1
+    }
+   ],
+   "must_fire": [
+    "RULE_IQM_RESVERATROL_BLEEDING"
+   ],
+   "must_not_fire": []
+  },
+  {
+   "id": "nac",
+   "dsld_id": "329944",
+   "brand": "BulkSupplements.com",
+   "product": "NAC N-Acetyl l-Cysteine 1000 mg Capsules",
+   "active_ingredients": [
+    {
+     "name": "N-Acetyl-L-Cysteine",
+     "standardName": "N-Acetyl Cysteine",
+     "ingredientGroup": "N-Acetyl Cysteine",
+     "canonical_id": "nac",
+     "canonical_source_db": "ingredient_quality_map",
+     "quantity": 1000.0,
+     "unit": "mg",
+     "forms": [],
+     "notes": null,
+     "order": 1
+    }
+   ],
+   "must_fire": [
+    "RULE_IQM_NAC_BLEEDING"
+   ],
+   "must_not_fire": []
+  },
+  {
+   "id": "l-arginine",
+   "dsld_id": "252589",
+   "brand": "BulkSupplements.com",
+   "product": "L-Arginine Base 500 mg",
+   "active_ingredients": [
+    {
+     "name": "L-Arginine",
+     "standardName": "L-Arginine",
+     "ingredientGroup": "Arginine",
+     "canonical_id": "l_arginine",
+     "canonical_source_db": "ingredient_quality_map",
+     "quantity": 500.0,
+     "unit": "mg",
+     "forms": [],
+     "notes": "L-Arginine base",
+     "order": 1
+    }
+   ],
+   "must_fire": [
+    "RULE_IQM_L_ARGININE_HYPERTENSION"
+   ],
+   "must_not_fire": []
+  },
+  {
+   "id": "saw-palmetto",
+   "dsld_id": "294541",
+   "brand": "BulkSupplements.com",
+   "product": "Saw Palmetto Extract (320 mg)",
+   "active_ingredients": [
+    {
+     "name": "Saw Palmetto",
+     "standardName": "Saw Palmetto",
+     "ingredientGroup": "Saw Palmetto",
+     "canonical_id": "saw_palmetto",
+     "canonical_source_db": "ingredient_quality_map",
+     "quantity": 320.0,
+     "unit": "mg",
+     "forms": [],
+     "notes": null,
+     "order": 1
+    }
+   ],
+   "must_fire": [
+    "RULE_IQM_SAW_PALMETTO_LIVER"
+   ],
+   "must_not_fire": []
+  },
+  {
+   "id": "echinacea",
+   "dsld_id": "241766",
+   "brand": "Double Wood Supplements",
+   "product": "Elderberry Zinc and Vitamin C",
+   "active_ingredients": [
+    {
+     "name": "Echinacea purpurea extract",
+     "standardName": "Echinacea",
+     "ingredientGroup": "Echinacea purpurea",
+     "canonical_id": "echinacea",
+     "canonical_source_db": "ingredient_quality_map",
+     "quantity": 50.0,
+     "unit": "mg",
+     "forms": [
+      {
+       "name": "extract",
+       "prefix": null,
+       "percent": null
+      }
+     ],
+     "notes": null,
+     "order": 4
+    }
+   ],
+   "must_fire": [
+    "RULE_INGREDIENT_ECHINACEA__AUTOIMMUNE"
+   ],
+   "must_not_fire": []
+  },
+  {
+   "id": "rhodiola",
+   "dsld_id": "312320",
+   "brand": "BulkSupplements.com",
+   "product": "Rhodiola Extract (3% Salidrosides)",
+   "active_ingredients": [
+    {
+     "name": "Rhodiola Root Extract",
+     "standardName": "Rhodiola",
+     "ingredientGroup": "Rhodiola ",
+     "canonical_id": "rhodiola",
+     "canonical_source_db": "ingredient_quality_map",
+     "quantity": 200.0,
+     "unit": "mg",
+     "forms": [
+      {
+       "name": "Rhodiola crenulata Root Extract",
+       "prefix": null,
+       "percent": null
+      }
+     ],
+     "notes": "standardized to contain greater than or equal to 3% salidrosides",
+     "order": 1
+    }
+   ],
+   "must_fire": [
+    "RULE_IQM_RHODIOLA_IMMUNE_BP"
+   ],
+   "must_not_fire": []
+  },
+  {
+   "id": "ginseng-root",
+   "dsld_id": "310646",
+   "brand": "BulkSupplements.com",
+   "product": "American Ginseng Extract",
+   "active_ingredients": [
+    {
+     "name": "American Ginseng Rhizome Extract",
+     "standardName": "Ginseng",
+     "ingredientGroup": "American Ginseng",
+     "canonical_id": "ginseng",
+     "canonical_source_db": "ingredient_quality_map",
+     "quantity": 1000.0,
+     "unit": "mg",
+     "forms": [
+      {
+       "name": "Panax quinquefolium L. Rhizome Extract",
+       "prefix": null,
+       "percent": null
+      }
+     ],
+     "notes": null,
+     "order": 1
+    }
+   ],
+   "must_fire": [
+    "RULE_INGREDIENT_GINSENG"
+   ],
+   "must_not_fire": []
+  },
+  {
+   "id": "ginkgo-biloba-leaf-powder",
+   "dsld_id": "329958",
+   "brand": "BulkSupplements.com",
+   "product": "Organic Ginkgo Biloba Powder 2000 mg",
+   "active_ingredients": [
+    {
+     "name": "Ginkgo biloba, Powder",
+     "standardName": "Ginkgo",
+     "ingredientGroup": "Ginkgo ",
+     "canonical_id": "ginkgo",
+     "canonical_source_db": "ingredient_quality_map",
+     "quantity": 2000.0,
+     "unit": "mg",
+     "forms": [],
+     "notes": null,
+     "order": 1
+    }
+   ],
+   "must_fire": [
+    "RULE_BOTAN_GINKGO_PREGNANCY",
+    "RULE_IQM_GINKGO_HYPERTENSION"
+   ],
+   "must_not_fire": []
+  },
+  {
+   "id": "probiotic-strain-lactobacillus-gg",
+   "dsld_id": "207050",
+   "brand": "Culturelle Digestive Health",
+   "product": "Daily Probiotic Orange Chewables",
+   "active_ingredients": [
+    {
+     "name": "Lactobacillus GG",
+     "standardName": "Lactobacillus rhamnosus GG",
+     "ingredientGroup": "Lactobacillus rhamnosus",
+     "canonical_id": "lactobacillus_rhamnosus",
+     "canonical_source_db": "ingredient_quality_map",
+     "quantity": 0.0,
+     "unit": "NP",
+     "forms": [],
+     "notes": "Lactobacillus GG Genus: Lactobacillus Note: 10 billion CFUs ",
+     "order": 4
+    }
+   ],
+   "must_fire": [
+    "RULE_IQM_PROBIOTICS_IMMUNOCOMPROMISED"
+   ],
+   "must_not_fire": []
+  }
+ ]
+}
