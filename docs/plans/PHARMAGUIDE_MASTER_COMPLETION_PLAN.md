@@ -795,3 +795,13 @@ Owner: scripts/scoring_v4/quality_score.py::_EVIDENCE_ZERO_REASON; scripts/scori
 - [ ] Fresh corpus/candidate, clinical coverage and release/device gates remain pending under the original completion plan. This process adjustment neither validates old artifacts nor approves publication.
 
 Owner: AGENTS.md::Tests — evidence: scripts/test.sh/test_profiles.py, .github/workflows/pipeline-tests.yml and existing rule/skill callers. Will NOT create: runner, automated risk classifier, bypass flag, workflow, tracker or release shortcut. No executable, scoring, curated-data, app or CI configuration changed.
+
+
+### October 4 — magnesium certification matching closure
+
+- [x] Trace both missing Nature Made capsule labels (310116/322551) to omitted “High Absorption” in the source titles. Reviewed the entire Nature Made glycinate-label family; gummy313829 already has a separate reviewed record.
+- [x] Live USP page12 HTTP200 confirms distinct capsule/gummy listings; official capsule page and both NIH raw labels agree on200mg magnesium as bisglycinate per two capsules,60 capsules. Added two reviewed DSLD-specific SKU aliases through the existing override owner, with explicit strength/form. No fuzzy thresholds, numerical magnitudes, source dates or clinical policies changed.
+- [x] Public normalizer→full enrichment→scored-artifact regression failed before the mappings. Owner/consumer/data slice:513passed,22missing-corpus skips in7.93s (worktree has no corpus). Twelve identity boundaries retain exclusion: wrong strength/form/brand, missing form and unreviewed label ID. Source review in existing research.md.
+- [ ] Finish six-label frozen raw measurement, independent review and combined CI/local checkpoint, then integrate. User's full corpus is currently running on main; preserve its source and defer broad local checks/integration until it finishes. This source fix has not been published.
+
+Owner: scripts/cert_resolver.py::resolve/_check_override using scripts/data/curated_overrides/cert_verification_overrides.json; scripts/scoring_v4/cert_evidence.py consumes the resolution. Evidence: certification_evidence matrix, production callers, exact data_batch expected-entry check, primary-source receipt and fail-first public seam tests. Will NOT create: second matcher, registry, scorer, policy, magnitude or export field. Receipt directory: /Users/seancheick/pg_quality/certification_match_20261004/.

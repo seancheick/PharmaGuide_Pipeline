@@ -1457,3 +1457,53 @@ def test_historical_certification_never_grants_points():
     resolutions = resolve("Example", "Example Probiotic", ["ConsumerLab"], registry=registry)
     assert resolutions
     assert all(not item.scores_points() for item in resolutions)
+
+
+@pytest.mark.parametrize("dsld_id", ["310116", "322551"])
+def test_reviewed_magnesium_capsule_alias_reaches_public_verification(dsld_id):
+    from enhanced_normalizer import EnhancedDSLDNormalizer
+    from enrich_supplements_v3 import SupplementEnricherV3
+    from scoring_v4.scored_artifact import build_scored_artifact
+
+    # Source facts shared by the two NIH labels; no USP claim on either label.
+    raw = {
+        "id": int(dsld_id), "brandName": "Nature Made",
+        "fullName": "Magnesium Glycinate 200 mg",
+        "physicalState": {"langualCodeDescription": "Capsule"},
+        "netContents": [{"quantity": 60, "unit": "Capsule(s)"}],
+        "servingSizes": [{"order": 1, "minQuantity": 2, "maxQuantity": 2,
+                          "minDailyServings": 1, "maxDailyServings": 1,
+                          "unit": "Capsule(s)", "inSFB": True}],
+        "ingredientRows": [{"name": "Magnesium", "category": "mineral",
+            "ingredientGroup": "Magnesium", "uniiCode": "I38ZP9992A",
+            "quantity": [{"servingSizeOrder": 1, "quantity": 200, "unit": "mg"}],
+            "forms": [{"name": "Magnesium Bisglycinate", "category": "mineral",
+                       "ingredientGroup": "Magnesium", "uniiCode": "IFN18A4Y6B"}]}],
+        "otheringredients": {"ingredients": []}, "statements": [],
+    }
+    enriched = SupplementEnricherV3().enrich_product(
+        EnhancedDSLDNormalizer().normalize_product(raw))[0]
+    verification = build_scored_artifact(enriched)["quality_pillars_v4"]["verification"]
+    assert verification["components"]["tier"] == "product"
+    assert verification["score"] == 15
+    from scoring_v4.cert_evidence import verified_product_cert_entries
+    entries = verified_product_cert_entries(enriched)
+    assert any(row.get("record_id") == "USP_VERIFIED_EED67511C424" for row in entries)
+    assert not any(row.get("record_id") == "USP_VERIFIED_9EEA504811A7" for row in entries)
+
+
+@pytest.mark.parametrize("dsld_id", ["310116", "322551"])
+@pytest.mark.parametrize("brand,title,form,requested_id", [
+    ("Nature Made", "Magnesium Glycinate 100 mg", "capsule", None),
+    ("Nature Made", "Magnesium Glycinate 200 mg", "gummy", None),
+    ("Nature Made", "Magnesium Glycinate 200 mg", "softgel", None),
+    ("Other Brand", "Magnesium Glycinate 200 mg", "capsule", None),
+    ("Nature Made", "Magnesium Glycinate 200 mg", "capsule", "unreviewed-label"),
+    ("Nature Made", "Magnesium Glycinate 200 mg", None, None),
+])
+def test_reviewed_magnesium_alias_does_not_cross_identity(brand, title, form, requested_id, dsld_id):
+    registry = CertRegistry.load()
+    discovered = discover_verified_programs(brand, title, registry,
+        dsld_id=requested_id or dsld_id, label_context={"form_factor": form})
+    assert not any(row.record_id == "USP_VERIFIED_EED67511C424" and row.scores_points()
+                   for row in discovered)

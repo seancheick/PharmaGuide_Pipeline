@@ -3,9 +3,9 @@
     "schema_version": "6.0.0",
     "description": "Manual overrides for cert verification scope. Used when (a) the fuzzy resolver returns needs_review and a human confirms/downgrades, or (b) a known-good cert isn't in the public registry snapshots yet. Pattern matches scripts/data/curated_overrides/upc_overrides.json.",
     "purpose": "cert_verification_manual_override",
-    "last_updated": "2026-09-24",
+    "last_updated": "2026-10-04",
     "usage": "Consumed by scripts/cert_resolver.py BEFORE running the rapidfuzz match. Entries here win over registry lookups. See docs/plans/SCORING_V4_PROPOSAL.md §10.",
-    "total_overrides": 740,
+    "total_overrides": 742,
     "status_meanings": {
       "verified": "Manually confirmed by reviewer. Scorer trusts the scope.",
       "pending_review": "Auto-flagged by resolver as borderline (needs_review queue). Scorer treats as claimed_only (zero points) until reviewer marks verified.",
@@ -13125,6 +13125,38 @@
       "record_id": "USP_VERIFIED_76840A3548EA",
       "matched_product": "Nature Made Iron 65 Mg Tablets",
       "source_url": "https://www.quality-supplements.org/usp_verified_products?page=8"
+    },
+    {
+      "brand": "Nature Made",
+      "product": "Magnesium Glycinate 200 mg Capsules",
+      "program": "USP Verified",
+      "status": "verified",
+      "scope": "sku",
+      "reason": "Reviewed NIH DSLD label and current official product: same 200 mg magnesium as bisglycinate per two-capsule serving, 60 capsules, no added active. The title omits High Absorption; the source-owned capsule form and strength identify the USP-listed capsule product. Does not cover gummies, other strengths, brands or unreviewed DSLD labels.",
+      "reviewed_at": "2026-10-04",
+      "review_source": "USP page12 live HTTP200 and Nature Made official capsule product page; NIH DSLD 310116",
+      "reviewer": "Codex",
+      "dsld_id": "310116",
+      "record_id": "USP_VERIFIED_EED67511C424",
+      "matched_brand": "Nature Made",
+      "matched_product": "Nature Made High Absorption Magnesium Glycinate 200mg Capsules",
+      "source_url": "https://www.quality-supplements.org/usp_verified_products?page=12"
+    },
+    {
+      "brand": "Nature Made",
+      "product": "Magnesium Glycinate 200 mg Capsules",
+      "program": "USP Verified",
+      "status": "verified",
+      "scope": "sku",
+      "reason": "Reviewed NIH DSLD label and current official product: same 200 mg magnesium as bisglycinate per two-capsule serving, 60 capsules, no added active. The title omits High Absorption; the source-owned capsule form and strength identify the USP-listed capsule product. Does not cover gummies, other strengths, brands or unreviewed DSLD labels.",
+      "reviewed_at": "2026-10-04",
+      "review_source": "USP page12 live HTTP200 and Nature Made official capsule product page; NIH DSLD 322551",
+      "reviewer": "Codex",
+      "dsld_id": "322551",
+      "record_id": "USP_VERIFIED_EED67511C424",
+      "matched_brand": "Nature Made",
+      "matched_product": "Nature Made High Absorption Magnesium Glycinate 200mg Capsules",
+      "source_url": "https://www.quality-supplements.org/usp_verified_products?page=12"
     }
   ]
 }
