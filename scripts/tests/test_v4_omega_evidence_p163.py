@@ -295,7 +295,7 @@ def test_canary_indication_relevance(dsld_id, expected_indication):
 
 @pytest.mark.parametrize("dsld_id,min_score,max_score", [
     ("327776", 5.0, 20.0),    # Sports Research
-    ("288740", 5.0, 20.0),    # Nordic
+    ("288740", 0.0, 0.0),    # Omega + CoQ10: mixed-purpose applicability held
     ("273630", 5.0, 20.0),    # GoL Advanced Omega
     ("239592", 0.0, 15.0),    # CVS Krill: clinical only
     ("184654", 0.0, 15.0),    # Pure Encap Krill: clinical only
@@ -312,6 +312,9 @@ def test_canary_evidence_score_in_range(dsld_id, min_score, max_score):
         pytest.skip(f"canary {dsld_id} not in catalog")
 
     payload = score_evidence(canaries[dsld_id])
+    if dsld_id == "288740":
+        assert payload["metadata"]["applicability_reason"] == "held_mixed_purpose_ownership"
+        assert payload["metadata"]["applicability_qualified"] is False
     assert min_score <= payload["score"] <= max_score, (
         f"canary {dsld_id} Evidence score {payload['score']} not in "
         f"[{min_score}, {max_score}]"

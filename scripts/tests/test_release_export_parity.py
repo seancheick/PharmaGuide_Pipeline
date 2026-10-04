@@ -1,5 +1,6 @@
 import json
-import math
+import hashlib
+from functools import lru_cache
 import sqlite3
 import sys
 from pathlib import Path
@@ -14,6 +15,7 @@ from build_final_db import (
     resolve_export_supplement_type,
 )
 from stage_manifest import select_stage_input_files
+from scoring_v4.quality_score import shipped_whole_score
 from scripts.release_artifact_paths import final_build_dir
 
 
@@ -24,6 +26,7 @@ _BUILD_EXISTS = BUILD_ROOT.exists() and (BUILD_ROOT / "export_manifest.json").ex
 _SKIP_MSG = "final_db_output not present — run build_final_db.py first"
 
 
+@lru_cache(maxsize=1)
 def _build_is_full_corpus() -> bool:
     """Sprint E1.7 — distinguish a full-corpus build from a canary build.
 
@@ -42,8 +45,8 @@ def _build_is_full_corpus() -> bool:
     except Exception:
         return False
     enriched_dirs, scored_dirs = _discover_pair_dirs()
-    enriched_lookup = _load_products(enriched_dirs)
-    scored_lookup = _load_products(scored_dirs)
+    enriched_lookup = _load_products(enriched_dirs, identifiers_only=True)
+    scored_lookup = _load_products(scored_dirs, identifiers_only=True)
     integrity = manifest.get("integrity") or {}
     return (
         len(enriched_lookup) > 0
@@ -75,7 +78,9 @@ def _discover_pair_dirs() -> tuple[list[Path], list[Path]]:
 ENRICHED_DIRS, SCORED_DIRS = _discover_pair_dirs()
 
 
-def _load_products(directories: list[Path]) -> dict[str, dict]:
+def _load_products(
+    directories: list[Path], *, identifiers_only: bool = False
+) -> dict[str, dict]:
     products: dict[str, dict] = {}
     for directory in directories:
         expected_stage = "enrich" if directory.parent.name.endswith("_enriched") else "score"
@@ -83,7 +88,7 @@ def _load_products(directories: list[Path]) -> dict[str, dict]:
             data = json.loads(path.read_text())
             rows = data if isinstance(data, list) else data.get("products", [])
             for row in rows:
-                products[str(row["dsld_id"])] = row
+                products[str(row["dsld_id"])] = {} if identifiers_only else row
     return products
 
 
@@ -171,22 +176,19 @@ def _expected_export_score_100(effective_scored: dict):
     raw = effective_scored.get("quality_score_v4_100")
     if raw is None:
         return None
-    return int(math.floor(float(raw) + 0.5))
+    return shipped_whole_score(float(raw))
 
 
 @pytest.mark.skipif(not _BUILD_EXISTS, reason=_SKIP_MSG)
 @pytest.mark.skipif(not _build_is_full_corpus(), reason=_FULL_CORPUS_SKIP_MSG)
 def test_release_export_matches_source_scored_and_resolved_type():
-    enriched_lookup = _load_products(ENRICHED_DIRS)
-    scored_lookup = _load_products(SCORED_DIRS)
-
     conn = sqlite3.connect(BUILD_ROOT / "pharmaguide_core.db")
     conn.row_factory = sqlite3.Row
     try:
         rows = conn.execute(
             """
             SELECT dsld_id, supplement_type, score_100_equivalent, verdict, mapped_coverage,
-                   output_schema_version
+                   output_schema_version, detail_blob_sha256
             FROM products_core
             """
         ).fetchall()
@@ -195,24 +197,43 @@ def test_release_export_matches_source_scored_and_resolved_type():
 
     assert rows, "expected exported products in release DB"
 
-    for row in rows:
-        dsld_id = str(row["dsld_id"])
-        enriched = enriched_lookup[dsld_id]
-        scored, _blob = _production_export(enriched, scored_lookup[dsld_id])
-        expected_type = resolve_export_supplement_type(enriched, scored)
+    rows_by_id = {str(row["dsld_id"]): row for row in rows}
+    checked = set()
+    # Process one paired dataset at a time rather than retaining the entire
+    # multi-gigabyte corpus during an all-row export assertion.
+    for enriched_dir, scored_dir in zip(ENRICHED_DIRS, SCORED_DIRS):
+        enriched_lookup = _load_products([enriched_dir])
+        scored_lookup = _load_products([scored_dir])
+        for dsld_id in enriched_lookup:
+            row = rows_by_id.get(dsld_id)
+            if row is None:
+                continue
+            checked.add(dsld_id)
+            enriched = enriched_lookup[dsld_id]
+            # Verify the actual shipped blob rather than rebuilding every label's
+            # expensive display/clinical projection a second time. Production core
+            # insertion consumes this same source artifact + detail-blob seam.
+            blob_bytes = (BUILD_ROOT / "detail_blobs" / f"{dsld_id}.json").read_bytes()
+            assert hashlib.sha256(blob_bytes).hexdigest() == row["detail_blob_sha256"], dsld_id
+            scored = project_export_scored_artifact(
+                enriched, scored_lookup[dsld_id], json.loads(blob_bytes)
+            )
+            expected_type = resolve_export_supplement_type(enriched, scored)
 
-        assert row["supplement_type"] == expected_type, dsld_id
-        assert row["verdict"] == scored["verdict"], dsld_id
-        assert row["output_schema_version"] == scored["output_schema_version"], dsld_id
+            assert row["supplement_type"] == expected_type, dsld_id
+            assert row["verdict"] == scored["verdict"], dsld_id
+            assert row["output_schema_version"] == scored["output_schema_version"], dsld_id
 
-        expected_score = _expected_export_score_100(scored)
-        if expected_score is None:
-            assert row["score_100_equivalent"] is None, dsld_id
-        else:
-            assert row["score_100_equivalent"] == expected_score, dsld_id
+            expected_score = _expected_export_score_100(scored)
+            if expected_score is None:
+                assert row["score_100_equivalent"] is None, dsld_id
+            else:
+                assert row["score_100_equivalent"] == expected_score, dsld_id
 
-        expected_coverage = round(float(scored["mapped_coverage"]), 4)
-        assert row["mapped_coverage"] == expected_coverage, dsld_id
+            expected_coverage = round(float(scored["mapped_coverage"]), 4)
+            assert row["mapped_coverage"] == expected_coverage, dsld_id
+
+    assert checked == set(rows_by_id), "every shipped core row must have source parity"
 
 
 @pytest.mark.skipif(not _BUILD_EXISTS, reason=_SKIP_MSG)
