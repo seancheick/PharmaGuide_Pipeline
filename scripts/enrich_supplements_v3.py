@@ -21998,6 +21998,21 @@ class SupplementEnricherV3:
                         and amount_for_ul is not None
                     ):
                         amount_for_ul *= explicit_preformed_vitamin_a_fraction
+                    # The UL is stated in the reference unit (copper: mcg), so
+                    # flags and per-nutrient sums state the exposure in it too.
+                    # Plain mass only: qualified units keep their own lineage.
+                    ul_amount, ul_unit = amount_for_ul, converted_unit
+                    reference_unit = _nutrient_record.get("unit")
+                    if (
+                        ul_amount is not None
+                        and _rda_mass_unit_key(converted_unit)
+                        and _rda_mass_unit_key(reference_unit)
+                        and _rda_mass_unit_key(converted_unit) != _rda_mass_unit_key(reference_unit)
+                    ):
+                        ul_amount, _ = RDAULCalculator._reconcile_amount_to_reference(
+                            ul_amount, converted_unit, reference_unit
+                        )
+                        ul_unit = reference_unit
                     folate_ul_screening = None
                     if (
                         _is_folate
@@ -22059,7 +22074,7 @@ class SupplementEnricherV3:
                         safety_over_ul = safety.over_ul
                         safety_over_ul_amount = safety.over_ul_amount
                         safety_warnings = list(safety.warnings)
-                        adequacy_unit = adequacy.unit
+                        adequacy_unit = _nutrient_record.get("unit") or adequacy.unit
                         adequacy_optimal_min = adequacy.optimal_min
                         adequacy_optimal_max = adequacy.optimal_max
                         adequacy_dict = adequacy.to_dict()
@@ -22647,13 +22662,13 @@ class SupplementEnricherV3:
                             _row_canonical,
                             {
                                 "nutrient": ing_name,
-                                "amount": amount_for_ul,
-                                "unit": converted_unit,
+                                "amount": ul_amount,
+                                "unit": ul_unit,
                                 "ul": safety_ul,
                                 "pct_ul": pct_ul_val,
                                 "over_amount": over_ul_amount,
                                 "warning": ul_exceedance_sentence(
-                                    float(amount_for_ul or 0.0), float(safety_ul or 0.0), str(converted_unit or "")
+                                    float(ul_amount or 0.0), float(safety_ul or 0.0), str(ul_unit or "")
                                 ),
                                 "severity": ul_display_severity(pct_ul_val),
                                 **ul_exposure,
@@ -22669,14 +22684,14 @@ class SupplementEnricherV3:
                             _row_canonical,
                             {
                                 "std_name": std_name,
-                                "unit": converted_unit,
+                                "unit": ul_unit,
                                 "total_amount": 0.0,
                                 "rows": [],
                                 "incompatible_units": False,
                                 "ul": safety_ul,  # from first row; all rows share canonical so UL is same
                             },
                         )
-                        if group["unit"] != converted_unit:
+                        if group["unit"] != ul_unit:
                             # Two rows for the same canonical but the
                             # unit_converter produced different units
                             # (e.g., one IU-based, one mg-based). Cannot
@@ -22684,11 +22699,11 @@ class SupplementEnricherV3:
                             # canonical; per-row flags will still emit.
                             group["incompatible_units"] = True
                         else:
-                            group["total_amount"] += amount_for_ul
+                            group["total_amount"] += ul_amount
                             group["rows"].append({
                                 "ingredient": ing_name,
-                                "amount": amount_for_ul,
-                                "unit": converted_unit,
+                                "amount": ul_amount,
+                                "unit": ul_unit,
                                 "pct_ul_individual": safety_pct_ul,
                                 "ul_gate_eligible": ul_exposure["ul_gate_eligible"],
                                 "ul_exposure_basis": ul_exposure["ul_exposure_basis"],
