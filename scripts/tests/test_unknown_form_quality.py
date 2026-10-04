@@ -1101,3 +1101,17 @@ def test_repaired_blend_identity_is_not_revived_as_member_mass(enricher, pid, me
     assert not any(r.get('canonical_id') == member and r.get('evidence_type') == 'blend_anchor_mass'
         for r in product.get('product_scoring_evidence', []))
     assert any(r.get('name') in {'TamaFlex', 'Glutamine Complex'} for r in product['activeIngredients'])
+
+
+@pytest.mark.parametrize("pid, nutrient, expected", [
+    ("1063", "Vanadium", ["Vanadium Amino Acid Chelate"]),
+    ("329884", "Magnesium", ["Magnesium Malate"]),
+    ("337854", "Calcium", ["Calcium Ascorbate"]),
+])
+def test_exact_nih_label_forms_replace_crossed_structured_sources(pid, nutrient, expected):
+    from enhanced_normalizer import EnhancedDSLDNormalizer
+    raw = json.loads((FIXTURES / f'label_source_{pid}_raw.json').read_text())
+    product = EnhancedDSLDNormalizer().normalize_product(raw)
+    row = next(r for r in product['activeIngredients'] if r['name'] == nutrient)
+    assert [f['name'] for f in row['forms']] == expected
+    assert row.get('label_correction') or row.get('label_correction_applied') or row.get('source_correction')
