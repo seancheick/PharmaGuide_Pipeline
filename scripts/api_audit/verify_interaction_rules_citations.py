@@ -53,7 +53,6 @@ import os
 import re
 import sys
 import time
-import urllib.request
 import xml.etree.ElementTree as ET
 from pathlib import Path
 
@@ -71,7 +70,7 @@ if _env.exists():
             k, _, v = line.partition("=")
             os.environ.setdefault(k.strip(), v.strip())
 
-from verify_all_citations_content import RATE_LIMIT, SSL_CTX, fetch_articles  # noqa: E402
+from verify_all_citations_content import RATE_LIMIT, _get, fetch_articles  # noqa: E402
 
 DATA = REPO / "scripts" / "data"
 RULES = DATA / "ingredient_interaction_rules.json"
@@ -266,9 +265,10 @@ def book_chapter(record: dict) -> dict:
 
 
 def _get_json(url: str) -> dict:
-    request = urllib.request.Request(url, headers={"User-Agent": "pharmaguide-audit/1.0"})
-    with urllib.request.urlopen(request, timeout=30, context=SSL_CTX) as response:
-        return json.loads(response.read().decode("utf-8"))
+    raw = _get(url)
+    if raw is None:
+        raise RuntimeError("Bookshelf citation retrieval unavailable")
+    return json.loads(raw)
 
 
 def fetch_book_chapters(nbk_ids: list[str]) -> dict[str, dict]:

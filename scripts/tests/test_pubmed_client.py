@@ -370,3 +370,117 @@ def test_unrelated_comment_links_leave_integrity_flags_clear():
 
     assert (article["retracted"], article["expression_of_concern"], article["has_erratum"]) == (
         False, False, False)
+
+
+def test_article_cache_reuses_across_batches_and_clients(monkeypatch, tmp_path):
+    import api_audit.pubmed_client as pc
+    calls = []
+
+    class Response:
+        status_code = 200
+        headers = {"content-type": "text/xml"}
+        def raise_for_status(self):
+            pass
+
+    def request(method, url, params, timeout):
+        calls.append(params["id"])
+        response = Response()
+        response.text = '<PubmedArticleSet>' + ''.join(
+            f'<PubmedArticle><MedlineCitation><PMID>{p}</PMID><Article><ArticleTitle>Title {p}</ArticleTitle></Article></MedlineCitation></PubmedArticle>'
+            for p in params["id"].split(',')
+        ) + '</PubmedArticleSet>'
+        return response
+
+    monkeypatch.setattr(pc.requests, 'request', request)
+    path = tmp_path / 'cache.json'
+    first = pc.PubMedClient(cache_path=path, rate_limit_delay=0)
+    first.efetch(['111', '222'])
+    second = pc.PubMedClient(cache_path=path, rate_limit_delay=0)
+    assert '222' in second.efetch(['222', '333'])
+    assert calls == ['111,222', '333']
+    second.circuit_open = True
+    assert '111' in second.efetch(['111'])
+
+
+def test_missing_article_is_not_cached_as_verified(monkeypatch, tmp_path):
+    import api_audit.pubmed_client as pc
+    calls = []
+    def request(endpoint, **kwargs):
+        calls.append(kwargs['params']['id'])
+        return '<PubmedArticleSet />'
+    client = pc.PubMedClient(cache_path=tmp_path / 'cache.json', rate_limit_delay=0)
+    monkeypatch.setattr(client, '_request', request)
+    client.efetch(['111'])
+    client.efetch(['111'])
+    assert calls == ['111', '111']
+    assert not client._cache
+
+
+def test_expired_article_must_refresh_and_failure_cannot_renew(monkeypatch, tmp_path):
+    import api_audit.pubmed_client as pc
+    import json
+    client = pc.PubMedClient(cache_path=tmp_path / 'cache.json', rate_limit_delay=0)
+    monkeypatch.setattr(client, '_request', lambda *a, **k: SAMPLE_PUBMED_XML)
+    client.efetch(['36849732'])
+    key = next(iter(client._cache))
+    client._cache[key]['expires_at'] = 0
+    original = dict(client._cache[key])
+    def fail(*args, **kwargs): raise RuntimeError('offline')
+    monkeypatch.setattr(client, '_request', fail)
+    import pytest
+    with pytest.raises(RuntimeError, match='offline'):
+        client.efetch(['36849732'])
+    assert client._cache[key] == original
+
+
+def test_cache_writers_preserve_other_gate_receipts(tmp_path):
+    import api_audit.pubmed_client as pc
+    path = tmp_path / 'cache.json'
+    first, second = pc.PubMedClient(cache_path=path), pc.PubMedClient(cache_path=path)
+    first._cache_put('first', 'one')
+    second._cache_put('second', 'two')
+    restored = pc.PubMedClient(cache_path=path)
+    assert restored._cache_get('first') == 'one'
+    assert restored._cache_get('second') == 'two'
+
+
+def test_partial_failure_retains_valid_cached_sources(monkeypatch, tmp_path):
+    import api_audit.pubmed_client as pc
+    client = pc.PubMedClient(cache_path=tmp_path / 'cache.json', rate_limit_delay=0)
+    monkeypatch.setattr(client, '_request', lambda *a, **k: SAMPLE_PUBMED_XML)
+    client.efetch(['36849732'])
+    client._cache_put('pmc:PMC1', '36849732')
+    def fail(*a, **k): raise RuntimeError('offline')
+    monkeypatch.setattr(client, '_request', fail)
+    partial = client.efetch(['36849732', '12345'])
+    assert [r['pmid'] for r in pc.parse_pubmed_article_xml(partial)] == ['36849732']
+    assert client.resolve_pmc_ids(['PMC1', 'PMC2']) == {'PMC1': '36849732'}
+
+
+def test_wrong_identity_or_corrupt_cache_does_not_establish_record(monkeypatch, tmp_path):
+    import api_audit.pubmed_client as pc
+    import json
+    client = pc.PubMedClient(cache_path=tmp_path / 'cache.json', rate_limit_delay=0)
+    key = json.dumps({'article':'12345', 'params':{'retmode':'xml','db':'pubmed'}}, sort_keys=True)
+    client._cache_put(key, SAMPLE_PUBMED_XML)
+    calls = []
+    monkeypatch.setattr(client, '_request', lambda *a, **k: calls.append(k['params']['id']) or '<PubmedArticleSet/>')
+    assert '36849732' not in client.efetch(['12345'])
+    assert calls == ['12345']
+
+
+def test_citation_external_request_does_not_forward_ncbi_credentials(monkeypatch, tmp_path):
+    import api_audit.pubmed_client as pc
+    captured = []
+    class Response:
+        status_code = 200
+        headers = {'content-type':'application/json'}
+        def json(self): return {'message':{'title':['Title']}}
+        def raise_for_status(self): pass
+    def request(method, url, params, timeout):
+        captured.append(params)
+        return Response()
+    monkeypatch.setattr(pc.requests, 'request', request)
+    client = pc.PubMedClient(cache_path=tmp_path/'cache.json', api_key='private', email='private@example.com', rate_limit_delay=0)
+    client._request('https://api.crossref.org/works/10.example')
+    assert captured == [{}]

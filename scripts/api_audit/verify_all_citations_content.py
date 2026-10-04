@@ -29,14 +29,9 @@ from __future__ import annotations
 
 import argparse
 import json
-import os
 import re
-import ssl
 import sys
-import time
-import urllib.error
 import urllib.parse
-import urllib.request
 import xml.etree.ElementTree as ET
 from pathlib import Path
 
@@ -47,6 +42,7 @@ DATA_DIR = SCRIPTS_ROOT / "data"
 if str(SCRIPTS_ROOT) not in sys.path:
     sys.path.insert(0, str(SCRIPTS_ROOT))
 
+from api_audit.pubmed_client import PubMedClient  # noqa: E402
 from api_audit.pubmed_xml import element_text  # noqa: E402
 
 PMID_RE = re.compile(r"pubmed\.ncbi\.nlm\.nih\.gov/(\d+)")
@@ -61,21 +57,8 @@ TEXT_CITATION_RE = re.compile(
 # Q57 (2026-10-02): unread DOIs let 106 registry citations point at unrelated
 # or nonexistent papers.
 DOI_RE = re.compile(r"\b(10\.\d{4,9}/[^\s\"<>,;]+)")
-PMC_IDCONV = "https://www.ncbi.nlm.nih.gov/pmc/utils/idconv/v1.0/"
 CROSSREF_WORKS = "https://api.crossref.org/works/"
 RATE_LIMIT = 0.35  # seconds between API calls
-PMC_IDCONV_MAX_ATTEMPTS = 3
-PMC_IDCONV_RETRYABLE_HTTP = {429, 500, 502, 503, 504}
-
-# SSL context — prefer verified; fall back to unverified if system certs are unavailable
-try:
-    SSL_CTX = ssl.create_default_context()
-except ssl.SSLError:
-    SSL_CTX = ssl._create_unverified_context()
-
-# Unverified fallback for corporate proxies / macOS cert issues
-SSL_CTX_UNVERIFIED = ssl._create_unverified_context()
-
 
 # ── Data file definitions ─────────────────────────────────────────────
 
@@ -251,54 +234,36 @@ def cite_label(cid: str) -> str:
 
 # ── PubMed API ─────────────────────────────────────────────────────────
 
+_CLIENT = None
+
+
+def citation_client() -> PubMedClient:
+    """One transport/cache owner for every citation gate in this process."""
+    global _CLIENT
+    if _CLIENT is None:
+        _CLIENT = PubMedClient(rate_limit_delay=RATE_LIMIT)
+    return _CLIENT
+
+
 def resolve_pmc_ids(pmc_ids: list[str]) -> dict[str, str]:
-    """PMC id -> PMID through NCBI's PMC ID converter (unresolved ids are left out)."""
-    resolved = {}
-    for i in range(0, len(pmc_ids), 100):
-        url = f"{PMC_IDCONV}?ids={','.join(pmc_ids[i:i + 100])}&format=json&tool=pharmaguide-audit"
-        req = urllib.request.Request(url, headers={"User-Agent": "pharmaguide-audit/1.0"})
-        for attempt in range(1, PMC_IDCONV_MAX_ATTEMPTS + 1):
-            try:
-                with urllib.request.urlopen(req, timeout=20, context=SSL_CTX) as resp:
-                    for record in json.loads(resp.read().decode("utf-8")).get("records", []):
-                        if record.get("pmcid") and record.get("pmid"):
-                            resolved[record["pmcid"].upper()] = str(record["pmid"])
-                break
-            except urllib.error.HTTPError as error:
-                retryable = error.code in PMC_IDCONV_RETRYABLE_HTTP
-                if not retryable or attempt == PMC_IDCONV_MAX_ATTEMPTS:
-                    print(f"  PMC ID converter error: {error}", file=sys.stderr)
-                    break
-                retry_after = error.headers.get("Retry-After") if error.headers else None
-                try:
-                    delay = max(float(retry_after), 0.0) if retry_after is not None else float(attempt)
-                except ValueError:
-                    delay = float(attempt)
-                print(
-                    f"  PMC ID converter HTTP {error.code}; retrying "
-                    f"({attempt}/{PMC_IDCONV_MAX_ATTEMPTS}) in {delay:g}s",
-                    file=sys.stderr,
-                )
-                time.sleep(delay)
-            except Exception as error:
-                print(f"  PMC ID converter error: {error}", file=sys.stderr)
-                break
-        time.sleep(RATE_LIMIT)
-    return resolved
+    try:
+        return citation_client().resolve_pmc_ids(pmc_ids)
+    except Exception as error:
+        print(f"  PMC ID converter unavailable ({type(error).__name__}); citations remain unresolved", file=sys.stderr)
+        return {}
 
 
 def _get(url: str) -> bytes | None:
-    """GET a URL; None on HTTP 404 (and on other errors, which are logged)."""
-    req = urllib.request.Request(url, headers={"User-Agent": "pharmaguide-audit/1.0 (citation verification)"})
+    """Retrieve through the existing shared cache; never cache a failed request."""
+    parsed = urllib.parse.urlsplit(url)
+    params = dict(urllib.parse.parse_qsl(parsed.query))
+    endpoint = parsed.path.rsplit("/", 1)[-1] if parsed.hostname == "eutils.ncbi.nlm.nih.gov" else url
     try:
-        with urllib.request.urlopen(req, timeout=20, context=SSL_CTX) as resp:
-            return resp.read()
-    except urllib.error.HTTPError as e:
-        if e.code != 404:
-            print(f"  HTTP {e.code} for {url}", file=sys.stderr)
-    except Exception as e:
-        print(f"  API error for {url}: {e}", file=sys.stderr)
-    return None
+        payload = citation_client()._request(endpoint, params=params)
+        return (json.dumps(payload) if isinstance(payload, dict) else payload).encode()
+    except Exception as error:
+        print(f"  Citation retrieval unavailable ({type(error).__name__}); source remains unresolved", file=sys.stderr)
+        return None
 
 
 def resolve_doi_ids(doi_ids: list[str]) -> tuple[dict[str, str], dict[str, dict]]:
@@ -309,13 +274,11 @@ def resolve_doi_ids(doi_ids: list[str]) -> tuple[dict[str, str], dict[str, dict]
         doi = cid[len("doi:"):]
         raw = _get("https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=pubmed&retmode=json&term="
                    + urllib.parse.quote(doi + "[doi]", safe=""))
-        time.sleep(RATE_LIMIT)
         ids = json.loads(raw).get("esearchresult", {}).get("idlist", []) if raw else []
         if len(ids) == 1:
             to_pmid[cid] = ids[0]
             continue
         raw = _get(CROSSREF_WORKS + urllib.parse.quote(doi, safe=""))
-        time.sleep(1)  # Crossref's public pool
         if raw:
             work = json.loads(raw).get("message", {})
             crossref[cid] = {
@@ -341,28 +304,10 @@ def fetch_articles(pmids: list[str], abstract_chars: int | None = 800) -> dict[s
     articles.update(crossref)
     pmids = list(dict.fromkeys([p for p in pmids if p not in pmc_ids and p not in doi_ids]
                                + list(pmc_to_pmid.values()) + list(doi_to_pmid.values())))
-    for i in range(0, len(pmids), 8):
-        batch = pmids[i:i + 8]
-        ids_str = ",".join(batch)
-        url = (
-            f"https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi"
-            f"?db=pubmed&id={ids_str}&retmode=xml"
-        )
-        api_key = os.environ.get("NCBI_API_KEY") or os.environ.get("PUBMED_API_KEY", "")
-        if api_key:
-            url += f"&api_key={api_key}"
-
+    for i in range(0, len(pmids), 100):
+        batch = pmids[i:i + 100]
         try:
-            req = urllib.request.Request(url, headers={"User-Agent": "pharmaguide-audit/1.0"})
-            try:
-                with urllib.request.urlopen(req, timeout=20, context=SSL_CTX) as resp:
-                    raw = resp.read().decode("utf-8")
-            except Exception as _ssl_err:
-                if "SSL" in str(_ssl_err) or "certificate" in str(_ssl_err).lower():
-                    with urllib.request.urlopen(req, timeout=20, context=SSL_CTX_UNVERIFIED) as resp:
-                        raw = resp.read().decode("utf-8")
-                else:
-                    raise
+            raw = citation_client().efetch(batch)
             root = ET.fromstring(raw)
 
             # A book record (PubmedBookArticle: NBK chapters, HTA dossiers) has a
@@ -395,9 +340,8 @@ def fetch_articles(pmids: list[str], abstract_chars: int | None = 800) -> dict[s
                     "mesh_terms": mesh_terms,
                 }
         except Exception as e:
-            print(f"  API error batch {i}: {e}", file=sys.stderr)
+            print(f"  Citation batch {i} unavailable ({type(e).__name__}); {len(batch)} IDs require review/retry", file=sys.stderr)
 
-        time.sleep(RATE_LIMIT)
 
     for alias, pmid in [*pmc_to_pmid.items(), *doi_to_pmid.items()]:
         if pmid in articles:
@@ -407,29 +351,9 @@ def fetch_articles(pmids: list[str], abstract_chars: int | None = 800) -> dict[s
 
 def search_pubmed(query: str, max_results: int = 3) -> list[dict]:
     """Search PubMed for papers matching a query. Returns [{pmid, title}]."""
-    encoded = urllib.parse.quote(query)
-    url = (
-        f"https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi"
-        f"?db=pubmed&term={encoded}&retmax={max_results}&sort=relevance&retmode=xml"
-    )
-    api_key = os.environ.get("NCBI_API_KEY") or os.environ.get("PUBMED_API_KEY", "")
-    if api_key:
-        url += f"&api_key={api_key}"
-
     try:
-        req = urllib.request.Request(url, headers={"User-Agent": "pharmaguide-audit/1.0"})
-        try:
-            with urllib.request.urlopen(req, timeout=15, context=SSL_CTX) as resp:
-                raw = resp.read().decode("utf-8")
-        except Exception as _ssl_err:
-            if "SSL" in str(_ssl_err) or "certificate" in str(_ssl_err).lower():
-                with urllib.request.urlopen(req, timeout=15, context=SSL_CTX_UNVERIFIED) as resp:
-                    raw = resp.read().decode("utf-8")
-            else:
-                raise
-        root = ET.fromstring(raw)
-        pmids = [el.text for el in root.findall(".//Id")]
-        time.sleep(RATE_LIMIT)
+        result = citation_client().esearch(query, retmax=max_results, sort="relevance")
+        pmids = result.get("esearchresult", {}).get("idlist", [])
 
         if not pmids:
             return []
@@ -441,7 +365,7 @@ def search_pubmed(query: str, max_results: int = 3) -> list[dict]:
             if p in articles
         ]
     except Exception as e:
-        print(f"  Search error: {e}", file=sys.stderr)
+        print(f"  Citation search unavailable ({type(e).__name__})", file=sys.stderr)
         return []
 
 
@@ -699,7 +623,9 @@ def verify_file(config: dict, only_ids: set[str] | None = None) -> dict:
     if not all_pmids:
         return {"file": config["file"], "status": "no_pubmed_citations", "entries": []}
 
-    # Fetch all articles
+    # Re-evaluate current claims against full cached/live source metadata.
+    client = citation_client()
+    before = (client.cache_hits, client.live_requests)
     print(f"\n  {config['file']}: fetching {len(all_pmids)} unique PMIDs...")
     articles = fetch_articles(list(all_pmids.keys()))
 
@@ -736,6 +662,9 @@ def verify_file(config: dict, only_ids: set[str] | None = None) -> dict:
         "not_found": notfound_count,
         "pass_rate": f"{(match_count + partial_count) / max(len(results), 1):.0%}",
         "entries": results,
+        "retrieval": {"cached_records_or_requests": client.cache_hits - before[0],
+                      "live_requests": client.live_requests - before[1],
+                      "cache_ttl_days": client.config.cache_ttl_seconds / 86400},
     }
 
 
@@ -787,6 +716,7 @@ def main():
     print("PubMed Citation Content Verification")
     print("=" * 60)
 
+    baseline = json.loads(args.baseline.read_text()) if args.baseline else {}
     all_results = []
     total_match = 0
     total_mismatch = 0
@@ -805,6 +735,7 @@ def main():
         print(f"    ✅ Match: {result.get('match', 0)}")
         print(f"    ⚠️  Partial: {result.get('partial', 0)}")
         print(f"    ❌ Mismatch: {result.get('mismatch', 0)}")
+        print(f"    Unresolved: {result.get('not_found', 0)}; retrieval: {result.get('retrieval', {})}")
         print(f"    Pass rate: {result.get('pass_rate', 'N/A')}")
 
         # Print mismatches (every citation when checking a batch)
@@ -812,7 +743,7 @@ def main():
             if only_ids is not None:
                 print(f"    {entry['status'].upper():<9} {entry['entry_id']} {cite_label(entry['pmid'])}: "
                       f"{entry['article_title'][:100]}")
-            elif entry["status"] == "mismatch":
+            elif entry["status"] == "mismatch" and not args.baseline:
                 print(f"    ❌ {entry['entry_id']} {cite_label(entry['pmid'])}: {entry['article_title']}")
 
     print(f"\n{'=' * 60}")
@@ -825,7 +756,7 @@ def main():
         print(f"Report: {args.report}")
 
     if args.baseline:
-        new, unresolved = baseline_failures(all_results, json.loads(args.baseline.read_text()))
+        new, unresolved = baseline_failures(all_results, baseline)
         print(f"BASELINE: {len(new)} new mismatch(es), {len(unresolved)} unresolved citation(s); "
               f"{total_mismatch - len(new)} backlog mismatch(es) reported, not blocking")
         for file, entry in unresolved:

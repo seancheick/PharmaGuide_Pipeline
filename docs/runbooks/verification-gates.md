@@ -41,6 +41,33 @@ Contract tests worth knowing: `test_label_fidelity_contract.py`, `test_active_co
 
 Tooling reference: `scripts/api_audit/README.md`.
 
+### Citation reuse and failure reports
+
+Owner: `scripts/api_audit/pubmed_client.py::PubMedClient`; full PubMed article XML,
+PMC→PMID mappings and request receipts share `scripts/.cache/pubmed_cache.json`
+(or `PUBMED_CACHE_FILE` / `NCBI_CACHE_FILE`). The content, backed-study, interaction,
+Bookshelf, depletion and IQM consumers use this owner. No cached clinical approval.
+
+Unexpired article records are reused by PMID, independent of batch composition.
+Every content audit re-evaluates the **current** entry/claim against those records;
+changing the claim cannot inherit an old match. New/missing/expired records fetch
+live; the existing14-day lifetime forces periodic source refresh, including updated
+retraction metadata. Transport failure, malformed XML, absent IDs and invalid identity
+are never successful article receipts. An expired receipt cannot pass offline or be
+restamped from an old batch cache. Valid records remain usable when another ID fails.
+Cache writes are atomic and serialized so separate gates retain each other's receipts.
+
+PMC conversion uses NCBI's documented endpoint:
+https://pmc.ncbi.nlm.nih.gov/tools/idconv/api/v1/articles/ . Rate limits and transient
+server failures get bounded retries respecting Retry-After; a longer requested wait
+leaves the source unresolved rather than retrying early or bypassing the gate.
+
+With `--baseline`, console output separates **new mismatch**, **unresolved retrieval**
+and **known backlog**. Every result, including known mismatches and partial matches,
+remains in the JSON report; each file reports reused records/requests, live requests
+and the cache lifetime. Known backlog is not a new regression and is not automatically
+fixed or clinically approved. No report/receipt changes the existing release policy.
+
 ## Diagnostics and importers
 
 | Script | Use |

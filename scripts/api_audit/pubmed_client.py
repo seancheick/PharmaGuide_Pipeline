@@ -4,6 +4,10 @@
 from __future__ import annotations
 
 import json
+import fcntl
+import tempfile
+import math
+from email.utils import parsedate_to_datetime
 import os
 import time
 import xml.etree.ElementTree as ET
@@ -28,6 +32,7 @@ from api_audit.system_trust_http import (
 )
 
 
+PMC_IDCONV_URL = "https://pmc.ncbi.nlm.nih.gov/tools/idconv/api/v1/articles/"
 DEFAULT_BASE_URL = "https://eutils.ncbi.nlm.nih.gov/entrez/eutils"
 DEFAULT_API_KEY = os.environ.get("NCBI_API_KEY") or os.environ.get("PUBMED_API_KEY", "")
 DEFAULT_TOOL = os.environ.get("NCBI_TOOL") or os.environ.get("PUBMED_TOOL") or "pharmaguide-audit"
@@ -215,13 +220,16 @@ class PubMedClient:
         self._failure_limit = failure_limit if failure_limit is not None else DEFAULT_FAILURE_LIMIT
         self.circuit_open = False
         self._cache = self._load_cache()
+        self.cache_hits = 0
+        self.live_requests = 0
 
     def _load_cache(self) -> dict[str, Any]:
         path = self.config.cache_path
         if not path or not path.exists():
             return {}
         try:
-            return json.loads(path.read_text())
+            loaded = json.loads(path.read_text())
+            return {key: record for key, record in loaded.items() if isinstance(record, dict)} if isinstance(loaded, dict) else {}
         except Exception:
             return {}
 
@@ -230,14 +238,28 @@ class PubMedClient:
         if not path:
             return
         path.parent.mkdir(parents=True, exist_ok=True)
-        path.write_text(json.dumps(self._cache, indent=2, ensure_ascii=True))
+        # Serialize writers and atomically replace: other gates share this file.
+        with path.with_suffix(path.suffix + ".lock").open("a") as lock:
+            fcntl.flock(lock, fcntl.LOCK_EX)
+            merged = self._load_cache()
+            for key, value in self._cache.items():
+                if value.get("stored_at", 0) >= merged.get(key, {}).get("stored_at", 0):
+                    merged[key] = value
+            with tempfile.NamedTemporaryFile(mode="w", dir=path.parent, delete=False) as output:
+                temporary = Path(output.name)
+                json.dump(merged, output, ensure_ascii=True)
+            try:
+                os.replace(temporary, path)
+            finally:
+                temporary.unlink(missing_ok=True)
+            self._cache = merged
 
     def _cache_get(self, key: str) -> Any | None:
         record = self._cache.get(key)
         if not isinstance(record, dict):
             return None
         expires_at = record.get("expires_at")
-        if isinstance(expires_at, (int, float)) and expires_at < time.time():
+        if not isinstance(expires_at, (int, float)) or not math.isfinite(expires_at) or expires_at <= time.time():
             return None
         return record.get("payload")
 
@@ -254,35 +276,37 @@ class PubMedClient:
         if elapsed < self.config.rate_limit_delay:
             time.sleep(self.config.rate_limit_delay - elapsed)
 
-    def _request(self, endpoint: str, *, params: dict[str, Any] | None = None, method: str = "GET") -> Any:
+    def _request(self, endpoint: str, *, params: dict[str, Any] | None = None, method: str = "GET", use_cache: bool = True) -> Any:
+        params = dict(params or {})
+        external = endpoint.startswith("https://")
+        ncbi = not external or endpoint == PMC_IDCONV_URL
+        if not external:
+            params.setdefault("db", "pubmed")
+            if self.config.api_key:
+                params.setdefault("api_key", self.config.api_key)
+        if ncbi:
+            if self.config.tool:
+                params.setdefault("tool", self.config.tool)
+            if self.config.email:
+                params.setdefault("email", self.config.email)
+
+        cache_key = json.dumps({"endpoint": endpoint, "method": method, "params": params}, sort_keys=True)
+        cached = self._cache_get(cache_key) if use_cache else None
+        if cached is not None and not _is_ncbi_error_payload(cached):
+            self.cache_hits += 1
+            return cached
         if self.circuit_open:
             raise RuntimeError(
                 f"PubMed circuit breaker open after {self._failure_limit} consecutive failures. "
                 "Check network connectivity or NCBI service status."
             )
 
-        params = dict(params or {})
-        params.setdefault("db", "pubmed")
-        if self.config.api_key:
-            params.setdefault("api_key", self.config.api_key)
-        if self.config.tool:
-            params.setdefault("tool", self.config.tool)
-        if self.config.email:
-            params.setdefault("email", self.config.email)
-
-        cache_key = json.dumps({"endpoint": endpoint, "method": method, "params": params}, sort_keys=True)
-        cached = self._cache_get(cache_key)
-        if cached is not None and not _is_ncbi_error_payload(cached):
-            return cached
-        if cached is not None:
-            self._cache.pop(cache_key, None)
-            self._persist_cache()
-
-        url = f"{self.config.base_url.rstrip('/')}/{endpoint}"
+        url = endpoint if external else f"{self.config.base_url.rstrip('/')}/{endpoint}"
         for attempt in range(1, MAX_RETRIES + 1):
             self._sleep_for_rate_limit()
             fallback_payload: Any | None = None
             try:
+                self.live_requests += 1
                 response = requests.request(method, url, params=params, timeout=self.config.timeout_seconds)
                 self._last_request_at = time.time()
             except requests.exceptions.SSLError as exc:
@@ -297,7 +321,7 @@ class PubMedClient:
                     self._last_request_at = time.time()
                     fallback_payload = (
                         json.loads(fallback_text)
-                        if params.get("retmode") == "json"
+                        if params.get("retmode") == "json" or params.get("format") == "json"
                         else fallback_text
                     )
                 except (SystemTrustHTTPError, json.JSONDecodeError) as fallback_exc:
@@ -323,8 +347,20 @@ class PubMedClient:
             if fallback_payload is not None:
                 payload = fallback_payload
             else:
-                if response.status_code == 429:
-                    time.sleep(min(2 ** attempt, 8))
+                if response.status_code in {429, 500, 502, 503, 504}:
+                    delay = min(2 ** attempt, 8)
+                    retry_after = response.headers.get("Retry-After", "")
+                    try:
+                        delay = max(delay, float(retry_after))
+                    except (ValueError, TypeError):
+                        try:
+                            delay = max(delay, parsedate_to_datetime(retry_after).timestamp() - time.time())
+                        except (ValueError, TypeError, OverflowError):
+                            pass
+                    if not math.isfinite(delay) or delay > 60:
+                        raise RuntimeError("Citation service requested a retry later than this bounded audit permits")
+                    if attempt < MAX_RETRIES:
+                        time.sleep(delay)
                     continue
 
                 response.raise_for_status()
@@ -345,7 +381,8 @@ class PubMedClient:
                 continue
 
             self._consecutive_failures = 0
-            self._cache_put(cache_key, payload)
+            if use_cache:
+                self._cache_put(cache_key, payload)
             return payload
 
         self._consecutive_failures += 1
@@ -364,9 +401,80 @@ class PubMedClient:
         return self._request("esummary.fcgi", params=merged)
 
     def efetch(self, ids: list[str] | str, **params: Any) -> str:
-        merged = {"id": ",".join(ids) if isinstance(ids, list) else ids, "retmode": "xml"}
-        merged.update(params)
-        return self._request("efetch.fcgi", params=merged)
+        """Reuse full records by identity, independent of requesting batch/consumer.
+
+        Claims are still evaluated on every audit. Missing records and failed
+        responses never get a successful receipt; expiry requires a live refresh.
+        """
+        requested = list(dict.fromkeys(str(p) for p in (ids.split(",") if isinstance(ids, str) else ids)))
+        options = {"retmode": "xml", "db": "pubmed", **params}
+        if options.get("retmode") != "xml" or options.get("db") != "pubmed":
+            return self._request("efetch.fcgi", params={**options, "id": ",".join(requested)})
+        keys = {p: json.dumps({"article": p, "params": options}, sort_keys=True) for p in requested}
+        records = {}
+        for p, key in keys.items():
+            cached = self._cache_get(key)
+            if isinstance(cached, str) and not _is_ncbi_error_payload(cached):
+                try:
+                    article = ET.fromstring(cached)
+                    if article.tag not in {"PubmedArticle", "PubmedBookArticle"} or _clean_text(article.findtext(".//PMID")) != p:
+                        continue
+                except ET.ParseError:
+                    continue
+                records[p] = cached
+                self.cache_hits += 1
+        missing = [p for p in requested if p not in records]
+        for offset in range(0, len(missing), 100):
+            batch = missing[offset:offset + 100]
+            # Do not renew a receipt from an older batch-level cache entry.
+            try:
+                raw = self._request("efetch.fcgi", params={**options, "id": ",".join(batch)}, use_cache=False)
+                root = ET.fromstring(raw)
+            except Exception as error:
+                if not records:
+                    raise
+                print(f"Citation retrieval unavailable ({type(error).__name__}); {len(batch)} IDs unresolved; valid cached records retained", file=sys.stderr)
+                continue
+            for article in list(root):
+                if article.tag not in {"PubmedArticle", "PubmedBookArticle"}:
+                    continue
+                pmid = _clean_text(article.findtext(".//PMID"))
+                if pmid not in batch:
+                    continue
+                xml = ET.tostring(article, encoding="unicode")
+                records[pmid] = xml
+                now = time.time()
+                self._cache[keys[pmid]] = {"stored_at": now, "expires_at": now + self.config.cache_ttl_seconds, "payload": xml}
+            if records:
+                self._persist_cache()
+        return "<PubmedArticleSet>" + "".join(records[p] for p in requested if p in records) + "</PubmedArticleSet>"
+
+    def resolve_pmc_ids(self, ids: list[str]) -> dict[str, str]:
+        requested = list(dict.fromkeys(p.upper() for p in ids))
+        result = {}
+        for pmcid in requested:
+            cached = self._cache_get("pmc:" + pmcid)
+            if isinstance(cached, str) and cached.isdigit():
+                result[pmcid] = cached
+                self.cache_hits += 1
+        missing = [p for p in requested if p not in result]
+        for offset in range(0, len(missing), 100):
+            batch = missing[offset:offset + 100]
+            try:
+                payload = self._request(PMC_IDCONV_URL, params={"ids": ",".join(batch), "format": "json"}, use_cache=False)
+                if not isinstance(payload, dict) or not isinstance(payload.get("records"), list):
+                    raise ValueError("Malformed PMC converter response")
+            except Exception as error:
+                print(f"PMC conversion unavailable ({type(error).__name__}); {len(batch)} IDs unresolved", file=sys.stderr)
+                continue
+            for record in payload["records"]:
+                pmcid, pmid = str(record.get("pmcid", "")).upper(), str(record.get("pmid", ""))
+                if pmcid in batch and pmid.isdigit():
+                    result[pmcid] = pmid
+                    now = time.time()
+                    self._cache["pmc:" + pmcid] = {"stored_at": now, "expires_at": now + self.config.cache_ttl_seconds, "payload": pmid}
+            self._persist_cache()
+        return result
 
     def ecitmatch(self, bdata: str, **params: Any) -> str:
         merged = {"retmode": "xml", "bdata": bdata}

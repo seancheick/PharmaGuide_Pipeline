@@ -823,3 +823,36 @@ Owner: scripts/cert_resolver.py::resolve/_check_override; scripts/api_audit/veri
 - [ ] **Release-validated:** fingerprints inspected: all38Clean,38Enrich and38Score manifests are stale against this candidate. Next is one clean,enrich,score --pipeline-only rebuild from main, then catalog/app parity and release gates. No corpus rerun or external publication was launched by this batch.
 
 Receipts: /Users/seancheick/pg_quality/certification_renewal_20261004/ and /Users/seancheick/pg_quality/cert_refresh_20261004_all/. Existing missing Garden of Life NSF reference remains explicitly reviewed/held; source absence does not authorize a replacement alias. Pending program interpretations and identity exceptions receive no new credit.
+
+### October 4 — shared citation reuse and release429 bottleneck
+
+Owner: `scripts/api_audit/pubmed_client.py::PubMedClient` (existing transport/cache);
+`verify_all_citations_content.py::fetch_articles/verify_file/baseline_failures` and
+existing backed-study, interaction/Bookshelf, depletion and IQM consumers. Evidence:
+production release callers, fail-first cross-batch regression, owner/consumer tests,
+official NCBI converter documentation and saved live source receipts.
+Will NOT create: a second verifier/cache/clinical registry, cached claim approval,
+new numerical policy, changed backlog exemptions or release bypass.
+
+- [x] **Implemented:** full article records reused by PMID across batches/processes;
+  PMC identity mappings use that same disk cache and current official endpoint.
+  Atomic serialized persistence, bounded429/5xx retries, current-context checks,
+  existing14-day expiry and failure-closed refresh retained. Duplicate direct network
+  paths removed from the content, Bookshelf and depletion-presence gates.
+- [x] **Measured:** supplied run successfully built15,421pipeline blocks and15,154
+  catalog rows, then release failed on56PMC citation occurrences/53distinct IDs.
+  Live probe resolves all53 in2requests/7.46s; warm repeat0requests/~0.05s.
+  Current-source content checks:54matches,1partial,1already-known mismatch,
+  0new mismatches,0unresolved. Known omega/niacin mismatch stays in the backlog;
+  successful retrieval is not clinical signoff.
+- [x] **Implemented reporting:** JSON retains every finding; console separates new
+  mismatches, unresolved retrieval and known backlog, with cache/live counts.
+  Old251backlog count was not251new failures and remains clinical work.
+- [ ] **Validated/integrated:** focused gates, full-diff review and exact-source CI
+  receipt to be recorded at integration; no corpus or publication started here.
+- [ ] **Release-validated:** final rebuilt candidate and release checks remain open.
+  Audit-client imports are included in all three stage fingerprints; this change
+  invalidates existing stage stamps despite unchanged scoring/reference data. Combine
+  with the already-required certification rebuild in one main-based pipeline-only run.
+
+Receipts: `/Users/seancheick/pg_quality/citation_cache_20261004/`.

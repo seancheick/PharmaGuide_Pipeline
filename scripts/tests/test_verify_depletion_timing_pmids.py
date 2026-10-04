@@ -7,10 +7,7 @@ clean. No network — `_fetch_esummary` is monkeypatched.
 """
 
 import os
-import ssl
 import sys
-import urllib.error
-import urllib.request
 
 import pytest
 
@@ -97,25 +94,13 @@ def test_live_gate_fails_closed_on_all_transient(monkeypatch):
     assert vd.run(["--live"]) == 2
 
 
-def test_certificate_failure_uses_verified_system_trust(monkeypatch):
+def test_certificate_failure_uses_verified_system_trust(monkeypatch, tmp_path):
     """macOS Python may miss Keychain roots that the system curl trusts."""
-    monkeypatch.setattr(
-        urllib.request,
-        "urlopen",
-        lambda *args, **kwargs: (_ for _ in ()).throw(
-            urllib.error.URLError(
-                ssl.SSLCertVerificationError("self-signed certificate in chain")
-            )
-        ),
-    )
-    monkeypatch.setattr(vd.time, "sleep", lambda _: None)
-    monkeypatch.setattr(
-        vd,
-        "fetch_text_with_system_trust",
-        lambda **kwargs: "<eSummaryResult></eSummaryResult>",
-        raising=False,
-    )
-
-    assert vd._fetch_esummary("123", "secret", attempts=1) == (
-        "<eSummaryResult></eSummaryResult>"
-    )
+    import requests
+    from api_audit import pubmed_client as pc
+    client = pc.PubMedClient(cache_path=tmp_path / "cache.json", rate_limit_delay=0)
+    monkeypatch.setattr(vd, "_CLIENT", client)
+    monkeypatch.setattr(pc.requests, "request", lambda *a, **k: (_ for _ in ()).throw(
+        requests.exceptions.SSLError("self-signed certificate in chain")))
+    monkeypatch.setattr(pc, "fetch_text_with_system_trust", lambda **k: "<eSummaryResult></eSummaryResult>")
+    assert vd._fetch_esummary("123", "secret") == "<eSummaryResult></eSummaryResult>"

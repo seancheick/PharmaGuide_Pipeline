@@ -42,10 +42,7 @@ sys.path.insert(0, str(SCRIPTS_ROOT))
 sys.path.insert(0, str(SCRIPT_DIR))
 
 import env_loader  # noqa: E402,F401 — loads .env into os.environ on import
-from system_trust_http import (  # noqa: E402
-    SystemTrustHTTPError,
-    fetch_text_with_system_trust,
-)
+from api_audit.pubmed_client import PubMedClient  # noqa: E402
 
 PMID_RE = re.compile(r"pubmed\.ncbi\.nlm\.nih\.gov/(\d+)")
 
@@ -54,7 +51,7 @@ TARGET_FILES = [
     ("medication_depletions.json", "depletions"),
 ]
 
-ESUMMARY_URL = "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esummary.fcgi"
+_CLIENT = None
 
 
 # --------------------------------------------------------------------------- #
@@ -111,86 +108,15 @@ class TransientVerifyError(Exception):
     """A retryable failure (HTTP 429, network, timeout) — NOT a verdict."""
 
 
-def _is_certificate_verification_error(exc: BaseException) -> bool:
-    import ssl
-    import urllib.error
-
-    pending: list[BaseException] = [exc]
-    seen: set[int] = set()
-    while pending:
-        current = pending.pop()
-        if id(current) in seen:
-            continue
-        seen.add(id(current))
-        if isinstance(current, ssl.SSLCertVerificationError):
-            return True
-        if isinstance(current, urllib.error.URLError) and isinstance(
-            current.reason, BaseException
-        ):
-            pending.append(current.reason)
-        if current.__cause__ is not None:
-            pending.append(current.__cause__)
-        if current.__context__ is not None:
-            pending.append(current.__context__)
-    return False
-
-
-def _fetch_esummary(ids_str: str, api_key: str, attempts: int = 4) -> str:
-    """Fetch esummary XML for a comma-joined id batch, retrying transient errors.
-
-    Raises TransientVerifyError if all attempts fail (429/network). Any other
-    exception propagates (treated as transient by the caller too, but retries
-    are exhausted here for the known-retryable classes).
-    """
-    import ssl
-    import urllib.error
-    import urllib.request
-
-    ctx = ssl.create_default_context()
-    params = {"db": "pubmed", "id": ids_str, "retmode": "xml"}
-    if api_key:
-        params["api_key"] = api_key
-    from urllib.parse import urlencode
-
-    url = f"{ESUMMARY_URL}?{urlencode(params)}"
-
-    last_err: Exception | None = None
-    for attempt in range(attempts):
-        try:
-            req = urllib.request.Request(
-                url, headers={"User-Agent": "pharmaguide-audit/1.0"}
-            )
-            with urllib.request.urlopen(req, timeout=20, context=ctx) as resp:
-                return resp.read().decode("utf-8")
-        except urllib.error.HTTPError as e:
-            last_err = e
-            if e.code == 429:
-                retry_after = e.headers.get("Retry-After") if e.headers else None
-                delay = float(retry_after) if (retry_after or "").isdigit() else 2.0 * (2 ** attempt)
-                time.sleep(min(delay, 30.0))
-                continue
-            # Non-429 HTTP errors (5xx) are also worth a couple retries.
-            if 500 <= e.code < 600:
-                time.sleep(2.0 * (2 ** attempt))
-                continue
-            raise TransientVerifyError(f"HTTP {e.code}") from e
-        except Exception as e:  # URLError, socket timeout, SSL, ET issues on read
-            if _is_certificate_verification_error(e):
-                try:
-                    return fetch_text_with_system_trust(
-                        url=ESUMMARY_URL,
-                        params=params,
-                        timeout_seconds=20,
-                        user_agent="pharmaguide-audit/1.0",
-                    )
-                except SystemTrustHTTPError as fallback_error:
-                    last_err = fallback_error
-                    time.sleep(1.0 * (2 ** attempt))
-                    continue
-            last_err = e
-            time.sleep(1.0 * (2 ** attempt))
-            continue
-    raise TransientVerifyError(str(last_err))
+def _fetch_esummary(ids_str: str, api_key: str) -> str:
+    """Use the shared retry/cache owner; unavailable is never an invalid PMID."""
+    global _CLIENT
+    if _CLIENT is None:
+        _CLIENT = PubMedClient(api_key=api_key, rate_limit_delay=0.35)
+    try:
+        return _CLIENT.esummary(ids_str, retmode="xml")
+    except Exception as error:
+        raise TransientVerifyError(f"PubMed retrieval unavailable ({type(error).__name__})") from error
 
 
 def verify_pmids_live(pmid_records: list[dict]) -> list[dict]:

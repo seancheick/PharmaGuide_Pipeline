@@ -799,3 +799,30 @@ Owner: scripts/cert_resolver.py::resolve/_check_override; scripts/api_audit/veri
 - [ ] **Release-validated:** fingerprints inspected: all38Clean,38Enrich and38Score manifests are stale against this candidate. Next is one clean,enrich,score --pipeline-only rebuild from main, then catalog/app parity and release gates. No corpus rerun or external publication was launched by this batch.
 
 Receipts: /Users/seancheick/pg_quality/certification_renewal_20261004/ and /Users/seancheick/pg_quality/cert_refresh_20261004_all/. Existing missing Garden of Life NSF reference remains explicitly reviewed/held; source absence does not authorize a replacement alias. Pending program interpretations and identity exceptions receive no new credit.
+
+## October 4 — citation cache bottleneck (release infrastructure)
+
+Owner: `scripts/api_audit/pubmed_client.py::PubMedClient` and existing citation adapters
+`verify_all_citations_content.py::fetch_articles/verify_file/baseline_failures`;
+`verify_interaction_rules_citations.py::_get_json`; `verify_depletion_timing_pmids.py::_fetch_esummary`.
+Evidence: matrix/glossary/name search, production callers/release chain, fail-first
+batch-reuse test and official https://pmc.ncbi.nlm.nih.gov/tools/id-converter-api/ .
+Will NOT create: second transport/cache/clinical registry, approval receipt that skips
+changed claims, new scoring policy or gate bypass.
+
+[x] Implemented: existing disk cache reuses complete PMID records across consumers
+and changed batch membership; mappings, DOI/request cache, expiry and retry owner
+shared. Current content matching always reruns locally; unchanged sources do not
+require another network fetch within existing14days. Failed/absent/malformed records
+cannot renew source receipts. Serialized atomic writes preserve concurrent gates.
+[x] Measured: supplied95aad235run completed pipeline/catalog but release halted on
+HTTP429;56unresolved occurrences cover53PMC IDs. Fresh probe53/53resolve with2live
+requests/7.46s; warm0requests/~0.05s. Current claim checks54match/1partial/1known
+mismatch,0new mismatches/0unresolved. omega3_niacin_lipid/PMC10600480 remains a triaged
+mismatch and STRAIN_PLANTARUM_LP01/PMC6073678 partial; neither is newly approved.
+[x] Reporting: full JSON findings preserved, backlog distinguished from new/unresolved,
+per-file reuse/live metrics. No clinical data/config/score/export/publication change.
+[ ] Validated/integrated: pending final focused slice/full-diff review/exact-source CI.
+[ ] Release-validated: stage fingerprints changed through imported audit modules;
+combine with certification rebuild, then new catalog/app/release verification.
+Receipts: /Users/seancheick/pg_quality/citation_cache_20261004/ .

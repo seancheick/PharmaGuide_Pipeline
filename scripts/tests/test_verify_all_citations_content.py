@@ -6,6 +6,11 @@ import json
 import re
 import subprocess
 import sys
+import urllib.request
+import urllib.parse
+import urllib.error
+import pytest
+import requests
 from pathlib import Path
 
 
@@ -13,6 +18,37 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "api_audit"))
 
 import verify_all_citations_content as vac  # noqa: E402
+
+
+@pytest.fixture(autouse=True)
+def isolated_citation_client(monkeypatch, tmp_path):
+    from api_audit.pubmed_client import PubMedClient
+    monkeypatch.setattr(vac, "_CLIENT", PubMedClient(cache_path=tmp_path / "cache.json", rate_limit_delay=0))
+
+
+def install_transport(monkeypatch, respond):
+    """Existing transport fixtures now exercise the canonical requests owner."""
+    from api_audit import pubmed_client as pc
+    def request(method, url, params, timeout):
+        req = urllib.request.Request(url + "?" + urllib.parse.urlencode(params))
+        try:
+            with respond(req) as response:
+                text = response.read().decode()
+            status, headers = 200, {"content-type": "application/json" if text.startswith("{") else "text/xml"}
+        except urllib.error.HTTPError as error:
+            text, status, headers = "", error.code, dict(error.headers)
+        class Response:
+            status_code = status
+            def __init__(self):
+                self.text = text
+                self.headers = headers
+            def json(self): return json.loads(self.text)
+            def raise_for_status(self):
+                if self.status_code >= 400:
+                    raise requests.HTTPError(response=self)
+        return Response()
+    monkeypatch.setattr(pc.requests, "request", request)
+    monkeypatch.setattr(pc.time, "sleep", lambda *_: None)
 
 
 def test_native_study_contexts_reach_existing_citation_verifier():
@@ -116,13 +152,12 @@ def test_pmc_id_converter_retries_rate_limit(monkeypatch) -> None:
         nonlocal calls
         calls += 1
         if calls == 1:
-            raise vac.urllib.error.HTTPError(
+            raise urllib.error.HTTPError(
                 request.full_url, 429, "Too Many Requests", {"Retry-After": "0"}, None,
             )
         return Response()
 
-    monkeypatch.setattr(vac.urllib.request, "urlopen", respond)
-    monkeypatch.setattr(vac.time, "sleep", lambda *_: None)
+    install_transport(monkeypatch, respond)
 
     assert vac.resolve_pmc_ids(["PMC7583039"]) == {"PMC7583039": "32992959"}
     assert calls == 2
@@ -160,7 +195,7 @@ def test_dois_resolve_through_pubmed_or_crossref(monkeypatch) -> None:
         elif "api.crossref.org/works/10.2%2Fefsa" in url:
             body = crossref
         else:
-            raise vac.urllib.error.HTTPError(url, 404, "Not Found", {}, None)
+            raise urllib.error.HTTPError(url, 404, "Not Found", {}, None)
 
         class Response:
             def __enter__(self):
@@ -173,8 +208,7 @@ def test_dois_resolve_through_pubmed_or_crossref(monkeypatch) -> None:
                 return body
         return Response()
 
-    monkeypatch.setattr(vac.urllib.request, "urlopen", respond)
-    monkeypatch.setattr(vac.time, "sleep", lambda *_: None)
+    install_transport(monkeypatch, respond)
     articles = vac.fetch_articles(["doi:10.1/kava", "doi:10.2/efsa", "doi:10.3/ghost"])
 
     assert articles["doi:10.1/kava"]["title"] == "Kava hepatotoxicity"
@@ -289,8 +323,7 @@ def test_book_records_are_parsed_not_reported_missing(monkeypatch) -> None:
         def read(self):
             return xml
 
-    monkeypatch.setattr(vac.urllib.request, "urlopen", lambda *a, **k: Response())
-    monkeypatch.setattr(vac.time, "sleep", lambda *_: None)
+    install_transport(monkeypatch, lambda *a, **k: Response())
     article = vac.fetch_articles(["29144655"])["29144655"]
     assert article["title"] == "Dulaglutide (Addendum to Commission A15-07)"
     assert article["abstract"] == "Benefit assessment."
@@ -332,3 +365,66 @@ def test_changed_entry_ids_are_added_and_modified_entries_only(tmp_path, monkeyp
     monkeypatch.setattr(data_batch, "at_ref", lambda ref, path: before)
     config = {"file": "x.json", "array_key": "items", "id_field": "id"}
     assert vac.changed_entry_ids(config, "origin/main") == {"B", "D"}
+
+
+def test_pmc_converter_uses_current_service_and_reuses_only_success(monkeypatch):
+    calls = []
+    vac.citation_client().config.api_key = 'must-not-leak'
+    class Response:
+        def __enter__(self): return self
+        def __exit__(self, *args): return False
+        def read(self): return b'{"records":[{"pmcid":"PMC7583039","pmid":"32992959"}]}'
+    def respond(request):
+        assert request.full_url.startswith('https://pmc.ncbi.nlm.nih.gov/tools/idconv/api/v1/articles/?')
+        assert 'api_key' not in request.full_url
+        calls.append(request.full_url)
+        return Response()
+    install_transport(monkeypatch, respond)
+    assert vac.resolve_pmc_ids(['PMC7583039']) == {'PMC7583039':'32992959'}
+    assert vac.resolve_pmc_ids(['PMC7583039', 'PMC7583039']) == {'PMC7583039':'32992959'}
+    assert len(calls) == 1
+
+
+def test_pmc_converter_failure_is_not_cached(monkeypatch):
+    client = vac.citation_client()
+    def fail(*args, **kwargs): raise RuntimeError('network unavailable')
+    monkeypatch.setattr(client, '_request', fail)
+    assert vac.resolve_pmc_ids(['PMC7583039']) == {}
+    assert not client._cache
+    monkeypatch.setattr(client, '_request', lambda *a, **k: {'records':[{'pmcid':'PMC7583039','pmid':'32992959'}]})
+    assert vac.resolve_pmc_ids(['PMC7583039']) == {'PMC7583039':'32992959'}
+
+
+def test_pmc_converter_rate_limit_waits_with_exponential_floor(monkeypatch):
+    from api_audit import pubmed_client as pc
+    waits = []
+    def respond(request):
+        raise urllib.error.HTTPError(request.full_url,429,'rate limited',{'Retry-After':'0'},None)
+    install_transport(monkeypatch, respond)
+    monkeypatch.setattr(pc.time, 'sleep', waits.append)
+    assert vac.resolve_pmc_ids(['PMC7583039']) == {}
+    assert waits[:2] == [2.0,4.0]
+
+
+def test_changed_claim_is_rechecked_against_cached_article():
+    article = {'title':'Vitamin D calcium trial', 'abstract':'', 'mesh_terms':[]}
+    assert vac.content_matches(article, ['vitamin','calcium'])[0] == 'match'
+    assert vac.content_matches(article, ['bromelain','digestion'])[0] == 'mismatch'
+
+
+def test_baseline_console_separates_known_and_new_without_dropping_report(monkeypatch, tmp_path, capsys):
+    baseline = tmp_path / 'baseline.json'
+    baseline.write_text(json.dumps({'backlog':[{'file':'x.json','entry_id':'known','pmid':'111','status':'mismatch'}]}))
+    report = tmp_path / 'report.json'
+    rows = [{'entry_id':identity,'pmid':pmid,'status':state,'article_title':identity+' title'}
+            for identity,pmid,state in [('known','111','mismatch'),('new','222','mismatch'),('missing','333','not_found')]]
+    monkeypatch.setattr(vac, 'FILE_CONFIGS', [{'file':'x.json'}])
+    monkeypatch.setattr(vac, 'verify_file', lambda *a: {'file':'x.json','mismatch':2,'not_found':1,'entries':rows})
+    monkeypatch.setattr(sys, 'argv', ['audit','--baseline',str(baseline),'--report',str(report)])
+    assert vac.main() == 1
+    console = capsys.readouterr().out
+    assert '1 new mismatch(es), 1 unresolved citation(s); 1 backlog mismatch(es)' in console
+    assert 'known title' not in console
+    assert 'NEW MISMATCH x.json new PMID 222' in console
+    assert 'UNRESOLVED x.json missing PMID 333' in console
+    assert len(json.loads(report.read_text())[0]['entries']) == 3
