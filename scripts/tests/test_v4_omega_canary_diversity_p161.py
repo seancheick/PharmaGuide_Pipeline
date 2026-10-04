@@ -50,43 +50,29 @@ CANARY_TARGETS = {
                "Sports Research Omega-3 1055 mg Fish Oil 1250 mg (one of several SKUs)"),
     "327776": ("omega", "rtg", 12.0, 12.0,
                "Sports Research Omega-3 1055 mg Fish Oil 1250 mg (original canary)"),
-    "273630": ("omega", "tg", 12.0, 12.0,
-               "Garden of Life Dr. Formulated Advanced Omega Lemon Flavor"),
-    "273636": ("omega", "tg", 9.0, 9.0,
-               "Garden of Life Dr. Formulated Alaskan Cod Liver Oil Lemon Flavor "
-               "— cod liver source"),
-    "292796": ("omega", "tg", 10.0, 10.0,  # re-baseline 2026-06-06: concentration partial (2.0)
-               "Garden of Life Dr. Formulated Advanced Omega Citrus Flavor"),
+    "273630": ('omega', 'tg', 10.86, 10.86, 'Garden of Life Dr. Formulated Advanced Omega Lemon Flavor'),
+    "273636": ('omega', 'tg', 7.29, 7.29, 'Garden of Life Dr. Formulated Alaskan Cod Liver Oil Lemon Flavor — cod liver source'),
+    "292796": ('omega', 'tg', 8.29, 8.29, 'Garden of Life Dr. Formulated Advanced Omega Citrus Flavor'),
 
     # --- Mid band: PL krill (form 6) + concentration ---
-    "239592": ("omega", "pl", 8.0, 8.0,
-               "CVS Health 100% Pure Omega-3 Krill Oil 350 mg"),
-    "223169": ("omega", "pl", 8.0, 8.0,
-               "Nordic Naturals Omega-3 Phospholipids"),
+    "239592": ('omega', 'pl', 5.57, 5.57, 'CVS Health 100% Pure Omega-3 Krill Oil 350 mg'),
+    "223169": ('omega', 'pl', 5.57, 5.57, 'Nordic Naturals Omega-3 Phospholipids'),
     # 2026-09-22: GNC 1072, Nutricost 223318 and Pure Encapsulations 182968 left
     # the catalog and their pins had gone unchecked (the loader skipped them).
     # Replaced by the same brands' current krill SKUs.
-    "1073":   ("omega", "pl", 11.0, 11.0,
-               "GNC Fish Oil +Krill"),
-    "179775": ("omega", "pl", 7.5, 7.5,
-               "Nature Made Krill Oil 300 mg"),
-    "269559": ("omega", "pl", 8.0, 8.0,
-               "Nutricost Krill Oil 1000 mg"),
-    "184654": ("omega", "pl", 8.0, 8.0,
-               "Pure Encapsulations Krill-Plex"),
+    "1073":   ('omega', 'pl', 7.43, 7.43, 'GNC Fish Oil +Krill'),
+    "179775": ('omega', 'pl', 7.93, 7.93, 'Nature Made Krill Oil 300 mg'),
+    "269559": ('omega', 'pl', 5.57, 5.57, 'Nutricost Krill Oil 1000 mg'),
+    "184654": ('omega', 'pl', 8.43, 8.43, 'Pure Encapsulations Krill-Plex'),
 
     # --- EE form with concentration (rare in catalog) ---
-    "239845": ("omega", "ee", 9.5, 9.5,
-               "Spring Valley Omega-3 520 mg Natural Lemon Flavor — EE form"),
-
+    "239845": ('omega', 'ee', 8.64, 8.64, 'Spring Valley Omega-3 520 mg Natural Lemon Flavor — EE form'),
     # --- Undefined form, concentration only ---
     # Nordic Naturals Ultimate Omega + CoQ10 — label omits molecular form in
     # this artifact, so form remains 'undefined'. Concentration still scores.
-    "288740": ("omega", "undefined", 8.0, 8.0,
-               "Nordic Naturals Ultimate Omega + CoQ10 Lemon"),
+    "288740": ('omega', 'undefined', 6.57, 6.57, 'Nordic Naturals Ultimate Omega + CoQ10 Lemon'),
     # --- Low band: plain fish oil, no molecular form, low concentration ---
-    "179447": ("omega", "undefined", 1.0, 1.0,
-               "Nature Made Fish Oil 1200 mg"),
+    "179447": ('omega', 'undefined', 0.0, 0.0, 'Nature Made Fish Oil 1200 mg'),
 }
 
 

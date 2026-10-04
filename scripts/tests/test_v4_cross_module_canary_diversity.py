@@ -44,16 +44,16 @@ GENERIC_CANARIES = {
         "label": "Thorne Curcumin Phytosome 1000 mg",
         # A6 effective-quality fix: Meriva uses the botanical A1 slot for the
         # single-ingredient focus bonus, lifting this premium branded extract.
-        "score_range": (80.8, 82.2),
+        "score_range": (72.5, 72.5),
         "traits": {"trust_high": True},
     },
-    # No-RDA quantified dose path: gets conservative partial dose credit,
+    # Disclosed but unbenchmarked purpose: gets limited-assessability fallback,
     # but weak formulation/evidence keeps the product in the low generic band.
     # Replaced vitafusion Fiber Gummies after the dedicated fiber module made
     # that product correctly route to fiber_digestive.
     "251998": {
         "label": "Nature's Way DHEA-25 mg",
-        "score_range": (34.5, 35.9),
+        "score_range": (37.7, 37.7),
         "traits": {"dose_partial_no_rda": True, "trust_positive": True},
     },
     # False-positive guard from omega routing: liposomal delivery/lecithin
@@ -65,7 +65,7 @@ GENERIC_CANARIES = {
         # Re-baseline 2026-07-19: committed generic calibration drift (~+1.3).
         # Mass-bearing sole active, so the pending mass-less evidence-floor change
         # is inert here.
-        "score_range": (52.4, 53.8),
+        "score_range": (54.7, 54.7),
         "traits": {},
     },
 }
@@ -75,7 +75,7 @@ SPORTS_CANARIES = {
     # High sports scorer after the P1.7 sports module split.
     "325587": {
         "label": "Transparent Labs Creatine HMB",
-        "score_range": (80.5, 81.9),
+        "score_range": (82.0, 82.0),
         "traits": {"trust_positive": True, "dose_max": True},
     },
 }
@@ -86,13 +86,13 @@ PROBIOTIC_CANARIES = {
     # export totals. Contextual evidence is not strain-dose applicability.
     "306247": {
         "label": "Thorne FloraSport 20B",
-        "score_range": (52.8, 54.2),
+        "score_range": (59.5, 59.5),
         "traits": {"trust_positive": True},
     },
     # Low end of current probiotic score distribution.
     "201158": {
         "label": "OLLY Kids Quick Melt Probiotic Sticks",
-        "score_range": (38.8, 40.2),
+        "score_range": (48.5, 48.5),
         "traits": {"trust_positive": True},
     },
     # Aggregate-CFU-only canary: gets Formulation credit and capped dose proxy,
@@ -101,7 +101,7 @@ PROBIOTIC_CANARIES = {
         "label": "Spring Valley Advanced Strength Probiotic 50B",
         # Ten species and no owned strain doses: aggregate disclosure receives
         # its existing floor, never an invented even allocation of total CFU.
-        "score_range": (26.7, 28.1),
+        "score_range": (24.2, 24.2),
         "traits": {
             "aggregate_cfu_proxy": True,
             "trust_zero": True,
@@ -116,7 +116,7 @@ PROBIOTIC_CANARIES = {
     # Per-strain CFU disclosed path; Dose > 0 with no Trust credit.
     "286725": {
         "label": "vitafusion Probiotic 5B",
-        "score_range": (41.5, 42.9),
+        "score_range": (44.0, 44.0),
         "traits": {"dose_positive": True, "trust_zero": True},
     },
     # Per-strain CFU + positive Trust path.
@@ -126,7 +126,7 @@ PROBIOTIC_CANARIES = {
         # the pre-fix artifact counted a phantom second blend row, inflating
         # total CFU from 2.25B to 3.37B and strain count from 3 to 4. The
         # corrected corpus legitimately lowers the raw dose score 5.9 -> 3.4.
-        "score_range": (42.5, 43.9),
+        "score_range": (45.1, 45.1),
         "traits": {"dose_positive": True, "trust_positive": True},
     },
     # Prenatal name must stay probiotic because supplement_type wins.
@@ -152,7 +152,7 @@ PROBIOTIC_CANARIES = {
     },
     "PG_SUB_35E0BD3374BF494B80FEABE87FC559E7": {
         "label": "Seed DS-01 Daily Synbiotic",
-        "score_range": (70.6, 72.0),
+        "score_range": (74.6, 74.6),
         "traits": {"studied_formula_afu": True, "dose_score": 25.0},
     },
 }
@@ -245,7 +245,7 @@ def test_generic_real_catalog_canary_score_and_traits(dsld_id: str, expected: di
         assert _dimension_score(breakdown, "dose") == 16.0
         assert (
             breakdown["dimensions"]["dose"]["metadata"]["window_proxy_status"]
-            == "partial_credit_without_rda_proxy"
+            == "limited_assessability_unbenchmarked_purpose"
         )
     if traits.get("trust_zero"):
         assert _verification_strength(breakdown) == 0

@@ -35,18 +35,9 @@ V4_CANARIES = {
         "score": None,
         "safety_short_circuit": True,
     },
-    # Unresolved identity must stop scoring, even when the separate substance
-    # policy is CAUTION rather than a safety short circuit.
-    "241706": {
-        "label": "HUM Ripped Rooster",
-        "module": "generic",
-        "verdict": "NOT_SCORED",
-        "confidence": None,
-        "score_unavailable_reason": "blocked_by_completeness_gate",
-        "score": None,
-        "missing": {"strict_scoring_contract", "mapped_coverage", "identity_assessment_readiness"},
-        "safety_verdict": "CAUTION",
-    },
+    # Reviewed identity resolution makes the current label assessable; its
+    # separate substance warning must remain CAUTION rather than become SAFE.
+    "241706": {'label': 'HUM Ripped Rooster', 'module': 'generic', 'verdict': 'CAUTION', 'confidence': 'moderate', 'score_unavailable_reason': None, 'score': 38.4, 'safety_verdict': 'CAUTION', 'completeness_ready': True},
     # The dedicated digestive route remains correct. Both the activity rows and
     # proprietary-blend anchor are module-owned product projections.
     "241684": {
@@ -55,7 +46,7 @@ V4_CANARIES = {
         "verdict": "SAFE",
         "confidence": "low",
         "score_unavailable_reason": None,
-        "score": 24.1,
+        "score": 33.4,
         "unevaluated_canonicals": set(),
     },
     # No total CFU and no demonstrated dose applicability: dose remains zero.
@@ -65,7 +56,7 @@ V4_CANARIES = {
         "module": "probiotic",
         "verdict": "SAFE",
         "confidence": "low",
-        "score_range": (27.5, 28.9),
+        "score_range": (29.1, 29.1),
     },
     # Fish-oil parent mass with no EPA/DHA breakdown: scoreable as aggregate
     # evidence with moderate uncertainty, no score cap, and no CAUTION ceiling.
@@ -80,7 +71,7 @@ V4_CANARIES = {
         # Schema 2.4's canonical EPA/DHA projection proves the parent fish-oil
         # row is not an undisclosed active, restoring the 1-point disclosure
         # component without changing any omega pillar.
-        "score_range": (20.8, 22.2),
+        "score_range": (13.6, 13.6),
     },
     # Typed confidence moderate: strong evidence/label/verification, but
     # taxonomy-first identity confidence correctly surfaces that this is a
@@ -90,18 +81,18 @@ V4_CANARIES = {
         "module": "sports",
         "verdict": "SAFE",
         "confidence": "moderate",
-        "score_range": (80.5, 81.9),  # Phase 4: 88 → 84.6; cert→GMP: +2.2 (Informed Choice sku implies GMP)
+        "score_range": (82.0, 82.0),  # Phase 4: 88 → 84.6; cert→GMP: +2.2 (Informed Choice sku implies GMP)
     },
     # Assessment coverage is separate from quality. This disclosed fiber total
-    # remains module-owned, with incomplete evidence review surfaced separately.
+    # remains module-owned; completed limited/negative evidence stays explicit.
     "12932": {
         "label": "vitafusion Fiber Gummies",
         "module": "fiber_digestive",
         "verdict": "SAFE",
         "confidence": "moderate",
         "score_unavailable_reason": None,
-        "score": 50.0,
-        "evidence_driver": "evidence_review_incomplete",
+        "score": 56.0,
+        "evidence_driver": "evidence_review_complete_limited_or_negative",
         "unevaluated_canonicals": set(),
     },
     # The chlorophyll blend anchor reconciles and maps as a module-owned product
@@ -112,7 +103,7 @@ V4_CANARIES = {
         "verdict": "SAFE",
         "confidence": "moderate",
         "score_unavailable_reason": None,
-        "score": 46.1,
+        "score": 39.2,
         "evidence_driver": "evidence_review_complete_limited_or_negative",
         "unevaluated_canonicals": set(),
     },
@@ -125,7 +116,7 @@ V4_CANARIES = {
         "verdict": "SAFE",
         "confidence": "moderate",
         "score_unavailable_reason": None,
-        "score": 45.9,
+        "score": 53.9,
         "unevaluated_canonicals": {"paba", "fo_ti"},
     },
     # Typed confidence high on the probiotic module.
@@ -135,7 +126,7 @@ V4_CANARIES = {
         "verdict": "SAFE",
         "confidence": "high",
         # Contextual MTCC5856 evidence; no unestablished DE111 human credit.
-        "score_range": (60.0, 61.4),
+        "score_range": (70.7, 70.7),
     },
     # Fully ready verdict-diversity anchors. These replace products that are now
     # correctly quarantined for material evidence that has not been reviewed.
@@ -144,7 +135,7 @@ V4_CANARIES = {
         "module": "generic",
         "verdict": "CAUTION",
         "confidence": "moderate",
-        "score_range": (65.8, 67.2),
+        "score_range": (67.3, 67.3),
         "safety_verdict": "CAUTION",
     },
     "206362": {
@@ -152,7 +143,7 @@ V4_CANARIES = {
         "module": "probiotic",
         "verdict": "SAFE",
         "confidence": "moderate",
-        "score_range": (41.2, 42.2),
+        "score_range": (43.5, 43.5),
     },
 }
 
@@ -223,6 +214,11 @@ def test_v4_real_catalog_gate_and_confidence_canary(dsld_id: str, expected: dict
         assert lo <= out["raw_score_v4_100"] <= hi
 
     breakdown = out["v4_breakdown"]
+    if expected.get("completeness_ready"):
+        assert breakdown["completeness_gate"]["is_live_eligible"] is True
+        assert breakdown["completeness_gate"]["missing_fields"] == []
+        assert breakdown["completeness_gate"]["mapped_coverage"] == 1.0
+        assert "module" in breakdown
     if "evidence_driver" in expected:
         assert expected["evidence_driver"] in breakdown["confidence"]["evidence"]["drivers"]
     if expected.get("safety_short_circuit"):

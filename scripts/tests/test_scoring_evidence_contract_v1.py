@@ -143,7 +143,10 @@ def test_enzyme_activity_reaches_v4_as_non_mass_dose_evidence() -> None:
     assert any(str(row.get("unit")).lower() == "ppi" for row in rows)
 
     out = score_product_v4(product)
-    _assert_module_aggregate_evidence(out, "digestive_enzymes")
+    # Activities retain their named enzyme identities; a synthetic generic
+    # digestive_enzymes row would erase the preparation and activity owner.
+    for canonical_id in ("protease", "lactase"):
+        _assert_module_aggregate_evidence(out, canonical_id)
 
 
 def test_galu_enzyme_activity_reaches_v4_as_non_mass_dose_evidence() -> None:
@@ -334,11 +337,12 @@ def test_identity_bearing_blend_total_reaches_v4_as_anchor_mass_evidence() -> No
 
     rows = _evidence_rows(product, "blend_anchor_mass")
     assert rows, "Identity-bearing blend totals must not disappear from scoring"
-    assert rows[0]["canonical_id"] == "quercetin"
+    assert rows[0]["canonical_id"] == "quercefit"
+    assert not any(row.get("canonical_id") == "quercetin" for row in rows)
     assert float(rows[0]["quantity"]) >= 300.0
 
     out = score_product_v4(product)
-    _assert_module_aggregate_evidence(out, "quercetin")
+    _assert_module_aggregate_evidence(out, "quercefit")
     completeness = out["v4_breakdown"]["completeness_gate"]
     assert "conservative_blend_anchor_mass" in completeness["soft_missing"]
     assert completeness["score_cap"] is None
