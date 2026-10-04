@@ -1056,3 +1056,18 @@ def test_the_export_attaches_no_form_copy_to_a_derived_unknown(parent):
     iqm_index = {k: v for k, v in IQM.items() if k != '_metadata'}
     assert _derive_form_note(row, iqm_index) == (None, None)
     assert _derive_form_evidence(row, iqm_index) is None
+
+
+def test_raw_red_grape_source_does_not_hold_resveratrol(enricher):
+    """DSLD328280 prints grape and knotweed as sources of trans-resveratrol."""
+    from enhanced_normalizer import EnhancedDSLDNormalizer
+    from scoring_v4.scored_artifact import build_scored_artifact
+    raw = json.loads((FIXTURES / 'resveratrol_source_328280_raw.json').read_text())
+    product, _ = enricher.enrich_product(EnhancedDSLDNormalizer().normalize_product(raw))
+    rows = product['ingredient_quality_data']['ingredients']
+    row = next(r for r in rows if r.get('canonical_id') == 'resveratrol')
+    assert row.get('form_match_status') != 'unmapped'
+    assert not row.get('unmapped_forms')
+    assert 'Red Grape Fruit Extract' in json.dumps(row)
+    scored = build_scored_artifact(product)
+    assert 'disclosed_form_unmapped' not in scored['strict_scoring_contract']['findings']
