@@ -182,7 +182,7 @@ class UnitConverter:
         if (
             rule_id == 'vitamin_e_unknown'
             and from_unit_lower in {'mg', 'mg at'}
-            and re.match(r'^vitamin\s+e\b', ingredient_text, re.IGNORECASE)
+            and re.match(r'^vitamin\s+e\b', measured_name or ingredient_text, re.IGNORECASE)
         ):
             rule_id = 'vitamin_e_label_mg_alpha_tocopherol'
             rule_data = self.vitamin_conversions.get(rule_id, {})
@@ -473,14 +473,6 @@ class UnitConverter:
         if rule_id == 'vitamin_a_unknown':
             warnings.append("Vitamin A form unknown - flagged for review")
 
-        # A label naming both natural and synthetic vitamin E keeps the natural
-        # factor as the conservative UL upper bound, but its exact mg is unknown.
-        mixed_vitamin_e = rule_id == 'vitamin_e_d_alpha_tocopherol' and any(
-            re.search(pattern, ingredient_text, re.IGNORECASE)
-            for pattern in self.form_patterns.get('vitamin_e', {}).get('synthetic_patterns', []))
-        if mixed_vitamin_e:
-            warnings.append("Mixed natural and synthetic vitamin E: natural factor used as an upper bound")
-
         # Determine form detection source
         form_source = "alias_match"
         if ingredient_name and ingredient_name.lower() != nutrient_lower:
@@ -500,12 +492,45 @@ class UnitConverter:
             confidence=(
                 "low"
                 if rule_id in {'vitamin_a_unknown', 'vitamin_e_unknown', 'folate_unknown'}
-                else "medium" if mixed_vitamin_e
                 else "high"
             ),
             warnings=warnings,
             notes=[rule_data.get('notes', '')] if rule_data.get('notes') else []
         )
+
+    def _ul_exposure_amount(
+        self, conversion: ConversionResult, *, measured_name: str,
+    ) -> Optional[float]:
+        """Vitamin E UL mass, separate from label nutritional activity.
+
+        NIH ODS: the UL counts all eight synthetic stereoisomers, whereas
+        nutritional activity counts half of all-rac alpha-tocopherol mass.
+        Unknown IU/parent-mg forms return a conservative bound only; the
+        caller must preserve indeterminate lineage unless that bound is low.
+        Standalone compound masses are not FDA parent nutrient declarations.
+        https://ods.od.nih.gov/factsheets/VitaminE-HealthProfessional/
+        """
+        rule = conversion.conversion_rule_id
+        parent = bool(re.match(r"^vitamin\s+e\b", measured_name, re.I))
+        iu = canonicalize_mass_unit(conversion.original_unit) in {"iu", "u", "ui"}
+        if rule == "vitamin_e_unknown" and iu:
+            synthetic = self.vitamin_conversions[
+                "vitamin_e_dl_alpha_tocopherol"
+            ]["conversions"]["iu_to_mg"]
+            return conversion.original_value * synthetic * 2.0
+        amount = conversion.converted_value
+        if amount is None:
+            return None
+        mass = self.convert_mass(amount, conversion.converted_unit or "", "mg")
+        if not mass.success or mass.converted_value is None:
+            return None
+        amount = mass.converted_value
+        if (
+            rule == "vitamin_e_dl_alpha_tocopherol" and (parent or iu)
+            or rule == "vitamin_e_label_mg_alpha_tocopherol" and parent
+        ):
+            return amount * 2.0
+        return amount
 
     def _find_conversion_rule(
         self,
@@ -651,25 +676,20 @@ class UnitConverter:
         """Detect Vitamin E form (natural vs synthetic)."""
         patterns = self.form_patterns.get('vitamin_e', {})
 
-        # Check natural patterns first
-        for pattern in patterns.get('natural_patterns', []):
-            if re.search(pattern, ingredient_text, re.IGNORECASE):
-                return 'vitamin_e_d_alpha_tocopherol', \
-                       self.vitamin_conversions.get('vitamin_e_d_alpha_tocopherol', {})
-
-        # Check synthetic patterns
-        for pattern in patterns.get('synthetic_patterns', []):
-            if re.search(pattern, ingredient_text, re.IGNORECASE):
-                return 'vitamin_e_dl_alpha_tocopherol', \
-                       self.vitamin_conversions.get('vitamin_e_dl_alpha_tocopherol', {})
-
-        # Unknown form: fail safe to not-evaluable (mirror vitamin A). Defaulting
-        # to the synthetic factor (0.45 mg/IU) UNDER-states mg vs natural
-        # (0.67 mg/IU) and can hide an over-UL dose — don't guess the form. The
-        # enricher treats a 'vitamin_e_unknown' form as skip_ul_check.
-        logger.debug("Vitamin E form not detected from: %s", ingredient_text)
-        return 'vitamin_e_unknown', \
-               self.vitamin_conversions.get('vitamin_e_unknown', {})
+        natural = any(re.search(p, ingredient_text, re.I)
+                      for p in patterns.get('natural_patterns', []))
+        synthetic = any(re.search(p, ingredient_text, re.I)
+                        for p in patterns.get('synthetic_patterns', []))
+        # A mixed declaration has no exact IU-to-activity conversion. Keep
+        # that uncertainty in the existing unknown-form rule; the UL caller
+        # can screen its conservative all-stereoisomer bound separately.
+        if natural and not synthetic:
+            rule = 'vitamin_e_d_alpha_tocopherol'
+        elif synthetic and not natural:
+            rule = 'vitamin_e_dl_alpha_tocopherol'
+        else:
+            rule = 'vitamin_e_unknown'
+        return rule, self.vitamin_conversions.get(rule, {})
 
     def _detect_folate_form(
         self,

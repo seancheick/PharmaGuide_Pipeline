@@ -4,7 +4,7 @@
     "purpose": "dosing_normalization",
     "schema_version": "5.2.2",
     "contract_test": "scripts/tests/test_unit_conversions_contract.py",
-    "last_updated": "2026-08-25",
+    "last_updated": "2026-10-04",
     "version": "1.2.5",
     "statistics": {
       "vitamin_conversions": 26,
@@ -86,7 +86,7 @@
       },
       "canonical_unit": "mg",
       "bioavailability": "lower",
-      "notes": "Synthetic form - approximately 50% bioavailability of natural",
+      "notes": "The 0.45 mg/IU factor expresses nutritional activity, not physical all-rac alpha-tocopherol mass. NIH ODS: 1 mg vitamin E activity equals 2 mg all-rac alpha-tocopherol; the UL includes all eight stereoisomers.",
       "source": "NIH ODS"
     },
     "vitamin_a_retinol": {
@@ -221,9 +221,9 @@
       "conversions": null,
       "canonical_unit": "mg",
       "handling": "flag_for_review",
-      "notes": "If vitamin E form cannot be determined, flag for review. Do NOT default to the synthetic 0.45 mg/IU factor - it under-states mg vs natural 0.67 mg/IU and can hide an over-UL dose.",
+      "notes": "Unknown form remains unresolved for exact activity and UL exposure. Nutritional factors are 0.67 mg/IU natural and 0.45 mg/IU synthetic. The conservative UL mass bound is 0.90 mg/IU (all synthetic stereoisomers), not the natural nutritional-activity factor. Only a bound within the UL can establish a within-limit safety screen.",
       "warnings": [
-        "Cannot safely convert without knowing form - natural (d-alpha) 0.67 vs synthetic (dl-alpha) 0.45 mg/IU"
+        "Exact activity requires form: natural 0.67 versus synthetic 0.45 mg/IU. UL mass includes all synthetic stereoisomers; do not compare nutritional activity directly with the UL."
       ]
     },
     "vitamin_e_label_mg_alpha_tocopherol": {
@@ -234,7 +234,7 @@
         "mg_to_mg": 1.0
       },
       "canonical_unit": "mg",
-      "notes": "A Supplement Facts parent nutrient amount headed Vitamin E and declared in mg uses the FDA mg alpha-tocopherol label basis. This rule does not apply to legacy IU or standalone mixed-tocopherol/tocotrienol masses.",
+      "notes": "A Supplement Facts parent nutrient amount headed Vitamin E and declared in mg uses the FDA alpha-tocopherol nutritional-activity basis. For the UL, all-rac mass is twice confirmed synthetic nutritional activity; unknown form requires a conservative bound. This rule does not apply to legacy IU or standalone mixed-tocopherol/tocotrienol masses.",
       "source": "FDA guidance: Converting Units of Measure for Folate, Niacin, and Vitamins A, D, and E on Nutrition and Supplement Facts Labels"
     },
     "folate_unknown": {
@@ -488,8 +488,8 @@
         "\\bdl-alpha-tocopherol",
         "\\bdl-alpha-tocopheryl"
       ],
-      "default_if_unknown": "synthetic",
-      "notes": "If form cannot be determined, assume synthetic (conservative)"
+      "default_if_unknown": "flag_for_review",
+      "notes": "Natural, synthetic and mixed or unknown forms have distinct activity/UL lineage; never default an unresolved form to synthetic."
     },
     "vitamin_a": {
       "retinol_patterns": [

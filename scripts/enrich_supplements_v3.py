@@ -21999,6 +21999,21 @@ class SupplementEnricherV3:
                         and amount_for_ul is not None
                     ):
                         amount_for_ul *= explicit_preformed_vitamin_a_fraction
+                    # Keep nutritional activity separate from the mass covered
+                    # by the Vitamin E UL (all synthetic stereoisomers).
+                    vitamin_e_ul_bound = None
+                    if _canonical_for_ul in {"vitamin e", "vitamin_e"}:
+                        ul_per_serving = self.unit_converter._ul_exposure_amount(
+                            conversion, measured_name=ing_name
+                        )
+                        if ul_per_serving is not None:
+                            vitamin_e_ul_bound = ul_per_serving * servings_max
+                            if _rda_mass_unit_key(converted_unit) == "mg":
+                                amount_for_ul = vitamin_e_ul_bound
+                        if conversion.conversion_rule_id == "vitamin_e_label_mg_alpha_tocopherol":
+                            ul_only_skip = True
+                            skip_ul_check = True
+                            skip_ul_reason = "unknown_vitamin_form"
                     # The UL is stated in the reference unit (copper: mcg), so
                     # flags and per-nutrient sums state the exposure in it too.
                     # Plain mass only: qualified units keep their own lineage.
@@ -22131,8 +22146,8 @@ class SupplementEnricherV3:
                             "unit": converted_unit,
                         },
                         "safety_exposure": {
-                            "per_day": amount_for_ul,
-                            "unit": converted_unit,
+                            "per_day": vitamin_e_ul_bound if vitamin_e_ul_bound is not None else amount_for_ul,
+                            "unit": "mg" if vitamin_e_ul_bound is not None else converted_unit,
                         },
                         "reference_profile": dict(_RDA_REFERENCE_PROFILE),
                         "data_by_group": list(_nutrient_record.get("data") or []),
@@ -22270,17 +22285,14 @@ class SupplementEnricherV3:
                             skip_ul_reason == "unknown_vitamin_form"
                             and _canonical_for_ul
                             in {"vitamin e", "vitamin_e"}
-                            and self._normalize_text(unit) == "iu"
-                            and quantity_float
-                            * servings_max
-                            * _VITAMIN_E_NATURAL_MG_PER_IU
-                            <= _VITAMIN_E_ADULT_UL_MG
+                            and norm_module.canonicalize_mass_unit(unit) in {"iu", "u", "ui"}
+                            and positive_vitamin_e_family_rows == 1
+                            and vitamin_e_ul_bound is not None
+                            and vitamin_e_ul_bound <= _VITAMIN_E_ADULT_UL_MG
                         )
                         if worst_case_natural_vitamin_e_within_ul:
-                            # NIH's larger legacy-IU factor is the natural-form
-                            # factor (0.67 mg/IU versus 0.45 synthetic). Using
-                            # the larger value proves a safety upper bound while
-                            # preserving form ambiguity for adequacy.
+                            # Keep the historical reason identifier, but use
+                            # all-rac mass for the safety bound, not activity.
                             skip_ul_reason = (
                                 "worst_case_natural_vitamin_e_within_ul"
                             )
@@ -22296,7 +22308,7 @@ class SupplementEnricherV3:
                                 "unit": converted_unit,
                             }
                             adequacy_dict["safety_exposure"] = {
-                                "per_day": per_day_max,
+                                "per_day": vitamin_e_ul_bound,
                                 "unit": converted_unit,
                             }
                         vitamin_e_mass_upper_bound_mg = None
@@ -22307,6 +22319,12 @@ class SupplementEnricherV3:
                             vitamin_e_mass_upper_bound_mg = quantity_float
                         elif vitamin_e_source_mass_unit == "mcg":
                             vitamin_e_mass_upper_bound_mg = quantity_float / 1000.0
+                        if conversion.conversion_rule_id == "vitamin_e_label_mg_alpha_tocopherol":
+                            vitamin_e_mass_upper_bound_mg = (
+                                vitamin_e_ul_bound / servings_max
+                                if vitamin_e_ul_bound is not None and servings_max
+                                else None
+                            )
                         worst_case_vitamin_e_mass_within_ul = bool(
                             skip_ul_reason == "unknown_vitamin_form"
                             and positive_vitamin_e_family_rows == 1
@@ -22329,7 +22347,8 @@ class SupplementEnricherV3:
                             skip_ul_reason = (
                                 "worst_case_vitamin_e_mass_within_ul"
                             )
-                            converted_amount = vitamin_e_mass_upper_bound_mg
+                            if converted_amount is None:
+                                converted_amount = vitamin_e_mass_upper_bound_mg
                             converted_unit = "mg"
                             per_day_min = converted_amount * servings_min
                             per_day_max = converted_amount * servings_max
@@ -22338,7 +22357,7 @@ class SupplementEnricherV3:
                                 "unit": converted_unit,
                             }
                             adequacy_dict["safety_exposure"] = {
-                                "per_day": per_day_max,
+                                "per_day": vitamin_e_mass_upper_bound_mg * servings_max,
                                 "unit": converted_unit,
                             }
                         is_indeterminate_folate = (
@@ -22387,18 +22406,18 @@ class SupplementEnricherV3:
                             elif worst_case_natural_vitamin_e_within_ul:
                                 bounded_ul = _VITAMIN_E_ADULT_UL_MG
                                 bounded_pct_ul = (
-                                    float(per_day_max) / bounded_ul * 100.0
+                                    float(adequacy_dict["safety_exposure"]["per_day"]) / bounded_ul * 100.0
                                 )
                                 bounded_status = (
                                     "assessed_within_limit_worst_case_natural_"
                                     "vitamin_e"
                                 )
                                 bounded_basis = (
-                                    "maximum_possible_natural_vitamin_e_"
+                                    "maximum_possible_all_stereoisomer_vitamin_e_"
                                     "exposure"
                                 )
                                 bounded_details = {
-                                    "screening_amount": per_day_max,
+                                    "screening_amount": adequacy_dict["safety_exposure"]["per_day"],
                                     "screening_unit": "mg",
                                     "screening_ul": bounded_ul,
                                     "screening_basis": bounded_basis,
@@ -22406,7 +22425,7 @@ class SupplementEnricherV3:
                             elif worst_case_vitamin_e_mass_within_ul:
                                 bounded_ul = _VITAMIN_E_ADULT_UL_MG
                                 bounded_pct_ul = (
-                                    float(per_day_max) / bounded_ul * 100.0
+                                    float(adequacy_dict["safety_exposure"]["per_day"]) / bounded_ul * 100.0
                                 )
                                 bounded_status = (
                                     "assessed_within_limit_worst_case_vitamin_"
@@ -22417,7 +22436,7 @@ class SupplementEnricherV3:
                                     "exposure"
                                 )
                                 bounded_details = {
-                                    "screening_amount": per_day_max,
+                                    "screening_amount": adequacy_dict["safety_exposure"]["per_day"],
                                     "screening_unit": "mg",
                                     "screening_ul": bounded_ul,
                                     "screening_basis": bounded_basis,
@@ -22487,7 +22506,11 @@ class SupplementEnricherV3:
                         if (
                             worst_case_compound_mass_within_ul
                             or worst_case_natural_vitamin_e_within_ul
-                            or worst_case_vitamin_e_mass_within_ul
+                            or (
+                                worst_case_vitamin_e_mass_within_ul
+                                and conversion.conversion_rule_id
+                                != "vitamin_e_label_mg_alpha_tocopherol"
+                            )
                             or (
                                 worst_case_preformed_vitamin_a_within_ul
                                 and normalized_converted_unit
@@ -22609,6 +22632,21 @@ class SupplementEnricherV3:
                         adequacy_dict.update({
                             "rda_ai": None,
                             "rda_ai_source": "unknown",
+                            "pct_rda": None,
+                            "adequacy_band": "unknown",
+                            "scoring_eligible": False,
+                            "point_recommendation": 0,
+                        })
+                    if (
+                        _canonical_for_ul in {"vitamin e", "vitamin_e"}
+                        and ul_exposure.get("ul_gate_ineligible_reason")
+                        == "compound_mass_not_elemental"
+                    ):
+                        # A standalone ester mass is not a declared FDA
+                        # nutrient activity amount. Without a verified moiety
+                        # conversion it cannot establish RDA adequacy, even
+                        # when its conservative UL bound is above the limit.
+                        adequacy_dict.update({
                             "pct_rda": None,
                             "adequacy_band": "unknown",
                             "scoring_eligible": False,
@@ -22745,6 +22783,7 @@ class SupplementEnricherV3:
                         **dose_lineage,
                         "per_day_min": per_day_min,
                         "per_day_max": per_day_max,
+                        "safety_exposure": dict(adequacy_dict["safety_exposure"]),
                         "servings_per_day_min": servings_min,
                         "servings_per_day_max": servings_max,
                         "skip_ul_check": skip_ul_check,
@@ -23017,10 +23056,9 @@ class SupplementEnricherV3:
                         or "tocotrienol" in identity_text
                     ):
                         continue
-                    amount = self._to_float_safe(rda_row.get("per_day_max"))
-                    mass_unit = _rda_mass_unit_key(
-                        rda_row.get("converted_unit")
-                    )
+                    exposure = rda_row.get("safety_exposure") or {}
+                    amount = self._to_float_safe(exposure.get("per_day"))
+                    mass_unit = _rda_mass_unit_key(exposure.get("unit"))
                     if amount is None or amount < 0 or mass_unit is None:
                         vitamin_e_family_invalid = True
                         continue
@@ -23125,6 +23163,13 @@ class SupplementEnricherV3:
                     for adequacy_row in adequacy_results:
                         if adequacy_row.get("source_label_key") not in unknown_vitamin_e_refs:
                             continue
+                        activity_fields = {
+                            key: adequacy_row.get(key)
+                            for key in (
+                                "rda_ai", "rda_ai_source", "pct_rda", "adequacy_band",
+                                "scoring_eligible", "point_recommendation",
+                            )
+                        } if adequacy_row.get("scoring_eligible") else {}
                         adequacy_row.update({
                             "rda_ai": None,
                             "rda_ai_source": "unknown",
@@ -23146,6 +23191,7 @@ class SupplementEnricherV3:
                             "over_ul_amount": None,
                             "warnings": [],
                         })
+                        adequacy_row.update(activity_fields)
                     for rda_row, _, _ in vitamin_e_family_rows:
                         if rda_row.get("source_label_key") not in unknown_vitamin_e_refs:
                             continue
@@ -23156,8 +23202,6 @@ class SupplementEnricherV3:
                             ),
                             "ul_assessment_status": "assessed_within_limit",
                             "ul_for_default_profile": _VITAMIN_E_ADULT_UL_MG,
-                            "pct_rda": None,
-                            "adequacy_band": "unknown",
                             "warnings": [],
                         })
 

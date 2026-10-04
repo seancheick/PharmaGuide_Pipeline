@@ -1,10 +1,10 @@
 {
  "_metadata": {
   "description": "Gold benchmark (roadmap 1.10) for dose/UL resolution: real DSLD labels through the production enricher must yield the hand-computed per-day exposure and upper-limit verdict.",
-  "expectation_basis": "Hand-computed from each label's per-row serving basis (DSLD quantityVariants), the directions' maximum daily servings, ODS unit conversions (vitamin D 40 IU/mcg; vitamin A 0.3 mcg RAE/IU; vitamin E 0.67 mg/IU natural, 0.45 mg/IU synthetic; folic acid 1.667 mcg DFE/mcg) and the adult 19-30 ULs in rda_optimal_uls.json, written before the enricher ran. 'basis' states the arithmetic.",
+  "expectation_basis": "Hand-computed from each label's per-row serving basis (DSLD quantityVariants), the directions' maximum daily servings, ODS unit conversions (vitamin D 40 IU/mcg; vitamin A 0.3 mcg RAE/IU; vitamin E UL mass 0.67 mg/IU natural, 0.90 mg/IU synthetic (nutritional activity remains 0.45 mg/IU synthetic); folic acid 1.667 mcg DFE/mcg) and the adult 19-30 ULs in rda_optimal_uls.json, written before the enricher ran. 'basis' states the arithmetic.",
   "assertions": "over_ul must match on the nutrient's UL-assessed row (and no row of that nutrient may be over when the verdict is false); safety_per_day, when given, must match a UL-assessed row within 0.5%. Compound-mass rows (salt weight) must never carry the verdict. When safety_unit is given, the matching row's safety_exposure unit must equal it.",
   "case_count": 44,
-  "last_updated": "2026-10-03"
+  "last_updated": "2026-10-04"
  },
  "cases": [
   {
@@ -1157,10 +1157,10 @@
    },
    "expect": {
     "canonical_id": "vitamin_e",
-    "safety_per_day": 450,
+    "safety_per_day": 900,
     "over_ul": false
    },
-   "basis": "1,000 IU synthetic x 0.45 mg/IU = 450 mg < UL 1,000 mg"
+   "basis": "1,000 IU synthetic x 0.45 mg/IU = 450 mg < UL 1,000 mg Corrected UL basis: NIH ODS counts all eight synthetic stereoisomers (0.90 mg/IU); 0.45 mg/IU is nutritional activity only. Unknown IU uses 0.90 mg/IU as a bound, not confirmed exposure."
   },
   {
    "id": "e-800iu-unstated-form-worst-case",
@@ -1279,10 +1279,10 @@
    },
    "expect": {
     "canonical_id": "vitamin_e",
-    "safety_per_day": 536,
+    "safety_per_day": 720,
     "over_ul": false
    },
-   "basis": "form unstated: natural factor 0.67 mg/IU is the worst case, 536 mg < 1,000"
+   "basis": "form unstated: natural factor 0.67 mg/IU is the worst case, 536 mg < 1,000 Corrected UL basis: NIH ODS counts all eight synthetic stereoisomers (0.90 mg/IU); 0.45 mg/IU is nutritional activity only. Unknown IU uses 0.90 mg/IU as a bound, not confirmed exposure."
   },
   {
    "id": "e-d-alpha-671mg",
@@ -1572,10 +1572,10 @@
    },
    "expect": {
     "canonical_id": "vitamin_e",
-    "safety_per_day": 180,
+    "safety_per_day": 360,
     "over_ul": false
    },
-   "basis": "400 IU x 0.45 = 180 mg"
+   "basis": "400 IU x 0.45 = 180 mg Corrected UL basis: NIH ODS counts all eight synthetic stereoisomers (0.90 mg/IU); 0.45 mg/IU is nutritional activity only. Unknown IU uses 0.90 mg/IU as a bound, not confirmed exposure."
   },
   {
    "id": "a-retinyl-10000iu-at-ul",

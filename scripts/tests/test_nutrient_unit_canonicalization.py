@@ -34,4 +34,6 @@ def test_mixed_natural_and_synthetic_vitamin_e_is_only_an_upper_bound():
     mixed = convert_nutrient('Vitamin E', 100, 'IU', 'mg', 'Vitamin E (as d-alpha tocopherol and dl-alpha tocopheryl acetate)')
     natural = convert_nutrient('Vitamin E', 100, 'IU', 'mg', 'Vitamin E (as d-alpha tocopherol)')
     assert natural.confidence == 'high'
-    assert mixed.confidence == 'medium' and mixed.converted_value == natural.converted_value
+    assert mixed.confidence == "low"
+    assert mixed.conversion_rule_id == 'vitamin_e_unknown'
+    assert mixed.converted_unit == "IU"

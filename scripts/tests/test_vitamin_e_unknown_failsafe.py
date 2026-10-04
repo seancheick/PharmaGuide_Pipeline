@@ -70,7 +70,7 @@ def test_low_unknown_form_vitamin_e_uses_natural_form_upper_bound(enricher):
 
     assert row["skip_ul_reason"] == "worst_case_natural_vitamin_e_within_ul"
     assert row["ul"] == pytest.approx(1000)
-    assert row["pct_ul"] == pytest.approx(5.025)
+    assert row["pct_ul"] == pytest.approx(6.75)
     assert row["pct_rda"] is None
     assert row["scoring_eligible"] is False
     assert assessment["normalized_value"] == pytest.approx(50.25)
@@ -331,7 +331,9 @@ def test_bare_vitamin_e_mg_is_label_declared_alpha_tocopherol(enricher):
     row = result["adequacy_results"][0]
     assessment = result["dose_assessments"][0]
 
-    assert row["skip_ul_check"] is False
+    assert row["skip_ul_check"] is True
+    assert row["safety_exposure"]["per_day"] == pytest.approx(30)
+    assert row["pct_rda"] == pytest.approx(100)
     assert assessment["normalized_unit"] == "mg"
     assert assessment["ul_assessment_status"] == "assessed_within_limit"
     assert assessment["readiness"] == "complete"
