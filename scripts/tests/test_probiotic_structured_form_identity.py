@@ -493,3 +493,52 @@ def test_group_code_requires_exact_source_owned_species_without_conflicts(enrich
     else:
         owner["name"] = owner["raw_source_text"] = "Probiotic"
     assert _collect(enricher, [owner])["probiotic_data"]["clinical_strains"] == []
+
+
+@pytest.mark.parametrize("case", ["valid", "wrong_species", "abbreviated_species", "embedded_species", "genus_only_group", "wrong_code", "missing_group", "multiple_forms", "missing_source"])
+def test_full_strain_form_under_marketing_wrapper_requires_agreeing_species(enricher, case):
+    owner = _row("Advanced Acidophilus", "Lactobacillus acidophilus LA-5")
+    owner.update(ingredientGroup="Lactobacillus acidophilus", standardName="Lactobacillus acidophilus")
+    if case == "wrong_species":
+        owner["name"] = owner["raw_source_text"] = "Bifidobacterium longum"
+    elif case == "abbreviated_species":
+        owner["name"] = owner["raw_source_text"] = "L. rhamnosus"
+    elif case == "embedded_species":
+        owner["name"] = owner["raw_source_text"] = "Advanced Lactobacillus rhamnosus"
+    elif case == "genus_only_group":
+        owner["ingredientGroup"] = "Lactobacillus"
+    elif case == "wrong_code":
+        owner["name"] = owner["raw_source_text"] = "Advanced Acidophilus LA-14"
+    elif case == "missing_group":
+        owner.pop("ingredientGroup")
+    elif case == "multiple_forms":
+        owner["forms"].append({"name": "Lactobacillus acidophilus LA-14"})
+    elif case == "missing_source":
+        owner.pop("raw_source_path")
+    product = _collect(enricher, [owner])
+    identities = [row["clinical_id"] for row in product["probiotic_data"]["clinical_strains"]]
+    assert identities == (["STRAIN_ACIDOPHILUS_LA5"] if case == "valid" else [])
+
+
+def test_raw_wrapper_strain_reaches_scored_artifact_without_positive_evidence(enricher):
+    from enhanced_normalizer import EnhancedDSLDNormalizer
+    from scoring_v4.scored_artifact import build_scored_artifact
+    raw = {
+        "id": 264105, "brandName": "Solgar", "fullName": "Advanced Acidophilus",
+        "physicalState": {"langualCodeDescription": "Capsule"},
+        "servingSizes": [{"order": 1, "minQuantity": 1, "maxQuantity": 1,
+                          "minDailyServings": 2, "maxDailyServings": 2, "unit": "Capsule(s)", "inSFB": True}],
+        "ingredientRows": [{"name": "Advanced Acidophilus", "category": "bacteria",
+            "ingredientGroup": "Lactobacillus acidophilus", "notes": "500 million CFU providing",
+            "quantity": [{"servingSizeOrder": 1, "quantity": 5, "unit": "mg"}],
+            "forms": [{"name": "Lactobacillus acidophilus LA-5", "category": "bacteria",
+                       "ingredientGroup": "Lactobacillus acidophilus"}]}],
+        "otheringredients": {"ingredients": []}, "statements": [],
+    }
+    product = enricher.enrich_product(EnhancedDSLDNormalizer().normalize_product(raw))[0]
+    native = product["probiotic_data"]["clinical_strains"]
+    assert [row["clinical_id"] for row in native] == ["STRAIN_ACIDOPHILUS_LA5"]
+    assert native[0]["source_row_ref"] == "ingredientRows[0]"
+    artifact = build_scored_artifact(product)
+    assert artifact["quality_pillars_v4"]["evidence"]["score"] == 0
+    assert artifact["product_safety_status"] == "no_known_catalog_concern"

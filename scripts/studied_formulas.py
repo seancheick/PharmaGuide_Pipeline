@@ -23,6 +23,7 @@ from probiotic_measurements import (
     context_review_finished, strain_literature_review_concluded,
     classify_dose_applicability, dose_applicability_credit, DOSE_MEASUREMENT_UNITS,
     clinical_review_provenance_valid, effective_clinical_dose_basis,
+    label_strain_identity_resolution, _label_designation_tokens, _PROBIOTIC_GENERA,
 )
 
 
@@ -302,9 +303,27 @@ def clinical_strain_identity_from_label(row: Mapping, reference: Mapping) -> str
         return None
     if not forms or not row.get("raw_source_path"):
         return None
+    # A marketing heading may wrap a full strain printed on its own row.
+    # Require agreeing source species, one exact full form and no conflicting
+    # scientific genus or explicit code in the heading. Taxonomy alone never
+    # supplies the strain: the complete identity must be on the form itself.
+    wrapper = False
     if not compatible_parent(label):
-        return None
+        # Reuse the label designation owner so abbreviated scientific names
+        # and code-bearing marketing text cannot masquerade as wrappers.
+        taxon, codes = _label_designation_tokens(label)
+        label_state = label_strain_identity_resolution(label, None, {})["resolution"]
+        explicit_identity = (bool(codes) or label_state != "unresolved_label_text"
+                             or any(word in _PROBIOTIC_GENERA or len(word) == 1 for word in taxon))
+        wrapper = (len(forms) == 1 and not explicit_identity
+                   and len(tokens(row.get("ingredientGroup"))) >= 2
+                   and compatible_parent(row.get("ingredientGroup"))
+                   and any(clinical_strain_identity_matches(form, reference) for form in forms))
+        if not wrapper:
+            return None
     for field in ("name", "standardName", "standard_name", "ingredientGroup"):
+        if wrapper and field == "name" and row.get(field) == label:
+            continue
         value = row.get(field)
         # Single-word taxonomy groups (e.g. Bifidobacteria) are not strain
         # identities. Multi-word scientific parents must agree with the form.
