@@ -1873,11 +1873,20 @@ def derive_product_scoring_evidence(product: Dict[str, Any]) -> List[Dict[str, A
             canonical_id = identity_row.get("canonical_id_after")
             source_db = identity_row.get("canonical_source_db")
             standard_name = identity_row.get("standard_name")
-            if canonical_id:
+            if "canonical_id_after" in identity_row:
+                # Explicit null is an identity repair, not absent metadata.
                 active_row["canonical_id"] = canonical_id
                 if source_db:
                     active_row["canonical_source_db"] = source_db
-                if standard_name:
+                if not _is_verified_canonical(canonical_id):
+                    # A repaired generic/null identity must not revive the
+                    # old member through its stale standardized name. Keep
+                    # the printed blend name as a structural anchor only.
+                    active_row["standardName"] = (
+                        identity_row.get("raw_source_text")
+                        or raw_active.get("name")
+                    )
+                elif standard_name:
                     active_row["standardName"] = standard_name
             if identity_row.get("source_label_key"):
                 active_row["source_label_key"] = identity_row["source_label_key"]

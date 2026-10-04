@@ -1092,3 +1092,12 @@ def test_chromemate_polynicotinate_control_keeps_named_form(enricher):
     assert match['form_id'] == 'chromium polynicotinate'
     assert not match.get('unmapped_forms')
 
+
+@pytest.mark.parametrize("pid, member", [("219819", "tamarind_extract"), ("33246", "l_glutamine")])
+def test_repaired_blend_identity_is_not_revived_as_member_mass(enricher, pid, member):
+    from enhanced_normalizer import EnhancedDSLDNormalizer
+    raw = json.loads((FIXTURES / f'blend_projection_{pid}_raw.json').read_text())
+    product, _ = enricher.enrich_product(EnhancedDSLDNormalizer().normalize_product(raw))
+    assert not any(r.get('canonical_id') == member and r.get('evidence_type') == 'blend_anchor_mass'
+        for r in product.get('product_scoring_evidence', []))
+    assert any(r.get('name') in {'TamaFlex', 'Glutamine Complex'} for r in product['activeIngredients'])
