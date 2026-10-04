@@ -93,3 +93,27 @@ def test_nonverdict_stimulant_signals_are_advisories(informational):
 
 def test_high_caffeine_remains_an_actionable_reason():
     assert stated_safety_signal(["STIMULANT_CAFFEINE_HIGH_DOSE", "DOSE_OVER_UL_CRITICAL"]) == "STIMULANT_CAFFEINE_HIGH_DOSE"
+
+
+@pytest.mark.parametrize("status_signal", ["B0_STATUS_CAUTION", "B0_STATUS_OTHER"])
+def test_unhandled_policy_status_is_only_a_recorded_advisory(status_signal):
+    # The fallback in _apply_signal_policy records these without changing verdict.
+    assert stated_safety_signal([status_signal, "DOSE_OVER_UL_CRITICAL"]) == "DOSE_OVER_UL_CRITICAL"
+    assert stated_safety_signal([status_signal]) == status_signal
+
+
+def test_generic_caution_status_does_not_set_a_gate_verdict():
+    from identity.safety import SafetySignal
+    from scoring_v4.gate_safety import SafetyResult, _apply_signal_policy
+
+    result = SafetyResult()
+    signal = SafetySignal(
+        entry_id="AUDIT_GENERIC_STATUS", source_db="banned_recalled_ingredients",
+        status="caution", severity="moderate", subject_role="active",
+        match_resolution="confirmed", match_confidence=1.0, policy_eligible=True,
+        review_required=False, inactive_policy="", evidence_text="test fixture",
+    )
+    _apply_signal_policy(result, signal)
+    assert result.verdict is None
+    assert result.safety_signals == ["B0_STATUS_CAUTION"]
+    assert stated_safety_signal(result.safety_signals + ["DOSE_OVER_UL_CRITICAL"]) == "DOSE_OVER_UL_CRITICAL"

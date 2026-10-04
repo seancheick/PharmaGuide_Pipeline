@@ -917,7 +917,9 @@ def stated_safety_signal(signals: List[str]) -> Optional[str]:
         if signal not in AUDIT_ONLY_SAFETY_SIGNALS and not signal.startswith("B0_LOWCONF_")
     ]
     return next(
-        (signal for signal in reportable if signal not in ADVISORY_ONLY_SAFETY_SIGNALS),
+        (signal for signal in reportable
+         if signal not in ADVISORY_ONLY_SAFETY_SIGNALS
+         and not signal.startswith("B0_STATUS_")),
         reportable[0] if reportable else None,
     )
 
