@@ -7,7 +7,7 @@
     "review_policy": "Every product entry is keyed by dsld_id and must carry: brand, product_name (for human-readable audit trail), raw_ingredient_text (the source row being corrected), corrected_ingredient_text (the text the cleaner should see, unchanged for unit-only corrections), correction_fields, evidence (free-text rationale with regulatory citations), sources (authoritative URLs — FDA, NIH, DailyMed, etc.), reviewer, and review_date (ISO 8601 YYYY-MM-DD). A verified cross-row defect may add additional_row_corrections, which inherit the product-level evidence, sources, reviewer, review_date, scope, and provenance tag. Quantity changes require exact raw and corrected value/unit pairs and must be supported by the official manufacturer or label image. Restoring a quantity absent from a form row additionally requires raw_quantity_missing=true, a positive corrected value/unit, and exact same-record source text that states the dose; the applier refuses to overwrite any existing quantity representation.",
     "unmatched_drug_tokens_policy": "When a row's raw_ingredient_text matches a known regulated-drug name (e.g., 'Insulin', 'Acetaminophen', 'Ibuprofen') and there is NO matching override for the product, the row must NOT be silently mapped. The cleaner emits the row to a quarantine path with reason='requires_human_review_drug_token_in_supplement' and excludes the product from scoring. New occurrences enter the reviewer pipeline via the same schema.",
     "last_updated": "2026-10-03",
-    "total_entries": 61,
+    "total_entries": 64,
     "loaded_by": "scripts/enhanced_normalizer.py via _load_label_corrections (cached on first product)"
   },
   "corrections": {
@@ -1295,6 +1295,92 @@
       "corrected_quantity_value": 1.2,
       "scope": "dsld_id_only",
       "provenance_tag": "official_label_unit_correction"
+    },
+    "1063": {
+      "brand": "GNC Women's Ultra Mega",
+      "product_name": "Active Vanilla Creme",
+      "raw_ingredient_text": "Vanadium",
+      "corrected_ingredient_text": "Vanadium",
+      "corrected_forms": [
+        {
+          "name": "Vanadium Amino Acid Chelate",
+          "prefix": "as",
+          "category": "mineral",
+          "ingredientGroup": "Vanadium"
+        }
+      ],
+      "correction_fields": [
+        "forms"
+      ],
+      "evidence": "NIH-hosted label for exact code171069JLG prints Vanadium(as Vanadium Amino Acid Chelate)5mcg, then a separate Carnitine(as L-Carnitine)500mg row. Structured JSON wrongly attaches L-Carnitine to Vanadium. This corrects only the Vanadium source form; quantities and the separate Carnitine row remain unchanged.",
+      "sources": [
+        "https://api.ods.od.nih.gov/dsld/v9/label/1063",
+        "https://api.ods.od.nih.gov/dsld/s3/pdf/1063.pdf"
+      ],
+      "reviewer": "Codex source-label integrity review",
+      "review_date": "2026-10-03",
+      "scope": "dsld_id_only",
+      "provenance_tag": "official_label_source_form_correction"
+    },
+    "329884": {
+      "brand": "BulkSupplements.com",
+      "product_name": "Magnesium Malate Powder 2500 mg",
+      "raw_ingredient_text": "Magnesium",
+      "corrected_ingredient_text": "Magnesium",
+      "corrected_forms": [
+        {
+          "order": 1,
+          "ingredientId": 295194,
+          "prefix": null,
+          "percent": null,
+          "name": "Magnesium Malate",
+          "category": "mineral",
+          "ingredientGroup": "Magnesium",
+          "uniiCode": "LA9X9UJA2Z"
+        }
+      ],
+      "correction_fields": [
+        "forms"
+      ],
+      "evidence": "NIH-hosted label identifies Magnesium Malate Powder100g, serving2500mg, Magnesium(as Magnesium Malate)400mg95%DV and Other Ingredients:None. Structured JSON adds Magnesium Stearate as a second source form absent from this exact label. Retain only its existing Magnesium Malate source; no quantity or chemical identifier is added.",
+      "sources": [
+        "https://api.ods.od.nih.gov/dsld/v9/label/329884",
+        "https://api.ods.od.nih.gov/dsld/s3/pdf/329884.pdf"
+      ],
+      "reviewer": "Codex source-label integrity review",
+      "review_date": "2026-10-03",
+      "scope": "dsld_id_only",
+      "provenance_tag": "official_label_source_form_correction"
+    },
+    "337854": {
+      "brand": "Thorne",
+      "product_name": "Buffered C Powder",
+      "raw_ingredient_text": "Calcium",
+      "corrected_ingredient_text": "Calcium",
+      "corrected_forms": [
+        {
+          "order": 2,
+          "ingredientId": 270964,
+          "prefix": "as",
+          "percent": null,
+          "name": "Calcium Ascorbate",
+          "category": "mineral",
+          "ingredientGroup": "Calcium",
+          "uniiCode": null
+        }
+      ],
+      "correction_fields": [
+        "forms"
+      ],
+      "evidence": "NIH-hosted exact Thorne Buffered C Powder label codeC155/LC15518 prints Calcium(as Ascorbate reacted from Calcium Carbonate and Ascorbic Acid)350mg27%DV. Structured JSON correctly carries Calcium Ascorbate but additionally lists the Ascorbic Acid reactant as a separate calcium form. Retain the declared reacted calcium-ascorbate source; do not credit the reactant as an independent calcium form or change quantities.",
+      "sources": [
+        "https://api.ods.od.nih.gov/dsld/v9/label/337854",
+        "https://api.ods.od.nih.gov/dsld/s3/pdf/337854.pdf"
+      ],
+      "reviewer": "Codex source-label integrity review",
+      "review_date": "2026-10-03",
+      "scope": "dsld_id_only",
+      "provenance_tag": "official_label_source_form_correction"
     },
     "5862": {
       "brand": "GNC Pro Performance AMP",

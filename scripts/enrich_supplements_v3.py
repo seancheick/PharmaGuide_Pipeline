@@ -7736,7 +7736,7 @@ class SupplementEnricherV3:
         "huperzia serrata whole plant extract", "toothed clubmoss whole herb extract",
         "piper nigrum berry extract", "ahiflower", "grape extract", "grape fruit extract",
         "grape seed extract", "grapeseed", "grapeseed extract", "grapeskin extract", "red grape extracts",
-        "red grape (fruit) extract", "whole red grape extract", "vitis vinifera", "vitis vinifera extract",
+        "red grape (fruit) extract", "red grape fruit extract", "whole red grape extract", "vitis vinifera", "vitis vinifera extract",
         "fallopia japonica", "tiger cane", "pterocarpus marsupium", "cranberry (vaccinium macrocarpon) extract",
         "strawberry extract", "strawberry fruit extract", "pomegranate hull extract",
         "holy basil leaf extract", "ampelopsis grossedentata", "laminaria japonica extract",

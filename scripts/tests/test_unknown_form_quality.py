@@ -1056,3 +1056,62 @@ def test_the_export_attaches_no_form_copy_to_a_derived_unknown(parent):
     iqm_index = {k: v for k, v in IQM.items() if k != '_metadata'}
     assert _derive_form_note(row, iqm_index) == (None, None)
     assert _derive_form_evidence(row, iqm_index) is None
+
+
+def test_raw_red_grape_source_does_not_hold_resveratrol(enricher):
+    """DSLD328280 prints grape and knotweed as sources of trans-resveratrol."""
+    from enhanced_normalizer import EnhancedDSLDNormalizer
+    from scoring_v4.scored_artifact import build_scored_artifact
+    raw = json.loads((FIXTURES / 'resveratrol_source_328280_raw.json').read_text())
+    product, _ = enricher.enrich_product(EnhancedDSLDNormalizer().normalize_product(raw))
+    rows = product['ingredient_quality_data']['ingredients']
+    row = next(r for r in rows if r.get('canonical_id') == 'resveratrol')
+    assert row.get('form_match_status') != 'unmapped'
+    assert not row.get('unmapped_forms')
+    assert 'Red Grape Fruit Extract' in json.dumps(row)
+    scored = build_scored_artifact(product)
+    assert 'disclosed_form_unmapped' not in scored['strict_scoring_contract']['findings']
+
+
+@pytest.mark.parametrize("chemical", ["Chromium Dinicocysteinate", "Zychrome Chromium Dinicocysteinate", "chromium dinicocysteinate"])
+def test_dinicocysteinate_never_inherits_polynicotinate_form(enricher, chemical):
+    """PMID27687012: dinicocysteinate includes L-cysteine, a distinct complex."""
+    iqm = enricher.databases['ingredient_quality_map']
+    assert 'Chromium Dinicocysteinate' not in iqm['chromium']['forms']['chromium polynicotinate']['aliases']
+    match = enricher._match_quality_map('Chromium', 'Chromium', iqm,
+        cleaned_forms=[{'name': chemical, 'category': 'mineral'}],
+        cleaner_canonical_id='chromium')
+    assert match.get('form_id') != 'chromium polynicotinate'
+    assert match.get('unmapped_forms') == [chemical]
+
+
+def test_chromemate_polynicotinate_control_keeps_named_form(enricher):
+    match = enricher._match_quality_map('Chromium', 'Chromium', enricher.databases['ingredient_quality_map'],
+        cleaned_forms=[{'name': 'Chromemate Chromium Polynicotinate', 'category': 'mineral'}],
+        cleaner_canonical_id='chromium')
+    assert match['form_id'] == 'chromium polynicotinate'
+    assert not match.get('unmapped_forms')
+
+
+@pytest.mark.parametrize("pid, member", [("219819", "tamarind_extract"), ("33246", "l_glutamine")])
+def test_repaired_blend_identity_is_not_revived_as_member_mass(enricher, pid, member):
+    from enhanced_normalizer import EnhancedDSLDNormalizer
+    raw = json.loads((FIXTURES / f'blend_projection_{pid}_raw.json').read_text())
+    product, _ = enricher.enrich_product(EnhancedDSLDNormalizer().normalize_product(raw))
+    assert not any(r.get('canonical_id') == member and r.get('evidence_type') == 'blend_anchor_mass'
+        for r in product.get('product_scoring_evidence', []))
+    assert any(r.get('name') in {'TamaFlex', 'Glutamine Complex'} for r in product['activeIngredients'])
+
+
+@pytest.mark.parametrize("pid, nutrient, expected", [
+    ("1063", "Vanadium", ["Vanadium Amino Acid Chelate"]),
+    ("329884", "Magnesium", ["Magnesium Malate"]),
+    ("337854", "Calcium", ["Calcium Ascorbate"]),
+])
+def test_exact_nih_label_forms_replace_crossed_structured_sources(pid, nutrient, expected):
+    from enhanced_normalizer import EnhancedDSLDNormalizer
+    raw = json.loads((FIXTURES / f'label_source_{pid}_raw.json').read_text())
+    product = EnhancedDSLDNormalizer().normalize_product(raw)
+    row = next(r for r in product['activeIngredients'] if r['name'] == nutrient)
+    assert [f['name'] for f in row['forms']] == expected
+    assert row.get('label_correction') or row.get('label_correction_applied') or row.get('source_correction')
