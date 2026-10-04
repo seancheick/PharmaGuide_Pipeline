@@ -84,16 +84,14 @@ with `$PG_PYTHON scripts/release_interaction_artifact.py --output-dir scripts/di
 - **Score and verdict movement** — the train's "catalog changes vs what users have" gate
   (`scripts/release_safety/catalog_diff.py`) compares every product with the app's committed
   bundle and the live Supabase catalog, and writes `scripts/reports/release_catalog_diff.md`. It
-  stops on a milder safety warning, a warned product leaving the catalog, a 10+ point score move,
-  or a grade up with a 5+ point rise. It reads Supabase, so it needs `.env`. Show Sean that report; only he
-  signs publication approvals in `scripts/release_safety/catalog_change_approvals.json`. Never
-  fill one in yourself to get past the gate. **Solo-development distinction (Sean, October4):**
-  ordinary score/tier movements are reviewed by shared cause and representative controls, not
-  individually approved. Safety changes, lost warnings and unsupported credit still require
-  investigation. The current executable gate may still demand individual approvals; that is a
-  policy/implementation mismatch to address at `catalog_diff.py` and its approval consumers,
-  not permission to forge approvals, erase the original baseline or silently bypass the gate.
-  Local development validation is not external publication approval.
+  stops on a milder safety warning or a warned product leaving the catalog. Ordinary score/tier
+  movements are report-only; historical magnitude thresholds select detail, not approvals.
+  Review shared causes with source evidence, representative affected labels and controls.
+  Numerical movement cannot prove a cause or clinical correctness. Existing clinical identity,
+  applicability, exposure, warning-retention and app contracts remain separate requirements.
+  Reviewed safety exceptions retain exact affected before/after states in the existing approval
+  groups; never forge approver/date/reason or erase the original baseline. The report carries
+  baseline and candidate hashes. Comparison success does not authorize external publication.
 
 ## 5. Report
 

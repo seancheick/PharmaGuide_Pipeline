@@ -4,23 +4,15 @@
 Users have the app bundle (committed on the app's main) and, through the in-app
 updater, the live catalog on Supabase (export_manifest is_current). The gate
 compares the candidate with each of them, product by product, and stops the
-release when a product changes in a way that weakens or upgrades what a user
-is told, unless a reviewed approval names that product's exact before/after:
+release on milder safety or removal of a warned product unless an exact reviewed
+approval covers it. Ordinary score/tier movement is reported for cause-based review,
+not individually approved. The historical 10-point score / 5-point tier-rise limits
+select report details; they are not safety thresholds or clinical judgments.
 
-    milder_safety  the safety warning gets milder on the ladder BLOCKED > UNSAFE >
-                   CAUTION > none (gate_safety.SAFETY_VERDICT_PRECEDENCE; POOR is
-                   the lowest quality grade, not a safety warning)
-    removed        a product with a safety warning leaves the catalog, so a scan
-                   answers "not found" where it used to warn
-    score_drop     the score falls SCORE_MOVE_LIMIT points or more
-    score_rise     the score rises SCORE_MOVE_LIMIT points or more
-    tier_up        the quality grade moves up (quality_score.json "tiers") and the
-                   score rose TIER_UP_MIN_RISE points or more
-
-Stricter warnings, grade moves below the limit and new products are reported,
-never gated. Approvals live in catalog_change_approvals.json, one entry per
-product; every group needs a reason, an approver and a date. On a stop the gate
-writes a draft of the missing approvals for the reviewer to complete.
+The report retains all safety transitions, movement counts and baseline/candidate
+hashes. Passing this comparison does not establish clinical correctness, contract
+parity or publication authorization; those remain separate release requirements.
+Approvals use the existing catalog_change_approvals.json owner for safety exceptions.
 
 Usage:
     python3 scripts/release_safety/catalog_diff.py \\
@@ -37,6 +29,7 @@ from __future__ import annotations
 import argparse
 import hashlib
 import json
+import math
 import sqlite3
 import sys
 import tempfile
@@ -56,9 +49,9 @@ from supabase_client import STORAGE_BUCKET, core_db_remote_path, fetch_current_m
 
 APPROVALS_PATH = Path(__file__).with_name("catalog_change_approvals.json")
 BUNDLED_DB = Path("assets/db/pharmaguide_core.db")
-#: A score move of this many points, either way, stops the release.
+#: A score move of this many points, either way, is detailed in the report.
 SCORE_MOVE_LIMIT = 10.0
-#: A grade up stops the release when the score rose at least this much.
+#: A grade up is detailed when the score rose at least this much.
 TIER_UP_MIN_RISE = 5.0
 KINDS = ("milder_safety", "removed", "score_drop", "score_rise", "tier_up")
 COLUMNS = ("dsld_id", "product_name", "brand_name", "verdict", "quality_score_v4_100",
@@ -78,7 +71,12 @@ def _sha256(path: Path) -> str:
 
 
 def _score(value) -> float | None:
-    return None if value is None else round(float(value), 1)
+    if value is None:
+        return None
+    score = float(value)
+    if not math.isfinite(score) or not 0 <= score <= 100:
+        raise ValueError(f"Invalid catalog quality score: {value!r}")
+    return round(score, 1)
 
 
 def _products(db: Path) -> dict[str, dict]:
@@ -93,11 +91,17 @@ def _products(db: Path) -> dict[str, dict]:
         rows = con.execute(f"select {', '.join(COLUMNS)} from products_core").fetchall()
     finally:
         con.close()
+    if not rows:
+        raise ValueError(f"{db}: empty catalog cannot establish comparison")
     tiers = set(_tiers())
     products = {}
     for values in rows:
         product = dict(zip(COLUMNS, values))
+        if product["dsld_id"] is None or not str(product["dsld_id"]).strip():
+            raise ValueError(f"{db}: missing product identity")
         pid = str(product["dsld_id"])
+        if pid in products:
+            raise ValueError(f"{db}: duplicate product identity {pid}")
         if product["verdict"] not in PUBLIC_VERDICT_PRECEDENCE:
             raise ValueError(f"{db}: product {pid} has unknown verdict {product['verdict']!r}")
         if product["quality_tier"] is not None and product["quality_tier"] not in tiers:
@@ -155,7 +159,7 @@ def load_approvals(path: Path = APPROVALS_PATH) -> list[dict]:
 
 
 def _reasons(old: dict, new: dict | None, tiers: list[str]) -> list[dict]:
-    """Why this product's change stops the release, in KINDS order."""
+    """Classify safety exceptions and reportable quality changes, in KINDS order."""
     if new is None:
         if safety_verdict_rank(old["verdict"]) < NO_WARNING:
             return [{"kind": "removed", "text": f"left the catalog while showing {old['verdict']}"}]
@@ -193,7 +197,7 @@ def diff_catalogs(baseline_db: Path, candidate_db: Path, approvals: list[dict]) 
     removed = before.keys() - after.keys()
     added = after.keys() - before.keys()
 
-    gated, verdicts, grades, stopping = [], Counter(), Counter(), Counter()
+    gated, reported, verdicts, grades, stopping = [], [], Counter(), Counter(), Counter()
     score_changes = {"down": 0, "up": 0}
     column_changes = {"blocking_reason": 0, "quality_score_status": 0}
     for pid in sorted(shared | removed):
@@ -211,10 +215,11 @@ def diff_catalogs(baseline_db: Path, candidate_db: Path, approvals: list[dict]) 
         reasons = _reasons(old, new, tiers)
         if not reasons:
             continue
-        if any(r["kind"] == "tier_up" for r in reasons):
+        needs_review = any(r["kind"] in {"milder_safety", "removed"} for r in reasons)
+        if needs_review and new is not None and old["tier"] and new["tier"] and old["tier"] != new["tier"]:
             stopping[(old["tier"], new["tier"])] += 1
         product = after.get(pid) or before[pid]
-        gated.append({"dsld_id": pid, "product_name": product["product_name"],
+        (gated if needs_review else reported).append({"dsld_id": pid, "product_name": product["product_name"],
                       "brand_name": product["brand_name"], "from": old, "to": new,
                       "reasons": reasons, "kind": reasons[0]["kind"]})
 
@@ -227,7 +232,8 @@ def diff_catalogs(baseline_db: Path, candidate_db: Path, approvals: list[dict]) 
         change["approval"] = None if match is None else {
             k: match[1][k] for k in ("reason", "approved_by", "date")}
     order = {kind: i for i, kind in enumerate(KINDS)}
-    gated.sort(key=lambda c: (order[c["kind"]], _severity(c), c["dsld_id"]))
+    for changes in (gated, reported):
+        changes.sort(key=lambda c: (order[c["kind"]], _severity(c), c["dsld_id"]))
 
     def safety(old, new):
         moved = safety_verdict_rank(new) - safety_verdict_rank(old)
@@ -254,6 +260,7 @@ def diff_catalogs(baseline_db: Path, candidate_db: Path, approvals: list[dict]) 
         "column_changes": column_changes,
         "limits": {"score_move": SCORE_MOVE_LIMIT, "tier_up_min_rise": TIER_UP_MIN_RISE},
         "gated": gated,
+        "reported": reported,
         "unapproved": sum(c["approval"] is None for c in gated),
         "stale_approvals": [c for c, _ in approved.values()],
     }
@@ -280,7 +287,7 @@ def _row(cells: list) -> str:
 
 
 def _table(changes: list[dict], with_approval: bool) -> list[str]:
-    head = "| DSLD ID | Product | Brand | Before | After | Why it stops |"
+    head = "| DSLD ID | Product | Brand | Before | After | Change |"
     head += " Approved by | Reason |" if with_approval else ""
     lines = [head, "|" + "---|" * head.count(" |")]
     for c in changes:
@@ -302,7 +309,7 @@ def render_markdown(result: dict) -> str:
                    + ", ".join(f"{counts[k]:,} {KIND_TITLES[k].split(' (')[0].lower()}" for k in KINDS if counts[k])
                    + ").")
     else:
-        verdict = "**Release can proceed:** no product changed in a gated way, or every such change is approved."
+        verdict = "**Catalog comparison passed:** no unapproved safety exception. Other release gates and publication authorization still apply."
 
     def label(side):
         version = f"{side['db_version']}, " if side.get("db_version") else ""
@@ -313,6 +320,10 @@ def render_markdown(result: dict) -> str:
         f"- What users have now ({base.get('source', 'baseline')}): {label(base)}",
         f"- Release candidate: {label(cand)}", "",
         verdict, "",
+        "Ordinary score/tier movements are report-only: review shared causes with source traces "
+        "and representative controls. A numerical delta does not prove its cause or clinical correctness. "
+        "Clinical applicability, identity, exposure, warning retention and app contracts must pass "
+        "their existing checks; this report does not replace them.", "",
         "## Summary", "",
         "| | Products |", "|---|---|",
         f"| In both | {result['shared']:,} |",
@@ -335,10 +346,10 @@ def render_markdown(result: dict) -> str:
         lines.append("No product changed catalog safety status.")
     lines += ["", "## Quality grade changes", ""]
     if result["tier_transitions"]:
-        lines += [f"| Change | Products | Stop the release (grade up with a {TIER_UP_MIN_RISE:g}+ point rise) |",
+        lines += ["| Change | Products | Also has a safety exception |",
                   "|---|---|---|"]
         for t in result["tier_transitions"]:
-            stop = f"{t['stopping']:,}" if t["up"] else f"0 (down; stops only on a {SCORE_MOVE_LIMIT:g}+ point fall)"
+            stop = f"{t['stopping']:,}"
             lines.append(f"| {t['from']} → {t['to']} | {t['products']:,} | {stop} |")
     else:
         lines.append("No product changed grade.")
@@ -347,7 +358,12 @@ def render_markdown(result: dict) -> str:
             lines += ["", f"{name} products by catalog safety status: "
                       + ", ".join(f"{v} {n:,}" for v, n in sorted(result[side].items()))]
 
-    lines += ["", f"## Needs approval ({len(unapproved):,} products)", ""]
+    lines += ["", f"## Quality movements — report-only ({len(result['reported']):,} products)", ""]
+    for kind in KINDS:
+        rows = [c for c in result["reported"] if c["kind"] == kind]
+        if rows:
+            lines += [f"### {KIND_TITLES[kind]} ({len(rows):,})", "", *_table(rows, False), ""]
+    lines += ["", f"## Safety exceptions needing approval ({len(unapproved):,} products)", ""]
     if not unapproved:
         lines.append("Nothing.")
     for kind in KINDS:
@@ -363,7 +379,9 @@ def render_markdown(result: dict) -> str:
                   for a in result["stale_approvals"]]
         lines.append("")
     lines += ["## How to approve", "",
-              "Review each product above. To let reviewed changes ship, copy their groups from the draft "
+              "Investigate safety exceptions by shared cause, retaining the exact affected products and "
+              "before/after states in each reviewed group. Ordinary quality movements need no signatures. "
+              "To accept reviewed safety exceptions, copy their groups from the draft "
               f"approvals file into `{APPROVALS_PATH.relative_to(SCRIPTS_DIR.parent)}`, fill in `reason`, "
               "`approved_by` and `date` (YYYY-MM-DD), commit, and rerun the release. An approval covers "
               "only the exact before and after it names.", ""]
@@ -477,7 +495,7 @@ def main(argv: list[str] | None = None) -> int:
     if stale:
         print(f"  {len(stale)} approval(s) match nothing in this diff and can be deleted")
     if not unapproved:
-        print("  nothing unapproved: the release may proceed")
+        print("  catalog comparison passed; other gates and publication authorization still apply")
         return 0
     args.draft_approvals.parent.mkdir(parents=True, exist_ok=True)
     args.draft_approvals.write_text(json.dumps(draft_approvals(results), indent=2) + "\n", encoding="utf-8")
