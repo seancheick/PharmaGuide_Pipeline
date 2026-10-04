@@ -385,3 +385,27 @@ def test_native_evidence_state_is_independent_of_owned_label_amount():
     assert all(result["components"] == results[0]["components"] for result in results)
     assert all(result["metadata"]["evidence_result_state"] == results[0]["metadata"]["evidence_result_state"]
                for result in results)
+
+
+def test_native_and_registry_evidence_are_both_consumed_without_stacking():
+    from scoring_v4.modules.probiotic_evidence import score_evidence
+    # A registry summary can supply credit when the native contexts do not
+    # establish the label's purpose; neither path must silently disappear.
+    registry_product = _product()
+    registry_only = score_evidence(registry_product)
+    registry_product["evidence_data"]["clinical_matches"] = []
+    assert registry_only["score"] > score_evidence(registry_product)["score"]
+
+    # Applicable BB-12 infant trials also score without any generic matches.
+    native_product = _infant_product()
+    native_only = score_evidence(native_product)
+    assert native_only["score"] == 18
+    native_product["evidence_data"] = {"clinical_matches": [
+        _match(id="STRAIN_LACTIS_BB12", ingredient="Bifidobacterium lactis BB-12",
+               standard_name="Bifidobacterium lactis BB-12", study_type="rct_single"),
+    ]}
+    both = score_evidence(native_product)
+    assert both["metadata"]["uncredited_strain_match_ids"] == []
+    assert both["components"] == native_only["components"]
+    native_product["evidence_data"]["clinical_matches"] *= 2
+    assert score_evidence(native_product)["components"] == both["components"]

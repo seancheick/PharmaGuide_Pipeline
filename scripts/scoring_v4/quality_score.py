@@ -841,7 +841,7 @@ _EVIDENCE_ZERO_REASON = {
         "Established nutritional authority recognizes the physiological necessity of these essential nutrients."
     ),
     "no_qualifying_human_evidence": (
-        "The research on record is not human clinical evidence of benefit for these ingredients."
+        "We reviewed the research but found no qualifying human clinical evidence of benefit applicable to this product."
     ),
     "no_assessable_actives": "No active ingredient on this label could be assessed for clinical evidence.",
 }

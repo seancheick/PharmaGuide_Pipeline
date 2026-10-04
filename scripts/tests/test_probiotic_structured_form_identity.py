@@ -540,5 +540,8 @@ def test_raw_wrapper_strain_reaches_scored_artifact_without_positive_evidence(en
     assert [row["clinical_id"] for row in native] == ["STRAIN_ACIDOPHILUS_LA5"]
     assert native[0]["source_row_ref"] == "ingredientRows[0]"
     artifact = build_scored_artifact(product)
-    assert artifact["quality_pillars_v4"]["evidence"]["score"] == 0
+    evidence = artifact["quality_pillars_v4"]["evidence"]
+    assert evidence["score"] == 0
+    assert evidence["display_state"] == "assessed"
+    assert "applicable to this product" in evidence["reason"]
     assert artifact["product_safety_status"] == "no_known_catalog_concern"

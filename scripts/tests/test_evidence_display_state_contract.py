@@ -54,6 +54,9 @@ def test_no_qualifying_human_evidence_is_a_reviewed_zero_with_its_own_copy():
 
     assert unqualified["display_state"] == "assessed"
     assert unqualified["reason"] != null_reason
+    assert unqualified["score"] == 0
+    assert "applicable to this product" in unqualified["reason"]
+    assert "not human clinical evidence" not in unqualified["reason"]
 
 
 def test_the_two_kinds_of_zero_never_overlap():
