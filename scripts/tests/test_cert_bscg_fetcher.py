@@ -100,3 +100,15 @@ def test_parse_bscg_record_has_required_registry_fields() -> None:
     for r in records:
         assert required <= set(r), f"missing fields: {required - set(r)}"
         assert r["record_id"].startswith("BSCG_")
+
+
+def test_distinct_authoritative_product_slugs_do_not_share_lots():
+    plain = dict(BSCG_SAMPLE_PAYLOAD[0], company='Ambrosia', company_slug='ambrosia',
+                 product='Mental Jewels (Cherry Limeade)', product_slug='mental-jewels-cherry-limeade-1')
+    powder = dict(plain, product_id='99', product='Mental Jewels Powder (Cherry Limeade)',
+                  product_slug='mental-jewels-powder-cherry-limeade-1', product_lot='POWDER-1')
+    rows = parse_bscg_products_payload([plain, powder], SNAPSHOT)
+    assert len(rows) == 2
+    assert {r['product']: r['lot_numbers_tested'] for r in rows} == {
+        plain['product']: ['LOT-A1'], powder['product']: ['POWDER-1']}
+    assert len({r['source_url'] for r in rows}) == 2

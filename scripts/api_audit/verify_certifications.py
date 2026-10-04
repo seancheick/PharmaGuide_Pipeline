@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
-"""Cert registry fetcher — populates scripts/data/cert_registry.json.
+"""Cert registry fetcher — stages reviewed-refresh candidates without changing live data.
 
 Sources:
-  - **live-nsf-sport** (production): GET nsfsport-prod.nsf.org/certified-products/search-results.php
+  - **live-nsf-sport** (production): GET www.nsfsport.com/certified-products/search-results.php
     returns all ~1253 NSF Certified for Sport Dietary Supplements in one HTML
     response. Optional --with-lots fetches per-product detail for lot numbers
     (~1253 extra requests, polite delay).
@@ -21,25 +21,29 @@ Multi-source: the registry holds records from all sources. Each verified_record
 carries its `program` field; recency status is per-source.
 
 Usage:
-  # Production refresh (recommended quarterly):
+  # Candidate refresh (monthly; independent review before integration):
   python scripts/api_audit/verify_certifications.py --source live-nsf-sport
   python scripts/api_audit/verify_certifications.py --source live-nsf-sport --with-lots
   python scripts/api_audit/verify_certifications.py --source live-nsf-173
   python scripts/api_audit/verify_certifications.py --source live-consumerlab
 
-  # All sources merged:
+  # All sources staged with failed snapshots preserved:
   python scripts/api_audit/verify_certifications.py --source all
 
   # PDF (fixture only, scoring_blocked by recency gate):
-  python scripts/api_audit/verify_certifications.py --source pdf
+  python scripts/api_audit/verify_certifications.py --source pdf --dry-run
 
-P0.1a is audit-only. Resolver consumes this registry; cert_audit_report.py
-runs the audit. No scoring changes until P0.1b.
+Retrieval never applies the candidate. Review refresh_report.json, response receipts,
+identity/scope changes and missing override references before integrating validated
+data through the usual behavioral-data gates. --merge-existing is retained as a
+compatibility flag; candidates now always preserve untouched or failed sources.
 """
 
 from __future__ import annotations
 
 import argparse
+import copy
+from collections import Counter, defaultdict
 import hashlib
 import html
 from html.parser import HTMLParser
@@ -49,7 +53,7 @@ import sys
 import time
 from datetime import datetime, timezone
 from pathlib import Path
-from urllib.parse import urljoin
+from urllib.parse import urljoin, urlsplit, urlunsplit, parse_qsl, urlencode
 
 import requests
 
@@ -59,8 +63,29 @@ if str(SCRIPTS_ROOT) not in sys.path:
     sys.path.insert(0, str(SCRIPTS_ROOT))
 
 REGISTRY_PATH = SCRIPTS_ROOT / "data" / "cert_registry.json"
+FETCHER_SOURCE_SHA256 = hashlib.sha256(Path(__file__).read_bytes()).hexdigest()
 
-from cert_resolver import normalize_brand, normalize_product  # noqa: E402
+from cert_resolver import normalize_brand, normalize_product, _sku_form_tokens  # noqa: E402
+
+
+# Enabled only by the candidate-refresh CLI; direct parser/fetcher callers remain pure.
+_RECEIPT_DIR: Path | None = None
+_RECEIPTS: list[dict] = []
+
+
+def _capture_body(url: str, body: bytes, status: int = 200) -> None:
+    if _RECEIPT_DIR is None:
+        return
+    digest = hashlib.sha256(body).hexdigest()
+    path = _RECEIPT_DIR / f"{len(_RECEIPTS):05d}-{digest[:16]}.response"
+    path.write_bytes(body)
+    _RECEIPTS.append({"url": url, "status": status, "sha256": digest,
+                      "path": str(path), "retrieved_at": datetime.now(timezone.utc).isoformat()})
+
+
+def _capture_response(response: requests.Response) -> None:
+    if _RECEIPT_DIR is not None:
+        _capture_body(response.url, response.content, response.status_code)
 
 
 HTTP_HEADERS = {
@@ -72,14 +97,14 @@ POLITE_DELAY_SECONDS = 0.7  # between detail fetches
 
 
 # ============================================================================
-# NSF Sport (live) — nsfsport-prod.nsf.org/certified-products/search-results.php
+# NSF Sport (live) — www.nsfsport.com/certified-products/search-results.php
 # ============================================================================
 
 NSF_SPORT_SEARCH_URL = (
-    "https://nsfsport-prod.nsf.org/certified-products/search-results.php"
+    "https://www.nsfsport.com/certified-products/search-results.php"
     "?keyword=&product_category=Dietary+Supplements&goal=&type=&brand="
 )
-NSF_SPORT_DETAIL_URL = "https://nsfsport-prod.nsf.org/certified-products/listing-detail.php"
+NSF_SPORT_DETAIL_URL = "https://www.nsfsport.com/certified-products/listing-detail.php"
 
 
 def fetch_nsf_sport_live(with_lots: bool = False) -> tuple[list[dict], str]:
@@ -89,6 +114,7 @@ def fetch_nsf_sport_live(with_lots: bool = False) -> tuple[list[dict], str]:
     snapshot_date = datetime.now(timezone.utc).strftime("%Y-%m-%d")
     print(f"GET {NSF_SPORT_SEARCH_URL}", file=sys.stderr)
     r = requests.get(NSF_SPORT_SEARCH_URL, headers=HTTP_HEADERS, timeout=REQUEST_TIMEOUT)
+    _capture_response(r)
     r.raise_for_status()
     soup = BeautifulSoup(r.text, "lxml")
 
@@ -98,7 +124,7 @@ def fetch_nsf_sport_live(with_lots: bool = False) -> tuple[list[dict], str]:
         href = link.get("href", "")
         m = re.search(r"id=(\d+)", href)
         if not m:
-            continue
+            raise ValueError(f"Missing NSF Sport listing identity: {href}")
         listing_id = m.group(1)
         if listing_id in seen_ids:
             continue
@@ -107,21 +133,24 @@ def fetch_nsf_sport_live(with_lots: bool = False) -> tuple[list[dict], str]:
         # Product name from CSS hook
         name_el = link.select_one(".results__product-name")
         product_name = (name_el.get_text(strip=True) if name_el else "").strip()
+        company_el = link.select_one(".results__company-name")
+        declared_brand = company_el.get_text(strip=True) if company_el else ""
         # Image URL → embeds brand directory in path
         img_el = link.select_one("img.results__image, img.results__image, img")
         img_src = img_el.get("src", "") if img_el else ""
         brand_from_img = _brand_from_nsf_sport_img(img_src)
 
         if not product_name:
-            continue
+            raise ValueError(f"Missing NSF Sport product identity: {listing_id}")
 
         rows.append(
             {
                 "listing_id": listing_id,
                 "product_name": product_name,
                 "brand_from_img": brand_from_img,
+                "declared_brand": declared_brand,
                 "thumbnail_url": img_src,
-                "detail_url": urljoin(NSF_SPORT_DETAIL_URL, href) if href.startswith("/") else href,
+                "detail_url": urljoin(NSF_SPORT_DETAIL_URL, href),
             }
         )
 
@@ -134,14 +163,14 @@ def fetch_nsf_sport_live(with_lots: bool = False) -> tuple[list[dict], str]:
                 detail = _fetch_nsf_sport_detail(row["listing_id"])
                 row.update(detail)
             except requests.RequestException as exc:
-                row["_detail_error"] = str(exc)
+                raise ValueError(f"NSF Sport required detail failed: {row['listing_id']}: {exc}") from exc
             if i % 50 == 0:
                 print(f"  [{i}/{len(rows)}] fetched", file=sys.stderr)
             time.sleep(POLITE_DELAY_SECONDS)
 
     records: list[dict] = []
     for row in rows:
-        brand = (row.get("manufacturer") or row.get("brand_from_img") or "").strip()
+        brand = (row.get("declared_brand") or row.get("manufacturer") or row.get("brand_from_img") or "").strip()
         if not brand:
             # Fall back to using the URL slug as brand. Better to skip than mislabel.
             brand = row.get("brand_from_img") or "UNKNOWN"
@@ -224,7 +253,12 @@ def _fetch_nsf_sport_detail(listing_id: str) -> dict:
     """Fetch lot numbers and facility metadata from one NSF Sport detail page."""
     url = f"{NSF_SPORT_DETAIL_URL}?id={listing_id}"
     r = requests.get(url, headers=HTTP_HEADERS, timeout=REQUEST_TIMEOUT)
+    _capture_response(r)
     r.raise_for_status()
+    from bs4 import BeautifulSoup
+    headers = {th.get_text(" ", strip=True).lower() for th in BeautifulSoup(r.text, "lxml").find_all("th")}
+    if not headers.intersection({"product form", "flavor", "lot #", "facility", "manufacturer"}):
+        raise ValueError(f"Unrecognized NSF Sport detail: {listing_id}")
     return parse_nsf_sport_detail_html(r.text)
 
 
@@ -242,6 +276,7 @@ def fetch_nsf_173_live() -> tuple[list[dict], str]:
     snapshot_date = datetime.now(timezone.utc).strftime("%Y-%m-%d")
     print(f"GET {NSF_173_URL}", file=sys.stderr)
     r = requests.get(NSF_173_URL, headers=HTTP_HEADERS, timeout=REQUEST_TIMEOUT)
+    _capture_response(r)
     r.raise_for_status()
     # IIS doesn't send a charset HTTP header, so requests defaults to
     # ISO-8859-1 per RFC 2616. The page is actually UTF-8 (declared via
@@ -270,7 +305,7 @@ def fetch_nsf_173_live() -> tuple[list[dict], str]:
 
         # Facilities — possibly multiple "<strong>Facility :</strong>City, ST"
         facilities = [
-            el.find_next(text=True).strip() if el else ""
+            el.find_next(string=True).strip() if el else ""
             for el in chunk.find_all(string=re.compile(r"Facility\s*:", re.IGNORECASE))
         ]
 
@@ -281,11 +316,13 @@ def fetch_nsf_173_live() -> tuple[list[dict], str]:
             trs = table.find_all("tr", recursive=False) or table.find_all("tr")
             if not trs:
                 continue
-            header_text = trs[0].get_text(" ", strip=True).lower()
-            if "trade designation" not in header_text:
+            header_cells = trs[0].find_all(["td", "th"], recursive=False)
+            headers = [cell.get_text(" ", strip=True).casefold() for cell in header_cells]
+            if not headers or headers[0] != "trade designation":
                 continue
+            columns = {name: i for i, name in enumerate(headers)}
             for tr in trs[1:]:
-                tds = tr.find_all("td")
+                tds = tr.find_all("td", recursive=False)
                 if not tds:
                     continue
                 cells = [td.get_text(" ", strip=True) for td in tds]
@@ -293,9 +330,10 @@ def fetch_nsf_173_live() -> tuple[list[dict], str]:
                 if len(cells) < 2:
                     continue
                 trade = cells[0]
-                product_id = cells[1] if len(cells) > 1 else ""
-                product_form = cells[2] if len(cells) > 2 else ""
-                serving = cells[3] if len(cells) > 3 else ""
+                product_id = cells[columns["product id"]] if "product id" in columns and len(cells) > columns["product id"] else ""
+                product_form = cells[columns["product form"]] if "product form" in columns and len(cells) > columns["product form"] else ""
+                serving_col = next((i for name, i in columns.items() if "serving" in name or "daily dose" in name), None)
+                serving = cells[serving_col] if serving_col is not None and len(cells) > serving_col else ""
                 if not trade or trade.strip().startswith(("AA/", "BCAA")) and "/" in trade:
                     # Looks like a product-type-code header row (e.g. "AA/BCAAs/CBD/...")
                     continue
@@ -308,26 +346,34 @@ def fetch_nsf_173_live() -> tuple[list[dict], str]:
                     }
                 )
 
+        grouped: dict[tuple, dict] = {}
         for fp in finished_products:
+            key = (fp["trade_designation"], fp["product_id"], _source_form_identity(fp["product_form"]))
+            if key not in grouped:
+                grouped[key] = {**fp, "source_listing_rows": []}
+            grouped[key]["source_listing_rows"].append({**fp, "brand": company_name})
+        for key, fp in grouped.items():
             product = fp["trade_designation"]
-            record_id = _make_record_id("NSF Certified", company_name, product, [], "")
-            records.append(
-                {
-                    "record_id": record_id,
-                    "program": "NSF Certified",  # NSF/ANSI 173 Contents Certified
-                    "brand": company_name,
-                    "product": product,
-                    "brand_normalized": normalize_brand(company_name),
-                    "product_normalized": normalize_product(product),
-                    "scope": "sku",
-                    "lot_numbers_tested": [],  # not exposed on this listing
-                    "verified_at": snapshot_date,
-                    "source_url": NSF_173_URL,
-                    "evidence_band": "strong",
-                    "product_form": fp.get("product_form"),
-                    "facilities": facilities,
-                }
-            )
+            record_id = _make_record_id("NSF Certified", company_name, product, [], json.dumps(key, sort_keys=True))
+            records.append({
+                "record_id": record_id, "program": "NSF Certified", "brand": company_name, "product": product,
+                "brand_normalized": normalize_brand(company_name), "product_normalized": normalize_product(product),
+                "scope": "sku", "lot_numbers_tested": [], "verified_at": snapshot_date,
+                "source_url": NSF_173_URL, "evidence_band": "strong", "product_form": fp["product_form"],
+                "product_id": fp["product_id"], "serving_size": fp["serving_size"],
+                "source_listing_rows": fp["source_listing_rows"], "facilities": sorted(set(facilities)),
+            })
+
+    aggregated: dict[tuple, dict] = {}
+    for row in records:
+        identity = _listing_identity(row)
+        if identity not in aggregated:
+            row["record_id"] = _make_record_id("NSF Certified", row["brand"].casefold(), row["product"].casefold(), [], json.dumps(identity))
+            aggregated[identity] = row
+        else:
+            aggregated[identity]["facilities"] = sorted(set(aggregated[identity]["facilities"]) | set(row["facilities"]))
+            aggregated[identity]["source_listing_rows"].extend(row["source_listing_rows"])
+    records = list(aggregated.values())
 
     print(f"NSF/ANSI 173: {company_count} companies → {len(records)} product records", file=sys.stderr)
     return records, snapshot_date
@@ -338,8 +384,8 @@ def fetch_nsf_173_live() -> tuple[list[dict], str]:
 # ============================================================================
 
 NSF_455_GMP_URL = "https://info.nsf.org/Certified/455GMP/Listings.asp"
-# 455-2 is the Dietary Supplements GMP standard (facility audit). 455-1 covers
-# label claims; 455-3 the sport/banned-substance annex. We snapshot 455-2 only.
+# 455-2 is the Dietary Supplements GMP standard (facility audit). Product
+# Contents Certified / Certified for Sport are separate programs. Snapshot 455-2 only.
 NSF_455_2_STANDARD = "455-2GMP"
 
 
@@ -405,6 +451,7 @@ def fetch_nsf_455_live() -> tuple[list[dict], str]:
     url = f"{NSF_455_GMP_URL}?Standard={NSF_455_2_STANDARD}"
     print(f"GET {url}", file=sys.stderr)
     r = requests.get(url, headers=HTTP_HEADERS, timeout=REQUEST_TIMEOUT)
+    _capture_response(r)
     r.raise_for_status()
     r.encoding = "utf-8"
     records = parse_nsf_455_listing(r.text, snapshot_date)
@@ -540,13 +587,22 @@ def fetch_usp_verified_live(max_pages: int | None = None) -> tuple[list[dict], s
             page = browser.new_page()
             page_url: str | None = USP_VERIFIED_URL
             page_count = 0
+            visited_pages: set[str] = set()
             while page_url:
+                if page_url in visited_pages:
+                    raise ValueError("USP pagination cycle")
+                visited_pages.add(page_url)
                 if max_pages is not None and page_count >= max_pages:
                     break
                 print(f"GET {page_url}", file=sys.stderr)
-                page.goto(page_url, wait_until="domcontentloaded", timeout=60_000)
+                navigation = page.goto(page_url, wait_until="domcontentloaded", timeout=60_000)
                 html = page.content()
+                _capture_body(page.url, html.encode("utf-8"), navigation.status if navigation else 0)
+                if navigation is None or not navigation.ok:
+                    raise ValueError(f"USP failed navigation: {page.url}")
                 page_products, next_url = parse_usp_verified_listing_page(html, page.url)
+                if not page_products:
+                    raise ValueError(f"USP empty/unrecognized listing page: {page.url}")
                 print(f"  parsed {len(page_products)} USP products", file=sys.stderr)
                 for product in page_products:
                     key = (
@@ -692,6 +748,7 @@ def fetch_informed_live(program: str) -> tuple[list[dict], str]:
     snapshot_date = datetime.now(timezone.utc).strftime("%Y-%m-%d")
     print(f"GET {url}", file=sys.stderr)
     r = requests.get(url, headers=HTTP_HEADERS, timeout=REQUEST_TIMEOUT)
+    _capture_response(r)
     r.raise_for_status()
     r.encoding = "utf-8"
     products, listing_month = parse_informed_certified_products_page(r.text)
@@ -701,7 +758,7 @@ def fetch_informed_live(program: str) -> tuple[list[dict], str]:
     for row in products:
         brand = row["brand"]
         product = row["product"]
-        key = (normalize_brand(brand), normalize_product(product))
+        key = (normalize_brand(brand), product.strip().casefold())
         if key in seen:
             continue
         seen.add(key)
@@ -740,16 +797,20 @@ NUTRASOURCE_PRODUCT_IMAGE_BASE = "https://andi.nutrasource.ca/ProductImages/"
 NUTRASOURCE_DETAIL_DELAY_SECONDS = 0.15
 
 
-def parse_nutrasource_products_payload(payload: dict) -> tuple[list[dict[str, str]], int]:
+def parse_nutrasource_products_payload(payload: dict, program: str = "IFOS") -> tuple[list[dict[str, str]], int]:
     """Parse the Nutrasource filtered-products JSON response.
 
     The endpoint includes product IDs and names, but not brand names. Brand is
     resolved from each product detail page before records are written.
     """
+    if program not in {"IFOS", "IKOS", "IAOS", "IPRO"}:
+        raise ValueError(f"Unsupported Nutrasource program: {program}")
+    if payload.get("success") is not True or not isinstance(payload.get("list"), list):
+        raise ValueError("Malformed/failed Nutrasource listing response")
     total_count = int(payload.get("totalCount") or 0)
     rows: list[dict[str, str]] = []
     for item in payload.get("list", []) or []:
-        if not item.get("IsIfos"):
+        if not item.get("Is" + program.capitalize()):
             continue
         product_num = str(item.get("ProductNum") or "").strip()
         product = _clean_nutrasource_text(str(item.get("ProductName") or ""))
@@ -792,8 +853,9 @@ def parse_nutrasource_product_detail_page(html_text: str, product_num: str) -> d
     certifications: list[str] = []
     for raw_cert in re.findall(r'<h2 class="h2--lg">\s*(.*?)\s*</h2>', html_text, flags=re.IGNORECASE | re.DOTALL):
         cert_text = _clean_nutrasource_text(_strip_tags(raw_cert)).lower()
-        if "ifos" in cert_text:
-            certifications.append("IFOS")
+        for program in ("IFOS", "IKOS", "IAOS", "IPRO"):
+            if re.search(r"\b" + program.lower() + r"\b", cert_text):
+                certifications.append(program)
 
     return {
         "brand": brand,
@@ -805,8 +867,8 @@ def parse_nutrasource_product_detail_page(html_text: str, product_num: str) -> d
     }
 
 
-def fetch_ifos_live(max_products: int | None = None) -> tuple[list[dict], str]:
-    """Fetch IFOS-certified products from Nutrasource.
+def fetch_ifos_live(max_products: int | None = None, program: str = "IFOS") -> tuple[list[dict], str]:
+    """Fetch an official Nutrasource program; additional programs are evidence-only.
 
     Nutrasource exposes product IDs via a JSON filtered-products endpoint. The
     product detail page is required to resolve brand names, so this performs one
@@ -823,18 +885,20 @@ def fetch_ifos_live(max_products: int | None = None) -> tuple[list[dict], str]:
         params = {
             "pageNumber": page_number,
             "pageSize": page_size,
-            "forCertification": "IFOS",
+            "forCertification": program,
             "forInterest": "",
             "forCategory": "",
             "byName": "",
         }
         print(f"GET {NUTRASOURCE_FILTERED_PRODUCTS_URL} page={page_number}", file=sys.stderr)
         r = requests.get(NUTRASOURCE_FILTERED_PRODUCTS_URL, params=params, headers=HTTP_HEADERS, timeout=REQUEST_TIMEOUT)
+        _capture_response(r)
         r.raise_for_status()
         payload = r.json()
-        page_rows, total_count = parse_nutrasource_products_payload(payload)
+        page_rows, total_count = parse_nutrasource_products_payload(payload, program=program)
         if not page_rows:
             break
+        previous_ids = set(seen_product_nums)
         for row in page_rows:
             product_num = row["product_num"]
             if product_num in seen_product_nums:
@@ -845,41 +909,47 @@ def fetch_ifos_live(max_products: int | None = None) -> tuple[list[dict], str]:
                 break
         if max_products is not None and len(products) >= max_products:
             break
+        if not page_rows or (page_number > 1 and not any(row["product_num"] not in previous_ids for row in page_rows)):
+            raise ValueError(f"{program} pagination made no progress")
         if total_count is not None and len(products) >= total_count:
             break
         page_number += 1
 
-    print(f"IFOS: found {len(products)} product IDs (reported total {total_count})", file=sys.stderr)
+    if max_products is None and len(products) != total_count:
+        raise ValueError(f"Incomplete {program} pagination: {len(products)} of {total_count}")
+
+    print(f"{program}: found {len(products)} product IDs (reported total {total_count})", file=sys.stderr)
 
     records: list[dict] = []
-    seen_records: set[tuple[str, str]] = set()
+    seen_records: set[str] = set()
     for i, row in enumerate(products, 1):
         product_num = row["product_num"]
         detail_url = f"{NUTRASOURCE_PRODUCT_DETAIL_URL}?id={product_num}"
         try:
             detail_response = requests.get(detail_url, headers=HTTP_HEADERS, timeout=REQUEST_TIMEOUT)
+            _capture_response(detail_response)
             detail_response.raise_for_status()
             detail = parse_nutrasource_product_detail_page(detail_response.text, product_num)
         except requests.RequestException as exc:
             print(f"  detail fetch failed for {product_num}: {exc}", file=sys.stderr)
-            detail = {}
+            raise ValueError(f"{program} required detail failed: {product_num}: {exc}") from exc
 
         brand = str(detail.get("brand") or "").strip()
         product = str(detail.get("product") or row["product"]).strip()
         certifications = detail.get("certifications") or []
-        if not brand or "IFOS" not in certifications:
-            print(f"  skipping {product_num}: missing brand or IFOS detail certification", file=sys.stderr)
-            continue
+        if not brand or program not in certifications:
+            print(f"  skipping {product_num}: missing brand or {program} detail certification", file=sys.stderr)
+            raise ValueError(f"{program} required detail identity missing: {product_num}")
 
-        key = (normalize_brand(brand), normalize_product(product))
+        key = product_num
         if key in seen_records:
             continue
         seen_records.add(key)
-        record_id = _make_record_id("IFOS", brand, product, [], product_num)
+        record_id = _make_record_id(program, brand, product, [], product_num)
         records.append(
             {
                 "record_id": record_id,
-                "program": "IFOS",
+                "program": program,
                 "brand": brand,
                 "product": product,
                 "brand_normalized": normalize_brand(brand),
@@ -900,7 +970,7 @@ def fetch_ifos_live(max_products: int | None = None) -> tuple[list[dict], str]:
             print(f"  [{i}/{len(products)}] fetched IFOS details", file=sys.stderr)
         time.sleep(NUTRASOURCE_DETAIL_DELAY_SECONDS)
 
-    print(f"IFOS: {len(records)} product records", file=sys.stderr)
+    print(f"{program}: {len(records)} product records", file=sys.stderr)
     return records, snapshot_date
 
 
@@ -951,7 +1021,7 @@ def parse_bscg_products_payload(payload: list[dict], snapshot_date: str) -> list
 
     The endpoint returns every BSCG program; we keep only Certified-Drug-Free
     rows (program code '1'). BSCG certifies by lot, so a single product appears
-    in many rows (one per tested lot). We group by (brand, product) and carry
+    in many rows (one per tested lot). We group by authoritative product URL and carry
     every tested lot in ``lot_numbers_tested`` plus the most-recent report date —
     matching the registry's per-SKU shape (cf. NSF Sport) instead of emitting one
     redundant record per lot.
@@ -965,11 +1035,11 @@ def parse_bscg_products_payload(payload: list[dict], snapshot_date: str) -> list
         product = _clean_bscg_text(item.get("product"))
         if not company or not product:
             continue
-        key = (normalize_brand(company), normalize_product(product))
+        company_slug = str(item.get("company_slug") or "").strip()
+        product_slug = str(item.get("product_slug") or "").strip()
+        key = (company_slug, product_slug) if company_slug and product_slug else (company.casefold(), product.casefold())
         grp = groups.get(key)
         if grp is None:
-            company_slug = str(item.get("company_slug") or "").strip()
-            product_slug = str(item.get("product_slug") or "").strip()
             source_url = (
                 f"{BSCG_DATABASE_URL}/{company_slug}/{product_slug}"
                 if company_slug and product_slug
@@ -1041,6 +1111,7 @@ def fetch_bscg_live() -> tuple[list[dict], str]:
 
     print(f"GET {BSCG_DATABASE_URL} (seed WAF session)", file=sys.stderr)
     seed = session.get(BSCG_DATABASE_URL, headers=base_headers, timeout=REQUEST_TIMEOUT)
+    _capture_response(seed)
     seed.raise_for_status()
 
     post_headers = {
@@ -1058,6 +1129,7 @@ def fetch_bscg_live() -> tuple[list[dict], str]:
         data={"program_id": 0, "cat_id": 0, "type_id": 0},
         timeout=REQUEST_TIMEOUT,
     )
+    _capture_response(r)
     r.raise_for_status()
     payload = r.json()
     if not isinstance(payload, list):
@@ -1184,9 +1256,13 @@ def fetch_consumerlab_live() -> tuple[list[dict], str]:
                     "AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36"
                 )
             )
-            page.goto(CONSUMERLAB_CERTIFIED_PRODUCTS_URL, wait_until="domcontentloaded", timeout=60_000)
+            navigation = page.goto(CONSUMERLAB_CERTIFIED_PRODUCTS_URL, wait_until="domcontentloaded", timeout=60_000)
+            _capture_body(page.url, page.content().encode("utf-8"), navigation.status if navigation else 0)
+            if navigation is None or not navigation.ok:
+                raise ValueError(f"ConsumerLab failed navigation: {page.url}")
             page.wait_for_selector("table tr", state="attached", timeout=15_000)
             rendered_html = page.content()
+            _capture_body(page.url, rendered_html.encode("utf-8"), navigation.status)
         finally:
             browser.close()
 
@@ -1284,37 +1360,6 @@ def _make_record_id(program: str, brand: str, product: str, lots: list[str], lis
     return f"{prefix}_{digest.upper()}"
 
 
-def _load_existing_sources(exclude_programs: set[str]) -> list[dict]:
-    """Return existing registry sources except programs being refreshed."""
-    if not REGISTRY_PATH.exists():
-        return []
-    payload = json.loads(REGISTRY_PATH.read_text(encoding="utf-8"))
-    source_by_program = {
-        s.get("program"): s
-        for s in payload.get("_metadata", {}).get("registry_sources", []) or []
-        if s.get("program")
-    }
-    records_by_program: dict[str, list[dict]] = {}
-    for record in payload.get("verified_records", []) or []:
-        program = record.get("program")
-        if not program or program in exclude_programs:
-            continue
-        records_by_program.setdefault(program, []).append(record)
-
-    sources: list[dict] = []
-    for program, records in records_by_program.items():
-        source = source_by_program.get(program, {})
-        sources.append(
-            {
-                "program": program,
-                "url": source.get("url", records[0].get("source_url", "")),
-                "snapshot_date": source.get("snapshot_date") or records[0].get("verified_at"),
-                "records": records,
-            }
-        )
-    return sources
-
-
 # Registry sources whose listings are facility audits rather than product
 # certifications. scoring_v4.cert_evidence trusts audited-GMP facility evidence
 # only from sources flagged here, so the flag is written on every refresh.
@@ -1323,52 +1368,141 @@ PROGRAM_AUDIT_SCOPE = {
 }
 
 
-def write_registry(sources_with_records: list[dict], merge_existing: bool = False) -> None:
-    """Merge records from one or more sources into the registry file.
+def _source_form_identity(value: str) -> tuple:
+    """Reuse the matcher form owner for simple singular/plural source forms.
 
-    Each element of sources_with_records is:
-      {"program": "...", "url": "...", "snapshot_date": "YYYY-MM-DD", "records": [...]}
+    Compound preparations retain their full source text; canonical form tokens
+    alone must not collapse coated, chewable or other named preparations.
     """
-    if merge_existing:
-        refreshed_programs = {source["program"] for source in sources_with_records}
-        sources_with_records = _load_existing_sources(refreshed_programs) + sources_with_records
-
-    all_records: list[dict] = []
-    registry_sources: list[dict] = []
-    for source in sources_with_records:
-        entry = {
-            "program": source["program"],
-            "url": source["url"],
-            "snapshot_date": source["snapshot_date"],
-            "entry_count": len(source["records"]),
-        }
-        if source["program"] in PROGRAM_AUDIT_SCOPE:
-            entry["audit_scope"] = PROGRAM_AUDIT_SCOPE[source["program"]]
-        registry_sources.append(entry)
-        all_records.extend(source["records"])
-
-    payload = {
-        "_metadata": {
-            "schema_version": "6.0.0",
-            "description": "Cached snapshots of public third-party certification registries.",
-            "purpose": "cert_verification_v4",
-            "last_updated": datetime.now(timezone.utc).strftime("%Y-%m-%d"),
-            "scoring_rule": (
-                "Only verified_records with scope in {sku, product_line} AND recency_status in "
-                "{fresh, warn} contribute B4a points. scoring_blocked records still appear in audits."
-            ),
-            "registry_sources": registry_sources,
-            "total_verified_records": len(all_records),
-        },
-        "verified_records": all_records,
-    }
-    REGISTRY_PATH.write_text(json.dumps(payload, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
-    print(f"Wrote registry to {REGISTRY_PATH} ({len(all_records)} records across {len(registry_sources)} programs)", file=sys.stderr)
+    text = (value or "").strip().casefold()
+    tokens = _sku_form_tokens(text)
+    if tokens and len(re.findall(r"[a-z]+", text)) == 1:
+        return tuple(sorted(tokens))
+    return (text,)
 
 
-# ============================================================================
-# CLI
-# ============================================================================
+def _source_display_identity(record: dict) -> tuple:
+    return record.get("program"), record.get("brand", "").strip().casefold(), record.get("product", "").strip().casefold(), _source_form_identity(record.get("product_form", "")), record.get("scope")
+
+
+def _listing_identity(record: dict) -> tuple:
+    """Authoritative listing identity; never collapse different forms via fuzzy names."""
+    program = record.get("program")
+    if program == "NSF Certified":
+        return _source_display_identity(record), record.get("product_id", "").casefold()
+    for key in ("listing_id", "product_num"):
+        if record.get(key):
+            return program, key, str(record[key])
+    if record.get("company_id"):
+        return program, "company_id", str(record["company_id"]), normalize_brand(record.get("brand", "")), record.get("scope"), record.get("product", ""), record.get("standard")
+    url = record.get("product_url")
+    if not url and program == "BSCG":
+        url = record.get("source_url")
+    if url:
+        parts = urlsplit(url)
+        query = [(k, v) for k, v in parse_qsl(parts.query) if not k.lower().startswith("utm_") and k.lower() not in {"queryid", "s", "p"}]
+        return program, "url", urlunsplit((parts.scheme, parts.netloc.lower(), parts.path, urlencode(sorted(query)), ""))
+    # Flat listings have no per-product source identifier. Preserve only exact
+    # display identity, including strength/form, rather than normalized product.
+    return program, "display", normalize_brand(record.get("brand", "")), re.sub(r"\s+", " ", record.get("product", "")).strip().casefold(), record.get("scope"), record.get("product_form"), record.get("product_type"), record.get("certified_year")
+
+
+def build_refresh_candidate(previous: dict, sources: list[dict], failures: list[dict], overrides: list[dict]) -> tuple[dict, dict]:
+    """Validate snapshots and report review deltas, without modifying the live registry."""
+    candidate = copy.deepcopy(previous)
+    records = candidate.setdefault("verified_records", [])
+    metadata = candidate.setdefault("_metadata", {})
+    source_meta = metadata.setdefault("registry_sources", [])
+    report = {"programs": [], "missing_override_references": [], "review_required": True}
+    for failure in failures:
+        report["programs"].append({**failure, "status": "failed_preserved"})
+    for source in sources:
+        program = source["program"]
+        incoming = copy.deepcopy(source["records"])
+        old = [r for r in records if r.get("program") == program]
+        try:
+            if not incoming:
+                raise ValueError("Empty/unrecognized snapshot requires review; old snapshot preserved")
+            ids, identities = set(), set()
+            old_by_identity = {}
+            ambiguous_old_identities = set()
+            old_display_ids = defaultdict(set)
+            old_id_displays = defaultdict(set)
+            incoming_display_counts = Counter(_source_display_identity(r) for r in incoming if isinstance(r, dict))
+            for row in old:
+                display = _source_display_identity(row)
+                old_display_ids[display].add(row["record_id"])
+                old_id_displays[row["record_id"]].add(display)
+                identity = _listing_identity(row)
+                if identity in old_by_identity and old_by_identity[identity]["record_id"] != row["record_id"]:
+                    ambiguous_old_identities.add(identity)
+                old_by_identity[identity] = row
+            for row in incoming:
+                if not isinstance(row, dict):
+                    raise ValueError("Malformed certification record type")
+                if row.get("program") != program or not all(row.get(k) for k in ("record_id", "brand", "source_url", "verified_at", "scope")):
+                    raise ValueError("Malformed certification record")
+                if row.get("brand") == "UNKNOWN" or (row.get("scope") != "facility" and not row.get("product")):
+                    raise ValueError("Missing product/facility identity")
+                if not isinstance(row["verified_at"], str):
+                    raise ValueError("Malformed record verification date")
+                datetime.strptime(row["verified_at"], "%Y-%m-%d")
+                if row["verified_at"] != source["snapshot_date"]:
+                    raise ValueError("Snapshot/record date mismatch")
+                if row["scope"] not in {"sku", "product_line", "brand", "facility"}:
+                    raise ValueError("Unrecognized certification scope")
+                identity = _listing_identity(row)
+                previous_row = old_by_identity.get(identity)
+                if previous_row and previous_row.get("lot_numbers_tested") and not row.get("lot_numbers_tested"):
+                    raise ValueError("Previous lot evidence cannot be erased by an empty/list-only refresh; verify current detail and review the withdrawal")
+                if identity in identities or row["record_id"] in ids:
+                    raise ValueError("Duplicate source identity or record ID")
+                identities.add(identity)
+                ids.add(row["record_id"])
+                if identity in old_by_identity and identity not in ambiguous_old_identities and len(old_id_displays[old_by_identity[identity]["record_id"]]) == 1:
+                    row["record_id"] = old_by_identity[identity]["record_id"]
+                elif program == "NSF Certified":
+                    display = _source_display_identity(row)
+                    previous_ids = old_display_ids.get(display, set())
+                    if len(previous_ids) == 1 and incoming_display_counts[display] == 1:
+                        previous_id = next(iter(previous_ids))
+                        if len(old_id_displays[previous_id]) == 1:
+                            row["record_id"] = previous_id
+            stable_ids = [r["record_id"] for r in incoming]
+            if len(set(stable_ids)) != len(stable_ids):
+                raise ValueError("Duplicate record IDs after preserving source identity")
+        except (ValueError, TypeError, KeyError, AttributeError) as exc:
+            report["programs"].append({"program": program, "status": "failed_preserved", "error": str(exc)})
+            continue
+        before = {r["record_id"]: r for r in old}
+        after = {r["record_id"]: r for r in incoming}
+        changed = [rid for rid in sorted(before.keys() & after.keys())
+                   if {k: v for k, v in before[rid].items() if k != "verified_at"} != {k: v for k, v in after[rid].items() if k != "verified_at"}]
+        report["programs"].append({"program": program, "status": "candidate_complete", "snapshot_date": source["snapshot_date"],
+                                    "added": sorted(after.keys() - before.keys()), "removed": sorted(before.keys() - after.keys()),
+                                    "changed": changed, "scope_changes": [rid for rid in changed if before[rid].get("scope") != after[rid].get("scope")],
+                                    "split_previous_record_ids": sorted(rid for rid, displays in old_id_displays.items() if program == "NSF Certified" and (len(displays) > 1 or any(incoming_display_counts[d] > 1 or len(old_display_ids[d]) > 1 for d in displays))),
+                                    "identity_changes": [rid for rid in changed if any(before[rid].get(k) != after[rid].get(k) for k in ("brand", "product", "product_form", "product_type", "scope"))],
+                                    "lot_changes": [rid for rid in changed if before[rid].get("lot_numbers_tested") != after[rid].get("lot_numbers_tested")],
+                                    "record_count": len(incoming)})
+        records[:] = [r for r in records if r.get("program") != program] + incoming
+        source_meta[:] = [s for s in source_meta if s.get("program") != program]
+        entry = {"program": program, "url": source["url"], "snapshot_date": source["snapshot_date"], "entry_count": len(incoming)}
+        if program in PROGRAM_AUDIT_SCOPE:
+            entry["audit_scope"] = PROGRAM_AUDIT_SCOPE[program]
+        source_meta.append(entry)
+    live_ids = {r["record_id"] for r in records}
+    report["missing_override_references"] = sorted({o["record_id"] for o in overrides if o.get("status") == "verified" and o.get("record_id") and o["record_id"] not in live_ids})
+    previous_ids = {r["record_id"] for r in previous.get("verified_records", [])}
+    report["preexisting_missing_override_references"] = [rid for rid in report["missing_override_references"] if rid not in previous_ids]
+    report["new_missing_override_references"] = [rid for rid in report["missing_override_references"] if rid in previous_ids]
+    if any(p["status"] == "candidate_complete" for p in report["programs"]):
+        metadata["total_verified_records"] = len(records)
+        for entry in source_meta:
+            if entry.get("program") in PROGRAM_AUDIT_SCOPE:
+                entry["audit_scope"] = PROGRAM_AUDIT_SCOPE[entry["program"]]
+        metadata["last_updated"] = datetime.now(timezone.utc).strftime("%Y-%m-%d")
+    return candidate, report
 
 
 def main() -> None:
@@ -1383,6 +1517,9 @@ def main() -> None:
             "live-informed-choice",
             "live-informed-sport",
             "live-ifos",
+            "live-ikos",
+            "live-iaos",
+            "live-ipro",
             "live-bscg",
             "live-consumerlab",
             "pdf",
@@ -1412,130 +1549,81 @@ def main() -> None:
         help="Limit paginated/detail-heavy sources for smoke tests (USP pages or IFOS products).",
     )
     parser.add_argument("--dry-run", action="store_true")
+    parser.add_argument("--output-dir", type=Path, help="Durable candidate/response receipt directory; never the live registry directory.")
     args = parser.parse_args()
-
-    sources: list[dict] = []
-
-    if args.source in ("live-nsf-sport", "all"):
-        records, snapshot = fetch_nsf_sport_live(with_lots=args.with_lots)
-        sources.append(
-            {
-                "program": "NSF Sport",
-                "url": NSF_SPORT_SEARCH_URL,
-                "snapshot_date": snapshot,
-                "records": records,
-            }
-        )
-
-    if args.source in ("live-nsf-173", "all"):
-        records, snapshot = fetch_nsf_173_live()
-        sources.append(
-            {
-                "program": "NSF Certified",
-                "url": NSF_173_URL,
-                "snapshot_date": snapshot,
-                "records": records,
-            }
-        )
-
-    if args.source in ("live-nsf-455", "all"):
-        records, snapshot = fetch_nsf_455_live()
-        sources.append(
-            {
-                "program": "NSF/ANSI 455",
-                "url": f"{NSF_455_GMP_URL}?Standard={NSF_455_2_STANDARD}",
-                "snapshot_date": snapshot,
-                "records": records,
-            }
-        )
-
-    if args.source in ("live-usp", "all"):
-        records, snapshot = fetch_usp_verified_live(max_pages=args.max_pages)
-        sources.append(
-            {
-                "program": "USP Verified",
-                "url": USP_VERIFIED_URL,
-                "snapshot_date": snapshot,
-                "records": records,
-            }
-        )
-
-    if args.source in ("live-informed-choice", "all"):
-        records, snapshot = fetch_informed_live("Informed Choice")
-        sources.append(
-            {
-                "program": "Informed Choice",
-                "url": INFORMED_CHOICE_URL,
-                "snapshot_date": snapshot,
-                "records": records,
-            }
-        )
-
-    if args.source in ("live-informed-sport", "all"):
-        records, snapshot = fetch_informed_live("Informed Sport")
-        sources.append(
-            {
-                "program": "Informed Sport",
-                "url": INFORMED_SPORT_URL,
-                "snapshot_date": snapshot,
-                "records": records,
-            }
-        )
-
-    if args.source in ("live-ifos", "all"):
-        records, snapshot = fetch_ifos_live(max_products=args.max_pages)
-        sources.append(
-            {
-                "program": "IFOS",
-                "url": NUTRASOURCE_CERTIFIED_PRODUCTS_URL,
-                "snapshot_date": snapshot,
-                "records": records,
-            }
-        )
-
-    if args.source in ("live-bscg", "all"):
-        records, snapshot = fetch_bscg_live()
-        sources.append(
-            {
-                "program": "BSCG",
-                "url": BSCG_DATABASE_URL,
-                "snapshot_date": snapshot,
-                "records": records,
-            }
-        )
-
-    if args.source in ("live-consumerlab", "all"):
-        records, snapshot = fetch_consumerlab_live()
-        sources.append(
-            {
-                "program": "ConsumerLab",
-                "url": CONSUMERLAB_CERTIFIED_PRODUCTS_URL,
-                "snapshot_date": snapshot,
-                "records": records,
-            }
-        )
-
-    if args.source == "pdf":
-        if not args.pdf_path.exists():
-            raise SystemExit(f"PDF not found at {args.pdf_path}")
-        records, snapshot = fetch_nsf_sport_pdf(args.pdf_path)
-        sources.append(
-            {
-                "program": "NSF Sport",
-                "url": "https://info.nsf.org/Certified/NFL/DS-ABS_contacts.pdf",
-                "snapshot_date": snapshot,
-                "records": records,
-            }
-        )
-
-    if args.dry_run:
-        for s in sources:
-            print(f"\n{s['program']} (snapshot {s['snapshot_date']}, {len(s['records'])} records)")
-            for r in s["records"][:3]:
-                print(json.dumps(r, indent=2, ensure_ascii=False))
-        return
-
-    write_registry(sources, merge_existing=args.merge_existing)
+    if args.source == "pdf" and not args.dry_run:
+        parser.error("PDF is historical fixture evidence; use --dry-run, not a production snapshot")
+    if args.max_pages is not None and not args.dry_run:
+        parser.error("--max-pages is a smoke-test limit and cannot produce a refresh candidate")
+    output = args.output_dir or Path.home() / "pg_quality" / ("cert_refresh_" + datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%SZ"))
+    if output.resolve() == REGISTRY_PATH.parent.resolve() or REGISTRY_PATH.resolve().is_relative_to(output.resolve()):
+        parser.error("Candidate output must be outside the live registry directory")
+    output.mkdir(parents=True, exist_ok=False)
+    global _RECEIPT_DIR, _RECEIPTS
+    _RECEIPT_DIR = output / "responses"
+    _RECEIPT_DIR.mkdir()
+    _RECEIPTS = []
+    baseline_bytes = REGISTRY_PATH.read_bytes()
+    baseline_hash = hashlib.sha256(baseline_bytes).hexdigest()
+    previous = json.loads(baseline_bytes)
+    (output / "baseline_registry.json").write_bytes(baseline_bytes)
+    (output / "fetch_provenance.json").write_text(json.dumps({"baseline_sha256": baseline_hash, "fetcher_source_sha256": FETCHER_SOURCE_SHA256}, indent=2) + "\n")
+    specs = [
+        ("live-nsf-sport", "NSF Sport", NSF_SPORT_SEARCH_URL, lambda: fetch_nsf_sport_live(with_lots=args.with_lots)),
+        ("live-nsf-173", "NSF Certified", NSF_173_URL, fetch_nsf_173_live),
+        ("live-nsf-455", "NSF/ANSI 455", f"{NSF_455_GMP_URL}?Standard={NSF_455_2_STANDARD}", fetch_nsf_455_live),
+        ("live-usp", "USP Verified", USP_VERIFIED_URL, lambda: fetch_usp_verified_live(max_pages=args.max_pages)),
+        ("live-informed-choice", "Informed Choice", INFORMED_CHOICE_URL, lambda: fetch_informed_live("Informed Choice")),
+        ("live-informed-sport", "Informed Sport", INFORMED_SPORT_URL, lambda: fetch_informed_live("Informed Sport")),
+        ("live-ifos", "IFOS", NUTRASOURCE_CERTIFIED_PRODUCTS_URL, lambda: fetch_ifos_live(max_products=args.max_pages)),
+        ("live-ikos", "IKOS", NUTRASOURCE_CERTIFIED_PRODUCTS_URL, lambda: fetch_ifos_live(max_products=args.max_pages, program="IKOS")),
+        ("live-iaos", "IAOS", NUTRASOURCE_CERTIFIED_PRODUCTS_URL, lambda: fetch_ifos_live(max_products=args.max_pages, program="IAOS")),
+        ("live-ipro", "IPRO", NUTRASOURCE_CERTIFIED_PRODUCTS_URL, lambda: fetch_ifos_live(max_products=args.max_pages, program="IPRO")),
+        ("live-bscg", "BSCG", BSCG_DATABASE_URL, fetch_bscg_live),
+        ("live-consumerlab", "ConsumerLab", CONSUMERLAB_CERTIFIED_PRODUCTS_URL, fetch_consumerlab_live),
+        ("pdf", "NSF Sport", "https://info.nsf.org/Certified/NFL/DS-ABS_contacts.pdf", lambda: fetch_nsf_sport_pdf(args.pdf_path)),
+    ]
+    sources, failures, additional = [], [], []
+    try:
+        for name, program, url, fetch in specs:
+            if args.source != name and not (args.source == "all" and name not in {"pdf", "live-ikos", "live-iaos", "live-ipro"}):
+                continue
+            start = len(_RECEIPTS)
+            try:
+                rows, snapshot = fetch()
+                fetched = {"program": program, "url": url, "snapshot_date": snapshot, "records": rows}
+                if program in {"IKOS", "IAOS", "IPRO"}:
+                    additional.append(fetched)
+                else:
+                    sources.append(fetched)
+            except (Exception, SystemExit) as exc:
+                failures.append({"program": program, "error": str(exc)})
+                print(f"{program}: failed; previous snapshot retained: {exc}", file=sys.stderr)
+            finally:
+                for receipt in _RECEIPTS[start:]:
+                    receipt["program"] = program
+                (output / "response_receipts.json").write_text(json.dumps(_RECEIPTS, indent=2) + "\n")
+                (output / "source_snapshots.json").write_text(json.dumps(sources + additional, indent=2, ensure_ascii=False) + "\n")
+        overrides_path = SCRIPTS_ROOT / "data" / "curated_overrides" / "cert_verification_overrides.json"
+        overrides = json.loads(overrides_path.read_text()).get("overrides", [])
+        candidate, report = build_refresh_candidate(previous, sources, failures, overrides)
+        if hashlib.sha256(REGISTRY_PATH.read_bytes()).hexdigest() != baseline_hash:
+            raise SystemExit("Registry changed during retrieval; snapshots retained, candidate withheld. Reconcile against the new baseline.")
+        if additional:
+            _, additional_report = build_refresh_candidate({"_metadata": {"registry_sources": []}, "verified_records": []}, additional, [], [])
+            report["pending_policy_sources"] = [{**row, "status": "complete_policy_pending" if row["status"] == "candidate_complete" else row["status"]} for row in additional_report["programs"]]
+            (output / "additional_programs.pending_policy.json").write_text(json.dumps(additional, indent=2) + "\n")
+        report["pending_policy_programs"] = [s["program"] for s in additional]
+        report.update(baseline_sha256=baseline_hash, fetcher_source_sha256=FETCHER_SOURCE_SHA256, smoke_test=args.dry_run,
+                      receipt_count=len(_RECEIPTS), generated_at=datetime.now(timezone.utc).isoformat())
+        (output / "refresh_report.json").write_text(json.dumps(report, indent=2) + "\n")
+        if not args.dry_run:
+            (output / "cert_registry.candidate.json").write_text(json.dumps(candidate, indent=2, ensure_ascii=False) + "\n")
+        print(f"Review candidate and source receipts: {output}")
+        if any(row["status"] == "failed_preserved" for row in report["programs"] + report.get("pending_policy_sources", [])):
+            raise SystemExit(1)
+    finally:
+        _RECEIPT_DIR = None
 
 
 if __name__ == "__main__":

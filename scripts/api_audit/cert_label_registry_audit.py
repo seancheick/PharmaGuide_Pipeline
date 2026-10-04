@@ -22,16 +22,23 @@ non-production rerun so the score-delta report has expected ranges.
 
 Usage:
   python3 scripts/api_audit/cert_label_registry_audit.py
+  python3 scripts/api_audit/cert_label_registry_audit.py --products-root scripts/products
+
+The --products-root census reruns production discovery for every enriched or
+clean-only label, regardless of claim or publication eligibility. Input failures
+are reported and return a nonzero exit; --limit is explicitly incomplete.
 """
 
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
 import sqlite3
 import sys
 from collections import Counter, defaultdict
 from datetime import datetime, timezone
+from dataclasses import replace
 from pathlib import Path
 from typing import Optional
 
@@ -40,7 +47,7 @@ SCRIPTS_ROOT = REPO_ROOT / "scripts"
 if str(SCRIPTS_ROOT) not in sys.path:
     sys.path.insert(0, str(SCRIPTS_ROOT))
 
-from cert_resolver import CertRegistry, normalize_program, resolve  # noqa: E402
+from cert_resolver import CertRegistry, OVERRIDES_PATH, REGISTRY_PATH, discover_verified_programs, _reviewed_override_identity_conflict, _sku_variant_conflict, _with_label_form_context, normalize_program, resolve  # noqa: E402
 
 CORE_DB = SCRIPTS_ROOT / "final_db_output" / "pharmaguide_core.db"
 BLOBS_DIR = SCRIPTS_ROOT / "final_db_output" / "detail_blobs"
@@ -121,6 +128,176 @@ def _registry_covered_programs(registry: CertRegistry) -> set[str]:
     return {p for p in (from_sources | from_records) if p}
 
 
+def audit_overrides(registry: CertRegistry) -> list[dict]:
+    """Check reviewed references against the candidate, without awarding credit."""
+    issues = []
+    for key, entries in registry.overrides_by_brand_product.items():
+        for entry in entries:
+            if entry.get("status") != "verified":
+                continue
+            record = registry.record_by_id(entry.get("record_id"))
+            cause = None
+            if not record:
+                cause = "missing_registry_record"
+            elif normalize_program(record.get("program", "")) != normalize_program(entry.get("program", "")):
+                cause = "program_conflict"
+            elif _reviewed_override_identity_conflict(entry, record):
+                cause = "reviewed_identity_conflict"
+            elif record.get("current_certification") is False:
+                cause = "withdrawn_registry_record"
+            elif record.get("_recency_status") in {"unknown", "scoring_blocked"}:
+                cause = "outdated_registry_record"
+            if cause:
+                issues.append({"brand": key[0], "product": key[1], "dsld_id": entry.get("dsld_id"),
+                               "record_id": entry.get("record_id"), "cause": cause})
+        for index, first in enumerate(entries):
+            for second in entries[index + 1:]:
+                if normalize_program(first.get("program", "")) != normalize_program(second.get("program", "")):
+                    continue
+                if first.get("dsld_id") and second.get("dsld_id") and str(first["dsld_id"]) != str(second["dsld_id"]):
+                    continue
+                # Disjoint strength/form reviews are legitimate. A broad name
+                # can overlap a narrower review when either owner comparison allows it.
+                if _sku_variant_conflict(first.get("product", ""), second.get("product", "")) and _sku_variant_conflict(second.get("product", ""), first.get("product", "")):
+                    continue
+                statuses = {first.get("status", "verified"), second.get("status", "verified")}
+                if statuses == {"verified", "rejected"}:
+                    rejected = first if first.get("status") == "rejected" else second
+                    verified = second if rejected is first else first
+                    # A rejected competing record and an accepted record are
+                    # normal review outcomes, not contradictory decisions.
+                    conflict = not rejected.get("record_id") or rejected.get("record_id") == verified.get("record_id")
+                elif statuses == {"verified"} and first.get("record_id") != second.get("record_id"):
+                    other_record = registry.record_by_id(second.get("record_id"))
+                    conflict = bool(other_record and _reviewed_override_identity_conflict(first, other_record))
+                else:
+                    conflict = False
+                if conflict:
+                    issues.append({"brand": key[0], "product": key[1], "cause": "conflicting_reviewed_overrides",
+                                   "record_ids": [first.get("record_id"), second.get("record_id")]})
+    return issues
+
+
+def _census_resolution(product: dict, registry: CertRegistry) -> dict:
+    """Ask production discovery; diagnostic candidates never become certification."""
+    brand, title = product["brandName"], product["fullName"]
+    identifier = str(product.get("dsld_id") or product.get("id"))
+    context = {key: product.get(key) for key in ("form_factor_canonical", "form_factor", "netContents")}
+    claims = _walk_label_programs(product)
+    # Resolve all registry programs for non-awarding explanations, including no-claim misses.
+    programs = sorted(_registry_covered_programs(registry) | {normalize_program(p) for p in claims})
+    diagnostic = resolve(brand, title, programs, registry, dsld_id=identifier, label_context=context)
+    # Discovery can only emit sku/product_line resolutions. Restrict a shallow
+    # view to those programs after the identical owner query, avoiding a second
+    # all-program search while preserving discovery's additional identity guard.
+    eligible_programs = {row.program for row in diagnostic if row.scope in {"sku", "product_line"}}
+    discovery_registry = replace(registry, records_by_program={
+        program: records for program, records in registry.records_by_program.items() if program in eligible_programs
+    })
+    discovered = discover_verified_programs(brand, title, discovery_registry, dsld_id=identifier, label_context=context)
+    matched = [resolution.to_dict() for resolution in discovered]
+    diagnostics = [resolution.to_dict() for resolution in diagnostic]
+    if any(resolution.scores_points() for resolution in discovered):
+        cause = "verified_match"
+    elif any(row.get("scoring_blocked_reason") for row in matched + diagnostics):
+        cause = "outdated_or_withdrawn_record"
+    elif any("ambiguous registry product variants" in row.get("notes", "") for row in diagnostics):
+        cause = "ambiguous_registry_variants"
+    elif any(row.get("scope") == "needs_review" and row.get("matched_product") and _sku_variant_conflict(
+            _with_label_form_context(title, context), row["matched_product"],
+            brand_a=brand, brand_b=row.get("matched_brand", "")) for row in diagnostics):
+        cause = "material_identity_conflict"
+    elif any(row.get("scope") == "needs_review" for row in diagnostics):
+        cause = "title_identity_review"
+    elif any(row.get("scope") in {"brand_only", "sku", "product_line"} for row in diagnostics):
+        cause = "product_identity_not_established"
+    elif any(normalize_program(p) not in _registry_covered_programs(registry) for p in claims):
+        cause = "source_not_covered"
+    else:
+        cause = "registry_brand_absent"
+    return {"dsld_id": identifier, "brand": brand, "product": title, "has_claim": bool(claims),
+            "claims": claims, "quality_score_status": product.get("quality_score_status"),
+            "cause": cause, "discovered": matched, "diagnostics": diagnostics}
+
+
+def census(products_root: Path, registry: CertRegistry, *, limit: int = 0) -> dict:
+    """Walk enriched plus clean-only inputs, including held and unclaimed labels.
+
+    Every malformed row/file is recorded. Clean copies of an enriched label are
+    counted as stage duplicates, not scored again. No export eligibility filter.
+    """
+    products, errors, seen = [], [], {}
+    duplicates = 0
+    paths = sorted(products_root.glob("output_*_enriched/enriched/enriched_cleaned_batch_*.json"))
+    paths += sorted(products_root.glob("output_*/cleaned/cleaned_batch_*.json"))
+    clean_count = 0
+    file_count = 0
+    input_fingerprints = {}
+    for path in paths:
+        file_count += 1
+        try:
+            raw = path.read_bytes()
+            input_fingerprints[str(path)] = hashlib.sha256(raw).hexdigest()
+            payload = json.loads(raw)
+            del raw
+            items = payload if isinstance(payload, list) else payload.get("products", payload.get("items")) if isinstance(payload, dict) else None
+            if not isinstance(items, list):
+                raise ValueError("product batch must contain a list")
+        except (OSError, ValueError) as exc:
+            errors.append({"path": str(path), "error": str(exc)})
+            continue
+        for index, product in enumerate(items):
+            identifier = str(product.get("dsld_id") or product.get("id") or "") if isinstance(product, dict) else ""
+            if identifier and identifier in seen:
+                identity = (product.get("brandName"), product.get("fullName"))
+                if identity != seen[identifier]:
+                    errors.append({"path": str(path), "row": index, "dsld_id": identifier,
+                                   "error": "duplicate label ID has conflicting identity"})
+                duplicates += 1
+                continue
+            if identifier:
+                seen[identifier] = (product.get("brandName"), product.get("fullName"))
+            if not isinstance(product, dict) or not identifier or not product.get("brandName") or not product.get("fullName"):
+                error = {"path": str(path), "row": index, "dsld_id": identifier, "error": "missing product identity"}
+                errors.append(error)
+                products.append({**error, "cause": "input_error"})
+            else:
+                try:
+                    row = _census_resolution(product, registry)
+                except Exception as exc:
+                    error = {"path": str(path), "row": index, "dsld_id": identifier, "error": str(exc)}
+                    errors.append(error)
+                    row = {**error, "cause": "input_error"}
+                row["input_path"] = str(path)
+                products.append(row)
+                if path.parent.name == "cleaned":
+                    clean_count += 1
+            if len(products) % 1000 == 0:
+                print(f"  census: {len(products)} products", file=sys.stderr)
+            if limit and len(products) >= limit:
+                break
+        if limit and len(products) >= limit:
+            break
+    if not paths:
+        errors.append({"path": str(products_root), "error": "no product batches found"})
+    clusters = defaultdict(list)
+    for product in products:
+        for row in product.get("diagnostics", []):
+            if row.get("scope") == "needs_review":
+                clusters[(row.get("program"), row.get("record_id"), row.get("notes"))].append(product["dsld_id"])
+    return {"_metadata": {"generated_at": datetime.now(timezone.utc).isoformat(),
+                           "audit_kind": "catalog_wide_certification_census", "total_products_scanned": len(products),
+                           "input_file_count": file_count, "input_error_count": len(errors),
+                           "stage_duplicates": duplicates, "clean_only_products": clean_count,
+                           "complete": not errors and not limit,
+                           "input_sha256": input_fingerprints},
+            "summary": {"by_cause": dict(Counter(p["cause"] for p in products)),
+                        "products_without_claim": sum(not p.get("has_claim") for p in products if p["cause"] != "input_error")},
+            "products": products, "input_errors": errors, "override_issues": audit_overrides(registry),
+            "review_clusters": [{"program": key[0], "record_id": key[1], "notes": key[2], "dsld_ids": ids}
+                                for key, ids in sorted(clusters.items(), key=lambda item: -len(item[1]))]}
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(description="Cert claim-vs-registry audit")
     parser.add_argument(
@@ -135,13 +312,41 @@ def main() -> None:
         "--samples", type=int, default=5,
         help="Per-scope sample count in the Markdown report (default 5).",
     )
+    parser.add_argument("--products-root", type=Path, help="Census all enriched and clean-only labels instead of exported claims.")
+    parser.add_argument("--registry", type=Path, default=REGISTRY_PATH, help="Candidate registry snapshot; production registry remains untouched.")
+    parser.add_argument("--overrides", type=Path, default=OVERRIDES_PATH, help="Reviewed mappings used for this comparison.")
     args = parser.parse_args()
     args.out_dir.mkdir(parents=True, exist_ok=True)
 
     print("Loading registry...", file=sys.stderr)
-    registry = CertRegistry.load()
+    if args.products_root and (not args.registry.is_file() or not args.overrides.is_file()):
+        parser.error("census requires existing registry and reviewed override inputs")
+    source_paths = (args.registry, args.overrides, Path(__file__), SCRIPTS_ROOT / "cert_resolver.py")
+    source_fingerprints = {str(path): hashlib.sha256(path.read_bytes()).hexdigest() for path in source_paths} if args.products_root else {}
+    registry = CertRegistry.load(registry_path=args.registry, overrides_path=args.overrides)
     covered_programs = _registry_covered_programs(registry)
     print(f"  registry loaded: {sum(len(v) for v in registry.records_by_program.values())} records across {len(covered_programs)} programs", file=sys.stderr)
+
+    if args.products_root:
+        payload = census(args.products_root, registry, limit=args.limit)
+        payload["_metadata"]["source_sha256"] = source_fingerprints
+        current_fingerprints = {str(path): hashlib.sha256(path.read_bytes()).hexdigest() for path in source_paths}
+        payload["_metadata"]["source_unchanged"] = source_fingerprints == current_fingerprints
+        if source_fingerprints != current_fingerprints:
+            payload["input_errors"].append({"error": "source or registry changed during census"})
+            payload["_metadata"]["input_error_count"] = len(payload["input_errors"])
+            payload["_metadata"]["complete"] = False
+        json_path = args.out_dir / "certification_census.json"
+        json_path.write_text(json.dumps(payload, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
+        md_path = args.out_dir / "certification_census.md"
+        md_path.write_text("# Catalog-wide certification census\n\n" + json.dumps(payload["_metadata"], indent=2) +
+                           "\n\n" + json.dumps(payload["summary"], indent=2) +
+                           "\n\nMatching outcomes are diagnostics, not new certification or clinical claims. "
+                           "See JSON product rows, review clusters, override issues and explicit input errors.\n", encoding="utf-8")
+        print(f"Wrote {json_path}", file=sys.stderr)
+        if payload["input_errors"]:
+            raise SystemExit(1)
+        return
 
     print("Loading catalog...", file=sys.stderr)
     rows = load_catalog()
