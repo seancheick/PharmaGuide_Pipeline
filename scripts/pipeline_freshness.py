@@ -54,7 +54,8 @@ def _reference_data_files(repo_root: Path) -> list[Path]:
     data_dir = Path(repo_root).resolve() / "scripts" / "data"
     return sorted(
         {
-            *data_dir.glob("*.json"),
+            # Operational identifier-audit cache, not an input to any stage.
+            *(path for path in data_dir.glob("*.json") if path.name != "fda_unii_cache.json"),
             *(data_dir / "curated_overrides").glob("*.json"),
         },
         key=lambda path: path.relative_to(repo_root).as_posix(),

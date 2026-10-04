@@ -634,3 +634,9 @@ Owner: `scoring_v4/modules/generic_helpers.py::is_scorable` — evidence: struct
 - [ ] Catalog/interaction/Flutter canonical field and on-device rendering, release/full and final exact-candidate publication approval.
 
 Preserved master-plan audit1c7e5383 reconciled into existing master/roadmap/LEDGER with October3results explicitly historical and October4open release gates; no new tracker. Docs/fixtures batch prepared for commit after reviewed source and fresh-artifact confirmation. No external publication.
+
+### 2026-10-04 — exact-candidate freshness cache defect
+
+- Main release0293968c stopped at reference-data freshness, not scoring: ignored operational FDA UNII audit cache existed in main but not the corpus worktree. Existing fingerprint selector included it although stage import/consumer census shows no Clean/Enrich/Score reader.
+- Owner: `scripts/pipeline_freshness.py::_reference_data_files`; exclude only `fda_unii_cache.json`, retain all curated reference invalidation. Will NOT create another fingerprint owner or restamp manifests.
+- Regression failed before fix; named input-fingerprint test file20passed1.77s after fix, including real-reference change rejection. Review/CI/local/integration pending. Clean code fingerprint changes, so corrected exact source requires one full pipeline regeneration; Enrich/Score code stamps unchanged. Final release/app verification remains open.

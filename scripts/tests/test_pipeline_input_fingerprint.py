@@ -401,3 +401,20 @@ def test_preflight_reports_malformed_manifest_fail_closed(tmp_path: Path) -> Non
 
     assert len(issues) == 1
     assert "malformed" in issues[0]
+
+
+def test_identifier_audit_cache_is_not_a_pipeline_reference_input(tmp_path: Path) -> None:
+    repo = _fake_repo(tmp_path)
+    for stage in STAGES:
+        _stage_output(repo, stage)
+    before = reference_data_fingerprint(repo)
+    cache = repo / "scripts/data/fda_unii_cache.json"
+    cache.write_text('{"name_to_unii": {"example": "ABC"}}')
+    assert reference_data_fingerprint(repo) == before
+    cache.write_text('{"name_to_unii": {"example": "DEF"}}')
+    assert reference_data_fingerprint(repo) == before
+    assert stage_freshness_issues(repo) == []
+    # Actual reference changes still invalidate all three stage outputs.
+    (repo / "scripts/data/reference.json").write_text('{"value": 2}')
+    assert reference_data_fingerprint(repo) != before
+    assert len(stage_freshness_issues(repo)) == 3
