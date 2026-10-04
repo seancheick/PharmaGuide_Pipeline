@@ -22,24 +22,45 @@ Raw `python3 -m pytest` picks macOS Python 3.9 and runs every heavy test (~1 h).
 ```bash
 scripts/test.sh fast scripts/tests/test_<topic>.py::test_<case>  # one failure / one edit
 scripts/test.sh fast scripts/tests/test_<topic>.py -k <kw>      # affected defect class
-scripts/test.sh local          # pipeline code or data changed: the corpus tests CI cannot run (~2 min)
+scripts/test.sh local          # behavioral pipeline/data batch: corpus checks CI cannot run (~2 min)
 scripts/test.sh fast           # whole suite: CI runs it on every push; locally only if CI is down
 scripts/test.sh release        # release gates before a ship
 scripts/test.sh full           # post-pipeline backstop, never alongside a pipeline run
 ```
 
-- Use focused tests while iterating; run one final whole fast checkpoint in CI. Push the branch (`claude/*`, `codex/*`; Sean,
-  2026-10-02) and GitHub Actions `pipeline-tests` runs it. Merge on green CI, plus `local` when
-  pipeline code or data changed.
+- Pick validation by the affected behavior below, not file count, line count or whether the file
+  is called a scorer. GitHub Actions `pipeline-tests` still runs automatically on branch/main
+  pushes; only behavioral batches must wait for it before merging.
 - CI has no product corpus, builds or raw DSLD datasets; it checks out the app repo for cross-repo tests (FLUTTER_REPO). A test that needs them goes in `LOCAL_ONLY_TEST_FILES`
   (`scripts/test_profiles.py`); `scripts/ci_skip_guard.py` fails CI on any other skip reason; the local rung rejects missing corpus/build skips.
 - `scripts/test.sh` holds a machine-wide lock: one full/release/slow suite at a time, alone;
   broad fast/local suites share it and split the worker budget. Focused runs (named files or
   nodes) take no lock and never wait. A waiting broad run is queued, not hung.
 
-Pick the rung by what changed and say which rung ran. Documentation-only changes need no pytest;
-scoring, clinical-data and runtime configuration changes require their affected checks.
-"Done" without output from the rung that covers the change is not done.
+**Validation by correctness risk — Sean, October 4, 2026.** This is the shared policy;
+rule files and skills refer here rather than defining another merge gate.
+
+| Change class | Required before merge to main |
+|---|---|
+| Documentation/process only; no executable/config/data change | Read the full diff, check affected references and contradictory instructions, `git diff --check`. No pytest, corpus run or CI wait. |
+| Display-only wording/formatting of an existing assessment | Diff proves no calculation, identity, source selection, state, contract or eligibility change. Run named owner/consumer tests and compare a representative real product before/after: underlying scores, amounts, roles, Evidence determination, status and safety stay unchanged. Verify factual wording against the existing source. Merge after those checks; no broad local suite or pre-merge CI wait. |
+| Tests only, with production behavior unchanged | Run the added/changed tests and the affected defect-class cases. Show assertions still enforce the source-grounded behavior; no weakened guard or unexplained fixture update. No broad local suite or pre-merge CI wait. |
+| Behavioral code/data/config, clinical facts, safety instructions, public contracts, or test/CI infrastructure | Fail-first defect regression, relevant owner/consumer tests, required source verification and bounded measurements/review. One green whole-fast CI checkpoint on the completed candidate before merge; also `local` for behavioral pipeline/data changes. Infrastructure needs its harness/config checks and CI; local corpus checks only if its affected behavior needs them. |
+
+A display edit may clarify a recorded conclusion; it cannot change clinical meaning, add an
+unsupported claim or soften actionable safety advice. Warning verbs, dosages, identifiers,
+applicability, review states and publication rules are behavioral even in a string or comment-driven
+config. Mixed batches use the highest applicable class. If classification or impact is uncertain,
+inspect the owner and affected consumers; use the behavioral gate if the uncertainty remains.
+Record the class, checks/results and limits in the existing handoff/LEDGER. Do not mark CI green
+while it is pending. For a targeted merge, automatic CI continues after the push; record its run
+or pending status and inspect available results when resuming. Independent development can proceed
+while CI runs. Investigate and fix failures promptly; they block release and work that relies on
+the failing behavior until resolved. A skipped or cancelled run is not a pass. New policy and
+publication still require Sean; this table is not release approval.
+
+Pick the rung by what changed and say which rung ran. “Done” requires the evidence for that class;
+a green suite alone never proves clinical accuracy or real-product correctness.
 
 **Iteration is targeted; broad validation belongs to a finished batch, not an edit or commit.**
 Never run the whole fast/full/release suite after one edit or one failed test. A bare
@@ -53,18 +74,21 @@ do not each require a broad checkpoint. Do not weaken an assertion merely to mak
    cases for the same defect class. Use `git grep`/`rg`, the ownership matrix and callers to
    identify affected test files; that list is discovery, not a command to rerun every consumer
    after every edit. Run the relevant owner/consumer slice when the class is stable.
-3. Check the fix on the affected labels plus unaffected controls with
+3. For behavioral output changes, check affected labels plus unaffected controls with
    `scripts/audits/quality_redesign/replay.py` (freeze-raw, snapshot, compare), never by
-   rerunning whole brands.
-4. The integrator schedules one combined checkpoint after the batch's source changes, focused
-   tests, measurements and required review are ready: green `pipeline-tests` CI on the exact
-   candidate commit, plus `scripts/test.sh local` when pipeline code or data changed. If it fails,
+   rerunning whole brands. Display-only edits use the smaller before/after comparison above.
+4. Apply the validation class above. For behavioral batches, the integrator schedules one combined
+   checkpoint after source changes, focused tests, measurements and required review are ready:
+   green `pipeline-tests` CI on the exact candidate, plus applicable local checks. If it fails,
    record all failures, fix each class using explicit nodes/files (or `--lf` with the failing
    files), then rerun the combined checkpoint once after all fixes are ready. Do not restart it
    after each individual fix. Run the whole fast suite locally only when CI is unavailable.
-5. After the last code change and the merge of main: inspect every stage code/reference fingerprint
-   first, then one corpus pass from the earliest required stage and the release rung. Check Clean
-   provenance before choosing Enrich-only; preflight refuses output built by other data or code.
+5. At final candidate validation after the last output-changing batch is integrated: inspect every
+   stage code/reference fingerprint, then one corpus pass from the earliest required stage and the
+   release rung. A small edit does not itself request a full corpus run. Even display-only source
+   edits may invalidate a stage fingerprint: do not restamp it or claim old artifacts contain new
+   copy. Rebuild at the candidate checkpoint; documentation-only edits do not invalidate runtime.
+   Check Clean provenance before choosing Enrich-only; preflight refuses stale output.
 
 Before a broad job, check active jobs and lane handoffs. Full/release/slow suites run
 one at a time; never run a broad suite alongside a corpus job. Broad fast/local suites
@@ -73,6 +97,8 @@ checks naming files or nodes bypass the suite queue and use one worker.
 For timeouts, inspect contention first and rerun the affected nodes in isolation; a successful
 retry explains neither a source defect nor the interrupted checkpoint by itself. Reuse existing
 receipts only when their source/data fingerprints cover the candidate; otherwise revalidate.
+An identical validated source plus documentation changes does not need another broad checkpoint;
+a push to main does not require waiting for a duplicate CI run when the same source already passed.
 
 **Progress and resume:** every agent first reads this file, its current handoff, the relevant
 master-plan boxes and LEDGER entries. Record goal, owned files, baseline and next unchecked item

@@ -10,6 +10,12 @@ have hidden over-promotion and silent regressions before, and a full pipeline re
 This procedure measures the real effect cheaply and keeps one owner per decision. The invariants live in `.claude/rules/scoring.md`; this
 skill covers the steps.
 
+Before using the steps, classify the diff using **AGENTS.md → Validation by correctness risk**.
+A display-only explanation in a scoring file does not automatically become a scoring change:
+use the targeted display checks there when all underlying decisions remain unchanged. Clinical
+meaning, safety advice and any numerical/identity/applicability change still require this procedure.
+Do not add a separate CI or corpus requirement for a verified display-only edit.
+
 ## Steps
 
 1. **Owner Check.** Find the concept in `scripts/contracts/source_of_truth_matrix.json`: its owner
@@ -61,7 +67,7 @@ skill covers the steps.
 8. **Tests.** Follow the targeted fix loop in `AGENTS.md`: explicit failing node first, then its
    defect-class edge cases and relevant owner/consumer files. Never collect the whole suite for
    one edit or restart it after each failure fix. The integrator runs one combined fast checkpoint
-   when the batch is ready; a failed checkpoint returns to targeted fixes until all classes are
-   ready for the next combined gate. Required measurements and independent review still apply.
+   for a completed behavioral batch under AGENTS.md; a failed checkpoint returns to targeted fixes
+   until all classes are ready for the next combined gate. Required measurements and independent review still apply.
    For external publication, show Sean the cause-grouped movement summary and unresolved risks;
    publication approval remains separate. Do not request approval per ordinary development score.
