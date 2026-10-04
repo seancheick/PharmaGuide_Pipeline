@@ -591,3 +591,16 @@ master plan. Will NOT create: scorer, registry, parser, public field/status,
 role classifier, serving selector or app calculation. Durable receipt:
 `scripts/audits/q53_d26_calibration_20261002/`; external replay artifacts:
 `/Users/seancheick/pg_quality/q53_calibration_final_20261002/`.
+
+### October 3 exact-candidate exclusion remediation — source measured, integration pending
+
+Owner: `enrich_supplements_v3.py::_SOURCE_MATERIAL_TERMS`, `scoring_input_contract.py::derive_product_scoring_evidence`, existing IQM chromium aliases and `product_label_corrections.json` forms. Evidence: raw47-label freeze, NIH-hosted PDF images, FDA GRN614/PMID27687012, fail-first production regressions, independent review. Will NOT create: second matcher/scorer, registry, public field/status, form-quality magnitude or alternative scoring policy.
+
+- [x] Locate all45 prior-CAUTION excluded raw labels; classify19parent/token gaps, preserving deliberate citrus safety holds.
+- [x] Fix retained red-grape source spelling (`aa0c7ac2`); remove false dinicocysteinate→polynicotinate alias (`88b4f999`); prevent generic/null identity repairs being revived as member-dose anchors (`d6c9bd66`); reconcile3exact label form transcription errors (`5cf34928`).
+- [x] Frozen47-label replay:8not_scored→scored restorations,14internal-state-only changes,25identical captures. All47 safety gates unchanged;37of45remain held. Controls1024/60812unchanged. No guessed forms or member-dose allocation.
+- [x] Independent source/diff/image reviews find no actionable findings. Focused receipts:626form;896form/signoff/data;91projection;646form+consumer;77source-correction checks.
+- [ ] Exact final source CI and combined local checkpoint accepted; main integration. Firstlocalattempt rejected for missing ignored canary fixtures; existing fixtures linked without changing assertions/skipguard, final checkpoint running.
+- [ ] Fresh corpus/manifest/reachability/catalog/Flutter rendering/release/full/publication verification. Prior99af7201catalog remains unchanged and cannot prove final source.
+
+Durable receipts: `/Users/seancheick/pg_quality/q53_release_20261003/form_remediation/` (`manifest.json`, `form_gap_census.json`, `research.md`, `delta_final.json`). Fouratomiccommits on `codex/catalog-form-remediation`; no main merge or external catalog publication yet.

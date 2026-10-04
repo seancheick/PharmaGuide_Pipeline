@@ -639,3 +639,7 @@ Next bounded source finding: primary PMID36198994 describes LA-5 alone versus fl
 - [ ] Integrate the active codex/q53-calibration-completion lane after validation on current main. It is not stale: its clinical fixes remain absent from main. Its earlier local gate rejected missing artifacts; do not mark it accepted from green CI alone.
 
 Cleanup receipts: /Users/seancheick/pg_quality/branch_cleanup_20261002/; accepted local log: /Users/seancheick/pg_quality/q65_cleanup_local_20261002.log. Main checkout is clean; only the active calibration worktree/branch remains besides main. S1 detail-blob versus core-column observation remains in Q65; removal of danger does not establish that every report axis is live.
+
+### October 3 exclusion checkpoint — final source5cf34928, not release-complete
+
+Eight of45 prior-CAUTION catalog exclusions are resolved by verified source/ownership corrections.37remain held; no safety gate changed in the47-label raw replay. Source fixes, focused verification and independent review are complete; exact-CI/local acceptance, integration, regenerated full candidate and hands-on Flutter audit remain unchecked. This does not close clinical holds, the citation backlog, broader source-section review or publication. Evidence and ownership: existing [execution LEDGER](../../scripts/audits/pending_items_20260926/LEDGER.md), durable `/Users/seancheick/pg_quality/q53_release_20261003/form_remediation/`.
