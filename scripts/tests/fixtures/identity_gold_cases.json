@@ -1,0 +1,1764 @@
+{
+ "_metadata": {
+  "description": "Gold benchmark (roadmap 1.10) for identity/form resolution: real DSLD label rows run through the production enricher boundary.",
+  "expectation_basis": "Hand-authored from the label's printed chemistry and the IQM form keys, written before the enricher was run. Not copied from enricher output.",
+  "input_boundary": "Each active_ingredients row is the cleaner's output for a real DSLD label, reduced to the fields the identity match reads (name, standardName, canonical_id, canonical_source_db, forms, quantity, unit). The enricher is not given any expected value.",
+  "unspecified_cases": "unspecified-* cases pin that a carrier-only or form-less label must resolve to the canonical's '(unspecified)' form, never to a guessed chemical form.",
+  "case_count": 55,
+  "last_updated": "2026-10-03",
+  "unmapped_cases": "unmapped-* cases pin fail-closed behaviour: a printed form the enricher cannot map keeps the canonical, gets no form_id and no bio score, and reports form_match_status 'unmapped'. Whether such a carrier word should instead default to '(unspecified)' is a policy question, not pinned here."
+ },
+ "cases": [
+  {
+   "id": "b12-methylcobalamin",
+   "dsld_id": "252800",
+   "brand": "BulkSupplements.com",
+   "product": "Vitamin B12 1% (Methylcobalamin)",
+   "active_ingredients": [
+    {
+     "name": "Vitamin B12",
+     "standardName": "Vitamin B12",
+     "ingredientGroup": "Vitamin B12",
+     "canonical_id": "vitamin_b12_cobalamin",
+     "canonical_source_db": "ingredient_quality_map",
+     "quantity": 200.0,
+     "unit": "mcg",
+     "forms": [
+      {
+       "name": "Methylcobalamin",
+       "prefix": null,
+       "percent": null
+      }
+     ],
+     "notes": "Vitamin B12 (Form: as Methylcobalamin)",
+     "order": 1
+    }
+   ],
+   "expect": [
+    {
+     "canonical_id": "vitamin_b12_cobalamin",
+     "form_id": "methylcobalamin"
+    }
+   ]
+  },
+  {
+   "id": "b12-cyanocobalamin",
+   "dsld_id": "213124",
+   "brand": "Airborne",
+   "product": "Airborne + Everyday Stress Away Zesty Orange",
+   "active_ingredients": [
+    {
+     "name": "Vitamin B12",
+     "standardName": "Vitamin B12",
+     "ingredientGroup": "Vitamin B12",
+     "canonical_id": "vitamin_b12_cobalamin",
+     "canonical_source_db": "ingredient_quality_map",
+     "quantity": 30.0,
+     "unit": "mcg",
+     "forms": [
+      {
+       "name": "Cyanocobalamin",
+       "prefix": null,
+       "percent": null
+      }
+     ],
+     "notes": "Vitamin B12 (Form: as Cyanocobalamin) ",
+     "order": 10
+    }
+   ],
+   "expect": [
+    {
+     "canonical_id": "vitamin_b12_cobalamin",
+     "form_id": "cyanocobalamin"
+    }
+   ]
+  },
+  {
+   "id": "b12-adenosylcobalamin",
+   "dsld_id": "328435",
+   "brand": "Life Extension",
+   "product": "Dopamine Advantage",
+   "active_ingredients": [
+    {
+     "name": "Vitamin B12",
+     "standardName": "Vitamin B12",
+     "ingredientGroup": "Vitamin B12",
+     "canonical_id": "vitamin_b12_cobalamin",
+     "canonical_source_db": "ingredient_quality_map",
+     "quantity": 500.0,
+     "unit": "mcg",
+     "forms": [
+      {
+       "name": "Adenosylcobalamin",
+       "prefix": null,
+       "percent": null
+      }
+     ],
+     "notes": null,
+     "order": 1
+    }
+   ],
+   "expect": [
+    {
+     "canonical_id": "vitamin_b12_cobalamin",
+     "form_id": "adenosylcobalamin"
+    }
+   ]
+  },
+  {
+   "id": "b12-hydroxocobalamin",
+   "dsld_id": "219584",
+   "brand": "Pure Encapsulations",
+   "product": "Multivitamin EasySticks Natural Blueberry Flavor",
+   "active_ingredients": [
+    {
+     "name": "Vitamin B12",
+     "standardName": "Vitamin B12",
+     "ingredientGroup": "Vitamin B12",
+     "canonical_id": "vitamin_b12_cobalamin",
+     "canonical_source_db": "ingredient_quality_map",
+     "quantity": 5.0,
+     "unit": "mcg",
+     "forms": [
+      {
+       "name": "Hydroxocobalamin",
+       "prefix": null,
+       "percent": null
+      }
+     ],
+     "notes": "Vitamin B12 (Form: as Hydroxycobalamin) ",
+     "order": 15
+    }
+   ],
+   "expect": [
+    {
+     "canonical_id": "vitamin_b12_cobalamin",
+     "form_id": "hydroxocobalamin"
+    }
+   ]
+  },
+  {
+   "id": "folate-quatrefolic",
+   "dsld_id": "209368",
+   "brand": "Doctor's Best",
+   "product": "Fully Active B Complex with Quatrefolic",
+   "active_ingredients": [
+    {
+     "name": "Quatrefolic",
+     "standardName": "Vitamin B9 (Folate)",
+     "ingredientGroup": "Folate",
+     "canonical_id": "vitamin_b9_folate",
+     "canonical_source_db": "ingredient_quality_map",
+     "quantity": 400.0,
+     "unit": "mcg",
+     "forms": [
+      {
+       "name": "Folate",
+       "prefix": null,
+       "percent": null
+      }
+     ],
+     "notes": null,
+     "order": 6
+    }
+   ],
+   "expect": [
+    {
+     "canonical_id": "vitamin_b9_folate",
+     "form_id": "quatrefolic"
+    }
+   ]
+  },
+  {
+   "id": "folate-folic-acid",
+   "dsld_id": "64233",
+   "brand": "Airborne",
+   "product": "Airborne Everyday",
+   "active_ingredients": [
+    {
+     "name": "Folic Acid",
+     "standardName": "Vitamin B9 (Folate)",
+     "ingredientGroup": "Folate",
+     "canonical_id": "vitamin_b9_folate",
+     "canonical_source_db": "ingredient_quality_map",
+     "quantity": 400.0,
+     "unit": "mcg",
+     "forms": [
+      {
+       "name": "folic acid",
+       "prefix": null,
+       "percent": null
+      }
+     ],
+     "notes": null,
+     "order": 6
+    }
+   ],
+   "expect": [
+    {
+     "canonical_id": "vitamin_b9_folate",
+     "form_id": "folic acid"
+    }
+   ]
+  },
+  {
+   "id": "b6-p5p",
+   "dsld_id": "256981",
+   "brand": "Centrum",
+   "product": "Centrum Energy",
+   "active_ingredients": [
+    {
+     "name": "Vitamin B6",
+     "standardName": "Vitamin B6 (Pyridoxine)",
+     "ingredientGroup": "Vitamin B6 (pyridoxal 5-phosphate)",
+     "canonical_id": "vitamin_b6_pyridoxine",
+     "canonical_source_db": "ingredient_quality_map",
+     "quantity": 1.7,
+     "unit": "mg",
+     "forms": [
+      {
+       "name": "Pyridoxal 5-Phosphate",
+       "prefix": "as",
+       "percent": null
+      }
+     ],
+     "notes": null,
+     "order": 4
+    }
+   ],
+   "expect": [
+    {
+     "canonical_id": "vitamin_b6_pyridoxine",
+     "form_id": "pyridoxal-5-phosphate (P5P)"
+    }
+   ]
+  },
+  {
+   "id": "b6-pyridoxine-hcl",
+   "dsld_id": "213124",
+   "brand": "Airborne",
+   "product": "Airborne + Everyday Stress Away Zesty Orange",
+   "active_ingredients": [
+    {
+     "name": "Vitamin B6",
+     "standardName": "Vitamin B6 (Pyridoxine)",
+     "ingredientGroup": "Vitamin B6",
+     "canonical_id": "vitamin_b6_pyridoxine",
+     "canonical_source_db": "ingredient_quality_map",
+     "quantity": 1.7,
+     "unit": "mg",
+     "forms": [
+      {
+       "name": "Pyridoxine Hydrochloride",
+       "prefix": null,
+       "percent": null
+      }
+     ],
+     "notes": "Vitamin B6 (Form: as Pyridoxine Hydrochloride) ",
+     "order": 9
+    }
+   ],
+   "expect": [
+    {
+     "canonical_id": "vitamin_b6_pyridoxine",
+     "form_id": "pyridoxine hydrochloride"
+    }
+   ]
+  },
+  {
+   "id": "d3-cholecalciferol",
+   "dsld_id": "240372",
+   "brand": "Airborne",
+   "product": "Airborne Elderberry",
+   "active_ingredients": [
+    {
+     "name": "Vitamin D",
+     "standardName": "Vitamin D",
+     "ingredientGroup": "Vitamin D",
+     "canonical_id": "vitamin_d",
+     "canonical_source_db": "ingredient_quality_map",
+     "quantity": 6.3,
+     "unit": "mcg",
+     "forms": [
+      {
+       "name": "Cholecalciferol",
+       "prefix": null,
+       "percent": null
+      }
+     ],
+     "notes": "Vitamin D (Form: as Cholecalciferol) ",
+     "order": 6
+    }
+   ],
+   "expect": [
+    {
+     "canonical_id": "vitamin_d",
+     "form_id": "cholecalciferol (D3)"
+    }
+   ]
+  },
+  {
+   "id": "d2-ergocalciferol",
+   "dsld_id": "25829",
+   "brand": "CVS Pharmacy",
+   "product": "Daily Multiple Plus Iron",
+   "active_ingredients": [
+    {
+     "name": "Vitamin D",
+     "standardName": "Vitamin D",
+     "ingredientGroup": "Vitamin D",
+     "canonical_id": "vitamin_d",
+     "canonical_source_db": "ingredient_quality_map",
+     "quantity": 400.0,
+     "unit": "IU",
+     "forms": [
+      {
+       "name": "Ergocalciferol",
+       "prefix": null,
+       "percent": null
+      }
+     ],
+     "notes": "Vitamin D (Form: as Ergocalciferol) ",
+     "order": 3
+    }
+   ],
+   "expect": [
+    {
+     "canonical_id": "vitamin_d",
+     "form_id": "ergocalciferol (D2)"
+    }
+   ]
+  },
+  {
+   "id": "a-retinyl-palmitate",
+   "dsld_id": "180210",
+   "brand": "Airborne Plus",
+   "product": "Probiotic Assorted Fruit Flavors",
+   "active_ingredients": [
+    {
+     "name": "Vitamin A",
+     "standardName": "Vitamin A",
+     "ingredientGroup": "Vitamin A",
+     "canonical_id": "vitamin_a",
+     "canonical_source_db": "ingredient_quality_map",
+     "quantity": 60.0,
+     "unit": "mcg",
+     "forms": [
+      {
+       "name": "Retinyl Palmitate",
+       "prefix": null,
+       "percent": null
+      }
+     ],
+     "notes": "Vitamin A (Form: as Retinyl Palmitate) ",
+     "order": 6
+    }
+   ],
+   "expect": [
+    {
+     "canonical_id": "vitamin_a",
+     "form_id": "retinyl palmitate"
+    }
+   ]
+  },
+  {
+   "id": "c-ascorbic-acid",
+   "dsld_id": "178352",
+   "brand": "Airborne Plus",
+   "product": "Beta-Immune Booster Zesty Orange",
+   "active_ingredients": [
+    {
+     "name": "Vitamin C",
+     "standardName": "Vitamin C",
+     "ingredientGroup": "Vitamin C",
+     "canonical_id": "vitamin_c",
+     "canonical_source_db": "ingredient_quality_map",
+     "quantity": 500.0,
+     "unit": "mg",
+     "forms": [
+      {
+       "name": "Ascorbic Acid",
+       "prefix": null,
+       "percent": null
+      }
+     ],
+     "notes": null,
+     "order": 4
+    }
+   ],
+   "expect": [
+    {
+     "canonical_id": "vitamin_c",
+     "form_id": "ascorbic acid"
+    }
+   ]
+  },
+  {
+   "id": "b3-niacinamide",
+   "dsld_id": "12012",
+   "brand": "CVS Pharmacy",
+   "product": "Spectravite Advanced Formula",
+   "active_ingredients": [
+    {
+     "name": "Niacin",
+     "standardName": "Vitamin B3 (Niacin)",
+     "ingredientGroup": "Niacin",
+     "canonical_id": "vitamin_b3_niacin",
+     "canonical_source_db": "ingredient_quality_map",
+     "quantity": 20.0,
+     "unit": "mg",
+     "forms": [
+      {
+       "name": "Niacinamide",
+       "prefix": null,
+       "percent": null
+      }
+     ],
+     "notes": "Niacin (Form: as Niacinamide) ",
+     "order": 8
+    }
+   ],
+   "expect": [
+    {
+     "canonical_id": "vitamin_b3_niacin",
+     "form_id": "niacinamide"
+    }
+   ]
+  },
+  {
+   "id": "b3-nicotinic-acid",
+   "dsld_id": "25539",
+   "brand": "Doctor's Best",
+   "product": "Real Niacin (As Nicotinic Acid) 500 mg",
+   "active_ingredients": [
+    {
+     "name": "Niacin",
+     "standardName": "Vitamin B3 (Niacin)",
+     "ingredientGroup": "Niacin",
+     "canonical_id": "vitamin_b3_niacin",
+     "canonical_source_db": "ingredient_quality_map",
+     "quantity": 500.0,
+     "unit": "mg",
+     "forms": [
+      {
+       "name": "Nicotinic Acid",
+       "prefix": null,
+       "percent": null
+      }
+     ],
+     "notes": "Niacin (Form: as Nicotinic Acid) ",
+     "order": 1
+    }
+   ],
+   "expect": [
+    {
+     "canonical_id": "vitamin_b3_niacin",
+     "form_id": "nicotinic acid"
+    }
+   ]
+  },
+  {
+   "id": "mg-glycinate",
+   "dsld_id": "310750",
+   "brand": "BulkSupplements.com",
+   "product": "Magnesium Glycinate",
+   "active_ingredients": [
+    {
+     "name": "Magnesium",
+     "standardName": "Magnesium",
+     "ingredientGroup": "Magnesium",
+     "canonical_id": "magnesium",
+     "canonical_source_db": "ingredient_quality_map",
+     "quantity": 225.0,
+     "unit": "mg",
+     "forms": [
+      {
+       "name": "Magnesium Glycinate",
+       "prefix": "as",
+       "percent": null
+      }
+     ],
+     "notes": null,
+     "order": 1
+    }
+   ],
+   "expect": [
+    {
+     "canonical_id": "magnesium",
+     "form_id": "magnesium glycinate"
+    }
+   ]
+  },
+  {
+   "id": "mg-oxide",
+   "dsld_id": "213056",
+   "brand": "Airborne",
+   "product": "Airborne Zesty Orange",
+   "active_ingredients": [
+    {
+     "name": "Magnesium",
+     "standardName": "Magnesium",
+     "ingredientGroup": "Magnesium",
+     "canonical_id": "magnesium",
+     "canonical_source_db": "ingredient_quality_map",
+     "quantity": 20.0,
+     "unit": "mg",
+     "forms": [
+      {
+       "name": "Magnesium Oxide",
+       "prefix": "as",
+       "percent": null
+      }
+     ],
+     "notes": "Magnesium (Form: as Magnesium Oxide) ",
+     "order": 9
+    }
+   ],
+   "expect": [
+    {
+     "canonical_id": "magnesium",
+     "form_id": "magnesium oxide"
+    }
+   ]
+  },
+  {
+   "id": "mg-citrate",
+   "dsld_id": "253851",
+   "brand": "BulkSupplements.com",
+   "product": "Magnesium Citrate (500 mg)",
+   "active_ingredients": [
+    {
+     "name": "Magnesium",
+     "standardName": "Magnesium",
+     "ingredientGroup": "Magnesium",
+     "canonical_id": "magnesium",
+     "canonical_source_db": "ingredient_quality_map",
+     "quantity": 330.0,
+     "unit": "mg",
+     "forms": [
+      {
+       "name": "Magnesium Citrate",
+       "prefix": "as",
+       "percent": null
+      }
+     ],
+     "notes": null,
+     "order": 1
+    }
+   ],
+   "expect": [
+    {
+     "canonical_id": "magnesium",
+     "form_id": "magnesium citrate"
+    }
+   ]
+  },
+  {
+   "id": "zn-picolinate",
+   "dsld_id": "294316",
+   "brand": "BulkSupplements.com",
+   "product": "Zinc Picolinate",
+   "active_ingredients": [
+    {
+     "name": "Zinc",
+     "standardName": "Zinc",
+     "ingredientGroup": "Zinc",
+     "canonical_id": "zinc",
+     "canonical_source_db": "ingredient_quality_map",
+     "quantity": 11.0,
+     "unit": "mg",
+     "forms": [
+      {
+       "name": "Zinc Picolinate",
+       "prefix": null,
+       "percent": null
+      }
+     ],
+     "notes": null,
+     "order": 1
+    }
+   ],
+   "expect": [
+    {
+     "canonical_id": "zinc",
+     "form_id": "zinc picolinate"
+    }
+   ]
+  },
+  {
+   "id": "zn-bisglycinate",
+   "dsld_id": "326703",
+   "brand": "Garden of Life Vitamin Code",
+   "product": "Gummies Kids Multi with Iron Orange Flavor",
+   "active_ingredients": [
+    {
+     "name": "Zinc",
+     "standardName": "Zinc",
+     "ingredientGroup": "Zinc",
+     "canonical_id": "zinc",
+     "canonical_source_db": "ingredient_quality_map",
+     "quantity": 5.5,
+     "unit": "mg",
+     "forms": [
+      {
+       "name": "Zinc Bisglycinate",
+       "prefix": null,
+       "percent": null
+      }
+     ],
+     "notes": null,
+     "order": 19
+    }
+   ],
+   "expect": [
+    {
+     "canonical_id": "zinc",
+     "form_id": "zinc bisglycinate"
+    }
+   ]
+  },
+  {
+   "id": "zn-oxide",
+   "dsld_id": "178352",
+   "brand": "Airborne Plus",
+   "product": "Beta-Immune Booster Zesty Orange",
+   "active_ingredients": [
+    {
+     "name": "Zinc",
+     "standardName": "Zinc",
+     "ingredientGroup": "Zinc",
+     "canonical_id": "zinc",
+     "canonical_source_db": "ingredient_quality_map",
+     "quantity": 8.0,
+     "unit": "mg",
+     "forms": [
+      {
+       "name": "Zinc Oxide",
+       "prefix": null,
+       "percent": null
+      }
+     ],
+     "notes": "Zinc (Form: as Zinc Oxide) ",
+     "order": 7
+    }
+   ],
+   "expect": [
+    {
+     "canonical_id": "zinc",
+     "form_id": "zinc oxide"
+    }
+   ]
+  },
+  {
+   "id": "fe-bisglycinate",
+   "dsld_id": "250997",
+   "brand": "MegaFood",
+   "product": "Baby & Me 2 Prenatal Multi",
+   "active_ingredients": [
+    {
+     "name": "Iron",
+     "standardName": "Iron",
+     "ingredientGroup": "Iron",
+     "canonical_id": "iron",
+     "canonical_source_db": "ingredient_quality_map",
+     "quantity": 18.0,
+     "unit": "mg",
+     "forms": [
+      {
+       "name": "Iron Bisglycinate",
+       "prefix": "as fermented",
+       "percent": null
+      }
+     ],
+     "notes": null,
+     "order": 16
+    }
+   ],
+   "expect": [
+    {
+     "canonical_id": "iron",
+     "form_id": "iron bisglycinate"
+    }
+   ]
+  },
+  {
+   "id": "fe-ferrous-fumarate",
+   "dsld_id": "294795",
+   "brand": "BulkSupplements.com",
+   "product": "Multivitamins Softgels",
+   "active_ingredients": [
+    {
+     "name": "Iron",
+     "standardName": "Iron",
+     "ingredientGroup": "Iron",
+     "canonical_id": "iron",
+     "canonical_source_db": "ingredient_quality_map",
+     "quantity": 2.5,
+     "unit": "mg",
+     "forms": [
+      {
+       "name": "Ferrous Fumarate",
+       "prefix": null,
+       "percent": null
+      }
+     ],
+     "notes": null,
+     "order": 13
+    }
+   ],
+   "expect": [
+    {
+     "canonical_id": "iron",
+     "form_id": "ferrous fumarate"
+    }
+   ]
+  },
+  {
+   "id": "fe-ferrous-sulfate",
+   "dsld_id": "63028",
+   "brand": "GNC Women's Ultra Mega",
+   "product": "Active",
+   "active_ingredients": [
+    {
+     "name": "Iron",
+     "standardName": "Iron",
+     "ingredientGroup": "Iron",
+     "canonical_id": "iron",
+     "canonical_source_db": "ingredient_quality_map",
+     "quantity": 18.0,
+     "unit": "mg",
+     "forms": [
+      {
+       "name": "Ferrous Sulfate",
+       "prefix": "as",
+       "percent": null
+      }
+     ],
+     "notes": "Iron (Form: as Ferrous Sulfate) ",
+     "order": 15
+    }
+   ],
+   "expect": [
+    {
+     "canonical_id": "iron",
+     "form_id": "ferrous sulfate"
+    }
+   ]
+  },
+  {
+   "id": "ca-carbonate",
+   "dsld_id": "294476",
+   "brand": "BulkSupplements.com",
+   "product": "Calcium Carbonate & Vitamin D3 Softgels",
+   "active_ingredients": [
+    {
+     "name": "Calcium",
+     "standardName": "Calcium",
+     "ingredientGroup": "Calcium",
+     "canonical_id": "calcium",
+     "canonical_source_db": "ingredient_quality_map",
+     "quantity": 480.0,
+     "unit": "mg",
+     "forms": [
+      {
+       "name": "Calcium Carbonate",
+       "prefix": null,
+       "percent": null
+      }
+     ],
+     "notes": null,
+     "order": 2
+    }
+   ],
+   "expect": [
+    {
+     "canonical_id": "calcium",
+     "form_id": "calcium carbonate"
+    }
+   ]
+  },
+  {
+   "id": "ca-citrate",
+   "dsld_id": "312868",
+   "brand": "BulkSupplements.com",
+   "product": "Calcium Citrate 210 mg Capsules",
+   "active_ingredients": [
+    {
+     "name": "Calcium",
+     "standardName": "Calcium",
+     "ingredientGroup": "Calcium",
+     "canonical_id": "calcium",
+     "canonical_source_db": "ingredient_quality_map",
+     "quantity": 210.0,
+     "unit": "mg",
+     "forms": [
+      {
+       "name": "Calcium Citrate",
+       "prefix": null,
+       "percent": null
+      }
+     ],
+     "notes": null,
+     "order": 1
+    }
+   ],
+   "expect": [
+    {
+     "canonical_id": "calcium",
+     "form_id": "calcium citrate"
+    }
+   ]
+  },
+  {
+   "id": "se-selenomethionine",
+   "dsld_id": "758",
+   "brand": "Emergen-C",
+   "product": "Immune Defense Formula Ruby Lemon Honey",
+   "active_ingredients": [
+    {
+     "name": "Selenium",
+     "standardName": "Selenium",
+     "ingredientGroup": "Selenium",
+     "canonical_id": "selenium",
+     "canonical_source_db": "ingredient_quality_map",
+     "quantity": 17.0,
+     "unit": "mcg",
+     "forms": [
+      {
+       "name": "Selenomethionine",
+       "prefix": null,
+       "percent": null
+      }
+     ],
+     "notes": "Selenium (Form: as Selenomethionine) ",
+     "order": 18
+    }
+   ],
+   "expect": [
+    {
+     "canonical_id": "selenium",
+     "form_id": "selenomethionine"
+    }
+   ]
+  },
+  {
+   "id": "se-sodium-selenite",
+   "dsld_id": "18102",
+   "brand": "Airborne",
+   "product": "Airborne Citrus",
+   "active_ingredients": [
+    {
+     "name": "Selenium",
+     "standardName": "Selenium",
+     "ingredientGroup": "Selenium",
+     "canonical_id": "selenium",
+     "canonical_source_db": "ingredient_quality_map",
+     "quantity": 15.0,
+     "unit": "mcg",
+     "forms": [
+      {
+       "name": "Sodium Selenite",
+       "prefix": null,
+       "percent": null
+      }
+     ],
+     "notes": "Selenium (Form: as Sodium Selenite) ",
+     "order": 8
+    }
+   ],
+   "expect": [
+    {
+     "canonical_id": "selenium",
+     "form_id": "sodium selenite"
+    }
+   ]
+  },
+  {
+   "id": "cr-picolinate",
+   "dsld_id": "329969",
+   "brand": "BulkSupplements.com",
+   "product": "Chromium Picolinate Powder 200 mcg",
+   "active_ingredients": [
+    {
+     "name": "Chromium",
+     "standardName": "Chromium",
+     "ingredientGroup": "Chromium",
+     "canonical_id": "chromium",
+     "canonical_source_db": "ingredient_quality_map",
+     "quantity": 200.0,
+     "unit": "mcg",
+     "forms": [
+      {
+       "name": "Chromium Picolinate",
+       "prefix": null,
+       "percent": null
+      }
+     ],
+     "notes": null,
+     "order": 1
+    }
+   ],
+   "expect": [
+    {
+     "canonical_id": "chromium",
+     "form_id": "chromium picolinate"
+    }
+   ]
+  },
+  {
+   "id": "coq10-ubiquinol",
+   "dsld_id": "302711",
+   "brand": "Doctor's Best",
+   "product": "Ubiquinol with Kaneka Ubiquinol 100 mg",
+   "active_ingredients": [
+    {
+     "name": "Kaneka Ubiquinol",
+     "standardName": "Coenzyme Q10",
+     "ingredientGroup": "Coenzyme Q10",
+     "canonical_id": "coq10",
+     "canonical_source_db": "ingredient_quality_map",
+     "quantity": 100.0,
+     "unit": "mg",
+     "forms": [
+      {
+       "name": "Ubiquinol",
+       "prefix": null,
+       "percent": null
+      }
+     ],
+     "notes": "reduced form of CoQ10",
+     "order": 1
+    }
+   ],
+   "expect": [
+    {
+     "canonical_id": "coq10",
+     "form_id": "ubiquinol"
+    }
+   ]
+  },
+  {
+   "id": "curcumin-meriva",
+   "dsld_id": "302652",
+   "brand": "Doctor's Best",
+   "product": "Curcumin Phytosome with Meriva",
+   "active_ingredients": [
+    {
+     "name": "Meriva",
+     "standardName": "Curcumin",
+     "ingredientGroup": "Curcumin",
+     "canonical_id": "curcumin",
+     "canonical_source_db": "ingredient_quality_map",
+     "quantity": 1000.0,
+     "unit": "mg",
+     "forms": [
+      {
+       "name": "Curcumin Extract",
+       "prefix": null,
+       "percent": null
+      }
+     ],
+     "notes": "Standardized to contain min. 18% total Curcuminoids (180mg) Phospholipid complex from sunflower lecithin  ",
+     "order": 1
+    }
+   ],
+   "expect": [
+    {
+     "canonical_id": "curcumin",
+     "form_id": "meriva curcumin"
+    }
+   ]
+  },
+  {
+   "id": "curcumin-bcm95",
+   "dsld_id": "181881",
+   "brand": "Life Extension",
+   "product": "Arthro-Immune",
+   "active_ingredients": [
+    {
+     "name": "BCM-95 Bio-Curcumin 25:1 extract",
+     "standardName": "Curcumin",
+     "ingredientGroup": "Turmeric",
+     "canonical_id": "curcumin",
+     "canonical_source_db": "ingredient_quality_map",
+     "quantity": 250.0,
+     "unit": "mg",
+     "forms": [
+      {
+       "name": "Total Curcuminoids Complex",
+       "prefix": "std. to",
+       "percent": 95
+      },
+      {
+       "name": "Turmeric",
+       "prefix": "with essential oils of",
+       "percent": null
+      }
+     ],
+     "notes": "BCM-95 Bio-Curcumin 25:1 extract (Form: std. to 95% Total Curcuminoids Complex, with essential oils of Turmeric PlantPart: rhizome Note: by HPLC) PlantPart: root ",
+     "order": 1
+    }
+   ],
+   "expect": [
+    {
+     "canonical_id": "curcumin",
+     "form_id": "bcm-95 curcumin"
+    }
+   ]
+  },
+  {
+   "id": "ashwagandha-ksm66",
+   "dsld_id": "251347",
+   "brand": "Centrum",
+   "product": "Centrum Calm & Reset Cherry Flavor",
+   "active_ingredients": [
+    {
+     "name": "KSM66 Ashwagandha root extract",
+     "standardName": "Ashwagandha",
+     "ingredientGroup": "Ashwagandha",
+     "canonical_id": "ashwagandha",
+     "canonical_source_db": "ingredient_quality_map",
+     "quantity": 250.0,
+     "unit": "mg",
+     "forms": [
+      {
+       "name": "extract",
+       "prefix": null,
+       "percent": null
+      }
+     ],
+     "notes": null,
+     "order": 7
+    }
+   ],
+   "expect": [
+    {
+     "canonical_id": "ashwagandha",
+     "form_id": "KSM-66 ashwagandha"
+    }
+   ]
+  },
+  {
+   "id": "berberine-hcl",
+   "dsld_id": "315592",
+   "brand": "Double Wood Supplements",
+   "product": "Berberine 500 mg",
+   "active_ingredients": [
+    {
+     "name": "Berberine Hydrochloride",
+     "standardName": "Berberine",
+     "ingredientGroup": "Berberine",
+     "canonical_id": "berberine_supplement",
+     "canonical_source_db": "ingredient_quality_map",
+     "quantity": 500.0,
+     "unit": "mg",
+     "forms": [
+      {
+       "name": "hydrochloride",
+       "prefix": null,
+       "percent": null
+      }
+     ],
+     "notes": null,
+     "order": 1
+    }
+   ],
+   "expect": [
+    {
+     "canonical_id": "berberine_supplement",
+     "form_id": "berberine hcl"
+    }
+   ]
+  },
+  {
+   "id": "creatine-monohydrate",
+   "dsld_id": "221132",
+   "brand": "GNC AMP Advanced Muscle Performance",
+   "product": "Myopower BCAA Tangy Orange",
+   "active_ingredients": [
+    {
+     "name": "Creatine",
+     "standardName": "Creatine",
+     "ingredientGroup": "Creatine",
+     "canonical_id": "creatine_monohydrate",
+     "canonical_source_db": "ingredient_quality_map",
+     "quantity": 3.54,
+     "unit": "Gram(s)",
+     "forms": [
+      {
+       "name": "Creatine Monohydrate",
+       "prefix": "as",
+       "percent": null
+      }
+     ],
+     "notes": "Creatine (Form: as Creatine Monohydrate) ",
+     "order": 9
+    }
+   ],
+   "expect": [
+    {
+     "canonical_id": "creatine_monohydrate",
+     "form_id": "creatine monohydrate"
+    }
+   ]
+  },
+  {
+   "id": "k2-mk7",
+   "dsld_id": "294331",
+   "brand": "BulkSupplements.com",
+   "product": "Vitamin K2 1% (MK-7)",
+   "active_ingredients": [
+    {
+     "name": "Vitamin K2",
+     "standardName": "Vitamin K2",
+     "ingredientGroup": "Vitamin K",
+     "canonical_id": "vitamin_k2",
+     "canonical_source_db": "ingredient_quality_map",
+     "quantity": 100.0,
+     "unit": "mcg",
+     "forms": [
+      {
+       "name": "Menaquinone-7",
+       "prefix": null,
+       "percent": null
+      }
+     ],
+     "notes": null,
+     "order": 1
+    }
+   ],
+   "expect": [
+    {
+     "canonical_id": "vitamin_k2",
+     "form_id": "menaquinone-7 (MK-7)"
+    }
+   ]
+  },
+  {
+   "id": "k2-mk4",
+   "dsld_id": "233617",
+   "brand": "Garden of Life",
+   "product": "Oceans 3 Healthy Hormones",
+   "active_ingredients": [
+    {
+     "name": "Vitamin K2",
+     "standardName": "Vitamin K2",
+     "ingredientGroup": "Vitamin K (menaquinone)",
+     "canonical_id": "vitamin_k2",
+     "canonical_source_db": "ingredient_quality_map",
+     "quantity": 7.5,
+     "unit": "mcg",
+     "forms": [
+      {
+       "name": "Menaquinone-4",
+       "prefix": "as",
+       "percent": null
+      }
+     ],
+     "notes": "Vitamin K2 (Form: as Menaquinone-4 (Form: from culture of S. cerevisiae Genus: S. Species: cerevisiae)) ",
+     "order": 10
+    }
+   ],
+   "expect": [
+    {
+     "canonical_id": "vitamin_k2",
+     "form_id": "menaquinone-4 (MK-4)"
+    }
+   ]
+  },
+  {
+   "id": "k1-phylloquinone",
+   "dsld_id": "297216",
+   "brand": "CVS Health",
+   "product": "Women's Daily Multivitamin",
+   "active_ingredients": [
+    {
+     "name": "Vitamin K",
+     "standardName": "Vitamin K1",
+     "ingredientGroup": "Vitamin K (unspecified)",
+     "canonical_id": "vitamin_k1",
+     "canonical_source_db": "ingredient_quality_map",
+     "quantity": 50.0,
+     "unit": "mcg",
+     "forms": [
+      {
+       "name": "Phylloquinone",
+       "prefix": null,
+       "percent": null
+      }
+     ],
+     "notes": null,
+     "order": 5
+    }
+   ],
+   "expect": [
+    {
+     "canonical_id": "vitamin_k1",
+     "form_id": "phylloquinone"
+    }
+   ]
+  },
+  {
+   "id": "e-d-alpha-tocopherol",
+   "dsld_id": "240372",
+   "brand": "Airborne",
+   "product": "Airborne Elderberry",
+   "active_ingredients": [
+    {
+     "name": "Vitamin E",
+     "standardName": "Vitamin E",
+     "ingredientGroup": "Vitamin E",
+     "canonical_id": "vitamin_e",
+     "canonical_source_db": "ingredient_quality_map",
+     "quantity": 6.7,
+     "unit": "mg",
+     "forms": [
+      {
+       "name": "D-Alpha-Tocopherol",
+       "prefix": null,
+       "percent": null
+      }
+     ],
+     "notes": null,
+     "order": 7
+    }
+   ],
+   "expect": [
+    {
+     "canonical_id": "vitamin_e",
+     "form_id": "d-alpha-tocopherol"
+    }
+   ]
+  },
+  {
+   "id": "e-dl-alpha-tocopheryl-acetate",
+   "dsld_id": "178352",
+   "brand": "Airborne Plus",
+   "product": "Beta-Immune Booster Zesty Orange",
+   "active_ingredients": [
+    {
+     "name": "Vitamin E",
+     "standardName": "Vitamin E",
+     "ingredientGroup": "Vitamin E",
+     "canonical_id": "vitamin_e",
+     "canonical_source_db": "ingredient_quality_map",
+     "quantity": 13.5,
+     "unit": "mg",
+     "forms": [
+      {
+       "name": "DL-Alpha-Tocopheryl Acetate",
+       "prefix": null,
+       "percent": null
+      }
+     ],
+     "notes": "Vitamin E (Form: as DL-Alpha Tocopheryl Acetate) ",
+     "order": 5
+    }
+   ],
+   "expect": [
+    {
+     "canonical_id": "vitamin_e",
+     "form_id": "dl-alpha-tocopheryl acetate"
+    }
+   ]
+  },
+  {
+   "id": "e-d-alpha-tocopheryl-acetate",
+   "dsld_id": "180210",
+   "brand": "Airborne Plus",
+   "product": "Probiotic Assorted Fruit Flavors",
+   "active_ingredients": [
+    {
+     "name": "Vitamin E",
+     "standardName": "Vitamin E",
+     "ingredientGroup": "Vitamin E",
+     "canonical_id": "vitamin_e",
+     "canonical_source_db": "ingredient_quality_map",
+     "quantity": 6.7,
+     "unit": "mg",
+     "forms": [
+      {
+       "name": "D-Alpha-Tocopheryl Acetate",
+       "prefix": null,
+       "percent": null
+      }
+     ],
+     "notes": "Vitamin E (Form: as D-Alpha Tocopheryl Acetate) ",
+     "order": 8
+    }
+   ],
+   "expect": [
+    {
+     "canonical_id": "vitamin_e",
+     "form_id": "d-alpha-tocopheryl acetate"
+    }
+   ]
+  },
+  {
+   "id": "e-mixed-tocopherols",
+   "dsld_id": "243513",
+   "brand": "GNC Men's",
+   "product": "Ultra NourishHair",
+   "active_ingredients": [
+    {
+     "name": "Vitamin E",
+     "standardName": "Tocopherol (Preservative)",
+     "ingredientGroup": "Vitamin E",
+     "canonical_id": "vitamin_e",
+     "canonical_source_db": "ingredient_quality_map",
+     "quantity": 6.7,
+     "unit": "mg",
+     "forms": [
+      {
+       "name": "Mixed Tocopherols",
+       "prefix": null,
+       "percent": null
+      }
+     ],
+     "notes": "Vitamin E (Form: as mixed Tocopherols) ",
+     "order": 3
+    }
+   ],
+   "expect": [
+    {
+     "canonical_id": "vitamin_e",
+     "form_id": "mixed tocopherols"
+    }
+   ]
+  },
+  {
+   "id": "c-calcium-ascorbate",
+   "dsld_id": "294795",
+   "brand": "BulkSupplements.com",
+   "product": "Multivitamins Softgels",
+   "active_ingredients": [
+    {
+     "name": "Vitamin C",
+     "standardName": "Vitamin C",
+     "ingredientGroup": "Vitamin C",
+     "canonical_id": "vitamin_c",
+     "canonical_source_db": "ingredient_quality_map",
+     "quantity": 30.0,
+     "unit": "mg",
+     "forms": [
+      {
+       "name": "Calcium Ascorbate",
+       "prefix": null,
+       "percent": null
+      }
+     ],
+     "notes": null,
+     "order": 2
+    }
+   ],
+   "expect": [
+    {
+     "canonical_id": "vitamin_c",
+     "form_id": "calcium ascorbate"
+    }
+   ]
+  },
+  {
+   "id": "mg-threonate",
+   "dsld_id": "313834",
+   "brand": "Nature Made",
+   "product": "Magnesium L-Threonate with Vitamins C & D3",
+   "active_ingredients": [
+    {
+     "name": "Magnesium",
+     "standardName": "Magnesium",
+     "ingredientGroup": "Magnesium",
+     "canonical_id": "magnesium",
+     "canonical_source_db": "ingredient_quality_map",
+     "quantity": 130.0,
+     "unit": "mg",
+     "forms": [
+      {
+       "name": "Magnesium L-Threonate",
+       "prefix": null,
+       "percent": null
+      }
+     ],
+     "notes": null,
+     "order": 5
+    }
+   ],
+   "expect": [
+    {
+     "canonical_id": "magnesium",
+     "form_id": "magnesium threonate"
+    }
+   ]
+  },
+  {
+   "id": "creatine-hcl",
+   "dsld_id": "223147",
+   "brand": "BulkSupplements.com",
+   "product": "Creatine HCl",
+   "active_ingredients": [
+    {
+     "name": "Creatine Hydrochloride",
+     "standardName": "Creatine",
+     "ingredientGroup": "Creatine",
+     "canonical_id": "creatine_monohydrate",
+     "canonical_source_db": "ingredient_quality_map",
+     "quantity": 750.0,
+     "unit": "mg",
+     "forms": [
+      {
+       "name": "hydrochloride",
+       "prefix": null,
+       "percent": null
+      }
+     ],
+     "notes": null,
+     "order": 1
+    }
+   ],
+   "expect": [
+    {
+     "canonical_id": "creatine_monohydrate",
+     "form_id": "creatine hydrochloride"
+    }
+   ]
+  },
+  {
+   "id": "creatine-ethyl-ester-hcl",
+   "dsld_id": "252591",
+   "brand": "BulkSupplements.com",
+   "product": "Creatine Ethyl Ester HCl",
+   "active_ingredients": [
+    {
+     "name": "Creatine Ethyl Ester HCl",
+     "standardName": "Creatine",
+     "ingredientGroup": "Creatine",
+     "canonical_id": "creatine_monohydrate",
+     "canonical_source_db": "ingredient_quality_map",
+     "quantity": 3.0,
+     "unit": "Gram(s)",
+     "forms": [
+      {
+       "name": "ethyl ester",
+       "prefix": null,
+       "percent": null
+      },
+      {
+       "name": "hydrochloride",
+       "prefix": null,
+       "percent": null
+      }
+     ],
+     "notes": null,
+     "order": 1
+    }
+   ],
+   "expect": [
+    {
+     "canonical_id": "creatine_monohydrate",
+     "form_id": "creatine ethyl ester"
+    }
+   ]
+  },
+  {
+   "id": "k2-mk4-and-mk7-same-label",
+   "dsld_id": "182362",
+   "brand": "Life Extension",
+   "product": "Super K with Advanced K2 Complex",
+   "active_ingredients": [
+    {
+     "name": "Vitamin K2",
+     "standardName": "Vitamin K2",
+     "ingredientGroup": "Vitamin K (menaquinone)",
+     "canonical_id": "vitamin_k2",
+     "canonical_source_db": "ingredient_quality_map",
+     "quantity": 1000.0,
+     "unit": "mcg",
+     "forms": [
+      {
+       "name": "Menaquinone-4",
+       "prefix": "as",
+       "percent": null
+      }
+     ],
+     "notes": "Vitamin K2 (Form: as Menaquinone-4) ",
+     "order": 4
+    },
+    {
+     "name": "Vitamin K2",
+     "standardName": "Vitamin K2",
+     "ingredientGroup": "Vitamin K (menaquinone)",
+     "canonical_id": "vitamin_k2",
+     "canonical_source_db": "ingredient_quality_map",
+     "quantity": 100.0,
+     "unit": "mcg",
+     "forms": [
+      {
+       "name": "Menaquinone-7",
+       "prefix": "as all-trans",
+       "percent": null
+      }
+     ],
+     "notes": "Vitamin K2 (Form: as all-trans Menaquinone-7) ",
+     "order": 5
+    }
+   ],
+   "expect": [
+    {
+     "canonical_id": "vitamin_k2",
+     "form_id": "menaquinone-4 (MK-4)"
+    },
+    {
+     "canonical_id": "vitamin_k2",
+     "form_id": "menaquinone-7 (MK-7)"
+    }
+   ]
+  },
+  {
+   "id": "unspecified-vitamin-d-no-form",
+   "dsld_id": "311853",
+   "brand": "BulkSupplements.com",
+   "product": "Whey Protein Concentrate 80%",
+   "active_ingredients": [
+    {
+     "name": "Vitamin D",
+     "standardName": "Vitamin D",
+     "ingredientGroup": "Vitamin D",
+     "canonical_id": "vitamin_d",
+     "canonical_source_db": "ingredient_quality_map",
+     "quantity": 0.2,
+     "unit": "mcg",
+     "forms": [],
+     "notes": null,
+     "order": 12
+    }
+   ],
+   "expect": [
+    {
+     "canonical_id": "vitamin_d",
+     "form_id": "vitamin d (unspecified)"
+    }
+   ]
+  },
+  {
+   "id": "unspecified-magnesium-no-form",
+   "dsld_id": "252510",
+   "brand": "BulkSupplements.com",
+   "product": "Grass-Fed Whey Protein Isolate",
+   "active_ingredients": [
+    {
+     "name": "Magnesium",
+     "standardName": "Magnesium",
+     "ingredientGroup": "Magnesium",
+     "canonical_id": "magnesium",
+     "canonical_source_db": "ingredient_quality_map",
+     "quantity": 24.0,
+     "unit": "mg",
+     "forms": [],
+     "notes": null,
+     "order": 9
+    }
+   ],
+   "expect": [
+    {
+     "canonical_id": "magnesium",
+     "form_id": "magnesium (unspecified)"
+    }
+   ]
+  },
+  {
+   "id": "unspecified-zinc-no-form",
+   "dsld_id": "210396",
+   "brand": "CVS Health",
+   "product": "Calcium, Magnesium & Zinc",
+   "active_ingredients": [
+    {
+     "name": "Zinc",
+     "standardName": "Zinc",
+     "ingredientGroup": "Zinc",
+     "canonical_id": "zinc",
+     "canonical_source_db": "ingredient_quality_map",
+     "quantity": 15.0,
+     "unit": "mg",
+     "forms": [],
+     "notes": null,
+     "order": 3
+    }
+   ],
+   "expect": [
+    {
+     "canonical_id": "zinc",
+     "form_id": "zinc (unspecified)"
+    }
+   ]
+  },
+  {
+   "id": "unspecified-iron-no-form",
+   "dsld_id": "294543",
+   "brand": "BulkSupplements.com",
+   "product": "Rice Protein",
+   "active_ingredients": [
+    {
+     "name": "Iron",
+     "standardName": "Iron",
+     "ingredientGroup": "Iron",
+     "canonical_id": "iron",
+     "canonical_source_db": "ingredient_quality_map",
+     "quantity": 1.0,
+     "unit": "mg",
+     "forms": [],
+     "notes": null,
+     "order": 13
+    }
+   ],
+   "expect": [
+    {
+     "canonical_id": "iron",
+     "form_id": "iron (unspecified)"
+    }
+   ]
+  },
+  {
+   "id": "unspecified-vitamin-k-no-form",
+   "dsld_id": "19168",
+   "brand": "CVS Pharmacy",
+   "product": "Calcium Soft Chews Milk Chocolate",
+   "active_ingredients": [
+    {
+     "name": "Vitamin K",
+     "standardName": "Vitamin K1",
+     "ingredientGroup": "Vitamin K",
+     "canonical_id": "vitamin_k1",
+     "canonical_source_db": "ingredient_quality_map",
+     "quantity": 40.0,
+     "unit": "mcg",
+     "forms": [],
+     "notes": null,
+     "order": 5
+    }
+   ],
+   "expect": [
+    {
+     "canonical_id": "vitamin_k",
+     "form_id": "vitamin k (unspecified)"
+    }
+   ]
+  },
+  {
+   "id": "unspecified-calcium-no-form",
+   "dsld_id": "252510",
+   "brand": "BulkSupplements.com",
+   "product": "Grass-Fed Whey Protein Isolate",
+   "active_ingredients": [
+    {
+     "name": "Calcium",
+     "standardName": "Calcium",
+     "ingredientGroup": "Calcium",
+     "canonical_id": "calcium",
+     "canonical_source_db": "ingredient_quality_map",
+     "quantity": 130.0,
+     "unit": "mg",
+     "forms": [],
+     "notes": null,
+     "order": 12
+    }
+   ],
+   "expect": [
+    {
+     "canonical_id": "calcium",
+     "form_id": "calcium (unspecified)"
+    }
+   ]
+  },
+  {
+   "id": "unspecified-selenium-no-form",
+   "dsld_id": "218677",
+   "brand": "Solgar",
+   "product": "Selenium 200 mcg",
+   "active_ingredients": [
+    {
+     "name": "Selenium",
+     "standardName": "Selenium",
+     "ingredientGroup": "Selenium",
+     "canonical_id": "selenium",
+     "canonical_source_db": "ingredient_quality_map",
+     "quantity": 200.0,
+     "unit": "mcg",
+     "forms": [],
+     "notes": null,
+     "order": 1
+    }
+   ],
+   "expect": [
+    {
+     "canonical_id": "selenium",
+     "form_id": "selenium (unspecified)"
+    }
+   ]
+  },
+  {
+   "id": "unspecified-b12-bacterial-carrier",
+   "dsld_id": "233674",
+   "brand": "Garden of Life Raw Probiotics",
+   "product": "Women 50 & Wiser",
+   "active_ingredients": [
+    {
+     "name": "Vitamin B12",
+     "standardName": "Vitamin B12",
+     "ingredientGroup": "Vitamin B12 (unspecified)",
+     "canonical_id": "vitamin_b12_cobalamin",
+     "canonical_source_db": "ingredient_quality_map",
+     "quantity": 10.0,
+     "unit": "mcg",
+     "forms": [
+      {
+       "name": "Lactobacillus bulgaricus",
+       "prefix": "from culture of",
+       "percent": null
+      }
+     ],
+     "notes": "Vitamin B12 (Form: from culture of Lactobacillus bulgaricus Genus: Lactobacillus Species: bulgaricus) ",
+     "order": 8
+    }
+   ],
+   "expect": [
+    {
+     "canonical_id": "vitamin_b12_cobalamin",
+     "form_id": "b12 (unspecified)"
+    }
+   ]
+  },
+  {
+   "id": "unmapped-b12-quinoa-disclosed-form",
+   "dsld_id": "304563",
+   "brand": "Solgar",
+   "product": "Daily Stress Support",
+   "active_ingredients": [
+    {
+     "name": "Vitamin B12",
+     "standardName": "Vitamin B12",
+     "ingredientGroup": "Vitamin B12",
+     "canonical_id": "vitamin_b12_cobalamin",
+     "canonical_source_db": "ingredient_quality_map",
+     "quantity": 1.8,
+     "unit": "mcg",
+     "forms": [
+      {
+       "name": "Quinoa",
+       "prefix": null,
+       "percent": null
+      }
+     ],
+     "notes": null,
+     "order": 7
+    }
+   ],
+   "expect": [
+    {
+     "canonical_id": "vitamin_b12_cobalamin",
+     "form_id": null,
+     "form_match_status": "unmapped"
+    }
+   ]
+  }
+ ]
+}
