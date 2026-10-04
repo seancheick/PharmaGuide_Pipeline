@@ -21639,6 +21639,7 @@ class SupplementEnricherV3:
                                     for value in (form_hint_name, disclosed_forms)
                                     if value
                                 ),
+                                measured_name=ing_name,
                             )
                         except Exception as conversion_error:
                             conversion_exception_occurred = True
