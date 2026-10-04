@@ -56,13 +56,16 @@ The [master completion plan](PHARMAGUIDE_MASTER_COMPLETION_PLAN.md), Phases 1–
 integrator. No export-schema change mixes into it. Work that can run beside it because it touches
 no shared pipeline owner: items 1.1, 1.2 and authoring the benchmark scenarios for 1.10.
 
-Current checkpoint (October 2): D26/D24/omega source implementation and bounded
-calibration are complete at `aca66621`; exact-source four-shard CI is green and
-independent review found no remaining code finding. The 344-label replay explains
-all 71 movers and has zero typed
-safety, scoring-status, route or purpose movement. Alternate-serving raw census
-is closed for the current source. Phase 0 now waits on the fresh full Clean run,
-release gates, rebuilt app rendering verification and exact candidate approval.
+Current checkpoint (October 3): D26/D24/omega source implementation, bounded
+calibration, alternate-serving reconciliation and the clinical-reachability order
+correction are integrated on `main` through `5246ad20` (historical source audit; subsequent accepted corrections are contained through `4f2a6509`). Exact-source four-shard CI
+and the local corpus gate are green. The accepted 344-label calibration replay and
+the later 137-affected-plus-35-control reachability replay have zero typed-safety,
+scoring-status or route regressions. The accepted fresh full Clean/Enrich/Score
+run completed 37 brand directories plus Product Submissions with38 complete
+stage chains and114 current manifests. Phase0 still waits on release gates,
+rebuilt app rendering verification and exact candidate approval; no runtime
+publication is complete.
 
 ### Phase 1 — truth reconciliation
 
@@ -312,3 +315,7 @@ Checked on October 1, 2026.
 - Owner of change tracking: `app:lib/features/history/providers/clinical_signal_lifecycle_provider.dart` — evidence: `rg` October 1.
 - Will NOT create: a second register, scorer, coverage calculator, diff engine or fingerprint; an
   app-side verdict; any export field without Sean and an ADR.
+
+### October 4 exact-candidate checkpoint
+
+Reviewed preparation/source remediation and structural-total Formulation eligibility are integrated and green on exact CI/local checks. The4f2a6509 fullcorpus/114manifest and15,421-product strictreachability receipts passed. Latermain dd2769ad adds nutrient-conversion and safety-reason fixes plus Dose/UL and regulatory benchmark coverage; its CI passed. Fresh final artifacts, snapshot movement review, local release/full gates and real Flutter rendering remain open. These focused gold sets do not establish the entire300–500scenario beta benchmark or beta readiness. Phase0 source implementation/calibration and final release validation remain distinct. See the master plan and existing LEDGER for exact receipts. No external catalog publication.

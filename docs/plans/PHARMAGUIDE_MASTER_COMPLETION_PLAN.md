@@ -1,12 +1,37 @@
 # PharmaGuide master completion plan
 
-Updated October 2, 2026. Pipeline integrator: Codex. Original scope: Sean's accepted September 30 master plan. This document is the readable checklist; [LEDGER.md](../../scripts/audits/pending_items_20260926/LEDGER.md) remains the execution register, and the [ownership matrix](../../scripts/contracts/source_of_truth_matrix.json) defines production owners. Historical descriptions below do not override current code or approved decisions.
+Updated October 4, 2026. Pipeline integrator: Codex. Original scope: Sean's accepted September 30 master plan. This document is the readable checklist; [LEDGER.md](../../scripts/audits/pending_items_20260926/LEDGER.md) remains the execution register, and the [ownership matrix](../../scripts/contracts/source_of_truth_matrix.json) defines production owners. Historical descriptions below do not override current code or approved decisions.
 
 A checked implementation box means that specific deliverable is implemented, measured and independently reviewed where required. It does **not** mean the whole phase is finished or the catalog is released. Repository code pushed to GitHub and catalog publication are separate events.
 
+## October 4 — exact-candidate verification
+
+- [x] Integrate the reviewed preparation/source corrections, including removal of borrowed Mirtogenol→bilberry credit. Exact branch/main CI, local corpus checks and independent review passed; source is contained in main through `4e073a6b`.
+- [x] Integrate structural-total Formulation correction `4f2a6509`. Failing-before regression; 121 focused checks; independent measured review; branch CI37181147593 and main CI37181628461 green; local527passed/24declared optional skips, skip guard green.
+- [x] Regenerate and verify all38Clean/Enrich/Score chains/114manifests at `4f2a6509`; strict reachability covers15,421products with zero findings. These outputs are a verified historical candidate after later main changes, not final release proof.
+- [x] Review/freeze the complete snapshot movement set against source and fresh artifacts: 18273085.8→86.1 and 28834477.2→78.4 change only Formulation (structural totals excluded); 20457146.9→62.5 changes only reviewed ingredient Evidence ownership. All three were independently accepted and generated through the existing freezer; the other33 snapshots are unchanged. Bounded36-label replay through newer main preserves displayed scores/statuses/safety;182730 raw Dose17.9039→17.9149 corrects declared choline below display rounding. Newest-source release validation remains required.
+- [ ] Regenerate the newest merged runtime, complete local release, catalog/interaction/bundle parity, canonical field and real Flutter rendering audits, release/full backstops and exact-candidate publication approval. Main has subsequently merged safety-reason and declared-nutrient conversion corrections at `dd2769ad` (CI37183817363green); older artifacts cannot validate those changes.
+
+Evidence: durable `/Users/seancheick/pg_quality/q53_release_20261003/final_candidate_4f2a6509/` and prior exact-source directories; existing execution LEDGER and authoritative worktree handoff. Owner: existing ingredient eligibility, scoring/export/display contracts. Will NOT create: another score/role owner, registry, status, tracker or approval shortcut. Nothing is externally published by this checkpoint.
+
+## October 3 — master-plan state audit
+
+This October 3 audit is historical; the October 4 checkpoint above is current. Older checkpoint prose below is retained as history; its unchecked boxes are corrected in place when later evidence closes the exact deliverable.
+
+- [x] Reconcile every previously checked master-plan row against current source, named commits, local receipts and CI. All 34 cited commit references resolve in the pipeline or paired Flutter repository; all four relative receipt links and all 14 durable absolute receipt paths resolve. The six cited historical CI runs are green at their named SHAs. No checked deliverable required reopening.
+- [x] Verify the current pipeline candidate: `main` and `origin/main` are identical at `5246ad20`; exact-source four-shard `pipeline-tests` run [37130043515](https://github.com/seancheick/PharmaGuide_Pipeline/actions/runs/37130043515) is green; the exact-source local corpus gate passed 527 tests with 24 declared opt-in skips and a green skip guard.
+- [x] Correct stale historical plan state. D26/D24/omega ownership and magnitudes, the four retired Evidence amount safeguards, duplicate fiber judgments, alternate-serving reconciliation, all live numerical-rule ownership, all 35 historical Q3 crossings and bounded calibration are complete. The clinical source-research batch is complete; unresolved release-eligible determinations remain open and are not relabeled as completed clinical coverage.
+- [x] Integrate the Q53/calibration lane and subsequent release-critical corrections into current `main`. The historical Q65 integration box is closed by containment through `5246ad20`; no active calibration branch is required for release.
+- [x] Complete and inspect the fresh final corpus run from Clean. The accepted 12:39–13:41 EDT pipeline-only run completed 37 brand directories plus Product Submissions: 38 complete stage chains, 114 valid manifests, one shared reference fingerprint and one code fingerprint per stage, zero freshness/manifest/pipeline errors and zero new quarantined stale outputs. Cleaner holds remain explicit for labels `312659` and `250356`, whose raw records contain no active ingredient rows; they are not converted into scored products. The detached 12:35 attempt remains rejected.
+- [ ] After the corpus succeeds, run strict reachability, catalog/interaction/Flutter build and rendering checks, sequential release/full backstops, freeze the exact manifest, obtain publication approval, publish and verify live parity.
+
+Current completion boundary: scoring policy, scoring implementation and bounded numerical calibration are done. Remaining source work is the explicitly unresolved clinical-determination queue plus the broader active/excipient source-section audit and final Evidence-subject census. Nutrition Facts, active ingredients and other ingredients retain one canonical pipeline partition; final acceptance requires real rebuilt-artifact and Flutter rendering verification.
+
+Owner: this plan for readable phase state; `scripts/audits/pending_items_20260926/LEDGER.md` for the execution register; `scripts/contracts/source_of_truth_matrix.json` and existing production owners for behavior. Evidence: current source containment, commit/receipt census, exact-source CI, local gate and frozen replay receipts. Will NOT create: another plan, tracker, scorer, registry, role classifier, public field/status or app calculation.
+
 ## October 2 — whole clinical batch and Dose decision packets
 
-This is the current checkpoint. It replaces the older “next ingredient” instructions below. Baseline: `753aa5cf`. Fixes: `1d62acbb`, `51595506`, and the historical curation-rerun correction `59d96720`. Bounded research and factual fixes are completed; clinical policy, calibration and release remain separate gates.
+This is the historical October 2 clinical checkpoint; the October 3 audit above is current. Baseline: `753aa5cf`. Fixes: `1d62acbb`, `51595506`, and the historical curation-rerun correction `59d96720`. Bounded research and factual fixes were completed here; later sections close the approved scoring policy and calibration while release remains separate.
 
 - [x] Review all nine Q53 labels and unresolved subjects together. Live NIH ingredient rows, servings and statements match retained raw for all nine. Preserve insufficient strain/preparation identity; do not guess a match or a positive grade.
 - [x] Complete the eight-family source comparison: PHGG, inulin/FOS, XOS, GOS, phage, Seed, IS-2 and LactoSpore. Distinguish preparation, population, outcomes, replication and commercial involvement. This is bounded research, not a systematic review or clinician signoff.
@@ -48,7 +73,8 @@ The completed source comparison is in [research.md](../../scripts/audits/pending
 - [x] Freeze and replay final production source `b8d298ac` across **1,544 unique products**:887 primary labels,604 expanded cranberry/chicory controls,51 prior correction controls and2 manual submissions. All captures succeed with unchanged source/input provenance;23 score movements and2 route movements are explained. No scoring-status or safety-gate movements;51 correction controls and both manual submissions are unchanged.
 - [x] Complete exact-source four-shard CI ([run37054020556](https://github.com/seancheick/PharmaGuide_Pipeline/actions/runs/37054020556)): **18,213 passed/183 approved skips**, all shards green. Local corpus/artifact gate: **527 passed/24 approved opt-in skips**, skip guard passed. Fresh final measured review accepted `b8d298ac`.
 - [x] Integrate and push the reviewed source/documentation batch through main `95af59fd`; production fingerprint matches tested/measured `b8d298ac`. Twenty final public artifacts retain typed safety and emit no new POOR compatibility verdict. Runtime publication remains pending.
-- [ ] Complete the remaining preparation-specific clinical reviews and numerical calibration; this input batch does not close Phase3/Phase5 or release acceptance.
+- [x] Complete the planned eight-family preparation-specific source research and bounded numerical calibration. This closes the approved scoring/calibration work, not every unresolved positive/negative clinical determination or release acceptance.
+- [ ] Complete the remaining release-eligible clinical determinations and identity holds named in Phase 3; insufficient identity may remain a justified hold.
 
 - [x] Preserve separate regression and current-state ranking artifacts. `current_state_ranking.md/.json` ranks all1,544 measured inputs using existing route outputs, the prior prebiotic/inulin title subset and canonical catalog brand identity. Ora leaves the probiotic group; Nutricost becomes second in the measured prebiotic group. This is a bounded diagnostic census, not exhaustive market coverage or a publishable recommendation.
 - [x] Produce before→after six-pillar breakdowns for the five requested movers plus Ora, historical certification, Seed and PHGG. `major_mover_breakdowns.md/.json` retain production reasons and source hashes; no score rule changed.
@@ -74,7 +100,7 @@ Receipts: `/Users/seancheick/pg_quality/pro_prebiotic_rank_audit_20261002/`: fin
 
 Then compare certainty/applicability principles across PHGG20, inulin15.6, Seed14.5, PureXOS0 and Thornephage0 before approved Dose policy/calibration changes. Review funding descriptively under existing policy; do not invent sponsorship deductions. Keep Nutricost87.1 and all Q59 scores as the frozen baseline until a verified clinical finding or approved policy justifies a change.
 
-Freeze Q59 normalization/identity/routing work unless another defect is reproduced. This is not a prohibition on correcting already tracked D26 ownership defects or release-critical bugs; those need their existing fail-first/measurement gates. Seed's14.5 versus IS-2's16 comes from recorded outcome grading under current policy, not a funding deduction; PHGG's raw18/reference18 becomes public20. No new benchmark, positive clinical determination or magnitude was silently added. Continue D26 equivalent Dose ownership, D24/omega decisions, Q53 clinical coverage and remaining role/serving cases; then one user-run fresh Clean corpus, exact candidate manifest/approval and release verification. Existing corpus outputs are stale for these source corrections.
+Freeze Q59 normalization/identity/routing work unless another defect is reproduced. This is not a prohibition on correcting already tracked ownership defects or release-critical bugs; those need their existing fail-first/measurement gates. Seed's14.5 versus IS-2's16 comes from recorded outcome grading under current policy, not a funding deduction; PHGG's raw18/reference18 becomes public20. No new benchmark, positive clinical determination or magnitude was silently added. The later approved batch closes D26/D24/omega and bounded calibration. Q53 clinical holds, broader role/source work, the fresh Clean corpus, exact candidate approval and release verification remain.
 
 ## PHGG/Sunfiber clinical-source checkpoint — October2
 
@@ -83,11 +109,11 @@ Freeze Q59 normalization/identity/routing work unless another defect is reproduc
 - [x] Write four fail-first clinical-record regressions; all initially failed, then passed. Entry/data-batch checks216passed; relevant clinical/Evidence owner slice177passed. Canonical batch check:one entry,zero problems. Both live citations have exact-title/topic matches.
 - [x] Freeze41real labels:33full staging text-census matches plus8controls. All scored captures remain identical. All five existing enriched Sunfiber matches are covered. A separate copied-raw control with Sunfiber form/notes removed changes89→75, Evidence20→6only, with unchanged status/Safety; this is a synthetic defect demonstration, not a shipped product delta.
 - [x] Complete exact-source gates at `77137e6f`: four-shard CI [37062220801](https://github.com/seancheick/PharmaGuide_Pipeline/actions/runs/37062220801), **18,217 passed / 183 approved skips / zero failures**; local **527 passed / 24 approved opt-in skips**; fresh measured review accepted. Source integrated with the accompanying plan receipt; runtime release remains separate.
-- [ ] Close remaining PHGG clinical/Dose/calibration determinations: prospectively registered outcome hierarchy where available, cross-family certainty grading, population-specific studied-preparation exposure and generic-versus-branded applicability. Positive_strong/tier1 remain frozen existing policy, explicitly not re-ratified by this factual correction.
+- [ ] Close remaining PHGG clinical/Dose applicability determinations: prospectively registered outcome hierarchy where available, population-specific studied-preparation exposure and generic-versus-branded applicability. Cross-family numerical calibration is complete; Positive_strong/tier1 remains a frozen existing clinical-policy baseline, explicitly not re-ratified by this factual correction.
 
 Why227960 still has Evidence20: existing brand+multiple-RCT+positive_strong policy supplies a decisive raw18 floor, normalized at the fiber route's18 reference. Its additive clinical pipeline component is7.92. This is the actual owner chain, not independent-confirmation or whole-retail-formula proof. The label declares3.2gSunfiber preparation per serving ×2daily=6.4g/day; indexed trials used6g/day after titration for IBS bloating and5g/day for loose-stool form. Preparation grams differ from dietary-fiber assay grams. No new studied-dose benchmark, amount gate, score magnitude or sponsorship deduction is introduced.
 
-Owner: `backed_clinical_studies.json::BRAND_SUNFIBER`; existing enrichment clinical matcher/applicability, `generic_evidence::_primary_mass_floor`, existing fiber/generic Dose and scored artifact. Evidence: indexed primary papers, raw227960, canonical batch/citation tools, fail-first tests, frozen comparisons and independent review. Will NOT create: second registry/scorer/parser, public field/status, benchmark or numerical policy. Receipts: `/Users/seancheick/pg_quality/phgg_clinical_review_20261002/`. Historical next step completed by the combined clinical batch above; broader D26/D24/omega/Q53/calibration/release obligations stay open.
+Owner: `backed_clinical_studies.json::BRAND_SUNFIBER`; existing enrichment clinical matcher/applicability, `generic_evidence::_primary_mass_floor`, existing fiber/generic Dose and scored artifact. Evidence: indexed primary papers, raw227960, canonical batch/citation tools, fail-first tests, frozen comparisons and independent review. Will NOT create: second registry/scorer/parser, public field/status, benchmark or numerical policy. Receipts: `/Users/seancheick/pg_quality/phgg_clinical_review_20261002/`. The later approved batch closes D26/D24/omega and numerical calibration; the PHGG clinical determinations and release obligations above remain open.
 
 ## Inulin/FOS factual-source checkpoint — October 2
 
@@ -97,9 +123,9 @@ Owner: `backed_clinical_studies.json::BRAND_SUNFIBER`; existing enrichment clini
 - [x] Final238-label raw comparison: zero full scored-payload deltas; all132existing enriched matches covered. Baseline220 plus disjoint18 retain identical source and verified raw hashes. Nutricost87.1, Jarrow77.4, BulkSupplements73.1 and all15.6 Evidence results unchanged.
 - [x] Independent source/measurement review accepted; local527passed/24approved opt-in skips with passing skip guard.
 - [x] Final four-shard CI at`0bbcedc5` [37064447723](https://github.com/seancheick/PharmaGuide_Pipeline/actions/runs/37064447723): **18,221passed/183approved skips/zero failures**; source integrated with this accompanying plan receipt. No runtime publication.
-- [ ] Complete remaining preparation-specific certainty/Dose/calibration decisions; inaccessible full-text details, endpoint heterogeneity and precise funding roles remain explicit research limits. This factual checkpoint does not close the clinical phase or ratify15.6 Evidence.
+- [ ] Complete remaining preparation-specific clinical-certainty and Dose-applicability determinations; inaccessible full-text details, endpoint heterogeneity and precise funding roles remain explicit research limits. Numerical calibration is complete; this factual checkpoint does not close the clinical phase or ratify15.6 Evidence.
 
-Owner: `backed_clinical_studies.json::INGR_INULIN`, `SupplementEnricherV3::_clinical_study_match`, existing clinical applicability, generic Evidence and route Dose. Evidence: indexed primary content, schema optional-count semantics, canonical batch check, production matcher regressions and frozen-label receipts. Will NOT create: registry/scorer/parser/public fields/status/benchmark/numerical policy. Baseline91884042; final source0bbcedc5. Receipts: `/Users/seancheick/pg_quality/inulin_clinical_review_20261002/`. Historical next step completed by the combined clinical batch above; inulin/PHGG cross-family calibration and D26/D24/omega/Q53/roles/serving/final corpus remain open.
+Owner: `backed_clinical_studies.json::INGR_INULIN`, `SupplementEnricherV3::_clinical_study_match`, existing clinical applicability, generic Evidence and route Dose. Evidence: indexed primary content, schema optional-count semantics, canonical batch check, production matcher regressions and frozen-label receipts. Will NOT create: registry/scorer/parser/public fields/status/benchmark/numerical policy. Baseline91884042; final source0bbcedc5. Receipts: `/Users/seancheick/pg_quality/inulin_clinical_review_20261002/`. The later approved batch closes D26/D24/omega, serving reconciliation and numerical calibration; inulin/PHGG clinical determinations, broader roles and the final corpus remain open.
 
 ## XOS/PreticX source/preparation checkpoint — October 2
 
@@ -110,7 +136,7 @@ Owner: `backed_clinical_studies.json::INGR_INULIN`, `SupplementEnricherV3::_clin
 - [x] Exact-source97cbff88 four-shard CI [37066989036](https://github.com/seancheick/PharmaGuide_Pipeline/actions/runs/37066989036): **18,222passed/183approved skips/zero failures**; local **527passed/24approved opt-in skips**, skip guard passed. Source integrated with this accompanying plan receipt; no runtime publication.
 - [ ] Close preparation-specific clinical-credit and Dose determinations:2014purity, explicitPreticX linkage, endpoint eligibility/clinical grading and studied-exposure applicability remain open. Published microbial research is not “no human research”; unchanged0Evidence is not a completed negative clinical review.
 
-Owner: `ingredient_quality_map.json::prebiotics.forms.xylooligosaccharides (XOS).notes`; existing prebiotic identity/preparation, backed clinical matcher/applicability and exposure/fiber Dose. Evidence: canonical matrix/schema, raw label rows, live citations and primary text,15-label frozen replay. Will NOT create: registry/scorer/parser/publicfield/status/benchmark/numerical policy. Baseline5938d487; source97cbff88. Receipts: `/Users/seancheick/pg_quality/xos_clinical_review_20261002/`. Existing fiber Dose mass table supplies current credit; it is not established XOS-specific trial adequacy. Keep this distinction in D24/calibration before release. Historical next step completed by the combined clinical batch above; broader clinical/release boxes remain open.
+Owner: `ingredient_quality_map.json::prebiotics.forms.xylooligosaccharides (XOS).notes`; existing prebiotic identity/preparation, backed clinical matcher/applicability and exposure/fiber Dose. Evidence: canonical matrix/schema, raw label rows, live citations and primary text,15-label frozen replay. Will NOT create: registry/scorer/parser/publicfield/status/benchmark/numerical policy. Baseline5938d487; source97cbff88. Receipts: `/Users/seancheick/pg_quality/xos_clinical_review_20261002/`. Existing fiber Dose mass table supplies current credit; it is not established XOS-specific trial adequacy. Numerical policy is now calibrated, but XOS-specific clinical/preparation applicability remains open before release.
 
 ## Execution discipline — October 2
 
@@ -144,7 +170,7 @@ phase, or replace the remaining corpus/release gates.
 
 Owner: `SupplementEnricherV3::_collect_probiotic_data`, `_statement_cfu_per_serving`, `_extract_guarantee_type`, existing serving-unit/selection helpers; `scripts/test.sh`, `test_profiles.py`, `test_lock.py`, `ci_skip_guard.py` own validation. Evidence: fail-first probes, production-boundary regressions, frozen raw replay and independent review. Will NOT create: another count/parser/serving owner, scorer, public field/status, scoring policy or test manifest. Earlier rejected measurements are not acceptance evidence.
 
-Next scoring batch remains **D26**: validate equivalent existing Dose ownership for lactoferrin, Carnipure/L-carnitine, ALCAR, zinc-lozenge intervention, L-arginine, D-mannose, D-aspartic acid, Tesnor and Sytrinol. Do not remove an Evidence amount gate until Dose owns that judgment. Prepare D24 missing-benchmark/denominator/publication and omega applicability/magnitude decisions for Sean; keep broader Q39 roles/serving cases and clinical coverage open. Calibration follows factual ownership closure; the final user-run Clean corpus, exact manifest approval and runtime publication remain later gates.
+Historical next batch was **D26**. The later approved implementation supplies equivalent existing Dose ownership for the named groups and closes D24/omega numerical policy and calibration. Broader active/excipient roles, clinical coverage, the fresh corpus, exact manifest approval and runtime publication remain later gates.
 
 The unrelated DEA-date review is **Q56**, not Q54: Q54 already identifies the integrated CFU consolidation. No clinical record was changed in this infrastructure/CFU batch.
 
@@ -158,7 +184,7 @@ accepted results. Source integrated and pushed on main through `54a374cb`.
 App source remains `63eeabff`; this batch changes no app code or public fields.
 Sean's run of 38 datasets and 15,421 products validates its `fa8c50bc` baseline and the
 previous CFU/Transparency repairs, but its outputs are stale for the corrected
-source. Final calibration/corpus/catalog/runtime acceptance remains open.
+source. Numerical calibration later closed; final corpus/catalog/runtime acceptance remains open.
 Earlier source gates are historical receipts, not release approval.
 
 - [x] Reconcile current main and the integration lane, including the release/storage changes on `d021061b`.
@@ -166,10 +192,11 @@ Earlier source gates are historical receipts, not release approval.
 - [x] Match the approved probiotic candidate across 1,259 frozen labels: 542 probiotics and 717 controls; no numerical/component/tier/route/status/Safety/confidence mismatch.
 - [x] Close Ravage's cinnamon expected failure with a cleaner-owned fix, not a scorer exception.
 - [x] Complete the earlier integrated source checkpoint: **17,915 passed, 167 skipped, zero expected failures** at `3ee91eae`, with independent review. Artifact-dependent skips still require release-stage checks.
-- [ ] Complete the remaining Phase 2 role/prominence and serving corrections.
+- [x] Complete the remaining prominence and alternate-serving corrections covered by the approved D26/Q39 batch, including the zero-repeat top-level raw census.
+- [ ] Complete the broader dual-use active/excipient source-section audit and final subject census; completed Ravage and trace-protein cases are bounded examples.
 - [ ] Validate a fresh complete catalog, approve its exact manifest, publish and verify live behavior.
 
-No catalog release has occurred under this plan. Recorded checkpoints validate their named source and frozen samples, not the entire rebuilt corpus. The earlier combined source was pushed through `19d4f661` (tested production checkpoint `a3a2d904`). Q49 and Q51 remain separate integrated items. Q53 source correction `0acde33e`, its two benchmark follow-ups and Q52 source correction `6a15be14` are integrated on main. Final combined fast: **18,008 passed,168 skipped,zero failures/xfails**; source fingerprints match measured candidate bytes and fresh review accepted. D26, remaining identity/research cases and fresh candidate validation remain open. Source push and cleanup receipts are recorded below.
+No catalog release has occurred under this plan. Recorded checkpoints validate their named source and frozen samples, not the entire rebuilt corpus. The earlier combined source was pushed through `19d4f661` (tested production checkpoint `a3a2d904`). Q49 and Q51 remain separate integrated items. Q53 source correction `0acde33e`, its two benchmark follow-ups and Q52 source correction `6a15be14` are integrated on main. Final combined fast: **18,008 passed,168 skipped,zero failures/xfails**; source fingerprints match measured candidate bytes and fresh review accepted. D26 was later closed; remaining identity/research cases and fresh candidate validation remain open. Source push and cleanup receipts are recorded below.
 
 ## How to read the remaining Phase 0–2 boxes
 
@@ -242,7 +269,7 @@ The October 1 source audit reconciled these boxes against current production and
   - [x] Reproduce and correct the symlinked manifest-path assertions (`b0c51483`); all three real-product clinical identity checks pass unchanged. The citation-parser timeout passes on focused rerun without data or timeout changes. The isolated combined checkpoint passed as recorded above.
   - [x] Reconcile and independently validate Claude's later production `68cae99a` and Q51's record-unit amount reader, retaining the Codex member-total safeguards. Combined source `a3a2d904`: 17,994 fast tests passed, 167 skipped, zero failures/xfails; seven independent consumer probes passed. Latest-Claude control replay: all 1,259 captured payloads identical; narrow 186-label replay retains the single explained UC-II correction. Earlier pinned results alone do not validate this combined source.
   - [x] Claude latest-source implementation/cohort measurement validated on `68cae99a` (17,954 passed, 168 skipped); Codex independently reconciled and tested the combined source. This is sampling, not full-corpus release validation.
-  - [x] Integrate the validated combined source on main, including Q49 safeguards and Q51 record-unit comparisons. Remaining Q49 follow-ups/D26 stay open; this does not close the Phase 2 umbrella or authorize catalog release.
+  - [x] Integrate the validated combined source on main, including Q49 safeguards and Q51 record-unit comparisons. D26 was later closed; this checkpoint alone does not close the Phase 2 umbrella or authorize catalog release.
 - [x] Resolve remaining alternate-serving identity/duplicate cases from raw JSON (Q39), including audience-only serving notes, inconsistent column contents and shared-form-UNII wording drift. Raw census: 108→0 repeated top-level names; 141→18 all-tree names, with all 18 retained as distinct authored branches. Never merge materially different preparations or discard label variants.
 - [ ] **SOURCE WORK NEXT:** Align remaining dual-use active/excipient decisions without using amount as a substitute for purpose. Ravage and trace-protein corrections are completed examples; the broader class remains open. Preserve genuine excipients, source-section membership and nutrition rollups.
 - [ ] **AFTER SOURCE CORRECTIONS:** Recompute the final Evidence-subject census after the remaining serving/role corrections and classify all holds and changes. Earlier frozen cohort checks do not establish this final census.
@@ -296,7 +323,7 @@ A completed determination may be applicable positive evidence, reviewed null/no 
 
 - [x] Audit Sean's October 1–2 intermediate Clean/Enrich/Score run: 38 datasets, 15,421 scored artifacts, 114 matching input/code/content manifests; 46 accepted CFU/control products retain all public pillars, totals, tiers and typed safety. This is a completed checkpoint, not the final candidate: downstream snapshot guard exposed two source defects, corrected in the October 2 batch below.
 
-- [ ] After the last source/data change, run one fresh corpus from **Clean**, publication disabled; no competing full suite.
+- [x] After the last source/data change, run one fresh corpus from **Clean**, publication disabled and without a competing broad suite. Accepted run: `batch_run_summary_20261003_123945.txt`;38 stage chains/114 current manifests.
 - [ ] Rebuild catalog, interaction output and canaries; run release gates and the full backstop sequentially.
 - [ ] Freeze candidate SHAs, config/data fingerprints, catalog generation and artifact hashes.
 - [ ] Produce counts/holds/statuses, route changes, newly scored/held items, largest 50 score deltas, all safer-verdict and BLOCKED changes.
@@ -364,7 +391,8 @@ Original fixed boundaries remain: six maxima 20/20/20/15/15/10, existing public 
 - [x] Remove clean merged lane worktrees and branches after verifying their tips are contained in published main. Remove the requested `dose-map-base` scratch checkout. Preserve rejected/superseded experiments and ignored handoffs in recoverable archives.
 - [x] Implement, measure and independently review Q53 generic probiotic source/applicability corrections (`0acde33e`; benchmark-only follow-up `de3d0353`). Exact-strain registry and all numerical policy magnitudes are unchanged.
 - [x] Complete and integrate Q53/Q52 final source checkpoint through `6a15be14`:18,008 passed,168 skipped,zero failures/xfails; fresh review accepted. Q52 corrects both CoQ10 copy branches through the existing rule owner; severity/gates/other siblings remain unchanged.
-- [ ] Complete D26, remaining identity/research and approved calibration before the fresh corpus/release sequence. Q53 coverage queue and new interaction copy require fresh generation before release.
+- [x] Complete D26/D24/omega implementation and approved calibration before the fresh corpus/release sequence.
+- [ ] Complete remaining release-eligible identity/clinical determinations and the broader dual-use source audit. Q53 holds and new interaction copy require fresh generation before release.
 - [x] Push app reference metadata parity to main `be368cfe`: clinical payloads unchanged, all 32 canonical artifacts synchronized, analyzer clean and 27 focused tests passed. Remove its clean merged worktree/branch; private handoff preserved.
 
 Durable replay, logs, simulator capture and cleanup archives: `/Users/seancheick/pg_quality/integration_20261001/`. App Dependabot branches are new unreviewed dependency proposals and remain untouched. Website main already contains its reconciled work; untracked `axis-proposals-for-review.csv` is preserved. No catalog, interaction DB, Supabase or OTA publication occurred.
@@ -386,14 +414,15 @@ Final October1 source batch: Q53 and Q52 are implemented, measured, independentl
 - [x] Measure285 frozen raw labels with zero capture deltas; owner sweep794passed/
   14artifact skips. All existing magnitudes and four retained D26 safeguards unchanged.
 - [x] Fullfast18,018passed/168skipped/zero failures or xfails,749.09s; fresh reviewer accepted source and verified byte-identical285-label captures. Source integrated/pushed at `c8f53b46`; main/origin verified equal and clean.
-- [ ] Complete broader D26: verified Dose coverage + D24 decision packet + approved
+- [x] Complete broader D26: verified Dose coverage + D24 decision packet + approved
   omega purpose/magnitude mapping → equivalent Dose assessments → remove Evidence
-  amount gates/stand-ins. **This source-binding fix does not close D26.**
+  amount gates/stand-ins. Closed by the approved October 2 implementation and calibration receipt.
 - [ ] Complete Q53's nine-label clinical coverage queue; priority12091 SD-5845 trace.
-- [ ] Calibrate only after ownership/policy stabilizes; finish numerical ownership
+- [x] Calibrate after ownership/policy stabilization; finish numerical ownership
   table, individual35 Q3 crossing reviews and all unexplained-delta classifications.
-- [ ] Run fresh final Clean corpus, rebuild candidate artifacts, sequential gates,
-  frozen manifest, exact candidate approval, publication and live verification.
+- [x] Run and inspect the fresh final Clean corpus with publication disabled.
+- [ ] Rebuild candidate artifacts, run sequential gates, freeze the manifest,
+  obtain exact candidate approval, publish and verify live behavior.
 
 Owner: `generic_evidence::_recover_contract_evidence_matches` / `_stamp_recovery_source_ref`
 / `_converted_product_dose` — evidence: failing artifact regressions, frozen raw269490
@@ -425,7 +454,7 @@ Sean decisions under Phase4, rather than implicit choices by an implementer.
 - [x] Complete clean1,259-label CFU replay and classify all33 score movements;717 omega controls identical, no Evidence/Safety/Verification/route/status/purpose changes. Independent review accepted source.
 - [x] Complete final portable full-fast checkpoint at `91987d74`:18,079 passed,168 skipped,zero failures/xfails.
 - [x] Complete pipeline main integration/push (`0f9ca406`) and contained-lane archive/branch cleanup; ignored handoff and frozen receipts preserved outside the worktree.
-- [ ] Close remaining label/basis discrepancies before final calibration/release.
+- [x] Close the named label/basis discrepancies `242637`, `242654` and `327966` through the shared serving/count/warranty owners. Broader dual-use source classification remains separately open in Phase 2.
 
 Owner: `SupplementEnricherV3::_extract_cfu` / `_extract_guarantee_type` /
 `_collect_probiotic_data`; `serving_frequency::resolve_daily_serving_range` for
@@ -437,7 +466,7 @@ Durable receipts: `/Users/seancheick/pg_quality/cfu_guarantee_20261001/`.
 
 The bounded SD-5845 source search remains a research receipt, not a completed
 negative Evidence determination. The nine-label Q53 clinical queue stays open.
-D26, D24/omega approvals, calibration and final corpus/release remain unchecked.
+At this historical checkpoint D26, D24/omega approvals, calibration and final corpus/release were unchecked. The October 3 audit closes the first three; the final corpus/release remains open.
 
 
 ## October 1 execution correction — independent quality and safety
@@ -496,7 +525,7 @@ Final export followup `50a2fb7d`: existing `build_decision_highlights` no longer
 
 The stale quality-completion UI attachment is owned by another chat and cannot be archived from this chat. It has no current Git worktree or branch; it is not pending implementation. The archive tool refused cross-chat ownership, and no source was deleted to work around that limitation.
 
-Next remains D26 equivalent Dose benchmark ownership and D24/omega policy packets, the nine Q53 clinical determinations and the three raw serving/title discrepancies, then numerical calibration and one fresh final Clean corpus/release manifest. Those items remain explicitly open; source integration does not close them.
+Historical next items were D26, D24/omega, Q53 clinical determinations, three raw serving/title discrepancies, calibration and a fresh final corpus. Later receipts close D26/D24/omega, the three named discrepancies and numerical calibration. Q53 clinical holds and the fresh corpus/release manifest remain open.
 
 Sean will run the full pipeline when ready; Codex will inspect its completed artifacts afterward. Do not start the hour-scale corpus job merely to keep this chat active. Source checks and the full runtime corpus remain distinct.
 
@@ -542,9 +571,9 @@ run did not rebuild or publish the current catalog.
   inputs. Current receipts: `candidate_verified.jsonl`,
   `numerical_delta_receipt_verified.json`, `final_fast_verified.log` and
   `independent_review_final.json` in the durable audit folder.
-- [ ] Regenerate the final candidate after the remaining source/policy work.
-  Preserved user-run outputs become stale after this source correction;
-  neither this intermediate run nor rescored canaries close Phase 7.
+- [x] Regenerate and inspect the Clean/Enrich/Score corpus after the final source correction; all38 stage chains and114 manifests are current.
+- [ ] Rebuild and validate the catalog/interaction/Flutter release candidate;
+  corpus regeneration alone does not close Phase 7.
 
 Owner: `clinical_applicability::assess_clinical_applicability` and
 `backed_clinical_studies/INGR_OMEGA3` for intervention scope;
@@ -604,11 +633,10 @@ Receipts: `/Users/seancheick/pg_quality/probiotic_companion_audit_20261002/`
 (`baseline.jsonl`, `candidate_final.jsonl`, `delta_final.json`, `receipt.json`,
 `independent_review.md`, `fast_final.log`).
 
-Remaining: D26 Dose coverage, D24/omega policy decisions, Q53 clinical
-coverage, serving discrepancies, numerical calibration and the final fresh
-corpus/manifest/release sequence. This batch closes none of those broader
-items. The existing user-run corpus is preserved; no full corpus job or
-runtime publication was performed.
+At this historical checkpoint D26, D24/omega, Q53 clinical coverage, serving
+discrepancies, numerical calibration and the final corpus/release were open.
+Later receipts close D26/D24/omega, the named serving discrepancies and
+calibration. Q53 holds and the final corpus/release sequence remain open.
 
 ## GOS/Bimuno and PreforPro source checkpoint — October 2
 
@@ -623,7 +651,7 @@ runtime publication was performed.
 
 Owner: `scripts/data/ingredient_quality_map.json::prebiotics.forms.galactooligosaccharides (GOS).notes` and `bacteriophages.forms.bacteriophage blend.notes`. Evidence: matrix/glossary, primary trial methods/results, canonical patch, production replay and independent review. Will NOT create: a scorer, registry, parser, public field, benchmark or numerical policy. Baseline `bf12f605`; source `c527c43c`. Receipts: `/Users/seancheick/pg_quality/gos_phage_review_20261002/`.
 
-**Next:** finish the existing probiotic strain/formula clinical queue, then assemble one cross-family certainty/applicability and Dose policy packet using the completed PHGG, inulin, XOS, GOS and phage source reviews. Keep D26's uncovered amount safeguards until equivalent assessment exists in Dose. Numerical calibration and release remain separate, uncompleted gates.
+**Next at this checkpoint:** finish the probiotic strain/formula clinical queue and assemble the cross-family certainty/applicability and Dose packet. The later approved batch completes the Dose packet, removes D26 safeguards after equivalent ownership and completes numerical calibration. Unresolved clinical determinations and release remain separate open gates.
 
 Measurement limit: baseline provenance includes five ignored FDA data/cache files absent from the candidate checkout. Independent review confirms matching raw hashes and all39 successful scored captures are byte-identical; this establishes bounded output equivalence, not identical full environments or release readiness. The existing research register now includes the cross-family decision-input table; it does not approve grades or Dose magnitudes.
 
@@ -636,12 +664,12 @@ Next bounded source finding: primary PMID36198994 describes LA-5 alone versus fl
 - [x] Exact candidate CI37080103407 passed; main-checkout local gate527passed/24declared opt-in skips, skip guard passed136.52s. Main fast-forwarded and pushed to31113c16. No catalog release.
 - [x] Delete local/remote codex/edta-release-exemption, codex/q64-number-boundary and claude/jolly-pike-10e4ca after containment checks. Preserve Claude state/config before removing its clean completed worktree.
 - [x] Archive the superseded clinical-completion-batch worktree recoverably and delete its local/remote branch. Four commits are retained in codex/q53-calibration-completion; range-diff and production-file comparison establish preservation, not release validation.
-- [ ] Integrate the active codex/q53-calibration-completion lane after validation on current main. It is not stale: its clinical fixes remain absent from main. Its earlier local gate rejected missing artifacts; do not mark it accepted from green CI alone.
+- [x] Integrate the Q53/calibration lane after current-main validation. Its source and later release-critical corrections are contained in current `main` through `5246ad20`; exact-source CI and the local corpus gate are green. Runtime release remains open.
 
-Cleanup receipts: /Users/seancheick/pg_quality/branch_cleanup_20261002/; accepted local log: /Users/seancheick/pg_quality/q65_cleanup_local_20261002.log. Main checkout is clean; only the active calibration worktree/branch remains besides main. S1 detail-blob versus core-column observation remains in Q65; removal of danger does not establish that every report axis is live.
+Cleanup receipts: /Users/seancheick/pg_quality/branch_cleanup_20261002/; accepted local log: /Users/seancheick/pg_quality/q65_cleanup_local_20261002.log. The historical calibration branch was integrated and is no longer a release dependency. S1 detail-blob versus core-column observation remains in Q65; removal of danger does not establish that every report axis is live.
 
 ### October 3 exclusion checkpoint — final source5cf34928, not release-complete
 
-Eight of45 prior-CAUTION catalog exclusions are resolved by verified source/ownership corrections.37remain held; no safety gate changed in the47-label raw replay. Source fixes, focused verification and independent review are complete; exact-CI/local acceptance, integration, regenerated full candidate and hands-on Flutter audit remain unchecked. This does not close clinical holds, the citation backlog, broader source-section review or publication. Evidence and ownership: existing [execution LEDGER](../../scripts/audits/pending_items_20260926/LEDGER.md), durable `/Users/seancheick/pg_quality/q53_release_20261003/form_remediation/`.
+Eight of45 prior-CAUTION catalog exclusions are resolved by verified source/ownership corrections.37remain held; no safety gate changed in the47-label raw replay. Source fixes, focused verification, independent review, exact-CI/local acceptance and integration are complete. Historical exact-source corpus verification is complete; newest-candidate release and hands-on Flutter audit remain unchecked. This does not close clinical holds, the citation backlog, broader source-section review or publication. Evidence and ownership: existing [execution LEDGER](../../scripts/audits/pending_items_20260926/LEDGER.md), durable `/Users/seancheick/pg_quality/q53_release_20261003/form_remediation/`.
 
-Combined CI then exposed preparation-projection regressions. Source3d002d99 corrects reviewed alias preservation and member-mass ownership;169owner/consumer checks plus12focused regressions pass. The expanded immutable51-label replay retains all8restorations and unchanged safety/dose-safety objects. Tesnor, Sytrinol and Sensoril controls stay unchanged. A separate source-verified false Mirtogenol→bilberry alias is removed:23186866.8→54.1, with unsupported Evidence15.6→0 and existing limited-assessability Dose fallback9.5→12.4. Exact combined CI/local, measured review, integration and release/app validation remain pending; no phase is closed by this checkpoint. See the existing LEDGER and durable preparation-control receipts.
+Combined CI then exposed preparation-projection regressions. Source3d002d99 corrects reviewed alias preservation and member-mass ownership;169owner/consumer checks plus12focused regressions pass. The expanded immutable51-label replay retains all8restorations and unchanged safety/dose-safety objects. Tesnor, Sytrinol and Sensoril controls stay unchanged. A separate source-verified false Mirtogenol→bilberry alias is removed:23186866.8→54.1, with unsupported Evidence15.6→0 and existing limited-assessability Dose fallback9.5→12.4. Exact combined CI/local, measured review and integration passed; newest release/app validation remain pending; no phase is closed by this checkpoint. See the existing LEDGER and durable preparation-control receipts.
