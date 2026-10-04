@@ -197,3 +197,35 @@ def test_unknown_vitamin_e_compound_grams_cannot_be_treated_as_mg(enricher):
     [adequacy] = _rda(enricher, [row])["adequacy_results"]
     assert adequacy["safety_exposure"] == {"per_day": pytest.approx(2000), "unit": "mg"}
     assert adequacy["ul_assessment_status"] != "assessed_within_limit"
+
+
+@pytest.mark.parametrize("quantity,unit", [(600, "mg"), (600, "mg AT"), (0.6, "g"), (600000, "mcg")])
+@pytest.mark.parametrize("form,multiplier,known", [
+    ("d-alpha-tocopheryl acetate", 1, True),
+    ("dl-alpha-tocopheryl acetate", 2, True),
+    ("d-alpha-tocopheryl acetate and dl-alpha-tocopheryl acetate", 2, False),
+    (None, 2, False),
+])
+def test_vitamin_e_parent_mass_units_preserve_activity_and_ul_lineage(
+    enricher, quantity, unit, form, multiplier, known,
+):
+    row = _row("Vitamin E", quantity, unit, 1, "vitamin_e")
+    if form:
+        row["forms"] = [{"name": form}]
+    [assessment] = _rda(enricher, [row])["adequacy_results"]
+    assert assessment["adequacy_exposure"]["per_day"] == pytest.approx(600)
+    assert assessment["safety_exposure"] == {"per_day": pytest.approx(600 * multiplier), "unit": "mg"}
+    assert assessment["over_ul"] is (known and multiplier == 2)
+    if not known:
+        assert assessment["ul_assessment_status"] != "assessed_within_limit"
+        assert assessment["skip_ul_reason"] == "unknown_vitamin_form"
+
+
+@pytest.mark.parametrize("quantity,unit", [(600, "mg"), (0.6, "g"), (600000, "mcg")])
+@pytest.mark.parametrize("name", ["dl-alpha-tocopheryl acetate", "Mixed Tocopherols"])
+def test_vitamin_e_compound_mass_units_do_not_become_parent_activity(enricher, quantity, unit, name):
+    row = _row(name, quantity, unit, 1, "vitamin_e")
+    row["standardName"] = "Vitamin E"
+    [assessment] = _rda(enricher, [row])["adequacy_results"]
+    assert assessment["safety_exposure"] == {"per_day": pytest.approx(600), "unit": "mg"}
+    assert assessment["scoring_eligible"] is False

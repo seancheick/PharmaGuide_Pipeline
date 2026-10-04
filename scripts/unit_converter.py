@@ -175,13 +175,13 @@ class UnitConverter:
         )
 
         # Since the 2020 Supplement Facts unit transition, a parent row headed
-        # "Vitamin E" and declared in mg is already expressed as mg
-        # alpha-tocopherol. Natural-vs-synthetic form is required only for the
-        # legacy IU conversion. Keep mixed tocopherol/tocotrienol ingredient
+        # "Vitamin E" declares alpha-tocopherol activity. Plain mass aliases
+        # change its scale, not that basis. Form is also needed to distinguish
+        # nutritional activity from physical UL mass. Keep standalone ingredient
         # masses outside this rule by requiring the parent nutrient heading.
         if (
             rule_id == 'vitamin_e_unknown'
-            and from_unit_lower in {'mg', 'mg at'}
+            and from_unit_lower in {'mg', 'mg at', 'g', 'mcg'}
             and re.match(r'^vitamin\s+e\b', measured_name or ingredient_text, re.IGNORECASE)
         ):
             rule_id = 'vitamin_e_label_mg_alpha_tocopherol'
@@ -437,10 +437,12 @@ class UnitConverter:
                     original_unit=from_unit,
                     converted_value=mass_result.converted_value,
                     converted_unit=mass_result.converted_unit,
-                    conversion_rule_id="mass_conversion",
+                    # A scale conversion must not erase the selected Vitamin E
+                    # form: its activity and UL mass can have different bases.
+                    conversion_rule_id=(rule_id if rule_id.startswith('vitamin_e_') else "mass_conversion"),
                     conversion_factor=mass_result.conversion_factor,
                     nutrient_detected=nutrient,
-                    form_detected=None,
+                    form_detected=(rule_data.get('standard_name') if rule_id.startswith('vitamin_e_') else None),
                     form_detection_source="mass_conversion_fallback",
                     confidence="high",
                     notes=["Used mass conversion (not IU-specific)"]
