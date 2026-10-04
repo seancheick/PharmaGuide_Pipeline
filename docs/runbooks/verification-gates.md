@@ -56,6 +56,8 @@ retraction metadata. Transport failure, malformed XML, absent IDs and invalid id
 are never successful article receipts. An expired receipt cannot pass offline or be
 restamped from an old batch cache. Valid records remain usable when another ID fails.
 Cache writes are atomic and serialized so separate gates retain each other's receipts.
+Expired receipts are pruned on persistence; they already cannot satisfy verification.
+This avoids rewriting obsolete batch payloads indefinitely and does not delete curated data.
 
 PMC conversion uses NCBI's documented endpoint:
 https://pmc.ncbi.nlm.nih.gov/tools/idconv/api/v1/articles/ . Rate limits and transient

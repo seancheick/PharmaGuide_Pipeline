@@ -826,3 +826,13 @@ per-file reuse/live metrics. No clinical data/config/score/export/publication ch
 [ ] Release-validated: stage fingerprints changed through imported audit modules;
 combine with certification rebuild, then new catalog/app/release verification.
 Receipts: /Users/seancheick/pg_quality/citation_cache_20261004/ .
+
+Citation-cache validation update: first source2cb0f9e1 passes whole-fast CI37233972615,
+all4shards. Focused owner/consumer/ratchet slice146passed24.20s before cache pruning.
+A real second bottleneck surfaced:344MBcache/2289receipts,1217expired; valid payloads
+~38.8MB. Fail-first pruning regression reproduced, existing cache owner now drops only
+expired receipts during load/persistence. Post-fix slice52passed with3file-scanning
+timeouts (one failure/two setup errors) under local I/O contention; not a passing
+checkpoint. Completed final source needs one new exact-source CI checkpoint.
+The interrupted full-network report is rejected, not recorded as passing. Bounded
+56citation current-content check remains0new mismatches/0unresolved.

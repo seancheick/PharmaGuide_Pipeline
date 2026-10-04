@@ -229,7 +229,15 @@ class PubMedClient:
             return {}
         try:
             loaded = json.loads(path.read_text())
-            return {key: record for key, record in loaded.items() if isinstance(record, dict)} if isinstance(loaded, dict) else {}
+            if not isinstance(loaded, dict):
+                return {}
+            now = time.time()
+            return {key: record for key, record in loaded.items()
+                    if isinstance(record, dict)
+                    and isinstance(record.get("stored_at"), (int, float))
+                    and isinstance(record.get("expires_at"), (int, float))
+                    and math.isfinite(record["expires_at"])
+                    and record["expires_at"] > now}
         except Exception:
             return {}
 
@@ -243,6 +251,8 @@ class PubMedClient:
             fcntl.flock(lock, fcntl.LOCK_EX)
             merged = self._load_cache()
             for key, value in self._cache.items():
+                if self._cache_get(key) is None:
+                    continue
                 if value.get("stored_at", 0) >= merged.get(key, {}).get("stored_at", 0):
                     merged[key] = value
             with tempfile.NamedTemporaryFile(mode="w", dir=path.parent, delete=False) as output:

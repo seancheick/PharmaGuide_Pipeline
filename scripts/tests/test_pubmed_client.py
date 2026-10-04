@@ -484,3 +484,14 @@ def test_citation_external_request_does_not_forward_ncbi_credentials(monkeypatch
     client = pc.PubMedClient(cache_path=tmp_path/'cache.json', api_key='private', email='private@example.com', rate_limit_delay=0)
     client._request('https://api.crossref.org/works/10.example')
     assert captured == [{}]
+
+
+def test_cache_persistence_prunes_expired_receipts(monkeypatch, tmp_path):
+    import api_audit.pubmed_client as pc
+    import json
+    path = tmp_path/'cache.json'
+    path.write_text(json.dumps({'expired':{'stored_at':0,'expires_at':1,'payload':'old source'}}))
+    client = pc.PubMedClient(cache_path=path)
+    client._cache_put('current', 'current source')
+    assert 'expired' not in json.loads(path.read_text())
+    assert client._cache_get('current') == 'current source'
