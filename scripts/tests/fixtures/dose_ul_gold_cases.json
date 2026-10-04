@@ -1160,7 +1160,7 @@
     "safety_per_day": 900,
     "over_ul": false
    },
-   "basis": "1,000 IU synthetic x 0.45 mg/IU = 450 mg < UL 1,000 mg Corrected UL basis: NIH ODS counts all eight synthetic stereoisomers (0.90 mg/IU); 0.45 mg/IU is nutritional activity only. Unknown IU uses 0.90 mg/IU as a bound, not confirmed exposure."
+   "basis": "1,000 IU synthetic: UL mass 0.90 mg/IU (all eight stereoisomers; ODS 1 mg vitamin E = 2 mg all-rac) = 900 mg < UL 1,000 mg. Nutritional activity is 450 mg."
   },
   {
    "id": "e-800iu-unstated-form-worst-case",
@@ -1282,7 +1282,7 @@
     "safety_per_day": 720,
     "over_ul": false
    },
-   "basis": "form unstated: natural factor 0.67 mg/IU is the worst case, 536 mg < 1,000 Corrected UL basis: NIH ODS counts all eight synthetic stereoisomers (0.90 mg/IU); 0.45 mg/IU is nutritional activity only. Unknown IU uses 0.90 mg/IU as a bound, not confirmed exposure."
+   "basis": "Form unstated: the UL screen uses the conservative all-stereoisomer bound 0.90 mg/IU = 720 mg < UL 1,000 mg."
   },
   {
    "id": "e-d-alpha-671mg",
@@ -1575,7 +1575,7 @@
     "safety_per_day": 360,
     "over_ul": false
    },
-   "basis": "400 IU x 0.45 = 180 mg Corrected UL basis: NIH ODS counts all eight synthetic stereoisomers (0.90 mg/IU); 0.45 mg/IU is nutritional activity only. Unknown IU uses 0.90 mg/IU as a bound, not confirmed exposure."
+   "basis": "400 IU synthetic: UL mass 0.90 mg/IU = 360 mg < UL 1,000 mg. Nutritional activity is 180 mg."
   },
   {
    "id": "a-retinyl-10000iu-at-ul",
