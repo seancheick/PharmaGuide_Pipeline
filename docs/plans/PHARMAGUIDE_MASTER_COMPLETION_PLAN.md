@@ -21,6 +21,10 @@ A checked implementation box means that specific deliverable is implemented, mea
 
 Approved scoring policy, implementation and bounded numerical calibration are complete. Broader source-section/role and clinical-determination coverage, current-source candidate validation, actual-device rendering, movement approval, publication and live verification remain open. Historical corpus/release passes do not validate the subsequently changed runtime. The execution LEDGER and main-checkout handoff carry the next steps; automation is deleted and jobs remain stopped pending the next authorized task.
 
+## October 4 — catalog gate development policy
+
+Implemented and independently reviewed in the existing catalog comparison owner: ordinary score/tier changes are report-only; safety weakening and warned-product removal retain exact reviewed exceptions. Historical comparison:3,046approval requests become43safety exceptions plus3,003visible quality movements; no flagged product or safety fact is lost. Focused owner/release-wiring checks60passed; independent gate checks48passed. This is gate implementation and historical measurement, not clinical acceptance, branch-CI acceptance or publication. Existing final candidate/app/clinical boxes remain open. Receipt and integration status: execution LEDGER.
+
 ## October 4 — audit integration and cleanup
 
 - [x] Sean authorized integration; pipeline audit source/documents merged and pushed to main through fed96040, exact branchCI37215506742 green. App UL consumers merged and pushed to main3553342c, exactCI37214557986 green. Final runtime/data are identical to the independently reviewed27d9b751 source and passing103b699e local527/24declaredskip checkpoint; later pipeline commits changed only documentation.

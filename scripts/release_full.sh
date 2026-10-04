@@ -754,11 +754,11 @@ fi
 
 # Compare every product with each catalog users can have: the app bundle
 # committed on the app's main, and the live Supabase catalog the in-app updater
-# downloads when that differs. A milder safety warning, a warned product
-# leaving the catalog, a 10+ point score move either way, or a grade up with a
-# 5+ point rise stops the release until an approval in
-# scripts/release_safety/catalog_change_approvals.json names that product's
-# exact before and after. Runs with every --skip-* flag: something still ships.
+# downloads when that differs. Milder safety and warned-product removal require
+# exact reviewed safety exceptions. Ordinary score/tier changes are report-only,
+# grouped for source-based review; they do not require per-product signatures.
+# This comparison does not replace clinical/contract gates or authorize publication.
+# Runs with every --skip-* flag so local candidates retain safety review.
 run_strict_gate "catalog changes vs what users have" \
   "$PG_PYTHON" scripts/release_safety/catalog_diff.py \
     --flutter-repo "$FLUTTER_REPO" \

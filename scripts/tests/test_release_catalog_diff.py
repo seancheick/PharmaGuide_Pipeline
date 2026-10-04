@@ -1,11 +1,7 @@
-"""The release gate that compares the candidate catalog with what users have.
+"""Catalog comparison: safety exceptions gate, ordinary quality movements report.
 
-Users have the app bundle and, through the in-app updater, the live catalog on
-Supabase. A product change that weakens what a user is told stops the release
-unless a reviewed approval names that product's exact before and after:
-a milder safety warning (BLOCKED > UNSAFE > CAUTION > none; POOR is a quality
-grade), a warned product leaving the catalog, a quality grade up with a 5+
-point rise, or a score move of 10+ points either way.
+All baselines remain checked; exact safety approvals cannot cover changed states.
+Clinical correctness and external publication authorization are separate gates.
 """
 
 from __future__ import annotations
@@ -97,26 +93,28 @@ def test_a_warned_product_leaving_the_catalog_stops_but_a_safe_or_poor_one_does_
     assert result["added_by_verdict"] == {"BLOCKED": 1}
 
 
-def test_a_grade_up_stops_only_with_a_rise_of_five_points(tmp_path):
+def test_a_grade_up_is_reported_with_a_rise_of_five_points(tmp_path):
     before = [row("1", score=72.0, tier="Good"), row("2", score=68.0, tier="Needs improvement"),
               row("3", "POOR", 50.0, "Poor"), row("4", score=81.0, tier="Very good")]
     after = [row("1", score=81.0, tier="Very good"), row("2", score=71.0, tier="Good"),
              row("3", "SAFE", 56.0, "Needs improvement"), row("4", score=79.0, tier="Good")]
     result = diff(tmp_path, before, after)
-    assert gated(result) == {"1": ["tier_up"], "3": ["tier_up"]}
+    assert gated(result) == {}
+    assert {c["dsld_id"]: [r["kind"] for r in c["reasons"]] for c in result["reported"]} == {"1": ["tier_up"], "3": ["tier_up"]}
     tiers = {(t["from"], t["to"]): (t["products"], t["stopping"]) for t in result["tier_transitions"]}
     assert tiers[("Needs improvement", "Good")] == (1, 0)
     assert tiers[("Very good", "Good")] == (1, 0)
 
 
-def test_a_score_move_of_ten_points_stops_either_way(tmp_path):
+def test_a_score_move_of_ten_points_is_reported_either_way(tmp_path):
     before = [row("1", score=72.3), row("2", score=72.3), row("3", score=50.0, tier="Poor"),
               row("4", score=60.0, tier="Needs improvement")]
     after = [row("1", score=62.3), row("2", score=62.4), row("3", score=59.9, tier="Poor"),
              row("4", score=70.0, tier="Needs improvement")]
     result = diff(tmp_path, before, after)
     # 72.3 - 62.3 is 9.999... in floating point; the gate still counts it as 10.
-    assert gated(result) == {"1": ["score_drop"], "4": ["score_rise"]}
+    assert gated(result) == {}
+    assert {c["dsld_id"]: [r["kind"] for r in c["reasons"]] for c in result["reported"]} == {"1": ["score_drop"], "4": ["score_rise"]}
     assert result["score_changes"] == {"down": 2, "up": 2}
 
 
@@ -215,8 +213,8 @@ def test_report_and_draft_approvals_close_the_loop(tmp_path):
     path = tmp_path / "approvals.json"
     path.write_text(json.dumps(draft))
     approved = diff(tmp_path, before, after, catalog_diff.load_approvals(path))
-    assert approved["unapproved"] == 0 and len(approved["gated"]) == 4
-    assert "Release can proceed" in catalog_diff.render_markdown(approved)
+    assert approved["unapproved"] == 0 and len(approved["gated"]) == 2 and len(approved["reported"]) == 2
+    assert "Catalog comparison passed" in catalog_diff.render_markdown(approved)
 
 
 # --- Live catalog: what the in-app updater downloads -------------------------
@@ -397,3 +395,58 @@ def test_release_gate_refuses_a_catalog_without_independent_safety_column(tmp_pa
     con.close()
     with pytest.raises(ValueError, match='lacks product_safety_status'):
         catalog_diff.diff_catalogs(before, after, [])
+
+
+def test_development_quality_movements_are_reported_without_approval(tmp_path):
+    result = diff(tmp_path, [row('up', score=60, tier='Needs improvement'), row('down', score=90, tier='Excellent')],
+                  [row('up', score=90, tier='Excellent'), row('down', score=60, tier='Needs improvement')])
+    assert result['unapproved'] == 0
+    assert result['gated'] == []
+    assert {c['dsld_id'] for c in result['reported']} == {'up', 'down'}
+    assert catalog_diff.draft_approvals(result) == {'approvals': []}
+    report = catalog_diff.render_markdown(result)
+    assert 'report-only' in report
+    assert '| up |' in report and '| down |' in report
+    assert 'clinical correctness' in report
+
+
+def test_score_movement_never_hides_safety_review_or_warned_removal(tmp_path):
+    result = diff(tmp_path, [row('safety', 'CAUTION', 60, 'Needs improvement'), blocked('gone'), row('ordinary', score=50, tier='Poor')],
+                  [row('safety', score=90, tier='Excellent'), row('ordinary', score=80, tier='Very good')])
+    assert result['unapproved'] == 2
+    assert set(gated(result)) == {'safety', 'gone'}
+    assert {c['dsld_id'] for c in result['reported']} == {'ordinary'}
+    drafts = catalog_diff.draft_approvals(result)['approvals']
+    assert {c['dsld_id'] for g in drafts for c in g['changes']} == {'safety', 'gone'}
+
+
+@pytest.mark.parametrize('rows', [[], [row('duplicate'), row('duplicate')], [row('bad', score=float('inf'))]])
+def test_unusable_catalog_cannot_pass_movement_review(tmp_path, rows):
+    with pytest.raises(ValueError):
+        diff(tmp_path, [row('control')], rows)
+
+
+def test_cli_quality_only_movements_pass_for_both_baselines_without_drafts(tmp_path, monkeypatch):
+    repo = fake_flutter_repo(tmp_path, [row('1', score=40, tier='Poor')])
+    code, out = run_cli(tmp_path, monkeypatch, repo, [row('1', score=90, tier='Excellent')],
+                        live_rows=[row('1', score=60, tier='Needs improvement')])
+    assert code == 0
+    report = (out / 'report.md').read_text()
+    assert report.count('Quality movements — report-only (1 products)') == 2
+    assert not (out / 'draft.json').exists()
+
+
+def test_safety_exception_is_counted_even_with_quality_downgrade(tmp_path):
+    result = diff(tmp_path, [row('1', 'CAUTION', 90, 'Excellent')],
+                  [row('1', score=60, tier='Needs improvement')])
+    assert result['tier_transitions'][0]['stopping'] == 1
+    assert result['unapproved'] == 1
+
+
+def test_old_quality_approval_cannot_approve_new_safety_exception(tmp_path):
+    old = approval([{'dsld_id': '1', 'from': state(score=60, tier='Needs improvement'),
+                     'to': state(score=90, tier='Excellent')}])
+    result = diff(tmp_path, [row('1', 'CAUTION', 60, 'Needs improvement')],
+                  [row('1', score=90, tier='Excellent')], [old])
+    assert result['unapproved'] == 1
+    assert result['gated'][0]['approval'] is None
