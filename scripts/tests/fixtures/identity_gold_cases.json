@@ -2,11 +2,10 @@
  "_metadata": {
   "description": "Gold benchmark (roadmap 1.10) for identity/form resolution: real DSLD label rows run through the production enricher boundary.",
   "expectation_basis": "Hand-authored from the label's printed chemistry and the IQM form keys, written before the enricher was run. Not copied from enricher output.",
-  "input_boundary": "Each active_ingredients row is the cleaner's output for a real DSLD label, reduced to the fields the identity match reads (name, standardName, canonical_id, canonical_source_db, forms, quantity, unit). The enricher is not given any expected value.",
+  "input_boundary": "Each active_ingredients row is the cleaner's verbatim output row for a real DSLD label (forms keep DSLD category/ingredientGroup, which source and carrier recognition reads). The enricher is not given any expected value.",
   "unspecified_cases": "unspecified-* cases pin that a carrier-only or form-less label must resolve to the canonical's '(unspecified)' form, never to a guessed chemical form.",
   "case_count": 55,
-  "last_updated": "2026-10-03",
-  "unmapped_cases": "unmapped-* cases pin fail-closed behaviour: a printed form the enricher cannot map keeps the canonical, gets no form_id and no bio score, and reports form_match_status 'unmapped'. Whether such a carrier word should instead default to '(unspecified)' is a policy question, not pinned here."
+  "last_updated": "2026-10-03"
  },
  "cases": [
   {
@@ -16,22 +15,91 @@
    "product": "Vitamin B12 1% (Methylcobalamin)",
    "active_ingredients": [
     {
-     "name": "Vitamin B12",
-     "standardName": "Vitamin B12",
-     "ingredientGroup": "Vitamin B12",
+     "ingredientId": 281388,
+     "uniiCode": "8406EY2OQA",
+     "order": 1,
+     "raw_category": "vitamin",
+     "raw_source_text": "Vitamin B12",
+     "branded_token_extracted": null,
      "canonical_id": "vitamin_b12_cobalamin",
      "canonical_source_db": "ingredient_quality_map",
+     "cleaner_match_method": "unii_form_exact_match",
+     "label_nutrient_context": "vitamin b12",
+     "source_section": "active",
+     "raw_source_path": "ingredientRows[0]",
+     "normalized_key": "vitamin_b12",
+     "cleaner_row_role": "active_scorable",
+     "score_eligible_by_cleaner": true,
+     "score_exclusion_reason": null,
+     "dose_class": "therapeutic_mass",
+     "raw_taxonomy": {
+      "category": "vitamin",
+      "ingredientGroup": "Vitamin B12",
+      "ingredientId": 281388,
+      "uniiCode": "8406EY2OQA",
+      "forms": [
+       {
+        "name": "Methylcobalamin",
+        "ingredientId": 280220,
+        "order": 1,
+        "prefix": null,
+        "percent": null,
+        "category": "vitamin",
+        "ingredientGroup": "Vitamin B12",
+        "uniiCode": "BR1SN1JS2W"
+       }
+      ],
+      "parentBlend": null,
+      "isNestedIngredient": false,
+      "nested_depth": 0,
+      "quantityVariants": [
+       {
+        "quantity": 200.0,
+        "unit": "mcg",
+        "index": 0,
+        "operator": "=",
+        "quantity_parsed": true,
+        "serving_size_order": 1,
+        "serving_size_quantity": 20,
+        "serving_size_unit": "mg",
+        "daily_value": 8333.0,
+        "daily_value_target_group": "adult_4_plus",
+        "selected_for_analysis": true
+       }
+      ]
+     },
+     "name": "Vitamin B12",
+     "label_display_name": null,
+     "standardName": "Vitamin B12",
+     "ingredientGroup": "Vitamin B12",
      "quantity": 200.0,
      "unit": "mcg",
+     "dailyValue": 8333.0,
+     "quantityVariants": null,
      "forms": [
       {
        "name": "Methylcobalamin",
+       "ingredientId": 280220,
+       "order": 1,
        "prefix": null,
-       "percent": null
+       "percent": null,
+       "category": "vitamin",
+       "ingredientGroup": "Vitamin B12",
+       "uniiCode": "BR1SN1JS2W"
       }
      ],
+     "alternateNames": [],
+     "mapped": true,
+     "proprietaryBlend": false,
+     "disclosureLevel": null,
+     "parentBlend": null,
+     "isNestedIngredient": false,
+     "nestedIngredients": [],
+     "parentBlendMass": null,
+     "parentBlendUnit": null,
+     "hierarchyType": null,
      "notes": "Vitamin B12 (Form: as Methylcobalamin)",
-     "order": 1
+     "safety_flags": []
     }
    ],
    "expect": [
@@ -48,22 +116,91 @@
    "product": "Airborne + Everyday Stress Away Zesty Orange",
    "active_ingredients": [
     {
-     "name": "Vitamin B12",
-     "standardName": "Vitamin B12",
-     "ingredientGroup": "Vitamin B12",
+     "ingredientId": 281279,
+     "uniiCode": "8406EY2OQA",
+     "order": 10,
+     "raw_category": "vitamin",
+     "raw_source_text": "Vitamin B12",
+     "branded_token_extracted": null,
      "canonical_id": "vitamin_b12_cobalamin",
      "canonical_source_db": "ingredient_quality_map",
+     "cleaner_match_method": "unii_form_exact_match",
+     "label_nutrient_context": "vitamin b12",
+     "source_section": "active",
+     "raw_source_path": "ingredientRows[7]",
+     "normalized_key": "vitamin_b12",
+     "cleaner_row_role": "active_scorable",
+     "score_eligible_by_cleaner": true,
+     "score_exclusion_reason": null,
+     "dose_class": "therapeutic_mass",
+     "raw_taxonomy": {
+      "category": "vitamin",
+      "ingredientGroup": "Vitamin B12",
+      "ingredientId": 281279,
+      "uniiCode": "8406EY2OQA",
+      "forms": [
+       {
+        "name": "Cyanocobalamin",
+        "ingredientId": 280323,
+        "order": 1,
+        "prefix": null,
+        "percent": null,
+        "category": "vitamin",
+        "ingredientGroup": "Vitamin B12",
+        "uniiCode": "P6YC3EG204"
+       }
+      ],
+      "parentBlend": null,
+      "isNestedIngredient": false,
+      "nested_depth": 0,
+      "quantityVariants": [
+       {
+        "quantity": 30.0,
+        "unit": "mcg",
+        "index": 0,
+        "operator": "=",
+        "quantity_parsed": true,
+        "serving_size_order": 1,
+        "serving_size_quantity": 5,
+        "serving_size_unit": "Gram(s)",
+        "daily_value": 1250.0,
+        "daily_value_target_group": "adult_4_plus",
+        "selected_for_analysis": true
+       }
+      ]
+     },
+     "name": "Vitamin B12",
+     "label_display_name": null,
+     "standardName": "Vitamin B12",
+     "ingredientGroup": "Vitamin B12",
      "quantity": 30.0,
      "unit": "mcg",
+     "dailyValue": 1250.0,
+     "quantityVariants": null,
      "forms": [
       {
        "name": "Cyanocobalamin",
+       "ingredientId": 280323,
+       "order": 1,
        "prefix": null,
-       "percent": null
+       "percent": null,
+       "category": "vitamin",
+       "ingredientGroup": "Vitamin B12",
+       "uniiCode": "P6YC3EG204"
       }
      ],
+     "alternateNames": [],
+     "mapped": true,
+     "proprietaryBlend": false,
+     "disclosureLevel": null,
+     "parentBlend": null,
+     "isNestedIngredient": false,
+     "nestedIngredients": [],
+     "parentBlendMass": null,
+     "parentBlendUnit": null,
+     "hierarchyType": null,
      "notes": "Vitamin B12 (Form: as Cyanocobalamin) ",
-     "order": 10
+     "safety_flags": []
     }
    ],
    "expect": [
@@ -80,22 +217,90 @@
    "product": "Dopamine Advantage",
    "active_ingredients": [
     {
-     "name": "Vitamin B12",
-     "standardName": "Vitamin B12",
-     "ingredientGroup": "Vitamin B12",
+     "ingredientId": 319545,
+     "uniiCode": "P6YC3EG204",
+     "order": 1,
+     "raw_category": "vitamin",
+     "raw_source_text": "Vitamin B12",
+     "branded_token_extracted": null,
      "canonical_id": "vitamin_b12_cobalamin",
      "canonical_source_db": "ingredient_quality_map",
+     "cleaner_match_method": "unii_exact_match",
+     "label_nutrient_context": "vitamin b12",
+     "source_section": "active",
+     "raw_source_path": "ingredientRows[0]",
+     "normalized_key": "vitamin_b12",
+     "cleaner_row_role": "active_scorable",
+     "score_eligible_by_cleaner": true,
+     "score_exclusion_reason": null,
+     "dose_class": "therapeutic_mass",
+     "raw_taxonomy": {
+      "category": "vitamin",
+      "ingredientGroup": "Vitamin B12",
+      "ingredientId": 319545,
+      "uniiCode": "P6YC3EG204",
+      "forms": [
+       {
+        "name": "Adenosylcobalamin",
+        "ingredientId": 284286,
+        "order": 1,
+        "prefix": null,
+        "percent": null,
+        "category": "vitamin",
+        "ingredientGroup": "Vitamin B12",
+        "uniiCode": "F0R1QK73KB"
+       }
+      ],
+      "parentBlend": null,
+      "isNestedIngredient": false,
+      "nested_depth": 0,
+      "quantityVariants": [
+       {
+        "quantity": 500.0,
+        "unit": "mcg",
+        "index": 0,
+        "operator": "=",
+        "quantity_parsed": true,
+        "serving_size_order": 1,
+        "serving_size_quantity": 1,
+        "serving_size_unit": "Vegetarian Capsule(s)",
+        "daily_value": 20833.0,
+        "daily_value_target_group": "adult_4_plus",
+        "selected_for_analysis": true
+       }
+      ]
+     },
+     "name": "Vitamin B12",
+     "label_display_name": null,
+     "standardName": "Vitamin B12",
+     "ingredientGroup": "Vitamin B12",
      "quantity": 500.0,
      "unit": "mcg",
+     "dailyValue": 20833.0,
+     "quantityVariants": null,
      "forms": [
       {
        "name": "Adenosylcobalamin",
+       "ingredientId": 284286,
+       "order": 1,
        "prefix": null,
-       "percent": null
+       "percent": null,
+       "category": "vitamin",
+       "ingredientGroup": "Vitamin B12",
+       "uniiCode": "F0R1QK73KB"
       }
      ],
-     "notes": null,
-     "order": 1
+     "alternateNames": [],
+     "mapped": true,
+     "proprietaryBlend": false,
+     "disclosureLevel": null,
+     "parentBlend": null,
+     "isNestedIngredient": false,
+     "nestedIngredients": [],
+     "parentBlendMass": null,
+     "parentBlendUnit": null,
+     "hierarchyType": null,
+     "safety_flags": []
     }
    ],
    "expect": [
@@ -112,22 +317,91 @@
    "product": "Multivitamin EasySticks Natural Blueberry Flavor",
    "active_ingredients": [
     {
-     "name": "Vitamin B12",
-     "standardName": "Vitamin B12",
-     "ingredientGroup": "Vitamin B12",
+     "ingredientId": 281394,
+     "uniiCode": "8406EY2OQA",
+     "order": 15,
+     "raw_category": "vitamin",
+     "raw_source_text": "Vitamin B12",
+     "branded_token_extracted": null,
      "canonical_id": "vitamin_b12_cobalamin",
      "canonical_source_db": "ingredient_quality_map",
+     "cleaner_match_method": "unii_form_exact_match",
+     "label_nutrient_context": "vitamin b12",
+     "source_section": "active",
+     "raw_source_path": "ingredientRows[11]",
+     "normalized_key": "vitamin_b12",
+     "cleaner_row_role": "active_scorable",
+     "score_eligible_by_cleaner": true,
+     "score_exclusion_reason": null,
+     "dose_class": "therapeutic_mass",
+     "raw_taxonomy": {
+      "category": "vitamin",
+      "ingredientGroup": "Vitamin B12",
+      "ingredientId": 281394,
+      "uniiCode": "8406EY2OQA",
+      "forms": [
+       {
+        "name": "Hydroxocobalamin",
+        "ingredientId": 281383,
+        "order": 1,
+        "prefix": null,
+        "percent": null,
+        "category": "vitamin",
+        "ingredientGroup": "Vitamin B12",
+        "uniiCode": "Q40X8H422O"
+       }
+      ],
+      "parentBlend": null,
+      "isNestedIngredient": false,
+      "nested_depth": 0,
+      "quantityVariants": [
+       {
+        "quantity": 5.0,
+        "unit": "mcg",
+        "index": 0,
+        "operator": "=",
+        "quantity_parsed": true,
+        "serving_size_order": 1,
+        "serving_size_quantity": 6,
+        "serving_size_unit": "Gram(s)",
+        "daily_value": 556.0,
+        "daily_value_target_group": "adult_4_plus",
+        "selected_for_analysis": true
+       }
+      ]
+     },
+     "name": "Vitamin B12",
+     "label_display_name": null,
+     "standardName": "Vitamin B12",
+     "ingredientGroup": "Vitamin B12",
      "quantity": 5.0,
      "unit": "mcg",
+     "dailyValue": 556.0,
+     "quantityVariants": null,
      "forms": [
       {
        "name": "Hydroxocobalamin",
+       "ingredientId": 281383,
+       "order": 1,
        "prefix": null,
-       "percent": null
+       "percent": null,
+       "category": "vitamin",
+       "ingredientGroup": "Vitamin B12",
+       "uniiCode": "Q40X8H422O"
       }
      ],
+     "alternateNames": [],
+     "mapped": true,
+     "proprietaryBlend": false,
+     "disclosureLevel": null,
+     "parentBlend": null,
+     "isNestedIngredient": false,
+     "nestedIngredients": [],
+     "parentBlendMass": null,
+     "parentBlendUnit": null,
+     "hierarchyType": null,
      "notes": "Vitamin B12 (Form: as Hydroxycobalamin) ",
-     "order": 15
+     "safety_flags": []
     }
    ],
    "expect": [
@@ -144,22 +418,90 @@
    "product": "Fully Active B Complex with Quatrefolic",
    "active_ingredients": [
     {
-     "name": "Quatrefolic",
-     "standardName": "Vitamin B9 (Folate)",
-     "ingredientGroup": "Folate",
+     "ingredientId": 278932,
+     "uniiCode": "Q65PL71Q1A",
+     "order": 6,
+     "raw_category": "vitamin",
+     "raw_source_text": "Quatrefolic",
+     "branded_token_extracted": "Quatrefolic",
      "canonical_id": "vitamin_b9_folate",
      "canonical_source_db": "ingredient_quality_map",
+     "cleaner_match_method": "unii_form_exact_match",
+     "label_nutrient_context": "quatrefolic",
+     "source_section": "active",
+     "raw_source_path": "ingredientRows[5]",
+     "normalized_key": "quatrefolic",
+     "cleaner_row_role": "active_scorable",
+     "score_eligible_by_cleaner": true,
+     "score_exclusion_reason": null,
+     "dose_class": "therapeutic_mass",
+     "raw_taxonomy": {
+      "category": "vitamin",
+      "ingredientGroup": "Folate",
+      "ingredientId": 278932,
+      "uniiCode": "Q65PL71Q1A",
+      "forms": [
+       {
+        "name": "Folate",
+        "ingredientId": 278757,
+        "order": 1,
+        "prefix": null,
+        "percent": null,
+        "category": "vitamin",
+        "ingredientGroup": "Folate",
+        "uniiCode": "935E97BOY8"
+       }
+      ],
+      "parentBlend": null,
+      "isNestedIngredient": false,
+      "nested_depth": 0,
+      "quantityVariants": [
+       {
+        "quantity": 400.0,
+        "unit": "mcg",
+        "index": 0,
+        "operator": "=",
+        "quantity_parsed": true,
+        "serving_size_order": 1,
+        "serving_size_quantity": 1,
+        "serving_size_unit": "Veggie Capsule(s)",
+        "daily_value": 100.0,
+        "daily_value_target_group": "adult_4_plus",
+        "selected_for_analysis": true
+       }
+      ]
+     },
+     "name": "Quatrefolic",
+     "label_display_name": null,
+     "standardName": "Vitamin B9 (Folate)",
+     "ingredientGroup": "Folate",
      "quantity": 400.0,
      "unit": "mcg",
+     "dailyValue": 100.0,
+     "quantityVariants": null,
      "forms": [
       {
        "name": "Folate",
+       "ingredientId": 278757,
+       "order": 1,
        "prefix": null,
-       "percent": null
+       "percent": null,
+       "category": "vitamin",
+       "ingredientGroup": "Folate",
+       "uniiCode": "935E97BOY8"
       }
      ],
-     "notes": null,
-     "order": 6
+     "alternateNames": [],
+     "mapped": true,
+     "proprietaryBlend": false,
+     "disclosureLevel": null,
+     "parentBlend": null,
+     "isNestedIngredient": false,
+     "nestedIngredients": [],
+     "parentBlendMass": null,
+     "parentBlendUnit": null,
+     "hierarchyType": null,
+     "safety_flags": []
     }
    ],
    "expect": [
@@ -176,22 +518,78 @@
    "product": "Airborne Everyday",
    "active_ingredients": [
     {
-     "name": "Folic Acid",
-     "standardName": "Vitamin B9 (Folate)",
-     "ingredientGroup": "Folate",
+     "ingredientId": 279040,
+     "uniiCode": "935E97BOY8",
+     "order": 6,
+     "raw_category": "vitamin",
+     "raw_source_text": "Folic Acid",
+     "branded_token_extracted": null,
      "canonical_id": "vitamin_b9_folate",
      "canonical_source_db": "ingredient_quality_map",
+     "cleaner_match_method": "unii_exact_match",
+     "label_nutrient_context": "folic acid",
+     "source_section": "active",
+     "raw_source_path": "ingredientRows[5]",
+     "normalized_key": "folic_acid",
+     "cleaner_row_role": "active_scorable",
+     "score_eligible_by_cleaner": true,
+     "score_exclusion_reason": null,
+     "dose_class": "therapeutic_mass",
+     "raw_taxonomy": {
+      "category": "vitamin",
+      "ingredientGroup": "Folate",
+      "ingredientId": 279040,
+      "uniiCode": "935E97BOY8",
+      "forms": [
+       {
+        "name": "folic acid",
+        "source": "name_extraction"
+       }
+      ],
+      "parentBlend": null,
+      "isNestedIngredient": false,
+      "nested_depth": 0,
+      "quantityVariants": [
+       {
+        "quantity": 400.0,
+        "unit": "mcg",
+        "index": 0,
+        "operator": "=",
+        "quantity_parsed": true,
+        "serving_size_order": 1,
+        "serving_size_quantity": 1,
+        "serving_size_unit": "Tablet(s)",
+        "daily_value": 100.0,
+        "daily_value_target_group": "adult_4_plus",
+        "selected_for_analysis": true
+       }
+      ]
+     },
+     "name": "Folic Acid",
+     "label_display_name": null,
+     "standardName": "Vitamin B9 (Folate)",
+     "ingredientGroup": "Folate",
      "quantity": 400.0,
      "unit": "mcg",
+     "dailyValue": 100.0,
+     "quantityVariants": null,
      "forms": [
       {
        "name": "folic acid",
-       "prefix": null,
-       "percent": null
+       "source": "name_extraction"
       }
      ],
-     "notes": null,
-     "order": 6
+     "alternateNames": [],
+     "mapped": true,
+     "proprietaryBlend": false,
+     "disclosureLevel": null,
+     "parentBlend": null,
+     "isNestedIngredient": false,
+     "nestedIngredients": [],
+     "parentBlendMass": null,
+     "parentBlendUnit": null,
+     "hierarchyType": null,
+     "safety_flags": []
     }
    ],
    "expect": [
@@ -208,22 +606,90 @@
    "product": "Centrum Energy",
    "active_ingredients": [
     {
-     "name": "Vitamin B6",
-     "standardName": "Vitamin B6 (Pyridoxine)",
-     "ingredientGroup": "Vitamin B6 (pyridoxal 5-phosphate)",
+     "ingredientId": 198526,
+     "uniiCode": null,
+     "order": 4,
+     "raw_category": "vitamin",
+     "raw_source_text": "Vitamin B6",
+     "branded_token_extracted": null,
      "canonical_id": "vitamin_b6_pyridoxine",
      "canonical_source_db": "ingredient_quality_map",
+     "cleaner_match_method": null,
+     "label_nutrient_context": "vitamin b6",
+     "source_section": "active",
+     "raw_source_path": "ingredientRows[3]",
+     "normalized_key": "vitamin_b6",
+     "cleaner_row_role": "active_scorable",
+     "score_eligible_by_cleaner": true,
+     "score_exclusion_reason": null,
+     "dose_class": "therapeutic_mass",
+     "raw_taxonomy": {
+      "category": "vitamin",
+      "ingredientGroup": "Vitamin B6 (pyridoxal 5-phosphate)",
+      "ingredientId": 198526,
+      "uniiCode": null,
+      "forms": [
+       {
+        "name": "Pyridoxal 5-Phosphate",
+        "ingredientId": 280470,
+        "order": 1,
+        "prefix": "as",
+        "percent": null,
+        "category": "vitamin",
+        "ingredientGroup": "Vitamin B6",
+        "uniiCode": "F06SGE49M6"
+       }
+      ],
+      "parentBlend": null,
+      "isNestedIngredient": false,
+      "nested_depth": 0,
+      "quantityVariants": [
+       {
+        "quantity": 1.7,
+        "unit": "mg",
+        "index": 0,
+        "operator": "=",
+        "quantity_parsed": true,
+        "serving_size_order": 1,
+        "serving_size_quantity": 2,
+        "serving_size_unit": "Capsule(s)",
+        "daily_value": 100.0,
+        "daily_value_target_group": "adult_4_plus",
+        "selected_for_analysis": true
+       }
+      ]
+     },
+     "name": "Vitamin B6",
+     "label_display_name": null,
+     "standardName": "Vitamin B6 (Pyridoxine)",
+     "ingredientGroup": "Vitamin B6 (pyridoxal 5-phosphate)",
      "quantity": 1.7,
      "unit": "mg",
+     "dailyValue": 100.0,
+     "quantityVariants": null,
      "forms": [
       {
        "name": "Pyridoxal 5-Phosphate",
+       "ingredientId": 280470,
+       "order": 1,
        "prefix": "as",
-       "percent": null
+       "percent": null,
+       "category": "vitamin",
+       "ingredientGroup": "Vitamin B6",
+       "uniiCode": "F06SGE49M6"
       }
      ],
-     "notes": null,
-     "order": 4
+     "alternateNames": [],
+     "mapped": true,
+     "proprietaryBlend": false,
+     "disclosureLevel": null,
+     "parentBlend": null,
+     "isNestedIngredient": false,
+     "nestedIngredients": [],
+     "parentBlendMass": null,
+     "parentBlendUnit": null,
+     "hierarchyType": null,
+     "safety_flags": []
     }
    ],
    "expect": [
@@ -240,22 +706,91 @@
    "product": "Airborne + Everyday Stress Away Zesty Orange",
    "active_ingredients": [
     {
-     "name": "Vitamin B6",
-     "standardName": "Vitamin B6 (Pyridoxine)",
-     "ingredientGroup": "Vitamin B6",
+     "ingredientId": 280455,
+     "uniiCode": "KV2JZ1BI6Z",
+     "order": 9,
+     "raw_category": "vitamin",
+     "raw_source_text": "Vitamin B6",
+     "branded_token_extracted": null,
      "canonical_id": "vitamin_b6_pyridoxine",
      "canonical_source_db": "ingredient_quality_map",
+     "cleaner_match_method": "unii_exact_match",
+     "label_nutrient_context": "vitamin b6",
+     "source_section": "active",
+     "raw_source_path": "ingredientRows[6]",
+     "normalized_key": "vitamin_b6",
+     "cleaner_row_role": "active_scorable",
+     "score_eligible_by_cleaner": true,
+     "score_exclusion_reason": null,
+     "dose_class": "therapeutic_mass",
+     "raw_taxonomy": {
+      "category": "vitamin",
+      "ingredientGroup": "Vitamin B6",
+      "ingredientId": 280455,
+      "uniiCode": "KV2JZ1BI6Z",
+      "forms": [
+       {
+        "name": "Pyridoxine Hydrochloride",
+        "ingredientId": 280215,
+        "order": 1,
+        "prefix": null,
+        "percent": null,
+        "category": "vitamin",
+        "ingredientGroup": "Vitamin B6",
+        "uniiCode": "68Y4CF58BV"
+       }
+      ],
+      "parentBlend": null,
+      "isNestedIngredient": false,
+      "nested_depth": 0,
+      "quantityVariants": [
+       {
+        "quantity": 1.7,
+        "unit": "mg",
+        "index": 0,
+        "operator": "=",
+        "quantity_parsed": true,
+        "serving_size_order": 1,
+        "serving_size_quantity": 5,
+        "serving_size_unit": "Gram(s)",
+        "daily_value": 100.0,
+        "daily_value_target_group": "adult_4_plus",
+        "selected_for_analysis": true
+       }
+      ]
+     },
+     "name": "Vitamin B6",
+     "label_display_name": null,
+     "standardName": "Vitamin B6 (Pyridoxine)",
+     "ingredientGroup": "Vitamin B6",
      "quantity": 1.7,
      "unit": "mg",
+     "dailyValue": 100.0,
+     "quantityVariants": null,
      "forms": [
       {
        "name": "Pyridoxine Hydrochloride",
+       "ingredientId": 280215,
+       "order": 1,
        "prefix": null,
-       "percent": null
+       "percent": null,
+       "category": "vitamin",
+       "ingredientGroup": "Vitamin B6",
+       "uniiCode": "68Y4CF58BV"
       }
      ],
+     "alternateNames": [],
+     "mapped": true,
+     "proprietaryBlend": false,
+     "disclosureLevel": null,
+     "parentBlend": null,
+     "isNestedIngredient": false,
+     "nestedIngredients": [],
+     "parentBlendMass": null,
+     "parentBlendUnit": null,
+     "hierarchyType": null,
      "notes": "Vitamin B6 (Form: as Pyridoxine Hydrochloride) ",
-     "order": 9
+     "safety_flags": []
     }
    ],
    "expect": [
@@ -272,22 +807,91 @@
    "product": "Airborne Elderberry",
    "active_ingredients": [
     {
-     "name": "Vitamin D",
-     "standardName": "Vitamin D",
-     "ingredientGroup": "Vitamin D",
+     "ingredientId": 280179,
+     "uniiCode": "9VU1KI44GP",
+     "order": 6,
+     "raw_category": "vitamin",
+     "raw_source_text": "Vitamin D",
+     "branded_token_extracted": null,
      "canonical_id": "vitamin_d",
      "canonical_source_db": "ingredient_quality_map",
+     "cleaner_match_method": "unii_exact_match",
+     "label_nutrient_context": "vitamin d",
+     "source_section": "active",
+     "raw_source_path": "ingredientRows[3]",
+     "normalized_key": "vitamin_d",
+     "cleaner_row_role": "active_scorable",
+     "score_eligible_by_cleaner": true,
+     "score_exclusion_reason": null,
+     "dose_class": "therapeutic_mass",
+     "raw_taxonomy": {
+      "category": "vitamin",
+      "ingredientGroup": "Vitamin D",
+      "ingredientId": 280179,
+      "uniiCode": "9VU1KI44GP",
+      "forms": [
+       {
+        "name": "Cholecalciferol",
+        "ingredientId": 280176,
+        "order": 1,
+        "prefix": null,
+        "percent": null,
+        "category": "vitamin",
+        "ingredientGroup": "Vitamin D",
+        "uniiCode": "1C6V77QF41"
+       }
+      ],
+      "parentBlend": null,
+      "isNestedIngredient": false,
+      "nested_depth": 0,
+      "quantityVariants": [
+       {
+        "quantity": 6.3,
+        "unit": "mcg",
+        "index": 0,
+        "operator": "=",
+        "quantity_parsed": true,
+        "serving_size_order": 1,
+        "serving_size_quantity": 2,
+        "serving_size_unit": "Gummy(ies)",
+        "daily_value": 31.0,
+        "daily_value_target_group": "adult_4_plus",
+        "selected_for_analysis": true
+       }
+      ]
+     },
+     "name": "Vitamin D",
+     "label_display_name": null,
+     "standardName": "Vitamin D",
+     "ingredientGroup": "Vitamin D",
      "quantity": 6.3,
      "unit": "mcg",
+     "dailyValue": 31.0,
+     "quantityVariants": null,
      "forms": [
       {
        "name": "Cholecalciferol",
+       "ingredientId": 280176,
+       "order": 1,
        "prefix": null,
-       "percent": null
+       "percent": null,
+       "category": "vitamin",
+       "ingredientGroup": "Vitamin D",
+       "uniiCode": "1C6V77QF41"
       }
      ],
+     "alternateNames": [],
+     "mapped": true,
+     "proprietaryBlend": false,
+     "disclosureLevel": null,
+     "parentBlend": null,
+     "isNestedIngredient": false,
+     "nestedIngredients": [],
+     "parentBlendMass": null,
+     "parentBlendUnit": null,
+     "hierarchyType": null,
      "notes": "Vitamin D (Form: as Cholecalciferol) ",
-     "order": 6
+     "safety_flags": []
     }
    ],
    "expect": [
@@ -304,22 +908,91 @@
    "product": "Daily Multiple Plus Iron",
    "active_ingredients": [
     {
-     "name": "Vitamin D",
-     "standardName": "Vitamin D",
-     "ingredientGroup": "Vitamin D",
+     "ingredientId": 281609,
+     "uniiCode": "VS041H42XC",
+     "order": 3,
+     "raw_category": "vitamin",
+     "raw_source_text": "Vitamin D",
+     "branded_token_extracted": null,
      "canonical_id": "vitamin_d",
      "canonical_source_db": "ingredient_quality_map",
+     "cleaner_match_method": null,
+     "label_nutrient_context": "vitamin d",
+     "source_section": "active",
+     "raw_source_path": "ingredientRows[2]",
+     "normalized_key": "vitamin_d",
+     "cleaner_row_role": "active_scorable",
+     "score_eligible_by_cleaner": true,
+     "score_exclusion_reason": null,
+     "dose_class": "therapeutic_mass",
+     "raw_taxonomy": {
+      "category": "vitamin",
+      "ingredientGroup": "Vitamin D",
+      "ingredientId": 281609,
+      "uniiCode": "VS041H42XC",
+      "forms": [
+       {
+        "name": "Ergocalciferol",
+        "ingredientId": 280175,
+        "order": 1,
+        "prefix": null,
+        "percent": null,
+        "category": "vitamin",
+        "ingredientGroup": "Vitamin D",
+        "uniiCode": "VS041H42XC"
+       }
+      ],
+      "parentBlend": null,
+      "isNestedIngredient": false,
+      "nested_depth": 0,
+      "quantityVariants": [
+       {
+        "quantity": 400.0,
+        "unit": "IU",
+        "index": 0,
+        "operator": "=",
+        "quantity_parsed": true,
+        "serving_size_order": 1,
+        "serving_size_quantity": 1,
+        "serving_size_unit": "Tablet(s)",
+        "daily_value": 100.0,
+        "daily_value_target_group": "adult_4_plus",
+        "selected_for_analysis": true
+       }
+      ]
+     },
+     "name": "Vitamin D",
+     "label_display_name": null,
+     "standardName": "Vitamin D",
+     "ingredientGroup": "Vitamin D",
      "quantity": 400.0,
      "unit": "IU",
+     "dailyValue": 100.0,
+     "quantityVariants": null,
      "forms": [
       {
        "name": "Ergocalciferol",
+       "ingredientId": 280175,
+       "order": 1,
        "prefix": null,
-       "percent": null
+       "percent": null,
+       "category": "vitamin",
+       "ingredientGroup": "Vitamin D",
+       "uniiCode": "VS041H42XC"
       }
      ],
+     "alternateNames": [],
+     "mapped": true,
+     "proprietaryBlend": false,
+     "disclosureLevel": null,
+     "parentBlend": null,
+     "isNestedIngredient": false,
+     "nestedIngredients": [],
+     "parentBlendMass": null,
+     "parentBlendUnit": null,
+     "hierarchyType": null,
      "notes": "Vitamin D (Form: as Ergocalciferol) ",
-     "order": 3
+     "safety_flags": []
     }
    ],
    "expect": [
@@ -336,22 +1009,91 @@
    "product": "Probiotic Assorted Fruit Flavors",
    "active_ingredients": [
     {
-     "name": "Vitamin A",
-     "standardName": "Vitamin A",
-     "ingredientGroup": "Vitamin A",
+     "ingredientId": 281599,
+     "uniiCode": "81G40H8B0T",
+     "order": 6,
+     "raw_category": "vitamin",
+     "raw_source_text": "Vitamin A",
+     "branded_token_extracted": null,
      "canonical_id": "vitamin_a",
      "canonical_source_db": "ingredient_quality_map",
+     "cleaner_match_method": "unii_exact_match",
+     "label_nutrient_context": "vitamin a",
+     "source_section": "active",
+     "raw_source_path": "ingredientRows[3]",
+     "normalized_key": "vitamin_a",
+     "cleaner_row_role": "active_scorable",
+     "score_eligible_by_cleaner": true,
+     "score_exclusion_reason": null,
+     "dose_class": "therapeutic_mass",
+     "raw_taxonomy": {
+      "category": "vitamin",
+      "ingredientGroup": "Vitamin A",
+      "ingredientId": 281599,
+      "uniiCode": "81G40H8B0T",
+      "forms": [
+       {
+        "name": "Retinyl Palmitate",
+        "ingredientId": 281212,
+        "order": 1,
+        "prefix": null,
+        "percent": null,
+        "category": "vitamin",
+        "ingredientGroup": "Vitamin A",
+        "uniiCode": "1D1K0N0VVC"
+       }
+      ],
+      "parentBlend": null,
+      "isNestedIngredient": false,
+      "nested_depth": 0,
+      "quantityVariants": [
+       {
+        "quantity": 60.0,
+        "unit": "mcg",
+        "index": 0,
+        "operator": "=",
+        "quantity_parsed": true,
+        "serving_size_order": 1,
+        "serving_size_quantity": 3,
+        "serving_size_unit": "Gummie(s)",
+        "daily_value": 7.0,
+        "daily_value_target_group": "adult_4_plus",
+        "selected_for_analysis": true
+       }
+      ]
+     },
+     "name": "Vitamin A",
+     "label_display_name": null,
+     "standardName": "Vitamin A",
+     "ingredientGroup": "Vitamin A",
      "quantity": 60.0,
      "unit": "mcg",
+     "dailyValue": 7.0,
+     "quantityVariants": null,
      "forms": [
       {
        "name": "Retinyl Palmitate",
+       "ingredientId": 281212,
+       "order": 1,
        "prefix": null,
-       "percent": null
+       "percent": null,
+       "category": "vitamin",
+       "ingredientGroup": "Vitamin A",
+       "uniiCode": "1D1K0N0VVC"
       }
      ],
+     "alternateNames": [],
+     "mapped": true,
+     "proprietaryBlend": false,
+     "disclosureLevel": null,
+     "parentBlend": null,
+     "isNestedIngredient": false,
+     "nestedIngredients": [],
+     "parentBlendMass": null,
+     "parentBlendUnit": null,
+     "hierarchyType": null,
      "notes": "Vitamin A (Form: as Retinyl Palmitate) ",
-     "order": 6
+     "safety_flags": []
     }
    ],
    "expect": [
@@ -368,22 +1110,90 @@
    "product": "Beta-Immune Booster Zesty Orange",
    "active_ingredients": [
     {
-     "name": "Vitamin C",
-     "standardName": "Vitamin C",
-     "ingredientGroup": "Vitamin C",
+     "ingredientId": 278603,
+     "uniiCode": "PQ6CK8PD0R",
+     "order": 4,
+     "raw_category": "vitamin",
+     "raw_source_text": "Vitamin C",
+     "branded_token_extracted": null,
      "canonical_id": "vitamin_c",
      "canonical_source_db": "ingredient_quality_map",
+     "cleaner_match_method": "unii_exact_match",
+     "label_nutrient_context": "vitamin c",
+     "source_section": "active",
+     "raw_source_path": "ingredientRows[3]",
+     "normalized_key": "vitamin_c",
+     "cleaner_row_role": "active_scorable",
+     "score_eligible_by_cleaner": true,
+     "score_exclusion_reason": null,
+     "dose_class": "therapeutic_mass",
+     "raw_taxonomy": {
+      "category": "vitamin",
+      "ingredientGroup": "Vitamin C",
+      "ingredientId": 278603,
+      "uniiCode": "PQ6CK8PD0R",
+      "forms": [
+       {
+        "name": "Ascorbic Acid",
+        "ingredientId": 278604,
+        "order": 1,
+        "prefix": null,
+        "percent": null,
+        "category": "vitamin",
+        "ingredientGroup": "Vitamin C",
+        "uniiCode": "PQ6CK8PD0R"
+       }
+      ],
+      "parentBlend": null,
+      "isNestedIngredient": false,
+      "nested_depth": 0,
+      "quantityVariants": [
+       {
+        "quantity": 500.0,
+        "unit": "mg",
+        "index": 0,
+        "operator": "=",
+        "quantity_parsed": true,
+        "serving_size_order": 1,
+        "serving_size_quantity": 5,
+        "serving_size_unit": "Gram(s)",
+        "daily_value": 556.0,
+        "daily_value_target_group": "adult_4_plus",
+        "selected_for_analysis": true
+       }
+      ]
+     },
+     "name": "Vitamin C",
+     "label_display_name": null,
+     "standardName": "Vitamin C",
+     "ingredientGroup": "Vitamin C",
      "quantity": 500.0,
      "unit": "mg",
+     "dailyValue": 556.0,
+     "quantityVariants": null,
      "forms": [
       {
        "name": "Ascorbic Acid",
+       "ingredientId": 278604,
+       "order": 1,
        "prefix": null,
-       "percent": null
+       "percent": null,
+       "category": "vitamin",
+       "ingredientGroup": "Vitamin C",
+       "uniiCode": "PQ6CK8PD0R"
       }
      ],
-     "notes": null,
-     "order": 4
+     "alternateNames": [],
+     "mapped": true,
+     "proprietaryBlend": false,
+     "disclosureLevel": null,
+     "parentBlend": null,
+     "isNestedIngredient": false,
+     "nestedIngredients": [],
+     "parentBlendMass": null,
+     "parentBlendUnit": null,
+     "hierarchyType": null,
+     "safety_flags": []
     }
    ],
    "expect": [
@@ -400,22 +1210,91 @@
    "product": "Spectravite Advanced Formula",
    "active_ingredients": [
     {
-     "name": "Niacin",
-     "standardName": "Vitamin B3 (Niacin)",
-     "ingredientGroup": "Niacin",
+     "ingredientId": 280746,
+     "uniiCode": "2679MF687A",
+     "order": 8,
+     "raw_category": "vitamin",
+     "raw_source_text": "Niacin",
+     "branded_token_extracted": null,
      "canonical_id": "vitamin_b3_niacin",
      "canonical_source_db": "ingredient_quality_map",
+     "cleaner_match_method": "unii_exact_match",
+     "label_nutrient_context": "niacin",
+     "source_section": "active",
+     "raw_source_path": "ingredientRows[7]",
+     "normalized_key": "niacin",
+     "cleaner_row_role": "active_scorable",
+     "score_eligible_by_cleaner": true,
+     "score_exclusion_reason": null,
+     "dose_class": "therapeutic_mass",
+     "raw_taxonomy": {
+      "category": "vitamin",
+      "ingredientGroup": "Niacin",
+      "ingredientId": 280746,
+      "uniiCode": "2679MF687A",
+      "forms": [
+       {
+        "name": "Niacinamide",
+        "ingredientId": 280445,
+        "order": 1,
+        "prefix": null,
+        "percent": null,
+        "category": "vitamin",
+        "ingredientGroup": "Niacin",
+        "uniiCode": "25X51I8RD4"
+       }
+      ],
+      "parentBlend": null,
+      "isNestedIngredient": false,
+      "nested_depth": 0,
+      "quantityVariants": [
+       {
+        "quantity": 20.0,
+        "unit": "mg",
+        "index": 0,
+        "operator": "=",
+        "quantity_parsed": true,
+        "serving_size_order": 1,
+        "serving_size_quantity": 1,
+        "serving_size_unit": "Tablet(s)",
+        "daily_value": 100.0,
+        "daily_value_target_group": "adult_4_plus",
+        "selected_for_analysis": true
+       }
+      ]
+     },
+     "name": "Niacin",
+     "label_display_name": null,
+     "standardName": "Vitamin B3 (Niacin)",
+     "ingredientGroup": "Niacin",
      "quantity": 20.0,
      "unit": "mg",
+     "dailyValue": 100.0,
+     "quantityVariants": null,
      "forms": [
       {
        "name": "Niacinamide",
+       "ingredientId": 280445,
+       "order": 1,
        "prefix": null,
-       "percent": null
+       "percent": null,
+       "category": "vitamin",
+       "ingredientGroup": "Niacin",
+       "uniiCode": "25X51I8RD4"
       }
      ],
+     "alternateNames": [],
+     "mapped": true,
+     "proprietaryBlend": false,
+     "disclosureLevel": null,
+     "parentBlend": null,
+     "isNestedIngredient": false,
+     "nestedIngredients": [],
+     "parentBlendMass": null,
+     "parentBlendUnit": null,
+     "hierarchyType": null,
      "notes": "Niacin (Form: as Niacinamide) ",
-     "order": 8
+     "safety_flags": []
     }
    ],
    "expect": [
@@ -432,22 +1311,91 @@
    "product": "Real Niacin (As Nicotinic Acid) 500 mg",
    "active_ingredients": [
     {
-     "name": "Niacin",
-     "standardName": "Vitamin B3 (Niacin)",
-     "ingredientGroup": "Niacin",
+     "ingredientId": 280748,
+     "uniiCode": "2679MF687A",
+     "order": 1,
+     "raw_category": "vitamin",
+     "raw_source_text": "Niacin",
+     "branded_token_extracted": null,
      "canonical_id": "vitamin_b3_niacin",
      "canonical_source_db": "ingredient_quality_map",
+     "cleaner_match_method": "unii_exact_match",
+     "label_nutrient_context": "niacin",
+     "source_section": "active",
+     "raw_source_path": "ingredientRows[0]",
+     "normalized_key": "niacin",
+     "cleaner_row_role": "active_scorable",
+     "score_eligible_by_cleaner": true,
+     "score_exclusion_reason": null,
+     "dose_class": "therapeutic_mass",
+     "raw_taxonomy": {
+      "category": "vitamin",
+      "ingredientGroup": "Niacin",
+      "ingredientId": 280748,
+      "uniiCode": "2679MF687A",
+      "forms": [
+       {
+        "name": "Nicotinic Acid",
+        "ingredientId": 280749,
+        "order": 1,
+        "prefix": null,
+        "percent": null,
+        "category": "vitamin",
+        "ingredientGroup": "Vitamin B3",
+        "uniiCode": "2679MF687A"
+       }
+      ],
+      "parentBlend": null,
+      "isNestedIngredient": false,
+      "nested_depth": 0,
+      "quantityVariants": [
+       {
+        "quantity": 500.0,
+        "unit": "mg",
+        "index": 0,
+        "operator": "=",
+        "quantity_parsed": true,
+        "serving_size_order": 1,
+        "serving_size_quantity": 1,
+        "serving_size_unit": "Tablet(s)",
+        "daily_value": 2500.0,
+        "daily_value_target_group": "adult_4_plus",
+        "selected_for_analysis": true
+       }
+      ]
+     },
+     "name": "Niacin",
+     "label_display_name": null,
+     "standardName": "Vitamin B3 (Niacin)",
+     "ingredientGroup": "Niacin",
      "quantity": 500.0,
      "unit": "mg",
+     "dailyValue": 2500.0,
+     "quantityVariants": null,
      "forms": [
       {
        "name": "Nicotinic Acid",
+       "ingredientId": 280749,
+       "order": 1,
        "prefix": null,
-       "percent": null
+       "percent": null,
+       "category": "vitamin",
+       "ingredientGroup": "Vitamin B3",
+       "uniiCode": "2679MF687A"
       }
      ],
+     "alternateNames": [],
+     "mapped": true,
+     "proprietaryBlend": false,
+     "disclosureLevel": null,
+     "parentBlend": null,
+     "isNestedIngredient": false,
+     "nestedIngredients": [],
+     "parentBlendMass": null,
+     "parentBlendUnit": null,
+     "hierarchyType": null,
      "notes": "Niacin (Form: as Nicotinic Acid) ",
-     "order": 1
+     "safety_flags": []
     }
    ],
    "expect": [
@@ -464,22 +1412,90 @@
    "product": "Magnesium Glycinate",
    "active_ingredients": [
     {
-     "name": "Magnesium",
-     "standardName": "Magnesium",
-     "ingredientGroup": "Magnesium",
+     "ingredientId": 20212,
+     "uniiCode": null,
+     "order": 1,
+     "raw_category": "mineral",
+     "raw_source_text": "Magnesium",
+     "branded_token_extracted": null,
      "canonical_id": "magnesium",
      "canonical_source_db": "ingredient_quality_map",
+     "cleaner_match_method": null,
+     "label_nutrient_context": "magnesium",
+     "source_section": "active",
+     "raw_source_path": "ingredientRows[0]",
+     "normalized_key": "magnesium",
+     "cleaner_row_role": "active_scorable",
+     "score_eligible_by_cleaner": true,
+     "score_exclusion_reason": null,
+     "dose_class": "therapeutic_mass",
+     "raw_taxonomy": {
+      "category": "mineral",
+      "ingredientGroup": "Magnesium",
+      "ingredientId": 20212,
+      "uniiCode": null,
+      "forms": [
+       {
+        "name": "Magnesium Glycinate",
+        "ingredientId": 12536,
+        "order": 1,
+        "prefix": "as",
+        "percent": null,
+        "category": "non-nutrient/non-botanical",
+        "ingredientGroup": "Magnesium",
+        "uniiCode": null
+       }
+      ],
+      "parentBlend": null,
+      "isNestedIngredient": false,
+      "nested_depth": 0,
+      "quantityVariants": [
+       {
+        "quantity": 225.0,
+        "unit": "mg",
+        "index": 0,
+        "operator": "=",
+        "quantity_parsed": true,
+        "serving_size_order": 1,
+        "serving_size_quantity": 1250,
+        "serving_size_unit": "mg",
+        "daily_value": 54.0,
+        "daily_value_target_group": "adult_4_plus",
+        "selected_for_analysis": true
+       }
+      ]
+     },
+     "name": "Magnesium",
+     "label_display_name": null,
+     "standardName": "Magnesium",
+     "ingredientGroup": "Magnesium",
      "quantity": 225.0,
      "unit": "mg",
+     "dailyValue": 54.0,
+     "quantityVariants": null,
      "forms": [
       {
        "name": "Magnesium Glycinate",
+       "ingredientId": 12536,
+       "order": 1,
        "prefix": "as",
-       "percent": null
+       "percent": null,
+       "category": "non-nutrient/non-botanical",
+       "ingredientGroup": "Magnesium",
+       "uniiCode": null
       }
      ],
-     "notes": null,
-     "order": 1
+     "alternateNames": [],
+     "mapped": true,
+     "proprietaryBlend": false,
+     "disclosureLevel": null,
+     "parentBlend": null,
+     "isNestedIngredient": false,
+     "nestedIngredients": [],
+     "parentBlendMass": null,
+     "parentBlendUnit": null,
+     "hierarchyType": null,
+     "safety_flags": []
     }
    ],
    "expect": [
@@ -496,22 +1512,91 @@
    "product": "Airborne Zesty Orange",
    "active_ingredients": [
     {
-     "name": "Magnesium",
-     "standardName": "Magnesium",
-     "ingredientGroup": "Magnesium",
+     "ingredientId": 100415,
+     "uniiCode": null,
+     "order": 9,
+     "raw_category": "mineral",
+     "raw_source_text": "Magnesium",
+     "branded_token_extracted": null,
      "canonical_id": "magnesium",
      "canonical_source_db": "ingredient_quality_map",
+     "cleaner_match_method": null,
+     "label_nutrient_context": "magnesium",
+     "source_section": "active",
+     "raw_source_path": "ingredientRows[6]",
+     "normalized_key": "magnesium",
+     "cleaner_row_role": "active_scorable",
+     "score_eligible_by_cleaner": true,
+     "score_exclusion_reason": null,
+     "dose_class": "therapeutic_mass",
+     "raw_taxonomy": {
+      "category": "mineral",
+      "ingredientGroup": "Magnesium",
+      "ingredientId": 100415,
+      "uniiCode": null,
+      "forms": [
+       {
+        "name": "Magnesium Oxide",
+        "ingredientId": 13625,
+        "order": 1,
+        "prefix": "as",
+        "percent": null,
+        "category": "mineral",
+        "ingredientGroup": "Magnesium",
+        "uniiCode": null
+       }
+      ],
+      "parentBlend": null,
+      "isNestedIngredient": false,
+      "nested_depth": 0,
+      "quantityVariants": [
+       {
+        "quantity": 20.0,
+        "unit": "mg",
+        "index": 0,
+        "operator": "=",
+        "quantity_parsed": true,
+        "serving_size_order": 1,
+        "serving_size_quantity": 4,
+        "serving_size_unit": "Tablet(s)",
+        "daily_value": 5.0,
+        "daily_value_target_group": "adult_4_plus",
+        "selected_for_analysis": true
+       }
+      ]
+     },
+     "name": "Magnesium",
+     "label_display_name": null,
+     "standardName": "Magnesium",
+     "ingredientGroup": "Magnesium",
      "quantity": 20.0,
      "unit": "mg",
+     "dailyValue": 5.0,
+     "quantityVariants": null,
      "forms": [
       {
        "name": "Magnesium Oxide",
+       "ingredientId": 13625,
+       "order": 1,
        "prefix": "as",
-       "percent": null
+       "percent": null,
+       "category": "mineral",
+       "ingredientGroup": "Magnesium",
+       "uniiCode": null
       }
      ],
+     "alternateNames": [],
+     "mapped": true,
+     "proprietaryBlend": false,
+     "disclosureLevel": null,
+     "parentBlend": null,
+     "isNestedIngredient": false,
+     "nestedIngredients": [],
+     "parentBlendMass": null,
+     "parentBlendUnit": null,
+     "hierarchyType": null,
      "notes": "Magnesium (Form: as Magnesium Oxide) ",
-     "order": 9
+     "safety_flags": []
     }
    ],
    "expect": [
@@ -528,22 +1613,90 @@
    "product": "Magnesium Citrate (500 mg)",
    "active_ingredients": [
     {
-     "name": "Magnesium",
-     "standardName": "Magnesium",
-     "ingredientGroup": "Magnesium",
+     "ingredientId": 6520,
+     "uniiCode": null,
+     "order": 1,
+     "raw_category": "mineral",
+     "raw_source_text": "Magnesium",
+     "branded_token_extracted": null,
      "canonical_id": "magnesium",
      "canonical_source_db": "ingredient_quality_map",
+     "cleaner_match_method": null,
+     "label_nutrient_context": "magnesium",
+     "source_section": "active",
+     "raw_source_path": "ingredientRows[0]",
+     "normalized_key": "magnesium",
+     "cleaner_row_role": "active_scorable",
+     "score_eligible_by_cleaner": true,
+     "score_exclusion_reason": null,
+     "dose_class": "therapeutic_mass",
+     "raw_taxonomy": {
+      "category": "mineral",
+      "ingredientGroup": "Magnesium",
+      "ingredientId": 6520,
+      "uniiCode": null,
+      "forms": [
+       {
+        "name": "Magnesium Citrate",
+        "ingredientId": 4045,
+        "order": 1,
+        "prefix": "as",
+        "percent": null,
+        "category": "mineral",
+        "ingredientGroup": "Magnesium",
+        "uniiCode": null
+       }
+      ],
+      "parentBlend": null,
+      "isNestedIngredient": false,
+      "nested_depth": 0,
+      "quantityVariants": [
+       {
+        "quantity": 330.0,
+        "unit": "mg",
+        "index": 0,
+        "operator": "=",
+        "quantity_parsed": true,
+        "serving_size_order": 1,
+        "serving_size_quantity": 4,
+        "serving_size_unit": "Capsule(s)",
+        "daily_value": 79.0,
+        "daily_value_target_group": "adult_4_plus",
+        "selected_for_analysis": true
+       }
+      ]
+     },
+     "name": "Magnesium",
+     "label_display_name": null,
+     "standardName": "Magnesium",
+     "ingredientGroup": "Magnesium",
      "quantity": 330.0,
      "unit": "mg",
+     "dailyValue": 79.0,
+     "quantityVariants": null,
      "forms": [
       {
        "name": "Magnesium Citrate",
+       "ingredientId": 4045,
+       "order": 1,
        "prefix": "as",
-       "percent": null
+       "percent": null,
+       "category": "mineral",
+       "ingredientGroup": "Magnesium",
+       "uniiCode": null
       }
      ],
-     "notes": null,
-     "order": 1
+     "alternateNames": [],
+     "mapped": true,
+     "proprietaryBlend": false,
+     "disclosureLevel": null,
+     "parentBlend": null,
+     "isNestedIngredient": false,
+     "nestedIngredients": [],
+     "parentBlendMass": null,
+     "parentBlendUnit": null,
+     "hierarchyType": null,
+     "safety_flags": []
     }
    ],
    "expect": [
@@ -560,22 +1713,92 @@
    "product": "Zinc Picolinate",
    "active_ingredients": [
     {
-     "name": "Zinc",
-     "standardName": "Zinc",
-     "ingredientGroup": "Zinc",
+     "ingredientId": 292825,
+     "uniiCode": "J41CSQ7QDS",
+     "order": 1,
+     "raw_category": "mineral",
+     "raw_source_text": "Zinc",
+     "branded_token_extracted": null,
      "canonical_id": "zinc",
      "canonical_source_db": "ingredient_quality_map",
+     "cleaner_match_method": "unii_exact_match",
+     "label_nutrient_context": "zinc",
+     "source_section": "active",
+     "raw_source_path": "ingredientRows[0]",
+     "normalized_key": "zinc",
+     "cleaner_row_role": "active_scorable",
+     "score_eligible_by_cleaner": true,
+     "score_exclusion_reason": null,
+     "dose_class": "therapeutic_mass",
+     "raw_taxonomy": {
+      "category": "mineral",
+      "ingredientGroup": "Zinc",
+      "ingredientId": 292825,
+      "uniiCode": "J41CSQ7QDS",
+      "forms": [
+       {
+        "name": "Zinc Picolinate",
+        "ingredientId": 292822,
+        "order": 1,
+        "prefix": null,
+        "percent": null,
+        "category": "mineral",
+        "ingredientGroup": "Zinc",
+        "uniiCode": "ALO92O31SE"
+       }
+      ],
+      "parentBlend": null,
+      "isNestedIngredient": false,
+      "nested_depth": 0,
+      "quantityVariants": [
+       {
+        "quantity": 11.0,
+        "unit": "mg",
+        "index": 0,
+        "operator": "=",
+        "quantity_parsed": true,
+        "serving_size_order": 1,
+        "serving_size_quantity": 1,
+        "serving_size_unit": "Softgel(s)",
+        "daily_value": 100.0,
+        "daily_value_target_group": "adult_4_plus",
+        "selected_for_analysis": true
+       }
+      ]
+     },
+     "name": "Zinc",
+     "label_display_name": null,
+     "standardName": "Zinc",
+     "ingredientGroup": "Zinc",
      "quantity": 11.0,
      "unit": "mg",
+     "dailyValue": 100.0,
+     "quantityVariants": null,
      "forms": [
       {
        "name": "Zinc Picolinate",
+       "ingredientId": 292822,
+       "order": 1,
        "prefix": null,
-       "percent": null
+       "percent": null,
+       "category": "mineral",
+       "ingredientGroup": "Zinc",
+       "uniiCode": "ALO92O31SE"
       }
      ],
-     "notes": null,
-     "order": 1
+     "alternateNames": [
+      "Zn"
+     ],
+     "mapped": true,
+     "proprietaryBlend": false,
+     "disclosureLevel": null,
+     "parentBlend": null,
+     "isNestedIngredient": false,
+     "nestedIngredients": [],
+     "parentBlendMass": null,
+     "parentBlendUnit": null,
+     "hierarchyType": null,
+     "safety_flags": []
     }
    ],
    "expect": [
@@ -592,22 +1815,92 @@
    "product": "Gummies Kids Multi with Iron Orange Flavor",
    "active_ingredients": [
     {
-     "name": "Zinc",
-     "standardName": "Zinc",
-     "ingredientGroup": "Zinc",
+     "ingredientId": 292474,
+     "uniiCode": "J41CSQ7QDS",
+     "order": 19,
+     "raw_category": "mineral",
+     "raw_source_text": "Zinc",
+     "branded_token_extracted": null,
      "canonical_id": "zinc",
      "canonical_source_db": "ingredient_quality_map",
+     "cleaner_match_method": "unii_exact_match",
+     "label_nutrient_context": "zinc",
+     "source_section": "active",
+     "raw_source_path": "ingredientRows[16]",
+     "normalized_key": "zinc",
+     "cleaner_row_role": "active_scorable",
+     "score_eligible_by_cleaner": true,
+     "score_exclusion_reason": null,
+     "dose_class": "therapeutic_mass",
+     "raw_taxonomy": {
+      "category": "mineral",
+      "ingredientGroup": "Zinc",
+      "ingredientId": 292474,
+      "uniiCode": "J41CSQ7QDS",
+      "forms": [
+       {
+        "name": "Zinc Bisglycinate",
+        "ingredientId": 292468,
+        "order": 1,
+        "prefix": null,
+        "percent": null,
+        "category": "mineral",
+        "ingredientGroup": "Zinc",
+        "uniiCode": "681VJX72FE"
+       }
+      ],
+      "parentBlend": null,
+      "isNestedIngredient": false,
+      "nested_depth": 0,
+      "quantityVariants": [
+       {
+        "quantity": 5.5,
+        "unit": "mg",
+        "index": 0,
+        "operator": "=",
+        "quantity_parsed": true,
+        "serving_size_order": 1,
+        "serving_size_quantity": 3,
+        "serving_size_unit": "Gummy(ies)",
+        "daily_value": 50.0,
+        "daily_value_target_group": "adult_4_plus",
+        "selected_for_analysis": true
+       }
+      ]
+     },
+     "name": "Zinc",
+     "label_display_name": null,
+     "standardName": "Zinc",
+     "ingredientGroup": "Zinc",
      "quantity": 5.5,
      "unit": "mg",
+     "dailyValue": 50.0,
+     "quantityVariants": null,
      "forms": [
       {
        "name": "Zinc Bisglycinate",
+       "ingredientId": 292468,
+       "order": 1,
        "prefix": null,
-       "percent": null
+       "percent": null,
+       "category": "mineral",
+       "ingredientGroup": "Zinc",
+       "uniiCode": "681VJX72FE"
       }
      ],
-     "notes": null,
-     "order": 19
+     "alternateNames": [
+      "Zn"
+     ],
+     "mapped": true,
+     "proprietaryBlend": false,
+     "disclosureLevel": null,
+     "parentBlend": null,
+     "isNestedIngredient": false,
+     "nestedIngredients": [],
+     "parentBlendMass": null,
+     "parentBlendUnit": null,
+     "hierarchyType": null,
+     "safety_flags": []
     }
    ],
    "expect": [
@@ -624,22 +1917,93 @@
    "product": "Beta-Immune Booster Zesty Orange",
    "active_ingredients": [
     {
-     "name": "Zinc",
-     "standardName": "Zinc",
-     "ingredientGroup": "Zinc",
+     "ingredientId": 292524,
+     "uniiCode": "J41CSQ7QDS",
+     "order": 7,
+     "raw_category": "mineral",
+     "raw_source_text": "Zinc",
+     "branded_token_extracted": null,
      "canonical_id": "zinc",
      "canonical_source_db": "ingredient_quality_map",
+     "cleaner_match_method": "unii_exact_match",
+     "label_nutrient_context": "zinc",
+     "source_section": "active",
+     "raw_source_path": "ingredientRows[6]",
+     "normalized_key": "zinc",
+     "cleaner_row_role": "active_scorable",
+     "score_eligible_by_cleaner": true,
+     "score_exclusion_reason": null,
+     "dose_class": "therapeutic_mass",
+     "raw_taxonomy": {
+      "category": "mineral",
+      "ingredientGroup": "Zinc",
+      "ingredientId": 292524,
+      "uniiCode": "J41CSQ7QDS",
+      "forms": [
+       {
+        "name": "Zinc Oxide",
+        "ingredientId": 292523,
+        "order": 1,
+        "prefix": null,
+        "percent": null,
+        "category": "mineral",
+        "ingredientGroup": "Zinc",
+        "uniiCode": "SOI2LOH54Z"
+       }
+      ],
+      "parentBlend": null,
+      "isNestedIngredient": false,
+      "nested_depth": 0,
+      "quantityVariants": [
+       {
+        "quantity": 8.0,
+        "unit": "mg",
+        "index": 0,
+        "operator": "=",
+        "quantity_parsed": true,
+        "serving_size_order": 1,
+        "serving_size_quantity": 5,
+        "serving_size_unit": "Gram(s)",
+        "daily_value": 73.0,
+        "daily_value_target_group": "adult_4_plus",
+        "selected_for_analysis": true
+       }
+      ]
+     },
+     "name": "Zinc",
+     "label_display_name": null,
+     "standardName": "Zinc",
+     "ingredientGroup": "Zinc",
      "quantity": 8.0,
      "unit": "mg",
+     "dailyValue": 73.0,
+     "quantityVariants": null,
      "forms": [
       {
        "name": "Zinc Oxide",
+       "ingredientId": 292523,
+       "order": 1,
        "prefix": null,
-       "percent": null
+       "percent": null,
+       "category": "mineral",
+       "ingredientGroup": "Zinc",
+       "uniiCode": "SOI2LOH54Z"
       }
      ],
+     "alternateNames": [
+      "Zn"
+     ],
+     "mapped": true,
+     "proprietaryBlend": false,
+     "disclosureLevel": null,
+     "parentBlend": null,
+     "isNestedIngredient": false,
+     "nestedIngredients": [],
+     "parentBlendMass": null,
+     "parentBlendUnit": null,
+     "hierarchyType": null,
      "notes": "Zinc (Form: as Zinc Oxide) ",
-     "order": 7
+     "safety_flags": []
     }
    ],
    "expect": [
@@ -656,22 +2020,90 @@
    "product": "Baby & Me 2 Prenatal Multi",
    "active_ingredients": [
     {
-     "name": "Iron",
-     "standardName": "Iron",
-     "ingredientGroup": "Iron",
+     "ingredientId": 280050,
+     "uniiCode": null,
+     "order": 16,
+     "raw_category": "mineral",
+     "raw_source_text": "Iron",
+     "branded_token_extracted": null,
      "canonical_id": "iron",
      "canonical_source_db": "ingredient_quality_map",
+     "cleaner_match_method": null,
+     "label_nutrient_context": "iron",
+     "source_section": "active",
+     "raw_source_path": "ingredientRows[14]",
+     "normalized_key": "iron",
+     "cleaner_row_role": "active_scorable",
+     "score_eligible_by_cleaner": true,
+     "score_exclusion_reason": null,
+     "dose_class": "therapeutic_mass",
+     "raw_taxonomy": {
+      "category": "mineral",
+      "ingredientGroup": "Iron",
+      "ingredientId": 280050,
+      "uniiCode": null,
+      "forms": [
+       {
+        "name": "Iron Bisglycinate",
+        "ingredientId": 62336,
+        "order": 1,
+        "prefix": "as fermented",
+        "percent": null,
+        "category": "non-nutrient/non-botanical",
+        "ingredientGroup": "Iron",
+        "uniiCode": null
+       }
+      ],
+      "parentBlend": null,
+      "isNestedIngredient": false,
+      "nested_depth": 0,
+      "quantityVariants": [
+       {
+        "quantity": 18.0,
+        "unit": "mg",
+        "index": 0,
+        "operator": "=",
+        "quantity_parsed": true,
+        "serving_size_order": 1,
+        "serving_size_quantity": 2,
+        "serving_size_unit": "Tablet(s)",
+        "daily_value": 67.0,
+        "daily_value_target_group": "pregnant_lactating",
+        "selected_for_analysis": true
+       }
+      ]
+     },
+     "name": "Iron",
+     "label_display_name": null,
+     "standardName": "Iron",
+     "ingredientGroup": "Iron",
      "quantity": 18.0,
      "unit": "mg",
+     "dailyValue": 67.0,
+     "quantityVariants": null,
      "forms": [
       {
        "name": "Iron Bisglycinate",
+       "ingredientId": 62336,
+       "order": 1,
        "prefix": "as fermented",
-       "percent": null
+       "percent": null,
+       "category": "non-nutrient/non-botanical",
+       "ingredientGroup": "Iron",
+       "uniiCode": null
       }
      ],
-     "notes": null,
-     "order": 16
+     "alternateNames": [],
+     "mapped": true,
+     "proprietaryBlend": false,
+     "disclosureLevel": null,
+     "parentBlend": null,
+     "isNestedIngredient": false,
+     "nestedIngredients": [],
+     "parentBlendMass": null,
+     "parentBlendUnit": null,
+     "hierarchyType": null,
+     "safety_flags": []
     }
    ],
    "expect": [
@@ -688,22 +2120,92 @@
    "product": "Multivitamins Softgels",
    "active_ingredients": [
     {
-     "name": "Iron",
-     "standardName": "Iron",
-     "ingredientGroup": "Iron",
+     "ingredientId": 294913,
+     "uniiCode": "E1UOL152H7",
+     "order": 13,
+     "raw_category": "mineral",
+     "raw_source_text": "Iron",
+     "branded_token_extracted": null,
      "canonical_id": "iron",
      "canonical_source_db": "ingredient_quality_map",
+     "cleaner_match_method": "unii_exact_match",
+     "label_nutrient_context": "iron",
+     "source_section": "active",
+     "raw_source_path": "ingredientRows[12]",
+     "normalized_key": "iron",
+     "cleaner_row_role": "active_scorable",
+     "score_eligible_by_cleaner": true,
+     "score_exclusion_reason": null,
+     "dose_class": "therapeutic_mass",
+     "raw_taxonomy": {
+      "category": "mineral",
+      "ingredientGroup": "Iron",
+      "ingredientId": 294913,
+      "uniiCode": "E1UOL152H7",
+      "forms": [
+       {
+        "name": "Ferrous Fumarate",
+        "ingredientId": 294710,
+        "order": 1,
+        "prefix": null,
+        "percent": null,
+        "category": "mineral",
+        "ingredientGroup": "Iron",
+        "uniiCode": "R5L488RY0Q"
+       }
+      ],
+      "parentBlend": null,
+      "isNestedIngredient": false,
+      "nested_depth": 0,
+      "quantityVariants": [
+       {
+        "quantity": 2.5,
+        "unit": "mg",
+        "index": 0,
+        "operator": "=",
+        "quantity_parsed": true,
+        "serving_size_order": 1,
+        "serving_size_quantity": 1,
+        "serving_size_unit": "Softgel(s)",
+        "daily_value": 14.0,
+        "daily_value_target_group": "adult_4_plus",
+        "selected_for_analysis": true
+       }
+      ]
+     },
+     "name": "Iron",
+     "label_display_name": null,
+     "standardName": "Iron",
+     "ingredientGroup": "Iron",
      "quantity": 2.5,
      "unit": "mg",
+     "dailyValue": 14.0,
+     "quantityVariants": null,
      "forms": [
       {
        "name": "Ferrous Fumarate",
+       "ingredientId": 294710,
+       "order": 1,
        "prefix": null,
-       "percent": null
+       "percent": null,
+       "category": "mineral",
+       "ingredientGroup": "Iron",
+       "uniiCode": "R5L488RY0Q"
       }
      ],
-     "notes": null,
-     "order": 13
+     "alternateNames": [
+      "Fe"
+     ],
+     "mapped": true,
+     "proprietaryBlend": false,
+     "disclosureLevel": null,
+     "parentBlend": null,
+     "isNestedIngredient": false,
+     "nestedIngredients": [],
+     "parentBlendMass": null,
+     "parentBlendUnit": null,
+     "hierarchyType": null,
+     "safety_flags": []
     }
    ],
    "expect": [
@@ -720,22 +2222,90 @@
    "product": "Active",
    "active_ingredients": [
     {
-     "name": "Iron",
-     "standardName": "Iron",
-     "ingredientGroup": "Iron",
+     "ingredientId": 16657,
+     "uniiCode": null,
+     "order": 15,
+     "raw_category": "mineral",
+     "raw_source_text": "Iron",
+     "branded_token_extracted": null,
      "canonical_id": "iron",
      "canonical_source_db": "ingredient_quality_map",
+     "cleaner_match_method": null,
+     "label_nutrient_context": "iron",
+     "source_section": "active",
+     "raw_source_path": "ingredientRows[14]",
+     "normalized_key": "iron",
+     "cleaner_row_role": "active_scorable",
+     "score_eligible_by_cleaner": true,
+     "score_exclusion_reason": null,
+     "dose_class": "therapeutic_mass",
+     "raw_taxonomy": {
+      "category": "mineral",
+      "ingredientGroup": "Iron",
+      "ingredientId": 16657,
+      "uniiCode": null,
+      "forms": [
+       {
+        "name": "Ferrous Sulfate",
+        "ingredientId": 3710,
+        "order": 1,
+        "prefix": "as",
+        "percent": null,
+        "category": "mineral",
+        "ingredientGroup": "Iron",
+        "uniiCode": null
+       }
+      ],
+      "parentBlend": null,
+      "isNestedIngredient": false,
+      "nested_depth": 0,
+      "quantityVariants": [
+       {
+        "quantity": 18.0,
+        "unit": "mg",
+        "index": 0,
+        "operator": "=",
+        "quantity_parsed": true,
+        "serving_size_order": 1,
+        "serving_size_unit": "Caplet(s)",
+        "daily_value": 100.0,
+        "daily_value_target_group": "adult_4_plus",
+        "selected_for_analysis": true
+       }
+      ]
+     },
+     "name": "Iron",
+     "label_display_name": null,
+     "standardName": "Iron",
+     "ingredientGroup": "Iron",
      "quantity": 18.0,
      "unit": "mg",
+     "dailyValue": 100.0,
+     "quantityVariants": null,
      "forms": [
       {
        "name": "Ferrous Sulfate",
+       "ingredientId": 3710,
+       "order": 1,
        "prefix": "as",
-       "percent": null
+       "percent": null,
+       "category": "mineral",
+       "ingredientGroup": "Iron",
+       "uniiCode": null
       }
      ],
+     "alternateNames": [],
+     "mapped": true,
+     "proprietaryBlend": false,
+     "disclosureLevel": null,
+     "parentBlend": null,
+     "isNestedIngredient": false,
+     "nestedIngredients": [],
+     "parentBlendMass": null,
+     "parentBlendUnit": null,
+     "hierarchyType": null,
      "notes": "Iron (Form: as Ferrous Sulfate) ",
-     "order": 15
+     "safety_flags": []
     }
    ],
    "expect": [
@@ -752,22 +2322,92 @@
    "product": "Calcium Carbonate & Vitamin D3 Softgels",
    "active_ingredients": [
     {
-     "name": "Calcium",
-     "standardName": "Calcium",
-     "ingredientGroup": "Calcium",
+     "ingredientId": 292683,
+     "uniiCode": "SY7Q814VUP",
+     "order": 2,
+     "raw_category": "mineral",
+     "raw_source_text": "Calcium",
+     "branded_token_extracted": null,
      "canonical_id": "calcium",
      "canonical_source_db": "ingredient_quality_map",
+     "cleaner_match_method": "unii_exact_match",
+     "label_nutrient_context": "calcium",
+     "source_section": "active",
+     "raw_source_path": "ingredientRows[1]",
+     "normalized_key": "calcium",
+     "cleaner_row_role": "active_scorable",
+     "score_eligible_by_cleaner": true,
+     "score_exclusion_reason": null,
+     "dose_class": "therapeutic_mass",
+     "raw_taxonomy": {
+      "category": "mineral",
+      "ingredientGroup": "Calcium",
+      "ingredientId": 292683,
+      "uniiCode": "SY7Q814VUP",
+      "forms": [
+       {
+        "name": "Calcium Carbonate",
+        "ingredientId": 292621,
+        "order": 1,
+        "prefix": null,
+        "percent": null,
+        "category": "mineral",
+        "ingredientGroup": "Calcium",
+        "uniiCode": "H0G9379FGK"
+       }
+      ],
+      "parentBlend": null,
+      "isNestedIngredient": false,
+      "nested_depth": 0,
+      "quantityVariants": [
+       {
+        "quantity": 480.0,
+        "unit": "mg",
+        "index": 0,
+        "operator": "=",
+        "quantity_parsed": true,
+        "serving_size_order": 1,
+        "serving_size_quantity": 1,
+        "serving_size_unit": "Softgel(s)",
+        "daily_value": 37.0,
+        "daily_value_target_group": "adult_4_plus",
+        "selected_for_analysis": true
+       }
+      ]
+     },
+     "name": "Calcium",
+     "label_display_name": null,
+     "standardName": "Calcium",
+     "ingredientGroup": "Calcium",
      "quantity": 480.0,
      "unit": "mg",
+     "dailyValue": 37.0,
+     "quantityVariants": null,
      "forms": [
       {
        "name": "Calcium Carbonate",
+       "ingredientId": 292621,
+       "order": 1,
        "prefix": null,
-       "percent": null
+       "percent": null,
+       "category": "mineral",
+       "ingredientGroup": "Calcium",
+       "uniiCode": "H0G9379FGK"
       }
      ],
-     "notes": null,
-     "order": 2
+     "alternateNames": [
+      "Ca"
+     ],
+     "mapped": true,
+     "proprietaryBlend": false,
+     "disclosureLevel": null,
+     "parentBlend": null,
+     "isNestedIngredient": false,
+     "nestedIngredients": [],
+     "parentBlendMass": null,
+     "parentBlendUnit": null,
+     "hierarchyType": null,
+     "safety_flags": []
     }
    ],
    "expect": [
@@ -784,22 +2424,92 @@
    "product": "Calcium Citrate 210 mg Capsules",
    "active_ingredients": [
     {
-     "name": "Calcium",
-     "standardName": "Calcium",
-     "ingredientGroup": "Calcium",
+     "ingredientId": 292354,
+     "uniiCode": "SY7Q814VUP",
+     "order": 1,
+     "raw_category": "mineral",
+     "raw_source_text": "Calcium",
+     "branded_token_extracted": null,
      "canonical_id": "calcium",
      "canonical_source_db": "ingredient_quality_map",
+     "cleaner_match_method": "unii_exact_match",
+     "label_nutrient_context": "calcium",
+     "source_section": "active",
+     "raw_source_path": "ingredientRows[0]",
+     "normalized_key": "calcium",
+     "cleaner_row_role": "active_scorable",
+     "score_eligible_by_cleaner": true,
+     "score_exclusion_reason": null,
+     "dose_class": "therapeutic_mass",
+     "raw_taxonomy": {
+      "category": "mineral",
+      "ingredientGroup": "Calcium",
+      "ingredientId": 292354,
+      "uniiCode": "SY7Q814VUP",
+      "forms": [
+       {
+        "name": "Calcium Citrate",
+        "ingredientId": 292351,
+        "order": 1,
+        "prefix": null,
+        "percent": null,
+        "category": "mineral",
+        "ingredientGroup": "Calcium",
+        "uniiCode": "MLM29U2X85"
+       }
+      ],
+      "parentBlend": null,
+      "isNestedIngredient": false,
+      "nested_depth": 0,
+      "quantityVariants": [
+       {
+        "quantity": 210.0,
+        "unit": "mg",
+        "index": 0,
+        "operator": "=",
+        "quantity_parsed": true,
+        "serving_size_order": 1,
+        "serving_size_quantity": 2,
+        "serving_size_unit": "Capsule(s)",
+        "daily_value": 16.0,
+        "daily_value_target_group": "adult_4_plus",
+        "selected_for_analysis": true
+       }
+      ]
+     },
+     "name": "Calcium",
+     "label_display_name": null,
+     "standardName": "Calcium",
+     "ingredientGroup": "Calcium",
      "quantity": 210.0,
      "unit": "mg",
+     "dailyValue": 16.0,
+     "quantityVariants": null,
      "forms": [
       {
        "name": "Calcium Citrate",
+       "ingredientId": 292351,
+       "order": 1,
        "prefix": null,
-       "percent": null
+       "percent": null,
+       "category": "mineral",
+       "ingredientGroup": "Calcium",
+       "uniiCode": "MLM29U2X85"
       }
      ],
-     "notes": null,
-     "order": 1
+     "alternateNames": [
+      "Ca"
+     ],
+     "mapped": true,
+     "proprietaryBlend": false,
+     "disclosureLevel": null,
+     "parentBlend": null,
+     "isNestedIngredient": false,
+     "nestedIngredients": [],
+     "parentBlendMass": null,
+     "parentBlendUnit": null,
+     "hierarchyType": null,
+     "safety_flags": []
     }
    ],
    "expect": [
@@ -816,22 +2526,93 @@
    "product": "Immune Defense Formula Ruby Lemon Honey",
    "active_ingredients": [
     {
-     "name": "Selenium",
-     "standardName": "Selenium",
-     "ingredientGroup": "Selenium",
+     "ingredientId": 288229,
+     "uniiCode": "H6241UJ22B",
+     "order": 18,
+     "raw_category": "mineral",
+     "raw_source_text": "Selenium",
+     "branded_token_extracted": null,
      "canonical_id": "selenium",
      "canonical_source_db": "ingredient_quality_map",
+     "cleaner_match_method": "unii_exact_match",
+     "label_nutrient_context": "selenium",
+     "source_section": "active",
+     "raw_source_path": "ingredientRows[17]",
+     "normalized_key": "selenium",
+     "cleaner_row_role": "active_scorable",
+     "score_eligible_by_cleaner": true,
+     "score_exclusion_reason": null,
+     "dose_class": "therapeutic_mass",
+     "raw_taxonomy": {
+      "category": "mineral",
+      "ingredientGroup": "Selenium",
+      "ingredientId": 288229,
+      "uniiCode": "H6241UJ22B",
+      "forms": [
+       {
+        "name": "Selenomethionine",
+        "ingredientId": 287570,
+        "order": 1,
+        "prefix": null,
+        "percent": null,
+        "category": "amino acid",
+        "ingredientGroup": "Selenomethionine",
+        "uniiCode": "964MRK2PEL"
+       }
+      ],
+      "parentBlend": null,
+      "isNestedIngredient": false,
+      "nested_depth": 0,
+      "quantityVariants": [
+       {
+        "quantity": 17.0,
+        "unit": "mcg",
+        "index": 0,
+        "operator": "=",
+        "quantity_parsed": true,
+        "serving_size_order": 1,
+        "serving_size_quantity": 8.4,
+        "serving_size_unit": "Gram(s)",
+        "daily_value": 25.0,
+        "daily_value_target_group": "adult_4_plus",
+        "selected_for_analysis": true
+       }
+      ]
+     },
+     "name": "Selenium",
+     "label_display_name": null,
+     "standardName": "Selenium",
+     "ingredientGroup": "Selenium",
      "quantity": 17.0,
      "unit": "mcg",
+     "dailyValue": 25.0,
+     "quantityVariants": null,
      "forms": [
       {
        "name": "Selenomethionine",
+       "ingredientId": 287570,
+       "order": 1,
        "prefix": null,
-       "percent": null
+       "percent": null,
+       "category": "amino acid",
+       "ingredientGroup": "Selenomethionine",
+       "uniiCode": "964MRK2PEL"
       }
      ],
+     "alternateNames": [
+      "Se"
+     ],
+     "mapped": true,
+     "proprietaryBlend": false,
+     "disclosureLevel": null,
+     "parentBlend": null,
+     "isNestedIngredient": false,
+     "nestedIngredients": [],
+     "parentBlendMass": null,
+     "parentBlendUnit": null,
+     "hierarchyType": null,
      "notes": "Selenium (Form: as Selenomethionine) ",
-     "order": 18
+     "safety_flags": []
     }
    ],
    "expect": [
@@ -848,22 +2629,93 @@
    "product": "Airborne Citrus",
    "active_ingredients": [
     {
-     "name": "Selenium",
-     "standardName": "Selenium",
-     "ingredientGroup": "Selenium",
+     "ingredientId": 293216,
+     "uniiCode": "H6241UJ22B",
+     "order": 8,
+     "raw_category": "mineral",
+     "raw_source_text": "Selenium",
+     "branded_token_extracted": null,
      "canonical_id": "selenium",
      "canonical_source_db": "ingredient_quality_map",
+     "cleaner_match_method": "unii_exact_match",
+     "label_nutrient_context": "selenium",
+     "source_section": "active",
+     "raw_source_path": "ingredientRows[7]",
+     "normalized_key": "selenium",
+     "cleaner_row_role": "active_scorable",
+     "score_eligible_by_cleaner": true,
+     "score_exclusion_reason": null,
+     "dose_class": "therapeutic_mass",
+     "raw_taxonomy": {
+      "category": "mineral",
+      "ingredientGroup": "Selenium",
+      "ingredientId": 293216,
+      "uniiCode": "H6241UJ22B",
+      "forms": [
+       {
+        "name": "Sodium Selenite",
+        "ingredientId": 293214,
+        "order": 1,
+        "prefix": null,
+        "percent": null,
+        "category": "mineral",
+        "ingredientGroup": "Sodium",
+        "uniiCode": "HIW548RQ3W"
+       }
+      ],
+      "parentBlend": null,
+      "isNestedIngredient": false,
+      "nested_depth": 0,
+      "quantityVariants": [
+       {
+        "quantity": 15.0,
+        "unit": "mcg",
+        "index": 0,
+        "operator": "=",
+        "quantity_parsed": true,
+        "serving_size_order": 1,
+        "serving_size_quantity": 4,
+        "serving_size_unit": "Tablet(s)",
+        "daily_value": 21.0,
+        "daily_value_target_group": "adult_4_plus",
+        "selected_for_analysis": true
+       }
+      ]
+     },
+     "name": "Selenium",
+     "label_display_name": null,
+     "standardName": "Selenium",
+     "ingredientGroup": "Selenium",
      "quantity": 15.0,
      "unit": "mcg",
+     "dailyValue": 21.0,
+     "quantityVariants": null,
      "forms": [
       {
        "name": "Sodium Selenite",
+       "ingredientId": 293214,
+       "order": 1,
        "prefix": null,
-       "percent": null
+       "percent": null,
+       "category": "mineral",
+       "ingredientGroup": "Sodium",
+       "uniiCode": "HIW548RQ3W"
       }
      ],
+     "alternateNames": [
+      "Se"
+     ],
+     "mapped": true,
+     "proprietaryBlend": false,
+     "disclosureLevel": null,
+     "parentBlend": null,
+     "isNestedIngredient": false,
+     "nestedIngredients": [],
+     "parentBlendMass": null,
+     "parentBlendUnit": null,
+     "hierarchyType": null,
      "notes": "Selenium (Form: as Sodium Selenite) ",
-     "order": 8
+     "safety_flags": []
     }
    ],
    "expect": [
@@ -880,22 +2732,92 @@
    "product": "Chromium Picolinate Powder 200 mcg",
    "active_ingredients": [
     {
-     "name": "Chromium",
-     "standardName": "Chromium",
-     "ingredientGroup": "Chromium",
+     "ingredientId": 294273,
+     "uniiCode": "0R0008Q3JB",
+     "order": 1,
+     "raw_category": "mineral",
+     "raw_source_text": "Chromium",
+     "branded_token_extracted": null,
      "canonical_id": "chromium",
      "canonical_source_db": "ingredient_quality_map",
+     "cleaner_match_method": "unii_exact_match",
+     "label_nutrient_context": "chromium",
+     "source_section": "active",
+     "raw_source_path": "ingredientRows[0]",
+     "normalized_key": "chromium",
+     "cleaner_row_role": "active_scorable",
+     "score_eligible_by_cleaner": true,
+     "score_exclusion_reason": null,
+     "dose_class": "therapeutic_mass",
+     "raw_taxonomy": {
+      "category": "mineral",
+      "ingredientGroup": "Chromium",
+      "ingredientId": 294273,
+      "uniiCode": "0R0008Q3JB",
+      "forms": [
+       {
+        "name": "Chromium Picolinate",
+        "ingredientId": 293493,
+        "order": 1,
+        "prefix": null,
+        "percent": null,
+        "category": "mineral",
+        "ingredientGroup": "Chromium",
+        "uniiCode": "S71T8B8Z6P"
+       }
+      ],
+      "parentBlend": null,
+      "isNestedIngredient": false,
+      "nested_depth": 0,
+      "quantityVariants": [
+       {
+        "quantity": 200.0,
+        "unit": "mcg",
+        "index": 0,
+        "operator": "=",
+        "quantity_parsed": true,
+        "serving_size_order": 1,
+        "serving_size_quantity": 1700,
+        "serving_size_unit": "mcg",
+        "daily_value": 571.0,
+        "daily_value_target_group": "adult_4_plus",
+        "selected_for_analysis": true
+       }
+      ]
+     },
+     "name": "Chromium",
+     "label_display_name": null,
+     "standardName": "Chromium",
+     "ingredientGroup": "Chromium",
      "quantity": 200.0,
      "unit": "mcg",
+     "dailyValue": 571.0,
+     "quantityVariants": null,
      "forms": [
       {
        "name": "Chromium Picolinate",
+       "ingredientId": 293493,
+       "order": 1,
        "prefix": null,
-       "percent": null
+       "percent": null,
+       "category": "mineral",
+       "ingredientGroup": "Chromium",
+       "uniiCode": "S71T8B8Z6P"
       }
      ],
-     "notes": null,
-     "order": 1
+     "alternateNames": [
+      "Cr"
+     ],
+     "mapped": true,
+     "proprietaryBlend": false,
+     "disclosureLevel": null,
+     "parentBlend": null,
+     "isNestedIngredient": false,
+     "nestedIngredients": [],
+     "parentBlendMass": null,
+     "parentBlendUnit": null,
+     "hierarchyType": null,
+     "safety_flags": []
     }
    ],
    "expect": [
@@ -912,22 +2834,90 @@
    "product": "Ubiquinol with Kaneka Ubiquinol 100 mg",
    "active_ingredients": [
     {
-     "name": "Kaneka Ubiquinol",
-     "standardName": "Coenzyme Q10",
-     "ingredientGroup": "Coenzyme Q10",
+     "ingredientId": 333493,
+     "uniiCode": null,
+     "order": 1,
+     "raw_category": "non-nutrient/non-botanical",
+     "raw_source_text": "Kaneka Ubiquinol",
+     "branded_token_extracted": "Ubiquinol",
      "canonical_id": "coq10",
      "canonical_source_db": "ingredient_quality_map",
+     "cleaner_match_method": null,
+     "label_nutrient_context": null,
+     "source_section": "active",
+     "raw_source_path": "ingredientRows[0]",
+     "normalized_key": "kaneka_ubiquinol",
+     "cleaner_row_role": "active_scorable",
+     "score_eligible_by_cleaner": true,
+     "score_exclusion_reason": null,
+     "dose_class": "therapeutic_mass",
+     "raw_taxonomy": {
+      "category": "non-nutrient/non-botanical",
+      "ingredientGroup": "Coenzyme Q10",
+      "ingredientId": 333493,
+      "uniiCode": null,
+      "forms": [
+       {
+        "name": "Ubiquinol",
+        "ingredientId": 333492,
+        "order": 1,
+        "prefix": null,
+        "percent": null,
+        "category": "non-nutrient/non-botanical",
+        "ingredientGroup": "Coenzyme Q10",
+        "uniiCode": null
+       }
+      ],
+      "parentBlend": null,
+      "isNestedIngredient": false,
+      "nested_depth": 0,
+      "quantityVariants": [
+       {
+        "quantity": 100.0,
+        "unit": "mg",
+        "index": 0,
+        "operator": "=",
+        "quantity_parsed": true,
+        "serving_size_order": 1,
+        "serving_size_quantity": 1,
+        "serving_size_unit": "Softgel(s)",
+        "daily_value_target_group": "adult_4_plus",
+        "selected_for_analysis": true
+       }
+      ]
+     },
+     "name": "Kaneka Ubiquinol",
+     "label_display_name": null,
+     "standardName": "Coenzyme Q10",
+     "ingredientGroup": "Coenzyme Q10",
      "quantity": 100.0,
      "unit": "mg",
+     "dailyValue": null,
+     "quantityVariants": null,
      "forms": [
       {
        "name": "Ubiquinol",
+       "ingredientId": 333492,
+       "order": 1,
        "prefix": null,
-       "percent": null
+       "percent": null,
+       "category": "non-nutrient/non-botanical",
+       "ingredientGroup": "Coenzyme Q10",
+       "uniiCode": null
       }
      ],
+     "alternateNames": [],
+     "mapped": true,
+     "proprietaryBlend": false,
+     "disclosureLevel": null,
+     "parentBlend": null,
+     "isNestedIngredient": false,
+     "nestedIngredients": [],
+     "parentBlendMass": null,
+     "parentBlendUnit": null,
+     "hierarchyType": null,
      "notes": "reduced form of CoQ10",
-     "order": 1
+     "safety_flags": []
     }
    ],
    "expect": [
@@ -944,22 +2934,90 @@
    "product": "Curcumin Phytosome with Meriva",
    "active_ingredients": [
     {
-     "name": "Meriva",
-     "standardName": "Curcumin",
-     "ingredientGroup": "Curcumin",
+     "ingredientId": 335775,
+     "uniiCode": null,
+     "order": 1,
+     "raw_category": "botanical",
+     "raw_source_text": "Meriva",
+     "branded_token_extracted": "Meriva",
      "canonical_id": "curcumin",
      "canonical_source_db": "ingredient_quality_map",
+     "cleaner_match_method": null,
+     "label_nutrient_context": null,
+     "source_section": "active",
+     "raw_source_path": "ingredientRows[0]",
+     "normalized_key": "meriva",
+     "cleaner_row_role": "active_scorable",
+     "score_eligible_by_cleaner": true,
+     "score_exclusion_reason": null,
+     "dose_class": "therapeutic_mass",
+     "raw_taxonomy": {
+      "category": "botanical",
+      "ingredientGroup": "Curcumin",
+      "ingredientId": 335775,
+      "uniiCode": null,
+      "forms": [
+       {
+        "name": "Curcumin Extract",
+        "ingredientId": 336793,
+        "order": 1,
+        "prefix": null,
+        "percent": null,
+        "category": "botanical",
+        "ingredientGroup": "Curcumin",
+        "uniiCode": null
+       }
+      ],
+      "parentBlend": null,
+      "isNestedIngredient": false,
+      "nested_depth": 0,
+      "quantityVariants": [
+       {
+        "quantity": 1000.0,
+        "unit": "mg",
+        "index": 0,
+        "operator": "=",
+        "quantity_parsed": true,
+        "serving_size_order": 1,
+        "serving_size_quantity": 2,
+        "serving_size_unit": "Veggie Capsule(s)",
+        "daily_value_target_group": "adult_4_plus",
+        "selected_for_analysis": true
+       }
+      ]
+     },
+     "name": "Meriva",
+     "label_display_name": null,
+     "standardName": "Curcumin",
+     "ingredientGroup": "Curcumin",
      "quantity": 1000.0,
      "unit": "mg",
+     "dailyValue": null,
+     "quantityVariants": null,
      "forms": [
       {
        "name": "Curcumin Extract",
+       "ingredientId": 336793,
+       "order": 1,
        "prefix": null,
-       "percent": null
+       "percent": null,
+       "category": "botanical",
+       "ingredientGroup": "Curcumin",
+       "uniiCode": null
       }
      ],
+     "alternateNames": [],
+     "mapped": true,
+     "proprietaryBlend": false,
+     "disclosureLevel": null,
+     "parentBlend": null,
+     "isNestedIngredient": false,
+     "nestedIngredients": [],
+     "parentBlendMass": null,
+     "parentBlendUnit": null,
+     "hierarchyType": null,
      "notes": "Standardized to contain min. 18% total Curcuminoids (180mg) Phospholipid complex from sunflower lecithin  ",
-     "order": 1
+     "safety_flags": []
     }
    ],
    "expect": [
@@ -976,27 +3034,113 @@
    "product": "Arthro-Immune",
    "active_ingredients": [
     {
-     "name": "BCM-95 Bio-Curcumin 25:1 extract",
-     "standardName": "Curcumin",
-     "ingredientGroup": "Turmeric",
+     "ingredientId": 203500,
+     "uniiCode": null,
+     "order": 1,
+     "raw_category": "botanical",
+     "raw_source_text": "BCM-95 Bio-Curcumin 25:1 extract",
+     "branded_token_extracted": "BCM-95",
      "canonical_id": "curcumin",
      "canonical_source_db": "ingredient_quality_map",
+     "cleaner_match_method": null,
+     "label_nutrient_context": null,
+     "source_section": "active",
+     "raw_source_path": "ingredientRows[0]",
+     "normalized_key": "bcm_95_bio_curcumin_25_1_extract",
+     "cleaner_row_role": "active_scorable",
+     "score_eligible_by_cleaner": true,
+     "score_exclusion_reason": null,
+     "dose_class": "therapeutic_mass",
+     "raw_taxonomy": {
+      "category": "botanical",
+      "ingredientGroup": "Turmeric",
+      "ingredientId": 203500,
+      "uniiCode": null,
+      "forms": [
+       {
+        "name": "Total Curcuminoids Complex",
+        "ingredientId": 145614,
+        "order": 1,
+        "prefix": "std. to",
+        "percent": 95,
+        "category": "non-nutrient/non-botanical",
+        "ingredientGroup": "Curcuminoid",
+        "uniiCode": null
+       },
+       {
+        "name": "Turmeric",
+        "ingredientId": 145329,
+        "order": 2,
+        "prefix": "with essential oils of",
+        "percent": null,
+        "category": "botanical",
+        "ingredientGroup": "Turmeric",
+        "uniiCode": null
+       }
+      ],
+      "parentBlend": null,
+      "isNestedIngredient": false,
+      "nested_depth": 0,
+      "quantityVariants": [
+       {
+        "quantity": 250.0,
+        "unit": "mg",
+        "index": 0,
+        "operator": "=",
+        "quantity_parsed": true,
+        "serving_size_order": 1,
+        "serving_size_quantity": 1,
+        "serving_size_unit": "Vegetarian Capsule(s)",
+        "daily_value_target_group": "adult_4_plus",
+        "selected_for_analysis": true
+       }
+      ]
+     },
+     "name": "BCM-95 Bio-Curcumin 25:1 extract",
+     "label_display_name": null,
+     "standardName": "Curcumin",
+     "ingredientGroup": "Turmeric",
      "quantity": 250.0,
      "unit": "mg",
+     "dailyValue": null,
+     "quantityVariants": null,
      "forms": [
       {
        "name": "Total Curcuminoids Complex",
+       "ingredientId": 145614,
+       "order": 1,
        "prefix": "std. to",
-       "percent": 95
+       "percent": 95,
+       "category": "non-nutrient/non-botanical",
+       "ingredientGroup": "Curcuminoid",
+       "uniiCode": null
       },
       {
        "name": "Turmeric",
+       "ingredientId": 145329,
+       "order": 2,
        "prefix": "with essential oils of",
-       "percent": null
+       "percent": null,
+       "category": "botanical",
+       "ingredientGroup": "Turmeric",
+       "uniiCode": null
       }
      ],
+     "alternateNames": [],
+     "mapped": true,
+     "proprietaryBlend": false,
+     "disclosureLevel": null,
+     "parentBlend": null,
+     "isNestedIngredient": false,
+     "nestedIngredients": [],
+     "parentBlendMass": null,
+     "parentBlendUnit": null,
+     "hierarchyType": null,
+     "plantPart": "rhizome",
+     "harvestMethod": "by HPLC)",
+     "form": "extract",
      "notes": "BCM-95 Bio-Curcumin 25:1 extract (Form: std. to 95% Total Curcuminoids Complex, with essential oils of Turmeric PlantPart: rhizome Note: by HPLC) PlantPart: root ",
-     "order": 1
+     "safety_flags": []
     }
    ],
    "expect": [
@@ -1013,22 +3157,79 @@
    "product": "Centrum Calm & Reset Cherry Flavor",
    "active_ingredients": [
     {
-     "name": "KSM66 Ashwagandha root extract",
-     "standardName": "Ashwagandha",
-     "ingredientGroup": "Ashwagandha",
+     "ingredientId": 134816,
+     "uniiCode": null,
+     "order": 7,
+     "raw_category": "botanical",
+     "raw_source_text": "KSM66 Ashwagandha root extract",
+     "branded_token_extracted": "KSM-66",
      "canonical_id": "ashwagandha",
      "canonical_source_db": "ingredient_quality_map",
+     "cleaner_match_method": null,
+     "label_nutrient_context": null,
+     "source_section": "active",
+     "raw_source_path": "ingredientRows[4]",
+     "normalized_key": "ksm66_ashwagandha_root_extract",
+     "cleaner_row_role": "active_scorable",
+     "score_eligible_by_cleaner": true,
+     "score_exclusion_reason": null,
+     "dose_class": "therapeutic_mass",
+     "raw_taxonomy": {
+      "category": "botanical",
+      "ingredientGroup": "Ashwagandha",
+      "ingredientId": 134816,
+      "uniiCode": null,
+      "forms": [
+       {
+        "name": "extract",
+        "source": "name_extraction"
+       }
+      ],
+      "parentBlend": null,
+      "isNestedIngredient": false,
+      "nested_depth": 0,
+      "quantityVariants": [
+       {
+        "quantity": 250.0,
+        "unit": "mg",
+        "index": 0,
+        "operator": "=",
+        "quantity_parsed": true,
+        "serving_size_order": 1,
+        "serving_size_quantity": 2,
+        "serving_size_unit": "Gummy(ies)",
+        "daily_value_target_group": "adult_4_plus",
+        "selected_for_analysis": true
+       }
+      ]
+     },
+     "name": "KSM66 Ashwagandha root extract",
+     "label_display_name": null,
+     "standardName": "Ashwagandha",
+     "ingredientGroup": "Ashwagandha",
      "quantity": 250.0,
      "unit": "mg",
+     "dailyValue": null,
+     "quantityVariants": null,
      "forms": [
       {
        "name": "extract",
-       "prefix": null,
-       "percent": null
+       "source": "name_extraction"
       }
      ],
-     "notes": null,
-     "order": 7
+     "alternateNames": [],
+     "mapped": true,
+     "proprietaryBlend": false,
+     "disclosureLevel": null,
+     "parentBlend": null,
+     "isNestedIngredient": false,
+     "nestedIngredients": [],
+     "parentBlendMass": null,
+     "parentBlendUnit": null,
+     "hierarchyType": null,
+     "plantPart": "root",
+     "plantPart_source": "name_inference",
+     "safety_flags": []
     }
    ],
    "expect": [
@@ -1045,22 +3246,79 @@
    "product": "Berberine 500 mg",
    "active_ingredients": [
     {
-     "name": "Berberine Hydrochloride",
-     "standardName": "Berberine",
-     "ingredientGroup": "Berberine",
+     "ingredientId": 304239,
+     "uniiCode": "0I8Y3P32UF",
+     "order": 1,
+     "raw_category": "non-nutrient/non-botanical",
+     "raw_source_text": "Berberine Hydrochloride",
+     "branded_token_extracted": null,
      "canonical_id": "berberine_supplement",
      "canonical_source_db": "ingredient_quality_map",
+     "cleaner_match_method": "unii_exact_match",
+     "label_nutrient_context": null,
+     "source_section": "active",
+     "raw_source_path": "ingredientRows[0]",
+     "normalized_key": "berberine_hydrochloride",
+     "cleaner_row_role": "active_scorable",
+     "score_eligible_by_cleaner": true,
+     "score_exclusion_reason": null,
+     "dose_class": "therapeutic_mass",
+     "raw_taxonomy": {
+      "category": "non-nutrient/non-botanical",
+      "ingredientGroup": "Berberine",
+      "ingredientId": 304239,
+      "uniiCode": "0I8Y3P32UF",
+      "forms": [
+       {
+        "name": "hydrochloride",
+        "source": "name_extraction"
+       }
+      ],
+      "parentBlend": null,
+      "isNestedIngredient": false,
+      "nested_depth": 0,
+      "quantityVariants": [
+       {
+        "quantity": 500.0,
+        "unit": "mg",
+        "index": 0,
+        "operator": "=",
+        "quantity_parsed": true,
+        "serving_size_order": 1,
+        "serving_size_quantity": 1,
+        "serving_size_unit": "Capsule(s)",
+        "daily_value_target_group": "adult_4_plus",
+        "selected_for_analysis": true
+       }
+      ]
+     },
+     "name": "Berberine Hydrochloride",
+     "label_display_name": null,
+     "standardName": "Berberine",
+     "ingredientGroup": "Berberine",
      "quantity": 500.0,
      "unit": "mg",
+     "dailyValue": null,
+     "quantityVariants": null,
      "forms": [
       {
        "name": "hydrochloride",
-       "prefix": null,
-       "percent": null
+       "source": "name_extraction"
       }
      ],
-     "notes": null,
-     "order": 1
+     "alternateNames": [
+      "Berberine HCl"
+     ],
+     "mapped": true,
+     "proprietaryBlend": false,
+     "disclosureLevel": null,
+     "parentBlend": null,
+     "isNestedIngredient": false,
+     "nestedIngredients": [],
+     "parentBlendMass": null,
+     "parentBlendUnit": null,
+     "hierarchyType": null,
+     "safety_flags": []
     }
    ],
    "expect": [
@@ -1077,22 +3335,89 @@
    "product": "Myopower BCAA Tangy Orange",
    "active_ingredients": [
     {
-     "name": "Creatine",
-     "standardName": "Creatine",
-     "ingredientGroup": "Creatine",
+     "ingredientId": 49162,
+     "uniiCode": null,
+     "order": 9,
+     "raw_category": "non-nutrient/non-botanical",
+     "raw_source_text": "Creatine",
+     "branded_token_extracted": null,
      "canonical_id": "creatine_monohydrate",
      "canonical_source_db": "ingredient_quality_map",
+     "cleaner_match_method": null,
+     "label_nutrient_context": null,
+     "source_section": "active",
+     "raw_source_path": "ingredientRows[5].nestedRows[0]",
+     "normalized_key": "creatine",
+     "cleaner_row_role": "active_scorable",
+     "score_eligible_by_cleaner": true,
+     "score_exclusion_reason": null,
+     "dose_class": "therapeutic_mass",
+     "raw_taxonomy": {
+      "category": "non-nutrient/non-botanical",
+      "ingredientGroup": "Creatine",
+      "ingredientId": 49162,
+      "uniiCode": null,
+      "forms": [
+       {
+        "name": "Creatine Monohydrate",
+        "ingredientId": 4475,
+        "order": 1,
+        "prefix": "as",
+        "percent": null,
+        "category": "non-nutrient/non-botanical",
+        "ingredientGroup": "Creatine",
+        "uniiCode": null
+       }
+      ],
+      "parentBlend": "Tri-Creatine Complex",
+      "isNestedIngredient": true,
+      "nested_depth": 1,
+      "quantityVariants": [
+       {
+        "quantity": 3.54,
+        "unit": "Gram(s)",
+        "index": 0,
+        "operator": "=",
+        "quantity_parsed": true,
+        "serving_size_order": 1,
+        "serving_size_unit": "Gram(s)",
+        "daily_value_target_group": "adult_4_plus",
+        "selected_for_analysis": true
+       }
+      ]
+     },
+     "name": "Creatine",
+     "label_display_name": null,
+     "standardName": "Creatine",
+     "ingredientGroup": "Creatine",
      "quantity": 3.54,
      "unit": "Gram(s)",
+     "dailyValue": null,
+     "quantityVariants": null,
      "forms": [
       {
        "name": "Creatine Monohydrate",
+       "ingredientId": 4475,
+       "order": 1,
        "prefix": "as",
-       "percent": null
+       "percent": null,
+       "category": "non-nutrient/non-botanical",
+       "ingredientGroup": "Creatine",
+       "uniiCode": null
       }
      ],
+     "alternateNames": [],
+     "mapped": true,
+     "proprietaryBlend": false,
+     "disclosureLevel": null,
+     "parentBlend": "Tri-Creatine Complex",
+     "isNestedIngredient": true,
+     "nestedIngredients": [],
+     "parentBlendMass": 5,
+     "parentBlendUnit": "Gram(s)",
+     "hierarchyType": null,
      "notes": "Creatine (Form: as Creatine Monohydrate) ",
-     "order": 9
+     "safety_flags": []
     }
    ],
    "expect": [
@@ -1109,22 +3434,90 @@
    "product": "Vitamin K2 1% (MK-7)",
    "active_ingredients": [
     {
-     "name": "Vitamin K2",
-     "standardName": "Vitamin K2",
-     "ingredientGroup": "Vitamin K",
+     "ingredientId": 287970,
+     "uniiCode": "71ANL51TLA",
+     "order": 1,
+     "raw_category": "vitamin",
+     "raw_source_text": "Vitamin K2",
+     "branded_token_extracted": null,
      "canonical_id": "vitamin_k2",
      "canonical_source_db": "ingredient_quality_map",
+     "cleaner_match_method": null,
+     "label_nutrient_context": "vitamin k2",
+     "source_section": "active",
+     "raw_source_path": "ingredientRows[0]",
+     "normalized_key": "vitamin_k2",
+     "cleaner_row_role": "active_scorable",
+     "score_eligible_by_cleaner": true,
+     "score_exclusion_reason": null,
+     "dose_class": "therapeutic_mass",
+     "raw_taxonomy": {
+      "category": "vitamin",
+      "ingredientGroup": "Vitamin K",
+      "ingredientId": 287970,
+      "uniiCode": "71ANL51TLA",
+      "forms": [
+       {
+        "name": "Menaquinone-7",
+        "ingredientId": 287973,
+        "order": 1,
+        "prefix": null,
+        "percent": null,
+        "category": "vitamin",
+        "ingredientGroup": "Vitamin K",
+        "uniiCode": "8427BML8NY"
+       }
+      ],
+      "parentBlend": null,
+      "isNestedIngredient": false,
+      "nested_depth": 0,
+      "quantityVariants": [
+       {
+        "quantity": 100.0,
+        "unit": "mcg",
+        "index": 0,
+        "operator": "=",
+        "quantity_parsed": true,
+        "serving_size_order": 1,
+        "serving_size_quantity": 1,
+        "serving_size_unit": "Softgel(s)",
+        "daily_value": 83.0,
+        "daily_value_target_group": "adult_4_plus",
+        "selected_for_analysis": true
+       }
+      ]
+     },
+     "name": "Vitamin K2",
+     "label_display_name": null,
+     "standardName": "Vitamin K2",
+     "ingredientGroup": "Vitamin K",
      "quantity": 100.0,
      "unit": "mcg",
+     "dailyValue": 83.0,
+     "quantityVariants": null,
      "forms": [
       {
        "name": "Menaquinone-7",
+       "ingredientId": 287973,
+       "order": 1,
        "prefix": null,
-       "percent": null
+       "percent": null,
+       "category": "vitamin",
+       "ingredientGroup": "Vitamin K",
+       "uniiCode": "8427BML8NY"
       }
      ],
-     "notes": null,
-     "order": 1
+     "alternateNames": [],
+     "mapped": true,
+     "proprietaryBlend": false,
+     "disclosureLevel": null,
+     "parentBlend": null,
+     "isNestedIngredient": false,
+     "nestedIngredients": [],
+     "parentBlendMass": null,
+     "parentBlendUnit": null,
+     "hierarchyType": null,
+     "safety_flags": []
     }
    ],
    "expect": [
@@ -1141,22 +3534,92 @@
    "product": "Oceans 3 Healthy Hormones",
    "active_ingredients": [
     {
-     "name": "Vitamin K2",
-     "standardName": "Vitamin K2",
-     "ingredientGroup": "Vitamin K (menaquinone)",
+     "ingredientId": 258746,
+     "uniiCode": null,
+     "order": 10,
+     "raw_category": "vitamin",
+     "raw_source_text": "Vitamin K2",
+     "branded_token_extracted": null,
      "canonical_id": "vitamin_k2",
      "canonical_source_db": "ingredient_quality_map",
+     "cleaner_match_method": null,
+     "label_nutrient_context": "vitamin k2",
+     "source_section": "active",
+     "raw_source_path": "ingredientRows[8]",
+     "normalized_key": "vitamin_k2",
+     "cleaner_row_role": "active_scorable",
+     "score_eligible_by_cleaner": true,
+     "score_exclusion_reason": null,
+     "dose_class": "therapeutic_mass",
+     "raw_taxonomy": {
+      "category": "vitamin",
+      "ingredientGroup": "Vitamin K (menaquinone)",
+      "ingredientId": 258746,
+      "uniiCode": null,
+      "forms": [
+       {
+        "name": "Menaquinone-4",
+        "ingredientId": 258747,
+        "order": 1,
+        "prefix": "as",
+        "percent": null,
+        "category": "vitamin",
+        "ingredientGroup": "Vitamin K (menaquinone)",
+        "uniiCode": null
+       }
+      ],
+      "parentBlend": null,
+      "isNestedIngredient": false,
+      "nested_depth": 0,
+      "quantityVariants": [
+       {
+        "quantity": 7.5,
+        "unit": "mcg",
+        "index": 0,
+        "operator": "=",
+        "quantity_parsed": true,
+        "serving_size_order": 1,
+        "serving_size_quantity": 3,
+        "serving_size_unit": "Softgel(s)",
+        "daily_value_target_group": "adult_4_plus",
+        "selected_for_analysis": true
+       }
+      ]
+     },
+     "name": "Vitamin K2",
+     "label_display_name": null,
+     "standardName": "Vitamin K2",
+     "ingredientGroup": "Vitamin K (menaquinone)",
      "quantity": 7.5,
      "unit": "mcg",
+     "dailyValue": null,
+     "quantityVariants": null,
      "forms": [
       {
        "name": "Menaquinone-4",
+       "ingredientId": 258747,
+       "order": 1,
        "prefix": "as",
-       "percent": null
+       "percent": null,
+       "category": "vitamin",
+       "ingredientGroup": "Vitamin K (menaquinone)",
+       "uniiCode": null
       }
      ],
+     "alternateNames": [],
+     "mapped": true,
+     "proprietaryBlend": false,
+     "disclosureLevel": null,
+     "parentBlend": null,
+     "isNestedIngredient": false,
+     "nestedIngredients": [],
+     "parentBlendMass": null,
+     "parentBlendUnit": null,
+     "hierarchyType": null,
+     "genus": "S.",
+     "species": "cerevisiae))",
      "notes": "Vitamin K2 (Form: as Menaquinone-4 (Form: from culture of S. cerevisiae Genus: S. Species: cerevisiae)) ",
-     "order": 10
+     "safety_flags": []
     }
    ],
    "expect": [
@@ -1173,22 +3636,90 @@
    "product": "Women's Daily Multivitamin",
    "active_ingredients": [
     {
-     "name": "Vitamin K",
-     "standardName": "Vitamin K1",
-     "ingredientGroup": "Vitamin K (unspecified)",
+     "ingredientId": 45998,
+     "uniiCode": null,
+     "order": 5,
+     "raw_category": "vitamin",
+     "raw_source_text": "Vitamin K",
+     "branded_token_extracted": null,
      "canonical_id": "vitamin_k1",
      "canonical_source_db": "ingredient_quality_map",
+     "cleaner_match_method": "unii_form_exact_match",
+     "label_nutrient_context": "vitamin k",
+     "source_section": "active",
+     "raw_source_path": "ingredientRows[4]",
+     "normalized_key": "vitamin_k",
+     "cleaner_row_role": "active_scorable",
+     "score_eligible_by_cleaner": true,
+     "score_exclusion_reason": null,
+     "dose_class": "therapeutic_mass",
+     "raw_taxonomy": {
+      "category": "vitamin",
+      "ingredientGroup": "Vitamin K (unspecified)",
+      "ingredientId": 45998,
+      "uniiCode": null,
+      "forms": [
+       {
+        "name": "Phylloquinone",
+        "ingredientId": 280193,
+        "order": 1,
+        "prefix": null,
+        "percent": null,
+        "category": "vitamin",
+        "ingredientGroup": "Vitamin K",
+        "uniiCode": "A034SE7857"
+       }
+      ],
+      "parentBlend": null,
+      "isNestedIngredient": false,
+      "nested_depth": 0,
+      "quantityVariants": [
+       {
+        "quantity": 50.0,
+        "unit": "mcg",
+        "index": 0,
+        "operator": "=",
+        "quantity_parsed": true,
+        "serving_size_order": 1,
+        "serving_size_quantity": 1,
+        "serving_size_unit": "Tablet(s)",
+        "daily_value": 42.0,
+        "daily_value_target_group": "adult_4_plus",
+        "selected_for_analysis": true
+       }
+      ]
+     },
+     "name": "Vitamin K",
+     "label_display_name": null,
+     "standardName": "Vitamin K1",
+     "ingredientGroup": "Vitamin K (unspecified)",
      "quantity": 50.0,
      "unit": "mcg",
+     "dailyValue": 42.0,
+     "quantityVariants": null,
      "forms": [
       {
        "name": "Phylloquinone",
+       "ingredientId": 280193,
+       "order": 1,
        "prefix": null,
-       "percent": null
+       "percent": null,
+       "category": "vitamin",
+       "ingredientGroup": "Vitamin K",
+       "uniiCode": "A034SE7857"
       }
      ],
-     "notes": null,
-     "order": 5
+     "alternateNames": [],
+     "mapped": true,
+     "proprietaryBlend": false,
+     "disclosureLevel": null,
+     "parentBlend": null,
+     "isNestedIngredient": false,
+     "nestedIngredients": [],
+     "parentBlendMass": null,
+     "parentBlendUnit": null,
+     "hierarchyType": null,
+     "safety_flags": []
     }
    ],
    "expect": [
@@ -1205,22 +3736,92 @@
    "product": "Airborne Elderberry",
    "active_ingredients": [
     {
-     "name": "Vitamin E",
-     "standardName": "Vitamin E",
-     "ingredientGroup": "Vitamin E",
+     "ingredientId": 280729,
+     "uniiCode": "H4N855PNZ1",
+     "order": 7,
+     "raw_category": "vitamin",
+     "raw_source_text": "Vitamin E",
+     "branded_token_extracted": null,
      "canonical_id": "vitamin_e",
      "canonical_source_db": "ingredient_quality_map",
+     "cleaner_match_method": null,
+     "label_nutrient_context": "vitamin e",
+     "source_section": "active",
+     "raw_source_path": "ingredientRows[4]",
+     "normalized_key": "vitamin_e",
+     "cleaner_row_role": "active_scorable",
+     "score_eligible_by_cleaner": true,
+     "score_exclusion_reason": null,
+     "dose_class": "therapeutic_mass",
+     "raw_taxonomy": {
+      "category": "vitamin",
+      "ingredientGroup": "Vitamin E",
+      "ingredientId": 280729,
+      "uniiCode": "H4N855PNZ1",
+      "forms": [
+       {
+        "name": "D-Alpha-Tocopherol",
+        "ingredientId": 280328,
+        "order": 1,
+        "prefix": null,
+        "percent": null,
+        "category": "vitamin",
+        "ingredientGroup": "Vitamin E",
+        "uniiCode": "N9PR3490H9"
+       }
+      ],
+      "parentBlend": null,
+      "isNestedIngredient": false,
+      "nested_depth": 0,
+      "quantityVariants": [
+       {
+        "quantity": 6.7,
+        "unit": "mg",
+        "index": 0,
+        "operator": "=",
+        "quantity_parsed": true,
+        "serving_size_order": 1,
+        "serving_size_quantity": 2,
+        "serving_size_unit": "Gummy(ies)",
+        "daily_value": 45.0,
+        "daily_value_target_group": "adult_4_plus",
+        "selected_for_analysis": true
+       }
+      ]
+     },
+     "name": "Vitamin E",
+     "label_display_name": null,
+     "standardName": "Vitamin E",
+     "ingredientGroup": "Vitamin E",
      "quantity": 6.7,
      "unit": "mg",
+     "dailyValue": 45.0,
+     "quantityVariants": null,
      "forms": [
       {
        "name": "D-Alpha-Tocopherol",
+       "ingredientId": 280328,
+       "order": 1,
        "prefix": null,
-       "percent": null
+       "percent": null,
+       "category": "vitamin",
+       "ingredientGroup": "Vitamin E",
+       "uniiCode": "N9PR3490H9"
       }
      ],
-     "notes": null,
-     "order": 7
+     "alternateNames": [],
+     "mapped": true,
+     "proprietaryBlend": false,
+     "disclosureLevel": null,
+     "parentBlend": null,
+     "isNestedIngredient": false,
+     "nestedIngredients": [],
+     "parentBlendMass": null,
+     "parentBlendUnit": null,
+     "hierarchyType": null,
+     "isAdditive": true,
+     "additiveType": "antioxidant_preservative",
+     "safety_flags": []
     }
    ],
    "expect": [
@@ -1237,22 +3838,93 @@
    "product": "Beta-Immune Booster Zesty Orange",
    "active_ingredients": [
     {
-     "name": "Vitamin E",
-     "standardName": "Vitamin E",
-     "ingredientGroup": "Vitamin E",
+     "ingredientId": 281760,
+     "uniiCode": "H4N855PNZ1",
+     "order": 5,
+     "raw_category": "vitamin",
+     "raw_source_text": "Vitamin E",
+     "branded_token_extracted": null,
      "canonical_id": "vitamin_e",
      "canonical_source_db": "ingredient_quality_map",
+     "cleaner_match_method": null,
+     "label_nutrient_context": "vitamin e",
+     "source_section": "active",
+     "raw_source_path": "ingredientRows[4]",
+     "normalized_key": "vitamin_e",
+     "cleaner_row_role": "active_scorable",
+     "score_eligible_by_cleaner": true,
+     "score_exclusion_reason": null,
+     "dose_class": "therapeutic_mass",
+     "raw_taxonomy": {
+      "category": "vitamin",
+      "ingredientGroup": "Vitamin E",
+      "ingredientId": 281760,
+      "uniiCode": "H4N855PNZ1",
+      "forms": [
+       {
+        "name": "DL-Alpha-Tocopheryl Acetate",
+        "ingredientId": 280484,
+        "order": 1,
+        "prefix": null,
+        "percent": null,
+        "category": "vitamin",
+        "ingredientGroup": "Vitamin E",
+        "uniiCode": "WR1WPI7EW8"
+       }
+      ],
+      "parentBlend": null,
+      "isNestedIngredient": false,
+      "nested_depth": 0,
+      "quantityVariants": [
+       {
+        "quantity": 13.5,
+        "unit": "mg",
+        "index": 0,
+        "operator": "=",
+        "quantity_parsed": true,
+        "serving_size_order": 1,
+        "serving_size_quantity": 5,
+        "serving_size_unit": "Gram(s)",
+        "daily_value": 90.0,
+        "daily_value_target_group": "adult_4_plus",
+        "selected_for_analysis": true
+       }
+      ]
+     },
+     "name": "Vitamin E",
+     "label_display_name": null,
+     "standardName": "Vitamin E",
+     "ingredientGroup": "Vitamin E",
      "quantity": 13.5,
      "unit": "mg",
+     "dailyValue": 90.0,
+     "quantityVariants": null,
      "forms": [
       {
        "name": "DL-Alpha-Tocopheryl Acetate",
+       "ingredientId": 280484,
+       "order": 1,
        "prefix": null,
-       "percent": null
+       "percent": null,
+       "category": "vitamin",
+       "ingredientGroup": "Vitamin E",
+       "uniiCode": "WR1WPI7EW8"
       }
      ],
+     "alternateNames": [],
+     "mapped": true,
+     "proprietaryBlend": false,
+     "disclosureLevel": null,
+     "parentBlend": null,
+     "isNestedIngredient": false,
+     "nestedIngredients": [],
+     "parentBlendMass": null,
+     "parentBlendUnit": null,
+     "hierarchyType": null,
+     "isAdditive": true,
+     "additiveType": "antioxidant_preservative",
      "notes": "Vitamin E (Form: as DL-Alpha Tocopheryl Acetate) ",
-     "order": 5
+     "safety_flags": []
     }
    ],
    "expect": [
@@ -1269,22 +3941,93 @@
    "product": "Probiotic Assorted Fruit Flavors",
    "active_ingredients": [
     {
-     "name": "Vitamin E",
-     "standardName": "Vitamin E",
-     "ingredientGroup": "Vitamin E",
+     "ingredientId": 280738,
+     "uniiCode": "H4N855PNZ1",
+     "order": 8,
+     "raw_category": "vitamin",
+     "raw_source_text": "Vitamin E",
+     "branded_token_extracted": null,
      "canonical_id": "vitamin_e",
      "canonical_source_db": "ingredient_quality_map",
+     "cleaner_match_method": null,
+     "label_nutrient_context": "vitamin e",
+     "source_section": "active",
+     "raw_source_path": "ingredientRows[5]",
+     "normalized_key": "vitamin_e",
+     "cleaner_row_role": "active_scorable",
+     "score_eligible_by_cleaner": true,
+     "score_exclusion_reason": null,
+     "dose_class": "therapeutic_mass",
+     "raw_taxonomy": {
+      "category": "vitamin",
+      "ingredientGroup": "Vitamin E",
+      "ingredientId": 280738,
+      "uniiCode": "H4N855PNZ1",
+      "forms": [
+       {
+        "name": "D-Alpha-Tocopheryl Acetate",
+        "ingredientId": 280366,
+        "order": 1,
+        "prefix": null,
+        "percent": null,
+        "category": "vitamin",
+        "ingredientGroup": "Vitamin E",
+        "uniiCode": "A7E6112E4N"
+       }
+      ],
+      "parentBlend": null,
+      "isNestedIngredient": false,
+      "nested_depth": 0,
+      "quantityVariants": [
+       {
+        "quantity": 6.7,
+        "unit": "mg",
+        "index": 0,
+        "operator": "=",
+        "quantity_parsed": true,
+        "serving_size_order": 1,
+        "serving_size_quantity": 3,
+        "serving_size_unit": "Gummie(s)",
+        "daily_value": 45.0,
+        "daily_value_target_group": "adult_4_plus",
+        "selected_for_analysis": true
+       }
+      ]
+     },
+     "name": "Vitamin E",
+     "label_display_name": null,
+     "standardName": "Vitamin E",
+     "ingredientGroup": "Vitamin E",
      "quantity": 6.7,
      "unit": "mg",
+     "dailyValue": 45.0,
+     "quantityVariants": null,
      "forms": [
       {
        "name": "D-Alpha-Tocopheryl Acetate",
+       "ingredientId": 280366,
+       "order": 1,
        "prefix": null,
-       "percent": null
+       "percent": null,
+       "category": "vitamin",
+       "ingredientGroup": "Vitamin E",
+       "uniiCode": "A7E6112E4N"
       }
      ],
+     "alternateNames": [],
+     "mapped": true,
+     "proprietaryBlend": false,
+     "disclosureLevel": null,
+     "parentBlend": null,
+     "isNestedIngredient": false,
+     "nestedIngredients": [],
+     "parentBlendMass": null,
+     "parentBlendUnit": null,
+     "hierarchyType": null,
+     "isAdditive": true,
+     "additiveType": "antioxidant_preservative",
      "notes": "Vitamin E (Form: as D-Alpha Tocopheryl Acetate) ",
-     "order": 8
+     "safety_flags": []
     }
    ],
    "expect": [
@@ -1301,22 +4044,93 @@
    "product": "Ultra NourishHair",
    "active_ingredients": [
     {
-     "name": "Vitamin E",
-     "standardName": "Tocopherol (Preservative)",
-     "ingredientGroup": "Vitamin E",
+     "ingredientId": 280736,
+     "uniiCode": "H4N855PNZ1",
+     "order": 3,
+     "raw_category": "vitamin",
+     "raw_source_text": "Vitamin E",
+     "branded_token_extracted": null,
      "canonical_id": "vitamin_e",
      "canonical_source_db": "ingredient_quality_map",
+     "cleaner_match_method": "unii_form_exact_match",
+     "label_nutrient_context": "vitamin e",
+     "source_section": "active",
+     "raw_source_path": "ingredientRows[2]",
+     "normalized_key": "vitamin_e",
+     "cleaner_row_role": "active_scorable",
+     "score_eligible_by_cleaner": true,
+     "score_exclusion_reason": null,
+     "dose_class": "therapeutic_mass",
+     "raw_taxonomy": {
+      "category": "vitamin",
+      "ingredientGroup": "Vitamin E",
+      "ingredientId": 280736,
+      "uniiCode": "H4N855PNZ1",
+      "forms": [
+       {
+        "name": "Mixed Tocopherols",
+        "ingredientId": 280625,
+        "order": 1,
+        "prefix": null,
+        "percent": null,
+        "category": "vitamin",
+        "ingredientGroup": "Vitamin E",
+        "uniiCode": "R0ZB2556P8"
+       }
+      ],
+      "parentBlend": null,
+      "isNestedIngredient": false,
+      "nested_depth": 0,
+      "quantityVariants": [
+       {
+        "quantity": 6.7,
+        "unit": "mg",
+        "index": 0,
+        "operator": "=",
+        "quantity_parsed": true,
+        "serving_size_order": 1,
+        "serving_size_quantity": 2,
+        "serving_size_unit": "Caplet(s)",
+        "daily_value": 45.0,
+        "daily_value_target_group": "adult_4_plus",
+        "selected_for_analysis": true
+       }
+      ]
+     },
+     "name": "Vitamin E",
+     "label_display_name": null,
+     "standardName": "Tocopherol (Preservative)",
+     "ingredientGroup": "Vitamin E",
      "quantity": 6.7,
      "unit": "mg",
+     "dailyValue": 45.0,
+     "quantityVariants": null,
      "forms": [
       {
        "name": "Mixed Tocopherols",
+       "ingredientId": 280625,
+       "order": 1,
        "prefix": null,
-       "percent": null
+       "percent": null,
+       "category": "vitamin",
+       "ingredientGroup": "Vitamin E",
+       "uniiCode": "R0ZB2556P8"
       }
      ],
+     "alternateNames": [],
+     "mapped": true,
+     "proprietaryBlend": false,
+     "disclosureLevel": null,
+     "parentBlend": null,
+     "isNestedIngredient": false,
+     "nestedIngredients": [],
+     "parentBlendMass": null,
+     "parentBlendUnit": null,
+     "hierarchyType": null,
+     "isAdditive": true,
+     "additiveType": "antioxidant_preservative",
      "notes": "Vitamin E (Form: as mixed Tocopherols) ",
-     "order": 3
+     "safety_flags": []
     }
    ],
    "expect": [
@@ -1333,22 +4147,90 @@
    "product": "Multivitamins Softgels",
    "active_ingredients": [
     {
-     "name": "Vitamin C",
-     "standardName": "Vitamin C",
-     "ingredientGroup": "Vitamin C",
+     "ingredientId": 279323,
+     "uniiCode": "PQ6CK8PD0R",
+     "order": 2,
+     "raw_category": "vitamin",
+     "raw_source_text": "Vitamin C",
+     "branded_token_extracted": null,
      "canonical_id": "vitamin_c",
      "canonical_source_db": "ingredient_quality_map",
+     "cleaner_match_method": "unii_exact_match",
+     "label_nutrient_context": "vitamin c",
+     "source_section": "active",
+     "raw_source_path": "ingredientRows[1]",
+     "normalized_key": "vitamin_c",
+     "cleaner_row_role": "active_scorable",
+     "score_eligible_by_cleaner": true,
+     "score_exclusion_reason": null,
+     "dose_class": "therapeutic_mass",
+     "raw_taxonomy": {
+      "category": "vitamin",
+      "ingredientGroup": "Vitamin C",
+      "ingredientId": 279323,
+      "uniiCode": "PQ6CK8PD0R",
+      "forms": [
+       {
+        "name": "Calcium Ascorbate",
+        "ingredientId": 278826,
+        "order": 1,
+        "prefix": null,
+        "percent": null,
+        "category": "mineral",
+        "ingredientGroup": "Calcium",
+        "uniiCode": "183E4W213W"
+       }
+      ],
+      "parentBlend": null,
+      "isNestedIngredient": false,
+      "nested_depth": 0,
+      "quantityVariants": [
+       {
+        "quantity": 30.0,
+        "unit": "mg",
+        "index": 0,
+        "operator": "=",
+        "quantity_parsed": true,
+        "serving_size_order": 1,
+        "serving_size_quantity": 1,
+        "serving_size_unit": "Softgel(s)",
+        "daily_value": 33.0,
+        "daily_value_target_group": "adult_4_plus",
+        "selected_for_analysis": true
+       }
+      ]
+     },
+     "name": "Vitamin C",
+     "label_display_name": null,
+     "standardName": "Vitamin C",
+     "ingredientGroup": "Vitamin C",
      "quantity": 30.0,
      "unit": "mg",
+     "dailyValue": 33.0,
+     "quantityVariants": null,
      "forms": [
       {
        "name": "Calcium Ascorbate",
+       "ingredientId": 278826,
+       "order": 1,
        "prefix": null,
-       "percent": null
+       "percent": null,
+       "category": "mineral",
+       "ingredientGroup": "Calcium",
+       "uniiCode": "183E4W213W"
       }
      ],
-     "notes": null,
-     "order": 2
+     "alternateNames": [],
+     "mapped": true,
+     "proprietaryBlend": false,
+     "disclosureLevel": null,
+     "parentBlend": null,
+     "isNestedIngredient": false,
+     "nestedIngredients": [],
+     "parentBlendMass": null,
+     "parentBlendUnit": null,
+     "hierarchyType": null,
+     "safety_flags": []
     }
    ],
    "expect": [
@@ -1365,22 +4247,92 @@
    "product": "Magnesium L-Threonate with Vitamins C & D3",
    "active_ingredients": [
     {
-     "name": "Magnesium",
-     "standardName": "Magnesium",
-     "ingredientGroup": "Magnesium",
+     "ingredientId": 295821,
+     "uniiCode": "I38ZP9992A",
+     "order": 5,
+     "raw_category": "mineral",
+     "raw_source_text": "Magnesium",
+     "branded_token_extracted": null,
      "canonical_id": "magnesium",
      "canonical_source_db": "ingredient_quality_map",
+     "cleaner_match_method": "unii_exact_match",
+     "label_nutrient_context": "magnesium",
+     "source_section": "active",
+     "raw_source_path": "ingredientRows[4]",
+     "normalized_key": "magnesium",
+     "cleaner_row_role": "active_scorable",
+     "score_eligible_by_cleaner": true,
+     "score_exclusion_reason": null,
+     "dose_class": "therapeutic_mass",
+     "raw_taxonomy": {
+      "category": "mineral",
+      "ingredientGroup": "Magnesium",
+      "ingredientId": 295821,
+      "uniiCode": "I38ZP9992A",
+      "forms": [
+       {
+        "name": "Magnesium L-Threonate",
+        "ingredientId": 295761,
+        "order": 1,
+        "prefix": null,
+        "percent": null,
+        "category": "mineral",
+        "ingredientGroup": "Magnesium",
+        "uniiCode": "1Y26ZZ0OTM"
+       }
+      ],
+      "parentBlend": null,
+      "isNestedIngredient": false,
+      "nested_depth": 0,
+      "quantityVariants": [
+       {
+        "quantity": 130.0,
+        "unit": "mg",
+        "index": 0,
+        "operator": "=",
+        "quantity_parsed": true,
+        "serving_size_order": 1,
+        "serving_size_quantity": 3,
+        "serving_size_unit": "Capsule(s)",
+        "daily_value": 31.0,
+        "daily_value_target_group": "adult_4_plus",
+        "selected_for_analysis": true
+       }
+      ]
+     },
+     "name": "Magnesium",
+     "label_display_name": null,
+     "standardName": "Magnesium",
+     "ingredientGroup": "Magnesium",
      "quantity": 130.0,
      "unit": "mg",
+     "dailyValue": 31.0,
+     "quantityVariants": null,
      "forms": [
       {
        "name": "Magnesium L-Threonate",
+       "ingredientId": 295761,
+       "order": 1,
        "prefix": null,
-       "percent": null
+       "percent": null,
+       "category": "mineral",
+       "ingredientGroup": "Magnesium",
+       "uniiCode": "1Y26ZZ0OTM"
       }
      ],
-     "notes": null,
-     "order": 5
+     "alternateNames": [
+      "Mg"
+     ],
+     "mapped": true,
+     "proprietaryBlend": false,
+     "disclosureLevel": null,
+     "parentBlend": null,
+     "isNestedIngredient": false,
+     "nestedIngredients": [],
+     "parentBlendMass": null,
+     "parentBlendUnit": null,
+     "hierarchyType": null,
+     "safety_flags": []
     }
    ],
    "expect": [
@@ -1397,22 +4349,77 @@
    "product": "Creatine HCl",
    "active_ingredients": [
     {
-     "name": "Creatine Hydrochloride",
-     "standardName": "Creatine",
-     "ingredientGroup": "Creatine",
+     "ingredientId": 64536,
+     "uniiCode": null,
+     "order": 1,
+     "raw_category": "non-nutrient/non-botanical",
+     "raw_source_text": "Creatine Hydrochloride",
+     "branded_token_extracted": null,
      "canonical_id": "creatine_monohydrate",
      "canonical_source_db": "ingredient_quality_map",
+     "cleaner_match_method": null,
+     "label_nutrient_context": null,
+     "source_section": "active",
+     "raw_source_path": "ingredientRows[0]",
+     "normalized_key": "creatine_hydrochloride",
+     "cleaner_row_role": "active_scorable",
+     "score_eligible_by_cleaner": true,
+     "score_exclusion_reason": null,
+     "dose_class": "therapeutic_mass",
+     "raw_taxonomy": {
+      "category": "non-nutrient/non-botanical",
+      "ingredientGroup": "Creatine",
+      "ingredientId": 64536,
+      "uniiCode": null,
+      "forms": [
+       {
+        "name": "hydrochloride",
+        "source": "name_extraction"
+       }
+      ],
+      "parentBlend": null,
+      "isNestedIngredient": false,
+      "nested_depth": 0,
+      "quantityVariants": [
+       {
+        "quantity": 750.0,
+        "unit": "mg",
+        "index": 0,
+        "operator": "=",
+        "quantity_parsed": true,
+        "serving_size_order": 1,
+        "serving_size_quantity": 0.75,
+        "serving_size_unit": "Gram(s)",
+        "daily_value_target_group": "adult_4_plus",
+        "selected_for_analysis": true
+       }
+      ]
+     },
+     "name": "Creatine Hydrochloride",
+     "label_display_name": null,
+     "standardName": "Creatine",
+     "ingredientGroup": "Creatine",
      "quantity": 750.0,
      "unit": "mg",
+     "dailyValue": null,
+     "quantityVariants": null,
      "forms": [
       {
        "name": "hydrochloride",
-       "prefix": null,
-       "percent": null
+       "source": "name_extraction"
       }
      ],
-     "notes": null,
-     "order": 1
+     "alternateNames": [],
+     "mapped": true,
+     "proprietaryBlend": false,
+     "disclosureLevel": null,
+     "parentBlend": null,
+     "isNestedIngredient": false,
+     "nestedIngredients": [],
+     "parentBlendMass": null,
+     "parentBlendUnit": null,
+     "hierarchyType": null,
+     "safety_flags": []
     }
    ],
    "expect": [
@@ -1429,27 +4436,85 @@
    "product": "Creatine Ethyl Ester HCl",
    "active_ingredients": [
     {
-     "name": "Creatine Ethyl Ester HCl",
-     "standardName": "Creatine",
-     "ingredientGroup": "Creatine",
+     "ingredientId": 54618,
+     "uniiCode": null,
+     "order": 1,
+     "raw_category": "non-nutrient/non-botanical",
+     "raw_source_text": "Creatine Ethyl Ester HCl",
+     "branded_token_extracted": null,
      "canonical_id": "creatine_monohydrate",
      "canonical_source_db": "ingredient_quality_map",
+     "cleaner_match_method": null,
+     "label_nutrient_context": null,
+     "source_section": "active",
+     "raw_source_path": "ingredientRows[0]",
+     "normalized_key": "creatine_ethyl_ester_hcl",
+     "cleaner_row_role": "active_scorable",
+     "score_eligible_by_cleaner": true,
+     "score_exclusion_reason": null,
+     "dose_class": "therapeutic_mass",
+     "raw_taxonomy": {
+      "category": "non-nutrient/non-botanical",
+      "ingredientGroup": "Creatine",
+      "ingredientId": 54618,
+      "uniiCode": null,
+      "forms": [
+       {
+        "name": "ethyl ester",
+        "source": "name_extraction"
+       },
+       {
+        "name": "hydrochloride",
+        "source": "name_extraction"
+       }
+      ],
+      "parentBlend": null,
+      "isNestedIngredient": false,
+      "nested_depth": 0,
+      "quantityVariants": [
+       {
+        "quantity": 3.0,
+        "unit": "Gram(s)",
+        "index": 0,
+        "operator": "=",
+        "quantity_parsed": true,
+        "serving_size_order": 1,
+        "serving_size_quantity": 3,
+        "serving_size_unit": "Gram(s)",
+        "daily_value_target_group": "adult_4_plus",
+        "selected_for_analysis": true
+       }
+      ]
+     },
+     "name": "Creatine Ethyl Ester HCl",
+     "label_display_name": null,
+     "standardName": "Creatine",
+     "ingredientGroup": "Creatine",
      "quantity": 3.0,
      "unit": "Gram(s)",
+     "dailyValue": null,
+     "quantityVariants": null,
      "forms": [
       {
        "name": "ethyl ester",
-       "prefix": null,
-       "percent": null
+       "source": "name_extraction"
       },
       {
        "name": "hydrochloride",
-       "prefix": null,
-       "percent": null
+       "source": "name_extraction"
       }
      ],
-     "notes": null,
-     "order": 1
+     "alternateNames": [],
+     "mapped": true,
+     "proprietaryBlend": false,
+     "disclosureLevel": null,
+     "parentBlend": null,
+     "isNestedIngredient": false,
+     "nestedIngredients": [],
+     "parentBlendMass": null,
+     "parentBlendUnit": null,
+     "hierarchyType": null,
+     "safety_flags": []
     }
    ],
    "expect": [
@@ -1466,40 +4531,174 @@
    "product": "Super K with Advanced K2 Complex",
    "active_ingredients": [
     {
-     "name": "Vitamin K2",
-     "standardName": "Vitamin K2",
-     "ingredientGroup": "Vitamin K (menaquinone)",
+     "ingredientId": 150156,
+     "uniiCode": null,
+     "order": 4,
+     "raw_category": "vitamin",
+     "raw_source_text": "Vitamin K2",
+     "branded_token_extracted": null,
      "canonical_id": "vitamin_k2",
      "canonical_source_db": "ingredient_quality_map",
+     "cleaner_match_method": null,
+     "label_nutrient_context": "vitamin k2",
+     "source_section": "active",
+     "raw_source_path": "ingredientRows[1].nestedRows[1]",
+     "normalized_key": "vitamin_k2",
+     "cleaner_row_role": "active_scorable",
+     "score_eligible_by_cleaner": true,
+     "score_exclusion_reason": null,
+     "dose_class": "therapeutic_mass",
+     "raw_taxonomy": {
+      "category": "vitamin",
+      "ingredientGroup": "Vitamin K (menaquinone)",
+      "ingredientId": 150156,
+      "uniiCode": null,
+      "forms": [
+       {
+        "name": "Menaquinone-4",
+        "ingredientId": 282213,
+        "order": 1,
+        "prefix": "as",
+        "percent": null,
+        "category": "vitamin",
+        "ingredientGroup": "Vitamin K",
+        "uniiCode": "27Y876D139"
+       }
+      ],
+      "parentBlend": "Vitamin K",
+      "isNestedIngredient": true,
+      "nested_depth": 1,
+      "quantityVariants": [
+       {
+        "quantity": 1000.0,
+        "unit": "mcg",
+        "index": 0,
+        "operator": "=",
+        "quantity_parsed": true,
+        "serving_size_order": 1,
+        "serving_size_quantity": 1,
+        "serving_size_unit": "Softgel(s)",
+        "selected_for_analysis": true
+       }
+      ]
+     },
+     "name": "Vitamin K2",
+     "label_display_name": null,
+     "standardName": "Vitamin K2",
+     "ingredientGroup": "Vitamin K (menaquinone)",
      "quantity": 1000.0,
      "unit": "mcg",
+     "dailyValue": null,
+     "quantityVariants": null,
      "forms": [
       {
        "name": "Menaquinone-4",
+       "ingredientId": 282213,
+       "order": 1,
        "prefix": "as",
-       "percent": null
+       "percent": null,
+       "category": "vitamin",
+       "ingredientGroup": "Vitamin K",
+       "uniiCode": "27Y876D139"
       }
      ],
+     "alternateNames": [],
+     "mapped": true,
+     "proprietaryBlend": false,
+     "disclosureLevel": null,
+     "parentBlend": "Vitamin K",
+     "isNestedIngredient": true,
+     "nestedIngredients": [],
+     "parentBlendMass": 2600,
+     "parentBlendUnit": "mcg",
+     "hierarchyType": null,
      "notes": "Vitamin K2 (Form: as Menaquinone-4) ",
-     "order": 4
+     "safety_flags": []
     },
     {
-     "name": "Vitamin K2",
-     "standardName": "Vitamin K2",
-     "ingredientGroup": "Vitamin K (menaquinone)",
+     "ingredientId": 203630,
+     "uniiCode": null,
+     "order": 5,
+     "raw_category": "vitamin",
+     "raw_source_text": "Vitamin K2",
+     "branded_token_extracted": null,
      "canonical_id": "vitamin_k2",
      "canonical_source_db": "ingredient_quality_map",
+     "cleaner_match_method": null,
+     "label_nutrient_context": "vitamin k2",
+     "source_section": "active",
+     "raw_source_path": "ingredientRows[1].nestedRows[2]",
+     "normalized_key": "vitamin_k2",
+     "cleaner_row_role": "active_scorable",
+     "score_eligible_by_cleaner": true,
+     "score_exclusion_reason": null,
+     "dose_class": "therapeutic_mass",
+     "raw_taxonomy": {
+      "category": "vitamin",
+      "ingredientGroup": "Vitamin K (menaquinone)",
+      "ingredientId": 203630,
+      "uniiCode": null,
+      "forms": [
+       {
+        "name": "Menaquinone-7",
+        "ingredientId": 282210,
+        "order": 1,
+        "prefix": "as all-trans",
+        "percent": null,
+        "category": "vitamin",
+        "ingredientGroup": "Vitamin K",
+        "uniiCode": "8427BML8NY"
+       }
+      ],
+      "parentBlend": "Vitamin K",
+      "isNestedIngredient": true,
+      "nested_depth": 1,
+      "quantityVariants": [
+       {
+        "quantity": 100.0,
+        "unit": "mcg",
+        "index": 0,
+        "operator": "=",
+        "quantity_parsed": true,
+        "serving_size_order": 1,
+        "serving_size_quantity": 1,
+        "serving_size_unit": "Softgel(s)",
+        "selected_for_analysis": true
+       }
+      ]
+     },
+     "name": "Vitamin K2",
+     "label_display_name": null,
+     "standardName": "Vitamin K2",
+     "ingredientGroup": "Vitamin K (menaquinone)",
      "quantity": 100.0,
      "unit": "mcg",
+     "dailyValue": null,
+     "quantityVariants": null,
      "forms": [
       {
        "name": "Menaquinone-7",
+       "ingredientId": 282210,
+       "order": 1,
        "prefix": "as all-trans",
-       "percent": null
+       "percent": null,
+       "category": "vitamin",
+       "ingredientGroup": "Vitamin K",
+       "uniiCode": "8427BML8NY"
       }
      ],
+     "alternateNames": [],
+     "mapped": true,
+     "proprietaryBlend": false,
+     "disclosureLevel": null,
+     "parentBlend": "Vitamin K",
+     "isNestedIngredient": true,
+     "nestedIngredients": [],
+     "parentBlendMass": 2600,
+     "parentBlendUnit": "mcg",
+     "hierarchyType": null,
      "notes": "Vitamin K2 (Form: as all-trans Menaquinone-7) ",
-     "order": 5
+     "safety_flags": []
     }
    ],
    "expect": [
@@ -1520,16 +4719,68 @@
    "product": "Whey Protein Concentrate 80%",
    "active_ingredients": [
     {
-     "name": "Vitamin D",
-     "standardName": "Vitamin D",
-     "ingredientGroup": "Vitamin D",
+     "ingredientId": 279013,
+     "uniiCode": "9VU1KI44GP",
+     "order": 12,
+     "raw_category": "vitamin",
+     "raw_source_text": "Vitamin D",
+     "branded_token_extracted": null,
      "canonical_id": "vitamin_d",
      "canonical_source_db": "ingredient_quality_map",
+     "cleaner_match_method": "unii_exact_match",
+     "label_nutrient_context": "vitamin d",
+     "source_section": "active",
+     "raw_source_path": "ingredientRows[6]",
+     "normalized_key": "vitamin_d",
+     "cleaner_row_role": "active_scorable",
+     "score_eligible_by_cleaner": true,
+     "score_exclusion_reason": null,
+     "dose_class": "therapeutic_mass",
+     "raw_taxonomy": {
+      "category": "vitamin",
+      "ingredientGroup": "Vitamin D",
+      "ingredientId": 279013,
+      "uniiCode": "9VU1KI44GP",
+      "forms": [],
+      "parentBlend": null,
+      "isNestedIngredient": false,
+      "nested_depth": 0,
+      "quantityVariants": [
+       {
+        "quantity": 0.2,
+        "unit": "mcg",
+        "index": 0,
+        "operator": "<",
+        "quantity_parsed": true,
+        "serving_size_order": 1,
+        "serving_size_quantity": 30,
+        "serving_size_unit": "Gram(s)",
+        "daily_value": 1.0,
+        "daily_value_target_group": "adult_4_plus",
+        "selected_for_analysis": true
+       }
+      ]
+     },
+     "name": "Vitamin D",
+     "label_display_name": null,
+     "standardName": "Vitamin D",
+     "ingredientGroup": "Vitamin D",
      "quantity": 0.2,
      "unit": "mcg",
+     "dailyValue": 1.0,
+     "quantityVariants": null,
      "forms": [],
-     "notes": null,
-     "order": 12
+     "alternateNames": [],
+     "mapped": true,
+     "proprietaryBlend": false,
+     "disclosureLevel": null,
+     "parentBlend": null,
+     "isNestedIngredient": false,
+     "nestedIngredients": [],
+     "parentBlendMass": null,
+     "parentBlendUnit": null,
+     "hierarchyType": null,
+     "safety_flags": []
     }
    ],
    "expect": [
@@ -1546,16 +4797,70 @@
    "product": "Grass-Fed Whey Protein Isolate",
    "active_ingredients": [
     {
-     "name": "Magnesium",
-     "standardName": "Magnesium",
-     "ingredientGroup": "Magnesium",
+     "ingredientId": 286056,
+     "uniiCode": "I38ZP9992A",
+     "order": 9,
+     "raw_category": "mineral",
+     "raw_source_text": "Magnesium",
+     "branded_token_extracted": null,
      "canonical_id": "magnesium",
      "canonical_source_db": "ingredient_quality_map",
+     "cleaner_match_method": "unii_exact_match",
+     "label_nutrient_context": "magnesium",
+     "source_section": "active",
+     "raw_source_path": "ingredientRows[6]",
+     "normalized_key": "magnesium",
+     "cleaner_row_role": "active_scorable",
+     "score_eligible_by_cleaner": true,
+     "score_exclusion_reason": null,
+     "dose_class": "therapeutic_mass",
+     "raw_taxonomy": {
+      "category": "mineral",
+      "ingredientGroup": "Magnesium",
+      "ingredientId": 286056,
+      "uniiCode": "I38ZP9992A",
+      "forms": [],
+      "parentBlend": null,
+      "isNestedIngredient": false,
+      "nested_depth": 0,
+      "quantityVariants": [
+       {
+        "quantity": 24.0,
+        "unit": "mg",
+        "index": 0,
+        "operator": "=",
+        "quantity_parsed": true,
+        "serving_size_order": 1,
+        "serving_size_quantity": 30,
+        "serving_size_unit": "Gram(s)",
+        "daily_value": 4.0,
+        "daily_value_target_group": "adult_4_plus",
+        "selected_for_analysis": true
+       }
+      ]
+     },
+     "name": "Magnesium",
+     "label_display_name": null,
+     "standardName": "Magnesium",
+     "ingredientGroup": "Magnesium",
      "quantity": 24.0,
      "unit": "mg",
+     "dailyValue": 4.0,
+     "quantityVariants": null,
      "forms": [],
-     "notes": null,
-     "order": 9
+     "alternateNames": [
+      "Mg"
+     ],
+     "mapped": true,
+     "proprietaryBlend": false,
+     "disclosureLevel": null,
+     "parentBlend": null,
+     "isNestedIngredient": false,
+     "nestedIngredients": [],
+     "parentBlendMass": null,
+     "parentBlendUnit": null,
+     "hierarchyType": null,
+     "safety_flags": []
     }
    ],
    "expect": [
@@ -1572,16 +4877,70 @@
    "product": "Calcium, Magnesium & Zinc",
    "active_ingredients": [
     {
-     "name": "Zinc",
-     "standardName": "Zinc",
-     "ingredientGroup": "Zinc",
+     "ingredientId": 292412,
+     "uniiCode": "J41CSQ7QDS",
+     "order": 3,
+     "raw_category": "mineral",
+     "raw_source_text": "Zinc",
+     "branded_token_extracted": null,
      "canonical_id": "zinc",
      "canonical_source_db": "ingredient_quality_map",
+     "cleaner_match_method": "unii_exact_match",
+     "label_nutrient_context": "zinc",
+     "source_section": "active",
+     "raw_source_path": "ingredientRows[2]",
+     "normalized_key": "zinc",
+     "cleaner_row_role": "active_scorable",
+     "score_eligible_by_cleaner": true,
+     "score_exclusion_reason": null,
+     "dose_class": "therapeutic_mass",
+     "raw_taxonomy": {
+      "category": "mineral",
+      "ingredientGroup": "Zinc",
+      "ingredientId": 292412,
+      "uniiCode": "J41CSQ7QDS",
+      "forms": [],
+      "parentBlend": null,
+      "isNestedIngredient": false,
+      "nested_depth": 0,
+      "quantityVariants": [
+       {
+        "quantity": 15.0,
+        "unit": "mg",
+        "index": 0,
+        "operator": "=",
+        "quantity_parsed": true,
+        "serving_size_order": 1,
+        "serving_size_quantity": 3,
+        "serving_size_unit": "Caplet(s)",
+        "daily_value": 100.0,
+        "daily_value_target_group": "adult_4_plus",
+        "selected_for_analysis": true
+       }
+      ]
+     },
+     "name": "Zinc",
+     "label_display_name": null,
+     "standardName": "Zinc",
+     "ingredientGroup": "Zinc",
      "quantity": 15.0,
      "unit": "mg",
+     "dailyValue": 100.0,
+     "quantityVariants": null,
      "forms": [],
-     "notes": null,
-     "order": 3
+     "alternateNames": [
+      "Zn"
+     ],
+     "mapped": true,
+     "proprietaryBlend": false,
+     "disclosureLevel": null,
+     "parentBlend": null,
+     "isNestedIngredient": false,
+     "nestedIngredients": [],
+     "parentBlendMass": null,
+     "parentBlendUnit": null,
+     "hierarchyType": null,
+     "safety_flags": []
     }
    ],
    "expect": [
@@ -1598,16 +4957,70 @@
    "product": "Rice Protein",
    "active_ingredients": [
     {
-     "name": "Iron",
-     "standardName": "Iron",
-     "ingredientGroup": "Iron",
+     "ingredientId": 292411,
+     "uniiCode": "E1UOL152H7",
+     "order": 13,
+     "raw_category": "mineral",
+     "raw_source_text": "Iron",
+     "branded_token_extracted": null,
      "canonical_id": "iron",
      "canonical_source_db": "ingredient_quality_map",
+     "cleaner_match_method": "unii_exact_match",
+     "label_nutrient_context": "iron",
+     "source_section": "active",
+     "raw_source_path": "ingredientRows[7]",
+     "normalized_key": "iron",
+     "cleaner_row_role": "active_scorable",
+     "score_eligible_by_cleaner": true,
+     "score_exclusion_reason": null,
+     "dose_class": "therapeutic_mass",
+     "raw_taxonomy": {
+      "category": "mineral",
+      "ingredientGroup": "Iron",
+      "ingredientId": 292411,
+      "uniiCode": "E1UOL152H7",
+      "forms": [],
+      "parentBlend": null,
+      "isNestedIngredient": false,
+      "nested_depth": 0,
+      "quantityVariants": [
+       {
+        "quantity": 1.0,
+        "unit": "mg",
+        "index": 0,
+        "operator": "=",
+        "quantity_parsed": true,
+        "serving_size_order": 1,
+        "serving_size_quantity": 30,
+        "serving_size_unit": "Gram(s)",
+        "daily_value": 0.0,
+        "daily_value_target_group": "adult_4_plus",
+        "selected_for_analysis": true
+       }
+      ]
+     },
+     "name": "Iron",
+     "label_display_name": null,
+     "standardName": "Iron",
+     "ingredientGroup": "Iron",
      "quantity": 1.0,
      "unit": "mg",
+     "dailyValue": 0.0,
+     "quantityVariants": null,
      "forms": [],
-     "notes": null,
-     "order": 13
+     "alternateNames": [
+      "Fe"
+     ],
+     "mapped": true,
+     "proprietaryBlend": false,
+     "disclosureLevel": null,
+     "parentBlend": null,
+     "isNestedIngredient": false,
+     "nestedIngredients": [],
+     "parentBlendMass": null,
+     "parentBlendUnit": null,
+     "hierarchyType": null,
+     "safety_flags": []
     }
    ],
    "expect": [
@@ -1624,16 +5037,68 @@
    "product": "Calcium Soft Chews Milk Chocolate",
    "active_ingredients": [
     {
-     "name": "Vitamin K",
-     "standardName": "Vitamin K1",
-     "ingredientGroup": "Vitamin K",
+     "ingredientId": 279021,
+     "uniiCode": "A034SE7857",
+     "order": 5,
+     "raw_category": "vitamin",
+     "raw_source_text": "Vitamin K",
+     "branded_token_extracted": null,
      "canonical_id": "vitamin_k1",
      "canonical_source_db": "ingredient_quality_map",
+     "cleaner_match_method": "unii_exact_match",
+     "label_nutrient_context": "vitamin k",
+     "source_section": "active",
+     "raw_source_path": "ingredientRows[2]",
+     "normalized_key": "vitamin_k",
+     "cleaner_row_role": "active_scorable",
+     "score_eligible_by_cleaner": true,
+     "score_exclusion_reason": null,
+     "dose_class": "therapeutic_mass",
+     "raw_taxonomy": {
+      "category": "vitamin",
+      "ingredientGroup": "Vitamin K",
+      "ingredientId": 279021,
+      "uniiCode": "A034SE7857",
+      "forms": [],
+      "parentBlend": null,
+      "isNestedIngredient": false,
+      "nested_depth": 0,
+      "quantityVariants": [
+       {
+        "quantity": 40.0,
+        "unit": "mcg",
+        "index": 0,
+        "operator": "=",
+        "quantity_parsed": true,
+        "serving_size_order": 1,
+        "serving_size_quantity": 1,
+        "serving_size_unit": "Chew(s)",
+        "daily_value": 50.0,
+        "daily_value_target_group": "adult_4_plus",
+        "selected_for_analysis": true
+       }
+      ]
+     },
+     "name": "Vitamin K",
+     "label_display_name": null,
+     "standardName": "Vitamin K1",
+     "ingredientGroup": "Vitamin K",
      "quantity": 40.0,
      "unit": "mcg",
+     "dailyValue": 50.0,
+     "quantityVariants": null,
      "forms": [],
-     "notes": null,
-     "order": 5
+     "alternateNames": [],
+     "mapped": true,
+     "proprietaryBlend": false,
+     "disclosureLevel": null,
+     "parentBlend": null,
+     "isNestedIngredient": false,
+     "nestedIngredients": [],
+     "parentBlendMass": null,
+     "parentBlendUnit": null,
+     "hierarchyType": null,
+     "safety_flags": []
     }
    ],
    "expect": [
@@ -1650,16 +5115,70 @@
    "product": "Grass-Fed Whey Protein Isolate",
    "active_ingredients": [
     {
-     "name": "Calcium",
-     "standardName": "Calcium",
-     "ingredientGroup": "Calcium",
+     "ingredientId": 281043,
+     "uniiCode": "SY7Q814VUP",
+     "order": 12,
+     "raw_category": "mineral",
+     "raw_source_text": "Calcium",
+     "branded_token_extracted": null,
      "canonical_id": "calcium",
      "canonical_source_db": "ingredient_quality_map",
+     "cleaner_match_method": "unii_exact_match",
+     "label_nutrient_context": "calcium",
+     "source_section": "active",
+     "raw_source_path": "ingredientRows[9]",
+     "normalized_key": "calcium",
+     "cleaner_row_role": "active_scorable",
+     "score_eligible_by_cleaner": true,
+     "score_exclusion_reason": null,
+     "dose_class": "therapeutic_mass",
+     "raw_taxonomy": {
+      "category": "mineral",
+      "ingredientGroup": "Calcium",
+      "ingredientId": 281043,
+      "uniiCode": "SY7Q814VUP",
+      "forms": [],
+      "parentBlend": null,
+      "isNestedIngredient": false,
+      "nested_depth": 0,
+      "quantityVariants": [
+       {
+        "quantity": 130.0,
+        "unit": "mg",
+        "index": 0,
+        "operator": "=",
+        "quantity_parsed": true,
+        "serving_size_order": 1,
+        "serving_size_quantity": 30,
+        "serving_size_unit": "Gram(s)",
+        "daily_value": 16.0,
+        "daily_value_target_group": "adult_4_plus",
+        "selected_for_analysis": true
+       }
+      ]
+     },
+     "name": "Calcium",
+     "label_display_name": null,
+     "standardName": "Calcium",
+     "ingredientGroup": "Calcium",
      "quantity": 130.0,
      "unit": "mg",
+     "dailyValue": 16.0,
+     "quantityVariants": null,
      "forms": [],
-     "notes": null,
-     "order": 12
+     "alternateNames": [
+      "Ca"
+     ],
+     "mapped": true,
+     "proprietaryBlend": false,
+     "disclosureLevel": null,
+     "parentBlend": null,
+     "isNestedIngredient": false,
+     "nestedIngredients": [],
+     "parentBlendMass": null,
+     "parentBlendUnit": null,
+     "hierarchyType": null,
+     "safety_flags": []
     }
    ],
    "expect": [
@@ -1676,16 +5195,70 @@
    "product": "Selenium 200 mcg",
    "active_ingredients": [
     {
-     "name": "Selenium",
-     "standardName": "Selenium",
-     "ingredientGroup": "Selenium",
+     "ingredientId": 288234,
+     "uniiCode": "H6241UJ22B",
+     "order": 1,
+     "raw_category": "mineral",
+     "raw_source_text": "Selenium",
+     "branded_token_extracted": null,
      "canonical_id": "selenium",
      "canonical_source_db": "ingredient_quality_map",
+     "cleaner_match_method": "unii_exact_match",
+     "label_nutrient_context": "selenium",
+     "source_section": "active",
+     "raw_source_path": "ingredientRows[0]",
+     "normalized_key": "selenium",
+     "cleaner_row_role": "active_scorable",
+     "score_eligible_by_cleaner": true,
+     "score_exclusion_reason": null,
+     "dose_class": "therapeutic_mass",
+     "raw_taxonomy": {
+      "category": "mineral",
+      "ingredientGroup": "Selenium",
+      "ingredientId": 288234,
+      "uniiCode": "H6241UJ22B",
+      "forms": [],
+      "parentBlend": null,
+      "isNestedIngredient": false,
+      "nested_depth": 0,
+      "quantityVariants": [
+       {
+        "quantity": 200.0,
+        "unit": "mcg",
+        "index": 0,
+        "operator": "=",
+        "quantity_parsed": true,
+        "serving_size_order": 1,
+        "serving_size_quantity": 1,
+        "serving_size_unit": "Tablet(s)",
+        "daily_value": 364.0,
+        "daily_value_target_group": "adult_4_plus",
+        "selected_for_analysis": true
+       }
+      ]
+     },
+     "name": "Selenium",
+     "label_display_name": null,
+     "standardName": "Selenium",
+     "ingredientGroup": "Selenium",
      "quantity": 200.0,
      "unit": "mcg",
+     "dailyValue": 364.0,
+     "quantityVariants": null,
      "forms": [],
-     "notes": null,
-     "order": 1
+     "alternateNames": [
+      "Se"
+     ],
+     "mapped": true,
+     "proprietaryBlend": false,
+     "disclosureLevel": null,
+     "parentBlend": null,
+     "isNestedIngredient": false,
+     "nestedIngredients": [],
+     "parentBlendMass": null,
+     "parentBlendUnit": null,
+     "hierarchyType": null,
+     "safety_flags": []
     }
    ],
    "expect": [
@@ -1702,22 +5275,93 @@
    "product": "Women 50 & Wiser",
    "active_ingredients": [
     {
-     "name": "Vitamin B12",
-     "standardName": "Vitamin B12",
-     "ingredientGroup": "Vitamin B12 (unspecified)",
+     "ingredientId": 258735,
+     "uniiCode": null,
+     "order": 8,
+     "raw_category": "vitamin",
+     "raw_source_text": "Vitamin B12",
+     "branded_token_extracted": null,
      "canonical_id": "vitamin_b12_cobalamin",
      "canonical_source_db": "ingredient_quality_map",
+     "cleaner_match_method": null,
+     "label_nutrient_context": "vitamin b12",
+     "source_section": "active",
+     "raw_source_path": "ingredientRows[7]",
+     "normalized_key": "vitamin_b12",
+     "cleaner_row_role": "active_scorable",
+     "score_eligible_by_cleaner": true,
+     "score_exclusion_reason": null,
+     "dose_class": "therapeutic_mass",
+     "raw_taxonomy": {
+      "category": "vitamin",
+      "ingredientGroup": "Vitamin B12 (unspecified)",
+      "ingredientId": 258735,
+      "uniiCode": null,
+      "forms": [
+       {
+        "name": "Lactobacillus bulgaricus",
+        "ingredientId": 109703,
+        "order": 1,
+        "prefix": "from culture of",
+        "percent": null,
+        "category": "bacteria",
+        "ingredientGroup": "Lactobacillus delbrueckii bulgaricus",
+        "uniiCode": null
+       }
+      ],
+      "parentBlend": null,
+      "isNestedIngredient": false,
+      "nested_depth": 0,
+      "quantityVariants": [
+       {
+        "quantity": 10.0,
+        "unit": "mcg",
+        "index": 0,
+        "operator": "=",
+        "quantity_parsed": true,
+        "serving_size_order": 1,
+        "serving_size_quantity": 3,
+        "serving_size_unit": "Capsule(s)",
+        "daily_value": 417.0,
+        "daily_value_target_group": "adult_4_plus",
+        "selected_for_analysis": true
+       }
+      ]
+     },
+     "name": "Vitamin B12",
+     "label_display_name": null,
+     "standardName": "Vitamin B12",
+     "ingredientGroup": "Vitamin B12 (unspecified)",
      "quantity": 10.0,
      "unit": "mcg",
+     "dailyValue": 417.0,
+     "quantityVariants": null,
      "forms": [
       {
        "name": "Lactobacillus bulgaricus",
+       "ingredientId": 109703,
+       "order": 1,
        "prefix": "from culture of",
-       "percent": null
+       "percent": null,
+       "category": "bacteria",
+       "ingredientGroup": "Lactobacillus delbrueckii bulgaricus",
+       "uniiCode": null
       }
      ],
+     "alternateNames": [],
+     "mapped": true,
+     "proprietaryBlend": false,
+     "disclosureLevel": null,
+     "parentBlend": null,
+     "isNestedIngredient": false,
+     "nestedIngredients": [],
+     "parentBlendMass": null,
+     "parentBlendUnit": null,
+     "hierarchyType": null,
+     "genus": "Lactobacillus",
+     "species": "bulgaricus)",
      "notes": "Vitamin B12 (Form: from culture of Lactobacillus bulgaricus Genus: Lactobacillus Species: bulgaricus) ",
-     "order": 8
+     "safety_flags": []
     }
    ],
    "expect": [
@@ -1728,35 +5372,102 @@
    ]
   },
   {
-   "id": "unmapped-b12-quinoa-disclosed-form",
+   "id": "unspecified-b12-quinoa-source",
    "dsld_id": "304563",
    "brand": "Solgar",
    "product": "Daily Stress Support",
    "active_ingredients": [
     {
-     "name": "Vitamin B12",
-     "standardName": "Vitamin B12",
-     "ingredientGroup": "Vitamin B12",
+     "ingredientId": 301782,
+     "uniiCode": "8406EY2OQA",
+     "order": 7,
+     "raw_category": "vitamin",
+     "raw_source_text": "Vitamin B12",
+     "branded_token_extracted": null,
      "canonical_id": "vitamin_b12_cobalamin",
      "canonical_source_db": "ingredient_quality_map",
+     "cleaner_match_method": null,
+     "label_nutrient_context": "vitamin b12",
+     "source_section": "active",
+     "raw_source_path": "ingredientRows[5]",
+     "normalized_key": "vitamin_b12",
+     "cleaner_row_role": "active_scorable",
+     "score_eligible_by_cleaner": true,
+     "score_exclusion_reason": null,
+     "dose_class": "therapeutic_mass",
+     "raw_taxonomy": {
+      "category": "vitamin",
+      "ingredientGroup": "Vitamin B12",
+      "ingredientId": 301782,
+      "uniiCode": "8406EY2OQA",
+      "forms": [
+       {
+        "name": "Quinoa",
+        "ingredientId": 301777,
+        "order": 1,
+        "prefix": null,
+        "percent": null,
+        "category": "botanical",
+        "ingredientGroup": "Quinoa",
+        "uniiCode": "0"
+       }
+      ],
+      "parentBlend": null,
+      "isNestedIngredient": false,
+      "nested_depth": 0,
+      "quantityVariants": [
+       {
+        "quantity": 1.8,
+        "unit": "mcg",
+        "index": 0,
+        "operator": "=",
+        "quantity_parsed": true,
+        "serving_size_order": 1,
+        "serving_size_quantity": 1,
+        "serving_size_unit": "Vegetable Capsule(s)",
+        "daily_value": 75.0,
+        "daily_value_target_group": "adult_4_plus",
+        "selected_for_analysis": true
+       }
+      ]
+     },
+     "name": "Vitamin B12",
+     "label_display_name": null,
+     "standardName": "Vitamin B12",
+     "ingredientGroup": "Vitamin B12",
      "quantity": 1.8,
      "unit": "mcg",
+     "dailyValue": 75.0,
+     "quantityVariants": null,
      "forms": [
       {
        "name": "Quinoa",
+       "ingredientId": 301777,
+       "order": 1,
        "prefix": null,
-       "percent": null
+       "percent": null,
+       "category": "botanical",
+       "ingredientGroup": "Quinoa",
+       "uniiCode": "0"
       }
      ],
-     "notes": null,
-     "order": 7
+     "alternateNames": [],
+     "mapped": true,
+     "proprietaryBlend": false,
+     "disclosureLevel": null,
+     "parentBlend": null,
+     "isNestedIngredient": false,
+     "nestedIngredients": [],
+     "parentBlendMass": null,
+     "parentBlendUnit": null,
+     "hierarchyType": null,
+     "safety_flags": []
     }
    ],
    "expect": [
     {
      "canonical_id": "vitamin_b12_cobalamin",
-     "form_id": null,
-     "form_match_status": "unmapped"
+     "form_id": "b12 (unspecified)"
     }
    ]
   }
