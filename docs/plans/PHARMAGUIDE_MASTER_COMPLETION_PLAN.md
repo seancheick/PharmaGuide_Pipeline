@@ -4,22 +4,40 @@ Updated October 4, 2026. Pipeline integrator: Codex. Original scope: Sean's acce
 
 A checked implementation box means that specific deliverable is implemented, measured and independently reviewed where required. It does **not** mean the whole phase is finished or the catalog is released. Repository code pushed to GitHub and catalog publication are separate events.
 
+## Completion measure — October 4
+
+**Main Phase 0–7 checklist: 50 of 68 boxes complete (73.5%, rounded to 74%).** Count only the eight phase sections under Updated execution checklist, including their nested deliverables; exclude historical checkpoint sections and repeated release reminders. This is an unweighted deliverable count, not an estimate of elapsed time, effort or release readiness. All document checkboxes would give222/263 (84.4%) before this update, but repeated historical receipts make that unsuitable as the main progress measure.
+
+| Phase | Complete / total |
+|---|---:|
+| 0 — Baseline and final freeze | 3 / 4 |
+| 1 — Evidence/Dose separation | 9 / 9 |
+| 2 — Identity and roles | 15 / 17 |
+| 3 — Clinical Evidence coverage | 6 / 11 |
+| 4 — Approved Dose policy | 6 / 6 |
+| 5 — Numerical calibration | 6 / 6 |
+| 6 — Flutter parity and nutrition | 3 / 6 |
+| 7 — Candidate, approval and release | 2 / 9 |
+
+Approved scoring policy, implementation and bounded numerical calibration are complete. Broader source-section/role and clinical-determination coverage, current-source candidate validation, actual-device rendering, movement approval, publication and live verification remain open. Historical corpus/release passes do not validate the subsequently changed runtime. The execution LEDGER and main-checkout handoff carry the next steps; automation is deleted and jobs remain stopped pending the next authorized task.
+
 ## October 4 — audit integration and cleanup
 
 - [x] Sean authorized integration; pipeline audit source/documents merged and pushed to main through fed96040, exact branchCI37215506742 green. App UL consumers merged and pushed to main3553342c, exactCI37214557986 green. Final runtime/data are identical to the independently reviewed27d9b751 source and passing103b699e local527/24declaredskip checkpoint; later pipeline commits changed only documentation.
 - [x] Master/LEDGER integration states reconciled. Audit fixes are integrated, not release-validated or catalog-published. Main source changed after the frozen6ea851dc catalog; that candidate is now historical for these owners.
 - [ ] Regenerate from Enrich through Score, rebuild catalog/interactions/app candidate, inspect measured changes and complete current release/bundle/device checks before exact-candidate publication approval. Do not restamp the old artifacts or publish them as this source.
 
-Owner: existing UnitConverter/enricher RDA/UL and safety-explanation owner; Flutter existing shared ingredient readers/stack/DoseSafety; existing pipeline/release provenance. Will NOT create another scorer/converter/status/registry/tracker. Existing release lane remains active; audit branches are removed only after containment/provenance checks.
+Owner: existing UnitConverter/enricher RDA/UL and safety-explanation owner; Flutter existing shared ingredient readers/stack/DoseSafety; existing pipeline/release provenance. Will NOT create another scorer/converter/status/registry/tracker. The completed release branch was deleted after containment checks; automation was deleted and jobs stopped at Sean’s request.
 
 ## October 4 — exact-candidate verification
 
 Historical locally built candidate: pipeline `6ea851dc`, catalog `2026.10.04.133540` (15,154 products), interaction DB `1.0.12` (132 records). Evidence directory: `/Users/seancheick/pg_quality/q53_release_20261003/final_candidate_6ea851dc/`.
 
-- [x] Exact current corpus: 38 stage chains / 114 owned, checksum-verified manifests; current input fingerprints; raw input inventory unchanged. Receipt SHA-256 `f3f5f90147025c0b3cecc484900933f7bd6f4205dff539a4d197eda6a2b102df`.
-- [x] Exact current clinical reachability: 15,421 products, zero findings. Receipt SHA-256 `54cc23059f3576f548afc880783abf4f6fd44dcc17f721c430fcf514bb3a2031`.
+- [x] Historical exact `6ea851dc` corpus: 38 stage chains / 114 owned, checksum-verified manifests; current input fingerprints; raw input inventory unchanged. Receipt SHA-256 `f3f5f90147025c0b3cecc484900933f7bd6f4205dff539a4d197eda6a2b102df`.
+- [x] Historical exact `6ea851dc` clinical reachability: 15,421 products, zero findings. Receipt SHA-256 `54cc23059f3576f548afc880783abf4f6fd44dcc17f721c430fcf514bb3a2031`.
 - [x] Preserve candidate hashes and original app baseline before local import; freeze the original movement report. Local import succeeds. This is development evidence, not publication approval.
 - [x] Release backstop: 124 passed in 1,233.24s; strict owner/freshness/Flutter audits pass; citation audit has zero new mismatches or unresolved citations (252 known backlog mismatches remain reported). Receipt `test_release_after_import.log`.
+- [x] Fix all38 reported full-backstop failure classes and integrate/push the test/docs batch (`bd824dc1`, `ffd5a44e`, `1b93c637`, `2e413434`, merged through `631c18df`). Focused verification:100 canaries passed plus both corrected remaining nodes passed;21 warning owner/consumer checks passed;all-row export parity passed in167.25s. No production scoring/data change from this batch, no replacement full-green receipt and no completed Flutter check claimed. Concurrent Vitamin E/safety runtime fixes are preserved; their new candidate remains pending.
 - [ ] Complete full backstop and Flutter `make check` / `make verify-bundle`. Completed full run: 38 failed, 21,620 passed, 45 skipped in 3,502.87s. Sean stopped broad validation and requested a handoff; queued/running checks owned by this lane were stopped and the monitor was subsequently deleted. Test-only remediation addresses stale policy expectations, warning identity and an export-parity timeout; focused receipts are recorded in the LEDGER. No replacement full run or completed Flutter check is claimed.
 - [x] Numerical census of all 3,046 distinct catalog-gate products saved in `catalog_movement_source_review.json`: 3,009 matched products and 37 removals. Largest absolute pillar movement is Evidence for 1,162, Formulation for 1,031, Transparency for 421, Dose for 358, Safety/Hygiene for 32, Verification for five. 2,335 move multiple pillars. This attribution does not establish clinical or human approval.
 - [x] Representative canonical field-chain audit for DSLD 18529, 182730, 231868 and blocked 18924: printed label fields, amounts/units/DVs/order/panels preserved; scored→core shared rounding and blob provenance→core quality status/tier/safety agree. Receipt `canonical_field_chain_audit.json`; this does not establish device rendering.

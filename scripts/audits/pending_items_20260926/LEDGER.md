@@ -681,7 +681,7 @@ Next unchecked work: fresh candidate validation after completed review/CI/local/
 ### October 4 — authorized audit integration
 
 - [x] Sean explicitly requested commit/merge/push and own stale-branch cleanup. Pipelinefed96040/app3553342c integrated on main; exact branchCI37215506742/appCI37214557986 green. Local/runtime source/data fingerprints cover final source; no broad test repeated for the documentation-only receipt.
-- [ ] Fresh Enrich→Score/candidate/release and real-device gates remain open. Frozen6ea catalog is historical for the integrated Vitamin E/safety corrections; nothing externally released. Keep the active catalog-form-remediation lane.
+- [ ] Fresh Enrich→Score/candidate/release and real-device gates remain open. Frozen6ea catalog is historical for the integrated Vitamin E/safety corrections; nothing externally released. The completed catalog-form-remediation branch was subsequently removed after integration; its evidence checkout remains detached.
 
 ### October 4 — stopped validation and focused failure remediation
 
@@ -694,9 +694,12 @@ Owner: existing production `build_final_db::_warning_dedup_key`, `project_export
 - `ffd5a44e`: remove copied warning identity helper and use existing production owner, retaining distinct interaction/dose-disposition states. Owner/consumer slice **21 passed, 3.29s** (`focused_warning_identity_fix.log`).
 - `1b93c637`: measured exact current canary pins; no widened ranges. Protease/lactase and whole Quercefit identity replace invalid borrowed aggregate/component assertions. Mixed-purpose omega remains Evidence zero with explicit hold. Current HUM Ripped Rooster is scored CAUTION with complete mapping. Initial five-file slice **100 passed, 2 failed, 349.62s**; remaining stale confidence/Dose metadata assertions inspected against owners, corrected, and targeted nodes **2 passed, 76.95s** (`focused_remaining_canary_fixes.log`). No other edits after these class results.
 - Independent review accepts test-only ownership corrections and parity coverage. Measurements: `failure_canary_measurements.json` and `failure_canary_pin_changes.json` in the existing final_candidate_6ea851dc evidence folder.
-- Runtime/data/export unchanged from main6ea851dc (git path diff excludes tests/docs and is empty). **No pipeline rerun is required for this batch.** Local commits are saved but not pushed/integrated; no green replacement full suite or completed Flutter check is claimed.
+- Runtime/data/export unchanged from main6ea851dc (git path diff excludes tests/docs and is empty). **No pipeline rerun is required for this batch.** This test/docs batch was merged and pushed through631c18df; its branch was deleted locally/remotely. No green replacement full suite or completed Flutter check is claimed.
 
-Remaining: next agent reviews/integrates this test/docs batch under Sean's authorization; resumes only requested validation, completes Flutter checks and actual-device audit, and resolves human catalog movement/publication review. Frozen original movement baseline remains authoritative: 3,046 distinct flagged products, including 37 removed caution products. No publication approval fabricated.
+Remaining: next agent starts from integrated main, resumes only requested validation, completes current-source candidate and Flutter/device checks, and resolves human catalog movement/publication review. No re-integration of this batch is needed. Frozen original movement baseline remains authoritative: 3,046 distinct flagged products, including 37 removed caution products. No publication approval fabricated.
 
 - [x] Cleanup complete: removed own merged pipeline audit and app consumer branches locally/remotely; removed merged pmc-idconv-retry/sida-cui-release-gate branches locally/remotely and superseded local master-plan-audit branch (preservation receipt already in this ledger). Archived the managed pipeline audit worktree with recoverable snapshot; removed own app worktree after committed-source checks and saved handoffs in durable receipts. Active release lane and independent review worktree were retained.
 - [x] Preserve concurrent Claude9f9a391c correction: three Vitamin E gold basis descriptions now state UL-mass arithmetic directly, with activity labelled separately. Numeric expectations unchanged; final named gold benchmark45passed2.82s. This copy-only correction does not change runtime/data fingerprints or invalidate source measurement.
+
+
+October4 alignment check: main Phase0–7 deliverable count50/68 (73.5%); historical repeated checkpoint boxes excluded. Master plan now records the integrated38-failure remediation and distinguishes historical6ea receipts from pending current-source acceptance. Main handoff links the same plan/LEDGER/owners; no jobs restarted.
