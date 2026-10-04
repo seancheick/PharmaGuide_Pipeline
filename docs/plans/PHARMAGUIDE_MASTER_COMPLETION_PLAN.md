@@ -23,7 +23,7 @@ Approved scoring policy, implementation and bounded numerical calibration are co
 
 ## October 4 — catalog gate development policy
 
-Implemented and independently reviewed in the existing catalog comparison owner: ordinary score/tier changes are report-only; safety weakening and warned-product removal retain exact reviewed exceptions. Historical comparison:3,046approval requests become43safety exceptions plus3,003visible quality movements; no flagged product or safety fact is lost. Focused owner/release-wiring checks60passed; independent gate checks48passed. This is gate implementation and historical measurement, not clinical acceptance, branch-CI acceptance or publication. Existing final candidate/app/clinical boxes remain open. Receipt and integration status: execution LEDGER.
+Implemented and independently reviewed in the existing catalog comparison owner: ordinary score/tier changes are report-only; safety weakening and warned-product removal retain exact reviewed exceptions. Historical comparison:3,046approval requests become43safety exceptions plus3,003visible quality movements; no flagged product or safety fact is lost. Focused owner/release-wiring checks60passed; independent gate checks48passed. Exact gate source3b0f10d6 passed all four CI shards (run37218555485) and was integrated on Sean’s instruction. This is gate implementation and historical measurement, not clinical acceptance or publication. Existing final candidate/app/clinical boxes remain open. Receipt and integration status: execution LEDGER.
 
 ## October 4 — audit integration and cleanup
 

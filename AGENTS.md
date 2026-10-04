@@ -248,8 +248,14 @@ bug-fix notes are history, not specifications.
   `source scripts/python_env.sh; PYTHON="$PG_PYTHON" bash batch_run_all_datasets.sh …`.
 - At most one full-corpus job at a time (16 GB Mac), never alongside the full suite. Keep durable
   inputs outside `/tmp` — a reboot wipes it.
-- One worktree + branch per agent; one integrator mutates and pushes `main`. Stage explicit paths
-  only. Re-check the branch tip before claiming a lane. Record your lane (goal + files you will
+- **Keep branches temporary:** one worktree/branch per active editing batch, not per bug, test,
+  subagent or document. Read-only reviewers need no branch. Reuse a suitable existing worktree.
+  One integrator mutates/pushes `main`; merge a completed validated batch promptly, verify its
+  commits are contained in `origin/main`, then delete its local/remote branch. Preserve unfinished
+  lanes and unmerged work. Do not create long-lived development/release branches for this solo app.
+  Main is the shared integration and final pipeline source; run the final corpus after all planned
+  output-changing batches are integrated, not from competing agent branches.
+  Stage explicit paths only. Re-check the branch tip before claiming a lane. Record your lane (goal + files you will
   touch) early in your worktree's `.claude/state/CURRENT_HANDOFF.md`, and rewrite that file on each
   update instead of appending (git keeps history; a stacked handoff costs every resume). Every agent
   reads the other lanes there before editing a shared owner (scoring config, matrix, rule files,
