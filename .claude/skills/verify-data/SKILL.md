@@ -9,7 +9,8 @@ Run the PharmaGuide API verification suite against data files. Use this BEFORE c
 
 ## Usage
 
-- `/verify-data` — run all verification scripts
+- `/verify-data` — verify the active changed-entry batch with the applicable verifier(s)
+- `/verify-data all` — explicitly request the complete verification suite
 - `/verify-data pmid` — verify PubMed citations only
 - `/verify-data cui` — verify UMLS CUIs only
 - `/verify-data interactions` — verify interaction RXCUIs + CUIs
@@ -19,8 +20,8 @@ Run the PharmaGuide API verification suite against data files. Use this BEFORE c
 
 1. Check that `.env` exists at repo root with API keys (UMLS_API_KEY, PUBMED_API_KEY, OPENFDA_API_KEY)
 2. Run the appropriate verification script(s) based on the argument
-3. Report results clearly — any FAIL or MISMATCH is a blocker
-4. Do NOT commit data changes until all verifications pass
+3. Classify results: changed-entry failures block that batch; known triaged unrelated backlog remains reported
+4. Do not accept unverified changed clinical facts. Fix all batch failure classes together; do not restart unrelated verifiers after each fix
 
 ## Script Map
 
@@ -51,20 +52,27 @@ If missing, tell the user: "API keys not found in .env — cannot verify. Do NOT
 </step>
 
 <step>
-Parse the argument to determine which scripts to run. If no argument, run the full suite (pmid, rules, cui, unii, interactions).
+Parse the argument and active diff. With no argument, use applicable changed-entry checks,
+not an automatic whole-registry audit. Explicit `all` runs pmid, rules, cui, unii and interactions.
+Use supported --changed-since/--file options; inspect each verifier's arguments rather than
+inventing filters. If a verifier has no narrower supported scope, run that verifier once for the
+completed batch. Reuse a still-applicable content-verification receipt for the identical entry,
+claim and source; a new session alone does not invalidate it. New/changed clinical claims need
+entry-specific verification; identity resolution alone never proves clinical applicability.
 </step>
 
 <step>
 Run each verification script with the project interpreter and capture output. Pipe through
-`| tail -30` to keep context lean. Example:
+`| tail -30` only with pipefail and a durable log, so a verifier failure cannot become success. Example:
 ```bash
 source scripts/python_env.sh
+set -o pipefail
 "$PG_PYTHON" scripts/api_audit/verify_all_citations_content.py --baseline scripts/data/citation_content_backlog.json 2>&1 | tail -30
 ```
 </step>
 
 <step>
 Report results:
-- **ALL PASS**: "Verification complete. All identifiers verified against live APIs. Safe to commit."
-- **ANY FAIL**: List every failure with the identifier, expected value, and actual value. State: "DO NOT commit until these are resolved."
+- **ALL PASS**: "Verification complete for the named changed entries and claims; report the exact scope and receipts."
+- **ANY FAIL**: List every failure with the identifier, expected value, and actual value. Distinguish new changed-entry defects, transient API failures and declared unrelated backlog. Resolve the affected class without restarting the entire suite; do not claim a failed or unresolved changed entry passed.
 </step>

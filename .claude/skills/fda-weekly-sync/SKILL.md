@@ -457,8 +457,8 @@ bash scripts/test.sh fast scripts/tests/test_banned_recalled_identifier_integrit
 ⚠️ **Editing `banned_recalled_ingredients.json` does not by itself change the
 shipped catalog.** Confirm the release actually rebuilds — historically
 `release_full.sh` did not watch this file, so a plain run reported "safe to skip"
-and shipped the previous catalog with the ban absent. Verify the rebuild ran, or
-force it, rather than assuming the edit propagated.
+and shipped the previous catalog with the ban absent. Inspect current stage/artifact fingerprints and confirm the required rebuild ran. Do not force
+another corpus or release build solely because this historical warning exists.
 
 ---
 
@@ -478,7 +478,8 @@ force it, rather than assuming the edit propagated.
 - Verify every substance name against its FDA source URL before writing
 - Use `regulatory_date` = recall initiation date (format YYYY-MM-DD), never today's date
 - Set `match_mode: historical` for product-specific terminated recalls
-- Increment `_metadata.governance.change_log` version on every run
+- Increment `_metadata.governance.change_log` version when curated entries actually change;
+  an inspection/no-op sync alone should not rewrite reference data or trigger a corpus rerun
 - Set `cui: null` for new entries (filled in after reviewing verify_cui.py's report)
 - Count and update `total_entries` after all changes
 - Run targeted schema guards after the batch changes; schedule broader validation through the integrator under AGENTS.md

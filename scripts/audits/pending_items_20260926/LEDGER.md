@@ -703,3 +703,19 @@ Remaining: next agent starts from integrated main, resumes only requested valida
 
 
 October4 alignment check: main Phase0–7 deliverable count50/68 (73.5%); historical repeated checkpoint boxes excluded. Master plan now records the integrated38-failure remediation and distinguishes historical6ea receipts from pending current-source acceptance. Main handoff links the same plan/LEDGER/owners; no jobs restarted.
+
+
+### October4 — development workflow instruction alignment
+
+Sean clarified that he is the only app user during development: expected score changes are reviewed by shared cause, not individually approved. Updated shared AGENTS, Claude session flow, scoring rule and existing scoring/data-fix/release skills. Keep source-grounded regression/controls, clinical honesty, warning preservation and external publication authority. One bounded batch, stage-fingerprint preflight, one necessary corpus pass; no mandatory session restart or extra full-corpus measurement run.
+
+Owner: AGENTS.md::Development workflow and existing workflow skills; evidence: instruction audit and current scripts/release_safety/catalog_diff.py approval consumer. Will NOT create a tracker, scorer, registry, approval signature or silent gate bypass. **Remaining executable mismatch:** catalog_diff.py still gates ordinary large score/tier changes with per-product approval. The active implementation agent should align this existing owner with the newly authorized development review policy; this documentation batch does not change the gate or touch its active code lane. Documentation diff checked; no tests/pipeline run required or started.
+
+
+### October4 — remaining skills and hooks audit
+
+Found an actual contradictory local Claude data-edit hook: bare fast -k plus full-fast before commit. Replaced its reminder with named-node/file iteration and one integrator checkpoint. Hook remains nonblocking; node --check passed. Global Claude pg-resume no longer stops solely for missing handoff when the user supplied a task, and validates current execution pointers rather than all historical branches. Global handoff clarifies continued work without mandatory session restart. These three user-local files are outside Git; repo instructions remain authoritative.
+
+Existing verify-data now defaults to the applicable changed-entry batch; all is explicit. Clinical rules allow still-applicable exact-claim/source receipts to be reused, never substitute identifier existence for clinical content. Scoring review is once per completed output-changing batch. Dirty release trees require owner inspection/finishing authorized work, not an automatic permission question. FDA skill no longer recommends forced rebuild on a historical anecdote or metadata version churn for a no-op scan. No submission reviewer attestations or clinical/safety/publication authority weakened.
+
+Owner: existing workflow skills, AGENTS and ~/.claude/hooks/pharmaguide-data-guard.js reminder — evidence: instruction text, actual hook output path and verifier supported arguments. Will NOT create another workflow, test runner, verifier or status. Documentation diff and hook syntax verified; no corpus, tests or API suite started. Executable catalog approval-policy mismatch remains assigned to the active implementation lane.

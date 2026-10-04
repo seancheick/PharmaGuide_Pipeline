@@ -19,7 +19,10 @@ A release is Sean's decision (AGENTS.md); run it only when asked.
 cd /Users/seancheick/Downloads/dsld_clean && git status -s && git log --oneline -3
 ```
 
-Stop and ask if the tree is dirty in `scripts/` — a release off uncommitted data is unreproducible.
+Do not build a release from uncommitted runtime/data edits. Inspect who owns dirty paths:
+finish and commit your authorized batch, or preserve another agent's work and wait for its source
+handoff. Documentation-only or unrelated changes do not justify a new approval question, reset,
+stash or pipeline run. Ask Sean only for a genuinely missing decision/authorization.
 
 ```bash
 bash scripts/test.sh release
@@ -29,8 +32,11 @@ Runs the stage freshness check (every brand's clean, enrich and score output mus
 current `scripts/data` and pipeline code), release-profile pytest and the release artifact gates,
 including the three citation verifiers (backed studies `--strict`, interaction rules
 `--strict`, all citations `--baseline`). **Must be green before proceeding.** A stale corpus
-means one corpus pass first, from the stage the preflight names (`SKIP_RELEASE=1 bash
-batch_run_all_datasets.sh --stages …`: every brand plus Product Submissions, no publish).
+means first inspect ALL stage code/reference fingerprints, then schedule one pass from the
+earliest required stage (`bash batch_run_all_datasets.sh --stages … --pipeline-only`: every brand
+plus Product Submissions, no snapshot or publication). Do not discover stale Clean only after
+an avoidable Enrich-only run. Do not repeat already-current validation without a source change,
+new failure or unresolved concern.
 
 ## 2. Run the train
 
@@ -80,8 +86,14 @@ with `$PG_PYTHON scripts/release_interaction_artifact.py --output-dir scripts/di
   bundle and the live Supabase catalog, and writes `scripts/reports/release_catalog_diff.md`. It
   stops on a milder safety warning, a warned product leaving the catalog, a 10+ point score move,
   or a grade up with a 5+ point rise. It reads Supabase, so it needs `.env`. Show Sean that report; only he
-  signs approvals in `scripts/release_safety/catalog_change_approvals.json`. Never fill one in
-  yourself to get past the gate.
+  signs publication approvals in `scripts/release_safety/catalog_change_approvals.json`. Never
+  fill one in yourself to get past the gate. **Solo-development distinction (Sean, October4):**
+  ordinary score/tier movements are reviewed by shared cause and representative controls, not
+  individually approved. Safety changes, lost warnings and unsupported credit still require
+  investigation. The current executable gate may still demand individual approvals; that is a
+  policy/implementation mismatch to address at `catalog_diff.py` and its approval consumers,
+  not permission to forge approvals, erase the original baseline or silently bypass the gate.
+  Local development validation is not external publication approval.
 
 ## 5. Report
 

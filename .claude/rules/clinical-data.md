@@ -20,8 +20,11 @@ Curated data is medical-grade: one corrupt entry discredits the whole product.
     ("valid 87, invalid 0" with 12 wrong-topic PMIDs).
   - CUI: `verify_cui.py` · RXCUI: `verify_interactions.py` · UNII: `verify_unii.py` ·
     CAS/CID: `verify_pubchem.py` · NCT: `verify_clinical_trials.py` · RDA/UL: `verify_rda_uls.py`.
-  - A reused identifier is verified again, the same as a new one. No API access means no write:
-    tell Sean.
+  - A reused identifier must have content verification for this exact entry and claim. Reuse a
+    still-applicable receipt when identity, claim and source are unchanged; do not repeat API
+    work merely because a new agent/session started. A new/changed claim requires verification.
+    Without applicable verified evidence, do not write an invented clinical fact; report the
+    unresolved entry and continue independent authorized work.
   - In a batch, `--changed-since <ref>` makes both citation verifiers check only the entries the
     batch changed, one result line each.
 - **Before adding an IQM, botanical or probiotic entry,** search existing entries by CUI, CAS and
