@@ -890,6 +890,14 @@ def _iter_resolver_clean_label_hits(
     return hits
 
 
+# Audit trail only: the gate saw a rule and deliberately did not apply it. These
+# stay in the signal list for review but are never a product's stated reason.
+AUDIT_ONLY_SAFETY_SIGNALS = frozenset({
+    "B0_RETIRED_POLICY_SIGNAL_IGNORED",
+    "B0_STALE_POLICY_SIGNAL_IGNORED",
+})
+
+
 def _append_signal(result: SafetyResult, code: str) -> None:
     if code not in result.safety_signals:
         result.safety_signals.append(code)
