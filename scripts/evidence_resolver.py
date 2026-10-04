@@ -470,7 +470,9 @@ def _backed_studies_index() -> Dict[str, List[Dict[str, Any]]]:
     return idx
 
 
-def is_reviewed_branded_material(canonical: Any, name: Any = None) -> bool:
+def is_reviewed_branded_material(
+    canonical: Any, name: Any = None, *, preparation_name: Any = None,
+) -> bool:
     """True when a curated branded clinical record (``BRAND_*`` in
     backed_clinical_studies, the evidence owner) names this identity: a studied
     material such as Sytrinol or Tesnor, not a marketing blend name."""
@@ -482,8 +484,21 @@ def is_reviewed_branded_material(canonical: Any, name: Any = None) -> bool:
         if text
         for variant in (text, text.replace(" ", "_"), text.replace("_", " "))
     }
+    if preparation_name is not None:
+        # An alias projected onto a label must identify the same reviewed
+        # preparation as the printed name, not merely another known brand.
+        printed = _canonical_text(preparation_name)
+        printed_ids = {
+            study.get("id")
+            for key in (printed, printed.replace(" ", "_"), printed.replace("_", " "))
+            for study in idx.get(key, [])
+            if _norm(study.get("id")).startswith("brand_")
+        }
+    else:
+        printed_ids = None
     return any(
         _norm(study.get("id")).startswith("brand_")
+        and (printed_ids is None or study.get("id") in printed_ids)
         for key in keys
         for study in idx.get(key, [])
     )

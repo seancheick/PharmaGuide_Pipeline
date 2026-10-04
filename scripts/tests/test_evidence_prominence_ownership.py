@@ -469,6 +469,8 @@ def test_a_member_named_heading_does_not_own_the_multi_ingredient_total(heading,
         and row.get("canonical_id") == "ashwagandha"
     )
     assert is_lent_blend_mass(header), "The shared contract must preserve member amount ownership"
+    assert header["evidence_canonical_id"] == header["scoring_parent_id"] == header["clean_identity_id"] == header["canonical_id"]
+    assert header["identity_kind"] == "verified_ingredient"
     evidence = _evidence(product)
     assert evidence["metadata"]["primary_evidence_floor"] == 0.0
     assert evidence["components"]["clinical_evidence_pipeline"] > 0
@@ -513,7 +515,7 @@ def test_real_nested_enzyme_member_has_one_physical_source_link():
     _evidence(product)  # exercise the production artifact, not only the adapter
 
 
-@pytest.mark.parametrize("pid", ["231868", "284197"])
+@pytest.mark.parametrize("pid", ["284197"])
 def test_a_named_whole_preparation_is_not_its_mapped_component(pid):
     from scoring_input_contract import get_scoring_ingredients, is_lent_blend_mass
 
@@ -649,3 +651,15 @@ def test_reviewed_identity_cannot_resurrect_legacy_name_or_singular_canonical(st
                    applicability_assessment={"status": "applicable", "matched_canonical_ids": accepted})
     index = {_norm_text("Alpha-Linolenic Acid"): "alpha_linolenic_acid", "epa": "epa"}
     assert _matched_active_canonical(entry, index, use_structured_identity=structured) == expected
+
+
+def test_mirtogenol_keeps_complete_preparation_without_borrowed_bilberry_floor():
+    # PMID18618008 tested Mirtoselect + Pycnogenol together in adults with
+    # ocular hypertension. The complete 120 mg label row is not bilberry.
+    from scoring_input_contract import get_scoring_ingredients
+    product = _enrich("prominence_preparation_231868_raw.json")
+    headers = [row for row in get_scoring_ingredients(product, strict=True).rows
+               if row.get("reason") == "identity_bearing_blend_header_mass"]
+    assert headers
+    assert all(row["canonical_id"] != "bilberry" for row in headers)
+    assert _evidence(product)["metadata"]["primary_evidence_floor"] == 0.0
