@@ -870,3 +870,20 @@ def test_literature_resolution_cannot_substitute_another_claimed_purpose(monkeyp
     result = er.resolve_evidence_for_row(row, product)
     assert result.disposition == EvidenceDisposition.RESEARCH_PRESENT_APPLICABILITY_UNESTABLISHED.value
     assert result.reason_code == 'label_purpose_evidence_mismatch'
+
+
+@pytest.mark.parametrize('printed, projected, expected', [
+    ('Tesnor', 'Tesnor (Pomegranate-Cocoa Blend)', True),
+    ('TamaFlex', 'Tamarind Extract', False),
+    ('TamaFlex', 'Sensoril Ashwagandha', False),
+    ('Unreviewed Sleep Blend', 'Sensoril Ashwagandha', False),
+])
+def test_reviewed_preparation_alias_cannot_transfer_between_materials(printed, projected, expected):
+    assert er.is_reviewed_branded_material(None, projected, preparation_name=printed) is expected
+
+
+def test_mirtogenol_complete_preparation_is_not_a_bilberry_form():
+    from scoring_reference_resolver import iqm_reference_entry
+    aliases = [alias.lower() for form in iqm_reference_entry('bilberry')['forms'].values()
+               for alias in form.get('aliases', [])]
+    assert 'mirtogenol' not in aliases

@@ -1811,6 +1811,8 @@ def derive_product_scoring_evidence(product: Dict[str, Any]) -> List[Dict[str, A
     Future enrichment runs stamp these rows into product_scoring_evidence, but
     v3/v4 scoring still consume them through get_scoring_ingredients().
     """
+    from evidence_resolver import is_reviewed_branded_material
+
     product = product or {}
     evidence: List[Dict[str, Any]] = []
     ptype = _primary_type(product)
@@ -1878,7 +1880,14 @@ def derive_product_scoring_evidence(product: Dict[str, Any]) -> List[Dict[str, A
                 active_row["canonical_id"] = canonical_id
                 if source_db:
                     active_row["canonical_source_db"] = source_db
-                if not _is_verified_canonical(canonical_id):
+                if (
+                    not _is_verified_canonical(canonical_id)
+                    and not is_reviewed_branded_material(
+                        None, standard_name, preparation_name=(
+                            identity_row.get("raw_source_text") or raw_active.get("name")
+                        ),
+                    )
+                ):
                     # A repaired generic/null identity must not revive the
                     # old member through its stale standardized name. Keep
                     # the printed blend name as a structural anchor only.
@@ -2114,13 +2123,26 @@ def derive_product_scoring_evidence(product: Dict[str, Any]) -> List[Dict[str, A
                     )
                     and _anchor_identity(child)[0]
                 ]
-                child_identities = {_anchor_identity(child)[0] for child in children}
                 child_paths = {str(child.get("raw_source_path")) for child in children}
-                names_member = any(
-                    _norm(child.get("name")) == _norm(row.get("name"))
-                    for child in children
-                )
-                if anchor_canonical in child_identities and len(child_paths) > 1 and names_member:
+                named_children = [
+                    child for child in children
+                    if _norm(child.get("name")) == _norm(row.get("name"))
+                ]
+                if len(child_paths) > 1 and named_children:
+                    # The printed heading may use a branded alias while its
+                    # nested member carries the canonical ingredient. The
+                    # exact declared member owns this identity, never the
+                    # combined amount of its co-ingredients.
+                    anchor_canonical, anchor_name = _anchor_identity(named_children[0])
+                    item["canonical_id"] = anchor_canonical
+                    item["evidence_canonical_id"] = anchor_canonical
+                    item["scoring_parent_id"] = anchor_canonical
+                    item["clean_identity_id"] = named_children[0].get("canonical_id")
+                    item["canonical_source_db"] = (
+                        named_children[0].get("canonical_source_db") or item["canonical_source_db"]
+                    )
+                    item["name"] = anchor_name or named_children[0].get("name")
+                    _stamp_evidence_identity_contract(item, row)
                     # Require the declared name, not just a shared canonical:
                     # a whole preparation (Mirtogenol, a phytosome) can map to
                     # a component ID without being that component's amount.
