@@ -655,6 +655,7 @@ class DosageNormalizer:
             amount=float(amount),
             from_unit=unit,
             ingredient_name=ingredient_name_for_form_detection,
+            measured_name=name,
         )
 
         # Calculate per-day amounts

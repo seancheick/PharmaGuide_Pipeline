@@ -144,7 +144,8 @@ class UnitConverter:
         amount: float,
         from_unit: str,
         to_unit: Optional[str] = None,
-        ingredient_name: Optional[str] = None
+        ingredient_name: Optional[str] = None,
+        measured_name: Optional[str] = None,
     ) -> ConversionResult:
         """
         Convert a nutrient amount from one unit to another.
@@ -155,6 +156,10 @@ class UnitConverter:
             from_unit: Original unit (e.g., "IU", "mg", "mcg")
             to_unit: Target unit. If None, converts to canonical unit.
             ingredient_name: Full ingredient name for form detection
+            measured_name: The label row's own name, when known. Active-moiety
+                conversions fire only when it names the compound: "Magnesium
+                50 mg (as magnesium hydroxide)" declares 50 mg of magnesium
+                (21 CFR 101.36); "Magnesium Hydroxide 2.6 g" measures the salt.
 
         Returns:
             ConversionResult with converted value and evidence
@@ -166,7 +171,7 @@ class UnitConverter:
 
         # Find matching conversion rule
         rule_id, rule_data = self._find_conversion_rule(
-            nutrient_lower, ingredient_text
+            nutrient_lower, ingredient_text, measured_name
         )
 
         # Since the 2020 Supplement Facts unit transition, a parent row headed
@@ -505,7 +510,8 @@ class UnitConverter:
     def _find_conversion_rule(
         self,
         nutrient: str,
-        ingredient_text: str
+        ingredient_text: str,
+        measured_name: Optional[str] = None,
     ) -> Tuple[Optional[str], Optional[Dict]]:
         """
         Find the appropriate conversion rule for a nutrient.
@@ -516,17 +522,21 @@ class UnitConverter:
         """
         nutrient_lower = nutrient.lower()
         ingredient_lower = ingredient_text.lower()
+        # A parenthetical in the row name names the source, not the measured compound.
+        compound_lower = (
+            measured_name.split('(')[0].lower() if measured_name else ingredient_lower
+        )
 
         if (
             'choline' in nutrient_lower
-            and re.search(r'\bcholine\s+(?:l[- ]|dl[- ])?bitartrate\b|\bcholine\s+tartrate\b', ingredient_lower)
+            and re.search(r'\bcholine\s+(?:l[- ]|dl[- ])?bitartrate\b|\bcholine\s+tartrate\b', compound_lower)
         ):
             return 'choline_bitartrate_to_choline', self.vitamin_conversions.get(
                 'choline_bitartrate_to_choline', {}
             )
         if (
             'magnesium' in nutrient_lower
-            and re.search(r'\bmagnesium\s+hydroxide\b', ingredient_lower)
+            and re.search(r'\bmagnesium\s+hydroxide\b|\bmilk\s+of\s+magnesia\b', compound_lower)
         ):
             return (
                 'magnesium_hydroxide_to_magnesium',
@@ -537,8 +547,8 @@ class UnitConverter:
         if (
             ('niacin' in nutrient_lower or 'vitamin b3' in nutrient_lower)
             and re.search(
-                r'\b(?:inositol\s+(?:hexanicotinate|nicotinate|niacinate)|hexanicotol)\b',
-                ingredient_lower,
+                r'\b(?:inositol\s+(?:hexa)?(?:nicotinate|niacinate)|hexanicotol)\b',
+                compound_lower,
             )
         ):
             return (
