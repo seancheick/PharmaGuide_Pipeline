@@ -890,12 +890,32 @@ def _iter_resolver_clean_label_hits(
     return hits
 
 
-# Audit trail only: the gate saw a rule and deliberately did not apply it. These
-# stay in the signal list for review but are never a product's stated reason.
+# Audit trail only: the gate saw a rule and deliberately did not apply it
+# (retired, stale, or a low-confidence B0_LOWCONF_* match). These stay in the
+# signal list for review but are never a product's stated reason.
 AUDIT_ONLY_SAFETY_SIGNALS = frozenset({
     "B0_RETIRED_POLICY_SIGNAL_IGNORED",
     "B0_STALE_POLICY_SIGNAL_IGNORED",
 })
+# Recorded for the consumer but never set a verdict (see _apply_signal_policy).
+ADVISORY_ONLY_SAFETY_SIGNALS = frozenset({
+    "B0_REGIONAL_ADVISORY",
+    "B0_HIGH_RISK_EXCIPIENT_WARNING_ONLY",
+    "B0_WATCHLIST_EXCIPIENT_WARNING_ONLY",
+})
+
+
+def stated_safety_signal(signals: List[str]) -> Optional[str]:
+    """The product's stated safety reason: the first signal that drives the
+    verdict; an advisory only when nothing does; never an audit marker."""
+    reportable = [
+        signal for signal in signals
+        if signal not in AUDIT_ONLY_SAFETY_SIGNALS and not signal.startswith("B0_LOWCONF_")
+    ]
+    return next(
+        (signal for signal in reportable if signal not in ADVISORY_ONLY_SAFETY_SIGNALS),
+        reportable[0] if reportable else None,
+    )
 
 
 def _append_signal(result: SafetyResult, code: str) -> None:

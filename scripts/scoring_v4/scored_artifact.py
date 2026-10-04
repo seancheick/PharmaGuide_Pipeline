@@ -16,7 +16,7 @@ from typing import Any, Dict
 
 from score_supplements_v4 import score_product_v4
 from scoring_input_contract import get_scoring_ingredients, scoring_input_scope
-from scoring_v4.gate_safety import AUDIT_ONLY_SAFETY_SIGNALS, safety_resolvers_failed
+from scoring_v4.gate_safety import safety_resolvers_failed, stated_safety_signal
 from supplement_taxonomy import percentile_label_for
 
 
@@ -307,10 +307,7 @@ def assemble_scored_artifact(
         "verdict": verdict,
         "safety_verdict": safety_verdict,
         "blocking_reason": blocking_reason,
-        "safety_signal_reason": decision_reason or next(
-            (signal for signal in safety_signals if signal not in AUDIT_ONLY_SAFETY_SIGNALS),
-            None,
-        ),
+        "safety_signal_reason": decision_reason or stated_safety_signal(safety_signals),
         "safety_decision": safety_decision or None,
         "safety_review_records": safety_review_records,
         "flags": safety_signals,

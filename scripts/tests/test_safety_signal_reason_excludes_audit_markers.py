@@ -11,7 +11,7 @@ in `flags` for audit; the reason skips them.
 import pytest
 
 from enrich_supplements_v3 import SupplementEnricherV3
-from scoring_v4.gate_safety import AUDIT_ONLY_SAFETY_SIGNALS
+from scoring_v4.gate_safety import AUDIT_ONLY_SAFETY_SIGNALS, stated_safety_signal
 from scoring_v4.scored_artifact import build_scored_artifact
 
 
@@ -54,3 +54,16 @@ def test_real_reason_is_not_hidden_behind_a_retired_marker(enricher):
     real = [f for f in scored["flags"] if f not in AUDIT_ONLY_SAFETY_SIGNALS]
     assert "B0_RETIRED_POLICY_SIGNAL_IGNORED" in scored["flags"] and real
     assert scored["safety_signal_reason"] == real[0]
+
+
+@pytest.mark.parametrize("signals,expected", [
+    (["B0_REGIONAL_ADVISORY", "B0_WATCHLIST_EXCIPIENT_WARNING_ONLY", "DOSE_OVER_UL_CRITICAL"], "DOSE_OVER_UL_CRITICAL"),
+    (["B0_REGIONAL_ADVISORY", "B0_WATCHLIST_EXCIPIENT_WARNING_ONLY"], "B0_REGIONAL_ADVISORY"),
+    (["B0_LOWCONF_BANNED", "B0_WATCHLIST_SUBSTANCE"], "B0_WATCHLIST_SUBSTANCE"),
+    (["B0_STALE_POLICY_SIGNAL_IGNORED"], None),
+    ([], None),
+])
+def test_stated_reason_is_the_verdict_driver(signals, expected):
+    """DSLD 207381 / 26394 (caution) stated an EU-only advisory as the reason
+    for a caution set by DOSE_OVER_UL_CRITICAL."""
+    assert stated_safety_signal(signals) == expected
