@@ -19,7 +19,7 @@ A checked implementation box means that specific deliverable is implemented, mea
 | 6 — Flutter parity and nutrition | 3 / 6 |
 | 7 — Candidate, approval and release | 2 / 9 |
 
-Approved scoring policy, implementation and bounded numerical calibration are complete. Broader source-section/role and clinical-determination coverage, current-source candidate validation, actual-device rendering, movement approval, publication and live verification remain open. Historical corpus/release passes do not validate the subsequently changed runtime. The execution LEDGER and main-checkout handoff carry the next steps; automation is deleted and jobs remain stopped pending the next authorized task.
+Approved scoring policy, implementation and bounded numerical calibration are complete. Broader source-section/role and clinical-determination coverage, current-source candidate validation, actual-device rendering, movement approval, publication and live verification remain open. Historical corpus/release passes do not validate the subsequently changed runtime. The execution LEDGER and main-checkout handoff carry the next steps. Monthly certification renewal is active; the stopped historical release monitor is separate. The October4 development rebuild is verified below, while final source/candidate acceptance remains open.
 
 ## October 4 — catalog gate development policy
 
@@ -367,7 +367,7 @@ A completed determination may be applicable positive evidence, reviewed null/no 
 
 - [x] Audit Sean's October 1–2 intermediate Clean/Enrich/Score run: 38 datasets, 15,421 scored artifacts, 114 matching input/code/content manifests; 46 accepted CFU/control products retain all public pillars, totals, tiers and typed safety. This is a completed checkpoint, not the final candidate: downstream snapshot guard exposed two source defects, corrected in the October 2 batch below.
 
-- [x] After the last source/data change, run one fresh corpus from **Clean**, publication disabled and without a competing broad suite. Accepted run: `batch_run_summary_20261003_123945.txt`;38 stage chains/114 current manifests.
+- [x] Verify a fresh development corpus from **Clean**: latest `batch_run_summary_20261004_173701.txt`, source c1deb2f2,38 stage chains/114 current manifests and strict catalog build. The subsequent note-scope correction changes reference fingerprints; this completed run is historical for that display copy, not the final post-batch candidate. Final regeneration is included in the next open candidate checkpoint below.
 - [ ] Rebuild catalog, interaction output and canaries; run release gates and the full backstop sequentially.
 - [ ] Freeze candidate SHAs, config/data fingerprints, catalog generation and artifact hashes.
 - [ ] Produce counts/holds/statuses, route changes, newly scored/held items, largest 50 score deltas, all safer-verdict and BLOCKED changes.
