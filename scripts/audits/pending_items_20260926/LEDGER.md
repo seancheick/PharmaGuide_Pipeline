@@ -600,7 +600,20 @@ Owner: `enrich_supplements_v3.py::_SOURCE_MATERIAL_TERMS`, `scoring_input_contra
 - [x] Fix retained red-grape source spelling (`aa0c7ac2`); remove false dinicocysteinate→polynicotinate alias (`88b4f999`); prevent generic/null identity repairs being revived as member-dose anchors (`d6c9bd66`); reconcile3exact label form transcription errors (`5cf34928`).
 - [x] Frozen47-label replay:8not_scored→scored restorations,14internal-state-only changes,25identical captures. All47 safety gates unchanged;37of45remain held. Controls1024/60812unchanged. No guessed forms or member-dose allocation.
 - [x] Independent source/diff/image reviews find no actionable findings. Focused receipts:626form;896form/signoff/data;91projection;646form+consumer;77source-correction checks.
-- [ ] Exact final source CI and combined local checkpoint accepted; main integration. Firstlocalattempt rejected for missing ignored canary fixtures; existing fixtures linked without changing assertions/skipguard, final checkpoint running.
+- [ ] Exact final source CI and combined local checkpoint accepted; main integration. Pre-repair local527passed/24declaredskips. CombinedCI37167312894 exposed four preparation-projection regressions; corrected in3d002d99. Current combined local checkpoint running; new exact CI pending.
 - [ ] Fresh corpus/manifest/reachability/catalog/Flutter rendering/release/full/publication verification. Prior99af7201catalog remains unchanged and cannot prove final source.
 
 Durable receipts: `/Users/seancheick/pg_quality/q53_release_20261003/form_remediation/` (`manifest.json`, `form_gap_census.json`, `research.md`, `delta_final.json`). Fouratomiccommits on `codex/catalog-form-remediation`; no main merge or external catalog publication yet.
+
+### Preparation projection correction after combined CI — measured, final checkpoint pending
+
+Owner: `scoring_input_contract.py::derive_product_scoring_evidence`, `evidence_resolver.py::is_reviewed_branded_material`, existing IQM bilberry forms. Evidence: exact CI failures, failing-before canonical-mirror/alias tests, frozen51-label replay, independent diff review, PMID18618008 publisher full text and PMID20505841 preparation research. Will NOT create: a registry, scorer, public field/status, brand exception list, new benchmark or numerical policy.
+
+- [x] Preserve reviewed preparation aliases only when printed and projected names identify the same existing BRAND record; retain explicit null/general identity repairs.
+- [x] Member-named headings use the existing lent-mass reason and consistent canonical mirrors/source/identity kind; whole blend mass is not assigned as the member's disclosed amount.
+- [x] Remove the false Mirtogenol→bilberry form alias. Its research tested the full bilberry/pine-bark preparation, so the old Bilberry floor assertion was a clinical attribution defect. Keep complete-preparation source identity; do not invent numerical preparation credit.
+- [x] Source commit3d002d99:169owner/consumer checks and12focused regressions passed. Independent reviewer finding on conflicting canonical mirrors reproduced and fixed; corrected diff accepted, measured-delta review pending.
+- [x] Clean-commit51-label replay versus main147a763c:8status restorations remain,23captures change/28identical. Controls1024/60812/Tesnor315089/Sytrinol54775/Sensoril328062 remain unchanged. Mirtogenol23186866.8→54.1: Evidence15.6→0 removes borrowed credit; Dose9.5→12.4 is the existing limited-assessability fallback, not a new clinical benchmark. All51 safety_gate and dose_safety objects unchanged.
+- [ ] Accept final measured review, exact combined CI/local, integrate, regenerate and release-validate.
+
+Receipts: existing durable form_remediation folder; immutable `manifest_preparation_controls.json`, `baseline_preparation_controls.jsonl`, `candidate_preparation_controls.jsonl`, `delta_preparation_controls.json`, and `mirtogenol_research.md`. No main integration or external publication.
