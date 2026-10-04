@@ -82,3 +82,19 @@ def test_structural_classification_overrides_legacy_mapped_flags(replays):
     assert header["identity_kind"] == "label_taxonomy_anchor"
     assert header["mapped"] is False
     assert header["mapped_identity"] is False
+
+
+def test_structural_anchor_does_not_count_as_an_ingredient_form(replays):
+    from scoring_v4.modules.generic_helpers import is_scorable
+    from scoring_v4.modules.multi_prenatal_formulation import _scorable_ingredients
+
+    product = replays["17186"]
+    header = _header_row(get_scoring_ingredients(product, strict=True).rows)
+    assert not is_scorable(header)
+    assert all(row.get("identity_kind") != "label_taxonomy_anchor"
+               for row in _scorable_ingredients(product))
+    # A verified ingredient still owns its formulation assessment.
+    rows = get_scoring_ingredients(product, strict=True).rows
+    vitamin_c = next(row for row in rows
+                     if row.get("raw_source_path") == "ingredientRows[3]")
+    assert is_scorable(vitamin_c)

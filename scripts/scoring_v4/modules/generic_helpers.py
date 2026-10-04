@@ -161,6 +161,10 @@ def is_scorable(ingredient: Dict[str, Any]) -> bool:
     """
     if not isinstance(ingredient, dict):
         return False
+    if ingredient.get("identity_kind") == "label_taxonomy_anchor":
+        # An unresolved structural total owns disclosure, not an ingredient
+        # form. Its printed amount must not enter ingredient averaging.
+        return False
     if ingredient.get("is_proprietary_blend"):
         return False
     if ingredient.get("is_parent_total"):
