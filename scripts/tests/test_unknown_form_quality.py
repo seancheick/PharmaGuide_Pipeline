@@ -1071,3 +1071,24 @@ def test_raw_red_grape_source_does_not_hold_resveratrol(enricher):
     assert 'Red Grape Fruit Extract' in json.dumps(row)
     scored = build_scored_artifact(product)
     assert 'disclosed_form_unmapped' not in scored['strict_scoring_contract']['findings']
+
+
+@pytest.mark.parametrize("chemical", ["Chromium Dinicocysteinate", "Zychrome Chromium Dinicocysteinate", "chromium dinicocysteinate"])
+def test_dinicocysteinate_never_inherits_polynicotinate_form(enricher, chemical):
+    """PMID27687012: dinicocysteinate includes L-cysteine, a distinct complex."""
+    iqm = enricher.databases['ingredient_quality_map']
+    assert 'Chromium Dinicocysteinate' not in iqm['chromium']['forms']['chromium polynicotinate']['aliases']
+    match = enricher._match_quality_map('Chromium', 'Chromium', iqm,
+        cleaned_forms=[{'name': chemical, 'category': 'mineral'}],
+        cleaner_canonical_id='chromium')
+    assert match.get('form_id') != 'chromium polynicotinate'
+    assert match.get('unmapped_forms') == [chemical]
+
+
+def test_chromemate_polynicotinate_control_keeps_named_form(enricher):
+    match = enricher._match_quality_map('Chromium', 'Chromium', enricher.databases['ingredient_quality_map'],
+        cleaned_forms=[{'name': 'Chromemate Chromium Polynicotinate', 'category': 'mineral'}],
+        cleaner_canonical_id='chromium')
+    assert match['form_id'] == 'chromium polynicotinate'
+    assert not match.get('unmapped_forms')
+

@@ -32,7 +32,7 @@
     "statistics": {
       "total_parents": 655,
       "total_forms": 1475,
-      "total_form_aliases": 12323,
+      "total_form_aliases": 12322,
       "parents_with_parent_aliases": 146,
       "parents_with_contains_aliases": 0,
       "parents_with_pattern_aliases": 0
@@ -53,7 +53,7 @@
       "vitamins": 25
     },
     "schema_version": "5.6.1",
-    "last_updated": "2026-10-02",
+    "last_updated": "2026-10-03",
     "pipeline_integration": "Used by enrichment to assign form quality (bio_score) to matched ingredient forms. Match ingredient name against forms aliases (case-insensitive).",
     "matching_notes": [
       "Match ingredient name + forms text against aliases array (case-insensitive)",
@@ -14902,7 +14902,6 @@
           "chrome mate",
           "chromemate cm-100m",
           "chromemate cm-100",
-          "Chromium Dinicocysteinate",
           "chromium nicotinate, fermented"
         ],
         "dosage_importance": 0.5,
