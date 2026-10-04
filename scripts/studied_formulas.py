@@ -23,7 +23,7 @@ from probiotic_measurements import (
     context_review_finished, strain_literature_review_concluded,
     classify_dose_applicability, dose_applicability_credit, DOSE_MEASUREMENT_UNITS,
     clinical_review_provenance_valid, effective_clinical_dose_basis,
-    label_strain_identity_resolution, _label_designation_tokens,
+    label_strain_identity_resolution, _label_designation_tokens, _PROBIOTIC_GENERA,
 )
 
 
@@ -311,10 +311,12 @@ def clinical_strain_identity_from_label(row: Mapping, reference: Mapping) -> str
     if not compatible_parent(label):
         # Reuse the label designation owner so abbreviated scientific names
         # and code-bearing marketing text cannot masquerade as wrappers.
-        _, codes = _label_designation_tokens(label)
+        taxon, codes = _label_designation_tokens(label)
         label_state = label_strain_identity_resolution(label, None, {})["resolution"]
-        explicit_identity = bool(codes) or label_state != "unresolved_label_text"
+        explicit_identity = (bool(codes) or label_state != "unresolved_label_text"
+                             or any(word in _PROBIOTIC_GENERA or len(word) == 1 for word in taxon))
         wrapper = (len(forms) == 1 and not explicit_identity
+                   and len(tokens(row.get("ingredientGroup"))) >= 2
                    and compatible_parent(row.get("ingredientGroup"))
                    and any(clinical_strain_identity_matches(form, reference) for form in forms))
         if not wrapper:

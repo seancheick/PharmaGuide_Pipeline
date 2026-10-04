@@ -495,7 +495,7 @@ def test_group_code_requires_exact_source_owned_species_without_conflicts(enrich
     assert _collect(enricher, [owner])["probiotic_data"]["clinical_strains"] == []
 
 
-@pytest.mark.parametrize("case", ["valid", "wrong_species", "abbreviated_species", "wrong_code", "missing_group", "multiple_forms", "missing_source"])
+@pytest.mark.parametrize("case", ["valid", "wrong_species", "abbreviated_species", "embedded_species", "genus_only_group", "wrong_code", "missing_group", "multiple_forms", "missing_source"])
 def test_full_strain_form_under_marketing_wrapper_requires_agreeing_species(enricher, case):
     owner = _row("Advanced Acidophilus", "Lactobacillus acidophilus LA-5")
     owner.update(ingredientGroup="Lactobacillus acidophilus", standardName="Lactobacillus acidophilus")
@@ -503,6 +503,10 @@ def test_full_strain_form_under_marketing_wrapper_requires_agreeing_species(enri
         owner["name"] = owner["raw_source_text"] = "Bifidobacterium longum"
     elif case == "abbreviated_species":
         owner["name"] = owner["raw_source_text"] = "L. rhamnosus"
+    elif case == "embedded_species":
+        owner["name"] = owner["raw_source_text"] = "Advanced Lactobacillus rhamnosus"
+    elif case == "genus_only_group":
+        owner["ingredientGroup"] = "Lactobacillus"
     elif case == "wrong_code":
         owner["name"] = owner["raw_source_text"] = "Advanced Acidophilus LA-14"
     elif case == "missing_group":
