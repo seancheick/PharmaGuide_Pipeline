@@ -67,3 +67,29 @@ def test_stated_reason_is_the_verdict_driver(signals, expected):
     """DSLD 207381 / 26394 (caution) stated an EU-only advisory as the reason
     for a caution set by DOSE_OVER_UL_CRITICAL."""
     assert stated_safety_signal(signals) == expected
+
+
+@pytest.mark.parametrize("caffeine_mg", [200, 350])
+def test_informational_caffeine_does_not_hide_actionable_dose_reason(enricher, caffeine_mg):
+    scored = _scored(enricher, [
+        _row("Caffeine", caffeine_mg, "mg", 1, "caffeine"),
+        _row("Niacin", 500, "mg", 2, "vitamin_b3_niacin"),
+    ])
+    assert scored["product_safety_status"] == "caution"
+    assert any(flag.startswith("STIMULANT_CAFFEINE_") for flag in scored["flags"])
+    assert any(flag.startswith("DOSE_") for flag in scored["flags"])
+    assert scored["safety_signal_reason"].startswith("DOSE_")
+
+
+@pytest.mark.parametrize("informational", [
+    "STIMULANT_CAFFEINE_MODERATE_DOSE",
+    "STIMULANT_CAFFEINE_ELEVATED_DOSE",
+    "STIMULANT_CAFFEINE_UNDISCLOSED_REVIEW",
+])
+def test_nonverdict_stimulant_signals_are_advisories(informational):
+    assert stated_safety_signal([informational, "DOSE_OVER_UL_CRITICAL"]) == "DOSE_OVER_UL_CRITICAL"
+    assert stated_safety_signal([informational]) == informational
+
+
+def test_high_caffeine_remains_an_actionable_reason():
+    assert stated_safety_signal(["STIMULANT_CAFFEINE_HIGH_DOSE", "DOSE_OVER_UL_CRITICAL"]) == "STIMULANT_CAFFEINE_HIGH_DOSE"

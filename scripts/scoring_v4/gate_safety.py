@@ -897,11 +897,15 @@ AUDIT_ONLY_SAFETY_SIGNALS = frozenset({
     "B0_RETIRED_POLICY_SIGNAL_IGNORED",
     "B0_STALE_POLICY_SIGNAL_IGNORED",
 })
-# Recorded for the consumer but never set a verdict (see _apply_signal_policy).
+# Recorded for the consumer but never set a verdict (see _apply_signal_policy
+# and _apply_stimulant_policy).
 ADVISORY_ONLY_SAFETY_SIGNALS = frozenset({
     "B0_REGIONAL_ADVISORY",
     "B0_HIGH_RISK_EXCIPIENT_WARNING_ONLY",
     "B0_WATCHLIST_EXCIPIENT_WARNING_ONLY",
+    "STIMULANT_CAFFEINE_MODERATE_DOSE",
+    "STIMULANT_CAFFEINE_ELEVATED_DOSE",
+    "STIMULANT_CAFFEINE_UNDISCLOSED_REVIEW",
 })
 
 
