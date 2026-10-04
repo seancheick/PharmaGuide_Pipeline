@@ -50,11 +50,63 @@ INTERACTION_TEXT_TAG_PATTERNS: tuple[tuple[re.Pattern[str], str], ...] = (
 # on `vitamin_k`; the 2026-07-28 identity split left them matching nothing.
 # This is narrower than the IQM display group on purpose: beta-carotene rolls
 # up to vitamin A for display but is a provitamin, not a vitamer, and must not
-# inherit preformed-retinol interactions. Members must match the IQM
-# `nutrient_group_id` (pinned by test_vitamin_k_interaction_subject.py).
+# inherit preformed-retinol interactions. Vitamin K members must match the IQM
+# `nutrient_group_id`.
+#
+# Probiotic organisms: the immunocompromised caution (bacteremia/fungemia from
+# live microorganisms) is authored on the generic IQM `probiotics`, but labels
+# resolve to strain identities, so it reached 0 of 15,421 products. Every IQM
+# identity with category `probiotics` is a member except `bacteriophages`
+# (viruses that infect bacteria, not a live bacterium or yeast). Both families
+# are pinned against the IQM by tests/test_interaction_subject_family.py.
 INTERACTION_SUBJECT_FAMILY: dict[str, str] = {
     "vitamin_k1": "vitamin_k",
     "vitamin_k2": "vitamin_k",
+    "bacillus_clausii": "probiotics",
+    "bacillus_coagulans": "probiotics",
+    "bacillus_indicus": "probiotics",
+    "bacillus_subtilis": "probiotics",
+    "bifidobacterium_bifidum": "probiotics",
+    "bifidobacterium_breve": "probiotics",
+    "bifidobacterium_lactis": "probiotics",
+    "bifidobacterium_longum": "probiotics",
+    "brettanomyces_anomalus": "probiotics",
+    "debaryomyces_hansenii": "probiotics",
+    "kefir_culture": "probiotics",
+    "kluyveromyces_marxianus": "probiotics",
+    "lactobacillus_acidophilus": "probiotics",
+    "lactobacillus_brevis": "probiotics",
+    "lactobacillus_bulgaricus": "probiotics",
+    "lactobacillus_casei": "probiotics",
+    "lactobacillus_crispatus": "probiotics",
+    "lactobacillus_fermentum": "probiotics",
+    "lactobacillus_gasseri": "probiotics",
+    "lactobacillus_helveticus": "probiotics",
+    "lactobacillus_jensenii": "probiotics",
+    "lactobacillus_kefir": "probiotics",
+    "lactobacillus_kefiranofaciens": "probiotics",
+    "lactobacillus_kefirgranum": "probiotics",
+    "lactobacillus_paracasei": "probiotics",
+    "lactobacillus_parakefir": "probiotics",
+    "lactobacillus_plantarum": "probiotics",
+    "lactobacillus_reuteri": "probiotics",
+    "lactobacillus_rhamnosus": "probiotics",
+    "lactobacillus_salivarius": "probiotics",
+    "lactococcus_cremoris": "probiotics",
+    "lactococcus_lactis": "probiotics",
+    "leuconostoc_cremoris": "probiotics",
+    "leuconostoc_dextranicum": "probiotics",
+    "leuconostoc_lactis": "probiotics",
+    "leuconostoc_mesenteroides": "probiotics",
+    "pediococcus_pentosaceus": "probiotics",
+    "probiotic_unspecified": "probiotics",
+    "saccharomyces_boulardii": "probiotics",
+    "saccharomyces_exiguus": "probiotics",
+    "saccharomyces_turicensis": "probiotics",
+    "saccharomyces_unisporus": "probiotics",
+    "streptococcus_salivarius": "probiotics",
+    "streptococcus_thermophilus": "probiotics",
+    "torulaspora_delbrueckii": "probiotics",
 }
 
 

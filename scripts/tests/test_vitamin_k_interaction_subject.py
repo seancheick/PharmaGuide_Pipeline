@@ -104,15 +104,6 @@ def test_export_interaction_tags_carry_the_vitamin_k_family():
     assert interaction_subject_ids("magnesium") == ["magnesium"]
 
 
-def test_interaction_family_is_a_subset_of_the_iqm_declared_groups():
-    """The interaction family may only narrow the IQM identity groups."""
-    from identity.interaction import INTERACTION_SUBJECT_FAMILY
-
-    iqm = _iqm()
-    for member, family in INTERACTION_SUBJECT_FAMILY.items():
-        assert iqm[member].get("nutrient_group_id") == family, member
-
-
 def test_every_rule_form_scope_names_a_real_form():
     """A form_scope key that no IQM form carries makes the rule silently dead."""
     from identity.interaction import INTERACTION_SUBJECT_FAMILY
