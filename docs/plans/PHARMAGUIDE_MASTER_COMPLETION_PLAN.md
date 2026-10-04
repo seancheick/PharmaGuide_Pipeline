@@ -6,6 +6,20 @@ A checked implementation box means that specific deliverable is implemented, mea
 
 ## October 4 — exact-candidate verification
 
+Current candidate: pipeline `6ea851dc`, catalog `2026.10.04.133540` (15,154 products), interaction DB `1.0.12` (132 records). Evidence directory: `/Users/seancheick/pg_quality/q53_release_20261003/final_candidate_6ea851dc/`.
+
+- [x] Exact current corpus: 38 stage chains / 114 owned, checksum-verified manifests; current input fingerprints; raw input inventory unchanged. Receipt SHA-256 `f3f5f90147025c0b3cecc484900933f7bd6f4205dff539a4d197eda6a2b102df`.
+- [x] Exact current clinical reachability: 15,421 products, zero findings. Receipt SHA-256 `54cc23059f3576f548afc880783abf4f6fd44dcc17f721c430fcf514bb3a2031`.
+- [x] Preserve candidate hashes and original app baseline before local import; freeze the original movement report. Local import succeeds. This is development evidence, not publication approval.
+- [x] Release backstop: 124 passed in 1,233.24s; strict owner/freshness/Flutter audits pass; citation audit has zero new mismatches or unresolved citations (252 known backlog mismatches remain reported). Receipt `test_release_after_import.log`.
+- [ ] Complete full backstop and Flutter `make check` / `make verify-bundle`; full running, Flutter queued sequentially.
+- [x] Numerical census of all 3,046 distinct catalog-gate products saved in `catalog_movement_source_review.json`: 3,009 matched products and 37 removals. Largest absolute pillar movement is Evidence for 1,162, Formulation for 1,031, Transparency for 421, Dose for 358, Safety/Hygiene for 32, Verification for five. 2,335 move multiple pillars. This attribution does not establish clinical or human approval.
+- [x] Representative canonical field-chain audit for DSLD 18529, 182730, 231868 and blocked 18924: printed label fields, amounts/units/DVs/order/panels preserved; scored→core shared rounding and blob provenance→core quality status/tier/safety agree. Receipt `canonical_field_chain_audit.json`; this does not establish device rendering.
+- [ ] Finish actual device rendering audit. Launch reproduced simulator architecture incompatibility; no connected iPhone currently detected. Static field tracing does not close this box.
+- [ ] Close human catalog movement review: 3,046 distinct flagged products (overlapping categories), including six milder safety statuses and 37 removed products previously showing caution. All 37 remain present in scored source as `not_scored` / `incomplete_product_data`, specifically `disclosed_form_unmapped`: declared preparation/form is unrecognized, despite full ingredient mapping and disclosed amounts. Independent review found 24 substance-risk markers, 30 UL signals and two high-dose caffeine signals (overlapping); none is currently blocked/banned/recalled, but removal hides existing cautions. This finding is not an approval to remove warnings. Preserve old baseline after candidate import; never regenerate the comparison against the candidate to erase this gate.
+- [ ] Sean approves external catalog/interaction/Supabase/OTA publication after remaining evidence is complete. No such publication has occurred.
+
+
 - [x] Integrate the reviewed preparation/source corrections, including removal of borrowed Mirtogenol→bilberry credit. Exact branch/main CI, local corpus checks and independent review passed; source is contained in main through `4e073a6b`.
 - [x] Integrate structural-total Formulation correction `4f2a6509`. Failing-before regression; 121 focused checks; independent measured review; branch CI37181147593 and main CI37181628461 green; local527passed/24declared optional skips, skip guard green.
 - [x] Regenerate and verify all38Clean/Enrich/Score chains/114manifests at `4f2a6509`; strict reachability covers15,421products with zero findings. These outputs are a verified historical candidate after later main changes, not final release proof.
