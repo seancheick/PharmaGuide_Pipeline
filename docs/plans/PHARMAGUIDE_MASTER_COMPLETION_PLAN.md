@@ -6,20 +6,20 @@ A checked implementation box means that specific deliverable is implemented, mea
 
 ## Completion measure — October 4
 
-**Main Phase 0–7 checklist: 50 of 68 boxes complete (73.5%, rounded to 74%).** Count only the eight phase sections under Updated execution checklist, including their nested deliverables; exclude historical checkpoint sections and repeated release reminders. This is an unweighted deliverable count, not an estimate of elapsed time, effort or release readiness. All document checkboxes would give222/263 (84.4%) before this update, but repeated historical receipts make that unsuitable as the main progress measure.
+**Main Phase 0–7 checklist: 51 of 68 boxes complete (75.0%).** Count only the eight phase sections under Updated execution checklist, including their nested deliverables; exclude historical checkpoint sections and repeated release reminders. This is an unweighted deliverable count, not an estimate of elapsed time, effort or release readiness. All document checkboxes would give222/263 (84.4%) before this update, but repeated historical receipts make that unsuitable as the main progress measure.
 
 | Phase | Complete / total |
 |---|---:|
 | 0 — Baseline and final freeze | 3 / 4 |
 | 1 — Evidence/Dose separation | 9 / 9 |
-| 2 — Identity and roles | 15 / 17 |
+| 2 — Identity and roles | 16 / 17 |
 | 3 — Clinical Evidence coverage | 6 / 11 |
 | 4 — Approved Dose policy | 6 / 6 |
 | 5 — Numerical calibration | 6 / 6 |
 | 6 — Flutter parity and nutrition | 3 / 6 |
 | 7 — Candidate, approval and release | 2 / 9 |
 
-Approved scoring policy, implementation and bounded numerical calibration are complete. Broader source-section/role and clinical-determination coverage, current-source candidate validation, actual-device rendering, movement approval, publication and live verification remain open. Historical corpus/release passes do not validate the subsequently changed runtime. The execution LEDGER and main-checkout handoff carry the next steps. Monthly certification renewal is active; the stopped historical release monitor is separate. The October4 development rebuild is verified below, while final source/candidate acceptance remains open.
+Approved scoring policy, implementation and bounded numerical calibration are complete. Final Evidence-subject census and clinical-determination coverage, current-source candidate validation, actual-device rendering, movement approval, publication and live verification remain open. Historical corpus/release passes do not validate the subsequently changed runtime. The execution LEDGER and main-checkout handoff carry the next steps. Monthly certification renewal is active; the stopped historical release monitor is separate. The October4 development rebuild is verified below, while final source/candidate acceptance remains open.
 
 ## October 4 — catalog gate development policy
 
@@ -254,10 +254,10 @@ The October 1 source audit reconciled these boxes against current production and
 | Phase 1 transfer-invariant audit | Closed for current source | Recheck rebuilt artifacts at release gate |
 | Phase 2 shared prominence owner | Implemented, measured, reviewed and integrated | Marked complete; retained amount guards stay under Phase 1/D26 |
 | Phase 2 remaining serving duplicates | Closed for current raw corpus | Recheck canonical output and app rendering after fresh Clean |
-| Phase 2 dual-use ingredient roles | Ravage/trace-protein examples corrected; broader class open | Inspect current source/purpose facts and correct shared owners without amount-based demotion |
+| Phase 2 dual-use ingredient roles | Shared amount-based excipient demotion corrected; all demonstrated affected labels replayed | Final artifact validation uses the corrected source owner |
 | Phase 2 final subject census | Pending corrected subjects | Recompute after the remaining source corrections; classify holds and deltas |
 
-**Work can proceed now without a full corpus job:** prepare the Phase 1 benchmark/policy packets and fix the remaining Phase 2 source classes with focused tests and bounded raw replays. The final census and candidate gates follow those changes. Sean runs the full pipeline when the final source is ready; Codex reviews its artifacts afterward.
+**Next source work without a full corpus job:** finish the clinical applicability/preparation determinations and corrected Evidence-subject census. Phase 1 transfer and approved Dose policy are complete; do not reopen their historical packets as new work. The candidate gates follow the remaining source decisions. Sean runs the full pipeline when the final source is ready; Codex reviews its artifacts afterward.
 
 ## Fixed boundaries and Owner Check
 
@@ -315,7 +315,7 @@ The October 1 source audit reconciled these boxes against current production and
   - [x] Claude latest-source implementation/cohort measurement validated on `68cae99a` (17,954 passed, 168 skipped); Codex independently reconciled and tested the combined source. This is sampling, not full-corpus release validation.
   - [x] Integrate the validated combined source on main, including Q49 safeguards and Q51 record-unit comparisons. D26 was later closed; this checkpoint alone does not close the Phase 2 umbrella or authorize catalog release.
 - [x] Resolve remaining alternate-serving identity/duplicate cases from raw JSON (Q39), including audience-only serving notes, inconsistent column contents and shared-form-UNII wording drift. Raw census: 108→0 repeated top-level names; 141→18 all-tree names, with all 18 retained as distinct authored branches. Never merge materially different preparations or discard label variants.
-- [ ] **SOURCE WORK NEXT:** Align remaining dual-use active/excipient decisions without using amount as a substitute for purpose. Ravage and trace-protein corrections are completed examples; the broader class remains open. Preserve genuine excipients, source-section membership and nutrition rollups.
+- [x] Align demonstrated dual-use active/excipient decisions through the existing shared owner without amount-based demotion. October4 census:5,770active additive-flagged rows;726flag changes across579products; final591-label raw replay plus inactive/unknown/descriptor/nutrition/legacy-source controls. Source membership and efficacy ownership stay separate. Integration receipts are recorded below and in LEDGER; final candidate validation remains open.
 - [ ] **AFTER SOURCE CORRECTIONS:** Recompute the final Evidence-subject census after the remaining serving/role corrections and classify all holds and changes. Earlier frozen cohort checks do not establish this final census.
 
 Do not introduce the rejected mass-based demotion of purpose ingredients. Keep source-section membership separate from efficacy ownership.
@@ -327,9 +327,9 @@ Do not introduce the rejected mass-based demotion of purpose ingredients. Keep s
 - [x] Independently identify source/strain attribution defects in the generic longum and acidophilus records (Q53); record a release hold rather than treating unchanged scores as clinical validation.
 - [x] Correct Q53 through the existing registry/applicability owners: two per-entry source reviews, canonical reference-only veto, 536 frozen raw labels plus one preserved submission, and fresh independent review. All 54 DSLD score decreases are Evidence-only; existing native-strain assessments are unchanged.
 - [x] Integrate Q53 final source checkpoint on main through `6a15be14`, including the corrected BB536 preservation canary; combined fast18,008passed/168skipped/zero failures or xfails.
-- [ ] Validate broader Evidence coverage on the fresh release candidate. Eight labels now expose incomplete Evidence coverage; one already-incomplete label adds an unresolved subject. Research queue:12091,1834,19171,19172,19890,264105,35694,46802,65049 (`probiotic_q53_20261001/research_queue.json`). These are research/identity checks, not a reason to restore unsupported species credit.
+- [ ] Validate broader Evidence coverage on the fresh release candidate. The October4 source correction recognizes264105/LA-5 as a completed negative review; it does not award Evidence points. Remaining identity/research queue:12091,1834,19171,19172,19890,35694,46802,65049 (`probiotic_q53_20261001/research_queue.json`). These are research/identity checks, not a reason to restore unsupported species credit.
 - [ ] Audit coverage against the **corrected release subject set**, not just the earlier registry census. October 2 marine-attribution correction exposes ALA determinations that remain unreviewed; rejection of a marine record is not a completed negative ALA assessment. Recheck every release-eligible ALA subject; affected examples12315,18141,241665,293406,295103,295198,295470,328010,328011,840.
-- [ ] Finish omega preparation/purpose applicability and the remaining generic/branded-formula coverage, including Tesnor/Sytrinol.
+- [ ] Finish omega preparation/purpose applicability and the remaining generic/branded-formula coverage, including preparation-specific applicability; Tesnor/Sytrinol matched reviewed-state wiring is verified, not pending code work.
 - [x] Verify the nine-label Q53 and eight-family indexed/bounded source batch together; document live identity/material/outcome checks and bounded negative searches in the existing research register (October2).
 - [ ] Complete remaining clinical determinations, generic/branded source verification and broader release-eligible coverage; source review does not resolve insufficient identity or approve a new positive grade.
 - [ ] Ensure no release-eligible subject has a pending Evidence determination; insufficient identity remains a justified hold.
@@ -883,3 +883,20 @@ Owner: `pipeline_freshness.py::stage_freshness_issues`, `build_final_db.py::buil
 - [ ] **Still open:** clinical applicability/coverage queues, complete movement classifications, interaction freshness, device/nutrition rendering, frozen release manifest, final release/full checks and exact-candidate publication approval. No whole phase is closed by this audit.
 
 Receipts: `/Users/seancheick/pg_quality/citation_cache_20261004/postrun_*`; pre-import assets in `app_before_import/`. This source-only correction is not yet present in the imported candidate blobs.
+
+
+## October 4 — clinical readiness and dual-use owner batch
+
+Baseline `b0af340a`; candidate source `c1a31c79` (`dbaebe3f`, `37e83e4d`, `c1a31c79`). This closes three confirmed defect classes; it does not ratify new clinical grades or declare the entire clinical queue finished.
+
+- [x] **Implemented:** Readiness consumes the existing resolver's verified nonpositive literature determinations and exact label-owned concluded native strain reviews. Species/stubs, unverified records and identity-insufficient subjects remain pending. LA-5's reviewed zero is complete, not missing research.
+- [x] **Implemented:** Evidence readiness uses the canonical subject provider and shared whole-label roles; undosed named blend children cannot silently disappear. Structural strict rows remain outside individual Evidence while retained for Dose; Dose keeps strict exposure requirements.
+- [x] **Implemented:** One excipient decision serves row signals and scoring selection. Source membership/recognized identity, canonical excipient/descriptor/nutrition roles and nutrition-rollup protection govern purpose; amount alone cannot demote an active ingredient. Genuine inactive/excipient rows remain excluded.
+- [x] **Implemented:** Tesnor notes correctly describe the older-men trial's primary symptom score and secondary hormone/strength outcomes, preserving exact-formula scope, numerical grade and200–400mg benchmark. D23's obsolete unmatched-header description is superseded.
+- [x] **Implemented:** Spirulina summaries retain the HIV population/null disease markers and pediatric nephrotic-syndrome within-group comparator. Existing aggregate grade remains a clinical-review obligation; this patch does not ratify it.
+- [x] **Measured:** Active additive-flag census covers5,770rows;726flag decisions differ across579products. Source-frozen29-label replay has no score/status/route changes. Final591-label capture on `f521aef0`:14score movers,1route change,0status/safety-gate/Dose-risk changes,0unexplained material movements. Twelve restore existing Spirulina Evidence,46707 restores existing VitaminC Evidence,17226 uses the existing fiber route/denominator after active pectin is retained. These owner fixes do not ratify the open Spirulina clinical grade.
+- [x] **Reviewed:** Fresh read-only reviewers reproduced source ownership, pending-review, real-excipient and structural Dose boundaries; their detected defects were corrected before acceptance. Initial CI exposed3additional classes: legacy active-source compatibility, recognized-excipient identity/safety retention, and a stale synthetic confidence pin. Fail-first fixes and final review close them;345defect-class checks,124final owner/source checks and41archetype checks pass. Local537passed/24declared opt-in skips; two changed clinical entries pass strict existing citation-owner check on9references.
+- [x] **Integrated:** Source `f521aef0` passes exact-candidate CI37248345191(all4shards), final local gate and independent review; fast-forward integrated/pushed on main with the documentation-only progress update. Own temporary branch/baseline removed after containment. Final release validation remains separate.
+- [ ] **Release-validated:** Current source needs a fresh combined rebuild and artifact/device gates. Do not restamp the October4 artifacts or request an intermediate corpus run while remaining output-changing clinical decisions are unfinished.
+
+Durable receipts: `/Users/seancheick/pg_quality/clinical_role_completion_20261004/`. Owner: `assessment_readiness.py::evaluate_evidence_assessment`, existing resolver/subject/strain owners; `SupplementEnricherV3::_compute_excipient_flags`; existing `BRAND_TESNOR.notes`. Will NOT create another subject list, classifier, Evidence/Dose policy, registry, status or numerical grade. Phase2 demonstrated dual-use source correction is complete; final Evidence-subject census remains open. Existing Spirulina aggregate grading, counts and general Healthy Aging applicability require clinical review before release.
