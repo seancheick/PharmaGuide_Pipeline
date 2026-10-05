@@ -1,6 +1,6 @@
 # PharmaGuide master completion plan
 
-Updated October 4, 2026. Pipeline integrator: Codex. Original scope: Sean's accepted September 30 master plan. This document is the readable checklist; [LEDGER.md](../../scripts/audits/pending_items_20260926/LEDGER.md) remains the execution register, and the [ownership matrix](../../scripts/contracts/source_of_truth_matrix.json) defines production owners. Historical descriptions below do not override current code or approved decisions.
+Updated October 5, 2026. Pipeline integrator: Codex. Original scope: Sean's accepted September 30 master plan. This document is the readable checklist; [LEDGER.md](../../scripts/audits/pending_items_20260926/LEDGER.md) remains the execution register, and the [ownership matrix](../../scripts/contracts/source_of_truth_matrix.json) defines production owners. Historical descriptions below do not override current code or approved decisions.
 
 A checked implementation box means that specific deliverable is implemented, measured and independently reviewed where required. It does **not** mean the whole phase is finished or the catalog is released. Repository code pushed to GitHub and catalog publication are separate events.
 
@@ -948,3 +948,8 @@ Owner: existing enhanced_normalizer preparation/printed nutrient identity, enric
 - [ ] Resolve the four exposure-policy choices and remaining exact preparation/clinical exceptions, then check actual stage fingerprints and perform one combined necessary Clean run followed by catalog/app/release validation. No intermediate corpus run or old stamp rewrite.
 
 The 53/70 phase count remains unchanged. The 58 classified pending groups are not universally closed by identity containment. Source receipts and checkpoint results: existing pending-items LEDGER/research and `/Users/seancheick/pg_quality/clinical_source_continuation_20261005/`.
+
+
+### October 5 — Claude blend audit, integration pending
+
+Independent audit of `a9bd0a3e` on current main found and repaired four source-owner defects: recursive hidden/NP descendants incorrectly yielding full disclosure, known stimulant doses incorrectly labelled undisclosed, distinct same-name blend parents collapsing together, and downstream Transparency deduplication undoing source separation. Behavioral source `fcb6a613` has fail-first regressions and fresh-context review; 537local checks pass; exact CI acceptance is recorded in the existing LEDGER. Frozen147-label raw replay reproduces107 score movements and seven safety verdict changes from current main. The audit repairs themselves affect only three payloads, with no numeric pillar, total, safety or scoring-status changes from integrated Claude. This is a bounded blend/missing-data gold contribution, not complete clinical, gold, candidate or release validation. Master count remains53/70. Integration precedes remaining clinical/amount-owner closure and the single necessary rebuild from Clean.

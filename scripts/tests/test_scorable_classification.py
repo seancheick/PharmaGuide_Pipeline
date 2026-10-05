@@ -682,8 +682,12 @@ class TestIdentityIntegrityBoundary:
         assert skipped["Stevia leaf extract"]["canonical_id_after"] == "NHA_STEVIA"
         assert skipped["Stevia leaf extract"]["canonical_id"] == "NHA_STEVIA"
 
+    @pytest.mark.parametrize("is_additive,expected_role", [
+        (False, "recognized_non_scorable"),
+        (True, "inactive_non_scorable"),
+    ])
     def test_identity_integrity_reclassifies_recognized_active_without_false_conflict(
-        self, enricher
+        self, enricher, is_additive, expected_role
     ):
         product = {
             "id": "recognized-active-beet",
@@ -697,7 +701,7 @@ class TestIdentityIntegrityBoundary:
                     canonical_source_db="standardized_botanicals",
                     ingredientGroup="Beet",
                     raw_taxonomy={"category": "botanical", "ingredientGroup": "Beet"},
-                    isAdditive=True,
+                    isAdditive=is_additive,
                     additiveType="natural_colorant",
                     quantity=1000.0,
                 )
@@ -708,7 +712,7 @@ class TestIdentityIntegrityBoundary:
         result = enricher._collect_ingredient_quality_data(product)
         row = result["ingredients"][0]
 
-        assert row["role_classification"] == "recognized_non_scorable"
+        assert row["role_classification"] == expected_role
         assert row["identity_disposition"] == "taxonomy_only"
         assert row["scoreable_identity"] is False
         assert row not in result["ingredients_scorable"]

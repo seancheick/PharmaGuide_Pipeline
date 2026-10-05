@@ -84,6 +84,7 @@ from functional_grouping_handler import FunctionalGroupingHandler
 import normalization as norm_module  # Single-source normalization
 from unit_converter import get_converter
 from serving_frequency import select_canonical_serving
+from proprietary_blend_detector import disclosure_tier, sole_component_is_single_source
 
 
 # ---------------------------------------------------------------------------
@@ -12346,16 +12347,9 @@ class EnhancedDSLDNormalizer:
             else:
                 has_quantities.append(False)
 
-        # Determine disclosure level — three-tier model
-        if all(has_quantities) and len(has_quantities) > 0:
-            return "full"  # All sub-ingredients have individual amounts
-        elif has_blend_total and has_sub_ingredients:
-            # Blend total declared AND sub-ingredients listed, but
-            # individual amounts are missing (or only some present).
-            # This is FDA-compliant partial disclosure per 21 CFR 101.36.
-            return "partial"
-        else:
-            # Missing blend total OR no sub-ingredient amounts at all
-            return "none"
+        return disclosure_tier(
+            has_blend_total, sum(has_quantities), len(has_quantities) - sum(has_quantities),
+            sole_single_source=sole_component_is_single_source(nested_ingredients),
+        )
 
     

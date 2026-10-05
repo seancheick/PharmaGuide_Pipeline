@@ -80,9 +80,8 @@ def test_no_blend_no_false_caution() -> None:
     assert _gate(p).verdict != "CAUTION"
 
 
-def test_real_gnc_amino_energy_caution() -> None:
-    """Real corpus product 66957 (GNC Amino Energy Advanced) has an opaque
-    'Stimulant Blends' — must read CAUTION, not SAFE."""
+def test_real_gnc_amino_energy_botanical_bound() -> None:
+    """66957 prints a 200 mg botanical total, below the accepted caffeine bound."""
     import json, glob
     for path in glob.glob(str(SCRIPTS_ROOT / "products" / "output_*_enriched" / "enriched" / "*.json")):
         try:
@@ -91,7 +90,17 @@ def test_real_gnc_amino_energy_caution() -> None:
             continue
         for p in (data if isinstance(data, list) else []):
             if isinstance(p, dict) and str(p.get("dsld_id")) == "66957":
-                assert _gate(p).verdict == "CAUTION"
+                import copy
+                blend = next(b for b in p["proprietary_blends"] if b["name"] == "Advanced Energy Blend")
+                assert blend["blend_total_mg"] == 200.0
+                assert {c["name"] for c in blend["child_ingredients"]} == {
+                    "Black Tea extract", "Green Coffee bean extract", "Green Tea extract"}
+                assert "STIMULANT_UNDISCLOSED_BLEND" not in _gate(p).safety_signals
+                unbounded = copy.deepcopy(p)
+                changed = next(b for b in unbounded["proprietary_blends"] if b["name"] == "Advanced Energy Blend")
+                changed["blend_total_mg"] = None
+                changed["total_weight"] = None
+                assert "STIMULANT_UNDISCLOSED_BLEND" in _gate(unbounded).safety_signals
                 return
     import pytest
     pytest.skip("66957 not in local corpus")

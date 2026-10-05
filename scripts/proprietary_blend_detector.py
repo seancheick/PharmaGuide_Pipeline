@@ -28,6 +28,57 @@ from typing import Dict, List, Optional, Any, Tuple
 logger = logging.getLogger(__name__)
 
 
+def disclosure_tier(
+    total_declared: bool, with_amounts: int, without_amounts: int, sole_single_source: bool = False
+) -> str:
+    """The one 21 CFR 101.36 disclosure tier for a blend.
+
+    full:    every listed sub-ingredient has its own amount;
+    partial: the blend total is declared and sub-ingredients are listed, but
+             individual amounts are missing (or only some present);
+    none:    no sub-ingredients listed, or no total with missing amounts.
+
+    A declared total over one listed sub-ingredient is that ingredient's amount
+    (e.g. "Milk Thistle seed extract 254 mg" > Silymarin), so it is full. The
+    caller asserts sole_single_source only when that is one raw row naming at
+    most one source: "Protein Blend 8 g" > one row from casein and whey still
+    hides the split.
+    """
+    if with_amounts + without_amounts == 0:
+        return "none"
+    if without_amounts == 0 or (total_declared and sole_single_source and with_amounts + without_amounts == 1):
+        return "full"
+    return "partial" if total_declared else "none"
+
+
+def _row_has_amount(row: Dict[str, Any]) -> bool:
+    quantity = row.get("quantity")
+    entries = quantity if isinstance(quantity, list) else [quantity]
+    return any(
+        isinstance(value, (int, float)) and value > 0
+        and str(unit or "").strip().casefold() not in {"", "np"}
+        for value, unit in (
+            (e.get("quantity"), e.get("unit")) if isinstance(e, dict)
+            else (e, row.get("unit")) for e in entries
+        )
+    ) and all(
+        isinstance(child, dict) and _row_has_amount(child)
+        for child in row.get("nestedRows") or row.get("ingredients") or []
+    )
+
+
+def sole_component_is_single_source(components: List[Any]) -> bool:
+    """True when a blend lists exactly one raw component row that names at most one
+    source and whose entire nested subtree (standardization markers) is quantified."""
+    if len(components or []) != 1 or not isinstance(components[0], dict):
+        return False
+    sole = components[0]
+    nested = sole.get("nestedRows") or sole.get("ingredients") or []
+    return len(sole.get("forms") or []) <= 1 and all(
+        _row_has_amount(row) for row in nested if isinstance(row, dict)
+    )
+
+
 @dataclass
 class DetectedBlend:
     """A detected proprietary blend with evidence."""
@@ -506,29 +557,15 @@ class ProprietaryBlendDetector:
                     else:
                         result["without_amounts"].append(sub)
 
-        # Determine disclosure level — three-tier model per 21 CFR 101.36
-        #   full:    every sub-ingredient has individual amount
-        #   partial: blend total declared AND sub-ingredients listed,
-        #            but individual amounts missing (or only some present)
-        #   none:    missing blend total OR missing sub-ingredient list
-        total_subs = len(result["with_amounts"]) + len(result["without_amounts"])
-
-        if total_subs == 0:
-            # No sub-ingredients listed = no disclosure
-            result["level"] = "none"
-            result["amounts_present"] = "none"
-        elif len(result["without_amounts"]) == 0 and len(result["with_amounts"]) > 0:
-            # All sub-ingredients have amounts = full disclosure
-            result["level"] = "full"
+        result["level"] = disclosure_tier(
+            result["total_declared"], len(result["with_amounts"]), len(result["without_amounts"]),
+            sole_single_source=sole_component_is_single_source(sub_ingredients),
+        )
+        if result["level"] == "full":
             result["amounts_present"] = "full"
-        elif result["total_declared"] and total_subs > 0:
-            # Blend total declared AND sub-ingredients listed, but
-            # individual amounts missing (or only some present).
-            result["level"] = "partial"
-            result["amounts_present"] = "partial" if len(result["with_amounts"]) > 0 else "none"
+        elif result["level"] == "partial" and result["with_amounts"]:
+            result["amounts_present"] = "partial"
         else:
-            # Missing blend total OR no amounts on any sub-ingredient
-            result["level"] = "none"
             result["amounts_present"] = "none"
 
         return result

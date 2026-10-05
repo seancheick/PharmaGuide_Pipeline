@@ -2723,6 +2723,8 @@ class TestHarmfulPrecedenceRegression:
             "standardName": name,
             "quantity": 100,
             "unit": "mg",
+            "source_section": "active",
+            "cleaner_row_role": "active_scorable",
         }
 
         skip_reason = enricher._should_skip_from_scoring(ingredient, quality_map, botanicals_db)
@@ -2733,6 +2735,20 @@ class TestHarmfulPrecedenceRegression:
             f"{name} is in IQM and should be scored (skip=None), not skipped. "
             f"Got skip_reason={skip_reason}"
         )
+
+    @pytest.mark.parametrize("source,expected", [
+        ("active", None),
+        ("inactive", "recognized_non_scorable"),
+        (None, "recognized_non_scorable"),
+    ])
+    def test_silica_therapeutic_override_requires_active_source(
+        self, enricher, quality_map, botanicals_db, source, expected
+    ):
+        ingredient = {"name": "Silicon Dioxide", "standardName": "Silicon Dioxide",
+                      "quantity": 100, "unit": "mg"}
+        if source:
+            ingredient.update(source_section=source, cleaner_row_role="active_scorable")
+        assert enricher._should_skip_from_scoring(ingredient, quality_map, botanicals_db) == expected
 
     @pytest.mark.parametrize(
         "name,expected_id",

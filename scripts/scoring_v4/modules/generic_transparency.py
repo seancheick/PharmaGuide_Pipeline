@@ -453,15 +453,21 @@ def _declared_active_count(product: Dict[str, Any], rows: List[Dict[str, Any]]) 
                 for path in (row.get("raw_source_path"), *_safe_list(row.get("linked_rows")))
                 if path
             }
-            nutrition_fact_rows = sum(
+            # A blend header that is not itself an active row is label
+            # structure too; its members are the actives.
+            active_paths = {row.get("raw_source_path") for row in rows if row.get("raw_source_path")}
+            structural_rows = sum(
                 1
                 for row in quality.get("ingredients") or []
                 if isinstance(row, dict)
                 and _norm_text(row.get("source_section")) == "active"
-                and is_nutrition_fact_declaration(row)
-                and row.get("raw_source_path") not in restored
+                and (
+                    (is_nutrition_fact_declaration(row) and row.get("raw_source_path") not in restored)
+                    or (row.get("is_blend_header") is True
+                        and row.get("raw_source_path") not in active_paths)
+                )
             )
-            return max(parsed - nutrition_fact_rows, 0)
+            return max(parsed - structural_rows, 0)
     return len(rows)
 
 
@@ -864,12 +870,14 @@ def _blend_dedupe_keys(
     return keys
 
 
-def _blend_name_total_key(blend: Dict[str, Any]) -> Optional[Tuple[str, str, str]]:
+def _blend_name_total_key(blend: Dict[str, Any]) -> Optional[Tuple[str, ...]]:
     name_key = _canon_key(blend.get("name"))
     blend_total_mg, _ = _blend_total_mg(blend)
     if not name_key or blend_total_mg is None:
         return None
-    return ("name_total", name_key, f"{round(blend_total_mg, 3):.3f}")
+    key = ("name_total", name_key, f"{round(blend_total_mg, 3):.3f}")
+    source_owner = _norm_text(blend.get("source_row_ref"))
+    return key + (source_owner,) if source_owner else key
 
 
 def _blend_total_mg(blend: Dict[str, Any]) -> Tuple[Optional[float], bool]:

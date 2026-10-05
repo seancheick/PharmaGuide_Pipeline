@@ -146,7 +146,10 @@ import form_vocab as _form_vocab  # noqa: E402
 # Import scoring hardening modules
 from unit_converter import UnitConverter, ConversionResult
 from dosage_normalizer import DosageNormalizer
-from proprietary_blend_detector import ProprietaryBlendDetector
+from proprietary_blend_detector import ProprietaryBlendDetector, disclosure_tier, _row_has_amount
+
+# One direct child row of a raw label row: "<parent>.nestedRows[3]".
+_RAW_CHILD_ROW = re.compile(r"\.nestedRows\[\d+\]")
 from rda_ul_calculator import RDAULCalculator, ul_display_severity, ul_exceedance_sentence
 from reference_data_contract import reference_stamp
 from collagen_taxonomy import classify_collagen_subtype_strict, UNSPECIFIED as _COLLAGEN_UNSPECIFIED
@@ -14310,7 +14313,7 @@ class SupplementEnricherV3:
             # Flattened children carry the relationship, but their own
             # disclosureLevel describes the child (or is absent) and must not
             # replace the parent blend's tier or provenance.
-            parent_headers: Dict[str, Dict[str, Any]] = {}
+            parent_headers: Dict[tuple, Dict[str, Any]] = {}
             for header_idx, candidate in enumerate(ingredient_list):
                 if not isinstance(candidate, dict):
                     continue
@@ -14323,7 +14326,7 @@ class SupplementEnricherV3:
                     candidate.get("proprietaryBlend", False)
                 ):
                     continue
-                parent_headers[self._normalize_exclusion_text(candidate_name)] = {
+                parent_headers[(self._normalize_exclusion_text(candidate_name), candidate.get("raw_source_path"))] = {
                     "disclosure_level": candidate.get("disclosureLevel"),
                     "quantity": candidate.get("quantity"),
                     "unit": candidate.get("unit", "") or "",
@@ -14412,18 +14415,26 @@ class SupplementEnricherV3:
                     # (every child amount withheld). `_keyword_blend` records
                     # whether the name matched so disclosed keyword-less
                     # aggregates drop out.
+                    child_ref = str(ingredient.get("raw_source_path") or "")
+                    parent_ref = child_ref.rsplit(".nestedRows[", 1)[0] if ".nestedRows[" in child_ref else None
                     parent_header = parent_headers.get(
-                        self._normalize_exclusion_text(parent_blend)
+                        (self._normalize_exclusion_text(parent_blend), parent_ref)
                     )
                     parent_disclosure = (
                         parent_header.get("disclosure_level")
                         if parent_header
                         else None
                     )
-                    if parent_disclosure in {"none", "partial", "full"}:
-                        disclosure = parent_disclosure
+                    # A child's own disclosureLevel describes the child; never
+                    # the parent. Without a flagged header the tier is derived
+                    # when the group is finalized, from its rows and printed total.
+                    disclosure = (
+                        parent_disclosure
+                        if parent_disclosure in {"none", "partial", "full"}
+                        else None
+                    )
 
-                    group_key = (parent_blend.lower(), disclosure)
+                    group_key = (parent_blend.lower(), disclosure, parent_ref or parent_source_path)
                     group = nested_parent_groups.get(group_key)
                     if not group:
                         parent_source_field = (
@@ -14450,6 +14461,8 @@ class SupplementEnricherV3:
                             "_source_fields": set(),
                             "_children_with_amounts": [],
                             "_children_without_amounts": set(),
+                            "_child_rows": 0,
+                            "_multi_source_child": False,
                         }
                         nested_parent_groups[group_key] = group
 
@@ -14472,6 +14485,9 @@ class SupplementEnricherV3:
                         )
                     elif child_name:
                         group["_children_without_amounts"].add(child_name)
+                    group["_child_rows"] += 1
+                    if len(ingredient.get("forms") or []) > 1:
+                        group["_multi_source_child"] = True
 
                     # Sprint E1.2.1: when the cleaner flattened a parent
                     # container, it stashed the parent's mass onto each
@@ -14488,10 +14504,12 @@ class SupplementEnricherV3:
                         group["total_weight"] = float(parent_blend_mass)
                         group["unit"] = parent_blend_unit
 
-                    # Preserve any measured parent quantity if it exists on nested rows.
-                    if isinstance(quantity, (int, float)) and quantity > group["total_weight"]:
-                        group["total_weight"] = float(quantity)
-                        group["unit"] = unit
+                    # The flagged parent header's own printed quantity is a
+                    # declared total; a child's quantity is never one.
+                    header_qty = (parent_header or {}).get("quantity")
+                    if isinstance(header_qty, (int, float)) and header_qty > group["total_weight"]:
+                        group["total_weight"] = float(header_qty)
+                        group["unit"] = (parent_header or {}).get("unit") or ""
                     continue
 
                 children_with_amounts, children_without_amounts = _collect_child_amounts(
@@ -14527,9 +14545,29 @@ class SupplementEnricherV3:
                     }
                 })
 
+        # Rows that themselves carry an unquantified row: such a row is not a
+        # fully disclosed sole component ("Milk Thistle extract" > Phospholipids NP).
+        label_row_paths = [
+            str(row.get("raw_source_path"))
+            for row in product.get("label_source_rows") or []
+            if isinstance(row, dict) and row.get("raw_source_path")
+        ]
+        source_amount_rows = {
+            str(row.get("raw_source_path")): row
+            for field in ("activeIngredients", "inactiveIngredients")
+            for row in product.get(field) or []
+            if isinstance(row, dict) and row.get("raw_source_path")
+        }
+        parents_hiding_rows = {
+            group["name"].strip().lower()
+            for group in nested_parent_groups.values()
+            if group["_children_without_amounts"]
+        }
         for group in nested_parent_groups.values():
             with_amounts = group.pop("_children_with_amounts", [])
             without_amounts = sorted(group.pop("_children_without_amounts", set()))
+            child_rows = group.pop("_child_rows", 0)
+            multi_source_child = group.pop("_multi_source_child", False)
             keyword_blend = group.pop("_keyword_blend", True)
             # D3 opacity gate: a keyword-less parent is a proprietary blend only
             # when OPAQUE — total weight shown, every child amount withheld. Any
@@ -14547,6 +14585,37 @@ class SupplementEnricherV3:
             elif source_fields:
                 group["source_field"] = source_fields[0]
                 group["source_path"] = source_fields[0]
+            if group.get("disclosure_level") is None:
+                # No flagged header: tier from the raw child rows (duplicate
+                # names are separate rows) and the printed total. A sole
+                # component must be the parent's only raw row on the label;
+                # rows dropped above (e.g. "Sugar") still count.
+                parent_ref = group.get("source_row_ref")
+                raw_children = sum(
+                    1 for path in label_row_paths
+                    if parent_ref and _RAW_CHILD_ROW.fullmatch(path[len(parent_ref):] if path.startswith(parent_ref) else "")
+                )
+                group["disclosure_level"] = disclosure_tier(
+                    group["total_weight"] > 0,
+                    len(with_amounts),
+                    child_rows - len(with_amounts),
+                    sole_single_source=(
+                        child_rows == 1
+                        and raw_children == 1
+                        and not multi_source_child
+                        and all(
+                            _row_has_amount(source_amount_rows.get(path, {}))
+                            for path in label_row_paths
+                            if parent_ref and path.startswith(parent_ref + ".nestedRows[")
+                            and re.fullmatch(r"(?:\.nestedRows\[\d+\]){2,}", path[len(parent_ref):])
+                        )
+                        and not ({name.lower() for name in without_amounts} & parents_hiding_rows)
+                    ),
+                )
+                if group["disclosure_level"] == "full" and without_amounts:
+                    # The printed total is the sole component's amount.
+                    with_amounts = [{"name": without_amounts[0], "amount": group["total_weight"], "unit": group["unit"]}]
+                    without_amounts = []
             group["child_ingredients"] = [
                 {
                     "name": item.get("name", ""),
@@ -14567,6 +14636,20 @@ class SupplementEnricherV3:
 
         # Step 3: Merge and dedupe using union-of-evidence
         merged_blends = self._merge_blend_evidence(detector_blends, cleaning_blends)
+
+        # Any merged record still without a tier (e.g. a detector-only blend)
+        # gets one from its own children and printed total; consumers read
+        # null differently.
+        for blend in merged_blends:
+            if blend.get("disclosure_level") not in {"full", "partial", "none"}:
+                children = [c for c in blend.get("child_ingredients") or [] if isinstance(c, dict)]
+                quantified = sum(1 for c in children if isinstance(c.get("amount"), (int, float)) and c["amount"] > 0)
+                total = blend.get("total_weight")
+                blend["disclosure_level"] = disclosure_tier(
+                    isinstance(total, (int, float)) and total > 0,
+                    quantified,
+                    len(children) - quantified,
+                )
 
         # Step 3b: Normalize blend_total_mg for scorer direct access.
         # The scorer reads blend_total_mg (in mg) first, falls back to total_weight.
@@ -14660,7 +14743,7 @@ class SupplementEnricherV3:
         """
         Merge detector and cleaning blend evidence with deduplication.
 
-        Dedupe key: (normalized_name, 5mg_bucket, nested_count)
+        Dedupe key: (normalized_name, 5mg_bucket, nested_count, source owner)
         This matches the dedupe logic in B4 scoring.
 
         Merge Precedence:
@@ -14686,8 +14769,8 @@ class SupplementEnricherV3:
         def dedupe_key(blend: Dict) -> tuple:
             """Generate deduplication key matching B4 scoring logic.
 
-            Keeps nested_count so genuinely-distinct same-name disclosed blends
-            stay separate; the header/body split is collapsed by the post-merge
+            Keeps source ownership and nested_count so distinct same-name
+            disclosed blends stay separate; the header/body split is collapsed by the post-merge
             consolidation pass below, not here.
             """
             name = label_identity(blend)
@@ -14695,7 +14778,7 @@ class SupplementEnricherV3:
             # 5mg bucket to tolerate parsing variance
             mg_bucket = int(round(mg / 5.0) * 5) if mg and mg > 0 else None
             nested = blend.get("nested_count", 0)
-            return (name, mg_bucket, nested)
+            return (name, mg_bucket, nested, blend.get("source_row_ref") or blend.get("source_field"))
 
         def blend_source_paths(blend: Dict) -> set[str]:
             paths = {
@@ -14708,6 +14791,9 @@ class SupplementEnricherV3:
             return paths
 
         def same_source_detector_alias(detector: Dict, cleaner: Dict) -> bool:
+            if (detector.get("source_row_ref") and cleaner.get("source_row_ref")
+                    and detector["source_row_ref"] != cleaner["source_row_ref"]):
+                return False
             if not (blend_source_paths(detector) & blend_source_paths(cleaner)):
                 return False
             detector_evidence = detector.get("evidence") or {}
@@ -14826,7 +14912,7 @@ class SupplementEnricherV3:
         groups: Dict[tuple, List[Dict]] = {}
         order: List[tuple] = []
         for b in merged.values():
-            gkey = (label_identity(b), _consol_bucket(b))
+            gkey = (label_identity(b), _consol_bucket(b), b.get("source_row_ref") or b.get("source_field"))
             groups.setdefault(gkey, [])
             if gkey not in order:
                 order.append(gkey)
