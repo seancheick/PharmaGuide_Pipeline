@@ -239,3 +239,11 @@ def test_sole_source_cannot_hide_deeper_or_unitless_amounts(pipeline, nested):
     header["nestedRows"][0]["nestedRows"] = [nested]
     enriched, _ = enricher.enrich_product(normalizer.normalize_product(raw))
     assert _blend(enriched, header["name"])["disclosure_level"] == "partial"
+
+
+@pytest.mark.parametrize("amount,unit,hidden", [(5, "mg", False), (0.005, "g", False), (5, "NP", True), (None, "mg", True)])
+def test_only_the_stimulants_own_missing_amount_is_undisclosed(amount, unit, hidden):
+    product = _product("Antioxidant Blend", 50, ["Synephrine HCl", "Grape seed extract"])
+    product["proprietary_blends"][0]["child_ingredients"][0].update(amount=amount, unit=unit)
+    scored = build_scored_artifact(product)
+    assert ("STIMULANT_UNDISCLOSED_BLEND" in scored["flags"]) is hidden

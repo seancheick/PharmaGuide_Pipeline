@@ -1017,10 +1017,12 @@ _CAFFEINE_SOURCE_BOTANICALS = (
 )
 
 
-def _blend_children_text(blend: Dict[str, Any]) -> str:
+def _blend_children_text(blend: Dict[str, Any], *, undisclosed_only: bool = False) -> str:
     parts = []
     for child in _safe_list(blend.get("child_ingredients")):
         if isinstance(child, dict):
+            if undisclosed_only and _dose_mg(child) is not None:
+                continue
             parts.append(_norm(child.get("name") or child.get("ingredient")
                                or child.get("standard_name") or child.get("raw_source_text")))
         else:
@@ -1045,7 +1047,8 @@ def _has_undisclosed_stimulant_blend(product: Dict[str, Any]) -> bool:
         kids = _blend_children_text(blend)
         if any(token in name for token in _STRONG_STIM_BLEND_NAMES):
             return True
-        if any(token in kids for token in _HIDDEN_STIMULANT_IDENTITIES):
+        hidden_kids = _blend_children_text(blend, undisclosed_only=True)
+        if any(token in hidden_kids for token in _HIDDEN_STIMULANT_IDENTITIES):
             return True
         total_mg = _as_float(blend.get("blend_total_mg"))
         if any(token in name for token in _ENERGY_BLEND_NAMES) and \
