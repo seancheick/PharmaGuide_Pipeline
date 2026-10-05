@@ -32,7 +32,7 @@
     "statistics": {
       "total_parents": 655,
       "total_forms": 1475,
-      "total_form_aliases": 12321,
+      "total_form_aliases": 12318,
       "parents_with_parent_aliases": 146,
       "parents_with_contains_aliases": 0,
       "parents_with_pattern_aliases": 0
@@ -53,7 +53,7 @@
       "vitamins": 25
     },
     "schema_version": "5.6.1",
-    "last_updated": "2026-10-03",
+    "last_updated": "2026-10-05",
     "pipeline_integration": "Used by enrichment to assign form quality (bio_score) to matched ingredient forms. Match ingredient name against forms aliases (case-insensitive).",
     "matching_notes": [
       "Match ingredient name + forms text against aliases array (case-insensitive)",
@@ -13098,7 +13098,7 @@
           "by": "Product owner approval",
           "date": "2026-08-08"
         },
-        "notes": "Heartwood and bark extract from Acacia catechu (Senegalia catechu, Fabaceae). Traditional Ayurvedic name 'Khadira' or 'Khadeer'. Standardised joint-formula extracts (Univestin = Acacia catechu + Morus alba) carry RCT evidence for osteoarthritis pain reduction at 250-500 mg/day. Active flavonoids include (+)-catechin, (-)-epicatechin, and procyanidin oligomers; oral bioavailability of monomeric catechins is ~25-35% with first-pass methylation. Distinct from Acacia gum (gum arabic) and from Acacia Senegal — those are different botanicals despite the shared genus name. Mechanism appears to be COX-2 / 5-LOX dual inhibition.",
+        "notes": "Heartwood and bark extract from Acacia catechu (Senegalia catechu, Fabaceae). Traditional Ayurvedic name 'Khadira' or 'Khadeer'. Univestin is a combination of Scutellaria baicalensis and Acacia catechu extracts. PMID:24611484 studied the combination (UP446) at 500 mg/day for one week in adults with knee osteoarthritis; this is not an Acacia-only efficacy or dose benchmark. Active flavonoids include (+)-catechin, (-)-epicatechin, and procyanidin oligomers; oral bioavailability of monomeric catechins is ~25-35% with first-pass methylation. Distinct from Acacia gum (gum arabic) and from Acacia Senegal — those are different botanicals despite the shared genus name. Mechanism appears to be COX-2 / 5-LOX dual inhibition.",
         "aliases": [
           "acacia catechu",
           "acacia catechu extract",
@@ -25208,10 +25208,7 @@
           "biocell collagen hydrolyzed collagen complex",
           "collagen type ii hydrolyzed",
           "collagen type ii, hydrolyzed",
-          "eggshell membrane",
           "hydrolyzed fish collagen",
-          "nem",
-          "nem eggshell membrane",
           "Fish Collagen",
           "hydrolyzed type ii collagen",
           "hydrolyzed type 2 collagen",
