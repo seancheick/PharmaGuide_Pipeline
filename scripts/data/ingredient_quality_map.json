@@ -32,7 +32,7 @@
     "statistics": {
       "total_parents": 655,
       "total_forms": 1475,
-      "total_form_aliases": 12318,
+      "total_form_aliases": 12316,
       "parents_with_parent_aliases": 146,
       "parents_with_contains_aliases": 0,
       "parents_with_pattern_aliases": 0
@@ -68803,11 +68803,8 @@
           "by": "Product owner approval",
           "date": "2026-08-08"
         },
-        "notes": "Grapefruit-derived flavanone; potent CYP3A4 inhibitor (grapefruit effect). Antioxidant and hepatoprotective in preclinical studies. Caution: may alter drug metabolism.",
-        "aliases": [
-          "grapefruit flavonoid",
-          "grapefruit extract"
-        ],
+        "notes": "Grapefruit-derived flavanone; potent CYP3A4 inhibitor (grapefruit effect). Antioxidant and hepatoprotective in preclinical studies. Caution: may alter drug metabolism. Identity scope: generic grapefruit extract or flavonoid wording does not establish isolated naringenin identity or exposure.",
+        "aliases": [],
         "dosage_importance": 1.0,
         "absorption_structured": {
           "value": 0.05,

@@ -390,6 +390,7 @@ def test_whole_plant_part_does_not_inherit_generated_extract_alias(pipeline, nam
     enriched = pipeline(_raw_product(990122, [_raw_row(1, name, 'Black Pepper', quantity=20, unit='mg')]))
     active = next(r for r in enriched['activeIngredients'] if r['name'] == name)
     assert active['canonical_id'] == 'black_pepper'
+    assert active['standardName'] == 'Black Pepper'
 
 
 def test_declared_marker_with_carrier_form_keeps_marker_identity(pipeline):
@@ -417,3 +418,17 @@ def test_constituent_descriptor_does_not_establish_whole_plant_marker_mass(pipel
     row = _raw_row(1, 'Black Pepper', 'Black Pepper', quantity=20, unit='mg', forms=[form])
     enriched = pipeline(_raw_product(990127, [row]))
     assert next(r for r in enriched['activeIngredients'] if r['name'] == 'Black Pepper')['canonical_id'] == 'black_pepper'
+
+@pytest.mark.parametrize('name', ['Grapefruit Extract', 'Grapefruit (Citrus x paradisi) extract', 'Grapefruit flavonoid'])
+def test_broad_source_extract_does_not_claim_isolated_flavanone(pipeline, name):
+    enriched = pipeline(_raw_product(990128, [_raw_row(1, name, 'Grapefruit', quantity=85, unit='mg')]))
+    active = next(r for r in enriched['activeIngredients'] if r['name'] == name)
+    assert active['canonical_id'] not in {'naringenin', 'grape_seed_extract', 'grapefruit_seed'}
+    assert active['quantity'] == 85
+    from scoring_input_contract import get_scoring_ingredients
+    assert not any(r.get('canonical_id') == 'naringenin' for r in get_scoring_ingredients(enriched, strict=True).rows)
+
+
+def test_declared_isolated_flavanone_retains_its_chemical_owner(pipeline):
+    enriched = pipeline(_raw_product(990129, [_raw_row(1, 'Naringenin', 'Naringenin', quantity=85, unit='mg')]))
+    assert next(r for r in enriched['activeIngredients'] if r['name'] == 'Naringenin')['canonical_id'] == 'naringenin'

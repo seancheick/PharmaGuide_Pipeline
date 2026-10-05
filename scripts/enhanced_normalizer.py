@@ -7972,7 +7972,9 @@ class EnhancedDSLDNormalizer:
                 if not literal_specific and not declared_specific and not negative_match_terms_veto([name], exclusion_terms):
                     if (group_id, canonical_id) in self._canonical_parent_relationships:
                         canonical_id, canonical_source_db = group_id, group_db
-                        standard_name = group["standard_name"]
+                        standard_name = self._canonical_identity_registry.standard_names.get(
+                            (group_db, group_id), group["standard_name"]
+                        )
                         is_mapped = True
                     else:
                         canonical_id, canonical_source_db = None, "unmapped"
