@@ -608,7 +608,7 @@ class UnitConverter:
             return self._detect_vitamin_a_form(ingredient_lower)
 
         # Vitamin E: natural d-alpha (0.67) vs synthetic dl-alpha (0.45)
-        if 'vitamin e' in nutrient_lower or 'tocopherol' in nutrient_lower:
+        if 'vitamin e' in nutrient_lower or 'tocopherol' in nutrient_lower or 'tocotrienol' in nutrient_lower:
             return self._detect_vitamin_e_form(ingredient_lower)
 
         # Folate: folic acid vs methylfolate
@@ -691,6 +691,13 @@ class UnitConverter:
     ) -> Tuple[Optional[str], Optional[Dict]]:
         """Detect Vitamin E form (natural vs synthetic)."""
         patterns = self.form_patterns.get('vitamin_e', {})
+
+        # Alpha stereochemistry is not the alpha-tocopherol molecule. Explicit
+        # tocotrienol material (including mixtures) cannot establish an exact
+        # tocopherol activity amount through broad d-alpha/all-rac patterns.
+        # Parent Vitamin E label activity is handled separately by the caller.
+        if re.search(r'\btocotrienols?\b', ingredient_text, re.I):
+            return 'vitamin_e_unknown', self.vitamin_conversions.get('vitamin_e_unknown', {})
 
         natural = any(re.search(p, ingredient_text, re.I)
                       for p in patterns.get('natural_patterns', []))

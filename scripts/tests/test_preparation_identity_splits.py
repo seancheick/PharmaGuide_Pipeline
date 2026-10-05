@@ -438,7 +438,7 @@ def test_nested_family_bounds_do_not_restore_nonalpha_adequacy(pipeline):
     raw = json.loads((Path(__file__).parent / 'fixtures' / 'tocopherol_family_2528_raw.json').read_text())
     enriched = pipeline(raw)
     assessments = enriched['rda_ul_data']['adequacy_results']
-    for chemical in ['d-beta-tocopherol', 'd-gamma-tocopherol', 'd-delta-tocopherol']:
+    for chemical in ['d-beta-tocopherol', 'd-gamma-tocopherol', 'd-delta-tocopherol', 'd-alpha-tocotrienol', 'd-beta-tocotrienol', 'd-gamma-tocotrienol', 'd-delta-tocotrienol']:
         rows = [r for r in assessments if chemical in r.get('source_label_key', '')]
         assert rows, chemical
         assert all(r['scoring_eligible'] is False and r['pct_rda'] is None for r in rows)

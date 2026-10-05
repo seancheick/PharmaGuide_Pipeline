@@ -639,7 +639,7 @@ def test_marker_threshold_uses_egcg_standardization_not_total_extract_mass():
     assert decision["dose_evaluation"]["threshold_unit"] == "mg egcg"
     assert decision["dose_evaluation"]["conversion_method"] == "label_standardization"
 
-@pytest.mark.parametrize('name', ['D-Beta Tocopherol', 'D-Gamma Tocopherol', 'D-Delta Tocopherol', 'Mixed Tocopherols', 'Tocotrienols'])
+@pytest.mark.parametrize('name', ['D-Beta Tocopherol', 'D-Gamma Tocopherol', 'D-Delta Tocopherol', 'Mixed Tocopherols', 'Tocotrienols', 'D-Alpha-Tocotrienol', 'RRR-Alpha Tocotrienol', 'DL-Alpha-Tocotrienol'])
 @pytest.mark.parametrize('amount,unit', [(300, 'mg'), (1500, 'mg'), (1.5, 'g'), (1500000, 'mcg')])
 def test_nonalpha_physical_mass_cannot_meet_alpha_tocopherol_threshold(name, amount, unit):
     enricher = SupplementEnricherV3()

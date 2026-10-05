@@ -23186,10 +23186,12 @@ class SupplementEnricherV3:
                         amount_mg,
                         str(rda_row.get("raw_source_path") or "").strip(),
                     ))
-                unknown_vitamin_e_refs = {
+                unresolved_vitamin_e_refs = {
                     row.get("source_row_ref")
                     for row in dose_assessments
-                    if row.get("reason_code") == "unknown_vitamin_form"
+                    if row.get("reason_code") in {
+                        "unknown_vitamin_form", "compound_mass_not_elemental"
+                    }
                     and (
                         "vitamin e" in self._normalize_text(
                             row.get("ingredient") or ""
@@ -23253,7 +23255,7 @@ class SupplementEnricherV3:
                     + sum(_vitamin_e_tree_bound(root) for root in family_roots)
                 )
                 if (
-                    unknown_vitamin_e_refs
+                    unresolved_vitamin_e_refs
                     and not vitamin_e_family_invalid
                     and vitamin_e_family_rows
                     and vitamin_e_family_upper_bound_mg
@@ -23263,7 +23265,7 @@ class SupplementEnricherV3:
                         "maximum_possible_aggregate_alpha_tocopherol_exposure"
                     )
                     for assessment in dose_assessments:
-                        if assessment.get("source_row_ref") not in unknown_vitamin_e_refs:
+                        if assessment.get("source_row_ref") not in unresolved_vitamin_e_refs:
                             continue
                         assessment.update({
                             "reason_code": "worst_case_vitamin_e_mass_within_ul",
@@ -23273,7 +23275,7 @@ class SupplementEnricherV3:
                             "readiness": "complete",
                         })
                     for adequacy_row in adequacy_results:
-                        if adequacy_row.get("source_label_key") not in unknown_vitamin_e_refs:
+                        if adequacy_row.get("source_label_key") not in unresolved_vitamin_e_refs:
                             continue
                         activity_fields = {
                             key: adequacy_row.get(key)
@@ -23305,7 +23307,7 @@ class SupplementEnricherV3:
                         })
                         adequacy_row.update(activity_fields)
                     for rda_row, _, _ in vitamin_e_family_rows:
-                        if rda_row.get("source_label_key") not in unknown_vitamin_e_refs:
+                        if rda_row.get("source_label_key") not in unresolved_vitamin_e_refs:
                             continue
                         rda_row.update({
                             "skip_ul_check": True,
