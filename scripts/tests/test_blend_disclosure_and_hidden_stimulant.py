@@ -247,3 +247,21 @@ def test_only_the_stimulants_own_missing_amount_is_undisclosed(amount, unit, hid
     product["proprietary_blends"][0]["child_ingredients"][0].update(amount=amount, unit=unit)
     scored = build_scored_artifact(product)
     assert ("STIMULANT_UNDISCLOSED_BLEND" in scored["flags"]) is hidden
+
+
+@pytest.mark.parametrize("second_total", [50, 500])
+def test_same_named_parents_keep_their_own_sources_and_amounts(pipeline, second_total):
+    normalizer, enricher = pipeline
+    raw = json.loads((FIXTURES / "blend_disclosure_328799_raw.json").read_text())
+    header = raw["ingredientRows"][0]
+    second = copy.deepcopy(header)
+    second["quantity"] = [{"quantity": second_total, "unit": "mg"}]
+    second["nestedRows"][0].update(name="Caffeine", forms=[], nestedRows=[])
+    raw["ingredientRows"].append(second)
+    enriched, _ = enricher.enrich_product(normalizer.normalize_product(raw))
+    blends = [b for b in enriched["proprietary_blends"] if b["name"] == header["name"]]
+    assert len(blends) == 2
+    assert {b["source_row_ref"] for b in blends} == {"ingredientRows[0]", "ingredientRows[1]"}
+    assert all(b["disclosure_level"] == "full" and b["hidden_count"] == 0 for b in blends)
+    assert sorted((c["name"], c["amount"]) for b in blends for c in b["child_ingredients"]) == [
+        ("Caffeine", second_total), ("Sweet Orange Peel Extract", 500.0)]

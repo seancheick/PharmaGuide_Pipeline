@@ -14313,7 +14313,7 @@ class SupplementEnricherV3:
             # Flattened children carry the relationship, but their own
             # disclosureLevel describes the child (or is absent) and must not
             # replace the parent blend's tier or provenance.
-            parent_headers: Dict[str, Dict[str, Any]] = {}
+            parent_headers: Dict[tuple, Dict[str, Any]] = {}
             for header_idx, candidate in enumerate(ingredient_list):
                 if not isinstance(candidate, dict):
                     continue
@@ -14326,7 +14326,7 @@ class SupplementEnricherV3:
                     candidate.get("proprietaryBlend", False)
                 ):
                     continue
-                parent_headers[self._normalize_exclusion_text(candidate_name)] = {
+                parent_headers[(self._normalize_exclusion_text(candidate_name), candidate.get("raw_source_path"))] = {
                     "disclosure_level": candidate.get("disclosureLevel"),
                     "quantity": candidate.get("quantity"),
                     "unit": candidate.get("unit", "") or "",
@@ -14415,8 +14415,10 @@ class SupplementEnricherV3:
                     # (every child amount withheld). `_keyword_blend` records
                     # whether the name matched so disclosed keyword-less
                     # aggregates drop out.
+                    child_ref = str(ingredient.get("raw_source_path") or "")
+                    parent_ref = child_ref.rsplit(".nestedRows[", 1)[0] if ".nestedRows[" in child_ref else None
                     parent_header = parent_headers.get(
-                        self._normalize_exclusion_text(parent_blend)
+                        (self._normalize_exclusion_text(parent_blend), parent_ref)
                     )
                     parent_disclosure = (
                         parent_header.get("disclosure_level")
@@ -14432,7 +14434,7 @@ class SupplementEnricherV3:
                         else None
                     )
 
-                    group_key = (parent_blend.lower(), disclosure)
+                    group_key = (parent_blend.lower(), disclosure, parent_ref or parent_source_path)
                     group = nested_parent_groups.get(group_key)
                     if not group:
                         parent_source_field = (
@@ -14741,7 +14743,7 @@ class SupplementEnricherV3:
         """
         Merge detector and cleaning blend evidence with deduplication.
 
-        Dedupe key: (normalized_name, 5mg_bucket, nested_count)
+        Dedupe key: (normalized_name, 5mg_bucket, nested_count, source owner)
         This matches the dedupe logic in B4 scoring.
 
         Merge Precedence:
@@ -14767,8 +14769,8 @@ class SupplementEnricherV3:
         def dedupe_key(blend: Dict) -> tuple:
             """Generate deduplication key matching B4 scoring logic.
 
-            Keeps nested_count so genuinely-distinct same-name disclosed blends
-            stay separate; the header/body split is collapsed by the post-merge
+            Keeps source ownership and nested_count so distinct same-name
+            disclosed blends stay separate; the header/body split is collapsed by the post-merge
             consolidation pass below, not here.
             """
             name = label_identity(blend)
@@ -14776,7 +14778,7 @@ class SupplementEnricherV3:
             # 5mg bucket to tolerate parsing variance
             mg_bucket = int(round(mg / 5.0) * 5) if mg and mg > 0 else None
             nested = blend.get("nested_count", 0)
-            return (name, mg_bucket, nested)
+            return (name, mg_bucket, nested, blend.get("source_row_ref") or blend.get("source_field"))
 
         def blend_source_paths(blend: Dict) -> set[str]:
             paths = {
@@ -14789,6 +14791,9 @@ class SupplementEnricherV3:
             return paths
 
         def same_source_detector_alias(detector: Dict, cleaner: Dict) -> bool:
+            if (detector.get("source_row_ref") and cleaner.get("source_row_ref")
+                    and detector["source_row_ref"] != cleaner["source_row_ref"]):
+                return False
             if not (blend_source_paths(detector) & blend_source_paths(cleaner)):
                 return False
             detector_evidence = detector.get("evidence") or {}
@@ -14907,7 +14912,7 @@ class SupplementEnricherV3:
         groups: Dict[tuple, List[Dict]] = {}
         order: List[tuple] = []
         for b in merged.values():
-            gkey = (label_identity(b), _consol_bucket(b))
+            gkey = (label_identity(b), _consol_bucket(b), b.get("source_row_ref") or b.get("source_field"))
             groups.setdefault(gkey, [])
             if gkey not in order:
                 order.append(gkey)
