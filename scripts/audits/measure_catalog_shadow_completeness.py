@@ -28,6 +28,8 @@ _RAW_OWNERS = None
 
 
 def census_product(product):
+    if product.get('enrichment_status') in {'failed', 'validation_failed'}:
+        raise ValueError(f"Product {product.get('id')}: enrichment {product['enrichment_status']}")
     rows = get_evidence_subject_rows(product)
     subjects = []
     for row in rows:

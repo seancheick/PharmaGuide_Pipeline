@@ -1071,3 +1071,20 @@ def test_stale_source_join_cannot_credit_foreign_unscoped_or_exclusion_only_reco
         monkeypatch.setattr(er, '_backed_studies_index', lambda: {'test_foreign': [entry]})
         monkeypatch.setattr(ca, 'reviewed_entries', lambda: {'TEST_FOREIGN': entry})
         assert er.resolve_evidence_for_row(row, product).points_eligible is False
+
+
+@pytest.mark.parametrize('status', ['failed', 'validation_failed'])
+def test_subject_census_cannot_turn_enrichment_failure_into_completed_empty_review(status):
+    from audits import measure_catalog_shadow_completeness as census
+    with pytest.raises(ValueError, match='enrichment'):
+        census.census_product({'id': 123, 'enrichment_status': status})
+
+
+def test_subject_census_rejects_real_owner_validation_failure(tmp_path, monkeypatch):
+    import json
+    from audits import measure_catalog_shadow_completeness as census
+    monkeypatch.setattr(census, '_RAW_OWNERS', None)
+    raw = tmp_path / 'invalid.json'
+    raw.write_text(json.dumps({'id': 'CENSUS_INVALID_REVIEW'}))
+    with pytest.raises(ValueError, match='enrichment.*validation_failed'):
+        census.census_file((str(tmp_path), {'path': 'invalid.json', 'kind': 'raw', 'sha256': census.replay.sha(raw)}))
