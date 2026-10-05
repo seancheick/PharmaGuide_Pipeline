@@ -4,8 +4,8 @@ Sprint E1.3.1 — context-aware is_additive classifier regression tests.
 Dual-use compounds (tocopherols, lecithin, some fatty acids) ship with
 DSLD's ``isAdditive=True`` flag by default because they're commonly
 used as preservatives / excipients. When the same compound appears in
-the ACTIVE panel with a meaningful therapeutic dose, it IS the primary
-active and MUST be scored (not skipped).
+the ACTIVE panel with a recognized therapeutic identity, it remains active.
+Dose independently determines whether its amount can be assessed.
 
 Dev rule (external review 2026-04-22): "Context decides classification
 — not the ingredient name."
@@ -142,9 +142,8 @@ def test_vitamin_e_no_dose_in_inactive_panel_is_additive(enricher) -> None:
 def test_lecithin_500mg_active_is_not_skipped(enricher) -> None:
     ing = _lecithin_active_500mg()
     reason = enricher._should_skip_from_scoring(ing, enricher.databases.get("ingredient_quality_map", {}), enricher.databases.get("botanical_ingredients", {}))
-    assert reason != "is_additive", (
-        f"Lecithin 500 mg in active panel skipped; reason={reason!r}"
-    )
+    assert reason is None, f"Active lecithin skipped: {reason!r}"
+    assert enricher._compute_excipient_flags(ing) == (False, None)
 
 
 def test_rice_flour_inactive_remains_additive(enricher) -> None:
@@ -158,20 +157,18 @@ def test_rice_flour_inactive_remains_additive(enricher) -> None:
 
 
 # ---------------------------------------------------------------------------
-# Dose-guard: trace Vitamin E (e.g. 2 mg in oil blend) must still skip
+# An undisclosed amount does not reclassify an active-panel ingredient.
 # ---------------------------------------------------------------------------
 
-def test_vitamin_e_trace_dose_without_valid_unit_still_skipped(enricher) -> None:
-    """Edge case: active-panel Vit E with qty=0 or no unit — no
-    therapeutic-dose signal, so isAdditive override does NOT trigger.
-    Respects the dev rule 'trace dose → additive'."""
+def test_vitamin_e_undisclosed_amount_remains_active_with_unknown_dose(enricher) -> None:
     ing = _vitamin_e_180mg_active_with_additive_flag()
-    ing["quantity"] = 0
-    ing["unit"] = "NP"
-    reason = enricher._should_skip_from_scoring(ing, enricher.databases.get("ingredient_quality_map", {}), enricher.databases.get("botanical_ingredients", {}))
-    assert reason is not None, (
-        "Vit E with qty=0/unit=NP should still be skipped even in active panel."
-    )
+    ing.update(quantity=0, unit="NP")
+    assert enricher._compute_excipient_flags(ing) == (False, None)
+    assert enricher._has_valid_therapeutic_dose(ing)[0] is False
+    assert enricher._should_skip_from_scoring(
+        ing, enricher.databases["ingredient_quality_map"],
+        enricher.databases["botanical_ingredients"],
+    ) is None
 
 
 # ---------------------------------------------------------------------------
@@ -189,3 +186,31 @@ def test_additive_type_gate_respects_therapeutic_override(enricher) -> None:
     assert reason != "additive_type", (
         f"additiveType='preservative_natural' skipped Vit E 180 mg; reason={reason!r}"
     )
+
+@pytest.mark.parametrize("source,quantity", [("active", 0), ("inactive", 180)])
+def test_excipient_purpose_follows_source_membership_not_amount(enricher, source, quantity):
+    row = _vitamin_e_180mg_active_with_additive_flag()
+    row.update(source_section=source, quantity=quantity,
+               unit="NP" if not quantity else "mg",
+               cleaner_row_role="nested_display_only" if source == "active" else "inactive",
+               isNestedIngredient=source == "active", parentBlend="Antioxidant Blend")
+    assert enricher._compute_excipient_flags(row)[0] is (source == "inactive")
+    # Undisclosed member amounts still cannot be counted as a known dose.
+    if source == "active":
+        assert enricher._should_skip_from_scoring(row, enricher.databases["ingredient_quality_map"],
+                                                 enricher.databases["botanical_ingredients"]) is not None
+
+@pytest.mark.parametrize("changes", [
+    {"source_section": "inactive"},
+    {"source_section": "active", "isNestedIngredient": True, "parentBlend": "Total Fat"},
+    {"source_section": "active", "name": "Unknown carrier", "standardName": "Unknown carrier"},
+    {"source_section": "active", "cleaner_row_role": "source_descriptor"},
+    {"source_section": "active", "cleaner_row_role": "excipient", "score_eligible_by_cleaner": False},
+    {"source_section": "active", "cleaner_row_role": "nutrition_fact"},
+])
+def test_additive_boundaries_preserve_inactive_rollup_and_unknown_carrier(enricher, changes):
+    row = _vitamin_e_180mg_active_with_additive_flag()
+    row.update(changes)
+    assert enricher._compute_excipient_flags(row)[0] is True
+    assert enricher._should_skip_from_scoring(row, enricher.databases["ingredient_quality_map"],
+                                             enricher.databases["botanical_ingredients"]) is not None
