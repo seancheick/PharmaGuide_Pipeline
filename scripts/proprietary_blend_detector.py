@@ -51,6 +51,27 @@ def disclosure_tier(
     return "partial" if total_declared else "none"
 
 
+def _row_has_amount(row: Dict[str, Any]) -> bool:
+    quantity = row.get("quantity")
+    entries = quantity if isinstance(quantity, list) else [quantity]
+    return any(
+        isinstance(value, (int, float)) and value > 0
+        for value in ((e.get("quantity") if isinstance(e, dict) else e) for e in entries)
+    )
+
+
+def sole_component_is_single_source(components: List[Any]) -> bool:
+    """True when a blend lists exactly one raw component row that names at most one
+    source and whose own nested rows (standardization markers) are all quantified."""
+    if len(components or []) != 1 or not isinstance(components[0], dict):
+        return False
+    sole = components[0]
+    nested = sole.get("nestedRows") or sole.get("ingredients") or []
+    return len(sole.get("forms") or []) <= 1 and all(
+        _row_has_amount(row) for row in nested if isinstance(row, dict)
+    )
+
+
 @dataclass
 class DetectedBlend:
     """A detected proprietary blend with evidence."""
@@ -529,14 +550,9 @@ class ProprietaryBlendDetector:
                     else:
                         result["without_amounts"].append(sub)
 
-        sole = sub_ingredients[0] if len(sub_ingredients or []) == 1 else None
         result["level"] = disclosure_tier(
             result["total_declared"], len(result["with_amounts"]), len(result["without_amounts"]),
-            sole_single_source=(
-                isinstance(sole, dict)
-                and len(sole.get("forms") or []) <= 1
-                and not (sole.get("nestedRows") or sole.get("ingredients"))
-            ),
+            sole_single_source=sole_component_is_single_source(sub_ingredients),
         )
         if result["level"] == "full":
             result["amounts_present"] = "full"

@@ -84,7 +84,7 @@ from functional_grouping_handler import FunctionalGroupingHandler
 import normalization as norm_module  # Single-source normalization
 from unit_converter import get_converter
 from serving_frequency import select_canonical_serving
-from proprietary_blend_detector import disclosure_tier
+from proprietary_blend_detector import disclosure_tier, sole_component_is_single_source
 
 
 # ---------------------------------------------------------------------------
@@ -12308,15 +12308,7 @@ class EnhancedDSLDNormalizer:
 
         return disclosure_tier(
             has_blend_total, sum(has_quantities), len(has_quantities) - sum(has_quantities),
-            sole_single_source=(
-                len(nested_ingredients) == 1
-                and len(nested_ingredients[0].get("forms") or []) <= 1
-                and all(
-                    any(isinstance(q.get("quantity"), (int, float)) and q["quantity"] > 0
-                        for q in (row.get("quantity") or []) if isinstance(q, dict))
-                    for row in nested_ingredients[0].get("nestedRows") or [] if isinstance(row, dict)
-                )
-            ),
+            sole_single_source=sole_component_is_single_source(nested_ingredients),
         )
 
     

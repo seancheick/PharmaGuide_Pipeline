@@ -198,3 +198,30 @@ def test_sole_component_that_hides_its_own_row_is_partial(pipeline):
     amount, so the phospholipid share is hidden."""
     enriched, _ = _run(pipeline, "232540")
     assert _blend(enriched, "Milk Thistle Phospholipid Proprietary Blend")["disclosure_level"] == "partial"
+
+
+def test_full_single_component_carries_the_printed_total_as_its_amount(pipeline):
+    """A tier of full means the amount is known: MPFF's sole component is 500 mg, nothing hidden."""
+    enriched, _ = _run(pipeline, "328799")
+    blend = _blend(enriched, "Micronized Purified Flavonoid Fraction")
+    assert blend["hidden_count"] == 0
+    assert [(c["name"], c["amount"]) for c in blend["child_ingredients"]] == [("Sweet Orange Peel Extract", 500.0)]
+
+
+def test_a_dropped_sibling_row_still_counts_against_full(pipeline):
+    """Review finding: a second component the enricher does not keep as a blend member (here
+    'Sugar') still makes the blend two unquantified components on the label."""
+    normalizer, enricher = pipeline
+    raw = json.loads((FIXTURES / "blend_disclosure_328799_raw.json").read_text())
+    header = next(r for r in raw["ingredientRows"] if r["name"] == "Micronized Purified Flavonoid Fraction")
+    sibling = copy.deepcopy(header["nestedRows"][0])
+    sibling.update(name="Sugar", category="sugar", nestedRows=[], forms=[])
+    header["nestedRows"].append(sibling)
+    enriched, _ = enricher.enrich_product(normalizer.normalize_product(raw))
+    assert _blend(enriched, "Micronized Purified Flavonoid Fraction")["disclosure_level"] == "partial"
+
+
+def test_cleaner_tier_accepts_a_bare_number_quantity():
+    rows = [{"name": "A", "quantity": [{"quantity": 0, "unit": "NP"}], "forms": [],
+             "nestedRows": [{"name": "B", "quantity": 80, "unit": "mg"}]}]
+    assert EnhancedDSLDNormalizer()._determine_disclosure_level("Proprietary Blend", 500, "mg", rows) == "full"
