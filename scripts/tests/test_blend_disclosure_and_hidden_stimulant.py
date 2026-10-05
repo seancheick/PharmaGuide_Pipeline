@@ -225,3 +225,17 @@ def test_cleaner_tier_accepts_a_bare_number_quantity():
     rows = [{"name": "A", "quantity": [{"quantity": 0, "unit": "NP"}], "forms": [],
              "nestedRows": [{"name": "B", "quantity": 80, "unit": "mg"}]}]
     assert EnhancedDSLDNormalizer()._determine_disclosure_level("Proprietary Blend", 500, "mg", rows) == "full"
+
+
+@pytest.mark.parametrize("nested", [
+    {"name": "Intermediate Marker", "quantity": [{"quantity": 100, "unit": "mg"}],
+     "forms": [], "nestedRows": [{"name": "Caffeine", "quantity": [{"quantity": 0, "unit": "NP"}], "forms": [], "nestedRows": []}]},
+    {"name": "Caffeine", "quantity": [{"quantity": 100, "unit": "NP"}], "forms": [], "nestedRows": []},
+])
+def test_sole_source_cannot_hide_deeper_or_unitless_amounts(pipeline, nested):
+    normalizer, enricher = pipeline
+    raw = json.loads((FIXTURES / "blend_disclosure_328799_raw.json").read_text())
+    header = next(r for r in raw["ingredientRows"] if r["name"] == "Micronized Purified Flavonoid Fraction")
+    header["nestedRows"][0]["nestedRows"] = [nested]
+    enriched, _ = enricher.enrich_product(normalizer.normalize_product(raw))
+    assert _blend(enriched, header["name"])["disclosure_level"] == "partial"

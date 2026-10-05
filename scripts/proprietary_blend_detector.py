@@ -56,13 +56,20 @@ def _row_has_amount(row: Dict[str, Any]) -> bool:
     entries = quantity if isinstance(quantity, list) else [quantity]
     return any(
         isinstance(value, (int, float)) and value > 0
-        for value in ((e.get("quantity") if isinstance(e, dict) else e) for e in entries)
+        and str(unit or "").strip().casefold() not in {"", "np"}
+        for value, unit in (
+            (e.get("quantity"), e.get("unit")) if isinstance(e, dict)
+            else (e, row.get("unit")) for e in entries
+        )
+    ) and all(
+        isinstance(child, dict) and _row_has_amount(child)
+        for child in row.get("nestedRows") or row.get("ingredients") or []
     )
 
 
 def sole_component_is_single_source(components: List[Any]) -> bool:
     """True when a blend lists exactly one raw component row that names at most one
-    source and whose own nested rows (standardization markers) are all quantified."""
+    source and whose entire nested subtree (standardization markers) is quantified."""
     if len(components or []) != 1 or not isinstance(components[0], dict):
         return False
     sole = components[0]

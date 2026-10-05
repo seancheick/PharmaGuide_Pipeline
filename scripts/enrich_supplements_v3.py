@@ -146,7 +146,7 @@ import form_vocab as _form_vocab  # noqa: E402
 # Import scoring hardening modules
 from unit_converter import UnitConverter, ConversionResult
 from dosage_normalizer import DosageNormalizer
-from proprietary_blend_detector import ProprietaryBlendDetector, disclosure_tier
+from proprietary_blend_detector import ProprietaryBlendDetector, disclosure_tier, _row_has_amount
 
 # One direct child row of a raw label row: "<parent>.nestedRows[3]".
 _RAW_CHILD_ROW = re.compile(r"\.nestedRows\[\d+\]")
@@ -14550,6 +14550,12 @@ class SupplementEnricherV3:
             for row in product.get("label_source_rows") or []
             if isinstance(row, dict) and row.get("raw_source_path")
         ]
+        source_amount_rows = {
+            str(row.get("raw_source_path")): row
+            for field in ("activeIngredients", "inactiveIngredients")
+            for row in product.get(field) or []
+            if isinstance(row, dict) and row.get("raw_source_path")
+        }
         parents_hiding_rows = {
             group["name"].strip().lower()
             for group in nested_parent_groups.values()
@@ -14595,6 +14601,12 @@ class SupplementEnricherV3:
                         child_rows == 1
                         and raw_children == 1
                         and not multi_source_child
+                        and all(
+                            _row_has_amount(source_amount_rows.get(path, {}))
+                            for path in label_row_paths
+                            if parent_ref and path.startswith(parent_ref + ".nestedRows[")
+                            and re.fullmatch(r"(?:\.nestedRows\[\d+\]){2,}", path[len(parent_ref):])
+                        )
                         and not ({name.lower() for name in without_amounts} & parents_hiding_rows)
                     ),
                 )
