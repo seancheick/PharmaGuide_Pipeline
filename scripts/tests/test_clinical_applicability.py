@@ -668,3 +668,26 @@ def test_amount_independent_applicability_keeps_provider_owned_undosed_member(mo
     monkeypatch.setattr(ca,'reviewed_entries', lambda: {})
     assert assess_clinical_applicability(product,entry,assess_amount=False)['status'] in {'applicable','not_curated'}
     assert assess_clinical_applicability(product,entry,assess_amount=True)['status'] in {'unresolved', 'not_applicable'}
+
+
+def test_provider_owned_anchor_uses_its_exact_named_child_without_lending_mass(monkeypatch):
+    import scoring_input_contract as contract
+    import clinical_applicability as ca
+    child = {'name': 'Cinnamon Extract', 'canonical_id': 'cinnamon', 'raw_source_path': 'ingredientRows[0].forms[0]',
+             'parent_source_path': 'ingredientRows[0]', 'source_section': 'active', 'quantity': 0, 'unit': 'mg'}
+    sibling = {**child, 'name': 'Other Extract', 'canonical_id': 'other', 'raw_source_path': 'ingredientRows[0].forms[1]'}
+    anchor = {**child, 'raw_source_path': 'ingredientRows[0]', 'quantity': 3200,
+              'scoring_input_kind': 'product_level_evidence', 'evidence_scope': 'blend_level'}
+    product = {'activeIngredients': [child, sibling], 'ingredient_quality_data': {'ingredients_scorable': [child, sibling]}}
+    monkeypatch.setattr(contract, 'get_evidence_subject_rows', lambda _: [anchor, sibling])
+    entry = {'ingredient': 'Cinnamon Extract', 'matched_canonical_ids': ['cinnamon'], 'matched_source_row_refs': ['ingredientRows[0]']}
+    linked = ca._linked_rows(product, entry, evidence_only=True)
+    assert [r['raw_source_path'] for r in linked] == ['ingredientRows[0].forms[0]']
+    assert linked[0]['quantity'] == 0
+    assert ca._linked_rows(product, entry, evidence_only=False) == []
+    entry['matched_canonical_ids'] = ['other']
+    assert ca._linked_rows(product, entry, evidence_only=True) == []
+    entry['matched_canonical_ids'] = ['cinnamon']
+    entry['matched_source_row_refs'] = ['ingredientRows[0]', 'ingredientRows[1]']
+    child['parent_source_path'] = 'ingredientRows[1]'
+    assert ca._linked_rows(product, entry, evidence_only=True) == []

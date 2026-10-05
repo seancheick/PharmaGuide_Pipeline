@@ -10464,7 +10464,8 @@
       "standard_name": "Inulin",
       "aliases": [
         "chicory root fiber",
-        "fos"
+        "fos",
+        "inulin/fos"
       ],
       "category": "digestive_gut",
       "evidence_level": "ingredient-human",
@@ -21430,9 +21431,9 @@
         "In 23 children aged 2-13 with nephrotic syndrome, medication plus 1g/day for 2 months produced within-group TC and LDL-C decreases of 116.33 and 94.14 mg/dL; the medication-only control also decreased by 69.87 and 61.13 mg/dL. These are not placebo-adjusted treatment effects (PMID: 12487756)"
       ],
       "health_goals_supported": [
-        "Cardiovascular Health"
+        "Cardiovascular/Heart Health"
       ],
-      "primary_outcome": "Cardiovascular Health",
+      "primary_outcome": "Cardiovascular/Heart Health",
       "effect_direction": "mixed",
       "notes": "Reviewed mixed clinical findings with preparation- and population-specific applicability. PMID 34538515 separates seven human clinical studies from 27 preclinical studies and reports null LDL-C/HbA1c findings alongside positive metabolic biomarkers. PMID 35988871 reports eight direct Spirulina-placebo studies/420 participants, 6–16 weeks, with a small LDL-C reduction and VERY LOW certainty. Its 131-trial/13062-participant total spans eleven nutraceuticals and is not a Spirulina study count. Later lipid review PMID 37263369 supports a lipid biomarker signal, not longevity or cardiovascular-event prevention; overlapping reviews must not be summed as independent trials. The HIV trial reports an antioxidant surrogate without between-group immunological/virological benefit; the pediatric nephrotic-syndrome study reports adjunctive within-group changes. No immune protection, longevity or ordinary-dose muscle-recovery claim is established. The existing conservative rct_single/tier_2 scoring representation is retained; source summaries do not automatically upgrade numerical study-type credit. The HIV and pediatric adjunctive studies are not evidence of general longevity benefit.",
       "last_updated": "2026-10-04",

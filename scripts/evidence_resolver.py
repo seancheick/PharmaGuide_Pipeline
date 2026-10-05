@@ -894,6 +894,28 @@ def resolve_evidence_for_row(
         + studies_idx.get(f"ingr_{canonical}", [])
         + (studies_idx.get(iqm_std_name, []) if iqm_std_name else [])
     )
+    # Enrichment may use a different native identity namespace for this
+    # exact label row. Reuse its source-bound record ID, then reassess the
+    # current curated scope below; stale stamps and adjacent matches confer
+    # neither identity nor clinical credit.
+    source_ref = row_dict.get("raw_source_path") or row_dict.get("source_row_ref")
+    if product and source_ref:
+        clinical_matches = (product.get("evidence_data") or {}).get("clinical_matches") or []
+        for match in clinical_matches:
+            if not isinstance(match, Mapping):
+                continue
+            refs = match.get("matched_source_row_refs")
+            if (isinstance(refs, list) and refs
+                    and all(isinstance(ref, str) and ref.strip() for ref in refs)
+                    and source_ref in refs):
+                for study in studies_idx.get(_norm(match.get("id") or match.get("study_id")), []):
+                    scope = study.get("applicability") or {}
+                    # Ref reuse is not identity proof. Namespace-only joins
+                    # require current affirmative source/preparation terms;
+                    # unscoped or exclusion-only legacy records cannot qualify.
+                    if (isinstance(scope, Mapping) and scope.get("require_source_label_form") is True
+                            and scope.get("required_form_terms")):
+                        matching_studies.append(study)
     # Deduplicate studies by ID
     seen_ids = set()
     deduped_studies = []

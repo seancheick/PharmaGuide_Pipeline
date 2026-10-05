@@ -21,8 +21,9 @@ def test_sunfiber_claims_do_not_borrow_immune_or_stress_outcomes():
     assert e["health_goals_supported"] == ["Digestive Health"]
     assert e["endpoint_relevance_tags"] == ["digestive_health"]
     assert e["published_studies"] == ["RCT"]
-    assert e["total_enrollment"] == 165  # randomized121 +44; analyzed populations differ
-    assert "165" in e["effect_direction_rationale"]
+    assert e["total_enrollment"] == 121  # largest randomized trial; not pooled across populations
+    assert e["effect_direction"] == "mixed"
+    assert "not" in e["effect_direction_rationale"].lower()
     assert "SCFA production ↑" not in e["key_endpoints"]
     assert "IBS symptoms ↓" not in e["key_endpoints"]
 

@@ -235,7 +235,26 @@ def _linked_rows(product: Mapping, entry: Mapping, *, source_only: bool = False,
         canonicals.add(_key(entry["matched_canonical_id"]))
     rows = list(_rows(product, source_only=source_only, evidence_only=evidence_only))
     if refs:
-        return [r for r in rows if (r.get("raw_source_path") or r.get("source_row_ref")) in refs]
+        exact_refs = [r for r in rows if (r.get("raw_source_path") or r.get("source_row_ref")) in refs]
+        if exact_refs:
+            return exact_refs
+        if evidence_only and not source_only:
+            # A provider-owned blend anchor references its parent panel row.
+            # Bind only its unique named/canonical child, never the sibling
+            # materials or the parent's mass. Dose keeps exact exposure refs.
+            from scoring_input_contract import get_evidence_subject_rows
+            anchors = [r for r in get_evidence_subject_rows(product)
+                       if r.get("raw_source_path") in refs
+                       and r.get("scoring_input_kind") == "product_level_evidence"
+                       and _key(r.get("canonical_id")) in canonicals
+                       and name in {_key(r.get("name")), _key(r.get("raw_source_text"))}]
+            children = [r for r in rows if r.get("parent_source_path") in refs
+                        and _key(r.get("canonical_id")) in canonicals
+                        and name in {_key(r.get("name")), _key(r.get("raw_source_text"))}]
+            if (len(anchors) == 1 and len(children) == 1
+                    and children[0].get("parent_source_path") == anchors[0].get("raw_source_path")):
+                return children
+        return []
     exact = [r for r in rows if name and name in {_key(r.get("name")), _key(r.get("raw_source_text"))}]
     if exact:
         return exact

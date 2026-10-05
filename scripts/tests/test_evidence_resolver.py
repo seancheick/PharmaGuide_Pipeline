@@ -1025,3 +1025,49 @@ def test_subject_census_manifest_orchestration_preserves_scope_and_hashes(tmp_pa
         import json
         report=json.loads(out.read_text());assert report['scope']=='current_source_raw_subject_census';assert report['release_validated'] is False
         assert len(report['audit_implementation_sha256'])==2
+
+
+def test_exact_source_reviewed_match_survives_canonical_namespace_difference(monkeypatch):
+    import clinical_applicability as ca
+    entry = {'id': 'TEST_REVIEWED', 'study_type': 'rct_single', 'effect_direction': 'mixed',
+             'applicability': {'scope': 'ingredient', 'required_form_terms': ['Exact Material'],
+                               'require_source_label_form': True}}
+    row = {'name': 'Exact Material', 'raw_source_text': 'Exact Material', 'canonical_id': 'nha_material',
+           'raw_source_path': 'ingredientRows[0]', 'source_section': 'active'}
+    product = {'activeIngredients': [row], 'ingredient_quality_data': {'ingredients_scorable': [row]},
+               'evidence_data': {'clinical_matches': [{'id': 'TEST_REVIEWED', 'matched_canonical_ids': ['material'],
+                                                       'matched_source_row_refs': ['ingredientRows[0]']}]}}
+    monkeypatch.setattr(er, '_backed_studies_index', lambda: {'test_reviewed': [entry]})
+    monkeypatch.setattr(ca, 'reviewed_entries', lambda: {'TEST_REVIEWED': entry})
+    assert er.resolve_evidence_for_row(row, product).points_eligible is True
+    product['evidence_data']['clinical_matches'][0]['matched_source_row_refs'] = ['ingredientRows[1]']
+    assert 'backed_clinical_studies' not in er.resolve_evidence_for_row(row, product).matched_owners
+    product['evidence_data']['clinical_matches'][0]['matched_source_row_refs'] = ['ingredientRows[0]']
+    row['raw_source_text'] = 'Different Preparation'
+    assert er.resolve_evidence_for_row(row, product).points_eligible is False
+
+
+def test_literal_inulin_fos_uses_existing_reviewed_family_scope():
+    row = {'name': 'Inulin/FOS', 'raw_source_text': 'Inulin/FOS', 'canonical_id': 'nha_inulin',
+           'raw_source_path': 'ingredientRows[0]', 'source_section': 'active'}
+    product = {'activeIngredients': [row], 'ingredient_quality_data': {'ingredients_scorable': [row]}}
+    result = er.resolve_evidence_for_row(row, product)
+    assert 'backed_clinical_studies' in result.matched_owners
+    assert result.applicability_status == 'applicable_reviewed_trials'
+    row['raw_source_text'] = 'XOS'
+    assert er.resolve_evidence_for_row(row, product).points_eligible is False
+
+
+def test_stale_source_join_cannot_credit_foreign_unscoped_or_exclusion_only_record(monkeypatch):
+    import clinical_applicability as ca
+    row = {'name': 'Different Material', 'raw_source_text': 'Different Material', 'canonical_id': 'nha_unknown',
+           'raw_source_path': 'ingredientRows[0]', 'source_section': 'active'}
+    product = {'activeIngredients': [row], 'ingredient_quality_data': {'ingredients_scorable': [row]},
+               'evidence_data': {'clinical_matches': [{'id': 'TEST_FOREIGN', 'matched_source_row_refs': ['ingredientRows[0]']}]}}
+    for policy in (None, {'scope': 'ingredient', 'excluded_form_terms': ['irrelevant excluded material']}):
+        entry = {'id': 'TEST_FOREIGN', 'study_type': 'rct_single', 'effect_direction': 'positive_strong'}
+        if policy is not None:
+            entry['applicability'] = policy
+        monkeypatch.setattr(er, '_backed_studies_index', lambda: {'test_foreign': [entry]})
+        monkeypatch.setattr(ca, 'reviewed_entries', lambda: {'TEST_FOREIGN': entry})
+        assert er.resolve_evidence_for_row(row, product).points_eligible is False
