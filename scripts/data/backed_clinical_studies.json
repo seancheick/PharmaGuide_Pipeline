@@ -3,9 +3,10 @@
     "description": "Ingredients backed by clinical research and studies - Enhanced for Section C v3.4.0",
     "purpose": "evidence_scoring",
     "schema_version": "5.6.3",
-    "last_updated": "2026-10-04",
+    "last_updated": "2026-10-05",
     "total_entries": 210,
     "changelog": [
+      "2026-10-05: Sean-approved four amount transfers. Descriptive research exposure is owned by Dose, with no new positive adequacy benchmark. Zinc uses discrete clusters, WKB retains preparation/reference uncertainty, D-mannose and DAA retain no affirmative credit; added content-verified PMID 25844073 and distinguished its negative 6 g/day result. Supersedes the four historical applicability amount floors.",
       "2026-10-02: INGR_OMEGA3 removes unsupported plant ALA intervention aliases and excludes stale ALA matches from marine EPA/DHA evidence through the existing clinical-applicability owner. No dose thresholds or numerical magnitudes changed.",
       "5.6.3 (2026-10-01): Correct INGR_BIFIDOBACTERIUM_LONGUM and INGR_LACTOBACILLUS_ACIDOPHILUS source attribution, strain/formula scopes, endpoint roles and unverifiable aggregate counts. Retain both as non-scoring reference context; existing exact-strain evidence remains authoritative. No numerical config, strain registry or Dose benchmark changed.",
       "5.6.2 (2026-09-26): INGR_OMEGA3 purpose_evidence retains factual scope and sources only. Numerical points, operational exposure cutoffs, interpolation and eligibility are owned by quality_score.json. Scientific boundaries rechecked against live source content; no clinician sign-off asserted and no score values changed.",
@@ -7498,19 +7499,17 @@
           "lozenge",
           "lozenges"
         ],
-        "minimum_daily_dose": 80,
-        "maximum_daily_dose": 207,
-        "dose_unit": "mg",
         "studied_population": "Adults with an acute common cold; early short-term treatment, not prevention",
         "supported_outcomes": [
           "common_cold_duration"
         ],
-        "reviewed_at": "2026-09-03",
+        "reviewed_at": "2026-10-05",
         "source_pmids": [
           "25888289",
           "27378206",
           "28515951"
-        ]
+        ],
+        "reason": "Reviewed preparation, population and purpose scope remains independent of amount. Dose reports descriptive research-exposure correspondence; it does not create a positive adequacy benchmark or Safety determination."
       },
       "aliases": [
         "zinc"
@@ -7529,10 +7528,10 @@
       "health_goals_supported": [
         "Immune Support"
       ],
-      "notes": "This record concerns early, short-term treatment of acute common colds in adults using zinc acetate or gluconate lozenges; it does not establish prevention or efficacy of other zinc forms or swallowed capsules. The 80-207 mg/day applicability bounds are a conservative envelope of observed trial doses, not an intake recommendation. Safety and upper-limit assessment remains separate.",
+      "notes": "This record concerns early, short-term treatment of acute common colds in adults using zinc acetate or gluconate lozenges; it does not establish prevention or efficacy of other zinc forms or swallowed capsules. Evidence applicability is independent of quantity. Dose describes the separate 80-92 and 192-207 mg/day research clusters, not a continuous efficacy range or an intake recommendation. Nutrient adequacy, Safety and upper-limit assessment remain independent; trial correspondence does not establish routine-safe intake.",
       "notable_studies": "PMID 25888289 assessed acetate lozenges at 80-92 mg/day and discussed initiation within 24 hours for less than two weeks. PMID 27378206 pooled 199 participants from three acetate-lozenge trials. PMID 28515951 pooled seven acetate/gluconate-lozenge trials with 575 participants; observed dose groups were 80-92 and 192-207 mg/day. These overlapping reviews must not be summed as independent participant cohorts.",
       "study_type": "systematic_review_meta",
-      "last_updated": "2026-09-03",
+      "last_updated": "2026-10-05",
       "references_structured": [
         {
           "type": "pubmed",
@@ -7616,10 +7615,33 @@
       "primary_outcome": "Immune Support",
       "total_enrollment": 575,
       "effect_direction_confidence": "high",
-      "effect_direction_rationale": "Positive pooled cold-duration findings apply only within the reviewed acetate/gluconate lozenge scope, dose envelope and acute-treatment context. PMID 28515951 supplies the 575-participant denominator; overlapping reviews do not add independent enrollment. This classification does not establish generic preventive benefit or efficacy for other zinc preparations.",
+      "effect_direction_rationale": "Positive pooled cold-duration findings apply only within the reviewed acetate/gluconate lozenge preparation and acute-treatment scope; disclosed amount is assessed separately in Dose. PMID 28515951 supplies the 575-participant denominator; overlapping reviews do not add independent enrollment. This classification does not establish generic preventive benefit or efficacy for other zinc preparations.",
       "endpoint_relevance_tags": [
         "common_cold_duration"
-      ]
+      ],
+      "studied_regimens": {
+        "kind": "studied_regimen",
+        "unit": "mg",
+        "regimens": [
+          {
+            "minimum": 80,
+            "maximum": 92,
+            "notes": "Matches a dose range used in reviewed adult acetate/gluconate cold-lozenge trials. This describes short-term research exposure, not routine-safe intake or an optimal dose."
+          },
+          {
+            "minimum": 192,
+            "maximum": 207,
+            "notes": "Matches a higher dose range used in reviewed adult cold-lozenge trials. Higher doses did not establish greater efficacy; this is not routine-safe intake."
+          }
+        ],
+        "source_pmids": [
+          "28515951"
+        ],
+        "unknown_notes": "Dose comparison unavailable because the daily ingredient amount is not disclosed or cannot be established.",
+        "below_notes": "Below the dose ranges used in the reviewed adult cold-lozenge trials.",
+        "above_notes": "Above the dose ranges evaluated in the reviewed adult cold-lozenge trials; higher amounts are not established as more effective.",
+        "between_notes": "Falls between dose ranges used in the reviewed trials; this interval is not established as a continuously studied range."
+      }
     },
     {
       "id": "INGR_LUTEIN",
@@ -22740,24 +22762,22 @@
       ],
       "total_enrollment": 543,
       "effect_direction_confidence": "medium",
-      "notes": "Oral white kidney bean (Phaseolus vulgaris) extract is rich in alpha-amylase inhibitors. A 2026 ingredient-level meta-analysis of 8 randomized controlled trials (543 adults with overweight or obesity) found reductions in weight, BMI, fat mass, waist and hip circumference, with no significant change in fasting glucose, triglycerides or insulin and no serious adverse events. The pooled weight effect is modest (-1.62 kg). IMPORTANT LIMITATION carried deliberately: alpha-amylase inhibitor extracts are not standardised by inhibitor units, so label milligrams do not guarantee equivalent activity, and no potency conversion is proposed or implied.",
+      "notes": "Oral white kidney bean (Phaseolus vulgaris) extract is rich in alpha-amylase inhibitors. A 2026 ingredient-level meta-analysis of 8 randomized controlled trials (543 adults with overweight or obesity) found reductions in weight, BMI, fat mass, waist and hip circumference, with no significant change in fasting glucose, triglycerides or insulin and no serious adverse events. The pooled weight effect is modest (-1.62 kg). IMPORTANT LIMITATION carried deliberately: generic extract milligrams without verified inhibitory activity do not guarantee equivalence to standardized study preparations, and no potency conversion is proposed or implied. Evidence remains independent of disclosed amount. The former 1,000 mg/day eligibility floor is retired: the verified meta-analysis abstract supplies no universal daily exposure boundary. Phaseolean 1,500/3,000 mg/day regimens are preparation-specific; generic extract milligrams cannot establish comparable potency. Dose retains reference uncertainty until exact comparable preparation identity and standardization are verified.",
       "notable_studies": "PMID 42066439 (Nutrition Research 2026): 8 RCTs, n=543; weight -1.62 kg (95% CI -1.99 to -1.25), BMI -0.58 kg/m2, fat mass -1.17 kg, waist -1.58 cm, hip -0.99 cm, all P < .05. PMID 39170208: randomized, double-blind, placebo-controlled trial of the branded standardised extract Phaseolean at 1,500 and 3,000 mg/day for 45 days, positive at both doses; it supports the ingredient-level synthesis without establishing that every white kidney bean extract is equivalent.",
       "effect_direction_rationale": "positive_weak, not positive_strong: the pooled base is 8 trials and 543 participants and the weight effect is -1.62 kg. study_type=systematic_review_meta; evidence_level=ingredient-human; total_enrollment=543 (the synthesis's own participant total). Authored Wave 2, 2026-09-18, sources re-fetched live.",
       "applicability": {
         "scope": "ingredient",
-        "minimum_daily_dose": 1000,
-        "dose_unit": "mg",
         "supported_outcomes": [
           "body_weight",
           "body_composition"
         ],
         "studied_population": "Adults with overweight or obesity; not a claim for people at a healthy weight.",
-        "reviewed_at": "2026-09-18",
+        "reviewed_at": "2026-10-05",
         "source_pmids": [
           "42066439",
           "39170208"
         ],
-        "reason": "The reviewed trials dose 1,000-3,000 mg/day, so a 1,000 mg/day floor keeps products below the studied exposure out rather than letting the ingredient name carry the evidence. This scope establishes neither an alpha-amylase inhibitor potency equivalence nor ineffectiveness of a lower dose."
+        "reason": "Reviewed preparation, population and purpose scope remains independent of amount. Dose reports descriptive research-exposure correspondence; it does not create a positive adequacy benchmark or Safety determination."
       },
       "references_structured": [
         {
@@ -22812,7 +22832,20 @@
           "doi": "10.1016/j.heliyon.2024.e35144"
         }
       ],
-      "last_updated": "2026-09-18"
+      "last_updated": "2026-10-05",
+      "studied_regimens": {
+        "kind": "studied_regimen",
+        "unit": "mg",
+        "regimens": [],
+        "source_pmids": [
+          "42066439",
+          "39170208"
+        ],
+        "unknown_notes": "Dose comparison unavailable because the daily ingredient amount is not disclosed or cannot be established.",
+        "below_notes": "",
+        "above_notes": "",
+        "notes": "A comparable generic research-exposure boundary is not established. The Phaseolean standardized water-extract trial used 1,500 or 3,000 mg/day for 45 days; generic extract mass does not establish that preparation, potency or alpha-amylase inhibitory activity. No positive Dose benchmark follows."
+      }
     },
     {
       "id": "INGR_AMLA",
@@ -23235,18 +23268,16 @@
       "effect_direction_rationale": "null with high confidence: the largest placebo-controlled trial in the target population was null on its primary endpoint and the most recent pairwise meta-analysis of RCTs agrees. study_type=rct_multiple; evidence_level=ingredient-human; total_enrollment=598 (the largest trial). Authored Wave 2, 2026-09-18. This is a reviewed no-benefit finding, not an absence of review, and it is not a safety penalty.",
       "applicability": {
         "scope": "ingredient",
-        "minimum_daily_dose": 2000,
-        "dose_unit": "mg",
         "supported_outcomes": [
           "recurrent_uti_prevention"
         ],
         "studied_population": "Women 18 or older living in the community with a documented history of recurrent UTI; mean age 58.",
-        "reviewed_at": "2026-09-18",
+        "reviewed_at": "2026-10-05",
         "source_pmids": [
           "38587819",
           "41004704"
         ],
-        "reason": "The null result was measured at 2 g/day. A product delivering less was not studied, so this evidence does not speak to it in either direction; it is refused as below the applicable clinical dose rather than being told that benefit was disproved at a dose nobody tested."
+        "reason": "Reviewed preparation, population and purpose scope remains independent of amount. Dose reports descriptive research-exposure correspondence; it does not create a positive adequacy benchmark or Safety determination."
       },
       "references_structured": [
         {
@@ -23313,7 +23344,24 @@
           "doi": "10.1590/2175-8239-JBN-2025-0169en"
         }
       ],
-      "last_updated": "2026-09-18"
+      "last_updated": "2026-10-05",
+      "studied_regimens": {
+        "kind": "studied_regimen",
+        "unit": "mg",
+        "regimens": [
+          {
+            "minimum": 2000,
+            "maximum": 2000,
+            "notes": "Matches the daily amount tested as D-mannose powder for six months in a large prevention trial in community-dwelling adult women with recurrent UTI; that trial did not show benefit. Correspondence earns no positive adequacy reward."
+          }
+        ],
+        "source_pmids": [
+          "38587819"
+        ],
+        "unknown_notes": "Dose comparison unavailable because the daily ingredient amount is not disclosed or cannot be established.",
+        "below_notes": "Below the amount tested in the reviewed recurrent-UTI prevention trial.",
+        "above_notes": "Above the amount tested in the reviewed prevention trial; the study does not establish benefit at higher amounts."
+      }
     },
     {
       "id": "INGR_D_ASPARTIC_ACID",
@@ -23333,7 +23381,7 @@
       "study_type": "rct_multiple",
       "effect_direction": "null",
       "key_endpoints": [
-        "total and free testosterone — no effect",
+        "total and free testosterone — no benefit; reduced in one short 6 g/day trial",
         "luteinizing hormone — no effect",
         "lean body mass and strength — no effect"
       ],
@@ -23344,28 +23392,27 @@
       "endpoint_relevance_tags": [
         "muscle_recovery"
       ],
-      "total_enrollment": 22,
+      "total_enrollment": 24,
       "effect_direction_confidence": "medium",
-      "notes": "REVIEWED NULL, not unreviewed. Three independent single-ingredient randomized trials in healthy trained men all found no testosterone effect: 6 g/day for 12 weeks in resistance-trained men (no change in total or free testosterone), 3 g/day in a placebo-controlled crossover in male climbers (no effect on testosterone, calculated free testosterone or luteinizing hormone), and 6 g/day for 14 days in boxers under simulated altitude (no effect on testosterone, cortisol or haematological responses). A fourth trial reporting benefit gave D-aspartic acid together with ubiquinol and zinc to men attending an infertility clinic; a three-component combination in a clinical population may not lend its direction to this ingredient. Under the 2026-09-18 owner decision a null direction contributes zero affirmative efficacy credit.",
-      "notable_studies": "PMID 28841667 (PLoS One 2017): randomised, double-blind, placebo-controlled, 22 resistance-trained men, 6 g/day for 12 weeks - no change in basal total or free testosterone; estradiol fell 16%. PMID 29893592 (IJSNEM 2019): single-blinded placebo-controlled crossover, 16 male climbers, 3 g/day for 2 weeks - no significant effect on testosterone, calculated free testosterone or luteinizing hormone. PMID 38201906 (Nutrients 2023): 16 male boxers, 6 g/day for 14 days with normobaric hypoxia - no significant effect on testosterone, cortisol or haematology.",
-      "effect_direction_rationale": "null: three single-ingredient RCTs concordant on the same primary biomarker at two different doses. Confidence is medium rather than high because each trial is small (16-22 participants). study_type=rct_multiple; evidence_level=ingredient-human; total_enrollment=22 (the largest single trial, per the field's convention). Authored Wave 2, 2026-09-18.",
+      "notes": "REVIEWED NULL, not unreviewed. Three single-ingredient randomized trials in healthy trained men found no testosterone benefit: 6 g/day for 12 weeks in resistance-trained men (no change in total or free testosterone), 3 g/day in a placebo-controlled crossover in male climbers (no effect on testosterone, calculated free testosterone or luteinizing hormone), and 6 g/day for 14 days in boxers under simulated altitude (no effect on testosterone, cortisol or haematological responses). A fourth trial reporting benefit gave D-aspartic acid together with ubiquinol and zinc to men attending an infertility clinic; a three-component combination in a clinical population may not lend its direction to this ingredient. Under the 2026-09-18 owner decision a null direction contributes zero affirmative efficacy credit. An additional 24-participant resistance-training trial (PMID 25844073) found no testosterone effect at 3 g/day for 14 days, but reduced total/free testosterone at 6 g/day. The aggregate determination retains zero affirmative efficacy credit; null trials and this negative biomarker result are distinguished, and training harm is not established.",
+      "notable_studies": "PMID 28841667 (PLoS One 2017): randomised, double-blind, placebo-controlled, 22 resistance-trained men, 6 g/day for 12 weeks - no change in basal total or free testosterone; estradiol fell 16%. PMID 29893592 (IJSNEM 2019): single-blinded placebo-controlled crossover, 16 male climbers, 3 g/day for 2 weeks - no significant effect on testosterone, calculated free testosterone or luteinizing hormone. PMID 38201906 (Nutrients 2023): 16 male boxers, 6 g/day for 14 days with normobaric hypoxia - no significant effect on testosterone, cortisol or haematology. PMID 25844073 (JISSN 2015): 24 resistance-trained men randomized to placebo, 3 or 6 g/day for 14 days; 3 g/day had no significant testosterone effect, while 6 g/day reduced total and free testosterone; effects on strength/hypertrophy remain unknown.",
+      "effect_direction_rationale": "No affirmative testosterone/training benefit in the reviewed trained-men trials. Three trials are null; PMID 25844073 is null at 3 g/day and negative for testosterone at 6 g/day after 14 days. This aggregate null/no-benefit determination does not erase the negative per-study result or establish training harm. Confidence remains medium because trials are small (16-24 participants). total_enrollment=24 denotes the largest single trial, not a sum.",
       "applicability": {
         "scope": "ingredient",
-        "minimum_daily_dose": 3000,
-        "dose_unit": "mg",
         "supported_outcomes": [
           "testosterone",
           "lean_mass",
           "strength"
         ],
         "studied_population": "Healthy resistance-trained or competitive male athletes aged 18-36.",
-        "reviewed_at": "2026-09-18",
+        "reviewed_at": "2026-10-05",
         "source_pmids": [
           "28841667",
           "29893592",
-          "38201906"
+          "38201906",
+          "25844073"
         ],
-        "reason": "The null results were measured at 3-6 g/day. A product delivering less than 3 g/day was not studied and is refused as below the applicable clinical dose rather than being characterised by a result at a dose it does not deliver."
+        "reason": "Reviewed preparation, population and purpose scope remains independent of amount. Dose reports descriptive research-exposure correspondence; it does not create a positive adequacy benchmark or Safety determination."
       },
       "references_structured": [
         {
@@ -23465,9 +23512,54 @@
           "supports_claims": [],
           "verification_source": "pubmed_eutils",
           "doi": "10.3390/nu16010076"
+        },
+        {
+          "type": "pubmed",
+          "authority": "NCBI PubMed",
+          "pmid": "25844073",
+          "title": "Three and six grams supplementation of d-aspartic acid in resistance trained men.",
+          "citation": "Journal of the International Society of Sports Nutrition (2015-04-01)",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/25844073/",
+          "published_date": "2015-04-01",
+          "publication_types": [
+            "research-article",
+            "Journal Article"
+          ],
+          "mesh_terms": [],
+          "supplementary_concepts": [],
+          "evidence_grade": "rct",
+          "retracted": false,
+          "supports_claims": [],
+          "verification_source": "europe_pmc_core",
+          "doi": "10.1186/s12970-015-0078-7"
         }
       ],
-      "last_updated": "2026-09-18"
+      "last_updated": "2026-10-05",
+      "studied_regimens": {
+        "kind": "studied_regimen",
+        "unit": "mg",
+        "regimens": [
+          {
+            "minimum": 3000,
+            "maximum": 3000,
+            "notes": "Matches a 3 g/day regimen studied for two weeks in trained men; the reviewed climber and resistance-training studies did not show the claimed testosterone benefit. Correspondence earns no positive adequacy reward."
+          },
+          {
+            "minimum": 6000,
+            "maximum": 6000,
+            "notes": "Matches a 6 g/day regimen studied in resistance-trained men. The 12-week trial found no testosterone or training benefit; the 14-day trial reduced total and free testosterone. Correspondence earns no positive adequacy reward."
+          }
+        ],
+        "source_pmids": [
+          "29893592",
+          "28841667",
+          "25844073"
+        ],
+        "unknown_notes": "Dose comparison unavailable because the daily ingredient amount is not disclosed or cannot be established.",
+        "below_notes": "Below the reviewed 3 g/day and 6 g/day study regimens in trained men.",
+        "above_notes": "Above the reviewed study regimens; higher exposure is not established as more effective.",
+        "between_notes": "Falls between reviewed 3 g/day and 6 g/day study regimens; this exact amount was not established by those studies."
+      }
     },
     {
       "id": "BRAND_TESNOR",

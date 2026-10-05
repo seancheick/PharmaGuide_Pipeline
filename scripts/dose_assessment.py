@@ -73,6 +73,86 @@ _POSITIVE_BENCHMARK_DIRECTIONS = {"positive_strong", "positive_moderate", "posit
 _CLINICAL_RECORDS_PATH = Path(__file__).resolve().parent / "data" / "backed_clinical_studies.json"
 
 
+def clinical_research_exposure_assessments(product: Dict[str, Any]) -> list[Dict[str, Any]]:
+    """Describe reviewed exposures without supplying adequacy or safety points.
+
+    Enrichment produces this once. Source links and preparation/purpose remain
+    owned by clinical applicability; daily quantities remain owned by exposure.
+    A missing frequency, member amount or comparable preparation stays unknown.
+    """
+    from clinical_applicability import _linked_rows, assess_clinical_applicability, reviewed_entries
+    from evidence_resolver import evidence_record_matches_declared_purpose
+
+    assessments = []
+    seen = set()
+    for match in (product.get("evidence_data") or {}).get("clinical_matches") or []:
+        if not isinstance(match, dict):
+            continue
+        record = reviewed_entries().get(str(match.get("id") or "")) or {}
+        reference = record.get("studied_regimens")
+        if not isinstance(reference, dict) or reference.get("kind") != "studied_regimen":
+            continue
+        scoped = {**match, **record}
+        rows = _linked_rows(product, scoped, evidence_only=True,
+                            discriminating_terms=(record.get("applicability") or {}).get("required_form_terms"))
+        for row in rows:
+            ref = row.get("raw_source_path") or row.get("source_row_ref")
+            key = (record["id"], ref)
+            if key in seen:
+                continue
+            decision = assess_clinical_applicability(
+                product, {**scoped, "matched_source_row_refs": [ref] if ref else []}, assess_amount=False)
+            if (decision.get("status") != "applicable"
+                    or not evidence_record_matches_declared_purpose(product, row, record)):
+                continue
+            seen.add(key)
+            exposure = row_exposure(product, row, basis="daily", unit=reference.get("unit") or "mg")
+            bands = reference.get("regimens") or []
+            valid = (isinstance(bands, list) and all(
+                isinstance(band, dict)
+                and type(band.get("minimum")) in (int, float)
+                and type(band.get("maximum")) in (int, float)
+                and _finite_number(band.get("minimum")) is not None
+                and _finite_number(band.get("maximum")) is not None
+                and 0 < band["minimum"] <= band["maximum"]
+                and isinstance(band.get("notes"), str) and band["notes"]
+                for band in bands))
+            status = "unknown"
+            notes = reference.get("unknown_notes") or "Daily research exposure comparison is unavailable."
+            low, high = exposure.minimum, exposure.maximum
+            if low is not None and high is not None and exposure.uncertainty is None:
+                if not valid or not bands:
+                    status = "reference_uncertain"
+                    notes = reference.get("notes") or "A comparable research exposure reference is not established."
+                else:
+                    bands = sorted(bands, key=lambda band: band["minimum"])
+                    matching = next((b for b in bands if b["minimum"] <= low <= high <= b["maximum"]), None)
+                    if matching:
+                        status, notes = "matches", matching["notes"]
+                    elif high < bands[0]["minimum"]:
+                        status, notes = "below", reference["below_notes"]
+                    elif low > bands[-1]["maximum"]:
+                        status, notes = "above", reference["above_notes"]
+                    elif any(left["maximum"] < low <= high < right["minimum"]
+                             for left, right in zip(bands, bands[1:])):
+                        status, notes = "between", reference["between_notes"]
+                    else:
+                        status = "crosses_regimens"
+                        notes = "The label-directed daily range crosses reviewed study regimens; it does not match a single studied regimen."
+            if exposure.uncertainty == "daily_frequency_unknown":
+                notes = "Daily research exposure comparison is unavailable because the label does not establish daily serving frequency."
+            assessments.append({
+                "record_id": record["id"], "name": record["standard_name"],
+                "kind": "studied_regimen", "status": status, "notes": notes,
+                "source_row_ref": ref, "unit": exposure.unit,
+                "minimum": low, "maximum": high, "uncertainty": exposure.uncertainty,
+                "studied_population": (record.get("applicability") or {}).get("studied_population"),
+                "supported_outcomes": (record.get("applicability") or {}).get("supported_outcomes", []),
+                "source_pmids": reference.get("source_pmids", []),
+            })
+    return assessments
+
+
 @dataclass(frozen=True)
 class ClinicalBenchmarkAssessment:
     record_id: str

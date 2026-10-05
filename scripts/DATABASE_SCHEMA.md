@@ -151,6 +151,7 @@ Primary key: `backed_clinical_studies` (array)
 | `min_clinical_dose` | number | NO | Lowest reviewed daily dose used for dose-scope assessment; meaningful only with `dose_unit` |
 | `max_studied_clinical_dose` | number | NO | Highest reviewed daily dose used for supra-clinical audit flags; meaningful only with `dose_unit` |
 | `dose_unit` | string | NO | Unit shared by the reviewed clinical-dose bounds |
+| `studied_regimens` | object | NO | Descriptive research-exposure reference: `kind=studied_regimen`, mass `unit`, discrete `regimens` with numeric `minimum`/`maximum` and source-scoped `notes`, `source_pmids` and comparison wording. Empty regimens mean a comparable numerical boundary is unestablished. Produced in `rda_ul_data.clinical_exposure_assessments` by the existing Dose owner; never supplies positive adequacy or Safety points. |
 | `score_contribution` | string | YES | Scoring tier: `tier_1` (≥3.0 pts), `tier_2` (≥1.5 pts), `tier_3` (<1.5 pts) |
 | `key_endpoints` | string[] | YES | Primary measured outcomes with PMID citations (e.g., `"Reduced LDL by 15% (PMID: 12345678)"`) |
 | `health_goals_supported` | string[] | YES | Mapped health goals |

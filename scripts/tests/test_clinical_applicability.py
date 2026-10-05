@@ -50,9 +50,8 @@ def zinc_product(form="zinc bisglycinate", amount=2.4, dosage_form="capsule"):
     ("zinc bisglycinate", 2.4, "capsule"),
     ("zinc acetate", 80, "capsule"),
     ("zinc picolinate", 80, "lozenge"),
-    ("zinc acetate", 2.4, "lozenge"),
 ])
-def test_cold_lozenge_research_cannot_credit_unmatched_form_dose_delivery(form, amount, dosage_form):
+def test_cold_lozenge_research_cannot_credit_unmatched_form_or_delivery(form, amount, dosage_form):
     product = zinc_product(form, amount, dosage_form)
     matches, _ = resolved_clinical_matches(product)
     assert not any(m["id"] == "INGR_ZINC_PICOLINATE" for m in matches)
@@ -151,9 +150,9 @@ def test_parent_and_source_form_on_same_row_can_match(name: str, forms: object) 
 
 
 @pytest.mark.parametrize("unmatched_form,unmatched_dose", [
-    ("zinc acetate", 2.4), ("zinc bisglycinate", 80),
+    ("zinc picolinate", 2.4), ("zinc bisglycinate", 80),
 ])
-def test_exact_source_reference_cannot_borrow_other_rows_form_or_dose(
+def test_exact_source_reference_cannot_borrow_other_rows_form(
     unmatched_form: str, unmatched_dose: float
 ) -> None:
     product = zinc_product(unmatched_form, unmatched_dose, "lozenge")
@@ -209,7 +208,10 @@ def test_non_exposure_rows_cannot_supply_clinical_dose(
     row.update(role_fields)
     if not use_reference:
         product["evidence_data"]["clinical_matches"][0].pop("matched_source_row_refs")
-    assert resolved_clinical_matches(product)[0] == []
+    entry = scoped_entry({"scope":"ingredient", "minimum_daily_dose":80, "dose_unit":"mg"})
+    if not use_reference:
+        entry.pop("matched_source_row_refs")
+    assert assess_clinical_applicability(product, entry)["status"] != "applicable"
 
 
 def test_source_term_on_unrelated_row_does_not_complete_parent_form() -> None:
@@ -230,8 +232,9 @@ def test_unreviewed_legacy_match_remains_accepted_without_claiming_review() -> N
 
 def test_zinc_reference_contains_only_verified_cold_lozenge_scope() -> None:
     entry = reviewed_entries()["INGR_ZINC_PICOLINATE"]
-    assert entry["applicability"]["minimum_daily_dose"] == 80
-    assert entry["applicability"]["maximum_daily_dose"] == 207
+    assert "minimum_daily_dose" not in entry["applicability"]
+    assert "maximum_daily_dose" not in entry["applicability"]
+    assert [(r["minimum"], r["maximum"]) for r in entry["studied_regimens"]["regimens"]] == [(80, 92), (192, 207)]
     assert entry["total_enrollment"] == 575
     assert "registry_completed_trials_count" not in entry
     assert "unii" not in entry.get("external_ids", {})
@@ -271,8 +274,8 @@ def test_seed_formula_effect_confidence_uses_the_clinical_registry_vocabulary() 
     assert reviewed_entries()["FORMULA_SEED_DS01"]["effect_direction_confidence"] == "medium"
 
 
-@pytest.mark.parametrize("amount,accepted", [(75, False), (80, True), (207, True), (208, False)])
-def test_zinc_cold_scope_uses_observed_dose_envelope(amount: float, accepted: bool) -> None:
+@pytest.mark.parametrize("amount,accepted", [(75, True), (80, True), (207, True), (208, True), (None, True)])
+def test_zinc_cold_evidence_scope_is_amount_independent(amount: float, accepted: bool) -> None:
     assert bool(resolved_clinical_matches(zinc_product("zinc acetate", amount, "lozenge"))[0]) is accepted
 
 
@@ -295,7 +298,7 @@ def enricher():
 @pytest.mark.parametrize("name,forms,amount,accepted", [
     ("Zinc (as acetate)", [{"name": "acetate"}], 80, True),
     ("Zinc (as bisglycinate)", [{"name": "bisglycinate"}], 80, False),
-    ("Zinc (as acetate)", [{"name": "acetate"}], 2.4, False),
+    ("Zinc (as acetate)", [{"name": "acetate"}], 2.4, True),
 ])
 def test_enrichment_collector_applies_shared_zinc_scope(
     enricher, name: str, forms: list, amount: float, accepted: bool
@@ -336,7 +339,7 @@ def test_dose_policy_resolves_every_canonical_mass_unit_spelling(unit, unit_norm
 def test_dose_policy_leaves_non_mass_units_unresolved():
     product = zinc_product("zinc acetate", 80, "lozenge")
     product["ingredient_quality_data"]["ingredients_scorable"][0]["unit"] = "IU"
-    verdict = assess_clinical_applicability(product, product["evidence_data"]["clinical_matches"][0])
+    verdict = assess_clinical_applicability(product, scoped_entry({"scope":"ingredient", "minimum_daily_dose":80, "dose_unit":"mg"}))
     assert verdict["status"] == "not_applicable"
     assert verdict["reason_code"] == "clinical_dose_unresolved"
 

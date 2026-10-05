@@ -509,7 +509,7 @@ corrections can be validated independently while these gates remain intact.
 
 ## October 5 team review brief — four remaining exposure decisions
 
-Status: proposal, not approved policy. Code inspected on integrated main c67600da; the blend audit and isolated test repairs are integrated. Existing four Evidence amount gates remain. Sean will run the pipeline after remaining source work is ready. This packet does not close the separately classified clinical/preparation exceptions.
+Historical October5 team-brief status (superseded by the approved implementation below): proposal, not approved policy. Code inspected on integrated main c67600da; the blend audit and isolated test repairs are integrated. Existing four Evidence amount gates remain. Sean will run the pipeline after remaining source work is ready. This packet does not close the separately classified clinical/preparation exceptions.
 
 Owner: existing clinical applicability, directed exposure, positive clinical benchmark, nutrient adequacy and per-purpose Dose owners listed above; this existing README owns the transfer decision packet. Evidence: current source and records, 15 retained boundary probes, live Europe PMC content checks for eight source PMIDs on October5. Will NOT create: another scorer/registry, a null-study positive benchmark, assumed blend-member dose, potency conversion, new safety threshold or a second execution register.
 
@@ -563,3 +563,19 @@ Please provide:
 - Any additional study/source that changes a recorded preparation, population, outcome or regimen, with a directly supporting link.
 
 The58 classified pending ingredient/preparation groups are a separate research/source queue. Examples include whole powder versus extract, oral essential oil versus tea/aromatherapy, generic mushroom mixtures versus studied formulas, and mass-only pancreatin versus studied enzyme activity. Each needs its own verified determination or honest hold. A four-record policy decision does not close them or authorize blanket no-human-evidence conclusions.
+
+
+## October 5 approved descriptive transfers — current execution
+
+Sean approved the four transfers in attachment78db306d. The approval creates no new positive Dose benchmark: descriptive research correspondence is separate from efficacy, adequacy and Safety. Implementation is on `codex/clinical-regimens` from main a8d7eeae; integration, final measurement/review and CI are pending.
+
+Owner: `scripts/dose_assessment.py::clinical_research_exposure_assessments` — evidence: existing Dose owner, `row_exposure`, clinical source linkage/applicability and declared-purpose seam. Enrichment produces `rda_ul_data.clinical_exposure_assessments` after clinical matching; the universal scorer and existing pillar-facts adapter project it into the existing Flutter fact renderer. Will NOT create: another registry/scorer, positive benchmark, new Safety threshold, assumed member amount, potency conversion or personal-population classifier.
+
+- Zinc: amount-independent acetate/gluconate lozenge research; descriptive clusters80–92 and192–207mg/day. Intermediate amounts are between regimens, not a continuously studied range. Nutrient Dose and UL/Safety remain independent.
+- WKB OptionA: retired1000mg Evidence floor, no numerical adequacy reference. The verified meta-analysis abstract does not establish a generic daily exposure envelope; per-meal amounts must not become daily limits. Phaseolean1500/3000mg/day for45days is reported as preparation-specific context. Generic extract mass cannot verify Phaseolean identity/potency; a comparable generic reference remains unestablished. No product-to-Phaseolean alias bridge is installed.
+- D-mannose: amount-independent reviewed null; exact2000mg/day trial context is powder/sixmonths/community adult women with recurrent UTI. Correspondence earns no positive adequacy reward; higher exposure does not escape the null record.
+- DAA: amount-independent reviewed no-benefit context in trained men; discrete3000/6000mg/day. Added content-verified PMID25844073 (24men,14days):3g null,6g reduced total/free testosterone. The12week6g training trial remains null; no training-harm threshold is invented. Largest-single-trial denominator now24.
+
+Population remains the source's explicitly carried study context. Product tags cannot establish a patient's diagnosis, training status or cohort membership; the existing population-applicability review explains this boundary. Tests preserve source-scoped context rather than inventing patient membership or extending the claim to a different population.
+
+Fail-first19failures/1pass reproduced amount gates and the absent producer. Current focused boundary regressions39pass, including full enrichment, hidden member amount, serving ranges, wrong zinc preparation/delivery, wrong declared purpose, null-no-positive-reward and Zinc UL coexistence. Strict changed-record citation gate22/22pass. Data batch check requires exactly the four record IDs. Frozen raw replay104labels contains all26D-mannose,28DAA,24WKB labels plus zinc and unrelated controls; final committed-candidate receipt follows. No full corpus run or release; Sean will run the pipeline himself. Remaining58 classified clinical/preparation groups are not closed by these transfers.

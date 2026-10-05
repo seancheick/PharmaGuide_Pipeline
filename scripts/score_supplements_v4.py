@@ -416,6 +416,12 @@ def _score_v4_core(enriched_product: Dict[str, Any]) -> Dict[str, Any]:
     if apply_penalty_registry(module_result):
         _assemble_score(module_result)
 
+    dose_dimension = module_result.dimensions.get("dose")
+    if dose_dimension is not None:
+        dose_dimension.metadata["clinical_exposure_assessments"] = (
+            (enriched_product.get("rda_ul_data") or {}).get("clinical_exposure_assessments") or []
+        )
+
     result["v4_breakdown"]["module"] = module_result.to_breakdown()
     result["raw_score_v4_100"] = _score_after_completeness_policy(
         module_result.score_100,

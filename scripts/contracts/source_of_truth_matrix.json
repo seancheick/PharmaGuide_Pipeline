@@ -621,6 +621,33 @@
       "release_gate": "scripts/audit_source_of_truth_contract.py scoring",
       "tests": ["scripts/tests/test_cert_claimed_vs_verified.py", "scripts/tests/test_gmp_one_owner.py", "scripts/tests/test_certification_quality_flag_semantics.py"],
       "retirement_status": "active"
+    },
+    {
+      "concept_id": "clinical_exposure_assessments",
+      "owner": "scripts/dose_assessment.py",
+      "first_created_stage": "enriched",
+      "field_kind": "derived",
+      "source_data_files": [
+        "scripts/data/backed_clinical_studies.json"
+      ],
+      "consumers": [
+        "scripts/enrich_supplements_v3.py",
+        "scripts/score_supplements_v4.py",
+        "scripts/scoring_v4/pillar_explanations.py",
+        "Flutter lib/core/components/pg_score_breakdown_card.dart"
+      ],
+      "forbidden_recomputation": [
+        "Enrichment produces descriptive research-exposure correspondence in rda_ul_data; scoring and pillar facts project the same assessment without recalculating it",
+        "studied_regimens describe source-reviewed exposures and must not supply positive adequacy or safety points",
+        "row_exposure owns daily serving and unit conversion; clinical_applicability owns preparation scope and evidence_record_matches_declared_purpose owns purpose; unknown member amount, frequency or preparation cannot borrow a blend total or a generic trial range"
+      ],
+      "fallback_class": "clinical_fail_safe",
+      "release_gate": "scripts/audit_source_of_truth_contract.py scoring",
+      "tests": [
+        "scripts/tests/test_clinical_research_exposure.py",
+        "scripts/tests/test_v4_pillar_explanations.py"
+      ],
+      "retirement_status": "active"
     }
   ]
 }
