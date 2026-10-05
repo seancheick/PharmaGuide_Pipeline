@@ -5127,10 +5127,12 @@ def _profile_material_blocking_mass(row: Dict[str, Any], botanical_mass_mg: floa
 
 
 def profile_owner_candidate_rows(rows: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
-    """Remove only fully reconciled blend projections from owner selection.
+    """Remove only physically reconciled duplicate totals/components from owner selection.
 
-    Product-level blend totals remain valid conservative fallback evidence.  A
-    projection becomes redundant for identity/profile ownership only when real
+    A declared active parent owns its same-identity components only when
+    their source lineage and disclosed masses reconcile. Product-level blend
+    totals remain valid conservative fallback evidence. A projection becomes
+    redundant for identity/profile ownership only when real
     label rows account for the same canonical exposure or linked source rows
     and their disclosed masses reconcile to the projection total.  This keeps
     opaque or partially disclosed aggregates while preventing a duplicate
@@ -5143,6 +5145,52 @@ def profile_owner_candidate_rows(rows: List[Dict[str, Any]]) -> List[Dict[str, A
     ]
     if not label_rows:
         return list(rows)
+
+    # A declared active parent can own quantified components of the same
+    # canonical substance. Require actual nested provenance and reconciled
+    # mass; separate rows or incomplete/different identities remain visible.
+    reconciled_components = set()
+    for parent in label_rows:
+        parent_path = str(parent.get("raw_source_path") or "").strip()
+        parent_canonical = _norm(parent.get("canonical_id"))
+        parent_mass = _role_mass_mg(parent)
+        if not parent_path or not parent_canonical or parent_mass is None or parent_mass <= 0:
+            continue
+        children = [row for row in label_rows if _path_is_nested_under(
+            parent_path, str(row.get("raw_source_path") or "").strip(),
+        )]
+        if not children or any(
+            _norm(row.get("canonical_id")) != parent_canonical
+            or _role_mass_mg(row) is None
+            for row in children
+        ):
+            continue
+        # Sum leaves, rather than counting any intermediate total again.
+        leaves = [row for row in children if not any(
+            _path_is_nested_under(
+                str(row.get("raw_source_path") or ""),
+                str(other.get("raw_source_path") or ""),
+            ) for other in children
+        )]
+        # Every intermediate subtotal must agree too: an outer total matching
+        # the leaves cannot conceal a contradictory amount inside the tree.
+        totals_reconcile = True
+        for subtotal in [parent, *children]:
+            subtotal_path = str(subtotal.get("raw_source_path") or "")
+            subtotal_leaves = [row for row in leaves if _path_is_nested_under(
+                subtotal_path, str(row.get("raw_source_path") or ""),
+            )]
+            if not subtotal_leaves:
+                continue
+            subtotal_mass = _role_mass_mg(subtotal)
+            disclosed_mass = sum(_role_mass_mg(row) for row in subtotal_leaves)
+            if abs(disclosed_mass - subtotal_mass) > max(0.01, subtotal_mass * 0.01):
+                totals_reconcile = False
+                break
+        if totals_reconcile:
+            reconciled_components.update(id(row) for row in children)
+    rows = [row for row in rows if id(row) not in reconciled_components]
+    label_rows = [row for row in label_rows if id(row) not in reconciled_components]
 
     def row_path(row: Dict[str, Any]) -> str:
         return str(row.get("raw_source_path") or row.get("source") or "").strip()

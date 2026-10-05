@@ -77,6 +77,8 @@ def test_fully_quantified_caffeine_blend_is_full_and_not_hidden(pipeline):
     enriched, scored = _run(pipeline, "219842")
     assert _blend(enriched, "Caffeine Blend")["disclosure_level"] == "full"
     assert "STIMULANT_UNDISCLOSED_BLEND" not in scored["flags"]
+    assert "STIMULANT_CAFFEINE_MODERATE_DOSE" in scored["flags"]
+    assert "STIMULANT_CAFFEINE_ELEVATED_DOSE" not in scored["flags"]
 
 
 def test_explicit_caffeine_hidden_in_partial_blend_is_a_caution(pipeline):
@@ -265,3 +267,55 @@ def test_same_named_parents_keep_their_own_sources_and_amounts(pipeline, second_
     assert all(b["disclosure_level"] == "full" and b["hidden_count"] == 0 for b in blends)
     assert sorted((c["name"], c["amount"]) for b in blends for c in b["child_ingredients"]) == [
         ("Caffeine", second_total), ("Sweet Orange Peel Extract", 500.0)]
+
+
+@pytest.mark.parametrize('total_mg,extra_mg,signal,status', [
+    (350, 0, 'STIMULANT_CAFFEINE_ELEVATED_DOSE', 'no_known_catalog_concern'),
+    (500, 0, 'STIMULANT_CAFFEINE_HIGH_DOSE', 'caution'),
+    (300, 100, 'STIMULANT_CAFFEINE_ELEVATED_DOSE', 'no_known_catalog_concern'),
+])
+def test_caffeine_rollup_reconciliation_preserves_thresholds_and_independent_rows(
+    pipeline, total_mg, extra_mg, signal, status,
+):
+    normalizer, enricher = pipeline
+    raw = json.loads((FIXTURES / 'blend_disclosure_219842_raw.json').read_text())
+
+    def find_blend(rows):
+        for row in rows:
+            if row.get('name') == 'Caffeine Blend':
+                return row
+            child = find_blend(row.get('nestedRows', []))
+            if child is not None:
+                return child
+        return None
+
+    blend = find_blend(raw['ingredientRows'])
+    blend['quantity'][0]['quantity'] = total_mg
+    blend['nestedRows'][0]['quantity'][0]['quantity'] = total_mg - 50
+    if extra_mg:
+        extra = copy.deepcopy(blend['nestedRows'][0])
+        extra['quantity'][0]['quantity'] = extra_mg
+        raw['ingredientRows'].append(extra)
+    enriched, _ = enricher.enrich_product(normalizer.normalize_product(raw))
+    scored = build_scored_artifact(enriched)
+    assert signal in scored['flags']
+    assert scored['product_safety_status'] == status
+    assert 'STIMULANT_UNDISCLOSED_BLEND' not in scored['flags']
+
+
+@pytest.mark.parametrize("subtotal,expected_safety", [(300, 'no_known_catalog_concern'), (450, 'caution')])
+def test_nested_caffeine_subtotal_mismatch_retains_high_dose_warning(pipeline, subtotal, expected_safety):
+    normalizer, enricher = pipeline
+    raw = json.loads((FIXTURES / 'blend_disclosure_219842_raw.json').read_text())
+    header = next(row for root in raw['ingredientRows'] for row in root.get('nestedRows', []) if row['name'] == 'Caffeine Blend')
+    header.update(name='Caffeine', category='non-nutrient/non-botanical', ingredientGroup='Caffeine')
+    intermediate = copy.deepcopy(header['nestedRows'][0])
+    leaf = copy.deepcopy(intermediate)
+    intermediate['quantity'][0]['quantity'] = subtotal
+    leaf['quantity'][0]['quantity'] = 300
+    intermediate['nestedRows'] = [leaf]
+    header['nestedRows'] = [intermediate]
+    enriched, _ = enricher.enrich_product(normalizer.normalize_product(raw))
+    scored = build_scored_artifact(enriched)
+    assert scored['product_safety_status'] == expected_safety
+    assert ('STIMULANT_CAFFEINE_HIGH_DOSE' in scored['flags']) is (subtotal > 400)

@@ -1922,3 +1922,31 @@ def test_profile_cutover_impact_counts_not_scored_transitions_separately():
     assert summary["not_scored_transition_count"] == 1
     assert summary["safety_verdict_flip_count"] == 0
     assert summary["ready_for_cutover"] is False
+
+
+@pytest.mark.parametrize('child_amount,child_unit,expected_count', [(50, 'mg', 1), (75, 'mg', 3), (None, 'mg', 3), (50, 'IU', 3)])
+def test_declared_same_identity_parent_owns_only_reconciled_component_rows(child_amount, child_unit, expected_count):
+    parent = _row('caffeine', '2nd Rush Caffeine', 250, raw_source_path='ingredientRows[0]')
+    first = _row('caffeine', 'Caffeine Anhydrous', 200, raw_source_path='ingredientRows[0].nestedRows[0]')
+    second = _row('caffeine', 'ZumXR Caffeine', child_amount, child_unit, raw_source_path='ingredientRows[0].nestedRows[1]')
+    selected = profile_owner_candidate_rows([parent, first, second])
+    assert len(selected) == expected_count
+    assert parent in selected
+    if expected_count == 1:
+        assert selected == [parent]
+
+
+def test_same_identity_unlinked_rows_remain_independent_exposures():
+    parent = _row('caffeine', 'Caffeine', 250, raw_source_path='ingredientRows[0]')
+    separate = _row('caffeine', 'Caffeine', 250, raw_source_path='ingredientRows[1]')
+    assert profile_owner_candidate_rows([parent, separate]) == [parent, separate]
+
+
+@pytest.mark.parametrize("subtotal,expected_count", [(300, 1), (450, 3)])
+def test_nested_same_identity_totals_require_every_subtotal_to_reconcile(subtotal, expected_count):
+    parent = _row('caffeine', 'Caffeine', 300, raw_source_path='ingredientRows[0]')
+    intermediate = _row('caffeine', 'Caffeine Anhydrous', subtotal, raw_source_path='ingredientRows[0].nestedRows[0]')
+    leaf = _row('caffeine', 'Caffeine Anhydrous', 300, raw_source_path='ingredientRows[0].nestedRows[0].nestedRows[0]')
+    selected = profile_owner_candidate_rows([parent, intermediate, leaf])
+    assert len(selected) == expected_count
+    assert intermediate in selected if subtotal != 300 else selected == [parent]
