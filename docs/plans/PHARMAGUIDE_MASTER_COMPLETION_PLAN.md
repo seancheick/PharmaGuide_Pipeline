@@ -242,9 +242,9 @@ Earlier source gates are historical receipts, not release approval.
 
 No catalog release has occurred under this plan. Recorded checkpoints validate their named source and frozen samples, not the entire rebuilt corpus. The earlier combined source was pushed through `19d4f661` (tested production checkpoint `a3a2d904`). Q49 and Q51 remain separate integrated items. Q53 source correction `0acde33e`, its two benchmark follow-ups and Q52 source correction `6a15be14` are integrated on main. Final combined fast: **18,008 passed,168 skipped,zero failures/xfails**; source fingerprints match measured candidate bytes and fresh review accepted. D26 was later closed; remaining identity/research cases and fresh candidate validation remain open. Source push and cleanup receipts are recorded below.
 
-## How to read the remaining Phase 0–2 boxes
+## Phase 0–2 completion and remaining artifact gates
 
-The October 1 source audit reconciled these boxes against current production and the existing receipts. An unchecked box means a real outstanding deliverable or an explicitly named later gate; it is not permission to skip it.
+The October 5 accepted source receipts reconcile these boxes against current production. An unchecked box means a real outstanding deliverable or an explicitly named later gate; it is not permission to skip it.
 
 | Item | Current status | What happens next |
 |---|---|---|
@@ -255,15 +255,15 @@ The October 1 source audit reconciled these boxes against current production and
 | Phase 2 shared prominence owner | Implemented, measured, reviewed and integrated | Marked complete; retained amount guards stay under Phase 1/D26 |
 | Phase 2 remaining serving duplicates | Closed for current raw corpus | Recheck canonical output and app rendering after fresh Clean |
 | Phase 2 dual-use ingredient roles | Shared amount-based excipient demotion corrected; all demonstrated affected labels replayed | Final artifact validation uses the corrected source owner |
-| Phase 2 accepted October4 subject census | Complete then:15,421labels/102,281subjects;340pending subjects retained; current-candidate counts await rebuild | Resolve classified owner/research/preparation exceptions; repeat release checks only on the final rebuilt candidate |
+| Phase 2 accepted October4 subject census | Complete then:15,421labels/102,281subjects;340pending subjects retained; current-candidate counts await rebuild | Corroborated source contradictions are closed; retain unresolved clinical/preparation holds and measure current coverage after rebuild |
 
-**Next candidate work:** the approved four transfers and reproduced clove/source defects are implemented, measured, reviewed and validated. Sean runs the combined necessary Clean→Enrich→Score pipeline; all38brand stage fingerprints require Clean. Codex reviews the resulting census/catalog/app artifacts afterward. Exact preparation/route/purpose clinical holds remain visible in the existing research/LEDGER; they do not become blanket negative or positive determinations.
+**Next candidate work:** the approved four transfers, clove/source defects and final shared identity/activity batch are implemented, measured, reviewed and validated. Sean runs the combined necessary Clean→Enrich→Score pipeline; all38brand stage fingerprints require Clean. Codex reviews the resulting census/catalog/app artifacts afterward. Exact preparation/route/purpose clinical holds remain visible in the existing research/LEDGER; they do not become blanket negative or positive determinations.
 
 ## Fixed boundaries and Owner Check
 
 | Decision | Existing production owner | Evidence |
 |---|---|---|
-| Shared purpose/prominence roles | `scripts/scoring_input_contract.py::classify_ingredient_roles` | Current consumers and role tests; correctness still needs Phase 2 work |
+| Shared purpose/prominence roles | `scripts/scoring_input_contract.py::classify_ingredient_roles` | Shared owner/consumer defects validated; final artifact/app checks remain under Phases 6–7 |
 | Evidence subject set | `scripts/scoring_input_contract.py::get_evidence_subject_rows` | Matrix, ownership tests and production consumers |
 | Raw source sections, label provenance and normalization | `scripts/enhanced_normalizer.py::EnhancedDSLDNormalizer.normalize_product` | Raw JSON replays and source/label-ledger tests |
 | Amount/exposure adequacy | Existing `row_exposure`, `rda_ul_data.adequacy_results` and route Dose modules | All-route transfer inventory and exposure tests |
@@ -302,7 +302,7 @@ The October 1 source audit reconciled these boxes against current production and
 ### Phase 2 — Identity, roles and prominence — source fixes complete
 
 - [x] Preserve landed Lane 2A subject ownership, Q3 single sugar/sweetener charging and Q40 cleaner-owned plant part.
-- [x] Close the bounded CFU source cases `242637` / `242654` / `327966`: statement exposure and guarantee use the selected panel serving; `327966` remains 50 B through expiration. Final 455-label replay explains all nine changed payloads and preserves 446 controls. Broader alternate-serving and role classes remain open.
+- [x] Close the bounded CFU source cases `242637` / `242654` / `327966`: statement exposure and guarantee use the selected panel serving; `327966` remains 50 B through expiration. Final 455-label replay explains all nine changed payloads and preserves 446 controls. Broader alternate-serving and role classes were subsequently addressed by the Q39 and shared-owner batches below; final artifact validation remains open.
 - [x] Fix Ravage cinnamon at the cleaner's functional attribution seam; retain explicit flavors, active/other membership, source paths and undisclosed member dose (Q48).
 - [x] Measure Ravage and five controls, then the extended 1,259-label cohort; obtain fresh review and **zero expected failures** in the full fast checkpoint.
 - [x] Correct trace-protein purpose for EAA product `66953` through shared roles and sports Evidence/Formulation/Dose consumers (Q39(b), source `3ee91eae`, pushed). Final fast suite passed; fresh review accepted clean replays. Total 49.1→37.0 is explained, Safety unchanged; five targeted and all 1,259 extended controls retain identical full payloads. EAA research remains open in Phase3.
