@@ -1109,3 +1109,17 @@ def test_clove_review_recognizes_extract_research_without_generic_credit():
     assert "31064377" in record["applicability_decision"]
     assert "lacks oral clinical efficacy trials" not in record["applicability_decision"]
     assert "unnamed" in record["applicability_decision"]
+
+@pytest.mark.parametrize('name', ['Matcha Tea Powder', 'Whole Matcha Leaf Powder'])
+def test_whole_matcha_research_is_reviewed_without_generic_efficacy_or_dose_credit(name):
+    result = er.resolve_evidence_for_canonical('matcha_tea_powder', name=name)
+    assert result.disposition == EvidenceDisposition.RESEARCH_PRESENT_APPLICABILITY_UNESTABLISHED.value
+    assert result.points_eligible is False
+    import json
+    records = json.loads((SCRIPTS_ROOT / 'data/literature_evidence_records.json').read_text())['literature_evidence_records']
+    record = next(r for r in records if r['canonical_id'] == 'matcha_tea_powder')
+    assert {s['pmid'] for s in record['qualifying_human_studies']} == {'28784536', '39213264'}
+    assert record['studied_dose_exposure'] == {}
+    assert record['applicability_status'] == 'applicability_unestablished'
+    assert 'primary' in record['applicability_decision']
+    assert 'extract' in record['applicability_decision']
