@@ -1076,10 +1076,10 @@ def test_real_label_aggregate_identity_keeps_its_individual_evidence_question() 
     assessment = evidence["ingredient_assessments"][0]
     assert assessment["scoring_input_kind"] != "product_level_evidence"
     assert assessment["evidence_applicability"] == "individual_ingredient"
-    assert assessment["state"] == "not_yet_evaluated"
-    assert assessment["reason_code"] == "no_reviewed_evidence_assessment"
-    assert evidence["not_yet_evaluated_count"] == 1
-    assert evidence["readiness"] == "incomplete"
+    assert assessment["state"] == "evaluated_limited_or_negative"
+    assert assessment["reason_code"] == "literature_applicability_unestablished"
+    assert evidence["not_yet_evaluated_count"] == 0
+    assert evidence["readiness"] == "complete"
 
 
 def test_row_level_active_projection_keeps_its_individual_evidence_question() -> None:
@@ -1159,7 +1159,7 @@ def test_uncurated_individual_ingredient_still_reports_incomplete() -> None:
     """The aggregate carve-out must not swallow genuine curation gaps."""
     from assessment_readiness import evaluate_assessment_readiness
 
-    row = _row("Lycopene", "lycopene")
+    row = _row("Unreviewed Botanical", "unreviewed_botanical")
     evidence = evaluate_assessment_readiness(_product(row), module="generic")["evidence"]
 
     assessment = evidence["ingredient_assessments"][0]
@@ -1184,7 +1184,7 @@ def test_dri_nutrient_is_authority_assessed_not_individually_curated() -> None:
 def test_applicability_counts_cover_every_assessment() -> None:
     from assessment_readiness import evaluate_assessment_readiness
 
-    row = _row("Lycopene", "lycopene")
+    row = _row("Unreviewed Botanical", "unreviewed_botanical")
     evidence = evaluate_assessment_readiness(_product(row), module="generic")["evidence"]
 
     assessments = evidence["ingredient_assessments"]
@@ -1213,7 +1213,7 @@ def test_evidence_is_measured_but_does_not_gate_live_eligibility() -> None:
         "route",
     }
 
-    row = _row("Lycopene", "lycopene")
+    row = _row("Unreviewed Botanical", "unreviewed_botanical")
     result = evaluate_assessment_readiness(_product(row), module="generic")
 
     assert result["evidence"]["readiness"] == "incomplete"
@@ -1262,3 +1262,64 @@ def test_readiness_includes_owner_recovery_alongside_existing_matches():
     assert any(match['id'] == 'INGR_NAC' for match in recovered)
     assessment = evaluate_evidence_assessment(product, module='generic')
     assert 'INGR_NAC' in assessment['ingredient_assessments'][0]['evidence_ids']
+
+@pytest.mark.parametrize(
+    "disposition,owners,reason,expected",
+    [
+        ("no_qualifying_human_evidence", ["clinical_strains"], "probiotic_strain_reviewed_no_qualifying_human_evidence", "not_yet_evaluated"),
+        ("reviewed_null_unfavorable", ["backed_clinical_studies"], "literature_reviewed_null_or_unfavorable", "evaluated_limited_or_negative"),
+        ("resolved_by_reviewed_clinical_evidence", ["backed_clinical_studies"], "literature_reviewed_human_clinical_evidence", "evaluated_limited_or_negative"),
+        ("research_present_applicability_unestablished", ["backed_clinical_studies"], "literature_applicability_unestablished", "evaluated_limited_or_negative"),
+        ("research_present_applicability_unestablished", ["clinical_strains"], "probiotic_species_or_stub_applicability_unestablished", "not_yet_evaluated"),
+        ("literature_resolution_required", [], "unverified_generated_record_cannot_complete_evidence", "not_yet_evaluated"),
+        ("identity_insufficient", ["backed_clinical_studies"], "identity_material_unresolved", "not_yet_evaluated"),
+    ],
+)
+def test_readiness_consumes_concluded_resolver_reviews_without_completing_pending_identity(
+    monkeypatch, disposition, owners, reason, expected,
+):
+    import evidence_resolver
+    from assessment_readiness import evaluate_evidence_assessment
+
+    row = _row("Unreviewed Botanical", "unreviewed_botanical")
+    result = evidence_resolver.EvidenceResolution(
+        canonical_id=row["canonical_id"], ingredient_name=row["name"],
+        matched_owners=owners, disposition=disposition, points_eligible=False,
+        applicability_status="test", reason_code=reason,
+        owner_facts={"literature_evidence": {}} if "backed_clinical_studies" in owners else {},
+    )
+    monkeypatch.setattr(evidence_resolver, "resolve_evidence_for_row", lambda *a, **k: result)
+    assessment = evaluate_evidence_assessment(_product(row), module="generic")
+    assert assessment["ingredient_assessments"][0]["state"] == expected
+    assert assessment["not_yet_evaluated_count"] == int(expected == "not_yet_evaluated")
+
+
+def test_evidence_readiness_includes_undosed_active_blend_subject():
+    from assessment_readiness import evaluate_evidence_assessment
+    row = _row("Unreviewed Botanical", "unreviewed_botanical", quantity=0, unit="NP")
+    row.update(has_dose=False, role_classification="inactive_non_scorable",
+               cleaner_row_role="nested_display_only", score_eligible=False,
+               score_eligible_by_cleaner=False, isNestedIngredient=True,
+               parentBlend="Botanical Blend")
+    product = _product(row)
+    product["ingredient_quality_data"]["ingredients_scorable"] = []
+    product["activeIngredients"] = [row]
+    result = evaluate_evidence_assessment(product, module="generic")
+    assessment = next(r for r in result["ingredient_assessments"] if r["canonical_id"] == row["canonical_id"])
+    assert assessment["state"] == "not_yet_evaluated"
+    assert assessment["source_value"] == 0
+    assert result["not_yet_evaluated_count"] == 1
+
+@pytest.mark.parametrize("owned", [True, False])
+def test_la5_negative_review_requires_exact_label_row_owner(owned):
+    from assessment_readiness import _probiotic_native_evidence_state
+    row = _row("Lactobacillus acidophilus LA-5", "lactobacillus_acidophilus", quantity=500, unit="million CFU")
+    product = _product(row)
+    product["activeIngredients"] = [row]
+    product["probiotic_data"] = {"is_probiotic_product": True, "clinical_strains": [{
+        "clinical_id": "STRAIN_ACIDOPHILUS_LA5", "strain": row["name"],
+        "source_row_ref": "ingredientRows[0]", "research_match_status": "no_qualifying_human_evidence",
+        "review_status": "literature_reviewed_no_qualifying_evidence",
+    }]}
+    target = row if owned else {**row, "name": "Lactobacillus acidophilus", "raw_source_path": "ingredientRows[99]", "source_row_ref": "ingredientRows[99]"}
+    assert _probiotic_native_evidence_state(product, target) == ("evaluated_limited_or_negative" if owned else None)
