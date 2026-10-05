@@ -12307,7 +12307,16 @@ class EnhancedDSLDNormalizer:
                 has_quantities.append(False)
 
         return disclosure_tier(
-            has_blend_total, sum(has_quantities), len(has_quantities) - sum(has_quantities)
+            has_blend_total, sum(has_quantities), len(has_quantities) - sum(has_quantities),
+            sole_single_source=(
+                len(nested_ingredients) == 1
+                and len(nested_ingredients[0].get("forms") or []) <= 1
+                and all(
+                    any(isinstance(q.get("quantity"), (int, float)) and q["quantity"] > 0
+                        for q in (row.get("quantity") or []) if isinstance(q, dict))
+                    for row in nested_ingredients[0].get("nestedRows") or [] if isinstance(row, dict)
+                )
+            ),
         )
 
     

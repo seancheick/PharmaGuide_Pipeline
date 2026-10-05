@@ -14412,8 +14412,14 @@ class SupplementEnricherV3:
                         if parent_header
                         else None
                     )
-                    if parent_disclosure in {"none", "partial", "full"}:
-                        disclosure = parent_disclosure
+                    # A child's own disclosureLevel describes the child; never
+                    # the parent. Without a flagged header the tier is derived
+                    # when the group is finalized, from its rows and printed total.
+                    disclosure = (
+                        parent_disclosure
+                        if parent_disclosure in {"none", "partial", "full"}
+                        else None
+                    )
 
                     group_key = (parent_blend.lower(), disclosure)
                     group = nested_parent_groups.get(group_key)
@@ -14442,6 +14448,8 @@ class SupplementEnricherV3:
                             "_source_fields": set(),
                             "_children_with_amounts": [],
                             "_children_without_amounts": set(),
+                            "_child_rows": 0,
+                            "_multi_source_child": False,
                         }
                         nested_parent_groups[group_key] = group
 
@@ -14464,6 +14472,9 @@ class SupplementEnricherV3:
                         )
                     elif child_name:
                         group["_children_without_amounts"].add(child_name)
+                    group["_child_rows"] += 1
+                    if len(ingredient.get("forms") or []) > 1:
+                        group["_multi_source_child"] = True
 
                     # Sprint E1.2.1: when the cleaner flattened a parent
                     # container, it stashed the parent's mass onto each
@@ -14480,10 +14491,12 @@ class SupplementEnricherV3:
                         group["total_weight"] = float(parent_blend_mass)
                         group["unit"] = parent_blend_unit
 
-                    # Preserve any measured parent quantity if it exists on nested rows.
-                    if isinstance(quantity, (int, float)) and quantity > group["total_weight"]:
-                        group["total_weight"] = float(quantity)
-                        group["unit"] = unit
+                    # The flagged parent header's own printed quantity is a
+                    # declared total; a child's quantity is never one.
+                    header_qty = (parent_header or {}).get("quantity")
+                    if isinstance(header_qty, (int, float)) and header_qty > group["total_weight"]:
+                        group["total_weight"] = float(header_qty)
+                        group["unit"] = (parent_header or {}).get("unit") or ""
                     continue
 
                 children_with_amounts, children_without_amounts = _collect_child_amounts(
@@ -14519,9 +14532,18 @@ class SupplementEnricherV3:
                     }
                 })
 
+        # Rows that themselves carry an unquantified row: such a row is not a
+        # fully disclosed sole component ("Milk Thistle extract" > Phospholipids NP).
+        parents_hiding_rows = {
+            group["name"].strip().lower()
+            for group in nested_parent_groups.values()
+            if group["_children_without_amounts"]
+        }
         for group in nested_parent_groups.values():
             with_amounts = group.pop("_children_with_amounts", [])
             without_amounts = sorted(group.pop("_children_without_amounts", set()))
+            child_rows = group.pop("_child_rows", 0)
+            multi_source_child = group.pop("_multi_source_child", False)
             keyword_blend = group.pop("_keyword_blend", True)
             # D3 opacity gate: a keyword-less parent is a proprietary blend only
             # when OPAQUE — total weight shown, every child amount withheld. Any
@@ -14548,6 +14570,19 @@ class SupplementEnricherV3:
                 for item in with_amounts
             ] + [{"name": child_name, "amount": None, "unit": ""} for child_name in without_amounts]
             group["hidden_count"] = len(without_amounts)
+            if group.get("disclosure_level") is None:
+                # No flagged header: tier from the raw child rows (duplicate
+                # names are separate rows) and the printed total.
+                group["disclosure_level"] = disclosure_tier(
+                    group["total_weight"] > 0,
+                    len(with_amounts),
+                    child_rows - len(with_amounts),
+                    sole_single_source=(
+                        child_rows == 1
+                        and not multi_source_child
+                        and not ({name.lower() for name in without_amounts} & parents_hiding_rows)
+                    ),
+                )
             group["evidence"] = {
                 "source_field": group.get("source_field", ""),
                 "source_fields": source_fields,

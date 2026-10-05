@@ -28,17 +28,25 @@ from typing import Dict, List, Optional, Any, Tuple
 logger = logging.getLogger(__name__)
 
 
-def disclosure_tier(total_declared: bool, with_amounts: int, without_amounts: int) -> str:
+def disclosure_tier(
+    total_declared: bool, with_amounts: int, without_amounts: int, sole_single_source: bool = False
+) -> str:
     """The one 21 CFR 101.36 disclosure tier for a blend.
 
     full:    every listed sub-ingredient has its own amount;
     partial: the blend total is declared and sub-ingredients are listed, but
              individual amounts are missing (or only some present);
     none:    no sub-ingredients listed, or no total with missing amounts.
+
+    A declared total over one listed sub-ingredient is that ingredient's amount
+    (e.g. "Milk Thistle seed extract 254 mg" > Silymarin), so it is full. The
+    caller asserts sole_single_source only when that is one raw row naming at
+    most one source: "Protein Blend 8 g" > one row from casein and whey still
+    hides the split.
     """
     if with_amounts + without_amounts == 0:
         return "none"
-    if without_amounts == 0:
+    if without_amounts == 0 or (total_declared and sole_single_source and with_amounts + without_amounts == 1):
         return "full"
     return "partial" if total_declared else "none"
 
@@ -521,8 +529,14 @@ class ProprietaryBlendDetector:
                     else:
                         result["without_amounts"].append(sub)
 
+        sole = sub_ingredients[0] if len(sub_ingredients or []) == 1 else None
         result["level"] = disclosure_tier(
-            result["total_declared"], len(result["with_amounts"]), len(result["without_amounts"])
+            result["total_declared"], len(result["with_amounts"]), len(result["without_amounts"]),
+            sole_single_source=(
+                isinstance(sole, dict)
+                and len(sole.get("forms") or []) <= 1
+                and not (sole.get("nestedRows") or sole.get("ingredients"))
+            ),
         )
         if result["level"] == "full":
             result["amounts_present"] = "full"

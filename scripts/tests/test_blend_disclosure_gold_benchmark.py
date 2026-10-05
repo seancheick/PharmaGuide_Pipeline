@@ -11,7 +11,6 @@ from enrich_supplements_v3 import SupplementEnricherV3
 
 DOC = json.loads((Path(__file__).resolve().parent / "fixtures" / "blend_disclosure_gold_cases.json").read_text())
 CASES = DOC["cases"]
-MERGE_DUPLICATES = {"74832", "243975", "59514"}
 
 
 @pytest.fixture(scope="module")
@@ -38,13 +37,7 @@ def test_blend_reaches_enrich_with_its_tier(enriched_by_id, case):
     assert case["expect"] in {b["disclosure_level"] for b in _records(enriched_by_id[case["dsld_id"]], case)}
 
 
-def _invariant_param(case):
-    marks = [pytest.mark.xfail(strict=True, reason=DOC["_metadata"]["known_defect"])] \
-        if case["dsld_id"] in MERGE_DUPLICATES else []
-    return pytest.param(case, id=case["id"], marks=marks)
-
-
-@pytest.mark.parametrize("case", [_invariant_param(c) for c in CASES])
+@pytest.mark.parametrize("case", CASES, ids=[c["id"] for c in CASES])
 def test_no_record_claims_full_without_quantified_components(enriched_by_id, case):
     for blend in _records(enriched_by_id[case["dsld_id"]], case):
         if blend["disclosure_level"] == "full":

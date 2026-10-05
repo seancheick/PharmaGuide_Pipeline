@@ -3,10 +3,10 @@
   "description": "Gold benchmark (roadmap 1.10) for proprietary blends and missing data: real DSLD raw labels through cleaner and enricher.",
   "expectation_basis": "Each tier is computed from the raw label's blend row (printed total), its listed components and their printed amounts under the 21 CFR 101.36 rule in proprietary_blend_detector.disclosure_tier, checked by hand before the pipeline ran. A standardization marker is not a component.",
   "assertions": "The blend reaches Enrich with the expected tier; no record claims full while listing an unquantified or no component; every unquantified member carries has_dose false (never a zero dose).",
-  "known_defect": "74832, 243975 and 59514 also carry a duplicate blend record claiming full without that evidence (detector/cleaner merge). Registered in LEDGER; the invariant case is a strict xfail until fixed.",
   "source": "https://api.ods.od.nih.gov/dsld/v9/label/<dsld_id>, fetched 2026-10-04.",
   "case_count": 16,
-  "last_updated": "2026-10-04"
+  "last_updated": "2026-10-04",
+  "regression_history": "74832/243975 carried phantom zero-child 'full' copies because a child amount was taken as the group total; 59514 carried a 'full' copy because a component's own tier (from its standardization-marker rows) was inherited by the parent blend. Both fixed in the same batch."
  },
  "cases": [
   {

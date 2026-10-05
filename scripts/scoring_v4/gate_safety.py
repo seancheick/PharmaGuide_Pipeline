@@ -1004,7 +1004,8 @@ _STRONG_STIM_BLEND_NAMES = (
     "pre workout", "pre-workout", "preworkout",
 )
 _ENERGY_BLEND_NAMES = ("energy", "metabolism", "metabolic", "weight loss", "weight-loss")
-# Disclosed caffeine above this per-day line is a CAUTION (STIMULANT_CAFFEINE_HIGH_DOSE).
+# Disclosed caffeine above this per-serving line is a CAUTION (STIMULANT_CAFFEINE_HIGH_DOSE);
+# a printed blend total is per serving too.
 _CAFFEINE_CAUTION_MG = 400.0
 # An explicit stimulant identity hidden in a partial/none blend is undisclosed stimulant use.
 _HIDDEN_STIMULANT_IDENTITIES = ("caffeine", "synephrine", "theacrine", "dmaa", "ephedra")

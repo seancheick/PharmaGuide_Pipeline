@@ -453,15 +453,21 @@ def _declared_active_count(product: Dict[str, Any], rows: List[Dict[str, Any]]) 
                 for path in (row.get("raw_source_path"), *_safe_list(row.get("linked_rows")))
                 if path
             }
-            nutrition_fact_rows = sum(
+            # A blend header that is not itself an active row is label
+            # structure too; its members are the actives.
+            active_paths = {row.get("raw_source_path") for row in rows if row.get("raw_source_path")}
+            structural_rows = sum(
                 1
                 for row in quality.get("ingredients") or []
                 if isinstance(row, dict)
                 and _norm_text(row.get("source_section")) == "active"
-                and is_nutrition_fact_declaration(row)
-                and row.get("raw_source_path") not in restored
+                and (
+                    (is_nutrition_fact_declaration(row) and row.get("raw_source_path") not in restored)
+                    or (row.get("is_blend_header") is True
+                        and row.get("raw_source_path") not in active_paths)
+                )
             )
-            return max(parsed - nutrition_fact_rows, 0)
+            return max(parsed - structural_rows, 0)
     return len(rows)
 
 
