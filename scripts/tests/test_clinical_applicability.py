@@ -649,3 +649,22 @@ def test_spirulina_endpoint_summaries_preserve_population_and_comparator():
     assert "medication-only control" in nephrotic
     assert "not placebo-adjusted treatment effects" in nephrotic
     assert "not evidence of general longevity benefit" in record["notes"]
+
+
+@pytest.mark.parametrize('legacy', [False, True])
+def test_amount_independent_applicability_keeps_provider_owned_undosed_member(monkeypatch, legacy):
+    import clinical_applicability as ca
+    from scoring_input_contract import get_evidence_subject_rows
+    row = {'name':'Bromelain', 'raw_source_text':'Bromelain', 'canonical_id':'bromelain',
+           'role_classification':'inactive_non_scorable', 'cleaner_row_role':'named_blend_member',
+           'source_section':'active', 'raw_source_path':'ingredientRows[0].nestedRows[0]',
+           'quantity':0, 'unit':'NP', 'matched_form':'Bromelain'}
+    product = {'activeIngredients':[row], 'ingredient_quality_data':{'ingredients':[row], 'ingredients_scorable':[]}}
+    assert get_evidence_subject_rows(product)
+    entry = {'id':'TEST_UNDOSED', 'ingredient':'Bromelain','matched_source_row_refs':[row['raw_source_path']],
+             'matched_canonical_ids':['bromelain'],'study_type':'rct_single'}
+    if legacy:entry['exclude_aliases']=['other preparation']
+    else:entry['applicability']={'scope':'ingredient', 'required_form_terms':['bromelain']}
+    monkeypatch.setattr(ca,'reviewed_entries', lambda: {})
+    assert assess_clinical_applicability(product,entry,assess_amount=False)['status'] in {'applicable','not_curated'}
+    assert assess_clinical_applicability(product,entry,assess_amount=True)['status'] in {'unresolved', 'not_applicable'}

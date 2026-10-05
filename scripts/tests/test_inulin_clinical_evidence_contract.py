@@ -23,7 +23,9 @@ def test_inulin_digestive_claims_do_not_borrow_discovery_endpoint_tags():
     assert e['endpoint_relevance_tags'] == ['digestive_health']
     assert 'muscle_recovery' not in e['effect_direction_rationale']
     assert 'stress_mood' not in e['effect_direction_rationale']
-    assert 'not re-ratified' in e['effect_direction_rationale']
+    assert e['effect_direction'] == 'mixed'
+    assert 'positive and null' in e['effect_direction_rationale']
+    assert 'clinical-event prevention' in e['effect_direction_rationale']
 
 
 def test_inulin_sample_size_is_not_unverified_registry_discovery():

@@ -24,6 +24,71 @@ import evidence_resolver as er
 from evidence_resolver import EvidenceDisposition, OWNER_CAPABILITY_MAP
 
 
+def test_resolver_uses_shared_clinical_preparation_scope_without_amount_gate(monkeypatch):
+    import clinical_applicability as ca
+    entry = {"id": "TEST_REVIEWED_OIL", "study_type": "rct_single", "effect_direction": "mixed",
+             "applicability": {"scope": "ingredient", "excluded_form_terms": ["flaxseed oil"],
+                               "minimum_daily_dose": 1000, "dose_unit": "mg"}}
+    monkeypatch.setattr(ca, "reviewed_entries", lambda: {entry["id"]: entry})
+    monkeypatch.setattr(er, "_backed_studies_index", lambda: {"fish_oil": [entry]})
+    row = {"canonical_id": "fish_oil", "name": "Omega-3 Fatty Acids", "matched_form": "Flaxseed Oil",
+           "quantity": 1, "unit": "mg", "raw_source_path": "ingredientRows[0]", "source_section": "active"}
+    product = {"activeIngredients": [row], "ingredient_quality_data": {"ingredients": [row], "ingredients_scorable": [row]}}
+    blocked = er.resolve_evidence_for_row(row, product)
+    assert blocked.points_eligible is False
+    assert blocked.disposition == EvidenceDisposition.RESEARCH_PRESENT_APPLICABILITY_UNESTABLISHED.value
+    row["matched_form"] = "fish oil"
+    supported = er.resolve_evidence_for_row(row, product)
+    assert supported.points_eligible is True  # one mg must not become an Evidence amount gate
+
+
+def test_ala_has_verified_mixed_determination_without_marine_credit():
+    result = er.resolve_evidence_for_canonical("alpha_linolenic_acid", name="Alpha-Linolenic Acid")
+    assert result.disposition == EvidenceDisposition.RESOLVED_BY_REVIEWED_CLINICAL_EVIDENCE.value
+    assert result.points_eligible is False
+    assert result.owner_facts["literature_evidence"]["effect_direction"] == "mixed"
+    assert "32114706" in result.owner_facts["literature_evidence"]["pmids"]
+
+
+def test_flax_oil_does_not_inherit_ground_seed_research():
+    oil = er.resolve_evidence_for_canonical("flaxseed", name="Flaxseed Oil", matched_form="oil")
+    seed = er.resolve_evidence_for_canonical("flaxseed", name="Ground Flaxseed", matched_form="ground whole seed")
+    assert oil.disposition == EvidenceDisposition.RESEARCH_PRESENT_APPLICABILITY_UNESTABLISHED.value
+    assert seed.disposition == EvidenceDisposition.RESOLVED_BY_REVIEWED_CLINICAL_EVIDENCE.value
+
+
+@pytest.mark.parametrize("canonical", ["nha_fos", "bacteriophages"])
+def test_reviewed_human_research_is_not_reported_as_absent(canonical):
+    result = er.resolve_evidence_for_canonical(canonical)
+    assert result.disposition == EvidenceDisposition.RESEARCH_PRESENT_APPLICABILITY_UNESTABLISHED.value
+    assert result.owner_facts["literature_evidence"]["pmids"]
+    assert result.points_eligible is False
+
+
+@pytest.mark.parametrize("name,form", [("XOS", "xylooligosaccharides"), ("GOS", "galactooligosaccharides")])
+def test_prebiotic_family_cannot_inherit_inulin_trial_applicability(name, form):
+    result = er.resolve_evidence_for_canonical("prebiotics", name=name, matched_form=form)
+    assert result.disposition == EvidenceDisposition.RESEARCH_PRESENT_APPLICABILITY_UNESTABLISHED.value
+    assert result.points_eligible is False
+
+
+def test_clinical_aggregates_keep_verified_direction_and_no_fabricated_counts():
+    import json
+    records = json.loads((SCRIPTS_ROOT / "data/backed_clinical_studies.json").read_text())["backed_clinical_studies"]
+    by_id = {r["id"]: r for r in records}
+    for key in ("BRAND_SUNFIBER", "INGR_INULIN", "INGR_SPIRULINA"):
+        assert by_id[key]["effect_direction"] == "mixed"
+    spirulina = by_id["INGR_SPIRULINA"]
+    assert "published_studies_count" not in spirulina
+    assert "registry_completed_trials_count" not in spirulina
+    assert "total_enrollment" not in spirulina
+    assert "Healthy Aging/Longevity" not in spirulina["health_goals_supported"]
+    endpoint = next(t for t in spirulina["key_endpoints"] if "34538515" in t)
+    assert "LDL-C and HbA1c were not significantly improved" in endpoint
+    assert "registry_completed_trials_count" not in by_id["BRAND_SUNFIBER"]
+    assert by_id["BRAND_SUNFIBER"]["total_enrollment"] == 121
+
+
 def test_owner_capability_map_completeness():
     """Every required authoritative owner is registered with complete metadata."""
     required_owners = {
@@ -887,3 +952,76 @@ def test_mirtogenol_complete_preparation_is_not_a_bilberry_form():
     aliases = [alias.lower() for form in iqm_reference_entry('bilberry')['forms'].values()
                for alias in form.get('aliases', [])]
     assert 'mirtogenol' not in aliases
+
+
+def test_shared_applicability_preserves_legacy_form_exclusions(monkeypatch):
+    import clinical_applicability as ca
+    entry = {"id": "TEST_FORM_EXCLUSION", "study_type": "rct_single", "exclude_aliases": ["inositol hexaphosphate"]}
+    monkeypatch.setattr(ca, "reviewed_entries", lambda: {entry['id']: entry})
+    monkeypatch.setattr(er, "_backed_studies_index", lambda: {"inositol": [entry]})
+    row = {"canonical_id": "inositol", "name": "Inositol", "matched_form": "inositol hexaphosphate",
+           "quantity": 100, "unit": "mg", "raw_source_path": "ingredientRows[0]", "source_section": "active"}
+    product = {"activeIngredients": [row], "ingredient_quality_data": {"ingredients": [row]}}
+    assert er.resolve_evidence_for_row(row, product).points_eligible is False
+    assert ca.assess_clinical_applicability(product, {**entry, 'ingredient':'Inositol', 'matched_canonical_ids':['inositol']}, assess_amount=False)['status'] == 'not_applicable'
+    row['matched_form'] = 'myo inositol'
+    assert ca.assess_clinical_applicability(product, {**entry, 'ingredient':'Inositol', 'matched_canonical_ids':['inositol']}, assess_amount=False)['status'] == 'not_curated'
+
+
+def test_subject_census_refuses_empty_catalog_instead_of_reporting_success(tmp_path, monkeypatch):
+    from audits import measure_catalog_shadow_completeness as census
+    monkeypatch.chdir(tmp_path)
+    monkeypatch.setattr(sys, 'argv', ['measure_catalog_shadow_completeness.py'])
+    with pytest.raises(ValueError, match='No enrichment stage inputs'):
+        census.main()
+
+
+def test_subject_census_uses_named_undosed_subjects_and_keeps_identity_debt(monkeypatch):
+    from audits import measure_catalog_shadow_completeness as census
+    rows = [{'canonical_id':'alpha_linolenic_acid','name':'ALA','raw_source_path':'ingredientRows[0].children[0]'},
+            {'canonical_id':'test_unresolved','name':'Unknown','raw_source_path':'ingredientRows[1]'}]
+    monkeypatch.setattr(census, 'get_evidence_subject_rows', lambda product: rows)
+    result = census.census_product({'id':123,'name':'Blend'})
+    assert result['subject_count'] == 2
+    assert result['subjects'][0]['source_row_ref'] == 'ingredientRows[0].children[0]'
+    assert result['subjects'][0]['disposition'] == EvidenceDisposition.RESOLVED_BY_REVIEWED_CLINICAL_EVIDENCE.value
+    assert result['is_assessment_complete'] is False
+    summary = census.summarize([result])
+    assert summary['partial_products'] == 1
+    assert summary['unresolved_subjects'][0]['product_id'] == '123'
+
+
+def test_subject_census_duplicate_and_empty_products_fail():
+    from audits import measure_catalog_shadow_completeness as census
+    with pytest.raises(ValueError, match='Empty census'):
+        census.summarize([])
+    product = {'id':'1','subject_count':0,'subjects':[], 'is_assessment_complete':True}
+    with pytest.raises(ValueError, match='Duplicate'):
+        census.summarize([product, product])
+
+
+def test_reviewed_outcome_scope_does_not_promote_null_population_descriptions():
+    entry = {'primary_outcome':'Cardiovascular Health', 'key_endpoints':['HIV-infected women: immune endpoints null', 'Children: adjunctive findings'],
+             'applicability':{'scope':'ingredient','supported_outcomes':['metabolic']}}
+    assert er._evidence_entry_purposes(entry) == {'metabolic'}
+
+
+@pytest.mark.parametrize('tamper', [False, True])
+def test_subject_census_manifest_orchestration_preserves_scope_and_hashes(tmp_path, monkeypatch, tamper):
+    from audits import measure_catalog_shadow_completeness as census
+    root=tmp_path/'inputs';root.mkdir();raw=root/'1.json';raw.write_text('{"id":1}')
+    manifest=root/'manifest.json';census.replay.write_json(manifest,{'schema_version':1,'product_count':1,'files':[{'path':'1.json','kind':'raw','sha256':census.replay.sha(raw)}]})
+    def capture(task):
+        if tamper:raw.write_text('{"id":2}')
+        return [{'id':'1','subject_count':0,'subjects':[], 'overall_disposition':'not_efficacy_relevant','is_assessment_complete':True}]
+    monkeypatch.setattr(census,'census_file',capture)
+    monkeypatch.setattr(census.replay,'repository_provenance',lambda checkout:{'head':'test','source_sha256':{}})
+    out=tmp_path/'report.json';args=['--products-root',str(root),'--manifest',str(manifest),'--out',str(out)]
+    if tamper:
+        with pytest.raises(ValueError,match='hash mismatch'):census.main(args)
+        assert not out.exists()
+    else:
+        census.main(args)
+        import json
+        report=json.loads(out.read_text());assert report['scope']=='current_source_raw_subject_census';assert report['release_validated'] is False
+        assert len(report['audit_implementation_sha256'])==2

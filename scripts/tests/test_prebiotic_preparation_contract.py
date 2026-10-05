@@ -49,7 +49,9 @@ def test_declared_inulin_preparation_preserves_botanical_source(pipeline):
     assert any(x['name'] == 'Cichorium intybus' for x in active['forms'])
     assert any(x['canonical_id'] == 'inulin' for x in get_scoring_ingredients(enriched).rows)
     assert artifact['quality_score_status'] == 'scored'
-    assert artifact['quality_pillars_v4']['evidence']['score'] == 15.6
+    matches = enriched['evidence_data']['clinical_matches']
+    assert any(x.get('id') == 'INGR_INULIN' and x.get('effect_direction') == 'mixed' for x in matches)
+    assert artifact['quality_pillars_v4']['evidence']['score'] == 7.3
 
 @pytest.mark.parametrize('forms', [[], [dict(name='Inulin', category='fiber', percent=20)],
                                    [dict(name='Inulin', category='fiber'),dict(name='Pectin', category='fiber')]])

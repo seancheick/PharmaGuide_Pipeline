@@ -88,7 +88,7 @@ def _is_exposure_row(row: Mapping) -> bool:
     return _key(row.get("dose_class")) != "source material mass"
 
 
-def _evidence_subject_refs(product: Mapping) -> set:
+def _evidence_subject_refs(product: Mapping, *, include_undosed: bool = False) -> set:
     """Label rows projected by the one Evidence-subject provider.
 
     Clinical applicability consumes the provider's decision and never rebuilds
@@ -101,7 +101,7 @@ def _evidence_subject_refs(product: Mapping) -> set:
     return {
         row.get("raw_source_path")
         for row in get_evidence_subject_rows(product)
-        if row.get("scoring_input_kind") == "product_level_evidence"
+        if (include_undosed or row.get("scoring_input_kind") == "product_level_evidence")
         and isinstance(row.get("raw_source_path"), str) and row.get("raw_source_path").strip()
     }
 
@@ -177,12 +177,12 @@ def _resolved_identity_by_ref(product: Mapping) -> dict:
     return resolved
 
 
-def _rows(product: Mapping, *, source_only: bool = False):
+def _rows(product: Mapping, *, source_only: bool = False, evidence_only: bool = False):
     seen = set()
     # A source-required scope distrusts enrichment-derived names, so it never
     # receives them; every other scope reads the identity enrichment resolved.
     resolved = {} if source_only else _resolved_identity_by_ref(product)
-    subject_refs = _evidence_subject_refs(product)
+    subject_refs = _evidence_subject_refs(product, include_undosed=evidence_only)
 
     def walk(rows):
         for row in rows or []:
@@ -195,9 +195,9 @@ def _rows(product: Mapping, *, source_only: bool = False):
             # A projected Evidence subject is excused only from the cleaner's
             # score eligibility (a header total); its printed mass is the
             # blend's, never a member's amount, so it carries no dose here.
-            projected = not exposure and ref in subject_refs and _is_exposure_row(
+            projected = not exposure and ref in subject_refs and (evidence_only or _is_exposure_row(
                 {**row, "score_eligible_by_cleaner": None}
-            )
+            ))
             if valid_reference and identity not in seen and (exposure or projected):
                 seen.add(identity)
                 # Raw and resolved projections may use different canonical
@@ -220,7 +220,7 @@ def _rows(product: Mapping, *, source_only: bool = False):
     yield from walk(iqd.get("ingredients_scorable") or iqd.get("ingredients"))
 
 
-def _linked_rows(product: Mapping, entry: Mapping, *, source_only: bool = False,
+def _linked_rows(product: Mapping, entry: Mapping, *, source_only: bool = False, evidence_only: bool = False,
                  discriminating_terms: Any = ()):
     source_refs = entry.get("matched_source_row_refs")
     if source_refs is not None and (
@@ -229,9 +229,11 @@ def _linked_rows(product: Mapping, entry: Mapping, *, source_only: bool = False,
     ):
         return []
     refs = set(source_refs or [])
-    name = _key(entry.get("ingredient"))
+    name = _key(entry.get("ingredient") or entry.get("matched_term"))
     canonicals = {_key(c) for c in entry.get("matched_canonical_ids") or []}
-    rows = list(_rows(product, source_only=source_only))
+    if entry.get("matched_canonical_id"):
+        canonicals.add(_key(entry["matched_canonical_id"]))
+    rows = list(_rows(product, source_only=source_only, evidence_only=evidence_only))
     if refs:
         return [r for r in rows if (r.get("raw_source_path") or r.get("source_row_ref")) in refs]
     exact = [r for r in rows if name and name in {_key(r.get("name")), _key(r.get("raw_source_text"))}]
@@ -267,6 +269,17 @@ def assess_clinical_applicability(product: Mapping, entry: Mapping, *, assess_am
         return {"status": "not_applicable", "reason_code": "reference_only_clinical_record"}
     policy = reference["applicability"] if "applicability" in reference else entry.get("applicability")
     if policy is None:
+        # Legacy reviewed exclusions constrain the matched preparation only.
+        # Keep their original semantics at this shared seam; ingredient names
+        # can legitimately contain a generic term beside a branded preparation.
+        excluded = reference.get("exclude_aliases", entry.get("exclude_aliases", []))
+        if excluded:
+            linked = _linked_rows(product, entry, evidence_only=not assess_amount)
+            if not linked:
+                return {"status": "unresolved", "reason_code": "clinical_source_row_unresolved"}
+            if all(any(_key(term) in _key(row.get("matched_form") or row.get("form"))
+                       for term in excluded) for row in linked):
+                return {"status": "not_applicable", "reason_code": "clinical_preparation_mismatch"}
         return {"status": "not_curated", "reason_code": "no_reviewed_scope_constraints"}
     if not _valid_policy(policy):
         return {"status": "unresolved", "reason_code": "invalid_applicability_contract"}
@@ -293,7 +306,7 @@ def assess_clinical_applicability(product: Mapping, entry: Mapping, *, assess_am
         )
     )
     applicable_rows = []
-    for row in _linked_rows(product, entry, source_only=source_only,
+    for row in _linked_rows(product, entry, source_only=source_only, evidence_only=not assess_amount,
                             discriminating_terms=policy.get("required_form_terms")):
         text = _row_text(row, source_only=source_only)
         if source_only and not text:

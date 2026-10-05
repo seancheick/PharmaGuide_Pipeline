@@ -3,11 +3,11 @@
     "description": "Phase 4 shadow literature resolution registry for high-impact canonical actives",
     "purpose": "literature_evidence_resolution",
     "schema_version": "5.0.0",
-    "last_updated": "2026-09-30",
-    "total_entries": 754,
+    "last_updated": "2026-10-04",
+    "total_entries": 755,
     "verification_pipeline": "scripts/api_audit/verify_literature_records.py",
-    "verified_studies_count": 207,
-    "verified_records_count": 754
+    "verified_studies_count": 221,
+    "verified_records_count": 755
   },
   "literature_evidence_records": [
     {
@@ -1072,13 +1072,24 @@
         "unit": "mg",
         "basis": "ground_seed_daily"
       },
-      "applicability_decision": "Dose applicable for whole ground seed at >= 30 g/day; oil preparation routes to alpha-linolenic acid / omega-3",
+      "applicability_decision": "Reviewed ground-whole-seed research; oil is a different preparation and cannot inherit the ground-seed intervention. Trial 30 g/day is an exposure fact, not an Evidence amount gate or universal optimal-dose benchmark.",
       "verification_result": "authoritative_pubmed_verified",
       "verification_provenance": {
         "verified_by": "scripts/api_audit/verify_literature_records.py",
         "verified_at": "2026-09-21T07:39:42.986936+00:00",
         "all_pmids_verified": true,
         "retractions_found": false
+      },
+      "applicability": {
+        "scope": "ingredient",
+        "excluded_form_terms": [
+          "oil"
+        ],
+        "source_pmids": [
+          "24126178",
+          "25740909"
+        ],
+        "reviewed_at": "2026-10-04"
       }
     },
     {
@@ -2581,11 +2592,8 @@
           "pmid": "34555168",
           "title": "The Prebiotic Potential of Inulin-Type Fructans: A Systematic Review.",
           "study_type": "systematic_review",
-          "sample_size": 400,
-          "dose": "2500-10000 mg/day",
-          "duration": "2-4 weeks",
-          "outcome": "significant selective stimulation of intestinal Bifidobacteria",
-          "effect_direction": "positive_moderate",
+          "outcome": "Systematic review of healthy-adult inulin-type-fructan studies: microbial surrogates and mixed bowel-function and calcium-related results; formulation/chain length matters.",
+          "effect_direction": "mixed",
           "verification_provenance": {
             "pmid_verified": true,
             "authoritative_live_title": "The Prebiotic Potential of Inulin-Type Fructans: A Systematic Review.",
@@ -2598,21 +2606,36 @@
           }
         }
       ],
-      "effect_direction": "positive_moderate",
-      "population_context": "healthy adults",
-      "studied_dose_exposure": {
-        "values": [
-          2500
-        ],
-        "unit": "mg"
-      },
-      "applicability_decision": "Selective bifidogenic microbiota stimulation established at >= 2500 mg/day inulin/FOS.",
+      "effect_direction": "applicability_unestablished",
+      "population_context": "Healthy adults studied with inulin-type fructans; not every prebiotic carbohydrate family.",
+      "studied_dose_exposure": {},
+      "applicability_decision": "Human research is present for inulin/FOS. Preparation-specific clinical applicability must be established; inulin evidence must not be transferred to XOS, GOS, unspecified prebiotic or phage preparations. Positive microbial findings are surrogate outcomes.",
       "verification_result": "authoritative_pubmed_verified",
       "verification_provenance": {
-        "verified_by": "scripts/api_audit/verify_literature_records.py",
-        "verified_at": "2026-09-21T07:39:42.986936+00:00",
+        "verified_by": "manual_primary_source_content_review",
+        "verified_at": "2026-10-04",
         "all_pmids_verified": true,
         "retractions_found": false
+      },
+      "applicability_status": "applicability_unestablished",
+      "applicability": {
+        "scope": "ingredient",
+        "required_form_terms": [
+          "inulin",
+          "fructooligosaccharides",
+          "fructo oligosaccharides",
+          "oligofructose",
+          "fos"
+        ],
+        "require_source_label_form": true,
+        "supported_outcomes": [
+          "digestive"
+        ],
+        "studied_population": "Healthy adults in ITF studies; chain length/preparation dependent.",
+        "source_pmids": [
+          "34555168"
+        ],
+        "reviewed_at": "2026-10-04"
       }
     },
     {
@@ -6619,7 +6642,7 @@
           "sample_size": 44,
           "dose": "12 g/day chicory native inulin",
           "duration": "4 weeks",
-          "outcome": "statistically significant increase in stool frequency and softer stool consistency compared to placebo",
+          "outcome": "Orafti Inulin 12 g/day for four weeks increased stool frequency versus placebo in adults with constipation; raw chicory-root equivalence is not established.",
           "effect_direction": "positive_weak",
           "verification_provenance": {
             "pmid_verified": true,
@@ -6633,21 +6656,37 @@
           }
         }
       ],
-      "effect_direction": "positive_weak",
-      "population_context": "healthy adults with mild constipation",
+      "effect_direction": "applicability_unestablished",
+      "population_context": "Adults with constipation in the Orafti Inulin trial.",
       "studied_dose_exposure": {
         "values": [
-          5000
+          12000
         ],
         "unit": "mg"
       },
-      "applicability_decision": "Bowel regularity and prebiotic microbiome support established for chicory inulin at >= 5 g/day.",
+      "applicability_decision": "PMID27492975 tested Orafti chicory inulin12g/day for4weeks, with increased stool frequency versus placebo. This does not establish5g/day efficacy or equivalence to raw chicory root. Preparation applicability remains unestablished without explicit reviewed inulin preparation.",
       "verification_result": "authoritative_pubmed_verified",
       "verification_provenance": {
-        "verified_by": "scripts/api_audit/verify_literature_records.py",
-        "verified_at": "2026-09-21T07:39:42.986936+00:00",
+        "verified_by": "manual_primary_source_content_review",
+        "verified_at": "2026-10-04",
         "all_pmids_verified": true,
         "retractions_found": false
+      },
+      "applicability_status": "applicability_unestablished",
+      "applicability": {
+        "scope": "ingredient",
+        "required_form_terms": [
+          "inulin"
+        ],
+        "require_source_label_form": true,
+        "supported_outcomes": [
+          "digestive"
+        ],
+        "studied_population": "Adults with constipation; Orafti chicory inulin trial, not raw botanical root.",
+        "source_pmids": [
+          "27492975"
+        ],
+        "reviewed_at": "2026-10-04"
       }
     },
     {
@@ -19028,15 +19067,61 @@
         "Cochrane Library"
       ],
       "records_screened": 20,
-      "qualifying_human_studies": [],
-      "effect_direction": "no_qualifying_human_evidence",
-      "population_context": "fermentation culture lacking strain-specific human trial evidence",
+      "qualifying_human_studies": [
+        {
+          "pmid": "30157383",
+          "title": "Bacteriophage for Gastrointestinal Health (PHAGE) Study: Evaluating the Safety and Tolerability of Supplemental Bacteriophage Consumption.",
+          "design": "rct",
+          "effect": "applicability_unestablished",
+          "primary_endpoint": "Comprehensive metabolic panel and GI health questionnaire (tolerability study)",
+          "notes": "PHAGE tolerability report:43 enrolled,32 completed both arms; symptom improvement in treatment and placebo and carryover effects.",
+          "verification_provenance": {
+            "pmid_verified": true,
+            "human_subjects_verified": true,
+            "topic_match_verified": true,
+            "verified_source": "https://pubmed.ncbi.nlm.nih.gov/30157383/",
+            "verified_at": "2026-10-04"
+          }
+        },
+        {
+          "pmid": "30897686",
+          "title": "PHAGE Study: Effects of Supplemental Bacteriophage Intake on Inflammation and Gut Microbiota in Healthy Adults.",
+          "design": "rct",
+          "effect": "applicability_unestablished",
+          "primary_endpoint": "Secondary microbiome/inflammation report of the PHAGE trial",
+          "notes": "Microbiome/inflammation report of the same PHAGE trial, not independent replication; selected microbial changes, global diversity largely unchanged.",
+          "verification_provenance": {
+            "pmid_verified": true,
+            "human_subjects_verified": true,
+            "topic_match_verified": true,
+            "verified_source": "https://pubmed.ncbi.nlm.nih.gov/30897686/",
+            "verified_at": "2026-10-04"
+          }
+        },
+        {
+          "pmid": "32824480",
+          "title": "PHAGE-2 Study: Supplemental Bacteriophages Extend Bifidobacterium animalis subsp. lactis BL04 Benefits on Gut Health and Microbiota in Healthy Adults.",
+          "design": "rct",
+          "effect": "applicability_unestablished",
+          "primary_endpoint": "GI and microbiome measures; powered Bifidobacterium outcome, combination intervention",
+          "notes": "PHAGE2 combination trial: BL04 plus PreforPro, BL04 alone and placebo; no phage-only arm. Reported within-group symptom improvements do not establish between-group clinical superiority.",
+          "verification_provenance": {
+            "pmid_verified": true,
+            "human_subjects_verified": true,
+            "topic_match_verified": true,
+            "verified_source": "https://pubmed.ncbi.nlm.nih.gov/32824480/",
+            "verified_at": "2026-10-04"
+          }
+        }
+      ],
+      "effect_direction": "applicability_unestablished",
+      "population_context": "Adults with self-reported GI distress without diagnosed GI/metabolic disease, and healthy adults in PHAGE2; not fermentation-culture research.",
       "studied_dose_exposure": {},
-      "applicability_decision": "Bacteriophage cocktail lacking standalone human randomized clinical trial efficacy.",
-      "applicability_status": "no_qualifying_trials_found",
+      "applicability_decision": "Human PreforPro research exists. PHAGE safety/tolerability and microbiome reports share one trial; PHAGE2 tests BL04 plus phages with no phage-only arm. Clinical symptom superiority over placebo was not established; potency and exact formula linkage cannot be inferred from15mg carrier-containing capsule mass. Microbial changes do not establish immune protection or pathogen-treatment benefit.",
+      "applicability_status": "applicability_unestablished",
       "verification_provenance": {
-        "verified_by": "scripts/api_audit/verify_literature_records.py",
-        "verified_at": "2026-09-21T07:39:42.986936+00:00",
+        "verified_by": "manual_primary_source_content_review",
+        "verified_at": "2026-10-04",
         "all_pmids_verified": true,
         "retractions_found": false
       },
@@ -22343,15 +22428,31 @@
         "Cochrane Library"
       ],
       "records_screened": 20,
-      "qualifying_human_studies": [],
-      "effect_direction": "no_qualifying_human_evidence",
-      "population_context": "human clinical trials unestablished",
+      "qualifying_human_studies": [
+        {
+          "pmid": "16569219",
+          "title": "The capacity of short-chain fructo-oligosaccharides to stimulate faecal bifidobacteria: a dose-response relationship study in healthy humans.",
+          "design": "rct",
+          "effect": "applicability_unestablished",
+          "primary_endpoint": "Fecal bifidobacteria (surrogate); not clinical symptom benefit",
+          "notes": "Forty healthy adults, five randomized arms, seven days; microbiome surrogate benefit, no between-group digestive symptom benefit. Subset report of PMID15585783, not independent replication. Actilight scFOS composition was 44% GF2, 46% GF3 and 10% GF4. Bloating intensity was higher at 2.5 and 5 g/day although digestive symptom frequency was unchanged; this does not establish universal tolerability or clinical efficacy.",
+          "verification_provenance": {
+            "pmid_verified": true,
+            "human_subjects_verified": true,
+            "topic_match_verified": true,
+            "verified_source": "https://pubmed.ncbi.nlm.nih.gov/16569219/",
+            "verified_at": "2026-10-04"
+          }
+        }
+      ],
+      "effect_direction": "applicability_unestablished",
+      "population_context": "Human short-chain FOS trials exist; preparation-specific applicability and clinical benefit must be distinguished from microbial endpoints.",
       "studied_dose_exposure": {},
-      "applicability_decision": "Reproducible literature search identified zero qualifying randomized, double-blind, placebo-controlled human clinical trials for standalone Fructooligosaccharides prebiotic carbohydrate fraction in dietary supplement indications.",
-      "applicability_status": "no_qualifying_trials_found",
+      "applicability_decision": "Human randomized placebo-controlled short-chain FOS research exists (PMID16569219; report of subset of PMID15585783), with fecal Bifidobacterium as a surrogate. No blanket absence conclusion or automatic clinical-benefit/retail dose equivalence.",
+      "applicability_status": "applicability_unestablished",
       "verification_provenance": {
-        "verified_by": "scripts/api_audit/verify_literature_records.py",
-        "verified_at": "2026-09-21T07:39:42.986936+00:00",
+        "verified_by": "manual_primary_source_content_review",
+        "verified_at": "2026-10-04",
         "all_pmids_verified": true,
         "retractions_found": false
       },
@@ -23294,6 +23395,94 @@
         "retractions_found": false
       },
       "verification_result": "authoritative_pubmed_verified"
+    },
+    {
+      "canonical_id": "alpha_linolenic_acid",
+      "material_form": "Plant-derived alpha-linolenic acid (ALA), chemically distinct from alpha-lipoic acid and marine EPA/DHA; dietary foods, enriched margarine and oil interventions remain preparation-specific",
+      "search_query": "(\"alpha-linolenic acid\" OR \"alpha linolenic acid\") AND (randomized controlled trial OR systematic review OR meta-analysis) AND (cardiovascular OR lipid OR blood pressure)",
+      "search_date": "2026-10-04",
+      "databases_searched": [
+        "PubMed",
+        "Cochrane Library"
+      ],
+      "records_screened": 4,
+      "qualifying_human_studies": [
+        {
+          "pmid": "32114706",
+          "title": "Omega-3 fatty acids for the primary and secondary prevention of cardiovascular disease.",
+          "design": "systematic_review_meta",
+          "sample_size": 19327,
+          "primary_endpoint": "ALA-specific mortality, cardiovascular events and arrhythmia",
+          "effect": "mixed",
+          "notes": "ALA-specific subgroup, not the total162796 participant marine+plant review. Mortality/CHD null or little effect; possible small cardiovascular-event and arrhythmia signals; enriched foods/advice, not blanket supplement efficacy.",
+          "verification_provenance": {
+            "pmid_verified": true,
+            "human_subjects_verified": true,
+            "topic_match_verified": true,
+            "verified_source": "https://pubmed.ncbi.nlm.nih.gov/32114706/",
+            "verified_at": "2026-10-04"
+          }
+        },
+        {
+          "pmid": "32643951",
+          "title": "Effects of α-linolenic acid intake on blood lipid profiles：a systematic review and meta-analysis of randomized controlled trials.",
+          "design": "systematic_review_meta",
+          "sample_size": 2630,
+          "primary_endpoint": "Blood lipid biomarkers",
+          "effect": "positive_weak",
+          "notes": "47 studies,1305 intervention+1325 control. Modest TG/TC/LDL changes; no significant HDL effect; heterogeneous dietary ALA preparations. Lipids are surrogates, not event-prevention proof.",
+          "verification_provenance": {
+            "pmid_verified": true,
+            "human_subjects_verified": true,
+            "topic_match_verified": true,
+            "verified_source": "https://pubmed.ncbi.nlm.nih.gov/32643951/",
+            "verified_at": "2026-10-04"
+          }
+        },
+        {
+          "pmid": "37778442",
+          "title": "Effect of Alpha-Linolenic Acid Supplementation on Cardiovascular Disease Risk Profile in Individuals with Obesity or Overweight: A Systematic Review and Meta-Analysis of Randomized Controlled Trials.",
+          "design": "systematic_review_meta",
+          "sample_size": 1183,
+          "primary_endpoint": "Cardiovascular risk biomarkers in adults with overweight or obesity",
+          "effect": "mixed",
+          "notes": "19RCTs with foods/oils/mixed vegetable sources. CRP/TNF/TG/SBP improvement alongside LDL increase; no significant IL6/DBP/TC/HDL improvement. Cannot transfer all groundseed/fiber/lignan contributions to isolatedALA or everyoil; subgroups >=3g/day>=12weeks are observations, not universal minimum-dose gates.",
+          "verification_provenance": {
+            "pmid_verified": true,
+            "human_subjects_verified": true,
+            "topic_match_verified": true,
+            "verified_source": "https://pubmed.ncbi.nlm.nih.gov/37778442/",
+            "verified_at": "2026-10-04"
+          }
+        },
+        {
+          "pmid": "20929341",
+          "title": "n-3 fatty acids and cardiovascular events after myocardial infarction.",
+          "design": "rct",
+          "sample_size": 4837,
+          "primary_endpoint": "Major cardiovascular events",
+          "effect": "null",
+          "notes": "Post-MI older adults; ALA enriched margarine factorial trial ~1.9g/day 40months. Overall major events not significantly reduced; female prespecified subgroup P=.07 cannot become a positive overall endpoint. Overlaps Cochrane; do not sum enrollment.",
+          "verification_provenance": {
+            "pmid_verified": true,
+            "human_subjects_verified": true,
+            "topic_match_verified": true,
+            "verified_source": "https://pubmed.ncbi.nlm.nih.gov/20929341/",
+            "verified_at": "2026-10-04"
+          }
+        }
+      ],
+      "effect_direction": "mixed",
+      "population_context": "Adults at varying cardiovascular risk; post-MI patients and overweight/obesity subgroups are not interchangeable with healthy general supplement users",
+      "studied_dose_exposure": {},
+      "applicability_decision": "Reviewed mixed ALA human evidence. Mortality/event and surrogate outcomes are distinguished; no marine EPA/DHA evidence, whole-seed fiber/lignan effect, combination intervention, or cohort association is inherited. No universal positive supplement efficacy or universal studied-dose benchmark is established. Exact ALA declaration establishes ingredient identity, while source preparation and label purpose must be retained. This literature determination supplies no new numerical grade.",
+      "verification_result": "authoritative_pubmed_verified",
+      "verification_provenance": {
+        "verified_by": "manual_primary_source_content_review",
+        "verified_at": "2026-10-04",
+        "all_pmids_verified": true,
+        "retractions_found": false
+      }
     }
   ]
 }

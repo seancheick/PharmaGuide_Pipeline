@@ -1,89 +1,133 @@
 #!/usr/bin/env python3
-"""Measure full catalog product evidence completeness in shadow mode across all 15,421 products."""
+"""Census the shared Evidence subjects, retaining every disposition and source row.
 
+A raw frozen input runs the existing Clean/Enrich owners in memory. Stored
+Enrich inputs are diagnostic only, never proof of current-source release coverage.
+No scoring, catalog publication, or independent subject classification occurs here.
+"""
+from __future__ import annotations
+
+import argparse
+from collections import Counter
+from concurrent.futures import ProcessPoolExecutor
+from datetime import datetime, timezone
 import json
-import sys
-from collections import Counter, defaultdict
+import logging
 from pathlib import Path
+import sys
 
 SCRIPTS_DIR = Path(__file__).resolve().parents[1]
 if str(SCRIPTS_DIR) not in sys.path:
     sys.path.insert(0, str(SCRIPTS_DIR))
 
 import evidence_resolver as er
+from scoring_input_contract import get_evidence_subject_rows
+from audits.quality_redesign import replay
 
-def main():
-    enriched_files = sorted(Path("scripts/products").glob("output_*_enriched/enriched/enriched_*.json"))
-    print(f"Loading {len(enriched_files)} enriched product files...")
+_RAW_OWNERS = None
 
-    total_products = 0
-    complete_products = 0
-    partial_products = 0
 
-    partial_by_reason = Counter()
-    partial_products_by_cid = defaultdict(list)
-    partial_examples = []
+def census_product(product):
+    rows = get_evidence_subject_rows(product)
+    subjects = []
+    for row in rows:
+        result = er.resolve_evidence_for_row(row, product)
+        subjects.append({
+            'canonical_id': result.canonical_id, 'name': result.ingredient_name,
+            'source_row_ref': row.get('raw_source_path') or row.get('source_row_ref'),
+            'source_section': row.get('source_section'), 'matched_form': row.get('matched_form'),
+            'disposition': result.disposition, 'reason_code': result.reason_code,
+            'points_eligible': result.points_eligible, 'blocking_reasons': result.blocking_reasons,
+        })
+    overall, complete = er.compose_product_resolution_state([s['disposition'] for s in subjects])
+    return {'id': str(product.get('id') or product.get('dsld_id') or ''),
+            'name': product.get('product_name') or product.get('name'),
+            'subject_count': len(subjects), 'subjects': subjects,
+            'overall_disposition': overall, 'is_assessment_complete': complete}
 
-    for fpath in enriched_files:
-        try:
-            data = json.loads(fpath.read_text(encoding="utf-8"))
-        except Exception as e:
-            print(f"Error reading {fpath}: {e}")
-            continue
 
-        products = data if isinstance(data, list) else data.get("products", [])
-        for prod in products:
-            total_products += 1
-            res = er.resolve_product_evidence(prod)
+def census_file(task):
+    global _RAW_OWNERS
+    root, item = task
+    products = replay.payloads(Path(root) / item['path'], raw=item['kind'] == 'raw')
+    if item['kind'] == 'raw':
+        if _RAW_OWNERS is None:
+            logging.disable(logging.CRITICAL)
+            from enhanced_normalizer import EnhancedDSLDNormalizer
+            from enrich_supplements_v3 import SupplementEnricherV3
+            _RAW_OWNERS = EnhancedDSLDNormalizer(), SupplementEnricherV3()
+        normalizer, enricher = _RAW_OWNERS
+        products = [enricher.enrich_product(normalizer.normalize_product(p))[0] for p in products]
+    return [{**census_product(p), 'input_sha256': item['sha256'], 'input_path': item['path']} for p in products]
 
-            if res.is_assessment_complete:
-                complete_products += 1
-            else:
-                partial_products += 1
-                for b in res.unresolved_blockers:
-                    partial_by_reason[b] += 1
-                # Find which active ingredients blocked it
-                blocked_cids = []
-                for ing_res in res.resolutions:
-                    if not ing_res.matched_owners or ing_res.disposition == er.EvidenceDisposition.IDENTITY_INSUFFICIENT.value:
-                        blocked_cids.append(ing_res.canonical_id)
-                        partial_products_by_cid[ing_res.canonical_id].append(prod.get("dsld_id"))
-                if len(partial_examples) < 10:
-                    partial_examples.append({
-                        "dsld_id": prod.get("dsld_id"),
-                        "name": prod.get("name") or prod.get("product_name"),
-                        "blocked_cids": blocked_cids,
-                        "overall_disposition": res.overall_disposition,
-                    })
 
-    pct_complete = (complete_products / total_products * 100.0) if total_products else 0.0
+def summarize(products):
+    if not products or any(not p['id'] for p in products):
+        raise ValueError('Empty census or missing product ID')
+    if len({p['id'] for p in products}) != len(products):
+        raise ValueError('Duplicate census product IDs')
+    counts = Counter(s['disposition'] for p in products for s in p['subjects'])
+    pending = [dict(s, product_id=p['id']) for p in products for s in p['subjects']
+               if s['disposition'] in {er.EvidenceDisposition.IDENTITY_INSUFFICIENT.value,
+                                       er.EvidenceDisposition.LITERATURE_RESOLUTION_REQUIRED.value}]
+    return {'total_products': len(products), 'subject_count': sum(p['subject_count'] for p in products),
+            'complete_products': sum(p['is_assessment_complete'] for p in products),
+            'partial_products': sum(not p['is_assessment_complete'] for p in products),
+            'dispositions': dict(sorted(counts.items())), 'unresolved_subjects': pending,
+            'products': sorted(products, key=lambda p: p['id'])}
 
-    print("=" * 70)
-    print("RESOLVER-SHADOW CATALOG EVIDENCE COMPLETENESS REPORT")
-    print("=" * 70)
-    print(f"Total Products Evaluated: {total_products}")
-    print(f"Complete Assessments:    {complete_products} ({pct_complete:.2f}%)")
-    print(f"Partial Products:         {partial_products} ({100.0 - pct_complete:.2f}%)")
-    print("\nPartial Blockers Breakdown:")
-    for reason, cnt in partial_by_reason.most_common():
-        print(f"  {reason:<45}: {cnt}")
 
-    print(f"\nRemaining Partial Blocking Canonical Actives ({len(partial_products_by_cid)}):")
-    for cid, pids in sorted(partial_products_by_cid.items(), key=lambda x: -len(x[1])):
-        print(f"  {cid:<40}: {len(pids)} products")
+def main(argv=None):
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('--products-root', default='scripts/products')
+    parser.add_argument('--manifest', help='Existing frozen raw or manifest-owned Enrich input manifest')
+    parser.add_argument('--workers', type=int, choices=range(1, 5), default=1)
+    parser.add_argument('--out', default='scripts/reports/phase4_final_sweep_completeness.json')
+    args = parser.parse_args(argv)
+    root = Path(args.products_root).resolve()
+    manifest = args.manifest
+    if not manifest:
+        # Reuse the established freezer/ownership validator; never glob stale
+        # product files or silently skip malformed records.
+        frozen = Path(args.out).with_suffix('.inputs')
+        manifest = frozen / 'manifest.json'
+        replay.freeze(root, frozen, manifest)
+        root = frozen
+    before = replay.repository_provenance(SCRIPTS_DIR.parent)
+    audit_hashes = {str(path): replay.sha(path) for path in (Path(__file__), Path(replay.__file__))}
+    manifest_hash = replay.sha(manifest)
+    files, spec = replay.verified_files(root, manifest)
+    kinds = {item['kind'] for item in files}
+    if not kinds <= {'raw', 'products'} or len(kinds) != 1:
+        raise ValueError('Census inputs must have one supported input kind')
+    products = []
+    tasks = [(str(root), item) for item in files]
+    if args.workers == 1:
+        batches = map(census_file, tasks)
+        for batch in batches:
+            products.extend(batch)
+    else:
+        with ProcessPoolExecutor(max_workers=args.workers) as pool:
+            for batch in pool.map(census_file, tasks, chunksize=8):
+                products.extend(batch)
+                if len(products) % 100 == 0:
+                    print(f'{len(products)}/{spec["product_count"]} labels assessed', flush=True)
+    report = summarize(products)
+    if report['total_products'] != spec['product_count']:
+        raise ValueError('Census input product count mismatch')
+    replay.verified_files(root, manifest)
+    if replay.sha(manifest) != manifest_hash or replay.repository_provenance(SCRIPTS_DIR.parent) != before:
+        raise ValueError('Census source/input mutated during assessment')
+    if any(replay.sha(path) != digest for path, digest in audit_hashes.items()):
+        raise ValueError('Census audit implementation mutated during assessment')
+    report.update({'created_at': datetime.now(timezone.utc).isoformat(), 'repository': before,
+                   'input_manifest_sha256': manifest_hash, 'input_kind': next(iter(kinds)),
+                   'audit_implementation_sha256': audit_hashes,
+                   'scope': 'current_source_raw_subject_census' if kinds == {'raw'} else 'stored_enrichment_diagnostic',
+                   'release_validated': False})
+    replay.write_json(args.out, report)
+    print(json.dumps({k:v for k,v in report.items() if k not in {'products','unresolved_subjects','repository'}}, indent=2))
 
-    output_report = {
-        "total_products": total_products,
-        "complete_products": complete_products,
-        "partial_products": partial_products,
-        "percentage_complete": round(pct_complete, 2),
-        "partial_by_reason": dict(partial_by_reason),
-        "partial_by_cid": {cid: len(pids) for cid, pids in partial_products_by_cid.items()},
-    }
-    out_path = Path("scripts/reports/phase4_final_sweep_completeness.json")
-    out_path.parent.mkdir(parents=True, exist_ok=True)
-    out_path.write_text(json.dumps(output_report, indent=2), encoding="utf-8")
-    print(f"\nSaved report to {out_path}")
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     main()
