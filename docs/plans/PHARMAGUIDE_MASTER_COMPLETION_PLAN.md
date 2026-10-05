@@ -6,13 +6,13 @@ A checked implementation box means that specific deliverable is implemented, mea
 
 ## Completion measure — October 5
 
-**Main Phase 0–7 checklist: 54 of 70 boxes complete (77.1%).** Count only the eight phase sections under Updated execution checklist, including their nested deliverables; exclude historical checkpoint sections and repeated release reminders. This is an unweighted deliverable count, not an estimate of elapsed time, effort or release readiness. All document checkboxes would give222/263 (84.4%) before this update, but repeated historical receipts make that unsuitable as the main progress measure.
+**Main Phase 0–7 checklist: 55 of 70 boxes complete (78.6%).** Count only the eight phase sections under Updated execution checklist, including their nested deliverables; exclude historical checkpoint sections and repeated release reminders. This is an unweighted deliverable count, not an estimate of elapsed time, effort or release readiness. All document checkboxes would give222/263 (84.4%) before this update, but repeated historical receipts make that unsuitable as the main progress measure.
 
 | Phase | Complete / total |
 |---|---:|
 | 0 — Baseline and final freeze | 3 / 4 |
 | 1 — Evidence/Dose separation | 10 / 10 |
-| 2 — Identity and roles | 17 / 18 |
+| 2 — Identity and roles | 18 / 18 |
 | 3 — Clinical Evidence coverage | 7 / 11 |
 | 4 — Approved Dose policy | 6 / 6 |
 | 5 — Numerical calibration | 6 / 6 |
@@ -299,7 +299,7 @@ The October 1 source audit reconciled these boxes against current production and
 
 **Invariant:** an amount judgment cannot leave Evidence until the same judgment is already in Dose or is added to the existing Dose owner in the same change. Removing amount gates must not automatically award full Evidence marks.
 
-### Phase 2 — Identity, roles and prominence — completed fixes and remaining source work
+### Phase 2 — Identity, roles and prominence — source fixes complete
 
 - [x] Preserve landed Lane 2A subject ownership, Q3 single sugar/sweetener charging and Q40 cleaner-owned plant part.
 - [x] Close the bounded CFU source cases `242637` / `242654` / `327966`: statement exposure and guarantee use the selected panel serving; `327966` remains 50 B through expiration. Final 455-label replay explains all nine changed payloads and preserves 446 controls. Broader alternate-serving and role classes remain open.
@@ -319,7 +319,7 @@ The October 1 source audit reconciled these boxes against current production and
 - [x] Resolve remaining alternate-serving identity/duplicate cases from raw JSON (Q39), including audience-only serving notes, inconsistent column contents and shared-form-UNII wording drift. Raw census: 108→0 repeated top-level names; 141→18 all-tree names, with all 18 retained as distinct authored branches. Never merge materially different preparations or discard label variants.
 - [x] Align demonstrated dual-use active/excipient decisions through the existing shared owner without amount-based demotion. October4 census:5,770active additive-flagged rows;726flag changes across579products; final591-label raw replay plus inactive/unknown/descriptor/nutrition/legacy-source controls. Source membership and efficacy ownership stay separate. Integration receipts are recorded below and in LEDGER; final candidate validation remains open.
 - [x] **Current-source Evidence-subject census:** immutable raw15,421labels/102,281subjects on380e1713;15,101resolver-complete/320partialproducts and340pending subjects across58canonicals. Every subject/source/disposition retained; existing malformedCleanholds250356/312659 remain outside successful Enrich inputs. Census completion is an audit result, not closure of newly discovered source fixes or release coverage. Receipts below and inLEDGER.
-- [ ] **Census-discovered source remainder:** close corroborated source/role/identity contradictions as one existing-owner batch, including NEM membrane versus hydrolyzed-collagen aliases, Univestin's incorrect botanical companion, Triphala extract versus powder, fatty-seed oils versus volatile-essential-oil identity, active Ascorbic Acid mapped as preservative, and per-label oil/mineral-source purpose. Preserve exact preparation and sole-purpose ingredient roles; classification receipts are investigation evidence, not completed fixes or permission to globally demote ingredients.
+- [x] **Census-discovered source remainder:** corroborated NEM/Univestin/Triphala/fatty-oil/active VitaminC corrections are integrated; the final existing-owner batch preserves declared pepper/isolated-marker preparations, olive-oil grade, parent-local active nutrient forms and canonical source names. Generic grapefruit cannot inherit grape-seed/naringenin credit. Both nutrient adequacy and interaction thresholds use the same converter activity result; tocotrienols cannot become alpha-tocopherol. Oil/mineral source and purpose contexts remain distinct, without blanket demotion or invented duplicate exposure. Final0123889b:310-label measurements, full warnings, independent review,537local checks and all four CI groups pass. This closes corroborated source defects, not preparation-specific clinical benefit or current artifact/app/release validation.
 
 Do not introduce the rejected mass-based demotion of purpose ingredients. Keep source-section membership separate from efficacy ownership.
 
@@ -957,3 +957,11 @@ Independent audit of `a9bd0a3e` on current main found and repaired four source-o
 ### October5 — approved transfers and uncertainty refinement
 
 Accepted runtime e79d8cff plus test-only refinement164a8e99, PR64. All4CIgroups37338107501 green (19,377pass/183declaredskips), local537pass/24declared opt-in skips; independent review accepted after clove extract identity and source-review repairs.183 immutable raw labels show10 explained Evidence-only score increases and zero Dose/status/captured Safety movements. Option1 preserves16/22 and the denominator, with source-authored uncertainty/reference facts; no new public Coverage score. Phase1 live-transfer box is closed, main checklist54/70. Broader Phase3 clinical coverage remains open. Final stage audit requires Clean for all38brands; Sean runs the pipeline himself. No corpus run, catalog refresh or release performed. See the current LEDGER for source, checks and limits.
+
+### October 5 — final source-role remainder accepted
+
+Final candidate0123889b extends the existing canonical identity/normalization and converter owners. Shared literal preparation proof prevents generated aliases or generic taxonomy from supplying isolated marker, extract or extra-virgin specificity. Exact declarations remain retained. Whole-matcha research is recorded as applicability-unestablished without positive credit or a dose benchmark. The additional VitaminE root defect is fixed at the converter/activity seams, preserving non-alpha physical masses while prohibiting alpha nutrient/threshold credit; conservative safety bounds stay separate. Approved16/22 uncertainty fallback and denominator policy are unchanged.
+
+Frozen310-label final measurements have four explained numerical movers (two MicroDefense wrong-species Evidence corrections, OatFiber specificity correction, VitaminEComplete8 genuine-alpha Dose/source-role correction). No score-status/route/subroute changes. All noninteraction warning blocks and product highest severities remain unchanged; interaction name/activity changes follow existing owners and authored unknown-form policy. Independent review accepts finalsource. Exact finalCI37356260687 all four groups green, final local537passed/24declared skips, plus focused regressions/source verification. Execution LEDGER records failed intermediate candidates, fixes, immutable hashes, cause review and integration.
+
+Phase2 is now18/18; overall55/70. Phase3 preparation/formula/route/purpose clinical holds remain explicit. All38brands have stale Clean/Enrich/Score fingerprints; earliest requiredClean. Sean runs one Clean→Enrich→Score pipeline-only pass after integration. Fresh corpus determination coverage, catalog/interactions, app/device, release/full and publication gates remain open; no pipeline or release was run here.
