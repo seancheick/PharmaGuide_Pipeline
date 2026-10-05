@@ -3596,6 +3596,37 @@ class EnhancedDSLDNormalizer:
         # IQM chemical identity after removing those existing label qualifiers.
         # Inactive rows never enter this path; forms and amounts stay attached.
         name = str(ingredient.get("name") or "").strip()
+        # DSLD may qualify an exact nutrient heading with its source form.
+        # Both the qualifier and the literal row must match reviewed aliases
+        # within that parent; arbitrary parenthetical text cannot pick it.
+        # This establishes chemical ownership, not nutrient activity.
+        if category == "vitamin":
+            group = str(ingredient.get("ingredientGroup") or "").strip()
+            wrapper = re.fullmatch(r"(.+?)\s*\(([^()]+)\)", group)
+            if wrapper:
+                heading = self._exact_ingredient_group_lookup(wrapper.group(1).strip())
+                parent_id, parent_db = self._resolve_canonical_identity(
+                    heading.get("standard_name") or ""
+                )
+                parent = self.ingredient_map.get(parent_id, {}) if parent_db == "ingredient_quality_map" else {}
+                for form in (parent.get("forms") or {}).values():
+                    if not isinstance(form, dict):
+                        continue
+                    source_aliases = {
+                        norm_module.make_normalized_key(alias)
+                        for alias in form.get("source_form_aliases") or []
+                        if isinstance(alias, str)
+                    }
+                    qualifiers = source_aliases | {
+                        norm_module.make_normalized_key(alias)
+                        for alias in form.get("aliases") or []
+                        if isinstance(alias, str)
+                    }
+                    if (
+                        norm_module.make_normalized_key(name) in source_aliases
+                        and norm_module.make_normalized_key(wrapper.group(2)) in qualifiers
+                    ):
+                        return heading["standard_name"], parent_id, parent_db
         stripped_name = self._strip_qualifier_suffixes(name)
         if category == "vitamin" and stripped_name != name:
             original = self._fast_ingredient_lookup(name)
@@ -8029,6 +8060,27 @@ class EnhancedDSLDNormalizer:
                 cleaner_row_role=unmapped_cleaner_row_role,
                 score_exclusion_reason=unmapped_cleaner_row_role,
             )
+        # Authored exclusions constrain all routes into an IQM parent,
+        # including aliases, group fallbacks and UNII. Preserve unresolved
+        # preparation facts rather than inheriting an isolated constituent.
+        if canonical_source_db == "ingredient_quality_map":
+            identity_entry = self.ingredient_map.get(canonical_id, {})
+            negative_terms = (identity_entry.get("match_rules", {}) or {}).get(
+                "negative_match_terms", []
+            )
+            if negative_match_terms_veto(
+                [name] + [form.get("name", "") for form in forms_structured],
+                negative_terms,
+            ):
+                canonical_id = None
+                canonical_source_db = "unmapped"
+                standard_name = name
+                is_mapped = False
+                self._record_unmapped_ingredient(
+                    name, forms, is_active=is_active,
+                    cleaner_row_role=unmapped_cleaner_row_role,
+                    score_exclusion_reason=unmapped_cleaner_row_role,
+                )
         # D2.1 CONTRACT (protocol rule #4): is_mapped ⇒ canonical_id.
         # Two directions handled atomically:
         #   (a) is_mapped=False → force canonical to None + "unmapped" source.

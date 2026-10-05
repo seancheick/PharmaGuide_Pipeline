@@ -4,10 +4,10 @@
     "schema_version": "1.0.0",
     "version": "2026-07-13",
     "total_entries": 7,
-    "total_relationships": 7,
+    "total_relationships": 8,
     "purpose": "Prevent cleaner/enricher identity drift using reviewed exact-identity and broad-to-specific contracts.",
     "policy": "Only exact same-substance records may be redirected. Parent, form, preparation, and context relationships require separate handling.",
-    "last_updated": "2026-09-26"
+    "last_updated": "2026-10-05"
   },
   "equivalences": [
     {
@@ -136,6 +136,15 @@
       "child_id": "matcha_tea_powder",
       "relation": "broader_than",
       "basis": "Green Tea is the broad plant identity; DSLD groups matcha rows under 'Green Tea'. A literal matcha label that resolves to matcha_tea_powder (stone-ground whole leaf) must keep that preparation identity. Matcha is not a concentrated extract, so it is not green_tea_extract either (register Q25, 2026-09-26).",
+      "scope": "specificity_resolution_only"
+    },
+    {
+      "parent_db": "other_ingredients",
+      "parent_id": "PII_EXTRA_VIRGIN_OLIVE_OIL",
+      "child_db": "ingredient_quality_map",
+      "child_id": "extra_virgin_olive_oil",
+      "relation": "broader_than",
+      "basis": "The existing OI substance is generic OLIVE OIL (UNII 6UYK2W1W1E), while extra-virgin is a specified olive-oil grade. Preserve an independently declared extra-virgin identity against a generic Olive Oil taxonomy group; generic, pure, organic, virgin or cold-pressed wording does not establish the grade. No efficacy or role transfer.",
       "scope": "specificity_resolution_only"
     }
   ]
