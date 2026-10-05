@@ -48,7 +48,7 @@ def enriched(enricher):
     logging.disable(logging.INFO)
     normalizer = EnhancedDSLDNormalizer()
     out = {}
-    for dsld_id in ("251549", "54775", "278019", "321604", "176055", "19505"):
+    for dsld_id in ("251549", "54775", "278019", "321604", "176055", "19505", "251338"):
         raw = json.loads((FIXTURES / f"evidence_subject_{dsld_id}_raw.json").read_text())
         out[dsld_id], _ = enricher.enrich_product(normalizer.normalize_product(raw))
     return out
@@ -166,4 +166,16 @@ def test_enrichment_keeps_undosed_reviewed_match_without_promising_a_member_dose
     assert matches
     assert row['raw_source_path'] in matches[0]['matched_source_row_refs']
     from dose_assessment import positive_clinical_benchmark
+    assert positive_clinical_benchmark(product, row) is None
+
+
+def test_printed_inulin_child_supports_anchor_without_borrowing_blend_mass(enriched):
+    from clinical_applicability import assess_clinical_applicability
+    from dose_assessment import positive_clinical_benchmark
+    product = enriched["251338"]
+    match = next(m for m in product["evidence_data"]["clinical_matches"] if m["id"] == "INGR_INULIN")
+    result = assess_clinical_applicability(product, match, assess_amount=False)
+    assert result["status"] == "applicable"
+    assert result["source_row_ref"] == "ingredientRows[7].nestedRows[0]"
+    row = next(r for r in get_evidence_subject_rows(product) if r.get("canonical_id") == "inulin")
     assert positive_clinical_benchmark(product, row) is None

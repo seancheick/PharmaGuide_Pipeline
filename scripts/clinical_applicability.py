@@ -98,12 +98,19 @@ def _evidence_subject_refs(product: Mapping, *, include_undosed: bool = False) -
     if not isinstance(iqd, Mapping) or not isinstance(iqd.get("ingredients_scorable"), list):
         return set()
     from scoring_input_contract import get_evidence_subject_rows
-    return {
-        row.get("raw_source_path")
-        for row in get_evidence_subject_rows(product)
-        if (include_undosed or row.get("scoring_input_kind") == "product_level_evidence")
-        and isinstance(row.get("raw_source_path"), str) and row.get("raw_source_path").strip()
-    }
+    refs = set()
+    for row in get_evidence_subject_rows(product):
+        anchor = row.get("scoring_input_kind") == "product_level_evidence"
+        if not (include_undosed or anchor):
+            continue
+        candidates = [row.get("raw_source_path")]
+        if include_undosed and anchor:
+            # The shared provider already records the exact printed lineage
+            # behind an anchor. Admit those source rows for Evidence only;
+            # their blend total remains unavailable as a member dose.
+            candidates.extend(row.get("linked_rows") or [])
+        refs.update(ref for ref in candidates if isinstance(ref, str) and ref.strip())
+    return refs
 
 
 def _valid_policy(policy: Any) -> bool:
@@ -246,12 +253,18 @@ def _linked_rows(product: Mapping, entry: Mapping, *, source_only: bool = False,
                        and r.get("scoring_input_kind") == "product_level_evidence"
                        and _key(r.get("canonical_id")) in canonicals
                        and name in {_key(r.get("name")), _key(r.get("raw_source_text"))}]
-            children = [r for r in rows if r.get("parent_source_path") in refs
-                        and _key(r.get("canonical_id")) in canonicals
-                        and name in {_key(r.get("name")), _key(r.get("raw_source_text"))}]
-            if (len(anchors) == 1 and len(children) == 1
-                    and children[0].get("parent_source_path") == anchors[0].get("raw_source_path")):
-                return children
+            if len(anchors) == 1:
+                anchor = anchors[0]
+                anchor_ref = anchor.get("raw_source_path")
+                linked = anchor.get("linked_rows") or []
+                children = [r for r in rows
+                            if (r.get("raw_source_path") != anchor_ref
+                                and (r.get("parent_source_path") == anchor_ref
+                                     or r.get("raw_source_path") in linked))
+                            and _key(r.get("canonical_id")) in canonicals
+                            and name in {_key(r.get("name")), _key(r.get("raw_source_text"))}]
+                if len(children) == 1:
+                    return children
         return exact_refs
     exact = [r for r in rows if name and name in {_key(r.get("name")), _key(r.get("raw_source_text"))}]
     if exact:

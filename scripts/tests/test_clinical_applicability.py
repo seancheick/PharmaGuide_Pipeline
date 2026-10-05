@@ -720,11 +720,12 @@ def test_source_required_anchor_binds_printed_child_before_structural_header(mon
               'raw_source_path':'ingredientRows[0]','canonical_id':'structural_blend',
               'quantity':10000,'unit':'mg','score_eligible_by_cleaner':False,'source_section':'active'}
     child = {'name':'Inulin','raw_source_text':'Inulin','canonical_id':'inulin',
-             'raw_source_path':'ingredientRows[0].forms[0]','parent_source_path':'ingredientRows[0]',
-             'quantity':0,'unit':'NP','source_section':'active'}
+             'raw_source_path':'ingredientRows[0].nestedRows[0]',
+             'quantity':0,'unit':'NP','source_section':'active','score_eligible_by_cleaner':False}
     anchor = {**child,'raw_source_path':'ingredientRows[0]','quantity':10000,'unit':'mg',
-              'scoring_input_kind':'product_level_evidence','evidence_scope':'blend_level'}
-    product = {'activeIngredients':[header,child],'ingredient_quality_data':{'ingredients_scorable':[child]}}
+              'scoring_input_kind':'product_level_evidence','evidence_scope':'blend_level',
+              'linked_rows':['ingredientRows[0]',child['raw_source_path']]}
+    product = {'activeIngredients':[header,child],'ingredient_quality_data':{'ingredients_scorable':[]}}
     monkeypatch.setattr(contract,'get_evidence_subject_rows', lambda _: [anchor])
     monkeypatch.setattr(ca,'reviewed_entries',lambda:{})
     entry = {'id':'TEST_INULIN_ANCHOR','ingredient':'Inulin','matched_canonical_ids':['inulin'],
