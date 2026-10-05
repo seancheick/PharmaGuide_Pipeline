@@ -26,6 +26,7 @@ sys.path.insert(0, str(SCRIPTS_DIR))
 
 from enrich_supplements_v3 import SupplementEnricherV3  # noqa: E402
 from serving_frequency import resolve_daily_serving_multiplier  # noqa: E402
+from unit_converter import UnitConverter  # noqa: E402
 
 DATA_DIR = SCRIPTS_DIR / "data"
 
@@ -35,6 +36,7 @@ CORRUPT_MULTIPLIER = 0.044
 
 def _enricher() -> SupplementEnricherV3:
     enricher = SupplementEnricherV3.__new__(SupplementEnricherV3)
+    enricher.unit_converter = UnitConverter()
     enricher.databases = {
         "ingredient_interaction_rules": json.loads(
             (DATA_DIR / "ingredient_interaction_rules.json").read_text()
