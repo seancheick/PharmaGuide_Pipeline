@@ -22844,7 +22844,49 @@
         "unknown_notes": "Dose comparison unavailable because the daily ingredient amount is not disclosed or cannot be established.",
         "below_notes": "",
         "above_notes": "",
-        "notes": "A comparable generic research-exposure boundary is not established. The Phaseolean standardized water-extract trial used 1,500 or 3,000 mg/day for 45 days; generic extract mass does not establish that preparation, potency or alpha-amylase inhibitory activity. No positive Dose benchmark follows."
+        "notes": "A comparable generic research-exposure boundary is not established. The Phaseolean standardized water-extract trial used 1,500 or 3,000 mg/day for 45 days; generic extract mass does not establish that preparation, potency or alpha-amylase inhibitory activity. No positive Dose benchmark follows.",
+        "preparations": [
+          {
+            "name": "Phaseolean standardized aqueous extract",
+            "required_source_terms": [
+              [
+                "Phaseolean"
+              ],
+              [
+                "water extract",
+                "aqueous extract"
+              ],
+              [
+                "20,000 AIU/g",
+                "20000 AIU/g",
+                "20,000 alpha-amylase inhibitory units/g",
+                "20000 alpha-amylase inhibitory units/g"
+              ],
+              [
+                "DNS",
+                "dinitro salicylate"
+              ]
+            ],
+            "regimens": [
+              {
+                "minimum": 1500,
+                "maximum": 1500,
+                "notes": "Matches a Phaseolean regimen studied at 1,500 mg/day for 45 days before meals in adults with overweight or obesity. The source-stated aqueous preparation and inhibitory activity correspond to the reviewed material; this is descriptive correspondence, not a positive adequacy benchmark."
+              },
+              {
+                "minimum": 3000,
+                "maximum": 3000,
+                "notes": "Matches a Phaseolean regimen studied at 3,000 mg/day for 45 days before meals in adults with overweight or obesity. Correspondence is descriptive, not a positive adequacy benchmark or proof that higher amounts are more effective."
+              }
+            ],
+            "below_notes": "Below the reviewed 1,500 and 3,000 mg/day Phaseolean regimens.",
+            "above_notes": "Above the reviewed Phaseolean regimens; higher amounts are not established as more effective.",
+            "between_notes": "Falls between the reviewed 1,500 and 3,000 mg/day Phaseolean regimens; this exact amount was not established by those studies.",
+            "source_pmids": [
+              "39170208"
+            ]
+          }
+        ]
       }
     },
     {

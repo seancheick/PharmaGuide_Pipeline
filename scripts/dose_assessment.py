@@ -80,7 +80,7 @@ def clinical_research_exposure_assessments(product: Dict[str, Any]) -> list[Dict
     owned by clinical applicability; daily quantities remain owned by exposure.
     A missing frequency, member amount or comparable preparation stays unknown.
     """
-    from clinical_applicability import _linked_rows, assess_clinical_applicability, reviewed_entries
+    from clinical_applicability import _linked_rows, _row_text, _key, assess_clinical_applicability, reviewed_entries
     from evidence_resolver import evidence_record_matches_declared_purpose
 
     assessments = []
@@ -107,7 +107,18 @@ def clinical_research_exposure_assessments(product: Dict[str, Any]) -> list[Dict
                 continue
             seen.add(key)
             exposure = row_exposure(product, row, basis="daily", unit=reference.get("unit") or "mg")
-            bands = reference.get("regimens") or []
+            row_reference = reference
+            source_text = _row_text(row, source_only=True)
+            for preparation in reference.get("preparations") or []:
+                groups = preparation.get("required_source_terms") if isinstance(preparation, dict) else None
+                if (isinstance(groups, list) and groups and all(
+                        isinstance(group, list) and group and any(
+                            isinstance(term, str) and _key(term)
+                            and " " + _key(term) + " " in source_text for term in group)
+                        for group in groups)):
+                    row_reference = {**reference, **preparation}
+                    break
+            bands = row_reference.get("regimens") or []
             valid = (isinstance(bands, list) and all(
                 isinstance(band, dict)
                 and type(band.get("minimum")) in (int, float)
@@ -130,12 +141,12 @@ def clinical_research_exposure_assessments(product: Dict[str, Any]) -> list[Dict
                     if matching:
                         status, notes = "matches", matching["notes"]
                     elif high < bands[0]["minimum"]:
-                        status, notes = "below", reference["below_notes"]
+                        status, notes = "below", row_reference["below_notes"]
                     elif low > bands[-1]["maximum"]:
-                        status, notes = "above", reference["above_notes"]
+                        status, notes = "above", row_reference["above_notes"]
                     elif any(left["maximum"] < low <= high < right["minimum"]
                              for left, right in zip(bands, bands[1:])):
-                        status, notes = "between", reference["between_notes"]
+                        status, notes = "between", row_reference["between_notes"]
                     else:
                         status = "crosses_regimens"
                         notes = "The label-directed daily range crosses reviewed study regimens; it does not match a single studied regimen."
@@ -148,7 +159,7 @@ def clinical_research_exposure_assessments(product: Dict[str, Any]) -> list[Dict
                 "minimum": low, "maximum": high, "uncertainty": exposure.uncertainty,
                 "studied_population": (record.get("applicability") or {}).get("studied_population"),
                 "supported_outcomes": (record.get("applicability") or {}).get("supported_outcomes", []),
-                "source_pmids": reference.get("source_pmids", []),
+                "source_pmids": row_reference.get("source_pmids", []),
             })
     return assessments
 

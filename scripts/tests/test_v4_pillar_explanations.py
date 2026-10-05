@@ -242,3 +242,20 @@ def test_zero_matched_entries_emits_no_fact_when_public_evidence_score_is_nonzer
     )
 
     assert "explanation" not in pillars["Evidence"]
+
+
+def test_dose_reference_fact_uses_existing_owner_counts_without_changing_points():
+    pillars = _pillars()
+    before = copy.deepcopy(pillars)
+    bd = _module_bd()
+    bd["dimensions"]["dose"]["metadata"].update(
+        purpose_ingredient_count=3,
+        unbenchmarked_purpose_ingredients=["lactoferrin"],
+    )
+    attach_pillar_explanations(pillars, bd, _cfg(), "generic")
+    fact, = pillars["Dose"]["explanation"]["facts"]
+    assert fact["label"] == "Dose reference availability"
+    assert "1 of 3" in fact["value_display"]
+    assert "cannot be determined confidently" in fact["value_display"]
+    for key in ("score", "max", "reason"):
+        assert pillars["Dose"][key] == before["Dose"][key]

@@ -201,3 +201,59 @@ def test_undisclosed_blend_member_never_borrows_the_parent_total(enricher):
     assert a["status"] == "unknown"
     assert a["minimum"] is None
     assert a["source_row_ref"].endswith("nestedRows[1]")
+
+
+@pytest.mark.parametrize("amount,status", [(1000,"below"),(1500,"matches"),(2000,"between"),(3000,"matches"),(4000,"above"),(None,"unknown")])
+def test_exact_source_verified_phaseolean_regimens(amount, status):
+    from dose_assessment import clinical_research_exposure_assessments, positive_clinical_benchmark
+    p = product("INGR_WHITE_KIDNEY_BEAN", "White Kidney Bean Extract", "common_bean_extract", amount)
+    row = p["ingredient_quality_data"]["ingredients_scorable"][0]
+    row["raw_source_text"] = "Phaseolean aqueous extract, 20,000 AIU/g, DNS assay"
+    assessment, = clinical_research_exposure_assessments(p)
+    assert assessment["status"] == status
+    if status == "matches":
+        assert "Phaseolean regimen" in assessment["notes"]
+    assert positive_clinical_benchmark(p, row) is None
+
+
+@pytest.mark.parametrize("source", [
+    "White Kidney Bean Extract 1500mg", "Phaseolean extract 1500mg",
+    "Phaseolean aqueous extract 20,000 AIU per serving DNS assay",
+    "Phaseolean aqueous extract 20,000 AIU/g starch assay",
+    "Phase2 aqueous extract 20,000 AIU/g DNS assay",
+    "Phaseolamin aqueous extract 20,000 AIU/g DNS assay",
+])
+def test_unverified_preparation_cannot_borrow_phaseolean(source):
+    from dose_assessment import clinical_research_exposure_assessments
+    p = product("INGR_WHITE_KIDNEY_BEAN", "White Kidney Bean Extract", "common_bean_extract", 1500)
+    p["ingredient_quality_data"]["ingredients_scorable"][0]["raw_source_text"] = source
+    a, = clinical_research_exposure_assessments(p)
+    assert a["status"] == "reference_uncertain"
+
+
+def test_derived_preparation_cannot_replace_exact_source_specification():
+    from dose_assessment import clinical_research_exposure_assessments
+    p = product("INGR_WHITE_KIDNEY_BEAN", "White Kidney Bean Extract", "common_bean_extract", 1500)
+    row = p["ingredient_quality_data"]["ingredients_scorable"][0]
+    row["matched_form"] = "Phaseolean aqueous extract 20,000 AIU/g DNS assay"
+    a, = clinical_research_exposure_assessments(p)
+    assert a["status"] == "reference_uncertain"
+
+
+def test_phaseolean_source_specification_survives_full_enrichment(enricher):
+    from test_green_tea_evidence_identity import _source_product
+    name = "White Kidney Bean Extract"
+    source = _source_product(name)
+    row = source["activeIngredients"][0]
+    row.update(canonical_id="common_bean_extract", standardName=name, quantity=1500,
+               ingredientGroup=name,
+               raw_source_text="Phaseolean aqueous extract 20,000 AIU/g DNS assay")
+    row["raw_taxonomy"]["ingredientGroup"] = name
+    enriched, issues = enricher.enrich_product(source)
+    assert enriched.get("enrichment_status") != "validation_failed", issues
+    assessment, = [a for a in enriched["rda_ul_data"]["clinical_exposure_assessments"]
+                    if a["record_id"] == "INGR_WHITE_KIDNEY_BEAN"]
+    assert assessment["status"] == "matches"
+    assert assessment["source_pmids"] == ["39170208"]
+    assert any(f["value_display"] == assessment["notes"]
+               for f in build_scored_artifact(enriched)["quality_pillars_v4"]["dose"]["explanation"]["facts"])

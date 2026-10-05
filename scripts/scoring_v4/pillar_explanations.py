@@ -153,6 +153,22 @@ def attach_pillar_explanations(
         if builder is not None:
             facts.extend(builder(dim_by_assembler.get(assembler) or {}))
         if assembler == "dose":
+            metadata = ((dims.get("dose") or {}).get("metadata") or {})
+            purpose_count = _nonnegative_int(metadata.get("purpose_ingredient_count"))
+            unbenchmarked = metadata.get("unbenchmarked_purpose_ingredients")
+            if (purpose_count and isinstance(unbenchmarked, list) and unbenchmarked
+                    and all(isinstance(item, str) and item for item in unbenchmarked)
+                    and len(unbenchmarked) <= purpose_count):
+                facts.append({
+                    "id": "dose_reference_availability",
+                    "label": "Dose reference availability",
+                    "value_display": (
+                        f"{len(unbenchmarked)} of {purpose_count} purpose ingredients "
+                        "have disclosed amounts but no applicable dose benchmark. "
+                        "Their adequacy cannot be determined confidently from available evidence; "
+                        "they remain included with limited-assessment credit."
+                    ),
+                })
             assessments = ((dims.get("dose") or {}).get("metadata") or {}).get("clinical_exposure_assessments") or []
             for index, assessment in enumerate(assessments):
                 if isinstance(assessment, dict) and assessment.get("kind") == "studied_regimen" and assessment.get("notes"):

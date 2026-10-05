@@ -915,6 +915,7 @@ def test_disclosed_amount_without_reference_does_not_claim_studied_dose():
     }
     out = _pillar_dose(dim, 20.0, "generic", _config())
     assert "benchmark is unavailable" in out["reason"]
+    assert "adequacy cannot be determined confidently" in out["reason"]
     assert "studied range" not in out["reason"]
     # Explanation changes must not change the dose points.
     control = _pillar_dose({"score": 16.0}, 20.0, "generic", _config())
