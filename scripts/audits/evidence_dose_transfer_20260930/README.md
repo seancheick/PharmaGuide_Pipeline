@@ -506,3 +506,60 @@ and preserve zinc nutrient/UL/Safety scoring. Separately choose WKB numerical
 range correspondence versus the existing unbenchmarked fallback. This is a
 proposal, not recorded approval or an implemented transfer. The existing source
 corrections can be validated independently while these gates remain intact.
+
+## October 5 team review brief — four remaining exposure decisions
+
+Status: proposal, not approved policy. Code inspected on integrated main c67600da; the blend audit and isolated test repairs are integrated. Existing four Evidence amount gates remain. Sean will run the pipeline after remaining source work is ready. This packet does not close the separately classified clinical/preparation exceptions.
+
+Owner: existing clinical applicability, directed exposure, positive clinical benchmark, nutrient adequacy and per-purpose Dose owners listed above; this existing README owns the transfer decision packet. Evidence: current source and records, 15 retained boundary probes, live Europe PMC content checks for eight source PMIDs on October5. Will NOT create: another scorer/registry, a null-study positive benchmark, assumed blend-member dose, potency conversion, new safety threshold or a second execution register.
+
+### What happened and why work remains
+
+The October2 transfer closed its bounded packet, not every amount constraint in the clinical registry. The subsequent census and owner audit found four records whose clinical match still depends on daily quantity. Generic Evidence, its sports/digestive consumers, readiness and confidence still use the shared collector with amount assessment enabled. Dose can normalize an amount but currently has no equivalent assessment of these four clinical exposure scopes. Their applicability.minimum_daily_dose fields are not automatically positive_clinical_benchmark inputs.
+
+For matching forms and purpose, the retained probes show the distinction:40mg zinc,500mg WKB,1000mg D-mannose and1500mg DAA fail the current amount assessment and pass preparation-only assessment. Zinc208mg fails the maximum. These are synthetic boundary probes, not product totals or new clinical recommendations.
+
+Evidence is intended to judge human support for the correct preparation/purpose; Dose judges the label-directed amount; Safety independently judges risk. Removing the Evidence checks before Dose retains the same exposure facts would lose information. Converting every studied amount into rewarded adequacy would introduce unsupported policy, especially for null results.
+
+Correction to the earlier choice wording: keeping current points means keeping current **Dose** scoring. Evidence points, readiness or explanations can still change after amount rejection moves out of Evidence. Exact product effects require raw replay; zero total movement is not promised.
+
+### Record-specific judgments
+
+| Record | Current amount rule | What the team needs to distinguish |
+|---|---|---|
+| Zinc acetate/gluconate cold lozenges (legacy ID INGR_ZINC_PICOLINATE) |80–207mg/day envelope, matching lozenge form and acute adult cold context |Trial comparability is distinct from routine nutrient adequacy and safe intake. The reviewed meta-analysis includes80–92 and192–207mg/day groups; a continuous envelope is not proof that every intermediate amount was tested. Do not extend this record to swallowed picolinate capsules or prevention. |
+| White Kidney Bean extract |At least1000mg/day; current curated narrative reports1000–3000mg/day trials |Weak positive weight-management research is distinct from a validated dose-response curve. Milligrams do not establish equivalent alpha-amylase inhibitory activity. The live Phaseolean abstract tests a specific standardized preparation at1500/3000mg/day; the1000mg registry minimum needs trial-table/preparation justification before becoming an operational scoring anchor. |
+| D-mannose |At least2000mg/day |The598-woman trial tested2g/day and did not demonstrate recurrent-UTI prevention in its community population. The null finding cannot become benefit credit or a rewarded effective-dose target. The current minimum also accepts amounts above2g; that is not proof that those amounts were studied. |
+| D-aspartic acid |At least3000mg/day; narrative describes3–6g/day |Small trials in trained/athletic men provide null findings for the reviewed outcomes.3g and6g are reported trial regimens, not proof of efficacy or a continuous dose-response curve. Retain population/outcome restrictions and no positive adequacy reward; amounts above6g are not automatically studied exposures. |
+
+Primary sources rechecked by content: [zinc meta-analysis](https://pubmed.ncbi.nlm.nih.gov/28515951/); [2026 WKB meta-analysis](https://pubmed.ncbi.nlm.nih.gov/42066439/), [Phaseolean trial](https://pubmed.ncbi.nlm.nih.gov/39170208/); [D-mannose randomized trial](https://pubmed.ncbi.nlm.nih.gov/38587819/), [2025 synthesis](https://pubmed.ncbi.nlm.nih.gov/41004704/); [DAA resistance-training trial](https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0182630), [climber trial](https://pubmed.ncbi.nlm.nih.gov/29893592/), [boxer trial](https://pubmed.ncbi.nlm.nih.gov/38201906/). [NIH Zinc guidance](https://ods.od.nih.gov/factsheets/Zinc-HealthProfessional/) gives an adult UL40mg/day, distinct from medically supervised treatment. Amounts in this packet describe records/studies, not intake advice. Eight API receipts are preserved at clinical_source_continuation_20261005/team_decision/.
+
+### Recommended policy for team consideration
+
+Move source-bound clinical exposure correspondence to the existing Dose owner for all four. Keep preparation, delivery, population and outcome support restrictions in Evidence. Retain existing Dose points, Zinc nutrient/UL/Safety judgments and zero affirmative Evidence credit for the two null records. Show exposure correspondence as below, within the reviewed envelope, above or unknown where those descriptions are supported; distinguish reported exact regimens from a descriptive envelope. A within-range result must not imply benefit, safety, or suitability for a person. Retain existing clinical holds, including reference-only Amla.
+
+White Kidney Bean numerical scoring remains a separate choice. OptionA keeps existing disclosure/unbenchmarked Dose scoring and reports studied-exposure correspondence. OptionB uses the existing positive benchmark calculation only for an explicitly justified comparable preparation and operational anchor. OptionB needs the exact source/preparation/potency condition, anchor, below/above-range scoring and explanation. Do not silently make every WKB extract eligible because of a name match, or describe the lowest reported dose as a proven efficacy threshold. I recommendA until the team supplies that justification.
+
+The team must also confirm whether a low/unknown-dose but otherwise matching positive preparation retains its research grade in Evidence with Dose separately explaining exposure uncertainty. This can raise Evidence credit that the current amount gate withholds. If another treatment is preferred, specify its single numerical owner and consumer explanation; do not introduce hidden duplicate deductions.
+
+### Implementation and acceptance after the decision
+
+1. Verify each record's sources, exact preparation/delivery, outcomes, reported regimens and any proposed operational anchor. Update structured constraints and contradictory narrative together. Preserve null directions and reference holds.
+2. Reuse row_exposure for actual label-directed daily exposure and the existing same-source linkage. Preserve dose ranges, unknown directions and unknown quantities. No blend-total borrowing, extract/potency equivalence or invented elemental mass.
+3. Extend the existing Dose assessment seam to preserve clinical exposure comparison separately from positive adequacy. Do not repurpose UL statuses for clinical efficacy. Reuse existing output contracts where compatible; any new public meaning/field needs a named owner and approval.
+4. Change the shared Evidence collector, readiness and confidence consistently for only the reviewed scope. Avoid a global assess_amount=False switch that changes unrelated formula/strain scopes. Preparation/purpose/route restrictions remain active.
+5. Test below/exact/above/unknown exposure, both ends of directed-serving ranges, wrong form/population/outcome, matched versus unknown potency, null versus positive direction, separate Zinc safety and blend-member unknowns through the public scorer. Test2g versus>2g D-mannose and3/6/>6g DAA contextual wording explicitly.
+6. Freeze affected raw labels and unaffected controls; compare full pillar/total, role, source, safety, status, readiness and explanation changes. Group ordinary movements by cause; investigate every unsupported credit, lost warning or unexplained delta.
+7. Fresh independent review, one completed-batch whole-fast CI checkpoint and applicable local checks; integrate before declaring source ready. Then inspect stage fingerprints. Sean runs the necessary pipeline fromClean; catalog/app/release validation follows the new artifacts.
+
+### Requested team reply
+
+Please provide:
+- Approval or revision of exposure correspondence in Dose for all four, while Evidence retains preparation/purpose/population support judgments.
+- Treatment of positive research credit when label amount is low or unknown; desired Evidence and Dose explanations.
+- Zinc: confirmation that cold-trial comparability does not replace nutrient/UL/Safety scoring or imply routine-safe/full Dose at80–207mg/day.
+- WKB: optionA orB. ForB, cite the preparation/potency condition, operational anchor, numerical treatment below/above the range and acceptable consumer wording.
+- D-mannose/DAA: confirmation of zero new affirmative credit/adequacy reward; specify exact-regimen versus envelope correspondence and out-of-range wording.
+- Any additional study/source that changes a recorded preparation, population, outcome or regimen, with a directly supporting link.
+
+The58 classified pending ingredient/preparation groups are a separate research/source queue. Examples include whole powder versus extract, oral essential oil versus tea/aromatherapy, generic mushroom mixtures versus studied formulas, and mass-only pancreatin versus studied enzyme activity. Each needs its own verified determination or honest hold. A four-record policy decision does not close them or authorize blanket no-human-evidence conclusions.
