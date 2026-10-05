@@ -567,7 +567,7 @@ The58 classified pending ingredient/preparation groups are a separate research/s
 
 ## October 5 approved descriptive transfers — current execution
 
-Sean approved the four transfers in attachment78db306d. The approval creates no new positive Dose benchmark: descriptive research correspondence is separate from efficacy, adequacy and Safety. Implemented from main a8d7eeae; accepted runtime e79d8cff and test-only candidate164a8e99 passed final measurement, independent review, local and exact-source CI37338107501. PR64 is the integration batch; current LEDGER/handoff records containment and cleanup.
+Sean approved the four transfers in attachment78db306d. The approval creates no new positive Dose benchmark: descriptive research correspondence is separate from efficacy, adequacy and Safety. Implemented from main a8d7eeae; accepted runtime e79d8cff and test-only candidate164a8e99 passed final measurement, independent review, local and exact-source CI37338107501. PR64 merged as7c4db17b; origin contains the accepted candidate and own temporary branch/checkout is removed. Current LEDGER/handoff records source containment, cleanup and remaining gates.
 
 Owner: `scripts/dose_assessment.py::clinical_research_exposure_assessments` — evidence: existing Dose owner, `row_exposure`, clinical source linkage/applicability and declared-purpose seam. Enrichment produces `rda_ul_data.clinical_exposure_assessments` after clinical matching; the universal scorer and existing pillar-facts adapter project it into the existing Flutter fact renderer. Will NOT create: another registry/scorer, positive benchmark, new Safety threshold, assumed member amount, potency conversion or personal-population classifier.
 
