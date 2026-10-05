@@ -3,10 +3,10 @@
     "description": "Phase 4 shadow literature resolution registry for high-impact canonical actives",
     "purpose": "literature_evidence_resolution",
     "schema_version": "5.0.0",
-    "last_updated": "2026-10-04",
+    "last_updated": "2026-10-05",
     "total_entries": 755,
     "verification_pipeline": "scripts/api_audit/verify_literature_records.py",
-    "verified_studies_count": 221,
+    "verified_studies_count": 222,
     "verified_records_count": 755
   },
   "literature_evidence_records": [
@@ -10328,7 +10328,7 @@
     },
     {
       "canonical_id": "cloves",
-      "material_form": "Syzygium aromaticum bud",
+      "material_form": "Syzygium aromaticum bud powder or unnamed bud extract; specific polyphenolic extract research is not a generic preparation bridge",
       "search_query": "cloves randomized controlled trial standardized extract",
       "search_date": "2026-09-20",
       "databases_searched": [
@@ -10336,15 +10336,36 @@
         "Cochrane Library"
       ],
       "records_screened": 20,
-      "qualifying_human_studies": [],
+      "qualifying_human_studies": [
+        {
+          "pmid": "31064377",
+          "title": "Water-soluble polyphenol-rich clove extract lowers pre- and post-prandial blood glucose levels in healthy and prediabetic volunteers: an open label pilot study.",
+          "study_type": "open_label_pilot",
+          "sample_size": 13,
+          "dose": "250 mg/day of specific water-soluble polyphenol-rich clove extract",
+          "duration": "30 days",
+          "outcome": "Pre/postprandial glucose reductions in an uncontrolled pilot; does not establish unnamed retail extract equivalence or liver efficacy.",
+          "effect_direction": "applicability_unestablished",
+          "verification_provenance": {
+            "pmid_verified": true,
+            "authoritative_live_title": "Water-soluble polyphenol-rich clove extract lowers pre- and post-prandial blood glucose levels in healthy and prediabetic volunteers: an open label pilot study.",
+            "human_subjects_verified": true,
+            "topic_match_verified": true,
+            "retracted": false,
+            "verified_source": "https://www.ebi.ac.uk/europepmc/webservices/rest/search?query=EXT_ID:31064377%20AND%20SRC:MED&format=json&resultType=core",
+            "verified_at": "2026-10-05",
+            "abstract_evidence_quote": "We evaluated the effect of PCE supplementation (250 mg once daily for 30 days)"
+          }
+        }
+      ],
       "effect_direction": "applicability_unestablished",
-      "population_context": "crude unstandardized botanical powder",
+      "population_context": "Available specific-extract pilot studied 13 otherwise healthy volunteers, stratified by preprandial glucose; generic powder/unnamed extracts and liver indications remain unestablished.",
       "studied_dose_exposure": {},
-      "applicability_decision": "Crude whole cloves culinary powder lacks oral clinical efficacy trials.",
-      "applicability_status": "crude_material_lacks_standardization",
+      "applicability_decision": "Human oral research exists for a specific water-soluble polyphenol-rich extract of unopened clove buds (PMID 31064377: 13 volunteers, 250 mg/day, 30 days, open-label glucose pilot). Whole culinary powder and unnamed retail bud extracts do not establish equivalent standardization or the studied glucose indication. Their clinical applicability remains unestablished; the pilot does not justify generic liver efficacy, a positive Evidence award or a Dose benchmark.",
+      "applicability_status": "applicability_unestablished",
       "verification_provenance": {
-        "verified_by": "scripts/api_audit/verify_literature_records.py",
-        "verified_at": "2026-09-21T07:39:42.986936+00:00",
+        "verified_by": "Codex direct live primary-source content review",
+        "verified_at": "2026-10-05",
         "all_pmids_verified": true,
         "retractions_found": false
       },

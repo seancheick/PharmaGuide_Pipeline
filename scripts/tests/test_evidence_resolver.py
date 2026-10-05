@@ -1097,3 +1097,15 @@ def test_declared_chicory_root_fiber_retains_reviewed_inulin_family_not_raw_root
     assert er.resolve_evidence_for_row(row,product).points_eligible is True
     row['raw_source_text']='Chicory root powder';row['name']='Chicory root powder'
     assert er.resolve_evidence_for_row(row,product).points_eligible is False
+
+
+def test_clove_review_recognizes_extract_research_without_generic_credit():
+    result = er.resolve_evidence_for_canonical("cloves", name="Clove Flower Bud Extract")
+    assert result.disposition == EvidenceDisposition.RESEARCH_PRESENT_APPLICABILITY_UNESTABLISHED.value
+    assert result.points_eligible is False
+    import json
+    records = json.loads((SCRIPTS_ROOT / "data/literature_evidence_records.json").read_text())["literature_evidence_records"]
+    record = next(r for r in records if r["canonical_id"] == "cloves")
+    assert "31064377" in record["applicability_decision"]
+    assert "lacks oral clinical efficacy trials" not in record["applicability_decision"]
+    assert "unnamed" in record["applicability_decision"]
