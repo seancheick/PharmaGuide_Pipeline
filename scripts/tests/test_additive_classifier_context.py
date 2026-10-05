@@ -214,3 +214,32 @@ def test_additive_boundaries_preserve_inactive_rollup_and_unknown_carrier(enrich
     assert enricher._compute_excipient_flags(row)[0] is True
     assert enricher._should_skip_from_scoring(row, enricher.databases["ingredient_quality_map"],
                                              enricher.databases["botanical_ingredients"]) is not None
+
+
+def test_unpromoted_excipient_keeps_its_existing_recognition_owner(enricher):
+    row = {"name": "Mannitol", "standardName": "Mannitol", "source_section": "active", "quantity": 1, "unit": "g"}
+    assert enricher._compute_excipient_flags(row)[0] is True
+    assert enricher._should_skip_from_scoring(row, enricher.databases["ingredient_quality_map"],
+                                             enricher.databases["botanical_ingredients"]) == "recognized_non_scorable"
+
+
+@pytest.mark.parametrize("section", ["absent", None, ""])
+def test_active_collection_supplies_missing_legacy_section_without_mutating_label(enricher, section):
+    row = _lecithin_active_500mg()
+    row.pop("raw_source_path")
+    if section != "absent":
+        row["source_section"] = section
+    product = {"id": "legacy-section", "activeIngredients": [row], "inactiveIngredients": []}
+    result = enricher._collect_ingredient_quality_data(product)
+    assert result["ingredients_scorable"], result["ingredients_skipped"]
+    if section == "absent":
+        assert "source_section" not in row
+    else:
+        assert row["source_section"] == section
+
+
+@pytest.mark.parametrize("source,excipient", [("activeIngredients", False), ("inactiveIngredients", True)])
+def test_legacy_explicit_section_names_keep_their_membership(enricher, source, excipient):
+    row = _lecithin_active_500mg()
+    row["source_section"] = source
+    assert enricher._compute_excipient_flags(row)[0] is excipient

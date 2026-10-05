@@ -1545,7 +1545,7 @@
         "product_safety_status": "no_known_catalog_concern",
         "quality_score_v4_100": 99.3,
         "quality_tier": "Exceptional",
-        "v4_confidence": "moderate",
+        "v4_confidence": "high",
         "normalization_references": {
           "formulation": 29.0,
           "dose": 25.0,

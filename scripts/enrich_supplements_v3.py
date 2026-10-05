@@ -4654,8 +4654,12 @@ class SupplementEnricherV3:
                 id(source_ingredient) in structural_parent_total_row_ids
             )
             sole_active_row = len(active_ingredients) == 1
-            if product_activity_text or is_structural_parent_total or sole_active_row:
+            if product_activity_text or is_structural_parent_total or sole_active_row or not ingredient.get("source_section"):
                 ingredient = dict(ingredient)
+            # This collection owns active membership for legacy inputs. Keep
+            # explicit source facts authoritative and do not mutate label rows.
+            if not ingredient.get("source_section"):
+                ingredient["source_section"] = "active"
             if product_activity_text:
                 ingredient.setdefault("_product_activity_text", product_activity_text)
             if is_structural_parent_total:
@@ -6204,7 +6208,7 @@ class SupplementEnricherV3:
             and str(ingredient.get("parentBlend") or "").strip().lower().startswith("total ")
         )
         active_context_override = (
-            source == "active"
+            source in {"active", "activeingredients"}
             and str(ingredient.get("cleaner_row_role") or "").strip().lower() not in (CLEANER_NON_EFFICACY_ROLES | {"excipient"})
             and not is_nutrition_fact_declaration(ingredient)
             and not under_nutrition_rollup
@@ -6530,6 +6534,11 @@ class SupplementEnricherV3:
         # selection. An undisclosed amount never changes active membership.
         is_excipient, excipient_reason = self._compute_excipient_flags(ingredient)
         if is_excipient:
+            # Name-based excipient exclusion does not erase the separate
+            # existing identity/safety recognition result for that substance.
+            if (excipient_reason == "excipient_never_promote"
+                    and self._is_recognized_non_scorable(ing_name, std_name)):
+                return SKIP_REASON_RECOGNIZED_NON_SCORABLE
             return excipient_reason
 
         # =================================================================
