@@ -233,6 +233,35 @@ def test_all_six_pillars_covered_across_corpus() -> None:
     }, f"corpus does not cover all six pillars, saw {sorted(seen)}"
 
 
+@pytest.mark.parametrize("opacity_penalty,hidden_count", [(0.0, 0), (0.0, 2), (-0.1, 2), (-2.0, 2)])
+def test_generic_blend_copy_uses_disclosure_facts_not_penalty_or_presence(
+    opacity_penalty: float, hidden_count: int,
+) -> None:
+    from scoring_v4.quality_score import _pillar_from_dim
+
+    dim = {
+        "score": 10.0, "max": 10.0,
+        "penalties": {"B5_proprietary_blend_opacity": opacity_penalty},
+        "metadata": {
+            "flags": ["PROPRIETARY_BLEND_PRESENT"],
+            "B5_blend_evidence": [{"children_without_amount_count": hidden_count}],
+        },
+    }
+    pillar = _pillar_from_dim("transparency", dim, 15.0, "transparency")
+    assert pillar["score"] == 15.0
+    assert ("without their individual amounts" in pillar["reason"]) is (hidden_count > 0)
+
+
+def test_generic_blend_copy_does_not_invent_disclosure_when_facts_are_missing() -> None:
+    from scoring_v4.quality_score import _pillar_from_dim
+
+    pillar = _pillar_from_dim("transparency", {
+        "score": 10.0, "max": 10.0,
+        "metadata": {"flags": ["PROPRIETARY_BLEND_PRESENT"]},
+    }, 15.0, "transparency")
+    assert pillar["reason"] == "The label includes a proprietary blend."
+
+
 def test_probiotic_aggregate_cfu_copy_does_not_claim_every_amount_is_disclosed() -> None:
     bd = _module_bd(transparency=13, transp_max=15)
     bd["dimensions"]["transparency"]["components"] = {

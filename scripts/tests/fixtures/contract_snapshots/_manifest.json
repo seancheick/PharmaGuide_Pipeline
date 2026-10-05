@@ -207,6 +207,14 @@
   ],
   "changelog": [
     {
+      "date": "2026-10-05",
+      "phase": "Post-pipeline completed Evidence determination",
+      "products_updated": [
+        18141
+      ],
+      "notes": "Fresh Clean/Enrich/Score source f6357167: CVS Omega-3 100 mg remains scored at60.3 with unchanged six pillars, route, quality tier, safety and flags. The only frozen-field change is quality_assessment_status partial\u2192complete. Existing scored_artifact::_quality_assessment_status treats applicability_unestablished as a completed review; ALA50mg at ingredientRows[6].nestedRows[1] now has evaluated_limited_or_negative / literature_reviewed_human_clinical_evidence, while the300mg parent is structural and not an individual Evidence subject. No positive Evidence credit or dose benchmark is granted. Fixture regenerated using freeze_contract_snapshots.py after source/artifact trace. Receipts: /Users/seancheick/pg_quality/post_pipeline_20261005/18141_{clean,enrich,score}.json and snapshot_red.log."
+    },
+    {
       "date": "2026-10-03",
       "phase": "Approved D26/D24/omega calibration and held-state correction",
       "products_updated": [

@@ -9,7 +9,7 @@
   "output_schema_version": "4.3.0",
   "product_name": "Omega-3 100 mg",
   "product_safety_status": "no_known_catalog_concern",
-  "quality_assessment_status": "partial",
+  "quality_assessment_status": "complete",
   "quality_score_status": "scored",
   "quality_score_v4_100": 60.3,
   "quality_tier": "Needs improvement",
