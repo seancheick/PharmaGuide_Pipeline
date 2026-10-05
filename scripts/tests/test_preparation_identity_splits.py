@@ -281,3 +281,10 @@ def test_qualified_vitamin_name_retains_its_full_form_unii(pipeline, name):
     rows = _rows(enriched, name)
     assert rows and {r["canonical_id"] for r in rows} == {"beta_carotene"}
     assert {r["bio_score"] for r in rows} == {5}
+
+
+@pytest.mark.parametrize("name,group,expected", [("Triphala", "Blend (Herb/Botanical)", "triphala_powder"), ("Univestin", "Blend (Herb/Botanical)", "nha_univestin")])
+def test_sole_formula_material_retains_its_evidence_subject(pipeline, name, group, expected):
+    from scoring_input_contract import get_evidence_subject_rows
+    enriched = pipeline(_raw_product(990111, [_raw_row(1, name, group, category="blend", quantity=1000, unit="mg")]))
+    assert expected in {str(r.get("canonical_id")).lower() for r in get_evidence_subject_rows(enriched)}
