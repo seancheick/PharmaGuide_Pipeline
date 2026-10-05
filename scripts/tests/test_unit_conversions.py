@@ -809,3 +809,62 @@ def test_tocotrienol_stereochemistry_does_not_establish_tocopherol_activity(name
     )
     assert result.conversion_rule_id == 'vitamin_e_unknown'
     assert result.has_established_vitamin_e_activity is False
+
+
+@pytest.mark.parametrize('name', [
+    'Nicotinamide Mononucleotide', 'Nicotinamide Riboside',
+    'Nicotinamide Riboside Chloride',
+])
+@pytest.mark.parametrize('amount,unit', [(1, 'Gram(s)'), (1000, 'mg')])
+def test_distinct_nad_precursor_mass_never_becomes_niacin_equivalents(name, amount, unit):
+    # NIH ODS Niacin: NR/NMN supplements are not labeled as niacin sources.
+    result = UnitConverter().convert_nutrient(
+        name, amount, unit, to_unit='mg', ingredient_name=name, measured_name=name,
+    )
+    assert result.success
+    assert result.converted_value == pytest.approx(1000)
+    assert result.converted_unit == 'mg'
+    assert result.conversion_rule_id != 'niacin'
+
+
+@pytest.mark.parametrize('name', ['Niacin', 'Nicotinamide', 'Vitamin B3 (Niacin)'])
+@pytest.mark.parametrize('amount,unit', [(1, 'Gram(s)'), (1000000, 'Microgram(s)')])
+def test_authored_niacin_equivalence_composes_with_mass_scale(name, amount, unit):
+    result = UnitConverter().convert_nutrient(name, amount, unit, ingredient_name=name)
+    assert result.success
+    assert result.converted_value == pytest.approx(1000)
+    assert result.converted_unit == 'mg NE'
+    assert result.conversion_rule_id == 'niacin'
+
+
+def test_rule_alias_cannot_capture_an_unrelated_longer_chemical_name():
+    converter = UnitConverter()
+    result = converter.convert_nutrient('Cobalamin-like unverified compound', 1, 'mg')
+    assert result.conversion_rule_id != 'vitamin_b12'
+
+
+def test_generic_vitamin_family_retains_shared_authored_conversion():
+    result = UnitConverter().convert_nutrient('Vitamin D', 400, 'IU')
+    assert result.success
+    assert result.converted_value == pytest.approx(10)
+    assert result.converted_unit == 'mcg'
+
+
+@pytest.mark.parametrize('name', ['Tin', 'CLA'])
+def test_short_name_cannot_match_letters_inside_another_nutrient(name):
+    result = UnitConverter().convert_nutrient(name, 10, 'mg')
+    assert result.success
+    assert result.converted_value == pytest.approx(10)
+    assert result.converted_unit == 'mg'
+    assert result.conversion_rule_id == 'identity_mass_passthrough'
+
+
+@pytest.mark.parametrize('amount,unit', [(1, 'Gram(s)'), (1000000, 'Microgram(s)')])
+def test_authored_choline_active_moiety_composes_with_mass_scale(amount, unit):
+    result = UnitConverter().convert_nutrient(
+        'Choline', amount, unit, ingredient_name='Choline Bitartrate',
+    )
+    assert result.success
+    assert result.converted_value == pytest.approx(1000 * 104.17 / 253.25)
+    assert result.converted_unit == 'mg'
+    assert result.conversion_rule_id == 'choline_bitartrate_to_choline'

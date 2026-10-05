@@ -425,6 +425,7 @@ class UnitConverter:
 
         from_key = canonicalize_mass_unit(from_unit_lower).replace(' ', '_')
         target_key = canonicalize_mass_unit(target_unit).replace(' ', '_')
+        mass_scale_applied = False
         if factor is None and from_key == target_key:
             factor = 1.0
         if (
@@ -441,6 +442,21 @@ class UnitConverter:
             and target_key == 'mcg_rae'
         ):
             factor = conversions.get('mcg_carotenoid_to_mcg_rae')
+        if factor is None and from_key in {'g', 'mg', 'mcg'}:
+            # Compose physical mass scaling with an explicitly authored
+            # nutrient conversion (e.g. g -> mg -> mg NE). Never invent a
+            # nutrient-equivalence factor or use IU as a mass bridge.
+            for bridge_unit in ('g', 'mg', 'mcg'):
+                authored_factor = conversions.get(
+                    self._get_conversion_key(bridge_unit, target_unit)
+                )
+                if authored_factor is None:
+                    continue
+                mass_result = self.convert_mass(amount, from_unit, bridge_unit)
+                if mass_result.success:
+                    factor = mass_result.conversion_factor * authored_factor
+                    mass_scale_applied = True
+                    break
         if factor is None:
             # Try mass conversion as fallback
             mass_result = self.convert_mass(amount, from_unit, target_unit)
@@ -511,7 +527,11 @@ class UnitConverter:
                 else "high"
             ),
             warnings=warnings,
-            notes=[rule_data.get('notes', '')] if rule_data.get('notes') else []
+            notes=(
+                ([rule_data['notes']] if rule_data.get('notes') else [])
+                + (['Scaled source mass before the authored nutrient conversion.']
+                   if mass_scale_applied else [])
+            )
         )
 
     def _ul_exposure_amount(
@@ -626,6 +646,22 @@ class UnitConverter:
                 return 'vitamin_d3', self.vitamin_conversions.get('vitamin_d3', {})
 
         # For non-form-dependent vitamins (D, K, B-vitamins, etc.), use direct match
+        nutrient_heading = nutrient_lower.split('(', 1)[0].strip()
+        # A parent family label may use the shared conversion only when the
+        # authored numbered forms all agree. This retains Vitamin D's common
+        # D2/D3 IU factor without allowing arbitrary chemical-name substrings.
+        family_rules = [
+            data for data in self.vitamin_conversions.values()
+            if nutrient_heading and re.fullmatch(
+                re.escape(nutrient_heading) + r'\d+',
+                data.get('standard_name', '').lower().split('(', 1)[0].strip(),
+            )
+        ]
+        shared_family_conversion = len(family_rules) > 1 and len({
+            (data.get('canonical_unit'), data.get('handling'),
+             json.dumps(data.get('conversions'), sort_keys=True))
+            for data in family_rules
+        }) == 1
         for rule_id, rule_data in self.vitamin_conversions.items():
             if rule_id in {
                 'choline_bitartrate_to_choline',
@@ -635,21 +671,24 @@ class UnitConverter:
                 # Active-moiety conversions require the exact compound checks
                 # above. Their parent nutrient names must never select them.
                 continue
-            # Check standard name
+            # Match complete nutrient headings, including a parenthetical
+            # label form. A chemical name containing an alias is not that
+            # substance: nicotinamide mononucleotide is not nicotinamide.
             std_name = rule_data.get('standard_name', '').lower()
-            if nutrient_lower in std_name or std_name in nutrient_lower:
+            standard_heading = std_name.split('(', 1)[0].strip()
+            if nutrient_lower == std_name or (
+                nutrient_heading and nutrient_heading == standard_heading
+            ) or (
+                shared_family_conversion and re.fullmatch(
+                    re.escape(nutrient_heading) + r'\d+', standard_heading,
+                )
+            ):
                 return rule_id, rule_data
 
-            # Check aliases — exact match first, then substring for
-            # parenthetical forms like "Vitamin B3 (Niacin)" matching "vitamin b3"
             aliases = rule_data.get('aliases', [])
             for alias in aliases:
                 alias_lower = alias.lower()
-                if alias_lower == nutrient_lower:
-                    return rule_id, rule_data
-                # Substring match: alias appears as a word boundary in nutrient
-                # e.g. "vitamin b3" in "vitamin b3 (niacin)"
-                if len(alias_lower) >= 2 and alias_lower in nutrient_lower:
+                if alias_lower in {nutrient_lower, nutrient_heading}:
                     return rule_id, rule_data
 
         return None, None
