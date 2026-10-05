@@ -9,6 +9,8 @@ from collections.abc import Callable, Iterable, Mapping
 from dataclasses import dataclass
 from typing import Any, Literal
 
+from normalization import strip_label_identity_qualifiers
+
 
 IdentityDisposition = Literal[
     "clean",
@@ -97,6 +99,7 @@ class CanonicalIdentityRegistry:
     verified_preferred_index: Mapping[str, tuple[str, str]]
     candidates_index: Mapping[str, tuple[str, ...]]
     canonical_redirects: Mapping[tuple[str, str], tuple[str, str]]
+    standard_names: Mapping[tuple[str, str], str]
 
     @staticmethod
     def _key(value: Any) -> str:
@@ -111,6 +114,13 @@ class CanonicalIdentityRegistry:
 
     def resolve_verified_preferred(self, value: Any) -> tuple[str, str] | None:
         return self.verified_preferred_index.get(self._key(value))
+
+    def literal_identity_matches(self, value: Any, canonical_id: str) -> bool:
+        """Curated literal ownership, without preparation-stripping derivatives."""
+        literal = self.resolve_preferred(value)
+        if literal is None:
+            literal = self.resolve_preferred(strip_label_identity_qualifiers(str(value or "")))
+        return literal is not None and literal[0] == canonical_id
 
     def canonicalize(
         self,
@@ -134,6 +144,7 @@ def build_canonical_identity_registry(
     literal_ranked: dict[str, list[tuple[tuple[int, int], str, str]]] = {}
     normalized_ranked: dict[str, list[tuple[tuple[int, int], str, str]]] = {}
     candidates: dict[str, set[str]] = {}
+    standard_names: dict[tuple[str, str], str] = {}
     source_priority = {
         "ingredient_quality_map": 0,
         "standardized_botanicals": 1,
@@ -186,7 +197,10 @@ def build_canonical_identity_registry(
         canonical = str(canonical_id or "").strip()
         if not literal_key or not key or not canonical:
             return
-        canonical, source_db = canonical_owner(canonical, source_db)
+        owner = canonical_owner(canonical, source_db)
+        if target_priority == 0 and owner == (canonical, source_db):
+            standard_names[(source_db, canonical)] = str(value)
+        canonical, source_db = owner
         rank = (source_priority[source_db], target_priority)
         candidates.setdefault(key, set()).add(canonical)
         literal_ranked.setdefault(literal_key, []).append(
@@ -285,6 +299,7 @@ def build_canonical_identity_registry(
             key: tuple(sorted(values)) for key, values in candidates.items()
         },
         canonical_redirects=dict(canonical_redirects),
+        standard_names=standard_names,
     )
 
 
@@ -860,6 +875,9 @@ def resolve_identity(
     literal_specific_over_structured_parent = bool(
         canonical_before
         and raw_canonical == canonical_before
+        and canonical_registry is not None
+        and raw_evidence
+        and canonical_registry.literal_identity_matches(raw_evidence[0].value, canonical_before)
         and structured_canonical
         and structured_canonical != canonical_before
         and canonical_parent_of

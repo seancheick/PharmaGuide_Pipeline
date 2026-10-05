@@ -88,7 +88,7 @@ def test_a_lent_blend_total_is_not_a_member_dose(enriched, pid, canonical):
     assert positive_clinical_benchmark(enriched[pid], row) is None
 
 
-def test_golden_milk_piperine_uses_the_absorption_aid_owner(enriched):
+def test_golden_milk_whole_pepper_uses_the_absorption_aid_owner(enriched):
     """An undosed active-panel aid stays visible, while the established
     turmeric pairing resolves its Evidence role without inventing an efficacy
     trial for piperine."""
@@ -97,9 +97,12 @@ def test_golden_milk_piperine_uses_the_absorption_aid_owner(enriched):
     product = enriched["243271"]
     assert product["absorption_enhancer_paired"] is True
     resolution = resolve_product_evidence(product, owner_scoped=True)
-    piperine = next(r for r in resolution.resolutions if r.canonical_id == "piperine")
-    assert piperine.disposition == "not_efficacy_relevant"
-    assert piperine.matched_owners == ["absorption_enhancer_role"]
+    # The retained raw row declares undosed organic Black Pepper, no extract
+    # or isolated marker. Its existing absorption-aid role stays distinct.
+    pepper = next(r for r in resolution.resolutions if r.canonical_id == "black_pepper")
+    assert not any(r.canonical_id == "piperine" for r in resolution.resolutions)
+    assert pepper.disposition == "not_efficacy_relevant"
+    assert pepper.matched_owners == ["absorption_enhancer_role"]
 
 
 @pytest.fixture(scope="module")
