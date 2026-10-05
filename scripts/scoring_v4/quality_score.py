@@ -30,7 +30,7 @@ from scoring_v4.penalty_registry import (
     FORMULA_QUALITY_MIRROR,
     mirrored_penalty_magnitude,
 )
-from scoring_v4.pillar_explanations import attach_pillar_explanations
+from scoring_v4.pillar_explanations import attach_pillar_explanations, _proprietary_blend_facts
 
 _CONFIG_PATH = Path(__file__).resolve().parent / "config" / "quality_score.json"
 _CONFIG_CACHE: Optional[Dict[str, Any]] = None
@@ -379,8 +379,15 @@ def _pillar_from_dim(name: str, dim: Dict[str, Any], weight: float, src: str) ->
     if name == "transparency":
         metadata = dim.get("metadata") or {}
         count = _num(metadata.get("panel_active_count"))
-        # Same ledger as the score: a blend-opacity deduction means amounts are hidden.
-        blends_hide = _num((dim.get("penalties") or {}).get("B5_proprietary_blend_opacity")) < 0
+        # Read the same source facts shown below the headline. Opacity penalties
+        # may be waived or consolidated without disclosing child amounts.
+        blend_facts = _proprietary_blend_facts(dim)
+        hidden_fact = next((fact for fact in blend_facts
+                            if fact["id"] == "undisclosed_ingredient_amount_count"), None)
+        blends_hide = (
+            _num(hidden_fact["value_display"]) > 0 if hidden_fact is not None
+            else _num((dim.get("penalties") or {}).get("B5_proprietary_blend_opacity")) < 0
+        )
         if count > 0:
             panel_full = (
                 _num(metadata.get("panel_named_count"), -1) == count
@@ -397,15 +404,19 @@ def _pillar_from_dim(name: str, dim: Dict[str, Any], weight: float, src: str) ->
             else:
                 reason = "Not all active ingredient identities or individual amounts are disclosed."
         elif (
-            "PROPRIETARY_BLEND_PRESENT" in (metadata.get("flags") or [])
+            blends_hide
             and _band(val, weight) == "high"
         ):
-            # A high band would say every amount is disclosed; a blend whose
-            # members carry no amounts makes that false.
             reason = (
                 "Most amounts are disclosed, but ingredients in a proprietary "
                 "blend are listed without their individual amounts."
             )
+        elif (
+            hidden_fact is None
+            and "PROPRIETARY_BLEND_PRESENT" in (metadata.get("flags") or [])
+            and _band(val, weight) == "high"
+        ):
+            reason = "The label includes a proprietary blend."
     return {
         "score": val,
         "max": weight,
