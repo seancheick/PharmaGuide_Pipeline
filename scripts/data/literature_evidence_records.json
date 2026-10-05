@@ -4,10 +4,10 @@
     "purpose": "literature_evidence_resolution",
     "schema_version": "5.0.0",
     "last_updated": "2026-10-05",
-    "total_entries": 755,
+    "total_entries": 756,
     "verification_pipeline": "scripts/api_audit/verify_literature_records.py",
-    "verified_studies_count": 222,
-    "verified_records_count": 755
+    "verified_studies_count": 224,
+    "verified_records_count": 756
   },
   "literature_evidence_records": [
     {
@@ -23503,6 +23503,90 @@
         "verified_at": "2026-10-04",
         "all_pmids_verified": true,
         "retractions_found": false
+      }
+    },
+    {
+      "canonical_id": "matcha_tea_powder",
+      "material_form": "Whole Camellia sinensis matcha leaf powder, not concentrated extract or isolated constituents",
+      "search_query": "matcha whole powder human cognition clinical trial; bounded direct-study review",
+      "search_date": "2026-10-05",
+      "databases_searched": [
+        "PubMed via Europe PMC",
+        "PLOS primary full text"
+      ],
+      "records_screened": 2,
+      "qualifying_human_studies": [
+        {
+          "pmid": "28784536",
+          "title": "An intervention study on the effect of matcha tea, in drink and snack bar formats, on mood and cognitive performance.",
+          "study_type": "randomized_placebo_controlled_crossover",
+          "sample_size": 23,
+          "dose": "4 g whole-matcha powder in drink or snack bar",
+          "duration": "acute; baseline and 60 minutes",
+          "outcome": "Selected attention and psychomotor tasks improved; most other cognitive tasks and mood were null. Food matrix influenced comparisons. Endpoint hierarchy and full intervention specification were not established from the available abstract.",
+          "effect_direction": "mixed",
+          "verification_provenance": {
+            "pmid_verified": true,
+            "authoritative_live_title": "An intervention study on the effect of matcha tea, in drink and snack bar formats, on mood and cognitive performance.",
+            "human_subjects_verified": true,
+            "topic_match_verified": true,
+            "retracted": false,
+            "verified_source": "https://pubmed.ncbi.nlm.nih.gov/28784536/",
+            "verified_at": "2026-10-05",
+            "abstract_evidence_quote": "Using a randomized, placebo-controlled, single-blind study, 23 consumers participated in four test sessions."
+          }
+        },
+        {
+          "pmid": "39213264",
+          "title": "Effect of matcha green tea on cognitive functions and sleep quality in older adults with cognitive decline: A randomized controlled study over 12 months.",
+          "study_type": "randomized_double_blind_placebo_controlled",
+          "sample_size": 99,
+          "dose": "2 g/day Hojin no shiro whole-matcha powder in nine capsules",
+          "duration": "12 months",
+          "outcome": "Primary MoCA-J and ADCS-MCI-ADL outcomes were null; secondary social-acuity signal, sleep trend nonsignificant. Multiple authors employed by MCBI or ITO EN; not independent replication.",
+          "effect_direction": "mixed",
+          "verification_provenance": {
+            "pmid_verified": true,
+            "authoritative_live_title": "Effect of matcha green tea on cognitive functions and sleep quality in older adults with cognitive decline: A randomized controlled study over 12 months.",
+            "human_subjects_verified": true,
+            "topic_match_verified": true,
+            "retracted": false,
+            "verified_source": "https://pubmed.ncbi.nlm.nih.gov/39213264/",
+            "verified_at": "2026-10-05",
+            "abstract_evidence_quote": "The primary outcomes, that is, Montreal Cognitive Assessment"
+          }
+        }
+      ],
+      "effect_direction": "applicability_unestablished",
+      "population_context": "Acute testing in healthy participants; older adults with subjective cognitive decline or mild cognitive impairment in the 12-month study.",
+      "studied_dose_exposure": {},
+      "applicability_decision": "Direct whole-matcha human research exists (PMIDs 28784536, 39213264): selected acute findings were mixed and the longer trial had null primary cognitive outcomes. Unspecified retail composition, formula, matrix and declared purpose do not establish correspondence. No general energy, cognition, dementia-prevention or effective-dose claim follows; concentrated green-tea extract and isolated constituents must not inherit this review. This is a bounded two-study review, not an exhaustive absence or universal-null determination.",
+      "verification_result": "authoritative_pubmed_verified",
+      "verification_provenance": {
+        "verified_by": "manual_primary_source_content_review",
+        "verified_at": "2026-10-05",
+        "all_pmids_verified": true,
+        "retractions_found": false
+      },
+      "applicability_status": "applicability_unestablished",
+      "applicability": {
+        "scope": "ingredient",
+        "required_form_terms": [
+          "matcha"
+        ],
+        "excluded_form_terms": [
+          "extract"
+        ],
+        "require_source_label_form": true,
+        "supported_outcomes": [
+          "cognitive"
+        ],
+        "studied_population": "Healthy acute-testing participants and older adults with SCD/MCI; matrix and preparation dependent.",
+        "source_pmids": [
+          "28784536",
+          "39213264"
+        ],
+        "reviewed_at": "2026-10-05"
       }
     }
   ]

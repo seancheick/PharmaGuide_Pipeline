@@ -710,3 +710,77 @@ def clear_caches():
     normalize_for_skip_matching.cache_clear()
     preprocess_text.cache_clear()
     strip_extraction_noise.cache_clear()
+
+
+# D2.2: common qualifier tokens that describe PREPARATION or processing,
+# not ingredient identity. Stripping them from the tail of a name
+# recovers the canonical form — "Phenylalanine, Micronized" resolves
+# to the same canonical as "Phenylalanine", "Quercetin, Organic" to
+# "Quercetin", etc.
+_QUALIFIER_SUFFIX_RE = re.compile(
+    r",\s*("
+    r"micronized|organic|natural|freeze[- ]dried|raw|fermented|vegan|"
+    r"non[- ]gmo|usp|pharmaceutical[- ]grade|food[- ]grade|"
+    r"certified[- ]organic|whole[- ]leaf|kosher|halal|powder"
+    r")\s*$",
+    re.IGNORECASE,
+)
+
+# D2.7.3: leading percent prefix stripped on fallback. "88% organic whole
+# leaf Aloe vera" → "organic whole leaf Aloe vera" → (then leading-adjective
+# strip) → "Aloe vera". Stripped version is tried as a fallback lookup so
+# real standardization-marker rows (already excluded by
+# _is_nutrition_fact) aren't affected.
+_LEADING_PERCENT_PREFIX_RE = re.compile(
+    r"^\s*\d+(?:\.\d+)?\s*%\s*",
+)
+
+# D2.7.3: leading adjective prefixes that describe SOURCE QUALITY or
+# PROCESSING but not ingredient identity. Stripped iteratively after
+# the percent prefix is removed.
+_LEADING_ADJECTIVE_RE = re.compile(
+    r"^\s*(organic|certified\s+organic|natural|raw|pure|whole[- ]leaf|"
+    r"whole[- ]plant|whole[- ]herb|non[- ]gmo|fermented|freeze[- ]dried|"
+    r"standardized|concentrated|micronized|cold[- ]pressed|unrefined)\s+",
+    re.IGNORECASE,
+)
+
+# D2.7.3: common trailing descriptor suffix — DSLD sometimes emits
+# "Curcumin Phytosome:" or "Fenugreek Extract :" with trailing colon.
+_TRAILING_COLON_RE = re.compile(r"\s*[:;]\s*$")
+
+def strip_label_identity_qualifiers(name: str) -> str:
+    """
+    Remove trailing preparation/processing qualifier tokens from an
+    ingredient name (D2.2 + D2.7.3 extensions).
+
+    Strips in order:
+      1. Trailing colon/semicolon (DSLD parsing artifact)
+      2. `, Micronized` / `, Organic` / `, Powder` / etc.
+      3. Leading `N%` prefix (e.g., "88% organic aloe vera")
+
+    Applied only on the FALLBACK lookup path — does not override an
+    exact raw-name or standard-name hit. Regex anchored to prevent
+    mid-name corruption.
+    """
+    if not name:
+        return name
+    result = _TRAILING_COLON_RE.sub("", name).strip()
+    # Apply comma-qualifier strip repeatedly until stable (handles
+    # ", Powder, Organic" chains).
+    for _ in range(3):
+        stripped = _QUALIFIER_SUFFIX_RE.sub("", result).strip()
+        if stripped == result:
+            break
+        result = stripped
+    # Strip leading percent prefix (D2.7.3: "88% organic aloe vera" →
+    # "organic aloe vera").
+    result = _LEADING_PERCENT_PREFIX_RE.sub("", result).strip()
+    # Strip leading adjective prefixes iteratively (D2.7.3: "organic
+    # whole leaf aloe vera" → "whole leaf aloe vera" → "aloe vera").
+    for _ in range(4):
+        stripped = _LEADING_ADJECTIVE_RE.sub("", result).strip()
+        if stripped == result:
+            break
+        result = stripped
+    return result

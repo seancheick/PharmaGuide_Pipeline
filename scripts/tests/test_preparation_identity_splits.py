@@ -288,3 +288,159 @@ def test_sole_formula_material_retains_its_evidence_subject(pipeline, name, grou
     from scoring_input_contract import get_evidence_subject_rows
     enriched = pipeline(_raw_product(990111, [_raw_row(1, name, group, category="blend", quantity=1000, unit="mg")]))
     assert expected in {str(r.get("canonical_id")).lower() for r in get_evidence_subject_rows(enriched)}
+
+@pytest.mark.parametrize("name", [
+    "Essence of pure black pepper (fruit) oil",
+    "Essence of pure black pepper oil extract",
+    "Black Pepper Oil",
+    "Organic black pepper essential oil",
+])
+def test_oil_preparation_cannot_inherit_isolated_marker_identity(pipeline, name):
+    from scoring_v4.scored_artifact import build_scored_artifact
+    from scoring_input_contract import get_evidence_subject_rows
+    source = _raw_product(990113, [_raw_row(1, name, "Black Pepper", quantity=20, unit="mg")])
+    enriched = pipeline(source)
+    active = next(r for r in enriched["activeIngredients"] if r["name"] == name)
+    assert active["canonical_id"] is None
+    assert active["standardName"] == name
+    assert active["quantity"] == 20
+    assert not any(r.get("canonical_id") == "piperine" for r in get_evidence_subject_rows(enriched))
+    assert not any("PIPERINE" in rule for rule, _ in _hits(enriched, name))
+    build_scored_artifact(enriched)
+
+@pytest.mark.parametrize("name", ["Black Pepper", "organic black pepper"])
+def test_whole_botanical_cannot_inherit_isolated_marker_identity(pipeline, name):
+    enriched = pipeline(_raw_product(990114, [_raw_row(1, name, "Black Pepper", quantity=20, unit="mg")]))
+    active = next(r for r in enriched["activeIngredients"] if r["name"] == name)
+    assert active["canonical_id"] == "black_pepper"
+    assert active["standardName"] == "Black Pepper"
+    assert active["quantity"] == 20
+
+@pytest.mark.parametrize("name", ["Piperine", "BioPerine", "Black Pepper Extract"])
+def test_declared_marker_preparation_retains_its_identity(pipeline, name):
+    enriched = pipeline(_raw_product(990115, [_raw_row(1, name, "Black Pepper", quantity=20, unit="mg")]))
+    active = next(r for r in enriched["activeIngredients"] if r["name"] == name)
+    assert active["canonical_id"] == "piperine"
+    assert active["quantity"] == 20
+
+@pytest.mark.parametrize("name", ["Olive Oil", "Pure Olive Oil", "Organic Olive Oil", "Virgin Olive Oil", "Cold-Pressed Olive Oil"])
+def test_generic_oil_does_not_acquire_an_unprinted_quality_grade(pipeline, name):
+    enriched = pipeline(_raw_product(990116, [_raw_row(1, name, "Olive Oil", quantity=100, unit="mg")]))
+    active = next(r for r in enriched["activeIngredients"] if r["name"] == name)
+    assert active["canonical_id"] != "extra_virgin_olive_oil"
+    assert active["standardName"] == "Olive Oil"
+    assert active["quantity"] == 100
+
+@pytest.mark.parametrize("name", ["Extra Virgin Olive Oil", "EVOO", "Extra Virgin Olive Fruit Oil", "organic, extra virgin Olive Oil", "organic cold pressed extra virgin olive oil", "Olive oil-extra virgin"])
+def test_explicit_oil_grade_keeps_its_existing_owner(pipeline, name):
+    enriched = pipeline(_raw_product(990117, [_raw_row(1, name, "Olive Oil", quantity=100, unit="mg")]))
+    active = next(r for r in enriched["activeIngredients"] if r["name"] == name)
+    assert active["canonical_id"] == "extra_virgin_olive_oil"
+    assert active["quantity"] == 100
+
+@pytest.mark.parametrize("name,group", [
+    ("D-Beta Tocopherol", "Vitamin E (beta tocopherol)"),
+    ("D-Delta Tocopherol", "Vitamin E (delta tocopherol)"),
+    ("D-Gamma Tocopherol", "Vitamin E (gamma tocopherol)"),
+])
+def test_active_nutrient_source_form_is_not_a_preservative_or_alpha_activity(pipeline, name, group):
+    source = _raw_product(990118, [_raw_row(1, name, group, category="vitamin", quantity=50, unit="mg")])
+    enriched = pipeline(source)
+    active = next(r for r in enriched["activeIngredients"] if r["name"] == name)
+    assert active["canonical_id"] == "vitamin_e"
+    assert active["name"] == name
+    assert active["quantity"] == 50
+    assessments = enriched['rda_ul_data']['adequacy_results']
+    assert not any(a.get('scoring_eligible') is True for a in assessments)
+
+@pytest.mark.parametrize('declaration', ['name', 'unii'])
+def test_authored_preparation_exclusion_covers_all_identity_lookup_routes(pipeline, declaration):
+    row = _raw_row(1, 'Black Pepper Fruit Oil', 'Piperine', quantity=20, unit='mg')
+    if declaration == 'unii':
+        row['uniiCode'] = 'U71XL721QK'
+    enriched = pipeline(_raw_product(990119, [row]))
+    assert all(r.get('canonical_id') != 'piperine' for r in enriched['activeIngredients'])
+
+@pytest.mark.parametrize('category,group', [
+    ('botanical', 'Vitamin E (beta tocopherol)'),
+    ('vitamin', 'Calcium (beta tocopherol)'),
+    ('vitamin', 'Vitamin E (unidentified complex)'),
+])
+def test_parent_local_source_form_does_not_accept_unrelated_taxonomy(category, group):
+    from enhanced_normalizer import EnhancedDSLDNormalizer
+    row = {'category': category, 'name': 'D-Beta Tocopherol', 'ingredientGroup': group}
+    assert EnhancedDSLDNormalizer()._printed_nutrient_identity(row) is None
+
+@pytest.mark.parametrize('name', ['D-Beta Tocopherol', 'D-Delta Tocopherol'])
+def test_plain_nutrient_heading_uses_parent_local_source_alias(pipeline, name):
+    enriched = pipeline(_raw_product(990120, [_raw_row(1, name, 'Vitamin E', category='vitamin', quantity=20, unit='mg')]))
+    active = next(r for r in enriched['activeIngredients'] if r['name'] == name)
+    assert active['canonical_id'] == 'vitamin_e'
+    assert not any(a.get('scoring_eligible') is True for a in enriched['rda_ul_data']['adequacy_results'])
+
+@pytest.mark.parametrize('name', ['Extra Virgin Olive Oil', 'organic cold pressed extra virgin olive oil', 'EVOO'])
+def test_inactive_declared_grade_survives_generic_generated_alias(pipeline, name):
+    raw = _raw_product(990121, [_raw_row(1, 'Vitamin D3', 'Vitamin D', category='vitamin', quantity=25, unit='mcg')])
+    raw['otheringredients'] = {'text': name, 'ingredients': [{'name': name, 'ingredientGroup': 'Olive Oil', 'category': 'non-nutrient/non-botanical'}]}
+    enriched = pipeline(raw)
+    assert {r['canonical_id'] for r in enriched['inactiveIngredients'] if r.get('name') == name} == {'extra_virgin_olive_oil'}
+
+@pytest.mark.parametrize('name', ['Black Pepper Fruit', 'Piper nigrum fruit powder'])
+def test_whole_plant_part_does_not_inherit_generated_extract_alias(pipeline, name):
+    enriched = pipeline(_raw_product(990122, [_raw_row(1, name, 'Black Pepper', quantity=20, unit='mg')]))
+    active = next(r for r in enriched['activeIngredients'] if r['name'] == name)
+    assert active['canonical_id'] == 'black_pepper'
+    assert active['standardName'] == 'Black Pepper'
+
+
+def test_declared_marker_with_carrier_form_keeps_marker_identity(pipeline):
+    row = _raw_row(1, 'Piperine', 'Piperine', quantity=20, unit='mg', forms=['Olive Oil'])
+    enriched = pipeline(_raw_product(990123, [row]))
+    assert next(r for r in enriched['activeIngredients'] if r['name'] == 'Piperine')['canonical_id'] == 'piperine'
+
+
+def test_declared_standardized_preparation_survives_generic_plant_group(pipeline):
+    name = 'Bioperine Black Pepper (Piper nigrum) extract'
+    row = _raw_row(1, name, 'Black Pepper', quantity=5.3, unit='mg')
+    row['forms'] = [{'name': 'Piperine', 'category': 'non-nutrient/non-botanical', 'ingredientGroup': 'Piperine', 'percent': 95, 'prefix': 'standardized to contain'}]
+    enriched = pipeline(_raw_product(990124, [row]))
+    assert next(r for r in enriched['activeIngredients'] if r['name'] == name)['canonical_id'] == 'piperine'
+
+
+@pytest.mark.parametrize('name,group', [('Black Pepper Fruit', ''), ('Piper nigrum fruit powder', ''), ('Black Pepper Fruit', 'Piperine')])
+def test_unowned_whole_plant_does_not_borrow_constituent_from_generated_alias(pipeline, name, group):
+    enriched = pipeline(_raw_product(990125, [_raw_row(1, name, group, quantity=20, unit='mg')]))
+    assert next(r for r in enriched['activeIngredients'] if r['name'] == name)['canonical_id'] != 'piperine'
+
+
+@pytest.mark.parametrize('form', ['BioPerine', 'Piperine'])
+def test_constituent_descriptor_does_not_establish_whole_plant_marker_mass(pipeline, form):
+    row = _raw_row(1, 'Black Pepper', 'Black Pepper', quantity=20, unit='mg', forms=[form])
+    enriched = pipeline(_raw_product(990127, [row]))
+    assert next(r for r in enriched['activeIngredients'] if r['name'] == 'Black Pepper')['canonical_id'] == 'black_pepper'
+
+@pytest.mark.parametrize('name', ['Grapefruit Extract', 'Grapefruit (Citrus x paradisi) extract', 'Grapefruit flavonoid'])
+def test_broad_source_extract_does_not_claim_isolated_flavanone(pipeline, name):
+    enriched = pipeline(_raw_product(990128, [_raw_row(1, name, 'Grapefruit', quantity=85, unit='mg')]))
+    active = next(r for r in enriched['activeIngredients'] if r['name'] == name)
+    assert active['canonical_id'] not in {'naringenin', 'grape_seed_extract', 'grapefruit_seed'}
+    assert active['quantity'] == 85
+    from scoring_input_contract import get_scoring_ingredients
+    assert not any(r.get('canonical_id') == 'naringenin' for r in get_scoring_ingredients(enriched, strict=True).rows)
+
+
+def test_declared_isolated_flavanone_retains_its_chemical_owner(pipeline):
+    enriched = pipeline(_raw_product(990129, [_raw_row(1, 'Naringenin', 'Naringenin', quantity=85, unit='mg')]))
+    assert next(r for r in enriched['activeIngredients'] if r['name'] == 'Naringenin')['canonical_id'] == 'naringenin'
+
+
+def test_nested_family_bounds_do_not_restore_nonalpha_adequacy(pipeline):
+    raw = json.loads((Path(__file__).parent / 'fixtures' / 'tocopherol_family_2528_raw.json').read_text())
+    enriched = pipeline(raw)
+    assessments = enriched['rda_ul_data']['adequacy_results']
+    for chemical in ['d-beta-tocopherol', 'd-gamma-tocopherol', 'd-delta-tocopherol', 'd-alpha-tocotrienol', 'd-beta-tocotrienol', 'd-gamma-tocotrienol', 'd-delta-tocotrienol']:
+        rows = [r for r in assessments if chemical in r.get('source_label_key', '')]
+        assert rows, chemical
+        assert all(r['scoring_eligible'] is False and r['pct_rda'] is None for r in rows)
+    alpha = [r for r in assessments if 'd-alpha-tocopherol:' in r.get('source_label_key', '')]
+    assert alpha and any(r['scoring_eligible'] is True for r in alpha)

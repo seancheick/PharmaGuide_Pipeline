@@ -19029,6 +19029,21 @@ class SupplementEnricherV3:
         tgt = self._normalize_threshold_unit(target_unit)
         if not src or not tgt:
             return None, "missing_unit", None
+        # Activity applicability precedes physical mass identity/scale shortcuts.
+        # The authored Vitamin E thresholds compare alpha-tocopherol, not an
+        # arbitrary beta/gamma/delta/tocotrienol mass under the family identity.
+        if self.unit_converter:
+            activity = self.unit_converter.convert_nutrient(
+                nutrient=standard_name or ingredient_name,
+                amount=amount,
+                from_unit=from_unit,
+                ingredient_name=ingredient_name,
+                measured_name=ingredient_name,
+            )
+            if ((activity.conversion_rule_id or "").startswith("vitamin_e_")
+                    and not activity.has_established_vitamin_e_activity):
+                return None, "form_unknown", activity.conversion_rule_id
+
         if src == tgt:
             return amount, None, "identity"
 
@@ -22733,13 +22748,16 @@ class SupplementEnricherV3:
                         })
                     if (
                         _canonical_for_ul in {"vitamin e", "vitamin_e"}
-                        and ul_exposure.get("ul_gate_ineligible_reason")
-                        == "compound_mass_not_elemental"
+                        and (
+                            ul_exposure.get("ul_gate_ineligible_reason")
+                            == "compound_mass_not_elemental"
+                            or not conversion.has_established_vitamin_e_activity
+                        )
                     ):
-                        # A standalone ester mass is not a declared FDA
-                        # nutrient activity amount. Without a verified moiety
-                        # conversion it cannot establish RDA adequacy, even
-                        # when its conservative UL bound is above the limit.
+                        # Physical compound/family mass and conservative UL
+                        # screening never establish nutritional activity. Use
+                        # the converter's single activity determination even
+                        # when a multi-row or aggregate path retained adequacy.
                         adequacy_dict.update({
                             "pct_rda": None,
                             "adequacy_band": "unknown",
@@ -23168,10 +23186,12 @@ class SupplementEnricherV3:
                         amount_mg,
                         str(rda_row.get("raw_source_path") or "").strip(),
                     ))
-                unknown_vitamin_e_refs = {
+                unresolved_vitamin_e_refs = {
                     row.get("source_row_ref")
                     for row in dose_assessments
-                    if row.get("reason_code") == "unknown_vitamin_form"
+                    if row.get("reason_code") in {
+                        "unknown_vitamin_form", "compound_mass_not_elemental"
+                    }
                     and (
                         "vitamin e" in self._normalize_text(
                             row.get("ingredient") or ""
@@ -23235,7 +23255,7 @@ class SupplementEnricherV3:
                     + sum(_vitamin_e_tree_bound(root) for root in family_roots)
                 )
                 if (
-                    unknown_vitamin_e_refs
+                    unresolved_vitamin_e_refs
                     and not vitamin_e_family_invalid
                     and vitamin_e_family_rows
                     and vitamin_e_family_upper_bound_mg
@@ -23245,7 +23265,7 @@ class SupplementEnricherV3:
                         "maximum_possible_aggregate_alpha_tocopherol_exposure"
                     )
                     for assessment in dose_assessments:
-                        if assessment.get("source_row_ref") not in unknown_vitamin_e_refs:
+                        if assessment.get("source_row_ref") not in unresolved_vitamin_e_refs:
                             continue
                         assessment.update({
                             "reason_code": "worst_case_vitamin_e_mass_within_ul",
@@ -23255,7 +23275,7 @@ class SupplementEnricherV3:
                             "readiness": "complete",
                         })
                     for adequacy_row in adequacy_results:
-                        if adequacy_row.get("source_label_key") not in unknown_vitamin_e_refs:
+                        if adequacy_row.get("source_label_key") not in unresolved_vitamin_e_refs:
                             continue
                         activity_fields = {
                             key: adequacy_row.get(key)
@@ -23287,7 +23307,7 @@ class SupplementEnricherV3:
                         })
                         adequacy_row.update(activity_fields)
                     for rda_row, _, _ in vitamin_e_family_rows:
-                        if rda_row.get("source_label_key") not in unknown_vitamin_e_refs:
+                        if rda_row.get("source_label_key") not in unresolved_vitamin_e_refs:
                             continue
                         rda_row.update({
                             "skip_ul_check": True,

@@ -836,6 +836,10 @@ def test_literal_specific_identity_is_not_replaced_by_structured_parent():
             "raw_source_text": "Green Tea Phytosome",
             "ingredientGroup": "Green Tea",
         },
+        canonical_registry=build_canonical_identity_registry({
+            "ingredient_quality_map": {"green_tea_extract": {
+                "standard_name": "Green Tea Extract", "aliases": ["Green Tea Phytosome"]}},
+        }),
         supplied_canonical_id="green_tea_extract",
         resolve_candidate=lambda value: canonicals.get(
             normalize_label_display(value).casefold()
@@ -1004,3 +1008,18 @@ def test_candidate_resolution_never_uses_product_or_parent_blend_text():
     assert not any("Maximum Strength" in value for value in resolved_candidates)
     assert not any("Made with" in value for value in resolved_candidates)
     assert not any("Fish Oil Blend" in value for value in resolved_candidates)
+
+
+def test_generated_preparation_match_cannot_prove_literal_specificity():
+    registry = build_canonical_identity_registry({
+        "ingredient_quality_map": {"marker": {"standard_name": "Marker", "aliases": ["Plant Fruit Extract"]}},
+    })
+    decision = resolve_identity(
+        row={"raw_source_text": "Plant Fruit", "ingredientGroup": "Plant"},
+        supplied_canonical_id="marker",
+        resolve_candidate=lambda value: "plant" if value == "Plant" else "marker",
+        canonical_parent_of=lambda parent, child: (parent, child) == ("plant", "marker"),
+        canonical_registry=registry,
+    )
+    assert decision.canonical_id == "plant"
+    assert decision.disposition == "repaired"

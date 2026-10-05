@@ -74,7 +74,7 @@ from identity.safety import (
     safety_normalize_text,
 )
 from identity.omega_labels import states_only_epa_and_dha as _states_only_epa_and_dha
-from identity_integrity import build_canonical_identity_registry
+from identity_integrity import build_canonical_identity_registry, validated_canonical_parent_relationships
 
 # Import the UnmappedIngredientTracker
 import sys
@@ -3054,6 +3054,9 @@ class EnhancedDSLDNormalizer:
             # sibling). Aliases get no precedence: many IQM forms declare bare
             # parent names as aliases, which last-writer order still resolves.
             # Cross-parent and botanical guards still run before this helper.
+            if (re.search(r"\bextract\b", declared_name, re.I)
+                    and not re.search(r"\bextract\b", variation, re.I)):
+                return
             exact = not is_alias and variation == declared_name.lower().strip()
             key = (standard_name, variation)
             previous = form_owners.get(key)
@@ -3361,6 +3364,14 @@ class EnhancedDSLDNormalizer:
                 "canonical_equivalences": self.canonical_equivalences,
             }
         )
+        self._canonical_parent_relationships = validated_canonical_parent_relationships({
+            "ingredient_quality_map": self.ingredient_map,
+            "standardized_botanicals": self.standardized_botanicals,
+            "botanical_ingredients": self.botanical_ingredients,
+            "other_ingredients": self.other_ingredients,
+            "proprietary_blends": self.proprietary_blends,
+            "canonical_equivalences": self.canonical_equivalences,
+        })
         self._canonical_id_by_std_name = dict(
             self._canonical_identity_registry.preferred_index
         )
@@ -3369,78 +3380,8 @@ class EnhancedDSLDNormalizer:
             len(self._canonical_id_by_std_name),
         )
 
-    # D2.2: common qualifier tokens that describe PREPARATION or processing,
-    # not ingredient identity. Stripping them from the tail of a name
-    # recovers the canonical form — "Phenylalanine, Micronized" resolves
-    # to the same canonical as "Phenylalanine", "Quercetin, Organic" to
-    # "Quercetin", etc.
-    _QUALIFIER_SUFFIX_RE = re.compile(
-        r",\s*("
-        r"micronized|organic|natural|freeze[- ]dried|raw|fermented|vegan|"
-        r"non[- ]gmo|usp|pharmaceutical[- ]grade|food[- ]grade|"
-        r"certified[- ]organic|whole[- ]leaf|kosher|halal|powder"
-        r")\s*$",
-        re.IGNORECASE,
-    )
-
-    # D2.7.3: leading percent prefix stripped on fallback. "88% organic whole
-    # leaf Aloe vera" → "organic whole leaf Aloe vera" → (then leading-adjective
-    # strip) → "Aloe vera". Stripped version is tried as a fallback lookup so
-    # real standardization-marker rows (already excluded by
-    # _is_nutrition_fact) aren't affected.
-    _LEADING_PERCENT_PREFIX_RE = re.compile(
-        r"^\s*\d+(?:\.\d+)?\s*%\s*",
-    )
-
-    # D2.7.3: leading adjective prefixes that describe SOURCE QUALITY or
-    # PROCESSING but not ingredient identity. Stripped iteratively after
-    # the percent prefix is removed.
-    _LEADING_ADJECTIVE_RE = re.compile(
-        r"^\s*(organic|certified\s+organic|natural|raw|pure|whole[- ]leaf|"
-        r"whole[- ]plant|whole[- ]herb|non[- ]gmo|fermented|freeze[- ]dried|"
-        r"standardized|concentrated|micronized|cold[- ]pressed|unrefined)\s+",
-        re.IGNORECASE,
-    )
-
-    # D2.7.3: common trailing descriptor suffix — DSLD sometimes emits
-    # "Curcumin Phytosome:" or "Fenugreek Extract :" with trailing colon.
-    _TRAILING_COLON_RE = re.compile(r"\s*[:;]\s*$")
-
     def _strip_qualifier_suffixes(self, name: str) -> str:
-        """
-        Remove trailing preparation/processing qualifier tokens from an
-        ingredient name (D2.2 + D2.7.3 extensions).
-
-        Strips in order:
-          1. Trailing colon/semicolon (DSLD parsing artifact)
-          2. `, Micronized` / `, Organic` / `, Powder` / etc.
-          3. Leading `N%` prefix (e.g., "88% organic aloe vera")
-
-        Applied only on the FALLBACK lookup path — does not override an
-        exact raw-name or standard-name hit. Regex anchored to prevent
-        mid-name corruption.
-        """
-        if not name:
-            return name
-        result = self._TRAILING_COLON_RE.sub("", name).strip()
-        # Apply comma-qualifier strip repeatedly until stable (handles
-        # ", Powder, Organic" chains).
-        for _ in range(3):
-            stripped = self._QUALIFIER_SUFFIX_RE.sub("", result).strip()
-            if stripped == result:
-                break
-            result = stripped
-        # Strip leading percent prefix (D2.7.3: "88% organic aloe vera" →
-        # "organic aloe vera").
-        result = self._LEADING_PERCENT_PREFIX_RE.sub("", result).strip()
-        # Strip leading adjective prefixes iteratively (D2.7.3: "organic
-        # whole leaf aloe vera" → "whole leaf aloe vera" → "aloe vera").
-        for _ in range(4):
-            stripped = self._LEADING_ADJECTIVE_RE.sub("", result).strip()
-            if stripped == result:
-                break
-            result = stripped
-        return result
+        return norm_module.strip_label_identity_qualifiers(name)
 
     def _resolve_canonical_identity(
         self, standard_name: str, raw_name: Optional[str] = None
@@ -3452,25 +3393,19 @@ class EnhancedDSLDNormalizer:
 
         Lookup order:
           1. raw_name exact (handles fish_oil vs omega_3 specificity)
-          2. standard_name exact (fuzzy-resolved canonical)
-          3. raw_name with qualifier suffix stripped (D2.2 —
-             "Phenylalanine, Micronized" → "Phenylalanine")
+          2. raw_name with existing label qualifiers stripped
+          3. standard_name exact (generated matching fallback)
           4. standard_name with qualifier suffix stripped
 
         raw_name is tried first because the raw label text is more specific
         than the fuzzy-resolved ``standard_name`` in cases where the matcher
         maps a sharply-defined source to a broader umbrella parent (fish_oil
-        vs omega_3). Qualifier-stripped variants are tried only as a
-        fallback after both exact lookups miss, so they never override a
-        legitimate exact match.
+        vs omega_3). Existing label qualifiers are resolved before accepting
+        a generated standard name; preparation-bearing words remain intact.
         """
         # 1 + 2: exact lookups
         if raw_name:
             hit = self._canonical_id_by_std_name.get(raw_name.lower().strip())
-            if hit:
-                return hit
-        if standard_name:
-            hit = self._canonical_id_by_std_name.get(standard_name.lower().strip())
             if hit:
                 return hit
         # 3 + 4: qualifier-stripped fallback (D2.2)
@@ -3480,6 +3415,10 @@ class EnhancedDSLDNormalizer:
                 hit = self._canonical_id_by_std_name.get(stripped.lower().strip())
                 if hit:
                     return hit
+        if standard_name:
+            hit = self._canonical_id_by_std_name.get(standard_name.lower().strip())
+            if hit:
+                return hit
         if standard_name:
             stripped = self._strip_qualifier_suffixes(standard_name)
             if stripped and stripped.lower().strip() != (standard_name or "").lower().strip():
@@ -3615,7 +3554,7 @@ class EnhancedDSLDNormalizer:
             and 0 < float(form["percent"]) < 100
             for form in (ingredient.get("forms") or [])
         )
-        if category != "mineral" and not (category == "vitamin" and has_partial_form):
+        if category not in {"mineral", "vitamin"}:
             return None
         name = str(ingredient.get("name") or "").strip()
         if not name:
@@ -3628,30 +3567,48 @@ class EnhancedDSLDNormalizer:
         # a parent from the global form index. When DSLD supplies an exact IQM
         # parent in ingredientGroup, accept the source alias only inside that
         # parent. Inactive rows never enter this active nutrient path.
-        group_result = self._exact_ingredient_group_lookup(ingredient_group)
+        wrapper = re.fullmatch(r"(.+?)\s*\(([^()]+)\)", ingredient_group)
+        group_heading = wrapper.group(1).strip() if wrapper else ingredient_group
+        group_result = self._exact_ingredient_group_lookup(group_heading)
         group_standard_name = group_result.get("standard_name")
         group_canonical_id, group_source_db = self._resolve_canonical_identity(
             group_standard_name or "",
-            raw_name=ingredient_group,
+            raw_name=group_heading,
         )
         group_parent = (
             self.ingredient_map.get(group_canonical_id, {})
             if group_source_db == "ingredient_quality_map"
             else {}
         )
-        processed_name = self.matcher.preprocess_text(name)
-        is_parent_scoped_source_form = any(
-            processed_name == self.matcher.preprocess_text(alias)
-            for form_data in (group_parent.get("forms") or {}).values()
-            if isinstance(form_data, dict)
-            for alias in (form_data.get("source_form_aliases") or [])
-            if isinstance(alias, str)
-        )
+        source_key = norm_module.make_normalized_key(name)
+        is_parent_scoped_source_form = False
+        for form_data in (group_parent.get("forms") or {}).values():
+            if not isinstance(form_data, dict):
+                continue
+            source_aliases = {
+                norm_module.make_normalized_key(alias)
+                for alias in form_data.get("source_form_aliases") or []
+                if isinstance(alias, str)
+            }
+            qualifier_aliases = source_aliases | {
+                norm_module.make_normalized_key(alias)
+                for alias in form_data.get("aliases") or []
+                if isinstance(alias, str)
+            }
+            if source_key in source_aliases and (
+                not wrapper
+                or norm_module.make_normalized_key(wrapper.group(2)) in qualifier_aliases
+            ):
+                is_parent_scoped_source_form = True
+                break
         if is_parent_scoped_source_form:
             standard_name = group_standard_name
             canonical_id, source_db = group_canonical_id, group_source_db
             return standard_name, canonical_id, source_db
         else:
+            # Ordinary complete vitamin forms still refine Vitamin A/K by UNII.
+            if category == "vitamin" and not has_partial_form:
+                return None
             standard_name, mapped, _ = self._enhanced_ingredient_mapping(
                 name,
                 [],
@@ -3906,6 +3863,11 @@ class EnhancedDSLDNormalizer:
                 logger.debug(f"Colors: '{name}' with no context -> colors (unspecified)")
                 return "colors (unspecified)", True, forms
             # If both indicators present, fall through to normal mapping
+
+        literal = self._canonical_identity_registry.resolve_preferred(name)
+        if literal and literal[1] == "ingredient_quality_map":
+            parent = self.ingredient_map.get(literal[0], {})
+            return parent.get("standard_name", name), True, forms or []
 
         # Preprocess the input name
         processed_name = self.matcher.preprocess_text(name)
@@ -7993,6 +7955,31 @@ class EnhancedDSLDNormalizer:
                         raw_name, standard_name
                     )
                 )
+        # A generated preparation alias cannot overrule a reviewed broader
+        # label group. The shared registry requires literal declared specificity.
+        if is_active and canonical_id:
+            group = self._exact_ingredient_group_lookup(ing.get("ingredientGroup") or "")
+            group_id, group_db = self._resolve_canonical_identity(
+                group.get("standard_name") or "", raw_name=ing.get("ingredientGroup") or ""
+            )
+            if any(child == canonical_id for _, child in self._canonical_parent_relationships):
+                literal_specific = self._canonical_identity_registry.literal_identity_matches(name, canonical_id)
+                declared_specific = any(
+                    self._canonical_identity_registry.literal_identity_matches(form.get("name", ""), canonical_id)
+                    for form in forms_structured
+                )
+                exclusion_terms = (self.ingredient_map.get(canonical_id, {}).get("match_rules") or {}).get("negative_match_terms", [])
+                if not literal_specific and not declared_specific and not negative_match_terms_veto([name], exclusion_terms):
+                    if (group_id, canonical_id) in self._canonical_parent_relationships:
+                        canonical_id, canonical_source_db = group_id, group_db
+                        standard_name = self._canonical_identity_registry.standard_names.get(
+                            (group_db, group_id), group["standard_name"]
+                        )
+                        is_mapped = True
+                    else:
+                        canonical_id, canonical_source_db = None, "unmapped"
+                        standard_name, is_mapped = name, False
+
         # A species/part match does not establish its preparation. Recover an
         # explicitly registered extract before accepting a generated powder
         # match; retain the source label when no exact preparation is owned.
@@ -8029,6 +8016,36 @@ class EnhancedDSLDNormalizer:
                 cleaner_row_role=unmapped_cleaner_row_role,
                 score_exclusion_reason=unmapped_cleaner_row_role,
             )
+        # Authored exclusions constrain all routes into an IQM parent,
+        # including aliases, group fallbacks and UNII. Preserve unresolved
+        # preparation facts rather than inheriting an isolated constituent.
+        if canonical_source_db == "ingredient_quality_map":
+            identity_entry = self.ingredient_map.get(canonical_id, {})
+            negative_terms = (identity_entry.get("match_rules", {}) or {}).get(
+                "negative_match_terms", []
+            )
+            if negative_match_terms_veto(
+                [name] + (
+                    [] if self._canonical_identity_registry.resolve_preferred(name)
+                    == (canonical_id, canonical_source_db)
+                    else [form.get("name", "") for form in forms_structured]
+                ),
+                negative_terms,
+            ):
+                canonical_id = None
+                canonical_source_db = "unmapped"
+                standard_name = name
+                is_mapped = False
+                self._record_unmapped_ingredient(
+                    name, forms, is_active=is_active,
+                    cleaner_row_role=unmapped_cleaner_row_role,
+                    score_exclusion_reason=unmapped_cleaner_row_role,
+                )
+        if canonical_id and self._canonical_identity_registry.literal_identity_matches(name, canonical_id):
+            standard_name = self._canonical_identity_registry.standard_names.get(
+                (canonical_source_db, canonical_id), standard_name
+            )
+
         # D2.1 CONTRACT (protocol rule #4): is_mapped ⇒ canonical_id.
         # Two directions handled atomically:
         #   (a) is_mapped=False → force canonical to None + "unmapped" source.
@@ -12254,12 +12271,13 @@ class EnhancedDSLDNormalizer:
                 str(candidate or "").strip().casefold()
             )
             if exact and exact.get("id"):
-                canonical_id, source_db = (
-                    self._canonical_identity_registry.canonicalize(
-                        str(exact["id"]), "other_ingredients"
-                    )
+                return self._canonical_identity_registry.canonicalize(
+                    str(exact["id"]), "other_ingredients"
                 )
-                return canonical_id, source_db
+            if candidate == raw_name:
+                literal = self._canonical_identity_registry.resolve_preferred(raw_name)
+                if literal is not None:
+                    return literal
 
         for candidate in candidates:
             processed = self.matcher.preprocess_text(candidate)

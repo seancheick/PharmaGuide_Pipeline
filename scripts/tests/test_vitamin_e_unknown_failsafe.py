@@ -175,7 +175,8 @@ def test_multiple_vitamin_e_family_masses_use_aggregate_upper_bound(
         )
 
 
-def test_nested_vitamin_e_breakdown_is_not_double_counted(enricher):
+@pytest.mark.parametrize("scale, complete", [(1, True), (10, False)])
+def test_nested_vitamin_e_breakdown_is_not_double_counted(enricher, scale, complete):
     rows = [
         {
             "name": "Complete 8 Vitamin E",
@@ -277,6 +278,8 @@ def test_nested_vitamin_e_breakdown_is_not_double_counted(enricher):
             "raw_source_path": "ingredientRows[0].nestedRows[1].nestedRows[3]",
         },
     ]
+    for row in rows:
+        row["quantity"] *= scale
     result = enricher._collect_rda_ul_data(
         {"activeIngredients": rows, "inactiveIngredients": []}
     )
@@ -284,7 +287,12 @@ def test_nested_vitamin_e_breakdown_is_not_double_counted(enricher):
         row for row in result["dose_assessments"]
         if row["readiness"] == "incomplete"
     ]
-    assert unresolved == []
+    if complete:
+        assert unresolved == []
+    else:
+        assert unresolved
+        assert all(row["reason_code"] != "worst_case_vitamin_e_mass_within_ul"
+                   for row in result["dose_assessments"])
 
 
 def test_natural_vitamin_e_still_converts(enricher):
@@ -337,3 +345,17 @@ def test_bare_vitamin_e_mg_is_label_declared_alpha_tocopherol(enricher):
     assert assessment["normalized_unit"] == "mg"
     assert assessment["ul_assessment_status"] == "assessed_within_limit"
     assert assessment["readiness"] == "complete"
+
+@pytest.mark.parametrize('name', ['D-Beta Tocopherol', 'D-Gamma Tocopherol', 'D-Delta Tocopherol', 'Mixed Tocopherols', 'Tocotrienols'])
+def test_multiple_family_rows_do_not_turn_nonalpha_mass_into_adequacy(enricher, name):
+    product = {'activeIngredients': [
+        {'name': 'Vitamin E', 'standardName': 'Vitamin E', 'canonical_id': 'vitamin_e', 'quantity': 15, 'unit': 'mg'},
+        {'name': name, 'standardName': 'Vitamin E', 'canonical_id': 'vitamin_e', 'quantity': 48, 'unit': 'mg'},
+    ], 'inactiveIngredients': []}
+    result = enricher._collect_rda_ul_data(product)
+    row = next(r for r in result['adequacy_results'] if r.get('amount') == 48)
+    assert row['scoring_eligible'] is False
+    assert row['pct_rda'] is None
+    parent = next(r for r in result['adequacy_results'] if r.get('amount') == 15)
+    assert parent['scoring_eligible'] is True
+    assert parent['pct_rda'] == pytest.approx(100)

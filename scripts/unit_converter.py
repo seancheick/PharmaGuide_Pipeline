@@ -61,6 +61,20 @@ class ConversionResult:
     notes: List[str] = field(default_factory=list)
     error: Optional[str] = None
 
+    @property
+    def has_established_vitamin_e_activity(self) -> bool:
+        """Known alpha-tocopherol activity, distinct from physical family mass.
+
+        The converter owns form detection and FDA parent-label activity. An
+        unknown-form physical mass or conservative UL bound cannot grant
+        nutritional activity or meet an alpha-tocopherol threshold.
+        """
+        return bool(
+            self.success
+            and (self.conversion_rule_id or "").startswith("vitamin_e_")
+            and self.conversion_rule_id != "vitamin_e_unknown"
+        )
+
     def to_dict(self) -> Dict:
         """Convert to dictionary for JSON serialization."""
         return {
@@ -594,7 +608,7 @@ class UnitConverter:
             return self._detect_vitamin_a_form(ingredient_lower)
 
         # Vitamin E: natural d-alpha (0.67) vs synthetic dl-alpha (0.45)
-        if 'vitamin e' in nutrient_lower or 'tocopherol' in nutrient_lower:
+        if 'vitamin e' in nutrient_lower or 'tocopherol' in nutrient_lower or 'tocotrienol' in nutrient_lower:
             return self._detect_vitamin_e_form(ingredient_lower)
 
         # Folate: folic acid vs methylfolate
@@ -677,6 +691,13 @@ class UnitConverter:
     ) -> Tuple[Optional[str], Optional[Dict]]:
         """Detect Vitamin E form (natural vs synthetic)."""
         patterns = self.form_patterns.get('vitamin_e', {})
+
+        # Alpha stereochemistry is not the alpha-tocopherol molecule. Explicit
+        # tocotrienol material (including mixtures) cannot establish an exact
+        # tocopherol activity amount through broad d-alpha/all-rac patterns.
+        # Parent Vitamin E label activity is handled separately by the caller.
+        if re.search(r'\btocotrienols?\b', ingredient_text, re.I):
+            return 'vitamin_e_unknown', self.vitamin_conversions.get('vitamin_e_unknown', {})
 
         natural = any(re.search(p, ingredient_text, re.I)
                       for p in patterns.get('natural_patterns', []))

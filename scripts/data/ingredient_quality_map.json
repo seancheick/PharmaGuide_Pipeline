@@ -32,7 +32,7 @@
     "statistics": {
       "total_parents": 655,
       "total_forms": 1475,
-      "total_form_aliases": 12318,
+      "total_form_aliases": 12317,
       "parents_with_parent_aliases": 146,
       "parents_with_contains_aliases": 0,
       "parents_with_pattern_aliases": 0
@@ -37242,16 +37242,12 @@
           "Black Pepper (Piper nigrum) fruit supercritical CO2 extract",
           "Black Pepper fruit supercritical extract",
           "BioPerine Black Pepper (fruit) extract",
-          "essence of pure black pepper (fruit) oil",
           "organic black pepper fruit extract",
-          "organic black pepper",
-          "essence of pure black pepper oil extract",
           "organic black pepper (fruit) extract",
           "organic black pepper extract",
           "piperine beadlets",
           "piperine extract",
           "bioperine(r) black pepper extract",
-          "black pepper",
           "bioperinie",
           "bioperinie(r)",
           "bioperinie (r)",
@@ -37282,7 +37278,10 @@
       "match_mode": "alias_and_fuzzy",
       "exclusions": [],
       "parent_id": null,
-      "confidence": "high"
+      "confidence": "high",
+      "negative_match_terms": [
+        "oil"
+      ]
     },
     "category_enum": "herbs",
     "data_quality": {
@@ -66053,7 +66052,11 @@
           "extra-virgin olive oil",
           "extra virgin olive fruit oil",
           "extra-virgin olive fruit oil",
-          "evoo"
+          "evoo",
+          "organic, extra virgin Olive Oil",
+          "organic cold pressed extra virgin olive oil",
+          "cold-pressed extra virgin olive oil",
+          "Olive oil-extra virgin"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -68800,10 +68803,9 @@
           "by": "Product owner approval",
           "date": "2026-08-08"
         },
-        "notes": "Grapefruit-derived flavanone; potent CYP3A4 inhibitor (grapefruit effect). Antioxidant and hepatoprotective in preclinical studies. Caution: may alter drug metabolism.",
+        "notes": "Grapefruit-derived flavanone; potent CYP3A4 inhibitor (grapefruit effect). Antioxidant and hepatoprotective in preclinical studies. Caution: may alter drug metabolism. Identity scope: generic grapefruit extract or flavonoid wording does not establish isolated naringenin identity or exposure.",
         "aliases": [
-          "grapefruit flavonoid",
-          "grapefruit extract"
+          "naringenin"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {

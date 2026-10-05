@@ -798,3 +798,14 @@ def main():
 
 if __name__ == "__main__":
     main()
+
+
+@pytest.mark.parametrize('name', ['D-Alpha-Tocotrienol', 'RRR-Alpha Tocotrienol', 'DL-Alpha-Tocotrienol', 'All-rac-alpha-tocotrienol', 'D-Beta-Tocotrienol', 'D-Gamma-Tocotrienol', 'D-Delta-Tocotrienol'])
+@pytest.mark.parametrize('nutrient', ['Vitamin E', None])
+def test_tocotrienol_stereochemistry_does_not_establish_tocopherol_activity(name, nutrient):
+    result = UnitConverter().convert_nutrient(
+        nutrient=nutrient or name, amount=9, from_unit='mg',
+        ingredient_name=name, measured_name=name,
+    )
+    assert result.conversion_rule_id == 'vitamin_e_unknown'
+    assert result.has_established_vitamin_e_activity is False

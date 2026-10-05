@@ -3,7 +3,7 @@
     "description": "Other/inactive ingredients database for supplement excipients and additives",
     "purpose": "inactive_ingredient_classification",
     "schema_version": "5.4.3",
-    "last_updated": "2026-10-02",
+    "last_updated": "2026-10-05",
     "total_entries": 729,
     "functional_roles_field": {
       "added_in": "5.1.0",
@@ -6712,29 +6712,21 @@
     },
     {
       "id": "PII_EXTRA_VIRGIN_OLIVE_OIL",
-      "standard_name": "Extra Virgin Olive Oil",
+      "standard_name": "Olive Oil",
       "aliases": [
         "cold-pressed olive oil",
-        "EVOO",
-        "extra-virgin Olive Oil",
         "olea europaea oil",
         "olive oil",
         "Olive Oil, Pure",
         "organic olive oil",
-        "organic, extra virgin Olive Oil",
         "pure Olive Oil",
-        "virgin olive oil",
-        "organic cold pressed extra virgin olive oil",
-        "cold-pressed extra virgin olive oil",
-        "Extra Virgin Olive Fruit Oil",
-        "extra virgin olive fruit oil",
-        "Olive oil-extra virgin"
+        "virgin olive oil"
       ],
       "category": "carrier_oil",
       "is_additive": false,
       "additive_type": "vegetable_oil_carrier",
       "allergen": false,
-      "notes": "A high-quality, healthy fat often used as a neutral carrier for fat-soluble vitamins (like D, E, K, A) and other lipophilic active ingredients in liquid or softgel formulations. Primarily serves as a passive base.",
+      "notes": "Olive oil identity; the label context determines dietary-oil or carrier use. Generic olive oil, virgin, organic and cold-pressed wording do not establish extra-virgin grade. Explicit extra-virgin preparations remain owned by the separate IQM entry. The existing stable registry key is retained for compatibility.",
       "common_uses": [
         "lipid carrier",
         "fat-soluble vitamin vehicle"

@@ -638,3 +638,34 @@ def test_marker_threshold_uses_egcg_standardization_not_total_extract_mass():
     assert decision["dose_evaluation"]["converted_amount"] == 400.0
     assert decision["dose_evaluation"]["threshold_unit"] == "mg egcg"
     assert decision["dose_evaluation"]["conversion_method"] == "label_standardization"
+
+@pytest.mark.parametrize('name', ['D-Beta Tocopherol', 'D-Gamma Tocopherol', 'D-Delta Tocopherol', 'Mixed Tocopherols', 'Tocotrienols', 'D-Alpha-Tocotrienol', 'RRR-Alpha Tocotrienol', 'DL-Alpha-Tocotrienol'])
+@pytest.mark.parametrize('amount,unit', [(300, 'mg'), (1500, 'mg'), (1.5, 'g'), (1500000, 'mcg')])
+def test_nonalpha_physical_mass_cannot_meet_alpha_tocopherol_threshold(name, amount, unit):
+    enricher = SupplementEnricherV3()
+    thresholds = [{
+        'scope': 'condition', 'target_id': 'pregnancy', 'basis': 'per_day',
+        'comparator': '>', 'value': 1000, 'unit': 'mg',
+        'severity_if_met': 'avoid', 'severity_if_not_met': 'monitor',
+        'unknown_form_disposition': 'suppress',
+    }]
+    _, decision = enricher._evaluate_dose_thresholds_for_target(
+        thresholds, 'condition', 'pregnancy',
+        {'name': name, 'standard_name': 'Vitamin E', 'canonical_id': 'vitamin_e',
+         'quantity': amount, 'unit': unit, 'matched_form': 'mixed tocopherols'},
+        1.0, 'monitor',
+    )
+    assert decision['evaluation_status'] == 'form_unknown'
+    assert decision['consumer_disposition'] == 'suppress'
+    assert decision['matched_threshold'] is False
+    assert decision['release_blocking'] is False
+
+@pytest.mark.parametrize('name', ['Vitamin E', 'D-Alpha Tocopherol', 'DL-Alpha Tocopherol'])
+def test_declared_alpha_activity_retains_mass_threshold_comparison(name):
+    enricher = SupplementEnricherV3()
+    value, reason, _ = enricher._convert_amount_to_target_unit_with_evidence(
+        amount=1500, from_unit='mg', target_unit='mg',
+        ingredient_name=name, standard_name='Vitamin E',
+    )
+    assert value == 1500
+    assert reason is None
