@@ -4236,6 +4236,15 @@ class SupplementEnricherV3:
         taxonomy_coherent = self._identity_taxonomy_coherent(
             ingredient, match_result, quality_map
         )
+        # A qualified active-vitamin decision is made by the cleaner from
+        # the source row. The same IQM parent cannot be replaced by an
+        # OI preservative synonym when rechecking that row's raw spelling.
+        authoritative_context_override = authoritative_context_override or bool(
+            ingredient.get("cleaner_match_method") == "printed_nutrient_identity"
+            and str((ingredient.get("raw_taxonomy") or {}).get("category") or "").casefold() == "vitamin"
+            and ingredient.get("canonical_source_db") == "ingredient_quality_map"
+            and supplied_canonical_id == ingredient.get("canonical_id")
+        )
         resolve_candidate = self._identity_candidate_resolver(
             quality_map,
             supplied_canonical_id=supplied_canonical_id,

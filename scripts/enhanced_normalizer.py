@@ -3588,6 +3588,24 @@ class EnhancedDSLDNormalizer:
         # mineral rows continue to keep their parent whenever a source salt
         # belongs to another IQM identity.
         category = str(ingredient.get("category") or "").strip().casefold()
+        # Source-quality prefixes can cause the general alias cascade to land
+        # on an OI preservative synonym. An active vitamin row keeps the exact
+        # IQM chemical identity after removing those existing label qualifiers.
+        # Inactive rows never enter this path; forms and amounts stay attached.
+        name = str(ingredient.get("name") or "").strip()
+        stripped_name = self._strip_qualifier_suffixes(name)
+        if category == "vitamin" and stripped_name != name:
+            original = self._fast_ingredient_lookup(name)
+            _, original_source = self._resolve_canonical_identity(
+                original.get("standard_name") or "", raw_name=name,
+            )
+            exact = self._fast_ingredient_lookup(stripped_name)
+            if original_source == "other_ingredients" and exact.get("type") == "ingredient":
+                canonical_id, source_db = self._resolve_canonical_identity(
+                    exact["standard_name"], raw_name=stripped_name,
+                )
+                if source_db == "ingredient_quality_map":
+                    return exact["standard_name"], canonical_id, source_db
         has_partial_form = any(
             isinstance(form, dict)
             and isinstance(form.get("percent"), (int, float))
@@ -7972,6 +7990,29 @@ class EnhancedDSLDNormalizer:
                         raw_name, standard_name
                     )
                 )
+        # Do not assign a contradictory botanical preparation. Powder does
+        # not establish an extract; a fatty-acid blend is not a volatile oil.
+        # Preserve the label and its components with an unresolved identity.
+        if (
+            is_active
+            and canonical_source_db == "botanical_ingredients"
+            and (
+                (re.search(r"\bpowder$", standard_name, re.I)
+                 and any(re.search(r"\bextract\b", text, re.I)
+                         for text in [name] + [form.get("name", "") for form in forms_structured]))
+                or (re.search(r"\bessential oil\b", standard_name, re.I)
+                    and re.search(r"\bfatty acid\b", ingredient_group, re.I))
+            )
+        ):
+            canonical_id = None
+            canonical_source_db = "unmapped"
+            standard_name = name
+            is_mapped = False
+            self._record_unmapped_ingredient(
+                name, forms, is_active=True,
+                cleaner_row_role=unmapped_cleaner_row_role,
+                score_exclusion_reason=unmapped_cleaner_row_role,
+            )
         # D2.1 CONTRACT (protocol rule #4): is_mapped ⇒ canonical_id.
         # Two directions handled atomically:
         #   (a) is_mapped=False → force canonical to None + "unmapped" source.

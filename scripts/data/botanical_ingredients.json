@@ -3,7 +3,7 @@
     "description": "Non-standardized whole herb powders and simple botanical extracts without guaranteed marker compounds. Used for basic ingredient mapping. For premium standardized extracts with marker compounds, see standardized_botanicals.json.",
     "purpose": "ingredient_mapping",
     "schema_version": "5.2.0",
-    "last_updated": "2026-09-27",
+    "last_updated": "2026-10-05",
     "total_entries": 552,
     "functional_roles_field": {
       "added_in": "5.1.0",
@@ -13825,8 +13825,7 @@
       "standard_name": "Triphala Powder",
       "aliases": [
         "triphala",
-        "amalaki bibhitaki haritaki blend",
-        "Triphala fruit extract"
+        "amalaki bibhitaki haritaki blend"
       ],
       "category": "herb",
       "notes": "Ayurvedic formula of three fruits: Amalaki (Phyllanthus emblica), Bibhitaki (Terminalia bellirica), Haritaki (Terminalia chebula). Traditional rasayana and GI tonic. Equal parts blend.",

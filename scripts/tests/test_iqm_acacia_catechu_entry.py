@@ -78,3 +78,11 @@ def test_acacia_catechu_does_not_duplicate_botanical_recognition():
     ids = {b.get("id") for b in bot.get("botanical_ingredients", []) if isinstance(b, dict)}
     assert "cutch_tree" in ids, "Existing cutch_tree recognition must remain"
     assert "khadeer" in ids, "Existing khadeer recognition must remain"
+
+
+def test_univestin_companion_and_trial_belong_to_the_combination(iqm):
+    notes = iqm["acacia_catechu"]["forms"]["acacia catechu wood and bark extract"]["notes"]
+    assert "Morus alba" not in notes
+    assert "Scutellaria baicalensis" in notes
+    assert "combination" in notes
+    assert "not an Acacia-only" in notes

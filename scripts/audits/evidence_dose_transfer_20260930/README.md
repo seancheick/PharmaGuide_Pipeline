@@ -468,3 +468,41 @@ Independent review found no remaining code finding. The transfer is implemented,
 measured and reviewed; it is not full-corpus or release validated. The next gate
 is Sean's fresh Clean/Enrich/Score run, followed by release and app rendering
 verification against those rebuilt artifacts.
+
+
+## October 5 remaining exposure decision packet — approval pending
+
+The October 2 accepted transfer remains valid. This packet covers only the four
+live remainder records reproduced in `clinical_completion_20261004/amount_transfer_remaining_review.md`;
+Amla stays reference-only and its dormant amount scope is not released. No gate
+has been removed and no new clinical or numerical benchmark is installed.
+
+Owner: `clinical_applicability::assess_clinical_applicability` for existing
+reviewed source/preparation/delivery scope; `scoring_v4.exposure::row_exposure`
+for directed exposure; `dose_assessment::positive_clinical_benchmark` and
+existing per-purpose Dose modules for positive adequacy. Evidence: current
+four records, existing 15 boundary probes and reviewed October 2 policy. Will
+NOT create a registry, post-route scorer, public field/status or null-as-positive
+benchmark. `DoseAssessment` is the UL contract; do not repurpose UL statuses as
+clinical efficacy grades.
+
+| Existing record | Exposure judgment to preserve in Dose | Proposed numerical treatment requiring Sean's decision |
+|---|---|---|
+| INGR_ZINC_PICOLINATE (cold acetate/gluconate lozenges) | Below 80, 80–207, above 207 mg/day or undisclosed exposure; exact delivery/preparation and clinical population/purpose remain Evidence constraints. | Keep nutrient adequacy and existing UL/Safety judgments independently. A short-course trial envelope cannot turn 80–207 mg into routine-safe/full nutrient Dose. Decide whether equivalent exposure reporting alone closes this clinical transfer, with present Dose points unchanged. |
+| INGR_WHITE_KIDNEY_BEAN | Below 1000 mg/day or disclosed studied 1000–3000 mg/day envelope; do not infer inhibitory activity from mass or blend totals. | Decide whether exact reviewed positive preparation may use the existing positive-benchmark ratio scale against the lowest studied amount, or whether range correspondence is diagnostic while current unbenchmarked disclosure credit remains. Lowest studied exposure must not be described as a demonstrated efficacy threshold. |
+| INGR_D_MANNOSE | Compare label-directed amount with 2000 mg/day null-trial exposure; below/unknown exposure is not the exposure tested in that null result. | No positive benchmark, benefit credit or new dose reward. Decide whether to move exposure correspondence to Dose while retaining current amount-independent null Evidence and existing Dose fallback. |
+| INGR_D_ASPARTIC_ACID | Compare label-directed amount with 3000 mg/day minimum and descriptive 3–6 g/day null-trial range; no borrowed blend mass. | Same null-context treatment: no positive adequacy anchor or reward. Preserve trained-young-adult-male population/endpoint restrictions in Evidence and report exposure correspondence through Dose. |
+
+The concrete boundary packet already contains half-minimum/exact/double-minimum
+probes for all four records and the dormant reference record, plus zinc 208 mg.
+At current source, positive Dose benchmark is None for every case. Removing all
+amount gates now would lose the exposure judgment. Equivalent Dose ownership
+and chosen treatment must land together, tested through the public scorer with
+low/studied/undisclosed exposures and preparation/delivery controls.
+
+Recommendation for a bounded decision: allow Dose to report the existing
+clinical exposure comparison for all four; retain null records as context only
+and preserve zinc nutrient/UL/Safety scoring. Separately choose WKB numerical
+range correspondence versus the existing unbenchmarked fallback. This is a
+proposal, not recorded approval or an implemented transfer. The existing source
+corrections can be validated independently while these gates remain intact.
