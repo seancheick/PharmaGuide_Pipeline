@@ -88,7 +88,8 @@ def _is_exposure_row(row: Mapping) -> bool:
     return _key(row.get("dose_class")) != "source material mass"
 
 
-def _evidence_subject_refs(product: Mapping, *, include_undosed: bool = False) -> set:
+def _evidence_subject_refs(product: Mapping, *, include_undosed: bool = False,
+                           include_anchor_lineage: bool = False) -> set:
     """Label rows projected by the one Evidence-subject provider.
 
     Clinical applicability consumes the provider's decision and never rebuilds
@@ -104,7 +105,7 @@ def _evidence_subject_refs(product: Mapping, *, include_undosed: bool = False) -
         if not (include_undosed or anchor):
             continue
         candidates = [row.get("raw_source_path")]
-        if include_undosed and anchor:
+        if (include_undosed or include_anchor_lineage) and anchor:
             # The shared provider already records the exact printed lineage
             # behind an anchor. Admit those source rows for Evidence only;
             # their blend total remains unavailable as a member dose.
@@ -190,6 +191,7 @@ def _rows(product: Mapping, *, source_only: bool = False, evidence_only: bool = 
     # receives them; every other scope reads the identity enrichment resolved.
     resolved = {} if source_only else _resolved_identity_by_ref(product)
     subject_refs = _evidence_subject_refs(product, include_undosed=evidence_only)
+    anchor_refs = _evidence_subject_refs(product, include_anchor_lineage=True)
 
     def walk(rows):
         for row in rows or []:
@@ -202,9 +204,13 @@ def _rows(product: Mapping, *, source_only: bool = False, evidence_only: bool = 
             # A projected Evidence subject is excused only from the cleaner's
             # score eligibility (a header total); its printed mass is the
             # blend's, never a member's amount, so it carries no dose here.
-            projected = not exposure and ref in subject_refs and (evidence_only or _is_exposure_row(
-                {**row, "score_eligible_by_cleaner": None}
-            ))
+            source_veto = (row.get("score_eligible_by_cleaner") is False
+                           and ref not in anchor_refs
+                           and _key(row.get("cleaner_row_role")) != "nested display only"
+                           and _is_exposure_row({**row, "score_eligible_by_cleaner": None}))
+            projected = (not exposure and not source_veto and ref in subject_refs
+                         and (evidence_only or _is_exposure_row(
+                             {**row, "score_eligible_by_cleaner": None})))
             if valid_reference and identity not in seen and (exposure or projected):
                 seen.add(identity)
                 # Raw and resolved projections may use different canonical

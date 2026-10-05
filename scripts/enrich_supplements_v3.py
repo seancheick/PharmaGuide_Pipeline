@@ -8566,6 +8566,13 @@ class SupplementEnricherV3:
 
         return result
 
+    def _is_provided_marker_form(self, form: Dict) -> bool:
+        """A declared providing/supplying marker, not a source or enzyme potency."""
+        prefix = str(form.get('prefix') or '').strip()
+        return (bool(prefix) and prefix.lower().split()[0] in {'providing', 'provides', 'supplying'}
+                and form.get('category') != 'enzyme'
+                and self._excluded_text_reason(f"{prefix} {form.get('name', '')}") == SKIP_REASON_LABEL_PHRASE)
+
     def _build_form_info_from_cleaned(self, ing_name: str, cleaned_forms: List[Dict],
                                       std_name: Optional[str] = None) -> Optional[Dict]:
         """
@@ -8727,8 +8734,7 @@ class SupplementEnricherV3:
             # A material providing a marker is not the isolated marker form;
             # keep its original label disclosure, exclude only this matching
             # candidate. Parent preparation still comes from its own name.
-            if (prefix and form.get('category') != 'enzyme'
-                    and self._excluded_text_reason(f"{prefix} {form.get('name', '')}") == SKIP_REASON_LABEL_PHRASE):
+            if self._is_provided_marker_form(form):
                 # A supplied enzyme with declared activity is still a named
                 # material, not a removable standardization marker.
                 continue
@@ -9487,10 +9493,8 @@ class SupplementEnricherV3:
             # PRIORITY 1: Use cleaned_forms[] from cleaning stage (structured, reliable)
             if cleaned_forms and isinstance(cleaned_forms, list) and len(cleaned_forms) > 0:
                 form_info = self._build_form_info_from_cleaned(ing_name, cleaned_forms, std_name)
-                if (not form_info and cleaner_iqm_canonical and any(
-                        form.get('prefix') and self._excluded_text_reason(
-                            f"{form['prefix']} {form.get('name', '')}") == SKIP_REASON_LABEL_PHRASE
-                        for form in cleaned_forms)):
+                if (not form_info and cleaner_iqm_canonical
+                        and any(self._is_provided_marker_form(form) for form in cleaned_forms)):
                     # Ignoring a provided marker must not discard the form
                     # explicitly named by its parent (e.g. DMAE bitartrate).
                     # Reuse the same-parent form owner; no marker identity or

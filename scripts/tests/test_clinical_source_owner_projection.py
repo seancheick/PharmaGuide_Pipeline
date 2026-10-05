@@ -1,4 +1,4 @@
-"""Clinical matching must use the quantified label owner, not its blend header."""
+"""Evidence uses the named material; Dose uses only its disclosed amount."""
 
 from copy import deepcopy
 
@@ -77,8 +77,23 @@ def test_nested_display_only_child_cannot_borrow_the_complex_amount(enricher):
     assert "ingredientRows[1].nestedRows[1]" not in {
         row["raw_source_path"] for row in rows
     }
-    assert not [m for m in product["evidence_data"]["clinical_matches"]
-                if m["id"] == "INGR_GREEN_TEA"]
+    # A named extract remains an Evidence subject without a member dose.
+    # The invariant here is amount ownership, not absence of its literature.
+    matches = [m for m in product["evidence_data"]["clinical_matches"]
+               if m["id"] == "INGR_GREEN_TEA"]
+    assert len(matches) == 1
+    assert matches[0]["matched_source_row_refs"] == ["ingredientRows[1].nestedRows[1]"]
+    from clinical_applicability import assess_clinical_applicability
+    from dose_assessment import positive_clinical_benchmark
+    from scoring_input_contract import get_evidence_subject_rows
+    from scoring_v4.exposure import row_exposure
+    assert assess_clinical_applicability(product, matches[0], assess_amount=False)["status"] == "applicable"
+    child = next(row for row in product["activeIngredients"][0]["nestedIngredients"]
+                 if row["raw_source_path"] == "ingredientRows[1].nestedRows[1]")
+    assert row_exposure(product, child, basis="daily", unit="mg").benchmark_amount is None
+    subject = next(row for row in get_evidence_subject_rows(product)
+                   if row["canonical_id"] == "green_tea_extract")
+    assert positive_clinical_benchmark(product, subject) is None
 
 
 def test_dose_projection_keeps_ancestor_context_without_promoting_it_to_evidence(enricher):
