@@ -664,10 +664,15 @@ def test_amount_independent_applicability_keeps_provider_owned_undosed_member(mo
     entry = {'id':'TEST_UNDOSED', 'ingredient':'Bromelain','matched_source_row_refs':[row['raw_source_path']],
              'matched_canonical_ids':['bromelain'],'study_type':'rct_single'}
     if legacy:entry['exclude_aliases']=['other preparation']
-    else:entry['applicability']={'scope':'ingredient', 'required_form_terms':['bromelain']}
+    else:entry['applicability']={'scope':'ingredient', 'required_form_terms':['bromelain'], 'minimum_daily_dose':100, 'dose_unit':'mg'}
     monkeypatch.setattr(ca,'reviewed_entries', lambda: {})
     assert assess_clinical_applicability(product,entry,assess_amount=False)['status'] in {'applicable','not_curated'}
-    assert assess_clinical_applicability(product,entry,assess_amount=True)['status'] in {'unresolved', 'not_applicable'}
+    if not legacy:
+        assert assess_clinical_applicability(product,entry,assess_amount=True)['status'] in {'unresolved', 'not_applicable'}
+    else:
+        assert assess_clinical_applicability(product,entry,assess_amount=True)['status'] == 'not_curated'
+    from dose_assessment import positive_clinical_benchmark
+    assert positive_clinical_benchmark(product,row) is None
 
 
 def test_provider_owned_anchor_uses_its_exact_named_child_without_lending_mass(monkeypatch):
@@ -691,3 +696,42 @@ def test_provider_owned_anchor_uses_its_exact_named_child_without_lending_mass(m
     entry['matched_source_row_refs'] = ['ingredientRows[0]', 'ingredientRows[1]']
     child['parent_source_path'] = 'ingredientRows[1]'
     assert ca._linked_rows(product, entry, evidence_only=True) == []
+
+
+def test_form_only_review_has_no_exposure_prerequisite(monkeypatch):
+    import clinical_applicability as ca
+    row = {'name':'Bromelain','raw_source_text':'Bromelain','canonical_id':'bromelain',
+           'role_classification':'inactive_non_scorable','cleaner_row_role':'named_blend_member',
+           'source_section':'active','raw_source_path':'ingredientRows[0].nestedRows[0]',
+           'quantity':0,'unit':'NP','matched_form':'Bromelain'}
+    product = {'activeIngredients':[row], 'ingredient_quality_data':{'ingredients':[row],'ingredients_scorable':[]}}
+    monkeypatch.setattr(ca,'reviewed_entries', lambda: {})
+    entry = {'id':'TEST_FORM_ONLY','ingredient':'Bromelain','matched_source_row_refs':[row['raw_source_path']],
+             'applicability':{'scope':'ingredient','required_form_terms':['bromelain']}}
+    assert ca.assess_clinical_applicability(product,entry)['status'] == 'applicable'
+    entry['applicability'].update(minimum_daily_dose=100,dose_unit='mg')
+    assert ca.assess_clinical_applicability(product,entry)['status'] in {'not_applicable','unresolved'}
+
+
+def test_source_required_anchor_binds_printed_child_before_structural_header(monkeypatch):
+    import clinical_applicability as ca
+    import scoring_input_contract as contract
+    header = {'name':'Organic Botanical Blend','raw_source_text':'Organic Botanical Blend',
+              'raw_source_path':'ingredientRows[0]','canonical_id':'structural_blend',
+              'quantity':10000,'unit':'mg','score_eligible_by_cleaner':False,'source_section':'active'}
+    child = {'name':'Inulin','raw_source_text':'Inulin','canonical_id':'inulin',
+             'raw_source_path':'ingredientRows[0].forms[0]','parent_source_path':'ingredientRows[0]',
+             'quantity':0,'unit':'NP','source_section':'active'}
+    anchor = {**child,'raw_source_path':'ingredientRows[0]','quantity':10000,'unit':'mg',
+              'scoring_input_kind':'product_level_evidence','evidence_scope':'blend_level'}
+    product = {'activeIngredients':[header,child],'ingredient_quality_data':{'ingredients_scorable':[child]}}
+    monkeypatch.setattr(contract,'get_evidence_subject_rows', lambda _: [anchor])
+    monkeypatch.setattr(ca,'reviewed_entries',lambda:{})
+    entry = {'id':'TEST_INULIN_ANCHOR','ingredient':'Inulin','matched_canonical_ids':['inulin'],
+             'matched_source_row_refs':['ingredientRows[0]'],
+             'applicability':{'scope':'ingredient','required_form_terms':['inulin'],'require_source_label_form':True}}
+    result=ca.assess_clinical_applicability(product,entry,assess_amount=False)
+    assert result['status']=='applicable'
+    assert result['source_row_ref']==child['raw_source_path']
+    child['raw_source_text']='Different Material';child['name']='Different Material'
+    assert ca.assess_clinical_applicability(product,entry,assess_amount=False)['status']=='not_applicable'

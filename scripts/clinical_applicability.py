@@ -236,9 +236,7 @@ def _linked_rows(product: Mapping, entry: Mapping, *, source_only: bool = False,
     rows = list(_rows(product, source_only=source_only, evidence_only=evidence_only))
     if refs:
         exact_refs = [r for r in rows if (r.get("raw_source_path") or r.get("source_row_ref")) in refs]
-        if exact_refs:
-            return exact_refs
-        if evidence_only and not source_only:
+        if evidence_only:
             # A provider-owned blend anchor references its parent panel row.
             # Bind only its unique named/canonical child, never the sibling
             # materials or the parent's mass. Dose keeps exact exposure refs.
@@ -254,7 +252,7 @@ def _linked_rows(product: Mapping, entry: Mapping, *, source_only: bool = False,
             if (len(anchors) == 1 and len(children) == 1
                     and children[0].get("parent_source_path") == anchors[0].get("raw_source_path")):
                 return children
-        return []
+        return exact_refs
     exact = [r for r in rows if name and name in {_key(r.get("name")), _key(r.get("raw_source_text"))}]
     if exact:
         return exact
@@ -293,7 +291,7 @@ def assess_clinical_applicability(product: Mapping, entry: Mapping, *, assess_am
         # can legitimately contain a generic term beside a branded preparation.
         excluded = reference.get("exclude_aliases", entry.get("exclude_aliases", []))
         if excluded:
-            linked = _linked_rows(product, entry, evidence_only=not assess_amount)
+            linked = _linked_rows(product, entry, evidence_only=True)
             if not linked:
                 return {"status": "unresolved", "reason_code": "clinical_source_row_unresolved"}
             if all(any(_key(term) in _key(row.get("matched_form") or row.get("form"))
@@ -324,8 +322,12 @@ def assess_clinical_applicability(product: Mapping, entry: Mapping, *, assess_am
             "minimum_daily_dose", "maximum_daily_dose", "dose_unit",
         )
     )
+    # Preparation-only judgments have no exposure prerequisite. A caller
+    # asking for dose checks must still own a real reviewed amount constraint;
+    # an undosed named material remains eligible for its form/literature review.
+    exposure_required = assess_amount and policy.get("dose_unit") is not None
     applicable_rows = []
-    for row in _linked_rows(product, entry, source_only=source_only, evidence_only=not assess_amount,
+    for row in _linked_rows(product, entry, source_only=source_only, evidence_only=not exposure_required,
                             discriminating_terms=policy.get("required_form_terms")):
         text = _row_text(row, source_only=source_only)
         if source_only and not text:

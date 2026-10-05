@@ -1088,3 +1088,12 @@ def test_subject_census_rejects_real_owner_validation_failure(tmp_path, monkeypa
     raw.write_text(json.dumps({'id': 'CENSUS_INVALID_REVIEW'}))
     with pytest.raises(ValueError, match='enrichment.*validation_failed'):
         census.census_file((str(tmp_path), {'path': 'invalid.json', 'kind': 'raw', 'sha256': census.replay.sha(raw)}))
+
+
+def test_declared_chicory_root_fiber_retains_reviewed_inulin_family_not_raw_root():
+    row={'name':'Chicory root Fiber','raw_source_text':'Chicory root Fiber','canonical_id':'inulin',
+         'raw_source_path':'ingredientRows[0]','source_section':'active'}
+    product={'activeIngredients':[row],'ingredient_quality_data':{'ingredients_scorable':[row]}}
+    assert er.resolve_evidence_for_row(row,product).points_eligible is True
+    row['raw_source_text']='Chicory root powder';row['name']='Chicory root powder'
+    assert er.resolve_evidence_for_row(row,product).points_eligible is False

@@ -216,3 +216,12 @@ class TestNegativeCases:
         assert not enricher._is_source_material_descriptor(text), (
             f"{text!r} is a real form alias gap, not a source descriptor"
         )
+
+
+@pytest.mark.parametrize('prefix', ['providing', 'provides', 'supplying'])
+def test_provided_marker_does_not_select_parent_extracted_material(enricher, prefix):
+    result=enricher._build_form_info_from_cleaned('Spirulina powder', [{'name':'Phycocyanin','prefix':prefix}])
+    assert result is None
+    # A genuinely named isolated material retains its own form matching.
+    explicit=enricher._build_form_info_from_cleaned('Phycocyanin extract', [{'name':'Phycocyanin','prefix':'as'}])
+    assert explicit is not None

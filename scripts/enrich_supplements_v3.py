@@ -8723,6 +8723,12 @@ class SupplementEnricherV3:
         for i, form in enumerate(cleaned_forms):
             form_name_token = (form.get('name') or '').strip().lower()
             prefix = (form.get('prefix') or '').strip()
+            # Existing label-phrase ownership also applies inside forms[].
+            # A material providing a marker is not the isolated marker form;
+            # keep its original label disclosure, exclude only this matching
+            # candidate. Parent preparation still comes from its own name.
+            if prefix and self._excluded_text_reason(f"{prefix} {form.get('name', '')}") == SKIP_REASON_LABEL_PHRASE:
+                continue
             keep_from_prefixed_form = (
                 prefix in _FROM_PREFIXES
                 and _keep_from_prefixed_form(form.get('name', ''))
