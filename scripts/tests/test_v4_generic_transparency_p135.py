@@ -646,3 +646,20 @@ def test_transparency_module_does_not_import_v3_scorer() -> None:
     source = Path(module.__file__).read_text()
     assert "from score_supplements" not in source
     assert "import score_supplements" not in source
+
+
+@pytest.mark.parametrize("same_owner", [False, True])
+def test_b5_same_named_totals_respect_raw_parent_ownership(same_owner):
+    from scoring_v4.modules.generic_transparency import score_transparency
+
+    full = {"name": "Protease Blend", "disclosure_level": "full",
+            "blend_total_mg": 300.0, "source_row_ref": "ingredientRows[22]",
+            "child_ingredients": [{"name": "Pineapple", "amount": 300.0, "unit": "mg"}]}
+    partial = {"name": "Protease Blend", "disclosure_level": "partial",
+               "blend_total_mg": 300.0,
+               "source_row_ref": "ingredientRows[22]" if same_owner else "ingredientRows[24]",
+               "child_ingredients": [{"name": "Bacillus", "amount": None, "unit": "NP"}]}
+    payload = score_transparency(_product(blends=[full, partial], total_active_mg=1000.0))
+    evidence = payload["metadata"]["B5_blend_evidence"]
+    assert len(evidence) == (1 if same_owner else 2)
+    assert payload["penalties"]["B5_proprietary_blend_opacity"] == (0 if same_owner else pytest.approx(-1.9))

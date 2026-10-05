@@ -870,12 +870,14 @@ def _blend_dedupe_keys(
     return keys
 
 
-def _blend_name_total_key(blend: Dict[str, Any]) -> Optional[Tuple[str, str, str]]:
+def _blend_name_total_key(blend: Dict[str, Any]) -> Optional[Tuple[str, ...]]:
     name_key = _canon_key(blend.get("name"))
     blend_total_mg, _ = _blend_total_mg(blend)
     if not name_key or blend_total_mg is None:
         return None
-    return ("name_total", name_key, f"{round(blend_total_mg, 3):.3f}")
+    key = ("name_total", name_key, f"{round(blend_total_mg, 3):.3f}")
+    source_owner = _norm_text(blend.get("source_row_ref"))
+    return key + (source_owner,) if source_owner else key
 
 
 def _blend_total_mg(blend: Dict[str, Any]) -> Tuple[Optional[float], bool]:
