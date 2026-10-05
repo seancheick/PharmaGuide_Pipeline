@@ -632,3 +632,20 @@ def test_exclusion_only_scope_retains_every_valid_marine_row_independent_of_orde
     assert not rejected
     assert set(accepted[0]["matched_source_row_refs"]) == {"ingredientRows[0]", "ingredientRows[1]"}
     assert set(accepted[0]["matched_canonical_ids"]) == {"epa", "dha"}
+def test_spirulina_endpoint_summaries_preserve_population_and_comparator():
+    """Disease-specific and within-group results are not general efficacy."""
+    import json
+    from pathlib import Path
+    from data_batch import entries
+
+    data = json.loads((Path(__file__).parents[1] / "data" / "backed_clinical_studies.json").read_text())
+    record = entries(data)["backed_clinical_studies/INGR_SPIRULINA"]
+    endpoints = record["key_endpoints"]
+    hiv = next(text for text in endpoints if "25057105" in text)
+    nephrotic = next(text for text in endpoints if "12487756" in text)
+    assert "HIV" in hiv and "women" in hiv
+    assert "no between-group differences in immunological or virological markers" in hiv
+    assert "within-group" in nephrotic and "children" in nephrotic
+    assert "medication-only control" in nephrotic
+    assert "not placebo-adjusted treatment effects" in nephrotic
+    assert "not evidence of general longevity benefit" in record["notes"]

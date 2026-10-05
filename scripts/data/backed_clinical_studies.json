@@ -21390,8 +21390,8 @@
       "key_endpoints": [
         "Reduced total cholesterol, LDL-C, and triglycerides significantly in meta-analysis of 7 clinical studies in diabetic populations (PMID: 34538515)",
         "Decreased systolic blood pressure and endothelial damage markers (sVCAM-1, sE-selectin) at 4.5g/day for 12 weeks in hypertensive patients (PMID: 30544795)",
-        "Increased serum total antioxidant capacity by 56 uM vs placebo at 5g/day for 3 months in RCT (PMID: 25057105)",
-        "Reduced total cholesterol by 116 mg/dL and LDL-C by 94 mg/dL at 1g/day for 2 months in hyperlipidemic patients (PMID: 12487756)"
+        "In 73 HIV-infected adult women before HAART, 5g/day for 3 months increased serum antioxidant capacity; no between-group differences in immunological or virological markers were observed. Antioxidant capacity is a surrogate outcome (PMID: 25057105)",
+        "In 23 children aged 2-13 with nephrotic syndrome, medication plus 1g/day for 2 months produced within-group TC and LDL-C decreases of 116.33 and 94.14 mg/dL; the medication-only control also decreased by 69.87 and 61.13 mg/dL. These are not placebo-adjusted treatment effects (PMID: 12487756)"
       ],
       "health_goals_supported": [
         "Healthy Aging/Longevity"
@@ -21399,8 +21399,8 @@
       "primary_outcome": "Healthy Aging/Longevity",
       "effect_direction": "positive_strong",
       "total_enrollment": 101,
-      "notes": "Spirulina has moderate-quality evidence for lipid-lowering (most consistent: TC, LDL-C, TG reduction), blood pressure reduction, and antioxidant effects. Network meta-analysis (PMID: 35988871) ranked spirulina among effective nutraceuticals for LDL-C lowering.",
-      "last_updated": "2026-04-02",
+      "notes": "Spirulina has moderate-quality evidence for lipid-lowering (most consistent: TC, LDL-C, TG reduction), blood pressure reduction, and antioxidant effects. Network meta-analysis (PMID: 35988871) ranked spirulina among effective nutraceuticals for LDL-C lowering. The HIV pilot reports an antioxidant surrogate without immunological or virological improvement; the nephrotic-syndrome study is pediatric adjunctive treatment and its quoted reductions are within-group, not placebo-adjusted. These two studies are not evidence of general longevity benefit. The existing aggregate grade, study counts and broader preparation/outcome applicability still require clinical review.",
+      "last_updated": "2026-10-04",
       "notable_studies": "NCT04988347 (n=45): Spirulina Platensis for PPI Withdrawal. NCT05016557 (n=36): The Muscle Protein Synthetic Response of Algal and Fungal Protein. NCT01752972 (n=30): Effect of Spirulina on Zinc, Vitamin E and Linoleic Acid Levels in Palm Skin Following Chronic Exposure to Arsenic.",
       "references_structured": [
         {
@@ -21436,14 +21436,14 @@
           "url": "https://pubmed.ncbi.nlm.nih.gov/25057105/",
           "source": "PubMed",
           "verified": true,
-          "note": "Extracted from key_endpoints text — needs content verification"
+          "note": "Content verified 2026-10-04: 73 HIV-infected women before HAART; antioxidant surrogate improved, immunological/virological markers did not differ between groups."
         },
         {
           "pmid": "12487756",
           "url": "https://pubmed.ncbi.nlm.nih.gov/12487756/",
           "source": "PubMed",
           "verified": true,
-          "note": "Extracted from key_endpoints text — needs content verification"
+          "note": "Content verified 2026-10-04: children with nephrotic syndrome, medication plus Spirulina versus medication alone; reported lipid decreases are within-group changes."
         }
       ],
       "published_studies_count": 58,
