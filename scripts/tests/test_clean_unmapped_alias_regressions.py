@@ -2046,7 +2046,6 @@ def test_batch25_softgels_active_exact_aliases_and_new_botanicals_map(normalizer
         ("Khadeer", "Acacia Catechu"),
         ("Sariva", "Sariva"),
         ("Corydalis yanhusuo root 10:1 extract", "Corydalis"),
-        ("Triphala fruit extract", "Triphala"),
         ("Sphingomyelin", "Sphingomyelin"),
         ("CLA Oil", "CLA"),
     ],
@@ -3327,3 +3326,9 @@ def test_wave1_inactive_label_identities_map_to_owned_taxonomy(
 
     assert mapped is True
     assert expected.casefold() in standard_name.casefold()
+
+
+def test_triphala_extract_does_not_use_the_powder_alias(normalizer):
+    standard_name, mapped, _ = normalizer._enhanced_ingredient_mapping("Triphala fruit extract", [])
+    assert mapped is False
+    assert standard_name == "Triphala fruit extract"
