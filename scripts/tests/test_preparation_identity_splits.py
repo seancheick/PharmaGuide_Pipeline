@@ -432,3 +432,15 @@ def test_broad_source_extract_does_not_claim_isolated_flavanone(pipeline, name):
 def test_declared_isolated_flavanone_retains_its_chemical_owner(pipeline):
     enriched = pipeline(_raw_product(990129, [_raw_row(1, 'Naringenin', 'Naringenin', quantity=85, unit='mg')]))
     assert next(r for r in enriched['activeIngredients'] if r['name'] == 'Naringenin')['canonical_id'] == 'naringenin'
+
+
+def test_nested_family_bounds_do_not_restore_nonalpha_adequacy(pipeline):
+    raw = json.loads((Path(__file__).parent / 'fixtures' / 'tocopherol_family_2528_raw.json').read_text())
+    enriched = pipeline(raw)
+    assessments = enriched['rda_ul_data']['adequacy_results']
+    for chemical in ['d-beta-tocopherol', 'd-gamma-tocopherol', 'd-delta-tocopherol']:
+        rows = [r for r in assessments if chemical in r.get('source_label_key', '')]
+        assert rows, chemical
+        assert all(r['scoring_eligible'] is False and r['pct_rda'] is None for r in rows)
+    alpha = [r for r in assessments if 'd-alpha-tocopherol:' in r.get('source_label_key', '')]
+    assert alpha and any(r['scoring_eligible'] is True for r in alpha)

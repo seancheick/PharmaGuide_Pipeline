@@ -337,3 +337,17 @@ def test_bare_vitamin_e_mg_is_label_declared_alpha_tocopherol(enricher):
     assert assessment["normalized_unit"] == "mg"
     assert assessment["ul_assessment_status"] == "assessed_within_limit"
     assert assessment["readiness"] == "complete"
+
+@pytest.mark.parametrize('name', ['D-Beta Tocopherol', 'D-Gamma Tocopherol', 'D-Delta Tocopherol', 'Mixed Tocopherols', 'Tocotrienols'])
+def test_multiple_family_rows_do_not_turn_nonalpha_mass_into_adequacy(enricher, name):
+    product = {'activeIngredients': [
+        {'name': 'Vitamin E', 'standardName': 'Vitamin E', 'canonical_id': 'vitamin_e', 'quantity': 15, 'unit': 'mg'},
+        {'name': name, 'standardName': 'Vitamin E', 'canonical_id': 'vitamin_e', 'quantity': 48, 'unit': 'mg'},
+    ], 'inactiveIngredients': []}
+    result = enricher._collect_rda_ul_data(product)
+    row = next(r for r in result['adequacy_results'] if r.get('amount') == 48)
+    assert row['scoring_eligible'] is False
+    assert row['pct_rda'] is None
+    parent = next(r for r in result['adequacy_results'] if r.get('amount') == 15)
+    assert parent['scoring_eligible'] is True
+    assert parent['pct_rda'] == pytest.approx(100)

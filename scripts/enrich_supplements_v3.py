@@ -19029,6 +19029,21 @@ class SupplementEnricherV3:
         tgt = self._normalize_threshold_unit(target_unit)
         if not src or not tgt:
             return None, "missing_unit", None
+        # Activity applicability precedes physical mass identity/scale shortcuts.
+        # The authored Vitamin E thresholds compare alpha-tocopherol, not an
+        # arbitrary beta/gamma/delta/tocotrienol mass under the family identity.
+        if self.unit_converter:
+            activity = self.unit_converter.convert_nutrient(
+                nutrient=standard_name or ingredient_name,
+                amount=amount,
+                from_unit=from_unit,
+                ingredient_name=ingredient_name,
+                measured_name=ingredient_name,
+            )
+            if ((activity.conversion_rule_id or "").startswith("vitamin_e_")
+                    and not activity.has_established_vitamin_e_activity):
+                return None, "form_unknown", activity.conversion_rule_id
+
         if src == tgt:
             return amount, None, "identity"
 
@@ -22733,13 +22748,16 @@ class SupplementEnricherV3:
                         })
                     if (
                         _canonical_for_ul in {"vitamin e", "vitamin_e"}
-                        and ul_exposure.get("ul_gate_ineligible_reason")
-                        == "compound_mass_not_elemental"
+                        and (
+                            ul_exposure.get("ul_gate_ineligible_reason")
+                            == "compound_mass_not_elemental"
+                            or not conversion.has_established_vitamin_e_activity
+                        )
                     ):
-                        # A standalone ester mass is not a declared FDA
-                        # nutrient activity amount. Without a verified moiety
-                        # conversion it cannot establish RDA adequacy, even
-                        # when its conservative UL bound is above the limit.
+                        # Physical compound/family mass and conservative UL
+                        # screening never establish nutritional activity. Use
+                        # the converter's single activity determination even
+                        # when a multi-row or aggregate path retained adequacy.
                         adequacy_dict.update({
                             "pct_rda": None,
                             "adequacy_band": "unknown",

@@ -61,6 +61,20 @@ class ConversionResult:
     notes: List[str] = field(default_factory=list)
     error: Optional[str] = None
 
+    @property
+    def has_established_vitamin_e_activity(self) -> bool:
+        """Known alpha-tocopherol activity, distinct from physical family mass.
+
+        The converter owns form detection and FDA parent-label activity. An
+        unknown-form physical mass or conservative UL bound cannot grant
+        nutritional activity or meet an alpha-tocopherol threshold.
+        """
+        return bool(
+            self.success
+            and (self.conversion_rule_id or "").startswith("vitamin_e_")
+            and self.conversion_rule_id != "vitamin_e_unknown"
+        )
+
     def to_dict(self) -> Dict:
         """Convert to dictionary for JSON serialization."""
         return {
