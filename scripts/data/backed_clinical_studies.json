@@ -3,7 +3,7 @@
     "description": "Ingredients backed by clinical research and studies - Enhanced for Section C v3.4.0",
     "purpose": "evidence_scoring",
     "schema_version": "5.6.3",
-    "last_updated": "2026-10-02",
+    "last_updated": "2026-10-04",
     "total_entries": 210,
     "changelog": [
       "2026-10-02: INGR_OMEGA3 removes unsupported plant ALA intervention aliases and excludes stale ALA matches from marine EPA/DHA evidence through the existing clinical-applicability owner. No dose thresholds or numerical magnitudes changed.",
@@ -23437,7 +23437,7 @@
       "health_goals_supported": [
         "Hormone Balance"
       ],
-      "notes": "Both trials tested LN18178 (Tesnor), a proprietary blend of standardized Punica granatum fruit-rind and Theobroma cocoa seed extracts, at 200 or 400 mg/day for 56 days in healthy men. Both were run by the ingredient's developer; no independent replication was found. Endpoints are hormone levels and a symptom score, not clinical outcomes. Pomegranate or cocoa extracts outside this blend cannot borrow this evidence.",
+      "notes": "Both trials tested LN18178 (Tesnor), a proprietary blend of standardized Punica granatum fruit-rind and Theobroma cocoa seed extracts, at 200 or 400 mg/day for 56 days in healthy men. Both were run by the ingredient's developer; no independent replication was found. Outcomes included an aging-males' symptom score, hormone levels and hand-grip strength. In the older-men trial, the symptom score was primary and hormone levels and strength were secondary; these short trials do not establish long-term disease outcomes. Pomegranate or cocoa extracts outside this blend cannot borrow this evidence.",
       "last_updated": "2026-09-28",
       "notable_studies": "Sreeramaneni et al. (2023, PMID 35129040) randomized 120 men aged 21-35 to placebo, 200 or 400 mg/day for 56 days: free testosterone rose at both doses and total testosterone at 400 mg versus placebo. Pandit et al. (2022, PMID 35928723) randomized 120 men aged 36-55 to the same arms: aging males' symptoms scores fell and free and total testosterone rose at both doses.",
       "references_structured": [
