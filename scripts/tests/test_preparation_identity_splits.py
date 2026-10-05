@@ -198,3 +198,86 @@ def test_clinical_followups_use_routable_fields_and_one_policy_owner():
         "hypoglycemics_lower_risk",
         "hypoglycemics_unknown",
     }
+
+
+@pytest.mark.parametrize("name", ["Ascorbic Acid", "non-GMO Ascorbic Acid", "organic Ascorbic Acid"])
+def test_active_vitamin_c_is_not_a_preservative(pipeline, name):
+    from scoring_input_contract import get_evidence_subject_rows
+    from scoring_v4.scored_artifact import build_scored_artifact
+
+    row = _raw_row(1, name, "Vitamin C (ascorbic acid)", category="vitamin", quantity=50, unit="mg")
+    enriched = pipeline(_raw_product(990103, [row]))
+    rows = _rows(enriched, name)
+    assert rows and {r["canonical_id"] for r in rows} == {"vitamin_c"}
+    assert {r["canonical_id"] for r in get_evidence_subject_rows(enriched)} == {"vitamin_c"}
+    assert build_scored_artifact(enriched)["quality_score_status"] == "scored"
+
+
+@pytest.mark.parametrize("name", ["Ascorbic Acid", "non-GMO Ascorbic Acid"])
+def test_inactive_vitamin_c_keeps_the_preservative_owner(pipeline, name):
+    raw = _raw_product(990104, [_raw_row(1, "Vitamin D3", "Vitamin D", category="vitamin", quantity=25, unit="mcg")])
+    raw["otheringredients"] = {"text": name, "ingredients": [{"name": name, "ingredientGroup": "Vitamin C (ascorbic acid)", "category": "vitamin"}]}
+    enriched = pipeline(raw)
+    assert {r["canonical_id"] for r in enriched["inactiveIngredients"] if name in r.get("name", "")} == {"OI_ASCORBIC_ACID_PRESERVATIVE"}
+
+
+@pytest.mark.parametrize("name", ["NEM", "NEM eggshell membrane", "Eggshell membrane"])
+def test_membrane_does_not_inherit_hydrolyzed_peptide_form(pipeline, name):
+    enriched = pipeline(_raw_product(990105, [_raw_row(1, name, "Collagen", category="non-nutrient/non-botanical", quantity=500, unit="mg")]))
+    rows = [r for r in enriched["ingredient_quality_data"]["ingredients"]
+            if r.get("raw_source_text") == name]
+    assert rows
+    assert all(r.get("form") != "hydrolyzed collagen peptides" and r.get("matched_form") != "hydrolyzed collagen peptides" for r in rows)
+
+
+def test_extract_formula_is_not_relabelled_as_powder(pipeline):
+    from scoring_input_contract import get_evidence_subject_rows
+    row = _raw_row(1, "Triphala", "Blend (Herb/Botanical)", category="blend", quantity=90, unit="mg", forms=["Amla extract", "Belleric Myrobalan extract", "Chebula Myrobalan extract"])
+    enriched = pipeline(_raw_product(990106, [row]))
+    assert not any(r.get("canonical_id") == "triphala_powder" for r in get_evidence_subject_rows(enriched))
+    assert not any(r.get("standard_name") == "Triphala Powder" for r in _rows(enriched, "Triphala"))
+
+
+def test_fatty_oil_blend_is_a_header_not_a_volatile_oil_subject(pipeline):
+    from scoring_input_contract import get_evidence_subject_rows
+    row = _raw_blend("Essential Oil Blend", [("Evening Primrose Oil", "Evening Primrose oil"), ("Black Currant Seed Oil", "Black Currant Seed Oil")])
+    row["ingredientGroup"] = "Blend (Fatty Acid or Fat/Oil Supplement)"
+    row["notes"] = "These oils provide the following fatty acid profile"
+    enriched = pipeline(_raw_product(990107, [row]))
+    subjects = get_evidence_subject_rows(enriched)
+    assert not any(r.get("canonical_id") == "essential_oil_blend" for r in subjects)
+    assert any("primrose" in str(r.get("canonical_id")) for r in subjects)
+    from scoring_input_contract import is_lent_blend_mass
+    from scoring_v4.modules.generic_helpers import has_usable_individual_dose
+    assert all(r.get("quantity", 0) in (0, None) or is_lent_blend_mass(r) for r in subjects)
+    assert all(not has_usable_individual_dose(r) for r in subjects)
+
+
+@pytest.mark.parametrize("name,forms", [("Triphala fruit extract", []), ("Triphala", ["Amla extract", "Belleric Myrobalan extract", "Chebula Myrobalan extract"])])
+def test_cleaner_keeps_unowned_extract_preparation_explicit(name, forms):
+    from enhanced_normalizer import EnhancedDSLDNormalizer
+    row = _raw_row(1, name, "Blend (Herb/Botanical)", category="blend", quantity=90, unit="mg", forms=forms)
+    cleaned = EnhancedDSLDNormalizer().normalize_product(_raw_product(990108, [row]))
+    parent = next(r for r in cleaned["activeIngredients"] if r["name"] == name)
+    assert parent["canonical_id"] is None
+    assert parent["standardName"] == name
+    assert parent["quantity"] == 90
+    if forms:
+        assert [f["name"] for f in parent["forms"]] == forms
+    else:
+        assert any(f["name"] == "extract" for f in parent["forms"])
+
+
+def test_declared_triphala_powder_keeps_its_existing_identity(pipeline):
+    enriched = pipeline(_raw_product(990109, [_raw_row(1, "Triphala Powder", "Triphala", quantity=2000, unit="mg")]))
+    assert {r["canonical_id"] for r in _rows(enriched, "Triphala Powder")} == {"triphala_powder"}
+
+
+@pytest.mark.parametrize("name", ["Vitamin A", "organic Vitamin A"])
+def test_qualified_vitamin_name_retains_its_full_form_unii(pipeline, name):
+    row = _raw_row(1, name, "Vitamin A", category="vitamin", quantity=900, unit="mcg")
+    row["forms"] = [{"name": "Beta-Carotene", "category": "vitamin", "ingredientGroup": "Beta Carotene", "uniiCode": "01YAE03M7J"}]
+    enriched = pipeline(_raw_product(990110, [row]))
+    rows = _rows(enriched, name)
+    assert rows and {r["canonical_id"] for r in rows} == {"beta_carotene"}
+    assert {r["bio_score"] for r in rows} == {5}

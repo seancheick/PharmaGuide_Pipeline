@@ -3343,6 +3343,11 @@ def _is_ineligible_evidence_subject(row: Mapping[str, Any]) -> bool:
     minted = (
         row.get("identity_kind") == "label_taxonomy_anchor"
         or _norm(row.get("canonical_source_db")) == "proprietary_blends"
+        or (
+            row.get("scoring_input_kind") == "product_level_evidence"
+            and row.get("evidence_type") == "blend_anchor_mass"
+            and row.get("reason") == "identity_bearing_blend_header_mass"
+        )
     )
     known = minted and (
         iqm_reference_entry(canonical)
