@@ -944,7 +944,7 @@ Owner: existing enhanced_normalizer preparation/printed nutrient identity, enric
 - [x] Measure final source `8084ca71` against dfeff692 on 123 frozen labels: three reason/readiness payload changers 178674/184942/267347; no numerical pillar/total, status or route movement. This subset does not refresh the 102,281-subject census.
 - [x] Prepare the four remaining Evidence-to-Dose exposure decisions in the existing transfer README. Zinc retains nutrient/UL/Safety ownership; D-mannose and D-aspartic-acid null exposure cannot become positive benchmarks; white-kidney-bean lowest studied amount is not a proven efficacy threshold. Existing amount gates remain intact pending equivalent Dose ownership and approved treatment.
 - [x] Validate/review exact source `8084ca71`: all four CI groups 37268235385 pass; local: 537 passed / 24 declared opt-in skips in 149.77s, skip guard passed; independent source/movement review accepted.
-- [ ] Integrate after Sean's main authorization.
+- [x] Integrate with Sean's October5 authorization: PR62 merged as115b30eb; origin/main contains validated source8084ca71 and documentation158ef4da. Temporary branch/worktree cleanup recorded in LEDGER.
 - [ ] Resolve the four exposure-policy choices and remaining exact preparation/clinical exceptions, then check actual stage fingerprints and perform one combined necessary Clean run followed by catalog/app/release validation. No intermediate corpus run or old stamp rewrite.
 
 The 53/70 phase count remains unchanged. The 58 classified pending groups are not universally closed by identity containment. Source receipts and checkpoint results: existing pending-items LEDGER/research and `/Users/seancheick/pg_quality/clinical_source_continuation_20261005/`.
