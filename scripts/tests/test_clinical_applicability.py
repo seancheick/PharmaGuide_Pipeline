@@ -632,3 +632,107 @@ def test_exclusion_only_scope_retains_every_valid_marine_row_independent_of_orde
     assert not rejected
     assert set(accepted[0]["matched_source_row_refs"]) == {"ingredientRows[0]", "ingredientRows[1]"}
     assert set(accepted[0]["matched_canonical_ids"]) == {"epa", "dha"}
+def test_spirulina_endpoint_summaries_preserve_population_and_comparator():
+    """Disease-specific and within-group results are not general efficacy."""
+    import json
+    from pathlib import Path
+    from data_batch import entries
+
+    data = json.loads((Path(__file__).parents[1] / "data" / "backed_clinical_studies.json").read_text())
+    record = entries(data)["backed_clinical_studies/INGR_SPIRULINA"]
+    endpoints = record["key_endpoints"]
+    hiv = next(text for text in endpoints if "25057105" in text)
+    nephrotic = next(text for text in endpoints if "12487756" in text)
+    assert "HIV" in hiv and "women" in hiv
+    assert "no between-group differences in immunological or virological markers" in hiv
+    assert "within-group" in nephrotic and "children" in nephrotic
+    assert "medication-only control" in nephrotic
+    assert "not placebo-adjusted treatment effects" in nephrotic
+    assert "not evidence of general longevity benefit" in record["notes"]
+
+
+@pytest.mark.parametrize('legacy', [False, True])
+def test_amount_independent_applicability_keeps_provider_owned_undosed_member(monkeypatch, legacy):
+    import clinical_applicability as ca
+    from scoring_input_contract import get_evidence_subject_rows
+    row = {'name':'Bromelain', 'raw_source_text':'Bromelain', 'canonical_id':'bromelain',
+           'role_classification':'inactive_non_scorable', 'cleaner_row_role':'named_blend_member',
+           'source_section':'active', 'raw_source_path':'ingredientRows[0].nestedRows[0]',
+           'quantity':0, 'unit':'NP', 'matched_form':'Bromelain'}
+    product = {'activeIngredients':[row], 'ingredient_quality_data':{'ingredients':[row], 'ingredients_scorable':[]}}
+    assert get_evidence_subject_rows(product)
+    entry = {'id':'TEST_UNDOSED', 'ingredient':'Bromelain','matched_source_row_refs':[row['raw_source_path']],
+             'matched_canonical_ids':['bromelain'],'study_type':'rct_single'}
+    if legacy:entry['exclude_aliases']=['other preparation']
+    else:entry['applicability']={'scope':'ingredient', 'required_form_terms':['bromelain'], 'minimum_daily_dose':100, 'dose_unit':'mg'}
+    monkeypatch.setattr(ca,'reviewed_entries', lambda: {})
+    assert assess_clinical_applicability(product,entry,assess_amount=False)['status'] in {'applicable','not_curated'}
+    if not legacy:
+        assert assess_clinical_applicability(product,entry,assess_amount=True)['status'] in {'unresolved', 'not_applicable'}
+    else:
+        assert assess_clinical_applicability(product,entry,assess_amount=True)['status'] == 'not_curated'
+    from dose_assessment import positive_clinical_benchmark
+    assert positive_clinical_benchmark(product,row) is None
+
+
+def test_provider_owned_anchor_uses_its_exact_named_child_without_lending_mass(monkeypatch):
+    import scoring_input_contract as contract
+    import clinical_applicability as ca
+    child = {'name': 'Cinnamon Extract', 'canonical_id': 'cinnamon', 'raw_source_path': 'ingredientRows[0].forms[0]',
+             'parent_source_path': 'ingredientRows[0]', 'source_section': 'active', 'quantity': 0, 'unit': 'mg'}
+    sibling = {**child, 'name': 'Other Extract', 'canonical_id': 'other', 'raw_source_path': 'ingredientRows[0].forms[1]'}
+    anchor = {**child, 'raw_source_path': 'ingredientRows[0]', 'quantity': 3200,
+              'scoring_input_kind': 'product_level_evidence', 'evidence_scope': 'blend_level'}
+    product = {'activeIngredients': [child, sibling], 'ingredient_quality_data': {'ingredients_scorable': [child, sibling]}}
+    monkeypatch.setattr(contract, 'get_evidence_subject_rows', lambda _: [anchor, sibling])
+    entry = {'ingredient': 'Cinnamon Extract', 'matched_canonical_ids': ['cinnamon'], 'matched_source_row_refs': ['ingredientRows[0]']}
+    linked = ca._linked_rows(product, entry, evidence_only=True)
+    assert [r['raw_source_path'] for r in linked] == ['ingredientRows[0].forms[0]']
+    assert linked[0]['quantity'] == 0
+    assert ca._linked_rows(product, entry, evidence_only=False) == []
+    entry['matched_canonical_ids'] = ['other']
+    assert ca._linked_rows(product, entry, evidence_only=True) == []
+    entry['matched_canonical_ids'] = ['cinnamon']
+    entry['matched_source_row_refs'] = ['ingredientRows[0]', 'ingredientRows[1]']
+    child['parent_source_path'] = 'ingredientRows[1]'
+    assert ca._linked_rows(product, entry, evidence_only=True) == []
+
+
+def test_form_only_review_has_no_exposure_prerequisite(monkeypatch):
+    import clinical_applicability as ca
+    row = {'name':'Bromelain','raw_source_text':'Bromelain','canonical_id':'bromelain',
+           'role_classification':'inactive_non_scorable','cleaner_row_role':'named_blend_member',
+           'source_section':'active','raw_source_path':'ingredientRows[0].nestedRows[0]',
+           'quantity':0,'unit':'NP','matched_form':'Bromelain'}
+    product = {'activeIngredients':[row], 'ingredient_quality_data':{'ingredients':[row],'ingredients_scorable':[]}}
+    monkeypatch.setattr(ca,'reviewed_entries', lambda: {})
+    entry = {'id':'TEST_FORM_ONLY','ingredient':'Bromelain','matched_source_row_refs':[row['raw_source_path']],
+             'applicability':{'scope':'ingredient','required_form_terms':['bromelain']}}
+    assert ca.assess_clinical_applicability(product,entry)['status'] == 'applicable'
+    entry['applicability'].update(minimum_daily_dose=100,dose_unit='mg')
+    assert ca.assess_clinical_applicability(product,entry)['status'] in {'not_applicable','unresolved'}
+
+
+def test_source_required_anchor_binds_printed_child_before_structural_header(monkeypatch):
+    import clinical_applicability as ca
+    import scoring_input_contract as contract
+    header = {'name':'Organic Botanical Blend','raw_source_text':'Organic Botanical Blend',
+              'raw_source_path':'ingredientRows[0]','canonical_id':'structural_blend',
+              'quantity':10000,'unit':'mg','score_eligible_by_cleaner':False,'source_section':'active'}
+    child = {'name':'Inulin','raw_source_text':'Inulin','canonical_id':'inulin',
+             'raw_source_path':'ingredientRows[0].nestedRows[0]',
+             'quantity':0,'unit':'NP','source_section':'active','score_eligible_by_cleaner':False}
+    anchor = {**child,'raw_source_path':'ingredientRows[0]','quantity':10000,'unit':'mg',
+              'scoring_input_kind':'product_level_evidence','evidence_scope':'blend_level',
+              'linked_rows':['ingredientRows[0]',child['raw_source_path']]}
+    product = {'activeIngredients':[header,child],'ingredient_quality_data':{'ingredients_scorable':[]}}
+    monkeypatch.setattr(contract,'get_evidence_subject_rows', lambda _: [anchor])
+    monkeypatch.setattr(ca,'reviewed_entries',lambda:{})
+    entry = {'id':'TEST_INULIN_ANCHOR','ingredient':'Inulin','matched_canonical_ids':['inulin'],
+             'matched_source_row_refs':['ingredientRows[0]'],
+             'applicability':{'scope':'ingredient','required_form_terms':['inulin'],'require_source_label_form':True}}
+    result=ca.assess_clinical_applicability(product,entry,assess_amount=False)
+    assert result['status']=='applicable'
+    assert result['source_row_ref']==child['raw_source_path']
+    child['raw_source_text']='Different Material';child['name']='Different Material'
+    assert ca.assess_clinical_applicability(product,entry,assess_amount=False)['status']=='not_applicable'

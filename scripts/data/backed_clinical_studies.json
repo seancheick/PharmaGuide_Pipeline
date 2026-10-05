@@ -3,7 +3,7 @@
     "description": "Ingredients backed by clinical research and studies - Enhanced for Section C v3.4.0",
     "purpose": "evidence_scoring",
     "schema_version": "5.6.3",
-    "last_updated": "2026-10-02",
+    "last_updated": "2026-10-04",
     "total_entries": 210,
     "changelog": [
       "2026-10-02: INGR_OMEGA3 removes unsupported plant ALA intervention aliases and excludes stale ALA matches from marine EPA/DHA evidence through the existing clinical-applicability owner. No dose thresholds or numerical magnitudes changed.",
@@ -10464,7 +10464,8 @@
       "standard_name": "Inulin",
       "aliases": [
         "chicory root fiber",
-        "fos"
+        "fos",
+        "inulin/fos"
       ],
       "category": "digestive_gut",
       "evidence_level": "ingredient-human",
@@ -10483,7 +10484,7 @@
       ],
       "notes": "Human evidence supports the inulin-type fructan family (inulin, oligofructose and short-chain FOS), not every unspecified prebiotic fiber. PMID 35833477 evaluates chicory-derived preparations: 3–20 g/day, 50 studies/2525 participants, with bowel-function benefits in healthy subjects and no significant bifidogenic benefit in the gastrointestinal-disorder subgroup. Live bibliographic metadata for PMID 35833477 lists BENEO support and author affiliations; precise funder roles require full-text review. PMID 34555168 reviews healthy adults and mixed chain lengths/preparations, with positive and null laxation/calcium findings; support from General Mills is disclosed. Those outcomes cannot be transferred uniformly between inulin and FOS or treated as whole retail-formula trials. PMID 38309832 reports small cardiometabolic risk-factor effects with low or very low certainty, not cardiovascular-event prevention. Review populations overlap and must not be summed as unique enrollment. Historic automated registry discovery supplied 420 enrollment/224 completed trials without an identified NCT receipt; neither is retained as verified evidence metadata. Trial exposure remains a source fact for existing Dose review; no universal studied-dose benchmark is established.",
       "study_type": "systematic_review_meta",
-      "last_updated": "2026-10-02",
+      "last_updated": "2026-10-04",
       "notable_studies": "PMID 35833477: chicory-derived inulin-type fructans increase Bifidobacterium (surrogate), with bowel-function benefits in healthy subjects; gastrointestinal-disorder bifidogenic subgroup was not significant. PMID 34555168: healthy-adult ITF review; 11 of 20 stool-frequency studies positive and nine null, mixed calcium-related findings (absorption, balance and serum concentrations are distinct outcomes); effects depend on preparation/chain length. PMID 38309832: 55 RCTs/2518 participants, small LDL/triglyceride/body-weight changes with low to very low certainty and little to no significant effect on other risk factors. These review totals are not unique trial-enrollment or published-replication counts for this entry.",
       "references_structured": [
         {
@@ -10601,13 +10602,35 @@
       "external_ids": {
         "unii": "JOS53KRJ01"
       },
-      "effect_direction": "positive_strong",
+      "effect_direction": "mixed",
       "primary_outcome": "Digestive Health",
-      "effect_direction_confidence": "high",
-      "effect_direction_rationale": "Existing positive_strong/tier_1 grading retained as the cross-family calibration baseline, not re-ratified by this factual correction. Digestive-health literature supports bifidogenic surrogate and bounded bowel-function findings; mixed preparation/population outcomes and low-certainty cardiometabolic findings are recorded separately. Unverified registry discovery counts and unrelated endpoint tags are not clinical grading evidence.",
+      "effect_direction_confidence": "medium",
+      "effect_direction_rationale": "Inulin-type fructan reviews contain preparation-dependent positive and null bowel-function outcomes; PMID34555168 reports eleven positive and nine null stool-frequency studies. Bifidobacterium abundance is a surrogate; cardiometabolic effects in PMID38309832 are low/very-low certainty risk-factor changes, not clinical-event prevention. Mixed direction reflects the bounded clinical conclusion under the existing magnitude table.",
       "endpoint_relevance_tags": [
         "digestive_health"
-      ]
+      ],
+      "applicability": {
+        "scope": "ingredient",
+        "required_form_terms": [
+          "inulin",
+          "fructooligosaccharides",
+          "fructo oligosaccharides",
+          "oligofructose",
+          "fos",
+          "chicory root fiber"
+        ],
+        "require_source_label_form": true,
+        "supported_outcomes": [
+          "digestive"
+        ],
+        "studied_population": "Healthy adult inulin-type-fructan research; findings depend on preparation and chain length. No uniform equivalence of inulin/FOS doses, no generic prebiotic, XOS, GOS, immune or cardiovascular-event claim.",
+        "source_pmids": [
+          "35833477",
+          "34555168",
+          "38309832"
+        ],
+        "reviewed_at": "2026-10-04"
+      }
     },
     {
       "id": "INGR_IRON_BISGLYCINATE",
@@ -15837,8 +15860,8 @@
       "health_goals_supported": [
         "Digestive Health"
       ],
-      "notes": "Both indexed randomized trials explicitly used Sunfiber PHGG supplied by Taiyo Kagaku; the evidence is for that ingredient preparation, not for a complete Nature's Way retail formula. Niv 2016 found selective improvement in bloating/gas, but not overall IBS severity, abdominal pain, stool frequency or quality of life; 121 randomized and 108 entered the reported intention-to-treat analysis, with substantial differential attrition. Yasukawa 2019 studied healthy adults with loose stools, excluding diagnosed IBS; 44 randomized, 42 stool-efficacy and 40 microbiome analyses. Stool form improved but frequency, GI symptom journals and overall physical/mental quality-of-life summaries did not. Microbiome composition is secondary surrogate evidence; neither indexed trial measured clinical immune benefits or increased SCFA production. The 2016 study received commercial support from Pro Natura and Sunwic AB with declared investigator independence. Taiyo funded and supplied the 2019 study, participated in protocol preparation and employed three authors; these are not independently funded replications. These outcome and funding limitations remain explicit for the pending cross-family certainty/calibration review.",
-      "last_updated": "2026-10-02",
+      "notes": "Both indexed randomized trials explicitly used Sunfiber PHGG supplied by Taiyo Kagaku; the evidence is for that ingredient preparation, not for a complete Nature's Way retail formula. Niv 2016 found selective improvement in bloating/gas, but not overall IBS severity, abdominal pain, stool frequency or quality of life; 121 randomized and 108 entered the reported intention-to-treat analysis, with substantial differential attrition. Yasukawa 2019 studied healthy adults with loose stools, excluding diagnosed IBS; 44 randomized, 42 stool-efficacy and 40 microbiome analyses. Stool form improved but frequency, GI symptom journals and overall physical/mental quality-of-life summaries did not. Microbiome composition is secondary surrogate evidence; neither indexed trial measured clinical immune benefits or increased SCFA production. The 2016 study received commercial support from Pro Natura and Sunwic AB with declared investigator independence. Taiyo funded and supplied the 2019 study, participated in protocol preparation and employed three authors; these are not independently funded replications. These limitations support the reviewed mixed clinical determination under the existing grading policy.",
+      "last_updated": "2026-10-04",
       "notable_studies": "Niv et al. (2016, PMID 26855665) explicitly tested Sunfiber PHGG in adults with Rome III IBS: 3 g/day for the first week, then 6 g/day for 11 weeks; bloating/gas improved, overall severity and quality of life did not. Yasukawa et al. (2019, PMID 31509971) explicitly tested Sunfiber PHGG at 5 g/day for 12 weeks in healthy adults with loose stools; stool form improved, stool frequency did not, and Bifidobacterium relative abundance was a secondary surrogate. PHGG preparation grams are not dietary-fiber assay grams. Trial amounts are source facts for the existing Dose owner, not additional Evidence deductions.",
       "references_structured": [
         {
@@ -15919,16 +15942,31 @@
       "external_ids": {
         "unii": "E89I1637KE"
       },
-      "effect_direction": "positive_strong",
+      "effect_direction": "mixed",
       "primary_outcome": "Digestive Health",
-      "total_enrollment": 165,
-      "registry_completed_trials_count": 1,
+      "total_enrollment": 121,
       "effect_direction_confidence": "medium",
-      "effect_direction_rationale": "The existing positive_strong numerical classification is retained as a frozen calibration baseline, not re-ratified by this factual correction. The two indexed Sunfiber RCTs randomized 165 participants in total (121 plus 44); analyzed populations differ. Clinical benefits were outcome-specific with important null results and attrition/commercial-support limitations. No meta-analysis, immune benefit, stress/mood treatment, measured SCFA increase, whole-retail-formula trial or independent funding is established by these references. Cross-family certainty grading remains pending; no new magnitude or sponsorship deduction is applied.",
+      "effect_direction_rationale": "Outcome-specific benefit with important null results: registered primary Francis IBS severity and quality of life were null in PMID 26855665; bloating/gas improved. PMID 31509971 found stool-form benefit in healthy loose-stool adults, with stool frequency and overall quality-of-life summaries null. Microbial changes are secondary surrogate outcomes. Attrition and commercial involvement limit certainty; these are not uniform digestive-health benefits. Existing mixed-direction magnitude applies without a new penalty.",
       "endpoint_relevance_tags": [
         "digestive_health"
       ],
-      "published_rct_count": 2
+      "published_rct_count": 2,
+      "applicability": {
+        "scope": "ingredient",
+        "required_form_terms": [
+          "sunfiber"
+        ],
+        "require_source_label_form": true,
+        "supported_outcomes": [
+          "digestive"
+        ],
+        "studied_population": "Adults with Rome III IBS and bloating (PMID26855665), and healthy adults with loose stools excluding diagnosed IBS (PMID31509971). Selective outcomes only; no universal IBS severity, immune, mood or cardiovascular benefit.",
+        "source_pmids": [
+          "26855665",
+          "31509971"
+        ],
+        "reviewed_at": "2026-10-04"
+      }
     },
     {
       "id": "BRAND_CYNATINE_HNS",
@@ -21388,20 +21426,19 @@
       ],
       "score_contribution": "tier_2",
       "key_endpoints": [
-        "Reduced total cholesterol, LDL-C, and triglycerides significantly in meta-analysis of 7 clinical studies in diabetic populations (PMID: 34538515)",
-        "Decreased systolic blood pressure and endothelial damage markers (sVCAM-1, sE-selectin) at 4.5g/day for 12 weeks in hypertensive patients (PMID: 30544795)",
-        "Increased serum total antioxidant capacity by 56 uM vs placebo at 5g/day for 3 months in RCT (PMID: 25057105)",
-        "Reduced total cholesterol by 116 mg/dL and LDL-C by 94 mg/dL at 1g/day for 2 months in hyperlipidemic patients (PMID: 12487756)"
+        "Human synthesis of seven clinical studies found lower total cholesterol, triglycerides and fasting blood sugar and increased HDL-C; LDL-C and HbA1c were not significantly improved. Twenty-seven preclinical studies were analyzed separately (PMID: 34538515).",
+        "Small randomized pilot in 16 ACE-inhibitor-treated hypertensive patients: systolic blood pressure and selected endothelial biomarkers improved with 4.5 g/day for 12 weeks; adjunctive population, not general cardiovascular-event prevention (PMID: 30544795).",
+        "In 73 HIV-infected adult women before HAART, 5g/day for 3 months increased serum antioxidant capacity; no between-group differences in immunological or virological markers were observed. Antioxidant capacity is a surrogate outcome (PMID: 25057105)",
+        "In 23 children aged 2-13 with nephrotic syndrome, medication plus 1g/day for 2 months produced within-group TC and LDL-C decreases of 116.33 and 94.14 mg/dL; the medication-only control also decreased by 69.87 and 61.13 mg/dL. These are not placebo-adjusted treatment effects (PMID: 12487756)"
       ],
       "health_goals_supported": [
-        "Healthy Aging/Longevity"
+        "Cardiovascular/Heart Health"
       ],
-      "primary_outcome": "Healthy Aging/Longevity",
-      "effect_direction": "positive_strong",
-      "total_enrollment": 101,
-      "notes": "Spirulina has moderate-quality evidence for lipid-lowering (most consistent: TC, LDL-C, TG reduction), blood pressure reduction, and antioxidant effects. Network meta-analysis (PMID: 35988871) ranked spirulina among effective nutraceuticals for LDL-C lowering.",
-      "last_updated": "2026-04-02",
-      "notable_studies": "NCT04988347 (n=45): Spirulina Platensis for PPI Withdrawal. NCT05016557 (n=36): The Muscle Protein Synthetic Response of Algal and Fungal Protein. NCT01752972 (n=30): Effect of Spirulina on Zinc, Vitamin E and Linoleic Acid Levels in Palm Skin Following Chronic Exposure to Arsenic.",
+      "primary_outcome": "Cardiovascular/Heart Health",
+      "effect_direction": "mixed",
+      "notes": "Reviewed mixed clinical findings with preparation- and population-specific applicability. PMID 34538515 separates seven human clinical studies from 27 preclinical studies and reports null LDL-C/HbA1c findings alongside positive metabolic biomarkers. PMID 35988871 reports eight direct Spirulina-placebo studies/420 participants, 6–16 weeks, with a small LDL-C reduction and VERY LOW certainty. Its 131-trial/13062-participant total spans eleven nutraceuticals and is not a Spirulina study count. Later lipid review PMID 37263369 supports a lipid biomarker signal, not longevity or cardiovascular-event prevention; overlapping reviews must not be summed as independent trials. The HIV trial reports an antioxidant surrogate without between-group immunological/virological benefit; the pediatric nephrotic-syndrome study reports adjunctive within-group changes. No immune protection, longevity or ordinary-dose muscle-recovery claim is established. The existing conservative rct_single/tier_2 scoring representation is retained; source summaries do not automatically upgrade numerical study-type credit. The HIV and pediatric adjunctive studies are not evidence of general longevity benefit.",
+      "last_updated": "2026-10-04",
+      "notable_studies": "NCT04988347: 45 screened/43 randomized in linked PMID38401078, 1.6 g/day for two months after PPI withdrawal; dyspeptic rebound improved, reflux did not. NCT01752972: nonrandomized open-label arsenic-exposure study, 30 enrolled, no posted results. NCT05016557: randomized basic-science protein-synthesis study, 36 enrolled, 25 g protein bolus, no posted results or linked publication; not ordinary-dose clinical muscle-recovery evidence.",
       "references_structured": [
         {
           "type": "clinical_trial",
@@ -21414,47 +21451,86 @@
           "type": "clinical_trial",
           "nct_id": "NCT01752972",
           "title": "Effect of Spirulina on Zinc, Vitamin E and Linoleic Acid Levels in Palm Skin Following Chronic Exposure to Arsenic",
-          "evidence_grade": "rct",
-          "enrollment": 30
+          "evidence_grade": "non_randomized",
+          "enrollment": 30,
+          "note": "Live registry design: NON_RANDOMIZED, open label; no posted results."
         },
         {
           "pmid": "34538515",
           "url": "https://pubmed.ncbi.nlm.nih.gov/34538515/",
           "source": "PubMed",
           "verified": true,
-          "note": "Extracted from key_endpoints text — needs content verification"
+          "note": "Content verified 2026-10-04; bounded findings and null outcomes recorded in key_endpoints."
         },
         {
           "pmid": "30544795",
           "url": "https://pubmed.ncbi.nlm.nih.gov/30544795/",
           "source": "PubMed",
           "verified": true,
-          "note": "Extracted from key_endpoints text — needs content verification"
+          "note": "Content verified 2026-10-04; bounded findings and null outcomes recorded in key_endpoints."
         },
         {
           "pmid": "25057105",
           "url": "https://pubmed.ncbi.nlm.nih.gov/25057105/",
           "source": "PubMed",
           "verified": true,
-          "note": "Extracted from key_endpoints text — needs content verification"
+          "note": "Content verified 2026-10-04: 73 HIV-infected women before HAART; antioxidant surrogate improved, immunological/virological markers did not differ between groups."
         },
         {
           "pmid": "12487756",
           "url": "https://pubmed.ncbi.nlm.nih.gov/12487756/",
           "source": "PubMed",
           "verified": true,
-          "note": "Extracted from key_endpoints text — needs content verification"
+          "note": "Content verified 2026-10-04: children with nephrotic syndrome, medication plus Spirulina versus medication alone; reported lipid decreases are within-group changes."
+        },
+        {
+          "pmid": "35988871",
+          "title": "A network meta-analysis on the comparative effect of nutraceuticals on lipid profile in adults.",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/35988871/",
+          "source": "PubMed",
+          "verified": true,
+          "note": "Primary source content reviewed 2026-10-04; interpretation bounded in notes/notable_studies."
+        },
+        {
+          "pmid": "37263369",
+          "title": "The effect of Spirulina supplementation on lipid profile: GRADE-assessed systematic review and dose-response meta-analysis of data from randomized controlled trials.",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/37263369/",
+          "source": "PubMed",
+          "verified": true,
+          "note": "Primary source content reviewed 2026-10-04; interpretation bounded in notes/notable_studies."
+        },
+        {
+          "pmid": "38401078",
+          "title": "Spirulina Platensis Attenuates Rebound Dyspeptic Symptoms After Proton Pump Inhibitors' Discontinuation: Phase 2 Placebo-controlled Trial.",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/38401078/",
+          "source": "PubMed",
+          "verified": true,
+          "note": "Primary source content reviewed 2026-10-04; interpretation bounded in notes/notable_studies."
         }
       ],
-      "published_studies_count": 58,
-      "registry_completed_trials_count": 58,
-      "effect_direction_confidence": "medium",
-      "effect_direction_rationale": "Retained positive_strong classification; study_type=rct_single; evidence_level=ingredient-human; primary_outcome=Healthy Aging/Longevity; published_tags=RCT; published_studies_count=58; registry_completed_trials_count=58; total_enrollment=101; endpoint_tags=immune_support,glycemic_control,muscle_recovery; notes/citations contain no automated downgrade signals.",
+      "effect_direction_confidence": "low",
+      "effect_direction_rationale": "Mixed positive and null clinical endpoints, small adjunctive trials and source-specific very-low certainty. Biomarker improvement is not evidence of longevity, immune protection or prevention of cardiovascular events. Existing mixed-direction magnitude applies; no new penalty or numerical tier is introduced.",
       "endpoint_relevance_tags": [
-        "immune_support",
-        "glycemic_control",
-        "muscle_recovery"
-      ]
+        "cardiovascular_health",
+        "glycemic_control"
+      ],
+      "applicability": {
+        "scope": "ingredient",
+        "excluded_form_terms": [
+          "extract"
+        ],
+        "supported_outcomes": [
+          "metabolic"
+        ],
+        "studied_population": "Preparation-specific lipid/glycemic biomarkers in adults; small adjunctive trials do not establish immune protection, longevity, pediatric general benefit or muscle recovery. Biomass studies do not establish extract equivalence.",
+        "source_pmids": [
+          "34538515",
+          "30544795",
+          "35988871",
+          "37263369"
+        ],
+        "reviewed_at": "2026-10-04"
+      }
     },
     {
       "id": "INGR_LACTOBACILLUS_ACIDOPHILUS",
@@ -23437,7 +23513,7 @@
       "health_goals_supported": [
         "Hormone Balance"
       ],
-      "notes": "Both trials tested LN18178 (Tesnor), a proprietary blend of standardized Punica granatum fruit-rind and Theobroma cocoa seed extracts, at 200 or 400 mg/day for 56 days in healthy men. Both were run by the ingredient's developer; no independent replication was found. Endpoints are hormone levels and a symptom score, not clinical outcomes. Pomegranate or cocoa extracts outside this blend cannot borrow this evidence.",
+      "notes": "Both trials tested LN18178 (Tesnor), a proprietary blend of standardized Punica granatum fruit-rind and Theobroma cocoa seed extracts, at 200 or 400 mg/day for 56 days in healthy men. Both were run by the ingredient's developer; no independent replication was found. Outcomes included an aging-males' symptom score, hormone levels and hand-grip strength. In the older-men trial, the symptom score was primary and hormone levels and strength were secondary; these short trials do not establish long-term disease outcomes. Pomegranate or cocoa extracts outside this blend cannot borrow this evidence.",
       "last_updated": "2026-09-28",
       "notable_studies": "Sreeramaneni et al. (2023, PMID 35129040) randomized 120 men aged 21-35 to placebo, 200 or 400 mg/day for 56 days: free testosterone rose at both doses and total testosterone at 400 mg versus placebo. Pandit et al. (2022, PMID 35928723) randomized 120 men aged 36-55 to the same arms: aging males' symptoms scores fell and free and total testosterone rose at both doses.",
       "references_structured": [

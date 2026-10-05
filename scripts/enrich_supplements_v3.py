@@ -54,6 +54,7 @@ except ImportError:
 sys.path.insert(0, str(Path(__file__).parent))
 
 from constants import (
+    CLEANER_NON_EFFICACY_ROLES,
     IQD_DOSE_EVIDENCE_CLASSES,
     DATA_DIR,
     ALLERGEN_FREE_PATTERNS,
@@ -110,6 +111,7 @@ from scoring_input_contract import (
     UNRESOLVED_IDENTITY_NO_QUALITY_MAP_MATCH,
     derive_product_scoring_evidence,
     get_evidence_subject_rows,
+    is_nutrition_fact_declaration,
     get_scoring_ingredients,
     normalize_product_evidence_scope,
     source_linked_rows,
@@ -4652,8 +4654,12 @@ class SupplementEnricherV3:
                 id(source_ingredient) in structural_parent_total_row_ids
             )
             sole_active_row = len(active_ingredients) == 1
-            if product_activity_text or is_structural_parent_total or sole_active_row:
+            if product_activity_text or is_structural_parent_total or sole_active_row or not ingredient.get("source_section"):
                 ingredient = dict(ingredient)
+            # This collection owns active membership for legacy inputs. Keep
+            # explicit source facts authoritative and do not mutate label rows.
+            if not ingredient.get("source_section"):
+                ingredient["source_section"] = "active"
             if product_activity_text:
                 ingredient.setdefault("_product_activity_text", product_activity_text)
             if is_structural_parent_total:
@@ -6187,35 +6193,30 @@ class SupplementEnricherV3:
         return False
 
     def _compute_excipient_flags(self, ingredient: Dict) -> Tuple[bool, Optional[str]]:
-        """Determine excipient status for ingredient-level signals.
-
-        Sprint E1.3.1 — honors the active-context therapeutic override:
-        dual-use compounds (tocopherols, lecithin) that land here with
-        isAdditive=True but carry a valid therapeutic dose AND are IQM-
-        known should not be flagged excipient.
-        """
-        ing_name_raw = (ingredient.get('name', '') or '')
+        """Use label purpose for dual-use identity; Dose owns amount adequacy."""
+        ing_name_raw = ingredient.get('name', '') or ''
         ing_name = ing_name_raw.strip().lower()
-        std_name = (ingredient.get('standardName', '') or ing_name_raw)
-        quality_map = self.databases.get('ingredient_quality_map', {})
-        botanicals_db = self.databases.get('botanical_ingredients', {})
-
-        # Sprint E1.3.1 override — but NOT for ingredients nested under a
-        # nutrition rollup (Total Carbohydrates, Total Fat, etc.).  Those
-        # are genuinely additives broken out from the nutrition panel and
-        # must keep skipping.  Real branded actives (KSM-66 in "Herbal
-        # Blend") don't have a "Total X" parent, so they still override.
-        has_dose_for_override, _ = self._has_valid_therapeutic_dose(ingredient)
-        _parent_blend = (ingredient.get("parentBlend") or "").strip()
-        _under_nutrition_rollup = bool(
+        std_name = ingredient.get('standardName', '') or ing_name_raw
+        source = str(ingredient.get("source_section") or "").strip().lower()
+        # Legacy cleaner rows may lack source_section; never contradict an
+        # explicit section with a compatibility path.
+        if not source:
+            path = str(ingredient.get("raw_source_path") or "").lower()
+            source = "inactive" if "inactiveingredients" in path else "active" if "activeingredients" in path else ""
+        under_nutrition_rollup = bool(
             ingredient.get("isNestedIngredient")
-            and _parent_blend
-            and _parent_blend.lower().startswith("total ")
+            and str(ingredient.get("parentBlend") or "").strip().lower().startswith("total ")
         )
         active_context_override = (
-            has_dose_for_override
-            and not _under_nutrition_rollup
-            and self._is_known_therapeutic(ing_name_raw, std_name, quality_map, botanicals_db)
+            source in {"active", "activeingredients"}
+            and str(ingredient.get("cleaner_row_role") or "").strip().lower() not in (CLEANER_NON_EFFICACY_ROLES | {"excipient"})
+            and not is_nutrition_fact_declaration(ingredient)
+            and not under_nutrition_rollup
+            and self._is_known_therapeutic(
+                ing_name_raw, std_name,
+                self.databases.get('ingredient_quality_map', {}),
+                self.databases.get('botanical_ingredients', {}),
+            )
         )
 
         if ingredient.get('isAdditive', False) and not active_context_override:
@@ -6232,11 +6233,11 @@ class SupplementEnricherV3:
         # Check ingredient name only — DSLD standardName can misclassify active botanicals
         # (e.g. Elderberry/Turmeric → "natural colors"), causing false excipient gates.
         # isAdditive=True (genuine additives) is already handled above.
-        if ing_name in EXCIPIENT_NEVER_PROMOTE:
+        if ing_name in EXCIPIENT_NEVER_PROMOTE and not active_context_override:
             return True, "excipient_never_promote"
 
         for excipient in EXCIPIENT_NEVER_PROMOTE:
-            if excipient in ing_name and re.search(r'\b' + re.escape(excipient) + r'\b', ing_name):
+            if not active_context_override and excipient in ing_name and re.search(r'\b' + re.escape(excipient) + r'\b', ing_name):
                 return True, "excipient_never_promote"
 
         return False, None
@@ -6529,44 +6530,16 @@ class SupplementEnricherV3:
             if parent_blend and not has_nested_dose and activity_qty is None:
                 return SKIP_REASON_NESTED_NON_THERAPEUTIC
 
-        # =================================================================
-        # GROUP A: Structural flags from cleaning
-        # These are product-level signals (isAdditive, additiveType) that
-        # reflect how the ingredient is USED in this product.
-        #
-        # Sprint E1.3.1 (context-aware classifier): dual-use compounds
-        # (tocopherols, lecithin, fatty acids) carry isAdditive=True by
-        # default because DSLD hints at common additive usage. When the
-        # same compound appears in the ACTIVE panel AND has a valid
-        # therapeutic dose AND is IQM-known, the label itself is treating
-        # it as an active — override the additive gate. Trace-dose or
-        # inactive-panel variants still skip as additive.
-        # =================================================================
-        has_dose_for_override, _ = self._has_valid_therapeutic_dose(ingredient)
-        _parent_blend = (ingredient.get("parentBlend") or "").strip()
-        _under_nutrition_rollup = bool(
-            ingredient.get("isNestedIngredient")
-            and _parent_blend
-            and _parent_blend.lower().startswith("total ")
-        )
-        active_context_override = (
-            has_dose_for_override
-            and not _under_nutrition_rollup
-            and self._is_known_therapeutic(ing_name, std_name, quality_map, botanicals_db)
-        )
-
-        # A1: Check isAdditive flag (unless overridden by active-panel therapeutic context)
-        if ingredient.get('isAdditive', False) and not active_context_override:
-            return SKIP_REASON_ADDITIVE
-
-        # A2: Check additiveType (same override)
-        additive_type = ingredient.get('additiveType', '')
-        if (
-            additive_type
-            and additive_type.lower() in ADDITIVE_TYPES_SKIP_SCORING
-            and not active_context_override
-        ):
-            return SKIP_REASON_ADDITIVE_TYPE
+        # One excipient owner serves both ingredient signals and score-row
+        # selection. An undisclosed amount never changes active membership.
+        is_excipient, excipient_reason = self._compute_excipient_flags(ingredient)
+        if is_excipient:
+            # Name-based excipient exclusion does not erase the separate
+            # existing identity/safety recognition result for that substance.
+            if (excipient_reason == "excipient_never_promote"
+                    and self._is_recognized_non_scorable(ing_name, std_name)):
+                return SKIP_REASON_RECOGNIZED_NON_SCORABLE
+            return excipient_reason
 
         # =================================================================
         # THERAPEUTIC OVERRIDE: If known in quality map or botanicals, score.
@@ -8593,6 +8566,13 @@ class SupplementEnricherV3:
 
         return result
 
+    def _is_provided_marker_form(self, form: Dict) -> bool:
+        """A declared providing/supplying marker, not a source or enzyme potency."""
+        prefix = str(form.get('prefix') or '').strip()
+        return (bool(prefix) and prefix.lower().split()[0] in {'providing', 'provides', 'supplying'}
+                and form.get('category') != 'enzyme'
+                and self._excluded_text_reason(f"{prefix} {form.get('name', '')}") == SKIP_REASON_LABEL_PHRASE)
+
     def _build_form_info_from_cleaned(self, ing_name: str, cleaned_forms: List[Dict],
                                       std_name: Optional[str] = None) -> Optional[Dict]:
         """
@@ -8750,6 +8730,14 @@ class SupplementEnricherV3:
         for i, form in enumerate(cleaned_forms):
             form_name_token = (form.get('name') or '').strip().lower()
             prefix = (form.get('prefix') or '').strip()
+            # Existing label-phrase ownership also applies inside forms[].
+            # A material providing a marker is not the isolated marker form;
+            # keep its original label disclosure, exclude only this matching
+            # candidate. Parent preparation still comes from its own name.
+            if self._is_provided_marker_form(form):
+                # A supplied enzyme with declared activity is still a named
+                # material, not a removable standardization marker.
+                continue
             keep_from_prefixed_form = (
                 prefix in _FROM_PREFIXES
                 and _keep_from_prefixed_form(form.get('name', ''))
@@ -9505,6 +9493,17 @@ class SupplementEnricherV3:
             # PRIORITY 1: Use cleaned_forms[] from cleaning stage (structured, reliable)
             if cleaned_forms and isinstance(cleaned_forms, list) and len(cleaned_forms) > 0:
                 form_info = self._build_form_info_from_cleaned(ing_name, cleaned_forms, std_name)
+                if (not form_info and cleaner_iqm_canonical
+                        and any(self._is_provided_marker_form(form) for form in cleaned_forms)):
+                    # Ignoring a provided marker must not discard the form
+                    # explicitly named by its parent (e.g. DMAE bitartrate).
+                    # Reuse the same-parent form owner; no marker identity or
+                    # preparation is inferred from the skipped disclosure.
+                    parent_form = self._specific_form_in_parent(
+                        ing_name, cleaner_iqm_canonical, quality_map)
+                    if parent_form:
+                        parent_form['original_label'] = ing_name
+                        return parent_form
                 if form_info and form_info.get('form_extraction_success'):
                     multi_form_result = self._match_multi_form(
                         form_info, quality_map,

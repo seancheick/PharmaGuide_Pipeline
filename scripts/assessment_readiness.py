@@ -302,7 +302,22 @@ def _is_supportive_human_match(match: Mapping[str, Any]) -> bool:
 
 
 def _probiotic_native_evidence_state(product: Mapping[str, Any], row: Mapping[str, Any] | None = None) -> str | None:
-    from studied_formulas import clinical_strain_matches_source_row, independent_clinical_strains
+    from studied_formulas import (
+        assess_probiotic_evidence, clinical_strain_matches_source_row,
+        independent_clinical_strains, label_owned_native_strains,
+    )
+    owned = label_owned_native_strains(product)
+    if row is not None:
+        owned = [strain for strain in owned
+                 if clinical_strain_matches_source_row(product, strain, row)]
+    if owned:
+        reviewed = assess_probiotic_evidence(product)["strain_assessments"]
+        owned_ids = {strain.get("clinical_id") for strain in owned}
+        conclusions = [assessment for assessment in reviewed
+                       if assessment.get("clinical_id") in owned_ids]
+        if conclusions and all(assessment.get("status") == "strain_reviewed_no_qualifying_human_evidence"
+                               for assessment in conclusions):
+            return EVIDENCE_EVALUATED_LIMITED_OR_NEGATIVE
     strains = independent_clinical_strains(product)
     if row is not None:
         strains = [
@@ -343,13 +358,13 @@ def evaluate_evidence_assessment(
     module: str,
 ) -> Dict[str, Any]:
     """Classify every score row without treating a missing match as a review."""
-    scoring_input = get_scoring_ingredients(
-        dict(product),
-        strict=True,
-        allow_legacy_fallback=False,
-    )
-    rows = list(scoring_input.rows)
-    roles = classify_ingredient_roles(dict(product), module=module, rows=rows)
+    # Use the same subject set and whole-label prominence context as the
+    # Evidence resolver. Undosed named blend members still need a review.
+    from evidence_resolver import _evidence_subject_roles
+    subjects, subject_roles, other_rows, other_roles = _evidence_subject_roles(product, module)
+    # Retain structural strict rows for the exposure consumer, while marking
+    # them outside the individual Evidence question.
+    rows, roles = subjects + other_rows, subject_roles + other_roles
     matches, recovered_matches = resolved_clinical_matches(
         dict(product), owner_scoped=module in {"generic", "fiber_digestive", "sports"}
     )
@@ -379,7 +394,11 @@ def evaluate_evidence_assessment(
         ))
 
         applicability = EVIDENCE_APPLICABILITY_INDIVIDUAL
-        if not material:
+        if index >= len(subjects):
+            applicability = EVIDENCE_APPLICABILITY_NOT_APPLICABLE
+            state = EVIDENCE_NOT_APPLICABLE
+            reason = "structural_row_not_evidence_subject"
+        elif not material:
             applicability = EVIDENCE_APPLICABILITY_NOT_APPLICABLE
             state = EVIDENCE_NOT_APPLICABLE
             reason = "non_material_active"
@@ -405,8 +424,35 @@ def evaluate_evidence_assessment(
             state = probiotic_state
             reason = "reviewed_native_clinical_strain_evidence"
         else:
-            state = EVIDENCE_NOT_YET_EVALUATED
-            reason = "no_reviewed_evidence_assessment"
+            # The canonical resolver owns completed negative and inapplicable
+            # reviews too. Missing positive credit is not a missing review.
+            from evidence_resolver import EvidenceDisposition, resolve_evidence_for_row
+            resolution = resolve_evidence_for_row(row, product=product)
+            disposition = resolution.disposition
+            if (disposition in {
+                EvidenceDisposition.NO_QUALIFYING_HUMAN_EVIDENCE.value,
+                EvidenceDisposition.REVIEWED_NULL_UNFAVORABLE.value,
+            } and "literature_evidence" in resolution.owner_facts):
+                state = EVIDENCE_EVALUATED_LIMITED_OR_NEGATIVE
+                reason = resolution.reason_code
+            elif (disposition == EvidenceDisposition.RESOLVED_BY_REVIEWED_CLINICAL_EVIDENCE.value
+                  and "literature_evidence" in resolution.owner_facts):
+                state = (EVIDENCE_EVALUATED_SUPPORTED if resolution.points_eligible
+                         else EVIDENCE_EVALUATED_LIMITED_OR_NEGATIVE)
+                reason = resolution.reason_code
+            elif (disposition == EvidenceDisposition.RESEARCH_PRESENT_APPLICABILITY_UNESTABLISHED.value
+                  and "backed_clinical_studies" in resolution.matched_owners):
+                # Verified literature has been reviewed, even when it cannot
+                # apply here. Species/stub and pending native reviews stay open.
+                state = EVIDENCE_EVALUATED_LIMITED_OR_NEGATIVE
+                reason = resolution.reason_code
+            elif disposition == EvidenceDisposition.NOT_EFFICACY_RELEVANT.value:
+                applicability = EVIDENCE_APPLICABILITY_NOT_APPLICABLE
+                state = EVIDENCE_NOT_APPLICABLE
+                reason = resolution.reason_code
+            else:
+                state = EVIDENCE_NOT_YET_EVALUATED
+                reason = "no_reviewed_evidence_assessment"
 
         if (
             applicability == EVIDENCE_APPLICABILITY_INDIVIDUAL
@@ -1247,9 +1293,16 @@ def evaluate_assessment_readiness(
         module,
         catalog_disposition=catalog_disposition,
     )
+    # Evidence includes undosed blend subjects. Dose retains its strict
+    # exposure contract; no parent amount or new denominator is inferred.
+    from evidence_resolver import evidence_row_key
+    strict_keys = {evidence_row_key(row) for row in
+                   get_scoring_ingredients(dict(product), strict=True,
+                                           allow_legacy_fallback=False).rows}
     dose = _dose_readiness(
         product,
-        evidence["ingredient_assessments"],
+        [row for row in evidence["ingredient_assessments"]
+         if evidence_row_key({**row, "raw_source_path": row["source_row_ref"]}) in strict_keys],
         module=module,
     )
     verification = evaluate_verification_assessment(product)

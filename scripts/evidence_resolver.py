@@ -894,6 +894,28 @@ def resolve_evidence_for_row(
         + studies_idx.get(f"ingr_{canonical}", [])
         + (studies_idx.get(iqm_std_name, []) if iqm_std_name else [])
     )
+    # Enrichment may use a different native identity namespace for this
+    # exact label row. Reuse its source-bound record ID, then reassess the
+    # current curated scope below; stale stamps and adjacent matches confer
+    # neither identity nor clinical credit.
+    source_ref = row_dict.get("raw_source_path") or row_dict.get("source_row_ref")
+    if product and source_ref:
+        clinical_matches = (product.get("evidence_data") or {}).get("clinical_matches") or []
+        for match in clinical_matches:
+            if not isinstance(match, Mapping):
+                continue
+            refs = match.get("matched_source_row_refs")
+            if (isinstance(refs, list) and refs
+                    and all(isinstance(ref, str) and ref.strip() for ref in refs)
+                    and source_ref in refs):
+                for study in studies_idx.get(_norm(match.get("id") or match.get("study_id")), []):
+                    scope = study.get("applicability") or {}
+                    # Ref reuse is not identity proof. Namespace-only joins
+                    # require current affirmative source/preparation terms;
+                    # unscoped or exclusion-only legacy records cannot qualify.
+                    if (isinstance(scope, Mapping) and scope.get("require_source_label_form") is True
+                            and scope.get("required_form_terms")):
+                        matching_studies.append(study)
     # Deduplicate studies by ID
     seen_ids = set()
     deduped_studies = []
@@ -929,11 +951,16 @@ def resolve_evidence_for_row(
         # Check applicability: preparation/form only. Amount adequacy is owned
         # by Dose; assessment readiness separately withholds a required missing
         # amount, so Evidence must not turn an amount into efficacy eligibility.
-        form_val = _canonical_text(matched_form)
+        from clinical_applicability import assess_clinical_applicability
+        scope_product = product or {"activeIngredients": [row_dict]}
+        source_ref = row_dict.get("raw_source_path") or row_dict.get("source_row_ref")
         record_states = []
         for study in valid_studies:
-            excluded_forms = [_canonical_text(f) for f in study.get("exclude_aliases", [])]
-            if form_val and any(ef and ef in form_val for ef in excluded_forms):
+            scoped = {**study, "ingredient": name, "matched_canonical_ids": [canonical]}
+            if source_ref:
+                scoped["matched_source_row_refs"] = [source_ref]
+            decision = assess_clinical_applicability(scope_product, scoped, assess_amount=False)
+            if decision["status"] not in {"applicable", "not_curated"}:
                 record_states.append("form_mismatch")
                 continue
             record_states.append("applicable")
@@ -1122,6 +1149,24 @@ def resolve_evidence_for_row(
                     applicability_status="food_powder_or_flavor_matrix",
                     reason_code="whole_food_matrix_not_efficacy_relevant",
                     owner_facts=owner_facts,
+                )
+
+        # Literature and scored studies consume the same reviewed preparation
+        # seam. The literature fallback cannot broaden a source-specific scope.
+        if lit_entry.get("applicability") is not None:
+            from clinical_applicability import assess_clinical_applicability
+            scoped = {**lit_entry, "ingredient": name, "matched_canonical_ids": [canonical]}
+            source_ref = row_dict.get("raw_source_path") or row_dict.get("source_row_ref")
+            if source_ref:
+                scoped["matched_source_row_refs"] = [source_ref]
+            decision = assess_clinical_applicability(product or {"activeIngredients": [row_dict]}, scoped, assess_amount=False)
+            if decision["status"] not in {"applicable", "not_curated"}:
+                return EvidenceResolution(
+                    canonical_id=canonical, ingredient_name=name, matched_owners=matched_owners,
+                    disposition=EvidenceDisposition.RESEARCH_PRESENT_APPLICABILITY_UNESTABLISHED.value,
+                    points_eligible=False, applicability_status="applicability_unestablished",
+                    reason_code=decision["reason_code"], owner_facts=owner_facts,
+                    blocking_reasons=["literature_applicability_unestablished"],
                 )
 
         # Check general applicability decision (only if not already explicitly qualified by material disclosure)
@@ -1342,6 +1387,12 @@ def _evidence_claim_purposes(product: Mapping[str, Any], module: Optional[str] =
 
 def _evidence_entry_purposes(entry: Mapping[str, Any]) -> Set[str]:
     """Only stated endpoints/goals describe the record's supported purpose."""
+    scope = entry.get("applicability") or {}
+    outcomes = scope.get("supported_outcomes") if isinstance(scope, Mapping) else None
+    if isinstance(outcomes, list) and outcomes:
+        # A reviewed scope outranks prose that may describe null outcomes or
+        # special study populations. Those words are not supported purposes.
+        return evidence_indication_categories(" ".join(str(value) for value in outcomes))
     parts = [str(entry.get("primary_outcome") or "")]
     for key in ("health_goals_supported", "endpoint_relevance_tags", "key_endpoints"):
         values = entry.get(key)

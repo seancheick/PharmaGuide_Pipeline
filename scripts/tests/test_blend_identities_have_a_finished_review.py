@@ -207,3 +207,14 @@ def test_active_cinnamon_function_does_not_depend_on_amount(quantity):
     assert row["canonical_id"] == "cinnamon"
     assert row["source_section"] == "active"
     assert row.get("isAdditive", False) is False
+
+
+def test_tesnor_notes_distinguish_primary_symptoms_from_secondary_biomarkers():
+    data = json.loads((Path(__file__).parents[1] / "data" / "backed_clinical_studies.json").read_text())
+    from data_batch import entries
+    record = next(r for r in entries(data).values() if isinstance(r, dict) and r.get("id") == "BRAND_TESNOR")
+    notes = record["notes"]
+    assert "not clinical outcomes" not in notes
+    assert "symptom score was primary" in notes
+    assert "hormone levels and strength were secondary" in notes
+    assert "outside this blend cannot borrow" in notes
