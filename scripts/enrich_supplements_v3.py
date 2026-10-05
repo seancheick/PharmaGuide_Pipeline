@@ -144,7 +144,7 @@ import form_vocab as _form_vocab  # noqa: E402
 # Import scoring hardening modules
 from unit_converter import UnitConverter, ConversionResult
 from dosage_normalizer import DosageNormalizer
-from proprietary_blend_detector import ProprietaryBlendDetector
+from proprietary_blend_detector import ProprietaryBlendDetector, disclosure_tier
 from rda_ul_calculator import RDAULCalculator, ul_display_severity, ul_exceedance_sentence
 from reference_data_contract import reference_stamp
 from collagen_taxonomy import classify_collagen_subtype_strict, UNSPECIFIED as _COLLAGEN_UNSPECIFIED
@@ -14559,6 +14559,20 @@ class SupplementEnricherV3:
 
         # Step 3: Merge and dedupe using union-of-evidence
         merged_blends = self._merge_blend_evidence(detector_blends, cleaning_blends)
+
+        # A flattened blend whose parent the cleaner did not flag arrives with
+        # no tier; consumers read null differently. Derive it from the blend's
+        # own children and printed total with the one 101.36 rule.
+        for blend in merged_blends:
+            if blend.get("disclosure_level") not in {"full", "partial", "none"}:
+                children = [c for c in blend.get("child_ingredients") or [] if isinstance(c, dict)]
+                quantified = sum(1 for c in children if isinstance(c.get("amount"), (int, float)) and c["amount"] > 0)
+                total = blend.get("total_weight")
+                blend["disclosure_level"] = disclosure_tier(
+                    isinstance(total, (int, float)) and total > 0,
+                    quantified,
+                    len(children) - quantified,
+                )
 
         # Step 3b: Normalize blend_total_mg for scorer direct access.
         # The scorer reads blend_total_mg (in mg) first, falls back to total_weight.

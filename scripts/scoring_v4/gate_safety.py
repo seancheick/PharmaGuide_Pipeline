@@ -1004,9 +1004,15 @@ _STRONG_STIM_BLEND_NAMES = (
     "pre workout", "pre-workout", "preworkout",
 )
 _ENERGY_BLEND_NAMES = ("energy", "metabolism", "metabolic", "weight loss", "weight-loss")
-_HIDDEN_STIMULANT_TOKENS = (
-    "guarana", "yerba mate", "synephrine", "green tea", "green coffee",
-    "kola nut", "kola seed", "theacrine", "dmaa", "bitter orange", "ephedra",
+# Disclosed caffeine above this per-day line is a CAUTION (STIMULANT_CAFFEINE_HIGH_DOSE).
+_CAFFEINE_CAUTION_MG = 400.0
+# An explicit stimulant identity hidden in a partial/none blend is undisclosed stimulant use.
+_HIDDEN_STIMULANT_IDENTITIES = ("caffeine", "synephrine", "theacrine", "dmaa", "ephedra")
+# A caffeine-source plant is material only when the printed blend total, as an upper bound,
+# cannot rule out caffeine above _CAFFEINE_CAUTION_MG (Sean, 2026-10-04: disclosure and
+# stimulant materiality are separate facts; no new threshold).
+_CAFFEINE_SOURCE_BOTANICALS = (
+    "guarana", "yerba mate", "green tea", "green coffee", "kola nut", "kola seed",
 )
 
 
@@ -1023,10 +1029,12 @@ def _blend_children_text(blend: Dict[str, Any]) -> str:
 
 def _has_undisclosed_stimulant_blend(product: Dict[str, Any]) -> bool:
     """True when an OPAQUE proprietary blend (disclosure none/partial) hides a
-    stimulant whose dose the consumer cannot see. Precise (no over-warning on
-    benign B-vitamin 'energy' blends): fires only when the blend is named for a
-    stimulant, OR caffeine is among its hidden children, OR an energy/metabolism
-    blend hides another stimulant (guarana/green tea/synephrine/...)."""
+    stimulant whose dose the consumer cannot see. Fires when the blend is named
+    for a stimulant, OR hides an explicit stimulant identity (caffeine,
+    synephrine, ...), OR an energy/metabolism blend hides a caffeine-source
+    plant and its printed total cannot rule out caffeine above the CAUTION line.
+    A tiny multi-extract blend with green tea is a disclosure gap, not a
+    stimulant warning."""
     for blend in _safe_list(product.get("proprietary_blends")):
         if not isinstance(blend, dict):
             continue
@@ -1036,10 +1044,12 @@ def _has_undisclosed_stimulant_blend(product: Dict[str, Any]) -> bool:
         kids = _blend_children_text(blend)
         if any(token in name for token in _STRONG_STIM_BLEND_NAMES):
             return True
-        if "caffeine" in kids:
+        if any(token in kids for token in _HIDDEN_STIMULANT_IDENTITIES):
             return True
+        total_mg = _as_float(blend.get("blend_total_mg"))
         if any(token in name for token in _ENERGY_BLEND_NAMES) and \
-                any(token in kids for token in _HIDDEN_STIMULANT_TOKENS):
+                any(token in kids for token in _CAFFEINE_SOURCE_BOTANICALS) and \
+                (total_mg is None or total_mg > _CAFFEINE_CAUTION_MG):
             return True
     return False
 
@@ -1081,7 +1091,7 @@ def _apply_stimulant_policy(result: SafetyResult, product: Dict[str, Any]) -> No
 
     if known_doses:
         total_mg = sum(known_doses)
-        if total_mg > 400.0:
+        if total_mg > _CAFFEINE_CAUTION_MG:
             result.verdict = _max_verdict(result.verdict, "CAUTION")
             _append_signal(result, "STIMULANT_CAFFEINE_HIGH_DOSE")
         elif total_mg > 300.0:

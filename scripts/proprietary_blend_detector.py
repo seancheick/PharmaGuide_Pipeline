@@ -28,6 +28,21 @@ from typing import Dict, List, Optional, Any, Tuple
 logger = logging.getLogger(__name__)
 
 
+def disclosure_tier(total_declared: bool, with_amounts: int, without_amounts: int) -> str:
+    """The one 21 CFR 101.36 disclosure tier for a blend.
+
+    full:    every listed sub-ingredient has its own amount;
+    partial: the blend total is declared and sub-ingredients are listed, but
+             individual amounts are missing (or only some present);
+    none:    no sub-ingredients listed, or no total with missing amounts.
+    """
+    if with_amounts + without_amounts == 0:
+        return "none"
+    if without_amounts == 0:
+        return "full"
+    return "partial" if total_declared else "none"
+
+
 @dataclass
 class DetectedBlend:
     """A detected proprietary blend with evidence."""
@@ -506,29 +521,14 @@ class ProprietaryBlendDetector:
                     else:
                         result["without_amounts"].append(sub)
 
-        # Determine disclosure level — three-tier model per 21 CFR 101.36
-        #   full:    every sub-ingredient has individual amount
-        #   partial: blend total declared AND sub-ingredients listed,
-        #            but individual amounts missing (or only some present)
-        #   none:    missing blend total OR missing sub-ingredient list
-        total_subs = len(result["with_amounts"]) + len(result["without_amounts"])
-
-        if total_subs == 0:
-            # No sub-ingredients listed = no disclosure
-            result["level"] = "none"
-            result["amounts_present"] = "none"
-        elif len(result["without_amounts"]) == 0 and len(result["with_amounts"]) > 0:
-            # All sub-ingredients have amounts = full disclosure
-            result["level"] = "full"
+        result["level"] = disclosure_tier(
+            result["total_declared"], len(result["with_amounts"]), len(result["without_amounts"])
+        )
+        if result["level"] == "full":
             result["amounts_present"] = "full"
-        elif result["total_declared"] and total_subs > 0:
-            # Blend total declared AND sub-ingredients listed, but
-            # individual amounts missing (or only some present).
-            result["level"] = "partial"
-            result["amounts_present"] = "partial" if len(result["with_amounts"]) > 0 else "none"
+        elif result["level"] == "partial" and result["with_amounts"]:
+            result["amounts_present"] = "partial"
         else:
-            # Missing blend total OR no amounts on any sub-ingredient
-            result["level"] = "none"
             result["amounts_present"] = "none"
 
         return result
