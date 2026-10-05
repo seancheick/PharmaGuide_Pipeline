@@ -361,3 +361,21 @@ def test_verified_branded_token_does_not_replace_printed_name(normalizer) -> Non
     assert result["name"] == printed
     assert result["raw_source_text"] == printed
     assert result["branded_token_extracted"] == "KSM-66"
+
+
+@pytest.mark.parametrize("label,expected", [
+    ("Clove Flower Bud Extract", "cloves"),
+    ("Clovinol Clove Flower Bud Extract", "cloves"),
+    ("Clove Flower Bud Powder", "PII_CLOVE_POWDER"),
+])
+def test_clove_preparation_preserves_extract_vs_powder(normalizer, label, expected):
+    row = normalizer._process_single_ingredient_enhanced(
+        {"name": label, "category": "botanical", "ingredientGroup": "Clove",
+         "quantity": [{"quantity": 250, "unit": "mg"}], "forms": []},
+        is_active=True,
+    )
+    assert row["canonical_id"] == expected
+    assert row["raw_source_text"] == label
+    assert row["quantity"] == 250
+    if "Extract" in label:
+        assert "powder" not in row["standardName"].casefold()

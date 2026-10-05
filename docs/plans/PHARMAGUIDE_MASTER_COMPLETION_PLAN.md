@@ -4,14 +4,14 @@ Updated October 5, 2026. Pipeline integrator: Codex. Original scope: Sean's acce
 
 A checked implementation box means that specific deliverable is implemented, measured and independently reviewed where required. It does **not** mean the whole phase is finished or the catalog is released. Repository code pushed to GitHub and catalog publication are separate events.
 
-## Completion measure — October 4
+## Completion measure — October 5
 
-**Main Phase 0–7 checklist: 53 of 70 boxes complete (75.7%).** Count only the eight phase sections under Updated execution checklist, including their nested deliverables; exclude historical checkpoint sections and repeated release reminders. This is an unweighted deliverable count, not an estimate of elapsed time, effort or release readiness. All document checkboxes would give222/263 (84.4%) before this update, but repeated historical receipts make that unsuitable as the main progress measure.
+**Main Phase 0–7 checklist: 54 of 70 boxes complete (77.1%).** Count only the eight phase sections under Updated execution checklist, including their nested deliverables; exclude historical checkpoint sections and repeated release reminders. This is an unweighted deliverable count, not an estimate of elapsed time, effort or release readiness. All document checkboxes would give222/263 (84.4%) before this update, but repeated historical receipts make that unsuitable as the main progress measure.
 
 | Phase | Complete / total |
 |---|---:|
 | 0 — Baseline and final freeze | 3 / 4 |
-| 1 — Evidence/Dose separation | 9 / 10 |
+| 1 — Evidence/Dose separation | 10 / 10 |
 | 2 — Identity and roles | 17 / 18 |
 | 3 — Clinical Evidence coverage | 7 / 11 |
 | 4 — Approved Dose policy | 6 / 6 |
@@ -19,7 +19,7 @@ A checked implementation box means that specific deliverable is implemented, mea
 | 6 — Flutter parity and nutrition | 3 / 6 |
 | 7 — Candidate, approval and release | 2 / 9 |
 
-Approved numerical policy and bounded calibration are implemented. The new four-live/one-dormant Evidence/Dose ownership inventory reopens a specific transfer obligation; historical exits do not cover it. The current-source Evidence-subject census is complete; clinical-determination coverage, current-source candidate validation, actual-device rendering, movement approval, publication and live verification remain open. Historical corpus/release passes do not validate the subsequently changed runtime. The execution LEDGER and main-checkout handoff carry the next steps. Monthly certification renewal is active; the stopped historical release monitor is separate. The October4 development rebuild is verified below, while final source/candidate acceptance remains open.
+Approved numerical policy and bounded calibration are implemented. The four live Evidence amount scopes are now transferred to descriptive Dose ownership under Sean’s approval; Amla remains a dormant reference-only scope. Broader clinical/preparation coverage stays open. The October4 Evidence-subject census is complete; current-candidate clinical-determination coverage, artifact validation, actual-device rendering, movement approval, publication and live verification remain open. Historical corpus/release passes do not validate the subsequently changed runtime. The execution LEDGER and main-checkout handoff carry the next steps. Monthly certification renewal is active; the stopped historical release monitor is separate. The October4 development rebuild is verified below, while final source/candidate acceptance remains open.
 
 ## October 4 — catalog gate development policy
 
@@ -251,13 +251,13 @@ The October 1 source audit reconciled these boxes against current production and
 | Phase 0 final baseline/artifact recheck | Current source reconciliation complete; final gate pending | Repeat at the exact candidate freeze, after the last scoring/data change |
 | Phase 1 generic amount transfer / D26 | Implemented, measured and independently reviewed | Validate on Sean's fresh full corpus before release |
 | Phase 1 omega Evidence mapping | Implemented with applicability holds | Validate all eight classes on the fresh full corpus |
-| Phase 1 transfer-invariant audit | Historical removed gates validated; October4 finds four live amount scopes still in Evidence and one dormant reference scope | Complete the existing-owner transfer packet before claiming full separation |
+| Phase 1 transfer-invariant audit | Four live scopes transferred,183 frozen labels measured and reviewed; no new positive Dose benchmark | Validate fresh full-corpus output; Amla reference-only scope remains dormant |
 | Phase 2 shared prominence owner | Implemented, measured, reviewed and integrated | Marked complete; retained amount guards stay under Phase 1/D26 |
 | Phase 2 remaining serving duplicates | Closed for current raw corpus | Recheck canonical output and app rendering after fresh Clean |
 | Phase 2 dual-use ingredient roles | Shared amount-based excipient demotion corrected; all demonstrated affected labels replayed | Final artifact validation uses the corrected source owner |
-| Phase 2 current-source subject census | Complete:15,421labels/102,281subjects;340pending subjects retained | Resolve classified owner/research/preparation exceptions; repeat release checks only on the final rebuilt candidate |
+| Phase 2 accepted October4 subject census | Complete then:15,421labels/102,281subjects;340pending subjects retained; current-candidate counts await rebuild | Resolve classified owner/research/preparation exceptions; repeat release checks only on the final rebuilt candidate |
 
-**Next source work without a full corpus job:** close the classified source/role contradictions and remaining preparation/research exceptions from the completed census, together with the four live amount-owner transfers. The bounded clinical reviews and current-source census are complete. Historical Phase1 transfers and approved Dose policy remain valid; newly reproduced live amount gates require a separate existing-owner transfer packet, not repetition of accepted historical work. The candidate gates follow the remaining source decisions. Sean runs the full pipeline when the final source is ready; Codex reviews its artifacts afterward.
+**Next candidate work:** the approved four transfers and reproduced clove/source defects are implemented, measured, reviewed and validated. Sean runs the combined necessary Clean→Enrich→Score pipeline; all38brand stage fingerprints require Clean. Codex reviews the resulting census/catalog/app artifacts afterward. Exact preparation/route/purpose clinical holds remain visible in the existing research/LEDGER; they do not become blanket negative or positive determinations.
 
 ## Fixed boundaries and Owner Check
 
@@ -293,9 +293,9 @@ The October 1 source audit reconciled these boxes against current production and
 - [x] Verify all nine uncovered benchmark groups/four retained D26 stand-ins and prepare the whole D24 denominator/publication/excess and omega decision packet (October2 combined batch,86synthetic/16real probes).
 - [x] Transfer remaining generic clinical-amount judgments after approval and equivalent existing-Dose ownership. Exact positive applicable preparation benchmarks only; the four D26 safeguards were removed only after Dose coverage existed.
 - [x] Integrate omega purpose/applicability mapping; carrier oil mass supplies neither EPA/DHA exposure nor clinical credit. Ordinary adult / triglyceride-purpose / prenatal map to 10.4 / 20 / 11.1 and the five excluded classes remain held.
-- [x] **HISTORICAL PHASE-1 EXIT CHECK (new live-owner remainder below):** Recheck every removed amount gate against the transfer inventory: no lost assessment and no duplicate deduction. The 344-label replay has zero status, safety, route or purpose movement.
+- [x] **HISTORICAL PHASE-1 EXIT CHECK (later live-owner gap closed below):** Recheck every removed amount gate against the transfer inventory: no lost assessment and no duplicate deduction. The 344-label replay has zero status, safety, route or purpose movement.
 
-- [ ] **October4 live-owner gap:** inventory and transfer the remaining zinc cold-lozenge, white-kidney-bean, D-mannose and D-aspartic-acid amount gates into the existing Dose owners with equivalent measured assessment. Amla is reference-only and its retained amount scope is dormant. These records have no `min_clinical_dose` consumed by `positive_clinical_benchmark`; RDA/UL or form-quality scores alone do not establish equivalent intervention-dose coverage. Preserve the gates until transfer is demonstrated; no implicit magnitudes or new policy. Receipt `clinical_completion_20261004/amount_transfer_remaining_review.md`.
+- [x] **October5 live-owner transfer:** Zinc cold-lozenge, white-kidney-bean, D-mannose and D-aspartic-acid research exposure now belongs to the existing Dose owner. Sean approved descriptive correspondence, no new positive benchmark, retained16/22 fallback and current denominator. Matching preparation/purpose Evidence is amount-independent; generic WKB stays reference-uncertain, exact-source Phaseolean uses discrete regimens.183 raw labels measured;10 Evidence-only movers, zero Dose/status/captured Safety movement; independent review, local537 and exact-source4-groupCI37338107501 pass. Amla remains dormant/reference-only. Broader clinical coverage and fresh corpus/catalog/app validation remain open.
 
 **Invariant:** an amount judgment cannot leave Evidence until the same judgment is already in Dose or is added to the existing Dose owner in the same change. Removing amount gates must not automatically award full Evidence marks.
 
@@ -945,7 +945,7 @@ Owner: existing enhanced_normalizer preparation/printed nutrient identity, enric
 - [x] Prepare the four remaining Evidence-to-Dose exposure decisions in the existing transfer README. Zinc retains nutrient/UL/Safety ownership; D-mannose and D-aspartic-acid null exposure cannot become positive benchmarks; white-kidney-bean lowest studied amount is not a proven efficacy threshold. Existing amount gates remain intact pending equivalent Dose ownership and approved treatment.
 - [x] Validate/review exact source `8084ca71`: all four CI groups 37268235385 pass; local: 537 passed / 24 declared opt-in skips in 149.77s, skip guard passed; independent source/movement review accepted.
 - [x] Integrate with Sean's October5 authorization: PR62 merged as115b30eb; origin/main contains validated source8084ca71 and documentation158ef4da. Temporary branch/worktree cleanup recorded in LEDGER.
-- [ ] Resolve the four exposure-policy choices and remaining exact preparation/clinical exceptions, then check actual stage fingerprints and perform one combined necessary Clean run followed by catalog/app/release validation. No intermediate corpus run or old stamp rewrite.
+- [ ] Complete broader exact-preparation clinical coverage and final artifact/app/release validation. The October5 four descriptive transfers are implemented, measured, reviewed and validated (Phase1 box above); stage fingerprints require Clean. Sean performs the combined pipeline run. Generic WKB and remaining clinical/preparation uncertainty stay explicit; no intermediate corpus run or old stamp rewrite.
 
 The 53/70 phase count remains unchanged. The 58 classified pending groups are not universally closed by identity containment. Source receipts and checkpoint results: existing pending-items LEDGER/research and `/Users/seancheick/pg_quality/clinical_source_continuation_20261005/`.
 
@@ -953,3 +953,7 @@ The 53/70 phase count remains unchanged. The 58 classified pending groups are no
 ### October 5 — Claude blend audit, integrated
 
 Independent audit of `a9bd0a3e` on current main found and repaired four source-owner defects: recursive hidden/NP descendants incorrectly yielding full disclosure, known stimulant doses incorrectly labelled undisclosed, distinct same-name blend parents collapsing together, and downstream Transparency deduplication undoing source separation. Behavioral source `fcb6a613` has fail-first regressions and fresh-context review; 537local checks pass; exact CI acceptance is recorded in the existing LEDGER. Frozen147-label raw replay reproduces107 score movements and seven safety verdict changes from current main. The audit repairs themselves affect only three payloads, with no numeric pillar, total, safety or scoring-status changes from integrated Claude. This is a bounded blend/missing-data gold contribution, not complete clinical, gold, candidate or release validation. Master count remains53/70. PR63 and isolated-fixture repairs are integrated on main `c67600da`;34named source/role boundary checks pass. Remaining clinical/amount-owner closure precedes the single necessary rebuild from Clean, which Sean will run.
+
+### October5 — approved transfers and uncertainty refinement
+
+Accepted runtime e79d8cff plus test-only refinement164a8e99, PR64. All4CIgroups37338107501 green (19,377pass/183declaredskips), local537pass/24declared opt-in skips; independent review accepted after clove extract identity and source-review repairs.183 immutable raw labels show10 explained Evidence-only score increases and zero Dose/status/captured Safety movements. Option1 preserves16/22 and the denominator, with source-authored uncertainty/reference facts; no new public Coverage score. Phase1 live-transfer box is closed, main checklist54/70. Broader Phase3 clinical coverage remains open. Final stage audit requires Clean for all38brands; Sean runs the pipeline himself. No corpus run, catalog refresh or release performed. See the current LEDGER for source, checks and limits.

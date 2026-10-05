@@ -23753,6 +23753,11 @@ class SupplementEnricherV3:
                     enriched["evidence_data"]["clinical_matches"]
                 )
 
+            from dose_assessment import clinical_research_exposure_assessments
+            enriched["rda_ul_data"]["clinical_exposure_assessments"] = (
+                clinical_research_exposure_assessments(enriched)
+            )
+
             # Percentile category (cohort ranking). MUST run AFTER the taxonomy:
             # this projects the canonical classification, it does not compete
             # with it. See _decorate_percentile_category and plan §5/§6.

@@ -190,17 +190,14 @@ def _unassessed_primary_dose_reason(dim: Dict[str, Any]) -> Optional[str]:
     metadata = dim.get("metadata") if isinstance(dim, dict) else None
     if not isinstance(metadata, dict):
         return None
-    if metadata.get("window_proxy_status") == "partial_credit_without_rda_proxy":
-        return "The dose benchmark is unavailable, so disclosed amounts receive partial credit."
-    if metadata.get("window_proxy_status") == "partial_credit_primary_active_unassessed":
+    if metadata.get("window_proxy_status") in {
+        "partial_credit_without_rda_proxy",
+        "partial_credit_primary_active_unassessed",
+        "limited_assessability_unbenchmarked_purpose",
+    }:
         return (
-            "The main ingredient's dose benchmark is unavailable, so dose "
-            "credit is partial."
-        )
-    if metadata.get("window_proxy_status") == "limited_assessability_unbenchmarked_purpose":
-        return (
-            "At least one declared-purpose ingredient has no applicable dose "
-            "benchmark, so disclosed amounts receive partial credit."
+            "Dose disclosed, but adequacy cannot be determined confidently "
+            "from available evidence because an applicable dose benchmark is unavailable."
         )
     return None
 

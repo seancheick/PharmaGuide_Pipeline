@@ -842,3 +842,22 @@ Remaining classified exceptions: all 58 canonical groups retain their individual
 Validation and final measurements are recorded in the existing research/LEDGER. The initial 122-label cohort includes all current raw NEM/eggshell,Univestin/Acacia,Triphala,EssentialOilBlend and quality-qualified vitamin names plus named source/sole-purpose/clinical controls. Final artifact/clinical/corpus/device/release closure is not inferred from this subset.
 
 Source candidate `8084ca71`: frozen 123-label compare changes three reason/readiness payloads only (178674 fatty-oil header/member linkage;184942 extracted Triphala structural identity;267347 active VitaminC authority identity). Zero numerical pillar/total, status or route movements. Final independent review accepted source `8084ca71` on 123 labels, including unchanged Calcium Ascorbate 306193. Local537passed/24declared opt-in skips149.77s and all four CI 37268235385 groups pass; LEDGER records complete checkpoint limits. Earlier broad header exclusion was removed; provider is exactly baseline. No new clinical grade, blanket oil demotion or fresh all-label census.
+
+## October5 remaining preparation exceptions — bounded disposition
+
+Current implemented source is e79d8cff. Reviewed historical pending groups against retained raw labels and existing owners;183 immutable labels supply bounded current-output controls, not a refreshed corpus census. Durable primary-source receipts: `/Users/seancheick/pg_quality/clinical_regimens_20261005/remaining_clinical_receipts.md`, `remaining_preparation_receipts.md`, `source_review.md`. Receipts are research evidence, not a runtime registry or a second execution register.
+
+| Group / source | Applied disposition / remaining boundary |
+|---|---|
+| Clove315309 / powder184659,185088 | Extract→powder identity bug fixed; existing cloves review corrected against live PMID31064377. Source-specific human pilot acknowledged; unnamed-extract standardization and liver-purpose bridge remain unestablished. Powder rows retain identity and unresolved review ownership. No borrowed efficacy or dose reward. |
+| White kidney bean | Approved OptionA; exact Phaseolean source preparation/potency/assay permits descriptive exposure only. Generic material stays reference-uncertain. |
+| Pancreatin | Prescription enzyme-replacement evidence does not identify retail mixture coating/activity/indication. Preserve activity fields; mass/USP protease do not establish equivalent lipase activity. No universal conversion or generic-digestion award. |
+| Hesperidin complexes | Purified hesperidin/MPFF research cannot identify unknown complexes or their active fraction; preserve explicit30%/3mg source. Existing Formulation signoff hold retained. |
+| Piperine and oil/essence subjects | Preserve Sean's removed standalone efficacy treatment and existing absorption-aid owner. Oil/essence cannot be reclassified as isolated piperine, or globally made incidental. |
+| Litesse213508 / polydextrose | Selected-scoop exposure6.25g retained; positive/null acute appetite research does not establish chronic weight-loss benefit or generic formulation equivalence. No new clinical grade. |
+| Soluble corn fiber74427 / allulose protein powders | Retain actual source section/role/amount. Research in another dose/matrix/population does not establish this formulation's benefit; no blanket absence-of-human-research or automatic incidental exclusion. |
+| Whole matcha | Whole-material mixed/null research differs from isolated green-tea constituents; no extract borrowing or universal positive/negative grade. |
+| Triphala / Bergamonte / oral essential oils | Identity corrections do not establish exact formula, oral route, chemotype, purpose or retained preparation equivalence. Keep specific holds. |
+| Mushroom/formula mixtures / Bionectria | Preserve named constituent identity, source role and actual member exposure; no formula or Cordyceps borrowing. Independent Wellmune owner remains distinct. |
+
+Known four-transfer/source defects are implemented. These research/preparation boundaries remain honest holds; they are not silently converted into clinical negatives or declared closed. Final whole-corpus coverage/readiness must be measured from Sean's new Clean output before release.

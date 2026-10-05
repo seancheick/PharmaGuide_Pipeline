@@ -1423,3 +1423,28 @@ def test_clinical_anchor_map_lists_only_pubmed_verified_anchors() -> None:
     assert generic_dose._CLINICAL_ANCHOR_REFERENCE_BY_CANONICAL == block(
         "dose_magnitudes", "generic"
     )["generic"]["_clinical_anchor_reference_by_canonical"]
+
+
+@pytest.mark.parametrize("count", [1, 2, 3, 4])
+@pytest.mark.parametrize("with_benchmark", [False, True])
+def test_approved_fallback_calibration_keeps_all_purpose_rows(count, with_benchmark):
+    from scoring_v4.modules.generic_dose import score_dose, NO_REFERENCE_INDIVIDUAL_DOSE_CREDIT
+    unknowns = [("Lactoferrin", "lactoferrin"), ("D-Mannose", "d_mannose"),
+                ("D-Aspartic Acid", "d_aspartic_acid"), ("CogniGrape", "cognigrape")]
+    chosen = ([("Vitamin C", "vitamin_c")] if with_benchmark else [])
+    chosen += unknowns[:count - len(chosen)]
+    rows = [_ingredient(name=name, canonical_id=canonical, quantity=500, unit="mg",
+                        bio_score=None, raw_source_path=f"ingredientRows[{index}]")
+            for index, (name, canonical) in enumerate(chosen)]
+    adequacy = [{"canonical_id": canonical, "nutrient": name,
+                 "pct_rda": 100.0 if canonical == "vitamin_c" else None,
+                 "pct_ul": 4.5 if canonical == "vitamin_c" else None}
+                for name, canonical in chosen]
+    p = _product(ingredients=rows, adequacy_results=adequacy,
+                 product_name=" and ".join(name for name, _ in chosen))
+    payload = score_dose(p)
+    expected = ((22.0 if with_benchmark else 16.0) + 16.0 * (count - 1)) / count
+    assert NO_REFERENCE_INDIVIDUAL_DOSE_CREDIT == 16.0
+    assert payload["components"]["supplemental_window_proxy"] == pytest.approx(expected)
+    assert payload["metadata"]["purpose_ingredient_count"] == count
+    assert len(payload["metadata"]["unbenchmarked_purpose_ingredients"]) == count - int(with_benchmark)
