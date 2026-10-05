@@ -8727,7 +8727,10 @@ class SupplementEnricherV3:
             # A material providing a marker is not the isolated marker form;
             # keep its original label disclosure, exclude only this matching
             # candidate. Parent preparation still comes from its own name.
-            if prefix and self._excluded_text_reason(f"{prefix} {form.get('name', '')}") == SKIP_REASON_LABEL_PHRASE:
+            if (prefix and form.get('category') != 'enzyme'
+                    and self._excluded_text_reason(f"{prefix} {form.get('name', '')}") == SKIP_REASON_LABEL_PHRASE):
+                # A supplied enzyme with declared activity is still a named
+                # material, not a removable standardization marker.
                 continue
             keep_from_prefixed_form = (
                 prefix in _FROM_PREFIXES
@@ -9484,6 +9487,19 @@ class SupplementEnricherV3:
             # PRIORITY 1: Use cleaned_forms[] from cleaning stage (structured, reliable)
             if cleaned_forms and isinstance(cleaned_forms, list) and len(cleaned_forms) > 0:
                 form_info = self._build_form_info_from_cleaned(ing_name, cleaned_forms, std_name)
+                if (not form_info and cleaner_iqm_canonical and any(
+                        form.get('prefix') and self._excluded_text_reason(
+                            f"{form['prefix']} {form.get('name', '')}") == SKIP_REASON_LABEL_PHRASE
+                        for form in cleaned_forms)):
+                    # Ignoring a provided marker must not discard the form
+                    # explicitly named by its parent (e.g. DMAE bitartrate).
+                    # Reuse the same-parent form owner; no marker identity or
+                    # preparation is inferred from the skipped disclosure.
+                    parent_form = self._specific_form_in_parent(
+                        ing_name, cleaner_iqm_canonical, quality_map)
+                    if parent_form:
+                        parent_form['original_label'] = ing_name
+                        return parent_form
                 if form_info and form_info.get('form_extraction_success'):
                     multi_form_result = self._match_multi_form(
                         form_info, quality_map,

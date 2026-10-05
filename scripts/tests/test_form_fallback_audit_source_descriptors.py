@@ -225,3 +225,19 @@ def test_provided_marker_does_not_select_parent_extracted_material(enricher, pre
     # A genuinely named isolated material retains its own form matching.
     explicit=enricher._build_form_info_from_cleaned('Phycocyanin extract', [{'name':'Phycocyanin','prefix':'as'}])
     assert explicit is not None
+
+
+def test_provided_marker_preserves_explicit_parent_salt(enricher):
+    match = enricher._match_quality_map(
+        'DMAE (Dimethylaminoethanol) Bitartrate', 'DMAE (Dimethylaminoethanol)',
+        enricher.databases['ingredient_quality_map'], cleaner_canonical_id='dmae',
+        cleaned_forms=[{'name':'DMAE','prefix':'providing','percent':37}])
+    assert match['form_id'] == 'dmae bitartrate'
+    assert match['bio_score'] == 9
+
+
+def test_supplied_enzyme_potency_remains_a_disclosed_material(enricher):
+    info = enricher._build_form_info_from_cleaned('Soy Natto extract', [
+        {'name':'Nattokinase','prefix':'supplying 2000 fibrinolytic units of','category':'enzyme'}])
+    assert info is not None
+    assert info['extracted_forms'][0]['raw_form_text'] == 'Nattokinase'
