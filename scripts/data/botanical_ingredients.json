@@ -3823,11 +3823,12 @@
         "clove aqueous extract",
         "clovinol clove extract",
         "clovinol",
-        "clovinol clove flower bud extract"
+        "clovinol clove flower bud extract",
+        "clove flower bud extract"
       ],
       "category": "herb",
       "notes": "Syzygium aromaticum (Myrtaceae) flower bud. Contains eugenol (72-90% of essential oil), beta-caryophyllene, and acetyl eugenol. Powerful antimicrobial and analgesic spice. Botanical whole-bud form.",
-      "last_updated": "2026-03-01",
+      "last_updated": "2026-10-05",
       "external_ids": {
         "unii": "K48IKT5321"
       },

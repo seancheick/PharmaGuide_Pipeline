@@ -1676,15 +1676,18 @@ class EnhancedDSLDNormalizer:
                 # Add aliases
                 for alias in botanical.get("aliases", []) or []:
                     processed_alias = self.matcher.preprocess_text(alias)
+                    botanical_payload = {
+                        "type": "botanical",
+                        "standard_name": standard_name,
+                        "category": botanical.get("category", "botanical"),
+                        "mapped": True,
+                        "priority": 6,
+                    }
                     if processed_alias not in self._fast_exact_lookup:
-                        self._fast_exact_lookup[processed_alias] = {
-                            "type": "botanical",
-                            "standard_name": standard_name,
-                            "category": botanical.get("category", "botanical"),
-                            "mapped": True,
-                            "priority": 6
-                        }
-                        add_group_exact(alias, self._fast_exact_lookup[processed_alias])
+                        self._fast_exact_lookup[processed_alias] = botanical_payload
+                    # Literal preparation aliases remain available even when
+                    # preprocessing collapses them onto another preparation.
+                    add_group_exact(alias, botanical_payload)
 
         # PRIORITY 7: Add OTHER INGREDIENTS lookups (safe additives/excipients)
         for key, value in self.other_ingredients_lookup.items():
@@ -7990,12 +7993,25 @@ class EnhancedDSLDNormalizer:
                         raw_name, standard_name
                     )
                 )
+        # A species/part match does not establish its preparation. Recover an
+        # explicitly registered extract before accepting a generated powder
+        # match; retain the source label when no exact preparation is owned.
+        if (is_active and re.search(r"\bpowder$", standard_name, re.I)
+                and any(re.search(r"\bextract\b", text, re.I)
+                        for text in [name] + [form.get("name", "") for form in forms_structured])):
+            source_identity = self._exact_ingredient_group_lookup(name)
+            if source_identity.get("type") in {"botanical", "standardized_botanical"}:
+                standard_name = source_identity["standard_name"]
+                canonical_id, canonical_source_db = self._resolve_canonical_identity(
+                    standard_name, raw_name=raw_name,
+                )
+                is_mapped = canonical_id is not None
         # Do not assign a contradictory botanical preparation. Powder does
         # not establish an extract; a fatty-acid blend is not a volatile oil.
         # Preserve the label and its components with an unresolved identity.
         if (
             is_active
-            and canonical_source_db == "botanical_ingredients"
+            and canonical_source_db in {"botanical_ingredients", "other_ingredients"}
             and (
                 (re.search(r"\bpowder$", standard_name, re.I)
                  and any(re.search(r"\bextract\b", text, re.I)
