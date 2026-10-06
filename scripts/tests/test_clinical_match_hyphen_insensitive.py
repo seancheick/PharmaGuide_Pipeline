@@ -180,7 +180,7 @@ def test_row_level_active_projection_reaches_exact_generic_evidence(enricher):
     assert matches["INGR_GARLIC"]["matched_canonical_ids"] == ["garlic"]
 
 
-@pytest.mark.parametrize("product_id", ["299952", "222864", "204521"])
+@pytest.mark.parametrize("product_id", ["299952", "222864"])
 def test_incidental_protein_does_not_inherit_resistance_training_evidence(enricher, product_id):
     """Actual collagen/greens labels must traverse current cleaning and enrichment."""
     import json
@@ -193,6 +193,30 @@ def test_incidental_protein_does_not_inherit_resistance_training_evidence(enrich
     enriched, _ = enricher.enrich_product(cleaned)
     matches = enriched["evidence_data"]["clinical_matches"]
     assert "INGR_WHEY_PROTEIN" not in {m["id"] for m in matches}
+
+
+def test_disclosed_pea_protein_blend_keeps_source_evidence_without_individual_dose(enricher):
+    import json
+    from pathlib import Path
+    from enhanced_normalizer import EnhancedDSLDNormalizer
+    from scoring_input_contract import is_lent_blend_mass
+    from scoring_v4.scored_artifact import build_scored_artifact
+
+    raw = json.loads((Path(__file__).parent / "fixtures" /
+                      "protein_evidence_204521_raw.json").read_text())
+    product, _ = enricher.enrich_product(EnhancedDSLDNormalizer().normalize_product(raw))
+    match = next(m for m in product["evidence_data"]["clinical_matches"]
+                 if m["id"] == "INGR_WHEY_PROTEIN")
+    assert match["matched_canonical_ids"] == ["pea_protein"]
+    assert match["matched_source_row_refs"] == ["ingredientRows[15]"]
+    pea = next(r for r in product["product_scoring_evidence"]
+               if r.get("canonical_id") == "pea_protein")
+    assert is_lent_blend_mass(pea)
+    assert pea["evidence_scope"] == "blend_level"
+    assert pea["dose_value"] == 42.0  # Container mass, never an individual pea dose.
+    artifact = build_scored_artifact(product)
+    metadata = artifact["_v4_module_breakdown"]["dimensions"]["evidence"]["metadata"]
+    assert not metadata.get("primary_evidence_floor")
 
 
 @pytest.mark.parametrize("term", ["whey protein", "casein", "soy protein", "pea protein"])
