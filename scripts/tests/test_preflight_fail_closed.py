@@ -80,6 +80,44 @@ def test_preparation_cli_reacquires_lock_when_only_held_environment_is_present(t
     assert calls[0][2:4] == ['exclusive', '--']
 
 
+def test_preparation_utf8_inputs_manifest_and_receipt_under_ascii_locale(tmp_path):
+    import os
+    import subprocess
+    script = r'''
+import sys,json
+from pathlib import Path
+sys.path.insert(0,sys.argv[1])
+import preflight,subprocess
+root=Path(sys.argv[2]); raw=root/'raw'; raw.mkdir()
+(raw/'1.json').write_bytes(json.dumps({'id':1,'ingredientRows':[],'name':'Caf\u00e9'},ensure_ascii=False).encode('utf-8'))
+manifest=root/'scripts/tests/fixtures/contract_snapshots/_manifest.json'
+manifest.parent.mkdir(parents=True)
+manifest.write_bytes(json.dumps({'products':[{'dsld_id':1,'name':'Caf\u00e9'}]},ensure_ascii=False).encode('utf-8'))
+calls=[]
+def run(command,**kwargs):
+    calls.append(command)
+    return subprocess.CompletedProcess(command,0,'Caf\u00e9','')
+report=root/'receipt.json'
+checks=[{'name':'probe','command':['fake']}]
+first=preflight.run_preparation(root,raw,checks=checks,runner=run,report_path=report)
+assert first['ready'],ascii(first['inputs']['errors'])
+assert preflight._preparation_canary_identifiers(root)==['1']
+report.write_bytes(json.dumps(first,ensure_ascii=False).encode('utf-8'))
+second=preflight.run_preparation(root,raw,checks=checks,runner=run,report_path=report)
+assert second['ready'] and calls==[['fake']]
+protocol=preflight.run_preparation(root,raw,checks=[{'name':'protocol','command':[sys.executable,'-c',"import sys;sys.stdout.buffer.write(b'Caf\\xc3\\xa9')"]}])
+assert protocol['ready'],ascii(protocol['checks'])
+assert protocol['checks'][1]['stdout']=='Caf\u00e9'
+print('UTF8 preparation passed')
+'''
+    # The script itself stays ASCII, but authored fixtures contain UTF-8 bytes.
+    environment = dict(os.environ, PYTHONUTF8='0', PYTHONCOERCECLOCALE='0', LC_ALL='C',
+                       FLUTTER_REPO=str(tmp_path / 'no_app'))
+    process = subprocess.run([sys.executable, '-c', script, str(Path(preflight.__file__).parent), str(tmp_path)],
+                             env=environment, capture_output=True, text=True, encoding='utf-8', timeout=30)
+    assert process.returncode == 0, process.stdout + process.stderr
+
+
 def _write_required_data(data_dir: Path, *, corrupt: str | None = None) -> None:
     data_dir.mkdir(parents=True)
     for filename, _description in preflight.CRITICAL_DATA_FILES:

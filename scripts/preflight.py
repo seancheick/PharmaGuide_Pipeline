@@ -706,7 +706,7 @@ def _atomic_report(path, value):
     path.parent.mkdir(parents=True, exist_ok=True)
     fd, temporary = tempfile.mkstemp(dir=path.parent, prefix=f'.{path.name}.')
     try:
-        with os.fdopen(fd, 'w') as stream:
+        with os.fdopen(fd, 'w', encoding='utf-8') as stream:
             json.dump(value, stream, indent=2, sort_keys=True)
             stream.write('\n')
             stream.flush()
@@ -788,7 +788,7 @@ def _preparation_inputs(repo_root, raw_root, *, operational_paths=()):
             errors.append(f'{key}: {issue}')
             continue
         try:
-            payload = json.loads(path.read_text())
+            payload = json.loads(path.read_text(encoding='utf-8'))
             if not isinstance(payload, dict):
                 errors.append(f'{key}: raw label must be a JSON object')
                 continue
@@ -923,7 +923,7 @@ def _valid_preparation_check(check, specification):
 
 def _preparation_canary_identifiers(repo_root):
     try:
-        manifest = json.loads((repo_root / 'scripts/tests/fixtures/contract_snapshots/_manifest.json').read_text())
+        manifest = json.loads((repo_root / 'scripts/tests/fixtures/contract_snapshots/_manifest.json').read_text(encoding='utf-8'))
         return [str(product['dsld_id']) for product in manifest['products']]
     except (OSError, ValueError, KeyError, TypeError):
         return []
@@ -951,7 +951,7 @@ def run_preparation(repo_root, raw_root, *, checks=None, runner=None, report_pat
     previous = {}
     if report_path and Path(report_path).is_file():
         try:
-            previous = json.loads(Path(report_path).read_text())
+            previous = json.loads(Path(report_path).read_text(encoding='utf-8'))
         except (OSError, ValueError):
             pass
     if not isinstance(previous, dict):
@@ -1001,7 +1001,7 @@ def run_preparation(repo_root, raw_root, *, checks=None, runner=None, report_pat
             # invokes the gates, live identifiers, OCR or remote writes.
             try:
                 gates = runner(['bash', 'scripts/test.sh', 'preparation-gates'], cwd=repo_root,
-                               capture_output=True, text=True, check=False, pass_fds=lock_fds)
+                               capture_output=True, text=True, encoding='utf-8', check=False, pass_fds=lock_fds)
                 if gates.returncode:
                     raise ValueError(gates.stderr)
                 inventory = [json.loads(line) for line in gates.stdout.splitlines() if line.strip()]
@@ -1042,11 +1042,11 @@ def run_preparation(repo_root, raw_root, *, checks=None, runner=None, report_pat
                 check = {'name': name, 'command': specification['command'], 'completed': False}
                 try:
                     process = runner(specification['command'], cwd=repo_root, env=environment,
-                                     capture_output=True, text=True, check=False, pass_fds=lock_fds)
+                                     capture_output=True, text=True, encoding='utf-8', check=False, pass_fds=lock_fds)
                     check.update(exit_code=process.returncode, stdout=process.stdout, stderr=process.stderr,
                                  completed=True, status='passed' if process.returncode == 0 else 'failed')
                     if specification.get('evidence') == 'pytest':
-                        check['evidence'] = json.loads(evidence_path.read_text()) if evidence_path.exists() else None
+                        check['evidence'] = json.loads(evidence_path.read_text(encoding='utf-8')) if evidence_path.exists() else None
                 except Exception as exc:
                     check.update(exit_code=None, stdout='', stderr=str(exc), status='failed')
                 check['duration_seconds'] = round(time.monotonic() - started, 3)
