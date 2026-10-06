@@ -663,3 +663,44 @@ def test_mirtogenol_keeps_complete_preparation_without_borrowed_bilberry_floor()
     assert headers
     assert all(row["canonical_id"] != "bilberry" for row in headers)
     assert _evidence(product)["metadata"]["primary_evidence_floor"] == 0.0
+
+
+def test_lent_identity_projection_inherits_declared_container_prominence_without_dose():
+    from evidence_resolver import evidence_owner_canonicals, evidence_prominent_row_keys
+    from scoring_input_contract import get_evidence_subject_rows, is_lent_blend_mass
+
+    product = _enrich("prominence_blend_members_327407_raw.json")
+    subject = next(row for row in get_evidence_subject_rows(product) if row.get("canonical_id") == "spirulina")
+    assert is_lent_blend_mass(subject)
+    assert subject["evidence_scope"] == "blend_level"
+    assert "spirulina" in evidence_owner_canonicals(product)
+    assert (subject["raw_source_path"], "spirulina") in evidence_prominent_row_keys(product)
+    evidence = _evidence(product)
+    assert evidence["metadata"]["ingredient_points"]["spirulina"] > 0
+    assert evidence["metadata"]["primary_evidence_floor"] == 0
+
+
+@pytest.mark.parametrize("path,parent_path,lent,links,expected", [
+    ("ingredientRows[4].nestedRows[0]", "ingredientRows[0]", False, [], True),
+    ("ingredientRows[0]", None, True, ["ingredientRows[0].nestedRows[0]"], True),
+    ("ingredientRows[0]", None, False, ["ingredientRows[0].nestedRows[0]"], False),
+    ("ingredientRows[0]", None, True, ["ingredientRows[9].nestedRows[0]"], False),
+    ("ingredientRows[9].nestedRows[0]", None, False, [], False),
+])
+def test_parent_tier_requires_canonical_lineage_or_a_linked_lent_member(monkeypatch, path, parent_path, lent, links, expected):
+    import evidence_resolver
+    from scoring_input_contract import ROLE_CLAIM_PROMINENT, ROLE_MAJOR
+
+    member = {"canonical_id": "member", "raw_source_path": path,
+              "parent_source_path": parent_path, "linked_rows": links}
+    if lent:
+        member.update(evidence_type="blend_anchor_mass",
+                      reason="identity_bearing_blend_header_mass_from_nested_child")
+    other = {"canonical_id": "other", "raw_source_path": "ingredientRows[8]"}
+    monkeypatch.setattr(evidence_resolver, "_evidence_subject_roles", lambda *args: (
+        [member, other], [{"role": ROLE_MAJOR}, {"role": ROLE_CLAIM_PROMINENT}],
+        [{"raw_source_path": "ingredientRows[0]"}], [{"role": ROLE_CLAIM_PROMINENT}],
+    ))
+    owners = evidence_resolver.evidence_owner_canonicals({})
+    assert ("member" in owners) is expected
+    assert "other" in owners

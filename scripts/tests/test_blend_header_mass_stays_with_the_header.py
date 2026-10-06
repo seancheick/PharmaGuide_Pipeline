@@ -129,6 +129,8 @@ def test_nested_botanical_anchor_preserves_identity_without_borrowing_a_child_do
     assert "ingredientRows[2].nestedRows[0]" in anchor["linked_rows"]
     scored = build_scored_artifact(enriched)
     assert scored["_v4_module_breakdown"]["dimensions"]["formulation"]["metadata"]["formulation_profile"] == "botanical"
+    dose = scored["_v4_module_breakdown"]["dimensions"]["dose"]["metadata"]
+    assert dose["botanical_dose"]["dose_mg"] == 250  # disclosed Sensoril, never the 1000 mg fungal blend
 
 
 def test_overlapping_constituents_do_not_reconcile_a_partly_disclosed_preparation():

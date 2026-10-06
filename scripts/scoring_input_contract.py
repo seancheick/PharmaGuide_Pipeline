@@ -763,6 +763,7 @@ def _evidence_base(
     }
     return _stamp_evidence_identity_contract(item, row, include_source_context=True)
 
+
 def _is_label_identity_source(row: Dict[str, Any]) -> bool:
     source_section = _norm(row.get("source_section"))
     if source_section in {"active", "inactive"}:
@@ -5146,7 +5147,10 @@ def profile_owner_candidate_rows(
     label rows account for the same canonical exposure or linked source rows
     and their disclosed masses reconcile to the projection total.  This keeps
     opaque or partially disclosed aggregates while preventing a duplicate
-    rollup from outranking its own fully disclosed children.
+    rollup from outranking its own fully disclosed children. Only immediate
+    independently dosed members reconcile a blend: descendant constituents
+    are not additional mass partitions, and source/ledger NP members prevent
+    a positive-row subset from proving complete disclosure.
     """
     label_rows = [
         row
