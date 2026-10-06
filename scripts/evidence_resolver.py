@@ -1332,7 +1332,7 @@ def _evidence_owner_selection(
     module: Optional[str],
 ) -> Tuple[Set[str], Set[Tuple[str, str]]]:
     """One owner decision: (owner identities, prominent subject row keys)."""
-    from scoring_input_contract import ROLE_CLAIM_PROMINENT, ROLE_MAJOR, ROLE_PRIMARY
+    from scoring_input_contract import ROLE_CLAIM_PROMINENT, ROLE_MAJOR, ROLE_PRIMARY, is_lent_blend_mass
 
     rows, roles, others, other_roles = _evidence_subject_roles(product, module)
 
@@ -1344,6 +1344,8 @@ def _evidence_owner_selection(
         }
 
     def tier_rows(accepted_roles: Set[str]) -> List[Mapping[str, Any]]:
+        # Serving merges can change a child's path; lent identity projections
+        # retain the container path. Inherit purpose tier only, never its dose.
         parents = blend_paths(accepted_roles)
         return [
             row
@@ -1354,6 +1356,13 @@ def _evidence_owner_selection(
                 or any(
                     str(row.get("raw_source_path") or "").startswith(
                         (parent + ".nestedRows[", parent + ".forms[")
+                    )
+                    or str(row.get("parent_source_path") or "") == parent
+                    or (
+                        is_lent_blend_mass(row)
+                        and str(row.get("raw_source_path") or "") == parent
+                        and any(str(path).startswith((parent + ".nestedRows[", parent + ".forms["))
+                                for path in (row.get("linked_rows") or []))
                     )
                     for parent in parents
                 )

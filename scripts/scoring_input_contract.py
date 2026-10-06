@@ -761,20 +761,7 @@ def _evidence_base(
         "evidence_origin": "compatibility_derived",
         "source_section": "product",
     }
-    for field in (
-        "raw_taxonomy",
-        "forms",
-        "matched_form",
-        "category",
-        "dsld_category",
-        "standardName",
-        "standard_name",
-        "raw_source_text",
-        "plantPart",
-    ):
-        if field in row and row.get(field) not in (None, ""):
-            item[field] = deepcopy(row.get(field))
-    return _stamp_evidence_identity_contract(item, row)
+    return _stamp_evidence_identity_contract(item, row, include_source_context=True)
 
 
 def _is_label_identity_source(row: Dict[str, Any]) -> bool:
@@ -786,9 +773,30 @@ def _is_label_identity_source(row: Dict[str, Any]) -> bool:
 
 
 def _stamp_evidence_identity_contract(
-    item: Dict[str, Any], row: Dict[str, Any]
+    item: Dict[str, Any], row: Dict[str, Any], *, include_source_context: bool = False
 ) -> Dict[str, Any]:
-    """Carry an active label row's shared identity state into derived evidence."""
+    """Carry the identity row's state and, when selected, printed source context.
+
+    Physical mass/path/scope remain on the container; taxonomy and forms
+    belong to the row whose identity is projected.
+    """
+    if include_source_context:
+        for field in (
+            "raw_taxonomy",
+            "forms",
+            "matched_form",
+            "category",
+            "dsld_category",
+            "standardName",
+            "standard_name",
+            "raw_source_text",
+            "plantPart",
+        ):
+            if field in row and row.get(field) not in (None, ""):
+                item[field] = deepcopy(row.get(field))
+            else:
+                item.pop(field, None)
+
     if _is_label_identity_source(row):
         item["identity_contract_required"] = True
         item["identity_disposition"] = row.get("identity_disposition")
@@ -1594,6 +1602,7 @@ def _derive_blend_header_anchor_from_nested_child(
     if child_path and child_path not in item["linked_rows"]:
         item["linked_rows"].append(child_path)
     item["canonical_source_db"] = child.get("canonical_source_db") or item["canonical_source_db"]
+    _stamp_evidence_identity_contract(item, child, include_source_context=True)
     if _is_botanical_or_standardized_anchor(child):
         item["anchor_risk_class"] = "botanical_or_standardized"
     return item
@@ -2142,7 +2151,7 @@ def derive_product_scoring_evidence(product: Dict[str, Any]) -> List[Dict[str, A
                         named_children[0].get("canonical_source_db") or item["canonical_source_db"]
                     )
                     item["name"] = anchor_name or named_children[0].get("name")
-                    _stamp_evidence_identity_contract(item, row)
+                    _stamp_evidence_identity_contract(item, named_children[0], include_source_context=True)
                     # Require the declared name, not just a shared canonical:
                     # a whole preparation (Mirtogenol, a phytosome) can map to
                     # a component ID without being that component's amount.
@@ -5126,7 +5135,9 @@ def _profile_material_blocking_mass(row: Dict[str, Any], botanical_mass_mg: floa
     return other_mass >= (_PROFILE_NONBOTANICAL_BLOCKER_MATERIALITY_FRACTION * botanical_mass_mg)
 
 
-def profile_owner_candidate_rows(rows: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
+def profile_owner_candidate_rows(
+    rows: List[Dict[str, Any]], *, product: Optional[Dict[str, Any]] = None
+) -> List[Dict[str, Any]]:
     """Remove only physically reconciled duplicate totals/components from owner selection.
 
     A declared active parent owns its same-identity components only when
@@ -5136,7 +5147,10 @@ def profile_owner_candidate_rows(rows: List[Dict[str, Any]]) -> List[Dict[str, A
     label rows account for the same canonical exposure or linked source rows
     and their disclosed masses reconcile to the projection total.  This keeps
     opaque or partially disclosed aggregates while preventing a duplicate
-    rollup from outranking its own fully disclosed children.
+    rollup from outranking its own fully disclosed children. Only immediate
+    independently dosed members reconcile a blend: descendant constituents
+    are not additional mass partitions, and source/ledger NP members prevent
+    a positive-row subset from proving complete disclosure.
     """
     label_rows = [
         row
@@ -5193,7 +5207,8 @@ def profile_owner_candidate_rows(rows: List[Dict[str, Any]]) -> List[Dict[str, A
     label_rows = [row for row in label_rows if id(row) not in reconciled_components]
 
     def row_path(row: Dict[str, Any]) -> str:
-        return str(row.get("raw_source_path") or row.get("source") or "").strip()
+        path = str(row.get("raw_source_path") or row.get("source") or "").strip()
+        return _resolve_source_tree_path(product or {}, path)
 
     def paths_overlap(owner_path: str, label_path: str) -> bool:
         if not owner_path or not label_path:
@@ -5218,7 +5233,7 @@ def profile_owner_candidate_rows(rows: List[Dict[str, Any]]) -> List[Dict[str, A
             or projection.get("scoring_parent_id")
         )
         linked_paths = {
-            str(path).strip()
+            _resolve_source_tree_path(product or {}, str(path).strip())
             for path in _safe_list(projection.get("linked_rows"))
             if str(path).strip()
         }
@@ -5226,6 +5241,29 @@ def profile_owner_candidate_rows(rows: List[Dict[str, Any]]) -> List[Dict[str, A
         if projection_path:
             linked_paths.add(projection_path)
         linked_path_roots = {path_root(path) for path in linked_paths if path_root(path)}
+
+        # Positive scoring rows cannot establish complete disclosure: NP and
+        # display-only members live in the source tree/identity ledger. A
+        # constituent beneath an undosed preparation is not a partition of
+        # the outer blend, even when its numbers happen to add to the total.
+        declared_rows = list(label_rows)
+        if product is not None:
+            declared_rows += _source_tree_rows(product)
+            declared_rows += [row for row in _safe_list(
+                _safe_dict(product.get("ingredient_quality_data")).get("ingredients")
+            ) if isinstance(row, dict)]
+        immediate_paths = {
+            row_path(row) for row in declared_rows
+            if row_path(row) != projection_path and
+            _resolve_source_tree_path(product or {}, _aggregate_parent_source_path(row)) == projection_path
+        }
+        immediate_scored = {row_path(row): row for row in label_rows
+                            if row_path(row) in immediate_paths}
+        if immediate_paths and any(
+            path not in immediate_scored or (_role_mass_mg(immediate_scored[path]) or 0) <= 0
+            for path in immediate_paths
+        ):
+            return False
 
         matched_rows: Dict[tuple[str, str], float] = {}
         for index, label_row in enumerate(label_rows):
@@ -5238,11 +5276,13 @@ def profile_owner_candidate_rows(rows: List[Dict[str, Any]]) -> List[Dict[str, A
                 or label_row.get("scoring_parent_id")
             )
             label_path = row_path(label_row)
+            if _path_is_nested_under(projection_path, label_path) and label_path not in immediate_paths:
+                continue
             same_identity = bool(
                 projection_canonical
                 and label_canonical == projection_canonical
             )
-            linked_identity = any(
+            linked_identity = label_path in immediate_paths or any(
                 paths_overlap(owner_path, label_path)
                 for owner_path in linked_paths
             )
@@ -5531,7 +5571,7 @@ def _classify_botanical_owner_type(
         }
 
     owner_candidate_ids = {
-        id(row) for row in profile_owner_candidate_rows(rows)
+        id(row) for row in profile_owner_candidate_rows(rows, product=product)
     }
     primary_candidates = [
         pair for pair in botanical_pairs if id(pair[0]) in owner_candidate_ids

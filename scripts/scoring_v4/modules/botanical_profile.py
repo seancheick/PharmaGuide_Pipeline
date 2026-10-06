@@ -390,7 +390,7 @@ def _primary_botanical_active(product: Dict[str, Any]) -> Optional[Dict[str, Any
     # anchors remain available as conservative fallback evidence.
     from scoring_input_contract import profile_owner_candidate_rows
 
-    owner_candidates = profile_owner_candidate_rows(scoring_actives)
+    owner_candidates = profile_owner_candidate_rows(scoring_actives, product=product)
     owner_candidate_ids = {id(row) for row in owner_candidates}
     candidates = [
         row for row in botanicals if id(row) in owner_candidate_ids
@@ -417,8 +417,12 @@ def _primary_botanical_active(product: Dict[str, Any]) -> Optional[Dict[str, Any
 
 
 def _recognized_botanical_identity(row: Dict[str, Any]) -> bool:
+    from evidence_resolver import is_reviewed_branded_material
+
     keys = set(_ingredient_identity_keys(row))
-    return bool(keys & _known_botanical_identity_set()) or (
+    return bool(keys & _known_botanical_identity_set()) or is_reviewed_branded_material(
+        row.get("canonical_id"), row.get("name")
+    ) or (
         bool(_norm(row.get("canonical_id"))) and _norm(
             (row.get("raw_taxonomy") or {}).get("category")) == "botanical"
         and not str(row.get("canonical_id")).startswith("blend")

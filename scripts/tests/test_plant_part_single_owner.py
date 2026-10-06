@@ -67,8 +67,17 @@ def test_botanical_blend_projection_preserves_only_cleaner_owned_child_part(keep
         for row in cleaned["activeIngredients"]:
             row.pop("plantPart", None)
     enriched, _ = SupplementEnricherV3().enrich_product(cleaned)
-    components = _botanical_components(build_scored_artifact(enriched))
-    assert components.get("plant_part_disclosed", 0) == (2.0 if keep_part else 0)
+    projection = next(row for row in enriched["product_scoring_evidence"]
+                      if row.get("canonical_id") == "ashwagandha"
+                      and row.get("raw_source_path") == "activeIngredients[6]")
+    assert projection.get("plantPart") == ("root" if keep_part else None)
+    assert projection["dose_value"] == 850
+    assert projection["evidence_scope"] == "blend_level"
+    artifact = build_scored_artifact(enriched)
+    assert artifact["_v4_provenance"]["module_route"] == "generic"
+    # This mixed product uses the generic profile; source disclosure does not
+    # independently promote it into botanical Formulation credit.
+    assert not _botanical_components(artifact)
 
 
 @pytest.mark.parametrize("case,expected", [("linked", "root"), ("unrelated", None), ("conflicting", None)])

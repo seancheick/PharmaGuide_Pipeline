@@ -44,3 +44,16 @@ def test_a_brand_named_blend_total_keeps_the_branded_credit():
     own label name is what names the brand."""
     components = _botanical_formulation("branded_form_sytrinol_54775_raw.json")
     assert components.get("branded_clinically_studied_extract") == 3.0
+
+
+def test_reviewed_preparation_recognition_does_not_follow_a_shared_container_path():
+    from scoring_v4.modules.botanical_profile import _recognized_botanical_identity
+
+    parent = {"canonical_id": "sytrinol", "name": "Sytrinol",
+              "raw_source_path": "ingredientRows[0]"}
+    child = {"canonical_id": "unknown_citrus_material", "name": "Citrus material",
+             "raw_source_path": "ingredientRows[0]"}
+    assert _recognized_botanical_identity(parent)
+    assert not _recognized_botanical_identity(child)
+    assert not _recognized_botanical_identity({**parent, "canonical_id": "unreviewed_blend",
+                                              "name": "Unreviewed Blend"})

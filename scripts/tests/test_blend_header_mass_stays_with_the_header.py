@@ -107,3 +107,46 @@ def test_an_opaque_sports_blend_is_not_an_off_list_primary():
     assert result["metadata"]["dose_basis"] != "generic_dose_proxy_for_offlist_primary"
     assert result["metadata"]["not_evaluable_reason"] == "opaque_primary_sports_blend"
     assert result["penalties"]["opaque_primary_sports_blend"] < 0
+
+
+def test_nested_botanical_anchor_preserves_identity_without_borrowing_a_child_dose():
+    from enhanced_normalizer import EnhancedDSLDNormalizer
+    from enrich_supplements_v3 import SupplementEnricherV3
+    from scoring_input_contract import get_scoring_ingredients
+    from scoring_v4.scored_artifact import build_scored_artifact
+
+    raw = json.loads((FIXTURES / "botanical_blend_321944_raw.json").read_text())
+    enriched, errors = SupplementEnricherV3().enrich_product(EnhancedDSLDNormalizer().normalize_product(raw))
+    assert not errors
+    rows = get_scoring_ingredients(enriched, strict=True).rows
+    anchor = next(row for row in rows if row.get("reason") == "identity_bearing_blend_header_mass_from_nested_child"
+                  and row.get("canonical_id") == "cordyceps")
+    assert anchor["raw_taxonomy"]["category"] == "botanical"
+    assert anchor["raw_taxonomy"]["forms"][0]["category"] == "botanical"
+    assert anchor["raw_source_path"] == "ingredientRows[2]"
+    assert anchor["quantity"] == 1000
+    assert anchor["evidence_scope"] == "blend_level"
+    assert "ingredientRows[2].nestedRows[0]" in anchor["linked_rows"]
+    scored = build_scored_artifact(enriched)
+    assert scored["_v4_module_breakdown"]["dimensions"]["formulation"]["metadata"]["formulation_profile"] == "botanical"
+    dose = scored["_v4_module_breakdown"]["dimensions"]["dose"]["metadata"]
+    assert dose["botanical_dose"]["dose_mg"] == 250  # disclosed Sensoril, never the 1000 mg fungal blend
+
+
+def test_overlapping_constituents_do_not_reconcile_a_partly_disclosed_preparation():
+    from enhanced_normalizer import EnhancedDSLDNormalizer
+    from enrich_supplements_v3 import SupplementEnricherV3
+    from scoring_input_contract import get_scoring_ingredients, profile_owner_candidate_rows
+    from scoring_v4.scored_artifact import build_scored_artifact
+
+    raw = json.loads((FIXTURES / "botanical_blend_59514_raw.json").read_text())
+    enriched, errors = SupplementEnricherV3().enrich_product(EnhancedDSLDNormalizer().normalize_product(raw))
+    assert not errors
+    rows = get_scoring_ingredients(enriched, strict=True).rows
+    candidates = profile_owner_candidate_rows(rows, product=enriched)
+    assert any(row.get("evidence_type") == "blend_anchor_mass" and row.get("quantity") == 380
+               for row in candidates)
+    scored = build_scored_artifact(enriched)
+    components = scored["_v4_module_breakdown"]["dimensions"]["formulation"]["metadata"]["botanical_formulation"]
+    assert components.get("plant_part_disclosed", 0) > 0
+    assert components.get("extract_not_whole_herb", 0) > 0
