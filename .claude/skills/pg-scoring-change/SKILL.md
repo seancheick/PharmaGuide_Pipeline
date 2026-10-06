@@ -79,5 +79,11 @@ Do not add a separate CI or corpus requirement for a verified display-only edit.
    one edit or restart it after each failure fix. The integrator runs one combined fast checkpoint
    for a completed behavioral batch under AGENTS.md; a failed checkpoint returns to targeted fixes
    until all classes are ready for the next combined gate. Required measurements and independent review still apply.
+   Before the corpus pass, discover affected assertions across all existing profiles, including
+   slow and local files; fast CI alone is not that inventory. Run the affected raw/source-backed
+   cases before the long run and resolve every failure class against accepted policy. Explicitly
+   record which checks genuinely require newly generated artifacts and therefore remain post-run.
+   A green raw-canary preflight is a representative guard, not proof that every artifact-dependent
+   expectation or every catalog product has already been validated.
    For external publication, show Sean the cause-grouped movement summary and unresolved risks;
    publication approval remains separate. Do not request approval per ordinary development score.
