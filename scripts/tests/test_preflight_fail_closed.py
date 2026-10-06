@@ -118,6 +118,92 @@ print('UTF8 preparation passed')
     assert process.returncode == 0, process.stdout + process.stderr
 
 
+def test_preparation_date_rollover_is_not_input_mutation(tmp_path, monkeypatch):
+    import subprocess
+    monkeypatch.setattr(preflight, '_preparation_inputs', lambda *args, **kwargs: {'files': {}, 'errors': [], 'raw_count': 1})
+    runtime = iter([{'environment': {'same': 'hash'}, 'freshness_date': '2026-10-06'},
+                    {'environment': {'same': 'hash'}, 'freshness_date': '2026-10-07'}])
+    monkeypatch.setattr(preflight, '_preparation_runtime', lambda: next(runtime))
+    result = preflight.run_preparation(tmp_path, tmp_path, checks=[{'name': 'source', 'command': ['fake']}],
+        runner=lambda command, **kwargs: subprocess.CompletedProcess(command, 0, 'ok', ''))
+    assert result['ready']
+    assert result['runtime']['freshness_date'] == '2026-10-06', 'Do not restamp completed source receipts'
+
+
+def test_preparation_rollover_still_blocks_real_environment_or_source_mutation(tmp_path, monkeypatch):
+    import subprocess
+    for changed in ['environment', 'files']:
+        inputs = iter([{'files': {'source': 'before'}, 'errors': [], 'raw_count': 1},
+                       {'files': {'source': 'after' if changed == 'files' else 'before'}, 'errors': [], 'raw_count': 1}])
+        runtime = iter([{'environment': {'value': 'before'}, 'freshness_date': '2026-10-06'},
+                        {'environment': {'value': 'after' if changed == 'environment' else 'before'}, 'freshness_date': '2026-10-07'}])
+        monkeypatch.setattr(preflight, '_preparation_inputs', lambda *args, **kwargs: next(inputs))
+        monkeypatch.setattr(preflight, '_preparation_runtime', lambda: next(runtime))
+        result = preflight.run_preparation(tmp_path, tmp_path, checks=[{'name': 'source', 'command': ['fake']}],
+            runner=lambda command, **kwargs: subprocess.CompletedProcess(command, 0, 'ok', ''))
+        assert not result['ready'] and result['checks'][-1]['status'] == 'failed'
+
+
+def test_preparation_next_day_invalidates_receipt_reuse(tmp_path, monkeypatch):
+    import subprocess
+    monkeypatch.setattr(preflight, '_preparation_inputs', lambda *args, **kwargs: {'files': {}, 'errors': [], 'raw_count': 1})
+    runtime = {'environment': {'same': 'hash'}, 'freshness_date': '2026-10-06'}
+    monkeypatch.setattr(preflight, '_preparation_runtime', lambda: dict(runtime))
+    calls = []
+    def run(command, **kwargs):
+        calls.append(command)
+        return subprocess.CompletedProcess(command, 0, 'ok', '')
+    def prepare():
+        return preflight.run_preparation(tmp_path, tmp_path, checks=[{'name': 'source', 'command': ['fake']}],
+                                       runner=run, report_path=tmp_path / 'receipt.json')
+    assert prepare()['ready'] and prepare()['ready']
+    assert len(calls) == 1
+    runtime['freshness_date'] = '2026-10-07'
+    assert prepare()['ready'] and len(calls) == 2
+
+
+def test_preparation_default_checks_revalidate_calendar_owner_at_final_acceptance(tmp_path, monkeypatch):
+    import subprocess
+    monkeypatch.setattr(preflight, '_preparation_inputs', lambda *args, **kwargs: {'files': {}, 'errors': [], 'raw_count': 1})
+    monkeypatch.setattr(preflight, '_preparation_runtime', lambda: {'freshness_date': '2026-10-06', 'environment': {}})
+    monkeypatch.setattr(preflight, '_preparation_canary_identifiers', lambda *args: ['1'])
+    for initial, final in [(0, 1), (1, 0), (0, 0)]:
+        calendar_calls = []
+        def run(command, **kwargs):
+            if command[-1] == 'preparation-gates':
+                output = json.dumps({'phase': 'artifact', 'command': ['deferred']})
+            elif 'fda_manufacturer_violations_sync.py' in ' '.join(command):
+                calendar_calls.append(command)
+                return subprocess.CompletedProcess(command, initial if len(calendar_calls) == 1 else final, 'calendar result', '')
+            elif command[-1] == '--json':
+                output = json.dumps({'summary': {'all_ok': True, 'exit_code': 0},
+                    **{key: {'failed': []} for key in ['critical', 'configs', 'scripts', 'json_valid']}})
+            elif 'freeze_contract_snapshots.py' in ' '.join(command):
+                output = '[1] UNCHANGED\nChecked: 1  Failed: 0  Total: 1\n'
+            else:
+                evidence = {'completed': True, 'exit_code': 0, 'collection_errors': [], 'collection_skips': [],
+                    'selection': {'args': ['scripts/tests']},
+                    'nodes': [{'nodeid': 'owner::test_source', 'phase': 'source', 'reason': 'source owner'}],
+                    'outcomes': {'owner::test_source': [{'when': stage, 'outcome': 'passed'} for stage in ['setup', 'call', 'teardown']]}}
+                Path(kwargs['env']['PG_PREPARATION_REPORT']).write_text(json.dumps(evidence), encoding='utf-8')
+                output = 'pytest complete'
+            return subprocess.CompletedProcess(command, 0, output, '')
+        report = tmp_path / 'calendar_receipt.json'
+        report.unlink(missing_ok=True)
+        result = preflight.run_preparation(tmp_path, tmp_path, runner=run, report_path=report)
+        checks = {check['name']: check for check in result['checks']}
+        assert len(calendar_calls) == 2
+        assert checks['fda_freshness']['status'] == ('failed' if initial else 'passed')
+        assert checks['fda_freshness_final']['status'] == ('failed' if final else 'passed')
+        assert result['ready'] is (initial == final == 0)
+        if initial == final == 0:
+            repeated = preflight.run_preparation(tmp_path, tmp_path, runner=run, report_path=report)
+            assert repeated['ready'] and len(calendar_calls) == 3
+            repeated_checks = {check['name']: check for check in repeated['checks']}
+            assert repeated_checks['fda_freshness']['reused'] is True
+            assert not repeated_checks['fda_freshness_final'].get('reused', False)
+
+
 def _write_required_data(data_dir: Path, *, corrupt: str | None = None) -> None:
     data_dir.mkdir(parents=True)
     for filename, _description in preflight.CRITICAL_DATA_FILES:

@@ -1014,6 +1014,11 @@ def run_preparation(repo_root, raw_root, *, checks=None, runner=None, report_pat
                            for i, g in enumerate(inventory) if g['phase'] in {'source', 'live'}]
             except Exception as exc:
                 result['checks'].append({'name': 'release_gate_inventory', 'status': 'failed', 'issues': [str(exc)]})
+            # The FDA owner evaluates local calendar age buckets. Recheck at
+            # final acceptance even when an earlier same-epoch receipt reused,
+            # retaining both outcomes without inferring calendar policy here.
+            checks.append({'name': 'fda_freshness_final', 'command': [sys.executable,
+                'scripts/api_audit/fda_manufacturer_violations_sync.py', '--check'], 'reuse': False})
         prior_checks = previous.get('checks', [])
         if not isinstance(prior_checks, list):
             prior_checks = []
@@ -1069,7 +1074,12 @@ def run_preparation(repo_root, raw_root, *, checks=None, runner=None, report_pat
         if inventories and isinstance(inventories[0], dict):
             result['deferred_tests'] = [n for n in inventories[0].get('nodes', []) if n['phase'] != 'source']
     after = _preparation_inputs(repo_root, raw_root, operational_paths=operational_paths)
-    stable = before == after and runtime == _preparation_runtime()
+    after_runtime = _preparation_runtime()
+    # Clock rollover expires reuse epochs; it is not source/runtime mutation.
+    # Keep the original receipt epoch, and let the final FDA owner check enforce
+    # its actual calendar policy without restamping completed source evidence.
+    stable = before == after and ({key: value for key, value in runtime.items() if key != 'freshness_date'}
+                                  == {key: value for key, value in after_runtime.items() if key != 'freshness_date'})
     result['checks'].append({'name': 'inputs_stable', 'status': 'passed' if stable else 'failed',
                              'issues': [] if stable else ['Input inventory/content or runtime/environment changed during preparation']})
     result['ready'] = all(check['status'] == 'passed' for check in result['checks'])
