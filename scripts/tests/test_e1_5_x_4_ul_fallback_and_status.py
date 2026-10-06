@@ -30,14 +30,15 @@ if str(ROOT / "scripts") not in sys.path:
     sys.path.insert(0, str(ROOT / "scripts"))
 
 from scripts.build_final_db import build_detail_blob  # noqa: E402
+from scripts.release_artifact_paths import catalog_dist_dir
 
 
 # ── Catalog-wide invariant: highest_ul always emitted for known nutrients ──
 
 
 def _iter_blobs(limit: int = 500):
-    """Yield a sample of blobs from scripts/dist/detail_blobs/."""
-    blob_dir = ROOT / "scripts" / "dist" / "detail_blobs"
+    """Yield a sample from the selected catalog artifact."""
+    blob_dir = catalog_dist_dir() / "detail_blobs"
     if not blob_dir.exists():
         pytest.skip("dist/detail_blobs not present — run rebuild first")
     count = 0

@@ -6,6 +6,8 @@ order.
 """
 from pathlib import Path
 
+from scripts.release_artifact_paths import final_build_dir
+
 
 def test_graceful_degradation(dashboard_app):
     """Views render without raising even when scan/build paths don't exist."""
@@ -25,7 +27,7 @@ def test_graceful_degradation(dashboard_app):
 def test_inspector_drill_down_real_product(dashboard_app):
     config = dashboard_app.DashboardConfig(
         scan_dir=Path("scripts/products").resolve(),
-        build_root=Path("scripts/final_db_output").resolve(),
+        build_root=final_build_dir(),
     )
 
     data = dashboard_app.load_dashboard_data(config)
