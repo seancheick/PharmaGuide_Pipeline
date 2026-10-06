@@ -1450,7 +1450,7 @@ def test_approved_fallback_calibration_keeps_all_purpose_rows(count, with_benchm
     assert len(payload["metadata"]["unbenchmarked_purpose_ingredients"]) == count - int(with_benchmark)
 
 
-@pytest.mark.parametrize("scope", ["lent", "structural"])
+@pytest.mark.parametrize("scope", ["lent", "structural", "header", "total_only"])
 @pytest.mark.parametrize("owner,canonical,quantity", [
     ("joint_support", "chondroitin", 1200),
     ("sleep_support", "melatonin", 3),
@@ -1471,6 +1471,8 @@ def test_specialized_dose_requires_individual_exposure(owner, canonical, quantit
                      scoring_input_kind="product_level_evidence",
                      reason="identity_bearing_blend_header_mass_from_nested_child" if scope == "lent"
                      else "identity_bearing_blend_header_mass")
+    if scope in {"header", "total_only"}:
+        projected = dict(row, **{"is_blend_header" if scope == "header" else "blend_total_weight_only": True})
     assert not has_usable_individual_dose(projected)
     assert assess(product, projected) is None
     # An actual label-row projection keeps its own disclosed exposure.
