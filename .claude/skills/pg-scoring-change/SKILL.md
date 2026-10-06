@@ -57,6 +57,16 @@ Do not add a separate CI or corpus requirement for a verified display-only edit.
    for each development movement. Investigate every safety/eligibility class, lost warning and
    unsupported credit. Unexplained identity/status changes block acceptance until resolved; do
    not blindly revert a source-grounded correction merely because old output differs.
+   **Before requesting any full corpus run:** run the complete existing canary manifest from
+   raw inputs through current Clean/Enrich/Score, not yesterday's stored scored outputs:
+   `"$PG_PYTHON" scripts/tests/freeze_contract_snapshots.py --check --raw-root <raw-root>`.
+   This read-only check reports every drift and missing/ambiguous input in one pass. Classify all
+   changed fields by the measured shared cause; investigate unexpected safety, identity, state,
+   warning or credit changes. Refresh only justified canaries using the same tool with the
+   selected `dsld_id` and `--raw-root`, record the cause in its existing manifest changelog,
+   then rerun the complete canary check. Never auto-accept a drift just because code produced it.
+   The all-dataset batch runner repeats this check before any brand is processed. No new canary
+   registry or scorer is needed, and a fixture-only correction does not invalidate pipeline stages.
    Reuse bounded captures within the batch; the final corpus comparison belongs to the one
    necessary post-batch run, not an additional measurement pipeline. Run one corpus job at a time.
 7. **Fresh-context review once per completed output-changing batch.** Do not restart review for

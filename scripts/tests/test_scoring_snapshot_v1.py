@@ -1,7 +1,7 @@
 """
 Phase 0 — Scoring-snapshot regression test.
 
-For the 30 diverse products listed in
+For the products listed in
 ``scripts/tests/fixtures/contract_snapshots/_manifest.json``, this test re-loads
 the current scored output from ``scripts/products/output_<brand>_scored/scored/``
 and asserts the scoring-critical fields match the frozen fixtures in
@@ -79,67 +79,8 @@ def _find_current_product(
     return None
 
 
-# ---------------------------------------------------------------------------
-# Diff helpers
-# ---------------------------------------------------------------------------
-
-
-def _restrict_to_whitelist(
-    product: Dict[str, Any], whitelist: List[str]
-) -> Dict[str, Any]:
-    return {k: product[k] for k in whitelist if k in product}
-
-
-def _walk_diff(
-    current: Any, frozen: Any, path: str = "", out: Optional[List[str]] = None
-) -> List[str]:
-    """Recursively diff two JSON-compatible values; return list of path:value1→value2 lines."""
-    if out is None:
-        out = []
-
-    if type(current) is not type(frozen):
-        # Allow int/float equivalence (e.g. 13.8 vs 13.8)
-        if not (
-            isinstance(current, (int, float))
-            and isinstance(frozen, (int, float))
-            and float(current) == float(frozen)
-        ):
-            out.append(f"  {path or '<root>'}: TYPE {type(frozen).__name__}={frozen!r} -> {type(current).__name__}={current!r}")
-            return out
-
-    if isinstance(frozen, dict):
-        all_keys = set(frozen.keys()) | set(current.keys())
-        for k in sorted(all_keys):
-            sub_path = f"{path}.{k}" if path else k
-            if k not in frozen:
-                out.append(f"  {sub_path}: ADDED {current[k]!r}")
-            elif k not in current:
-                out.append(f"  {sub_path}: REMOVED (was {frozen[k]!r})")
-            else:
-                _walk_diff(current[k], frozen[k], sub_path, out)
-    elif isinstance(frozen, list):
-        if len(current) != len(frozen):
-            out.append(f"  {path}: LEN {len(frozen)} -> {len(current)}")
-        for i, (c, f) in enumerate(zip(current, frozen)):
-            _walk_diff(c, f, f"{path}[{i}]", out)
-    else:
-        if current != frozen:
-            # Tolerance for float rounding (accept 1e-9 drift only)
-            if (
-                isinstance(current, float)
-                and isinstance(frozen, float)
-                and abs(current - frozen) < 1e-9
-            ):
-                return out
-            out.append(f"  {path}: {frozen!r} -> {current!r}")
-    return out
-
-
-def _product_diff(
-    current: Dict[str, Any], frozen: Dict[str, Any], whitelist: List[str]
-) -> List[str]:
-    current_restricted = _restrict_to_whitelist(current, whitelist)
-    return _walk_diff(current_restricted, frozen)
+# The freezer and both raw/stored checks share one comparison contract.
+from scripts.tests.freeze_contract_snapshots import _product_diff
 
 
 # ---------------------------------------------------------------------------
