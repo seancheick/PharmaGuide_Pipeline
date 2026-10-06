@@ -1023,3 +1023,20 @@ def test_generated_preparation_match_cannot_prove_literal_specificity():
     )
     assert decision.canonical_id == "plant"
     assert decision.disposition == "repaired"
+
+
+def test_registered_compound_alias_does_not_become_its_nutrient_moiety():
+    import json
+    from pathlib import Path
+
+    quality_map = json.loads(
+        (Path(__file__).resolve().parents[1] / "data/ingredient_quality_map.json").read_text()
+    )
+    registry = build_canonical_identity_registry({"ingredient_quality_map": quality_map})
+    for name in ("Phosphatidylcholine", "Phosphatidyl Choline"):
+        assert registry.resolve_preferred(name) == (
+            "phosphatidylcholine", "ingredient_quality_map"
+        )
+    assert registry.resolve_preferred("Choline") == ("choline", "ingredient_quality_map")
+    # A declared nutrient can still select its phospholipid source form.
+    assert "phosphatidyl choline" in quality_map["choline"]["forms"]["phosphatidylcholine"]["aliases"]

@@ -5344,6 +5344,7 @@ class EnhancedDSLDNormalizer:
                         )
                         continue
                     nested_ing["parentBlend"] = name or "Unknown Blend"
+                    nested_ing["parent_source_path"] = ing.get("raw_source_path")
                     nested_ing["isNestedIngredient"] = True
                     if parent_mass is not None:
                         nested_ing["parentBlendMass"] = parent_mass
@@ -5385,6 +5386,7 @@ class EnhancedDSLDNormalizer:
                         )
                         continue
                     nested_ing["parentBlend"] = name or "Unknown Blend"
+                    nested_ing["parent_source_path"] = ing.get("raw_source_path")
                     nested_ing["isNestedIngredient"] = True
                     if parent_mass is not None:
                         nested_ing["parentBlendMass"] = parent_mass
@@ -5500,6 +5502,7 @@ class EnhancedDSLDNormalizer:
                             )
                             continue
                         nested_ing["parentBlend"] = name
+                        nested_ing["parent_source_path"] = ing.get("raw_source_path")
                         nested_ing["isNestedIngredient"] = True
                         if parent_mass is not None:
                             nested_ing["parentBlendMass"] = parent_mass
@@ -5621,6 +5624,7 @@ class EnhancedDSLDNormalizer:
 
                     # Mark as part of a blend
                     nested_ing["parentBlend"] = name or "Unknown Blend"
+                    nested_ing["parent_source_path"] = ing.get("raw_source_path")
                     nested_ing["isNestedIngredient"] = True
                     if parent_mass is not None:
                         nested_ing["parentBlendMass"] = parent_mass

@@ -9,11 +9,13 @@ NULL pillar columns), so they must keep rendering all views, not skip them.
 import json
 from pathlib import Path
 
+from scripts.release_artifact_paths import final_build_dir
+
 
 def test_all_dashboard_views_smoke_render(dashboard_app):
     config = dashboard_app.DashboardConfig(
         scan_dir=Path("scripts/products").resolve(),
-        build_root=Path("scripts/final_db_output").resolve(),
+        build_root=final_build_dir(),
     )
     data = dashboard_app.load_dashboard_data(config)
 
@@ -43,7 +45,7 @@ def test_inspector_drilldown_renders_v4_for_real_product(dashboard_app):
     V4 six-pillar rendering path."""
     config = dashboard_app.DashboardConfig(
         scan_dir=Path("scripts/products").resolve(),
-        build_root=Path("scripts/final_db_output").resolve(),
+        build_root=final_build_dir(),
     )
     data = dashboard_app.load_dashboard_data(config)
     if data.product_catalog.empty:

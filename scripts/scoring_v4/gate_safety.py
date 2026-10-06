@@ -62,7 +62,7 @@ from identity.safety import (
     safety_severity_for_status,
 )
 from rda_ul_calculator import get_actionable_ul_review_signals
-from scoring_input_contract import get_scoring_ingredients
+from scoring_input_contract import get_source_score_eligible_active_rows, profile_owner_candidate_rows
 from scoring_v4.dose_safety import (
     CONFIRMED_OVER_THRESHOLD,
     MATERIAL_BUT_UNRESOLVED,
@@ -1065,14 +1065,13 @@ def _apply_stimulant_policy(result: SafetyResult, product: Dict[str, Any]) -> No
     caffeine dose (>400 mg) or undisclosed caffeine in a stimulant/pre-workout
     context is different: the user cannot judge safe use without taking action.
     """
-    # The shared scoring-input contract owns row selection and deduplication.
-    # Compatibility fixtures without a current IQD contract still flow through
-    # that same resolver; release audits separately reject such fallbacks.
-    scoring_rows = get_scoring_ingredients(
-        product,
-        strict=False,
-        allow_legacy_fallback=True,
-    ).rows
+    # Use cleaner-owned physical actives, including missing amounts. Product
+    # evidence blend totals are not known doses of one ingredient; hidden
+    # stimulant membership remains assessed by the blend policy below.
+    scoring_rows = get_source_score_eligible_active_rows(product)
+    # Declared parents and reconciled components represent one exposure.
+    # The contract keeps independent or incomplete rows visible.
+    scoring_rows = profile_owner_candidate_rows(scoring_rows)
     caffeine_rows = [
         row
         for row in scoring_rows

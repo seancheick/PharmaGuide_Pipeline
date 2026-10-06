@@ -14416,7 +14416,7 @@ class SupplementEnricherV3:
                     # whether the name matched so disclosed keyword-less
                     # aggregates drop out.
                     child_ref = str(ingredient.get("raw_source_path") or "")
-                    parent_ref = child_ref.rsplit(".nestedRows[", 1)[0] if ".nestedRows[" in child_ref else None
+                    parent_ref = parent_source_path or (child_ref.rsplit(".nestedRows[", 1)[0] if ".nestedRows[" in child_ref else None)
                     parent_header = parent_headers.get(
                         (self._normalize_exclusion_text(parent_blend), parent_ref)
                     )
@@ -14451,10 +14451,7 @@ class SupplementEnricherV3:
                             "hidden_count": 0,
                             "source_field": parent_source_field,
                             "source_path": parent_source_field,
-                            "source_row_ref": (
-                                str(ingredient.get("raw_source_path")).rsplit(".nestedRows[", 1)[0]
-                                if ".nestedRows[" in str(ingredient.get("raw_source_path") or "")
-                                else (parent_header or {}).get("source_row_ref")),
+                            "source_row_ref": parent_ref or (parent_header or {}).get("source_row_ref"),
                             "sources": ["cleaning"],
                             "_keyword_blend": parent_looks_like_blend,
                             "_parent_source_field": parent_source_field,
@@ -14466,9 +14463,7 @@ class SupplementEnricherV3:
                         }
                         nested_parent_groups[group_key] = group
 
-                    child_ref = str(ingredient.get("raw_source_path") or "")
-                    if (".nestedRows[" in child_ref
-                            and group["source_row_ref"] != child_ref.rsplit(".nestedRows[", 1)[0]):
+                    if parent_ref and group["source_row_ref"] != parent_ref:
                         # A legacy same-name merge spanning different owners
                         # cannot authorize an allocation-specific exception.
                         group["source_row_ref"] = None
@@ -16241,7 +16236,7 @@ class SupplementEnricherV3:
 
         def _parent_path(path: str) -> str:
             marker = ".nestedRows["
-            return path.split(marker, 1)[0] if marker in path else ""
+            return path.rsplit(marker, 1)[0] if marker in path else ""
 
         # Cleaner deliberately removes a blend header from activeIngredients
         # when its named children are the scorable identities. The header still
@@ -16316,19 +16311,37 @@ class SupplementEnricherV3:
         # keep the parent unresolved; a declared total is metadata, not an
         # unnamed strain container. A sibling prebiotic never becomes a strain.
         source_rows = self._flatten_active_ingredients_for_analysis(active_ingredients)
+        source_rows_by_ref = {_row_path(row): row for row in source_rows if _row_path(row)}
+
+        def _belongs_to_owner(row: Dict, owner_ref: str) -> bool:
+            # After alternate serving columns merge, physical raw paths can
+            # differ from the cleaner's analysis parent. Follow that existing
+            # relationship; raw ancestry is only the legacy fallback.
+            seen = set()
+            parent_ref = str(row.get("parent_source_path") or _parent_path(_row_path(row)))
+            while parent_ref and parent_ref not in seen:
+                if parent_ref == owner_ref:
+                    return True
+                seen.add(parent_ref)
+                parent = source_rows_by_ref.get(parent_ref)
+                if parent is None:
+                    return parent_ref.startswith(owner_ref + ".nestedRows[")
+                parent_ref = str(parent.get("parent_source_path") or _parent_path(parent_ref))
+            return False
+
         strain_allocation_owner_refs = set()
         for owner in source_rows:
             ref = _row_path(owner)
             if not ref or not _is_blend_header_total(owner):
                 continue
-            descendants = [r for r in source_rows if _row_path(r).startswith(ref + ".nestedRows[")]
+            descendants = [r for r in source_rows if _belongs_to_owner(r, ref)]
             if descendants:
                 members = [r for r in descendants if not _is_blend_header_total(r)]
                 incomplete = any(
                     _is_blend_header_total(r)
                     and r.get("dose_role") != "declared_total"
                     and not any(
-                        _row_path(child).startswith(_row_path(r) + ".nestedRows[")
+                        _belongs_to_owner(child, _row_path(r))
                         for child in descendants)
                     for r in descendants)
             else:
@@ -16339,9 +16352,10 @@ class SupplementEnricherV3:
                 strain_allocation_owner_refs.add(ref)
 
         flattened_child_parent_paths = {
-            _parent_path(_row_path(ingredient))
+            str(ingredient.get("parent_source_path") or _parent_path(_row_path(ingredient)))
             for ingredient in active_ingredients
-            if _parent_path(_row_path(ingredient)) and _is_probiotic_identity(ingredient)
+            if (ingredient.get("parent_source_path") or _parent_path(_row_path(ingredient)))
+            and _is_probiotic_identity(ingredient)
         }
 
         for ingredient in active_ingredients:
@@ -16696,7 +16710,7 @@ class SupplementEnricherV3:
         for blend in probiotic_blends:
             path = str(blend.get("raw_source_path") or "")
             parent = max(
-                (ref for ref in header_blends if ref and path.startswith(ref + ".nestedRows[")),
+                (ref for ref in header_blends if ref and _belongs_to_owner(source_rows_by_ref.get(path, {"raw_source_path": path}), ref)),
                 key=len, default=None,
             )
             if parent:

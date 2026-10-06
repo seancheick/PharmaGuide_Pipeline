@@ -26,6 +26,8 @@ from typing import Optional
 
 import pytest
 
+from scripts.release_artifact_paths import catalog_dist_dir, final_build_dir
+
 REPO_ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(REPO_ROOT / "scripts"))
 
@@ -104,28 +106,19 @@ def test_placeholder_matched_forms_emit_unknown():
 
 # -- Integration: scan real build output if present --------------------------
 
-# Probe the canonical release path first (scripts/dist/detail_blobs — what
-# release_full.sh emits) then fall back to the legacy build dir.
-_CANDIDATE_BLOB_DIRS = (
-    REPO_ROOT / "scripts" / "dist" / "detail_blobs",
-    REPO_ROOT / "scripts" / "final_db_output" / "detail_blobs",
-)
-
-
 def _resolve_detail_blobs_dir() -> Optional[Path]:
-    for d in _CANDIDATE_BLOB_DIRS:
+    for d in (catalog_dist_dir() / "detail_blobs", final_build_dir() / "detail_blobs"):
         if d.is_dir() and any(d.iterdir()):
             return d
     return None
 
 
-DETAIL_BLOBS_DIR = _resolve_detail_blobs_dir()
-
 
 def _iter_blob_paths(limit: Optional[int] = None):
-    if DETAIL_BLOBS_DIR is None:
+    blob_dir = _resolve_detail_blobs_dir()
+    if blob_dir is None:
         return
-    for i, path in enumerate(sorted(DETAIL_BLOBS_DIR.iterdir())):
+    for i, path in enumerate(sorted(blob_dir.iterdir())):
         if limit is not None and i >= limit:
             return
         if path.suffix == ".json":
@@ -145,10 +138,6 @@ def _build_carries_contract(blob_path: Path) -> bool:
     return False
 
 
-@pytest.mark.skipif(
-    DETAIL_BLOBS_DIR is None,
-    reason="No build output to scan — run scripts/build_final_db.py first.",
-)
 def test_no_form_sensitive_violations_in_build_output():
     """Release gate. For any active ingredient whose matched_form is a
     real chemical form, display_form_label MUST be non-empty.
@@ -157,6 +146,8 @@ def test_no_form_sensitive_violations_in_build_output():
     the corpus is fresh this gate would have caught the Thorne Basic
     Prenatal regression (DSLD 328830) before Flutter consumed it.
     """
+    if _resolve_detail_blobs_dir() is None:
+        pytest.skip("No build output to scan — run scripts/build_final_db.py first.")
     sample = next(_iter_blob_paths(limit=1), None)
     if sample is None:
         pytest.skip("Empty build output directory.")

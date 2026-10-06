@@ -1908,6 +1908,7 @@ class TestBatch11WrapperAndSummaryRows:
         # accurate — Phosphatidyl Choline IS phosphatidylcholine, the
         # phospholipid molecule, not just a choline source.
         assert active_by_name["Phosphatidyl Choline"]["standardName"] == "Phosphatidylcholine"
+        assert active_by_name["Phosphatidyl Choline"]["canonical_id"] == "phosphatidylcholine"
         assert display_by_raw["High Choline Lecithin"]["score_included"] is False
         assert display_by_raw["High Choline Lecithin"]["source_section"] == "activeIngredients"
 

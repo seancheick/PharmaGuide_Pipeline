@@ -25,6 +25,7 @@ def _row(name, quantity, unit, order, canonical_id, forms=()):
         "name": name, "standardName": name, "raw_source_text": name, "order": order,
         "canonical_id": canonical_id, "canonical_source_db": "ingredient_quality_map",
         "quantity": quantity, "unit": unit, "forms": [{"name": f, "prefix": None} for f in forms],
+        "raw_source_path": f"ingredientRows[{order - 1}]",
     }
 
 

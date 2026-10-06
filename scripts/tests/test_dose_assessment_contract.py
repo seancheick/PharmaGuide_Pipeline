@@ -513,3 +513,20 @@ def test_disabled_collection_is_explicitly_incomplete(enricher) -> None:
     assert result["dose_assessment_errors"] == [
         {"reason": "disabled_by_config"}
     ]
+
+
+@pytest.mark.parametrize('quantity,unit', [(1, 'Gram(s)'), (1000, 'mg')])
+def test_disclosed_nmn_mass_reaches_score_readiness_without_niacin_equivalence(enricher, quantity, unit):
+    from scoring_v4.scored_artifact import build_scored_artifact
+
+    row = _row('Nicotinamide Mononucleotide', 'nmn', quantity, unit)
+    row['raw_source_path'] = 'ingredientRows[0]'
+    product, _issues = enricher.enrich_product({
+        'id': 'TEST_NMN_MASS', 'product_name': 'NMN mass identity control',
+        'activeIngredients': [row], 'inactiveIngredients': [],
+    })
+    assert product['rda_ul_data']['dose_assessments'][0]['readiness'] != 'incomplete'
+    assert product['rda_ul_data']['conversion_evidence'][0]['conversion_rule_id'] != 'niacin'
+    scored = build_scored_artifact(product)
+    assert scored['assessment_readiness']['dose']['readiness'] == 'complete'
+    assert scored['quality_score_status'] == 'scored'

@@ -278,3 +278,30 @@ def test_literal_same_source_row_is_not_counted_twice():
 
     row = _row("Zinc", 1, 2, 5, 44)
     assert len(EnhancedDSLDNormalizer._merge_alternate_serving_rows([row, dict(row)])) == 1
+
+
+def test_merged_serving_blend_keeps_one_analysis_owner_through_scoring():
+    from enhanced_normalizer import EnhancedDSLDNormalizer
+    from enrich_supplements_v3 import SupplementEnricherV3
+    from scoring_v4.scored_artifact import build_scored_artifact
+
+    raw = json.loads((FIXTURES / "serving_column_184730_raw.json").read_text())
+    cleaned = EnhancedDSLDNormalizer().normalize_product(raw)
+    header = next(row for row in cleaned["activeIngredients"] if row["name"] == "Probiotic Blend")
+    children = [row for row in cleaned["activeIngredients"] if row.get("parentBlend") == "Probiotic Blend"]
+    assert len(children) == 3
+    assert {row.get("parent_source_path") for row in children} == {header["raw_source_path"]}
+    # The analysis owner changes after a merge; physical label provenance does not.
+    assert {row["raw_source_path"] for row in children} == {
+        f"ingredientRows[1].nestedRows[{index}]" for index in range(3)
+    }
+    assert len(header["raw_taxonomy"]["quantityVariants"]) == 2
+    enriched, _ = SupplementEnricherV3().enrich_product(cleaned)
+    assert len(enriched["proprietary_blends"]) == 1
+    assert header["raw_source_path"] in enriched["probiotic_data"]["strain_allocation_owner_refs"]
+    assert enriched["probiotic_data"]["total_billion_count"] == 2.25
+    artifact = build_scored_artifact(enriched)
+    transparency = artifact["_v4_module_breakdown"]["dimensions"]["transparency"]
+    assert transparency["penalties"]["B5_proprietary_blend_opacity"] == 0.0
+    assert transparency["components"]["per_strain_cfu_on_label"] == 0.0
+    assert transparency["components"]["aggregate_cfu_disclosure_proxy"] == 3.0

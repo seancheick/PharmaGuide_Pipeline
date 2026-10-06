@@ -31,11 +31,12 @@ cleanly in CI environments without a build artifact.
 from __future__ import annotations
 
 import json
-import os
 import re
 from pathlib import Path
 
 import pytest
+
+from scripts.release_artifact_paths import catalog_dist_dir, final_build_dir
 
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
@@ -94,14 +95,10 @@ STANDARDIZATION_RE = re.compile(
 
 
 def _find_blob_dir() -> Path | None:
-    candidate_root = os.environ.get("PG_RELEASE_CANDIDATE_ROOT", "").strip()
-    candidates = []
-    if candidate_root:
-        candidates.append(Path(candidate_root) / "dist" / "detail_blobs")
-    candidates.extend([
-        REPO_ROOT / "scripts" / "dist" / "detail_blobs",
-        REPO_ROOT / "scripts" / "final_db_output" / "detail_blobs",
-    ])
+    candidates = [
+        catalog_dist_dir() / "detail_blobs",
+        final_build_dir() / "detail_blobs",
+    ]
     for c in candidates:
         if c.is_dir() and any(c.glob("*.json")):
             return c

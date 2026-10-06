@@ -46,3 +46,15 @@ def test_label_yields_expected_safety_status_and_driver(pipeline, case):
         assert scored["safety_signal_reason"] is None
     else:
         assert (scored["safety_signal_reason"] or "").startswith(driver)
+
+
+def test_hidden_caffeine_mixture_never_borrows_the_whole_blend_dose(pipeline):
+    normalizer, enricher = pipeline
+    case = next(c for c in CASES if c['id'] == 'caffeine-hidden-mixture-remains-caution')
+    enriched, _ = enricher.enrich_product(
+        normalizer.normalize_product(copy.deepcopy(case['raw_label']))
+    )
+    scored = build_scored_artifact(enriched)
+    assert scored['product_safety_status'] == 'caution'
+    assert 'STIMULANT_UNDISCLOSED_BLEND' in scored['flags']
+    assert 'STIMULANT_CAFFEINE_HIGH_DOSE' not in scored['flags']
