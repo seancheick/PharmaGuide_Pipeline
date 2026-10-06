@@ -13,6 +13,7 @@ from scoring_v4.modules.generic_helpers import (
     daily_serving_multiplier,
     daily_serving_range,
     get_active_ingredients,
+    has_usable_individual_dose,
     primary_type_of,
     _as_float,
     _norm_text,
@@ -153,6 +154,8 @@ def _row_matches(row: Dict[str, Any], canonical_set: set[str]) -> bool:
 
 
 def _row_quantity_mg(row: Dict[str, Any]) -> Optional[float]:
+    if not has_usable_individual_dose(row):
+        return None
     quantity = _as_float(row.get("quantity"), None)
     if quantity is None or quantity <= 0:
         return None

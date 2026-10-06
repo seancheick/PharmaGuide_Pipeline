@@ -15,6 +15,7 @@ from scoring_v4.modules.generic_helpers import (
     daily_serving_multiplier,
     daily_serving_range,
     get_active_ingredients,
+    has_usable_individual_dose,
     primary_type_of,
 )
 from scoring_input_contract import get_source_score_eligible_active_rows
@@ -258,6 +259,8 @@ def _matches_any(keys: set[str], text: str, aliases: Iterable[str]) -> bool:
 
 
 def _row_amount(row: Dict[str, Any], active: str) -> Optional[float]:
+    if not has_usable_individual_dose(row):
+        return None
     quantity = _as_float(row.get("quantity"), None)
     if quantity is None or quantity <= 0:
         return None
