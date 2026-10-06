@@ -92,6 +92,7 @@ from scoring_input_contract import (
     ROLE_PRIMARY,
     classify_ingredient_roles,
     mass_primary_label_actives,
+    is_lent_blend_mass,
     source_linked_rows,
 )
 from scoring_v4.dose_safety import resolve_dose_safety
@@ -261,7 +262,7 @@ def _row_identity_keys(row: Dict[str, Any]) -> set[str]:
 
 def _score_declared_purpose_window(
     product: Dict[str, Any],
-) -> tuple[Optional[float], List[str], int, List[Dict[str, Any]], List[Dict[str, Any]]]:
+) -> tuple[Optional[float], List[str], int, List[Dict[str, Any]], List[Dict[str, Any]], List[float]]:
     """Score each explicitly declared purpose once, using one equal vote.
 
     The shared role owner establishes purpose from the route, product title or
@@ -271,7 +272,8 @@ def _score_declared_purpose_window(
     heavy.  Missing required amounts are handled by assessment readiness before
     this route scorer is published.
 
-    Returns ``(score, unbenchmarked identities, purpose count)``. ``score`` is
+    Returns the score, unbenchmarked identities, purpose count, benchmark
+    assessments, specialized assessments and unbenchmarked fallback values. ``score`` is
     ``None`` when the label declares no purpose row, preserving the legacy
     compatibility path for products whose source has not yet supplied one.
     """
@@ -286,7 +288,7 @@ def _score_declared_purpose_window(
         and _norm_text(row.get("canonical_id")) not in aggregate_members
     ]
     if not purpose_rows and aggregate is None:
-        return None, [], 0, [], []
+        return None, [], 0, [], [], []
 
     # A physical purpose may have a compatibility projection of the same
     # source row.  Count it once by canonical identity, falling back to source.
@@ -304,6 +306,7 @@ def _score_declared_purpose_window(
     ]
     contributions: List[float] = []
     unbenchmarked: List[str] = []
+    fallback_values: List[float] = []
     clinical_assessments: List[Dict[str, Any]] = []
     specialized_assessments: List[Dict[str, Any]] = []
     if aggregate is not None:
@@ -372,16 +375,27 @@ def _score_declared_purpose_window(
             continue
         if has_usable_individual_dose(purpose):
             contributions.append(NO_REFERENCE_INDIVIDUAL_DOSE_CREDIT)
+            fallback_values.append(NO_REFERENCE_INDIVIDUAL_DOSE_CREDIT)
             unbenchmarked.append(key)
+        elif not is_lent_blend_mass(purpose):
+            # A disclosed whole preparation remains assessable at the existing
+            # product-evidence fallback. A borrowed child amount cannot own
+            # that preparation's contribution in the purpose average.
+            credit, _ = _product_evidence_dose_credit(purpose)
+            if credit:
+                contributions.append(credit)
+                fallback_values.append(credit)
+                unbenchmarked.append(key)
 
     if not contributions:
-        return 0.0, sorted(unbenchmarked), len(purposes) + int(aggregate is not None), clinical_assessments, specialized_assessments
+        return 0.0, sorted(unbenchmarked), len(purposes) + int(aggregate is not None), clinical_assessments, specialized_assessments, fallback_values
     return (
         round(_clamp(0.0, CAP_SUPPLEMENTAL_WINDOW, sum(contributions) / len(contributions)), 4),
         sorted(unbenchmarked),
         len(purposes) + int(aggregate is not None),
         clinical_assessments,
         specialized_assessments,
+        fallback_values,
     )
 
 
@@ -409,21 +423,26 @@ def _score_no_reference_quantified_dose(product: Dict[str, Any]) -> tuple[float,
             return NO_REFERENCE_INDIVIDUAL_DOSE_CREDIT, "individual_quantified_dose_no_rda_reference"
 
     for evidence in _safe_list(product.get("product_scoring_evidence")):
-        if not isinstance(evidence, dict):
-            continue
-        if not evidence.get("scoreable"):
-            continue
-        dose_value = _as_float(evidence.get("dose_value"), None)
-        if dose_value is None or dose_value <= 0:
-            continue
-        dose_class = _norm_text(evidence.get("dose_class"))
-        evidence_type = _norm_text(evidence.get("evidence_type"))
-        if dose_class in {"therapeutic_mass", "enzyme_activity", "probiotic_cfu"}:
-            if evidence_type == "blend_anchor_mass":
-                return NO_REFERENCE_PRODUCT_EVIDENCE_CREDIT, "blend_anchor_quantified_dose_no_rda_reference"
-            return NO_REFERENCE_INDIVIDUAL_DOSE_CREDIT, "product_evidence_quantified_dose_no_rda_reference"
+        credit, reason = _product_evidence_dose_credit(evidence)
+        if credit:
+            return credit, reason
 
     return 0.0, None
+
+
+def _product_evidence_dose_credit(evidence: Any) -> tuple[float, Optional[str]]:
+    """Existing limited-assessment credit for a disclosed preparation."""
+    if not isinstance(evidence, dict) or not evidence.get("scoreable"):
+        return 0.0, None
+    dose_value = _as_float(evidence.get("dose_value"), None)
+    if dose_value is None or dose_value <= 0:
+        return 0.0, None
+    dose_class = _norm_text(evidence.get("dose_class"))
+    if dose_class not in {"therapeutic_mass", "enzyme_activity", "probiotic_cfu"}:
+        return 0.0, None
+    if _norm_text(evidence.get("evidence_type")) == "blend_anchor_mass":
+        return NO_REFERENCE_PRODUCT_EVIDENCE_CREDIT, "blend_anchor_quantified_dose_no_rda_reference"
+    return NO_REFERENCE_INDIVIDUAL_DOSE_CREDIT, "product_evidence_quantified_dose_no_rda_reference"
 
 
 def _mass_primary_without_reference(product: Dict[str, Any]) -> Optional[str]:
@@ -531,6 +550,7 @@ def score_dose(product: Dict[str, Any]) -> Dict[str, Any]:
         purpose_count,
         clinical_benchmarks,
         specialized_purpose_assessments,
+        purpose_fallback_values,
     ) = (
         _score_declared_purpose_window(product)
     )
@@ -728,7 +748,11 @@ def score_dose(product: Dict[str, Any]) -> Dict[str, Any]:
             }
         if unbenchmarked_purposes:
             metadata["window_proxy_status"] = "limited_assessability_unbenchmarked_purpose"
-            metadata["partial_credit_value"] = NO_REFERENCE_INDIVIDUAL_DOSE_CREDIT
+            # A mixed whole-preparation/individual fallback has no single
+            # value. Keep the uncertainty status without misreporting 16 for
+            # a preparation that actually contributes 12.
+            if len(set(purpose_fallback_values)) == 1:
+                metadata["partial_credit_value"] = purpose_fallback_values[0]
     if window_reason is not None:
         metadata["window_proxy_reason"] = window_reason
     if unassessed_primary:
