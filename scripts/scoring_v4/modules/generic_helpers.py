@@ -128,9 +128,14 @@ def has_usable_individual_dose(ingredient: Dict[str, Any]) -> bool:
     """
     if not isinstance(ingredient, dict):
         return False
-    if is_lent_blend_mass(ingredient):
-        # A blend total lent to one child identity: the child's own amount is
-        # not on the label, so it is blend-level evidence, never its dose.
+    if (is_lent_blend_mass(ingredient)
+            or (ingredient.get("evidence_type") == "blend_anchor_mass"
+                and ingredient.get("scoring_input_kind") == "product_level_evidence")
+            or ingredient.get("is_blend_header")
+            or ingredient.get("blend_total_weight_only")):
+        # A structural/product total or a total lent to a child is not that
+        # ingredient's disclosed exposure. Label-active projections retain
+        # their own amount; whole-preparation benchmarks use their own owner.
         return False
     qty = _as_float(ingredient.get("quantity"), None)
     if qty is None or qty <= 0:

@@ -37,6 +37,7 @@ from scoring_v4.modules.sports_helpers import (
     group_eaa,
     primary_sports_identity,
     sports_dosed_rows,
+    sports_identity_rows,
     sports_rows,
 )
 
@@ -247,7 +248,14 @@ def _score_primary(product: Dict[str, Any], identity: Optional[str]) -> Tuple[fl
     if identity == "bcaa":
         grouped = group_bcaa(rows)
         if not grouped["complete"]:
-            aggregate = _max_g(rows, BCAA_AGGREGATE_CANONICALS)
+            # This existing band assesses the disclosed BCAA preparation as
+            # a whole, not any individual amino acid. Keep it outside the
+            # individual-dose list and never borrow a parent total for it.
+            aggregate = _max_g(
+                [row for row in sports_identity_rows(product)
+                 if not is_lent_blend_mass(row)],
+                BCAA_AGGREGATE_CANONICALS,
+            )
             if aggregate is None:
                 return 0.0, "bcaa_incomplete"
             # Disclosed BCAA aggregate ("BCAA 7 g 2:1:1") with no per-amino split.

@@ -85,7 +85,14 @@ def test_a_self_named_bcaa_total_stays_a_sports_dose():
 
     raw = json.loads((FIXTURES / "bcaa_67304_raw.json").read_text())
     enriched, _ = SupplementEnricherV3().enrich_product(EnhancedDSLDNormalizer().normalize_product(raw))
-    assert any(r.get("canonical_id") == "branched_chain_amino_acids" for r in sports_dosed_rows(enriched))
+    from scoring_v4.modules.sports_dose import _score_primary
+
+    # This label discloses a 250 mg BCAA preparation, not its individual amino
+    # amounts. Preserve the existing aggregate band without lending its mass to
+    # leucine or counting its header as an individually dosed sports ingredient.
+    assert not any(r.get("canonical_id") == "branched_chain_amino_acids"
+                   for r in sports_dosed_rows(enriched))
+    assert _score_primary(enriched, "bcaa") == (1.0, "bcaa_aggregate_under_2_g")
 
 
 def test_an_opaque_sports_blend_is_not_an_off_list_primary():

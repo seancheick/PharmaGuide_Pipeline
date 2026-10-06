@@ -1448,3 +1448,120 @@ def test_approved_fallback_calibration_keeps_all_purpose_rows(count, with_benchm
     assert payload["components"]["supplemental_window_proxy"] == pytest.approx(expected)
     assert payload["metadata"]["purpose_ingredient_count"] == count
     assert len(payload["metadata"]["unbenchmarked_purpose_ingredients"]) == count - int(with_benchmark)
+
+
+@pytest.mark.parametrize("scope", ["lent", "structural", "header", "total_only"])
+@pytest.mark.parametrize("owner,canonical,quantity", [
+    ("joint_support", "chondroitin", 1200),
+    ("sleep_support", "melatonin", 3),
+    ("immune_support", "elderberry", 500),
+])
+def test_specialized_dose_requires_individual_exposure(owner, canonical, quantity, scope):
+    from importlib import import_module
+    from scoring_v4.modules.generic_helpers import has_usable_individual_dose
+
+    row = _ingredient(name=canonical, canonical_id=canonical, quantity=quantity)
+    product = _product(ingredients=[row], primary_type=owner)
+    assess = getattr(import_module("scoring_v4.modules." + owner),
+                     {"joint_support": "score_joint_purpose_dose",
+                      "sleep_support": "score_sleep_purpose_dose",
+                      "immune_support": "score_immune_purpose_dose"}[owner])
+    assert assess(product, row) is not None
+    projected = dict(row, evidence_type="blend_anchor_mass", evidence_scope="blend_level",
+                     scoring_input_kind="product_level_evidence",
+                     reason="identity_bearing_blend_header_mass_from_nested_child" if scope == "lent"
+                     else "identity_bearing_blend_header_mass")
+    if scope in {"header", "total_only"}:
+        projected = dict(row, **{"is_blend_header" if scope == "header" else "blend_total_weight_only": True})
+    assert not has_usable_individual_dose(projected)
+    assert assess(product, projected) is None
+    # An actual label-row projection keeps its own disclosed exposure.
+    disclosed = dict(row, evidence_type="blend_anchor_mass", evidence_scope="row_level",
+                     scoring_input_kind="label_active_projection")
+    assert has_usable_individual_dose(disclosed)
+    assert assess(product, disclosed) == assess(product, row)
+
+
+@pytest.mark.parametrize("pid", ["12196", "176071", "204571"])
+def test_raw_blend_total_never_becomes_an_individual_dose(pid):
+    import json
+    from copy import deepcopy
+    from enhanced_normalizer import EnhancedDSLDNormalizer
+    from enrich_supplements_v3 import SupplementEnricherV3
+    from scoring_v4.scored_artifact import build_scored_artifact
+    from scoring_v4.modules.generic_dose import NO_REFERENCE_INDIVIDUAL_DOSE_CREDIT
+
+    raw = json.loads((Path(__file__).parent / "fixtures" / f"dose_blend_{pid}_raw.json").read_text())
+    clean = EnhancedDSLDNormalizer().normalize_product(deepcopy(raw))
+    enriched, errors = SupplementEnricherV3().enrich_product(clean)
+    assert not errors
+    result = build_scored_artifact(enriched)
+    dose = result["_v4_module_breakdown"]["dimensions"]["dose"]
+    if pid == "12196":
+        assert "chondroitin" not in [item["active"] for item in
+                dose["metadata"].get("specialized_purpose_assessments", [])]
+        assert any(item["active"] == "glucosamine" and item["daily_mg"] == 1500
+                   for item in dose["metadata"]["specialized_purpose_assessments"])
+    elif pid == "204571":
+        from scoring_v4.modules.generic_dose import NO_REFERENCE_PRODUCT_EVIDENCE_CREDIT
+        assert dose["components"]["supplemental_window_proxy"] == NO_REFERENCE_PRODUCT_EVIDENCE_CREDIT
+        assert dose["metadata"]["partial_credit_value"] == NO_REFERENCE_PRODUCT_EVIDENCE_CREDIT
+        assert dose["metadata"]["unbenchmarked_purpose_ingredients"]
+    else:
+        # The raw notes disclose individual enzyme activity (DU/HUT/FCCPU);
+        # reject container mass while preserving that distinct usable exposure.
+        assert dose["metadata"]["partial_credit_reason"] == "enzyme_activity_quantified_dose_no_rda_reference"
+        assert dose["score"] == NO_REFERENCE_INDIVIDUAL_DOSE_CREDIT
+
+
+def test_structural_blend_fallback_preserves_existing_product_credit():
+    from scoring_v4.modules.generic_dose import (
+        _score_no_reference_quantified_dose, NO_REFERENCE_PRODUCT_EVIDENCE_CREDIT,
+    )
+    total = _ingredient(name="Digestive enzyme blend", canonical_id="enzyme_blend", quantity=500,
+                        evidence_type="blend_anchor_mass", evidence_scope="blend_level",
+                        scoring_input_kind="product_level_evidence", dose_class="therapeutic_mass",
+                        dose_value=500, dose_unit="mg", scoreable=True)
+    product = _product(ingredients=[total], product_scoring_evidence=[total])
+    score, reason = _score_no_reference_quantified_dose(product)
+    assert score == NO_REFERENCE_PRODUCT_EVIDENCE_CREDIT
+    assert reason == "blend_anchor_quantified_dose_no_rda_reference"
+
+
+@pytest.mark.parametrize("lent,disclosed,expected", [(False, True, 12), (True, True, 0), (False, False, 0)])
+def test_declared_structural_purpose_keeps_product_total_fallback(lent, disclosed, expected):
+    from scoring_v4.modules.generic_dose import (
+        _score_declared_purpose_window, NO_REFERENCE_PRODUCT_EVIDENCE_CREDIT,
+    )
+    total = _ingredient(name="Digestive enzyme blend", canonical_id="enzyme_blend", quantity=500,
+                        evidence_type="blend_anchor_mass", evidence_scope="blend_level",
+                        scoring_input_kind="product_level_evidence", dose_class="therapeutic_mass",
+                        dose_value=500, dose_unit="mg", scoreable=True)
+    product = _product(ingredients=[total], product_scoring_evidence=[total],
+                       fullName="Digestive enzyme blend")
+    if lent:
+        total["reason"] = "identity_bearing_blend_header_mass_from_nested_child"
+    if not disclosed:
+        total["quantity"] = total["dose_value"] = None
+    score, unknown, count, clinical, specialized, fallbacks = _score_declared_purpose_window(product)
+    assert count == 1
+    assert score == (NO_REFERENCE_PRODUCT_EVIDENCE_CREDIT if expected else 0)
+    assert unknown == (["enzyme_blend"] if expected else [])
+    assert not clinical and not specialized
+    assert fallbacks == ([NO_REFERENCE_PRODUCT_EVIDENCE_CREDIT] if expected else [])
+
+
+def test_mixed_preparation_and_individual_fallbacks_keep_each_purpose_vote():
+    from scoring_v4.modules.generic_dose import score_dose
+    total = _ingredient(name="Digestive enzyme blend", canonical_id="enzyme_blend", quantity=500,
+                        evidence_type="blend_anchor_mass", evidence_scope="blend_level",
+                        scoring_input_kind="product_level_evidence", dose_class="therapeutic_mass",
+                        dose_value=500, dose_unit="mg", scoreable=True)
+    active = _ingredient(name="Astragalus", canonical_id="astragalus", quantity=100)
+    product = _product(ingredients=[total, active], product_scoring_evidence=[total],
+                       fullName="Digestive enzyme blend with Astragalus")
+    dose = score_dose(product)
+    assert dose["metadata"]["purpose_ingredient_count"] == 2
+    assert dose["components"]["supplemental_window_proxy"] == 14
+    assert dose["metadata"]["unbenchmarked_purpose_ingredients"] == ["astragalus", "enzyme_blend"]
+    assert "partial_credit_value" not in dose["metadata"]
