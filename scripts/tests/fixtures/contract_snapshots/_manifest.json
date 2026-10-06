@@ -207,6 +207,18 @@
   ],
   "changelog": [
     {
+      "date": "2026-10-06",
+      "phase": "Individual dose exposure ownership",
+      "products_updated": [
+        18141,
+        204571,
+        241353,
+        274498,
+        327416
+      ],
+      "notes": "Raw Clean/Enrich/Score at adca543f: 18141 and 204571 disclose whole-blend totals, not individual amounts; existing product-level limited-assessment fallback12 replaces wrongly attributed individual16. 241353,274498 and327416 lose panel-disclosure credit incorrectly counting structural blend totals as individual doses; actual vitamin/mineral Dose assessments and form quality stay unchanged. Only quality_score_v4_100 and its compatibility mirror change. All remaining frozen fields and all246 measured safety/status/readiness/route contracts are unchanged. No new magnitude or denominator policy. Generated with the existing freezer using selected raw labels; complete33-canary check required before integration. Receipts: /Users/seancheick/pg_quality/post_pipeline_20261006/final_run_070547/catalog_cause_review/."
+    },
+    {
       "date": "2026-10-05",
       "phase": "Post-pipeline completed Evidence determination",
       "products_updated": [
