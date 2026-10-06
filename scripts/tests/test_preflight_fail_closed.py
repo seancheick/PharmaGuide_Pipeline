@@ -63,6 +63,37 @@ def test_preparation_runtime_ignores_descriptor_numbers_but_binds_worker_budget(
     assert preflight._preparation_runtime() != before
 
 
+
+def test_preparation_runtime_ignores_only_named_shell_launch_bookkeeping(monkeypatch):
+    monkeypatch.setenv('SHELL_PID', '100')
+    before = preflight._preparation_runtime()
+    monkeypatch.setenv('SHELL_PID', '200')
+    assert preflight._preparation_runtime() == before
+    monkeypatch.delenv('SHELL_PID')
+    assert preflight._preparation_runtime() == before
+    for key in ['PG_TEST_WORKERS', 'PG_RUN_OCR_FIDELITY_TESTS', 'FLUTTER_REPO',
+                'SUPABASE_SERVICE_ROLE_KEY', 'OTHER_PID']:
+        with monkeypatch.context() as context:
+            context.setenv(key, 'meaningful-runtime-change')
+            changed = preflight._preparation_runtime()
+            assert changed != before, key
+            assert changed['environment'][key] == preflight._digest('meaningful-runtime-change')
+
+
+def test_preparation_runtime_matches_across_real_shell_launches():
+    import os
+    import subprocess
+    code = "import sys; sys.path.insert(0, 'scripts'); import preflight; print(preflight._digest(preflight._preparation_runtime()))"
+    command = ['bash', '-c', 'source scripts/python_env.sh; "$PG_PYTHON" -c "$1"', '_', code]
+    def launch(pid, **settings):
+        environment = dict(os.environ, SHELL_PID=pid, **settings)
+        return subprocess.run(command, cwd=Path(__file__).resolve().parents[2],
+                              env=environment, capture_output=True, text=True,
+                              encoding='utf-8', check=True, timeout=30).stdout.strip()
+    before = launch('100')
+    assert launch('200') == before
+    assert launch('300', PG_TEST_WORKERS='changed-budget') != before
+
 def test_preparation_cli_reacquires_lock_when_only_held_environment_is_present(tmp_path, monkeypatch):
     import subprocess
     import pytest

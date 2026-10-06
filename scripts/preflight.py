@@ -825,11 +825,11 @@ def _preparation_runtime():
             executables[name] = None
     packages = sorted((d.metadata['Name'], d.version) for d in importlib.metadata.distributions()
                       if d.metadata.get('Name'))
-    # Report paths and lock bookkeeping change between runs without changing
+    # Report paths and lock/shell bookkeeping change between runs without changing
     # test semantics. Every other variable participates, including opt-ins,
     # config locations and secrets (hash only).
     ignored = {'PG_PREPARATION_REPORT', 'PG_PREPARATION_MODE', 'PG_TEST_LOCK_HELD',
-               'PG_TEST_CONCURRENT_RUNS', 'PG_TEST_LOCK_FDS', 'SHLVL', '_', 'PWD', 'OLDPWD'}
+               'PG_TEST_CONCURRENT_RUNS', 'PG_TEST_LOCK_FDS', 'SHELL_PID', 'SHLVL', '_', 'PWD', 'OLDPWD'}
     environment = {key: _digest(value) for key, value in os.environ.items() if key not in ignored}
     return {'python': str(Path(sys.executable).resolve()), 'version': sys.version,
             'platform': platform.platform(), 'executables': executables, 'freshness_date': datetime.now(timezone.utc).date().isoformat(), 'packages': packages, 'environment': environment}
