@@ -1426,11 +1426,9 @@ def test_nordic_softgels_inactive_unmapped_labels_map(
         ("Star Anise Seed Extract", "Star Anise"),
         ("Tea Tree Oil", "Tea Tree"),
         ("total Sulfur", "total sulfur"),
-        # Regression: Eicosatrienoic Acid (C20:3n-3) was unmapped in 2 Softgels PIDs (320013, 320017)
-        # because it appeared as a flat active (not nested), so contextual suppression never fired.
-        # Fix: added IQM form "eicosatrienoic acid (20:3n-3)" under omega_3 key.
-        ("Eicosatrienoic Acid", "Omega-3"),
-        ("eicosatrienoic acid", "Omega-3"),
+        # A bare C20:3 name does not establish the omega isomer family.
+        ("Eicosatrienoic Acid", "Eicosatrienoic Acid"),
+        ("eicosatrienoic acid", "Eicosatrienoic Acid"),
         ("ESA", "Omega-3"),
     ],
 )
@@ -2346,7 +2344,7 @@ def test_batch36_vidarikanda_remains_unmapped_until_identity_is_verified(normali
 @pytest.mark.parametrize(
     "name,expected",
     [
-        ("Eicosatrienoic Acid", "Omega-3"),  # now maps via IQM omega_3 form "eicosatrienoic acid (20:3n-3)"
+        ("Eicosatrienoic Acid", "Eicosatrienoic Acid"),  # no declared n-3 isomer
         ("Pine Nut Oil", "Pine Nut Oil"),
     ],
 )
@@ -2655,7 +2653,6 @@ def test_batch45_inactive_exact_aliases_map(normalizer, name, ingredient_group, 
         # Piperine / Black pepper — "organic black pepper" now routes to botanical
         # (genus contamination fix: bare plant names → botanical, not compound IQM)
         ("organic black pepper", "Black Pepper"),
-        ("essence of pure black pepper (fruit) oil", "Piperine"),
         # Strontium
         ("strontium", "Strontium"),
         # Cayenne — post identity_bioactivity_split Phase 2, bare cayenne
@@ -3332,3 +3329,55 @@ def test_triphala_extract_does_not_use_the_powder_alias(normalizer):
     standard_name, mapped, _ = normalizer._enhanced_ingredient_mapping("Triphala fruit extract", [])
     assert mapped is False
     assert standard_name == "Triphala fruit extract"
+
+
+def test_black_pepper_oil_does_not_become_an_isolated_piperine_dose(normalizer):
+    name = "essence of pure black pepper (fruit) oil"
+    standard_name, mapped, forms = normalizer._enhanced_ingredient_mapping(name, [])
+    assert mapped is False
+    assert standard_name == name
+    assert forms == []
+
+
+def test_registered_strain_names_precede_species_form_aliases(normalizer):
+    import json
+    from pathlib import Path
+
+    registry = json.loads(
+        (Path(__file__).resolve().parents[1] / "data/clinically_relevant_strains.json").read_text()
+    )
+    collision_count = 0
+    for entry in registry["clinically_relevant_strains"]:
+        for name in [entry["standard_name"], *entry.get("aliases", [])]:
+            if not normalizer._canonical_identity_registry.resolve_preferred(name):
+                continue
+            expected = normalizer._match_probiotic_strain(normalizer.matcher.preprocess_text(name))
+            if not expected:
+                continue
+            collision_count += 1
+            standard_name, mapped, _ = normalizer._enhanced_ingredient_mapping(name, [])
+            assert mapped is True
+            assert standard_name == expected, name
+    assert collision_count > 0
+
+
+@pytest.mark.parametrize("name,group,amount,canonical", [
+    ("Phosphatidyl Choline", "phosphatidylcholine", 1500.0, "phosphatidylcholine"),
+    ("Phosphatidylcholine", "phosphatidylcholine", 1500.0, "phosphatidylcholine"),
+    ("Choline", "Choline", 195.0, "choline"),
+])
+def test_compound_and_declared_nutrient_keep_their_own_amounts(normalizer, name, group, amount, canonical):
+    raw = {
+        "id": "compound-nutrient-identity", "fullName": "Compound identity control",
+        "ingredientRows": [{"name": name, "ingredientGroup": group,
+                            "category": "vitamin" if canonical == "choline" else "fatty acid",
+                            "quantity": [{"quantity": amount, "unit": "mg"}],
+                            "forms": [{"name": "Phosphatidyl Choline"}] if canonical == "choline" else []}],
+        "otheringredients": {"ingredients": []},
+    }
+    rows = normalizer.normalize_product(raw)["activeIngredients"]
+    assert len(rows) == 1
+    assert rows[0]["canonical_id"] == canonical
+    assert rows[0]["quantity"] == amount
+    assert rows[0]["unit"] == "mg"
+    assert rows[0]["raw_source_text"] == name
