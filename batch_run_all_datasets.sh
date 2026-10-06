@@ -210,6 +210,17 @@ SUMMARY_FILE="products/reports/batch_run_summary_$(date +%Y%m%d_%H%M%S).txt"
     echo ""
 } > "$SUMMARY_FILE"
 
+# A full corpus run must first exercise every reviewed canary through current
+# Clean/Enrich/Score. Checking yesterday's stored scores cannot reveal today's
+# code/data changes. This check is read-only and runs before any brand or release.
+if [ -z "$TARGET_DATASETS" ]; then
+    echo "Checking raw scoring canaries before the full corpus run..."
+    if ! "$PYTHON" tests/freeze_contract_snapshots.py --check --raw-root "$DATASET_ROOT" 2>&1 | tee -a "$SUMMARY_FILE"; then
+        echo "STOP: canary preflight failed. Review all movements and update only justified expectations before rerunning."
+        exit 1
+    fi
+fi
+
 # Track results
 PASSED=()
 FAILED=()
