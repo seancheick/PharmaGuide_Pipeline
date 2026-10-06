@@ -214,9 +214,9 @@ SUMMARY_FILE="products/reports/batch_run_summary_$(date +%Y%m%d_%H%M%S).txt"
 # Clean/Enrich/Score. Checking yesterday's stored scores cannot reveal today's
 # code/data changes. This check is read-only and runs before any brand or release.
 if [ -z "$TARGET_DATASETS" ]; then
-    echo "Checking raw scoring canaries before the full corpus run..."
-    if ! "$PYTHON" tests/freeze_contract_snapshots.py --check --raw-root "$DATASET_ROOT" 2>&1 | tee -a "$SUMMARY_FILE"; then
-        echo "STOP: canary preflight failed. Review all movements and update only justified expectations before rerunning."
+    echo "Collecting aggregate pipeline preparation before the full corpus run..."
+    if ! "$PYTHON" preflight.py --prepare --raw-root "$DATASET_ROOT" 2>&1 | tee -a "$SUMMARY_FILE"; then
+        echo "STOP: aggregate preparation failed. Review scripts/reports/pipeline_preparation.json before any corpus or publication work."
         exit 1
     fi
 fi

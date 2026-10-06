@@ -226,3 +226,70 @@ def dashboard_app():
             if _is_streamlit_or_dashboard(name):
                 del sys.modules[name]
         sys.modules.update(saved)
+
+# Preparation keeps a complete collection inventory before selecting source
+# nodes. This is structured process evidence, never a clinical approval.
+_PREPARATION = {'nodes': [], 'outcomes': {}, 'collection_errors': [], 'collection_skips': []}
+
+
+def pytest_sessionstart(session):
+    if os.environ.get('PG_PREPARATION_REPORT'):
+        _PREPARATION.clear()
+        _PREPARATION.update(nodes=[], outcomes={}, collection_errors=[], collection_skips=[])
+        _write_preparation_progress()
+
+
+@pytest.hookimpl(trylast=True)
+def pytest_collection_finish(session):
+    if not os.environ.get('PG_PREPARATION_REPORT'):
+        return
+    _PREPARATION['selection'] = {key: getattr(session.config.option, key, None)
+        for key in ('keyword', 'markexpr', 'deselect', 'ignore', 'ignore_glob')}
+    _PREPARATION['selection']['args'] = list(session.config.args)
+    from test_profiles import preparation_phase
+    for item in session.items:
+        phase, reason = preparation_phase(Path(str(item.path)).name, item.originalname or item.name,
+            markers=[marker.name for marker in item.iter_markers()])
+        _PREPARATION['nodes'].append({'nodeid': item.nodeid, 'phase': phase, 'reason': reason})
+    if os.environ.get('PG_PREPARATION_MODE') == 'source' and not session.config.option.collectonly:
+        selected = {row['nodeid'] for row in _PREPARATION['nodes'] if row['phase'] == 'source'}
+        removed = [item for item in session.items if item.nodeid not in selected]
+        session.items[:] = [item for item in session.items if item.nodeid in selected]
+        session.config.hook.pytest_deselected(items=removed)
+        session.testscollected = len(session.items)
+    _write_preparation_progress()
+
+
+def _write_preparation_progress():
+    path = os.environ.get('PG_PREPARATION_REPORT')
+    if path:
+        from preflight import _atomic_report
+        _atomic_report(Path(path), dict(_PREPARATION, completed=False, exit_code=None))
+
+
+def pytest_collectreport(report):
+    if os.environ.get('PG_PREPARATION_REPORT') and report.skipped:
+        _PREPARATION['collection_skips'].append({'nodeid': report.nodeid, 'reason': str(report.longrepr)})
+        _write_preparation_progress()
+    if os.environ.get('PG_PREPARATION_REPORT') and report.failed:
+        _PREPARATION['collection_errors'].append(str(report.longrepr))
+        _write_preparation_progress()
+
+
+def pytest_runtest_logreport(report):
+    if not os.environ.get('PG_PREPARATION_REPORT'):
+        return
+    outcome = {'when': report.when, 'outcome': report.outcome}
+    if report.skipped:
+        outcome['reason'] = str(report.longrepr[2]) if isinstance(report.longrepr, tuple) else str(report.longrepr)
+    _PREPARATION['outcomes'].setdefault(report.nodeid, []).append(outcome)
+    if report.failed or report.skipped:
+        outcome['details'] = str(report.longrepr)
+        _write_preparation_progress()
+
+
+def pytest_sessionfinish(session, exitstatus):
+    path = os.environ.get('PG_PREPARATION_REPORT')
+    if path:
+        from preflight import _atomic_report
+        _atomic_report(Path(path), dict(_PREPARATION, completed=True, exit_code=int(exitstatus)))

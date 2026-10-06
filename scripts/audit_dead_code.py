@@ -63,6 +63,7 @@ KEEP: dict[str, str] = {
     "scripts/normalization.py::validate_normalized_key": "provenance tests assert the key format of every cleaned row",
     "scripts/release_artifact_paths.py::catalog_dist_dir": "release tests locate candidate vs live artifacts through it",
     "scripts/release_artifact_paths.py::final_build_dir": "release tests locate candidate vs live artifacts through it",
+    "scripts/test_profiles.py::preparation_phase": "pytest conftest collection hook classifies every node for the preparation runner's source/deferred inventory",
     "scripts/submission_review/extraction/grounding.py::ungrounded": "grounding tests read the report through it",
     "scripts/evidence_resolver.py::resolve_evidence_for_canonical": "tests drive the live resolve_evidence_for_row through it (builds the row)",
     # Cross-repo reference implementations the app must match.

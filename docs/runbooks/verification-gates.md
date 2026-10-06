@@ -3,6 +3,39 @@
 Reference moved out of `AGENTS.md` so it no longer loads every session. Counts are deliberately
 absent — run the script and read its output.
 
+## Before a corpus run
+
+Use the existing aggregate preflight after the bounded source batch is ready:
+
+```bash
+source scripts/python_env.sh
+"$PG_PYTHON" scripts/preflight.py --prepare --raw-root <raw-brands-root> --report <durable-report.json>
+```
+
+The full all-dataset runner invokes this preparation before processing any brand.
+The report collects independent failures and blocked prerequisites, inventories source,
+generated-artifact and external/opt-in test requirements, checks current raw canaries,
+and asks the existing freshness owner which stages need regeneration. Source-backed
+assertions run before the expensive corpus pass; checks requiring newly generated
+outputs remain in their existing post-run gates. Optional OCR or disposable-service
+tests are listed with their prerequisites and never enabled automatically.
+
+An intact completed successful check can be reused only while its command, runtime
+and the complete source/input inventory still match. This includes source-test fixtures
+and the existing FDA UNII identity cache, even though that cache is excluded from
+stage-freshness calculations. Collection runs again; live verifiers run again under
+their existing cache and freshness rules. Changed or incomplete evidence cannot grant readiness.
+Live commands have a 15-minute wall-clock limit each. A timeout is an unresolved failed
+check, never a data mismatch or readiness approval; independent checks continue and
+valid source evidence remains reusable. Source tests have no such live-command limit.
+Shell launch bookkeeping (`SHELL_PID`) is excluded from runtime identity; effective
+configuration, opt-ins, credentials and worker budgets remain bound.
+Preparation does not refresh expected scores, change clinical policy, publish artifacts
+or establish release readiness. Classify all reported failures by shared cause, fix
+the combined batch, and then run from the earliest required stage. The current stage
+owner proves code/reference/output freshness; it does not prove historical raw-to-Clean
+provenance. Changed raw datasets require Clean unless reuse is independently established.
+
 ## Data-integrity gates
 
 Run against `scripts/final_db_output` or a fresh `/tmp/pharmaguide_release_build*/`.

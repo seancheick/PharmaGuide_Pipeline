@@ -8,6 +8,7 @@ import pytest
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
+from data_batch import INTENTIONAL_EXCEPTIONS  # noqa: E402
 from ci_skip_guard import undeclared_skips  # noqa: E402
 from test_profiles import LOCAL_ONLY_TEST_FILES  # noqa: E402
 
@@ -29,6 +30,25 @@ def _write(tmp_path, extra=""):
 
 def test_declared_local_only_skips_pass(tmp_path):
     assert undeclared_skips(_write(tmp_path)) == []
+
+
+def test_cleaner_missing_output_reason_keeps_existing_ci_policy(tmp_path):
+    path = _write(tmp_path)
+    path.write_text('<testsuites><testsuite><testcase classname="scripts.tests.test_cleaner_forms_preservation" name="test_every_form_has_name"><skipped message="No pipeline output"/></testcase></testsuite></testsuites>')
+    assert undeclared_skips(path) == []
+
+
+def test_ci_skip_reason_declaration_has_unique_keys_and_regex_sequences():
+    import ast
+    from test_profiles import CI_SKIP_ALLOWED_REASONS
+    tree = ast.parse((Path(__file__).parents[1] / 'test_profiles.py').read_text())
+    mapping = next(node.value for node in tree.body if isinstance(node, ast.Assign)
+                   and any(isinstance(target, ast.Name) and target.id == 'CI_SKIP_ALLOWED_REASONS'
+                           for target in node.targets))
+    names = [ast.literal_eval(key) for key in mapping.keys]
+    assert len(names) == len(set(names)), 'Duplicate skip-policy keys silently overwrite declared reasons'
+    assert all(isinstance(value, tuple) and all(isinstance(reason, str) for reason in value)
+               for value in CI_SKIP_ALLOWED_REASONS.values())
 
 
 def test_a_skip_in_an_undeclared_file_fails(tmp_path):
@@ -95,3 +115,98 @@ def test_conflicting_shard_interfaces_fail_closed(monkeypatch):
     monkeypatch.setattr(sys, 'argv', ['test_profiles.py', 'fast', '--shard', '1/4', '--shard-index', '0', '--shard-count', '4'])
     with pytest.raises(SystemExit):
         main()
+
+
+def test_preparation_inventory_runs_source_cases_in_mixed_files():
+    from test_profiles import preparation_phase
+    assert preparation_phase('test_v4_safety_parity_release.py', 'test_exact_high_risk_still_yields_caution')[0] == 'source'
+    assert preparation_phase('test_v4_safety_parity_release.py', 'test_v3_blocked_release_products_remain_v4_blocked')[0] == 'artifact'
+    assert preparation_phase('test_submission_print_fidelity.py', 'test_scoring_refuses_a_line_whose_dose_is_missing')[0] == 'source'
+    assert preparation_phase('test_submission_print_fidelity.py', 'test_preparation_costs_nothing_at_the_working_operating_point')[0] == 'external'
+    assert preparation_phase('test_manifest_contract.py', 'test_staged_manifest_has_every_required_key')[0] == 'source'
+
+
+def test_preparation_evidence_refuses_missing_coverage_skips_and_incomplete_outcomes():
+    from preflight import _valid_test_evidence
+    evidence = {'completed': True, 'exit_code': 0, 'collection_errors': [],
+        'selection': {'args': ['scripts/tests']},
+        'nodes': [{'nodeid': 'a::test_one', 'phase': 'source', 'reason': 'source owner'}],
+        'outcomes': {'a::test_one': [
+            {'when': stage, 'outcome': 'passed'} for stage in ['setup', 'call', 'teardown']]}}
+    assert _valid_test_evidence(evidence)
+    evidence['outcomes']['a::test_one'][1]['outcome'] = 'skipped'
+    assert not _valid_test_evidence(evidence)
+    evidence['outcomes'] = {}
+    assert not _valid_test_evidence(evidence)
+    evidence['completed'] = False
+    assert not _valid_test_evidence(evidence, inventory=True)
+
+
+def test_preparation_does_not_infer_artifact_dependency_from_synthetic_path_tokens():
+    from test_profiles import preparation_phase
+    for filename, name in [
+        ('test_release_artifact_paths.py', 'test_default_paths_resolve_to_live_build'),
+        ('test_run_pipeline_output_prefix.py', 'test_resolve_path'),
+        ('test_graceful_degradation.py', 'test_graceful_degradation'),
+        ('test_cert_audit_canary.py', 'test_audit_report_recency_gated_b4a_does_not_credit_stale'),
+    ]:
+        assert preparation_phase(filename, name)[0] == 'source'
+
+
+def test_preparation_inventory_order_is_not_coverage_but_missing_or_changed_nodes_are():
+    from preflight import _same_preparation_inventory
+    one = {'nodeid': 'one', 'phase': 'source', 'reason': 'owner'}
+    two = {'nodeid': 'two', 'phase': 'artifact', 'reason': 'generated'}
+    assert _same_preparation_inventory({'nodes': [one, two]}, {'nodes': [two, one]})
+    assert not _same_preparation_inventory({'nodes': [one, two]}, {'nodes': [one]})
+    assert not _same_preparation_inventory({'nodes': [one, two]}, {'nodes': [one, dict(two, phase='source')]})
+
+
+@pytest.mark.parametrize('name,reason', sorted(INTENTIONAL_EXCEPTIONS.items()),
+                         ids=sorted(INTENTIONAL_EXCEPTIONS))
+def test_metadata_skip_policy_uses_every_authored_owner_reason(tmp_path, name, reason):
+    import re
+    import xml.etree.ElementTree as ET
+    from test_profiles import CI_SKIP_ALLOWED_REASONS
+    from preflight import _valid_test_evidence
+    message = f'{name}: {reason}'
+    patterns = CI_SKIP_ALLOWED_REASONS['test_data_file_metadata_contract.py']
+    assert re.escape(message) in patterns
+    root = ET.Element('testsuites')
+    suite = ET.SubElement(root, 'testsuite')
+    case = ET.SubElement(suite, 'testcase', classname='scripts.tests.test_data_file_metadata_contract', name=f'test_metadata[{name}]')
+    ET.SubElement(case, 'skipped', message=message)
+    path = tmp_path / 'metadata.xml'
+    ET.ElementTree(root).write(path, encoding='utf-8')
+    assert undeclared_skips(path) == []
+    nodeid = f'scripts/tests/test_data_file_metadata_contract.py::test_metadata[{name}]'
+    evidence = {'completed': True, 'exit_code': 0, 'collection_errors': [],
+        'selection': {'args': ['scripts/tests']},
+        'nodes': [{'nodeid': nodeid, 'phase': 'source', 'reason': 'source owner'}],
+        'outcomes': {nodeid: [{'when': 'setup', 'outcome': 'passed'},
+            {'when': 'call', 'outcome': 'skipped', 'reason': 'Skipped: ' + message},
+            {'when': 'teardown', 'outcome': 'passed'}]}}
+    assert _valid_test_evidence(evidence)
+    for invalid in [f'{name}: changed authored reason', f'unknown.json: {reason}',
+                    f'{name}: optional dependency unexpectedly missing']:
+        case.find('skipped').set('message', invalid)
+        ET.ElementTree(root).write(path, encoding='utf-8')
+        assert undeclared_skips(path)
+        evidence['outcomes'][nodeid][1]['reason'] = 'Skipped: ' + invalid
+        assert not _valid_test_evidence(evidence)
+
+
+def test_metadata_skip_policy_preserves_strict_other_reasons_without_duplicates():
+    import re
+    from data_batch import INTENTIONAL_EXCEPTIONS
+    from test_profiles import CI_SKIP_ALLOWED_REASONS
+    patterns = CI_SKIP_ALLOWED_REASONS['test_data_file_metadata_contract.py']
+    authored = {re.escape(f'{name}: {reason}') for name, reason in INTENTIONAL_EXCEPTIONS.items()}
+    other = {
+        *(re.escape(f'{name}.json: _metadata has no total_entries field')
+          for name in ['canary_products', 'cert_registry', 'high_dose_rule_exemptions', 'omega_rubric']),
+        *(re.escape(f'{name}.json: shape not recognized by universal classifier (needs a bespoke per-file test; add to INTENTIONAL_EXCEPTIONS with a pointer to that test).')
+          for name in ['canonical_equivalences', 'iqm_excellent_evidence_backlog']),
+    }
+    assert set(patterns) == authored | other
+    assert len(patterns) == len(set(patterns))
