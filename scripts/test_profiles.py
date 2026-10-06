@@ -4,8 +4,11 @@
 from __future__ import annotations
 
 import argparse
+import re
 from pathlib import Path
 from typing import FrozenSet, Iterable
+
+from data_batch import INTENTIONAL_EXCEPTIONS
 
 
 SLOW_TEST_FILES: FrozenSet[str] = frozenset({
@@ -139,22 +142,17 @@ CI_SKIP_ALLOWED_REASONS = {
         'enriched\\ corpus\\ not\\ present\\ \\(output_MegaFood_enriched\\)',
         'enriched\\ corpus\\ not\\ present\\ \\(output_Ora_enriched\\)',
     ),
-    'test_data_file_metadata_contract.py': (
-        'banned_match_allowlist\\.json:\\ total_entries\\ tracks\\ allowlist\\ only;\\ denylist\\ is\\ auxiliary\\ and\\ tracked\\ separately\\.\\ Pinned\\ by\\ test_banned_match_allowlist_contract\\.py\\.',
+    # The metadata test emits these exact reasons from its existing owner.
+    'test_data_file_metadata_contract.py': tuple(
+        re.escape(f'{name}: {reason}')
+        for name, reason in sorted(INTENTIONAL_EXCEPTIONS.items())
+    ) + (
         'canary_products\\.json:\\ _metadata\\ has\\ no\\ total_entries\\ field',
         'canonical_equivalences\\.json:\\ shape\\ not\\ recognized\\ by\\ universal\\ classifier\\ \\(needs\\ a\\ bespoke\\ per\\-file\\ test;\\ add\\ to\\ INTENTIONAL_EXCEPTIONS\\ with\\ a\\ pointer\\ to\\ that\\ test\\)\\.',
-        'catalog_brand_registry\\.json:\\ total_entries\\ tracks\\ canonical\\ brand\\-family\\ records;\\ wave_1\\ is\\ an\\ execution\\ manifest,\\ not\\ another\\ brand\\ catalog\\.\\ Pinned\\ by\\ test_brand_identity\\.py\\.',
-        "cert_claim_rules\\.json:\\ total_entries\\ =\\ Σ\\(non\\-_\\-prefixed\\ rule\\ keys\\ across\\ rules\\.\\*\\),\\ excluding\\ each\\ category's\\ _metadata\\ config\\ sub\\-key\\.\\ Pinned\\ by\\ test_cert_claim_rules_contract\\.py\\.",
         'cert_registry\\.json:\\ _metadata\\ has\\ no\\ total_entries\\ field',
-        'clinical_risk_taxonomy\\.json:\\ UNIQUE\\ convention\\ —\\ total_entries\\ =\\ SUM\\ of\\ all\\ 7\\ taxonomy\\ arrays\\ \\(conditions\\ \\+\\ drug_classes\\ \\+\\ severity_levels\\ \\+\\ evidence_levels\\ \\+\\ profile_flags\\ \\+\\ product_forms\\ \\+\\ sources\\)\\.\\ Pinned\\ by\\ test_clinical_risk_taxonomy_contract\\.py\\.',
-        'color_indicators\\.json:\\ total_entries\\ tracks\\ natural_indicators\\ only;\\ artificial_indicators\\ \\+\\ explicit_natural_dyes\\ \\+\\ explicit_artificial_dyes\\ are\\ auxiliary\\.\\ Pinned\\ by\\ test_color_indicators_contract\\.py\\.',
-        'functional_ingredient_groupings\\.json:\\ total_entries\\ tracks\\ functional_groupings\\ only;\\ vague_terms_to_flag\\ \\+\\ transparency_bonuses\\ are\\ auxiliary\\.\\ Pinned\\ by\\ test_functional_ingredient_groupings_contract\\.py\\.',
         'high_dose_rule_exemptions\\.json:\\ _metadata\\ has\\ no\\ total_entries\\ field',
         'iqm_excellent_evidence_backlog\\.json:\\ shape\\ not\\ recognized\\ by\\ universal\\ classifier\\ \\(needs\\ a\\ bespoke\\ per\\-file\\ test;\\ add\\ to\\ INTENTIONAL_EXCEPTIONS\\ with\\ a\\ pointer\\ to\\ that\\ test\\)\\.',
-        'manufacture_deduction_expl\\.json:\\ Structural\\ config\\ file\\ \\(1\\ scalar\\ total_deduction_cap\\ \\+\\ 4\\ nested\\ dicts\\ for\\ violation_categories\\ /\\ modifiers\\ /\\ calculation_rules\\ /\\ score_thresholds\\)\\.\\ total_entries=5\\ tracks\\ count\\ of\\ top\\-level\\ non\\-_metadata\\ sub\\-sections\\ —\\ meaningful\\ but\\ not\\ entry\\-shaped\\.\\ Pinned\\ by\\ test_manufacture_deduction_expl_contract\\.py\\.',
-        'migration_report\\.json:\\ total_entries\\ tracks\\ alias_collisions_resolved\\ \\(the\\ headline\\ number\\ of\\ this\\ migration\\);\\ other\\ arrays/dicts\\ are\\ scaffolding\\.\\ Pinned\\ by\\ test_migration_report_contract\\.py\\.',
         'omega_rubric\\.json:\\ _metadata\\ has\\ no\\ total_entries\\ field',
-        'unit_conversions\\.json:\\ total_entries\\ tracks\\ vitamin_conversions\\ only;\\ mass_conversions\\ and\\ form_detection_patterns\\ are\\ static\\ rule\\ config,\\ not\\ vitamin\\ entries\\.\\ Pinned\\ by\\ test_unit_conversions_contract\\.py\\.',
     ),
     'test_e1_2_2_preflight_invariant.py': (
         'baseline\\ \\d+\\.json\\ missing',
