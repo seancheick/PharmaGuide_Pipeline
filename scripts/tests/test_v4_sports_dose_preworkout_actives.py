@@ -22,6 +22,7 @@ precedent and the B5 transparency penalty).
 from __future__ import annotations
 
 import os
+import pytest
 import sys
 
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
@@ -174,3 +175,46 @@ def test_thorne_preworkout_alpha_gpc_atp_takes_alpha_gpc_primary() -> None:
     )
     assert primary == 20.0
     assert basis == "alpha_gpc_at_least_600_mg"
+
+
+@pytest.mark.parametrize("lent,quantity,expected", [(False,7000,14), (True,7000,0), (False,None,0)])
+def test_bcaa_preparation_assessment_owns_aggregate_not_individual_mass(lent, quantity, expected):
+    from scoring_v4.modules.generic_helpers import has_usable_individual_dose
+    from scoring_v4.modules.sports_helpers import sports_dosed_rows
+    row = dict(_row("branched_chain_amino_acids", quantity, "mg"),
+               evidence_type="blend_anchor_mass", evidence_scope="blend_level",
+               scoring_input_kind="product_level_evidence")
+    if lent:
+        row["reason"] = "identity_bearing_blend_header_mass_from_nested_child"
+    product = _product(row, primary_type="amino_acid")
+    assert not has_usable_individual_dose(row)
+    assert not sports_dosed_rows(product)
+    assert _primary(product)[0] == expected
+
+
+def test_bcaa_header_does_not_duplicate_individually_disclosed_members():
+    row = dict(_row("branched_chain_amino_acids", 7000, "mg"),
+               evidence_type="blend_anchor_mass", evidence_scope="blend_level",
+               scoring_input_kind="product_level_evidence")
+    product = _product(row, _row("l_leucine",3500,"mg"), _row("l_isoleucine",1750,"mg"),
+                       _row("l_valine",1750,"mg"), primary_type="amino_acid")
+    payload = score_dose(product)
+    assert payload["components"]["sports_primary_active_dose"] == 20
+    assert payload["components"]["sports_focused_single_completion"] == 5
+
+
+@pytest.mark.parametrize("pid", ["306183", "307773"])
+def test_raw_disclosed_bcaa_preparation_retains_its_existing_aggregate_band(pid):
+    import json
+    from pathlib import Path
+    from enhanced_normalizer import EnhancedDSLDNormalizer
+    from enrich_supplements_v3 import SupplementEnricherV3
+    from scoring_v4.scored_artifact import build_scored_artifact
+    raw = json.loads((Path(__file__).parent / "fixtures" / f"dose_bcaa_{pid}_raw.json").read_text())
+    enriched, errors = SupplementEnricherV3().enrich_product(EnhancedDSLDNormalizer().normalize_product(raw))
+    assert not errors
+    result = build_scored_artifact(enriched)
+    dose = result["_v4_module_breakdown"]["dimensions"]["dose"]
+    assert result["quality_score_status"] == "scored"
+    assert dose["components"]["sports_primary_active_dose"] == 14
+    assert dose["metadata"]["dose_basis"] == "bcaa_aggregate_at_least_5_g"
