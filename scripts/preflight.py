@@ -352,6 +352,10 @@ def validate_database_schema(data_dir: Path = DATA_DIR) -> Dict:
                 if not isinstance(entry, dict):
                     continue
                 for dep in DEPRECATED_FIELDS:
+                    # The condition taxonomy owns aliases as synonyms; the
+                    # ingredient/root deprecation contract still applies.
+                    if dep == 'synonyms' and filename == 'clinical_risk_taxonomy.json' and primary_key == 'conditions':
+                        continue
                     if dep in entry:
                         entry_id = entry.get("id", f"index {idx}")
                         issues.append(
@@ -746,12 +750,16 @@ def _preparation_inputs(repo_root, raw_root, *, operational_paths=()):
         # These existing input owners intentionally live outside Git inventory.
         relative_paths |= {path.relative_to(root) for path in (root / 'manual_labels').rglob('*') if path.is_file()}
         relative_paths |= {Path(name) for name in ('.env', 'scripts/.env') if (root / name).is_file()}
+        if not flutter:
+            # This ignored FDA bulk map is an existing source-test dependency,
+            # distinct from volatile API transport caches in .cache.
+            relative_paths.add(Path('scripts/data/fda_unii_cache.json'))
         for relative in sorted(relative_paths):
             parts = relative.parts
             generated = (parts[:2] in {('scripts', 'products'), ('scripts', 'dist'), ('scripts', 'final_db_output')}
                          or (flutter and parts[:2] == ('assets', 'db'))
                          or any(part in {'.git', '.cache', '__pycache__', '.pytest_cache', 'node_modules', 'build', '.dart_tool'} for part in parts))
-            operational = (relative.name in {'fda_unii_cache.json', 'LEDGER.md', 'CURRENT_HANDOFF.md', '.DS_Store'}
+            operational = (relative.name in {'LEDGER.md', 'CURRENT_HANDOFF.md', '.DS_Store'}
                            or relative.as_posix() == 'docs/plans/PHARMAGUIDE_MASTER_COMPLETION_PLAN.md')
             if generated or operational:
                 continue
@@ -821,7 +829,7 @@ def _preparation_runtime():
     # test semantics. Every other variable participates, including opt-ins,
     # config locations and secrets (hash only).
     ignored = {'PG_PREPARATION_REPORT', 'PG_PREPARATION_MODE', 'PG_TEST_LOCK_HELD',
-               'PG_TEST_CONCURRENT_RUNS', 'SHLVL', '_', 'PWD', 'OLDPWD'}
+               'PG_TEST_CONCURRENT_RUNS', 'PG_TEST_LOCK_FDS', 'SHLVL', '_', 'PWD', 'OLDPWD'}
     environment = {key: _digest(value) for key, value in os.environ.items() if key not in ignored}
     return {'python': str(Path(sys.executable).resolve()), 'version': sys.version,
             'platform': platform.platform(), 'executables': executables, 'freshness_date': datetime.now(timezone.utc).date().isoformat(), 'packages': packages, 'environment': environment}
@@ -931,9 +939,11 @@ def run_preparation(repo_root, raw_root, *, checks=None, runner=None, report_pat
     import subprocess
     import time
     import tempfile
+    from test_lock import inherited_lock_fds
     from pipeline_freshness import STAGES, RERUN_STAGES, stage_freshness_issues
     repo_root, raw_root = Path(repo_root).resolve(), Path(raw_root).resolve()
     runner = runner or subprocess.run
+    lock_fds = inherited_lock_fds()
     operational_paths = [Path(report_path), Path(report_path).with_suffix('.pytest.json')] if report_path else []
     before = _preparation_inputs(repo_root, raw_root, operational_paths=operational_paths)
     runtime = _preparation_runtime()
@@ -991,7 +1001,7 @@ def run_preparation(repo_root, raw_root, *, checks=None, runner=None, report_pat
             # invokes the gates, live identifiers, OCR or remote writes.
             try:
                 gates = runner(['bash', 'scripts/test.sh', 'preparation-gates'], cwd=repo_root,
-                               capture_output=True, text=True, check=False)
+                               capture_output=True, text=True, check=False, pass_fds=lock_fds)
                 if gates.returncode:
                     raise ValueError(gates.stderr)
                 inventory = [json.loads(line) for line in gates.stdout.splitlines() if line.strip()]
@@ -1032,7 +1042,7 @@ def run_preparation(repo_root, raw_root, *, checks=None, runner=None, report_pat
                 check = {'name': name, 'command': specification['command'], 'completed': False}
                 try:
                     process = runner(specification['command'], cwd=repo_root, env=environment,
-                                     capture_output=True, text=True, check=False)
+                                     capture_output=True, text=True, check=False, pass_fds=lock_fds)
                     check.update(exit_code=process.returncode, stdout=process.stdout, stderr=process.stderr,
                                  completed=True, status='passed' if process.returncode == 0 else 'failed')
                     if specification.get('evidence') == 'pytest':
@@ -1106,7 +1116,8 @@ Exit codes:
             parser.error('--prepare requires --raw-root')
         import os
         import subprocess
-        if not os.environ.get('PG_TEST_LOCK_HELD'):
+        from test_lock import inherited_lock_fds
+        if not inherited_lock_fds():
             # Preparation is a broad workload even when its inventory expands
             # into explicit nodes. Hold the existing exclusive machine lock.
             environment = dict(os.environ, PG_TEST_LOCK_HELD='1', PG_TEST_WORKERS='1')

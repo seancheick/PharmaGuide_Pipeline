@@ -443,6 +443,13 @@ NICE=(); command -v nice >/dev/null 2>&1 && NICE=(nice -n 15)
 # never waits: iteration must keep moving while a suite runs. Since the
 # normalizer stopped retaining instances, a whole fast suite peaks near 2 GB in
 # one process, so a focused run beside a suite fits in memory.
+if [[ "$PROFILE" == "preparation" ]]; then
+  if PYTHONPATH="$SCRIPT_DIR${PYTHONPATH:+:$PYTHONPATH}" "$PG_PYTHON" -c 'from test_lock import inherited_lock_fds; import sys; sys.exit(0 if inherited_lock_fds() else 1)'; then
+    export PG_TEST_LOCK_HELD=1
+  else
+    unset PG_TEST_LOCK_HELD
+  fi
+fi
 if [[ -z "${PG_TEST_LOCK_HELD:-}" ]]; then
   split_user_pytest_args "$@"
   lock_mode=""
@@ -475,7 +482,7 @@ case "$PROFILE" in
     files=(scripts/tests)
     if ((${#USER_TARGETS[@]} > 0)); then files=("${USER_TARGETS[@]}"); fi
     parallel_args=(); if has_xdist; then parallel_args=(-n 0); fi
-    "$PG_PYTHON" -m pytest "${files[@]}" -q --tb=line "${TIMEOUT_HEAVY[@]+"${TIMEOUT_HEAVY[@]}"}" "${USER_OPTIONS[@]+"${USER_OPTIONS[@]}"}" "${parallel_args[@]+"${parallel_args[@]}"}"
+    "$PG_PYTHON" -m pytest "${files[@]}" -q --tb=line --durations=20 "${TIMEOUT_HEAVY[@]+"${TIMEOUT_HEAVY[@]}"}" "${USER_OPTIONS[@]+"${USER_OPTIONS[@]}"}" "${parallel_args[@]+"${parallel_args[@]}"}"
     ;;
   fast)
     split_user_pytest_args "$@"

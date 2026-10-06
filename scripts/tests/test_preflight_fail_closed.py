@@ -11,6 +11,75 @@ sys.path.insert(0, str(Path(__file__).parent.parent))
 import preflight
 
 
+def test_schema_respects_condition_synonyms_and_rejects_deprecated_ingredient_fields(tmp_path, monkeypatch):
+    for filename, primary in [('clinical_risk_taxonomy.json', 'conditions'), ('ingredient_quality_map.json', 'ingredients')]:
+        metadata = json.loads((preflight.DATA_DIR / filename).read_text())['_metadata']
+        (tmp_path / filename).write_text(json.dumps({'_metadata': metadata, primary: [{'id': 'one', 'synonyms': ['alias']}]}))
+    monkeypatch.setattr(preflight, 'REFERENCE_DATABASES', ['clinical_risk_taxonomy.json', 'ingredient_quality_map.json'])
+    result = preflight.validate_database_schema(tmp_path)
+    assert 'clinical_risk_taxonomy.json' in result['passed']
+    assert [entry['file'] for entry in result['failed']] == ['ingredient_quality_map.json']
+    taxonomy = json.loads((tmp_path / 'clinical_risk_taxonomy.json').read_text())
+    taxonomy['synonyms'] = ['deprecated root']
+    (tmp_path / 'clinical_risk_taxonomy.json').write_text(json.dumps(taxonomy))
+    assert any("Deprecated root field 'synonyms'" in issue for entry in preflight.validate_database_schema(tmp_path)['failed'] for issue in entry['issues'])
+
+
+def test_preparation_receipt_binds_existing_unii_source_cache_content_and_absence(tmp_path, monkeypatch):
+    import subprocess
+    monkeypatch.setenv('FLUTTER_REPO', str(tmp_path / 'absent_app'))
+    raw = tmp_path / 'raw'
+    raw.mkdir()
+    (raw / '1.json').write_text(json.dumps({'id': 1, 'ingredientRows': []}))
+    cache = tmp_path / 'scripts/data/fda_unii_cache.json'
+    cache.parent.mkdir(parents=True)
+    calls = []
+    def run(command, **kwargs):
+        calls.append(command)
+        return subprocess.CompletedProcess(command, 0, 'ok', '')
+    receipt = tmp_path / 'receipt.json'
+    def prepare():
+        return preflight.run_preparation(tmp_path, raw, checks=[{'name': 'probe', 'command': ['fake']}], runner=run, report_path=receipt)
+    absent = prepare()
+    assert absent['inputs']['files']['repo/scripts/data/fda_unii_cache.json'] == 'MISSING'
+    cache.write_text('{"caffeine":"3G6A5W338E"}')
+    assert prepare()['ready']
+    assert prepare()['ready']
+    assert len(calls) == 2
+    cache.write_text('{"caffeine":"WRONG"}')
+    assert prepare()['ready']
+    assert len(calls) == 3
+    cache.unlink()
+    assert prepare()['ready']
+    assert len(calls) == 4
+
+
+def test_preparation_runtime_ignores_descriptor_numbers_but_binds_worker_budget(monkeypatch):
+    monkeypatch.setenv('PG_TEST_LOCK_FDS', '3')
+    before = preflight._preparation_runtime()
+    monkeypatch.setenv('PG_TEST_LOCK_FDS', '9,10')
+    assert preflight._preparation_runtime() == before
+    monkeypatch.setenv('PG_TEST_WORKERS', 'different-budget')
+    assert preflight._preparation_runtime() != before
+
+
+def test_preparation_cli_reacquires_lock_when_only_held_environment_is_present(tmp_path, monkeypatch):
+    import subprocess
+    import pytest
+    monkeypatch.setenv('PG_TEST_LOCK_HELD', '1')
+    monkeypatch.setenv('PG_TEST_LOCK_FDS', '999999')
+    monkeypatch.setenv('PG_TEST_LOCK_DIR', str(tmp_path))
+    monkeypatch.setattr(sys, 'argv', ['preflight.py', '--prepare', '--raw-root', str(tmp_path)])
+    monkeypatch.setattr(preflight, 'run_preparation', lambda *args, **kwargs: pytest.fail('Stale held flag bypassed acquisition'))
+    calls = []
+    monkeypatch.setattr(subprocess, 'call', lambda command, **kwargs: calls.append(command) or 0)
+    with pytest.raises(SystemExit) as exit_result:
+        preflight.main()
+    assert exit_result.value.code == 0
+    assert calls and Path(calls[0][1]).name == 'test_lock.py'
+    assert calls[0][2:4] == ['exclusive', '--']
+
+
 def _write_required_data(data_dir: Path, *, corrupt: str | None = None) -> None:
     data_dir.mkdir(parents=True)
     for filename, _description in preflight.CRITICAL_DATA_FILES:

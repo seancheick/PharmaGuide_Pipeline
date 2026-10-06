@@ -30,6 +30,27 @@ LOCK_DIR = Path(
 )
 
 
+def inherited_lock_fds() -> tuple[int, ...]:
+    """Validate the lock owner's descriptors before passing them to descendants."""
+    declared = os.environ.get('PG_TEST_LOCK_FDS', '')
+    if not declared:
+        return ()
+    try:
+        descriptors = tuple(int(value) for value in declared.split(','))
+        if len(descriptors) not in (1, 2) or len(set(descriptors)) != len(descriptors):
+            return ()
+        allowed = { (path.stat().st_dev, path.stat().st_ino)
+                    for path in [LOCK_DIR / 'suite.lock', *LOCK_DIR.glob('worker-*.lock')] if path.is_file() }
+        suite = (LOCK_DIR / 'suite.lock').stat()
+        identities = [(os.fstat(fd).st_dev, os.fstat(fd).st_ino) for fd in descriptors if fd > 2]
+        if (len(identities) != len(descriptors) or any(identity not in allowed for identity in identities)
+                or identities[0] != (suite.st_dev, suite.st_ino)):
+            return ()
+        return descriptors
+    except (ValueError, OSError):
+        return ()
+
+
 def _pid_alive(pid: int) -> bool:
     try:
         os.kill(pid, 0)
@@ -104,6 +125,7 @@ def main(argv: list[str]) -> int:
         workers = 1 if mode == "shared" else min(broad_capacity, max(1, int(os.environ.get("PG_TEST_WORKERS") or broad_capacity)))
         env = dict(os.environ, PG_TEST_CONCURRENT_RUNS=str(len(_live_runs(runs_dir))), PG_TEST_WORKERS=str(workers))
         descriptors = (lock_file.fileno(),) + ((slot.fileno(),) if slot else ())
+        env['PG_TEST_LOCK_FDS'] = ','.join(str(fd) for fd in descriptors)
         return subprocess.call(command, env=env, pass_fds=descriptors)
     except KeyboardInterrupt:
         return 130

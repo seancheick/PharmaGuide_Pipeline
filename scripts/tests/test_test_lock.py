@@ -114,6 +114,71 @@ def test_lock_survives_wrapper_death_while_child_is_running(tmp_path):
         second.communicate(timeout=20)
 
 
+def test_preparation_child_retains_lock_after_preparation_owner_dies(tmp_path):
+    import signal
+    ready, release = tmp_path / 'validator_ready', tmp_path / 'release_validator'
+    child_code = f"import os,time; from pathlib import Path; Path({str(ready)!r}).write_text(str(os.getppid()));\nwhile not Path({str(release)!r}).exists(): time.sleep(.02)"
+    scripts = Path(__file__).resolve().parents[1]
+    code = (f"import sys; sys.path.insert(0, {str(scripts)!r}); import preflight; "
+            "preflight._preparation_inputs=lambda *args, **kwargs: {'files': {}, 'errors': [], 'raw_count': 1}; "
+            f"preflight.run_preparation({str(tmp_path)!r}, {str(tmp_path)!r}, checks=[{{'name':'validator','command':[sys.executable,'-c',{child_code!r}]}}])")
+    first = _start(tmp_path, 'exclusive', code)
+    second = None
+    try:
+        deadline = time.monotonic() + 10
+        while not ready.exists():
+            assert first.poll() is None
+            assert time.monotonic() < deadline
+            time.sleep(.02)
+        os.kill(int(ready.read_text()), signal.SIGTERM)
+        first.wait(timeout=10)
+        second = _start(tmp_path, 'exclusive', "print('second')")
+        time.sleep(.3)
+        assert second.poll() is None, 'Preparation owner death released a still-running validator lock'
+    finally:
+        release.touch()
+        first.communicate(timeout=20)
+        if second:
+            second.communicate(timeout=20)
+
+
+def test_inherited_lock_descriptors_require_existing_owner_files(tmp_path, monkeypatch):
+    import test_lock
+    monkeypatch.setattr(test_lock, 'LOCK_DIR', tmp_path)
+    suite = (tmp_path / 'suite.lock').open('a+')
+    unrelated = (tmp_path / 'unrelated').open('a+')
+    try:
+        monkeypatch.setenv('PG_TEST_LOCK_FDS', str(suite.fileno()))
+        assert test_lock.inherited_lock_fds() == (suite.fileno(),)
+        for declaration in ['not-a-descriptor', '0', str(unrelated.fileno()), '999999', f'{suite.fileno()},{suite.fileno()}']:
+            monkeypatch.setenv('PG_TEST_LOCK_FDS', declaration)
+            assert test_lock.inherited_lock_fds() == ()
+    finally:
+        suite.close()
+        unrelated.close()
+
+
+def test_preparation_runner_reacquires_with_stale_held_environment(tmp_path):
+    release = tmp_path / 'release_stale_flag'
+    holder = _start(tmp_path, 'exclusive', f"from pathlib import Path; import time\nwhile not Path({str(release)!r}).exists(): time.sleep(.02)")
+    _wait_for_markers(tmp_path, 1)
+    repo = Path(__file__).resolve().parents[2]
+    env = dict(os.environ, PG_TEST_LOCK_DIR=str(tmp_path), PG_TEST_LOCK_HELD='1',
+               PG_TEST_LOCK_FDS='999999', PG_PREPARATION_REPORT=str(tmp_path / 'evidence.json'))
+    queued = subprocess.Popen(['bash', 'scripts/test.sh', 'preparation', '--collect-only',
+                              'scripts/tests/test_ci_skip_guard.py::test_every_local_only_file_exists'],
+                             cwd=repo, env=env, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+    try:
+        time.sleep(.4)
+        assert queued.poll() is None, 'Stale held flag bypassed preparation suite lock'
+    finally:
+        release.touch()
+        holder.communicate(timeout=20)
+        out, err = queued.communicate(timeout=30)
+    assert queued.returncode == 0, out[-2000:] + err[-2000:]
+    assert 'waiting for the machine-wide test lock' in err
+
+
 def test_broad_worker_slots_bound_overlap(tmp_path):
     release = tmp_path / "release_slots"
     code = f"from pathlib import Path; import os,time; print(os.environ['PG_TEST_WORKERS'], flush=True)\nwhile not Path({str(release)!r}).exists(): time.sleep(.02)"
