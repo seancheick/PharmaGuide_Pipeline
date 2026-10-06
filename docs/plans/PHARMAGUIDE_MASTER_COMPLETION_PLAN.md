@@ -6,7 +6,7 @@ A checked implementation box means that specific deliverable is implemented, mea
 
 ## Completion measure — October 5
 
-**Main Phase 0–7 checklist: 55 of 70 boxes complete (78.6%).** Count only the eight phase sections under Updated execution checklist, including their nested deliverables; exclude historical checkpoint sections and repeated release reminders. This is an unweighted deliverable count, not an estimate of elapsed time, effort or release readiness. All document checkboxes would give222/263 (84.4%) before this update, but repeated historical receipts make that unsuitable as the main progress measure.
+**Main Phase 0–7 checklist: 57 of 70 boxes complete (81.4%).** Count only the eight phase sections under Updated execution checklist, including their nested deliverables; exclude historical checkpoint sections and repeated release reminders. This is an unweighted deliverable count, not an estimate of elapsed time, effort or release readiness. All document checkboxes would give222/263 (84.4%) before this update, but repeated historical receipts make that unsuitable as the main progress measure.
 
 | Phase | Complete / total |
 |---|---:|
@@ -17,9 +17,9 @@ A checked implementation box means that specific deliverable is implemented, mea
 | 4 — Approved Dose policy | 6 / 6 |
 | 5 — Numerical calibration | 6 / 6 |
 | 6 — Flutter parity and nutrition | 3 / 6 |
-| 7 — Candidate, approval and release | 2 / 9 |
+| 7 — Candidate, approval and release | 4 / 9 |
 
-Approved numerical policy and bounded calibration are implemented. The four live Evidence amount scopes are now transferred to descriptive Dose ownership under Sean’s approval; Amla remains a dormant reference-only scope. Broader clinical/preparation coverage stays open. The October4 Evidence-subject census is complete; current-candidate clinical-determination coverage, artifact validation, actual-device rendering, movement approval, publication and live verification remain open. Historical corpus/release passes do not validate the subsequently changed runtime. The execution LEDGER and main-checkout handoff carry the next steps. Monthly certification renewal is active; the stopped historical release monitor is separate. The October4 development rebuild is verified below, while final source/candidate acceptance remains open.
+Approved numerical policy and bounded calibration are implemented. The four live Evidence amount scopes are now transferred to descriptive Dose ownership under Sean’s approval; Amla remains a dormant reference-only scope. Broader clinical/preparation coverage stays open. The October 4 Evidence-subject census and current candidate freeze/movement reports are complete. Broader clinical coverage, combined artifact validation, actual-device rendering, movement approval, publication and live verification remain open. Historical corpus/release passes do not validate the subsequently changed runtime. The execution LEDGER and main-checkout handoff carry the next steps. Monthly certification renewal is active; the stopped historical release monitor is separate. The October4 development rebuild is verified below, while final source/candidate acceptance remains open.
 
 ## October 4 — catalog gate development policy
 
@@ -372,8 +372,8 @@ A completed determination may be applicable positive evidence, reviewed null/no 
 
 - [x] Verify a fresh development corpus from **Clean**: latest `batch_run_summary_20261004_173701.txt`, source c1deb2f2,38 stage chains/114 current manifests and strict catalog build. The subsequent note-scope correction changes reference fingerprints; this completed run is historical for that display copy, not the final post-batch candidate. Final regeneration is included in the next open candidate checkpoint below.
 - [ ] Rebuild catalog, interaction output and canaries; run release gates and the full backstop sequentially.
-- [ ] Freeze candidate SHAs, config/data fingerprints, catalog generation and artifact hashes.
-- [ ] Produce counts/holds/statuses, route changes, newly scored/held items, largest 50 score deltas, all safer-verdict and BLOCKED changes.
+- [x] Freeze candidate SHAs, config/data fingerprints, catalog generation and artifact hashes. October5 candidate2026.10.06.013007 is frozen at pipeline9f726a8f/runtimefb91849b and test-only acceptance sourcea5560b14; all114stage fingerprints match. Core/detail-index/manifests/interactions and218runtime/reference files have recorded hashes. Main integration, full/device validation and exact-candidate approval remain separate.
+- [x] Produce counts/holds/statuses, route changes, newly scored/held items, largest 50 score deltas, all safer-verdict and BLOCKED changes. Frozen candidate15149products/272quarantines,37added/198removed,77shared route changes versus committed/live September22 baseline and73blocked products. Top50score deltas and pillar attribution, all safety transitions, source-level twoNMN readiness recoveries and unchanged37warned identity holds are retained. Numerical attribution is not blanket clinical approval.
 - [ ] List every expected failure and release relevance; require **zero unexplained deltas** and no release-critical expected failure.
 - [ ] Resolve release-gate decisions in D25 and approve the exact candidate/manifest. New code-push authorization is not catalog-release authorization.
 - [ ] Publish through the existing release chain only after exact-candidate approval.
@@ -978,3 +978,14 @@ Sean approved integration and Score-only regeneration; PR66 merged asf57ea263, c
 
 
 The local catalog trace also found duplicate caffeine parent/component totals and unsupported whole-blend caffeine mass. Fix `fb91849b` reuses existing physical source rows and shared lineage/mass reconciliation; every intermediate subtotal must reconcile. Public regressions fail first, final owner slice passes 211 checks, and fresh review accepts the correction after 13 targeted guards. The final 287-label capture changes 47 outputs: 15 false caution removals, nine restored hidden-dose cautions, 20 corrected signals with caution retained and three elevated→moderate signals. Scores, pillars, scoring statuses and routes remain unchanged; all 287 clinical-warning payloads match. Another 52 frozen controls show zero output changes. Final source repeats all three frozen cohorts with identical preceding candidate outputs; native artifacts differ only in scoring timestamps and all clinical-warning payloads match. Local checkpoint passes 537 checks / 24 declared opt-in skips; exact-source whole-fast CI [37384808424](https://github.com/seancheick/PharmaGuide_Pipeline/actions/runs/37384808424) passes all four groups (19,521 checks / 183 declared skips). Main integration awaits Sean. Actual fingerprints require regeneration from Clean. Master remains 55/70; publication is unapproved.
+
+
+### October 5 — final194817 run and candidate acceptance
+
+Sean's final run completes38datasets/15,421products per stage with114fresh manifests at9f726a8f. Isolated catalog2026.10.06.013007 has15,149products/blobs,272quarantines and zero export/contract errors. Core SHA173f4e2953a692bc9d3ec00eeb5d4ec08046a49c335932dc583ae2d52212669b; interaction output is byte-identical to the verified132-record source. All800measuredlabels retain exact numerical/status/route agreement and310accepted clinical-warning payloads agree. Native15421comparison has51explained changes (3conversion/48caffeine), no unexplained new deltas. Diagnostic resolver102,175subjects/15,159complete/262partial/278pending55groups remains diagnostic; broader clinical coverage is open.
+
+The62catalog safety exceptions preserve the prior47plus exactly15corrected falsecautions. All37warned removals retain identical identity holds; approval fields remain blank. Candidate hashes and population/movement reports close exactly two Phase7 deliverables;57/70complete. No combined release/device/publication box is closed by these reports.
+
+Test-only acceptance correctiona5560b14 routes dashboard/UL/form/label artifact consumers through the existing release_artifact_paths owner. Six fail-first regressions reproduced stale-live selection;13path/regression checks and66affected candidate consumers pass without changing clinical assertions or runtime fingerprints. No pipeline rerun is needed. Release124tests pass; subsequent audits and the fullbackstop remain in progress/unrun respectively. Host app reader/widget2passed and real connected-screen8passed; native simulator is blocked by existingMLKit architecture/Rosetta availability. Original dirty app assets are restored; physical-device install is unapproved. PR67 main integration awaits Sean; publication remains unapproved.
+
+Owner: existing release_artifact_paths, build_final_db/release_catalog_artifact, catalog_diff and appCoreDatabase/detailBlobProvider/ProductDetailV2ConnectedScreen — evidence: matrix/glossary/caller search and actual candidate consumer probes. Will NOT create: another path/scoring/clinical owner, publicfield/status, registry, approval shortcut or app calculation. Current receipts: /Users/seancheick/pg_quality/post_pipeline_20261005/final_run_194817/; execution state remains in the existing LEDGER and handoff.
