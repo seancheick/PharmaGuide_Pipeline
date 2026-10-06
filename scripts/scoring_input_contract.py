@@ -761,21 +761,7 @@ def _evidence_base(
         "evidence_origin": "compatibility_derived",
         "source_section": "product",
     }
-    for field in (
-        "raw_taxonomy",
-        "forms",
-        "matched_form",
-        "category",
-        "dsld_category",
-        "standardName",
-        "standard_name",
-        "raw_source_text",
-        "plantPart",
-    ):
-        if field in row and row.get(field) not in (None, ""):
-            item[field] = deepcopy(row.get(field))
-    return _stamp_evidence_identity_contract(item, row)
-
+    return _stamp_evidence_identity_contract(item, row, include_source_context=True)
 
 def _is_label_identity_source(row: Dict[str, Any]) -> bool:
     source_section = _norm(row.get("source_section"))
@@ -786,9 +772,30 @@ def _is_label_identity_source(row: Dict[str, Any]) -> bool:
 
 
 def _stamp_evidence_identity_contract(
-    item: Dict[str, Any], row: Dict[str, Any]
+    item: Dict[str, Any], row: Dict[str, Any], *, include_source_context: bool = False
 ) -> Dict[str, Any]:
-    """Carry an active label row's shared identity state into derived evidence."""
+    """Carry the identity row's state and, when selected, printed source context.
+
+    Physical mass/path/scope remain on the container; taxonomy and forms
+    belong to the row whose identity is projected.
+    """
+    if include_source_context:
+        for field in (
+            "raw_taxonomy",
+            "forms",
+            "matched_form",
+            "category",
+            "dsld_category",
+            "standardName",
+            "standard_name",
+            "raw_source_text",
+            "plantPart",
+        ):
+            if field in row and row.get(field) not in (None, ""):
+                item[field] = deepcopy(row.get(field))
+            else:
+                item.pop(field, None)
+
     if _is_label_identity_source(row):
         item["identity_contract_required"] = True
         item["identity_disposition"] = row.get("identity_disposition")
@@ -1594,6 +1601,7 @@ def _derive_blend_header_anchor_from_nested_child(
     if child_path and child_path not in item["linked_rows"]:
         item["linked_rows"].append(child_path)
     item["canonical_source_db"] = child.get("canonical_source_db") or item["canonical_source_db"]
+    _stamp_evidence_identity_contract(item, child, include_source_context=True)
     if _is_botanical_or_standardized_anchor(child):
         item["anchor_risk_class"] = "botanical_or_standardized"
     return item
@@ -2142,7 +2150,7 @@ def derive_product_scoring_evidence(product: Dict[str, Any]) -> List[Dict[str, A
                         named_children[0].get("canonical_source_db") or item["canonical_source_db"]
                     )
                     item["name"] = anchor_name or named_children[0].get("name")
-                    _stamp_evidence_identity_contract(item, row)
+                    _stamp_evidence_identity_contract(item, named_children[0], include_source_context=True)
                     # Require the declared name, not just a shared canonical:
                     # a whole preparation (Mirtogenol, a phytosome) can map to
                     # a component ID without being that component's amount.
