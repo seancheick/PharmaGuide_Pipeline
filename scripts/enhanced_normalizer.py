@@ -3864,6 +3864,11 @@ class EnhancedDSLDNormalizer:
                 return "colors (unspecified)", True, forms
             # If both indicators present, fall through to normal mapping
 
+        literal = self._canonical_identity_registry.resolve_preferred(name)
+        if literal and literal[1] == "ingredient_quality_map":
+            parent = self.ingredient_map.get(literal[0], {})
+            return parent.get("standard_name", name), True, forms or []
+
         # Preprocess the input name
         processed_name = self.matcher.preprocess_text(name)
 
@@ -3877,11 +3882,6 @@ class EnhancedDSLDNormalizer:
                 name, strain_name,
             )
             return strain_name, True, forms or []
-
-        literal = self._canonical_identity_registry.resolve_preferred(name)
-        if literal and literal[1] == "ingredient_quality_map":
-            parent = self.ingredient_map.get(literal[0], {})
-            return parent.get("standard_name", name), True, forms or []
 
         # SAFETY FIRST: Try critical exact matching for short aliases (B1, D3, K2, etc.)
         critical_match = self.matcher.exact_match_critical_aliases(name, list(self.ingredient_alias_lookup.keys()))

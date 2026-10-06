@@ -342,7 +342,20 @@ def test_identity_bearing_blend_total_reaches_v4_as_anchor_mass_evidence() -> No
     assert float(rows[0]["quantity"]) >= 300.0
 
     out = score_product_v4(product)
-    _assert_module_aggregate_evidence(out, "quercefit")
+    # This named structural anchor retains mass provenance without becoming
+    # an ingredient efficacy claim or borrowing the protein/enzyme aggregate rule.
+    assessments = out["v4_breakdown"]["assessment_readiness"]["evidence"]["ingredient_assessments"]
+    anchors = [row for row in assessments if row.get("canonical_id") == "quercefit"]
+    assert anchors
+    assert all(
+        row["state"] == "not_applicable"
+        and row["evidence_applicability"] == "not_applicable"
+        and row["reason_code"] == "structural_row_not_evidence_subject"
+        and row["evidence_ids"] == []
+        for row in anchors
+    )
+    assert out["v4_verdict"] != "NOT_SCORED"
+    assert out["raw_score_v4_100"] is not None
     completeness = out["v4_breakdown"]["completeness_gate"]
     assert "conservative_blend_anchor_mass" in completeness["soft_missing"]
     assert completeness["score_cap"] is None

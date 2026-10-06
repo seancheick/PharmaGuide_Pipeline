@@ -3190,7 +3190,7 @@ def test_megafood_exact_active_aliases_map(normalizer, name, expected):
         ("Bifidobacterium animalis lactis SD-5219", "Bifidobacterium Lactis"),
         ("Bifidobacterium longum infantis SD-6720", "Bifidobacterium Longum"),
         ("Bifidobacterium animalis lactis HN-019", "Bifidobacterium Lactis"),
-        ("Bifidobacterium lactis B-420", "Bifidobacterium animalis subsp. lactis 420"),
+        ("Bifidobacterium lactis B-420", "Bifidobacterium Lactis"),
     ],
 )
 def test_megafood_no_dose_blend_children_keep_canonical_identity(
@@ -3339,26 +3339,29 @@ def test_black_pepper_oil_does_not_become_an_isolated_piperine_dose(normalizer):
     assert forms == []
 
 
-def test_registered_strain_names_precede_species_form_aliases(normalizer):
+def test_species_parent_mapping_preserves_exact_b420_label_identity(normalizer):
+    from studied_formulas import clinical_strain_identity_from_label
     import json
     from pathlib import Path
 
-    registry = json.loads(
-        (Path(__file__).resolve().parents[1] / "data/clinically_relevant_strains.json").read_text()
-    )
-    collision_count = 0
-    for entry in registry["clinically_relevant_strains"]:
-        for name in [entry["standard_name"], *entry.get("aliases", [])]:
-            if not normalizer._canonical_identity_registry.resolve_preferred(name):
-                continue
-            expected = normalizer._match_probiotic_strain(normalizer.matcher.preprocess_text(name))
-            if not expected:
-                continue
-            collision_count += 1
-            standard_name, mapped, _ = normalizer._enhanced_ingredient_mapping(name, [])
-            assert mapped is True
-            assert standard_name == expected, name
-    assert collision_count > 0
+    name = "Bifidobacterium lactis B-420"
+    raw = {
+        "id": "strain-identity-control", "fullName": "Probiotic Blend",
+        "ingredientRows": [{"name": name, "ingredientGroup": "Bifidobacterium lactis",
+                            "category": "bacteria", "quantity": [{"quantity": 0, "unit": "NP"}]}],
+        "otheringredients": {"ingredients": []},
+    }
+    row = normalizer.normalize_product(raw)["activeIngredients"][0]
+    assert row["standardName"] == "Bifidobacterium Lactis"
+    assert row["canonical_id"] == "bifidobacterium_lactis"
+    assert row["name"] == name
+    assert row["raw_source_text"] == name
+    assert row["quantity"] == 0.0
+    registry = json.loads((Path(__file__).resolve().parents[1] / "data/clinically_relevant_strains.json").read_text())
+    reference = next(entry for entry in registry["clinically_relevant_strains"] if entry["id"] == "STRAIN_LACTIS_B420")
+    assert clinical_strain_identity_from_label(row, reference) == name
+    other = next(entry for entry in registry["clinically_relevant_strains"] if entry["id"] == "STRAIN_LACTIS_HN019")
+    assert clinical_strain_identity_from_label(row, other) is None
 
 
 @pytest.mark.parametrize("name,group,amount,canonical", [

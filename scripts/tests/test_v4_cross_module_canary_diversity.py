@@ -86,8 +86,12 @@ PROBIOTIC_CANARIES = {
     # export totals. Contextual evidence is not strain-dose applicability.
     "306247": {
         "label": "Thorne FloraSport 20B",
-        "score_range": (59.5, 59.5),
-        "traits": {"trust_positive": True},
+        # DE111/HN019 reviewed native outcomes do not establish benefit here;
+        # the other two source identities lack exact registered strain codes.
+        "score_range": (52.5, 52.5),
+        "traits": {"trust_positive": True,
+                   "dimension_scores": {"formulation": 7.5, "dose": 15.0, "evidence": 0.0, "transparency": 15.0},
+                   "identity_counts": (2, 4), "evidence_state": "evaluated_null"},
     },
     # Low end of current probiotic score distribution.
     "201158": {
@@ -122,12 +126,14 @@ PROBIOTIC_CANARIES = {
     # Per-strain CFU + positive Trust path.
     "184730": {
         "label": "Pure Encapsulations Probiotic 123",
-        # Re-baseline 2026-07-27 after the serving-aware label-identity fix:
-        # the pre-fix artifact counted a phantom second blend row, inflating
-        # total CFU from 2.25B to 3.37B and strain count from 3 to 4. The
-        # corrected corpus legitimately lowers the raw dose score 5.9 -> 3.4.
-        "score_range": (45.1, 45.1),
-        "traits": {"dose_positive": True, "trust_positive": True},
+        # Alternative serving headers retain one source-owned pure blend.
+        # Its 2.25B total is disclosed; individual strain quantities are not.
+        # The CFU disclosure component owns that limitation, without a second B5.
+        "score_range": (46.6, 46.6),
+        "traits": {"dose_positive": True, "trust_positive": True,
+                   "dimension_scores": {"formulation": 12.0, "dose": 3.4, "evidence": 10.0, "transparency": 11.0},
+                   "identity_counts": (3, 3),
+                   "evidence_state": "research_present_applicability_unestablished"},
     },
     # Prenatal name must stay probiotic because supplement_type wins.
     "76803": {
@@ -306,6 +312,13 @@ def test_probiotic_real_catalog_canary_score_and_traits(dsld_id: str, expected: 
     assert lo <= score <= hi, (expected["label"], score, breakdown)
 
     traits = expected["traits"]
+    for dimension, value in traits.get("dimension_scores", {}).items():
+        assert _dimension_score(breakdown, dimension) == pytest.approx(value)
+    if "identity_counts" in traits:
+        metadata = breakdown["dimensions"]["formulation"]["metadata"]
+        assert (metadata["identified_strain_count"], metadata["total_strain_count"]) == traits["identity_counts"]
+    if "evidence_state" in traits:
+        assert breakdown["dimensions"]["evidence"]["metadata"]["evidence_result_state"] == traits["evidence_state"]
     if traits.get("form_max"):
         assert _dimension_score(breakdown, "formulation") == 25
     if traits.get("dose_zero"):
@@ -371,3 +384,13 @@ def test_cross_module_canaries_cover_expected_score_bands() -> None:
     assert any(lo >= 65 for lo, _hi in sports_ranges), "missing high sports canary"
     assert any(hi <= 55 for _lo, hi in probiotic_ranges), "missing weak probiotic canary"
     assert any(lo >= 65 for lo, _hi in probiotic_ranges), "missing high probiotic canary"
+
+
+def test_merged_serving_canary_from_frozen_raw_label(monkeypatch):
+    from enhanced_normalizer import EnhancedDSLDNormalizer
+    from enrich_supplements_v3 import SupplementEnricherV3
+
+    raw = json.loads((Path(__file__).parent / "fixtures/serving_column_184730_raw.json").read_text())
+    enriched, _ = SupplementEnricherV3().enrich_product(EnhancedDSLDNormalizer().normalize_product(raw))
+    monkeypatch.setattr(sys.modules[__name__], "_CANARY_CACHE", {"184730": enriched})
+    test_probiotic_real_catalog_canary_score_and_traits("184730", PROBIOTIC_CANARIES["184730"])

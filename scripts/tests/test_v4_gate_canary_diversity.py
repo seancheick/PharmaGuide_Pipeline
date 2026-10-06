@@ -108,8 +108,8 @@ V4_CANARIES = {
         "unevaluated_canonicals": set(),
     },
     # Real-catalog guard for the four-micronutrient taxonomy false positive: the
-    # targeted hair formula remains generic. PABA/Fo-Ti review debt stays visible
-    # in the shadow evidence lane; zinc lozenge evidence cannot transfer to gummies.
+    # targeted hair formula remains generic. Reviewed PABA/Fo-Ti literature
+    # has no established applicability; zinc lozenge evidence cannot transfer to gummies.
     "241692": {
         "label": "HUM Hair Sweet Hair Berry",
         "module": "generic",
@@ -117,7 +117,7 @@ V4_CANARIES = {
         "confidence": "moderate",
         "score_unavailable_reason": None,
         "score": 53.9,
-        "unevaluated_canonicals": {"paba", "fo_ti"},
+        "limited_canonicals": {"paba", "fo_ti"},
     },
     # Typed confidence high on the probiotic module.
     "230149": {
@@ -233,6 +233,16 @@ def test_v4_real_catalog_gate_and_confidence_canary(dsld_id: str, expected: dict
         missing = set(breakdown["completeness_gate"]["missing_fields"])
         assert expected["missing"].issubset(missing)
         assert "module" not in breakdown
+    if "limited_canonicals" in expected:
+        evidence = breakdown["assessment_readiness"]["evidence"]
+        observed = {
+            row.get("canonical_id") for row in evidence["ingredient_assessments"]
+            if row.get("material") is True
+            and row.get("state") == "evaluated_limited_or_negative"
+            and row.get("reason_code") == "literature_applicability_unestablished"
+            and row.get("evidence_ids") == []
+        }
+        assert expected["limited_canonicals"].issubset(observed)
     if "unevaluated_canonicals" in expected:
         evidence = breakdown["assessment_readiness"]["evidence"]
         observed = {
