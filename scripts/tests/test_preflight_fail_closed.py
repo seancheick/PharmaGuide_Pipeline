@@ -214,11 +214,11 @@ def test_preparation_hashes_environment_files_workflow_and_flutter_consumers(tmp
     workflow = tmp_path / '.github/workflows/tests.yml'
     workflow.write_text('one')
     first = preflight._preparation_inputs(tmp_path, raw)
-    assert first['files']['.env'] != 'KEY=secret'
+    assert first['files']['repo/.env'] != 'KEY=secret'
     consumer.write_text('two')
     assert preflight._preparation_inputs(tmp_path, raw) != first
     workflow.unlink()
-    assert '.github/workflows/tests.yml' not in preflight._preparation_inputs(tmp_path, raw)['files']
+    assert 'repo/.github/workflows/tests.yml' not in preflight._preparation_inputs(tmp_path, raw)['files']
 
 
 def test_preparation_incomplete_checkpoint_and_evidence_survive_interruption(tmp_path):
@@ -388,3 +388,52 @@ def test_preparation_runtime_binds_same_path_node_binary_content(tmp_path, monke
     second = preflight._preparation_runtime()
     assert first['executables']['node']['path'] == second['executables']['node']['path']
     assert first['executables']['node']['sha256'] != second['executables']['node']['sha256']
+
+
+def test_preparation_git_inventory_covers_report_code_root_fixtures_manual_labels_and_docs(tmp_path, monkeypatch):
+    import subprocess
+    raw = tmp_path / 'raw'
+    raw.mkdir()
+    (raw / '1.json').write_text(json.dumps({'id': 1, 'ingredientRows': []}))
+    monkeypatch.setenv('FLUTTER_REPO', str(tmp_path / 'absent_app'))
+    subprocess.run(['git', 'init', '-q', str(tmp_path)], check=True)
+    paths = ['scripts/reports/source.py', 'reports/storage_cleanup/fixture.json',
+             'manual_labels/product_submissions/approved.json', 'docs/UNII_BACKFILL_DEFERRED.md']
+    for name in paths:
+        path = tmp_path / name
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.write_text('one')
+    subprocess.run(['git', '-C', str(tmp_path), 'add', *paths], check=True)
+    first = preflight._preparation_inputs(tmp_path, raw)
+    for name in paths:
+        path = tmp_path / name
+        path.write_text('two')
+        second = preflight._preparation_inputs(tmp_path, raw)
+        assert first != second, name
+        path.write_text('one')
+    missing = tmp_path / paths[0]
+    missing.unlink()
+    result = preflight._preparation_inputs(tmp_path, raw)
+    assert result['files']['repo/' + paths[0]] == 'MISSING'
+    assert not result['errors']
+    new_source = tmp_path / 'scripts/new_owner.unknown_extension'
+    new_source.write_text('new source type')
+    assert 'repo/scripts/new_owner.unknown_extension' in preflight._preparation_inputs(tmp_path, raw)['files']
+
+
+def test_preparation_custom_untracked_git_report_is_operational_not_source_mutation(tmp_path, monkeypatch):
+    import subprocess
+    raw = tmp_path / 'raw'
+    raw.mkdir()
+    (raw / '1.json').write_text(json.dumps({'id': 1, 'ingredientRows': []}))
+    monkeypatch.setenv('FLUTTER_REPO', str(tmp_path / 'missing_app'))
+    subprocess.run(['git', 'init', '-q', str(tmp_path)], check=True)
+    calls = []
+    def run(command, **kwargs):
+        calls.append(command)
+        return subprocess.CompletedProcess(command, 0, 'completed', '')
+    for _ in range(2):
+        assert preflight.run_preparation(tmp_path, raw,
+            checks=[{'name': 'probe', 'command': ['fake']}], runner=run,
+            report_path=tmp_path / 'readiness.json')['ready']
+    assert len(calls) == 1

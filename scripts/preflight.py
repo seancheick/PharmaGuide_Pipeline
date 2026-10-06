@@ -712,48 +712,63 @@ def _atomic_report(path, value):
         Path(temporary).unlink(missing_ok=True)
 
 
-def _preparation_inputs(repo_root, raw_root):
+def _preparation_inputs(repo_root, raw_root, *, operational_paths=()):
     """Hash a complete path inventory; keep only one raw label in memory."""
     import hashlib
     from batch_processor import BatchProcessor
     validator = object.__new__(BatchProcessor)
     validator.config = {'validation': {'check_input_integrity': True}}
     files, errors, identities = {}, [], {}
+    operational_paths = {Path(path).resolve() for path in operational_paths}
     def record(path, key):
         try:
             with path.open('rb') as stream:
                 files[key] = hashlib.file_digest(stream, 'sha256').hexdigest()
         except OSError as exc:
             errors.append(f'{key}: {exc}')
-    # Include additions/deletions as well as content, including harness/tests and
-    # fixtures. Generated products/reports are deliberately not source inputs.
-    for directory in ('scripts', '.claude/rules', '.github'):
-        for path in sorted((repo_root / directory).rglob('*')):
-            relative = path.relative_to(repo_root)
-            if (path.is_file() and not any(part in {'products', 'dist', 'final_db_output',
-                    'reports', '.cache', '__pycache__', '.pytest_cache'} for part in relative.parts)
-                    and path.name not in {'fda_unii_cache.json', 'LEDGER.md', 'CURRENT_HANDOFF.md'}
-                    and path.name != '.DS_Store'):
-                record(path, str(relative))
     import os
+    import subprocess
+    def discover(root, fallback, *, flutter=False):
+        # Git owns committed source/fixture discovery across all extensions and
+        # directories. Operational reports that are not tracked stay outside it.
+        inventory = subprocess.run(['git', '-C', str(root), 'ls-files', '-z',
+                                    '--cached', '--others', '--exclude-standard'],
+                                   capture_output=True, check=False)
+        if inventory.returncode == 0:
+            relative_paths = {Path(os.fsdecode(name)) for name in inventory.stdout.split(b'\0') if name}
+        else:
+            relative_paths = {path.relative_to(root) for directory in fallback
+                              for path in (root / directory).rglob('*') if path.is_file()
+                              and not any(part in {'reports', '.cache', '__pycache__', '.pytest_cache'}
+                                          for part in path.relative_to(root).parts)}
+            relative_paths |= {path.relative_to(root) for path in root.glob('*') if path.is_file()
+                               and (path.suffix in {'.sh', '.ini', '.toml'} or path.name in {'.python-version', 'requirements.txt'})}
+        # These existing input owners intentionally live outside Git inventory.
+        relative_paths |= {path.relative_to(root) for path in (root / 'manual_labels').rglob('*') if path.is_file()}
+        relative_paths |= {Path(name) for name in ('.env', 'scripts/.env') if (root / name).is_file()}
+        for relative in sorted(relative_paths):
+            parts = relative.parts
+            generated = (parts[:2] in {('scripts', 'products'), ('scripts', 'dist'), ('scripts', 'final_db_output')}
+                         or (flutter and parts[:2] == ('assets', 'db'))
+                         or any(part in {'.git', '.cache', '__pycache__', '.pytest_cache', 'node_modules', 'build', '.dart_tool'} for part in parts))
+            operational = (relative.name in {'fda_unii_cache.json', 'LEDGER.md', 'CURRENT_HANDOFF.md', '.DS_Store'}
+                           or relative.as_posix() == 'docs/plans/PHARMAGUIDE_MASTER_COMPLETION_PLAN.md')
+            if generated or operational:
+                continue
+            path = root / relative
+            if path.resolve() in operational_paths:
+                continue
+            key = ('flutter/' if flutter else 'repo/') + relative.as_posix()
+            if not path.is_file():
+                # Preserved tracked deletions participate without declaring an
+                # unrelated missing source file to be a required-input defect.
+                files[key] = 'MISSING'
+            else:
+                record(path, key)
+    discover(repo_root, ('scripts', '.claude/rules', '.github', 'manual_labels', 'docs'))
     flutter = Path(os.environ.get('FLUTTER_REPO', '/Users/seancheick/PharmaGuide ai'))
-    for directory in ('lib', 'test', 'supabase', 'assets/data'):
-        for path in sorted((flutter / directory).rglob('*')):
-            relative = path.relative_to(flutter)
-            if (path.is_file() and path.name != '.DS_Store' and not any(
-                    part in {'node_modules', '.cache', 'build', '.dart_tool'} for part in relative.parts)):
-                record(path, 'flutter/' + str(relative))
-    for name in ('pubspec.yaml', 'pubspec.lock'):
-        path = flutter / name
-        if path.is_file():
-            record(path, 'flutter/' + name)
-    for name in ('.env', 'scripts/.env'):
-        path = repo_root / name
-        if path.is_file():
-            record(path, name)
-    for path in sorted(repo_root.glob('*')):
-        if path.is_file() and (path.suffix in {'.sh', '.ini', '.toml'} or path.name in {'.python-version', 'requirements.txt'}):
-            record(path, str(path.relative_to(repo_root)))
+    if flutter.is_dir():
+        discover(flutter, ('lib', 'test', 'supabase', 'assets/data'), flutter=True)
     paths = sorted(raw_root.rglob('*.json')) if raw_root.is_dir() else []
     if not paths:
         errors.append(f'No raw JSON labels found under {raw_root}')
@@ -919,7 +934,8 @@ def run_preparation(repo_root, raw_root, *, checks=None, runner=None, report_pat
     from pipeline_freshness import STAGES, RERUN_STAGES, stage_freshness_issues
     repo_root, raw_root = Path(repo_root).resolve(), Path(raw_root).resolve()
     runner = runner or subprocess.run
-    before = _preparation_inputs(repo_root, raw_root)
+    operational_paths = [Path(report_path), Path(report_path).with_suffix('.pytest.json')] if report_path else []
+    before = _preparation_inputs(repo_root, raw_root, operational_paths=operational_paths)
     runtime = _preparation_runtime()
     fingerprint = _digest({'inputs': before, 'runtime': runtime, 'raw_root': str(raw_root)})
     previous = {}
@@ -1042,7 +1058,7 @@ def run_preparation(repo_root, raw_root, *, checks=None, runner=None, report_pat
                     'issues': ['Source execution did not cover the collected inventory']})
         if inventories and isinstance(inventories[0], dict):
             result['deferred_tests'] = [n for n in inventories[0].get('nodes', []) if n['phase'] != 'source']
-    after = _preparation_inputs(repo_root, raw_root)
+    after = _preparation_inputs(repo_root, raw_root, operational_paths=operational_paths)
     stable = before == after and runtime == _preparation_runtime()
     result['checks'].append({'name': 'inputs_stable', 'status': 'passed' if stable else 'failed',
                              'issues': [] if stable else ['Input inventory/content or runtime/environment changed during preparation']})
