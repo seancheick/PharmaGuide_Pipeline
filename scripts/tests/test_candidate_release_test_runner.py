@@ -30,7 +30,8 @@ def test_candidate_release_uses_candidate_freshness_without_flutter_parity() -> 
 
     assert 'release_preflight_candidate_check' in text
     assert '--skip-interaction-inputs' in text
-    assert 'if [[ -z "$RELEASE_CANDIDATE_ROOT" && -d "$FLUTTER_REPO" ]]' in text
+    assert '( -z "$RELEASE_CANDIDATE_ROOT" && -d "$FLUTTER_REPO" )' in text
+    assert '"${PG_GATE_MODE:-}" == "inventory"' in text
 
 
 def test_candidate_root_must_be_absolute_and_complete() -> None:
@@ -109,3 +110,23 @@ def test_ul_blob_probe_reads_selected_candidate(monkeypatch, tmp_path):
         "scripts.tests.test_e1_5_x_4_ul_fallback_and_status"
     )
     assert list(module._iter_blobs()) == [{"candidate_probe": True}]
+
+
+def test_release_gate_execution_cannot_be_disabled_by_inherited_inventory_environment(tmp_path):
+    import os
+    import subprocess
+    text = _runner_text()
+    functions = text[text.index('release_gate() {'):text.index('\nfast_test_files()')]
+    calls = tmp_path / 'calls'
+    fake_python = tmp_path / 'python'
+    fake_python.write_text('#!/bin/bash\nprintf "%s\\n" "$*" >> "$GATE_CALL_LOG"\n')
+    fake_python.chmod(0o755)
+    script = functions + '\nPG_PYTHON="$FAKE_GATE_PYTHON"\nRELEASE_DIST_DIR=dist\nRELEASE_FINAL_DB_DIR=final\nRELEASE_CANDIDATE_ROOT=""\nFLUTTER_REPO=missing\nrun_release_artifact_gates\n'
+    result = subprocess.run(['bash', '-c', script], env=dict(os.environ,
+        PG_GATE_MODE='inventory', SKIP_LIVE_IDENTITY_GATES='1', GATE_CALL_LOG=str(calls),
+        FAKE_GATE_PYTHON=str(fake_python)), capture_output=True, text=True)
+    assert result.returncode == 0, result.stderr
+    commands = calls.read_text().splitlines()
+    assert 'scripts/iqm_form_evidence.py audit' in commands
+    assert 'scripts/coverage_gate_functional_roles.py' in commands
+    assert not any(command.startswith('-c ') for command in commands)

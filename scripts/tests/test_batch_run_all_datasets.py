@@ -23,11 +23,11 @@ def _install_batch_dependencies(tmp_path):
         PYTHON_ENV_PATH.read_text(encoding="utf-8"), encoding="utf-8"
     )
     (scripts_dir / "tests").mkdir(exist_ok=True)
-    (scripts_dir / "tests" / "freeze_contract_snapshots.py").write_text(
+    (scripts_dir / "preflight.py").write_text(
         "import sys\n"
-        "assert sys.argv[1:3] == ['--check', '--raw-root']\n"
+        "assert sys.argv[1:3] == ['--prepare', '--raw-root']\n"
         "assert len(sys.argv) == 4\n"
-        "print('raw-canary-check-reached')\n",
+        "print('aggregate-preparation-reached')\n",
         encoding="utf-8",
     )
 
@@ -72,7 +72,7 @@ def test_batch_runner_defaults_to_local_non_icloud_dataset_root(tmp_path):
     combined_output = result.stdout + result.stderr
     assert str(dataset_root) in combined_output
     assert "local-root-runner-reached" in combined_output
-    assert combined_output.index("raw-canary-check-reached") < combined_output.index("local-root-runner-reached")
+    assert combined_output.index("aggregate-preparation-reached") < combined_output.index("local-root-runner-reached")
     assert result.returncode == 1, combined_output
 
 

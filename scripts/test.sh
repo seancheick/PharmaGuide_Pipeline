@@ -338,7 +338,20 @@ PY
   }
 }
 
+# One command inventory for preparation and release. Inventory mode emits only
+# arg arrays; the live/artifact commands keep their release behavior unchanged.
+release_gate() {
+  local phase="$1"
+  shift
+  if [[ "${PG_GATE_MODE:-}" == "inventory" ]]; then
+    "$PG_PYTHON" -c 'import json,sys; print(json.dumps({"phase":sys.argv[1],"command":sys.argv[2:]}))' "$phase" "$@"
+  else
+    "$@"
+  fi
+}
+
 run_release_artifact_gates() {
+  local PG_GATE_MODE="${1:-execute}"
   local freshness_args=(
     freshness
     --dist-dir "$RELEASE_DIST_DIR"
@@ -350,16 +363,16 @@ run_release_artifact_gates() {
     freshness_args+=(--skip-interaction-inputs)
   fi
 
-  "$PG_PYTHON" scripts/iqm_form_evidence.py audit
-  "$PG_PYTHON" scripts/validate_form_notes_export.py --blobs-dir "$RELEASE_DIST_DIR/detail_blobs"
-  "$PG_PYTHON" scripts/coverage_gate_functional_roles.py
-  "$PG_PYTHON" scripts/audits/evidence_match_reachability.py \
+  release_gate source "$PG_PYTHON" scripts/iqm_form_evidence.py audit
+  release_gate artifact "$PG_PYTHON" scripts/validate_form_notes_export.py --blobs-dir "$RELEASE_DIST_DIR/detail_blobs"
+  release_gate source "$PG_PYTHON" scripts/coverage_gate_functional_roles.py
+  release_gate artifact "$PG_PYTHON" scripts/audits/evidence_match_reachability.py \
     --products-dir scripts/products \
     --output scripts/reports/evidence_match_reachability_latest.json \
     --strict
-  "$PG_PYTHON" scripts/audit_source_of_truth_contract.py "${freshness_args[@]}"
-  if [[ -z "$RELEASE_CANDIDATE_ROOT" && -d "$FLUTTER_REPO" ]]; then
-    "$PG_PYTHON" scripts/audit_source_of_truth_contract.py flutter \
+  release_gate artifact "$PG_PYTHON" scripts/audit_source_of_truth_contract.py "${freshness_args[@]}"
+  if [[ "${PG_GATE_MODE:-}" == "inventory" || ( -z "$RELEASE_CANDIDATE_ROOT" && -d "$FLUTTER_REPO" ) ]]; then
+    release_gate artifact "$PG_PYTHON" scripts/audit_source_of_truth_contract.py flutter \
       --dist-dir "$RELEASE_DIST_DIR" \
       --flutter-repo "$FLUTTER_REPO" \
       --strict-release
@@ -370,30 +383,30 @@ run_release_artifact_gates() {
   # exactly this reason). Fail-closed; need network + an NCBI key in .env. Set
   # SKIP_LIVE_IDENTITY_GATES=1 for an intentionally-offline run (you then own the
   # identifier risk). Mirrors release_full.sh Step 4b.
-  if [[ "${SKIP_LIVE_IDENTITY_GATES:-0}" == "1" ]]; then
+  if [[ "${SKIP_LIVE_IDENTITY_GATES:-0}" == "1" && "${PG_GATE_MODE:-}" != "inventory" ]]; then
     echo "[test.sh] SKIP live identifier gates (SKIP_LIVE_IDENTITY_GATES=1) — identifier risk UNVERIFIED" >&2
   else
-    "$PG_PYTHON" scripts/api_audit/verify_drug_class_rxcuis.py
-    "$PG_PYTHON" scripts/api_audit/verify_medication_depletion_identifiers.py
-    "$PG_PYTHON" scripts/api_audit/verify_depletion_timing_pmids.py --live
+    release_gate live "$PG_PYTHON" scripts/api_audit/verify_drug_class_rxcuis.py
+    release_gate live "$PG_PYTHON" scripts/api_audit/verify_medication_depletion_identifiers.py
+    release_gate live "$PG_PYTHON" scripts/api_audit/verify_depletion_timing_pmids.py --live
     # Reviewed citation-content gate. Every PubMed source on an active verified
     # record must have an authored expectation; suppressed legacy candidates
     # remain outside the active-release coverage requirement.
-    "$PG_PYTHON" scripts/api_audit/verify_depletion_timing_citation_content.py \
+    release_gate live "$PG_PYTHON" scripts/api_audit/verify_depletion_timing_citation_content.py \
       --live \
       --require-coverage
-    "$PG_PYTHON" scripts/iqm_form_evidence.py verify-live
+    release_gate live "$PG_PYTHON" scripts/iqm_form_evidence.py verify-live
     # backed_clinical_studies.json is the evidence-bonus backbone (~438 PMIDs)
     # and had no gate in any release path: the verifier existed but always
     # returned 0, so wiring it before --strict would have added a check that
     # could not fire.
-    "$PG_PYTHON" scripts/api_audit/verify_backed_studies_citations.py --strict
+    release_gate live "$PG_PYTHON" scripts/api_audit/verify_backed_studies_citations.py --strict
     # Interaction-rule citations are safety claims (Sean, D6 2026-09-26): an
     # unresolved, unrelated or unreviewed citation fails. Mirrors release_full.sh.
-    "$PG_PYTHON" scripts/api_audit/verify_interaction_rules_citations.py --strict
+    release_gate live "$PG_PYTHON" scripts/api_audit/verify_interaction_rules_citations.py --strict
     # Every other citation in scripts/data: the triaged backlog is reported; an
     # unresolved PMID or a mismatch outside the backlog fails.
-    "$PG_PYTHON" scripts/api_audit/verify_all_citations_content.py \
+    release_gate live "$PG_PYTHON" scripts/api_audit/verify_all_citations_content.py \
       --baseline scripts/data/citation_content_backlog.json \
       --report scripts/reports/citation_content_audit.json
   fi
@@ -434,6 +447,7 @@ if [[ -z "${PG_TEST_LOCK_HELD:-}" ]]; then
   split_user_pytest_args "$@"
   lock_mode=""
   case "$PROFILE" in
+    preparation) lock_mode=exclusive ;;
     full|release|slow) lock_mode=exclusive ;;
     local) lock_mode=shared ;;
     fast) ((${#USER_TARGETS[@]} == 0)) && lock_mode=shared ;;
@@ -448,6 +462,21 @@ if [[ -z "${PG_TEST_LOCK_HELD:-}" ]]; then
 fi
 
 case "$PROFILE" in
+  preparation-gates)
+    RELEASE_DIST_DIR="$REPO_ROOT/scripts/dist"
+    RELEASE_FINAL_DB_DIR="$REPO_ROOT/scripts/final_db_output"
+    run_release_artifact_gates inventory
+    ;;
+  preparation)
+    export PG_TEST_WORKERS=1
+    export PG_PREPARATION_REPORT="${PG_PREPARATION_REPORT:-$REPO_ROOT/scripts/reports/preparation_source_tests.json}"
+    export PG_PREPARATION_MODE="${PG_PREPARATION_MODE:-source}"
+    split_user_pytest_args "$@"
+    files=(scripts/tests)
+    if ((${#USER_TARGETS[@]} > 0)); then files=("${USER_TARGETS[@]}"); fi
+    parallel_args=(); if has_xdist; then parallel_args=(-n 0); fi
+    "$PG_PYTHON" -m pytest "${files[@]}" -q --tb=line "${TIMEOUT_HEAVY[@]+"${TIMEOUT_HEAVY[@]}"}" "${USER_OPTIONS[@]+"${USER_OPTIONS[@]}"}" "${parallel_args[@]+"${parallel_args[@]}"}"
+    ;;
   fast)
     split_user_pytest_args "$@"
     if ((${#USER_TARGETS[@]} > 0)); then

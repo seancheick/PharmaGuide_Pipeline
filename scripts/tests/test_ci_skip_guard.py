@@ -95,3 +95,48 @@ def test_conflicting_shard_interfaces_fail_closed(monkeypatch):
     monkeypatch.setattr(sys, 'argv', ['test_profiles.py', 'fast', '--shard', '1/4', '--shard-index', '0', '--shard-count', '4'])
     with pytest.raises(SystemExit):
         main()
+
+
+def test_preparation_inventory_runs_source_cases_in_mixed_files():
+    from test_profiles import preparation_phase
+    assert preparation_phase('test_v4_safety_parity_release.py', 'test_exact_high_risk_still_yields_caution')[0] == 'source'
+    assert preparation_phase('test_v4_safety_parity_release.py', 'test_v3_blocked_release_products_remain_v4_blocked')[0] == 'artifact'
+    assert preparation_phase('test_submission_print_fidelity.py', 'test_scoring_refuses_a_line_whose_dose_is_missing')[0] == 'source'
+    assert preparation_phase('test_submission_print_fidelity.py', 'test_preparation_costs_nothing_at_the_working_operating_point')[0] == 'external'
+    assert preparation_phase('test_manifest_contract.py', 'test_staged_manifest_has_every_required_key')[0] == 'source'
+
+
+def test_preparation_evidence_refuses_missing_coverage_skips_and_incomplete_outcomes():
+    from preflight import _valid_test_evidence
+    evidence = {'completed': True, 'exit_code': 0, 'collection_errors': [],
+        'selection': {'args': ['scripts/tests']},
+        'nodes': [{'nodeid': 'a::test_one', 'phase': 'source', 'reason': 'source owner'}],
+        'outcomes': {'a::test_one': [
+            {'when': stage, 'outcome': 'passed'} for stage in ['setup', 'call', 'teardown']]}}
+    assert _valid_test_evidence(evidence)
+    evidence['outcomes']['a::test_one'][1]['outcome'] = 'skipped'
+    assert not _valid_test_evidence(evidence)
+    evidence['outcomes'] = {}
+    assert not _valid_test_evidence(evidence)
+    evidence['completed'] = False
+    assert not _valid_test_evidence(evidence, inventory=True)
+
+
+def test_preparation_does_not_infer_artifact_dependency_from_synthetic_path_tokens():
+    from test_profiles import preparation_phase
+    for filename, name in [
+        ('test_release_artifact_paths.py', 'test_default_paths_resolve_to_live_build'),
+        ('test_run_pipeline_output_prefix.py', 'test_resolve_path'),
+        ('test_graceful_degradation.py', 'test_graceful_degradation'),
+        ('test_cert_audit_canary.py', 'test_audit_report_recency_gated_b4a_does_not_credit_stale'),
+    ]:
+        assert preparation_phase(filename, name)[0] == 'source'
+
+
+def test_preparation_inventory_order_is_not_coverage_but_missing_or_changed_nodes_are():
+    from preflight import _same_preparation_inventory
+    one = {'nodeid': 'one', 'phase': 'source', 'reason': 'owner'}
+    two = {'nodeid': 'two', 'phase': 'artifact', 'reason': 'generated'}
+    assert _same_preparation_inventory({'nodes': [one, two]}, {'nodes': [two, one]})
+    assert not _same_preparation_inventory({'nodes': [one, two]}, {'nodes': [one]})
+    assert not _same_preparation_inventory({'nodes': [one, two]}, {'nodes': [one, dict(two, phase='source')]})

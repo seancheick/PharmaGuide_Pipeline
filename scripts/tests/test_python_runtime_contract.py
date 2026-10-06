@@ -134,14 +134,14 @@ def test_batch_runner_stops_before_processing_when_canary_preflight_fails(tmp_pa
     fake_python = tmp_path / "fake-python"
     fake_python.write_text(f"#!{sys.executable}\nimport sys\nfrom pathlib import Path\n"
         f"with Path({str(calls)!r}).open('a') as f:f.write(' '.join(sys.argv[1:])+'\\n')\n"
-        "sys.exit(7 if '--check' in sys.argv else 0)\n")
+        "sys.exit(7 if '--prepare' in sys.argv else 0)\n")
     fake_python.chmod(0o755)
     env = dict(os.environ, PG_PYTHON=sys.executable, PYTHON=str(fake_python))
     result = subprocess.run(["bash", str(root / "batch_run_all_datasets.sh"),
         "--root", str(raw_root), "--pipeline-only"], env=env, capture_output=True, text=True)
     assert result.returncode != 0
     invocations = calls.read_text().splitlines()
-    assert any("--check" in call and "--raw-root" in call for call in invocations)
+    assert any("--prepare" in call and "--raw-root" in call for call in invocations)
     assert not any("run_pipeline.py" in call or "release_full.sh" in call for call in invocations)
 
 
@@ -174,3 +174,11 @@ def test_raw_snapshot_preflight_refuses_missing_ambiguous_and_wrong_identity(tmp
     assert freezer.main() == 1
     assert "raw label identity does not match" in capsys.readouterr().out
     assert json.loads(snapshot.read_text()) == frozen
+
+
+def test_preparation_explicit_nodes_still_use_suite_lock_and_inventory_gates():
+    text = (REPO_ROOT / 'scripts/test.sh').read_text()
+    assert 'preparation) lock_mode=exclusive' in text
+    assert 'preparation-gates)' in text
+    assert 'release_gate source "$PG_PYTHON" scripts/iqm_form_evidence.py audit' in text
+    assert 'release_gate live "$PG_PYTHON" scripts/iqm_form_evidence.py verify-live' in text

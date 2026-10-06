@@ -690,6 +690,370 @@ def print_results(results: Dict, verbose: bool = False):
     print("=" * 60)
 
 
+def _digest(value):
+    import hashlib
+    return hashlib.sha256(json.dumps(value, sort_keys=True, separators=(',', ':')).encode()).hexdigest()
+
+
+def _atomic_report(path, value):
+    import os
+    import tempfile
+    path = Path(path)
+    path.parent.mkdir(parents=True, exist_ok=True)
+    fd, temporary = tempfile.mkstemp(dir=path.parent, prefix=f'.{path.name}.')
+    try:
+        with os.fdopen(fd, 'w') as stream:
+            json.dump(value, stream, indent=2, sort_keys=True)
+            stream.write('\n')
+            stream.flush()
+            os.fsync(stream.fileno())
+        os.replace(temporary, path)
+    finally:
+        Path(temporary).unlink(missing_ok=True)
+
+
+def _preparation_inputs(repo_root, raw_root):
+    """Hash a complete path inventory; keep only one raw label in memory."""
+    import hashlib
+    from batch_processor import BatchProcessor
+    validator = object.__new__(BatchProcessor)
+    validator.config = {'validation': {'check_input_integrity': True}}
+    files, errors, identities = {}, [], {}
+    def record(path, key):
+        try:
+            with path.open('rb') as stream:
+                files[key] = hashlib.file_digest(stream, 'sha256').hexdigest()
+        except OSError as exc:
+            errors.append(f'{key}: {exc}')
+    # Include additions/deletions as well as content, including harness/tests and
+    # fixtures. Generated products/reports are deliberately not source inputs.
+    for directory in ('scripts', '.claude/rules', '.github'):
+        for path in sorted((repo_root / directory).rglob('*')):
+            relative = path.relative_to(repo_root)
+            if (path.is_file() and not any(part in {'products', 'dist', 'final_db_output',
+                    'reports', '.cache', '__pycache__', '.pytest_cache'} for part in relative.parts)
+                    and path.name not in {'fda_unii_cache.json', 'LEDGER.md', 'CURRENT_HANDOFF.md'}
+                    and path.name != '.DS_Store'):
+                record(path, str(relative))
+    import os
+    flutter = Path(os.environ.get('FLUTTER_REPO', '/Users/seancheick/PharmaGuide ai'))
+    for directory in ('lib', 'test', 'supabase', 'assets/data'):
+        for path in sorted((flutter / directory).rglob('*')):
+            relative = path.relative_to(flutter)
+            if (path.is_file() and path.name != '.DS_Store' and not any(
+                    part in {'node_modules', '.cache', 'build', '.dart_tool'} for part in relative.parts)):
+                record(path, 'flutter/' + str(relative))
+    for name in ('pubspec.yaml', 'pubspec.lock'):
+        path = flutter / name
+        if path.is_file():
+            record(path, 'flutter/' + name)
+    for name in ('.env', 'scripts/.env'):
+        path = repo_root / name
+        if path.is_file():
+            record(path, name)
+    for path in sorted(repo_root.glob('*')):
+        if path.is_file() and (path.suffix in {'.sh', '.ini', '.toml'} or path.name in {'.python-version', 'requirements.txt'}):
+            record(path, str(path.relative_to(repo_root)))
+    paths = sorted(raw_root.rglob('*.json')) if raw_root.is_dir() else []
+    if not paths:
+        errors.append(f'No raw JSON labels found under {raw_root}')
+    for path in paths:
+        key = 'raw/' + str(path.relative_to(raw_root))
+        record(path, key)
+        valid, issue = validator.validate_input_file(path)
+        if not valid:
+            errors.append(f'{key}: {issue}')
+            continue
+        try:
+            payload = json.loads(path.read_text())
+            if not isinstance(payload, dict):
+                errors.append(f'{key}: raw label must be a JSON object')
+                continue
+            identity = payload.get('id')
+            if isinstance(identity, bool) or not str(identity).isdigit() or int(identity) <= 0:
+                errors.append(f'{key}: missing or invalid product identity {identity!r}')
+                continue
+            identity = str(int(identity))
+            if path.stem.isdigit() and str(int(path.stem)) != identity:
+                errors.append(f'{key}: filename identity does not match label id {identity}')
+            if identity in identities:
+                errors.append(f'Duplicate raw identity {identity}: {identities[identity]}, {key}')
+            else:
+                identities[identity] = key
+        except (OSError, ValueError, TypeError) as exc:
+            errors.append(f'{key}: {exc}')
+    return {'files': files, 'raw_count': len(paths), 'errors': errors}
+
+
+def _preparation_runtime():
+    """Bind effective environment without persisting credentials."""
+    import os
+    import platform
+    import importlib.metadata
+    import hashlib
+    import shutil
+    executables = {}
+    for name, filename in [('python', sys.executable), ('bash', shutil.which('bash')), ('node', shutil.which('node'))]:
+        if filename:
+            path = Path(filename).resolve()
+            with path.open('rb') as stream:
+                executables[name] = {'path': str(path), 'sha256': hashlib.file_digest(stream, 'sha256').hexdigest()}
+        else:
+            executables[name] = None
+    packages = sorted((d.metadata['Name'], d.version) for d in importlib.metadata.distributions()
+                      if d.metadata.get('Name'))
+    # Report paths and lock bookkeeping change between runs without changing
+    # test semantics. Every other variable participates, including opt-ins,
+    # config locations and secrets (hash only).
+    ignored = {'PG_PREPARATION_REPORT', 'PG_PREPARATION_MODE', 'PG_TEST_LOCK_HELD',
+               'PG_TEST_CONCURRENT_RUNS', 'SHLVL', '_', 'PWD', 'OLDPWD'}
+    environment = {key: _digest(value) for key, value in os.environ.items() if key not in ignored}
+    return {'python': str(Path(sys.executable).resolve()), 'version': sys.version,
+            'platform': platform.platform(), 'executables': executables, 'freshness_date': datetime.now(timezone.utc).date().isoformat(), 'packages': packages, 'environment': environment}
+
+
+def _valid_test_evidence(evidence, *, inventory=False):
+    """Validate complete collected coverage and all setup/call/teardown outcomes."""
+    if not isinstance(evidence, dict) or evidence.get('completed') is not True:
+        return False
+    nodes = evidence.get('nodes')
+    if not isinstance(nodes, list) or not nodes or evidence.get('collection_errors') or evidence.get('collection_skips'):
+        return False
+    selection = evidence.get('selection')
+    if not isinstance(selection, dict) or selection.get('args') != ['scripts/tests']:
+        return False
+    if any(selection.get(key) for key in ('keyword', 'markexpr', 'deselect', 'ignore', 'ignore_glob')):
+        return False
+    identifiers = [node.get('nodeid') for node in nodes if isinstance(node, dict)]
+    if (len(identifiers) != len(nodes) or not all(isinstance(identifier, str) and identifier for identifier in identifiers)
+            or len(set(identifiers)) != len(nodes)):
+        return False
+    if any(node.get('phase') not in ('source', 'artifact', 'external')
+           or not isinstance(node.get('reason'), str) or not node['reason'] for node in nodes):
+        return False
+    if inventory:
+        return evidence.get('exit_code') == 0
+    expected = {node['nodeid'] for node in nodes if node['phase'] == 'source'}
+    outcomes = evidence.get('outcomes', {})
+    if not isinstance(outcomes, dict) or not expected or set(outcomes) != expected or evidence.get('exit_code') != 0:
+        return False
+    for nodeid, stages in outcomes.items():
+        if (not isinstance(stages, list) or not all(isinstance(row, dict) and
+                isinstance(row.get('when'), str) and isinstance(row.get('outcome'), str) for row in stages)):
+            return False
+        actual = sorted((row.get('when'), row.get('outcome')) for row in stages)
+        if actual == [('call', 'passed'), ('setup', 'passed'), ('teardown', 'passed')]:
+            continue
+        # Existing metadata exceptions have bespoke owner assertions; they are
+        # source-grounded coverage policy, not missing corpus/external skips.
+        from test_profiles import CI_SKIP_ALLOWED_REASONS
+        import re
+        filename = Path(nodeid.split('::')[0]).name
+        skipped = [row for row in stages if row.get('outcome') == 'skipped']
+        allowed = CI_SKIP_ALLOWED_REASONS.get(filename, ()) if filename == 'test_data_file_metadata_contract.py' else ()
+        reason = skipped[0].get('reason', '') if len(skipped) == 1 else ''
+        reason = reason.removeprefix('Skipped: ') if isinstance(reason, str) else ''
+        if (actual != [('call', 'skipped'), ('setup', 'passed'), ('teardown', 'passed')]
+                or not any(re.fullmatch(pattern, reason) for pattern in allowed)):
+            return False
+    return True
+
+
+def _same_preparation_inventory(collected, executed):
+    return ({row['nodeid']: row for row in collected.get('nodes', [])}
+            == {row['nodeid']: row for row in executed.get('nodes', [])})
+
+
+def _valid_preparation_check(check, specification):
+    if not isinstance(check, dict) or check.get('status') != 'passed' or check.get('exit_code') != 0:
+        return False
+    if check.get('command') != specification['command'] or not check.get('completed'):
+        return False
+    import math
+    if (not isinstance(check.get('duration_seconds'), (int, float))
+            or isinstance(check['duration_seconds'], bool) or not math.isfinite(check['duration_seconds'])
+            or check['duration_seconds'] < 0):
+        return False
+    if not isinstance(check.get('stdout'), str) or not isinstance(check.get('stderr'), str):
+        return False
+    payload = {key: value for key, value in check.items() if key not in {'integrity', 'reused'}}
+    if check.get('integrity') != _digest(payload):
+        return False
+    if specification.get('evidence') == 'pytest':
+        return _valid_test_evidence(check.get('evidence'), inventory=specification.get('inventory', False))
+    if specification.get('evidence') == 'references':
+        try:
+            payload = json.loads(check.get('stdout', ''))
+            return (payload['summary']['all_ok'] is True and payload['summary']['exit_code'] == 0
+                    and all(not payload[key]['failed'] for key in ('critical', 'configs', 'scripts', 'json_valid')))
+        except (KeyError, TypeError, ValueError):
+            return False
+    if specification.get('evidence') == 'canaries':
+        import re
+        match = re.search(r'Checked: (\d+)  Failed: (\d+)  Total: (\d+)', check.get('stdout', ''))
+        observed = re.findall(r'^\[\s*(\d+)\] UNCHANGED$', check.get('stdout', ''), re.MULTILINE)
+        return bool(match and int(match[1]) > 0 and int(match[2]) == 0 and int(match[1]) == int(match[3])
+                    and len(observed) == int(match[1]) and len(set(observed)) == len(observed)
+                    and set(observed) == set(specification.get('identifiers', observed)))
+    return isinstance(check.get('stdout'), str) and isinstance(check.get('stderr'), str)
+
+
+def _preparation_canary_identifiers(repo_root):
+    try:
+        manifest = json.loads((repo_root / 'scripts/tests/fixtures/contract_snapshots/_manifest.json').read_text())
+        return [str(product['dsld_id']) for product in manifest['products']]
+    except (OSError, ValueError, KeyError, TypeError):
+        return []
+
+
+def run_preparation(repo_root, raw_root, *, checks=None, runner=None, report_path=None):
+    """Aggregate read-only checks. Readiness permits regeneration, never publication.
+
+    CLI callers use the pinned test runner and its suite lock. Injectable checks
+    and runner are the orchestration test seam, not a receipt-import API.
+    """
+    import os
+    import subprocess
+    import time
+    import tempfile
+    from pipeline_freshness import STAGES, RERUN_STAGES, stage_freshness_issues
+    repo_root, raw_root = Path(repo_root).resolve(), Path(raw_root).resolve()
+    runner = runner or subprocess.run
+    before = _preparation_inputs(repo_root, raw_root)
+    runtime = _preparation_runtime()
+    fingerprint = _digest({'inputs': before, 'runtime': runtime, 'raw_root': str(raw_root)})
+    previous = {}
+    if report_path and Path(report_path).is_file():
+        try:
+            previous = json.loads(Path(report_path).read_text())
+        except (OSError, ValueError):
+            pass
+    if not isinstance(previous, dict):
+        previous = {}
+    result = {'timestamp': datetime.now(timezone.utc).isoformat(), 'fingerprint': fingerprint,
+              'runtime': runtime, 'inputs': before, 'checks': [], 'ready': False,
+              'publication_ready': False, 'completed': False}
+    result['checks'].append({'name': 'raw_inputs', 'status': 'failed' if before['errors'] else 'passed',
+                             'issues': before['errors']})
+    try:
+        issues = stage_freshness_issues(repo_root)
+        earliest = next((s for s in STAGES if any(i.startswith(s + ': ') for i in issues)), None)
+        # The existing freshness owner defines every JSON/JSONL output shape.
+        # Missing stages need regeneration even when no stale manifest exists.
+        products = repo_root / 'scripts/products'
+        missing = [stage for stage, spec in STAGES.items()
+                   if not any(path.is_file() and not path.name.startswith('.')
+                              for pattern in spec['outputs'] for path in products.glob(pattern))]
+        earliest = next((stage for stage in STAGES if stage in missing or
+                         any(issue.startswith(stage + ': ') for issue in issues)), None)
+        result['regeneration'] = {'issues': issues, 'missing_stages': missing, 'earliest_stage': earliest,
+                                  'stages': RERUN_STAGES.get(earliest),
+                                  'basis': 'Existing stage code/reference fingerprints and missing output patterns',
+                                  'limits': ['Raw-to-Clean provenance is not established by these manifests; raw dataset changes require Clean unless existing evidence proves reuse']}
+    except Exception as exc:
+        result['checks'].append({'name': 'stage_freshness', 'status': 'failed', 'issues': [str(exc)]})
+    with tempfile.TemporaryDirectory(prefix='pg-preparation-') as temporary:
+        evidence_path = (Path(report_path).with_suffix('.pytest.json') if report_path
+                         else Path(temporary) / 'pytest.json')
+        if report_path:
+            result['evidence_path'] = str(evidence_path)
+            _atomic_report(report_path, result)
+        if checks is None:
+            checks = [
+                {'name': 'references', 'command': [sys.executable, 'scripts/preflight.py', '--json'], 'evidence': 'references'},
+                {'name': 'ownership_matrix', 'command': [sys.executable, 'scripts/audit_source_of_truth_contract.py', 'matrix', '--strict-release']},
+                {'name': 'fda_freshness', 'command': [sys.executable, 'scripts/api_audit/fda_manufacturer_violations_sync.py', '--check']},
+                {'name': 'raw_canaries', 'command': [sys.executable, 'scripts/tests/freeze_contract_snapshots.py',
+                    '--check', '--raw-root', str(raw_root)], 'requires': ['raw_inputs', 'references'], 'evidence': 'canaries',
+                    'identifiers': _preparation_canary_identifiers(repo_root)},
+                {'name': 'pytest_inventory', 'command': ['bash', 'scripts/test.sh', 'preparation', '--collect-only'],
+                    'evidence': 'pytest', 'inventory': True, 'reuse': False},
+                {'name': 'source_tests', 'command': ['bash', 'scripts/test.sh', 'preparation'],
+                    'requires': ['pytest_inventory'], 'evidence': 'pytest'},
+            ]
+            # The release runner owns these commands. Inventory mode never
+            # invokes the gates, live identifiers, OCR or remote writes.
+            try:
+                gates = runner(['bash', 'scripts/test.sh', 'preparation-gates'], cwd=repo_root,
+                               capture_output=True, text=True, check=False)
+                if gates.returncode:
+                    raise ValueError(gates.stderr)
+                inventory = [json.loads(line) for line in gates.stdout.splitlines() if line.strip()]
+                if not inventory or any(g.get('phase') not in {'source', 'artifact', 'live'} for g in inventory):
+                    raise ValueError('Incomplete release-gate inventory')
+                result['post_run_gates'] = [g for g in inventory if g['phase'] == 'artifact']
+                result['live_verification'] = [g for g in inventory if g['phase'] == 'live']
+                checks += [{'name': g['phase'] + '_gate_' + str(i), 'command': g['command'],
+                            'reuse': g['phase'] != 'live'}
+                           for i, g in enumerate(inventory) if g['phase'] in {'source', 'live'}]
+            except Exception as exc:
+                result['checks'].append({'name': 'release_gate_inventory', 'status': 'failed', 'issues': [str(exc)]})
+        prior_checks = previous.get('checks', [])
+        if not isinstance(prior_checks, list):
+            prior_checks = []
+        prior = {check.get('name'): check for check in prior_checks if isinstance(check, dict) and isinstance(check.get('name'), str)}
+        previous_payload = {k: v for k, v in previous.items() if k != 'integrity'}
+        reusable = (previous.get('completed') is True and previous.get('fingerprint') == fingerprint
+                    and previous.get('integrity') == _digest(previous_payload)
+                    and len(prior) == len(prior_checks)
+                    and prior.get('inputs_stable', {}).get('status') == 'passed')
+        for specification in checks:
+            name = specification['name']
+            states = {check['name']: check['status'] for check in result['checks']}
+            blocked = [dep for dep in specification.get('requires', []) if states.get(dep) != 'passed']
+            if report_path:
+                _atomic_report(report_path, result)
+            if blocked:
+                result['checks'].append({'name': name, 'status': 'blocked', 'prerequisites': blocked})
+                continue
+            if reusable and specification.get('reuse', True) and _valid_preparation_check(prior.get(name), specification):
+                check = dict(prior[name], reused=True)
+            else:
+                evidence_path.unlink(missing_ok=True)
+                started = time.monotonic()
+                environment = dict(os.environ, PG_PREPARATION_REPORT=str(evidence_path),
+                    PG_PREPARATION_MODE='inventory' if specification.get('inventory') else 'source')
+                check = {'name': name, 'command': specification['command'], 'completed': False}
+                try:
+                    process = runner(specification['command'], cwd=repo_root, env=environment,
+                                     capture_output=True, text=True, check=False)
+                    check.update(exit_code=process.returncode, stdout=process.stdout, stderr=process.stderr,
+                                 completed=True, status='passed' if process.returncode == 0 else 'failed')
+                    if specification.get('evidence') == 'pytest':
+                        check['evidence'] = json.loads(evidence_path.read_text()) if evidence_path.exists() else None
+                except Exception as exc:
+                    check.update(exit_code=None, stdout='', stderr=str(exc), status='failed')
+                check['duration_seconds'] = round(time.monotonic() - started, 3)
+                check['integrity'] = _digest(check)
+                if not _valid_preparation_check(check, specification):
+                    check['status'] = 'failed'
+                    check['integrity'] = _digest({k: v for k, v in check.items() if k != 'integrity'})
+            if name == 'raw_canaries' and check['status'] == 'failed' and 'DRIFT' in check.get('stdout', ''):
+                check['category'] = 'expectation_drift_requires_source_review'
+                check['integrity'] = _digest({k: v for k, v in check.items() if k not in {'integrity', 'reused'}})
+            result['checks'].append(check)
+            if report_path:
+                _atomic_report(report_path, result)
+        inventories = [c.get('evidence') for c in result['checks'] if c['name'] == 'pytest_inventory' and c['status'] == 'passed']
+        executed = [c.get('evidence') for c in result['checks'] if c['name'] == 'source_tests' and c['status'] == 'passed']
+        if inventories and executed and isinstance(inventories[0], dict) and isinstance(executed[0], dict):
+            if not _same_preparation_inventory(inventories[0], executed[0]):
+                result['checks'].append({'name': 'node_inventory_stable', 'status': 'failed',
+                    'issues': ['Source execution did not cover the collected inventory']})
+        if inventories and isinstance(inventories[0], dict):
+            result['deferred_tests'] = [n for n in inventories[0].get('nodes', []) if n['phase'] != 'source']
+    after = _preparation_inputs(repo_root, raw_root)
+    stable = before == after and runtime == _preparation_runtime()
+    result['checks'].append({'name': 'inputs_stable', 'status': 'passed' if stable else 'failed',
+                             'issues': [] if stable else ['Input inventory/content or runtime/environment changed during preparation']})
+    result['ready'] = all(check['status'] == 'passed' for check in result['checks'])
+    result['completed'] = True
+    result['integrity'] = _digest(result)
+    if report_path:
+        _atomic_report(report_path, result)
+    return result
+
+
 def main():
     parser = argparse.ArgumentParser(
         description='DSLD Pipeline Preflight Validator',
@@ -717,7 +1081,26 @@ Exit codes:
         help='Output as JSON for CI integration'
     )
 
+    parser.add_argument('--prepare', action='store_true', help='Aggregate read-only source readiness before regeneration')
+    parser.add_argument('--raw-root', type=Path)
+    parser.add_argument('--report', type=Path, default=SCRIPTS_DIR / 'reports/pipeline_preparation.json')
     args = parser.parse_args()
+    if args.prepare:
+        if args.raw_root is None:
+            parser.error('--prepare requires --raw-root')
+        import os
+        import subprocess
+        if not os.environ.get('PG_TEST_LOCK_HELD'):
+            # Preparation is a broad workload even when its inventory expands
+            # into explicit nodes. Hold the existing exclusive machine lock.
+            environment = dict(os.environ, PG_TEST_LOCK_HELD='1', PG_TEST_WORKERS='1')
+            return_code = subprocess.call([sys.executable, str(SCRIPTS_DIR / 'test_lock.py'),
+                'exclusive', '--', sys.executable, str(Path(__file__).resolve()), *sys.argv[1:]], env=environment)
+            sys.exit(return_code)
+        results = run_preparation(SCRIPTS_DIR.parent, args.raw_root, report_path=args.report)
+        print(json.dumps(results, indent=2) if args.json else
+              '\n'.join(f"{check['status'].upper()}: {check['name']}" for check in results['checks']))
+        sys.exit(0 if results['ready'] else 1)
 
     results = run_preflight(verbose=args.verbose, quick=args.quick)
 
