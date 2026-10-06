@@ -13,7 +13,8 @@ Implementation strategy: build a global alias index across IQM, where
 each alias-string maps to the (entry_id, form_id, identifiers) it
 appears under. If the SAME alias-string appears under two entries with
 DIFFERENT external identifiers (CUI / PubChem CID / UNII), that's a
-cross-compound aliasing violation.
+cross-compound aliasing violation. A nutrient source form uses its registered
+compound identity when available, rather than inheriting the nutrient identity.
 
 Whitelisted exceptions: parent-level aliases that are GENERIC TERMS
 (e.g. "Resolvins", "Protectins") legitimately route to a precursor
@@ -27,6 +28,8 @@ from collections import defaultdict
 from pathlib import Path
 
 import pytest
+
+from identity_integrity import build_canonical_identity_registry
 
 ROOT = Path(__file__).resolve().parent.parent
 DATA = ROOT / "data" / "ingredient_quality_map.json"
@@ -122,7 +125,7 @@ def _entry_identifiers(entry: dict) -> tuple:
 
 
 def _form_identifiers(form: dict, parent_ids: tuple) -> tuple:
-    """Form-level identifiers fall back to parent if not specified."""
+    """Explicit form IDs win; missing IDs use the resolved source identity."""
     ext = form.get("external_ids") or {}
     return (
         ext.get("cui") or parent_ids[0],
@@ -145,10 +148,8 @@ def _identifiers_match(a: tuple, b: tuple) -> bool:
     return matches > 0
 
 
-def test_no_cross_compound_aliases():
-    """No alias string should appear on two entries with conflicting
-    identifiers (CUI / PubChem CID / UNII)."""
-    data = _load_iqm()
+def _cross_compound_alias_violations(data):
+    registry = build_canonical_identity_registry({"ingredient_quality_map": data})
 
     # alias_lower -> list of (entry_id, form_id, identifiers, source)
     alias_index: dict[str, list[tuple]] = defaultdict(list)
@@ -168,7 +169,14 @@ def test_no_cross_compound_aliases():
         for fname, form in (entry.get("forms") or {}).items():
             if not isinstance(form, dict):
                 continue
-            form_ids = _form_identifiers(form, parent_ids)
+            # A nutrient source form may be a separately registered compound.
+            # The parent's nutrient identifiers do not identify that source.
+            # Resolve the form name through the production identity owner;
+            # explicit form identifiers still win and conflicts still fail.
+            resolved = registry.resolve_preferred(fname)
+            source_entry = data.get(resolved[0]) if resolved and resolved[1] == "ingredient_quality_map" else None
+            source_ids = _entry_identifiers(source_entry) if source_entry else parent_ids
+            form_ids = _form_identifiers(form, source_ids)
             for alias in form.get("aliases") or []:
                 if not isinstance(alias, str):
                     continue
@@ -201,10 +209,49 @@ def test_no_cross_compound_aliases():
                         f"distinct compounds; cross-compound aliasing forbidden"
                     )
 
+    return violations
+
+
+def test_no_cross_compound_aliases():
+    violations = _cross_compound_alias_violations(_load_iqm())
     assert not violations, (
         "Cross-compound aliasing violations found:\n  - "
         + "\n  - ".join(violations)
     )
+
+
+
+def _nutrient_and_source_fixture():
+    # Synthetic identities: a declared nutrient and its distinct source compound.
+    return {
+        "nutrient": {"standard_name": "Nutrient", "cui": "nutrient-identity",
+                     "forms": {"Source compound": {"aliases": ["shared compound alias"]}}},
+        "source": {"standard_name": "Source compound", "cui": "source-identity",
+                   "aliases": ["shared compound alias"]},
+    }
+
+
+def test_source_form_uses_registered_compound_identity_not_nutrient_parent():
+    data = _nutrient_and_source_fixture()
+    assert _cross_compound_alias_violations(data) == []
+
+
+def test_source_alias_on_unrelated_form_is_still_rejected():
+    data = _nutrient_and_source_fixture()
+    data["nutrient"]["forms"]["Unrelated form"] = data["nutrient"]["forms"].pop("Source compound")
+    assert _cross_compound_alias_violations(data)
+
+
+def test_explicit_source_form_identifier_conflict_is_still_rejected():
+    data = _nutrient_and_source_fixture()
+    data["nutrient"]["forms"]["Source compound"]["external_ids"] = {"cui": "wrong-identity"}
+    assert _cross_compound_alias_violations(data)
+
+
+def test_compound_alias_on_distinct_nutrient_parent_is_still_rejected():
+    data = _nutrient_and_source_fixture()
+    data["nutrient"]["aliases"] = ["shared compound alias"]
+    assert _cross_compound_alias_violations(data)
 
 
 def test_specific_spm_compounds_have_distinct_entries():
