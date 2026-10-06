@@ -31,6 +31,25 @@ def test_declared_local_only_skips_pass(tmp_path):
     assert undeclared_skips(_write(tmp_path)) == []
 
 
+def test_cleaner_missing_output_reason_keeps_existing_ci_policy(tmp_path):
+    path = _write(tmp_path)
+    path.write_text('<testsuites><testsuite><testcase classname="scripts.tests.test_cleaner_forms_preservation" name="test_every_form_has_name"><skipped message="No pipeline output"/></testcase></testsuite></testsuites>')
+    assert undeclared_skips(path) == []
+
+
+def test_ci_skip_reason_declaration_has_unique_keys_and_regex_sequences():
+    import ast
+    from test_profiles import CI_SKIP_ALLOWED_REASONS
+    tree = ast.parse((Path(__file__).parents[1] / 'test_profiles.py').read_text())
+    mapping = next(node.value for node in tree.body if isinstance(node, ast.Assign)
+                   and any(isinstance(target, ast.Name) and target.id == 'CI_SKIP_ALLOWED_REASONS'
+                           for target in node.targets))
+    names = [ast.literal_eval(key) for key in mapping.keys]
+    assert len(names) == len(set(names)), 'Duplicate skip-policy keys silently overwrite declared reasons'
+    assert all(isinstance(value, tuple) and all(isinstance(reason, str) for reason in value)
+               for value in CI_SKIP_ALLOWED_REASONS.values())
+
+
 def test_a_skip_in_an_undeclared_file_fails(tmp_path):
     extra = (
         '<testcase classname="scripts.tests.test_new_corpus_check.TestX" name="test_y">'

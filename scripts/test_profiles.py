@@ -128,7 +128,6 @@ CI_SKIP_ALLOWED_REASONS = {
     'test_cleaner_forms_preservation.py': (
         'No\\ pipeline\\ output',
     ),
-    'test_cleaner_forms_preservation.py': {'test_every_form_has_name', 'test_every_form_is_dsld_structured_or_name_extracted', 'test_dsld_structured_forms_preserve_all_fields'},
     'test_condition_id_shape_consistency.py': (
         '\\d+\\ canary\\ not\\ rebuilt\\ yet',
     ),
@@ -163,7 +162,6 @@ CI_SKIP_ALLOWED_REASONS = {
     'test_e1_5_x_4_ul_fallback_and_status.py': (
         'dist/detail_blobs\\ not\\ present\\ —\\ run\\ rebuild\\ first',
     ),
-    'test_label_fidelity_contract.py': {'test_blob_capsimax_display_label_invariants', 'test_no_np_leaks_to_display', 'test_standardization_note_preserved', 'test_no_false_well_dosed_on_undisclosed', 'test_branded_identity_preserved', 'test_inactive_ingredients_complete', 'test_plant_part_preserved', 'test_projection_label_text_comes_from_the_label_ledger', 'test_label_display_name_drives_display_label', 'test_display_name_never_canonical', 'test_plant_part_present_in_form_metadata'},
     'test_inactive_ingredient_preservation.py': (
         '\\d+\\ canary\\ not\\ rebuilt\\ yet',
     ),
