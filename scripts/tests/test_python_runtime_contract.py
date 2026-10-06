@@ -1,5 +1,7 @@
 from pathlib import Path
 
+import pytest
+
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
 
@@ -81,7 +83,8 @@ def test_python_runtime_helper_rejects_pre_313():
     assert "Xcode/launchd/cron" in helper
 
 
-def test_raw_snapshot_preflight_detects_drift_while_stored_outputs_match(tmp_path, monkeypatch, capsys):
+@pytest.mark.parametrize("score_offset", [-1.0, 1.0])
+def test_raw_snapshot_preflight_detects_drift_while_stored_outputs_match(tmp_path, monkeypatch, capsys, score_offset):
     import json
     import shutil
     import sys
@@ -93,8 +96,14 @@ def test_raw_snapshot_preflight_detects_drift_while_stored_outputs_match(tmp_pat
                     raw_root / "204571.json")
     fixtures = tmp_path / "fixtures"
     fixtures.mkdir()
-    frozen = {"dsld_id": "204571", "quality_score_v4_100": 62.5,
-              "quality_score_status": "scored", "product_safety_status": "no_known_catalog_concern"}
+    # This is an infrastructure drift test, not a clinical score canary.
+    # Create stale stored output relative to the real current production seam
+    # so both score increases and decreases remain detectable after calibration.
+    current = freezer._score_raw_product(raw_root / "204571.json", 204571)
+    frozen = freezer.freeze_fields(current, ["dsld_id", "quality_score_v4_100",
+        "quality_score_status", "product_safety_status"])
+    current_score = frozen["quality_score_v4_100"]
+    frozen["quality_score_v4_100"] = round(current_score + score_offset, 4)
     snapshot = fixtures / "204571.json"
     snapshot.write_text(json.dumps(frozen))
     manifest = fixtures / "_manifest.json"
@@ -112,7 +121,11 @@ def test_raw_snapshot_preflight_detects_drift_while_stored_outputs_match(tmp_pat
     monkeypatch.setattr(sys, "argv", ["freeze_contract_snapshots.py", "--check", "--raw-root", str(raw_root)])
     assert freezer.main() == 1
     output = capsys.readouterr().out
-    assert "62.5 -> 63.5" in output
+    expected_drift = (f"quality_score_v4_100: {frozen['quality_score_v4_100']!r}"
+                      f" -> {current_score!r}")
+    assert expected_drift in output
+    assert "DRIFT" in output
+    assert "Checked: 0  Failed: 1  Total: 1" in output
     assert json.loads(snapshot.read_text()) == frozen
     assert json.loads((stored / "old.json").read_text()) == [frozen]
 
