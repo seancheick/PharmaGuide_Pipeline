@@ -30,8 +30,13 @@ LOCK_DIR = Path(
 )
 
 
-def inherited_lock_fds() -> tuple[int, ...]:
-    """Validate the lock owner's descriptors before passing them to descendants."""
+def inherited_lock_fds(*, exclusive: bool = False) -> tuple[int, ...]:
+    """Validate owner descriptors; preparation entry points require exclusivity.
+
+    Upgrade the inherited open-file description in place, avoiding acquisition
+    on a second descriptor that could wait forever behind our own shared lock.
+    Generic orchestration only propagates descriptors without upgrading them.
+    """
     declared = os.environ.get('PG_TEST_LOCK_FDS', '')
     if not declared:
         return ()
@@ -46,6 +51,13 @@ def inherited_lock_fds() -> tuple[int, ...]:
         if (len(identities) != len(descriptors) or any(identity not in allowed for identity in identities)
                 or identities[0] != (suite.st_dev, suite.st_ino)):
             return ()
+        if exclusive:
+            try:
+                fcntl.flock(descriptors[0], fcntl.LOCK_EX | fcntl.LOCK_NB)
+            except BlockingIOError:
+                print('test.sh: waiting for the machine-wide test lock (exclusive inherited upgrade)',
+                      file=sys.stderr, flush=True)
+                fcntl.flock(descriptors[0], fcntl.LOCK_EX)
         return descriptors
     except (ValueError, OSError):
         return ()

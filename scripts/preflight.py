@@ -1117,7 +1117,7 @@ Exit codes:
         import os
         import subprocess
         from test_lock import inherited_lock_fds
-        if not inherited_lock_fds():
+        if not inherited_lock_fds(exclusive=True):
             # Preparation is a broad workload even when its inventory expands
             # into explicit nodes. Hold the existing exclusive machine lock.
             environment = dict(os.environ, PG_TEST_LOCK_HELD='1', PG_TEST_WORKERS='1')
