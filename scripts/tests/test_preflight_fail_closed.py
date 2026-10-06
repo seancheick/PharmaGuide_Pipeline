@@ -202,7 +202,12 @@ def test_preparation_default_checks_revalidate_calendar_owner_at_final_acceptanc
         calendar_calls = []
         def run(command, **kwargs):
             if command[-1] == 'preparation-gates':
-                output = json.dumps({'phase': 'artifact', 'command': ['deferred']})
+                output = '\n'.join(json.dumps(gate) for gate in [
+                    {'phase': 'artifact', 'command': ['deferred']},
+                    {'phase': 'live', 'command': ['live-owner']}])
+            elif command == ['live-owner']:
+                assert kwargs.get('timeout') == 900
+                output = 'live complete'
             elif 'fda_manufacturer_violations_sync.py' in ' '.join(command):
                 calendar_calls.append(command)
                 return subprocess.CompletedProcess(command, initial if len(calendar_calls) == 1 else final, 'calendar result', '')
@@ -661,3 +666,70 @@ def test_preparation_custom_untracked_git_report_is_operational_not_source_mutat
             checks=[{'name': 'probe', 'command': ['fake']}], runner=run,
             report_path=tmp_path / 'readiness.json')['ready']
     assert len(calls) == 1
+
+
+
+def test_preparation_live_deadline_kills_direct_child_preserves_successors_and_never_reuses_failure(tmp_path):
+    import os
+    import subprocess
+    import pytest
+    repo = tmp_path / 'repo'
+    (repo / 'scripts').mkdir(parents=True)
+    source = repo / 'scripts/source.py'
+    source.write_text("print('source passed')", encoding='utf-8')
+    raw = tmp_path / 'raw'
+    raw.mkdir()
+    (raw / '1.json').write_text(json.dumps({'id': 1, 'ingredientRows': []}), encoding='utf-8')
+    pidfile = tmp_path / 'live.pid'
+    code = "import os,sys,time; from pathlib import Path; Path(sys.argv[1]).write_text(str(os.getpid())); time.sleep(0.6)"
+    checks = [
+        {'name': 'source', 'command': [sys.executable, str(source)]},
+        {'name': 'live', 'phase': 'live', 'timeout_seconds': 0.2,
+         'command': [sys.executable, '-c', code, str(pidfile)]},
+        {'name': 'successor', 'command': [sys.executable, '-c', "print('successor passed')"]},
+    ]
+    receipt = tmp_path / 'receipt.json'
+    def prepare():
+        return preflight.run_preparation(repo, raw, checks=checks, report_path=receipt)
+    first = prepare()
+    states = {check['name']: check for check in first['checks']}
+    assert states['live']['status'] == 'failed'
+    assert 'timed out' in states['live']['stderr']
+    assert not states['live']['completed']
+    assert first['completed'] and not first['ready'] and not first['publication_ready']
+    assert states['successor']['status'] == states['inputs_stable']['status'] == 'passed'
+    with pytest.raises(ProcessLookupError):
+        os.kill(int(pidfile.read_text()), 0)
+    second = prepare()
+    repeated = {check['name']: check for check in second['checks']}
+    assert repeated['source']['reused'] and repeated['successor']['reused']
+    assert repeated['live']['status'] == 'failed' and not repeated['live'].get('reused', False)
+    assert second['completed'] and not second['ready'] and repeated['inputs_stable']['status'] == 'passed'
+
+    source.write_text("print('changed source passed')", encoding='utf-8')
+    changed = prepare()
+    changed_states = {check['name']: check for check in changed['checks']}
+    assert changed['fingerprint'] != second['fingerprint']
+    assert not changed_states['source'].get('reused', False)
+    assert changed_states['source']['stdout'].strip() == 'changed source passed'
+    assert not changed['ready'] and changed_states['inputs_stable']['status'] == 'passed'
+
+
+def test_preparation_live_deadline_default_is_phase_owned_and_success_always_rechecks(tmp_path, monkeypatch):
+    import subprocess
+    monkeypatch.setattr(preflight, '_preparation_inputs', lambda *args, **kwargs: {'files': {}, 'errors': [], 'raw_count': 1})
+    calls = []
+    def run(command, **kwargs):
+        calls.append((command, kwargs.get('timeout')))
+        return subprocess.CompletedProcess(command, 0, 'passed', '')
+    checks = [
+        {'name': 'live', 'phase': 'live', 'command': ['live-owner']},
+        {'name': 'source', 'phase': 'source', 'timeout_seconds': 0.01, 'command': ['source-owner']},
+    ]
+    receipt = tmp_path / 'receipt.json'
+    assert preflight.run_preparation(tmp_path, tmp_path, checks=checks, runner=run, report_path=receipt)['ready']
+    assert calls == [(['live-owner'], 900), (['source-owner'], None)]
+    calls.clear()
+    repeated = preflight.run_preparation(tmp_path, tmp_path, checks=checks, runner=run, report_path=receipt)
+    assert repeated['ready'] and calls == [(['live-owner'], 900)]
+    assert next(check for check in repeated['checks'] if check['name'] == 'source')['reused']

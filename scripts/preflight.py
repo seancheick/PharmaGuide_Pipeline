@@ -1010,7 +1010,7 @@ def run_preparation(repo_root, raw_root, *, checks=None, runner=None, report_pat
                 result['post_run_gates'] = [g for g in inventory if g['phase'] == 'artifact']
                 result['live_verification'] = [g for g in inventory if g['phase'] == 'live']
                 checks += [{'name': g['phase'] + '_gate_' + str(i), 'command': g['command'],
-                            'reuse': g['phase'] != 'live'}
+                            'phase': g['phase'], 'reuse': g['phase'] != 'live'}
                            for i, g in enumerate(inventory) if g['phase'] in {'source', 'live'}]
             except Exception as exc:
                 result['checks'].append({'name': 'release_gate_inventory', 'status': 'failed', 'issues': [str(exc)]})
@@ -1037,7 +1037,7 @@ def run_preparation(repo_root, raw_root, *, checks=None, runner=None, report_pat
             if blocked:
                 result['checks'].append({'name': name, 'status': 'blocked', 'prerequisites': blocked})
                 continue
-            if reusable and specification.get('reuse', True) and _valid_preparation_check(prior.get(name), specification):
+            if reusable and specification.get('phase') != 'live' and specification.get('reuse', True) and _valid_preparation_check(prior.get(name), specification):
                 check = dict(prior[name], reused=True)
             else:
                 evidence_path.unlink(missing_ok=True)
@@ -1047,7 +1047,8 @@ def run_preparation(repo_root, raw_root, *, checks=None, runner=None, report_pat
                 check = {'name': name, 'command': specification['command'], 'completed': False}
                 try:
                     process = runner(specification['command'], cwd=repo_root, env=environment,
-                                     capture_output=True, text=True, encoding='utf-8', check=False, pass_fds=lock_fds)
+                                     capture_output=True, text=True, encoding='utf-8', check=False, pass_fds=lock_fds,
+                                     timeout=specification.get('timeout_seconds', 900) if specification.get('phase') == 'live' else None)
                     check.update(exit_code=process.returncode, stdout=process.stdout, stderr=process.stderr,
                                  completed=True, status='passed' if process.returncode == 0 else 'failed')
                     if specification.get('evidence') == 'pytest':
