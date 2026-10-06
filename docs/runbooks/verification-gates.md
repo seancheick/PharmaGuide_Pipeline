@@ -25,6 +25,11 @@ and the complete source/input inventory still match. This includes source-test f
 and the existing FDA UNII identity cache, even though that cache is excluded from
 stage-freshness calculations. Collection runs again; live verifiers run again under
 their existing cache and freshness rules. Changed or incomplete evidence cannot grant readiness.
+Live commands have a 15-minute wall-clock limit each. A timeout is an unresolved failed
+check, never a data mismatch or readiness approval; independent checks continue and
+valid source evidence remains reusable. Source tests have no such live-command limit.
+Shell launch bookkeeping (`SHELL_PID`) is excluded from runtime identity; effective
+configuration, opt-ins, credentials and worker budgets remain bound.
 Preparation does not refresh expected scores, change clinical policy, publish artifacts
 or establish release readiness. Classify all reported failures by shared cause, fix
 the combined batch, and then run from the earliest required stage. The current stage

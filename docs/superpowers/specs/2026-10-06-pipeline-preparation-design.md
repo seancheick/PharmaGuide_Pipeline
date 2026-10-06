@@ -23,3 +23,5 @@ Review refinements:
 - Preparation success is not release readiness; deferred post-run and publication checks remain authoritative.
 
 Infrastructure acceptance refinements: preserve existing skip-policy declarations; keep the suite lock held by surviving check descendants after owner interruption; bind the existing FDA UNII source-test cache content/existence separately from transport caches; honor explicitly authored taxonomy condition fields while retaining deprecated ingredient/root-field guards; retain the dead-code ratchet with narrowly justified harness entry points.
+
+Live execution boundary: use the existing preflight subprocess seam to bound every live command to 900 seconds. Source checks have no live-command deadline. Timeout remains an unresolved failure, independently runnable checks continue, and valid source receipts survive for a retry. Live checks always rerun. This is an operational bound, not a new clinical freshness policy. Runtime fingerprints exclude only named shell bookkeeping while retaining effective configuration. Authored metadata skip reasons derive from the existing data_batch owner; unknown or altered reasons remain failures.
