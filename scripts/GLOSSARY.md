@@ -41,6 +41,7 @@ committed outcome after a lost response without borrowing another attempt's resu
 | **Routing feature shadow** | A self-hashed, manifest-owned, measure-only table of label-intent and panel-composition facts recomputed from enriched inputs. It never changes route or catalog eligibility; reviewed gold cases and threshold selection consume it before production predicates change. |
 | **Routing gold review** | A report that binds one exact baseline/candidate routing-shadow hash pair, assigns every changed product to an approved review group, and fails closed on any unreviewed transition or changed corpus. It records route expectations; it is never a classifier input. |
 | **Artifact freshness** | Proof that catalog, manifest, interactions, and upstream product outputs describe the same current state. |
+| **Pipeline preparation** | The aggregate source-readiness check owned by `preflight.py::run_preparation` before corpus regeneration. It records failures, blocked prerequisites, test dependency phases and freshness requirements; it does not grant clinical approval or publication readiness. |
 
 ## Canonical stages
 

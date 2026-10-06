@@ -65,7 +65,11 @@ Do not add a separate CI or corpus requirement for a verified display-only edit.
    warning or credit changes. Refresh only justified canaries using the same tool with the
    selected `dsld_id` and `--raw-root`, record the cause in its existing manifest changelog,
    then rerun the complete canary check. Never auto-accept a drift just because code produced it.
-   The all-dataset batch runner repeats this check before any brand is processed. No new canary
+   The all-dataset batch runner includes this check in aggregate preparation before any brand
+   is processed (`scripts/preflight.py --prepare --raw-root <raw-root> --report <durable-report.json>`).
+   Collect and resolve all source-backed failure classes together; preserve explicit artifact-dependent
+   and external/opt-in coverage requirements in the report. Preparation success never authorizes
+   publication or proves post-run parity. No new canary
    registry or scorer is needed, and a fixture-only correction does not invalidate pipeline stages.
    Reuse bounded captures within the batch; the final corpus comparison belongs to the one
    necessary post-batch run, not an additional measurement pipeline. Run one corpus job at a time.
