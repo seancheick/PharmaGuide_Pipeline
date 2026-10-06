@@ -1950,3 +1950,28 @@ def test_nested_same_identity_totals_require_every_subtotal_to_reconcile(subtota
     selected = profile_owner_candidate_rows([parent, intermediate, leaf])
     assert len(selected) == expected_count
     assert intermediate in selected if subtotal != 300 else selected == [parent]
+
+
+@pytest.mark.parametrize("hidden_amount", [None, 100, 0])
+def test_equal_visible_child_mass_does_not_prove_hidden_member_disclosure(hidden_amount):
+    projection = _row("ashwagandha", "Botanical Blend", 600,
+                      raw_source_path="ingredientRows[0]", scoring_input_kind="product_level_evidence",
+                      evidence_type="blend_anchor_mass", linked_rows=["ingredientRows[0]"])
+    visible = _row("ashwagandha", "Ashwagandha Extract", 600,
+                   raw_source_path="ingredientRows[0].nestedRows[0]")
+    hidden = _row("gaba", "GABA", hidden_amount,
+                  raw_source_path="ingredientRows[0].nestedRows[1]")
+    product = _product("Botanical Blend", [visible], ingredient_quality_data={
+        "ingredients_scorable": [visible], "ingredients": [visible, hidden]})
+    assert projection in profile_owner_candidate_rows([visible, projection], product=product)
+
+
+def test_merged_immediate_children_reconcile_by_canonical_parent_lineage():
+    projection = _row("ashwagandha", "Botanical Blend", 1000,
+                      raw_source_path="ingredientRows[0]", scoring_input_kind="product_level_evidence",
+                      evidence_type="blend_anchor_mass", linked_rows=["ingredientRows[0]"])
+    first = _row("ashwagandha", "Ashwagandha Extract", 600,
+                 raw_source_path="ingredientRows[0].nestedRows[0]")
+    second = _row("gaba", "GABA", 400, raw_source_path="ingredientRows[4].nestedRows[1]",
+                  parent_source_path="ingredientRows[0]")
+    assert profile_owner_candidate_rows([first, second, projection]) == [first, second]

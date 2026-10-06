@@ -1071,7 +1071,7 @@ def _apply_stimulant_policy(result: SafetyResult, product: Dict[str, Any]) -> No
     scoring_rows = get_source_score_eligible_active_rows(product)
     # Declared parents and reconciled components represent one exposure.
     # The contract keeps independent or incomplete rows visible.
-    scoring_rows = profile_owner_candidate_rows(scoring_rows)
+    scoring_rows = profile_owner_candidate_rows(scoring_rows, product=product)
     caffeine_rows = [
         row
         for row in scoring_rows

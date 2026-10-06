@@ -390,7 +390,7 @@ def _primary_botanical_active(product: Dict[str, Any]) -> Optional[Dict[str, Any
     # anchors remain available as conservative fallback evidence.
     from scoring_input_contract import profile_owner_candidate_rows
 
-    owner_candidates = profile_owner_candidate_rows(scoring_actives)
+    owner_candidates = profile_owner_candidate_rows(scoring_actives, product=product)
     owner_candidate_ids = {id(row) for row in owner_candidates}
     candidates = [
         row for row in botanicals if id(row) in owner_candidate_ids
