@@ -928,6 +928,17 @@
         "Canonical source identity and structural-total Formulation eligibility"
       ],
       "notes": "Generated only these three fixtures through freeze_contract_snapshots.py from the complete current 4f2a6509 corpus: 38 stage chains, 114 owned/checksummed/current manifests, and clean strict reachability across 15,421 products. Independent frozen-raw review and fresh artifact confirmation: 182730 85.8->86.1 and 288344 77.2->78.4 change only Formulation after structural label_taxonomy_anchor totals are excluded from ingredient form averaging. 204571 46.9->62.5 changes only Evidence: correcting the false adrenal-organ header restores existing shared purpose ownership for the exact generic ashwagandha/Withanolides match; no 850 mg blend total is borrowed and no new clinical policy is introduced. The other 33 snapshots are unchanged. All 36 labels were additionally replayed through newer main dd2769ad: displayed totals/status/pillars and safety objects unchanged; 182730 raw Dose17.9039->17.9149 reflects corrected declared choline coverage0.015->0.0364, below display rounding. This bounded replay does not replace newest-source full-corpus/release validation or publication approval."
+    },
+    {
+      "date": "2026-10-06",
+      "action": "refreeze_reviewed_blend_source_provenance",
+      "products": [
+        204571
+      ],
+      "sprints_covered": [
+        "PR68 canonical child-source context and generic profile ownership"
+      ],
+      "notes": "Generated with freeze_contract_snapshots.py from Sean's complete070547 run on integratedmain604e2b2c:114current/checksummed manifests,15421rows perstage. The accepted694-label measurement explains62.5->63.5 for204571: generic Formulation replaces incorrectly borrowed botanical context. Only quality_score_v4_100 and its compatibility mirror change; tier/status/safety/coverage and every other frozen field remain unchanged. All other product canaries and the three structural snapshot tests pass. Source-reviewed PR68 is unchanged; this tests-only baseline correction requires no corpus regeneration."
     }
   ]
 }
