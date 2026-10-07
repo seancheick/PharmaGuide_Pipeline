@@ -3,7 +3,7 @@
     "description": "Ingredients backed by clinical research and studies - Enhanced for Section C v3.4.0",
     "purpose": "evidence_scoring",
     "schema_version": "5.6.3",
-    "last_updated": "2026-10-05",
+    "last_updated": "2026-10-07",
     "total_entries": 210,
     "changelog": [
       "2026-10-05: Sean-approved four amount transfers. Descriptive research exposure is owned by Dose, with no new positive adequacy benchmark. Zinc uses discrete clusters, WKB retains preparation/reference uncertainty, D-mannose and DAA retain no affirmative credit; added content-verified PMID 25844073 and distinguished its negative 6 g/day result. Supersedes the four historical applicability amount floors.",
@@ -19554,7 +19554,7 @@
         "Increase Energy"
       ],
       "notes": "Extensive human evidence supports creatine monohydrate for strength, lean mass, and high-intensity performance. Evidence is strongest when paired with resistance training and adequate dosing.",
-      "last_updated": "2026-03-23",
+      "last_updated": "2026-10-07",
       "notable_studies": "Recent 2024 meta-analyses show improved strength and body-composition outcomes when creatine is paired with resistance training (PMIDs: 39519498, 39074168).",
       "references_structured": [
         {
@@ -19632,7 +19632,25 @@
       "endpoint_relevance_tags": [
         "stress_mood",
         "muscle_recovery"
-      ]
+      ],
+      "applicability": {
+        "scope": "ingredient",
+        "require_source_label_form": true,
+        "required_form_terms": [
+          "creatine monohydrate"
+        ],
+        "reviewed_at": "2026-10-07",
+        "source_pmids": [
+          "39519498",
+          "39074168"
+        ],
+        "reason": "This existing record describes creatine monohydrate. The source label must identify that preparation; a shared creatine canonical, an enrichment-derived default form, or Con-Cret/creatine hydrochloride wording does not establish correspondence. This form scope adds no dose threshold or grade and does not conclude that hydrochloride, another salt or an unspecified preparation is ineffective. PMID 39519498 discusses monohydrate but uses broadly worded inclusion criteria; it is not evidence of universal equivalence among forms.",
+        "excluded_form_terms": [
+          "creatine hydrochloride",
+          "creatine HCl",
+          "Con-Cret"
+        ]
+      }
     },
     {
       "id": "INGR_PEPPERMINT_OIL",
