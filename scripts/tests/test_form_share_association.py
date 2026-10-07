@@ -166,3 +166,22 @@ def test_from_prefix_preserves_a_same_nutrient_chemical_form(enricher, parent, g
     ])
     assert [f['raw_form_text'] for f in info['extracted_forms']] == ['Unspecified Carrier', chemical]
     assert chemical not in info['extracted_forms'][0]['match_candidates']
+
+
+@pytest.mark.parametrize('parent, name, form, expected', [
+    ('calcium', 'Calcium', 'microystalline hydroxyapatite', 'calcium hydroxyapatite'),
+    ('calcium', 'Calcium', 'MCH-Cal', 'calcium hydroxyapatite'),
+    ('iron', 'Iron', 'Ferractiv Iron', 'iron amino acid chelate'),
+])
+def test_verified_preparation_alias_keeps_the_existing_parent_form(enricher, parent, name, form, expected):
+    # NIH25486 explicitly corrects its misspelling; Doctor's Best names MCH-Cal
+    # microcrystalline hydroxyapatite. Biotron's Ferractiv is a multi-amino-acid
+    # chelate, not a claim of bisglycinate or a newly scored formulation.
+    info = enricher._build_form_info_from_cleaned(name, [
+        {'name': form, 'prefix': 'from', 'category': 'mineral', 'ingredientGroup': name},
+    ])
+    iqm = enricher.databases['ingredient_quality_map']
+    match = enricher._match_multi_form(info, iqm, cleaner_canonical_id=parent)
+    assert match['unmapped_forms'] == []
+    assert [(f['form_key'], f['percent_share']) for f in match['matched_forms']] == [(expected, 1.0)]
+    assert match['bio_score'] == iqm[parent]['forms'][expected]['bio_score']
