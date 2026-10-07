@@ -1123,3 +1123,163 @@ def test_whole_matcha_research_is_reviewed_without_generic_efficacy_or_dose_cred
     assert record['applicability_status'] == 'applicability_unestablished'
     assert 'primary' in record['applicability_decision']
     assert 'extract' in record['applicability_decision']
+
+
+@pytest.mark.parametrize("canonical,name,pmid", [
+    ('nha_monk_fruit', 'Monk Fruit Extract', '28378852'),
+    ('nha_stevia', 'Stevia Extract', '28378852'),
+    ('nha_allulose', 'Allulose', '29797503'),
+    ('nha_vegetable_glycerin', 'Glycerol', '3436862'),
+    ('extra_virgin_olive_oil', 'Extra Virgin Olive Oil', '16954359'),
+    ('sunflower_oil', 'Sunflower Oil', '35892771'),
+    ('pii_rice_bran_oil', 'Rice Bran Oil', '15640461'),
+    ("nha_xanthan_gum", "Xanthan Gum", "3549377"),
+    ("pii_polyethylene_glycol", "Polyethylene Glycol", "17403074"),
+    ("add_sugar_alcohols", "Mannitol", "39562215"),
+    ("pii_honey", "Organic Honey", "22869830"),
+    ("bitter_melon_fruit", "Bitter Melon Fruit Powder", "21211558"),
+    ("add_polydextrose", "Litesse Polydextrose Fiber", "22885981"),
+    ("beta_caryophyllene", "Beta Caryophyllene", "31650795"),
+    ("pancreatin", "Pancreatin", "22762290"),
+    ("hesperidin", "Hesperidin Complex", "21346065"),
+    ("piperine", "Piperine", "9619120"),
+    ("oi_acetyl_l_carnitine_arginate", "Acetyl-L-Carnitine Arginate Dihydrochloride", "19490608"),
+    ("essential_amino_acids", "Essential Amino Acids", "16507602"),
+    ("nha_nem_eggshell_membrane", "NEM Natural Eggshell Membrane", "19340512"),
+    ("nha_univestin", "Univestin", "24611484"),
+    ("bergamonte_full_spectrum_citrus_bergamia_risso_fruit_extract_complex", "Bergamonte Full Spectrum Complex", "31167512"),
+    ("triphala_powder", "Triphala Powder", "23351558"),
+    ("nha_raspberry_natural", "Raspberry", "30767409"),
+    ("oi_natural_strawberry_flavor", "Strawberry Powder", "35512768"),
+    ("nha_pomegranate_juice", "Pomegranate Juice", "22648092"),
+    ("nha_apple_puree_concentrate", "Apple Fruit Powder", "31840162"),
+    ("nha_juice_concentrates", "Watermelon Juice Powder", "27378312"),
+    ("pii_corn_bran_powder", "Corn Bran", "18996860"),
+    ("nha_soluble_corn_fiber", "Soluble Corn Fiber", "27281813"),
+    ("red_clover_flower", "Red Clover Powder", "12851275"),
+    ("pii_clove_powder", "Clove Powder", "31064377"),
+    ("nha_beet_juice_color", "Beet Juice Concentrate", "25421976"),
+    ("nha_carrot_juice_color", "Carrot Juice Concentrate", "21943297"),
+    ("nha_vegetable_fruit_juice_colors", "Lemon Juice Concentrate", "32201919"),
+    ("pii_salt", "Himalayan Rock Salt", "35137791"),
+    ("dicalcium_phosphate", "Dicalcium Phosphate", "2381302"),
+])
+def test_preparation_research_is_acknowledged_without_generic_clinical_credit(canonical, name, pmid):
+    result = er.resolve_evidence_for_canonical(canonical, name=name)
+    assert result.disposition == EvidenceDisposition.RESEARCH_PRESENT_APPLICABILITY_UNESTABLISHED.value
+    assert result.points_eligible is False
+    assert "literature_applicability_unestablished" in result.blocking_reasons
+    import json
+    records = json.loads((SCRIPTS_ROOT / "data/literature_evidence_records.json").read_text())["literature_evidence_records"]
+    record = next(r for r in records if r["canonical_id"] == canonical)
+    assert pmid in {s["pmid"] for s in record["qualifying_human_studies"]}
+    assert record["studied_dose_exposure"] == {}
+    assert "bounded" in record["applicability_decision"]
+    assert record["effect_direction"] == "applicability_unestablished"
+    assert all("effect" not in study and "effect_direction" not in study
+               for study in record["qualifying_human_studies"])
+    # These completions must join the actual source owners, not plausible spellings.
+    source_owner = {
+        "nha_raspberry_natural": "other_ingredients.json",
+        "oi_natural_strawberry_flavor": "other_ingredients.json",
+        "nha_pomegranate_juice": "other_ingredients.json",
+        "nha_apple_puree_concentrate": "other_ingredients.json",
+        "nha_juice_concentrates": "other_ingredients.json",
+        "pii_corn_bran_powder": "other_ingredients.json",
+        "nha_soluble_corn_fiber": "other_ingredients.json",
+        "red_clover_flower": "botanical_ingredients.json",
+        "pii_clove_powder": "other_ingredients.json",
+    }.get(canonical)
+    if source_owner:
+        owner = json.loads((SCRIPTS_ROOT / "data" / source_owner).read_text())
+        entries = owner[source_owner.removesuffix(".json")]
+        assert canonical in {entry["id"].casefold() for entry in entries}
+
+
+
+def test_monostearate_review_records_actual_bounded_search_without_free_glycerol_credit():
+    result = er.resolve_evidence_for_canonical("pii_glycerol_monostearate", name="Glycerol Monostearate")
+    assert result.disposition == EvidenceDisposition.NO_QUALIFYING_HUMAN_EVIDENCE.value
+    assert result.points_eligible is False
+    import json
+    records = json.loads((SCRIPTS_ROOT / "data/literature_evidence_records.json").read_text())["literature_evidence_records"]
+    record = next(r for r in records if r["canonical_id"] == "pii_glycerol_monostearate")
+    assert record["records_screened"] == 3
+    assert record["qualifying_human_studies"] == []
+    assert record["studied_dose_exposure"] == {}
+    assert "chemically distinct" in record["applicability_decision"]
+    assert "bounded" in record["applicability_decision"]
+
+
+@pytest.mark.parametrize("canonical,name,pmid", [
+    ("bergamot_essential_oil", "Essence of organic Bergamot (fruit) oil", "25824404"),
+    ("nha_white_thyme_oil", "Thyme Oil extract", "38129231"),
+])
+def test_human_oil_research_does_not_establish_oral_retail_preparation(canonical, name, pmid):
+    result = er.resolve_evidence_for_canonical(canonical, name=name)
+    assert result.disposition == EvidenceDisposition.RESEARCH_PRESENT_APPLICABILITY_UNESTABLISHED.value
+    assert result.points_eligible is False
+    assert "literature_applicability_unestablished" in result.blocking_reasons
+    import json
+    records = json.loads((SCRIPTS_ROOT / "data/literature_evidence_records.json").read_text())["literature_evidence_records"]
+    record = next(r for r in records if r["canonical_id"] == canonical)
+    assert record["studied_dose_exposure"] == {}
+    assert record["effect_direction"] == "applicability_unestablished"
+    assert "inhalation" in record["applicability_decision"]
+    assert "oral" in record["applicability_decision"]
+    assert "bounded" in record["applicability_decision"]
+    assert pmid in {s["pmid"] for s in record["qualifying_human_studies"]}
+    assert all("effect" not in s and "effect_direction" not in s for s in record["qualifying_human_studies"])
+    owner = "botanical_ingredients" if canonical == "bergamot_essential_oil" else "other_ingredients"
+    source = json.loads((SCRIPTS_ROOT / f"data/{owner}.json").read_text())[owner]
+    assert canonical in {r["id"].casefold() for r in source}
+
+
+@pytest.mark.parametrize("canonical", ["bionectria_ochroleuca", "nha_activait_mustard_eo"])
+def test_exact_material_bounded_search_does_not_invent_clinical_credit(canonical):
+    result = er.resolve_evidence_for_canonical(canonical)
+    assert result.disposition == EvidenceDisposition.NO_QUALIFYING_HUMAN_EVIDENCE.value
+    assert result.points_eligible is False
+    import json
+    record = next(r for r in json.loads((SCRIPTS_ROOT / "data/literature_evidence_records.json").read_text())["literature_evidence_records"] if r["canonical_id"] == canonical)
+    assert record["qualifying_human_studies"] == []
+    assert record["studied_dose_exposure"] == {}
+    assert record["records_screened"] == 0
+    assert "bounded" in record["applicability_decision"]
+    assert "not exhaustive" in record["applicability_decision"]
+
+
+@pytest.mark.parametrize("name", ["Essence of organic Chamomile (leaf) oil", "Chamomile Essential Oil"])
+def test_chamomile_oil_research_keeps_leaf_oral_preparation_unestablished(name):
+    result = er.resolve_evidence_for_canonical("chamomile_essential_oil", name=name)
+    assert result.disposition == EvidenceDisposition.RESEARCH_PRESENT_APPLICABILITY_UNESTABLISHED.value
+    assert result.points_eligible is False
+    assert "literature_applicability_unestablished" in result.blocking_reasons
+    import json
+    records = json.loads((SCRIPTS_ROOT / "data/literature_evidence_records.json").read_text())["literature_evidence_records"]
+    record = next(r for r in records if r["canonical_id"] == "chamomile_essential_oil")
+    assert record["studied_dose_exposure"] == {}
+    assert record["effect_direction"] == "applicability_unestablished"
+    study = next(s for s in record["qualifying_human_studies"] if s["pmid"] == "37123948")
+    assert "effect" not in study and "effect_direction" not in study
+    assert study["verification_provenance"]["correction_pmid"] == "40535870"
+    assert "unspecified" in record["material_form"]
+    assert "leaf-to-flower" in record["applicability_decision"]
+
+
+def test_mushroom_formula_research_cannot_transfer_between_compositions():
+    result = er.resolve_evidence_for_canonical("medicinal_mushroom_blend", name="Mushroom Blend")
+    assert result.disposition == EvidenceDisposition.RESEARCH_PRESENT_APPLICABILITY_UNESTABLISHED.value
+    assert result.points_eligible is False
+    import json
+    records = json.loads((SCRIPTS_ROOT / "data/literature_evidence_records.json").read_text())["literature_evidence_records"]
+    record = next(r for r in records if r["canonical_id"] == "medicinal_mushroom_blend")
+    assert record["studied_dose_exposure"] == {}
+    assert record["effect_direction"] == "applicability_unestablished"
+    study = record["qualifying_human_studies"][0]
+    assert study["pmid"] == "41540766" and study["sample_size"] == 51
+    assert "50 completed" in study["outcome"]
+    assert "effect" not in study and "effect_direction" not in study and "dose" not in study
+    assert "without Chaga" in study["notes"]
+    assert "reporting" in study["outcome"] and "funded" in study["notes"]
+    assert "Separate Wellmune cannot establish" in record["applicability_decision"]

@@ -1426,7 +1426,7 @@
         "proprietary_blends": [],
         "proprietary_data": {"blends": [], "total_active_ingredients": 1}
       },
-      "expected": {"v4_module": "sports", "archetype": "sports_single", "quality_score_status": "scored", "product_safety_status": "no_known_catalog_concern", "quality_score_v4_100": 59.5, "quality_tier": "Needs improvement", "v4_confidence": "moderate", "normalization_references": {"formulation": 15.0, "dose": 25.0, "evidence": 18.0}, "pillars": {"formulation": 6.1, "dose": 6.4, "evidence": 20.0, "transparency": 15.0, "verification": 6.0, "safety_hygiene": 6.0}, "raw_dimensions": {"formulation": 4.5714, "dose": 8.0, "evidence": 18.0, "transparency": 10.0}}
+      "expected": {"v4_module": "sports", "archetype": "sports_single", "quality_score_status": "scored", "product_safety_status": "no_known_catalog_concern", "quality_score_v4_100": 39.5, "quality_tier": "Poor", "v4_confidence": "moderate", "normalization_references": {"formulation": 15.0, "dose": 25.0, "evidence": 18.0}, "pillars": {"formulation": 6.1, "dose": 6.4, "evidence": 0.0, "transparency": 15.0, "verification": 6.0, "safety_hygiene": 6.0}, "raw_dimensions": {"formulation": 4.5714, "dose": 8.0, "evidence": 0.0, "transparency": 10.0}}
     },
     {
       "id": "sports_pre_workout__ideal",

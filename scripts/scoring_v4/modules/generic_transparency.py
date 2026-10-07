@@ -23,6 +23,7 @@ from __future__ import annotations
 import re
 from typing import Any, Dict, List, Optional, Tuple
 
+from constants import CLEANER_NON_EFFICACY_ROLES
 from scoring_input_contract import dose_disclosure_status, is_nutrition_fact_declaration
 from scoring_v4.modules.generic_helpers import (
     _as_float,
@@ -463,6 +464,8 @@ def _declared_active_count(product: Dict[str, Any], rows: List[Dict[str, Any]]) 
                 and _norm_text(row.get("source_section")) == "active"
                 and (
                     (is_nutrition_fact_declaration(row) and row.get("raw_source_path") not in restored)
+                    or (_norm_text(row.get("cleaner_row_role")) in CLEANER_NON_EFFICACY_ROLES
+                        and row.get("raw_source_path") not in active_paths)
                     or (row.get("is_blend_header") is True
                         and row.get("raw_source_path") not in active_paths)
                 )

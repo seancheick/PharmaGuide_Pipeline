@@ -179,3 +179,51 @@ def test_printed_inulin_child_supports_anchor_without_borrowing_blend_mass(enric
     assert result["source_row_ref"] == "ingredientRows[7].nestedRows[0]"
     row = next(r for r in get_evidence_subject_rows(product) if r.get("canonical_id") == "inulin")
     assert positive_clinical_benchmark(product, row) is None
+
+
+def test_strict_subject_merge_respects_accepted_marker_role():
+    from scoring_input_contract import _is_ineligible_evidence_subject
+    marker = {'name': 'Terpene Lactone', 'canonical_id': 'nha_total_terpene_lactones',
+              'cleaner_row_role': 'standardization_marker', 'quantity': 7.2, 'unit': 'mg'}
+    assert _is_ineligible_evidence_subject(marker)
+    # The same named material without an accepted marker role is not globally excluded.
+    assert not _is_ineligible_evidence_subject({**marker, 'cleaner_row_role': 'active_scorable'})
+
+
+
+@pytest.mark.parametrize('dsld_id, ref', [('175375', 'ingredientRows[11]'), ('175409', 'ingredientRows[13]')])
+def test_source_flavor_heading_keeps_disclosure_without_therapeutic_projection(enricher, dsld_id, ref):
+    from enhanced_normalizer import EnhancedDSLDNormalizer
+    raw = json.loads((FIXTURES / f'functional_flavor_{dsld_id}_raw.json').read_text())
+    cleaned = EnhancedDSLDNormalizer().normalize_product(raw)
+    header = next(r for r in cleaned['activeIngredients'] if r['raw_source_path'] == ref)
+    assert header['cleaner_row_role'] == 'source_descriptor'
+    assert header['quantity'] > 0
+    display = next(r for r in cleaned['display_ingredients'] if r.get('raw_source_path') == ref)
+    assert display['score_included'] is False
+    assert display['is_label_context'] is True
+    children = header['nestedIngredients']
+    source_children = raw['ingredientRows'][int(ref.split('[')[1].split(']')[0])]['nestedRows']
+    assert [r['raw_source_text'] for r in children] == [r['name'] for r in source_children]
+    assert all(r['raw_source_path'].startswith(ref + '.nestedRows[') for r in children)
+    product, _ = enricher.enrich_product(cleaned)
+    assert not any(r.get('canonical_id') == 'oi_generic_flavor' for r in get_evidence_subject_rows(product))
+
+
+@pytest.mark.parametrize('source_ref, canonical', [
+    ('ingredientRows[8].nestedRows[3]', 'hmb'),
+    ('ingredientRows[10].nestedRows[1]', 'l_citrulline'),
+])
+def test_assessed_blend_children_keep_scoring_display_annotation(enricher, source_ref, canonical):
+    from enhanced_normalizer import EnhancedDSLDNormalizer
+    raw = json.loads((FIXTURES / 'evidence_subject_2219_raw.json').read_text())
+    cleaned = EnhancedDSLDNormalizer().normalize_product(raw)
+    child = next(r for r in cleaned['activeIngredients'] if r.get('raw_source_path') == source_ref)
+    assert child['cleaner_row_role'] == 'nested_display_only'
+    assert child['score_eligible_by_cleaner'] is False
+    product, _ = enricher.enrich_product(cleaned)
+    assert canonical in _canonicals(get_evidence_subject_rows(product))
+    display = next(r for r in cleaned['display_ingredients'] if r.get('raw_source_path') == source_ref)
+    assert display['score_included'] is True
+    assert display['is_label_context'] is False
+    assert display['identity_integrity_state'] == 'clean'

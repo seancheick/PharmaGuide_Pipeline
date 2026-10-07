@@ -207,6 +207,22 @@
   ],
   "changelog": [
     {
+      "date": "2026-10-07",
+      "phase": "Source-qualified creatine research correspondence",
+      "products_updated": [
+        223084
+      ],
+      "notes": "Actual Nutricost Creatine Ethyl Ester source label cannot borrow the existing monohydrate clinical record. Frozen264-label baseline/candidate review changes223084total78 to58 and Evidence20 to0; other five pillars and captured safety fields stay unchanged. Existing applicability owner now requires printed monohydrate or its verified existing Creatin Monohydrate/Creapure source aliases, with hydrochloride exclusions retained. No new grade, dose benchmark or conclusion that ethyl ester is ineffective. Selective existing RAW freezer refresh only; receipts /Users/seancheick/pg_quality/post_pipeline_20261006/creatine_{baseline,candidate}.jsonl and creatine_223084_raw_refresh.log. Complete33rawcanary check follows."
+    },
+    {
+      "date": "2026-10-07",
+      "phase": "Preparation-specific research acknowledgment",
+      "products_updated": [
+        321405
+      ],
+      "notes": "Existing raw freezer on source8ab7afd9 changes only quality_assessment_status partial\u2192complete. Related prescription pancreatin trial22762290 is now acknowledged conservatively without retail preparation/activity/indication equivalence, affirmative clinical grade or dose benchmark. Frozen17-label baseline/candidate capture keeps321405total77.9 and all six numerical pillar values, route/status/safety/Dose-safety; Evidence10.4 remains driven by previously reviewed ingredients, not pancreatin. Clinical review completion is distinct from efficacy. Ginkgo180417six-point Transparency regression was repaired at the existing disclosure count owner and retains69.7; no Ginkgo fixture was refreshed. Complete33rawcanary check follows this selective refresh. Receipts: /Users/seancheick/pg_quality/post_pipeline_20261006/final_two_preparations_{baseline,candidate}.jsonl and final_321405_raw_refresh.log."
+    },
+    {
       "date": "2026-10-06",
       "phase": "Individual dose exposure ownership",
       "products_updated": [

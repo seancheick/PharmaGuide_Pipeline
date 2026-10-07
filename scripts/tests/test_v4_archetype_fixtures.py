@@ -210,3 +210,21 @@ def test_references_use_reviewed_engine_limits_not_observed_catalog_maxima() -> 
     # Omega explicitly reserves 15 points for clinical evidence and 5 for
     # indication relevance, so 20—not the current corpus maximum—is reachable.
     assert evidence["omega"] == 20.0
+
+
+def test_single_creatine_fixture_does_not_treat_derived_identity_as_source_form():
+    validation = _validation_module()
+    suite = validation.load_fixture_suite()
+    failure = suite.by_id("sports_single__failure")
+    row = failure.product["ingredient_quality_data"]["ingredients_scorable"][0]
+    assert row["name"] == "Creatine Monohydrate"
+    assert not row.get("source_label_name")
+    assert not row.get("raw_source_text")
+    assert not row.get("raw_taxonomy")
+    assert not failure.product.get("activeIngredients")
+    actual = validation.evaluate_fixture(failure).actual
+    assert actual["pillars"]["evidence"] == 0.0
+    assert actual["raw_dimensions"]["evidence"] == 0.0
+    ideal = validation.evaluate_fixture(suite.by_id("sports_single__ideal")).actual
+    assert ideal["pillars"]["evidence"] == 20.0
+    assert ideal["quality_score_v4_100"] == 100.0

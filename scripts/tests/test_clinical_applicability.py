@@ -739,3 +739,85 @@ def test_source_required_anchor_binds_printed_child_before_structural_header(mon
     assert result['source_row_ref']==child['raw_source_path']
     child['raw_source_text']='Different Material';child['name']='Different Material'
     assert ca.assess_clinical_applicability(product,entry,assess_amount=False)['status']=='not_applicable'
+
+
+@pytest.mark.parametrize("source_name,source_form,eligible", [
+    ("Creatine Monohydrate", None, True),
+    ("Creatin Monohydrate", None, True),
+    ("Creapure", None, True),
+    ("Micronized Creatine", "Creatine Monohydrate", True),
+    ("Con-Cret", "Creatine Hydrochloride", False),
+    ("Creatine", None, False),
+    ("Creatine Citrate", None, False),
+    ("Creatine Nitrate", None, False),
+])
+def test_monohydrate_research_requires_its_printed_preparation(source_name, source_form, eligible):
+    row = {"name": source_name, "source_label_name": source_name,
+           "raw_source_text": source_name, "canonical_id": "creatine_monohydrate",
+           "mapped": True, "quantity": 2000, "unit": "mg",
+           "raw_source_path": "ingredientRows[0]", "matched_form": "creatine monohydrate",
+           "raw_taxonomy": {"forms": [{"name": source_form}] if source_form else []}}
+    product = {"fullName": "Creatine", "activeIngredients": [deepcopy(row)],
+               "ingredient_quality_data": {"ingredients_scorable": [row]},
+               "evidence_data": {"clinical_matches": [{
+                   **reviewed_entries()["INGR_CREATINE_MONOHYDRATE"],
+                   "matched_canonical_ids": ["creatine_monohydrate"],
+                   "matched_source_row_refs": ["ingredientRows[0]"],
+               }]}}
+    matches, _ = resolved_clinical_matches(product)
+    assert bool(matches) is eligible
+    if eligible:
+        assert matches[0]["matched_source_row_refs"] == ["ingredientRows[0]"]
+    else:
+        evidence = score_evidence(product)
+        assert evidence["metadata"]["matched_entries"] == 0
+        assert evidence["metadata"]["primary_evidence_floor"] == 0
+
+
+@pytest.mark.parametrize("source_form,eligible", [("Creatine Hydrochloride", False), ("Creatine Monohydrate", True)])
+def test_raw_triphase_material_keeps_sports_identity_without_borrowing_monohydrate(source_form, eligible):
+    from pathlib import Path
+    from enhanced_normalizer import EnhancedDSLDNormalizer
+    from enrich_supplements_v3 import SupplementEnricherV3
+    from scoring_v4.scored_artifact import build_scored_artifact
+    raw = json.loads((Path(__file__).parent / "fixtures/triphase_317610_raw.json").read_text())
+    if eligible:
+        # An explicit monohydrate variant is the form-qualified adverse control.
+        row = next(row for row in raw["ingredientRows"] if row["name"] == "Con-Cret")
+        row["name"] = source_form
+        row["ingredientGroup"] = "Creatine"
+        row["forms"][0]["name"] = source_form
+    enriched, errors = SupplementEnricherV3().enrich_product(EnhancedDSLDNormalizer().normalize_product(raw))
+    assert not errors
+    artifact = build_scored_artifact(deepcopy(enriched))
+    assert artifact["_v4_module"] == "sports"
+    matches, _ = resolved_clinical_matches(enriched)
+    assert any(match["id"] == "INGR_CREATINE_MONOHYDRATE" for match in matches) is eligible
+    evidence = artifact["_v4_module_breakdown"]["dimensions"]["evidence"]["metadata"]
+    assert ("creatine_monohydrate" in evidence["ingredient_points"]) is eligible
+    assert "beta-alanine" in evidence["ingredient_points"]
+    if not eligible:
+        assert evidence["primary_evidence_floor_canonical"] != "creatine monohydrate"
+        material = next(row for row in enriched["ingredient_quality_data"]["ingredients"]
+                        if row.get("raw_source_path") == "ingredientRows[5]")
+        assert material["canonical_id"] == "creatine_monohydrate"
+        assert material["raw_taxonomy"]["forms"][0]["name"] == "Creatine Hydrochloride"
+        assert material["quantity"] == 2.0
+
+
+def test_monohydrate_scope_binds_only_its_source_row_beside_hydrochloride():
+    rows = []
+    for index, form in enumerate(["Creatine Hydrochloride", "Creatine Monohydrate"]):
+        rows.append({"name": form, "raw_source_text": form, "source_label_name": form,
+                     "canonical_id": "creatine_monohydrate", "mapped": True,
+                     "quantity": 1000 + index, "unit": "mg",
+                     "raw_source_path": f"ingredientRows[{index}]"})
+    entry = {**reviewed_entries()["INGR_CREATINE_MONOHYDRATE"],
+             "matched_canonical_ids": ["creatine_monohydrate"],
+             "matched_source_row_refs": ["ingredientRows[0]", "ingredientRows[1]"]}
+    product = {"fullName": "Creatine", "activeIngredients": deepcopy(rows),
+               "ingredient_quality_data": {"ingredients_scorable": rows}}
+    matches, _ = filter_clinical_matches(product, [entry], assess_amount=False)
+    assert len(matches) == 1
+    assert matches[0]["matched_source_row_refs"] == ["ingredientRows[1]"]
+    assert [row["quantity"] for row in product["activeIngredients"]] == [1000, 1001]

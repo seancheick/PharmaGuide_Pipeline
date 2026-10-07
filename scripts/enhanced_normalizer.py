@@ -37,6 +37,7 @@ except ImportError:
 
 from constants import (
     INGREDIENT_QUALITY_MAP,
+    CLEANER_NON_EFFICACY_ROLES,
     HARMFUL_ADDITIVES,
     OTHER_INGREDIENTS,
     ALLERGENS,
@@ -8020,16 +8021,23 @@ class EnhancedDSLDNormalizer:
                 cleaner_row_role=unmapped_cleaner_row_role,
                 score_exclusion_reason=unmapped_cleaner_row_role,
             )
-        # Authored exclusions constrain all routes into an IQM parent,
-        # including aliases, group fallbacks and UNII. Preserve unresolved
-        # preparation facts rather than inheriting an isolated constituent.
-        if canonical_source_db == "ingredient_quality_map":
-            identity_entry = self.ingredient_map.get(canonical_id, {})
+        # Authored exclusions constrain aliases, group fallbacks and UNII.
+        # Preserve unresolved preparation or salt identity instead of borrowing
+        # a different material's canonical identity.
+        if canonical_source_db in {"ingredient_quality_map", "other_ingredients"}:
+            identity_entry = (
+                self.ingredient_map.get(canonical_id, {})
+                if canonical_source_db == "ingredient_quality_map"
+                else self.other_ingredients_exact_lookup.get(standard_name.strip().lower(), {})
+            )
             negative_terms = (identity_entry.get("match_rules", {}) or {}).get(
                 "negative_match_terms", []
             )
             if negative_match_terms_veto(
                 [name] + (
+                    [botanical_details.get("plantPart", "")]
+                    if canonical_source_db == "other_ingredients" else []
+                ) + (
                     [] if self._canonical_identity_registry.resolve_preferred(name)
                     == (canonical_id, canonical_source_db)
                     else [form.get("name", "") for form in forms_structured]
@@ -8202,6 +8210,15 @@ class EnhancedDSLDNormalizer:
             and (
                 self._parent_is_standardized_botanical_extract(_marker_parent_name)
                 or self._is_analytical_fraction_marker(_marker_parent_name, name)
+                # Curated descriptor identity supplies the missing marker
+                # semantics when the printed parent omits "standardized".
+                # Nesting, an extract parent and the mass bound below remain
+                # required; standalone named compounds keep active handling.
+                or (
+                    "extract" in _marker_parent_name.lower()
+                    and (self.other_ingredients_exact_lookup.get(processed_name_check) or {}).get("is_label_descriptor") is True
+                    and (self.other_ingredients_exact_lookup.get(processed_name_check) or {}).get("category") == "label_descriptor"
+                )
             )
             and unit_norm_for_contract in {"mcg", "ug", "microgram", "micrograms", "mg", "milligram", "milligrams"}
             and quantity is not None
@@ -8244,7 +8261,18 @@ class EnhancedDSLDNormalizer:
         curated_scoring_disposition = str(
             ing.get("_label_scoring_disposition") or ""
         ).strip().lower()
-        if curated_scoring_disposition == "source_descriptor":
+        if (
+            is_structural_active_blend_total
+            and str(ing.get("ingredientGroup") or "").strip().casefold() == "flavor"
+        ):
+            # The source declares a flavor-system heading with nested
+            # materials, not a therapeutic blend dose. Keep the heading's
+            # disclosure and every child while preventing an active anchor.
+            cleaner_row_role = "source_descriptor"
+            score_eligible_by_cleaner = False
+            score_exclusion_reason = "source_descriptor"
+            dose_class = "source_material_mass"
+        elif curated_scoring_disposition == "source_descriptor":
             cleaner_row_role = "source_descriptor"
             score_eligible_by_cleaner = False
             score_exclusion_reason = "source_descriptor"
@@ -10515,6 +10543,8 @@ class EnhancedDSLDNormalizer:
                 )
                 row_score_included = bool(
                     score_included
+                    and str(ing.get("cleaner_row_role") or "").strip().lower()
+                    not in CLEANER_NON_EFFICACY_ROLES
                     and not is_structural_blend_header
                     and not is_specification_limit
                 )
@@ -11735,6 +11765,16 @@ class EnhancedDSLDNormalizer:
                 unit_lower = unit_lower[1:-1].strip()
         else:
             unit_lower = ""
+
+        # Total/added sugar summaries include DSLD's singular spellings.
+        # Named sugar materials and bare standalone sweeteners remain outside
+        # this panel-summary rule; nutrition capture uses the same grammar.
+        if (
+            _cat_lower == "sugar"
+            and unit_lower in {"g", "gram", "grams", "gram(s)"}
+            and re.fullmatch(r"(?:total|added)\s+sugars?", _name_lower)
+        ):
+            return True
 
         # Batch 14a (2026-04-29): Bare "Protein" without unit AND without
         # supplement-magnitude quantity is always a panel disclosure. This

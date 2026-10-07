@@ -900,6 +900,54 @@ def resolve_identity(
             for candidate in _form_candidate_variants(item.value)
         )
     )
+    # A sole, complete chemical-material form can identify a preparation
+    # whose broad botanical group only describes its source (e.g. a branded
+    # policosanol form under sugar cane wax). Retain the supplied identity
+    # only when its source preparation has an exact curated alias; this cannot
+    # promote a source-only, partial, mixed or conflicting chemical row.
+    declared_forms = row.get("forms")
+    if not declared_forms and isinstance(row.get("raw_taxonomy"), Mapping):
+        declared_forms = row["raw_taxonomy"].get("forms")
+    declared_material_validates_identity = bool(
+        canonical_before
+        and raw_canonical in {None, canonical_before, structured_canonical}
+        and canonical_registry is not None
+        and raw_evidence
+        and canonical_registry.literal_identity_matches(
+            normalize_label_display(raw_evidence[0].value).casefold().removesuffix(" extract"),
+            canonical_before,
+        )
+        and isinstance(declared_forms, (list, tuple))
+        and len(declared_forms) == 1
+        and isinstance(declared_forms[0], Mapping)
+        and str(declared_forms[0].get("name") or "").strip()
+        and declared_forms[0].get("percent") in {None, 100, "100"}
+        and declared_forms[0].get("quantity") in (None, [])
+        and declared_forms[0].get("amount") is None
+        and str(declared_forms[0].get("prefix") or "").strip().casefold() in {"", "as"}
+        and str(declared_forms[0].get("category") or "").casefold()
+            == "non-nutrient/non-botanical"
+        and canonical_registry.literal_identity_matches(
+            str(declared_forms[0].get("ingredientGroup") or ""), canonical_before
+        )
+        # An unresolved branded form keeps its honest form hold. A known
+        # different chemical name cannot be overruled by its broad group.
+        and not any(
+            (form_identity := canonical_registry.resolve_verified_preferred(candidate))
+            and form_identity[0] != canonical_before
+            and not (
+                canonical_parent_of
+                and (
+                    canonical_parent_of(form_identity[0], canonical_before)
+                    or canonical_parent_of(canonical_before, form_identity[0])
+                )
+            )
+            for candidate in _form_candidate_variants(str(declared_forms[0]["name"]))
+        )
+    )
+    if declared_material_validates_identity:
+        form_validates_specific_over_structured_parent = True
+
     microbial_derivative_conflict = bool(
         has_nonlive_microbial_derivative_evidence(row)
         and (
@@ -929,7 +977,9 @@ def resolve_identity(
         else None
     )
     display_canonical = (
-        raw_canonical
+        canonical_before
+        if declared_material_validates_identity
+        else raw_canonical
         if literal_specific_over_structured_parent
         else structured_canonical or raw_canonical
     )
@@ -943,7 +993,8 @@ def resolve_identity(
         # structured parent (Vitamin A -> beta-carotene, for example), retain
         # that structured parent as the label base. In ordinary clean/alias
         # cases the literal source wording remains the authoritative display.
-        prefer_literal_source=not form_validates_specific_over_structured_parent,
+        prefer_literal_source=(declared_material_validates_identity
+                               or not form_validates_specific_over_structured_parent),
     )
     if literal_preparation_canonical:
         source_name = raw_evidence[0].value
@@ -1023,8 +1074,11 @@ def resolve_identity(
                     "the structured line identity is its registered parent."
                     if literal_specific_over_structured_parent
                     else (
-                        "An explicit label form validates the supplied specific identity; "
-                        "the structured line identity is its registered parent."
+                        ("An exact source alias and sole complete material form validate "
+                         "the supplied preparation identity; the broad group is provenance."
+                         if declared_material_validates_identity
+                         else "An explicit label form validates the supplied specific identity; "
+                              "the structured line identity is its registered parent.")
                         if form_validates_specific_over_structured_parent
                         else "Structured line identity agrees with the supplied canonical ID."
                     )

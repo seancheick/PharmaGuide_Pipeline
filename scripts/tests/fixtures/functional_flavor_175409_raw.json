@@ -1,0 +1,1585 @@
+{
+  "id": 175409,
+  "fullName": "Complete Vegan Gainer Natural Chocolate",
+  "brandName": "GNC Pro Performance",
+  "physicalState": {
+    "langualCode": "E0162",
+    "langualCodeDescription": "Powder"
+  },
+  "servingSizes": [
+    {
+      "order": 1,
+      "minQuantity": 72.5,
+      "maxQuantity": 145,
+      "minDailyServings": 1,
+      "maxDailyServings": 1,
+      "unit": "Gram(s)",
+      "notes": "2-4 scoops",
+      "inSFB": true
+    }
+  ],
+  "servingsPerContainer": "28",
+  "ingredientRows": [
+    {
+      "order": 1,
+      "ingredientId": 284519,
+      "quantity": [
+        {
+          "servingSizeOrder": 1,
+          "servingSizeQuantity": 72.5,
+          "operator": "=",
+          "quantity": 280,
+          "unit": "Calorie(s)",
+          "servingSizeUnit": "Gram(s)"
+        },
+        {
+          "servingSizeOrder": 1,
+          "servingSizeQuantity": 145,
+          "operator": "=",
+          "quantity": 550,
+          "unit": "Calorie(s)",
+          "servingSizeUnit": "Gram(s)"
+        }
+      ],
+      "name": "Calories",
+      "category": "other",
+      "ingredientGroup": "Calories",
+      "uniiCode": "1"
+    },
+    {
+      "order": 2,
+      "ingredientId": 43077,
+      "quantity": [
+        {
+          "servingSizeOrder": 1,
+          "servingSizeQuantity": 72.5,
+          "operator": "=",
+          "quantity": 5,
+          "unit": "Gram(s)",
+          "dailyValueTargetGroup": [
+            {
+              "name": "Adults and children 4 or more years of age",
+              "operator": "=",
+              "percent": 6
+            }
+          ],
+          "servingSizeUnit": "Gram(s)"
+        },
+        {
+          "servingSizeOrder": 1,
+          "servingSizeQuantity": 145,
+          "operator": "=",
+          "quantity": 10,
+          "unit": "Gram(s)",
+          "dailyValueTargetGroup": [
+            {
+              "name": "Adults and children 4 or more years of age",
+              "operator": "=",
+              "percent": 13
+            }
+          ],
+          "servingSizeUnit": "Gram(s)"
+        }
+      ],
+      "nestedRows": [
+        {
+          "order": 3,
+          "ingredientId": 18184,
+          "quantity": [
+            {
+              "servingSizeOrder": 1,
+              "servingSizeQuantity": 72.5,
+              "operator": "=",
+              "quantity": 1,
+              "unit": "Gram(s)",
+              "dailyValueTargetGroup": [
+                {
+                  "name": "Adults and children 4 or more years of age",
+                  "operator": "=",
+                  "percent": 5
+                }
+              ],
+              "servingSizeUnit": "Gram(s)"
+            },
+            {
+              "servingSizeOrder": 1,
+              "servingSizeQuantity": 145,
+              "operator": "=",
+              "quantity": 2,
+              "unit": "Gram(s)",
+              "dailyValueTargetGroup": [
+                {
+                  "name": "Adults and children 4 or more years of age",
+                  "operator": "=",
+                  "percent": 10
+                }
+              ],
+              "servingSizeUnit": "Gram(s)"
+            }
+          ],
+          "name": "Saturated Fat",
+          "category": "fat",
+          "ingredientGroup": "Saturated fat"
+        },
+        {
+          "order": 4,
+          "ingredientId": 18595,
+          "quantity": [
+            {
+              "servingSizeOrder": 1,
+              "servingSizeQuantity": 72.5,
+              "operator": "=",
+              "quantity": 0,
+              "unit": "Gram(s)",
+              "dailyValueTargetGroup": [
+                {
+                  "name": "Adults and children 4 or more years of age",
+                  "footnote": "Daily Value not established"
+                }
+              ],
+              "servingSizeUnit": "Gram(s)"
+            },
+            {
+              "servingSizeOrder": 1,
+              "servingSizeQuantity": 145,
+              "operator": "=",
+              "quantity": 0,
+              "unit": "Gram(s)",
+              "dailyValueTargetGroup": [
+                {
+                  "name": "Adults and children 4 or more years of age",
+                  "footnote": "Daily Value not established"
+                }
+              ],
+              "servingSizeUnit": "Gram(s)"
+            }
+          ],
+          "name": "Trans Fat",
+          "category": "fat",
+          "ingredientGroup": "Trans fat"
+        }
+      ],
+      "name": "Total Fat",
+      "category": "fat",
+      "ingredientGroup": "Fat (unspecified)"
+    },
+    {
+      "order": 5,
+      "ingredientId": 43080,
+      "quantity": [
+        {
+          "servingSizeOrder": 1,
+          "servingSizeQuantity": 72.5,
+          "operator": "=",
+          "quantity": 0,
+          "unit": "mg",
+          "dailyValueTargetGroup": [
+            {
+              "name": "Adults and children 4 or more years of age",
+              "operator": "=",
+              "percent": 0
+            }
+          ],
+          "servingSizeUnit": "Gram(s)"
+        },
+        {
+          "servingSizeOrder": 1,
+          "servingSizeQuantity": 145,
+          "operator": "=",
+          "quantity": 0,
+          "unit": "mg",
+          "dailyValueTargetGroup": [
+            {
+              "name": "Adults and children 4 or more years of age",
+              "operator": "=",
+              "percent": 0
+            }
+          ],
+          "servingSizeUnit": "Gram(s)"
+        }
+      ],
+      "name": "Cholesterol",
+      "category": "fat",
+      "ingredientGroup": "Cholesterol"
+    },
+    {
+      "order": 6,
+      "ingredientId": 283702,
+      "quantity": [
+        {
+          "servingSizeOrder": 1,
+          "servingSizeQuantity": 72.5,
+          "operator": "=",
+          "quantity": 35,
+          "unit": "Gram(s)",
+          "dailyValueTargetGroup": [
+            {
+              "name": "Adults and children 4 or more years of age",
+              "operator": "=",
+              "percent": 13
+            }
+          ],
+          "servingSizeUnit": "Gram(s)"
+        },
+        {
+          "servingSizeOrder": 1,
+          "servingSizeQuantity": 145,
+          "operator": "=",
+          "quantity": 70,
+          "unit": "Gram(s)",
+          "dailyValueTargetGroup": [
+            {
+              "name": "Adults and children 4 or more years of age",
+              "operator": "=",
+              "percent": 25
+            }
+          ],
+          "servingSizeUnit": "Gram(s)"
+        }
+      ],
+      "nestedRows": [
+        {
+          "order": 7,
+          "ingredientId": 43083,
+          "quantity": [
+            {
+              "servingSizeOrder": 1,
+              "servingSizeQuantity": 72.5,
+              "operator": "=",
+              "quantity": 4,
+              "unit": "Gram(s)",
+              "dailyValueTargetGroup": [
+                {
+                  "name": "Adults and children 4 or more years of age",
+                  "operator": "=",
+                  "percent": 14
+                }
+              ],
+              "servingSizeUnit": "Gram(s)"
+            },
+            {
+              "servingSizeOrder": 1,
+              "servingSizeQuantity": 145,
+              "operator": "=",
+              "quantity": 8,
+              "unit": "Gram(s)",
+              "dailyValueTargetGroup": [
+                {
+                  "name": "Adults and children 4 or more years of age",
+                  "operator": "=",
+                  "percent": 29
+                }
+              ],
+              "servingSizeUnit": "Gram(s)"
+            }
+          ],
+          "name": "Dietary Fiber",
+          "category": "fiber",
+          "ingredientGroup": "Fiber (unspecified)"
+        },
+        {
+          "order": 8,
+          "ingredientId": 283759,
+          "quantity": [
+            {
+              "servingSizeOrder": 1,
+              "servingSizeQuantity": 72.5,
+              "operator": "=",
+              "quantity": 5,
+              "unit": "Gram(s)",
+              "dailyValueTargetGroup": [
+                {
+                  "name": "Adults and children 4 or more years of age",
+                  "footnote": "Daily Value not established"
+                }
+              ],
+              "servingSizeUnit": "Gram(s)"
+            },
+            {
+              "servingSizeOrder": 1,
+              "servingSizeQuantity": 145,
+              "operator": "=",
+              "quantity": 10,
+              "unit": "Gram(s)",
+              "dailyValueTargetGroup": [
+                {
+                  "name": "Adults and children 4 or more years of age",
+                  "footnote": "Daily Value not established"
+                }
+              ],
+              "servingSizeUnit": "Gram(s)"
+            }
+          ],
+          "nestedRows": [
+            {
+              "order": 9,
+              "ingredientId": 283687,
+              "quantity": [
+                {
+                  "servingSizeOrder": 1,
+                  "servingSizeQuantity": 72.5,
+                  "operator": "=",
+                  "quantity": 2,
+                  "unit": "Gram(s)",
+                  "dailyValueTargetGroup": [
+                    {
+                      "name": "Adults and children 4 or more years of age",
+                      "operator": "=",
+                      "percent": 4
+                    }
+                  ],
+                  "servingSizeUnit": "Gram(s)"
+                },
+                {
+                  "servingSizeOrder": 1,
+                  "servingSizeQuantity": 145,
+                  "operator": "=",
+                  "quantity": 4,
+                  "unit": "Gram(s)",
+                  "dailyValueTargetGroup": [
+                    {
+                      "name": "Adults and children 4 or more years of age",
+                      "operator": "=",
+                      "percent": 8
+                    }
+                  ],
+                  "servingSizeUnit": "Gram(s)"
+                }
+              ],
+              "name": "Added Sugars",
+              "category": "sugar",
+              "ingredientGroup": "Sugar",
+              "uniiCode": "0"
+            }
+          ],
+          "name": "Total Sugars",
+          "category": "sugar",
+          "ingredientGroup": "Sugar",
+          "uniiCode": "1"
+        }
+      ],
+      "name": "Total Carbohydrates",
+      "category": "sugar",
+      "ingredientGroup": "Carbohydrate",
+      "uniiCode": "0"
+    },
+    {
+      "order": 10,
+      "ingredientId": 18344,
+      "quantity": [
+        {
+          "servingSizeOrder": 1,
+          "servingSizeQuantity": 72.5,
+          "operator": "=",
+          "quantity": 25,
+          "unit": "Gram(s)",
+          "servingSizeUnit": "Gram(s)"
+        },
+        {
+          "servingSizeOrder": 1,
+          "servingSizeQuantity": 145,
+          "operator": "=",
+          "quantity": 50,
+          "unit": "Gram(s)",
+          "servingSizeUnit": "Gram(s)"
+        }
+      ],
+      "name": "Protein",
+      "category": "protein",
+      "ingredientGroup": "Protein (unspecified)"
+    },
+    {
+      "order": 11,
+      "ingredientId": 281043,
+      "quantity": [
+        {
+          "servingSizeOrder": 1,
+          "servingSizeQuantity": 72.5,
+          "operator": "=",
+          "quantity": 70,
+          "unit": "mg",
+          "dailyValueTargetGroup": [
+            {
+              "name": "Adults and children 4 or more years of age",
+              "operator": "=",
+              "percent": 5
+            }
+          ],
+          "servingSizeUnit": "Gram(s)"
+        },
+        {
+          "servingSizeOrder": 1,
+          "servingSizeQuantity": 145,
+          "operator": "=",
+          "quantity": 140,
+          "unit": "mg",
+          "dailyValueTargetGroup": [
+            {
+              "name": "Adults and children 4 or more years of age",
+              "operator": "=",
+              "percent": 11
+            }
+          ],
+          "servingSizeUnit": "Gram(s)"
+        }
+      ],
+      "name": "Calcium",
+      "category": "mineral",
+      "ingredientGroup": "Calcium",
+      "uniiCode": "SY7Q814VUP",
+      "alternateNames": [
+        "Ca"
+      ]
+    },
+    {
+      "order": 12,
+      "ingredientId": 292411,
+      "quantity": [
+        {
+          "servingSizeOrder": 1,
+          "servingSizeQuantity": 72.5,
+          "operator": "=",
+          "quantity": 6,
+          "unit": "mg",
+          "dailyValueTargetGroup": [
+            {
+              "name": "Adults and children 4 or more years of age",
+              "operator": "=",
+              "percent": 33
+            }
+          ],
+          "servingSizeUnit": "Gram(s)"
+        },
+        {
+          "servingSizeOrder": 1,
+          "servingSizeQuantity": 145,
+          "operator": "=",
+          "quantity": 12,
+          "unit": "mg",
+          "dailyValueTargetGroup": [
+            {
+              "name": "Adults and children 4 or more years of age",
+              "operator": "=",
+              "percent": 67
+            }
+          ],
+          "servingSizeUnit": "Gram(s)"
+        }
+      ],
+      "name": "Iron",
+      "category": "mineral",
+      "ingredientGroup": "Iron",
+      "uniiCode": "E1UOL152H7",
+      "alternateNames": [
+        "Fe"
+      ]
+    },
+    {
+      "order": 13,
+      "ingredientId": 286056,
+      "quantity": [
+        {
+          "servingSizeOrder": 1,
+          "servingSizeQuantity": 72.5,
+          "operator": "=",
+          "quantity": 140,
+          "unit": "mg",
+          "dailyValueTargetGroup": [
+            {
+              "name": "Adults and children 4 or more years of age",
+              "operator": "=",
+              "percent": 33
+            }
+          ],
+          "servingSizeUnit": "Gram(s)"
+        },
+        {
+          "servingSizeOrder": 1,
+          "servingSizeQuantity": 145,
+          "operator": "=",
+          "quantity": 270,
+          "unit": "mg",
+          "dailyValueTargetGroup": [
+            {
+              "name": "Adults and children 4 or more years of age",
+              "operator": "=",
+              "percent": 64
+            }
+          ],
+          "servingSizeUnit": "Gram(s)"
+        }
+      ],
+      "name": "Magnesium",
+      "category": "mineral",
+      "ingredientGroup": "Magnesium",
+      "uniiCode": "I38ZP9992A",
+      "alternateNames": [
+        "Mg"
+      ]
+    },
+    {
+      "order": 14,
+      "ingredientId": 292436,
+      "notes": "Zinc (Form: as Zinc Citrate) ",
+      "quantity": [
+        {
+          "servingSizeOrder": 1,
+          "servingSizeQuantity": 72.5,
+          "operator": "=",
+          "quantity": 2.5,
+          "unit": "mg",
+          "dailyValueTargetGroup": [
+            {
+              "name": "Adults and children 4 or more years of age",
+              "operator": "=",
+              "percent": 23
+            }
+          ],
+          "servingSizeUnit": "Gram(s)"
+        },
+        {
+          "servingSizeOrder": 1,
+          "servingSizeQuantity": 145,
+          "operator": "=",
+          "quantity": 5,
+          "unit": "mg",
+          "dailyValueTargetGroup": [
+            {
+              "name": "Adults and children 4 or more years of age",
+              "operator": "=",
+              "percent": 45
+            }
+          ],
+          "servingSizeUnit": "Gram(s)"
+        }
+      ],
+      "name": "Zinc",
+      "category": "mineral",
+      "ingredientGroup": "Zinc",
+      "uniiCode": "J41CSQ7QDS",
+      "alternateNames": [
+        "Zn"
+      ],
+      "forms": [
+        {
+          "order": 1,
+          "ingredientId": 292437,
+          "name": "Zinc Citrate",
+          "category": "mineral",
+          "ingredientGroup": "Zinc",
+          "uniiCode": "K72I3DEX9B"
+        }
+      ]
+    },
+    {
+      "order": 15,
+      "ingredientId": 292597,
+      "quantity": [
+        {
+          "servingSizeOrder": 1,
+          "servingSizeQuantity": 72.5,
+          "operator": "=",
+          "quantity": 180,
+          "unit": "mg",
+          "dailyValueTargetGroup": [
+            {
+              "name": "Adults and children 4 or more years of age",
+              "operator": "=",
+              "percent": 8
+            }
+          ],
+          "servingSizeUnit": "Gram(s)"
+        },
+        {
+          "servingSizeOrder": 1,
+          "servingSizeQuantity": 145,
+          "operator": "=",
+          "quantity": 350,
+          "unit": "mg",
+          "dailyValueTargetGroup": [
+            {
+              "name": "Adults and children 4 or more years of age",
+              "operator": "=",
+              "percent": 15
+            }
+          ],
+          "servingSizeUnit": "Gram(s)"
+        }
+      ],
+      "name": "Sodium",
+      "category": "mineral",
+      "ingredientGroup": "Sodium",
+      "uniiCode": "9NEZ333N27",
+      "alternateNames": [
+        "Na"
+      ]
+    },
+    {
+      "order": 16,
+      "ingredientId": 292477,
+      "quantity": [
+        {
+          "servingSizeOrder": 1,
+          "servingSizeQuantity": 72.5,
+          "operator": "=",
+          "quantity": 480,
+          "unit": "mg",
+          "dailyValueTargetGroup": [
+            {
+              "name": "Adults and children 4 or more years of age",
+              "operator": "=",
+              "percent": 10
+            }
+          ],
+          "servingSizeUnit": "Gram(s)"
+        },
+        {
+          "servingSizeOrder": 1,
+          "servingSizeQuantity": 145,
+          "operator": "=",
+          "quantity": 950,
+          "unit": "mg",
+          "dailyValueTargetGroup": [
+            {
+              "name": "Adults and children 4 or more years of age",
+              "operator": "=",
+              "percent": 20
+            }
+          ],
+          "servingSizeUnit": "Gram(s)"
+        }
+      ],
+      "name": "Potassium",
+      "category": "mineral",
+      "ingredientGroup": "Potassium",
+      "uniiCode": "RWP5GA015D",
+      "alternateNames": [
+        "K"
+      ]
+    },
+    {
+      "order": 17,
+      "ingredientId": 122807,
+      "quantity": [
+        {
+          "servingSizeOrder": 1,
+          "servingSizeQuantity": 72.5,
+          "operator": "=",
+          "quantity": 2745,
+          "unit": "mg",
+          "servingSizeUnit": "Gram(s)"
+        },
+        {
+          "servingSizeOrder": 1,
+          "servingSizeQuantity": 145,
+          "operator": "=",
+          "quantity": 5490,
+          "unit": "mg",
+          "servingSizeUnit": "Gram(s)"
+        }
+      ],
+      "nestedRows": [
+        {
+          "order": 18,
+          "ingredientId": 51825,
+          "quantity": [
+            {
+              "servingSizeOrder": 1,
+              "servingSizeQuantity": 72.5,
+              "operator": "=",
+              "quantity": 1420,
+              "unit": "mg",
+              "dailyValueTargetGroup": [
+                {
+                  "name": "Adults and children 4 or more years of age",
+                  "footnote": "Daily Value not established"
+                }
+              ],
+              "servingSizeUnit": "Gram(s)"
+            },
+            {
+              "servingSizeOrder": 1,
+              "servingSizeQuantity": 145,
+              "operator": "=",
+              "quantity": 2840,
+              "unit": "mg",
+              "dailyValueTargetGroup": [
+                {
+                  "name": "Adults and children 4 or more years of age",
+                  "footnote": "Daily Value not established"
+                }
+              ],
+              "servingSizeUnit": "Gram(s)"
+            }
+          ],
+          "name": "Zucchini powder",
+          "category": "botanical",
+          "ingredientGroup": "Zucchini"
+        },
+        {
+          "order": 19,
+          "ingredientId": 105280,
+          "notes": "Betaine (Form: as BetaPower Betaine Anhydrous) ",
+          "quantity": [
+            {
+              "servingSizeOrder": 1,
+              "servingSizeQuantity": 72.5,
+              "operator": "=",
+              "quantity": 1250,
+              "unit": "mg",
+              "dailyValueTargetGroup": [
+                {
+                  "name": "Adults and children 4 or more years of age",
+                  "footnote": "Daily Value not established"
+                }
+              ],
+              "servingSizeUnit": "Gram(s)"
+            },
+            {
+              "servingSizeOrder": 1,
+              "servingSizeQuantity": 145,
+              "operator": "=",
+              "quantity": 2500,
+              "unit": "mg",
+              "dailyValueTargetGroup": [
+                {
+                  "name": "Adults and children 4 or more years of age",
+                  "footnote": "Daily Value not established"
+                }
+              ],
+              "servingSizeUnit": "Gram(s)"
+            }
+          ],
+          "name": "Betaine",
+          "category": "non-nutrient/non-botanical",
+          "ingredientGroup": "Betaine",
+          "forms": [
+            {
+              "order": 1,
+              "ingredientId": 106268,
+              "prefix": "as",
+              "name": "BetaPower Betaine Anhydrous",
+              "category": "non-nutrient/non-botanical",
+              "ingredientGroup": "Betaine Anhydrous"
+            }
+          ]
+        },
+        {
+          "order": 20,
+          "ingredientId": 170115,
+          "quantity": [
+            {
+              "servingSizeOrder": 1,
+              "servingSizeQuantity": 72.5,
+              "operator": "=",
+              "quantity": 75,
+              "unit": "mg",
+              "dailyValueTargetGroup": [
+                {
+                  "name": "Adults and children 4 or more years of age",
+                  "footnote": "Daily Value not established"
+                }
+              ],
+              "servingSizeUnit": "Gram(s)"
+            },
+            {
+              "servingSizeOrder": 1,
+              "servingSizeQuantity": 145,
+              "operator": "=",
+              "quantity": 150,
+              "unit": "mg",
+              "dailyValueTargetGroup": [
+                {
+                  "name": "Adults and children 4 or more years of age",
+                  "footnote": "Daily Value not established"
+                }
+              ],
+              "servingSizeUnit": "Gram(s)"
+            }
+          ],
+          "name": "ElevATP",
+          "category": "blend",
+          "ingredientGroup": "Proprietary Blend (Combination)",
+          "forms": [
+            {
+              "order": 1,
+              "ingredientId": 158142,
+              "name": "Ancient Peat",
+              "category": "other",
+              "ingredientGroup": "Peat"
+            },
+            {
+              "order": 2,
+              "ingredientId": 25065,
+              "name": "Apple Extract",
+              "category": "botanical",
+              "ingredientGroup": "Apple"
+            }
+          ]
+        }
+      ],
+      "name": "Whole-Food-Based Vegan Performance Blend",
+      "category": "blend",
+      "ingredientGroup": "Blend (Combination)"
+    },
+    {
+      "order": 21,
+      "ingredientId": 122820,
+      "quantity": [
+        {
+          "servingSizeOrder": 1,
+          "servingSizeQuantity": 72.5,
+          "operator": "=",
+          "quantity": 50,
+          "unit": "mg",
+          "servingSizeUnit": "Gram(s)"
+        },
+        {
+          "servingSizeOrder": 1,
+          "servingSizeQuantity": 145,
+          "operator": "=",
+          "quantity": 100,
+          "unit": "mg",
+          "servingSizeUnit": "Gram(s)"
+        }
+      ],
+      "nestedRows": [
+        {
+          "order": 22,
+          "ingredientId": 290770,
+          "notes": "Bromelain (Form: from Pineapple PlantPart: stem) ",
+          "quantity": [
+            {
+              "servingSizeOrder": 1,
+              "servingSizeQuantity": 72.5,
+              "operator": "=",
+              "quantity": 25,
+              "unit": "mg",
+              "dailyValueTargetGroup": [
+                {
+                  "name": "Adults and children 4 or more years of age",
+                  "footnote": "Daily Value not established"
+                }
+              ],
+              "servingSizeUnit": "Gram(s)"
+            },
+            {
+              "servingSizeOrder": 1,
+              "servingSizeQuantity": 145,
+              "operator": "=",
+              "quantity": 50,
+              "unit": "mg",
+              "dailyValueTargetGroup": [
+                {
+                  "name": "Adults and children 4 or more years of age",
+                  "footnote": "Daily Value not established"
+                }
+              ],
+              "servingSizeUnit": "Gram(s)"
+            }
+          ],
+          "name": "Bromelain",
+          "category": "enzyme",
+          "ingredientGroup": "Bromelain",
+          "uniiCode": "U182GP2CF3",
+          "forms": [
+            {
+              "order": 1,
+              "ingredientId": 290769,
+              "name": "Pineapple",
+              "category": "botanical",
+              "ingredientGroup": "Pineapple",
+              "uniiCode": "2A88ZO081O"
+            }
+          ]
+        },
+        {
+          "order": 23,
+          "ingredientId": 290629,
+          "notes": "Papain (Form: from Papaya PlantPart: fruit) ",
+          "quantity": [
+            {
+              "servingSizeOrder": 1,
+              "servingSizeQuantity": 72.5,
+              "operator": "=",
+              "quantity": 25,
+              "unit": "mg",
+              "dailyValueTargetGroup": [
+                {
+                  "name": "Adults and children 4 or more years of age",
+                  "footnote": "Daily Value not established"
+                }
+              ],
+              "servingSizeUnit": "Gram(s)"
+            },
+            {
+              "servingSizeOrder": 1,
+              "servingSizeQuantity": 145,
+              "operator": "=",
+              "quantity": 50,
+              "unit": "mg",
+              "dailyValueTargetGroup": [
+                {
+                  "name": "Adults and children 4 or more years of age",
+                  "footnote": "Daily Value not established"
+                }
+              ],
+              "servingSizeUnit": "Gram(s)"
+            }
+          ],
+          "name": "Papain",
+          "category": "enzyme",
+          "ingredientGroup": "Papain",
+          "uniiCode": "A236A06Y32",
+          "forms": [
+            {
+              "order": 1,
+              "ingredientId": 290630,
+              "name": "Papaya",
+              "category": "botanical",
+              "ingredientGroup": "Papaya",
+              "uniiCode": "KU94FIY6JB"
+            }
+          ]
+        }
+      ],
+      "name": "Nutrient Digestion Blend",
+      "category": "blend",
+      "ingredientGroup": "Blend (non-nutrient/non-botanical)"
+    },
+    {
+      "order": 24,
+      "ingredientId": 105121,
+      "quantity": [
+        {
+          "servingSizeOrder": 1,
+          "servingSizeQuantity": 72.5,
+          "operator": "=",
+          "quantity": 6448,
+          "unit": "mg",
+          "dailyValueTargetGroup": [
+            {
+              "name": "Adults and children 4 or more years of age",
+              "footnote": "Daily Value not established"
+            }
+          ],
+          "servingSizeUnit": "Gram(s)"
+        },
+        {
+          "servingSizeOrder": 1,
+          "servingSizeQuantity": 145,
+          "operator": "=",
+          "quantity": 12895,
+          "unit": "mg",
+          "dailyValueTargetGroup": [
+            {
+              "name": "Adults and children 4 or more years of age",
+              "footnote": "Daily Value not established"
+            }
+          ],
+          "servingSizeUnit": "Gram(s)"
+        }
+      ],
+      "nestedRows": [
+        {
+          "order": 25,
+          "ingredientId": 9759,
+          "quantity": [
+            {
+              "servingSizeOrder": 1,
+              "servingSizeQuantity": 72.5,
+              "operator": "=",
+              "quantity": 0,
+              "unit": "NP",
+              "servingSizeUnit": "Gram(s)"
+            },
+            {
+              "servingSizeOrder": 1,
+              "servingSizeQuantity": 145,
+              "operator": "=",
+              "quantity": 0,
+              "unit": "NP",
+              "servingSizeUnit": "Gram(s)"
+            }
+          ],
+          "name": "Cocoa powder",
+          "category": "botanical",
+          "ingredientGroup": "cocoa"
+        },
+        {
+          "order": 26,
+          "ingredientId": 59939,
+          "quantity": [
+            {
+              "servingSizeOrder": 1,
+              "servingSizeQuantity": 72.5,
+              "operator": "=",
+              "quantity": 0,
+              "unit": "NP",
+              "servingSizeUnit": "Gram(s)"
+            },
+            {
+              "servingSizeOrder": 1,
+              "servingSizeQuantity": 145,
+              "operator": "=",
+              "quantity": 0,
+              "unit": "NP",
+              "servingSizeUnit": "Gram(s)"
+            }
+          ],
+          "name": "natural Chocolate flavors",
+          "category": "other",
+          "ingredientGroup": "Flavor"
+        },
+        {
+          "order": 27,
+          "ingredientId": 5018,
+          "quantity": [
+            {
+              "servingSizeOrder": 1,
+              "servingSizeQuantity": 72.5,
+              "operator": "=",
+              "quantity": 0,
+              "unit": "NP",
+              "servingSizeUnit": "Gram(s)"
+            },
+            {
+              "servingSizeOrder": 1,
+              "servingSizeQuantity": 145,
+              "operator": "=",
+              "quantity": 0,
+              "unit": "NP",
+              "servingSizeUnit": "Gram(s)"
+            }
+          ],
+          "name": "natural Vanilla flavor",
+          "category": "botanical",
+          "ingredientGroup": "Vanilla"
+        },
+        {
+          "order": 28,
+          "ingredientId": 12144,
+          "quantity": [
+            {
+              "servingSizeOrder": 1,
+              "servingSizeQuantity": 72.5,
+              "operator": "=",
+              "quantity": 0,
+              "unit": "NP",
+              "servingSizeUnit": "Gram(s)"
+            },
+            {
+              "servingSizeOrder": 1,
+              "servingSizeQuantity": 145,
+              "operator": "=",
+              "quantity": 0,
+              "unit": "NP",
+              "servingSizeUnit": "Gram(s)"
+            }
+          ],
+          "name": "other Natural flavors",
+          "category": "other",
+          "ingredientGroup": "Flavor"
+        },
+        {
+          "order": 29,
+          "ingredientId": 105123,
+          "notes": "Cocoa extract (Form: 10% Theobromine Note: 1 mg) ",
+          "quantity": [
+            {
+              "servingSizeOrder": 1,
+              "servingSizeQuantity": 72.5,
+              "operator": "=",
+              "quantity": 0,
+              "unit": "NP",
+              "servingSizeUnit": "Gram(s)"
+            },
+            {
+              "servingSizeOrder": 1,
+              "servingSizeQuantity": 145,
+              "operator": "=",
+              "quantity": 0,
+              "unit": "NP",
+              "servingSizeUnit": "Gram(s)"
+            }
+          ],
+          "name": "Cocoa extract",
+          "category": "botanical",
+          "ingredientGroup": "cocoa",
+          "forms": [
+            {
+              "order": 1,
+              "ingredientId": 105124,
+              "percent": 10,
+              "name": "Theobromine",
+              "category": "non-nutrient/non-botanical",
+              "ingredientGroup": "Theobromine"
+            }
+          ]
+        }
+      ],
+      "name": "Functional Flavor System",
+      "category": "other",
+      "ingredientGroup": "Flavor"
+    }
+  ],
+  "otheringredients": {
+    "ingredients": [
+      {
+        "order": 1,
+        "ingredientId": 158339,
+        "name": "Protein Blend",
+        "category": "blend",
+        "ingredientGroup": "Blend (Combination)",
+        "forms": [
+          {
+            "order": 1,
+            "ingredientId": 99700,
+            "name": "Brown Rice Protein concentrate",
+            "category": "protein",
+            "ingredientGroup": "Rice Protein"
+          },
+          {
+            "order": 2,
+            "ingredientId": 105132,
+            "name": "Chia seed meal",
+            "category": "botanical",
+            "ingredientGroup": "Chia"
+          },
+          {
+            "order": 3,
+            "ingredientId": 28801,
+            "name": "Flaxseed powder",
+            "category": "botanical",
+            "ingredientGroup": "Flax"
+          },
+          {
+            "order": 4,
+            "ingredientId": 30394,
+            "name": "Pea Protein isolate",
+            "category": "protein",
+            "ingredientGroup": "Pea protein"
+          },
+          {
+            "order": 5,
+            "ingredientId": 55864,
+            "name": "Quinoa powder",
+            "category": "botanical",
+            "ingredientGroup": "Quinoa"
+          },
+          {
+            "order": 6,
+            "ingredientId": 158340,
+            "name": "White Bean Powder",
+            "category": "botanical",
+            "ingredientGroup": "Bean"
+          },
+          {
+            "order": 7,
+            "ingredientId": 155371,
+            "name": "whole Algal Protein",
+            "category": "protein",
+            "ingredientGroup": "Algal protein"
+          }
+        ]
+      },
+      {
+        "order": 2,
+        "ingredientId": 158082,
+        "name": "Carb blend",
+        "category": "blend",
+        "ingredientGroup": "Blend (Combination)",
+        "forms": [
+          {
+            "order": 1,
+            "ingredientId": 134782,
+            "name": "Carb10 Pea Starch",
+            "category": "complex carbohydrate",
+            "ingredientGroup": "Starch"
+          }
+        ]
+      },
+      {
+        "order": 3,
+        "ingredientId": 60359,
+        "name": "Sweet Potato powder",
+        "category": "botanical",
+        "ingredientGroup": "Sweet Potato"
+      },
+      {
+        "order": 4,
+        "ingredientId": 158341,
+        "name": "ModCarb",
+        "category": "blend",
+        "ingredientGroup": "Proprietary Blend (Combination)",
+        "forms": [
+          {
+            "order": 1,
+            "ingredientId": 51828,
+            "name": "Amaranth",
+            "category": "botanical",
+            "ingredientGroup": "Amaranth"
+          },
+          {
+            "order": 2,
+            "ingredientId": 47237,
+            "name": "Buckwheat",
+            "category": "botanical",
+            "ingredientGroup": "Buckwheat "
+          },
+          {
+            "order": 3,
+            "ingredientId": 78225,
+            "name": "Chia",
+            "category": "botanical",
+            "ingredientGroup": "Chia"
+          },
+          {
+            "order": 4,
+            "ingredientId": 65199,
+            "name": "Millet",
+            "category": "botanical",
+            "ingredientGroup": "Millet"
+          },
+          {
+            "order": 5,
+            "ingredientId": 8992,
+            "name": "Oat Bran",
+            "category": "fiber",
+            "ingredientGroup": "Oat Fiber"
+          },
+          {
+            "order": 6,
+            "ingredientId": 71082,
+            "name": "Quinoa",
+            "category": "botanical",
+            "ingredientGroup": "Quinoa"
+          }
+        ]
+      },
+      {
+        "order": 5,
+        "ingredientId": 158342,
+        "name": "Fat Blend",
+        "category": "blend",
+        "ingredientGroup": "Blend (Combination)",
+        "forms": [
+          {
+            "order": 1,
+            "ingredientId": 105132,
+            "name": "Chia seed meal",
+            "category": "botanical",
+            "ingredientGroup": "Chia"
+          },
+          {
+            "order": 2,
+            "ingredientId": 10551,
+            "name": "Flaxseed powder",
+            "category": "botanical",
+            "ingredientGroup": "Flaxseed"
+          },
+          {
+            "order": 3,
+            "ingredientId": 25371,
+            "name": "Safflower Oil",
+            "category": "fat",
+            "ingredientGroup": "Safflower Oil"
+          },
+          {
+            "order": 4,
+            "ingredientId": 9615,
+            "name": "Sunflower Oil",
+            "category": "fat",
+            "ingredientGroup": "Sunflower Oil"
+          }
+        ]
+      },
+      {
+        "order": 6,
+        "ingredientId": 9400,
+        "name": "Polydextrose",
+        "category": "fiber",
+        "ingredientGroup": "Polydextrose"
+      },
+      {
+        "order": 7,
+        "ingredientId": 102467,
+        "name": "TRAACS Magnesium Bisglycinate Chelate",
+        "category": "non-nutrient/non-botanical",
+        "ingredientGroup": "Magnesium"
+      },
+      {
+        "order": 8,
+        "ingredientId": 158343,
+        "name": "Gum Blend",
+        "category": "blend",
+        "ingredientGroup": "Blend (Herb/Botanical)",
+        "forms": [
+          {
+            "order": 1,
+            "ingredientId": 84429,
+            "name": "organic Guar Gum",
+            "category": "fiber",
+            "ingredientGroup": "Guar"
+          },
+          {
+            "order": 2,
+            "ingredientId": 12126,
+            "name": "organic Gum Acacia",
+            "category": "botanical",
+            "ingredientGroup": "Acacia"
+          },
+          {
+            "order": 3,
+            "ingredientId": 283063,
+            "name": "Xanthan Gum",
+            "category": "complex carbohydrate",
+            "ingredientGroup": "Xanthan Gum",
+            "uniiCode": "TTV12P4NEE"
+          }
+        ]
+      },
+      {
+        "order": 9,
+        "ingredientId": 76842,
+        "name": "Monk Fruit extract",
+        "category": "botanical",
+        "ingredientGroup": "Luo Han Guo"
+      },
+      {
+        "order": 10,
+        "ingredientId": 144799,
+        "name": "Stevia extract",
+        "category": "botanical",
+        "ingredientGroup": "Stevia"
+      },
+      {
+        "order": 11,
+        "ingredientId": 280319,
+        "name": "Silicon Dioxide",
+        "category": "mineral",
+        "ingredientGroup": "Silicon",
+        "uniiCode": "ETJ7Z6XBU4",
+        "alternateNames": [
+          "SiO2"
+        ]
+      }
+    ]
+  },
+  "statements": [
+    {
+      "type": "Brand IP Statement(s) re: (c), (TM), (SM)",
+      "notes": "Pro Performance Results"
+    },
+    {
+      "type": "Formula re: Contains",
+      "notes": "Complete Vegan Gainer is an all-in-one performance formula with 550 calories from 17 plant-based sources and whole-food-based blends.  This formula provides 50 grams of complete protein, a protein that gives you all 9 essential amino acids in amounts appropriate for you nutrition."
+    },
+    {
+      "type": "General Statements: All Other Content",
+      "notes": "Whether you want to gain muscle or satisfy your hunger, you can use this delicious protein to meet your nutritional needs."
+    },
+    {
+      "type": "Formula re: Contains",
+      "notes": "This performance gainer provides 9 grams of branched chain amino acids (BCAA) to help fuel muscles, along with key amino acids glutamine and glutamic acid to support immune response. Complete Vegan Gainer also has 70 grams of clean, maltodextrin-free carbs featuring ancient grains and 8 grams of hunger-satisfying fiber."
+    },
+    {
+      "type": "Formulation re: Does NOT Contain",
+      "notes": "Complete Vegan Gainer also has 70 grams of clean, maltodextrin-free carbs featuring ancient grains and 8 grams of hunger-satisfying fiber."
+    },
+    {
+      "type": "General Statements: All Other Content",
+      "notes": "These high-quality carbs support glycogen replenishment for energy regeneration."
+    },
+    {
+      "type": "Formula re: Contains",
+      "notes": "And it includes clinically proven beet extract to enhance athletic performance."
+    },
+    {
+      "type": "Brand IP Statement(s) re: (c), (TM), (SM)",
+      "notes": "Pro Performance Quality"
+    },
+    {
+      "type": "General Statements: All Other Content",
+      "notes": "Complete Vegan Gainer sets the standard for quality, nature-based sports nutrition without sacrificing delicious taste or the performance benefits you'd expect from the industry leader. It provides powerful, natural compounds and clinically studied ingredients, plus it is certified Banned Substance Free."
+    },
+    {
+      "type": "General Statements: All Other Content",
+      "notes": "When used in conjunction with an exercise program.\nPer 4 scoop serving."
+    },
+    {
+      "type": "Seals/Symbols",
+      "notes": "Informed-Choice.org\nTrusted by sport\n"
+    },
+    {
+      "type": "General Statements: All Other Content",
+      "notes": "Products bearing this logo have been tested for banned substances by LGC Sport Science, Inc. a world-class anti-doping lab. Product was tested for over 145 banned substances on the 2017 World Anti-Doping Agency (WADA) Prohibited List via LGC skip lot testing protocol #ICP0307. See gnc.com for more information."
+    },
+    {
+      "type": "Precautions re: Children",
+      "notes": "Keep out of reach of children."
+    },
+    {
+      "type": "Storage",
+      "notes": "Store in a cool, dry place."
+    },
+    {
+      "type": "FDA Disclaimer Statement",
+      "notes": "These statements have not been evaluated by the Food and Drug Administration. This product is not intended to diagnose, treat, cure, or prevent any disease."
+    },
+    {
+      "type": "Seals/Symbols",
+      "notes": "Banned Substance Free"
+    },
+    {
+      "type": "Formulation re: Does NOT Contain",
+      "notes": "Banned Substance Free"
+    },
+    {
+      "type": "Seals/Symbols",
+      "notes": "V Vegan"
+    },
+    {
+      "type": "Formulation re: Vegetarian/Vegan",
+      "notes": "V Vegan"
+    },
+    {
+      "type": "Formula re: Contains",
+      "notes": "50 g Protein\n550 Calories\n70 g Carbs\n9 g BCAA"
+    },
+    {
+      "type": "General Statements: All Other Content",
+      "notes": "Vegan aminos to fuel muscle growth & repair\nQuality carbs from ancient grains"
+    },
+    {
+      "type": "FDA Statement of Identity",
+      "notes": "Dietary Supplement"
+    },
+    {
+      "type": "Formula re: Contains",
+      "notes": "Naturally sweetened with Stevia"
+    },
+    {
+      "type": "General Statements: All Other Content",
+      "notes": "Natural flavors"
+    },
+    {
+      "type": "General: Product/Version Code",
+      "notes": "CODE 369876 GSG"
+    },
+    {
+      "type": "Brand IP Statement(s) re: (c), (TM), (SM)",
+      "notes": "Servings Per Container 28 14"
+    },
+    {
+      "type": "Suggested/Recommended/Usage/Directions",
+      "notes": "Directions: As a dietary supplement, mix 2-4 scoops (72.5-145 g) with 10-20 fl. oz. of water, almond milk, rice milk or your favorite beverage and blend well."
+    },
+    {
+      "type": "Precautions re: Pregnant or Nursing or Prescription Medications",
+      "notes": "Warning: Consult your physician prior to using this product if you are pregnant, nursing, taking medication, or have a medical condition."
+    },
+    {
+      "type": "Precautions re: All Other",
+      "notes": "Discontinue use two weeks prior to surgery."
+    },
+    {
+      "type": "General Statements: All Other Content",
+      "notes": "Notice: Significant product settling may occur."
+    },
+    {
+      "type": "Seals/Symbols",
+      "notes": "Gf\nGluten free"
+    },
+    {
+      "type": "Formulation re: Does NOT Contain",
+      "notes": "Gf\nGluten free"
+    },
+    {
+      "type": "Formulation re: Does NOT Contain",
+      "notes": "Complete Vegan Gainer Contains:\nNo gluten\nNo dairy or lactose\nNo soy\nNon-GMO\nNo banned substances\nNo artificial flavors, colors or sweeteners\nNo preservatives\nNo wheat, fish or egg\nNo sugar alcohols"
+    },
+    {
+      "type": "General Statements: All Other Content",
+      "notes": "Our products are tested by an independent third party lab for genetically modified material and test below at 0.9% threshold."
+    },
+    {
+      "type": "Brand IP Statement(s) re: (c), (TM), (SM)",
+      "notes": "BetaPower Natural Betaine\nBetaPower is a registered trademark of DuPont or its affiliates.\nCarb10\nCarb10 is a trademark of Compound Solutions, Inc.\nMod CARB\nMod CARB and the ModCarb logo are trademarks of VDF FutureCeuticals, Inc., used under license. ModCarb is manufactured under U.S. Patent 6060519, used under license.\nelevATP Strength, Power, Performance.\nelevATP is a registered trademark of VDF FutureCeuticals, Inc., and is covered by pending U.S. patent applications, used under license.\nTRAACS\nTRAACS is a registered trademark of Albion Laboratories, Inc."
+    },
+    {
+      "type": "Suggested/Recommended/Usage/Directions",
+      "notes": "Ways to enjoy your Complete Vegan Gainer\n1 Shake\nCombine with cold water, milk or your favorite beverage in a shaker cup\n2 Blend\nMake a delicious smoothie adding fruits, juices, peanut butter or yogurt\n3 Eat\nMix powder in your oatmeal, yogurt or your favorite food"
+    }
+  ],
+  "claims": [
+    {
+      "langualCode": "P0065",
+      "langualCodeDescription": "Nutrient "
+    },
+    {
+      "langualCode": "P0115",
+      "langualCodeDescription": "All Other"
+    },
+    {
+      "langualCode": "P0265",
+      "langualCodeDescription": "Structure/Function"
+    }
+  ],
+  "targetGroups": [
+    "Vegan",
+    "Vegetarian",
+    "Adult (18 - 50 Years)",
+    "Gluten Free",
+    "Dairy Free"
+  ],
+  "userGroups": [
+    {
+      "dailyValueTargetGroupName": "Adults and children 4 or more years of age",
+      "langualCode": "P0250",
+      "langualCodeDescription": "Adults and Children 4 years and above"
+    }
+  ],
+  "contacts": [
+    {
+      "contactId": 9828,
+      "text": "Distributed by:",
+      "types": [
+        "Distributor"
+      ],
+      "contactDetails": {
+        "src": "01-raw/2025-09-25/data/contact_3.json",
+        "id": 9828,
+        "name": "General Nutrition Corporation",
+        "city": "Pittsburgh",
+        "state": "PA",
+        "country": "USA",
+        "zipCode": "15222",
+        "phoneNumber": "1-888-462-2548",
+        "webAddress": "gnc.com"
+      }
+    }
+  ],
+  "netContents": [
+    {
+      "order": 1,
+      "quantity": 4.48,
+      "unit": "lb",
+      "display": "4.48 lb"
+    },
+    {
+      "order": 2,
+      "quantity": 71.61,
+      "unit": "oz.",
+      "display": "71.61 oz."
+    },
+    {
+      "order": 3,
+      "quantity": 2030,
+      "unit": "Gram(s)",
+      "display": "2030 Gram(s)"
+    }
+  ],
+  "upcSku": "0 48107 17782 9",
+  "_fixture_source": "/Users/seancheick/Downloads/PharmaGuide_Datasets/staging/brands/GNC/175409.json"
+}
