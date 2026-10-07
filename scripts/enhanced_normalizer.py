@@ -37,6 +37,7 @@ except ImportError:
 
 from constants import (
     INGREDIENT_QUALITY_MAP,
+    CLEANER_NON_EFFICACY_ROLES,
     HARMFUL_ADDITIVES,
     OTHER_INGREDIENTS,
     ALLERGENS,
@@ -10542,7 +10543,8 @@ class EnhancedDSLDNormalizer:
                 )
                 row_score_included = bool(
                     score_included
-                    and ing.get("score_eligible_by_cleaner", True)
+                    and str(ing.get("cleaner_row_role") or "").strip().lower()
+                    not in CLEANER_NON_EFFICACY_ROLES
                     and not is_structural_blend_header
                     and not is_specification_limit
                 )

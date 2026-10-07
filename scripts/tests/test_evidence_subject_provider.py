@@ -208,3 +208,22 @@ def test_source_flavor_heading_keeps_disclosure_without_therapeutic_projection(e
     assert all(r['raw_source_path'].startswith(ref + '.nestedRows[') for r in children)
     product, _ = enricher.enrich_product(cleaned)
     assert not any(r.get('canonical_id') == 'oi_generic_flavor' for r in get_evidence_subject_rows(product))
+
+
+@pytest.mark.parametrize('source_ref, canonical', [
+    ('ingredientRows[8].nestedRows[3]', 'hmb'),
+    ('ingredientRows[10].nestedRows[1]', 'l_citrulline'),
+])
+def test_assessed_blend_children_keep_scoring_display_annotation(enricher, source_ref, canonical):
+    from enhanced_normalizer import EnhancedDSLDNormalizer
+    raw = json.loads((FIXTURES / 'evidence_subject_2219_raw.json').read_text())
+    cleaned = EnhancedDSLDNormalizer().normalize_product(raw)
+    child = next(r for r in cleaned['activeIngredients'] if r.get('raw_source_path') == source_ref)
+    assert child['cleaner_row_role'] == 'nested_display_only'
+    assert child['score_eligible_by_cleaner'] is False
+    product, _ = enricher.enrich_product(cleaned)
+    assert canonical in _canonicals(get_evidence_subject_rows(product))
+    display = next(r for r in cleaned['display_ingredients'] if r.get('raw_source_path') == source_ref)
+    assert display['score_included'] is True
+    assert display['is_label_context'] is False
+    assert display['identity_integrity_state'] == 'clean'
