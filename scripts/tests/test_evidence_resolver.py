@@ -1123,3 +1123,24 @@ def test_whole_matcha_research_is_reviewed_without_generic_efficacy_or_dose_cred
     assert record['applicability_status'] == 'applicability_unestablished'
     assert 'primary' in record['applicability_decision']
     assert 'extract' in record['applicability_decision']
+
+
+@pytest.mark.parametrize("canonical,name,pmid", [
+    ("essential_amino_acids", "Essential Amino Acids", "16507602"),
+    ("nha_nem_eggshell_membrane", "NEM Natural Eggshell Membrane", "19340512"),
+    ("nha_univestin", "Univestin", "24611484"),
+    ("bergamonte_full_spectrum_citrus_bergamia_risso_fruit_extract_complex", "Bergamonte Full Spectrum Complex", "31167512"),
+    ("triphala_powder", "Triphala Powder", "23351558"),
+])
+def test_preparation_research_is_acknowledged_without_generic_clinical_credit(canonical, name, pmid):
+    result = er.resolve_evidence_for_canonical(canonical, name=name)
+    assert result.disposition == EvidenceDisposition.RESEARCH_PRESENT_APPLICABILITY_UNESTABLISHED.value
+    assert result.points_eligible is False
+    assert "literature_applicability_unestablished" in result.blocking_reasons
+    import json
+    records = json.loads((SCRIPTS_ROOT / "data/literature_evidence_records.json").read_text())["literature_evidence_records"]
+    record = next(r for r in records if r["canonical_id"] == canonical)
+    assert pmid in {s["pmid"] for s in record["qualifying_human_studies"]}
+    assert record["studied_dose_exposure"] == {}
+    assert "bounded" in record["applicability_decision"]
+    assert record["effect_direction"] == "applicability_unestablished"

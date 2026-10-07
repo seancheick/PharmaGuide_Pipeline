@@ -3,11 +3,11 @@
     "description": "Phase 4 shadow literature resolution registry for high-impact canonical actives",
     "purpose": "literature_evidence_resolution",
     "schema_version": "5.0.0",
-    "last_updated": "2026-10-05",
-    "total_entries": 756,
+    "last_updated": "2026-10-06",
+    "total_entries": 761,
     "verification_pipeline": "scripts/api_audit/verify_literature_records.py",
-    "verified_studies_count": 224,
-    "verified_records_count": 756
+    "verified_studies_count": 229,
+    "verified_records_count": 761
   },
   "literature_evidence_records": [
     {
@@ -23588,6 +23588,217 @@
         ],
         "reviewed_at": "2026-10-05"
       }
+    },
+    {
+      "canonical_id": "essential_amino_acids",
+      "material_form": "Disclosed essential-amino-acid mixture; composition-dependent evidence, distinct from isolated leucine or BCAA",
+      "search_query": "PMID 16507602; bounded direct-study content review, not exhaustive search",
+      "search_date": "2026-10-07",
+      "databases_searched": [
+        "PubMed"
+      ],
+      "records_screened": 1,
+      "qualifying_human_studies": [
+        {
+          "pmid": "16507602",
+          "title": "A high proportion of leucine is required for optimal stimulation of the rate of muscle protein synthesis by essential amino acids in the elderly.",
+          "study_type": "controlled_clinical_trial",
+          "dose": "6.7 g EAA bolus with 26% or 41% leucine",
+          "duration": "acute",
+          "outcome": "Muscle-protein-synthesis responses varied with age and leucine fraction; this acute mechanistic outcome does not establish long-term hypertrophy or efficacy of arbitrary retail EAA profiles.",
+          "verification_provenance": {
+            "pmid_verified": true,
+            "authoritative_live_title": "A high proportion of leucine is required for optimal stimulation of the rate of muscle protein synthesis by essential amino acids in the elderly.",
+            "human_subjects_verified": true,
+            "topic_match_verified": true,
+            "retracted": false,
+            "verified_source": "https://pubmed.ncbi.nlm.nih.gov/16507602/",
+            "verified_at": "2026-10-07"
+          }
+        }
+      ],
+      "effect_direction": "applicability_unestablished",
+      "population_context": "Young and elderly participants in an acute muscle-protein-metabolism study.",
+      "studied_dose_exposure": {},
+      "applicability_decision": "Human preparation-specific research exists (PMID 16507602). Retail nine-EAA composition, population, intended outcome and full preparation correspondence remain unestablished. Isolated leucine, BCAA and mixture mass must not inherit a universal efficacy or effective-dose claim. This is a bounded direct-study review, not an absence-of-research or universal-null determination.",
+      "verification_result": "authoritative_pubmed_verified",
+      "verification_provenance": {
+        "verified_by": "manual_primary_source_content_review",
+        "verified_at": "2026-10-07",
+        "all_pmids_verified": true,
+        "retractions_found": false
+      },
+      "applicability_status": "applicability_unestablished"
+    },
+    {
+      "canonical_id": "nha_nem_eggshell_membrane",
+      "material_form": "Branded Natural Eggshell Membrane (NEM), distinct from purified collagen and unrelated eggshell preparations",
+      "search_query": "PMID 19340512; bounded direct-study content review, not exhaustive search",
+      "search_date": "2026-10-07",
+      "databases_searched": [
+        "PubMed"
+      ],
+      "records_screened": 1,
+      "qualifying_human_studies": [
+        {
+          "pmid": "19340512",
+          "title": "Eggshell membrane in the treatment of pain and stiffness from osteoarthritis of the knee: a randomized, multicenter, double-blind, placebo-controlled clinical study.",
+          "study_type": "randomized_double_blind_placebo_controlled",
+          "dose": "500 mg/day NEM",
+          "duration": "8 weeks",
+          "outcome": "Pain and stiffness subscales improved versus placebo; function and overall WOMAC were not statistically significant.",
+          "verification_provenance": {
+            "pmid_verified": true,
+            "authoritative_live_title": "Eggshell membrane in the treatment of pain and stiffness from osteoarthritis of the knee: a randomized, multicenter, double-blind, placebo-controlled clinical study.",
+            "human_subjects_verified": true,
+            "topic_match_verified": true,
+            "retracted": false,
+            "verified_source": "https://pubmed.ncbi.nlm.nih.gov/19340512/",
+            "verified_at": "2026-10-07"
+          },
+          "sample_size": 67
+        }
+      ],
+      "effect_direction": "applicability_unestablished",
+      "population_context": "Adults with knee osteoarthritis.",
+      "studied_dose_exposure": {},
+      "applicability_decision": "Human preparation-specific research exists (PMID 19340512). Evidence is preparation- and population-specific. Generic eggshell membrane, collagen peptides and fermented preparations do not establish NEM equivalence. Current label identity does not establish a general-purpose clinical benefit or a universal dose benchmark. This is a bounded direct-study review, not an absence-of-research or universal-null determination.",
+      "verification_result": "authoritative_pubmed_verified",
+      "verification_provenance": {
+        "verified_by": "manual_primary_source_content_review",
+        "verified_at": "2026-10-07",
+        "all_pmids_verified": true,
+        "retractions_found": false
+      },
+      "applicability_status": "applicability_unestablished"
+    },
+    {
+      "canonical_id": "nha_univestin",
+      "material_form": "UP446 combined Scutellaria baicalensis and Acacia catechu extracts; not either component alone",
+      "search_query": "PMID 24611484; bounded direct-study content review, not exhaustive search",
+      "search_date": "2026-10-07",
+      "databases_searched": [
+        "PubMed"
+      ],
+      "records_screened": 1,
+      "qualifying_human_studies": [
+        {
+          "pmid": "24611484",
+          "title": "A combination of Scutellaria baicalensis and Acacia catechu extracts for short-term symptomatic relief of joint discomfort associated with osteoarthritis of the knee.",
+          "study_type": "randomized_double_blind_active_comparator",
+          "dose": "500 mg/day UP446 versus 440 mg/day naproxen",
+          "duration": "1 week",
+          "outcome": "Within-group pain, stiffness and range-of-motion changes were reported; this active-comparator study does not establish placebo superiority or component-only efficacy.",
+          "verification_provenance": {
+            "pmid_verified": true,
+            "authoritative_live_title": "A combination of Scutellaria baicalensis and Acacia catechu extracts for short-term symptomatic relief of joint discomfort associated with osteoarthritis of the knee.",
+            "human_subjects_verified": true,
+            "topic_match_verified": true,
+            "retracted": false,
+            "verified_source": "https://pubmed.ncbi.nlm.nih.gov/24611484/",
+            "verified_at": "2026-10-07"
+          },
+          "sample_size": 79
+        }
+      ],
+      "effect_direction": "applicability_unestablished",
+      "population_context": "Men and women aged 40–90 with mild-to-moderate knee osteoarthritis.",
+      "studied_dose_exposure": {},
+      "applicability_decision": "Human preparation-specific research exists (PMID 24611484). Exact whole-formula composition, exposure and intended-population correspondence remain unestablished for unspecified retail disclosures. A component amount does not establish the studied combined preparation. No Acacia-only efficacy or effective-dose benchmark follows. This is a bounded direct-study review, not an absence-of-research or universal-null determination.",
+      "verification_result": "authoritative_pubmed_verified",
+      "verification_provenance": {
+        "verified_by": "manual_primary_source_content_review",
+        "verified_at": "2026-10-07",
+        "all_pmids_verified": true,
+        "retractions_found": false
+      },
+      "applicability_status": "applicability_unestablished"
+    },
+    {
+      "canonical_id": "bergamonte_full_spectrum_citrus_bergamia_risso_fruit_extract_complex",
+      "material_form": "Related BPE-C / BΠE-complex preparation: bergamot juice extract plus BPF; equivalence to retail Bergamonte Full Spectrum complex unverified",
+      "search_query": "PMID 31167512; bounded direct-study content review, not exhaustive search",
+      "search_date": "2026-10-07",
+      "databases_searched": [
+        "PubMed",
+        "Europe PMC primary full text"
+      ],
+      "records_screened": 1,
+      "qualifying_human_studies": [
+        {
+          "pmid": "31167512",
+          "title": "Atherogenic Index Reduction and Weight Loss in Metabolic Syndrome Patients Treated with A Novel Pectin-Enriched Formulation of Bergamot Polyphenols.",
+          "study_type": "randomized_double_blind_placebo_controlled",
+          "sample_size": 52,
+          "dose": "650 or 1300 mg/day BPE-C",
+          "duration": "90 days",
+          "outcome": "The studied pectin-enriched preparation was associated with lipid/glucose and weight changes. All groups received 1200 Cal/day diet advice; 52 randomized and 45 completed. This trial does not establish equivalence of an unspecified retail fruit-extract complex.",
+          "verification_provenance": {
+            "pmid_verified": true,
+            "authoritative_live_title": "Atherogenic Index Reduction and Weight Loss in Metabolic Syndrome Patients Treated with A Novel Pectin-Enriched Formulation of Bergamot Polyphenols.",
+            "human_subjects_verified": true,
+            "topic_match_verified": true,
+            "retracted": false,
+            "verified_source": "https://pubmed.ncbi.nlm.nih.gov/31167512/",
+            "verified_at": "2026-10-07"
+          }
+        }
+      ],
+      "effect_direction": "applicability_unestablished",
+      "population_context": "Adults with metabolic syndrome.",
+      "studied_dose_exposure": {},
+      "applicability_decision": "Related human preparation research exists (PMID 31167512). H&AD BPE-C combines approximately 80% juice extract with 20% BPF and specified flavanones, pectin and vitamin C. The retained retail Full Spectrum complex lacks verified composition/manufacturing correspondence. Related BPE-C research is not proof of retail-formula efficacy or a generic bergamot dose benchmark. This is a bounded direct-study review, not an absence-of-research or universal-null determination.",
+      "verification_result": "authoritative_pubmed_verified",
+      "verification_provenance": {
+        "verified_by": "manual_primary_source_content_review",
+        "verified_at": "2026-10-07",
+        "all_pmids_verified": true,
+        "retractions_found": false
+      },
+      "applicability_status": "applicability_unestablished"
+    },
+    {
+      "canonical_id": "triphala_powder",
+      "material_form": "Related Itrifal Saghir confection: equal fruit-pulp powders combined with almond oil and honey; distinct from standalone retail powder or extracts",
+      "search_query": "PMID 23351558; bounded direct-study content review, not exhaustive search",
+      "search_date": "2026-10-07",
+      "databases_searched": [
+        "PubMed",
+        "Europe PMC primary full text"
+      ],
+      "records_screened": 1,
+      "qualifying_human_studies": [
+        {
+          "pmid": "23351558",
+          "title": "Efficacy of 'Itrifal Saghir', a combination of three medicinal plants in the treatment of obesity; A randomized controlled trial.",
+          "study_type": "randomized_double_blind_placebo_controlled",
+          "sample_size": 62,
+          "dose": "10 g/day whole confection, not 10 g pure Triphala powder",
+          "duration": "3 months",
+          "outcome": "Weight and anthropometric outcomes improved versus placebo in this confection trial. It does not establish standalone powder efficacy for gastrointestinal claims.",
+          "verification_provenance": {
+            "pmid_verified": true,
+            "authoritative_live_title": "Efficacy of 'Itrifal Saghir', a combination of three medicinal plants in the treatment of obesity; A randomized controlled trial.",
+            "human_subjects_verified": true,
+            "topic_match_verified": true,
+            "retracted": false,
+            "verified_source": "https://pubmed.ncbi.nlm.nih.gov/23351558/",
+            "verified_at": "2026-10-07"
+          }
+        }
+      ],
+      "effect_direction": "applicability_unestablished",
+      "population_context": "Participants aged 16–60 with obesity.",
+      "studied_dose_exposure": {},
+      "applicability_decision": "Related human preparation research exists (PMID 23351558). The preparation combined equal fruit-pulp powders with almond oil and honey. Whole-confection mass cannot be transferred to pure powder. Retail powder/extract composition and gastrointestinal-purpose applicability remain unestablished; component-only Amla research and combination studies cannot establish whole-formula benefit. This is a bounded direct-study review, not an absence-of-research or universal-null determination.",
+      "verification_result": "authoritative_pubmed_verified",
+      "verification_provenance": {
+        "verified_by": "manual_primary_source_content_review",
+        "verified_at": "2026-10-07",
+        "all_pmids_verified": true,
+        "retractions_found": false
+      },
+      "applicability_status": "applicability_unestablished"
     }
   ]
 }
