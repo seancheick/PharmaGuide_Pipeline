@@ -743,6 +743,8 @@ def test_source_required_anchor_binds_printed_child_before_structural_header(mon
 
 @pytest.mark.parametrize("source_name,source_form,eligible", [
     ("Creatine Monohydrate", None, True),
+    ("Creatin Monohydrate", None, True),
+    ("Creapure", None, True),
     ("Micronized Creatine", "Creatine Monohydrate", True),
     ("Con-Cret", "Creatine Hydrochloride", False),
     ("Creatine", None, False),

@@ -19637,14 +19637,16 @@
         "scope": "ingredient",
         "require_source_label_form": true,
         "required_form_terms": [
-          "creatine monohydrate"
+          "creatine monohydrate",
+          "creatin monohydrate",
+          "creapure"
         ],
         "reviewed_at": "2026-10-07",
         "source_pmids": [
           "39519498",
           "39074168"
         ],
-        "reason": "This existing record describes creatine monohydrate. The source label must identify that preparation; a shared creatine canonical, an enrichment-derived default form, or Con-Cret/creatine hydrochloride wording does not establish correspondence. This form scope adds no dose threshold or grade and does not conclude that hydrochloride, another salt or an unspecified preparation is ineffective. PMID 39519498 discusses monohydrate but uses broadly worded inclusion criteria; it is not evidence of universal equivalence among forms.",
+        "reason": "This existing record describes creatine monohydrate. The source label must identify that preparation; a shared creatine canonical, an enrichment-derived default form, or Con-Cret/creatine hydrochloride wording does not establish correspondence. This form scope adds no dose threshold or grade and does not conclude that hydrochloride, another salt or an unspecified preparation is ineffective. PMID 39519498 discusses monohydrate but uses broadly worded inclusion criteria; it is not evidence of universal equivalence among forms. Existing curated source aliases Creatin Monohydrate and Creapure identify monohydrate; the Creapure manufacturer independently confirms that preparation. This identity correspondence adds no branded efficacy or safety claim.",
         "excluded_form_terms": [
           "creatine hydrochloride",
           "creatine HCl",
