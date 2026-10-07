@@ -1499,7 +1499,7 @@ def test_wild_crafted_prefix_normalization_maps(normalizer, name):
         ("China Wax"),
         ("Pea Starch"),
         ("Methacrylic Acid"),
-        ("Alginic Acid"),
+        ("Alginic acid sodium salt"),
         ("Vegetable Magnesium Silicate"),
         ("Dextrates"),
         ("Glycerol Palmitostearate"),
@@ -3384,3 +3384,17 @@ def test_compound_and_declared_nutrient_keep_their_own_amounts(normalizer, name,
     assert rows[0]["quantity"] == amount
     assert rows[0]["unit"] == "mg"
     assert rows[0]["raw_source_text"] == name
+
+
+def test_alginic_acid_does_not_borrow_sodium_salt_alias(normalizer):
+    # PII_SODIUM_ALGINATE owns the sodium salt, not the declared acid.
+    standard_name, mapped, _ = normalizer._enhanced_ingredient_mapping("Alginic Acid", [])
+    assert mapped is False
+    assert standard_name == "Alginic Acid"
+
+
+@pytest.mark.parametrize("name", ["Sodium Alginate", "Alginic acid sodium salt"])
+def test_named_sodium_alginate_aliases_keep_salt_identity(normalizer, name):
+    standard_name, mapped, _ = normalizer._enhanced_ingredient_mapping(name, [])
+    assert mapped is True
+    assert standard_name == "Sodium Alginate"
