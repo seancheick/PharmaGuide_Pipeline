@@ -337,21 +337,24 @@ def test_identity_bearing_blend_total_reaches_v4_as_anchor_mass_evidence() -> No
 
     rows = _evidence_rows(product, "blend_anchor_mass")
     assert rows, "Identity-bearing blend totals must not disappear from scoring"
-    assert rows[0]["canonical_id"] == "quercefit"
-    assert not any(row.get("canonical_id") == "quercetin" for row in rows)
+    assert rows[0]["canonical_id"] == "quercetin"
+    assert rows[0]["matched_form"] == "quercetin phytosome"
+    assert rows[0]["raw_source_path"] == "ingredientRows[0]"
+    assert rows[0]["evidence_scope"] == "blend_level"
     assert float(rows[0]["quantity"]) >= 300.0
 
     out = score_product_v4(product)
-    # This named structural anchor retains mass provenance without becoming
-    # an ingredient efficacy claim or borrowing the protein/enzyme aggregate rule.
+    # The verified preparation retains its literal blend mass and canonical
+    # ingredient identity. Coverage is module-scoped, not an individual dose
+    # or proof of a whole-formula clinical trial.
     assessments = out["v4_breakdown"]["assessment_readiness"]["evidence"]["ingredient_assessments"]
-    anchors = [row for row in assessments if row.get("canonical_id") == "quercefit"]
+    anchors = [row for row in assessments if row.get("canonical_id") == "quercetin"]
     assert anchors
     assert all(
         row["state"] == "not_applicable"
-        and row["evidence_applicability"] == "not_applicable"
-        and row["reason_code"] == "structural_row_not_evidence_subject"
-        and row["evidence_ids"] == []
+        and row["evidence_applicability"] == "module_aggregate"
+        and row["reason_code"] == "module_scoped_product_projection"
+        and set(row["evidence_ids"]) == {"INGR_QUERCETIN", "PRECLIN_QUERCETIN_PHYTOSOME"}
         for row in anchors
     )
     assert out["v4_verdict"] != "NOT_SCORED"

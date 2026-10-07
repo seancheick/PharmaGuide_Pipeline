@@ -103,7 +103,8 @@ V4_CANARIES = {
         "verdict": "SAFE",
         "confidence": "moderate",
         "score_unavailable_reason": None,
-        "score": 39.2,
+        "score": 34.2,
+        "no_primary_evidence_floor": True,
         "evidence_driver": "evidence_review_complete_limited_or_negative",
         "unevaluated_canonicals": set(),
     },
@@ -214,6 +215,11 @@ def test_v4_real_catalog_gate_and_confidence_canary(dsld_id: str, expected: dict
         assert lo <= out["raw_score_v4_100"] <= hi
 
     breakdown = out["v4_breakdown"]
+    if expected.get("no_primary_evidence_floor"):
+        evidence_dimension = breakdown["module"]["dimensions"]["evidence"]
+        assert evidence_dimension["score"] == 0.0
+        assert evidence_dimension["metadata"]["primary_evidence_floor"] == 0.0
+        assert "chlorophyll_complex" not in evidence_dimension["metadata"]["evidence_owner_canonicals"]
     if expected.get("completeness_ready"):
         assert breakdown["completeness_gate"]["is_live_eligible"] is True
         assert breakdown["completeness_gate"]["missing_fields"] == []
