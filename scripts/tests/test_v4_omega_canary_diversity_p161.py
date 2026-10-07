@@ -52,7 +52,7 @@ CANARY_TARGETS = {
                "Sports Research Omega-3 1055 mg Fish Oil 1250 mg (original canary)"),
     "273630": ('omega', 'tg', 10.86, 10.86, 'Garden of Life Dr. Formulated Advanced Omega Lemon Flavor'),
     "273636": ('omega', 'tg', 7.29, 7.29, 'Garden of Life Dr. Formulated Alaskan Cod Liver Oil Lemon Flavor — cod liver source'),
-    "292796": ('omega', 'tg', 8.29, 8.29, 'Garden of Life Dr. Formulated Advanced Omega Citrus Flavor'),
+    "292796": ('omega', 'tg', 10.29, 10.29, 'Garden of Life Dr. Formulated Advanced Omega Citrus Flavor'),
 
     # --- Mid band: PL krill (form 6) + concentration ---
     "239592": ('omega', 'pl', 5.57, 5.57, 'CVS Health 100% Pure Omega-3 Krill Oil 350 mg'),
@@ -156,6 +156,13 @@ def test_omega_canary_routes_and_scores_in_range(dsld_id, expected):
         f"canary {dsld_id} form detected {form!r}, expected {expected_form!r}. "
         f"Components: {payload['components']}"
     )
+    if dsld_id == "292796":
+        concentration = payload["metadata"]["epa_dha_concentration"]
+        assert concentration["epa_dha_mg"] == 1160.0
+        assert concentration["oil_mg"] == 1450.0
+        assert concentration["oil_mass_source"] == "label_oil_row"
+        assert concentration["ratio"] == pytest.approx(0.8)
+        assert payload["components"]["epa_dha_concentration"] == 4.0
     assert score_min <= score <= score_max, (
         f"canary {dsld_id} ({label}) Formulation score {score} not in "
         f"[{score_min}, {score_max}]. Components: {payload['components']}"

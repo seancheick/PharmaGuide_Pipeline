@@ -274,6 +274,9 @@ bug-fix notes are history, not specifications.
   `source scripts/python_env.sh; PYTHON="$PG_PYTHON" bash batch_run_all_datasets.sh …`.
 - At most one full-corpus job at a time (16 GB Mac), never alongside the full suite. Keep durable
   inputs outside `/tmp` — a reboot wipes it.
+- Before large audits/builds, check free disk space and reuse completed manifest-owned outputs.
+  Remove verified duplicate and superseded generated work files at handoff; retain the current
+  candidate, required comparison baselines, checksum manifests, compact reports and unique user data.
 - **Keep branches temporary:** one worktree/branch per active editing batch, not per bug, test,
   subagent or document. Read-only reviewers need no branch. Reuse a suitable existing worktree.
   One integrator mutates/pushes `main`; merge a completed validated batch promptly, verify its
