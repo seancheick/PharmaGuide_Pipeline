@@ -963,7 +963,9 @@ def resolve_identity(
         else None
     )
     display_canonical = (
-        raw_canonical
+        canonical_before
+        if declared_material_validates_identity
+        else raw_canonical
         if literal_specific_over_structured_parent
         else structured_canonical or raw_canonical
     )

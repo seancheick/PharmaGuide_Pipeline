@@ -514,6 +514,12 @@ def test_polisure_declared_material_survives_strict_evidence_identity(pipeline):
     assert active["canonical_id"] == "policosanol"
     assert active["quantity"] == 10 and active["unit"] == "mg"
 
+    quality = next(r for r in enriched["ingredient_quality_data"]["ingredients"]
+                   if r.get("canonical_id") == "policosanol")
+    assert quality["source_label_name"] == row["name"]
+    assert quality["label_display_name"] == row["name"]
+    assert quality["form_match_status"] == "unmapped"  # no fabricated PoliSure equivalence
+
 
 def test_achiote_leaf_cannot_inherit_annatto_seed_carotenoid_identity(pipeline):
     row = _raw_row(1, "Achiote extract", "Annatto", quantity=500, unit="mg")
