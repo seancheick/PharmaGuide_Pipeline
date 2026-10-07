@@ -207,6 +207,14 @@
   ],
   "changelog": [
     {
+      "date": "2026-10-07",
+      "phase": "Preparation-specific research acknowledgment",
+      "products_updated": [
+        321405
+      ],
+      "notes": "Existing raw freezer on source8ab7afd9 changes only quality_assessment_status partial\u2192complete. Related prescription pancreatin trial22762290 is now acknowledged conservatively without retail preparation/activity/indication equivalence, affirmative clinical grade or dose benchmark. Frozen17-label baseline/candidate capture keeps321405total77.9 and all six numerical pillar values, route/status/safety/Dose-safety; Evidence10.4 remains driven by previously reviewed ingredients, not pancreatin. Clinical review completion is distinct from efficacy. Ginkgo180417six-point Transparency regression was repaired at the existing disclosure count owner and retains69.7; no Ginkgo fixture was refreshed. Complete33rawcanary check follows this selective refresh. Receipts: /Users/seancheick/pg_quality/post_pipeline_20261006/final_two_preparations_{baseline,candidate}.jsonl and final_321405_raw_refresh.log."
+    },
+    {
       "date": "2026-10-06",
       "phase": "Individual dose exposure ownership",
       "products_updated": [
