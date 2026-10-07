@@ -10257,7 +10257,7 @@
           ],
           "alert_headline": "Turmeric or curcumin — liver caution",
           "alert_body": "Turmeric and curcumin supplements have rarely been linked to serious liver injury. If you have or have had liver problems, avoid these supplements and review use with your clinician.",
-          "informational_note": "This precaution applies to medicinal turmeric and curcumin preparations, including enhanced-absorption forms; culinary use is different.",
+          "informational_note": "Medicinal turmeric/curcumin, including enhanced-absorption forms, carry this precaution; culinary use differs.",
           "profile_gate": {
             "gate_type": "condition",
             "requires": {
@@ -11290,7 +11290,7 @@
           ],
           "alert_headline": "Turmeric or curcumin — liver caution",
           "alert_body": "Turmeric and curcumin supplements have rarely been linked to serious liver injury. If you have or have had liver problems, avoid these supplements and review use with your clinician.",
-          "informational_note": "This precaution applies to medicinal turmeric and curcumin preparations, including enhanced-absorption forms; culinary use is different.",
+          "informational_note": "Medicinal turmeric/curcumin, including enhanced-absorption forms, carry this precaution; culinary use differs.",
           "profile_gate": {
             "gate_type": "condition",
             "requires": {
@@ -25959,7 +25959,7 @@
           ],
           "alert_headline": "Willow bark — clotting precaution",
           "alert_body": "Weeping willow bark has limited specific safety data. Willow preparations may affect clotting; review use with your clinician if you take blood thinners or have a bleeding disorder.",
-          "informational_note": "The precaution follows broader Salix bark safety guidance. Exact species-specific effects and salicin exposure remain unestablished.",
+          "informational_note": "Broader Salix bark guidance informs this precaution; exact species effects and salicin exposure remain unestablished.",
           "profile_gate": {
             "gate_type": "condition",
             "requires": {
@@ -25993,7 +25993,7 @@
           ],
           "alert_headline": "Willow bark — clotting precaution",
           "alert_body": "Weeping willow bark has limited specific safety data. Willow preparations may affect clotting; review use with your clinician if you take blood thinners or have a bleeding disorder.",
-          "informational_note": "The precaution follows broader Salix bark safety guidance. Exact species-specific effects and salicin exposure remain unestablished.",
+          "informational_note": "Broader Salix bark guidance informs this precaution; exact species effects and salicin exposure remain unestablished.",
           "profile_gate": {
             "gate_type": "profile_flag",
             "requires": {
@@ -26029,7 +26029,7 @@
           ],
           "alert_headline": "Willow bark — clotting precaution",
           "alert_body": "Weeping willow bark has limited specific safety data. Willow preparations may affect clotting; review use with your clinician if you take blood thinners or have a bleeding disorder.",
-          "informational_note": "The precaution follows broader Salix bark safety guidance. Exact species-specific effects and salicin exposure remain unestablished.",
+          "informational_note": "Broader Salix bark guidance informs this precaution; exact species effects and salicin exposure remain unestablished.",
           "profile_gate": {
             "gate_type": "drug_class",
             "requires": {
@@ -26063,7 +26063,7 @@
           ],
           "alert_headline": "Willow bark — clotting precaution",
           "alert_body": "Weeping willow bark has limited specific safety data. Willow preparations may affect clotting; review use with your clinician if you take blood thinners or have a bleeding disorder.",
-          "informational_note": "The precaution follows broader Salix bark safety guidance. Exact species-specific effects and salicin exposure remain unestablished.",
+          "informational_note": "Broader Salix bark guidance informs this precaution; exact species effects and salicin exposure remain unestablished.",
           "profile_gate": {
             "gate_type": "drug_class",
             "requires": {
@@ -26097,7 +26097,7 @@
           ],
           "alert_headline": "Willow bark — clotting precaution",
           "alert_body": "Weeping willow bark has limited specific safety data. Willow preparations may affect clotting; review use with your clinician if you take blood thinners or have a bleeding disorder.",
-          "informational_note": "The precaution follows broader Salix bark safety guidance. Exact species-specific effects and salicin exposure remain unestablished.",
+          "informational_note": "Broader Salix bark guidance informs this precaution; exact species effects and salicin exposure remain unestablished.",
           "profile_gate": {
             "gate_type": "drug_class",
             "requires": {
