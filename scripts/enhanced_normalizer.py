@@ -3490,6 +3490,14 @@ class EnhancedDSLDNormalizer:
         # A brand alone, mixed/partial forms, or a nested composition cannot
         # establish a component amount.
         if (len(forms) == 1 and not ingredient.get("nestedRows")
+                # A culture/plant source names where an enzyme was made, not
+                # a different active or an encompassing multi-enzyme blend.
+                # Preserve the discrete enzyme owner; explicitly declared
+                # enzyme forms still enter the component/activity path below.
+                and not (
+                    str(ingredient.get("category") or "").casefold() == "enzyme"
+                    and str(forms[0].get("category") or "").casefold() == "botanical"
+                )
                 and forms[0].get("percent") in (None, 100)
                 and not forms[0].get("quantity")
                 and (

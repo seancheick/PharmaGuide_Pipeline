@@ -994,3 +994,39 @@ def test_dha_triglyceride_without_source_does_not_choose_fish_algae_or_rtg(pipel
     child = _raw_row(1, "Docosahexaenoic Acid", "DHA (Docosahexaenoic Acid)", category="fatty acid", quantity=200, unit="mg", forms=("Docosahexaenoic Acid Triglyceride",))
     enriched = pipeline(_raw_product("unknown-source-dha", [child]))
     assert all(r["form_match_status"] == "unmapped" for r in _rows(enriched, "Docosahexaenoic Acid"))
+
+
+@pytest.mark.parametrize("name,group,expected,activity", [
+    ("Acid Protease", "Proteolytic Enzymes (Proteases)", "protease", "25 SAPU"),
+    ("Protease", "Protease", "protease", "100 HUT"),
+    ("Lactase", "Lactase", "lactase", "9000 ALU"),
+    ("Amylase", "Amylase", "amylase", "10 DU"),
+    ("Lipase", "Lipase", "lipase", "50 FIP"),
+    ("Peptidase", "Peptidase", "protease", "25 DPP-IV"),
+])
+def test_enzyme_culture_source_does_not_replace_its_discrete_identity(name, group, expected, activity):
+    from enhanced_normalizer import EnhancedDSLDNormalizer
+    row = _raw_row(1, name, group, category="enzyme", quantity=0, unit="NP", forms=("Aspergillus niger",))
+    row["forms"][0].update(category="botanical", ingredientGroup="Aspergillus niger", uniiCode="9IOA40ANG6")
+    row["notes"] = name + " Note: " + activity
+    clean = EnhancedDSLDNormalizer().normalize_product(_raw_product("enzyme-culture-source", [row]))
+    assert clean["activeIngredients"][0]["canonical_id"] == expected
+    assert clean["activeIngredients"][0]["quantity"] == 0
+    assert clean["activeIngredients"][0]["activity_quantity"] > 0
+
+
+def test_culture_source_activity_keeps_its_owner_through_the_scored_artifact(pipeline):
+    from scoring_v4.scored_artifact import build_scored_artifact
+    from scoring_input_contract import get_evidence_subject_rows
+    row = _raw_row(2, "Acid Protease", "Proteolytic Enzymes (Proteases)", category="enzyme", quantity=0, unit="NP", forms=("Aspergillus niger",))
+    row["forms"][0].update(category="botanical", ingredientGroup="Aspergillus niger", uniiCode="9IOA40ANG6")
+    row["notes"] = "Acid Protease Note: 25 SAPU"
+    blend = _raw_row(1, "Enzyme Blend", "blend (non-nutrient/non-botanical)", category="blend", quantity=300, unit="mg")
+    blend["nestedRows"] = [row]
+    enriched = pipeline(_raw_product("culture-source-blend", [blend]))
+    artifact = build_scored_artifact(enriched)
+    assert artifact["quality_score_status"] in {"scored", "not_scored"}
+    subjects = [r for r in get_evidence_subject_rows(enriched) if r.get("name") == "Acid Protease"]
+    assert subjects and all(r["canonical_id"] == "protease" for r in subjects)
+    assert any(r.get("quantity") == 25 and r.get("unit") == "SAPU" for r in subjects)
+    assert not any(r.get("quantity") == 300 and r.get("unit") == "mg" for r in subjects)
