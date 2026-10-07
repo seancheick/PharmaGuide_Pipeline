@@ -1081,3 +1081,22 @@ def test_declared_material_group_cannot_override_missing_source_alias_or_chemica
         canonical_registry=registry,
     )
     assert decision.canonical_id != "policosanol"
+
+
+@pytest.mark.parametrize("form_name,retained", [("Sucrose", False), ("Magnesium", False), ("Creatine Hydrochloride", False), ("PoliSure", True)])
+def test_complete_material_group_cannot_hide_a_known_conflicting_form_name(form_name, retained):
+    registry = build_canonical_identity_registry({"ingredient_quality_map": {
+        "policosanol": {"standard_name": "Policosanol", "aliases": ["Sugar Cane Wax"]},
+        "sugar": {"standard_name": "Sugar cane", "aliases": ["Sucrose"]},
+        "magnesium": {"standard_name": "Magnesium"},
+        "creatine_monohydrate": {"standard_name": "Creatine", "aliases": ["Creatine Hydrochloride"]},
+    }})
+    decision = resolve_identity(
+        {"raw_source_text": "Sugar Cane Wax Extract", "ingredientGroup": "Sugar cane", "forms": [
+            {"name": form_name, "ingredientGroup": "Policosanol", "category": "non-nutrient/non-botanical"}]},
+        "policosanol", lambda value: {"sugar cane": "sugar", "policosanol": "policosanol"}.get(value.casefold()),
+        canonical_registry=registry,
+    )
+    assert (decision.canonical_id == "policosanol") is retained
+    if retained:
+        assert decision.label_display_name == "Sugar Cane Wax Extract"

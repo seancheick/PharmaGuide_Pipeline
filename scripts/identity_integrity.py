@@ -921,7 +921,7 @@ def resolve_identity(
         and len(declared_forms) == 1
         and isinstance(declared_forms[0], Mapping)
         and str(declared_forms[0].get("name") or "").strip()
-        and declared_forms[0].get("percent") in {None, 100, 100.0, "100"}
+        and declared_forms[0].get("percent") in {None, 100, "100"}
         and declared_forms[0].get("quantity") in (None, [])
         and declared_forms[0].get("amount") is None
         and str(declared_forms[0].get("prefix") or "").strip().casefold() in {"", "as"}
@@ -929,6 +929,20 @@ def resolve_identity(
             == "non-nutrient/non-botanical"
         and canonical_registry.literal_identity_matches(
             str(declared_forms[0].get("ingredientGroup") or ""), canonical_before
+        )
+        # An unresolved branded form keeps its honest form hold. A known
+        # different chemical name cannot be overruled by its broad group.
+        and not any(
+            (form_identity := canonical_registry.resolve_verified_preferred(candidate))
+            and form_identity[0] != canonical_before
+            and not (
+                canonical_parent_of
+                and (
+                    canonical_parent_of(form_identity[0], canonical_before)
+                    or canonical_parent_of(canonical_before, form_identity[0])
+                )
+            )
+            for candidate in _form_candidate_variants(str(declared_forms[0]["name"]))
         )
     )
     if declared_material_validates_identity:
