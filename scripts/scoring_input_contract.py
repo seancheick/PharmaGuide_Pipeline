@@ -3359,6 +3359,9 @@ def _is_ineligible_evidence_subject(row: Mapping[str, Any]) -> bool:
     )
     return (
         (minted and not known)
+        # Both the strict projection and label mirror consume the cleaner's
+        # accepted non-efficacy role; the strict merge must not revive markers.
+        or _norm(row.get("cleaner_row_role")) in CLEANER_NON_EFFICACY_ROLES
         or row.get("demotion_reason") == "absorption_enhancer_sub_threshold"
         or canonical.endswith("_descriptor")
         or canonical in DETERMINISTIC_NON_EFFICACY_CANONICALS

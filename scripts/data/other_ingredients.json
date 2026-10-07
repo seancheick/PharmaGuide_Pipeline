@@ -3,7 +3,7 @@
     "description": "Other/inactive ingredients database for supplement excipients and additives",
     "purpose": "inactive_ingredient_classification",
     "schema_version": "5.4.3",
-    "last_updated": "2026-10-05",
+    "last_updated": "2026-10-07",
     "total_entries": 729,
     "functional_roles_field": {
       "added_in": "5.1.0",
@@ -1090,6 +1090,12 @@
     {
       "id": "NHA_ANNATTO_VARIANTS",
       "standard_name": "Annatto (Variants)",
+      "match_rules": {
+        "negative_match_terms": [
+          "leaf",
+          "leaves"
+        ]
+      },
       "aliases": [
         "annato",
         "Annato extract",
@@ -1110,7 +1116,7 @@
         "natural coloring",
         "yellow/orange color"
       ],
-      "last_updated": "2025-12-04",
+      "last_updated": "2026-10-07",
       "external_ids": {
         "unii": "6PQP1V1B6O"
       },
@@ -1134,6 +1140,12 @@
     {
       "id": "OI_ANNATTO_EXTRACT",
       "standard_name": "Annatto Extract",
+      "match_rules": {
+        "negative_match_terms": [
+          "leaf",
+          "leaves"
+        ]
+      },
       "aliases": [
         "achiote",
         "annatto",
@@ -1150,7 +1162,7 @@
         "natural coloring",
         "yellow/orange color"
       ],
-      "last_updated": "2025-11-14",
+      "last_updated": "2026-10-07",
       "external_ids": {
         "unii": "6PQP1V1B6O"
       },
@@ -17652,9 +17664,16 @@
     {
       "id": "PII_SODIUM_ALGINATE",
       "standard_name": "Sodium Alginate",
+      "match_rules": {
+        "negative_match_terms": [
+          {
+            "term": "alginic acid",
+            "match_mode": "exact"
+          }
+        ]
+      },
       "aliases": [
         "alginate",
-        "alginic acid",
         "alginic acid sodium salt",
         "brown algae extract",
         "E401"
@@ -17669,7 +17688,7 @@
         "thickener",
         "controlled release"
       ],
-      "last_updated": "2025-11-17",
+      "last_updated": "2026-10-07",
       "external_ids": {
         "unii": "C269C4G2ZQ",
         "cas": "62543-89-9",

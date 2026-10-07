@@ -444,3 +444,97 @@ def test_nested_family_bounds_do_not_restore_nonalpha_adequacy(pipeline):
         assert all(r['scoring_eligible'] is False and r['pct_rda'] is None for r in rows)
     alpha = [r for r in assessments if 'd-alpha-tocopherol:' in r.get('source_label_key', '')]
     assert alpha and any(r['scoring_eligible'] is True for r in alpha)
+
+
+@pytest.mark.parametrize("group,unii", [("Algin", None), ("Sodium Alginate", None), ("Algin", "8C3Z4148WZ")])
+def test_declared_alginic_acid_does_not_assert_sodium_salt(pipeline, group, unii):
+    # Esophageal Guardian 232011/328450 declares acid, 1000 mg, not its sodium salt.
+    row = _raw_row(1, "Alginic Acid", group, category="non-nutrient/non-botanical", quantity=1000, unit="mg")
+    row["uniiCode"] = unii
+    enriched = pipeline(_raw_product(990132, [row]))
+    active = next(r for r in enriched["activeIngredients"] if r["name"] == "Alginic Acid")
+    assert active.get("canonical_id") is None
+    assert active["quantity"] == 1000
+    assert active["unit"] == "mg"
+    assert active.get("standardName") == "Alginic Acid"
+    assert "C269C4G2ZQ" not in json.dumps(active)
+    assert "23665711" not in json.dumps(active)
+
+
+@pytest.mark.parametrize("name", ["Sodium Alginate", "Alginic acid sodium salt"])
+def test_declared_sodium_alginate_retains_existing_salt_owner(pipeline, name):
+    row = _raw_row(1, name, "Algin", category="non-nutrient/non-botanical", quantity=1000, unit="mg")
+    row["uniiCode"] = "C269C4G2ZQ"
+    enriched = pipeline(_raw_product(990133, [row]))
+    active = next(r for r in enriched["activeIngredients"] if r["name"] == name)
+    assert active["canonical_id"].lower() == "pii_sodium_alginate"
+    assert active["quantity"] == 1000
+
+
+@pytest.mark.parametrize("pid,serving_unit", [(232011, "Tablet(s)"), (328450, "Vegetarian Chewable Tablet(s)")])
+def test_esophageal_guardian_declared_acid_retains_source_facts(pipeline, pid, serving_unit):
+    row = {
+        "order": 4, "ingredientId": 282529, "description": "", "notes": "",
+        "quantity": [{"servingSizeOrder": 1, "servingSizeQuantity": 2,
+                      "operator": "=", "quantity": 1000, "unit": "mg",
+                      "dailyValueTargetGroup": [{"name": "Adults and children 4 or more years of age",
+                                                  "operator": None, "percent": None,
+                                                  "footnote": "Daily Value not established"}],
+                      "servingSizeUnit": serving_unit}],
+        "nestedRows": [], "name": "Alginic Acid", "category": "complex carbohydrate",
+        "ingredientGroup": "Algin", "uniiCode": "8C3Z4148WZ", "alternateNames": [], "forms": [],
+    }
+    enriched = pipeline(_raw_product(pid, [row]))
+    active = next(r for r in enriched["activeIngredients"] if r["name"] == "Alginic Acid")
+    assert active.get("canonical_id") is None
+    assert active["raw_source_text"] == "Alginic Acid"
+    assert active["quantity"] == 1000 and active["unit"] == "mg"
+    assert active["raw_taxonomy"]["uniiCode"] == "8C3Z4148WZ"
+    assert active["raw_source_path"] == "ingredientRows[0]"
+
+
+def test_acid_literal_vetoes_conflicting_sodium_unii(pipeline):
+    row = _raw_row(1, "Alginic Acid", "Algin", quantity=1000, unit="mg")
+    row["uniiCode"] = "C269C4G2ZQ"
+    enriched = pipeline(_raw_product(990134, [row]))
+    active = next(r for r in enriched["activeIngredients"] if r["name"] == "Alginic Acid")
+    assert active.get("canonical_id") is None
+    assert active["standardName"] == "Alginic Acid"
+
+
+def test_polisure_declared_material_survives_strict_evidence_identity(pipeline):
+    row = _raw_row(1, "Sugar Cane Wax Extract", "Sugar cane", quantity=10, unit="mg")
+    row["forms"] = [{"name": "PoliSure", "ingredientId": 344472, "order": 1,
+                     "prefix": None, "percent": None, "category": "non-nutrient/non-botanical",
+                     "ingredientGroup": "Policosanol", "uniiCode": None}]
+    enriched = pipeline(_raw_product(314749, [row]))
+    from scoring_input_contract import get_evidence_subject_rows
+    subjects = get_evidence_subject_rows(enriched)
+    active = next(r for r in subjects if r["name"] == row["name"])
+    assert active["canonical_id"] == "policosanol"
+    assert active["quantity"] == 10 and active["unit"] == "mg"
+
+
+def test_achiote_leaf_cannot_inherit_annatto_seed_carotenoid_identity(pipeline):
+    row = _raw_row(1, "Achiote extract", "Annatto", quantity=500, unit="mg")
+    row["ingredientId"] = 237672
+    row["notes"] = "Achiote extract PlantPart: leaf Note: 4:1 "
+    enriched = pipeline(_raw_product(213740, [row]))
+    active = next(r for r in enriched["activeIngredients"] if r["name"] == "Achiote extract")
+    assert active.get("canonical_id") is None
+    assert active["quantity"] == 500 and active["unit"] == "mg"
+    assert "6PQP1V1B6O" not in json.dumps(active)
+    assert active["plantPart"] == "leaf"
+    from scoring_input_contract import get_evidence_subject_rows
+    # An unresolved source is not an assessable seed-material subject.
+    assert not any(r.get("canonical_id") in {"oi_annatto_extract", "nha_annatto_variants"}
+                   for r in get_evidence_subject_rows(enriched) if r["name"] == row["name"])
+
+
+@pytest.mark.parametrize("name,owner", [("Annatto Extract", "oi_annatto_extract"), ("Annatto seed extract", "nha_annatto_variants"), ("Natural color annatto", "oi_annatto_extract")])
+def test_annatto_seed_colorant_retains_existing_owner(pipeline, name, owner):
+    row = _raw_row(1, name, "Annatto", quantity=5, unit="mg")
+    row["uniiCode"] = "6PQP1V1B6O"
+    enriched = pipeline(_raw_product(990135, [row]))
+    active = next(r for r in enriched["activeIngredients"] if r["name"] == name)
+    assert active.get("canonical_id", "").lower() == owner

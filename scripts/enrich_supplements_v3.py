@@ -1987,6 +1987,7 @@ class SupplementEnricherV3:
                     "matched_entry_id": entry.get('id'),
                     "matched_entry_name": entry.get('standard_name'),
                     "recognition_type": rec_type,
+                    "match_rules": entry.get("match_rules") or {},
                 }
                 source_id, source_name = entry.get('id'), entry.get('standard_name')
                 if (
@@ -2091,6 +2092,7 @@ class SupplementEnricherV3:
                     "matched_entry_id": entry.get("id"),
                     "matched_entry_name": entry.get("standard_name"),
                     "recognition_type": rec_type,
+                    "match_rules": entry.get("match_rules") or {},
                 }
                 existing = nonscorable_unii_idx.get(entry_unii)
                 if existing is None or _recognition_priority(result) > _recognition_priority(existing):
@@ -4733,7 +4735,7 @@ class SupplementEnricherV3:
 
                 recognition_info = None
                 if skip_reason == SKIP_REASON_RECOGNIZED_NON_SCORABLE:
-                    recognition_info = self._is_recognized_non_scorable(ing_name, std_name)
+                    recognition_info = self._is_recognized_non_scorable(ing_name, std_name, source_context=ingredient)
                     if recognition_info:
                         recognized_non_scorable_count += 1
 
@@ -5138,7 +5140,7 @@ class SupplementEnricherV3:
                     identity_decision.disposition == "identity_conflict"
                     and has_nonlive_microbial_derivative_evidence(ingredient)
                 ):
-                    recognition = self._is_recognized_non_scorable(ing_name, std_name)
+                    recognition = self._is_recognized_non_scorable(ing_name, std_name, source_context=ingredient)
                 if recognition:
                     self._restamp_recognized_non_scorable_identity(
                         quality_entry,
@@ -5300,7 +5302,7 @@ class SupplementEnricherV3:
                     # Apply the same identity fallback used in pass-1 actives.
                     # Promoted inactives can be therapeutically relevant botanicals
                     # that are recognized in non-quality DBs.
-                    recognition = self._is_recognized_non_scorable(ing_name, std_name)
+                    recognition = self._is_recognized_non_scorable(ing_name, std_name, source_context=ingredient)
                     if recognition:
                         self._restamp_recognized_non_scorable_identity(
                             quality_entry,
@@ -6549,7 +6551,7 @@ class SupplementEnricherV3:
             # Name-based excipient exclusion does not erase the separate
             # existing identity/safety recognition result for that substance.
             if (excipient_reason == "excipient_never_promote"
-                    and self._is_recognized_non_scorable(ing_name, std_name)):
+                    and self._is_recognized_non_scorable(ing_name, std_name, source_context=ingredient)):
                 return SKIP_REASON_RECOGNIZED_NON_SCORABLE
             return excipient_reason
 
@@ -6563,7 +6565,7 @@ class SupplementEnricherV3:
         if self._is_known_therapeutic(ing_name, std_name, quality_map, botanicals_db):
             return None
 
-        recognized = self._is_recognized_non_scorable(ing_name, std_name)
+        recognized = self._is_recognized_non_scorable(ing_name, std_name, source_context=ingredient)
         if self._recognition_blocks_scoring(recognized):
             return SKIP_REASON_RECOGNIZED_NON_SCORABLE
 
@@ -6783,7 +6785,7 @@ class SupplementEnricherV3:
             }
 
         # Block promotion for banned_recalled ingredients not in IQM
-        recognized = self._is_recognized_non_scorable(ing_name, std_name)
+        recognized = self._is_recognized_non_scorable(ing_name, std_name, source_context=ingredient)
         if self._recognition_blocks_scoring(recognized):
             return None
 
@@ -6932,7 +6934,8 @@ class SupplementEnricherV3:
         return False
 
     def _is_recognized_non_scorable(
-        self, ing_name: str, std_name: str, raw_row: Optional[Dict] = None
+        self, ing_name: str, std_name: str, raw_row: Optional[Dict] = None,
+        *, source_context: Optional[Dict] = None,
     ) -> Optional[Dict]:
         """
         Check if ingredient is recognized in non-scorable databases.
@@ -6953,15 +6956,35 @@ class SupplementEnricherV3:
             std_name: candidate standard_name (from cleaner mapping attempt)
             raw_row: optional full DSLD row dict with `uniiCode` and `forms[*]`
                      for Tier-0 UNII-anchored recognition (Sprint 1)
+            source_context: existing cleaned source row for authored exclusions;
+                            does not enable the separate raw UNII lookup path.
 
         Returns:
             Dict with recognition_source and reason if recognized, None otherwise.
         """
+        def validated_recognition(recognition: Dict) -> Optional[Dict]:
+            # The indexes accelerate recognition; they cannot broaden an
+            # authored preparation/salt exclusion from the source registry.
+            context = [ing_name]
+            context_row = source_context if source_context is not None else raw_row
+            if isinstance(context_row, dict):
+                context.extend(context_row.get(key) or "" for key in
+                               ("raw_source_text", "plantPart", "notes"))
+                context.extend(form.get("name") or "" for form in
+                               context_row.get("forms") or [] if isinstance(form, dict))
+            rules = (recognition.get("match_rules") or {}
+                     if recognition.get("recognition_source") == "other_ingredients" else {})
+            if negative_match_terms_veto(context, rules.get("negative_match_terms") or []):
+                return None
+            result = dict(recognition)
+            result.pop("match_rules", None)
+            return result
+
         # ── Sprint 1 Tier-0: UNII-anchored fast path ──
         if raw_row is not None and self._nonscorable_unii_index:
             raw_unii = _normalize_unii(raw_row.get("uniiCode"))
             if raw_unii and raw_unii in self._nonscorable_unii_index:
-                return dict(self._nonscorable_unii_index[raw_unii])
+                return validated_recognition(self._nonscorable_unii_index[raw_unii])
             # Walk forms[*].uniiCode if top-level missed
             forms = raw_row.get("forms") or []
             if isinstance(forms, list):
@@ -6970,31 +6993,31 @@ class SupplementEnricherV3:
                         continue
                     form_unii = _normalize_unii(form.get("uniiCode"))
                     if form_unii and form_unii in self._nonscorable_unii_index:
-                        return dict(self._nonscorable_unii_index[form_unii])
+                        return validated_recognition(self._nonscorable_unii_index[form_unii])
 
         # ── FAST PATH: O(1) index lookup before expensive variant generation ──
         if self._nonscorable_index:
             # Check ing_name directly (most common hit)
             ing_norm = self._normalize_text(ing_name)
             if ing_norm in self._nonscorable_index:
-                return dict(self._nonscorable_index[ing_norm])
+                return validated_recognition(self._nonscorable_index[ing_norm])
 
             # Check std_name (unless it's an excipient descriptor)
             std_name_norm = self._normalize_text(std_name)
             if std_name_norm not in EXCIPIENT_NEVER_PROMOTE:
                 if std_name_norm in self._nonscorable_index:
-                    return dict(self._nonscorable_index[std_name_norm])
+                    return validated_recognition(self._nonscorable_index[std_name_norm])
 
             # Check preprocessed variants for quick wins
             ing_pre = norm_module.preprocess_text(ing_name)
             ing_pre_norm = self._normalize_text(ing_pre)
             if ing_pre_norm and ing_pre_norm in self._nonscorable_index:
-                return dict(self._nonscorable_index[ing_pre_norm])
+                return validated_recognition(self._nonscorable_index[ing_pre_norm])
 
             # Strip parenthetical groups (common pattern: "Oregano (Origanum vulgare)")
             ing_no_parens = self._normalize_text(re.sub(r"\([^)]*\)", " ", ing_name))
             if ing_no_parens and ing_no_parens in self._nonscorable_index:
-                return dict(self._nonscorable_index[ing_no_parens])
+                return validated_recognition(self._nonscorable_index[ing_no_parens])
         # ── END FAST PATH — fall through to full variant scan if no hit ──
 
         def _variants(value: str) -> List[str]:
@@ -7101,7 +7124,8 @@ class SupplementEnricherV3:
                 entry_variants.update(_variants(alias))
 
             if entry_name in candidates or any(v in candidates for v in entry_variants):
-                return {
+                return validated_recognition({
+                    "match_rules": entry.get("match_rules") or {},
                     "recognition_source": "other_ingredients",
                     "recognition_reason": entry.get('category', 'other_ingredient'),
                     "matched_entry_id": entry.get('id'),
@@ -7110,7 +7134,7 @@ class SupplementEnricherV3:
                     "reference_notes": entry.get('notes', ''),
                     "reference_common_uses": entry.get('common_uses', []),
                     "reference_additive_type": entry.get('additive_type', ''),
-                }
+                })
 
         # Check harmful_additives DB for known additive identities.
         harmful_db = self.databases.get('harmful_additives', {})

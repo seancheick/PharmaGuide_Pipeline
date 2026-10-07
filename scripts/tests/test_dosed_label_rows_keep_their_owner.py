@@ -85,3 +85,19 @@ def test_a_printed_nutrition_fact_row_is_not_a_missing_active(normalizer):
                   ["complete_active_disclosure"])
     assert disclosure["qualifies"] is True
     assert disclosure["declared_active_count"] == disclosure["active_row_count"] == 13
+
+
+def test_extract_constituent_markers_are_not_missing_disclosed_actives(normalizer):
+    from enrich_supplements_v3 import SupplementEnricherV3
+    from scoring_v4.scored_artifact import build_scored_artifact
+
+    cleaned = _clean(normalizer, "ginkgo_180417_raw.json")
+    markers = [r for r in cleaned["activeIngredients"]
+               if r.get("cleaner_row_role") == "standardization_marker"]
+    assert [r["quantity"] for r in markers] == [14.4]
+    enriched, _ = SupplementEnricherV3().enrich_product(cleaned)
+    scored = build_scored_artifact(enriched)
+    disclosure = scored["_v4_module_breakdown"]["dimensions"]["transparency"]["metadata"]["complete_active_disclosure"]
+    assert disclosure["qualifies"] is True
+    assert disclosure["declared_active_count"] == disclosure["active_row_count"] == 1
+    assert scored["quality_pillars_v4"]["transparency"]["score"] == 15

@@ -1040,3 +1040,44 @@ def test_registered_compound_alias_does_not_become_its_nutrient_moiety():
     assert registry.resolve_preferred("Choline") == ("choline", "ingredient_quality_map")
     # A declared nutrient can still select its phospholipid source form.
     assert "phosphatidyl choline" in quality_map["choline"]["forms"]["phosphatidylcholine"]["aliases"]
+
+
+@pytest.mark.parametrize("forms", [
+    [],
+    [{"name": "PoliSure", "ingredientGroup": "Policosanol", "category": "non-nutrient/non-botanical", "percent": 50}],
+    [{"name": "PoliSure", "ingredientGroup": "Policosanol", "category": "botanical"}],
+    [{"name": "PoliSure", "ingredientGroup": "Policosanol", "category": "non-nutrient/non-botanical"}, {"name": "Another material"}],
+    [{"name": "PoliSure", "ingredientGroup": "Unknown", "category": "non-nutrient/non-botanical"}],
+    [{"name": "PoliSure", "ingredientGroup": "Policosanol", "category": "non-nutrient/non-botanical", "quantity": 1}],
+    [{"name": "PoliSure", "ingredientGroup": "Policosanol", "category": "non-nutrient/non-botanical", "quantity": [{"quantity": 1, "unit": "mg"}]}],
+    [{"name": "PoliSure", "ingredientGroup": "Policosanol", "category": "non-nutrient/non-botanical", "amount": 1}],
+    [{"name": "PoliSure", "ingredientGroup": "Policosanol", "category": "non-nutrient/non-botanical", "prefix": "provides"}],
+    [{"name": "PoliSure", "ingredientGroup": "Policosanol", "category": "non-nutrient/non-botanical", "prefix": "contains"}],
+])
+def test_source_material_form_does_not_validate_partial_mixed_or_unidentified_preparation(forms):
+    registry = build_canonical_identity_registry({"ingredient_quality_map": {
+        "policosanol": {"standard_name": "Policosanol", "aliases": ["Sugar Cane Wax"]},
+        "sugar": {"standard_name": "Sugar cane"},
+    }})
+    decision = resolve_identity(
+        {"raw_source_text": "Sugar Cane Wax Extract", "ingredientGroup": "Sugar cane", "forms": forms},
+        "policosanol", lambda value: {"sugar cane": "sugar", "policosanol": "policosanol"}.get(value.casefold()),
+        canonical_registry=registry,
+    )
+    assert decision.canonical_id == "sugar"
+    assert decision.disposition == "repaired"
+
+
+@pytest.mark.parametrize("name", ["Sugar Cane", "Magnesium"])
+def test_declared_material_group_cannot_override_missing_source_alias_or_chemical_conflict(name):
+    registry = build_canonical_identity_registry({"ingredient_quality_map": {
+        "policosanol": {"standard_name": "Policosanol", "aliases": ["Sugar Cane Wax"]},
+        "sugar": {"standard_name": "Sugar cane"}, "magnesium": {"standard_name": "Magnesium"},
+    }})
+    decision = resolve_identity(
+        {"raw_source_text": name, "ingredientGroup": "Sugar cane", "forms": [
+            {"name": "PoliSure", "ingredientGroup": "Policosanol", "category": "non-nutrient/non-botanical"}]},
+        "policosanol", lambda value: {"sugar cane": "sugar", "policosanol": "policosanol", "magnesium": "magnesium"}.get(value.casefold()),
+        canonical_registry=registry,
+    )
+    assert decision.canonical_id != "policosanol"

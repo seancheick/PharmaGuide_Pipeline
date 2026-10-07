@@ -355,3 +355,71 @@ class TestAnalyticalFractionCanaries:
                      nestedRows=[_row("Green Tea Catechins Extract", 200, "mg", category="herb",
                                       ingredientGroup="Green Tea")])]
         assert self._role(normalizer, rows, "Green Tea Catechins Extract") != "standardization_marker"
+
+
+@pytest.mark.parametrize('parent, parent_mg, child, child_mg', [
+    ('Ginkgo biloba leaf extract', 120, 'Terpene Lactone', 7.2),
+    ('CinSulin Cinnamon Water extract', 175, 'Type-A Polymers', 4.375),
+    ('Sensoril Ashwagandha extract', 125, 'Glycoside Conjugates', 10),
+    ("St. John's Wort Aerial Extract", 300, 'Dianthrones', .9),
+    ("St. John's Wort Flower, Leaf, Stem Extract", 300, 'Dianthrones', .45),
+    ('Astragalus Root Extract', 250, 'Astragaloside', 1.25),
+])
+def test_curated_descriptor_in_dosed_extract_keeps_marker_role(normalizer, parent, parent_mg, child, child_mg):
+    rows = [_row(parent, parent_mg, 'mg', category='botanical', ingredientGroup=parent,
+                 nestedRows=[_row(child, child_mg, 'mg', category='non-nutrient/non-botanical', ingredientGroup=child)])]
+    cleaned = normalizer.normalize_product(_make_dsld_product(331487, 'Marker control', rows))
+    marker = next(r for r in cleaned['activeIngredients'] if r['name'] == child)
+    assert marker['cleaner_row_role'] == 'standardization_marker'
+    assert marker['quantity'] == child_mg
+    assert marker['score_eligible_by_cleaner'] is False
+    assert next(r for r in cleaned['activeIngredients'] if r['name'] == parent)['quantity'] == parent_mg
+
+
+def test_curated_descriptor_without_parent_stays_source_assessable(normalizer):
+    cleaned = normalizer.normalize_product(_make_dsld_product(331487, 'Standalone', [
+        _row('Astragaloside', 1.25, 'mg', category='non-nutrient/non-botanical', ingredientGroup='Astragaloside')]))
+    assert cleaned['activeIngredients'][0]['cleaner_row_role'] != 'standardization_marker'
+
+
+@pytest.mark.parametrize('parent, parent_mg, child_mg', [
+    ('Astragalus Root Extract', .5, 1.25),
+    ('Astragalus Root Powder', 250, 1.25),
+    ('Proprietary Botanical Blend', 250, 1.25),
+])
+def test_curated_descriptor_requires_valid_extract_parent_mass(normalizer, parent, parent_mg, child_mg):
+    cleaned = normalizer.normalize_product(_make_dsld_product(337240, 'Boundary', [
+        _row(parent, parent_mg, 'mg', category='botanical', ingredientGroup=parent,
+             nestedRows=[_row('Astragaloside', child_mg, 'mg', category='non-nutrient/non-botanical', ingredientGroup='Astragaloside')])]))
+    marker = next(r for r in cleaned['activeIngredients'] if r['name'] == 'Astragaloside')
+    assert marker['cleaner_row_role'] != 'standardization_marker'
+
+
+@pytest.mark.parametrize('name', ['Total Sugar', 'added Sugar'])
+def test_singular_sugar_summary_is_nutrition_disclosure(normalizer, name):
+    assert normalizer._is_nutrition_fact(name, ingredient_group='Sugar (unspecified)',
+                                       unit='Gram(s)', dsld_category='sugar', quantity_g=3)
+
+
+@pytest.mark.parametrize('name, category, group', [
+    ('Sugar', 'non-nutrient/non-botanical', 'Sugar'),
+    ('Monk Fruit Extract', 'botanical', 'Monk Fruit'),
+    ('Steviosides', 'non-nutrient/non-botanical', 'Stevioside'),
+    ('Sugar Cane Wax Extract', 'botanical', 'Sugar cane'),
+])
+def test_named_standalone_sweetener_or_wax_is_not_summary(normalizer, name, category, group):
+    assert not normalizer._is_nutrition_fact(name, ingredient_group=group,
+                                           unit='mg', dsld_category=category, quantity_g=.375)
+
+
+@pytest.mark.parametrize('dsld_id, name, grams', [(271565, 'Total Sugar', 2), (271691, 'Total Sugar', 3), (315694, 'added Sugar', 3)])
+def test_nested_singular_sugar_summary_preserves_nutrition_only(normalizer, dsld_id, name, grams):
+    raw = _make_dsld_product(dsld_id, 'Sugar summary control', [
+        _row('Total Carbohydrate', 6, 'Gram(s)', category='sugar', ingredientGroup='Carbohydrate',
+             nestedRows=[_row(name, grams, 'Gram(s)', category='sugar', ingredientGroup='Sugar (unspecified)')]),
+        _row('Vitamin C', 250, 'mg', category='vitamin', ingredientGroup='Vitamin C'),
+    ])
+    cleaned = normalizer.normalize_product(raw)
+    assert cleaned['nutritionalInfo']['sugars']['amount'] == grams
+    assert not any(r['name'] == name for r in cleaned['activeIngredients'])
+    assert any(r['name'] == 'Vitamin C' for r in cleaned['activeIngredients'])
