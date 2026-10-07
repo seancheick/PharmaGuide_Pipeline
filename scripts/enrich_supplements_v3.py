@@ -8712,8 +8712,18 @@ class SupplementEnricherV3:
         # resolve the biologically-active compound rather than the salt/carrier.
         _FROM_PREFIXES = frozenset({'from', 'From', 'from '})
 
-        def _keep_from_prefixed_form(form_name: str) -> bool:
-            """Keep reviewed same-identity compounds serialized as sources."""
+        quality_map = self.databases.get('ingredient_quality_map') or {}
+        row_parent = self._infer_preferred_parent_from_context_cached(ing_name, quality_map)
+        parent_names = self._parent_identity_names(row_parent, quality_map, ing_name)
+
+        def _keep_from_prefixed_form(form: Dict) -> bool:
+            """Keep reviewed compounds and same-nutrient chemical declarations."""
+            form_name = form.get('name') or ''
+            if (str(form.get('category') or '').lower() in {'mineral', 'vitamin'}
+                    and self._norm_form_name(form.get('ingredientGroup')) in parent_names):
+                # "from calcium phosphate and calcium stearate" supplies two
+                # salts; neither is a manufacturing source of the other.
+                return True
             if self._should_keep_from_prefixed_form_as_actual(form_name):
                 return True
             ingredient_key = norm_module.make_normalized_key(ing_name)
@@ -8792,7 +8802,7 @@ class SupplementEnricherV3:
         from_source_map: Dict[int, str] = {}  # index → source name
         for i, form in enumerate(cleaned_forms):
             prefix = (form.get('prefix') or '').strip()
-            keep_as_form = _keep_from_prefixed_form(form.get('name', ''))
+            keep_as_form = _keep_from_prefixed_form(form)
             if prefix in _FROM_PREFIXES and i > 0 and not keep_as_form:
                 src = (form.get('name') or '').strip()
                 if src:
@@ -8850,7 +8860,7 @@ class SupplementEnricherV3:
                 continue
             keep_from_prefixed_form = (
                 prefix in _FROM_PREFIXES
-                and _keep_from_prefixed_form(form.get('name', ''))
+                and _keep_from_prefixed_form(form)
             )
             # Skip biological culture/origin descriptors entirely — these name
             # the fermentation substrate or organism, not the ingredient's form.

@@ -125,3 +125,44 @@ def test_generic_vitamin_d_never_becomes_d2(enricher):
     match = enricher._match_quality_map('Zqx Blend', 'Zqx Blend', iqm, _form_extraction_attempt=True,
                                         preferred_parent='vitamin_d', cleaner_canonical_id='vitamin_d')
     assert match['form_id'] == 'vitamin d (unspecified)'
+
+
+@pytest.mark.parametrize('reverse', [False, True])
+def test_from_prefix_keeps_two_declared_calcium_salts_and_the_unknown_share(enricher, reverse):
+    # NIH269360 prints calcium from tricalcium phosphate AND calcium stearate.
+    # DSLD serializes its two salts in reverse label order; neither derives from
+    # the other. Existing calcium phosphate6 and unknown2 imply equal-share4.
+    forms = [
+        {'name': 'Calcium Stearate', 'prefix': 'and', 'category': 'other',
+         'ingredientGroup': 'Calcium Stearate'},
+        {'name': 'Tricalcium Phosphate', 'prefix': 'from', 'category': 'mineral',
+         'ingredientGroup': 'Calcium'},
+    ]
+    if reverse:
+        forms.reverse()
+    info = enricher._build_form_info_from_cleaned('Calcium', forms)
+    assert len(info['extracted_forms']) == 2
+    for form in info['extracted_forms']:
+        other = 'Tricalcium Phosphate' if form['raw_form_text'] == 'Calcium Stearate' else 'Calcium Stearate'
+        assert other not in form['match_candidates']
+    match = enricher._match_multi_form(info, enricher.databases['ingredient_quality_map'],
+                                     cleaner_canonical_id='calcium')
+    assert match['bio_score'] == 4.0
+    assert match.get('unmapped_forms') == []
+    assert match['matched_forms'][0]['raw_form_text'] == 'Tricalcium Phosphate'
+    assert match['matched_forms'][0]['percent_share'] == 0.5
+
+
+@pytest.mark.parametrize('parent, group, chemical', [
+    ('Magnesium', 'Magnesium', 'Magnesium Citrate'),
+    ('Iron', 'Iron', 'Ferrous Sulfate'),
+    ('Vitamin C', 'Vitamin C', 'Ascorbic Acid'),
+])
+def test_from_prefix_preserves_a_same_nutrient_chemical_form(enricher, parent, group, chemical):
+    info = enricher._build_form_info_from_cleaned(parent, [
+        {'name': 'Unspecified Carrier', 'prefix': 'and', 'category': 'other'},
+        {'name': chemical, 'prefix': 'from', 'category': 'mineral' if parent != 'Vitamin C' else 'vitamin',
+         'ingredientGroup': group},
+    ])
+    assert [f['raw_form_text'] for f in info['extracted_forms']] == ['Unspecified Carrier', chemical]
+    assert chemical not in info['extracted_forms'][0]['match_candidates']
