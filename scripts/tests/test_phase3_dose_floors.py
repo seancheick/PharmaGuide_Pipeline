@@ -54,7 +54,8 @@ EXPECTED = {
     # saw_palmetto: 320 mg floor removed 2026-09-26 (Sean, D8); no source gives a
     # dose for saw palmetto bleeding, so its bleeding sub-rules fire on presence.
     "glucosamine": (1500, "mg", {"anticoagulants"}),
-    "white_willow_bark": (120, "mg", {"bleeding_disorders"}),
+    # White-willow salicin study exposure cannot gate whole-bark mg; presence
+    # precautions are pinned by test_botanical_interaction_subjects.
     # BP batch
     "hawthorn": (160, "mg", {"hypertension"}),
     "l_arginine": (4000, "mg", {"antihypertensives"}),

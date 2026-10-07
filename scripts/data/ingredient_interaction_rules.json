@@ -3,10 +3,10 @@
     "description": "Deterministic ingredient-level interaction rules keyed by canonical database identity",
     "purpose": "interaction_alert_rules",
     "schema_version": "6.3.0",
-    "last_updated": "2026-10-01",
-    "total_entries": 151,
+    "last_updated": "2026-10-07",
+    "total_entries": 152,
     "structure_note": "One entry per ingredient (or per form-scoped variant). All conditions, drug classes, and dose thresholds for that ingredient are in one object. As of v6.0.0, every sub-rule (condition_rules[], drug_class_rules[], dose_thresholds[], pregnancy_lactation block) carries an explicit profile_gate predicate that consumers MUST evaluate against the user profile before firing the alert.",
-    "total_rules": 151,
+    "total_rules": 152,
     "flutter_top_level_key": "interaction_rules",
     "flutter_schema_version": "6.1.2",
     "v60_added_fields": {
@@ -126,7 +126,7 @@
     "reviewed_by": "Lead Clinician (PharmaGuide)",
     "reviewed_date": "2026-04-18",
     "review_round": "full_authoring_pass_v1",
-    "rules_with_dose_thresholds": 43,
+    "rules_with_dose_thresholds": 42,
     "pregnancy_lactation_evidence_levels": [
       "no_data",
       "limited",
@@ -200,7 +200,8 @@
       "2026-09-26: RULE_IQM_DANDELION_KIDNEY kidney_disease cites the EU herbal monograph on dandelion root (EMA/HMPC/475726/2020, final 2021-11-24): traditional use 'to increase the amount of urine', and root 'is not recommended for patients with conditions where reduced fluid intake is advised by a medical doctor'. IQM dandelion's form covers root, and the rule's diuretic premise was cited only to leaf evidence (register Q18).",
       "2026-09-27: Dandelion root now carries the EMA pregnancy/lactation and liver/biliary recommendations; eleuthero carries only the EMA pregnancy/lactation recommendation because the monograph reports no interactions and removed the hypertension contraindication; DGL uses its distinct botanical identity instead of an unread form_exclusion field.",
       "2026-09-27: Dandelion glucose sub-rules were folded back into RULE_IQM_DANDELION_KIDNEY so one ingredient has one rule owner and one pregnancy/lactation policy.",
-      "2026-10-01: Q52 agent source correction, not a new clinician sign-off: CoQ10 high_cholesterol and statins copy follows the 2026 ACC/AHA dyslipidemia guideline (PMID41824590, section5.1 recommendation4, Class3 No Benefit/B-R) for routine prevention/treatment of statin-attributed muscle symptoms. Circulating depletion and conflicting supplementation studies remain distinct; unsupported routine doses and blanket safe-coadministration claims removed. Severity, evidence level, profile gates, direction, materiality and human review stamps unchanged. Heart-failure, TTC and anticoagulant siblings unchanged."
+      "2026-10-01: Q52 agent source correction, not a new clinician sign-off: CoQ10 high_cholesterol and statins copy follows the 2026 ACC/AHA dyslipidemia guideline (PMID41824590, section5.1 recommendation4, Class3 No Benefit/B-R) for routine prevention/treatment of statin-attributed muscle symptoms. Circulating depletion and conflicting supplementation studies remain distinct; unsupported routine doses and blanket safe-coadministration claims removed. Severity, evidence level, profile gates, direction, materiality and human review stamps unchanged. Heart-failure, TTC and anticoagulant siblings unchanged.",
+      "2026-10-07 canonical preparation safety review: TGA liver precaution is recorded for both existing turmeric and curcumin subjects; no safe lower dose inferred. Removed three unsupported 120 mg salicin cutoffs that were being compared with whole bark mass (D8 policy). Distinct Salix babylonica bark has an evidence-limited class precaution in its own botanical subject; no white-willow identity, grade or marker dose inherited. Source receipts: post_pipeline_20261007/mapping_warning_safety_pubmed_efetch.xml and primary TGA/EMA guidance. Removed the old liver-dose threshold (>500 mg) because it contradicts the source precaution and could lower avoid to caution. Existing clinical review dates retained; this source audit is not clinician sign-off."
     ]
   },
   "interaction_rules": [
@@ -10247,17 +10248,16 @@
       "condition_rules": [
         {
           "condition_id": "liver_disease",
-          "severity": "monitor",
-          "evidence_level": "theoretical",
-          "mechanism": "Dietary turmeric and culinary curcumin use is generally safe and even hepatoprotective at low doses. However, high-dose concentrated curcumin supplements — particularly formulations co-administered with piperine (black pepper extract), which can increase curcumin bioavailability up to 20-fold — have been implicated in drug-induced liver injury (DILI) case reports with cholestatic and hepatocellular patterns. The proposed mechanism involves CYP1A2 and CYP3A4 inhibition by curcumin, leading to reactive metabolite accumulation. Patients with existing liver disease may have impaired detoxification capacity, lowering the safety threshold.",
-          "action": "Culinary turmeric is acceptable. Avoid high-dose curcumin supplement formulations (>500 mg curcumin/day) especially those combined with piperine in patients with liver disease. Monitor LFTs if high-dose curcumin is initiated.",
+          "severity": "avoid",
+          "evidence_level": "probable",
+          "mechanism": "Medicinal-dose turmeric and curcumin supplements have been associated with rare, sometimes severe liver injury. The TGA safety investigation identifies existing or previous liver disease as a precaution and recommends avoiding these supplements in that population. Enhanced-absorption formulations or higher doses may increase risk, but the investigation does not establish a safe lower dose or identify all higher-risk preparations. Typical culinary turmeric use is distinct from medicinal supplementation.",
+          "action": "If you have current or previous liver disease, avoid turmeric or curcumin supplements unless your treating clinician specifically advises their use.",
           "sources": [
-            "https://pubmed.ncbi.nlm.nih.gov/41255460/",
-            "https://pubmed.ncbi.nlm.nih.gov/41281037/"
+            "https://www.tga.gov.au/safety/safety-monitoring-and-information/safety-alerts/medicines-containing-turmeric-or-curcumin-risk-liver-injury"
           ],
-          "alert_headline": "Concentrated curcumin — liver caution",
-          "alert_body": "High-dose curcumin extract has been linked to liver injury in recent reports. If you have liver disease, review use of concentrated curcumin with your clinician.",
-          "informational_note": "Turmeric depends on liver clearance — relevant to people with liver conditions.",
+          "alert_headline": "Turmeric or curcumin — liver caution",
+          "alert_body": "Turmeric and curcumin supplements have rarely been linked to serious liver injury. If you have or have had liver problems, avoid these supplements and review use with your clinician.",
+          "informational_note": "Medicinal turmeric/curcumin, including enhanced-absorption forms, carry this precaution; culinary use differs.",
           "profile_gate": {
             "gate_type": "condition",
             "requires": {
@@ -10477,43 +10477,7 @@
           "materiality": "presence"
         }
       ],
-      "dose_thresholds": [
-        {
-          "scope": "condition",
-          "target_id": "liver_disease",
-          "basis": "per_day",
-          "comparator": ">",
-          "value": 500,
-          "unit": "mg",
-          "severity_if_met": "caution",
-          "severity_if_not_met": "monitor",
-          "profile_gate": {
-            "gate_type": "combination",
-            "requires": {
-              "conditions_any": [
-                "liver_disease"
-              ],
-              "drug_classes_any": [],
-              "profile_flags_any": []
-            },
-            "excludes": {
-              "conditions_any": [],
-              "drug_classes_any": [],
-              "profile_flags_any": [],
-              "product_forms_any": [],
-              "nutrient_forms_any": []
-            },
-            "dose": {
-              "basis": "per_day",
-              "comparator": ">",
-              "value": 500,
-              "unit": "mg",
-              "severity_if_met": "caution",
-              "severity_if_not_met": "monitor"
-            }
-          }
-        }
-      ],
+      "dose_thresholds": [],
       "pregnancy_lactation": {
         "pregnancy_category": "no_data",
         "lactation_category": "no_data",
@@ -11308,6 +11272,39 @@
               "product_forms_any": [
                 "culinary_turmeric"
               ],
+              "nutrient_forms_any": []
+            },
+            "dose": null
+          },
+          "direction": "harmful",
+          "materiality": "presence"
+        },
+        {
+          "condition_id": "liver_disease",
+          "severity": "avoid",
+          "evidence_level": "probable",
+          "mechanism": "Medicinal-dose turmeric and curcumin supplements have been associated with rare, sometimes severe liver injury. The TGA safety investigation identifies existing or previous liver disease as a precaution and recommends avoiding these supplements in that population. Enhanced-absorption formulations or higher doses may increase risk, but the investigation does not establish a safe lower dose or identify all higher-risk preparations. Typical culinary turmeric use is distinct from medicinal supplementation.",
+          "action": "If you have current or previous liver disease, avoid turmeric or curcumin supplements unless your treating clinician specifically advises their use.",
+          "sources": [
+            "https://www.tga.gov.au/safety/safety-monitoring-and-information/safety-alerts/medicines-containing-turmeric-or-curcumin-risk-liver-injury"
+          ],
+          "alert_headline": "Turmeric or curcumin — liver caution",
+          "alert_body": "Turmeric and curcumin supplements have rarely been linked to serious liver injury. If you have or have had liver problems, avoid these supplements and review use with your clinician.",
+          "informational_note": "Medicinal turmeric/curcumin, including enhanced-absorption forms, carry this precaution; culinary use differs.",
+          "profile_gate": {
+            "gate_type": "condition",
+            "requires": {
+              "conditions_any": [
+                "liver_disease"
+              ],
+              "drug_classes_any": [],
+              "profile_flags_any": []
+            },
+            "excludes": {
+              "conditions_any": [],
+              "drug_classes_any": [],
+              "profile_flags_any": [],
+              "product_forms_any": [],
               "nutrient_forms_any": []
             },
             "dose": null
@@ -21449,7 +21446,7 @@
           "condition_id": "bleeding_disorders",
           "severity": "caution",
           "evidence_level": "established",
-          "mechanism": "The EU herbal monograph contraindicates willow bark in coagulation disorders. Willow bark's salicin is converted mainly to salicylic acid (240 mg salicin gives salicylate exposure comparable to 87 mg aspirin). In a randomised placebo-controlled trial, willow bark extract with 240 mg salicin daily reduced arachidonic-acid- and ADP-induced platelet aggregation compared with placebo, far less than in a separate, non-randomised group taking 100 mg aspirin; the authors call its clinical relevance uncertain.",
+          "mechanism": "The EU Salix bark monograph contraindicates use in coagulation disorders and warns about combinations with anticoagulants, including coumarin derivatives, or salicylates without medical advice. In PMID 11345689, 35 patients were randomised to Salix extract providing 240 mg salicin/day or placebo; a separate non-randomised group taking 100 mg aspirin comprised 16 patients. Willow affected platelet aggregation far less than aspirin, and its clinical relevance was uncertain. This study establishes neither a safe lower-dose cutoff nor equivalence between whole bark mass and salicin mass.",
           "action": "Avoid in bleeding disorders; the EU herbal monograph lists coagulation disorders as a contraindication.",
           "sources": [
             "https://www.ema.europa.eu/en/documents/herbal-monograph/final-european-union-herbal-monograph-salix-various-species-including-s-purpurea-l-s-daphnoides-vill-s-fragilis-l-cortex_en.pdf",
@@ -21477,22 +21474,13 @@
             "dose": null
           },
           "direction": "harmful",
-          "materiality": "dose_dependent",
-          "min_effective_dose": {
-            "value": 120,
-            "unit": "mg",
-            "basis": "per_day",
-            "confidence": "low",
-            "confidence_basis": "aspirin_like_conservative",
-            "source": "https://pubmed.ncbi.nlm.nih.gov/11345689/",
-            "rationale": "Willow bark extract with 240 mg salicin/day reduced platelet aggregation, though far less than 100 mg aspirin (PMID 11345689). The 120 mg salicin floor is a conservative margin below that tested dose."
-          }
+          "materiality": "presence"
         },
         {
           "condition_id": "surgery_scheduled",
           "severity": "avoid",
           "evidence_level": "limited",
-          "mechanism": "Willow bark's salicin is converted mainly to salicylic acid (240 mg salicin gives salicylate exposure comparable to 87 mg aspirin). In a randomised placebo-controlled trial, willow bark extract with 240 mg salicin daily reduced arachidonic-acid- and ADP-induced platelet aggregation compared with placebo, far less than in a separate, non-randomised group taking 100 mg aspirin; the authors call its clinical relevance uncertain. The EU herbal monograph contraindicates willow bark in coagulation disorders and says it may increase the effects of anticoagulants. No study defines how long before surgery it should be stopped.",
+          "mechanism": "The EU Salix bark monograph contraindicates use in coagulation disorders and warns about combinations with anticoagulants, including coumarin derivatives, or salicylates without medical advice. In PMID 11345689, 35 patients were randomised to Salix extract providing 240 mg salicin/day or placebo; a separate non-randomised group taking 100 mg aspirin comprised 16 patients. Willow affected platelet aggregation far less than aspirin, and its clinical relevance was uncertain. This study establishes neither a safe lower-dose cutoff nor equivalence between whole bark mass and salicin mass.",
           "action": "Tell your surgical and anaesthesia team that you take white willow bark, and stop it before elective surgery as they advise.",
           "sources": [
             "https://www.ema.europa.eu/en/documents/herbal-monograph/final-european-union-herbal-monograph-salix-various-species-including-s-purpurea-l-s-daphnoides-vill-s-fragilis-l-cortex_en.pdf",
@@ -21528,7 +21516,7 @@
           "drug_class_id": "anticoagulants",
           "severity": "caution",
           "evidence_level": "established",
-          "mechanism": "The EU herbal monograph states that willow bark may increase the effects of anticoagulants such as coumarin derivatives (warfarin). Willow bark's salicin is converted mainly to salicylic acid (240 mg salicin gives salicylate exposure comparable to 87 mg aspirin). In a randomised placebo-controlled trial, willow bark extract with 240 mg salicin daily reduced arachidonic-acid- and ADP-induced platelet aggregation compared with placebo, far less than in a separate, non-randomised group taking 100 mg aspirin; the authors call its clinical relevance uncertain.",
+          "mechanism": "The EU Salix bark monograph contraindicates use in coagulation disorders and warns about combinations with anticoagulants, including coumarin derivatives, or salicylates without medical advice. In PMID 11345689, 35 patients were randomised to Salix extract providing 240 mg salicin/day or placebo; a separate non-randomised group taking 100 mg aspirin comprised 16 patients. Willow affected platelet aggregation far less than aspirin, and its clinical relevance was uncertain. This study establishes neither a safe lower-dose cutoff nor equivalence between whole bark mass and salicin mass.",
           "action": "Avoid white willow bark with anticoagulants. If analgesic is needed, consult prescriber about alternatives.",
           "sources": [
             "https://www.ema.europa.eu/en/documents/herbal-monograph/final-european-union-herbal-monograph-salix-various-species-including-s-purpurea-l-s-daphnoides-vill-s-fragilis-l-cortex_en.pdf",
@@ -21556,22 +21544,13 @@
             "dose": null
           },
           "direction": "harmful",
-          "materiality": "dose_dependent",
-          "min_effective_dose": {
-            "value": 120,
-            "unit": "mg",
-            "basis": "per_day",
-            "confidence": "low",
-            "confidence_basis": "aspirin_like_conservative",
-            "source": "https://pubmed.ncbi.nlm.nih.gov/11345689/",
-            "rationale": "Willow bark extract with 240 mg salicin/day reduced platelet aggregation, though far less than 100 mg aspirin (PMID 11345689). The 120 mg salicin floor is a conservative margin below that tested dose."
-          }
+          "materiality": "presence"
         },
         {
           "drug_class_id": "antiplatelets",
           "severity": "caution",
           "evidence_level": "established",
-          "mechanism": "Willow bark's salicin is converted mainly to salicylic acid (240 mg salicin gives salicylate exposure comparable to 87 mg aspirin). In a randomised placebo-controlled trial, willow bark extract with 240 mg salicin daily reduced arachidonic-acid- and ADP-induced platelet aggregation compared with placebo, far less than in a separate, non-randomised group taking 100 mg aspirin; the authors call its clinical relevance uncertain. An additive effect with aspirin or clopidogrel is therefore possible; the EU herbal monograph advises against combining willow bark with salicylates such as aspirin without medical advice.",
+          "mechanism": "The EU Salix bark monograph contraindicates use in coagulation disorders and warns about combinations with anticoagulants, including coumarin derivatives, or salicylates without medical advice. In PMID 11345689, 35 patients were randomised to Salix extract providing 240 mg salicin/day or placebo; a separate non-randomised group taking 100 mg aspirin comprised 16 patients. Willow affected platelet aggregation far less than aspirin, and its clinical relevance was uncertain. This study establishes neither a safe lower-dose cutoff nor equivalence between whole bark mass and salicin mass.",
           "action": "Do not combine with antiplatelet therapy. Consult prescriber if analgesic is needed.",
           "sources": [
             "https://www.ema.europa.eu/en/documents/herbal-monograph/final-european-union-herbal-monograph-salix-various-species-including-s-purpurea-l-s-daphnoides-vill-s-fragilis-l-cortex_en.pdf",
@@ -21599,22 +21578,13 @@
             "dose": null
           },
           "direction": "harmful",
-          "materiality": "dose_dependent",
-          "min_effective_dose": {
-            "value": 120,
-            "unit": "mg",
-            "basis": "per_day",
-            "confidence": "low",
-            "confidence_basis": "aspirin_like_conservative",
-            "source": "https://pubmed.ncbi.nlm.nih.gov/11345689/",
-            "rationale": "Willow bark extract with 240 mg salicin/day reduced platelet aggregation, though far less than 100 mg aspirin (PMID 11345689). The 120 mg salicin floor is a conservative margin below that tested dose."
-          }
+          "materiality": "presence"
         },
         {
           "drug_class_id": "nsaids",
           "severity": "avoid",
           "evidence_level": "established",
-          "mechanism": "The EU herbal monograph advises against combining willow bark with salicylates and other NSAIDs without medical advice, and contraindicates it in active peptic ulcer disease and severe renal dysfunction. Its salicin is converted mainly to salicylic acid; 240 mg salicin gives salicylate exposure comparable to 87 mg aspirin.",
+          "mechanism": "The EU Salix bark monograph contraindicates use in coagulation disorders and warns about combinations with anticoagulants, including coumarin derivatives, or salicylates without medical advice. In PMID 11345689, 35 patients were randomised to Salix extract providing 240 mg salicin/day or placebo; a separate non-randomised group taking 100 mg aspirin comprised 16 patients. Willow affected platelet aggregation far less than aspirin, and its clinical relevance was uncertain. This study establishes neither a safe lower-dose cutoff nor equivalence between whole bark mass and salicin mass.",
           "action": "Do not combine white willow bark with NSAIDs. Select an alternative analgesic in consultation with prescriber.",
           "sources": [
             "https://www.ema.europa.eu/en/documents/herbal-monograph/final-european-union-herbal-monograph-salix-various-species-including-s-purpurea-l-s-daphnoides-vill-s-fragilis-l-cortex_en.pdf",
@@ -25969,6 +25939,201 @@
       },
       "last_reviewed": "2026-09-27",
       "review_owner": "pharmaguide_clinical_team"
+    },
+    {
+      "id": "RULE_BOT_WEEPING_WILLOW_BARK",
+      "subject_ref": {
+        "db": "botanical_ingredients",
+        "canonical_id": "weeping_willow_bark"
+      },
+      "condition_rules": [
+        {
+          "condition_id": "bleeding_disorders",
+          "severity": "caution",
+          "evidence_level": "theoretical",
+          "mechanism": "Salix babylonica bark has been included in comparative chemical profiling of Salix bark phenolics. Species and genotypes differ, so its marker exposure and clinical effect cannot be inferred from white-willow bark or from whole bark mass. The broader Salix bark monograph warns about salicylate-related bleeding and combinations with anticoagulants or salicylates. This is an evidence-limited class precaution, not proof of a species-specific human interaction or a transferred salicin dose.",
+          "action": "Review weeping willow bark use with your clinician, especially if you have a bleeding disorder, take blood thinners or NSAIDs, or are preparing for surgery.",
+          "sources": [
+            "https://www.ema.europa.eu/en/documents/herbal-monograph/final-european-union-herbal-monograph-salix-various-species-including-s-purpurea-l-s-daphnoides-vill-s-fragilis-l-cortex_en.pdf",
+            "https://pubmed.ncbi.nlm.nih.gov/37648031/"
+          ],
+          "alert_headline": "Willow bark — clotting precaution",
+          "alert_body": "Weeping willow bark has limited specific safety data. Willow preparations may affect clotting; review use with your clinician if you take blood thinners or have a bleeding disorder.",
+          "informational_note": "Broader Salix bark guidance informs this precaution; exact species effects and salicin exposure remain unestablished.",
+          "profile_gate": {
+            "gate_type": "condition",
+            "requires": {
+              "conditions_any": [
+                "bleeding_disorders"
+              ],
+              "drug_classes_any": [],
+              "profile_flags_any": []
+            },
+            "excludes": {
+              "conditions_any": [],
+              "drug_classes_any": [],
+              "profile_flags_any": [],
+              "product_forms_any": [],
+              "nutrient_forms_any": []
+            },
+            "dose": null
+          },
+          "direction": "harmful",
+          "materiality": "presence"
+        },
+        {
+          "condition_id": "surgery_scheduled",
+          "severity": "caution",
+          "evidence_level": "theoretical",
+          "mechanism": "Salix babylonica bark has been included in comparative chemical profiling of Salix bark phenolics. Species and genotypes differ, so its marker exposure and clinical effect cannot be inferred from white-willow bark or from whole bark mass. The broader Salix bark monograph warns about salicylate-related bleeding and combinations with anticoagulants or salicylates. This is an evidence-limited class precaution, not proof of a species-specific human interaction or a transferred salicin dose.",
+          "action": "Review weeping willow bark use with your clinician, especially if you have a bleeding disorder, take blood thinners or NSAIDs, or are preparing for surgery.",
+          "sources": [
+            "https://www.ema.europa.eu/en/documents/herbal-monograph/final-european-union-herbal-monograph-salix-various-species-including-s-purpurea-l-s-daphnoides-vill-s-fragilis-l-cortex_en.pdf",
+            "https://pubmed.ncbi.nlm.nih.gov/37648031/"
+          ],
+          "alert_headline": "Willow bark — clotting precaution",
+          "alert_body": "Weeping willow bark has limited specific safety data. Willow preparations may affect clotting; review use with your clinician if you take blood thinners or have a bleeding disorder.",
+          "informational_note": "Broader Salix bark guidance informs this precaution; exact species effects and salicin exposure remain unestablished.",
+          "profile_gate": {
+            "gate_type": "profile_flag",
+            "requires": {
+              "conditions_any": [],
+              "drug_classes_any": [],
+              "profile_flags_any": [
+                "surgery_scheduled"
+              ]
+            },
+            "excludes": {
+              "conditions_any": [],
+              "drug_classes_any": [],
+              "profile_flags_any": [],
+              "product_forms_any": [],
+              "nutrient_forms_any": []
+            },
+            "dose": null
+          },
+          "direction": "harmful",
+          "materiality": "presence"
+        }
+      ],
+      "drug_class_rules": [
+        {
+          "drug_class_id": "anticoagulants",
+          "severity": "caution",
+          "evidence_level": "theoretical",
+          "mechanism": "Salix babylonica bark has been included in comparative chemical profiling of Salix bark phenolics. Species and genotypes differ, so its marker exposure and clinical effect cannot be inferred from white-willow bark or from whole bark mass. The broader Salix bark monograph warns about salicylate-related bleeding and combinations with anticoagulants or salicylates. This is an evidence-limited class precaution, not proof of a species-specific human interaction or a transferred salicin dose.",
+          "action": "Review weeping willow bark use with your clinician, especially if you have a bleeding disorder, take blood thinners or NSAIDs, or are preparing for surgery.",
+          "sources": [
+            "https://www.ema.europa.eu/en/documents/herbal-monograph/final-european-union-herbal-monograph-salix-various-species-including-s-purpurea-l-s-daphnoides-vill-s-fragilis-l-cortex_en.pdf",
+            "https://pubmed.ncbi.nlm.nih.gov/37648031/"
+          ],
+          "alert_headline": "Willow bark — clotting precaution",
+          "alert_body": "Weeping willow bark has limited specific safety data. Willow preparations may affect clotting; review use with your clinician if you take blood thinners or have a bleeding disorder.",
+          "informational_note": "Broader Salix bark guidance informs this precaution; exact species effects and salicin exposure remain unestablished.",
+          "profile_gate": {
+            "gate_type": "drug_class",
+            "requires": {
+              "conditions_any": [],
+              "drug_classes_any": [
+                "anticoagulants"
+              ],
+              "profile_flags_any": []
+            },
+            "excludes": {
+              "conditions_any": [],
+              "drug_classes_any": [],
+              "profile_flags_any": [],
+              "product_forms_any": [],
+              "nutrient_forms_any": []
+            },
+            "dose": null
+          },
+          "direction": "harmful",
+          "materiality": "presence"
+        },
+        {
+          "drug_class_id": "antiplatelets",
+          "severity": "caution",
+          "evidence_level": "theoretical",
+          "mechanism": "Salix babylonica bark has been included in comparative chemical profiling of Salix bark phenolics. Species and genotypes differ, so its marker exposure and clinical effect cannot be inferred from white-willow bark or from whole bark mass. The broader Salix bark monograph warns about salicylate-related bleeding and combinations with anticoagulants or salicylates. This is an evidence-limited class precaution, not proof of a species-specific human interaction or a transferred salicin dose.",
+          "action": "Review weeping willow bark use with your clinician, especially if you have a bleeding disorder, take blood thinners or NSAIDs, or are preparing for surgery.",
+          "sources": [
+            "https://www.ema.europa.eu/en/documents/herbal-monograph/final-european-union-herbal-monograph-salix-various-species-including-s-purpurea-l-s-daphnoides-vill-s-fragilis-l-cortex_en.pdf",
+            "https://pubmed.ncbi.nlm.nih.gov/37648031/"
+          ],
+          "alert_headline": "Willow bark — clotting precaution",
+          "alert_body": "Weeping willow bark has limited specific safety data. Willow preparations may affect clotting; review use with your clinician if you take blood thinners or have a bleeding disorder.",
+          "informational_note": "Broader Salix bark guidance informs this precaution; exact species effects and salicin exposure remain unestablished.",
+          "profile_gate": {
+            "gate_type": "drug_class",
+            "requires": {
+              "conditions_any": [],
+              "drug_classes_any": [
+                "antiplatelets"
+              ],
+              "profile_flags_any": []
+            },
+            "excludes": {
+              "conditions_any": [],
+              "drug_classes_any": [],
+              "profile_flags_any": [],
+              "product_forms_any": [],
+              "nutrient_forms_any": []
+            },
+            "dose": null
+          },
+          "direction": "harmful",
+          "materiality": "presence"
+        },
+        {
+          "drug_class_id": "nsaids",
+          "severity": "caution",
+          "evidence_level": "theoretical",
+          "mechanism": "Salix babylonica bark has been included in comparative chemical profiling of Salix bark phenolics. Species and genotypes differ, so its marker exposure and clinical effect cannot be inferred from white-willow bark or from whole bark mass. The broader Salix bark monograph warns about salicylate-related bleeding and combinations with anticoagulants or salicylates. This is an evidence-limited class precaution, not proof of a species-specific human interaction or a transferred salicin dose.",
+          "action": "Review weeping willow bark use with your clinician, especially if you have a bleeding disorder, take blood thinners or NSAIDs, or are preparing for surgery.",
+          "sources": [
+            "https://www.ema.europa.eu/en/documents/herbal-monograph/final-european-union-herbal-monograph-salix-various-species-including-s-purpurea-l-s-daphnoides-vill-s-fragilis-l-cortex_en.pdf",
+            "https://pubmed.ncbi.nlm.nih.gov/37648031/"
+          ],
+          "alert_headline": "Willow bark — clotting precaution",
+          "alert_body": "Weeping willow bark has limited specific safety data. Willow preparations may affect clotting; review use with your clinician if you take blood thinners or have a bleeding disorder.",
+          "informational_note": "Broader Salix bark guidance informs this precaution; exact species effects and salicin exposure remain unestablished.",
+          "profile_gate": {
+            "gate_type": "drug_class",
+            "requires": {
+              "conditions_any": [],
+              "drug_classes_any": [
+                "nsaids"
+              ],
+              "profile_flags_any": []
+            },
+            "excludes": {
+              "conditions_any": [],
+              "drug_classes_any": [],
+              "profile_flags_any": [],
+              "product_forms_any": [],
+              "nutrient_forms_any": []
+            },
+            "dose": null
+          },
+          "direction": "harmful",
+          "materiality": "presence"
+        }
+      ],
+      "dose_thresholds": [],
+      "pregnancy_lactation": {
+        "pregnancy_category": "no_data",
+        "lactation_category": "no_data",
+        "evidence_level": "no_data",
+        "notes": "Species-specific pregnancy and breastfeeding safety data for Salix babylonica bark are unestablished; discuss use with your clinician.",
+        "alert_headline": "Limited safety data",
+        "alert_body": "There isn't enough specific safety data to give a confident recommendation for pregnancy or breastfeeding. Talk to your obstetrician or pediatrician before using this supplement.",
+        "informational_note": "Pregnancy/lactation safety data is limited — clinician guidance recommended.",
+        "direction": "unknown",
+        "materiality": "presence"
+      },
+      "last_reviewed": "2026-10-07",
+      "review_owner": "Source-content review; species-specific clinical interaction evidence remains unestablished"
     }
   ]
 }

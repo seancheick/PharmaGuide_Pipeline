@@ -3,8 +3,8 @@
     "purpose": "Reviewed GHOST-SUSPECT findings from verify_interaction_rules_citations.py --strict",
     "description": "Reviewed GHOST-SUSPECT findings from verify_interaction_rules_citations.py --strict, keyed by PMID, rule_id and sub_rule. A suspect blocks the strict gate until it is reviewed here with a rationale that states why the live PubMed record does support the sub-rule (class-level, constituent, full-text or heuristic-miss citations). Wrong-topic citations are fixed in the rules file, never listed here. Removing an entry re-arms the gate for that citation. Receipts: scripts/audits/interaction_rules/citation_triage_2026_09/research.md.",
     "schema_version": "5.0.0",
-    "last_updated": "2026-10-01",
-    "total_entries": 71
+    "last_updated": "2026-10-07",
+    "total_entries": 76
   },
   "reviewed": [
     {
@@ -645,6 +645,51 @@
       "rationale": "Full-text guideline citation: section 5.1 recommendation 4 (Class 3: No Benefit, B-R) does not recommend routine CoQ10 for prevention or treatment of statin-attributed muscle symptoms in adults taking statins. The primary publisher recommendation table was read and PMID41824590/title/DOI10.1016/j.jacc.2025.11.016 content-verified. The abstract discusses dyslipidemia generally and omits CoQ10, hence the subject heuristic miss. This is not a claim of a harmful interaction or absence of all CoQ10 benefits.",
       "reviewed_by": "Codex primary-source review 2026-10-01 (not clinician-reviewed)",
       "reviewed_at": "2026-10-01"
+    },
+    {
+      "pmid": "37648031",
+      "rule_id": "RULE_BOT_WEEPING_WILLOW_BARK",
+      "sub_rule": "condition:bleeding_disorders",
+      "live_title": "Inter- and intraspecific diversity of Salix bark phenolic profiles - A resource for the pharmaceutical industry.",
+      "rationale": "Claim-scoped chemistry reference only: live NCBI efetch explicitly includes Salix babylonica bark in the 13-species comparative phenolic analysis and stresses species/genotype variability and standardization. The sub-rule does not claim this paper demonstrates bleeding, a drug interaction, a human effect in S. babylonica, or a marker dose. The separately cited EMA Salix bark monograph supplies the broader salicylate-related precaution; evidence is theoretical and species-specific clinical effects remain unestablished. Receipt: mapping_warning_safety_pubmed_efetch.xml and full EMA monograph inspected 2026-10-07.",
+      "reviewed_by": "agent source-content review (not clinician-reviewed)",
+      "reviewed_at": "2026-10-07"
+    },
+    {
+      "pmid": "37648031",
+      "rule_id": "RULE_BOT_WEEPING_WILLOW_BARK",
+      "sub_rule": "condition:surgery_scheduled",
+      "live_title": "Inter- and intraspecific diversity of Salix bark phenolic profiles - A resource for the pharmaceutical industry.",
+      "rationale": "Claim-scoped chemistry reference only: live NCBI efetch explicitly includes Salix babylonica bark in the 13-species comparative phenolic analysis and stresses species/genotype variability and standardization. The sub-rule does not claim this paper demonstrates bleeding, a drug interaction, a human effect in S. babylonica, or a marker dose. The separately cited EMA Salix bark monograph supplies the broader salicylate-related precaution; evidence is theoretical and species-specific clinical effects remain unestablished. Receipt: mapping_warning_safety_pubmed_efetch.xml and full EMA monograph inspected 2026-10-07.",
+      "reviewed_by": "agent source-content review (not clinician-reviewed)",
+      "reviewed_at": "2026-10-07"
+    },
+    {
+      "pmid": "37648031",
+      "rule_id": "RULE_BOT_WEEPING_WILLOW_BARK",
+      "sub_rule": "drug:anticoagulants",
+      "live_title": "Inter- and intraspecific diversity of Salix bark phenolic profiles - A resource for the pharmaceutical industry.",
+      "rationale": "Claim-scoped chemistry reference only: live NCBI efetch explicitly includes Salix babylonica bark in the 13-species comparative phenolic analysis and stresses species/genotype variability and standardization. The sub-rule does not claim this paper demonstrates bleeding, a drug interaction, a human effect in S. babylonica, or a marker dose. The separately cited EMA Salix bark monograph supplies the broader salicylate-related precaution; evidence is theoretical and species-specific clinical effects remain unestablished. Receipt: mapping_warning_safety_pubmed_efetch.xml and full EMA monograph inspected 2026-10-07.",
+      "reviewed_by": "agent source-content review (not clinician-reviewed)",
+      "reviewed_at": "2026-10-07"
+    },
+    {
+      "pmid": "37648031",
+      "rule_id": "RULE_BOT_WEEPING_WILLOW_BARK",
+      "sub_rule": "drug:antiplatelets",
+      "live_title": "Inter- and intraspecific diversity of Salix bark phenolic profiles - A resource for the pharmaceutical industry.",
+      "rationale": "Claim-scoped chemistry reference only: live NCBI efetch explicitly includes Salix babylonica bark in the 13-species comparative phenolic analysis and stresses species/genotype variability and standardization. The sub-rule does not claim this paper demonstrates bleeding, a drug interaction, a human effect in S. babylonica, or a marker dose. The separately cited EMA Salix bark monograph supplies the broader salicylate-related precaution; evidence is theoretical and species-specific clinical effects remain unestablished. Receipt: mapping_warning_safety_pubmed_efetch.xml and full EMA monograph inspected 2026-10-07.",
+      "reviewed_by": "agent source-content review (not clinician-reviewed)",
+      "reviewed_at": "2026-10-07"
+    },
+    {
+      "pmid": "37648031",
+      "rule_id": "RULE_BOT_WEEPING_WILLOW_BARK",
+      "sub_rule": "drug:nsaids",
+      "live_title": "Inter- and intraspecific diversity of Salix bark phenolic profiles - A resource for the pharmaceutical industry.",
+      "rationale": "Claim-scoped chemistry reference only: live NCBI efetch explicitly includes Salix babylonica bark in the 13-species comparative phenolic analysis and stresses species/genotype variability and standardization. The sub-rule does not claim this paper demonstrates bleeding, a drug interaction, a human effect in S. babylonica, or a marker dose. The separately cited EMA Salix bark monograph supplies the broader salicylate-related precaution; evidence is theoretical and species-specific clinical effects remain unestablished. Receipt: mapping_warning_safety_pubmed_efetch.xml and full EMA monograph inspected 2026-10-07.",
+      "reviewed_by": "agent source-content review (not clinician-reviewed)",
+      "reviewed_at": "2026-10-07"
     }
   ]
 }

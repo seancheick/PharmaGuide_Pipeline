@@ -62,3 +62,25 @@ def test_unresolved_sibling_form_unii_blocks_the_row_identity(normalizer):
     row = {"name": "Vitamin B6", "uniiCode": None,
            "forms": [{"name": "Pyridoxine HCl", "uniiCode": unii_a}, {"name": "Other", "uniiCode": unknown}]}
     assert normalizer._try_unii_match(row) is None
+
+
+@pytest.mark.parametrize("group", ["Holy Basil", "Rosemary", "Green Tea"])
+def test_botanical_source_and_constituent_do_not_assign_marker_unii_to_whole_row(normalizer, group):
+    row = {"name": "Standardized botanical extract", "category": "botanical",
+           "ingredientGroup": group, "uniiCode": None,
+           "forms": [
+               {"name": group + " Leaf Extract", "category": "botanical", "uniiCode": None},
+               {"name": "Rosmarinic Acid", "category": "non-nutrient/non-botanical",
+                "uniiCode": "MQE6XG29YI"},
+           ]}
+    assert "MQE6XG29YI" in normalizer._identity_unii_to_payload_lookup
+    assert normalizer._try_unii_match(row) is None
+
+
+def test_isolated_marker_with_botanical_source_keeps_explicit_row_unii(normalizer):
+    row = {"name": "Rosmarinic Acid", "category": "non-nutrient/non-botanical",
+           "uniiCode": "MQE6XG29YI",
+           "forms": [{"name": "Rosemary Leaf Extract", "category": "botanical", "uniiCode": None}]}
+    payload, method = normalizer._try_unii_match(row)
+    assert method == "unii_exact_match"
+    assert payload == normalizer._identity_unii_to_payload_lookup["MQE6XG29YI"]

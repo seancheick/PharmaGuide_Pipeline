@@ -440,7 +440,8 @@ def test_window_proxy_no_rda_data_with_label_dose_gets_partial_credit() -> None:
     assert payload["metadata"]["partial_credit_reason"] == "individual_quantified_dose_no_rda_reference"
 
 
-def test_enzyme_activity_evidence_gets_no_reference_partial_dose_credit() -> None:
+@pytest.mark.parametrize("declared_on_label", [False, True])
+def test_enzyme_activity_evidence_gets_no_reference_partial_dose_credit(declared_on_label) -> None:
     """Enzyme products are dosed by activity units, not mg. When the scoring
     contract recovers a GALU/HUT/etc. activity row, generic dose should treat it
     as real quantified dose evidence instead of "not evaluable".
@@ -449,6 +450,13 @@ def test_enzyme_activity_evidence_gets_no_reference_partial_dose_credit() -> Non
 
     product = _product(
         ingredients=[],
+        activeIngredients=[_ingredient(
+            name="Alpha-Galactosidase", canonical_id="digestive_enzymes",
+            quantity=0, unit="NP", raw_source_path="ingredientRows[0]",
+            cleaner_row_role="active_scorable", score_eligible_by_cleaner=True,
+            score_exclusion_reason=None,
+            notes="300 GALU" if declared_on_label else "Declared enzyme",
+        )],
         adequacy_results=[],
         ingredient_quality_data={
             "ingredients_scorable": [],
@@ -471,6 +479,11 @@ def test_enzyme_activity_evidence_gets_no_reference_partial_dose_credit() -> Non
 
     payload = score_dose(product)
 
+    if not declared_on_label:
+        # Canonical IQD research notes cannot invent a serving activity.
+        assert payload["score"] is None
+        assert payload["components"]["supplemental_window_proxy"] == 0.0
+        return
     assert payload["score"] == 16.0
     assert payload["components"]["supplemental_window_proxy"] == 16.0
     assert payload["metadata"]["partial_credit_reason"] == "enzyme_activity_quantified_dose_no_rda_reference"

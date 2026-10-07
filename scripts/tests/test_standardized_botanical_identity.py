@@ -57,3 +57,30 @@ def test_resolved_identity_finds_the_standardized_botanical(enricher):
 def test_identity_from_another_catalog_is_not_trusted(enricher):
     product = _amla_product(canonical_source_db="other_ingredients")
     assert enricher._collect_standardized_botanicals(product) == []
+
+
+@pytest.mark.parametrize("notes", [
+    "standardized to 5% ocimum bioactive complex",
+    "standardized to 5% unspecified compounds",
+    "standardized to 5% unrelated marker",
+])
+def test_unmatched_marker_percentage_cannot_satisfy_authored_marker_threshold(enricher, notes):
+    product = {"activeIngredients": [{
+        "name": "Holixer", "standardName": "Holy Basil", "notes": notes,
+        "canonical_id": "holy_basil", "canonical_source_db": "ingredient_quality_map",
+        "quantity": 250, "unit": "mg",
+    }]}
+    found = enricher._collect_standardized_botanicals(product)
+    assert len(found) == 1
+    assert found[0]["percentage_found"] == 0
+    assert found[0]["meets_threshold"] is False
+
+
+def test_explicit_authored_marker_percentage_retains_credit(enricher):
+    product = {"activeIngredients": [{
+        "name": "Holy Basil Extract", "notes": "standardized to 2.5% ursolic acid",
+        "canonical_id": "holy_basil", "canonical_source_db": "ingredient_quality_map",
+    }]}
+    found = enricher._collect_standardized_botanicals(product)
+    assert found[0]["percentage_found"] == 2.5
+    assert found[0]["meets_threshold"] is True

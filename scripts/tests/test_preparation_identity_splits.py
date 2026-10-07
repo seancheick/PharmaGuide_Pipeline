@@ -518,7 +518,9 @@ def test_polisure_declared_material_survives_strict_evidence_identity(pipeline):
                    if r.get("canonical_id") == "policosanol")
     assert quality["source_label_name"] == row["name"]
     assert quality["label_display_name"] == row["name"]
-    assert quality["form_match_status"] == "unmapped"  # no fabricated PoliSure equivalence
+    assert quality["form_match_status"] == "mapped"
+    assert quality["matched_form"] == "sugar cane policosanol"
+    assert quality["bio_score"] == 7  # identity verified; no marketing absorption bonus
 
 
 def test_achiote_leaf_cannot_inherit_annatto_seed_carotenoid_identity(pipeline):
@@ -527,12 +529,14 @@ def test_achiote_leaf_cannot_inherit_annatto_seed_carotenoid_identity(pipeline):
     row["notes"] = "Achiote extract PlantPart: leaf Note: 4:1 "
     enriched = pipeline(_raw_product(213740, [row]))
     active = next(r for r in enriched["activeIngredients"] if r["name"] == "Achiote extract")
-    assert active.get("canonical_id") is None
+    assert active.get("canonical_id") == "achiote_leaf"
+    assert active.get("canonical_source_db") == "botanical_ingredients"
     assert active["quantity"] == 500 and active["unit"] == "mg"
     assert "6PQP1V1B6O" not in json.dumps(active)
     assert active["plantPart"] == "leaf"
+    assert all(r.get("bio_score") is None for r in _rows(enriched, row["name"]))
     from scoring_input_contract import get_evidence_subject_rows
-    # An unresolved source is not an assessable seed-material subject.
+    # Verified leaf identity is not an assessable seed-material subject.
     assert not any(r.get("canonical_id") in {"oi_annatto_extract", "nha_annatto_variants"}
                    for r in get_evidence_subject_rows(enriched) if r["name"] == row["name"])
 
@@ -544,3 +548,485 @@ def test_annatto_seed_colorant_retains_existing_owner(pipeline, name, owner):
     enriched = pipeline(_raw_product(990135, [row]))
     active = next(r for r in enriched["activeIngredients"] if r["name"] == name)
     assert active.get("canonical_id", "").lower() == owner
+
+
+@pytest.mark.parametrize("name,group,form,parent,expected", [
+    ("Acai Berry Fruit Extract", "Acai", "Euterpe badiocarpa Fruit Extract",
+     "acai_berry", "acai berry (unspecified)"),
+    ("Acai Berry Extract", "Acai", "Euterpe badiocarpa Berry Extract",
+     "acai_berry", "acai berry (unspecified)"),
+    ("Acai Fruit Extract", "Acai", "Euterpe oleracea Fruit Extract",
+     "acai_berry", "acai berry (unspecified)"),
+    ("Pine Bark Extract", "Pine", "Pinus massoniana Bark Extract",
+     "pine_bark_extract", "generic pine bark extract"),
+])
+def test_verified_botanical_form_alias_resolves_existing_owner(
+    pipeline, name, group, form, parent, expected,
+):
+    raw = _raw_row(1, name, group, quantity=100, unit="mg", forms=[form])
+    enriched = pipeline(_raw_product(990201, [raw]))
+    quality = next(r for r in enriched["ingredient_quality_data"]["ingredients"]
+                   if r["name"] == name)
+    assert quality["canonical_id"] == parent
+    assert not quality["unmapped_forms"]
+    assert quality["matched_form"] == expected
+    assert quality["quantity"] == 100
+    from scoring_v4.scored_artifact import build_scored_artifact
+    artifact = build_scored_artifact(enriched)
+    assert "disclosed_form_unmapped" not in artifact["strict_scoring_contract"]["findings"]
+
+
+def test_masson_pine_cannot_claim_branded_pycnogenol_form(pipeline):
+    row = _raw_row(1, "Masson Pine Bark Extract", "Pine", quantity=100, unit="mg")
+    enriched = pipeline(_raw_product(990202, [row]))
+    quality = next(r for r in enriched["ingredient_quality_data"]["ingredients"]
+                   if r["name"] == row["name"])
+    assert quality["canonical_id"] == "pine_bark_extract"
+    assert quality["matched_form"] == "generic pine bark extract"
+    assert quality["bio_score"] == 9
+
+
+@pytest.mark.parametrize("name,source,expected", [
+    ("Hesperidin", "Citrus aurantium", "hesperidin"),
+    ("Hesperidin", "Citrus aurantium L.", "hesperidin"),
+    ("Citrus Bioflavonoid Complex", "Bitter Orange", "citrus bioflavonoids complex"),
+    ("Citrus Bioflavonoid Complex", "Citrus aurantium", "citrus bioflavonoids complex"),
+])
+def test_citrus_source_preserves_printed_preparation(pipeline, name, source, expected):
+    row = _raw_row(1, name, "Hesperidin" if name == "Hesperidin" else "Flavonoid (mixture)",
+                   category="non-nutrient/non-botanical", quantity=100, unit="mg")
+    row["forms"] = [{"name": source, "order": 1, "category": "botanical",
+                     "ingredientGroup": "Bitter orange", "prefix": None}]
+    enriched = pipeline(_raw_product(990203, [row]))
+    quality = next(r for r in enriched["ingredient_quality_data"]["ingredients"]
+                   if r["name"] == name)
+    assert quality["canonical_id"] == "citrus_bioflavonoids"
+    assert quality["matched_form"] == expected
+    assert quality["unmapped_forms"] == []
+    assert quality["source_label_name"] == name
+    from scoring_v4.scored_artifact import build_scored_artifact
+    scored = build_scored_artifact(enriched)
+    assert "disclosed_form_unmapped" not in scored["strict_scoring_contract"]["findings"]
+
+
+@pytest.mark.parametrize("name", ["Hesperetin", "Hesperidin Methyl Chalcone"])
+def test_distinct_hesperidin_derivatives_do_not_inherit_hesperidin(pipeline, name):
+    enriched = pipeline(_raw_product(990204, [
+        _raw_row(1, name, name, category="non-nutrient/non-botanical",
+                 quantity=100, unit="mg")]))
+    quality = next(r for r in enriched["ingredient_quality_data"]["ingredients"]
+                   if r["name"] == name)
+    assert quality.get("matched_form") != "hesperidin"
+    assert quality.get("scoreable_identity") is False
+
+
+def test_unverified_citrus_source_is_still_held(pipeline):
+    row = _raw_row(1, "Hesperidin", "Hesperidin",
+                   category="non-nutrient/non-botanical", quantity=100, unit="mg")
+    row["forms"] = [{"name": "Unknown Citrus Preparation", "order": 1,
+                     "category": "botanical", "ingredientGroup": "Unknown Citrus",
+                     "prefix": None}]
+    enriched = pipeline(_raw_product(990205, [row]))
+    quality = next(r for r in enriched["ingredient_quality_data"]["ingredients"]
+                   if r["name"] == "Hesperidin")
+    assert quality["form_match_status"] == "unmapped"
+    assert quality["unmapped_forms"] == ["Unknown Citrus Preparation"]
+
+
+@pytest.mark.parametrize("name,group,category,form,parent,expected,grade", [
+    ("Calcium", "Calcium", "mineral", "GIVOCAL", "calcium", "calcium glycerophosphate", 3),
+    ("Magnesium", "Magnesium", "mineral", "GIVOMAG", "magnesium", "magnesium glycerophosphate", 2),
+    ("Collagen Peptides", "Collagen", "protein", "KoACT Calcium Collagen Chelate",
+     "collagen", "hydrolyzed collagen peptides", 11),
+    ("Magnesium", "Magnesium", "mineral", "Magnesium HPC", "magnesium",
+     "magnesium amino acid chelate", 11),
+])
+def test_verified_preparation_alias_keeps_existing_form_grade(
+    pipeline, name, group, category, form, parent, expected, grade,
+):
+    row = _raw_row(1, name, group, category=category, quantity=100, unit="mg")
+    row["forms"] = [{"name": form, "order": 1, "category": category,
+                     "ingredientGroup": group, "prefix": None}]
+    enriched = pipeline(_raw_product(990206, [row]))
+    quality = next(r for r in enriched["ingredient_quality_data"]["ingredients"]
+                   if r["name"] == name)
+    assert quality["canonical_id"] == parent
+    assert quality["matched_form"] == expected
+    assert quality["unmapped_forms"] == []
+    assert quality["bio_score"] == grade
+    assert quality["quantity"] == 100
+
+
+def test_declared_sesame_lignan_mixture_keeps_family_identity(pipeline):
+    row = _raw_row(1, "Sesame seed (Sesamum indicum) lignan extract", "Sesame",
+                   category="botanical", quantity=20, unit="mg")
+    enriched = pipeline(_raw_product(990207, [row]))
+    quality = next(r for r in enriched["ingredient_quality_data"]["ingredients"]
+                   if r["name"] == row["name"])
+    assert quality["canonical_id"] == "lignans"
+    assert quality["matched_form"] != "sesamin (unspecified)"
+    assert quality["identity_disposition"] != "identity_conflict"
+    assert quality["quantity"] == 20
+
+
+def test_singular_polyphenol_keeps_existing_family_identity(pipeline):
+    row = _raw_row(1, "Polyphenol", "Polyphenol (unspecified)",
+                   category="non-nutrient/non-botanical", quantity=10, unit="mg")
+    enriched = pipeline(_raw_product(990208, [row]))
+    quality = next(r for r in enriched["ingredient_quality_data"]["ingredients"]
+                   if r["name"] == row["name"])
+    assert quality["canonical_id"] == "polyphenols"
+    assert quality["identity_disposition"] != "identity_conflict"
+    assert quality["quantity"] == 10
+
+
+@pytest.mark.parametrize("name,group,parent,forms,grade", [
+    ("Flavonoids", "Flavonoid (mixture)", "flavonoids", ["Monomers", "Oligomers"], 7),
+    ("Masquelier's Original OPCs", "Proanthocyanidins", "opc",
+     ["single and condensed (2-5) units of Flavanols & Polyphenols from grape seeds"], 5),
+])
+def test_composition_disclosure_does_not_invent_a_new_chemical_form(
+    pipeline, name, group, parent, forms, grade,
+):
+    row = _raw_row(1, name, group, category="non-nutrient/non-botanical",
+                   quantity=100, unit="mg", forms=forms)
+    enriched = pipeline(_raw_product(990210, [row]))
+    quality = next(r for r in enriched["ingredient_quality_data"]["ingredients"]
+                   if r["name"] == name)
+    assert quality["canonical_id"] == parent
+    assert quality["unmapped_forms"] == []
+    assert quality["bio_score"] == grade
+    assert quality["quantity"] == 100
+
+
+def test_shared_carotenoid_brand_keeps_disclosed_component_identity_and_amount(pipeline):
+    rows = []
+    for order, form, group, amount in [(1, "Lutein", "Lutein", 10),
+                                       (2, "Zeaxanthin Isomers", "Zeaxanthin", 2)]:
+        row = _raw_row(order, "Lutemax 2020", "Tagetes", quantity=amount, unit="mg")
+        row["forms"] = [{"order": 1, "name": form, "category": "non-nutrient/non-botanical",
+                         "ingredientGroup": group, "prefix": None, "percent": None}]
+        rows.append(row)
+    enriched = pipeline(_raw_product(298076, rows))
+    subjects = enriched["activeIngredients"]
+    assert [(r["canonical_id"], r["quantity"]) for r in subjects] == [("lutein", 10), ("zeaxanthin", 2)]
+    quality = enriched["ingredient_quality_data"]["ingredients"]
+    assert [(r["canonical_id"], r["quantity"]) for r in quality] == [("lutein", 10), ("zeaxanthin", 2)]
+    assert all(not r["unmapped_forms"] for r in quality)
+
+
+@pytest.mark.parametrize("case", ["partial", "multiple", "nested", "unreviewed_source", "marker_note"])
+def test_source_component_routing_requires_one_complete_reviewed_declaration(case):
+    from enhanced_normalizer import EnhancedDSLDNormalizer
+    row = _raw_row(1, "Lutemax 2020", "Tagetes", quantity=12, unit="mg")
+    row["forms"] = [{"order": 1, "name": "Zeaxanthin Isomers",
+                     "category": "non-nutrient/non-botanical", "ingredientGroup": "Zeaxanthin",
+                     "prefix": None, "percent": None}]
+    if case == "partial":
+        row["forms"][0]["percent"] = 20
+    elif case == "multiple":
+        row["forms"].append({"name": "Lutein", "category": "non-nutrient/non-botanical",
+                             "ingredientGroup": "Lutein"})
+    elif case == "nested":
+        row["nestedRows"] = [_raw_row(2, "Lutein", "Lutein", quantity=10, unit="mg")]
+    elif case == "unreviewed_source":
+        row["name"] = "Unknown Marigold Preparation"
+    else:
+        row["notes"] = "standardized to contain 20% zeaxanthin"
+    assert EnhancedDSLDNormalizer()._single_declared_source_form_identity(row) is None
+
+
+def test_lipo_cmax_source_preserves_separately_declared_calcium_amount(pipeline):
+    row = _raw_row(1, "Calcium", "Calcium", category="mineral", quantity=40, unit="mg")
+    row["forms"] = [{"order": 1, "name": "Lipo-Cmax", "category": "vitamin",
+                     "ingredientGroup": "Vitamin C", "prefix": None, "percent": None}]
+    enriched = pipeline(_raw_product(328794, [row]))
+    quality = next(r for r in enriched["ingredient_quality_data"]["ingredients"] if r["name"] == "Calcium")
+    assert quality["canonical_id"] == "calcium"
+    assert quality["matched_form"] == "calcium ascorbate (as calcium source)"
+    assert quality["unmapped_forms"] == []
+    assert quality["quantity"] == 40 and quality["bio_score"] == 10
+
+
+def test_phytopin_resolves_to_mixed_sterols_without_pine_bark_credit(pipeline):
+    row = _raw_row(1, "Phytosterols", "Phytosterol (mixed)",
+                   category="non-nutrient/non-botanical", quantity=500, unit="mg", forms=["PhytoPin"])
+    enriched = pipeline(_raw_product(299745, [row]))
+    quality = next(r for r in enriched["ingredient_quality_data"]["ingredients"] if r["name"] == "Phytosterols")
+    assert quality["canonical_id"] == "phytosterols"
+    assert quality["matched_form"] == "mixed phytosterols"
+    assert quality["unmapped_forms"] == []
+    assert quality["bio_score"] == 9 and quality["quantity"] == 500
+    from enhanced_normalizer import EnhancedDSLDNormalizer
+    normalizer = EnhancedDSLDNormalizer()
+    assert normalizer._resolve_canonical_identity("PhytoPin", raw_name="PhytoPin")[0] == "phytosterols"
+
+
+@pytest.mark.parametrize("name,category,amount,parent,form,grade", [
+    ("Vitamin C", "vitamin", 619, "vitamin_c", "calcium ascorbate", 13),
+    ("Calcium", "mineral", 68, "calcium", "calcium ascorbate (as calcium source)", 10),
+])
+def test_chelamax_requires_exact_salt_context(pipeline, name, category, amount, parent, form, grade):
+    row = _raw_row(1, name, name, category=category, quantity=amount, unit="mg")
+    row["forms"] = [{"order": 1, "name": "ChelaMax", "category": "vitamin",
+                     "ingredientGroup": "Calcium Ascorbate", "prefix": None}]
+    enriched = pipeline(_raw_product(293952, [row]))
+    quality = next(r for r in enriched["ingredient_quality_data"]["ingredients"] if r["name"] == name)
+    assert quality["canonical_id"] == parent
+    assert quality["matched_form"] == form and quality["bio_score"] == grade
+    assert quality["unmapped_forms"] == [] and quality["quantity"] == amount
+
+
+def test_unqualified_chelamax_does_not_invent_an_ascorbate_salt(pipeline):
+    row = _raw_row(1, "Calcium", "Calcium", category="mineral", quantity=68, unit="mg", forms=["ChelaMax"])
+    enriched = pipeline(_raw_product(990220, [row]))
+    quality = next(r for r in enriched["ingredient_quality_data"]["ingredients"] if r["name"] == "Calcium")
+    assert quality["form_match_status"] == "unmapped"
+    assert quality["unmapped_forms"] == ["ChelaMax"]
+
+
+def test_meriva_names_existing_preparation_without_changing_its_printed_mass(pipeline):
+    row = _raw_row(1, "Meriva Turmeric Phytosome", "Turmeric", quantity=125, unit="mg")
+    row["notes"] = "Meriva Turmeric Phytosome (Form: Turmeric (Curcuma longa) extract (Form: standardized to contain 18% Curcuminoids), and Phospholipid Complex)"
+    row["forms"] = [{"order": 1, "name": "Phospholipid Complex", "category": "fat",
+                     "ingredientGroup": "Phospholipid (unspecified)", "prefix": "and", "percent": None},
+                    {"order": 2, "name": "Turmeric (Curcuma longa) extract", "category": "botanical",
+                     "ingredientGroup": "Turmeric", "prefix": None, "percent": None}]
+    enriched = pipeline(_raw_product(246351, [row]))
+    quality = next(r for r in enriched["ingredient_quality_data"]["ingredients"] if r["name"] == row["name"])
+    assert quality["canonical_id"] == "curcumin"
+    assert quality["matched_form"] == "meriva curcumin"
+    assert quality["bio_score"] == 8
+    assert quality["quantity"] == 125 and quality["unit"] == "mg"
+    assert quality["unmapped_forms"] == []
+
+@pytest.mark.parametrize("name,form", [("Protease", "Papain, Powder"), ("Protease II", "Papain")])
+def test_specific_papain_declaration_uses_papain_owner(pipeline, name, form):
+    row = _raw_row(1, name, "Proteolytic Enzymes (Proteases)", category="enzyme",
+                   quantity=10, unit="mg", forms=(form,))
+    row["forms"][0].update(ingredientGroup="Papain", category="enzyme", uniiCode="A236A06Y32")
+    row["uniiCode"] = "0"
+    enriched = pipeline(_raw_product("papain-specific", [row]))
+    candidates = _rows(enriched, name)
+    assert len(candidates) == 1
+    assert candidates[0]["canonical_id"] == "papain"
+    assert candidates[0]["form_match_status"] == "mapped"
+
+@pytest.mark.parametrize("partial", [False, True])
+def test_papain_source_mapping_does_not_claim_mixed_or_partial_enzyme_mass(partial):
+    from enhanced_normalizer import EnhancedDSLDNormalizer
+    row = _raw_row(1, "Protease", "Proteolytic Enzymes (Proteases)", category="enzyme",
+                   quantity=10, unit="mg", forms=("Papain",))
+    row["forms"][0].update(category="enzyme", ingredientGroup="Papain")
+    if partial:
+        row["forms"][0]["percent"] = 50
+    else:
+        row["forms"].append({"name": "Bromelain", "category": "enzyme", "ingredientGroup": "Bromelain"})
+    assert EnhancedDSLDNormalizer()._single_declared_source_form_identity(row) is None
+
+
+def test_declared_smilax_china_does_not_borrow_sarsaparilla_species_grade(pipeline):
+    row = _raw_row(1, "Sarsaparilla Root Extract", "Sarsaparilla", category="botanical",
+                   quantity=1000, unit="mg", forms=("Smilax china Root Extract",))
+    row["forms"][0].update(ingredientGroup="Chinese Smilax", category="botanical")
+    enriched = pipeline(_raw_product("smilax-source", [row]))
+    active = enriched["activeIngredients"][0]
+    assert active["canonical_id"] == "chopchini"
+    assert active["canonical_source_db"] == "botanical_ingredients"
+    assert active["quantity"] == 1000
+    assert active["forms"][0]["name"] == "Smilax china Root Extract"
+    assert all(r.get("canonical_id") != "sarsaparilla" for r in _rows(enriched, row["name"]))
+
+
+def test_achiote_leaf_is_a_botanical_material_not_seed_colorant(pipeline):
+    row = _raw_row(1, "Achiote extract", "Annatto", category="botanical", quantity=500, unit="mg")
+    row["notes"] = "Achiote extract PlantPart: leaf Note: 4:1 "
+    enriched = pipeline(_raw_product("achiote-leaf", [row]))
+    active = enriched["activeIngredients"][0]
+    assert active["canonical_id"] == "achiote_leaf"
+    assert active["canonical_source_db"] == "botanical_ingredients"
+    assert active["quantity"] == 500
+    assert active["plantPart"] == "leaf"
+    assert active["notes"] == row["notes"]
+    assert all(r.get("bio_score") is None for r in _rows(enriched, row["name"]))
+
+@pytest.mark.parametrize("notes", ["", "Achiote extract PlantPart: seed", "Achiote extract PlantPart: unknown"])
+def test_achiote_source_part_cannot_be_inferred_from_short_name(notes):
+    from enhanced_normalizer import EnhancedDSLDNormalizer
+    row = _raw_row(1, "Achiote extract", "Annatto", category="botanical", quantity=500, unit="mg")
+    row["notes"] = notes
+    assert EnhancedDSLDNormalizer()._single_declared_source_form_identity(row) is None
+
+@pytest.mark.parametrize("name,group,category,form,canonical", [
+    ("White Willow Bark Extract", "White Willow", "botanical", "Salix babylonica Bark Extract", "weeping_willow_bark"),
+    ("Pumpkin Seed Oil", "Pumpkin Seed Oil", "fat", "Cucurbita moschata Seed Oil", "butternut_squash_seed_oil"),
+])
+def test_specific_bark_or_seed_oil_does_not_borrow_another_species(pipeline, name, group, category, form, canonical):
+    row = _raw_row(1, name, group, category=category, quantity=400, unit="mg", forms=(form,))
+    row["forms"][0].update(category="botanical", ingredientGroup=form.split(" ")[0]+" "+form.split(" ")[1])
+    if canonical == "weeping_willow_bark":
+        row["uniiCode"] = "205MXS71H7"
+        row["forms"][0]["uniiCode"] = "86LHC23T1R"
+    enriched = pipeline(_raw_product("distinct-botanical-material", [row]))
+    assert enriched["activeIngredients"][0]["canonical_id"] == canonical
+    assert all(r.get("bio_score") is None for r in _rows(enriched, name))
+
+
+def test_duplicate_chinese_wolfberry_forms_are_one_declared_species(pipeline):
+    row = _raw_row(1, "Goji, Powder", "Goji", category="botanical", quantity=1000, unit="mg", forms=("Lycium chinense, Powder", "Lycium chinense, Powder"))
+    for index, form in enumerate(row["forms"]):
+        form.update(order=index+1, ingredientId=342854+index, category="botanical", ingredientGroup="Goji")
+    enriched = pipeline(_raw_product("chinese-wolfberry", [row]))
+    active = enriched["activeIngredients"][0]
+    assert active["canonical_id"] == "chinese_wolfberry_fruit"
+    assert active["quantity"] == 1000
+    assert len(active["forms"]) == 2
+    assert all(r.get("bio_score") is None for r in _rows(enriched, row["name"]))
+
+@pytest.mark.parametrize("name,group,category,source,canonical,expected,grade", [
+    ("Pycnogenol", "maritime Pine", "botanical", "French Maritime Pine Bark Extract, Dried", "pine_bark_extract", "pycnogenol", 10),
+    ("Pycnogenol Maritime Pine extract", "maritime Pine", "botanical", "French Maritime Pines", "pine_bark_extract", "pycnogenol", 10),
+    ("MBP", "Milk Basic Protein", "protein", "Milk Protein", "milk_basic_protein", "milk basic protein (unspecified)", 7),
+    ("Omega-3", "Fish Oil", "fatty acid", "Fish Oil", "fish_oil", "fish oil (unspecified)", 8),
+])
+def test_existing_preparation_accepts_its_verified_parent_local_source(pipeline, name, group, category, source, canonical, expected, grade):
+    row = _raw_row(1, name, group, category=category, quantity=40, unit="mg", forms=(source,))
+    row["forms"][0]["category"] = {"protein":"protein", "fatty acid":"fat"}.get(category, "botanical")
+    enriched = pipeline(_raw_product("existing-preparation-source", [row]))
+    candidates = _rows(enriched, name)
+    assert candidates and {r["canonical_id"] for r in candidates} == {canonical}
+    expected_status = "n/a" if "(unspecified)" in expected else "mapped"
+    assert all(r["form_match_status"] == expected_status and r["matched_form"] == expected and r["bio_score"] == grade for r in candidates)
+    assert enriched["activeIngredients"][0]["quantity"] == 40
+
+
+def test_standardized_botanical_keeps_whole_extract_identity_and_mass(pipeline):
+    row = _raw_row(1, "Holixer", "Holy Basil", quantity=250, unit="mg")
+    row["notes"] = "standardized to greater than or equal to 5% ocimum bioactive complex"
+    row["forms"] = [
+        {"name": "Apigenin-7-O-betaglucuronide", "category": "non-nutrient/non-botanical", "ingredientGroup": "TBD"},
+        {"name": "Holy Basil Aerial Parts, Leaf Extract", "category": "botanical", "ingredientGroup": "Holy Basil"},
+        {"name": "Luteolin-7-O-glucuronide", "category": "non-nutrient/non-botanical", "ingredientGroup": "TBD"},
+        {"name": "Ociglycoside-I", "category": "non-nutrient/non-botanical", "ingredientGroup": "TBD"},
+        {"name": "Rosmarinic Acid", "category": "non-nutrient/non-botanical", "ingredientGroup": "Rosmarinic Acid", "uniiCode": "MQE6XG29YI"},
+        {"name": "Rabdosiin", "category": "non-nutrient/non-botanical", "ingredientGroup": "TBD"},
+    ]
+    enriched = pipeline(_raw_product("whole-standardized-botanical", [row]))
+    active = enriched["activeIngredients"][0]
+    assert active["canonical_id"] == "holy_basil"
+    assert active["quantity"] == 250
+    candidates = _rows(enriched, "Holixer")
+    assert candidates and {r["canonical_id"] for r in candidates} == {"holy_basil"}
+    assert all(r["matched_form"] == "holy basil extract" and r["bio_score"] == 10 for r in candidates)
+    assert all(r["form_match_status"] == "mapped" and not r.get("unmapped_forms") for r in candidates)
+    assert all(not r.get("delivers_markers") for r in candidates)
+    standardization = enriched["formulation_data"]["standardized_botanicals"]
+    assert standardization and all(r["percentage_found"] == 0 and not r["meets_threshold"] for r in standardization)
+
+
+def test_disclosed_potassium_source_does_not_invent_a_chemical_salt(pipeline):
+    row = _raw_row(1, "Potassium", "Potassium", category="mineral", quantity=70, unit="mg", forms=("Citrus Pectin, Modified",))
+    row["forms"][0].update(category="fiber", ingredientGroup="Pectin", uniiCode="47EQO8LE7H")
+    row["uniiCode"] = "RWP5GA015D"
+    enriched = pipeline(_raw_product("pectin-carried-potassium", [row]))
+    candidates = _rows(enriched, "Potassium")
+    assert candidates and {r["canonical_id"] for r in candidates} == {"potassium"}
+    assert all(r["form_match_status"] == "n/a" and r["matched_form"] == "potassium (unspecified)" and r["bio_score"] == 6 for r in candidates)
+    assert enriched["activeIngredients"][0]["quantity"] == 70
+
+
+def test_measurement_reference_does_not_become_an_isolated_flavonoid(pipeline):
+    row = _raw_row(1, "Flavonoids", "Flavonoid (mixture)", category="non-nutrient/non-botanical", quantity=50, unit="mg", forms=("Hesperidin",))
+    row["forms"][0].update(prefix="expressed as", ingredientGroup="Hesperidin")
+    row["notes"] = "Flavonoids (Form: expressed as Hesperidin)"
+    enriched = pipeline(_raw_product("flavonoid-measurement-reference", [row]))
+    candidates = _rows(enriched, "Flavonoids")
+    assert candidates and {r["canonical_id"] for r in candidates} == {"flavonoids"}
+    assert all(r["form_match_status"] == "n/a" and r["matched_form"] == "flavonoids (unspecified)" and r["bio_score"] == 7 for r in candidates)
+    assert enriched["activeIngredients"][0]["quantity"] == 50
+
+
+def test_standardized_natto_enzyme_uses_activity_without_claiming_pure_enzyme_mass(pipeline):
+    row = _raw_row(1, "Soy Natto extract", "Soy", quantity=100, unit="mg", forms=("Nattokinase",))
+    row["forms"][0].update(category="enzyme", ingredientGroup="Nattokinase", prefix="supplying 2000 fibrinolytic units of")
+    row["notes"] = "Soy Natto extract (Form: supplying 2000 fibrinolytic units of Nattokinase (Alt. Name: NSK-SD))"
+    enriched = pipeline(_raw_product("natto-declared-enzyme-activity", [row]))
+    candidates = _rows(enriched, "Soy Natto extract")
+    assert candidates and {r["canonical_id"] for r in candidates} == {"nattokinase"}
+    assert all(r["quantity"] == 100 and r["unit"] == "mg" for r in candidates)
+    assert all(r["activity_quantity"] == 2000 and r["activity_unit"] == "FU" and r["dose_class"] == "enzyme_activity" for r in candidates)
+    assert all(r["bio_score"] == 9 for r in candidates)
+    assert any("NATTOKINASE" in alert["rule_id"] for alert in enriched["interaction_profile"]["ingredient_alerts"])
+    from scoring_input_contract import get_evidence_subject_rows
+    from scoring_v4.scored_artifact import build_scored_artifact
+    build_scored_artifact(enriched)
+    subjects = [r for r in get_evidence_subject_rows(enriched) if r.get("canonical_id") == "nattokinase"]
+    assert any(r["quantity"] == 2000 and r["unit"] == "FU" for r in subjects)
+    # The physical preparation row and activity projection retain the same
+    # source; the former carries explicit activity rather than relabeling mg.
+    assert all((r["quantity"] == 2000 and r["unit"] == "FU")
+               or (r.get("activity_quantity") == 2000 and r.get("activity_unit") == "FU")
+               for r in subjects)
+
+
+def test_unqualified_fermented_soy_material_is_not_isolated_isoflavones_or_nattokinase(pipeline):
+    enriched = pipeline(_raw_product("unqualified-natto-material", [_raw_row(1, "Soy Natto extract", "Soy", quantity=100, unit="mg")]))
+    assert enriched["activeIngredients"][0]["canonical_id"] == "soybean"
+    assert not any(r["canonical_id"] in {"nattokinase", "isoflavones"} for r in _rows(enriched, "Soy Natto extract"))
+
+
+@pytest.mark.parametrize("source,expected,grade", [
+    ("Fish Oil concentrate", "DHA fish oil triglyceride", 11),
+    ("Algae Oil", "algal triglyceride", 12),
+])
+def test_long_dha_triglyceride_declaration_requires_its_actual_source(pipeline, source, expected, grade):
+    child = _raw_row(2, "Docosahexaenoic Acid", "DHA (Docosahexaenoic Acid)", category="fatty acid", quantity=200, unit="mg", forms=("Docosahexaenoic Acid Triglyceride",))
+    parent = _raw_row(1, source, source, category="fat", quantity=2410, unit="mg")
+    parent["nestedRows"] = [child]
+    enriched = pipeline(_raw_product("source-qualified-dha", [parent]))
+    candidates = _rows(enriched, "Docosahexaenoic Acid")
+    assert candidates and {r["canonical_id"] for r in candidates} == {"dha"}
+    assert all(r["matched_form"] == expected and r["bio_score"] == grade and r["form_match_status"] == "mapped" for r in candidates)
+    assert all(r["quantity"] == 200 for r in candidates)
+
+
+def test_dha_triglyceride_without_source_does_not_choose_fish_algae_or_rtg(pipeline):
+    child = _raw_row(1, "Docosahexaenoic Acid", "DHA (Docosahexaenoic Acid)", category="fatty acid", quantity=200, unit="mg", forms=("Docosahexaenoic Acid Triglyceride",))
+    enriched = pipeline(_raw_product("unknown-source-dha", [child]))
+    assert all(r["form_match_status"] == "unmapped" for r in _rows(enriched, "Docosahexaenoic Acid"))
+
+
+@pytest.mark.parametrize("name,group,expected,activity", [
+    ("Acid Protease", "Proteolytic Enzymes (Proteases)", "protease", "25 SAPU"),
+    ("Protease", "Protease", "protease", "100 HUT"),
+    ("Lactase", "Lactase", "lactase", "9000 ALU"),
+    ("Amylase", "Amylase", "amylase", "10 DU"),
+    ("Lipase", "Lipase", "lipase", "50 FIP"),
+    ("Peptidase", "Peptidase", "protease", "25 DPP-IV"),
+])
+def test_enzyme_culture_source_does_not_replace_its_discrete_identity(name, group, expected, activity):
+    from enhanced_normalizer import EnhancedDSLDNormalizer
+    row = _raw_row(1, name, group, category="enzyme", quantity=0, unit="NP", forms=("Aspergillus niger",))
+    row["forms"][0].update(category="botanical", ingredientGroup="Aspergillus niger", uniiCode="9IOA40ANG6")
+    row["notes"] = name + " Note: " + activity
+    clean = EnhancedDSLDNormalizer().normalize_product(_raw_product("enzyme-culture-source", [row]))
+    assert clean["activeIngredients"][0]["canonical_id"] == expected
+    assert clean["activeIngredients"][0]["quantity"] == 0
+    assert clean["activeIngredients"][0]["activity_quantity"] > 0
+
+
+def test_culture_source_activity_keeps_its_owner_through_the_scored_artifact(pipeline):
+    from scoring_v4.scored_artifact import build_scored_artifact
+    from scoring_input_contract import get_evidence_subject_rows
+    row = _raw_row(2, "Acid Protease", "Proteolytic Enzymes (Proteases)", category="enzyme", quantity=0, unit="NP", forms=("Aspergillus niger",))
+    row["forms"][0].update(category="botanical", ingredientGroup="Aspergillus niger", uniiCode="9IOA40ANG6")
+    row["notes"] = "Acid Protease Note: 25 SAPU"
+    blend = _raw_row(1, "Enzyme Blend", "blend (non-nutrient/non-botanical)", category="blend", quantity=300, unit="mg")
+    blend["nestedRows"] = [row]
+    enriched = pipeline(_raw_product("culture-source-blend", [blend]))
+    artifact = build_scored_artifact(enriched)
+    assert artifact["quality_score_status"] in {"scored", "not_scored"}
+    subjects = [r for r in get_evidence_subject_rows(enriched) if r.get("name") == "Acid Protease"]
+    assert subjects and all(r["canonical_id"] == "protease" for r in subjects)
+    assert any(r.get("quantity") == 25 and r.get("unit") == "SAPU" for r in subjects)
+    assert not any(r.get("quantity") == 300 and r.get("unit") == "mg" for r in subjects)

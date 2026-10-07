@@ -402,3 +402,37 @@ def test_standardized_label_carries_its_iqm_twin_rule(pid, rule_id, parent_tag):
     fired = [a for a in enriched["interaction_profile"]["ingredient_alerts"] if a["rule_id"] == rule_id]
     assert len(fired) == 1, f"{pid}: {len(fired)} {rule_id} alerts"
     assert parent_tag in classify_product_categories(enriched)["key_ingredient_tags"]
+
+
+def test_curcumin_preparation_keeps_the_source_verified_liver_caution(enricher):
+    from enhanced_normalizer import EnhancedDSLDNormalizer
+    from tests.test_preparation_identity_splits import _raw_product, _raw_row
+    raw = _raw_row(1, "Curcumin", "Curcumin", quantity=125, unit="mg", forms=("Meriva",))
+    enriched, errors = enricher.enrich_product(EnhancedDSLDNormalizer().normalize_product(_raw_product("meriva-liver-precaution", [raw])))
+    assert not errors
+    profile = enriched["interaction_profile"]
+    liver = [hit for alert in profile["ingredient_alerts"] for hit in alert["condition_hits"] if hit["condition_id"] == "liver_disease"]
+    assert liver and all(hit["severity"] == "avoid" for hit in liver)
+
+
+def test_weeping_willow_has_its_own_precaution_without_white_willow_identity(enricher):
+    row = _resolved_row("weeping_willow_bark", "botanical_ingredients")
+    profile = enricher._collect_interaction_profile({"ingredient_quality_data": {"ingredients": [row], "ingredients_scorable": []}})
+    alerts = profile["ingredient_alerts"]
+    assert {a["rule_id"] for a in alerts} == {"RULE_BOT_WEEPING_WILLOW_BARK"}
+    assert alerts[0]["subject_ref"] == {"db": "botanical_ingredients", "canonical_id": "weeping_willow_bark"}
+    assert {h["drug_class_id"] for h in alerts[0]["drug_class_hits"]} >= {"anticoagulants", "antiplatelets"}
+
+
+def test_whole_willow_bark_mass_cannot_suppress_a_salicylate_precaution(enricher):
+    from enhanced_normalizer import EnhancedDSLDNormalizer
+    from tests.test_preparation_identity_splits import _raw_product, _raw_row
+    raw = _raw_row(1, "White Willow Bark", "Willow Bark", category="botanical", quantity=20, unit="mg", forms=("White Willow Bark Extract",))
+    enriched, errors = enricher.enrich_product(EnhancedDSLDNormalizer().normalize_product(_raw_product("whole-bark-not-salicin", [raw])))
+    assert not errors
+    profile = enriched["interaction_profile"]
+    hits = [h for a in profile["ingredient_alerts"] for h in a["condition_hits"] if h["condition_id"] == "bleeding_disorders"]
+    assert hits
+    assert all((h.get("dose_decision") or {}).get("consumer_disposition") != "suppress" for h in hits), (
+        "20 mg bark is not a measured salicin dose or a demonstrated safe cutoff"
+    )

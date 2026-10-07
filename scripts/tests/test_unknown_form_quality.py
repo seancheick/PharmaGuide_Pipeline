@@ -866,11 +866,9 @@ def test_form_tokens_are_judged_under_the_parent_the_row_is_scored_as(enricher, 
 
 
 @pytest.mark.parametrize('label, std_name, form, cleaner_canonical_id', [
-    # D21: a different species under the row's parent waits for Sean's call.
-    ('Acai Berry Fruit Extract', 'Acai Berry', {'name': 'Euterpe badiocarpa Fruit Extract', 'category': _B, 'ingredientGroup': 'Acai'}, None),
-    ('Acai Berry Extract', 'Acai Berry', {'name': 'Euterpe badiocarpa Berry Extract', 'category': _B, 'ingredientGroup': 'Acai'}, 'acai_berry'),
+    # Unreviewed species/part relationships still remain held. Reviewed acai
+    # and generic Masson pine mappings are pinned in preparation identity tests.
     ('Sarsaparilla Root Extract', 'Sarsaparilla', {'name': 'Smilax china Root Extract', 'category': _B, 'ingredientGroup': 'Chinese Smilax'}, 'sarsaparilla'),
-    ('Pine Bark Extract', 'Pine Bark Extract', {'name': 'Pinus massoniana Bark Extract', 'category': _B, 'ingredientGroup': 'Masson Pine'}, 'pine_bark_extract'),
     ('White Willow Bark', 'White Willow Bark', {'name': 'Salix babylonica Bark', 'category': _B, 'ingredientGroup': 'Willow'}, 'white_willow_bark'),
     ('Oat Straw Extract', 'Oat Straw', {'name': 'Avena sativa Seed Extract', 'category': _B, 'ingredientGroup': 'Oats'}, 'oat_straw'),
     ('Goji Berry Extract', 'Goji Berry', {'name': 'Lycium chinense Fruit Extract', 'category': _B, 'ingredientGroup': 'Goji'}, 'goji_berry'),
@@ -914,14 +912,17 @@ def test_5_mthf_beside_its_glucosamine_salt_reads_quatrefolic(enricher):
     assert [m['form_key'] for m in match.get('matched_forms') or []] in ([], ['quatrefolic'])
 
 
-def test_bitter_orange_under_citrus_bioflavonoids_stays_held_for_review(enricher):
-    """Bitter orange carries its own safety owner (synephrine); it is not
-    folded into the generic citrus-source list without a review."""
+def test_reviewed_bitter_orange_source_does_not_claim_synephrine_extract(enricher):
+    """A reviewed citrus source retains the declared bioflavonoid owner;
+    a botanical source does not establish synephrine-containing extract."""
     match = enricher._match_quality_map(
         'Citrus Bioflavonoids', 'Citrus Bioflavonoids', enricher.databases['ingredient_quality_map'],
         cleaned_forms=[{'name': 'Bitter Orange', 'category': _B, 'ingredientGroup': 'Bitter orange'}],
         cleaner_canonical_id='citrus_bioflavonoids')
-    assert match.get('unmapped_forms') == ['Bitter Orange']
+    assert not match.get('unmapped_forms')
+    assert match['canonical_id'] == 'citrus_bioflavonoids'
+    assert match['form_id'] == 'citrus bioflavonoids complex'
+    assert match['form_id'] != 'hesperidin'
 
 
 def test_generic_tocopherol_is_curated_without_claiming_a_specific_isomer(enricher):

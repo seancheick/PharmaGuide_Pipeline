@@ -3,8 +3,8 @@
     "description": "Non-standardized whole herb powders and simple botanical extracts without guaranteed marker compounds. Used for basic ingredient mapping. For premium standardized extracts with marker compounds, see standardized_botanicals.json.",
     "purpose": "ingredient_mapping",
     "schema_version": "5.2.0",
-    "last_updated": "2026-10-05",
-    "total_entries": 552,
+    "last_updated": "2026-10-07",
+    "total_entries": 556,
     "functional_roles_field": {
       "added_in": "5.1.0",
       "type": "string[]",
@@ -15117,7 +15117,8 @@
         "smilax china root",
         "madhusnuhi",
         "smilax china l.",
-        "smilax china l. root"
+        "smilax china l. root",
+        "Smilax china Root Extract"
       ],
       "category": "root",
       "notes": "Smilax china L. (Smilacaceae) root — traditional Ayurvedic (madhusnuhi) botanical. Contains steroidal saponins (sarsasaponin, smilasaponin), flavonoids, stilbenes, and polyphenols. Traditional uses: anti-inflammatory, diuretic, blood purification, rheumatoid arthritis support, and skin conditions (psoriasis, eczema). DISTINCT from Smilax glabra (Tu Fu Ling, CUI C2810601 — different species, primary TCM herb for damp-heat clearing) and from Smilax ornata/regelii (sarsaparilla). Clinical evidence sparse — primarily in vitro and animal studies. High doses may cause GI irritation (saponin content). No FDA safety alerts.",
@@ -16499,6 +16500,95 @@
       "notes": "Malus domestica whole-fruit source identity. Whole-fruit or generic extract mass is not treated as a declared apple-polyphenol dose.",
       "last_updated": "2026-07-16",
       "external_ids": {},
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
+    },
+    {
+      "id": "achiote_leaf",
+      "standard_name": "Achiote Leaf Extract",
+      "latin_name": "Bixa orellana",
+      "aliases": [
+        "achiote leaf",
+        "achiote leaf extract",
+        "bixa orellana leaf",
+        "bixa orellana leaf extract",
+        "annatto leaf",
+        "annatto leaf extract",
+        "arnatto leaf extract"
+      ],
+      "category": "leaf",
+      "notes": "Bixa orellana leaf material, distinct from annatto seed colorant and annatto-derived tocotrienol preparations. The retained Solgar label213740 specifies a4:1 leaf extract500mg. GSRS KQ341J3HXI identifies the leaf source; it does not establish extract equivalence or an efficacy/form-quality grade. UMLS C4046715 identifies arnatto/Bixa orellana leaf extract. No quantitative assessment is implied by botanical identity recognition.",
+      "last_updated": "2026-10-07",
+      "external_ids": {
+        "unii": "KQ341J3HXI"
+      },
+      "cui": "C4046715",
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
+    },
+    {
+      "id": "weeping_willow_bark",
+      "standard_name": "Weeping Willow Bark",
+      "latin_name": "Salix babylonica",
+      "aliases": [
+        "Salix babylonica Bark Extract",
+        "Salix babylonica bark",
+        "weeping willow bark"
+      ],
+      "category": "bark",
+      "notes": "Salix babylonica bark source, distinct from Salix alba white-willow bark. NIH label311869 explicitly prints Salix babylonica and bark; its DSLD top-level Salix alba UNII conflicts with the printed species and does not establish equivalence. GSRS86LHC23T1R identifies the source bark. No Salix alba clinical evidence or numeric preparation assessment is inherited.",
+      "last_updated": "2026-10-07",
+      "external_ids": {
+        "unii": "86LHC23T1R"
+      },
+      "cui": "C1031391",
+      "cui_note": "Species concept; not an extract-specific identity.",
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
+    },
+    {
+      "id": "butternut_squash_seed_oil",
+      "standard_name": "Butternut Squash Seed Oil",
+      "latin_name": "Cucurbita moschata",
+      "aliases": [
+        "Cucurbita moschata Seed Oil",
+        "Cucurbita moschata seed oil cold pressed",
+        "butternut squash seed oil"
+      ],
+      "category": "seed",
+      "notes": "Cucurbita moschata seed oil, explicitly printed on NIH label294381. Distinct species from Cucurbita pepo seed oil; not equivalent to whole butternut-squash fruit. No exact oil UNII or quantitative preparation assessment has been verified. The source-seed identifier4O338K8OH3 describes seed material and is not assigned as an exact oil identifier. No pepo form-quality or clinical credit is inherited.",
+      "last_updated": "2026-10-07",
+      "external_ids": {},
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
+    },
+    {
+      "id": "chinese_wolfberry_fruit",
+      "standard_name": "Chinese Wolfberry Fruit",
+      "latin_name": "Lycium chinense",
+      "aliases": [
+        "Lycium chinense fruit",
+        "Lycium chinense fruit powder",
+        "Lycium chinense, Powder",
+        "Chinese wolfberry fruit",
+        "Chinese wolfberry fruit powder"
+      ],
+      "category": "fruit",
+      "notes": "Lycium chinense fruit powder, explicitly identified as fruit on NIH label312563. Distinct from Lycium barbarum fruit; the latter species form-quality and clinical assessments are not inherited. Duplicated identical DSLD form declarations describe one ingredient and do not double the source dose. GSRS TG711Q7A1Q identifies the fruit source, while UMLS C1053466 identifies the species. Botanical identity does not establish a quantitative preparation assessment.",
+      "last_updated": "2026-10-07",
+      "external_ids": {
+        "unii": "TG711Q7A1Q"
+      },
+      "cui": "C1053466",
+      "cui_note": "Species concept, not exact fruit-powder preparation.",
       "functional_roles": [],
       "attributes": {
         "source_origin": "plant"

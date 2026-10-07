@@ -21,6 +21,8 @@ from typing import Any, Callable, Dict, List, Mapping, Optional, Tuple
 # Shared, dependency-free reference resolver (contract -> shared resolver <- scorer).
 # Importing it here is safe: the resolver imports nothing from the contract or
 # the scorer and only reads data files lazily.
+from normalization import extract_enzyme_activity
+
 from constants import (
     CLEANER_NON_EFFICACY_ROLES,
     CLEANER_NON_SCORABLE_ROLES,
@@ -241,15 +243,6 @@ _NON_EPA_DHA_SOURCE_RE = re.compile(
     r"conjugated\s+linoleic|cla|omega[-\s]?6|omega[-\s]?9|"
     r"fiber|fibre|seed\s+blend|super\s+seed"
     r")\b",
-    re.IGNORECASE,
-)
-_ENZYME_UNITS = {
-    "alu", "ppi", "blgu", "hut", "sapu", "fip", "cu", "gdu", "dppiv", "dpp-iv",
-    "lacu", "fccpu", "galu", "au", "skb", "mwu", "pu", "dp", "ckpu", "aju", "usp",
-    "du", "pc", "agu", "bgu", "lu", "phy", "ftu", "su", "fu",
-}
-_ENZYME_ACTIVITY_RE = re.compile(
-    r"(?P<value>\d[\d,]*(?:\.\d+)?)\s*(?P<unit>ALU|PPI|BLGU|HUT|SAPU|FIP|CU|GDU|DPP[- ]?IV|LACU|FCC(?:\s*\(\s*PU\s*\)|\s*PU)|GALU|AU|SKB|MWU|PU|DP|CKPU|AJU|USP|DU|PC|AGU|BGU|LU|PHY|FTU|SU|FU)(?!\w)",
     re.IGNORECASE,
 )
 _TITLE_MASS_RE = re.compile(
@@ -1269,22 +1262,10 @@ def _derive_declared_active_fiber_evidence(
 
 
 def _extract_enzyme_activity(row: Dict[str, Any]) -> tuple[Optional[float], Optional[str]]:
-    unit = _norm(row.get("activity_unit") or row.get("unit"))
-    value = _as_float(row.get("activity_quantity"), None)
-    if unit in _ENZYME_UNITS and value and value > 0:
-        return value, unit.upper()
-    match = _ENZYME_ACTIVITY_RE.search(_row_text(row))
-    if not match:
-        return None, None
-    parsed = _as_float(match.group("value").replace(",", ""), None)
-    unit_text = match.group("unit").upper().replace(" ", "-")
-    if unit_text.startswith("FCC"):
-        # Alternate label spellings of the existing FCCPU assay, not a
-        # conversion to another activity unit or to member mass.
-        unit_text = "FCCPU"
-    if unit_text == "DPP-IV":
-        unit_text = "DPPIV"
-    return parsed, unit_text
+    return extract_enzyme_activity(
+        _row_text(row), row.get("activity_quantity") if row.get("activity_quantity") is not None else row.get("quantity"),
+        row.get("activity_unit") or row.get("unit"),
+    )
 
 
 def _has_non_probiotic_strict_active(product: Dict[str, Any]) -> bool:
@@ -2174,7 +2155,13 @@ def derive_product_scoring_evidence(product: Dict[str, Any]) -> List[Dict[str, A
         if path and (path in scorable_paths or path in special_evidence_paths):
             continue
         canonical = _norm(row.get("canonical_id"))
-        activity_value, activity_unit = _extract_enzyme_activity(row)
+        # IQD notes describe canonical research, not necessarily this label.
+        # Source active rows were already read above; only persisted declared
+        # activity fields or a typed activity dose may support this fallback.
+        activity_value, activity_unit = extract_enzyme_activity(
+            "", row.get("activity_quantity") if row.get("activity_quantity") is not None else row.get("quantity"),
+            row.get("activity_unit") or row.get("unit"),
+        )
         if activity_value is None or not activity_unit:
             continue
         special_evidence_paths.add(path)
@@ -2188,7 +2175,7 @@ def derive_product_scoring_evidence(product: Dict[str, Any]) -> List[Dict[str, A
             dose_unit=activity_unit,
             evidence_scope="row_level",
             confidence="high",
-            reason="enzyme_activity_unit_from_skipped_label_notes",
+            reason="enzyme_activity_from_skipped_declared_fields",
             name=row.get("name") or "Enzyme activity",
             dose_class="enzyme_activity",
         ))
