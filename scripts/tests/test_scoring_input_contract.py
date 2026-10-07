@@ -39,6 +39,35 @@ def test_enzyme_activity_reads_explicit_fcc_pu_spelling_without_assay_conversion
     assert scoring_contract._extract_enzyme_activity({"notes": declaration}) == expected
 
 
+@pytest.mark.parametrize("declaration,expected", [
+    ("800,000 FCC (PU)", (800000.0, "FCCPU")),
+    ("2000 fibrinolytic units", (2000.0, "FU")),
+    ("2000 FU", (2000.0, "FU")),
+    ("120000 SPU", (120000.0, "SPU")),
+    ("800000 FCC", (None, None)),
+    ("800000 FCC (PUX)", (None, None)),
+    ("50 GDUα", (None, None)),
+    ("2400 GDU/g", (None, None)),
+    ("2400 GDU per gram; supplying 600 GDU per serving", (600.0, "GDU")),
+])
+def test_declared_enzyme_activity_survives_cleaner_enrichment_and_scoring_without_mass_conversion(declaration, expected):
+    from enhanced_normalizer import EnhancedDSLDNormalizer
+    from enrich_supplements_v3 import SupplementEnricherV3
+    from tests.test_preparation_identity_splits import _raw_product, _raw_row
+    raw_row = _raw_row(1, "Nattokinase", "Nattokinase", category="enzyme", quantity=100, unit="mg")
+    raw_row["notes"] = declaration
+    clean = EnhancedDSLDNormalizer().normalize_product(_raw_product("declared-assay-activity", [raw_row]))
+    row = clean["activeIngredients"][0]
+    assert row["quantity"] == 100 and row["unit"] == "mg"
+    if expected[0] is None:
+        assert row.get("activity_quantity") is None and row.get("activity_unit") is None
+    else:
+        assert (row["activity_quantity"], row["activity_unit"]) == expected
+        assert row["dose_class"] == "enzyme_activity"
+    assert SupplementEnricherV3()._extract_enzyme_activity_dose(row) == expected
+    assert scoring_contract._extract_enzyme_activity(row) == expected
+
+
 def test_fcc_pu_label_activity_reaches_the_production_artifact_subject_owner():
     from tests.test_evidence_prominence_ownership import _enrich
     from scoring_v4.scored_artifact import build_scored_artifact
@@ -2173,3 +2202,40 @@ def test_conflicting_safety_recognition_cannot_survive_as_native_anchor(with_pee
     assert result.mapped_count == int(with_peer)
     assert "identity_projection_inconsistent:recognized_entry_id" in result.contract_findings
     assert build_scored_artifact(product)["quality_score_status"] == "not_scored"
+
+
+@pytest.mark.parametrize("declaration,expected", [
+    ("2400 GDU/g", (None, None)),
+    ("2,400 GDU/gram", (None, None)),
+    ("providing 2000 GDU per gram", (None, None)),
+    ("500000 FCC PU / g", (None, None)),
+    ("2400 GDU/g; supplying 600 GDU per serving", (600.0, "GDU")),
+    ("600 GDU per serving", (600.0, "GDU")),
+])
+def test_enzyme_concentration_is_not_declared_serving_activity(declaration, expected):
+    from normalization import extract_enzyme_activity
+    from enrich_supplements_v3 import SupplementEnricherV3
+    row = {"name": "Bromelain enzyme", "quantity": 250, "unit": "mg", "notes": declaration}
+    assert extract_enzyme_activity(declaration) == expected
+    assert SupplementEnricherV3()._extract_enzyme_activity_dose(row) == expected
+    assert scoring_contract._extract_enzyme_activity(row) == expected
+
+
+@pytest.mark.parametrize("label_activity", [None, 1000])
+def test_skipped_enzyme_research_notes_do_not_supply_label_activity(label_activity):
+    source = _row(name="Nattokinase", canonical_id="nattokinase", quantity=100, unit="mg",
+                  dose_class="therapeutic_mass", notes="Declared preparation")
+    if label_activity:
+        source.update(activity_quantity=label_activity, activity_unit="FU", dose_class="enzyme_activity")
+    skipped = {**source, "notes": "A clinical study used 2000 FU daily.",
+               "skip_reason": "unmapped_form", "mapped": False}
+    skipped.pop("activity_quantity", None)
+    skipped.pop("activity_unit", None)
+    product = _product([], activeIngredients=[source], ingredient_quality_data={
+        "ingredients": [skipped], "ingredients_scorable": [], "ingredients_skipped": [skipped]})
+    activity = [r for r in derive_product_scoring_evidence(product) if r["evidence_type"] == "enzyme_activity"]
+    assert [r["dose_value"] for r in activity] == ([label_activity] if label_activity else [])
+
+
+def test_typed_enzyme_activity_dose_survives_without_duplicate_activity_fields():
+    assert scoring_contract._extract_enzyme_activity({"quantity": 50, "unit": "GDU"}) == (50.0, "GDU")

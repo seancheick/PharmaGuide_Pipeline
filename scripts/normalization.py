@@ -9,12 +9,51 @@ Store it at entity creation time and propagate through all stages.
 """
 
 import re
+import math
 import string
 import unicodedata
 from functools import lru_cache
 from typing import Iterable, Optional, Tuple
 
 VERSION = "1.0.0"
+
+# Declared assay units only; no conversion between assays or to enzyme mass.
+# Shared by the cleaner, enrichment and the scoring-input contract.
+ENZYME_ACTIVITY_UNITS = frozenset({
+    "alu", "ppi", "blgu", "hut", "sapu", "spu", "fip", "cu", "gdu", "dppiv", "dpp-iv",
+    "lacu", "fcc", "fccpu", "galu", "au", "skb", "mwu", "pu", "dp", "ckpu", "aju", "usp",
+    "du", "pc", "agu", "bgu", "lu", "phy", "ftu", "su", "fu",
+})
+_ENZYME_ACTIVITY_RE = re.compile(
+    r"(?P<value>\d[\d,]*(?:\.\d+)?)\s*(?P<unit>ALU|PPI|BLGU|HUT|SAPU|SPU|FIP|CU|GDU|DPP[- ]?IV|LACU|FCC(?:\s*\(\s*PU\s*\)|\s*PU)|GALU|AU|SKB|MWU|PU|DP|CKPU|AJU|USP|DU|PC|AGU|BGU|LU|PHY|FTU|SU|FU|fibrinolytic\s+units?)(?!\w)",
+    re.IGNORECASE,
+)
+
+
+def extract_enzyme_activity(text, quantity=None, unit=None):
+    """Read an explicit activity declaration without treating carrier mass as activity."""
+    normalized_unit = re.sub(r"[\s()-]", "", str(unit or "").lower())
+    try:
+        value = float(str(quantity).replace(",", ""))
+    except (TypeError, ValueError):
+        value = None
+    if normalized_unit in ENZYME_ACTIVITY_UNITS and value and math.isfinite(value) and value > 0:
+        return value, normalized_unit.upper()
+    declaration = str(text or "")
+    for match in _ENZYME_ACTIVITY_RE.finditer(declaration):
+        # A potency per mass is not a serving activity. Preserve the label's
+        # physical dose; do not infer activity by multiplying a concentration.
+        if re.match(r"\s*(?:/|per\b)\s*(?:mg|g|kg|mcg|grams?|milligrams?|kilograms?)\b",
+                    declaration[match.end():], re.IGNORECASE):
+            continue
+        value = float(match.group("value").replace(",", ""))
+        if not math.isfinite(value) or value <= 0:
+            continue
+        unit_text = re.sub(r"[\s()-]", "", match.group("unit").upper())
+        if unit_text.startswith("FIBRINOLYTIC"):
+            unit_text = "FU"
+        return value, unit_text
+    return None, None
 
 _MASS_UNIT_ALIASES = {
     "g": "g",

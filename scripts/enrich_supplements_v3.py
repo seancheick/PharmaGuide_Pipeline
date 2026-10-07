@@ -2217,14 +2217,22 @@ class SupplementEnricherV3:
             # fallback in _botanical_source_identity back to the botanical the
             # override corrected (Barley -> barley_unspecified), vetoing it.
             return False
+        declared_parent = self.databases.get("ingredient_quality_map", {}).get(ingredient.get("canonical_id")) or {}
+        declared_form = (declared_parent.get("forms") or {}).get(match_result.get("form_id"), {})
         if (
             ingredient.get("cleaner_match_method") == "single_declared_nutrient_form"
             and ingredient.get("canonical_source_db") == "ingredient_quality_map"
             and ingredient.get("canonical_id") == match_result.get("canonical_id")
-            and (self.databases.get("ingredient_quality_map", {}).get(ingredient.get("canonical_id")) or {}).get("category") == "fibers"
+            and (
+                declared_parent.get("category") == "fibers"
+                or self._normalize_text(ingredient.get("raw_source_text") or ingredient.get("name") or "") in {
+                    self._normalize_text(alias)
+                    for alias in declared_form.get("source_form_aliases") or []
+                }
+            )
         ):
-            # The cleaner establishes the declared fiber preparation; the
-            # retained botanical is its source, not an inferred marker.
+            # The cleaner establishes a single declared preparation and its
+            # amount; a reviewed botanical carrier is not an inferred marker.
             return False
         source_identity = self._botanical_source_identity(ingredient)
         if not source_identity:
@@ -2264,6 +2272,12 @@ class SupplementEnricherV3:
             # example green_tea → green_tea_extract) remain valid.  The guard
             # targets source→marker substitution, not reviewed specificity.
             return False
+
+        if (ingredient.get("cleaner_match_method") == "single_declared_nutrient_form"
+                and ingredient.get("canonical_source_db") in BOTANICAL_CANONICAL_SOURCE_DBS):
+            # A complete species/part declaration refines the broad row heading.
+            # The broad heading cannot restore a different graded botanical.
+            return bool(resolved_id and resolved_id != source_id)
 
         raw_label = ingredient.get("raw_source_text") or ingredient.get("name") or ""
         literal_match = self._match_quality_map(
@@ -3998,10 +4012,21 @@ class SupplementEnricherV3:
                     and self._normalize_text(literal_canonical_id)
                     == selected_category
                 )
+                selected_preparation = (registry_entry.get("forms") or {}).get(
+                    match_result.get("form_id"), {})
+                literal_is_reviewed_source_of_selected = (
+                    match_result.get("cleaner_canonical_enforced") is True
+                    and ingredient.get("cleaner_match_method") == "single_declared_nutrient_form"
+                    and self._normalize_text(literal_label) in {
+                        self._normalize_text(alias)
+                        for alias in selected_preparation.get("source_form_aliases") or []
+                    }
+                )
                 if (
                     literal_canonical_id
                     and literal_canonical_id != canonical_id
                     and not literal_is_generic_parent_of_selected
+                    and not literal_is_reviewed_source_of_selected
                 ):
                     return False
                 literal_identity_confirms_selected = (
@@ -4920,6 +4945,7 @@ class SupplementEnricherV3:
                         cleaned_forms=ingredient_forms,
                         branded_token=_bte, cleaner_canonical_id=_cleaner_iqm_cid,
                         row_notes=ingredient.get("notes"),
+                        source_context=ingredient.get("parentBlend"),
                     )
             context_match_reason = pre_context_match_reason
             authoritative_marker_context = False
@@ -5258,6 +5284,7 @@ class SupplementEnricherV3:
                     ing_name, std_name, quality_map, cleaned_forms=ingredient_forms,
                     branded_token=_bte, cleaner_canonical_id=_cleaner_iqm_cid,
                     row_notes=ingredient.get('notes'),
+                    source_context=ingredient.get('parentBlend'),
                 )
                 if self._is_blocked_botanical_source_marker_match(ingredient, match_result):
                     match_result = None
@@ -5931,14 +5958,6 @@ class SupplementEnricherV3:
         unit_normalized = unit_normalized.replace(' ', '')
         return unit_normalized
 
-    _ENZYME_ACTIVITY_UNITS = frozenset({
-        "spu", "hut", "fcc", "galu", "su", "du", "alu", "fip", "sapu", "cu", "fu"
-    })
-    _ENZYME_ACTIVITY_RE = re.compile(
-        r"\b(\d[\d,]*(?:\.\d+)?)\s*(SAPU|SPU|HUT|FCC|GALU|ALU|FIP|DU|SU|CU|FU)\b",
-        re.IGNORECASE,
-    )
-
     def _extract_enzyme_activity_dose(self, ingredient: Dict) -> Tuple[Optional[float], Optional[str]]:
         """Extract enzyme activity dose from unit fields or raw label text."""
         quantity = ingredient.get("quantity")
@@ -5955,13 +5974,16 @@ class SupplementEnricherV3:
             and "transglucosidase" in identity_text
             and "enzyme" in identity_text
         )
-        if unit in self._ENZYME_ACTIVITY_UNITS or is_transglucosidase_tg:
+        if is_transglucosidase_tg:
             try:
                 qty = float(str(quantity).replace(",", ""))
                 if qty > 0:
-                    return qty, unit.upper()
+                    return qty, "TG"
             except (TypeError, ValueError):
                 pass
+        declared = norm_module.extract_enzyme_activity("", quantity, unit)
+        if declared[0] is not None:
+            return declared
 
         if not any(
             token in identity_text
@@ -5981,13 +6003,9 @@ class SupplementEnricherV3:
             ingredient.get("_product_activity_text"),
         ]
         text = " ".join(str(part) for part in text_parts if part)
-        match = self._ENZYME_ACTIVITY_RE.search(text)
-        if not match:
-            return None, None
-        try:
-            return float(match.group(1).replace(",", "")), match.group(2).upper()
-        except ValueError:
-            return None, None
+        return norm_module.extract_enzyme_activity(
+            text, ingredient.get("activity_quantity"), ingredient.get("activity_unit")
+        )
 
     _IQD_DOSE_EVIDENCE_CLASSES = IQD_DOSE_EVIDENCE_CLASSES
     _CLEANER_CONTRACT_FIELDS = frozenset({
@@ -6121,6 +6139,13 @@ class SupplementEnricherV3:
         row["scoreable_identity"] = False
         if not recognition:
             return
+
+        if ingredient.get("cleaner_match_method") == "single_declared_nutrient_form":
+            declared_source = self._botanical_source_identity(ingredient)
+            if declared_source and ingredient.get("canonical_source_db") in BOTANICAL_CANONICAL_SOURCE_DBS:
+                source_id, source_db, source_name = declared_source
+                recognition = {**recognition, "recognition_source": source_db,
+                               "matched_entry_id": source_id, "matched_entry_name": source_name}
 
         recognition_source = recognition.get("recognition_source")
         recognition_reason = (
@@ -7997,6 +8022,10 @@ class SupplementEnricherV3:
         "phenolic acids", "phenolics", "total phenols", "silicic acid", "type i collagen",
         "type iii collagen", "collagen type i", "collagen type iii", "collagen type i hydrolyzed",
         "collagen type iii hydrolyzed", "yohimbe alkaloid", "yohimbe alkaloids",
+        # Disclosed constituents of the Ocimum Bioactive Complex. These are
+        # composition markers, not separately dosed forms or bonus thresholds.
+        "apigenin-7-o-betaglucuronide", "luteolin-7-o-glucuronide",
+        "ociglycoside-i", "rabdosiin",
     })
 
     def _is_standardization_marker_token(self, normalized_text: str) -> bool:
@@ -8330,10 +8359,51 @@ class SupplementEnricherV3:
                 and not _has_epa_dha_source_context
             )
 
+        # An explicitly printed preparation remains authoritative when its
+        # reviewed source is serialized as a DSLD form. A shared source can
+        # supply several preparations; it must not select a sibling form.
+        label_form = (self._specific_form_in_parent(base_name, preferred_parent, quality_map)
+                      if preferred_parent else None)
+        source_parent = quality_map.get(preferred_parent) or {}
+        source_context_parent = self._infer_preferred_parent_from_context_cached(
+            str(form_info.get('source_context') or ''), quality_map
+        ) if form_info.get('source_context') else None
+        source_context_name = (quality_map.get(source_context_parent) or {}).get('standard_name') or ''
+        unspecified_source = authored_unknown_form(source_parent)
+        label_source_form = (label_form or {}).get('form_id')
+        if not label_source_form and unspecified_source:
+            # A reviewed source can establish the known parent while leaving
+            # its preparation unspecified; it cannot select a named sibling.
+            label_source_form = unspecified_source[0]
+        label_source_aliases = {
+            self._norm_form_name(alias)
+            for alias in ((source_parent.get('forms') or {})
+                          .get(label_source_form) or {}).get('source_form_aliases') or []
+        }
+
         for form_data in extracted_forms:
             match_candidates = form_data.get('match_candidates', [])
             percent_share = form_data.get('percent_share', 1.0 / max(1, len(extracted_forms)))
             raw_form_text = form_data.get('raw_form_text', '')
+            # A material-family brand alone does not identify its salt. Accept
+            # its retained DSLD group only as an exact reviewed parent-local
+            # source alias, never as a general group-based form guess.
+            qualified_source = f"{raw_form_text} {form_data.get('dsld_ingredient_group') or ''}".strip()
+            parent_forms = (quality_map.get(preferred_parent) or {}).get('forms') or {}
+            if source_context_name:
+                source_qualified_form = f"{raw_form_text} {source_context_name}"
+                if any(self._norm_form_name(source_qualified_form) in {
+                    self._norm_form_name(alias) for alias in prepared.get('source_form_aliases') or []
+                } for prepared in parent_forms.values() if isinstance(prepared, dict)):
+                    match_candidates = [source_qualified_form, *match_candidates]
+            if any(self._norm_form_name(qualified_source) in {
+                self._norm_form_name(alias) for alias in prepared.get('source_form_aliases') or []
+            } for prepared in parent_forms.values() if isinstance(prepared, dict)):
+                match_candidates = [qualified_source, *match_candidates]
+            if self._norm_form_name(raw_form_text) in label_source_aliases:
+                generic_form_tokens.append(raw_form_text)
+                non_form_tokens.append(raw_form_text)
+                continue
 
             # Phase 2: Short-circuit on DSLD structural signals.
             # When the cleaner preserved `forms[].category` from raw DSLD and
@@ -9009,7 +9079,8 @@ class SupplementEnricherV3:
                            preferred_parent: Optional[str] = None,
                            branded_token: Optional[str] = None,
                            cleaner_canonical_id: Optional[str] = None,
-                           row_notes: Optional[str] = None) -> Optional[Dict]:
+                           row_notes: Optional[str] = None,
+                           source_context: Optional[str] = None) -> Optional[Dict]:
         """Memoizing wrapper around :meth:`_match_quality_map_impl`.
 
         ``row_notes`` (the row's DSLD notes) is read after the cached match,
@@ -9032,6 +9103,7 @@ class SupplementEnricherV3:
                 ing_name, std_name, quality_map, cleaned_forms=cleaned_forms,
                 preferred_parent=preferred_parent, branded_token=branded_token,
                 cleaner_canonical_id=cleaner_canonical_id,
+                source_context=source_context,
             )
             return self._read_form_in_row_notes(
                 match, row_notes.strip(), quality_map, ing_name, cleaned_forms, cleaner_canonical_id)
@@ -9040,7 +9112,7 @@ class SupplementEnricherV3:
                 [
                     ing_name, std_name, _form_extraction_attempt, cleaned_forms,
                     preferred_parent, branded_token, cleaner_canonical_id,
-                    id(quality_map),
+                    source_context, id(quality_map),
                 ],
                 sort_keys=True, default=str,
             )
@@ -9050,6 +9122,7 @@ class SupplementEnricherV3:
                 ing_name, std_name, quality_map, _form_extraction_attempt,
                 cleaned_forms, preferred_parent, branded_token,
                 cleaner_canonical_id,
+                source_context,
             )
 
         if key in self._match_quality_cache:
@@ -9058,6 +9131,7 @@ class SupplementEnricherV3:
         result = self._match_quality_map_impl(
             ing_name, std_name, quality_map, _form_extraction_attempt,
             cleaned_forms, preferred_parent, branded_token, cleaner_canonical_id,
+            source_context,
         )
         # Store an isolated copy (defends against any impl-side aliasing) and
         # hand every caller its own isolated copy — the cache entry is immutable.
@@ -9333,7 +9407,7 @@ class SupplementEnricherV3:
         # A recorded marker also reads as "Total Rosavins" or "Salidrosides",
         # and DSLD's own "standardized for" / "std. to 85%-" prefix marks one.
         unprefixed = token[len('total '):] if token.startswith('total ') else token
-        if (prefix.startswith(('standardized', 'std.'))
+        if (prefix.startswith(('standardized', 'std.', 'expressed as'))
                 or any(singular(unprefixed.split()) == singular(marker.split())
                        for marker in self._standardization_marker_names())
                 or self._is_standardization_marker_token(source_text)):
@@ -9369,7 +9443,8 @@ class SupplementEnricherV3:
                                 cleaned_forms: Optional[List[Dict]] = None,
                                 preferred_parent: Optional[str] = None,
                                 branded_token: Optional[str] = None,
-                                cleaner_canonical_id: Optional[str] = None) -> Optional[Dict]:
+                                cleaner_canonical_id: Optional[str] = None,
+                                source_context: Optional[str] = None) -> Optional[Dict]:
         """
         Match ingredient against quality map using explicit precedence rules.
 
@@ -9529,6 +9604,8 @@ class SupplementEnricherV3:
             # PRIORITY 1: Use cleaned_forms[] from cleaning stage (structured, reliable)
             if cleaned_forms and isinstance(cleaned_forms, list) and len(cleaned_forms) > 0:
                 form_info = self._build_form_info_from_cleaned(ing_name, cleaned_forms, std_name)
+                if form_info and source_context:
+                    form_info['source_context'] = source_context
                 if (not form_info and cleaner_iqm_canonical
                         and any(self._is_provided_marker_form(form) for form in cleaned_forms)):
                     # Ignoring a provided marker must not discard the form
@@ -11047,7 +11124,7 @@ class SupplementEnricherV3:
                     percentage = self._extract_percentage(
                         local_text,
                         markers,
-                        require_marker_proximity=False,
+                        require_marker_proximity=True,
                     )
                     percentage_source = "local"
                     if percentage <= 0 and context_text:

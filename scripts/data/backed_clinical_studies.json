@@ -330,24 +330,23 @@
         "indena meriva"
       ],
       "category": "anti_inflammatory",
-      "evidence_level": "branded-rct",
-      "study_type": "rct_multiple",
+      "evidence_level": "reference",
+      "study_type": "reference",
       "published_studies": [
-        "RCT",
-        "meta-analysis"
+        "Controlled Clinical Trial",
+        "RCT"
       ],
-      "score_contribution": "tier_1",
+      "score_contribution": "tier_3",
       "key_endpoints": [
-        "joint pain ↓",
-        "CRP ↓",
-        "bioavailability ↑"
+        "WOMAC joint pain and function in osteoarthritis",
+        "PASI and IL-22 with adjunct treatment in psoriasis",
+        "Liver histology in biopsy-confirmed NASH"
       ],
       "health_goals_supported": [
-        "Reduce Stress/Anxiety",
-        "Healthy Aging/Longevity"
+        "Joint & Bone Health"
       ],
-      "notes": "Branded curcumin phytosome with explicit human trial evidence in osteoarthritis and psoriasis, plus newer placebo-controlled data in metabolic liver disease.",
-      "last_updated": "2026-03-06",
+      "notes": "REVIEWED DISEASE-CONTEXT RESEARCH, NON-SCORING. The cited studies concern oral Meriva preparation in osteoarthritis, adjunct psoriasis treatment, and biopsy-confirmed NASH. Their findings do not establish the former stress/anxiety, muscle-recovery, or longevity tags. Osteoarthritis: an open controlled registry, 100 participants, 1 g Meriva/day (200 mg total curcuminoids), eight months. Psoriasis: 63 participants, 2 g Meriva/day as an adjunct to topical corticosteroids, 12 weeks. NASH: 52 participants, 2 g Meriva/day, 72 weeks. These are studied regimens, not newly imposed efficacy thresholds. Keep preparation mass distinct from total curcuminoids and pure curcumin. Existing reference-only handling retains this research while avoiding numerical efficacy outside established applicability. No clinician sign-off or universal lack-of-efficacy conclusion is asserted.",
+      "last_updated": "2026-10-07",
       "notable_studies": "Belcaro et al. (2010, PMID 21194249) reported improved WOMAC and inflammatory markers with Meriva in osteoarthritis. Antiga et al. (2015, PMID 26090395) randomized psoriasis patients and found adjunctive benefit with oral Meriva. More recent placebo-controlled Meriva data also exist in NASH (PMID 38809154).",
       "references_structured": [
         {
@@ -457,18 +456,34 @@
           "verification_source": "pubmed_eutils"
         }
       ],
-      "external_ids": {
-        "unii": "IT942ZTH98"
-      },
+      "external_ids": {},
       "effect_direction": "positive_strong",
-      "primary_outcome": "Reduce Stress/Anxiety",
-      "total_enrollment": 85,
-      "registry_completed_trials_count": 11,
-      "effect_direction_confidence": "high",
-      "effect_direction_rationale": "Retained positive_strong classification; study_type=rct_multiple; evidence_level=branded-rct; primary_outcome=Reduce Stress/Anxiety; published_tags=RCT,meta-analysis; registry_completed_trials_count=11; total_enrollment=85; endpoint_tags=muscle_recovery; notes/citations contain no automated downgrade signals.",
+      "primary_outcome": "Joint & Bone Health",
+      "total_enrollment": 215,
+      "registry_completed_trials_count": null,
+      "effect_direction_confidence": "medium",
+      "effect_direction_rationale": "Positive findings in the three cited disease-specific studies: an open controlled osteoarthritis registry (100 participants), an adjunct psoriasis RCT (63 participants), and a biopsy-confirmed NASH RCT (52 participants). This is not stress/anxiety, muscle-recovery, longevity, or meta-analysis evidence. Numerical generic ingredient efficacy is withheld through the existing reference-only applicability owner until the studied indication/preparation/exposure scope can be established; this does not assert absent human research.",
       "endpoint_relevance_tags": [
-        "muscle_recovery"
-      ]
+        "joint_pain"
+      ],
+      "applicability": {
+        "scope": "ingredient",
+        "studied_population": "Patients with osteoarthritis; patients with psoriasis receiving topical corticosteroids; adults with biopsy-confirmed NASH.",
+        "supported_outcomes": [
+          "Osteoarthritis WOMAC joint pain and function",
+          "Adjunct psoriasis PASI and IL-22",
+          "NASH liver histology"
+        ],
+        "required_form_terms": [
+          "meriva"
+        ],
+        "source_pmids": [
+          "21194249",
+          "26090395",
+          "38809154"
+        ],
+        "reason": "Retain exact branded oral disease-context research. The current population/outcome fields are descriptive at runtime and cannot establish indication-specific efficacy for a generic catalog ingredient. Existing reference-only gate withholds numerical clinical credit pending applicable scope; dosage regimens remain source context, without a new minimum."
+      }
     },
     {
       "id": "BRAND_KSM66",

@@ -2136,6 +2136,23 @@ class EnhancedDSLDNormalizer:
             # A DSLD blend group lists its constituents as forms; none of
             # them is the identity of the whole row.
             return None
+        if (
+            str(ingredient_data.get("category") or "").lower() == "botanical"
+            and isinstance(forms, list)
+            and any(isinstance(form, dict) and form.get("category") == "botanical" for form in forms)
+            and any(
+                isinstance(form, dict)
+                and form.get("category") == "non-nutrient/non-botanical"
+                and _normalize_unii(form.get("uniiCode"))
+                for form in forms
+            )
+        ):
+            # Botanical source plus chemical constituents describe an extract,
+            # not equivalent chemical forms. A constituent's identifier cannot
+            # establish the identity (or dose) of that whole preparation.
+            # Exact row identifiers retain precedence above; otherwise resolve
+            # the printed preparation through the canonical name owners.
+            return None
         if isinstance(forms, list):
             for form in forms:
                 if not isinstance(form, dict):
@@ -3442,9 +3459,82 @@ class EnhancedDSLDNormalizer:
             r"[^a-z0-9]+", " ", str(ingredient.get("name") or "").casefold(),
         ).strip()
         raw_forms = ingredient.get("forms") or []
+        if not raw_forms and str(ingredient.get("category") or "").casefold() == "botanical":
+            # Structured source-part metadata can qualify an ambiguous vernacular
+            # name. Only an existing exact part-qualified botanical owns it.
+            details = self._parse_botanical_details(str(ingredient.get("notes") or ""))
+            part = str(details.get("plantPart") or "").strip()
+            if part and not ingredient.get("nestedRows"):
+                qualified = re.sub(r"\bextract\b", part + " extract", str(ingredient.get("name") or ""), flags=re.I)
+                exact = self._exact_ingredient_group_lookup(qualified)
+                if exact.get("type") in {"botanical", "standardized_botanical"}:
+                    standard = exact["standard_name"]
+                    canonical, source = self._resolve_canonical_identity(standard, raw_name=qualified)
+                    if canonical and source in {"botanical_ingredients", "standardized_botanicals"}:
+                        return standard, canonical, source
         if any(not isinstance(form, dict) for form in raw_forms):
             return None
-        forms = list(raw_forms)
+        forms = []
+        declarations = set()
+        for form in raw_forms:
+            # Distinct source IDs/order can repeat the same complete declaration.
+            # Deduplicate only for identity selection; retained label forms stay intact.
+            declaration = json.dumps({key: value for key, value in form.items()
+                                      if key not in {"order", "ingredientId", "raw_source_path"}}, sort_keys=True)
+            if declaration not in declarations:
+                declarations.add(declaration)
+                forms.append(form)
+        # A reviewed source can supply several separately declared actives.
+        # The single explicit form owns this row's amount only when its existing
+        # IQM owner records the printed source as a parent-local source alias.
+        # A brand alone, mixed/partial forms, or a nested composition cannot
+        # establish a component amount.
+        if (len(forms) == 1 and not ingredient.get("nestedRows")
+                and forms[0].get("percent") in (None, 100)
+                and not forms[0].get("quantity")
+                and (
+                    str(forms[0].get("prefix") or "").strip().casefold() in {"", "as"}
+                    or (
+                        forms[0].get("category") == "enzyme"
+                        and str(forms[0].get("prefix") or "").strip().casefold().startswith(("supplying ", "providing "))
+                        and str(forms[0].get("prefix") or "").strip().casefold().endswith(" of")
+                        and norm_module.extract_enzyme_activity(forms[0].get("prefix"))[0] is not None
+                    )
+                )
+                and not re.search(r"%|standardiz|contains?|provides?|yields?", " ".join(
+                    str(item.get(key) or "")
+                    for item in [ingredient, *forms]
+                    for key in ("name", "description", "notes")
+                ), re.I)
+                and str(forms[0].get("category") or "").casefold() in {"non-nutrient/non-botanical", "enzyme", "botanical"}):
+            form_name = str(forms[0].get("name") or "").strip()
+            standard, mapped, _ = self._enhanced_ingredient_mapping(
+                form_name, [], ingredient_group=forms[0].get("ingredientGroup"))
+            exact_source = self._exact_ingredient_group_lookup(form_name)
+            if exact_source.get("type") in {"botanical", "standardized_botanical"}:
+                standard, mapped = exact_source["standard_name"], True
+            canonical, source = self._resolve_canonical_identity(standard, raw_name=form_name)
+            # A complete species/part declaration is the botanical material,
+            # not an isolated marker or a graded preparation of another species.
+            if (mapped and canonical and source in {"botanical_ingredients", "standardized_botanicals"}
+                    and str(ingredient.get("category") or "").casefold() in {"botanical", "fat"}
+                    and str(forms[0].get("category") or "").casefold() == "botanical"
+                    and re.search(r"\b(?:root|rhizome|leaf|bark|stem|fruit|berry|seed|flower|powder)\b", form_name, re.I)
+                    and self._exact_ingredient_group_lookup(form_name).get("type")
+                    in {"botanical", "standardized_botanical"}):
+                printed_canonical, _ = self._resolve_canonical_identity(
+                    str(ingredient.get("name") or ""), raw_name=str(ingredient.get("name") or ""))
+                if (canonical, printed_canonical) not in self._canonical_parent_relationships:
+                    return standard, canonical, source
+            parent = self.ingredient_map.get(canonical, {}) if source == "ingredient_quality_map" else {}
+            source_key = norm_module.make_normalized_key(ingredient.get("name") or "")
+            if mapped and any(
+                source_key in {norm_module.make_normalized_key(alias)
+                               for alias in prepared.get("source_form_aliases") or []}
+                for prepared in (parent.get("forms") or {}).values()
+                if isinstance(prepared, dict)
+            ):
+                return standard, canonical, source
         if carrier_name == "foodstate s cerevisiae":
             if len(forms) != 1:
                 return None
@@ -8229,9 +8319,21 @@ class EnhancedDSLDNormalizer:
                 ing.get("parentBlendMass"), ing.get("parentBlendUnit"),
             )
         )
-        enzyme_activity_unit = unit_norm_for_contract in {
-            "spu", "hut", "fcc", "su", "du", "alu", "fip", "sapu", "cu"
-        }
+        enzyme_activity_unit = unit_norm_for_contract in norm_module.ENZYME_ACTIVITY_UNITS
+        activity_quantity, activity_unit = None, None
+        enzyme_identity_text = " ".join(str(value or "").lower() for value in (
+            name, standard_name, canonical_id, ing.get("category"), ing.get("ingredientGroup"),
+        ))
+        if ((self.ingredient_map.get(canonical_id) or {}).get("category") == "enzymes"
+                or str(ing.get("category") or "").lower() == "enzyme"):
+            activity_text = " ".join([str(ing.get("notes") or ""), *[
+                f"{form.get('prefix') or ''} {form.get('name') or ''}"
+                for form in forms_structured or [] if isinstance(form, dict)
+            ]])
+            activity_quantity, activity_unit = norm_module.extract_enzyme_activity(
+                activity_text, quantity, unit_norm_for_contract
+            )
+            enzyme_activity_unit = enzyme_activity_unit or activity_quantity is not None
         if unit_norm_for_contract == "tg":
             enzyme_identity_text = " ".join(
                 str(value or "").strip().lower()
@@ -8430,6 +8532,9 @@ class EnhancedDSLDNormalizer:
             # Hierarchy classification for scoring (source/summary/component)
             "hierarchyType": "blend_header" if is_structural_active_blend_total else self._classify_hierarchy_type(name)
         }
+        if activity_quantity is not None:
+            result["activity_quantity"] = activity_quantity
+            result["activity_unit"] = activity_unit
         if ing.get("parent_source_path"):
             result["parent_source_path"] = ing["parent_source_path"]
         if is_active and (

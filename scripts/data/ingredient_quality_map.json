@@ -32,7 +32,7 @@
     "statistics": {
       "total_parents": 655,
       "total_forms": 1475,
-      "total_form_aliases": 12317,
+      "total_form_aliases": 12326,
       "parents_with_parent_aliases": 147,
       "parents_with_contains_aliases": 0,
       "parents_with_pattern_aliases": 0
@@ -53,7 +53,7 @@
       "vitamins": 25
     },
     "schema_version": "5.6.1",
-    "last_updated": "2026-10-05",
+    "last_updated": "2026-10-07",
     "pipeline_integration": "Used by enrichment to assign form quality (bio_score) to matched ingredient forms. Match ingredient name against forms aliases (case-insensitive).",
     "matching_notes": [
       "Match ingredient name + forms text against aliases array (case-insensitive)",
@@ -5334,7 +5334,10 @@
             }
           ]
         },
-        "form_evidence_axis": "class_equivalence"
+        "form_evidence_axis": "class_equivalence",
+        "source_form_aliases": [
+          "ChelaMax Calcium Ascorbate"
+        ]
       },
       "sodium ascorbate": {
         "bio_score": 13,
@@ -7172,7 +7175,9 @@
         "source_form_aliases": [
           "calcium ascorbate",
           "ester-c calcium ascorbate",
-          "ester-c"
+          "ester-c",
+          "Lipo-Cmax",
+          "ChelaMax Calcium Ascorbate"
         ],
         "dosage_importance": 1.5
       },
@@ -7905,7 +7910,8 @@
       "calcium glycerophosphate": {
         "bio_score": 3,
         "aliases": [
-          "calcium glycerophosphate"
+          "calcium glycerophosphate",
+          "GIVOCAL"
         ],
         "notes": "Identity verified against PubChem CID 62820 on 2026-09-29. No comparative human absorption evidence was reviewed, so this identity-only form receives no premium over the parent conservative baseline.",
         "absorption_structured": {
@@ -8776,7 +8782,8 @@
       },
       "magnesium amino acid chelate": {
         "source_form_aliases": [
-          "magnesium arginate"
+          "magnesium arginate",
+          "Magnesium HPC"
         ],
         "bio_score": 11,
         "absorption": "AAC superior to oxide in humans (Walker 2003); inferior to citrate",
@@ -8961,7 +8968,8 @@
       "magnesium glycerophosphate": {
         "bio_score": 2,
         "aliases": [
-          "magnesium glycerophosphate"
+          "magnesium glycerophosphate",
+          "GIVOMAG"
         ],
         "notes": "Identity verified against PubChem CID 10012877 on 2026-09-29. No comparative human absorption evidence was reviewed, so this identity-only form receives no premium over the parent conservative baseline.",
         "absorption_structured": {
@@ -11679,7 +11687,13 @@
           "range_low": 0.05,
           "range_high": 0.15,
           "quality": "low"
-        }
+        },
+        "source_form_aliases": [
+          "Bitter Orange",
+          "Citrus aurantium",
+          "Citrus aurantium L.",
+          "Citrus aurantium Fruit Extract"
+        ]
       },
       "hesperidin": {
         "bio_score": 10,
@@ -11689,7 +11703,7 @@
           "by": "Product owner approval",
           "date": "2026-08-08"
         },
-        "notes": "The dominant flavanone in oranges and other citrus fruits. Clinically studied for cardiovascular benefits — supports healthy blood pressure, reduces inflammation, and improves endothelial function. Also available as hesperidin methyl chalcone (HMC), which has improved water solubility. Its metabolite hesperetin is the active form. B28 audit 2026-04-25: hesperidin class-poor (B19).",
+        "notes": "The dominant flavanone in oranges and other citrus fruits. Clinically studied for cardiovascular benefits — supports healthy blood pressure, reduces inflammation, and improves endothelial function. Hesperidin methylchalcone and the aglycone hesperetin are chemically distinct compounds; this form does not represent either one. B28 audit 2026-04-25: hesperidin class-poor (B19).",
         "aliases": [
           "orange flavonoid",
           "citrus hesperidin",
@@ -11699,9 +11713,6 @@
           "citrus hesperidin supplement",
           "vitamin p hesperidin supplement",
           "vit p hesperidin",
-          "Hesperidin Methyl Chalcone",
-          "hesperidin methylchalcone",
-          "hesperetin",
           "hesperidin bioflavonoid extract",
           "hesperidin bioflavonoids extract",
           "peakforce watts'up",
@@ -11718,7 +11729,13 @@
         },
         "external_ids": {
           "unii": "E750O06Y6O"
-        }
+        },
+        "source_form_aliases": [
+          "Bitter Orange",
+          "Citrus aurantium",
+          "Citrus aurantium L.",
+          "Citrus aurantium Fruit Extract"
+        ]
       },
       "rutin": {
         "bio_score": 9,
@@ -11761,7 +11778,11 @@
     "match_rules": {
       "priority": 2,
       "match_mode": "alias_and_fuzzy",
-      "exclusions": [],
+      "exclusions": [
+        "hesperetin",
+        "hesperidin methyl chalcone",
+        "hesperidin methylchalcone"
+      ],
       "parent_id": null,
       "confidence": "high"
     },
@@ -16542,7 +16563,8 @@
           "potassium iodide",
           "glucosamine hydrochloride potassium sulfate",
           "calcium potassium phosphate citrate",
-          "potassium hydroxycitrate"
+          "potassium hydroxycitrate",
+          "Citrus Pectin, Modified"
         ]
       },
       "potassium glycinate": {
@@ -17515,7 +17537,8 @@
           "phytosome curcuminoids",
           "curcuminoid phytosome",
           "phytosomes curcumin",
-          "soy lecithin curcumin complex"
+          "soy lecithin curcumin complex",
+          "Meriva Turmeric Phytosome"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -17530,7 +17553,11 @@
         "source_form_aliases": [
           "phospholipid complex",
           "phosphatidylcholine",
-          "phosphatidylcholine complex"
+          "phosphatidylcholine complex",
+          "Turmeric (Curcuma longa) extract"
+        ],
+        "same_identity_aliases": [
+          "Meriva Turmeric Phytosome"
         ]
       },
       "theracurmin": {
@@ -22639,7 +22666,8 @@
           "lutemax 2020",
           "lutemax 2020 aztec marigold extract",
           "lutemax 2020 marigold flower extract",
-          "lute-gen"
+          "lute-gen",
+          "Lutemax 2020"
         ]
       }
     },
@@ -25231,7 +25259,10 @@
           "range_low": 0.7,
           "range_high": 0.95,
           "quality": "very_good"
-        }
+        },
+        "source_form_aliases": [
+          "KoACT Calcium Collagen Chelate"
+        ]
       },
       "undenatured collagen": {
         "bio_score": 9,
@@ -26399,7 +26430,6 @@
           "pycnogenol french maritime pine",
           "pycnogenol dried french maritime pine extract",
           "oligopin french maritime pine (pinus pinaster) extract",
-          "masson pine bark extract",
           "pycnogenol pine bark extract",
           "pine OPCs",
           "pycnogenol maritime pine extract"
@@ -26410,7 +26440,11 @@
           "range_low": 0.02,
           "range_high": 0.1,
           "quality": "poor"
-        }
+        },
+        "source_form_aliases": [
+          "French Maritime Pine Bark Extract, Dried",
+          "French Maritime Pines"
+        ]
       },
       "generic pine bark extract": {
         "bio_score": 9,
@@ -26437,8 +26471,6 @@
           "monterey pine extract",
           "pinus radiata extract",
           "monterey pine bark extract",
-          "phytopin",
-          "phytopin pine bark extract",
           "fenoprolic pine bark extract",
           "fenoprolic",
           "organic fenoprolic pine bark extract",
@@ -26446,7 +26478,9 @@
           "pine bark OPC extract",
           "oligomeric procyanidins pine bark",
           "Pinus pinaster Bark Extract",
-          "pinus pinaster extract"
+          "pinus pinaster extract",
+          "masson pine bark extract",
+          "Pinus massoniana Bark Extract"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -28352,7 +28386,10 @@
           "range_low": 0.05,
           "range_high": 0.25,
           "quality": "low"
-        }
+        },
+        "source_form_aliases": [
+          "Soy Natto extract"
+        ]
       },
       "nattokinase nsk-sd": {
         "bio_score": 10,
@@ -30288,7 +30325,8 @@
           "policosanols",
           "triacontanol",
           "hexacosanol",
-          "Policosanol (Saccharum officinarum) dried extract"
+          "Policosanol (Saccharum officinarum) dried extract",
+          "PoliSure"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -31368,7 +31406,10 @@
           "range_low": 0.1,
           "range_high": 0.3,
           "quality": "low"
-        }
+        },
+        "source_form_aliases": [
+          "single and condensed (2-5) units of Flavanols & Polyphenols from grape seeds"
+        ]
       }
     },
     "match_rules": {
@@ -34634,7 +34675,11 @@
           "range_low": 0.003,
           "range_high": 0.43,
           "quality": "variable"
-        }
+        },
+        "source_form_aliases": [
+          "Monomers",
+          "Oligomers"
+        ]
       }
     },
     "match_rules": {
@@ -35772,7 +35817,6 @@
           "soy germ extract",
           "soy germ isoflavones concentrate",
           "novasoy soy isoflavone concentrate",
-          "soy natto extract",
           "standardized soy isoflavone extract"
         ],
         "bio_score": 8,
@@ -35807,8 +35851,6 @@
           "glycetein",
           "standardized soy isoflavone extract",
           "Soy Isoflavones 40%",
-          "Soynatto Fermented Soyfood",
-          "Soy Natto extract",
           "Isomax 30",
           "total Soy Isoflavones",
           "Soy Bean Isoflavones",
@@ -36441,7 +36483,8 @@
           "HMRlignan Norway Spruce lignan extract",
           "hydroxymatairesinol",
           "Norway Spruce extract",
-          "SDG Lignans Flaxseed Extract"
+          "SDG Lignans Flaxseed Extract",
+          "Sesame seed (Sesamum indicum) lignan extract"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -36449,7 +36492,12 @@
           "range_low": 0.1,
           "range_high": 0.55,
           "quality": "variable"
-        }
+        },
+        "same_identity_aliases": [
+          "Sesame seed (Sesamum indicum) lignan extract",
+          "sesame seed sesamum indicum lignan extract",
+          "sesame seed lignan extract"
+        ]
       }
     },
     "match_rules": {
@@ -37083,7 +37131,8 @@
           "brassicasterol",
           "Sitostanol",
           "beta-sitostanol",
-          "Campestanol"
+          "Campestanol",
+          "PhytoPin"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -37337,7 +37386,8 @@
           "natural polyphenols",
           "polyphenol extract",
           "mixed polyphenols",
-          "polyphenol antioxidants"
+          "polyphenol antioxidants",
+          "Polyphenol"
         ],
         "dosage_importance": 0.5,
         "absorption_structured": {
@@ -37345,7 +37395,10 @@
           "range_low": 0.2,
           "range_high": 0.6,
           "quality": "moderate"
-        }
+        },
+        "same_identity_aliases": [
+          "Polyphenol"
+        ]
       }
     },
     "match_rules": {
@@ -47642,7 +47695,8 @@
           "lifes dha",
           "LifesDHA",
           "DSM life's dha",
-          "life's algal dha"
+          "life's algal dha",
+          "Docosahexaenoic Acid Triglyceride Algae Oil"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -47752,7 +47806,10 @@
           "quality": "very_good",
           "range_low": 0.78,
           "range_high": 0.92
-        }
+        },
+        "source_form_aliases": [
+          "Docosahexaenoic Acid Triglyceride Fish Oil"
+        ]
       },
       "DHA krill phospholipid": {
         "bio_score": 13,
@@ -49715,7 +49772,10 @@
           "quality": "good",
           "range_low": 0.65,
           "range_high": 0.9
-        }
+        },
+        "source_form_aliases": [
+          "Fish Oil"
+        ]
       },
       "emulsified": {
         "bio_score": 13,
@@ -55277,7 +55337,9 @@
           "ocimum tenuiflorum leaf extract",
           "holy basil extract supplement",
           "holy basil (ocimum sanctum) leaf supercritical co2 extract",
-          "OciBest"
+          "OciBest",
+          "Holixer",
+          "Holy Basil Aerial Parts, Leaf Extract"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -55285,7 +55347,10 @@
           "range_low": 0.52,
           "range_high": 0.78,
           "quality": "good"
-        }
+        },
+        "same_identity_aliases": [
+          "Holixer"
+        ]
       },
       "holy basil (unspecified)": {
         "bio_score": 9,
@@ -61939,7 +62004,10 @@
           "AcaiRich",
           "20:1 {Acai} extract",
           "Acai 2:1 extract",
-          "Acai Berry 20:1 extract"
+          "Acai Berry 20:1 extract",
+          "Euterpe badiocarpa Fruit Extract",
+          "Euterpe badiocarpa Berry Extract",
+          "Euterpe oleracea Fruit Extract"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -66610,7 +66678,10 @@
           "range_low": 0.35,
           "range_high": 0.55,
           "quality": "moderate"
-        }
+        },
+        "source_form_aliases": [
+          "Milk Protein"
+        ]
       }
     },
     "match_rules": {
@@ -69168,7 +69239,9 @@
           "fermented soy extract",
           "fermented soybean powder",
           "fermented soy powder",
-          "soya"
+          "soya",
+          "Soy Natto extract",
+          "Soynatto Fermented Soyfood"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -73136,7 +73209,8 @@
           "carica papaya enzyme",
           "papaya peptidase",
           "papaya protease",
-          "papain supplement"
+          "papain supplement",
+          "Papain, Powder"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -73145,7 +73219,11 @@
           "range_high": null,
           "quality": "unknown"
         },
-        "unii": "A236A06Y32"
+        "unii": "A236A06Y32",
+        "source_form_aliases": [
+          "Protease",
+          "Protease II"
+        ]
       }
     },
     "category_enum": "enzymes",

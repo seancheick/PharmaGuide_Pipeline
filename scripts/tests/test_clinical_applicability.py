@@ -821,3 +821,18 @@ def test_monohydrate_scope_binds_only_its_source_row_beside_hydrochloride():
     assert len(matches) == 1
     assert matches[0]["matched_source_row_refs"] == ["ingredientRows[1]"]
     assert [row["quantity"] for row in product["activeIngredients"]] == [1000, 1001]
+
+
+def test_meriva_verified_disease_research_keeps_existing_reference_only_guard():
+    from pathlib import Path
+    data = json.loads((Path(__file__).resolve().parents[1] / "data" / "backed_clinical_studies.json").read_text())
+    entry = next(r for r in data["backed_clinical_studies"] if r["id"] == "BRAND_MERIVA")
+    assert entry["primary_outcome"] != "Reduce Stress/Anxiety"
+    assert "muscle_recovery" not in entry["endpoint_relevance_tags"]
+    assert "meta-analysis" not in entry["published_studies"]
+    assert entry["total_enrollment"] == 215
+    assert entry.get("registry_completed_trials_count") is None
+    assert {r["pmid"] for r in entry["references_structured"]} == {"21194249", "26090395", "38809154"}
+    assert entry["external_ids"].get("unii") is None  # pure curcumin is not the whole phytosome
+    decision = assess_clinical_applicability({}, entry)
+    assert decision == {"status": "not_applicable", "reason_code": "reference_only_clinical_record"}
