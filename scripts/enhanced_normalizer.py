@@ -10542,6 +10542,7 @@ class EnhancedDSLDNormalizer:
                 )
                 row_score_included = bool(
                     score_included
+                    and ing.get("score_eligible_by_cleaner", True)
                     and not is_structural_blend_header
                     and not is_specification_limit
                 )

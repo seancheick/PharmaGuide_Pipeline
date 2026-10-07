@@ -199,6 +199,9 @@ def test_source_flavor_heading_keeps_disclosure_without_therapeutic_projection(e
     header = next(r for r in cleaned['activeIngredients'] if r['raw_source_path'] == ref)
     assert header['cleaner_row_role'] == 'source_descriptor'
     assert header['quantity'] > 0
+    display = next(r for r in cleaned['display_ingredients'] if r.get('raw_source_path') == ref)
+    assert display['score_included'] is False
+    assert display['is_label_context'] is True
     children = header['nestedIngredients']
     source_children = raw['ingredientRows'][int(ref.split('[')[1].split(']')[0])]['nestedRows']
     assert [r['raw_source_text'] for r in children] == [r['name'] for r in source_children]
