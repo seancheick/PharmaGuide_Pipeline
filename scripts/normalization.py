@@ -25,7 +25,7 @@ ENZYME_ACTIVITY_UNITS = frozenset({
     "du", "pc", "agu", "bgu", "lu", "phy", "ftu", "su", "fu",
 })
 _ENZYME_ACTIVITY_RE = re.compile(
-    r"(?P<value>\d[\d,]*(?:\.\d+)?)\s*(?P<unit>ALU|PPI|BLGU|HUT|SAPU|SPU|FIP|CU|GDU|DPP[- ]?IV|LACU|FCC(?:\s*\(\s*PU\s*\)|\s*PU)|GALU|AU|SKB|MWU|PU|DP|CKPU|AJU|USP|DU|PC|AGU|BGU|LU|PHY|FTU|SU|FU|fibrinolytic\s+units?)(?!\w)",
+    r"(?P<value>\d[\d,]*(?:\.\d+)?)\s*(?P<unit>ALU|PPI|BLGU|HUT|SAPU|SPU|FIP|CU|GDU|DPP[- ]?IV|LACU|FCC(?:\s*\(\s*PU\s*\)|\s*PU|\s+lactase\s+units?)|GALU|AU|SKB|MWU|PU|DP|CKPU|AJU|USP|DU|PC|AGU|BGU|LU|PHY|FTU|SU|FU|fibrinolytic\s+units?)(?!\w)",
     re.IGNORECASE,
 )
 
@@ -52,6 +52,10 @@ def extract_enzyme_activity(text, quantity=None, unit=None):
         unit_text = re.sub(r"[\s()-]", "", match.group("unit").upper())
         if unit_text.startswith("FIBRINOLYTIC"):
             unit_text = "FU"
+        elif unit_text.startswith("FCCLACTASE"):
+            # The label explicitly names the lactase assay; retain its FCC
+            # units without converting them to another assay or to mass.
+            unit_text = "FCC"
         return value, unit_text
     return None, None
 

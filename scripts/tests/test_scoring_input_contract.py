@@ -2239,3 +2239,21 @@ def test_skipped_enzyme_research_notes_do_not_supply_label_activity(label_activi
 
 def test_typed_enzyme_activity_dose_survives_without_duplicate_activity_fields():
     assert scoring_contract._extract_enzyme_activity({"quantity": 50, "unit": "GDU"}) == (50.0, "GDU")
+
+
+@pytest.mark.parametrize("declaration", ["9000 FCC lactase units", "9,000 FCC Lactase Units"])
+def test_explicit_fcc_lactase_assay_is_not_rejected_as_bare_fcc(declaration):
+    from enhanced_normalizer import EnhancedDSLDNormalizer
+    from enrich_supplements_v3 import SupplementEnricherV3
+    from tests.test_preparation_identity_splits import _raw_product, _raw_row
+    from scoring_v4.scored_artifact import build_scored_artifact
+    raw = _raw_row(1, "Lactase", "Lactase", category="enzyme", quantity=0, unit="NP")
+    raw["notes"] = "Lactase enzyme Note: " + declaration
+    clean = EnhancedDSLDNormalizer().normalize_product(_raw_product("explicit-fcc-lactase", [raw]))
+    assert (clean["activeIngredients"][0].get("activity_quantity"), clean["activeIngredients"][0].get("activity_unit")) == (9000.0, "FCC")
+    enriched, errors = SupplementEnricherV3().enrich_product(clean)
+    assert not errors
+    artifact = build_scored_artifact(enriched)
+    assert artifact["quality_score_status"] == "scored"
+    subjects = scoring_contract.get_evidence_subject_rows(enriched)
+    assert any(r.get("canonical_id") == "lactase" and r.get("quantity") == 9000 and r.get("unit") == "FCC" for r in subjects)
