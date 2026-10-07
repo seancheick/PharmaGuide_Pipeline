@@ -1247,3 +1247,39 @@ def test_exact_material_bounded_search_does_not_invent_clinical_credit(canonical
     assert record["records_screened"] == 0
     assert "bounded" in record["applicability_decision"]
     assert "not exhaustive" in record["applicability_decision"]
+
+
+@pytest.mark.parametrize("name", ["Essence of organic Chamomile (leaf) oil", "Chamomile Essential Oil"])
+def test_chamomile_oil_research_keeps_leaf_oral_preparation_unestablished(name):
+    result = er.resolve_evidence_for_canonical("chamomile_essential_oil", name=name)
+    assert result.disposition == EvidenceDisposition.RESEARCH_PRESENT_APPLICABILITY_UNESTABLISHED.value
+    assert result.points_eligible is False
+    assert "literature_applicability_unestablished" in result.blocking_reasons
+    import json
+    records = json.loads((SCRIPTS_ROOT / "data/literature_evidence_records.json").read_text())["literature_evidence_records"]
+    record = next(r for r in records if r["canonical_id"] == "chamomile_essential_oil")
+    assert record["studied_dose_exposure"] == {}
+    assert record["effect_direction"] == "applicability_unestablished"
+    study = next(s for s in record["qualifying_human_studies"] if s["pmid"] == "37123948")
+    assert "effect" not in study and "effect_direction" not in study
+    assert study["verification_provenance"]["correction_pmid"] == "40535870"
+    assert "unspecified" in record["material_form"]
+    assert "leaf-to-flower" in record["applicability_decision"]
+
+
+def test_mushroom_formula_research_cannot_transfer_between_compositions():
+    result = er.resolve_evidence_for_canonical("medicinal_mushroom_blend", name="Mushroom Blend")
+    assert result.disposition == EvidenceDisposition.RESEARCH_PRESENT_APPLICABILITY_UNESTABLISHED.value
+    assert result.points_eligible is False
+    import json
+    records = json.loads((SCRIPTS_ROOT / "data/literature_evidence_records.json").read_text())["literature_evidence_records"]
+    record = next(r for r in records if r["canonical_id"] == "medicinal_mushroom_blend")
+    assert record["studied_dose_exposure"] == {}
+    assert record["effect_direction"] == "applicability_unestablished"
+    study = record["qualifying_human_studies"][0]
+    assert study["pmid"] == "41540766" and study["sample_size"] == 51
+    assert "50 completed" in study["outcome"]
+    assert "effect" not in study and "effect_direction" not in study and "dose" not in study
+    assert "without Chaga" in study["notes"]
+    assert "reporting" in study["outcome"] and "funded" in study["notes"]
+    assert "Separate Wellmune cannot establish" in record["applicability_decision"]

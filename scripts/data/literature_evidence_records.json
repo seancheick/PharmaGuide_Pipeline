@@ -4,10 +4,10 @@
     "purpose": "literature_evidence_resolution",
     "schema_version": "5.0.0",
     "last_updated": "2026-10-07",
-    "total_entries": 798,
+    "total_entries": 800,
     "verification_pipeline": "scripts/api_audit/verify_literature_records.py",
-    "verified_studies_count": 271,
-    "verified_records_count": 798
+    "verified_studies_count": 273,
+    "verified_records_count": 800
   },
   "literature_evidence_records": [
     {
@@ -25407,6 +25407,89 @@
       "studied_dose_exposure": {},
       "applicability_decision": "Source 77108 has an undosed dicalcium-phosphate child within Hydration Complex and a separate declared calcium nutrient with that form. The phosphate-plus-glucose trial does not establish efficacy of an unspecified retail salt exposure or whole hydration blend. Do not borrow the sibling calcium amount or blend total, assign a nutrient-parent alias, or infer elemental contributions. This bounded review awards no clinical grade, dose benchmark or safety conclusion.",
       "applicability_status": "applicability_unestablished",
+      "verification_result": "authoritative_pubmed_verified",
+      "verification_provenance": {
+        "verified_by": "manual_primary_source_content_review",
+        "verified_at": "2026-10-07",
+        "all_pmids_verified": true
+      }
+    },
+    {
+      "canonical_id": "chamomile_essential_oil",
+      "material_form": "Chamomile essential oil; the retail source declares leaf oil, while the studied purchased oil has unspecified plant part and composition",
+      "search_query": "Bounded primary review of human chamomile essential oil inhalation trial PMID 37123948 and linked corrigendum PMID 40535870",
+      "search_date": "2026-10-07",
+      "databases_searched": [
+        "PubMed via Europe PMC",
+        "Primary PMC full text and corrigendum"
+      ],
+      "records_screened": 2,
+      "qualifying_human_studies": [
+        {
+          "pmid": "37123948",
+          "title": "Effect of chamomile aromatherapy with and without oxygen on pain of women in post cesarean section with spinal anesthesia: A randomized clinical trial.",
+          "study_type": "randomized_controlled_trial",
+          "sample_size": 136,
+          "dose": "One drop of purchased Zardband chamomile essential oil in a nebulizer; oil plant part and composition not established",
+          "duration": "Three postoperative inhalation interventions; short-term pain assessments",
+          "outcome": "Postoperative pain in women after cesarean section, comparing inhalation with or without oxygen, oxygen alone and routine care. This is not an oral leaf-oil or sleep intervention.",
+          "notes": "The primary methods identify purchased chamomile essential oil but do not establish leaf origin, exact species identity or chemical composition of the intervention oil. Linked corrigendum PMID 40535870 corrects references and citations and removes the oxygen 6 L/min sentence from the intervention description; no outcome-table revision is specified. The removed flow rate must not be reproduced as a verified intervention parameter. No exact retail leaf-oil correspondence follows.",
+          "verification_provenance": {
+            "pmid_verified": true,
+            "human_subjects_verified": true,
+            "topic_match_verified": true,
+            "verified_source": "https://pmc.ncbi.nlm.nih.gov/articles/PMC10133761/",
+            "verified_at": "2026-10-07",
+            "correction_pmid": "40535870",
+            "correction_source": "https://pmc.ncbi.nlm.nih.gov/articles/PMC12169233/"
+          }
+        }
+      ],
+      "effect_direction": "applicability_unestablished",
+      "applicability_status": "applicability_unestablished",
+      "population_context": "Women following cesarean section with spinal anesthesia; postoperative inhalation and routine-care context",
+      "studied_dose_exposure": {},
+      "applicability_decision": "This bounded primary review acknowledges human research using purchased chamomile essential oil and retains its linked corrigendum. Sources 232878, 232905 and 232942 declare oral Essence of organic Chamomile (leaf) oil within CBD sleep preparations, with unestablished individual oil exposure. The study does not identify its oil as leaf-derived, and the existing canonical registry describes flower-top oil; this review establishes neither leaf-to-flower nor retail-to-trial preparation equivalence. Route, plant part, composition, population, purpose and complete formula correspondence remain unestablished. No oral sleep or pain benefit, positive clinical grade, efficacy-dose benchmark or safety conclusion follows. Oral chamomile extract and combination-oil trials are not substituted for this material.",
+      "verification_result": "authoritative_pubmed_verified",
+      "verification_provenance": {
+        "verified_by": "manual_primary_source_content_review; corrigendum content independently reviewed by integrator",
+        "verified_at": "2026-10-07",
+        "all_pmids_verified": true
+      }
+    },
+    {
+      "canonical_id": "medicinal_mushroom_blend",
+      "material_form": "Variable multi-species mushroom combinations; current source-labelled shiitake/maitake/chaga powder differs from studied five-species Restake extract",
+      "search_query": "Bounded primary-content review PMID41540766; related whole-combination research, not an exhaustive search or exact retail trial",
+      "search_date": "2026-10-07",
+      "databases_searched": [
+        "PubMed via Europe PMC",
+        "Primary PMC full text"
+      ],
+      "records_screened": 1,
+      "qualifying_human_studies": [
+        {
+          "pmid": "41540766",
+          "title": "Adaptogenic Effects of Mushroom Blend Supplementation on Stress, Fatigue, and Sleep: A Randomised, Double-Blind, and Placebo-Controlled Trial.",
+          "study_type": "randomized_double_blind_placebo_controlled",
+          "sample_size": 51,
+          "duration": "12 weeks",
+          "outcome": "Adults with stress and fatigue symptoms; 51 randomized and 50 completed/per-protocol analyzed. A different five-species proprietary extract was assessed for stress, fatigue and sleep. Selective positive/null findings and inconsistent dose/outcome reporting do not establish uniform efficacy.",
+          "notes": "Restake contains Lion's Mane, Cordyceps militaris, Reishi, Shiitake and Maitake, without Chaga. Methods describe two 500 mg capsules containing 25% blend extract; other sections describe 500 mg/day. Abstract/full-text enrollment and PSS reporting also differ. No uniform daily dose, quantitative effect, extraction conversion or safety conclusion is inferred. NexusWise funded the study and commercial-source authors are disclosed.",
+          "verification_provenance": {
+            "pmid_verified": true,
+            "human_subjects_verified": true,
+            "topic_match_verified": true,
+            "verified_source": "https://pmc.ncbi.nlm.nih.gov/articles/PMC12808922/",
+            "verified_at": "2026-10-07"
+          }
+        }
+      ],
+      "effect_direction": "applicability_unestablished",
+      "applicability_status": "applicability_unestablished",
+      "population_context": "Adults with stress and fatigue symptoms; related proprietary whole-formula study, not the current immune-purpose powder mixture",
+      "studied_dose_exposure": {},
+      "applicability_decision": "Human whole-combination research exists for specific proprietary mushroom formulas, including Restake, but species, composition, extraction, exposure and purpose correspondence are unestablished for variable generic mushroom blends. Source328581 declares 400 mg shiitake/maitake/chaga powder with unknown member amounts and a separate 250 mg Wellmune preparation. That mushroom mixture is not Restake, RM10 or an established PeakO2 equivalent. Separate Wellmune cannot establish mushroom-mixture efficacy. No arbitrary-mixture credit, individual-component attribution, borrowed exposure, dose conversion, immune-benefit claim, clinical grade, benchmark or safety conclusion follows. This bounded related-formula acknowledgment is not a universal no-human-research or null determination.",
       "verification_result": "authoritative_pubmed_verified",
       "verification_provenance": {
         "verified_by": "manual_primary_source_content_review",
