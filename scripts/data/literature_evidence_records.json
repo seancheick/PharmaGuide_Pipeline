@@ -3,11 +3,11 @@
     "description": "Phase 4 shadow literature resolution registry for high-impact canonical actives",
     "purpose": "literature_evidence_resolution",
     "schema_version": "5.0.0",
-    "last_updated": "2026-10-06",
-    "total_entries": 761,
+    "last_updated": "2026-10-07",
+    "total_entries": 798,
     "verification_pipeline": "scripts/api_audit/verify_literature_records.py",
-    "verified_studies_count": 229,
-    "verified_records_count": 761
+    "verified_studies_count": 271,
+    "verified_records_count": 798
   },
   "literature_evidence_records": [
     {
@@ -23799,6 +23799,1620 @@
         "retractions_found": false
       },
       "applicability_status": "applicability_unestablished"
+    },
+    {
+      "canonical_id": "pancreatin",
+      "material_form": "Pancreatin pancreatic enzyme preparation; studied enteric-coated Creon 40000 minimicrospheres",
+      "search_query": "PMIDs 22762290; bounded direct-study content review, not exhaustive search",
+      "search_date": "2026-10-07",
+      "databases_searched": [
+        "PubMed",
+        "Europe PMC primary full text"
+      ],
+      "records_screened": 1,
+      "qualifying_human_studies": [
+        {
+          "pmid": "22762290",
+          "title": "Randomised clinical trial: the efficacy and safety of pancreatin enteric-coated minimicrospheres (Creon 40000 MMS) in patients with pancreatic exocrine insufficiency due to chronic pancreatitis--a double-blind, placebo-controlled study.",
+          "study_type": "randomized_double_blind_placebo_controlled",
+          "dose": "80,000 Ph. Eur. lipase units per main meal and 40,000 per snack; oral enteric-coated minimicrospheres",
+          "duration": "1 week",
+          "outcome": "Primary fat absorption improved versus placebo; nitrogen absorption and stool measures also improved. Delivery and indication are specific to pancreatic enzyme replacement.",
+          "verification_provenance": {
+            "pmid_verified": true,
+            "authoritative_live_title": "Randomised clinical trial: the efficacy and safety of pancreatin enteric-coated minimicrospheres (Creon 40000 MMS) in patients with pancreatic exocrine insufficiency due to chronic pancreatitis--a double-blind, placebo-controlled study.",
+            "human_subjects_verified": true,
+            "topic_match_verified": true,
+            "retracted": false,
+            "verified_source": "https://pubmed.ncbi.nlm.nih.gov/22762290/",
+            "verified_at": "2026-10-07"
+          },
+          "sample_size": 62
+        }
+      ],
+      "effect_direction": "applicability_unestablished",
+      "population_context": "Adults with chronic pancreatitis and confirmed pancreatic exocrine insufficiency.",
+      "studied_dose_exposure": {},
+      "applicability_decision": "Specific pancreatic enzyme replacement research exists. Retail digestive/systemic mixtures do not establish equivalent coating, lipase activity or disease indication. Protease units or preparation mass cannot establish lipase exposure; fungal enzyme blends cannot supply this preparation. No generic digestive efficacy or mass-to-activity benchmark follows. This is a bounded direct-study review, not an absence-of-research or universal-null determination.",
+      "verification_result": "authoritative_pubmed_verified",
+      "verification_provenance": {
+        "verified_by": "manual_primary_source_content_review",
+        "verified_at": "2026-10-07",
+        "all_pmids_verified": true,
+        "retractions_found": false
+      },
+      "applicability_status": "applicability_unestablished"
+    },
+    {
+      "canonical_id": "hesperidin",
+      "material_form": "Hesperidin; retail Hesperidin Complex composition and active fraction may be undisclosed",
+      "search_query": "PMIDs 21346065; bounded direct-study content review, not exhaustive search",
+      "search_date": "2026-10-07",
+      "databases_searched": [
+        "PubMed"
+      ],
+      "records_screened": 1,
+      "qualifying_human_studies": [
+        {
+          "pmid": "21346065",
+          "title": "Citrus polyphenol hesperidin stimulates production of nitric oxide in endothelial cells while improving endothelial function and reducing inflammatory markers in patients with metabolic syndrome.",
+          "study_type": "randomized_double_blind_placebo_controlled_crossover",
+          "dose": "500 mg oral hesperidin once daily",
+          "duration": "3 weeks",
+          "outcome": "Primary brachial flow-mediated dilation surrogate improved versus placebo; inflammatory biomarkers also changed. Cellular hesperetin experiments in the paper are separate from human outcomes.",
+          "verification_provenance": {
+            "pmid_verified": true,
+            "authoritative_live_title": "Citrus polyphenol hesperidin stimulates production of nitric oxide in endothelial cells while improving endothelial function and reducing inflammatory markers in patients with metabolic syndrome.",
+            "human_subjects_verified": true,
+            "topic_match_verified": true,
+            "retracted": false,
+            "verified_source": "https://pubmed.ncbi.nlm.nih.gov/21346065/",
+            "verified_at": "2026-10-07"
+          },
+          "sample_size": 24
+        }
+      ],
+      "effect_direction": "applicability_unestablished",
+      "population_context": "Adults with metabolic syndrome.",
+      "studied_dose_exposure": {},
+      "applicability_decision": "Purified-hesperidin vascular surrogate research does not establish unspecified Hesperidin Complex preparation, active fraction or retail purpose. Preserve explicitly disclosed 30%/3 mg source content. MPFF diosmin/hesperidin combination outcomes cannot establish standalone hesperidin efficacy. No general multivitamin benefit or effective-dose benchmark follows. This is a bounded direct-study review, not an absence-of-research or universal-null determination.",
+      "verification_result": "authoritative_pubmed_verified",
+      "verification_provenance": {
+        "verified_by": "manual_primary_source_content_review",
+        "verified_at": "2026-10-07",
+        "all_pmids_verified": true,
+        "retractions_found": false
+      },
+      "applicability_status": "applicability_unestablished"
+    },
+    {
+      "canonical_id": "piperine",
+      "material_form": "Isolated or standardized piperine coadministered with another compound; distinct from whole black pepper or volatile oil",
+      "search_query": "PMIDs 9619120, 32868637; bounded direct-study content review, not exhaustive search",
+      "search_date": "2026-10-07",
+      "databases_searched": [
+        "PubMed"
+      ],
+      "records_screened": 2,
+      "qualifying_human_studies": [
+        {
+          "pmid": "9619120",
+          "title": "Influence of piperine on the pharmacokinetics of curcumin in animals and human volunteers.",
+          "study_type": "human_pharmacokinetic_experiment",
+          "dose": "2 g oral curcumin with or without 20 mg piperine",
+          "duration": "acute",
+          "outcome": "Coadministration increased curcumin exposure; pharmacokinetics is not independent piperine clinical efficacy.",
+          "verification_provenance": {
+            "pmid_verified": true,
+            "authoritative_live_title": "Influence of piperine on the pharmacokinetics of curcumin in animals and human volunteers.",
+            "human_subjects_verified": true,
+            "topic_match_verified": true,
+            "retracted": false,
+            "verified_source": "https://pubmed.ncbi.nlm.nih.gov/9619120/",
+            "verified_at": "2026-10-07"
+          }
+        },
+        {
+          "pmid": "32868637",
+          "title": "A randomized, double-blind, dose-ranging, pilot trial of piperine with resveratrol on the effects on serum levels of resveratrol.",
+          "study_type": "randomized_double_blind_dose_ranging_pilot",
+          "dose": "Single oral dose of 2.5 g resveratrol plus 0, 5 or 25 mg piperine",
+          "duration": "single dose; pharmacokinetics through 24 hours",
+          "outcome": "No significant relationship between piperine dose and resveratrol pharmacokinetic values; no sufficient enhancement demonstrated.",
+          "verification_provenance": {
+            "pmid_verified": true,
+            "authoritative_live_title": "A randomized, double-blind, dose-ranging, pilot trial of piperine with resveratrol on the effects on serum levels of resveratrol.",
+            "human_subjects_verified": true,
+            "topic_match_verified": true,
+            "retracted": false,
+            "verified_source": "https://pubmed.ncbi.nlm.nih.gov/32868637/",
+            "verified_at": "2026-10-07"
+          },
+          "sample_size": 24
+        }
+      ],
+      "effect_direction": "applicability_unestablished",
+      "population_context": "Healthy volunteers in acute combination pharmacokinetic experiments.",
+      "studied_dose_exposure": {},
+      "applicability_decision": "Combination pharmacokinetic research does not establish independent energy, ageing or other efficacy for an unpaired piperine subject. Existing paired absorption-aid ownership and Sean's removal of standalone BioPerine efficacy remain intact. Oil/essence or whole-plant material cannot inherit isolated-piperine evidence. No generic efficacy or dose benchmark follows. This is a bounded direct-study review, not an absence-of-research or universal-null determination.",
+      "verification_result": "authoritative_pubmed_verified",
+      "verification_provenance": {
+        "verified_by": "manual_primary_source_content_review",
+        "verified_at": "2026-10-07",
+        "all_pmids_verified": true,
+        "retractions_found": false
+      },
+      "applicability_status": "applicability_unestablished"
+    },
+    {
+      "canonical_id": "oi_acetyl_l_carnitine_arginate",
+      "material_form": "Acetyl-L-carnitine arginate ArginoCarn studied preparation; retail dihydrochloride correspondence unestablished",
+      "search_query": "PMIDs 19490608; bounded direct-study content review, not exhaustive search",
+      "search_date": "2026-10-07",
+      "databases_searched": [
+        "PubMed",
+        "Europe PMC primary full text"
+      ],
+      "records_screened": 1,
+      "qualifying_human_studies": [
+        {
+          "pmid": "19490608",
+          "title": "Effect of oral acetyl L-carnitine arginate on resting and postprandial blood biomarkers in pre-diabetics.",
+          "study_type": "randomized_double_blind_placebo_controlled",
+          "dose": "3 g/day oral ArginoCarn in two divided doses with meals",
+          "duration": "8 weeks",
+          "outcome": "Forty randomized, 29 completed (14 intervention, 15 placebo). Resting nitrate/nitrite increased; other resting metabolic/oxidative measures and postprandial AUC comparisons were nonsignificant. Nonsignificant glucose/HbA1c/HOMA trends are not benefit.",
+          "verification_provenance": {
+            "pmid_verified": true,
+            "authoritative_live_title": "Effect of oral acetyl L-carnitine arginate on resting and postprandial blood biomarkers in pre-diabetics.",
+            "human_subjects_verified": true,
+            "topic_match_verified": true,
+            "retracted": false,
+            "verified_source": "https://pubmed.ncbi.nlm.nih.gov/19490608/",
+            "verified_at": "2026-10-07"
+          },
+          "sample_size": 40
+        }
+      ],
+      "effect_direction": "applicability_unestablished",
+      "population_context": "Prediabetic men and women; 40 randomized and 29 completed.",
+      "studied_dose_exposure": {},
+      "applicability_decision": "Arginate-specific human research exists but does not establish retail dihydrochloride correspondence, pharmacokinetic equivalence to free ALCAR, or cognition/antiageing purpose benefit. The study composition cannot convert retail salt mass into active amounts. Preserve existing identity-only form and Dose holds; no generic effective-dose benchmark follows. This is a bounded direct-study review, not an absence-of-research or universal-null determination.",
+      "verification_result": "authoritative_pubmed_verified",
+      "verification_provenance": {
+        "verified_by": "manual_primary_source_content_review",
+        "verified_at": "2026-10-07",
+        "all_pmids_verified": true,
+        "retractions_found": false
+      },
+      "applicability_status": "applicability_unestablished"
+    },
+    {
+      "canonical_id": "pii_honey",
+      "material_form": "Organic honey; botanical origin and complete cough-syrup formula remain unspecified",
+      "search_query": "Bounded primary content review PMID22869830; not exhaustive absence search",
+      "search_date": "2026-10-07",
+      "databases_searched": [
+        "PubMed via Europe PMC"
+      ],
+      "records_screened": 1,
+      "qualifying_human_studies": [
+        {
+          "pmid": "22869830",
+          "title": "Effect of honey on nocturnal cough and sleep quality: a double-blind, randomized, placebo-controlled study.",
+          "study_type": "randomized_double_blind_placebo_controlled",
+          "outcome": "Parent-reported cough and sleep measures improved more with honey than silan date extract; all groups improved. Retail honey origin and multi-ingredient syrup correspondence remain unestablished.",
+          "verification_provenance": {
+            "pmid_verified": true,
+            "human_subjects_verified": true,
+            "topic_match_verified": true,
+            "verified_source": "https://pubmed.ncbi.nlm.nih.gov/22869830/",
+            "verified_at": "2026-10-07",
+            "authoritative_live_title": "Effect of honey on nocturnal cough and sleep quality: a double-blind, randomized, placebo-controlled study.",
+            "retracted": false
+          },
+          "sample_size": 300,
+          "dose": "Single oral 10 g dose of eucalyptus, citrus or labiatae honey, 30 minutes before bedtime",
+          "duration": "one night"
+        }
+      ],
+      "effect_direction": "applicability_unestablished",
+      "population_context": "Children aged 1–5 with upper respiratory infections and nocturnal cough, illness duration no more than 7 days.",
+      "studied_dose_exposure": {},
+      "applicability_decision": "Human honey cough research exists for a single 10 g bedtime dose of specified honey origins. Retail 7 g/3.5 g servings, unspecified botanical origins and complete multi-ingredient cough formulas do not establish intervention correspondence. No positive clinical grade or universal dose benchmark follows. This is a bounded direct-study review, not an exhaustive absence or universal-null determination.",
+      "applicability_status": "applicability_unestablished",
+      "verification_result": "authoritative_pubmed_verified",
+      "verification_provenance": {
+        "verified_by": "manual_primary_source_content_review",
+        "verified_at": "2026-10-07",
+        "all_pmids_verified": true,
+        "retractions_found": false
+      }
+    },
+    {
+      "canonical_id": "bitter_melon_fruit",
+      "material_form": "Momordica charantia fruit powder; retail processing/standardization unspecified",
+      "search_query": "Bounded primary content review PMID21211558; not exhaustive absence search",
+      "search_date": "2026-10-07",
+      "databases_searched": [
+        "PubMed via Europe PMC"
+      ],
+      "records_screened": 1,
+      "qualifying_human_studies": [
+        {
+          "pmid": "21211558",
+          "title": "Hypoglycemic effect of bitter melon compared with metformin in newly diagnosed type 2 diabetes patients.",
+          "study_type": "randomized_double_blind_active_controlled",
+          "outcome": "Fructosamine declined from baseline at 2000 mg/day; lower doses were nonsignificant. Response was less than metformin; active comparator and within-group result do not establish placebo-controlled benefit. Retail fruit-powder preparation and formula correspondence remain unestablished.",
+          "verification_provenance": {
+            "pmid_verified": true,
+            "human_subjects_verified": true,
+            "topic_match_verified": true,
+            "verified_source": "https://pubmed.ncbi.nlm.nih.gov/21211558/",
+            "verified_at": "2026-10-07",
+            "authoritative_live_title": "Hypoglycemic effect of bitter melon compared with metformin in newly diagnosed type 2 diabetes patients.",
+            "retracted": false
+          },
+          "dose": "Oral bitter melon 500, 1000 or 2000 mg/day versus metformin 1000 mg/day",
+          "duration": "4 weeks"
+        }
+      ],
+      "effect_direction": "applicability_unestablished",
+      "population_context": "Patients with newly diagnosed type 2 diabetes.",
+      "studied_dose_exposure": {},
+      "applicability_decision": "Human fruit-powder research exists at 500–2000 mg/day for four weeks in newly diagnosed type 2 diabetes versus metformin. A retail 100 mg per-caplet multi-ingredient formula does not establish the same powder specification, exposure or intervention; 200 mg/day directions remain distinct. The within-group high-dose result is not placebo-controlled proof. No positive clinical grade or universal benchmark follows. This is a bounded direct-study review, not an exhaustive absence or universal-null determination.",
+      "applicability_status": "applicability_unestablished",
+      "verification_result": "authoritative_pubmed_verified",
+      "verification_provenance": {
+        "verified_by": "manual_primary_source_content_review",
+        "verified_at": "2026-10-07",
+        "all_pmids_verified": true,
+        "retractions_found": false
+      }
+    },
+    {
+      "canonical_id": "add_polydextrose",
+      "material_form": "Litesse branded polydextrose fiber in powder mixtures",
+      "search_query": "Bounded primary content review PMID22885981; not exhaustive absence search",
+      "search_date": "2026-10-07",
+      "databases_searched": [
+        "PubMed via Europe PMC"
+      ],
+      "records_screened": 1,
+      "qualifying_human_studies": [
+        {
+          "pmid": "22885981",
+          "title": "Consuming polydextrose in a mid-morning snack increases acute satiety measurements and reduces subsequent energy intake at lunch in healthy human subjects.",
+          "study_type": "randomized_single_blind_placebo_controlled_crossover",
+          "outcome": "Immediate subjective satiety increased at 6.25/12.5 g; lunch energy intake decreased at 12.5 g without dinner compensation. This does not establish chronic weight loss or retail multi-ingredient formula efficacy.",
+          "verification_provenance": {
+            "pmid_verified": true,
+            "human_subjects_verified": true,
+            "topic_match_verified": true,
+            "verified_source": "https://pubmed.ncbi.nlm.nih.gov/22885981/",
+            "verified_at": "2026-10-07",
+            "authoritative_live_title": "Consuming polydextrose in a mid-morning snack increases acute satiety measurements and reduces subsequent energy intake at lunch in healthy human subjects.",
+            "retracted": false
+          },
+          "sample_size": 34,
+          "dose": "0, 6.25 or 12.5 g Litesse polydextrose in a yogurt drink 90 minutes before lunch",
+          "duration": "acute test day"
+        }
+      ],
+      "effect_direction": "applicability_unestablished",
+      "population_context": "Healthy male and female volunteers in an acute feeding crossover.",
+      "studied_dose_exposure": {},
+      "applicability_decision": "Human Litesse acute appetite research exists at 6.25/12.5 g in yogurt drinks. Acute satiety and lunch-intake findings do not establish chronic weight loss or complete retail formula efficacy. Source 213508 prints 12.5 g per 33 g/two scoops, or 6.25 g per scoop; do not double 12.5 g again. Preparation, matrix and purpose correspondence remain unestablished; no positive clinical grade or universal benchmark follows. This is a bounded direct-study review, not an exhaustive absence or universal-null determination.",
+      "applicability_status": "applicability_unestablished",
+      "verification_result": "authoritative_pubmed_verified",
+      "verification_provenance": {
+        "verified_by": "manual_primary_source_content_review",
+        "verified_at": "2026-10-07",
+        "all_pmids_verified": true,
+        "retractions_found": false
+      }
+    },
+    {
+      "canonical_id": "beta_caryophyllene",
+      "material_form": "Named undosed beta-caryophyllene within VESIsorb Hemp oil extract",
+      "search_query": "Bounded primary content review PMID31650795; not exhaustive absence search",
+      "search_date": "2026-10-07",
+      "databases_searched": [
+        "PubMed via Europe PMC"
+      ],
+      "records_screened": 1,
+      "qualifying_human_studies": [
+        {
+          "pmid": "31650795",
+          "title": "[Inhibitory Effects of β-caryophyllene on Helicobacter pylori Infection: A Randomized Double-blind, Placebo-controlled Study].",
+          "study_type": "randomized_double_blind_placebo_controlled",
+          "outcome": "No complete eradication, significant urea breath test change or updated Sydney score change; secondary nausea, epigastric pain and IL-1 beta findings do not validate an undosed hemp-formula member.",
+          "verification_provenance": {
+            "pmid_verified": true,
+            "human_subjects_verified": true,
+            "topic_match_verified": true,
+            "verified_source": "https://pubmed.ncbi.nlm.nih.gov/31650795/",
+            "verified_at": "2026-10-07",
+            "authoritative_live_title": "[Inhibitory Effects of β-caryophyllene on Helicobacter pylori Infection: A Randomized Double-blind, Placebo-controlled Study].",
+            "retracted": false
+          },
+          "sample_size": 66,
+          "dose": "126 mg/day oral beta-caryophyllene versus placebo",
+          "duration": "8 weeks"
+        }
+      ],
+      "effect_direction": "applicability_unestablished",
+      "population_context": "Adults with Helicobacter pylori infection.",
+      "studied_dose_exposure": {},
+      "applicability_decision": "Human isolated beta-caryophyllene research exists at 126 mg/day for eight weeks in Helicobacter pylori infection. Null eradication, breath-test and Sydney-score findings with selective secondary symptom signals do not validate an undosed member of a VESIsorb hemp formula or other retail purpose. Preparation, formula and exposure correspondence remain unestablished; no positive clinical grade or universal benchmark follows. This is a bounded direct-study review, not an exhaustive absence or universal-null determination.",
+      "applicability_status": "applicability_unestablished",
+      "verification_result": "authoritative_pubmed_verified",
+      "verification_provenance": {
+        "verified_by": "manual_primary_source_content_review",
+        "verified_at": "2026-10-07",
+        "all_pmids_verified": true,
+        "retractions_found": false
+      }
+    },
+    {
+      "canonical_id": "nha_monk_fruit",
+      "material_form": "Monk fruit preparations; human evidence for a monk-fruit-sweetened beverage, retail extract specification unestablished",
+      "search_query": "PMIDs 28378852; bounded direct-study content review, not exhaustive search",
+      "search_date": "2026-10-07",
+      "databases_searched": [
+        "PubMed via Europe PMC"
+      ],
+      "records_screened": 1,
+      "qualifying_human_studies": [
+        {
+          "pmid": "28378852",
+          "title": "Effects of non-nutritive (artificial vs natural) sweeteners on 24-h glucose profiles.",
+          "study_type": "controlled_human_intervention",
+          "dose": "Monk-fruit-sweetened beverage versus stevia, aspartame and 65 g sucrose beverages",
+          "duration": "acute; 24-hour glucose monitoring",
+          "outcome": "No significant differences in mean 24-hour glucose, glucose AUC or glycemic variability among the four treatments.",
+          "verification_provenance": {
+            "pmid_verified": true,
+            "authoritative_live_title": "Effects of non-nutritive (artificial vs natural) sweeteners on 24-h glucose profiles.",
+            "human_subjects_verified": true,
+            "topic_match_verified": true,
+            "retracted": false,
+            "verified_source": "https://pubmed.ncbi.nlm.nih.gov/28378852/",
+            "verified_at": "2026-10-07"
+          },
+          "sample_size": 10
+        }
+      ],
+      "effect_direction": "applicability_unestablished",
+      "population_context": "Healthy male volunteers in an acute beverage crossover.",
+      "studied_dose_exposure": {},
+      "applicability_decision": "Human sweetened-beverage research does not establish retail extract/powder composition, metabolic purpose or benefit. Preserve sole-material monk-fruit products as genuine source subjects; vitamin-drink context alone cannot demote every monk-fruit subject. No positive clinical grade or universal effective-dose benchmark follows. This is a bounded direct-study review, not an absence-of-research or universal-null determination.",
+      "applicability_status": "applicability_unestablished",
+      "verification_result": "authoritative_pubmed_verified",
+      "verification_provenance": {
+        "verified_by": "manual_primary_source_content_review",
+        "verified_at": "2026-10-07",
+        "all_pmids_verified": true,
+        "retractions_found": false
+      }
+    },
+    {
+      "canonical_id": "nha_stevia",
+      "material_form": "Stevia preparations; studied stevia-sweetened beverage, retail glycoside profile unestablished",
+      "search_query": "PMIDs 28378852; bounded direct-study content review, not exhaustive search",
+      "search_date": "2026-10-07",
+      "databases_searched": [
+        "PubMed via Europe PMC"
+      ],
+      "records_screened": 1,
+      "qualifying_human_studies": [
+        {
+          "pmid": "28378852",
+          "title": "Effects of non-nutritive (artificial vs natural) sweeteners on 24-h glucose profiles.",
+          "study_type": "controlled_human_intervention",
+          "dose": "Stevia-sweetened beverage versus monk fruit, aspartame and 65 g sucrose beverages",
+          "duration": "acute; 24-hour glucose monitoring",
+          "outcome": "No significant differences in mean 24-hour glucose, glucose AUC or glycemic variability among the four treatments.",
+          "verification_provenance": {
+            "pmid_verified": true,
+            "authoritative_live_title": "Effects of non-nutritive (artificial vs natural) sweeteners on 24-h glucose profiles.",
+            "human_subjects_verified": true,
+            "topic_match_verified": true,
+            "retracted": false,
+            "verified_source": "https://pubmed.ncbi.nlm.nih.gov/28378852/",
+            "verified_at": "2026-10-07"
+          },
+          "sample_size": 10
+        }
+      ],
+      "effect_direction": "applicability_unestablished",
+      "population_context": "Healthy male volunteers in an acute beverage crossover.",
+      "studied_dose_exposure": {},
+      "applicability_decision": "Named stevia beverage research does not establish leaf/extract/glycoside preparation, retail matrix or declared-purpose correspondence. Do not infer universal ineffectiveness or erase actual source purpose from sweetener taxonomy. No positive clinical grade or universal effective-dose benchmark follows. This is a bounded direct-study review, not an absence-of-research or universal-null determination.",
+      "applicability_status": "applicability_unestablished",
+      "verification_result": "authoritative_pubmed_verified",
+      "verification_provenance": {
+        "verified_by": "manual_primary_source_content_review",
+        "verified_at": "2026-10-07",
+        "all_pmids_verified": true,
+        "retractions_found": false
+      }
+    },
+    {
+      "canonical_id": "nha_allulose",
+      "material_form": "D-allulose; retail raw-versus-registry identifier correspondence unresolved",
+      "search_query": "PMIDs 29797503, 29890724, 33637605; bounded direct-study content review, not exhaustive search",
+      "search_date": "2026-10-07",
+      "databases_searched": [
+        "PubMed via Europe PMC",
+        "Europe PMC primary full text"
+      ],
+      "records_screened": 3,
+      "qualifying_human_studies": [
+        {
+          "pmid": "29797503",
+          "title": "The effect of small doses of fructose and allulose on postprandial glucose metabolism in type 2 diabetes: A double‐blind, randomized, controlled, acute feeding, equivalence trial",
+          "study_type": "controlled_human_intervention",
+          "dose": "0, 5 or 10 g oral allulose added to 75 g glucose",
+          "duration": "acute crossover",
+          "outcome": "Primary glucose incremental AUC modestly decreased at 10 g in type 2 diabetes; findings are acute and do not establish sustained disease benefit.",
+          "verification_provenance": {
+            "pmid_verified": true,
+            "authoritative_live_title": "The effect of small doses of fructose and allulose on postprandial glucose metabolism in type 2 diabetes: A double‐blind, randomized, controlled, acute feeding, equivalence trial",
+            "human_subjects_verified": true,
+            "topic_match_verified": true,
+            "retracted": false,
+            "verified_source": "https://pubmed.ncbi.nlm.nih.gov/29797503/",
+            "verified_at": "2026-10-07"
+          },
+          "sample_size": 24
+        },
+        {
+          "pmid": "29890724",
+          "title": "A Double-Blind, Randomized Controlled, Acute Feeding Equivalence Trial of Small, Catalytic Doses of Fructose and Allulose on Postprandial Blood Glucose Metabolism in Healthy Participants: The Fructose and Allulose Catalytic Effects (FACE) Trial",
+          "study_type": "controlled_human_intervention",
+          "dose": "0, 5 or 10 g oral allulose with 75 g glucose",
+          "duration": "acute crossover",
+          "outcome": "Twenty-seven randomized, 25 analyzed. Primary glucose incremental AUC findings did not confirm catalytic effects; limited power was noted.",
+          "verification_provenance": {
+            "pmid_verified": true,
+            "authoritative_live_title": "A Double-Blind, Randomized Controlled, Acute Feeding Equivalence Trial of Small, Catalytic Doses of Fructose and Allulose on Postprandial Blood Glucose Metabolism in Healthy Participants: The Fructose and Allulose Catalytic Effects (FACE) Trial",
+            "human_subjects_verified": true,
+            "topic_match_verified": true,
+            "retracted": false,
+            "verified_source": "https://pubmed.ncbi.nlm.nih.gov/29890724/",
+            "verified_at": "2026-10-07"
+          },
+          "sample_size": 27
+        },
+        {
+          "pmid": "33637605",
+          "title": "Effects of D-allulose on glucose tolerance and insulin response to a standard oral sucrose load: results of a prospective, randomized, crossover study",
+          "study_type": "controlled_human_intervention",
+          "dose": "2.5, 5, 7.5 or 10 g oral D-allulose with 50 g sucrose",
+          "duration": "acute crossover",
+          "outcome": "Selective early glucose/insulin and excursion reductions at higher doses; no chronic clinical efficacy established.",
+          "verification_provenance": {
+            "pmid_verified": true,
+            "authoritative_live_title": "Effects of D-allulose on glucose tolerance and insulin response to a standard oral sucrose load: results of a prospective, randomized, crossover study",
+            "human_subjects_verified": true,
+            "topic_match_verified": true,
+            "retracted": false,
+            "verified_source": "https://pubmed.ncbi.nlm.nih.gov/33637605/",
+            "verified_at": "2026-10-07"
+          },
+          "sample_size": 30
+        }
+      ],
+      "effect_direction": "applicability_unestablished",
+      "population_context": "Adults with type 2 diabetes and healthy adults in distinct acute carbohydrate-challenge studies.",
+      "studied_dose_exposure": {},
+      "applicability_decision": "Acute D-allulose carbohydrate-challenge research does not establish protein-product matrix or chronic metabolic-purpose correspondence. Existing raw and registry UNII codes differ: identity equivalence remains unverified and no identifier substitution is authorized. Preserve the printed 10 g nutritional amount without borrowed protein efficacy. No positive clinical grade or universal effective-dose benchmark follows. This is a bounded direct-study review, not an absence-of-research or universal-null determination.",
+      "applicability_status": "applicability_unestablished",
+      "verification_result": "authoritative_pubmed_verified",
+      "verification_provenance": {
+        "verified_by": "manual_primary_source_content_review",
+        "verified_at": "2026-10-07",
+        "all_pmids_verified": true,
+        "retractions_found": false
+      }
+    },
+    {
+      "canonical_id": "nha_vegetable_glycerin",
+      "material_form": "Free glycerol; distinct from glycerol monostearate ester",
+      "search_query": "PMIDs 3436862; bounded direct-study content review, not exhaustive search",
+      "search_date": "2026-10-07",
+      "databases_searched": [
+        "PubMed via Europe PMC"
+      ],
+      "records_screened": 1,
+      "qualifying_human_studies": [
+        {
+          "pmid": "3436862",
+          "title": "Hyperhydration with glycerol solutions.",
+          "study_type": "controlled_human_intervention",
+          "dose": "0.5, 1.0 or 1.5 g/kg glycerol with 21.4 mL/kg fluid; separate 1.0 g/kg plus 25.7 mL/kg fluid protocol",
+          "duration": "4-hour experiments",
+          "outcome": "Glycerol plus excess fluid increased plasma osmolality and reduced urine volume; no significant hemoglobin/hematocrit change.",
+          "verification_provenance": {
+            "pmid_verified": true,
+            "authoritative_live_title": "Hyperhydration with glycerol solutions.",
+            "human_subjects_verified": true,
+            "topic_match_verified": true,
+            "retracted": false,
+            "verified_source": "https://pubmed.ncbi.nlm.nih.gov/3436862/",
+            "verified_at": "2026-10-07"
+          }
+        }
+      ],
+      "effect_direction": "applicability_unestablished",
+      "population_context": "Male and female human volunteers in short hydration experiments.",
+      "studied_dose_exposure": {},
+      "applicability_decision": "Free-glycerol hydration research does not establish retail low-dose sports formula, fluid protocol, intended pump benefit or universal efficacy. Retain sports source intent and disclosed 1.5 g rows. Glycerol monostearate is chemically distinct and cannot inherit this research. No positive clinical grade or universal effective-dose benchmark follows. This is a bounded direct-study review, not an absence-of-research or universal-null determination.",
+      "applicability_status": "applicability_unestablished",
+      "verification_result": "authoritative_pubmed_verified",
+      "verification_provenance": {
+        "verified_by": "manual_primary_source_content_review",
+        "verified_at": "2026-10-07",
+        "all_pmids_verified": true,
+        "retractions_found": false
+      }
+    },
+    {
+      "canonical_id": "extra_virgin_olive_oil",
+      "material_form": "Virgin olive oil; phenolic content specified in the study but unestablished for retail oil/formula",
+      "search_query": "PMIDs 16954359; bounded direct-study content review, not exhaustive search",
+      "search_date": "2026-10-07",
+      "databases_searched": [
+        "PubMed via Europe PMC"
+      ],
+      "records_screened": 1,
+      "qualifying_human_studies": [
+        {
+          "pmid": "16954359",
+          "title": "The effect of polyphenols in olive oil on heart disease risk factors: a randomized trial.",
+          "study_type": "controlled_human_intervention",
+          "dose": "25 mL/day olive oils containing 2.7, 164 or 366 mg/kg phenolics",
+          "duration": "3-week periods with 2-week washouts",
+          "outcome": "HDL and oxidative-damage biomarkers varied with phenolic content; short-term dietary context, not cardiovascular clinical events.",
+          "verification_provenance": {
+            "pmid_verified": true,
+            "authoritative_live_title": "The effect of polyphenols in olive oil on heart disease risk factors: a randomized trial.",
+            "human_subjects_verified": true,
+            "topic_match_verified": true,
+            "retracted": false,
+            "verified_source": "https://pubmed.ncbi.nlm.nih.gov/16954359/",
+            "verified_at": "2026-10-07"
+          },
+          "sample_size": 200
+        }
+      ],
+      "effect_direction": "applicability_unestablished",
+      "population_context": "Healthy male volunteers in short dietary-oil crossover periods.",
+      "studied_dose_exposure": {},
+      "applicability_decision": "Virgin olive-oil research with defined phenolics does not establish retail oil composition, undosed blend-member exposure, diet substitution or declared purpose. Keep olive oil distinct from refined oil, olive leaf and isolated extracts; proprietary blend mass is not olive-oil mass. No positive clinical grade or universal effective-dose benchmark follows. This is a bounded direct-study review, not an absence-of-research or universal-null determination.",
+      "applicability_status": "applicability_unestablished",
+      "verification_result": "authoritative_pubmed_verified",
+      "verification_provenance": {
+        "verified_by": "manual_primary_source_content_review",
+        "verified_at": "2026-10-07",
+        "all_pmids_verified": true,
+        "retractions_found": false
+      }
+    },
+    {
+      "canonical_id": "sunflower_oil",
+      "material_form": "Ordinary sunflower oil; explicitly distinct from the high-oleic sunflower comparator in a separate study",
+      "search_query": "PMIDs 35892771; bounded direct-study content review, not exhaustive search",
+      "search_date": "2026-10-07",
+      "databases_searched": [
+        "PubMed via Europe PMC",
+        "Europe PMC primary full text"
+      ],
+      "records_screened": 1,
+      "qualifying_human_studies": [
+        {
+          "pmid": "35892771",
+          "title": "Olive Pomace Oil versus High Oleic Sunflower Oil and Sunflower Oil: A Comparative Study in Healthy and Cardiovascular Risk Humans.",
+          "study_type": "controlled_human_intervention",
+          "dose": "45 g/day dietary oil substitution; ordinary sunflower versus olive pomace in study 2, high-oleic sunflower versus olive pomace in study 1",
+          "duration": "14-week designs with 4-week intervention phases",
+          "outcome": "Integrated 65 normocholesterolemic and 67 moderately hypercholesterolemic participants across two trials. Ordinary sunflower intervention increased Apo B and Apo B/A ratio; olive-pomace comparative findings do not establish generic sunflower efficacy.",
+          "verification_provenance": {
+            "pmid_verified": true,
+            "authoritative_live_title": "Olive Pomace Oil versus High Oleic Sunflower Oil and Sunflower Oil: A Comparative Study in Healthy and Cardiovascular Risk Humans.",
+            "human_subjects_verified": true,
+            "topic_match_verified": true,
+            "retracted": false,
+            "verified_source": "https://pubmed.ncbi.nlm.nih.gov/35892771/",
+            "verified_at": "2026-10-07"
+          },
+          "sample_size": 132
+        }
+      ],
+      "effect_direction": "applicability_unestablished",
+      "population_context": "Normocholesterolemic and moderately hypercholesterolemic participants in two dietary-oil crossover trials.",
+      "studied_dose_exposure": {},
+      "applicability_decision": "Dietary sunflower-oil comparator research does not establish retail dry cold-pressed preparation, 50 mg multinutrient amount, blend-member exposure or cardiovascular purpose. Ordinary and high-oleic oils cannot be conflated. Neither comparator use nor selective biomarkers establishes a universal negative or positive effect. No positive clinical grade or universal effective-dose benchmark follows. This is a bounded direct-study review, not an absence-of-research or universal-null determination.",
+      "applicability_status": "applicability_unestablished",
+      "verification_result": "authoritative_pubmed_verified",
+      "verification_provenance": {
+        "verified_by": "manual_primary_source_content_review",
+        "verified_at": "2026-10-07",
+        "all_pmids_verified": true,
+        "retractions_found": false
+      }
+    },
+    {
+      "canonical_id": "pii_rice_bran_oil",
+      "material_form": "Rice bran oil; distinct from defatted rice bran, rice-bran concentrate and isolated tocotrienols",
+      "search_query": "PMIDs 15640461; bounded direct-study content review, not exhaustive search",
+      "search_date": "2026-10-07",
+      "databases_searched": [
+        "PubMed via Europe PMC"
+      ],
+      "records_screened": 1,
+      "qualifying_human_studies": [
+        {
+          "pmid": "15640461",
+          "title": "Rice bran oil, not fiber, lowers cholesterol in humans.",
+          "study_type": "controlled_human_intervention",
+          "dose": "Rice bran oil supplying one third of dietary fat versus a fatty-acid-matched oil blend",
+          "duration": "10-week crossover",
+          "outcome": "Rice-bran-oil study 2 lowered total and LDL cholesterol (LDL about 7%); HDL unchanged. Separate defatted-bran study did not lower lipids.",
+          "verification_provenance": {
+            "pmid_verified": true,
+            "authoritative_live_title": "Rice bran oil, not fiber, lowers cholesterol in humans.",
+            "human_subjects_verified": true,
+            "topic_match_verified": true,
+            "retracted": false,
+            "verified_source": "https://pubmed.ncbi.nlm.nih.gov/15640461/",
+            "verified_at": "2026-10-07"
+          },
+          "sample_size": 14
+        }
+      ],
+      "effect_direction": "applicability_unestablished",
+      "population_context": "Healthy moderately hypercholesterolemic volunteers in a dietary feeding crossover.",
+      "studied_dose_exposure": {},
+      "applicability_decision": "Dietary rice-bran-oil substitution research does not establish an undosed child of a 133 mg Toco-Rich blend or complete vitamin-E formula efficacy. Preserve oil-versus-bran/concentrate distinction and source purpose; blend mass cannot supply member exposure. No positive clinical grade or universal effective-dose benchmark follows. This is a bounded direct-study review, not an absence-of-research or universal-null determination.",
+      "applicability_status": "applicability_unestablished",
+      "verification_result": "authoritative_pubmed_verified",
+      "verification_provenance": {
+        "verified_by": "manual_primary_source_content_review",
+        "verified_at": "2026-10-07",
+        "all_pmids_verified": true,
+        "retractions_found": false
+      }
+    },
+    {
+      "canonical_id": "nha_raspberry_natural",
+      "material_form": "Source-labelled raspberry fruit powder/extract or raspberry leaf; tissues and preparations differ across labels",
+      "search_query": "PMID 30767409, 33348685, 11370690; bounded direct-study content review, not exhaustive search",
+      "search_date": "2026-10-07",
+      "databases_searched": [
+        "PubMed"
+      ],
+      "records_screened": 3,
+      "qualifying_human_studies": [
+        {
+          "pmid": "30767409",
+          "title": "Attenuation of Postmeal Metabolic Indices with Red Raspberries in Individuals at Risk for Diabetes: A Randomized Controlled Trial.",
+          "study_type": "randomized_crossover",
+          "sample_size": 32,
+          "dose": "0, 125 or 250 g frozen red raspberry FRUIT with breakfast",
+          "duration": "Acute postmeal assessment",
+          "outcome": "Selected insulin/glucose responses improved; inflammatory and oxidative stress measures were null.",
+          "verification_provenance": {
+            "pmid_verified": true,
+            "authoritative_live_title": "Attenuation of Postmeal Metabolic Indices with Red Raspberries in Individuals at Risk for Diabetes: A Randomized Controlled Trial.",
+            "human_subjects_verified": true,
+            "topic_match_verified": true,
+            "retracted": false,
+            "verified_source": "https://pubmed.ncbi.nlm.nih.gov/30767409/",
+            "verified_at": "2026-10-07"
+          }
+        },
+        {
+          "pmid": "33348685",
+          "title": "Effects of Daily Raspberry Consumption on Immune-Metabolic Health in Subjects at Risk of Metabolic Syndrome: A Randomized Controlled Trial.",
+          "study_type": "randomized_controlled",
+          "sample_size": 59,
+          "dose": "280 g/day frozen red raspberry FRUIT",
+          "duration": "8 weeks",
+          "outcome": "Main glucose, insulin, inflammation and blood-pressure measures were null; exploratory molecular results do not establish clinical immune benefit.",
+          "verification_provenance": {
+            "pmid_verified": true,
+            "authoritative_live_title": "Effects of Daily Raspberry Consumption on Immune-Metabolic Health in Subjects at Risk of Metabolic Syndrome: A Randomized Controlled Trial.",
+            "human_subjects_verified": true,
+            "topic_match_verified": true,
+            "retracted": false,
+            "verified_source": "https://pubmed.ncbi.nlm.nih.gov/33348685/",
+            "verified_at": "2026-10-07"
+          }
+        },
+        {
+          "pmid": "11370690",
+          "title": "Raspberry leaf in pregnancy: its safety and efficacy in labor.",
+          "study_type": "randomized_double_blind_placebo_controlled",
+          "sample_size": 192,
+          "dose": "Raspberry LEAF tablets 2.4 g/day",
+          "duration": "32 weeks gestation until labor",
+          "outcome": "No statistically established broad labor benefit; selected labor findings do not establish general pregnancy safety.",
+          "verification_provenance": {
+            "pmid_verified": true,
+            "authoritative_live_title": "Raspberry leaf in pregnancy: its safety and efficacy in labor.",
+            "human_subjects_verified": true,
+            "topic_match_verified": true,
+            "retracted": false,
+            "verified_source": "https://pubmed.ncbi.nlm.nih.gov/11370690/",
+            "verified_at": "2026-10-07"
+          }
+        }
+      ],
+      "effect_direction": "applicability_unestablished",
+      "population_context": "Study-specific human populations described in individual study outcomes; no general-population transfer.",
+      "studied_dose_exposure": {},
+      "applicability_decision": "Fruit trials cannot resolve leaf and leaf trials cannot resolve fruit. Unspecified powders/extracts and prenatal/gummy materials lack exact tissue, preparation and exposure linkage; no fruit-to-leaf credit or whole-fruit-to-powder conversion. This is a bounded related-preparation human research review, not exact retail efficacy, an absence-of-research claim or universal-null determination.",
+      "verification_result": "authoritative_pubmed_verified",
+      "verification_provenance": {
+        "verified_by": "manual_primary_source_content_review",
+        "verified_at": "2026-10-07",
+        "all_pmids_verified": true,
+        "retractions_found": false
+      },
+      "applicability_status": "applicability_unestablished"
+    },
+    {
+      "canonical_id": "oi_natural_strawberry_flavor",
+      "material_form": "Source-labelled strawberry powder or unspecified strawberry extract; canonical flavor name does not determine source role",
+      "search_query": "PMID 35512768; bounded direct-study content review, not exhaustive search",
+      "search_date": "2026-10-07",
+      "databases_searched": [
+        "PubMed"
+      ],
+      "records_screened": 1,
+      "qualifying_human_studies": [
+        {
+          "pmid": "35512768",
+          "title": "Randomized Double-Blind Controlled Trial of Freeze-Dried Strawberry Powder Supplementation in Adults with Overweight or Obesity and Elevated Cholesterol.",
+          "study_type": "randomized_double_blind_crossover",
+          "sample_size": 40,
+          "dose": "0, 13 or 40 g/day freeze-dried strawberry powder",
+          "duration": "4-week periods",
+          "outcome": "Primary LDL difference favored low versus high dose but not control; selected posthoc total-cholesterol findings and other vascular/inflammatory null measures require restraint.",
+          "verification_provenance": {
+            "pmid_verified": true,
+            "authoritative_live_title": "Randomized Double-Blind Controlled Trial of Freeze-Dried Strawberry Powder Supplementation in Adults with Overweight or Obesity and Elevated Cholesterol.",
+            "human_subjects_verified": true,
+            "topic_match_verified": true,
+            "retracted": false,
+            "verified_source": "https://pubmed.ncbi.nlm.nih.gov/35512768/",
+            "verified_at": "2026-10-07"
+          }
+        }
+      ],
+      "effect_direction": "applicability_unestablished",
+      "population_context": "Study-specific human populations described in individual study outcomes; no general-population transfer.",
+      "studied_dose_exposure": {},
+      "applicability_decision": "Sole 5 g powders and 416 mg extract cannot inherit studied freeze-dried powder composition/exposure or lipid findings as reflux efficacy. No blanket incidental-flavor classification. This is a bounded related-preparation human research review, not exact retail efficacy, an absence-of-research claim or universal-null determination.",
+      "verification_result": "authoritative_pubmed_verified",
+      "verification_provenance": {
+        "verified_by": "manual_primary_source_content_review",
+        "verified_at": "2026-10-07",
+        "all_pmids_verified": true,
+        "retractions_found": false
+      },
+      "applicability_status": "applicability_unestablished"
+    },
+    {
+      "canonical_id": "nha_pomegranate_juice",
+      "material_form": "Source-labelled pomegranate juice concentrate or juice powder in flavored ACV gummies",
+      "search_query": "PMID 22648092; bounded direct-study content review, not exhaustive search",
+      "search_date": "2026-10-07",
+      "databases_searched": [
+        "PubMed"
+      ],
+      "records_screened": 1,
+      "qualifying_human_studies": [
+        {
+          "pmid": "22648092",
+          "title": "Effects of pomegranate juice supplementation on pulse wave velocity and blood pressure in healthy young and middle-aged men and women.",
+          "study_type": "randomized_controlled",
+          "sample_size": 51,
+          "dose": "330 mL/day pomegranate juice",
+          "duration": "4 weeks",
+          "outcome": "Selected blood-pressure measures improved; pulse-wave velocity and antioxidant-capacity measures were null.",
+          "verification_provenance": {
+            "pmid_verified": true,
+            "authoritative_live_title": "Effects of pomegranate juice supplementation on pulse wave velocity and blood pressure in healthy young and middle-aged men and women.",
+            "human_subjects_verified": true,
+            "topic_match_verified": true,
+            "retracted": false,
+            "verified_source": "https://pubmed.ncbi.nlm.nih.gov/22648092/",
+            "verified_at": "2026-10-07"
+          }
+        }
+      ],
+      "effect_direction": "applicability_unestablished",
+      "population_context": "Study-specific human populations described in individual study outcomes; no general-population transfer.",
+      "studied_dose_exposure": {},
+      "applicability_decision": "30 mL concentrate lacks verified reconstitution correspondence; 78 mcg juice powder in ACV gummies is a different matrix. No concentrate-to-juice or juice-to-extract dose conversion or antioxidant efficacy inference. This is a bounded related-preparation human research review, not exact retail efficacy, an absence-of-research claim or universal-null determination.",
+      "verification_result": "authoritative_pubmed_verified",
+      "verification_provenance": {
+        "verified_by": "manual_primary_source_content_review",
+        "verified_at": "2026-10-07",
+        "all_pmids_verified": true,
+        "retractions_found": false
+      },
+      "applicability_status": "applicability_unestablished"
+    },
+    {
+      "canonical_id": "nha_apple_puree_concentrate",
+      "material_form": "Source-labelled apple FRUIT POWDER within fruit-and-vegetable blends, not apple puree",
+      "search_query": "PMID 31840162; bounded direct-study content review, not exhaustive search",
+      "search_date": "2026-10-07",
+      "databases_searched": [
+        "PubMed"
+      ],
+      "records_screened": 1,
+      "qualifying_human_studies": [
+        {
+          "pmid": "31840162",
+          "title": "Two apples a day lower serum cholesterol and improve cardiometabolic biomarkers in mildly hypercholesterolemic adults: a randomized, controlled, crossover trial.",
+          "study_type": "randomized_crossover",
+          "sample_size": 40,
+          "dose": "Two whole Renetta Canada apples, 340 g/day, versus sugar/energy-matched beverage",
+          "duration": "8-week periods",
+          "outcome": "Selected lipids and microvascular measures improved; blood pressure was null and uric acid increased.",
+          "verification_provenance": {
+            "pmid_verified": true,
+            "authoritative_live_title": "Two apples a day lower serum cholesterol and improve cardiometabolic biomarkers in mildly hypercholesterolemic adults: a randomized, controlled, crossover trial.",
+            "human_subjects_verified": true,
+            "topic_match_verified": true,
+            "retracted": false,
+            "verified_source": "https://pubmed.ncbi.nlm.nih.gov/31840162/",
+            "verified_at": "2026-10-07"
+          }
+        }
+      ],
+      "effect_direction": "applicability_unestablished",
+      "population_context": "Study-specific human populations described in individual study outcomes; no general-population transfer.",
+      "studied_dose_exposure": {},
+      "applicability_decision": "Whole-fruit research is related only: 6900 mg fruit powder in a blend lacks verified composition/exposure correspondence. No powder conversion, detox/purification claim or whole-formula benefit. This is a bounded related-preparation human research review, not exact retail efficacy, an absence-of-research claim or universal-null determination.",
+      "verification_result": "authoritative_pubmed_verified",
+      "verification_provenance": {
+        "verified_by": "manual_primary_source_content_review",
+        "verified_at": "2026-10-07",
+        "all_pmids_verified": true,
+        "retractions_found": false
+      },
+      "applicability_status": "applicability_unestablished"
+    },
+    {
+      "canonical_id": "nha_juice_concentrates",
+      "material_form": "Current source-labelled WATERMELON juice powder; related trials used liquid watermelon juice/concentrate",
+      "search_query": "PMID 23862566, 27378312; bounded direct-study content review, not exhaustive search",
+      "search_date": "2026-10-07",
+      "databases_searched": [
+        "PubMed"
+      ],
+      "records_screened": 2,
+      "qualifying_human_studies": [
+        {
+          "pmid": "23862566",
+          "title": "Watermelon juice: potential functional drink for sore muscle relief in athletes.",
+          "study_type": "exercise_crossover",
+          "sample_size": 7,
+          "dose": "500 mL natural or citrulline-enriched watermelon juice versus placebo",
+          "duration": "Acute exercise and 24-hour recovery",
+          "outcome": "Selected recovery heart-rate and soreness findings in seven athletes do not establish general efficacy.",
+          "verification_provenance": {
+            "pmid_verified": true,
+            "authoritative_live_title": "Watermelon juice: potential functional drink for sore muscle relief in athletes.",
+            "human_subjects_verified": true,
+            "topic_match_verified": true,
+            "retracted": false,
+            "verified_source": "https://pubmed.ncbi.nlm.nih.gov/23862566/",
+            "verified_at": "2026-10-07"
+          }
+        },
+        {
+          "pmid": "27378312",
+          "title": "Two weeks of watermelon juice supplementation improves nitric oxide bioavailability but not endurance exercise performance in humans.",
+          "study_type": "randomized_crossover",
+          "sample_size": 8,
+          "dose": "300 mL/day watermelon concentrate, approximately 3.4 g citrulline",
+          "duration": "16 days",
+          "outcome": "Biochemical and muscle-oxygenation changes occurred; endurance endpoint was null and resting systolic pressure exceeded unsupplemented control.",
+          "verification_provenance": {
+            "pmid_verified": true,
+            "authoritative_live_title": "Two weeks of watermelon juice supplementation improves nitric oxide bioavailability but not endurance exercise performance in humans.",
+            "human_subjects_verified": true,
+            "topic_match_verified": true,
+            "retracted": false,
+            "verified_source": "https://pubmed.ncbi.nlm.nih.gov/27378312/",
+            "verified_at": "2026-10-07"
+          }
+        }
+      ],
+      "effect_direction": "applicability_unestablished",
+      "population_context": "Study-specific human populations described in individual study outcomes; no general-population transfer.",
+      "studied_dose_exposure": {},
+      "applicability_decision": "700 mg watermelon juice powder lacks liquid reconstitution/citrulline exposure correspondence. No endurance or blood-pressure-lowering credit, and no inference to unrelated generic juice concentrates. This is a bounded related-preparation human research review, not exact retail efficacy, an absence-of-research claim or universal-null determination.",
+      "verification_result": "authoritative_pubmed_verified",
+      "verification_provenance": {
+        "verified_by": "manual_primary_source_content_review",
+        "verified_at": "2026-10-07",
+        "all_pmids_verified": true,
+        "retractions_found": false
+      },
+      "applicability_status": "applicability_unestablished"
+    },
+    {
+      "canonical_id": "pii_corn_bran_powder",
+      "material_form": "Corn bran disclosed in calcium/vitamin D chewable; related human trial used MIXED breakfast cereal matrices",
+      "search_query": "PMID 18996860; bounded direct-study content review, not exhaustive search",
+      "search_date": "2026-10-07",
+      "databases_searched": [
+        "PubMed"
+      ],
+      "records_screened": 1,
+      "qualifying_human_studies": [
+        {
+          "pmid": "18996860",
+          "title": "Using cereal to increase dietary fiber intake to the recommended level and the effect of fiber on bowel function in healthy persons consuming North American diets.",
+          "study_type": "randomized_crossover",
+          "sample_size": 23,
+          "dose": "25.0–28.7 g/day FIBER from mixed breakfast cereals including Bran Buds with Corn",
+          "duration": "3-week periods",
+          "outcome": "Cereal arms improved fecal bulk, transit and bowel frequency; the corn-containing arm is not a standalone corn-bran intervention.",
+          "verification_provenance": {
+            "pmid_verified": true,
+            "authoritative_live_title": "Using cereal to increase dietary fiber intake to the recommended level and the effect of fiber on bowel function in healthy persons consuming North American diets.",
+            "human_subjects_verified": true,
+            "topic_match_verified": true,
+            "retracted": false,
+            "verified_source": "https://pubmed.ncbi.nlm.nih.gov/18996860/",
+            "verified_at": "2026-10-07"
+          }
+        }
+      ],
+      "effect_direction": "applicability_unestablished",
+      "population_context": "Study-specific human populations described in individual study outcomes; no general-population transfer.",
+      "studied_dose_exposure": {},
+      "applicability_decision": "Mixed cereal research acknowledges related corn-containing material, not a pure corn-bran trial. Exact composition and 10.4 mg retail material correspondence are unestablished. Amount/category alone does not prove incidental role; no standalone benefit or benchmark. This is a bounded related-preparation human research review, not exact retail efficacy, an absence-of-research claim or universal-null determination.",
+      "verification_result": "authoritative_pubmed_verified",
+      "verification_provenance": {
+        "verified_by": "manual_primary_source_content_review",
+        "verified_at": "2026-10-07",
+        "all_pmids_verified": true,
+        "retractions_found": false
+      },
+      "applicability_status": "applicability_unestablished"
+    },
+    {
+      "canonical_id": "nha_soluble_corn_fiber",
+      "material_form": "Unspecified soluble corn fiber in gummy; related studies used defined soluble maize/corn fiber preparations",
+      "search_query": "PMID 27281813, 24848974; bounded direct-study content review, not exhaustive search",
+      "search_date": "2026-10-07",
+      "databases_searched": [
+        "PubMed"
+      ],
+      "records_screened": 2,
+      "qualifying_human_studies": [
+        {
+          "pmid": "27281813",
+          "title": "Soluble Corn Fiber Increases Calcium Absorption Associated with Shifts in the Gut Microbiome: A Randomized Dose-Response Trial in Free-Living Pubertal Females.",
+          "study_type": "randomized_double_blind_crossover",
+          "sample_size": 28,
+          "dose": "PROMITOR SCF 85 delivering 0, 10 or 20 g FIBER/day",
+          "duration": "4-week periods",
+          "outcome": "Fractional calcium absorption increased in girls aged 11–14; microbiome findings are surrogate measures, not fracture or clinical bone-health efficacy.",
+          "verification_provenance": {
+            "pmid_verified": true,
+            "authoritative_live_title": "Soluble Corn Fiber Increases Calcium Absorption Associated with Shifts in the Gut Microbiome: A Randomized Dose-Response Trial in Free-Living Pubertal Females.",
+            "human_subjects_verified": true,
+            "topic_match_verified": true,
+            "retracted": false,
+            "verified_source": "https://pubmed.ncbi.nlm.nih.gov/27281813/",
+            "verified_at": "2026-10-07"
+          }
+        },
+        {
+          "pmid": "24848974",
+          "title": "Soluble maize fibre affects short-term calcium absorption in adolescent boys and girls: a randomised controlled trial using dual stable isotopic tracers.",
+          "study_type": "randomized_crossover",
+          "sample_size": 24,
+          "dose": "0 or 12 g/day soluble maize fiber within low-calcium diet",
+          "duration": "3-week metabolic balance periods",
+          "outcome": "Fractional calcium absorption increased in adolescents; calcium retention was unaffected.",
+          "verification_provenance": {
+            "pmid_verified": true,
+            "authoritative_live_title": "Soluble maize fibre affects short-term calcium absorption in adolescent boys and girls: a randomised controlled trial using dual stable isotopic tracers.",
+            "human_subjects_verified": true,
+            "topic_match_verified": true,
+            "retracted": false,
+            "verified_source": "https://pubmed.ncbi.nlm.nih.gov/24848974/",
+            "verified_at": "2026-10-07"
+          }
+        }
+      ],
+      "effect_direction": "applicability_unestablished",
+      "population_context": "Study-specific human populations described in individual study outcomes; no general-population transfer.",
+      "studied_dose_exposure": {},
+      "applicability_decision": "324 mg unspecified retail ingredient does not establish studied preparation or active-fiber exposure. No absorption-surrogate-to-clinical-bone-benefit inference or effective-dose benchmark. This is a bounded related-preparation human research review, not exact retail efficacy, an absence-of-research claim or universal-null determination.",
+      "verification_result": "authoritative_pubmed_verified",
+      "verification_provenance": {
+        "verified_by": "manual_primary_source_content_review",
+        "verified_at": "2026-10-07",
+        "all_pmids_verified": true,
+        "retractions_found": false
+      },
+      "applicability_status": "applicability_unestablished"
+    },
+    {
+      "canonical_id": "red_clover_flower",
+      "material_form": "Source-labelled raw red-clover aerial/flower powder; related trial used standardized isoflavone extracts",
+      "search_query": "PMID 12851275; bounded direct-study content review, not exhaustive search",
+      "search_date": "2026-10-07",
+      "databases_searched": [
+        "PubMed"
+      ],
+      "records_screened": 1,
+      "qualifying_human_studies": [
+        {
+          "pmid": "12851275",
+          "title": "Phytoestrogen supplements for the treatment of hot flashes: the Isoflavone Clover Extract (ICE) Study: a randomized controlled trial.",
+          "study_type": "randomized_double_blind_placebo_controlled",
+          "sample_size": 252,
+          "dose": "Promensil 82 mg/day or Rimostil 57 mg/day TOTAL ISOFLAVONES versus placebo",
+          "duration": "12 weeks",
+          "outcome": "Primary hot-flash reductions were similar between groups; Promensil had a faster secondary trajectory, while quality-of-life changes were comparable. Neither extract had a clinically important menopausal symptom effect.",
+          "verification_provenance": {
+            "pmid_verified": true,
+            "authoritative_live_title": "Phytoestrogen supplements for the treatment of hot flashes: the Isoflavone Clover Extract (ICE) Study: a randomized controlled trial.",
+            "human_subjects_verified": true,
+            "topic_match_verified": true,
+            "retracted": false,
+            "verified_source": "https://pubmed.ncbi.nlm.nih.gov/12851275/",
+            "verified_at": "2026-10-07"
+          }
+        }
+      ],
+      "effect_direction": "applicability_unestablished",
+      "population_context": "Study-specific human populations described in individual study outcomes; no general-population transfer.",
+      "studied_dose_exposure": {},
+      "applicability_decision": "Raw 225 mg powder does not establish standardized extract or isoflavone exposure; a separate 250 mg standardized extract sibling cannot supply its concentration. This null result concerns studied extracts, not a universal raw-powder negative conclusion. This is a bounded related-preparation human research review, not exact retail efficacy, an absence-of-research claim or universal-null determination.",
+      "verification_result": "authoritative_pubmed_verified",
+      "verification_provenance": {
+        "verified_by": "manual_primary_source_content_review",
+        "verified_at": "2026-10-07",
+        "all_pmids_verified": true,
+        "retractions_found": false
+      },
+      "applicability_status": "applicability_unestablished"
+    },
+    {
+      "canonical_id": "pii_clove_powder",
+      "material_form": "Source-labelled raw clove powder; related human trial used water-soluble polyphenol-rich unopened-bud extract",
+      "search_query": "PMID 31064377; bounded direct-study content review, not exhaustive search",
+      "search_date": "2026-10-07",
+      "databases_searched": [
+        "PubMed"
+      ],
+      "records_screened": 1,
+      "qualifying_human_studies": [
+        {
+          "pmid": "31064377",
+          "title": "Water-soluble polyphenol-rich clove extract lowers pre- and post-prandial blood glucose levels in healthy and prediabetic volunteers: an open label pilot study.",
+          "study_type": "open_label_single_arm",
+          "sample_size": 13,
+          "dose": "250 mg/day water-soluble polyphenol-rich clove bud extract",
+          "duration": "30 days",
+          "outcome": "Within-participant pre/postprandial glucose changes in healthy/prediabetic volunteers lacked placebo comparison; in-vitro mechanisms are separate.",
+          "verification_provenance": {
+            "pmid_verified": true,
+            "authoritative_live_title": "Water-soluble polyphenol-rich clove extract lowers pre- and post-prandial blood glucose levels in healthy and prediabetic volunteers: an open label pilot study.",
+            "human_subjects_verified": true,
+            "topic_match_verified": true,
+            "retracted": false,
+            "verified_source": "https://pubmed.ncbi.nlm.nih.gov/31064377/",
+            "verified_at": "2026-10-07"
+          }
+        }
+      ],
+      "effect_direction": "applicability_unestablished",
+      "population_context": "Study-specific human populations described in individual study outcomes; no general-population transfer.",
+      "studied_dose_exposure": {},
+      "applicability_decision": "Raw 75 mg powder lacks studied extract composition/exposure linkage. A small uncontrolled retrospectively registered pilot does not establish placebo-controlled glucose efficacy or immune-protection benefit. This is a bounded related-preparation human research review, not exact retail efficacy, an absence-of-research claim or universal-null determination.",
+      "verification_result": "authoritative_pubmed_verified",
+      "verification_provenance": {
+        "verified_by": "manual_primary_source_content_review",
+        "verified_at": "2026-10-07",
+        "all_pmids_verified": true,
+        "retractions_found": false
+      },
+      "applicability_status": "applicability_unestablished"
+    },
+    {
+      "canonical_id": "bergamot_essential_oil",
+      "material_form": "Citrus bergamia essential oil; extraction, composition and individual oral blend exposure remain unspecified",
+      "search_query": "Bounded primary content review of bergamot essential oil human inhalation research, PMID 25824404",
+      "search_date": "2026-10-07",
+      "databases_searched": [
+        "PubMed via Europe PMC"
+      ],
+      "records_screened": 1,
+      "qualifying_human_studies": [
+        {
+          "pmid": "25824404",
+          "title": "Effects of bergamot ( Citrus bergamia (Risso) Wright & Arn.) essential oil aromatherapy on mood states, parasympathetic nervous system activity, and salivary cortisol levels in 41 healthy females.",
+          "study_type": "randomized_crossover",
+          "sample_size": 41,
+          "dose": "Bergamot essential oil vapor with water vapor; individual administered dose not established here",
+          "duration": "15-minute exposures with subsequent 10-minute rest",
+          "outcome": "Acute mood, heart-rate variability and salivary cortisol outcomes following inhalation in healthy women; not evidence of oral supplement efficacy",
+          "verification_provenance": {
+            "pmid_verified": true,
+            "human_subjects_verified": true,
+            "topic_match_verified": true,
+            "verified_source": "https://pubmed.ncbi.nlm.nih.gov/25824404/",
+            "verified_at": "2026-10-07"
+          }
+        }
+      ],
+      "population_context": "Healthy women in acute vapor-inhalation crossover testing",
+      "studied_dose_exposure": {},
+      "effect_direction": "applicability_unestablished",
+      "applicability_status": "applicability_unestablished",
+      "applicability_decision": "This bounded primary review acknowledges human bergamot essential oil inhalation research. Source 222867 declares an oral organic bergamot fruit oil essence within a CBD Entourage Effect Blend. The 2.5 mg blend anchor is not individual oil exposure. Route, extraction, composition, population and complete formula correspondence remain unestablished; fruit-extract lipid trials cannot transfer. No oral benefit, positive clinical grade, efficacy-dose benchmark or safety conclusion follows.",
+      "verification_result": "authoritative_pubmed_verified",
+      "verification_provenance": {
+        "verified_by": "manual_primary_source_content_review",
+        "verified_at": "2026-10-07",
+        "all_pmids_verified": true
+      }
+    },
+    {
+      "canonical_id": "nha_white_thyme_oil",
+      "material_form": "Thyme oil extract; retail White Thyme species, chemotype, composition and preparation correspondence remain unspecified",
+      "search_query": "Bounded primary content review of thyme oil human inhalation research, PMID 38129231",
+      "search_date": "2026-10-07",
+      "databases_searched": [
+        "PubMed via Europe PMC"
+      ],
+      "records_screened": 1,
+      "qualifying_human_studies": [
+        {
+          "pmid": "38129231",
+          "title": "The effects of aromatherapy with thyme oil on disease symptoms, vital findings, and hemodynamic parameters in COVID-19 patients.",
+          "study_type": "randomized_controlled_trial",
+          "sample_size": 140,
+          "dose": "Thyme oil inhalation three times daily; oil concentration and exact species or chemotype not established from the abstract",
+          "duration": "5 days",
+          "outcome": "Symptoms, vital signs and hemodynamic measures in hospitalized COVID-19 patients receiving inhalation plus routine care versus routine care; not evidence of oral retail multi-oil preparation efficacy",
+          "verification_provenance": {
+            "pmid_verified": true,
+            "human_subjects_verified": true,
+            "topic_match_verified": true,
+            "verified_source": "https://pubmed.ncbi.nlm.nih.gov/38129231/",
+            "verified_at": "2026-10-07"
+          }
+        }
+      ],
+      "population_context": "Hospitalized COVID-19 patients receiving routine care and experimental inhalation",
+      "studied_dose_exposure": {},
+      "effect_direction": "applicability_unestablished",
+      "applicability_status": "applicability_unestablished",
+      "applicability_decision": "This bounded primary review acknowledges human thyme oil inhalation research. Sources 219047 and 270533 declare 100 mg oral Thyme Oil extract within multi-oil Herbal Balance softgels. The abstract does not identify exact species, chemotype or composition; full primary methods were not available. Route, preparation, population, purpose and complete formula correspondence remain unestablished. Isolated thymol pharmacokinetics and other thyme extracts cannot establish this oil preparation. No oral benefit, positive clinical grade, efficacy-dose benchmark or safety conclusion follows.",
+      "verification_result": "authoritative_pubmed_verified",
+      "verification_provenance": {
+        "verified_by": "manual_primary_source_content_review",
+        "verified_at": "2026-10-07",
+        "all_pmids_verified": true
+      }
+    },
+    {
+      "canonical_id": "pii_glycerol_monostearate",
+      "material_form": "Glycerol/glyceryl monostearate (monostearin), a glycerol ester distinct from free glycerol; standalone oral sports/hydration preparation",
+      "search_query": "(TITLE_ABS:\"glycerol monostearate\" OR TITLE_ABS:\"glyceryl monostearate\" OR TITLE_ABS:monostearin) AND SRC:MED AND (PUB_TYPE:\"clinical trial\" OR PUB_TYPE:\"randomized controlled trial\" OR MESH:Humans); bounded oral sports/hydration review, with additional volunteer/participant/patient query to identify drug-carrier human studies",
+      "search_date": "2026-10-07",
+      "databases_searched": [
+        "PubMed-indexed records via Europe PMC"
+      ],
+      "records_screened": 3,
+      "qualifying_human_studies": [],
+      "effect_direction": "no_qualifying_human_evidence",
+      "population_context": "Adult oral retail sports/hydration use; source products print 1500 mg before exercise.",
+      "studied_dose_exposure": {},
+      "applicability_decision": "The bounded human/clinical query returned two records: PMID 27997725 used glycerol monostearate in a topical cream vehicle and PMID 10502624 used it as a lubricant in an oral theophylline drug formulation. Additional candidate PMID 32194094 used it in raloxifene/vitamin-D nanocarriers for drug pharmacokinetics. All three primary abstracts were content-screened and none tested standalone oral glycerol-monostearate hydration or exercise benefit. No qualifying trial was identified within these stated queries and screened candidates; this is not an exhaustive absence-of-research or universal ineffectiveness/safety determination. Free-glycerol hydration research involves a chemically distinct material and cannot supply this ester review.",
+      "verification_result": "authoritative_pubmed_verified",
+      "verification_provenance": {
+        "verified_by": "manual_bounded_search_and_primary_source_content_review",
+        "verified_at": "2026-10-07",
+        "all_pmids_verified": true,
+        "retractions_found": false
+      }
+    },
+    {
+      "canonical_id": "nha_xanthan_gum",
+      "material_form": "Xanthan gum consumed orally; retail food-additive purpose distinct from study gel/feeding preparation",
+      "search_query": "PMIDs 3549377, 8329363; bounded direct-study content review, not exhaustive search",
+      "search_date": "2026-10-07",
+      "databases_searched": [
+        "PubMed via Europe PMC",
+        "PubMed primary XML"
+      ],
+      "records_screened": 2,
+      "qualifying_human_studies": [
+        {
+          "pmid": "3549377",
+          "title": "The dietary effects of xanthan gum in man.",
+          "study_type": "uncontrolled_before_after_human_feeding",
+          "sample_size": 5,
+          "dose": "10.4–12.9 g/day oral prehydrated xanthan gel",
+          "duration": "23 days after 7-day control",
+          "outcome": "Before/after stool bulking and selected transit findings; most metabolic measures unchanged. Small uncontrolled study does not establish placebo superiority.",
+          "verification_provenance": {
+            "pmid_verified": true,
+            "authoritative_live_title": "The dietary effects of xanthan gum in man.",
+            "human_subjects_verified": true,
+            "topic_match_verified": true,
+            "retracted": false,
+            "verified_source": "https://pubmed.ncbi.nlm.nih.gov/3549377/",
+            "verified_at": "2026-10-07"
+          }
+        },
+        {
+          "pmid": "8329363",
+          "title": "The effect of feeding xanthan gum on colonic function in man: correlation with in vitro determinants of bacterial breakdown.",
+          "study_type": "uncontrolled_before_after_human_feeding",
+          "sample_size": 18,
+          "dose": "15 g/day oral xanthan",
+          "duration": "10 days versus preceding 10-day control",
+          "outcome": "Stool output/frequency and flatulence increased; transit effects varied. Fecal fermentation experiments are separate from human outcomes.",
+          "verification_provenance": {
+            "pmid_verified": true,
+            "authoritative_live_title": "The effect of feeding xanthan gum on colonic function in man: correlation with in vitro determinants of bacterial breakdown.",
+            "human_subjects_verified": true,
+            "topic_match_verified": true,
+            "retracted": false,
+            "verified_source": "https://pubmed.ncbi.nlm.nih.gov/8329363/",
+            "verified_at": "2026-10-07"
+          }
+        }
+      ],
+      "effect_direction": "applicability_unestablished",
+      "population_context": "Healthy adult volunteers in small uncontrolled feeding studies.",
+      "studied_dose_exposure": {},
+      "applicability_decision": "Exact oral xanthan human research exists, but source 330103/330104/330105 explicitly directs 2 g as a food additive. That retail purpose, preparation and exposure do not establish clinical benefit from higher-dose uncontrolled feeding studies; source intent remains a food additive rather than an invented efficacy claim. No positive clinical grade or universal dose benchmark follows. This is a bounded direct-study review, not an exhaustive absence or universal-null determination.",
+      "verification_result": "authoritative_pubmed_verified",
+      "verification_provenance": {
+        "verified_by": "manual_primary_source_content_review",
+        "verified_at": "2026-10-07",
+        "all_pmids_verified": true,
+        "retractions_found": false
+      },
+      "applicability_status": "applicability_unestablished"
+    },
+    {
+      "canonical_id": "pii_polyethylene_glycol",
+      "material_form": "Polyethylene glycol family; studied PEG 3350 grade distinct from unspecified sports PEG",
+      "search_query": "PMIDs 17403074; bounded direct-study content review, not exhaustive search",
+      "search_date": "2026-10-07",
+      "databases_searched": [
+        "PubMed via Europe PMC",
+        "PubMed primary XML"
+      ],
+      "records_screened": 1,
+      "qualifying_human_studies": [
+        {
+          "pmid": "17403074",
+          "title": "A randomized, multicenter, placebo-controlled trial of polyethylene glycol laxative for chronic treatment of chronic constipation.",
+          "study_type": "randomized_double_blind_placebo_controlled",
+          "sample_size": 304,
+          "dose": "17 g/day oral PEG 3350",
+          "duration": "6 months",
+          "outcome": "Primary constipation-treatment success was 52% versus 11% with placebo. This endpoint does not establish sports absorption or nitric-oxide benefits.",
+          "verification_provenance": {
+            "pmid_verified": true,
+            "authoritative_live_title": "A randomized, multicenter, placebo-controlled trial of polyethylene glycol laxative for chronic treatment of chronic constipation.",
+            "human_subjects_verified": true,
+            "topic_match_verified": true,
+            "retracted": false,
+            "verified_source": "https://pubmed.ncbi.nlm.nih.gov/17403074/",
+            "verified_at": "2026-10-07"
+          }
+        }
+      ],
+      "effect_direction": "applicability_unestablished",
+      "population_context": "Patients with chronic constipation.",
+      "studied_dose_exposure": {},
+      "applicability_decision": "PEG 3350 oral laxative research exists; raw 4846 and 5819 disclose PEG 500 mg and 150 mg in sports/delivery products without molecular-weight grade. Grade, delivery platform, dose and purpose correspondence remain unestablished. Preserve active source intent, without assigning PEG 3350 chemistry or constipation efficacy to an unspecified PEG platform. No positive clinical grade or universal dose benchmark follows. This is a bounded direct-study review, not an exhaustive absence or universal-null determination.",
+      "verification_result": "authoritative_pubmed_verified",
+      "verification_provenance": {
+        "verified_by": "manual_primary_source_content_review",
+        "verified_at": "2026-10-07",
+        "all_pmids_verified": true,
+        "retractions_found": false
+      },
+      "applicability_status": "applicability_unestablished"
+    },
+    {
+      "canonical_id": "add_sugar_alcohols",
+      "material_form": "Mannitol-specific oral preparation; other sugar alcohols are not established by this review",
+      "search_query": "PMIDs 39562215; bounded direct-study content review, not exhaustive search",
+      "search_date": "2026-10-07",
+      "databases_searched": [
+        "PubMed via Europe PMC",
+        "PubMed primary XML"
+      ],
+      "records_screened": 1,
+      "qualifying_human_studies": [
+        {
+          "pmid": "39562215",
+          "title": "Mannitol for bowel preparation: Efficacy and safety results from the SATISFACTION randomised clinical trial.",
+          "study_type": "randomized_active_comparator_noninferiority",
+          "sample_size": 703,
+          "dose": "Single oral 100 g mannitol in 750 mL versus split-dose PEG-ASC",
+          "duration": "same-day bowel preparation",
+          "outcome": "Bowel-cleansing adequacy was noninferior to PEG-ASC in this procedure-specific trial; the result does not establish retail 3 g purpose or another sugar alcohol.",
+          "verification_provenance": {
+            "pmid_verified": true,
+            "authoritative_live_title": "Mannitol for bowel preparation: Efficacy and safety results from the SATISFACTION randomised clinical trial.",
+            "human_subjects_verified": true,
+            "topic_match_verified": true,
+            "retracted": false,
+            "verified_source": "https://pubmed.ncbi.nlm.nih.gov/39562215/",
+            "verified_at": "2026-10-07"
+          }
+        }
+      ],
+      "effect_direction": "applicability_unestablished",
+      "population_context": "Patients undergoing colonoscopy bowel preparation.",
+      "studied_dose_exposure": {},
+      "applicability_decision": "This is a Mannitol-specific bounded review for the retained sole-material Mannitol source products (252699/253990/253992/253993/311029/311030/311031/311032), each disclosing 3 g. Oral 100 g colonoscopy intervention cannot establish ordinary supplement purpose/exposure correspondence. The broad canonical sugar-alcohol grouping cannot extend these facts or clinical credit to other polyols; intravenous/inhaled mannitol evidence is not used. No positive clinical grade or universal dose benchmark follows. This is a bounded direct-study review, not an exhaustive absence or universal-null determination.",
+      "verification_result": "authoritative_pubmed_verified",
+      "verification_provenance": {
+        "verified_by": "manual_primary_source_content_review",
+        "verified_at": "2026-10-07",
+        "all_pmids_verified": true,
+        "retractions_found": false
+      },
+      "applicability_status": "applicability_unestablished"
+    },
+    {
+      "canonical_id": "nha_beet_juice_color",
+      "material_form": "Current source-labelled beet juice concentrate; related trial used nitrate-rich liquid beetroot juice",
+      "search_query": "PMID 25421976; bounded direct-study content review, not exhaustive search",
+      "search_date": "2026-10-07",
+      "databases_searched": [
+        "PubMed via Europe PMC"
+      ],
+      "records_screened": 1,
+      "qualifying_human_studies": [
+        {
+          "pmid": "25421976",
+          "title": "Dietary nitrate provides sustained blood pressure lowering in hypertensive patients: a randomized, phase 2, double-blind, placebo-controlled study.",
+          "study_type": "randomized_double_blind_placebo_controlled",
+          "dose": "250 mL/day for 4 weeks",
+          "outcome": "Hypertensive adults; primary clinic, home and ambulatory blood-pressure reductions versus nitrate-depleted beetroot juice.",
+          "verification_provenance": {
+            "pmid_verified": true,
+            "human_subjects_verified": true,
+            "topic_match_verified": true,
+            "verified_source": "https://pubmed.ncbi.nlm.nih.gov/25421976/",
+            "verified_at": "2026-10-07"
+          },
+          "sample_size": 68
+        }
+      ],
+      "effect_direction": "applicability_unestablished",
+      "population_context": "Hypertensive adults; primary clinic, home and ambulatory blood-pressure reductions versus nitrate-depleted beetroot juice.",
+      "studied_dose_exposure": {},
+      "applicability_decision": "Source 28479 discloses 600 mg unspecified beet juice concentrate in a heartburn formula. The trial concerns quantified dietary nitrate and hypertension. Nitrate content, liquid/concentrate equivalence and heartburn efficacy are unestablished. This bounded related-preparation review does not award a clinical grade, dose benchmark or safety conclusion.",
+      "applicability_status": "applicability_unestablished",
+      "verification_result": "authoritative_pubmed_verified",
+      "verification_provenance": {
+        "verified_by": "manual_primary_source_content_review",
+        "verified_at": "2026-10-07",
+        "all_pmids_verified": true
+      }
+    },
+    {
+      "canonical_id": "nha_carrot_juice_color",
+      "material_form": "Current source-labelled carrot juice concentrate; related pilot used freshly squeezed liquid carrot juice",
+      "search_query": "PMID 21943297; bounded direct-study content review, not exhaustive search",
+      "search_date": "2026-10-07",
+      "databases_searched": [
+        "PubMed via Europe PMC"
+      ],
+      "records_screened": 1,
+      "qualifying_human_studies": [
+        {
+          "pmid": "21943297",
+          "title": "Drinking carrot juice increases total antioxidant status and decreases lipid peroxidation in adults.",
+          "study_type": "uncontrolled_before_after",
+          "dose": "16 fl oz/day for 90 days",
+          "outcome": "Antioxidant-capacity and lipid-peroxidation biomarkers changed; lipid, insulin, body-fat and inflammatory measures were null. Systolic pressure P=.06 does not establish a significant antihypertensive effect.",
+          "verification_provenance": {
+            "pmid_verified": true,
+            "human_subjects_verified": true,
+            "topic_match_verified": true,
+            "verified_source": "https://pubmed.ncbi.nlm.nih.gov/21943297/",
+            "verified_at": "2026-10-07"
+          }
+        }
+      ],
+      "effect_direction": "applicability_unestablished",
+      "population_context": "Antioxidant-capacity and lipid-peroxidation biomarkers changed; lipid, insulin, body-fat and inflammatory measures were null. Systolic pressure P=.06 does not establish a significant antihypertensive effect.",
+      "studied_dose_exposure": {},
+      "applicability_decision": "Source 28479 discloses 600 mg carrot juice concentrate in a heartburn formula. The uncontrolled pilot establishes neither concentrate exposure equivalence, cardiovascular-event prevention nor heartburn efficacy. This bounded related-preparation review does not award a clinical grade, dose benchmark or safety conclusion.",
+      "applicability_status": "applicability_unestablished",
+      "verification_result": "authoritative_pubmed_verified",
+      "verification_provenance": {
+        "verified_by": "manual_primary_source_content_review",
+        "verified_at": "2026-10-07",
+        "all_pmids_verified": true
+      }
+    },
+    {
+      "canonical_id": "nha_vegetable_fruit_juice_colors",
+      "material_form": "Current reviewed material is Lemon Juice Concentrate; broad canonical juice/color wording does not establish a color purpose or other juice identity",
+      "search_query": "PMID 32201919; bounded direct-study content review, not exhaustive search",
+      "search_date": "2026-10-07",
+      "databases_searched": [
+        "PubMed via Europe PMC"
+      ],
+      "records_screened": 1,
+      "qualifying_human_studies": [
+        {
+          "pmid": "32201919",
+          "title": "Lemon juice, but not tea, reduces the glycemic response to bread in healthy volunteers: a randomized crossover trial.",
+          "study_type": "randomized_crossover",
+          "dose": "100 g bread with 250 mL beverage; acute 180-minute observation",
+          "outcome": "Healthy-adult meal-response study: lower and later capillary glucose peak with lemon juice; subsequent energy intake unchanged. This is an acute surrogate, not diabetes treatment.",
+          "verification_provenance": {
+            "pmid_verified": true,
+            "human_subjects_verified": true,
+            "topic_match_verified": true,
+            "verified_source": "https://pubmed.ncbi.nlm.nih.gov/32201919/",
+            "verified_at": "2026-10-07"
+          }
+        }
+      ],
+      "effect_direction": "applicability_unestablished",
+      "population_context": "Healthy-adult meal-response study: lower and later capillary glucose peak with lemon juice; subsequent energy intake unchanged. This is an acute surrogate, not diabetes treatment.",
+      "studied_dose_exposure": {},
+      "applicability_decision": "Source 326692 discloses undosed Lemon Juice Concentrate in a polyphenol blend. Liquid dilution, composition, acidity and exposure correspondence are unestablished. This lemon-specific research cannot transfer to arbitrary fruit/vegetable juice colors or establish heartburn/whole-formula efficacy. This bounded related-preparation review does not award a clinical grade, dose benchmark or safety conclusion.",
+      "applicability_status": "applicability_unestablished",
+      "verification_result": "authoritative_pubmed_verified",
+      "verification_provenance": {
+        "verified_by": "manual_primary_source_content_review",
+        "verified_at": "2026-10-07",
+        "all_pmids_verified": true
+      }
+    },
+    {
+      "canonical_id": "bionectria_ochroleuca",
+      "material_form": "Source-labelled Bionectria ochroleuca in oral mushroom blends; undisclosed fungal material/preparation",
+      "search_query": "(TITLE_ABS:\"Bionectria ochroleuca\" OR TITLE_ABS:\"Clonostachys rosea\") AND SRC:MED AND (PUB_TYPE:\"clinical trial\" OR PUB_TYPE:\"randomized controlled trial\")",
+      "search_date": "2026-10-07",
+      "databases_searched": [
+        "PubMed-indexed records via Europe PMC"
+      ],
+      "records_screened": 0,
+      "qualifying_human_studies": [],
+      "effect_direction": "no_qualifying_human_evidence",
+      "population_context": "Human oral supplement use; exact retail preparation unestablished",
+      "studied_dose_exposure": {},
+      "applicability_decision": "This bounded exact-taxon clinical-trial query returned zero records. No qualifying human trial was identified in this query for oral Bionectria ochroleuca as a supplement. It does not establish the efficacy of an entire mushroom formula or transfer evidence from another species. The search is not exhaustive and does not establish universal absence, ineffectiveness or safety.",
+      "applicability_status": "no_qualifying_trials_found",
+      "verification_result": "authoritative_pubmed_verified",
+      "verification_provenance": {
+        "verified_by": "manual_live_bounded_search_review",
+        "verified_at": "2026-10-07",
+        "all_pmids_verified": true
+      }
+    },
+    {
+      "canonical_id": "nha_activait_mustard_eo",
+      "material_form": "ActivAIT mustard essential-oil preparation, oral 50 mg source disclosure; exact extraction/composition unestablished",
+      "search_query": "TITLE_ABS:\"ActivAIT\" AND SRC:MED ; TITLE_ABS:\"mustard essential oil\" AND SRC:MED AND (PUB_TYPE:\"clinical trial\" OR PUB_TYPE:\"randomized controlled trial\")",
+      "search_date": "2026-10-07",
+      "databases_searched": [
+        "PubMed-indexed records via Europe PMC"
+      ],
+      "records_screened": 0,
+      "qualifying_human_studies": [],
+      "effect_direction": "no_qualifying_human_evidence",
+      "population_context": "Human oral supplement use; exact retail preparation unestablished",
+      "studied_dose_exposure": {},
+      "applicability_decision": "This bounded exact-brand query returned zero indexed records; the separate mustard-essential-oil clinical-trial query also returned zero. No qualifying human trial was identified in these queries for the oral ActivAIT preparation. Mustard condiment thermogenesis and isolated-constituent studies cannot establish brand/oil equivalence. The search is not exhaustive and does not establish universal absence, ineffectiveness or safety.",
+      "applicability_status": "no_qualifying_trials_found",
+      "verification_result": "authoritative_pubmed_verified",
+      "verification_provenance": {
+        "verified_by": "manual_live_bounded_search_review",
+        "verified_at": "2026-10-07",
+        "all_pmids_verified": true
+      }
+    },
+    {
+      "canonical_id": "pii_salt",
+      "material_form": "Current source-labelled Himalayan Rock Salt; retail composition and sodium content unassayed",
+      "search_query": "PMID 35137791; bounded primary-content review, not exhaustive search",
+      "search_date": "2026-10-07",
+      "databases_searched": [
+        "PubMed via Europe PMC",
+        "PubMed primary XML"
+      ],
+      "records_screened": 1,
+      "qualifying_human_studies": [
+        {
+          "pmid": "35137791",
+          "title": "Comparison between the Effects of Hymalaian Salt and Common Salt Intake on Urinary Sodium and Blood Pressure in Hypertensive Individuals.",
+          "study_type": "randomized_crossover",
+          "sample_size": 17,
+          "outcome": "Hypertensive women; randomized crossover dietary Himalayan versus common table salt. No significant blood-pressure or urinary-sodium differences between interventions.",
+          "verification_provenance": {
+            "pmid_verified": true,
+            "human_subjects_verified": true,
+            "topic_match_verified": true,
+            "verified_source": "https://pubmed.ncbi.nlm.nih.gov/35137791/",
+            "verified_at": "2026-10-07"
+          }
+        }
+      ],
+      "effect_direction": "applicability_unestablished",
+      "population_context": "Hypertensive women; randomized crossover dietary Himalayan versus common table salt. No significant blood-pressure or urinary-sodium differences between interventions.",
+      "studied_dose_exposure": {},
+      "applicability_decision": "Source 306183/307773 discloses 150 mg Himalayan Rock Salt in BCAA sports products. A small dietary-salt hypertension trial cannot establish sports/hydration efficacy, exact salt composition, elemental sodium exposure or equivalence to pure sodium chloride. This bounded review awards no clinical grade, dose benchmark or safety conclusion.",
+      "applicability_status": "applicability_unestablished",
+      "verification_result": "authoritative_pubmed_verified",
+      "verification_provenance": {
+        "verified_by": "manual_primary_source_content_review",
+        "verified_at": "2026-10-07",
+        "all_pmids_verified": true
+      }
+    },
+    {
+      "canonical_id": "dicalcium_phosphate",
+      "material_form": "Dicalcium phosphate salt; current hydration-complex child is undosed and hydration state unestablished",
+      "search_query": "PMID 2381302; bounded primary-content review, not exhaustive search",
+      "search_date": "2026-10-07",
+      "databases_searched": [
+        "PubMed via Europe PMC",
+        "PubMed primary XML"
+      ],
+      "records_screened": 1,
+      "qualifying_human_studies": [
+        {
+          "pmid": "2381302",
+          "title": "Oxygen delivery and cardiac output during exercise following oral phosphate-glucose.",
+          "study_type": "randomized_double_blind_crossover",
+          "sample_size": 10,
+          "outcome": "Ten normal fasting men; oral dicalcium phosphate 129 mmol with 500 mL 10% glucose versus placebo before exercise. Phosphate/metabolic measures increased from baseline; P50 did not differ between interventions before or after exercise. Abstract is truncated, so no unreported performance outcome is inferred.",
+          "verification_provenance": {
+            "pmid_verified": true,
+            "human_subjects_verified": true,
+            "topic_match_verified": true,
+            "verified_source": "https://pubmed.ncbi.nlm.nih.gov/2381302/",
+            "verified_at": "2026-10-07"
+          }
+        }
+      ],
+      "effect_direction": "applicability_unestablished",
+      "population_context": "Ten normal fasting men; oral dicalcium phosphate 129 mmol with 500 mL 10% glucose versus placebo before exercise. Phosphate/metabolic measures increased from baseline; P50 did not differ between interventions before or after exercise. Abstract is truncated, so no unreported performance outcome is inferred.",
+      "studied_dose_exposure": {},
+      "applicability_decision": "Source 77108 has an undosed dicalcium-phosphate child within Hydration Complex and a separate declared calcium nutrient with that form. The phosphate-plus-glucose trial does not establish efficacy of an unspecified retail salt exposure or whole hydration blend. Do not borrow the sibling calcium amount or blend total, assign a nutrient-parent alias, or infer elemental contributions. This bounded review awards no clinical grade, dose benchmark or safety conclusion.",
+      "applicability_status": "applicability_unestablished",
+      "verification_result": "authoritative_pubmed_verified",
+      "verification_provenance": {
+        "verified_by": "manual_primary_source_content_review",
+        "verified_at": "2026-10-07",
+        "all_pmids_verified": true
+      }
     }
   ]
 }
