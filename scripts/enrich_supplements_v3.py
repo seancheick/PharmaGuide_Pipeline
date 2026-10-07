@@ -8400,7 +8400,11 @@ class SupplementEnricherV3:
                 self._norm_form_name(alias) for alias in prepared.get('source_form_aliases') or []
             } for prepared in parent_forms.values() if isinstance(prepared, dict)):
                 match_candidates = [qualified_source, *match_candidates]
-            if self._norm_form_name(raw_form_text) in label_source_aliases:
+            # An unknown chemical form retains its share; a parent-local alias
+            # alone cannot turn a declared salt into non-form source context.
+            if (self._norm_form_name(raw_form_text) in label_source_aliases
+                    and (label_form or str(form_data.get('dsld_category') or '').lower()
+                         in {'botanical', 'protein', 'fat'})):
                 generic_form_tokens.append(raw_form_text)
                 non_form_tokens.append(raw_form_text)
                 continue
