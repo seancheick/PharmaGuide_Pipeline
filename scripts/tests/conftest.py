@@ -52,7 +52,8 @@ def pytest_configure(config: pytest.Config) -> None:  # noqa: ARG001
     )
 
 
-def pytest_collection_modifyitems(items: list[pytest.Item]) -> None:
+@pytest.hookimpl(hookwrapper=True)
+def pytest_collection_modifyitems(session, items: list[pytest.Item]) -> None:
     """Centralize suite tiers without editing hundreds of test files.
 
     Full-suite pytest remains accuracy-first. The wrapper in scripts/test.sh
@@ -66,6 +67,11 @@ def pytest_collection_modifyitems(items: list[pytest.Item]) -> None:
             item.add_marker(pytest.mark.release)
         if filename in ARTIFACT_TEST_FILES:
             item.add_marker(pytest.mark.artifact)
+    # Mark before pytest applies -m; finalize phases after other selectors.
+    yield
+    # xdist announces IDs in collection_finish. Selection must already be
+    # final there or controller indexes address a different worker item list.
+    _collect_preparation_inventory(session, items)
 
 
 # ---------------------------------------------------------------------------
@@ -246,24 +252,23 @@ def pytest_sessionstart(session):
         _write_preparation_progress()
 
 
-@pytest.hookimpl(trylast=True)
-def pytest_collection_finish(session):
+def _collect_preparation_inventory(session, items):
     if not os.environ.get('PG_PREPARATION_REPORT'):
         return
     _PREPARATION['selection'] = {key: getattr(session.config.option, key, None)
         for key in ('keyword', 'markexpr', 'deselect', 'ignore', 'ignore_glob')}
     _PREPARATION['selection']['args'] = list(session.config.args)
     from test_profiles import preparation_phase
-    for item in session.items:
+    for item in items:
         phase, reason = preparation_phase(Path(str(item.path)).name, item.originalname or item.name,
             markers=[marker.name for marker in item.iter_markers()])
         _PREPARATION['nodes'].append({'nodeid': item.nodeid, 'phase': phase, 'reason': reason})
     if os.environ.get('PG_PREPARATION_MODE') == 'source' and not session.config.option.collectonly:
         selected = {row['nodeid'] for row in _PREPARATION['nodes'] if row['phase'] == 'source'}
-        removed = [item for item in session.items if item.nodeid not in selected]
-        session.items[:] = [item for item in session.items if item.nodeid in selected]
+        removed = [item for item in items if item.nodeid not in selected]
+        items[:] = [item for item in items if item.nodeid in selected]
         session.config.hook.pytest_deselected(items=removed)
-        session.testscollected = len(session.items)
+        session.testscollected = len(items)
     _PREPARATION['selected_tests'] = sum(row['phase'] == 'source' for row in _PREPARATION['nodes'])
     _write_preparation_progress(force=True)
 

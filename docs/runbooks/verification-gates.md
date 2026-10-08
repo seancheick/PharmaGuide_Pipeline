@@ -17,7 +17,9 @@ The report collects independent failures and blocked prerequisites, inventories 
 generated-artifact and external/opt-in test requirements, checks current raw canaries,
 and asks the existing freshness owner which stages need regeneration. Source-backed
 assertions run before the expensive corpus pass; checks requiring newly generated
-outputs remain in their existing post-run gates. Optional OCR or disposable-service
+outputs remain in their existing post-run gates. Synthetic fixtures belong to source
+tests even when they model enriched fields; real stored-product checks belong to
+artifact tests. Worker phase selection finishes before parallel test IDs are announced. Optional OCR or disposable-service
 tests are listed with their prerequisites and never enabled automatically.
 
 An intact completed successful check can be reused only while its command, runtime
