@@ -5958,6 +5958,8 @@ class EnhancedDSLDNormalizer:
                         for group in quantity.get("dailyValueTargetGroup") or []:
                             if (
                                 isinstance(group, dict)
+                                and quantity.get("quantity") == entry.get("raw_quantity_value")
+                                and quantity.get("unit") == entry.get("raw_quantity_unit")
                                 and group.get("percent") == entry["raw_daily_value"]
                                 and group.get("name") == entry.get("raw_daily_value_target_group")
                                 and bool(entry.get("raw_daily_value_target_group"))

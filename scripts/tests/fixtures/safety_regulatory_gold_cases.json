@@ -5,7 +5,7 @@
   "driver": "Blocked: safety_decision.winning_rule equals driver. Caution/no concern: safety_signal_reason starts with driver (dose reasons are matched by the DOSE_OVER_UL prefix because the severity band is a separate display decision); null driver means no stated reason.",
   "source": "Existing raw DSLD labels fetched 2026-10-04; added 4290 from the hash-verified October 5 corpus snapshot (official DSLD label ID).",
   "case_count": 23,
-  "last_updated": "2026-10-05"
+  "last_updated": "2026-10-08"
  },
  "cases": [
   {
@@ -4993,13 +4993,13 @@
    }
   },
   {
-   "id": "over-ul-reason-not-hidden-by-retired-marker",
+   "id": "verified-molybdenum-label-correction-clears-false-ul",
    "dsld_id": "312980",
    "expect": {
-    "product_safety_status": "caution",
-    "driver": "DOSE_OVER_UL"
+    "product_safety_status": "no_known_catalog_concern",
+    "driver": null
    },
-   "basis": "The caution comes from an over-UL dose; a retired-policy audit marker must not be the stated reason.",
+   "basis": "Original NIH label312980 prints molybdenum25.5mcg/57%DV; the exact source correction removes API25.5mg/5%DV. The retired-policy marker remains audit-only. Source: https://api.ods.od.nih.gov/dsld/s3/pdf/312980.pdf (reviewed2026-10-08).",
    "raw_label": {
     "src": "01-raw/2025-09-25/data/label_291.json",
     "id": 312980,

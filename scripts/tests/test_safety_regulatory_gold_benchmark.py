@@ -58,3 +58,19 @@ def test_hidden_caffeine_mixture_never_borrows_the_whole_blend_dose(pipeline):
     assert scored['product_safety_status'] == 'caution'
     assert 'STIMULANT_UNDISCLOSED_BLEND' in scored['flags']
     assert 'STIMULANT_CAFFEINE_HIGH_DOSE' not in scored['flags']
+
+
+def test_real_label_correction_does_not_disable_over_ul_marker_precedence(pipeline):
+    normalizer, enricher = pipeline
+    case = next(c for c in CASES if c["dsld_id"] == "312980")
+    raw = copy.deepcopy(case["raw_label"])
+    molybdenum = next(row for row in raw["ingredientRows"] if row["name"] == "Molybdenum")
+    # Synthetic guard control:26mg is not the reviewed25.5mg transcription.
+    # The exact source correction must not blanket-convert other amounts.
+    molybdenum["quantity"][0]["quantity"] = 26
+    enriched, _ = enricher.enrich_product(normalizer.normalize_product(raw))
+    scored = build_scored_artifact(enriched)
+    assert scored["product_safety_status"] == "caution"
+    assert scored["safety_signal_reason"].startswith("DOSE_OVER_UL")
+    assert "B0_RETIRED_POLICY_SIGNAL_IGNORED" in scored["flags"]
+    assert "DOSE_OVER_UL_CRITICAL" in scored["flags"]
