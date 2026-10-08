@@ -6,8 +6,8 @@
     "scope": "Only fires for an exact (dsld_id, raw_ingredient_text) tuple match. Case-sensitive on raw_ingredient_text by design — manufacturers may print 'Insulin' in one product and 'INSULIN' in another, and each needs independent reviewer sign-off because the surrounding context (sibling ingredients, product category, regulatory status) must be re-evaluated per occurrence.",
     "review_policy": "Every product entry is keyed by dsld_id and must carry: brand, product_name (for human-readable audit trail), raw_ingredient_text (the source row being corrected), corrected_ingredient_text (the text the cleaner should see, unchanged for unit-only corrections), correction_fields, evidence (free-text rationale with regulatory citations), sources (authoritative URLs — FDA, NIH, DailyMed, etc.), reviewer, and review_date (ISO 8601 YYYY-MM-DD). A verified cross-row defect may add additional_row_corrections, which inherit the product-level evidence, sources, reviewer, review_date, scope, and provenance tag. Quantity changes require exact raw and corrected value/unit pairs and must be supported by the official manufacturer or label image. Restoring a quantity absent from a form row additionally requires raw_quantity_missing=true, a positive corrected value/unit, and exact same-record source text that states the dose; the applier refuses to overwrite any existing quantity representation.",
     "unmatched_drug_tokens_policy": "When a row's raw_ingredient_text matches a known regulated-drug name (e.g., 'Insulin', 'Acetaminophen', 'Ibuprofen') and there is NO matching override for the product, the row must NOT be silently mapped. The cleaner emits the row to a quarantine path with reason='requires_human_review_drug_token_in_supplement' and excludes the product from scoring. New occurrences enter the reviewer pipeline via the same schema.",
-    "last_updated": "2026-10-03",
-    "total_entries": 64,
+    "last_updated": "2026-10-08",
+    "total_entries": 66,
     "loaded_by": "scripts/enhanced_normalizer.py via _load_label_corrections (cached on first product)"
   },
   "corrections": {
@@ -1439,6 +1439,46 @@
       ],
       "reviewer": "Claude engineering data-integrity review (label PDF and printed %DV checked); owner sign-off pending",
       "review_date": "2026-10-03",
+      "scope": "dsld_id_only",
+      "provenance_tag": "official_label_unit_correction"
+    },
+    "31063": {
+      "brand": "GNC Mega Men",
+      "product_name": "Maximum Nutrition Milk Chocolate",
+      "raw_ingredient_text": "Molybdenum",
+      "corrected_ingredient_text": "Molybdenum",
+      "raw_quantity_unit": "mg",
+      "corrected_quantity_unit": "mcg",
+      "correction_fields": [
+        "quantity.unit"
+      ],
+      "evidence": "Original NIH-hosted label image for this exact DSLD record prints Molybdenum (as Sodium Molybdate)75mcg and100%Daily Value. Live DSLD v9 JSON instead transcribes75mg. Visually verified on2026-10-08; correct only the unit through the existing exact product/source-row owner. Preserve numeric75 and the original API source in the research receipt.",
+      "sources": [
+        "https://api.ods.od.nih.gov/dsld/v9/label/31063",
+        "https://api.ods.od.nih.gov/dsld/s3/pdf/31063.pdf"
+      ],
+      "reviewer": "Codex original-label data integrity review",
+      "review_date": "2026-10-08",
+      "scope": "dsld_id_only",
+      "provenance_tag": "official_label_unit_correction"
+    },
+    "801": {
+      "brand": "GNC Mega Men",
+      "product_name": "Maximum Nutrition Vanilla Bean",
+      "raw_ingredient_text": "Molybdenum",
+      "corrected_ingredient_text": "Molybdenum",
+      "raw_quantity_unit": "mg",
+      "corrected_quantity_unit": "mcg",
+      "correction_fields": [
+        "quantity.unit"
+      ],
+      "evidence": "Original NIH-hosted label image for this exact DSLD record prints Molybdenum (as Sodium Molybdate)75mcg and100%Daily Value. Live DSLD v9 JSON instead transcribes75mg. Visually verified on2026-10-08; correct only the unit through the existing exact product/source-row owner. Preserve numeric75 and the original API source in the research receipt.",
+      "sources": [
+        "https://api.ods.od.nih.gov/dsld/v9/label/801",
+        "https://api.ods.od.nih.gov/dsld/s3/pdf/801.pdf"
+      ],
+      "reviewer": "Codex original-label data integrity review",
+      "review_date": "2026-10-08",
       "scope": "dsld_id_only",
       "provenance_tag": "official_label_unit_correction"
     }

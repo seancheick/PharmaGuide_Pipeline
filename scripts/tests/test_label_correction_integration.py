@@ -1079,3 +1079,18 @@ def test_explicit_epa_note_repairs_contradictory_dsld_dha_taxonomy(normalizer):
         "360 mg",
         "300 mg",
     ]
+
+
+@pytest.mark.parametrize("dsld_id, expected_unit", [(31063, "mcg"), (801, "mcg"), (999999, "mg")])
+def test_maximum_nutrition_molybdenum_correction_is_exactly_scoped(normalizer, dsld_id, expected_unit):
+    raw = _make_raw_product(dsld_id, [])
+    raw["ingredientRows"] = [{**_make_ingredient_row("Molybdenum", category="mineral"),
+        "ingredientGroup": "Molybdenum", "quantity": [{"quantity": 75, "unit": "mg"}],
+        "nestedRows": [], "forms": []}]
+    result = normalizer.normalize_product(raw)
+    active = result["activeIngredients"][0]
+    assert active["quantity"] == 75
+    assert active["unit"] == expected_unit
+    if dsld_id != 999999:
+        assert active["source_correction"]["original_quantity_unit"] == "mg"
+        assert active["source_correction"]["corrected_quantity_unit"] == "mcg"
