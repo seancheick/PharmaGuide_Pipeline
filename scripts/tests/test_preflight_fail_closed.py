@@ -906,11 +906,12 @@ def test_parallel_preparation_filters_deferred_nodes_before_worker_inventory(tmp
     import shutil
     root = Path(__file__).resolve().parents[2]
     shutil.copyfile(root / 'scripts/tests/conftest.py', tmp_path / 'conftest.py')
-    (tmp_path / 'pytest.ini').write_text('[pytest]\nmarkers =\n    artifact: generated output prerequisite\n')
+    (tmp_path / 'pytest.ini').write_text('[pytest]\nmarkers =\n    artifact: generated output prerequisite\n    release: release profile\n    slow: slow profile\n')
     source = tmp_path / 'test_source.py'
     source.write_text('\n'.join(f'def test_source_{i}():\n    assert True\n' for i in range(8)))
-    deferred = tmp_path / 'test_deferred.py'
-    deferred.write_text('import pytest\n@pytest.mark.artifact\ndef test_generated_output():\n    assert False, "must run only after generation"\n')
+    from test_profiles import ARTIFACT_TEST_FILES, PREPARATION_ARTIFACT_FILES
+    deferred = tmp_path / sorted(ARTIFACT_TEST_FILES & set(PREPARATION_ARTIFACT_FILES))[0]
+    deferred.write_text('def test_generated_output():\n    assert False, "must run only after generation"\n')
     external = tmp_path / 'test_external_live.py'
     external.write_text('def test_live():\n    assert False, "explicit opt-in required"\n')
     receipt = tmp_path / 'evidence.json'
@@ -919,6 +920,14 @@ def test_parallel_preparation_filters_deferred_nodes_before_worker_inventory(tmp
     process = subprocess.run(['bash', str(root / 'scripts/test.sh'), 'fast', str(source), str(deferred), str(external),
                               '--dist', 'loadfile'], cwd=root, env=env, capture_output=True, text=True, timeout=60)
     assert process.returncode == 0, process.stdout + process.stderr
+    ordinary_env = dict(env)
+    ordinary_env.pop('PG_PREPARATION_REPORT')
+    ordinary_env.pop('PG_PREPARATION_MODE')
+    ordinary = subprocess.run(['bash', str(root / 'scripts/test.sh'), 'fast', str(source), str(deferred),
+                               '-m', 'not artifact', '--dist', 'loadfile'], cwd=root,
+                              env=ordinary_env, capture_output=True, text=True, timeout=60)
+    assert ordinary.returncode == 0, ordinary.stdout + ordinary.stderr
+
     evidence = json.loads(receipt.read_text())
     assert evidence['completed'] and evidence['exit_code'] == 0
     assert len(evidence['nodes']) == 10 and len(evidence['outcomes']) == 8

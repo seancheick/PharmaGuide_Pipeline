@@ -52,7 +52,7 @@ def pytest_configure(config: pytest.Config) -> None:  # noqa: ARG001
     )
 
 
-@pytest.hookimpl(trylast=True)
+@pytest.hookimpl(hookwrapper=True)
 def pytest_collection_modifyitems(session, items: list[pytest.Item]) -> None:
     """Centralize suite tiers without editing hundreds of test files.
 
@@ -67,6 +67,8 @@ def pytest_collection_modifyitems(session, items: list[pytest.Item]) -> None:
             item.add_marker(pytest.mark.release)
         if filename in ARTIFACT_TEST_FILES:
             item.add_marker(pytest.mark.artifact)
+    # Mark before pytest applies -m; finalize phases after other selectors.
+    yield
     # xdist announces IDs in collection_finish. Selection must already be
     # final there or controller indexes address a different worker item list.
     _collect_preparation_inventory(session, items)
