@@ -8355,6 +8355,9 @@ def generate_share_metadata(enriched: Dict, scored: Dict) -> Dict:
     if len(share_title) > 200:
         share_title = share_title[:197] + "..."
 
+    quality_status = safe_str(scored.get("quality_score_status"))
+    assessment_unavailable = quality_status in {"not_scored", "suppressed_safety"}
+
     # Description
     positive_signals = []
     if v4_evidence >= 15:
@@ -8376,6 +8379,15 @@ def generate_share_metadata(enriched: Dict, scored: Dict) -> Dict:
     if positive_signals:
         share_description += f" with {', '.join(positive_signals[:2])}"
     share_description += ". Analyzed by PharmaGuide for safety, purity, and evidence."
+    if quality_status == "not_scored":
+        share_description = (
+            "Quality score unavailable. The quality assessment is incomplete. "
+            "Review the label information and recorded safety warnings."
+        )
+    elif quality_status == "suppressed_safety":
+        share_description = (
+            "Quality score withheld. Review this product’s recorded safety warnings."
+        )
 
     if len(share_description) > 300:
         share_description = share_description[:297] + "..."
@@ -8386,12 +8398,12 @@ def generate_share_metadata(enriched: Dict, scored: Dict) -> Dict:
     # Top ingredient quality insight
     formulation = safe_dict(enriched.get("formulation_detail"))
     delivery_tier = safe_str(formulation.get("delivery_tier"))
-    if delivery_tier in ["premium", "enhanced"]:
+    if not assessment_unavailable and delivery_tier in ["premium", "enhanced"]:
         highlights.append(f"Premium {delivery_tier} formulation")
 
     # Clinical evidence — v4 evidence pillar (>= 12 of /20) stands in for the
     # retired v3 C.matched_entries; avoids over-claiming on the evidence floor.
-    if v4_evidence >= 12:
+    if not assessment_unavailable and v4_evidence >= 12:
         highlights.append("Clinically-backed ingredients")
 
     # Certifications: registry-verified only; a label claim is not a highlight.
@@ -8414,7 +8426,7 @@ def generate_share_metadata(enriched: Dict, scored: Dict) -> Dict:
         highlights.append(" • ".join(dietary_flags))
 
     # Safety
-    if not safe_list(enriched.get("harmful_additives")):
+    if not assessment_unavailable and not safe_list(enriched.get("harmful_additives")):
         highlights.append("No harmful additives")
 
     return {
