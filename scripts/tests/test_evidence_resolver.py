@@ -1283,3 +1283,27 @@ def test_mushroom_formula_research_cannot_transfer_between_compositions():
     assert "without Chaga" in study["notes"]
     assert "reporting" in study["outcome"] and "funded" in study["notes"]
     assert "Separate Wellmune cannot establish" in record["applicability_decision"]
+
+
+@pytest.mark.parametrize("canonical", [
+    "butternut_squash_seed_oil", "weeping_willow_bark", "chinese_wolfberry_fruit",
+    "nettle_root", "chopchini", "achiote_leaf", "saccharina_latissima",
+])
+def test_exact_botanical_material_has_reviewed_literature_determination(canonical):
+    """Identified species/parts need reviewed disposition without borrowed credit."""
+    result = er.resolve_evidence_for_canonical(canonical)
+    assert result.disposition != EvidenceDisposition.LITERATURE_RESOLUTION_REQUIRED.value
+    assert result.points_eligible is False
+    assert "literature_evidence" in result.owner_facts
+    import json
+    entries = json.loads((SCRIPTS_ROOT / "data/literature_evidence_records.json").read_text())["literature_evidence_records"]
+    record = next(r for r in entries if r["canonical_id"] == canonical)
+    assert record["verification_result"] == "authoritative_pubmed_verified"
+    assert record["search_query"] and record["search_date"]
+    assert record["studied_dose_exposure"] == {}
+    assert record["effect_direction"] in {"applicability_unestablished", "no_qualifying_human_evidence"}
+    assert "bounded" in record["applicability_decision"].lower()
+    assert "not exhaustive" in record["applicability_decision"].lower()
+    for study in record["qualifying_human_studies"]:
+        assert study["verification_provenance"]["topic_match_verified"] is True
+        assert "effect" not in study and "effect_direction" not in study
