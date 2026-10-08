@@ -42,10 +42,21 @@ GENERIC_CANARIES = {
     # clinically-studied branded extract scoring closer to its merit.
     "328825": {
         "label": "Thorne Curcumin Phytosome 1000 mg",
-        # A6 effective-quality fix: Meriva uses the botanical A1 slot for the
-        # single-ingredient focus bonus, lifting this premium branded extract.
-        "score_range": (72.5, 72.5),
-        "traits": {"trust_high": True},
+        # Native module rubric, not the final six-pillar export. The label's
+        # 1 g complex and two daily servings mean 2,000 mg/day, above the
+        # existing 500–1,000 mg studied-preparation window. Keep that source
+        # exposure and component attribution pinned instead of the old
+        # per-serving/interim total. Formulation is 9 + 3 - 1.5 = 10.5.
+        "score_range": (62.5, 62.5),
+        "traits": {
+            "trust_high": True,
+            "dimension_scores": {
+                "formulation": 10.5, "dose": 12.0,
+                "evidence": 14.0, "transparency": 10.0,
+            },
+            "botanical_dose": {"dose_mg": 2000.0, "range_mg": [500.0, 1000.0]},
+            "botanical_dose_band": "above_studied_range",
+        },
     },
     # Disclosed but unbenchmarked purpose: gets limited-assessability fallback,
     # but weak formulation/evidence keeps the product in the low generic band.
@@ -245,6 +256,12 @@ def test_generic_real_catalog_canary_score_and_traits(dsld_id: str, expected: di
     assert lo <= score <= hi, (expected["label"], score, breakdown)
 
     traits = expected["traits"]
+    for dimension, points in traits.get("dimension_scores", {}).items():
+        assert _dimension_score(breakdown, dimension) == pytest.approx(points)
+    if "botanical_dose" in traits:
+        dose_metadata = breakdown["dimensions"]["dose"]["metadata"]
+        assert dose_metadata["botanical_dose"] == traits["botanical_dose"]
+        assert dose_metadata["botanical_dose_band"] == traits["botanical_dose_band"]
     if traits.get("dose_none"):
         assert _dimension_score(breakdown, "dose") is None
     if traits.get("dose_partial_no_rda"):
