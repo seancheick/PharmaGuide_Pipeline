@@ -898,3 +898,47 @@ def test_preparation_checkpoint_midnight_keeps_epoch_without_false_input_drift(t
         runner=lambda command, **kwargs: subprocess.CompletedProcess(command, 0, 'OK', ''), report_path=tmp_path / 'receipt.json')
     assert result['ready'] and result['checkpoint_stable']
     assert result['runtime']['freshness_date'] == '2026-10-06'
+
+
+def test_parallel_preparation_filters_deferred_nodes_before_worker_inventory(tmp_path):
+    import os
+    import subprocess
+    import shutil
+    root = Path(__file__).resolve().parents[2]
+    shutil.copyfile(root / 'scripts/tests/conftest.py', tmp_path / 'conftest.py')
+    (tmp_path / 'pytest.ini').write_text('[pytest]\nmarkers =\n    artifact: generated output prerequisite\n')
+    source = tmp_path / 'test_source.py'
+    source.write_text('\n'.join(f'def test_source_{i}():\n    assert True\n' for i in range(8)))
+    deferred = tmp_path / 'test_deferred.py'
+    deferred.write_text('import pytest\n@pytest.mark.artifact\ndef test_generated_output():\n    assert False, "must run only after generation"\n')
+    external = tmp_path / 'test_external_live.py'
+    external.write_text('def test_live():\n    assert False, "explicit opt-in required"\n')
+    receipt = tmp_path / 'evidence.json'
+    env = dict(os.environ, PYTHONPATH=str(root / 'scripts'), PG_TEST_LOCK_HELD='1', PG_TEST_WORKERS='2',
+               PG_PREPARATION_REPORT=str(receipt), PG_PREPARATION_MODE='source')
+    process = subprocess.run(['bash', str(root / 'scripts/test.sh'), 'fast', str(source), str(deferred), str(external),
+                              '--dist', 'loadfile'], cwd=root, env=env, capture_output=True, text=True, timeout=60)
+    assert process.returncode == 0, process.stdout + process.stderr
+    evidence = json.loads(receipt.read_text())
+    assert evidence['completed'] and evidence['exit_code'] == 0
+    assert len(evidence['nodes']) == 10 and len(evidence['outcomes']) == 8
+    assert {row['phase'] for row in evidence['nodes']} == {'source', 'artifact', 'external'}
+    expected = {row['nodeid'] for row in evidence['nodes'] if row['phase'] == 'source'}
+    assert set(evidence['outcomes']) == expected
+    assert not evidence['collection_errors'] and not evidence['collection_skips']
+    assert all(sorted(stage['when'] for stage in stages) == ['call', 'setup', 'teardown']
+               for stages in evidence['outcomes'].values())
+
+
+def test_scoring_evidence_checks_follow_source_and_artifact_owners():
+    import ast
+    from test_profiles import iter_profile_paths, preparation_phase
+    root = Path(__file__).resolve().parents[2]
+    artifact = root / 'scripts/tests/test_scoring_evidence_contract_v1.py'
+    source = root / 'scripts/tests/test_scoring_input_contract.py'
+    assert source in set(iter_profile_paths('fast', root / 'scripts/tests'))
+    artifact_tests = [n.name for n in ast.parse(artifact.read_text()).body
+                      if isinstance(n, ast.FunctionDef) and n.name.startswith('test_')]
+    assert artifact_tests
+    assert all(preparation_phase(artifact.name, name)[0] == 'artifact' for name in artifact_tests)
+    assert preparation_phase(source.name, 'test_galu_enzyme_activity_reaches_v4_as_non_mass_dose_evidence')[0] == 'source'
