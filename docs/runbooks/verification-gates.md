@@ -23,8 +23,20 @@ tests are listed with their prerequisites and never enabled automatically.
 An intact completed successful check can be reused only while its command, runtime
 and the complete source/input inventory still match. This includes source-test fixtures
 and the existing FDA UNII identity cache, even though that cache is excluded from
-stage-freshness calculations. Collection runs again; live verifiers run again under
-their existing cache and freshness rules. Changed or incomplete evidence cannot grant readiness.
+stage-freshness calculations. Successful checks survive interrupted attempts only in
+sealed checkpoints that proved input stability; failed or incomplete checks never reuse.
+Source tests collect and execute once, preserving the full inventory and deferred phases
+in that execution evidence. Matching complete coverage avoids repeated collection and
+execution. Live verifiers and the final FDA freshness check run again under their existing
+cache and freshness rules. Changed or incomplete evidence cannot grant readiness.
+
+Preparation displays each check immediately, then elapsed time and source-test progress
+every ten seconds, including the current test and failing node names. Source tests use
+at most two workers, clamped to the existing memory budget under the exclusive suite
+lock. Only the controller writes the report; worker inventories must match and execution
+coverage must be disjoint and complete. Detected input drift keeps the attempt failed
+even if a later check restores the input. SIGTERM or Ctrl-C records interruption as
+failure while preserving intact earlier checkpoints.
 Live commands have a 15-minute wall-clock limit each. A timeout is an unresolved failed
 check, never a data mismatch or readiness approval; independent checks continue and
 valid source evidence remains reusable. Source tests have no such live-command limit.

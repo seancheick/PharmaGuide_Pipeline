@@ -232,12 +232,14 @@ def dashboard_app():
 _PREPARATION = {'nodes': [], 'outcomes': {}, 'collection_errors': [], 'collection_skips': []}
 _PREPARATION_CONFIG = None
 _PREPARATION_WRITTEN = 0.0
+_PREPARATION_ACTIVE = set()
 
 
 def pytest_sessionstart(session):
     global _PREPARATION_CONFIG, _PREPARATION_WRITTEN
     _PREPARATION_CONFIG = session.config
     _PREPARATION_WRITTEN = 0.0
+    _PREPARATION_ACTIVE.clear()
     if os.environ.get('PG_PREPARATION_REPORT'):
         _PREPARATION.clear()
         _PREPARATION.update(nodes=[], outcomes={}, collection_errors=[], collection_skips=[])
@@ -303,7 +305,10 @@ def pytest_runtest_logreport(report):
         _PREPARATION.setdefault('failures', []).append(report.nodeid)
         print(f'FAILED: {report.nodeid}', file=sys.stderr, flush=True)
     if report.when == 'teardown':
+        _PREPARATION_ACTIVE.discard(report.nodeid)
+        _PREPARATION['current_test'] = ' | '.join(sorted(_PREPARATION_ACTIVE)) or 'finishing'
         _PREPARATION['finished_tests'] = _PREPARATION.get('finished_tests', 0) + 1
+        _emit_preparation_progress()
     _write_preparation_progress(force=report.failed or report.skipped)
 
 
@@ -337,7 +342,18 @@ def pytest_xdist_node_collection_finished(node, ids):
         _write_preparation_progress(force=True)
 
 
+def _emit_preparation_progress():
+    if _PREPARATION_CONFIG is None or not hasattr(_PREPARATION_CONFIG, 'workerinput'):
+        import json
+        progress = {'current_test': _PREPARATION.get('current_test', 'collecting'),
+                    'finished_tests': _PREPARATION.get('finished_tests', 0),
+                    'selected_tests': _PREPARATION.get('selected_tests', '?')}
+        print('PG_PREPARATION_PROGRESS:' + json.dumps(progress), file=sys.stderr, flush=True)
+
+
 def pytest_runtest_logstart(nodeid, location):
     if os.environ.get('PG_PREPARATION_REPORT'):
-        _PREPARATION['current_test'] = nodeid
+        _PREPARATION_ACTIVE.add(nodeid)
+        _PREPARATION['current_test'] = ' | '.join(sorted(_PREPARATION_ACTIVE))
+        _emit_preparation_progress()
         _write_preparation_progress()

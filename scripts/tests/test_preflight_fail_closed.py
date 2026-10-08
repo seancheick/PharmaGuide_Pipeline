@@ -857,3 +857,44 @@ def test_preparation_detected_input_drift_cannot_be_erased_by_later_restore(tmp_
         checks=[{'name': name, 'command': ['fake', name]} for name in ('mutate', 'restore')])
     assert not result['ready'] and result['checkpoint_stable'] is False
     assert result['checks'][-1]['status'] == 'failed'
+
+
+def test_preparation_live_test_name_overrides_throttled_evidence(tmp_path, capsys):
+    import os
+    evidence = tmp_path / 'progress.json'
+    evidence.write_text(json.dumps({'current_test': 'stale::test_previous', 'finished_tests': 1, 'selected_tests': 2}))
+    code = 'import sys,time; print(\'PG_PREPARATION_PROGRESS:\'+\'{"current_test":"live::test_slow","finished_tests":1,"selected_tests":2}\',file=sys.stderr,flush=True); time.sleep(1.2)'
+    result = preflight._preparation_process([sys.executable, '-c', code], cwd=tmp_path,
+        env=dict(os.environ, PG_PREPARATION_REPORT=str(evidence)))
+    assert result.returncode == 0
+    assert 'live::test_slow' in capsys.readouterr().err
+    assert 'PG_PREPARATION_PROGRESS:' not in result.stderr
+
+
+def test_parallel_progress_keeps_long_test_visible_after_other_worker_finishes(tmp_path, monkeypatch, capsys):
+    import conftest
+    from types import SimpleNamespace
+    with monkeypatch.context() as hook_patch:
+        hook_patch.setenv('PG_PREPARATION_REPORT', str(tmp_path / 'progress.json'))
+        hook_patch.setattr(conftest, '_PREPARATION_CONFIG', None)
+        hook_patch.setattr(conftest, '_PREPARATION_ACTIVE', set())
+        hook_patch.setattr(conftest, '_PREPARATION', {'nodes': [], 'outcomes': {}, 'selected_tests': 2})
+        conftest.pytest_runtest_logstart('long::test_slow', None)
+        conftest.pytest_runtest_logstart('short::test_fast', None)
+        conftest.pytest_runtest_logreport(SimpleNamespace(nodeid='short::test_fast', when='teardown', outcome='passed', skipped=False, failed=False))
+        frames = [json.loads(line.removeprefix('PG_PREPARATION_PROGRESS:')) for line in capsys.readouterr().err.splitlines() if line.startswith('PG_PREPARATION_PROGRESS:')]
+        assert frames[-1]['current_test'] == 'long::test_slow'
+        assert frames[-1]['finished_tests'] == 1
+
+
+def test_preparation_checkpoint_midnight_keeps_epoch_without_false_input_drift(tmp_path, monkeypatch):
+    import subprocess
+    monkeypatch.setattr(preflight, '_preparation_inputs', lambda *args, **kwargs: {'files': {}, 'errors': [], 'raw_count': 1})
+    runtime = iter([{'environment': {'same': 'hash'}, 'freshness_date': '2026-10-06'},
+                    {'environment': {'same': 'hash'}, 'freshness_date': '2026-10-07'},
+                    {'environment': {'same': 'hash'}, 'freshness_date': '2026-10-07'}])
+    monkeypatch.setattr(preflight, '_preparation_runtime', lambda: next(runtime))
+    result = preflight.run_preparation(tmp_path, tmp_path, checks=[{'name': 'source', 'command': ['fake']}],
+        runner=lambda command, **kwargs: subprocess.CompletedProcess(command, 0, 'OK', ''), report_path=tmp_path / 'receipt.json')
+    assert result['ready'] and result['checkpoint_stable']
+    assert result['runtime']['freshness_date'] == '2026-10-06'

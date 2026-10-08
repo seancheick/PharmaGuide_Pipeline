@@ -835,6 +835,12 @@ def _preparation_runtime():
             'platform': platform.platform(), 'executables': executables, 'freshness_date': datetime.now(timezone.utc).date().isoformat(), 'packages': packages, 'environment': environment}
 
 
+def _preparation_runtime_stable(before, after):
+    # Calendar epochs expire reuse; the FDA owner decides actual date readiness.
+    return ({key: value for key, value in before.items() if key != 'freshness_date'}
+            == {key: value for key, value in after.items() if key != 'freshness_date'})
+
+
 def _valid_test_evidence(evidence, *, inventory=False):
     """Validate complete collected coverage and all setup/call/teardown outcomes."""
     if not isinstance(evidence, dict) or evidence.get('completed') is not True:
@@ -962,24 +968,47 @@ def _preparation_process(command, *, cwd, env=None, timeout=None, pass_fds=(), *
     with tempfile.TemporaryFile(mode='w+', encoding='utf-8') as out, tempfile.TemporaryFile(mode='w+', encoding='utf-8') as err:
         process = subprocess.Popen(command, cwd=cwd, env=env, stdout=out, stderr=err, pass_fds=pass_fds, start_new_session=True)
         started = time.monotonic()
+        telemetry, stderr_offset, pending = {}, 0, ''
+        last_progress, last_printed = None, -10.0
+        evidence_stamp, evidence_state = None, {}
         try:
             while process.poll() is None:
                 elapsed = time.monotonic() - started
                 if timeout is not None and elapsed >= timeout:
                     raise subprocess.TimeoutExpired(command, timeout)
+                chunk = os.pread(err.fileno(), max(0, os.fstat(err.fileno()).st_size - stderr_offset), stderr_offset)
+                stderr_offset += len(chunk)
+                lines = (pending + chunk.decode('utf-8', errors='replace')).split('\n')
+                pending = lines.pop()
+                for line in lines:
+                    if line.startswith('PG_PREPARATION_PROGRESS:'):
+                        try:
+                            telemetry = json.loads(line.removeprefix('PG_PREPARATION_PROGRESS:'))
+                        except ValueError:
+                            pass
+                    elif line.startswith('FAILED:'):
+                        print(line, file=sys.stderr, flush=True)
                 progress = ''
                 if env and env.get('PG_PREPARATION_REPORT'):
                     try:
-                        state = json.loads(Path(env['PG_PREPARATION_REPORT']).read_text())
+                        evidence_file = Path(env['PG_PREPARATION_REPORT'])
+                        stamp = evidence_file.stat().st_mtime_ns
+                        if stamp != evidence_stamp:
+                            evidence_state = json.loads(evidence_file.read_text())
+                            evidence_stamp = stamp
+                        state = dict(evidence_state)
+                        state.update(telemetry)
                         progress = f" | {state.get('finished_tests', 0)}/{state.get('selected_tests', '?')} tests | {state.get('current_test', 'collecting')}"
                         failures = state.get('failures', [])
                         if failures:
                             progress += ' | FAILED: ' + ', '.join(failures)
                     except (OSError, ValueError):
                         pass
-                print(f"RUNNING: {(env or {}).get('PG_PREPARATION_CHECK', command[0])} | elapsed {elapsed:.0f}s{progress}", file=sys.stderr, flush=True)
+                if progress != last_progress or elapsed - last_printed >= 10:
+                    print(f"RUNNING: {(env or {}).get('PG_PREPARATION_CHECK', command[0])} | elapsed {elapsed:.0f}s{progress}", file=sys.stderr, flush=True)
+                    last_progress, last_printed = progress, elapsed
                 try:
-                    process.wait(timeout=min(10, max(.01, timeout - elapsed)) if timeout else 10)
+                    process.wait(timeout=min(1, max(.01, timeout - elapsed)) if timeout else 1)
                 except subprocess.TimeoutExpired:
                     pass
         except BaseException:
@@ -992,7 +1021,8 @@ def _preparation_process(command, *, cwd, env=None, timeout=None, pass_fds=(), *
             raise
         out.seek(0)
         err.seek(0)
-        return subprocess.CompletedProcess(command, process.returncode, out.read(), err.read())
+        stderr = ''.join(line for line in err.readlines() if not line.startswith('PG_PREPARATION_PROGRESS:'))
+        return subprocess.CompletedProcess(command, process.returncode, out.read(), stderr)
 
 
 def run_preparation(repo_root, raw_root, *, checks=None, runner=None, report_path=None):
@@ -1121,7 +1151,7 @@ def run_preparation(repo_root, raw_root, *, checks=None, runner=None, report_pat
                 except KeyboardInterrupt:
                     check.update(exit_code=None, stdout='', stderr='Preparation interrupted', status='failed', duration_seconds=round(time.monotonic() - started, 3))
                     result['checks'].append(check)
-                    result['checkpoint_stable'] = result.get('checkpoint_stable', True) and before == _preparation_inputs(repo_root, raw_root, operational_paths=operational_paths) and runtime == _preparation_runtime()
+                    result['checkpoint_stable'] = result.get('checkpoint_stable', True) and before == _preparation_inputs(repo_root, raw_root, operational_paths=operational_paths) and _preparation_runtime_stable(runtime, _preparation_runtime())
                     result['integrity'] = _digest({k: v for k, v in result.items() if k != 'integrity'})
                     if report_path:
                         _atomic_report(report_path, result)
@@ -1149,7 +1179,7 @@ def run_preparation(repo_root, raw_root, *, checks=None, runner=None, report_pat
                     result.setdefault('checkpoint_stable', True)
                 else:
                     print(f'RUNNING: verifying {name} input stability', file=sys.stderr, flush=True)
-                    result['checkpoint_stable'] = result.get('checkpoint_stable', True) and before == _preparation_inputs(repo_root, raw_root, operational_paths=operational_paths) and runtime == _preparation_runtime()
+                    result['checkpoint_stable'] = result.get('checkpoint_stable', True) and before == _preparation_inputs(repo_root, raw_root, operational_paths=operational_paths) and _preparation_runtime_stable(runtime, _preparation_runtime())
                 result['integrity'] = _digest({k: v for k, v in result.items() if k != 'integrity'})
                 _atomic_report(report_path, result)
         inventories = [c.get('evidence') for c in result['checks'] if c['name'] == 'pytest_inventory' and c['status'] == 'passed']
@@ -1166,8 +1196,7 @@ def run_preparation(repo_root, raw_root, *, checks=None, runner=None, report_pat
     # Clock rollover expires reuse epochs; it is not source/runtime mutation.
     # Keep the original receipt epoch, and let the final FDA owner check enforce
     # its actual calendar policy without restamping completed source evidence.
-    stable = result.get('checkpoint_stable', True) and before == after and ({key: value for key, value in runtime.items() if key != 'freshness_date'}
-                                  == {key: value for key, value in after_runtime.items() if key != 'freshness_date'})
+    stable = result.get('checkpoint_stable', True) and before == after and _preparation_runtime_stable(runtime, after_runtime)
     result['checks'].append({'name': 'inputs_stable', 'status': 'passed' if stable else 'failed',
                              'issues': [] if stable else ['Input inventory/content or runtime/environment changed during preparation']})
     result['ready'] = all(check['status'] == 'passed' for check in result['checks'])
