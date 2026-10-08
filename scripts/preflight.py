@@ -1121,7 +1121,7 @@ def run_preparation(repo_root, raw_root, *, checks=None, runner=None, report_pat
                 except KeyboardInterrupt:
                     check.update(exit_code=None, stdout='', stderr='Preparation interrupted', status='failed', duration_seconds=round(time.monotonic() - started, 3))
                     result['checks'].append(check)
-                    result['checkpoint_stable'] = before == _preparation_inputs(repo_root, raw_root, operational_paths=operational_paths) and runtime == _preparation_runtime()
+                    result['checkpoint_stable'] = result.get('checkpoint_stable', True) and before == _preparation_inputs(repo_root, raw_root, operational_paths=operational_paths) and runtime == _preparation_runtime()
                     result['integrity'] = _digest({k: v for k, v in result.items() if k != 'integrity'})
                     if report_path:
                         _atomic_report(report_path, result)
@@ -1149,7 +1149,7 @@ def run_preparation(repo_root, raw_root, *, checks=None, runner=None, report_pat
                     result.setdefault('checkpoint_stable', True)
                 else:
                     print(f'RUNNING: verifying {name} input stability', file=sys.stderr, flush=True)
-                    result['checkpoint_stable'] = before == _preparation_inputs(repo_root, raw_root, operational_paths=operational_paths) and runtime == _preparation_runtime()
+                    result['checkpoint_stable'] = result.get('checkpoint_stable', True) and before == _preparation_inputs(repo_root, raw_root, operational_paths=operational_paths) and runtime == _preparation_runtime()
                 result['integrity'] = _digest({k: v for k, v in result.items() if k != 'integrity'})
                 _atomic_report(report_path, result)
         inventories = [c.get('evidence') for c in result['checks'] if c['name'] == 'pytest_inventory' and c['status'] == 'passed']
@@ -1166,7 +1166,7 @@ def run_preparation(repo_root, raw_root, *, checks=None, runner=None, report_pat
     # Clock rollover expires reuse epochs; it is not source/runtime mutation.
     # Keep the original receipt epoch, and let the final FDA owner check enforce
     # its actual calendar policy without restamping completed source evidence.
-    stable = before == after and ({key: value for key, value in runtime.items() if key != 'freshness_date'}
+    stable = result.get('checkpoint_stable', True) and before == after and ({key: value for key, value in runtime.items() if key != 'freshness_date'}
                                   == {key: value for key, value in after_runtime.items() if key != 'freshness_date'})
     result['checks'].append({'name': 'inputs_stable', 'status': 'passed' if stable else 'failed',
                              'issues': [] if stable else ['Input inventory/content or runtime/environment changed during preparation']})

@@ -841,3 +841,19 @@ def test_default_preparation_collects_executes_once_and_reuses_full_coverage(tmp
     assert second['ready']
     assert sum('preparation' in command for command in calls) == 1
     assert next(check for check in second['checks'] if check['name'] == 'source_tests')['reused']
+
+
+def test_preparation_detected_input_drift_cannot_be_erased_by_later_restore(tmp_path):
+    import subprocess
+    raw = tmp_path / 'raw'
+    raw.mkdir()
+    label = raw / '1.json'
+    original = json.dumps({'id': 1, 'ingredientRows': []})
+    label.write_text(original)
+    def run(command, **kwargs):
+        label.write_text(json.dumps({'id': 1, 'ingredientRows': [{'name': 'changed'}]}) if command[-1] == 'mutate' else original)
+        return subprocess.CompletedProcess(command, 0, 'OK', '')
+    result = preflight.run_preparation(tmp_path, raw, runner=run, report_path=tmp_path / 'report.json',
+        checks=[{'name': name, 'command': ['fake', name]} for name in ('mutate', 'restore')])
+    assert not result['ready'] and result['checkpoint_stable'] is False
+    assert result['checks'][-1]['status'] == 'failed'
