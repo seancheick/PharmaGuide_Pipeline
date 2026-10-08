@@ -733,3 +733,111 @@ def test_preparation_live_deadline_default_is_phase_owned_and_success_always_rec
     repeated = preflight.run_preparation(tmp_path, tmp_path, checks=checks, runner=run, report_path=receipt)
     assert repeated['ready'] and calls == [(['live-owner'], 900)]
     assert next(check for check in repeated['checks'] if check['name'] == 'source')['reused']
+
+
+def test_preparation_reuses_sealed_success_after_interrupt(tmp_path):
+    import subprocess
+    import pytest
+    raw = tmp_path / 'raw'
+    raw.mkdir()
+    (raw / '1.json').write_text(json.dumps({'id': 1, 'ingredientRows': []}))
+    receipt = tmp_path / 'receipt.json'
+    calls = []
+    def run(command, **kwargs):
+        calls.append(command[-1])
+        if command[-1] == 'interrupt':
+            raise KeyboardInterrupt()
+        return subprocess.CompletedProcess(command, 0, 'OK', '')
+    checks = [{'name': name, 'command': ['fake', name]} for name in ('good', 'interrupt')]
+    for _ in range(2):
+        with pytest.raises(KeyboardInterrupt):
+            preflight.run_preparation(tmp_path, raw, checks=checks, runner=run, report_path=receipt)
+    assert calls == ['good', 'interrupt', 'interrupt']
+    saved = json.loads(receipt.read_text())
+    assert not saved['ready'] and not saved['completed']
+    assert saved['checks'][-1]['status'] == 'failed'
+
+
+def test_preparation_announces_check_before_runner_and_failure(tmp_path, capsys):
+    import subprocess
+    raw = tmp_path / 'raw'
+    raw.mkdir()
+    (raw / '1.json').write_text(json.dumps({'id': 1, 'ingredientRows': []}))
+    def run(command, **kwargs):
+        assert 'START: broken' in capsys.readouterr().err
+        return subprocess.CompletedProcess(command, 1, '', 'broken test')
+    result = preflight.run_preparation(tmp_path, raw,
+        checks=[{'name': 'broken', 'command': ['fake']}], runner=run)
+    assert not result['ready']
+    assert 'FAILED: broken' in capsys.readouterr().err
+
+
+def test_parallel_preparation_requires_identical_inventory_and_disjoint_complete_outcomes():
+    import copy
+    nodes = [{'nodeid': f'scripts/tests/test_sample.py::test_{i}', 'phase': 'source', 'reason': 'source'} for i in range(2)]
+    stages = [{'when': stage, 'outcome': 'passed'} for stage in ('setup', 'call', 'teardown')]
+    workers = [dict(completed=True, nodes=copy.deepcopy(nodes), selection={'args': ['scripts/tests']},
+                    outcomes={nodes[i]['nodeid']: stages}) for i in range(2)]
+    def valid(payloads):
+        evidence = preflight._combine_preparation_workers(payloads)
+        evidence.update(completed=True, exit_code=0)
+        return preflight._valid_test_evidence(evidence)
+    assert valid(workers)
+    assert not valid(workers[:1])  # missing execution
+    assert not valid(workers + workers[:1])  # duplicate execution
+    changed = copy.deepcopy(workers)
+    changed[1]['nodes'][0]['reason'] = 'different policy'
+    assert not valid(changed)
+    changed = copy.deepcopy(workers)
+    changed[1]['completed'] = False
+    assert not valid(changed)
+    changed = copy.deepcopy(workers)
+    changed[1]['outcomes'][nodes[1]['nodeid']][1]['outcome'] = 'failed'
+    assert not valid(changed)
+    assert not valid([])
+
+
+def test_preparation_real_process_reports_elapsed_and_current_test(tmp_path, capsys):
+    import sys
+    evidence = tmp_path / 'progress.json'
+    evidence.write_text(json.dumps({'current_test': 'sample::test_one', 'finished_tests': 1, 'selected_tests': 2,
+                                   'failures': ['sample::test_broken']}))
+    result = preflight._preparation_process([sys.executable, '-c', 'import time; time.sleep(.1)'],
+        cwd=tmp_path, env=dict(__import__('os').environ, PG_PREPARATION_REPORT=str(evidence)))
+    output = capsys.readouterr().err
+    assert result.returncode == 0
+    assert 'elapsed' in output and '1/2 tests' in output and 'sample::test_one' in output
+    assert 'FAILED: sample::test_broken' in output
+
+
+def test_default_preparation_collects_executes_once_and_reuses_full_coverage(tmp_path, monkeypatch):
+    import subprocess
+    monkeypatch.setattr(preflight, '_preparation_inputs', lambda *args, **kwargs: {'files': {}, 'errors': [], 'raw_count': 1})
+    monkeypatch.setattr(preflight, '_preparation_runtime', lambda: {'version': 'same'})
+    monkeypatch.setattr(preflight, '_preparation_canary_identifiers', lambda root: ['1'])
+    calls = []
+    def run(command, **kwargs):
+        calls.append(command)
+        stdout = 'OK'
+        if command[-1] == 'preparation-gates':
+            stdout = json.dumps({'phase': 'source', 'command': ['fake-gate']})
+        elif '--json' in command:
+            stdout = json.dumps(dict(summary={'all_ok': True, 'exit_code': 0},
+                                     **{key: {'failed': []} for key in ('critical', 'configs', 'scripts', 'json_valid')}))
+        elif '--check' in command and 'scripts/tests/freeze_contract_snapshots.py' in command:
+            stdout = '[1] UNCHANGED\nChecked: 1  Failed: 0  Total: 1'
+        if 'preparation' in command:
+            node = {'nodeid': 'scripts/tests/test_one.py::test_one', 'phase': 'source', 'reason': 'source'}
+            evidence = dict(completed=True, exit_code=0, selection={'args': ['scripts/tests']}, nodes=[node],
+                            outcomes={node['nodeid']: [{'when': stage, 'outcome': 'passed'} for stage in ('setup', 'call', 'teardown')]})
+            Path(kwargs['env']['PG_PREPARATION_REPORT']).write_text(json.dumps(evidence))
+        return subprocess.CompletedProcess(command, 0, stdout, '')
+    receipt = tmp_path / 'receipt.json'
+    first = preflight.run_preparation(tmp_path, tmp_path, runner=run, report_path=receipt)
+    assert first['ready']
+    assert not any('--collect-only' in command for command in calls)
+    assert sum('preparation' in command for command in calls) == 1
+    second = preflight.run_preparation(tmp_path, tmp_path, runner=run, report_path=receipt)
+    assert second['ready']
+    assert sum('preparation' in command for command in calls) == 1
+    assert next(check for check in second['checks'] if check['name'] == 'source_tests')['reused']

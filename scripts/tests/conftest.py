@@ -230,9 +230,14 @@ def dashboard_app():
 # Preparation keeps a complete collection inventory before selecting source
 # nodes. This is structured process evidence, never a clinical approval.
 _PREPARATION = {'nodes': [], 'outcomes': {}, 'collection_errors': [], 'collection_skips': []}
+_PREPARATION_CONFIG = None
+_PREPARATION_WRITTEN = 0.0
 
 
 def pytest_sessionstart(session):
+    global _PREPARATION_CONFIG, _PREPARATION_WRITTEN
+    _PREPARATION_CONFIG = session.config
+    _PREPARATION_WRITTEN = 0.0
     if os.environ.get('PG_PREPARATION_REPORT'):
         _PREPARATION.clear()
         _PREPARATION.update(nodes=[], outcomes={}, collection_errors=[], collection_skips=[])
@@ -257,10 +262,19 @@ def pytest_collection_finish(session):
         session.items[:] = [item for item in session.items if item.nodeid in selected]
         session.config.hook.pytest_deselected(items=removed)
         session.testscollected = len(session.items)
-    _write_preparation_progress()
+    _PREPARATION['selected_tests'] = sum(row['phase'] == 'source' for row in _PREPARATION['nodes'])
+    _write_preparation_progress(force=True)
 
 
-def _write_preparation_progress():
+def _write_preparation_progress(*, force=False):
+    global _PREPARATION_WRITTEN
+    import time
+    if _PREPARATION_CONFIG is not None and hasattr(_PREPARATION_CONFIG, 'workerinput'):
+        return
+    now = time.monotonic()
+    if not force and now - _PREPARATION_WRITTEN < 5:
+        return
+    _PREPARATION_WRITTEN = now
     path = os.environ.get('PG_PREPARATION_REPORT')
     if path:
         from preflight import _atomic_report
@@ -285,11 +299,45 @@ def pytest_runtest_logreport(report):
     _PREPARATION['outcomes'].setdefault(report.nodeid, []).append(outcome)
     if report.failed or report.skipped:
         outcome['details'] = str(report.longrepr)
-        _write_preparation_progress()
+    if report.failed:
+        _PREPARATION.setdefault('failures', []).append(report.nodeid)
+        print(f'FAILED: {report.nodeid}', file=sys.stderr, flush=True)
+    if report.when == 'teardown':
+        _PREPARATION['finished_tests'] = _PREPARATION.get('finished_tests', 0) + 1
+    _write_preparation_progress(force=report.failed or report.skipped)
 
 
 def pytest_sessionfinish(session, exitstatus):
     path = os.environ.get('PG_PREPARATION_REPORT')
     if path:
-        from preflight import _atomic_report
-        _atomic_report(Path(path), dict(_PREPARATION, completed=True, exit_code=int(exitstatus)))
+        from preflight import _atomic_report, _combine_preparation_workers
+        if hasattr(session.config, 'workerinput'):
+            session.config.workeroutput['preparation'] = dict(_PREPARATION, completed=True, exit_code=int(exitstatus))
+            return
+        workers = _PREPARATION.pop('workers', [])
+        evidence = _combine_preparation_workers(workers) if getattr(session.config.option, 'numprocesses', None) else dict(_PREPARATION)
+        evidence.update(completed=True, exit_code=int(exitstatus))
+        _atomic_report(Path(path), evidence)
+
+
+@pytest.hookimpl(optionalhook=True)
+def pytest_testnodedown(node, error):
+    if not os.environ.get('PG_PREPARATION_REPORT'):
+        return
+    payload = node.workeroutput.get('preparation')
+    if error or not isinstance(payload, dict):
+        payload = {'completed': False, 'collection_errors': [str(error or 'Missing worker evidence')]}
+    _PREPARATION.setdefault('workers', []).append(payload)
+
+
+@pytest.hookimpl(optionalhook=True)
+def pytest_xdist_node_collection_finished(node, ids):
+    if os.environ.get('PG_PREPARATION_REPORT'):
+        _PREPARATION['selected_tests'] = len(ids)
+        _write_preparation_progress(force=True)
+
+
+def pytest_runtest_logstart(nodeid, location):
+    if os.environ.get('PG_PREPARATION_REPORT'):
+        _PREPARATION['current_test'] = nodeid
+        _write_preparation_progress()
