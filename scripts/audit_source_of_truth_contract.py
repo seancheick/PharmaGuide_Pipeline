@@ -959,12 +959,15 @@ def audit_scoring(args: argparse.Namespace) -> list[Finding]:
                 and strict_contract.get("passed") is False
                 and strict_reasons == ["disclosed_form_unmapped"]
                 and (
-                    "review_queue: export cannot ship score with failed "
-                    "strict scoring contract."
-                ) in quarantines.get(pid, ())
-                and any(
-                    issue.startswith("review_queue: NOT_SCORED verdict (")
-                    for issue in quarantines.get(pid, ())
+                    pid in warning_only
+                    or (
+                        "review_queue: export cannot ship score with failed "
+                        "strict scoring contract."
+                    ) in quarantines.get(pid, ())
+                    and any(
+                        issue.startswith("review_queue: NOT_SCORED verdict (")
+                        for issue in quarantines.get(pid, ())
+                    )
                 )
             )
             if (

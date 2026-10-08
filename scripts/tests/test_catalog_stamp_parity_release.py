@@ -2,7 +2,7 @@
 
 Two questions, both answered against the built artifact rather than trusted:
 
-1. Does anything the completeness gate quarantined, or anything NOT_SCORED,
+1. Does anything the export contract quarantined,
    reach the app catalog? Quarantine is only a real boundary if the excluded
    ids are absent from `products_core` and from `detail_blobs/`.
 
@@ -141,15 +141,14 @@ def test_no_quarantined_product_reaches_the_catalog() -> None:
     )
 
 
-def test_no_live_product_is_not_scored() -> None:
+def test_unscored_catalog_products_never_publish_a_quality_score_or_tier() -> None:
     _require_build()
-    core, _ = _core_rows(["quality_score_status", "quality_assessment_status"])
-    bad = sorted(
-        pid for pid, row in core.items()
-        if str(row.get("quality_score_status") or "").upper() == "NOT_SCORED"
-        or str(row.get("quality_assessment_status") or "").upper() == "NOT_SCORED"
-    )
-    assert not bad, f"NOT_SCORED products in the live catalog: {bad[:10]}"
+    core, _ = _core_rows(["quality_score_status", "quality_score_v4_100", "quality_tier", "score_100_equivalent"])
+    bad = sorted(pid for pid, row in core.items()
+        if row.get("quality_score_status") == "not_scored"
+        and any(row.get(key) is not None for key in
+            ("quality_score_v4_100", "score_100_equivalent", "quality_tier")))
+    assert not bad, f"Unscored products publish a quality result: {bad[:10]}"
 
 
 def test_every_live_product_has_a_blob_and_every_blob_a_row() -> None:

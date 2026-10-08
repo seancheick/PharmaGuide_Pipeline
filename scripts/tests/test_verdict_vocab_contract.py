@@ -11,7 +11,7 @@ decision-maker for tone/color/icon/action.
 
 Locked decisions captured by these tests:
   - Four current disposition IDs: SAFE, CAUTION, BLOCKED, UNSAFE; POOR is old-catalog compatibility only
-  - NOT_SCORED is intentionally excluded (review-queue-only per doc spec)
+  - NOT_SCORED carries a known label without a quality score; no safety claim
   - Display contract: 8 required fields per entry
   - tone enum: positive | neutral | info | warning | danger
   - ui_color enum: green | blue | gray | yellow | orange | red
@@ -19,7 +19,7 @@ Locked decisions captured by these tests:
   - short_label ≤12 chars, action ≤40 chars, notes ≤200 chars
   - All IDs UPPERCASE_SNAKE (verdicts are emitted as uppercase by pipeline)
 
-Adding a 6th verdict requires fresh clinician sign-off and a coordinated
+Adding another verdict requires fresh clinician sign-off and a coordinated
 pipeline + Flutter release — should fail this test, not slip through silently.
 """
 
@@ -53,19 +53,19 @@ def verdicts(vocab):
 def test_metadata_block_present(vocab):
     assert "_metadata" in vocab
     md = vocab["_metadata"]
-    assert md["schema_version"] == "1.1.1"
-    assert md["total_entries"] == 5
+    assert md["schema_version"] == "1.1.2"
+    assert md["total_entries"] == 6
     assert "LOCKED" in md["status"]
     assert md["char_limit_short_label"] == 12
     assert md["char_limit_action"] == 40
     assert md["char_limit_notes"] == 200
 
 
-def test_compatibility_vocabulary_keeps_5_readable_ids(verdicts):
+def test_compatibility_vocabulary_keeps_6_readable_ids(verdicts):
     """Adding/removing verdicts requires pipeline + Flutter coordination.
-    NOT_SCORED is deliberately excluded per doc spec (review-queue-only)."""
-    assert len(verdicts) == 5, (
-        f"Vocab is locked at 5 shipped verdicts; got {len(verdicts)}. "
+    NOT_SCORED is the existing score-unavailable compatibility disposition."""
+    assert len(verdicts) == 6, (
+        f"Vocab is locked at 6 shipped verdicts; got {len(verdicts)}. "
         "Adding or removing requires a fresh clinician review cycle "
         "AND a coordinated pipeline + Flutter release."
     )
@@ -112,7 +112,7 @@ def test_every_id_unique_and_uppercase_snake(verdicts):
 
 def test_canonical_compatibility_ids_present(verdicts):
     """The locked canonical set per REFERENCE_DATA_LOOKUP_OPPORTUNITIES.md §1."""
-    expected = {"SAFE", "CAUTION", "POOR", "BLOCKED", "UNSAFE"}
+    expected = {"SAFE", "CAUTION", "POOR", "BLOCKED", "UNSAFE", "NOT_SCORED"}
     actual = {v["id"] for v in verdicts}
     missing = expected - actual
     extra = actual - expected
@@ -123,15 +123,13 @@ def test_canonical_compatibility_ids_present(verdicts):
     )
 
 
-def test_not_scored_explicitly_excluded(verdicts):
-    """Per doc: NOT_SCORED ships to review queue, never to Flutter.
-    Including it in vocab would create a dead ID."""
-    ids = {v["id"] for v in verdicts}
-    assert "NOT_SCORED" not in ids, (
-        "NOT_SCORED MUST NOT be in vocab — products that fail to score "
-        "go to the review queue per pipeline contract. Including it here "
-        "would be a dead ID."
-    )
+def test_not_scored_is_neutral_assessment_visibility_without_a_safety_claim(verdicts):
+    item = next(v for v in verdicts if v["id"] == "NOT_SCORED")
+    assert item["name"] == "Score unavailable"
+    assert item["tone"] == "neutral"
+    assert item["ui_color"] == "gray"
+    assert "no safety claim" in item["notes"]
+    assert "warnings remain visible" in item["notes"]
 
 
 def test_nutrition_only_explicitly_retired(verdicts):

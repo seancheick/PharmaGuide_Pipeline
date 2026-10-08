@@ -1237,3 +1237,34 @@ def test_main_succeeds_when_stale_input_with_allow_stale(
     assert exit_code == 0
     err = capsys.readouterr().err
     assert "WARNING" in err and "--allow-stale" in err
+
+
+def test_scoring_form_backlog_can_ship_only_after_actual_null_score_export(good_release_dir):
+    from audit_source_of_truth_contract import audit_scoring
+    from test_scoring_source_of_truth_audit import _args, _scored, _write
+    _warning_only_candidate(good_release_dir, verdict="NOT_SCORED", status="not_scored")
+    product = _scored(dsld_id="ID00000", verdict="NOT_SCORED", quality_score_status="not_scored",
+        quality_score_v4_100=None, score_100_equivalent=None,
+        strict_scoring_contract={"passed": False, "findings": ["disclosed_form_unmapped"]})
+    path = good_release_dir.parent / "unscored.json"
+    _write(path, product)
+    args = _args(path)
+    assert audit_scoring(args)
+    args.dist_dir = str(good_release_dir)
+    assert audit_scoring(args) == []
+    product["strict_scoring_contract"]["findings"].append("missing_required_fields:dose_class")
+    _write(path, product)
+    assert audit_scoring(args)
+
+
+@pytest.mark.parametrize("mirror", ["quality_score_v4_100", "score_100_equivalent"])
+def test_unscored_export_proof_rejects_any_numeric_quality_score(good_release_dir, mirror):
+    _warning_only_candidate(good_release_dir, verdict="NOT_SCORED", status="not_scored")
+    db = good_release_dir / "pharmaguide_core.db"
+    with sqlite3.connect(db) as conn:
+        conn.execute(f"UPDATE products_core SET {mirror}=0 WHERE dsld_id='ID00000'")
+    path = good_release_dir / "export_manifest.json"
+    manifest = json.loads(path.read_text())
+    manifest["checksum"] = "sha256:" + rca.compute_sha256(db)
+    path.write_text(json.dumps(manifest))
+    assert "ID00000" not in rca.verified_warning_only_products(good_release_dir)

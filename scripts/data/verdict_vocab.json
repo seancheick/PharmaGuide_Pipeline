@@ -1,26 +1,26 @@
 {
   "_metadata": {
     "description": "Safety/disposition compatibility display contract. Quality ratings are emitted separately in quality_tier. POOR remains only for older cached catalogs and is never emitted by the current scorer.",
-    "schema_version": "1.1.1",
-    "last_updated": "2026-10-01",
-    "total_entries": 5,
-    "status": "LOCKED — independent quality/safety clarification approved October 1, 2026",
+    "schema_version": "1.1.2",
+    "last_updated": "2026-10-08",
+    "total_entries": 6,
+    "status": "LOCKED \u2014 catalog visibility separated from quality assessment October8,2026",
     "purpose": "Current safety/disposition compatibility IDs are SAFE, CAUTION, BLOCKED and UNSAFE. POOR is a retired quality alias readable in older catalogs; it makes no safety claim.",
     "alignment": "Pipeline: scripts/scoring_v4/scored_artifact.py. Flutter: lib/core/scoring/catalog_product_semantics.dart and lib/core/widgets/verdict_badge.dart.",
     "field_contract": {
       "id": "Stable compatibility identifier. Consumer safety comes from product_safety_status; consumer quality comes from quality_tier. POOR is read-only compatibility for older catalogs.",
       "name": "Full user-facing label (sentence case). Shown in detail screens and full-text contexts.",
-      "short_label": "Compact chip / pill label. ≤12 chars. Shown in search-result tiles and dense list views.",
+      "short_label": "Compact chip / pill label. \u226412 chars. Shown in search-result tiles and dense list views.",
       "tone": "Semantic intent for theming. One of: positive, neutral, info, warning, danger.",
       "ui_color": "Color hint Flutter resolves to a theme color. One of: green, blue, gray, yellow, orange, red.",
       "ui_icon": "Icon hint Flutter resolves to an icon asset. One of: check, info, warning, alert, block.",
-      "action": "Suggested user action verb-phrase (≤40 chars). Shown beneath the verdict in product detail.",
-      "notes": "≤200-char plain-English description shown in tap-to-learn modal."
+      "action": "Suggested user action verb-phrase (\u226440 chars). Shown beneath the verdict in product detail.",
+      "notes": "\u2264200-char plain-English description shown in tap-to-learn modal."
     },
     "char_limit_short_label": 12,
     "char_limit_action": 40,
     "char_limit_notes": 200,
-    "pipeline_contract_note": "NOT_SCORED and NUTRITION_ONLY are intentionally absent. Products with incomplete supplement assessment, including food-shaped inputs, divert to the QA review queue and never ship to Flutter.",
+    "pipeline_contract_note": "NOT_SCORED may ship a confidently matched source label with no quality score or tier and independently valid safety warnings. NUTRITION_ONLY remains retired. Product-match and payload-integrity failures remain quarantined.",
     "co_render_surfaces": [
       "lib/features/product_detail/widgets/verdict_badge.dart",
       "lib/features/search/widgets/result_tile.dart",
@@ -77,6 +77,16 @@
       "ui_icon": "alert",
       "action": "Do not use",
       "notes": "Product has critical safety flags (high-dose contraindications, severe interaction risk, or regulatory adverse events). Do not use without medical supervision."
+    },
+    {
+      "id": "NOT_SCORED",
+      "name": "Score unavailable",
+      "short_label": "Unscored",
+      "tone": "neutral",
+      "ui_color": "gray",
+      "ui_icon": "info",
+      "action": "Review label and warnings",
+      "notes": "Product label information is available, but its quality assessment is incomplete. This makes no safety claim. Independently verified warnings remain visible."
     }
   ]
 }

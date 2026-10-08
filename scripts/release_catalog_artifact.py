@@ -562,9 +562,10 @@ def verified_warning_only_products(input_dir: Path) -> set[str]:
                 " OR score_display_100_equivalent='N/A')"
             )
         return {str(row[0]) for row in conn.execute(
-            "SELECT dsld_id FROM products_core WHERE verdict IN ('BLOCKED','UNSAFE') "
-            "AND quality_score_status='suppressed_safety' AND quality_score_v4_100 IS NULL "
-            + mirror_checks
+            "SELECT dsld_id FROM products_core WHERE "
+            "((verdict IN ('BLOCKED','UNSAFE') AND quality_score_status='suppressed_safety') "
+            "OR (verdict='NOT_SCORED' AND quality_score_status='not_scored')) "
+            "AND quality_score_v4_100 IS NULL " + mirror_checks
         )}
 
 

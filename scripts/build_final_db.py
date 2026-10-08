@@ -1690,8 +1690,8 @@ def validate_export_contract(enriched: Dict, scored: Dict) -> List[str]:
         SAFE, CAUTION, BLOCKED, UNSAFE (POOR only in old catalogs)
 
     Products are QUARANTINED (excluded_by_gate; never reach Flutter) when:
-      - verdict == NOT_SCORED  (mapping/dosage gate failure upstream)
-      - score_100_equivalent is None on a non-BLOCKED/UNSAFE verdict
+      - NOT_SCORED without a verified source-label record or with a score/tier
+      - score_100_equivalent is None on a scored non-BLOCKED/UNSAFE verdict
       - the Stage-3 artifact is not the v4-native six-pillar contract
 
     BLOCKED/UNSAFE products may legitimately have null scores — the recall
@@ -1705,6 +1705,36 @@ def validate_export_contract(enriched: Dict, scored: Dict) -> List[str]:
     import math
 
     issues = []
+
+    # October8 approved policy: product/label identity is independent of
+    # ingredient-assessment completeness. Keep a known label visible while
+    # its quality score is unavailable, without excusing malformed payloads.
+    unscored_label_known = False
+    if scored.get("quality_score_status") == "not_scored":
+        try:
+            label_record = build_label_record_contract(
+                enriched, enriched.get("display_ingredients")
+            )
+            unscored_label_known = bool(
+                label_record.get("source_name")
+                and label_record.get("source_record_id")
+                and label_record.get("formula_fingerprint")
+                and enriched.get("display_ingredients")
+            )
+        except ValueError:
+            pass
+        if not unscored_label_known:
+            issues.append("review_queue: NOT_SCORED product lacks a verified source-label record.")
+        if (
+            scored.get("quality_score_v4_100") is not None
+            or scored.get("score_100_equivalent") is not None
+            or scored.get("quality_tier") is not None
+            or scored.get("grade") is not None
+            or scored.get("display_100") not in {None, "N/A"}
+        ):
+            issues.append("review_queue: NOT_SCORED product cannot publish a quality score or tier.")
+        if not safe_str(scored.get("score_unavailable_reason") or scored.get("not_scorable_reason")):
+            issues.append("review_queue: NOT_SCORED product must explain its assessment limitation.")
 
     if not safe_str(enriched.get("dsld_id")):
         issues.append("missing enriched.dsld_id")
@@ -1820,6 +1850,13 @@ def validate_export_contract(enriched: Dict, scored: Dict) -> List[str]:
         and all(finding == "identity_disposition_not_scoreable:identity_conflict"
                 for finding in strict_scoring_contract["findings"])
     ) or (
+        # An unfinished preparation grade protects a score, not the existence
+        # of a verified product label. No other strict failure is waived.
+        unscored_label_known
+        and scored.get("quality_score_status") == "not_scored"
+        and strict_scoring_contract.get("passed") is False
+        and strict_scoring_contract.get("findings") == ["disclosed_form_unmapped"]
+    ) or (
         # A disclosed form gap cannot hide a confirmed ban/recall warning.
         # This permits no score and excuses no other contract finding.
         strict_scoring_contract.get("passed") is False
@@ -1857,7 +1894,7 @@ def validate_export_contract(enriched: Dict, scored: Dict) -> List[str]:
     # for the ship/quarantine decision.
     #   scored           → require a finite quality_score_v4_100 (asserted here);
     #   suppressed_safety → BLOCKED/UNSAFE, null score is legitimate (score_optional below);
-    #   not_scored        → verdict is NOT_SCORED, quarantined by the block below.
+    #   not_scored        → known label may ship with no quality score or tier.
     # The verdict-keyed checks still apply to the v4-native Stage-3 artifact.
     v4_status = scored.get("quality_score_status")
     if v4_status not in {"scored", "suppressed_safety", "not_scored"}:
@@ -1977,37 +2014,8 @@ def validate_export_contract(enriched: Dict, scored: Dict) -> List[str]:
         issues.append("review_queue: SAFE verdict is forbidden below mapped_coverage 0.3.")
 
     if verdict == "NOT_SCORED":
-        unavailable_reason = safe_str(
-            scored.get("score_unavailable_reason")
-            or scored.get("score_unavailable_reason")
-            or scored.get("not_scorable_reason")
-        ).strip() or "unspecified"
-        readiness_value = scored.get("assessment_readiness")
-        if not isinstance(readiness_value, dict):
-            readiness_value = scored.get("assessment_readiness")
-        incomplete_dimensions: List[str] = []
-        if isinstance(readiness_value, dict):
-            for dimension_value in safe_list(
-                readiness_value.get("enforced_dimensions")
-            ):
-                dimension = safe_str(dimension_value).strip()
-                if not dimension:
-                    continue
-                readiness = safe_str(
-                    safe_dict(readiness_value.get(dimension)).get("readiness")
-                ).strip()
-                if readiness not in {"complete", "not_applicable"}:
-                    incomplete_dimensions.append(dimension)
-        review_details = [f"reason={unavailable_reason}"]
-        if incomplete_dimensions:
-            review_details.append(
-                "incomplete_dimensions=" + ",".join(incomplete_dimensions)
-            )
-        issues.append(
-            "review_queue: NOT_SCORED verdict ("
-            + "; ".join(review_details)
-            + ") — product excluded from the live catalog pending remediation."
-        )
+        if v4_status != "not_scored":
+            issues.append("review_queue: NOT_SCORED verdict requires quality_score_status=not_scored.")
     elif verdict == "NUTRITION_ONLY":
         issues.append(
             "review_queue: NUTRITION_ONLY is retired; food-shaped or otherwise "
@@ -2020,7 +2028,7 @@ def validate_export_contract(enriched: Dict, scored: Dict) -> List[str]:
     # in this product"). So it SHIPS (with a `proprietary_blend` or
     # `unverified_ingredient` flag set in build_detail_blob — split by why the
     # active is unidentifiable), rather than being silently quarantined. Genuinely
-    # unscoreable products are NOT_SCORED (handled above) and still quarantine.
+    # unscoreable products are NOT_SCORED and may ship their verified label.
     elif not score_optional:
         s100 = scored.get("score_100_equivalent")
         if s100 is None:
@@ -10867,15 +10875,15 @@ def build_final_db(
     for key, value in local_manifest_rows:
         c.execute("INSERT OR REPLACE INTO export_manifest VALUES (?,?)", (key, value))
 
-    # Defensive sweep: non-live QA verdicts MUST NOT reach products_core per
+    # Defensive sweep: retired QA verdicts MUST NOT reach products_core per
     # validate_export_contract() review-queue gate (line 389). This sweep
     # cleans any stale rows left from builds that pre-date the gate, in case
     # the source product no longer appears in the current input batch (so
     # the per-product DELETE at line 4341 wouldn't fire). Sweep is logged
     # and counted in the manifest for observability.
     quarantined_verdicts_swept = c.execute(
-        "DELETE FROM products_core WHERE verdict IN (?, ?)",
-        ("NOT_SCORED", "NUTRITION_ONLY"),
+        "DELETE FROM products_core WHERE verdict = ?",
+        ("NUTRITION_ONLY",),
     ).rowcount
     if quarantined_verdicts_swept > 0:
         logger.warning(
