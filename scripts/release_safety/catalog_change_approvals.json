@@ -1,7 +1,7 @@
 {
   "_metadata": {
-    "description": "Reviewed exact catalog safety transitions allowed to ship: a milder catalog safety summary or a warned product leaving the catalog. Ordinary score/tier movements are report-only. Read by scripts/release_safety/catalog_diff.py before publication. Each approval matches one product exact dsld_id/from/to state (verdict is uppercase product_safety_status, tier and score); null to means removal. Each group requires a reason, approver and YYYY-MM-DD date. Unmatched later approvals are reported stale.",
-    "schema_version": 2
+    "description": "Reviewed exact catalog safety transitions allowed to ship: a milder catalog safety summary or a warned product leaving the catalog. Ordinary score/tier movements are report-only. Read by scripts/release_safety/catalog_diff.py before publication. Each approval matches one product exact dsld_id/from/to state (verdict is uppercase product_safety_status, tier and score); null to means removal. Each group requires a reason, approver and YYYY-MM-DD date. Unmatched later approvals are reported stale. Each group also requires baseline_sha256 and candidate_sha256; an approval applies only when both full catalog hashes and the product states match.",
+    "schema_version": 3
   },
   "approvals": [
     {
@@ -384,7 +384,9 @@
           "product_name": "Neuro Shred",
           "why": "safety: CAUTION \u2192 no safety warning"
         }
-      ]
+      ],
+      "baseline_sha256": "edfdb110fa2f48adc83723686338a5b0dc026529ed4f055dfe3027f44691e34c",
+      "candidate_sha256": "b65f4946a3f9c3e382992f8f5f1758793504ee802298565166e9fdedd678c42c"
     },
     {
       "reason": "Sean explicitly approved October 8, 2026 for candidate 2026.10.08.184425, core SHA-256 b65f4946a3f9c3e382992f8f5f1758793504ee802298565166e9fdedd678c42c, original/live baseline edfdb110fa2f48adc83723686338a5b0dc026529ed4f055dfe3027f44691e34c. Approval is limited to these exact records and transitions. Prior CAUTION resulted from a verified data/interpretation defect now corrected; this corrects previously incorrect or overstated signals and does not relax safety thresholds or policy. NO_KNOWN_CATALOG_CONCERN means no remaining catalog-level safety signal from the current rule set, never safe for everyone. Personalized medication, condition, pregnancy, allergy and stack warnings remain independent. Any other valid caution must remain; no thresholds, unrelated warnings, class exemptions, BLOCKED or UNSAFE behavior may change. Nine incomplete assessments remain visible with null quality scores and valid warnings. All source/citation, interaction, catalog, app/simulator, bundle, manifest/hash and live-parity gates remain mandatory. A modified candidate requires a new exact diff and renewed approval. The three molybdenum cases 28976, 28980 and 312980 are verified against original NIH labels and integrated exact-raw molybdenum corrections. Incorrect source data caused the prior critical over-UL condition; corrected label values no longer exceed that threshold. Unreviewed synthetic26mg retains its critical UL warning.",
@@ -436,7 +438,9 @@
           "product_name": "Multivitamins for Women - with Fish Oil Softgels",
           "why": "safety: CAUTION \u2192 no safety warning; score +12.0; grade Good \u2192 Very good (+12.0)"
         }
-      ]
+      ],
+      "baseline_sha256": "edfdb110fa2f48adc83723686338a5b0dc026529ed4f055dfe3027f44691e34c",
+      "candidate_sha256": "b65f4946a3f9c3e382992f8f5f1758793504ee802298565166e9fdedd678c42c"
     }
   ]
 }

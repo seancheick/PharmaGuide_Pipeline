@@ -45,11 +45,15 @@ def blocked(pid, name=None):
 
 
 def diff(tmp_path, before, after, approvals=()):
-    return catalog_diff.diff_catalogs(
-        make_db(tmp_path / "baseline.db", before),
-        make_db(tmp_path / "candidate.db", after),
-        list(approvals),
-    )
+    baseline = make_db(tmp_path / "baseline.db", before)
+    candidate = make_db(tmp_path / "candidate.db", after)
+    bound = []
+    for group in approvals:
+        group = dict(group)
+        group.setdefault("baseline_sha256", hashlib.sha256(baseline.read_bytes()).hexdigest())
+        group.setdefault("candidate_sha256", hashlib.sha256(candidate.read_bytes()).hexdigest())
+        bound.append(group)
+    return catalog_diff.diff_catalogs(baseline, candidate, bound)
 
 
 def gated(result):
@@ -450,3 +454,46 @@ def test_old_quality_approval_cannot_approve_new_safety_exception(tmp_path):
                   [row('1', score=90, tier='Excellent')], [old])
     assert result['unapproved'] == 1
     assert result['gated'][0]['approval'] is None
+
+
+@pytest.mark.parametrize("changed_side", ["baseline", "candidate"])
+def test_exact_state_approval_cannot_survive_unrelated_catalog_change(tmp_path, changed_side):
+    baseline = make_db(tmp_path / "bound_baseline.db", [row("1", "CAUTION"), row("control")])
+    candidate = make_db(tmp_path / "bound_candidate.db", [row("1"), row("control")])
+    group = approval([{"dsld_id": "1", "from": state("CAUTION"), "to": state()}])
+    group.update(baseline_sha256=hashlib.sha256(baseline.read_bytes()).hexdigest(),
+                 candidate_sha256=hashlib.sha256(candidate.read_bytes()).hexdigest())
+    assert catalog_diff.diff_catalogs(baseline, candidate, [group])["unapproved"] == 0
+    altered = baseline if changed_side == "baseline" else candidate
+    con = sqlite3.connect(altered)
+    con.execute("update products_core set product_name='Changed unrelated label' where dsld_id='control'")
+    con.commit()
+    con.close()
+    result = catalog_diff.diff_catalogs(baseline, candidate, [group])
+    assert result["unapproved"] == 1
+    assert result["gated"][0]["approval"] is None
+
+
+def test_drafts_keep_identical_transitions_bound_to_each_baseline(tmp_path):
+    baseline1 = make_db(tmp_path / "baseline1.db", [row("1", "CAUTION"), row("control")])
+    baseline2 = make_db(tmp_path / "baseline2.db", [row("1", "CAUTION"), row("control", name="Other baseline")])
+    candidate = make_db(tmp_path / "bound_candidate.db", [row("1"), row("control")])
+    results = [catalog_diff.diff_catalogs(base, candidate, []) for base in [baseline1, baseline2]]
+    draft = catalog_diff.draft_approvals(results)
+    assert len(draft["approvals"]) == 2
+    assert {g["baseline_sha256"] for g in draft["approvals"]} == {r["baseline"]["sha256"] for r in results}
+    assert {g["candidate_sha256"] for g in draft["approvals"]} == {results[0]["candidate"]["sha256"]}
+    for group in draft["approvals"]:
+        assert [c["dsld_id"] for c in group["changes"]] == ["1"]
+
+
+@pytest.mark.parametrize("field", ["baseline_sha256", "candidate_sha256"])
+@pytest.mark.parametrize("bad", [None, "", "f" * 63, "G" * 64, 42])
+def test_signed_approval_requires_both_valid_catalog_hashes(tmp_path, field, bad):
+    group = approval([{"dsld_id": "1", "from": state("CAUTION"), "to": state()}])
+    group.update(baseline_sha256="a" * 64, candidate_sha256="b" * 64)
+    group[field] = bad
+    path = tmp_path / "approvals.json"
+    path.write_text(json.dumps({"approvals": [group]}))
+    with pytest.raises(ValueError, match=field):
+        catalog_diff.load_approvals(path)
