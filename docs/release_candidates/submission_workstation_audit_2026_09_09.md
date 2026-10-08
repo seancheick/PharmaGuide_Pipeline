@@ -63,7 +63,8 @@ model download, paid inference or scoring change.
   fixtures, not a signed-in physical operator. This complements, not replaces,
   the authenticated HTTP tests. Checked the final-image action, help-loading
   shortcut suppression and editing a fully checked payload. The final
-  [screenshot](screenshots/workstation_audit_2026_09_09.png) shows all checks
+  screenshot (`workstation_audit_2026_09_09.png`, retained in Git history;
+  deletion committed under Sean’s October 8 cleanup authorization) showed all checks
   withdrawn after the edit and approval disabled with its reason. Initial
   auth/config 404s are expected on the fixture's static server.
 - Test logs: `/tmp/pg-workstation-audit.slFjPD/live-expanded.log`,
