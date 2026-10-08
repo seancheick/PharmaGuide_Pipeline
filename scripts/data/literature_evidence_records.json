@@ -3,11 +3,11 @@
     "description": "Phase 4 shadow literature resolution registry for high-impact canonical actives",
     "purpose": "literature_evidence_resolution",
     "schema_version": "5.0.0",
-    "last_updated": "2026-10-07",
-    "total_entries": 800,
+    "last_updated": "2026-10-08",
+    "total_entries": 807,
     "verification_pipeline": "scripts/api_audit/verify_literature_records.py",
-    "verified_studies_count": 273,
-    "verified_records_count": 800
+    "verified_studies_count": 279,
+    "verified_records_count": 807
   },
   "literature_evidence_records": [
     {
@@ -2960,49 +2960,56 @@
     },
     {
       "canonical_id": "stinging_nettle",
-      "material_form": "Urtica dioica root extract",
-      "search_query": "Urtica dioica nettle benign prostatic hyperplasia randomized controlled trial",
-      "search_date": "2026-09-20",
+      "material_form": "Urtica dioica generic nettle; root, leaf or unspecified preparation",
+      "search_query": "(\"Urtica dioica\"[tiab] OR \"nettle root\"[tiab]) AND (randomized controlled trial[pt] OR clinical trial[pt] OR systematic review[pt]) NOT (animals[mh] NOT humans[mh])",
+      "search_date": "2026-10-08",
       "databases_searched": [
-        "PubMed",
-        "Cochrane Library"
+        "PubMed"
       ],
-      "records_screened": 31,
+      "records_screened": 33,
       "qualifying_human_studies": [
         {
           "pmid": "16635963",
           "title": "Urtica dioica for treatment of benign prostatic hyperplasia: a prospective, randomized, double-blind, placebo-controlled, crossover study.",
           "study_type": "randomized_controlled_trial",
           "sample_size": 620,
-          "dose": "600 mg/day root extract",
           "duration": "6 months",
-          "outcome": "significant improvements in IPSS symptom score, peak flow rate, and post-void residual volume",
-          "effect_direction": "positive_moderate",
           "verification_provenance": {
             "pmid_verified": true,
             "authoritative_live_title": "Urtica dioica for treatment of benign prostatic hyperplasia: a prospective, randomized, double-blind, placebo-controlled, crossover study.",
             "human_subjects_verified": true,
-            "topic_match_verified": false,
+            "topic_match_verified": true,
             "retracted": false,
             "verified_source": "https://pubmed.ncbi.nlm.nih.gov/16635963/",
-            "verified_at": "2026-09-21T07:39:42.986936+00:00",
+            "verified_at": "2026-10-08T04:35:08.624987+00:00",
             "abstract_evidence_quote": "To determine the effects of therapy with Urtica dioica for symptomatic relief of lower urinary tract symptoms (LUTS) secondary to benign prostatic hyperplasia (BPH)."
+          },
+          "notes": "Species-level BPH trial; PubMed abstract does not establish the formerly recorded root-extract dose or standardization. No leaf, unspecified nettle or generic retail preparation efficacy is inferred."
+        },
+        {
+          "pmid": "32981268",
+          "title": "Urtica Dioica Root Extract on Clinical and Biochemical Parameters in Patients with Benign Prostatic Hyperplasia, Randomized Controlled Trial.",
+          "design": "randomized_controlled_trial",
+          "notes": "60 men with BPH, 450 mg/day studied root extract for 12 weeks; IPSS symptom endpoint. Preparation equivalence to unspecified retail extract is unestablished; no general efficacy or dose benchmark.",
+          "verification_provenance": {
+            "pmid_verified": true,
+            "authoritative_live_title": "Urtica Dioica Root Extract on Clinical and Biochemical Parameters in Patients with Benign Prostatic Hyperplasia, Randomized Controlled Trial.",
+            "human_subjects_verified": true,
+            "topic_match_verified": true,
+            "retracted": false,
+            "verified_source": "https://pubmed.ncbi.nlm.nih.gov/32981268/",
+            "verified_at": "2026-10-08T04:35:08.624987+00:00"
           }
         }
       ],
-      "effect_direction": "positive_moderate",
-      "population_context": "men with symptomatic BPH",
-      "studied_dose_exposure": {
-        "values": [
-          600
-        ],
-        "unit": "mg"
-      },
-      "applicability_decision": "Lower urinary tract symptom support established at >= 600 mg/day standardized root extract.",
+      "effect_direction": "applicability_unestablished",
+      "population_context": "Material-specific oral human evidence; retail preparation correspondence explicitly limited",
+      "studied_dose_exposure": {},
+      "applicability_decision": "Human BPH research includes a root-specific extract trial, but this generic canonical includes leaf, root and unspecified materials. Root trials cannot establish leaf or unspecified nettle efficacy; retail root extraction and standardization equivalence also remain unestablished. The historical species-level trial abstract does not verify the formerly assigned preparation exposure. Root-specific botanical identity remains separately assessed under nettle_root, with the same preparation limits. This bounded PubMed review is not exhaustive across all databases. No clinical grade, efficacy-dose benchmark or safety conclusion is assigned.",
       "verification_result": "authoritative_pubmed_verified",
       "verification_provenance": {
-        "verified_by": "scripts/api_audit/verify_literature_records.py",
-        "verified_at": "2026-09-21T07:39:42.986936+00:00",
+        "verified_by": "Codex primary-content review of retained live PubMed API receipts",
+        "verified_at": "2026-10-08T04:35:08.624987+00:00",
         "all_pmids_verified": true,
         "retractions_found": false
       }
@@ -25495,6 +25502,239 @@
         "verified_by": "manual_primary_source_content_review",
         "verified_at": "2026-10-07",
         "all_pmids_verified": true
+      }
+    },
+    {
+      "canonical_id": "butternut_squash_seed_oil",
+      "material_form": "Cucurbita moschata cold-pressed seed oil",
+      "search_query": "(\"Cucurbita moschata\"[tiab] OR \"butternut squash\"[tiab]) AND (human*[tiab] OR humans[mh] OR trial[tiab] OR clinical[tiab] OR random*[tiab])",
+      "search_date": "2026-10-08",
+      "databases_searched": [
+        "PubMed"
+      ],
+      "records_screened": 91,
+      "qualifying_human_studies": [
+        {
+          "pmid": "38635826",
+          "title": "Effects of Cucurbita Moschata squash (Butternut) seed paste in improving zinc and iron status in children attending Early Childhood Development centres in Limpopo province, South Africa.",
+          "design": "cluster_randomized_trial",
+          "notes": "Seed paste in preschool children; not oil. No paste-to-oil or nutrient-to-oil efficacy transfer.",
+          "verification_provenance": {
+            "pmid_verified": true,
+            "authoritative_live_title": "Effects of Cucurbita Moschata squash (Butternut) seed paste in improving zinc and iron status in children attending Early Childhood Development centres in Limpopo province, South Africa.",
+            "human_subjects_verified": true,
+            "topic_match_verified": true,
+            "retracted": false,
+            "verified_source": "https://pubmed.ncbi.nlm.nih.gov/38635826/",
+            "verified_at": "2026-10-08T04:35:08.624987+00:00"
+          }
+        }
+      ],
+      "effect_direction": "applicability_unestablished",
+      "population_context": "Material-specific oral human evidence; retail preparation correspondence explicitly limited",
+      "studied_dose_exposure": {},
+      "applicability_decision": "Exact-species human research concerns seed paste, not cold-pressed seed oil. The preschool nutritional seed-paste intervention cannot establish oil efficacy or transfer nutrient outcomes. Historical PMID13810019 has no abstract and its preparation/result remain unverified. Cucurbita pepo oil studies are a different species. This bounded PubMed review is not exhaustive across all databases and does not establish a universal absence or null effect. No clinical grade, efficacy-dose benchmark or safety conclusion is assigned.",
+      "verification_result": "authoritative_pubmed_verified",
+      "verification_provenance": {
+        "verified_by": "Codex primary-content review of retained live PubMed API receipts",
+        "verified_at": "2026-10-08T04:35:08.624987+00:00",
+        "all_pmids_verified": true,
+        "retractions_found": false
+      }
+    },
+    {
+      "canonical_id": "weeping_willow_bark",
+      "material_form": "Salix babylonica bark / bark extract",
+      "search_query": "(\"Salix babylonica\"[tiab] OR \"weeping willow\"[tiab]) AND (human*[tiab] OR humans[mh] OR trial[tiab] OR clinical[tiab] OR random*[tiab])",
+      "search_date": "2026-10-08",
+      "databases_searched": [
+        "PubMed"
+      ],
+      "records_screened": 36,
+      "qualifying_human_studies": [],
+      "effect_direction": "no_qualifying_human_evidence",
+      "population_context": "Material-specific oral human evidence; retail preparation correspondence explicitly limited",
+      "studied_dose_exposure": {},
+      "applicability_decision": "No qualifying standalone oral Salix babylonica bark efficacy intervention was found among the screened records. Animal, leaf, allergen and other Salix species findings cannot supply this bark assessment. Existing separate safety precautions remain intact. This bounded PubMed review is not exhaustive across all databases and does not establish a universal absence or null effect. No clinical grade, efficacy-dose benchmark or safety conclusion is assigned.",
+      "verification_result": "authoritative_pubmed_verified",
+      "verification_provenance": {
+        "verified_by": "Codex primary-content review of retained live PubMed API receipts",
+        "verified_at": "2026-10-08T04:35:08.624987+00:00",
+        "all_pmids_verified": true,
+        "retractions_found": false
+      }
+    },
+    {
+      "canonical_id": "chinese_wolfberry_fruit",
+      "material_form": "Lycium chinense whole-fruit powder",
+      "search_query": "(\"Lycium chinense\"[tiab] OR \"Chinese wolfberry\"[tiab]) AND (human*[tiab] OR humans[mh] OR trial[tiab] OR clinical[tiab] OR random*[tiab])",
+      "search_date": "2026-10-08",
+      "databases_searched": [
+        "PubMed"
+      ],
+      "records_screened": 61,
+      "qualifying_human_studies": [
+        {
+          "pmid": "31949453",
+          "title": "Standardized Lycium chinense fruit extract enhances attention and cognitive function in healthy young people by a double-blind, randomized, placebo-controlled, crossover trial.",
+          "design": "randomized_crossover_trial",
+          "notes": "Standardized dried water extract; 74 randomized and 43 analyzed. Full text PMC6950474 identifies 384 mg extract per 600 mg capsule, six capsules daily; reporting/attrition limits and powder equivalence remain unestablished.",
+          "verification_provenance": {
+            "pmid_verified": true,
+            "authoritative_live_title": "Standardized Lycium chinense fruit extract enhances attention and cognitive function in healthy young people by a double-blind, randomized, placebo-controlled, crossover trial.",
+            "human_subjects_verified": true,
+            "topic_match_verified": true,
+            "retracted": false,
+            "verified_source": "https://pubmed.ncbi.nlm.nih.gov/31949453/",
+            "verified_at": "2026-10-08T04:35:08.624987+00:00"
+          }
+        },
+        {
+          "pmid": "36629892",
+          "title": "Lycium chinense Miller fruit extract lowers liver enzyme levels in subjects with mild hepatic dysfunction: a randomized, double-blind, placebo-controlled clinical trial.",
+          "design": "randomized_controlled_trial",
+          "notes": "Fruit-extract capsules in adults with mild hepatic dysfunction; ALT/GGT surrogate endpoints. No whole-powder transfer.",
+          "verification_provenance": {
+            "pmid_verified": true,
+            "authoritative_live_title": "Lycium chinense Miller fruit extract lowers liver enzyme levels in subjects with mild hepatic dysfunction: a randomized, double-blind, placebo-controlled clinical trial.",
+            "human_subjects_verified": true,
+            "topic_match_verified": true,
+            "retracted": false,
+            "verified_source": "https://pubmed.ncbi.nlm.nih.gov/36629892/",
+            "verified_at": "2026-10-08T04:35:08.624987+00:00"
+          }
+        }
+      ],
+      "effect_direction": "applicability_unestablished",
+      "population_context": "Material-specific oral human evidence; retail preparation correspondence explicitly limited",
+      "studied_dose_exposure": {},
+      "applicability_decision": "Exact-species fruit-extract trials exist, but whole-fruit powder equivalence in extraction, standardization, exposure, population and purpose is unestablished. Cognition trial full text identifies 3600 mg capsule mass containing 2304 mg dried water extract daily, not 3600 mg whole-fruit powder. Liver-enzyme findings are surrogate outcomes, not a general liver-benefit claim. This bounded PubMed review is not exhaustive across all databases and does not establish a universal absence or null effect. No clinical grade, efficacy-dose benchmark or safety conclusion is assigned.",
+      "verification_result": "authoritative_pubmed_verified",
+      "verification_provenance": {
+        "verified_by": "Codex primary-content review of retained live PubMed API receipts",
+        "verified_at": "2026-10-08T04:35:08.624987+00:00",
+        "all_pmids_verified": true,
+        "retractions_found": false
+      }
+    },
+    {
+      "canonical_id": "nettle_root",
+      "material_form": "Urtica dioica root extract",
+      "search_query": "(\"Urtica dioica\"[tiab] OR \"nettle root\"[tiab]) AND (randomized controlled trial[pt] OR clinical trial[pt] OR systematic review[pt]) NOT (animals[mh] NOT humans[mh])",
+      "search_date": "2026-10-08",
+      "databases_searched": [
+        "PubMed"
+      ],
+      "records_screened": 33,
+      "qualifying_human_studies": [
+        {
+          "pmid": "32981268",
+          "title": "Urtica Dioica Root Extract on Clinical and Biochemical Parameters in Patients with Benign Prostatic Hyperplasia, Randomized Controlled Trial.",
+          "design": "randomized_controlled_trial",
+          "notes": "60 men with BPH, 450 mg/day studied root extract for 12 weeks; IPSS symptom endpoint. Preparation equivalence to unspecified retail extract is unestablished; no general efficacy or dose benchmark.",
+          "verification_provenance": {
+            "pmid_verified": true,
+            "authoritative_live_title": "Urtica Dioica Root Extract on Clinical and Biochemical Parameters in Patients with Benign Prostatic Hyperplasia, Randomized Controlled Trial.",
+            "human_subjects_verified": true,
+            "topic_match_verified": true,
+            "retracted": false,
+            "verified_source": "https://pubmed.ncbi.nlm.nih.gov/32981268/",
+            "verified_at": "2026-10-08T04:35:08.624987+00:00"
+          }
+        }
+      ],
+      "effect_direction": "applicability_unestablished",
+      "population_context": "Material-specific oral human evidence; retail preparation correspondence explicitly limited",
+      "studied_dose_exposure": {},
+      "applicability_decision": "Root-specific BPH research exists; generic retail root extract is not demonstrated equivalent to studied preparations or applicable to general wellness. Root evidence cannot transfer to nettle leaf/herb. The trial exposure is not a universal effective-dose threshold; no 600 mg threshold or retail standardization is inferred. This bounded PubMed review is not exhaustive across all databases and does not establish a universal absence or null effect. No clinical grade, efficacy-dose benchmark or safety conclusion is assigned.",
+      "verification_result": "authoritative_pubmed_verified",
+      "verification_provenance": {
+        "verified_by": "Codex primary-content review of retained live PubMed API receipts",
+        "verified_at": "2026-10-08T04:35:08.624987+00:00",
+        "all_pmids_verified": true,
+        "retractions_found": false
+      }
+    },
+    {
+      "canonical_id": "chopchini",
+      "material_form": "Smilax china root extract",
+      "search_query": "(\"Smilax china\"[tiab] OR chopchini[tiab]) AND (humans[mh] OR clinical[tiab] OR trial[tiab] OR patient*[tiab]) NOT (animals[mh] NOT humans[mh])",
+      "search_date": "2026-10-08",
+      "databases_searched": [
+        "PubMed"
+      ],
+      "records_screened": 40,
+      "qualifying_human_studies": [],
+      "effect_direction": "no_qualifying_human_evidence",
+      "population_context": "Material-specific oral human evidence; retail preparation correspondence explicitly limited",
+      "studied_dose_exposure": {},
+      "applicability_decision": "No attributable controlled standalone oral Smilax china root-extract efficacy study was found. Multi-intervention case reports cannot establish isolated efficacy. Smilax ornata/officinalis sarsaparilla findings are not this species. This bounded PubMed review is not exhaustive across all databases and does not establish a universal absence or null effect. No clinical grade, efficacy-dose benchmark or safety conclusion is assigned.",
+      "verification_result": "authoritative_pubmed_verified",
+      "verification_provenance": {
+        "verified_by": "Codex primary-content review of retained live PubMed API receipts",
+        "verified_at": "2026-10-08T04:35:08.624987+00:00",
+        "all_pmids_verified": true,
+        "retractions_found": false
+      }
+    },
+    {
+      "canonical_id": "achiote_leaf",
+      "material_form": "Bixa orellana leaf extract",
+      "search_query": "(\"Bixa orellana\"[tiab] OR achiote[tiab] OR annatto[tiab]) AND (leaf[tiab] OR leaves[tiab]) AND (humans[mh] OR clinical[tiab] OR trial[tiab] OR patient*[tiab]) NOT (animals[mh] NOT humans[mh])",
+      "search_date": "2026-10-08",
+      "databases_searched": [
+        "PubMed"
+      ],
+      "records_screened": 10,
+      "qualifying_human_studies": [],
+      "effect_direction": "no_qualifying_human_evidence",
+      "population_context": "Material-specific oral human evidence; retail preparation correspondence explicitly limited",
+      "studied_dose_exposure": {},
+      "applicability_decision": "No qualifying controlled oral leaf-extract efficacy intervention was found. Review PMID24357022 discusses leaf-powder safety, not efficacy of a 4:1 leaf extract; no safety conclusion is transferred. Annatto seed colorant and tocotrienol research are different materials. This bounded PubMed review is not exhaustive across all databases and does not establish a universal absence or null effect. No clinical grade, efficacy-dose benchmark or safety conclusion is assigned.",
+      "verification_result": "authoritative_pubmed_verified",
+      "verification_provenance": {
+        "verified_by": "Codex primary-content review of retained live PubMed API receipts",
+        "verified_at": "2026-10-08T04:35:08.624987+00:00",
+        "all_pmids_verified": true,
+        "retractions_found": false
+      }
+    },
+    {
+      "canonical_id": "saccharina_latissima",
+      "material_form": "Saccharina latissima whole kelp powder",
+      "search_query": "(\"Saccharina latissima\"[tiab] OR \"Laminaria saccharina\"[tiab]) AND (humans[mh] OR clinical[tiab] OR trial[tiab] OR patient*[tiab]) NOT (animals[mh] NOT humans[mh])",
+      "search_date": "2026-10-08",
+      "databases_searched": [
+        "PubMed"
+      ],
+      "records_screened": 37,
+      "qualifying_human_studies": [
+        {
+          "pmid": "40732054",
+          "title": "Gut Microbiome Modulation and Health Benefits of a Novel Fucoidan Extract from Saccharina latissima: A Double-Blind, Placebo-Controlled Trial.",
+          "design": "randomized_controlled_trial",
+          "notes": "91 healthy adults, proprietary fucoidan-rich extract for four weeks; microbiome composition/pathway endpoints, not whole kelp-powder efficacy.",
+          "verification_provenance": {
+            "pmid_verified": true,
+            "authoritative_live_title": "Gut Microbiome Modulation and Health Benefits of a Novel Fucoidan Extract from Saccharina latissima: A Double-Blind, Placebo-Controlled Trial.",
+            "human_subjects_verified": true,
+            "topic_match_verified": true,
+            "retracted": false,
+            "verified_source": "https://pubmed.ncbi.nlm.nih.gov/40732054/",
+            "verified_at": "2026-10-08T04:35:08.624987+00:00"
+          }
+        }
+      ],
+      "effect_direction": "applicability_unestablished",
+      "population_context": "Material-specific oral human evidence; retail preparation correspondence explicitly limited",
+      "studied_dose_exposure": {},
+      "applicability_decision": "Human proprietary fucoidan-rich SLE-F extract research exists; whole kelp powder in a greens preparation is not demonstrated equivalent in extraction, composition, exposure or purpose. Microbiome taxonomic/pathway findings do not establish clinical benefit for whole powder. Historical records without abstracts remain unqualifiable. This bounded PubMed review is not exhaustive across all databases and does not establish a universal absence or null effect. No clinical grade, efficacy-dose benchmark or safety conclusion is assigned.",
+      "verification_result": "authoritative_pubmed_verified",
+      "verification_provenance": {
+        "verified_by": "Codex primary-content review of retained live PubMed API receipts",
+        "verified_at": "2026-10-08T04:35:08.624987+00:00",
+        "all_pmids_verified": true,
+        "retractions_found": false
       }
     }
   ]
