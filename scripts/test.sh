@@ -475,13 +475,17 @@ case "$PROFILE" in
     run_release_artifact_gates inventory
     ;;
   preparation)
-    export PG_TEST_WORKERS=1
+    preparation_capacity="$(safe_worker_count capacity)"
+    preparation_workers="${PG_TEST_WORKERS:-2}"
+    (( preparation_workers > 2 )) && preparation_workers=2
+    (( preparation_workers > preparation_capacity )) && preparation_workers="$preparation_capacity"
+    export PG_TEST_WORKERS="$preparation_workers"
     export PG_PREPARATION_REPORT="${PG_PREPARATION_REPORT:-$REPO_ROOT/scripts/reports/preparation_source_tests.json}"
     export PG_PREPARATION_MODE="${PG_PREPARATION_MODE:-source}"
     split_user_pytest_args "$@"
     files=(scripts/tests)
     if ((${#USER_TARGETS[@]} > 0)); then files=("${USER_TARGETS[@]}"); fi
-    parallel_args=(); if has_xdist; then parallel_args=(-n 0); fi
+    parallel_args=(); if has_xdist; then parallel_args=(-n "$PG_TEST_WORKERS" --dist loadfile); fi
     "$PG_PYTHON" -m pytest "${files[@]}" -q --tb=line --durations=20 "${TIMEOUT_HEAVY[@]+"${TIMEOUT_HEAVY[@]}"}" "${USER_OPTIONS[@]+"${USER_OPTIONS[@]}"}" "${parallel_args[@]+"${parallel_args[@]}"}"
     ;;
   fast)

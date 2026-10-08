@@ -1210,7 +1210,7 @@ def test_nordic_softgels_inactive_unmapped_labels_map(
         # Exact branded alias belongs to the reviewed EpiCor preparation;
         # generic fermentate must not replace that identity (Sep-04 audit).
         ("EpiCor dried Yeast Fermentate", "EpiCor"),
-        ("Soynatto Fermented Soyfood", "Isoflavones"),
+        ("Soynatto Fermented Soyfood", "Soybean (Glycine max)"),
         ("MaquiBright Aristotelia chilensis berry standardized extract", "Maqui"),
         ("EVNolMax", "Vitamin E"),
         ("ERr 731", "Siberian Rhubarb"),
@@ -1229,7 +1229,7 @@ def test_nordic_softgels_inactive_unmapped_labels_map(
         ("Enzopharm(R) Plus", "enzopharm"),
         ("ATPro", "atpro"),
         ("Mitopure Urolithin A", "Urolithin A"),
-        ("Phytopin", "Pine Bark"),
+        ("Phytopin", "Phytosterols"),
         ("PhytoSure", "phytosure"),
         ("Peat extract", "peat extract"),
         ("Oat", "Oat (Generic)"),

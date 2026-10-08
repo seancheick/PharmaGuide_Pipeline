@@ -835,6 +835,12 @@ def _preparation_runtime():
             'platform': platform.platform(), 'executables': executables, 'freshness_date': datetime.now(timezone.utc).date().isoformat(), 'packages': packages, 'environment': environment}
 
 
+def _preparation_runtime_stable(before, after):
+    # Calendar epochs expire reuse; the FDA owner decides actual date readiness.
+    return ({key: value for key, value in before.items() if key != 'freshness_date'}
+            == {key: value for key, value in after.items() if key != 'freshness_date'})
+
+
 def _valid_test_evidence(evidence, *, inventory=False):
     """Validate complete collected coverage and all setup/call/teardown outcomes."""
     if not isinstance(evidence, dict) or evidence.get('completed') is not True:
@@ -880,6 +886,29 @@ def _valid_test_evidence(evidence, *, inventory=False):
                 or not any(re.fullmatch(pattern, reason) for pattern in allowed)):
             return False
     return True
+
+
+def _combine_preparation_workers(workers):
+    """Combine identical inventories and disjoint outcomes; crashes fail closed."""
+    combined = {'nodes': [], 'outcomes': {}, 'collection_errors': [], 'collection_skips': []}
+    if not workers:
+        combined['collection_errors'].append('No worker evidence')
+        return combined
+    for worker in workers:
+        if not worker.get('completed'):
+            combined['collection_errors'].append('Incomplete worker evidence')
+        combined['collection_errors'].extend(worker.get('collection_errors', []))
+        combined['collection_skips'].extend(worker.get('collection_skips', []))
+        if not combined['nodes']:
+            combined['nodes'] = worker.get('nodes', [])
+            combined['selection'] = worker.get('selection')
+        elif (combined['nodes'] != worker.get('nodes') or combined.get('selection') != worker.get('selection')):
+            combined['collection_errors'].append('Worker inventories differ')
+        for nodeid, outcomes in worker.get('outcomes', {}).items():
+            if nodeid in combined['outcomes']:
+                combined['collection_errors'].append('Duplicate worker execution: ' + nodeid)
+            combined['outcomes'][nodeid] = outcomes
+    return combined
 
 
 def _same_preparation_inventory(collected, executed):
@@ -929,6 +958,73 @@ def _preparation_canary_identifiers(repo_root):
         return []
 
 
+def _preparation_process(command, *, cwd, env=None, timeout=None, pass_fds=(), **kwargs):
+    """Drain to files so quiet/heavy children cannot deadlock a captured pipe."""
+    import subprocess
+    import tempfile
+    import time
+    import os
+    import signal
+    with tempfile.TemporaryFile(mode='w+', encoding='utf-8') as out, tempfile.TemporaryFile(mode='w+', encoding='utf-8') as err:
+        process = subprocess.Popen(command, cwd=cwd, env=env, stdout=out, stderr=err, pass_fds=pass_fds, start_new_session=True)
+        started = time.monotonic()
+        telemetry, stderr_offset, pending = {}, 0, ''
+        last_progress, last_printed = None, -10.0
+        evidence_stamp, evidence_state = None, {}
+        try:
+            while process.poll() is None:
+                elapsed = time.monotonic() - started
+                if timeout is not None and elapsed >= timeout:
+                    raise subprocess.TimeoutExpired(command, timeout)
+                chunk = os.pread(err.fileno(), max(0, os.fstat(err.fileno()).st_size - stderr_offset), stderr_offset)
+                stderr_offset += len(chunk)
+                lines = (pending + chunk.decode('utf-8', errors='replace')).split('\n')
+                pending = lines.pop()
+                for line in lines:
+                    if line.startswith('PG_PREPARATION_PROGRESS:'):
+                        try:
+                            telemetry = json.loads(line.removeprefix('PG_PREPARATION_PROGRESS:'))
+                        except ValueError:
+                            pass
+                    elif line.startswith('FAILED:'):
+                        print(line, file=sys.stderr, flush=True)
+                progress = ''
+                if env and env.get('PG_PREPARATION_REPORT'):
+                    try:
+                        evidence_file = Path(env['PG_PREPARATION_REPORT'])
+                        stamp = evidence_file.stat().st_mtime_ns
+                        if stamp != evidence_stamp:
+                            evidence_state = json.loads(evidence_file.read_text())
+                            evidence_stamp = stamp
+                        state = dict(evidence_state)
+                        state.update(telemetry)
+                        progress = f" | {state.get('finished_tests', 0)}/{state.get('selected_tests', '?')} tests | {state.get('current_test', 'collecting')}"
+                        failures = state.get('failures', [])
+                        if failures:
+                            progress += ' | FAILED: ' + ', '.join(failures)
+                    except (OSError, ValueError):
+                        pass
+                if progress != last_progress or elapsed - last_printed >= 10:
+                    print(f"RUNNING: {(env or {}).get('PG_PREPARATION_CHECK', command[0])} | elapsed {elapsed:.0f}s{progress}", file=sys.stderr, flush=True)
+                    last_progress, last_printed = progress, elapsed
+                try:
+                    process.wait(timeout=min(1, max(.01, timeout - elapsed)) if timeout else 1)
+                except subprocess.TimeoutExpired:
+                    pass
+        except BaseException:
+            os.killpg(process.pid, signal.SIGTERM)
+            try:
+                process.wait(timeout=5)
+            except subprocess.TimeoutExpired:
+                os.killpg(process.pid, signal.SIGKILL)
+                process.wait()
+            raise
+        out.seek(0)
+        err.seek(0)
+        stderr = ''.join(line for line in err.readlines() if not line.startswith('PG_PREPARATION_PROGRESS:'))
+        return subprocess.CompletedProcess(command, process.returncode, out.read(), stderr)
+
+
 def run_preparation(repo_root, raw_root, *, checks=None, runner=None, report_path=None):
     """Aggregate read-only checks. Readiness permits regeneration, never publication.
 
@@ -942,9 +1038,10 @@ def run_preparation(repo_root, raw_root, *, checks=None, runner=None, report_pat
     from test_lock import inherited_lock_fds
     from pipeline_freshness import STAGES, RERUN_STAGES, stage_freshness_issues
     repo_root, raw_root = Path(repo_root).resolve(), Path(raw_root).resolve()
-    runner = runner or subprocess.run
+    runner = runner or _preparation_process
     lock_fds = inherited_lock_fds()
     operational_paths = [Path(report_path), Path(report_path).with_suffix('.pytest.json')] if report_path else []
+    print('START: input fingerprints', file=sys.stderr, flush=True)
     before = _preparation_inputs(repo_root, raw_root, operational_paths=operational_paths)
     runtime = _preparation_runtime()
     fingerprint = _digest({'inputs': before, 'runtime': runtime, 'raw_root': str(raw_root)})
@@ -983,7 +1080,8 @@ def run_preparation(repo_root, raw_root, *, checks=None, runner=None, report_pat
                          else Path(temporary) / 'pytest.json')
         if report_path:
             result['evidence_path'] = str(evidence_path)
-            _atomic_report(report_path, result)
+            if not previous:
+                _atomic_report(report_path, result)
         if checks is None:
             checks = [
                 {'name': 'references', 'command': [sys.executable, 'scripts/preflight.py', '--json'], 'evidence': 'references'},
@@ -992,10 +1090,8 @@ def run_preparation(repo_root, raw_root, *, checks=None, runner=None, report_pat
                 {'name': 'raw_canaries', 'command': [sys.executable, 'scripts/tests/freeze_contract_snapshots.py',
                     '--check', '--raw-root', str(raw_root)], 'requires': ['raw_inputs', 'references'], 'evidence': 'canaries',
                     'identifiers': _preparation_canary_identifiers(repo_root)},
-                {'name': 'pytest_inventory', 'command': ['bash', 'scripts/test.sh', 'preparation', '--collect-only'],
-                    'evidence': 'pytest', 'inventory': True, 'reuse': False},
                 {'name': 'source_tests', 'command': ['bash', 'scripts/test.sh', 'preparation'],
-                    'requires': ['pytest_inventory'], 'evidence': 'pytest'},
+                    'evidence': 'pytest'},
             ]
             # The release runner owns these commands. Inventory mode never
             # invokes the gates, live identifiers, OCR or remote writes.
@@ -1024,16 +1120,15 @@ def run_preparation(repo_root, raw_root, *, checks=None, runner=None, report_pat
             prior_checks = []
         prior = {check.get('name'): check for check in prior_checks if isinstance(check, dict) and isinstance(check.get('name'), str)}
         previous_payload = {k: v for k, v in previous.items() if k != 'integrity'}
-        reusable = (previous.get('completed') is True and previous.get('fingerprint') == fingerprint
+        reusable = (previous.get('fingerprint') == fingerprint
                     and previous.get('integrity') == _digest(previous_payload)
                     and len(prior) == len(prior_checks)
-                    and prior.get('inputs_stable', {}).get('status') == 'passed')
+                    and (prior.get('inputs_stable', {}).get('status') == 'passed' or previous.get('checkpoint_stable') is True))
         for specification in checks:
             name = specification['name']
             states = {check['name']: check['status'] for check in result['checks']}
             blocked = [dep for dep in specification.get('requires', []) if states.get(dep) != 'passed']
-            if report_path:
-                _atomic_report(report_path, result)
+            print(f'START: {name}', file=sys.stderr, flush=True)
             if blocked:
                 result['checks'].append({'name': name, 'status': 'blocked', 'prerequisites': blocked})
                 continue
@@ -1043,7 +1138,7 @@ def run_preparation(repo_root, raw_root, *, checks=None, runner=None, report_pat
                 evidence_path.unlink(missing_ok=True)
                 started = time.monotonic()
                 environment = dict(os.environ, PG_PREPARATION_REPORT=str(evidence_path),
-                    PG_PREPARATION_MODE='inventory' if specification.get('inventory') else 'source')
+                    PG_PREPARATION_MODE='inventory' if specification.get('inventory') else 'source', PG_PREPARATION_CHECK=name)
                 check = {'name': name, 'command': specification['command'], 'completed': False}
                 try:
                     process = runner(specification['command'], cwd=repo_root, env=environment,
@@ -1053,6 +1148,15 @@ def run_preparation(repo_root, raw_root, *, checks=None, runner=None, report_pat
                                  completed=True, status='passed' if process.returncode == 0 else 'failed')
                     if specification.get('evidence') == 'pytest':
                         check['evidence'] = json.loads(evidence_path.read_text(encoding='utf-8')) if evidence_path.exists() else None
+                except KeyboardInterrupt:
+                    check.update(exit_code=None, stdout='', stderr='Preparation interrupted', status='failed', duration_seconds=round(time.monotonic() - started, 3))
+                    result['checks'].append(check)
+                    result['checkpoint_stable'] = result.get('checkpoint_stable', True) and before == _preparation_inputs(repo_root, raw_root, operational_paths=operational_paths) and _preparation_runtime_stable(runtime, _preparation_runtime())
+                    result['integrity'] = _digest({k: v for k, v in result.items() if k != 'integrity'})
+                    if report_path:
+                        _atomic_report(report_path, result)
+                    print(f'FAILED: {name} (interrupted)', file=sys.stderr, flush=True)
+                    raise
                 except Exception as exc:
                     check.update(exit_code=None, stdout='', stderr=str(exc), status='failed')
                 check['duration_seconds'] = round(time.monotonic() - started, 3)
@@ -1064,7 +1168,19 @@ def run_preparation(repo_root, raw_root, *, checks=None, runner=None, report_pat
                 check['category'] = 'expectation_drift_requires_source_review'
                 check['integrity'] = _digest({k: v for k, v in check.items() if k not in {'integrity', 'reused'}})
             result['checks'].append(check)
+            print(f"{check['status'].upper()}: {name} | elapsed {check.get('duration_seconds', 0):.1f}s" + (' | reused verified evidence' if check.get('reused') else ''), file=sys.stderr, flush=True)
+            if check['status'] == 'failed':
+                print(check.get('stderr', '') or check.get('stdout', ''), file=sys.stderr, flush=True)
             if report_path:
+                # A reused check already has exact-input stability evidence.
+                # Newly executed checks need a fresh stability proof before a
+                # partial receipt can preserve them across an interruption.
+                if check.get('reused'):
+                    result.setdefault('checkpoint_stable', True)
+                else:
+                    print(f'RUNNING: verifying {name} input stability', file=sys.stderr, flush=True)
+                    result['checkpoint_stable'] = result.get('checkpoint_stable', True) and before == _preparation_inputs(repo_root, raw_root, operational_paths=operational_paths) and _preparation_runtime_stable(runtime, _preparation_runtime())
+                result['integrity'] = _digest({k: v for k, v in result.items() if k != 'integrity'})
                 _atomic_report(report_path, result)
         inventories = [c.get('evidence') for c in result['checks'] if c['name'] == 'pytest_inventory' and c['status'] == 'passed']
         executed = [c.get('evidence') for c in result['checks'] if c['name'] == 'source_tests' and c['status'] == 'passed']
@@ -1072,6 +1188,7 @@ def run_preparation(repo_root, raw_root, *, checks=None, runner=None, report_pat
             if not _same_preparation_inventory(inventories[0], executed[0]):
                 result['checks'].append({'name': 'node_inventory_stable', 'status': 'failed',
                     'issues': ['Source execution did not cover the collected inventory']})
+        inventories = inventories or executed
         if inventories and isinstance(inventories[0], dict):
             result['deferred_tests'] = [n for n in inventories[0].get('nodes', []) if n['phase'] != 'source']
     after = _preparation_inputs(repo_root, raw_root, operational_paths=operational_paths)
@@ -1079,13 +1196,12 @@ def run_preparation(repo_root, raw_root, *, checks=None, runner=None, report_pat
     # Clock rollover expires reuse epochs; it is not source/runtime mutation.
     # Keep the original receipt epoch, and let the final FDA owner check enforce
     # its actual calendar policy without restamping completed source evidence.
-    stable = before == after and ({key: value for key, value in runtime.items() if key != 'freshness_date'}
-                                  == {key: value for key, value in after_runtime.items() if key != 'freshness_date'})
+    stable = result.get('checkpoint_stable', True) and before == after and _preparation_runtime_stable(runtime, after_runtime)
     result['checks'].append({'name': 'inputs_stable', 'status': 'passed' if stable else 'failed',
                              'issues': [] if stable else ['Input inventory/content or runtime/environment changed during preparation']})
     result['ready'] = all(check['status'] == 'passed' for check in result['checks'])
     result['completed'] = True
-    result['integrity'] = _digest(result)
+    result['integrity'] = _digest({k: v for k, v in result.items() if k != 'integrity'})
     if report_path:
         _atomic_report(report_path, result)
     return result
@@ -1131,10 +1247,14 @@ Exit codes:
         if not inherited_lock_fds(exclusive=True):
             # Preparation is a broad workload even when its inventory expands
             # into explicit nodes. Hold the existing exclusive machine lock.
-            environment = dict(os.environ, PG_TEST_LOCK_HELD='1', PG_TEST_WORKERS='1')
+            environment = dict(os.environ, PG_TEST_LOCK_HELD='1')
             return_code = subprocess.call([sys.executable, str(SCRIPTS_DIR / 'test_lock.py'),
                 'exclusive', '--', sys.executable, str(Path(__file__).resolve()), *sys.argv[1:]], env=environment)
             sys.exit(return_code)
+        import signal
+        def interrupted(signum, frame):
+            raise KeyboardInterrupt()
+        signal.signal(signal.SIGTERM, interrupted)
         results = run_preparation(SCRIPTS_DIR.parent, args.raw_root, report_path=args.report)
         print(json.dumps(results, indent=2) if args.json else
               '\n'.join(f"{check['status'].upper()}: {check['name']}" for check in results['checks']))
