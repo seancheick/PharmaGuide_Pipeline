@@ -2533,3 +2533,21 @@ def test_cod_liver_oil_in_forms_does_not_emit_omega_evidence() -> None:
         if row.get("evidence_type") == "omega_epa_dha_aggregate"
     ]
     assert not omega_rows, "Carrier text 'from Cod Liver Oil' in forms must not emit omega evidence"
+
+
+@pytest.mark.parametrize("disposition, kind, expected_hold", [
+    ("taxonomy_only", "product_level_evidence", False),
+    ("clean", "product_level_evidence", True),
+    ("taxonomy_only", None, True),
+])
+def test_structural_product_total_does_not_require_an_ingredient_form_grade(disposition, kind, expected_hold):
+    from scoring_v4.scored_artifact import build_scored_artifact
+    row = _row(name="Fiber Blend", canonical_id="fiber", bio_score=None,
+        form_match_status="unmapped", unmapped_forms=["Cellulose", "Inulin"],
+        identity_disposition=disposition, scoring_input_kind=kind)
+    product = _product([row])
+    result = get_scoring_ingredients(product, strict=True)
+    assert ("disclosed_form_unmapped" in result.contract_findings) is expected_hold
+    artifact = build_scored_artifact(product)
+    assert ("disclosed_form_unmapped" in artifact["strict_scoring_contract"]["findings"]) is expected_hold
+    assert row["bio_score"] is None

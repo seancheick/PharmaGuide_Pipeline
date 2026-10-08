@@ -2760,9 +2760,15 @@ def _evaluate_row(row: Dict[str, Any], *, strict: bool) -> tuple[bool, Optional[
     if not _has_identity(row):
         return False, _reject(row, "missing_scoring_identity"), findings
 
-    # The label names a form IQM does not recognize: the identity scores, but
-    # the product is held from release until the form is curated.
-    if row.get("form_match_status") == "unmapped":
+    # A taxonomy-only product total is structural dose/disclosure evidence,
+    # not an independently graded ingredient. Its source member names are
+    # not alternative forms of the heading. Actual ingredient/preparation
+    # rows (including identity-bearing aggregates) retain the form guard.
+    structural_total = (
+        row.get("scoring_input_kind") == "product_level_evidence"
+        and row.get("identity_disposition") == "taxonomy_only"
+    )
+    if row.get("form_match_status") == "unmapped" and not structural_total:
         findings.append(DISCLOSED_FORM_UNMAPPED_FINDING)
 
     return True, None, findings
