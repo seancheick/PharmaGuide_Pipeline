@@ -520,3 +520,15 @@ def test_unmatched_drug_tokens_policy_is_documented(overrides):
         f"unmatched_drug_tokens_policy must state that silent mapping "
         f"is forbidden. Got: {policy!r}"
     )
+
+
+@pytest.mark.parametrize("dsld_id", ["31063", "801", "312980", "28976", "28980"])
+def test_maximum_nutrition_molybdenum_unit_matches_official_label(overrides, dsld_id):
+    entry = overrides["corrections"].get(dsld_id)
+    assert entry, "Official label prints75mcg, while DSLD JSON transcribes75mg"
+    assert entry["raw_ingredient_text"] == "Molybdenum"
+    assert entry["corrected_ingredient_text"] == "Molybdenum"
+    assert entry["raw_quantity_unit"] == "mg"
+    assert entry["corrected_quantity_unit"] == "mcg"
+    assert "quantity.unit" in entry["correction_fields"]
+    assert f"https://api.ods.od.nih.gov/dsld/s3/pdf/{dsld_id}.pdf" in entry["sources"]

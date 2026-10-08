@@ -167,8 +167,8 @@ def _quality_assessment_status(
         #       Neither incomplete nor failed; the vocabulary has no
         #       "not_applicable", and inventing a fourth value to carry nine
         #       products would be worse than this documented imprecision. These
-        #       never reach the catalog: the export gate quarantines every
-        #       not_scored product.
+        #       retain partial assessment state. Catalog eligibility separately
+        #       requires usable source-label identity and null quality fields.
         return "partial"
     return "failed"
 

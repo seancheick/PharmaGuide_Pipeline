@@ -1665,3 +1665,40 @@ def test_a_regulatory_record_that_is_not_an_ingredient_never_becomes_a_tag():
     enriched, scored = _safety_only_product(row)
     tags = classify_product_categories(enriched, scored)["key_ingredient_tags"]
     assert not any(tag.startswith(("add_", "banned_")) for tag in tags)
+
+
+def _unscored_known_label_fixture():
+    enriched = _base_enriched(dsld_id="31063")
+    enriched["display_ingredients"] = [{
+        "label_order": 0, "nested_depth": 0, "label_display_name": "Vitamin C",
+        "exact_dose_text": "500 mg", "display_type": "mapped_ingredient",
+        "raw_source_path": "ingredientRows[0]", "raw_source_text": "Vitamin C",
+    }]
+    scored = _base_scored(verdict="NOT_SCORED", quality_score_status="not_scored",
+        quality_assessment_status="partial", quality_score_v4_100=None,
+        score_100_equivalent=None, display_100="N/A", quality_tier=None, grade=None,
+        score_unavailable_reason="incomplete_product_data",
+        strict_scoring_contract={"passed": False, "findings": ["disclosed_form_unmapped"]})
+    return enriched, scored
+
+
+def test_known_label_with_unfinished_form_remains_visible_without_a_score():
+    enriched, scored = _unscored_known_label_fixture()
+    assert validate_export_contract(enriched, scored) == []
+    row = _row_dict(enriched, scored)
+    assert row["quality_score_status"] == "not_scored"
+    assert row["quality_score_v4_100"] is None
+    assert row["score_100_equivalent"] is None
+    assert row["quality_tier"] is None
+
+
+@pytest.mark.parametrize("defect", ["missing_label", "unknown_source", "numeric_score", "numeric_mirror", "quality_tier", "other_contract_failure"])
+def test_unscored_visibility_does_not_excuse_invalid_matching_or_a_published_score(defect):
+    enriched, scored = _unscored_known_label_fixture()
+    if defect == "missing_label": enriched["display_ingredients"] = []
+    elif defect == "unknown_source": enriched["dsld_id"] = "UNKNOWN"
+    elif defect == "numeric_score": scored["quality_score_v4_100"] = 50
+    elif defect == "numeric_mirror": scored["score_100_equivalent"] = 50
+    elif defect == "quality_tier": scored["quality_tier"] = "GOOD"
+    else: scored["strict_scoring_contract"]["findings"].append("missing_required_fields:dose_class")
+    assert validate_export_contract(enriched, scored)

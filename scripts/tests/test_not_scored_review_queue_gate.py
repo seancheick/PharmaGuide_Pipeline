@@ -1,17 +1,13 @@
 #!/usr/bin/env python3
-"""
-Regression test for the NOT_SCORED review-queue gate (build_final_db.py).
+"""Known labels may ship without scores; missing label identity stays quarantined.
 
-Asserts:
-  1. validate_export_contract() raises (returns issues) when verdict=NOT_SCORED
-  2. The defensive sweep SQL removes any stale NOT_SCORED rows from products_core
-
-Per REFERENCE_DATA_LOOKUP_OPPORTUNITIES.md §1 pipeline contract:
-"NOT_SCORED is intentionally NOT in vocab — products that fail scoring
-divert to the review queue and never ship to Flutter."
+The actual builder, including its defensive sweep, must retain eligible
+NOT_SCORED rows while continuing to reject retired NUTRITION_ONLY rows.
 """
 
 import os
+import json
+from pathlib import Path
 import sqlite3
 
 import pytest
@@ -20,12 +16,11 @@ import sys
 HERE = os.path.dirname(__file__)
 sys.path.insert(0, os.path.join(HERE, ".."))
 
-from build_final_db import validate_export_contract  # noqa: E402
+from build_final_db import validate_export_contract, build_final_db  # noqa: E402
 
 
 def test_validate_export_contract_rejects_not_scored():
-    """Per Batch 3 data integrity gate, NOT_SCORED must be flagged for the
-    review queue and excluded from the products_core insert path."""
+    """A malformed NOT_SCORED payload without a usable label stays excluded."""
     enriched = {"dsld_id": "TEST-001", "product_name": "Test"}
     scored = {
         "verdict": "NOT_SCORED",
@@ -38,10 +33,11 @@ def test_validate_export_contract_rejects_not_scored():
     )
 
 
-def test_not_scored_review_record_names_reason_and_incomplete_dimensions():
+def test_missing_label_quarantine_preserves_scorer_assessment_reason():
     enriched = {"dsld_id": "TEST-ROUTE", "product_name": "Claimed Protein"}
     scored = {
         "verdict": "NOT_SCORED",
+        "quality_score_status": "not_scored",
         "score_unavailable_reason": "blocked_by_completeness_gate",
         "assessment_readiness": {
             "enforcement_mode": "enforced",
@@ -63,38 +59,34 @@ def test_not_scored_review_record_names_reason_and_incomplete_dimensions():
 
     issues = validate_export_contract(enriched, scored)
 
-    review_record = next(issue for issue in issues if "NOT_SCORED" in issue)
-    assert "reason=blocked_by_completeness_gate" in review_record
-    assert "incomplete_dimensions=route" in review_record
-    assert "evidence" not in review_record
+    assert "review_queue: NOT_SCORED product lacks a verified source-label record." in issues
+    assert scored["score_unavailable_reason"] == "blocked_by_completeness_gate"
+    assert scored["assessment_readiness"]["route"]["readiness"] == "incomplete"
+    assert scored["assessment_readiness"]["evidence"]["readiness"] == "incomplete"
 
 
-def test_defensive_sweep_removes_not_scored():
-    """The end-of-build defensive sweep cleans any stale NOT_SCORED rows
-    from products_core. This guards against pre-gate builds and against
-    products that fell out of the input batch between runs."""
-    # In-memory SQLite mirroring the products_core schema for the columns
-    # we care about
-    conn = sqlite3.connect(":memory:")
-    c = conn.cursor()
-    c.execute("CREATE TABLE products_core (dsld_id TEXT PRIMARY KEY, verdict TEXT)")
-    c.execute("INSERT INTO products_core VALUES ('A', 'SAFE')")
-    c.execute("INSERT INTO products_core VALUES ('B', 'NOT_SCORED')")
-    c.execute("INSERT INTO products_core VALUES ('C', 'NOT_SCORED')")
-    c.execute("INSERT INTO products_core VALUES ('D', 'NUTRITION_ONLY')")
-    conn.commit()
+def test_actual_builder_retains_eligible_not_scored_after_defensive_sweep(tmp_path):
+    from scripts.tests.test_export_gate import _unscored_known_label_fixture
 
-    swept = c.execute(
-        "DELETE FROM products_core WHERE verdict IN (?, ?)",
-        ("NOT_SCORED", "NUTRITION_ONLY"),
-    ).rowcount
-    assert swept == 3
-
-    remaining = c.execute(
-        "SELECT verdict, COUNT(*) FROM products_core GROUP BY verdict ORDER BY 1"
-    ).fetchall()
-    assert remaining == [("SAFE", 1)]
-    conn.close()
+    enriched, scored = _unscored_known_label_fixture()
+    scored["dsld_id"] = enriched["dsld_id"]
+    enriched_dir = tmp_path / "enriched"
+    scored_dir = tmp_path / "scored"
+    output = tmp_path / "output"
+    enriched_dir.mkdir()
+    scored_dir.mkdir()
+    (enriched_dir / "batch.json").write_text(json.dumps([enriched]))
+    (scored_dir / "batch.json").write_text(json.dumps([scored]))
+    result = build_final_db([str(enriched_dir)], [str(scored_dir)],
+                            str(output), str(Path(__file__).resolve().parents[1]))
+    assert result["product_count"] == 1
+    assert result["error_count"] == 0
+    with sqlite3.connect(output / "pharmaguide_core.db") as conn:
+        row = conn.execute("SELECT verdict, quality_score_status, quality_score_v4_100, "
+                           "quality_tier FROM products_core WHERE dsld_id='31063'").fetchone()
+    assert row == ("NOT_SCORED", "not_scored", None, None)
+    blob = json.loads((output / "detail_blobs" / "31063.json").read_text())
+    assert blob["display_ingredients"][0]["label_display_name"] == "Vitamin C"
 
 
 def test_validate_export_contract_rejects_retired_nutrition_only():

@@ -5946,6 +5946,27 @@ class EnhancedDSLDNormalizer:
                     row[f"_pre_correction_{row_field}"] = row.get(row_field)
                     row[row_field] = corrected_value
                     correction_applied = True
+                # Same-record printed Daily Value is a source fact, not an
+                # RDA-derived substitute. Rewrite only the reviewed raw percent;
+                # a changed upstream value remains untouched for fresh review.
+                if "raw_daily_value" in entry and "corrected_daily_value" in entry:
+                    quantity_data = row.get("quantity")
+                    quantities = quantity_data if isinstance(quantity_data, list) else [quantity_data]
+                    for quantity in quantities:
+                        if not isinstance(quantity, dict):
+                            continue
+                        for group in quantity.get("dailyValueTargetGroup") or []:
+                            if (
+                                isinstance(group, dict)
+                                and quantity.get("quantity") == entry.get("raw_quantity_value")
+                                and quantity.get("unit") == entry.get("raw_quantity_unit")
+                                and group.get("percent") == entry["raw_daily_value"]
+                                and group.get("name") == entry.get("raw_daily_value_target_group")
+                                and bool(entry.get("raw_daily_value_target_group"))
+                            ):
+                                row["_pre_correction_daily_value"] = group["percent"]
+                                group["percent"] = entry["corrected_daily_value"]
+                                correction_applied = True
                 if (
                     has_quantity_value_correction
                     and rewrite_quantity_values(row, entry)
@@ -8568,6 +8589,9 @@ class EnhancedDSLDNormalizer:
                     "_pre_correction_unii"
                 )
                 source_correction["corrected_unii_code"] = ing.get("uniiCode")
+            if "_pre_correction_daily_value" in ing:
+                source_correction["original_daily_value"] = ing["_pre_correction_daily_value"]
+                source_correction["corrected_daily_value"] = daily_value
             if "_pre_correction_quantity_unit" in ing:
                 source_correction["original_quantity_unit"] = ing.get(
                     "_pre_correction_quantity_unit"

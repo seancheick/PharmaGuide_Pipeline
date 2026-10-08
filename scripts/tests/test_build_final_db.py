@@ -6850,3 +6850,24 @@ def test_share_title_shows_the_shipped_whole_score_not_a_truncation():
     )
     assert " - 75/100 " in meta["share_title"]
     assert "✓" in meta["share_title"]  # the >=75 band is judged on the shipped 75
+
+
+@pytest.mark.parametrize("status, phrase", [
+    ("not_scored", "Quality score unavailable"),
+    ("suppressed_safety", "Quality score withheld"),
+])
+def test_share_copy_preserves_unavailable_assessment_boundary(status, phrase):
+    enriched = make_enriched()
+    enriched["compliance_data"] = {"vegan": True}
+    enriched["formulation_detail"] = {"delivery_tier": "premium"}
+    scored = {"quality_score_status": status, "grade": None,
+              "score_100_equivalent": None, "quality_pillars_v4": {}}
+    share = generate_share_metadata(enriched, scored)
+    assert phrase in share["share_description"]
+    assert "safety warnings" in share["share_description"]
+    assert "quality supplement" not in share["share_description"]
+    assert "Analyzed by PharmaGuide" not in share["share_description"]
+    assert "Premium premium formulation" not in share["share_highlights"]
+    assert "No harmful additives" not in share["share_highlights"]
+    assert "Vegan" in share["share_highlights"]
+    assert "/100" not in share["share_title"]

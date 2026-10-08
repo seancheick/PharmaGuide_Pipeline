@@ -1079,3 +1079,34 @@ def test_explicit_epa_note_repairs_contradictory_dsld_dha_taxonomy(normalizer):
         "360 mg",
         "300 mg",
     ]
+
+
+@pytest.mark.parametrize("dsld_id, expected_unit", [(31063, "mcg"), (801, "mcg"), (312980, "mcg"), (28976, "mcg"), (28980, "mcg"), (27807, "mg"), (802, "mg"), (999999, "mg")])
+def test_maximum_nutrition_molybdenum_correction_is_exactly_scoped(normalizer, dsld_id, expected_unit):
+    amount = 25.5 if dsld_id == 312980 else 75
+    raw = _make_raw_product(dsld_id, [])
+    raw["ingredientRows"] = [{**_make_ingredient_row("Molybdenum", category="mineral"),
+        "ingredientGroup": "Molybdenum", "quantity": [{"quantity": amount, "unit": "mg"}],
+        "nestedRows": [], "forms": []}]
+    result = normalizer.normalize_product(raw)
+    active = result["activeIngredients"][0]
+    assert active["quantity"] == amount
+    assert active["unit"] == expected_unit
+    if expected_unit == "mcg":
+        assert active["source_correction"]["original_quantity_unit"] == "mg"
+        assert active["source_correction"]["corrected_quantity_unit"] == "mcg"
+
+
+@pytest.mark.parametrize("dsld_id, raw_dv, expected_dv", [(312980, 5, 57), (312980, 42, 42), (999999, 5, 5)])
+def test_reviewed_daily_value_correction_matches_only_the_exact_source_percent(normalizer, dsld_id, raw_dv, expected_dv):
+    raw = _make_raw_product(dsld_id, [])
+    raw["ingredientRows"] = [{**_make_ingredient_row("Molybdenum", category="mineral"),
+        "ingredientGroup": "Molybdenum", "quantity": [{"quantity": 25.5, "unit": "mg",
+        "dailyValueTargetGroup": [{"name": "Adults and children 4 or more years of age", "percent": raw_dv}]}],
+        "nestedRows": [], "forms": []}]
+    result = normalizer.normalize_product(raw)
+    active = result["activeIngredients"][0]
+    assert active["dailyValue"] == expected_dv
+    if dsld_id == 312980 and raw_dv == 5:
+        assert active["source_correction"]["original_daily_value"] == 5
+        assert active["source_correction"]["corrected_daily_value"] == 57
