@@ -1,7 +1,446 @@
 {
   "_metadata": {
-    "description": "Reviewed product changes allowed to ship although the release gate stops on them: a milder safety warning, a product with a safety warning leaving the catalog, a score move of 10+ points either way, or a quality grade up with a 5+ point rise. Read by scripts/release_safety/catalog_diff.py, which release_full.sh runs before any publication. Each entry approves one product's exact change: dsld_id, 'from' state and 'to' state (verdict = uppercase product_safety_status, tier, score), or 'to': null for a product leaving the catalog. A group needs a reason, an approver and a YYYY-MM-DD date. Entries that match nothing in a later comparison are reported as stale and can be deleted.",
-    "schema_version": 2
+    "description": "Reviewed exact catalog safety transitions allowed to ship: a milder catalog safety summary or a warned product leaving the catalog. Ordinary score/tier movements are report-only. Read by scripts/release_safety/catalog_diff.py before publication. Each approval matches one product exact dsld_id/from/to state (verdict is uppercase product_safety_status, tier and score); null to means removal. Each group requires a reason, approver and YYYY-MM-DD date. Unmatched later approvals are reported stale. Each group also requires baseline_sha256 and candidate_sha256; an approval applies only when both full catalog hashes and the product states match.",
+    "schema_version": 3
   },
-  "approvals": []
+  "approvals": [
+    {
+      "reason": "Sean explicitly approved October 8, 2026 for candidate 2026.10.08.184425, core SHA-256 b65f4946a3f9c3e382992f8f5f1758793504ee802298565166e9fdedd678c42c, original/live baseline edfdb110fa2f48adc83723686338a5b0dc026529ed4f055dfe3027f44691e34c. Approval is limited to these exact records and transitions. Prior CAUTION resulted from a verified data/interpretation defect now corrected; this corrects previously incorrect or overstated signals and does not relax safety thresholds or policy. NO_KNOWN_CATALOG_CONCERN means no remaining catalog-level safety signal from the current rule set, never safe for everyone. Personalized medication, condition, pregnancy, allergy and stack warnings remain independent. Any other valid caution must remain; no thresholds, unrelated warnings, class exemptions, BLOCKED or UNSAFE behavior may change. Nine incomplete assessments remain visible with null quality scores and valid warnings. All source/citation, interaction, catalog, app/simulator, bundle, manifest/hash and live-parity gates remain mandatory. A modified candidate requires a new exact diff and renewed approval. The 25 previously reviewed cases retain the accepted shared-cause review (three copper, eighteen caffeine-exposure, four preparation/disclosure corrections) and byte-identical detail records against the retained reviewed candidate.",
+      "approved_by": "Sean",
+      "date": "2026-10-08",
+      "changes": [
+        {
+          "dsld_id": "18529",
+          "from": {
+            "verdict": "CAUTION",
+            "tier": "Needs improvement",
+            "score": 58.0
+          },
+          "to": {
+            "verdict": "NO_KNOWN_CATALOG_CONCERN",
+            "tier": "Needs improvement",
+            "score": 58.0
+          },
+          "product_name": "Amplified Endurance Booster Blue Raspberry",
+          "why": "safety: CAUTION \u2192 no safety warning"
+        },
+        {
+          "dsld_id": "219819",
+          "from": {
+            "verdict": "CAUTION",
+            "tier": "Needs improvement",
+            "score": 62.0
+          },
+          "to": {
+            "verdict": "NO_KNOWN_CATALOG_CONCERN",
+            "tier": "Needs improvement",
+            "score": 58.0
+          },
+          "product_name": "Precision EAA Elevated Gummy Worm",
+          "why": "safety: CAUTION \u2192 no safety warning"
+        },
+        {
+          "dsld_id": "219827",
+          "from": {
+            "verdict": "CAUTION",
+            "tier": "Needs improvement",
+            "score": 62.0
+          },
+          "to": {
+            "verdict": "NO_KNOWN_CATALOG_CONCERN",
+            "tier": "Needs improvement",
+            "score": 58.0
+          },
+          "product_name": "Precision EAA Elevated Grape",
+          "why": "safety: CAUTION \u2192 no safety warning"
+        },
+        {
+          "dsld_id": "219832",
+          "from": {
+            "verdict": "CAUTION",
+            "tier": "Needs improvement",
+            "score": 66.0
+          },
+          "to": {
+            "verdict": "NO_KNOWN_CATALOG_CONCERN",
+            "tier": "Needs improvement",
+            "score": 62.0
+          },
+          "product_name": "Precision EAA Elevated Raspberry Iced Tea",
+          "why": "safety: CAUTION \u2192 no safety warning"
+        },
+        {
+          "dsld_id": "219842",
+          "from": {
+            "verdict": "CAUTION",
+            "tier": "Needs improvement",
+            "score": 59.0
+          },
+          "to": {
+            "verdict": "NO_KNOWN_CATALOG_CONCERN",
+            "tier": "Good",
+            "score": 72.0
+          },
+          "product_name": "LIT AF Gummy Worm",
+          "why": "safety: CAUTION \u2192 no safety warning; score +13.0; grade Needs improvement \u2192 Good (+13.0)"
+        },
+        {
+          "dsld_id": "219914",
+          "from": {
+            "verdict": "CAUTION",
+            "tier": "Needs improvement",
+            "score": 62.0
+          },
+          "to": {
+            "verdict": "NO_KNOWN_CATALOG_CONCERN",
+            "tier": "Good",
+            "score": 75.0
+          },
+          "product_name": "LIT AF Icy Fireworks",
+          "why": "safety: CAUTION \u2192 no safety warning; score +13.0; grade Needs improvement \u2192 Good (+13.0)"
+        },
+        {
+          "dsld_id": "219916",
+          "from": {
+            "verdict": "CAUTION",
+            "tier": "Needs improvement",
+            "score": 61.0
+          },
+          "to": {
+            "verdict": "NO_KNOWN_CATALOG_CONCERN",
+            "tier": "Good",
+            "score": 73.0
+          },
+          "product_name": "LIT AF Cotton Candy",
+          "why": "safety: CAUTION \u2192 no safety warning; score +12.0; grade Needs improvement \u2192 Good (+12.0)"
+        },
+        {
+          "dsld_id": "219919",
+          "from": {
+            "verdict": "CAUTION",
+            "tier": "Needs improvement",
+            "score": 63.0
+          },
+          "to": {
+            "verdict": "NO_KNOWN_CATALOG_CONCERN",
+            "tier": "Good",
+            "score": 75.0
+          },
+          "product_name": "LIT AF Apple Juice",
+          "why": "safety: CAUTION \u2192 no safety warning; score +12.0; grade Needs improvement \u2192 Good (+12.0)"
+        },
+        {
+          "dsld_id": "219921",
+          "from": {
+            "verdict": "CAUTION",
+            "tier": "Needs improvement",
+            "score": 61.0
+          },
+          "to": {
+            "verdict": "NO_KNOWN_CATALOG_CONCERN",
+            "tier": "Good",
+            "score": 73.0
+          },
+          "product_name": "LIT AF Lemon Ice",
+          "why": "safety: CAUTION \u2192 no safety warning; score +12.0; grade Needs improvement \u2192 Good (+12.0)"
+        },
+        {
+          "dsld_id": "219923",
+          "from": {
+            "verdict": "CAUTION",
+            "tier": "Needs improvement",
+            "score": 60.0
+          },
+          "to": {
+            "verdict": "NO_KNOWN_CATALOG_CONCERN",
+            "tier": "Good",
+            "score": 72.0
+          },
+          "product_name": "LIT AF Sweet & Tart",
+          "why": "safety: CAUTION \u2192 no safety warning; score +12.0; grade Needs improvement \u2192 Good (+12.0)"
+        },
+        {
+          "dsld_id": "243091",
+          "from": {
+            "verdict": "CAUTION",
+            "tier": "Needs improvement",
+            "score": 59.0
+          },
+          "to": {
+            "verdict": "NO_KNOWN_CATALOG_CONCERN",
+            "tier": "Needs improvement",
+            "score": 66.0
+          },
+          "product_name": "LIT AF Grape",
+          "why": "safety: CAUTION \u2192 no safety warning"
+        },
+        {
+          "dsld_id": "243094",
+          "from": {
+            "verdict": "CAUTION",
+            "tier": "Good",
+            "score": 73.0
+          },
+          "to": {
+            "verdict": "NO_KNOWN_CATALOG_CONCERN",
+            "tier": "Very good",
+            "score": 85.0
+          },
+          "product_name": "LIT AF Iced Tea Lemonade",
+          "why": "safety: CAUTION \u2192 no safety warning; score +12.0; grade Good \u2192 Very good (+12.0)"
+        },
+        {
+          "dsld_id": "246519",
+          "from": {
+            "verdict": "CAUTION",
+            "tier": "Poor",
+            "score": 53.0
+          },
+          "to": {
+            "verdict": "NO_KNOWN_CATALOG_CONCERN",
+            "tier": "Needs improvement",
+            "score": 60.0
+          },
+          "product_name": "Burn MF",
+          "why": "safety: CAUTION \u2192 no safety warning; grade Poor \u2192 Needs improvement (+7.0)"
+        },
+        {
+          "dsld_id": "275056",
+          "from": {
+            "verdict": "CAUTION",
+            "tier": "Good",
+            "score": 70.0
+          },
+          "to": {
+            "verdict": "NO_KNOWN_CATALOG_CONCERN",
+            "tier": "Good",
+            "score": 77.0
+          },
+          "product_name": "Perfect Weight",
+          "why": "safety: CAUTION \u2192 no safety warning"
+        },
+        {
+          "dsld_id": "318102",
+          "from": {
+            "verdict": "CAUTION",
+            "tier": "Good",
+            "score": 77.0
+          },
+          "to": {
+            "verdict": "NO_KNOWN_CATALOG_CONCERN",
+            "tier": "Very good",
+            "score": 80.0
+          },
+          "product_name": "Burn MF Orange Mango",
+          "why": "safety: CAUTION \u2192 no safety warning"
+        },
+        {
+          "dsld_id": "319907",
+          "from": {
+            "verdict": "CAUTION",
+            "tier": "Needs improvement",
+            "score": 62.0
+          },
+          "to": {
+            "verdict": "NO_KNOWN_CATALOG_CONCERN",
+            "tier": "Good",
+            "score": 75.0
+          },
+          "product_name": "LIT AF Gummy Worm",
+          "why": "safety: CAUTION \u2192 no safety warning; score +13.0; grade Needs improvement \u2192 Good (+13.0)"
+        },
+        {
+          "dsld_id": "319908",
+          "from": {
+            "verdict": "CAUTION",
+            "tier": "Needs improvement",
+            "score": 65.0
+          },
+          "to": {
+            "verdict": "NO_KNOWN_CATALOG_CONCERN",
+            "tier": "Good",
+            "score": 77.0
+          },
+          "product_name": "LIT AF Icy Fireworks",
+          "why": "safety: CAUTION \u2192 no safety warning; score +12.0; grade Needs improvement \u2192 Good (+12.0)"
+        },
+        {
+          "dsld_id": "321814",
+          "from": {
+            "verdict": "CAUTION",
+            "tier": "Good",
+            "score": 72.0
+          },
+          "to": {
+            "verdict": "NO_KNOWN_CATALOG_CONCERN",
+            "tier": "Good",
+            "score": 75.0
+          },
+          "product_name": "Burn MF Gummy Worm",
+          "why": "safety: CAUTION \u2192 no safety warning"
+        },
+        {
+          "dsld_id": "335662",
+          "from": {
+            "verdict": "CAUTION",
+            "tier": "Needs improvement",
+            "score": 66.0
+          },
+          "to": {
+            "verdict": "NO_KNOWN_CATALOG_CONCERN",
+            "tier": "Good",
+            "score": 72.0
+          },
+          "product_name": "LIT AF Gummy Worm",
+          "why": "safety: CAUTION \u2192 no safety warning; grade Needs improvement \u2192 Good (+6.0)"
+        },
+        {
+          "dsld_id": "5862",
+          "from": {
+            "verdict": "CAUTION",
+            "tier": "Needs improvement",
+            "score": 58.0
+          },
+          "to": {
+            "verdict": "NO_KNOWN_CATALOG_CONCERN",
+            "tier": "Needs improvement",
+            "score": 58.0
+          },
+          "product_name": "Amplified Endurance Booster Blue Raspberry",
+          "why": "safety: CAUTION \u2192 no safety warning"
+        },
+        {
+          "dsld_id": "5864",
+          "from": {
+            "verdict": "CAUTION",
+            "tier": "Needs improvement",
+            "score": 58.0
+          },
+          "to": {
+            "verdict": "NO_KNOWN_CATALOG_CONCERN",
+            "tier": "Needs improvement",
+            "score": 59.0
+          },
+          "product_name": "Amplified Endurance Booster Orange",
+          "why": "safety: CAUTION \u2192 no safety warning"
+        },
+        {
+          "dsld_id": "66957",
+          "from": {
+            "verdict": "CAUTION",
+            "tier": "Poor",
+            "score": 47.0
+          },
+          "to": {
+            "verdict": "NO_KNOWN_CATALOG_CONCERN",
+            "tier": "Poor",
+            "score": 43.0
+          },
+          "product_name": "Amino Energy Advanced Fruit Punch",
+          "why": "safety: CAUTION \u2192 no safety warning"
+        },
+        {
+          "dsld_id": "74839",
+          "from": {
+            "verdict": "CAUTION",
+            "tier": "Needs improvement",
+            "score": 62.0
+          },
+          "to": {
+            "verdict": "NO_KNOWN_CATALOG_CONCERN",
+            "tier": "Needs improvement",
+            "score": 64.0
+          },
+          "product_name": "Soft Chew Multivitamin Delicious Mixed Berry",
+          "why": "safety: CAUTION \u2192 no safety warning"
+        },
+        {
+          "dsld_id": "75121",
+          "from": {
+            "verdict": "CAUTION",
+            "tier": "Needs improvement",
+            "score": 60.0
+          },
+          "to": {
+            "verdict": "NO_KNOWN_CATALOG_CONCERN",
+            "tier": "Needs improvement",
+            "score": 62.0
+          },
+          "product_name": "Mega Men Soft Chew Multivitamin Fruit Punch",
+          "why": "safety: CAUTION \u2192 no safety warning"
+        },
+        {
+          "dsld_id": "78153",
+          "from": {
+            "verdict": "CAUTION",
+            "tier": "Needs improvement",
+            "score": 68.0
+          },
+          "to": {
+            "verdict": "NO_KNOWN_CATALOG_CONCERN",
+            "tier": "Needs improvement",
+            "score": 68.0
+          },
+          "product_name": "Neuro Shred",
+          "why": "safety: CAUTION \u2192 no safety warning"
+        }
+      ],
+      "baseline_sha256": "edfdb110fa2f48adc83723686338a5b0dc026529ed4f055dfe3027f44691e34c",
+      "candidate_sha256": "b65f4946a3f9c3e382992f8f5f1758793504ee802298565166e9fdedd678c42c"
+    },
+    {
+      "reason": "Sean explicitly approved October 8, 2026 for candidate 2026.10.08.184425, core SHA-256 b65f4946a3f9c3e382992f8f5f1758793504ee802298565166e9fdedd678c42c, original/live baseline edfdb110fa2f48adc83723686338a5b0dc026529ed4f055dfe3027f44691e34c. Approval is limited to these exact records and transitions. Prior CAUTION resulted from a verified data/interpretation defect now corrected; this corrects previously incorrect or overstated signals and does not relax safety thresholds or policy. NO_KNOWN_CATALOG_CONCERN means no remaining catalog-level safety signal from the current rule set, never safe for everyone. Personalized medication, condition, pregnancy, allergy and stack warnings remain independent. Any other valid caution must remain; no thresholds, unrelated warnings, class exemptions, BLOCKED or UNSAFE behavior may change. Nine incomplete assessments remain visible with null quality scores and valid warnings. All source/citation, interaction, catalog, app/simulator, bundle, manifest/hash and live-parity gates remain mandatory. A modified candidate requires a new exact diff and renewed approval. The three molybdenum cases 28976, 28980 and 312980 are verified against original NIH labels and integrated exact-raw molybdenum corrections. Incorrect source data caused the prior critical over-UL condition; corrected label values no longer exceed that threshold. Unreviewed synthetic26mg retains its critical UL warning.",
+      "approved_by": "Sean",
+      "date": "2026-10-08",
+      "changes": [
+        {
+          "dsld_id": "28976",
+          "from": {
+            "verdict": "CAUTION",
+            "tier": "Needs improvement",
+            "score": 61.0
+          },
+          "to": {
+            "verdict": "NO_KNOWN_CATALOG_CONCERN",
+            "tier": "Needs improvement",
+            "score": 68.0
+          },
+          "product_name": "Living Multi Optimal Women's Formula",
+          "why": "safety: CAUTION \u2192 no safety warning"
+        },
+        {
+          "dsld_id": "28980",
+          "from": {
+            "verdict": "CAUTION",
+            "tier": "Needs improvement",
+            "score": 61.0
+          },
+          "to": {
+            "verdict": "NO_KNOWN_CATALOG_CONCERN",
+            "tier": "Needs improvement",
+            "score": 68.0
+          },
+          "product_name": "Living Multi Optimal Women's Formula",
+          "why": "safety: CAUTION \u2192 no safety warning"
+        },
+        {
+          "dsld_id": "312980",
+          "from": {
+            "verdict": "CAUTION",
+            "tier": "Good",
+            "score": 71.0
+          },
+          "to": {
+            "verdict": "NO_KNOWN_CATALOG_CONCERN",
+            "tier": "Very good",
+            "score": 83.0
+          },
+          "product_name": "Multivitamins for Women - with Fish Oil Softgels",
+          "why": "safety: CAUTION \u2192 no safety warning; score +12.0; grade Good \u2192 Very good (+12.0)"
+        }
+      ],
+      "baseline_sha256": "edfdb110fa2f48adc83723686338a5b0dc026529ed4f055dfe3027f44691e34c",
+      "candidate_sha256": "b65f4946a3f9c3e382992f8f5f1758793504ee802298565166e9fdedd678c42c"
+    }
+  ]
 }

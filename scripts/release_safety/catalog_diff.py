@@ -146,6 +146,10 @@ def load_approvals(path: Path = APPROVALS_PATH) -> list[dict]:
             date.fromisoformat(group["date"])
         except ValueError:
             raise ValueError(f"{where}: date must be YYYY-MM-DD, got {group['date']!r}") from None
+        for field in ("baseline_sha256", "candidate_sha256"):
+            value = group.get(field)
+            if not isinstance(value, str) or len(value) != 64 or any(c not in "0123456789abcdef" for c in value):
+                raise ValueError(f"{where} needs a lowercase SHA-256 {field!r}")
         changes = group.get("changes")
         if not isinstance(changes, list) or not changes:
             raise ValueError(f"{where} names no changes")
@@ -193,6 +197,7 @@ def diff_catalogs(baseline_db: Path, candidate_db: Path, approvals: list[dict]) 
     """Compare two catalogs; the result is plain JSON for reports and the gate."""
     tiers = _tiers()
     before, after = _products(Path(baseline_db)), _products(Path(candidate_db))
+    baseline_sha256, candidate_sha256 = _sha256(Path(baseline_db)), _sha256(Path(candidate_db))
     shared = before.keys() & after.keys()
     removed = before.keys() - after.keys()
     added = after.keys() - before.keys()
@@ -226,9 +231,9 @@ def diff_catalogs(baseline_db: Path, candidate_db: Path, approvals: list[dict]) 
     approved = {}
     for group in approvals:
         for change in group["changes"]:
-            approved[_key(change)] = (change, group)
+            approved[(group["baseline_sha256"], group["candidate_sha256"], _key(change))] = (change, group)
     for change in gated:
-        match = approved.pop(_key(change), None)
+        match = approved.pop((baseline_sha256, candidate_sha256, _key(change)), None)
         change["approval"] = None if match is None else {
             k: match[1][k] for k in ("reason", "approved_by", "date")}
     order = {kind: i for i, kind in enumerate(KINDS)}
@@ -240,8 +245,8 @@ def diff_catalogs(baseline_db: Path, candidate_db: Path, approvals: list[dict]) 
         return "milder" if moved > 0 else "stricter" if moved < 0 else "none"
 
     return {
-        "baseline": {"path": str(baseline_db), "sha256": _sha256(Path(baseline_db)), "products": len(before)},
-        "candidate": {"path": str(candidate_db), "sha256": _sha256(Path(candidate_db)), "products": len(after)},
+        "baseline": {"path": str(baseline_db), "sha256": baseline_sha256, "products": len(before)},
+        "candidate": {"path": str(candidate_db), "sha256": candidate_sha256, "products": len(after)},
         "shared": len(shared),
         "added": len(added),
         "removed": len(removed),
@@ -262,7 +267,9 @@ def diff_catalogs(baseline_db: Path, candidate_db: Path, approvals: list[dict]) 
         "gated": gated,
         "reported": reported,
         "unapproved": sum(c["approval"] is None for c in gated),
-        "stale_approvals": [c for c, _ in approved.values()],
+        "stale_approvals": [{**c, "baseline_sha256": group["baseline_sha256"],
+                             "candidate_sha256": group["candidate_sha256"]}
+                            for c, group in approved.values()],
     }
 
 
@@ -392,15 +399,21 @@ def draft_approvals(results: dict | list[dict]) -> dict:
     """The unapproved changes as approval groups, one per kind, still unsigned."""
     seen, groups = set(), {}
     for result in results if isinstance(results, list) else [results]:
+        scope = result["baseline"]["sha256"], result["candidate"]["sha256"]
         for c in result["gated"]:
-            if c["approval"] is None and _key(c) not in seen:
-                seen.add(_key(c))
-                groups.setdefault(c["kind"], []).append({
+            key = (*scope, _key(c))
+            if c["approval"] is None and key not in seen:
+                seen.add(key)
+                groups.setdefault((*scope, c["kind"]), []).append({
                     "dsld_id": c["dsld_id"], "from": c["from"], "to": c["to"],
                     "product_name": c["product_name"], "why": "; ".join(r["text"] for r in c["reasons"]),
                 })
-    return {"approvals": [{"reason": "", "approved_by": "", "date": "", "changes": groups[k]}
-                          for k in KINDS if k in groups]}
+    return {"approvals": [{"reason": "", "approved_by": "", "date": "",
+                           "baseline_sha256": baseline, "candidate_sha256": candidate,
+                           "changes": changes}
+                          for (baseline, candidate, kind), changes in sorted(
+                              groups.items(), key=lambda item: (KINDS.index(item[0][2]), item[0][:2]))]}
+
 
 
 def _bundled_baseline(flutter_repo: Path) -> tuple[Path, dict]:
@@ -475,7 +488,9 @@ def main(argv: list[str] | None = None) -> int:
 
     # An approval is stale only when it matches nothing in any comparison.
     stale = [a for a in results[0]["stale_approvals"]
-             if all(any(_key(a) == _key(b) for b in r["stale_approvals"]) for r in results)]
+             if all(any(_key(a) == _key(b) and a["baseline_sha256"] == b["baseline_sha256"]
+                         and a["candidate_sha256"] == b["candidate_sha256"]
+                         for b in r["stale_approvals"]) for r in results)]
     for result in results:
         result["stale_approvals"] = stale
     args.report.parent.mkdir(parents=True, exist_ok=True)
