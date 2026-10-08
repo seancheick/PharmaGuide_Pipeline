@@ -1,13 +1,13 @@
 {
   "_metadata": {
-    "schema_version": "1.2.0",
+    "schema_version": "1.3.0",
     "description": "Reviewer-signed corrections for DSLD product rows where label text, a source identifier, or a quantity value/unit contains a verified transcription or attribution defect.",
     "purpose": "Per-product source-row correction with provenance. Each entry targets one (dsld_id, raw_ingredient_text) pair before cleaner identity resolution and may correct label text, a misattributed UNII, a verified quantity value/unit, or a combination of those fields. Global aliases and global identifier suppression are not supported.",
     "scope": "Only fires for an exact (dsld_id, raw_ingredient_text) tuple match. Case-sensitive on raw_ingredient_text by design — manufacturers may print 'Insulin' in one product and 'INSULIN' in another, and each needs independent reviewer sign-off because the surrounding context (sibling ingredients, product category, regulatory status) must be re-evaluated per occurrence.",
-    "review_policy": "Every product entry is keyed by dsld_id and must carry: brand, product_name (for human-readable audit trail), raw_ingredient_text (the source row being corrected), corrected_ingredient_text (the text the cleaner should see, unchanged for unit-only corrections), correction_fields, evidence (free-text rationale with regulatory citations), sources (authoritative URLs — FDA, NIH, DailyMed, etc.), reviewer, and review_date (ISO 8601 YYYY-MM-DD). A verified cross-row defect may add additional_row_corrections, which inherit the product-level evidence, sources, reviewer, review_date, scope, and provenance tag. Quantity changes require exact raw and corrected value/unit pairs and must be supported by the official manufacturer or label image. Restoring a quantity absent from a form row additionally requires raw_quantity_missing=true, a positive corrected value/unit, and exact same-record source text that states the dose; the applier refuses to overwrite any existing quantity representation.",
+    "review_policy": "Every product entry is keyed by dsld_id and must carry: brand, product_name (for human-readable audit trail), raw_ingredient_text (the source row being corrected), corrected_ingredient_text (the text the cleaner should see, unchanged for unit-only corrections), correction_fields, evidence (free-text rationale with regulatory citations), sources (authoritative URLs — FDA, NIH, DailyMed, etc.), reviewer, and review_date (ISO 8601 YYYY-MM-DD). A verified cross-row defect may add additional_row_corrections, which inherit the product-level evidence, sources, reviewer, review_date, scope, and provenance tag. Quantity changes require exact raw and corrected value/unit pairs and must be supported by the official manufacturer or label image. Restoring a quantity absent from a form row additionally requires raw_quantity_missing=true, a positive corrected value/unit, and exact same-record source text that states the dose; the applier refuses to overwrite any existing quantity representation. A reviewed Daily Value correction requires an exact raw_daily_value and corrected_daily_value from the same official label; it rewrites only matching source percentages, never derives a percentage or changes a different value.",
     "unmatched_drug_tokens_policy": "When a row's raw_ingredient_text matches a known regulated-drug name (e.g., 'Insulin', 'Acetaminophen', 'Ibuprofen') and there is NO matching override for the product, the row must NOT be silently mapped. The cleaner emits the row to a quarantine path with reason='requires_human_review_drug_token_in_supplement' and excludes the product from scoring. New occurrences enter the reviewer pipeline via the same schema.",
     "last_updated": "2026-10-08",
-    "total_entries": 66,
+    "total_entries": 69,
     "loaded_by": "scripts/enhanced_normalizer.py via _load_label_corrections (cached on first product)"
   },
   "corrections": {
@@ -1460,7 +1460,8 @@
       "reviewer": "Codex original-label data integrity review",
       "review_date": "2026-10-08",
       "scope": "dsld_id_only",
-      "provenance_tag": "official_label_unit_correction"
+      "provenance_tag": "official_label_unit_correction",
+      "raw_quantity_value": 75
     },
     "801": {
       "brand": "GNC Mega Men",
@@ -1480,7 +1481,75 @@
       "reviewer": "Codex original-label data integrity review",
       "review_date": "2026-10-08",
       "scope": "dsld_id_only",
-      "provenance_tag": "official_label_unit_correction"
+      "provenance_tag": "official_label_unit_correction",
+      "raw_quantity_value": 75
+    },
+    "312980": {
+      "brand": "BulkSupplements.com",
+      "product_name": "Multivitamins for Women - with Fish Oil Softgels",
+      "raw_ingredient_text": "Molybdenum",
+      "corrected_ingredient_text": "Molybdenum",
+      "raw_quantity_unit": "mg",
+      "corrected_quantity_unit": "mcg",
+      "correction_fields": [
+        "quantity.unit",
+        "quantity.dailyValueTargetGroup.percent"
+      ],
+      "evidence": "Original NIH-hosted label image for this exact DSLD record prints Molybdenum25.5mcg. Live DSLD v9 JSON instead transcribes25.5mg. Visually verified on2026-10-08. Correct only this source row through the existing product-label correction owner; retain the amount and original API/PDF receipt. The same original label prints57%Daily Value; the JSON says5%. Preserve the printed57 rather than calculate a replacement from a reference standard.",
+      "sources": [
+        "https://api.ods.od.nih.gov/dsld/v9/label/312980",
+        "https://api.ods.od.nih.gov/dsld/s3/pdf/312980.pdf"
+      ],
+      "reviewer": "Codex original-label data integrity review",
+      "review_date": "2026-10-08",
+      "scope": "dsld_id_only",
+      "provenance_tag": "official_label_unit_correction",
+      "raw_daily_value": 5,
+      "corrected_daily_value": 57,
+      "raw_daily_value_target_group": "Adults and children 4 or more years of age",
+      "raw_quantity_value": 25.5
+    },
+    "28976": {
+      "brand": "Garden of Life",
+      "product_name": "Living Multi Optimal Women's Formula",
+      "raw_ingredient_text": "Molybdenum",
+      "corrected_ingredient_text": "Molybdenum",
+      "raw_quantity_unit": "mg",
+      "corrected_quantity_unit": "mcg",
+      "correction_fields": [
+        "quantity.unit"
+      ],
+      "evidence": "Original NIH-hosted label image for this exact DSLD record prints Molybdenum75mcg. Live DSLD v9 JSON instead transcribes75mg. Visually verified on2026-10-08. Correct only this source row through the existing product-label correction owner; retain the amount and original API/PDF receipt.",
+      "sources": [
+        "https://api.ods.od.nih.gov/dsld/v9/label/28976",
+        "https://api.ods.od.nih.gov/dsld/s3/pdf/28976.pdf"
+      ],
+      "reviewer": "Codex original-label data integrity review",
+      "review_date": "2026-10-08",
+      "scope": "dsld_id_only",
+      "provenance_tag": "official_label_unit_correction",
+      "raw_quantity_value": 75
+    },
+    "28980": {
+      "brand": "Garden of Life",
+      "product_name": "Living Multi Optimal Women's Formula",
+      "raw_ingredient_text": "Molybdenum",
+      "corrected_ingredient_text": "Molybdenum",
+      "raw_quantity_unit": "mg",
+      "corrected_quantity_unit": "mcg",
+      "correction_fields": [
+        "quantity.unit"
+      ],
+      "evidence": "Original NIH-hosted label image for this exact DSLD record prints Molybdenum75mcg. Live DSLD v9 JSON instead transcribes75mg. Visually verified on2026-10-08. Correct only this source row through the existing product-label correction owner; retain the amount and original API/PDF receipt.",
+      "sources": [
+        "https://api.ods.od.nih.gov/dsld/v9/label/28980",
+        "https://api.ods.od.nih.gov/dsld/s3/pdf/28980.pdf"
+      ],
+      "reviewer": "Codex original-label data integrity review",
+      "review_date": "2026-10-08",
+      "scope": "dsld_id_only",
+      "provenance_tag": "official_label_unit_correction",
+      "raw_quantity_value": 75
     }
   }
 }

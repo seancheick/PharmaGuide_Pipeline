@@ -522,7 +522,7 @@ def test_unmatched_drug_tokens_policy_is_documented(overrides):
     )
 
 
-@pytest.mark.parametrize("dsld_id", ["31063", "801"])
+@pytest.mark.parametrize("dsld_id", ["31063", "801", "312980", "28976", "28980"])
 def test_maximum_nutrition_molybdenum_unit_matches_official_label(overrides, dsld_id):
     entry = overrides["corrections"].get(dsld_id)
     assert entry, "Official label prints75mcg, while DSLD JSON transcribes75mg"
