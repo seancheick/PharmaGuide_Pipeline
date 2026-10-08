@@ -1307,3 +1307,15 @@ def test_exact_botanical_material_has_reviewed_literature_determination(canonica
     for study in record["qualifying_human_studies"]:
         assert study["verification_provenance"]["topic_match_verified"] is True
         assert "effect" not in study and "effect_direction" not in study
+
+
+@pytest.mark.parametrize("name,form", [("Nettle", None), ("Nettle Leaf", "stinging nettle leaf extract"), ("Nettle Root", "stinging nettle root extract")])
+def test_generic_nettle_review_cannot_invent_root_preparation_threshold(name, form):
+    result = er.resolve_evidence_for_canonical("stinging_nettle", name=name, matched_form=form)
+    assert result.disposition == EvidenceDisposition.RESEARCH_PRESENT_APPLICABILITY_UNESTABLISHED.value
+    assert result.points_eligible is False
+    import json
+    record = next(x for x in json.loads((SCRIPTS_ROOT / "data/literature_evidence_records.json").read_text())["literature_evidence_records"] if x["canonical_id"] == "stinging_nettle")
+    assert record["studied_dose_exposure"] == {}
+    assert "600" not in json.dumps(record)
+    assert "leaf" in record["applicability_decision"].lower()

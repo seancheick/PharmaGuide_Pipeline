@@ -6,7 +6,7 @@
     "last_updated": "2026-10-08",
     "total_entries": 807,
     "verification_pipeline": "scripts/api_audit/verify_literature_records.py",
-    "verified_studies_count": 278,
+    "verified_studies_count": 279,
     "verified_records_count": 807
   },
   "literature_evidence_records": [
@@ -2960,49 +2960,56 @@
     },
     {
       "canonical_id": "stinging_nettle",
-      "material_form": "Urtica dioica root extract",
-      "search_query": "Urtica dioica nettle benign prostatic hyperplasia randomized controlled trial",
-      "search_date": "2026-09-20",
+      "material_form": "Urtica dioica generic nettle; root, leaf or unspecified preparation",
+      "search_query": "(\"Urtica dioica\"[tiab] OR \"nettle root\"[tiab]) AND (randomized controlled trial[pt] OR clinical trial[pt] OR systematic review[pt]) NOT (animals[mh] NOT humans[mh])",
+      "search_date": "2026-10-08",
       "databases_searched": [
-        "PubMed",
-        "Cochrane Library"
+        "PubMed"
       ],
-      "records_screened": 31,
+      "records_screened": 33,
       "qualifying_human_studies": [
         {
           "pmid": "16635963",
           "title": "Urtica dioica for treatment of benign prostatic hyperplasia: a prospective, randomized, double-blind, placebo-controlled, crossover study.",
           "study_type": "randomized_controlled_trial",
           "sample_size": 620,
-          "dose": "600 mg/day root extract",
           "duration": "6 months",
-          "outcome": "significant improvements in IPSS symptom score, peak flow rate, and post-void residual volume",
-          "effect_direction": "positive_moderate",
           "verification_provenance": {
             "pmid_verified": true,
             "authoritative_live_title": "Urtica dioica for treatment of benign prostatic hyperplasia: a prospective, randomized, double-blind, placebo-controlled, crossover study.",
             "human_subjects_verified": true,
-            "topic_match_verified": false,
+            "topic_match_verified": true,
             "retracted": false,
             "verified_source": "https://pubmed.ncbi.nlm.nih.gov/16635963/",
-            "verified_at": "2026-09-21T07:39:42.986936+00:00",
+            "verified_at": "2026-10-08T04:35:08.624987+00:00",
             "abstract_evidence_quote": "To determine the effects of therapy with Urtica dioica for symptomatic relief of lower urinary tract symptoms (LUTS) secondary to benign prostatic hyperplasia (BPH)."
+          },
+          "notes": "Species-level BPH trial; PubMed abstract does not establish the formerly recorded root-extract dose or standardization. No leaf, unspecified nettle or generic retail preparation efficacy is inferred."
+        },
+        {
+          "pmid": "32981268",
+          "title": "Urtica Dioica Root Extract on Clinical and Biochemical Parameters in Patients with Benign Prostatic Hyperplasia, Randomized Controlled Trial.",
+          "design": "randomized_controlled_trial",
+          "notes": "60 men with BPH, 450 mg/day studied root extract for 12 weeks; IPSS symptom endpoint. Preparation equivalence to unspecified retail extract is unestablished; no general efficacy or dose benchmark.",
+          "verification_provenance": {
+            "pmid_verified": true,
+            "authoritative_live_title": "Urtica Dioica Root Extract on Clinical and Biochemical Parameters in Patients with Benign Prostatic Hyperplasia, Randomized Controlled Trial.",
+            "human_subjects_verified": true,
+            "topic_match_verified": true,
+            "retracted": false,
+            "verified_source": "https://pubmed.ncbi.nlm.nih.gov/32981268/",
+            "verified_at": "2026-10-08T04:35:08.624987+00:00"
           }
         }
       ],
-      "effect_direction": "positive_moderate",
-      "population_context": "men with symptomatic BPH",
-      "studied_dose_exposure": {
-        "values": [
-          600
-        ],
-        "unit": "mg"
-      },
-      "applicability_decision": "Lower urinary tract symptom support established at >= 600 mg/day standardized root extract.",
+      "effect_direction": "applicability_unestablished",
+      "population_context": "Material-specific oral human evidence; retail preparation correspondence explicitly limited",
+      "studied_dose_exposure": {},
+      "applicability_decision": "Human BPH research includes a root-specific extract trial, but this generic canonical includes leaf, root and unspecified materials. Root trials cannot establish leaf or unspecified nettle efficacy; retail root extraction and standardization equivalence also remain unestablished. The historical species-level trial abstract does not verify the formerly assigned preparation exposure. Root-specific botanical identity remains separately assessed under nettle_root, with the same preparation limits. This bounded PubMed review is not exhaustive across all databases. No clinical grade, efficacy-dose benchmark or safety conclusion is assigned.",
       "verification_result": "authoritative_pubmed_verified",
       "verification_provenance": {
-        "verified_by": "scripts/api_audit/verify_literature_records.py",
-        "verified_at": "2026-09-21T07:39:42.986936+00:00",
+        "verified_by": "Codex primary-content review of retained live PubMed API receipts",
+        "verified_at": "2026-10-08T04:35:08.624987+00:00",
         "all_pmids_verified": true,
         "retractions_found": false
       }
