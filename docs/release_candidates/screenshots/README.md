@@ -1,5 +1,10 @@
 # Device verification — 2026-08-22
 
+Historical record: the two PNG files listed below were removed from the working
+checkout and their deletion was committed with Sean’s October 8 cleanup
+authorization. The original artifacts remain recoverable in Git history. This
+record does not describe the current release candidate.
+
 iPhone 16 Pro (iOS 18.5) simulator, `Runner.app` built from the Flutter branch
 HEAD at the time of capture, running against the **currently shipped** bundled
 catalog. No candidate bundle was imported.
