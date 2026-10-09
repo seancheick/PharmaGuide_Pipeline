@@ -1,10 +1,16 @@
 # PharmaGuide master completion plan
 
-Updated October 8, 2026. Pipeline integrator: Codex. Original scope: Sean's accepted September 30 master plan. This document is the readable checklist; [LEDGER.md](../../scripts/audits/pending_items_20260926/LEDGER.md) remains the execution register, and the [ownership matrix](../../scripts/contracts/source_of_truth_matrix.json) defines production owners. Historical descriptions below do not override current code or approved decisions.
+Updated October 9, 2026. Pipeline integrator: Codex. Original scope: Sean's accepted September 30 master plan. This document is the readable checklist; [LEDGER.md](../../scripts/audits/pending_items_20260926/LEDGER.md) remains the execution register, and the [ownership matrix](../../scripts/contracts/source_of_truth_matrix.json) defines production owners. Historical descriptions below do not override current code or approved decisions.
 
 A checked implementation box means that specific deliverable is implemented, measured and independently reviewed where required. It does **not** mean the whole phase is finished or the catalog is released. Repository code pushed to GitHub and catalog publication are separate events.
 
-## Current candidate checkpoint — October 8
+## Current delivery checkpoint — October 9
+
+Catalog `2026.10.09.085312` is published and independently verified. Its core SHA-256 is `bd21963197ab987204c986dd8485ad602a732386b98d6cc40aa34a4644d97290`. All 15,414 live detail-index entries and 113 risk-selected detail bodies match the candidate, including all 73 BLOCKED products. The release profile passed 129 tests and its attached gates. App analysis and all 3,756 tests passed. The approved safety corrections retain every original boundary.
+
+App PR97 passed CI37945878063 on source625f453a and merged to main406f3d3b. Build `1.0.0+19` archived successfully; all four packaged database/manifest hashes match the published bundle. No IPA export, TestFlight upload or phone installation is claimed. Xcode reports no signed-in account and no distribution certificate; the phone service reports error4016, and the Mac was locked at the last UI attempt. Sean must unlock/sign in and connect/unlock the phone before distribution can finish. The existing archive and delivery authorization remain valid. No new corpus or renewed safety approval is needed for this unchanged candidate.
+
+## Historical candidate checkpoint — October 8
 
 Sean’s post-PR86 pipeline completed at 02:57:07 EDT: 38 datasets and 15,421 rows per stage. All 114 manifests and 174 owned files verify. The gated final catalog contains 15,244 products, 177 quarantines and all 73 BLOCKED products. The fresh clinical census covers 102,293 subjects: 15,420 products have complete determinations; one has two genuinely unresolved bile identities. No literature-review queue remains. The existing 132 verified interactions and 152 profile rules are paired without restamping their original build. Images: 15,208 reused, 27 downloaded, zero failures.
 
@@ -16,9 +22,9 @@ Sean explicitly authorized publication: “you can publish, im giving my authori
 
 Candidate SHA/config/data provenance is frozen. Verified duplicate blob mirrors saved 2,508,643,950 bytes; completed simulator compilation caches saved another 1,121,280,000 bytes. The exact candidate, simulator package, original baseline and comparison evidence remain retained.
 
-## Completion measure — October 8
+## Completion measure — October 9
 
-**Main Phase 0–7 checklist: 66 of 70 boxes complete (94.3%).** Count only the eight phase sections under Updated execution checklist, including their nested deliverables; exclude historical checkpoint sections and repeated release reminders. This is an unweighted deliverable count, not an estimate of elapsed time, effort or release readiness. Repeated historical receipts are excluded from this completion measure.
+**Main Phase 0–7 checklist: 69 of 70 boxes complete (98.6%).** Count only the eight phase sections under Updated execution checklist, including their nested deliverables; exclude historical checkpoint sections and repeated release reminders. This is an unweighted deliverable count, not an estimate of elapsed time, effort or release readiness. Repeated historical receipts are excluded from this completion measure.
 
 | Phase | Complete / total |
 |---|---:|
@@ -29,7 +35,7 @@ Candidate SHA/config/data provenance is frozen. Verified duplicate blob mirrors 
 | 4 — Approved Dose policy | 6 / 6 |
 | 5 — Numerical calibration | 6 / 6 |
 | 6 — Flutter parity and nutrition | 6 / 6 |
-| 7 — Candidate, approval and release | 5 / 9 |
+| 7 — Candidate, approval and release | 8 / 9 |
 
 Approved numerical policy, bounded calibration, the four live Evidence→Dose transfers and demonstrated identity/source-role corrections are integrated. Amla remains dormant/reference-only. PR72 adds aggregate preparation before brand processing; PR73 fixes shared individual-dose exposure; PR74 corrects a stale infrastructure assertion without changing production. The 193 prior catalog movements are source-attributed; the final 2,615-product correction replay has 608 explained numerical movements and zero protected safety/status/readiness/route changes. These are source and bounded-measurement results, not validation of a rebuilt release candidate.
 
@@ -413,9 +419,9 @@ A completed determination may be applicable positive evidence, reviewed null/no 
 - [x] Freeze candidate SHAs, config/data fingerprints, catalog generation and artifact hashes. October5 candidate2026.10.06.013007 is frozen at pipeline9f726a8f/runtimefb91849b and test-only acceptance sourcea5560b14; all114stage fingerprints match. Core/detail-index/manifests/interactions and218runtime/reference files have recorded hashes. Main integration, full/device validation and exact-candidate approval remain separate.
 - [x] Produce counts/holds/statuses, route changes, newly scored/held items, largest 50 score deltas, all safer-verdict and BLOCKED changes. Frozen candidate15149products/272quarantines,37added/198removed,77shared route changes versus committed/live September22 baseline and73blocked products. Top50score deltas and pillar attribution, all safety transitions, source-level twoNMN readiness recoveries and unchanged37warned identity holds are retained. Numerical attribution is not blanket clinical approval.
 - [ ] List every expected failure and release relevance; require **zero unexplained deltas** and no release-critical expected failure.
-- [ ] Resolve release-gate decisions in D25 and approve the exact candidate/manifest. New code-push authorization is not catalog-release authorization.
-- [ ] Publish through the existing release chain only after exact-candidate approval.
-- [ ] Verify live core/blob parity, interaction checksums, bundle/OTA generation and representative app rendering.
+- [x] Resolve D25 and approve the exact candidate. Sean renewed all 28 exact transitions for `2026.10.09.085312`/`bd219631`. Approval PR99 integrated at `66be5be2` after CI37933077976 passed. These correct verified defects; all original safety boundaries remain required.
+- [x] Publish through the existing release chain after exact-candidate approval. The October9 train completed with exit0. Catalog `2026.10.09.085312` is ACTIVE: 15,414 detail blobs uploaded with zero errors. `clinical-db-2026.10.09.1` is published, and its pin/download are verified.
+- [x] Verify live core/blob parity, interaction checksums, bundle/OTA generation and representative rendering. Downloaded live core bytes match `bd219631`; all 15,414 index entries and 113 risk-selected bodies match, including all 73 BLOCKED products and nine incomplete controls. `make verify-bundle` passed 20 anonymous live samples; `make check` passed analysis and 3,756 tests. Retained current-candidate ordinary simulator/home/all-row parity and the corrected214452 native case remain applicable. Build19 embeds the exact core. Physical installation and TestFlight availability remain open below.
 
 Any candidate change after approval requires a new freeze and approval.
 
@@ -1180,3 +1186,14 @@ Owner: resolved firebase_core::ios/firebase_sdk_version.rb and CocoaPods Podfile
 Sean's full batch completed corpus/catalog/image/interaction gates and stopped before publication at28unsigned safety transitions because regenerated candidate2026.10.09.085312 has coreSHA bd21963197ab987204c986dd8485ad602a732386b98d6cc40aa34a4644d97290. Prior exacte7d0approval is retained, never restamped. Full15414core comparison against approvedpre-image catalog:zeroadded/removed; onlythumbnail links and processing dates changed, every score/safety/othercorefield unchanged. All114stage manifests/174ownedfiles verify with zerohash/fingerprint errors. Exactnewfile approval question is pending; no renewed approval is inferred. Publication/liveparityremainopen, Master66/70.
 Corrected214452NutritionFacts native retrypassesexit0 on currentcandidate/currentappsource; priorfailedsuite retained honestly. Ordinary lib/main.dart build/import pass and originalappassets restored. Four packagedDB/manifest hashes matchcandidate; installedordinarysimulatorapp renders home with userprofile/stack retained, and runningcatalog matchesall15414products/allcorecolumns with zeroadded/missing/differentrows. No user_data edited. This closes the specific nutritiontest/ordinaryappstartup issue, not allcurrentnativecase/releasechecks. Receipts: catalog_visibility_review/oct9_full_run_core_comparison.json, oct9_full_provenance.json, oct9_native_result.json, oct9_interactive_build_result.json, oct9_interactive_packaged_candidate.json, oct9_interactive_runtime_parity.json and inspected oct9_interactive_home_check.png. No anothercorpus run.
 Owner: existing release_safety/catalog_diff approvalgroups; PGNutritionPanel and generated nativeharness; app import/core reader — evidence: receipts above. Will NOT create: forged approval, new scoring/safety policy, bypass or publication claim. Documentation-only update: full diff/references and git diff --check; no pytest/CI wait required. Next after exactfiledecision: existingapprovalowner PR/CI/merge, currentcandidate gates/fulltrain withFlutter/Supabaseenabled, then bundle/liveverification.
+
+
+## October9 publication and build19 delivery
+
+The original Phase0–7 checklist is 69/70. Final delivery/acceptance remains open. Published data and its validation are complete; wider clinical holds and the citation backlog remain documented, and this checkpoint does not close them.
+
+Build `1.0.0+19` archived with the approved core. IPA export failed with `No Accounts` and no `iOS Distribution` certificate for team `SVBYWES848`. The Mac was locked, and the phone service still returned4016. No TestFlight upload or phone installation occurred. The archive is preserved at `/Users/seancheick/Library/Developer/Xcode/Archives/2026-10-09/PharmaGuide 1.0.0 (19).xcarchive` for distribution after Sean signs in and connects/unlocks the phone.
+
+Receipts are under `/Users/seancheick/pg_quality/post_pipeline_20261008/catalog_visibility_review/`: `oct9_release_rung_after_import.log`, `oct9_publishing_release_retry.log`, `oct9_verify_bundle.log`, `oct9_live_catalog_parity.json`, `oct9_reviewed_detail_index_parity.json`, `oct9_app_check.log`, `oct9_ios_archive_result.json`, and `oct9_approved_manifest_freeze/checksums.json`. The initial local import conflicted with the gate's committed-main baseline requirement. The validated bundle was preserved, the committed baseline restored, the direct comparison passed, and the publishing retry succeeded. Failure and repair logs are retained. No approvals were forged, thresholds changed, unrelated warnings suppressed or user data modified.
+
+Owner: existing `release_full`, `catalog_diff`, `supabase_client`, app import/verification, `build_ios_release`, `prepare_ios_build_number`, master and LEDGER. Evidence: receipts above. Will NOT create: another scorer, policy, approval authority or build-version owner. App PR97/source625f453a passed CI37945878063 and integrated at main406f3d3b. Later documentation changes do not require another corpus or broad checkpoint.
