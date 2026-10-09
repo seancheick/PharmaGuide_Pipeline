@@ -153,8 +153,9 @@ names, never change a reading value (fix the reading and record again).
   sentence or block; do not merge warnings and storage into one.
 - **otherIngredientsDisclosure / otherIngredients**: already set from the
   reading; fill `otherIngredients` only if unresolved names it.
-- **UPC**: there is no UPC field. The barcode lives on the submission and the
-  console checks it.
+- **UPC**: there is no UPC field in the label. The barcode lives on the
+  submission (`normalized_upc`), the console checks it, and the reviewer
+  corrects it in the console's Barcode panel when it differs from the photo.
 
 ## 4. Worked example
 

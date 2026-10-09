@@ -94,6 +94,26 @@
         <h2>Is this barcode already in the catalog?</h2>
         <p class="step-hint">Required before a new product can be approved. Same barcode does not always mean same label.</p>
       </div>
+      <!-- The barcode the check runs against. It is what the owner filed, and
+           the owner can scan a neighbouring bottle: compare it with the one
+           printed in the barcode photo, and correct it here when they differ. -->
+      <div id="barcode-panel" class="barcode-panel">
+        <p class="barcode-line">
+          <span class="muted">Barcode on this submission</span>
+          <strong id="barcode-current" class="barcode-digits"></strong>
+        </p>
+        <ul id="barcode-history" class="muted barcode-history" hidden></ul>
+        <details id="barcode-correct">
+          <summary>The bottle prints a different barcode? Correct it</summary>
+          <label>Barcode printed on the label
+            <input id="barcode-new" type="text" inputmode="numeric" autocomplete="off" maxlength="32" placeholder="e.g. 0067 1422">
+          </label>
+          <label>Why it differs
+            <input id="barcode-reason" type="text" autocomplete="off" maxlength="500" placeholder="e.g. Owner scanned the neighbouring bottle">
+          </label>
+          <button id="barcode-save" type="button" class="primary">Correct barcode</button>
+        </details>
+      </div>
       <div id="identity-status-card" class="identity-status" data-state="unchecked">
         <span class="identity-icon" aria-hidden="true"></span>
         <div class="identity-body">
