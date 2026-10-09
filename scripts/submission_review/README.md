@@ -54,6 +54,11 @@ arrives by email → enter it. Requirements:
 2. **Evidence**: photos render in capture order with their evidence-category
    tags. Click to open full size. Signed URLs live 5 minutes; the console
    refreshes them automatically while a submission is open.
+   **Barcode**: the identity step shows the barcode the owner filed. If the
+   bottle in the barcode photo prints a different one (the owner scanned a
+   neighbouring bottle), correct it there with a reason. The filed value is
+   kept in `product_submission_barcode_corrections`, the catalog check for the
+   old barcode stops counting, and the import uses the corrected barcode.
 3. **Label**: fill brand/name/servings + the ingredient rows table (or edit
    the raw JSON). Every declared row on the label goes in — dose accuracy
    here feeds real safety math. The advisory sha preview is informational;

@@ -178,6 +178,7 @@ async function boot() {
     }
   });
   $('identity-run').addEventListener('click', () => checkIdentity({ record: true }));
+  $('barcode-save').addEventListener('click', () => void correctBarcode());
   $('other-disclosure').addEventListener('change', syncDisclosureFields);
   $('other-ingredients').addEventListener('input', syncDisclosureFields);
   $('reviewer-image-upload').addEventListener('click', uploadReplacementImage);
@@ -365,6 +366,8 @@ function select(submission) {
   state.identityLookup = null;
   state.identityRecorded = null;
   state.catalogRelation = null;
+  $('barcode-new').value = '';
+  $('barcode-reason').value = '';
   state.comparisonTarget = null;
   state.reviewerImages = [];
   state.productImage = null;
@@ -1044,6 +1047,79 @@ function chooseCatalogRelation(kind, dsldId) {
   setDecisionAvailability();
 }
 
+/**
+ * The barcode the check runs against, and the way to change it. The barcode
+ * itself is product_submissions.normalized_upc, read from the server row;
+ * this shows what the owner filed beside it once a reviewer has corrected it.
+ */
+function renderBarcodePanel() {
+  const selected = state.selected;
+  const digits = String(selected?.normalized_upc ?? '');
+  $('barcode-current').textContent = digits || 'none';
+  const history = $('barcode-history');
+  history.textContent = '';
+  const corrections = state.review?.barcode_corrections ?? [];
+  for (const correction of corrections) {
+    const item = document.createElement('li');
+    item.textContent = `Filed as ${correction.from_upc}, corrected to ${correction.to_upc}: ${correction.reason}`;
+    history.append(item);
+  }
+  history.hidden = corrections.length === 0;
+  // Only a submission under review can change its barcode (opening one in
+  // the console starts its review); the server enforces the same.
+  const open = selected?.review_status === 'under_review';
+  $('barcode-correct').hidden = !open;
+  if (!open) $('barcode-correct').open = false;
+}
+
+async function correctBarcode() {
+  const selection = state.selected;
+  if (!selection) return;
+  const newUpc = $('barcode-new').value.trim();
+  const reason = $('barcode-reason').value.trim();
+  if (!newUpc || !reason) {
+    return setStatus('Enter the barcode printed on the label and why it differs.', true);
+  }
+  const button = $('barcode-save');
+  button.disabled = true;
+  try {
+    const binding = selectedEvidenceBinding();
+    const { corrected } = await edge({
+      action: 'correct_barcode', submission_id: selection.id, new_upc: newUpc, reason, ...binding,
+    });
+    if (state.selected?.id !== selection.id) return;
+    // Take the row back from the server rather than patching a local copy:
+    // normalized_upc has one owner and the page must show exactly that.
+    const { submissions } = await edge({ action: 'list', submission_id: selection.id, limit: 1 });
+    const fresh = submissions.find((row) => row.id === selection.id);
+    if (!fresh || state.selected?.id !== selection.id) throw new Error('Barcode corrected, but the submission could not be reloaded. Reload the queue.');
+    state.submissions = state.submissions.map((row) => row.id === fresh.id ? fresh : row);
+    state.selected = fresh;
+    // A check recorded for the old barcode says nothing about the new one.
+    state.identityCheckRequest += 1;
+    state.identityLookup = null;
+    state.identityRecorded = null;
+    $('barcode-new').value = '';
+    $('barcode-reason').value = '';
+    renderQueue();
+    renderDetail();
+    // Refresh only what the correction changed: the history and the server's
+    // verdict on the barcode check. loadReview would re-adopt the saved draft
+    // into the editor and could replace an edit that has not been saved yet;
+    // saveReview refreshes the review the same way, without touching the payload.
+    const { review } = await edge({ action: 'load_review', submission_id: selection.id });
+    if (state.selected?.id !== selection.id) return;
+    hydrateReview(review);
+    renderIdentityCheck();
+    setStatus(`Barcode corrected from ${corrected.from_upc} to ${corrected.to_upc}. Check the catalog again.`);
+    await checkIdentity();
+  } catch (error) {
+    setStatus(String(error.message ?? error), true);
+  } finally {
+    button.disabled = false;
+  }
+}
+
 function renderIdentityCheck() {
   renderReadiness();
   setDecisionAvailability();
@@ -1063,6 +1139,7 @@ function renderIdentityCheck() {
     return;
   }
   section.classList.remove('hidden');
+  renderBarcodePanel();
   const lookup = state.identityLookup;
   if (state.identityRecorded !== 'catalog_match') {
     $('label-comparison').classList.add('hidden');
@@ -1578,6 +1655,7 @@ function sourcePhotoForField(field) {
 
 function hydrateReview(review) {
   state.review = review ?? null;
+  renderBarcodePanel();
   const draft = review?.draft ?? null;
   state.reviewSuperseded = Boolean(draft?.superseded);
   // The server's digest is authoritative. If the two sides canonicalize the

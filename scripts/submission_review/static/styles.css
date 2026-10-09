@@ -866,3 +866,12 @@ dialog::backdrop { background: rgb(24 26 27 / 60%); }
   #queue li { padding-right: 2.8rem; }
   button.compact { min-height: 2.5rem; }
 }
+
+/* The barcode the identity check runs against, and its correction. */
+.barcode-panel { margin-bottom: 12px; }
+.barcode-line { display: flex; gap: 10px; align-items: baseline; margin: 0 0 6px; }
+.barcode-digits { font-variant-numeric: tabular-nums; letter-spacing: 0.04em; }
+.barcode-history { margin: 0 0 6px; padding-left: 18px; }
+.barcode-panel details { margin-top: 6px; }
+.barcode-panel details label { display: block; margin: 8px 0; }
+.barcode-panel details input { display: block; width: 100%; max-width: 420px; }

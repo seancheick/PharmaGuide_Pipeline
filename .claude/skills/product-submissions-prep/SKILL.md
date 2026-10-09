@@ -262,7 +262,9 @@ not the one that qualified on the frozen holdout.
   `0067 1422`, filed `00671477`). Usually the user scanned a neighbouring
   product. Approving would attach this label to someone else's barcode.
   Finish the transcription, put the mismatch first in your report, and leave
-  the decision (retake request or reject) to the reviewer.
+  the decision to the reviewer: correct the barcode in the console's Barcode
+  panel (it keeps the filed value in a log and reopens the catalog check), or
+  send a retake request or reject.
 
 - **Barcode check says the index is rebuilding.** Another pipeline run is
   rewriting the corpus; the console refuses mid-write on purpose. The reviewer
