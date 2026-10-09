@@ -49,11 +49,13 @@ Run from the `dsld_clean` repository root.
 
 ```bash
 source scripts/python_env.sh                 # sets $PG_PYTHON (Python 3.13)
+set -a; source .env; set +a                  # agent_reader reads the keys from the environment
 export PG_REVIEWER_EMAIL=<reviewer account>  # ask the owner if it is not set
 R="$PG_PYTHON scripts/submission_review/extraction/agent_reader.py"
 ```
 
-Use `$R` unquoted (`"$R"` is one command name and fails), and run every
+Use `$R` unquoted (`"$R"` is one command name and fails; in zsh, which the Bash tool
+is, write `${=R}`), and run every
 Python helper of your own with `$PG_PYTHON`, never bare `python3` (on this Mac
 that is Xcode's interpreter, without the repo's packages).
 

@@ -47,6 +47,9 @@ A **field** is:
 - `confidence`: your honest 0–1, or null.
 
 An **amount** field's value is `{"value": <number>, "unit_text": "<unit as printed>"}`.
+`serving.amount` and `other_ingredients.text` are fields too (value + status +
+sources + region), not bare objects/strings: `record` refuses a bare one. Only
+`other_ingredients.disclosure_hint` is a plain string.
 
 ## 2. reading.json: field by field
 
