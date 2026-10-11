@@ -22,12 +22,16 @@ def test_ssri_class_is_not_an_exact_fluoxetine_alias():
 def test_metformin_warning_retains_principal_risk_and_context():
     row = entries()['ADULTERANT_METFORMIN']
     assert 'lactic acidosis' in row['safety_warning'].lower()
-    assert 'other glucose-lowering' in row['safety_warning'].lower()
+    assert 'low blood sugar with other diabetes drugs' in row['safety_warning'].lower()
+    assert 'stop the supplement' in row['safety_warning'].lower()
+    assert 'does not apply to prescribed metformin' in row['safety_warning'].lower()
     assert row['clinical_risk_enum'] == 'critical'
 
 def test_hidden_dexamethasone_requires_supervised_discontinuation():
     row = entries()['SPIKE_DEXAMETHASONE']
-    assert 'abruptly' in row['safety_warning'].lower()
+    assert 'abrupt stopping after prolonged use' in row['safety_warning'].lower()
+    assert 'suppress adrenal function' in row['safety_warning'].lower()
+    assert 'consult a clinician immediately for safe discontinuation' in row['safety_warning'].lower()
     assert 'before stopping' in row['safety_warning_one_liner'].lower()
     assert row['clinical_risk_enum'] == 'critical'
 

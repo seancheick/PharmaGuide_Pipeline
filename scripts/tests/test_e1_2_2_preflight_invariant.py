@@ -14,13 +14,14 @@ Intentionally strict. If a future E1.2.2 sub-task accidentally mutates
 a pre-existing field, this invariant raises a clear assertion failure
 that points to the exact dsld_id + field.
 
-Runs against the 7 canary baseline blobs + their fresh rebuilds.
+Runs against the nine reviewed canary baseline blobs + their fresh rebuilds.
 
-The baseline rolls forward (see below). Last rolled forward 2026-09-22 from
-``scripts/reports/canary_rebuild.py`` on the v4 code: the April baseline had not
-moved since E1.2.2, and five months of intended changes (v4 fields, label
-ledger, warning dedup) were each classified before the roll. After an intended
-blob change, rebuild the canaries and copy them into ``baseline_pre_e1_2_2/``.
+The active baseline is the reviewed October 11 native-owner rebuild of the same
+nine frozen raw labels. The historical September/April blobs remain untouched.
+Same-input c7→current captures classified the intended clinical warning changes
+and established that legacy full-pipeline fields were already absent from the
+native canary owner before this batch. Snapshot hashes live beside the active
+fixtures; future output changes require another source-qualified review.
 """
 
 from __future__ import annotations
@@ -35,12 +36,9 @@ ROOT = Path(__file__).resolve().parents[2]
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
-# The pre-flight baseline is "post-E1.2.1, pre-E1.2.2 code state" — locked
-# at E1.2.2 kickoff. This filters out E1.0/E1.1/E1.2.1 already-in-flight
-# changes + Dr Pham's tone-sweep commit 5dec46e (landed after the
-# v2026.04.21.224445 dist build). That earlier snapshot remains frozen
-# as the forever-reference at reports/baseline_v2026.04.21.224445/.
-BASELINE_DIR = ROOT / "reports" / "baseline_pre_e1_2_2"
+# Keep historical snapshots unchanged; this dated baseline records the reviewed
+# native canary contract after the clinical registry correction batch.
+BASELINE_DIR = ROOT / "reports" / "baseline_pre_e1_2_2" / "clinical_registry_20261011"
 REBUILD_DIR = ROOT / "reports" / "canary_rebuild"
 
 # Fields E1.2.2 is explicitly permitted to ADD (not mutate). Any other
@@ -53,11 +51,8 @@ E1_2_2_NEW_INGREDIENT_FIELDS = {
     "clinical_support_level",  # E1.3.2 per-strain adequacy
 }
 
-# Baseline rolls forward sub-task by sub-task. As each field lands, move
-# the baseline pointer. Currently "post-E1.2.2.a" is the active pre-flight
-# reference (contains display_label, not yet dose_label / badge / note).
-# The test allows any subset of E1_2_2_NEW_INGREDIENT_FIELDS to be
-# present in the rebuild but NOT in the baseline (additive-only).
+# Existing additive display-field allowances remain narrow; all previously
+# present ingredient fields are compared against the reviewed snapshot.
 
 # Known non-ingredient keys that have been added by earlier E1 tasks
 # (E1.1.4 banned_substance_detail). These are
@@ -232,3 +227,14 @@ def test_toplevel_keys_only_gained_known_e1_additions(canary_pair) -> None:
     assert not lost, (
         f"[{dsld_id}] top-level keys dropped in rebuild: {sorted(lost)}"
     )
+
+
+def test_label_display_and_ledger_rows_unchanged(canary_pair) -> None:
+    """Scorer-only ingredients are not the complete label inventory.
+
+    A recognized non-scorable enhancer must retain its name, form, amount and
+    source row in the existing display/ledger owners.
+    """
+    dsld_id, baseline, rebuild = canary_pair
+    for key in ("display_ingredients", "label_source_rows", "row_ledger"):
+        assert baseline.get(key) == rebuild.get(key), f"[{dsld_id}] {key} changed"

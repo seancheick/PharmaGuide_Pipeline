@@ -390,7 +390,12 @@ def test_bergamot_drug_rules_cite_bergamottin_not_an_osteosarcopenia_review():
     assert _pmid("39517207") not in json.dumps(rule)
     # Alert verb matches the unchanged "avoid" severity.
     for drug_class in ("statins", "calcium_channel_blockers", "antiarrhythmics"):
-        assert "avoid bergamot products" in _sub_rule(rule, "drug_class_id", drug_class)["alert_body"]
+        body = _sub_rule(rule, "drug_class_id", drug_class)["alert_body"].lower()
+        assert "avoid bergamot" in body
+        assert "prescriber" in body
+        if drug_class == "statins":
+            assert "furanocoumarin content varies" in body
+            assert "pravastatin" in body
     assert rule["last_reviewed"] == "2026-04-09"  # agent re-sourcing, not a clinical review
 
 

@@ -76,14 +76,33 @@ def test_ksm66_standardization_locked() -> None:
 
 def test_bioperine_display_label_locked() -> None:
     b = _load("306237")
-    ing = _find_ingredient(b, "bioperine")
-    assert ing.get("display_label") == "Bioperine (Black Pepper Fruit Extract)"  # the label's own spelling
+    # The 5mg enhancer is recognized but not in the scored-ingredient bucket.
+    # The existing label display owner retains its literal identity and fruit.
+    ing = next((r for r in b["display_ingredients"]
+                if r.get("raw_source_path") == "ingredientRows[1]"), None)
+    assert ing is not None
+    assert ing["label_display_name"] == "Bioperine"
+    assert ing["label_display_form"] == "Black Pepper Fruit Extract"
+    assert ing["canonical_id"] == "piperine"
+    assert ing["exact_dose_text"] == "5 mg"
 
 
 def test_bioperine_standardization_locked() -> None:
-    b = _load("306237")
-    ing = _find_ingredient(b, "bioperine")
-    assert ing.get("standardization_note") == "95% piperine"
+    from enhanced_normalizer import EnhancedDSLDNormalizer
+    from enrich_supplements_v3 import SupplementEnricherV3
+    from build_final_db import _compute_standardization_note
+
+    # Frozen NIH raw306237 prints min95%piperine. Assess the native row with
+    # the existing extraction owner; an unassessed display row has analysis=None.
+    raw = json.loads((ROOT / "scripts/tests/fixtures/plant_part_306237_raw.json").read_text())
+    cleaned = EnhancedDSLDNormalizer().normalize_product(raw)
+    enriched, _ = SupplementEnricherV3().enrich_product(cleaned)
+    ing = next(r for r in enriched["ingredient_quality_data"]["ingredients"]
+               if r["raw_source_path"] == "ingredientRows[1]")
+    assert ing["name"] == "Bioperine" and ing["quantity"] == 5
+    assert ing["raw_taxonomy"]["forms"][0]["name"] == "Black Pepper Fruit Extract"
+    assert ing["role_classification"] == "recognized_non_scorable"
+    assert _compute_standardization_note(ing) == "95% piperine"
 
 
 def test_green_tea_standardization_locked() -> None:
