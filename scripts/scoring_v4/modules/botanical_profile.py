@@ -184,9 +184,11 @@ def _branded_studied_entries() -> tuple:
         raw = json.loads((_DATA_DIR / "backed_clinical_studies.json").read_text())
     except Exception:  # pragma: no cover
         return ()
+    from evidence_resolver import clinical_record_sources_eligible
+
     out = []
     for entry in raw.get("backed_clinical_studies") or []:
-        if not isinstance(entry, dict):
+        if not isinstance(entry, dict) or not clinical_record_sources_eligible(entry):
             continue
         level = _norm(entry.get("evidence_level"))
         branded = "branded" in level or _norm(entry.get("id")).startswith("brand_")
@@ -211,9 +213,11 @@ def _branded_studied_row(product: Dict[str, Any], row: Dict[str, Any]) -> bool:
     label name. Remove this branch when the enricher records brand matches for
     those rows.
     """
+    from evidence_resolver import clinical_record_sources_eligible
+
     ref = row.get("raw_source_path")
     for match in ((product.get("evidence_data") or {}).get("clinical_matches") or []):
-        if not isinstance(match, dict):
+        if not isinstance(match, dict) or not clinical_record_sources_eligible(match):
             continue
         level = _norm(match.get("evidence_level"))
         branded = "branded" in level or _norm(match.get("id")).startswith("brand_")

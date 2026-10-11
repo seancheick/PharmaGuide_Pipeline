@@ -11108,6 +11108,12 @@ class SupplementEnricherV3:
             )
 
             for botanical in botanicals_list:
+                # A retained identity is not a verified standardization claim.
+                # Existing explicit registry holds must precede both brand and
+                # percentage credit; missing legacy flags retain their meaning.
+                if botanical.get("bonus_eligible") is False or \
+                   botanical.get("data_quality") == "requires_verification":
+                    continue
                 bot_name = botanical.get('standard_name', '')
                 bot_aliases = botanical.get('aliases', [])
 
@@ -11276,6 +11282,12 @@ class SupplementEnricherV3:
                 item["markers"] = list(dict.fromkeys(entry_markers))
                 merged[key] = item
                 continue
+
+            # An explicit hold on either duplicate cannot be lost to ordering.
+            if entry.get("bonus_eligible") is False:
+                current["bonus_eligible"] = False
+            if entry.get("data_quality") == "requires_verification":
+                current["data_quality"] = "requires_verification"
 
             # Merge aliases/markers with stable order and conservative thresholding.
             current_aliases = current.get("aliases") if isinstance(current.get("aliases"), list) else []
@@ -15651,6 +15663,7 @@ class SupplementEnricherV3:
 
                     # Optional schema extensions (forward-compatible passthrough).
                     optional_fields = [
+                        "scoring_eligible",
                         "applicability",
                         "min_clinical_dose",
                         "max_studied_clinical_dose",
@@ -15761,6 +15774,7 @@ class SupplementEnricherV3:
                         "marker_evidence_id": marker_entry.get("evidence_id"),
                     }
                     optional_fields = [
+                        "scoring_eligible",
                         "applicability",
                         "min_clinical_dose", "max_studied_clinical_dose",
                         "max_clinical_dose", "max_studied_dose", "dose_unit",

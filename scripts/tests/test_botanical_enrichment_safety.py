@@ -60,6 +60,12 @@ def test_standardized_botanical_marker_rows_have_bonus_basis():
     for entry in standardized.values():
         if not entry.get("markers"):
             continue
+        if entry.get("bonus_eligible") is False:
+            # Retained marker identity under an explicit source hold must not
+            # require invented quantitative standardization (e.g. A. annua's
+            # artemisinin threshold cannot authorize A. absinthium credit).
+            assert entry.get("data_quality") == "requires_verification", entry["id"]
+            continue
         has_legacy_basis = bool(
             entry.get("branded_form") is True
             or entry.get("min_threshold") is not None
