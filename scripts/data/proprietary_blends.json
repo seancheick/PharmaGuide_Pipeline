@@ -3,7 +3,7 @@
     "description": "Proprietary blend recognition database for supplement label mapping",
     "purpose": "blend_recognition_mapping",
     "schema_version": "5.0.0",
-    "last_updated": "2026-04-20",
+    "last_updated": "2026-10-11",
     "total_entries": 19,
     "schema_notes": "This file is for MAPPING only. It identifies and categorizes proprietary blend names found on supplement labels. Penalty scoring is handled entirely by the scorer (B5 engine) based on disclosure_level (full/partial/none) — NOT by this file. Each entry has: id, standard_name, blend_terms (label text patterns), risk_factors (safety concerns for user-facing notes), notes (user-facing explanation shown in product detail view)."
   },
@@ -62,7 +62,7 @@
         "Liver toxicity risk from undisclosed methylated compounds",
         "Hormone disruption from unknown compound ratios"
       ],
-      "notes": "Testosterone and hormone support blends carry the highest contamination risk of any supplement category. FDA and DOD testing consistently finds undeclared anabolic agents, SARMs, and prohormones. Products with undisclosed formulas in this category warrant particular caution."
+      "notes": "FDA warning-selected records include undeclared anabolic agents and other drug ingredients in muscle-building products. These records do not establish testosterone blends as the supplement category with the highest market contamination prevalence. Undisclosed formulas warrant careful identity and safety review."
     },
     {
       "id": "BLEND_WEIGHT_LOSS",
@@ -91,7 +91,7 @@
         "Hidden stimulants (DMAA, BMPEA) pose cardiovascular risk",
         "Dangerous drug combinations undetectable without full disclosure"
       ],
-      "notes": "Weight loss supplements have the highest rate of FDA enforcement actions. A 2018 JAMA study found 776 adulterated weight loss products over a decade, with sibutramine, phenolphthalein, and fluoxetine as top adulterants. Full ingredient disclosure is essential for safety in this category."
+      "notes": "The 2018 JAMA analysis (PMID 30646238) identified 776 products in an FDA-warning-selected database across all categories, including 317 weight-loss products. This selection does not estimate market prevalence or establish the highest market contamination rate. Ingredient disclosure remains important for reviewing adulteration concerns."
     },
     {
       "id": "BLEND_NOOTROPIC",
@@ -256,7 +256,7 @@
         "Total CFU may be dominated by one cheap filler strain",
         "Strain ratios affect competitive exclusion and colonization success"
       ],
-      "notes": "Probiotic efficacy is strain-specific and dose-dependent (e.g., L. rhamnosus GG requires ≥10B CFU). When blends disclose only total CFU without per-strain breakdown, it is impossible to verify whether any strain reaches its clinically studied dose. Some blends use high-count filler strains to inflate total CFU."
+      "notes": "Probiotic effects depend on the specific strain or studied mixture, dose, population and outcome. L. rhamnosus GG has no single universal clinically required CFU floor. Total CFU alone may not establish equivalence to a studied individual strain or mixture when component amounts and identities are undisclosed."
     },
     {
       "id": "BLEND_ENZYME",
@@ -614,7 +614,7 @@
         "hibiscus sabdariffa flower extract"
       ],
       "disclosure_level": "partial",
-      "notes": "500 mg dose. Standardized to ≥25% verbascosides + ≥10% anthocyanins. AMPK activation."
+      "notes": "PMID 33810049 studied 500 mg/day of the final mixture (175 mg Hibiscus sabdariffa and 325 mg Lippia citriodora), standardized to 16% phenylpropanoids (15% verbascoside plus 1% isoverbascoside) and 3.5% anthocyanins. Separate extract percentages must not be attributed to the finished mixture. The 84-day trial in 80 participants with elevated blood pressure does not establish a human AMPK mechanism or general weight-loss benefit."
     }
   ]
 }
