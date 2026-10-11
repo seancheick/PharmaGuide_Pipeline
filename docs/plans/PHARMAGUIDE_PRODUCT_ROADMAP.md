@@ -42,7 +42,8 @@ A critical product safety gate (recall, ban, adulteration) sits above all three:
 |---|---|
 | 2026-10-01 | Personal Fit stays on the phone. The pipeline writes the rules; the phone applies them. The profile never leaves the device for this. |
 | 2026-10-01 | One compact personal card: a safety line always; a goal line only when the product matches a goal or works against one; nothing when neutral. |
-| 2026-10-01 | The first external beta comes after Stack Impact. **Under review (Launch track L7):** a small invited TestFlight beta before Stack Impact is proposed; this row stands until Sean decides. |
+| 2026-10-10 | Superseding the 2026-10-01 order ("first external beta after Stack Impact"): a small invited TestFlight beta once the core flows work reliably (Launch track L7); full Stack Impact is built alongside tester feedback. Social builds awareness now, with wording that states availability accurately. Forwarded by Sean. |
+| 2026-10-10 | Clinical oversight model, superseding the 2026-10-01 "human reviewer on every record" row below: agents verify, Laurie oversees (Launch track L4). Forwarded by Sean. |
 | 2026-10-01 | Business team's answers to the decision queue, forwarded by Sean; see "Decisions taken" below. |
 | 2026-10-01 | Public catalog wording: the catalog is "sourced from NIH's Dietary Supplement Label Database (200,000+ labels)". No product count is shown (Sean: 15k reads as weak; 180,000+ described neither our catalog nor the source). |
 | 2026-07-23 | No consumer change timeline or notifications before beta data shows the changes are meaningful (signal-lifecycle guardrail). Still in force: Change Watch UI is Phase 4. |
@@ -70,13 +71,32 @@ subsets only.
 
 | # | Item | Why it blocks launch | Builder → reviewer | Sean decides |
 |---|---|---|---|---|
-| L1 | North star in all three AGENTS.md files | Agents act toward a goal only if it is written | Claude (done October 10, branches `claude/north-star*`) | Wording |
+| L1 | North star in all three AGENTS.md files | Agents act toward a goal only if it is written | Claude (done October 10, branches `claude/north-star*`) | Approved October 10 |
 | L2 | 1.3: coverage out of the verdict, with one exported Analysis Coverage value, **shipped together with the app showing it** | CAUTION must mean "a reason for caution was found" (decision 2026-10-01). Today the low-coverage SAFE→CAUTION switch in `_public_verdict` is the only guard against a poorly assessed product reading SAFE; removing it alone would be a false reassurance. Pipeline verdict, exported coverage and the app's coverage display land in one release, or none does | Claude via `/pg-scoring-change` (pipeline + app) → Codex fresh-context review | New export field + ADR |
 | L3 | 1.10: gold benchmark in the release rung, judged by coverage, not count | Each required class has meaningful cases: severe interactions and contraindications, missing or hidden amounts, aliases and branded forms, unit/amount resolution, recalls/bans, and pipeline↔app parity. Expected answers are set from the rule's source and checked by someone other than the author. 300–500 is an estimate of what that coverage takes, not the gate | Codex authors, extending the existing fixtures → Claude checks each expected answer against the source; Laurie spot-checks severities | None (scenarios follow existing rules) |
-| L4 | 1.8 reviewer gate: a named human reviewer on the published version of every shipped clinical record | Website and social say "pharmacist-reviewed"; the record must prove it, and a review of an earlier wording does not count | Claude inventories shipped records lacking `reviewed_by`/`reviewed_at` or changed since review → Laurie reviews | Which records ship unreviewed, if any |
-| L5 | 1.8 citation gate: close material citation defects in shipped records | A reviewer's name does not fix an unsupported claim. Records in the 252-item baseline debt that ship in the beta catalog are fixed or withheld first; the rest stay in the Q22 burn-down | Claude triages the debt by shipped/not shipped and materiality via `/data-fix` → Codex re-verifies | Withholding a record |
-| L6 | Claims parity across website, social and app | One claim set: the June how-it-works carousel says "180k+" (decision 2026-10-01: no product count, "sourced from NIH's DSLD, 200,000+ labels"); "Private, on your device" must match the privacy decision ("Core Personal Fit and stack safety logic runs on your device") | Claude lists mismatches → Sean edits social | Final wording |
-| L7 | Beta timing (two orders recorded; Sean picks one) | The 2026-10-01 decision puts the external beta after Stack Impact. Proposed instead: a small invited TestFlight beta once L2–L6 pass and the real-app checks pass, with the existing stack checks working and their limits stated in the app (no claim of full stack analysis). Social copy ("Beta's open") and the website ("adding the first testers") already assume the second order | — | Keep the 2026-10-01 order, or adopt the invited beta (recommended); the decision row above is then updated |
+| L4 | Clinical verification and oversight (model of 2026-10-10) | Agents verify each clinical claim against its actual source: ingredient, population, dose, outcome, severity and applicability (a resolving PubMed ID is not enough), then a second agent reviews the change independently and tests what the app displays. Laurie gets short consolidated summaries with only material questions highlighted; work continues while she reads. Silence is never recorded as approval; `reviewed_by` and the words "pharmacist-reviewed" apply only to content she explicitly reviewed. Unresolved material safety questions stay explicit or held; routine work never waits for her | Claude verifies → Codex reviews and checks the app; Sean sends the summaries | Holding a record with an open material question |
+| L5 | 1.8 citation gate: close material citation defects in shipped records | A review does not fix an unsupported claim. Records in the 252-item baseline debt that ship in the beta catalog are fixed or withheld first; the rest stay in the Q22 burn-down | Claude triages the debt by shipped/not shipped and materiality via `/data-fix` → Codex re-verifies | Withholding a record |
+| L6 | Claims parity across website, social and app | One claim set: the June how-it-works carousel says "180k+" (decision 2026-10-01: no product count, "sourced from NIH's DSLD, 200,000+ labels"); "Private, on your device" must match the privacy decision ("Core Personal Fit and stack safety logic runs on your device"); under L4, the website FAQ line "Every interaction is cross-referenced… then reviewed by a licensed pharmacist" (`web:src/lib/faq.ts`) and the "Clinician-reviewed" badges must describe only what was explicitly reviewed | Claude lists mismatches → Sean edits social | Final wording |
+| L7 | Invited TestFlight beta (decided 2026-10-10) | Opens once this week's order below passes on the finished candidate: existing stack checks working, their limits stated in the app, no claim of full stack analysis | Integrator validates the candidate; Sean invites testers | Who is invited and when |
+
+### This week (October 10–17), in order
+
+Bounded to these five; it is not a promise to clear the historical backlog. Every remaining item
+leaves the week with a disposition (done, held with reason, or scheduled) and its evidence, so
+nothing quietly disappears.
+
+1. **Verify depletion, stack interactions and nutrient accumulation end to end**: units, serving
+   quantities, duplicate ingredients, missing amounts, applicable upper limits, and medication/profile
+   triggers, checked on real products through to what the app shows.
+2. **L2: ship coverage and safety presentation together.** A poorly assessed product never gains an
+   unqualified all-clear.
+3. **Remove the unused FitScore arithmetic** (`scoreFit20`, `e2cPenalty`, `maxPossible`) after the
+   dead-code proof. Keep personal relevance, medication warnings and goal context; behavior matters
+   more than the name.
+4. **Close known defects and validate the finished candidate**: representative real products and
+   phone checks, before the build goes to invited testers (L7).
+5. **Content alongside**: magnesium, melatonin, label reading and certification seals, each paired
+   with a social post using the same verified facts.
 
 ### During beta
 
@@ -87,17 +107,19 @@ then the broad citation scan as a full gate), then Phase 2 Stack Impact.
 ### Content (runs beside everything)
 
 A target of two blog posts a week (not a promise) from the ranked backlog
-`web:docs/13-blog-topic-backlog.md`, each through `/pg-blog-mdx` with Laurie as reviewer where its
-risk score requires; medication-heavy posts are scheduled around her availability. Start with
+`web:docs/13-blog-topic-backlog.md`, each through `/pg-blog-mdx`, verified under the L4 model. Start with
 magnesium, then melatonin, to match the social series. Sean runs social media outside these repos and
-pairs each post with a carousel. First parallel start: L2 and the magnesium article.
+pairs each post with a carousel. The blog's executable gate still requires a `reviewer:` field
+for risk 31–70 posts (`web:pnpm blog:publish-check`); until Sean changes that gate, those posts wait
+for Laurie's explicit review or are rewritten to a lower risk, never published with a reviewer she
+did not give.
 
 ### Roster
 
 | Who | Owns |
 |---|---|
 | Sean | North star, policy and clinical decisions, pushes to main, releases, social media |
-| Laurie Pham, PharmD | Clinical review of records and of blog posts the risk gate flags |
+| Laurie Pham, PharmD | Occasional oversight: reads consolidated summaries, answers material questions, flags anything inaccurate |
 | Claude | Building in one worktree per batch; blog drafts; integration when Sean names it the integrator |
 | Codex | Fresh-context review of Claude's behavioral diffs (and Claude of Codex's); benchmark authoring |
 
@@ -222,7 +244,9 @@ publication is complete.
 - [ ] **2.4 Clinician brief.** A one-screen summary and a plain-text version on top of
   `app:lib/services/sharing/clinician_pdf_builder.dart`, with coverage-bounded wording.
 - [ ] **2.5 External beta.** Collect false positives and negatives, scan misses, no-result searches
-  and wording problems. Gate: 1.10 passes and the Phase 0 catalog is released.
+  and wording problems. Gate: 1.10 passes and the Phase 0 catalog is released. Since 2026-10-10 a
+  small invited TestFlight beta (Launch track L7) comes first; this gate now applies to opening the
+  beta beyond invited testers.
 
 ### Phase 3 — product and version intelligence
 
@@ -277,7 +301,7 @@ ontology. Examine's API is never ingested (its terms forbid it, see below).
 | Privacy | Local by default (Personal Fit, condition gating, core stack rules, health profile); explicit network services (RxNorm lookup, optional account sync, catalog/recall updates, future AI). Ask PharmaGuide is hybrid: answer from structured engine output where possible; cloud only when invoked, minimum context, disclosed, no training. Claim: "Core Personal Fit and stack safety logic runs on your device." | 1.2, Phase 5 |
 | Pricing | Never paywall a critical safety finding (recall, contraindication, avoid, unsafe accumulation). Premium monetizes history, Change Watch, advanced Stack Impact, profiles, AI, comparisons, reports, sync. Exact price after beta. | — |
 | Fail-open and guest recall | Absolute P0, beside each other: lookup and critical safety before any quota; safety uncertainty fails closed with "Current safety status unavailable", never positive reassurance. | 1.2 |
-| Human reviewer | Required on every published clinical record (reviewed_by human + reviewed_at); AI provenance kept as audited_by, never as the accountable reviewer. Before external beta. | 1.8 |
+| Human reviewer | Required on every published clinical record (reviewed_by human + reviewed_at); AI provenance kept as audited_by, never as the accountable reviewer. Before external beta. **Superseded 2026-10-10 by the oversight model (Launch track L4);** the audited_by/reviewed_by distinction still holds. | 1.8 |
 | Gold benchmark | Start authoring now: about 100 interaction/safety, 80 identity/form/strain, 60 dose/UL, 40 condition/profile, 40 proprietary/missing data, 30 recall/regulatory, 30 scoring controls, 20 formula/version cases, each with expected verdict, score presence, critical flags, severity, evidence tier, coverage, identity, dose resolution and citation requirements. | 1.10 |
 | Rule schema | Target fields: rule_id, rule_version, entities, severity, evidence_level, presence/dose based, studied_dose, activation_threshold, threshold_basis, form/population/route scope, mechanism, clinical_effect, action, sources, reviewed_by, reviewed_at. | 1.7 |
 | Formula history | Activate the existing snapshot writer; never overwrite history. | 3.1 |
