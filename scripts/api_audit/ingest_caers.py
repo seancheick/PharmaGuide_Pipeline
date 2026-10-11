@@ -42,12 +42,13 @@ OUTPUT_FILE = os.path.join(DATA_DIR, "caers_adverse_event_signals.json")
 # ---------------------------------------------------------------------------
 SUPPLEMENT_INDUSTRY_CODES = {"54"}  # Vit/Min/Prot/Unconv Diet(Human/Animal)
 
-# Serious outcome categories (for serious_reports count)
+# Serious outcome categories (for serious_reports count). FDA guidance requires
+# another qualifying outcome for an ER visit without inpatient admission:
+# https://www.fda.gov/safety/reporting-serious-problems-fda/what-serious-adverse-event
 SERIOUS_OUTCOMES = {
     "Hospitalization",
     "Death",
     "Life Threatening",
-    "Visited Emergency Room",
     "Disability",
     "Required Intervention",
     "Congenital Anomaly",
