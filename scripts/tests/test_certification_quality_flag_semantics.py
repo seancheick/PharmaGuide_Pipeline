@@ -95,10 +95,14 @@ def test_reversed_contents_certified_nsf_is_detected_as_a_claim() -> None:
 
 
 def test_nsf_ansi_455_is_detected_as_a_claim() -> None:
-    certification = _certification_from_label("NSF/ANSI 455 Dietary Supplement Certified")
+    certification = _certification_from_label("NSF/ANSI 455-2 Dietary Supplement Certified")
 
     assert _program_names(certification) == ["NSF/ANSI 455 Dietary Supplement"]
     _assert_no_claim_derived_flags(certification)
+
+    # The unsuffixed family also includes cosmetics and OTC-drug standards.
+    ambiguous = _certification_from_label("NSF/ANSI 455 Certified")
+    assert "NSF/ANSI 455 Dietary Supplement" not in _program_names(ambiguous)
 
 
 def test_nsf_contents_rules_db_bridge_preserves_specific_program_name() -> None:

@@ -4,7 +4,7 @@
     "purpose": "claims_scoring",
     "schema_version": "5.0.0",
     "contract_test": "scripts/tests/test_cert_claim_rules_contract.py",
-    "last_updated": "2026-10-04",
+    "last_updated": "2026-10-11",
     "scoring_rule": "Only award points when evidence_strength >= 'medium' AND score_eligible=true AND feature gate enabled",
     "design_principles": [
       "Separation of concerns: Enrichment extracts claims, Scoring computes points",
@@ -181,7 +181,7 @@
         "approved_field_group": "product_level_fields",
         "points_if_eligible": 5,
         "verification_url": "https://www.quality-supplements.org/verified-products",
-        "notes": "An independent lab (U.S. Pharmacopeia) tested this product and confirmed it contains exactly what the label says, dissolves properly in your body, and is free of harmful contaminants. USP Verified is one of the most respected supplement certifications in the world."
+        "notes": "A USP Verified claim refers to the USP verification program, which assesses declared ingredients and potency, specified contaminant limits, applicable disintegration or dissolution tests, and manufacturing controls. A label claim alone is not a verified certificate or a guarantee of absorption or safety."
       },
       "nsf_sport": {
         "id": "CERT_NSF_SPORT",
@@ -258,8 +258,7 @@
         "positive_patterns": [
           "\\bNSF\\s+Contents\\s+Certified\\b",
           "\\bContents\\s+Certified\\s+NSF\\b",
-          "\\bNSF/ANSI\\s*173\\b",
-          "\\bNSF\\s+173\\b"
+          "\\bNSF(?:/ANSI)?\\s*173\\s+Certified\\b"
         ],
         "negative_patterns": [],
         "evidence_strength": "strong",
@@ -288,9 +287,8 @@
         "dedupe_key": "third_party_program:consumerlab",
         "claim_type": "third_party_certification",
         "positive_patterns": [
-          "\\bConsumerLab\\s*(Tested|Approved)\\b",
-          "\\bCL\\s*Approved\\b",
-          "\\bConsumerLab\\.com\\s+Approved\\b"
+          "\\bConsumerLab(?:\\.com)?\\s+Approved\\b",
+          "\\bCL\\s+Approved\\b"
         ],
         "negative_patterns": [
           "\\bnot\\s+ConsumerLab\\b",
@@ -301,7 +299,7 @@
         "approved_field_group": "product_level_fields",
         "points_if_eligible": 5,
         "verification_url": "https://www.consumerlab.com/seal/",
-        "notes": "ConsumerLab is an independent company that buys supplements off store shelves and tests them in their own lab. Products that pass earn the CL Approved seal — meaning they contain what the label claims and are free of contamination."
+        "notes": "A ConsumerLab Approved claim identifies a product that reportedly passed the applicable ConsumerLab tests. The test panel and contaminant limits are bounded; approval is not proof that every contaminant is absent."
       },
       "informed_sport": {
         "id": "CERT_INFORMED_SPORT",
@@ -315,15 +313,7 @@
           "basis": "Informed Sport verifies batch testing for prohibited substances. That is valuable named-program evidence, but it does not establish PharmaGuide's broader purity, heavy-metal, or label-accuracy flags.",
           "source": "https://sport.wetestyoutrust.com/about/certification-process"
         },
-        "implies_gmp": {
-          "verified_program": "Informed Sport",
-          "scopes": [
-            "sku",
-            "product_line"
-          ],
-          "basis": "Informed Sport requires manufacturing in a GMP-registered facility plus an audit as part of certification.",
-          "source": "https://sport.wetestyoutrust.com/"
-        },
+        "implies_gmp": null,
         "display_name": "Informed Sport",
         "dedupe_key": "third_party_program:informed_sport",
         "claim_type": "third_party_certification",
@@ -336,7 +326,7 @@
         "approved_field_group": "product_level_fields",
         "points_if_eligible": 5,
         "verification_url": "https://sport.wetestyoutrust.com/",
-        "notes": "Every single batch of this product is tested by LGC, a world-leading anti-doping lab, for substances banned in professional and Olympic sports. Widely required by pro sports teams around the world."
+        "notes": "Informed Sport screens certified product batches for prohibited substances and reviews manufacturing quality information. This program description does not by itself establish a separate independently audited GMP facility registration."
       },
       "informed_choice": {
         "id": "CERT_INFORMED_CHOICE",
@@ -350,15 +340,7 @@
           "basis": "Informed Choice verifies recurring testing for banned-substance contamination. That is valuable named-program evidence, but it does not establish PharmaGuide's broader purity, heavy-metal, or label-accuracy flags.",
           "source": "https://choice.wetestyoutrust.com/sites/default/files/2022-07/Informed%20Choice%20Dietary%20Supplement%20Certification%20Process.pdf"
         },
-        "implies_gmp": {
-          "verified_program": "Informed Choice",
-          "scopes": [
-            "sku",
-            "product_line"
-          ],
-          "basis": "Informed Choice (consumer arm of the Informed program) requires manufacturing in a GMP-registered, audited facility.",
-          "source": "https://choice.wetestyoutrust.com/"
-        },
+        "implies_gmp": null,
         "display_name": "Informed Choice",
         "dedupe_key": "third_party_program:informed_choice",
         "claim_type": "third_party_certification",
@@ -371,7 +353,7 @@
         "approved_field_group": "product_level_fields",
         "points_if_eligible": 5,
         "verification_url": "https://choice.wetestyoutrust.com/",
-        "notes": "This product is regularly tested by LGC, one of the world's top anti-doping labs, for prohibited substances. Informed Choice is the consumer version of the Informed Sport program — monthly batch testing for everyday supplement users."
+        "notes": "Informed Choice uses regular blind retail testing for prohibited substances and a manufacturing-quality review. Monthly testing does not establish that every production lot was tested or that a separate GMP facility audit occurred."
       },
       "bscg": {
         "id": "CERT_BSCG",
@@ -401,8 +383,8 @@
         "dedupe_key": "third_party_program:bscg",
         "claim_type": "third_party_certification",
         "positive_patterns": [
-          "\\bBSCG\\s*(Certified\\s*Drug\\s*Free)?\\b",
-          "\\bBanned\\s+Substances\\s+Control\\s+Group\\b"
+          "\\bBSCG\\s+Certified\\s+Drug\\s+Free\\b",
+          "\\bBanned\\s+Substances\\s+Control\\s+Group\\s+Certified\\s+Drug\\s+Free\\b"
         ],
         "negative_patterns": [],
         "evidence_strength": "strong",
@@ -504,8 +486,7 @@
         "dedupe_key": "third_party_program:goed",
         "claim_type": "third_party_certification",
         "positive_patterns": [
-          "\\bGOED\\s*(Certified|Member|Quality|Standard)?\\b",
-          "\\bGlobal\\s+Organization\\s+for\\s+EPA\\s+and\\s+DHA\\b"
+          "\\bGOED\\s+Certified\\b"
         ],
         "negative_patterns": [],
         "evidence_strength": "strong",
@@ -513,7 +494,7 @@
         "approved_field_group": "product_level_fields",
         "points_if_eligible": 5,
         "verification_url": "https://goedomega3.com/",
-        "notes": "GOED is the international trade group for omega-3 products. Their quality standard tests for oxidation (freshness), heavy metals, and accurate EPA/DHA potency. Products meeting GOED standards deliver the omega-3 dose they promise, without rancidity or contamination.",
+        "notes": "GOED is an omega-3 trade organization with a voluntary monograph and member adherence requirements. Membership or a label certification claim is not proof of independent finished-product certification; the monograph specifies limits rather than absence of oxidation or contaminants.",
         "category_gate": "omega_or_marine",
         "product_scope": "marine"
       },
@@ -541,8 +522,7 @@
         "claim_type": "third_party_certification",
         "positive_patterns": [
           "\\biTested\\b",
-          "\\biHerb\\s+iTested\\b",
-          "\\btested\\s+by\\s+Eurofins\\b"
+          "\\biHerb\\s+iTested\\b"
         ],
         "negative_patterns": [],
         "evidence_strength": "strong",
@@ -550,7 +530,7 @@
         "approved_field_group": "product_level_fields",
         "points_if_eligible": 5,
         "verification_url": "https://www.iherb.com/itested",
-        "notes": "This product was independently tested by Eurofins, one of the world's largest lab networks, through iHerb's iTested program. Testing covers identity (is this really what it says it is?), potency (correct dose?), and contaminant screening."
+        "notes": "An iTested claim names the iHerb testing program. A generic Eurofins laboratory mention does not establish program participation. Product-specific reports are needed to establish the methods, analytes, results and lot tested."
       },
       "informed_bst": {
         "id": "CERT_INFORMED_BST",
@@ -575,9 +555,8 @@
         "dedupe_key": "third_party_program:tga_listed",
         "claim_type": "third_party_certification",
         "positive_patterns": [
-          "\\bTGA\\s*(Listed|Registered|Approved)\\b",
-          "\\bAustralian\\s+Therapeutic\\s+Goods\\b",
-          "\\bARTG\\s*(Listed|Number|ID)\\b",
+          "\\bTGA\\s+Listed\\b",
+          "\\bARTG\\s+Listed\\b",
           "\\bAUST\\s*L\\s*\\d+\\b"
         ],
         "negative_patterns": [],
@@ -594,7 +573,7 @@
         "dedupe_key": "third_party_program:ecocert",
         "claim_type": "third_party_certification",
         "positive_patterns": [
-          "\\bEcocert\\s*(Certified|Organic|Fair\\s+Trade)?\\b"
+          "\\bEcocert\\s+(?:Certified|Organic|Fair\\s+Trade)\\b"
         ],
         "negative_patterns": [],
         "evidence_strength": "strong",
@@ -602,7 +581,7 @@
         "approved_field_group": "product_level_fields",
         "points_if_eligible": 5,
         "verification_url": "https://www.ecocert.com/",
-        "notes": "Ecocert is one of the largest organic and sustainability certification bodies in the world, based in Europe. Products with Ecocert certification meet strict standards for organic sourcing, sustainable production, and environmental responsibility."
+        "notes": "Ecocert operates several distinct organic, sustainability and fair-trade certification standards. A certifier or fair-trade claim does not establish organic status; the applicable standard and certificate must be identified."
       },
       "nsf_ansi_455": {
         "id": "CERT_NSF_ANSI_455",
@@ -610,9 +589,8 @@
         "dedupe_key": "third_party_program:nsf_ansi_455",
         "claim_type": "third_party_certification",
         "positive_patterns": [
-          "\\bNSF[\\s/]*ANSI\\s*455\\b",
-          "\\bNSF\\s+455\\b",
-          "\\bNSF\\s+Dietary\\s+Supplement\\s+Certified\\b"
+          "\\bNSF[\\s/]*ANSI\\s*455-2\\b",
+          "\\bNSF\\s+455-2\\b"
         ],
         "negative_patterns": [],
         "evidence_strength": "strong",
@@ -765,8 +743,7 @@
         "dedupe_key": "gmp:cgmp",
         "claim_type": "gmp_certification",
         "positive_patterns": [
-          "\\bcGMP[\\s-]*(Certified|Compliant)\\b",
-          "\\b21\\s*CFR\\s*Part\\s*(210|211)\\s*(compliant|certified)\\b"
+          "\\bcGMP[\\s-]*Certified\\b"
         ],
         "negative_patterns": [
           "\\bfollows?\\s+cGMP\\b",
@@ -776,7 +753,7 @@
         "scope_rule": "product_level_only",
         "approved_field_group": "product_level_fields",
         "points_if_eligible": 4,
-        "notes": "cGMP (Current Good Manufacturing Practice) is the FDA's manufacturing quality standard. When a product says 'cGMP Certified,' it means an independent auditor verified the facility meets FDA manufacturing requirements — going beyond the minimum legal compliance."
+        "notes": "A cGMP Certified label statement is a manufacturing claim. Dietary-supplement cGMP requirements are in 21 CFR Part 111; drug Parts 210 and 211 are different. Independent audit evidence must identify the certifier, facility and scope."
       },
       "gmp_explicit": {
         "id": "CERT_GMP_EXPLICIT",
@@ -796,7 +773,7 @@
         "scope_rule": "product_level_only",
         "approved_field_group": "product_level_fields",
         "points_if_eligible": 4,
-        "notes": "This product explicitly states it was made in a GMP Certified facility — meaning an independent auditor verified the manufacturing site meets quality standards for cleanliness, equipment, and consistency."
+        "notes": "This label claims manufacture in a GMP certified or registered facility. The wording alone does not establish an independent audit; the audit source, facility, scope and recency must be verified."
       },
       "gmp_generic": {
         "id": "CERT_GMP_GENERIC",
@@ -849,9 +826,7 @@
         "dedupe_key": "organic:usda",
         "claim_type": "organic_certification",
         "positive_patterns": [
-          "\\bUSDA[\\s-]+Organic\\b",
-          "\\bCertified[\\s-]+Organic\\b",
-          "\\b100(?:%|\\s*percent)?[\\s-]*Organic\\b"
+          "\\bUSDA[\\s-]+Organic\\b"
         ],
         "negative_patterns": [
           "\\bmade[\\s-]+with[\\s-]+organic[\\s-]+ingredients?\\b",
@@ -869,7 +844,7 @@
         "scope_rule": "product_level_only",
         "approved_field_group": "product_level_fields",
         "points_if_eligible": 2,
-        "notes": "This product is certified organic by the U.S. Department of Agriculture. USDA Organic means at least 95% of ingredients are organically grown — without synthetic pesticides, herbicides, or GMOs. The certification requires annual third-party inspections."
+        "notes": "A USDA Organic claim refers to the USDA organic program. Organic products generally require at least 95% organic ingredients, excluding water and salt; permitted National List substances are exceptions to broad synthetic-substance restrictions. Certification does not mean every synthetic pesticide is prohibited."
       },
       "organic_ingredient": {
         "id": "CLAIM_ORGANIC_INGREDIENT",
@@ -886,7 +861,7 @@
         "scope_rule": "any",
         "approved_field_group": "any_field",
         "points_if_eligible": 0,
-        "notes": "This product uses some organic ingredients but is not fully USDA Organic certified. 'Made with organic ingredients' means at least 70% of ingredients are organic, but the product hasn't passed the full USDA certification process."
+        "notes": "Organic ingredient wording does not establish the overall organic percentage or USDA certification. The separately regulated made-with-organic category requires at least 70% organic ingredients and certification, but cannot use the USDA Organic seal."
       }
     },
     "allergen_free_claims": {
@@ -934,8 +909,7 @@
         "claim_type": "allergen_free_claim",
         "positive_patterns": [
           "\\bGFCO\\b",
-          "\\bGluten[\\s-]*Free\\s+Certification\\s+Organization\\b",
-          "\\bCertified\\s+Gluten[\\s-]*Free\\b"
+          "\\bGluten[\\s-]*Free\\s+Certification\\s+Organization\\b"
         ],
         "negative_patterns": [],
         "conflict_allergens": [
@@ -948,7 +922,7 @@
         "scope_rule": "product_level_only",
         "approved_field_group": "product_level_fields",
         "points_if_eligible": 1,
-        "notes": "Certified gluten-free by the Gluten-Free Certification Organization (GFCO), which requires products to contain less than 10 ppm of gluten — stricter than the FDA's 20 ppm standard. This is the strongest gluten-free verification available."
+        "notes": "GFCO is a specific gluten-free certification program with its own testing requirements and gluten threshold. Generic certified-gluten-free wording does not establish GFCO membership; a current product certificate is needed."
       },
       "dairy_free": {
         "id": "CLAIM_DAIRY_FREE",
@@ -1217,13 +1191,16 @@
         "positive_patterns": [
           "\\bNon[\\s-]*GMO\\s+Project\\s+Verified\\b"
         ],
-        "negative_patterns": [],
+        "negative_patterns": [
+          "\\bnot\\s+Non[\\s-]*GMO\\s+Project\\s+Verified\\b",
+          "\\bNon[\\s-]*GMO\\s+Project\\s+(?:verification\\s+)?pending\\b"
+        ],
         "evidence_strength": "strong",
         "scope_rule": "product_level_only",
         "approved_field_group": "product_level_fields",
         "points_if_eligible": 1,
         "verification_url": "https://www.nongmoproject.org/",
-        "notes": "Verified by the Non-GMO Project, North America's most trusted GMO avoidance program. Every ingredient is tested and traced to ensure it was not genetically modified. The butterfly logo means independent verification, not just a manufacturer's claim."
+        "notes": "The Non-GMO Project standard requires traceability and ongoing testing for major high-risk ingredients or precursors, with specified exceptions and alternatives for non-testable materials. It does not require every ingredient to be tested."
       },
       "kosher": {
         "id": "CLAIM_KOSHER",
@@ -1241,7 +1218,7 @@
         "scope_rule": "product_level_only",
         "approved_field_group": "product_level_fields",
         "points_if_eligible": 0,
-        "notes": "This product is certified Kosher, meaning it meets Jewish dietary laws. Kosher certification also implies a level of manufacturing oversight — an independent rabbi or certifying agency inspects the facility and ingredients."
+        "notes": "Kosher wording expresses a religious dietary claim. Independent certification and inspection require a named certifier and current certificate; bare wording alone does not establish either."
       },
       "halal": {
         "id": "CLAIM_HALAL",
@@ -1257,7 +1234,7 @@
         "scope_rule": "product_level_only",
         "approved_field_group": "product_level_fields",
         "points_if_eligible": 0,
-        "notes": "This product is certified Halal, meaning it complies with Islamic dietary laws. Halal certification verifies that ingredients and manufacturing processes meet religious dietary requirements — including no alcohol-based solvents or animal-derived gelatin from non-Halal sources."
+        "notes": "Halal wording expresses a religious dietary claim. The applicable standard, certifier, ingredient scope and certificate must be established before describing independent certification or specific processing requirements."
       }
     },
     "batch_traceability": {
@@ -1451,14 +1428,15 @@
         "dedupe_key": "quality:iso",
         "claim_type": "quality_marker",
         "positive_patterns": [
-          "\\bISO\\s*\\d+\\s*(Certified)?\\b"
+          "\\bISO\\s*(?:9001|22000)(?::\\d{4})?\\s+Certified\\b",
+          "\\bCertified\\s+to\\s+ISO\\s*(?:9001|22000)(?::\\d{4})?\\b"
         ],
         "negative_patterns": [],
         "evidence_strength": "medium",
         "scope_rule": "product_level_only",
         "approved_field_group": "product_level_fields",
         "points_if_eligible": 0,
-        "notes": "ISO (International Organization for Standardization) certification means the manufacturing facility meets internationally recognized quality management standards. Common ISO certifications for supplements include ISO 9001 (quality management) and ISO 22000 (food safety)."
+        "notes": "ISO 9001 concerns quality-management systems and ISO 22000 food-safety management. ISO 14001 concerns environmental management and ISO 50001 energy management. Mentioning a standard is not certification; systems certification does not certify every product or establish clinical safety."
       }
     }
   }
