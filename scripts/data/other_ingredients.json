@@ -3,7 +3,7 @@
     "description": "Other/inactive ingredients database for supplement excipients and additives",
     "purpose": "inactive_ingredient_classification",
     "schema_version": "5.4.3",
-    "last_updated": "2026-10-07",
+    "last_updated": "2026-10-11",
     "total_entries": 729,
     "functional_roles_field": {
       "added_in": "5.1.0",
@@ -545,7 +545,7 @@
       "is_additive": true,
       "additive_type": "fiber",
       "allergen": false,
-      "notes": "Agave-derived inulin-type fructan fiber used as prebiotic filler in supplement formulations. Fermented by colonic Bifidobacteria to produce short-chain fatty acids (butyrate, propionate). GRAS. 5-10g/day supports gut microbiome diversity.",
+      "notes": "Agave-derived fructan fiber. PMID 26090092 studied 5 g/day Predilife for three weeks in 38 healthy adults: bifidobacteria and lactobacilli increased, but no significant bacterial-community, SCFA or secretory-IgA difference was found. This does not establish a universal 5–10 g/day microbiome-diversity benefit.",
       "common_uses": [
         "fiber source",
         "prebiotic",
@@ -729,7 +729,7 @@
       "is_additive": true,
       "additive_type": "rare_sugar_sweetener",
       "allergen": false,
-      "notes": "Rare natural sugar with 70% sweetness of sucrose but minimal calories. Does not affect blood sugar. FDA recognized as GRAS.",
+      "notes": "Allulose is a rare sugar used as a sweetener. PMID 29797503 studied 24 people with type 2 diabetes given 5 or 10 g with a 75 g glucose challenge: modest acute postprandial glucose reductions, including the primary endpoint at 10 g. This is not a claim of no metabolic effect or established long-term diabetes treatment.",
       "common_uses": [
         "low-calorie sweetener",
         "sugar substitute"
@@ -2113,55 +2113,19 @@
       "is_additive": false,
       "additive_type": "functional",
       "allergen": false,
-      "notes": "Identity-level mapping for trimethylglycine monohydrate labels when declared in other ingredients or as a source form rather than a primary scored active.",
+      "notes": "Identity-level mapping for trimethylglycine monohydrate labels when declared in other ingredients or as a source form rather than a primary scored active. Source review: exact chemical/preparation identifiers are withheld where they do not represent this label scope; raw composition and clinical applicability remain unresolved.",
       "common_uses": [
         "source form",
         "osmolyte ingredient"
       ],
       "last_updated": "2026-03-13",
       "external_ids": {
-        "unii": "3SCV180C9W",
+        "unii": null,
         "cas": "17146-86-0",
         "pubchem_cid": 24884197
       },
       "rxcui": "1512",
-      "gsrs": {
-        "substance_name": "BETAINE",
-        "substance_class": "chemical",
-        "cfr_sections": [],
-        "dsld_count": 495,
-        "dsld_info_raw": "Dietary Supplement Label Database|Chemical|Betaine Anhydrous | 625 (Number of products:495)",
-        "active_moiety": null,
-        "salt_parents": [
-          {
-            "type": "SALT/SOLVATE->PARENT",
-            "name": "THEOPHYLLINE-BETAINE",
-            "unii": "AVI4QY17K7"
-          },
-          {
-            "type": "SALT/SOLVATE->PARENT",
-            "name": "CHLORAL BETAINE",
-            "unii": "8680278NRH"
-          },
-          {
-            "type": "SALT/SOLVATE->PARENT",
-            "name": "BETAINE CITRATE",
-            "unii": "19JX795NXV"
-          },
-          {
-            "type": "SALT/SOLVATE->PARENT",
-            "name": "BETAINE HYDRATE",
-            "unii": "TPU0ITR2BR"
-          },
-          {
-            "type": "SALT/SOLVATE->PARENT",
-            "name": "BETAINE IRON COMPLEX HYDROCHLORIDE",
-            "unii": "UZX0O3J7FM"
-          }
-        ],
-        "metabolic_relationships": [],
-        "metabolites": []
-      },
+      "gsrs": null,
       "cui": "C0005304",
       "functional_roles": [],
       "is_active_only": true
@@ -2349,14 +2313,13 @@
       "aliases": [
         "black pepper extract",
         "Black Pepper Fruit Extract",
-        "Piper nigrum extract",
-        "piperine"
+        "Piper nigrum extract"
       ],
       "category": "active_pending_relocation",
       "is_additive": false,
       "additive_type": "bioenhancer",
       "allergen": false,
-      "notes": "Black pepper extract containing piperine. Enhances absorption of other nutrients. GRAS approved.",
+      "notes": "Black pepper extract containing piperine. Enhances absorption of other nutrients. GRAS approved. Source review: exact chemical/preparation identifiers are withheld where they do not represent this label scope; raw composition and clinical applicability remain unresolved.",
       "common_uses": [
         "absorption enhancement",
         "bioavailability"
@@ -2364,8 +2327,8 @@
       "last_updated": "2025-12-04",
       "external_ids": {
         "unii": "KM66971LVF",
-        "cas": "94-62-2",
-        "pubchem_cid": 638024
+        "cas": null,
+        "pubchem_cid": null
       },
       "rxcui": "259314",
       "rxcui_note": "Codex live-RxNorm audit 2026-07-24: prior 1306935 = Brazilian pepper (Schinus, wrong genus); corrected to 259314 'black pepper preparation' (Active, content-verified). Non-load-bearing (UNII/CUI are the match keys; rxcui not emitted to blob).",
@@ -2881,7 +2844,7 @@
       "additive_type": "milk_protein",
       "allergen": true,
       "allergen_type": "milk",
-      "notes": "Calcium salt of casein (milk protein) used as protein source and tablet binder. Contains ~90% protein with complete amino acid profile. Dairy allergen — must declare per FALCPA. GRAS food ingredient. Slow-digesting protein matrix.",
+      "notes": "Calcium salt of casein (milk protein) used as protein source and tablet binder. Contains ~90% protein with complete amino acid profile. Dairy allergen — must declare per FALCPA. GRAS food ingredient. Slow-digesting protein matrix. Source review: exact chemical/preparation identifiers are withheld where they do not represent this label scope; raw composition and clinical applicability remain unresolved.",
       "common_uses": [
         "binder",
         "protein source"
@@ -2889,7 +2852,7 @@
       "last_updated": "2026-03-01",
       "external_ids": {
         "cas": "9005-43-0",
-        "pubchem_cid": 161712915
+        "pubchem_cid": null
       },
       "cui": "C0301465",
       "functional_roles": [
@@ -2909,7 +2872,7 @@
       "is_additive": true,
       "additive_type": "processing_salt",
       "allergen": false,
-      "notes": "Calcium chloride (CaCl2) — mineral salt used as firming agent, electrolyte source, and processing aid in supplement manufacturing. FDA GRAS (21 CFR 184.1193). Hygroscopic; also serves as desiccant in packaging.",
+      "notes": "Calcium chloride (CaCl2) — mineral salt used as firming agent, electrolyte source, and processing aid in supplement manufacturing. FDA GRAS (21 CFR 184.1193). Hygroscopic; also serves as desiccant in packaging. Source review: exact chemical/preparation identifiers are withheld where they do not represent this label scope; raw composition and clinical applicability remain unresolved.",
       "common_uses": [
         "firming agent",
         "electrolyte source",
@@ -2917,29 +2880,12 @@
       ],
       "last_updated": "2026-03-01",
       "external_ids": {
-        "unii": "M4I0D6VV5M",
+        "unii": null,
         "cas": "10043-52-4",
         "pubchem_cid": 5284359
       },
       "rxcui": "221068",
-      "gsrs": {
-        "substance_name": "Calcium Chloride",
-        "substance_class": "chemical",
-        "cfr_sections": [
-          "21 CFR 184.1193",
-          "21 CFR 172.330",
-          "21 CFR 176.300"
-        ],
-        "dsld_count": null,
-        "dsld_info_raw": null,
-        "active_moiety": {
-          "name": "Chloride ion",
-          "unii": "Q32ZN48698"
-        },
-        "salt_parents": [],
-        "metabolic_relationships": [],
-        "metabolites": []
-      },
+      "gsrs": null,
       "cui": "C0006675",
       "functional_roles": [
         "processing_aid"
@@ -2953,36 +2899,19 @@
       "is_additive": true,
       "additive_type": "mineral_excipient",
       "allergen": false,
-      "notes": "Mineral salt used in processing/formulation context; treated as non-scorable excipient mapping row.",
+      "notes": "Mineral salt used in processing/formulation context; treated as non-scorable excipient mapping row. Source review: exact chemical/preparation identifiers are withheld where they do not represent this label scope; raw composition and clinical applicability remain unresolved.",
       "common_uses": [
         "firming",
         "stabilizing"
       ],
       "last_updated": "2026-02-18",
       "external_ids": {
-        "unii": "M4I0D6VV5M",
+        "unii": null,
         "cas": "10043-52-4",
         "pubchem_cid": 5284359
       },
       "rxcui": "221068",
-      "gsrs": {
-        "substance_name": "Calcium Chloride",
-        "substance_class": "chemical",
-        "cfr_sections": [
-          "21 CFR 184.1193",
-          "21 CFR 172.330",
-          "21 CFR 176.300"
-        ],
-        "dsld_count": null,
-        "dsld_info_raw": null,
-        "active_moiety": {
-          "name": "Chloride ion",
-          "unii": "Q32ZN48698"
-        },
-        "salt_parents": [],
-        "metabolic_relationships": [],
-        "metabolites": []
-      },
+      "gsrs": null,
       "cui": "C0006686",
       "functional_roles": [
         "ph_regulator"
@@ -3464,13 +3393,13 @@
       "is_additive": true,
       "additive_type": "capsule_shell",
       "allergen": false,
-      "notes": "Generic capsule delivery format descriptor. Not a specific ingredient but a formulation type. Classified as non-active to prevent unmapped inflation. UNII 3NXW29V3WO (hypromelloses/HPMC) was removed 2026-05-14 — generic capsules can be gelatin, HPMC, pullulan, etc., so a single specific UNII would mis-anchor every generic-capsule disclosure to HPMC. Specific capsule materials are modeled in separate entries (PII_HPMC, PII_GELATIN_CAPSULE, etc.).",
+      "notes": "Capsule label identity retained; preparation-specific clinical applicability remains unresolved. Source review: exact chemical/preparation identifiers are withheld where they do not represent this label scope; raw composition and clinical applicability remain unresolved.",
       "common_uses": [
         "delivery format"
       ],
       "last_updated": "2026-05-14",
       "external_ids": {
-        "pubchem_cid": 57503849
+        "pubchem_cid": null
       },
       "cui": "C1704652",
       "cui_status": "governed_null",
@@ -3653,27 +3582,17 @@
       "is_additive": true,
       "additive_type": "color_blend",
       "allergen": false,
-      "notes": "Combined carob and caramel label disclosure preserved as an exact inactive color/flavor blend descriptor.",
+      "notes": "Combined carob and caramel label disclosure preserved as an exact inactive color/flavor blend descriptor. Source review: exact chemical/preparation identifiers are withheld where they do not represent this label scope; raw composition and clinical applicability remain unresolved.",
       "common_uses": [
         "coloring",
         "flavoring"
       ],
       "last_updated": "2026-03-13",
       "external_ids": {
-        "unii": "5MG5Z946UO"
+        "unii": null
       },
       "rxcui": "904498",
-      "gsrs": {
-        "substance_name": "CAROB",
-        "substance_class": "structurallyDiverse",
-        "cfr_sections": [],
-        "dsld_count": 53,
-        "dsld_info_raw": "Dietary Supplement Label Database|Botanical|Carob | 1175 (Number of products:53)",
-        "active_moiety": null,
-        "salt_parents": [],
-        "metabolic_relationships": [],
-        "metabolites": []
-      },
+      "gsrs": null,
       "functional_roles": [
         "colorant_natural"
       ]
@@ -4670,7 +4589,7 @@
       "is_additive": false,
       "additive_type": "carrier",
       "allergen": false,
-      "notes": "Various forms of coconut-derived ingredients used as carriers or fillers for fat-soluble ingredients. Generally safe, well-tolerated, and offer clean label appeal.",
+      "notes": "Various forms of coconut-derived ingredients used as carriers or fillers for fat-soluble ingredients. Generally safe, well-tolerated, and offer clean label appeal. Source review: exact chemical/preparation identifiers are withheld where they do not represent this label scope; raw composition and clinical applicability remain unresolved.",
       "common_uses": [
         "fat-soluble carrier",
         "texture improvement",
@@ -4678,20 +4597,10 @@
       ],
       "last_updated": "2026-03-06",
       "external_ids": {
-        "unii": "Q9L0O73W7L"
+        "unii": null
       },
       "rxcui": "1370658",
-      "gsrs": {
-        "substance_name": "Coconut oil",
-        "substance_class": "structurallyDiverse",
-        "cfr_sections": [],
-        "dsld_count": 163,
-        "dsld_info_raw": "Dietary Supplement Label Database|Botanical|coconut oil | 1142 (Number of products:163)",
-        "active_moiety": null,
-        "salt_parents": [],
-        "metabolic_relationships": [],
-        "metabolites": []
-      },
+      "gsrs": null,
       "cui": "C0453341",
       "functional_roles": [
         "carrier_oil",
@@ -5059,8 +4968,7 @@
       "aliases": [
         "cranberry fiber",
         "cranberry fibre",
-        "cranberry seed fiber",
-        "cranberry seed oil"
+        "cranberry seed fiber"
       ],
       "category": "filler",
       "is_additive": true,
@@ -5626,7 +5534,7 @@
       "is_additive": false,
       "additive_type": "starch_digesting_enzyme",
       "allergen": false,
-      "notes": "An enzyme that breaks down starch into sugars. Generally considered safe and beneficial for digestion.",
+      "notes": "An enzyme that breaks down starch into sugars. Generally considered safe and beneficial for digestion. Source review: exact chemical/preparation identifiers are withheld where they do not represent this label scope; raw composition and clinical applicability remain unresolved.",
       "common_uses": [
         "starch digestion",
         "maltose production"
@@ -5634,7 +5542,7 @@
       "last_updated": "2025-08-15",
       "external_ids": {
         "cas": "9000-92-4",
-        "pubchem_cid": 71475145
+        "pubchem_cid": null
       },
       "cui": "C0002712",
       "functional_roles": [],
@@ -6159,25 +6067,15 @@
       "is_additive": false,
       "additive_type": "functional",
       "allergen": false,
-      "notes": "Edible hemoglobin (typically bovine or porcine blood-derived) — used as bioavailable heme iron source in supplement formulations. Iron content ~0.34%. Mapped as non-scorable identity entry. USDA-inspected source.",
+      "notes": "Edible hemoglobin (typically bovine or porcine blood-derived) — used as bioavailable heme iron source in supplement formulations. Iron content ~0.34%. Mapped as non-scorable identity entry. USDA-inspected source. Source review: exact chemical/preparation identifiers are withheld where they do not represent this label scope; raw composition and clinical applicability remain unresolved.",
       "common_uses": [
         "animal-derived nutrient source"
       ],
       "last_updated": "2026-03-01",
       "external_ids": {
-        "unii": "VSU9IB86SP"
+        "unii": null
       },
-      "gsrs": {
-        "substance_name": "HEMOGLOBIN",
-        "substance_class": "mixture",
-        "cfr_sections": [],
-        "dsld_count": 2,
-        "dsld_info_raw": "Dietary Supplement Label Database|TBD|Hemoglobin | 3999 (Number of products:2)",
-        "active_moiety": null,
-        "salt_parents": [],
-        "metabolic_relationships": [],
-        "metabolites": []
-      },
+      "gsrs": null,
       "cui": "C0019046",
       "functional_roles": [],
       "is_active_only": true
@@ -6341,7 +6239,6 @@
         "gastro-resistant coating",
         "intestinal coating",
         "methacrylate copolymer",
-        "methacrylic acid",
         "methacrylic acid co-polymer",
         "Methacrylic Acid Copolymer",
         "pH-dependent coating",
@@ -6351,14 +6248,14 @@
       "is_additive": true,
       "additive_type": "enteric_coating",
       "allergen": false,
-      "notes": "A specialized coating designed to prevent the tablet from dissolving in the stomach, allowing it to pass into the intestines. Key passive ingredient for targeted delivery. Generally considered safe.",
+      "notes": "A specialized coating designed to prevent the tablet from dissolving in the stomach, allowing it to pass into the intestines. Key passive ingredient for targeted delivery. Generally considered safe. Source review: exact chemical/preparation identifiers are withheld where they do not represent this label scope; raw composition and clinical applicability remain unresolved.",
       "common_uses": [
         "acid-resistant coating",
         "intestinal targeted release"
       ],
       "last_updated": "2026-03-13",
       "external_ids": {
-        "unii": "1CS02G8656"
+        "unii": null
       },
       "cui": "C0066072",
       "functional_roles": [
@@ -6792,27 +6689,17 @@
       "is_additive": false,
       "additive_type": "lipid_component",
       "allergen": false,
-      "notes": "Fatty acid profile subcomponents used as compositional descriptors; mapped as non-scorable identity terms.",
+      "notes": "Fatty acid profile subcomponents used as compositional descriptors; mapped as non-scorable identity terms. Source review: exact chemical/preparation identifiers are withheld where they do not represent this label scope; raw composition and clinical applicability remain unresolved.",
       "common_uses": [
         "fatty acid composition disclosure"
       ],
       "last_updated": "2026-02-18",
       "external_ids": {
-        "unii": "LI791SXT24",
-        "cas": "26444-06-4",
-        "pubchem_cid": 6440260
+        "unii": null,
+        "cas": null,
+        "pubchem_cid": null
       },
-      "gsrs": {
-        "substance_name": "CARNOSIC ACID",
-        "substance_class": "chemical",
-        "cfr_sections": [],
-        "dsld_count": 2,
-        "dsld_info_raw": "Dietary Supplement Label Database|Chemical|Carnosic acid | 672 (Number of products:2)",
-        "active_moiety": null,
-        "salt_parents": [],
-        "metabolic_relationships": [],
-        "metabolites": []
-      },
+      "gsrs": null,
       "cui": "C0074007",
       "functional_roles": [
         "carrier_oil"
@@ -7204,7 +7091,7 @@
       "is_additive": true,
       "additive_type": "prebiotic_fiber",
       "allergen": false,
-      "notes": "Prebiotic fiber composed of short fructose chains. FDA GRAS. Used as prebiotic and mild sweetener.",
+      "notes": "Prebiotic fiber composed of short fructose chains. FDA GRAS. Used as prebiotic and mild sweetener. Source review: exact chemical/preparation identifiers are withheld where they do not represent this label scope; raw composition and clinical applicability remain unresolved.",
       "common_uses": [
         "prebiotic",
         "fiber source",
@@ -7212,8 +7099,8 @@
       ],
       "last_updated": "2026-02-23",
       "external_ids": {
-        "cas": "53188-23-1",
-        "pubchem_cid": 439709
+        "cas": null,
+        "pubchem_cid": null
       },
       "cui": "C5441949",
       "functional_roles": [
@@ -7252,7 +7139,7 @@
       "is_additive": false,
       "additive_type": "natural_ingredient",
       "allergen": false,
-      "notes": "Natural fruit and vegetable juices used for flavor, color, and sweetness. Clean label ingredient.",
+      "notes": "Natural fruit and vegetable juices used for flavor, color, and sweetness. Clean label ingredient. Source review: exact chemical/preparation identifiers are withheld where they do not represent this label scope; raw composition and clinical applicability remain unresolved.",
       "common_uses": [
         "natural sweetening",
         "natural coloring",
@@ -7260,20 +7147,10 @@
       ],
       "last_updated": "2025-11-11",
       "external_ids": {
-        "unii": "9L8NK01P32"
+        "unii": null
       },
       "rxcui": "1488814",
-      "gsrs": {
-        "substance_name": "BLACK CURRANT JUICE",
-        "substance_class": "structurallyDiverse",
-        "cfr_sections": [],
-        "dsld_count": null,
-        "dsld_info_raw": null,
-        "active_moiety": null,
-        "salt_parents": [],
-        "metabolic_relationships": [],
-        "metabolites": []
-      },
+      "gsrs": null,
       "cui": "C0452453",
       "functional_roles": [
         "sweetener_natural",
@@ -7345,26 +7222,16 @@
       "is_additive": true,
       "additive_type": "natural_colorant",
       "allergen": false,
-      "notes": "Natural fruit juice concentrates used for color and flavor. Clean label ingredients. GRAS approved.",
+      "notes": "Natural fruit juice concentrates used for color and flavor. Clean label ingredients. GRAS approved. Source review: exact chemical/preparation identifiers are withheld where they do not represent this label scope; raw composition and clinical applicability remain unresolved.",
       "common_uses": [
         "natural coloring",
         "flavoring"
       ],
       "last_updated": "2025-12-04",
       "external_ids": {
-        "unii": "3O1G4G4DIR"
+        "unii": null
       },
-      "gsrs": {
-        "substance_name": "BLACKBERRY JUICE",
-        "substance_class": "structurallyDiverse",
-        "cfr_sections": [],
-        "dsld_count": null,
-        "dsld_info_raw": null,
-        "active_moiety": null,
-        "salt_parents": [],
-        "metabolic_relationships": [],
-        "metabolites": []
-      },
+      "gsrs": null,
       "functional_roles": [
         "flavor_natural",
         "colorant_natural"
@@ -8458,7 +8325,7 @@
       "is_additive": true,
       "additive_type": "natural_sweetener",
       "allergen": false,
-      "notes": "Natural sweetener derived from licorice root (Glycyrrhiza glabra). Approximately 30-50x sweeter than sugar. Used in small amounts as flavor enhancer. MAG form commonly used in supplements. May raise blood pressure in sensitive individuals with excessive use.",
+      "notes": "Natural sweetener derived from licorice root (Glycyrrhiza glabra). Approximately 30-50x sweeter than sugar. Used in small amounts as flavor enhancer. MAG form commonly used in supplements. May raise blood pressure in sensitive individuals with excessive use. Source review: exact chemical/preparation identifiers are withheld where they do not represent this label scope; raw composition and clinical applicability remain unresolved.",
       "common_uses": [
         "flavor enhancement",
         "natural sweetening",
@@ -8466,66 +8333,12 @@
       ],
       "last_updated": "2026-01-06",
       "external_ids": {
-        "unii": "6FO62043WK",
-        "cas": "53956-04-0",
-        "pubchem_cid": 62074
+        "unii": null,
+        "cas": null,
+        "pubchem_cid": null
       },
       "rxcui": "1359426",
-      "gsrs": {
-        "substance_name": "GLYCYRRHIZIN",
-        "substance_class": "chemical",
-        "cfr_sections": [],
-        "dsld_count": 14,
-        "dsld_info_raw": "Dietary Supplement Label Database|chemical|Glycyrrhizin | 3011 (Number of products:14)",
-        "active_moiety": {
-          "name": "Enoxolone",
-          "unii": "P540XA09DR"
-        },
-        "salt_parents": [
-          {
-            "type": "SALT/SOLVATE->PARENT",
-            "name": "MAGNESIUM GLYCYRRHIZINATE",
-            "unii": "4U2UBI61D7"
-          },
-          {
-            "type": "SALT/SOLVATE->PARENT",
-            "name": "AMMONIUM GLYCYRRHIZATE",
-            "unii": "3VRD35U26C"
-          },
-          {
-            "type": "SALT/SOLVATE->PARENT",
-            "name": "TRISODIUM GLYCYRRHIZATE",
-            "unii": "5VWB9ZP8JV"
-          },
-          {
-            "type": "SALT/SOLVATE->PARENT",
-            "name": "MONOSODIUM GLYCYRRHIZINATE",
-            "unii": "V4B3392JBL"
-          },
-          {
-            "type": "SALT/SOLVATE->PARENT",
-            "name": "TRIPOTASSIUM GLYCYRRHIZINATE",
-            "unii": "LD4YKZ48B6"
-          },
-          {
-            "type": "SALT/SOLVATE->PARENT",
-            "name": "AMMONIUM GLYCYRRHIZINATE TRIHYDRATE",
-            "unii": "78NEL3149I"
-          },
-          {
-            "type": "SALT/SOLVATE->PARENT",
-            "name": "GLYCYRRHIZINATE DIPOTASSIUM",
-            "unii": "CA2Y0FE3FX"
-          },
-          {
-            "type": "SALT/SOLVATE->PARENT",
-            "name": "AMMONIUM GLYCYRRHIZATE PENTAHYDRATE",
-            "unii": "1Z1Y4QY887"
-          }
-        ],
-        "metabolic_relationships": [],
-        "metabolites": []
-      },
+      "gsrs": null,
       "cui": "C2697513",
       "functional_roles": [
         "sweetener_natural"
@@ -8783,7 +8596,7 @@
       "is_additive": false,
       "additive_type": "functional",
       "allergen": false,
-      "notes": "Hemp extract containing various phytocannabinoids. Legal hemp contains <0.3% THC. Regulatory status varies by state.",
+      "notes": "Hemp extract containing various phytocannabinoids. Legal hemp contains <0.3% THC. Regulatory status varies by state. Source review: exact chemical/preparation identifiers are withheld where they do not represent this label scope; raw composition and clinical applicability remain unresolved.",
       "common_uses": [
         "relaxation",
         "sleep support",
@@ -8791,20 +8604,10 @@
       ],
       "last_updated": "2026-03-13",
       "external_ids": {
-        "unii": "TD1MUT01Q7"
+        "unii": null
       },
       "rxcui": "1788846",
-      "gsrs": {
-        "substance_name": "HEMP",
-        "substance_class": "structurallyDiverse",
-        "cfr_sections": [],
-        "dsld_count": 198,
-        "dsld_info_raw": "Dietary Supplement Label Database|TBD|Hemp | 1979 (Number of products:198)",
-        "active_moiety": null,
-        "salt_parents": [],
-        "metabolic_relationships": [],
-        "metabolites": []
-      },
+      "gsrs": null,
       "cui": "C1504050",
       "functional_roles": [],
       "is_active_only": true
@@ -9284,7 +9087,6 @@
         "hydroxypropyl methylcellose",
         "hydroxypropyl methylcellulose",
         "hydroxypropyl methylcellulose capsule",
-        "hydroxypropyl methylcellulose phthalate",
         "hydroxypropylmethyl cellulose",
         "hypromellose",
         "hypromellose capsule",
@@ -9375,7 +9177,7 @@
       "is_additive": true,
       "additive_type": "enteric_coating",
       "allergen": false,
-      "notes": "Hypromellose phthalate (HPMCP) — cellulose-derived enteric coating polymer that resists gastric acid (pH <5.0) and dissolves in intestinal pH (>5.5). Used for acid-sensitive ingredients and targeted intestinal release. NF/EP excipient.",
+      "notes": "Hypromellose phthalate (HPMCP) — cellulose-derived enteric coating polymer that resists gastric acid (pH <5.0) and dissolves in intestinal pH (>5.5). Used for acid-sensitive ingredients and targeted intestinal release. NF/EP excipient. Source review: exact chemical/preparation identifiers are withheld where they do not represent this label scope; raw composition and clinical applicability remain unresolved.",
       "common_uses": [
         "enteric coating",
         "acid-resistant barrier"
@@ -9383,7 +9185,7 @@
       "last_updated": "2026-03-01",
       "external_ids": {
         "cas": "99011-02-6",
-        "pubchem_cid": 57469
+        "pubchem_cid": null
       },
       "cui": "C1453005",
       "functional_roles": [
@@ -10354,14 +10156,14 @@
       "is_additive": false,
       "additive_type": "bioactive_constituent",
       "allergen": false,
-      "notes": "Identity-only mapping for milk-casein tripeptide labels (IPP/VPP) pending dedicated scoring policy.",
+      "notes": "Identity-only mapping for milk-casein tripeptide labels (IPP/VPP) pending dedicated scoring policy. Source review: exact chemical/preparation identifiers are withheld where they do not represent this label scope; raw composition and clinical applicability remain unresolved.",
       "common_uses": [
         "cardiovascular support"
       ],
       "last_updated": "2026-02-24",
       "external_ids": {
-        "cas": "26001-32-1",
-        "pubchem_cid": 9949212
+        "cas": null,
+        "pubchem_cid": null
       },
       "cui": null,
       "cui_status": "no_single_umls_concept",
@@ -10831,7 +10633,7 @@
       "is_additive": true,
       "additive_type": "buffering_agent",
       "allergen": false,
-      "notes": "Magnesium phosphate used as pH buffering agent and anticaking agent in supplements.",
+      "notes": "Magnesium phosphate used as pH buffering agent and anticaking agent in supplements. Source review: exact chemical/preparation identifiers are withheld where they do not represent this label scope; raw composition and clinical applicability remain unresolved.",
       "common_uses": [
         "buffering",
         "anticaking",
@@ -10839,25 +10641,12 @@
       ],
       "last_updated": "2026-02-23",
       "external_ids": {
-        "unii": "A1Y870209Z",
-        "cas": "10043-83-1",
-        "pubchem_cid": 24439
+        "unii": null,
+        "cas": null,
+        "pubchem_cid": null
       },
       "rxcui": "1482795",
-      "gsrs": {
-        "substance_name": "MAGNESIUM PHOSPHATE, DIBASIC",
-        "substance_class": "chemical",
-        "cfr_sections": [],
-        "dsld_count": null,
-        "dsld_info_raw": null,
-        "active_moiety": {
-          "name": "MAGNESIUM CATION",
-          "unii": "T6V3LHY838"
-        },
-        "salt_parents": [],
-        "metabolic_relationships": [],
-        "metabolites": []
-      },
+      "gsrs": null,
       "cui": "C0126784",
       "functional_roles": [
         "ph_regulator"
@@ -11085,8 +10874,7 @@
       "standard_name": "Malt Syrup",
       "aliases": [
         "barley malt syrup",
-        "malt syrup",
-        "rice syrup solids"
+        "malt syrup"
       ],
       "category": "sweetener_natural",
       "is_additive": true,
@@ -12122,15 +11910,15 @@
       "is_additive": true,
       "additive_type": "mucosal_protectant",
       "allergen": false,
-      "notes": "Glycoprotein complex found in mucous secretions (typically porcine gastric mucin). Used as excipient, carrier, and gastric mucosal protectant. Forms viscous gel at acid pH. Bioadhesive properties for drug delivery applications.",
+      "notes": "Glycoprotein complex found in mucous secretions (typically porcine gastric mucin). Used as excipient, carrier, and gastric mucosal protectant. Forms viscous gel at acid pH. Bioadhesive properties for drug delivery applications. Source review: exact chemical/preparation identifiers are withheld where they do not represent this label scope; raw composition and clinical applicability remain unresolved.",
       "common_uses": [
         "mucosal protectant",
         "gastric barrier"
       ],
       "last_updated": "2026-03-01",
       "external_ids": {
-        "cas": "526-99-8",
-        "pubchem_cid": 3037582
+        "cas": null,
+        "pubchem_cid": null
       },
       "cui": "C0026682",
       "functional_roles": [
@@ -13120,7 +12908,7 @@
       "is_additive": true,
       "additive_type": "texture_modifier",
       "allergen": false,
-      "notes": "Natural gums used as thickeners, binders, and stabilizers. Generally safe and can be a source of dietary fiber. May cause bloating or gas in some individuals. Good clean label choice.",
+      "notes": "Natural gums used as thickeners, binders, and stabilizers. Generally safe and can be a source of dietary fiber. May cause bloating or gas in some individuals. Good clean label choice. Source review: exact chemical/preparation identifiers are withheld where they do not represent this label scope; raw composition and clinical applicability remain unresolved.",
       "common_uses": [
         "thickening",
         "stabilizing",
@@ -13129,7 +12917,7 @@
       ],
       "last_updated": "2025-11-17",
       "external_ids": {
-        "unii": "7593U09I4D"
+        "unii": null
       },
       "cui": "C0018389",
       "functional_roles": [
@@ -13400,7 +13188,7 @@
       "is_additive": true,
       "additive_type": "preservative_natural",
       "allergen": false,
-      "notes": "Antioxidants used to prevent spoilage, such as fat-soluble Vitamin C (ascorbyl palmitate) or Vitamin E (tocopherols). Generally recognized as safe (GRAS) and beneficial. Premium clean label choice.",
+      "notes": "Antioxidants used to prevent spoilage, such as fat-soluble Vitamin C (ascorbyl palmitate) or Vitamin E (tocopherols). Generally recognized as safe (GRAS) and beneficial. Premium clean label choice. Source review: exact chemical/preparation identifiers are withheld where they do not represent this label scope; raw composition and clinical applicability remain unresolved.",
       "common_uses": [
         "antioxidant protection",
         "shelf life extension",
@@ -13408,7 +13196,7 @@
       ],
       "last_updated": "2026-03-06",
       "external_ids": {
-        "unii": "QN83US2B0N"
+        "unii": null
       },
       "cui": "C0049690",
       "functional_roles": [
@@ -13729,7 +13517,7 @@
       "is_additive": true,
       "additive_type": "coating_agent",
       "allergen": false,
-      "notes": "Plant-based materials used for natural coatings and glazing. Provides protective barrier and improves appearance. Vegan-friendly alternative to animal-derived waxes. Excellent clean label choice.",
+      "notes": "Umbrella wax/glazing-agent identity: plant waxes and beeswax-containing mixtures are distinct source preparations. This entry does not establish universal vegan origin; exact source and chemical composition require label disclosure. A candelilla identifier cannot represent every wax alias.",
       "common_uses": [
         "protective coating",
         "gloss enhancement",
@@ -13737,7 +13525,7 @@
       ],
       "last_updated": "2026-02-23",
       "external_ids": {
-        "unii": "WL0328HX19"
+        "unii": null
       },
       "cui": "C0043076",
       "functional_roles": [
@@ -13781,7 +13569,7 @@
       "is_additive": true,
       "additive_type": "natural_sweetener",
       "allergen": false,
-      "notes": "Natural sweetener derived from citrus bioflavonoids. Approximately 1500x sweeter than sugar. Used in very small amounts. E959 in EU. Derived from naringin in citrus peel.",
+      "notes": "Natural sweetener derived from citrus bioflavonoids. Approximately 1500x sweeter than sugar. Used in very small amounts. E959 in EU. Derived from naringin in citrus peel. Source review: exact chemical/preparation identifiers are withheld where they do not represent this label scope; raw composition and clinical applicability remain unresolved.",
       "common_uses": [
         "flavor enhancement",
         "natural sweetening",
@@ -13789,21 +13577,11 @@
       ],
       "last_updated": "2026-01-06",
       "external_ids": {
-        "unii": "H5W525SX7Q",
+        "unii": null,
         "cas": "20702-77-6",
         "pubchem_cid": 30231
       },
-      "gsrs": {
-        "substance_name": "DIHYDROCHALCONE",
-        "substance_class": "chemical",
-        "cfr_sections": [],
-        "dsld_count": null,
-        "dsld_info_raw": null,
-        "active_moiety": null,
-        "salt_parents": [],
-        "metabolic_relationships": [],
-        "metabolites": []
-      },
+      "gsrs": null,
       "cui": "C0068517",
       "functional_roles": [
         "sweetener_natural"
@@ -13981,27 +13759,17 @@
       "is_additive": false,
       "additive_type": "oil_carrier",
       "allergen": false,
-      "notes": "Generic oil listing with no specific source. Treated as a neutral carrier unless otherwise specified.",
+      "notes": "Generic oil listing with no specific source. Treated as a neutral carrier unless otherwise specified. Source review: exact chemical/preparation identifiers are withheld where they do not represent this label scope; raw composition and clinical applicability remain unresolved.",
       "common_uses": [
         "carrier oil",
         "softgel fill"
       ],
       "last_updated": "2026-01-04",
       "external_ids": {
-        "unii": "H3E878020N"
+        "unii": null
       },
       "rxcui": "1309243",
-      "gsrs": {
-        "substance_name": "COTTONSEED OIL",
-        "substance_class": "structurallyDiverse",
-        "cfr_sections": [],
-        "dsld_count": null,
-        "dsld_info_raw": null,
-        "active_moiety": null,
-        "salt_parents": [],
-        "metabolic_relationships": [],
-        "metabolites": []
-      },
+      "gsrs": null,
       "cui": "C0010198",
       "functional_roles": [
         "carrier_oil"
@@ -14264,14 +14032,14 @@
       "is_additive": false,
       "additive_type": "omega_3_lipid_matrix",
       "allergen": false,
-      "notes": "Triglyceride-form omega-3 lipid listed in inactive excipient/carrier context.",
+      "notes": "Triglyceride-form omega-3 lipid listed in inactive excipient/carrier context. Source review: exact chemical/preparation identifiers are withheld where they do not represent this label scope; raw composition and clinical applicability remain unresolved.",
       "common_uses": [
         "carrier lipid",
         "softgel oil matrix"
       ],
       "last_updated": "2026-03-13",
       "external_ids": {
-        "pubchem_cid": 56842239
+        "pubchem_cid": null
       },
       "cui": "C0354657",
       "functional_roles": [
@@ -14328,29 +14096,19 @@
       "is_additive": true,
       "additive_type": "natural_flavor",
       "allergen": false,
-      "notes": "Natural or artificial orange flavoring used for taste masking and consumer palatability in supplement formulations. GRAS (21 CFR 182.20). Contains limonene as primary aroma compound. Standard in citrus-flavored gummies.",
+      "notes": "Natural or artificial orange flavoring used for taste masking and consumer palatability in supplement formulations. GRAS (21 CFR 182.20). Contains limonene as primary aroma compound. Standard in citrus-flavored gummies. Source review: exact chemical/preparation identifiers are withheld where they do not represent this label scope; raw composition and clinical applicability remain unresolved.",
       "common_uses": [
         "citrus flavoring",
         "taste masking"
       ],
       "last_updated": "2026-03-01",
       "external_ids": {
-        "unii": "5EVU04N5QU",
-        "cas": "138-86-3",
-        "pubchem_cid": 22311
+        "unii": null,
+        "cas": null,
+        "pubchem_cid": null
       },
       "rxcui": "892565",
-      "gsrs": {
-        "substance_name": "ORANGE",
-        "substance_class": "structurallyDiverse",
-        "cfr_sections": [],
-        "dsld_count": null,
-        "dsld_info_raw": null,
-        "active_moiety": null,
-        "salt_parents": [],
-        "metabolic_relationships": [],
-        "metabolites": []
-      },
+      "gsrs": null,
       "cui": "C0475654",
       "functional_roles": [
         "flavor_natural"
@@ -14822,15 +14580,15 @@
       "is_additive": false,
       "additive_type": "source_descriptor",
       "allergen": false,
-      "notes": "Generic palm source disclosure in inactive sections when the label does not specify palm oil, palm kernel oil, stearin, or another defined palm derivative.",
+      "notes": "Generic palm source disclosure in inactive sections when the label does not specify palm oil, palm kernel oil, stearin, or another defined palm derivative. Source review: exact chemical/preparation identifiers are withheld where they do not represent this label scope; raw composition and clinical applicability remain unresolved.",
       "common_uses": [
         "source disclosure",
         "identity routing"
       ],
       "last_updated": "2026-03-09",
       "external_ids": {
-        "cas": "88-04-0",
-        "pubchem_cid": 2723
+        "cas": null,
+        "pubchem_cid": null
       },
       "cui": "C0230373",
       "functional_roles": [],
@@ -14955,25 +14713,15 @@
       "is_additive": false,
       "additive_type": "functional",
       "allergen": false,
-      "notes": "Bovine parotid gland tissue — used in traditional glandular therapy formulations. Contains parotid-derived enzymes and peptides. No controlled human efficacy data. USDA-inspected tissue source required for safety.",
+      "notes": "Parotid glandular-tissue descriptor. Animal species and processing are not established by the generic label; the supplied porcine UNII cannot establish bovine tissue identity. Source-specific clinical efficacy and safety remain unresolved.",
       "common_uses": [
         "glandular supplement matrix"
       ],
       "last_updated": "2026-03-01",
       "external_ids": {
-        "unii": "51M1AAK625"
+        "unii": null
       },
-      "gsrs": {
-        "substance_name": "SUS SCROFA PAROTID GLAND",
-        "substance_class": "structurallyDiverse",
-        "cfr_sections": [],
-        "dsld_count": null,
-        "dsld_info_raw": null,
-        "active_moiety": null,
-        "salt_parents": [],
-        "metabolic_relationships": [],
-        "metabolites": []
-      },
+      "gsrs": null,
       "cui": "C0030580",
       "functional_roles": [],
       "is_active_only": true
@@ -15218,7 +14966,7 @@
       "is_additive": true,
       "additive_type": "natural_fiber",
       "allergen": false,
-      "notes": "Natural fiber from fruits, excellent for gelling and thickening. Provides additional health benefits including cholesterol support.",
+      "notes": "Natural fiber from fruits, excellent for gelling and thickening. Provides additional health benefits including cholesterol support. Source review: exact chemical/preparation identifiers are withheld where they do not represent this label scope; raw composition and clinical applicability remain unresolved.",
       "common_uses": [
         "gelling",
         "thickening",
@@ -15229,7 +14977,7 @@
       "external_ids": {
         "unii": "89NA02M4RX",
         "cas": "9000-69-5",
-        "pubchem_cid": 441476
+        "pubchem_cid": null
       },
       "rxcui": "32987",
       "gsrs": {
@@ -15644,30 +15392,17 @@
       "is_additive": true,
       "additive_type": "processing_aid",
       "allergen": false,
-      "notes": "Ion-exchange polymer/resin used as tablet disintegrant or formulation aid. Not a therapeutic active in supplement scoring.",
+      "notes": "Ion-exchange polymer/resin used as tablet disintegrant or formulation aid. Not a therapeutic active in supplement scoring. Source review: exact chemical/preparation identifiers are withheld where they do not represent this label scope; raw composition and clinical applicability remain unresolved.",
       "common_uses": [
         "tablet disintegration",
         "formulation aid"
       ],
       "last_updated": "2026-02-18",
       "external_ids": {
-        "unii": "RWP5GA015D"
+        "unii": null
       },
       "rxcui": "8588",
-      "gsrs": {
-        "substance_name": "Potassium",
-        "substance_class": "chemical",
-        "cfr_sections": [
-          "21 CFR 176.170",
-          "21 CFR 862.1600"
-        ],
-        "dsld_count": 9399,
-        "dsld_info_raw": "Dietary Supplement Label Database|Mineral|Potassium | 106 (Number of products:9399)",
-        "active_moiety": null,
-        "salt_parents": [],
-        "metabolic_relationships": [],
-        "metabolites": []
-      },
+      "gsrs": null,
       "cui": "C3255798",
       "functional_roles": [
         "disintegrant"
@@ -16036,33 +15771,17 @@
       "is_additive": true,
       "additive_type": "mineral_salt",
       "allergen": false,
-      "notes": "Uncommon borate-salt label token observed in inactive/header context. Classified as non-scorable mapped ingredient pending regulatory/source-level curation.",
+      "notes": "Uncommon borate-salt label token observed in inactive/header context. Classified as non-scorable mapped ingredient pending regulatory/source-level curation. Source review: exact chemical/preparation identifiers are withheld where they do not represent this label scope; raw composition and clinical applicability remain unresolved.",
       "common_uses": [
         "inactive/header token"
       ],
       "last_updated": "2026-02-18",
       "external_ids": {
-        "unii": "ZV5114S322",
-        "cas": "12712-38-8",
-        "pubchem_cid": 12816516
+        "unii": null,
+        "cas": null,
+        "pubchem_cid": null
       },
-      "gsrs": {
-        "substance_name": "POTASSIUM BORATE",
-        "substance_class": "chemical",
-        "cfr_sections": [],
-        "dsld_count": null,
-        "dsld_info_raw": null,
-        "active_moiety": null,
-        "salt_parents": [
-          {
-            "type": "PARENT->SALT/SOLVATE",
-            "name": "TETRABORIC ACID",
-            "unii": "8KIK8VI3TB"
-          }
-        ],
-        "metabolic_relationships": [],
-        "metabolites": []
-      },
+      "gsrs": null,
       "cui": "C4733987",
       "functional_roles": [
         "ph_regulator"
@@ -17247,7 +16966,7 @@
       "is_additive": false,
       "additive_type": "descriptor",
       "allergen": false,
-      "notes": "Sarcosine (N-methylglycine) — endogenous amino acid derivative. NMDA receptor co-agonist. Studied for cognitive enhancement and adjunct therapy in schizophrenia (PMID 17659263 (Lane/Tsai 2008 Biol Psychiatry sarcosine schizophrenia RCT)). Identity mapping for label tokens.",
+      "notes": "Sarcosine (N-methylglycine), a glycine-transporter-I inhibitor. PMID 17659263 randomized 20 acutely symptomatic, drug-free schizophrenia patients to 1 or 2 g/day monotherapy for six weeks. Selected responder differences favored 2 g, but no significant dose-by-time interaction was found. This source does not establish adjunctive antipsychotic therapy or cognitive benefit in healthy people.",
       "common_uses": [
         "identity mapping"
       ],
@@ -17682,7 +17401,7 @@
       "is_additive": true,
       "additive_type": "gelling_agent",
       "allergen": false,
-      "notes": "A gum from brown algae used as a gelling agent and stabilizer. Natural, vegan-friendly, and generally considered safe. Can provide dietary fiber benefits.",
+      "notes": "A gum from brown algae used as a gelling agent and stabilizer. Natural, vegan-friendly, and generally considered safe. Can provide dietary fiber benefits. Source review: exact chemical/preparation identifiers are withheld where they do not represent this label scope; raw composition and clinical applicability remain unresolved.",
       "common_uses": [
         "gelling agent",
         "thickener",
@@ -17691,8 +17410,8 @@
       "last_updated": "2026-10-07",
       "external_ids": {
         "unii": "C269C4G2ZQ",
-        "cas": "62543-89-9",
-        "pubchem_cid": 23665711
+        "cas": null,
+        "pubchem_cid": null
       },
       "rxcui": "56446",
       "gsrs": {
@@ -18106,38 +17825,25 @@
       "id": "NHA_CHLOROPHYLLIN",
       "standard_name": "Sodium Magnesium Chlorophyllin",
       "aliases": [
-        "chlorophyllin",
-        "E141",
-        "sodium copper chlorophyllin",
         "Sodium Magnesium Chlorophyllin"
       ],
       "category": "colorant_natural",
       "is_additive": true,
       "additive_type": "natural_colorant",
       "allergen": false,
-      "notes": "Sodium copper chlorophyllin (E141ii) — water-soluble semisynthetic derivative of chlorophyll used as green colorant in supplements. FDA exempt from certification (21 CFR 73.125). Also studied for internal deodorant properties and aflatoxin binding.",
+      "notes": "Sodium magnesium chlorophyllin identity. Verified CID 171041605 contains magnesium; copper chlorophyllin is a different preparation. The supplied copper-complex UNII and copper-specific clinical/regulatory prose do not establish this magnesium form.",
       "common_uses": [
         "natural coloring",
         "green color"
       ],
       "last_updated": "2026-03-01",
       "external_ids": {
-        "unii": "1D276TYV9O",
+        "unii": null,
         "cas": "15203-43-7",
         "pubchem_cid": 171041605
       },
       "rxcui": "1366841",
-      "gsrs": {
-        "substance_name": "SODIUM COPPER CHLOROPHYLLIN",
-        "substance_class": "mixture",
-        "cfr_sections": [],
-        "dsld_count": 135,
-        "dsld_info_raw": "Dietary Supplement Label Database|Botanical|Chlorophyllin | 1204 (Number of products:135)",
-        "active_moiety": null,
-        "salt_parents": [],
-        "metabolic_relationships": [],
-        "metabolites": []
-      },
+      "gsrs": null,
       "cui": "C0055435",
       "functional_roles": [
         "colorant_natural"
@@ -18274,7 +17980,7 @@
       "is_additive": true,
       "additive_type": "pH_adjuster",
       "allergen": false,
-      "notes": "Rochelle salt (E337) — double tartrate salt used as acidity regulator, leavening agent, and emulsifier. FDA GRAS (21 CFR 184.1804). Also known as Seignette's salt. Used in effervescent supplement formulations.",
+      "notes": "Rochelle salt (E337) — double tartrate salt used as acidity regulator, leavening agent, and emulsifier. FDA GRAS (21 CFR 184.1804). Also known as Seignette's salt. Used in effervescent supplement formulations. Source review: exact chemical/preparation identifiers are withheld where they do not represent this label scope; raw composition and clinical applicability remain unresolved.",
       "common_uses": [
         "pH regulation",
         "leavening"
@@ -18282,8 +17988,8 @@
       "last_updated": "2026-03-01",
       "external_ids": {
         "unii": "QH257BPV3J",
-        "cas": "304-59-6",
-        "pubchem_cid": 9357
+        "cas": null,
+        "pubchem_cid": null
       },
       "rxcui": "1311363",
       "gsrs": {
@@ -18430,7 +18136,6 @@
       "id": "NHA_SODIUM_SULFATE",
       "standard_name": "Sodium Sulfate",
       "aliases": [
-        "glauber's salt",
         "na2so4",
         "sodium sulfate",
         "sodium sulphate"
@@ -18439,7 +18144,7 @@
       "is_additive": true,
       "additive_type": "processing_aid",
       "allergen": false,
-      "notes": "Inorganic salt used as processing aid and drying agent in supplement manufacturing. Also known as Glauber's salt.",
+      "notes": "Sodium sulfate processing-salt identity. Retained CAS/CID describe anhydrous Na2SO4; Glauber’s salt is the decahydrate and is not an equivalent exact-form alias. Hydrated-form applicability requires explicit product disclosure.",
       "common_uses": [
         "processing aid",
         "drying agent",
@@ -18447,27 +18152,12 @@
       ],
       "last_updated": "2026-02-23",
       "external_ids": {
-        "unii": "0YPR65R21J",
+        "unii": null,
         "cas": "7757-82-6",
         "pubchem_cid": 24436
       },
       "rxcui": "36721",
-      "gsrs": {
-        "substance_name": "SODIUM SULFATE",
-        "substance_class": "chemical",
-        "cfr_sections": [
-          "21 CFR 186.1797"
-        ],
-        "dsld_count": 27,
-        "dsld_info_raw": "Dietary Supplement Label Database|other|Sodium Sulfate | 3059 (Number of products:27)",
-        "active_moiety": {
-          "name": "Sodium sulfate anhydrous",
-          "unii": "36KCS0R750"
-        },
-        "salt_parents": [],
-        "metabolic_relationships": [],
-        "metabolites": []
-      },
+      "gsrs": null,
       "cui": "C0074769",
       "functional_roles": [
         "processing_aid"
@@ -18483,34 +18173,19 @@
       "is_additive": true,
       "additive_type": "stabilizer",
       "allergen": false,
-      "notes": "Stabilizing and reducing agent used in some supplement coating and color systems.",
+      "notes": "Stabilizing and reducing agent used in some supplement coating and color systems. Source review: exact chemical/preparation identifiers are withheld where they do not represent this label scope; raw composition and clinical applicability remain unresolved.",
       "common_uses": [
         "stabilizer",
         "processing aid"
       ],
       "last_updated": "2026-03-09",
       "external_ids": {
-        "unii": "HX1032V43M",
+        "unii": null,
         "cas": "7772-98-7",
         "pubchem_cid": 24477
       },
       "rxcui": "36726",
-      "gsrs": {
-        "substance_name": "Sodium Thiosulfate",
-        "substance_class": "chemical",
-        "cfr_sections": [
-          "21 CFR 184.1807"
-        ],
-        "dsld_count": null,
-        "dsld_info_raw": null,
-        "active_moiety": {
-          "name": "THIOSULFATE ION",
-          "unii": "LLT6XV39PY"
-        },
-        "salt_parents": [],
-        "metabolic_relationships": [],
-        "metabolites": []
-      },
+      "gsrs": null,
       "cui": "C0074774",
       "functional_roles": [
         "stabilizer"
@@ -18917,15 +18592,15 @@
       "additive_type": "processing_aid",
       "allergen": true,
       "allergen_type": "soy",
-      "notes": "Soy-derived protein hydrolysate used as fermentation growth medium for probiotic cultures.",
+      "notes": "Soy-derived protein hydrolysate used as fermentation growth medium for probiotic cultures. Source review: exact chemical/preparation identifiers are withheld where they do not represent this label scope; raw composition and clinical applicability remain unresolved.",
       "common_uses": [
         "fermentation medium",
         "nutrient source"
       ],
       "last_updated": "2026-02-23",
       "external_ids": {
-        "cas": "1020253-71-7",
-        "pubchem_cid": 42552953
+        "cas": null,
+        "pubchem_cid": null
       },
       "functional_roles": [
         "processing_aid"
@@ -18993,14 +18668,14 @@
       "is_additive": false,
       "additive_type": "proprietary_complex",
       "allergen": false,
-      "notes": "Branded multi-ingredient complex recognized for identity mapping and auditability; not directly scored as a standalone active without full compositional/form disclosure.",
+      "notes": "Branded multi-ingredient complex recognized for identity mapping and auditability; not directly scored as a standalone active without full compositional/form disclosure. Source review: exact chemical/preparation identifiers are withheld where they do not represent this label scope; raw composition and clinical applicability remain unresolved.",
       "common_uses": [
         "antioxidant blend"
       ],
       "last_updated": "2026-02-23",
       "external_ids": {
-        "cas": "38641-94-0",
-        "pubchem_cid": 38078
+        "cas": null,
+        "pubchem_cid": null
       },
       "functional_roles": [],
       "is_active_only": true
@@ -19042,15 +18717,15 @@
       "is_additive": true,
       "additive_type": "natural_colorant",
       "allergen": false,
-      "notes": "Natural blue/green colorant from spirulina algae. GRAS status. Clean label natural color.",
+      "notes": "Natural blue/green colorant from spirulina algae. GRAS status. Clean label natural color. Source review: exact chemical/preparation identifiers are withheld where they do not represent this label scope; raw composition and clinical applicability remain unresolved.",
       "common_uses": [
         "natural coloring",
         "blue/green color"
       ],
       "last_updated": "2025-11-14",
       "external_ids": {
-        "cas": "20298-86-6",
-        "pubchem_cid": 101557521
+        "cas": null,
+        "pubchem_cid": null
       },
       "functional_roles": [
         "colorant_natural"
@@ -19352,7 +19027,7 @@
       "is_additive": true,
       "additive_type": "natural_sweetener",
       "allergen": false,
-      "notes": "Natural, calorie-free sweetener from the Stevia rebaudiana plant. FDA GRAS status applies to HIGH-PURITY extracts (≥95% steviol glycosides) including rebaudioside A and stevioside. Whole stevia leaves and crude extracts are NOT FDA GRAS approved. Includes branded forms like BetterStevia, Truvia, and PureVia. Clean label alternative to artificial sweeteners.",
+      "notes": "Stevia & Stevia Extracts label identity retained; preparation-specific clinical applicability remains unresolved. Source review: exact chemical/preparation identifiers are withheld where they do not represent this label scope; raw composition and clinical applicability remain unresolved.",
       "common_uses": [
         "flavor enhancement",
         "sugar replacement",
@@ -19361,7 +19036,7 @@
       ],
       "last_updated": "2026-03-06",
       "external_ids": {
-        "unii": "B3FUD0528F"
+        "unii": null
       },
       "cui": "C1018894",
       "functional_roles": [
@@ -19446,36 +19121,18 @@
       "is_additive": true,
       "additive_type": "emulsifier",
       "allergen": false,
-      "notes": "Emulsifier derived from sucrose and fatty acids. Used in gummies for texture. GRAS approved.",
+      "notes": "Emulsifier derived from sucrose and fatty acids. Used in gummies for texture. GRAS approved. Source review: exact chemical/preparation identifiers are withheld where they do not represent this label scope; raw composition and clinical applicability remain unresolved.",
       "common_uses": [
         "emulsifier",
         "texture modifier"
       ],
       "last_updated": "2025-12-04",
       "external_ids": {
-        "unii": "C151H8M554",
-        "pubchem_cid": 303618
+        "unii": null,
+        "pubchem_cid": null
       },
       "rxcui": "10159",
-      "gsrs": {
-        "substance_name": "Sucrose",
-        "substance_class": "chemical",
-        "cfr_sections": [
-          "21 CFR 184.1854"
-        ],
-        "dsld_count": 656,
-        "dsld_info_raw": "Dietary Supplement Label Database|Carbohydrate|Sugar | 125 (Number of products:656)",
-        "active_moiety": null,
-        "salt_parents": [
-          {
-            "type": "SALT/SOLVATE->PARENT",
-            "name": "SUCRALOX",
-            "unii": "7ZN39F9HEO"
-          }
-        ],
-        "metabolic_relationships": [],
-        "metabolites": []
-      },
+      "gsrs": null,
       "functional_roles": [
         "emulsifier"
       ]
@@ -20685,87 +20342,16 @@
       "is_additive": false,
       "additive_type": "descriptor",
       "allergen": false,
-      "notes": "Marketing/function descriptor text; routed as non-scorable identity to avoid unmapped pollution.",
+      "notes": "Marketing/function descriptor text; routed as non-scorable identity to avoid unmapped pollution. Source review: exact chemical/preparation identifiers are withheld where they do not represent this label scope; raw composition and clinical applicability remain unresolved.",
       "common_uses": [
         "marketing claim"
       ],
       "last_updated": "2026-02-23",
       "external_ids": {
-        "unii": "3XMK78S47O"
+        "unii": null
       },
       "rxcui": "10379",
-      "gsrs": {
-        "substance_name": "TESTOSTERONE",
-        "substance_class": "chemical",
-        "cfr_sections": [
-          "21 CFR 862.1680",
-          "21 CFR 862.1430",
-          "21 CFR 310.528"
-        ],
-        "dsld_count": null,
-        "dsld_info_raw": null,
-        "active_moiety": null,
-        "salt_parents": [],
-        "metabolic_relationships": [
-          {
-            "type": "METABOLIC ENZYME->SUBSTRATE",
-            "name": "CYTOCHROME P450 3A5",
-            "unii": "805SU96HKF"
-          },
-          {
-            "type": "METABOLIC ENZYME->SUBSTRATE",
-            "name": "CYTOCHROME P450 3A4",
-            "unii": "PUO0521HZV"
-          },
-          {
-            "type": "TARGET->INHIBITOR",
-            "name": "ANDROGEN RECEPTOR",
-            "unii": "EJC4C3UYXH"
-          }
-        ],
-        "metabolites": [
-          {
-            "type": "METABOLITE->PARENT",
-            "name": "3.ALPHA.-ANDROSTANEDIOL",
-            "unii": "J34MX0M30Y"
-          },
-          {
-            "type": "METABOLITE ACTIVE->PARENT",
-            "name": "ANDROSTANOLONE",
-            "unii": "08J2K08A3Y"
-          },
-          {
-            "type": "METABOLITE->PARENT",
-            "name": "3.BETA.-ANDROSTANEDIOL",
-            "unii": "6J0K4253QD"
-          },
-          {
-            "type": "METABOLITE->PARENT",
-            "name": "3.BETA.,6.ALPHA.,17.BETA.-TRIHYDROXY-5.ALPHA.-ANDROSTANE",
-            "unii": "9PW83L45JI"
-          },
-          {
-            "type": "METABOLITE ACTIVE->PARENT",
-            "name": "ESTRADIOL",
-            "unii": "4TI98Z838E"
-          },
-          {
-            "type": "METABOLITE->PARENT",
-            "name": "5.BETA.-DIHYDROTESTOSTERONE GLUCURONIDE",
-            "unii": "5YC5KU6NC3"
-          },
-          {
-            "type": "METABOLITE->PARENT",
-            "name": "5.BETA.-DIHYDROTESTOSTERONE",
-            "unii": "SVX1G0C5VD"
-          },
-          {
-            "type": "METABOLITE->PARENT",
-            "name": "5.ALPHA.-DIHYDROTESTOSTERONE GLUCURONIDE",
-            "unii": "2VVB2958E5"
-          }
-        ]
-      },
+      "gsrs": null,
       "functional_roles": [],
       "is_label_descriptor": true
     },
@@ -20803,28 +20389,16 @@
       "is_additive": false,
       "additive_type": "descriptor",
       "allergen": false,
-      "notes": "Bovine thyroid glandular tissue — used in traditional glandular therapy for thyroid support. Contains desiccated thyroid hormones (T3/T4 at trace levels). Identity mapping for glandular descriptor label rows.",
+      "notes": "Thyroid glandular-tissue descriptor. Animal species, processing and hormone content require product-specific verification; the supplied porcine UNII cannot establish bovine origin. Potential thyroid-hormone exposure requires clinical review; this identity-only record does not establish a safe dose or therapeutic benefit.",
       "common_uses": [
         "identity mapping"
       ],
       "last_updated": "2026-03-01",
       "external_ids": {
-        "unii": "6RV024OAUQ"
+        "unii": null
       },
       "rxcui": "235479",
-      "gsrs": {
-        "substance_name": "Thyroid",
-        "substance_class": "structurallyDiverse",
-        "cfr_sections": [
-          "21 CFR 250.11"
-        ],
-        "dsld_count": null,
-        "dsld_info_raw": null,
-        "active_moiety": null,
-        "salt_parents": [],
-        "metabolic_relationships": [],
-        "metabolites": []
-      },
+      "gsrs": null,
       "cui": "C3163618",
       "functional_roles": [],
       "is_label_descriptor": true
@@ -20890,7 +20464,7 @@
       "is_additive": true,
       "additive_type": "antioxidant_preservative",
       "allergen": false,
-      "notes": "Vitamin E used as natural antioxidant/preservative. GRAS status. Prevents oxidation in supplements.",
+      "notes": "Vitamin E used as natural antioxidant/preservative. GRAS status. Prevents oxidation in supplements. Source review: exact chemical/preparation identifiers are withheld where they do not represent this label scope; raw composition and clinical applicability remain unresolved.",
       "common_uses": [
         "antioxidant",
         "preservative",
@@ -20898,22 +20472,12 @@
       ],
       "last_updated": "2026-03-17",
       "external_ids": {
-        "unii": "R0ZB2556P8",
-        "cas": "1406-66-2",
-        "pubchem_cid": 14986
+        "unii": null,
+        "cas": null,
+        "pubchem_cid": null
       },
       "rxcui": "1236136",
-      "gsrs": {
-        "substance_name": "TOCOPHEROL",
-        "substance_class": "mixture",
-        "cfr_sections": [],
-        "dsld_count": null,
-        "dsld_info_raw": null,
-        "active_moiety": null,
-        "salt_parents": [],
-        "metabolic_relationships": [],
-        "metabolites": []
-      },
+      "gsrs": null,
       "cui": "C3255108",
       "functional_roles": [
         "preservative",
@@ -21225,32 +20789,16 @@
       "is_additive": false,
       "additive_type": "descriptor",
       "allergen": false,
-      "notes": "Total sulfur content descriptor on supplement labels — represents elemental sulfur from MSM, SAMe, cysteine, methionine, or other sulfur-containing compounds. Not a discrete ingredient; analytical specification marker.",
+      "notes": "Total sulfur is an analytical element-content descriptor, including sulfur contributed by organic compounds such as MSM or amino acids. It is not evidence that elemental S8 sulfur is present as an ingredient; chemical composition remains unspecified.",
       "common_uses": [
         "identity mapping"
       ],
       "last_updated": "2026-03-01",
       "external_ids": {
-        "unii": "70FD1KFU70"
+        "unii": null
       },
       "rxcui": "221083",
-      "gsrs": {
-        "substance_name": "Sulfur",
-        "substance_class": "chemical",
-        "cfr_sections": [
-          "21 CFR 358.710",
-          "21 CFR 358.720",
-          "21 CFR 333.310",
-          "21 CFR 333.320",
-          "21 CFR 310.531"
-        ],
-        "dsld_count": 160,
-        "dsld_info_raw": "Dietary Supplement Label Database|Mineral|Sulfur | 1352 (Number of products:160)",
-        "active_moiety": null,
-        "salt_parents": [],
-        "metabolic_relationships": [],
-        "metabolites": []
-      },
+      "gsrs": null,
       "functional_roles": [],
       "is_label_descriptor": true
     },
@@ -21554,7 +21102,7 @@
       "is_additive": true,
       "additive_type": "buffering_agent",
       "allergen": false,
-      "notes": "Trisodium citrate dihydrate (E331iii) — sodium salt of citric acid used as buffering agent, emulsifier, and acidity regulator. FDA GRAS (21 CFR 184.1792). Same compound as sodium citrate. Standard pharmaceutical/food excipient.",
+      "notes": "Trisodium citrate label identity. Stored CAS 68-04-2, CID 6224 and UNII RS7A450LGA represent the anhydrous form, not proof of dihydrate. Exact hydration requires product-specific disclosure. Used as a formulation buffering/acidity-regulating salt; no form equivalence is inferred.",
       "common_uses": [
         "buffering",
         "pH control"
@@ -22287,7 +21835,7 @@
       "is_additive": true,
       "additive_type": "vegetable_lubricant",
       "allergen": false,
-      "notes": "Plant-derived fatty acids and stearates used as natural lubricants and flow agents in manufacturing. Cleaner alternative to mineral-derived stearates. Generally recognized as safe (GRAS).",
+      "notes": "Plant-derived fatty acids and stearates used as natural lubricants and flow agents in manufacturing. Cleaner alternative to mineral-derived stearates. Generally recognized as safe (GRAS). Source review: exact chemical/preparation identifiers are withheld where they do not represent this label scope; raw composition and clinical applicability remain unresolved.",
       "common_uses": [
         "lubrication",
         "flow improvement",
@@ -22296,7 +21844,7 @@
       ],
       "last_updated": "2025-11-17",
       "external_ids": {
-        "unii": "776XM7047L"
+        "unii": null
       },
       "cui": "C0038229",
       "functional_roles": [
@@ -22439,33 +21987,17 @@
       "is_additive": false,
       "additive_type": "descriptor",
       "allergen": false,
-      "notes": "Legacy naming descriptor (commonly S-methylmethionine contexts); identity-only mapping pending explicit form policy.",
+      "notes": "Legacy naming descriptor (commonly S-methylmethionine contexts); identity-only mapping pending explicit form policy. Source review: exact chemical/preparation identifiers are withheld where they do not represent this label scope; raw composition and clinical applicability remain unresolved.",
       "common_uses": [
         "identity mapping"
       ],
       "last_updated": "2026-02-24",
       "external_ids": {
-        "unii": "3485Y39925",
-        "cas": "1115-84-0",
-        "pubchem_cid": 16217806
+        "unii": null,
+        "cas": null,
+        "pubchem_cid": null
       },
-      "gsrs": {
-        "substance_name": "METHYLMETHIONINE",
-        "substance_class": "chemical",
-        "cfr_sections": [],
-        "dsld_count": 2,
-        "dsld_info_raw": "Dietary Supplement Label Database|chemical|S-Methylmethionine | 2308 (Number of products:2)",
-        "active_moiety": null,
-        "salt_parents": [
-          {
-            "type": "SALT/SOLVATE->PARENT",
-            "name": "METHYLMETHIONINE CHLORIDE",
-            "unii": "G9CUR2204U"
-          }
-        ],
-        "metabolic_relationships": [],
-        "metabolites": []
-      },
+      "gsrs": null,
       "cui": "C0042889",
       "functional_roles": [],
       "is_label_descriptor": true
@@ -22897,7 +22429,7 @@
       "is_additive": false,
       "additive_type": "fiber_digesting_enzyme",
       "allergen": false,
-      "notes": "An enzyme that breaks down xylan, a component of plant fiber. Generally considered safe and beneficial for digestion.",
+      "notes": "An enzyme that breaks down xylan, a component of plant fiber. Generally considered safe and beneficial for digestion. Source review: exact chemical/preparation identifiers are withheld where they do not represent this label scope; raw composition and clinical applicability remain unresolved.",
       "common_uses": [
         "hemicellulose digestion",
         "fiber breakdown"
@@ -22905,7 +22437,7 @@
       "last_updated": "2025-08-15",
       "external_ids": {
         "cas": "9025-56-3",
-        "pubchem_cid": 171706620
+        "pubchem_cid": null
       },
       "functional_roles": [],
       "is_active_only": true
@@ -22922,7 +22454,7 @@
       "is_additive": false,
       "additive_type": "prebiotic_fiber",
       "allergen": false,
-      "notes": "Prebiotic oligosaccharide that feeds beneficial gut bacteria. Provides mild sweetness while supporting digestive health. GRAS approved.",
+      "notes": "Prebiotic oligosaccharide that feeds beneficial gut bacteria. Provides mild sweetness while supporting digestive health. GRAS approved. Source review: exact chemical/preparation identifiers are withheld where they do not represent this label scope; raw composition and clinical applicability remain unresolved.",
       "common_uses": [
         "prebiotic fiber",
         "mild sweetening",
@@ -22930,8 +22462,8 @@
       ],
       "last_updated": "2025-09-20",
       "external_ids": {
-        "cas": "488-81-3",
-        "pubchem_cid": 6912
+        "cas": null,
+        "pubchem_cid": null
       },
       "cui": "C3491084",
       "functional_roles": [
@@ -23350,15 +22882,15 @@
       "is_additive": false,
       "additive_type": "functional",
       "allergen": false,
-      "notes": "Generic triglyceride chemical descriptor used on some oil-based supplement labels.",
+      "notes": "Generic triglyceride chemical descriptor used on some oil-based supplement labels. Source review: exact chemical/preparation identifiers are withheld where they do not represent this label scope; raw composition and clinical applicability remain unresolved.",
       "common_uses": [
         "oil base",
         "lipid carrier"
       ],
       "last_updated": "2026-03-16",
       "external_ids": {
-        "cas": "555-43-1",
-        "pubchem_cid": 11146
+        "cas": null,
+        "pubchem_cid": null
       },
       "cui": "C0041004",
       "functional_roles": [
@@ -24175,13 +23707,13 @@
       "is_additive": false,
       "additive_type": null,
       "allergen": false,
-      "notes": "Resolvin D5 — D-series resolvin, a Specialized Pro-resolving Mediator (SPM) derived from DHA via the 17-HDHA pathway. Distinct chemical entity from its 17-HDHA precursor (CUI C0639949). Endogenously short-lived; commercial supplements rarely contain measurable preformed Resolvin D5 — most 'SPM' products deliver the precursor (HDHA) which the body converts. Listed in other_ingredients (not IQM) per 2026-05-01 IQM-purity rule: no verified clinical bio_score data exists for oral preformed Resolvin D5 supplementation. Identity verified (UMLS C3492734 + PubChem CID 24932575). When/if clinical PK + efficacy data emerge, can be promoted to IQM.",
+      "notes": "Resolvin D5 label identity. Stored CID 24932575 resolves an unrelated nitrogen-containing chemical and is withheld. Exact mediator identity, preformed content, oral pharmacokinetics and clinical efficacy remain unresolved; no replacement identifier or form-quality credit is inferred.",
       "common_uses": [
         "SPM-marker label-identity matching"
       ],
       "last_updated": "2026-05-01",
       "external_ids": {
-        "pubchem_cid": 24932575
+        "pubchem_cid": null
       },
       "cui": "C3492734",
       "cui_status": "verified",
@@ -24204,13 +23736,13 @@
       "is_additive": false,
       "additive_type": null,
       "allergen": false,
-      "notes": "Protectin DX (PDX) — DHA-derived double-lipoxygenase Specialized Pro-resolving Mediator (SPM). Stereoisomer-distinct from Protectin D1; biologically less active per published mediator-lipidomics data but still a distinct chemical entity. Endogenously short-lived; commercial supplements rarely contain measurable preformed Protectin DX. Listed in other_ingredients (not IQM) per 2026-05-01 IQM-purity rule: no verified clinical bio_score data exists for oral preformed Protectin DX supplementation. Identity verified (UMLS C3886642 + PubChem CID 11968800).",
+      "notes": "Protectin DX label identity. Stored CID 11968800 resolves an unrelated steroidal glycoside and is withheld. Exact mediator identity, preformed content, oral pharmacokinetics and clinical efficacy remain unresolved; no replacement identifier or form-quality credit is inferred.",
       "common_uses": [
         "SPM-marker label-identity matching"
       ],
       "last_updated": "2026-05-01",
       "external_ids": {
-        "pubchem_cid": 11968800
+        "pubchem_cid": null
       },
       "cui": "C3886642",
       "cui_status": "verified",
@@ -24872,13 +24404,13 @@
       "is_additive": false,
       "additive_type": null,
       "allergen": false,
-      "notes": "Identity-only routing for the arginate salt of acetyl-L-carnitine. Kept separate from the reviewed ALCAR form because the label does not establish equivalent oral pharmacokinetics; no form-quality or dose credit is assigned.",
+      "notes": "Identity-only routing for the arginate salt of acetyl-L-carnitine. Kept separate from the reviewed ALCAR form because the label does not establish equivalent oral pharmacokinetics; no form-quality or dose credit is assigned. Source review: exact chemical/preparation identifiers are withheld where they do not represent this label scope; raw composition and clinical applicability remain unresolved.",
       "common_uses": [
         "active ingredient identity"
       ],
       "last_updated": "2026-07-13",
       "external_ids": {
-        "unii": "PIY2W03CO6"
+        "unii": null
       },
       "functional_roles": [],
       "is_active_only": true
@@ -24895,13 +24427,13 @@
       "is_additive": false,
       "additive_type": null,
       "allergen": false,
-      "notes": "Identity-only routing for the taurinate salt of acetyl-L-carnitine. Kept separate from the reviewed ALCAR form because the label does not establish equivalent oral pharmacokinetics; no form-quality or dose credit is assigned.",
+      "notes": "Identity-only routing for the taurinate salt of acetyl-L-carnitine. Kept separate from the reviewed ALCAR form because the label does not establish equivalent oral pharmacokinetics; no form-quality or dose credit is assigned. Source review: exact chemical/preparation identifiers are withheld where they do not represent this label scope; raw composition and clinical applicability remain unresolved.",
       "common_uses": [
         "active ingredient identity"
       ],
       "last_updated": "2026-07-13",
       "external_ids": {
-        "unii": "S3Z3R3X6RL"
+        "unii": null
       },
       "functional_roles": [],
       "is_active_only": true
