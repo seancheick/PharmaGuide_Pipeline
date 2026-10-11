@@ -3521,33 +3521,33 @@ class SupplementEnricherV3:
     # the primary canonical_id; Section C scoring (Phase 5) uses delivers_markers
     # at scaled confidence. See scripts/data/botanical_marker_contributions.json.
 
-    _STANDARDIZATION_PCT_RE = re.compile(r"(\d+(?:\.\d+)?)\s*%", re.IGNORECASE)
-    _STANDARDIZATION_TERMS_RE = re.compile(
-        r"\bstandardi[sz]ed\s+to\b|\bstd\.?\s+to\b|\bcontaining\s+\d|\bmin\.?\s+\d+\s*%",
-        re.IGNORECASE,
-    )
-
     def _scan_label_for_standardization(
         self, label_text: str, keywords: List[str]
     ) -> Tuple[bool, Optional[float]]:
         """Returns (has_standardization, pct_value_or_None).
 
-        has_standardization is True when the label text mentions ANY of the
-        botanical's standardization_keywords (e.g. 'curcuminoid', '95%',
-        'standardized to'). pct_value extracts the numeric standardization
-        percentage when the keyword appears alongside a percentage.
+        Require a named marker, and associate a percentage with that marker.
+        A generic standardization phrase or another constituent's percentage
+        cannot establish the target marker's mass.
         """
         if not label_text:
             return False, None
-        text_l = label_text.lower()
-        # Any keyword present?
-        keyword_hit = any(k.lower() in text_l for k in (keywords or []))
-        if not keyword_hit and not self._STANDARDIZATION_TERMS_RE.search(label_text):
-            return False, None
-        # Try to extract percentage if present
-        m = self._STANDARDIZATION_PCT_RE.search(label_text)
-        pct = float(m.group(1)) if m else None
-        return True, pct
+        marker_present = False
+        for keyword in keywords or []:
+            term = re.sub(r"^(?:%|mg)\s*", "", keyword.strip(), flags=re.IGNORECASE)
+            if not term or term.lower() == "standardized to" or not re.search(r"[a-z]", term, re.IGNORECASE):
+                continue
+            marker = rf"(?<![a-z0-9]){re.escape(term)}(?![a-z0-9])"
+            if not re.search(marker, label_text, re.IGNORECASE):
+                continue
+            marker_present = True
+            number = r"(\d+(?:\.\d+)?)\s*%"
+            patterns = (rf"{number}\s*{marker}", rf"{marker}\s*(?:[:=]|at)?\s*{number}")
+            for pattern in patterns:
+                match = re.search(pattern, label_text, re.IGNORECASE)
+                if match and 0 < float(match.group(1)) <= 100:
+                    return True, float(match.group(1))
+        return marker_present, None
 
     def _compute_delivers_markers(
         self, ingredient_record: Dict[str, Any]

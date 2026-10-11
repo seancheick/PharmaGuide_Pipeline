@@ -99,8 +99,8 @@ def test_turmeric_no_standardization_no_dose_credit(enricher):
     assert m["evidence_id"].startswith("PMID:")
 
 
-def test_turmeric_with_95pct_curcuminoids_credits_marker(enricher):
-    """Standardized 95% turmeric → 380 mg curcumin at full confidence."""
+def test_turmeric_total_curcuminoids_do_not_define_pure_curcumin_mass(enricher):
+    """The source separates curcumin from the other curcuminoids."""
     ing = {
         "canonical_id": "turmeric",
         "raw_source_text": "Turmeric Extract standardized to 95% curcuminoids",
@@ -108,6 +108,11 @@ def test_turmeric_with_95pct_curcuminoids_credits_marker(enricher):
     }
     markers = enricher._compute_delivers_markers(ing)
     m = markers[0]
+    assert m["estimation_method"] == "none"
+    assert m["confidence_scale"] == 0.0
+    assert m["estimated_dose_mg"] is None
+    ing["raw_source_text"] = "Turmeric Extract standardized to 95% curcumin"
+    m = enricher._compute_delivers_markers(ing)[0]
     assert m["estimation_method"] == "standardization_pct"
     assert m["confidence_scale"] == 1.0
     assert m["estimated_dose_mg"] == pytest.approx(380.0, rel=0.01)
@@ -155,7 +160,7 @@ def test_broccoli_sprout_no_standardization_no_credit(enricher):
     assert m["estimated_dose_mg"] is None
 
 
-def test_broccoli_sprout_with_glucoraphanin_standardization_credits(enricher):
+def test_broccoli_precursor_needs_measured_sulforaphane_to_credit_mass(enricher):
     ing = {
         "canonical_id": "broccoli_sprout",
         "raw_source_text": "Broccoli Sprout Extract standardized to 13% glucoraphanin",
@@ -163,6 +168,11 @@ def test_broccoli_sprout_with_glucoraphanin_standardization_credits(enricher):
     }
     markers = enricher._compute_delivers_markers(ing)
     m = markers[0]
+    assert m["estimation_method"] == "none"
+    assert m["estimated_dose_mg"] is None
+    assert m["confidence_scale"] == 0.0
+    ing["raw_source_text"] = "Broccoli Sprout Extract standardized to 13% sulforaphane"
+    m = enricher._compute_delivers_markers(ing)[0]
     assert m["estimation_method"] == "standardization_pct"
     assert m["estimated_dose_mg"] == pytest.approx(26.0, rel=0.01)
     assert m["confidence_scale"] == 1.0
