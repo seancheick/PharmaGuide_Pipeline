@@ -155,8 +155,8 @@
       "agent2_id": "C0993630",
       "severity": "Moderate",
       "interaction_effect_type": "Additive",
-      "mechanism": "Garlic (Allium sativum) inhibits platelet aggregation via ajoene and other sulfur compounds. Combined with warfarin, it increases antiplatelet burden and may elevate bleeding risk. Some evidence of mild CYP2C9 inhibition.",
-      "management": "Use garlic supplements cautiously with warfarin. Culinary amounts are generally safe. High-dose garlic supplements (>600 mg/day) warrant INR monitoring. Report any unusual bruising.",
+      "mechanism": "Garlic supplements may affect platelet function and increase bleeding risk with warfarin. The cited monographs do not establish a 600 mg safe-below threshold or clinically demonstrated CYP2C9 inhibition.",
+      "management": "Talk to your warfarin prescriber before starting, stopping or changing garlic supplements. Ask whether INR checks are needed and report unusual bruising or bleeding.",
       "source_urls": [
         "https://nccih.nih.gov/health/garlic/ataglance.htm"
       ],
@@ -174,21 +174,12 @@
       "evidence_basis": "clinical_literature",
       "clinical_confidence": "medium",
       "evidence_notes": "Mainly case reports. Culinary amounts are safe. Concentrated supplements may have mild antiplatelet effect.",
-      "applies_to": "dose_dependent",
+      "applies_to": "whole_class",
       "agent1_canonical_id": null,
       "agent2_canonical_id": "garlic",
       "direction": "harmful",
-      "materiality": "dose_dependent",
-      "dose_threshold": {
-        "agent_canonical_id": "garlic",
-        "value": 600,
-        "unit": "mg",
-        "basis": "per_day",
-        "confidence": "medium",
-        "confidence_basis": "reuse+management",
-        "source": "https://www.mskcc.org/cancer-care/integrative-medicine/herbs/garlic",
-        "rationale": "Reused garlic bleeding floor (600 mg); pair mgmt agrees (>600 mg supplement); culinary safe."
-      }
+      "materiality": "presence",
+      "dose_threshold": null
     },
     {
       "id": "DSI_WAR_SJW",
@@ -373,8 +364,8 @@
       "agent2_id": "C0077524",
       "severity": "Moderate",
       "interaction_effect_type": "Additive",
-      "mechanism": "Curcumin inhibits platelet aggregation and thromboxane formation. At supplement doses (500–2000 mg/day), it may add antiplatelet activity on top of warfarin's anticoagulant effect, increasing bleeding risk.",
-      "management": "Culinary turmeric is generally safe. High-dose curcumin supplements warrant INR monitoring. Inform prescriber before starting curcumin supplements.",
+      "mechanism": "Curcumin has antiplatelet effects in laboratory and animal studies. This provides a precautionary basis for possible bleeding effects with warfarin, but does not establish a human oral 500 mg interaction threshold.",
+      "management": "Inform your warfarin prescriber before starting, stopping or changing turmeric or curcumin supplements. Ask about INR monitoring and report unusual bruising or bleeding.",
       "source_urls": [
         "https://nccih.nih.gov/health/turmeric",
         "https://pubmed.ncbi.nlm.nih.gov/22531131/"
@@ -392,23 +383,14 @@
         },
         "method": "live_api_batch_2026_04_13"
       },
-      "evidence_basis": "clinical_literature",
-      "clinical_confidence": "medium",
-      "applies_to": "dose_dependent",
+      "evidence_basis": "preclinical",
+      "clinical_confidence": "low",
+      "applies_to": "whole_class",
       "agent1_canonical_id": null,
       "agent2_canonical_id": "turmeric",
       "direction": "harmful",
-      "materiality": "dose_dependent",
-      "dose_threshold": {
-        "agent_canonical_id": "turmeric",
-        "value": 500,
-        "unit": "mg",
-        "basis": "per_day",
-        "confidence": "low",
-        "confidence_basis": "management_stated",
-        "source": "https://pubmed.ncbi.nlm.nih.gov/22531131/",
-        "rationale": "High-dose curcumin (>500 mg/day, per the sibling anticoagulant pair) with warfarin; culinary turmeric safe."
-      }
+      "materiality": "presence",
+      "dose_threshold": null
     },
     {
       "id": "DSI_WAR_DONGQUAI",
@@ -457,8 +439,8 @@
       "agent2_id": "C0162751",
       "severity": "Minor",
       "interaction_effect_type": "Additive",
-      "mechanism": "Ginger (Zingiber officinale) has mild antiplatelet properties via thromboxane synthase inhibition. At culinary doses the effect is negligible; high-dose supplements may add to warfarin's antiplatelet burden.",
-      "management": "Culinary ginger is safe. High-dose ginger supplements (>2 g/day) warrant awareness. Report unusual bruising. INR monitoring is reasonable if high-dose ginger is started.",
+      "mechanism": "Human platelet studies of ginger have mixed results. A possible bleeding interaction with warfarin warrants caution, but a 2 g/day safe-below boundary is not established.",
+      "management": "Discuss ginger supplements with your warfarin prescriber. Report unusual bruising or bleeding and ask whether INR monitoring is appropriate when changing supplement use.",
       "source_urls": [
         "https://nccih.nih.gov/health/ginger"
       ],
@@ -475,21 +457,12 @@
       "evidence_basis": "authoritative_review",
       "clinical_confidence": "low",
       "evidence_notes": "Theoretical based on in-vitro platelet inhibition. Clinical evidence for interaction at dietary doses is weak.",
-      "applies_to": "dose_dependent",
+      "applies_to": "whole_class",
       "agent1_canonical_id": null,
       "agent2_canonical_id": "ginger",
       "direction": "harmful",
-      "materiality": "dose_dependent",
-      "dose_threshold": {
-        "agent_canonical_id": "ginger",
-        "value": 2000,
-        "unit": "mg",
-        "basis": "per_day",
-        "confidence": "low",
-        "confidence_basis": "management_stated",
-        "source": "https://www.nccih.nih.gov/health/ginger",
-        "rationale": "Pair mgmt: high-dose ginger supplements (>2 g/day) with warfarin; culinary ginger safe."
-      }
+      "materiality": "presence",
+      "dose_threshold": null
     },
     {
       "id": "DSI_STATINS_SJW",
@@ -500,7 +473,7 @@
       "agent2_id": "C0813171",
       "severity": "Major",
       "interaction_effect_type": "Inhibitor",
-      "mechanism": "St. John's Wort induces CYP3A4 and P-glycoprotein, significantly increasing statin metabolism (especially simvastatin, atorvastatin, lovastatin). Plasma statin levels fall by up to 50%, substantially reducing cardiovascular protection.",
+      "mechanism": "St. John's wort induces CYP3A4 and can reduce the effect of susceptible statins. A crossover study in atorvastatin-treated patients found increased LDL and total cholesterol; it did not measure atorvastatin plasma pharmacokinetics. Other statins and preparations may differ.",
       "management": "Do not use St. John's Wort with CYP3A4-metabolized statins. If herbal antidepressant therapy is desired, discuss alternatives with your doctor. Monitor for reduced lipid-lowering effect if combined inadvertently.",
       "source_urls": [
         "https://www.nccih.nih.gov/health/st-johns-wort",
@@ -528,7 +501,7 @@
           "31742659",
           "15260917"
         ],
-        "notes": "Wave 6.Y Batch 9.A. PMID 17701167 (Andren 2007) is the direct human PK study of SJW + atorvastatin; 31742659 is the updated clinical-relevance review; 15260917 is the pharmacokinetic-interactions mechanism review. All three content-verified via PubMed efetch 2026-05-27; titles+abstracts directly support the CYP3A4/P-gp induction → reduced statin exposure mechanism the entry describes."
+        "notes": "PMID 17701167 (Andren 2007) measures LDL and total-cholesterol outcomes during SJW plus atorvastatin use, not atorvastatin plasma pharmacokinetics. PMID 31742659 is a clinical-relevance review and 15260917 a pharmacokinetic-interactions review. These citations do not establish identical quantitative effects for every statin or preparation."
       },
       "evidence_basis": "clinical_literature",
       "clinical_confidence": "high",
@@ -536,7 +509,8 @@
       "agent1_canonical_id": null,
       "agent2_canonical_id": "st_johns_wort",
       "direction": "harmful",
-      "materiality": "presence"
+      "materiality": "presence",
+      "evidence_notes": "PMID 17701167 measures lipid outcomes, not plasma atorvastatin pharmacokinetics. No universal 50% class-wide exposure reduction is established by that study."
     },
     {
       "id": "DSI_STATINS_RYR",
@@ -769,15 +743,12 @@
       "agent2_id": "C0036002",
       "severity": "Major",
       "interaction_effect_type": "Additive",
-      "mechanism": "SAMe is involved in monoamine metabolism and has antidepressant properties partly via serotonergic mechanisms. Combined with SSRIs, it can cause additive serotonergic stimulation. Case reports of serotonin syndrome exist.",
+      "mechanism": "SAMe may interact with serotonin-increasing medicines, including SSRIs. This supports a potential serotonin-syndrome precaution; the retained content does not establish a quantified human combination risk or the asserted case-report incidence.",
       "management": "Avoid combining SAMe with SSRIs without medical supervision. If used as an adjunct (some practitioners do this), requires careful dose titration and monitoring for agitation, tremor, or hyperthermia.",
       "source_urls": [
-        "https://www.nccih.nih.gov/health/same",
-        "https://nccih.nih.gov/health/supplements/SAMe"
+        "https://www.nccih.nih.gov/health/sadenosyllmethionine-same-in-depth"
       ],
-      "source_pmids": [
-        "36402294"
-      ],
+      "source_pmids": [],
       "verification": {
         "status": "verified",
         "verified_at": "2026-04-13T16:37:00Z",
@@ -788,8 +759,8 @@
         },
         "method": "live_api_batch_2026_04_13"
       },
-      "evidence_basis": "clinical_literature",
-      "clinical_confidence": "high",
+      "evidence_basis": "authoritative_review",
+      "clinical_confidence": "low",
       "applies_to": "dose_dependent",
       "agent1_canonical_id": null,
       "agent2_canonical_id": "same",
@@ -855,10 +826,10 @@
       "mechanism": "Fluvoxamine strongly inhibits CYP1A2, the main enzyme metabolizing melatonin. Fluvoxamine with melatonin can substantially increase melatonin exposure and cause excessive sedation.",
       "management": "Ask the fluvoxamine prescriber before using melatonin. If the combination is approved, use only the dose they recommend and monitor for excessive drowsiness; do not drive or operate machinery if impaired.",
       "source_urls": [
-        "https://pubmed.ncbi.nlm.nih.gov/10877005/"
+        "https://pubmed.ncbi.nlm.nih.gov/10668847/"
       ],
       "source_pmids": [
-        "10877005"
+        "10668847"
       ],
       "verification": {
         "status": "verified",
@@ -876,7 +847,8 @@
       "agent1_canonical_id": null,
       "agent2_canonical_id": "melatonin",
       "direction": "harmful",
-      "materiality": "presence"
+      "materiality": "presence",
+      "evidence_notes": "In a small healthy-volunteer study, oral melatonin 5 mg with fluvoxamine 50 mg increased melatonin AUC about 17-fold and peak concentration about 12-fold. This is a drug-specific exposure study; it does not establish a class-wide SSRI effect or a safe melatonin dose."
     },
     {
       "id": "DSI_ACEI_POTASSIUM",
@@ -1039,8 +1011,8 @@
       "agent2_id": "C0041536",
       "severity": "Minor",
       "interaction_effect_type": "Additive",
-      "mechanism": "CoQ10 has been shown in some trials to modestly lower blood pressure (~10–17 mmHg systolic). When combined with antihypertensive medications, this additive effect is usually beneficial, but can occasionally cause excessive blood pressure reduction.",
-      "management": "CoQ10 can be a useful adjunct in hypertension management. Monitor blood pressure when starting CoQ10. Dose adjustment of antihypertensives may be needed in some cases.",
+      "mechanism": "A Cochrane review of two small trials found no clinically significant blood-pressure reduction with CoQ10. A clinically useful additive effect with antihypertensive medicines and a 100 mg interaction threshold are not established.",
+      "management": "Tell your prescriber if you use CoQ10 with blood-pressure medicines. Monitor your blood pressure when changing supplements; medication changes should be made by your prescriber.",
       "source_urls": [
         "https://pubmed.ncbi.nlm.nih.gov/26935713/"
       ],
@@ -1057,23 +1029,14 @@
         },
         "method": "live_api_batch_2026_04_13"
       },
-      "evidence_basis": "clinical_literature",
+      "evidence_basis": "systematic_review",
       "clinical_confidence": "low",
-      "applies_to": "dose_dependent",
+      "applies_to": "whole_class",
       "agent1_canonical_id": null,
       "agent2_canonical_id": "coq10",
       "direction": "harmful",
-      "materiality": "dose_dependent",
-      "dose_threshold": {
-        "agent_canonical_id": "coq10",
-        "value": 100,
-        "unit": "mg",
-        "basis": "per_day",
-        "confidence": "low",
-        "confidence_basis": "inferred_conservative",
-        "source": "https://www.nccih.nih.gov/health/coenzyme-q10",
-        "rationale": "INFERRED floor at the supplemental CoQ10 dose (~100 mg) where a modest BP effect is reported; trace amounts below."
-      }
+      "materiality": "presence",
+      "dose_threshold": null
     },
     {
       "id": "DSI_METFORMIN_ALA",
@@ -1084,8 +1047,8 @@
       "agent2_id": "C0023791",
       "severity": "Moderate",
       "interaction_effect_type": "Additive",
-      "mechanism": "Alpha-lipoic acid (ALA) improves insulin sensitivity and glucose uptake. Combined with metformin or other diabetes medications, it can cause additive blood glucose lowering, potentially resulting in hypoglycemia.",
-      "management": "Monitor blood glucose when adding ALA to diabetes therapy. Dose adjustments may be needed. Common in integrative diabetes care but requires tracking glucose responses.",
+      "mechanism": "Alpha-lipoic acid may affect glucose control. A trial across 300–1200 mg/day does not establish a 600 mg safe-below interaction boundary with metformin or other diabetes medicines.",
+      "management": "Discuss alpha-lipoic acid with your diabetes prescriber and monitor glucose when starting or changing it. Adjust prescribed medicine only under prescriber supervision.",
       "source_urls": [
         "https://ods.od.nih.gov/factsheets/Alpha-Lipoic-Acid-HealthProfessional/"
       ],
@@ -1102,21 +1065,12 @@
       },
       "evidence_basis": "clinical_literature",
       "clinical_confidence": "medium",
-      "applies_to": "dose_dependent",
+      "applies_to": "whole_class",
       "agent1_canonical_id": null,
       "agent2_canonical_id": "alpha_lipoic_acid",
       "direction": "harmful",
-      "materiality": "dose_dependent",
-      "dose_threshold": {
-        "agent_canonical_id": "alpha_lipoic_acid",
-        "value": 600,
-        "unit": "mg",
-        "basis": "per_day",
-        "confidence": "medium",
-        "confidence_basis": "reuse",
-        "source": "https://pubmed.ncbi.nlm.nih.gov/22374556/",
-        "rationale": "Reused ALA glucose floor (600 mg)."
-      }
+      "materiality": "presence",
+      "dose_threshold": null
     },
     {
       "id": "DSI_DM_CHROMIUM",
@@ -1211,8 +1165,8 @@
       "agent2_id": "C1509189",
       "severity": "Moderate",
       "interaction_effect_type": "Additive",
-      "mechanism": "Bitter melon (Momordica charantia) contains charantin and polypeptide-p, which have insulin-like activity and stimulate glucose uptake. Combined with diabetes medications, additive hypoglycemia can occur.",
-      "management": "Monitor blood glucose when using bitter melon with diabetes medications. Dose adjustment may be needed. Do not use as a replacement for prescribed therapy.",
+      "mechanism": "Glucose effects of bitter melon vary by preparation. A small trial of a specific mcIRBP-19 fruit extract reported borderline overall glucose results and a positive subgroup; it does not establish a universal 600 mg interaction threshold.",
+      "management": "Discuss bitter melon with your diabetes prescriber and monitor glucose when starting or changing the supplement. Do not replace prescribed therapy; medication changes require prescriber supervision.",
       "source_urls": [
         "https://nccih.nih.gov/health/herbsataglance.htm",
         "https://pubmed.ncbi.nlm.nih.gov/21211558/"
@@ -1231,22 +1185,13 @@
         "method": "live_api_batch_2026_04_13"
       },
       "evidence_basis": "clinical_literature",
-      "clinical_confidence": "medium",
-      "applies_to": "dose_dependent",
+      "clinical_confidence": "low",
+      "applies_to": "whole_class",
       "agent1_canonical_id": null,
       "agent2_canonical_id": "bitter_melon",
       "direction": "harmful",
-      "materiality": "dose_dependent",
-      "dose_threshold": {
-        "agent_canonical_id": "bitter_melon",
-        "value": 600,
-        "unit": "mg",
-        "basis": "per_day",
-        "confidence": "medium",
-        "confidence_basis": "reuse",
-        "source": "https://pubmed.ncbi.nlm.nih.gov/35140559/",
-        "rationale": "Reused bitter melon glucose floor (600 mg)."
-      }
+      "materiality": "presence",
+      "dose_threshold": null
     },
     {
       "id": "DSI_DM_FENUGREEK",
@@ -1257,13 +1202,13 @@
       "agent2_id": "C0936126",
       "severity": "Moderate",
       "interaction_effect_type": "Additive",
-      "mechanism": "Fenugreek seeds contain soluble fiber and compounds that slow carbohydrate absorption and may enhance insulin secretion, causing additive glucose lowering when combined with diabetes medications.",
-      "management": "Monitor blood glucose when using fenugreek supplements with diabetes medications. Dose adjustment may be needed. Inform your prescriber.",
+      "mechanism": "A meta-analysis of heterogeneous fenugreek seed trials suggests possible glucose lowering, with limitations in study quality and preparation reporting. Additive effects with diabetes medicines are a precaution; a generic 500 mg safe-below boundary is not established.",
+      "management": "Monitor blood glucose when using fenugreek seed supplements with diabetes medicines. Inform your prescriber, who should manage any medication adjustment.",
       "source_urls": [
-        "https://pubmed.ncbi.nlm.nih.gov/11370345/"
+        "https://pubmed.ncbi.nlm.nih.gov/24438170/"
       ],
       "source_pmids": [
-        "11370345"
+        "24438170"
       ],
       "verification": {
         "status": "verified",
@@ -1275,23 +1220,14 @@
         },
         "method": "live_api_batch_2026_04_13"
       },
-      "evidence_basis": "clinical_literature",
-      "clinical_confidence": "medium",
-      "applies_to": "dose_dependent",
+      "evidence_basis": "systematic_review",
+      "clinical_confidence": "low",
+      "applies_to": "whole_class",
       "agent1_canonical_id": null,
       "agent2_canonical_id": "fenugreek",
       "direction": "harmful",
-      "materiality": "dose_dependent",
-      "dose_threshold": {
-        "agent_canonical_id": "fenugreek",
-        "value": 500,
-        "unit": "mg",
-        "basis": "per_day",
-        "confidence": "medium",
-        "confidence_basis": "reuse",
-        "source": "https://pubmed.ncbi.nlm.nih.gov/24438170/",
-        "rationale": "Reused fenugreek glucose floor (500 mg)."
-      }
+      "materiality": "presence",
+      "dose_threshold": null
     },
     {
       "id": "DSI_DM_GYMNEMA",
@@ -1341,7 +1277,7 @@
     {
       "id": "DSI_DM_CINNAMON",
       "display_layer": "background",
-      "background_rationale": "Minor dose-dependent glucose signal; culinary exposure is outside the alert layer.",
+      "background_rationale": "Uncertain glucose interaction signal retained as background context; no validated safe-below dose is established.",
       "type": "Med-Sup",
       "agent1_name": "Diabetes medications (class)",
       "agent1_id": "class:diabetes_meds",
@@ -1349,13 +1285,17 @@
       "agent2_id": "C0939899",
       "severity": "Minor",
       "interaction_effect_type": "Additive",
-      "mechanism": "Cinnamon extracts have modest insulin-sensitizing properties. At supplemental doses it may produce mild additional glucose lowering, especially with secretagogues.",
-      "management": "Culinary cinnamon is safe. High-dose cinnamon supplements with diabetes medications warrant glucose monitoring. Note: Cassia cinnamon (most common) contains coumarin, which can be harmful in large amounts.",
+      "mechanism": "Trials of cinnamon preparations report variable glucose effects. The preferred preparation and dose remain unclear; an additive glucose-lowering effect with diabetes medicines is a precaution, not a proven dose boundary.",
+      "management": "Discuss supplemental cinnamon with your diabetes prescriber and monitor glucose. Do not use it instead of prescribed treatment. Cassia cinnamon contains coumarin, which can be harmful with substantial exposure.",
       "source_urls": [
-        "https://pubmed.ncbi.nlm.nih.gov/14633804/"
+        "https://pubmed.ncbi.nlm.nih.gov/24019277/",
+        "https://pubmed.ncbi.nlm.nih.gov/14633804/",
+        "https://pubmed.ncbi.nlm.nih.gov/40834253/"
       ],
       "source_pmids": [
-        "14633804"
+        "24019277",
+        "14633804",
+        "40834253"
       ],
       "verification": {
         "status": "verified",
@@ -1369,21 +1309,13 @@
       },
       "evidence_basis": "clinical_literature",
       "clinical_confidence": "low",
-      "applies_to": "dose_dependent",
+      "applies_to": "whole_class",
       "agent1_canonical_id": null,
       "agent2_canonical_id": "cinnamon",
       "direction": "harmful",
-      "materiality": "dose_dependent",
-      "dose_threshold": {
-        "agent_canonical_id": "cinnamon",
-        "value": 500,
-        "unit": "mg",
-        "basis": "per_day",
-        "confidence": "medium",
-        "confidence_basis": "reuse",
-        "source": "https://pubmed.ncbi.nlm.nih.gov/24019277/",
-        "rationale": "Reused cinnamon glucose floor (500 mg extract); culinary cinnamon safe."
-      }
+      "materiality": "presence",
+      "dose_threshold": null,
+      "evidence_notes": "PMID 14633804 has an expression of concern (PMID 40834253), not a retraction. PMID 24019277 reports heterogeneous doses and uncertain preferred dose; neither establishes a 500 mg interaction threshold."
     },
     {
       "id": "DSI_LEVOTHYROXINE_CALCIUM",
@@ -1583,8 +1515,8 @@
       "agent2_id": "C0813171",
       "severity": "Contraindicated",
       "interaction_effect_type": "Inhibitor",
-      "mechanism": "St. John's Wort is a potent CYP3A4 and P-glycoprotein inducer. Cyclosporine, tacrolimus, and sirolimus — all transplant immunosuppressants — are CYP3A4/P-gp substrates. Concomitant use can reduce drug levels by 50–70%, leading to acute transplant rejection.",
-      "management": "Absolutely contraindicated in transplant patients. Do not use St. John's Wort with any calcineurin inhibitor or mTOR inhibitor. Emergency INR/drug level monitoring is required if accidental exposure occurred.",
+      "mechanism": "St. John's wort induces CYP3A4 and P-glycoprotein and can reduce exposure to susceptible transplant immunosuppressants. Cyclosporine-associated transplant rejection has been reported. The retained sources do not establish an identical 50–70% reduction for every listed drug.",
+      "management": "Do not use St. John's wort with transplant immunosuppressants. Contact the transplant prescriber promptly after accidental use; they should arrange the appropriate immunosuppressant drug-level monitoring and treatment review. Do not stop or adjust prescribed treatment yourself.",
       "source_urls": [
         "https://www.nccih.nih.gov/health/st-johns-wort",
         "https://nccih.nih.gov/health/stjohnswort/ataglance.htm",
@@ -1618,7 +1550,7 @@
       "agent2_id": "C0752270",
       "severity": "Major",
       "interaction_effect_type": "Inhibitor",
-      "mechanism": "Echinacea is an immune stimulant. In transplant recipients or patients on immunosuppressants for autoimmune disease, immune stimulation can overcome the intended immunosuppression, triggering organ rejection or disease flare.",
+      "mechanism": "Echinacea may interact with immunosuppressants through effects on immune activity. NCCIH describes this interaction as theoretical; the cited content does not establish transplant rejection or autoimmune flare caused by this combination.",
       "management": "Avoid echinacea with any immunosuppressant therapy. Transplant patients and those on immunosuppressants for autoimmune conditions should not use echinacea for colds or immune support.",
       "source_urls": [
         "https://nccih.nih.gov/health/echinacea/ataglance.htm"
@@ -1634,8 +1566,8 @@
         },
         "method": "live_api_batch_2026_04_13"
       },
-      "evidence_basis": "clinical_literature",
-      "clinical_confidence": "high",
+      "evidence_basis": "mechanism_inferred",
+      "clinical_confidence": "low",
       "applies_to": "whole_class",
       "agent1_canonical_id": null,
       "agent2_canonical_id": "echinacea",
@@ -1976,14 +1908,12 @@
       "agent2_id": "C0036002",
       "severity": "Contraindicated",
       "interaction_effect_type": "Additive",
-      "mechanism": "SAMe has serotonergic activity and monoamine-modulating properties. Combined with an MAOI, it can potentiate serotonin syndrome risk through additive serotonergic load.",
-      "management": "Contraindicated. Do not use SAMe with any MAOI. Observe appropriate washout periods.",
+      "mechanism": "SAMe may interact with medicines that increase serotonin. Combining it with an MAOI raises a potential serotonin-syndrome concern; a quantified human combination risk is not established by the cited guidance.",
+      "management": "Do not combine SAMe with an MAOI. Do not stop or change a prescribed MAOI to use SAMe; the prescriber must manage any medication change or product-specific washout.",
       "source_urls": [
-        "https://pubmed.ncbi.nlm.nih.gov/36402294/"
+        "https://www.nccih.nih.gov/health/sadenosyllmethionine-same-in-depth"
       ],
-      "source_pmids": [
-        "36402294"
-      ],
+      "source_pmids": [],
       "verification": {
         "status": "verified",
         "verified_at": "2026-04-13T16:37:00Z",
@@ -1994,10 +1924,10 @@
         },
         "method": "live_api_batch_2026_04_13"
       },
-      "evidence_basis": "label_regulatory",
-      "clinical_confidence": "high",
+      "evidence_basis": "authoritative_review",
+      "clinical_confidence": "low",
       "applies_to": "whole_class",
-      "evidence_notes": "SAMe has documented serotonergic activity. NCCIH explicitly warns against combination with serotonergic drugs including MAOIs.",
+      "evidence_notes": "NCCIH advises caution with serotonin-increasing medicines. This is a precaution, not a quantified human combination risk.",
       "agent1_canonical_id": null,
       "agent2_canonical_id": "same",
       "direction": "harmful",
@@ -2090,8 +2020,8 @@
       "agent2_id": "C0993630",
       "severity": "Moderate",
       "interaction_effect_type": "Additive",
-      "mechanism": "Garlic supplements have antiplatelet activity via inhibition of arachidonic acid and thromboxane pathways. Combined with NSAIDs (which also inhibit COX-dependent platelet activation), bleeding risk is additive.",
-      "management": "Avoid high-dose garlic supplements with regular NSAID use. Culinary garlic is generally safe. Watch for unusual bruising or GI bleeding.",
+      "mechanism": "Garlic supplements may affect platelet function. Combining them with NSAIDs may increase bleeding risk; the retained monographs do not establish a 600 mg safe-below threshold.",
+      "management": "Discuss garlic supplements with your prescriber if you use NSAIDs regularly. Watch for unusual bruising or gastrointestinal bleeding.",
       "source_urls": [
         "https://nccih.nih.gov/health/garlic/ataglance.htm"
       ],
@@ -2107,21 +2037,12 @@
       },
       "evidence_basis": "authoritative_review",
       "clinical_confidence": "medium",
-      "applies_to": "dose_dependent",
+      "applies_to": "whole_class",
       "agent1_canonical_id": null,
       "agent2_canonical_id": "garlic",
       "direction": "harmful",
-      "materiality": "dose_dependent",
-      "dose_threshold": {
-        "agent_canonical_id": "garlic",
-        "value": 600,
-        "unit": "mg",
-        "basis": "per_day",
-        "confidence": "medium",
-        "confidence_basis": "reuse",
-        "source": "https://www.mskcc.org/cancer-care/integrative-medicine/herbs/garlic",
-        "rationale": "Reused garlic bleeding floor; culinary garlic safe with NSAIDs."
-      }
+      "materiality": "presence",
+      "dose_threshold": null
     },
     {
       "id": "DSI_NSAID_GINKGO",
@@ -2211,15 +2132,12 @@
       "agent2_id": "C0795674",
       "severity": "Moderate",
       "interaction_effect_type": "Additive",
-      "mechanism": "Valerian has GABAergic activity and CNS sedative properties. Combined with sedative medications (including benzodiazepines, sleep aids, antihistamines), it produces additive CNS depression, excessive sedation, and impaired psychomotor function.",
+      "mechanism": "Valerian may have sleep-inducing effects and should not be combined with alcohol or sedatives without clinician guidance. NCCIH does not establish an oral 400 mg interaction threshold.",
       "management": "Avoid valerian with prescription sedatives or sleep medications. Do not drive or operate machinery if using both. Inform your doctor.",
       "source_urls": [
-        "https://nccih.nih.gov/health/valerian/ataglance.htm",
-        "https://pubmed.ncbi.nlm.nih.gov/15901352/"
+        "https://www.nccih.nih.gov/health/valerian"
       ],
-      "source_pmids": [
-        "15901352"
-      ],
+      "source_pmids": [],
       "verification": {
         "status": "verified",
         "verified_at": "2026-04-13T16:37:00Z",
@@ -2230,23 +2148,14 @@
         },
         "method": "live_api_batch_2026_04_13"
       },
-      "evidence_basis": "clinical_literature",
-      "clinical_confidence": "medium",
+      "evidence_basis": "authoritative_review",
+      "clinical_confidence": "low",
       "applies_to": "whole_class",
       "agent1_canonical_id": null,
       "agent2_canonical_id": "valerian",
       "direction": "harmful",
-      "materiality": "dose_dependent",
-      "dose_threshold": {
-        "agent_canonical_id": "valerian",
-        "value": 400,
-        "unit": "mg",
-        "basis": "per_day",
-        "confidence": "low",
-        "confidence_basis": "inferred_conservative",
-        "source": "https://www.nccih.nih.gov/health/valerian",
-        "rationale": "INFERRED conservative floor at a sedative valerian-root dose (~400 mg; typical 300-600 mg)."
-      }
+      "materiality": "presence",
+      "dose_threshold": null
     },
     {
       "id": "DSI_SEDATIVES_KAVA",
@@ -2339,7 +2248,7 @@
       "agent2_id": "C0330470",
       "severity": "Moderate",
       "interaction_effect_type": "Additive",
-      "mechanism": "Passionflower (Passiflora incarnata) has GABAergic sedative activity. Combined with sedatives, benzodiazepines, or hypnotics, it can produce additive CNS depression.",
+      "mechanism": "Passionflower can cause drowsiness and may add to nervous-system slowing from sedating medicines or anesthesia. NCCIH does not establish a 400 mg interaction threshold.",
       "management": "Avoid passionflower with sedative medications. Do not drive after combining. Use under physician guidance.",
       "source_urls": [
         "https://nccih.nih.gov/health/passionflower"
@@ -2355,22 +2264,13 @@
         "method": "live_api_batch_2026_04_13"
       },
       "evidence_basis": "authoritative_review",
-      "clinical_confidence": "medium",
+      "clinical_confidence": "low",
       "applies_to": "whole_class",
       "agent1_canonical_id": null,
       "agent2_canonical_id": "passionflower",
       "direction": "harmful",
-      "materiality": "dose_dependent",
-      "dose_threshold": {
-        "agent_canonical_id": "passionflower",
-        "value": 400,
-        "unit": "mg",
-        "basis": "per_day",
-        "confidence": "low",
-        "confidence_basis": "inferred_conservative",
-        "source": "https://www.nccih.nih.gov/health/passionflower",
-        "rationale": "INFERRED conservative floor at a sedative passionflower dose (~400 mg)."
-      }
+      "materiality": "presence",
+      "dose_threshold": null
     },
     {
       "id": "DSI_CORTICO_LICORICE",
@@ -2515,12 +2415,12 @@
       "type": "Med-Sup",
       "agent1_name": "Oral Contraceptives (class)",
       "agent1_id": "class:oral_contraceptives",
-      "agent2_name": "Soy isoflavones",
+      "agent2_name": "Genistein (soy isoflavone)",
       "agent2_id": "C0061202",
       "severity": "Minor",
       "interaction_effect_type": "Additive",
-      "mechanism": "Soy isoflavones (genistein, daidzein) are phytoestrogens that bind estrogen receptors. They may weakly compete with or add to the estrogenic component of OCs. Clinical significance at typical dietary intake is minimal.",
-      "management": "Dietary soy is generally safe with OCs. High-dose soy isoflavone supplements (>100 mg/day) warrant caution. Discuss with your prescriber.",
+      "mechanism": "Genistein is a soy isoflavone with estrogen-receptor activity. A clinically important interaction with oral contraceptives and a 100 mg interaction threshold are not established by the retained source.",
+      "management": "Discuss concentrated genistein supplements with your prescriber if you use oral contraceptives. The retained evidence does not establish contraceptive failure or a safe-below supplement dose.",
       "source_urls": [
         "https://ods.od.nih.gov/factsheets/Soy-HealthProfessional/"
       ],
@@ -2534,23 +2434,14 @@
         },
         "method": "live_api_batch_2026_04_13"
       },
-      "evidence_basis": "authoritative_review",
+      "evidence_basis": "mechanism_inferred",
       "clinical_confidence": "low",
-      "applies_to": "dose_dependent",
+      "applies_to": "whole_class",
       "agent1_canonical_id": null,
       "agent2_canonical_id": "genistein",
       "direction": "harmful",
-      "materiality": "dose_dependent",
-      "dose_threshold": {
-        "agent_canonical_id": "genistein",
-        "value": 100,
-        "unit": "mg",
-        "basis": "per_day",
-        "confidence": "low",
-        "confidence_basis": "management_stated",
-        "source": "https://www.nccih.nih.gov/health/soy",
-        "rationale": "Pair mgmt: high-dose soy isoflavone supplements (>100 mg/day) warrant caution; dietary soy safe with OCs."
-      }
+      "materiality": "presence",
+      "dose_threshold": null
     },
     {
       "id": "SSI_IRON_CALCIUM",
@@ -2594,8 +2485,8 @@
       "agent2_id": "C1704263",
       "severity": "Moderate",
       "interaction_effect_type": "Inhibitor",
-      "mechanism": "Catechins and tannins in green tea bind non-heme iron, forming insoluble iron-polyphenol complexes that cannot be absorbed. This can reduce iron absorption by 50–90% when consumed together.",
-      "management": "Do not take iron supplements with green tea extract or green tea beverages. Separate by at least 2 hours. Take iron with vitamin C instead to enhance absorption.",
+      "mechanism": "Tea polyphenols can reduce non-heme iron absorption when consumed with an iron-containing meal. A small study in iron-replete women found about 37% inhibition with concurrent brewed tea; this is not a 50–90% effect established for all green-tea extracts and iron supplements.",
+      "management": "Avoid taking iron with tea. Follow the iron product directions and ask your clinician about timing. A one-hour tea interval attenuated inhibition in a meal study; it did not establish a universal interval for concentrated green-tea extracts.",
       "source_urls": [
         "https://pubmed.ncbi.nlm.nih.gov/29046302/"
       ],
@@ -2617,7 +2508,8 @@
       "agent1_canonical_id": "iron",
       "agent2_canonical_id": "green_tea_extract",
       "direction": "harmful",
-      "materiality": "presence"
+      "materiality": "presence",
+      "evidence_notes": "PMID 29046302 studied brewed tea with porridge in 12 nonanemic iron-replete women, not a concentrated green-tea extract/iron-supplement combination."
     },
     {
       "id": "SSI_ZINC_COPPER",
@@ -2780,8 +2672,8 @@
       "agent2_id": "C0024467",
       "severity": "Minor",
       "interaction_effect_type": "Additive",
-      "mechanism": "Magnesium has mild calcium channel blocking and vasodilatory properties. High-dose supplementation can modestly lower blood pressure, adding to antihypertensive drug effects.",
-      "management": "Magnesium is generally safe with antihypertensives. Monitor blood pressure when starting magnesium. Beneficial in patients with hypomagnesemia or metabolic syndrome.",
+      "mechanism": "Magnesium may affect blood pressure, but the cited insulin-resistance trial found no significant blood-pressure change. The adult supplemental magnesium UL of 350 mg concerns gastrointestinal adverse effects and is not a blood-pressure interaction threshold.",
+      "management": "Tell your prescriber about magnesium supplements and monitor blood pressure when changing them. Do not adjust prescribed medicines yourself. Kidney function and the reason for supplementation also need consideration.",
       "source_urls": [
         "https://ods.od.nih.gov/factsheets/Magnesium-HealthProfessional/",
         "https://pubmed.ncbi.nlm.nih.gov/21205110/"
@@ -2801,21 +2693,12 @@
       },
       "evidence_basis": "clinical_literature",
       "clinical_confidence": "low",
-      "applies_to": "dose_dependent",
+      "applies_to": "whole_class",
       "agent1_canonical_id": null,
       "agent2_canonical_id": "magnesium",
       "direction": "harmful",
-      "materiality": "dose_dependent",
-      "dose_threshold": {
-        "agent_canonical_id": "magnesium",
-        "value": 350,
-        "unit": "mg",
-        "basis": "per_day",
-        "confidence": "low",
-        "confidence_basis": "inferred_conservative",
-        "source": "https://ods.od.nih.gov/factsheets/Magnesium-HealthProfessional/",
-        "rationale": "INFERRED floor at the supplemental-magnesium UL (350 mg); dietary magnesium below is not a meaningful BP modifier."
-      }
+      "materiality": "presence",
+      "dose_threshold": null
     },
     {
       "id": "DSI_ANTIPSYCH_MELATONIN",
@@ -2870,7 +2753,7 @@
       "agent2_id": "C4704022",
       "severity": "Moderate",
       "interaction_effect_type": "Enhancer",
-      "mechanism": "CBD inhibits CYP2C9 and CYP3A4, the primary enzymes metabolizing warfarin and other anticoagulants. This can substantially increase anticoagulant blood levels, elevating INR and bleeding risk. The FDA-approved CBD drug (Epidiolex) carries this interaction warning.",
+      "mechanism": "Very-low-quality case reports describe INR changes with cannabinoids and warfarin. The retained review found no clinical evidence for other anticoagulants. The Epidiolex label does not establish a warfarin-specific warning; its tested CYP2C9 and CYP3A4 substrates did not show clinically significant exposure changes.",
       "management": "Monitor INR closely if CBD is started or stopped with warfarin. Dose adjustment of warfarin may be required. Inform prescriber of all CBD use including oils and capsules.",
       "source_urls": [
         "https://www.fda.gov/drugs/drug-interactions-labeling/drug-development-and-drug-interactions-table-substrates-inhibitors-and-inducers",
@@ -2889,13 +2772,14 @@
         },
         "method": "live_api_batch_2026_04_13"
       },
-      "evidence_basis": "label_regulatory",
-      "clinical_confidence": "medium",
+      "evidence_basis": "observational",
+      "clinical_confidence": "low",
       "applies_to": "dose_dependent",
       "agent1_canonical_id": null,
       "agent2_canonical_id": "cbd",
       "direction": "harmful",
-      "materiality": "presence"
+      "materiality": "presence",
+      "evidence_notes": "PMID 37740600 summarizes seven warfarin cases with very-low-quality evidence; this is not proof of a uniform anticoagulant-class pharmacokinetic interaction."
     },
     {
       "id": "DSI_ANTIHYP_CBD",
@@ -2906,8 +2790,8 @@
       "agent2_id": "C4704022",
       "severity": "Moderate",
       "interaction_effect_type": "Enhancer",
-      "mechanism": "CBD inhibits CYP3A4 and CYP2C9, affecting metabolism of many antihypertensive drugs (amlodipine, losartan, others). Elevated drug levels can cause excessive blood pressure reduction, dizziness, or syncope.",
-      "management": "Inform prescriber of CBD use with blood pressure medications. Monitor blood pressure when starting or stopping CBD. CBD dose and drug dose may both need adjustment.",
+      "mechanism": "CBD may affect blood pressure and can have drug interactions, but a clinically demonstrated increase in amlodipine or losartan exposure is not established by the retained source. Epidiolex studies did not increase exposure to the tested CYP3A4 and CYP2C9 substrates.",
+      "management": "Inform your prescriber of CBD use and monitor blood pressure when starting or stopping it. Any medication adjustment should be managed by the prescriber.",
       "source_urls": [
         "https://www.fda.gov/consumers/consumer-updates/what-we-know-and-dont-know-about-cbd"
       ],
@@ -2922,8 +2806,8 @@
         },
         "method": "live_api_batch_2026_04_13"
       },
-      "evidence_basis": "clinical_literature",
-      "clinical_confidence": "medium",
+      "evidence_basis": "mechanism_inferred",
+      "clinical_confidence": "low",
       "applies_to": "dose_dependent",
       "agent1_canonical_id": null,
       "agent2_canonical_id": "cbd",
@@ -2939,8 +2823,8 @@
       "agent2_id": "C4704022",
       "severity": "Moderate",
       "interaction_effect_type": "Enhancer",
-      "mechanism": "CBD inhibits CYP3A4 and OATP1B1/1B3 transporters, both of which are involved in statin metabolism. This can raise statin plasma concentrations, increasing risk of myopathy and hepatotoxicity.",
-      "management": "Inform prescriber of CBD use with statin therapy. Monitor for muscle pain, weakness, or elevated liver enzymes. Dose adjustment may be needed.",
+      "mechanism": "A clinically demonstrated increase in statin exposure from CBD is not established by the retained source. The Epidiolex label does not anticipate OATP1B1/1B3 inhibition, and its tested CYP3A4 substrate had unchanged exposure. Statin-specific clinical evidence remains limited.",
+      "management": "Tell your statin prescriber about CBD use. Report new muscle pain or weakness; any medication change should be made by your prescriber.",
       "source_urls": [
         "https://www.fda.gov/consumers/consumer-updates/what-we-know-and-dont-know-about-cbd"
       ],
@@ -2955,8 +2839,8 @@
         },
         "method": "live_api_batch_2026_04_13"
       },
-      "evidence_basis": "clinical_literature",
-      "clinical_confidence": "medium",
+      "evidence_basis": "mechanism_inferred",
+      "clinical_confidence": "low",
       "applies_to": "dose_dependent",
       "agent1_canonical_id": null,
       "agent2_canonical_id": "cbd",
@@ -3105,14 +2989,12 @@
       "agent2_id": "C0613707",
       "severity": "Minor",
       "interaction_effect_type": "Additive",
-      "mechanism": "Ashwagandha has mild adaptogenic blood pressure-lowering effects in some studies. Combined with antihypertensives, minor additive effects are possible.",
-      "management": "Monitor blood pressure when starting ashwagandha with antihypertensive therapy. Generally well-tolerated but inform prescriber.",
+      "mechanism": "Ashwagandha may interact with blood-pressure medicines. NCCIH supports a precaution but does not establish a 300 mg standardized-extract interaction threshold.",
+      "management": "Monitor blood pressure and talk to your prescriber before combining ashwagandha with blood-pressure medicine. Do not adjust prescribed medicines yourself.",
       "source_urls": [
-        "https://pubmed.ncbi.nlm.nih.gov/25237891/"
+        "https://www.nccih.nih.gov/health/ashwagandha"
       ],
-      "source_pmids": [
-        "25237891"
-      ],
+      "source_pmids": [],
       "verification": {
         "status": "verified",
         "verified_at": "2026-04-13T16:37:00Z",
@@ -3123,23 +3005,14 @@
         },
         "method": "live_api_batch_2026_04_13"
       },
-      "evidence_basis": "clinical_literature",
+      "evidence_basis": "authoritative_review",
       "clinical_confidence": "low",
       "applies_to": "whole_class",
       "agent1_canonical_id": null,
       "agent2_canonical_id": "ashwagandha",
       "direction": "harmful",
-      "materiality": "dose_dependent",
-      "dose_threshold": {
-        "agent_canonical_id": "ashwagandha",
-        "value": 300,
-        "unit": "mg",
-        "basis": "per_day",
-        "confidence": "low",
-        "confidence_basis": "inferred_conservative",
-        "source": "https://www.nccih.nih.gov/health/ashwagandha",
-        "rationale": "INFERRED conservative floor at a standardized ashwagandha-extract dose (~300 mg)."
-      }
+      "materiality": "presence",
+      "dose_threshold": null
     },
     {
       "id": "DSI_SEDATIVES_ASHWAGANDHA",
@@ -3197,8 +3070,8 @@
       "agent2_id": "C0077524",
       "severity": "Moderate",
       "interaction_effect_type": "Additive",
-      "mechanism": "Curcumin inhibits platelet aggregation via multiple pathways (COX inhibition, TXA2 suppression, cAMP elevation). With anticoagulant/antiplatelet drugs, this produces additive bleeding risk.",
-      "management": "Use caution with high-dose curcumin supplements (>500 mg/day) with anticoagulants. Culinary turmeric is generally safe. Monitor for unusual bruising or bleeding.",
+      "mechanism": "Curcumin has antiplatelet effects in laboratory and animal studies, providing a precautionary basis for possible bleeding effects with anticoagulants. Those studies do not establish a human oral 500 mg interaction boundary.",
+      "management": "Discuss turmeric or curcumin supplements with your anticoagulant prescriber and report unusual bruising or bleeding. Ask about appropriate monitoring when starting, stopping or changing the supplement.",
       "source_urls": [
         "https://pubmed.ncbi.nlm.nih.gov/22531131/"
       ],
@@ -3215,23 +3088,14 @@
         },
         "method": "live_api_batch_2026_04_13"
       },
-      "evidence_basis": "clinical_literature",
-      "clinical_confidence": "medium",
-      "applies_to": "dose_dependent",
+      "evidence_basis": "preclinical",
+      "clinical_confidence": "low",
+      "applies_to": "whole_class",
       "agent1_canonical_id": null,
       "agent2_canonical_id": "turmeric",
       "direction": "harmful",
-      "materiality": "dose_dependent",
-      "dose_threshold": {
-        "agent_canonical_id": "turmeric",
-        "value": 500,
-        "unit": "mg",
-        "basis": "per_day",
-        "confidence": "low",
-        "confidence_basis": "management_stated",
-        "source": "https://pubmed.ncbi.nlm.nih.gov/22531131/",
-        "rationale": "Pair mgmt: curcumin >500 mg/day with anticoagulants; culinary turmeric safe."
-      }
+      "materiality": "presence",
+      "dose_threshold": null
     },
     {
       "id": "DSI_HIV_SJW",

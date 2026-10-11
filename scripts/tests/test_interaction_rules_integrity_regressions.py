@@ -1187,8 +1187,10 @@ def test_resveratrol_warfarin_note_cites_the_mouse_study_it_describes():
     (ANGPTL3 deficiency and postprandial lipids) was a ghost."""
     rule = _rule("RULE_IQM_RESVERATROL_BLEEDING")
     assert "27040449" not in json.dumps(rule)
-    note = next(t for t in rule["dose_thresholds"] if t.get("target_id") == "anticoagulants")["note"]
-    assert _pmid("26947597") in note and "0.5%" in note
+    sub = _sub_rule(rule, "drug_class_id", "anticoagulants")
+    assert _pmid("26947597") in sub["sources"]
+    assert "0.5%" in sub["mechanism"] and "mouse" in sub["mechanism"]
+    assert not any(t.get("target_id") == "anticoagulants" for t in rule["dose_thresholds"])
 
 
 def test_saw_palmetto_bleeding_rules_carry_no_floor_borrowed_from_bph():
@@ -1290,10 +1292,11 @@ def test_licorice_root_bp_rule_fires_on_presence():
 def test_iqm_licorice_bp_rules_fire_on_presence_and_the_threshold_note_claims_no_safe_floor():
     _assert_licorice_bp_presence("RULE_IQM_LICORICE_HYPERTENSION",
                                  (("condition_id", "hypertension"), ("drug_class_id", "antihypertensives")))
-    note = next(t for t in _rule("RULE_IQM_LICORICE_HYPERTENSION")["dose_thresholds"]
-                if t.get("target_id") == "hypertension")["note"]
-    assert "the threshold above which BP elevation becomes clinically significant" not in note
-    assert _pmid("12574791") in note
+    rule = _rule("RULE_IQM_LICORICE_HYPERTENSION")
+    sub = _sub_rule(rule, "condition_id", "hypertension")
+    assert _pmid("12574791") in sub["sources"]
+    assert "100 mg/day" in sub["mechanism"]
+    assert not any(t.get("target_id") == "hypertension" for t in rule["dose_thresholds"])
 
 
 def test_green_tea_liver_warning_treats_800_mg_as_an_observed_risk_dose_not_a_safe_limit():
