@@ -3,7 +3,7 @@
     "description": "Phase 4 shadow literature resolution registry for high-impact canonical actives",
     "purpose": "literature_evidence_resolution",
     "schema_version": "5.0.0",
-    "last_updated": "2026-10-08",
+    "last_updated": "2026-10-11",
     "total_entries": 807,
     "verification_pipeline": "scripts/api_audit/verify_literature_records.py",
     "verified_studies_count": 279,
@@ -24,9 +24,9 @@
         {
           "pmid": "27840359",
           "title": "The Risk Factors of Prostate Cancer and Its Prevention: A Literature Review.",
-          "design": "systematic_review_meta",
-          "sample_size": 563,
-          "primary_endpoint": "prostate cancer incidence",
+          "design": "narrative_review",
+          "sample_size": null,
+          "primary_endpoint": "Narrative prevention context; no qualifying intervention estimate",
           "effect": "null",
           "verification_provenance": {
             "pmid_verified": true,
@@ -37,14 +37,15 @@
             "verified_source": "https://pubmed.ncbi.nlm.nih.gov/27840359/",
             "verified_at": "2026-09-21T07:39:42.986936+00:00",
             "abstract_evidence_quote": "The results of epidemiological, In vivo, in vitro, and early clinical studies suggested that selected dietary products and supplementation may play a role in PCa prevention."
-          }
+          },
+          "scoring_eligible": false
         },
         {
           "pmid": "36422550",
           "title": "Lycopene Modulates Oxidative Stress and Inflammation in Hypercholesterolemic Rats.",
-          "design": "systematic_review_meta",
-          "sample_size": 1188,
-          "primary_endpoint": "biomarkers (oxidative stress, endothelial function)",
+          "design": "animal_experiment",
+          "sample_size": null,
+          "primary_endpoint": "Rat biochemical and tissue endpoints; not human efficacy",
           "effect": "positive_weak",
           "verification_provenance": {
             "pmid_verified": true,
@@ -55,27 +56,26 @@
             "verified_source": "https://pubmed.ncbi.nlm.nih.gov/36422550/",
             "verified_at": "2026-09-21T07:39:42.986936+00:00",
             "abstract_evidence_quote": "Additionally, the mRNA expression of paraoxonase 1 (PON-1), peroxisome proliferator-activated receptor gamma (PPAR-γ), and PPAR-γ coactivator 1 alpha (PGC-1α) in cardiac a"
-          }
+          },
+          "scoring_eligible": false
         }
       ],
       "effect_direction": "mixed",
-      "population_context": "Adults; cardiovascular biomarkers vs prostate cancer prevention",
+      "population_context": "Narrative prevention review and hypercholesterolemic rats; cited sources do not establish an applicable human intervention cohort.",
       "studied_dose_exposure": {
-        "values": [
-          10,
-          30
-        ],
+        "values": [],
         "unit": "mg",
         "basis": "daily_intake"
       },
-      "applicability_decision": "Dose applicable at >= 10 mg/day for cardiovascular biomarker endpoints; no general wellness antioxidant credit permitted per policy lock",
+      "applicability_decision": "Held: retained historical sources are a narrative review and rat experiment, not qualifying human trials. No human dose threshold or efficacy credit is established by these citations.",
       "verification_result": "authoritative_pubmed_verified",
       "verification_provenance": {
         "verified_by": "scripts/api_audit/verify_literature_records.py",
         "verified_at": "2026-09-21T07:39:42.986936+00:00",
         "all_pmids_verified": true,
         "retractions_found": false
-      }
+      },
+      "scoring_eligible": false
     },
     {
       "canonical_id": "zeaxanthin",
@@ -94,7 +94,7 @@
           "design": "rct",
           "sample_size": 4203,
           "primary_endpoint": "progression to advanced AMD",
-          "effect": "positive_strong",
+          "effect": "null",
           "verification_provenance": {
             "pmid_verified": true,
             "authoritative_live_title": "Lutein + zeaxanthin and omega-3 fatty acids for age-related macular degeneration: the Age-Related Eye Disease Study 2 (AREDS2) randomized clinical trial.",
@@ -111,7 +111,7 @@
           "title": "Lutein + zeaxanthin and omega-3 fatty acids for age-related macular degeneration: the Age-Related Eye Disease Study 2 (AREDS2) randomized clinical trial.",
           "design": "rct",
           "sample_size": 4203,
-          "primary_endpoint": "progression in lowest dietary intake quintile",
+          "primary_endpoint": "Secondary dietary-intake subgroup analysis from the same AREDS2 trial; primary hierarchy not established",
           "effect": "positive_strong",
           "verification_provenance": {
             "pmid_verified": true,
@@ -122,10 +122,11 @@
             "verified_source": "https://pubmed.ncbi.nlm.nih.gov/23644932/",
             "verified_at": "2026-09-21T07:39:42.986936+00:00",
             "abstract_evidence_quote": "To determine whether adding lutein + zeaxanthin, DHA + EPA, or both to the AREDS formulation decreases the risk of developing advanced AMD and to evaluate the effect of eliminating beta carotene, lowering zinc doses, or both in the AREDS formulation."
-          }
+          },
+          "scoring_eligible": false
         }
       ],
-      "effect_direction": "positive_strong",
+      "effect_direction": "mixed",
       "population_context": "Older adults (50-85y) with bilateral intermediate AMD or unilateral advanced AMD",
       "studied_dose_exposure": {
         "values": [
@@ -134,7 +135,7 @@
         "unit": "mg",
         "basis": "daily_intake"
       },
-      "applicability_decision": "Dose-applicable at >= 2 mg/day specifically in combination macular health / AREDS2 context; no generic antioxidant credit",
+      "applicability_decision": "AREDS2 primary comparison adding lutein 10 mg + zeaxanthin 2 mg to an AREDS background was nonsignificant (HR 0.90; P=.12). A retained dietary subgroup is not a second trial or primary positive outcome; substitution and subgroup interpretations do not establish standalone zeaxanthin efficacy.",
       "verification_result": "authoritative_pubmed_verified",
       "verification_provenance": {
         "verified_by": "scripts/api_audit/verify_literature_records.py",
@@ -175,7 +176,7 @@
           "pmid": "24284442",
           "title": "Leucine supplementation of a low-protein mixed macronutrient beverage enhances myofibrillar protein synthesis in young men: a double-blind, randomized trial.",
           "design": "rct",
-          "sample_size": 24,
+          "sample_size": 40,
           "primary_endpoint": "postprandial myofibrillar MPS",
           "effect": "positive_strong",
           "verification_provenance": {
@@ -209,16 +210,18 @@
         }
       ],
       "effect_direction": "positive_weak",
-      "population_context": "Adults and elderly undergoing resistance training or recovering from muscle atrophy",
+      "population_context": "Young men and older/young adults in acute EAA or protein-beverage studies; broader nutritional umbrella review includes older adults.",
       "studied_dose_exposure": {
         "values": [
-          2500,
-          3000
+          1742,
+          2747,
+          3000,
+          5000
         ],
         "unit": "mg",
         "basis": "per_serving_threshold"
       },
-      "applicability_decision": "Dose threshold (2-3 g) establishes applicability for muscle protein synthesis trigger; chronic standalone lean mass accretion without whole protein/exercise is mixed",
+      "applicability_decision": "Acute muscle-protein-synthesis surrogate studies used leucine within EAA mixtures (6.7 g with 26% or 41% leucine) or whey-protein beverages (3 or 5 g total leucine). These sources do not establish a universal standalone 2–3 g clinical threshold, muscle-mass benefit, or efficacy without the studied co-intervention.",
       "verification_result": "authoritative_pubmed_verified",
       "verification_provenance": {
         "verified_by": "scripts/api_audit/verify_literature_records.py",
@@ -242,8 +245,8 @@
           "title": "Betaine supplementation decreases plasma homocysteine in healthy adult participants: a meta-analysis.",
           "study_type": "meta_analysis_rct",
           "sample_size": 316,
-          "dose": ">= 1.5 g/day (median 4 g/day)",
-          "duration": "6 weeks",
+          "dose": ">= 4 g/day",
+          "duration": "6–24 weeks",
           "outcome": "significant reduction in plasma homocysteine (-1.23 umol/L)",
           "effect_direction": "positive_moderate",
           "verification_provenance": {
@@ -279,16 +282,16 @@
         }
       ],
       "effect_direction": "positive_weak",
-      "population_context": "Adults with hyperhomocysteinemia or strength-trained athletes",
+      "population_context": "Healthy adults in the homocysteine meta-analysis; experienced strength-trained men in the separate 2.5 g/day performance trial.",
       "studied_dose_exposure": {
         "values": [
-          1500,
+          4000,
           2500
         ],
         "unit": "mg",
         "basis": "daily_intake"
       },
-      "applicability_decision": "Dose-applicable at >= 1,500 mg/day for homocysteine reduction; sports performance applicable at >= 2,500 mg/day",
+      "applicability_decision": "The cited homocysteine meta-analysis studied >=4 g/day for 6–24 weeks in healthy adults and a biochemical endpoint, not a 1.5 g threshold or clinical outcomes in hyperhomocysteinemia. The separate 2.5 g/day, 6-week strength-trained cohort is a distinct intervention/population.",
       "verification_result": "authoritative_pubmed_verified",
       "verification_provenance": {
         "verified_by": "scripts/api_audit/verify_literature_records.py",

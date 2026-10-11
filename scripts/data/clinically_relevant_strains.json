@@ -3,7 +3,7 @@
     "description": "Clinically relevant probiotic strains and prebiotic compounds",
     "purpose": "probiotic_strain_validation",
     "schema_version": "5.1.0",
-    "last_updated": "2026-10-02",
+    "last_updated": "2026-10-11",
     "total_entries": 132,
     "data_source": null,
     "version": "2.4.0",
@@ -3288,7 +3288,7 @@
           "trial_family": "xian_fiber_probiotic_fc_37078654",
           "limitations": [
             "No time-by-group effect for frequency, stool form or straining; stool-form gains were within-arm and shared with fiber arms.",
-            "Probiotic arm also contained oligosaccharides; per-strain dose not stated."
+            "Probiotic arm also contained oligosaccharides; per-strain dose not stated in the abstract. Full-text Methods specifies 7.7 billion HN019 and 1.9 billion HN001 CFU per sachet, two sachets daily."
           ],
           "review_status": "clinician_approved",
           "study_design": "rct",
@@ -3377,8 +3377,9 @@
           ],
           "trial_family": "milan_pediatric_urti_probiotic_40085083",
           "limitations": [
-            "Median fever duration 3 vs 5 days (adjusted RR 0.64); 0.5 mL daily of a three-strain mixture, CFU not stated.",
-            "Combination evidence; nothing here attributes the effect to any single strain."
+            "Median fever duration 3 vs 5 days (adjusted RR 0.64); 0.5 mL daily of a three-strain mixture, CFU not stated in the abstract; full-text Methods specifies 1 billion CFU of each strain daily.",
+            "Combination evidence; nothing here attributes the effect to any single strain.",
+            "Published correction PMID 40327349 states the trial was registered after completion and refers to an author Comment about methods and additional limitations; Comment details remain unresolved. This is combination evidence, not an independent or individual-strain result."
           ],
           "review_status": "clinician_approved",
           "study_design": "rct",
@@ -3386,7 +3387,7 @@
           "blinding": "double",
           "funding": "unreported",
           "source_tier": "C",
-          "trial_registration": null,
+          "trial_registration": "NCT06052540",
           "authored_on": "2026-09-13",
           "authoring_method": "PubMed title/abstract read; Wave 1 bounded search (guidelines, meta-analyses, RCTs)",
           "context_schema_version": "1.1.0",
@@ -4817,12 +4818,14 @@
     },
     {
       "id": "STRAIN_INFANTIS_35624",
-      "standard_name": "Bifidobacterium infantis 35624",
+      "standard_name": "Bifidobacterium longum subsp. longum 35624",
       "aliases": [
         "B. infantis 35624",
         "Bifantis",
         "Bifidobacterium longum 35624",
-        "B. longum subsp. infantis 35624"
+        "B. longum subsp. infantis 35624",
+        "Bifidobacterium infantis 35624",
+        "B. longum subsp. longum 35624"
       ],
       "evidence_level": "high",
       "key_benefits": [
@@ -4931,7 +4934,8 @@
             "decision": "approve"
           }
         }
-      ]
+      ],
+      "notes": " Genome-based subspecies assignment is longum (PMID 27656878); older infantis designations are retained as historical label aliases, not a distinct strain."
     },
     {
       "id": "STRAIN_INFANTIS_M63",
@@ -7552,7 +7556,8 @@
           ],
           "trial_family": "bb12_lgg_preterm_route_37020105",
           "limitations": [
-            "Route-comparison design without placebo; microbiota composition is a surrogate; dose not stated in the abstract."
+            "Route-comparison design including a 14-neonate placebo arm; microbiota composition is a surrogate; dose not stated in the abstract.",
+            "Five randomized groups (N=68) included direct LGG (13), maternal LGG (17), direct LGG+Bb-12 (14), maternal combination (10), and placebo (14). Microbiota endpoints do not establish clinical benefit or equivalence across routes."
           ],
           "review_status": "clinician_approved",
           "study_design": "rct",
@@ -10917,19 +10922,20 @@
               "name": "transcutaneous_bilirubin_decline",
               "hierarchy": "unresolved",
               "kind": "surrogate",
-              "direction": "positive"
+              "direction": "unresolved"
             },
             {
               "name": "hospital_stay_duration",
               "hierarchy": "unresolved",
               "kind": "patient_important",
-              "direction": "positive"
+              "direction": "unresolved"
             }
           ],
           "trial_family": "m16v_bb12_jaundice_41994268",
           "limitations": [
             "About 20 infants per arm; the Bb-12 arm's neurodevelopment-domain signals are not recorded under this identity.",
-            "Industry-adjacent authorship (Diprobio); dose not stated in the abstract."
+            "Industry-adjacent authorship (Diprobio); dose not stated in the abstract.",
+            "Full-text Results attributes significant bilirubin-reduction and hospital-stay differences to the combined M-16V + Bb-12 arm versus control. M-16V-alone hospitalization values are descriptive; a positive individual-strain pairwise contrast is not established."
           ],
           "review_status": "clinician_approved",
           "study_design": "rct",
@@ -10963,7 +10969,7 @@
           ],
           "population": {
             "age_group": "infant",
-            "description": "284 healthy cesarean-born infants randomized to a synbiotic formula with M-16V and scGOS/lcFOS versus a prebiotic-only formula"
+            "description": "224 fully formula-fed healthy Chinese infants randomized (112 per formula arm); 54.8% born by C-section and the remainder vaginally; 60 breastfed infants were a nonrandomized reference group."
           },
           "purpose": "physiology",
           "condition": "gut_microbiota_after_cesarean_birth",
@@ -10992,18 +10998,19 @@
           ],
           "trial_family": "danone_m16v_csection_39915586",
           "limitations": [
-            "Microbiota restoration is a surrogate; formula matrix with prebiotic co-therapy; sponsor-run (Danone)."
+            "Microbiota restoration is a surrogate; formula matrix with prebiotic co-therapy; sponsor-run (Danone).",
+            "Active formula contained partially hydrolyzed whey protein whereas comparator contained intact protein; preparation differences prevent isolated attribution to M-16V. Randomized N=224, not 284."
           ],
           "review_status": "clinician_approved",
           "study_design": "rct",
-          "sample_size": 284,
+          "sample_size": 224,
           "blinding": "unreported",
           "funding": "industry",
           "source_tier": "C",
           "trial_registration": "NCT03520764",
           "authored_on": "2026-09-14",
           "authoring_method": "PubMed title/abstract read; Wave 2 bounded search (guidelines, meta-analyses, RCTs)",
-          "comparator": "prebiotic-only formula",
+          "comparator": "Intact-protein formula with scGOS/lcFOS; breastfed group is a separate nonrandomized reference.",
           "context_schema_version": "1.1.0",
           "evidence_role": "direct_rct",
           "component_registration_status": "fully_registered",
@@ -12551,7 +12558,7 @@
           ],
           "trial_family": "b1714_mood_42060410",
           "limitations": [
-            "Primary depression score not different from placebo at week 4 or 8; secondary week-4 signals did not persist to week 8."
+            "Primary depression score not different from placebo at week 4 or 8; PSQI and PHQ-9 week-4 differences did not persist at week 8; SF-36 vitality remained significant at week 8 (P=.042). These are secondary results, not a positive primary depression endpoint."
           ],
           "review_status": "clinician_approved",
           "study_design": "rct",
@@ -15297,12 +15304,13 @@
               5000000000.0
             ],
             "dosage_forms": [
-              "sachet"
+              "sachet",
+              "powder mixed with 3–5 mL breastmilk or safe water, administered by oral syringe"
             ],
             "duration_days": 28,
             "co_therapies": [],
             "dose_status": "verified",
-            "dose_basis": "measured_viability",
+            "dose_basis": "nominal_assigned_arm",
             "duration_basis": "fixed_protocol",
             "administration_frequency": "once_daily",
             "duration_note": "Approximately 5 billion CFU per sachet at end of shelf life (a minimum stability claim, not a measured administered dose), daily for 28 days.",
@@ -15847,24 +15855,23 @@
           "purpose": "treatment",
           "condition": "chronic_rhinosinusitis",
           "dose": {
-            "basis": "discrete_daily_arms",
+            "basis": "unresolved",
             "unit": "CFU",
-            "values": [
-              1000000000.0
-            ],
+            "values": [],
             "dosage_forms": [
               "tablet"
             ],
             "duration_days": 28,
             "co_therapies": [],
-            "dose_status": "verified",
-            "dose_basis": "per_strain_daily",
+            "dose_status": "source_not_reported",
+            "dose_basis": "not_applicable",
             "duration_basis": "fixed_protocol",
             "source_provenance": {
               "pmid": "19201289",
               "source_url": "https://pubmed.ncbi.nlm.nih.gov/19201289/",
               "location": "abstract"
-            }
+            },
+            "duration_note": "Source reports 500 million active cells per tablet twice daily (1 billion active cells/day); equivalence to CFU is unverified, so no numeric CFU dose is assigned."
           },
           "outcomes": [
             {
@@ -19063,15 +19070,21 @@
       "study_contexts": [],
       "literature_review": {
         "conclusion": "no_qualifying_human_evidence",
-        "reason": "no_human_research_found",
-        "reviewed_on": "2026-09-22",
+        "reason": "combination_only_human_research",
+        "reviewed_on": "2026-10-11",
         "reviewer": "Claude Opus 5 research review (closure D1, 2026-09-22), delegated by Sean B (engineering owner) to resolve reviews from established doctrine; not a clinician sign-off",
         "search_query": "(\"LbV 116\"[tiab] OR \"LbV116\"[tiab]) AND jensenii[tiab]",
-        "pmids_screened": [],
-        "combination_pmids": [],
+        "pmids_screened": [
+          "29065710",
+          "31012733"
+        ],
+        "combination_pmids": [
+          "29065710",
+          "31012733"
+        ],
         "ineligible_single_strain_pmids": [],
         "basis": "scripts/audits/closure_20260921/D1_STRAIN_REVIEW_20260922.json",
-        "note": "No human study names this designation with its species (records found are in vitro, animal or food-technology)."
+        "note": "Human combination research exists: oral four-strain yogurt trial (PMID 29065710) and related meta-analysis (PMID 31012733). These sources do not establish qualifying isolated strain efficacy; evidence_level none is retained."
       }
     },
     {
@@ -19107,15 +19120,21 @@
       "study_contexts": [],
       "literature_review": {
         "conclusion": "no_qualifying_human_evidence",
-        "reason": "no_human_research_found",
-        "reviewed_on": "2026-09-22",
+        "reason": "combination_only_human_research",
+        "reviewed_on": "2026-10-11",
         "reviewer": "Claude Opus 5 research review (closure D1, 2026-09-22), delegated by Sean B (engineering owner) to resolve reviews from established doctrine; not a clinician sign-off",
         "search_query": "(\"LbV 150N\"[tiab] OR \"LbV150N\"[tiab]) AND gasseri[tiab]",
-        "pmids_screened": [],
-        "combination_pmids": [],
+        "pmids_screened": [
+          "29065710",
+          "31012733"
+        ],
+        "combination_pmids": [
+          "29065710",
+          "31012733"
+        ],
         "ineligible_single_strain_pmids": [],
         "basis": "scripts/audits/closure_20260921/D1_STRAIN_REVIEW_20260922.json",
-        "note": "No human study names this designation with its species (records found are in vitro, animal or food-technology)."
+        "note": "Human combination research exists: oral four-strain yogurt trial (PMID 29065710) and related meta-analysis (PMID 31012733). These sources do not establish qualifying isolated strain efficacy; evidence_level none is retained."
       }
     },
     {
@@ -19151,15 +19170,21 @@
       "study_contexts": [],
       "literature_review": {
         "conclusion": "no_qualifying_human_evidence",
-        "reason": "no_human_research_found",
-        "reviewed_on": "2026-09-22",
+        "reason": "combination_only_human_research",
+        "reviewed_on": "2026-10-11",
         "reviewer": "Claude Opus 5 research review (closure D1, 2026-09-22), delegated by Sean B (engineering owner) to resolve reviews from established doctrine; not a clinician sign-off",
         "search_query": "(\"LbV 88\"[tiab] OR \"LbV88\"[tiab]) AND crispatus[tiab]",
-        "pmids_screened": [],
-        "combination_pmids": [],
+        "pmids_screened": [
+          "29065710",
+          "31012733"
+        ],
+        "combination_pmids": [
+          "29065710",
+          "31012733"
+        ],
         "ineligible_single_strain_pmids": [],
         "basis": "scripts/audits/closure_20260921/D1_STRAIN_REVIEW_20260922.json",
-        "note": "No human study names this designation with its species (records found are in vitro, animal or food-technology)."
+        "note": "Human combination research exists: oral four-strain yogurt trial (PMID 29065710) and related meta-analysis (PMID 31012733). These sources do not establish qualifying isolated strain efficacy; evidence_level none is retained."
       }
     },
     {
@@ -19682,15 +19707,19 @@
       "study_contexts": [],
       "literature_review": {
         "conclusion": "no_qualifying_human_evidence",
-        "reason": "no_human_research_found",
-        "reviewed_on": "2026-09-22",
+        "reason": "combination_only_human_research",
+        "reviewed_on": "2026-10-11",
         "reviewer": "Claude Opus 5 research review (closure D1, 2026-09-22), delegated by Sean B (engineering owner) to resolve reviews from established doctrine; not a clinician sign-off",
         "search_query": "(\"HA 108\"[tiab] OR \"HA-108\"[tiab] OR \"HA108\"[tiab]) AND casei[tiab]",
-        "pmids_screened": [],
-        "combination_pmids": [],
+        "pmids_screened": [
+          "37019866"
+        ],
+        "combination_pmids": [
+          "37019866"
+        ],
         "ineligible_single_strain_pmids": [],
         "basis": "scripts/audits/closure_20260921/D1_STRAIN_REVIEW_20260922.json",
-        "note": "No human study names this designation with its species (records found are in vitro, animal or food-technology)."
+        "note": "Human combination research exists: healthy-adult five-strain feeding/persistence study uses Lacticaseibacillus paracasei HA-108 (PMID 37019866); canonical casei/paracasei assignment remains unresolved. These sources do not establish qualifying isolated strain efficacy; evidence_level none is retained."
       }
     },
     {
@@ -19771,16 +19800,23 @@
               "direction": "null"
             },
             {
-              "name": "immune_parameters",
+              "name": "other_immune_parameters",
               "hierarchy": "unresolved",
               "kind": "surrogate",
               "direction": "null"
+            },
+            {
+              "name": "cd4_cd8_ratio",
+              "hierarchy": "secondary",
+              "kind": "surrogate",
+              "direction": "positive"
             }
           ],
           "trial_family": "lafti_l10_athletes_27363733",
           "limitations": [
             "Small trial (39 athletes); no primary endpoint named; incidence and severity did not differ.",
-            "2 x 10^10 CFU is stated without a per-day basis."
+            "2 x 10^10 CFU is stated without a per-day basis.",
+            "CD4+/CD8+ ratio differed after 14 weeks (P=.02), while most measured immune parameters were null; a surrogate does not establish general immune protection."
           ],
           "review_status": "clinician_approved",
           "study_design": "rct",
@@ -19979,7 +20015,7 @@
     }
   ],
   "prebiotics": {
-    "description": "Canonical prebiotic identity catalog. Enrichment and the v4 scorer share one matcher over these names and aliases (scripts/prebiotic_catalog.py); a disclosed prebiotic adds at most 1 point to the probiotic formulation pillar (dose-aware: >=3 g full credit, >=1 g half, unknown dose 0.25). Generic fiber never qualifies; an alias shared by two entries stays unresolved.",
+    "description": "Canonical prebiotic identity catalog. Enrichment uses scripts/prebiotic_catalog.py to match names and aliases and exports presence/name/dose. Current probiotic Formulation scoring has CFU disclosure, identity completeness and delivery components; this catalog does not itself confer a dose-based prebiotic bonus. Generic fiber never qualifies; ambiguous shared aliases remain unresolved. Entry-level clinical preparation/benefit provenance remains unreviewed.",
     "ingredients": [
       {
         "standard_name": "Inulin",
