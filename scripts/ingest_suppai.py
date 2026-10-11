@@ -281,7 +281,7 @@ def select_top_sentences(
     cleaned: list[dict[str, Any]] = []
     for s in sentences:
         paper = paper_meta.get(s.get("paper_id", "")) or {}
-        if paper.get("retraction", False):
+        if paper.get("retraction", False) or compress_paper_meta(str(s.get("paper_id", "")), paper_meta) is None:
             continue
         cleaned.append(s)
 
@@ -292,7 +292,7 @@ def select_top_sentences(
         # then break ties on (pmid, uid) ascending for byte-identity.
         return (
             tuple(-x for x in score),
-            str(rec.get("paper_id", "")),
+            str(compress_paper_meta(str(rec.get("paper_id", "")), paper_meta)["pmid"]),
             int(rec.get("uid", 0)),
         )
 
@@ -317,19 +317,20 @@ def compress_paper_meta(
     paper = paper_meta.get(pmid)
     if not isinstance(paper, dict):
         return None
+    # The dictionary key is a Supp.ai corpus identifier, not a PubMed ID.
+    # Missing attribution cannot safely fall back to that numeric-looking key.
+    actual = paper.get("pmid")
+    if isinstance(actual, bool) or not isinstance(actual, (int, str)):
+        return None
+    actual_text = str(actual).strip()
+    if not actual_text.isascii() or not actual_text.isdigit() or int(actual_text) <= 0:
+        return None
     return {
-        "pmid": paper.get("pmid") if isinstance(paper.get("pmid"), int) else _safe_int(pmid),
+        "pmid": int(actual_text),
         "year": paper.get("year"),
         "clinical_study": bool(paper.get("clinical_study", False)),
         "human_study": bool(paper.get("human_study", False)),
     }
-
-
-def _safe_int(value: Any) -> int | None:
-    try:
-        return int(value)
-    except (TypeError, ValueError):
-        return None
 
 
 # --------------------------------------------------------------------------- #
@@ -364,10 +365,14 @@ def build_research_pair_row(
     non_retracted_pmids: list[str] = []
     seen: set[str] = set()
     for s in sentences:
-        pmid = str(s.get("paper_id", ""))
-        if not pmid or pmid in seen:
+        internal_id = str(s.get("paper_id", ""))
+        compressed = compress_paper_meta(internal_id, paper_meta)
+        if compressed is None:
             continue
-        paper = paper_meta.get(pmid) or {}
+        pmid = str(compressed["pmid"])
+        if pmid in seen:
+            continue
+        paper = paper_meta.get(internal_id) or {}
         if paper.get("retraction", False):
             continue
         seen.add(pmid)
@@ -385,7 +390,8 @@ def build_research_pair_row(
     top_papers: list[dict[str, Any]] = []
     seen_pmids: set[str] = set()
     for s in top:
-        pmid = str(s.get("paper_id", ""))
+        compressed = compress_paper_meta(str(s.get("paper_id", "")), paper_meta)
+        pmid = str(compressed["pmid"])
         top_sentences_out.append(
             {
                 "pmid": pmid,
@@ -396,9 +402,7 @@ def build_research_pair_row(
         if pmid and pmid not in seen_pmids:
             seen_pmids.add(pmid)
             top_pmids.append(pmid)
-            compressed = compress_paper_meta(pmid, paper_meta)
-            if compressed is not None:
-                top_papers.append(compressed)
+            top_papers.append(compressed)
     top_pmids.sort()
     top_papers.sort(key=lambda p: str(p.get("pmid", "")))
 
