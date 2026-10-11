@@ -11,6 +11,6 @@
     "DSI_ANTICONV_FOLATE": "Folate management with anticonvulsants depends on seizure history, medication, and pregnancy context; a generic numeric floor cannot safely suppress clinician-review guidance.",
     "SSI_ZINC_COPPER": "Copper depletion reflects prolonged cumulative zinc exposure and baseline copper status, which a one-day label dose cannot fully model; retain the non-suppressed monitoring signal.",
     "SSI_KAVA_ACETAMINOPHEN": "This is a major shared-hepatotoxicity concern. It must remain visible regardless of an incomplete or low apparent supplement dose.",
-    "DSI_WAR_OMEGA3": "NIH ODS reports that most studies at 3–6 g/day do not significantly affect anticoagulant status and no clinically significant bleeding overall in reviewed evidence. PMID 17192169 is a 6g omega-3 plus aspirin and warfarin case after a fall, not a 1g warning floor. The combination remains a prescriber/INR context warning without an evidence-supported numeric suppression cutoff. Agent source review 2026-10-11; not a new clinician sign-off."
+    "DSI_WAR_OMEGA3": "This source-reviewed interaction remains a prescriber/INR context warning without a numeric suppression cutoff. The mechanism and evidence belong to DSI_WAR_OMEGA3 in curated_interactions_v1.json, not this exemption map. Agent source review 2026-10-11; not a new clinician sign-off."
   }
 }

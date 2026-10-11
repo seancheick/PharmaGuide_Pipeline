@@ -38,6 +38,7 @@ def test_manufacturer_history_preserves_date_scope_and_source(enricher,monkeypat
     assert '2024-01-01' in row['detail']
     assert 'Other product' in row['detail']
     assert 'resolved' in row['detail'].lower()
+    assert 'does not clear recalled units' in row['detail'].lower()
     assert 'product or lot' in row['detail'].lower()
     assert 'product-specific check' in row['detail'].lower()
     assert row['source_urls']==['https://www.fda.gov/test-history']
@@ -113,3 +114,34 @@ def test_real_siluetaya_event_keeps_lot_scope_without_duplicate_deduction(enrich
     assert 'US1220' in assessment['violations'][0]['product']
     assert '7500464462411' in assessment['violations'][0]['product']
     assert '06/2027' in assessment['violations'][0]['product']
+
+@pytest.mark.parametrize('recall_id', [None, 'N/A', 'F-2856'])
+def test_uncitable_history_cannot_drive_assessment(enricher, monkeypatch, recall_id):
+    monkeypatch.setitem(enricher.databases, 'manufacturer_violations', {'manufacturer_violations': [
+        {'id': 'UNSOURCED', 'manufacturer': 'Test Company', 'fda_recall_id': recall_id, 'reason': 'Uncorroborated history', 'total_deduction_applied': -10},
+        {'id': 'SOURCED', 'manufacturer': 'Test Company', 'fda_recall_id': None, 'fda_source_url': 'https://www.fda.gov/safety/recalls-market-withdrawals-safety-alerts/test-fixture', 'reason': 'Synthetic source-link control', 'total_deduction_applied': -2},
+    ]})
+    result = enricher._check_violations('Test Company', 'Test Company')
+    assert [v['violation_id'] for v in result['violations']] == ['SOURCED']
+    assert result['total_deduction_applied'] == -2
+
+
+def test_source_corrected_manufacturer_history_does_not_repeat_disproved_claims(enricher):
+    rows = {r['id']: r for r in enricher.databases['manufacturer_violations']['manufacturer_violations']}
+    assert rows['V051']['deaths_reported'] == 0
+    assert '2 deaths' not in str(rows['V051']).lower()
+    assert rows['V066']['violation_type'] == 'Class II Recall'
+    assert rows['V011']['violation_type'] == 'Class II Recall'
+    assert rows['V015']['violation_type'] == 'Class II Recall'
+    assert rows['V026']['is_resolved'] is True
+    assert rows['V062']['date'] == '2025-06-25'
+    assert rows['V039']['fda_recall_id'] == 'D-0397-2026'
+    assert rows['V042']['fda_recall_id'] == 'H-0302-2026'
+
+
+def test_resolution_and_scope_are_not_inferred_from_old_event(enricher):
+    rows = {r['id']: r for r in enricher.databases['manufacturer_violations']['manufacturer_violations']}
+    assert rows['V027']['is_resolved'] is False
+    assert 'as supplements' not in rows['V055']['product'].lower()
+    assert rows['V048']['cdc_outbreak_investigation'] is False
+    assert rows['V053']['cdc_outbreak_investigation'] is False

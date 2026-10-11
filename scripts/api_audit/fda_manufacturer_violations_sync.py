@@ -27,6 +27,7 @@ import re
 import sys
 from datetime import date, datetime, timedelta
 from pathlib import Path
+from urllib.parse import parse_qs, urlparse
 
 # Ensure scripts/ source module path is visible when run from repo root.
 REPO_ROOT = Path(__file__).resolve().parents[2]
@@ -655,6 +656,37 @@ def normalize_company_name(name: str) -> str:
     return re.sub(r"[^a-z0-9]+", "", (name or "").strip().lower())
 
 
+def _complete_recall_number(value: str = "") -> str:
+    number = (value or "").strip().upper()
+    return number if re.fullmatch(r"[FDH]-[0-9]+-20[0-9]{2}", number) else ""
+
+
+def build_regulatory_source_url(recall_number: str = "", link: str = "") -> str:
+    """Project an existing FDA/DOJ/DEA reference, never certify its clinical content.
+
+    Missing/placeholder recall numbers cannot produce a usable enforcement link.
+    Announcement and warning-letter URLs remain valid references without a number.
+    """
+    complete_number = _complete_recall_number(recall_number)
+    if link:
+        parsed = urlparse(link.strip())
+        if parsed.scheme in ("https", "http") and parsed.hostname in {
+            "fda.gov", "www.fda.gov", "accessdata.fda.gov",
+            "dea.gov", "www.dea.gov", "federalregister.gov", "www.federalregister.gov",
+            "justice.gov", "www.justice.gov",
+        }:
+            if parsed.hostname == "accessdata.fda.gov" and parsed.path.rstrip("/").endswith("/ires"):
+                number = parse_qs(parsed.query).get("recall_number", [""])[0]
+                if _complete_recall_number(number):
+                    return link.strip()
+            else:
+                return link.strip()
+    if complete_number:
+        return ("https://www.accessdata.fda.gov/scripts/ires/?action=Redirect"
+                f"&recall_number={complete_number}")
+    return ""
+
+
 def build_source_identifier(
     *,
     recall_number: str = "",
@@ -666,7 +698,7 @@ def build_source_identifier(
     date_value: str = "",
 ) -> str:
     """Build a deterministic fallback identifier for records without recall IDs."""
-    recall_number = (recall_number or "").strip().upper()
+    recall_number = _complete_recall_number(recall_number)
     if recall_number:
         return f"recall::{recall_number}"
 
@@ -693,11 +725,11 @@ def infer_violation_code(reason: str, classification: str, status: str) -> str:
         return "CRI_CONTA"
     if any(tok in r for tok in ["toxic", "poison", "death", "hospital", "serious"]):
         return "CRI_TOXIC"
-    if "class ii" in (classification or "").lower():
+    if re.search(r"\bclass ii\b", (classification or "").lower()):
         return "HIGH_CII"
-    if "class i" in (classification or "").lower():
+    if re.search(r"\bclass i\b", (classification or "").lower()):
         return "CRI_TOXIC"
-    if "class iii" in (classification or "").lower():
+    if re.search(r"\bclass iii\b", (classification or "").lower()):
         return "MOD_CIII_SING"
     if status.lower() in ["ongoing", "open", "active"]:
         return "HIGH_CGMP_CRIT"
@@ -793,7 +825,11 @@ def build_repeat_violation_lookup(
             lookback_days = 3 * 365
 
     counts: dict[str, int] = {}
+    seen_events: set[tuple[str, str]] = set()
     for entry in entries:
+        source_url = build_regulatory_source_url(entry.get("fda_recall_id") or "", entry.get("fda_source_url") or "")
+        if not source_url:
+            continue
         manufacturer_key = (
             (entry.get("manufacturer_family_id") or "").strip()
             or (entry.get("manufacturer_id") or "").strip()
@@ -803,8 +839,11 @@ def build_repeat_violation_lookup(
             continue
         _, entry_date = parse_entry_date(entry.get("date"), as_of)
         days_since = (as_of - entry_date).days
-        if days_since <= lookback_days:
+        event_id = build_source_identifier(recall_number=entry.get("fda_recall_id") or "", link=source_url)
+        identity = (manufacturer_key, event_id)
+        if 0 <= days_since <= lookback_days and identity not in seen_events:
             counts[manufacturer_key] = counts.get(manufacturer_key, 0) + 1
+            seen_events.add(identity)
 
     return {manufacturer_key: count > 1 for manufacturer_key, count in counts.items()}
 
@@ -815,10 +854,6 @@ def get_entry_grouping_key(entry: dict) -> str:
         or (entry.get("manufacturer_id") or "").strip()
         or normalize_company_name(entry.get("manufacturer", ""))
     )
-
-
-def get_new_record_grouping_key(manufacturer: str, manufacturer_id: str) -> str:
-    return manufacturer_id or normalize_company_name(manufacturer)
 
 
 def _ensure_alias_list(value) -> list[str]:
@@ -851,6 +886,13 @@ def _maybe_seed_related_cluster_metadata(entry: dict) -> None:
     cluster_aliases = _ensure_alias_list(entry.get("related_brand_cluster_aliases"))
     if cluster_aliases:
         entry["related_brand_cluster_aliases"] = cluster_aliases
+
+
+def build_user_facing_note(entry: dict) -> str:
+    """Describe the recorded event and scope without turning history into a product recall."""
+    return (f"{entry.get('violation_type') or 'Regulatory record'} for {entry.get('manufacturer') or 'Unknown company'} "
+            f"({entry.get('date') or 'date not recorded'}): {entry.get('reason') or 'See source notice'}. "
+            f"Affected scope: {entry.get('product') or 'See source notice'}.")
 
 
 def recalculate_all_entries(data: dict, deduction_expl: dict | None = None, as_of: date | None = None) -> int:
@@ -910,6 +952,8 @@ def recalculate_all_entries(data: dict, deduction_expl: dict | None = None, as_o
         entry["days_since_violation"] = days_since
         entry["recency_multiplier"] = recency
         entry["violation_code"] = violation_code
+        if not entry.get("contamination_type"):
+            entry["contamination_type"] = violation_code.lower()
         entry["severity_level"] = severity_level
         entry["base_deduction"] = base_deduction
         entry["multiple_product_lines"] = multiple_product_lines
@@ -925,13 +969,7 @@ def recalculate_all_entries(data: dict, deduction_expl: dict | None = None, as_o
                 link=entry.get("fda_source_url", ""),
                 date_value=normalized_date,
             )
-        entry["user_facing_note"] = (
-            f"⚠️ FDA Recall {entry.get('fda_recall_id') or ''} by {manufacturer} for "
-            f"{(entry.get('product') or 'Unknown').strip()}: "
-            f"{(entry.get('reason') or '').strip()} "
-            f"(classification {entry.get('violation_type') or 'Recall'}). "
-            f"Penalty: {total_deduction_applied} pts."
-        )
+        entry["user_facing_note"] = build_user_facing_note(entry)
 
         after = json.dumps(entry, sort_keys=True, default=str)
         if before != after:
@@ -1010,7 +1048,7 @@ def main() -> int:
         with open(output_path, "r", encoding="utf-8") as f:
             data = json.load(f)
         for violations in data.get("manufacturer_violations", []):
-            rid = str(violations.get("fda_recall_id", "")).strip().upper()
+            rid = _complete_recall_number(violations.get("fda_recall_id") or "")
             if rid:
                 existing["by_recall_id"][rid] = violations
             source_identifier = build_source_identifier(
@@ -1058,12 +1096,6 @@ def main() -> int:
     seen_batch_recall_ids: set[str] = set()
     seen_batch_source_identifiers: set[str] = set()
 
-    # if source contains 2+ recalls from same firm => repeat_violation handles 1. We derive later.
-    manufacturer_event_counts = {}
-    for entry in data.get("manufacturer_violations", []):
-        key = get_entry_grouping_key(entry)
-        if key:
-            manufacturer_event_counts[key] = manufacturer_event_counts.get(key, 0) + 1
     for record in raw_candidates:
         eligible, skip_reason = is_eligible_manufacturer_record(record)
         if not eligible:
@@ -1085,7 +1117,7 @@ def main() -> int:
                 skip_reasons[skip_reason] += 1
             continue
 
-        recall_number = (record.get("recall_number") or "").strip().upper()
+        recall_number = _complete_recall_number(record.get("recall_number") or "")
         if recall_number and recall_number in existing["by_recall_id"]:
             skipped += 1
             skip_reasons["existing_recall_id"] += 1
@@ -1110,9 +1142,6 @@ def main() -> int:
         d = date_from_openfda(record.get("recall_initiation_date") or record.get("report_date"))
         if d is None:
             d = as_of.isoformat()
-        date_obj = datetime.fromisoformat(d).date() if isinstance(d, str) else d
-        days_since = (as_of - date_obj).days
-        recency = recency_multiplier(days_since, deduction_expl)
         source_type = record.get("_source_type", "openfda_enforcement")
         product_text = (record.get("product_description") or record.get("product_quantity") or "Unknown").strip()
         reason_text = (record.get("reason_for_recall") or "").strip()
@@ -1134,39 +1163,12 @@ def main() -> int:
             skip_reasons["batch_duplicate_source"] += 1
             continue
 
-        # Look for hint of repeated or unresolved
-        key = get_new_record_grouping_key(mfr, normalize_company_name(mfr))
-        manufacturer_event_counts[key] = manufacturer_event_counts.get(key, 0) + 1
-
-        code = infer_violation_code(record.get("reason_for_recall"), record.get("classification"), record.get("status"))
-        base_deduction = lookup_base_deduction(code, deduction_expl)
-        severity_level = severity_level_from_code(code)
-
         is_resolved = str(record.get("status") or "").lower() in ["terminated", "completed", "closed", "resolved"]
-        # repeat inference is per manufacturer history and current batch
-        repeat = manufacturer_event_counts[key] > 1
-        multiple_product_lines = False
 
-        total_deduction_applied = compute_total_deduction(
-            base_deduction,
-            not is_resolved,
-            repeat,
-            multiple_product_lines,
-            recency,
-            deduction_expl,
+        fda_source_url = build_regulatory_source_url(
+            recall_number,
+            record.get("link", "") if source_type in ("fda_rss", "dea_federal_register") else "",
         )
-        total_deduction_cap = int(deduction_expl.get("total_deduction_cap", -25)) if deduction_expl else -25
-        if total_deduction_applied < total_deduction_cap:
-            total_deduction_applied = float(total_deduction_cap)
-
-        fda_source_url = ""
-        if recall_number:
-            fda_source_url = (
-                f"https://www.accessdata.fda.gov/scripts/ires/?action=Redirect"
-                f"&recall_number={recall_number}"
-            )
-        elif source_type in ("fda_rss", "dea_federal_register"):
-            fda_source_url = record.get("link", "")
 
         entry = {
             "id": f"V{next_id:03d}",
@@ -1174,7 +1176,6 @@ def main() -> int:
             "fda_source_url": fda_source_url,
             "source_identifier": source_identifier,
             "manufacturer": mfr,
-            "manufacturer_id": key or normalize_company_name(mfr),
             "manufacturer_family_id": None,
             "manufacturer_family_name": None,
             "manufacturer_family_aliases": [],
@@ -1184,14 +1185,8 @@ def main() -> int:
             "product": product_text,
             "product_category": "supplement",
             "violation_type": record.get("classification") or "Recall",
-            "severity_level": severity_level,
-            "violation_code": code,
-            "base_deduction": base_deduction,
             "reason": reason_text,
-            "contamination_type": code.lower(),
             "date": d,
-            "days_since_violation": days_since,
-            "recency_multiplier": recency,
             "illnesses_reported": int(record.get("report_date") or 0) if False else None,
             "deaths_reported": None,
             "states_affected": None,
@@ -1199,14 +1194,6 @@ def main() -> int:
             "is_resolved": is_resolved,
             "fda_action": "Recall",
             "fda_recall_id": recall_number,
-            "repeat_violation": repeat,
-            "multiple_product_lines": multiple_product_lines,
-            "total_deduction_applied": total_deduction_applied,
-            "user_facing_note": (
-                f"⚠️ FDA Recall {recall_number} by {mfr} for {(record.get('product_description') or record.get('product_quantity') or 'Unknown').strip()}: "
-                f"{(record.get('reason_for_recall') or '').strip()} (classification {record.get('classification') or 'Recall'}). "
-                f"Penalty: {total_deduction_applied} pts."
-            ),
             "internal_note": "Auto-generated by fda_manufacturer_violations_sync.py",
             "allergens": None,
             "cdc_outbreak_investigation": None,
@@ -1244,7 +1231,7 @@ def main() -> int:
         "active_outbreaks": 0,
     }
 
-    manufacturer_total = {}
+    repeat_manufacturers = set()
     for entry in data.get("manufacturer_violations", []):
         lvl = (entry.get("severity_level") or "").lower()
         stat_key = f"{lvl}_violations"
@@ -1255,11 +1242,12 @@ def main() -> int:
         else:
             stats["unresolved_count"] += 1
         manufacturer_key = get_entry_grouping_key(entry)
-        manufacturer_total[manufacturer_key] = manufacturer_total.get(manufacturer_key, 0) + 1
+        if entry.get("repeat_violation"):
+            repeat_manufacturers.add(manufacturer_key)
         if entry.get("cdc_outbreak_investigation"):
             stats["active_outbreaks"] += 1
 
-    stats["repeat_offenders"] = sum(1 for _, c in manufacturer_total.items() if c > 1)
+    stats["repeat_offenders"] = len(repeat_manufacturers)
 
     data.setdefault("_metadata", {})["last_updated"] = as_of.isoformat()
     data["_metadata"]["calculation_date"] = as_of.isoformat()

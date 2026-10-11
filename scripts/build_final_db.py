@@ -6505,7 +6505,7 @@ def _product_context_warnings(enriched: Dict) -> List[Dict]:
         company = safe_str(row.get("matched_manufacturer"))
         date = safe_str(row.get("date")) or "Date not recorded"
         product = safe_str(row.get("product")) or "Product scope not recorded"
-        status = "Resolved in our records" if json_bool(row.get("is_resolved")) else "Resolution not confirmed in our records"
+        status = "Recorded action marked resolved. This does not clear recalled units for use" if json_bool(row.get("is_resolved")) else "Resolution not confirmed in our records"
         url = safe_str(row.get("fda_source_url"))
         result.append({
             "type": "manufacturer_violation", "source": "manufacturer_violations",

@@ -16085,13 +16085,16 @@ class SupplementEnricherV3:
         manufacturer_norm = self._normalize_company_name(manufacturer)
 
         found = []
-        seen_recall_ids = set()
+        seen_event_ids = set()
         for violation in violations_list:
-            # Placeholder identifiers cannot substantiate an FDA recall.
-            # Preserve curated records for source repair, but do not let
-            # knowingly incomplete identifiers drive claims or deductions.
+            # Source references are projected by the FDA-sync owner. A missing
+            # citable reference must not become a public claim or a deduction.
+            # A usable URL is not itself proof: curated content still requires
+            # per-entry verification against that primary source.
+            from api_audit.fda_manufacturer_violations_sync import build_regulatory_source_url
             recall_id = str(violation.get('fda_recall_id') or '')
-            if re.search(r'(?i)^[FDH]-[0-9X]*X[0-9X]*(?:-[0-9X]+)?$', recall_id):
+            source_url = build_regulatory_source_url(recall_id, violation.get('fda_source_url') or '')
+            if not source_url:
                 continue
             mfr_name = violation.get('manufacturer', '')
             if not mfr_name:
@@ -16121,14 +16124,16 @@ class SupplementEnricherV3:
             if not match_source:
                 continue
 
-            # The FDA sync owner identifies recall events by recall number.
-            # Historical and synced rows of that same event are one assessment.
-            if recall_id:
-                from api_audit.fda_manufacturer_violations_sync import build_source_identifier
-                event_id = build_source_identifier(recall_number=recall_id)
-                if event_id in seen_recall_ids:
-                    continue
-                seen_recall_ids.add(event_id)
+            # One event identity owner for historical and synced records.
+            from api_audit.fda_manufacturer_violations_sync import build_source_identifier
+            event_id = build_source_identifier(
+                recall_number=recall_id, link=source_url,
+                manufacturer=mfr_name, product=violation.get('product') or '',
+                reason=violation.get('reason') or '', date_value=violation.get('date') or '',
+            )
+            if event_id in seen_event_ids:
+                continue
+            seen_event_ids.add(event_id)
             total_deduction_applied = violation.get('total_deduction_applied', 0.0)
             found.append({
                 "violation_id": violation.get('id', ''),
@@ -16147,7 +16152,7 @@ class SupplementEnricherV3:
                 # Path C authored field — user-facing brand-trust summary.
                 "brand_trust_summary": violation.get("brand_trust_summary"),
                 "product": violation.get("product"),
-                "fda_source_url": violation.get("fda_source_url"),
+                "fda_source_url": source_url,
                 "reason": violation.get("reason"),
                 "user_facing_note": violation.get("user_facing_note"),
                 "manufacturer_id": violation.get('manufacturer_id', ''),

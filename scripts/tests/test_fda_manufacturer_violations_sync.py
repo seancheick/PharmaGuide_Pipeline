@@ -47,7 +47,7 @@ def test_dry_run_reads_output_file_and_dedupes_same_run_recall_ids(monkeypatch, 
                     {
                         "id": "V010",
                         "manufacturer": "Existing Co",
-                        "fda_recall_id": "RCL-EXISTING",
+                        "fda_recall_id": "F-0001-2026",
                         "severity_level": "high",
                         "is_resolved": False,
                     }
@@ -58,7 +58,7 @@ def test_dry_run_reads_output_file_and_dedupes_same_run_recall_ids(monkeypatch, 
 
     records = [
         {
-            "recall_number": "RCL-EXISTING",
+            "recall_number": "F-0001-2026",
             "recalling_firm": "Existing Co",
             "product_description": "Existing supplement",
             "reason_for_recall": "undeclared sildenafil",
@@ -67,7 +67,7 @@ def test_dry_run_reads_output_file_and_dedupes_same_run_recall_ids(monkeypatch, 
             "recall_initiation_date": "20260401",
         },
         {
-            "recall_number": "RCL-NEW",
+            "recall_number": "F-0002-2026",
             "recalling_firm": "New Co",
             "product_description": "New supplement",
             "reason_for_recall": "undeclared sildenafil",
@@ -76,7 +76,7 @@ def test_dry_run_reads_output_file_and_dedupes_same_run_recall_ids(monkeypatch, 
             "recall_initiation_date": "20260401",
         },
         {
-            "recall_number": "RCL-NEW",
+            "recall_number": "F-0002-2026",
             "recalling_firm": "New Co",
             "product_description": "Duplicate same-run supplement",
             "reason_for_recall": "undeclared sildenafil",
@@ -181,7 +181,7 @@ def test_persist_mode_recalculates_existing_entry_fields(monkeypatch, tmp_path):
                         "product": "Legacy product A",
                         "reason": "undeclared sildenafil",
                         "violation_type": "Class I",
-                        "fda_recall_id": "OLD-1",
+                        "fda_recall_id": "F-0001-2025",
                         "date": "2025-04-01",
                         "days_since_violation": 1,
                         "recency_multiplier": 0.0,
@@ -202,7 +202,7 @@ def test_persist_mode_recalculates_existing_entry_fields(monkeypatch, tmp_path):
                         "product": "Legacy product B",
                         "reason": "undeclared sildenafil",
                         "violation_type": "Class I",
-                        "fda_recall_id": "OLD-2",
+                        "fda_recall_id": "F-0002-2025",
                         "date": "2024-12-01",
                         "days_since_violation": 1,
                         "recency_multiplier": 0.0,
@@ -268,7 +268,7 @@ def test_statistics_recompute_active_outbreaks_from_rows(monkeypatch, tmp_path):
                         "product": "Outbreak greens",
                         "reason": "salmonella contamination",
                         "violation_type": "Class I",
-                        "fda_recall_id": "OLD-1",
+                        "fda_recall_id": "F-0001-2025",
                         "date": "2026-01-01",
                         "severity_level": "critical",
                         "base_deduction": -15,
@@ -321,7 +321,7 @@ def test_repeat_violation_prefers_curated_manufacturer_family_id(monkeypatch, tm
                         "product": "Rhino product A",
                         "reason": "undeclared sildenafil",
                         "violation_type": "Class I",
-                        "fda_recall_id": "OLD-1",
+                        "fda_recall_id": "F-0001-2025",
                         "date": "2025-06-01",
                         "severity_level": "critical",
                         "base_deduction": -15,
@@ -341,7 +341,7 @@ def test_repeat_violation_prefers_curated_manufacturer_family_id(monkeypatch, tm
                         "product": "Rhino product B",
                         "reason": "undeclared tadalafil",
                         "violation_type": "Class I",
-                        "fda_recall_id": "OLD-2",
+                        "fda_recall_id": "F-0002-2025",
                         "date": "2025-08-01",
                         "severity_level": "critical",
                         "base_deduction": -15,
@@ -436,7 +436,8 @@ def test_repeat_violation_uses_existing_manufacturer_history(monkeypatch, tmp_pa
                         "id": "V010",
                         "manufacturer": "Herbal Doctor Remedies",
                         "manufacturer_id": "herbaldoctorremedies",
-                        "fda_recall_id": "",
+                        "fda_recall_id": "F-0004-2026",
+                        "date": "2026-01-01",
                         "severity_level": "high",
                         "is_resolved": False,
                     }
@@ -447,7 +448,7 @@ def test_repeat_violation_uses_existing_manufacturer_history(monkeypatch, tmp_pa
 
     records = [
         {
-            "recall_number": "RCL-NEW-2",
+            "recall_number": "F-0003-2026",
             "recalling_firm": "Herbal Doctor Remedies",
             "product_description": "Another supplement",
             "reason_for_recall": "undeclared sildenafil",
@@ -841,3 +842,38 @@ def test_publishing_release_runs_the_penalty_freshness_check_after_the_release_b
     assert "fda_manufacturer_violations_sync.py\" --check" in body
     assert "--recalculate-only" in body  # the failure message names the fix
     assert "--as-of" not in body  # compared against today, never a pinned date
+
+@pytest.mark.parametrize('number', ['', 'N/A', 'F-2XXX', 'F-2856'])
+def test_missing_or_incomplete_recall_id_cannot_become_enforcement_url(number):
+    assert sync.build_regulatory_source_url(number) == ''
+    assert sync.build_regulatory_source_url(number, 'https://www.accessdata.fda.gov/scripts/ires/?action=Redirect&recall_number=N/A') == ''
+
+
+def test_primary_announcement_is_usable_without_enforcement_number():
+    url = 'https://www.fda.gov/safety/recalls-market-withdrawals-safety-alerts/synthetic-fixture'
+    assert sync.build_regulatory_source_url('N/A', url) == url
+    assert sync.build_regulatory_source_url('D-0397-2026').endswith('recall_number=D-0397-2026')
+    assert not sync.build_regulatory_source_url('', 'https://www.fda.gov.evil.example/recall')
+
+
+def test_placeholder_number_uses_source_identity_instead_of_shared_na():
+    url = 'https://www.fda.gov/safety/recalls-market-withdrawals-safety-alerts/synthetic-fixture'
+    assert sync.build_source_identifier(recall_number='N/A', link=url) == 'link::' + url
+
+
+def test_repeat_violation_counts_distinct_citable_events_not_duplicate_rows():
+    from datetime import date
+    event = {'manufacturer': 'Synthetic Company', 'manufacturer_id': 'synthetic', 'date': '2026-01-01', 'fda_recall_id': 'H-0647-2026'}
+    assert sync.build_repeat_violation_lookup([dict(event, id='OLD'), dict(event, id='SYNC')], as_of=date(2026, 10, 11)) == {'synthetic': False}
+    unknown = {**event, 'fda_recall_id': 'N/A', 'date': '2026-02-01'}
+    assert sync.build_repeat_violation_lookup([event, unknown], as_of=date(2026, 10, 11)) == {'synthetic': False}
+    second = {**event, 'fda_recall_id': 'H-0648-2026'}
+    assert sync.build_repeat_violation_lookup([event, second], as_of=date(2026, 10, 11)) == {'synthetic': True}
+
+
+def test_recall_classes_are_not_substring_matches():
+    assert sync.infer_violation_code('Subpotent vitamin D', 'Class III', 'Ongoing') == 'MOD_CIII_SING'
+    assert sync.infer_violation_code('Generic quality deviation', 'Class II', 'Ongoing') == 'HIGH_CII'
+    assert sync.infer_violation_code('Generic quality deviation', 'Class I', 'Ongoing') == 'CRI_TOXIC'
+    # Hazard-specific rules still take priority over the administrative class.
+    assert sync.infer_violation_code('Undeclared sildenafil', 'Class II', 'Ongoing') == 'CRI_UNDRUG'
