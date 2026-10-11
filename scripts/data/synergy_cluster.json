@@ -161,7 +161,7 @@
         "l_glycine"
       ],
       "evidence_note": "PMID 30807974 is an observational magnesium/ADHD meta-analysis, not a stressed-volunteer treatment trial. PMID 30562392 used magnesium300 mg plus B6 30 mg for8 weeks in low-magnesium stressed adults: no overall superiority versus magnesium alone; a severe-stress subgroup improved more. These studies do not establish taurine/glycine sleep benefit, P5P-required magnesium transport, or the stored generic dose floors.",
-      "synergy_benefit_short": "The studied magnesium/B6 combination was not superior overall; a severe-stress subgroup result does not establish benefit from every matched partner.",
+      "synergy_benefit_short": "The studied magnesium/B6 combination was not superior overall. A subgroup result does not establish benefit from every matched partner.",
       "allow_single_ingredient": true,
       "primary_ingredients": [
         "magnesium",

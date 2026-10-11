@@ -745,8 +745,8 @@
         "metabolites": []
       },
       "ban_context": "adulterant_in_supplements",
-      "safety_warning": "A prescription diabetes drug found undeclared in supplements. Risk of potentially fatal lactic acidosis; low blood sugar can occur with other glucose-lowering medicines. Stop the supplement and talk to your doctor. This does not apply to prescribed metformin.",
-      "safety_warning_one_liner": "Hidden diabetes drug: risk of lactic acidosis. Stop the supplement and talk to your doctor.",
+      "safety_warning": "Hidden metformin in supplements risks fatal lactic acidosis and low blood sugar with other diabetes drugs. Stop the supplement and talk to your doctor. This does not apply to prescribed metformin.",
+      "safety_warning_one_liner": "Hidden diabetes drug risks lactic acidosis. Stop supplement and ask your doctor.",
       "policy_verification_status": "verified",
       "policy_verified_at": "2026-10-02"
     },
@@ -2565,7 +2565,7 @@
         "unii": null
       },
       "ban_context": "substance",
-      "safety_warning": "Estrogen-active compounds can affect hormone-sensitive conditions. Risk depends on the specific compound and exposure. Stop using an unprescribed supplement with synthetic estrogens and talk to your doctor.",
+      "safety_warning": "Estrogen-active compounds can affect hormone-sensitive conditions. Risk varies by compound and exposure. Stop an unprescribed synthetic-estrogen supplement and talk to your doctor.",
       "safety_warning_one_liner": "Endocrine-disrupting synthetic hormones. Stop using and talk to your doctor.",
       "inactive_policy": "penalize_anyway",
       "inactive_policy_reason": "Synthetic hormones — never an excipient"
@@ -11236,7 +11236,7 @@
       "external_ids": {},
       "ban_context": "substance",
       "safety_warning": "Unverified Cardarine-analogue identity and safety. Rodent tumor findings for parent GW501516 do not establish that every derivative causes cancer. Avoid unverified products and consult your doctor.",
-      "safety_warning_one_liner": "Unverified Cardarine derivative; safety unresolved. Avoid."
+      "safety_warning_one_liner": "Unverified Cardarine derivative. Safety unresolved. Avoid."
     },
     {
       "id": "RECALLED_GE_LABS_YKARINE",
@@ -11336,8 +11336,8 @@
       "cui_note": "Brand-scoped FDA advisory; no single UMLS ingredient concept represents this multi-compound product.",
       "external_ids": {},
       "ban_context": "adulterant_in_supplements",
-      "safety_warning": "FDA found hidden trendione in GE Labs Ykarine after a reported stroke. FDA advises not to use and to discard it. If using regularly, consult a clinician immediately about safe discontinuation because rapid steroid cessation can cause dangerous withdrawal.",
-      "safety_warning_one_liner": "Hidden steroid: do not use; current users consult a clinician immediately before stopping.",
+      "safety_warning": "FDA found hidden trendione in supplement Ykarine after a reported stroke. Do not use. Regular users consult a clinician immediately before stopping because abrupt steroid cessation risks withdrawal.",
+      "safety_warning_one_liner": "Hidden steroid. Current users consult a clinician immediately before stopping.",
       "policy_verification_status": "verified",
       "policy_verified_at": "2026-10-02"
     },
@@ -11999,7 +11999,7 @@
           "supports_claims": [
             "regulatory_action"
           ],
-          "evidence_summary": "FDA recall due to undeclared 1,4-DMAA, aniracetam, and tianeptine in supplement",
+          "evidence_summary": "FDA-hosted company recall announcement identifies undeclared tianeptine,1,4-DMAA and aniracetam. It describes potentially life-threatening tianeptine overdose and directs consumers to stop using Modern Warrior Ready.",
           "fda_recall_url": "https://www.fda.gov/safety/recalls-market-withdrawals-safety-alerts/modern-warrior-recalls-modern-warrior-ready-dietary-supplement-due-undeclared-14-dmaa-and-aniracetam"
         },
         {
@@ -12011,6 +12011,16 @@
             "regulatory_action"
           ],
           "evidence_summary": "FDA enforcement report H-1178-2026: Class I recall, status Ongoing when read 2026-10-02; reason: tianeptine, 1,4-DMAA and aniracetam."
+        },
+        {
+          "type": "fda_advisory",
+          "title": "FDA: Tianeptine Products Linked to Serious Harm, Overdoses, Death",
+          "url": "https://www.fda.gov/consumers/consumer-updates/tianeptine-products-linked-serious-harm-overdoses-death",
+          "evidence_grade": "R",
+          "supports_claims": [
+            "clinical_risk"
+          ],
+          "evidence_summary": "FDA describes tianeptine abuse potential, difficulty stopping and opioid-like withdrawal, as well as slowed or stopped breathing, coma and death with abuse or misuse. These establish tianeptine risk, not observed patient outcomes from this recalled product."
         }
       ],
       "source_category": "recalled_supplement_brands",
@@ -12052,7 +12062,7 @@
       "cui_note": "Product recall record is intentionally null-CUI because a single UMLS ingredient or product concept would misrepresent this recalled branded product/formulation.",
       "external_ids": {},
       "ban_context": "adulterant_in_supplements",
-      "safety_warning": "Modern Warrior Ready was recalled after FDA found tianeptine,1,4-DMAA and aniracetam. Tianeptine has serious overdose and dependence risks; undeclared drugs can interact with medicines. Stop using affected recalled product and promptly consult a doctor, especially after regular use.",
+      "safety_warning": "Hidden tianeptine, DMAA and aniracetam in recalled supplement Modern Warrior Ready. Tianeptine risks overdose and dependence. Stop using and promptly consult a doctor, especially after regular use.",
       "safety_warning_one_liner": "Recalled for tianeptine,DMAA and aniracetam. Stop using and consult a doctor.",
       "policy_verification_status": "verified",
       "policy_verified_at": "2026-10-02"
@@ -12578,7 +12588,7 @@
       "cui_note": "Product recall record is intentionally null-CUI because a single UMLS ingredient or product concept would misrepresent this recalled branded product/formulation.",
       "external_ids": {},
       "ban_context": "contamination_recall",
-      "safety_warning": "The company recalled ReBoost for identified yeast,mold and Achromobacter contamination; ClearLife may also be affected by Achromobacter. Stop using affected recalled product and consult a doctor if symptoms occur.",
+      "safety_warning": "ReBoost was recalled for yeast, mold and Achromobacter. ClearLife may also be affected by Achromobacter. Stop using affected recalled product and consult a doctor if symptoms occur.",
       "safety_warning_one_liner": "Recalled for microbial contamination. Do not use this recalled product.",
       "policy_verification_status": "verified",
       "policy_verified_at": "2026-10-02"
@@ -12910,7 +12920,7 @@
       "cui_note": "Brand-scoped warning-letter record for unapproved drugs; no single UMLS concept represents these products.",
       "external_ids": {},
       "ban_context": "adulterant_in_supplements",
-      "safety_warning": "FDA issued a warning letter for research-labelled TITAN SARMS products sold for human use as unapproved drugs. SARMs can cause serious liver and cardiovascular harm. Stop using and consult a doctor.",
+      "safety_warning": "FDA warned of unapproved drugs in TITAN SARMS products sold for human use. SARMs can cause serious liver and cardiovascular harm. Stop using and consult a doctor.",
       "safety_warning_one_liner": "Sold unapproved SARM drugs. Stop using and talk to your doctor.",
       "policy_verification_status": "verified",
       "policy_verified_at": "2026-09-26"
@@ -15445,7 +15455,7 @@
         "pubchem_cid": 112500385
       },
       "ban_context": "substance",
-      "safety_warning": "A synthetic steroid marketed as a supplement. Steroids and steroid-like products are associated with serious liver and cardiovascular harm. Consult a health care professional immediately for safe discontinuation; quickly stopping steroid products can cause dangerous withdrawal.",
+      "safety_warning": "Steroid supplements are associated with serious liver and cardiovascular harm. Consult a clinician immediately for safe discontinuation because quickly stopping steroid products risks withdrawal.",
       "safety_warning_one_liner": "Steroid product: consult a clinician immediately before stopping.",
       "policy_verification_status": "verified",
       "policy_verified_at": "2026-09-27"
@@ -15542,7 +15552,7 @@
         "pubchem_cid": 17311
       },
       "ban_context": "substance",
-      "safety_warning": "A synthetic steroid marketed as a supplement. Steroids and steroid-like products are associated with serious liver and cardiovascular harm. Consult a health care professional immediately for safe discontinuation; quickly stopping steroid products can cause dangerous withdrawal.",
+      "safety_warning": "Steroid supplements are associated with serious liver and cardiovascular harm. Consult a clinician immediately for safe discontinuation because quickly stopping steroid products risks withdrawal.",
       "safety_warning_one_liner": "Steroid product: consult a clinician immediately before stopping.",
       "policy_verification_status": "verified",
       "policy_verified_at": "2026-09-27"
@@ -15635,7 +15645,7 @@
       "cui_note": "No PubChem, UNII or UMLS record exists for this designer steroid; identity rests on the printed chemical name.",
       "external_ids": {},
       "ban_context": "substance",
-      "safety_warning": "A synthetic steroid marketed as a supplement. Steroids and steroid-like products are associated with serious liver and cardiovascular harm. Consult a health care professional immediately for safe discontinuation; quickly stopping steroid products can cause dangerous withdrawal.",
+      "safety_warning": "Steroid supplements are associated with serious liver and cardiovascular harm. Consult a clinician immediately for safe discontinuation because quickly stopping steroid products risks withdrawal.",
       "safety_warning_one_liner": "Steroid product: consult a clinician immediately before stopping.",
       "policy_verification_status": "verified",
       "policy_verified_at": "2026-09-27"
@@ -15892,8 +15902,8 @@
         ]
       },
       "ban_context": "adulterant_in_supplements",
-      "safety_warning": "A prescription corticosteroid found undeclared in supplements. It can suppress adrenal function; stopping abruptly after prolonged use can cause serious withdrawal. Consult a healthcare professional immediately for assessment and safe discontinuation.",
-      "safety_warning_one_liner": "Hidden prescription steroid. Consult a healthcare professional immediately before stopping; withdrawal can be dangerous.",
+      "safety_warning": "Hidden corticosteroid in supplements can suppress adrenal function. Abrupt stopping after prolonged use risks serious withdrawal. Consult a clinician immediately for safe discontinuation.",
+      "safety_warning_one_liner": "Hidden steroid. Consult a clinician immediately before stopping.",
       "policy_verification_status": "verified",
       "policy_verified_at": "2026-10-02"
     },
@@ -16318,7 +16328,7 @@
       "external_ids": {},
       "ban_context": "substance",
       "safety_warning": "A kratom-derivative marketing name with unresolved chemical identity and human risk. Avoid unverified products and discuss use with your doctor.",
-      "safety_warning_one_liner": "Unverified kratom derivative; identity and safety unresolved. Avoid."
+      "safety_warning_one_liner": "Unverified kratom derivative. Identity and safety unresolved. Avoid."
     },
     {
       "id": "SPIKE_PHENOLPHTHALEIN",
@@ -16905,7 +16915,7 @@
       "external_ids": {},
       "ban_context": "substance",
       "safety_warning": "Unverified tianeptine-analogue identity and safety. Parent-drug opioid warnings do not establish every derivative's effects. Avoid unverified products and consult your doctor.",
-      "safety_warning_one_liner": "Unverified tianeptine derivative; safety unresolved. Avoid."
+      "safety_warning_one_liner": "Unverified tianeptine derivative. Safety unresolved. Avoid."
     },
     {
       "id": "STIM_ALPHA_PHP",
@@ -18132,7 +18142,7 @@
         "metabolites": []
       },
       "ban_context": "substance",
-      "safety_warning": "A synthetic laxogenin derivative marketed for muscle building, with unknown human safety. FDA determined it is not a dietary ingredient; OPSS lists it as prohibited for Service Members. Stop using and talk to your doctor.",
+      "safety_warning": "Unknown human safety. FDA determined this synthetic derivative is not a dietary ingredient. OPSS prohibits it for Service Members. Stop using and talk to your doctor.",
       "safety_warning_one_liner": "Not a lawful supplement ingredient. Stop using and talk to your doctor.",
       "inactive_policy": "penalize_anyway",
       "inactive_policy_reason": "Synthetic anabolic — never an excipient",
@@ -19133,8 +19143,8 @@
       "cui": "C0891893",
       "external_ids": {},
       "ban_context": "substance",
-      "safety_warning": "A thyroid-hormone analog with limited human safety evidence. Experimental animal dosing affected thyroid regulation and heart weight; a two-person human study cannot rule out risk. Stop using an unsupervised supplement and consult your doctor.",
-      "safety_warning_one_liner": "Thyroid-hormone analog; safety unresolved. Stop using and talk to your doctor.",
+      "safety_warning": "Thyroid-hormone analog with limited human evidence. Animal dosing affected thyroid regulation and heart weight. Stop an unsupervised supplement and consult your doctor.",
+      "safety_warning_one_liner": "Thyroid-hormone analog. Safety unresolved. Stop and talk to your doctor.",
       "inactive_policy": "penalize_anyway",
       "inactive_policy_reason": "Thyroid pro-hormone — never an excipient"
     },
@@ -19215,7 +19225,7 @@
         "metabolites": []
       },
       "ban_context": "adulterant_in_supplements",
-      "safety_warning": "Docusate sodium is an OTC stool-softener drug. A supplement label or detection alone does not establish that it was undisclosed. Talk to your doctor before continuing a supplement containing it.",
+      "safety_warning": "An OTC stool-softener drug. Its presence in a supplement does not prove it was undisclosed. Talk to your doctor before continuing a supplement containing it.",
       "safety_warning_one_liner": "OTC drug found in supplements. Talk to your doctor.",
       "inactive_policy": "excipient_acceptable",
       "inactive_policy_reason": "FDA-approved softgel emulsifier; OTC stool softener at therapeutic doses, but legitimate excipient at trace levels"
@@ -22651,8 +22661,8 @@
       "entity_type": "ingredient",
       "match_mode": "active",
       "ban_context": "substance",
-      "safety_warning": "Serious cardiovascular events have been reported after bitter-orange-containing supplements, usually with other ingredients; bitter orange's contribution is unclear. Stop using a concentrated supplement and consult your doctor.",
-      "safety_warning_one_liner": "Cardiovascular concerns reported with bitter-orange products. Stop using and talk to your doctor.",
+      "safety_warning": "Cardiovascular events were reported after bitter-orange supplements, often with other ingredients. Its contribution is unclear. Stop using a concentrated supplement and consult your doctor.",
+      "safety_warning_one_liner": "Heart concerns with bitter-orange products. Stop and talk to your doctor.",
       "review": {
         "status": "validated",
         "last_reviewed_at": "2026-04-26",
@@ -24865,7 +24875,7 @@
       },
       "cui": "C0675409",
       "ban_context": "watchlist",
-      "safety_warning": "Ginkgolic acids are allergenic ginkgo impurities; cultured neuron toxicity is experimental evidence. Standardized EGb 761 limits them to less than 5 ppm. A declaration alone does not show an under-purified extract; review the measured concentration and sourcing with your doctor.",
+      "safety_warning": "Allergenic ginkgo impurities. EGb 761 limits them to less than 5 ppm. A label alone does not prove under-purification. Talk to your doctor about measured concentration and sourcing.",
       "safety_warning_one_liner": "Allergenic ginkgo impurity and quality risk. Avoid under-purified extracts.",
       "review": {
         "status": "validated",

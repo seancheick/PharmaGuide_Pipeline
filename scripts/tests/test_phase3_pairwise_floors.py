@@ -42,38 +42,25 @@ def test_presence_pairs_carry_no_floor():
             assert not e.get("dose_threshold"), f"{e['id']} presence pair wrongly floored"
 
 
+# October 11 content review removed unsupported suppression floors; other
+# retained floors remain separately source-qualified, not blanket re-approved.
 EXPECTED_FLOORED_IDS = {
-    'DSI_ANTICOAG_HORSE_CHESTNUT',
-    'DSI_ANTICOAG_TURMERIC',
-    'DSI_ANTIHYP_ASHWAGANDHA',
-    'DSI_ANTIHYP_COQ10',
-    'DSI_ANTIHYP_MAGNESIUM',
-    'DSI_ANTIHYP_VITD',
-    'DSI_ANTIPSYCH_MELATONIN',
-    'DSI_BENZO_MELATONIN',
-    'DSI_DM_ASHWAGANDHA',
-    'DSI_DM_BITTERMELON',
-    'DSI_DM_CHROMIUM',
-    'DSI_DM_CINNAMON',
-    'DSI_DM_FENUGREEK',
-    'DSI_DM_GYMNEMA',
-    'DSI_FISHOIL_GINKGO',
-    'DSI_FISHOIL_VITE',
-    'DSI_MELATONIN_VALERIAN',
-    'DSI_METFORMIN_ALA',
-    'DSI_NSAID_FISHOIL',
-    'DSI_NSAID_GARLIC',
-    'DSI_NSAID_GINKGO',
-    'DSI_OC_SOY',
-    'DSI_SEDATIVES_ASHWAGANDHA',
-    'DSI_SEDATIVES_PASSIONFLOWER',
-    'DSI_SEDATIVES_VALERIAN',
-    'DSI_SSRI_GINKGO',
     'DSI_STATINS_NIACIN',
-    'DSI_WAR_GARLIC',
-    'DSI_WAR_GINGER',
-    'DSI_WAR_TURMERIC',
+    'DSI_SSRI_GINKGO',
+    'DSI_DM_CHROMIUM',
+    'DSI_DM_GYMNEMA',
+    'DSI_NSAID_FISHOIL',
+    'DSI_NSAID_GINKGO',
+    'DSI_BENZO_MELATONIN',
     'SSI_ZINC_COPPER',
+    'DSI_ANTIPSYCH_MELATONIN',
+    'DSI_ANTICOAG_HORSE_CHESTNUT',
+    'DSI_DM_ASHWAGANDHA',
+    'DSI_SEDATIVES_ASHWAGANDHA',
+    'DSI_ANTIHYP_VITD',
+    'DSI_FISHOIL_VITE',
+    'DSI_FISHOIL_GINKGO',
+    'DSI_MELATONIN_VALERIAN',
 }
 
 def test_only_source_supported_pairs_are_floored():
@@ -88,11 +75,8 @@ def test_only_source_supported_pairs_are_floored():
 EXPECTED = {
     "DSI_FISHOIL_VITE": (180, "mg"),        # vitamin E bleeding, 400 IU floor normalized conservatively
     "DSI_DM_CHROMIUM": (200, "mcg"),        # chromium glucose, reused
-    "DSI_METFORMIN_ALA": (600, "mg"),       # ALA glucose, reused
-    "DSI_WAR_GARLIC": (600, "mg"),          # garlic bleeding, reused
     "DSI_SSRI_GINKGO": (120, "mg"),         # ginkgo bleeding, reused
     "DSI_STATINS_NIACIN": (1000, "mg"),     # pharmacologic niacin / statin myopathy
-    "DSI_OC_SOY": (100, "mg"),              # soy isoflavones, pair-stated
     "DSI_BENZO_MELATONIN": (5, "mg"),       # melatonin sedation, pair-stated
     "SSI_ZINC_COPPER": (25, "mg"),           # prolonged supplemental zinc context
 }
@@ -104,3 +88,11 @@ def test_representative_floors_locked():
         dt = BY_ID[rid].get("dose_threshold") or {}
         assert (dt.get("value"), dt.get("unit")) == (value, unit), \
             f"{rid} floor {(dt.get('value'), dt.get('unit'))} != {(value, unit)}"
+
+
+def test_removed_unsupported_floors_cannot_suppress_presence_warnings():
+    for rid in ("DSI_METFORMIN_ALA", "DSI_WAR_GARLIC", "DSI_OC_SOY"):
+        row = BY_ID[rid]
+        assert row["materiality"] == "presence"
+        assert not row.get("dose_threshold")
+        assert row.get("severity"), "Removing an unsupported floor must retain the warning"

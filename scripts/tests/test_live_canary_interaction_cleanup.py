@@ -91,7 +91,8 @@ def test_fluvoxamine_melatonin_rule_is_not_broadened_to_all_ssris():
 
     assert rule["agent1_id"] == "42355"
     assert rule["agent1_name"] == "Fluvoxamine"
-    assert rule["source_pmids"] == ["10877005"]
+    assert rule["source_pmids"] == ["10668847"]
+    assert "Fluvoxamine" in rule["agent1_name"]
     assert "other ssris" not in rule["management"].lower()
 
 

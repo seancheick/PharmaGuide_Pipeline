@@ -223,7 +223,7 @@
             "https://www.fda.gov/food/hfp-constituent-updates/fda-launches-new-directory-ingredients-used-products-marketed"
           ],
           "alert_headline": "Avoid unsupervised use during pregnancy",
-          "alert_body": "Pregnancy safety of 7-keto DHEA is uncertain. Do not use it during pregnancy without obstetric guidance.",
+          "alert_body": "If you are pregnant, do not use 7-keto DHEA without obstetric guidance. Pregnancy safety is uncertain.",
           "informational_note": "7-Keto DHEA is hormonally active — relevant to anyone pregnant or planning pregnancy.",
           "profile_gate": {
             "gate_type": "profile_flag",
@@ -418,7 +418,7 @@
             "https://pubmed.ncbi.nlm.nih.gov/23397375/"
           ],
           "alert_headline": "Stimulant — may raise blood pressure",
-          "alert_body": "Synephrine-containing bitter orange products may raise cardiovascular concerns, especially with caffeine. If you have hypertension or take blood-pressure medicine, avoid unsupervised use and discuss it with your prescriber.",
+          "alert_body": "Bitter-orange synephrine raises cardiovascular concerns, especially with caffeine. If you have hypertension or take blood-pressure medicine, avoid unsupervised use and ask your prescriber.",
           "informational_note": "Bitter orange has stimulant effects relevant to people with high blood pressure.",
           "profile_gate": {
             "gate_type": "condition",
@@ -453,7 +453,7 @@
             "https://pubmed.ncbi.nlm.nih.gov/23397375/"
           ],
           "alert_headline": "May reduce blood-pressure medication effect",
-          "alert_body": "Synephrine-containing bitter orange products may raise cardiovascular concerns, especially with caffeine. If you have hypertension or take blood-pressure medicine, avoid unsupervised use and discuss it with your prescriber.",
+          "alert_body": "Bitter-orange synephrine raises cardiovascular concerns, especially with caffeine. If you have hypertension or take blood-pressure medicine, avoid unsupervised use and ask your prescriber.",
           "informational_note": "Bitter orange is a stimulant — relevant to people on antihypertensive medications.",
           "profile_gate": {
             "gate_type": "drug_class",
@@ -4414,7 +4414,7 @@
             "https://www.nccih.nih.gov/health/goldenseal"
           ],
           "alert_headline": "Affects how many drugs are processed",
-          "alert_body": "Goldenseal can inhibit CYP2D6. This may reduce activation of codeine or tramadol and change levels of some antidepressants. Do not combine it with CYP2D6-substrate medicines unless your prescriber clears the specific combination.",
+          "alert_body": "Goldenseal inhibits CYP2D6 and may change antidepressant levels or codeine/tramadol activation. Do not combine with CYP2D6-substrate medicines unless your prescriber clears the specific combination.",
           "informational_note": "Goldenseal inhibits CYP2D6 in addition to CYP3A4 — relevant to anyone on antidepressants, opioids for pain, or tamoxi...",
           "profile_gate": {
             "gate_type": "drug_class",
@@ -5377,7 +5377,7 @@
             "https://pubmed.ncbi.nlm.nih.gov/9803987/"
           ],
           "alert_headline": "May affect blood-pressure control",
-          "alert_body": "Iron interactions with blood-pressure medicine depend on the specific drug. Ask your prescriber about your medicine and supplement timing; evidence for methyldopa or captopril should not be applied to every antihypertensive.",
+          "alert_body": "If you take blood-pressure medicine, ask your prescriber about iron and timing. Methyldopa or captopril findings do not establish the same interaction with every antihypertensive.",
           "informational_note": "Iron can affect blood pressure — relevant to people on antihypertensive medications.",
           "profile_gate": {
             "gate_type": "drug_class",
@@ -11155,7 +11155,7 @@
             "https://pubmed.ncbi.nlm.nih.gov/23946031/"
           ],
           "alert_headline": "May add to blood-thinner effects",
-          "alert_body": "Case reports describe INR changes in warfarin users taking glucosamine, sometimes with chondroitin. Tell your prescriber before starting, stopping or increasing these supplements and ask about INR monitoring.",
+          "alert_body": "Case reports describe INR changes with warfarin and glucosamine, sometimes with chondroitin. Tell your prescriber before starting, stopping or increasing them and ask about INR monitoring.",
           "informational_note": "Glucosamine can affect clotting — relevant to people on anticoagulants.",
           "profile_gate": {
             "gate_type": "drug_class",
@@ -13846,7 +13846,7 @@
             "https://www.fda.gov/consumers/consumer-updates/grapefruit-juice-and-some-drugs-dont-mix"
           ],
           "alert_headline": "Muscle-toxicity risk with statins",
-          "alert_body": "Until your prescriber reviews the specific combination, avoid bergamot products. Preparations differ in furanocoumarin content, and grapefruit-related concerns apply to susceptible CYP3A4-metabolized statins; they should not imply the same exposure increase for pravastatin.",
+          "alert_body": "If you take a statin, avoid bergamot until your prescriber reviews it. Furanocoumarin content varies. Grapefruit-related CYP3A4 concerns do not imply the same exposure increase for pravastatin.",
           "informational_note": "Grapefruit/bergamot interact with simvastatin and lovastatin — relevant to anyone on those statins.",
           "profile_gate": {
             "gate_type": "drug_class",
@@ -15134,7 +15134,7 @@
             "https://pubmed.ncbi.nlm.nih.gov/24131672/"
           ],
           "alert_headline": "May alter liver-metabolized drugs",
-          "alert_body": "Some schisandra preparations can change exposure to prescription drugs through liver-enzyme effects. If you have liver disease or take medicines, ask your clinician about the specific product; this is not evidence that schisandra itself necessarily accumulates.",
+          "alert_body": "Some schisandra preparations change drug exposure through liver enzymes. If you have liver disease or take medicines, ask about the specific product. This does not prove schisandra itself accumulates.",
           "informational_note": "Schisandra depends on liver clearance — relevant to people with liver conditions.",
           "profile_gate": {
             "gate_type": "condition",
@@ -15921,8 +15921,8 @@
             "https://pubmed.ncbi.nlm.nih.gov/31927673/",
             "https://pubmed.ncbi.nlm.nih.gov/18312197/"
           ],
-          "alert_headline": "Live probiotics can rarely cause infection in vulnerable users",
-          "alert_body": "Live probiotics can rarely cause bloodstream infection in severely immunocompromised people. If you take immunosuppressive medicine, ask your specialist whether the specific live-organism product is appropriate.",
+          "alert_headline": "Live probiotics rarely cause infection in vulnerable users",
+          "alert_body": "Live probiotics rarely cause bloodstream infection in severely immunocompromised people. If you take immunosuppressive medicine, ask your specialist about the specific live-organism product.",
           "informational_note": "Probiotics affects immune function — relevant to people on immunosuppressants.",
           "profile_gate": {
             "gate_type": "drug_class",
@@ -15980,7 +15980,7 @@
             "https://pubmed.ncbi.nlm.nih.gov/22771630/"
           ],
           "alert_headline": "May affect platelet activity",
-          "alert_body": "Laboratory platelet findings and a null oral human study leave andrographis bleeding effects uncertain. If you have a bleeding disorder or take blood thinners, discuss the specific preparation with your clinician.",
+          "alert_body": "Laboratory platelet findings and a null oral human study leave bleeding effects uncertain. If you have a bleeding disorder or take blood thinners, discuss the preparation with your clinician.",
           "informational_note": "Andrographis can affect platelet function — relevant to people with a bleeding disorder.",
           "profile_gate": {
             "gate_type": "condition",
@@ -19894,7 +19894,7 @@
             "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=380d7717-2a79-42f3-a712-efe5e7696ba0"
           ],
           "alert_headline": "Do not combine with MAOIs",
-          "alert_body": "Tyrosine and tyramine are distinct compounds. The cited rat study does not establish the claimed human combination mechanism. If you take an MAOI, avoid unsupervised tyrosine supplementation and ask your prescriber.",
+          "alert_body": "Tyrosine differs from tyramine. The rat study does not establish the claimed human interaction. If you take an MAOI, avoid unsupervised tyrosine and ask your prescriber.",
           "informational_note": "L-tyrosine converts to tyramine — relevant to people on MAOI antidepressants.",
           "profile_gate": {
             "gate_type": "drug_class",
@@ -19985,7 +19985,7 @@
             "https://www.nccih.nih.gov/health/milk-thistle"
           ],
           "alert_headline": "Review possible transplant drug interactions",
-          "alert_body": "Silymarin may affect drug-metabolizing pathways in laboratory studies. A clinical increase in transplant drug exposure is not established by the cited source. Ask your transplant prescriber before use.",
+          "alert_body": "Silymarin affects drug pathways in laboratory studies. A clinical increase in transplant-drug exposure is unestablished by this source. Ask your transplant prescriber before use.",
           "informational_note": "Silymarin affects immune function — relevant to people on immunosuppressants.",
           "profile_gate": {
             "gate_type": "drug_class",

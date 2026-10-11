@@ -4806,7 +4806,7 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "safety_summary": "An inorganic copper source. High copper exposure can cause gastrointestinal effects; dose and individual copper-handling conditions matter. The cited nutrition review does not establish clinical superiority of chelated forms.",
+      "safety_summary": "An inorganic copper source. High exposure can cause gastrointestinal effects. Dose and copper-handling conditions matter. The cited review does not establish chelated-form clinical superiority.",
       "safety_summary_one_liner": "Synthetic copper form — GI-irritation concern.",
       "functional_roles": []
     },
@@ -10442,7 +10442,7 @@
         "unii": null
       },
       "safety_summary": "A branded monk-fruit sweetener. Sugar exposure depends on the full formulation and carriers.",
-      "safety_summary_one_liner": "Monk-fruit extract; assess separate carriers.",
+      "safety_summary_one_liner": "Monk-fruit extract. Assess separate carriers.",
       "functional_roles": [
         "sweetener_natural"
       ]
@@ -14366,7 +14366,7 @@
         "unii": null
       },
       "safety_summary": "Synthetic B-vitamin forms are not inherently unsafe at recommended intakes. High folic-acid intake and individual clinical circumstances require dose-specific review.",
-      "safety_summary_one_liner": "Review dose and indication; common MTHFR variants do not require avoiding folic acid.",
+      "safety_summary_one_liner": "Common MTHFR variants do not require avoiding folic acid. Review dose.",
       "functional_roles": []
     },
     {
@@ -14847,7 +14847,7 @@
         "metabolites": []
       },
       "safety_summary": "Tapioca starch is a filler or binder. Glycemic exposure depends on quantity; trace capsule-excipient amounts differ from a substantial gummy carbohydrate load.",
-      "safety_summary_one_liner": "Starch filler; glycemic relevance depends on amount.",
+      "safety_summary_one_liner": "Starch filler. Glycemic relevance depends on amount.",
       "functional_roles": [
         "filler"
       ]

@@ -113,10 +113,10 @@ def test_niacin_statin_warning_requires_lipid_modifying_nicotinic_acid_dose():
     }
 
 
-def test_thyroid_mineral_floors_restore_retired_app_boundaries():
-    """Selenium/iodine thyroid gates moved out of Flutter and into the emitted
-    pipeline floor contract. Below-floor warnings suppress; missing dose still
-    fails open in the generic floor tests above.
+def test_iodine_authored_floor_retained_selenium_no_unsupported_floor():
+    """Iodine retains its authored screening floor. Selenium400mcg is an adult
+    UL, not a source-established thyroid interaction floor; no selenium dose
+    suppressor is invented. Missing dose remains conservative.
     """
     e = SupplementEnricher()
     iodine_floor = _condition_floor("iodine", "thyroid_disorder")
@@ -128,12 +128,11 @@ def test_thyroid_mineral_floors_restore_retired_app_boundaries():
     assert e._evaluate_min_effective_dose(
         iodine_floor, {"quantity": 150, "unit": "mcg", "raw_source_text": "Iodine"}, 1.0
     ) == "at_or_above"
-    assert e._evaluate_min_effective_dose(
-        selenium_floor, {"quantity": 399, "unit": "mcg", "raw_source_text": "Selenium"}, 1.0
-    ) == "below"
-    assert e._evaluate_min_effective_dose(
-        selenium_floor, {"quantity": 400, "unit": "mcg", "raw_source_text": "Selenium"}, 1.0
-    ) == "at_or_above"
+    assert selenium_floor is None  #400mcg adult UL is not a thyroid-interaction floor.
+    for amount in [399, 400, None]:
+        assert e._evaluate_min_effective_dose(
+            selenium_floor, {"quantity": amount, "unit": "mcg", "raw_source_text": "Selenium"}, 1.0
+        ) is None
 
 
 FLOOR_NICOTINIC = {
