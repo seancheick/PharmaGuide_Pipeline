@@ -22,6 +22,8 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Any, Dict, Iterable, List, Sequence, Tuple
 
+from evidence_resolver import clinical_record_sources_eligible
+
 from scoring_reference_resolver import (
     PARENT_RELATIONSHIPS,
     authored_unknown_form,
@@ -669,8 +671,16 @@ def check_clinical_db(findings: List[Finding], data: Dict[str, Any], file: str) 
             _check_enum(findings, file, e, i, "effect_direction", valid_effect_direction)
         if "effect_direction_confidence" in e and valid_confidence:
             _check_enum(findings, file, e, i, "effect_direction_confidence", valid_confidence)
-        _check_list_of_strings(findings, file, e, i, "health_goals_supported", required=True, allow_empty=False)
-        _check_list_of_strings(findings, file, e, i, "key_endpoints", required=True, allow_empty=False)
+        source_hold = not clinical_record_sources_eligible(e)
+        endpoints = e.get("key_endpoints")
+        has_endpoints = isinstance(endpoints, list) and bool(endpoints) and all(
+            isinstance(value, str) and value.strip() for value in endpoints)
+        # An eligible trial can describe endpoints without establishing a
+        # consumer benefit. An absent endpoint requires the existing source hold.
+        _check_list_of_strings(findings, file, e, i, "health_goals_supported", required=True,
+                               allow_empty=source_hold or has_endpoints)
+        _check_list_of_strings(findings, file, e, i, "key_endpoints", required=True,
+                               allow_empty=source_hold)
 
 
 def check_iqm(findings: List[Finding], data: Dict[str, Any], file: str) -> None:

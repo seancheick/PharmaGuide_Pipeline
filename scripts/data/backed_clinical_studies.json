@@ -2513,7 +2513,7 @@
       "published_studies": [
         "reference"
       ],
-      "score_contribution": "reference",
+      "score_contribution": null,
       "key_endpoints": [],
       "health_goals_supported": [],
       "notes": "No proprietary SeaKelp product trials were identified; the usable evidence is for kelp-derived iodine supplementation as an ingredient. PMID 14583417 randomized 36 euthyroid adults. Higher TSH and urinary iodine are physiological responses, not established improved energy, weight loss or beneficial thyroid function. The named SeaKelp preparation is not established; this record is reference-only pending appropriate clinical applicability review.",
@@ -3284,7 +3284,7 @@
       "published_studies": [
         "reference"
       ],
-      "score_contribution": "reference",
+      "score_contribution": null,
       "key_endpoints": [],
       "health_goals_supported": [],
       "notes": "Yeast beta-glucan product with explicit randomized evidence for common-cold burden and immune-resilience endpoints. PMID 23340963 explicitly studied Yestimun supplied by Leiber, not Wellmune. It randomized 162; fewer cold episodes were a per-protocol finding and the symptom score was nonsignificant. This wrong-brand anchor is retained only as reference context; qualifying Wellmune-specific evidence is unresolved.",
@@ -3875,7 +3875,7 @@
       "published_studies": [
         "reference"
       ],
-      "score_contribution": "reference",
+      "score_contribution": null,
       "key_endpoints": [],
       "health_goals_supported": [],
       "notes": "Standardized curcuminoid complex with explicit branded rheumatoid-arthritis evidence and broader supportive curcumin literature; very large trial-count claims should be treated cautiously. PMID 22407780 randomized 45 RA patients to curcumin, diclofenac or their combination, without placebo. Its abstract does not establish the Curcumin C3 brand; exact material attribution remains unresolved, so this record is reference-only rather than an affirmative C3-specific anchor.",

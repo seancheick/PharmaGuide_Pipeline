@@ -84,3 +84,33 @@ class TestDBIntegrity:
         missing = [f for f in required if not (data_dir / f).exists()]
         if missing:
             pytest.fail(f"Missing data files: {missing}")
+
+
+def test_source_qualified_records_can_have_no_goal_or_endpoint_claims():
+    from db_integrity_sanity_check import check_clinical_db
+    row = {"id": "SOURCE_HOLD", "standard_name": "Unknown preparation",
+           "study_type": "reference", "evidence_level": "reference",
+           "score_contribution": None, "scoring_eligible": False,
+           "health_goals_supported": [], "key_endpoints": []}
+    findings = []
+    check_clinical_db(findings, {"backed_clinical_studies": [row]}, "backed_clinical_studies.json")
+    assert not findings
+    row["health_goals_supported"] = "unsupported string"
+    check_clinical_db(findings, {"backed_clinical_studies": [row]}, "backed_clinical_studies.json")
+    assert any(f.severity == "error" and "health_goals_supported" in f.path for f in findings)
+
+
+def test_eligible_trial_with_no_endpoints_or_goals_still_fails():
+    from db_integrity_sanity_check import check_clinical_db
+    row = {"id": "ELIGIBLE_RCT", "standard_name": "Ingredient",
+           "study_type": "rct_single", "evidence_level": "ingredient-human",
+           "score_contribution": "tier_3", "scoring_eligible": True,
+           "health_goals_supported": [], "key_endpoints": []}
+    findings = []
+    check_clinical_db(findings, {"backed_clinical_studies": [row]}, "backed_clinical_studies.json")
+    assert any("key_endpoints" in f.path and f.issue == "empty_list" for f in findings)
+    assert any("health_goals_supported" in f.path and f.issue == "empty_list" for f in findings)
+    row["key_endpoints"] = ["Measured physiological endpoint; benefit unestablished"]
+    findings = []
+    check_clinical_db(findings, {"backed_clinical_studies": [row]}, "backed_clinical_studies.json")
+    assert not findings
