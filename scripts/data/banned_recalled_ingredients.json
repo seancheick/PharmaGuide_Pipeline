@@ -3,7 +3,7 @@
     "description": "Banned and recalled ingredients database for regulatory compliance and safety (v3.0)",
     "purpose": "safety_disqualification_and_regulatory_compliance",
     "schema_version": "5.5.3",
-    "last_updated": "2026-10-03",
+    "last_updated": "2026-10-11",
     "total_entries": 188,
     "data_source_metadata": {
       "sources": [
@@ -745,8 +745,8 @@
         "metabolites": []
       },
       "ban_context": "adulterant_in_supplements",
-      "safety_warning": "A prescription diabetes drug found undeclared in weight-loss supplements — risk of dangerous low blood sugar. Stop the supplement and talk to your doctor. Does not affect prescribed metformin.",
-      "safety_warning_one_liner": "Prescription drug hidden in supplements. Stop using and talk to your doctor.",
+      "safety_warning": "A prescription diabetes drug found undeclared in supplements. Risk of potentially fatal lactic acidosis; low blood sugar can occur with other glucose-lowering medicines. Stop the supplement and talk to your doctor. This does not apply to prescribed metformin.",
+      "safety_warning_one_liner": "Hidden diabetes drug: risk of lactic acidosis. Stop the supplement and talk to your doctor.",
       "policy_verification_status": "verified",
       "policy_verified_at": "2026-10-02"
     },
@@ -760,7 +760,7 @@
         "SR141716",
         "rimonabant"
       ],
-      "reason": "Rimonabant (Acomplia) was a weight-loss drug that blocked cannabinoid CB1 receptors. It was never FDA-approved — the agency's advisory committee rejected it due to severe psychiatric side effects including depression, anxiety, and suicidal ideation in clinical trials. It was briefly approved in the EU (2006) before being withdrawn in 2008 after post-market safety signals. When found undeclared in supplements, users face psychiatric risks with no informed consent, no psychiatric screening, and no medical supervision.",
+      "reason": "Rimonabant (Acomplia) was a weight-loss drug that blocked cannabinoid CB1 receptors. It was never FDA-approved — the agency's advisory committee rejected it due to severe psychiatric side effects including depression, anxiety, and suicidal ideation in clinical trials. It was briefly approved in the EU (2006) before marketing was suspended in 2008 after post-market safety signals; the EU authorisation was formally withdrawn on January 16, 2009. When found undeclared in supplements, users face psychiatric risks with no informed consent, no psychiatric screening, and no medical supervision.",
       "status": "banned",
       "class_tags": [
         "pharmaceutical_adulterants",
@@ -796,10 +796,11 @@
       "references_structured": [
         {
           "type": "other",
-          "title": "EMA: Rimonabant withdrawal (2008)",
+          "title": "EMA: Acomplia suspension (2008) and authorisation withdrawal (2009)",
           "evidence_grade": "R",
           "supports_claims": [],
-          "evidence_summary": "EMA: Rimonabant withdrawal (2008)"
+          "evidence_summary": "Authorised June 19, 2006; marketing suspended November 13, 2008; authorisation withdrawn January 16, 2009.",
+          "url": "https://www.ema.europa.eu/en/medicines/human/EPAR/acomplia"
         },
         {
           "type": "pubmed",
@@ -942,7 +943,6 @@
         "1,4-BD",
         "14BD",
         "BDO",
-        "butylene glycol",
         "tetramethylene glycol",
         "1,4-butylene glycol",
         "1,4-butanediol"
@@ -1536,7 +1536,7 @@
         "androstenolone",
         "5-androsten-3beta-ol-17-one"
       ],
-      "reason": "DHEA is an endogenous adrenal steroid hormone and direct precursor to testosterone and estradiol. Classified as a controlled substance / prescription-only in Canada (Schedule IV), UK (POM), Australia (S4), and most EU countries. Banned by WADA (S1.1b Anabolic Agents). NIH ODS warns of androgenic / estrogenic side effects (acne, hair changes, mood changes, lipid alterations) and theoretical promotion of hormone-sensitive cancers (breast, prostate, ovarian). NIH LiverTox lists DHEA among supplements with mild idiosyncratic hepatotoxicity reports. Legal in the US only because DSHEA 1994 grandfathered it; no FDA review affirmed safety.",
+      "reason": "DHEA is an endogenous adrenal steroid hormone and direct precursor to testosterone and estradiol. Classified as a controlled substance / prescription-only in Canada (Schedule IV), UK (POM), Australia (S4), and most EU countries. Banned by WADA (S1.1b Anabolic Agents). NIH ODS warns of androgenic / estrogenic side effects (acne, hair changes, mood changes, lipid alterations) and theoretical promotion of hormone-sensitive cancers (breast, prostate, ovarian). The previously cited LiverTox entry is about leflunomide and does not establish DHEA hepatotoxicity. DHEA supplement safety remains inadequately assessed; this source correction is not evidence of safety. Legal in the US only because DSHEA 1994 grandfathered it; no FDA review affirmed safety.",
       "status": "high_risk",
       "class_tags": [
         "steroid_hormone",
@@ -1653,9 +1653,11 @@
         {
           "type": "clinical_database",
           "agency": "NIH LiverTox",
-          "title": "LiverTox: DHEA",
+          "title": "LiverTox: Leflunomide — not DHEA evidence",
           "url": "https://www.ncbi.nlm.nih.gov/books/NBK548725/",
-          "accessed_date": "2026-05-12"
+          "accessed_date": "2026-05-12",
+          "evidence_summary": "Incorrect prior DHEA attribution; this entry concerns leflunomide and supports no DHEA clinical claim.",
+          "scoring_eligible": false
         }
       ],
       "cui": "C0011185",
@@ -2064,6 +2066,17 @@
             "regulatory_action"
           ],
           "evidence_summary": "FDA historical listing reflects Orange B’s narrow restricted use case."
+        },
+        {
+          "type": "regulatory",
+          "title": "FDA final Orange B food authorization revocation update",
+          "url": "https://www.fda.gov/food/hfp-constituent-updates/fda-proposes-revocation-authorization-orange-b-food",
+          "date": "2026-07-22",
+          "evidence_grade": "R",
+          "supports_claims": [
+            "regulatory_action"
+          ],
+          "evidence_summary": "Final revocation effective September 8, 2026 because the authorized food use was abandoned."
         }
       ],
       "review": {
@@ -2085,21 +2098,22 @@
         ]
       },
       "status": "watchlist",
-      "reason": "Synthetic orange dye. Restricted to use in hot dog and sausage casings only in the US. Not approved for general food use. Potential carcinogen.",
+      "reason": "Orange B is a synthetic dye whose FDA authorization for food use was revoked effective September 8, 2026 because industry had abandoned the use. This revocation is not a new carcinogenicity finding. Orange B is not an authorized supplement colorant.",
       "jurisdictions": [
         {
           "region": "US",
           "level": "federal",
-          "status": "restricted",
-          "effective_date": null,
+          "status": "banned",
+          "effective_date": "2026-09-08",
           "source": {
             "type": "fda_action",
-            "citation": "Status pending review",
-            "accessed_date": "2026-01-08"
+            "citation": "FDA final order revoking Orange B food authorization due to abandoned use, effective September 8, 2026.",
+            "url": "https://www.fda.gov/food/hfp-constituent-updates/fda-proposes-revocation-authorization-orange-b-food",
+            "accessed_date": "2026-10-11"
           },
           "jurisdiction_type": "country",
           "jurisdiction_code": "US",
-          "last_verified_date": "2026-01-08"
+          "last_verified_date": "2026-10-11"
         }
       ],
       "legal_status_enum": "high_risk",
@@ -2113,8 +2127,8 @@
         "ADD_ORANGE_B"
       ],
       "entity_type": "ingredient",
-      "regulatory_date": "1978-01-01",
-      "regulatory_date_label": "Regulatory restriction effective",
+      "regulatory_date": "2026-09-08",
+      "regulatory_date_label": "Food color authorization revoked",
       "match_mode": "active",
       "cui": "C0387837",
       "external_ids": {
@@ -2140,10 +2154,10 @@
         "metabolites": []
       },
       "ban_context": "watchlist",
-      "safety_warning": "A synthetic dye FDA-approved only for hot dog and sausage casings — not for dietary supplements. Its presence in a supplement is associated with undisclosed colorant use and possible mislabeling.",
-      "safety_warning_one_liner": "Synthetic dye not approved for supplements. Possible mislabeling risk.",
+      "safety_warning": "FDA revoked food-use authorization for this synthetic dye effective September 8, 2026 because its use was abandoned. Avoid supplements containing this unauthorized colorant.",
+      "safety_warning_one_liner": "Food color authorization revoked. Avoid supplements containing Orange B.",
       "inactive_policy": "penalize_anyway",
-      "inactive_policy_reason": "Restricted food color (sausage casing only) — never a supplement excipient"
+      "inactive_policy_reason": "Food color authorization revoked; not an authorized supplement excipient"
     },
     {
       "id": "BANNED_ADD_PHTHALATES",
@@ -2160,8 +2174,7 @@
         "dibutyl phthalate",
         "diethyl phthalate",
         "benzyl butyl phthalate",
-        "dimethyl phthalate",
-        "plasticizers"
+        "dimethyl phthalate"
       ],
       "match_rules": {
         "exclusions": [],
@@ -2281,13 +2294,13 @@
       "match_mode": "active",
       "cui": "C0136960",
       "external_ids": {
-        "unii": "2286E5R2KE"
+        "unii": null
       },
       "ban_context": "watchlist",
       "safety_warning": "Phthalates can enter supplements through packaging, manufacturing, or certain formulation materials. Some have been linked to endocrine and reproductive concerns. Avoid when possible.",
       "safety_warning_one_liner": "Plastics chemicals with reproductive concerns. Avoid.",
       "inactive_policy": "penalize_anyway",
-      "inactive_policy_reason": "Plasticizer contamination — never an excipient"
+      "inactive_policy_reason": "Some low-molecular-weight phthalates can occur in pharmaceutical or supplement coatings or as contaminants; phthalate polymers are distinct. Existing concern policy is retained pending compound-specific exposure review."
     },
     {
       "id": "BANNED_ADD_POTASSIUM_BROMATE",
@@ -2295,8 +2308,6 @@
       "aliases": [
         "KBrO3",
         "E924a",
-        "flour improver",
-        "dough conditioner",
         "potassium salt of bromic acid",
         "potassium bromate"
       ],
@@ -2433,7 +2444,7 @@
       "safety_warning": "Possibly carcinogenic flour-treatment agent (IARC Group 2B). Allowed in US flour within limits, banned in California food from 2027; in a supplement it is associated with poor sourcing.",
       "safety_warning_one_liner": "Possible carcinogen (IARC 2B). Avoid.",
       "inactive_policy": "penalize_anyway",
-      "inactive_policy_reason": "Banned flour-treatment agent — never a supplement excipient"
+      "inactive_policy_reason": "Potassium bromate is a flour-treatment agent; the existing contaminant-risk policy applies separately from source-specific food-use permissions."
     },
     {
       "id": "BANNED_ADD_SYNTHETIC_ESTROGENS",
@@ -2444,9 +2455,7 @@
         "diethylstilbestrol",
         "DES",
         "xenoestrogens",
-        "synthetic hormone",
         "artificial estrogen",
-        "hormone mimics",
         "synthetic estrogens",
         "Estrogens, Synthetic"
       ],
@@ -2519,7 +2528,7 @@
         ]
       },
       "status": "high_risk",
-      "reason": "Synthetic hormones that can disrupt the endocrine system. Associated with increased risk of certain cancers, reproductive issues, and developmental problems. Can accumulate in body tissues.",
+      "reason": "Synthetic estrogens and environmental estrogen mimics are a heterogeneous group. The cited endocrine-disruptor review includes experimental animal evidence and observational human associations; outcomes and persistence depend on the specific compound and exposure. It does not establish that every synthetic hormone accumulates in body fat.",
       "jurisdictions": [
         {
           "region": "US",
@@ -2553,10 +2562,10 @@
       "match_mode": "active",
       "cui": "C0014941",
       "external_ids": {
-        "unii": "423D2T571U"
+        "unii": null
       },
       "ban_context": "substance",
-      "safety_warning": "Synthetic hormones that can disrupt the endocrine system and have been linked to reproductive problems and cancer risk. They can accumulate in body fat. Stop.",
+      "safety_warning": "Estrogen-active compounds can affect hormone-sensitive conditions. Risk depends on the specific compound and exposure. Stop using an unprescribed supplement with synthetic estrogens and talk to your doctor.",
       "safety_warning_one_liner": "Endocrine-disrupting synthetic hormones. Stop using and talk to your doctor.",
       "inactive_policy": "penalize_anyway",
       "inactive_policy_reason": "Synthetic hormones — never an excipient"
@@ -3062,28 +3071,17 @@
       "standard_name": "CBD (Cannabidiol)",
       "aliases": [
         "Broad Spectrum Cannabidiol",
-        "Broad Spectrum Hemp Aerial Parts Extract",
         "CBD distillate",
         "Cannabidiol, Distillate",
         "Cannabidiolic acid/Cannabidiol",
         "Full Spectrum CBD Distillate",
         "Full Spectrum Cannabidiol",
-        "Full Spectrum Hemp Distillate",
-        "Full-Spectrum Hemp, Distillate",
-        "Hemp Aerial Parts Extract",
-        "Hemp Aerial Parts Extract, Full Spectrum",
-        "Hemp Extract, Pure",
         "Hemp derived Crystalline Cannabidiol",
         "Nano Cannabidiol",
-        "Phytocannabinoid Hemp Oil",
-        "VESIsorb HEMPCHOICE PCR Hemp Oil extract",
         "broad spectrum cbd",
         "cannabidiol",
         "cannabidiol distillate",
         "cannabidiol hemp extract",
-        "cannabinoid extract",
-        "cannabis extract",
-        "cannabis sativa oil extract",
         "cbd",
         "cbd (cannabidiol)",
         "cbd full spectrum",
@@ -3091,7 +3089,6 @@
         "cbd isolate",
         "full spectrum cbd",
         "full-spectrum cbd",
-        "full-spectrum hemp distillate",
         "hemp extract cbd",
         "hemp oil cbd",
         "hemp-derived cannabidiol",
@@ -3099,10 +3096,7 @@
         "naturally-occurring Cannabidiol",
         "naturally-occurring cannabidiol",
         "pure cannabidiol",
-        "pure cbd extract",
-        "broad spectrum phytocannabinoids",
-        "broad spectrum phytocannabinoid",
-        "phytocannabinoids"
+        "pure cbd extract"
       ],
       "reason": "Under the FD&C Act's drug exclusion rule, CBD (cannabidiol) cannot lawfully be marketed as a dietary supplement because it was first investigated as a drug (clinical trials pre-dated any supplement marketing) and is now an approved drug ingredient in Epidiolex (approved by FDA in 2018 for epilepsy). FDA has consistently stated that CBD is excluded from the dietary supplement definition under 21 U.S.C. §321(ff)(3)(B). Despite widespread US market presence, CBD supplement products are technically unlawful. FDA has exercised enforcement discretion but this legal status remains unchanged as of 2026.",
       "status": "banned",
@@ -3158,7 +3152,7 @@
           "supports_claims": [
             "regulatory_status"
           ],
-          "evidence_summary": "FDA states THC/CBD products are excluded from dietary supplement definition under FD&C Act section 201(ff)(3)(B)."
+          "evidence_summary": "FDA states THC/CBD products are excluded from dietary supplement definition under FD&C Act section 201(ff)(3)(B). Q&A9 distinguishes cannabis-derived ingredients without THC or CBD from the excluded THC/CBD substances; hemp or phytocannabinoid wording alone does not identify CBD."
         }
       ],
       "source_category": "permanently_banned",
@@ -3495,7 +3489,7 @@
         "mounjaro contamination",
         "contaminated glp-1 compounds"
       ],
-      "reason": "Compounded GLP-1 receptor agonist preparations (semaglutide, tirzepatide analogs) have faced FDA safety alerts over sterility, potency, and contamination concerns. Because GLP-1 drugs are administered by injection, any microbial contamination or mislabeling creates immediate serious risk of bloodstream infection, overdose, or anaphylaxis. FDA has warned that compounded versions using salt forms (semaglutide sodium, semaglutide acetate) are not approved alternatives. The growing market for compounded GLP-1s in supplements and online pharmacies without adequate quality oversight represents an active safety crisis.",
+      "reason": "FDA guidance identifies contamination, storage, potency and dosing concerns in unapproved GLP-1 preparations, including semaglutide and tirzepatide. Nonsterile injected formulations can cause serious infection; oral and injected GLP-1 formulations exist, so route-specific risks cannot be assigned to every preparation. Mislabeling and incorrect dosing are separate hazards. FDA warns about unapproved semaglutide salt forms. General compounding guidance does not identify specific Class II recalls or impose a blanket ban on medically necessary lawful compounding under applicable rules.",
       "status": "high_risk",
       "class_tags": [
         "high_risk_ingredients",
@@ -3515,55 +3509,57 @@
         {
           "region": "US",
           "level": "federal",
-          "status": "banned",
-          "effective_date": "2025-01-01",
+          "status": "clinical_advisory",
+          "effective_date": null,
           "source": {
-            "type": "fda_action",
-            "citation": "FDA Class II recalls (2024-2025). Multiple warning letters to compounding pharmacies. FDA warns agai",
-            "accessed_date": "2026-01-08"
+            "type": "fda_advisory",
+            "citation": "FDA general safety guidance on unapproved/compounded GLP-1 preparations; does not establish a named ClassII recall or blanket ban on lawful compounding.",
+            "accessed_date": "2026-10-11",
+            "url": "https://www.fda.gov/drugs/postmarket-drug-safety-information-patients-and-providers/fdas-concerns-unapproved-glp-1-drugs-used-weight-loss"
           },
           "jurisdiction_type": "country",
           "jurisdiction_code": "US",
-          "last_verified_date": "2026-01-08"
+          "last_verified_date": "2026-10-11"
         },
         {
           "region": "US",
           "level": "federal",
           "name": "FDA",
-          "status": "banned",
+          "status": "clinical_advisory",
           "effective_date": null,
           "source": {
-            "type": "state_statute",
-            "citation": "Ongoing enforcement against contaminated compounded GLP-1 products",
-            "accessed_date": "2026-01-08"
+            "type": "fda_advisory",
+            "citation": "FDA general safety guidance on unapproved/compounded GLP-1 preparations; does not establish a named ClassII recall or blanket ban on lawful compounding.",
+            "accessed_date": "2026-10-11",
+            "url": "https://www.fda.gov/drugs/postmarket-drug-safety-information-patients-and-providers/fdas-concerns-unapproved-glp-1-drugs-used-weight-loss"
           },
           "jurisdiction_type": "country",
           "jurisdiction_code": "US",
-          "last_verified_date": "2026-01-08"
+          "last_verified_date": "2026-10-11"
         }
       ],
       "references_structured": [
         {
           "type": "fda_advisory",
-          "title": "FDA: September 2024 - Warning on compounded semaglutide",
+          "title": "FDA concerns with unapproved GLP-1 drugs used for weight loss",
           "url": "https://www.fda.gov/drugs/postmarket-drug-safety-information-patients-and-providers/fdas-concerns-unapproved-glp-1-drugs-used-weight-loss",
           "evidence_grade": "R",
-          "date": "2024",
+          "date": null,
           "supports_claims": [
             "regulatory_action"
           ],
-          "evidence_summary": "FDA: September 2024 - Warning on compounded semaglutide"
+          "evidence_summary": "General FDA concerns about unapproved preparations; exact clinical and legal scope depends on formulation, quality defect and applicable compounding rules."
         },
         {
           "type": "fda_advisory",
-          "title": "FDA Class II Recalls: 2024-2025 - Multiple compounding pharmacies",
+          "title": "FDA: Understanding the risks of compounded drugs",
           "url": "https://www.fda.gov/drugs/human-drug-compounding/understanding-risks-compounded-drugs",
           "evidence_grade": "R",
-          "date": "2024",
+          "date": null,
           "supports_claims": [
             "regulatory_action"
           ],
-          "evidence_summary": "FDA Class II Recalls: 2024-2025 - Multiple compounding pharmacies"
+          "evidence_summary": "General risk guidance; does not identify named ClassII GLP-1 recalls, lots or initiation dates."
         }
       ],
       "source_category": "high_risk_ingredients",
@@ -3581,8 +3577,8 @@
           }
         ]
       },
-      "regulatory_date": "2024-01-01",
-      "regulatory_date_label": "First regulatory safety alert",
+      "regulatory_date": null,
+      "regulatory_date_label": null,
       "match_mode": "active",
       "cui_status": "no_single_umls_concept",
       "cui_note": "Contamination watchlist spans multiple GLP-1 compounds and quality defects; no single ingredient-level UMLS concept is appropriate.",
@@ -3617,7 +3613,7 @@
       "supersedes_ids": [
         "STATE_DELTA8_THC"
       ],
-      "reason": "Delta-8 THC (Δ8-THC) is a psychoactive cannabinoid that occurs in trace amounts naturally in cannabis but is synthesized in commercial quantities from CBD. It produces intoxicating effects similar to delta-9 THC. FDA and DEA have both raised concerns about its legal status: synthetic delta-8 derived from hemp-CBD may constitute a controlled analog of delta-9 THC. Multiple states have explicitly banned it. FDA has received over 2,000 adverse event reports including hallucinations, vomiting, tremors, anxiety, and hospitalizations. Products are often mislabeled and accessible to minors.",
+      "reason": "Delta-8 THC (Δ8-THC) is a psychoactive cannabinoid that occurs in trace amounts naturally in cannabis but is synthesized in commercial quantities from CBD. It produces intoxicating effects similar to delta-9 THC. FDA and DEA have both raised concerns about its legal status: synthetic delta-8 derived from hemp-CBD may constitute a controlled analog of delta-9 THC. Multiple states have explicitly banned it. FDA received 104 adverse-event reports between December 1, 2020 and February 28, 2022, including hallucinations, vomiting, tremor and anxiety. National poison control centers separately received 2,362 exposure cases between January 1, 2021 and February 28, 2022; these are distinct reporting systems and historical intervals. Products are often mislabeled and accessible to minors.",
       "status": "high_risk",
       "match_rules": {
         "exclusions": [],
@@ -3979,7 +3975,7 @@
       "legal_status_enum": "adulterant",
       "clinical_risk_enum": "critical",
       "entity_type": "ingredient",
-      "reason": "DMBA (1,3-dimethylbutylamine, AMP Citrate) is a synthetic aliphatic amine stimulant marketed as a DMAA replacement after FDA's enforcement actions against DMAA. FDA issued warning letters in April 2015 stating that DMBA is a new dietary ingredient marketed without the required safety notification, so products containing it are adulterated. Like DMAA and DMHA, it is a sympathomimetic amine that raises blood pressure and heart rate with no clinical evidence of safety or efficacy at supplement doses.",
+      "reason": "DMBA (1,3-dimethylbutylamine, AMP Citrate) is a synthetic aliphatic amine stimulant marketed as a DMAA replacement after FDA's enforcement actions against DMAA. FDA issued warning letters in April 2015 stating that DMBA is a new dietary ingredient marketed without the required safety notification, so products containing it are adulterated. Its stimulant classification raises cardiovascular concern, but the cited regulatory sources do not measure DMBA-specific human blood-pressure or heart-rate effects or establish safety at supplement doses.",
       "references_structured": [
         {
           "type": "fda_advisory",
@@ -4083,7 +4079,7 @@
         "metabolites": []
       },
       "ban_context": "substance",
-      "safety_warning": "A DMAA-successor synthetic stimulant. FDA considers products containing it adulterated; associated with cardiovascular risk similar to DMAA. Stop and consult a doctor.",
+      "safety_warning": "A synthetic stimulant for which FDA cited unmet new-dietary-ingredient requirements. Human cardiovascular risk at supplement doses is unresolved. Stop using and consult your doctor.",
       "safety_warning_one_liner": "Unlawful DMAA-like stimulant. Stop using and talk to your doctor.",
       "policy_verification_status": "verified",
       "policy_verified_at": "2026-09-26"
@@ -4798,16 +4794,17 @@
         {
           "region": "Australia",
           "level": "federal",
-          "status": "banned",
+          "status": "restricted",
           "effective_date": "2025-03-01",
           "source": {
             "type": "regulatory_action",
-            "citation": "TGA mandatory liver harm warning",
-            "accessed_date": "2026-02-18"
+            "citation": "TGA requires liver-injury warning for relevant listed medicines containing Garcinia/hydroxycitric acid: new listings fromMarch1,2025; medicines supplied afterMarch1,2026 must comply. Warning requirement is not a blanket ban.",
+            "accessed_date": "2026-10-11",
+            "url": "https://consultations.tga.gov.au/medicines-regulation-division/copy-of-low-neg-risk-2024-2025/user_uploads/low-negligible-risk-annual-consultation-2024-25---final-decision-document.pdf"
           },
           "jurisdiction_type": "country",
           "jurisdiction_code": "AU",
-          "last_verified_date": "2026-02-18"
+          "last_verified_date": "2026-10-11"
         }
       ],
       "references_structured": [
@@ -4876,7 +4873,7 @@
         "higenamine hydrochloride",
         "higenamine"
       ],
-      "reason": "Higenamine (norcoclaurine) is a beta-2 adrenergic agonist alkaloid found in multiple plants. FDA listed higenamine on its Dietary Supplement Ingredient Advisory List in 2019 and, in 2022 warning letters, treated it as a new dietary ingredient marketed without the required notification or evidence of safety, so supplements containing it are adulterated. WADA prohibits it in competition as a beta-2 agonist. Given intravenously it raises heart rate; small oral supplement trials found no significant change in heart rate or blood pressure, and no published cardiovascular adverse-event reports were found.",
+      "reason": "Higenamine (norcoclaurine) is a beta-2 adrenergic agonist alkaloid found in multiple plants. FDA listed higenamine on its Dietary Supplement Ingredient Advisory List in 2019 and, in 2022 warning letters, treated it as a new dietary ingredient marketed without the required notification or evidence of safety, so supplements containing it are adulterated. WADA prohibits it at all times, both in and out of competition, as a beta-2 agonist. Given intravenously it raises heart rate; small oral supplement trials found no significant change in heart rate or blood pressure, and no published cardiovascular adverse-event reports were found.",
       "status": "banned",
       "class_tags": [
         "permanently_banned",
@@ -5465,7 +5462,7 @@
         "iron fibers",
         "metal fiber contamination"
       ],
-      "reason": "Metal fiber contamination refers to metallic particles or fibers — stainless steel, aluminum, iron — found in supplement products due to manufacturing equipment degradation. Metal fibers can lacerate the gastrointestinal tract, cause GI perforation, and lead to internal bleeding and peritonitis. FDA has issued recalls for products found to contain metal fragments, most commonly traced to broken sifting screens or worn mixing equipment during manufacturing. Detection requires specialized testing; contamination may not be visible to the consumer.",
+      "reason": "Health Canada recalled specified lots of L’il Critters and vitafusion vitamins on April 20,2021 for metallic wire fragments traced to a stainless-steel manufacturing screen. The thin flexible fragments were visible and could damage the digestive system. This source supports a physical-injury hazard in affected recalled products, not universal systemic metal accumulation or a US ClassI ban.",
       "status": "high_risk",
       "class_tags": [
         "high_risk_ingredients",
@@ -5483,28 +5480,29 @@
       "clinical_risk_enum": "critical",
       "jurisdictions": [
         {
-          "region": "US",
+          "region": "Canada",
           "level": "federal",
-          "status": "banned",
-          "effective_date": "2024-07-25",
+          "status": "recalled",
+          "effective_date": "2021-04-20",
           "source": {
-            "type": "fda_action",
-            "citation": "FDA monitoring. Class I recall risk (most serious).",
-            "accessed_date": "2026-01-08"
+            "type": "regulatory_action",
+            "citation": "Health Canada April20,2021 recall of specified L’il Critters/vitafusion vitamin lots for metal wire fragments; not a US ClassI ban.",
+            "accessed_date": "2026-10-11",
+            "url": "https://recalls-rappels.canada.ca/en/alert-recall/certain-lots-il-critters-and-vitafusion-vitamins-recalled-due-metal-wire-fragments"
           },
           "jurisdiction_type": "country",
-          "jurisdiction_code": "US",
+          "jurisdiction_code": "CA",
           "last_verified_date": "2026-01-08"
         }
       ],
       "references_structured": [
         {
           "type": "other",
-          "title": "Health Canada Recall: July 25, 2024 - RA-84584 through RA-84605",
+          "title": "Health Canada April20,2021: specified vitamin lots recalled for metal wire fragments",
           "url": "https://recalls-rappels.canada.ca/en/alert-recall/certain-lots-il-critters-and-vitafusion-vitamins-recalled-due-metal-wire-fragments",
           "evidence_grade": "R",
           "supports_claims": [],
-          "evidence_summary": "Health Canada Recall: July 25, 2024 - RA-84584 through RA-84605"
+          "evidence_summary": "Health Canada April20,2021 recall of specified L’il Critters/vitafusion vitamin lots for metal wire fragments; not a US ClassI ban."
         }
       ],
       "source_category": "high_risk_ingredients",
@@ -5522,14 +5520,14 @@
           }
         ]
       },
-      "regulatory_date": "2024-07-25",
-      "regulatory_date_label": "First regulatory safety alert",
+      "regulatory_date": null,
+      "regulatory_date_label": null,
       "match_mode": "active",
       "cui_status": "no_single_umls_concept",
       "cui_note": "Contamination category covers multiple metal fiber and particle variants; no single ingredient-level UMLS concept is appropriate.",
       "external_ids": {},
       "ban_context": "substance",
-      "safety_warning": "Metallic particles from manufacturing equipment found in some supplements — linked to GI irritation and long-term accumulation concerns. Avoid products with recalls flagged for metal contamination.",
+      "safety_warning": "Metal wire fragments can damage the digestive system. Stop using affected recalled products and contact a doctor if symptoms occur.",
       "safety_warning_one_liner": "Manufacturing contaminant. Avoid affected products.",
       "inactive_policy": "penalize_anyway",
       "inactive_policy_reason": "Manufacturing contamination — never an excipient"
@@ -5573,43 +5571,45 @@
           "effective_date": null,
           "source": {
             "type": "fda_action",
-            "citation": "FDA announced plans to remove from market (May 14, 2025). Under regulatory review.",
-            "accessed_date": "2026-01-08"
+            "citation": "Initial FDA announcement May13,2025. Current FDA recommendation limits ingestible fluoride prescription drug products to children aged three years and older at high risk of tooth decay; compliance action targets inconsistent unapproved labeling, not toothpaste.",
+            "accessed_date": "2026-10-11",
+            "url": "https://www.fda.gov/news-events/public-health-focus/ingestible-fluoride-drug-products"
           },
           "jurisdiction_type": "country",
           "jurisdiction_code": "US",
-          "last_verified_date": "2026-01-08",
-          "notes": "Date: pending"
+          "last_verified_date": "2026-10-11"
         },
         {
           "region": "US",
           "level": "federal",
           "name": "NTP",
-          "status": "banned",
+          "status": "clinical_advisory",
           "effective_date": null,
           "source": {
-            "type": "state_statute",
-            "citation": "National Toxicology Program (2024) - Moderate confidence that higher fluoride exposure is associated",
-            "accessed_date": "2026-01-08"
+            "type": "scientific_review",
+            "citation": "NTP2024 reports moderate confidence in an association between higher fluoride exposure and lower childhood IQ; uncertainty at lower exposure. Scientific assessment does not enact a ban.",
+            "accessed_date": "2026-10-11",
+            "url": "https://ntp.niehs.nih.gov/publications/monographs/mgraph08"
           },
           "jurisdiction_type": "country",
           "jurisdiction_code": "US",
-          "last_verified_date": "2026-01-08"
+          "last_verified_date": "2026-10-11"
         },
         {
           "region": "US",
           "level": "federal",
           "name": "EPA",
-          "status": "banned",
+          "status": "under_review",
           "effective_date": null,
           "source": {
-            "type": "state_statute",
-            "citation": "Reviewing fluoride safety standards",
-            "accessed_date": "2026-01-08"
+            "type": "regulatory",
+            "citation": "The existing citation only says safety standards are under review and establishes no legislative ban; exact EPA action remains unresolved.",
+            "accessed_date": "2026-10-11",
+            "url": "https://www.epa.gov/"
           },
           "jurisdiction_type": "country",
           "jurisdiction_code": "US",
-          "last_verified_date": "2026-01-08"
+          "last_verified_date": "2026-10-11"
         }
       ],
       "references_structured": [
@@ -5634,13 +5634,14 @@
         },
         {
           "type": "fda_advisory",
-          "title": "FDA: May 14, 2025 - Proposed removal announcement",
+          "title": "FDA May13,2025 initial pediatric ingestible fluoride announcement",
           "evidence_grade": "R",
-          "date": "2025",
+          "date": "2025-05-13",
           "supports_claims": [
             "regulatory_action"
           ],
-          "evidence_summary": "FDA: May 14, 2025 - Proposed removal announcement"
+          "evidence_summary": "Initial announcement; current age/caries-risk scope is recorded in the FDA jurisdiction citation.",
+          "url": "https://www.fda.gov/news-events/press-announcements/fda-begins-action-remove-ingestible-fluoride-prescription-drug-products-children-market"
         }
       ],
       "source_category": "high_risk_ingredients",
@@ -5658,7 +5659,7 @@
           }
         ]
       },
-      "regulatory_date": "2025-05-14",
+      "regulatory_date": "2025-05-13",
       "regulatory_date_label": "First regulatory safety alert",
       "match_mode": "active",
       "cui_status": "no_single_umls_concept",
@@ -6825,7 +6826,7 @@
         "1-benzoyl-4-propanoylpiperazine",
         "sunifiram"
       ],
-      "reason": "Sunifiram (DM-235) is a synthetic pyrrolidone compound and ampakine nootropic — structurally related to racetams but more potent. It has never been investigated in human clinical trials and has no established safety profile in humans. FDA has not addressed it; the US Department of Defense prohibits it in supplements for Service Members. Products selling it as a supplement contain an untested research chemical. Preclinical data suggests high potency AMPA receptor modulation, with unknown effects on seizure threshold and neurological development at supplement doses.",
+      "reason": "Sunifiram (DM-235) is a synthetic piperazine compound investigated as an ampakine nootropic. It has never been investigated in human clinical trials and has no established safety profile in humans. FDA has not addressed it; the US Department of Defense prohibits it in supplements for Service Members. Products selling it as a supplement contain an untested research chemical. Preclinical data suggests high potency AMPA receptor modulation, with unknown effects on seizure threshold and neurological development at supplement doses.",
       "status": "banned",
       "class_tags": [
         "nootropic_banned",
@@ -7643,7 +7644,7 @@
         {
           "region": "US",
           "level": "federal",
-          "status": "banned",
+          "status": "under_review",
           "effective_date": null,
           "source": {
             "type": "fda_action",
@@ -7652,7 +7653,8 @@
           },
           "jurisdiction_type": "country",
           "jurisdiction_code": "US",
-          "last_verified_date": "2026-01-08"
+          "last_verified_date": "2026-01-08",
+          "notes": "The existing citation explicitly says not banned while the former status said banned. Current legal scope lacks a primary legal source and remains unresolved; clinical high-risk assessment is retained."
         }
       ],
       "references_structured": [
@@ -7783,7 +7785,7 @@
         {
           "region": "US",
           "level": "federal",
-          "status": "banned",
+          "status": "under_review",
           "effective_date": null,
           "source": {
             "type": "fda_action",
@@ -7792,13 +7794,14 @@
           },
           "jurisdiction_type": "country",
           "jurisdiction_code": "US",
-          "last_verified_date": "2026-01-08"
+          "last_verified_date": "2026-01-08",
+          "notes": "The existing citation explicitly says not banned while the former status said banned. Current legal scope lacks a primary legal source and remains unresolved; clinical high-risk assessment is retained."
         },
         {
-          "region": "Germany",
+          "region": "France",
           "level": "national",
           "name": "France",
-          "status": "banned",
+          "status": "under_review",
           "effective_date": null,
           "source": {
             "type": "national_regulation",
@@ -7806,8 +7809,9 @@
             "accessed_date": "2026-01-08"
           },
           "jurisdiction_type": "country",
-          "jurisdiction_code": "DE",
-          "last_verified_date": "2026-01-08"
+          "jurisdiction_code": "FR",
+          "last_verified_date": "2026-01-08",
+          "notes": "Country attribution corrected from the named source annotation; current national legal status remains unresolved because no primary legal source is supplied."
         }
       ],
       "references_structured": [
@@ -7909,7 +7913,7 @@
         {
           "region": "US",
           "level": "federal",
-          "status": "banned",
+          "status": "under_review",
           "effective_date": null,
           "source": {
             "type": "fda_action",
@@ -7918,13 +7922,14 @@
           },
           "jurisdiction_type": "country",
           "jurisdiction_code": "US",
-          "last_verified_date": "2026-01-08"
+          "last_verified_date": "2026-01-08",
+          "notes": "The existing citation explicitly says not banned while the former status said banned. Current legal scope lacks a primary legal source and remains unresolved; clinical high-risk assessment is retained."
         },
         {
-          "region": "US",
+          "region": "UK",
           "level": "federal",
           "name": "UK",
-          "status": "banned",
+          "status": "under_review",
           "effective_date": null,
           "source": {
             "type": "state_statute",
@@ -7932,8 +7937,9 @@
             "accessed_date": "2026-01-08"
           },
           "jurisdiction_type": "country",
-          "jurisdiction_code": "US",
-          "last_verified_date": "2026-01-08"
+          "jurisdiction_code": "GB",
+          "last_verified_date": "2026-01-08",
+          "notes": "Country attribution corrected from the named source annotation; current national legal status remains unresolved because no primary legal source is supplied."
         }
       ],
       "references_structured": [
@@ -8077,61 +8083,64 @@
         {
           "region": "US",
           "level": "federal",
-          "status": "banned",
+          "status": "under_review",
           "effective_date": null,
           "source": {
-            "type": "fda_action",
-            "citation": "FDA limit: 10 mcg/day (varies by product). FDA action level for apple juice: 10 ppb.",
-            "accessed_date": "2026-01-08"
+            "type": "fda_advisory",
+            "citation": "No source in this record establishes the previously asserted universal FDA daily supplement limit. Product-specific action levels and adulteration provisions require separate verification.",
+            "accessed_date": "2026-10-11",
+            "url": "https://www.fda.gov/food/environmental-contaminants-food"
           },
           "jurisdiction_type": "country",
           "jurisdiction_code": "US",
-          "last_verified_date": "2026-01-08"
+          "last_verified_date": "2026-10-11"
         },
         {
           "region": "IARC",
           "level": "international",
           "name": "IARC",
-          "status": "banned",
+          "status": "clinical_advisory",
           "effective_date": null,
           "source": {
-            "type": "national_regulation",
-            "citation": "Group 1 - Carcinogenic to humans (inorganic arsenic)",
-            "accessed_date": "2026-01-08"
+            "type": "scientific_review",
+            "citation": "Group 1 - Carcinogenic to humans (inorganic arsenic) This is a hazard classification or health/quality benchmark, not a statutory product ban.",
+            "accessed_date": "2026-10-11"
           },
           "jurisdiction_type": "agency_scope",
           "jurisdiction_code": "IARC",
-          "last_verified_date": "2026-01-08"
+          "last_verified_date": "2026-10-11"
         },
         {
           "region": "US",
           "level": "state",
           "name": "California",
-          "status": "banned",
+          "status": "restricted",
           "effective_date": null,
           "source": {
             "type": "state_statute",
-            "citation": "Prop 65: 10 mcg/day",
-            "accessed_date": "2026-01-08"
+            "citation": "Prop 65: 10 mcg/day Proposition 65 safe-harbor levels concern warning requirements, not a universal maximum intake or product ban.",
+            "accessed_date": "2026-10-11",
+            "url": "https://oehha.ca.gov/proposition-65/proposition-65-list"
           },
           "jurisdiction_type": "state",
           "jurisdiction_code": "US-CA",
-          "last_verified_date": "2026-01-08"
+          "last_verified_date": "2026-10-11"
         },
         {
           "region": "US",
           "level": "federal",
           "name": "Recent",
-          "status": "banned",
+          "status": "under_review",
           "effective_date": null,
           "source": {
-            "type": "state_statute",
-            "citation": "Zaarah Herbals recall (March 2025) for arsenic contamination",
-            "accessed_date": "2026-01-08"
+            "type": "fda_advisory",
+            "citation": "No source in this record establishes the previously asserted universal FDA daily supplement limit. Product-specific action levels and adulteration provisions require separate verification.",
+            "accessed_date": "2026-10-11",
+            "url": "https://www.fda.gov/food/environmental-contaminants-food"
           },
           "jurisdiction_type": "country",
           "jurisdiction_code": "US",
-          "last_verified_date": "2026-01-08"
+          "last_verified_date": "2026-10-11"
         }
       ],
       "references_structured": [
@@ -8193,8 +8202,8 @@
           }
         ]
       },
-      "regulatory_date": "2025-01-01",
-      "regulatory_date_label": "Regulatory limit established",
+      "regulatory_date": null,
+      "regulatory_date_label": null,
       "match_mode": "active",
       "cui": "C0936225",
       "external_ids": {
@@ -8248,46 +8257,48 @@
         {
           "region": "US",
           "level": "federal",
-          "status": "banned",
+          "status": "under_review",
           "effective_date": null,
           "source": {
-            "type": "fda_action",
-            "citation": "FDA limit: 5 mcg/day. USP limit: 5 mcg/day.",
-            "accessed_date": "2026-01-08"
+            "type": "fda_advisory",
+            "citation": "No source in this record establishes the previously asserted universal FDA daily supplement limit. Product-specific action levels and adulteration provisions require separate verification.",
+            "accessed_date": "2026-10-11",
+            "url": "https://www.fda.gov/food/environmental-contaminants-food"
           },
           "jurisdiction_type": "country",
           "jurisdiction_code": "US",
-          "last_verified_date": "2026-01-08"
+          "last_verified_date": "2026-10-11"
         },
         {
           "region": "IARC",
           "level": "international",
           "name": "IARC",
-          "status": "banned",
+          "status": "clinical_advisory",
           "effective_date": null,
           "source": {
-            "type": "national_regulation",
-            "citation": "Group 1 - Carcinogenic to humans",
-            "accessed_date": "2026-01-08"
+            "type": "scientific_review",
+            "citation": "Group 1 - Carcinogenic to humans This is a hazard classification or health/quality benchmark, not a statutory product ban.",
+            "accessed_date": "2026-10-11"
           },
           "jurisdiction_type": "agency_scope",
           "jurisdiction_code": "IARC",
-          "last_verified_date": "2026-01-08"
+          "last_verified_date": "2026-10-11"
         },
         {
           "region": "US",
           "level": "state",
           "name": "California",
-          "status": "banned",
+          "status": "restricted",
           "effective_date": null,
           "source": {
             "type": "state_statute",
-            "citation": "Prop 65: 4.1 mcg/day",
-            "accessed_date": "2026-01-08"
+            "citation": "Prop 65: 4.1 mcg/day Proposition 65 safe-harbor levels concern warning requirements, not a universal maximum intake or product ban.",
+            "accessed_date": "2026-10-11",
+            "url": "https://oehha.ca.gov/proposition-65/proposition-65-list"
           },
           "jurisdiction_type": "state",
           "jurisdiction_code": "US-CA",
-          "last_verified_date": "2026-01-08"
+          "last_verified_date": "2026-10-11"
         }
       ],
       "references_structured": [
@@ -8339,8 +8350,8 @@
           }
         ]
       },
-      "regulatory_date": "1986-01-01",
-      "regulatory_date_label": "Regulatory limit established",
+      "regulatory_date": null,
+      "regulatory_date_label": null,
       "match_mode": "active",
       "cui": "C0006632",
       "external_ids": {
@@ -8373,7 +8384,7 @@
         "plumbum",
         "lead"
       ],
-      "reason": "Lead is a cumulative neurotoxin. In children, intellectual deficits have been found even at blood lead levels below 7.5 µg/dL; in adults, low-level exposure is linked to higher cardiovascular death rates. IARC Group 2A (probable human carcinogen, inorganic lead). California Prop 65 maximum daily intake: 0.5 mcg/day (MADL). FDA has no specific supplement lead limit but has proposed action levels. Lead has been detected in many supplements; a 2025 study found it in most prenatal vitamins tested, with higher levels in products containing more calcium and iron.",
+      "reason": "Lead is a cumulative neurotoxin. In children, intellectual deficits have been found even at blood lead levels below 7.5 µg/dL; in adults, low-level exposure is linked to higher cardiovascular death rates. IARC Group 2A (probable human carcinogen, inorganic lead). California Proposition 65 reproductive-toxicity warning safe harbor (MADL): 0.5 mcg/day; the oral cancer warning safe harbor (NSRL) is 15 mcg/day. These thresholds determine warning safe harbors, not universal intake permissions. FDA has no specific supplement lead limit but has proposed action levels. Lead has been detected in many supplements; a 2025 study found it in most prenatal vitamins tested, with higher levels in products containing more calcium and iron.",
       "status": "high_risk",
       "class_tags": [
         "heavy_metal_limits",
@@ -8393,55 +8404,58 @@
         {
           "region": "US",
           "level": "federal",
-          "status": "banned",
+          "status": "under_review",
           "effective_date": null,
           "source": {
-            "type": "fda_action",
-            "citation": "FDA limit: 10 mcg/day. California Prop 65: 0.5 mcg/day (reproductive toxin).",
-            "accessed_date": "2026-01-08"
+            "type": "fda_advisory",
+            "citation": "No source in this record establishes the previously asserted universal FDA daily supplement limit. Product-specific action levels and adulteration provisions require separate verification.",
+            "accessed_date": "2026-10-11",
+            "url": "https://www.fda.gov/food/environmental-contaminants-food"
           },
           "jurisdiction_type": "country",
           "jurisdiction_code": "US",
-          "last_verified_date": "2026-01-08"
+          "last_verified_date": "2026-10-11"
         },
         {
-          "region": "US",
-          "level": "federal",
+          "region": "USP",
+          "level": "international",
           "name": "USP",
-          "status": "banned",
+          "status": "clinical_advisory",
           "effective_date": null,
           "source": {
-            "type": "state_statute",
-            "citation": "USP limit: 10 mcg/day",
-            "accessed_date": "2026-01-08"
+            "type": "scientific_review",
+            "citation": "USP limit: 10 mcg/day This is a health/quality benchmark, not a statutory ban.",
+            "accessed_date": "2026-10-11"
           },
-          "jurisdiction_type": "country",
-          "jurisdiction_code": "US",
-          "last_verified_date": "2026-01-08"
+          "jurisdiction_type": "agency_scope",
+          "jurisdiction_code": "USP",
+          "last_verified_date": "2026-10-11"
         },
         {
-          "region": "US",
-          "level": "federal",
+          "region": "WHO",
+          "level": "international",
           "name": "WHO",
-          "status": "banned",
+          "status": "clinical_advisory",
           "effective_date": null,
           "source": {
-            "type": "state_statute",
-            "citation": "No safe level of lead exposure",
-            "accessed_date": "2026-01-08"
+            "type": "scientific_review",
+            "citation": "No safe level of lead exposure This is a health/quality benchmark, not a statutory ban.",
+            "accessed_date": "2026-10-11",
+            "url": "https://www.who.int/"
           },
-          "jurisdiction_type": "country",
-          "jurisdiction_code": "US",
-          "last_verified_date": "2026-01-08"
+          "jurisdiction_type": "agency_scope",
+          "jurisdiction_code": "WHO",
+          "last_verified_date": "2026-10-11"
         }
       ],
       "references_structured": [
         {
           "type": "other",
-          "title": "California Prop 65: Lead NSRL 0.5 mcg/day",
+          "title": "California Prop 65: Lead MADL 0.5 mcg/day; oral NSRL 15 mcg/day",
           "evidence_grade": "R",
           "supports_claims": [],
-          "evidence_summary": "California Prop 65: Lead NSRL 0.5 mcg/day"
+          "evidence_summary": "OEHHA lists reproductive MADL0.5mcg/day and oral cancer NSRL15mcg/day; warning safe harbors, not universal intake limits.",
+          "url": "https://oehha.ca.gov/chemicals/lead"
         },
         {
           "type": "pubmed",
@@ -8509,8 +8523,8 @@
           }
         ]
       },
-      "regulatory_date": "1986-01-01",
-      "regulatory_date_label": "Regulatory limit established",
+      "regulatory_date": null,
+      "regulatory_date_label": null,
       "match_mode": "active",
       "cui": "C0023175",
       "external_ids": {
@@ -8545,7 +8559,7 @@
         "mercury compounds",
         "mercury"
       ],
-      "reason": "Mercury — particularly organic methylmercury — is a potent neurotoxin that crosses the blood-brain barrier and placenta. It causes irreversible neurological damage, especially in the developing brain (prenatal and early childhood exposure). EPA/FDA reference dose for methylmercury: 0.1 mcg/kg bw/day. IARC: Group 2B (inorganic mercury), Group 1 for methylmercury from occupational data. In supplements, mercury contamination is most common in fish oils, certain botanical powders, and traditional medicinal preparations. Pregnant women and young children are at highest risk.",
+      "reason": "Mercury — particularly organic methylmercury — is a potent neurotoxin that crosses the blood-brain barrier and placenta. It causes irreversible neurological damage, especially in the developing brain (prenatal and early childhood exposure). EPA/FDA reference dose for methylmercury: 0.1 mcg/kg bw/day. IARC Volume 58 classifies methylmercury compounds as Group 2B (possibly carcinogenic to humans), and metallic mercury and inorganic mercury compounds as Group 3 (not classifiable as to human carcinogenicity). This cancer classification does not remove neurotoxicity concerns. In supplements, mercury contamination is most common in fish oils, certain botanical powders, and traditional medicinal preparations. Pregnant women and young children are at highest risk.",
       "status": "high_risk",
       "class_tags": [
         "heavy_metal_limits",
@@ -8573,46 +8587,49 @@
         {
           "region": "US",
           "level": "federal",
-          "status": "banned",
+          "status": "under_review",
           "effective_date": null,
           "source": {
-            "type": "fda_action",
-            "citation": "FDA limit: 15 mcg/day. EPA reference dose: 0.1 mcg/kg/day (methylmercury).",
-            "accessed_date": "2026-01-08"
+            "type": "fda_advisory",
+            "citation": "No source in this record establishes the previously asserted universal FDA daily supplement limit. Product-specific action levels and adulteration provisions require separate verification.",
+            "accessed_date": "2026-10-11",
+            "url": "https://www.fda.gov/food/environmental-contaminants-food"
           },
           "jurisdiction_type": "country",
           "jurisdiction_code": "US",
-          "last_verified_date": "2026-01-08"
+          "last_verified_date": "2026-10-11"
         },
         {
           "region": "US",
           "level": "state",
           "name": "California",
-          "status": "banned",
+          "status": "restricted",
           "effective_date": null,
           "source": {
             "type": "state_statute",
-            "citation": "Prop 65: 0.3 mcg/day (much stricter)",
-            "accessed_date": "2026-01-08"
+            "citation": "Prop 65: 0.3 mcg/day (much stricter) Proposition 65 safe-harbor levels concern warning requirements, not a universal maximum intake or product ban.",
+            "accessed_date": "2026-10-11",
+            "url": "https://oehha.ca.gov/proposition-65/proposition-65-list"
           },
           "jurisdiction_type": "state",
           "jurisdiction_code": "US-CA",
-          "last_verified_date": "2026-01-08"
+          "last_verified_date": "2026-10-11"
         },
         {
           "region": "WHO",
           "level": "international",
           "name": "WHO",
-          "status": "banned",
+          "status": "clinical_advisory",
           "effective_date": null,
           "source": {
-            "type": "national_regulation",
-            "citation": "Provisional tolerable weekly intake: 1.6 mcg/kg",
-            "accessed_date": "2026-01-08"
+            "type": "scientific_review",
+            "citation": "Provisional tolerable weekly intake: 1.6 mcg/kg This is a health/quality benchmark, not a statutory ban.",
+            "accessed_date": "2026-10-11",
+            "url": "https://www.who.int/"
           },
           "jurisdiction_type": "agency_scope",
           "jurisdiction_code": "WHO",
-          "last_verified_date": "2026-01-08"
+          "last_verified_date": "2026-10-11"
         }
       ],
       "references_structured": [
@@ -8661,8 +8678,8 @@
           }
         ]
       },
-      "regulatory_date": "1979-01-01",
-      "regulatory_date_label": "Regulatory limit established",
+      "regulatory_date": null,
+      "regulatory_date_label": null,
       "match_mode": "active",
       "cui": "C0025424",
       "external_ids": {
@@ -10136,7 +10153,7 @@
           "region": "US",
           "level": "federal",
           "status": "under_review",
-          "effective_date": "2016-09-07",
+          "effective_date": "2016-09-06",
           "source": {
             "type": "fda_action",
             "citation": "FDA opened an administrative proceeding on vinpocetine and continues to describe its dietary-ingredient conclusion as tentative; FDA also warns of reproductive risk.",
@@ -10228,7 +10245,7 @@
         "BPC 157",
         "bpc-157"
       ],
-      "reason": "BPC-157 (Body Protection Compound-157) is a synthetic 15-amino-acid peptide studied mainly in animal models for tissue repair; no completed human trials exist. FDA lists it among bulk substances for compounding that may present significant safety risks (possible immunogenicity and impurities, too little safety information to know whether it causes harm in people). FDA warning letters have treated BPC-157 products sold with disease claims as unapproved drugs. No FDA determination on its use as a dietary ingredient was found.",
+      "reason": "BPC-157 (Body Protection Compound-157) is a synthetic 15-amino-acid peptide studied mainly in animal models for tissue repair; human evidence is very limited: a 2025 uncontrolled intravenous pilot (PMID 40131143) studied two previously exposed adults for three days and does not establish efficacy, long-term safety or oral safety. FDA lists it among bulk substances for compounding that may present significant safety risks (possible immunogenicity and impurities, too little safety information to know whether it causes harm in people). FDA warning letters have treated BPC-157 products sold with disease claims as unapproved drugs. No FDA determination on its use as a dietary ingredient was found.",
       "status": "banned",
       "class_tags": [
         "novel_peptides",
@@ -10337,7 +10354,7 @@
         "metabolites": []
       },
       "ban_context": "substance",
-      "safety_warning": "An unapproved synthetic peptide studied only in animal models. Long-term human safety is unknown. Stop and consult a doctor before continuing use.",
+      "safety_warning": "An unapproved synthetic peptide with very limited uncontrolled human research. Long-term and oral safety are not established. Stop and consult a doctor before continuing use.",
       "safety_warning_one_liner": "Unapproved experimental peptide. Stop using and talk to your doctor.",
       "policy_verification_status": "verified",
       "policy_verified_at": "2026-10-02"
@@ -11115,7 +11132,7 @@
         "pparδ agonists",
         "gw-501516 derivatives"
       ],
-      "reason": "This watchlist covers synthetic derivatives of GW501516 (Cardarine) — a PPAR-delta agonist whose parent compound was abandoned after rodent studies linked it to widespread tumour development. Designer analogs are created to evade detection of GW501516 itself while attempting to retain the metabolic and endurance effects. None have any approved human use, safety data, or dietary ingredient status.",
+      "reason": "This watchlist concerns synthetic derivatives marketed as Cardarine analogues. The cited parent GW501516 literature reports rodent tumor findings; it does not establish cancer outcomes, activity, human safety, design intent or legal status for every derivative. Parent-compound concerns justify caution but do not identify or clinically validate an unspecified analogue. Existing quarantine policy remains separate.",
       "status": "banned",
       "class_tags": [
         "research_chemicals",
@@ -11218,8 +11235,8 @@
       "cui_note": "Analogue watchlist spans multiple cardarine derivatives; no single ingredient-level UMLS concept is appropriate.",
       "external_ids": {},
       "ban_context": "substance",
-      "safety_warning": "Designer derivatives of cardarine, whose parent compound caused cancer in animal studies. Avoid any product labeled with these analogs.",
-      "safety_warning_one_liner": "Cancer-linked designer drug. Stop using and talk to your doctor."
+      "safety_warning": "Unverified Cardarine-analogue identity and safety. Rodent tumor findings for parent GW501516 do not establish that every derivative causes cancer. Avoid unverified products and consult your doctor.",
+      "safety_warning_one_liner": "Unverified Cardarine derivative; safety unresolved. Avoid."
     },
     {
       "id": "RECALLED_GE_LABS_YKARINE",
@@ -11228,7 +11245,7 @@
         "ge labs ykarine",
         "ykarine"
       ],
-      "reason": "GE Labs Ykarine was found to contain undeclared trendione (trenbolone ketone / dione) — a designer anabolic steroid prohormone. The product was linked to a consumer stroke, which is a known risk of high-dose androgenic-anabolic steroids due to erythrocytosis, thrombosis, and dyslipidemia. Anabolic steroids are DEA Schedule III controlled substances when synthetic. The presence of undeclared trendione makes this product an adulterated, misbranded, and illegally marketed controlled substance analog.",
+      "reason": "FDA testing found undeclared trendione, an anabolic steroid identified by FDA as a DEA Schedule III controlled substance, and confirmed labelled YK-11 in GE Labs Ykarine. Testing followed a report of a consumer who used the product and subsequently suffered a stroke; the report does not prove an individual causal pathway. FDA warns that anabolic steroids can cause serious liver injury and life-threatening cardiovascular and kidney reactions, and urges consumers not to use and to discard this product.",
       "status": "banned",
       "class_tags": [
         "recalled_supplement_brands",
@@ -11313,14 +11330,14 @@
         "lots": null,
         "effective_from": "2025-12-02",
         "effective_to": null,
-        "note": "FDA warning-letter enforcement for supplement product containing undeclared trendione."
+        "note": "FDA consumer advisory based on testing and an adverse-event report; not a warning letter or recall."
       },
       "cui_status": "no_single_umls_concept",
-      "cui_note": "Product recall record is intentionally null-CUI because a single UMLS ingredient or product concept would misrepresent this recalled branded product/formulation.",
+      "cui_note": "Brand-scoped FDA advisory; no single UMLS ingredient concept represents this multi-compound product.",
       "external_ids": {},
       "ban_context": "adulterant_in_supplements",
-      "safety_warning": "FDA found an undeclared designer anabolic steroid (trendione) in this supplement after a consumer's stroke. Stop and consult a doctor.",
-      "safety_warning_one_liner": "Hidden steroid found by FDA. Stop using and talk to your doctor.",
+      "safety_warning": "FDA found hidden trendione in GE Labs Ykarine after a reported stroke. FDA advises not to use and to discard it. If using regularly, consult a clinician immediately about safe discontinuation because rapid steroid cessation can cause dangerous withdrawal.",
+      "safety_warning_one_liner": "Hidden steroid: do not use; current users consult a clinician immediately before stopping.",
       "policy_verification_status": "verified",
       "policy_verified_at": "2026-10-02"
     },
@@ -11424,7 +11441,7 @@
         "green lumber capsules",
         "gl holdings green lumber"
       ],
-      "reason": "Green Lumber dietary supplement was found by FDA to contain undeclared tadalafil — a prescription PDE5 inhibitor (Cialis) — making it an adulterated product. Users were unknowingly consuming a pharmaceutical drug, creating life-threatening hypotension risk for anyone also taking nitrate medications for heart disease. FDA issued a recall. See also: SPIKE_TADALAFIL for the full risk profile of undeclared tadalafil in supplements.",
+      "reason": "Green Lumber dietary supplement was found by FDA to contain undeclared tadalafil — a prescription PDE5 inhibitor (Cialis) — making it an adulterated product. Users were unknowingly consuming a pharmaceutical drug, creating life-threatening hypotension risk for anyone also taking nitrate medications for heart disease. The company initiated a voluntary recall. See also: SPIKE_TADALAFIL for the full risk profile of undeclared tadalafil in supplements.",
       "status": "recalled",
       "class_tags": [
         "recalled_supplement_brands",
@@ -11446,7 +11463,7 @@
           "region": "US",
           "level": "federal",
           "status": "recalled",
-          "effective_date": "2025-08-29",
+          "effective_date": "2025-08-28",
           "source": {
             "type": "fda_action",
             "citation": "FDA recall August 29, 2025. Undeclared tadalafil.",
@@ -11506,14 +11523,18 @@
           }
         ]
       },
-      "regulatory_date": "2025-08-29",
-      "regulatory_date_label": "First FDA enforcement action",
+      "regulatory_date": "2025-08-28",
+      "regulatory_date_label": "FDA recall initiation date",
       "match_mode": "active",
       "recall_scope": {
         "brand": "Green Lumber Dietary Supplement",
-        "formulations": null,
-        "lots": null,
-        "effective_from": "2025-08-29",
+        "formulations": [
+          "Blister packages of2,4,10 or30 capsules"
+        ],
+        "lots": [
+          "Lot308 exp03/28"
+        ],
+        "effective_from": "2025-08-28",
         "effective_to": null,
         "note": null
       },
@@ -11913,7 +11934,8 @@
         "brand": "Live it Up Super Greens",
         "formulations": null,
         "lots": [
-          "lots beginning 'A', exp 08/2026-01/2028 (listed in the enforcement reports)"
+          "Powder pouches: lot numbers beginning A, expiry August2026–January2028",
+          "All stick packs: lot numbers beginning3, expiry August2026–January2028"
         ],
         "effective_from": "2026-01-20",
         "effective_to": null,
@@ -12012,12 +12034,16 @@
         ]
       },
       "regulatory_date": "2026-01-09",
-      "regulatory_date_label": "First FDA enforcement action",
+      "regulatory_date_label": "FDA recall initiation date",
       "match_mode": "active",
       "recall_scope": {
         "brand": "Modern Warrior Dietary Supplement",
-        "formulations": null,
-        "lots": null,
+        "formulations": [
+          "Modern Warrior Ready,60 capsules"
+        ],
+        "lots": [
+          "Products distributed April2022–December8,2025"
+        ],
         "effective_from": "2026-01-09",
         "effective_to": null,
         "note": null
@@ -12026,8 +12052,8 @@
       "cui_note": "Product recall record is intentionally null-CUI because a single UMLS ingredient or product concept would misrepresent this recalled branded product/formulation.",
       "external_ids": {},
       "ban_context": "adulterant_in_supplements",
-      "safety_warning": "A recalled product found to contain undeclared stimulants and nootropics in the supplement, including a DMAA variant. Stop the supplement and consult a doctor if you have been using it.",
-      "safety_warning_one_liner": "Recalled product with hidden stimulants. Stop using and talk to your doctor.",
+      "safety_warning": "Modern Warrior Ready was recalled after FDA found tianeptine,1,4-DMAA and aniracetam. Tianeptine has serious overdose and dependence risks; undeclared drugs can interact with medicines. Stop using affected recalled product and promptly consult a doctor, especially after regular use.",
+      "safety_warning_one_liner": "Recalled for tianeptine,DMAA and aniracetam. Stop using and consult a doctor.",
       "policy_verification_status": "verified",
       "policy_verified_at": "2026-10-02"
     },
@@ -12059,11 +12085,11 @@
         {
           "region": "US",
           "level": "federal",
-          "status": "banned",
+          "status": "recalled",
           "effective_date": "2025-11-21",
           "source": {
-            "type": "fda_action",
-            "citation": "FDA public notification November 21, 2025. StuffbyNainax LLC voluntary nationwide recall. Distribute",
+            "type": "fda_recall",
+            "citation": "FDA public notification November 21, 2025. StuffbyNainax LLC voluntary nationwide recall. Distribute Recall action concerns affected formulations/lots; not a permanent statutory substance ban.",
             "accessed_date": "2026-01-08",
             "url": "https://api.fda.gov/drug/enforcement.json?search=recall_number:%22D-0397-2026%22"
           },
@@ -12075,11 +12101,11 @@
           "region": "US",
           "level": "federal",
           "name": "FDA",
-          "status": "banned",
+          "status": "recalled",
           "effective_date": null,
           "source": {
-            "type": "state_statute",
-            "citation": "Public notification and voluntary recall",
+            "type": "fda_recall",
+            "citation": "Public notification and voluntary recall Recall action concerns affected formulations/lots; not a permanent statutory substance ban.",
             "accessed_date": "2026-01-08"
           },
           "jurisdiction_type": "country",
@@ -12187,11 +12213,11 @@
         {
           "region": "US",
           "level": "federal",
-          "status": "banned",
+          "status": "recalled",
           "effective_date": "2013-11-08",
           "source": {
-            "type": "fda_action",
-            "citation": "FDA recall (November 8, 2013). Permanently banned. Class I recall (most serious).",
+            "type": "fda_recall",
+            "citation": "FDA recall (November 8, 2013). Recalled. Class I recall (most serious). Recall action concerns affected formulations/lots; not a permanent statutory substance ban.",
             "accessed_date": "2026-01-08"
           },
           "jurisdiction_type": "country",
@@ -12202,11 +12228,11 @@
           "region": "US",
           "level": "federal",
           "name": "FDA",
-          "status": "banned",
+          "status": "recalled",
           "effective_date": null,
           "source": {
-            "type": "state_statute",
-            "citation": "Class I recall - most serious",
+            "type": "fda_recall",
+            "citation": "Class I recall - most serious Recall action concerns affected formulations/lots; not a permanent statutory substance ban.",
             "accessed_date": "2026-01-08"
           },
           "jurisdiction_type": "country",
@@ -12350,7 +12376,7 @@
         "purity products my bladder",
         "mybladder"
       ],
-      "reason": "Purity Products My Bladder supplement was recalled after the finished product tested positive for E. coli O7:K1 — a pathogenic strain associated with urinary tract infections and, in immunocompromised individuals, bloodstream infections. The contamination represented a manufacturing and quality control failure. FDA issued a voluntary recall. Consumers with UTI symptoms who used this product may have been at risk of worsened or treatment-resistant infection from the contaminating organism.",
+      "reason": "The company voluntarily recalled MyBladder lot030425176 after routine testing detected E. coli O7:K1 (IAI39/ExPEC) and E. coli1303. The notice describes gastrointestinal or other infection risks, especially for vulnerable consumers; it does not establish treatment resistance or worsening of a pre-existing urinary infection.",
       "status": "recalled",
       "class_tags": [
         "recalled_supplement_brands",
@@ -12377,13 +12403,14 @@
           "status": "recalled",
           "effective_date": "2025-10-28",
           "source": {
-            "type": "fda_action",
-            "citation": "FDA recall October 28, 2025. E. coli O7:K1 contamination.",
-            "accessed_date": "2026-01-27"
+            "type": "fda_recall",
+            "citation": "Company voluntary recall of lot030425176 for potential E. coli O7:K1 (IAI39/ExPEC) and1303 contamination.",
+            "accessed_date": "2026-10-11",
+            "url": "https://www.fda.gov/safety/recalls-market-withdrawals-safety-alerts/purity-products-announces-recall-dietary-supplement-my-bladder-because-possible-health-risk"
           },
           "jurisdiction_type": "country",
           "jurisdiction_code": "US",
-          "last_verified_date": "2026-01-27"
+          "last_verified_date": "2026-10-11"
         }
       ],
       "references_structured": [
@@ -12395,7 +12422,7 @@
           "supports_claims": [
             "regulatory_action"
           ],
-          "evidence_summary": "FDA recall due to pathogenic E. coli contamination",
+          "evidence_summary": "Company voluntary recall of lot030425176 for potential E. coli O7:K1 (IAI39/ExPEC) and1303 contamination.",
           "fda_recall_url": "https://www.fda.gov/safety/recalls-market-withdrawals-safety-alerts/purity-products-announces-recall-dietary-supplement-my-bladder-because-possible-health-risk"
         }
       ],
@@ -12420,13 +12447,13 @@
         ]
       },
       "regulatory_date": "2025-10-28",
-      "regulatory_date_label": "Regulatory limit established",
+      "regulatory_date_label": "FDA recall notice publication",
       "match_mode": "historical",
       "recall_scope": {
         "brand": "Purity Products My Bladder",
         "formulations": null,
         "lots": [
-          "03042517"
+          "030425176"
         ],
         "effective_from": "2025-10-28",
         "effective_to": "2026-04-13",
@@ -12436,7 +12463,7 @@
       "cui_note": "Product recall record is intentionally null-CUI because a single UMLS ingredient or product concept would misrepresent this recalled branded product/formulation.",
       "external_ids": {},
       "ban_context": "contamination_recall",
-      "safety_warning": "Purity Products My Bladder was recalled after tests found E. coli contamination, a concern for urinary tract and kidney infections. Stop any remaining product and consult a doctor if symptoms develop.",
+      "safety_warning": "MyBladder lot030425176 was recalled for possible E. coli contamination. Stop using affected product, return or discard it, and contact a doctor if unexpected symptoms occur.",
       "safety_warning_one_liner": "Recalled for E. coli contamination. Do not use this recalled product."
     },
     {
@@ -12449,7 +12476,7 @@
         "medinatura reboost",
         "medinatura clearlife"
       ],
-      "reason": "ReBoost and ClearLife nasal spray products were recalled after testing found yeast/mold contamination and Achromobacter — an opportunistic pathogen that can cause respiratory and bloodstream infections, particularly dangerous in immunocompromised patients. Intranasal products carry elevated contamination risk because they bypass skin and digestive barriers. FDA issued the recall. Consumers who had used these products were advised to stop immediately.",
+      "reason": "The company voluntarily recalled ReBoost nasal spray after yeast, mold and Achromobacter contamination was identified, then expanded the recall on December 16,2025 to include ClearLife, which may also be linked to Achromobacter contamination. These are distinct levels of confirmation. The notice identifies serious infection concern, especially for vulnerable consumers, and directs affected users to stop use.",
       "status": "recalled",
       "class_tags": [
         "recalled_supplement_brands",
@@ -12478,10 +12505,10 @@
           "status": "recalled",
           "effective_date": "2025-12-10",
           "source": {
-            "type": "fda_action",
-            "citation": "FDA recall December 10-16, 2025. Yeast/mold and Achromobacter contamination.",
+            "type": "fda_recall",
+            "citation": "FDA API D-0288-2026 covers ReBoost only, initiated December12,2025. Company expansion December16 covers ReBoost and ClearLife. Original December10 company announcement and API initiation describe different events.",
             "accessed_date": "2026-01-27",
-            "url": "https://api.fda.gov/drug/enforcement.json?search=recall_number:%22D-0288-2026%22"
+            "url": "https://www.fda.gov/safety/recalls-market-withdrawals-safety-alerts/medinatura-new-mexico-inc-expands-voluntary-nationwide-recall-reboost-nasal-spray-and-include"
           },
           "jurisdiction_type": "country",
           "jurisdiction_code": "US",
@@ -12493,12 +12520,12 @@
           "type": "fda_advisory",
           "title": "FDA Recall: ReBoost/ClearLife Nasal Spray - December 2025",
           "evidence_grade": "R",
-          "date": "2025-12-10",
+          "date": "2025-12-16",
           "supports_claims": [
             "regulatory_action"
           ],
-          "evidence_summary": "FDA recall due to microbial contamination in nasal spray products",
-          "fda_recall_url": "https://www.fda.gov/safety/recalls-market-withdrawals-safety-alerts"
+          "evidence_summary": "Company voluntary recall expansion: confirmed ReBoost contamination; ClearLife may be linked to Achromobacter.",
+          "fda_recall_url": "https://www.fda.gov/safety/recalls-market-withdrawals-safety-alerts/medinatura-new-mexico-inc-expands-voluntary-nationwide-recall-reboost-nasal-spray-and-include"
         },
         {
           "type": "fda_recall",
@@ -12532,21 +12559,26 @@
         ]
       },
       "regulatory_date": "2025-12-10",
-      "regulatory_date_label": "Regulatory limit established",
+      "regulatory_date_label": "Original company recall announcement",
       "match_mode": "active",
       "recall_scope": {
         "brand": "ReBoost and ClearLife Nasal Spray",
-        "formulations": null,
-        "lots": null,
+        "formulations": [
+          "ReBoost nasal spray20mL,NDC62795-4005-9",
+          "ClearLife nasal spray20mL,NDC62795-4006-9"
+        ],
+        "lots": [
+          "All lots within expiry; listed expiry dates12/2022–12/2025"
+        ],
         "effective_from": "2025-12-10",
         "effective_to": null,
-        "note": null
+        "note": "FDA API D-0288-2026 covers ReBoost only, initiated December12,2025. Company expansion December16 covers ReBoost and ClearLife. Original December10 company announcement and API initiation describe different events."
       },
       "cui_status": "no_single_umls_concept",
       "cui_note": "Product recall record is intentionally null-CUI because a single UMLS ingredient or product concept would misrepresent this recalled branded product/formulation.",
       "external_ids": {},
       "ban_context": "contamination_recall",
-      "safety_warning": "These nasal sprays were recalled after tests flagged yeast, mold, and Achromobacter — associated with respiratory infection risk, particularly in immunocompromised users. Stop and consult a doctor.",
+      "safety_warning": "The company recalled ReBoost for identified yeast,mold and Achromobacter contamination; ClearLife may also be affected by Achromobacter. Stop using affected recalled product and consult a doctor if symptoms occur.",
       "safety_warning_one_liner": "Recalled for microbial contamination. Do not use this recalled product.",
       "policy_verification_status": "verified",
       "policy_verified_at": "2026-10-02"
@@ -12559,7 +12591,7 @@
         "rheumacare capsules",
         "navafresh rheumacare"
       ],
-      "reason": "Rheumacare Capsules were found to contain lead at up to 11,100 ppm (milligrams per kilogram) in FDA testing. Lead at this concentration causes acute and chronic lead poisoning: neurological damage, kidney injury, bone disruption, and in children severe developmental harm. California Prop 65's maximum level is 0.5 mcg/day total lead; a single capsule of this product would deliver a catastrophically toxic dose. The distributor recalled lots CAM040 and CAL079-N after FDA testing.",
+      "reason": "The company voluntarily recalled Rheumacare lots CAM040 and CAL079-N (CALO79-N in company notice) for lead concentrations up to11,100ppm. Lead exposure can cause serious harm. Concentration alone does not establish dose per capsule without its mass. Proposition65 warning safe harbors are not universal intake limits. Stop using and return or discard affected product.",
       "status": "recalled",
       "class_tags": [
         "recalled_supplement_brands",
@@ -12579,11 +12611,11 @@
         {
           "region": "US",
           "level": "federal",
-          "status": "banned",
-          "effective_date": "2025-12-29",
+          "status": "recalled",
+          "effective_date": "2025-12-22",
           "source": {
-            "type": "fda_action",
-            "citation": "FDA recall December 2025. Consumers advised to stop use immediately. Class I recall.",
+            "type": "fda_recall",
+            "citation": "FDA recall December 2025. Consumers advised to stop use immediately. Class I recall. Recall action concerns affected formulations/lots; not a permanent statutory substance ban.",
             "accessed_date": "2026-01-08",
             "url": "https://api.fda.gov/drug/enforcement.json?search=recall_number:%22D-0332-2026%22"
           },
@@ -12595,11 +12627,11 @@
           "region": "US",
           "level": "federal",
           "name": "FDA",
-          "status": "banned",
-          "effective_date": null,
+          "status": "recalled",
+          "effective_date": "2025-12-22",
           "source": {
-            "type": "state_statute",
-            "citation": "Class I recall - most serious",
+            "type": "fda_recall",
+            "citation": "Class I recall - most serious Recall action concerns affected formulations/lots; not a permanent statutory substance ban.",
             "accessed_date": "2026-01-08"
           },
           "jurisdiction_type": "country",
@@ -12656,16 +12688,19 @@
           }
         ]
       },
-      "regulatory_date": "2025-12-29",
-      "regulatory_date_label": "Regulatory limit established",
+      "regulatory_date": "2025-12-22",
+      "regulatory_date_label": "FDA recall initiation date",
       "match_mode": "active",
       "recall_scope": {
         "brand": "Rheumacare Capsules",
         "formulations": null,
-        "lots": null,
-        "effective_from": "2025-12-29",
+        "lots": [
+          "CAM040 exp06/30/2029",
+          "CAL079-N exp09/30/2028"
+        ],
+        "effective_from": "2025-12-22",
         "effective_to": null,
-        "note": null
+        "note": "API spells CAL079-N (zero); company notice spells CALO79-N (letterO). Preserve this source discrepancy when checking a package."
       },
       "cui_status": "no_single_umls_concept",
       "cui_note": "Product recall record is intentionally null-CUI because a single UMLS ingredient or product concept would misrepresent this recalled branded product/formulation.",
@@ -12706,7 +12741,7 @@
           "region": "US",
           "level": "federal",
           "status": "recalled",
-          "effective_date": "2026-01-09",
+          "effective_date": "2025-10-20",
           "source": {
             "type": "fda_action",
             "citation": "FDA recall January 9, 2026. Unapproved new drug containing undeclared meloxicam.",
@@ -12761,14 +12796,18 @@
           }
         ]
       },
-      "regulatory_date": "2026-01-09",
-      "regulatory_date_label": "First FDA enforcement action",
+      "regulatory_date": "2025-10-20",
+      "regulatory_date_label": "FDA recall initiation date",
       "match_mode": "active",
       "recall_scope": {
         "brand": "Silintan Dietary Supplement",
-        "formulations": null,
-        "lots": null,
-        "effective_from": "2026-01-09",
+        "formulations": [
+          "25-count blue-label capsule bottles"
+        ],
+        "lots": [
+          "All lots within expiry"
+        ],
+        "effective_from": "2025-10-20",
         "effective_to": null,
         "note": null
       },
@@ -12865,13 +12904,13 @@
         "lots": null,
         "effective_from": "2025-12-12",
         "effective_to": null,
-        "note": "FDA warning-letter enforcement covering SARMs products marketed as dietary supplements."
+        "note": "FDA warning-letter enforcement covering research-labelled LGD-4033,RAD-140,S-4 and YK-11 sold for human use; not a product recall."
       },
       "cui_status": "no_single_umls_concept",
-      "cui_note": "Product recall record is intentionally null-CUI because a single UMLS ingredient or product concept would misrepresent this recalled branded product/formulation.",
+      "cui_note": "Brand-scoped warning-letter record for unapproved drugs; no single UMLS concept represents these products.",
       "external_ids": {},
       "ban_context": "adulterant_in_supplements",
-      "safety_warning": "Recalled products from this brand were marketed as supplements but contained unapproved SARMs in the product — linked to liver injury and hormone suppression. Stop and consult a doctor.",
+      "safety_warning": "FDA issued a warning letter for research-labelled TITAN SARMS products sold for human use as unapproved drugs. SARMs can cause serious liver and cardiovascular harm. Stop using and consult a doctor.",
       "safety_warning_one_liner": "Sold unapproved SARM drugs. Stop using and talk to your doctor.",
       "policy_verification_status": "verified",
       "policy_verified_at": "2026-09-26"
@@ -12928,7 +12967,7 @@
         {
           "region": "US",
           "level": "federal",
-          "status": "banned",
+          "status": "under_review",
           "effective_date": null,
           "source": {
             "type": "fda_action",
@@ -12937,7 +12976,8 @@
           },
           "jurisdiction_type": "country",
           "jurisdiction_code": "US",
-          "last_verified_date": "2026-01-08"
+          "last_verified_date": "2026-01-08",
+          "notes": "The existing citation explicitly says not banned while the former status said banned. Current legal scope lacks a primary legal source and remains unresolved; clinical high-risk assessment is retained."
         }
       ],
       "references_structured": [
@@ -13125,34 +13165,34 @@
           "last_verified_date": "2026-01-08"
         },
         {
-          "region": "US",
+          "region": "Japan",
           "level": "federal",
           "name": "Japan",
-          "status": "banned",
+          "status": "under_review",
           "effective_date": null,
           "source": {
-            "type": "state_statute",
-            "citation": "Banned in supplements",
-            "accessed_date": "2026-01-08"
+            "type": "regulatory",
+            "citation": "The prior entry asserted a Japanese supplement ban without a primary Japanese source; exact national status remains unresolved.",
+            "accessed_date": "2026-10-11"
           },
           "jurisdiction_type": "country",
-          "jurisdiction_code": "US",
-          "last_verified_date": "2026-01-08"
+          "jurisdiction_code": "JP",
+          "last_verified_date": "2026-10-11"
         },
         {
           "region": "US",
           "level": "federal",
-          "name": "Korea",
-          "status": "banned",
+          "name": "Korean-origin imports",
+          "status": "under_review",
           "effective_date": null,
           "source": {
-            "type": "state_statute",
-            "citation": "Subject to FDA import alerts",
-            "accessed_date": "2026-01-08"
+            "type": "fda_action",
+            "citation": "The authored citation concerns US FDA import controls on products originating in Korea, not Korean national law. Exact import-alert scope remains unresolved.",
+            "accessed_date": "2026-10-11"
           },
           "jurisdiction_type": "country",
           "jurisdiction_code": "US",
-          "last_verified_date": "2026-01-08"
+          "last_verified_date": "2026-10-11"
         }
       ],
       "references_structured": [
@@ -13284,19 +13324,20 @@
           "last_verified_date": "2026-01-08"
         },
         {
-          "region": "US",
-          "level": "federal",
+          "region": "EFSA",
+          "level": "international",
           "name": "EFSA",
-          "status": "banned",
+          "status": "clinical_advisory",
           "effective_date": null,
           "source": {
-            "type": "state_statute",
-            "citation": "Upper limit set at 800mg EGCG per day (2018)",
-            "accessed_date": "2026-01-08"
+            "type": "scientific_review",
+            "citation": "EFSA2018 scientific assessment found liver-enzyme concerns at supplemental EGCG doses of800mg/day or more and could not establish a safe supplemental intake. This is a scientific opinion, not US federal law or an intake authorization.",
+            "accessed_date": "2026-10-11",
+            "url": "https://www.efsa.europa.eu/en/efsajournal/pub/5239"
           },
-          "jurisdiction_type": "country",
-          "jurisdiction_code": "US",
-          "last_verified_date": "2026-01-08"
+          "jurisdiction_type": "agency_scope",
+          "jurisdiction_code": "EFSA",
+          "last_verified_date": "2026-10-11"
         }
       ],
       "references_structured": [
@@ -13417,7 +13458,7 @@
         {
           "region": "US",
           "level": "federal",
-          "status": "banned",
+          "status": "under_review",
           "effective_date": null,
           "source": {
             "type": "fda_action",
@@ -13426,13 +13467,14 @@
           },
           "jurisdiction_type": "country",
           "jurisdiction_code": "US",
-          "last_verified_date": "2026-01-08"
+          "last_verified_date": "2026-01-08",
+          "notes": "The existing citation explicitly says not banned while the former status said banned. Current legal scope lacks a primary legal source and remains unresolved; clinical high-risk assessment is retained."
         },
         {
-          "region": "US",
+          "region": "Germany",
           "level": "federal",
           "name": "Germany",
-          "status": "banned",
+          "status": "under_review",
           "effective_date": null,
           "source": {
             "type": "state_statute",
@@ -13440,14 +13482,15 @@
             "accessed_date": "2026-01-08"
           },
           "jurisdiction_type": "country",
-          "jurisdiction_code": "US",
-          "last_verified_date": "2026-01-08"
+          "jurisdiction_code": "DE",
+          "last_verified_date": "2026-01-08",
+          "notes": "Country attribution corrected from the named source annotation; current national legal status remains unresolved because no primary legal source is supplied."
         },
         {
-          "region": "US",
+          "region": "France",
           "level": "federal",
           "name": "France",
-          "status": "banned",
+          "status": "under_review",
           "effective_date": null,
           "source": {
             "type": "state_statute",
@@ -13455,14 +13498,15 @@
             "accessed_date": "2026-01-08"
           },
           "jurisdiction_type": "country",
-          "jurisdiction_code": "US",
-          "last_verified_date": "2026-01-08"
+          "jurisdiction_code": "FR",
+          "last_verified_date": "2026-01-08",
+          "notes": "Country attribution corrected from the named source annotation; current national legal status remains unresolved because no primary legal source is supplied."
         },
         {
-          "region": "US",
+          "region": "UK",
           "level": "federal",
           "name": "UK",
-          "status": "banned",
+          "status": "under_review",
           "effective_date": null,
           "source": {
             "type": "state_statute",
@@ -13470,14 +13514,15 @@
             "accessed_date": "2026-01-08"
           },
           "jurisdiction_type": "country",
-          "jurisdiction_code": "US",
-          "last_verified_date": "2026-01-08"
+          "jurisdiction_code": "GB",
+          "last_verified_date": "2026-01-08",
+          "notes": "Country attribution corrected from the named source annotation; current national legal status remains unresolved because no primary legal source is supplied."
         },
         {
-          "region": "US",
+          "region": "Switzerland",
           "level": "federal",
           "name": "Switzerland",
-          "status": "banned",
+          "status": "under_review",
           "effective_date": null,
           "source": {
             "type": "state_statute",
@@ -13485,8 +13530,9 @@
             "accessed_date": "2026-01-08"
           },
           "jurisdiction_type": "country",
-          "jurisdiction_code": "US",
-          "last_verified_date": "2026-01-08"
+          "jurisdiction_code": "CH",
+          "last_verified_date": "2026-01-08",
+          "notes": "Country attribution corrected from the named source annotation; current national legal status remains unresolved because no primary legal source is supplied."
         },
         {
           "region": "Germany",
@@ -13660,7 +13706,7 @@
         "mitragynine",
         "kratom (natural leaf)"
       ],
-      "reason": "Kratom (Mitragyna speciosa) leaf contains mitragynine and related alkaloids that act as mu-opioid receptor agonists at high doses. FDA has cited 44 reported deaths associated with kratom use and has repeatedly warned that it is an opioid with associated addiction, dependence, withdrawal, and overdose risk. The semi-synthetic derivative 7-hydroxymitragynine (see BANNED_7_HYDROXYMITRAGYNINE) is far more potent. Liver toxicity has also been reported. FDA considers kratom to be an opioid and has repeatedly warned against its use.",
+      "reason": "Kratom (Mitragyna speciosa) leaf contains mitragynine and related alkaloids that act as mu-opioid receptor agonists at high doses. FDA has cited 44 reported deaths associated with kratom use and has repeatedly warned that it is an opioid with associated addiction, dependence, withdrawal, and overdose risk. 7-hydroxymitragynine occurs naturally as a minor kratom-leaf constituent; concentrated or manufactured7-OH products are distinct exposures (see BANNED_7_HYDROXYMITRAGYNINE). Liver toxicity has also been reported. FDA considers kratom to be an opioid and has repeatedly warned against its use.",
       "status": "banned",
       "class_tags": [
         "high_risk_ingredients",
@@ -13862,7 +13908,7 @@
         {
           "region": "US",
           "level": "federal",
-          "status": "banned",
+          "status": "under_review",
           "effective_date": null,
           "source": {
             "type": "fda_action",
@@ -13871,7 +13917,8 @@
           },
           "jurisdiction_type": "country",
           "jurisdiction_code": "US",
-          "last_verified_date": "2026-01-08"
+          "last_verified_date": "2026-01-08",
+          "notes": "The existing citation explicitly says not banned while the former status said banned. Current legal scope lacks a primary legal source and remains unresolved; clinical high-risk assessment is retained."
         }
       ],
       "references_structured": [
@@ -14122,7 +14169,7 @@
         "cardarine",
         "GW 501516"
       ],
-      "reason": "Cardarine (GW501516) is a synthetic PPAR-delta agonist developed by GlaxoSmithKline. Its developer stopped research after rodent studies linked it to widespread tumour development; in mice it enlarged intestinal polyps and, after a carcinogen, drove rapid metastatic stomach cancer. There are no human data. It is not a dietary ingredient, has never been approved by any regulatory agency, and has no NDI notification. FDA warning letters (from 2021) treat products selling GW501516 as SARMs as unapproved new drugs. WADA prohibits it. Any supplement label listing Cardarine or GW-501516 should be treated as a safety alert.",
+      "reason": "Cardarine (GW501516) is a synthetic PPAR-delta agonist developed by GlaxoSmithKline. Its developer stopped research after rodent studies linked it to widespread tumour development; in mice it enlarged intestinal polyps and, after a carcinogen, drove rapid metastatic stomach cancer. Limited short-term human data exist: PMID 22814748 reports a 12-week oral trial in 268 patients with low HDL, plus an exploratory study in 37 participants. These studies do not establish long-term carcinogenic safety. It is not a dietary ingredient, has never been approved by any regulatory agency, and has no NDI notification. FDA warning letters (from 2021) treat products selling GW501516 as SARMs as unapproved new drugs. WADA prohibits it. Any supplement label listing Cardarine or GW-501516 should be treated as a safety alert.",
       "status": "banned",
       "class_tags": [
         "sarms_prohibited",
@@ -15358,7 +15405,7 @@
             "legal_status",
             "clinical_outcomes"
           ],
-          "evidence_summary": "FDA: bodybuilding products labelled as dietary supplements illegally contain steroids and steroid-like substances; named risks include serious liver injury, kidney damage, heart attack, stroke, pulmonary embolism and deep vein thrombosis."
+          "evidence_summary": "FDA: bodybuilding products labelled as dietary supplements illegally contain steroids and steroid-like substances; named risks include serious liver injury, kidney damage, heart attack, stroke, pulmonary embolism and deep vein thrombosis. FDA recommends immediate professional consultation because quickly ceasing steroid products can cause dangerous withdrawal."
         },
         {
           "type": "regulatory",
@@ -15398,8 +15445,8 @@
         "pubchem_cid": 112500385
       },
       "ban_context": "substance",
-      "safety_warning": "A synthetic anabolic steroid sold as a supplement, which is not lawful. Steroids like it are linked to liver injury, heart attack, stroke and blood clots. Stop using it and talk to your doctor.",
-      "safety_warning_one_liner": "Synthetic steroid, not a lawful supplement. Stop using and talk to your doctor.",
+      "safety_warning": "A synthetic steroid marketed as a supplement. Steroids and steroid-like products are associated with serious liver and cardiovascular harm. Consult a health care professional immediately for safe discontinuation; quickly stopping steroid products can cause dangerous withdrawal.",
+      "safety_warning_one_liner": "Steroid product: consult a clinician immediately before stopping.",
       "policy_verification_status": "verified",
       "policy_verified_at": "2026-09-27"
     },
@@ -15456,7 +15503,7 @@
             "legal_status",
             "clinical_outcomes"
           ],
-          "evidence_summary": "FDA: bodybuilding products labelled as dietary supplements illegally contain steroids and steroid-like substances; named risks include serious liver injury, kidney damage, heart attack, stroke, pulmonary embolism and deep vein thrombosis."
+          "evidence_summary": "FDA: bodybuilding products labelled as dietary supplements illegally contain steroids and steroid-like substances; named risks include serious liver injury, kidney damage, heart attack, stroke, pulmonary embolism and deep vein thrombosis. FDA recommends immediate professional consultation because quickly ceasing steroid products can cause dangerous withdrawal."
         },
         {
           "type": "regulatory",
@@ -15495,8 +15542,8 @@
         "pubchem_cid": 17311
       },
       "ban_context": "substance",
-      "safety_warning": "A synthetic anabolic steroid sold as a supplement, which is not lawful. Steroids like it are linked to liver injury, heart attack, stroke and blood clots. Stop using it and talk to your doctor.",
-      "safety_warning_one_liner": "Synthetic steroid, not a lawful supplement. Stop using and talk to your doctor.",
+      "safety_warning": "A synthetic steroid marketed as a supplement. Steroids and steroid-like products are associated with serious liver and cardiovascular harm. Consult a health care professional immediately for safe discontinuation; quickly stopping steroid products can cause dangerous withdrawal.",
+      "safety_warning_one_liner": "Steroid product: consult a clinician immediately before stopping.",
       "policy_verification_status": "verified",
       "policy_verified_at": "2026-09-27"
     },
@@ -15553,7 +15600,7 @@
             "legal_status",
             "clinical_outcomes"
           ],
-          "evidence_summary": "FDA: bodybuilding products labelled as dietary supplements illegally contain steroids and steroid-like substances; named risks include serious liver injury, kidney damage, heart attack, stroke, pulmonary embolism and deep vein thrombosis."
+          "evidence_summary": "FDA: bodybuilding products labelled as dietary supplements illegally contain steroids and steroid-like substances; named risks include serious liver injury, kidney damage, heart attack, stroke, pulmonary embolism and deep vein thrombosis. FDA recommends immediate professional consultation because quickly ceasing steroid products can cause dangerous withdrawal."
         },
         {
           "type": "regulatory",
@@ -15588,8 +15635,8 @@
       "cui_note": "No PubChem, UNII or UMLS record exists for this designer steroid; identity rests on the printed chemical name.",
       "external_ids": {},
       "ban_context": "substance",
-      "safety_warning": "A synthetic anabolic steroid sold as a supplement, which is not lawful. Steroids like it are linked to liver injury, heart attack, stroke and blood clots. Stop using it and talk to your doctor.",
-      "safety_warning_one_liner": "Synthetic steroid, not a lawful supplement. Stop using and talk to your doctor.",
+      "safety_warning": "A synthetic steroid marketed as a supplement. Steroids and steroid-like products are associated with serious liver and cardiovascular harm. Consult a health care professional immediately for safe discontinuation; quickly stopping steroid products can cause dangerous withdrawal.",
+      "safety_warning_one_liner": "Steroid product: consult a clinician immediately before stopping.",
       "policy_verification_status": "verified",
       "policy_verified_at": "2026-09-27"
     },
@@ -15602,7 +15649,7 @@
         "chloropre tadalafil",
         "chloropretadalafil"
       ],
-      "reason": "Chloropretadalafil is a synthetic analog of tadalafil designed to evade detection while delivering PDE5 inhibitor activity equivalent to the prescription drug. Its presence in supplements is always undeclared. The same cardiovascular risks apply as with tadalafil — life-threatening hypotension with nitrates — but standard screening may not identify it. FDA considers chloropretadalafil an undeclared pharmaceutical adulterant. No safety or efficacy data exists for this specific analog in humans.",
+      "reason": "Chloropretadalafil is an analogue of tadalafil identified undeclared in sexual-enhancement supplements. The cited FDA notice or posted recall describes structural similarity and concern for dangerous blood-pressure drops when combined with nitrate medicines such as nitroglycerin. Safety and efficacy of this analogue have not been established by the cited source; the source does not establish comparative pharmacological activity or relative risk. Its undeclared presence in supplements remains an adulteration concern.",
       "status": "banned",
       "class_tags": [
         "illegal_spiking_agents",
@@ -15699,7 +15746,7 @@
         "metabolites": []
       },
       "ban_context": "adulterant_in_supplements",
-      "safety_warning": "A designer tadalafil analog found undeclared in sexual-enhancement supplements, engineered to evade testing. Risk of dangerous blood-pressure drops with nitrates. Stop and consult a doctor.",
+      "safety_warning": "An analogue of tadalafil found undeclared in supplements. Risk of dangerous blood-pressure drops with nitrate medicines. Stop the supplement and talk to your doctor.",
       "safety_warning_one_liner": "Designer ED drug hidden in supplements. Stop using and talk to your doctor.",
       "policy_verification_status": "verified",
       "policy_verified_at": "2026-10-02"
@@ -15845,8 +15892,8 @@
         ]
       },
       "ban_context": "adulterant_in_supplements",
-      "safety_warning": "A prescription corticosteroid found undeclared in joint and arthritis supplements — risk includes blood-sugar spikes, mood changes, and adrenal suppression. Stop and consult your doctor.",
-      "safety_warning_one_liner": "Prescription steroid hidden in supplements. Stop using and talk to your doctor.",
+      "safety_warning": "A prescription corticosteroid found undeclared in supplements. It can suppress adrenal function; stopping abruptly after prolonged use can cause serious withdrawal. Consult a healthcare professional immediately for assessment and safe discontinuation.",
+      "safety_warning_one_liner": "Hidden prescription steroid. Consult a healthcare professional immediately before stopping; withdrawal can be dangerous.",
       "policy_verification_status": "verified",
       "policy_verified_at": "2026-10-02"
     },
@@ -16040,7 +16087,6 @@
       "standard_name": "Fluoxetine",
       "aliases": [
         "prozac",
-        "SSRI antidepressant",
         "fluoxetine hydrochloride",
         "fluoxetine"
       ],
@@ -16201,7 +16247,7 @@
         "7-methyl mitragynine",
         "7-methylkratom"
       ],
-      "reason": "7-Methylkratom refers to semi-synthetic derivatives of mitragynine (kratom's primary alkaloid) designed to increase potency. The most clinically significant is 7-hydroxymitragynine — a metabolite also created synthetically — which has potency far exceeding natural kratom and full mu-opioid receptor agonist activity. These semi-synthetic opioids carry overdose risk equivalent to pharmaceutical opioids. FDA has issued safety alerts and DEA has initiated scheduling proceedings for these compounds. See also: BANNED_7_HYDROXYMITRAGYNINE.",
+      "reason": "This disabled watchlist uses the marketing name7-Methylkratom. Exact chemical identity and compound-specific human effects remain unresolved. Its FDA source addresses7-hydroxymitragynine, which cannot be assigned to a different methylated alkaloid solely by name. The source does not establish full mu-opioid agonism, pharmaceutical-opioid-equivalent risk, or compound-specific scheduling for this entry.",
       "status": "banned",
       "class_tags": [
         "illegal_spiking_agents",
@@ -16236,14 +16282,12 @@
       "references_structured": [
         {
           "type": "fda_advisory",
-          "title": "FDA: 2025 warnings on synthetic kratom derivatives",
+          "title": "FDA seizes7-OH opioid products — parent source does not identify7-Methylkratom",
           "url": "https://www.fda.gov/news-events/press-announcements/fda-seizes-7-oh-opioids-protect-american-consumers",
           "evidence_grade": "R",
           "date": "2025",
-          "supports_claims": [
-            "regulatory_action"
-          ],
-          "evidence_summary": "FDA: 2025 warnings on synthetic kratom derivatives"
+          "supports_claims": [],
+          "evidence_summary": "This source addresses7-hydroxymitragynine; exact applicability to the different marketing name is unresolved."
         }
       ],
       "source_category": "illegal_spiking_agents",
@@ -16273,8 +16317,8 @@
       "cui_note": "No confirmed exact UMLS concept was found for this kratom-derived analogue name; null CUI is intentional.",
       "external_ids": {},
       "ban_context": "substance",
-      "safety_warning": "A semi-synthetic kratom alkaloid engineered for greater potency at opioid receptors. Associated with overdose risk and dependence. Stop and consult a doctor.",
-      "safety_warning_one_liner": "Potent semi-synthetic opioid-like compound. Stop using and talk to your doctor."
+      "safety_warning": "A kratom-derivative marketing name with unresolved chemical identity and human risk. Avoid unverified products and discuss use with your doctor.",
+      "safety_warning_one_liner": "Unverified kratom derivative; identity and safety unresolved. Avoid."
     },
     {
       "id": "SPIKE_PHENOLPHTHALEIN",
@@ -16405,7 +16449,7 @@
         "propoxyphenyl sildenafil",
         "propoxyphenylsildenafil"
       ],
-      "reason": "Propoxyphenylsildenafil is a synthetic sildenafil analog engineered to evade standard pharmaceutical testing while retaining PDE5 inhibitor activity. Its use in supplements is always undeclared. Like sildenafil, it carries life-threatening interaction risk with nitrates and can cause cardiovascular events. Because it is not standard sildenafil, routine FDA adulterant screening may not flag it — making it more dangerous than the parent compound from a consumer safety standpoint.",
+      "reason": "Propoxyphenylsildenafil is an analogue of sildenafil identified undeclared in sexual-enhancement supplements. The cited FDA notice or posted recall describes structural similarity and concern for dangerous blood-pressure drops when combined with nitrate medicines such as nitroglycerin. Safety and efficacy of this analogue have not been established by the cited source; the source does not establish comparative pharmacological activity or relative risk. Its undeclared presence in supplements remains an adulteration concern.",
       "status": "banned",
       "class_tags": [
         "illegal_spiking_agents",
@@ -16496,7 +16540,7 @@
         "unii": "2JW56253DF"
       },
       "ban_context": "adulterant_in_supplements",
-      "safety_warning": "A designer sildenafil analog found undeclared in sexual-enhancement supplements, engineered to evade testing. Risk of dangerous blood-pressure drops for users on nitrates. Stop and consult a doctor.",
+      "safety_warning": "An analogue of sildenafil found undeclared in supplements. Risk of dangerous blood-pressure drops with nitrate medicines. Stop the supplement and talk to your doctor.",
       "safety_warning_one_liner": "Designer ED drug hidden in supplements. Stop using and talk to your doctor.",
       "policy_verification_status": "verified",
       "policy_verified_at": "2026-10-02"
@@ -16523,7 +16567,10 @@
         "priority": 1,
         "match_type": "exact",
         "confidence": "high",
-        "negative_match_terms": []
+        "negative_match_terms": [
+          "propoxyphenyl sildenafil",
+          "propoxyphenylsildenafil"
+        ]
       },
       "legal_status_enum": "adulterant",
       "clinical_risk_enum": "critical",
@@ -16656,7 +16703,12 @@
         "priority": 1,
         "match_type": "exact",
         "confidence": "high",
-        "negative_match_terms": []
+        "negative_match_terms": [
+          "amino tadalafil",
+          "aminotadalafil",
+          "chloro-tadalafil",
+          "chloropretadalafil"
+        ]
       },
       "legal_status_enum": "adulterant",
       "clinical_risk_enum": "critical",
@@ -16762,7 +16814,7 @@
         "methyl-tianeptine",
         "fluorinated tianeptine"
       ],
-      "reason": "Tianeptine analogue compounds are designer drug variants engineered to mimic tianeptine — an atypical antidepressant with mu-opioid receptor agonist activity. FDA has not approved tianeptine for any use (see BANNED_TIANEPTINE). Designer analogs are created to evade listing and scheduling while retaining the opioid-like and addiction properties of the parent compound. When found in supplements, users face opioid-like dependence, withdrawal, and overdose risk without any labeling indicating the opioid mechanism.",
+      "reason": "This watchlist concerns unverified compounds marketed as tianeptine analogues. FDA's cited source describes tianeptine and its salts, not every ethyl, methyl or fluorinated derivative. Compound-specific opioid activity, dependence, withdrawal, toxicity and legal status cannot be inferred solely from a name or parent-drug warning. Existing quarantine policy remains separate from those unresolved facts.",
       "status": "banned",
       "class_tags": [
         "illegal_spiking_agents",
@@ -16816,10 +16868,8 @@
           "url": "https://www.fda.gov/food/information-select-dietary-supplement-ingredients-and-other-substances/tianeptine-dietary-supplements",
           "evidence_grade": "R",
           "date": "2025",
-          "supports_claims": [
-            "regulatory_action"
-          ],
-          "evidence_summary": "FDA: 2025 warnings on tianeptine analogs"
+          "supports_claims": [],
+          "evidence_summary": "FDA addresses tianeptine and its salts, not the entire synthetic analogue class; this citation does not verify analogue-specific hazard or legal status."
         }
       ],
       "source_category": "illegal_spiking_agents",
@@ -16854,8 +16904,8 @@
       "cui_note": "Policy watchlist spans multiple tianeptine analogues; no single ingredient-level UMLS concept is appropriate.",
       "external_ids": {},
       "ban_context": "substance",
-      "safety_warning": "Designer tianeptine analogs with opioid-receptor activity, found in gray-market supplements. Associated with dependence and withdrawal. Stop and consult a doctor.",
-      "safety_warning_one_liner": "Designer opioid-like substances. Stop using and talk to your doctor."
+      "safety_warning": "Unverified tianeptine-analogue identity and safety. Parent-drug opioid warnings do not establish every derivative's effects. Avoid unverified products and consult your doctor.",
+      "safety_warning_one_liner": "Unverified tianeptine derivative; safety unresolved. Avoid."
     },
     {
       "id": "STIM_ALPHA_PHP",
@@ -17371,23 +17421,24 @@
           "status": "banned",
           "effective_date": null,
           "source": {
-            "type": "national_regulation",
-            "citation": "CBD not prohibited by WADA if THC <0.3%",
-            "accessed_date": "2026-01-08"
+            "type": "anti_doping_code",
+            "citation": "WADA 2026 S8 prohibits natural and synthetic cannabinoids in competition, except cannabidiol (CBD). The exception has no product THC percentage condition; other cannabinoids in CBD products may still cause a positive test.",
+            "accessed_date": "2026-10-11",
+            "url": "https://www.wada-ama.org/en/prohibited-list"
           },
           "jurisdiction_type": "agency_scope",
           "jurisdiction_code": "WADA",
-          "last_verified_date": "2026-01-08"
+          "last_verified_date": "2026-10-11"
         }
       ],
       "references_structured": [
         {
           "type": "wada_list",
-          "title": "WADA: Prohibited List - Cannabis",
-          "url": "https://www.wada-ama.org/en/resources/world-anti-doping-program/prohibited-list",
+          "title": "WADA 2026 Prohibited List — S8 Cannabinoids",
+          "url": "https://www.wada-ama.org/en/prohibited-list",
           "evidence_grade": "R",
           "supports_claims": [],
-          "evidence_summary": "WADA: Prohibited List - Cannabis"
+          "evidence_summary": "WADA 2026 S8 prohibits natural and synthetic cannabinoids in competition, except cannabidiol (CBD). The exception has no product THC percentage condition; other cannabinoids in CBD products may still cause a positive test."
         },
         {
           "type": "fda_advisory",
@@ -17791,7 +17842,7 @@
           "title": "FDA Safety Alert: Undeclared drug ingredients in dietary supplements",
           "url": "https://www.fda.gov/drugs/medication-health-fraud-notifications/ultra-advanc3-and-ultra-advanc3-gold-may-be-harmful-due-hidden-drug-ingredients",
           "evidence_grade": "R",
-          "date": "2025",
+          "date": "2026-02-26",
           "supports_claims": [
             "regulatory_action"
           ],
@@ -17898,11 +17949,11 @@
           "type": "systematic_review",
           "title": "Lobeline for smoking cessation (Cochrane Review)",
           "evidence_grade": "A",
-          "url": "https://pubmed.ncbi.nlm.nih.gov/24373424",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/22336780/",
           "supports_claims": [
             "lack_of_efficacy"
           ],
-          "evidence_summary": "PMID 24373424 — Cochrane review found no evidence that lobeline aids smoking cessation. Adverse effects noted."
+          "evidence_summary": "PMID22336780: systematic review of smoking cessation; no eligible long-term trials, with no benefit found in available short-term evidence. This does not evaluate every indication."
         }
       ],
       "review": {
@@ -17924,7 +17975,7 @@
         ]
       },
       "status": "watchlist",
-      "reason": "Lobeline (lobelia alkaloids, Lobelia inflata herb) may not be used in OTC smoking-deterrent drugs without an approved application (21 CFR 310.544, from 1993-12-01). Narrow therapeutic index — toxic dose overlaps with emetic dose. Not demonstrated effective for any indication (Cochrane).",
+      "reason": "Lobeline (lobelia alkaloids, Lobelia inflata herb) may not be used in OTC smoking-deterrent drugs without an approved application (21 CFR 310.544, from 1993-12-01). Narrow therapeutic index — toxic dose overlaps with emetic dose. The Cochrane smoking-cessation review found no eligible long-term trials; the available short-term trial showed no benefit. This conclusion is specific to smoking cessation.",
       "jurisdictions": [
         {
           "region": "US",
@@ -17970,20 +18021,17 @@
         "5a-hydroxy laxogenin",
         "5-alpha hydroxy laxogenin",
         "5 alpha hydroxy laxogenin",
-        "5a-hydroxy laxogenin acetate",
         "laxosterone 5a-hydroxy laxogenin",
         "alpha hydroxy laxogenin",
-        "laxogenin",
         "alpha hydroxy laxogenine",
         "5a hydroxy laxogenin",
         "laxosterone",
-        "Laxogenin Acetate",
         "5α-hydroxy laxogenin"
       ],
       "entity_type": "ingredient",
       "match_mode": "active",
       "status": "high_risk",
-      "reason": "A steroidal plant compound marketed for muscle building. The FDA has not accepted it as a lawful dietary ingredient and has issued warning letters to manufacturers. No adequate human safety studies exist. Avoid, especially if you are an athlete subject to anti-doping testing (WADA prohibited class).",
+      "reason": "5-alpha-hydroxy-laxogenin is a synthetic derivative marketed for muscle building, distinct from naturally occurring laxogenin. OPSS reports that its natural occurrence has not been demonstrated and that product safety is unknown. FDA determined the named hydroxyl compound is not a dietary ingredient in its May 4, 2022 Performax warning letter. OPSS lists it as prohibited for Service Members; this is a DoD rule, not proof of a named WADA classification.",
       "legal_status_enum": "high_risk",
       "clinical_risk_enum": "high",
       "source_category": "steroidal_analog",
@@ -17993,7 +18041,9 @@
         "fuzzy_threshold": 0.75,
         "case_sensitive": false,
         "preferred_alias": "5a-Hydroxy Laxogenin",
-        "negative_match_terms": []
+        "negative_match_terms": [
+          "acetate"
+        ]
       },
       "jurisdictions": [],
       "references_structured": [
@@ -18016,6 +18066,19 @@
           "evidence_grade": "R",
           "confidence": "high",
           "title": "FDA Sends Warning Letters to Multiple Companies for Illegally Selling Adulterated Dietary Supplements"
+        },
+        {
+          "type": "government_consumer_guidance",
+          "authority": "OPSS",
+          "title": "Laxogenin and 5-Alpha-Hydroxy-Laxogenin in Dietary Supplements",
+          "url": "https://www.opss.org/article/laxogenin-and-5-alpha-hydroxy-laxogenin-dietary-supplements",
+          "published_date": "2022-05-10",
+          "evidence_grade": "R",
+          "supports_claims": [
+            "chemical_identity",
+            "regulatory_scope"
+          ],
+          "evidence_summary": "Natural laxogenin and synthetic 5-alpha-hydroxy-laxogenin are distinct; the hydroxyl derivative is on the DoD prohibited list and its human safety is unknown."
         }
       ],
       "review": {
@@ -18069,10 +18132,11 @@
         "metabolites": []
       },
       "ban_context": "substance",
-      "safety_warning": "A steroidal plant compound marketed for muscle building. FDA has issued warning letters and does not accept it as a lawful supplement ingredient. Stop and consult a doctor.",
+      "safety_warning": "A synthetic laxogenin derivative marketed for muscle building, with unknown human safety. FDA determined it is not a dietary ingredient; OPSS lists it as prohibited for Service Members. Stop using and talk to your doctor.",
       "safety_warning_one_liner": "Not a lawful supplement ingredient. Stop using and talk to your doctor.",
       "inactive_policy": "penalize_anyway",
-      "inactive_policy_reason": "Synthetic anabolic — never an excipient"
+      "inactive_policy_reason": "Synthetic anabolic — never an excipient",
+      "notes": " Exact identity scope: the acetate ester is excluded from this free-compound identifier match. The cited FDA action names 5-alpha-hydroxy-laxogenin, not its acetate ester; ester-specific regulatory and clinical safety remain unresolved. Exclusion does not establish safety."
     },
     {
       "id": "ADD_CASCARA_SAGRADA",
@@ -19006,14 +19070,12 @@
         "t2 3,5-diiodo-l-thyronine",
         "s 3,5-diiodo-l-thyronine",
         "3,5-diido-l-thyronine",
-        "3,3-diiodothyronine",
-        "3,3 diiodo l thyronine",
         "3,5 diiodo l-thyronine"
       ],
       "entity_type": "ingredient",
       "match_mode": "active",
       "status": "high_risk",
-      "reason": "Added from recurrent unresolved T2/diiodothyronine label variants in P3 routing pass; treated as high-risk hormone analog.",
+      "reason": "This record identifies 3,5-diiodo-L-thyronine, distinct from the 3,3 positional isomer. PMID25322465 reports thyroid-axis and potential cardiac effects in male obese mice. PMID22217997 is a two-person short-term human study, with no measured cardiac side effects. These studies do not establish safety for general supplement use or a legal prohibition.",
       "legal_status_enum": "high_risk",
       "clinical_risk_enum": "high",
       "source_category": "thyroid_hormone_analog",
@@ -19028,24 +19090,26 @@
       "jurisdictions": [],
       "references_structured": [
         {
-          "type": "review_article",
-          "authority": "OTHER",
+          "type": "pubmed",
+          "authority": "NCBI PubMed",
           "citation": "PMID: 25322465",
           "url": "https://pubmed.ncbi.nlm.nih.gov/25322465/",
           "published_date": "2014-10-16",
-          "evidence_grade": "B",
+          "evidence_grade": "D",
           "confidence": "medium",
-          "title": "PMID: 25322465"
+          "title": "3,5-Diiodo-L-thyronine (3,5-t2) exerts thyromimetic effects on hypothalamus-pituitary-thyroid axis, body composition, and energy metabolism in male diet-induced obese mice.",
+          "evidence_summary": "Experimental dosing in male obese mice altered thyroid regulation and increased heart weight; not a human safety trial."
         },
         {
-          "type": "review_article",
-          "authority": "OTHER",
+          "type": "pubmed",
+          "authority": "NCBI PubMed",
           "citation": "PMID: 22217997",
           "url": "https://pubmed.ncbi.nlm.nih.gov/22217997/",
           "published_date": "2011-12-31",
           "evidence_grade": "C",
           "confidence": "low",
-          "title": "PMID: 22217997"
+          "title": "3,5-diiodo-L-thyronine increases resting metabolic rate and reduces body weight without undesirable side effects.",
+          "evidence_summary": "Two euthyroid adults received short-term T2; no measured cardiac side effects, insufficient to establish general safety."
         }
       ],
       "review": {
@@ -19069,8 +19133,8 @@
       "cui": "C0891893",
       "external_ids": {},
       "ban_context": "substance",
-      "safety_warning": "A thyroid-hormone analog found on supplement labels. Associated with unpredictable thyroid effects and cardiovascular strain; not a lawful supplement ingredient. Stop and consult your doctor.",
-      "safety_warning_one_liner": "Thyroid hormone analog, not a supplement. Stop using and talk to your doctor.",
+      "safety_warning": "A thyroid-hormone analog with limited human safety evidence. Experimental animal dosing affected thyroid regulation and heart weight; a two-person human study cannot rule out risk. Stop using an unsupervised supplement and consult your doctor.",
+      "safety_warning_one_liner": "Thyroid-hormone analog; safety unresolved. Stop using and talk to your doctor.",
       "inactive_policy": "penalize_anyway",
       "inactive_policy_reason": "Thyroid pro-hormone — never an excipient"
     },
@@ -19079,14 +19143,10 @@
       "standard_name": "Docusate Sodium",
       "aliases": [
         "docusate sodium",
-        "docusate",
         "dioctyl sodium sulfosuccinate",
         "DSS",
         "colace",
-        "docusate calcium",
-        "docusate potassium",
-        "sodium docusate",
-        "stool softener"
+        "sodium docusate"
       ],
       "entity_type": "ingredient",
       "match_mode": "active",
@@ -19155,7 +19215,7 @@
         "metabolites": []
       },
       "ban_context": "adulterant_in_supplements",
-      "safety_warning": "An OTC stool-softener drug appearing as an undisclosed ingredient in supplements. Its presence reflects a labeling issue — talk to your doctor before continuing the product.",
+      "safety_warning": "Docusate sodium is an OTC stool-softener drug. A supplement label or detection alone does not establish that it was undisclosed. Talk to your doctor before continuing a supplement containing it.",
       "safety_warning_one_liner": "OTC drug found in supplements. Talk to your doctor.",
       "inactive_policy": "excipient_acceptable",
       "inactive_policy_reason": "FDA-approved softgel emulsifier; OTC stool softener at therapeutic doses, but legitimate excipient at trace levels"
@@ -20597,7 +20657,7 @@
         "nano titanium dioxide",
         "nano-tio2"
       ],
-      "reason": "In 2021, EFSA concluded that a concern for genotoxicity of titanium dioxide (E171) particles 'cannot be ruled out' and that E171 'can no longer be considered safe when used as a food additive,' so no ADI could be established (EFSA Journal 2021;19(5):e06585). On this basis, the European Commission adopted Commission Regulation (EU) 2022/63 banning E171 as a food additive; from 7 February 2022 it may no longer be added to foods, food supplements included, in the EU (foods made earlier could be sold until 7 August 2022). FDA still permits TiO2 at ≤1% of food weight (21 CFR 73.575) and in 2023 received a petition to revoke that listing, with no decision yet. IARC Group 2B (possibly carcinogenic by inhalation). Nanoparticle form (<100nm) shows greater intestinal absorption and genotoxic concern.",
+      "reason": "In 2021, EFSA concluded that a concern for genotoxicity of titanium dioxide (E171) particles 'cannot be ruled out' and that E171 'can no longer be considered safe when used as a food additive,' so no ADI could be established (EFSA Journal 2021;19(5):e06585). On this basis, the European Commission adopted Commission Regulation (EU) 2022/63 banning E171 as a food additive; from 7 February 2022 it may no longer be added to foods, food supplements included, in the EU (foods compliant with the rules before7 February 2022 could be placed on the market until7 August 2022 and remain on the market until their date of minimum durability or use-by date). FDA still permits TiO2 at ≤1% of food weight (21 CFR 73.575) and in 2023 received a petition to revoke that listing, with no decision yet. IARC Group 2B (possibly carcinogenic by inhalation). Nanoparticle form (<100nm) shows greater intestinal absorption and genotoxic concern.",
       "status": "watchlist",
       "class_tags": [
         "high_risk_ingredients",
@@ -20669,7 +20729,7 @@
           "supports_claims": [
             "regulatory_action"
           ],
-          "evidence_summary": "EU banned TiO2 as food additive; effective August 7 2022 for all food categories."
+          "evidence_summary": "Regulation entered into force7February2022. Article2 permits pre-transition compliant foods to be placed on the market until7August2022 and remain until minimum-durability/use-by date."
         },
         {
           "type": "scientific_review",
@@ -20867,13 +20927,14 @@
         },
         {
           "type": "scientific_review",
-          "title": "IARC Monographs Vol 93: Talc",
+          "title": "IARC Monographs Volume136: Talc and acrylonitrile",
           "evidence_grade": "A",
-          "url": "https://monographs.iarc.who.int/iarc-monographs-volume-93/",
+          "url": "https://monographs.iarc.who.int/news-events/volume-136-talc-and-acrylonitrile/",
           "supports_claims": [
-            "carcinogenicity_2b"
+            "carcinogenicity_2a"
           ],
-          "evidence_summary": "IARC Group 2B (perineal use, ovarian cancer association). Asbestos-contaminated talc: Group 1."
+          "evidence_summary": "IARC classified talc Group2A on limited human, sufficient animal and strong mechanistic evidence; this supersedes older talc classifications. Talc containing asbestos retains Group1.",
+          "date": "2024-07-05"
         }
       ],
       "source_category": "contaminant_risk",
@@ -21108,26 +21169,28 @@
           "status": "banned",
           "effective_date": null,
           "source": {
-            "type": "regulation",
-            "citation": "WADA Prohibited List — octopamine listed under beta-2 agonists/sympathomimetics category.",
-            "accessed_date": "2026-03-08"
+            "type": "anti_doping_code",
+            "citation": "WADA2026 S6 lists octopamine as a specified stimulant prohibited in competition.",
+            "accessed_date": "2026-10-11",
+            "url": "https://www.wada-ama.org/en/prohibited-list"
           },
           "jurisdiction_type": "agency_scope",
           "jurisdiction_code": "WADA",
-          "last_verified_date": "2026-03-08"
+          "last_verified_date": "2026-10-11"
         }
       ],
       "references_structured": [
         {
           "type": "fda_guidance",
-          "title": "FDA Warning Letters — Dietary Supplement Adulteration (Octopamine HCl)",
+          "title": "FDA Max Muscle warning letter622401 — May4,2022",
           "evidence_grade": "R",
-          "url": "https://www.fda.gov/food/dietary-supplement-products-ingredients/dietary-supplement-warning-letters",
+          "url": "https://www.fda.gov/inspections-compliance-enforcement-and-criminal-investigations/warning-letters/max-muscle-622401-05042022",
           "supports_claims": [
             "not_lawful_as_supplement",
             "regulatory_action"
           ],
-          "evidence_summary": "FDA has issued warning letters citing octopamine HCl as a non-dietary ingredient making products adulterated under FDCA."
+          "evidence_summary": "FDA identifies octopamine as a dietary ingredient and NDI; products subject to notification requirements without a submitted notification are adulterated. This finding is distinct from the non-dietary hordenine-HCl finding in the same letter.",
+          "date": "2022-05-04"
         }
       ],
       "source_category": "high_risk_ingredients",
@@ -21459,7 +21522,7 @@
         "chromium hexavalent",
         "hexavalent chromium compounds"
       ],
-      "reason": "Chromium(VI) is an IARC Group 1 human carcinogen (inhalation — lung and nasal cancers). NTP 2008 TR-546 found clear evidence of oral carcinogenicity in rats (small intestine tumors). EU CLP Category 1A carcinogen AND 1A mutagen. EPA Group A carcinogen. Not a permitted food additive or supplement ingredient in any jurisdiction — it is a contaminant only. Any supplement containing Cr(VI) is adulterated. Mechanism: Cr(VI) crosses cell membranes via sulfate/phosphate anion transporters, undergoes intracellular reductive activation through Cr(V)/Cr(IV) to Cr(III), generating ROS, Cr-DNA adducts, DNA-protein crosslinks, and strand breaks. IMPORTANT: Chromium(III) (picolinate, polynicotinate, etc.) is the beneficial supplemental form — only Cr(VI) compounds are carcinogenic.",
+      "reason": "Chromium(VI) is an IARC Group 1 human carcinogen (inhalation — lung and nasal cancers). NTP 2008 TR-546 found clear evidence of oral carcinogenicity, with oral-cavity tumors in rats and small-intestine tumors in mice. EU CLP Category 1A carcinogen AND 1A mutagen. EPA Group A carcinogen. Not a permitted food additive or supplement ingredient in any jurisdiction — it is a contaminant only. Any supplement containing Cr(VI) is adulterated. Mechanism: Cr(VI) crosses cell membranes via sulfate/phosphate anion transporters, undergoes intracellular reductive activation through Cr(V)/Cr(IV) to Cr(III), generating ROS, Cr-DNA adducts, DNA-protein crosslinks, and strand breaks. IMPORTANT: Chromium(III) (picolinate, polynicotinate, etc.) is the beneficial supplemental form — only Cr(VI) compounds are carcinogenic.",
       "status": "high_risk",
       "class_tags": [
         "heavy_metal_limits",
@@ -21534,16 +21597,16 @@
         {
           "region": "IARC",
           "level": "international",
-          "status": "banned",
+          "status": "clinical_advisory",
           "effective_date": null,
           "source": {
-            "type": "national_regulation",
-            "citation": "IARC Group 1: Known human carcinogen (sufficient evidence for lung cancer via inhalation). IARC Monographs Vol 100C (2012).",
-            "accessed_date": "2026-03-22"
+            "type": "scientific_review",
+            "citation": "IARC Group 1: Known human carcinogen (sufficient evidence for lung cancer via inhalation). IARC Monographs Vol 100C (2012). Hazard classification is not a statutory ban.",
+            "accessed_date": "2026-10-11"
           },
           "jurisdiction_type": "agency_scope",
           "jurisdiction_code": "IARC",
-          "last_verified_date": "2026-03-22"
+          "last_verified_date": "2026-10-11"
         }
       ],
       "references_structured": [
@@ -21679,9 +21742,62 @@
       "regulatory_date_label": "FDA recall initiation date",
       "recall_scope": {
         "brand": "Rosabella Moringa Dietary Supplement Capsules",
-        "formulations": null,
+        "formulations": [
+          "Moringa dietary supplement, 60 capsules per bottle"
+        ],
         "lots": [
-          "5020591-5020596, 5030246, 5030247 and further lots (exp 03-04/2027)"
+          "5020591 exp 03/2027",
+          "5020592 exp 03/2027",
+          "5020593 exp 03/2027",
+          "5020594 exp 03/2027",
+          "5020595 exp 03/2027",
+          "5020596 exp 03/2027",
+          "5030246 exp 04/2027",
+          "5030247 exp 04/2027",
+          "5030248 exp 04/2027",
+          "5030249 exp 04/2027",
+          "5030250 exp 04/2027",
+          "5030251 exp 04/2027",
+          "5040270 exp 05/2027",
+          "5040271 exp 05/2027",
+          "5040272 exp 05/2027",
+          "5040273 exp 05/2027",
+          "5040274 exp 05/2027",
+          "5040275 exp 05/2027",
+          "5040276 exp 05/2027",
+          "5040277 exp 05/2027",
+          "5040278 exp 05/2027",
+          "5040279 exp 05/2027",
+          "5050053 exp 6/2027",
+          "5050054 exp 6/2027",
+          "5050055 exp 6/2027",
+          "5050056 exp 6/2027",
+          "5060069 exp 07/2027",
+          "5060070 exp 07/2027",
+          "5060071 exp 07/2027",
+          "5060072 exp 07/2027",
+          "5060073 exp 07/2027",
+          "5060074 exp 07/2027",
+          "5060075 exp 07/2027",
+          "5060076 exp 07/2027",
+          "5060077 exp 07/2027",
+          "5060078 exp 07/2027",
+          "5060079 exp 07/2027",
+          "5060080 exp 07/2027",
+          "5080084 exp 9/2027",
+          "5080085 exp 9/2027",
+          "5080086 exp 9/2027",
+          "5090107 exp 10/2027",
+          "5090108 exp 10/2027",
+          "5090109 exp 10/2027",
+          "5090113 exp 10/2027",
+          "5090114 exp 10/2027",
+          "5090115 exp 10/2027",
+          "5090116 exp 10/2027",
+          "5090117 exp 10/2027",
+          "5090118 exp 10/2027",
+          "5100039 exp 11/2027",
+          "5100048 exp 11/2027"
         ],
         "effective_from": "2026-02-13",
         "effective_to": "2026-08-13",
@@ -22472,7 +22588,7 @@
         "sour orange",
         "bitter orange extract"
       ],
-      "reason": "Bitter orange (Citrus aurantium) extracts in supplements are concentrated for synephrine, an adrenergic agonist that — alone or combined with caffeine — has caused hypertensive crises, arrhythmias, ischemic strokes, and myocardial infarction. Marketed as an ephedra replacement after the 2004 ephedra ban. Health Canada caps OTC synephrine at 30 mg/day; supplement-dose products routinely exceed clinical safety. Pregnancy is not appropriate for stimulant-driven cardiovascular stress.",
+      "reason": "Bitter-orange supplements contain p-synephrine, which has different pharmacology from ephedrine. NCCIH reports serious cardiovascular events after bitter-orange-containing products, mostly multi-ingredient formulations; the contribution of bitter orange or p-synephrine is unclear. These reports do not establish that bitter orange alone caused every event or a universal safe dose. Food amounts and concentrated supplement exposures differ; risk in pregnancy and with medicines warrants caution.",
       "status": "high_risk",
       "class_tags": [
         "sympathomimetic",
@@ -22535,8 +22651,8 @@
       "entity_type": "ingredient",
       "match_mode": "active",
       "ban_context": "substance",
-      "safety_warning": "Bitter orange concentrates synephrine, a stimulant linked to hypertensive crisis, arrhythmias, strokes, and heart attacks. Health Canada caps OTC use at 30 mg/day. Stop and consult a doctor.",
-      "safety_warning_one_liner": "Stimulant, hypertensive crisis and stroke. Stop using and talk to your doctor.",
+      "safety_warning": "Serious cardiovascular events have been reported after bitter-orange-containing supplements, usually with other ingredients; bitter orange's contribution is unclear. Stop using a concentrated supplement and consult your doctor.",
+      "safety_warning_one_liner": "Cardiovascular concerns reported with bitter-orange products. Stop using and talk to your doctor.",
       "review": {
         "status": "validated",
         "last_reviewed_at": "2026-04-26",
@@ -23545,7 +23661,7 @@
         "tg foods divided sunset"
       ],
       "cui": null,
-      "reason": "TG Foods Inc. initiated an FDA Class II recall of Divided Sunset Multi Collagen Peptides (FDA recall H-0637-2026, 2026-02-27) after the ingredient statement was found to list 'eggshell membrane collagen' but failed to declare EGG as a major food allergen. Under the Food Allergen Labeling and Consumer Protection Act (FALCPA, 21 USC 343 et seq.), egg-containing products must carry explicit 'Contains: Egg' labeling. Consumers with egg allergy can experience anaphylaxis or other severe allergic reactions when the allergen is undisclosed. Class II reflects a temporary or medically reversible adverse consequence with remote probability of serious outcome for the general population — but acute risk for egg-allergic users.",
+      "reason": "FDA Class II recall H-0637-2026 initiated February 27,2026: wild-caught marine collagen and eggshell membrane appeared in the ingredient statement without EGG and specific FISH species declared parenthetically or in a Contains statement. FALCPA allows those alternative disclosure forms. Consumers with egg or fish allergy may have serious allergic reactions to affected recalled product.",
       "status": "recalled",
       "ban_context": "contamination_recall",
       "class_tags": [
@@ -23572,8 +23688,8 @@
       "match_mode": "historical",
       "inactive_policy": "penalize_anyway",
       "inactive_policy_reason": "Product-scoped recall — any presence of this SKU warrants the B0 gate. Undeclared allergen risk applies regardless of column.",
-      "safety_warning": "Divided Sunset Multi Collagen Peptides was recalled after FDA found undeclared egg — risk of allergic reaction or anaphylaxis for egg-allergic users. Stop and consult a doctor.",
-      "safety_warning_one_liner": "Class II FDA recall — undeclared egg allergen. Do not use this recalled product.",
+      "safety_warning": "Affected Divided Sunset Multi Collagen Peptides was recalled for missing egg and specific fish allergen disclosure. Do not use recalled product; consult a doctor if symptoms occur.",
+      "safety_warning_one_liner": "Recalled product: missing egg and fish allergen disclosure. Do not use.",
       "legal_status_enum": "contaminant_risk",
       "clinical_risk_enum": "high",
       "jurisdictions": [
@@ -23595,14 +23711,14 @@
       "references_structured": [
         {
           "type": "fda_enforcement",
-          "title": "FDA Recall H-0637-2026: Divided Sunset Multi Collagen Peptides — undeclared egg allergen",
+          "title": "FDA recall H-0637-2026: missing egg and fish allergen disclosure",
           "url": "https://www.accessdata.fda.gov/scripts/ires/?action=Redirect&recall_number=H-0637-2026",
           "evidence_grade": "R",
           "date": "2026-02-27",
           "supports_claims": [
             "regulatory_action"
           ],
-          "evidence_summary": "FDA Class II recall — ingredient statement listed 'eggshell membrane collagen' but failed to declare EGG as a major food allergen per FALCPA labeling requirements."
+          "evidence_summary": "FDA ClassII recall H-0637-2026 initiated February27,2026: wild-caught marine collagen and eggshell membrane appeared in the ingredient statement without EGG and specific FISH species declared parenthetically or in a Contains statement. FALCPA allows those alternative disclosure forms."
         }
       ],
       "source_category": "labeling_violation",
@@ -23638,13 +23754,13 @@
         ],
         "effective_from": "2026-02-27",
         "effective_to": "2026-04-16",
-        "note": "FDA Class II recall (H-0637-2026) — 8 Ounce stand-up pouch, UPC 8 50005 60689 5. Ingredient statement listed eggshell membrane collagen without the required 'Contains: Egg' FALCPA disclosure."
+        "note": "FDA ClassII recall H-0637-2026 initiated February27,2026: wild-caught marine collagen and eggshell membrane appeared in the ingredient statement without EGG and specific FISH species declared parenthetically or in a Contains statement. FALCPA allows those alternative disclosure forms. 8-ounce stand-up pouch, UPC8 50005 60689 5."
       },
       "external_ids": {
         "fda_recall_id": "H-0637-2026"
       },
       "cui_status": "no_single_umls_concept",
-      "cui_note": "Product-scoped undeclared-allergen recall — no single UMLS concept maps to a brand collagen SKU. The undeclared allergen (egg) is governed by FALCPA labeling rules rather than a substance-level ban; egg-allergic users should consult the allergens.json catalog for general egg-allergen detection."
+      "cui_note": "Product-scoped egg and fish allergen labeling recall; no single ingredient UMLS concept represents this branded SKU."
     },
     {
       "id": "ADULTERANT_TESTOSTERONE_PROPIONATE",
@@ -24301,15 +24417,17 @@
           "region": "EU",
           "level": "federal",
           "status": "banned",
-          "effective_date": "2006-01-01",
+          "effective_date": "2008-08-15",
           "source": {
             "type": "regulation",
-            "citation": "Authorisation withdrawn by Directive 2006/52/EC, following EFSA 2004 opinion (ADI invalidated).",
-            "accessed_date": "2026-06-07"
+            "citation": "Directive2006/52/EC of5July2006 removed E216/E217. Article3 required prohibition of noncompliant trade/use by15August2008, with earlier marketed/labelled stocks allowed until exhausted.",
+            "accessed_date": "2026-10-11",
+            "url": "https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32006L0052"
           },
           "jurisdiction_type": "region",
           "jurisdiction_code": "EU",
-          "last_verified_date": "2026-06-07"
+          "last_verified_date": "2026-10-11",
+          "notes": "Deadline for Member States to prohibit noncompliant trade/use; earlier marketed or labelled stocks could be sold until exhausted."
         }
       ],
       "display_mode_default": "informational",
@@ -24318,11 +24436,11 @@
           "type": "regulation",
           "title": "Directive 2006/52/EC (E216 authorisation withdrawn)",
           "evidence_grade": "R",
-          "url": "https://www.efsa.europa.eu/en/efsajournal/pub/83",
+          "url": "https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32006L0052",
           "supports_claims": [
             "regulatory_action"
           ],
-          "evidence_summary": "Authorisation withdrawn by Directive 2006/52/EC, following EFSA 2004 opinion (ADI invalidated)."
+          "evidence_summary": "Directive2006/52/EC of5July2006 removed E216/E217. Article3 required prohibition of noncompliant trade/use by15August2008, with earlier marketed/labelled stocks allowed until exhausted."
         },
         {
           "type": "regulatory",
@@ -24681,7 +24799,7 @@
         "ginkgolic acids",
         "ginkgolic acid c15:1"
       ],
-      "reason": "Ginkgolic acids are alkylphenol constituents of Ginkgo biloba that are allergenic, cytotoxic and genotoxic. They are an impurity/quality marker, not an intended active: pharmaceutical-grade standardized extract (EGb 761) is specified to contain <5 ppm ginkgolic acids. A label that discloses ginkgolic acid signals an extract that may not meet that purity limit. Ginkgo biloba itself is not unsafe — this entry flags the contaminant, and is intentionally a watchlist contaminant rather than a hard penalty so properly purified ginkgo products are not punished.",
+      "reason": "Ginkgolic acids are alkylphenol constituents of Ginkgo biloba that are allergenic, cytotoxic and genotoxic. They are an impurity/quality marker, not an intended active: pharmaceutical-grade standardized extract (EGb 761) is specified to contain <5 ppm ginkgolic acids. A label disclosure alone cannot establish whether the extract exceeds its purity limit; a declared amount may document compliance. Ginkgo biloba itself is not unsafe — this entry flags the contaminant, and is intentionally a watchlist contaminant rather than a hard penalty so properly purified ginkgo products are not punished.",
       "status": "watchlist",
       "class_tags": [
         "quality_marker",
@@ -24718,9 +24836,9 @@
         {
           "type": "pmid",
           "id": "18211362",
-          "title": "Quantitation of ginkgolic acids in ginkgo products",
+          "title": "Multifaceted therapeutic benefits of Ginkgo biloba L.: chemistry, efficacy, safety, and uses.",
           "url": "https://pubmed.ncbi.nlm.nih.gov/18211362/",
-          "evidence_grade": "B",
+          "evidence_grade": "C",
           "supports_claims": [
             "quality_limit"
           ],
@@ -24735,7 +24853,7 @@
           "supports_claims": [
             "mechanism_of_harm"
           ],
-          "evidence_summary": "Ginkgolic acids are cytotoxic/neurotoxic in vitro; allergenic and genotoxic"
+          "evidence_summary": "Concentration-dependent death of cultured chick embryonic neurons; experimental in-vitro evidence, not a human toxicity trial."
         }
       ],
       "source_category": "contaminant_risk",
@@ -24747,7 +24865,7 @@
       },
       "cui": "C0675409",
       "ban_context": "watchlist",
-      "safety_warning": "An allergenic, cytotoxic ginkgo impurity and a quality risk that suggests an under-purified extract. Quality extracts keep it under 5 ppm. Talk to your doctor about ginkgo sourcing.",
+      "safety_warning": "Ginkgolic acids are allergenic ginkgo impurities; cultured neuron toxicity is experimental evidence. Standardized EGb 761 limits them to less than 5 ppm. A declaration alone does not show an under-purified extract; review the measured concentration and sourcing with your doctor.",
       "safety_warning_one_liner": "Allergenic ginkgo impurity and quality risk. Avoid under-purified extracts.",
       "review": {
         "status": "validated",
@@ -25085,7 +25203,7 @@
         "rr-atdf",
         "designer tadalafil analog aminotadalafil"
       ],
-      "reason": "Aminotadalafil is a synthetic analog of tadalafil that delivers PDE5-inhibitor activity equivalent to the prescription drug while evading routine screening. Its presence in supplements is always undeclared. The same cardiovascular risk applies as with tadalafil — life-threatening hypotension when combined with nitrates such as nitroglycerin. FDA treats aminotadalafil as an undeclared pharmaceutical adulterant. No human safety or efficacy data exists for this analog.",
+      "reason": "Aminotadalafil is an analogue of tadalafil identified undeclared in sexual-enhancement supplements. The cited FDA notice or posted recall describes structural similarity and concern for dangerous blood-pressure drops when combined with nitrate medicines such as nitroglycerin. Safety and efficacy of this analogue have not been established by the cited source; the source does not establish comparative pharmacological activity or relative risk. Its undeclared presence in supplements remains an adulteration concern.",
       "status": "banned",
       "class_tags": [
         "illegal_spiking_agents",
@@ -25154,16 +25272,17 @@
       "regulatory_date": "2026-09-15",
       "regulatory_date_label": "FDA advisory publication date",
       "match_mode": "active",
-      "cui_status": "no_confirmed_umls_match",
-      "cui_note": "No confirmed exact UMLS concept for this undeclared PDE-5 analogue; null CUI is intentional, matching the other designer-analog entries.",
+      "cui_status": null,
+      "cui_note": "Exact aminotadalafil concept confirmed by live UMLS content on 2026-10-11; chemical analogue identity remains distinct from tadalafil.",
       "external_ids": {
         "unii": "FY501QO030"
       },
       "ban_context": "adulterant_in_supplements",
-      "safety_warning": "A designer tadalafil analog found undeclared in sexual-enhancement supplements. Risk of dangerous blood-pressure drops with nitrate heart medicines. Stop using and talk to your doctor.",
+      "safety_warning": "An analogue of tadalafil found undeclared in supplements. Risk of dangerous blood-pressure drops with nitrate medicines. Stop the supplement and talk to your doctor.",
       "safety_warning_one_liner": "Designer ED drug hidden in supplements — stop using and talk to your doctor.",
       "policy_verification_status": "verified",
-      "policy_verified_at": "2026-10-02"
+      "policy_verified_at": "2026-10-02",
+      "cui": "C2935567"
     },
     {
       "id": "RECALLED_LUZE_FIT_INTENSITY",
@@ -25363,7 +25482,7 @@
         "deep male enhancement"
       ],
       "cui": null,
-      "reason": "FDA laboratory analysis confirmed undeclared amino tadalafil, a designer analog of tadalafil (the active ingredient in Cialis) that evades routine screening. It can interact with nitrates found in heart medicines such as nitroglycerin and drop blood pressure to dangerous levels, which is especially concerning for people with diabetes, high blood pressure, high cholesterol or heart disease.",
+      "reason": "FDA laboratory analysis confirmed undeclared amino tadalafil, an analogue structurally similar to tadalafil (the active ingredient in Cialis). It can interact with nitrates found in heart medicines such as nitroglycerin and drop blood pressure to dangerous levels, which is especially concerning for people with diabetes, high blood pressure, high cholesterol or heart disease.",
       "status": "banned",
       "ban_context": "adulterant_in_supplements",
       "class_tags": [
