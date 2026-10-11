@@ -8,7 +8,7 @@ in `docs/adr/`, ownership in `scripts/contracts/source_of_truth_matrix.json`.
 
 **Anyone who scans a supplement gets a straight, verified answer: what the product is, whether it
 is good quality, and whether it is safe for them (their pregnancy or breastfeeding, conditions and
-medications), with the reason and the source. When we lack data we say so. No invented claims,
+medications), with the reason and the source. We flag only real, sourced concerns, never noise; when we find none we say "no known concerns", never "safe". No invented claims,
 and never a false reassurance.** Example: a pregnant user scans a St. John's wort product and is told at the top of the page that it is not for her during pregnancy, why, and the source. Set by Sean; agents propose, Sean changes it.
 Launch order and what is left: `docs/plans/PHARMAGUIDE_PRODUCT_ROADMAP.md` ("Launch track").
 

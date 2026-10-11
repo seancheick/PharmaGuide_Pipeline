@@ -51,7 +51,7 @@ A critical product safety gate (recall, ban, adulteration) sits above all three:
 
 ## Launch track — October 10, 2026
 
-North star (Sean, sharpened October 11): **anyone who scans a supplement gets a straight, verified answer: what the product is, whether it is good quality, and whether it is safe for them (their pregnancy or breastfeeding, conditions and medications), with the reason and the source. When we lack data we say so. No invented claims, and never a false reassurance.** Example: a pregnant user scans a St. John's wort product and is told at the top of the page that it is not for her during pregnancy, why, and the source. It heads AGENTS.md in all three
+North star (Sean, sharpened October 11): **anyone who scans a supplement gets a straight, verified answer: what the product is, whether it is good quality, and whether it is safe for them (their pregnancy or breastfeeding, conditions and medications), with the reason and the source. We flag only real, sourced concerns, never noise; when we find none we say "no known concerns", never "safe". No invented claims, and never a false reassurance.** Example: a pregnant user scans a St. John's wort product and is told at the top of the page that it is not for her during pregnancy, why, and the source. It heads AGENTS.md in all three
 repos. "Never a false reassurance" is the design standard for every verdict and all-clear; it is not
 a marketing guarantee and never appears as one. Sean wants the product launched soon with a steady
 blog cadence; this section orders what is left. The phases below keep their detail; the ledger rows
