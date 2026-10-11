@@ -3,9 +3,9 @@
     "schema_version": "1.0.0",
     "description": "Drug class expansion map for interaction matching (class:X → RxCUIs)",
     "purpose": "interaction_db_class_expansion",
-    "last_updated": "2026-07-27",
+    "last_updated": "2026-10-11",
     "total_classes": 39,
-    "total_members": 819,
+    "total_members": 816,
     "data_source_metadata": {
       "sources": [
         "NLM RxClass (ATC)",
@@ -192,6 +192,7 @@
         "30121",
         "7394",
         "8123",
+        "9639",
         "38382",
         "10734"
       ],
@@ -201,6 +202,7 @@
         "moclobemide",
         "nialamide",
         "phenelzine",
+        "selegiline",
         "toloxatone",
         "tranylcypromine"
       ],
@@ -209,7 +211,7 @@
         "N06AF",
         "N06AG"
       ],
-      "notes": "Union of N06AF (non-selective hydrazines) and N06AG (type A selective)"
+      "notes": "N06AF/N06AG antidepressant MAOIs plus selegiline. Selegiline product, route and dose matter: EMSAM contraindications and sympathomimetic blood-pressure monitoring must remain product-specific; membership does not make every combination contraindicated."
     },
     "class:benzodiazepines": {
       "display_name": "Benzodiazepines",
@@ -293,7 +295,6 @@
         "1796",
         "19847",
         "140587",
-        "2473",
         "183877",
         "237162",
         "22759",
@@ -306,7 +307,6 @@
         "8673",
         "4453",
         "4502",
-        "4845",
         "5640",
         "5781",
         "28198",
@@ -350,7 +350,6 @@
         "bufexamac",
         "bumadizone",
         "celecoxib",
-        "chondroitin sulfates",
         "clofezone",
         "dexketoprofen",
         "diacetylrhein",
@@ -363,7 +362,6 @@
         "feprazone",
         "flufenamic acid",
         "flurbiprofen",
-        "glucosamine",
         "ibuprofen",
         "indomethacin",
         "kebuzone",
@@ -401,7 +399,8 @@
       "rxclass_id": "M01A",
       "atc_codes": [
         "M01A"
-      ]
+      ],
+      "notes": "Clinical NSAID hazard membership is narrower than ATC M01A: glucosamine and chondroitin are not NSAIDs. Aspirin dose-specific medication-profile handling is separate; prescribed low-dose aspirin must not be blanket-excluded or blanket-treated as analgesic-dose NSAID use."
     },
     "class:anticonvulsants": {
       "display_name": "Anticonvulsants",
@@ -916,7 +915,6 @@
         "4507",
         "5093",
         "73178",
-        "6448",
         "6475",
         "2275602",
         "1040028",
@@ -979,7 +977,6 @@
         "fluspirilene",
         "haloperidol",
         "iloperidone",
-        "lithium",
         "loxapine",
         "lumateperone",
         "lurasidone",
@@ -1023,7 +1020,8 @@
       "rxclass_id": "N05A",
       "atc_codes": [
         "N05A"
-      ]
+      ],
+      "notes": "Clinical antipsychotic membership excludes lithium despite its ATC N05A grouping. Lithium is a mood stabilizer; independent lithium-specific interactions remain applicable."
     },
     "class:triptans": {
       "display_name": "Triptans",
@@ -1230,7 +1228,7 @@
     },
     "class:oral_contraceptives": {
       "display_name": "Hormonal contraceptives",
-      "description": "Systemic hormonal contraceptives (estrogens, progestogens, combinations)",
+      "description": "Systemic hormonal contraceptive ingredients, including oral and nonoral methods. Ingredient membership does not establish the route of a particular product.",
       "member_rxcuis": [
         "22656",
         "11636",
@@ -1238,7 +1236,6 @@
         "6373",
         "6529",
         "6691",
-        "6703",
         "7514",
         "7519",
         "1005921"
@@ -1250,7 +1247,6 @@
         "levonorgestrel",
         "lynestrenol",
         "medroxyprogesterone",
-        "megestrol",
         "norethindrone",
         "norgestrienone",
         "ulipristal"
@@ -1258,11 +1254,12 @@
       "rxclass_id": "G03A",
       "atc_codes": [
         "G03A"
-      ]
+      ],
+      "notes": "Etonogestrel includes subdermal implant and vaginal-ring exposure; enzyme-inducer contraceptive warnings are retained. Megestrol is excluded from this contraceptive hazard class; its current US oral suspension indication is AIDS-related anorexia/cachexia. Do not infer oral administration from the legacy class key."
     },
     "class:sedatives": {
       "display_name": "Hypnotics and sedatives",
-      "description": "Non-benzodiazepine hypnotics and sedatives (zolpidem, zaleplon, melatonin agonists)",
+      "description": "Hypnotics and sedatives, including benzodiazepine hypnotics, barbiturates, Z-drugs and melatonin or orexin receptor agents.",
       "member_rxcuis": [
         "516",
         "719",

@@ -157,6 +157,7 @@ def test_rule_sources_are_authoritative_urls(rules_blob):
         "www.fda.gov",
         "www.acog.org",
         "www.niddk.nih.gov",
+        "www.kidney.org",
         "publications.smfm.org",
     }
     for rule in rules_blob["medication_profile_gate_rules"]:
