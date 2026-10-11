@@ -801,7 +801,7 @@ def test_pragma_integrity_check_ok(build_ctx):
 def test_pragma_user_version_set(build_ctx):
     _build(build_ctx)
     con = _conn(build_ctx.output_db)
-    assert con.execute("PRAGMA user_version").fetchone()[0] == 2
+    assert con.execute("PRAGMA user_version").fetchone()[0] == 3
 
 
 def test_profile_warning_rules_are_versioned_and_queryable(build_ctx):
@@ -994,3 +994,19 @@ def test_audit_report_shape(build_ctx):
     assert report["total_interactions"] == 3
     assert report["source_drafts_count"] == 3
     assert report["source_suppai_count"] == 2
+
+
+def test_explicit_class_exclusions_export_without_becoming_members(build_ctx):
+    payload=json.loads(build_ctx.drug_classes_path.read_text())
+    payload['classes']['class:ssris']['excluded_member_rxcuis']=['2473','4845']
+    build_ctx.drug_classes_path.write_text(json.dumps(payload))
+    _build(build_ctx)
+    row=_conn(build_ctx.output_db).execute(
+        "SELECT drug_rxcuis_json, excluded_drug_rxcuis_json FROM drug_class_map WHERE class_id='class:ssris'"
+    ).fetchone()
+    assert json.loads(row['excluded_drug_rxcuis_json']) == ['2473','4845']
+    assert '2473' not in json.loads(row['drug_rxcuis_json'])
+    other=_conn(build_ctx.output_db).execute(
+        "SELECT excluded_drug_rxcuis_json FROM drug_class_map WHERE class_id='class:warfarin_family'"
+    ).fetchone()
+    assert json.loads(other[0]) == []

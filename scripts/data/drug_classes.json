@@ -400,7 +400,11 @@
       "atc_codes": [
         "M01A"
       ],
-      "notes": "Clinical NSAID hazard membership is narrower than ATC M01A: glucosamine and chondroitin are not NSAIDs. Aspirin dose-specific medication-profile handling is separate; prescribed low-dose aspirin must not be blanket-excluded or blanket-treated as analgesic-dose NSAID use."
+      "notes": "Clinical NSAID hazard membership is narrower than ATC M01A: glucosamine and chondroitin are not NSAIDs. Aspirin dose-specific medication-profile handling is separate; prescribed low-dose aspirin must not be blanket-excluded or blanket-treated as analgesic-dose NSAID use.",
+      "excluded_member_rxcuis": [
+        "2473",
+        "4845"
+      ]
     },
     "class:anticonvulsants": {
       "display_name": "Anticonvulsants",
