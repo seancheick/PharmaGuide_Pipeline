@@ -1,37 +1,15 @@
 #!/usr/bin/env python3
-"""Pins the V054/V055 CRI_UNDRUG → CRI_ANABOLIC reclassification.
+"""Keep the anabolic classification while checking dated deductions at their owner.
 
-Audit performed 2026-05-14: scanned all 37 CRI_UNDRUG entries in
-manufacturer_violations.json against GLP-1, anabolic, and botanical-
-substitution markers. Found exactly 2 entries that warranted moving
-from the generic CRI_UNDRUG (-15) to the more specific CRI_ANABOLIC
-(-18):
-
-  V054 — Warrior Labz SARMS (explicit SARMs + ED-drug spike; the
-         manufacturer name itself contains "SARMS"). The CRI_ANABOLIC
-         code's examples list mentions "stanozolol", "designer
-         prohormone", and pre-workout SARM spikes.
-
-  V055 — Modern Therapy (criminal prosecution for conspiracy to
-         distribute controlled anabolic steroids as supplements).
-         undeclared_drugs field literally reads
-         "anabolic steroids (multiple)".
-
-Score impact (per the 2026-05-14 audit, reports/cri_reclassification_2026_05_14):
-  - V054 manufacturer score: 79 Acceptable → 76 Acceptable (no band change)
-  - V055 manufacturer score: 96.25 Trusted → 95.5 Trusted (no band change)
-  - 0 manufacturers crossed any band boundary
-
-The remaining 35 CRI_UNDRUG entries are correctly classified — they
-cover pharmaceutical adulterations that aren't anabolic or GLP-1
-(ED drugs alone, NSAIDs like diclofenac, corticosteroids like
-dexamethasone, weight-loss agents like sibutramine from the pre-GLP1
-era, kratom-derived opioids, etc.).
-
-This test prevents drift if a future sync run or manual edit
-accidentally reverts the reclassification.
+Warrior Labz sold unapproved SARMs and prescription drugs. Modern Therapy's
+criminal proceeding involved prescription anabolic steroids, not products
+marketed as supplements. Source scope and user copy must retain that distinction.
 """
 import json
+from copy import deepcopy
+from datetime import date
+
+from api_audit import fda_manufacturer_violations_sync as sync
 from pathlib import Path
 
 import pytest
@@ -66,10 +44,6 @@ def test_v054_warrior_labz_is_cri_anabolic(entries):
     assert e["base_deduction"] == -18, (
         "V054 base_deduction must match CRI_ANABOLIC's -18"
     )
-    # (-18 + -3 unresolved + -3 multi_line) * 1.0 recency = -24
-    assert e["total_deduction_applied"] == -24.0, (
-        f"V054 total_deduction_applied expected -24.0, got {e['total_deduction_applied']}"
-    )
 
 
 def test_v055_modern_therapy_is_cri_anabolic(entries):
@@ -81,26 +55,52 @@ def test_v055_modern_therapy_is_cri_anabolic(entries):
     assert e["violation_code"] == "CRI_ANABOLIC", (
         "V055 must remain CRI_ANABOLIC (was reclassified from CRI_UNDRUG "
         "on 2026-05-14 — criminal prosecution for distributing anabolic "
-        "steroids as supplements)"
+        "prescription steroids)"
     )
     assert e["base_deduction"] == -18
-    # (-18 + 0 modifiers) * 0.25 recency = -4.5
-    assert e["total_deduction_applied"] == -4.5, (
-        f"V055 total_deduction_applied expected -4.5, got {e['total_deduction_applied']}"
-    )
 
 
-def test_user_facing_note_penalty_reflects_new_total(entries):
-    """The user_facing_note ends with 'Penalty: <value> pts.' — must
-    track total_deduction_applied so the Flutter card displays the
-    correct number."""
-    for vid, expected in (("V054", "-24.0"), ("V055", "-4.5")):
-        e = _find(entries, vid)
-        note = e["user_facing_note"]
-        assert f"Penalty: {expected} pts." in note, (
-            f"{vid} user_facing_note must end with 'Penalty: {expected} pts.', "
-            f"got: ...{note[-60:]}"
-        )
+@pytest.mark.parametrize("as_of,expected", [
+    (date(2025, 5, 14), -24.0),
+    (date(2026, 10, 11), -12.0),
+])
+def test_warrior_labz_deduction_ages_at_canonical_owner(entries, as_of, expected):
+    data = {"manufacturer_violations": deepcopy(entries)}
+    sync.recalculate_all_entries(data, sync.load_deduction_expl(), as_of=as_of)
+    row = _find(data["manufacturer_violations"], "V054")
+    assert row["violation_code"] == "CRI_ANABOLIC"
+    assert row["base_deduction"] == -18
+    assert row["total_deduction_applied"] == expected
+    if as_of == date(2026, 10, 11):
+        assert _find(data["manufacturer_violations"], "V055")["total_deduction_applied"] == -4.5
+
+
+def test_stored_anabolic_deductions_match_recorded_calculation_date(entries):
+    source = json.loads(DATA.read_text())
+    as_of = date.fromisoformat(source["_metadata"]["calculation_date"])
+    recalculated = deepcopy(source)
+    sync.recalculate_all_entries(recalculated, sync.load_deduction_expl(), as_of=as_of)
+    for vid in ("V054", "V055"):
+        actual = _find(entries, vid)
+        expected = _find(recalculated["manufacturer_violations"], vid)
+        for field in ("base_deduction", "recency_multiplier", "total_deduction_applied"):
+            assert actual[field] == expected[field], (vid, field)
+
+
+def test_user_facing_notes_describe_event_scope_without_score_arithmetic(entries):
+    for vid in ("V054", "V055"):
+        row = _find(entries, vid)
+        note = row["user_facing_note"]
+        assert row["manufacturer"] in note
+        assert row["date"] in note
+        assert row["product"] in note
+        assert row["reason"] in note
+        assert "Affected scope:" in note
+        assert "Penalty:" not in note
+        assert "FDA Recall" not in note
+    modern = _find(entries, "V055")
+    assert "prescription" in modern["product"].lower()
+    assert "this source does not describe supplements" in modern["reason"].lower()
 
 
 def test_no_other_cri_undrug_is_obviously_anabolic_or_glp1(entries):
