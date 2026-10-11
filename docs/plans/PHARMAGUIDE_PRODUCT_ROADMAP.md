@@ -114,7 +114,7 @@ then the broad citation scan as a full gate), then Phase 2 Stack Impact.
 ### Content (runs beside everything)
 
 A target of two blog posts a week (not a promise) from the ranked backlog
-`web:docs/13-blog-topic-backlog.md`, each through `/pg-blog-mdx`, verified under the L4 model. Start with
+`web:docs/13-blog-topic-backlog.md`, each through `/pg-trends` (what people ask and share, new research and recalls; demand, never facts) then `/pg-blog-mdx`, verified under the L4 model; `pnpm blog:validate` checks every PubMed/DOI citation live. Start with
 magnesium, then melatonin, to match the social series. Sean runs social media outside these repos and
 pairs each post with a carousel. Posts the blog gate marks risk 31–70 (`web:pnpm blog:publish-check`
 needs a `reviewer:` field) go to Laurie in a batch for a quick double-check rather than one at a time.
