@@ -3,11 +3,11 @@
     "description": "RDA (Recommended Dietary Allowance), optimal dosing, and UL (Upper Limit) reference values for nutrient dosing validation",
     "purpose": "dosing_validation",
     "schema_version": "5.1.1",
-    "last_updated": "2026-10-03",
+    "last_updated": "2026-10-11",
     "reference_data_contract": {
       "contract_version": "1",
       "reference_version": "5.1.2-2026-09-15",
-      "semantic_fingerprint": "sha256:50c128ce98f9352a3c8ed7a0c23d8639e4a088bdbd487a830649a6bb84ecfab5"
+      "semantic_fingerprint": "sha256:c4cd50542056bfdd2c425a3ab8663dd1c474791c49cf8ab13892fbf14db40e90"
     },
     "total_entries": 77,
     "data_source": "Institute of Medicine (IOM) Dietary Reference Intakes, National Academies 2019 Sodium/Potassium Update, FDA, USDA, Clinical Research",
@@ -113,6 +113,10 @@
     "boron": {
       "message": "Too much can cause nausea, vomiting, diarrhea, rash, or headache.",
       "source_url": "https://ods.od.nih.gov/factsheets/Boron-HealthProfessional/"
+    },
+    "vanadium": {
+      "message": "Excessive vanadium intake can harm the kidneys. The adult upper limit is 1.8 mg per day.",
+      "source_url": "https://www.nationalacademies.org/read/10026/chapter/15"
     }
   },
   "nutrient_recommendations": [
@@ -5445,7 +5449,7 @@
       "standard_name": "Vanadium",
       "unit": "mcg",
       "ul": null,
-      "ul_note": "No official RDA established, UL based on toxicity studies",
+      "ul_note": "NASEM 2001 established an adult (age 19+) UL of 1.8 mg/day elemental vanadium. No RDA or AI is established. No UL can be established for ages 0–18, pregnancy or lactation; intake in these groups should come from food (and formula for infants) only.",
       "optimal_range": "10-100",
       "highest_ul": 1800,
       "warnings": [
@@ -5461,15 +5465,15 @@
         "Kidney damage",
         "Nervous system effects"
       ],
-      "unofficial_ul": 1800,
+      "unofficial_ul": null,
       "data": [
         {
           "group": "Male",
           "age_range": "14-18",
           "rda_ai": null,
-          "ul": 1800,
+          "ul": null,
           "rda_ai_status": "not_determined",
-          "ul_status": null
+          "ul_status": "not_determined"
         },
         {
           "group": "Male",
@@ -5477,7 +5481,7 @@
           "rda_ai": null,
           "ul": 1800,
           "rda_ai_status": "not_determined",
-          "ul_status": null
+          "ul_status": "established"
         },
         {
           "group": "Male",
@@ -5485,7 +5489,7 @@
           "rda_ai": null,
           "ul": 1800,
           "rda_ai_status": "not_determined",
-          "ul_status": null
+          "ul_status": "established"
         },
         {
           "group": "Male",
@@ -5493,7 +5497,7 @@
           "rda_ai": null,
           "ul": 1800,
           "rda_ai_status": "not_determined",
-          "ul_status": null
+          "ul_status": "established"
         },
         {
           "group": "Male",
@@ -5501,15 +5505,15 @@
           "rda_ai": null,
           "ul": 1800,
           "rda_ai_status": "not_determined",
-          "ul_status": null
+          "ul_status": "established"
         },
         {
           "group": "Female",
           "age_range": "14-18",
           "rda_ai": null,
-          "ul": 1800,
+          "ul": null,
           "rda_ai_status": "not_determined",
-          "ul_status": null
+          "ul_status": "not_determined"
         },
         {
           "group": "Female",
@@ -5517,7 +5521,7 @@
           "rda_ai": null,
           "ul": 1800,
           "rda_ai_status": "not_determined",
-          "ul_status": null
+          "ul_status": "established"
         },
         {
           "group": "Female",
@@ -5525,7 +5529,7 @@
           "rda_ai": null,
           "ul": 1800,
           "rda_ai_status": "not_determined",
-          "ul_status": null
+          "ul_status": "established"
         },
         {
           "group": "Female",
@@ -5533,7 +5537,7 @@
           "rda_ai": null,
           "ul": 1800,
           "rda_ai_status": "not_determined",
-          "ul_status": null
+          "ul_status": "established"
         },
         {
           "group": "Female",
@@ -5541,70 +5545,70 @@
           "rda_ai": null,
           "ul": 1800,
           "rda_ai_status": "not_determined",
-          "ul_status": null
+          "ul_status": "established"
         },
         {
           "group": "Pregnancy",
           "age_range": "14-18",
           "rda_ai": null,
-          "ul": 1800,
+          "ul": null,
           "rda_ai_status": "not_determined",
-          "ul_status": null
+          "ul_status": "not_determined"
         },
         {
           "group": "Pregnancy",
           "age_range": "19-30",
           "rda_ai": null,
-          "ul": 1800,
+          "ul": null,
           "rda_ai_status": "not_determined",
-          "ul_status": null
+          "ul_status": "not_determined"
         },
         {
           "group": "Pregnancy",
           "age_range": "31-50",
           "rda_ai": null,
-          "ul": 1800,
+          "ul": null,
           "rda_ai_status": "not_determined",
-          "ul_status": null
+          "ul_status": "not_determined"
         },
         {
           "group": "Lactation",
           "age_range": "14-18",
           "rda_ai": null,
-          "ul": 1800,
+          "ul": null,
           "rda_ai_status": "not_determined",
-          "ul_status": null
+          "ul_status": "not_determined"
         },
         {
           "group": "Lactation",
           "age_range": "19-30",
           "rda_ai": null,
-          "ul": 1800,
+          "ul": null,
           "rda_ai_status": "not_determined",
-          "ul_status": null
+          "ul_status": "not_determined"
         },
         {
           "group": "Lactation",
           "age_range": "31-50",
           "rda_ai": null,
-          "ul": 1800,
+          "ul": null,
           "rda_ai_status": "not_determined",
-          "ul_status": null
+          "ul_status": "not_determined"
         }
       ],
       "id": "vanadium",
-      "ul_status": "not_established_insufficient_data",
+      "ul_status": "established",
       "cdrr": null,
       "cdrr_note": null,
       "conditionally_essential_for": null,
       "dri_update": null,
       "interaction_warnings": null,
       "is_conditionally_essential": null,
-      "notes": null,
+      "notes": "Source: https://www.nationalacademies.org/read/10026/chapter/15 (Vanadium UL Summary). An absent life-stage UL does not establish safety of supplements.",
       "smoker_adjustment": null,
       "synthesis_precursors": null,
-      "nutrient_class": "floor",
-      "ul_basis": "not_applicable"
+      "nutrient_class": "ceiling",
+      "ul_basis": "total_intake"
     },
     {
       "standard_name": "Alpha-Linolenic Acid",
