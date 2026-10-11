@@ -378,6 +378,26 @@ def _norm(val: Any) -> str:
     return str(val or "").strip().lower()
 
 
+def clinical_record_sources_eligible(entry: Mapping[str, Any]) -> bool:
+    """Honor source-integrity holds at the shared clinical-credit seam."""
+    if entry.get("scoring_eligible") is False:
+        return False
+    if any(_norm(entry.get(key)) == "reference" for key in ("study_type", "evidence_level")):
+        return False
+    references = entry.get("references_structured")
+    # Legacy records without structured references retain their existing
+    # eligibility; this guard contains explicit holds, not a new review policy.
+    if not references:
+        return True
+    return any(
+        isinstance(ref, Mapping)
+        and not ref.get("retracted")
+        and not ref.get("expression_of_concern")
+        and ref.get("scoring_eligible") is not False
+        for ref in references
+    )
+
+
 def _canonical_text(val: Any) -> str:
     s = _norm(val)
     return re.sub(r"[^a-z0-9]+", " ", s).strip()
@@ -928,7 +948,16 @@ def resolve_evidence_for_row(
     if deduped_studies:
         matched_owners.append("backed_clinical_studies")
         # Check study types, effect directions, and applicability
-        valid_studies = [s for s in deduped_studies if _norm(s.get("study_type")) != "reference"]
+        valid_studies = [s for s in deduped_studies if clinical_record_sources_eligible(s)]
+        if not valid_studies:
+            return EvidenceResolution(
+                canonical_id=canonical, ingredient_name=name,
+                matched_owners=matched_owners,
+                disposition=EvidenceDisposition.RESEARCH_PRESENT_APPLICABILITY_UNESTABLISHED.value,
+                points_eligible=False, applicability_status="applicability_unestablished",
+                reason_code="clinical_sources_ineligible", owner_facts=owner_facts,
+                blocking_reasons=["clinical_sources_ineligible"],
+            )
         claimed_purposes = _evidence_claim_purposes(product).get(canonical) if product else None
         if claimed_purposes:
             valid_studies = [study for study in valid_studies if claimed_purposes & _evidence_entry_purposes(study)]
