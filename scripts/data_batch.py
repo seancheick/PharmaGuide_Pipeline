@@ -45,6 +45,10 @@ IQM_FILE = "ingredient_quality_map.json"
 # total_entries means something file-specific. Each entry MUST cite the
 # bespoke per-file test that pins the semantic (no silent skips).
 INTENTIONAL_EXCEPTIONS: dict[str, str] = {
+    "caers_adverse_event_signals.json":
+        "total_ingredients_with_signals counts signals; total_supplement_reports_analyzed "
+        "counts source reports, not entries. Pinned by "
+        "test_caers_integration.py::TestCAERSOutputSchema::test_has_metadata.",
     "catalog_brand_registry.json":
         "total_entries tracks canonical brand-family records; wave_1 is an "
         "execution manifest, not another brand catalog. Pinned by "
