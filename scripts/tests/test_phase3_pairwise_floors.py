@@ -42,11 +42,46 @@ def test_presence_pairs_carry_no_floor():
             assert not e.get("dose_threshold"), f"{e['id']} presence pair wrongly floored"
 
 
-def test_exactly_32_floored():
-    floored = [e["id"] for e in PAIRS if e.get("dose_threshold")]
-    dose_dep = [e["id"] for e in PAIRS if e.get("materiality") == "dose_dependent"]
-    assert len(floored) == 32, f"expected 32 floors, found {len(floored)}"
-    assert set(floored) == set(dose_dep), "floored set != dose_dependent set"
+EXPECTED_FLOORED_IDS = {
+    'DSI_ANTICOAG_HORSE_CHESTNUT',
+    'DSI_ANTICOAG_TURMERIC',
+    'DSI_ANTIHYP_ASHWAGANDHA',
+    'DSI_ANTIHYP_COQ10',
+    'DSI_ANTIHYP_MAGNESIUM',
+    'DSI_ANTIHYP_VITD',
+    'DSI_ANTIPSYCH_MELATONIN',
+    'DSI_BENZO_MELATONIN',
+    'DSI_DM_ASHWAGANDHA',
+    'DSI_DM_BITTERMELON',
+    'DSI_DM_CHROMIUM',
+    'DSI_DM_CINNAMON',
+    'DSI_DM_FENUGREEK',
+    'DSI_DM_GYMNEMA',
+    'DSI_FISHOIL_GINKGO',
+    'DSI_FISHOIL_VITE',
+    'DSI_MELATONIN_VALERIAN',
+    'DSI_METFORMIN_ALA',
+    'DSI_NSAID_FISHOIL',
+    'DSI_NSAID_GARLIC',
+    'DSI_NSAID_GINKGO',
+    'DSI_OC_SOY',
+    'DSI_SEDATIVES_ASHWAGANDHA',
+    'DSI_SEDATIVES_PASSIONFLOWER',
+    'DSI_SEDATIVES_VALERIAN',
+    'DSI_SSRI_GINKGO',
+    'DSI_STATINS_NIACIN',
+    'DSI_WAR_GARLIC',
+    'DSI_WAR_GINGER',
+    'DSI_WAR_TURMERIC',
+    'SSI_ZINC_COPPER',
+}
+
+def test_only_source_supported_pairs_are_floored():
+    floored = {e["id"] for e in PAIRS if e.get("dose_threshold")}
+    dose_dep = {e["id"] for e in PAIRS if e.get("materiality") == "dose_dependent"}
+    assert floored == EXPECTED_FLOORED_IDS, "floor identities changed without a source-grounded update"
+    assert floored == dose_dep, "floored set != dose_dependent set"
+    assert "DSI_WAR_OMEGA3" not in floored, "the case report cannot define a 1g fish-oil floor"
 
 
 # Representative floors locked (value+unit) so a later edit can't silently move them.

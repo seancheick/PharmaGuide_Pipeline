@@ -2526,7 +2526,7 @@ class SupplementEnricherV3:
             # Unsubstantiated claims (egregious only)
             'disease_claims': re.compile(r'\b(treats?|cures?|prevents?|heals?|eliminates?|reverses?)\s+(cancer|diabetes|alzheimer|arthritis|covid|hypertension|heart\s+disease|depression|anxiety)\b', re.I),
             'miracle_claims': re.compile(r'\b(miracle|instant\s+(cure|healing)|100\s*%\s*(cure|effective)|guaranteed\s+results)\b', re.I),
-            'fda_approved': re.compile(r'\b(FDA\s+approved|approved\s+by\s+(the\s+)?FDA)\b(?!.*facility)', re.I)
+            'fda_approved': re.compile(r'\b(FDA\s+approved|approved\s+by\s+(the\s+)?FDA)\b(?!\s+(?:manufacturing\s+)?facility)', re.I)
         }
 
     # =========================================================================
@@ -14242,7 +14242,7 @@ class SupplementEnricherV3:
                                 "spirulina", "chlorella", "barley grass"],
             "ayurvedic_herbal": ["ayurvedic", "ayurveda", "ashwagandha", "triphala",
                                 "guggul", "brahmi", "shatavari"],
-            "weight_loss": ["weight loss", "fat burner", "thermogenic", "metabolism",
+            "weight_loss": ["weight loss", "fat burner", "thermogenic",
                            "appetite suppressant", "diet pill"],
             "sexual_enhancement": ["sexual enhancement", "male enhancement", "libido",
                                   "testosterone booster", "ed support"],
@@ -15829,11 +15829,14 @@ class SupplementEnricherV3:
         ]
 
         for pattern_name, claim_type, penalty in checks:
-            if self.compiled_patterns[pattern_name].search(text):
-                found_claims.append({
-                    "type": claim_type,
-                    "severity": "critical"
-                })
+            # Match affirmative label statements only. A nearby explicit
+            # denial/disclaimer is not a treatment or approval claim.
+            for match in self.compiled_patterns[pattern_name].finditer(text):
+                prefix = re.split(r"[.!?;\n]", text[:match.start()])[-1]
+                if re.search(r"\b(?:not(?:\s+been)?|not\s+claim\s+to|not,\s+and\s+has\s+never\s+been,|no|never|without|not\s+(?:intended|designed)\s+to(?:\s+(?:diagnose|treat|cure|prevent)\s*[,/]?\s*(?:or\s+)?)*)\s*$", prefix, re.I):
+                    continue
+                found_claims.append({"type": claim_type, "severity": "critical"})
+                break
 
         return {
             "found": len(found_claims) > 0,
@@ -16082,7 +16085,17 @@ class SupplementEnricherV3:
         manufacturer_norm = self._normalize_company_name(manufacturer)
 
         found = []
+        seen_event_ids = set()
         for violation in violations_list:
+            # Source references are projected by the FDA-sync owner. A missing
+            # citable reference must not become a public claim or a deduction.
+            # A usable URL is not itself proof: curated content still requires
+            # per-entry verification against that primary source.
+            from api_audit.fda_manufacturer_violations_sync import build_regulatory_source_url
+            recall_id = str(violation.get('fda_recall_id') or '')
+            source_url = build_regulatory_source_url(recall_id, violation.get('fda_source_url') or '')
+            if not source_url:
+                continue
             mfr_name = violation.get('manufacturer', '')
             if not mfr_name:
                 continue
@@ -16111,6 +16124,16 @@ class SupplementEnricherV3:
             if not match_source:
                 continue
 
+            # One event identity owner for historical and synced records.
+            from api_audit.fda_manufacturer_violations_sync import build_source_identifier
+            event_id = build_source_identifier(
+                recall_number=recall_id, link=source_url,
+                manufacturer=mfr_name, product=violation.get('product') or '',
+                reason=violation.get('reason') or '', date_value=violation.get('date') or '',
+            )
+            if event_id in seen_event_ids:
+                continue
+            seen_event_ids.add(event_id)
             total_deduction_applied = violation.get('total_deduction_applied', 0.0)
             found.append({
                 "violation_id": violation.get('id', ''),
@@ -16128,6 +16151,8 @@ class SupplementEnricherV3:
                 "matched_alias": matched_candidate if matched_candidate and matched_candidate != mfr_name else None,
                 # Path C authored field — user-facing brand-trust summary.
                 "brand_trust_summary": violation.get("brand_trust_summary"),
+                "product": violation.get("product"),
+                "fda_source_url": source_url,
                 "reason": violation.get("reason"),
                 "user_facing_note": violation.get("user_facing_note"),
                 "manufacturer_id": violation.get('manufacturer_id', ''),

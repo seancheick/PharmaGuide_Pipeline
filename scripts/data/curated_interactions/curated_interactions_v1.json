@@ -1,7 +1,7 @@
 {
   "_metadata": {
     "schema_version": "1.2.5",
-    "last_updated": "2026-10-01",
+    "last_updated": "2026-10-11",
     "total_entries": 92,
     "purpose": "Tier 1 curated drug-supplement and supplement-supplement interactions for the interaction database",
     "sources": [
@@ -30,7 +30,8 @@
       "2026-08-08: Corrected the vitamin E/warfarin and chromium/diabetes-medication guidance. Vitamin E copy now limits the bleeding-risk statement to large supplemental doses and preserves the uncertain clinically significant amount. Chromium is reclassified from Moderate to Minor/background monitoring, and its 200 mcg/day screening threshold is explicitly documented as inferred from studied dose ranges rather than a guideline cutoff.",
       "2026-09-11: Corrected DSI_ANTICOAG_VINPOCETINE evidence to preclinical/low confidence after reviewing PMID 28930203 and original human study PMID 2272713. Retained the Moderate precautionary warning, clarified management wording, and recorded project-owner confirmation of prior approval.",
       "2026-09-21: One owner per fact. DSI_DIURETICS_POTASSIUM mixed a chronic depletion fact (loop/thiazide diuretics lower potassium) with the supplement-safety fact; it now carries only the hyperkalemia warning and is scoped to class:potassium_sparing_diuretics (amiloride, canrenone, eplerenone, finerenone, spironolactone, triamterene), re-checked against the NIH ODS potassium fact sheet (Interactions with Medications). The loop/thiazide depletion fact belongs to DEP_DIURETICS_POTASSIUM in the depletion corpus. Retired DSI_BETABLOCK_MELATONIN: a neutral physiology/benefit statement, not a supplement-safety interaction; the beta-blocker/melatonin relationship is owned by DEP_BETABLOCKERS_MELATONIN.",
-      "2026-09-26: DSI_WAR_GARLIC no longer cites PMID 10594976 (Ankri & Mirelman 1999, antimicrobial properties of allicin): right ingredient, no warfarin or bleeding content. The NCCIH garlic page it keeps states the bleeding risk with anticoagulants. Severity, mechanism and dose threshold unchanged. Receipt: scripts/audits/pending_items_20260926/research.md."
+      "2026-09-26: DSI_WAR_GARLIC no longer cites PMID 10594976 (Ankri & Mirelman 1999, antimicrobial properties of allicin): right ingredient, no warfarin or bleeding content. The NCCIH garlic page it keeps states the bleeding risk with anticoagulants. Severity, mechanism and dose threshold unchanged. Receipt: scripts/audits/pending_items_20260926/research.md.",
+      "2026-10-11: Source audit corrected DSI_GINKGO_ANTIPLATELET observational design and unsupported 7-day surgery advice; DSI_WAR_GINKGO risk certainty; DSI_WAR_OMEGA3 unsupported 1g warning floor and bleeding certainty; DSI_STATINS_RYR exact dose-doubling claim; DSI_SSRI_SJW universal washout advice. Existing severity tiers and identities retained. Agent source verification, not a new clinician review. Receipt: scripts/audits/pending_items_20260926/research.md."
     ]
   },
   "interactions": [
@@ -81,8 +82,8 @@
       "agent2_id": "C0016157",
       "severity": "Moderate",
       "interaction_effect_type": "Additive",
-      "mechanism": "Omega-3 fatty acids (EPA/DHA) inhibit platelet aggregation and thromboxane A2 synthesis, adding antiplatelet activity on top of warfarin's anticoagulant effect. High doses (≥3 g/day) can meaningfully increase bleeding risk.",
-      "management": "Use fish oil supplements cautiously with warfarin. Doses up to 1 g/day are generally low risk. Inform your doctor; monitor for bruising or unusual bleeding. INR monitoring is advisable when starting or stopping high-dose fish oil.",
+      "mechanism": "Fish oil can have antiplatelet effects at high doses and might affect INR with warfarin. NIH ODS notes that most research at 3–6 g/day does not significantly affect anticoagulant status and reviews have not found clinically significant bleeding overall. A case report describes bleeding after a fall with 6 g/day omega-3 plus aspirin and warfarin; it does not establish a warning threshold.",
+      "management": "Tell your prescriber or anticoagulation clinic before starting, stopping, or changing fish oil while taking warfarin. Periodic INR monitoring may be appropriate, and watch for unusual bruising or bleeding. Do not change warfarin on your own. This alert identifies the combination; it does not mean a proven dose threshold was crossed.",
       "source_urls": [
         "https://ods.od.nih.gov/factsheets/Omega3FattyAcids-HealthProfessional/",
         "https://pubmed.ncbi.nlm.nih.gov/17192169/"
@@ -106,17 +107,8 @@
       "agent1_canonical_id": null,
       "agent2_canonical_id": "fish_oil",
       "direction": "harmful",
-      "materiality": "dose_dependent",
-      "dose_threshold": {
-        "agent_canonical_id": "fish_oil",
-        "value": 1000,
-        "unit": "mg",
-        "basis": "per_day",
-        "confidence": "medium",
-        "confidence_basis": "management_stated",
-        "source": "https://pubmed.ncbi.nlm.nih.gov/17192169/",
-        "rationale": "Pair mgmt: fish oil up to 1 g/day is low-risk with warfarin; >1 g warrants INR monitoring."
-      }
+      "materiality": "presence",
+      "evidence_notes": "PMID 17192169 is a case report with aspirin, warfarin and high-dose omega-3 after a fall. Neither that report nor NIH ODS establishes a 1 g/day warning floor or a universal 3 g/day bleeding threshold."
     },
     {
       "id": "DSI_WAR_GINKGO",
@@ -127,7 +119,7 @@
       "agent2_id": "C0772125",
       "severity": "Major",
       "interaction_effect_type": "Additive",
-      "mechanism": "Ginkgo inhibits platelet-activating factor (PAF) and has antiplatelet activity independent of warfarin's mechanism. The combination significantly amplifies bleeding risk. Case reports of serious hemorrhagic events exist.",
+      "mechanism": "Ginkgo can affect platelet function and may increase bleeding risk with warfarin. Serious bleeding has been reported, but controlled and observational findings are mixed; a uniform or quantified increase in risk is not established.",
       "management": "Avoid combining ginkgo with warfarin. If ginkgo is being used, inform prescriber immediately. Watch for signs of bleeding (unusual bruising, prolonged cuts, blood in urine/stool).",
       "source_urls": [
         "https://www.nccih.nih.gov/health/ginkgo",
@@ -555,7 +547,7 @@
       "agent2_id": "C0763533",
       "severity": "Major",
       "interaction_effect_type": "Additive",
-      "mechanism": "Red yeast rice naturally contains monacolin K, which is chemically identical to lovastatin. Combining red yeast rice with a prescription statin doubles the effective statin dose, dramatically increasing risk of myopathy and rhabdomyolysis.",
+      "mechanism": "Red yeast rice may contain monacolin K, which is chemically identical to lovastatin. The amount varies substantially across products and may be undisclosed. Combining a monacolin-containing product with a prescription statin can add statin exposure and increase muscle, liver and kidney adverse-effect risks; it does not predictably double the statin dose.",
       "management": "Do not use red yeast rice if you are already taking a prescription statin. If you prefer a natural approach, discuss with your doctor — the two should not be combined. Seek immediate care for severe muscle pain, weakness, or dark urine.",
       "source_urls": [
         "https://www.nccih.nih.gov/health/red-yeast-rice",
@@ -706,12 +698,13 @@
       "agent2_id": "C0813171",
       "severity": "Contraindicated",
       "interaction_effect_type": "Additive",
-      "mechanism": "St. John's Wort (hypericin, hyperforin) inhibits reuptake of serotonin, dopamine, and norepinephrine. Combined with SSRIs, this creates severe serotonergic excess leading to serotonin syndrome: agitation, hyperthermia, clonus, seizures, and potentially death.",
-      "management": "Never combine St. John's Wort with any SSRI, SNRI, or other serotonergic agent. A washout period equivalent to 5 half-lives of the SSRI is required before switching. Seek emergency care immediately if serotonin syndrome symptoms appear.",
+      "mechanism": "St. John's Wort has serotonergic activity. Combining it with an SSRI or SNRI can cause serotonin syndrome, which can be life-threatening. Symptoms can include agitation, high temperature, muscle rigidity or clonus, and seizures.",
+      "management": "Do not combine St. John's Wort with an SSRI or SNRI without specialist direction. Any change or switch must be planned by your prescriber; the required washout depends on the medicines and clinical circumstances. Do not stop your prescribed antidepressant on your own. Seek emergency care immediately if serotonin syndrome symptoms appear.",
       "source_urls": [
         "https://nccih.nih.gov/health/stjohnswort/ataglance.htm",
         "https://pubmed.ncbi.nlm.nih.gov/17868285/",
-        "https://www.fda.gov/drugs/drug-safety-and-availability/fda-drug-safety-communication-revised-recommendations-celexa-citalopram"
+        "https://www.fda.gov/drugs/drug-safety-and-availability/fda-drug-safety-communication-revised-recommendations-celexa-citalopram",
+        "https://www.nccih.nih.gov/health/st-johns-wort-and-depression-in-depth"
       ],
       "source_pmids": [
         "17868285"
@@ -3558,8 +3551,8 @@
       "agent2_canonical_id": "ginkgo",
       "severity": "Major",
       "interaction_effect_type": "Additive",
-      "mechanism": "Ginkgolides (particularly ginkgolide B) are potent PAF antagonists; concurrent use with aspirin (COX-1) or clopidogrel (P2Y12) produces additive inhibition of platelet activation, increasing bleeding risk.",
-      "management": "Avoid combining ginkgo with antiplatelet drugs. Discontinue ginkgo at least 7 days before surgery.",
+      "mechanism": "Ginkgo constituents can affect platelet function. A retrospective observational study found associations between ginkgo drug interactions and bleeding, including aspirin and clopidogrel combinations. These associations do not establish causation or a quantified risk for every patient.",
+      "management": "Avoid combining ginkgo with antiplatelet drugs unless your prescriber specifically recommends it. Tell your surgical team about ginkgo before any procedure and follow their instructions on when to stop it. Do not stop a prescribed antiplatelet on your own.",
       "source_urls": [
         "https://pubmed.ncbi.nlm.nih.gov/40198642/"
       ],
@@ -3574,10 +3567,11 @@
           "pubmed": true
         }
       },
-      "evidence_basis": "systematic_review",
-      "clinical_confidence": "high",
+      "evidence_basis": "observational",
+      "clinical_confidence": "medium",
       "direction": "harmful",
-      "materiality": "presence"
+      "materiality": "presence",
+      "evidence_notes": "PMID 40198642 is a retrospective observational study, not a systematic review. The avoid tier is precautionary; the study does not establish a universal preoperative stop interval."
     },
     {
       "id": "DSI_CALCIUM_CIPROFLOXACIN",

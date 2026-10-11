@@ -19,7 +19,10 @@ def enricher():
 
 def _set_violations_db(enricher: SupplementEnricherV3, rows):
     enricher.databases["manufacturer_violations"] = {
-        "manufacturer_violations": rows
+        "manufacturer_violations": [
+            {"fda_source_url": "https://www.fda.gov/test-fixture", **row}
+            for row in rows
+        ]
     }
 
 

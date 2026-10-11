@@ -3619,6 +3619,11 @@ def _warning_dedup_key(w: Dict[str, Any]) -> tuple:
             dose_state,
         )
 
+    # Context events have no ingredient/risk-rule identity. Preserve distinct
+    # event scope and claim categories rather than losing their authored copy.
+    if w.get("type") in {"manufacturer_violation", "marketing_claim"}:
+        return (_norm(w.get("type")), _norm(w.get("source")), _norm(w.get("detail")), _norm(w.get("source_urls")))
+
     # Per-ingredient identity: include matched_rule_id (when present) or
     # ingredient_name so two resolver-synthesized warnings for DIFFERENT
     # banned actives (e.g. 7-Keto-DHEA + Garcinia on the same product)
@@ -6472,6 +6477,58 @@ def _classify_product_role(
     }
 
 
+def _product_context_warnings(enriched: Dict) -> List[Dict]:
+    """Project existing assessments as context, never as product-specific bans.
+
+    Category heuristics and company history do not establish contamination or
+    a recall of this label. Explicit ingredient/recall owners remain separate.
+    """
+    result = []
+    ods_url = "https://ods.od.nih.gov/factsheets/WYNTK-Consumer/"
+    risk = safe_dict(safe_dict(enriched.get("certification_data")).get("category_contamination_risk"))
+    if json_bool(risk.get("has_elevated_risk")):
+        category = safe_str(risk.get("category")).replace("_", " ")
+        result.append({
+            "type": "category_contamination_risk", "source": "category_contamination_risk",
+            "severity": "informational", "display_mode_default": "informational",
+            "evidence_level": "ungraded", "title": "Category testing context",
+            "detail": f"The label suggests the {category} category. Product-specific independent testing is worth checking. This is category context, not a finding that this product contains contaminants. Testing seals do not guarantee safety or effectiveness.",
+            "source_urls": [ods_url],
+        })
+    violations = safe_dict(safe_dict(enriched.get("manufacturer_data")).get("violations"))
+    for row in safe_list(violations.get("violations")):
+        if not isinstance(row, dict):
+            continue
+        summary = safe_str(row.get("brand_trust_summary") or row.get("reason"))
+        if not summary:
+            continue
+        company = safe_str(row.get("matched_manufacturer"))
+        date = safe_str(row.get("date")) or "Date not recorded"
+        product = safe_str(row.get("product")) or "Product scope not recorded"
+        status = "Recorded action marked resolved. This does not clear recalled units for use" if json_bool(row.get("is_resolved")) else "Resolution not confirmed in our records"
+        url = safe_str(row.get("fda_source_url"))
+        result.append({
+            "type": "manufacturer_violation", "source": "manufacturer_violations",
+            "severity": "informational", "display_mode_default": "informational",
+            "evidence_level": "ungraded", "title": "Manufacturer history",
+            "detail": f"{company} — {date}. Recorded action: {safe_str(row.get('violation_type'))}. Product scope: {product}. {status}. {summary} Whether the scanned product or lot is affected requires a product-specific check.",
+            "source_urls": [url] if url else [],
+        })
+    claims = safe_dict(enriched.get("evidence_data")).get("unsubstantiated_claims")
+    rows = safe_list(claims.get("claims")) if isinstance(claims, dict) else safe_list(claims)
+    for row in rows:
+        if not isinstance(row, dict) or not safe_str(row.get("type")):
+            continue
+        result.append({
+            "type": "marketing_claim", "source": "evidence_data",
+            "severity": "informational", "display_mode_default": "informational",
+            "evidence_level": "ungraded", "title": "Label claim to review",
+            "detail": f"The label contains wording flagged as a {safe_str(row.get('type'))}. Label wording does not establish that this supplement is FDA-approved or proven to treat disease. This flag is a claim check, not a finding about its ingredients.",
+            "source_urls": [ods_url],
+        })
+    return result
+
+
 def build_detail_blob(
     enriched: Dict,
     scored: Dict,
@@ -7555,6 +7612,8 @@ def build_detail_blob(
                 warning_entry["safety_warning"] = safety_warning
             warnings.append(warning_entry)
 
+    warnings.extend(_product_context_warnings(enriched))
+
     # Build the profile-gated subset — warnings whose default treatment is
     # NOT "suppress". This is what Flutter should render by default when
     # the user has no declared profile; items with display_mode_default ==
@@ -7690,7 +7749,11 @@ def build_detail_blob(
         blob["evidence_data"] = {
             "match_count": evidence_data.get("match_count"),
             "clinical_matches": safe_list(evidence_data.get("clinical_matches")),
-            "unsubstantiated_claims": safe_list(evidence_data.get("unsubstantiated_claims")),
+            "unsubstantiated_claims": (
+                safe_list(evidence_data["unsubstantiated_claims"].get("claims"))
+                if isinstance(evidence_data.get("unsubstantiated_claims"), dict)
+                else safe_list(evidence_data.get("unsubstantiated_claims"))
+            ),
         }
     if rda_ul_data and (
         rda_ul_data.get("collection_enabled") is not None
