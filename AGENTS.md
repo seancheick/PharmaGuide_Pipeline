@@ -4,6 +4,23 @@ Shared by Claude, Codex and every other agent; Claude loads it through `@AGENTS.
 Kept short on purpose: path-specific rules live in `.claude/rules/`, procedures in skills, rationale
 in `docs/adr/`, ownership in `scripts/contracts/source_of_truth_matrix.json`.
 
+## North star — Sean, October 10, 2026
+
+**Anyone who scans a supplement gets an accurate, sourced answer to "is this safe for me, and is
+it any good?", and never a false reassurance.** Set by Sean; agents propose, Sean changes it.
+Launch order and what is left: `docs/plans/PHARMAGUIDE_PRODUCT_ROADMAP.md` ("Launch track").
+
+## Related repos (one product, three repos)
+
+| Repo | GitHub | Local |
+|---|---|---|
+| Pipeline (this) | github.com/seancheick/PharmaGuide_Pipeline | `/Users/seancheick/Downloads/dsld_clean` |
+| Flutter app | github.com/seancheick/Pharmaguide.ai | `/Users/seancheick/PharmaGuide ai` |
+| Website and blog | github.com/seancheick/PharmaGuideWebsite | `/Users/seancheick/PharmaGuide Website` |
+
+A cloud session sees only the repos attached to it: attach the app or website repo when the task
+crosses the contract. Social media is run by Sean outside these repos.
+
 ## Project
 
 - Pipeline Clean → Enrich → Score → Export: NIH DSLD supplement labels become evidence-based scores

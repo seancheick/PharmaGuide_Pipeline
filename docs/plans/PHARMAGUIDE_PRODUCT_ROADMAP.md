@@ -48,6 +48,57 @@ A critical product safety gate (recall, ban, adulteration) sits above all three:
 | 2026-07-23 | No consumer change timeline or notifications before beta data shows the changes are meaningful (signal-lifecycle guardrail). Still in force: Change Watch UI is Phase 4. |
 | 2026-07-22 | No user-facing health score for the stack; use status and concern counts. |
 
+## Launch track — October 10, 2026
+
+North star (Sean): **anyone who scans a supplement gets an accurate, sourced answer to "is this
+safe for me, and is it any good?", and never a false reassurance.** It heads AGENTS.md in all three
+repos. Sean wants the product launched soon with a steady blog cadence; this section orders what is
+left. The phases below keep their detail; the ledger rows S1.x stay the register.
+
+Status checked October 10 against the ledger and code: the master plan (Phase 0 here) is complete
+(70/70; TestFlight build 19 accepted by Sean). Of Phase 1, only 1.1 (website claims) and the P0
+part of 1.2 are done. Code still shows the rest open: `scored_artifact.py::_public_verdict` turns
+SAFE into CAUTION below `LOW_COVERAGE_TRUST_FLOOR` (1.3); `buildLabelConfidenceSection` is defined
+and never mounted (1.4); `scoreFit20` and `buildInteractionContextLine` remain unused (1.5); 1.6,
+1.7 and 1.9 have not started; 1.8 keeps the 252-item baseline citation debt; 1.10 has focused
+subsets only.
+
+### Before public launch (trust-critical)
+
+| # | Item | Why it blocks launch | Builder → reviewer | Sean decides |
+|---|---|---|---|---|
+| L1 | North star in all three AGENTS.md files | Agents act toward a goal only if it is written | Claude (done October 10, branches `claude/north-star*`) | Wording |
+| L2 | 1.3: coverage out of the verdict; one exported Analysis Coverage value | CAUTION must mean "a reason for caution was found", never "we don't know enough" (decision 2026-10-01) | Claude via `/pg-scoring-change` → Codex fresh-context review | New export field + ADR |
+| L3 | 1.10: gold benchmark, 300–500 scenarios in the release rung | The bug-catching net: every later change runs against it | Codex authors by the decision-table mix → Claude checks each expected result against the rules; Laurie spot-checks severities | None (scenarios follow existing rules) |
+| L4 | 1.8 reviewer part: a named human reviewer on every published clinical record | Website and social say "pharmacist-reviewed"; the record must prove it | Claude inventories records lacking `reviewed_by` → Laurie reviews | Which records ship unreviewed, if any |
+| L5 | Claims parity across website, social and app | One claim set: the June how-it-works carousel says "180k+" (decision 2026-10-01: no product count, "sourced from NIH's DSLD, 200,000+ labels"); "Private, on your device" must match the privacy decision ("Core Personal Fit and stack safety logic runs on your device") | Claude lists mismatches → Sean edits social | Final wording |
+| L6 | Beta timing | This document gates the external beta on Stack Impact and 1.10; social copy says "Beta's open" and the website says "we're adding the first testers now" | — | Open the TestFlight beta after L2–L4 and build Stack Impact during it (recommended), or keep the original order |
+
+### During beta
+
+1.4 page order (needs L2), 1.5 personal card and dead fit-score removal, 1.6 "Why this score"
+(export contract: Sean), 1.7 rule typing, 1.9 export versioning, the rest of 1.8 (Q22 burn-down,
+then the broad citation scan as a full gate), then Phase 2 Stack Impact.
+
+### Content (runs beside everything)
+
+Two blog posts a week from the ranked backlog `web:docs/13-blog-topic-backlog.md`, each through
+`/pg-blog-mdx` with Laurie as reviewer where its risk score requires. Sean runs social media outside
+these repos and pairs each post with a carousel.
+
+### Roster
+
+| Who | Owns |
+|---|---|
+| Sean | North star, policy and clinical decisions, pushes to main, releases, social media |
+| Laurie Pham, PharmD | Clinical review of records and of blog posts the risk gate flags |
+| Claude | Building in one worktree per batch; blog drafts; integration when Sean names it the integrator |
+| Codex | Fresh-context review of Claude's behavioral diffs (and Claude of Codex's); benchmark authoring |
+
+Autonomy grows by change class (AGENTS.md validation table): documentation and tests-only batches
+are merge-ready after their checks; behavioral batches also need the fresh-context review and green
+CI. Pushes to main stay Sean's.
+
 ## Phases
 
 ### Phase 0 — finish the current remediation
