@@ -22128,6 +22128,45 @@ class SupplementEnricherV3:
                             if _explicit_non_folic_folate
                             else "unknown_folate_form_lineage"
                         )
+                    elif (
+                        rule_id == "vitamin_a_beta_carotene_supplement"
+                        and resolved_canonical_id == "vitamin_a"
+                        and any(
+                            "water" in str(statement.get("notes") or "").lower()
+                            and "milk" in str(statement.get("notes") or "").lower()
+                            for statement in (product.get("statements") or [])
+                            if isinstance(statement, dict)
+                            and any(token in str(statement.get("type") or "").lower()
+                                    for token in ("directions", "suggested", "usage"))
+                        )
+                        and any(
+                            isinstance(variant, dict)
+                            and isinstance(variant.get("quantity"), (int, float))
+                            and 0 < variant["quantity"] < quantity_float
+                            and self._normalize_text(variant.get("unit") or "")
+                                in {"mcg", "mcg rae"}
+                            and self._normalize_text(unit) in {"mcg", "mcg rae"}
+                            and any(
+                                isinstance(selected, dict)
+                                and selected.get("quantity") == quantity_float
+                                and variant.get("serving_size_quantity") == selected.get("serving_size_quantity")
+                                and all(variant.get(key) == selected.get(key)
+                                        and variant.get(key) is not None
+                                        for key in ("serving_size_order", "serving_size_unit"))
+                                for selected in (ingredient.get("quantityVariants") or
+                                                 (ingredient.get("raw_taxonomy") or {}).get("quantityVariants") or [])
+                            )
+                            for variant in (ingredient.get("quantityVariants") or
+                                            (ingredient.get("raw_taxonomy") or {}).get("quantityVariants") or [])
+                        )
+                    ):
+                        # A larger prepared-serving total is not evidence that
+                        # its added activity has the powder's beta-carotene form.
+                        # Keep the selected total for adequacy; do not infer
+                        # either preformed excess or all-beta UL exclusion.
+                        skip_ul_check = True
+                        ul_only_skip = True
+                        skip_ul_reason = "mixed_vitamin_a_preformed_fraction_unknown"
                     elif rule_id == "vitamin_a_beta_carotene_supplement":
                         # Supplemental beta-carotene contributes vitamin A
                         # activity after conversion to mcg RAE, but the adult
@@ -23102,7 +23141,12 @@ class SupplementEnricherV3:
                         ),
                         "pct_rda": adequacy_dict.get("pct_rda"),
                         "adequacy_band": adequacy_dict.get("adequacy_band"),
-                        "warnings": [] if skip_ul_check else safety_warnings,
+                        "warnings": (
+                            ["Prepared-serving Vitamin A includes activity whose form is not identified; the preformed Vitamin A UL assessment is indeterminate."]
+                            if skip_ul_reason == "mixed_vitamin_a_preformed_fraction_unknown"
+                            and rule_id == "vitamin_a_beta_carotene_supplement"
+                            else [] if skip_ul_check else safety_warnings
+                        ),
                         "data_by_group": list(_nutrient_record.get("data") or []),
                         "reference_profile": dict(_RDA_REFERENCE_PROFILE),
                         "conversion_evidence": conv_evidence,  # Per-item evidence for coverage gate
