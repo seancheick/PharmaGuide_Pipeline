@@ -54,3 +54,22 @@ def test_other_native_ul_status_controls_remain_unchanged(nutrient,expected):
     result=RDAULCalculator().compute_nutrient_adequacy(nutrient,1,'mg','19-30','male')
     assert result.ul_status == expected
     assert not any('vanadium' in warning.lower() for warning in result.warnings)
+
+
+@pytest.mark.parametrize('nutrient,amount,reference',[('Vitamin E',15,15),('Hyaluronic Acid',120,120)])
+def test_unqualified_optimal_ranges_are_not_presented_as_clinical_recommendations(nutrient,amount,reference):
+    result=RDAULCalculator().compute_nutrient_adequacy(nutrient,amount,'mg')
+    assert result.optimal_min is None
+    assert result.optimal_max is None
+    assert result.rda_ai == reference
+    assert result.pct_rda == 100
+
+
+def test_hyaluronate_trial_dose_is_not_claimed_as_a_universal_minimum():
+    rows=json.loads((DATA/'rda_optimal_uls.json').read_text())['nutrient_recommendations']
+    ha=next(row for row in rows if row['id']=='hyaluronic_acid')
+    assert 'lower bound of the clinically effective dose' not in ha['notes']
+    assert '60 and 120 mg/day' in ha['notes']
+    assert '1.8 MDa' in ha['notes']
+    vitamin_e=next(row for row in rows if row['id']=='vitamin_e')
+    assert 'Smokers may need higher intake' not in vitamin_e['special_considerations']
