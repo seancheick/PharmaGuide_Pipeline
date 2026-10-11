@@ -1011,5 +1011,8 @@ def test_shipped_iqm_carries_no_nested_axis_and_full_canonical_coverage():
     assert coverage.canonical == 66
     # 2026-09-25: 18 legacy unspecified forms fell below Excellent under the
     # unknown-form floor and left the backlog (250 -> 232, 195 -> 177).
-    assert coverage.total == 232
+    # Source-qualified corrections remove three Excellent ratings: liposomal
+    # taurine 12->11, Suntheanine 13->10, and the same35624 strain 15->7.
+    # Frozen initial backlog remains unchanged; only outstanding keys shrink.
+    assert coverage.total == 229
     assert sorted(coverage.missing) == sorted(load_backlog_file(BACKLOG_PATH))

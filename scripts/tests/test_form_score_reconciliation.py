@@ -49,7 +49,7 @@ def test_reconciliation_manifest_is_complete_and_matches_iqm():
         assert row["rationale"].strip()
         assert isinstance(row["citation_ids"], list)
         form = iqm[row["ingredient_key"]]["forms"][row["form_key"]]
-        if _superseded_by_unknown_floor(iqm, row) or _superseded_by_verified_recalibration(form, row):
+        if _superseded_by_source_qualified_20261011(form, row) or _superseded_by_unknown_floor(iqm, row) or _superseded_by_verified_recalibration(form, row):
             continue
         assert form["bio_score"] == row["final_score"]
         if row["action"] == "RESTORE_LEGACY":
@@ -58,6 +58,18 @@ def test_reconciliation_manifest_is_complete_and_matches_iqm():
 
     assert manifest["summary"]["scores_restored"] == 161
     assert manifest["summary"]["affirmative_corrections_preserved"] == 21
+
+
+def _superseded_by_source_qualified_20261011(form, row):
+    # Exact reviewed reductions: same35624 class anchor and no lipo premium.
+    # Original migration remains frozen; no arbitrary new Excellent exemption.
+    reviewed = {('bifidobacterium_longum', 'bifidobacterium longum 35624'): 7,
+                ('taurine', 'liposomal taurine'): 11}
+    key = (row['ingredient_key'], row['form_key'])
+    if key not in reviewed:
+        return False
+    assert form['bio_score'] == reviewed[key]
+    return True
 
 
 def _superseded_by_unknown_floor(iqm, row):
@@ -109,6 +121,7 @@ def test_legacy_excellent_forms_are_frozen_without_weakening_new_score_gate():
         for row in manifest["changes"]
         if row["provenance_status"] == "legacy_curated_unvalidated"
         and row["final_score"] >= 12
+        and not _superseded_by_source_qualified_20261011(iqm[row["ingredient_key"]]["forms"][row["form_key"]], row)
         and not _superseded_by_unknown_floor(iqm, row)
         # The backlog policy: remaining_forms shrink as evidence is verified.
         and not _passed_verified_review(iqm[row["ingredient_key"]]["forms"][row["form_key"]], row)

@@ -85,7 +85,12 @@ def test_iqm_uses_only_retained_or_verified_replacement_form_sources():
     for ingredient_key, form_key in {
         (r["ingredient"], r["form"]) for r in rows
     }:
-        form = _form(iqm, ingredient_key, form_key)
+        # The historical ledger's generic taurine was chemically specific free
+        # taurine; its corrected name retains aliases and source-integrity checks.
+        current_key = 'free taurine' if (ingredient_key, form_key) == ('taurine', 'taurine (generic)') else form_key
+        form = _form(iqm, ingredient_key, current_key)
+        if current_key == 'free taurine':
+            assert form['bio_score'] == 11
         assert isinstance(form.get("aliases"), list) and form["aliases"]
         assert _reference_ids(form) == expected[(ingredient_key, form_key)]
         if expected[(ingredient_key, form_key)]:
