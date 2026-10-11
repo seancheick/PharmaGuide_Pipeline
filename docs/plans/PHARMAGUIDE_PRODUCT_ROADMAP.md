@@ -51,8 +51,7 @@ A critical product safety gate (recall, ban, adulteration) sits above all three:
 
 ## Launch track — October 10, 2026
 
-North star (Sean): **anyone who scans a supplement gets an accurate, sourced answer to "is this
-safe for me, and is it any good?", and never a false reassurance.** It heads AGENTS.md in all three
+North star (Sean, sharpened October 11): **anyone who scans a supplement gets a straight, verified answer: what the product is, whether it is good quality, and whether it is safe for them (their pregnancy or breastfeeding, conditions and medications), with the reason and the source. When we lack data we say so. No invented claims, and never a false reassurance.** Example: a pregnant user scans a St. John's wort product and is told at the top of the page that it is not for her during pregnancy, why, and the source. It heads AGENTS.md in all three
 repos. "Never a false reassurance" is the design standard for every verdict and all-clear; it is not
 a marketing guarantee and never appears as one. Sean wants the product launched soon with a steady
 blog cadence; this section orders what is left. The phases below keep their detail; the ledger rows
@@ -78,29 +77,34 @@ subsets only.
 | L5 | 1.8 citation gate: close material citation defects in shipped records | A citation that resolves does not prove the claim. Records in the 252-item baseline debt that ship in the beta catalog are fixed or withheld first; the rest stay in the Q22 burn-down | Claude triages the debt by shipped/not shipped and materiality via `/data-fix` → Codex re-verifies | Withholding a record |
 | L6 | Claims parity across website, social and app | One claim set: the June how-it-works carousel says "180k+" (decision 2026-10-01: no product count, "sourced from NIH's DSLD, 200,000+ labels"); "Private, on your device" must match the privacy decision ("Core Personal Fit and stack safety logic runs on your device") | Claude lists mismatches → Sean edits social | Final wording |
 | L7 | Invited TestFlight beta (decided 2026-10-10) | Opens once this week's order below passes on the finished candidate: existing stack checks working, their limits stated in the app, no claim of full stack analysis | Integrator validates the candidate; Sean invites testers | Who is invited and when |
+| L8 | Personal verdict at the top of the product page (north star, October 11) | A pregnant, breastfeeding or condition-flagged user must see, before anything else, whether this product is for them, why, and the source; an ingredient with no pregnancy data must say so, never read as safe. Status checked October 11 on real exports: the data path works (GNC St. John's Wort 18219 exports "Birth-defect signal — avoid in pregnancy" with NIH/NCCIH sources; 152 rules carry pregnancy/lactation gates). Gaps: (a) 30 rules rate breastfeeding but reuse pregnancy-worded alert text, so a breastfeeding user reads "If you are pregnant…" (the rule schema has one `alert_headline`/`alert_body` for both); (b) 77 of 152 rules are `no_data` for pregnancy, and the app's display of that case is unverified; (c) no test proves the whole scenario from profile to visible card. Absorbs item 1.5 (personal card) into the pre-launch set | Claude builds the end-to-end gold cases and the app check → Codex reviews; breastfeeding wording via `/data-fix` after Codex's clinical-registry lane lands | Breastfeeding-specific alert text as a rule field (schema change) |
 
 ### This week (October 10–17), in order
 
-Bounded to these five; it is not a promise to clear the historical backlog. Every remaining item
+Bounded to these six; it is not a promise to clear the historical backlog. Every remaining item
 leaves the week with a disposition (done, held with reason, or scheduled) and its evidence, so
 nothing quietly disappears.
 
-1. **Verify depletion, stack interactions and nutrient accumulation end to end**: units, serving
+1. **L8: the personal verdict, end to end.** Gold cases from profile to visible card: pregnant +
+   St. John's wort, breastfeeding + a breastfeeding-rated herb, a condition (kidney disease +
+   magnesium), a medication (levothyroxine + calcium), a `no_data` ingredient, and an unaffected
+   control. Fix what fails, starting with the breastfeeding wording.
+2. **Verify depletion, stack interactions and nutrient accumulation end to end**: units, serving
    quantities, duplicate ingredients, missing amounts, applicable upper limits, and medication/profile
    triggers, checked on real products through to what the app shows.
-2. **L2: ship coverage and safety presentation together.** A poorly assessed product never gains an
+3. **L2: ship coverage and safety presentation together.** A poorly assessed product never gains an
    unqualified all-clear.
-3. **Remove the unused FitScore arithmetic** (`scoreFit20`, `e2cPenalty`, `maxPossible`) after the
+4. **Remove the unused FitScore arithmetic** (`scoreFit20`, `e2cPenalty`, `maxPossible`) after the
    dead-code proof. Keep personal relevance, medication warnings and goal context; behavior matters
    more than the name.
-4. **Close known defects and validate the finished candidate**: representative real products and
+5. **Close known defects and validate the finished candidate**: representative real products and
    phone checks, before the build goes to invited testers (L7).
-5. **Content alongside**: magnesium, melatonin, label reading and certification seals, each paired
+6. **Content alongside**: magnesium, melatonin, label reading and certification seals, each paired
    with a social post using the same verified facts.
 
 ### During beta
 
-1.4 page order (needs L2), 1.5 personal card and dead fit-score removal, 1.6 "Why this score"
+1.4 page order (needs L2), 1.6 "Why this score"
 (export contract: Sean), 1.7 rule typing, 1.9 export versioning, the rest of 1.8 (Q22 burn-down,
 then the broad citation scan as a full gate), then Phase 2 Stack Impact.
 
