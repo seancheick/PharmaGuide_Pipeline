@@ -72,3 +72,5 @@ def test_st_johns_wort_does_not_prescribe_a_universal_ssri_washout():
     assert '5 half-lives' not in pair['management']
     assert 'prescriber' in pair['management'].lower()
     assert pair['severity'] == 'Contraindicated'
+    assert 'can cause serotonin syndrome' in pair['mechanism']
+    assert 'this creates severe' not in pair['mechanism'].lower()

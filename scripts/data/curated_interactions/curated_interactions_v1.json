@@ -698,7 +698,7 @@
       "agent2_id": "C0813171",
       "severity": "Contraindicated",
       "interaction_effect_type": "Additive",
-      "mechanism": "St. John's Wort (hypericin, hyperforin) inhibits reuptake of serotonin, dopamine, and norepinephrine. Combined with SSRIs, this creates severe serotonergic excess leading to serotonin syndrome: agitation, hyperthermia, clonus, seizures, and potentially death.",
+      "mechanism": "St. John's Wort has serotonergic activity. Combining it with an SSRI or SNRI can cause serotonin syndrome, which can be life-threatening. Symptoms can include agitation, high temperature, muscle rigidity or clonus, and seizures.",
       "management": "Do not combine St. John's Wort with an SSRI or SNRI without specialist direction. Any change or switch must be planned by your prescriber; the required washout depends on the medicines and clinical circumstances. Do not stop your prescribed antidepressant on your own. Seek emergency care immediately if serotonin syndrome symptoms appear.",
       "source_urls": [
         "https://nccih.nih.gov/health/stjohnswort/ataglance.htm",
