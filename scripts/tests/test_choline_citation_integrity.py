@@ -84,7 +84,7 @@ def test_bockmann_2021_cited_somewhere_in_choline(iqm):
     hits = 0
     for form in forms.values():
         notes = form.get('notes') or ''
-        if 'PMID:34287673' in notes or 'Böckmann 2021' in notes or 'Böckmann' in notes:
+        if '34287673' in notes or 'Böckmann 2021' in notes or 'Böckmann' in notes:
             hits += 1
     assert hits >= 3, (
         f'Böckmann 2021 (PMID:34287673) should be cited in ≥3 choline forms '
@@ -116,3 +116,12 @@ def test_choline_struct_values_in_evidence_range(iqm):
     assert not violations, (
         f'choline struct.value out of evidence-supported range: {violations}'
     )
+
+
+def test_citrate_does_not_inherit_unmeasured_absolute_fraction(iqm):
+    """PMID34287673 did not administer citrate or measure absolute F."""
+    form = iqm['choline']['forms']['choline citrate']
+    assert form['absorption_structured'] == dict(value=None, range_low=None, range_high=None, quality='unknown')
+    assert '34287673' in form['notes']
+    assert 'did not administer citrate' in form['notes']
+    assert 'plasma-choline AUC' in form['notes']

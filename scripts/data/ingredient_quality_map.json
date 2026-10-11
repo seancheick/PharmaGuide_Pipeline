@@ -18999,13 +18999,13 @@
       },
       "choline citrate": {
         "bio_score": 10,
-        "absorption": "free-choline salt; assumed equivalent to bitartrate (no citrate-specific PK)",
+        "absorption": "Unknown (citrate-specific absolute human fraction unresolved)",
         "consumer_note": "Choline citrate is choline paired with citric acid. It is a choline salt, so the total compound weight includes the citrate portion as well as choline.",
         "consumer_note_review": {
           "by": "Product owner approval",
           "date": "2026-08-08"
         },
-        "notes": "Citrate salt — 40% choline by weight. Good solubility for liquid formulas. Adequate for daily choline needs but no brain-crossing advantage over bitartrate. Evidence update 2026-04-24: no citrate-specific human PK located. Extrapolated from bitartrate/chloride evidence (PMID:34287673 Böckmann 2021): free-choline-releasing salts all deliver equivalent plasma choline AUC. struct.value revised 0.825 → 0.875 for class-consistency.",
+        "notes": "Choline citrate is a choline salt. PMID34287673 compared550mg choline-equivalent chloride, bitartrate, alpha-GPC and egg phosphatidylcholine doses in six healthy men; it did not administer citrate. Similar plasma-choline AUC among those four preparations is not87.5%absolute F or a citrate-specific human fraction. Chemical choline yield, systemic exposure and brain distribution are separate endpoints; no citrate superiority or universal no-brain-crossing claim is inferred.",
         "aliases": [
           "citric acid choline",
           "citrate choline",
@@ -19013,10 +19013,10 @@
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": 0.875,
-          "range_low": 0.8,
-          "range_high": 0.95,
-          "quality": "very_good"
+          "value": null,
+          "range_low": null,
+          "range_high": null,
+          "quality": "unknown"
         }
       },
       "choline chloride": {
@@ -35082,7 +35082,8 @@
       "metabolic_relationships": [],
       "metabolites": []
     },
-    "aliases": []
+    "aliases": [],
+    "cui_status": "no_confirmed_umls_match"
   },
   "ganoderic_acids": {
     "standard_name": "Ganoderic Acids",
@@ -38945,7 +38946,8 @@
       "metabolic_relationships": [],
       "metabolites": []
     },
-    "aliases": []
+    "aliases": [],
+    "cui_status": "no_confirmed_umls_match"
   },
   "vicine": {
     "standard_name": "Vicine",
@@ -41387,7 +41389,8 @@
       "metabolites": []
     },
     "aliases": [],
-    "cui_note": "The previously assigned UMLS concept identifies a different derivative, laboratory analyte, or combination rather than this ingredient. Exact ingredient concept remains unresolved."
+    "cui_note": "The previously assigned UMLS concept identifies a different derivative, laboratory analyte, or combination rather than this ingredient. Exact ingredient concept remains unresolved.",
+    "cui_status": "no_confirmed_umls_match"
   },
   "ginger": {
     "standard_name": "Ginger",
@@ -43722,7 +43725,8 @@
       "metabolites": []
     },
     "aliases": [],
-    "cui_note": "The previously assigned UMLS concept identifies a different derivative, laboratory analyte, or combination rather than this ingredient. Exact ingredient concept remains unresolved."
+    "cui_note": "The previously assigned UMLS concept identifies a different derivative, laboratory analyte, or combination rather than this ingredient. Exact ingredient concept remains unresolved.",
+    "cui_status": "no_confirmed_umls_match"
   },
   "lactobacillus_plantarum": {
     "standard_name": "Lactobacillus Plantarum",
@@ -44216,7 +44220,8 @@
       "metabolites": []
     },
     "aliases": [],
-    "cui_note": "The previously assigned UMLS concept identifies a different derivative, laboratory analyte, or combination rather than this ingredient. Exact ingredient concept remains unresolved."
+    "cui_note": "The previously assigned UMLS concept identifies a different derivative, laboratory analyte, or combination rather than this ingredient. Exact ingredient concept remains unresolved.",
+    "cui_status": "no_confirmed_umls_match"
   },
   "bifidobacterium_bifidum": {
     "standard_name": "Bifidobacterium Bifidum",
@@ -47949,7 +47954,8 @@
       ],
       "metabolic_relationships": [],
       "metabolites": []
-    }
+    },
+    "cui_status": "no_confirmed_umls_match"
   },
   "epa": {
     "standard_name": "EPA (Eicosapentaenoic Acid)",
@@ -54603,7 +54609,8 @@
       "research_status": "validated"
     },
     "external_ids": {},
-    "aliases": []
+    "aliases": [],
+    "cui_status": "no_confirmed_umls_match"
   },
   "pea_protein": {
     "standard_name": "Pea Protein",
@@ -55868,7 +55875,8 @@
       "metabolites": []
     },
     "aliases": [],
-    "cui_note": "The previously assigned UMLS concept identifies a different derivative, laboratory analyte, or combination rather than this ingredient. Exact ingredient concept remains unresolved."
+    "cui_note": "The previously assigned UMLS concept identifies a different derivative, laboratory analyte, or combination rather than this ingredient. Exact ingredient concept remains unresolved.",
+    "cui_status": "no_confirmed_umls_match"
   },
   "guarana": {
     "standard_name": "Guarana",
@@ -56269,7 +56277,8 @@
       "metabolic_relationships": [],
       "metabolites": []
     },
-    "aliases": []
+    "aliases": [],
+    "cui_status": "no_confirmed_umls_match"
   },
   "l_carnosine": {
     "standard_name": "L-Carnosine",
@@ -57346,7 +57355,8 @@
       "metabolites": []
     },
     "aliases": [],
-    "cui_note": "The previously assigned UMLS concept identifies a different derivative, laboratory analyte, or combination rather than this ingredient. Exact ingredient concept remains unresolved."
+    "cui_note": "The previously assigned UMLS concept identifies a different derivative, laboratory analyte, or combination rather than this ingredient. Exact ingredient concept remains unresolved.",
+    "cui_status": "no_confirmed_umls_match"
   },
   "guggul": {
     "standard_name": "Guggul (Commiphora mukul)",
@@ -58094,7 +58104,8 @@
       "metabolic_relationships": [],
       "metabolites": []
     },
-    "aliases": []
+    "aliases": [],
+    "cui_status": "no_confirmed_umls_match"
   },
   "calcium_pyruvate": {
     "standard_name": "Calcium Pyruvate",
@@ -62976,7 +62987,8 @@
     },
     "cui_note": "The previously assigned UMLS concept identifies a different derivative, laboratory analyte, or combination rather than this ingredient. Exact ingredient concept remains unresolved.",
     "external_ids": {},
-    "aliases": []
+    "aliases": [],
+    "cui_status": "no_confirmed_umls_match"
   },
   "phlorizin": {
     "standard_name": "Phlorizin",
@@ -64731,7 +64743,8 @@
     "rxcui_note": "No RxNorm concept for supplement ingredient",
     "description": "Endogenous trace amine neuromodulator; dopamine/norepinephrine efflux via TAAR1",
     "aliases": [],
-    "external_ids": {}
+    "external_ids": {},
+    "cui_status": "no_confirmed_umls_match"
   },
   "yohimbe": {
     "category": "herbs",
@@ -65191,7 +65204,8 @@
       "metabolic_relationships": [],
       "metabolites": []
     },
-    "aliases": []
+    "aliases": [],
+    "cui_status": "no_confirmed_umls_match"
   },
   "lactobacillus_gasseri": {
     "standard_name": "Lactobacillus Gasseri",
