@@ -647,7 +647,7 @@ def _parse_args(argv: list[str] | None = None) -> argparse.Namespace:
         default=1,
         help=(
             "Drop research pairs supported by fewer than N non-retracted papers. "
-            "Production builds use 2 to meet §11.3 bundle-size target."
+            "The canonical rebuild script currently uses the default 1; use 2 for a narrower research bundle."
         ),
     )
     parser.add_argument(
@@ -655,7 +655,7 @@ def _parse_args(argv: list[str] | None = None) -> argparse.Namespace:
         action="store_true",
         help=(
             "Only keep pairs where at least one retained paper is a human study. "
-            "Combined with --min-paper-count 2 yields ~7.7k rows from full dump."
+            "Optional narrower research filter; the canonical rebuild script does not enable it."
         ),
     )
     parser.add_argument(
