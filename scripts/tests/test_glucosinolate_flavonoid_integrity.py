@@ -76,19 +76,15 @@ def test_sulforaphane_hierarchy_preserved(iqm):
     def v(name):
         return (f[name].get('absorption_structured') or {}).get('value')
 
-    stabilized   = v('stabilized sulforaphane')
-    plus_myro    = v('glucoraphanin + myrosinase')
-    glucoraphanin = v('glucoraphanin')
-
-    assert stabilized > plus_myro, (
-        f'stabilized sulforaphane ({stabilized}) must absorb more than '
-        f'glucoraphanin + exogenous myrosinase ({plus_myro})'
-    )
-    assert plus_myro > glucoraphanin, (
-        f'glucoraphanin + myrosinase ({plus_myro}) must absorb more than '
-        f'glucoraphanin alone ({glucoraphanin}); exogenous enzyme overcomes '
-        f'absent gut myrosinase activity'
-    )
+    # Different beverages, analytes and formulations do not establish a generic F hierarchy.
+    for name in ['stabilized sulforaphane', 'glucoraphanin + myrosinase']:
+        assert f[name]['absorption_structured'] == dict(value=None, range_low=None, range_high=None, quality='unknown')
+    assert 'urinary metabolites' in f['stabilized sulforaphane']['notes']
+    assert 'not absolute F' in f['stabilized sulforaphane']['notes']
+    assert '39.8%' in f['glucoraphanin + myrosinase']['notes']
+    assert '18.6%' in f['glucoraphanin + myrosinase']['notes']
+    assert '2.14fold' in f['glucoraphanin + myrosinase']['notes']
+    assert v('glucoraphanin') == 0.05
 
 
 def test_pmid_citations_present(iqm):

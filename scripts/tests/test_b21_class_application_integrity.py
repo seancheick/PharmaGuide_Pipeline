@@ -58,7 +58,7 @@ B21_BANDS = [
     ('grape_seed_extract', 'grape seed phytosome',                    0.05, 0.20, 'B19 OPC phytosome'),
     # GROUP 6: PROBIOTIC STRAINS (live organism)
     ('bifidobacterium_lactis', 'bifidobacterium lactis (unspecified)', 0.05, 0.20, 'B18 live organism'),
-    ('bifidobacterium_longum', 'bifidobacterium longum infantis 35624', 0.05, 0.20, 'B18 live organism'),
+    ('bifidobacterium_longum', 'bifidobacterium longum 35624', 0.05, 0.20, 'B18 live organism'),
     ('bifidobacterium_longum', 'bifidobacterium longum r0175',         0.05, 0.20, 'B18 live organism'),
     ('lactobacillus_plantarum', 'lactobacillus plantarum (unspecified)', 0.05, 0.20, 'B18 live organism'),
     ('lactobacillus_plantarum', 'lactobacillus plantarum l-137 (heat-killed/postbiotic)', 0.10, 0.40, 'postbiotic'),
@@ -74,6 +74,22 @@ def test_b21_class_application_in_band(iqm, pid, fname, vmin, vmax, framework):
     """
     form = iqm[pid]['forms'].get(fname)
     assert form is not None, f'{pid}::{fname} missing'
+    reviewed_unknown = {'liposomal ginkgo': ['35922794', 'relative ginkgolide'],
+     'boron brown rice chelate': ['Lack of search hits is not proof'],
+     'potassium brown rice chelate': ['Lack of search hits is not proof'],
+     'coenzymated': ['Each component needs its own dose'],
+     'lifepqq': ['not proof that no study exists'],
+     'quercetin phytosome': ['30328058', 'Rutin was not its comparator']}
+    if fname in reviewed_unknown:
+        assert form['absorption_structured'] == dict(value=None, range_low=None, range_high=None, quality='unknown')
+        for source_limit in reviewed_unknown[fname]:
+            assert source_limit in form['notes']
+        return
+    if fname == 'bifidobacterium longum 35624':
+        assert form['absorption_structured'] == dict(value=None, range_low=None, range_high=None, quality='unknown')
+        assert '27656878' in form['notes'] and 'subsp.longum' in form['notes']
+        assert form['bio_score'] == 7
+        return
     val = (form.get('absorption_structured') or {}).get('value')
     assert val is not None, f'{pid}::{fname} struct.value should be populated'
     assert vmin <= val <= vmax, (
@@ -96,17 +112,14 @@ def test_p5p_class_equivalent_to_pyridoxine_class(iqm):
 
 
 def test_emiq_higher_than_quercetin_phytosome(iqm):
-    """EMIQ (SGLT1-absorbed) should rank higher than quercetin phytosome
-    (lipid carrier on still-poor base) per Batch 19 exception.
-    """
-    forms = iqm['quercetin']['forms']
-    emiq = (forms['isoquercetin (EMIQ)'].get('absorption_structured') or {}).get('value')
-    phytosome = (forms['quercetin phytosome'].get('absorption_structured') or {}).get('value')
-    assert emiq is not None and phytosome is not None
-    assert emiq >= phytosome, (
-        f'EMIQ ({emiq}) should be ≥ quercetin phytosome ({phytosome}) — '
-        f'EMIQ has SGLT1-mediated absorption per Murota et al.'
-    )
+    # Source-qualified preparation/endpoints supersede inferred absolute-F hierarchy.
+    form = iqm['quercetin']['forms']['quercetin phytosome']
+    assert form['absorption_structured'] == dict(value=None, range_low=None, range_high=None, quality='unknown')
+    assert '30328058' in form['notes']
+    assert 'relative exposure' in form['notes']
+    assert 'Rutin was not its comparator' in form['notes']
+    assert iqm['quercetin']['forms']['isoquercetin (EMIQ)']['absorption_structured']['value'] == 0.2
+
 
 
 def test_probiotic_strains_class_equivalent(iqm):
@@ -115,7 +128,7 @@ def test_probiotic_strains_class_equivalent(iqm):
     """
     probiotic_forms = [
         ('bifidobacterium_lactis', 'bifidobacterium lactis (unspecified)'),
-        ('bifidobacterium_longum', 'bifidobacterium longum infantis 35624'),
+        ('bifidobacterium_longum', 'bifidobacterium longum 35624'),
         ('bifidobacterium_longum', 'bifidobacterium longum r0175'),
         ('lactobacillus_plantarum', 'lactobacillus plantarum (unspecified)'),
         ('lactobacillus_rhamnosus', 'lactobacillus rhamnosus (unspecified)'),
@@ -123,6 +136,10 @@ def test_probiotic_strains_class_equivalent(iqm):
     ]
     for pid, fname in probiotic_forms:
         form = iqm[pid]['forms'][fname]
+        if fname == 'bifidobacterium longum 35624':
+            assert form['absorption_structured'] == dict(value=None, range_low=None, range_high=None, quality='unknown')
+            assert 'Clinical IBS outcomes do not establish90%colonization' in form['notes']
+            continue
         v = (form.get('absorption_structured') or {}).get('value')
         assert v is not None and 0.05 <= v <= 0.20, (
             f'{pid}::{fname} value={v} outside live-organism class band [0.05, 0.20]'
@@ -130,15 +147,14 @@ def test_probiotic_strains_class_equivalent(iqm):
 
 
 def test_brown_rice_chelate_class_F_applied(iqm):
-    """Brown rice chelate forms must use parent mineral class F (boron ~85%,
-    potassium ~90%) since brown rice marketing has 0 PubMed hits per Batch 11.
-    """
-    boron = (iqm['boron']['forms']['boron brown rice chelate']
-             .get('absorption_structured') or {}).get('value')
-    potassium = (iqm['potassium']['forms']['potassium brown rice chelate']
-                 .get('absorption_structured') or {}).get('value')
-    assert boron >= 0.70, f'boron BR chelate value={boron} should be ≥0.70 (B class F)'
-    assert potassium >= 0.80, f'potassium BR chelate value={potassium} should be ≥0.80 (K class F)'
+    # Source-qualified preparation/endpoints supersede inferred absolute-F hierarchy.
+    form = iqm['boron']['forms']['boron brown rice chelate']
+    assert form['absorption_structured'] == dict(value=None, range_low=None, range_high=None, quality='unknown')
+    assert 'Lack of search hits is not proof' in form['notes']
+    form = iqm['potassium']['forms']['potassium brown rice chelate']
+    assert form['absorption_structured'] == dict(value=None, range_low=None, range_high=None, quality='unknown')
+    assert 'Lack of search hits is not proof' in form['notes']
+
 
 
 def test_branded_extracts_class_poor(iqm):
@@ -173,6 +189,9 @@ def test_liposomal_evidence_thin_documented(iqm):
         text_lower = text.lower()
         flag_phrases = ('evidence-thin', 'no human pk', 'no dedicated',
                         'mechanistic', 'no published', 'no comparator')
+        if pid == 'ginkgo':
+            assert '35922794' in text and 'not an absolute fraction' in text
+            continue
         assert any(p in text_lower for p in flag_phrases), (
             f'{pid}::{fname} liposomal form must document evidence-thin '
             f'status (Batch 6/10/15 framework). Text: {text[:300]}'

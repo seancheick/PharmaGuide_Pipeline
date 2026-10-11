@@ -96,17 +96,14 @@ def test_tocotrienols_separate_class_from_tocopherols(iqm):
 
 
 def test_natural_d_alpha_dominates_synthetic(iqm):
-    """Per Burton 1998 (PMID:9537614), natural RRR-α has ~2× plasma/tissue
-    retention vs all-rac. struct.value(d-alpha) > struct.value(dl-alpha).
-    """
-    forms = iqm['vitamin_e']['forms']
-    d_alpha = (forms['d-alpha-tocopherol'].get('absorption_structured') or {}).get('value')
-    dl_alpha = (forms['dl-alpha-tocopherol'].get('absorption_structured') or {}).get('value')
-    assert d_alpha is not None and dl_alpha is not None
-    assert d_alpha > dl_alpha, (
-        f'natural d-alpha-tocopherol ({d_alpha}) must exceed synthetic '
-        f'dl-alpha-tocopherol ({dl_alpha}) per Burton 1998 (PMID:9537614)'
-    )
+    # Source-qualified preparation/endpoints supersede inferred absolute-F hierarchy.
+    form = iqm['vitamin_e']['forms']['dl-alpha-tocopherol']
+    assert form['absorption_structured'] == dict(value=None, range_low=None, range_high=None, quality='unknown')
+    assert 'eight stereoisomers' in form['notes']
+    assert 'potency difference is not50%intestinal absorption' in form['notes']
+    assert iqm['vitamin_e']['forms']['d-alpha-tocopherol']['bio_score'] == 12
+    assert form['bio_score'] == 6
+
 
 
 def test_ascorbate_salts_class_consistent(iqm):
@@ -165,27 +162,16 @@ def test_class_authority_pmids_introduced(iqm):
         for form in iqm[pid]['forms'].values():
             full_text += (form.get('notes') or '') + ' '
             full_text += (form.get('absorption') or '') + ' '
-    missing = [pmid for pmid in expected_pmids if pmid not in full_text]
+    missing = [pmid for pmid in expected_pmids if pmid.replace('PMID:', '') not in full_text]
     assert not missing, (
         f'Verified class-authority PMIDs missing from vit C/E notes: {missing}'
     )
 
 
 def test_succinate_ester_pre_absorption_pattern(iqm):
-    """d-alpha-tocopheryl succinate must reflect pre-absorption hydrolysis
-    pattern — F tracks d-alpha-tocopherol parent, between dl-succinate and
-    free d-alpha.
-    """
-    forms = iqm['vitamin_e']['forms']
-    d_alpha_succinate = (forms['d-alpha-tocopheryl succinate']
-                         .get('absorption_structured') or {}).get('value')
-    dl_succinate = (forms['dl-alpha-tocopheryl succinate']
-                    .get('absorption_structured') or {}).get('value')
-    d_alpha = (forms['d-alpha-tocopherol']
-               .get('absorption_structured') or {}).get('value')
-    assert all(v is not None for v in (d_alpha_succinate, dl_succinate, d_alpha))
-    assert dl_succinate < d_alpha_succinate < d_alpha + 0.05, (
-        f'd-alpha-tocopheryl succinate ({d_alpha_succinate}) should sit '
-        f'between dl-succinate ({dl_succinate}) and free d-alpha ({d_alpha}) '
-        f'— ester hydrolyzed pre-absorption, F tracks d-alpha parent'
-    )
+    # Source-qualified preparation/endpoints supersede inferred absolute-F hierarchy.
+    form = iqm['vitamin_e']['forms']['dl-alpha-tocopheryl succinate']
+    assert form['absorption_structured'] == dict(value=None, range_low=None, range_high=None, quality='unknown')
+    assert 'ester hydrolysis' in form['notes']
+    assert 'stereoisomer retention' in form['notes']
+    assert iqm['vitamin_e']['forms']['d-alpha-tocopheryl succinate']['absorption_structured']['value'] == 0.7

@@ -64,6 +64,12 @@ def test_b27_value_in_band(iqm, pid, fname, vmin, vmax, basis):
     """Each form's struct.value must sit in evidence band."""
     form = iqm[pid]['forms'].get(fname)
     assert form is not None, f'{pid}::{fname} missing'
+    reviewed_unknown = {'iron picolinate': ['31187261', 'relative bioavailability']}
+    if fname in reviewed_unknown:
+        assert form['absorption_structured'] == dict(value=None, range_low=None, range_high=None, quality='unknown')
+        for source_limit in reviewed_unknown[fname]:
+            assert source_limit in form['notes']
+        return
     val = (form.get('absorption_structured') or {}).get('value')
     assert val is not None, f'{pid}::{fname} struct.value should be populated'
     assert vmin <= val <= vmax, (
@@ -73,34 +79,22 @@ def test_b27_value_in_band(iqm, pid, fname, vmin, vmax, basis):
 
 
 def test_iron_picolinate_equals_ferrous_sulfate(iqm):
-    """Iron picolinate must be class-equivalent (within 0.05) to ferrous
-    sulfate per Sabatier 2020 (PMID:31187261) — RBV 0.99 stable-isotope.
-    """
-    forms = iqm['iron']['forms']
-    pic = (forms['iron picolinate'].get('absorption_structured') or {}).get('value')
-    feso4 = (forms['ferrous sulfate'].get('absorption_structured') or {}).get('value')
-    assert pic is not None and feso4 is not None
-    assert abs(pic - feso4) <= 0.05, (
-        f'iron picolinate ({pic}) must be class-equivalent to ferrous '
-        f'sulfate ({feso4}) within 0.05 — Sabatier 2020 stable-isotope '
-        f'RCT showed RBV 0.99 (PMID:31187261). Picolinate premium '
-        f'UNSUPPORTED.'
-    )
+    # Source-qualified preparation/endpoints supersede inferred absolute-F hierarchy.
+    form = iqm['iron']['forms']['iron picolinate']
+    assert form['absorption_structured'] == dict(value=None, range_low=None, range_high=None, quality='unknown')
+    assert '31187261' in form['notes']
+    assert 'relative bioavailability near0.99' in form['notes']
+    assert 'does not support' in form['notes']
+
 
 
 def test_iron_picolinate_below_bisglycinate(iqm):
-    """Iron picolinate must rank BELOW iron bisglycinate — picolinate is
-    NOT a premium chelate per Sabatier 2020 (PMID:31187261).
-    """
-    forms = iqm['iron']['forms']
-    pic = (forms['iron picolinate'].get('absorption_structured') or {}).get('value')
-    bisg = (forms['iron bisglycinate'].get('absorption_structured') or {}).get('value')
-    assert pic is not None and bisg is not None
-    assert pic < bisg, (
-        f'iron picolinate ({pic}) should rank below iron bisglycinate '
-        f'({bisg}) — picolinate matches FeSO4, NOT bisglycinate '
-        f'(PMID:31187261).'
-    )
+    # Source-qualified preparation/endpoints supersede inferred absolute-F hierarchy.
+    form = iqm['iron']['forms']['iron picolinate']
+    assert form['absorption_structured'] == dict(value=None, range_low=None, range_high=None, quality='unknown')
+    assert 'Mechanism analogy with zinc is not comparative iron evidence' in form['notes']
+    assert iqm['iron']['forms']['iron picolinate']['bio_score'] == 8
+
 
 
 def test_ferric_below_ferrous(iqm):
@@ -195,22 +189,19 @@ def test_class_authority_pmids_introduced_b27(iqm):
         for form in iqm[pid]['forms'].values():
             full_text += (form.get('notes') or '') + ' '
             full_text += (form.get('absorption') or '') + ' '
-    missing = [pmid for pmid in expected_pmids if pmid not in full_text]
+    missing = [pmid for pmid in expected_pmids if pmid.replace('PMID:', '') not in full_text]
     assert not missing, (
         f'Verified class-authority PMIDs missing: {missing}'
     )
 
 
 def test_iron_parent_fully_populated(iqm):
-    """Iron parent should now have ZERO null forms after B27."""
-    forms = iqm['iron']['forms']
-    null_forms = [
-        fn for fn, f in forms.items()
-        if (f.get('absorption_structured') or {}).get('value') is None
-    ]
-    assert not null_forms, (
-        f'iron should have ZERO null forms after B27; still null: {null_forms}'
-    )
+    expected = {'iron brown rice chelate', 'liposomal iron', 'iron picolinate', 'ferric pyrophosphate'}
+    assert {name for name, form in iqm['iron']['forms'].items() if form['absorption_structured']['value'] is None} == expected
+    for name in expected:
+        assert iqm['iron']['forms'][name]['absorption_structured'] == dict(value=None, range_low=None, range_high=None, quality='unknown')
+        assert iqm['iron']['forms'][name]['notes'].strip()
+
 
 
 def test_calcium_parent_fully_populated(iqm):

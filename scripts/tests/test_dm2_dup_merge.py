@@ -3,12 +3,8 @@
 7 more std/bot duplicate entries. Includes two tricky cases that
 required investigation before merge:
 
-  1. graviola: std had UNII AN924793RM (ANNONA MURICATA WHOLE),
-     bot has UNII 5EI0SM9VVE (ANNONA MURICATA FRUIT — also the FDA
-     entry for 'soursop'). The common name 'graviola' specifically
-     refers to the FRUIT of Annona muricata, so bot's UNII is more
-     accurate. Resolution: keep bot's UNII (FRUIT), drop the std
-     entry, merge the 'soursop extract' alias.
+  1. graviola: the current row is a leaf preparation. The fruit UNII
+     cannot identify leaves; the compound identifier remains unresolved.
 
   2. cranberry: std unique aliases include 'urophenol' — that's a
      chemical CLASS (hydroxyphenols, often referenced as urinary
@@ -53,15 +49,15 @@ DM2_ENTRIES = [
     {"id": "cranberry", "bot_unii_expected": "0MVO31Q3QS",
      "newly_merged_aliases": ["american cranberry", "cranberry extract",
                               "cranberry fruit extract", "cranberry juice concentrate"]},
-    # graviola: bot UNII is more accurate (FRUIT vs std's WHOLE)
-    {"id": "graviola", "bot_unii_expected": "5EI0SM9VVE",
+    # October 11 source correction: leaf identity does not inherit fruit UNII
+    {"id": "graviola", "bot_unii_expected": None,
      "newly_merged_aliases": ["soursop extract"]},
     {"id": "marshmallow_root", "bot_unii_expected": "TRW2FUF47H",
      "newly_merged_aliases": ["althaea", "marshmallow root extract"]},
     {"id": "mullein", "bot_unii_expected": "C9TD27U172",
      "newly_merged_aliases": ["mullein extract", "mullein leaf extract"]},
     {"id": "sarsaparilla", "bot_unii_expected": "2H1576D5WG",
-     "newly_merged_aliases": ["sarsaparilla extract", "smilax officinalis"]},
+     "newly_merged_aliases": ["sarsaparilla extract", "smilax ornata"]},
     {"id": "yucca", "bot_unii_expected": "08A0YG3VIC",
      "newly_merged_aliases": ["mojave yucca", "yucca root"]},
 ]
@@ -118,13 +114,13 @@ def test_urophenol_NOT_merged(bot_doc):
     )
 
 
-def test_graviola_uses_fruit_unii(bot_doc):
-    """graviola refers to the FRUIT of Annona muricata. bot's
-    pre-existing UNII 5EI0SM9VVE (ANNONA MURICATA FRUIT) is the
-    accurate identity — the std-side UNII AN924793RM (WHOLE) was
-    broader and is intentionally NOT promoted."""
+def test_graviola_leaf_does_not_inherit_fruit_identity(bot_doc):
     e = _find(bot_doc.get("botanical_ingredients", []), "graviola")
-    assert (e.get("external_ids") or {}).get("unii") == "5EI0SM9VVE"
+    assert e["external_ids"]["unii"] is None
+    assert "leaf" in e["notes"].lower()
+    assert "fruit UNII does not establish leaf identity" in e["notes"]
+    sarsaparilla = _find(bot_doc["botanical_ingredients"], "sarsaparilla")
+    assert "smilax officinalis" not in _lc(sarsaparilla["aliases"])
 
 
 def test_dm2_net_count(std_doc, bot_doc):

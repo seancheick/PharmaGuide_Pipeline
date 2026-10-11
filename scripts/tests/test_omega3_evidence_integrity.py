@@ -69,6 +69,13 @@ def test_omega3_value_in_evidence_band(iqm, pid, fname, vmin, vmax, basis):
     """Each omega-3 form's struct.value must sit in evidence-supported band."""
     form = iqm.get(pid, {}).get('forms', {}).get(fname)
     assert form is not None, f'{pid}::{fname} missing'
+    reviewed_unknown = {'fish oil phospholipid': ['26328782', 'not statistically significant'],
+     'algal triglyceride': ['41096614', 'noninferiority']}
+    if fname in reviewed_unknown:
+        assert form['absorption_structured'] == dict(value=None, range_low=None, range_high=None, quality='unknown')
+        for source_limit in reviewed_unknown[fname]:
+            assert source_limit in form['notes']
+        return
     val = (form.get('absorption_structured') or {}).get('value')
     assert val is not None, f'{pid}::{fname} struct.value should be populated'
     assert vmin <= val <= vmax, (
@@ -146,7 +153,7 @@ def test_no_unverified_pmids_introduced(iqm):
         for fname, form in iqm[pid]['forms'].items():
             text = (form.get('notes') or '') + ' ' + (form.get('absorption') or '')
             for pmid in unverified:
-                if pmid in text:
+                if pmid.replace('PMID:', '') in text:
                     violations.append((pid, fname, pmid))
     # Allowed if it appears in audit-trail under "REQUIRES VERIFICATION" or in metadata
     # but should not appear in form-level notes/absorption fields as a live citation

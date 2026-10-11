@@ -31,7 +31,7 @@ def test_ala_has_the_official_ai_values(calculator: RDAULCalculator) -> None:
     )
 
     assert result.rda_ai == pytest.approx(1.6)
-    assert result.rda_ai_source == "rda"
+    assert result.rda_ai_source == "ai"
     assert result.scoring_eligible is True
     assert result.pct_rda == pytest.approx(100.0)
 

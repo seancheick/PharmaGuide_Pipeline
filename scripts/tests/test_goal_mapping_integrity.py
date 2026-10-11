@@ -201,12 +201,12 @@ def test_required_clusters_appear_in_cluster_weights():
             )
 
 
-def test_joint_inflammation_copy_matches_moderate_evidence_tier():
+def test_joint_inflammation_requires_preparation_specific_evidence():
     cluster = _load_cluster("joint_inflammation")
 
-    assert cluster["evidence_tier"] == 3
-    assert "Tier 1" not in cluster["note"]
-    assert "Tier 3" in cluster["note"]
+    assert cluster["evidence_tier"] == 4
+    assert "does not establish clinical benefit" in cluster["note"]
+    assert "preparation, dose, population and outcome" in cluster["note"]
 
 
 def test_collagen_skin_cluster_copy_matches_popular_stack_tier():
@@ -235,7 +235,7 @@ def test_methylation_support_copy_matches_moderate_evidence_tier():
 @pytest.mark.parametrize(
     ("cluster_id", "expected_tier"),
     [
-        ("eye_health", 2),
+        ("eye_health", 4),
         ("cardiovascular_support", 4),
     ],
 )
@@ -244,7 +244,10 @@ def test_generic_bioactive_goal_copy_matches_structured_evidence_tier(cluster_id
 
     assert cluster["evidence_tier"] == expected_tier
     assert "Tier 1" not in cluster["note"]
-    assert f"Tier {expected_tier}" in cluster["note"]
+    if cluster_id == "eye_health":
+        assert "does not establish clinical benefit" in cluster["note"]
+    else:
+        assert f"Tier {expected_tier}" in cluster["note"]
 
 
 @pytest.mark.parametrize(

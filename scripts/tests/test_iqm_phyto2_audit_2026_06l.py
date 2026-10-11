@@ -31,7 +31,8 @@ def test_msm_unspecified_value_aligned(iqm):
     ex = iqm["msm"]["forms"]["MSM (methylsulfonylmethane)"]
     un = iqm["msm"]["forms"]["msm (methylsulfonylmethane) (unspecified)"]
     assert un["bio_score"] == ex["bio_score"] - 1
-    assert un["absorption_structured"]["value"] == ex["absorption_structured"]["value"]
+    assert un["absorption_structured"] == dict(value=None, range_low=None, range_high=None, quality="unknown")
+    assert "rats" in un["notes"] and "not human absolute" in un["notes"]
 
 
 # ── alias cleanup ────────────────────────────────────────────────────────────

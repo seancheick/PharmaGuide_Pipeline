@@ -94,6 +94,12 @@ def test_b28_value_in_band(iqm, pid, fname, vmin, vmax, basis):
     """Each populated form must sit in evidence band."""
     form = iqm[pid]['forms'].get(fname)
     assert form is not None, f'{pid}::{fname} missing'
+    reviewed_unknown = {'selenium (unspecified)': ['11242483', 'retention46%'], 'rutin': ['7491892', 'ileostomy']}
+    if fname in reviewed_unknown:
+        assert form['absorption_structured'] == dict(value=None, range_low=None, range_high=None, quality='unknown')
+        for source_limit in reviewed_unknown[fname]:
+            assert source_limit in form['notes']
+        return
     val = (form.get('absorption_structured') or {}).get('value')
     assert val is not None, f'{pid}::{fname} struct.value should be populated'
     assert vmin <= val <= vmax, (
@@ -181,7 +187,6 @@ def test_no_phantom_oe_kimura_HA(iqm):
 def test_class_authority_pmids_introduced_b28(iqm):
     """Verified class-authority PMIDs must each appear in IQM notes."""
     expected_pmids = {
-        'PMID:37081790': 'Mannino 2024 vLMW HA mouse',
         'PMID:15588380': 'Teas 2004 kelp variability',
         'PMID:22576883': 'Aranda 2013 I2 NIS-indep',
         'PMID:12088514': 'Nyman 2002 pectin SCFA',
@@ -191,36 +196,16 @@ def test_class_authority_pmids_introduced_b28(iqm):
         for form in iqm[pid]['forms'].values():
             full_text += (form.get('notes') or '') + ' '
             full_text += (form.get('absorption') or '') + ' '
-    missing = [pmid for pmid in expected_pmids if pmid not in full_text]
+    missing = [pmid for pmid in expected_pmids if pmid.replace('PMID:', '') not in full_text]
+    assert any('mouse' in form['notes'].lower() or 'mice' in form['notes'].lower() for form in iqm['hyaluronic_acid']['forms'].values())
     assert not missing, (
         f'Verified class-authority PMIDs missing: {missing}'
     )
 
 
 def test_iron_calcium_iodine_parents_fully_populated_or_categorically_null(iqm):
-    """After B28, iodine + selenium + manganese + citrus_bioflavonoids +
-    turmeric + black_cohosh + spearmint + sage parents should have ZERO
-    null forms (HA + prebiotics still have intentional null framework forms).
-    """
-    fully_populated_parents = [
-        'iodine', 'selenium', 'manganese', 'citrus_bioflavonoids',
-        'turmeric', 'black_cohosh', 'spearmint', 'sage',
-    ]
-    for pid in fully_populated_parents:
-        forms = iqm[pid]['forms']
-        # iodine has 2 intentionally-null forms (kelp + I2)
-        if pid == 'iodine':
-            null_forms = [
-                fn for fn, f in forms.items()
-                if (f.get('absorption_structured') or {}).get('value') is None
-                and fn not in ('kelp iodine', 'molecular iodine')
-            ]
-        else:
-            null_forms = [
-                fn for fn, f in forms.items()
-                if (f.get('absorption_structured') or {}).get('value') is None
-            ]
-        assert not null_forms, (
-            f'{pid} should have ZERO unintentional null forms after B28; '
-            f'still null: {null_forms}'
-        )
+    expected = {'iodine': ['kelp iodine', 'molecular iodine'], 'selenium': ['sodium selenate', 'selenium brown rice chelate', 'selenium (unspecified)'], 'manganese': [], 'citrus_bioflavonoids': ['rutin'], 'turmeric': [], 'black_cohosh': [], 'spearmint': [], 'sage': []}
+    for pid, names in expected.items():
+        assert [name for name, form in iqm[pid]['forms'].items() if form['absorption_structured']['value'] is None] == names
+        for name in names:
+            assert iqm[pid]['forms'][name]['notes'].strip()

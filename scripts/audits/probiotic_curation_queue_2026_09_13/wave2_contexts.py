@@ -56,6 +56,29 @@ def _declared_disposition_patches():
         for review in json.loads(RESPONSE.read_text(encoding="utf-8")).get("reviews", {}).values():
             for patch in review.get("patches", []):
                 patches.setdefault(patch["record_id"], []).append((patch["field_path"], patch["new_value"]))
+    # Source-qualified October 11 correction: PMID37020105 randomized five
+    # groups, including 14 placebo neonates. Preserve all other authored and
+    # disposition facts; this exact patch is not a later-review waiver.
+    patches.setdefault("lgg_bb12_preterm_administration_route_37020105", []).append((
+        "limitations", [
+            "Route-comparison design including a 14-neonate placebo arm; microbiota composition is a surrogate; dose not stated in the abstract.",
+            "Five randomized groups (N=68) included direct LGG (13), maternal LGG (17), direct LGG+Bb-12 (14), maternal combination (10), and placebo (14). Microbiota endpoints do not establish clinical benefit or equivalence across routes.",
+        ]))
+    # PMID41994268 full-text Results (PMC13079629): the significant bilirubin
+    # and hospital-stay contrasts belong to the combination, not M-16V alone.
+    patches.setdefault("m16v_neonatal_jaundice_adjunct_41994268", []).extend([
+        ("outcomes[1].direction", "unresolved"),
+        ("outcomes[2].direction", "unresolved"),
+        ("limitations[2]", "Full-text Results attributes significant bilirubin-reduction and hospital-stay differences to the combined M-16V + Bb-12 arm versus control. M-16V-alone hospitalization values are descriptive; a positive individual-strain pairwise contrast is not established."),
+    ])
+    # PMID39915586: 112 randomized infants per formula arm; 60 breastfed
+    # infants are a separate reference, and the randomized sample is mixed-route.
+    patches.setdefault("m16v_synbiotic_formula_csection_39915586", []).extend([
+        ("population", {"age_group": "infant", "description": "224 fully formula-fed healthy Chinese infants randomized (112 per formula arm); 54.8% born by C-section and the remainder vaginally; 60 breastfed infants were a nonrandomized reference group."}),
+        ("sample_size", 224),
+        ("comparator", "Intact-protein formula with scGOS/lcFOS; breastfed group is a separate nonrandomized reference."),
+        ("limitations[1]", "Active formula contained partially hydrolyzed whey protein whereas comparator contained intact protein; preparation differences prevent isolated attribution to M-16V. Randomized N=224, not 284."),
+    ])
     return patches
 
 

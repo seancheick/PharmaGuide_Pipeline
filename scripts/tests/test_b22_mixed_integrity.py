@@ -72,6 +72,12 @@ def test_b22_value_in_band(iqm, pid, fname, vmin, vmax, basis):
     """Each form's struct.value must sit in evidence band."""
     form = iqm[pid]['forms'].get(fname)
     assert form is not None, f'{pid}::{fname} missing'
+    reviewed_unknown = {'5-htp (unspecified)': 'decarboxylase inhibitor',
+     'd beta hydroxybutyrate bhb (standard)': 'rather than demonstrated wholly inactive'}
+    if fname in reviewed_unknown:
+        assert form['absorption_structured'] == dict(value=None, range_low=None, range_high=None, quality='unknown')
+        assert reviewed_unknown[fname].lower() in form['notes'].lower()
+        return
     val = (form.get('absorption_structured') or {}).get('value')
     assert val is not None, f'{pid}::{fname} struct.value should be populated'
     assert vmin <= val <= vmax, (
@@ -87,6 +93,12 @@ def test_b22_prebiotic_category_error_null(iqm, pid, fname):
     """
     form = iqm[pid]['forms'].get(fname)
     assert form is not None, f'{pid}::{fname} missing'
+    reviewed_unknown = {'5-htp (unspecified)': 'decarboxylase inhibitor',
+     'd beta hydroxybutyrate bhb (standard)': 'rather than demonstrated wholly inactive'}
+    if fname in reviewed_unknown:
+        assert form['absorption_structured'] == dict(value=None, range_low=None, range_high=None, quality='unknown')
+        assert reviewed_unknown[fname].lower() in form['notes'].lower()
+        return
     val = (form.get('absorption_structured') or {}).get('value')
     assert val is None, (
         f'{pid}::{fname} value={val} must be null — non-digestible '
@@ -147,18 +159,12 @@ def test_d_chiro_class_equivalent_to_myo(iqm):
 
 
 def test_5_htp_unspec_matches_extract_band(iqm):
-    """5-HTP unspecified should match the published Magnussen 1980 (PMID:6966118)
-    band — extract form already at 0.70.
-    """
-    forms = iqm['5_htp']['forms']
-    extract = (forms['5-htp extract'].get('absorption_structured') or {}).get('value')
-    unspec = (forms['5-htp (unspecified)'].get('absorption_structured') or {}).get('value')
-    assert extract is not None and unspec is not None
-    # Both should be in 0.47-0.84 band per Magnussen
-    for v in (extract, unspec):
-        assert 0.47 <= v <= 0.84, (
-            f'5-HTP value {v} should be in Magnussen 1980 band [0.47, 0.84]'
-        )
+    # PMID6966118: myoclonus with decarboxylase inhibitor, not supplement-alone F.
+    for name in ['5-htp (unspecified)', '5-htp extract']:
+        form = iqm['5_htp']['forms'][name]
+        assert form['absorption_structured'] == dict(value=None, range_low=None, range_high=None, quality='unknown')
+        assert '6966118' in form['notes']
+        assert 'decarboxylase inhibitor' in form['notes']
 
 
 def test_tudca_no_human_pk_qualified(iqm):
@@ -192,7 +198,6 @@ def test_class_authority_pmids_introduced(iqm):
         'PMID:6966118':  'Magnussen 1980 5-HTP',
         'PMID:29163194': 'Stubbs 2017 BHB',
         'PMID:28165863': 'Holscher 2017 prebiotic',
-        'PMID:15877886': 'Roberfroid 2005 inulin',
     }
     full_text = ''
     for pid in ('5_htp', 'd_beta_hydroxybutyrate_bhb', 'larch_arabinogalactan',
@@ -200,7 +205,9 @@ def test_class_authority_pmids_introduced(iqm):
         for form in iqm[pid]['forms'].values():
             full_text += (form.get('notes') or '') + ' '
             full_text += (form.get('absorption') or '') + ' '
-    missing = [pmid for pmid in expected_pmids if pmid not in full_text]
+    inulin = iqm['inulin']['forms']['inulin (unspecified)']['notes']
+    assert 'local gastrointestinal' in inulin and 'systemic absorption is not the relevant endpoint' in inulin
+    missing = [pmid for pmid in expected_pmids if pmid.replace('PMID:', '') not in full_text]
     assert not missing, (
         f'Verified class-authority PMIDs missing: {missing}'
     )

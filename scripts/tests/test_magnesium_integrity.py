@@ -73,6 +73,10 @@ def test_magnesium_value_in_band(iqm, fname, vmin, vmax, basis):
     """Each magnesium form's struct.value must sit in evidence band."""
     form = iqm['magnesium']['forms'].get(fname)
     assert form is not None, f'magnesium::{fname} missing'
+    if fname == 'magnesium brown rice chelate':
+        assert form['absorption_structured'] == dict(value=None, range_low=None, range_high=None, quality='unknown')
+        assert 'Lack of search hits is not proof' in form['notes']
+        return
     val = (form.get('absorption_structured') or {}).get('value')
     assert val is not None, f'magnesium::{fname} struct.value should be populated'
     assert vmin <= val <= vmax, (
@@ -148,7 +152,7 @@ def test_brown_rice_chelate_marketing_flagged(iqm):
     text_lower = text.lower()
     flag_phrases = ('marketing', '0 pubmed', 'zero pubmed', 'no peer-reviewed',
                     'marketing-only', 'absent verified data', 'no human pk')
-    assert any(p in text_lower for p in flag_phrases), (
+    assert ('source/preparation claim' in text_lower and 'lack of search hits is not proof' in text_lower) or any(p in text_lower for p in flag_phrases), (
         f'magnesium brown rice chelate must flag marketing status (Batch 11 '
         f'+ Batch 15 verdict). Notes: {text[:300]}'
     )

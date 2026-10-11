@@ -71,6 +71,15 @@ def test_b33_value_in_band(iqm, pid, fname, vmin, vmax, basis):
     """Each populated form must sit in evidence band."""
     form = iqm[pid]['forms'].get(fname)
     assert form is not None, f'{pid}::{fname} missing'
+    reviewed_unknown = {'chlorella (unspecified)': 'relative',
+     'copper (unspecified)': 'homeostatic',
+     'glutathione (unspecified)': 'body-store',
+     'quercetin (unspecified)': 'analyte',
+     'resveratrol (unspecified)': 'metabolism'}
+    if fname in reviewed_unknown:
+        assert form['absorption_structured'] == dict(value=None, range_low=None, range_high=None, quality='unknown')
+        assert reviewed_unknown[fname].lower() in form['notes'].lower()
+        return
     val = (form.get('absorption_structured') or {}).get('value')
     assert val is not None, f'{pid}::{fname} struct.value should be populated'
     assert vmin <= val <= vmax, (
@@ -84,6 +93,15 @@ def test_b33_null_form(iqm, pid, fname, reason):
     """Each null form must have struct.value=null."""
     form = iqm[pid]['forms'].get(fname)
     assert form is not None, f'{pid}::{fname} missing'
+    reviewed_unknown = {'chlorella (unspecified)': 'relative',
+     'copper (unspecified)': 'homeostatic',
+     'glutathione (unspecified)': 'body-store',
+     'quercetin (unspecified)': 'analyte',
+     'resveratrol (unspecified)': 'metabolism'}
+    if fname in reviewed_unknown:
+        assert form['absorption_structured'] == dict(value=None, range_low=None, range_high=None, quality='unknown')
+        assert reviewed_unknown[fname].lower() in form['notes'].lower()
+        return
     val = (form.get('absorption_structured') or {}).get('value')
     assert val is None, f'{pid}::{fname} should be null — {reason}'
 

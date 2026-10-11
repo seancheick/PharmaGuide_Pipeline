@@ -42,6 +42,13 @@ def reconciliation():
 def manifest(reconciliation):
     iqm = reconciliation._load_object(reconciliation.IQM_PATH)
     rows = reconciliation._load_rows(reconciliation.LEDGER_PATH)
+    # Preserve the historical ledger; adapt only the chemically specific form
+    # renamed by the source-qualified 2026-10-11 correction.
+    assert 'taurine (generic)' not in iqm['taurine']['forms']
+    assert iqm['taurine']['forms']['free taurine']['bio_score'] == 11
+    rows = [dict(row, form='free taurine')
+            if (row['ingredient'], row['form']) == ('taurine', 'taurine (generic)')
+            else row for row in rows]
     return iqm, reconciliation.build_manifest(iqm, rows)
 
 

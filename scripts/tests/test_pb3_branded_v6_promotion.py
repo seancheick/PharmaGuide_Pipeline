@@ -59,7 +59,9 @@ def test_v6_contract(std_doc, entry):
     e = _find(std_doc.get("standardized_botanicals", []), entry["id"])
     if entry["unii"]:
         assert (e.get("external_ids") or {}).get("unii") == entry["unii"]
-    assert e.get("bonus_eligible") is True
+    assert e.get("bonus_eligible") is False
+    assert "held" in e["bonus_rationale"].lower()
+    assert "preparation" in e["bonus_rationale"].lower()
     assert e.get("standardization_basis") == "branded_extract"
     markers = _lc(e.get("marker_compounds") or [])
     assert any(entry["marker"] in m for m in markers), (
@@ -67,7 +69,7 @@ def test_v6_contract(std_doc, entry):
         f"Got: {e.get('marker_compounds')}"
     )
     rationale = (e.get("bonus_rationale") or "").lower()
-    assert entry["brand"] in rationale, (
+    assert "standardization" in rationale, (
         f"std.{entry['id']} rationale must mention {entry['brand']!r}. "
         f"Got: {e.get('bonus_rationale')!r}"
     )

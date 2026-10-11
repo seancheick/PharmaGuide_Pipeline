@@ -97,7 +97,7 @@ def iqm():
     ('lactobacillus_salivarius', 'lactobacillus salivarius ha-118',              7),
     ('bifidobacterium_lactis', 'bifidobacterium lactis (unspecified)',          11),
     ('lactobacillus_rhamnosus', 'lactobacillus rhamnosus (unspecified)',        10),
-    ('bifidobacterium_longum', 'bifidobacterium longum infantis 35624',          7),
+    ('bifidobacterium_longum', 'bifidobacterium longum 35624',          7),
     # C12 — BMOV
     ('vanadyl_sulfate', 'bis(maltolato)oxovanadium (BMOV)',   7),
     # C13 — Iron picolinate
@@ -123,18 +123,27 @@ def test_c1_coq10_pd_respect_documented(iqm):
         if form is None:
             continue
         notes = form.get('notes') or ''
+        if fname == 'ubiquinol crystal-free':
+            assert form['bio_score'] == 13
+            assert '16919858' in notes and 'did not include an active' in notes
+            continue
+        if fname == 'ubiquinol':
+            assert form['bio_score'] == 13
+            assert '32188111' in notes and 'not significant' in notes
+            continue
         assert 'PD-respect' in notes or 'C1' in notes or 'PD' in notes, (
             f'{fname} must document PD-respect decoupling per Dr Pham C1.'
         )
 
 
 def test_c12_bmov_struct_value_downgraded(iqm):
-    """C12 BMOV must have struct.value downgraded to V class baseline."""
+    # Source-qualified preparation/endpoints supersede inferred absolute-F hierarchy.
     form = iqm['vanadyl_sulfate']['forms']['bis(maltolato)oxovanadium (BMOV)']
-    val = (form.get('absorption_structured') or {}).get('value')
-    assert val is not None and 0.01 <= val <= 0.03, (
-        f'BMOV struct.value={val} should be in V class baseline [0.01, 0.03].'
-    )
+    assert form['absorption_structured'] == dict(value=None, range_low=None, range_high=None, quality='unknown')
+    assert 'Human comparative evidence remains unresolved' in form['notes']
+    assert 'A sulfate study cannot demonstrate equivalence' in form['notes']
+    assert form['bio_score'] == 7
+
 
 
 # ============================================================================
@@ -142,21 +151,19 @@ def test_c12_bmov_struct_value_downgraded(iqm):
 # ============================================================================
 
 def test_e1_gaba_pk_strict(iqm):
-    """E1 GABA companions must be PK-strict (BBB-blocked) ~0.05-0.10."""
-    forms = iqm['gaba']['forms']
-    for fname in ['gaba powder', 'pharma-gaba']:
-        form = forms.get(fname)
-        if form is None:
-            continue
-        v = (form.get('absorption_structured') or {}).get('value')
-        assert v is not None and 0.02 <= v <= 0.10, (
-            f'gaba::{fname} value={v} should be PK-strict [0.02, 0.10] '
-            f'per Dr Pham E1 BBB-blocked decision.'
-        )
-        bio = form.get('bio_score')
-        assert bio is not None and bio <= 7, (
-            f'gaba::{fname} bio_score={bio} should be ≤7 per Dr Pham E1.'
-        )
+    # Source-qualified preparation/endpoints supersede inferred absolute-F hierarchy.
+    form = iqm['gaba']['forms']['gaba powder']
+    assert form['absorption_structured'] == dict(value=None, range_low=None, range_high=None, quality='unknown')
+    assert '26500584' in form['notes']
+    assert 'contradictory BBB' in form['notes']
+    assert 'oral uptake is distinct from brain entry' in form['notes']
+    form = iqm['gaba']['forms']['pharma-gaba']
+    assert form['absorption_structured'] == dict(value=None, range_low=None, range_high=None, quality='unknown')
+    assert 'same GABA molecular identity' in form['notes']
+    assert 'not establish a human absorption or BBB premium' in form['notes']
+    assert iqm['gaba']['forms']['gaba powder']['bio_score'] == 6
+    assert iqm['gaba']['forms']['pharma-gaba']['bio_score'] == 6
+
 
 
 def test_e2_spirulina_category_error(iqm):

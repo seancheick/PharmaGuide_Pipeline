@@ -79,6 +79,13 @@ def test_b32_value_in_band(iqm, pid, fname, vmin, vmax, basis):
     """Each form's struct.value must sit in evidence band."""
     form = iqm[pid]['forms'].get(fname)
     assert form is not None, f'{pid}::{fname} missing'
+    reviewed_unknown = {'l-theanine (unspecified)': ['34562208', 'mouse pharmacokinetics'],
+     'coq10 (unspecified)': ['carrier preparation are unspecified']}
+    if fname in reviewed_unknown:
+        assert form['absorption_structured'] == dict(value=None, range_low=None, range_high=None, quality='unknown')
+        for source_limit in reviewed_unknown[fname]:
+            assert source_limit in form['notes']
+        return
     val = (form.get('absorption_structured') or {}).get('value')
     assert val is not None, f'{pid}::{fname} struct.value should be populated'
     assert vmin <= val <= vmax, (

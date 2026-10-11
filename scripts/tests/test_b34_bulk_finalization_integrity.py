@@ -37,19 +37,21 @@ def iqm():
 
 
 def test_b34_coverage_milestone(iqm):
-    """Coverage must be ≥95% after B34 bulk finalization. A declared
-    category-error form (a fiber acting in the gut lumen) is null by design,
-    so it is not a coverage gap and stays out of the denominator."""
-    forms = [
-        f for p in iqm.values() for f in p.get('forms', {}).values()
-        if not str(f.get('absorption', '')).lower().startswith('category_error')
-    ]
-    total = len(forms)
-    pop = sum(1 for f in forms if (f.get('absorption_structured') or {}).get('value') is not None)
-    pct = pop / total * 100
-    assert pct >= 95.0, (
-        f'Coverage {pct:.1f}% below 95% target. Pop: {pop}/{total}'
-    )
+    """Coverage means explicit data states; mechanically filled fractions are not evidence."""
+    for pid, parent in iqm.items():
+        for name, form in parent.get('forms', {}).items():
+            structured = form.get('absorption_structured')
+            assert isinstance(structured, dict), (pid, name)
+            assert 'quality' in structured, (pid, name)
+            if 'value' not in structured:
+                assert (pid, name) == ('vitamin_k2', 'vitamin k2 (unspecified subtype)')
+                assert structured == {'quality': 'unknown'}
+            value = structured.get('value')
+            if value is not None:
+                assert 0 <= value <= 1, (pid, name)
+            else:
+                assert form.get('notes') or structured.get('notes'), (pid, name)
+
 
 
 def test_b34_all_category_errors_preserved(iqm):
@@ -130,37 +132,180 @@ def test_b34_classifier_examples():
 
 
 def test_b34_no_residual_unintended_null(iqm):
-    """Verify there are no parents where ALL forms are null
-    (architectural-orphan check). Every parent should have at least one
-    populated form OR explicit category-error documentation.
-    """
-    all_null_parents = []
-    for pid, parent in iqm.items():
-        forms = parent.get('forms', {})
-        if not forms:
-            continue
-        all_null = all(
-            (f.get('absorption_structured') or {}).get('value') is None
-            for f in forms.values()
-        )
-        if all_null:
-            # Check if it's an intentional all-null (category-error parent)
-            sample_form = next(iter(forms.values()))
-            sample_text = (
-                (sample_form.get('notes') or '')
-                + ' ' + (sample_form.get('absorption') or '')
-                + ' ' + ((sample_form.get('absorption_structured') or {}).get('notes') or '')
-            ).lower()
-            intentional = any(p in sample_text for p in [
-                'category error', 'category_error', 'framework_mismatch',
-                'framework mismatch', 'no human pk', 'no published human pk',
-                'no published', 'pending dr pham', 'distinct mechanism',
-                'variable content', 'evidence-thin', 'liposomal-thin',
-                'no comparative', 'no head-to-head', 'no oral human',
-            ])
-            if not intentional:
-                all_null_parents.append(pid)
-    assert not all_null_parents, (
-        f'Parents with ALL forms null but no intentional-null flag: '
-        f'{all_null_parents}'
-    )
+    """Pin explicit source-reviewed unknown/local-action forms instead of requiring made-up F."""
+    expected = {'slippery_elm': ['inner bark powder',
+                      'standardized extract (mucilage)',
+                      'bark powder (unspecified)',
+                      'outer bark powder'],
+     'diindolylmethane': ['diindolylmethane (dim)', 'indole-3-carbinol (i3c)'],
+     'resveratrol': ['trans-resveratrol',
+                     'resveratrol (unspecified)',
+                     'stilbenes (resveratrol-family)'],
+     'taurine': ['liposomal taurine', 'magnesium taurate (as taurine source)', 'free taurine'],
+     'ergothioneine': ['l-ergothioneine'],
+     'l_glycine': ['l-glycine powder'],
+     'd_aspartic_acid': ['d-aspartic acid powder'],
+     'gaba': ['gaba powder',
+              'pharma-gaba',
+              'liposomal gaba',
+              'gaba (gamma-aminobutyric acid) (unspecified)'],
+     'lutein': ['lutein (unspecified)', 'free lutein (floraglo / lutemax, marigold)'],
+     'chlorella': ['fermented chlorella',
+                   'broken cell wall chlorella',
+                   'chlorella powder',
+                   'chlorella tablets',
+                   'chlorella (unspecified)'],
+     'hyaluronic_acid': ['oligosaccharide HA',
+                         'liposomal HA',
+                         'acetylated HA',
+                         'low molecular weight HA',
+                         'high molecular weight HA',
+                         'hyaluronic acid (unspecified)'],
+     'rice_protein': ['rice protein isolate', 'rice protein'],
+     'l_theanine': ['suntheanine (Taiyo)', 'l-theanine powder', 'l-theanine (unspecified)'],
+     'digestive_enzymes': ['plant-based enzyme complex',
+                           'pancreatic enzymes (animal-derived)',
+                           'specific enzymes',
+                           'enteric-coated enzymes',
+                           'oxidized enzymes',
+                           'digestive enzymes (unspecified)'],
+     'squalene': ['squalene standard'],
+     'l_leucine': ['l-leucine powder'],
+     'l_valine': ['l-valine powder'],
+     'l_isoleucine': ['l-isoleucine powder'],
+     'l_citrulline': ['l-citrulline malate', 'l-citrulline powder'],
+     'dmae': ['dmae bitartrate', 'dmae (dimethylaminoethanol) (unspecified)'],
+     'superoxide_dismutase': ['sod supplement', 'superoxide dismutase (sod) (unspecified)'],
+     'eriocitrin': ['eriocitrin extract'],
+     'dnj_1_deoxynojirimycin': ['dnj (1-deoxynojirimycin) (unspecified)'],
+     'tsg': ['tsg (unspecified)'],
+     'acemannan': ['acemannan (unspecified)'],
+     'aloin': ['aloin (unspecified)'],
+     'anthocyanins': ['anthocyanins (unspecified)'],
+     'cyanidin_3_glucoside': ['cyanidin-3-glucoside (unspecified)'],
+     'apigenin': ['apigenin extract'],
+     'daidzein': ['daidzein (unspecified)'],
+     'delphinidin': ['delphinidin (unspecified)'],
+     'ellagic_acid': ['ellagic acid (unspecified)'],
+     'erythrina_alkaloids': ['erythrina alkaloids (unspecified)'],
+     'fiber': ['resistant dextrin', 'fiber (unspecified)', 'konjac glucomannan'],
+     'formononetin': ['formononetin (unspecified)'],
+     'galactolipids': ['galactolipids (unspecified)'],
+     'gallic_acid': ['gallic acid (unspecified)'],
+     'gallocatechin': ['gallocatechin (unspecified)'],
+     'genistein': ['genistein (unspecified)'],
+     'glucosinolates': ['glucosinolates (unspecified)'],
+     'glycitein': ['glycitein (unspecified)'],
+     'huperzine_a': ['huperzine a (unspecified)'],
+     'inulin': ['inulin (unspecified)'],
+     'isoflavones': ['isoflavones (unspecified)'],
+     'isothiocyanates': ['isothiocyanates (unspecified)'],
+     'lignans': ['lignans (unspecified)'],
+     'linoleic_acid': ['linoleic acid (unspecified)'],
+     'luteolin': ['luteolin (unspecified)'],
+     'phenolic_acids': ['phenolic acids (unspecified)'],
+     'polysaccharides': ['polysaccharides (unspecified)'],
+     'puerarin': ['puerarin (unspecified)'],
+     'ruscogenin': ['ruscogenin (unspecified)'],
+     'salvianolic_acid_b': ['salvianolic acid b (unspecified)',
+                            'tanshinones (danshen lipophilic fraction)'],
+     'shatavarin_iv': ['shatavarin iv (unspecified)'],
+     'tannins': ['tannins (unspecified)'],
+     'theobromine': ['theobromine (unspecified)'],
+     'total_carotenoids': ['total carotenoids (unspecified)'],
+     'triterpene_glycosides': ['triterpene glycosides (unspecified)'],
+     'triterpenes': ['triterpenes (unspecified)'],
+     'ursolic_acid': ['ursolic acid (unspecified)'],
+     'verbascoside': ['verbascoside (unspecified)'],
+     'vicine': ['vicine (unspecified)'],
+     'viscotoxin': ['viscotoxin (unspecified)'],
+     'vitexin': ['vitexin (unspecified)'],
+     'volatile_oils': ['volatile oils (unspecified)'],
+     'pterostilbene': ['trans-pterostilbene'],
+     'larch_arabinogalactan': ['larch arabinogalactan powder'],
+     'alpha_amylase': ['alpha-amylase enzyme'],
+     'coenzymated_complex': ['coenzymated', 'coenzymated complex (unspecified)'],
+     '5_htp': ['5-htp extract', '5-htp (unspecified)'],
+     'nac': ['nac powder', 'nac sustained-release'],
+     'd_beta_hydroxybutyrate_bhb': ['d beta hydroxybutyrate bhb (standard)'],
+     'bioflavonoids': ['citrus complex',
+                       'hesperidin-rich',
+                       'rutin complex',
+                       'bioflavonoids (unspecified)'],
+     'organ_extracts': ['grass-fed desiccated',
+                        'freeze-dried',
+                        'standard desiccated',
+                        'organ extracts (unspecified)'],
+     'propolis': ['propolis extract'],
+     'papaya': ['papaya fruit'],
+     'blueberry': ['blueberry extract'],
+     'herring_roe_extract': ['herring roe extract', 'herring roe extract (unspecified)'],
+     'butterbur': ['PA-free butterbur extract (Petadolex)', 'butterbur (unspecified)'],
+     'gamma_oryzanol': ['gamma oryzanol (unspecified)'],
+     'calanus_oil': ['calanus oil'],
+     'pgx_fiber': ['PGX fiber'],
+     'ahiflower_seed_oil': ['cold-pressed ahiflower seed oil', 'ahiflower seed oil (unspecified)'],
+     'guarana': ['guarana standardized extract', 'guarana (unspecified)'],
+     'apple_cider_vinegar': ['apple cider vinegar (unspecified)'],
+     'fisetin': ['fisetin (unspecified)'],
+     'l_pyroglutamic_acid': ['l-pyroglutamic acid (unspecified)'],
+     'calcium_pyruvate': ['calcium pyruvate (unspecified)'],
+     'inosine': ['inosine (unspecified)'],
+     'humic_acid': ['humic acid (unspecified)'],
+     'apoaequorin': ['apoaequorin (unspecified)'],
+     'dimethyl_glycine': ['dimethyl glycine (unspecified)'],
+     'methylliberine': ['methylliberine (unspecified)'],
+     'ipriflavone': ['ipriflavone (unspecified)'],
+     'l_baiba': ['L-BAIBA (unspecified)'],
+     'threonic_acid': ['threonic acid (unspecified)'],
+     'dihydromyricetin': ['dihydromyricetin (unspecified)'],
+     'centrophenoxine': ['centrophenoxine (unspecified)'],
+     'l_norvaline': ['l-norvaline (unspecified)'],
+     'cat_s_claw': ["cat's claw (unspecified)"],
+     'keratin': ['keratin (unspecified)'],
+     'coffee_fruit': ['coffee fruit extract (unspecified)'],
+     'phlorizin': ['phlorizin (unspecified)'],
+     'nobiletin': ['nobiletin (unspecified)'],
+     'mangiferin': ['mangiferin (unspecified)'],
+     'l_asparagine': ['l-asparagine (unspecified)'],
+     'tart_cherry': ['vitacherry sports extract', 'tart cherry extract', 'tart cherry (unspecified)'],
+     'phenylethylamine': ['phenylethylamine (unspecified)'],
+     'undecylenic_acid': ['10-undecenoic acid'],
+     'optiberry': ['OptiBerry IH141'],
+     'guanidinoacetate': ['guanidinoacetate (unspecified)'],
+     'blood_orange_extract': ['blood orange extract (unspecified)'],
+     'oat_bran': ['oat bran (unspecified)'],
+     'epigallocatechin': ['epigallocatechin (unspecified)'],
+     'l_aspartic_acid': ['l-aspartic acid (unspecified)'],
+     'salacia': ['salacia (unspecified)'],
+     'touchi_extract': ['touchi extract (unspecified)'],
+     'chitosan': ['chitosan (unspecified)'],
+     'calcium_d_glucarate': ['calcium d-glucarate (unspecified)'],
+     'artemisinin': ['artemisinin (unspecified)'],
+     '7_keto_dhea': ['7-keto dhea (unspecified)'],
+     'blue_flag': ['blue flag root extract'],
+     'glutamate': ['l-glutamate'],
+     'chloride': ['chloride (unspecified)'],
+     'lactase': ['lactase'],
+     'alpha_galactosidase': ['alpha-galactosidase'],
+     'pancreatin': ['pancreatin (porcine/bovine)'],
+     'protease': ['protease (fungal/bacterial)'],
+     'lipase': ['lipase'],
+     'amylase': ['amylase'],
+     'papain': ['papain'],
+     'cellulase': ['cellulase'],
+     'serrapeptase': ['serrapeptase'],
+     'invertase': ['invertase'],
+     'maltase': ['maltase'],
+     'phytase': ['phytase'],
+     'pectinase': ['pectinase'],
+     'hemicellulase': ['hemicellulase'],
+     'beta_glucanase': ['beta-glucanase']}
+    actual = {pid: [name for name, form in parent['forms'].items() if form.get('absorption_structured', {}).get('value') is None]
+              for pid, parent in iqm.items() if parent.get('forms') and all(form.get('absorption_structured', {}).get('value') is None for form in parent['forms'].values())}
+    assert actual == expected
+    for pid, names in expected.items():
+        for name in names:
+            form = iqm[pid]['forms'][name]
+            assert form['notes'].strip(), (pid, name)
+            assert form['absorption_structured']['value'] is None

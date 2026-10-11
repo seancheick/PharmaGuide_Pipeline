@@ -76,7 +76,12 @@ def test_has_unii(std_doc, entry):
 @pytest.mark.parametrize("entry", PB2_ENTRIES, ids=[e["id"] for e in PB2_ENTRIES])
 def test_has_v6_contract(std_doc, entry):
     e = _find(std_doc.get("standardized_botanicals", []), entry["id"])
-    assert e.get("bonus_eligible") is True
+    held = {"turmipure_gold", "neurofactor", "sharp_ps_green", "flowens", "eps_7630", "life_s_dha"}
+    if entry["id"] in held:
+        assert e.get("bonus_eligible") is False
+        assert "held" in e["bonus_rationale"].lower()
+    else:
+        assert e.get("bonus_eligible") is True
     assert e.get("standardization_basis") == "branded_extract"
     markers = _lc(e.get("marker_compounds") or [])
     assert any(entry["marker_keyword"] in m for m in markers), (
@@ -84,7 +89,7 @@ def test_has_v6_contract(std_doc, entry):
         f"{entry['marker_keyword']!r}. Got: {e.get('marker_compounds')}"
     )
     rationale = (e.get("bonus_rationale") or "").lower()
-    assert entry["brand_keyword"] in rationale, (
+    assert (entry["brand_keyword"] in rationale if entry["id"] not in held else "identity" in rationale), (
         f"std.{entry['id']} bonus_rationale must mention "
         f"{entry['brand_keyword']!r}. Got: {e.get('bonus_rationale')!r}"
     )

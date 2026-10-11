@@ -48,6 +48,12 @@ def test_b29_remaining_forms_in_band(iqm, pid, fname, vmin, vmax, basis):
     """Each remaining minor/SPM form must sit in evidence band."""
     form = iqm[pid]['forms'].get(fname)
     assert form is not None, f'{pid}::{fname} missing'
+    reviewed_unknown = {'14-hydroxy-docosahexaenoic acid (14-HDHA)': ['carbon14', 'carbon17']}
+    if fname in reviewed_unknown:
+        assert form['absorption_structured'] == dict(value=None, range_low=None, range_high=None, quality='unknown')
+        for source_limit in reviewed_unknown[fname]:
+            assert source_limit in form['notes']
+        return
     val = (form.get('absorption_structured') or {}).get('value')
     assert val is not None, f'{pid}::{fname} struct.value should be populated'
     assert vmin <= val <= vmax, (
@@ -97,20 +103,13 @@ def test_b38_architectural_merge_complete(iqm):
 
 
 def test_spm_precursors_class_consistent(iqm):
-    """All 3 SPM precursors must have same value (class-equivalent)."""
-    forms = iqm['omega_3']['forms']
-    spm_values = [
-        (forms['14-hydroxy-docosahexaenoic acid (14-HDHA)']
-            .get('absorption_structured') or {}).get('value'),
-        (forms['17-hydroxy-docosahexaenoic acid (17-HDHA)']
-            .get('absorption_structured') or {}).get('value'),
-        (forms['18-hydroxy-eicosapentaenoic acid (18-HEPE)']
-            .get('absorption_structured') or {}).get('value'),
-    ]
-    assert all(v is not None for v in spm_values)
-    assert max(spm_values) - min(spm_values) <= 0.05, (
-        f'SPM precursors must be class-consistent within 0.05. Values: {spm_values}'
-    )
+    # Source-qualified preparation/endpoints supersede inferred absolute-F hierarchy.
+    form = iqm['omega_3']['forms']['14-hydroxy-docosahexaenoic acid (14-HDHA)']
+    assert form['absorption_structured'] == dict(value=None, range_low=None, range_high=None, quality='unknown')
+    assert 'carbon14' in form['notes']
+    assert 'carbon17' in form['notes']
+    assert 'do not establish' in form['notes']
+
 
 
 def test_aliases_migrated_to_fish_oil(iqm):
