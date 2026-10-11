@@ -64,18 +64,18 @@ CURATED_ROW_WARFARIN_VITK = {
     "agent1_id": "11289",
     "agent2_name": "Vitamin K",
     "agent2_id": "C0042878",
-    "severity": "avoid",
+    "severity": "caution",
     "interaction_effect_type": "Inhibitor",
     "mechanism": "Vitamin K opposes warfarin anticoagulant effect.",
     "management": "Maintain consistent vitamin K intake.",
     "source_urls": [
         "https://ods.od.nih.gov/factsheets/VitaminK-HealthProfessional/",
-        "https://pubmed.ncbi.nlm.nih.gov/12345678/",
+        "https://pubmed.ncbi.nlm.nih.gov/10102468/",
     ],
     "type_authored": "Med-Sup",
     "agent1_type": "drug",
     "agent2_type": "supplement",
-    "source_pmids": ["12345678"],
+    "source_pmids": ["10102468"],
     "agent1_canonical_id": None,
     "agent2_canonical_id": "vitamin_k",
 }
@@ -109,7 +109,7 @@ CURATED_ROW_SSRI_STJOHNS = {
     "agent1_id": "4493",
     "agent2_name": "St. John's Wort",
     "agent2_id": "C0813171",
-    "severity": "avoid",
+    "severity": "contraindicated",
     "interaction_effect_type": "Additive",
     "mechanism": "Serotonergic additive effect raises serotonin syndrome risk.",
     "management": "Avoid concurrent use.",
@@ -544,9 +544,9 @@ def test_curated_rows_inserted_with_correct_severity(build_ctx):
         r["id"]: r["severity"]
         for r in con.execute("SELECT id, severity FROM interactions")
     }
-    assert got["DDI_WAR_VITK"] == "avoid"
+    assert got["DDI_WAR_VITK"] == "caution"
     assert got["DDI_IRON_CALCIUM"] == "caution"
-    assert got["DDI_SSRI_STJOHNS"] == "avoid"
+    assert got["DDI_SSRI_STJOHNS"] == "contraindicated"
 
 
 def test_evidence_level_wired_from_sp6_rubric():
@@ -653,7 +653,7 @@ def test_source_pmids_persisted(build_ctx):
     row = con.execute(
         "SELECT source_pmids_json FROM interactions WHERE id=?", ("DDI_WAR_VITK",)
     ).fetchone()
-    assert json.loads(row["source_pmids_json"]) == ["12345678"]
+    assert json.loads(row["source_pmids_json"]) == ["10102468"]
 
 
 def test_tombstone_columns_initialized_on_new_rows(build_ctx):
@@ -726,7 +726,7 @@ def test_conflict_resolution_more_cautious_wins(tmp_path, build_ctx, monkeypatch
     drafts = json.loads(build_ctx.normalized_drafts_path.read_text())
     softer = dict(CURATED_ROW_WARFARIN_VITK)
     softer["id"] = "DDI_WAR_VITK_SOFTER"
-    softer["severity"] = "caution"  # less cautious than the original 'avoid'
+    softer["severity"] = "monitor"  # synthetic softer tier, not clinical guidance
     drafts["interactions"].append(softer)
     build_ctx.normalized_drafts_path.write_text(json.dumps(drafts))
 
@@ -737,8 +737,8 @@ def test_conflict_resolution_more_cautious_wins(tmp_path, build_ctx, monkeypatch
         "SELECT severity FROM interactions WHERE agent1_id=? AND agent2_id=?",
         ("11289", "C0042878"),
     ).fetchone()
-    assert row["severity"] == "avoid", (
-        "more-cautious-wins broke — expected 'avoid' (from 'avoid' vs 'caution')"
+    assert row["severity"] == "caution", (
+        "more-cautious-wins broke — expected caution over synthetic monitor"
     )
     assert report["resolved_conflicts"], "conflict should be logged in audit report"
 

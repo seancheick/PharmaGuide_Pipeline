@@ -74,3 +74,39 @@ def test_st_johns_wort_does_not_prescribe_a_universal_ssri_washout():
     assert pair['severity'] == 'Contraindicated'
     assert 'can cause serotonin syndrome' in pair['mechanism']
     assert 'this creates severe' not in pair['mechanism'].lower()
+
+
+def test_real_source_pairs_preserve_clinical_tier_and_identity_through_export():
+    """Independent source expectations supplement synthetic builder fixtures.
+
+    These are the brief's checked pairs, not a complete clinical-registry audit.
+    Severity expectations follow the current authored policy; evidence strength
+    remains a separate axis. See per-source receipts in research.md.
+    """
+    from api_audit.verify_interactions import normalize_severity
+    from build_interaction_db import build_interaction_row, build_rxcui_to_class
+    classes = json.loads((DATA / 'drug_classes.json').read_text())
+    expected = {
+        'DSI_ACEI_POTASSIUM': ('avoid', 'potassium', 'established'),
+        'DSI_WAR_GINKGO': ('avoid', 'ginkgo', 'probable'),
+        'DSI_GINKGO_ANTIPLATELET': ('avoid', 'ginkgo', 'moderate'),
+        'DSI_SSRI_SJW': ('contraindicated', 'st_johns_wort', 'established'),
+        'DSI_STATINS_RYR': ('avoid', 'red_yeast_rice', 'established'),
+        'DSI_WAR_OMEGA3': ('caution', 'fish_oil', 'probable'),
+        'DSI_WAR_VITK': ('caution', 'vitamin_k', 'established'),
+        'DSI_LEVOTHYROXINE_CALCIUM': ('caution', 'calcium', 'established'),
+        'DSI_LEVOTHYROXINE_IRON': ('caution', 'iron', 'established'),
+        'DSI_LEVOTHYROXINE_MAGNESIUM': ('caution', 'magnesium', 'probable'),
+    }
+    for id, (severity, canonical, evidence) in expected.items():
+        entry = dict(PAIRS[id])
+        entry['severity'] = normalize_severity(entry['severity'])
+        row = build_interaction_row(entry, rxcui_to_class=build_rxcui_to_class(classes), build_time='2026-10-11', interaction_db_version='audit')
+        assert row['severity'] == severity, id
+        assert row['agent2_canonical_id'] == canonical, id
+        assert row['evidence_level'] == evidence, id
+        assert row['mechanism'] == entry['mechanism'], id
+        assert row['management'] == entry['management'], id
+        assert row['source_urls_json'], id
+    assert '4' in PAIRS['DSI_LEVOTHYROXINE_CALCIUM']['management']
+    assert '4' in PAIRS['DSI_LEVOTHYROXINE_IRON']['management']

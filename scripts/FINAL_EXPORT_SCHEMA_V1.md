@@ -1045,3 +1045,5 @@ and shared across versions so unchanged products do not get re-uploaded.
 | Product-level recalls     | Needs product/UPC-keyed FDA data source. Not faked in v1.          |
 | Offline images            | `image_url` may be PDF. V1 uses placeholder + runtime cache.       |
 | `rda_ul_data` enforcement | Must decide: always collect, or treat as optional in detail blob   |
+
+Product-context warning rows use the existing `warnings` / `warnings_profile_gated` contract. `category_contamination_risk`, `manufacturer_violation` and `marketing_claim` are informational assessments, with `severity=informational`, `display_mode_default=informational`, `evidence_level=ungraded`, authored `title`/`detail` and available `source_urls`. Company records preserve affected-product scope, action date and resolution status; company matching alone cannot establish a scanned-product/lot recall. `evidence_data.unsubstantiated_claims` remains a list of detected claim records, projected from enrichment’s `{found, claims}` assessment.
