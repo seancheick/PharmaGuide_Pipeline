@@ -36,6 +36,8 @@ Every result answers three separate questions, never merged into one number:
 
 A critical product safety gate (recall, ban, adulteration) sits above all three: BLOCKED, no score.
 
+October 12 pairwise-source candidate: all 52 hard warnings and 16 dose floors reviewed (plus acetaminophen/warfarin). Fifty pair corrections and approved EPO pair removal implemented;15 unsupported floors removed, one niacin qualifier retained with form hold. Native131-row build and54 actual Flutter before/after probes pass;506 focused owner tests and independent surgical review pass. Exact-source8ba68dbe whole-fast CI38314549265 passes20,455tests/192declared skips; local546passed/24declared opt-in skips, guards green. No catalog run or delivery claim. MAOI-ginseng/kava-acetaminophen hard grades, niacin form eligibility and pairwise context remain open. Details: `scripts/audits/pending_items_20260926/research.md` / `LEDGER.md`.
+
 ## Decisions already made
 
 | Date | Decision |
