@@ -1702,3 +1702,108 @@ def test_unscored_visibility_does_not_excuse_invalid_matching_or_a_published_sco
     elif defect == "quality_tier": scored["quality_tier"] = "GOOD"
     else: scored["strict_scoring_contract"]["findings"].append("missing_required_fields:dose_class")
     assert validate_export_contract(enriched, scored)
+
+
+def _confirmed_ban_with_unmapped_carrier():
+    enriched, scored = _safety_only_label_product()
+    cannabidiol = enriched["ingredient_quality_data"]["ingredients"][0]
+    cannabidiol.update(raw_source_path="ingredientRows[0].nestedRows[0]", name="Cannabidiol",
+        raw_source_text="Cannabidiol", standard_name="Cannabidiol", source_label_name="Cannabidiol",
+        label_display_name="Cannabidiol", source_label_key="label:cannabidiol")
+    carrier = _safety_only_row(path="ingredientRows[0]", label="Hemp Oil Extract",
+        recognition_source=None, safety_identity_id=None,
+        identity_decision_reason="no_quality_map_match", recognized_non_scorable=False)
+    enriched["ingredient_quality_data"]["ingredients"] = [carrier, cannabidiol]
+    enriched["activeIngredients"] = []
+    enriched["label_source_rows"] = []
+    enriched["display_ingredients"] = []
+    for row in [carrier, cannabidiol]:
+        source = {"raw_source_path": row["raw_source_path"],
+            "raw_source_text": row["raw_source_text"], "source_section": "activeIngredients",
+            "score_eligible_by_cleaner": True}
+        enriched["activeIngredients"].append({**source, "name": row["name"], "quantity":25,"unit":"mg"})
+        enriched["label_source_rows"].append(source)
+        enriched["display_ingredients"].append({**source, "display_type":"unmapped_ingredient",
+            "display_disposition":"unmapped", "score_included":False, "canonical_id":None})
+    enriched["raw_actives_count"] = 2
+    enriched["contaminant_data"]["banned_substances"]["safety_flags"] = [{
+        "entry_id":"BANNED_CBD_US", "source_db":"banned_recalled_ingredients", "status":"banned",
+        "severity":"critical", "match_type":"exact", "matched_variant":"Cannabidiol",
+        "evidence_text":"Cannabidiol", "confidence":"high"}]
+    scored["safety_decision"] = json.loads(json.dumps(_CONFIRMED_BAN))
+    scored["safety_decision"].update(winning_rule="BANNED_CBD_US", substance="Cannabidiol")
+    return enriched, scored
+
+
+def test_confirmed_ban_stays_findable_with_an_intact_unmapped_carrier():
+    enriched, scored = _confirmed_ban_with_unmapped_carrier()
+    assert _gate_issues(enriched, scored) == []
+    blob = build_detail_blob(enriched, scored)
+    assert blob["row_ledger_summary"]["mapped_coverage"] == 0.0
+    assert {row["source_label"] for row in blob["row_ledger"]} == {"Hemp Oil Extract", "Cannabidiol"}
+    assert all(not row.get("canonical_id") for row in blob["row_ledger"])
+
+
+@pytest.mark.parametrize("defect", ["unverified_ban", "likely_ban", "no_ban", "numeric_score",
+    "competing_identity", "canonical_id", "mapped", "scoreable", "wrong_label",
+    "wrong_raw_label", "missing_source", "wrong_source", "duplicate_path", "duplicate_source",
+    "other_strict_failure"])
+def test_confirmed_ban_carrier_containment_rejects_unsupported_or_malformed_rows(defect):
+    enriched, scored = _confirmed_ban_with_unmapped_carrier()
+    carrier = enriched["ingredient_quality_data"]["ingredients"][0]
+    if defect == "unverified_ban":
+        scored["safety_decision"]["policy_basis"]["policy_verification_status"] = "unverified"
+    elif defect == "likely_ban":
+        scored["safety_decision"]["match_resolution"] = "likely"
+    elif defect == "no_ban":
+        scored.pop("safety_decision")
+    elif defect == "numeric_score":
+        scored["quality_score_v4_100"] = 75
+    elif defect == "competing_identity":
+        carrier["identity_decision_reason"] = "competing_identity"
+    elif defect == "canonical_id":
+        carrier["canonical_id"] = "hemp_seed_oil"
+    elif defect == "mapped":
+        carrier["mapped"] = True
+    elif defect == "scoreable":
+        carrier["scoreable_identity"] = True
+    elif defect == "wrong_label":
+        carrier["label_display_name"] = "Hemp Seed Oil"
+    elif defect == "wrong_raw_label":
+        carrier["raw_source_text"] = "Hemp Seed Oil"
+    elif defect == "missing_source":
+        enriched["label_source_rows"] = []
+    elif defect == "wrong_source":
+        enriched["label_source_rows"][0]["raw_source_text"] = "Hemp Seed Oil"
+    elif defect == "duplicate_path":
+        enriched["ingredient_quality_data"]["ingredients"].append(dict(carrier))
+    elif defect == "duplicate_source":
+        enriched["label_source_rows"].append(dict(enriched["label_source_rows"][0]))
+    else:
+        scored["strict_scoring_contract"]["findings"].append("disclosed_form_unmapped")
+    assert _gate_issues(enriched, scored)
+
+
+def test_a_malformed_confirmed_ban_blocks_the_catalog_instead_of_silent_quarantine():
+    enriched, scored = _confirmed_ban_with_unmapped_carrier()
+    enriched["label_source_rows"] = []
+    quarantines, failures = [], []
+    _, quarantine_count, failure_count = update_audit_state(
+        init_audit_counts(), [], quarantines, failures, 0, 0, 0,
+        "EG001", enriched, scored)
+    assert quarantine_count == 0
+    assert failure_count == 1
+    assert not quarantines
+    assert failures[0]["dsld_id"] == "EG001"
+
+
+@pytest.mark.parametrize('decision', [_CONFIRMED_BAN, _CONFIRMED_RECALL])
+def test_confirmed_ban_or_recall_export_failures_cannot_be_nonblocking(decision):
+    from build_final_db import _classify_export_error
+    product = {'verdict': decision['verdict'], 'safety_decision': decision}
+    assert _classify_export_error('review_queue: identity conflict', scored=product) == 'error'
+    assert _classify_export_error('critical-mode warning carries condition-specific copy', scored=product) == 'error'
+    unverified = {**decision, 'policy_basis': {**decision['policy_basis'],
+        'policy_verification_status': 'needs_review'}}
+    assert _classify_export_error('review_queue: identity conflict',
+        scored={**product, 'safety_decision': unverified}) == 'excluded_by_gate'
