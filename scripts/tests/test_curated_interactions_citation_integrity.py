@@ -110,3 +110,14 @@ def test_real_source_pairs_preserve_clinical_tier_and_identity_through_export():
         assert row['source_urls_json'], id
     assert '4' in PAIRS['DSI_LEVOTHYROXINE_CALCIUM']['management']
     assert '4' in PAIRS['DSI_LEVOTHYROXINE_IRON']['management']
+
+
+def test_ace_inhibitor_potassium_cites_a_real_lisinopril_label():
+    """DailyMed API returned404 for old setid; replacement label5.5/7.1 supports risk."""
+    pair = PAIRS['DSI_ACEI_POTASSIUM']
+    assert not any('f4cb6e1e-2d43-4d17-8c6e-c9d3f7b4c4a0' in url for url in pair['source_urls'])
+    assert 'https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=34ebeea1-6812-4697-84c4-b2ae4f39e55f' in pair['source_urls']
+    assert 'https://ods.od.nih.gov/factsheets/Potassium-HealthProfessional/' in pair['source_urls']
+    assert pair['severity'] == 'Major'
+    assert pair['agent1_id'] == 'class:ace_inhibitors'
+    assert pair['agent2_canonical_id'] == 'potassium'
