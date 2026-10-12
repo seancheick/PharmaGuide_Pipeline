@@ -51,6 +51,22 @@ python scripts/sync_to_supabase.py <output_dir> --dry-run
 | `detail_index.json` | Storage: `pharmaguide/v{version}/detail_index.json` (compatibility/audit map; app can now prefer `products_core.detail_blob_sha256`) |
 | `detail_blobs/*.json` | Storage: `pharmaguide/shared/details/sha256/{blob_sha256[0:2]}/{blob_sha256}.json` |
 | `export_manifest.json` | PostgreSQL: `export_manifest` table (is_current=true) |
+| `pharmaguide_core.db` → `products_core` | PostgreSQL: `catalog_search` rows (one per product per version) |
+
+### Public catalog search table (`catalog_search`)
+
+Before the manifest rotates (and on an already-current re-run), the sync reads the
+release's `pharmaguide_core.db` with stdlib `sqlite3` and upserts one slim row per
+product into `catalog_search` in batches of 500 (`on_conflict=catalog_version,dsld_id`),
+then deletes every version except this release and the newest other manifest version.
+Readers use the `catalog_search_current` view (joined on `export_manifest.is_current`)
+or the `search_catalog()` RPC, so a release becomes searchable exactly when the manifest
+flips. Only the service role can read it; the app repo's public MCP edge function
+(`supabase/functions/mcp-public`) is the consumer. Columns: `CATALOG_SEARCH_COLUMNS` in
+`sync_to_supabase.py`; `upc_sku` is stored normalized like the app's barcode lookup.
+`--dry-run` prints the row count without touching Supabase. **Apply section 9 of
+`scripts/sql/supabase_schema.sql` (idempotent) before the first sync that includes this
+step**: a missing table fails the step, and the manifest then does not rotate.
 
 ### Version checking
 

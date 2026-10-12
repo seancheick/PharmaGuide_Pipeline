@@ -320,3 +320,150 @@ REVOKE ALL ON FUNCTION public.promote_catalog_release(text)
   FROM PUBLIC, anon, authenticated;
 GRANT EXECUTE ON FUNCTION public.promote_catalog_release(text)
   TO service_role;
+
+-- =============================================================================
+-- 9. Public catalog search (read only by the public MCP edge function)
+-- =============================================================================
+-- One slim row per product per catalog release, published by
+-- sync_to_supabase.py::publish_catalog_search from the release's
+-- pharmaguide_core.db BEFORE rotate_manifest runs. Readers use
+-- catalog_search_current, which joins export_manifest.is_current, so a
+-- version that is still uploading (or an older one kept for rollback) is never
+-- visible. upc_sku is stored with the app's normalization (spaces, '-', '.',
+-- '/' removed; Flutter CoreDatabase.upcNormalizeSql) so a barcode lookup is an
+-- exact match. No client role reads these objects: the public MCP function
+-- reads with the service role. Product discovery only; no personal data.
+
+CREATE EXTENSION IF NOT EXISTS pg_trgm WITH SCHEMA extensions;
+
+CREATE TABLE IF NOT EXISTS public.catalog_search (
+  catalog_version          text NOT NULL,
+  dsld_id                  text NOT NULL,
+  product_name             text NOT NULL,
+  brand_name               text,
+  brand_family             text,
+  product_line             text,
+  upc_sku                  text,
+  form_factor              text,
+  supplement_type          text,
+  product_status           text,
+  quality_tier             text,
+  quality_score_status     text,
+  product_safety_status    text,
+  -- Needed by get_product: the detail blob does not carry these two.
+  mapped_coverage          double precision
+    CHECK (mapped_coverage IS NULL OR (mapped_coverage >= 0 AND mapped_coverage <= 1)),
+  quality_score_confidence text,
+  search_tsv               tsvector GENERATED ALWAYS AS (
+    to_tsvector(
+      'simple'::regconfig,
+      coalesce(product_name, '') || ' ' || coalesce(brand_name, '') || ' ' ||
+      coalesce(product_line, '')
+    )
+  ) STORED,
+  published_at             timestamptz DEFAULT now(),
+  PRIMARY KEY (catalog_version, dsld_id)
+);
+
+CREATE INDEX IF NOT EXISTS idx_catalog_search_product_name_trgm
+  ON public.catalog_search USING gin (product_name extensions.gin_trgm_ops);
+CREATE INDEX IF NOT EXISTS idx_catalog_search_brand_name_trgm
+  ON public.catalog_search USING gin (brand_name extensions.gin_trgm_ops);
+CREATE INDEX IF NOT EXISTS idx_catalog_search_tsv
+  ON public.catalog_search USING gin (search_tsv);
+CREATE INDEX IF NOT EXISTS idx_catalog_search_upc_sku
+  ON public.catalog_search (upc_sku)
+  WHERE upc_sku IS NOT NULL;
+
+ALTER TABLE public.catalog_search ENABLE ROW LEVEL SECURITY;
+REVOKE ALL ON TABLE public.catalog_search FROM PUBLIC, anon, authenticated;
+GRANT SELECT, INSERT, UPDATE, DELETE ON TABLE public.catalog_search TO service_role;
+
+CREATE OR REPLACE VIEW public.catalog_search_current
+  WITH (security_invoker = true) AS
+SELECT cs.catalog_version,
+       cs.dsld_id,
+       cs.product_name,
+       cs.brand_name,
+       cs.brand_family,
+       cs.product_line,
+       cs.upc_sku,
+       cs.form_factor,
+       cs.supplement_type,
+       cs.product_status,
+       cs.quality_tier,
+       cs.quality_score_status,
+       cs.product_safety_status,
+       cs.mapped_coverage,
+       cs.quality_score_confidence,
+       cs.search_tsv
+  FROM public.catalog_search cs
+  JOIN public.export_manifest m
+    ON m.db_version = cs.catalog_version
+   AND m.is_current = true;
+
+REVOKE ALL ON TABLE public.catalog_search_current FROM PUBLIC, anon, authenticated;
+GRANT SELECT ON TABLE public.catalog_search_current TO service_role;
+-- security_invoker view: its reader also needs the manifest it joins.
+GRANT SELECT ON TABLE public.export_manifest TO service_role;
+
+-- Ranked search for the public MCP `search_products` tool. Trigram similarity
+-- (typo tolerant) blended with a full-text rank; match_score is in [0, 1].
+-- SECURITY INVOKER: it can only ever see what its caller (service_role) sees.
+CREATE OR REPLACE FUNCTION public.search_catalog(
+  p_query text,
+  p_brand text DEFAULT NULL,
+  p_form  text DEFAULT NULL,
+  p_limit integer DEFAULT 10
+)
+RETURNS TABLE (
+  catalog_version          text,
+  dsld_id                  text,
+  product_name             text,
+  brand_name               text,
+  brand_family             text,
+  product_line             text,
+  upc_sku                  text,
+  form_factor              text,
+  supplement_type          text,
+  product_status           text,
+  quality_tier             text,
+  quality_score_status     text,
+  product_safety_status    text,
+  mapped_coverage          double precision,
+  quality_score_confidence text,
+  match_score              real
+)
+LANGUAGE sql STABLE SECURITY INVOKER
+SET search_path = public, extensions, pg_catalog
+AS $$
+  WITH q AS (
+    SELECT lower(left(btrim(coalesce(p_query, '')), 200)) AS text,
+           websearch_to_tsquery('simple'::regconfig, left(btrim(coalesce(p_query, '')), 200)) AS tsq
+  )
+  SELECT c.catalog_version, c.dsld_id, c.product_name, c.brand_name, c.brand_family,
+         c.product_line, c.upc_sku, c.form_factor, c.supplement_type, c.product_status,
+         c.quality_tier, c.quality_score_status, c.product_safety_status,
+         c.mapped_coverage, c.quality_score_confidence,
+         LEAST(1.0,
+           GREATEST(
+             extensions.similarity(c.product_name, q.text),
+             extensions.word_similarity(
+               q.text, concat_ws(' ', c.brand_name, c.product_name, c.product_line))
+           ) * 0.8
+           + ts_rank_cd(c.search_tsv, q.tsq, 32) * 0.2
+         )::real AS match_score
+    FROM public.catalog_search_current c, q
+   WHERE length(q.text) > 0
+     AND (c.search_tsv @@ q.tsq OR q.text <% c.product_name OR q.text <% c.brand_name)
+     AND (p_brand IS NULL OR strpos(lower(concat_ws(' ', c.brand_name, c.brand_family)),
+                                    lower(btrim(p_brand))) > 0)
+     AND (p_form IS NULL OR strpos(lower(coalesce(c.form_factor, '')), lower(btrim(p_form))) > 0)
+   ORDER BY match_score DESC, c.dsld_id
+   LIMIT LEAST(GREATEST(coalesce(p_limit, 10), 1), 25);
+$$;
+
+REVOKE ALL ON FUNCTION public.search_catalog(text, text, text, integer)
+  FROM PUBLIC, anon, authenticated;
+GRANT EXECUTE ON FUNCTION public.search_catalog(text, text, text, integer)
+  TO service_role;
