@@ -3468,3 +3468,51 @@ def test_hemp_label_scope_reaches_public_scored_artifact(normalizer, enricher, n
         assert row["bio_score"] is None
         assert artifact["quality_score_status"] == "not_scored"
         assert artifact["quality_score_v4_100"] is None
+
+
+@pytest.mark.parametrize("percent,marker", [(14, "Polyphenols"), (50, "EGCG"), (30, "EGCG"),
+                                         (0, "EGCG"), (101, "EGCG"), (None, "EGCG"),
+                                         ("unknown", "EGCG")])
+def test_green_tea_standardization_requires_own_row_evidence(normalizer, enricher, percent, marker):
+    raw = {
+        "id": "green-tea-row-scope", "fullName": "Green Tea Extract",
+        "ingredientRows": [{"name": "Green Tea Leaves Extract", "ingredientGroup": "Green Tea",
+                            "category": "botanical", "quantity": [{"quantity": 250, "unit": "mg"}],
+                            "forms": [{"name": marker, "percent": percent, "category": "non-nutrient/non-botanical"}]}],
+        "otheringredients": {"ingredients": []},
+    }
+    enriched, _ = enricher.enrich_product(normalizer.normalize_product(raw))
+    row = enriched["ingredient_quality_data"]["ingredients"][0]
+    assert row["quantity"] == 250.0
+    if marker == "EGCG" and percent == 50:
+        assert row["matched_form"] == "green tea extract (50% EGCG)"
+        assert row["bio_score"] == 9.0
+    else:
+        assert row["matched_form"] != "green tea extract (50% EGCG)"
+        assert not any("50.0%" in str(x.get("basis")) for x in row.get("delivers_markers", []))
+
+
+def test_same_name_green_tea_rows_keep_separate_marker_percentages(normalizer, enricher):
+    raw = {
+        "id": "green-tea-same-name", "fullName": "Green Tea Complex",
+        "ingredientRows": [
+            {"name": "Green Tea Leaves Extract", "ingredientGroup": "Green Tea", "category": "botanical",
+             "quantity": [{"quantity": 250, "unit": "mg"}],
+             "forms": [{"name": "Polyphenols", "percent": 14, "category": "blend"}]},
+            {"name": "Green Tea Leaves Extract", "ingredientGroup": "Green Tea", "category": "botanical",
+             "quantity": [{"quantity": 250, "unit": "mg"}],
+             "forms": [{"name": "EGCG", "percent": 50, "category": "non-nutrient/non-botanical"},
+                       {"name": "Polyphenols", "percent": 75, "category": "blend"}]},
+        ],
+        "otheringredients": {"ingredients": []},
+    }
+    enriched, _ = enricher.enrich_product(normalizer.normalize_product(raw))
+    rows = enriched["ingredient_quality_data"]["ingredients"]
+    assert len(rows) == 2
+    assert [r["quantity"] for r in rows] == [250.0, 250.0]
+    assert [r["raw_source_path"] for r in rows] == ["ingredientRows[0]", "ingredientRows[1]"]
+    assert rows[0]["matched_form"] != "green tea extract (50% EGCG)"
+    assert rows[1]["matched_form"] == "green tea extract (50% EGCG)"
+    assert all(m["estimated_dose_mg"] is None and m["confidence_scale"] == 0.0
+               for m in rows[0].get("delivers_markers", []))
+    assert rows[1]["delivers_markers"][0]["estimated_dose_mg"] == 125.0

@@ -26001,32 +26001,7 @@
         "notes": "Standardized green tea extract with ≥50% EGCG. EGCG Cmax 326 ng/mL after 4.5g green tea solids (PMID:9568793, Yang 1998). t1/2 5.0-5.5h. Chronic dosing (800mg/day x 4wks) increases AUC >60% suggesting conjugation pathway saturation (PMID:12960117, Chow 2003). Standard form for clinical use.",
         "aliases": [
           "50% EGCG",
-          "decaffeinated green tea",
-          "green tea leaf extract, decaffeinated",
-          "green tea polyphenol blend",
-          "standardized green tea",
-          "green tea 50% EGCG",
-          "EGCG green tea extract",
-          "green tea catechin blend",
-          "green tea standardized extract",
-          "chinese green tea",
-          "chinese green tea leaf extract",
-          "green tea decaffeinated extract",
-          "sunphenon green tea extract",
-          "sunphenon green tea",
-          "green tea whole leaf extract",
-          "green tea leaf extract",
-          "camellia sinensis leaf extract",
-          "green tea aqueous extract",
-          "camellia sinensis aqueous extract",
-          "decaffeinated green tea leaf extract",
-          "green tea 50% extract",
-          "green tea 5:1 extract",
-          "green tea leaves extract",
-          "green tea ext.",
-          "green tea leaf 50% extract",
-          "Green tea extract, decaffeinated",
-          "Origine 8 Liposome"
+          "green tea 50% EGCG"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -26034,7 +26009,11 @@
           "range_low": 0.001,
           "range_high": 0.05,
           "quality": "poor"
-        }
+        },
+        "source_form_aliases": [
+          "50% EGCG",
+          "green tea 50% EGCG"
+        ]
       },
       "green tea catechins": {
         "bio_score": 9,
@@ -26072,7 +26051,7 @@
       "green tea extract (unspecified)": {
         "bio_score": 8,
         "absorption": "very_low (EGCG class-poor; F ~0.1-1%)",
-        "consumer_note": "This listing identifies green tea extract without naming the plant part, catechin standardization, or delivery format. The label does not provide enough form detail to distinguish among green tea extracts.",
+        "consumer_note": "This listing identifies green tea extract without a verified EGCG percentage or delivery format. Plant-part, decaffeinated, extract-ratio and generic polyphenol wording leave the EGCG percentage unspecified.",
         "consumer_note_review": {
           "by": "Product owner approval",
           "date": "2026-08-08"
@@ -26087,7 +26066,32 @@
           "Total Monomeric Phenols",
           "organic green & white tea extract",
           "green & white tea extract",
-          "green and white tea extract"
+          "green and white tea extract",
+          "decaffeinated green tea",
+          "green tea leaf extract, decaffeinated",
+          "green tea polyphenol blend",
+          "standardized green tea",
+          "EGCG green tea extract",
+          "green tea catechin blend",
+          "green tea standardized extract",
+          "chinese green tea",
+          "chinese green tea leaf extract",
+          "green tea decaffeinated extract",
+          "sunphenon green tea extract",
+          "sunphenon green tea",
+          "green tea whole leaf extract",
+          "green tea leaf extract",
+          "camellia sinensis leaf extract",
+          "green tea aqueous extract",
+          "camellia sinensis aqueous extract",
+          "decaffeinated green tea leaf extract",
+          "green tea 50% extract",
+          "green tea 5:1 extract",
+          "green tea leaves extract",
+          "green tea ext.",
+          "green tea leaf 50% extract",
+          "Green tea extract, decaffeinated",
+          "Origine 8 Liposome"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
