@@ -267,6 +267,12 @@ def test_sync_skips_bucket_capacity_check_when_catalog_is_already_current(
         "_promote_registry_release",
         lambda *_args, **_kwargs: None,
     )
+    catalog_search_versions = []
+    monkeypatch.setattr(
+        sync_to_supabase,
+        "_publish_catalog_search_step",
+        lambda _client, **kwargs: catalog_search_versions.append(kwargs["version"]),
+    )
 
     result = sync_to_supabase.sync(str(tmp_path))
 
@@ -274,6 +280,8 @@ def test_sync_skips_bucket_capacity_check_when_catalog_is_already_current(
         "status": "up_to_date",
         "version": local["db_version"],
     }
+    # An already-current release still (re)publishes its idempotent search rows.
+    assert catalog_search_versions == [local["db_version"]]
     assert uploaded_paths == [
         f"v{local['db_version']}/share_index/{shard}.json"
         for shard in (f"{value:02x}" for value in range(256))

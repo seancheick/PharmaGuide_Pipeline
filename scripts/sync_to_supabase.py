@@ -19,6 +19,7 @@ import argparse
 import glob
 import hashlib
 import json
+import math
 import os
 import sqlite3
 import sys
@@ -1047,6 +1048,172 @@ def upload_product_images(
 # Supabase operations (require real client)
 # ---------------------------------------------------------------------------
 
+# ---------------------------------------------------------------------------
+# Public catalog search table (read by the app repo's public MCP function)
+# ---------------------------------------------------------------------------
+
+CATALOG_SEARCH_TABLE = "catalog_search"
+CATALOG_SEARCH_BATCH_SIZE = 500
+#: The release being published plus the newest other manifest version.
+CATALOG_SEARCH_KEEP_VERSIONS = 2
+#: products_core columns copied into catalog_search (scripts/sql/supabase_schema.sql
+#: section 9). Values pass through unchanged except: blank text -> NULL, and
+#: upc_sku normalized like the app's CoreDatabase.upcNormalizeSql.
+CATALOG_SEARCH_COLUMNS = (
+    "dsld_id",
+    "product_name",
+    "brand_name",
+    "brand_family",
+    "product_line",
+    "upc_sku",
+    "form_factor",
+    "supplement_type",
+    "product_status",
+    "quality_tier",
+    "quality_score_status",
+    "product_safety_status",
+    "mapped_coverage",
+    "quality_score_confidence",
+    "quality_assessment_status",
+)
+_CATALOG_UPC_SEPARATORS = (" ", "-", ".", "/")
+
+
+def _catalog_text(value):
+    if value is None:
+        return None
+    text = str(value)
+    return text if text.strip() else None
+
+
+def normalize_catalog_upc(value):
+    """Mirror Flutter ``CoreDatabase.upcNormalizeSql`` (drop ' ', '-', '.', '/')."""
+    text = _catalog_text(value)
+    if text is None:
+        return None
+    for separator in _CATALOG_UPC_SEPARATORS:
+        text = text.replace(separator, "")
+    return text or None
+
+
+def catalog_search_rows_from_connection(conn, catalog_version):
+    """Map every products_core row to one catalog_search upsert payload."""
+    if not catalog_version:
+        raise ValueError("catalog_search: catalog_version is required")
+    columns = ", ".join(CATALOG_SEARCH_COLUMNS)
+    rows = []
+    for record in conn.execute(f"SELECT {columns} FROM products_core ORDER BY dsld_id"):
+        raw = dict(zip(CATALOG_SEARCH_COLUMNS, record))
+        row = {"catalog_version": catalog_version}
+        for column in CATALOG_SEARCH_COLUMNS:
+            row[column] = _catalog_text(raw[column])
+        row["upc_sku"] = normalize_catalog_upc(raw["upc_sku"])
+        coverage = raw["mapped_coverage"]
+        if coverage is not None:
+            coverage = float(coverage)
+            if math.isnan(coverage) or not 0.0 <= coverage <= 1.0:
+                raise ValueError(
+                    f"catalog_search: dsld_id {raw['dsld_id']!r} has mapped_coverage "
+                    f"{raw['mapped_coverage']!r} outside [0, 1]"
+                )
+        row["mapped_coverage"] = coverage
+        if row["dsld_id"] is None or row["product_name"] is None:
+            raise ValueError(
+                "catalog_search: products_core row without dsld_id/product_name: "
+                f"{raw['dsld_id']!r}"
+            )
+        rows.append(row)
+    return rows
+
+
+def catalog_search_rows(db_path, catalog_version):
+    """Read the release's core DB (read-only, stdlib sqlite3) into upsert payloads."""
+    conn = sqlite3.connect(f"file:{db_path}?mode=ro", uri=True)
+    try:
+        return catalog_search_rows_from_connection(conn, catalog_version)
+    finally:
+        conn.close()
+
+
+def catalog_search_keep_versions(client, catalog_version, keep=CATALOG_SEARCH_KEEP_VERSIONS):
+    """The release being published plus the newest other manifest versions."""
+    response = (
+        client.table("export_manifest")
+        .select("db_version")
+        .order("created_at", desc=True)
+        .limit(10)
+        .execute()
+    )
+    kept = [catalog_version]
+    for record in response.data or []:
+        if len(kept) >= keep:
+            break
+        version = (record or {}).get("db_version")
+        if version and version not in kept:
+            kept.append(version)
+    return kept
+
+
+def publish_catalog_search(
+    client,
+    *,
+    db_path,
+    catalog_version,
+    batch_size=CATALOG_SEARCH_BATCH_SIZE,
+    keep_versions=CATALOG_SEARCH_KEEP_VERSIONS,
+    retries=DEFAULT_UPLOAD_RETRIES,
+    base_delay=DEFAULT_RETRY_BASE_DELAY,
+    sleep_fn=time.sleep,
+):
+    """Upsert this release's catalog_search rows, then prune older versions.
+
+    Runs before the manifest rotation, so readers of catalog_search_current
+    (joined on export_manifest.is_current) switch versions together with the
+    manifest. Upserts are idempotent; a failed run is safe to repeat.
+    """
+    rows = catalog_search_rows(db_path, catalog_version)
+    if not rows:
+        raise ValueError("catalog_search: core DB has no products to publish")
+    for start in range(0, len(rows), batch_size):
+        batch = rows[start:start + batch_size]
+        upload_with_retries(
+            lambda batch=batch: client.table(CATALOG_SEARCH_TABLE)
+            .upsert(batch, on_conflict="catalog_version,dsld_id")
+            .execute(),
+            retries,
+            base_delay,
+            sleep_fn,
+        )
+    kept = catalog_search_keep_versions(client, catalog_version, keep_versions)
+    upload_with_retries(
+        lambda: client.table(CATALOG_SEARCH_TABLE)
+        .delete()
+        .not_.in_("catalog_version", kept)
+        .execute(),
+        retries,
+        base_delay,
+        sleep_fn,
+    )
+    return {"row_count": len(rows), "kept_versions": kept}
+
+
+def _publish_catalog_search_step(client, *, db_path, version, retries, base_delay):
+    print(f"\nPublishing {CATALOG_SEARCH_TABLE} rows for {version}...")
+    start = time.time()
+    result = publish_catalog_search(
+        client,
+        db_path=db_path,
+        catalog_version=version,
+        retries=retries,
+        base_delay=base_delay,
+    )
+    print(
+        f"  Done ({result['row_count']} rows in {time.time() - start:.1f}s; "
+        f"kept versions: {', '.join(result['kept_versions'])})"
+    )
+    return result
+
+
 def is_v4_manifest(manifest):
     """Return True for the production v4 export schema."""
     schema = str((manifest or {}).get("schema_version") or "")
@@ -1081,7 +1248,8 @@ def sync(
     2. Compare to remote manifest
     3. Upload .db file to Storage
     4. Upload detail blobs to Storage
-    5. Insert new manifest row
+    5. Publish catalog_search rows (public MCP search); prune old versions
+    6. Insert new manifest row
     """
     from supabase_client import (
         download_file,
@@ -1126,6 +1294,11 @@ def sync(
         img_index, _ = load_product_image_index(build_dir)
         if img_index:
             print(f"  - {len(img_index)} product images to {PRODUCT_IMAGE_BUCKET}")
+        catalog_search_count = len(catalog_search_rows(build_stats["db_path"], version))
+        print(
+            f"  - {catalog_search_count} {CATALOG_SEARCH_TABLE} rows (public MCP search); "
+            f"keep the last {CATALOG_SEARCH_KEEP_VERSIONS} versions"
+        )
         print(f"  - New manifest row (version {version})")
         return {"status": "dry_run", "version": version, "blob_count": build_stats["blob_count"]}
 
@@ -1150,6 +1323,13 @@ def sync(
                 content_type="application/json",
                 cache_control=CACHE_CONTROL_IMMUTABLE,
             )
+        _publish_catalog_search_step(
+            client,
+            db_path=build_stats["db_path"],
+            version=version,
+            retries=retry_count,
+            base_delay=retry_base_delay,
+        )
         print("Already up to date. Verifying registry state...")
         remote_detail_index_path = f"v{version}/detail_index.json"
         _ensure_registry_validating(
@@ -1311,6 +1491,16 @@ def sync(
             "error_count": len(errors),
             "time_seconds": round(db_time + detail_index_time + discover_time + blob_time, 1),
         }
+
+    # Public MCP search rows for this release go in BEFORE the manifest flip;
+    # catalog_search_current exposes them only once rotate_manifest runs.
+    _publish_catalog_search_step(
+        client,
+        db_path=db_path,
+        version=version,
+        retries=retry_count,
+        base_delay=retry_base_delay,
+    )
 
     # P3.6b Stage 1: bring catalog_releases registry row to VALIDATING
     # BEFORE the manifest flip. Once VALIDATING, P3.5 protected-set
