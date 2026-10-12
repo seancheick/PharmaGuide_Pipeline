@@ -106,15 +106,22 @@ def test_bioperine_standardization_locked() -> None:
 
 
 def test_green_tea_standardization_locked() -> None:
-    """Canary 1036 does not disclose an EGCG percentage or marker dose."""
+    """Raw1036 lists15mg leaf extract without an EGCG percentage/forms."""
     b = _load("1036")
     ing = _find_ingredient(b, "green tea")
+    assert ing["name"] == "Green Tea leaf extract"
+    assert ing["quantity"] == 15 and ing["unit"] == "mg"
     assert ing.get("standardization_note") is None
     assert ing["matched_form"] == "green tea extract (unspecified)"
-    assert ing["quantity"] == 15
-    assert ing["unit"] == "mg"
     assert all(marker.get("estimated_dose_mg") is None
-               for marker in ing.get("delivers_markers", []))
+               for marker in ing["delivers_markers"])
+    concerns = [w for w in b.get("warnings", [])
+                if "egcg" in str(w.get("dose_decision") or {}).lower()]
+    assert concerns
+    assert all(w["dose_decision"]["evaluation_status"] == "amount_unknown" and
+               w["dose_decision"]["consumer_disposition"] == "block"
+               for w in concerns)
+
 
 
 # ---------------------------------------------------------------------------

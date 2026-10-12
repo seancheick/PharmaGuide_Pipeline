@@ -17,7 +17,7 @@ that points to the exact dsld_id + field.
 Runs against the nine reviewed canary baseline blobs + their fresh rebuilds.
 
 The active baseline is the reviewed October 12 native-owner rebuild of the same
-nine frozen raw labels. The historical September/April blobs remain untouched.
+nine frozen raw labels. Historical October 11, September and April blobs remain untouched.
 Same-input c7→current captures classified the intended clinical warning changes
 and established that legacy full-pipeline fields were already absent from the
 native canary owner before this batch. Snapshot hashes live beside the active
