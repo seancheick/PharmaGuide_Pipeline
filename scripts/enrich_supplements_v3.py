@@ -9617,6 +9617,28 @@ class SupplementEnricherV3:
         if not _form_extraction_attempt:
             # PRIORITY 1: Use cleaned_forms[] from cleaning stage (structured, reliable)
             if cleaned_forms and isinstance(cleaned_forms, list) and len(cleaned_forms) > 0:
+                # A percentage-qualified preparation belongs to this row, not
+                # to another row with the same name. Select it only when the
+                # exact percentage/marker text is already curated in its parent.
+                if cleaner_iqm_canonical:
+                    for form in cleaned_forms:
+                        try:
+                            percent = float(form.get('percent'))
+                        except (TypeError, ValueError):
+                            continue
+                        if not math.isfinite(percent) or not 0 < percent <= 100:
+                            continue
+                        text = f"{percent:g}% {form.get('name') or ''}".strip()
+                        parent_forms = (quality_map[cleaner_iqm_canonical].get('forms') or {})
+                        if not any(text.casefold() == str(alias).casefold()
+                                   for data in parent_forms.values()
+                                   for alias in data.get('source_form_aliases') or []):
+                            continue
+                        declared_match = self._specific_form_in_parent(
+                            text, cleaner_iqm_canonical, quality_map)
+                        if declared_match:
+                            declared_match['original_label'] = ing_name
+                            return declared_match
                 form_info = self._build_form_info_from_cleaned(ing_name, cleaned_forms, std_name)
                 if form_info and source_context:
                     form_info['source_context'] = source_context
