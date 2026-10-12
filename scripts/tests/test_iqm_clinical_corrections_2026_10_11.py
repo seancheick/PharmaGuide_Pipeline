@@ -163,3 +163,17 @@ def test_sage_description_does_not_restore_disclaimed_aromatherapy_evidence():
     assert 'Multiple RCTs support cognitive performance enhancement in healthy adults' not in description
     assert 'mixed aromatherapy' in description
     assert 'unresolved' in description
+
+
+@pytest.mark.parametrize("name", ["Hemp Oil (aerial plant parts) extract", "Hemp Oil extract", "Hemp oil", "Beta-Caryophyllene, Phytocannabinoids, Terpenes"])
+def test_hemp_extract_never_gets_seed_form_credit(name):
+    from enrich_supplements_v3 import SupplementEnricherV3
+    enricher = SupplementEnricherV3()
+    match = enricher._match_quality_map(name, "Hemp Seed Oil", enricher.databases["ingredient_quality_map"])
+    assert match is None or match.get("canonical_id") != "hemp_seed_oil"
+
+
+def test_hemp_seed_oil_does_not_promise_absent_cannabinoids():
+    forms = _data()["hemp_seed_oil"]["forms"]
+    assert "Contains no significant CBD or THC" not in str(forms)
+    assert "trace" in forms["hemp seed oil (unspecified)"]["notes"].lower()

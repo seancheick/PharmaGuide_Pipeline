@@ -32,7 +32,7 @@
     "statistics": {
       "total_parents": 655,
       "total_forms": 1474,
-      "total_form_aliases": 12314,
+      "total_form_aliases": 12311,
       "parents_with_parent_aliases": 147,
       "parents_with_contains_aliases": 0,
       "parents_with_pattern_aliases": 0
@@ -48726,14 +48726,8 @@
     "standard_name": "Hemp Seed Oil",
     "category": "fatty_acids",
     "aliases": [
-      "hemp oil",
       "hemp seed oil",
-      "cannabis sativa seed oil",
-      "concentrated European Hemp (Cannabis sativa) stalk and seed Oil",
-      "VESIsorb Hemp (Cannibis sativa) oil extract",
-      "VESIsorb Hemp (Cannabis sativa) oil extract",
-      "hempchoice bshoe hemp oil extract",
-      "cannabid-all hemp extract"
+      "cannabis sativa seed oil"
     ],
     "forms": {
       "cold-pressed organic": {
@@ -48804,12 +48798,9 @@
           "by": "Product owner approval",
           "date": "2026-08-08"
         },
-        "notes": "Hemp seed oil form not specified. Conservative scoring. Hemp seed oil provides balanced omega-3/6/9 fatty acids and GLA. Contains no significant CBD or THC. Check label for cold-pressed specification. Evidence update 2026-04-25 (Batch 19): Fenugreek/SB/hemp/bioflavonoid audit — 10 PMIDs WebFetch-verified. CLASS FINDINGS: (1) Fenugreek saponin F is class-poor (~1-5%); testofen bio=14 was Crominex-pattern (clinical, not PK). (2) Sea buckthorn berry oil palmitoleic content does NOT translate to plasma palmitoleic delivery — Johansson 2000 (PMID:11120446) explicitly shows plasma FA UNCHANGED at 5g/4wk. (3) Bioflavonoids class-poor F: hesperidin 4-8% urinary (Manach 2003 PMID:12571654), rutin systemic 1-5% (Hollman 1995 PMID:7491892). (4) Hemp organic ≡ cold-pressed (same TG chemistry); refined retains TG/F structure. EMIQ exists as separately-absorbed bioflavonoid form (SGLT1-mediated) — should be added as separate parent if not already.",
+        "notes": "Hemp-seed oil preparation is unspecified; pressing, refining and fatty-acid composition require label or analytical evidence. FDA distinguishes seed-derived oil from aerial or cannabinoid extracts. Seeds do not naturally contain THC or CBD, but trace cannabinoids may enter seed-derived ingredients during harvesting or processing. A product-specific absence claim requires analytical evidence. Source: https://www.fda.gov/food/hfp-constituent-updates/fda-responds-three-gras-notices-hemp-seed-derived-ingredients-use-human-food .",
         "aliases": [
-          "hemp seed oil",
-          "non psychotropic Hemp Oil",
-          "non-psychotropic hemp oil",
-          "Beta-Caryophyllene, Phytocannabinoids, Terpenes"
+          "hemp seed oil"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -48820,15 +48811,32 @@
         }
       }
     },
-    "notes": "Rich in omega-6 GLA and omega-3 ALA. Not to be confused with CBD oil.",
+    "notes": "Seed-derived Cannabis sativa oil, distinct from generic hemp, aerial extracts and cannabinoid/terpene mixtures. Seed fatty-acid identity or form credit requires explicit seed-oil evidence. FDA distinguishes seed-derived ingredients and possible trace processing contamination; unknown hemp extracts do not establish CBD identity. Source: https://www.fda.gov/food/hfp-constituent-updates/fda-responds-three-gras-notices-hemp-seed-derived-ingredients-use-human-food .",
     "cui": "C4489800",
     "rxcui": "1305550",
     "match_rules": {
       "priority": 0,
-      "match_mode": "alias_and_fuzzy",
-      "exclusions": [],
+      "match_mode": "exact",
+      "exclusions": [
+        "hemp oil",
+        "hemp extract",
+        "aerial",
+        "stalk",
+        "phytocannabinoids",
+        "terpenes",
+        "caryophyllene"
+      ],
       "parent_id": null,
-      "confidence": "high"
+      "confidence": "high",
+      "negative_match_terms": [
+        "hemp oil",
+        "hemp extract",
+        "aerial",
+        "stalk",
+        "phytocannabinoids",
+        "terpenes",
+        "caryophyllene"
+      ]
     },
     "category_enum": "fatty_acids",
     "cui_note": "",
