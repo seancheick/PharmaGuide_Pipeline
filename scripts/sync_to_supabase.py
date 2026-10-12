@@ -1074,6 +1074,7 @@ CATALOG_SEARCH_COLUMNS = (
     "product_safety_status",
     "mapped_coverage",
     "quality_score_confidence",
+    "quality_assessment_status",
 )
 _CATALOG_UPC_SEPARATORS = (" ", "-", ".", "/")
 

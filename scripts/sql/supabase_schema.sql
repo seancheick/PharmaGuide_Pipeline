@@ -350,10 +350,12 @@ CREATE TABLE IF NOT EXISTS public.catalog_search (
   quality_tier             text,
   quality_score_status     text,
   product_safety_status    text,
-  -- Needed by get_product: the detail blob does not carry these two.
+  -- The detail blob carries neither mapped_coverage nor quality_score_confidence;
+  -- quality_assessment_status lets search results apply the completion rule.
   mapped_coverage          double precision
     CHECK (mapped_coverage IS NULL OR (mapped_coverage >= 0 AND mapped_coverage <= 1)),
   quality_score_confidence text,
+  quality_assessment_status text,
   search_tsv               tsvector GENERATED ALWAYS AS (
     to_tsvector(
       'simple'::regconfig,
@@ -396,6 +398,7 @@ SELECT cs.catalog_version,
        cs.product_safety_status,
        cs.mapped_coverage,
        cs.quality_score_confidence,
+       cs.quality_assessment_status,
        cs.search_tsv
   FROM public.catalog_search cs
   JOIN public.export_manifest m
@@ -432,6 +435,7 @@ RETURNS TABLE (
   product_safety_status    text,
   mapped_coverage          double precision,
   quality_score_confidence text,
+  quality_assessment_status text,
   match_score              real
 )
 LANGUAGE sql STABLE SECURITY INVOKER
@@ -444,7 +448,7 @@ AS $$
   SELECT c.catalog_version, c.dsld_id, c.product_name, c.brand_name, c.brand_family,
          c.product_line, c.upc_sku, c.form_factor, c.supplement_type, c.product_status,
          c.quality_tier, c.quality_score_status, c.product_safety_status,
-         c.mapped_coverage, c.quality_score_confidence,
+         c.mapped_coverage, c.quality_score_confidence, c.quality_assessment_status,
          LEAST(1.0,
            GREATEST(
              extensions.similarity(c.product_name, q.text),

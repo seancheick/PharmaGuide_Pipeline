@@ -28,7 +28,7 @@ def _create_products_core(conn):
           brand_family TEXT, product_line TEXT, upc_sku TEXT, form_factor TEXT,
           supplement_type TEXT, product_status TEXT, quality_tier TEXT,
           quality_score_status TEXT, product_safety_status TEXT,
-          mapped_coverage REAL, quality_score_confidence TEXT,
+          mapped_coverage REAL, quality_score_confidence TEXT, quality_assessment_status TEXT,
           verdict TEXT, top_warnings TEXT
         )
         """
@@ -51,6 +51,7 @@ def _insert(conn, **values):
         "product_safety_status": "no_known_catalog_concern",
         "mapped_coverage": 1.0,
         "quality_score_confidence": "high",
+        "quality_assessment_status": "complete",
         "verdict": "SAFE",
         "top_warnings": "[]",
     }
@@ -75,6 +76,7 @@ def test_row_mapping_from_in_memory_products_core():
         product_safety_status="caution",
         mapped_coverage=0.25,
         quality_score_confidence="low",
+        quality_assessment_status="partial",
     )
 
     rows = sync.catalog_search_rows_from_connection(conn, "2026.10.12.142202")
@@ -96,6 +98,7 @@ def test_row_mapping_from_in_memory_products_core():
             "product_safety_status": "caution",
             "mapped_coverage": 0.25,
             "quality_score_confidence": "low",
+            "quality_assessment_status": "partial",
         }
     ]
     # Never copied: the legacy verdict and warning payloads stay out of search.
