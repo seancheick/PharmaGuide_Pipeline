@@ -177,3 +177,11 @@ def test_hemp_seed_oil_does_not_promise_absent_cannabinoids():
     forms = _data()["hemp_seed_oil"]["forms"]
     assert "Contains no significant CBD or THC" not in str(forms)
     assert "trace" in forms["hemp seed oil (unspecified)"]["notes"].lower()
+
+
+def test_all_hemp_form_notes_exclude_unrelated_batch_citations():
+    forms = _data()["hemp_seed_oil"]["forms"]
+    for row in forms.values():
+        for unrelated in ("11120446", "12571654", "7491892", "Sea buckthorn", "Fenugreek", "Bioflavonoids"):
+            assert unrelated.lower() not in row["notes"].lower()
+    assert [row["bio_score"] for row in forms.values()] == [13, 12, 9, 8]
