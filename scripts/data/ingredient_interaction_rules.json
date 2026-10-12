@@ -6416,7 +6416,7 @@
           ],
           "alert_headline": "May lower lithium levels",
           "alert_body": "Psyllium may decrease lithium concentrations. Talk to your lithium prescriber before adding or changing psyllium and ask about serum lithium monitoring.",
-          "informational_note": "The lithium product data sheet lists psyllium or ispaghula husk as potentially decreasing lithium concentrations; a fixed two-hour interval is not established by these sources.",
+          "informational_note": "Psyllium may lower lithium levels; discuss monitoring with your prescriber. No fixed spacing interval is established.",
           "profile_gate": {
             "gate_type": "drug_class",
             "requires": {
