@@ -123,19 +123,18 @@ class CanonicalIdentityRegistry:
         return literal is not None and literal[0] == canonical_id
 
     def preparation_identity_matches(
-        self, value: Any, canonical_id: str, source_db: str, forms: Iterable[str] = (),
+        self, value: Any, canonical_id: str, source_db: str,
     ) -> bool:
-        """An extract requires its own label/form evidence, never a stripped oil name."""
+        """Require the declared preparation, never a stripped oil or constituent form.
+
+        Whole-material form promotion belongs to the existing structured
+        complete-source-form owner, which retains quantity and composition.
+        Flattened form names cannot establish the identity of the full row.
+        """
         standard = self.standard_names.get((source_db, canonical_id), "")
         if source_db != "other_ingredients" or not re.search(r"\bextract\b", standard, re.I):
             return True
-        if self.literal_identity_matches(value, canonical_id):
-            return True
-        return any(
-            re.search(r"\bextract\b", str(form or ""), re.I)
-            and self.literal_identity_matches(form, canonical_id)
-            for form in forms
-        )
+        return self.literal_identity_matches(value, canonical_id)
 
     def canonicalize(
         self,

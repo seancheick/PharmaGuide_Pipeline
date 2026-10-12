@@ -7010,8 +7010,6 @@ class SupplementEnricherV3:
             if not self._current_canonical_identity_registry().preparation_identity_matches(
                 (context_row or {}).get("raw_source_text") or ing_name,
                 recognition.get("matched_entry_id"), recognition.get("recognition_source"),
-                [form.get("name") or "" for form in (context_row or {}).get("forms") or []
-                 if isinstance(form, dict)],
             ):
                 return None
             result = dict(recognition)

@@ -3926,7 +3926,7 @@ class EnhancedDSLDNormalizer:
         if (
             candidate
             and not self._canonical_identity_registry.preparation_identity_matches(
-                name, candidate.get("id"), "other_ingredients", forms)
+                name, candidate.get("id"), "other_ingredients")
             and not self._canonical_identity_registry.resolve_verified_preferred(name)
         ):
             # An exact source botanical may still be owned independently of

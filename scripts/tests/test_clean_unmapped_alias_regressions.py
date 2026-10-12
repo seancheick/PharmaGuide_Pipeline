@@ -3474,6 +3474,26 @@ def test_unrelated_extract_form_cannot_establish_hemp_preparation(normalizer, en
     assert row["bio_score"] is None
 
 
+@pytest.mark.parametrize("forms", [
+    [{"name": "Hemp Oil extract", "percent": 10}],
+    [{"name": "Hemp Oil extract", "quantity": [{"quantity": 5, "unit": "mg"}]}],
+    [{"name": "Hemp Oil extract"}, {"name": "Green Tea Extract"}],
+])
+def test_partial_or_mixed_form_does_not_own_whole_hemp_oil_amount(normalizer, enricher, forms):
+    raw = {"id": "partial-hemp-form", "fullName": "Hemp oil",
+           "ingredientRows": [{"name": "Hemp oil", "ingredientGroup": "Hemp oil",
+               "category": "fat", "quantity": [{"quantity": 50, "unit": "mg"}],
+               "nestedRows": [], "forms": forms}],
+           "otheringredients": {"ingredients": []}}
+    cleaned = normalizer.normalize_product(raw)
+    assert cleaned["activeIngredients"][0]["canonical_id"] is None
+    enriched, _ = enricher.enrich_product(cleaned)
+    row = enriched["ingredient_quality_data"]["ingredients"][0]
+    assert row["canonical_id"] is None
+    assert row["quantity"] == 50
+    assert row["bio_score"] is None
+
+
 @pytest.mark.parametrize("name", ["Hemp Seed Oil", "Cannabis sativa seed oil"])
 def test_explicit_hemp_seed_oil_retains_seed_identity(normalizer, name):
     standard, mapped, _ = normalizer._enhanced_ingredient_mapping(name, [])
