@@ -156,3 +156,10 @@ def test_theophylline_retains_margin_and_interaction_cautions():
     assert 'narrow' in row['notes'].lower()
     assert 'concomitant medicines' in row['notes'].lower()
     assert 'toxicity risk' in row['notes'].lower()
+
+
+def test_sage_description_does_not_restore_disclaimed_aromatherapy_evidence():
+    description = _data()['sage']['description']
+    assert 'Multiple RCTs support cognitive performance enhancement in healthy adults' not in description
+    assert 'mixed aromatherapy' in description
+    assert 'unresolved' in description

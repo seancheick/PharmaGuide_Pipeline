@@ -53,7 +53,7 @@
       "vitamins": 25
     },
     "schema_version": "5.6.1",
-    "last_updated": "2026-10-11",
+    "last_updated": "2026-10-12",
     "pipeline_integration": "Used by enrichment to assign form quality (bio_score) to matched ingredient forms. Match ingredient name against forms aliases (case-insensitive).",
     "matching_notes": [
       "Match ingredient name + forms text against aliases array (case-insensitive)",
@@ -64499,7 +64499,7 @@
     "category_enum": "herbs",
     "source": "botanical_extract",
     "priority": "medium",
-    "description": "Salvia officinalis (Common Sage). Rich in rosmarinic acid, ursolic acid, and polyphenols. Well-documented cholinesterase inhibitory activity and antioxidant properties. Multiple RCTs support cognitive performance enhancement in healthy adults, particularly memory, attention, and processing speed (PMID 16205659, 20377818). Cognivia® (Nexira) is a proprietary high-polyphenol extract with clinical backing.",
+    "description": "Salvia officinalis (Common Sage). Evidence depends on the specific preparation, route and population. PMID 20377818 studied mixed aromatherapy in elderly dementia patients, not oral sage or Cognivia in healthy adults. PMID 16205659 content remains unresolved; these references do not establish healthy-adult efficacy for this parent or branded form.",
     "dosage_importance": 0.1,
     "cui": "C3265310",
     "cui_note": "",
