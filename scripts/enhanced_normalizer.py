@@ -3944,6 +3944,21 @@ class EnhancedDSLDNormalizer:
                 exact = self._canonical_identity_registry.resolve_verified_preferred(literal)
                 if exact and exact[1] == "botanical_ingredients":
                     return self._canonical_identity_registry.standard_names[(exact[1], exact[0])], True, forms
+            # A literal whole powder can keep an authored generic source
+            # owner. Never use this path for an oil, extract or concentrate:
+            # preprocessing deliberately erases those preparation words.
+            if re.search(r"\bpowder$", name, re.I) and not re.search(
+                r"\b(?:extract|oil|concentrate)\b", name, re.I
+            ):
+                literal_base = self.matcher.preprocess_text(name)
+                base = self._exact_ingredient_group_lookup(literal_base)
+                if (
+                    base.get("mapped")
+                    and base.get("type") in {"ingredient", "botanical"}
+                    and not re.search(r"\b(?:extract|oil|concentrate)\b",
+                                      base.get("standard_name", ""), re.I)
+                ):
+                    return base["standard_name"], True, forms
             return name, False, forms
 
         # P0.5 PRIORITY 1: Check EXPLICIT DYES first (deterministic, bypasses indicator heuristics)

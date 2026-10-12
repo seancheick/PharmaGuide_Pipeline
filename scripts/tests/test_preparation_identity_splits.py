@@ -1032,3 +1032,53 @@ def test_culture_source_activity_keeps_its_owner_through_the_scored_artifact(pip
     assert subjects and all(r["canonical_id"] == "protease" for r in subjects)
     assert any(r.get("quantity") == 25 and r.get("unit") == "SAPU" for r in subjects)
     assert not any(r.get("quantity") == 300 and r.get("unit") == "mg" for r in subjects)
+
+
+@pytest.mark.parametrize("name,group,canonical", [
+    ("Chamomile powder", "German Chamomile", "chamomile"),
+    ("Echinacea powder", "Echinacea purpurea", "echinacea"),
+    ("raw Echinacea powder", "Echinacea (unspecified)", "echinacea"),
+    ("organic Echinacea powder", "Echinacea", "echinacea"),
+    ("Passion Flower powder", "Passionflower", "passionflower"),
+])
+def test_whole_botanical_powder_keeps_parent_without_extract_credit(pipeline, name, group, canonical):
+    enriched = pipeline(_raw_product(990140, [_raw_row(1, name, group, quantity=75, unit="mg")]))
+    active = next(r for r in enriched["activeIngredients"] if r["name"] == name)
+    assert active["canonical_id"] == canonical
+    assert active["quantity"] == 75
+    from scoring_input_contract import get_scoring_ingredients
+    rows = get_scoring_ingredients(enriched, strict=True).rows
+    assert {r.get("canonical_id") for r in rows} == {canonical}
+    assert all(r.get("form_match_status") == "n/a" for r in rows)
+    assert active.get("plant_part") in {None, "unknown"}
+
+
+@pytest.mark.parametrize("name", ["organic Hemp powder", "Chamomile extract powder", "Chamomile oil powder"])
+def test_powder_fallback_cannot_borrow_generated_extract_or_plant_preparation(pipeline, name):
+    enriched = pipeline(_raw_product(990141, [_raw_row(1, name, "", quantity=75, unit="mg")]))
+    active = next(r for r in enriched["activeIngredients"] if r["name"] == name)
+    assert active.get("canonical_id") not in {"NHA_HEMP_EXTRACT", "chamomile"}
+
+
+@pytest.mark.parametrize("base,canonical", [("Chamomile", "chamomile"), ("Passionflower", "passionflower")])
+@pytest.mark.parametrize("disclosure", ["label", "form"])
+def test_row_owned_extract_disclosure_survives_whole_powder_guard(pipeline, base, canonical, disclosure):
+    name = base + (" Extract" if disclosure == "label" else " powder")
+    row = _raw_row(1, name, base, quantity=75, unit="mg",
+                   forms=[base + " Extract"] if disclosure == "form" else [])
+    enriched = pipeline(_raw_product(990142, [row]))
+    from scoring_input_contract import get_scoring_ingredients
+    scored_row = next(r for r in get_scoring_ingredients(enriched, strict=True).rows if r.get("canonical_id") == canonical)
+    assert scored_row["form_match_status"] == "mapped"
+    assert "extract" in scored_row["form_id"].lower()
+
+
+@pytest.mark.parametrize("base,canonical", [("Chamomile", "chamomile"), ("Passionflower", "passionflower")])
+def test_unrelated_extract_form_cannot_upgrade_whole_powder(pipeline, base, canonical):
+    name = base + " powder"
+    raw = _raw_product(990143, [_raw_row(1, name, base, quantity=75, unit="mg", forms=["Green Tea Extract"])])
+    enriched = pipeline(raw)
+    rows = enriched["ingredient_quality_data"]["ingredients"]
+    row = next(r for r in rows if r.get("raw_source_path") == "ingredientRows[0]")
+    assert row.get("canonical_id") == canonical or row.get("scoreable_identity") is False
+    assert row.get("form_match_status") != "mapped" or row.get("form_id") != canonical + " extract"

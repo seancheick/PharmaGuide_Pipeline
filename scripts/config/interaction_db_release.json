@@ -1,6 +1,6 @@
 {
-  "interaction_db_version": "1.0.14",
-  "build_time_utc": "2026-10-12T18:00:00Z",
-  "purpose": "Replace nonexistent ACE inhibitor/potassium DailyMed label citation with content-verified lisinopril label; clinical tier and rule identity unchanged.",
+  "interaction_db_version": "1.0.15",
+  "build_time_utc": "2026-10-12T22:45:00Z",
+  "purpose": "Publish the source-reviewed presence-warning corrections, approved unsupported EPO pair removal and verified medication-class refinements through the existing interaction release owner; preserve unresolved clinical grades and form/context holds.",
   "updated_at": "2026-10-12"
 }
