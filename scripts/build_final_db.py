@@ -1790,8 +1790,9 @@ def validate_export_contract(enriched: Dict, scored: Dict) -> List[str]:
     # contract both protect a *score*. Neither applies to a row that is
     # unresolved only because its sole recognition is a safety record, on a
     # product that ships no score: withholding that product hides the ban from
-    # the person scanning it. Other identity findings still block, display
-    # defects included; the form-only contract exception is checked below.
+    # the person scanning it. A confirmed ban also contains intact source-only
+    # unmapped rows through the same export owner. Competing identities and
+    # display defects still block; the form-only exception is checked below.
     conflict_paths = {
         safe_str(ingredient.get("raw_source_path"))
         for ingredient in ingredients
@@ -3323,21 +3324,27 @@ _EXPORT_ERROR_TAXONOMY: List[Tuple[str, "re.Pattern[str]"]] = [
 ]
 
 
-def _classify_export_error(msg: str) -> str:
+def _classify_export_error(msg: str, *, scored: Optional[Dict[str, Any]] = None) -> str:
     """Classify an export-validator error message into one of:
     'error', 'excluded_by_gate', 'warning'. See ``_EXPORT_ERROR_TAXONOMY``
     above for pattern definitions. Unknown patterns fail-safe to 'error'
     so that new validator messages don't silently become non-blocking.
     """
+    # A catalog missing a confirmed ban/recall cannot be a publishable partial
+    # success. Preserve the original validation failure and block publication.
+    if scored is not None and is_confirmed_ban_or_recall(scored):
+        return "error"
     for bucket, pattern in _EXPORT_ERROR_TAXONOMY:
         if pattern.search(msg or ""):
             return bucket
     return "error"
 
 
-def _classify_export_contract_issues(issues: List[str]) -> str:
+def _classify_export_contract_issues(
+    issues: List[str], *, scored: Optional[Dict[str, Any]] = None,
+) -> str:
     """A quarantine reason cannot amnesty a separate schema failure."""
-    buckets = {_classify_export_error(issue) for issue in issues}
+    buckets = {_classify_export_error(issue, scored=scored) for issue in issues}
     if "error" in buckets or not buckets:
         return "error"
     if "excluded_by_gate" in buckets:
@@ -3359,13 +3366,45 @@ def _warning_only_identity_labels(
         return {}
     rows = safe_list(safe_dict(enriched.get("ingredient_quality_data")).get("ingredients"))
     paths = safety_only_conflict_paths(rows)
-    return {
+    labels = {
         row["raw_source_path"]: row["label_display_name"]
         for row in rows
         if isinstance(row, dict)
         and isinstance(row.get("raw_source_path"), str)
         and row["raw_source_path"] in paths
     }
+    if not is_confirmed_ban_or_recall(scored):
+        return labels
+
+    # A separate unmapped label cannot hide a confirmed ban. Preserve its
+    # literal source without assigning a primary identity or score. Competing
+    # mappings and incomplete/substituted labels still fail the original gate.
+    source_rows = safe_list(enriched.get("label_source_rows"))
+    row_paths = [row.get("raw_source_path") for row in rows if isinstance(row, dict)]
+    for row in rows:
+        if not isinstance(row, dict):
+            continue
+        path = row.get("raw_source_path")
+        source = [item for item in source_rows if isinstance(item, dict)
+                  and item.get("raw_source_path") == path]
+        if not (
+            isinstance(path, str) and path.strip() and row_paths.count(path) == 1
+            and len(source) == 1
+            and row.get("identity_disposition") == "identity_conflict"
+            and row.get("identity_decision_reason") == "no_quality_map_match"
+            and row.get("scoreable_identity") is False
+            and row.get("mapped") is False
+            and not any(row.get(key) for key in
+                        ("canonical_id", "canonical_id_before", "canonical_id_after"))
+            and isinstance(row.get("source_label_name"), str)
+            and row["source_label_name"].strip()
+            and row.get("label_display_name") == normalize_label_display(row["source_label_name"])
+            and row["label_display_name"] == normalize_label_display(row.get("raw_source_text"))
+            and row["label_display_name"] == normalize_label_display(source[0].get("raw_source_text"))
+        ):
+            continue
+        labels[path] = row["label_display_name"]
+    return labels
 
 
 def _validate_active_count_reconciliation(
@@ -10482,7 +10521,7 @@ def update_audit_state(
     )
     if issues:
         entry = {"dsld_id": pid, "issues": issues[:5]}
-        if _classify_export_contract_issues(issues) == "excluded_by_gate":
+        if _classify_export_contract_issues(issues, scored=scored) == "excluded_by_gate":
             counts["export_contract_quarantined"] += 1
             contract_quarantine_count += 1
             contract_quarantines.append(entry)
@@ -10708,7 +10747,7 @@ def build_final_db(
                     contract_issues=contract_issues,
                 )
                 if contract_issues:
-                    contract_error_bucket = _classify_export_contract_issues(contract_issues)
+                    contract_error_bucket = _classify_export_contract_issues(contract_issues, scored=scored)
                     raise ValueError("; ".join(contract_issues[:10]))
                 blob = (
                     build_detail_blob(enriched, scored)
@@ -10772,7 +10811,7 @@ def build_final_db(
                     os.remove(blob_path)
                 c.execute("DELETE FROM products_core WHERE dsld_id = ?", (str(pid),))
                 msg = str(e)
-                bucket = contract_error_bucket or _classify_export_error(msg)
+                bucket = contract_error_bucket or _classify_export_error(msg, scored=scored)
                 entry = {"dsld_id": str(pid), "error": msg}
                 if bucket == "excluded_by_gate":
                     # By-design coverage gate (E1.2.5). Product correctly
