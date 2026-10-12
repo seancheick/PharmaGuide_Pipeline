@@ -1702,8 +1702,8 @@ class TestBlendPatternCounterTests:
         assert 'Mixed Tocotrienols (Tocotrienol Complex)' in scorable_names
         assert 'Mixed Tocotrienols (Tocotrienol Complex)' not in skipped_names
 
-    def test_carotenoid_complex_with_dose_scorable(self, enricher):
-        """Carotenoid Complex 10 mg - realistic label."""
+    def test_carotenoid_complex_dose_does_not_establish_vitamin_a_identity(self, enricher):
+        """A generic carotenoid amount does not identify provitamin A content."""
         product = {
             'dsld_id': 'test-carotenoid-complex',
             'fullName': 'Carotenoid Test',
@@ -1716,8 +1716,16 @@ class TestBlendPatternCounterTests:
         scorable_names = [ing['name'] for ing in result['ingredients_scorable']]
         skipped_names = [ing['name'] for ing in result['ingredients_skipped']]
 
-        assert 'Carotenoid Complex' in scorable_names
-        assert 'Carotenoid Complex' not in skipped_names
+        assert 'Carotenoid Complex' not in scorable_names
+        assert 'Carotenoid Complex' in skipped_names
+        row = result['ingredients_skipped'][0]
+        assert row['mapped_identity'] is False
+        assert row['canonical_id'] is None
+        assert row['role_classification'] == 'active_unmapped'
+        assert row['score_included'] is False
+        assert row['skip_reason'] == 'no_quality_map_match'
+        assert row['quantity'] == 10
+        assert row['unit'] == 'mg'
 
     def test_phospholipid_complex_with_dose_scorable(self, enricher):
         """Phospholipid Complex 300 mg has dose, but no resolved scoreable identity."""
