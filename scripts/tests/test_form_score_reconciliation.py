@@ -61,10 +61,13 @@ def test_reconciliation_manifest_is_complete_and_matches_iqm():
 
 
 def _superseded_by_source_qualified_20261011(form, row):
-    # Exact reviewed reductions: same35624 class anchor and no lipo premium.
+    # Exact reviewed reductions: same35624 class anchor, no lipo premium,
+    # and Sean-approved October12 provisional ceilings (not clinical calibration).
     # Original migration remains frozen; no arbitrary new Excellent exemption.
     reviewed = {('bifidobacterium_longum', 'bifidobacterium longum 35624'): 7,
-                ('taurine', 'liposomal taurine'): 11}
+                ('taurine', 'liposomal taurine'): 11,
+                ('taurine', 'magnesium taurate (as taurine source)'): 11,
+                ('l_arginine', 'nitrosigine (arginine silicate inositol)'): 11}
     key = (row['ingredient_key'], row['form_key'])
     if key not in reviewed:
         return False

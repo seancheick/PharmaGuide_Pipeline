@@ -19,8 +19,8 @@ FINAL_MANIFEST_PATH = AUDIT_DIR / "final_reconciliation_manifest_20260818.json"
 
 KEEP = "KEEP_FORM_SOURCE"
 REPLACEMENTS = {
-    ("hmb", "hmb calcium salt (hmb-ca)"): {"21134325"},
-    ("hmb", "hmb free acid (hmb-fa)"): {"21134325"},
+    ("hmb", "hmb calcium salt (hmb-ca)"): {"21134325", "38564019"},
+    ("hmb", "hmb free acid (hmb-fa)"): {"21134325", "38564019"},
     ("collagen", "collagen tripeptides"): {"26934933"},
     # 2026-08-19. PMID 32188111 (Nutrients 2020) is a randomized three-period
     # crossover in 21 adults aged 65-74 comparing ubiquinol vs ubiquinone
@@ -93,7 +93,11 @@ def test_iqm_uses_only_retained_or_verified_replacement_form_sources():
             assert form['bio_score'] == 11
         assert isinstance(form.get("aliases"), list) and form["aliases"]
         assert _reference_ids(form) == expected[(ingredient_key, form_key)]
-        if expected[(ingredient_key, form_key)]:
+        if (ingredient_key, form_key) == ("hmb", "hmb free acid (hmb-fa)"):
+            assert form["bio_score"] == 11
+            assert form["form_evidence"]["score_supported"] is False
+            assert "provisional" in form["notes"].lower()
+        elif expected[(ingredient_key, form_key)]:
             assert form["form_evidence"]["score_supported"] is True
         else:
             assert "form_evidence" not in form
@@ -104,7 +108,7 @@ def test_score_corrections_are_narrow_and_match_the_reviewed_form_axis():
     expected = {
         ("vitamin_c", "calcium ascorbate"): (13, 13),
         ("magnesium", "magnesium aspartate"): (13, 13),
-        ("hmb", "hmb free acid (hmb-fa)"): (14, 14),
+        ("hmb", "hmb free acid (hmb-fa)"): (11, 14),
         ("dha", "DHA fish oil rTG"): (14, 17),
         ("epa", "EPA fish oil rTG"): (14, 17),
     }
