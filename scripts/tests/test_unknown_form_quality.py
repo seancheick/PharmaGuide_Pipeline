@@ -754,7 +754,6 @@ def test_a_held_source_or_marker_token_leaves_the_row_unheld(enricher, parent, l
     ('aloe_vera', 'Aloe vera Leaf Extract', {'name': 'Aloe barbadensis leaf extract', 'category': _B, 'ingredientGroup': 'Aloe'}, 'aloe vera (unspecified)'),
     ('rose_hips', 'Rosehip Fruit Extract', {'name': 'Rosae canina Fruit Extract', 'category': _B, 'ingredientGroup': 'Dog Rose'}, 'rose hips extract'),
     ('rose_hips', 'Rose Hip Fruit Extract', {'name': 'Rosa canina Fruit Extract', 'category': _B, 'ingredientGroup': 'Rose Hip'}, 'rose hips extract'),
-    ('corn_silk', 'Corn Silk, Powder', {'name': 'Zea mays, Powder', 'category': _B, 'ingredientGroup': 'Corn'}, 'corn silk extract'),
     ('perilla_oil', 'Perilla Seed Extract', {'name': 'Perilla frutescens Seed Extract', 'category': _B, 'ingredientGroup': 'perilla'}, 'perilla seed oil'),
     ('horse_chestnut_seed', 'Horse Chestnut Seed Extract', {'name': 'Aesculus hippocastanum Seed Extract', 'category': _B, 'ingredientGroup': 'Horse Chestnut'}, 'horse chestnut seed (unspecified)'),
     ('chamomile', 'Chamomile Flower Extract', {'name': 'Matricaria recutita Flower Extract', 'category': _B, 'ingredientGroup': 'German Chamomile '}, 'chamomile extract'),
@@ -1116,3 +1115,15 @@ def test_exact_nih_label_forms_replace_crossed_structured_sources(pid, nutrient,
     row = next(r for r in product['activeIngredients'] if r['name'] == nutrient)
     assert [f['name'] for f in row['forms']] == expected
     assert row.get('label_correction') or row.get('label_correction_applied') or row.get('source_correction')
+
+
+def test_a_named_corn_silk_powder_cannot_claim_extract_form_credit(enricher):
+    # Both source fields say Powder; the old alias selected an extract.
+    form = {"name": "Zea mays, Powder", "category": _B, "ingredientGroup": "Corn"}
+    match = enricher._match_quality_map("Corn Silk, Powder", "Corn Silk, Powder",
+        enricher.databases["ingredient_quality_map"], cleaned_forms=[form], cleaner_canonical_id="corn_silk")
+    assert match["canonical_id"] == "corn_silk"
+    assert match["form_id"] is None
+    assert match["bio_score"] is None
+    assert match["match_status"] == "FORM_DISCLOSED_UNMAPPED"
+    assert match["unmapped_forms"] == ["Zea mays, Powder"]

@@ -10221,6 +10221,15 @@ class SupplementEnricherV3:
         def add_candidate(candidate: Dict):
             if _blocks_false_omega_parent(str(candidate.get("parent_key") or "")):
                 return
+            # A bare parent alias cannot turn a printed whole powder into
+            # an extract. Retain the parent candidate and its shared unknown
+            # form treatment; row-owned explicit extract forms remain valid.
+            if (
+                re.search(r"\bpowder$", ing_name, re.I)
+                and not re.search(r"\bextract\b", ing_name, re.I)
+                and re.search(r"\bextract\b", _resolved_candidate_form_id(candidate) or "", re.I)
+            ):
+                return
 
             # Multiple aliases often describe the same scoring identity
             # (canonical parent + resolved form). Collapse those paths here so
