@@ -24611,10 +24611,10 @@
       "aliases": [
         "maltodextrin"
       ],
-      "category": "manual_review",
+      "category": "filler",
       "is_additive": true,
       "allergen": false,
-      "notes": "Primary identity of the unspecified-source glucose polymer maltodextrin. Distinct from resistant maltodextrin and named plant-source preparations. GSRS7CVR7L4A2D resolves exactly to MALTODEXTRIN (verified2026-10-12). Recognition provides no therapeutic or form-quality credit; the existing harmful-additive owner separately assesses concerns. A blend total is not its constituent dose.",
+      "notes": "Primary identity of the unspecified-source glucose polymer maltodextrin. Distinct from resistant maltodextrin and named plant-source preparations. GSRS7CVR7L4A2D resolves exactly to MALTODEXTRIN (verified2026-10-12). Recognition provides no therapeutic or form-quality credit; the existing harmful-additive owner separately assesses concerns. A blend total is not its constituent dose. Common bulking/filler function verified against Cargill https://www.cargill.com/food-bev/na/maltodextrin (2026-10-12), consistent with the existing harmful-additive role owner. This common function does not establish the manufacturer’s purpose or constituent dose in an individual product.",
       "common_uses": [
         "label identity recognition"
       ],
@@ -24622,7 +24622,9 @@
       "external_ids": {
         "unii": "7CVR7L4A2D"
       },
-      "functional_roles": []
+      "functional_roles": [
+        "filler"
+      ]
     }
   ]
 }

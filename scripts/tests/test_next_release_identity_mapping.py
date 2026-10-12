@@ -119,3 +119,12 @@ def test_preparation_recognition_does_not_invent_iqm_rating(enricher, literal):
     assert row["final_form_bio_score"] is None
     assert row["source_label_name"] == literal
 
+
+
+def test_primary_maltodextrin_has_source_supported_display_role():
+    data = json.loads((Path(__file__).parents[1] / "data/other_ingredients.json").read_text())
+    entry = next(r for r in data["other_ingredients"] if r["id"] == "NHA_MALTODEXTRIN")
+    assert entry["category"] == "filler"
+    assert entry["functional_roles"] == ["filler"]
+    assert "cargill.com/food-bev/na/maltodextrin" in entry["notes"]
+    assert "individual product" in entry["notes"]
