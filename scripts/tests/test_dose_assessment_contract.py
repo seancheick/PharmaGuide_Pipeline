@@ -530,3 +530,30 @@ def test_disclosed_nmn_mass_reaches_score_readiness_without_niacin_equivalence(e
     scored = build_scored_artifact(product)
     assert scored['assessment_readiness']['dose']['readiness'] == 'complete'
     assert scored['quality_score_status'] == 'scored'
+
+
+@pytest.mark.parametrize("name,parent,value,unit,form", [
+    ("Molybdenum", "molybdenum", 75, "mg", None),
+    ("Vitamin A", "vitamin_a", 900, "mg RAE", "beta-carotene"),
+    ("Vitamin D3", "vitamin_d", 100, "mg", "cholecalciferol"),
+])
+def test_reviewed_label_unit_conflict_cannot_become_dose_or_ul_clearance(enricher, name, parent, value, unit, form):
+    from scoring_v4.exposure import row_exposure, quantity_is_unresolved
+    row = _row(name, parent, value, unit, matched_form=form)
+    row["dose_data_quality"] = {"status": "unresolved_unit", "reason": "label_unit_conflict"}
+    assert quantity_is_unresolved(row)
+    assert row_exposure({}, row, basis="daily", unit="mg").benchmark_amount is None
+    result = _collect(enricher, row)
+    assessed = result["dose_assessments"][0]
+    assert assessed["source_value"] == value
+    assert assessed["source_unit"] == unit
+    assert assessed["normalized_value"] is None
+    assert assessed["ul_assessment_status"] == "unresolved_unit"
+    assert assessed["readiness"] == "incomplete"
+    assert assessed["reason_code"] == "label_unit_conflict"
+    adequacy = result["adequacy_results"][0]
+    assert adequacy["scoring_eligible"] is False
+    assert adequacy["pct_rda"] is None
+    assert adequacy["pct_ul"] is None
+    assert result["ul_review_flags"]
+    assert not result["safety_flags"]

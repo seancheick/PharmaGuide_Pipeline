@@ -110,7 +110,7 @@ def _preprocess_text_module_cached(text: str) -> str:
 # is consistent across the cleaner and enricher.
 # ---------------------------------------------------------------------------
 _UNII_PLACEHOLDERS = frozenset({"", "0", "1"})
-_LABEL_CORRECTION_SCORING_DISPOSITIONS = frozenset({"source_descriptor"})
+_LABEL_CORRECTION_SCORING_DISPOSITIONS = frozenset({"source_descriptor", "unresolved_unit"})
 
 
 def _normalize_unii(value):
@@ -5893,6 +5893,18 @@ class EnhancedDSLDNormalizer:
                 return row
             name = row.get("name")
             entry = corrections_by_raw_text.get(name)
+            if entry and entry.get("scoring_disposition") == "unresolved_unit":
+                quantities = row.get("quantity")
+                quantities = quantities if isinstance(quantities, list) else [quantities]
+                # A manufacturer revision must not inherit an old unit hold.
+                if not any(
+                    isinstance(q, dict)
+                    and q.get("unit") == entry.get("raw_quantity_unit")
+                    and not isinstance(q.get("quantity"), bool)
+                    and q.get("quantity") == entry.get("raw_quantity_value")
+                    for q in quantities
+                ):
+                    entry = None
             if entry:
                 corrected = entry.get("corrected_ingredient_text")
                 has_unii_correction = (
@@ -8226,7 +8238,8 @@ class EnhancedDSLDNormalizer:
         if raw_category in {"vitamin", "mineral"}:
             label_nutrient_context = norm_module.normalize_text(raw_name or name)
 
-        if not dose_data_quality:
+        reviewed_unit_conflict = ing.get("_label_scoring_disposition") == "unresolved_unit"
+        if not dose_data_quality and not reviewed_unit_conflict:
             dose_data_quality = self._maybe_correct_dv_backed_unit(
                 ingredient_name=name,
                 standard_name=standard_name,
@@ -8236,7 +8249,7 @@ class EnhancedDSLDNormalizer:
                 daily_value=daily_value,
                 quantity_variants=quantity_variants,
             )
-        if not dose_data_quality:
+        if not dose_data_quality and not reviewed_unit_conflict:
             dose_data_quality = self._maybe_correct_parent_equivalent_unit(
                 ingredient_name=name,
                 quantity=quantity,
@@ -8265,6 +8278,15 @@ class EnhancedDSLDNormalizer:
                     variant["quantity"] = quantity
                     variant["unit"] = unit
                     variant["dose_data_quality"] = dose_data_quality
+
+        if reviewed_unit_conflict:
+            dose_data_quality = {
+                "status": "unresolved_unit",
+                "reason": "label_unit_conflict",
+                "raw_amount": quantity,
+                "raw_unit": unit,
+                "notes": ["The printed amount and Daily Value conflict; the dose needs manufacturer confirmation."],
+            }
 
         unit_norm_for_contract = str(unit or "").strip().lower()
         # 2026-09-19 clinical-signoff fix (Life Extension Ginkgo 328464):

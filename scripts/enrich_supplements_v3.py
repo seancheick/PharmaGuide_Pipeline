@@ -21966,6 +21966,25 @@ class SupplementEnricherV3:
                                 error=f"conversion_exception: {conversion_error}",
                             )
 
+                    reviewed_unit_conflict = bool(
+                        dose_data_quality
+                        and dose_data_quality.get("status") == "unresolved_unit"
+                    )
+                    if reviewed_unit_conflict:
+                        conversion = ConversionResult(
+                            success=False, original_value=quantity_float, original_unit=unit,
+                            converted_value=None, converted_unit=None,
+                            conversion_rule_id="label_unit_conflict", conversion_factor=None,
+                            nutrient_detected=std_name, form_detected=None,
+                            form_detection_source="reviewed_label_unit_conflict",
+                            confidence="unknown",
+                            error="Printed amount and Daily Value conflict; manufacturer confirmation is needed.",
+                        )
+                        ul_exposure = {
+                            "ul_gate_eligible": False,
+                            "ul_exposure_basis": "unresolved_unit",
+                            "ul_gate_ineligible_reason": "label_unit_conflict",
+                        }
                     conv_evidence = conversion.to_dict()
                     conv_evidence["ingredient"] = ing_name
                     if explicit_preformed_vitamin_a_fraction is not None:
@@ -22084,6 +22103,9 @@ class SupplementEnricherV3:
                     else:
                         converted_amount = None
                         converted_unit = None
+                    if reviewed_unit_conflict:
+                        converted_amount = None
+                        converted_unit = None
                     if converted_amount is None or not converted_unit:
                         conversion_failed = True
                         converted_amount = None
@@ -22119,7 +22141,10 @@ class SupplementEnricherV3:
                     skip_ul_check = False
                     skip_ul_reason = None
                     ul_only_skip = False
-                    if dose_lineage["dose_role"] == "form_component":
+                    if reviewed_unit_conflict:
+                        skip_ul_check = True
+                        skip_ul_reason = "label_unit_conflict"
+                    elif dose_lineage["dose_role"] == "form_component":
                         # The label-declared DFE total owns this form-derived
                         # conversion. Retain the row for label context but do
                         # not create a second UL or stack dose.
@@ -22941,6 +22966,14 @@ class SupplementEnricherV3:
                             adequacy_dict["form_confidence"] = "LOW"
                     else:
                         adequacy_dict["skip_ul_check"] = False
+                    if reviewed_unit_conflict:
+                        warning = "The printed amount and Daily Value conflict; the dose needs manufacturer confirmation."
+                        adequacy_dict["warnings"] = [warning]
+                        ul_review_flags.append({
+                            "nutrient": ing_name, "assessment_status": "indeterminate",
+                            "reason": "label_unit_conflict", "review_required": True,
+                            "warnings": [warning],
+                        })
                     adequacy_dict["original_quantity"] = quantity
                     adequacy_dict["original_unit"] = unit
                     adequacy_dict["conversion_applied"] = conversion.success
@@ -23167,6 +23200,7 @@ class SupplementEnricherV3:
                             ["Prepared-serving Vitamin A includes activity whose form is not identified; the preformed Vitamin A UL assessment is indeterminate."]
                             if skip_ul_reason == "mixed_vitamin_a_preformed_fraction_unknown"
                             and rule_id == "vitamin_a_beta_carotene_supplement"
+                            else adequacy_dict["warnings"] if reviewed_unit_conflict
                             else [] if skip_ul_check else safety_warnings
                         ),
                         "data_by_group": list(_nutrient_record.get("data") or []),

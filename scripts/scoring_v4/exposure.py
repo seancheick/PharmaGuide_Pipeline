@@ -56,6 +56,9 @@ def quantity_is_unresolved(row: Mapping[str, Any]) -> bool:
 
 
 def _quantity_operator(row: Mapping[str, Any]) -> str:
+    quality = row.get("dose_data_quality")
+    if isinstance(quality, Mapping) and quality.get("status") == "unresolved_unit":
+        return "unknown"
     explicit = row.get("quantity_operator")
     if explicit is not None:
         return str(explicit).strip() or "="

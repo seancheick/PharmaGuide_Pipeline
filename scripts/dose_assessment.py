@@ -62,6 +62,7 @@ _UNRESOLVED_FORM_REASONS = {
     "mixed_vitamin_a_preformed_fraction_unknown",
 }
 _UNRESOLVED_UNIT_REASONS = {
+    "label_unit_conflict",
     "amount_not_declared",
     "conversion_failed",
     "unit_unrecognized",
