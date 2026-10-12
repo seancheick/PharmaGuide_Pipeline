@@ -967,6 +967,16 @@
         "PR68 canonical child-source context and generic profile ownership"
       ],
       "notes": "Generated with freeze_contract_snapshots.py from Sean's complete070547 run on integratedmain604e2b2c:114current/checksummed manifests,15421rows perstage. The accepted694-label measurement explains62.5->63.5 for204571: generic Formulation replaces incorrectly borrowed botanical context. Only quality_score_v4_100 and its compatibility mirror change; tier/status/safety/coverage and every other frozen field remain unchanged. All other product canaries and the three structural snapshot tests pass. Source-reviewed PR68 is unchanged; this tests-only baseline correction requires no corpus regeneration."
+    },
+    {
+      "date": "2026-10-12",
+      "action": "refrozen_two_source_reviewed_raw_canaries",
+      "products": [
+        245156,
+        306381
+      ],
+      "source_commit": "9b320ab683759b4b550dc6b5f832721cad2b5842",
+      "notes": "Complete native raw canary check found exactly two drifts; other 31 matched. Frozen original fixture source 786f4a0d4 reproduces 245156=83.5 and 306381=75.5; pre-clinical baseline c7acfb930 reproduces 85.0 and 75.5; integrated main reproduces 85.0 and 75.8 on identical raw inputs. Goli 245156: Verification 4.5->6.0 removes a 1.5 deduction from unsupported V029 (placeholder FDA F-27XX, asserted Apple Cider Vinegar Gummies expiration-label event), excluded by the existing primary-source eligibility owner. Historical recall assertions remain unknown; this does not verify absence or resolution of a real recall. All other pillars unchanged. 306381: Formulation 12.9->13.2 reflects the source-reviewed removal of unsupported citrulline-malate premium (15->14) and corresponding parent reference, weighted normalized formulation 9.6728->9.9124. Free-taurine chemistry rename retains its existing 11 anchor. Other pillars, snapshot identity, status, flags and safety fields unchanged. Absorption metadata is not scored. Canonical freeze_contract_snapshots.py regenerated only these two snapshots from raw; receipts and immutable old bytes/hashes retained in private rebuild_20261012/canary_review."
     }
   ]
 }
