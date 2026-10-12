@@ -24,7 +24,7 @@ the candidate's verified export quarantine. The source finding is preserved;
 the product must be absent from SQLite, the detail index, and local blobs.
 All other identity-contract failures still block the release.
 
-An intact safety-only unresolved row may instead be contained by a verified
+An intact warning-only unresolved row may instead be contained by a verified
 BLOCKED/UNSAFE catalog record with no numeric public score. This uses
 the same row eligibility policy as export; source dispositions stay unchanged.
 """
@@ -198,6 +198,7 @@ def audit_product(
     *,
     classify: Classifier = class_for_product,
     source: str = "",
+    scored: dict[str, Any] | None = None,
 ) -> list[DispositionRecord]:
     """Return one DispositionRecord for every active row in ``product``."""
     route = classify(product)
@@ -205,7 +206,14 @@ def audit_product(
         route = "generic"
     product_id = str(product.get("dsld_id") or product.get("id") or "unknown")
     records: list[DispositionRecord] = []
-    safety_paths = safety_only_conflict_paths(_identity_rows(product))
+    if scored is None:
+        safety_paths = safety_only_conflict_paths(_identity_rows(product))
+    else:
+        # Export owns warning-only row eligibility. This records containment
+        # candidates, never a resolved identity; uncontained_failures still
+        # requires a checksum-verified actual catalog row.
+        from build_final_db import _warning_only_identity_labels
+        safety_paths = set(_warning_only_identity_labels(product, scored))
     for active, row, pair_violation in _active_identity_pairs(product):
         active = active or {}
         if (
@@ -316,6 +324,7 @@ def audit_enriched_outputs(
     *,
     products_dir: Path | str,
     classify: Classifier = class_for_product,
+    scored_context: dict[str, dict[str, Any]] | None = None,
 ) -> list[DispositionRecord]:
     """Scan every enriched artifact under ``products_dir``.
 
@@ -330,7 +339,8 @@ def audit_enriched_outputs(
             raise ValueError(f"enriched batch is not a list: {path}")
         for product in products:
             if isinstance(product, dict):
-                records.extend(audit_product(product, classify=classify, source=path.name))
+                records.extend(audit_product(product, classify=classify, source=path.name,
+                    scored=(scored_context or {}).get(str(product.get("dsld_id") or product.get("id") or "unknown"))))
     return records
 
 
@@ -391,7 +401,26 @@ def main() -> int:
     )
     args = parser.parse_args()
 
-    records = audit_enriched_outputs(products_dir=Path(args.products_dir))
+    scored_context = {}
+    if args.export_dir is not None:
+        try:
+            warning_only = verified_warning_only_products(args.export_dir, blocked_only=True)
+            score_dirs = Path(args.products_dir).glob("output_*_scored/scored")
+            for path in select_stage_files(score_dirs, "score"):
+                products = json.loads(path.read_text(encoding="utf-8"))
+                if not isinstance(products, list):
+                    raise ValueError(f"scored batch is not a list: {path}")
+                for product in products:
+                    if not isinstance(product, dict):
+                        continue
+                    pid = str(product.get("dsld_id") or product.get("id") or "unknown")
+                    if pid in warning_only:
+                        scored_context[pid] = product
+        except (ReleaseValidationError, OSError, ValueError) as exc:
+            print(f"identity integrity gate FAILED: {exc}")
+            return 1
+    records = audit_enriched_outputs(products_dir=Path(args.products_dir),
+        scored_context=scored_context)
     print(_format_summary(records))
 
     failures = [r for r in records if r.failed]

@@ -1268,3 +1268,28 @@ def test_unscored_export_proof_rejects_any_numeric_quality_score(good_release_di
     manifest["checksum"] = "sha256:" + rca.compute_sha256(db)
     path.write_text(json.dumps(manifest))
     assert "ID00000" not in rca.verified_warning_only_products(good_release_dir)
+
+
+@pytest.mark.parametrize('defect', [None, 'numeric_catalog_score', 'unscored_catalog', 'unverified_source', 'missing_source'])
+def test_identity_gate_main_uses_shared_export_policy_and_actual_catalog_proof(good_release_dir, tmp_path, monkeypatch, defect):
+    from test_export_gate import _confirmed_ban_with_unmapped_carrier
+    from stage_manifest import write_stage_manifest
+    _warning_only_candidate(good_release_dir, score=75 if defect == 'numeric_catalog_score' else None,
+        verdict='NOT_SCORED' if defect == 'unscored_catalog' else 'BLOCKED',
+        status='not_scored' if defect == 'unscored_catalog' else 'suppressed_safety')
+    enriched, scored = _confirmed_ban_with_unmapped_carrier()
+    enriched['dsld_id'] = scored['dsld_id'] = 'ID00000'
+    if defect == 'unverified_source':
+        scored['safety_decision']['policy_basis']['policy_verification_status'] = 'needs_review'
+    if defect == 'missing_source':
+        enriched['label_source_rows'] = []
+    products = tmp_path / 'products'
+    for stage, payload, suffix in [('enrich', enriched, 'enriched'), ('score', scored, 'scored')]:
+        directory = products / f'output_Test_{suffix}' / suffix
+        directory.mkdir(parents=True)
+        path = directory / f'{suffix}_batch_1.json'
+        path.write_text(json.dumps([payload]))
+        write_stage_manifest(directory, stage, [path], run_id='blocked-carrier-audit')
+    monkeypatch.setattr(sys, 'argv', ['audit_identity_integrity.py', '--products-dir', str(products),
+        '--export-dir', str(good_release_dir)])
+    assert identity_audit.main() == (0 if defect is None else 1)
