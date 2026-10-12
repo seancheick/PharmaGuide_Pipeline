@@ -9,6 +9,16 @@ from enhanced_normalizer import EnhancedDSLDNormalizer
 
 DATA=Path(__file__).resolve().parents[1]/'data'
 
+def test_hpmcp_polymer_cas_is_not_imiquimod():
+    # Manufacturer HPMCP description: CAS 9050-31-1, HP-50/55/55S.
+    # Live PubChem resolves old CAS 99011-02-6 to imiquimod CID57469.
+    entry = rows('other_ingredients')['NHA_HYPROMELLOSE_PHTHALATE']
+    assert entry['external_ids']['cas'] == '9050-31-1'
+    result = InactiveIngredientResolver().resolve('Hydroxypropyl Methylcellulose Phthalate')
+    assert result.matched_rule_id == 'NHA_HYPROMELLOSE_PHTHALATE'
+    assert result.identifiers['external_ids']['cas'] == '9050-31-1'
+    assert result.identifiers['external_ids']['pubchem_cid'] is None
+
 def test_hpmcp_exact_derivative_beats_plain_hypromellose_group():
     normalizer = EnhancedDSLDNormalizer()
     name = 'Hydroxypropyl Methylcellulose Phthalate'
