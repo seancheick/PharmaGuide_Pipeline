@@ -134,7 +134,11 @@ class CanonicalIdentityRegistry:
         standard = self.standard_names.get((source_db, canonical_id), "")
         if source_db != "other_ingredients" or not re.search(r"\bextract\b", standard, re.I):
             return True
-        return self.literal_identity_matches(value, canonical_id)
+        # Recognition may retain an authored non-scoring preparation beside
+        # a higher-priority IQM primary owner. Both are literal source owners;
+        # preferred-index priority is not proof that the preparation is absent.
+        return any(canonical_id in self.candidates_index.get(self._key(label), ())
+                   for label in (value, strip_label_identity_qualifiers(str(value or ""))))
 
     def canonicalize(
         self,
