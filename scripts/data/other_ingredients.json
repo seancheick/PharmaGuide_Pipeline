@@ -4,7 +4,7 @@
     "purpose": "inactive_ingredient_classification",
     "schema_version": "5.4.3",
     "last_updated": "2026-10-12",
-    "total_entries": 732,
+    "total_entries": 736,
     "functional_roles_field": {
       "added_in": "5.1.0",
       "type": "string[]",
@@ -24625,6 +24625,94 @@
       "functional_roles": [
         "filler"
       ]
+    },
+    {
+      "id": "NHA_CANNABIDIOL",
+      "standard_name": "Cannabidiol",
+      "aliases": [
+        "cannabidiol",
+        "CBD"
+      ],
+      "category": "active_pending_relocation",
+      "is_additive": false,
+      "allergen": false,
+      "is_active_only": true,
+      "notes": "Direct named cannabidiol identity only. Hemp, hemp seed oil, broad-spectrum mixtures and cannabidiolic acid do not establish this identity. Named recognition does not prove purity or an individual dose. Identity content verified2026-10-12 against live PubChem and GSRS. No form rating, efficacy or safety clearance. Existing banned-substance owner retains its independent block. Source: https://pubchem.ncbi.nlm.nih.gov/compound/644019",
+      "common_uses": [
+        "label identity recognition"
+      ],
+      "last_updated": "2026-10-12",
+      "external_ids": {
+        "pubchem_cid": 644019,
+        "cas": "13956-29-1",
+        "unii": "19GBJ60SN5"
+      },
+      "functional_roles": []
+    },
+    {
+      "id": "NHA_SULBUTIAMINE",
+      "standard_name": "Sulbutiamine",
+      "aliases": [
+        "sulbutiamine"
+      ],
+      "category": "active_pending_relocation",
+      "is_additive": false,
+      "allergen": false,
+      "is_active_only": true,
+      "notes": "Sulbutiamine identity only; distinct from thiamine, benfotiamine and sulbutiamine hydrochloride. No vitamin B1 equivalence is assigned. Identity content verified2026-10-12 against live PubChem and GSRS. No form rating, efficacy or safety clearance. Existing banned-substance owner retains its independent block. Source: https://pubchem.ncbi.nlm.nih.gov/compound/3002120",
+      "common_uses": [
+        "label identity recognition"
+      ],
+      "last_updated": "2026-10-12",
+      "external_ids": {
+        "pubchem_cid": 3002120,
+        "cas": "3286-46-2",
+        "unii": "42NCM1BW43"
+      },
+      "functional_roles": []
+    },
+    {
+      "id": "NHA_METHYLDIAZIRINOL",
+      "standard_name": "Methyldiazirinol",
+      "aliases": [
+        "3,3-Azo-17a-Methyl-5a-Androstan-17b-Ol"
+      ],
+      "category": "active_pending_relocation",
+      "is_additive": false,
+      "allergen": false,
+      "is_active_only": true,
+      "notes": "Exact printed steroid chemistry on NIH DSLD33358; no marketing or brand-name alias. The label chemical name matches the source structure. Identity content verified2026-10-12 against live PubChem and GSRS. No form rating, efficacy or safety clearance. Existing banned-substance owner retains its independent block. Source: https://pubchem.ncbi.nlm.nih.gov/compound/112500385",
+      "common_uses": [
+        "label identity recognition"
+      ],
+      "last_updated": "2026-10-12",
+      "external_ids": {
+        "pubchem_cid": 112500385,
+        "cas": "2429-17-6",
+        "unii": "7AA03AP597"
+      },
+      "functional_roles": []
+    },
+    {
+      "id": "NHA_DIMETHANDROSTENOL",
+      "standard_name": "Dimethandrostenol",
+      "aliases": [
+        "2, 17a-Dimethyl-17b-Hydroxy-5a-Androst-2-Ene"
+      ],
+      "category": "active_pending_relocation",
+      "is_additive": false,
+      "allergen": false,
+      "is_active_only": true,
+      "notes": "Exact printed steroid chemistry on NIH DSLD33360; no marketing or brand-name alias. The label specifies the matching 2,17alpha-dimethyl-5alpha-androst-2-en-17beta-ol structure. Identity content verified2026-10-12 against live PubChem. No form rating, efficacy or safety clearance. Existing banned-substance owner retains its independent block. Source: https://pubchem.ncbi.nlm.nih.gov/compound/17311",
+      "common_uses": [
+        "label identity recognition"
+      ],
+      "last_updated": "2026-10-12",
+      "external_ids": {
+        "pubchem_cid": 17311,
+        "cas": "2527-18-6"
+      },
+      "functional_roles": []
     }
   ]
 }

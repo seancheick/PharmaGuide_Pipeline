@@ -6501,14 +6501,15 @@ class SupplementEnricherV3:
                 if cleaner_declared_total:
                     continue
                 if (
-                    not source_label
+                    (not source_label or ingredient.get("raw_category") == "fatty acid")
                     and ingredient.get("cleaner_row_role") == "active_scorable"
                     and ingredient.get("score_eligible_by_cleaner") is True
                     and self._has_valid_therapeutic_dose(ingredient)[0]
                     # The canonical identity owner already resolved this
-                    # exact DSLD active row. A generic standardized name such
-                    # as "Fiber" cannot reclassify that owned identity as a
-                    # Nutrition Facts total. Do not rematch the display name
+                    # exact DSLD active row. Neither a generic standardized
+                    # name nor an explicitly classified discrete fatty acid
+                    # can reclassify that owned identity as a nutrition total.
+                    # Nutrition rollups remain cleaner-excluded. Do not rematch the display name
                     # here: that would create a second identity decision.
                     and bool(str(ingredient.get("canonical_id") or "").strip())
                     and ingredient.get("canonical_source_db")

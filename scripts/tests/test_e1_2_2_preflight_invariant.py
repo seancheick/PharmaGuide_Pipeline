@@ -44,7 +44,7 @@ if str(ROOT) not in sys.path:
 
 # Keep historical snapshots unchanged; this dated baseline records the reviewed
 # native canary contract after the clinical registry correction batch.
-BASELINE_DIR = ROOT / "reports" / "baseline_pre_e1_2_2" / "clinical_registry_20261012"
+BASELINE_DIR = ROOT / "reports" / "baseline_pre_e1_2_2" / "mapping_identity_20261012"
 REBUILD_DIR = ROOT / "reports" / "canary_rebuild"
 
 # Fields E1.2.2 is explicitly permitted to ADD (not mutate). Any other
