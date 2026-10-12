@@ -22,6 +22,8 @@ def _install_batch_dependencies(tmp_path):
     (scripts_dir / "python_env.sh").write_text(
         PYTHON_ENV_PATH.read_text(encoding="utf-8"), encoding="utf-8"
     )
+    if not (scripts_dir / "release_full.sh").exists():
+        (scripts_dir / "release_full.sh").write_text("#!/bin/bash\nexit 0\n")
     (scripts_dir / "tests").mkdir(exist_ok=True)
     (scripts_dir / "preflight.py").write_text(
         "import sys\n"
@@ -170,7 +172,7 @@ def test_batch_runner_propagates_snapshot_failure_and_skips_release(tmp_path):
     release_marker = tmp_path / "release-ran"
     release = scripts_dir / "release_full.sh"
     release.write_text(
-        f"#!/bin/bash\ntouch '{release_marker}'\n",
+        f"#!/bin/bash\n[[ \"$1\" == --preflight-only ]] && exit 0\ntouch '{release_marker}'\n",
         encoding="utf-8",
     )
     snapshot.chmod(snapshot.stat().st_mode | stat.S_IXUSR)
@@ -317,3 +319,23 @@ def test_full_batch_refreshes_stale_product_submissions_before_snapshot(tmp_path
     assert combined_output.index("Product Submissions") < combined_output.index(
         "snapshot-ok"
     )
+
+
+def test_batch_full_run_refuses_release_prerequisites_before_preparation_or_brands(tmp_path):
+    dataset_root = tmp_path / "data"
+    (dataset_root / "ExampleBrand").mkdir(parents=True)
+    _install_batch_dependencies(tmp_path)
+    scripts = tmp_path / "scripts"
+    (scripts / "release_full.sh").write_text(
+        "#!/bin/bash\n[[ \"$1\" == --preflight-only ]] || exit 90\necho release-prerequisite-refused\nexit 42\n"
+    )
+    (scripts / "run_pipeline.py").write_text("print('brand-must-not-run')\n")
+    runner = tmp_path / "batch_run_all_datasets.sh"
+    runner.write_text(SCRIPT_PATH.read_text())
+    result = subprocess.run(["bash", str(runner)], capture_output=True, text=True,
+                            env={**os.environ, "PHARMAGUIDE_DATASET_ROOT": str(dataset_root)})
+    output = result.stdout + result.stderr
+    assert result.returncode != 0
+    assert "release-prerequisite-refused" in output
+    assert "aggregate-preparation-reached" not in output
+    assert "brand-must-not-run" not in output

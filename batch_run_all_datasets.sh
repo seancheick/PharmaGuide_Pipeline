@@ -210,6 +210,24 @@ SUMMARY_FILE="products/reports/batch_run_summary_$(date +%Y%m%d_%H%M%S).txt"
     echo ""
 } > "$SUMMARY_FILE"
 
+# Refuse predictable publishing prerequisites before preparation or any brand.
+# release_full owns these checks; it repeats them at publication because state
+# can change while the corpus runs. Output-dependent accuracy gates stay final.
+RELEASE_ARGS=()
+[ "$RELEASE_SKIP_PRODUCT_IMAGES" = "1" ] && RELEASE_ARGS+=(--skip-product-images)
+[ "$RELEASE_SKIP_SUPABASE" = "1" ]    && RELEASE_ARGS+=(--skip-supabase)
+[ "$RELEASE_SKIP_FLUTTER" = "1" ]     && RELEASE_ARGS+=(--skip-flutter)
+[ "$RELEASE_SUPABASE_DRY_RUN" = "1" ] && RELEASE_ARGS+=(--supabase-dry-run)
+[ -n "$RELEASE_FLUTTER_REPO" ]        && RELEASE_ARGS+=(--flutter-repo "$RELEASE_FLUTTER_REPO")
+
+if [ "$PIPELINE_ONLY" != "1" ] && [ "${SKIP_SNAPSHOT:-0}" != "1" ] \
+    && [ "${SKIP_RELEASE:-0}" != "1" ] && [ "$SKIP_RELEASE_FLAG" != "1" ]; then
+    if ! bash "$SCRIPTS_DIR/release_full.sh" --preflight-only "${RELEASE_ARGS[@]}" 2>&1 | tee -a "$SUMMARY_FILE"; then
+        echo "STOP: release prerequisites failed before corpus work. Fix the reported prerequisite and rerun this command."
+        exit 1
+    fi
+fi
+
 # A full corpus run must first exercise every reviewed canary through current
 # Clean/Enrich/Score. Checking yesterday's stored scores cannot reveal today's
 # code/data changes. This check is read-only and runs before any brand or release.
@@ -449,12 +467,6 @@ echo ""
 # every step decides for itself whether it has work. After
 # rebuild_dashboard_snapshot.sh runs, the catalog is fresh in dist/, and
 # release_full's step 1+2 detection skips both. No --skip-assemble needed.
-RELEASE_ARGS=()
-[ "$RELEASE_SKIP_PRODUCT_IMAGES" = "1" ] && RELEASE_ARGS+=(--skip-product-images)
-[ "$RELEASE_SKIP_SUPABASE" = "1" ]    && RELEASE_ARGS+=(--skip-supabase)
-[ "$RELEASE_SKIP_FLUTTER" = "1" ]     && RELEASE_ARGS+=(--skip-flutter)
-[ "$RELEASE_SUPABASE_DRY_RUN" = "1" ] && RELEASE_ARGS+=(--supabase-dry-run)
-[ -n "$RELEASE_FLUTTER_REPO" ]        && RELEASE_ARGS+=(--flutter-repo "$RELEASE_FLUTTER_REPO")
 
 if bash "$RELEASE_SCRIPT" "${RELEASE_ARGS[@]}" 2>&1 | tee -a "$SUMMARY_FILE"; then
     echo -e "${GREEN}✓ Full release pipeline completed${NC}"
