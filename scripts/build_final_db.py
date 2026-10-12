@@ -7829,7 +7829,10 @@ def build_detail_blob(
                 row
                 for row in rows
                 if isinstance(row, dict)
-                and row.get("ul_gate_eligible") is True
+                and (
+                    row.get("ul_gate_eligible") is True
+                    or safe_dict(row.get("dose_data_quality")).get("status") == "unresolved_unit"
+                )
                 and row.get("dose_role") != "form_component"
             ]
 
