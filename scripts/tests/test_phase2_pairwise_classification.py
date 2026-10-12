@@ -36,8 +36,9 @@ BY_ID = {e["id"]: e for e in PAIRS}
 def test_every_pair_classified_with_valid_enums():
     # 133 since 2026-09-21 (DSI_BETABLOCK_MELATONIN retired to the depletion
     # owner); 132 since 2026-09-22 (DSI_DIURETICS_POTASSIUM retired: a second
-    # owner of the potassium-sparing diuretic pair).
-    assert len(PAIRS) == 132, f"expected 132 reviewed pairs, found {len(PAIRS)}"
+    # owner of the potassium-sparing diuretic pair). Sean approved retirement
+    # of the unsupported EPO/anticonvulsant pair on 2026-10-12: 131 remain.
+    assert len(PAIRS) == 131, f"expected 131 reviewed pairs, found {len(PAIRS)}"
     assert len(BY_ID) == len(PAIRS), "pairwise interaction ids must be unique"
     bad = []
     for e in PAIRS:
@@ -66,12 +67,12 @@ def test_warfarin_vitamin_k_is_presence_despite_applies_to():
     assert e.get("materiality") == "presence"         # our authored axis wins
 
 
-def test_fishoil_vitamin_e_is_dose_dependent():
-    """The named Phase-3 target: fish oil + high-dose vitamin E is a floorable
-    additive-bleeding pair (the actual floor value is Phase-3 work)."""
+def test_fishoil_vitamin_e_has_no_unverified_suppression_boundary():
+    """ODS does not establish a fish-oil/vitamin-E combination cutoff."""
     e = BY_ID["DSI_FISHOIL_VITE"]
     assert e.get("direction") == "harmful"
-    assert e.get("materiality") == "dose_dependent"
+    assert e.get("materiality") == "presence"
+    assert e.get("dose_threshold") is None
 
 
 def test_vitamin_e_vitamin_k_is_not_a_safety_pair():

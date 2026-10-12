@@ -108,6 +108,9 @@ HISTORY_KEYS = {"change_log", "previous_citation", "swap_reason", "literature_re
                 "citation_review_note", "top_pubmed_pmids", "verification"}
 
 FILE_CONFIGS = [
+    {"file": "drug_classes.json", "map_key": "classes", "id_field": "_key",
+     "topic_fields": ["display_name", "description", "member_names"],
+     "sources_field": "__none__", "scan_all": True},
     {
         "file": "timing_rules.json",
         "array_key": "timing_rules",

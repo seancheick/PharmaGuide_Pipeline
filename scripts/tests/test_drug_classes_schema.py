@@ -26,6 +26,9 @@ import pytest
 DRUG_CLASSES_PATH = Path(__file__).resolve().parent.parent / "data" / "drug_classes.json"
 
 EXPECTED_CLASSES = {
+    "class:opioids",
+    "class:fluconazole_sensitive_statins",
+    "class:cyp3a4_metabolized_statins",
     "class:statins",
     "class:ssris",
     "class:beta_blockers",
@@ -242,6 +245,14 @@ def test_class_sorted_deterministically(classes, class_id):
 @pytest.mark.parametrize("class_id", sorted(EXPECTED_CLASSES))
 def test_class_atc_codes_non_empty(classes, class_id):
     codes = classes[class_id]["atc_codes"]
+    # Explicit curated subsets have no single ATC parent matching their scope.
+    # Broad ATC fallbacks would reintroduce the false-positive members; exact
+    # membership and negative controls are pinned in the presence-source review.
+    if class_id in {"class:opioids", "class:fluconazole_sensitive_statins", "class:cyp3a4_metabolized_statins"}:
+        assert codes == []
+        assert classes[class_id]["rxclass_id"] is None
+        assert classes[class_id]["notes"]
+        return
     assert isinstance(codes, list) and codes, f"{class_id}: atc_codes missing or empty"
 
 

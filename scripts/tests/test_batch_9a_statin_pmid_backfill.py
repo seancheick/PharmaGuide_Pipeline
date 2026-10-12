@@ -94,8 +94,7 @@ def test_dsi_statins_ryr_canonical_aligned_with_banned_recalled(curated):
 
 # PMID 17701167: "Interaction between a commercially available St. John's wort
 #   product (Movina) and atorvastatin in patients with hypercholesterolemia."
-#   Direct human PK study on SJW + atorvastatin — anchors the CYP3A4-statin
-#   mechanism with patient-level evidence.
+#   Human lipid-response study, not a pharmacokinetic measurement.
 # PMID 31742659: "Clinical relevance of St. John's wort drug interactions
 #   revisited." Updated review confirming the clinically relevant induction
 #   profile that drove the original SJW labeling guidance.

@@ -4,8 +4,8 @@
     "description": "Drug class expansion map for interaction matching (class:X → RxCUIs)",
     "purpose": "interaction_db_class_expansion",
     "last_updated": "2026-10-12",
-    "total_classes": 40,
-    "total_members": 817,
+    "total_classes": 43,
+    "total_members": 860,
     "data_source_metadata": {
       "sources": [
         "NLM RxClass (ATC)",
@@ -24,7 +24,7 @@
       "live_command": "python3 scripts/api_audit/seed_drug_classes.py --live"
     },
     "usage": "Referenced by build_interaction_db.py when expanding class:X agents at build time. Missing class → blocks build.",
-    "total_entries": 40
+    "total_entries": 43
   },
   "classes": {
     "class:statins": {
@@ -2190,6 +2190,125 @@
         "N05AN01"
       ],
       "notes": "RxNorm identifies 6448 as the active ingredient lithium. Live RxClass ATC N05AN membership contains that ingredient with direct source N05AN01. This membership selects the existing lithium profile vocabulary; it does not restore antipsychotic membership. Verified 2026-10-12."
+    },
+    "class:opioids": {
+      "display_name": "Opioids",
+      "description": "Curated opioid agonist and partial/mixed agonist ingredients used for analgesia, cough suppression, anesthesia or opioid use disorder.",
+      "member_rxcuis": [
+        "480",
+        "17933",
+        "1819",
+        "1841",
+        "2670",
+        "3290",
+        "22713",
+        "23088",
+        "4166",
+        "4337",
+        "3304",
+        "5489",
+        "3423",
+        "236913",
+        "6754",
+        "6761",
+        "6813",
+        "7052",
+        "7238",
+        "32009",
+        "2392230",
+        "7676",
+        "7804",
+        "7814",
+        "7894",
+        "8001",
+        "8119",
+        "8143",
+        "33431",
+        "8354",
+        "8785",
+        "73032",
+        "56795",
+        "787390",
+        "10597",
+        "10689"
+      ],
+      "member_names": [
+        "alfentanil",
+        "anileridine",
+        "buprenorphine",
+        "butorphanol",
+        "codeine",
+        "dextromoramide",
+        "dezocine",
+        "dihydrocodeine",
+        "ethylmorphine",
+        "fentanyl",
+        "heroin",
+        "hydrocodone",
+        "hydromorphone",
+        "levomethadone",
+        "meperidine",
+        "meptazinol",
+        "methadone",
+        "morphine",
+        "nalbuphine",
+        "normethadone",
+        "oliceridine",
+        "opium",
+        "oxycodone",
+        "oxymorphone",
+        "papaveretum",
+        "pentazocine",
+        "phenazocine",
+        "phenoperidine",
+        "pholcodine",
+        "pirinitramide",
+        "propoxyphene",
+        "remifentanil",
+        "sufentanil",
+        "tapentadol",
+        "tilidine",
+        "tramadol"
+      ],
+      "rxclass_id": null,
+      "atc_codes": [],
+      "notes": "Live RxNorm IN identities and RxClass N02A/N01AH/R05DA/N07BC membership checked 2026-10-12. Explicit curated members: excludes opioid antagonists, nonopioid antitussives and nonopioid sleep medicines. FDA benzodiazepine warning: https://www.fda.gov/drugs/drug-safety-and-availability/fda-requiring-boxed-warning-updated-improve-safe-use-benzodiazepine-drug-class"
+    },
+    "class:fluconazole_sensitive_statins": {
+      "display_name": "Fluconazole-sensitive statins",
+      "description": "Statins with relevant CYP3A4 or CYP2C9 metabolism for the curated fluconazole interaction.",
+      "member_rxcuis": [
+        "83367",
+        "41127",
+        "6472",
+        "36567"
+      ],
+      "member_names": [
+        "atorvastatin",
+        "fluvastatin",
+        "lovastatin",
+        "simvastatin"
+      ],
+      "rxclass_id": null,
+      "atc_codes": [],
+      "notes": "Fluconazole label names atorvastatin, simvastatin and fluvastatin; lovastatin membership is a CYP3A4-based inference. Pravastatin and rosuvastatin excluded. Exact IN identities and metabolism labels checked 2026-10-12. https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=737e0fac-a2d2-4053-a0d7-edbfb6248f69"
+    },
+    "class:cyp3a4_metabolized_statins": {
+      "display_name": "CYP3A4-metabolized statins",
+      "description": "Atorvastatin, simvastatin and lovastatin for the curated St. John’s wort interaction.",
+      "member_rxcuis": [
+        "83367",
+        "6472",
+        "36567"
+      ],
+      "member_names": [
+        "atorvastatin",
+        "lovastatin",
+        "simvastatin"
+      ],
+      "rxclass_id": null,
+      "atc_codes": [],
+      "notes": "Human simvastatin/atorvastatin evidence plus lovastatin CYP3A4-based inference. Exact IN identities and metabolism labels checked 2026-10-12. https://pubmed.ncbi.nlm.nih.gov/15260917/ https://pubmed.ncbi.nlm.nih.gov/17701167/"
     }
   }
 }
