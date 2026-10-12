@@ -12304,11 +12304,11 @@
           "schema_version": "1.0.0",
           "evidence_level": "moderate",
           "score_supported": true,
-          "rationale": "A randomized human crossover directly compared calcium HMB with HMB free acid, establishing calcium HMB as the reference form while showing higher exposure for the free-acid form.",
+          "rationale": "The 2011 crossover found higher relative exposure for the tested free-acid gel. The 2024 fed capsule comparison found higher exposure for calcium HMB. These preparation-specific results do not establish a universal free-acid ranking or exact ordinal calibration.",
           "review": {
             "status": "source_verified",
-            "by": "PharmaGuide evidence audit",
-            "date": "2026-08-18"
+            "by": "Codex preparation-specific primary-source review",
+            "date": "2026-10-12"
           },
           "references_structured": [
             {
@@ -12332,20 +12332,39 @@
               ],
               "verification_source": "pubmed_eutils",
               "verified_on": "2026-08-18"
+            },
+            {
+              "type": "pubmed",
+              "authority": "NCBI PubMed",
+              "pmid": "38564019",
+              "doi": "10.1007/s00726-023-03369-z",
+              "title": "Superior bioavailability of the calcium salt form of β-hydroxy-β-methylbutyrate compared with the free acid form",
+              "url": "https://pubmed.ncbi.nlm.nih.gov/38564019/",
+              "published_date": "2024-04-02",
+              "publication_types": [
+                "Journal Article"
+              ],
+              "evidence_grade": "human_crossover",
+              "retracted": false,
+              "supports_claims": [
+                "preparation_specific_comparative_oral_bioavailability"
+              ],
+              "verification_source": "europepmc_fulltext",
+              "verified_on": "2026-10-12"
             }
           ]
         },
         "form_evidence_axis": "systemic_bioavailability"
       },
       "hmb free acid (hmb-fa)": {
-        "bio_score": 14,
+        "bio_score": 11,
         "absorption": "unknown (specific human absolute fraction not established by reviewed evidence)",
         "consumer_note": "HMB free acid is the acid form of beta-hydroxy beta-methylbutyrate without calcium as the counterion. It is chemically distinct from HMB calcium salt.",
         "consumer_note_review": {
           "by": "Product owner approval",
           "date": "2026-08-08"
         },
-        "notes": "HMB-free-acid delivery format and meal conditions matter. PMID21134325 supports faster relative exposure for its tested gel, not90–95%absolute F or immediate clinical anti-catabolic protection. A fed1g16-participant crossover(PMC10987370) found higher calcium-HMB AUC than free-acid capsules. These trials do not support universal superiority of every free-acid formulation.",
+        "notes": "HMB-free-acid delivery format and meal conditions matter. PMID21134325 supports faster relative exposure for its tested gel, not90–95%absolute F or immediate clinical anti-catabolic protection. A fed1g16-participant crossover(PMC10987370) found higher calcium-HMB AUC than free-acid capsules. These trials do not support universal superiority of every free-acid formulation. Provisional ceiling of 11 approved by Sean Cheick on 2026-10-12; this is policy containment of an unsupported higher rating, not an exact clinical calibration.",
         "aliases": [
           "hmb free acid",
           "hmb-fa",
@@ -12390,13 +12409,13 @@
         },
         "form_evidence": {
           "schema_version": "1.0.0",
-          "evidence_level": "moderate",
-          "score_supported": true,
-          "rationale": "A randomized human crossover found a faster peak and nearly double the exposure for HMB free acid versus calcium HMB, supporting the higher form-quality score.",
+          "evidence_level": "limited",
+          "score_supported": false,
+          "rationale": "The 2011 crossover found higher relative exposure for the tested free-acid gel. The 2024 fed capsule comparison found higher exposure for calcium HMB. These preparation-specific results do not establish a universal free-acid ranking or exact ordinal calibration.",
           "review": {
             "status": "source_verified",
-            "by": "PharmaGuide evidence audit",
-            "date": "2026-08-18"
+            "by": "Codex primary-source review; provisional ceiling approved by Sean Cheick",
+            "date": "2026-10-12"
           },
           "references_structured": [
             {
@@ -12420,6 +12439,25 @@
               ],
               "verification_source": "pubmed_eutils",
               "verified_on": "2026-08-18"
+            },
+            {
+              "type": "pubmed",
+              "authority": "NCBI PubMed",
+              "pmid": "38564019",
+              "doi": "10.1007/s00726-023-03369-z",
+              "title": "Superior bioavailability of the calcium salt form of β-hydroxy-β-methylbutyrate compared with the free acid form",
+              "url": "https://pubmed.ncbi.nlm.nih.gov/38564019/",
+              "published_date": "2024-04-02",
+              "publication_types": [
+                "Journal Article"
+              ],
+              "evidence_grade": "human_crossover",
+              "retracted": false,
+              "supports_claims": [
+                "preparation_specific_comparative_oral_bioavailability"
+              ],
+              "verification_source": "europepmc_fulltext",
+              "verified_on": "2026-10-12"
             }
           ]
         },
@@ -19535,14 +19573,14 @@
         }
       },
       "magnesium taurate (as taurine source)": {
-        "bio_score": 13,
+        "bio_score": 11,
         "absorption": "unknown (specific human absolute fraction not established by reviewed evidence)",
         "consumer_note": "Magnesium taurate combines taurine with magnesium, so the compound supplies both components.",
         "consumer_note_review": {
           "by": "Product owner approval",
           "date": "2026-08-08"
         },
-        "notes": "Magnesium taurate supplies chemically associated magnesium and taurine. The McCarty1996 rationale was a hypothesis paper, not a measured human comparison; it does not establish87.5%F or a synergistic clinical benefit. Exact taurine delivery and human comparative ranking remain unresolved.",
+        "notes": "Magnesium taurate supplies chemically associated magnesium and taurine. The McCarty1996 rationale was a hypothesis paper, not a measured human comparison; it does not establish87.5%F or a synergistic clinical benefit. Exact taurine delivery and human comparative ranking remain unresolved. Provisional ceiling of 11 approved by Sean Cheick on 2026-10-12; this is policy containment of an unsupported higher rating, not an exact clinical calibration.",
         "aliases": [
           "taurine with magnesium",
           "taurine magnesium complex",
@@ -20497,7 +20535,7 @@
         }
       },
       "nitrosigine (arginine silicate inositol)": {
-        "bio_score": 14,
+        "bio_score": 11,
         "absorption": "unknown (specific human absolute fraction not established by reviewed evidence)",
         "absorption_structured": {
           "value": null,
@@ -20510,7 +20548,7 @@
           "by": "Product owner approval",
           "date": "2026-08-08"
         },
-        "notes": "Inositol-stabilized arginine silicate is a defined preparation. PMID26504409/PMC4603712 studied ten men in a single-arm1500mg14-day experiment, not a randomized HCl comparison. Within-product plasma rise does not establish75%absolute F, greater-than70%HCl exposure or demonstrated unique human arginase inhibition. Clinical and PK endpoints require separate appraisal.",
+        "notes": "Inositol-stabilized arginine silicate is a defined preparation. PMID26504409/PMC4603712 studied ten men in a single-arm1500mg14-day experiment, not a randomized HCl comparison. Within-product plasma rise does not establish75%absolute F, greater-than70%HCl exposure or demonstrated unique human arginase inhibition. Clinical and PK endpoints require separate appraisal. Provisional ceiling of 11 approved by Sean Cheick on 2026-10-12; this is policy containment of an unsupported higher rating, not an exact clinical calibration.",
         "dosage_importance": 1.0,
         "aliases": [
           "nitrosigine",
@@ -71757,7 +71795,7 @@
           "by": "Product owner approval",
           "date": "2026-08-08"
         },
-        "notes": "Zea mays var. purple (Poaceae) cob extract. Peruvian/Andean origin. Active constituents: cyanidin-3-glucoside (C3G) anthocyanin plus other polyphenols. EVIDENCE IS THIN: single small RCT (Finkel 2013, J. Evidence-Based Complementary & Alternative Medicine, DOI 10.1177/2156587213482942) — double-blind placebo-controlled crossover n=30 Peruvian adults, 300 mg purple corn extract (18 mg anthocyanin) daily × 3 weeks, SBP 139→130.7 mm Hg [clinical_review — single small RCT at HALF the Solgar 550 mg dose; cannot extrapolate]. No Cochrane review. NO authoritative NCCIH page for purple corn or anthocyanin supplements. NO NIH ODS factsheet for purple corn (ODS only defines anthocyanin class). NO FDA color additive listing for purple corn under 21 CFR §73 (the only Zea mays color listed is §73.315 yellow corn endosperm oil, restricted to chicken feed). NO EFSA opinion. SAFETY: 'No individual reported any adverse effects from taking the purple corn extract capsule' (Finkel 2013); class-level anthocyanin safety acceptable [clinical_review]. Pregnancy/pediatric: no dedicated extract-dose data. Clinical efficacy and safety do not establish comparative form-delivery quality; applicable delivery evidence remains unresolved. DISTINCT from existing anthocyanins IQM parent (compound class) — purple corn extract is NOT aliased to anthocyanins because the Solgar label does not declare anthocyanin standardization.",
+        "notes": "Zea mays var. purple (Poaceae) cob extract. Peruvian/Andean origin. Active constituents: cyanidin-3-glucoside (C3G) anthocyanin plus other polyphenols. LIMITED EXTRACT-SPECIFIC EVIDENCE: the cited small RCT (Finkel 2013, J. Evidence-Based Complementary & Alternative Medicine, DOI 10.1177/2156587213482942) — double-blind placebo-controlled crossover n=30 Peruvian adults, 300 mg purple corn extract (18 mg anthocyanin) daily × 3 weeks, SBP 139→130.7 mm Hg [clinical_review — this extract RCT at HALF the Solgar 550 mg dose; cannot extrapolate]. No Cochrane review. NO authoritative NCCIH page for purple corn or anthocyanin supplements. NO NIH ODS factsheet for purple corn (ODS only defines anthocyanin class). NO FDA color additive listing for purple corn under 21 CFR §73 (the only Zea mays color listed is §73.315 yellow corn endosperm oil, restricted to chicken feed). NO EFSA opinion. SAFETY: 'No individual reported any adverse effects from taking the purple corn extract capsule' (Finkel 2013); class-level anthocyanin safety acceptable [clinical_review]. Pregnancy/pediatric: no dedicated extract-dose data. Clinical efficacy and safety do not establish comparative form-delivery quality; applicable delivery evidence remains unresolved. DISTINCT from existing anthocyanins IQM parent (compound class) — purple corn extract is NOT aliased to anthocyanins because the Solgar label does not declare anthocyanin standardization.",
         "aliases": [
           "purple corn",
           "purple corn extract",

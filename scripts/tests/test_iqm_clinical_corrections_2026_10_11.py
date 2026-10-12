@@ -185,3 +185,25 @@ def test_all_hemp_form_notes_exclude_unrelated_batch_citations():
         for unrelated in ("11120446", "12571654", "7491892", "Sea buckthorn", "Fenugreek", "Bioflavonoids"):
             assert unrelated.lower() not in row["notes"].lower()
     assert [row["bio_score"] for row in forms.values()] == [13, 12, 9, 8]
+
+
+@pytest.mark.parametrize("parent,form", [
+    ("hmb", "hmb free acid (hmb-fa)"),
+    ("taurine", "magnesium taurate (as taurine source)"),
+    ("l_arginine", "nitrosigine (arginine silicate inositol)"),
+])
+def test_approved_provisional_form_ceiling_is_not_clinical_calibration(parent, form):
+    record = _data()[parent]["forms"][form]
+    assert record["bio_score"] == 11
+    assert "provisional" in record["notes"].lower()
+    assert "clinical calibration" in record["notes"].lower()
+
+
+def test_hmb_evidence_cannot_generalize_gel_exposure_to_all_free_acid_preparations():
+    forms = _data()["hmb"]["forms"]
+    for form in forms.values():
+        rationale = form["form_evidence"]["rationale"]
+        assert "gel" in rationale.lower()
+        assert "capsule" in rationale.lower()
+        assert "universal" in rationale.lower()
+    assert forms["hmb free acid (hmb-fa)"]["form_evidence"]["score_supported"] is False

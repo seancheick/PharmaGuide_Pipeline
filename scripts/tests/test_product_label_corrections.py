@@ -125,7 +125,7 @@ REQUIRED_ENTRY_FIELDS = (
     "provenance_tag",
 )
 
-ALLOWED_SCORING_DISPOSITIONS = {"source_descriptor"}
+ALLOWED_SCORING_DISPOSITIONS = {"source_descriptor", "unresolved_unit"}
 
 
 def test_every_correction_has_reviewer_provenance(overrides):
@@ -523,12 +523,19 @@ def test_unmatched_drug_tokens_policy_is_documented(overrides):
 
 
 @pytest.mark.parametrize("dsld_id", ["31063", "801", "312980", "28976", "28980"])
-def test_maximum_nutrition_molybdenum_unit_matches_official_label(overrides, dsld_id):
+def test_maximum_nutrition_molybdenum_conflict_is_not_a_verified_unit_correction(overrides, dsld_id):
     entry = overrides["corrections"].get(dsld_id)
-    assert entry, "Official label prints75mcg, while DSLD JSON transcribes75mg"
+    assert entry, "Preserve the source conflict: printed75mg versus100%DV"
     assert entry["raw_ingredient_text"] == "Molybdenum"
     assert entry["corrected_ingredient_text"] == "Molybdenum"
     assert entry["raw_quantity_unit"] == "mg"
-    assert entry["corrected_quantity_unit"] == "mcg"
-    assert "quantity.unit" in entry["correction_fields"]
+    if dsld_id in {"31063", "801"}:
+        assert entry["corrected_quantity_unit"] is None
+        assert entry["scoring_disposition"] == "unresolved_unit"
+        assert entry["raw_quantity_value"] == 75
+        assert entry["correction_fields"] == ["scoring_disposition"]
+    else:
+        # Other exact-label corrections retain their independently reviewed units.
+        assert entry["corrected_quantity_unit"] == "mcg"
+        assert "quantity.unit" in entry["correction_fields"]
     assert f"https://api.ods.od.nih.gov/dsld/s3/pdf/{dsld_id}.pdf" in entry["sources"]

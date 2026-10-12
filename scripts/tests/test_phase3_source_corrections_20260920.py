@@ -8,8 +8,9 @@ physiological plausibility.
 
 What this file guards:
 
-1. The three E2 Vitamin A unit defects really are repaired, and the quantity
-   is untouched (unit-only corrections).
+1. Verified E2 Vitamin A units are repaired without changing quantities.
+   The October12-reviewed Nutricost conflicts preserve printed units and
+   receive unresolved-dose containment, never an inferred microgram rewrite.
 2. The three E2 rows whose printed denomination could NOT be established to
    audit grade carry NO correction at all. A plausibility-based mg/mcg rewrite
    is exactly what the reviewed-source contract forbids.
@@ -34,10 +35,11 @@ _CORRECTIONS_PATH = os.path.join(
     _ROOT, "scripts", "data", "curated_overrides", "product_label_corrections.json"
 )
 
-# E2 unit defects and the unit each printed label establishes.
+# E2 source dispositions: independently established unit, or unresolved
+# printed-unit conflict (None) after October12 original-label review.
 E2_UNIT_CORRECTIONS = {
-    "223563": ("mg RAE", "mcg RAE"),
-    "223572": ("mg RAE", "mcg RAE"),
+    "223563": ("mg RAE", None),
+    "223572": ("mg RAE", None),
     "328644": ("mg RAE", "mcg RAE"),
 }
 
@@ -128,12 +130,17 @@ def test_engine_fix_actually_reconciles_the_flagged_shape(dsld_id):
 
 
 @pytest.mark.parametrize("dsld_id", sorted(E2_UNIT_CORRECTIONS))
-def test_e2_unit_correction_changes_only_the_unit(corrections, dsld_id):
+def test_e2_verified_units_and_reviewed_conflicts_remain_source_scoped(corrections, dsld_id):
     raw_unit, corrected_unit = E2_UNIT_CORRECTIONS[dsld_id]
     entry = corrections[dsld_id]
     assert entry["raw_quantity_unit"] == raw_unit
     assert entry["corrected_quantity_unit"] == corrected_unit
-    assert entry["correction_fields"] == ["quantity.unit"]
+    if dsld_id in {"223563", "223572"}:
+        assert entry["scoring_disposition"] == "unresolved_unit"
+        assert entry["correction_fields"] == ["scoring_disposition"]
+        assert entry["raw_quantity_value"] == 900
+    else:
+        assert entry["correction_fields"] == ["quantity.unit"]
     assert "corrected_quantity_value" not in entry, (
         f"{dsld_id}: the printed source establishes the unit, not a different "
         f"quantity — the amount must not be rewritten"
@@ -220,7 +227,7 @@ def test_every_new_correction_carries_reviewer_provenance(corrections, dsld_id):
         "provenance_tag",
     ):
         assert entry.get(field), f"{dsld_id} missing {field!r}"
-    assert entry["review_date"] == "2026-09-20"
+    assert entry["review_date"] == ("2026-10-12" if dsld_id in {"223563", "223572"} else "2026-09-20")
     assert entry["scope"] == "dsld_id_only"
     assert all(
         str(url).startswith("https://") for url in entry["sources"]
@@ -273,15 +280,15 @@ def _quantity_row(dsld_id: str, name: str, quantity, unit, forms=None):
     }
 
 
-def test_cleaner_applies_the_e2_unit_correction(normalizer):
+def test_cleaner_preserves_reviewed_e2_unit_conflict(normalizer):
     product = _quantity_row("223563", "Vitamin A", 900, "mg RAE")
     rows = normalizer._apply_label_corrections(
         product["ingredientRows"], "223563"
     )
     row = rows[0]
-    assert row["_pre_correction_quantity_unit"] == "mg RAE"
+    assert row["_label_scoring_disposition"] == "unresolved_unit"
     assert row["quantity"][0]["quantity"] == 900, "the printed quantity is unchanged"
-    assert row["quantity"][0]["unit"] == "mcg RAE"
+    assert row["quantity"][0]["unit"] == "mg RAE"
 
 
 def test_cleaner_restores_the_serrapeptase_activity(normalizer):

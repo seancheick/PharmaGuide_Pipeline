@@ -30,7 +30,7 @@ IQM = json.loads((Path(__file__).resolve().parents[1] / 'data' / 'ingredient_qua
 
 # parent -> (lowest eligible named bio_score, the named form the old fallback invented)
 DERIVED = {
-    'hmb': (13, 'hmb calcium salt (hmb-ca)'),
+    'hmb': (11, 'hmb calcium salt (hmb-ca)'),
     'l_leucine': (14, 'l-leucine powder'),
     'acacia_catechu': (9, 'acacia catechu wood and bark extract'),
     'chlorophyll': (3, 'natural chlorophyll'),
@@ -172,7 +172,7 @@ def test_the_enricher_fallback_names_no_form(enricher, parent, label):
 @pytest.mark.parametrize('label', ['HMB', 'HMB Powder', 'beta-hydroxy beta-methylbutyrate'])
 def test_a_bare_hmb_label_names_no_salt(enricher, label):
     match = enricher._match_quality_map(label, label, enricher.databases['ingredient_quality_map'])
-    assert (match['canonical_id'], match['form_id'], match['bio_score']) == ('hmb', None, 12.0)
+    assert (match['canonical_id'], match['form_id'], match['bio_score']) == ('hmb', None, 10.0)
 
 
 def test_the_parents_generic_form_is_not_a_reading_of_a_named_token(enricher):

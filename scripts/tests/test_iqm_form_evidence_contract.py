@@ -1008,11 +1008,14 @@ def test_shipped_iqm_carries_no_nested_axis_and_full_canonical_coverage():
     # class-equivalence evidence (62 -> 66); BCAA unspecified rose to 14 under the
     # unknown-form floor. Q38 then lowered eight unsupported authored unspecified
     # Excellent forms to their evidence ceiling, leaving 232 Excellent forms total.
-    assert coverage.canonical == 66
+    assert coverage.canonical == 65
     # 2026-09-25: 18 legacy unspecified forms fell below Excellent under the
     # unknown-form floor and left the backlog (250 -> 232, 195 -> 177).
     # Source-qualified corrections remove three Excellent ratings: liposomal
     # taurine 12->11, Suntheanine 13->10, and the same35624 strain 15->7.
+    # October12 approved ceilings remove HMB-FA from canonical Excellent
+    # coverage and taurine-magnesiumtaurate/Nitrosigine from outstanding
+    # Excellent coverage (229 -> 226). This is containment, not clearance.
     # Frozen initial backlog remains unchanged; only outstanding keys shrink.
-    assert coverage.total == 229
+    assert coverage.total == 226
     assert sorted(coverage.missing) == sorted(load_backlog_file(BACKLOG_PATH))

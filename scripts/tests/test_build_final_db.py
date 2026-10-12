@@ -6871,3 +6871,26 @@ def test_share_copy_preserves_unavailable_assessment_boundary(status, phrase):
     assert "No harmful additives" not in share["share_highlights"]
     assert "Vegan" in share["share_highlights"]
     assert "/100" not in share["share_title"]
+
+
+def test_detail_blob_retains_reviewed_unit_conflict_as_unresolved_exposure():
+    enriched = make_enriched()
+    conflict = {
+        "ingredient": "Molybdenum", "canonical_id": "molybdenum",
+        "quantity": 75, "unit": "mg", "converted_quantity": None,
+        "dose_data_quality": {"status": "unresolved_unit", "reason": "label_unit_conflict"},
+        "ul_gate_eligible": False, "ul_gate_ineligible_reason": "label_unit_conflict",
+        "skip_ul_check": True, "skip_ul_reason": "label_unit_conflict",
+        "ul_assessment_status": "indeterminate", "pct_ul": None,
+        "warnings": ["Dose needs manufacturer confirmation."],
+    }
+    for key in ["analyzed_ingredients", "ingredients_with_rda", "adequacy_results"]:
+        enriched["rda_ul_data"][key] = [conflict]
+    blob = build_detail_blob(enriched, make_scored())
+    for key in ["analyzed_ingredients", "ingredients_with_rda", "adequacy_results"]:
+        assert len(blob["rda_ul_data"][key]) == 1
+        row = blob["rda_ul_data"][key][0]
+        assert row["dose_data_quality"]["status"] == "unresolved_unit"
+        assert row["converted_quantity"] is None
+        assert row["ul_assessment_status"] == "indeterminate"
+        assert row["warnings"]
