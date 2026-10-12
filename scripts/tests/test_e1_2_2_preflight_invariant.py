@@ -17,14 +17,17 @@ that points to the exact dsld_id + field.
 Runs against the nine reviewed canary baseline blobs + their fresh rebuilds.
 
 The active baseline is the reviewed October 12 native-owner rebuild of the same
-nine frozen raw labels. The historical October11/September/April blobs remain untouched. The October12
-refresh changes only1036 after the separately merged green-tea form correction:
-a generic15mg leaf extract declares no EGCG percentage, so no50%EGCG claim
-or7.5mg marker credit is allowed. The other eight baselines are unchanged.
+nine frozen raw labels. Historical October 11, September and April blobs remain untouched.
 Same-input c7→current captures classified the intended clinical warning changes
 and established that legacy full-pipeline fields were already absent from the
 native canary owner before this batch. Snapshot hashes live beside the active
 fixtures; future output changes require another source-qualified review.
+The October 12 refresh preserves eight identical blobs. In 1036, integrated
+PR111 removes an unsupported 50% EGCG form and marker estimate; the label only
+specifies 15 mg leaf extract. Formulation changes from 13.1 to 13.0, the public
+whole-number total stays unchanged, and EGCG dose assessment becomes unknown.
+Warning severity and subjects stay pinned. This mapping batch also supplies
+1036's primary maltodextrin identity without changing its amount.
 """
 
 from __future__ import annotations

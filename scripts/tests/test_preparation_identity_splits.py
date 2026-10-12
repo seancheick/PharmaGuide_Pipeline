@@ -453,7 +453,8 @@ def test_declared_alginic_acid_does_not_assert_sodium_salt(pipeline, group, unii
     row["uniiCode"] = unii
     enriched = pipeline(_raw_product(990132, [row]))
     active = next(r for r in enriched["activeIngredients"] if r["name"] == "Alginic Acid")
-    assert active.get("canonical_id") is None
+    assert active.get("canonical_id") == "NHA_ALGINIC_ACID"
+    assert active.get("canonical_source_db") == "other_ingredients"
     assert active["quantity"] == 1000
     assert active["unit"] == "mg"
     assert active.get("standardName") == "Alginic Acid"
@@ -486,7 +487,8 @@ def test_esophageal_guardian_declared_acid_retains_source_facts(pipeline, pid, s
     }
     enriched = pipeline(_raw_product(pid, [row]))
     active = next(r for r in enriched["activeIngredients"] if r["name"] == "Alginic Acid")
-    assert active.get("canonical_id") is None
+    assert active.get("canonical_id") == "NHA_ALGINIC_ACID"
+    assert active.get("canonical_source_db") == "other_ingredients"
     assert active["raw_source_text"] == "Alginic Acid"
     assert active["quantity"] == 1000 and active["unit"] == "mg"
     assert active["raw_taxonomy"]["uniiCode"] == "8C3Z4148WZ"

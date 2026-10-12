@@ -3,8 +3,8 @@
     "description": "Non-standardized whole herb powders and simple botanical extracts without guaranteed marker compounds. Used for basic ingredient mapping. For premium standardized extracts with marker compounds, see standardized_botanicals.json.",
     "purpose": "ingredient_mapping",
     "schema_version": "5.2.0",
-    "last_updated": "2026-10-11",
-    "total_entries": 556,
+    "last_updated": "2026-10-12",
+    "total_entries": 558,
     "functional_roles_field": {
       "added_in": "5.1.0",
       "type": "string[]",
@@ -16550,6 +16550,37 @@
       },
       "cui": "C1053466",
       "cui_note": "Species concept, not exact fruit-powder preparation.",
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
+    },
+    {
+      "id": "calendula",
+      "standard_name": "Calendula",
+      "aliases": [
+        "calendula"
+      ],
+      "category": "herb",
+      "notes": "Identity-only recognition of the label-declared Calendula botanical. Nature’s Way Horse Chestnut lists Calendula flower100mg; its Canadian label identifies Calendula officinalis. Generic names do not establish plant part, extract ratio or standardization. Distinct from Tagetes erecta (marigold/lutein source). No absorption rating or efficacy claim assigned.",
+      "last_updated": "2026-10-12",
+      "external_ids": {},
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
+    },
+    {
+      "id": "apple_powder_extract",
+      "standard_name": "Apple Powder Extract",
+      "aliases": [
+        "Oxyphyte Apple powder extract",
+        "Oxyphyte Apple Powder Extract"
+      ],
+      "category": "fruit",
+      "notes": "Identity-only recognition of the apple powder extract preparation printed in NIH DSLD17226 (Super Greens Fruit Blend). Oxyphyte is the label’s brand preparation; the label does not disclose polyphenol composition, extract ratio or an individual ingredient dose. It is not apple fiber, a specific polyphenol, or evidence of a premium form.",
+      "last_updated": "2026-10-12",
+      "external_ids": {},
       "functional_roles": [],
       "attributes": {
         "source_origin": "plant"

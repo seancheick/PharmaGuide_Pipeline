@@ -4,7 +4,7 @@
     "purpose": "inactive_ingredient_classification",
     "schema_version": "5.4.3",
     "last_updated": "2026-10-12",
-    "total_entries": 729,
+    "total_entries": 732,
     "functional_roles_field": {
       "added_in": "5.1.0",
       "type": "string[]",
@@ -8590,27 +8590,32 @@
         "organic broad-spectrum hemp (aerial part) extract",
         "organic broad-spectrum hemp aerial part extract",
         "Broad Spectrum Hemp Oil",
-        "broad spectrum hemp oil"
+        "broad spectrum hemp oil",
+        "organic Hemp Oil extract",
+        "Hemp Oil extract",
+        "Hemp Oil (aerial plant parts) extract"
       ],
       "category": "active_pending_relocation",
       "is_additive": false,
       "additive_type": "functional",
       "allergen": false,
-      "notes": "Hemp extract containing various phytocannabinoids. Legal hemp contains <0.3% THC. Regulatory status varies by state. Source review: exact chemical/preparation identifiers are withheld where they do not represent this label scope; raw composition and clinical applicability remain unresolved.",
+      "notes": "Identity-only recognition of a label-declared hemp extract preparation. Distinct from hemp seed oil and isolated cannabidiol. Broad-spectrum wording does not disclose individual cannabinoid amounts or establish CBD/THC absence, regulatory compliance, efficacy, or safety. Composition and clinical applicability remain unresolved.",
       "common_uses": [
         "relaxation",
         "sleep support",
         "stress relief"
       ],
-      "last_updated": "2026-03-13",
+      "last_updated": "2026-10-12",
       "external_ids": {
         "unii": null
       },
-      "rxcui": "1788846",
+      "rxcui": null,
       "gsrs": null,
-      "cui": "C1504050",
+      "cui": null,
       "functional_roles": [],
-      "is_active_only": true
+      "is_active_only": true,
+      "rxcui_note": "RxNav 1788846 resolves to generic hemp, not this extracted preparation; no preparation-specific RxNorm identifier assigned.",
+      "cui_note": "No exact concept assigned to the unspecified hemp-extract mixture."
     },
     {
       "id": "NHA_HEMP_ISOLATE_99",
@@ -24561,6 +24566,65 @@
       "external_ids": {},
       "functional_roles": [],
       "is_active_only": true
+    },
+    {
+      "id": "NHA_PHYTOCANNABINOIDS",
+      "standard_name": "Phytocannabinoids (Mixture)",
+      "aliases": [
+        "Broad Spectrum Phytocannabinoids"
+      ],
+      "category": "active_pending_relocation",
+      "is_additive": false,
+      "allergen": false,
+      "is_active_only": true,
+      "notes": "Identity-only recognition of a label-declared phytocannabinoid mixture. The combined mass does not identify individual cannabinoids or their doses. Broad-spectrum wording is not evidence of CBD or THC absence. No efficacy, quality rating, or safety assurance is assigned. NIH DSLD labels213013/213015 disclose5mg within50mg hemp extract;213005/213011 name the mixture as a preparation descriptor.",
+      "common_uses": [
+        "label identity recognition"
+      ],
+      "last_updated": "2026-10-12",
+      "external_ids": {},
+      "functional_roles": []
+    },
+    {
+      "id": "NHA_ALGINIC_ACID",
+      "standard_name": "Alginic Acid",
+      "aliases": [
+        "alginic acid"
+      ],
+      "category": "active_pending_relocation",
+      "is_additive": false,
+      "allergen": false,
+      "is_active_only": true,
+      "notes": "Identity-only recognition of alginic acid, a polymer distinct from sodium alginate. NIH DSLD232011/328450 and the Life Extension Esophageal Guardian label disclose1000mg. GSRS8C3Z4148WZ resolves exactly to ALGINIC ACID (verified2026-10-12). No comparative form rating or clinical efficacy inferred.",
+      "common_uses": [
+        "label identity recognition"
+      ],
+      "last_updated": "2026-10-12",
+      "external_ids": {
+        "unii": "8C3Z4148WZ"
+      },
+      "functional_roles": []
+    },
+    {
+      "id": "NHA_MALTODEXTRIN",
+      "standard_name": "Maltodextrin",
+      "aliases": [
+        "maltodextrin"
+      ],
+      "category": "filler",
+      "is_additive": true,
+      "allergen": false,
+      "notes": "Primary identity of the unspecified-source glucose polymer maltodextrin. Distinct from resistant maltodextrin and named plant-source preparations. GSRS7CVR7L4A2D resolves exactly to MALTODEXTRIN (verified2026-10-12). Recognition provides no therapeutic or form-quality credit; the existing harmful-additive owner separately assesses concerns. A blend total is not its constituent dose. Common bulking/filler function verified against Cargill https://www.cargill.com/food-bev/na/maltodextrin (2026-10-12), consistent with the existing harmful-additive role owner. This common function does not establish the manufacturer’s purpose or constituent dose in an individual product.",
+      "common_uses": [
+        "label identity recognition"
+      ],
+      "last_updated": "2026-10-12",
+      "external_ids": {
+        "unii": "7CVR7L4A2D"
+      },
+      "functional_roles": [
+        "filler"
+      ]
     }
   ]
 }
