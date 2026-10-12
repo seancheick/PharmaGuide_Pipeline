@@ -1164,7 +1164,6 @@ def test_nordic_softgels_inactive_unmapped_labels_map(
         ("Green Peppers", "Green Bell Pepper"),
         ("Gardenia fruit extract", "Gardenia"),
         ("Glehnia root extract", "Glehnia"),
-        ("Apricot seed extract", "Apricot"),
         ("Methyliberine", "Methylliberine"),
         ("CoreBiome Tributyrin", "Butyric Acid"),
         ("OpiTAC Glutathione", "Glutathione"),
@@ -1498,7 +1497,6 @@ def test_wild_crafted_prefix_normalization_maps(normalizer, name):
         ("Oil of Peppermint"),
         ("China Wax"),
         ("Pea Starch"),
-        ("Methacrylic Acid"),
         ("Alginic acid sodium salt"),
         ("Vegetable Magnesium Silicate"),
         ("Dextrates"),
@@ -1929,7 +1927,6 @@ def test_high_confidence_alias_batch_maps(normalizer, name, expected_substring):
         ("Celery 10:1 extract", "Celery"),
         # Bitter Orange moved to banned_recalled_ingredients (RISK_BITTER_ORANGE)
         ("Huperzia serrata leaf extract", "Toothed Clubmoss"),
-        ("Cape Aloe leaf latex extract", "Aloe"),
         ("Bitter Melon P.E.", "Bitter Melon"),
         ("Daucus sativus", "Carrot"),
         ("Parsnip", "Parsnip"),
@@ -1941,7 +1938,6 @@ def test_high_confidence_alias_batch_maps(normalizer, name, expected_substring):
         ("Squaw Vine", "Squaw Vine"),
         ("Acai berry 4:1 extract", "Acai"),
         ("Acai std. concentrate", "Acai"),
-        ("European Vervain", "Vervain"),
         ("Vervain whole herb powder", "Vervain"),
         ("Parsley aerial parts juice powder", "Parsley"),
         ("Andrographis EP80 (Andrographis paniculata) leaf extract", "Andrographis"),
@@ -3398,3 +3394,22 @@ def test_named_sodium_alginate_aliases_keep_salt_identity(normalizer, name):
     standard_name, mapped, _ = normalizer._enhanced_ingredient_mapping(name, [])
     assert mapped is True
     assert standard_name == "Sodium Alginate"
+
+
+@pytest.mark.parametrize("raw_name,valid_name,valid_identity", [
+    ("Apricot seed extract", "Apricot", "Apricot"),
+    ("Cape Aloe leaf latex extract", "Aloe", "Aloe Vera"),
+    ("European Vervain", "Blue Vervain", "Blue Vervain"),
+    ("Methacrylic Acid", "Methacrylic Acid Copolymer", "Enteric Coating"),
+])
+def test_source_scope_does_not_collapse_distinct_parts_species_or_polymers(
+    normalizer, raw_name, valid_name, valid_identity
+):
+    # No verified matching owner: retain the raw identity; safety is separate.
+    identity, mapped, _ = normalizer._enhanced_ingredient_mapping(raw_name, [])
+    assert mapped is False
+    assert identity == raw_name
+    assert identity != valid_identity
+    identity, mapped, _ = normalizer._enhanced_ingredient_mapping(valid_name, [])
+    assert mapped is True
+    assert identity == valid_identity

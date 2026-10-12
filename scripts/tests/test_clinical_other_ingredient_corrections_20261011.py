@@ -5,8 +5,34 @@ import pytest
 from inactive_ingredient_resolver import InactiveIngredientResolver
 from enrich_supplements_v3 import SupplementEnricherV3
 from build_final_db import build_structured_allergens
+from enhanced_normalizer import EnhancedDSLDNormalizer
 
 DATA=Path(__file__).resolve().parents[1]/'data'
+
+def test_hpmcp_polymer_cas_is_not_imiquimod():
+    # Manufacturer HPMCP description: CAS 9050-31-1, HP-50/55/55S.
+    # Live PubChem resolves old CAS 99011-02-6 to imiquimod CID57469.
+    entry = rows('other_ingredients')['NHA_HYPROMELLOSE_PHTHALATE']
+    assert entry['external_ids']['cas'] == '9050-31-1'
+    result = InactiveIngredientResolver().resolve('Hydroxypropyl Methylcellulose Phthalate')
+    assert result.matched_rule_id == 'NHA_HYPROMELLOSE_PHTHALATE'
+    assert result.identifiers['external_ids']['cas'] == '9050-31-1'
+    assert result.identifiers['external_ids']['pubchem_cid'] is None
+
+def test_hpmcp_exact_derivative_beats_plain_hypromellose_group():
+    normalizer = EnhancedDSLDNormalizer()
+    name = 'Hydroxypropyl Methylcellulose Phthalate'
+    standard, mapped, _ = normalizer._map_inactive_name_prefer_other(
+        name, ingredient_group='Hypromellose')
+    assert mapped is True
+    assert standard == 'Hypromellose Phthalate'
+    owner = InactiveIngredientResolver()
+    result = owner.resolve(name)
+    assert result.matched_rule_id == 'NHA_HYPROMELLOSE_PHTHALATE'
+    assert result.identifiers.get('external_ids', {}).get('pubchem_cid') is None
+    assert not result.is_banned
+    assert owner.resolve('Hydroxypropyl Methylcellulose').matched_rule_id == 'PII_HPMC'
+    assert owner.resolve('Diethyl Phthalate').matched_rule_id == 'BANNED_ADD_PHTHALATES'
 
 def rows(name):
     return {r['id']:r for r in json.loads((DATA/(name+'.json')).read_text())[name]}

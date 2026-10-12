@@ -3,8 +3,8 @@
     "purpose": "Reviewed GHOST-SUSPECT findings from verify_backed_studies_citations.py --strict",
     "description": "Reviewed GHOST-SUSPECT findings from verify_backed_studies_citations.py --strict. A suspect blocks the release gate until it is reviewed here with a rationale that states why the live PubMed record does support the entry. Removing an entry re-arms the gate for that citation.",
     "schema_version": "5.0.0",
-    "last_updated": "2026-08-23",
-    "total_entries": 2
+    "last_updated": "2026-10-12",
+    "total_entries": 3
   },
   "reviewed": [
     {
@@ -22,6 +22,14 @@
       "rationale": "False positive of the title-only word-overlap heuristic. The live PubMed abstract's Methods section explicitly identifies the tested intervention as BCM-95 500 mg twice daily. This entry is scoped to the BCM-95/CurcuGreen formulation and explicitly disclaims evidence for the finished Life Extension retail product, so the PMID supports the authored formulation-level claim.",
       "reviewed_by": "pipeline citation audit 2026-08-23",
       "reviewed_at": "2026-08-23"
+    },
+    {
+      "pmid": "42211211",
+      "entry_id": "INGR_LUTEIN",
+      "live_title": "Retraction Notice.",
+      "rationale": "Primary PubMed identifies this as the retraction of lutein/zeaxanthin adolescent-myopia review PMID41573009 (DOI10.18240/ijo.2026.02.21). The corrected entry cites the notice only to exclude that original from affirmative evidence. Remaining PMID28661438 concerns a macular-carotenoid combination in 48 young adults, not isolated lutein or adolescent myopia prevention. A generic notice title is a title-heuristic miss; no affirmative credit or whole-record clearance is granted.",
+      "reviewed_by": "agent source-content review (not clinician-reviewed)",
+      "reviewed_at": "2026-10-12"
     }
   ]
 }

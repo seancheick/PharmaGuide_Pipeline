@@ -3,8 +3,8 @@
     "purpose": "Known citation-content backlog for verify_all_citations_content.py --baseline",
     "description": "Citations the first full-coverage run (2026-09-26) flagged: 'mismatch' means the live PubMed record shares no identity word with its entry (a heuristic; many are wrong papers, some are naming misses), 'not_found' means the PMID does not resolve. The release gate fails on any not_found and on any mismatch NOT listed here, so a new bad citation cannot hide in this backlog. Fix entries one at a time via /data-fix and delete each from this list in the same commit (register Q22). The 10 medication_depletions items are needs_revision records the app suppresses.",
     "schema_version": "5.0.0",
-    "last_updated": "2026-10-02",
-    "total_entries": 253,
+    "last_updated": "2026-10-12",
+    "total_entries": 261,
     "source_run": "verify_all_citations_content.py --report (after e349a2b7: every citation in scripts/data read)",
     "summary_by_file": {
       "timing_rules.json": {
@@ -3757,6 +3757,153 @@
       "live_title": "Severe Illness Associated with Eating Mushroom-Containing Chocolate Products - United States, January-October 2024.",
       "identity_words": [],
       "note": "Q57b 2026-10-02: correct citation, identity-word naming miss: MMWR Diamond Shruumz outbreak; muscimol found in products per full text, read"
+    },
+    {
+      "file": "clinically_relevant_strains.json",
+      "entry_id": "STRAIN_LACTIS_HN019",
+      "pmid": "40327349",
+      "status": "mismatch",
+      "live_title": "Clarification for Late Trial Registration and Additional Study Limitations.",
+      "identity_words": [
+        "primary",
+        "strain",
+        "transit",
+        "complete",
+        "endpoint",
+        "subsp.",
+        "improved",
+        "require",
+        "movement",
+        "5674"
+      ],
+      "note": "2026-10-12 source-qualified heuristic adjudication: Correction-only context: primary PMC12056561 corrects pediatric three-strain trial40085083, explains late registration and additional limitations. Comment details unresolved; not independent HN019 efficacy evidence. Whole-record clinical review remains separate."
+    },
+    {
+      "file": "ingredient_quality_map.json",
+      "entry_id": "tannins",
+      "pmid": "11285327",
+      "status": "mismatch",
+      "live_title": "Pharmacokinetics of gallic acid and its relative bioavailability from tea in healthy humans.",
+      "identity_words": [
+        "hydrolyzable",
+        "tannins",
+        "extract",
+        "total",
+        "content",
+        "tannin",
+        "unspecified"
+      ],
+      "note": "2026-10-12 source-qualified heuristic adjudication: Gallic-acid tea/tablet relative exposure1.06, not absolute tannin-class F. Current row explicitly disclaims extrapolation and retains null absolute absorption. Whole-record clinical review remains separate."
+    },
+    {
+      "file": "ingredient_quality_map.json",
+      "entry_id": "turkey_tail",
+      "pmid": "23921761",
+      "status": "mismatch",
+      "live_title": "5-Fluorouracil, mitomycin-c, and polysaccharide-k versus uracil-ftorafur and polysaccharide-K as adjuvant chemoimmunotherapy for patients with locally advanced gastric cancer with curative resection.",
+      "identity_words": [
+        "whole",
+        "glucan",
+        "turkey",
+        "extract",
+        "fruiting",
+        "powder",
+        "trametes",
+        "versicolor",
+        "tail",
+        "tails"
+      ],
+      "note": "2026-10-12 source-qualified heuristic adjudication: Oral PSK3g/day in both chemotherapy groups, not IV-only PSK. Cannot isolate PSK benefit or establish generic turkey-tail/PSP efficacy or absolute F; current standardized-extract notes retain these boundaries. Whole-record clinical review remains separate."
+    },
+    {
+      "file": "ingredient_quality_map.json",
+      "entry_id": "turkey_tail",
+      "pmid": "20229169",
+      "status": "mismatch",
+      "live_title": "PSK may suppress CD57(+) T cells to improve survival of advanced gastric cancer patients.",
+      "identity_words": [
+        "whole",
+        "glucan",
+        "turkey",
+        "extract",
+        "fruiting",
+        "powder",
+        "trametes",
+        "versicolor",
+        "tail",
+        "tails"
+      ],
+      "note": "2026-10-12 source-qualified heuristic adjudication: Oral PSK+UFT vsUFT in21stage-III gastric-cancer patients. Does not establish generic turkey-tail/PSP efficacy or absolute F; current notes retain this limitation. Whole-record clinical review remains separate."
+    },
+    {
+      "file": "harmful_additives.json",
+      "entry_id": "ADD_SODIUM_TRIPOLYPHOSPHATE",
+      "pmid": "doi:10.2903/j.efsa.2019.5674",
+      "status": "mismatch",
+      "live_title": "Re-evaluation of phosphoric acid-phosphates - di-, tri- and polyphosphates (E 338-341, E 343, E 450-452) as food additives and the safety of proposed extension of use.",
+      "identity_words": [
+        "stpp",
+        "triphosphate",
+        "e451i",
+        "e451",
+        "anhydrous",
+        "sodium",
+        "tripolyphosphate",
+        "pentasodium"
+      ],
+      "note": "2026-10-12 source-qualified heuristic adjudication: Regulatory group source covers E450-452 including tripolyphosphateE451. Corrected group ADI40mg phosphorus/kg/day from all sources is not additive mass and excludes moderate/severe renal impairment. No product-specific safety clearance. Whole-record clinical review remains separate."
+    },
+    {
+      "file": "banned_recalled_ingredients.json",
+      "entry_id": "BANNED_ADD_SYNTHETIC_ESTROGENS",
+      "pmid": "doi:10.1210/er.2015-1010",
+      "status": "mismatch",
+      "live_title": "EDC-2: The Endocrine Society's Second Scientific Statement on Endocrine-Disrupting Chemicals.",
+      "identity_words": [
+        "estrogens",
+        "estrogen",
+        "artificial",
+        "estradiol",
+        "diethylstilbestrol",
+        "xenoestrogens",
+        "synthetic",
+        "ethinyl"
+      ],
+      "note": "2026-10-12 source-qualified heuristic adjudication: Endocrine-disruptor review supports corrected heterogeneous compound/exposure context, animal experiments versus observational human associations. Not universal adipose accumulation or supplement legal-status proof. Whole-record clinical review remains separate."
+    },
+    {
+      "file": "proprietary_blends.json",
+      "entry_id": "BLEND_WEIGHT_LOSS",
+      "pmid": "30646238",
+      "status": "mismatch",
+      "live_title": "Unapproved Pharmaceutical Ingredients Included in Dietary Supplements Associated With US Food and Drug Administration Warnings.",
+      "identity_words": [
+        "burner",
+        "loss",
+        "weight",
+        "blends"
+      ],
+      "note": "2026-10-12 source-qualified heuristic adjudication: FDA-warning-selected776products included317weight-loss products. Corrected notes deny market-prevalence/highest-contamination-rate inference; no product-specific adulteration finding. Whole-record clinical review remains separate."
+    },
+    {
+      "file": "ingredient_quality_map.json",
+      "entry_id": "sage",
+      "pmid": "20377818",
+      "status": "mismatch",
+      "live_title": "Effect of aromatherapy on patients with Alzheimer's disease.",
+      "identity_words": [
+        "salvia",
+        "aerial",
+        "extract",
+        "common",
+        "powder",
+        "nexira",
+        "leaf",
+        "unspecified",
+        "officinalis",
+        "parts"
+      ],
+      "note": "2026-10-12 source-qualified disclaimer reference: mixed rosemary/lemon/lavender/orange aromatherapy in 28 elderly dementia patients, not oral sage or Cognivia in healthy adults. Both current parent description and Cognivia notes now expressly reject that attribution. PMID16205659 content remains unresolved, not evidence of absence. This is a reference to an excluded claim, not affirmative efficacy evidence or whole-record clearance."
     }
   ]
 }

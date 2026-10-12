@@ -197,3 +197,20 @@ def test_unsupported_study_dose_tier_does_not_suppress_real_label_warning():
         hits=[hit for alert in profile['ingredient_alerts'] for hit in alert.get('condition_hits',[])+alert.get('drug_class_hits',[]) if hit.get('condition_id',hit.get('drug_class_id'))==target]
         assert hits
         assert all((hit.get('dose_decision') or {}).get('consumer_disposition')!='suppress' for hit in hits), rule_id
+
+
+def test_psyllium_lithium_sources_and_advice_match_actual_medicine():
+    rule = _rules()['RULE_IQM_PSYLLIUM_DIABETES']
+    row = next(r for r in rule['drug_class_rules'] if r['drug_class_id'] == 'lithium')
+    assert row['severity'] == 'monitor'
+    assert row['profile_gate']['requires']['drug_classes_any'] == ['lithium']
+    assert 'https://pubmed.ncbi.nlm.nih.gov/1968148/' in row['sources']
+    assert any('LithicarbFCtab.pdf' in s for s in row['sources'])
+    assert all(s not in row['sources'] for s in ['https://pubmed.ncbi.nlm.nih.gov/9737361/', 'https://pubmed.ncbi.nlm.nih.gov/8636317/'])
+    text = ' '.join(row.get(k, '') for k in ['mechanism', 'action', 'alert_body', 'informational_note']).lower()
+    assert 'thyroid' not in text
+    assert 'levothyroxine' not in text
+    assert 'at least 2 hours' not in text
+    assert 'lithium' in row['alert_body'].lower()
+    assert 'monitor' in row['action'].lower()
+    assert row['alert_headline'] == 'May lower lithium levels'

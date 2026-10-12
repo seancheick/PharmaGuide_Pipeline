@@ -3,7 +3,7 @@
     "description": "Deterministic ingredient-level interaction rules keyed by canonical database identity",
     "purpose": "interaction_alert_rules",
     "schema_version": "6.3.0",
-    "last_updated": "2026-10-11",
+    "last_updated": "2026-10-12",
     "total_entries": 152,
     "structure_note": "One entry per ingredient (or per form-scoped variant). All conditions, drug classes, and dose thresholds for that ingredient are in one object. As of v6.0.0, every sub-rule (condition_rules[], drug_class_rules[], dose_thresholds[], pregnancy_lactation block) carries an explicit profile_gate predicate that consumers MUST evaluate against the user profile before firing the alert.",
     "total_rules": 152,
@@ -6408,15 +6408,15 @@
           "drug_class_id": "lithium",
           "severity": "monitor",
           "evidence_level": "established",
-          "mechanism": "A small study of 3.4 g psyllium found a clinically insignificant change in levothyroxine absorption; other dietary-fiber or wheat-bran reports differ. Do not apply a uniform significant malabsorption claim to every fiber preparation.",
-          "action": "If you take lithium, separate psyllium and high-fiber supplements from your lithium dose by at least 2 hours.",
+          "mechanism": "The lithium product data sheet lists psyllium or ispaghula husk among interactions that may decrease lithium concentrations. PMID 1968148 is a lithium-ispaghula case-report letter with no abstract available; its full clinical details remain unresolved. These sources do not establish a fixed spacing interval.",
+          "action": "Talk to your lithium prescriber before adding or changing psyllium. Arrange serum lithium monitoring as your prescriber advises; do not change or stop prescribed lithium on your own.",
           "sources": [
-            "https://pubmed.ncbi.nlm.nih.gov/9737361/",
-            "https://pubmed.ncbi.nlm.nih.gov/8636317/"
+            "https://pubmed.ncbi.nlm.nih.gov/1968148/",
+            "https://www.medsafe.govt.nz/profs/datasheet/l/LithicarbFCtab.pdf"
           ],
-          "alert_headline": "May reduce lithium absorption",
-          "alert_body": "Fiber preparations may affect oral medicine absorption, but studies differ. Ask your thyroid prescriber about the specific psyllium product, timing and thyroid monitoring.",
-          "informational_note": "Psyllium can interfere with lithium absorption — relevant to anyone on lithium.",
+          "alert_headline": "May lower lithium levels",
+          "alert_body": "Psyllium may decrease lithium concentrations. Talk to your lithium prescriber before adding or changing psyllium and ask about serum lithium monitoring.",
+          "informational_note": "Psyllium may lower lithium levels; discuss monitoring with your prescriber. No fixed spacing interval is established.",
           "profile_gate": {
             "gate_type": "drug_class",
             "requires": {
