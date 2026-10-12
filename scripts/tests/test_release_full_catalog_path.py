@@ -94,3 +94,15 @@ def test_release_moves_the_app_hydration_pin_with_the_bundle() -> None:
     assert source.index(verify) < source.index(add_line)
     assert pin in add_line
     assert pin in status_line
+
+
+def test_release_preflight_only_local_run_never_reaches_artifact_gates():
+    import os
+    import subprocess
+    result = subprocess.run(
+        ["bash", str(SCRIPT), "--preflight-only", "--skip-supabase", "--skip-flutter"],
+        capture_output=True, text=True, env={**os.environ}, timeout=30,
+    )
+    assert result.returncode == 0, result.stdout + result.stderr
+    assert "Release prerequisites passed" in result.stdout
+    assert "Step 1/8" not in result.stdout

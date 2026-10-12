@@ -56,6 +56,9 @@
 #     # Force every step to run (override auto-detect — emergency rebuild):
 #     bash scripts/release_full.sh --force
 #
+#     # Check publishing prerequisites without processing or publishing:
+#     bash scripts/release_full.sh --preflight-only
+#
 #     # Skip cloud/device steps (local-only iteration):
 #     bash scripts/release_full.sh --skip-supabase
 #     bash scripts/release_full.sh --skip-flutter
@@ -110,6 +113,7 @@ fi
 
 FLUTTER_REPO="/Users/seancheick/PharmaGuide ai"
 FORCE=0
+PREFLIGHT_ONLY=0
 SKIP_SUPABASE=0
 SKIP_FLUTTER=0
 SKIP_PRODUCT_IMAGES=0
@@ -123,6 +127,7 @@ SCORING_SNAPSHOT_GATE_RAN=0
 
 while (($# > 0)); do
   case "$1" in
+    --preflight-only)    PREFLIGHT_ONLY=1; shift ;;
     --force)             FORCE=1; shift ;;
     --skip-assemble)     shift ;;  # accepted for backward compat; no-op now
     --skip-supabase)     SKIP_SUPABASE=1; shift ;;
@@ -232,6 +237,17 @@ if (( SKIP_FLUTTER == 0 || (SKIP_SUPABASE == 0 && SUPABASE_DRY_RUN == 0) )); the
   require_manufacturer_penalties_current || exit 1
 else
   skip "Release base check skipped (local-only run: no Supabase upload, no Flutter bundle)"
+fi
+
+# Read-only prerequisite mode is shared with the corpus runner. Final artifact,
+# clinical, change-approval and publication gates still run in a normal release.
+if (( PREFLIGHT_ONLY == 1 )); then
+  if (( SKIP_FLUTTER == 0 )) && [[ ! -x "$FLUTTER_REPO/scripts/import_catalog_artifact.sh" ]]; then
+    err "Flutter import script is missing or not executable: $FLUTTER_REPO/scripts/import_catalog_artifact.sh"
+    exit 1
+  fi
+  ok "Release prerequisites passed; no artifacts rebuilt or published"
+  exit 0
 fi
 
 START_TS=$(date +%s)
