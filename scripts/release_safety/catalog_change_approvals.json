@@ -441,6 +441,59 @@
       ],
       "baseline_sha256": "edfdb110fa2f48adc83723686338a5b0dc026529ed4f055dfe3027f44691e34c",
       "candidate_sha256": "bd21963197ab987204c986dd8485ad602a732386b98d6cc40aa34a4644d97290"
+    },
+    {
+      "reason": "Sean explicitly approved October 12, 2026: hold these four unresolved-identity hemp labels for this release, publish the corrected catalog, and research mappings for the next release. Historical CBD blocks were unsupported; no CBD or seed-oil identity is inferred. All 69 confirmed bans remain findable and blocked. Approval covers only these four removals and exact baseline/candidate hashes; no safety policy or threshold changes.",
+      "approved_by": "Sean",
+      "date": "2026-10-12",
+      "baseline_sha256": "bd21963197ab987204c986dd8485ad602a732386b98d6cc40aa34a4644d97290",
+      "candidate_sha256": "b1b0f30e4d21e26f2a80fcb432ad36781b47aabfb8af6063c7be8b77da90812e",
+      "changes": [
+        {
+          "dsld_id": "213005",
+          "from": {
+            "verdict": "BLOCKED",
+            "tier": null,
+            "score": null
+          },
+          "to": null,
+          "product_name": "Organic Hemp",
+          "why": "left the catalog while showing BLOCKED"
+        },
+        {
+          "dsld_id": "213011",
+          "from": {
+            "verdict": "BLOCKED",
+            "tier": null,
+            "score": null
+          },
+          "to": null,
+          "product_name": "Organic Hemp Mint Flavored",
+          "why": "left the catalog while showing BLOCKED"
+        },
+        {
+          "dsld_id": "213013",
+          "from": {
+            "verdict": "BLOCKED",
+            "tier": null,
+            "score": null
+          },
+          "to": null,
+          "product_name": "Broad Spectrum Hemp+ Recovery",
+          "why": "left the catalog while showing BLOCKED"
+        },
+        {
+          "dsld_id": "213015",
+          "from": {
+            "verdict": "BLOCKED",
+            "tier": null,
+            "score": null
+          },
+          "to": null,
+          "product_name": "Broad Spectrum Hemp+ Stress",
+          "why": "left the catalog while showing BLOCKED"
+        }
+      ]
     }
   ]
 }
