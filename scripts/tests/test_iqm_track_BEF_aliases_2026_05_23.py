@@ -854,7 +854,7 @@ def test_purple_corn_extract_notes_include_required_evidence_markers(iqm):
     notes = form.get("notes", "")
     notes_lower = notes.lower()
     assert "finkel" in notes_lower and "2013" in notes_lower, (
-        "Notes must cite Finkel 2013 by author + year (single available "
+        "Notes must cite Finkel 2013 by author + year (the cited extract-specific "
         "purple-corn human RCT at supplement dose)."
     )
     assert "10.1177/2156587213482942" in notes, (
