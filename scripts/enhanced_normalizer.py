@@ -1691,6 +1691,10 @@ class EnhancedDSLDNormalizer:
                     add_group_exact(alias, botanical_payload)
 
         # PRIORITY 7: Add OTHER INGREDIENTS lookups (safe additives/excipients)
+        iqm_standard_names = {
+            entry.get("standard_name") for entry in self.ingredient_map.values()
+            if isinstance(entry, dict)
+        }
         for key, value in self.other_ingredients_lookup.items():
             # Only add if not already present (higher priorities take precedence)
             if key not in self._fast_exact_lookup:
@@ -1702,8 +1706,18 @@ class EnhancedDSLDNormalizer:
                     "mapped": True,
                     "priority": 7
                 }
+            # A generated lookup key may strip a preparation (extract/oil).
+            # Only authored names can own an exact ingredientGroup fallback.
             add_group_exact(value.get("standard_name", key), self._fast_exact_lookup[key])
-            add_group_exact(key, self._fast_exact_lookup[key])
+            owned_other = self.other_ingredients_exact_lookup.get(
+                self._fast_exact_lookup[key].get("standard_name", "").strip().lower())
+            if not owned_other or self._fast_exact_lookup[key].get("standard_name") in iqm_standard_names:
+                add_group_exact(key, self._fast_exact_lookup[key])
+        for entry in self.other_ingredients.get("other_ingredients", []) or []:
+            for literal in [entry.get("standard_name", ""), *(entry.get("aliases") or [])]:
+                payload = self._fast_exact_lookup.get(self.matcher.preprocess_text(literal), {})
+                if payload.get("standard_name") == entry.get("standard_name"):
+                    add_group_exact(literal, payload)
 
         # PRIORITY 8: Add PROPRIETARY BLENDS lookups
         proprietary_blend_concerns = self.proprietary_blends.get("proprietary_blend_concerns", [])
@@ -3904,6 +3918,33 @@ class EnhancedDSLDNormalizer:
         """Perform the actual ingredient mapping logic"""
         forms = forms or []
         name_lower = name.lower().strip()
+
+        # Lossy preprocessing cannot establish an extracted preparation from
+        # an unspecified oil. Literal curated identities retain precedence;
+        # safety recognition remains independent of this identity decision.
+        candidate = self.other_ingredients_lookup.get(self.matcher.preprocess_text(name), {})
+        if (
+            candidate
+            and not self._canonical_identity_registry.preparation_identity_matches(
+                name, candidate.get("id"), "other_ingredients")
+            and not self._canonical_identity_registry.resolve_verified_preferred(name)
+        ):
+            # An exact source botanical may still be owned independently of
+            # the generated extract alias (e.g. organic black pepper).
+            for literal in [name, *norm_module.descriptor_fallback_candidates(name)]:
+                exact = self._canonical_identity_registry.resolve_verified_preferred(literal)
+                if exact and exact != (candidate.get("id"), "other_ingredients"):
+                    return self._canonical_identity_registry.standard_names[(exact[1], exact[0])], True, forms
+            # A printed whole-plant part can retain its independently authored
+            # botanical owner; it cannot borrow the generated extract alias.
+            for part in self._PLANT_PART_TOKENS:
+                literal = re.sub(r"\s+" + re.escape(part) + r"$", "", name, flags=re.I)
+                if literal == name:
+                    continue
+                exact = self._canonical_identity_registry.resolve_verified_preferred(literal)
+                if exact and exact[1] == "botanical_ingredients":
+                    return self._canonical_identity_registry.standard_names[(exact[1], exact[0])], True, forms
+            return name, False, forms
 
         # P0.5 PRIORITY 1: Check EXPLICIT DYES first (deterministic, bypasses indicator heuristics)
         # Pre-lowercase for matching

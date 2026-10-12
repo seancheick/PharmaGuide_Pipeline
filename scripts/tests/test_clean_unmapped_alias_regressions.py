@@ -3385,8 +3385,11 @@ def test_compound_and_declared_nutrient_keep_their_own_amounts(normalizer, name,
 def test_alginic_acid_does_not_borrow_sodium_salt_alias(normalizer):
     # PII_SODIUM_ALGINATE owns the sodium salt, not the declared acid.
     standard_name, mapped, _ = normalizer._enhanced_ingredient_mapping("Alginic Acid", [])
-    assert mapped is False
+    assert mapped is True
     assert standard_name == "Alginic Acid"
+    assert normalizer._canonical_identity_registry.resolve_verified_preferred("Alginic Acid") == (
+        "NHA_ALGINIC_ACID", "other_ingredients")
+    assert standard_name != "Sodium Alginate"
 
 
 @pytest.mark.parametrize("name", ["Sodium Alginate", "Alginic acid sodium salt"])
@@ -3416,17 +3419,79 @@ def test_source_scope_does_not_collapse_distinct_parts_species_or_polymers(
 
 
 @pytest.mark.parametrize("name", [
-    "Hemp Oil (aerial plant parts) extract", "Hemp Oil extract", "Hemp oil",
+    "Hemp oil",
     "concentrated European Hemp (Cannabis sativa) stalk and seed Oil",
     "VESIsorb Hemp (Cannabis sativa) oil extract", "non-psychotropic hemp oil",
     "Beta-Caryophyllene, Phytocannabinoids, Terpenes",
 ])
-def test_hemp_extract_does_not_borrow_seed_oil_identity(normalizer, name):
+def test_hemp_extract_does_not_borrow_seed_oil_identity(normalizer, enricher, name):
     standard, mapped, forms = normalizer._enhanced_ingredient_mapping(
         name, [], ingredient_group="Hemp oil")
     assert not mapped
     assert standard == name
     assert forms == []
+
+    raw = {"id": "unknown-hemp-preparation", "fullName": name,
+           "ingredientRows": [{"name": name, "ingredientGroup": "Hemp oil",
+               "category": "fat", "quantity": [{"quantity": 50, "unit": "mg"}],
+               "nestedRows": []}], "otheringredients": {"ingredients": []}}
+    row = normalizer.normalize_product(raw)["activeIngredients"][0]
+    assert row["raw_source_text"] == name
+    assert row["canonical_id"] is None
+    assert row["canonical_source_db"] == "unmapped"
+    assert row["quantity"] == 50
+    enriched, _ = enricher.enrich_product(normalizer.normalize_product(raw))
+    iqd = enriched["ingredient_quality_data"]["ingredients"][0]
+    assert iqd["canonical_id"] is None
+    assert iqd["bio_score"] is None
+
+
+@pytest.mark.parametrize("name", ["Hemp Oil (aerial plant parts) extract", "Hemp Oil extract"])
+def test_verified_hemp_extract_has_its_own_unrated_identity(normalizer, name):
+    standard, mapped, forms = normalizer._enhanced_ingredient_mapping(
+        name, [], ingredient_group="Hemp oil")
+    assert mapped
+    assert standard == "Hemp Extract"
+    assert normalizer._canonical_identity_registry.resolve_verified_preferred(name) == (
+        "NHA_HEMP_EXTRACT", "other_ingredients")
+    assert forms == []
+
+
+def test_unrelated_extract_form_cannot_establish_hemp_preparation(normalizer, enricher):
+    standard, mapped, forms = normalizer._enhanced_ingredient_mapping(
+        "Hemp oil", ["Green Tea Extract"], ingredient_group="Hemp oil")
+    assert not mapped
+    assert standard == "Hemp oil"
+    assert forms == ["Green Tea Extract"]
+    raw = {"id": "unrelated-hemp-form", "fullName": "Hemp oil",
+           "ingredientRows": [{"name": "Hemp oil", "ingredientGroup": "Hemp oil",
+               "category": "fat", "quantity": [{"quantity": 50, "unit": "mg"}],
+               "nestedRows": [], "forms": [{"name": "Green Tea Extract"}]}],
+           "otheringredients": {"ingredients": []}}
+    enriched, _ = enricher.enrich_product(normalizer.normalize_product(raw))
+    row = enriched["ingredient_quality_data"]["ingredients"][0]
+    assert row["canonical_id"] is None
+    assert row["bio_score"] is None
+
+
+@pytest.mark.parametrize("forms", [
+    [{"name": "Hemp Oil extract", "percent": 10}],
+    [{"name": "Hemp Oil extract", "quantity": [{"quantity": 5, "unit": "mg"}]}],
+    [{"name": "Hemp Oil extract"}, {"name": "Green Tea Extract"}],
+])
+def test_partial_or_mixed_form_does_not_own_whole_hemp_oil_amount(normalizer, enricher, forms):
+    raw = {"id": "partial-hemp-form", "fullName": "Hemp oil",
+           "ingredientRows": [{"name": "Hemp oil", "ingredientGroup": "Hemp oil",
+               "category": "fat", "quantity": [{"quantity": 50, "unit": "mg"}],
+               "nestedRows": [], "forms": forms}],
+           "otheringredients": {"ingredients": []}}
+    cleaned = normalizer.normalize_product(raw)
+    assert cleaned["activeIngredients"][0]["canonical_id"] is None
+    enriched, _ = enricher.enrich_product(cleaned)
+    row = enriched["ingredient_quality_data"]["ingredients"][0]
+    assert row["canonical_id"] is None
+    assert row["quantity"] == 50
+    assert row["bio_score"] is None
 
 
 @pytest.mark.parametrize("name", ["Hemp Seed Oil", "Cannabis sativa seed oil"])
@@ -3464,10 +3529,13 @@ def test_hemp_label_scope_reaches_public_scored_artifact(normalizer, enricher, n
         assert artifact["quality_score_status"] == "scored"
         assert artifact["quality_score_v4_100"] is not None
     else:
-        assert row.get("canonical_id") != "hemp_seed_oil"
+        assert row["canonical_id"] == "NHA_HEMP_EXTRACT"
+        assert row["canonical_source_db"] == "other_ingredients"
         assert row["bio_score"] is None
-        assert artifact["quality_score_status"] == "not_scored"
-        assert artifact["quality_score_v4_100"] is None
+        assert row["final_form_bio_score"] is None
+        assert artifact["quality_score_status"] == "scored"
+        assert artifact["quality_score_v4_100"] is not None
+        assert not enriched.get("banned_substances", {}).get("has_banned_substance")
 
 
 @pytest.mark.parametrize("percent,marker", [(14, "Polyphenols"), (50, "EGCG"), (30, "EGCG"),

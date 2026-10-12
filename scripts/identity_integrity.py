@@ -122,6 +122,24 @@ class CanonicalIdentityRegistry:
             literal = self.resolve_preferred(strip_label_identity_qualifiers(str(value or "")))
         return literal is not None and literal[0] == canonical_id
 
+    def preparation_identity_matches(
+        self, value: Any, canonical_id: str, source_db: str,
+    ) -> bool:
+        """Require the declared preparation, never a stripped oil or constituent form.
+
+        Whole-material form promotion belongs to the existing structured
+        complete-source-form owner, which retains quantity and composition.
+        Flattened form names cannot establish the identity of the full row.
+        """
+        standard = self.standard_names.get((source_db, canonical_id), "")
+        if source_db != "other_ingredients" or not re.search(r"\bextract\b", standard, re.I):
+            return True
+        # Recognition may retain an authored non-scoring preparation beside
+        # a higher-priority IQM primary owner. Both are literal source owners;
+        # preferred-index priority is not proof that the preparation is absent.
+        return any(canonical_id in self.candidates_index.get(self._key(label), ())
+                   for label in (value, strip_label_identity_qualifiers(str(value or ""))))
+
     def canonicalize(
         self,
         canonical_id: str,
