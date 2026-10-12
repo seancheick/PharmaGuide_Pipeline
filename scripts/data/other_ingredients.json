@@ -3,7 +3,7 @@
     "description": "Other/inactive ingredients database for supplement excipients and additives",
     "purpose": "inactive_ingredient_classification",
     "schema_version": "5.4.3",
-    "last_updated": "2026-10-11",
+    "last_updated": "2026-10-12",
     "total_entries": 729,
     "functional_roles_field": {
       "added_in": "5.1.0",
@@ -9171,7 +9171,8 @@
       "aliases": [
         "hpmc phthalate",
         "hpmcp",
-        "hypromellose phthalate"
+        "hypromellose phthalate",
+        "hydroxypropyl methylcellulose phthalate"
       ],
       "category": "coating",
       "is_additive": true,
