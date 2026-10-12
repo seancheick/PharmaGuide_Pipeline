@@ -1100,3 +1100,21 @@ def test_complete_material_group_cannot_hide_a_known_conflicting_form_name(form_
     assert (decision.canonical_id == "policosanol") is retained
     if retained:
         assert decision.label_display_name == "Sugar Cane Wax Extract"
+
+
+@pytest.mark.parametrize("literal,group", [
+    ("organic Chamomile (flower) extract", "Chamomile (unspecified)"),
+    ("Kelp Thallus Extract", "Kelp"),
+    ("organic Hemp powder", "Hemp"),
+])
+def test_unresolved_identity_keeps_literal_preparation_display(literal, group):
+    decision = resolve_identity(
+        row={"raw_source_text": literal, "name": literal, "ingredientGroup": group},
+        supplied_canonical_id=None,
+        resolve_candidate=lambda value: "generic_parent" if value == group else None,
+    )
+    assert decision.disposition == "identity_conflict"
+    assert decision.canonical_id is None
+    assert decision.scoreable_identity is False
+    assert decision.source_label_name == literal
+    assert decision.label_display_name == normalize_label_display(literal)
