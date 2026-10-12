@@ -3413,3 +3413,58 @@ def test_source_scope_does_not_collapse_distinct_parts_species_or_polymers(
     identity, mapped, _ = normalizer._enhanced_ingredient_mapping(valid_name, [])
     assert mapped is True
     assert identity == valid_identity
+
+
+@pytest.mark.parametrize("name", [
+    "Hemp Oil (aerial plant parts) extract", "Hemp Oil extract", "Hemp oil",
+    "concentrated European Hemp (Cannabis sativa) stalk and seed Oil",
+    "VESIsorb Hemp (Cannabis sativa) oil extract", "non-psychotropic hemp oil",
+    "Beta-Caryophyllene, Phytocannabinoids, Terpenes",
+])
+def test_hemp_extract_does_not_borrow_seed_oil_identity(normalizer, name):
+    standard, mapped, forms = normalizer._enhanced_ingredient_mapping(
+        name, [], ingredient_group="Hemp oil")
+    assert not mapped
+    assert standard == name
+    assert forms == []
+
+
+@pytest.mark.parametrize("name", ["Hemp Seed Oil", "Cannabis sativa seed oil"])
+def test_explicit_hemp_seed_oil_retains_seed_identity(normalizer, name):
+    standard, mapped, _ = normalizer._enhanced_ingredient_mapping(name, [])
+    assert mapped
+    assert standard == "Hemp Seed Oil"
+
+
+@pytest.mark.parametrize("name,is_seed", [
+    ("Hemp Oil (aerial plant parts) extract", False),
+    ("Hemp Oil extract", False),
+    ("Hemp Seed Oil", True),
+    ("Cannabis sativa seed oil", True),
+])
+def test_hemp_label_scope_reaches_public_scored_artifact(normalizer, enricher, name, is_seed):
+    from scoring_v4.scored_artifact import build_scored_artifact
+
+    raw = {
+        "id": "hemp-scope-control", "fullName": "Hemp identity control",
+        "ingredientRows": [{"name": name, "ingredientGroup": "Hemp oil",
+                            "category": "fat", "quantity": [{"quantity": 50, "unit": "mg"}],
+                            "nestedRows": []}],
+        "otheringredients": {"ingredients": []},
+    }
+    enriched, _ = enricher.enrich_product(normalizer.normalize_product(raw))
+    row = enriched["ingredient_quality_data"]["ingredients"][0]
+    artifact = build_scored_artifact(enriched)
+    assert row["quantity"] == 50.0
+    assert row["unit"] == "mg"
+    assert row["raw_source_text"] == name
+    if is_seed:
+        assert row["canonical_id"] == "hemp_seed_oil"
+        assert row["bio_score"] == 8.0
+        assert artifact["quality_score_status"] == "scored"
+        assert artifact["quality_score_v4_100"] is not None
+    else:
+        assert row.get("canonical_id") != "hemp_seed_oil"
+        assert row["bio_score"] is None
+        assert artifact["quality_score_status"] == "not_scored"
+        assert artifact["quality_score_v4_100"] is None
