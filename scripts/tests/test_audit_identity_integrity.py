@@ -268,3 +268,16 @@ def test_enriched_identity_audit_defers_final_label_ledger_contract():
     assert len(records) == 1
     assert records[0].disposition == "clean"
     assert not records[0].failed
+
+
+def test_identity_audit_reuses_export_containment_without_resolving_source_identity():
+    from test_export_gate import _confirmed_ban_with_unmapped_carrier
+    enriched, scored = _confirmed_ban_with_unmapped_carrier()
+    records = audit_product(enriched, scored=scored)
+    carrier = next(r for r in records if r.source_path == 'ingredientRows[0]')
+    assert carrier.failed and carrier.violation == 'unresolved_identity_conflict'
+    assert not carrier.scoreable_identity and carrier.final_canonical is None
+    assert carrier.safety_only_identity
+    scored['safety_decision']['policy_basis']['policy_verification_status'] = 'needs_review'
+    carrier = next(r for r in audit_product(enriched, scored=scored) if r.source_path == 'ingredientRows[0]')
+    assert carrier.failed and not carrier.safety_only_identity

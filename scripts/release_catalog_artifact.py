@@ -539,12 +539,13 @@ def verified_contract_quarantines(input_dir: Path) -> dict[str, tuple[str, ...]]
     return receipts
 
 
-def verified_warning_only_products(input_dir: Path) -> set[str]:
+def verified_warning_only_products(input_dir: Path, *, blocked_only: bool = False) -> set[str]:
     """Prove warning-only publication from the checksum-validated catalog.
 
     A source status flag alone is not containment. Numeric public scores must
     be null in the actual catalog. The retired text display may also carry its
     defined "N/A" sentinel; schemas without the v4 score cannot prove containment.
+    blocked_only restricts proof to actual BLOCKED/UNSAFE suppressed products.
     """
     result = validate_release_candidate(input_dir=input_dir, min_products=1)
     uri = result["db_path"].resolve().as_uri() + "?mode=ro"
@@ -561,10 +562,11 @@ def verified_warning_only_products(input_dir: Path) -> set[str]:
                 " AND (score_display_100_equivalent IS NULL"
                 " OR score_display_100_equivalent='N/A')"
             )
+        unavailable_clause = "" if blocked_only else " OR (verdict='NOT_SCORED' AND quality_score_status='not_scored')"
         return {str(row[0]) for row in conn.execute(
             "SELECT dsld_id FROM products_core WHERE "
             "((verdict IN ('BLOCKED','UNSAFE') AND quality_score_status='suppressed_safety') "
-            "OR (verdict='NOT_SCORED' AND quality_score_status='not_scored')) "
+            + unavailable_clause + ") "
             "AND quality_score_v4_100 IS NULL " + mirror_checks
         )}
 
