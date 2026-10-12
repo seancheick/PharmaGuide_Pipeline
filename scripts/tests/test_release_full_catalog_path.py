@@ -106,3 +106,10 @@ def test_release_preflight_only_local_run_never_reaches_artifact_gates():
     assert result.returncode == 0, result.stdout + result.stderr
     assert "Release prerequisites passed" in result.stdout
     assert "Step 1/8" not in result.stdout
+
+
+def test_release_checks_flutter_main_with_existing_release_base_owner():
+    source = SCRIPT.read_text()
+    publishing = source.split('if (( SKIP_FLUTTER == 0 ||', 1)[1].split('START_TS=', 1)[0]
+    assert 'require_release_base "$FLUTTER_REPO" || exit 1' in publishing
+    assert publishing.index('require_release_base "$FLUTTER_REPO"') < publishing.index('PREFLIGHT_ONLY == 1')

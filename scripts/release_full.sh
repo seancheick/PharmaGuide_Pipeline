@@ -235,6 +235,10 @@ if (( SKIP_FLUTTER == 0 || (SKIP_SUPABASE == 0 && SUPABASE_DRY_RUN == 0) )); the
   require_release_base "$REPO_ROOT" || exit 1
   ok "Release base: clean checkout at origin/main $(git -C "$REPO_ROOT" rev-parse --short HEAD)"
   require_manufacturer_penalties_current || exit 1
+  if (( SKIP_FLUTTER == 0 )); then
+    require_release_base "$FLUTTER_REPO" || exit 1
+    ok "Flutter release base: clean checkout at origin/main"
+  fi
 else
   skip "Release base check skipped (local-only run: no Supabase upload, no Flutter bundle)"
 fi
