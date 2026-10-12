@@ -42,25 +42,10 @@ def test_presence_pairs_carry_no_floor():
             assert not e.get("dose_threshold"), f"{e['id']} presence pair wrongly floored"
 
 
-# October 11 content review removed unsupported suppression floors; other
-# retained floors remain separately source-qualified, not blanket re-approved.
+# October 12 content review removed 15 unsupported suppression floors.
+# Niacin retains a regulatory lipid-modifying-dose qualifier, not universal safety.
 EXPECTED_FLOORED_IDS = {
     'DSI_STATINS_NIACIN',
-    'DSI_SSRI_GINKGO',
-    'DSI_DM_CHROMIUM',
-    'DSI_DM_GYMNEMA',
-    'DSI_NSAID_FISHOIL',
-    'DSI_NSAID_GINKGO',
-    'DSI_BENZO_MELATONIN',
-    'SSI_ZINC_COPPER',
-    'DSI_ANTIPSYCH_MELATONIN',
-    'DSI_ANTICOAG_HORSE_CHESTNUT',
-    'DSI_DM_ASHWAGANDHA',
-    'DSI_SEDATIVES_ASHWAGANDHA',
-    'DSI_ANTIHYP_VITD',
-    'DSI_FISHOIL_VITE',
-    'DSI_FISHOIL_GINKGO',
-    'DSI_MELATONIN_VALERIAN',
 }
 
 def test_only_source_supported_pairs_are_floored():
@@ -73,12 +58,7 @@ def test_only_source_supported_pairs_are_floored():
 
 # Representative floors locked (value+unit) so a later edit can't silently move them.
 EXPECTED = {
-    "DSI_FISHOIL_VITE": (180, "mg"),        # vitamin E bleeding, 400 IU floor normalized conservatively
-    "DSI_DM_CHROMIUM": (200, "mcg"),        # chromium glucose, reused
-    "DSI_SSRI_GINKGO": (120, "mg"),         # ginkgo bleeding, reused
     "DSI_STATINS_NIACIN": (1000, "mg"),     # pharmacologic niacin / statin myopathy
-    "DSI_BENZO_MELATONIN": (5, "mg"),       # melatonin sedation, pair-stated
-    "SSI_ZINC_COPPER": (25, "mg"),           # prolonged supplemental zinc context
 }
 
 

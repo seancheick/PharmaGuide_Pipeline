@@ -2,7 +2,7 @@
   "_metadata": {
     "schema_version": "1.2.5",
     "last_updated": "2026-10-12",
-    "total_entries": 92,
+    "total_entries": 91,
     "purpose": "Tier 1 curated drug-supplement and supplement-supplement interactions for the interaction database",
     "sources": [
       "NIH Office of Dietary Supplements (ods.od.nih.gov)",
@@ -119,26 +119,27 @@
       "agent2_id": "C0772125",
       "severity": "Major",
       "interaction_effect_type": "Additive",
-      "mechanism": "Ginkgo can affect platelet function and may increase bleeding risk with warfarin. Serious bleeding has been reported, but controlled and observational findings are mixed; a uniform or quantified increase in risk is not established.",
-      "management": "Avoid combining ginkgo with warfarin. If ginkgo is being used, inform prescriber immediately. Watch for signs of bleeding (unusual bruising, prolonged cuts, blood in urine/stool).",
+      "mechanism": "Ginkgo may increase bleeding risk with warfarin. A large Veterans Administration record study found an association with bleeding during concurrent use, while the literature has mixed and conflicting findings. Observational association does not establish causality, incidence for an individual or a safe dose.",
+      "management": "Avoid adding ginkgo during warfarin treatment without anticoagulation-clinician review. If already taking it, discuss monitoring and changes rather than adjusting warfarin yourself. Report unusual bruising or bleeding promptly.",
       "source_urls": [
         "https://www.nccih.nih.gov/health/ginkgo",
-        "https://nccih.nih.gov/health/ginkgo/ataglance.htm"
+        "https://pubmed.ncbi.nlm.nih.gov/26958257/"
       ],
       "source_pmids": [
-        "40198642"
+        "26958257"
       ],
       "verification": {
         "status": "verified",
-        "verified_at": "2026-04-13T16:37:00Z",
+        "verified_at": "2026-10-12",
         "verified_with": {
           "rxnorm": true,
           "umls": true,
           "pubmed": true
         },
-        "method": "live_api_batch_2026_04_13"
+        "method": "agent_source_content_review_2026_10_12",
+        "notes": "26958257 directly studies ginkgo with warfarin; 40198642 did not include a warfarin cohort and is removed as direct support for this pair. Observational evidence and conflicting literature remain qualified."
       },
-      "evidence_basis": "clinical_literature",
+      "evidence_basis": "observational",
       "clinical_confidence": "medium",
       "evidence_notes": "Mixed: observational data suggest increased bleeding risk, but controlled studies at recommended doses show no significant effect. Severity reflects precautionary approach for anticoagulant users.",
       "agent1_canonical_id": null,
@@ -190,11 +191,10 @@
       "agent2_id": "C0813171",
       "severity": "Major",
       "interaction_effect_type": "Inhibitor",
-      "mechanism": "St. John's Wort (Hypericum perforatum) is a potent inducer of CYP3A4 and P-glycoprotein. It significantly accelerates warfarin metabolism, reducing plasma concentrations and anticoagulant effect. INR can fall to sub-therapeutic levels, increasing thrombosis risk.",
-      "management": "Do not use St. John's Wort while taking warfarin. INR must be monitored closely if it is started or stopped. Switching to a different antidepressant approach is strongly recommended.",
+      "mechanism": "St. John’s wort can induce drug-metabolizing pathways and reduce warfarin exposure or anticoagulant effect. Starting or stopping it can therefore change anticoagulation; the reviewed evidence does not establish one exclusive enzyme/transporter mechanism for all warfarin responses.",
+      "management": "Avoid adding St. John’s wort during warfarin treatment without the anticoagulation clinician reviewing it. If already taking it, tell the clinician before any change so INR monitoring can be planned. Do not change warfarin or discontinue an established supplement without discussing the monitoring plan.",
       "source_urls": [
-        "https://nccih.nih.gov/health/stjohnswort/ataglance.htm",
-        "https://www.fda.gov/drugs/drug-interactions-labeling/drug-development-and-drug-interactions-table-substrates-inhibitors-and-inducers",
+        "https://www.nccih.nih.gov/health/st-johns-wort",
         "https://pubmed.ncbi.nlm.nih.gov/15260917/",
         "https://pubmed.ncbi.nlm.nih.gov/15049433/"
       ],
@@ -204,13 +204,14 @@
       ],
       "verification": {
         "status": "verified",
-        "verified_at": "2026-04-13T16:37:00Z",
+        "verified_at": "2026-10-12",
         "verified_with": {
           "rxnorm": true,
           "umls": true,
           "pubmed": true
         },
-        "method": "live_api_batch_2026_04_13"
+        "method": "agent_source_content_review_2026_10_12",
+        "notes": "Primary source content reviewed for the corrected claim. Presence screening is not a declaration of harm at every dose or clinical clearance."
       },
       "evidence_basis": "label_regulatory",
       "clinical_confidence": "high",
@@ -401,11 +402,9 @@
       "agent2_id": "C0950081",
       "severity": "Major",
       "interaction_effect_type": "Additive",
-      "mechanism": "Dong quai (Angelica sinensis) contains coumarin derivatives with intrinsic anticoagulant properties, and may also inhibit platelet aggregation. Combined with warfarin, it can substantially increase INR and bleeding risk.",
-      "management": "Avoid dong quai while taking warfarin. INR should be checked if the herb was recently used. Inform prescriber.",
+      "mechanism": "One case report described more than a twofold rise in INR/prothrombin time after dong quai was added to stable warfarin, with improvement after discontinuation. The authors state that the true mechanism remains unknown; a single report cannot establish incidence or a safe dose.",
+      "management": "Avoid adding dong quai during warfarin treatment without anticoagulation-clinician review. Tell the clinician if already taking it so INR monitoring and any changes can be managed. Do not adjust warfarin yourself; report unusual bruising or bleeding promptly.",
       "source_urls": [
-        "https://www.nccih.nih.gov/health/dong-quai",
-        "https://nccih.nih.gov/health/herbsataglance.htm",
         "https://pubmed.ncbi.nlm.nih.gov/10417036/"
       ],
       "source_pmids": [
@@ -413,16 +412,17 @@
       ],
       "verification": {
         "status": "verified",
-        "verified_at": "2026-04-13T16:37:00Z",
+        "verified_at": "2026-10-12",
         "verified_with": {
           "rxnorm": true,
           "umls": true,
           "pubmed": true
         },
-        "method": "live_api_batch_2026_04_13"
+        "method": "agent_source_content_review_2026_10_12",
+        "notes": "Primary source content reviewed for the corrected claim. Presence screening is not a declaration of harm at every dose or clinical clearance."
       },
       "evidence_basis": "clinical_literature",
-      "clinical_confidence": "high",
+      "clinical_confidence": "medium",
       "agent1_canonical_id": null,
       "agent2_canonical_id": "dong_quai",
       "direction": "harmful",
@@ -467,41 +467,40 @@
     {
       "id": "DSI_STATINS_SJW",
       "type": "Med-Sup",
-      "agent1_name": "Statins (class)",
-      "agent1_id": "class:statins",
+      "agent1_name": "CYP3A4-metabolized statins",
+      "agent1_id": "class:cyp3a4_metabolized_statins",
       "agent2_name": "St. John's Wort",
       "agent2_id": "C0813171",
       "severity": "Major",
       "interaction_effect_type": "Inhibitor",
-      "mechanism": "St. John's wort induces CYP3A4 and can reduce the effect of susceptible statins. A crossover study in atorvastatin-treated patients found increased LDL and total cholesterol; it did not measure atorvastatin plasma pharmacokinetics. Other statins and preparations may differ.",
-      "management": "Do not use St. John's Wort with CYP3A4-metabolized statins. If herbal antidepressant therapy is desired, discuss alternatives with your doctor. Monitor for reduced lipid-lowering effect if combined inadvertently.",
+      "mechanism": "St. John’s wort induces drug-metabolizing enzymes and can reduce the effect of CYP3A4-metabolized statins. Human evidence reports reduced simvastatin exposure and increased LDL cholesterol during atorvastatin co-use. Lovastatin shares CYP3A4 metabolism, a mechanistic scope inference; these findings do not apply uniformly to every statin.",
+      "management": "Avoid adding St. John’s wort to atorvastatin, simvastatin or lovastatin without prescriber review. The clinician should manage treatment and any lipid monitoring; do not change the statin yourself. This rule does not establish the same interaction for pravastatin or rosuvastatin.",
       "source_urls": [
         "https://www.nccih.nih.gov/health/st-johns-wort",
-        "https://nccih.nih.gov/health/stjohnswort/ataglance.htm",
         "https://pubmed.ncbi.nlm.nih.gov/17701167/",
-        "https://pubmed.ncbi.nlm.nih.gov/31742659/",
-        "https://pubmed.ncbi.nlm.nih.gov/15260917/"
+        "https://pubmed.ncbi.nlm.nih.gov/15260917/",
+        "https://pubmed.ncbi.nlm.nih.gov/31742659/"
       ],
       "source_pmids": [
         "17701167",
-        "31742659",
-        "15260917"
+        "15260917",
+        "31742659"
       ],
       "verification": {
         "status": "verified",
-        "verified_at": "2026-05-27T16:00:00Z",
+        "verified_at": "2026-10-12",
         "verified_with": {
           "rxnorm": true,
           "umls": true,
           "pubmed": true
         },
-        "method": "live_api_content_verify_2026_05_27",
+        "method": "agent_source_content_review_2026_10_12",
         "verified_pmids": [
           "17701167",
-          "31742659",
-          "15260917"
+          "15260917",
+          "31742659"
         ],
-        "notes": "PMID 17701167 (Andren 2007) measures LDL and total-cholesterol outcomes during SJW plus atorvastatin use, not atorvastatin plasma pharmacokinetics. PMID 31742659 is a clinical-relevance review and 15260917 a pharmacokinetic-interactions review. These citations do not establish identical quantitative effects for every statin or preparation."
+        "notes": "Atorvastatin study measured lipid response, not drug concentrations. Review 15260917 distinguishes reduced simvastatin exposure from unchanged pravastatin pharmacokinetics. Lovastatin is a metabolism-based inference. Exact IN identities verified live; no broad statin-class exclusion."
       },
       "evidence_basis": "clinical_literature",
       "clinical_confidence": "high",
@@ -612,14 +611,14 @@
       "type": "Med-Sup",
       "agent1_name": "Statins (class)",
       "agent1_id": "class:statins",
-      "agent2_name": "Niacin (high dose)",
+      "agent2_name": "Niacin (lipid-modifying nicotinic acid)",
       "agent2_id": "C0027996",
       "severity": "Moderate",
       "interaction_effect_type": "Additive",
-      "mechanism": "High-dose niacin (≥1 g/day, pharmacologic dose) combined with statins increases risk of myopathy and rhabdomyolysis. The mechanism is additive muscle toxicity, possibly related to impaired CoQ10 synthesis and mitochondrial dysfunction.",
-      "management": "Pharmacologic niacin doses require physician supervision when combined with statins. Monitor for muscle pain, weakness, or brown urine. Nutritional niacin doses from multivitamins are generally safe.",
+      "mechanism": "Statin labeling reports myopathy and rhabdomyolysis with lipid-modifying nicotinic acid doses of at least 1 g/day. Trials of high-dose niacin added to statin therapy also provide adverse-event evidence; they do not establish a universal safe lower dose.",
+      "management": "Use lipid-modifying nicotinic acid with a statin only under prescriber supervision. Report unexplained muscle pain, weakness or dark urine promptly. This regulatory dose qualifier does not establish the same interaction for niacinamide, other B3 forms, or universal safety at lower doses.",
       "source_urls": [
-        "https://ods.od.nih.gov/factsheets/CoQ10-HealthProfessional/",
+        "https://dailymed.nlm.nih.gov/dailymed/fda/fdaDrugXsl.cfm?setid=e432e043-c019-4d58-94ca-7c1d85f5cd40&type=display",
         "https://pubmed.ncbi.nlm.nih.gov/22085343/",
         "https://pubmed.ncbi.nlm.nih.gov/25014686/",
         "https://pubmed.ncbi.nlm.nih.gov/23444397/"
@@ -631,19 +630,19 @@
       ],
       "verification": {
         "status": "verified",
-        "verified_at": "2026-05-27T16:00:00Z",
+        "verified_at": "2026-10-12",
         "verified_with": {
           "rxnorm": true,
           "umls": true,
           "pubmed": true
         },
-        "method": "live_api_content_verify_2026_05_27",
+        "method": "agent_source_content_review_2026_10_12",
         "verified_pmids": [
           "22085343",
           "25014686",
           "23444397"
         ],
-        "notes": "Wave 6.Y Batch 9.A. PMIDs content-verified via PubMed efetch 2026-05-27. 22085343 is AIM-HIGH (Boden 2011 NEJM), the landmark RCT showing no incremental CV benefit of niacin added to intensive statin therapy plus the adverse-event signal. 25014686 is HPS2-THRIVE primary outcomes (Landray 2014 NEJM), the largest niacin+statin trial documenting the myopathy and hepatotoxicity signal. 23444397 is the HPS2-THRIVE design + pre-specified muscle and liver outcomes paper documenting the elevated myopathy/hepatic-event rates that anchor the 'monitor for muscle pain, weakness, or brown urine' management text. High-dose niacin qualifier (≥1 g/day pharmacologic dose) intentionally retained to avoid generic multivitamin B3 warnings."
+        "notes": "Primary source content reviewed for the corrected claim. Presence screening is not a declaration of harm at every dose or clinical clearance."
       },
       "evidence_basis": "clinical_literature",
       "clinical_confidence": "medium",
@@ -658,10 +657,11 @@
         "unit": "mg",
         "basis": "per_day",
         "confidence": "medium",
-        "confidence_basis": "management_stated",
-        "source": "https://ods.od.nih.gov/factsheets/Niacin-HealthProfessional/",
-        "rationale": "Pharmacologic niacin (>=1 g/day) drives statin-myopathy risk; nutritional/multivitamin niacin doses are safe."
-      }
+        "confidence_basis": "label_regulatory",
+        "source": "https://dailymed.nlm.nih.gov/dailymed/fda/fdaDrugXsl.cfm?setid=e432e043-c019-4d58-94ca-7c1d85f5cd40&type=display",
+        "rationale": "Rosuvastatin labeling reports myopathy/rhabdomyolysis with lipid-modifying niacin doses of at least 1 g/day. This label threshold does not establish universal safety below it."
+      },
+      "evidence_notes": "Label-supported ≥1 g/day lipid-modifying nicotinic-acid qualifier retained. Existing pairwise canonical vitamin_b3_niacin also includes niacinamide and other forms; automatic form-specific gating is unresolved. Copy must not claim all B3 forms have identical risk."
     },
     {
       "id": "DSI_SSRI_SJW",
@@ -710,24 +710,28 @@
       "agent2_id": "C0000578",
       "severity": "Major",
       "interaction_effect_type": "Additive",
-      "mechanism": "5-HTP (5-hydroxytryptophan) is the direct precursor to serotonin. Taking 5-HTP while on an SSRI floods the serotonin system from both the supply side (increased synthesis) and the reuptake side (blocked clearance), creating a high risk of serotonin syndrome.",
-      "management": "Avoid 5-HTP while taking any SSRI. If transitioning from an SSRI to 5-HTP for mood support, a full washout of the SSRI is required. Consult your doctor before using 5-HTP.",
+      "mechanism": "5-HTP is a serotonin precursor, and MSK advises against unsupervised use with serotonergic medicines including SSRIs. A reported sertraline case involved multiple medicines/supplements and exercise; it supports a serious concern but not a pair-specific incidence or numerical safe dose.",
+      "management": "Do not add 5-HTP during SSRI treatment without prescriber review. Do not stop or switch antidepressants yourself; any washout depends on the exact medicine. Suspected serotonin syndrome, including agitation with fever, muscle rigidity or altered consciousness, requires emergency care.",
       "source_urls": [
-        "https://nccih.nih.gov/health/5-htp"
+        "https://www.mskcc.org/cancer-care/integrative-medicine/herbs/5-htp-01",
+        "https://pubmed.ncbi.nlm.nih.gov/28839121/"
       ],
-      "source_pmids": [],
+      "source_pmids": [
+        "28839121"
+      ],
       "verification": {
         "status": "verified",
-        "verified_at": "2026-04-13T16:37:00Z",
+        "verified_at": "2026-10-12",
         "verified_with": {
           "rxnorm": true,
           "umls": true,
           "pubmed": true
         },
-        "method": "live_api_batch_2026_04_13"
+        "method": "agent_source_content_review_2026_10_12",
+        "notes": "Primary source content reviewed for the corrected claim. Presence screening is not a declaration of harm at every dose or clinical clearance."
       },
-      "evidence_basis": "clinical_literature",
-      "clinical_confidence": "high",
+      "evidence_basis": "authoritative_review",
+      "clinical_confidence": "medium",
       "applies_to": "whole_class",
       "agent1_canonical_id": null,
       "agent2_canonical_id": "5_htp",
@@ -776,41 +780,31 @@
       "agent2_id": "C0772125",
       "severity": "Moderate",
       "interaction_effect_type": "Additive",
-      "mechanism": "Ginkgo has antiplatelet activity; SSRIs also impair platelet function by depleting serotonin in platelets. Combined, bleeding risk is increased. Additionally, ginkgo may have serotonin-modulating properties that could interact with SSRIs.",
-      "management": "Avoid high-dose ginkgo with SSRIs. If used for cognitive support, discuss with your doctor. Monitor for unusual bruising.",
+      "mechanism": "Ginkgo may affect hemostasis, and bleeding is a concern with SSRIs, but the cited hospital study did not establish a specific SSRI-ginkgo effect or a 120 mg interaction boundary. This pair remains a mechanistic precaution, not proven serotonin toxicity.",
+      "management": "Ask the prescriber or pharmacist to review ginkgo with the exact SSRI and other bleeding risks. Do not change the SSRI yourself or assume a lower ginkgo dose establishes no interaction. Report unusual bruising or bleeding.",
       "source_urls": [
         "https://www.nccih.nih.gov/health/ginkgo"
       ],
-      "source_pmids": [
-        "40198642"
-      ],
+      "source_pmids": [],
       "verification": {
         "status": "verified",
-        "verified_at": "2026-04-13T16:37:00Z",
+        "verified_at": "2026-10-12",
         "verified_with": {
           "rxnorm": true,
           "umls": true,
           "pubmed": true
         },
-        "method": "live_api_batch_2026_04_13"
+        "method": "agent_source_content_review_2026_10_12",
+        "notes": "Primary source content reviewed for the corrected claim. Presence screening is not a declaration of harm at every dose or clinical clearance."
       },
-      "evidence_basis": "clinical_literature",
-      "clinical_confidence": "medium",
+      "evidence_basis": "mechanism_inferred",
+      "clinical_confidence": "low",
       "applies_to": "dose_dependent",
       "agent1_canonical_id": null,
       "agent2_canonical_id": "ginkgo",
       "direction": "harmful",
-      "materiality": "dose_dependent",
-      "dose_threshold": {
-        "agent_canonical_id": "ginkgo",
-        "value": 120,
-        "unit": "mg",
-        "basis": "per_day",
-        "confidence": "medium",
-        "confidence_basis": "reuse",
-        "source": "https://www.nccih.nih.gov/health/ginkgo",
-        "rationale": "Reused ginkgo antiplatelet floor (120 mg, standard EGb-761 dose)."
-      }
+      "materiality": "presence",
+      "dose_threshold": null
     },
     {
       "id": "DSI_SSRI_MELATONIN",
@@ -893,10 +887,10 @@
       "agent2_id": "C0086555",
       "severity": "Major",
       "interaction_effect_type": "Inhibitor",
-      "mechanism": "Glycyrrhizin in licorice root inhibits 11-beta-hydroxysteroid dehydrogenase, leading to mineralocorticoid excess, sodium retention, potassium loss, and elevated blood pressure. This directly opposes antihypertensive therapy.",
-      "management": "Avoid licorice root supplements (glycyrrhizin-containing) while on antihypertensives. DGL (deglycyrrhizinated licorice) is safer. Blood pressure should be re-checked if licorice exposure is suspected.",
+      "mechanism": "Glycyrrhizin-containing licorice can increase blood pressure and reduce potassium, potentially undermining blood-pressure treatment. A systematic review/meta-analysis found these effects with chronic glycyrrhizic-acid ingestion; NCCIH warns that people with hypertension can have serious effects even with small amounts.",
+      "management": "Avoid glycyrrhizin-containing licorice during blood-pressure treatment unless the clinician has reviewed it. A product described as deglycyrrhizinated (DGL) is a different preparation, but the label must establish that identity; do not assume an unspecified licorice product or DGL is universally safe.",
       "source_urls": [
-        "https://nccih.nih.gov/health/licorice",
+        "https://www.nccih.nih.gov/health/licorice-root",
         "https://pubmed.ncbi.nlm.nih.gov/28660884/"
       ],
       "source_pmids": [
@@ -904,15 +898,16 @@
       ],
       "verification": {
         "status": "verified",
-        "verified_at": "2026-04-13T16:37:00Z",
+        "verified_at": "2026-10-12",
         "verified_with": {
           "rxnorm": true,
           "umls": true,
           "pubmed": true
         },
-        "method": "live_api_batch_2026_04_13"
+        "method": "agent_source_content_review_2026_10_12",
+        "notes": "Primary source content reviewed for the corrected claim. Presence screening is not a declaration of harm at every dose or clinical clearance."
       },
-      "evidence_basis": "clinical_literature",
+      "evidence_basis": "systematic_review",
       "clinical_confidence": "high",
       "applies_to": "whole_class",
       "agent1_canonical_id": null,
@@ -929,24 +924,25 @@
       "agent2_id": "C0885298",
       "severity": "Major",
       "interaction_effect_type": "Inhibitor",
-      "mechanism": "Ephedra (ephedrine alkaloids) stimulates alpha and beta adrenergic receptors, raising heart rate and blood pressure. Beta blockers block beta receptors, leaving alpha-mediated vasoconstriction unopposed, causing paradoxical hypertension. Combined cardiac effects are unpredictable.",
-      "management": "Do not use ephedra or products containing ephedrine alkaloids with beta blockers. Note: Ephedra was banned for dietary supplements in the US in 2004 but persists in some herbal products marketed outside the US.",
+      "mechanism": "Ephedrine-alkaloid supplements have been associated with serious cardiovascular and central-nervous-system adverse events, including hypertension and stroke. FDA prohibits these dietary supplements because of unreasonable risk. The cited adverse-event review does not establish a beta-blocker-specific unopposed-alpha mechanism.",
+      "management": "Do not use dietary supplements containing ephedrine alkaloids. Ask a clinician to review the product and medicines if already using one; chest pain, severe headache or neurological symptoms require emergency care.",
       "source_urls": [
-        "https://www.fda.gov/food/dietary-supplements/ephedra-and-ephedrine-alkaloids-dietary-supplements",
-        "https://pubmed.ncbi.nlm.nih.gov/11117974/"
+        "https://pubmed.ncbi.nlm.nih.gov/11117974/",
+        "https://www.fda.gov/food/dietary-supplements/information-select-dietary-supplement-ingredients-and-other-substances"
       ],
       "source_pmids": [
         "11117974"
       ],
       "verification": {
         "status": "verified",
-        "verified_at": "2026-04-13T16:37:00Z",
+        "verified_at": "2026-10-12",
         "verified_with": {
           "rxnorm": true,
           "umls": true,
           "pubmed": true
         },
-        "method": "live_api_batch_2026_04_13"
+        "method": "agent_source_content_review_2026_10_12",
+        "notes": "Primary source content reviewed for the corrected claim. Presence screening is not a declaration of harm at every dose or clinical clearance."
       },
       "evidence_basis": "label_regulatory",
       "clinical_confidence": "high",
@@ -954,7 +950,8 @@
       "agent1_canonical_id": null,
       "agent2_canonical_id": "ephedra",
       "direction": "harmful",
-      "materiality": "presence"
+      "materiality": "presence",
+      "evidence_notes": "General ephedrine-alkaloid hazard is sourced; beta-blocker-specific mechanism and risk magnitude are not established by the cited study."
     },
     {
       "id": "DSI_CCB_GRAPEFRUIT",
@@ -1082,7 +1079,7 @@
       "severity": "Minor",
       "interaction_effect_type": "Additive",
       "mechanism": "Chromium might lower blood glucose. With insulin or other diabetes medications, the additive effect could increase the risk of low blood glucose.",
-      "management": "Chromium may lower blood glucose, which may add to your diabetes medication's effect. Monitor your glucose more closely when starting or changing chromium, and ask the clinician managing your diabetes whether any monitoring or medication change is needed — do not change medication on your own. Shown when the supplemental total is at least 200 mcg/day: a screening threshold inferred from studied dose ranges, not a proven toxicity cutoff or guideline cutoff.",
+      "management": "Chromium might lower blood glucose, which may add to diabetes medication effects. Ask the diabetes clinician whether additional glucose monitoring is appropriate when starting or changing supplemental chromium. Do not change medicines yourself; studied dose ranges do not establish a 200 mcg/day interaction boundary.",
       "source_urls": [
         "https://ods.od.nih.gov/factsheets/Chromium-HealthProfessional/",
         "https://pubmed.ncbi.nlm.nih.gov/15208835/"
@@ -1098,7 +1095,8 @@
           "umls": true,
           "pubmed": true
         },
-        "method": "live_api_batch_2026_04_13"
+        "method": "live_api_batch_2026_04_13",
+        "notes": "September26 accepted LEDGER D8 requires an effect-specific clinical boundary. The older disclosed screening gate has no later exception and its source does not establish a clinical cutoff; removed under existing policy. No lower-dose safety guarantee."
       },
       "evidence_basis": "clinical_literature",
       "clinical_confidence": "medium",
@@ -1106,19 +1104,10 @@
       "agent1_canonical_id": null,
       "agent2_canonical_id": "chromium",
       "direction": "harmful",
-      "materiality": "dose_dependent",
+      "materiality": "presence",
       "display_layer": "background",
       "background_rationale": "Potential additive glucose lowering supports monitoring, not a categorical product-level caution.",
-      "dose_threshold": {
-        "agent_canonical_id": "chromium",
-        "value": 200,
-        "unit": "mcg",
-        "basis": "per_day",
-        "confidence": "medium",
-        "confidence_basis": "inferred_from_dose_range",
-        "source": "https://ods.od.nih.gov/factsheets/Chromium-HealthProfessional/",
-        "rationale": "Authored screening floor inferred from studied supplemental dose ranges; 200 mcg/day is not a guideline cutoff or proven toxicity threshold."
-      }
+      "dose_threshold": null
     },
     {
       "id": "DSI_DM_BERBERINE",
@@ -1129,27 +1118,27 @@
       "agent2_id": "C0005117",
       "severity": "Major",
       "interaction_effect_type": "Additive",
-      "mechanism": "Berberine activates AMPK, closely mimicking metformin's mechanism of action. Clinical trials show HbA1c reductions comparable to metformin. Combined use can cause significant hypoglycemia. Berberine also inhibits CYP3A4 and CYP2D6, affecting metabolism of multiple drugs.",
-      "management": "Berberine should not be combined with diabetes medications without physician supervision. Frequent blood glucose monitoring is essential. Dose adjustments are commonly required.",
+      "mechanism": "A small pilot study found glucose-lowering effects of berberine in type 2 diabetes, including use alongside existing treatment. Additional glucose lowering is a concern with diabetes medicines, but this study does not establish a class-wide rate or dose boundary for hypoglycemia.",
+      "management": "Have the diabetes clinician review berberine before combining it with treatment and agree on appropriate glucose monitoring. Report symptoms of low blood sugar and follow the existing treatment plan. Do not reduce or replace diabetes medicines yourself.",
       "source_urls": [
-        "https://pubmed.ncbi.nlm.nih.gov/18442638/",
-        "https://nccih.nih.gov/health/berberine"
+        "https://pubmed.ncbi.nlm.nih.gov/18442638/"
       ],
       "source_pmids": [
         "18442638"
       ],
       "verification": {
         "status": "verified",
-        "verified_at": "2026-04-13T16:37:00Z",
+        "verified_at": "2026-10-12",
         "verified_with": {
           "rxnorm": true,
           "umls": true,
           "pubmed": true
         },
-        "method": "live_api_batch_2026_04_13"
+        "method": "agent_source_content_review_2026_10_12",
+        "notes": "Primary source content reviewed for the corrected claim. Presence screening is not a declaration of harm at every dose or clinical clearance."
       },
       "evidence_basis": "clinical_literature",
-      "clinical_confidence": "high",
+      "clinical_confidence": "medium",
       "applies_to": "dose_dependent",
       "agent1_canonical_id": null,
       "agent2_canonical_id": "berberine_supplement",
@@ -1238,23 +1227,26 @@
       "agent2_id": "C0996922",
       "severity": "Moderate",
       "interaction_effect_type": "Additive",
-      "mechanism": "Gymnema sylvestre may stimulate insulin secretion and improve beta-cell function. Combined with secretagogues or insulin, it can cause additive hypoglycemia.",
-      "management": "Monitor blood glucose carefully. Inform your prescriber. Dose adjustments to diabetes medications may be required.",
+      "mechanism": "A small study using 400 mg/day of a particular Gymnema leaf extract alongside diabetes therapy reported reduced glucose and medication requirements. It did not compare doses that establish an interaction boundary, and the result cannot be generalized to every preparation.",
+      "management": "Have the diabetes clinician review Gymnema and plan glucose monitoring before use with treatment. Do not reduce or replace diabetes medicines yourself or assume less than 400 mg/day guarantees no interaction.",
       "source_urls": [
-        "https://pubmed.ncbi.nlm.nih.gov/2259217/"
+        "https://pubmed.ncbi.nlm.nih.gov/2259217/",
+        "https://pubmed.ncbi.nlm.nih.gov/34467577/"
       ],
       "source_pmids": [
-        "2259217"
+        "2259217",
+        "34467577"
       ],
       "verification": {
         "status": "verified",
-        "verified_at": "2026-04-13T16:37:00Z",
+        "verified_at": "2026-10-12",
         "verified_with": {
           "rxnorm": true,
           "umls": true,
           "pubmed": true
         },
-        "method": "live_api_batch_2026_04_13"
+        "method": "agent_source_content_review_2026_10_12",
+        "notes": "Primary source content reviewed for the corrected claim. Presence screening is not a declaration of harm at every dose or clinical clearance."
       },
       "evidence_basis": "clinical_literature",
       "clinical_confidence": "medium",
@@ -1262,17 +1254,8 @@
       "agent1_canonical_id": null,
       "agent2_canonical_id": "gymnema_sylvestre",
       "direction": "harmful",
-      "materiality": "dose_dependent",
-      "dose_threshold": {
-        "agent_canonical_id": "gymnema_sylvestre",
-        "value": 400,
-        "unit": "mg",
-        "basis": "per_day",
-        "confidence": "medium",
-        "confidence_basis": "reuse",
-        "source": "https://pubmed.ncbi.nlm.nih.gov/34467577/",
-        "rationale": "Reused gymnema glucose floor (400 mg)."
-      }
+      "materiality": "presence",
+      "dose_threshold": null
     },
     {
       "id": "DSI_DM_CINNAMON",
@@ -1718,40 +1701,6 @@
       "materiality": "presence"
     },
     {
-      "id": "DSI_ANTICONV_EPO",
-      "type": "Med-Sup",
-      "agent1_name": "Anticonvulsants (class)",
-      "agent1_id": "class:anticonvulsants",
-      "agent2_name": "Evening Primrose Oil",
-      "agent2_id": "C0700602",
-      "severity": "Major",
-      "interaction_effect_type": "Inhibitor",
-      "mechanism": "Gamma-linolenic acid (GLA) in evening primrose oil has been reported to lower the seizure threshold. In patients with epilepsy on anticonvulsants, this can precipitate breakthrough seizures.",
-      "management": "Avoid evening primrose oil in patients with epilepsy or on anticonvulsant therapy. Use alternative omega-6 sources if needed.",
-      "source_urls": [
-        "https://www.nccih.nih.gov/health/evening-primrose-oil",
-        "https://nccih.nih.gov/health/eveningprimrose"
-      ],
-      "source_pmids": [],
-      "verification": {
-        "status": "verified",
-        "verified_at": "2026-04-13T16:37:00Z",
-        "verified_with": {
-          "rxnorm": true,
-          "umls": true,
-          "pubmed": true
-        },
-        "method": "live_api_batch_2026_04_13"
-      },
-      "evidence_basis": "clinical_literature",
-      "clinical_confidence": "high",
-      "applies_to": "whole_class",
-      "agent1_canonical_id": null,
-      "agent2_canonical_id": "evening_primrose_oil",
-      "direction": "harmful",
-      "materiality": "presence"
-    },
-    {
       "id": "DSI_ANTICONV_GINKGO",
       "type": "Med-Sup",
       "agent1_name": "Anticonvulsants (class)",
@@ -1793,39 +1742,34 @@
       "agent2_id": "C0041479",
       "severity": "Contraindicated",
       "interaction_effect_type": "Enhancer",
-      "mechanism": "MAO-A in the intestinal wall normally breaks down dietary tyramine. When MAO is inhibited, tyramine is absorbed intact and releases massive norepinephrine from sympathetic nerve terminals, causing a hypertensive crisis: severe headache, blood pressure spikes to dangerous levels, stroke, and death.",
-      "management": "Strict low-tyramine diet is mandatory with MAOIs. Avoid: aged cheeses, cured meats, fermented foods, tap beer, overripe fruit, soy sauce, miso, tofu, and fava beans. Work with a dietitian. Carry a hypertensive crisis emergency plan.",
+      "mechanism": "Tyramine-rich food can provoke a hypertensive crisis with MAOIs that impair dietary tyramine metabolism. Dietary restrictions depend on the exact medicine, route and dose; they are not identical for all MAOIs.",
+      "management": "Confirm the exact MAOI, route and dose with the prescriber and follow its food instructions. EMSAM 6 mg/24 hours does not require a modified diet under its label; EMSAM 9 or 12 mg/24 hours requires avoidance of tyramine-rich foods, continuing for 2 weeks after stopping or reducing to 6 mg/24 hours. Other MAOIs have different instructions. This food exception is not clearance for concentrated tyramine supplements. Severe headache, chest pain or neurological symptoms require emergency care.",
       "source_urls": [
-        "https://medlineplus.gov/ency/article/001508.htm",
-        "https://www.ncbi.nlm.nih.gov/books/NBK539849/",
-        "https://pubmed.ncbi.nlm.nih.gov/3525654/"
+        "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=b891bd9f-fdb8-4862-89c5-ecdd700398a3",
+        "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=513a41d0-37d4-4355-8a6d-a2c643bce6fa"
       ],
-      "source_pmids": [
-        "3525654"
-      ],
+      "source_pmids": [],
       "verification": {
         "status": "verified",
-        "verified_at": "2026-05-27T15:26:04Z",
+        "verified_at": "2026-10-12",
         "verified_with": {
           "rxnorm": true,
           "umls": true,
           "pubmed": true
         },
-        "method": "live_api_content_verify_2026_05_27",
-        "verified_pmids": [
-          "3525654"
-        ],
-        "notes": "Food advisory note; PMIDs content-verified via PubMed esummary on 2026-05-27."
+        "method": "agent_source_content_review_2026_10_12",
+        "verified_pmids": [],
+        "notes": "Primary source content reviewed for the corrected claim. Presence screening is not a declaration of harm at every dose or clinical clearance."
       },
       "evidence_basis": "label_regulatory",
       "clinical_confidence": "high",
       "applies_to": "whole_class",
-      "evidence_notes": "MAOI + tyramine hypertensive crisis is one of the most established drug-food interactions in clinical pharmacology. FDA black box warning on all MAOI labels.",
+      "evidence_notes": "The established food interaction has medicine-, route- and dose-specific labeling. The existing pairwise consumer cannot automatically confirm those contexts; unknowns retain a review warning.",
       "agent1_canonical_id": null,
       "agent2_canonical_id": "tyramine",
       "alert_style": "food_advisory_note",
-      "note_body": "MAOIs block an enzyme that normally breaks down tyramine in foods like aged cheese, cured meats, fermented foods, and tap beer. With the enzyme blocked, tyramine can spike blood pressure quickly.",
-      "practical_guidance": "A low-tyramine diet is essential while on MAOIs. Your prescriber or a dietitian should walk you through the food list. Headache, sweating, or chest pain after a meal can mean a tyramine reaction — call your prescriber.",
+      "note_body": "Some MAOIs impair the breakdown of tyramine from foods and can cause a dangerous rise in blood pressure. The food restrictions depend on your exact medicine, route and dose.",
+      "practical_guidance": "Ask your prescriber which food list applies. The EMSAM 6 mg/24-hour label does not require a modified diet, while 9 and 12 mg/24-hour treatment does, including for 2 weeks after stopping or reducing the dose. Severe headache or chest pain after a meal needs emergency care.",
       "direction": "harmful",
       "materiality": "presence"
     },
@@ -1838,27 +1782,26 @@
       "agent2_id": "C0813171",
       "severity": "Contraindicated",
       "interaction_effect_type": "Additive",
-      "mechanism": "St. John's Wort inhibits serotonin, dopamine, and norepinephrine reuptake. Combined with an MAOI, which prevents monoamine degradation, the resulting monoamine excess causes severe serotonin syndrome and potentially fatal hypertensive crisis.",
-      "management": "Absolutely contraindicated. St. John's Wort must not be used with any MAOI. A 14-day washout after stopping an MAOI is required before any serotonergic supplement.",
+      "mechanism": "St. John’s wort can interact with antidepressants and other serotonergic drugs, potentially causing serious serotonin-related effects. The cited report of fluoxetine, triptans and hypericum does not establish a specific MAOI pair; MAOI-specific magnitude remains uncertain.",
+      "management": "Do not add St. John’s wort during MAOI treatment without prescriber review. Switching or stopping treatment requires an exact-medicine plan; there is no universal supplement-to-MAOI washout established by these sources. Suspected serotonin syndrome requires emergency care.",
       "source_urls": [
-        "https://nccih.nih.gov/health/stjohnswort/ataglance.htm",
-        "https://pubmed.ncbi.nlm.nih.gov/17868285/"
+        "https://www.nccih.nih.gov/health/st-johns-wort",
+        "https://www.nccih.nih.gov/health/st-johns-wort-and-depression-in-depth"
       ],
-      "source_pmids": [
-        "17868285"
-      ],
+      "source_pmids": [],
       "verification": {
         "status": "verified",
-        "verified_at": "2026-04-13T16:37:00Z",
+        "verified_at": "2026-10-12",
         "verified_with": {
           "rxnorm": true,
           "umls": true,
           "pubmed": true
         },
-        "method": "live_api_batch_2026_04_13"
+        "method": "agent_source_content_review_2026_10_12",
+        "notes": "Primary source content reviewed for the corrected claim. Presence screening is not a declaration of harm at every dose or clinical clearance."
       },
-      "evidence_basis": "label_regulatory",
-      "clinical_confidence": "high",
+      "evidence_basis": "authoritative_review",
+      "clinical_confidence": "medium",
       "applies_to": "whole_class",
       "evidence_notes": "St Johns Wort is a known serotonergic agent. Combination with MAOIs carries serotonin syndrome risk. NCCIH and FDA both warn against this combination.",
       "agent1_canonical_id": null,
@@ -1875,29 +1818,31 @@
       "agent2_id": "C0000578",
       "severity": "Contraindicated",
       "interaction_effect_type": "Additive",
-      "mechanism": "5-HTP is the immediate serotonin precursor. With MAO inhibited, 5-HTP-derived serotonin cannot be degraded, causing catastrophic serotonin accumulation and serotonin syndrome.",
-      "management": "Never combine 5-HTP with an MAOI. Do not start 5-HTP after stopping an MAOI until the prescriber confirms the product-specific washout interval has been completed.",
+      "mechanism": "5-HTP is a serotonin precursor. Combining it with medicines that affect serotonin can cause serious adverse effects. MSK reports mania with an MAOI and 5-HTP and serotonin syndrome with linezolid, an antibiotic MAOI; these reports do not establish a class-wide event rate or safe dose.",
+      "management": "Do not add 5-HTP while using an MAOI without the prescriber reviewing it. Do not stop or switch the MAOI yourself; any product-specific washout must follow the exact medicine and a clinician-directed plan. Suspected serotonin syndrome requires emergency care.",
       "source_urls": [
-        "https://www.ncbi.nlm.nih.gov/books/NBK482377/"
+        "https://www.mskcc.org/cancer-care/integrative-medicine/herbs/5-htp-01"
       ],
       "verification": {
         "status": "verified",
-        "verified_at": "2026-04-13T16:37:00Z",
+        "verified_at": "2026-10-12",
         "verified_with": {
           "rxnorm": true,
           "umls": true,
           "pubmed": false
         },
-        "method": "live_api_batch_2026_04_13"
+        "method": "agent_source_content_review_2026_10_12",
+        "notes": "Primary source content reviewed for the corrected claim. Presence screening is not a declaration of harm at every dose or clinical clearance."
       },
-      "evidence_basis": "label_regulatory",
-      "clinical_confidence": "high",
+      "evidence_basis": "authoritative_review",
+      "clinical_confidence": "medium",
       "applies_to": "whole_class",
       "evidence_notes": "5-HTP is a direct serotonin precursor. Combination with MAOIs is universally contraindicated due to serotonin syndrome risk. Clinical pharmacology consensus.",
       "agent1_canonical_id": null,
       "agent2_canonical_id": "5_htp",
       "direction": "harmful",
-      "materiality": "presence"
+      "materiality": "presence",
+      "source_pmids": []
     },
     {
       "id": "DSI_MAOI_SAME",
@@ -1942,32 +1887,34 @@
       "agent2_id": "C1119918",
       "severity": "Major",
       "interaction_effect_type": "Additive",
-      "mechanism": "Ginseng has stimulant and sympathomimetic-like properties. With MAO inhibited, the catecholaminergic activity of ginseng can contribute to hypertensive reactions and CNS overstimulation.",
-      "management": "Avoid ginseng with MAOIs. Case reports of hypomania and headache with this combination exist. Use ginseng only after full MAOI washout.",
+      "mechanism": "A historical case-report publication concerns ginseng with phenelzine. The available indexed record has no abstract, so it does not verify the previously stated symptom details or a catecholamine/hypertensive-crisis mechanism across all MAOIs.",
+      "management": "Have the prescriber review ginseng before combining it with an MAOI. The evidence is limited and does not establish a safe dose or a universal washout period. Do not change prescribed MAOI treatment yourself.",
       "source_urls": [
-        "https://nccih.nih.gov/health/asianginseng",
-        "https://pubmed.ncbi.nlm.nih.gov/3597812/"
+        "https://pubmed.ncbi.nlm.nih.gov/3597812/",
+        "https://www.nccih.nih.gov/health/asian-ginseng"
       ],
       "source_pmids": [
         "3597812"
       ],
       "verification": {
         "status": "verified",
-        "verified_at": "2026-04-13T16:37:00Z",
+        "verified_at": "2026-10-12",
         "verified_with": {
           "rxnorm": true,
           "umls": true,
           "pubmed": true
         },
-        "method": "live_api_batch_2026_04_13"
+        "method": "agent_source_content_review_2026_10_12",
+        "notes": "Primary source content reviewed for the corrected claim. Presence screening is not a declaration of harm at every dose or clinical clearance."
       },
       "evidence_basis": "clinical_literature",
-      "clinical_confidence": "high",
+      "clinical_confidence": "low",
       "applies_to": "whole_class",
       "agent1_canonical_id": null,
       "agent2_canonical_id": "ginseng",
       "direction": "harmful",
-      "materiality": "presence"
+      "materiality": "presence",
+      "evidence_notes": "Historical hard severity is retained pending full-text clinical review. Indexed publication identity is verified; the detailed original case and whole-class severity are unresolved."
     },
     {
       "id": "DSI_NSAID_FISHOIL",
@@ -1978,38 +1925,31 @@
       "agent2_id": "C0016157",
       "severity": "Moderate",
       "interaction_effect_type": "Additive",
-      "mechanism": "NSAIDs reduce platelet thromboxane A2 synthesis and GI mucosal protection. Omega-3s additionally inhibit platelet aggregation. Combined, GI bleeding risk and systemic antiplatelet effect are additive.",
-      "management": "Use caution combining high-dose fish oil (>2 g/day) with NSAIDs. Take NSAIDs with food to protect GI lining. Monitor for GI symptoms. Discuss with doctor if using regularly.",
+      "mechanism": "Fish oil may affect platelet function, but ODS discusses bleeding-time effects at doses expressed as EPA plus DHA, not a 2000 mg fish-oil carrier-mass boundary for NSAID harm. The cited evidence does not establish clinically important bleeding onset for this specific pair.",
+      "management": "Ask a clinician or pharmacist to review fish oil with an NSAID if there are additional bleeding risks. Do not assume a dose below 2000 mg fish oil guarantees no interaction; taking an NSAID with food does not establish protection from bleeding.",
       "source_urls": [
         "https://ods.od.nih.gov/factsheets/Omega3FattyAcids-HealthProfessional/"
       ],
       "verification": {
         "status": "verified",
-        "verified_at": "2026-04-13T16:37:00Z",
+        "verified_at": "2026-10-12",
         "verified_with": {
           "rxnorm": true,
           "umls": true,
           "pubmed": false
         },
-        "method": "live_api_batch_2026_04_13"
+        "method": "agent_source_content_review_2026_10_12",
+        "notes": "Primary source content reviewed for the corrected claim. Presence screening is not a declaration of harm at every dose or clinical clearance."
       },
-      "evidence_basis": "authoritative_review",
-      "clinical_confidence": "medium",
+      "evidence_basis": "mechanism_inferred",
+      "clinical_confidence": "low",
       "applies_to": "dose_dependent",
       "agent1_canonical_id": null,
       "agent2_canonical_id": "fish_oil",
       "direction": "harmful",
-      "materiality": "dose_dependent",
-      "dose_threshold": {
-        "agent_canonical_id": "fish_oil",
-        "value": 2000,
-        "unit": "mg",
-        "basis": "per_day",
-        "confidence": "medium",
-        "confidence_basis": "management_stated",
-        "source": "https://ods.od.nih.gov/factsheets/Omega3FattyAcids-HealthProfessional/",
-        "rationale": "Pair mgmt: caution combining fish oil >2 g/day with NSAIDs; lower doses low-risk."
-      }
+      "materiality": "presence",
+      "dose_threshold": null,
+      "source_pmids": []
     },
     {
       "id": "DSI_NSAID_GARLIC",
@@ -2053,9 +1993,10 @@
       "agent2_id": "C0772125",
       "severity": "Moderate",
       "interaction_effect_type": "Additive",
-      "mechanism": "Ginkgo inhibits PAF and platelet aggregation. NSAIDs inhibit COX-mediated thromboxane synthesis. The combined antiplatelet effect increases GI and systemic bleeding risk.",
-      "management": "Avoid ginkgo with regular NSAID use. Watch for GI bleeding, unusual bruising. Inform prescriber of all supplements.",
+      "mechanism": "A retrospective hospital study reported bleeding-related associations involving ginkgo and selected NSAIDs. It does not establish causality for every NSAID or an interaction-onset boundary at 120 mg/day of ginkgo.",
+      "management": "Have a clinician or pharmacist review ginkgo with the exact NSAID and other bleeding risks. Report unusual bruising or bleeding. Do not assume a dose below 120 mg/day removes the concern.",
       "source_urls": [
+        "https://www.nccih.nih.gov/health/ginkgo",
         "https://pubmed.ncbi.nlm.nih.gov/40198642/"
       ],
       "source_pmids": [
@@ -2063,31 +2004,23 @@
       ],
       "verification": {
         "status": "verified",
-        "verified_at": "2026-04-13T16:37:00Z",
+        "verified_at": "2026-10-12",
         "verified_with": {
           "rxnorm": true,
           "umls": true,
           "pubmed": true
         },
-        "method": "live_api_batch_2026_04_13"
+        "method": "agent_source_content_review_2026_10_12",
+        "notes": "Primary source content reviewed for the corrected claim. Presence screening is not a declaration of harm at every dose or clinical clearance."
       },
-      "evidence_basis": "clinical_literature",
+      "evidence_basis": "observational",
       "clinical_confidence": "medium",
       "applies_to": "whole_class",
       "agent1_canonical_id": null,
       "agent2_canonical_id": "ginkgo",
       "direction": "harmful",
-      "materiality": "dose_dependent",
-      "dose_threshold": {
-        "agent_canonical_id": "ginkgo",
-        "value": 120,
-        "unit": "mg",
-        "basis": "per_day",
-        "confidence": "medium",
-        "confidence_basis": "reuse",
-        "source": "https://www.nccih.nih.gov/health/ginkgo",
-        "rationale": "Reused ginkgo antiplatelet floor (120 mg)."
-      }
+      "materiality": "presence",
+      "dose_threshold": null
     },
     {
       "id": "DSI_NSAID_WILLOWBARK",
@@ -2098,24 +2031,24 @@
       "agent2_id": "C2349151",
       "severity": "Major",
       "interaction_effect_type": "Additive",
-      "mechanism": "Willow bark contains salicin, which is metabolized to salicylate (aspirin-like compound). Combining willow bark with NSAIDs or aspirin creates additive salicylate toxicity and GI mucosal damage risk.",
-      "management": "Do not combine willow bark supplements with NSAIDs or aspirin. This combination is essentially double-dosing salicylate drugs. Seek medical advice for pain management if both are considered.",
+      "mechanism": "Willow bark contains salicin-derived constituents. EMA advises against concomitant salicylates or other NSAIDs without medical advice. Willow bark is not chemically equivalent to aspirin, and the monograph does not establish an exact doubled dose or numerical interaction boundary.",
+      "management": "Avoid adding willow bark to an NSAID without medical review. Ask the clinician or pharmacist to review the preparation and other medicines. Black stools, vomiting blood or other significant bleeding require urgent medical care.",
       "source_urls": [
-        "https://www.nccih.nih.gov/health/willow-bark",
-        "https://nccih.nih.gov/health/willowbark"
+        "https://www.ema.europa.eu/en/documents/herbal-monograph/final-european-union-herbal-monograph-salix-various-species-including-s-purpurea-l-s-daphnoides-vill-s-fragilis-l-cortex_en.pdf"
       ],
       "source_pmids": [],
       "verification": {
         "status": "verified",
-        "verified_at": "2026-04-13T16:37:00Z",
+        "verified_at": "2026-10-12",
         "verified_with": {
           "rxnorm": true,
           "umls": true,
           "pubmed": true
         },
-        "method": "live_api_batch_2026_04_13"
+        "method": "agent_source_content_review_2026_10_12",
+        "notes": "Primary source content reviewed for the corrected claim. Presence screening is not a declaration of harm at every dose or clinical clearance."
       },
-      "evidence_basis": "clinical_literature",
+      "evidence_basis": "label_regulatory",
       "clinical_confidence": "high",
       "applies_to": "whole_class",
       "agent1_canonical_id": null,
@@ -2166,12 +2099,10 @@
       "agent2_id": "C5789747",
       "severity": "Major",
       "interaction_effect_type": "Additive",
-      "mechanism": "Kava (Piper methysticum) has CNS depressant and kavalactone-mediated GABAergic activity. Combined with sedatives or benzodiazepines, it causes additive sedation and respiratory depression. Kava also has hepatotoxic potential that may be enhanced by other CNS drugs.",
-      "management": "Do not combine kava with sedatives, benzodiazepines, or alcohol. Kava alone carries hepatotoxicity warnings. Combined use amplifies both CNS and liver risks.",
+      "mechanism": "Kava has sedative effects. NCCIH advises against combining it with other sedative substances, including benzodiazepines and alcohol. A published report concerns coma with alprazolam and kava, but does not quantify risk across every sedative. Kava-associated liver injury is a separate concern, not proof that all sedatives amplify it.",
+      "management": "Avoid combining kava with sedative medicines or alcohol without prescriber review. Do not drive if impaired or abruptly stop a prescribed sedative. Severe drowsiness, difficulty breathing or inability to wake needs emergency care.",
       "source_urls": [
         "https://www.nccih.nih.gov/health/kava",
-        "https://nccih.nih.gov/health/kava",
-        "https://livertox.nih.gov/Kava.htm",
         "https://pubmed.ncbi.nlm.nih.gov/8967683/"
       ],
       "source_pmids": [
@@ -2179,16 +2110,17 @@
       ],
       "verification": {
         "status": "verified",
-        "verified_at": "2026-04-13T16:37:00Z",
+        "verified_at": "2026-10-12",
         "verified_with": {
           "rxnorm": true,
           "umls": true,
           "pubmed": true
         },
-        "method": "live_api_batch_2026_04_13"
+        "method": "agent_source_content_review_2026_10_12",
+        "notes": "Primary source content reviewed for the corrected claim. Presence screening is not a declaration of harm at every dose or clinical clearance."
       },
-      "evidence_basis": "clinical_literature",
-      "clinical_confidence": "high",
+      "evidence_basis": "authoritative_review",
+      "clinical_confidence": "medium",
       "applies_to": "whole_class",
       "agent1_canonical_id": null,
       "agent2_canonical_id": "kavalactones",
@@ -2206,38 +2138,32 @@
       "agent2_id": "C0025219",
       "severity": "Minor",
       "interaction_effect_type": "Additive",
-      "mechanism": "Melatonin has mild sedative properties. Combined with benzodiazepines, it may produce additive drowsiness. The interaction is generally mild and melatonin is sometimes used therapeutically to help patients taper benzodiazepines.",
-      "management": "Use low-dose melatonin (0.5–3 mg) with benzodiazepines if needed for sleep. Avoid activities requiring alertness. Inform your doctor.",
+      "mechanism": "The 2 mg prolonged-release melatonin product information describes increased impairment with benzodiazepines and related hypnotics. It does not establish a 5 mg safe-below cutoff; medicine and formulation matter.",
+      "management": "Ask the prescriber or pharmacist to review melatonin with the exact medicine. Watch for drowsiness or impaired coordination and avoid driving if affected. Do not assume a dose below 5 mg removes the concern or change prescribed treatment yourself.",
       "source_urls": [
-        "https://ods.od.nih.gov/factsheets/Melatonin-HealthProfessional/"
+        "https://www.medicines.org.uk/emc/product/101476/smpc"
       ],
       "verification": {
         "status": "verified",
-        "verified_at": "2026-04-13T16:37:00Z",
+        "verified_at": "2026-10-12",
         "verified_with": {
           "rxnorm": true,
           "umls": true,
           "pubmed": false
         },
-        "method": "live_api_batch_2026_04_13"
+        "method": "agent_source_content_review_2026_10_12",
+        "notes": "Primary source content reviewed for the corrected claim. Presence screening is not a declaration of harm at every dose or clinical clearance."
       },
-      "evidence_basis": "authoritative_review",
-      "clinical_confidence": "low",
+      "evidence_basis": "label_regulatory",
+      "clinical_confidence": "medium",
       "applies_to": "dose_dependent",
       "agent1_canonical_id": null,
       "agent2_canonical_id": "melatonin",
       "direction": "harmful",
-      "materiality": "dose_dependent",
-      "dose_threshold": {
-        "agent_canonical_id": "melatonin",
-        "value": 5,
-        "unit": "mg",
-        "basis": "per_day",
-        "confidence": "low",
-        "confidence_basis": "management_stated",
-        "source": "https://www.nccih.nih.gov/health/melatonin-what-you-need-to-know",
-        "rationale": "Pair mgmt: low-dose melatonin (0.5-3 mg) is fine with benzodiazepines; floor at 5 mg (above the sleep-dose range)."
-      }
+      "materiality": "presence",
+      "dose_threshold": null,
+      "source_pmids": [],
+      "evidence_notes": "The reviewed 2 mg prolonged-release label supplies interaction evidence, not a numerical warning boundary."
     },
     {
       "id": "DSI_SEDATIVES_PASSIONFLOWER",
@@ -2520,24 +2446,22 @@
       "agent2_id": "C0009968",
       "severity": "Moderate",
       "interaction_effect_type": "Inhibitor",
-      "mechanism": "High zinc intake induces intestinal metallothionein, a protein that binds copper tightly. Copper bound to metallothionein is not released into circulation and is lost when intestinal cells slough off. Chronic high-dose zinc (>40 mg/day) causes copper deficiency.",
-      "management": "PharmaGuide displays this review when the known zinc total is at least 25 mg/day. This is a conservative screening threshold, not a proven toxicity cutoff. Long-term higher-dose zinc can reduce copper status; ask a clinician whether copper monitoring or a balanced formulation is appropriate.",
+      "mechanism": "High supplemental zinc intake over time can reduce copper absorption and status. ODS describes this effect with zinc doses of 50 mg or more over weeks; the adult zinc upper limit is not a proven copper-deficiency onset boundary.",
+      "management": "Long-term higher-dose zinc can reduce copper status. Ask a clinician whether your dose and duration warrant copper monitoring or a balanced formulation. The sources do not establish a 25 mg safe-below boundary; this review does not mean that every low-dose zinc/copper combination causes harm.",
       "source_urls": [
-        "https://ods.od.nih.gov/factsheets/Zinc-HealthProfessional/",
-        "https://pubmed.ncbi.nlm.nih.gov/10801966/"
+        "https://ods.od.nih.gov/factsheets/Zinc-HealthProfessional/"
       ],
-      "source_pmids": [
-        "10801966"
-      ],
+      "source_pmids": [],
       "verification": {
         "status": "verified",
-        "verified_at": "2026-04-13T16:37:00Z",
+        "verified_at": "2026-10-12",
         "verified_with": {
           "rxnorm": true,
           "umls": true,
           "pubmed": true
         },
-        "method": "live_api_batch_2026_04_13"
+        "method": "agent_source_content_review_2026_10_12",
+        "notes": "September26 accepted LEDGER D8 requires an effect-specific clinical boundary. The older disclosed screening gate has no later exception and its source does not establish a clinical cutoff; removed under existing policy. No lower-dose safety guarantee."
       },
       "evidence_basis": "clinical_literature",
       "clinical_confidence": "medium",
@@ -2545,17 +2469,8 @@
       "agent1_canonical_id": "zinc",
       "agent2_canonical_id": "copper",
       "direction": "harmful",
-      "materiality": "dose_dependent",
-      "dose_threshold": {
-        "agent_canonical_id": "zinc",
-        "value": 25,
-        "unit": "mg",
-        "basis": "per_day",
-        "confidence": "medium",
-        "confidence_basis": "management_stated",
-        "source": "https://ods.od.nih.gov/factsheets/Zinc-HealthProfessional/",
-        "rationale": "Conservative review floor for prolonged supplemental zinc use; this is not a toxicity cutoff."
-      }
+      "materiality": "presence",
+      "dose_threshold": null
     },
     {
       "id": "SSI_SJW_5HTP",
@@ -2566,27 +2481,26 @@
       "agent2_id": "C0000578",
       "severity": "Major",
       "interaction_effect_type": "Additive",
-      "mechanism": "St. John's Wort inhibits serotonin reuptake. 5-HTP increases serotonin synthesis as a direct precursor. Combined, these supplements produce additive serotonin loading, potentially causing serotonin syndrome even without prescription medications.",
-      "management": "Do not combine St. John's Wort with 5-HTP. Choose one or the other for mood support. If either is used with prescription serotonergic drugs, additional caution is required.",
+      "mechanism": "St. John’s wort and 5-HTP both affect serotonin. MSK advises avoiding their combined use to reduce the risk of excessive serotonin. The fluoxetine/triptan/hypericum report is not evidence for this two-supplement pair, and the pair-specific incidence is unknown.",
+      "management": "Avoid combining St. John’s wort with 5-HTP without clinician review. Do not use this warning as advice to choose either supplement as treatment. Suspected serotonin syndrome, including agitation with fever, muscle rigidity or altered consciousness, requires emergency care.",
       "source_urls": [
-        "https://pubmed.ncbi.nlm.nih.gov/17868285/",
-        "https://nccih.nih.gov/health/stjohnswort/ataglance.htm"
+        "https://www.mskcc.org/cancer-care/integrative-medicine/herbs/5-htp-01",
+        "https://www.nccih.nih.gov/health/st-johns-wort"
       ],
-      "source_pmids": [
-        "17868285"
-      ],
+      "source_pmids": [],
       "verification": {
         "status": "verified",
-        "verified_at": "2026-04-13T16:37:00Z",
+        "verified_at": "2026-10-12",
         "verified_with": {
           "rxnorm": true,
           "umls": true,
           "pubmed": true
         },
-        "method": "live_api_batch_2026_04_13"
+        "method": "agent_source_content_review_2026_10_12",
+        "notes": "Primary source content reviewed for the corrected claim. Presence screening is not a declaration of harm at every dose or clinical clearance."
       },
-      "evidence_basis": "clinical_literature",
-      "clinical_confidence": "high",
+      "evidence_basis": "authoritative_review",
+      "clinical_confidence": "medium",
       "agent1_canonical_id": "st_johns_wort",
       "agent2_canonical_id": "5_htp",
       "direction": "harmful",
@@ -2636,30 +2550,34 @@
       "agent2_id": "161",
       "severity": "Major",
       "interaction_effect_type": "Additive",
-      "mechanism": "Kava is metabolized hepatically and can inhibit CYP2E1, the enzyme responsible for converting acetaminophen to the hepatotoxic metabolite NAPQI. However, both kava and high-dose acetaminophen are hepatotoxic — combined use substantially increases risk of liver damage.",
-      "management": "Avoid kava with regular acetaminophen use. If pain relief is needed, use the lowest effective dose of acetaminophen and avoid alcohol. Monitor liver enzymes with long-term exposure.",
+      "mechanism": "Kava and acetaminophen have separate liver-toxicity concerns. A preclinical study found that kava extract increased acetaminophen-induced cytotoxicity in rat hepatic cells, with glutathione depletion and mitochondrial effects. The magnitude and dose boundary of this combined risk in humans are not established by that experiment.",
+      "management": "Avoid combining kava with repeated acetaminophen use without clinician review, particularly when liver risk is present. Ask the clinician or pharmacist to review all acetaminophen-containing products; do not assume a lower dose guarantees no interaction. Possible liver-injury symptoms need prompt medical assessment.",
       "source_urls": [
         "https://www.nccih.nih.gov/health/kava",
-        "https://livertox.nih.gov/Kava.htm"
+        "https://pubmed.ncbi.nlm.nih.gov/21397479/"
       ],
-      "source_pmids": [],
+      "source_pmids": [
+        "21397479"
+      ],
       "verification": {
         "status": "verified",
-        "verified_at": "2026-04-13T16:37:00Z",
+        "verified_at": "2026-10-12",
         "verified_with": {
           "rxnorm": true,
           "umls": true,
           "pubmed": true
         },
-        "method": "live_api_batch_2026_04_13"
+        "method": "agent_source_content_review_2026_10_12",
+        "notes": "Primary source content reviewed for the corrected claim. Presence screening is not a declaration of harm at every dose or clinical clearance."
       },
-      "evidence_basis": "clinical_literature",
-      "clinical_confidence": "high",
+      "evidence_basis": "preclinical",
+      "clinical_confidence": "low",
       "applies_to": "dose_dependent",
       "agent1_canonical_id": "kavalactones",
       "agent2_canonical_id": null,
       "direction": "harmful",
-      "materiality": "presence"
+      "materiality": "presence",
+      "evidence_notes": "Historical hard severity retained as a precaution pending clinical regrading. Primary combination evidence is rat-cell cytotoxicity, not quantified human harm or a validated suppression threshold."
     },
     {
       "id": "DSI_ANTIHYP_MAGNESIUM",
@@ -2705,44 +2623,38 @@
       "display_layer": "background",
       "background_rationale": "Minor additive drowsiness signal; background counseling rather than a product-fit gate.",
       "type": "Med-Sup",
-      "agent1_name": "Antipsychotics (class)",
-      "agent1_id": "class:antipsychotics",
+      "agent1_name": "Thioridazine",
+      "agent1_id": "10502",
       "agent2_name": "Melatonin",
       "agent2_id": "C0025219",
       "severity": "Minor",
       "interaction_effect_type": "Additive",
-      "mechanism": "Some antipsychotics (olanzapine, clozapine) are metabolized by CYP1A2 and also cause sedation. Melatonin can add mild sedative effect and fluvoxamine (sometimes used with antipsychotics) can raise melatonin levels significantly.",
-      "management": "Use low-dose melatonin (0.5–3 mg) if needed for sleep with antipsychotics. Monitor for excessive sedation. Inform your psychiatrist.",
+      "mechanism": "The 2 mg prolonged-release melatonin product information describes increased impairment with thioridazine. It does not establish a 5 mg safe-below cutoff; medicine and formulation matter.",
+      "management": "Ask the prescriber or pharmacist to review melatonin with the exact medicine. Watch for drowsiness or impaired coordination and avoid driving if affected. Do not assume a dose below 5 mg removes the concern or change prescribed treatment yourself.",
       "source_urls": [
-        "https://ods.od.nih.gov/factsheets/Melatonin-HealthProfessional/"
+        "https://www.medicines.org.uk/emc/product/101476/smpc"
       ],
       "verification": {
         "status": "verified",
-        "verified_at": "2026-04-13T16:37:00Z",
+        "verified_at": "2026-10-12",
         "verified_with": {
           "rxnorm": true,
           "umls": true,
           "pubmed": false
         },
-        "method": "live_api_batch_2026_04_13"
+        "method": "agent_source_content_review_2026_10_12",
+        "notes": "Primary source content reviewed for the corrected claim. Presence screening is not a declaration of harm at every dose or clinical clearance."
       },
-      "evidence_basis": "authoritative_review",
-      "clinical_confidence": "low",
-      "applies_to": "dose_dependent",
+      "evidence_basis": "label_regulatory",
+      "clinical_confidence": "medium",
+      "applies_to": "specific_drug",
       "agent1_canonical_id": null,
       "agent2_canonical_id": "melatonin",
       "direction": "harmful",
-      "materiality": "dose_dependent",
-      "dose_threshold": {
-        "agent_canonical_id": "melatonin",
-        "value": 5,
-        "unit": "mg",
-        "basis": "per_day",
-        "confidence": "low",
-        "confidence_basis": "management_stated",
-        "source": "https://www.nccih.nih.gov/health/melatonin-what-you-need-to-know",
-        "rationale": "Pair mgmt: low-dose melatonin (0.5-3 mg) is fine with antipsychotics; floor at 5 mg."
-      }
+      "materiality": "presence",
+      "dose_threshold": null,
+      "source_pmids": [],
+      "evidence_notes": "Reviewed 2 mg prolonged-release melatonin label describes thioridazine-related impairment; rule is narrowed to that verified RxNorm IN rather than extrapolated across every antipsychotic."
     },
     {
       "id": "DSI_ANTICOAG_CBD",
@@ -2897,8 +2809,8 @@
       "agent2_id": "ref:horse_chestnut_seed",
       "severity": "Moderate",
       "interaction_effect_type": "Additive",
-      "mechanism": "Health Canada lists horse chestnut among natural health products with evidence that they may change warfarin levels or directly affect blood clotting. Horse chestnut seed extracts contain aescin/escin and are used for venous insufficiency, so anticoagulant users need bleeding-risk monitoring rather than a silent clean check.",
-      "management": "Use caution with horse chestnut seed extract while taking warfarin or another anticoagulant. Tell the anticoagulation clinician before adding or stopping it, keep intake consistent if already using it, and watch for unusual bruising or bleeding.",
+      "mechanism": "Health Canada lists horse chestnut among products that may change warfarin levels or clotting. Preparation matters: raw horse chestnut is toxic, while standardized seed extracts are different. Neither source establishes a 300 mg interaction boundary or equivalent risk across preparations.",
+      "management": "Discuss horse chestnut seed extract with the anticoagulation clinician before adding or stopping it. Do not use raw horse chestnut. Report unusual bruising or bleeding; the source does not establish a lower extract dose that guarantees no interaction.",
       "source_urls": [
         "https://www.canada.ca/en/health-canada/services/drugs-medical-devices/warfarin.html",
         "https://www.nccih.nih.gov/health/horse-chestnut"
@@ -2906,13 +2818,14 @@
       "source_pmids": [],
       "verification": {
         "status": "verified",
-        "verified_at": "2026-05-17T20:20:00Z",
+        "verified_at": "2026-10-12",
         "verified_with": {
           "rxnorm": true,
           "umls": true,
           "pubmed": false
         },
-        "method": "manual_primary_source_review_2026_05_17"
+        "method": "agent_source_content_review_2026_10_12",
+        "notes": "Primary source content reviewed for the corrected claim. Presence screening is not a declaration of harm at every dose or clinical clearance."
       },
       "evidence_basis": "authoritative_review",
       "clinical_confidence": "medium",
@@ -2920,17 +2833,8 @@
       "agent1_canonical_id": null,
       "agent2_canonical_id": "horse_chestnut_seed",
       "direction": "harmful",
-      "materiality": "dose_dependent",
-      "dose_threshold": {
-        "agent_canonical_id": "horse_chestnut_seed",
-        "value": 300,
-        "unit": "mg",
-        "basis": "per_day",
-        "confidence": "low",
-        "confidence_basis": "inferred_conservative",
-        "source": "https://www.nccih.nih.gov/health/horse-chestnut",
-        "rationale": "INFERRED conservative floor at standardized horse-chestnut-seed (aescin) supplement dose (~300 mg); not a guideline cutoff."
-      }
+      "materiality": "presence",
+      "dose_threshold": null
     },
     {
       "id": "DSI_DM_ASHWAGANDHA",
@@ -2941,42 +2845,31 @@
       "agent2_id": "C0613707",
       "severity": "Moderate",
       "interaction_effect_type": "Additive",
-      "mechanism": "Ashwagandha (Withania somnifera) has been shown in clinical trials to reduce fasting blood glucose and HbA1c. Combined with diabetes medications, it can cause additive glucose lowering.",
-      "management": "Monitor blood glucose when adding ashwagandha to diabetes therapy. Inform prescriber. Dose adjustment may be needed.",
+      "mechanism": "NCCIH notes that ashwagandha may interact with diabetes medicines. The risk magnitude and dose boundary are not established. A stress trial using 300 mg twice daily was not a combination-interaction boundary study.",
+      "management": "Ask the prescriber to review ashwagandha with diabetes medicines and agree on appropriate monitoring. Do not assume an amount below 300 mg/day guarantees no interaction or change prescribed medicines yourself.",
       "source_urls": [
-        "https://www.nccih.nih.gov/health/ashwagandha",
-        "https://pubmed.ncbi.nlm.nih.gov/31975514/"
+        "https://www.nccih.nih.gov/health/ashwagandha"
       ],
-      "source_pmids": [
-        "31975514"
-      ],
+      "source_pmids": [],
       "verification": {
         "status": "verified",
-        "verified_at": "2026-04-13T16:37:00Z",
+        "verified_at": "2026-10-12",
         "verified_with": {
           "rxnorm": true,
           "umls": true,
           "pubmed": true
         },
-        "method": "live_api_batch_2026_04_13"
+        "method": "agent_source_content_review_2026_10_12",
+        "notes": "Primary source content reviewed for the corrected claim. Presence screening is not a declaration of harm at every dose or clinical clearance."
       },
-      "evidence_basis": "clinical_literature",
+      "evidence_basis": "authoritative_review",
       "clinical_confidence": "medium",
       "applies_to": "dose_dependent",
       "agent1_canonical_id": null,
       "agent2_canonical_id": "ashwagandha",
       "direction": "harmful",
-      "materiality": "dose_dependent",
-      "dose_threshold": {
-        "agent_canonical_id": "ashwagandha",
-        "value": 300,
-        "unit": "mg",
-        "basis": "per_day",
-        "confidence": "low",
-        "confidence_basis": "inferred_conservative",
-        "source": "https://www.nccih.nih.gov/health/ashwagandha",
-        "rationale": "INFERRED conservative floor at a standardized ashwagandha-extract dose (~300 mg); not a guideline cutoff."
-      }
+      "materiality": "presence",
+      "dose_threshold": null
     },
     {
       "id": "DSI_ANTIHYP_ASHWAGANDHA",
@@ -3025,41 +2918,31 @@
       "agent2_id": "C0613707",
       "severity": "Minor",
       "interaction_effect_type": "Additive",
-      "mechanism": "Ashwagandha has anxiolytic and mild sedative properties via GABAergic mechanisms. Combined with sedative medications, it may add to CNS depressant effects.",
-      "management": "Use caution combining ashwagandha with sedatives. Avoid driving or operating machinery if drowsiness occurs. Inform prescriber.",
+      "mechanism": "NCCIH notes that ashwagandha may interact with sedative medicines. The risk magnitude and dose boundary are not established. A stress trial using 300 mg twice daily was not a combination-interaction boundary study.",
+      "management": "Ask the prescriber to review ashwagandha with sedative medicines and agree on appropriate monitoring. Do not assume an amount below 300 mg/day guarantees no interaction or change prescribed medicines yourself.",
       "source_urls": [
-        "https://pubmed.ncbi.nlm.nih.gov/23439798/"
+        "https://www.nccih.nih.gov/health/ashwagandha"
       ],
-      "source_pmids": [
-        "23439798"
-      ],
+      "source_pmids": [],
       "verification": {
         "status": "verified",
-        "verified_at": "2026-04-13T16:37:00Z",
+        "verified_at": "2026-10-12",
         "verified_with": {
           "rxnorm": true,
           "umls": true,
           "pubmed": true
         },
-        "method": "live_api_batch_2026_04_13"
+        "method": "agent_source_content_review_2026_10_12",
+        "notes": "Primary source content reviewed for the corrected claim. Presence screening is not a declaration of harm at every dose or clinical clearance."
       },
-      "evidence_basis": "clinical_literature",
-      "clinical_confidence": "low",
+      "evidence_basis": "authoritative_review",
+      "clinical_confidence": "medium",
       "applies_to": "whole_class",
       "agent1_canonical_id": null,
       "agent2_canonical_id": "ashwagandha",
       "direction": "harmful",
-      "materiality": "dose_dependent",
-      "dose_threshold": {
-        "agent_canonical_id": "ashwagandha",
-        "value": 300,
-        "unit": "mg",
-        "basis": "per_day",
-        "confidence": "low",
-        "confidence_basis": "inferred_conservative",
-        "source": "https://www.nccih.nih.gov/health/ashwagandha",
-        "rationale": "INFERRED conservative floor at a standardized ashwagandha-extract dose (~300 mg)."
-      }
+      "materiality": "presence",
+      "dose_threshold": null
     },
     {
       "id": "DSI_ANTICOAG_TURMERIC",
@@ -3106,22 +2989,25 @@
       "agent2_id": "C0813171",
       "severity": "Contraindicated",
       "interaction_effect_type": "Inhibitor",
-      "mechanism": "HIV protease inhibitors (indinavir, ritonavir, saquinavir, etc.) are CYP3A4/P-gp substrates. St. John's Wort induces both, causing a 50–80% reduction in protease inhibitor plasma levels, leading to virological failure and drug resistance.",
-      "management": "Absolutely contraindicated. St. John's Wort must not be used with any antiretroviral therapy. This interaction has led to treatment failures and HIV drug resistance. The FDA has issued specific warnings.",
+      "mechanism": "St. John’s wort can reduce exposure to some HIV medicines through enzyme/transporter induction. In healthy volunteers, one indinavir study found mean AUC and trough reductions of 57% and 81%. Those values are specific to indinavir and that preparation; they are not measurements for every protease inhibitor. Reduced exposure could compromise treatment.",
+      "management": "Avoid adding St. John’s wort during HIV treatment without review by the HIV prescriber or pharmacist. They must check the exact regimen and manage any change. Do not stop antiretroviral treatment yourself.",
       "source_urls": [
         "https://www.nccih.nih.gov/health/st-johns-wort",
-        "https://www.fda.gov/drugs/drug-safety-and-availability/fda-public-health-advisory-risk-drug-interactions-st-johns-wort-hypericum-perforatum-and-indinavir"
+        "https://pubmed.ncbi.nlm.nih.gov/10683007/"
       ],
-      "source_pmids": [],
+      "source_pmids": [
+        "10683007"
+      ],
       "verification": {
         "status": "verified",
-        "verified_at": "2026-04-13T16:37:00Z",
+        "verified_at": "2026-10-12",
         "verified_with": {
           "rxnorm": true,
           "umls": true,
           "pubmed": true
         },
-        "method": "live_api_batch_2026_04_13"
+        "method": "agent_source_content_review_2026_10_12",
+        "notes": "Primary source content reviewed for the corrected claim. Presence screening is not a declaration of harm at every dose or clinical clearance."
       },
       "evidence_basis": "label_regulatory",
       "clinical_confidence": "high",
@@ -3129,7 +3015,8 @@
       "agent1_canonical_id": null,
       "agent2_canonical_id": "st_johns_wort",
       "direction": "harmful",
-      "materiality": "presence"
+      "materiality": "presence",
+      "evidence_notes": "Indinavir pharmacokinetic study supports a clinically serious concern, not observed treatment failure/resistance in that study or identical effects across all antiretrovirals."
     },
     {
       "id": "DSI_IMMUNOSUP_PROBIOTICS",
@@ -3201,30 +3088,30 @@
     {
       "id": "DSI_ANTIHYP_VITD",
       "display_layer": "background",
-      "background_rationale": "Low-confidence modest blood-pressure signal; informational monitoring only.",
+      "background_rationale": "Source-qualified thiazide/vitamin D hypercalcemia review; no validated numerical floor.",
       "type": "Med-Sup",
-      "agent1_name": "Antihypertensives (class)",
-      "agent1_id": "class:antihypertensives",
+      "agent1_name": "Thiazide diuretics",
+      "agent1_id": "class:thiazide_diuretics",
       "agent2_name": "Vitamin D",
       "agent2_id": "C0042866",
       "severity": "Minor",
       "interaction_effect_type": "Additive",
-      "mechanism": "Vitamin D deficiency is associated with renin-angiotensin system activation and elevated blood pressure. Correction of deficiency may modestly lower blood pressure, potentially adding to antihypertensive effects.",
-      "management": "Vitamin D supplementation is generally recommended for deficient patients on antihypertensives. Monitor blood pressure when correcting significant deficiency. Usually beneficial rather than problematic.",
+      "mechanism": "Thiazide diuretics reduce urinary calcium excretion. Combined with vitamin D, they can increase hypercalcemia risk, particularly with kidney impairment, hyperparathyroidism or older age. The adult vitamin D upper limit is not an interaction-onset threshold.",
+      "management": "Ask the prescriber to review vitamin D supplementation with a thiazide diuretic and determine whether calcium or kidney-function monitoring is appropriate. Do not assume an amount below 4000 IU/day removes this interaction concern.",
       "source_urls": [
-        "https://ods.od.nih.gov/factsheets/VitaminD-HealthProfessional/",
         "https://ods.od.nih.gov/factsheets/VitaminD-HealthProfessional/"
       ],
       "source_pmids": [],
       "verification": {
         "status": "verified",
-        "verified_at": "2026-04-13T16:37:00Z",
+        "verified_at": "2026-10-12",
         "verified_with": {
           "rxnorm": true,
           "umls": true,
           "pubmed": false
         },
-        "method": "live_api_batch_2026_04_13"
+        "method": "agent_source_content_review_2026_10_12",
+        "notes": "Primary source content reviewed for the corrected claim. Presence screening is not a declaration of harm at every dose or clinical clearance."
       },
       "evidence_basis": "authoritative_review",
       "clinical_confidence": "low",
@@ -3232,17 +3119,8 @@
       "agent1_canonical_id": null,
       "agent2_canonical_id": "vitamin_d",
       "direction": "harmful",
-      "materiality": "dose_dependent",
-      "dose_threshold": {
-        "agent_canonical_id": "vitamin_d",
-        "value": 4000,
-        "unit": "IU",
-        "basis": "per_day",
-        "confidence": "low",
-        "confidence_basis": "inferred_conservative",
-        "source": "https://ods.od.nih.gov/factsheets/VitaminD-HealthProfessional/",
-        "rationale": "INFERRED floor at the adult UL (4000 IU); repletion doses below are usually beneficial rather than additive-hypotensive."
-      }
+      "materiality": "presence",
+      "dose_threshold": null
     },
     {
       "id": "DSI_FISHOIL_VITE",
@@ -3255,36 +3133,29 @@
       "agent2_canonical_id": "vitamin_e",
       "severity": "Moderate",
       "interaction_effect_type": "Additive",
-      "mechanism": "Both omega-3 fatty acids and vitamin E suppress platelet aggregation via separate pathways (membrane phospholipid remodeling and inhibition of platelet thromboxane synthesis), producing additive antiplatelet effects.",
-      "management": "Monitor for signs of easy bruising or bleeding. Consider keeping supplemental vitamin E below high-dose ranges (≤400 IU/day, roughly 180-268 mg alpha-tocopherol depending on form) when taking fish oil.",
+      "mechanism": "High-dose vitamin E can affect coagulation, but ODS does not establish a fish-oil/vitamin-E combination boundary at 180 mg (about 400 IU of natural vitamin E). Clinically important bleeding from this specific pair and its dose boundary remain uncertain.",
+      "management": "Ask a clinician or pharmacist to review high supplemental vitamin E with fish oil, especially with medicines or conditions that increase bleeding risk. Do not assume an amount below the old screening cutoff establishes no interaction.",
       "source_urls": [
-        "https://pubmed.ncbi.nlm.nih.gov/22300597/"
+        "https://ods.od.nih.gov/factsheets/VitaminE-HealthProfessional/",
+        "https://ods.od.nih.gov/factsheets/Omega3FattyAcids-HealthProfessional/"
       ],
-      "source_pmids": [
-        "22300597"
-      ],
+      "source_pmids": [],
       "verification": {
         "status": "verified",
         "verified_with": {
           "rxnorm": false,
           "umls": true,
           "pubmed": true
-        }
+        },
+        "verified_at": "2026-10-12",
+        "method": "agent_source_content_review_2026_10_12",
+        "notes": "Primary source content reviewed for the corrected claim. Presence screening is not a declaration of harm at every dose or clinical clearance."
       },
-      "evidence_basis": "systematic_review",
-      "clinical_confidence": "moderate",
+      "evidence_basis": "mechanism_inferred",
+      "clinical_confidence": "low",
       "direction": "harmful",
-      "materiality": "dose_dependent",
-      "dose_threshold": {
-        "agent_canonical_id": "vitamin_e",
-        "value": 180,
-        "unit": "mg",
-        "basis": "per_day",
-        "confidence": "medium",
-        "confidence_basis": "reuse+management+unit_normalized",
-        "source": "https://ods.od.nih.gov/factsheets/VitaminE-HealthProfessional/",
-        "rationale": "Reused vitamin E bleeding floor (400 IU/day) normalized to a conservative 180 mg alpha-tocopherol equivalent. NIH ODS lists 1 IU synthetic vitamin E as 0.45 mg alpha-tocopherol and 1 IU natural vitamin E as 0.67 mg; 180 mg is the lower mass equivalent, so below this floor is below 400 IU for either form."
-      }
+      "materiality": "presence",
+      "dose_threshold": null
     },
     {
       "id": "DSI_FISHOIL_GINKGO",
@@ -3297,36 +3168,29 @@
       "agent2_canonical_id": "ginkgo",
       "severity": "Moderate",
       "interaction_effect_type": "Additive",
-      "mechanism": "Both omega-3 fatty acids and ginkgo biloba (via ginkgolides inhibiting PAF) independently inhibit platelet aggregation, producing additive antiplatelet/bleeding risk.",
-      "management": "Monitor for signs of bruising or prolonged bleeding, especially before surgery. Consider separating or reducing doses.",
+      "mechanism": "Ginkgo and fish oil have possible effects on hemostasis, but the cited evidence does not establish clinically important bleeding from this specific combination or an onset boundary at 120 mg/day of ginkgo.",
+      "management": "Ask a clinician or pharmacist to review combined use, particularly with anticoagulants, other bleeding risks or a planned procedure. The concern is uncertain; a lower ginkgo dose is not a verified clearance criterion.",
       "source_urls": [
-        "https://pubmed.ncbi.nlm.nih.gov/20617421/"
+        "https://www.nccih.nih.gov/health/ginkgo",
+        "https://ods.od.nih.gov/factsheets/Omega3FattyAcids-HealthProfessional/"
       ],
-      "source_pmids": [
-        "20617421"
-      ],
+      "source_pmids": [],
       "verification": {
         "status": "verified",
         "verified_with": {
           "rxnorm": false,
           "umls": true,
           "pubmed": true
-        }
+        },
+        "verified_at": "2026-10-12",
+        "method": "agent_source_content_review_2026_10_12",
+        "notes": "Primary source content reviewed for the corrected claim. Presence screening is not a declaration of harm at every dose or clinical clearance."
       },
-      "evidence_basis": "review",
-      "clinical_confidence": "moderate",
+      "evidence_basis": "mechanism_inferred",
+      "clinical_confidence": "low",
       "direction": "harmful",
-      "materiality": "dose_dependent",
-      "dose_threshold": {
-        "agent_canonical_id": "ginkgo",
-        "value": 120,
-        "unit": "mg",
-        "basis": "per_day",
-        "confidence": "low",
-        "confidence_basis": "reuse",
-        "source": "https://www.nccih.nih.gov/health/ginkgo",
-        "rationale": "Sup-Sup additive bleeding; floor on ginkgo (primary antiplatelet, 120 mg standard dose)."
-      }
+      "materiality": "presence",
+      "dose_threshold": null
     },
     {
       "id": "DSI_MELATONIN_VALERIAN",
@@ -3341,36 +3205,28 @@
       "agent2_canonical_id": "valerian",
       "severity": "Minor",
       "interaction_effect_type": "Additive",
-      "mechanism": "Valerian acts as a GABAergic/adenosine modulator promoting sleep, while melatonin acts on MT1/MT2 receptors; combined use produces additive CNS sedation and may increase next-day drowsiness.",
-      "management": "Start with lower doses of both if combining. Avoid driving or operating machinery after taking both.",
+      "mechanism": "Melatonin and valerian can cause drowsiness; additive impairment is a precaution, not an established pair-specific dose-response result. NCCIH describes valerian-related additive sedative effects as possible but unproven; no 400 mg boundary is established.",
+      "management": "Discuss combined use with a clinician or pharmacist. Watch for drowsiness or impaired coordination and avoid driving if affected. Do not assume less than 400 mg valerian guarantees no interaction.",
       "source_urls": [
-        "https://pubmed.ncbi.nlm.nih.gov/38359657/"
+        "https://www.nccih.nih.gov/health/valerian"
       ],
-      "source_pmids": [
-        "38359657"
-      ],
+      "source_pmids": [],
       "verification": {
         "status": "verified",
         "verified_with": {
           "rxnorm": false,
           "umls": true,
           "pubmed": true
-        }
+        },
+        "verified_at": "2026-10-12",
+        "method": "agent_source_content_review_2026_10_12",
+        "notes": "Primary source content reviewed for the corrected claim. Presence screening is not a declaration of harm at every dose or clinical clearance."
       },
       "evidence_basis": "mechanism_inferred",
       "clinical_confidence": "low",
       "direction": "harmful",
-      "materiality": "dose_dependent",
-      "dose_threshold": {
-        "agent_canonical_id": "valerian",
-        "value": 400,
-        "unit": "mg",
-        "basis": "per_day",
-        "confidence": "low",
-        "confidence_basis": "inferred_conservative",
-        "source": "https://www.nccih.nih.gov/health/valerian",
-        "rationale": "INFERRED conservative floor on valerian (~400 mg) for additive sedation with melatonin."
-      }
+      "materiality": "presence",
+      "dose_threshold": null
     },
     {
       "id": "DSI_MAGNESIUM_BISPHOSPHONATE",
@@ -3383,26 +3239,28 @@
       "agent2_canonical_id": "magnesium",
       "severity": "Major",
       "interaction_effect_type": "Inhibitor",
-      "mechanism": "Divalent cations (Mg2+, Ca2+) form insoluble chelate complexes with bisphosphonate molecules in the GI tract, severely reducing oral bioavailability.",
-      "management": "Take bisphosphonates on an empty stomach with plain water. Wait at least 30-60 minutes before any mineral supplements.",
+      "mechanism": "Magnesium-containing products can interfere with absorption of oral bisphosphonates. This gastrointestinal interaction does not establish a warning for intravenous bisphosphonates; dosing instructions differ by oral medicine and formulation.",
+      "management": "Follow the exact oral bisphosphonate label and ask the pharmacist to schedule magnesium. Immediate-release products have their own fasting and separation instructions. Risedronate delayed-release is taken after breakfast, and magnesium supplements or laxatives must be taken at a different time of day. Do not apply a universal fasting interval to every formulation.",
       "source_urls": [
-        "https://pubmed.ncbi.nlm.nih.gov/26934925/"
+        "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=c89430be-15f1-4b8b-ab7e-738de716ee7d"
       ],
-      "source_pmids": [
-        "26934925"
-      ],
+      "source_pmids": [],
       "verification": {
         "status": "verified",
         "verified_with": {
           "rxnorm": false,
           "umls": true,
           "pubmed": true
-        }
+        },
+        "verified_at": "2026-10-12",
+        "method": "agent_source_content_review_2026_10_12",
+        "notes": "Primary source content reviewed for the corrected claim. Presence screening is not a declaration of harm at every dose or clinical clearance."
       },
-      "evidence_basis": "preclinical",
+      "evidence_basis": "label_regulatory",
       "clinical_confidence": "high",
       "direction": "harmful",
-      "materiality": "presence"
+      "materiality": "presence",
+      "evidence_notes": "Delayed-release risedronate label is the human dosing authority; PMID 26934925 was a rat mineral-water study and cannot establish uniform human timing. Existing broad class still lacks route/formulation gating; copy limits the concern to oral therapy."
     },
     {
       "id": "DSI_GINKGO_ANTIPLATELET",
