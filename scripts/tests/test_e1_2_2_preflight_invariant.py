@@ -16,8 +16,11 @@ that points to the exact dsld_id + field.
 
 Runs against the nine reviewed canary baseline blobs + their fresh rebuilds.
 
-The active baseline is the reviewed October 11 native-owner rebuild of the same
-nine frozen raw labels. The historical September/April blobs remain untouched.
+The active baseline is the reviewed October 12 native-owner rebuild of the same
+nine frozen raw labels. The historical October11/September/April blobs remain untouched. The October12
+refresh changes only1036 after the separately merged green-tea form correction:
+a generic15mg leaf extract declares no EGCG percentage, so no50%EGCG claim
+or7.5mg marker credit is allowed. The other eight baselines are unchanged.
 Same-input c7→current captures classified the intended clinical warning changes
 and established that legacy full-pipeline fields were already absent from the
 native canary owner before this batch. Snapshot hashes live beside the active
@@ -38,7 +41,7 @@ if str(ROOT) not in sys.path:
 
 # Keep historical snapshots unchanged; this dated baseline records the reviewed
 # native canary contract after the clinical registry correction batch.
-BASELINE_DIR = ROOT / "reports" / "baseline_pre_e1_2_2" / "clinical_registry_20261011"
+BASELINE_DIR = ROOT / "reports" / "baseline_pre_e1_2_2" / "clinical_registry_20261012"
 REBUILD_DIR = ROOT / "reports" / "canary_rebuild"
 
 # Fields E1.2.2 is explicitly permitted to ADD (not mutate). Any other

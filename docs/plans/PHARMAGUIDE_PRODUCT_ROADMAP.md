@@ -105,6 +105,15 @@ nothing quietly disappears.
 6. **Content alongside**: magnesium, melatonin, label reading and certification seals, each paired
    with a social post using the same verified facts.
 
+October12 independent candidate audit for items2/5: production-reader and provider checks
+cover interactions, depletion, cumulative nutrients/units, profile gates and incomplete data.
+The active catalog and all69blocked products were checked; signed build21 repairs one broken
+DailyMed citation through the existing pipeline interaction owner. Tests also expose and repair
+stale canary expectations for previously integrated green-tea standardization; no clinical policy
+or app decision engine was added. Evidence: `/Users/seancheick/pg_quality/build20_independent_audit_20261012/REPORT.md`.
+Whole-registry clearance and physical-device acceptance are separate; existing holds remain.
+Final automated checkpoint and integration status are recorded in the LEDGER/report.
+
 ### During beta
 
 1.4 page order (needs L2), 1.6 "Why this score"
