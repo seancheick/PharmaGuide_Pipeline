@@ -3,9 +3,9 @@
     "schema_version": "1.0.0",
     "description": "Drug class expansion map for interaction matching (class:X → RxCUIs)",
     "purpose": "interaction_db_class_expansion",
-    "last_updated": "2026-10-11",
-    "total_classes": 39,
-    "total_members": 816,
+    "last_updated": "2026-10-12",
+    "total_classes": 40,
+    "total_members": 817,
     "data_source_metadata": {
       "sources": [
         "NLM RxClass (ATC)",
@@ -24,7 +24,7 @@
       "live_command": "python3 scripts/api_audit/seed_drug_classes.py --live"
     },
     "usage": "Referenced by build_interaction_db.py when expanding class:X agents at build time. Missing class → blocks build.",
-    "total_entries": 39
+    "total_entries": 40
   },
   "classes": {
     "class:statins": {
@@ -1025,7 +1025,10 @@
       "atc_codes": [
         "N05A"
       ],
-      "notes": "Clinical antipsychotic membership excludes lithium despite its ATC N05A grouping. Lithium is a mood stabilizer; independent lithium-specific interactions remain applicable."
+      "notes": "Clinical antipsychotic membership excludes lithium despite its ATC N05A grouping. Lithium is a mood stabilizer; independent lithium-specific interactions remain applicable.",
+      "excluded_member_rxcuis": [
+        "6448"
+      ]
     },
     "class:triptans": {
       "display_name": "Triptans",
@@ -1259,7 +1262,10 @@
       "atc_codes": [
         "G03A"
       ],
-      "notes": "Etonogestrel includes subdermal implant and vaginal-ring exposure; enzyme-inducer contraceptive warnings are retained. Megestrol is excluded from this contraceptive hazard class; its current US oral suspension indication is AIDS-related anorexia/cachexia. Do not infer oral administration from the legacy class key."
+      "notes": "Etonogestrel includes subdermal implant and vaginal-ring exposure; enzyme-inducer contraceptive warnings are retained. Megestrol is excluded from this contraceptive hazard class; its current US oral suspension indication is AIDS-related anorexia/cachexia. Do not infer oral administration from the legacy class key.",
+      "excluded_member_rxcuis": [
+        "6703"
+      ]
     },
     "class:sedatives": {
       "display_name": "Hypnotics and sedatives",
@@ -2169,6 +2175,21 @@
         "N03AG01"
       ],
       "notes": "Valproate moiety across its dispensed salts (Depakote is divalproex). Deliberately separate from class:enzyme_inducing_antiseizure_medications: valproate INHIBITS CYP450, so it shares none of the induction-driven depletions (vitamin D, vitamin K, calcium, folate). It carries its own L-carnitine risk through acylcarnitine conjugation. The biotin signal is suppressed pending valproate-specific evidence. All 4 rxcuis content-verified against RxNorm 2026-07-26."
+    },
+    "class:lithium": {
+      "display_name": "Lithium",
+      "description": "Lithium medications, kept separate from antipsychotic agents for existing lithium-specific supplement warnings.",
+      "member_rxcuis": [
+        "6448"
+      ],
+      "member_names": [
+        "lithium"
+      ],
+      "rxclass_id": "N05AN",
+      "atc_codes": [
+        "N05AN01"
+      ],
+      "notes": "RxNorm identifies 6448 as the active ingredient lithium. Live RxClass ATC N05AN membership contains that ingredient with direct source N05AN01. This membership selects the existing lithium profile vocabulary; it does not restore antipsychotic membership. Verified 2026-10-12."
     }
   }
 }

@@ -67,11 +67,15 @@ EXPECTED_CLASSES = {
     # Section 3 (2026-07-26): valproate's salts, kept separate from the inducer
     # class because valproate INHIBITS CYP450 — see test_med_nutrient_antiseizure.
     "class:valproate",
+    # Existing lithium-specific profile warnings need this identity group;
+    # ATC's broader N05A placement does not make lithium an antipsychotic.
+    "class:lithium",
 }
 
 # Sanity anchors: drugs we *must* be able to find in these classes.
 # If the ATC upstream changes and drops one of these, we want to know.
 CANONICAL_ANCHORS = {
+    "class:lithium": ["lithium"],
     "class:statins": ["atorvastatin", "simvastatin", "rosuvastatin"],
     "class:ssris": ["sertraline", "fluoxetine", "escitalopram"],
     "class:beta_blockers": ["metoprolol", "propranolol", "atenolol"],
