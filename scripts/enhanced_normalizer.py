@@ -3935,6 +3935,15 @@ class EnhancedDSLDNormalizer:
                 exact = self._canonical_identity_registry.resolve_verified_preferred(literal)
                 if exact and exact != (candidate.get("id"), "other_ingredients"):
                     return self._canonical_identity_registry.standard_names[(exact[1], exact[0])], True, forms
+            # A printed whole-plant part can retain its independently authored
+            # botanical owner; it cannot borrow the generated extract alias.
+            for part in self._PLANT_PART_TOKENS:
+                literal = re.sub(r"\s+" + re.escape(part) + r"$", "", name, flags=re.I)
+                if literal == name:
+                    continue
+                exact = self._canonical_identity_registry.resolve_verified_preferred(literal)
+                if exact and exact[1] == "botanical_ingredients":
+                    return self._canonical_identity_registry.standard_names[(exact[1], exact[0])], True, forms
             return name, False, forms
 
         # P0.5 PRIORITY 1: Check EXPLICIT DYES first (deterministic, bypasses indicator heuristics)
