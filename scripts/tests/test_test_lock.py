@@ -160,25 +160,42 @@ def test_inherited_lock_descriptors_require_existing_owner_files(tmp_path, monke
         unrelated.close()
 
 
-def test_preparation_runner_reacquires_with_stale_held_environment(tmp_path):
+@pytest.mark.parametrize("startup_delay", [0, 0.75])
+def test_preparation_runner_reacquires_with_stale_held_environment(tmp_path, startup_delay):
     release = tmp_path / 'release_stale_flag'
     holder = _start(tmp_path, 'exclusive', f"from pathlib import Path; import time\nwhile not Path({str(release)!r}).exists(): time.sleep(.02)")
     _wait_for_markers(tmp_path, 1)
     repo = Path(__file__).resolve().parents[2]
     env = dict(os.environ, PG_TEST_LOCK_DIR=str(tmp_path), PG_TEST_LOCK_HELD='1',
                PG_TEST_LOCK_FDS='999999', PG_PREPARATION_REPORT=str(tmp_path / 'evidence.json'))
-    queued = subprocess.Popen(['bash', 'scripts/test.sh', 'preparation', '--collect-only',
+    queued = subprocess.Popen(['bash', '-c', f'sleep {startup_delay}; exec bash scripts/test.sh "$@"',
+                              'bash', 'preparation', '--collect-only',
                               'scripts/tests/test_ci_skip_guard.py::test_every_local_only_file_exists'],
                              cwd=repo, env=env, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+    # Starting a shell/Python process can take longer than a fixed sleep on a
+    # loaded machine. Keep the holder alive until the real acquisition attempt
+    # reports contention; otherwise this test releases it before the runner
+    # reaches the lock and incorrectly treats a successful acquire as a bypass.
+    import selectors
+    wait_message = 'waiting for the machine-wide test lock'
+    observed_stderr = ''
     try:
-        time.sleep(.4)
-        assert queued.poll() is None, 'Stale held flag bypassed preparation suite lock'
+        deadline = time.monotonic() + 20
+        with selectors.DefaultSelector() as selector:
+            selector.register(queued.stderr, selectors.EVENT_READ)
+            while wait_message not in observed_stderr:
+                assert queued.poll() is None, 'Stale held flag bypassed preparation suite lock'
+                assert time.monotonic() < deadline, 'Runner never attempted the preparation lock'
+                if selector.select(timeout=.1):
+                    observed_stderr += queued.stderr.readline()
+        assert queued.poll() is None, 'Contending runner did not retain the lock wait'
     finally:
         release.touch()
         holder.communicate(timeout=20)
         out, err = queued.communicate(timeout=30)
+    err = observed_stderr + err
     assert queued.returncode == 0, out[-2000:] + err[-2000:]
-    assert 'waiting for the machine-wide test lock' in err
+    assert wait_message in err
 
 
 @pytest.mark.parametrize('inherited_state', ['shared', 'opened_unlocked'])
