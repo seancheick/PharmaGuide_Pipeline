@@ -51,6 +51,13 @@ def test_coq10_value_in_evidence_band(iqm, fname, vmin, vmax, basis):
     """Each CoQ10 form's struct.value must sit in evidence-supported band."""
     form = iqm.get('coq10', {}).get('forms', {}).get(fname)
     assert form is not None, f'coq10::{fname} missing'
+    reviewed_unknown = {'ubiquinol crystal-free': ['16919858', 'did not include an active'],
+     'ubiquinol': ['32188111', 'not significant']}
+    if fname in reviewed_unknown:
+        assert form['absorption_structured'] == dict(value=None, range_low=None, range_high=None, quality='unknown')
+        for source_limit in reviewed_unknown[fname]:
+            assert source_limit in form['notes']
+        return
     val = (form.get('absorption_structured') or {}).get('value')
     assert val is not None, (
         f'coq10::{fname} struct.value should be populated (per Batch 7)'
@@ -62,23 +69,14 @@ def test_coq10_value_in_evidence_band(iqm, fname, vmin, vmax, basis):
 
 
 def test_coq10_form_ranking_consistent(iqm):
-    """CoQ10 form ranking by struct.value must match clinical evidence:
-    ubiquinol crystal-free > ubiquinol ≈ crystal-dispersed > softgel > standard > powder.
-    """
     forms = iqm['coq10']['forms']
-    def v(name):
-        return (forms[name].get('absorption_structured') or {}).get('value')
+    for name in ['ubiquinol', 'ubiquinol crystal-free']:
+        assert forms[name]['absorption_structured'] == dict(value=None, range_low=None, range_high=None, quality='unknown')
+        assert forms[name]['bio_score'] == 13
+    assert 'did not include an active' in forms['ubiquinol crystal-free']['notes']
+    assert 'not significant' in forms['ubiquinol']['notes']
+    assert forms['ubiquinone crystal-dispersed']['absorption_structured']['value'] >= forms['ubiquinone softgel']['absorption_structured']['value'] >= forms['ubiquinone standard']['absorption_structured']['value'] >= forms['ubiquinone powder/capsule']['absorption_structured']['value']
 
-    # Tier 1 (highest): ubiquinol crystal-free
-    assert v('ubiquinol crystal-free') >= v('ubiquinol')
-    assert v('ubiquinol crystal-free') >= v('ubiquinone crystal-dispersed')
-    # Tier 2: ubiquinol ≈ crystal-dispersed
-    assert v('ubiquinol') >= v('ubiquinone softgel')
-    assert v('ubiquinone crystal-dispersed') >= v('ubiquinone softgel')
-    # Tier 3: softgel > standard
-    assert v('ubiquinone softgel') >= v('ubiquinone standard')
-    # Tier 4: standard > powder
-    assert v('ubiquinone standard') >= v('ubiquinone powder/capsule')
 
 
 def test_no_lopez_lluch_misattribution_for_absolute_numbers(iqm):
@@ -150,12 +148,15 @@ def test_class_authority_pmids_cited(iqm):
     two class-authority references — must each appear in ≥2 CoQ10 forms.
     """
     forms = iqm['coq10']['forms']
-    counts = {'PMID:32380795': 0, 'PMID:16551570': 0}
+    counts = {'PMID:16551570': 0}
     for form in forms.values():
         text = (form.get('notes') or '') + ' ' + (form.get('absorption') or '')
         for pmid in counts:
-            if pmid in text:
+            if pmid.replace('PMID:', '') in text:
                 counts[pmid] += 1
+    assert '32188111' in forms['ubiquinol']['notes'] and 'not significant' in forms['ubiquinol']['notes']
+    assert '16919858' in forms['ubiquinol crystal-free']['notes'] and 'did not include an active' in forms['ubiquinol crystal-free']['notes']
+    assert '32380795' in forms['ubiquinone powder/capsule']['notes']
     for pmid, n in counts.items():
         assert n >= 2, (
             f'Class authority {pmid} should be cited in ≥2 CoQ10 forms; '

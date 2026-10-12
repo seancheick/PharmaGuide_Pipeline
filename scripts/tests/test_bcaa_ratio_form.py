@@ -175,5 +175,8 @@ def test_pmid_34642762_is_cited_by_its_real_byline(enricher):
     """PMID 34642762 is Weijzen et al., J Nutr 2022 (free amino acids vs intact milk
     protein); the leucine note had it as "Churchward-Venne 2021"."""
     iqm = enricher.databases['ingredient_quality_map']
-    assert 'Weijzen 2022, PMID:34642762' in iqm['l_leucine']['forms']['l-leucine powder']['notes']
+    notes = iqm['l_leucine']['forms']['l-leucine powder']['notes']
+    assert '34642762' in notes
+    assert 'free-amino-acid mixture with intact milk protein' in notes
+    assert 'not intestinal absorption measurements' in notes
     assert 'Churchward-Venne' not in json.dumps(iqm)

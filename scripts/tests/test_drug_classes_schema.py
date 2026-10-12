@@ -314,3 +314,16 @@ def test_rxcui_name_pairing_consistent_across_classes(classes):
         "rxcui mapped to multiple names across classes (a member_rxcuis/"
         f"member_names misalignment): {conflicts}"
     )
+
+
+def test_authored_exclusions_are_explicit_numeric_and_disjoint():
+    payload=json.loads(DRUG_CLASSES_PATH.read_text())
+    for class_id, row in payload['classes'].items():
+        excluded=row.get('excluded_member_rxcuis', [])
+        assert isinstance(excluded,list),class_id
+        assert all(isinstance(value,str) and value.isdigit() for value in excluded),class_id
+        assert len(excluded)==len(set(excluded)),class_id
+        assert not set(excluded).intersection(row['member_rxcuis']),class_id
+    nsaids=payload['classes']['class:nsaids']
+    assert nsaids['excluded_member_rxcuis']==['2473','4845']
+    assert '5640' in nsaids['member_rxcuis']

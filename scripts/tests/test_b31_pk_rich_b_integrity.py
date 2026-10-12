@@ -71,6 +71,15 @@ def test_b31_value_in_band(iqm, pid, fname, vmin, vmax, basis):
     """Each form's struct.value must sit in evidence band."""
     form = iqm[pid]['forms'].get(fname)
     assert form is not None, f'{pid}::{fname} missing'
+    reviewed_unknown = {'whole fruit powder': ['22399525', 'juice'],
+     'tart cherry extract': ['20218618', 'raspberry'],
+     'tart cherry (unspecified)': ['20218618', 'raspberry'],
+     'cordycepsprime extract': ['31673018', 'rat cordycepin']}
+    if fname in reviewed_unknown:
+        assert form['absorption_structured'] == dict(value=None, range_low=None, range_high=None, quality='unknown')
+        for source_limit in reviewed_unknown[fname]:
+            assert source_limit in form['notes']
+        return
     val = (form.get('absorption_structured') or {}).get('value')
     assert val is not None, f'{pid}::{fname} struct.value should be populated'
     assert vmin <= val <= vmax, (
@@ -148,46 +157,37 @@ def test_cordycepsprime_crominex_relapse_documented(iqm):
 
 
 def test_nag_class_equivalent_to_glucosamine_sulfate(iqm):
-    """NAG must be class-equivalent (within 0.10) to glucosamine sulfate
-    crystalline per Talent 1996 in vivo NAG→glucosamine conversion.
-    """
-    forms = iqm['glucosamine']['forms']
-    nag = (forms['n-acetyl glucosamine (NAG)'].get('absorption_structured') or {}).get('value')
-    sulfate = (forms['glucosamine sulfate (crystalline)'].get('absorption_structured') or {}).get('value')
-    assert nag is not None and sulfate is not None
-    assert abs(nag - sulfate) <= 0.10, (
-        f'NAG ({nag}) must be class-equivalent to glucosamine sulfate '
-        f'({sulfate}) within 0.10 — in vivo conversion (PMID:9001835).'
-    )
+    # Source-qualified preparation/endpoints supersede inferred absolute-F hierarchy.
+    form = iqm['glucosamine']['forms']['glucosamine sulfate (crystalline)']
+    assert form['absorption_structured'] == dict(value=None, range_low=None, range_high=None, quality='unknown')
+    assert '16168682' in form['notes']
+    assert '17353133' in form['notes']
+    assert 'not a free-glucosamine absolute fraction' in form['notes']
+    assert iqm['glucosamine']['forms']['n-acetyl glucosamine (NAG)']['absorption_structured']['value'] == 0.35
+
 
 
 def test_mangosteen_whole_fruit_below_pericarp(iqm):
-    """Mangosteen whole fruit must rank below pericarp extract per
-    Chitchumroonchokchai 2012 — pericarp = 99% of xanthone content.
-    """
-    forms = iqm['mangosteen']['forms']
-    whole = (forms['whole fruit powder'].get('absorption_structured') or {}).get('value')
-    pericarp = (forms['pericarp extract'].get('absorption_structured') or {}).get('value')
-    assert whole is not None and pericarp is not None
-    assert whole < pericarp, (
-        f'mangosteen whole fruit ({whole}) should rank below pericarp '
-        f'({pericarp}) — pericarp = 99% xanthone content (PMID:22399525).'
-    )
+    # Source-qualified preparation/endpoints supersede inferred absolute-F hierarchy.
+    form = iqm['mangosteen']['forms']['whole fruit powder']
+    assert form['absorption_structured'] == dict(value=None, range_low=None, range_high=None, quality='unknown')
+    assert '22399525' in form['notes']
+    assert 'juice' in form['notes']
+    assert 'not whole-fruit powder' in form['notes']
+
 
 
 def test_tart_cherry_extract_class_consistent_with_vitacherry(iqm):
-    """Tart cherry extract must be class-consistent (within 0.01) with
-    vitacherry sports per anthocyanin class-poor framework.
-    """
-    forms = iqm['tart_cherry']['forms']
-    extract = (forms['tart cherry extract'].get('absorption_structured') or {}).get('value')
-    vitacherry = (forms['vitacherry sports extract'].get('absorption_structured') or {}).get('value')
-    assert extract is not None and vitacherry is not None
-    assert abs(extract - vitacherry) <= 0.015, (
-        f'tart cherry extract ({extract}) must be class-consistent with '
-        f'vitacherry sports ({vitacherry}) within 0.015 — anthocyanin '
-        f'class-poor (PMID:20218618).'
-    )
+    # Source-qualified preparation/endpoints supersede inferred absolute-F hierarchy.
+    form = iqm['tart_cherry']['forms']['tart cherry extract']
+    assert form['absorption_structured'] == dict(value=None, range_low=None, range_high=None, quality='unknown')
+    assert '20218618' in form['notes']
+    assert 'raspberry' in form['notes']
+    form = iqm['tart_cherry']['forms']['tart cherry (unspecified)']
+    assert form['absorption_structured'] == dict(value=None, range_low=None, range_high=None, quality='unknown')
+    assert '20218618' in form['notes']
+    assert 'raspberry' in form['notes']
+
 
 
 def test_no_phantom_borges_2010_first_author(iqm):
@@ -223,7 +223,7 @@ def test_class_authority_pmids_introduced_b31(iqm):
         for form in iqm[pid]['forms'].values():
             full_text += (form.get('notes') or '') + ' '
             full_text += (form.get('absorption') or '') + ' '
-    missing = [pmid for pmid in expected_pmids if pmid not in full_text]
+    missing = [pmid for pmid in expected_pmids if pmid.replace('PMID:', '') not in full_text]
     assert not missing, (
         f'Verified class-authority PMIDs missing: {missing}'
     )

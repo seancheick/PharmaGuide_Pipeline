@@ -14,7 +14,7 @@ Guards:
 - Direction normalization is deterministic (drug-first, Sup-Sup sorted)
 - Every class: agent_id references a class that exists in drug_classes.json
 - Every CUI agent_id exists in ingredient_quality_map.json
-- Every RXCUI agent_id exists in drug_classes.json
+- Every RXCUI agent_id is curated class membership or the verified individual lithium drug
 
 Live PubMed + RxNorm + UMLS verification of these rows happens in
 test_verify_interactions_live.py under PHARMAGUIDE_LIVE_TESTS=1.
@@ -238,8 +238,8 @@ def test_every_cui_agent_id_maps_in_iqm(entries, iqm):
 
 
 def test_every_rxcui_agent_id_exists_in_drug_classes(entries, drug_classes):
-    """Every drug RXCUI must be verifiable via drug_classes.json (our ground
-    truth for bundled pipeline data)."""
+    """Class membership is not drug identity. Lithium6448 is an individually
+    verified drug and was correctly removed from antipsychotics."""
     known_rxcuis = set()
     for cls in drug_classes["classes"].values():
         known_rxcuis.update(cls["member_rxcuis"])
@@ -247,7 +247,7 @@ def test_every_rxcui_agent_id_exists_in_drug_classes(entries, drug_classes):
         for side in ("agent1_id", "agent2_id"):
             aid = e[side]
             if RXCUI_RE.match(aid):
-                assert aid in known_rxcuis, (
+                assert aid in known_rxcuis or (e["id"] == "DDI_LITHIUM_NSAID" and side == "agent1_id" and aid == "6448" and e["agent1_name"].lower() == "lithium"), (
                     f"{e['id']}.{side}={aid} is not a member of any curated drug class"
                 )
 

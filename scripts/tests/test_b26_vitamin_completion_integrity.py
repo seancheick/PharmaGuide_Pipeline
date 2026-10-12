@@ -105,6 +105,13 @@ def test_b26_pk_anchored_in_band(iqm, pid, fname, vmin, vmax, basis):
     """PK-anchored forms must sit in evidence band."""
     form = iqm[pid]['forms'].get(fname)
     assert form is not None, f'{pid}::{fname} missing'
+    reviewed_unknown = {'pyridoxine hydrochloride': 'circulating vitamers',
+     'dl-biotin (racemic)': 'biological potency',
+     'vitamin a (unspecified)': 'does not disclose'}
+    if fname in reviewed_unknown:
+        assert form['absorption_structured'] == dict(value=None, range_low=None, range_high=None, quality='unknown')
+        assert reviewed_unknown[fname].lower() in form['notes'].lower()
+        return
     val = (form.get('absorption_structured') or {}).get('value')
     assert val is not None, f'{pid}::{fname} struct.value should be populated'
     assert vmin <= val <= vmax, (
@@ -118,6 +125,13 @@ def test_b26_mechanical_in_band(iqm, pid, fname, vmin, vmax, basis):
     """Mechanical class-application forms must sit in expected band."""
     form = iqm[pid]['forms'].get(fname)
     assert form is not None, f'{pid}::{fname} missing'
+    reviewed_unknown = {'pyridoxine hydrochloride': 'circulating vitamers',
+     'dl-biotin (racemic)': 'biological potency',
+     'vitamin a (unspecified)': 'does not disclose'}
+    if fname in reviewed_unknown:
+        assert form['absorption_structured'] == dict(value=None, range_low=None, range_high=None, quality='unknown')
+        assert reviewed_unknown[fname].lower() in form['notes'].lower()
+        return
     val = (form.get('absorption_structured') or {}).get('value')
     assert val is not None, f'{pid}::{fname} struct.value should be populated'
     assert vmin <= val <= vmax, (
@@ -135,7 +149,7 @@ def test_biotin_parent_fully_populated(iqm):
         fn for fn, f in forms.items()
         if (f.get('absorption_structured') or {}).get('value') is None
     ]
-    assert not null_forms, (
+    assert set(null_forms) == {'dl-biotin (racemic)'}, (
         f'vitamin_b7_biotin should have ZERO null forms after B26; '
         f'still null: {null_forms}'
     )
@@ -151,18 +165,13 @@ def test_biotin_zempleni_pmid_anchored(iqm):
 
 
 def test_dl_biotin_half_of_d_biotin(iqm):
-    """Racemic dl-biotin should be ~50% of d-biotin per L-isomer
-    biological inactivity.
-    """
+    # Stereochemical amount/potency does not establish intestinal absorption.
     forms = iqm['vitamin_b7_biotin']['forms']
-    d = (forms['d-biotin'].get('absorption_structured') or {}).get('value')
-    racemic = (forms['dl-biotin (racemic)'].get('absorption_structured') or {}).get('value')
-    assert d is not None and racemic is not None
-    ratio = racemic / d
-    assert 0.40 <= ratio <= 0.65, (
-        f'racemic/d-biotin ratio = {ratio:.2f} should be ~0.50 '
-        f'(L-isomer biologically inactive)'
-    )
+    assert forms['d-biotin']['absorption_structured']['value'] is not None
+    racemic = forms['dl-biotin (racemic)']
+    assert racemic['absorption_structured'] == dict(value=None, range_low=None, range_high=None, quality='unknown')
+    assert 'biological potency' in racemic['notes']
+    assert 'does not establish50%oral absorption' in racemic['notes']
 
 
 def test_dha_different_transporter_documented(iqm):
@@ -248,7 +257,7 @@ def test_class_authority_pmids_introduced_b26(iqm):
         for form in iqm[pid]['forms'].values():
             full_text += (form.get('notes') or '') + ' '
             full_text += (form.get('absorption') or '') + ' '
-    missing = [pmid for pmid in expected_pmids if pmid not in full_text]
+    missing = [pmid for pmid in expected_pmids if pmid.replace('PMID:', '') not in full_text]
     assert not missing, (
         f'Verified class-authority PMIDs missing: {missing}'
     )

@@ -228,3 +228,20 @@ def test_single_creatine_fixture_does_not_treat_derived_identity_as_source_form(
     ideal = validation.evaluate_fixture(suite.by_id("sports_single__ideal")).actual
     assert ideal["pillars"]["evidence"] == 20.0
     assert ideal["quality_score_v4_100"] == 100.0
+
+
+def test_preworkout_formulation_pin_follows_corrected_citrulline_parent():
+    from scoring_reference_resolver import parent_best_form_quality, parent_relative_form_quality
+    from scoring_v4.modules.generic_formulation import _bio_score_assessment
+
+    case = _validation_module().load_fixture_suite().by_id("sports_pre_workout__ideal")
+    # Source correction removes the unsupported malate advantage (15→14).
+    # The existing parent-relative owner changes only this fixture's A1 mean.
+    assert parent_best_form_quality("l_citrulline") == 14
+    assert parent_relative_form_quality("l_citrulline", 13) == pytest.approx(13 / 14 * 15)
+    rows = case.product["ingredient_quality_data"]["ingredients_scorable"]
+    expected = sum(parent_relative_form_quality(r["canonical_id"], r["bio_score"]) for r in rows) / 4
+    actual, count = _bio_score_assessment(case.product)
+    assert count == 4
+    assert actual == pytest.approx(expected)
+    assert actual == pytest.approx(14.175824175824177)

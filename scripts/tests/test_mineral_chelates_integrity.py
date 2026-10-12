@@ -96,6 +96,14 @@ def test_mineral_chelate_value_in_band(iqm, pid, fname, vmin, vmax, basis):
     """Each mineral chelate form's struct.value must sit in evidence band."""
     form = iqm.get(pid, {}).get('forms', {}).get(fname)
     assert form is not None, f'{pid}::{fname} missing'
+    reviewed_unknown = {'iron brown rice chelate': 'Lack of search hits',
+     'liposomal iron': 'Sucrosomial',
+     'zinc brown rice chelate': 'Lack of search hits',
+     'selenium brown rice chelate': 'Lack of search hits'}
+    if fname in reviewed_unknown:
+        assert form['absorption_structured'] == dict(value=None, range_low=None, range_high=None, quality='unknown')
+        assert reviewed_unknown[fname].lower() in form['notes'].lower()
+        return
     val = (form.get('absorption_structured') or {}).get('value')
     assert val is not None, f'{pid}::{fname} struct.value should be populated'
     assert vmin <= val <= vmax, (
@@ -121,7 +129,7 @@ def test_brown_rice_chelate_marketing_flagged(iqm):
         text = text.lower()
         flag_phrases = ('no human pk', 'no human-pk', 'marketing', 'zero pubmed',
                         'no peer-reviewed', 'absent peer-reviewed', 'marketing-only')
-        assert any(p in text for p in flag_phrases), (
+        assert ('source/preparation claim' in text and 'lack of search hits is not proof' in text) or any(p in text for p in flag_phrases), (
             f'{pid}::{fname} should flag "no human PK" or "marketing" status. '
             f'Text: {text[:200]}'
         )
@@ -137,6 +145,10 @@ def test_brown_rice_chelate_value_conservative(iqm):
     ]
     for pid, fname, max_val in rice_caps:
         val = (iqm[pid]['forms'][fname].get('absorption_structured') or {}).get('value')
+        if pid != 'manganese':
+            assert iqm[pid]['forms'][fname]['absorption_structured'] == dict(value=None, range_low=None, range_high=None, quality='unknown')
+            assert 'Lack of search hits is not proof' in iqm[pid]['forms'][fname]['notes']
+            continue
         assert val <= max_val, (
             f'{pid}::{fname} value={val} exceeds conservative cap {max_val}. '
             f'The "60-70%" marketing claim has 0 PubMed support.'

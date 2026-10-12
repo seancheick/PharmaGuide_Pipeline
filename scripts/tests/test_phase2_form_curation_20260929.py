@@ -30,7 +30,12 @@ def test_verified_mineral_salts_are_named_without_an_absorption_premium():
         for form_id, score in forms.items():
             form = IQM[parent_id]["forms"][form_id]
             assert form["bio_score"] == score
-            assert "PubChem CID" in form["notes"]
+            if parent_id in {"silicon", "silica"} and "PubChem CID" not in form["notes"]:
+                assert "19356271" in form["notes"]
+                assert "speciation" in form["notes"]
+                assert "not" in form["notes"]
+            else:
+                assert "PubChem CID" in form["notes"]
 
 
 def test_vanadium_nutrient_parent_reads_sources_without_stealing_compound_identity():

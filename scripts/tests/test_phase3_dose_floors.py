@@ -70,6 +70,32 @@ EXPECTED = {
     "selenium": (400, "mcg", {"thyroid_disorder"}),
 }
 
+# Source-content correction2026-10-11: effect-study doses/ULs cannot establish
+# universal safe-below interaction floors. Pin conservative presence guards.
+SOURCE_UNESTABLISHED_FLOORS = {k: EXPECTED.pop(k) for k in (
+    "vitamin_b3_niacin", "alpha_lipoic_acid", "vitamin_e", "omega_3", "fish_oil",
+    "turmeric", "curcumin", "berberine_supplement", "fenugreek", "bitter_melon",
+    "white_mulberry", "psyllium", "quercetin", "glucosamine", "hawthorn",
+    "l_arginine", "st_johns_wort", "vitamin_d", "selenium",
+)}
+
+
+def test_unestablished_floors_do_not_suppress_source_precautions():
+    for canonical, (_, _, keys) in SOURCE_UNESTABLISHED_FLOORS.items():
+        found = []
+        for rule in RULES:
+            if rule.get("subject_ref", {}).get("canonical_id") != canonical:
+                continue
+            for key, row in _sub_rules(rule):
+                if key in keys:
+                    found.append(row)
+                    assert row.get("min_effective_dose") is None, (canonical, key)
+                    assert row["materiality"] == "presence", (canonical, key)
+                    assert row["direction"] == "harmful", (canonical, key)
+                    assert row.get("profile_gate", {}).get("dose") is None, (canonical, key)
+        assert found, canonical
+
+
 # (canonical, sub-rule) that MUST be beneficial (routed to support, never floored)
 # NB: (inositol, diabetes) was beneficial in the Phase-3 batch but was retagged
 # `neutral` after an adversarial clinical review (2026-07-02): inositol's glucose

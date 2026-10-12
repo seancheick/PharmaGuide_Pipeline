@@ -672,6 +672,15 @@ def resolved_clinical_matches(
     if formula:
         matches = [entry for entry in matches if _entry_id(entry) != formula["id"]]
         matches.append(formula)
+    from evidence_resolver import clinical_record_sources_eligible
+    # Reference-only context remains visible in provenance; its existing
+    # point/floor guards still award zero. Explicit clinical holds are removed.
+    matches = [
+        entry for entry in matches
+        if clinical_record_sources_eligible(entry)
+        or (_norm_text(entry.get("study_type")) == "reference"
+            and entry.get("scoring_eligible") is not False)
+    ]
     accepted_ids = {_entry_id(entry) for entry in matches}
     return matches, [entry for entry in recovered_matches if _entry_id(entry) in accepted_ids]
 
@@ -1025,9 +1034,8 @@ def _verified_ingredient_human_evidence_entries() -> Tuple[Dict[str, Any], ...]:
 
 
 def _is_verified_product_level_entry(entry: Dict[str, Any]) -> bool:
-    if _norm_text(entry.get("study_type")) == "reference":
-        return False
-    if _norm_text(entry.get("evidence_level")) == "reference":
+    from evidence_resolver import clinical_record_sources_eligible
+    if not clinical_record_sources_eligible(entry):
         return False
     if not _safe_list(entry.get("references_structured")):
         return False
@@ -1040,9 +1048,8 @@ def _is_verified_product_level_entry(entry: Dict[str, Any]) -> bool:
 
 
 def _is_verified_ingredient_human_entry(entry: Dict[str, Any]) -> bool:
-    if _norm_text(entry.get("study_type")) == "reference":
-        return False
-    if _norm_text(entry.get("evidence_level")) == "reference":
+    from evidence_resolver import clinical_record_sources_eligible
+    if not clinical_record_sources_eligible(entry):
         return False
     if not _safe_list(entry.get("references_structured")):
         return False

@@ -149,7 +149,8 @@ def test_boswellia_carterii_botanical_entry_exists(botanicals):
     assert e, "botanical_ingredients.boswellia_carterii missing"
     assert (e.get("external_ids") or {}).get("unii") == "R9XLF1R1WM"
     aliases = _lc(e.get("aliases", []))
-    for required in ("frankincense extract", "boswellia carterii"):
+    assert "frankincense extract" not in aliases
+    for required in ("boswellia carterii", "boswellia carterii resin"):
         assert required in aliases, (
             f"boswellia_carterii must alias '{required}'. Got: "
             f"{e.get('aliases')}"

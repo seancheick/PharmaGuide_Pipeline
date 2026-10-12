@@ -95,6 +95,10 @@ def test_bot_specific_preserved(bot_doc, m):
 def test_aliases_merged_to_specific(bot_doc, m):
     e = _find(bot_doc.get("botanical_ingredients", []), m["bot_id"])
     aliases = _lc(e.get("aliases", []))
+    if m['std_id'] == 'kelp':
+        assert 'laminaria' not in aliases  # genus alone cannot specify the source species.
+        assert 'kelp' in aliases
+        return
     for a in m["merged_aliases_sample"]:
         assert a in aliases, (
             f"bot.{m['bot_id']} missing merged alias '{a}' from std.{m['std_id']}. "

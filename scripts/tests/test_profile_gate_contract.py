@@ -293,6 +293,7 @@ def test_5_htp_has_broad_serotonergic_medications_profile_gate(live_rules):
     assert set(rule["profile_gate"]["excludes"]["drug_classes_any"]) == {
         "antidepressants_ssri_snri",
         "maois",
+        "ssris",
     }
     body = f"{rule['mechanism']} {rule['alert_body']} {rule['informational_note']}"
     assert "linezolid" in body.lower()

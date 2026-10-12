@@ -69,8 +69,8 @@ from api_audit.verify_interactions import (
 )
 from identity.interaction import normalize_interaction_canonical_id
 
-SCHEMA_VERSION = "2.0.0"
-SCHEMA_USER_VERSION = 2
+SCHEMA_VERSION = "3.0.0"
+SCHEMA_USER_VERSION = 3
 DEFAULT_PROFILE_WARNING_RULES = (
     Path(__file__).parent / "data" / "ingredient_interaction_rules.json"
 )
@@ -419,6 +419,7 @@ CREATE TABLE drug_class_map (
     class_id            TEXT PRIMARY KEY,
     class_name          TEXT NOT NULL,
     drug_rxcuis_json    TEXT NOT NULL,
+    excluded_drug_rxcuis_json TEXT NOT NULL DEFAULT '[]',
     source              TEXT NOT NULL,
     last_updated        TEXT NOT NULL
 );
@@ -720,6 +721,7 @@ def _column_order(table: str) -> list[str]:
             "class_id",
             "class_name",
             "drug_rxcuis_json",
+            "excluded_drug_rxcuis_json",
             "source",
             "last_updated",
         ]
@@ -837,6 +839,7 @@ def run_build(ctx: BuildContext) -> BuildResult:
                 "class_id": cid,
                 "class_name": meta.get("class_name", cid),
                 "drug_rxcuis_json": json.dumps(meta.get("member_rxcuis", [])),
+                "excluded_drug_rxcuis_json": json.dumps(meta.get("excluded_member_rxcuis", [])),
                 "source": meta.get("source", "rxclass"),
                 "last_updated": ctx.build_time,
             }

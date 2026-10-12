@@ -263,14 +263,23 @@ def test_real_218600_a_lineage_owned_complex_never_demotes_the_active_it_supplie
     supplying complex nested under it. The contract's competitor rule drops
     that complex (same mass counted twice), so the role owner's mass ratio must
     too (role test in test_v4_role_classification): PS stays the material
-    purpose and keeps its floor."""
+    purpose and keeps its source-qualified floor. Mixed PS evidence does not
+    regain the former affirmative-direction floor merely through prominence."""
     from evidence_resolver import evidence_prominent_row_keys
 
     product = _enrich("prominence_lineage_218600_raw.json")
     assert ("ingredientRows[2]", "phosphatidylserine") in evidence_prominent_row_keys(product)
     evidence = _evidence(product)
     assert evidence["metadata"]["primary_evidence_floor_canonical"] == "phosphatidylserine"
-    assert evidence["components"]["primary_evidence_floor"] == 14.0
+    from scoring_v4.modules.generic_evidence import PRIMARY_FLOOR_MODERATE, _EFFECT_FLOOR_MULTIPLIER
+    matches = product["evidence_data"]["clinical_matches"]
+    ps = next(m for m in matches if m["id"] == "INGR_PHOSPHATIDYLSERINE")
+    assert ps["effect_direction"] == "mixed"
+    assert ps["matched_source_row_refs"] == ["ingredientRows[2]"]
+    assert evidence["metadata"]["evidence_owner_canonicals"] == ["phosphatidylserine"]
+    assert evidence["components"]["primary_evidence_floor"] == round(
+        PRIMARY_FLOOR_MODERATE * _EFFECT_FLOOR_MULTIPLIER["mixed"], 4)
+    assert evidence["components"]["primary_evidence_floor"] == 6.6
 
 
 def test_real_210555_disclosed_members_of_the_title_named_blend_anchor_the_floor():

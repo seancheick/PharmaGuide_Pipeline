@@ -3,7 +3,7 @@
     "description": "Non-standardized whole herb powders and simple botanical extracts without guaranteed marker compounds. Used for basic ingredient mapping. For premium standardized extracts with marker compounds, see standardized_botanicals.json.",
     "purpose": "ingredient_mapping",
     "schema_version": "5.2.0",
-    "last_updated": "2026-10-07",
+    "last_updated": "2026-10-11",
     "total_entries": 556,
     "functional_roles_field": {
       "added_in": "5.1.0",
@@ -116,7 +116,7 @@
         "pelargonium sidoides"
       ],
       "category": "root",
-      "notes": "Pelargonium sidoides (Geraniaceae) root. EPs 7630 extract studied for acute bronchitis (PMID 18425868). Traditional Southern African remedy. Botanical form is unstandardized root powder.",
+      "notes": "Pelargonium sidoides (Geraniaceae) root. Traditional Southern African remedy. Botanical form is unstandardized root powder. Source review: PMID 18425868 does not support the attributed botanical clinical claim; replacement source and preparation applicability remain unresolved.",
       "last_updated": "2026-03-01",
       "external_ids": {
         "unii": "4FY2944729"
@@ -325,8 +325,6 @@
         "activaloe",
         "aloe vera gel 200:1 extract",
         "aloe vera gel 200:1 conc.",
-        "cape aloe extract",
-        "Cape Aloe leaf latex extract",
         "Aloe barbadensis"
       ],
       "category": "herb",
@@ -616,8 +614,7 @@
       "aliases": [
         "prunus armeniaca",
         "apricot powder",
-        "apricot fruit",
-        "apricot seed extract"
+        "apricot fruit"
       ],
       "category": "fruit",
       "notes": "Prunus armeniaca (Rosaceae) fruit. Rich in beta-carotene and dietary fiber. Used as whole-fruit powder in supplements. Kernels (not covered here) contain amygdalin and are a separate safety concern.",
@@ -988,7 +985,6 @@
         "barberry",
         "wild crafted barberry",
         "berberis vulgaris root",
-        "berberis aristata root",
         "barberry root extract",
         "Berberis vulgaris"
       ],
@@ -1182,7 +1178,7 @@
         "Beta vulgaris"
       ],
       "category": "root",
-      "notes": "Beta vulgaris (Amaranthaceae) root. Rich in dietary nitrate (250-400 mg/100g), betalain pigments, and betaine. RCT evidence for exercise performance via nitric oxide pathway (PMID 28983845). Botanical powder form.",
+      "notes": "Beta vulgaris (Amaranthaceae) root. Rich in dietary nitrate (250-400 mg/100g), betalain pigments, and betaine. Botanical powder form. Source review: PMID 28983845 does not support the attributed botanical clinical claim; replacement source and preparation applicability remain unresolved.",
       "last_updated": "2026-03-01",
       "external_ids": {
         "unii": "N487KM8COK"
@@ -1879,7 +1875,6 @@
       "aliases": [
         "verbena hastata",
         "blue vervain extract",
-        "European Vervain",
         "Vervain whole herb powder"
       ],
       "category": "herb",
@@ -2047,7 +2042,7 @@
         "Boswellia serrata"
       ],
       "category": "resin",
-      "notes": "Boswellia serrata (Burseraceae) oleo-gum resin. Indian frankincense containing boswellic acids (AKBA, KBA). RCT evidence for joint and inflammatory support (PMID 21110389). Botanical resin, unstandardized form.",
+      "notes": "Boswellia serrata (Burseraceae) oleo-gum resin. Indian frankincense containing boswellic acids (AKBA, KBA). Botanical resin, unstandardized form. Source review: PMID 21110389 does not support the attributed botanical clinical claim; replacement source and preparation applicability remain unresolved.",
       "last_updated": "2026-03-01",
       "external_ids": {
         "unii": "4PW41QCO2M"
@@ -2077,13 +2072,11 @@
       "aliases": [
         "boswellia carterii",
         "Boswellia carterii",
-        "frankincense extract",
-        "frankincense",
         "Somali frankincense",
         "Boswellia carterii resin"
       ],
       "category": "resin",
-      "notes": "Boswellia carterii (Burseraceae) oleo-gum resin — Somali frankincense. UNII R9XLF1R1WM. Distinct species from Boswellia serrata (Indian frankincense, UNII 4PW41QCO2M). B. carterii has a different boswellic-acid profile (lower KBA/AKBA, higher incensole acetate and α-pinene) and a longer history in aromatic / topical use than oral supplementation. Created 2026-05-22 via SB-4 §8.5 cleanup to host the 'frankincense extract' alias that was previously misplaced in standardized_botanicals.boswellia (which is species-precise to B. serrata). Identity only — no A5b bonus pathway. Most supplement labels saying 'Frankincense extract' in oral-supplement context are B. serrata; products carrying the explicit 'Boswellia carterii' Latin or 'Somali frankincense' wording should route here.",
+      "notes": "Boswellia carterii oleo-gum resin (Somali frankincense), distinct from Boswellia serrata. Only species-specific labels map here; generic frankincense does not establish this species. Identity matching does not establish clinical benefit.",
       "last_updated": "2026-05-22",
       "external_ids": {
         "unii": "R9XLF1R1WM"
@@ -2866,7 +2859,6 @@
       "standard_name": "Cassia Nomame",
       "latin_name": "Cassia mimosoides var. nomame",
       "aliases": [
-        "cassia nomame seed extract",
         "cassia nomame extract",
         "chamaecrista nomame",
         "Cassia mimosoides var. nomame"
@@ -2961,7 +2953,6 @@
         "catauba",
         "catuaba bark",
         "catuaba bark extract",
-        "erythroxylum catuaba",
         "trichilia catigua"
       ],
       "category": "herb",
@@ -3221,7 +3212,7 @@
         "wild chamomile"
       ],
       "category": "flower",
-      "notes": "Matricaria chamomilla (Asteraceae) flower. Contains apigenin, bisabolol, and chamazulene. RCT evidence for mild anxiolytic and sleep-promoting effects (PMID 27912875). Most-studied calming botanical. [DM-1 2026-05-22] Merged 4 alias(es) from deleted standardized_botanicals.chamomile dup entry: ['matricaria recutita', 'chamomile extract', 'german chamomile extract', 'wild chamomile'].",
+      "notes": "Matricaria chamomilla flower. PMID 27912875 is a generalized-anxiety-disorder continuation study of 1500 mg/day extract: primary relapse difference was not significant; selected symptom outcomes improved. It does not establish sleep efficacy or equivalence to unstandardized flowers.",
       "last_updated": "2026-05-22",
       "external_ids": {
         "unii": "FGL3685T2X"
@@ -3283,7 +3274,7 @@
         "vitex berry extract"
       ],
       "category": "berry",
-      "notes": "Vitex agnus-castus (Lamiaceae) berry. Contains diterpenes and iridoids acting on dopamine D2 receptors. European HMPC-approved for PMS symptoms. RCT evidence for menstrual regularity (PMID 23136064).",
+      "notes": "Vitex agnus-castus berry. PMID 23136064 is a systematic review of twelve trials with heterogeneous preparations, with suggested benefits in PMS and selected other reproductive conditions; it is not one trial establishing menstrual regularity for every berry product.",
       "last_updated": "2026-09-26",
       "external_ids": {
         "unii": "433OSF3U8A"
@@ -3613,13 +3604,10 @@
       "standard_name": "Cinnamon",
       "latin_name": "Cinnamomum spp. (generic)",
       "aliases": [
-        "cinnamomum verum",
-        "ceylon cinnamon",
-        "cinnamomum cassia",
         "cinnamon bark extract"
       ],
       "category": "herb",
-      "notes": "Plain identity (relocated from standardized_botanicals.json via MO-6, 2026-05-22). No documented standardization marker; identity-only mapping with no A5b bonus pathway.  Generic Cinnamomum identity (separate from bot.cinnamon_bark which is C. cassia bark UNII WS4CQ062KM, and bot.ceylon_cinnamon which is C. verum). Products mentioning unspecified 'cinnamon' route here; products with species specifications route to the species-precise entries.Botanical ingredient standardized for polyphenols, cinnamaldehyde. Commonly used in dietary supplements.",
+      "notes": "Generic Cinnamomum identity for species-unspecified cinnamon. Species-specific C. verum and C. cassia labels belong to their own entries; this entry does not establish marker standardization.",
       "last_updated": "2026-05-22",
       "external_ids": {
         "unii": "5S29HWU6QB"
@@ -3637,10 +3625,8 @@
       "standard_name": "Cinnamon Bark",
       "latin_name": "Cinnamomum cassia",
       "aliases": [
-        "cinnamomum verum bark",
         "cinnamon powder",
         "cinnamomum cassia bark",
-        "true cinnamon",
         "Cinnamomum cassia"
       ],
       "category": "bark",
@@ -3696,13 +3682,12 @@
       "latin_name": "Cistanche tubulosa",
       "aliases": [
         "cistanche tubulosa",
-        "cistanche deserticola",
         "rou cong rong",
         "desert hyacinth",
         "cistanche extract"
       ],
       "category": "adaptogen",
-      "notes": "Plain identity (relocated from standardized_botanicals.json via MO-6, 2026-05-22). No documented standardization marker; identity-only mapping with no A5b bonus pathway.  C. tubulosa-specific UNII set. C. deserticola (different species, UNII LM25W02G91 WHOLE) intentionally NOT promoted on this entry — species-split deferred to future batch if/when products surface specifically labeling C. deserticola.Traditional Chinese medicine herb used for energy and vitality. Standardized for echinacoside content.",
+      "notes": "Cistanche tubulosa identity. Cistanche deserticola is a different species and is not covered here. Preparation-specific echinacoside standardization and clinical applicability require verification.",
       "last_updated": "2026-05-22",
       "external_ids": {
         "unii": "863KM6AO0R"
@@ -3723,7 +3708,7 @@
         "Citrus bergamia"
       ],
       "category": "fruit",
-      "notes": "Citrus bergamia (Rutaceae) fruit. Southern Italian citrus rich in flavanones (neoeriocitrin, naringin, neohesperidin). RCT evidence for lipid management (PMID 26268692). Botanical fruit powder.",
+      "notes": "Citrus bergamia (Rutaceae) fruit. Southern Italian citrus rich in flavanones (neoeriocitrin, naringin, neohesperidin). Botanical fruit powder. Source review: PMID 26268692 does not support the attributed botanical clinical claim; replacement source and preparation applicability remain unresolved.",
       "last_updated": "2026-03-01",
       "external_ids": {},
       "cui": "C1258049",
@@ -3994,7 +3979,7 @@
         "plectranthus barbatus extract"
       ],
       "category": "root",
-      "notes": "Coleus forskohlii (Lamiaceae) root. Contains forskolin diterpene that directly activates adenylate cyclase/cAMP pathway. RCT evidence for body composition (PMID 15947455). Botanical root form.",
+      "notes": "Coleus forskohlii (Lamiaceae) root. Contains forskolin diterpene that directly activates adenylate cyclase/cAMP pathway. Botanical root form. Source review: PMID 15947455 does not support the attributed botanical clinical claim; replacement source and preparation applicability remain unresolved.",
       "last_updated": "2026-03-13",
       "external_ids": {
         "unii": "V5741391RG"
@@ -4096,7 +4081,6 @@
       "standard_name": "Cordyceps Mushroom Powder",
       "latin_name": "Cordyceps militaris",
       "aliases": [
-        "cordyceps sinensis powder",
         "cordyceps militaris powder",
         "Cordyceps militaris"
       ],
@@ -4302,7 +4286,7 @@
         "cranberry juice concentrate"
       ],
       "category": "fruit",
-      "notes": "Vaccinium macrocarpon (Ericaceae) fruit. Contains type-A proanthocyanidins (PACs) with anti-adhesion activity against E. coli uropathogenic strains. RCT evidence for UTI prevention (PMID 23440782). [DM-2 2026-05-22] Merged 4 alias(es): ['cranberry extract', 'cranberry fruit extract', 'american cranberry', 'cranberry juice concentrate']. Dropped (filtered): ['urophenol'].",
+      "notes": "Vaccinium macrocarpon (Ericaceae) fruit. Contains type-A proanthocyanidins (PACs) with anti-adhesion activity against E. coli uropathogenic strains. [DM-2 2026-05-22] Merged 4 alias(es): ['cranberry extract', 'cranberry fruit extract', 'american cranberry', 'cranberry juice concentrate']. Dropped (filtered): ['urophenol']. Source review: PMID 23440782 does not support the attributed botanical clinical claim; replacement source and preparation applicability remain unresolved.",
       "last_updated": "2026-05-22",
       "external_ids": {
         "unii": "0MVO31Q3QS"
@@ -4746,7 +4730,7 @@
         "Harpagophytum procumbens"
       ],
       "category": "tuber",
-      "notes": "Harpagophytum procumbens (Pedaliaceae) secondary root tuber. Contains harpagoside iridoid glycoside. European HMPC-approved for musculoskeletal pain. RCT evidence for osteoarthritis (PMID 14669258).",
+      "notes": "Harpagophytum procumbens (Pedaliaceae) secondary root tuber. Contains harpagoside iridoid glycoside. European HMPC-approved for musculoskeletal pain. Source review: PMID 14669258 does not support the attributed botanical clinical claim; replacement source and preparation applicability remain unresolved.",
       "last_updated": "2026-03-01",
       "external_ids": {},
       "cui": "C1109161",
@@ -4775,7 +4759,7 @@
         "gutgard glycyrrhiza glabra extract"
       ],
       "category": "root",
-      "notes": "Glycyrrhiza glabra (Fabaceae) root with glycyrrhizin removed (<3%). DGL retains flavonoids while eliminating aldosterone-mimetic effects. Used for gastric mucosal protection and peptic ulcer support.",
+      "notes": "Glycyrrhiza glabra root preparation with reduced glycyrrhizin. A stated residual content below 3% is not complete removal and does not establish elimination of mineralocorticoid effects; exact preparation, dose and safety require verification.",
       "last_updated": "2026-09-27",
       "external_ids": {},
       "cui": "C0697105",
@@ -5427,7 +5411,7 @@
         "Trigonella foenum-graecum"
       ],
       "category": "seed",
-      "notes": "Trigonella foenum-graecum (Fabaceae) seed. Contains 4-hydroxyisoleucine and galactomannan fiber (50%). RCT evidence for glycemic control and testosterone (PMID 20676249). Botanical seed powder.",
+      "notes": "Trigonella foenum-graecum (Fabaceae) seed. Contains 4-hydroxyisoleucine and galactomannan fiber (50%). Botanical seed powder. Source review: PMID 20676249 does not support the attributed botanical clinical claim; replacement source and preparation applicability remain unresolved.",
       "last_updated": "2026-03-01",
       "external_ids": {
         "unii": "654825W09Z"
@@ -5466,7 +5450,7 @@
         "Feverfew, Freeze-Dried"
       ],
       "category": "herb",
-      "notes": "Tanacetum parthenium (Asteraceae) leaf. Contains parthenolide sesquiterpene lactone. European HMPC-approved for migraine prophylaxis. RCT evidence (PMID 15257711). Botanical leaf form, unstandardized.",
+      "notes": "Tanacetum parthenium (Asteraceae) leaf. Contains parthenolide sesquiterpene lactone. European HMPC-approved for migraine prophylaxis. Botanical leaf form, unstandardized. Source review: PMID 15257711 does not support the attributed botanical clinical claim; replacement source and preparation applicability remain unresolved.",
       "last_updated": "2026-03-01",
       "external_ids": {
         "unii": "Z64FK7P217"
@@ -5695,12 +5679,7 @@
     {
       "id": "fruits",
       "standard_name": "Fruits",
-      "aliases": [
-        "apple",
-        "Pineapple",
-        "papaya",
-        "Papaya juice powder"
-      ],
+      "aliases": [],
       "category": "fruit",
       "notes": "Generic multi-fruit blend covering non-specific 'fruits' label terms in supplements. Identity mapping only; species composition varies by product. Not standardized.",
       "last_updated": "2026-03-01",
@@ -5833,7 +5812,7 @@
         "garlic"
       ],
       "category": "bulb",
-      "notes": "Allium sativum (Amaryllidaceae) fresh/dried bulb. Contains alliin → allicin (via alliinase on crushing). RCT evidence for blood pressure and lipids (PMID 23590705). Botanical bulb form, unstandardized. [DM-3 2026-05-22] Absorbed broader standardized_botanicals.garlic entry (no marker signal); merged 6 alias(es): ['garlic extract', 'aged garlic extract', 'garlic bulb', 'kyolic', 'odorless garlic', 'garlic'].",
+      "notes": "Allium sativum bulb and preparation-specific garlic products. PMID 23590705 is a lipid meta-analysis: selected total/LDL cholesterol effects in people with elevated total cholesterol after more than two months; triglyceride effects were not significant. This source does not establish blood-pressure benefit or fresh-bulb/aged-extract equivalence.",
       "last_updated": "2026-05-22",
       "external_ids": {
         "unii": "V1V998DC17"
@@ -6351,7 +6330,7 @@
         "Vitis vinifera"
       ],
       "category": "seed",
-      "notes": "Vitis vinifera (Vitaceae) seed. Rich in oligomeric proanthocyanidins (OPCs, 80-95%). RCT evidence for blood pressure and endothelial function (PMID 21802563). Botanical seed form, unstandardized.",
+      "notes": "Vitis vinifera seed. PMID 21802563 is a meta-analysis of nine extract trials: small systolic-pressure and heart-rate differences, without significant diastolic-pressure, lipid or CRP effects; this source does not establish flow-mediated-dilation benefit. Extract findings do not establish 80–95% OPC content or clinical benefit of unstandardized seed powder.",
       "last_updated": "2026-03-01",
       "external_ids": {
         "unii": "C34U15ICXA"
@@ -6421,16 +6400,17 @@
         "soursop extract"
       ],
       "category": "leaf",
-      "notes": "Annona muricata (Annonaceae) leaf. Soursop/graviola containing annonaceous acetogenins. Neurotoxicity concern from annonacin (atypical parkinsonism, PMID 15269786). Traditional tropical remedy. [DM-2 2026-05-22] Merged 1 alias(es): ['soursop extract']. UNII choice: kept bot's 5EI0SM9VVE (ANNONA MURICATA FRUIT) over std's AN924793RM (ANNONA MURICATA WHOLE) — 'graviola' specifically refers to the fruit/soursop.",
+      "notes": "Annona muricata leaf preparation. Annonacin-related neurotoxicity concerns require a relevant primary source; PMID 15269786 is unrelated and cannot support that attribution. The current fruit UNII does not establish leaf identity; leaf-specific identifier remains unresolved. This source issue does not establish safety.",
       "last_updated": "2026-05-22",
       "external_ids": {
-        "unii": "5EI0SM9VVE"
+        "unii": null
       },
       "cui": "C2723348",
       "functional_roles": [],
       "attributes": {
         "source_origin": "plant"
-      }
+      },
+      "gsrs": null
     },
     {
       "id": "celandine",
@@ -6730,7 +6710,7 @@
         "Psidium guajava"
       ],
       "category": "fruit",
-      "notes": "Psidium guajava (Myrtaceae) fruit/leaf. Tropical fruit exceptionally rich in vitamin C (228 mg/100g). Leaf contains quercetin and gallic acid. RCT evidence for glycemic control (PMID 20170471).",
+      "notes": "Psidium guajava (Myrtaceae) fruit/leaf. Tropical fruit exceptionally rich in vitamin C (228 mg/100g). Leaf contains quercetin and gallic acid. Source review: PMID 20170471 does not support the attributed botanical clinical claim; replacement source and preparation applicability remain unresolved.",
       "last_updated": "2026-03-01",
       "external_ids": {
         "unii": "74O70D6VG0"
@@ -6829,7 +6809,7 @@
         "Gymnema sylvestre"
       ],
       "category": "leaf",
-      "notes": "Gymnema sylvestre (Apocynaceae) leaf. Gurmar ('sugar destroyer') in Ayurveda. Contains gymnemic acids that block sweet taste receptors. RCT evidence for glycemic control (PMID 11370345).",
+      "notes": "Gymnema sylvestre (Apocynaceae) leaf. Gurmar ('sugar destroyer') in Ayurveda. Contains gymnemic acids that block sweet taste receptors. Source review: PMID 11370345 does not support the attributed botanical clinical claim; replacement source and preparation applicability remain unresolved.",
       "last_updated": "2026-03-01",
       "external_ids": {
         "unii": "2ZK6ZS8392"
@@ -7547,9 +7527,7 @@
       "id": "inulin",
       "standard_name": "Inulin",
       "aliases": [
-        "chicory root inulin",
-        "fructooligosaccharides",
-        "FOS"
+        "chicory root inulin"
       ],
       "category": "active_compound",
       "notes": "Plain identity (relocated from standardized_botanicals.json via MO-3, 2026-05-22). No documented standardization marker; identity-only mapping with no A5b bonus pathway. Botanical ingredient standardized for inulin. Commonly used in dietary supplements.",
@@ -7999,8 +7977,7 @@
         "kelp powder",
         "norwegian kelp",
         "ascophyllum nodosum",
-        "rockweed",
-        "laminaria"
+        "rockweed"
       ],
       "category": "seaweed",
       "notes": "Ascophyllum nodosum (Fucaceae) thallus — Atlantic rockweed / Norwegian kelp. UNII 168S4EO8YJ. Brown seaweed naturally rich in iodine (varies widely; verify per-product testing) plus phlorotannins, fucoidan, and alginate polysaccharides. SB-3c §7.5/§8.5 cleanup 2026-05-22: realigned latin_name from 'Laminaria digitata' (different species) to 'Ascophyllum nodosum' to match UNII. SB-3d 2026-05-22: removed remaining species-mismatched aliases ('laminaria powder', 'laminaria digitata' → new laminaria_digitata canonical; 'Laminaria saccharina', 'Laminaria saccharina, Powder' → new saccharina_latissima canonical; 'ecklonia radiata' → new ecklonia_radiata canonical; 'ecklonia kurome' → new ecklonia_kurome canonical). Entry now scopes cleanly to Ascophyllum nodosum identity plus generic-kelp registry aliases. [DM-3 2026-05-22] Absorbed broader standardized_botanicals.kelp entry (no marker signal); merged 1 alias(es): ['laminaria'].",
@@ -8125,7 +8102,6 @@
       "latin_name": "Tilia cordata (flower)",
       "aliases": [
         "tilia cordata",
-        "tilia platyphyllos",
         "linden flower extract"
       ],
       "category": "herb",
@@ -8157,7 +8133,7 @@
         "lions mane mushroom"
       ],
       "category": "mushroom",
-      "notes": "Plain identity (relocated from standardized_botanicals.json via MO-5, 2026-05-22). No documented standardization marker; identity-only mapping with no A5b bonus pathway. UNII Y62T8P9AAP verified via scripts/data/fda_unii_cache.json. Cognitive mushroom standardized for beta-glucans (10-40%) and nerve growth factors (hericenones, erinacines).",
+      "notes": "Hericium erinaceus mushroom. Hericenones and erinacines are small molecules studied in relation to nerve-growth-factor pathways; they are not nerve growth factors. Beta-glucan percentage alone does not establish human cognitive benefit.",
       "last_updated": "2026-05-22",
       "external_ids": {
         "unii": "Y62T8P9AAP"
@@ -8443,7 +8419,7 @@
         "Actinidia deliciosa"
       ],
       "category": "fruit",
-      "notes": "Actinidia deliciosa (Actinidiaceae) fruit. Rich in vitamin C (92 mg/100g), actinidin enzyme, and dietary fiber. RCT evidence for constipation relief and sleep quality (PMID 21669584). Botanical fruit powder.",
+      "notes": "Actinidia deliciosa fruit. PMID 21669584 studied whole fruit in 24 people using a self-controlled sleep study, not a randomized constipation trial. Whole-fruit results do not establish Actazin powder equivalence.",
       "last_updated": "2026-03-01",
       "external_ids": {},
       "cui": "C0440282",
@@ -8636,7 +8612,7 @@
         "Melissa officinalis"
       ],
       "category": "leaf",
-      "notes": "Melissa officinalis (Lamiaceae) leaf. Contains rosmarinic acid and flavonoids. RCT evidence for anxiolytic and cognitive effects (PMID 14669926). European HMPC-approved for mild anxiety and sleep.",
+      "notes": "Melissa officinalis (Lamiaceae) leaf. Contains rosmarinic acid and flavonoids. European HMPC-approved for mild anxiety and sleep. Source review: PMID 14669926 does not support the attributed botanical clinical claim; replacement source and preparation applicability remain unresolved.",
       "last_updated": "2026-03-01",
       "external_ids": {
         "unii": "50D2ZE9219"
@@ -8741,7 +8717,6 @@
       "aliases": [
         "lemon grass",
         "cymbopogon citratus",
-        "cymbopogon flexuosus",
         "lemongrass extract",
         "lemongrass leaf extract",
         "lemongrass powder",
@@ -8986,7 +8961,7 @@
         "Lepidium meyenii"
       ],
       "category": "root",
-      "notes": "Lepidium meyenii (Brassicaceae) root. Peruvian adaptogen grown at 4,000+ m altitude. Contains macamides, macaenes, and glucosinolates. RCT evidence for libido and fertility (PMID 19781622).",
+      "notes": "Lepidium meyenii root. PMID 19781622 studied eight cyclists for fourteen days in a crossover study: selected sexual-desire effects; cycling performance did not differ from placebo. This does not establish fertility benefit.",
       "last_updated": "2026-03-01",
       "external_ids": {
         "unii": "HP7119212T"
@@ -9077,7 +9052,7 @@
         "organic maitake blend extract"
       ],
       "category": "mushroom",
-      "notes": "Grifola frondosa (Meripilaceae) fruiting body. Hen-of-the-woods mushroom. Contains maitake D-fraction beta-glucan. RCT evidence for immune modulation (PMID 19367670). Botanical mushroom powder.",
+      "notes": "Grifola frondosa (Meripilaceae) fruiting body. Hen-of-the-woods mushroom. Contains maitake D-fraction beta-glucan. Botanical mushroom powder. Source review: PMID 19367670 does not support the attributed botanical clinical claim; replacement source and preparation applicability remain unresolved.",
       "last_updated": "2026-03-01",
       "external_ids": {
         "unii": "A1U5YJI0Z8"
@@ -9437,7 +9412,7 @@
         "Silybum marianum"
       ],
       "category": "seed",
-      "notes": "Silybum marianum (Asteraceae) seed. Primary source of silymarin (silybin, silydianin, silychristin). RCT evidence for hepatoprotection and liver support (PMID 17127537). Botanical seed form.",
+      "notes": "Silybum marianum (Asteraceae) seed. Primary source of silymarin (silybin, silydianin, silychristin). Botanical seed form. Source review: PMID 17127537 does not support the attributed botanical clinical claim; replacement source and preparation applicability remain unresolved.",
       "last_updated": "2026-03-01",
       "external_ids": {
         "unii": "U946SH95EE"
@@ -9930,7 +9905,7 @@
         "nigella seed extract"
       ],
       "category": "seed",
-      "notes": "Nigella sativa (Ranunculaceae) seed. Black seed/black cumin containing thymoquinone (primary bioactive). RCT evidence for glycemic and lipid control (PMID 28068824). Botanical seed powder.",
+      "notes": "Nigella sativa (Ranunculaceae) seed. Black seed/black cumin containing thymoquinone (primary bioactive). Botanical seed powder. Source review: PMID 28068824 does not support the attributed botanical clinical claim; replacement source and preparation applicability remain unresolved.",
       "last_updated": "2026-03-01",
       "external_ids": {},
       "cui": "C1140702",
@@ -10945,7 +10920,7 @@
         "Mentha × piperita"
       ],
       "category": "leaf",
-      "notes": "Mentha × piperita (Lamiaceae) leaf. Contains menthol (30-55%) and menthone. RCT evidence for IBS (enteric-coated oil, PMID 17420159). European HMPC-approved for GI spasms. Botanical leaf form.",
+      "notes": "Mentha × piperita leaf. PMID 17420159 concerns enteric-coated peppermint oil for IBS; it does not establish equivalent effects for leaf powder, isolated menthol or other oil formulations.",
       "last_updated": "2026-03-01",
       "external_ids": {
         "unii": "V95R5KMY2B"
@@ -11486,7 +11461,7 @@
         "Polypodium leucotomos"
       ],
       "category": "leaf",
-      "notes": "Polypodium leucotomos (Polypodiaceae) rhizome. Central American fern. Contains caffeic and ferulic acid derivatives. RCT evidence for photoprotection (PMID 25064166). Fernblock® is branded extract.",
+      "notes": "Polypodium leucotomos (Polypodiaceae) rhizome. Central American fern. Contains caffeic and ferulic acid derivatives. Fernblock® is branded extract. Source review: PMID 25064166 does not support the attributed botanical clinical claim; replacement source and preparation applicability remain unresolved.",
       "last_updated": "2026-03-01",
       "external_ids": {
         "unii": "BG58BW230G"
@@ -11563,7 +11538,7 @@
         "Punica granatum"
       ],
       "category": "fruit",
-      "notes": "Punica granatum (Lythraceae) fruit. Rich in punicalagins, ellagitannins, and anthocyanins. RCT evidence for blood pressure and antioxidant status (PMID 22648174). Botanical fruit powder.",
+      "notes": "Punica granatum (Lythraceae) fruit. Rich in punicalagins, ellagitannins, and anthocyanins. Botanical fruit powder. Source review: PMID 22648174 does not support the attributed botanical clinical claim; replacement source and preparation applicability remain unresolved.",
       "last_updated": "2026-03-01",
       "external_ids": {
         "unii": "56687D1Z4D"
@@ -11656,7 +11631,6 @@
       "aliases": [
         "prickly ash bark",
         "zanthoxylum americanum",
-        "zanthoxylum clava-herculis",
         "prickly ash bark extract"
       ],
       "category": "herb",
@@ -11693,7 +11667,7 @@
         "Prunus domestica"
       ],
       "category": "fruit",
-      "notes": "Prunus domestica (Rosaceae) dried fruit. Prune (dried plum) rich in sorbitol, chlorogenic acid, and boron. FDA-recognized laxative. RCT evidence for bone health (PMID 21681165). Botanical fruit.",
+      "notes": "Prunus domestica (Rosaceae) dried fruit. Prune (dried plum) rich in sorbitol, chlorogenic acid, and boron. Botanical fruit. Source review: PMID 21681165 does not support the attributed botanical clinical claim; replacement source and preparation applicability remain unresolved.",
       "last_updated": "2026-03-01",
       "external_ids": {
         "unii": "S8O01I9YLZ"
@@ -11811,11 +11785,10 @@
         "water soluble pumpkin extract",
         "organic pumpkin protein",
         "pumpkin seed protein",
-        "pumpkin protein",
-        "cucurbita maxima"
+        "pumpkin protein"
       ],
       "category": "fruit",
-      "notes": "Cucurbita pepo (Cucurbitaceae) fruit/seed. Rich in carotenoids (beta-carotene, lutein) and cucurbitins in seeds. Seed oil studied for BPH (PMID 26093535). Botanical fruit/seed powder.",
+      "notes": "Cucurbita pepo (Cucurbitaceae) fruit/seed. Rich in carotenoids (beta-carotene, lutein) and cucurbitins in seeds. Botanical fruit/seed powder. Source review: PMID 26093535 does not support the attributed botanical clinical claim; replacement source and preparation applicability remain unresolved.",
       "last_updated": "2026-05-01",
       "external_ids": {
         "unii": "SYW0QUB89Y"
@@ -12209,7 +12182,7 @@
         "Rhodiola rosea"
       ],
       "category": "root",
-      "notes": "Rhodiola rosea (Crassulaceae) root. Arctic adaptogen containing rosavins and salidroside. RCT evidence for fatigue reduction and stress resilience (PMID 22228617). Botanical root form.",
+      "notes": "Rhodiola rosea root. PMID 22228617 is an open-label study of 101 adults taking WS 1375 extract 200 mg twice daily for four weeks. It is not a randomized trial and does not establish unstandardized root equivalence.",
       "last_updated": "2026-03-01",
       "external_ids": {
         "unii": "3S5ITS5ULN"
@@ -12313,7 +12286,7 @@
         "Rosa canina"
       ],
       "category": "fruit",
-      "notes": "Rosa canina (Rosaceae) fruit. Rich in vitamin C (426 mg/100g), galactolipid GOPO, and lycopene. RCT evidence for osteoarthritis (PMID 18326603). Traditional northern European remedy.",
+      "notes": "Rosa canina (Rosaceae) fruit. Rich in vitamin C (426 mg/100g), galactolipid GOPO, and lycopene. Traditional northern European remedy. Source review: PMID 18326603 does not support the attributed botanical clinical claim; replacement source and preparation applicability remain unresolved.",
       "last_updated": "2026-03-01",
       "external_ids": {
         "unii": "3TNW8D08V3"
@@ -12504,11 +12477,10 @@
         "sarsaparilla root extract",
         "jamaican sarsaparilla",
         "sarsaparilla extract",
-        "smilax extract",
-        "smilax officinalis"
+        "smilax extract"
       ],
       "category": "root",
-      "notes": "Smilax ornata (Smilacaceae) root — Jamaican Sarsaparilla. Contains sarsasapogenin steroidal saponins. Traditional blood purifier and adaptogenic root. Used in Eclectic and Unani medicine. NOTE: 'Sarsaparilla' is a commercial trade name applied to multiple Smilax species — S. ornata (this entry, CUI C4277519), S. officinalis (CUI C3388298, Honduran), S. regelii, S. aristolochiifolia (Mexican). Strict policy: only S. ornata is mapped here. Products labeled 'Smilax officinalis' or 'Honduras Sarsaparilla' will surface in unmapped triage and require separate entries if confirmed. Old CUI C0036312 was a stale identifier (not present in current UMLS); corrected to C4277519 via verify_cui.py audit 2026-05-01. [DM-2 2026-05-22] Merged 3 alias(es): ['sarsaparilla extract', 'smilax extract', 'smilax officinalis']. [CUI restore 2026-05-22] cui 'C4277519' → 'C1014795' (DM-1 merge dropped std-curated value; restored per test_standardized_botanicals_cui_remediation pin).",
+      "notes": "Smilax ornata root (Jamaican sarsaparilla). Smilax officinalis is a different species and is not covered here. Commercial sarsaparilla naming alone may be species ambiguous; exact product identity requires verification.",
       "last_updated": "2026-05-22",
       "external_ids": {
         "unii": "2H1576D5WG"
@@ -12557,7 +12529,7 @@
         "Serenoa repens"
       ],
       "category": "berry",
-      "notes": "Serenoa repens (Arecaceae) berry. Contains fatty acids and phytosterols with 5-alpha reductase inhibition. RCT evidence for BPH symptoms (PMID 16467543). Botanical berry/fruit form.",
+      "notes": "Serenoa repens berry. PMID 16467543 randomized 225 men to a particular extract 160 mg twice daily for one year: no significant benefit versus placebo on primary or secondary BPH outcomes. This source does not demonstrate symptom benefit.",
       "last_updated": "2026-03-01",
       "external_ids": {
         "unii": "J7WWH9M8QS"
@@ -12966,13 +12938,10 @@
         "solomons seal extract",
         "solomon's seal root",
         "solomons seal root",
-        "polygonatum odoratum",
-        "polygonatum odoratum extract",
-        "aromatic solomon's seal",
         "Polygonatum multiflorum"
       ],
       "category": "root",
-      "notes": "Polygonatum multiflorum (Asparagaceae) rhizome. Yu Zhu in TCM. Contains polysaccharides, steroidal saponins, and lectins. Yin-nourishing herb for dryness patterns. Botanical root form.",
+      "notes": "Polygonatum multiflorum rhizome. Polygonatum odoratum (Yu Zhu) is a distinct species and is not covered by this entry.",
       "last_updated": "2026-03-01",
       "external_ids": {
         "unii": "C4O9177MBP"
@@ -13105,11 +13074,10 @@
       "latin_name": "Arthrospira platensis",
       "aliases": [
         "arthrospira platensis powder",
-        "blue-green algae",
         "Arthrospira platensis"
       ],
       "category": "algae",
-      "notes": "Arthrospira platensis (Spirulinaceae) whole cell. Blue-green cyanobacterium rich in protein (60-70%), C-phycocyanin, and gamma-linolenic acid. RCT evidence for lipid control (PMID 18855693).",
+      "notes": "Arthrospira platensis whole-cell powder. PMID 18855693 is a narrative review, not a lipid-control randomized trial. Other blue-green algae are not interchangeable species.",
       "last_updated": "2026-03-01",
       "external_ids": {
         "unii": "9L3TIH1UUE"
@@ -13529,7 +13497,7 @@
         "Montmorency Tart Cherry"
       ],
       "category": "fruit",
-      "notes": "Prunus cerasus (Rosaceae) fruit. Montmorency tart cherry rich in anthocyanins and melatonin. RCT evidence for post-exercise recovery, sleep, and uric acid reduction (PMID 23075559).",
+      "notes": "Prunus cerasus (Rosaceae) fruit. Montmorency tart cherry rich in anthocyanins and melatonin. Source review: PMID 23075559 does not support the attributed botanical clinical claim; replacement source and preparation applicability remain unresolved.",
       "last_updated": "2026-04-20",
       "external_ids": {
         "unii": "1L29G6428X"
@@ -13698,7 +13666,7 @@
         "LJ100 Tongkat Ali"
       ],
       "category": "root",
-      "notes": "Eurycoma longifolia (Simaroubaceae) root. Malaysian ginseng/Tongkat Ali. Contains eurycomanone and quassinoids. RCT evidence for testosterone and ergogenic effects (PMID 23754792). Botanical root form.",
+      "notes": "Eurycoma longifolia root. PMID 23754792 is an uncontrolled study of 25 older adults receiving a specific 400 mg/day extract for five weeks. It does not establish placebo-controlled efficacy, fertility benefit or equivalence of every LJ100/root preparation.",
       "last_updated": "2026-03-01",
       "external_ids": {
         "unii": "8GOM182CI3"
@@ -13977,7 +13945,7 @@
         "tylophora indica"
       ],
       "category": "leaf",
-      "notes": "Tylophora indica (Apocynaceae) leaf. Contains tylophorine and tylophorinine alkaloids. Traditional Ayurvedic remedy for asthma and allergies. RCT evidence for bronchial asthma (PMID 18288292).",
+      "notes": "Tylophora indica (Apocynaceae) leaf. Contains tylophorine and tylophorinine alkaloids. Traditional Ayurvedic remedy for asthma and allergies. Source review: PMID 18288292 does not support the attributed botanical clinical claim; replacement source and preparation applicability remain unresolved.",
       "last_updated": "2026-03-01",
       "external_ids": {},
       "cui": "C1024211",
@@ -14056,7 +14024,7 @@
         "valeriana officinalis root"
       ],
       "category": "root",
-      "notes": "Valeriana officinalis (Caprifoliaceae) root. Contains valerenic acid and iridoids (valepotriates). European HMPC-approved for sleep and mild anxiety. RCT evidence for insomnia (PMID 16619700).",
+      "notes": "Valeriana officinalis (Caprifoliaceae) root. Contains valerenic acid and iridoids (valepotriates). European HMPC-approved for sleep and mild anxiety. Source review: PMID 16619700 does not support the attributed botanical clinical claim; replacement source and preparation applicability remain unresolved.",
       "last_updated": "2026-03-01",
       "external_ids": {
         "unii": "JWF5YAW3QW"
@@ -14131,7 +14099,7 @@
         "patagonian wakame"
       ],
       "category": "seaweed",
-      "notes": "Undaria pinnatifida (Alariaceae) thallus. Japanese edible brown seaweed containing fucoxanthin carotenoid and fucoidan polysaccharide. RCT evidence for metabolic support (PMID 19840063).",
+      "notes": "Undaria pinnatifida thallus. PMID 19840063 concerns Xanthigen, a combination of brown-algae extract and pomegranate seed oil in selected obese premenopausal women. It does not establish isolated wakame, fucoidan-rich Maritech 926 or whole-thallus equivalence.",
       "last_updated": "2026-03-01",
       "external_ids": {
         "unii": "ICV1OK7M1S"
@@ -14493,13 +14461,12 @@
         "salix alba bark",
         "willow bark",
         "white willow bark ext.",
-        "purple willow salix purpurea extract",
         "willow bark 5:1 extract",
         "willow",
         "Salix alba"
       ],
       "category": "bark",
-      "notes": "Salix alba (Salicaceae) bark. Contains salicin (natural aspirin precursor, 1-2%). European HMPC-approved for low back pain and mild fever. RCT evidence for osteoarthritis (PMID 11201053).",
+      "notes": "Salix alba (Salicaceae) bark. Contains salicin (natural aspirin precursor, 1-2%). European HMPC-approved for low back pain and mild fever. Source review: PMID 11201053 does not support the attributed botanical clinical claim; replacement source and preparation applicability remain unresolved.",
       "last_updated": "2026-03-01",
       "external_ids": {
         "unii": "205MXS71H7"
@@ -14526,8 +14493,6 @@
       "standard_name": "Wild Blueberry",
       "latin_name": "Vaccinium angustifolium",
       "aliases": [
-        "wild bilberry",
-        "vaccinium myrtillus",
         "blueberry, wild",
         "blueberry, powder, wild",
         "Wild Blueberry Anthocyanin extract",
@@ -14536,7 +14501,7 @@
         "Vaccinium angustifolium"
       ],
       "category": "fruit",
-      "notes": "Vaccinium angustifolium (Ericaceae) fruit. Lowbush wild blueberry with 2x anthocyanin content vs. cultivated. Rich in pterostilbene and chlorogenic acid. Superior antioxidant capacity.",
+      "notes": "Vaccinium angustifolium fruit. Anthocyanin composition varies with preparation and assay; a universal twice-anthocyanin or superior-antioxidant comparison is unestablished. Vaccinium myrtillus is a distinct species.",
       "last_updated": "2026-03-01",
       "external_ids": {
         "unii": "EE76EZ4QNZ"
@@ -15248,7 +15213,7 @@
         "tarragon"
       ],
       "category": "herb",
-      "notes": "Artemisia dracunculus (Asteraceae) herb. Some evidence for glucose management (PMID 22034519). Used in GNC sports nutrition products.",
+      "notes": "Artemisia dracunculus (Asteraceae) herb. Used in GNC sports nutrition products. Source review: PMID 22034519 does not support the attributed botanical clinical claim; replacement source and preparation applicability remain unresolved.",
       "last_updated": "2026-04-03",
       "data_quality": {
         "completeness": 0.7,
@@ -16300,12 +16265,10 @@
         "east indian globe thistle",
         "indian globe thistle",
         "mundi",
-        "kottakkarantai",
-        "holimel",
-        "meratrim"
+        "kottakkarantai"
       ],
       "category": "herb",
-      "notes": "Sphaeranthus indicus (Asteraceae). Ayurvedic herb; flower extracts standardized to 7-hydroxyfrullanolide and other sesquiterpene lactones. Trade names Holimel and Meratrim (combination with Garcinia mangostana) marketed for weight management; clinical RCTs in obesity/metabolic-syndrome populations.",
+      "notes": "Sphaeranthus indicus. Holimel is a melon juice concentrate rich in SOD, not this herb. Meratrim combines Sphaeranthus with Garcinia mangostana; combination results do not establish single-herb equivalence.",
       "last_updated": "2026-05-01",
       "external_ids": {},
       "cui": "C3531007",
@@ -16350,8 +16313,6 @@
         "brassica oleracea italica sprouts",
         "broccoli sprout extract",
         "broccoli sprout powder",
-        "cruciferous extract",
-        "myrosinase complex",
         "sprouted broccoli",
         "broccoli sprouts powder",
         "broccoli cruciferous extract",
@@ -16386,7 +16347,7 @@
         "biolut"
       ],
       "category": "flower",
-      "notes": "Tagetes erecta (Aztec marigold) flower extract. Commercial source of lutein and zeaxanthin via saponification. Per identity_bioactivity_split policy: bare marigold labels resolve to this botanical canonical; lutein marker Section C credit requires explicit standardization declaration (see scripts/data/botanical_marker_contributions.json — TODO: add entry).",
+      "notes": "Tagetes erecta (Aztec marigold) flower extract. Commercial source of lutein and zeaxanthin via saponification. Per identity_bioactivity_split policy: bare marigold labels resolve to this botanical canonical; lutein marker Section C credit requires explicit standardization declaration (see scripts/data/botanical_marker_contributions.json).",
       "last_updated": "2026-05-11",
       "external_ids": {},
       "cui": "C1000850",

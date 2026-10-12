@@ -110,7 +110,12 @@ def test_vanadyl_sulfate_forms_obey_class_equivalence_bio_score_floor():
         form = forms[form_name]
         assert form["bio_score"] == bio_score, form_name
         notes = form.get("notes", "").lower()
-        assert "23982218" in notes or "dr pham c12" in notes or "v class" in notes, form_name
+        if form_name in {"bis(maltolato)oxovanadium (BMOV)", "vanadium aspartate"}:
+            assert "human comparative evidence remains unresolved" in notes
+            assert "a sulfate study cannot demonstrate equivalence" in notes
+            assert form["absorption_structured"]["value"] is None
+        else:
+            assert "23982218" in notes or "dr pham c12" in notes or "v class" in notes, form_name
 
 
 def test_vanadyl_sulfate_unii_no_longer_has_same_tier_conflict():

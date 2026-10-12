@@ -73,6 +73,16 @@ def test_b19_value_in_band(iqm, pid, fname, vmin, vmax):
     """Each form's struct.value must sit in evidence band."""
     form = iqm[pid]['forms'].get(fname)
     assert form is not None, f'{pid}::{fname} missing'
+    reviewed_unknown = {'rutin': ['7491892', 'ileostomy'],
+     'citrus complex': ['12571654', 'urinary recovery'],
+     'hesperidin-rich': ['12571654', 'urinary conjugate'],
+     'rutin complex': ['7491892', 'ileostomy'],
+     'bioflavonoids (unspecified)': ['12571654', 'intestinal or metabolite-mediated']}
+    if fname in reviewed_unknown:
+        assert form['absorption_structured'] == dict(value=None, range_low=None, range_high=None, quality='unknown')
+        for source_limit in reviewed_unknown[fname]:
+            assert source_limit in form['notes']
+        return
     val = (form.get('absorption_structured') or {}).get('value')
     assert val is not None, f'{pid}::{fname} struct.value should be populated'
     assert vmin <= val <= vmax, (
@@ -187,7 +197,7 @@ def test_class_authority_pmids_introduced(iqm):
         for form in iqm[pid]['forms'].values():
             full_text += (form.get('notes') or '') + ' '
             full_text += (form.get('absorption') or '') + ' '
-    missing = [pmid for pmid in expected_pmids if pmid not in full_text]
+    missing = [pmid for pmid in expected_pmids if pmid.replace('PMID:', '') not in full_text]
     assert not missing, (
         f'Verified class-authority PMIDs missing: {missing}'
     )

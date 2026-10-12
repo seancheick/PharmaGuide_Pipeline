@@ -210,6 +210,7 @@ FILE_CONFIGS = [
     _scan_all(file="harmful_additives.json", array_key="harmful_additives"),
     _scan_all(file="banned_recalled_ingredients.json", array_key="ingredients"),
     _scan_all(file="other_ingredients.json", array_key="other_ingredients"),
+    _scan_all(file="proprietary_blends.json", array_key="proprietary_blend_concerns"),
     _scan_all(file="synergy_cluster.json", array_key="synergy_clusters"),
     _scan_all(file="botanical_marker_contributions.json", map_key="botanicals"),
     _scan_all(file="branded_blend_anchor_overrides.json", array_key="anchors"),

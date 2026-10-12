@@ -176,13 +176,13 @@ def test_a_bare_hmb_label_names_no_salt(enricher, label):
 
 
 def test_the_parents_generic_form_is_not_a_reading_of_a_named_token(enricher):
-    # "taurine (generic)" is taurine's authored unspecified form; before, it was
-    # accepted as the form "Magnesium Taurate" named.
+    # An unrecognized named token must not inherit the free-taurine form.
     from enrich_supplements_v3 import SupplementEnricherV3
     quality_map = enricher.databases['ingredient_quality_map']
     default = enricher._match_quality_map('Zqx', 'Zqx', quality_map, _form_extraction_attempt=True,
                                           preferred_parent='taurine', cleaner_canonical_id='taurine')
-    assert default['form_id'] == 'taurine (generic)'
+    assert default['form_id'] is None
+    assert default['bio_score'] == 10
     assert not SupplementEnricherV3._is_specific_form_match(default, quality_map)
 
 

@@ -58,7 +58,7 @@ PB1_ENTRIES = [
      "marker_keyword": "lutein", "brand_keyword": "kemin"},
     {"id": "ksm_66_ashwagandha", "unii": "V038D626IF",
      "marker_keyword": "withanolide", "brand_keyword": "ixoreal"},
-    {"id": "cognigrape", "unii": "RDS2V6DVY5",
+    {"id": "cognigrape", "unii": None,
      "marker_keyword": "anthocyanin", "brand_keyword": "bionap"},
     {"id": "optiberry", "unii": None,
      "marker_keyword": "anthocyanin", "brand_keyword": "interhealth"},
@@ -100,9 +100,11 @@ def test_entry_has_unii(std_doc, entry):
 @pytest.mark.parametrize("entry", PB1_ENTRIES, ids=[e["id"] for e in PB1_ENTRIES])
 def test_entry_has_v6_contract(std_doc, entry):
     e = _find(std_doc.get("standardized_botanicals", []), entry["id"])
-    assert e.get("bonus_eligible") is True, (
-        f"std.{entry['id']} must have bonus_eligible=True"
-    )
+    held = entry["id"] in {"pacran", "cran_max", "lutemax_2020", "cognigrape", "optiberry"}
+    assert e.get("bonus_eligible") is (not held)
+    if held:
+        assert "held" in e["bonus_rationale"].lower()
+        assert "preparation" in e["bonus_rationale"].lower()
     assert e.get("standardization_basis") == "branded_extract", (
         f"std.{entry['id']} basis must be 'branded_extract'. "
         f"Got: {e.get('standardization_basis')!r}"
@@ -113,7 +115,7 @@ def test_entry_has_v6_contract(std_doc, entry):
         f"{entry['marker_keyword']!r}. Got: {e.get('marker_compounds')}"
     )
     rationale = (e.get("bonus_rationale") or "").lower()
-    assert entry["brand_keyword"] in rationale, (
+    assert held or entry["brand_keyword"] in rationale, (
         f"std.{entry['id']} bonus_rationale must mention brand owner "
         f"{entry['brand_keyword']!r}. Got: {e.get('bonus_rationale')!r}"
     )

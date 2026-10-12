@@ -141,12 +141,8 @@ def test_cognigrape_typo_fixed(sbot):
     )
 
 
-def test_cognigrape_has_unii(sbot):
-    """cognigrape external_ids must be populated so the audit's
-    no-target-UNII flag clears."""
-    e = _find(sbot.get("standardized_botanicals", []), "cognigrape")
-    unii = (e.get("external_ids") or {}).get("unii")
-    assert unii, (
-        f"cognigrape external_ids.unii must be populated. Got: "
-        f"{e.get('external_ids')}"
-    )
+def test_cognigrape_does_not_inherit_unverified_grape_seed_unii(sbot):
+    e = _find(sbot["standardized_botanicals"], "cognigrape")
+    assert e["external_ids"]["unii"] is None
+    assert e["bonus_eligible"] is False
+    assert "cognigrape" in _lc(e["aliases"])

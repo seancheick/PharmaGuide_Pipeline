@@ -919,3 +919,11 @@ caers_adverse_event_signals.json
 fda_unii_cache.json (172K substances)
   └── unii lookup → enrichment identity resolution (offline, via unii_cache.py)
 ```
+
+The interaction builder exports `drug_classes.json` per-class
+`excluded_member_rxcuis` to `drug_class_map.excluded_drug_rxcuis_json` (JSON array,
+empty by default). These are explicit identity/class exclusions, not missing
+membership. `MedicationClassBridge` reads them to prevent RxClass fallback from
+reintroducing a rejected class; unknown identities retain fallback. Exclusions
+never imply general medication safety. Aspirin dose/route/use exceptions belong
+to `medication_profile_gate_rules.json`, not the class-membership bridge.

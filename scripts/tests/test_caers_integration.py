@@ -157,6 +157,7 @@ class TestCAERSOutputSchema:
         meta = signals_data["_metadata"]
         assert meta["schema_version"] == "1.0.0"
         assert "FDA CAERS" in meta["source"]
+        assert meta["total_ingredients_with_signals"] == len(signals_data["signals"])
         assert meta["total_ingredients_with_signals"] > 0
 
     def test_has_signals(self, signals_data):

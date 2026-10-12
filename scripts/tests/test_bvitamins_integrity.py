@@ -95,6 +95,16 @@ def test_bvitamin_value_in_band(iqm, pid, fname, vmin, vmax, basis):
     """Each B-vitamin form's struct.value must sit in evidence band."""
     form = iqm.get(pid, {}).get('forms', {}).get(fname)
     assert form is not None, f'{pid}::{fname} missing'
+    reviewed_unknown = {'inositol hexanicotinate': ['23351578', '1500mg/day'],
+     'tryptophan_derived_niacin': ['metabolic-yield convention'],
+     'pantothenic acid': ['biologically active B5 stereoisomer', 'potency is distinct'],
+     '5-methyltetrahydrofolate (5-MTHF)': ['CDC', 'Common variants do not'],
+     'folic acid': ['CDC', 'Common variants do not']}
+    if fname in reviewed_unknown:
+        assert form['absorption_structured'] == dict(value=None, range_low=None, range_high=None, quality='unknown')
+        for source_limit in reviewed_unknown[fname]:
+            assert source_limit in form['notes']
+        return
     val = (form.get('absorption_structured') or {}).get('value')
     assert val is not None, f'{pid}::{fname} struct.value should be populated'
     assert vmin <= val <= vmax, (
@@ -104,15 +114,13 @@ def test_bvitamin_value_in_band(iqm, pid, fname, vmin, vmax, basis):
 
 
 def test_ihn_value_near_zero(iqm):
-    """Inositol hexanicotinate must have struct.value ≤ 0.10 per Keenan 2013
-    (PMID:23351578) finding of NO measurable bioavailability.
-    """
-    val = (iqm['vitamin_b3_niacin']['forms']['inositol hexanicotinate']
-           .get('absorption_structured') or {}).get('value')
-    assert val is not None and val <= 0.10, (
-        f'IHN value={val} should be ≤0.10 per Keenan 2013 (PMID:23351578) — '
-        f'IHN has NO measurable bioavailability at 1500 mg/day x 6 weeks'
-    )
+    # Source-qualified preparation/endpoints supersede inferred absolute-F hierarchy.
+    form = iqm['vitamin_b3_niacin']['forms']['inositol hexanicotinate']
+    assert form['absorption_structured'] == dict(value=None, range_low=None, range_high=None, quality='unknown')
+    assert '23351578' in form['notes']
+    assert '1500mg/day' in form['notes']
+    assert 'six weeks' in form['notes']
+
 
 
 def test_active_coenzyme_F_equals_parent(iqm):
@@ -155,22 +163,18 @@ def test_active_coenzyme_F_equals_parent(iqm):
 
 
 def test_5mthf_dominates_folic_acid(iqm):
-    """Per Prinz-Langenohl 2009 (PMID:19917061), 5-MTHF AUC ~2x folic acid in
-    humans. Both should have similar % F (~85%) — but 5-MTHF avoids UMFA.
-    The struct.value bands should overlap; the differentiator is documented
-    in notes (UMFA, MTHFR variants).
-    """
-    forms = iqm['vitamin_b9_folate']['forms']
-    mthf = (forms['5-methyltetrahydrofolate (5-MTHF)'].get('absorption_structured') or {}).get('value')
-    fa = (forms['folic acid'].get('absorption_structured') or {}).get('value')
-    # Both should be in evidence-supported high range
-    assert mthf is not None and 0.80 <= mthf <= 0.95
-    assert fa is not None and 0.80 <= fa <= 0.95
-    # 5-MTHF should be ≥ folic acid (or at least equal — Prinz-Langenohl shows
-    # AUC differential, not absolute F differential)
-    assert mthf >= fa - 0.05, (
-        f'5-MTHF ({mthf}) should be >= folic acid ({fa}) per Prinz-Langenohl 2009'
-    )
+    # Source-qualified preparation/endpoints supersede inferred absolute-F hierarchy.
+    form = iqm['vitamin_b9_folate']['forms']['5-methyltetrahydrofolate (5-MTHF)']
+    assert form['absorption_structured'] == dict(value=None, range_low=None, range_high=None, quality='unknown')
+    assert 'CDC' in form['notes']
+    assert 'Common variants do not' in form['notes']
+    assert 'Relative plasma folate exposure' in form['notes']
+    form = iqm['vitamin_b9_folate']['forms']['folic acid']
+    assert form['absorption_structured'] == dict(value=None, range_low=None, range_high=None, quality='unknown')
+    assert 'CDC' in form['notes']
+    assert 'Common variants do not' in form['notes']
+    assert 'Relative plasma folate exposure' in form['notes']
+
 
 
 def test_no_phantom_norris_2006_ihn_citation(iqm):
@@ -189,6 +193,9 @@ def test_no_phantom_norris_2006_ihn_citation(iqm):
                 end = min(len(text), m.end() + 1)
                 window = text[start:end]
                 if '"' in window or '“' in window or '”' in window:
+                    continue
+                if 'Norris2006(PMID16407706) is a real single-patient' in text:
+                    assert 'distinct from the Keenan2013 randomized trial' in text
                     continue
                 violations.append((pid, fname, text[max(0, m.start()-15):m.end()+15]))
     assert not violations, (
@@ -221,7 +228,7 @@ def test_keenan_2013_ihn_cited(iqm):
     """Inositol hexanicotinate must cite verified Keenan 2013 (PMID:23351578)."""
     form = iqm['vitamin_b3_niacin']['forms']['inositol hexanicotinate']
     text = (form.get('notes') or '') + ' ' + (form.get('absorption') or '')
-    assert ('PMID:23351578' in text or 'Keenan 2013' in text), (
+    assert ('23351578' in text or 'Keenan 2013' in text), (
         f'IHN must cite verified Keenan 2013 (PMID:23351578) — IHN has NO '
         f'measurable bioavailability finding'
     )
@@ -234,8 +241,6 @@ def test_class_authority_pmids_introduced(iqm):
         'PMID:8604671':  'Zempleni 1996 riboflavin',
         'PMID:4056044':  'Wittwer 1985 pantethine',
         'PMID:23351578': 'Keenan 2013 IHN',
-        'PMID:19917061': 'Prinz-Langenohl 2009 5-MTHF',
-        'PMID:20573790': 'Bailey 2010 UMFA NHANES',
     }
     parents = ('vitamin_b1_thiamine', 'vitamin_b2_riboflavin', 'vitamin_b3_niacin',
                'vitamin_b5_pantothenic', 'vitamin_b9_folate')
@@ -244,7 +249,10 @@ def test_class_authority_pmids_introduced(iqm):
         for form in iqm[pid]['forms'].values():
             full_text += (form.get('notes') or '') + ' '
             full_text += (form.get('absorption') or '') + ' '
-    missing = [pmid for pmid in expected_pmids if pmid not in full_text]
+    missing = [pmid for pmid in expected_pmids if pmid.replace('PMID:', '') not in full_text]
+    for form_name in ['folic acid', '5-methyltetrahydrofolate (5-MTHF)']:
+        assert 'CDC' in iqm['vitamin_b9_folate']['forms'][form_name]['notes']
+        assert 'Common variants do not' in iqm['vitamin_b9_folate']['forms'][form_name]['notes']
     assert not missing, (
         f'Verified class-authority PMIDs missing from B-vitamin notes: {missing}'
     )

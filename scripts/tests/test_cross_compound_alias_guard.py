@@ -257,8 +257,8 @@ def test_compound_alias_on_distinct_nutrient_parent_is_still_rejected():
 def test_specific_spm_compounds_have_distinct_entries():
     """Regression guard for the 2026-05-01 SPM ontology fix.
 
-    Resolvin D5 and Protectin DX must each have their OWN entry with
-    distinct PubChem CIDs, NOT be aliased onto the 17-HDHA precursor.
+    Resolvin D5 and Protectin DX must each have their OWN entry without
+    inheriting wrong PubChem CIDs or aliases from the 17-HDHA precursor.
 
     Per IQM-purity rule (clinician 2026-05-01) the entries live in
     other_ingredients.json (no verified scoring data) rather than IQM.
@@ -276,7 +276,7 @@ def test_specific_spm_compounds_have_distinct_entries():
         "Lives in other_ingredients.json until clinician approves real bio_score."
     )
 
-    # Must be in other_ingredients with verified identifiers
+    # Separate label-identity entries; the two mismatched CIDs remain withheld.
     oth_path = ROOT / "data" / "other_ingredients.json"
     oth = json.loads(oth_path.read_text())
     by_id = {e.get("id"): e for e in oth.get("other_ingredients", []) if isinstance(e, dict)}
@@ -292,17 +292,21 @@ def test_specific_spm_compounds_have_distinct_entries():
     assert rvd5.get("cui") == "C3492734", (
         f"NHA_RESOLVIN_D5 CUI must be C3492734 (verified UMLS), got {rvd5.get('cui')}"
     )
-    assert rvd5.get("external_ids", {}).get("pubchem_cid") == 24932575, (
-        "NHA_RESOLVIN_D5 PubChem CID must be 24932575"
+    assert rvd5.get("external_ids", {}).get("pubchem_cid") is None, (
+        "NHA_RESOLVIN_D5 must withhold mismatched nitrogen-containing CID 24932575"
     )
+
+    assert "unrelated nitrogen-containing" in rvd5["notes"]
 
     pdx = by_id["NHA_PROTECTIN_DX"]
     assert pdx.get("cui") == "C3886642", (
         f"NHA_PROTECTIN_DX CUI must be C3886642 (verified UMLS), got {pdx.get('cui')}"
     )
-    assert pdx.get("external_ids", {}).get("pubchem_cid") == 11968800, (
-        "NHA_PROTECTIN_DX PubChem CID must be 11968800"
+    assert pdx.get("external_ids", {}).get("pubchem_cid") is None, (
+        "NHA_PROTECTIN_DX must withhold mismatched steroidal-glycoside CID 11968800"
     )
+
+    assert "unrelated steroidal glycoside" in pdx["notes"]
 
     # 17-HDHA precursor (still in IQM) must NOT alias the specific compounds
     omega3 = iqm_data.get("omega_3", {})

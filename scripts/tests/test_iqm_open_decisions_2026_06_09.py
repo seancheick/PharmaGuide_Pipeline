@@ -45,8 +45,9 @@ def _aliases(form: dict) -> set[str]:
 def test_coq10_crystal_free_has_no_clinical_utility_bio_score_exception() -> None:
     form = _form(_iqm(), "coq10", "ubiquinol crystal-free")
     assert form["bio_score"] == 13
-    assert form["absorption_structured"]["value"] <= 0.10
-    assert "no clinical-utility exception" in form["notes"].lower()
+    assert form["absorption_structured"] == dict(value=None, range_low=None, range_high=None, quality="unknown")
+    assert "16919858" in form["notes"]
+    assert "did not include an active standard-CoQ10 comparator" in form["notes"]
 
 
 def test_black_cherry_and_dark_sweet_cherry_are_separate_species_identities() -> None:

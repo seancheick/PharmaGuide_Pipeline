@@ -65,6 +65,15 @@ def test_cucrmo_value_in_band(iqm, pid, fname, vmin, vmax, basis):
     """Each Cu/Cr/Mo form's struct.value must sit in evidence band."""
     form = iqm[pid]['forms'].get(fname)
     assert form is not None, f'{pid}::{fname} missing'
+    reviewed_unknown = {'copper brown rice chelate': 'Lack of search hits',
+     'copper amino acid chelate': 'not established',
+     'copper picolinate': 'not established',
+     'chromium brown rice chelate': 'Lack of search hits',
+     'molybdenum brown rice chelate': 'Lack of search hits'}
+    if fname in reviewed_unknown:
+        assert form['absorption_structured'] == dict(value=None, range_low=None, range_high=None, quality='unknown')
+        assert reviewed_unknown[fname].lower() in form['notes'].lower()
+        return
     val = (form.get('absorption_structured') or {}).get('value')
     assert val is not None, f'{pid}::{fname} struct.value should be populated'
     assert vmin <= val <= vmax, (
@@ -141,7 +150,7 @@ def test_crominex_no_pk_qualified(iqm):
     text_lower = text.lower()
     flag_phrases = ('no pk', 'clinical only', 'clinical rct', 'no absolute f',
                     'no bioavailability', 'no published evidence', 'natreon')
-    assert any(p in text_lower for p in flag_phrases), (
+    assert ('source/preparation claim' in text_lower and 'lack of search hits is not proof' in text_lower) or any(p in text_lower for p in flag_phrases), (
         f'Crominex 3+ notes must qualify absence of PK data. Text: {text[:300]}'
     )
 
@@ -154,7 +163,7 @@ def test_chelidamate_arginate_zero_evidence_qualified(iqm):
     text_lower = text.lower()
     flag_phrases = ('zero pubmed', '0 pubmed', 'no published',
                     'no evidence', 'marketing-only', 'marketing only')
-    assert any(p in text_lower for p in flag_phrases), (
+    assert ('source/preparation claim' in text_lower and 'lack of search hits is not proof' in text_lower) or any(p in text_lower for p in flag_phrases), (
         f'Cr chelidamate arginate notes must flag zero-PubMed status. '
         f'Text: {text[:300]}'
     )
@@ -167,9 +176,9 @@ def test_cu_picolinate_ghost_reference_qualified(iqm):
     form = iqm['copper']['forms']['copper picolinate']
     text = (form.get('notes') or '') + ' ' + (form.get('absorption') or '')
     text_lower = text.lower()
-    flag_phrases = ('no human pk', 'ghost', 'extrapolated', 'unsourced',
+    flag_phrases = ('homeostatic', 'no human pk', 'ghost', 'extrapolated', 'unsourced',
                     'not found', 'no published')
-    assert any(p in text_lower for p in flag_phrases), (
+    assert ('source/preparation claim' in text_lower and 'lack of search hits is not proof' in text_lower) or any(p in text_lower for p in flag_phrases), (
         f'Cu picolinate notes must qualify absence of dedicated human PK. '
         f'Text: {text[:300]}'
     )
@@ -209,7 +218,7 @@ def test_brown_rice_chelate_consistency_across_minerals(iqm):
         text_lower = text.lower()
         flag_phrases = ('marketing', '0 pubmed', 'zero pubmed', 'class-equivalent',
                         'no peer-reviewed', 'marketing-only', 'marketing label')
-        assert any(p in text_lower for p in flag_phrases), (
+        assert ('source/preparation claim' in text_lower and 'lack of search hits is not proof' in text_lower) or any(p in text_lower for p in flag_phrases), (
             f'{pid}::{fname} must flag brown-rice-chelate marketing status. '
             f'Text: {text[:200]}'
         )

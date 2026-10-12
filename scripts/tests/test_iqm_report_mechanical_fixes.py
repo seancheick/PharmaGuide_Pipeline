@@ -170,7 +170,7 @@ def test_branded_lutein_routes_to_dedicated_form_not_unspecified(iqm: dict) -> N
     }
     assert branded_aliases <= premium_aliases
     assert branded_aliases.isdisjoint(unspecified_aliases)
-    assert forms["lutein (unspecified)"]["absorption_structured"]["quality"] == "low"
+    assert forms["lutein (unspecified)"]["absorption_structured"]["quality"] == "unknown"
     assert premium["bio_score"] == 10
 
 
@@ -242,7 +242,8 @@ def test_acetyl_l_carnitine_duplicate_parent_is_deprecated_compat_only(iqm: dict
             assert form["bio_score"] == unknown_floor(duplicate)[0]
         else:
             assert form["bio_score"] == canonical["bio_score"]
-        assert "deprecated compatibility form" in form["notes"]
+        assert "deprecated compatibility" in form["notes"]
+        assert "canonical" in form["notes"]
 
 
 @pytest.mark.parametrize(

@@ -24,8 +24,9 @@
     "name": "Nitrites"
   },
   "sodium nitrite/nitrate": {
-    "cui": "C0028137",
-    "name": "Nitrites"
+    "cui": null,
+    "name": null,
+    "note": "Curated override: this umbrella spans sodium nitrite and sodium nitrate, chemically distinct species. Do not collapse nitrate into the Nitrites concept C0028137. Individual compound identifiers remain owned by their specific entries."
   },
   "synthetic antioxidants": {
     "cui": null,

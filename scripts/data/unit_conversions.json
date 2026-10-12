@@ -4,7 +4,7 @@
     "purpose": "dosing_normalization",
     "schema_version": "5.2.2",
     "contract_test": "scripts/tests/test_unit_conversions_contract.py",
-    "last_updated": "2026-10-04",
+    "last_updated": "2026-10-11",
     "version": "1.2.5",
     "statistics": {
       "vitamin_conversions": 26,
@@ -271,7 +271,7 @@
         "mcg_dfe_to_mcg": 0.588
       },
       "canonical_unit": "mcg DFE",
-      "notes": "Folic acid on empty stomach: 1 mcg = 1.7 mcg DFE; with food: 1 mcg = 1 mcg DFE",
+      "notes": "Physiological DFE equivalence: 1 mcg DFE = 0.6 mcg folic acid consumed with food, or 0.5 mcg folic acid on an empty stomach. The fixed 1.7 factor used here is the labeling conversion; it does not change dynamically with meals.",
       "source": "NIH ODS"
     },
     "folate_methylfolate": {

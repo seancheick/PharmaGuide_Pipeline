@@ -28,13 +28,18 @@ def iqm():
 
 
 def test_glutamate_aligned_to_glutamic_acid(iqm):
-    g = iqm["glutamate"]["forms"]["l-glutamate"]
-    assert g["absorption_structured"]["value"] == 0.1  # splanchnic extraction (= l_glutamic_acid)
+    # Source-qualified preparation/endpoints supersede inferred absolute-F hierarchy.
+    form = iqm['glutamate']['forms']['l-glutamate']
+    assert form['absorption_structured'] == dict(value=None, range_low=None, range_high=None, quality='unknown')
+    assert 'intestinal uptake' in form['notes']
+    assert 'systemic appearance' in form['notes']
+    assert 'No replacement fraction' in form['notes']
+  # splanchnic extraction (= l_glutamic_acid)
 
 
 def test_glutamate_no_longer_contradicts_glutamic_acid(iqm):
-    g = iqm["glutamate"]["forms"]["l-glutamate"]
-    ga = iqm["l_glutamic_acid"]["forms"]["l-glutamic acid standard"]
-    # shared labels (glutamate/MSG) must score identically whichever parent wins
-    assert g["bio_score"] == ga["bio_score"]
-    assert g["absorption_structured"]["value"] == ga["absorption_structured"]["value"]
+    # Source-qualified preparation/endpoints supersede inferred absolute-F hierarchy.
+    form = iqm['glutamate']['forms']['l-glutamate']
+    assert form['absorption_structured'] == dict(value=None, range_low=None, range_high=None, quality='unknown')
+    assert 'same defined endpoint' in form['notes']
+    assert form['bio_score'] == iqm['l_glutamic_acid']['forms']['l-glutamic acid standard']['bio_score']

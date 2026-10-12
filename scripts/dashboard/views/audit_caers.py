@@ -79,10 +79,15 @@ def _render_overview(signals, metadata):
     ])
     metric_row([
         ("Reports Analyzed", f"{reports_analyzed:,}"),
-        ("Total Serious Events", f"{total_serious:,}"),
-        ("Total Deaths Reported", f"{total_deaths:,}"),
-        ("Total Hospitalizations", f"{total_hosp:,}"),
+        ("Serious Report Associations", f"{total_serious:,}"),
+        ("Death Report Associations", f"{total_deaths:,}"),
+        ("Hospitalization Associations", f"{total_hosp:,}"),
     ])
+    st.caption(
+        "One report may be associated with several ingredients, so these sums "
+        "are not unique events or patients. Reports do not establish causation "
+        "or the probability of harm."
+    )
 
 
 def _render_signal_explorer(signals):

@@ -93,6 +93,16 @@ def test_b25_value_in_band(iqm, pid, fname, vmin, vmax, basis):
     """Each form's struct.value must sit in evidence band."""
     form = iqm[pid]['forms'].get(fname)
     assert form is not None, f'{pid}::{fname} missing'
+    reviewed_unknown = {'guarana standardized extract': ['12087345', 'ephedra-plus-guarana'],
+     'guarana (unspecified)': ['12087345', 'ephedra-plus-guarana'],
+     'cold-pressed ahiflower seed oil': ['22279143', 'conversion'],
+     'ahiflower seed oil (unspecified)': ['28287415', 'defined refined'],
+     'vanadium aspartate': ['Animal', 'Human comparative evidence remains unresolved']}
+    if fname in reviewed_unknown:
+        assert form['absorption_structured'] == dict(value=None, range_low=None, range_high=None, quality='unknown')
+        for source_limit in reviewed_unknown[fname]:
+            assert source_limit in form['notes']
+        return
     val = (form.get('absorption_structured') or {}).get('value')
     assert val is not None, f'{pid}::{fname} struct.value should be populated'
     assert vmin <= val <= vmax, (
@@ -165,6 +175,10 @@ def test_vanadium_class_equivalence_collapse(iqm):
     for fname in expected_v_forms:
         form = forms.get(fname)
         assert form is not None, f'vanadyl_sulfate::{fname} missing'
+        if fname == 'vanadium aspartate':
+            assert form['absorption_structured'] == dict(value=None, range_low=None, range_high=None, quality='unknown')
+            assert 'Human comparative evidence remains unresolved' in form['notes']
+            continue
         v = (form.get('absorption_structured') or {}).get('value')
         assert v is not None and 0.01 <= v <= 0.03, (
             f'vanadyl_sulfate::{fname} value={v} outside V class band '
@@ -188,16 +202,18 @@ def test_lithium_orotate_class_equivalent_to_unspecified(iqm):
 
 
 def test_guarana_class_equivalent_to_caffeine(iqm):
-    """Guarana forms must reflect caffeine class F (~99%) per Haller 2002
-    (PMID:12087345).
-    """
-    forms = iqm['guarana']['forms']
-    for fname, form in forms.items():
-        v = (form.get('absorption_structured') or {}).get('value')
-        assert v is not None and v >= 0.95, (
-            f'guarana::{fname} value={v} should be ≥0.95 — caffeine class '
-            f'baseline (PMID:12087345)'
-        )
+    # Source-qualified preparation/endpoints supersede inferred absolute-F hierarchy.
+    form = iqm['guarana']['forms']['guarana standardized extract']
+    assert form['absorption_structured'] == dict(value=None, range_low=None, range_high=None, quality='unknown')
+    assert '12087345' in form['notes']
+    assert 'ephedra-plus-guarana' in form['notes']
+    assert 'eight healthy' in form['notes']
+    form = iqm['guarana']['forms']['guarana (unspecified)']
+    assert form['absorption_structured'] == dict(value=None, range_low=None, range_high=None, quality='unknown')
+    assert '12087345' in form['notes']
+    assert 'ephedra-plus-guarana' in form['notes']
+    assert 'eight healthy' in form['notes']
+
 
 
 def test_butterbur_no_human_pk_documented(iqm):
@@ -263,7 +279,7 @@ def test_class_authority_pmids_introduced_b25(iqm):
         for form in iqm[pid]['forms'].values():
             full_text += (form.get('notes') or '') + ' '
             full_text += (form.get('absorption') or '') + ' '
-    missing = [pmid for pmid in expected_pmids if pmid not in full_text]
+    missing = [pmid for pmid in expected_pmids if pmid.replace('PMID:', '') not in full_text]
     assert not missing, (
         f'Verified class-authority PMIDs missing: {missing}'
     )

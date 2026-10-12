@@ -75,6 +75,14 @@ def test_bdk_value_in_evidence_band(iqm, pid, fname, vmin, vmax, basis):
     """Each B12/D/K form's struct.value must sit in evidence band."""
     form = iqm.get(pid, {}).get('forms', {}).get(fname)
     assert form is not None, f'{pid}::{fname} missing'
+    reviewed_unknown = {'calcidiol (25-hydroxy D3)': ['28187226', 'different mass doses'],
+     'phylloquinone': ['food-bound', 'Anticoagulant'],
+     'vitamin K1 synthetic': ['food-bound', 'Anticoagulant']}
+    if fname in reviewed_unknown:
+        assert form['absorption_structured'] == dict(value=None, range_low=None, range_high=None, quality='unknown')
+        for source_limit in reviewed_unknown[fname]:
+            assert source_limit in form['notes']
+        return
     val = (form.get('absorption_structured') or {}).get('value')
     if 'sublingual' in fname:
         assert val is None, f'{pid}::{fname} must not claim an unmeasured fraction'
@@ -110,9 +118,10 @@ def test_no_misattributed_pmids_introduced(iqm):
         for fname, form in iqm[pid]['forms'].items():
             text = (form.get('notes') or '') + ' ' + (form.get('absorption') or '')
             for pmid, what in misattributed:
-                if pmid in text:
-                    # Allow if surrounded by audit-trail context
-                    idx = text.find(pmid)
+                identifier = pmid.replace('PMID:', '')
+                if identifier in text:
+                    # Only the local preceding audit-trail context can disavow it.
+                    idx = text.find(identifier)
                     window = text[max(0, idx-80):idx]
                     if any(marker in window.lower()
                            for marker in ('supposed', 'supplied', 'misattribut',
@@ -173,7 +182,7 @@ def test_verified_pmids_introduced(iqm):
     for pmid, (pid, fname) in expected_citations.items():
         form = iqm[pid]['forms'][fname]
         text = (form.get('notes') or '') + ' ' + (form.get('absorption') or '')
-        assert pmid in text, (
+        assert pmid.replace('PMID:', '') in text, (
             f'Verified citation {pmid} should be cited in {pid}::{fname}'
         )
 
@@ -247,3 +256,19 @@ def test_d2_inferior_to_d3(iqm):
     assert d2 < d3, (
         f'D2 ({d2}) must be < D3 ({d3}) per van den Heuvel 2024 (PMID:37865222)'
     )
+
+
+@pytest.mark.parametrize('token', ['PMID:18065595', '18065595'])
+@pytest.mark.parametrize('disavowed', [False, True])
+def test_ghost_citation_guard_uses_local_context_for_both_identifier_spellings(token, disavowed):
+    parents = ['vitamin_b12_cobalamin', 'vitamin_d', 'vitamin_k',
+               'vitamin_k1', 'vitamin_k2', 'vitamin_k3']
+    notes = (f'Supplied wrong attribution {token}; correct replacement is reviewed.'
+             if disavowed else f'{token} establishes absorption. An unrelated later claim is not supported.')
+    sample = {parent: {'forms': {}} for parent in parents}
+    sample['vitamin_d']['forms']['control'] = {'notes': notes}
+    if disavowed:
+        test_no_misattributed_pmids_introduced(sample)
+    else:
+        with pytest.raises(AssertionError, match='Misattributed PMIDs introduced'):
+            test_no_misattributed_pmids_introduced(sample)

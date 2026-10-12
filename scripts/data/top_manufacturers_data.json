@@ -3,7 +3,7 @@
     "description": "Top supplement manufacturers with quality ratings and certifications",
     "purpose": "manufacturer_quality",
     "schema_version": "5.0.0",
-    "last_updated": "2026-09-17",
+    "last_updated": "2026-10-11",
     "total_entries": 77,
     "recent_changes": "2025-12-04: Added Seed Health (NutraIngredients-USA 2022 winner, multiple RCTs, WHO advisor founded). 2025-12-03: Added BioGaia and Culturelle. 2026-02-20: Added 16 manufacturer entries (sports, DTC, international, and legacy Care/of coverage) with updated alias coverage for exact matching.",
     "country_field_added": "2026-06-04 (research-verified HQ/regulatory jurisdiction; 5 unverified left blank)",
@@ -16,7 +16,7 @@
       "country": "USA",
       "evidence": [
         "USP-verified products",
-        "No FDA warning letters or recalls (last 10 years)",
+        "A June 2016 Nature Made recall was within the ten-year window at the July 2025 record date; it is outside the October 2026 ten-year window. This record does not establish a complete warning-letter history.",
         "Widely recognized for quality and compliance"
       ],
       "notes": "Long-established, industry-leading reputation for compliance and product purity.",
@@ -56,7 +56,7 @@
       "evidence": [
         "IFOS 5-star rated omega-3s",
         "Multiple third-party purity certifications",
-        "No recalls or FDA warning letters"
+        "Documented recalls include elevated-dose infant vitamin D3 in February 2024 and a mislabeling recall in May 2025; termination does not erase recall history."
       ],
       "notes": "Gold standard in omega-3 quality and third-party testing.",
       "last_updated": "2025-07-16",
@@ -80,7 +80,7 @@
       "country": "USA",
       "evidence": [
         "NSF, USDA Organic, and Non-GMO Project certifications",
-        "No significant recalls or FDA warnings",
+        "The 2016 RAW Meal recall was associated with a Salmonella outbreak (CDC: 33 cases, six hospitalizations, no deaths); this does not establish a defect in the SPORT line.",
         "Industry awards for transparency"
       ],
       "notes": "Organic leader with unmatched ingredient sourcing transparency.",
@@ -123,7 +123,7 @@
       "country": "USA",
       "evidence": [
         "ISO, GMP certifications",
-        "No regulatory penalties or recalls"
+        "Exact-company recalls were documented in 2013 and 2014 for potential chloramphenicol and undeclared soy. These older recalls do not establish a current product defect."
       ],
       "notes": "Provider-trusted supplement manufacturer leading in clinical evidence.",
       "last_updated": "2025-07-16",
@@ -137,7 +137,7 @@
       "country": "USA",
       "evidence": [
         "GMP certs, clinical distribution",
-        "Zero warning letters and recalls"
+        "Exact-company recalls include undeclared milk in 2014, undeclared soy in 2020 and positive Cronobacter testing in 2023; a blanket zero-recall claim is unsupported."
       ],
       "notes": "Favorably regarded by integrative and functional medicine specialists.",
       "last_updated": "2025-07-16",
@@ -588,7 +588,7 @@
       "evidence": [
         "cGMP compliant",
         "Third-party lab testing with batch certificates",
-        "No FDA warning letters or recalls"
+        "FDA issued Double Wood LLC warning letter 593766 on July 23, 2020 for Dycetin drug claims; the historical letter does not establish a currently unresolved violation."
       ],
       "notes": "Popular online supplement brand known for transparency and quality analysis reports.",
       "last_updated": "2025-07-22",
@@ -853,7 +853,7 @@
       "evidence": [
         "USDA Organic and NSF certified",
         "Specializes in vegan and plant-based protein and nutritional shakes",
-        "No history of FDA warning letters or recalls"
+        "Limited Organic Protein + Superfoods lots were recalled in October 2023 for undeclared sesame; the notice reported no illnesses."
       ],
       "notes": "Popular for plant-based nutrition shakes and protein with clean ingredient lists.",
       "last_updated": "2025-07-24",
@@ -1008,7 +1008,7 @@
       "evidence": [
         "2022 NutraIngredients-USA Probiotic Product of the Year",
         "Multiple published RCTs (DDW 2024, DDW 2025)",
-        "Founded by Dr. Gregor Reid (former WHO Expert Panel chair)",
+        "Co-founded by Ara Katz and Raja Dhir; Gregor Reid is a scientific board member.",
         "FDA IND authorized for IBS research",
         "Lot-to-lot third-party testing at accredited labs",
         "No FDA warning letters or recalls"

@@ -182,6 +182,22 @@ class RDAULCalculator:
     final scores (that's the scorer's job).
     """
 
+    # Formal FNB reference types for the life stages this calculator supports
+    # (14 years and older). Other registry values are authored dose anchors,
+    # not government RDAs or AIs. This labels provenance; it does not calibrate
+    # the scorer's separate DRI/clinical-anchor credit policy.
+    _AI_NUTRIENT_IDS = frozenset({
+        "vitamin_k", "biotin", "pantothenic_acid", "choline", "chromium",
+        "manganese", "potassium", "sodium", "chloride", "fluoride",
+        "alpha_linolenic_acid",
+    })
+    _RDA_NUTRIENT_IDS = frozenset({
+        "vitamin_a", "vitamin_c", "vitamin_d", "vitamin_e", "thiamin",
+        "riboflavin", "niacin", "vitamin_b6", "folate", "vitamin_b12",
+        "calcium", "magnesium", "iron", "zinc", "copper", "selenium",
+        "iodine", "molybdenum", "phosphorus",
+    })
+
     # Age group normalization
     AGE_NORMALIZATION = {
         "14-18": "14-18",
@@ -199,6 +215,10 @@ class RDAULCalculator:
         "m": "Male",
         "female": "Female",
         "f": "Female",
+        "pregnancy": "Pregnancy",
+        "pregnant": "Pregnancy",
+        "lactation": "Lactation",
+        "lactating": "Lactation",
         "both": "Male",  # Use male as default when both
         "adult_neutral": "Adult neutral",
         "default": "Male"
@@ -369,16 +389,20 @@ class RDAULCalculator:
         rda_ai, ul = self._get_age_sex_values(nutrient_data, norm_age, norm_sex)
 
         # Determine RDA source
-        rda_source = "rda"
+        nutrient_id = nutrient_data.get("id")
+        rda_source = (
+            "ai" if nutrient_id in self._AI_NUTRIENT_IDS else
+            "rda" if nutrient_id in self._RDA_NUTRIENT_IDS else "unknown"
+        )
         if rda_ai is None:
             # Check for AI value
             ai_data = self._get_ai_value(nutrient_data, norm_age, norm_sex)
             if ai_data:
                 rda_ai = ai_data
-                rda_source = "ai"
+                # The shared numeric field alone cannot establish provenance.
 
         # Check UL status
-        ul_status = self._determine_ul_status(nutrient_data, ul)
+        ul_status = self._determine_ul_status(nutrient_data, ul, norm_age, norm_sex)
 
         # Get optimal range
         optimal_min, optimal_max = self._parse_optimal_range(nutrient_data.get("optimal_range", ""))
@@ -411,7 +435,8 @@ class RDAULCalculator:
         else:
             if rda_ai and rda_ai > 0:
                 pct_rda = (amount_in_ref / rda_ai) * 100
-                notes.append(f"{pct_rda:.1f}% of RDA/AI ({rda_ai} {ref_unit_label})")
+                reference_name = {"rda": "RDA", "ai": "AI"}.get(rda_source, "authored dose reference")
+                notes.append(f"{pct_rda:.1f}% of {reference_name} ({rda_ai} {ref_unit_label})")
 
             if ul and ul > 0 and ul_status == "established":
                 pct_ul = (amount_in_ref / ul) * 100
@@ -436,6 +461,8 @@ class RDAULCalculator:
         # Handle "no UL" policy
         if ul_status == "not_determined":
             notes.append("No UL established for this nutrient")
+            if nutrient_data.get("id") == "vanadium" and nutrient_data.get("ul_note"):
+                warnings.append(nutrient_data["ul_note"])
             if adequacy_band == "excessive":
                 # Do not turn an RDA multiple into a toxicity proxy when the
                 # authoritative reference has no UL. Retain reduced high-dose
@@ -447,7 +474,7 @@ class RDAULCalculator:
                 )
             # Flag extreme doses (>10x RDA) for information only
             if pct_rda and pct_rda > 1000:
-                notes.append(f"Note: Amount is {pct_rda/100:.1f}x RDA (informational only, no UL applies)")
+                notes.append(f"Note: Amount is {pct_rda/100:.1f}x reference intake (informational only, no UL applies)")
 
         # Get point recommendation from band
         point_recommendation = ADEQUACY_BANDS.get(adequacy_band, {}).get("points", 0)
@@ -638,7 +665,10 @@ class RDAULCalculator:
 
         return None
 
-    def _determine_ul_status(self, nutrient_data: Dict, ul: Optional[float]) -> str:
+    def _determine_ul_status(
+        self, nutrient_data: Dict, ul: Optional[float],
+        age_group: Optional[str] = None, sex: Optional[str] = None,
+    ) -> str:
         """Determine UL status."""
         # Check ul_status field. Floor nutrients carry the granular display schema
         # (not_established_low_toxicity / not_established_insufficient_data) or the
@@ -656,6 +686,17 @@ class RDAULCalculator:
 
         if ul is not None and ul > 0:
             return "established"
+
+        # An adult ceiling does not establish a ceiling for a life stage whose
+        # native row explicitly records insufficient data.
+        matching_rows = [
+            row for row in nutrient_data.get("data", [])
+            if row.get("age_range") == age_group
+            and (row.get("group") == sex or
+                 (sex == "Adult neutral" and row.get("group") in {"Male", "Female"}))
+        ]
+        if any(row.get("ul_status") == "not_determined" for row in matching_rows):
+            return "not_determined"
 
         # Check highest_ul
         highest = nutrient_data.get("highest_ul")

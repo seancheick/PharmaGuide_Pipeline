@@ -3,7 +3,7 @@
     "description": "Comprehensive database of harmful additives, contaminants, and concerning ingredients found in dietary supplements. Used for scoring penalties and consumer warnings.",
     "purpose": "penalty_scoring",
     "schema_version": "5.4.0",
-    "last_updated": "2026-10-02",
+    "last_updated": "2026-10-11",
     "total_entries": 116,
     "functional_roles_field": {
       "added_in": "5.2.0",
@@ -767,7 +767,7 @@
       "mechanism_of_harm": "Inhibits cellular enzymes including pyruvate dehydrogenase. Chronic exposure linked to respiratory irritation, cardiac arrhythmia, and GI effects. Trivalent antimony classified as IARC Group 2A (probably carcinogenic to humans) based on limited evidence in humans, sufficient evidence in animals, and strong mechanistic evidence (IARC Monographs Volume 131, 2023).",
       "regulatory_status": {
         "US": "EPA oral reference dose (RfD) of 0.0004 mg/kg/day for antimony. California Prop 65 listed. FDA monitors as contaminant.",
-        "EU": "EFSA TDI of 0.006 mg/kg/day (antimony trioxide). Regulated under EU 2023/915 for contaminants in food."
+        "EU": "Antimony species and route must be distinguished. The cited IARC material describes a WHO drinking-water TDI of 6 mcg/kg body weight/day; this is not an EFSA antimony-trioxide food TDI."
       },
       "population_warnings": [
         "People with respiratory conditions — antimony dust irritates airways",
@@ -928,7 +928,7 @@
         {
           "value": 0.006,
           "unit": "mg/kg/day",
-          "source": "EFSA TDI for antimony trioxide"
+          "source": "WHO drinking-water TDI as described by IARC; species/route appraisal required, not an EFSA antimony-trioxide food limit."
         }
       ],
       "cui_status": "no_single_umls_concept",
@@ -961,17 +961,15 @@
         "FLAVOR,ARTIFICIAL"
       ],
       "category": "excipient",
-      "mechanism_of_harm": "Synthetic chemicals designed to mimic natural flavors. Exact composition is often proprietary and undisclosed on supplement labels. Some individual flavoring compounds have been linked to allergic reactions, headaches, and behavioral effects in sensitive individuals, though the category as a whole is FDA GRAS-approved.",
+      "mechanism_of_harm": "Artificial flavors represent many compounds whose identities can be unspecified on the label. Individual safety and allergen applicability require composition-specific evidence. A colors-plus-sodium-benzoate study cannot establish artificial-flavor behavioral effects.",
       "regulatory_status": {
-        "US": "FDA approved under GRAS (21 CFR 101.22). Manufacturers not required to disclose individual flavoring chemicals.",
+        "US": "21 CFR 101.22 governs flavor labeling; it does not grant blanket GRAS status to every synthetic flavor compound or exempt major-allergen declarations.",
         "EU": "Approved under Regulation (EC) No 1334/2008 with mandatory labeling as 'flavouring'."
       },
       "population_warnings": [
-        "People with chemical sensitivities — undisclosed compounds may trigger reactions",
-        "Children — some synthetic flavoring agents linked to behavioral effects (Southampton study)",
-        "People with allergies — proprietary blends may contain undisclosed allergens"
+        "People with allergies or sensitivities: assess the specific product and allergen declaration; the generic flavor category does not identify individual compounds."
       ],
-      "notes": "A broad category of synthetic flavoring agents used in supplement formulations. Individual chemicals are FDA GRAS-approved, but exact compositions are proprietary and not disclosed on labels. This lack of transparency makes it difficult to assess individual risk. Some flavoring compounds have been linked to allergic reactions and headaches. Presence signals a heavily processed formulation.",
+      "notes": "A broad flavor category with composition-dependent safety and transparency. The generic category is not a clinical hazard assessment or proof every constituent is GRAS.",
       "scientific_references": [
         "21 CFR 101.22 — FDA labeling of spices, flavorings, colorings",
         "Regulation (EC) No 1334/2008 — EU flavourings in food"
@@ -2068,11 +2066,11 @@
         "CAS 62-33-9"
       ],
       "category": "preservative",
-      "notes": "A synthetic chelating agent used as a preservative in supplements to bind metal ions and prevent oxidation. Can deplete essential minerals (zinc, iron, copper) when consumed regularly. FDA limits use to 75 ppm in food. Not recommended in mineral-containing supplement formulations where it may reduce bioavailability of the active ingredients. Cross-reference: shares E385 regulatory identity with ADD_DISODIUM_EDTA (disodium EDTA).",
+      "notes": "Calcium disodium EDTA is a chelator used under food-specific conditions in 21 CFR 172.120. Disodium EDTA has a separate section, 172.135. Clinical mineral depletion cannot be inferred from chelation mechanism without exposure-specific evidence.",
       "last_updated": "2026-03-24",
       "mechanism_of_harm": "Non-selective chelator that binds divalent and trivalent metal ions (Zn²⁺, Fe²⁺/Fe³⁺, Cu²⁺, Ca²⁺, Mn²⁺) with high affinity, forming stable complexes excreted renally. Chronic dietary exposure can deplete essential trace minerals. In supplements containing mineral ingredients, EDTA may chelate and reduce bioavailability of the intended active. Poorly absorbed orally (~5%), limiting systemic toxicity, but GI-level mineral binding still occurs.",
       "regulatory_status": {
-        "US": "FDA approved food additive under 21 CFR 172.120. Limited to specific foods; max 75–500 ppm depending on application.",
+        "US": "21 CFR 172.120 specifies individual foods, uses and concentrations; examples range from 25 to 800 ppm. This is not a blanket supplement permission or universal 75 ppm limit.",
         "EU": "E385 authorized with ADI of 2.5 mg/kg bw/day (SCF 1977, reconfirmed 1990). EFSA full re-evaluation pending (call for data issued 2024)."
       },
       "population_warnings": [
@@ -2551,10 +2549,10 @@
           "supports_claims": []
         },
         {
-          "type": "clinical_study",
+          "type": "review",
           "authority": "OTHER",
-          "title": "DOI: 10.1016/j.fct.2020.111814 - Titanium dioxide nanoparticles accumulation in gut tissues",
-          "citation": "DOI: 10.1016/j.fct.2020.111814 - Titanium dioxide nanoparticles accumulation in gut tissues",
+          "title": "Review of food nanoparticles and non-food counterparts",
+          "citation": "Food Chem Toxicol. 2020; doi:10.1016/j.fct.2020.111814; review, not a human Candurin trial.",
           "url": "https://doi.org/10.1016/j.fct.2020.111814",
           "published_date": "2020-12-01",
           "evidence_grade": "B",
@@ -3293,12 +3291,12 @@
         "People with IBD/IBS — monitor GI tolerance at high cumulative intake",
         "Children with high processed-food intake — cumulative exposure consideration"
       ],
-      "notes": "A cellulose-derived thickener and stabilizer used in supplement capsules and formulations. FDA GRAS status. Recent controlled-feeding studies suggest high chronic intake may affect gut microbiome, but typical supplement excipient doses are much lower than study levels. Not banned anywhere. Low-concern quality signal. SEVERITY UPGRADED TO MODERATE (2026): Human RCT data now exists. Randomized controlled-feeding study (Chassaing et al., Gastroenterology 2022, PMID 34774538): 15g/day CMC for 11 days in healthy adults caused significant gut microbiome perturbation, reduced microbial diversity, reduced short-chain fatty acids, and mucosal encroachment in 2 of 16 subjects. 2025 placebo-controlled trial (Clinical Gastroenterology and Hepatology, 60 participants) confirmed microbiota composition changes and intestinal inflammation markers. No longer animal-only evidence — human mechanistic data materially elevates this from 'low'.",
+      "notes": "In PMID 34774538, seven healthy adults received 15 g/day CMC for 11 days and nine received control diets. Microbiome/metabolome changes and increased microbial encroachment occurred in two CMC subjects. The 2025 sixty-participant exploratory trial (PMID 40816342) found lower short-chain fatty acids with CMC but no intestinal or systemic inflammation or metabolic endpoint effect. These high food-study exposures do not establish typical supplement-excipient clinical harm.",
       "scientific_references": [
         "21 CFR 182.1745 - GRAS status for sodium CMC",
         "PMID: 34774538 - human controlled feeding CMC study",
         "PMID 34774538 — Chassaing et al., Gastroenterology 2022: Human RCT CMC 15g/day → gut microbiome perturbation, SCFA reduction, mucosal encroachment",
-        "Clinical Gastroenterology and Hepatology 2025 — 5-emulsifier RCT in 60 participants: CMC associated with intestinal inflammation markers"
+        "PMID 40816342: 2025 exploratory randomized trial; short-chain fatty acid changes without intestinal/systemic inflammatory or metabolic endpoint effects."
       ],
       "last_updated": "2026-03-08",
       "match_rules": {
@@ -3446,11 +3444,11 @@
         "CAS 1390-65-4"
       ],
       "category": "colorant_natural",
-      "notes": "A natural red colorant (E120) derived from dried female cochineal insects (*Dactylopius coccus*). Contains carminic acid, which can trigger IgE-mediated allergic reactions ranging from urticaria to anaphylaxis. ⚠️ FDA MANDATE: Since 2009, FDA requires explicit labeling of 'cochineal extract' or 'carmine' (21 CFR 73.100) due to severe allergic reactions. Not banned anywhere, but allergenic. Quality concern for sensitive individuals.",
+      "notes": "A natural red colorant (E120) derived from dried female cochineal insects (*Dactylopius coccus*). Contains carminic acid, which can trigger IgE-mediated allergic reactions ranging from urticaria to anaphylaxis. ⚠️ FDA MANDATE: Under a rule published January 5, 2009 and effective January 5, 2011, FDA requires explicit labeling of 'cochineal extract' or 'carmine' (21 CFR 73.100) due to severe allergic reactions. Not banned anywhere, but allergenic. Quality concern for sensitive individuals.",
       "last_updated": "2026-03-24",
       "mechanism_of_harm": "Carmine contains carminic acid and insect-derived proteins that can trigger IgE-mediated hypersensitivity reactions. Documented cases include urticaria, angioedema, bronchospasm, and anaphylaxis. Cross-reactivity with other insect allergens possible. FDA issued mandatory labeling rule in 2009 after multiple severe allergic reactions were reported. Allergenicity varies with processing quality and protein content.",
       "regulatory_status": {
-        "US": "FDA approved as color additive (21 CFR 73.100). Mandatory allergen labeling required since 2009.",
+        "US": "FDA approved color additive (21 CFR 73.100). Named declaration rule published January 5, 2009; effective January 5, 2011.",
         "EU": "E120 approved with purity criteria. Allergen labeling required.",
         "WHO": "JECFA ADI 0-5 mg/kg body weight (as carminic acid)"
       },
@@ -3618,19 +3616,16 @@
         "CAS 9000-07-1"
       ],
       "category": "emulsifier",
-      "mechanism_of_harm": "Triggers gut inflammation and disrupts intestinal barrier function. Alters gut microbiota composition. 2024 clinical study shows it induces insulin resistance and inflammatory response in healthy humans. Can cause chronic low-grade intestinal inflammation. May promote inflammatory bowel disease.",
+      "mechanism_of_harm": "A 2024 twenty-man crossover trial of 500 mg/day for two weeks found no overall significant difference in insulin sensitivity. BMI-treatment interactions and overweight-subgroup signals, plus intestinal permeability findings, warrant further study. The 2025 Crohn’s epithelial-cell/organoid experiment measured inflammatory markers with unchanged permeability, not patient flares.",
       "regulatory_status": {
         "US": "FDA GRAS status for food use (21 CFR 172.620). NOSB voted in 2016 to recommend removal from the National List for organic foods, but USDA issued a final rule in April 2018 RETAINING carrageenan on the National List — overriding the NOSB recommendation (only the second override in ~30 years). Carrageenan remains permitted in USDA-certified organic processed products as of 2026.",
         "EU": "E407 and E407a approved. EFSA 2018 re-evaluation (EFSA Journal 2018;16(4):5238) set a temporary group ADI of 75 mg/kg bw/day pending further data.",
         "WHO": "JECFA acceptable but notes concerns about degraded forms. No ADI established separately by JECFA for food-grade carrageenan."
       },
       "population_warnings": [
-        "People with IBD or Crohn's disease — may trigger flares and amplify inflammation (Vissers et al. 2025)",
-        "People with IBS — may worsen symptoms",
-        "People with diabetes or prediabetes — may induce insulin resistance (Wagner et al. 2024)",
-        "Overweight individuals — 2024 RCT showed inflammatory effects and reduced insulin sensitivity"
+        "People with IBD or metabolic conditions: review concentrated exposure and tolerance with your clinician; experimental signals are not a universal clinical outcome."
       ],
-      "notes": "A red seaweed extract (E407/E407a) widely used as a thickener and emulsifier. FDA GRAS (21 CFR 172.620) and EU-approved (E407). A 2024 BMC Medicine RCT (Wagner et al.) found carrageenan triggered gut inflammation and insulin resistance in overweight young men, and a 2025 study (Vissers et al.) showed amplified inflammatory markers in Crohn's disease epithelial cells. EFSA set a temporary ADI of 75 mg/kg bw/day in 2018. Classified as moderate because evidence is Tier 2 (emerging clinical research) rather than Tier 1 (regulatory action). People with IBD, IBS, or metabolic concerns should consider avoidance.",
+      "notes": "Carrageenan is a food thickener. Human and experimental findings differ by dose, population and endpoint: PMID 39593091 had an overall null insulin-sensitivity endpoint with BMI interactions; PMID 39720875 studied cultured epithelial cells/organoid monolayers. Neither establishes universal clinical insulin resistance or observed Crohn’s flares at supplement-excipient exposure.",
       "scientific_references": [
         "DOI: 10.1186/s12916-024-03771-8 - BMC Medicine 2024 clinical study on insulin resistance",
         "DOI: 10.1093/ibd/izae306 - Vissers et al. 2025, Dietary carrageenan amplifies inflammatory profile in Crohn's disease intestinal epithelial cells",
@@ -3659,7 +3654,7 @@
           ]
         },
         {
-          "type": "clinical_trial",
+          "type": "primary_study",
           "authority": "OTHER",
           "title": "Vissers et al. 2025 - Dietary Carrageenan Amplifies the Inflammatory Profile of Intestinal Epithelial Cells from Patients With Crohn's Disease",
           "citation": "Inflamm Bowel Dis. 2025;31(5):1392-1403",
@@ -3667,8 +3662,7 @@
           "published_date": "2025-05-12",
           "evidence_grade": "B",
           "supports_claims": [
-            "gut_inflammation",
-            "IBD_exacerbation"
+            "experimental_inflammatory_markers"
           ]
         },
         {
@@ -4146,18 +4140,15 @@
         "CSS"
       ],
       "category": "sweetener_natural",
-      "mechanism_of_harm": "Essentially dried corn syrup - pure glucose with extremely high glycemic index (GI 100+). Causes rapid, severe blood sugar spikes. Metabolically equivalent to pure sugar. Used as cheap filler/sweetener in supplements. Contributes to insulin resistance, weight gain, and metabolic dysfunction.",
+      "mechanism_of_harm": "Dehydrated corn syrup contains saccharides from starch hydrolysis, not necessarily pure glucose. Glycemic exposure depends on composition and quantity; label presence alone does not establish severe glucose excursions or metabolic disease.",
       "regulatory_status": {
         "US": "FDA GRAS status",
         "EU": "Approved as food ingredient"
       },
       "population_warnings": [
-        "People with diabetes - Extreme blood sugar impact",
-        "People with metabolic syndrome - Worsens condition significantly",
-        "People with insulin resistance - Exacerbates the problem",
-        "Everyone - Essentially sugar, should be minimized"
+        "Diabetes or glucose management: assess the amount and total carbohydrate, rather than inferring a severe effect from presence alone."
       ],
-      "notes": "Corn syrup solids are dehydrated corn syrup — essentially pure glucose with a glycemic index near 100. FDA GRAS. In supplements, they serve as cheap fillers or binders adding empty calories and causing rapid blood-sugar spikes. While metabolically harmful in excess, this is a nutritional concern (like added sugar) rather than a toxicological hazard, so severity is low, matching other caloric sugar fillers. Diabetics and those with metabolic syndrome should avoid products containing this ingredient.",
+      "notes": "A carbohydrate sweetener or binder made from corn-starch hydrolysate. Consider serving amount and total carbohydrate, especially for glucose management; it is not synonymous with pure glucose or high-fructose corn syrup.",
       "scientific_references": [],
       "last_updated": "2026-07-04",
       "match_rules": {
@@ -4170,21 +4161,11 @@
         {
           "type": "regulatory_action",
           "authority": "FDA",
-          "title": "21 CFR 184.1866 - Corn syrup",
-          "citation": "21 CFR 184.1866 - Corn syrup",
-          "url": "https://www.law.cornell.edu/cfr/text/21/184.1866",
+          "title": "21 CFR 184.1865 Corn syrup",
+          "citation": "21 CFR 184.1865 Corn syrup",
+          "url": "https://www.ecfr.gov/current/title-21/section-184.1865",
           "published_date": null,
-          "evidence_grade": "B",
-          "supports_claims": []
-        },
-        {
-          "type": "guidance",
-          "authority": "WHO",
-          "title": "WHO guideline: Sugars intake for adults and children (2015)",
-          "citation": "WHO guideline: Sugars intake for adults and children (2015)",
-          "url": "https://www.who.int/publications/i/item/9789241549028",
-          "published_date": null,
-          "evidence_grade": "A",
+          "evidence_grade": "R",
           "supports_claims": []
         }
       ],
@@ -4311,8 +4292,8 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "safety_summary": "Dried corn syrup. Essentially pure glucose that spikes blood sugar fast — worth avoiding in daily supplements.",
-      "safety_summary_one_liner": "Essentially pure glucose — spikes blood sugar fast.",
+      "safety_summary": "A carbohydrate sweetener or binder; glucose effects depend on amount and composition.",
+      "safety_summary_one_liner": "Carbohydrate exposure depends on dose.",
       "functional_roles": [
         "filler",
         "sweetener_natural"
@@ -4334,7 +4315,7 @@
       "category": "excipient",
       "mechanism_of_harm": "Synthetic polymer (modified cellulose) that swells rapidly in water. Generally considered safe but may cause bloating, gas, or digestive discomfort in sensitive individuals. Not absorbed systemically.",
       "regulatory_status": {
-        "US": "FDA approved as inactive ingredient",
+        "US": "Exact US inactive-ingredient and food-use permissions require substance-specific appraisal; 21 CFR 172.330 is not croscarmellose sodium.",
         "EU": "E468 approved",
         "WHO": "No ADI specified - considered safe"
       },
@@ -4354,13 +4335,15 @@
       "references_structured": [
         {
           "type": "regulatory_action",
-          "authority": "FDA",
-          "title": "FDA Food Additive Status List - Croscarmellose sodium (21 CFR 172.330)",
-          "citation": "FDA Food Additive Status List - Croscarmellose sodium (21 CFR 172.330)",
-          "url": "https://www.fda.gov/food/food-additives-petitions/food-additive-status-list",
+          "authority": "EFSA",
+          "title": "EFSA 2018 re-evaluation of celluloses including E460(i) and E468",
+          "citation": "EFSA 2018 re-evaluation of celluloses including E460(i) and E468",
+          "url": "https://doi.org/10.2903/j.efsa.2018.5047",
           "published_date": null,
-          "evidence_grade": "B",
-          "supports_claims": []
+          "evidence_grade": "R",
+          "supports_claims": [
+            "regulatory_status"
+          ]
         }
       ],
       "jurisdictional_statuses": [
@@ -4498,9 +4481,9 @@
         "polyvinyl polypyrrolidone"
       ],
       "category": "excipient",
-      "mechanism_of_harm": "Synthetic cross-linked polyvinylpyrrolidone polymer largely unabsorbed by the body. As a synthetic polymer, theoretical concerns exist about potential accumulation in tissues with long-term exposure, though evidence is limited. May cause minor digestive effects in sensitive individuals. Not absorbed systemically.",
+      "mechanism_of_harm": "Crosslinked PVP has very low absorption; the EFSA assessment supports no safety concern at reported uses and use levels. Systemic accumulation from oral excipient exposure is not established by parenteral polymer-storage findings.",
       "regulatory_status": {
-        "US": "FDA approved as inactive ingredient (21 CFR 172.375)",
+        "US": "Exact US inactive-ingredient and food-use permissions require substance-specific appraisal.",
         "EU": "E1202 approved as food additive",
         "WHO": "No ADI specified — considered safe as excipient"
       },
@@ -4508,7 +4491,7 @@
         "People with digestive sensitivity — may cause minor bloating",
         "No significant safety concerns at typical excipient doses"
       ],
-      "notes": "A synthetic polymer and 'superdisintegrant' (cross-linked PVP) used to promote rapid tablet dissolution. It is largely unabsorbed and generally considered safe. FDA-approved inactive ingredient (21 CFR 172.375). CAS 9003-39-8. Low severity because no systemic absorption or toxicological concern at excipient quantities.",
+      "notes": "Crosslinked PVP is a tablet disintegrant. EFSA 2020 found very low absorption and no safety concern at reported food uses and use levels. That assessment does not establish systemic tissue accumulation from oral excipient use.",
       "scientific_references": [],
       "last_updated": "2026-03-24",
       "match_rules": {
@@ -4520,13 +4503,15 @@
       "references_structured": [
         {
           "type": "regulatory_action",
-          "authority": "FDA",
-          "title": "FDA Food Additive Status List - Crospovidone (21 CFR 172.375)",
-          "citation": "FDA Food Additive Status List - Crospovidone (21 CFR 172.375)",
-          "url": "https://www.fda.gov/food/food-additives-petitions/food-additive-status-list",
+          "authority": "EFSA",
+          "title": "EFSA 2020 re-evaluation of PVP and PVPP E1201/E1202",
+          "citation": "EFSA 2020 re-evaluation of PVP and PVPP E1201/E1202",
+          "url": "https://doi.org/10.2903/j.efsa.2020.6215",
           "published_date": null,
-          "evidence_grade": "B",
-          "supports_claims": []
+          "evidence_grade": "R",
+          "supports_claims": [
+            "regulatory_status"
+          ]
         }
       ],
       "jurisdictional_statuses": [
@@ -4653,7 +4638,7 @@
       "regulatory_status": {
         "US": "FDA approved as copper source in supplements and foods",
         "EU": "Approved as nutrient source",
-        "WHO": "Copper is essential nutrient; UL is 10 mg/day for adults"
+        "WHO": "Copper is an essential nutrient. The 10 mg/day adult total-intake UL is from the US Institute of Medicine (2001), not a WHO compound-specific limit."
       },
       "population_warnings": [
         "People with Wilson's disease - MUST AVOID - Cannot metabolize copper properly",
@@ -4821,7 +4806,7 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "safety_summary": "A synthetic inorganic copper form. Can cause GI irritation at high doses — worth preferring chelated or organic copper forms where available.",
+      "safety_summary": "An inorganic copper source. High exposure can cause gastrointestinal effects. Dose and copper-handling conditions matter. The cited review does not establish chelated-form clinical superiority.",
       "safety_summary_one_liner": "Synthetic copper form — GI-irritation concern.",
       "functional_roles": []
     },
@@ -4980,11 +4965,11 @@
         "disodium ethylenediaminetetraacetate"
       ],
       "category": "preservative",
-      "notes": "Synthetic chelating agent and preservative. While FDA approved for food use, concerns about mineral depletion, potential heavy metal mobilization, and cellular membrane disruption. May interfere with nutrient absorption. Cross-reference: shares E385 regulatory identity with ADD_CALCIUM_DISODIUM_EDTA (calcium disodium EDTA).",
+      "notes": "Disodium EDTA is a chelator with specified food-use permissions distinct from calcium disodium EDTA. Food-level chelation does not alone establish clinical mineral depletion or intravenous chelation risks.",
       "last_updated": "2026-06-22",
       "mechanism_of_harm": "Non-selective chelator binding divalent/trivalent metal ions (Zn²⁺, Fe²⁺/Fe³⁺, Cu²⁺, Ca²⁺). Mechanism identical to calcium disodium EDTA (ADD_CALCIUM_DISODIUM_EDTA). Poorly absorbed orally (~5%). GI-level mineral binding may reduce bioavailability of co-administered mineral supplements.",
       "regulatory_status": {
-        "US": "FDA approved food additive (21 CFR 172.120). Approved uses are limited to specific food categories (dressings, sauces, mayonnaise, canned/bottled legumes). ADI: 2.5 mg/kg bw/day (JECFA).",
+        "US": "21 CFR 172.135 permits designated uses and concentrations, including 150 ppm in aqueous multivitamin preparations with iron salts to stabilize B12; limits are calculated on the specified anhydrous calcium disodium EDTA basis.",
         "EU": "E385 (calcium disodium EDTA) — permitted chelating agent/preservative under Regulation (EC) No 1333/2008. Disodium EDTA also listed. ADI: 2.5 mg/kg bw/day (EFSA/JECFA). Restricted to specific food categories (canned vegetables, potato products, spreads, sauces, canned fish).",
         "WHO": "JECFA ADI: 2.5 mg/kg bw/day (established 1973, reaffirmed)."
       },
@@ -5004,12 +4989,14 @@
         {
           "type": "regulatory_action",
           "authority": "FDA",
-          "title": "FDA Food Additive Status List - Disodium EDTA (21 CFR 172.120)",
-          "citation": "FDA Food Additive Status List - Disodium EDTA (21 CFR 172.120)",
-          "url": "https://www.fda.gov/food/food-additives-petitions/food-additive-status-list",
+          "title": "21 CFR 172.135 Disodium EDTA",
+          "citation": "21 CFR 172.135 Disodium EDTA",
+          "url": "https://www.ecfr.gov/current/title-21/section-172.135",
           "published_date": null,
-          "evidence_grade": "B",
-          "supports_claims": []
+          "evidence_grade": "R",
+          "supports_claims": [
+            "regulatory_status"
+          ]
         }
       ],
       "jurisdictional_statuses": [
@@ -5133,16 +5120,15 @@
         "pure d-mannose"
       ],
       "category": "sweetener_natural",
-      "notes": "D-Mannose is a natural simple sugar with evidence-based use for urinary tract health (prevents E. coli adhesion to bladder wall). As a supplement active it is legitimate and tracked in IQM. Penalized here only when used as a bulking sweetener in non-UTI products, where it adds empty sugar calories. Low severity because the sugar load per serving is typically small in supplement contexts.",
+      "notes": "D-mannose remains an active ingredient in some urinary-tract products, a separate role from formulation sweetener use. A 2024 trial of 598 women (PMID 38587819) found no significant prevention benefit versus placebo at 2 g/day for six months.",
       "last_updated": "2026-03-24",
-      "mechanism_of_harm": "D-Mannose is a naturally occurring simple sugar found in cranberries and other fruits. When used as a supplement active ingredient (e.g., for urinary tract health), it is legitimate — it prevents E. coli adhesion to bladder wall. However, when used as a bulk sweetener or filler in other supplements, it adds unnecessary sugar calories with high glycemic impact.",
+      "mechanism_of_harm": "D-mannose is a simple sugar with proposed bacterial-adherence effects. The 2024 placebo-controlled trial of 2 g/day for six months did not reduce medically attended recurrent UTIs; mechanism plausibility does not establish clinical prophylaxis. The trial does not establish a blood-thinner interaction or a high-glycemic effect.",
       "regulatory_status": {
         "US": "Sold as dietary supplement; FDA GRAS for food use",
         "EU": "Permitted in supplements"
       },
       "population_warnings": [
-        "People with diabetes — simple sugar that raises blood glucose",
-        "People taking blood thinners — theoretical interaction at very high doses"
+        "Discuss recurrent UTI prevention with your clinician; the large 2024 placebo-controlled trial did not establish benefit."
       ],
       "scientific_references": [
         "DOI: 10.1007/s00345-013-1091-6 - Kranjcec et al. 2014, D-mannose powder for prophylaxis of recurrent UTIs in women: a randomized clinical trial"
@@ -5155,17 +5141,14 @@
       },
       "references_structured": [
         {
-          "type": "clinical_trial",
+          "type": "primary_study",
           "authority": "OTHER",
-          "title": "Kranjcec et al. 2014 - D-mannose powder for prophylaxis of recurrent urinary tract infections in women: a randomized clinical trial",
-          "citation": "World J Urol. 2014;32(1):79-84",
-          "url": "https://doi.org/10.1007/s00345-013-1091-6",
-          "published_date": "2013-04-30",
-          "evidence_grade": "A",
-          "supports_claims": [
-            "UTI_prevention",
-            "therapeutic_use_as_active"
-          ]
+          "title": "d-Mannose for Prevention of Recurrent UTI Among Women: randomized trial PMID38587819",
+          "citation": "d-Mannose for Prevention of Recurrent UTI Among Women: randomized trial PMID38587819",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/38587819/",
+          "published_date": null,
+          "evidence_grade": "C",
+          "supports_claims": []
         }
       ],
       "jurisdictional_statuses": [
@@ -5270,7 +5253,7 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "safety_summary": "A naturally occurring simple sugar used in some urinary-tract supplements as an active ingredient; when added purely as a sweetener it contributes to blood sugar spikes. Low concern overall.",
+      "safety_summary": "A simple sugar used in urinary-tract products; recent placebo-controlled evidence did not establish recurrent-UTI prevention.",
       "safety_summary_one_liner": "Natural simple sugar with targeted uses.",
       "functional_roles": [
         "sweetener_natural"
@@ -5300,15 +5283,15 @@
         "WHO": "JECFA: ADI 'not specified' (1999), meaning no safety concern at normal dietary intake levels. Does not address high-dose supplemental use."
       },
       "population_warnings": [
-        "Cardiovascular disease or thrombotic risk — elevated MACE risk (HR 1.8-2.2) in prospective cohorts; enhanced platelet reactivity confirmed in RCT (PMID 39114916)",
+        "Cardiovascular or thrombotic risk: discuss high intake; observational marker associations and acute platelet findings do not establish an individual clinical-event threshold.",
         "Post-MI or atrial fibrillation — avoid high-dose erythritol until cardiovascular signal is further characterized (PMID 39983608)",
         "IBS or digestive sensitivity — osmotic laxation at >20 g/day (EFSA laxative NOAEL basis)"
       ],
-      "notes": "A sugar alcohol (C4 polyol) used as a zero-calorie sweetener in supplements and foods. Three independent human study lines support a cardiovascular/thrombotic risk signal: Nature Medicine 2023 prospective cohort (HR 1.80-2.21 for MACE), ATVB 2024 RCT confirming enhanced platelet reactivity in healthy volunteers, and JACC Advances 2025 ARIC cohort linking erythritol to heart failure and CHD. FDA GRAS (GRN 789) unchanged; EFSA set ADI at 0.5 g/kg bw/day in 2023 based on laxative threshold. Consumers with cardiovascular risk should limit high-dose erythritol intake.",
+      "notes": "Prospective cohorts associate circulating erythritol with cardiovascular outcomes; this endogenous marker is not a direct measure of dietary intake. A 2024 prospective nonrandomized intervention studied 30 g in ten volunteers per group and measured platelet responsiveness, not clinical thrombosis incidence. In ARIC, erythritol was associated with heart failure and mortality; additional CHD and stroke associations concerned erythronate. These signals do not establish events caused by typical excipient intake.",
       "scientific_references": [
         "PMID 36849732 — Witkowski et al., Nature Medicine 2023: plasma erythritol associated with 2x increased MACE risk (prospective cohort + 3 validation cohorts)",
-        "PMID 39114916 — Witkowski et al., ATVB 2024: erythritol ingestion enhanced platelet reactivity and thrombosis in healthy volunteers (RCT crossover)",
-        "PMID 39983608 — JACC Advances 2025: ARIC cohort (n=4,006, 8.4-year follow-up), erythritol/erythronate associated with heart failure, CHD, stroke",
+        "PMID 39114916: prospective nonrandomized 30 g ingestion intervention, ten healthy volunteers per group; platelet reactivity endpoints.",
+        "PMID 39983608: ARIC circulating erythritol and erythronate associations with heart failure and mortality; additional CHD/stroke associations for erythronate.",
         "DOI: 10.2903/j.efsa.2023.8430 — EFSA 2023 re-evaluation of erythritol (E968), ADI 0.5 g/kg bw/day"
       ],
       "last_updated": "2026-03-27",
@@ -5984,17 +5967,17 @@
         "iron oxide black"
       ],
       "category": "colorant_natural",
-      "mechanism_of_harm": "Inorganic colorant (Fe2O3/Fe3O4) used in supplement capsule and tablet coatings. Iron from oxide colorants is poorly bioavailable and does not meaningfully contribute to iron intake. Primary concern is nanoparticle exposure: EFSA has requested additional characterization data on particle size distribution in E172. No evidence of systemic toxicity at approved use levels (max 5 mg elemental Fe/day from colorants).",
+      "mechanism_of_harm": "Iron-oxide colorants differ in particle properties and oxidation state. EFSA identified inadequate biological and toxicological data and could not adequately evaluate in-vitro genotoxicity; read-across across redox states was not justified. This is assessment uncertainty rather than proof of harm at a particular oral dose.",
       "regulatory_status": {
         "US": "FDA approved for dietary supplement tablets and capsules (21 CFR 73.1200, effective 2018-12-04). Limit: 5 mg elemental iron/day from color additive use. Exempt from batch certification.",
-        "EU": "E172 approved (red E172i, yellow E172ii, black E172iii). EFSA 2015 re-evaluation maintained approval (EFSA Journal 2015;13(12):4317). EFSA 2021 requested additional nanoparticle characterization data but did not restrict use.",
+        "EU": "E172 authorization is distinct from EFSA’s 2015 assessment: an adequate safety assessment cannot be carried out because the biological and toxicological database was insufficient.",
         "WHO": "JECFA provisional ADI 0-0.5 mg/kg bw/day for iron oxides as food colorants (25th meeting, 1980)."
       },
       "population_warnings": [
         "Hemochromatosis — iron from oxide colorants is poorly absorbed but caution warranted in iron overload conditions",
         "Nanoparticle sensitivity — EFSA requested additional particle size data (2021); significance for consumers not yet established"
       ],
-      "notes": "One of the most common colorants in the supplement industry. Explicitly approved by FDA in 2018 for dietary supplement use (21 CFR 73.1200) with a 5 mg elemental iron/day limit. Previously incorrectly classified as banned in this database. Low severity — purely cosmetic additive with well-established safety profile. EFSA nanoparticle data request is precautionary, not a restriction.",
+      "notes": "Iron-oxide colorants have specified US supplement-color uses and an elemental iron limit. EFSA’s 2015 re-evaluation identified inadequate safety data; authorization does not establish a complete safety assessment.",
       "scientific_references": [
         "Federal Register 83 FR 54790 (2018) - FDA approval of synthetic iron oxide in dietary supplements",
         "EFSA Journal 2015;13(12):4317 - Re-evaluation of iron oxides and hydroxides (E 172)"
@@ -6810,7 +6793,7 @@
         "rice maltodextrin"
       ],
       "category": "filler",
-      "mechanism_of_harm": "Highly processed glucose polymer (DE 3-20) with glycemic index 85-105, comparable to pure glucose. Rapidly digested to glucose in the small intestine. In vitro studies suggest maltodextrin may suppress antimicrobial defense mechanisms and promote E. coli adhesion to intestinal epithelial cells (PMID 23251695 (Nickerson & Chang 2012 PLoS One)). Used as cheap filler/binder in supplements with no nutritional benefit.",
+      "mechanism_of_harm": "Highly processed glucose polymer (DE 3-20) with glycemic index 85-105, comparable to pure glucose. Rapidly digested to glucose in the small intestine. In vitro studies suggest maltodextrin may suppress antimicrobial defense mechanisms and promote E. coli adhesion to intestinal epithelial cells (PMID 23251695 (Nickerson and McDonald 2012 PLoS One)). Used as cheap filler/binder in supplements with no nutritional benefit.",
       "regulatory_status": {
         "US": "FDA GRAS (21 CFR 184.1444). No specific use limits.",
         "EU": "Not classified as a food additive (treated as food ingredient). No E-number.",
@@ -6821,7 +6804,7 @@
         "IBD (Crohn's disease) — in vitro evidence of impaired antimicrobial defense and promoted E. coli adhesion (PMID 23251695)",
         "Celiac disease — wheat-derived maltodextrin may contain trace gluten"
       ],
-      "notes": "Highly processed glucose polymer used as filler, binder, and carrier in supplements. GI 85-105 makes it metabolically equivalent to glucose. In vitro data suggests potential gut barrier effects but clinical significance at supplement doses is uncertain. Low severity: the high glycemic impact is a nutritional concern (like added sugar) rather than a toxicological hazard, matching other caloric filler ingredients.",
+      "notes": "A digestible glucose polymer used as a filler, binder or carrier. PMID 23251695 concerns bacterial/epithelial-cell experiments; PMID 25738413 is a 2015 review/addendum, not a 2012 human clinical study. Glycemic relevance depends on composition and amount; these sources do not establish clinical gut harm from trace excipient exposure.",
       "scientific_references": [
         "PMID 23251695 - Nickerson KP, McDonald C. 'Crohn's disease-associated adherent-invasive Escherichia coli adhesion is enhanced by exposure to the ubiquitous dietary polysaccharide maltodextrin.' PLoS One 2012;7(12):e52132. Content-verified via PubMed 2026-05-25.",
         "21 CFR 184.1444 — FDA GRAS listing for maltodextrin"
@@ -6835,12 +6818,12 @@
       },
       "references_structured": [
         {
-          "type": "primary_study",
+          "type": "review",
           "authority": "OTHER",
           "title": "Deregulation of intestinal anti-microbial defense by the dietary additive, maltodextrin",
           "citation": "Nickerson KP et al. Gut Microbes. 2015;6(1):78-83. PMID 25738413",
           "url": "https://pubmed.ncbi.nlm.nih.gov/25738413/",
-          "published_date": "2012-11-01",
+          "published_date": "2015-01-01",
           "evidence_grade": "D",
           "supports_claims": [
             "mechanism_of_harm"
@@ -7285,17 +7268,16 @@
       "category": "filler",
       "mechanism_of_harm": "Inert, indigestible cellulose polymer used as tablet binder and filler. Passes through the GI tract unabsorbed. No evidence of systemic toxicity, nutrient absorption interference, or microbiome disruption at approved use levels. EFSA and JECFA set no ADI limit. Nanoparticle concerns are theoretical and unsubstantiated at food/supplement grades.",
       "regulatory_status": {
-        "US": "FDA GRAS (21 CFR 182.1745). Widely used pharmaceutical excipient listed in FDA Inactive Ingredients Database.",
+        "US": "US inactive-ingredient and food-use permissions require exact substance and use appraisal.",
         "EU": "E460(i) approved. EFSA re-evaluated 2018 — no safety concerns (EFSA Journal 2018;16(1):5047).",
-        "WHO": "JECFA: ADI 'not specified' (not limited). No safety concern."
+        "WHO": "ADI not specified does not mean unrestricted intake."
       },
       "population_warnings": [
         "No specific population concerns at standard excipient levels"
       ],
-      "notes": "MCC is the most widely used tablet excipient in the supplement and pharmaceutical industry. FDA GRAS with decades of safe use. EFSA and JECFA set no ADI limit. Low severity — tracked purely as non-nutritive filler quality signal.",
+      "notes": "Microcrystalline cellulose is a tablet excipient. EFSA 2018 found no need for a numerical ADI and no safety concern at reported uses and use levels; that conclusion does not establish unrestricted intake.",
       "scientific_references": [
-        "21 CFR 182.1745 — FDA GRAS listing for cellulose",
-        "EFSA Journal 2018;16(1):5047 — Re-evaluation of cellulose (E460) as food additive"
+        "EFSA Journal 2018;16(1):5047: re-evaluation of celluloses including microcrystalline cellulose."
       ],
       "last_updated": "2026-03-27",
       "match_rules": {
@@ -7306,28 +7288,15 @@
       },
       "references_structured": [
         {
-          "type": "regulatory",
-          "authority": "FDA",
-          "title": "21 CFR 182.1745 — Cellulose GRAS",
-          "citation": "Code of Federal Regulations, Title 21, Part 182, Section 182.1745",
-          "url": "https://www.ecfr.gov/current/title-21/section-182.1745",
+          "type": "regulatory_action",
+          "authority": "EFSA",
+          "title": "EFSA 2018 re-evaluation of celluloses including E460(i) and E468",
+          "citation": "EFSA 2018 re-evaluation of celluloses including E460(i) and E468",
+          "url": "https://doi.org/10.2903/j.efsa.2018.5047",
           "published_date": null,
           "evidence_grade": "R",
           "supports_claims": [
             "regulatory_status"
-          ]
-        },
-        {
-          "type": "regulatory",
-          "authority": "EFSA",
-          "title": "Re-evaluation of cellulose (E 460(i)) and (E 460(ii)) as food additives",
-          "citation": "EFSA Journal 2018;16(1):5047",
-          "url": "https://doi.org/10.2903/j.efsa.2018.5047",
-          "published_date": "2018-01-25",
-          "evidence_grade": "A",
-          "supports_claims": [
-            "regulatory_status",
-            "mechanism_of_harm"
           ]
         }
       ],
@@ -7750,14 +7719,13 @@
       "population_warnings": [
         "People sensitive to MSG - May cause symptom complex",
         "People with migraines - May trigger headaches",
-        "People with asthma - May worsen symptoms in some cases",
-        "Children - Limit exposure to excitotoxins"
+        "People with asthma - May worsen symptoms in some cases"
       ],
-      "notes": "Umami flavor enhancer classified as FDA GRAS (21 CFR 182.1480). WHO/JECFA ADI: 'not specified' — safe at any realistic dietary intake. 'MSG symptom complex' (formerly 'Chinese restaurant syndrome'): multiple double-blind placebo-controlled trials have failed to consistently reproduce symptoms on rechallenge (PMID 9215242, PMID 11080723). This is largely a nocebo phenomenon in blinded conditions. Excitotoxicity at supplement doses is not supported by human pharmacokinetic data — dietary glutamate does not significantly raise plasma or brain glutamate at normal doses. Sodium content (12% by weight) may be relevant for hypertensive individuals at high food-level intake, not at typical supplement doses. SEVERITY DOWNGRADED FROM MODERATE TO LOW based on controlled trial evidence.",
+      "notes": "In self-identified MSG-sensitive adults, PMID 9215242 reported symptom reproduction on oral challenge with an apparent 2.5 g reactivity threshold. PMID 11080723 found more symptoms after fasted 5 g challenges than placebo, but responses were inconsistent and serious or persistent effects were not observed. These challenge conditions do not establish the same risk from trace supplement use or a universal nocebo explanation.",
       "scientific_references": [
         "PMID: 24927698 (Brosnan/Drewnowski/Friedman 2014 Amino Acids) - Dietary MSG and obesity in animals or humans?",
-        "PMID 9215242 — Yang et al. 1997: double-blind RCT — MSG symptoms not reproducibly distinct from placebo",
-        "PMID 11080723 — Geha et al. 2000: multicenter double-blind rechallenge — no objectively confirmed MSG-specific reactions",
+        "PMID 9215242: oral challenge reproduced symptoms in self-identified sensitive adults; apparent 2.5 g threshold.",
+        "PMID 11080723: fasted high-dose challenge symptoms were inconsistent, without persistent serious effects.",
         "FDA GRAS 21 CFR 182.1480; WHO/JECFA ADI 'not specified'"
       ],
       "last_updated": "2026-03-27",
@@ -9321,11 +9289,11 @@
         "tween 40"
       ],
       "category": "emulsifier",
-      "notes": "Synthetic emulsifier from sorbitol and palmitic acid. May affect gut microbiome. Less common than polysorbate 80 but similar concerns about potential inflammation and metabolic effects.",
+      "notes": "This polysorbate is distinct from polysorbate 80. EFSA assessed the polysorbate group, but individual clinical gut effects and comparisons require preparation-specific evidence.",
       "last_updated": "2026-03-27",
-      "mechanism_of_harm": "Synthetic ethoxylated sorbitan monopalmitate (palmitic acid). Same mechanistic class as polysorbate 80 — potential gut barrier disruption and microbiome alteration at high doses in animal studies. Less studied individually than P80. JECFA/EFSA group ADI 25 mg/kg bw/day for all polysorbates.",
+      "mechanism_of_harm": "Polysorbate emulsifier. PMID 25731162 studied CMC and polysorbate 80 in mice, not this individual polysorbate. Class extrapolation does not establish a direct human gut-barrier effect or comparative potency for this preparation.",
       "regulatory_status": {
-        "US": "FDA approved food additive (21 CFR 172.838) as a surface-active agent. Limited food applications (defoamer in fermented beverages, specific processing uses). No specific ADI established separately by JECFA — grouped with other polysorbates.",
+        "US": "US permissions require the exact polysorbate and use; permissions for polysorbate 80 cannot be transferred to this substance.",
         "EU": "E434 — permitted emulsifier under Regulation (EC) No 1333/2008. Polysorbates group (E432-436) ADI: 25 mg/kg bw/day (EFSA 2015 re-evaluation — EFSA Journal 13(7):4152). Restricted to specific food categories.",
         "WHO": "JECFA group ADI for polysorbates 20/40/60/65/80: 25 mg/kg bw/day."
       },
@@ -9346,12 +9314,12 @@
       "references_structured": [
         {
           "type": "regulatory_action",
-          "authority": "FDA",
-          "title": "FDA Food Additive Status List - Polysorbate 40 (21 CFR 178.3700)",
-          "citation": "FDA Food Additive Status List - Polysorbate 40 (21 CFR 178.3700)",
-          "url": "https://www.fda.gov/food/food-additives-petitions/food-additive-status-list",
+          "authority": "EFSA",
+          "title": "EFSA 2015 re-evaluation of polysorbates E432–436",
+          "citation": "EFSA 2015 re-evaluation of polysorbates E432–436",
+          "url": "https://doi.org/10.2903/j.efsa.2015.4152",
           "published_date": null,
-          "evidence_grade": "B",
+          "evidence_grade": "R",
           "supports_claims": []
         }
       ],
@@ -9474,8 +9442,8 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "safety_summary": "A polysorbate-class synthetic emulsifier. Same gut-microbiome concerns as polysorbate 80 — worth choosing products without it where possible.",
-      "safety_summary_one_liner": "Synthetic emulsifier with gut-disruption signals.",
+      "safety_summary": "A polysorbate emulsifier; gut-effect concerns are extrapolated from other preparations and models.",
+      "safety_summary_one_liner": "Polysorbate emulsifier with uncertain individual gut effects.",
       "functional_roles": [
         "emulsifier",
         "surfactant"
@@ -9490,11 +9458,11 @@
         "tween 65"
       ],
       "category": "emulsifier",
-      "notes": "Synthetic emulsifier that may be contaminated with 1,4-dioxane (carcinogen). Studies show it can disrupt gut microbiome and compromise intestinal barrier function.",
+      "notes": "This polysorbate is distinct from polysorbate 80. EFSA assessed the polysorbate group, but individual clinical gut effects and comparisons require preparation-specific evidence.",
       "last_updated": "2026-03-27",
-      "mechanism_of_harm": "Synthetic ethoxylated sorbitan tristearate (stearic acid). Same mechanistic class as P80 and P40. Poorly absorbed. Potential gut microbiome effects extrapolated from polysorbate class data. EFSA 2015 re-evaluation found no genotoxicity concern.",
+      "mechanism_of_harm": "Polysorbate emulsifier. PMID 25731162 studied CMC and polysorbate 80 in mice, not this individual polysorbate. Class extrapolation does not establish a direct human gut-barrier effect or comparative potency for this preparation.",
       "regulatory_status": {
-        "US": "FDA approved food additive (21 CFR 172.838) as surface-active agent. Limited specific food applications. No separate ADI — grouped with polysorbates.",
+        "US": "21 CFR 172.838 permits specified polysorbate 65 food uses.",
         "EU": "E436 — permitted emulsifier under Regulation (EC) No 1333/2008. Polysorbates group (E432-436) ADI: 25 mg/kg bw/day (EFSA 2015 — EFSA Journal 13(7):4152). Restricted to specific food categories.",
         "WHO": "JECFA group ADI for polysorbates 20/40/60/65/80: 25 mg/kg bw/day."
       },
@@ -9515,12 +9483,12 @@
       "references_structured": [
         {
           "type": "regulatory_action",
-          "authority": "FDA",
-          "title": "FDA Food Additive Status List - Polysorbate 65 (21 CFR 172.840)",
-          "citation": "FDA Food Additive Status List - Polysorbate 65 (21 CFR 172.840)",
-          "url": "https://www.fda.gov/food/food-additives-petitions/food-additive-status-list",
+          "authority": "EFSA",
+          "title": "EFSA 2015 re-evaluation of polysorbates E432–436",
+          "citation": "EFSA 2015 re-evaluation of polysorbates E432–436",
+          "url": "https://doi.org/10.2903/j.efsa.2015.4152",
           "published_date": null,
-          "evidence_grade": "B",
+          "evidence_grade": "R",
           "supports_claims": []
         }
       ],
@@ -9648,8 +9616,8 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "safety_summary": "A polysorbate-class synthetic emulsifier. Same gut-microbiome concerns as polysorbate 80 — worth choosing products without it where possible.",
-      "safety_summary_one_liner": "Synthetic emulsifier with gut-disruption signals.",
+      "safety_summary": "A polysorbate emulsifier; gut-effect concerns are extrapolated from other preparations and models.",
+      "safety_summary_one_liner": "Polysorbate emulsifier with uncertain individual gut effects.",
       "functional_roles": [
         "emulsifier",
         "surfactant"
@@ -9890,7 +9858,7 @@
         "potash lye"
       ],
       "category": "processing_aid",
-      "notes": "Potassium hydroxide is an FDA GRAS processing aid (21 CFR 184.1631) used to adjust pH during supplement manufacturing. By the time the product reaches the consumer, KOH has been neutralized and only trace amounts remain. The 'caustic alkali' concern applies to the raw industrial chemical, not to finished supplement products. Penalized at moderate level because its presence indicates chemical processing, but it is not a direct health hazard at residual levels.",
+      "notes": "Potassium hydroxide is a GRAS processing ingredient under specified good-manufacturing conditions. A finished product’s residual amount and neutralization cannot be established from the ingredient name or regulatory status alone. Raw caustic-alkali hazards should not be automatically assigned to finished-product trace exposure.",
       "last_updated": "2026-03-27",
       "mechanism_of_harm": "Strong alkali (KOH) used as a pH adjuster and processing aid in food manufacturing. FDA GRAS (21 CFR 184.1631) when used in accordance with good manufacturing practice. In finished supplement products, only trace residual amounts remain after pH adjustment. The caustic properties apply to the raw chemical, not to the neutralized trace amounts in finished products.",
       "regulatory_status": {
@@ -9913,23 +9881,11 @@
         {
           "type": "regulatory_action",
           "authority": "FDA",
-          "title": "FDA Food Additive Status List - Potassium hydroxide (21 CFR 184.1293)",
-          "citation": "FDA Food Additive Status List - Potassium hydroxide (21 CFR 184.1293)",
-          "url": "https://www.fda.gov/food/food-additives-petitions/food-additive-status-list",
+          "title": "21 CFR 184.1631 Potassium hydroxide",
+          "citation": "21 CFR 184.1631 Potassium hydroxide",
+          "url": "https://www.ecfr.gov/current/title-21/section-184.1631",
           "published_date": null,
-          "evidence_grade": "B",
-          "supports_claims": [
-            "regulatory_status"
-          ]
-        },
-        {
-          "type": "monograph",
-          "authority": "WHO",
-          "title": "ICSC 0357 - Potassium hydroxide",
-          "citation": "ICSC 0357 - Potassium hydroxide",
-          "url": "https://www.ilo.org/dyn/icsc/showcard.display?p_lang=en&p_card_id=0357",
-          "published_date": null,
-          "evidence_grade": "B",
+          "evidence_grade": "R",
           "supports_claims": [
             "regulatory_status"
           ]
@@ -10213,16 +10169,15 @@
         "1,2-dihydroxypropane"
       ],
       "category": "excipient",
-      "mechanism_of_harm": "Synthetic solvent and carrier that acts as penetration enhancer, potentially increasing absorption of other substances. Can cause allergic reactions, contact dermatitis, and irritation. High doses may cause lactic acidosis, central nervous system depression, and kidney damage. May accumulate with repeated exposure.",
+      "mechanism_of_harm": "Propylene glycol is a solvent and carrier. Contact-dermatitis evidence concerns topical exposure, while severe toxicity reports commonly concern high or repeated parenteral exposure in vulnerable patients. These findings do not establish the same risk from trace oral excipient exposure.",
       "regulatory_status": {
-        "US": "FDA GRAS (21 CFR 184.1666). Also approved for direct food use (21 CFR 172.850). Max 5% in food.",
+        "US": "21 CFR 184.1666 specifies category-dependent food-use limits under good manufacturing practice; there is no universal 5% limit for all foods.",
         "EU": "E1520 approved. EFSA ADI 25 mg/kg bw/day.",
         "WHO": "JECFA ADI 0-25 mg/kg bw/day."
       },
       "population_warnings": [
         "Infants/neonates — reduced metabolic clearance; toxicity cases reported at high parenteral doses",
-        "Kidney disease — impaired clearance may lead to accumulation at high intake",
-        "PEG/polysorbate allergy — propylene glycol cross-reactivity documented"
+        "Kidney disease — impaired clearance may lead to accumulation at high intake"
       ],
       "notes": "A synthetic liquid used as a solvent and carrier, often for 'natural flavors'. It is a penetration enhancer and can cause allergic reactions. High doses can be toxic, particularly in vulnerable populations. Widely used but safety concerns exist for chronic exposure.",
       "scientific_references": [
@@ -10240,14 +10195,12 @@
         {
           "type": "regulatory_action",
           "authority": "FDA",
-          "title": "FDA Food Additive Status List - Propylene glycol (21 CFR 172.1666)",
-          "citation": "FDA Food Additive Status List - Propylene glycol (21 CFR 172.1666)",
-          "url": "https://www.fda.gov/food/food-additives-petitions/food-additive-status-list",
+          "title": "21 CFR 184.1666 Propylene glycol",
+          "citation": "21 CFR 184.1666 Propylene glycol",
+          "url": "https://www.ecfr.gov/current/title-21/section-184.1666",
           "published_date": null,
-          "evidence_grade": "B",
-          "supports_claims": [
-            "regulatory_status"
-          ]
+          "evidence_grade": "R",
+          "supports_claims": []
         }
       ],
       "jurisdictional_statuses": [
@@ -10391,17 +10344,16 @@
         "pure fruit select"
       ],
       "category": "sweetener_natural",
-      "mechanism_of_harm": "Proprietary fruit-based sweetener concentrate. While derived from natural sources, still functions as added sugar in supplement formulation. Limited independent safety data for concentrated form.",
+      "mechanism_of_harm": "The manufacturer identifies PUREFRUIT Select as monk fruit extract standardized to 48–52% mogroside V. the composition of any separate blend or carrier requires its own label assessment.",
       "regulatory_status": {
-        "US": "Not separately evaluated by FDA",
+        "US": "Manufacturer specification states compliance with GRAS notice GRN000301; this is not an FDA approval of every product blend.",
         "EU": "Not evaluated",
         "WHO": "Not evaluated"
       },
       "population_warnings": [
-        "People with diabetes - Concentrated fruit sugar",
-        "People with fructose intolerance - May contain concentrated fructose"
+        "Review the full product’s carriers and sweetener blend; this monk fruit ingredient alone does not establish sugar or fructose exposure."
       ],
-      "notes": "Proprietary fruit-derived sweetener concentrate. No FDA, EFSA, or JECFA evaluation as a discrete substance. Low severity — tracked as proprietary sweetener quality signal. Limited public safety data available.",
+      "notes": "Tate & Lyle’s exact PUREFRUIT Select specification identifies monk fruit extract and references GRN000301. Its current PUREFRUIT page describes a calorie-free sweetener. Do not infer fructose or added-sugar exposure from the brand name.",
       "scientific_references": [],
       "last_updated": "2026-03-27",
       "match_rules": {
@@ -10412,16 +10364,14 @@
       },
       "references_structured": [
         {
-          "type": "regulatory",
+          "type": "primary_study",
           "authority": "OTHER",
-          "title": "FDA status - artificial sweetener blends in dietary supplements",
-          "citation": "",
-          "url": "",
+          "title": "PUREFRUIT Select manufacturer specification",
+          "citation": "PUREFRUIT Select manufacturer specification",
+          "url": "https://www.tateandlyle.com/sites/default/files/2018-01/Purefruit%20Select%20SPEC.pdf",
           "published_date": null,
-          "evidence_grade": "R",
-          "supports_claims": [
-            "regulatory_status"
-          ]
+          "evidence_grade": "C",
+          "supports_claims": []
         }
       ],
       "jurisdictional_statuses": [
@@ -10491,8 +10441,8 @@
         "pubchem_cid": null,
         "unii": null
       },
-      "safety_summary": "A proprietary fruit-based sweetener concentrate. Still functions as added sugar in a supplement formulation — worth noting if you are tracking added sugars.",
-      "safety_summary_one_liner": "Proprietary sweetener that still counts as added sugar.",
+      "safety_summary": "A branded monk-fruit sweetener. Sugar exposure depends on the full formulation and carriers.",
+      "safety_summary_one_liner": "Monk-fruit extract. Assess separate carriers.",
       "functional_roles": [
         "sweetener_natural"
       ]
@@ -10710,7 +10660,7 @@
       "mechanism_of_harm": "FDA-approved artificial sweetener (21 CFR 180.37). NTP delisted as carcinogen (2000). Congress removed warning label (2000). Rat bladder cancer mechanism not relevant to humans. Presence in supplements signals artificial sweetener use.",
       "regulatory_status": {
         "US": "FDA approved food additive (21 CFR 180.37). NTP delisted as carcinogen (2000). Congress removed warning label (2000).",
-        "EU": "E954. ADI 5 mg/kg bw/day (EFSA, maintained after 2019 review).",
+        "EU": "E954: EFSA 2024 ADI 9 mg/kg body weight/day, expressed as free imide, covering saccharin and its sodium, potassium and calcium salts.",
         "WHO": "JECFA ADI 0-5 mg/kg bw/day. IARC Group 3 (not classifiable as carcinogen to humans)."
       },
       "population_warnings": [
@@ -10719,7 +10669,8 @@
       "notes": "FDA-approved sweetener. Definitively delisted as carcinogen by NTP (2000). Congress removed warning label requirement (Dec 2000). Moved from banned_recalled to harmful_additives (2026-02-18).",
       "scientific_references": [
         "21 CFR 180.37 - FDA food additive listing",
-        "NTP 10th Report on Carcinogens (2000) - Saccharin delisted"
+        "NTP 10th Report on Carcinogens (2000) - Saccharin delisted",
+        "EFSA 2024;22:e9044: re-evaluation of saccharin and its salts; ADI 9 mg/kg/day expressed as free imide."
       ],
       "last_updated": "2026-03-27",
       "match_rules": {
@@ -10790,9 +10741,9 @@
       "confidence": "high",
       "severity_level": "low",
       "dose_thresholds": {
-        "value": 5,
+        "value": 9,
         "unit": "mg/kg/day",
-        "source": "EFSA ADI"
+        "source": "EFSA 2024 ADI, expressed as free imide; doi:10.2903/j.efsa.2024.9044"
       },
       "cui": "C0036023",
       "rxcui": "9509",
@@ -11381,13 +11332,12 @@
         {
           "type": "regulatory_action",
           "authority": "FDA",
-          "title": "FDA Food Additive Status List - Sodium aluminum phosphate (21 CFR 172.620)",
-          "citation": "FDA Food Additive Status List - Sodium aluminum phosphate (21 CFR 172.620)",
-          "url": "https://www.fda.gov/food/food-additives-petitions/food-additive-status-list",
+          "title": "21 CFR 182.1781 Sodium aluminum phosphate",
+          "citation": "21 CFR 182.1781 Sodium aluminum phosphate",
+          "url": "https://www.ecfr.gov/current/title-21/section-182.1781",
           "published_date": null,
-          "evidence_grade": "B",
+          "evidence_grade": "R",
           "supports_claims": [
-            "mechanism_of_harm",
             "regulatory_status"
           ]
         }
@@ -11530,17 +11480,17 @@
         "benzoate of soda"
       ],
       "category": "preservative",
-      "mechanism_of_harm": "FDA GRAS Affirmed preservative (21 CFR 184.1733, max 0.1%). Can form benzene when combined with ascorbic acid (vitamin C) under heat/light. WHO ADI: 0-5 mg/kg bw/day. Benzene formation is the primary concern in supplement context.",
+      "mechanism_of_harm": "Benzoate preservative. Benzene formation with ascorbic acid depends on concentrations, pH, heat, light, storage and other formulation factors; co-presence alone does not establish a measured hazardous exposure.",
       "regulatory_status": {
         "US": "FDA GRAS Affirmed (21 CFR 184.1733, max 0.1%)",
         "EU": "E211, ADI 5 mg/kg bw/day (EFSA re-evaluation 2016)",
-        "WHO": "JECFA ADI: 0-5 mg/kg bw/day"
+        "WHO": "JECFA 2021 group ADI 0–20 mg/kg body weight/day expressed as benzoic acid equivalents, including sodium and potassium salts; previous group ADI withdrawn."
       },
       "population_warnings": [
         "Products with ascorbic acid — benzene formation risk when sodium benzoate + vitamin C coexist (especially under heat/light)",
         "Children — EFSA noted exposure may exceed ADI in high consumers"
       ],
-      "notes": "FDA GRAS Affirmed (21 CFR Part 184). Benzene formation with vitamin C is documented concern. Moved from banned_recalled to harmful_additives (2026-02-18); severity set to moderate (2026). Benzene formation with ascorbic acid is not merely theoretical in the supplement context — liquid supplement formulations routinely contain both sodium benzoate and ascorbic acid (vitamin C). Benzene is an IARC Group 1 carcinogen with no established safe threshold. FDA 2006 survey of beverages found some products exceeded 5 ppb benzene from this reaction. Hyperactivity association supported beyond Southampton pediatric study: PMID 22538314 found sodium benzoate-rich beverage intake significantly associated with ADHD symptom reporting in college students. The combination in a supplement product (sodium benzoate + vitamin C) represents a realistic benzene-formation risk that warrants a moderate rather than low classification.",
+      "notes": "A benzoate preservative with formulation-dependent benzene formation concerns. A beverage survey association with ADHD symptoms is observational and does not establish causation or every supplement’s exposure.",
       "scientific_references": [
         "21 CFR 184.1733 - FDA GRAS Affirmed listing",
         "FDA Survey of Benzene in Soft Drinks (2006)",
@@ -11557,11 +11507,11 @@
       },
       "references_structured": [
         {
-          "type": "regulatory",
-          "authority": "OTHER",
-          "title": "Regulatory status documentation for Sodium Benzoate",
-          "citation": "",
-          "url": "",
+          "type": "regulatory_action",
+          "authority": "JECFA",
+          "title": "JECFA 2021 benzoic acid and benzoate group ADI",
+          "citation": "92nd meeting, expressed as benzoic acid equivalents",
+          "url": "https://apps.who.int/food-additives-contaminants-jecfa-database/Home/Chemical/4530",
           "published_date": null,
           "evidence_grade": "R",
           "supports_claims": [
@@ -11621,7 +11571,7 @@
       "dose_thresholds": {
         "value": 5,
         "unit": "mg/kg/day",
-        "source": "EFSA/JECFA ADI"
+        "source": "EFSA 2016 group ADI expressed as benzoic acid; this total-intake framework is not a product-only clinical threshold."
       },
       "cui": "C0142805",
       "rxcui": "56455",
@@ -11799,12 +11749,12 @@
         "Sodium Copper Chlorophyll"
       ],
       "category": "colorant_natural",
-      "notes": "SAFETY CONCERN: Semi-synthetic derivative of chlorophyll with copper substituted for magnesium. Limited long-term safety data for regular consumption. Potential copper accumulation concerns with chronic use. While over 50 years of use and FDA GRAS status, recent studies question safety of regular copper chlorophyllin consumption. May cause gastrointestinal upset in sensitive individuals. SEVERITY DOWNGRADED FROM MODERATE TO LOW (2026): EFSA 2015 re-evaluation (EFSA Journal 2015:4151) confirmed safety at authorized use levels. FDA permanently listed sodium copper chlorophyllin as a color additive in 2002 (21 CFR 73.125) with ADI calculated at 450 mg/person/day (with 200-fold safety factor). Acute toxicity: no toxicity observed up to 5000 mg/kg bw in animals. Copper content at typical colorant use levels is far below concerns for copper toxicity. Note: category corrected from 'colorant_artificial' to 'colorant_semisynthetic' — this pigment is derived from natural chlorophyll (saponification + copper replacement), not fully synthetic, and is exempt from FDA color certification.",
+      "notes": "Semi-synthetic copper-containing chlorophyll derivative. EFSA’s 2015 re-evaluation concluded that safety of use as food additives cannot be assessed from the available data and the current ADI should be withdrawn. Authorization and assessment uncertainty are separate; this conclusion does not establish a ban or an individual toxic dose.",
       "last_updated": "2026-03-28",
-      "mechanism_of_harm": "Semi-synthetic derivative of chlorophyll with copper replacing magnesium. At typical colorant doses, copper content is far below toxicity thresholds. EFSA 2015 confirmed safety at authorized use levels. Theoretical concern only at extreme intake via copper accumulation in individuals with Wilson's disease.",
+      "mechanism_of_harm": "Some copper-chlorophyllin components can be absorbed. EFSA found inadequate ADME, genotoxicity, chronic toxicity and reproductive data, so safety cannot be assessed; it did not confirm safety at authorized levels. Copper-related concerns require preparation and exposure appraisal.",
       "regulatory_status": {
         "US": "FDA exempt from certification (21 CFR 73.125). Permitted in citrus-based dry beverage mixes and certain other food categories at specified levels. ADI: 15 mg/kg bw/day (JECFA 2004).",
-        "EU": "E141(ii) — permitted food colorant (copper complexes of chlorophyllins) under Regulation (EC) No 1333/2008. ADI: 15 mg/kg bw/day (EFSA 2015 re-evaluation — EFSA Journal 13(5):4081). Restricted to specific food categories (spirits, vegetable preparations, certain cheeses).",
+        "EU": "E141(ii) food-color authorization is distinct from the EFSA 2015 assessment, which could not assess safety and recommended withdrawing the ADI.",
         "WHO": "JECFA ADI: 15 mg/kg bw/day (copper complexes of chlorophylls and chlorophyllins, 2004). No significant toxicity concerns at ADI levels."
       },
       "population_warnings": [
@@ -11812,8 +11762,8 @@
         "Wilson's disease / hepatic copper accumulation disorders: theoretical concern at high intake of copper-containing colorants"
       ],
       "scientific_references": [
-        "EFSA Journal 2015:4151 — Re-evaluation of chlorophylls (E140) and chlorophyllins (E141): safety confirmed at authorized levels",
-        "FDA Federal Register 2002:02-12544 — Permanent listing of sodium copper chlorophyllin (21 CFR 73.125)"
+        "EFSA Journal 2015;13(6):4151: re-evaluation of copper complexes of chlorophylls and chlorophyllins; safety cannot be assessed.",
+        "FDA 21 CFR 73.125: sodium copper chlorophyllin, specified color-additive uses."
       ],
       "match_rules": {
         "match_mode": "alias_and_fuzzy",
@@ -11824,13 +11774,28 @@
       "references_structured": [
         {
           "type": "regulatory_action",
+          "authority": "EFSA",
+          "title": "Re-evaluation of copper complexes of chlorophylls and chlorophyllins",
+          "citation": "EFSA Journal 2015;13(6):4151",
+          "url": "https://doi.org/10.2903/j.efsa.2015.4151",
+          "published_date": "2015-06-30",
+          "evidence_grade": "R",
+          "supports_claims": [
+            "mechanism_of_harm",
+            "regulatory_status"
+          ]
+        },
+        {
+          "type": "regulatory_action",
           "authority": "FDA",
-          "title": "FDA Food Additive Status List - Sodium copper chlorophyllin (21 CFR 73.80)",
-          "citation": "FDA Food Additive Status List - Sodium copper chlorophyllin (21 CFR 73.80)",
-          "url": "https://www.fda.gov/food/food-additives-petitions/food-additive-status-list",
+          "title": "21 CFR 73.125 Sodium copper chlorophyllin",
+          "citation": "21 CFR 73.125",
+          "url": "https://www.ecfr.gov/current/title-21/section-73.125",
           "published_date": null,
-          "evidence_grade": "B",
-          "supports_claims": []
+          "evidence_grade": "R",
+          "supports_claims": [
+            "regulatory_status"
+          ]
         }
       ],
       "jurisdictional_statuses": [
@@ -11932,7 +11897,7 @@
       "dose_thresholds": {
         "value": 15,
         "unit": "mg/kg/day",
-        "source": "JECFA/EFSA ADI"
+        "source": "Historical JECFA ADI; not a current EFSA safety benchmark. EFSA 2015 could not assess safety and recommended withdrawal of the existing ADI; applicability of this historical value requires separate appraisal."
       },
       "cui": "C0951590",
       "external_ids": {
@@ -11952,8 +11917,8 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "safety_summary": "A chlorophyll-derived colorant. Copper content is well below toxicity thresholds at typical colorant doses — low overall concern.",
-      "safety_summary_one_liner": "Chlorophyll-derived colorant — low concern at typical use.",
+      "safety_summary": "A copper-containing colorant with important gaps in long-term safety assessment. Review exposure and individual copper-related conditions.",
+      "safety_summary_one_liner": "Copper colorant with unresolved safety-assessment gaps.",
       "functional_roles": [
         "colorant_natural"
       ]
@@ -12102,12 +12067,12 @@
         "sodium dodecyl sulphate"
       ],
       "category": "emulsifier",
-      "notes": "A synthetic emulsifier and surfactant that can cause skin and gastrointestinal irritation. May disrupt the gut microbiome and cause digestive issues in sensitive individuals. SEVERITY DOWNGRADED FROM HIGH TO MODERATE (2026): EMA background review on sodium laurilsulfate as pharmaceutical excipient (EMA/CHMP/351898/2014) explicitly states: 'no adverse reactions reported when used as an excipient in tablets and capsules.' Aphthous ulcer association is the best-established clinical harm — applies to oral care products (toothpaste) with direct/prolonged mucosal contact, not to tablets/capsules. Gut permeability concerns are supported by animal/ex vivo studies but lack human confirmation at supplement excipient doses. Endocrine disruption applies to concentrated topical/occupational exposure, not to oral supplement excipient quantities (typically <2% of formulation). Moderate is the appropriate designation for oral excipient use.",
+      "notes": "Sodium laurilsulfate is a surfactant. EMA’s excipient review distinguishes tablet/capsule use from prolonged oral-care mucosal contact. Animal/ex-vivo permeability findings and concentrated topical irritation do not establish clinical harm from ordinary oral excipient exposure. Exact preparation and route matter.",
       "last_updated": "2026-03-28",
       "mechanism_of_harm": "Anionic surfactant that disrupts lipid bilayer integrity through electrostatic interaction with cell membrane proteins. At concentrated topical exposure: causes protein denaturation, aphthous ulcers (oral mucosa), and skin irritation. At oral tablet/capsule excipient doses (<2% of formulation): EMA review found no adverse reactions. Gut permeability effects demonstrated in animal/ex vivo models but not confirmed at supplement excipient quantities in humans.",
       "regulatory_status": {
         "US": "FDA approved food additive (21 CFR 172.822) as an emulsifying agent. Also FDA-recognized OTC pharmaceutical inactive ingredient. At concentrations in food/supplements (typically <1%), FDA considers safe. Higher concentrations (skin/mucosa) linked to irritation — relevant to oral dissolution products.",
-        "EU": "E487 — permitted emulsifier/stabilizer under Regulation (EC) No 1333/2008. Quantum satis in specific food categories. EFSA 2018 re-evaluation: no safety concern at estimated dietary exposure (EFSA Journal 16(2):5080). Some EU member states restrict use in cosmetics at higher concentrations.",
+        "EU": "Exact E487 food authorization requires current use-specific appraisal. EFSA Journal 5080 is not a sodium-lauryl-sulfate safety assessment.",
         "WHO": "No established ADI — considered safe at typical food use levels. No carcinogenicity classification. GI and mucosal irritant at high concentrations."
       },
       "population_warnings": [
@@ -12684,7 +12649,7 @@
       "mechanism_of_harm": "Excessive phosphate intake can disrupt calcium-phosphorus balance, potentially affecting bone health and kidney function. High intake linked to cardiovascular concerns and accelerated aging in those with compromised kidney function. Common in processed foods contributing to overall phosphate overload.",
       "regulatory_status": {
         "US": "FDA GRAS for various food uses as sequestrant and emulsifier.",
-        "EU": "E451 approved. EFSA 2019 group ADI 40 mg P/kg bw/day for all phosphate additives (E338-452).",
+        "EU": "EFSA 2019 group ADI 40 mg phosphorus/kg/day includes natural and additive sources, not individual additive mass; it does not apply to moderate/severe renal impairment.",
         "WHO": "JECFA MTDI for phosphorus from all sources."
       },
       "population_warnings": [
@@ -12703,13 +12668,15 @@
       "references_structured": [
         {
           "type": "regulatory_action",
-          "authority": "FDA",
-          "title": "FDA Food Additive Status List - Sodium tripolyphosphate (21 CFR 172.620)",
-          "citation": "FDA Food Additive Status List - Sodium tripolyphosphate (21 CFR 172.620)",
-          "url": "https://www.fda.gov/food/food-additives-petitions/food-additive-status-list",
+          "authority": "EFSA",
+          "title": "EFSA 2019 re-evaluation of phosphate food additives",
+          "citation": "EFSA 2019 re-evaluation of phosphate food additives",
+          "url": "https://doi.org/10.2903/j.efsa.2019.5674",
           "published_date": null,
-          "evidence_grade": "B",
-          "supports_claims": []
+          "evidence_grade": "R",
+          "supports_claims": [
+            "regulatory_status"
+          ]
         }
       ],
       "jurisdictional_statuses": [
@@ -12799,7 +12766,7 @@
       "dose_thresholds": {
         "value": 40,
         "unit": "mg P/kg/day",
-        "source": "EFSA group ADI for phosphate additives (2019)"
+        "source": "EFSA 2019 group ADI expressed as phosphorus, including natural and additive sources; not applicable to moderate/severe renal impairment."
       },
       "cui": "C2827333",
       "external_ids": {
@@ -12998,12 +12965,12 @@
         "SMS"
       ],
       "category": "emulsifier",
-      "notes": "Synthetic emulsifier. Generally considered safe but may affect gut barrier function and microbiome in high doses. Commonly used in softgels. SEVERITY DOWNGRADED FROM MODERATE TO LOW (2026): EFSA 2017 re-evaluation of sorbitan esters (EFSA Journal 2017:4788, PMC7010202) found no genotoxicity concern; established group ADI of 10 mg/kg bw/day for sorbitan esters. Exposure estimates at mean and 95th percentile did not exceed the ADI in any population group. Sorbitan esters are structurally related to but distinct from polysorbates — limited evidence that sorbitan monostearate shares polysorbate gut microbiome effects.",
+      "notes": "Synthetic emulsifier. Generally considered safe but may affect gut barrier function and microbiome in high doses. Commonly used in softgels. SEVERITY DOWNGRADED FROM MODERATE TO LOW (2026): EFSA 2017 re-evaluation of sorbitan esters (EFSA Journal 2017:4788, PMC7010202) found no genotoxicity concern; established group ADI of 10 mg sorbitan/kg bw/day for sorbitan esters. Exposure estimates at mean and 95th percentile did not exceed the ADI in any population group. Sorbitan esters are structurally related to but distinct from polysorbates — limited evidence that sorbitan monostearate shares polysorbate gut microbiome effects.",
       "last_updated": "2026-03-28",
       "mechanism_of_harm": "Non-ionic surfactant (E491). Poorly absorbed. Hydrolyzed in GI tract to sorbitan and stearic acid, both of which are metabolized normally. EFSA 2017 found no genotoxicity concern. Less studied than polysorbates for gut barrier effects.",
       "regulatory_status": {
         "US": "FDA permitted food additive (21 CFR 172.842) as an emulsifier. Approved for use in yeast-leavened bakery products, cake icing/filling, chocolate-flavored coating, and other specified categories. GRAS-like status.",
-        "EU": "E491 — permitted emulsifier under Regulation (EC) No 1333/2008. Sorbitan esters (E491-495) group ADI: 25 mg/kg bw/day (EFSA 2015 re-evaluation — EFSA Journal 13(7):4152). Restricted to specific food categories.",
+        "EU": "E491: EFSA 2017 group ADI for sorbitan esters E491–495 is 10 mg sorbitan/kg body weight/day, equivalent to 26 mg sorbitan monostearate/kg/day. Sorbitan esters and polysorbates are separate assessment groups.",
         "WHO": "JECFA group ADI for sorbitan esters: 25 mg/kg bw/day. No carcinogenicity or genotoxicity concerns."
       },
       "population_warnings": [
@@ -13022,12 +12989,14 @@
         {
           "type": "regulatory_action",
           "authority": "FDA",
-          "title": "FDA Food Additive Status List - Sorbitan monostearate (21 CFR 172.840)",
-          "citation": "FDA Food Additive Status List - Sorbitan monostearate (21 CFR 172.840)",
-          "url": "https://www.fda.gov/food/food-additives-petitions/food-additive-status-list",
+          "title": "21 CFR 172.842 Sorbitan monostearate",
+          "citation": "21 CFR 172.842 Sorbitan monostearate",
+          "url": "https://www.ecfr.gov/current/title-21/section-172.842",
           "published_date": null,
-          "evidence_grade": "B",
-          "supports_claims": []
+          "evidence_grade": "R",
+          "supports_claims": [
+            "regulatory_status"
+          ]
         }
       ],
       "jurisdictional_statuses": [
@@ -13127,11 +13096,11 @@
       "confidence": "high",
       "dose_thresholds": [
         {
-          "amount": 25,
-          "unit": "mg/kg",
+          "amount": 10,
+          "unit": "mg sorbitan/kg",
           "basis": "per day",
-          "context": "EFSA evaluates sorbitan esters together with polysorbates.",
-          "citation": "EFSA Journal 2017;15(1):4663 - Polysorbates and sorbitan esters."
+          "context": "Group intake of sorbitan esters expressed as sorbitan, not additive mass; equivalent to 26 mg sorbitan monostearate/kg/day.",
+          "citation": "EFSA Journal 2017;15(5):4788; doi:10.2903/j.efsa.2017.4788"
         }
       ],
       "severity_level": "low",
@@ -13335,17 +13304,16 @@
         "monoglycerides and diglycerides"
       ],
       "category": "emulsifier",
-      "mechanism_of_harm": "Emulsifier derived from soy that may disrupt gut barrier function and alter microbiome composition. Contains soy allergen. Often produced from partially hydrogenated oils, potentially containing trace trans fats.",
+      "mechanism_of_harm": "Mono- and diglyceride emulsifiers can come from different feedstocks. A generic E471 or monoglyceride name does not establish soy protein, trans-fat content or gut-barrier effects. The CMC/P80 mouse experiment is not a monoglyceride clinical study.",
       "regulatory_status": {
         "US": "FDA GRAS (21 CFR 182.4505 — mono- and diglycerides).",
         "EU": "E471 approved. EFSA re-evaluated 2017 — no safety concern, no numerical ADI.",
         "WHO": "JECFA ADI 'not limited' for mono- and diglycerides of fatty acids."
       },
       "population_warnings": [
-        "Soy allergy — soy-derived monoglycerides may retain allergenic soy proteins",
-        "IBD/IBS — emulsifier class linked to gut barrier disruption in animal models"
+        "Soy allergy: check the specific source and allergen declaration; generic monoglycerides do not establish soy exposure."
       ],
-      "notes": "Emulsifier commonly used in supplement manufacturing. Derived from soybean oil. May contain trace trans fats from hydrogenation processing. Soy allergen concern for sensitive populations.",
+      "notes": "Source-specific soy-derived monoglycerides should be distinguished from generic mono- and diglycerides. Allergen assessment requires the specific source and retained protein, not the generic emulsifier name.",
       "scientific_references": [
         "DOI: 10.1038/nature14232 - Emulsifiers impact on gut microbiota and inflammation"
       ],
@@ -13358,13 +13326,13 @@
       },
       "references_structured": [
         {
-          "type": "clinical_study",
-          "authority": "OTHER",
-          "title": "DOI: 10.1038/nature14232 - Dietary emulsifiers impact the mouse gut microbiota promoting colitis and metabolic syndrome",
-          "citation": "DOI: 10.1038/nature14232 - Dietary emulsifiers impact the mouse gut microbiota promoting colitis and metabolic syndrome",
-          "url": "https://doi.org/10.1038/nature14232",
-          "published_date": "2015-02-25",
-          "evidence_grade": "B",
+          "type": "regulatory_action",
+          "authority": "EFSA",
+          "title": "EFSA 2017 re-evaluation of mono- and diglycerides of fatty acids E471",
+          "citation": "EFSA 2017 re-evaluation of mono- and diglycerides of fatty acids E471",
+          "url": "https://doi.org/10.2903/j.efsa.2017.5045",
+          "published_date": null,
+          "evidence_grade": "R",
           "supports_claims": []
         }
       ],
@@ -13434,8 +13402,8 @@
       "confidence": "medium",
       "severity_level": "moderate",
       "cui": "C0026481",
-      "safety_summary": "A soy-derived emulsifier. Carries soy allergen exposure and preclinical gut-lining signals — worth knowing if you avoid soy.",
-      "safety_summary_one_liner": "Soy-derived emulsifier — matters with soy allergy.",
+      "safety_summary": "A mono-/diglyceride emulsifier; source and allergen composition require product-specific information.",
+      "safety_summary_one_liner": "Emulsifier source matters for allergen assessment.",
       "functional_roles": [
         "emulsifier"
       ]
@@ -13474,12 +13442,14 @@
         {
           "type": "regulatory_action",
           "authority": "FDA",
-          "title": "FDA Food Additive Status List - Stearic acid (21 CFR 172.864)",
-          "citation": "FDA Food Additive Status List - Stearic acid (21 CFR 172.864)",
-          "url": "https://www.fda.gov/food/food-additives-petitions/food-additive-status-list",
+          "title": "21 CFR 172.860 Fatty acids",
+          "citation": "21 CFR 172.860 Fatty acids",
+          "url": "https://www.ecfr.gov/current/title-21/section-172.860",
           "published_date": null,
-          "evidence_grade": "B",
-          "supports_claims": []
+          "evidence_grade": "R",
+          "supports_claims": [
+            "regulatory_status"
+          ]
         }
       ],
       "jurisdictional_statuses": [
@@ -13714,7 +13684,7 @@
         "TGS"
       ],
       "category": "sweetener_artificial",
-      "mechanism_of_harm": "Chlorinated artificial sweetener that disrupts gut microbiome composition and diversity. Inhibits farnesoid X receptor signaling and disrupts bile acid metabolism. May induce glucose intolerance and affect insulin response. Releases potentially harmful chlorinated compounds when heated above 120°C (248°F).",
+      "mechanism_of_harm": "Sucralose microbiome, FXR and bile-acid findings require the specific experimental preparation, model and dose. These findings do not establish uniform clinical glucose intolerance from supplement excipient exposure. Heating-related degradation is a separate preparation context.",
       "regulatory_status": {
         "US": "FDA approved (21 CFR 172.831). ADI 5 mg/kg bw/day.",
         "EU": "E955 approved. ADI 15 mg/kg bw/day (EFSA 2016, maintained).",
@@ -13725,7 +13695,7 @@
         "Diabetes — may affect glucose/insulin response despite being non-caloric (contested evidence)",
         "Cooking/baking — thermal degradation produces chlorinated compounds (chloropropanols) at >120°C"
       ],
-      "notes": "An artificial sweetener made by chlorinating sugar. 2024 studies show it disrupts the gut microbiome, inhibits bile acid metabolism, and may induce glucose intolerance. Releases harmful compounds when heated. May affect insulin response despite being non-caloric.",
+      "notes": "Sucralose is a non-sugar sweetener. WHO’s 2023 weight-control guideline is not a sucralose-specific toxicology assessment. Experimental microbiome and heating findings should not be represented as universal human clinical harm.",
       "scientific_references": [
         "DOI: 10.3389/fnut.2024.1387646 - Metabolic effects 2024"
       ],
@@ -13740,12 +13710,14 @@
         {
           "type": "guidance",
           "authority": "WHO",
-          "title": "WHO guideline: Sugars intake for adults and children (2015)",
-          "citation": "WHO guideline: Sugars intake for adults and children (2015)",
-          "url": "https://www.who.int/publications/i/item/9789241549028",
-          "published_date": null,
-          "evidence_grade": "A",
-          "supports_claims": []
+          "title": "Use of non-sugar sweeteners: WHO guideline (2023)",
+          "citation": "WHO 2023 non-sugar sweeteners guideline",
+          "url": "https://www.who.int/publications/i/item/9789240073616",
+          "published_date": "2023-05-15",
+          "evidence_grade": "R",
+          "supports_claims": [
+            "regulatory_status"
+          ]
         }
       ],
       "jurisdictional_statuses": [
@@ -14248,19 +14220,21 @@
         "synthetic vitamin blend"
       ],
       "category": "nutrient_synthetic",
-      "mechanism_of_harm": "Class entry for synthetic B vitamin forms. Key concern: synthetic folic acid (pteroylmonoglutamic acid) requires DHFR conversion and may accumulate as unmetabolized folic acid (UMFA) in individuals with MTHFR polymorphisms or high intake. Cyanocobalamin requires decyanation. These are quality signals for non-bioidentical forms, not safety hazards at recommended doses.",
+      "mechanism_of_harm": "Class entry for synthetic B-vitamin forms. High folic-acid intake can result in unmetabolized folic acid, but its clinical implications remain uncertain. CDC states common MTHFR variants are not a reason to avoid folic acid; 400 mcg/day helps prevent neural-tube defects regardless of common genotype. Form preference is not established by that genotype alone.",
       "regulatory_status": {
         "US": "FDA: synthetic B vitamins are standard in fortification and supplements. No restriction.",
         "EU": "Permitted forms listed in Annex II of Directive 2002/46/EC.",
         "WHO": "No safety concern at recommended intake levels."
       },
       "population_warnings": [
-        "MTHFR polymorphism carriers — synthetic folic acid (not 5-MTHF) requires additional conversion; UMFA accumulation possible at high doses"
+        "Review high-dose folic acid and total intake with your clinician; common MTHFR variants alone do not require avoiding folic acid."
       ],
       "notes": "Do not penalize nutrient identities like cyanocobalamin/pyridoxine by default. Cyanocobalamin is a common supplemental B12 form; this record now only matches explicit synthetic-blend labeling.",
       "scientific_references": [
         "PMID: 22529856 (Tam/O'Connor/Koren 2012 Obstet Gynecol Int) - Unmetabolized folic acid: folate status and supplementation effects - Synthetic vs natural forms",
-        "PMID: 25820384 (Obeid/Fedosov/Nexo 2015 Mol Nutr Food Res) - Cobalamin coenzyme forms not superior to cyano/hydroxocobalamin - Bioavailability comparison"
+        "PMID: 25820384 (Obeid/Fedosov/Nexo 2015 Mol Nutr Food Res) - Cobalamin coenzyme forms not superior to cyano/hydroxocobalamin - Bioavailability comparison",
+        "CDC MTHFR Gene Variant and Folic Acid Facts: https://www.cdc.gov/folic-acid/data-research/mthfr/index.html",
+        "NIH ODS Folate Health Professional Fact Sheet: https://ods.od.nih.gov/factsheets/Folate-HealthProfessional/"
       ],
       "last_updated": "2026-03-28",
       "match_rules": {
@@ -14391,8 +14365,8 @@
         "pubchem_cid": null,
         "unii": null
       },
-      "safety_summary": "A class of synthetic B-vitamin forms. Key concern is synthetic folic acid, which may accumulate as unmetabolized folic acid at high intake — methylfolate is preferred.",
-      "safety_summary_one_liner": "Synthetic B vitamins — methylfolate is preferred.",
+      "safety_summary": "Synthetic B-vitamin forms are not inherently unsafe at recommended intakes. High folic-acid intake and individual clinical circumstances require dose-specific review.",
+      "safety_summary_one_liner": "Common MTHFR variants do not require avoiding folic acid. Review dose.",
       "functional_roles": []
     },
     {
@@ -14571,18 +14545,17 @@
         "organic tapioca syrup"
       ],
       "category": "sweetener_natural",
-      "mechanism_of_harm": "Concentrated liquid sugars with high glycemic index (GI 60-100+). Rapidly absorbed, causing blood glucose spikes. Rice syrup specifically may contain inorganic arsenic from rice cultivation. Used as sweetener/binder in gummies and liquid supplements.",
+      "mechanism_of_harm": "Syrups differ in composition: glucose-containing, polyol and fiber preparations cannot share one glycemic index or sugar burden. Measured arsenic findings in commercial brown-rice syrups do not establish arsenic in every syrup.",
       "regulatory_status": {
         "US": "FDA GRAS status for various syrups",
         "EU": "Approved as sweeteners",
         "WHO": "Recommends limiting free sugars"
       },
       "population_warnings": [
-        "Diabetes/insulin resistance — high GI causes rapid blood glucose spikes",
-        "Children — rice syrup may contain inorganic arsenic; FDA monitors but no specific limit for supplements",
-        "Calorie-conscious consumers — concentrated sugar adds significant calories"
+        "Diabetes: assess the specific syrup composition and carbohydrate amount.",
+        "Rice-syrup products: contamination concern depends on the product and measured exposure."
       ],
-      "notes": "Concentrated liquid sugars used as sweeteners. They have the same metabolic effects as solid sugars, contributing to blood sugar spikes and related health issues. Brown rice syrup has additional concerns due to potential arsenic contamination. NOTE: Category corrected from 'sweetener_artificial' to 'sweetener_natural' — corn syrup and rice syrup are not synthetic/artificial sweeteners.",
+      "notes": "Assess the exact syrup composition and serving amount. Fiber and polyol syrups are distinct from concentrated glucose or fructose syrups. Rice-specific contamination findings require product-specific exposure appraisal.",
       "scientific_references": [
         "DOI: 10.1289/ehp.1104619 - Arsenic in rice syrup"
       ],
@@ -14718,8 +14691,8 @@
         "unii": null
       },
       "unii_note": "Class-level syrup umbrella; no single exact GSRS/UNII substance. Prior representative UNII 9G5L16BK6N resolves to CORN SYRUP and is retained only on ADD_CORN_SYRUP_SOLIDS.",
-      "safety_summary": "Concentrated liquid added sugars (rice syrup, brown rice syrup, etc.). Rice syrups in particular can carry trace arsenic — worth limiting daily intake.",
-      "safety_summary_one_liner": "Concentrated added sugar, some can carry trace arsenic.",
+      "safety_summary": "Syrup composition and dose vary; rice-specific contamination evidence does not apply to every syrup.",
+      "safety_summary_one_liner": "Assess the specific syrup and amount.",
       "audit_trail": [
         "Sprint D1.3 (2026-04-20): marked severity_level='low' for formulation sugar/sweetener/fat/carrier rows. These are low-quality supplement additives (caloric sweeteners, bulk fillers) — they deserve a small penalty, not the full harmful-additive hammer. Nutrition-Facts-panel disclosures of these same substances route to nutritionalInfo via the cleaner's _is_nutrition_fact filter; only genuine formulation-use rows reach the scorer and get this low-severity penalty."
       ],
@@ -14873,8 +14846,8 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "safety_summary": "A refined tapioca starch filler that spikes blood sugar quickly. Minimal nutritional value — worth moderating daily intake.",
-      "safety_summary_one_liner": "Refined starch filler — spikes blood sugar fast.",
+      "safety_summary": "Tapioca starch is a filler or binder. Glycemic exposure depends on quantity; trace capsule-excipient amounts differ from a substantial gummy carbohydrate load.",
+      "safety_summary_one_liner": "Starch filler. Glycemic relevance depends on amount.",
       "functional_roles": [
         "filler"
       ]
@@ -14896,7 +14869,7 @@
       "mechanism_of_harm": "Similar to other phosphate additives - contributes to cumulative phosphate intake which can disrupt mineral balance. May affect calcium absorption and bone metabolism with chronic high exposure. Generally less concerning than tripolyphosphate but still a processed food marker.",
       "regulatory_status": {
         "US": "FDA GRAS. Used as emulsifier and sequestrant.",
-        "EU": "E450 approved. EFSA 2019 group ADI 40 mg P/kg bw/day for all phosphate additives (E338-452).",
+        "EU": "EFSA 2019 group ADI 40 mg phosphorus/kg/day includes natural and additive sources, not individual additive mass; it does not apply to moderate/severe renal impairment.",
         "WHO": "JECFA MTDI for phosphorus from all sources."
       },
       "population_warnings": [
@@ -14915,13 +14888,15 @@
       "references_structured": [
         {
           "type": "regulatory_action",
-          "authority": "FDA",
-          "title": "FDA Food Additive Status List - Tetrasodium diphosphate (21 CFR 172.620)",
-          "citation": "FDA Food Additive Status List - Tetrasodium diphosphate (21 CFR 172.620)",
-          "url": "https://www.fda.gov/food/food-additives-petitions/food-additive-status-list",
+          "authority": "EFSA",
+          "title": "EFSA 2019 re-evaluation of phosphate food additives",
+          "citation": "EFSA 2019 re-evaluation of phosphate food additives",
+          "url": "https://doi.org/10.2903/j.efsa.2019.5674",
           "published_date": null,
-          "evidence_grade": "B",
-          "supports_claims": []
+          "evidence_grade": "R",
+          "supports_claims": [
+            "regulatory_status"
+          ]
         }
       ],
       "jurisdictional_statuses": [
@@ -15011,7 +14986,7 @@
       "dose_thresholds": {
         "value": 40,
         "unit": "mg P/kg/day",
-        "source": "EFSA group ADI for phosphate additives (2019)"
+        "source": "EFSA 2019 group ADI expressed as phosphorus, including natural and additive sources; not applicable to moderate/severe renal impairment."
       },
       "cui": "C0074764",
       "external_ids": {
@@ -15321,13 +15296,13 @@
       ],
       "category": "contaminant",
       "active_source_policy": "declared_trace_nutrient",
-      "notes": "A heavy metal that can contaminate supplements, particularly those sourced from regions with industrial pollution. Can cause gastrointestinal issues and potentially affect nervous system function.",
+      "notes": "Inorganic tin is a contaminant whose high food concentrations can cause gastrointestinal symptoms. Neurotoxicity concerns for organotin compounds should not be assigned to inorganic tin without species-specific exposure evidence.",
       "last_updated": "2026-03-28",
       "mechanism_of_harm": "Inorganic tin (Sn²⁺/Sn⁴⁺) causes acute GI irritation (nausea, vomiting, diarrhea) at >200 mg/kg food. Poorly absorbed orally. Organotin compounds (tributyltin, etc.) are highly neurotoxic and immunotoxic but not relevant to dietary supplement context. JECFA PTWI 14 mg/kg bw (maintained since 1988).",
       "regulatory_status": {
         "US": "Not a recognized dietary supplement ingredient. Treated as a contaminant. Codex Alimentarius maximum levels for inorganic tin: 250 mg/kg (solid foods) and 150 mg/kg (beverages) in canned products.",
         "EU": "Commission Regulation (EC) No 1881/2006 (as amended by Reg EU 2023/915) sets maximum levels for inorganic tin: 200 mg/kg (canned food) and 100 mg/kg (canned beverages).",
-        "WHO": "JECFA established PTWI of 14 mg/kg bw for inorganic tin (1988, reaffirmed 2001/2006). Acute gastric irritation observed at ≥150 mg/kg in beverages and ≥250 mg/kg in solid foods."
+        "WHO": "JECFA’s historical 1988 PTWI was 14 mg/kg body weight. The 2006 evaluation noted an unclear basis and desirability of reassessment; concentration-dependent acute gastric effects are distinct from this historical weekly framework."
       },
       "population_warnings": [
         "GI sensitivity — acute gastric irritation at ≥150 mg/kg in beverages",
@@ -16545,12 +16520,12 @@
       },
       "confidence": "high",
       "regulatory_status": {
-        "US": "PARTIALLY hydrogenated coconut oil (PHO): FDA banned all PHOs as GRAS effective June 18, 2018. Federal Register 2023-16725 (direct final rule, effective December 22, 2023) revoked remaining PHO uses — FDA PHO ban is complete as of December 2023. FULLY hydrogenated coconut oil: not subject to the PHO ban; contains no trans fats. Different regulatory status depending on degree of hydrogenation.",
+        "US": "FDA determined partially hydrogenated oils are not GRAS, with final food compliance dates through 2021 and removal of outdated regulatory references in 2023. These actions concern partial hydrogenation; they do not establish that unspecified hydrogenated oil is partially hydrogenated.",
         "EU": "Partially hydrogenated fats subject to maximum trans fat limits (Regulation (EU) 2019/649, effective April 2021: max 2g per 100g fat in food). Fully hydrogenated fats are permitted.",
         "WHO": "WHO recommends eliminating industrially produced trans fats (REPLACE action package, 2018)."
       },
       "mechanism_of_harm": "PARTIAL hydrogenation creates artificial trans fatty acids (elaidic acid, etc.). Trans fats raise LDL cholesterol, lower HDL cholesterol, promote inflammation, and are independently associated with cardiovascular disease risk. FULL hydrogenation converts all double bonds to saturated bonds — primarily stearic and lauric acids. Fully hydrogenated coconut oil contains no trans fats; its profile is dominated by saturated fats (stearic acid metabolized to oleic acid; lauric acid raises HDL as well as LDL). This entry covers PARTIALLY hydrogenated coconut oil — the form banned by FDA.",
-      "notes": "IMPORTANT DISTINCTION: Partially hydrogenated vs. fully hydrogenated coconut oil have fundamentally different safety profiles and regulatory statuses. PARTIALLY hydrogenated coconut oil: source of artificial trans fats; FDA PHO ban complete December 2023 (Federal Register 2023-16725). High severity. FULLY hydrogenated coconut oil: no trans fats; saturated fat profile; not banned; lower concern. This entry covers the partially hydrogenated form. Severity raised from low to high to reflect the trans fat burden and FDA ban status. Confidence assigned as high.",
+      "notes": "Partial and full hydrogenation have different chemical and regulatory scope. FDA’s PHO food phase-out reached final compliance dates through 2021, with administrative regulatory cleanup in 2023. Unspecified hydrogenation requires source provenance; this record’s partial-hydrogenation warning does not establish that identity from the generic name.",
       "scientific_references": [
         "FDA Final Determination 2015 — Partially Hydrogenated Oils (PHOs) no longer GRAS",
         "Federal Register 2023-16725 — Revocation of remaining PHO uses, effective December 22, 2023",
@@ -16681,10 +16656,10 @@
       "regulatory_status": {
         "US": "FDA considers methylparaben GRAS at low concentrations in food (21 CFR 184.1490) and approved for pharmaceutical use. Not banned in US foods or supplements.",
         "EU": "E218 is APPROVED in EU food with ADI 10 mg/kg bw/day. EU cosmetics: methylparaben and ethylparaben are specifically permitted (up to 0.4% individually, 0.8% combined). The 2014 EU cosmetics restriction primarily targeted butylparaben and propylparaben in rinse-off children's products — NOT methylparaben. France June 2025: submitted CLH proposal to classify methylparaben as environmental endocrine disrupter (ED ENV 1). SCCS 2024 review confirmed methylparaben safe in cosmetics at current permitted levels.",
-        "WHO": "JECFA ADI: 10 mg/kg bw/day. Estrogenic potency approximately 100,000× less than estradiol at ERα."
+        "WHO": "The reported group ADI must be interpreted by its substance and exposure basis; experimental estrogenic-potency ratios do not establish clinical risk."
       },
-      "mechanism_of_harm": "Weak estrogenic activity (approximately 2,500,000× less potent than 17β-estradiol (methylparaben is the weakest paraben; the ~100,000× figure from Routledge 1998 applies to butylparaben, not methylparaben — Miller et al. 2001 Env Health Perspect found methylparaben potency <1/3,000,000 relative to estradiol) at ERα in vitro). Darbre et al. studies detected parabens in breast tumor tissue, but this demonstrates exposure, not causation — parabens are also present in non-tumor breast tissue; no dose-response established. Scientific consensus does not support a causal link between methylparaben and breast cancer. Antiandrogenic effects weaker than propylparaben or butylparaben. France 2025 CLH proposal for environmental endocrine disrupter classification is an emerging regulatory signal.",
-      "notes": "Preservative with the weakest endocrine activity among common parabens. EU E218 remains APPROVED in food and cosmetics — previous entry description implied it was restricted like propylparaben/butylparaben. Severity downgraded from high to moderate: estrogenic potency is ~100,000× weaker than estradiol; EFSA/SCCS regulatory assessments confirm safety at current use levels. The Denmark/EU children's product restrictions primarily applied to butylparaben and propylparaben, not methylparaben. Added confidence=medium. France June 2025 CLH environmental endocrine disrupter proposal is a developing signal to monitor.",
+      "mechanism_of_harm": "Methylparaben has weak estrogenic activity in experimental systems. Potency varies by assay and paraben; an exact estradiol-relative ratio is not a universal human dose-risk measure. Detection in tissue does not establish causation of breast cancer, and cosmetic permissions do not establish every oral exposure’s safety.",
+      "notes": "Methylparaben is distinct from butylparaben and propylparaben. Regulatory permissions and experimental endocrine findings are preparation-, route- and exposure-specific; exact clinical implications remain uncertain.",
       "scientific_references": [
         "PMID 41301867 — 2025 paraben review: estrogenic potency comparison across paraben series",
         "SCCS 2024 — Methylparaben cosmetics safety review: confirmed safe at current permitted levels",
@@ -17318,16 +17293,16 @@
         "INS 212"
       ],
       "category": "preservative",
-      "mechanism_of_harm": "Benzoate preservative closely related to sodium benzoate. Used as an antimicrobial preservative and carries the same practical formulation concern in acidic vitamin-C-containing systems: potential benzene formation under heat/light exposure.",
+      "mechanism_of_harm": "Benzoate preservative. Benzene formation with ascorbic acid depends on concentrations, pH, heat, light, storage and other formulation factors; co-presence alone does not establish a measured hazardous exposure.",
       "regulatory_status": {
-        "US": "FDA: permitted preservative. Same regulatory class as sodium benzoate. Max 0.1% in food.",
+        "US": "Exact potassium-benzoate food-use permission requires salt-specific appraisal; sodium-benzoate concentration limits cannot be assumed to apply.",
         "EU": "E212 approved. Group ADI 5 mg/kg bw/day as benzoic acid (EFSA 2016 re-evaluation).",
-        "WHO": "JECFA group ADI 0-5 mg/kg bw/day as benzoic acid."
+        "WHO": "JECFA 2021 group ADI 0–20 mg/kg body weight/day expressed as benzoic acid equivalents, including sodium and potassium salts; previous group ADI withdrawn."
       },
       "population_warnings": [
         "Products with ascorbic acid — benzene formation risk when benzoate + vitamin C coexist (heat/light/acidic conditions)"
       ],
-      "notes": "Conservative harmful-additive route for potassium benzoate based on benzoate preservative class behavior and supplement-formulation risk signaling.",
+      "notes": "A benzoate preservative with formulation-dependent benzene formation concerns. A beverage survey association with ADHD symptoms is observational and does not establish causation or every supplement’s exposure.",
       "scientific_references": [
         "21 CFR Part 582 Subpart D - Chemical Preservatives",
         "Benzoate preservative risk is handled conservatively alongside sodium benzoate in this pipeline"
@@ -17340,11 +17315,11 @@
       },
       "references_structured": [
         {
-          "type": "regulatory",
-          "authority": "OTHER",
-          "title": "Regulatory status documentation for Potassium Benzoate",
-          "citation": "",
-          "url": "",
+          "type": "regulatory_action",
+          "authority": "JECFA",
+          "title": "JECFA 2021 benzoic acid and benzoate group ADI",
+          "citation": "92nd meeting, expressed as benzoic acid equivalents",
+          "url": "https://apps.who.int/food-additives-contaminants-jecfa-database/Home/Chemical/4530",
           "published_date": null,
           "evidence_grade": "R",
           "supports_claims": [
@@ -17386,7 +17361,7 @@
       "dose_thresholds": {
         "value": 5,
         "unit": "mg/kg/day",
-        "source": "EFSA/JECFA group ADI (as benzoic acid)"
+        "source": "EFSA 2016 group ADI expressed as benzoic acid; this total-intake framework is not a product-only clinical threshold."
       },
       "cui": "C0137992",
       "rxcui": "54991",
@@ -17966,7 +17941,7 @@
       "dose_thresholds": {
         "value": 50,
         "unit": "g/day",
-        "source": "WHO conditional recommendation: limit free sugars, no specific fructose ADI"
+        "source": "WHO strong recommendation: total free sugars below 10% of energy; 50 g at 2000 kcal/day is an illustrative total-intake amount, not a compound-specific ADI or supplement threshold."
       },
       "rxcui": "4570",
       "gsrs": {
@@ -18145,7 +18120,7 @@
       "dose_thresholds": {
         "value": 50,
         "unit": "g/day",
-        "source": "WHO conditional recommendation for free sugars (same as fructose)"
+        "source": "WHO strong recommendation: total free sugars below 10% of energy; 50 g at 2000 kcal/day is an illustrative total-intake amount, not a compound-specific ADI or supplement threshold."
       },
       "rxcui": "1310511",
       "gsrs": {
@@ -18181,10 +18156,10 @@
         "CAS 80-09-1"
       ],
       "category": "contaminant",
-      "mechanism_of_harm": "Binds estrogen receptors (ERα and ERβ) with comparable affinity to BPA, disrupting endocrine signaling. Leaches from 'BPA-free' plastic supplement packaging. In vitro studies show estrogenic, anti-androgenic, and thyroid-disrupting activity. More thermally stable than BPA, leading to higher persistence in food contact materials.",
+      "mechanism_of_harm": "Compound-specific endocrine, genotoxicity and migration assertions require primary evidence for this bisphenol and the relevant preparation. BPA-only evidence is not sufficient to establish equivalence or supplement exposure.",
       "regulatory_status": {
         "US": "No specific FDA regulation for BPS. FDA banned BPA in infant formula packaging (2013). BPS not yet individually regulated.",
-        "EU": "Commission Regulation (EU) 2024/3190 bans BPS in food contact materials alongside BPA, effective January 20, 2025. EFSA evaluation ongoing.",
+        "EU": "Regulation (EU) 2024/3190 addresses BPA and other bisphenols meeting specified harmonized hazardous classifications, with authorizations and transition provisions. A compound-specific prohibition requires its classification and intended use; this is not an interchangeable blanket ban on every bisphenol.",
         "Canada": "Under assessment as potential toxic substance under CEPA."
       },
       "population_warnings": [
@@ -18192,7 +18167,7 @@
         "Children — developing endocrine systems more vulnerable to estrogenic compounds",
         "People with hormone-sensitive conditions — breast cancer, endometriosis, PCOS"
       ],
-      "notes": "BPS is the most common BPA replacement in 'BPA-free' products. Research shows comparable endocrine-disrupting activity to BPA. Found as a packaging contaminant rather than an intentional ingredient. EFSA 2023 TDI reduction for BPA (20,000×) has increased scrutiny of all bisphenol analogs.",
+      "notes": "A bisphenol analog used in some materials. The cited BPA assessment cannot by itself establish this analog’s receptor affinity, migration magnitude, genotoxicity or human clinical risk; those require compound-specific primary evidence.",
       "scientific_references": [
         "DOI: 10.2903/j.efsa.2023.6857 - EFSA 2023 BPA re-evaluation (TDI context)",
         "EFSA Journal 2023 — BPA re-evaluation: TDI reduced to 0.2 ng/kg bw/day (20,000-fold reduction)",
@@ -18345,7 +18320,7 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "safety_summary": "A BPA alternative that leaches from some 'BPA-free' packaging. Shows comparable endocrine-disrupting activity to BPA — worth choosing products in glass or BPA-/BPS-free containers.",
+      "safety_summary": "A bisphenol analog whose specific material, migration and toxicology require appraisal; BPA evidence does not alone establish identical risk.",
       "safety_summary_one_liner": "BPA alternative with endocrine-disruption concerns.",
       "functional_roles": []
     },
@@ -18361,10 +18336,10 @@
         "CAS 620-92-8"
       ],
       "category": "contaminant",
-      "mechanism_of_harm": "Binds estrogen receptors with estrogenic activity comparable to BPA and BPS. Additionally shows genotoxic potential in some in vitro assays (Ames-positive in certain conditions). Leaches from epoxy resins and 'BPA-free' packaging into supplement contents. Anti-androgenic and thyroid-disrupting activity demonstrated in cell-based assays.",
+      "mechanism_of_harm": "Compound-specific endocrine, genotoxicity and migration assertions require primary evidence for this bisphenol and the relevant preparation. BPA-only evidence is not sufficient to establish equivalence or supplement exposure.",
       "regulatory_status": {
         "US": "No specific FDA regulation for BPF. Not individually regulated.",
-        "EU": "Commission Regulation (EU) 2024/3190 includes BPF among bisphenols banned in food contact materials. BPF-specific migration limit under evaluation.",
+        "EU": "Regulation (EU) 2024/3190 addresses BPA and other bisphenols meeting specified harmonized hazardous classifications, with authorizations and transition provisions. A compound-specific prohibition requires its classification and intended use; this is not an interchangeable blanket ban on every bisphenol.",
         "Canada": "Under assessment as potential toxic substance under CEPA."
       },
       "population_warnings": [
@@ -18372,7 +18347,7 @@
         "Children — developing endocrine systems more vulnerable to estrogenic compounds",
         "People with hormone-sensitive conditions — breast cancer, endometriosis, PCOS"
       ],
-      "notes": "BPF is used in epoxy resins and as a BPA alternative. May be more genotoxic than BPS. Found as a packaging contaminant. Less studied than BPA/BPS but emerging evidence suggests comparable endocrine disruption with additional genotoxicity concerns.",
+      "notes": "A bisphenol analog used in some materials. The cited BPA assessment cannot by itself establish this analog’s receptor affinity, migration magnitude, genotoxicity or human clinical risk; those require compound-specific primary evidence.",
       "scientific_references": [
         "DOI: 10.2903/j.efsa.2023.6857 - EFSA 2023 BPA re-evaluation (TDI context)",
         "EFSA Journal 2023 — BPA re-evaluation: TDI reduced to 0.2 ng/kg bw/day (20,000-fold reduction)",
@@ -18519,7 +18494,7 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "safety_summary": "A BPA alternative found in some packaging. Shows endocrine-disrupting activity comparable to BPA and BPS — worth choosing products with glass or fully bisphenol-free containers.",
+      "safety_summary": "A bisphenol analog whose specific material, migration and toxicology require appraisal; BPA evidence does not alone establish identical risk.",
       "safety_summary_one_liner": "BPA alternative with endocrine-disruption concerns.",
       "functional_roles": []
     },
@@ -18537,7 +18512,7 @@
       "cui": "C0043369",
       "rxcui": "11377",
       "category": "sweetener_sugar_alcohol",
-      "mechanism_of_harm": "Sugar alcohol with dose-dependent osmotic laxative effect; ingestion above 20-30 g/day commonly causes bloating, gas, and diarrhea. A 2024 Cleveland Clinic study (PMID 38814334) found elevated circulating xylitol levels associated with increased platelet reactivity and major adverse cardiovascular events in a prospective cohort. Highly toxic to dogs at any dose (hepatic necrosis).",
+      "mechanism_of_harm": "Sugar alcohol with dose-dependent osmotic gastrointestinal effects. PMID 38842092 reports an observational association between circulating xylitol and cardiovascular events, laboratory platelet effects, and a ten-volunteer ingestion experiment. These findings do not establish clinical cardiovascular events caused by typical supplement doses. Xylitol can cause serious poisoning in dogs; keep products away from pets.",
       "regulatory_status": {
         "US": "FDA GRAS (21 CFR 172.395). Approved food additive. No established ADI; FDA advises labeling for laxative effect above 50 g/day.",
         "EU": "E967 approved. EFSA 2023 sweeteners re-evaluation programme ongoing. Current ADI: not specified (acceptable at current use levels)."
@@ -18545,12 +18520,12 @@
       "population_warnings": [
         "People with IBS or sensitive digestion — osmotic diarrhea at >20-30 g/day",
         "Children — more susceptible to GI effects from sugar alcohols at lower doses",
-        "People with cardiovascular risk factors — emerging 2024 data links elevated xylitol to platelet reactivity and MACE (PMID 38814334); caution advised pending confirmation",
+        "People with cardiovascular risk factors — emerging 2024 data links elevated xylitol to platelet reactivity and MACE (PMID 38842092); caution advised pending confirmation",
         "Dog owners — xylitol is acutely hepatotoxic to dogs; cross-contamination risk from supplement handling"
       ],
-      "notes": "A 5-carbon sugar alcohol widely used as a sweetener in supplements, gummies, and chewables. Well-established anticariogenic properties (dental health). GI side effects are dose-dependent and generally mild. A 2024 Cleveland Clinic study raised cardiovascular safety questions but regulatory agencies have not yet changed the GRAS determination. Severity set to moderate based on GI effects at supplement-relevant doses plus the emerging CV signal.",
+      "notes": "A sugar-alcohol sweetener used in supplements, gummies and chewables. Gastrointestinal effects depend on dose. A 2024 circulating-marker and experimental platelet study raised cardiovascular questions, without establishing an intake-specific clinical event threshold.",
       "scientific_references": [
-        "PMID: 38814334 — Witkowski M et al. Xylitol is prothrombotic and associated with cardiovascular risk. Eur Heart J. 2024."
+        "PMID: 38842092 — Witkowski M et al. Xylitol is prothrombotic and associated with cardiovascular risk. Eur Heart J. 2024."
       ],
       "last_updated": "2026-03-28",
       "match_rules": {
@@ -18728,15 +18703,15 @@
         "E432"
       ],
       "category": "emulsifier",
-      "mechanism_of_harm": "Non-ionic surfactant (polyoxyethylene sorbitan monolaurate / E432). Like other polysorbates, may disrupt gut epithelial barrier integrity at high doses (Chassaing et al., Nature 2015 PMID:25731862). Generally lower concern than Polysorbate 80 due to shorter fatty acid chain (lauric vs oleic). Used as an emulsifier/solubilizer in softgels and liquid supplements.",
+      "mechanism_of_harm": "Polysorbate emulsifier. PMID 25731162 studied CMC and polysorbate 80 in mice, not this individual polysorbate. Class extrapolation does not establish a direct human gut-barrier effect or comparative potency for this preparation.",
       "regulatory_status": {
-        "US": "GRAS. FDA approved as food additive under 21 CFR 172.840",
+        "US": "US permissions require the exact polysorbate and use; permissions for polysorbate 80 cannot be transferred to this substance.",
         "EU": "E432 approved with group ADI of 25 mg/kg bw/day for polysorbates (EFSA 2015 re-evaluation)"
       },
       "population_warnings": [
         "Individuals with IBD or compromised gut barrier — surfactant-induced epithelial disruption"
       ],
-      "notes": "Polyoxyethylene 20 sorbitan monolaurate. Non-ionic surfactant/emulsifier used in supplement softgels and liquids. Lower molecular weight than Polysorbate 80. GRAS status; FDA approved under 21 CFR 172.840. EU E432 with group ADI 25 mg/kg/day. Low severity — included for label transparency.",
+      "notes": "This polysorbate is distinct from polysorbate 80. EFSA assessed the polysorbate group, but individual clinical gut effects and comparisons require preparation-specific evidence.",
       "severity_level": "low",
       "penalty_points": -0.5,
       "entity_type": "ingredient",
@@ -18753,11 +18728,11 @@
       },
       "references_structured": [
         {
-          "type": "regulation",
-          "authority": "FDA",
-          "title": "21 CFR 172.840 - Polysorbate 20",
-          "citation": "21 CFR 172.840",
-          "url": "https://www.law.cornell.edu/cfr/text/21/172.840",
+          "type": "regulatory_action",
+          "authority": "EFSA",
+          "title": "EFSA 2015 re-evaluation of polysorbates E432–436",
+          "citation": "EFSA 2015 re-evaluation of polysorbates E432–436",
+          "url": "https://doi.org/10.2903/j.efsa.2015.4152",
           "published_date": null,
           "evidence_grade": "R",
           "supports_claims": []
@@ -18777,8 +18752,8 @@
         ]
       },
       "confidence": "medium",
-      "safety_summary": "A polysorbate-class emulsifier. May affect gut-lining integrity at higher intakes; overall concern is lower than P80 but worth noting.",
-      "safety_summary_one_liner": "Polysorbate emulsifier — lower-end gut signals.",
+      "safety_summary": "A polysorbate emulsifier; gut-effect concerns are extrapolated from other preparations and models.",
+      "safety_summary_one_liner": "Polysorbate emulsifier with uncertain individual gut effects.",
       "functional_roles": [
         "emulsifier",
         "surfactant"

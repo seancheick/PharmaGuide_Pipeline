@@ -43,6 +43,12 @@ committed outcome after a lost response without borrowing another attempt's resu
 | **Artifact freshness** | Proof that catalog, manifest, interactions, and upstream product outputs describe the same current state. |
 | **Pipeline preparation** | The aggregate source-readiness check owned by `preflight.py::run_preparation` before corpus regeneration. It records failures, blocked prerequisites, test dependency phases and freshness requirements; it does not grant clinical approval or publication readiness. |
 
+**Medication class exclusion:** an authored ingredient RxCUI excluded from a specific clinical class, owned by `drug_classes.json::classes[*].excluded_member_rxcuis` and exported through `drug_class_map.excluded_drug_rxcuis_json`. It prevents a broader RxClass fallback from undoing a verified classification correction. It does not clear the medicine's independent risks or disable fallback for unknown identities.
+
+**Confirmed medication context:** explicitly entered daily dose in mg, route and use context, stored locally on the existing medication stack row. It belongs to one selected medicine and is cleared when its identity changes. It never syncs to Supabase. Free-text dosage, names, unspecified routes and unconfirmed purpose do not establish it.
+
+**Medication exception:** an optional source-authored applicability condition in `medication_profile_gate_rules.json::medication_exceptions`. Conditions within one exception must all be satisfied; separate exceptions are alternatives. `medication_ingredient_rxcuis` extends the existing rule subject to explicitly named ingredients. Unknown or malformed inputs retain the warning. Sean approved these existing-owner contract extensions on October 11, 2026.
+
 ## Canonical stages
 
 | Stage | Authority | Input → output |

@@ -77,6 +77,14 @@ def test_b30_value_in_band(iqm, pid, fname, vmin, vmax, basis):
     """Each form's struct.value must sit in evidence band."""
     form = iqm[pid]['forms'].get(fname)
     assert form is not None, f'{pid}::{fname} missing'
+    reviewed_unknown = {'algae oil (dha)': ['41096614', 'noninferiority'],
+     'auricularia fruiting body extract': ['39968271', 'human open-label'],
+     'button mushroom fruiting body extract': ['22113068', 'salivary IgA']}
+    if fname in reviewed_unknown:
+        assert form['absorption_structured'] == dict(value=None, range_low=None, range_high=None, quality='unknown')
+        for source_limit in reviewed_unknown[fname]:
+            assert source_limit in form['notes']
+        return
     val = (form.get('absorption_structured') or {}).get('value')
     assert val is not None, f'{pid}::{fname} struct.value should be populated'
     assert vmin <= val <= vmax, (
@@ -120,13 +128,9 @@ def test_nucleic_acid_digestion_barrier_documented(iqm):
 
 
 def test_algae_oil_matches_omega3_TG_class(iqm):
-    """algae_oil DHA must match TG omega-3 class baseline (B9)."""
-    val = (iqm['algae_oil']['forms']['algae oil (dha)']
-           .get('absorption_structured') or {}).get('value')
-    fish_natural_tg = (iqm['fish_oil']['forms']['natural triglyceride']
-                       .get('absorption_structured') or {}).get('value')
-    assert val is not None and fish_natural_tg is not None
-    assert abs(val - fish_natural_tg) <= 0.05, (
-        f'algae_oil DHA ({val}) must match fish_oil natural TG ({fish_natural_tg}) '
-        f'within 0.05 — TG omega-3 class.'
-    )
+    # Source-qualified preparation/endpoints supersede inferred absolute-F hierarchy.
+    form = iqm['algae_oil']['forms']['algae oil (dha)']
+    assert form['absorption_structured'] == dict(value=None, range_low=None, range_high=None, quality='unknown')
+    assert '41096614' in form['notes']
+    assert 'noninferiority' in form['notes']
+    assert 'not a two-sided bioequivalence' in form['notes']

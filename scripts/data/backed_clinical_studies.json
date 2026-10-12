@@ -3,7 +3,7 @@
     "description": "Ingredients backed by clinical research and studies - Enhanced for Section C v3.4.0",
     "purpose": "evidence_scoring",
     "schema_version": "5.6.3",
-    "last_updated": "2026-10-07",
+    "last_updated": "2026-10-11",
     "total_entries": 210,
     "changelog": [
       "2026-10-05: Sean-approved four amount transfers. Descriptive research exposure is owned by Dose, with no new positive adequacy benchmark. Zinc uses discrete clusters, WKB retains preparation/reference uncertainty, D-mannose and DAA retain no affirmative credit; added content-verified PMID 25844073 and distinguished its negative 6 g/day result. Supersedes the four historical applicability amount floors.",
@@ -604,13 +604,12 @@
         "cognition ↑"
       ],
       "health_goals_supported": [
-        "Sleep Quality",
-        "Reduce Stress/Anxiety",
-        "Focus & Mental Clarity"
+        "Joint & Bone Health",
+        "Reduce Stress/Anxiety"
       ],
-      "notes": "Root-and-leaf ashwagandha extract with one clear Sensoril-labeled randomized PubMed trial in knee discomfort and additional composition-matched root-and-leaf stress data; earlier marketing language overstated the branded RCT count.",
+      "notes": "Root-and-leaf ashwagandha extract with one clear Sensoril-labeled randomized PubMed trial in knee discomfort and additional composition-matched root-and-leaf stress data; earlier marketing language overstated the branded RCT count. Cited knee trial randomized 60; stress trial enrolled 131 with 98 in final analysis. Unique aggregate enrollment and exact preparation overlap are unresolved.",
       "study_type": "rct_multiple",
-      "last_updated": "2026-03-06",
+      "last_updated": "2026-10-11",
       "notable_studies": "Tiwari et al. (2016, PMID 27647541) randomized adults with knee joint pain and explicitly used a Sensoril-characterized Withania extract. Broader root-and-leaf stress evidence includes the randomized trial indexed as PMID 38732539, but not every later study is explicitly Sensoril-labeled.",
       "references_structured": [
         {
@@ -675,13 +674,13 @@
         "unii": "V038D626IF"
       },
       "effect_direction": "positive_strong",
-      "primary_outcome": "Sleep Quality",
-      "total_enrollment": 120,
+      "primary_outcome": "Joint & Bone Health",
+      "total_enrollment": null,
       "registry_completed_trials_count": 9,
       "effect_direction_confidence": "high",
-      "effect_direction_rationale": "Retained positive_strong classification; study_type=rct_multiple; evidence_level=branded-rct; primary_outcome=Sleep Quality; published_tags=RCT; registry_completed_trials_count=9; total_enrollment=120; endpoint_tags=immune_support,stress_mood; notes/citations contain no automated downgrade signals.",
+      "effect_direction_rationale": "Cited knee trial randomized 60; stress trial enrolled 131 with 98 in final analysis. Unique aggregate enrollment and exact preparation overlap are unresolved.",
       "endpoint_relevance_tags": [
-        "immune_support",
+        "joint_pain",
         "stress_mood"
       ]
     },
@@ -706,12 +705,11 @@
         "joint pain ↓"
       ],
       "health_goals_supported": [
-        "Reduce Stress/Anxiety",
-        "Healthy Aging/Longevity"
+        "Joint & Bone Health"
       ],
-      "notes": "Curcumin-turmeric-oil formulation with explicit branded randomized evidence in knee osteoarthritis; broader mood and inflammatory support exists, but much of that literature is curcumin-level rather than uniquely BCM-95-specific.",
+      "notes": "Curcumin-turmeric-oil formulation with explicit branded randomized evidence in knee osteoarthritis; broader mood and inflammatory support exists, but much of that literature is curcumin-level rather than uniquely BCM-95-specific. Cited active-comparator studies report 139 randomized and 144 completers, respectively. Enrollment and completion are distinct; no unique aggregate is asserted. The diclofenac study was open-label and the paracetamol study assessed non-inferiority, not placebo superiority.",
       "study_type": "rct_multiple",
-      "last_updated": "2026-03-06",
+      "last_updated": "2026-10-11",
       "notable_studies": "Shep et al. (2019, PMID 30975196) compared BCM-95 against diclofenac in knee osteoarthritis and reported similar symptom improvement with fewer GI complaints. Singhal et al. (2021, PMID 33516238) also tested BCM-95 against paracetamol in knee osteoarthritis. Depression evidence exists for curcumin more broadly, but the clearest directly indexed BCM-95 anchors are musculoskeletal.",
       "references_structured": [
         {
@@ -788,11 +786,11 @@
         "unii": "IT942ZTH98"
       },
       "effect_direction": "positive_strong",
-      "primary_outcome": "Reduce Stress/Anxiety",
-      "total_enrollment": 80,
+      "primary_outcome": "Joint & Bone Health",
+      "total_enrollment": null,
       "registry_completed_trials_count": 4,
       "effect_direction_confidence": "medium",
-      "effect_direction_rationale": "Retained positive_strong classification; study_type=rct_multiple; evidence_level=branded-rct; primary_outcome=Reduce Stress/Anxiety; published_tags=RCT,brand; registry_completed_trials_count=4; total_enrollment=80; endpoint_tags=joint_pain; notes/citations contain no automated downgrade signals.",
+      "effect_direction_rationale": "Cited active-comparator studies report 139 randomized and 144 completers, respectively. Enrollment and completion are distinct; no unique aggregate is asserted. The diclofenac study was open-label and the paracetamol study assessed non-inferiority, not placebo superiority.",
       "endpoint_relevance_tags": [
         "joint_pain"
       ]
@@ -817,12 +815,12 @@
       ],
       "health_goals_supported": [
         "Focus & Mental Clarity",
-        "Healthy Aging/Longevity"
+        "Joint & Bone Health"
       ],
-      "notes": "Highly bioavailable curcumin formulation with explicit randomized evidence in knee osteoarthritis and age-associated memory endpoints.",
+      "notes": "Highly bioavailable curcumin formulation with explicit randomized evidence in knee osteoarthritis and age-associated memory endpoints. Cited studies enrolled 50 knee-OA patients, randomized 40 non-demented adults, and enrolled 50 mosaicplasty patients. Unique cohort overlap is unresolved; the mosaicplasty trial is not a memory-study follow-up and did not show between-group clinical symptom superiority.",
       "study_type": "rct_multiple",
-      "last_updated": "2026-03-06",
-      "notable_studies": "Nakagawa et al. (2014, PMID 25308211) randomized patients with knee osteoarthritis and found lower pain scores and reduced celecoxib dependence with Theracurmin. Small et al. (2018, PMID 29246725) reported memory benefits and PET biomarker changes in non-demented adults after 18 months of Theracurmin, with later follow-up also reported in PMID 35494290.",
+      "last_updated": "2026-10-11",
+      "notable_studies": "PMID 25308211 enrolled 50 knee-OA patients; PMID 29246725 randomized 40 non-demented adults for 18 months. PMID 35494290 independently enrolled 50 patients after knee mosaicplasty for 12 months; between-group clinical symptom differences were nonsignificant. It is not follow-up of the memory cohort.",
       "references_structured": [
         {
           "type": "pubmed",
@@ -929,12 +927,13 @@
       },
       "effect_direction": "positive_strong",
       "primary_outcome": "Focus & Mental Clarity",
-      "total_enrollment": 100,
+      "total_enrollment": null,
       "registry_completed_trials_count": 5,
       "effect_direction_confidence": "medium",
-      "effect_direction_rationale": "Retained positive_strong classification; study_type=rct_multiple; evidence_level=branded-rct; primary_outcome=Focus & Mental Clarity; published_tags=RCT; registry_completed_trials_count=5; total_enrollment=100; endpoint_tags=focus_memory; notes/citations contain no automated downgrade signals.",
+      "effect_direction_rationale": "Cited studies enrolled 50 knee-OA patients, randomized 40 non-demented adults, and enrolled 50 mosaicplasty patients. Unique cohort overlap is unresolved; the mosaicplasty trial is not a memory-study follow-up and did not show between-group clinical symptom superiority.",
       "endpoint_relevance_tags": [
-        "focus_memory"
+        "focus_memory",
+        "joint_pain"
       ]
     },
     {
@@ -1008,13 +1007,11 @@
         "inflammation ↓",
         "joint health ↑"
       ],
-      "health_goals_supported": [
-        "Healthy Aging/Longevity"
-      ],
-      "notes": "Retail product using BCM-95 CurcuGreen; the usable evidence is the BCM-95 formulation literature, not PubMed-indexed trials on the finished Life Extension product.",
+      "health_goals_supported": [],
+      "notes": "Retail product using BCM-95 CurcuGreen; the usable evidence is the BCM-95 formulation literature, not PubMed-indexed trials on the finished Life Extension product. No verified unique aggregate enrollment for the finished retail product. Formulation trials and the general curcumin review must not be described as retail-product trials. Finished Life Extension product attribution is held: cited studies assess a general review or BCM-95 rather than this named product. Historical sources are retained without branded evidence credit.",
       "study_type": "rct_multiple",
-      "last_updated": "2026-03-06",
-      "notable_studies": "The supporting formulation evidence comes from BCM-95 and CurcuGreen pharmacokinetic or clinical studies such as Antony et al. (2008, PMID 19594223) and later BCM-95 osteoarthritis trials (PMID 30975196; PMID 33516238). No PubMed-indexed trials were identified for the finished Life Extension retail product itself.",
+      "last_updated": "2026-10-11",
+      "notable_studies": "PMID 19594223 is a general curcumin review, not an Antony BCM-95 pharmacokinetic trial. PMID 30975196 and 33516238 concern BCM-95 formulation active-comparator OA trials, not the finished Life Extension product.",
       "references_structured": [
         {
           "type": "pubmed",
@@ -1124,13 +1121,12 @@
         "unii": "IT942ZTH98"
       },
       "effect_direction": "positive_strong",
-      "primary_outcome": "Healthy Aging/Longevity",
-      "total_enrollment": 40,
+      "primary_outcome": "Joint & Bone Health",
+      "total_enrollment": null,
       "effect_direction_confidence": "medium",
-      "effect_direction_rationale": "Retained positive_strong classification; study_type=rct_multiple; evidence_level=branded-rct; primary_outcome=Healthy Aging/Longevity; published_tags=ingredient,RCT; total_enrollment=40; endpoint_tags=healthy_aging; notes/citations contain no automated downgrade signals.",
-      "endpoint_relevance_tags": [
-        "healthy_aging"
-      ]
+      "effect_direction_rationale": "No verified unique aggregate enrollment for the finished retail product. Formulation trials and the general curcumin review must not be described as retail-product trials.",
+      "endpoint_relevance_tags": [],
+      "scoring_eligible": false
     },
     {
       "id": "BRAND_PYCNOGENOL",
@@ -1154,13 +1150,11 @@
         "blood pressure ↓"
       ],
       "health_goals_supported": [
-        "Cardiovascular/Heart Health",
-        "Focus & Mental Clarity",
-        "Healthy Aging/Longevity"
+        "Joint & Bone Health"
       ],
-      "notes": "Branded pine-bark extract with explicit randomized evidence in osteoarthritis and supportive meta-analytic evidence for cardiometabolic endpoints.",
+      "notes": "Branded pine-bark extract with explicit randomized evidence in osteoarthritis and supportive meta-analytic evidence for cardiometabolic endpoints. The cited OA trial randomized 156; meta-analyses report 922 and 1594 participants. Meta-analysis and individual-trial populations may overlap; no unique aggregate is asserted.",
       "study_type": "rct_multiple",
-      "last_updated": "2026-03-06",
+      "last_updated": "2026-10-11",
       "notable_studies": "Belcaro et al. (2008, PMID 18386255) randomized osteoarthritis trial found reduced symptoms and analgesic use with Pycnogenol. Cardiometabolic support is summarized in later meta-analyses including Pourmasoumi et al. (2020, PMID 31637782) and Malekahmadi et al. (2019, PMID 31585179).",
       "references_structured": [
         {
@@ -1271,17 +1265,13 @@
         "unii": "50JZ5Z98QY"
       },
       "effect_direction": "positive_strong",
-      "primary_outcome": "Cardiovascular/Heart Health",
-      "total_enrollment": 209,
+      "primary_outcome": "Joint & Bone Health",
+      "total_enrollment": null,
       "registry_completed_trials_count": 41,
       "effect_direction_confidence": "high",
-      "effect_direction_rationale": "Retained positive_strong classification; study_type=rct_multiple; evidence_level=branded-rct; primary_outcome=Cardiovascular/Heart Health; published_tags=RCT,meta-analysis; registry_completed_trials_count=41; total_enrollment=209; endpoint_tags=immune_support,stress_mood,sleep,glycemic_control,muscle_recovery; notes/citations contain no automated downgrade signals.",
+      "effect_direction_rationale": "The cited OA trial randomized 156; meta-analyses report 922 and 1594 participants. Meta-analysis and individual-trial populations may overlap; no unique aggregate is asserted.",
       "endpoint_relevance_tags": [
-        "immune_support",
-        "stress_mood",
-        "sleep",
-        "glycemic_control",
-        "muscle_recovery"
+        "joint_pain"
       ]
     },
     {
@@ -1303,12 +1293,11 @@
         "IBS ↓"
       ],
       "health_goals_supported": [
-        "Digestive Health",
-        "Immune Support"
+        "Digestive Health"
       ],
-      "notes": "Evidence is strongest for the CNCM I-745 yeast strain in antibiotic-associated and acute infectious diarrhea; brand-level claims largely follow that strain literature.",
+      "notes": "Evidence is strongest for the CNCM I-745 yeast strain in antibiotic-associated and acute infectious diarrhea; brand-level claims largely follow that strain literature. The cited pediatric acute-diarrhea study reports 363 participants and a single-blind design. The microbiome review includes mixed human and animal evidence; it does not itself establish multiple product RCTs across adult indications.",
       "study_type": "rct_multiple",
-      "last_updated": "2026-03-06",
+      "last_updated": "2026-10-11",
       "notable_studies": "The strain evidence includes a broad review of Saccharomyces boulardii CNCM I-745 (PMID 26316791) and pediatric acute-diarrhea RCT evidence such as the multicenter trial reported in PMID 25653151. Florastor maps to this strain evidence rather than to a distinct product-specific RCT program.",
       "references_structured": [
         {
@@ -1369,10 +1358,10 @@
       "external_ids": {},
       "effect_direction": "positive_strong",
       "primary_outcome": "Digestive Health",
-      "total_enrollment": 362,
+      "total_enrollment": null,
       "registry_completed_trials_count": 1,
       "effect_direction_confidence": "high",
-      "effect_direction_rationale": "Retained positive_strong classification; study_type=rct_multiple; evidence_level=branded-rct; primary_outcome=Digestive Health; published_tags=RCT,meta-analysis; registry_completed_trials_count=1; total_enrollment=362; endpoint_tags=digestive_health; notes/citations contain no automated downgrade signals.",
+      "effect_direction_rationale": "The cited pediatric acute-diarrhea study reports 363 participants and a single-blind design. The microbiome review includes mixed human and animal evidence; it does not itself establish multiple product RCTs across adult indications.",
       "endpoint_relevance_tags": [
         "digestive_health"
       ]
@@ -1404,14 +1393,12 @@
         "oxidative stress ↓"
       ],
       "health_goals_supported": [
-        "Healthy Aging/Longevity",
-        "Focus & Mental Clarity",
-        "Increase Energy"
+        "Skin, Hair & Nails"
       ],
-      "notes": "Natural astaxanthin from H. pluvialis with explicit human evidence for skin-aging endpoints; broader exercise and eye-strain claims are supported less directly.",
+      "notes": "Natural astaxanthin from H. pluvialis with explicit human evidence for skin-aging endpoints; broader exercise and eye-strain claims are supported less directly. PMID 22428137 reports 30 women receiving combined oral/topical astaxanthin without a control and 36 men in an oral placebo-controlled study. PMID 31221944 is BioCell cartilage, not astaxanthin, and is excluded from this record. Unique brand-specific aggregate and broader eye/exercise outcomes remain unestablished.",
       "study_type": "rct_multiple",
-      "last_updated": "2026-03-06",
-      "notable_studies": "Tominaga et al. (2012, PMID 22428137) reported improved wrinkle and elasticity outcomes with oral/topical astaxanthin from H. pluvialis. AstaReal materials cite later branded skin RCTs including PubMed 31221944, but the strongest directly indexed human anchor remains PMID 22428137.",
+      "last_updated": "2026-10-11",
+      "notable_studies": "Tominaga et al. (2012, PMID 22428137) reported selected skin endpoints: an uncontrolled oral-plus-topical study in 30 women and a placebo-controlled oral study in 36 men. Exact AstaReal preparation and broader eye-strain or exercise outcomes require separate source verification.",
       "references_structured": [
         {
           "type": "pubmed",
@@ -1445,54 +1432,19 @@
           "retracted": false,
           "supports_claims": [],
           "verification_source": "pubmed_eutils"
-        },
-        {
-          "type": "pubmed",
-          "authority": "NCBI PubMed",
-          "pmid": "31221944",
-          "doi": null,
-          "title": "Novel Hydrolyzed Chicken Sternal Cartilage Extract Improves Facial Epidermis and Connective Tissue in Healthy Adult Females: A Randomized, Double-Blind, Placebo-Controlled Trial.",
-          "citation": "Alternative therapies in health and medicine (2019-09-01)",
-          "url": "https://pubmed.ncbi.nlm.nih.gov/31221944/",
-          "published_date": "2019-09-01",
-          "publication_types": [
-            "Journal Article",
-            "Randomized Controlled Trial"
-          ],
-          "mesh_terms": [
-            "Adult",
-            "Animals",
-            "Chickens",
-            "Collagen Type II",
-            "Costal Cartilage",
-            "Double-Blind Method",
-            "Epidermis",
-            "Face",
-            "Female",
-            "Humans",
-            "Middle Aged",
-            "Skin Aging",
-            "Sternum",
-            "Treatment Outcome"
-          ],
-          "supplementary_concepts": [],
-          "evidence_grade": "rct",
-          "retracted": false,
-          "supports_claims": [],
-          "verification_source": "pubmed_eutils"
         }
       ],
       "external_ids": {
         "unii": "8XPW32PR7I"
       },
       "effect_direction": "positive_strong",
-      "primary_outcome": "Healthy Aging/Longevity",
-      "total_enrollment": 1500,
+      "primary_outcome": "Skin, Hair & Nails",
+      "total_enrollment": null,
       "registry_completed_trials_count": 12,
       "effect_direction_confidence": "medium",
-      "effect_direction_rationale": "Retained positive_strong classification; study_type=rct_multiple; evidence_level=branded-rct; primary_outcome=Healthy Aging/Longevity; published_tags=RCT,human trial; registry_completed_trials_count=1; total_enrollment=41; endpoint_tags=muscle_recovery; notes/citations contain no automated downgrade signals.",
+      "effect_direction_rationale": "PMID 22428137 reports 30 women receiving combined oral/topical astaxanthin without a control and 36 men in an oral placebo-controlled study. PMID 31221944 is BioCell cartilage, not astaxanthin, and is excluded from this record. Unique brand-specific aggregate and broader eye/exercise outcomes remain unestablished.",
       "endpoint_relevance_tags": [
-        "muscle_recovery"
+        "skin_health"
       ]
     },
     {
@@ -1681,13 +1633,10 @@
         "bioavailability ↑",
         "immune function ↑"
       ],
-      "health_goals_supported": [
-        "Immune Support",
-        "Healthy Aging/Longevity"
-      ],
-      "notes": "Buffered vitamin C formulation with limited randomized evidence for higher leukocyte vitamin C retention and modest cold-prevention effects; clinical superiority over plain ascorbic acid remains uncertain.",
+      "health_goals_supported": [],
+      "notes": "Buffered vitamin C formulation with limited randomized evidence for higher leukocyte vitamin C retention and modest cold-prevention effects; clinical superiority over plain ascorbic acid remains uncertain. Cited studies report 15 participants in an acute crossover and 168 randomized in a cold trial. Unique aggregate enrollment is not asserted. Leukocyte retention is a biomarker with unestablished clinical relevance; comparison with placebo does not establish superiority over plain vitamin C.",
       "study_type": "rct_multiple",
-      "last_updated": "2026-03-06",
+      "last_updated": "2026-10-11",
       "notable_studies": "Moyad et al. (2008, PMID 18836692) crossover RCT reported higher leukocyte vitamin C concentrations at 24 hours versus plain ascorbic acid. Van Straten et al. (2002, PMID 12201356) randomized winter trial reported fewer colds and shorter severe-symptom duration, but the overall evidence for meaningful clinical superiority remains limited.",
       "references_structured": [
         {
@@ -1763,13 +1712,11 @@
       },
       "effect_direction": "mixed",
       "primary_outcome": "Immune Support",
-      "total_enrollment": 354,
+      "total_enrollment": null,
       "registry_completed_trials_count": 37,
       "effect_direction_confidence": "medium",
-      "effect_direction_rationale": "Retained mixed classification; study_type=rct_multiple; evidence_level=product-human; primary_outcome=Immune Support; published_tags=RCT,brand; registry_completed_trials_count=37; total_enrollment=354; endpoint_tags=cardiovascular; notes/citations include mixed-evidence language.",
-      "endpoint_relevance_tags": [
-        "cardiovascular"
-      ]
+      "effect_direction_rationale": "Cited studies report 15 participants in an acute crossover and 168 randomized in a cold trial. Unique aggregate enrollment is not asserted. Leukocyte retention is a biomarker with unestablished clinical relevance; comparison with placebo does not establish superiority over plain vitamin C.",
+      "endpoint_relevance_tags": []
     },
     {
       "id": "BRAND_ZYLOFRESH",
@@ -1849,12 +1796,11 @@
         "cognition ↑"
       ],
       "health_goals_supported": [
-        "Increase Energy",
-        "Focus & Mental Clarity"
+        "Muscle Growth & Recovery"
       ],
-      "notes": "High-purity creatine monohydrate source with published trials explicitly using Creapure in methods, but most efficacy conclusions still reflect the broader creatine-monohydrate literature rather than unique Creapure superiority.",
+      "notes": "High-purity creatine monohydrate source with published trials explicitly using Creapure in methods, but most efficacy conclusions still reflect the broader creatine-monohydrate literature rather than unique Creapure superiority. Cited comparator studies randomized 36 and used 10 crossover participants. Their preparation-specific use does not establish unique branded superiority over other verified creatine monohydrate.",
       "study_type": "rct_single",
-      "last_updated": "2026-03-23",
+      "last_updated": "2026-10-11",
       "notable_studies": "Jagim et al. (2012, PMID 22971354) used Creapure creatine monohydrate as the comparator in a double-blind resistance-training trial and confirmed expected increases in muscle creatine and training adaptation with standard creatine monohydrate dosing. Oliver et al. (2014, PMID 24568653) also used Creapure in a crossover retention study. These support Creapure as a validated source material, while the wider ergogenic evidence remains generic creatine literature.",
       "references_structured": [
         {
@@ -1900,13 +1846,12 @@
         "unii": "9603LN7R2Q"
       },
       "effect_direction": "positive_strong",
-      "primary_outcome": "Increase Energy",
-      "total_enrollment": 68,
+      "primary_outcome": "Muscle Growth & Recovery",
+      "total_enrollment": null,
       "registry_completed_trials_count": 5,
       "effect_direction_confidence": "medium",
-      "effect_direction_rationale": "Retained positive_strong classification; study_type=rct_single; evidence_level=branded-rct; primary_outcome=Increase Energy; published_tags=controlled trial,ingredient-form; registry_completed_trials_count=5; total_enrollment=68; endpoint_tags=digestive_health,muscle_recovery; notes/citations contain no automated downgrade signals.",
+      "effect_direction_rationale": "Cited comparator studies randomized 36 and used 10 crossover participants. Their preparation-specific use does not establish unique branded superiority over other verified creatine monohydrate.",
       "endpoint_relevance_tags": [
-        "digestive_health",
         "muscle_recovery"
       ]
     },
@@ -1931,14 +1876,11 @@
         "folate status ↑",
         "homocysteine ↓"
       ],
-      "health_goals_supported": [
-        "Cardiovascular/Heart Health",
-        "Healthy Aging/Longevity"
-      ],
-      "notes": "Quatrefolic is the glucosamine salt of 5-MTHF with explicit EFSA-reviewed human bioavailability evidence. Most support is PK and biomarker based rather than disease-endpoint RCTs.",
+      "health_goals_supported": [],
+      "notes": "Quatrefolic is the glucosamine salt of 5-MTHF with explicit EFSA-reviewed human bioavailability evidence. Most support is PK and biomarker based rather than disease-endpoint RCTs. PMID 23698160 randomized 149 and is authored by Zappacosta, not Venn. The EFSA DFE opinion is not a therapeutic efficacy RCT; generic 5-MTHF evidence does not independently verify the exact glucosamine salt in every trial.",
       "study_type": "rct_multiple",
-      "last_updated": "2026-03-06",
-      "notable_studies": "EFSA reviewed human intervention and crossover data for (6S)-5-MTHF glucosamine salt in its 2022 opinion (PMID 36034319) and earlier 2013 safety/bioavailability opinion. Generic 5-MTHF biomarker evidence also includes Venn et al. (2013, PMID 23698160), supporting homocysteine lowering and folate-status improvement.",
+      "last_updated": "2026-10-11",
+      "notable_studies": "EFSA PMID 36034319 evaluates dietary folate equivalents for specified 5-MTHF salts, not therapeutic efficacy. Zappacosta et al. (2013, PMID 23698160) randomized 149 adults with moderate hyperhomocysteinemia to diet, 5-MTHF, folic acid or placebo; exact Quatrefolic preparation cannot be inferred from a generic 5-MTHF label.",
       "references_structured": [
         {
           "type": "pubmed",
@@ -2004,13 +1946,11 @@
       },
       "effect_direction": "positive_strong",
       "primary_outcome": "Cardiovascular/Heart Health",
-      "total_enrollment": 100,
+      "total_enrollment": null,
       "registry_completed_trials_count": 1,
       "effect_direction_confidence": "medium",
-      "effect_direction_rationale": "Retained positive_strong classification; study_type=rct_multiple; evidence_level=branded-rct; primary_outcome=Cardiovascular/Heart Health; published_tags=RCT; registry_completed_trials_count=1; total_enrollment=100; endpoint_tags=stress_mood; notes/citations contain no automated downgrade signals.",
-      "endpoint_relevance_tags": [
-        "stress_mood"
-      ]
+      "effect_direction_rationale": "PMID 23698160 randomized 149 and is authored by Zappacosta, not Venn. The EFSA DFE opinion is not a therapeutic efficacy RCT; generic 5-MTHF evidence does not independently verify the exact glucosamine salt in every trial.",
+      "endpoint_relevance_tags": []
     },
     {
       "id": "BRAND_CIRCADIN",
@@ -2033,9 +1973,9 @@
       "health_goals_supported": [
         "Sleep Quality"
       ],
-      "notes": "European-approved 2 mg prolonged-release melatonin with explicit randomized evidence for sleep quality and low withdrawal risk in older adults.",
+      "notes": "European-approved 2 mg prolonged-release melatonin with explicit randomized evidence for sleep quality and low withdrawal risk in older adults. Cited trials report 170 participants, 354 admitted to a trial, and 930 enrolled with 791 entering an active phase. These denominators and potential report overlap are not summed. Findings concern prolonged-release 2 mg and age-specific insomnia populations, not all melatonin forms or ages.",
       "study_type": "rct_multiple",
-      "last_updated": "2026-03-06",
+      "last_updated": "2026-10-11",
       "notable_studies": "Lemoine et al. (2007, PMID 18036082) and Wade et al. (2007, PMID 17875243) randomized trials found improved sleep quality and morning alertness with Circadin 2 mg in adults aged 55 and older. Wade et al. (2011, PMID 21091391) reported maintained benefit over 6 months with no rebound or withdrawal signal.",
       "references_structured": [
         {
@@ -2154,13 +2094,11 @@
       },
       "effect_direction": "positive_strong",
       "primary_outcome": "Sleep Quality",
-      "total_enrollment": 170,
+      "total_enrollment": null,
       "registry_completed_trials_count": 16,
       "effect_direction_confidence": "high",
-      "effect_direction_rationale": "Retained positive_strong classification; study_type=rct_multiple; evidence_level=branded-rct; primary_outcome=Sleep Quality; published_tags=RCT,meta-analysis; registry_completed_trials_count=16; total_enrollment=170; endpoint_tags=joint_pain,stress_mood,sleep; notes/citations contain no automated downgrade signals.",
+      "effect_direction_rationale": "Cited trials report 170 participants, 354 admitted to a trial, and 930 enrolled with 791 entering an active phase. These denominators and potential report overlap are not summed. Findings concern prolonged-release 2 mg and age-specific insomnia populations, not all melatonin forms or ages.",
       "endpoint_relevance_tags": [
-        "joint_pain",
-        "stress_mood",
         "sleep"
       ]
     },
@@ -2294,10 +2232,10 @@
       "health_goals_supported": [
         "Muscle Growth & Recovery"
       ],
-      "notes": "Two small double-blind crossover trials evaluated 2 g/day L-carnitine L-tartrate for post-exercise recovery markers (10 resistance-trained men and 18 healthy middle-aged adults). They support a cautious recovery-biomarker signal, not broad energy, performance, cardiovascular, or muscle-growth efficacy.",
+      "notes": "Two small double-blind crossover trials evaluated 2 g/day active L-carnitine delivered as L-tartrate for post-exercise recovery markers (10 resistance-trained men and 18 healthy middle-aged adults). They support a cautious recovery-biomarker signal, not broad energy, performance, cardiovascular, or muscle-growth efficacy. Both cited studies administered 2 g/day of active L-carnitine delivered as L-carnitine L-tartrate, not 2 g of tartrate salt. The 10- and 18-participant crossover studies emphasize recovery biomarkers rather than durable performance outcomes.",
       "study_type": "rct_multiple",
-      "last_updated": "2026-08-06",
-      "notable_studies": "Volek et al. (2002, PMID 11788381) used a balanced crossover design in 10 resistance-trained men after 3 weeks of 2 g/day L-carnitine L-tartrate. Ho et al. (2010, PMID 20045157) explicitly used Carnipure tartrate in a double-blind crossover study of 18 healthy middle-aged adults after 3 weeks and 3 days of supplementation. Both emphasized biochemical or tissue-disruption recovery markers rather than direct durable performance outcomes.",
+      "last_updated": "2026-10-11",
+      "notable_studies": "PMID 11788381 studied 10 resistance-trained men and PMID 20045157 studied 18 middle-aged adults in crossover protocols. Both provided 2 g/day active L-carnitine as tartrate, with recovery biomarker endpoints rather than proven durable performance improvement.",
       "min_clinical_dose": 2000,
       "max_studied_clinical_dose": 2000,
       "dose_unit": "mg",
@@ -2390,7 +2328,7 @@
       "primary_outcome": "Muscle Growth & Recovery",
       "total_enrollment": 28,
       "effect_direction_confidence": "high",
-      "effect_direction_rationale": "Positive_weak is a high-confidence characterization of two small crossover trials with favorable post-exercise recovery biomarkers. PubMed E-utilities verified both cited records and their combined enrollment (10 plus 18) on 2026-08-06. The evidence does not establish broad energy, heart-health, muscle-growth, or durable exercise-performance benefit.",
+      "effect_direction_rationale": "Both cited studies administered 2 g/day of active L-carnitine delivered as L-carnitine L-tartrate, not 2 g of tartrate salt. The 10- and 18-participant crossover studies emphasize recovery biomarkers rather than durable performance outcomes.",
       "endpoint_relevance_tags": [
         "muscle_recovery"
       ]
@@ -2571,24 +2509,17 @@
         "organic kelp"
       ],
       "category": "hormonal_endocrine",
-      "evidence_level": "branded-rct",
+      "evidence_level": "reference",
       "published_studies": [
-        "brand",
-        "RCT"
+        "reference"
       ],
-      "score_contribution": "tier_1",
-      "key_endpoints": [
-        "thyroid function ↑",
-        "iodine status ↑"
-      ],
-      "health_goals_supported": [
-        "Increase Energy",
-        "Weight Management"
-      ],
-      "notes": "No proprietary SeaKelp product trials were identified; the usable evidence is for kelp-derived iodine supplementation as an ingredient.",
-      "study_type": "rct_single",
-      "last_updated": "2026-03-23",
-      "notable_studies": "Clark et al. (2003, PMID 14583417) remains the clearest randomized human kelp-supplementation trial, showing dose-dependent urinary iodine increases and higher TSH in euthyroid adults. No proprietary SeaKelp-specific multi-RCT stack was identified, so the evidence should be framed as a single kelp-supplement RCT plus broader iodine physiology.",
+      "score_contribution": null,
+      "key_endpoints": [],
+      "health_goals_supported": [],
+      "notes": "No proprietary SeaKelp product trials were identified; the usable evidence is for kelp-derived iodine supplementation as an ingredient. PMID 14583417 randomized 36 euthyroid adults. Higher TSH and urinary iodine are physiological responses, not established improved energy, weight loss or beneficial thyroid function. The named SeaKelp preparation is not established; this record is reference-only pending appropriate clinical applicability review.",
+      "study_type": "reference",
+      "last_updated": "2026-10-11",
+      "notable_studies": "PMID 14583417 randomized 36 euthyroid adults. Higher TSH and urinary iodine are physiological responses, not established improved energy, weight loss or beneficial thyroid function. The named SeaKelp preparation is not established; this record is reference-only pending appropriate clinical applicability review.",
       "references_structured": [
         {
           "type": "pubmed",
@@ -2634,14 +2565,13 @@
       "external_ids": {
         "unii": "9679TC07X4"
       },
-      "effect_direction": "positive_strong",
-      "primary_outcome": "Increase Energy",
-      "total_enrollment": 40,
-      "effect_direction_confidence": "medium",
-      "effect_direction_rationale": "Retained positive_strong classification; study_type=rct_single; evidence_level=branded-rct; primary_outcome=Increase Energy; published_tags=brand,RCT; total_enrollment=40; notes/citations contain no automated downgrade signals.",
-      "endpoint_relevance_tags": [
-        "energy_metabolism"
-      ]
+      "effect_direction": "mixed",
+      "primary_outcome": "",
+      "total_enrollment": 36,
+      "effect_direction_confidence": "low",
+      "effect_direction_rationale": "PMID 14583417 randomized 36 euthyroid adults. Higher TSH and urinary iodine are physiological responses, not established improved energy, weight loss or beneficial thyroid function. The named SeaKelp preparation is not established; this record is reference-only pending appropriate clinical applicability review.",
+      "endpoint_relevance_tags": [],
+      "scoring_eligible": false
     },
     {
       "id": "INGR_PHOSPHATIDYLSERINE",
@@ -2662,13 +2592,11 @@
         "exercise recovery ↑"
       ],
       "health_goals_supported": [
-        "Focus & Mental Clarity",
-        "Reduce Stress/Anxiety",
-        "Increase Energy"
+        "Focus & Mental Clarity"
       ],
-      "notes": "Human evidence supports phosphatidylserine as an ingredient, but the cited trials are on soy-derived PS products such as Sharp-PS and Soy-PS rather than on a clearly validated SerinAid-specific trial set.",
+      "notes": "Human evidence supports phosphatidylserine as an ingredient, but the cited trials are on soy-derived PS products such as Sharp-PS and Soy-PS rather than on a clearly validated SerinAid-specific trial set. Cited trials randomized 157 to PS-DHA and 78 to soybean-derived PS. The preparations differ; the soybean trial had no overall cognitive-score separation and baseline-defined analyses must remain qualified. No unique aggregate is asserted.",
       "study_type": "rct_multiple",
-      "last_updated": "2026-09-05",
+      "last_updated": "2026-10-11",
       "notable_studies": "Vakhapova et al. (2010, PMID 20523044) placebo-controlled trial found PS-DHA improved memory measures in non-demented older adults with memory complaints. Kato-Kataoka et al. (2010, PMID 21103034) reported benefits in lower-baseline-memory subgroups taking soy-derived phosphatidylserine. The evidence is therefore ingredient-level rather than clearly SerinAid-brand-specific; the record was reclassified from a branded entry to ingredient-human on 2026-09-05 because neither cited trial studied SerinAid (PS-DHA and soybean-derived PS respectively).",
       "references_structured": [
         {
@@ -2729,14 +2657,14 @@
           "verification_source": "pubmed_eutils"
         }
       ],
-      "effect_direction": "positive_strong",
+      "effect_direction": "mixed",
       "primary_outcome": "Focus & Mental Clarity",
-      "total_enrollment": 96,
+      "total_enrollment": null,
       "registry_completed_trials_count": 1,
       "effect_direction_confidence": "medium",
-      "effect_direction_rationale": "Retained positive_strong classification; study_type=rct_multiple; evidence_level=branded-rct; primary_outcome=Focus & Mental Clarity; published_tags=RCT; registry_completed_trials_count=1; total_enrollment=96; endpoint_tags=stress_mood; notes/citations contain no automated downgrade signals.",
+      "effect_direction_rationale": "Cited trials randomized 157 to PS-DHA and 78 to soybean-derived PS. The preparations differ; the soybean trial had no overall cognitive-score separation and baseline-defined analyses must remain qualified. No unique aggregate is asserted.",
       "endpoint_relevance_tags": [
-        "stress_mood"
+        "focus_memory"
       ]
     },
     {
@@ -2757,14 +2685,11 @@
         "liver function ↑",
         "hepatoprotection ↑"
       ],
-      "health_goals_supported": [
-        "Healthy Aging/Longevity",
-        "Digestive Health"
-      ],
-      "notes": "No MediHerb-brand-specific randomized trials were identified in PubMed; the usable human evidence is for silymarin as an ingredient, and results are mixed across liver conditions.",
+      "health_goals_supported": [],
+      "notes": "No MediHerb-brand-specific randomized trials were identified in PubMed; the usable human evidence is for silymarin as an ingredient, and results are mixed across liver conditions. Cited HCV and NASH trials randomized 154 and 99. The HCV primary ALT endpoint and NASH primary NAS endpoint were null; secondary fibrosis signals require confirmation. The studies are ingredient-level and do not establish MediHerb-specific efficacy.",
       "study_type": "rct_multiple",
-      "last_updated": "2026-03-06",
-      "notable_studies": "Fried et al. (2012, PMID 22797645) multi-center RCT found high-dose silymarin did not improve ALT levels in chronic hepatitis C. Wah Kheong et al. (2017, PMID 28419855) randomized NASH patients to silymarin and reported some histologic improvement signals. This remains ingredient-level rather than MediHerb-brand-specific evidence.",
+      "last_updated": "2026-10-11",
+      "notable_studies": "PMID 22797645 found null primary ALT efficacy in154HCV patients. PMID 28419855 randomized99NASH patients; the primary NAS endpoint was null, with secondary fibrosis signals requiring confirmation. Neither establishes MediHerb-specific efficacy.",
       "references_structured": [
         {
           "type": "pubmed",
@@ -2841,13 +2766,11 @@
         }
       ],
       "effect_direction": "mixed",
-      "primary_outcome": "Healthy Aging/Longevity",
-      "total_enrollment": 80,
+      "primary_outcome": "Digestive Health",
+      "total_enrollment": null,
       "effect_direction_confidence": "medium",
-      "effect_direction_rationale": "Retained mixed classification; study_type=rct_multiple; evidence_level=branded-rct; primary_outcome=Healthy Aging/Longevity; published_tags=brand,RCT; total_enrollment=80; endpoint_tags=healthy_aging; notes/citations include mixed-evidence language.",
-      "endpoint_relevance_tags": [
-        "healthy_aging"
-      ]
+      "effect_direction_rationale": "Cited HCV and NASH trials randomized 154 and 99. The HCV primary ALT endpoint and NASH primary NAS endpoint were null; secondary fibrosis signals require confirmation. The studies are ingredient-level and do not establish MediHerb-specific efficacy.",
+      "endpoint_relevance_tags": []
     },
     {
       "id": "BRAND_MITOQ",
@@ -2866,14 +2789,10 @@
         "vascular function ↑",
         "cellular stress ↓"
       ],
-      "health_goals_supported": [
-        "Cardiovascular/Heart Health",
-        "Healthy Aging/Longevity",
-        "Increase Energy"
-      ],
-      "notes": "Unique mitochondrial-targeted antioxidant. Randomized human evidence supports vascular-function effects in older adults, with explicit PubMed evidence.",
+      "health_goals_supported": [],
+      "notes": "Unique mitochondrial-targeted antioxidant. Randomized human evidence supports vascular-function effects in older adults, with explicit PubMed evidence. The retained trial studied 20 healthy older participants in a crossover at 20 mg/day for six weeks. FMD is a vascular surrogate; aortic-stiffness benefit was in an 11-person elevated-baseline subgroup. Disease prevention was not demonstrated.",
       "study_type": "rct_single",
-      "last_updated": "2026-03-23",
+      "last_updated": "2026-10-11",
       "notable_studies": "Rossman et al. (2018, PMID 29661838) remains the clearest branded human trial, showing improved brachial flow-mediated dilation after 6 weeks of MitoQ in older adults. Additional follow-up work exists, but the direct PubMed-indexed product evidence is still closer to one strong RCT than to a broad multi-RCT platform.",
       "references_structured": [
         {
@@ -2923,14 +2842,12 @@
       },
       "effect_direction": "positive_strong",
       "primary_outcome": "Cardiovascular/Heart Health",
-      "total_enrollment": 128,
+      "total_enrollment": 20,
       "registry_completed_trials_count": 13,
       "effect_direction_confidence": "medium",
-      "effect_direction_rationale": "Retained positive_strong classification; study_type=rct_single; evidence_level=product-human; primary_outcome=Cardiovascular/Heart Health; published_tags=RCT; registry_completed_trials_count=13; total_enrollment=128; endpoint_tags=stress_mood,glycemic_control,muscle_recovery; notes/citations contain no automated downgrade signals.",
+      "effect_direction_rationale": "The retained trial studied 20 healthy older participants in a crossover at 20 mg/day for six weeks. FMD is a vascular surrogate; aortic-stiffness benefit was in an 11-person elevated-baseline subgroup. Disease prevention was not demonstrated.",
       "endpoint_relevance_tags": [
-        "stress_mood",
-        "glycemic_control",
-        "muscle_recovery"
+        "cardiovascular"
       ]
     },
     {
@@ -2956,12 +2873,11 @@
         "neuroprotection ↑"
       ],
       "health_goals_supported": [
-        "Focus & Mental Clarity",
-        "Healthy Aging/Longevity"
+        "Focus & Mental Clarity"
       ],
-      "notes": "Branded citicoline with explicit PubMed evidence for memory improvement in older adults; additional attentional evidence exists but is less robustly indexed.",
+      "notes": "Branded citicoline with explicit PubMed evidence for memory improvement in older adults; additional attentional evidence exists but is less robustly indexed. The retained study randomized 100 with 99 completers. Episodic and composite memory benefits were secondary outcomes. These findings must not be represented as an independently replicated broad primary memory benefit.",
       "study_type": "rct_single",
-      "last_updated": "2026-03-23",
+      "last_updated": "2026-10-11",
       "notable_studies": "Nakazaki et al. (2021, PMID 33978188) remains the clearest placebo-controlled Cognizin trial, showing improvements in episodic and composite memory in adults aged 50-85. Earlier attentional studies are supportive but not robust enough to justify a broad multi-RCT claim.",
       "exclude_aliases": [
         "citicoline",
@@ -3005,10 +2921,10 @@
       ],
       "effect_direction": "positive_strong",
       "primary_outcome": "Focus & Mental Clarity",
-      "total_enrollment": 148,
+      "total_enrollment": 100,
       "registry_completed_trials_count": 7,
       "effect_direction_confidence": "medium",
-      "effect_direction_rationale": "Retained positive_strong classification; study_type=rct_single; evidence_level=branded-rct; primary_outcome=Focus & Mental Clarity; published_tags=RCT; registry_completed_trials_count=7; total_enrollment=148; endpoint_tags=focus_memory; notes/citations contain no automated downgrade signals.",
+      "effect_direction_rationale": "The retained study randomized 100 with 99 completers. Episodic and composite memory benefits were secondary outcomes. These findings must not be represented as an independently replicated broad primary memory benefit.",
       "endpoint_relevance_tags": [
         "focus_memory"
       ]
@@ -3037,12 +2953,11 @@
       ],
       "health_goals_supported": [
         "Reduce Stress/Anxiety",
-        "Focus & Mental Clarity",
         "Sleep Quality"
       ],
-      "notes": "L-theanine product with explicit randomized human evidence for stress-related symptoms and sleep quality.",
+      "notes": "L-theanine product with explicit randomized human evidence for stress-related symptoms and sleep quality. Cited adult and ADHD-boy trials involved 30 and 98 participants. Adult stress reductions were described versus baseline; placebo-separated selected sleep and baseline-defined verbal-fluency results are narrower. Pediatric sleep latency was unchanged. Unique aggregate is not asserted.",
       "study_type": "rct_multiple",
-      "last_updated": "2026-09-29",
+      "last_updated": "2026-10-11",
       "notable_studies": "Hidese et al. (2019, PMID 31623400) crossover RCT found 200 mg/day improved stress-related symptoms and some cognitive measures in healthy adults. Lyon et al. (2011, PMID 22214254) reported improved sleep quality in boys with ADHD using Suntheanine 400 mg/day.",
       "references_structured": [
         {
@@ -3120,14 +3035,13 @@
       },
       "effect_direction": "positive_strong",
       "primary_outcome": "Reduce Stress/Anxiety",
-      "total_enrollment": 171,
+      "total_enrollment": null,
       "registry_completed_trials_count": 38,
       "effect_direction_confidence": "high",
-      "effect_direction_rationale": "Retained positive_strong classification; study_type=rct_multiple; evidence_level=branded-rct; primary_outcome=Reduce Stress/Anxiety; published_tags=brand,RCT; registry_completed_trials_count=38; total_enrollment=171; endpoint_tags=stress_mood,sleep,focus_memory; notes/citations contain no automated downgrade signals.",
+      "effect_direction_rationale": "Cited adult and ADHD-boy trials involved 30 and 98 participants. Adult stress reductions were described versus baseline; placebo-separated selected sleep and baseline-defined verbal-fluency results are narrower. Pediatric sleep latency was unchanged. Unique aggregate is not asserted.",
       "endpoint_relevance_tags": [
         "stress_mood",
-        "sleep",
-        "focus_memory"
+        "sleep"
       ]
     },
     {
@@ -3150,9 +3064,9 @@
       "health_goals_supported": [
         "Digestive Health"
       ],
-      "notes": "Spore-forming probiotic with explicit randomized human evidence in IBS-D and IBS with depressive symptoms.",
+      "notes": "Spore-forming probiotic with explicit randomized human evidence in IBS-D and IBS with depressive symptoms. Cited studies randomized 36 IBS-D patients and 40 IBS patients with major depression. MTCC 5856 was studied for 90 days in adjunct standard-care or comorbid-disease contexts; findings do not establish general depression treatment. Unique aggregate is not asserted.",
       "study_type": "rct_multiple",
-      "last_updated": "2026-03-06",
+      "last_updated": "2026-10-11",
       "notable_studies": "Majeed et al. (2016, PMID 26922379) randomized placebo-controlled IBS-D trial found reduced bloating, abdominal pain, and diarrhea with Bacillus coagulans MTCC 5856. Majeed et al. (2018, PMID 29997457) reported improved depressive symptoms and IBS quality-of-life measures in IBS patients with comorbid depression.",
       "references_structured": [
         {
@@ -3224,10 +3138,10 @@
       },
       "effect_direction": "positive_strong",
       "primary_outcome": "Digestive Health",
-      "total_enrollment": 120,
+      "total_enrollment": null,
       "registry_completed_trials_count": 1,
       "effect_direction_confidence": "medium",
-      "effect_direction_rationale": "Retained positive_strong classification; study_type=rct_multiple; evidence_level=branded-rct; primary_outcome=Digestive Health; published_tags=RCT; registry_completed_trials_count=1; total_enrollment=120; endpoint_tags=digestive_health; notes/citations contain no automated downgrade signals.",
+      "effect_direction_rationale": "Cited studies randomized 36 IBS-D patients and 40 IBS patients with major depression. MTCC 5856 was studied for 90 days in adjunct standard-care or comorbid-disease contexts; findings do not establish general depression treatment. Unique aggregate is not asserted.",
       "endpoint_relevance_tags": [
         "digestive_health"
       ]
@@ -3250,13 +3164,12 @@
         "visual performance ↑"
       ],
       "health_goals_supported": [
-        "Healthy Aging/Longevity",
-        "Focus & Mental Clarity"
+        "Eye & Vision"
       ],
-      "notes": "Lutein/zeaxanthin blend with explicit randomized human evidence for visual-performance endpoints and large AREDS2 disease-progression evidence.",
+      "notes": "Lutein/zeaxanthin blend with explicit randomized human evidence for visual-performance endpoints and large AREDS2 disease-progression evidence. AREDS2 randomized 4203 and the visual-performance trial randomized 115. AREDS2 primary comparisons were nonsignificant; subgroup and carotenoid-substitution analyses are distinct. The smaller trial improved photostress recovery and chromatic contrast, not significantly glare disability. Exact brand and unique aggregate are unestablished.",
       "study_type": "rct_multiple",
-      "last_updated": "2026-03-06",
-      "notable_studies": "AREDS2 Research Group (2013, PMID 23644932) found lutein/zeaxanthin improved AMD outcomes in key subgroups. Hammond et al. (2014, PMID 25468896) randomized 115 adults to lutein/zeaxanthin supplementation and found improved macular pigment, photostress recovery, and glare disability.",
+      "last_updated": "2026-10-11",
+      "notable_studies": "AREDS2 (PMID 23644932) had nonsignificant primary progression comparisons; subgroup and beta-carotene substitution findings are distinct. PMID 25468896 randomized 115 adults and improved MPOD, photostress recovery and chromatic contrast; glare disability did not improve significantly.",
       "references_structured": [
         {
           "type": "pubmed",
@@ -3350,14 +3263,13 @@
         "unii": "X72A60C9MT"
       },
       "effect_direction": "positive_strong",
-      "primary_outcome": "Healthy Aging/Longevity",
-      "total_enrollment": 120,
+      "primary_outcome": "Eye & Vision",
+      "total_enrollment": null,
       "registry_completed_trials_count": 1,
       "effect_direction_confidence": "medium",
-      "effect_direction_rationale": "Retained positive_strong classification; study_type=rct_multiple; evidence_level=branded-rct; primary_outcome=Healthy Aging/Longevity; published_tags=RCT; registry_completed_trials_count=1; total_enrollment=120; endpoint_tags=stress_mood,muscle_recovery; notes/citations contain no automated downgrade signals.",
+      "effect_direction_rationale": "AREDS2 randomized 4203 and the visual-performance trial randomized 115. AREDS2 primary comparisons were nonsignificant; subgroup and carotenoid-substitution analyses are distinct. The smaller trial improved photostress recovery and chromatic contrast, not significantly glare disability. Exact brand and unique aggregate are unestablished.",
       "endpoint_relevance_tags": [
-        "stress_mood",
-        "muscle_recovery"
+        "eye_health"
       ]
     },
     {
@@ -3368,25 +3280,17 @@
         "beta glucan 1,3/1,6"
       ],
       "category": "immune",
-      "evidence_level": "branded-rct",
+      "evidence_level": "reference",
       "published_studies": [
-        "RCT",
-        "double-blind"
+        "reference"
       ],
-      "score_contribution": "tier_1",
-      "key_endpoints": [
-        "immune function ↑",
-        "cold symptoms ↓",
-        "stress resistance ↑"
-      ],
-      "health_goals_supported": [
-        "Immune Support",
-        "Reduce Stress/Anxiety"
-      ],
-      "notes": "Yeast beta-glucan product with explicit randomized evidence for common-cold burden and immune-resilience endpoints.",
-      "study_type": "rct_single",
-      "last_updated": "2026-03-23",
-      "notable_studies": "Auinger et al. (2013, PMID 23340963) remains the clearest branded multicenter randomized trial, showing fewer symptomatic common-cold episodes and better sleep during colds with Wellmune beta-glucan. Supportive exercise-stress studies exist, but the direct PubMed evidence is still closer to a single strong branded RCT than to a deep multi-RCT stack.",
+      "score_contribution": null,
+      "key_endpoints": [],
+      "health_goals_supported": [],
+      "notes": "Yeast beta-glucan product with explicit randomized evidence for common-cold burden and immune-resilience endpoints. PMID 23340963 explicitly studied Yestimun supplied by Leiber, not Wellmune. It randomized 162; fewer cold episodes were a per-protocol finding and the symptom score was nonsignificant. This wrong-brand anchor is retained only as reference context; qualifying Wellmune-specific evidence is unresolved.",
+      "study_type": "reference",
+      "last_updated": "2026-10-11",
+      "notable_studies": "PMID 23340963 explicitly studied Yestimun supplied by Leiber, not Wellmune. It randomized 162; fewer cold episodes were a per-protocol finding and the symptom score was nonsignificant. This wrong-brand anchor is retained only as reference context; qualifying Wellmune-specific evidence is unresolved.",
       "references_structured": [
         {
           "type": "pubmed",
@@ -3430,16 +3334,14 @@
       "external_ids": {
         "unii": "44FQ49X6UN"
       },
-      "effect_direction": "positive_strong",
-      "primary_outcome": "Immune Support",
-      "total_enrollment": 75,
+      "effect_direction": "mixed",
+      "primary_outcome": "",
+      "total_enrollment": null,
       "registry_completed_trials_count": 1,
-      "effect_direction_confidence": "medium",
-      "effect_direction_rationale": "Retained positive_strong classification; study_type=rct_single; evidence_level=branded-rct; primary_outcome=Immune Support; published_tags=RCT,double-blind; registry_completed_trials_count=1; total_enrollment=75; endpoint_tags=glycemic_control,digestive_health; notes/citations contain no automated downgrade signals.",
-      "endpoint_relevance_tags": [
-        "glycemic_control",
-        "digestive_health"
-      ]
+      "effect_direction_confidence": "low",
+      "effect_direction_rationale": "PMID 23340963 explicitly studied Yestimun supplied by Leiber, not Wellmune. It randomized 162; fewer cold episodes were a per-protocol finding and the symptom score was nonsignificant. This wrong-brand anchor is retained only as reference context; qualifying Wellmune-specific evidence is unresolved.",
+      "endpoint_relevance_tags": [],
+      "scoring_eligible": false
     },
     {
       "id": "BRAND_SETRIA",
@@ -3564,12 +3466,11 @@
         "exercise recovery ↑"
       ],
       "health_goals_supported": [
-        "Healthy Aging/Longevity",
-        "Increase Energy"
+        "Joint & Bone Health"
       ],
-      "notes": "Distilled MSM with explicit randomized human evidence in knee pain and osteoarthritis; newer mild-knee-pain data extend support but remain ingredient-like rather than uniquely product-specific. Studied doses: 6 g/day (PMID 16309928, MSM 3 g twice daily; source not named in the abstract) and 2 g/day (PMID 37447322, ten 200 mg OptiMSM tablets). Generic MSM draws on INGR_MSM, not on this brand record.",
+      "notes": "Distilled MSM with explicit randomized human evidence in knee pain and osteoarthritis; newer mild-knee-pain data extend support but remain ingredient-like rather than uniquely product-specific. Studied doses: 6 g/day (PMID 16309928, MSM 3 g twice daily; source not named in the abstract) and 2 g/day (PMID 37447322, ten 200 mg OptiMSM tablets). Generic MSM draws on INGR_MSM, not on this brand record. Cited studies randomized 50 OA and 88 mild-knee-discomfort participants. Selected pain/function findings at 6 g/day and JKOM findings at 2 g/day must remain dose-specific. Exact branded preparation and unique aggregate require methods-level verification.",
       "study_type": "rct_multiple",
-      "last_updated": "2026-09-29",
+      "last_updated": "2026-10-11",
       "notable_studies": "Kim et al. (2006, PMID 16309928) placebo-controlled osteoarthritis trial found improved pain and physical function with MSM. More recent randomized knee-pain data include Toguchi et al. (2023, PMID 37447322), which showed improved quality-of-life measures after 12 weeks of MSM intake.",
       "references_structured": [
         {
@@ -3646,12 +3547,12 @@
         "unii": "9H4PO4Z4FT"
       },
       "effect_direction": "positive_strong",
-      "primary_outcome": "Healthy Aging/Longevity",
-      "total_enrollment": 100,
+      "primary_outcome": "Joint & Bone Health",
+      "total_enrollment": null,
       "effect_direction_confidence": "medium",
-      "effect_direction_rationale": "Retained positive_strong classification; study_type=rct_multiple; evidence_level=product-human; primary_outcome=Healthy Aging/Longevity; published_tags=RCT; total_enrollment=100; endpoint_tags=healthy_aging; notes/citations contain no automated downgrade signals.",
+      "effect_direction_rationale": "Cited studies randomized 50 OA and 88 mild-knee-discomfort participants. Selected pain/function findings at 6 g/day and JKOM findings at 2 g/day must remain dose-specific. Exact branded preparation and unique aggregate require methods-level verification.",
       "endpoint_relevance_tags": [
-        "healthy_aging"
+        "joint_pain"
       ],
       "min_clinical_dose": 2000,
       "max_studied_clinical_dose": 6000,
@@ -3788,12 +3689,11 @@
         "digestive comfort ↑"
       ],
       "health_goals_supported": [
-        "Healthy Aging/Longevity",
-        "Digestive Health"
+        "Joint & Bone Health"
       ],
-      "notes": "Marine multi-mineral complex with a small branded randomized trial in knee osteoarthritis; confirmatory human outcome trials remain limited.",
+      "notes": "Marine multi-mineral complex with a small branded randomized trial in knee osteoarthritis; confirmatory human outcome trials remain limited. The pilot randomized 29; 22 received treatment and 14 completed. WOMAC ITT was null; range-of-motion and walking signals followed partial NSAID withdrawal. Attrition and small sample prevent an unqualified strong pain-benefit conclusion.",
       "study_type": "rct_single",
-      "last_updated": "2026-03-23",
+      "last_updated": "2026-10-11",
       "notable_studies": "Frestedt et al. (2009, PMID 19187557) remains the clearest randomized branded trial, showing improved range of motion and walking distance during NSAID withdrawal in knee osteoarthritis. The product evidence is promising but still best described as a single pilot RCT rather than a broad multi-RCT program.",
       "references_structured": [
         {
@@ -3837,14 +3737,14 @@
           "verification_source": "pubmed_eutils"
         }
       ],
-      "effect_direction": "positive_strong",
-      "primary_outcome": "Healthy Aging/Longevity",
-      "total_enrollment": 30,
+      "effect_direction": "mixed",
+      "primary_outcome": "Joint & Bone Health",
+      "total_enrollment": 29,
       "registry_completed_trials_count": 2,
       "effect_direction_confidence": "medium",
-      "effect_direction_rationale": "Retained positive_strong classification; study_type=rct_single; evidence_level=product-human; primary_outcome=Healthy Aging/Longevity; published_tags=RCT; registry_completed_trials_count=2; total_enrollment=30; endpoint_tags=focus_memory; notes/citations contain no automated downgrade signals.",
+      "effect_direction_rationale": "The pilot randomized 29; 22 received treatment and 14 completed. WOMAC ITT was null; range-of-motion and walking signals followed partial NSAID withdrawal. Attrition and small sample prevent an unqualified strong pain-benefit conclusion.",
       "endpoint_relevance_tags": [
-        "focus_memory"
+        "joint_pain"
       ]
     },
     {
@@ -3868,12 +3768,11 @@
         "bioavailability ↑"
       ],
       "health_goals_supported": [
-        "Focus & Mental Clarity",
-        "Healthy Aging/Longevity"
+        "Focus & Mental Clarity"
       ],
-      "notes": "Patented solid lipid formulation; multiple human studies on brain health, mood, and superior absorption compared to standard curcumin.",
+      "notes": "Patented solid lipid formulation; multiple human studies on brain health, mood, and superior absorption compared to standard curcumin. The cited studies randomized 60 and 80; no unique aggregate is asserted without cohort reconciliation. A 400 mg formulation delivered 80 mg curcumin; cognition outcomes do not themselves measure superior absorption.",
       "study_type": "rct_multiple",
-      "last_updated": "2026-03-23",
+      "last_updated": "2026-10-11",
       "notable_studies": "Cox et al. (2015, PMID 25277322) found that Longvida curcumin improved working memory and reduced fatigue over 4 weeks in healthy older adults. A 12-week partial replication study (PMID 32512782) again found benefits for mood and working memory, supporting a small but genuinely branded RCT evidence base.",
       "references_structured": [
         {
@@ -3956,9 +3855,9 @@
       },
       "effect_direction": "positive_weak",
       "primary_outcome": "Focus & Mental Clarity",
-      "total_enrollment": 60,
+      "total_enrollment": null,
       "effect_direction_confidence": "medium",
-      "effect_direction_rationale": "Retained positive_weak classification; study_type=rct_multiple; evidence_level=product-human; primary_outcome=Focus & Mental Clarity; published_tags=RCT,human trial; total_enrollment=60; endpoint_tags=focus_memory; notes/citations include weak-effect language.",
+      "effect_direction_rationale": "The cited studies randomized 60 and 80; no unique aggregate is asserted without cohort reconciliation. A 400 mg formulation delivered 80 mg curcumin; cognition outcomes do not themselves measure superior absorption.",
       "endpoint_relevance_tags": [
         "focus_memory"
       ]
@@ -3972,25 +3871,17 @@
         "curcuminoids complex"
       ],
       "category": "anti_inflammatory",
-      "evidence_level": "product-human",
+      "evidence_level": "reference",
       "published_studies": [
-        "RCT",
-        "meta-analysis"
+        "reference"
       ],
-      "score_contribution": "tier_1",
-      "key_endpoints": [
-        "arthritis symptoms ↓",
-        "oxidative stress ↓",
-        "liver function ↑"
-      ],
-      "health_goals_supported": [
-        "Healthy Aging/Longevity",
-        "Digestive Health"
-      ],
-      "notes": "Standardized curcuminoid complex with explicit branded rheumatoid-arthritis evidence and broader supportive curcumin literature; very large trial-count claims should be treated cautiously.",
-      "study_type": "rct_single",
-      "last_updated": "2026-03-23",
-      "notable_studies": "Chandran and Goel (2012, PMID 22407780) remains the clearest directly indexed Curcumin C3 Complex human trial, showing symptom improvement in active rheumatoid arthritis. That supports a branded RCT footing, but not an 80-plus-trial equivalent evidence posture for the specific brand.",
+      "score_contribution": null,
+      "key_endpoints": [],
+      "health_goals_supported": [],
+      "notes": "Standardized curcuminoid complex with explicit branded rheumatoid-arthritis evidence and broader supportive curcumin literature; very large trial-count claims should be treated cautiously. PMID 22407780 randomized 45 RA patients to curcumin, diclofenac or their combination, without placebo. Its abstract does not establish the Curcumin C3 brand; exact material attribution remains unresolved, so this record is reference-only rather than an affirmative C3-specific anchor.",
+      "study_type": "reference",
+      "last_updated": "2026-10-11",
+      "notable_studies": "PMID 22407780 randomized 45 RA patients to curcumin, diclofenac or their combination, without placebo. Its abstract does not establish the Curcumin C3 brand; exact material attribution remains unresolved, so this record is reference-only rather than an affirmative C3-specific anchor.",
       "references_structured": [
         {
           "type": "pubmed",
@@ -4031,15 +3922,14 @@
       "external_ids": {
         "unii": "IT942ZTH98"
       },
-      "effect_direction": "positive_strong",
-      "primary_outcome": "Healthy Aging/Longevity",
-      "total_enrollment": 686,
+      "effect_direction": "mixed",
+      "primary_outcome": "",
+      "total_enrollment": 45,
       "registry_completed_trials_count": 11,
-      "effect_direction_confidence": "medium",
-      "effect_direction_rationale": "Retained positive_strong classification; study_type=rct_single; evidence_level=product-human; primary_outcome=Healthy Aging/Longevity; published_tags=RCT,meta-analysis; registry_completed_trials_count=11; total_enrollment=686; endpoint_tags=focus_memory; notes/citations contain no automated downgrade signals.",
-      "endpoint_relevance_tags": [
-        "focus_memory"
-      ]
+      "effect_direction_confidence": "low",
+      "effect_direction_rationale": "PMID 22407780 randomized 45 RA patients to curcumin, diclofenac or their combination, without placebo. Its abstract does not establish the Curcumin C3 brand; exact material attribution remains unresolved, so this record is reference-only rather than an affirmative C3-specific anchor.",
+      "endpoint_relevance_tags": [],
+      "scoring_eligible": false
     },
     {
       "id": "BRAND_UCII",
@@ -4062,12 +3952,12 @@
         "inflammation ↓"
       ],
       "health_goals_supported": [
-        "Healthy Aging/Longevity"
+        "Joint & Bone Health"
       ],
-      "notes": "Patented low-dose undenatured type II collagen with randomized evidence in knee osteoarthritis and activity-related joint discomfort.",
+      "notes": "Patented low-dose undenatured type II collagen with randomized evidence in knee osteoarthritis and activity-related joint discomfort. Cited OA and healthy-discomfort trials randomized 191 and 55. The 2013 paper is by Lugo, not Crowley; knee extension separated from placebo, while longer pain-free exertion was a within-group change. Unique aggregate is not asserted.",
       "study_type": "rct_multiple",
-      "last_updated": "2026-03-06",
-      "notable_studies": "Lugo et al. (2016, PMID 26822714) RCT (n=191, knee OA, 180 days): UC-II 40 mg/day improved WOMAC total, pain, stiffness, and function versus placebo and glucosamine/chondroitin. Crowley et al. (2013, PMID 24153020) placebo-controlled trial in healthy adults with exercise-related joint discomfort reported improved knee extension and longer pain-free exertion with UC-II 40 mg/day.",
+      "last_updated": "2026-10-11",
+      "notable_studies": "Lugo et al. (2016, PMID 26822714) studied 191 OA participants with UC-II40mg/day for180days. Lugo et al. (2013, PMID 24153020) studied55 healthy volunteers: knee extension improved versus placebo; longer pain-free exertion was a within-group change.",
       "references_structured": [
         {
           "type": "pubmed",
@@ -4132,12 +4022,12 @@
         }
       ],
       "effect_direction": "positive_strong",
-      "primary_outcome": "Healthy Aging/Longevity",
-      "total_enrollment": 191,
+      "primary_outcome": "Joint & Bone Health",
+      "total_enrollment": null,
       "effect_direction_confidence": "medium",
-      "effect_direction_rationale": "Retained positive_strong classification; study_type=rct_multiple; evidence_level=product-human; primary_outcome=Healthy Aging/Longevity; published_tags=RCT,double-blind; total_enrollment=191; endpoint_tags=healthy_aging; notes/citations contain no automated downgrade signals.",
+      "effect_direction_rationale": "Cited OA and healthy-discomfort trials randomized 191 and 55. The 2013 paper is by Lugo, not Crowley; knee extension separated from placebo, while longer pain-free exertion was a within-group change. Unique aggregate is not asserted.",
       "endpoint_relevance_tags": [
-        "healthy_aging"
+        "joint_pain"
       ]
     },
     {
@@ -4160,11 +4050,12 @@
         "wrinkles ↓"
       ],
       "health_goals_supported": [
-        "Healthy Aging/Longevity"
+        "Joint & Bone Health",
+        "Skin, Hair & Nails"
       ],
-      "notes": "Hydrolyzed chicken-cartilage matrix with explicit randomized joint-evidence and supportive skin-aging studies.",
+      "notes": "Hydrolyzed chicken-cartilage matrix with explicit randomized joint-evidence and supportive skin-aging studies. Cited studies report 80 OA participants, 26 women in an uncontrolled skin study and 128 randomized with 113 skin-study completers. Whole cartilage matrix evidence must not transfer to isolated collagen, hyaluronic acid or chondroitin; unique aggregate is not asserted.",
       "study_type": "rct_multiple",
-      "last_updated": "2026-03-06",
+      "last_updated": "2026-10-11",
       "notable_studies": "Schauss et al. (2012, PMID 22486722) randomized osteoarthritis trial found improved pain and WOMAC outcomes with BioCell Collagen. Skin-aging support includes the open-label facial-aging study indexed as PMID 22956862 and later controlled branded work indexed as PMID 31221944.",
       "references_structured": [
         {
@@ -4285,12 +4176,13 @@
         }
       ],
       "effect_direction": "positive_strong",
-      "primary_outcome": "Healthy Aging/Longevity",
-      "total_enrollment": 80,
+      "primary_outcome": "Joint & Bone Health",
+      "total_enrollment": null,
       "effect_direction_confidence": "medium",
-      "effect_direction_rationale": "Retained positive_strong classification; study_type=rct_multiple; evidence_level=product-human; primary_outcome=Healthy Aging/Longevity; published_tags=RCT; total_enrollment=80; endpoint_tags=healthy_aging; notes/citations contain no automated downgrade signals.",
+      "effect_direction_rationale": "Cited studies report 80 OA participants, 26 women in an uncontrolled skin study and 128 randomized with 113 skin-study completers. Whole cartilage matrix evidence must not transfer to isolated collagen, hyaluronic acid or chondroitin; unique aggregate is not asserted.",
       "endpoint_relevance_tags": [
-        "healthy_aging"
+        "joint_pain",
+        "skin_health"
       ]
     },
     {
@@ -4311,13 +4203,10 @@
         "mitochondrial function ↑",
         "inflammation ↓"
       ],
-      "health_goals_supported": [
-        "Healthy Aging/Longevity",
-        "Increase Energy"
-      ],
-      "notes": "Patented nicotinamide riboside precursor with randomized human evidence for NAD+ elevation and safety; downstream cardiometabolic benefits remain mixed.",
+      "health_goals_supported": [],
+      "notes": "Patented nicotinamide riboside precursor with randomized human evidence for NAD+ elevation and safety; downstream cardiometabolic benefits remain mixed. Cited studies include a 24-person crossover and 40 obese men. NAD biomarkers increased but insulin sensitivity, energy expenditure and body composition were null in the obese-men trial. Brand identity and unique aggregate remain separate from efficacy.",
       "study_type": "rct_multiple",
-      "last_updated": "2026-03-06",
+      "last_updated": "2026-10-11",
       "notable_studies": "Martens et al. (2018, PMID 29599478) crossover RCT (n=24, ages 55-79): nicotinamide riboside 1000 mg/day for 6 weeks raised whole-blood NAD+ by about 60% with exploratory vascular benefits. Dollerup et al. (2018, PMID 29992272) RCT (n=40 obese men): 2000 mg/day for 12 weeks confirmed NAD+ pathway activity and safety but did not improve insulin sensitivity.",
       "references_structured": [
         {
@@ -4396,16 +4285,11 @@
       },
       "effect_direction": "mixed",
       "primary_outcome": "Healthy Aging/Longevity",
-      "total_enrollment": 120,
+      "total_enrollment": null,
       "registry_completed_trials_count": 26,
       "effect_direction_confidence": "medium",
-      "effect_direction_rationale": "Retained mixed classification; study_type=rct_multiple; evidence_level=product-human; primary_outcome=Healthy Aging/Longevity; published_tags=RCT; registry_completed_trials_count=26; total_enrollment=120; endpoint_tags=stress_mood,cardiovascular,glycemic_control,muscle_recovery; notes/citations include mixed-evidence language.",
-      "endpoint_relevance_tags": [
-        "stress_mood",
-        "cardiovascular",
-        "glycemic_control",
-        "muscle_recovery"
-      ]
+      "effect_direction_rationale": "Cited studies include a 24-person crossover and 40 obese men. NAD biomarkers increased but insulin sensitivity, energy expenditure and body composition were null in the obese-men trial. Brand identity and unique aggregate remain separate from efficacy.",
+      "endpoint_relevance_tags": []
     },
     {
       "id": "BRAND_MENAQ7",
@@ -4555,9 +4439,9 @@
         "Reduce Stress/Anxiety",
         "Sleep Quality"
       ],
-      "notes": "Standardized saffron extract with randomized human evidence for mood and some sleep outcomes in adults and adolescents.",
+      "notes": "Standardized saffron extract with randomized human evidence for mood and some sleep outcomes in adults and adolescents. Cited studies enrolled 128 adults, 80 youths and 202 adults; no unique aggregate is asserted. The early adult 28 mg dose benefited mood while 22 mg was null; youth reports were inconsistently corroborated by parents. Later secondary outcomes were null, with an exploratory sleep-disturbance subgroup.",
       "study_type": "rct_multiple",
-      "last_updated": "2026-03-06",
+      "last_updated": "2026-10-11",
       "notable_studies": "Kell et al. (2017, PMID 28735826) randomized placebo-controlled trial (n=128) found affron 28 mg/day improved mood and stress/anxiety measures over 4 weeks. Lopresti et al. (2018, PMID 29510352) reported improved youth anxiety and depressive symptoms over 8 weeks, and later adult low-mood data are available in PubMed 40414301.",
       "references_structured": [
         {
@@ -4687,9 +4571,9 @@
       },
       "effect_direction": "positive_strong",
       "primary_outcome": "Reduce Stress/Anxiety",
-      "total_enrollment": 60,
+      "total_enrollment": null,
       "effect_direction_confidence": "medium",
-      "effect_direction_rationale": "Retained positive_strong classification; study_type=rct_multiple; evidence_level=product-human; primary_outcome=Reduce Stress/Anxiety; published_tags=RCT; total_enrollment=60; endpoint_tags=stress_mood,sleep; notes/citations contain no automated downgrade signals.",
+      "effect_direction_rationale": "Cited studies enrolled 128 adults, 80 youths and 202 adults; no unique aggregate is asserted. The early adult 28 mg dose benefited mood while 22 mg was null; youth reports were inconsistently corroborated by parents. Later secondary outcomes were null, with an exploratory sleep-disturbance subgroup.",
       "endpoint_relevance_tags": [
         "stress_mood",
         "sleep"
@@ -7669,8 +7553,6 @@
       "category": "eye_health",
       "evidence_level": "ingredient-human",
       "published_studies": [
-        "systematic_review",
-        "meta-analysis",
         "RCT"
       ],
       "score_contribution": "tier_1",
@@ -7678,13 +7560,11 @@
         "macular pigment ↑",
         "visual performance ↑"
       ],
-      "health_goals_supported": [
-        "Healthy Aging/Longevity"
-      ],
-      "notes": "Human evidence supports lutein most clearly for increasing macular pigment optical density and selected visual-performance endpoints, often in combination with zeaxanthin rather than as an isolated lutein-only intervention.",
-      "study_type": "systematic_review_meta",
-      "last_updated": "2026-03-07",
-      "notable_studies": "Recent pooled human evidence includes PMID 41573009, which found better macular pigment and visual-sensitivity outcomes in myopia studies using lutein plus zeaxanthin. Broader visual-performance evidence also includes trials and meta-analyses of lutein-zeaxanthin combinations such as PMID 28661438.",
+      "health_goals_supported": [],
+      "notes": "Retraction notice PMID 42211211 excludes PMID 41573009 from affirmative evidence. Remaining human source PMID 28661438 concerns a macular-carotenoid combination, not isolated lutein. Enrollment48 is that retained trial, not AREDS2 or a registry aggregate.",
+      "study_type": "rct_single",
+      "last_updated": "2026-10-11",
+      "notable_studies": "PMID 41573009 was retracted by notice PMID 42211211 and is not usable affirmative evidence. PMID 28661438 studied 48 healthy young adults with high screen exposure, using a lutein, zeaxanthin and mesozeaxanthin combination for six months; selected visual and symptom outcomes improved versus placebo. This is not isolated lutein or adolescent myopia-prevention evidence.",
       "references_structured": [
         {
           "type": "pubmed",
@@ -7701,7 +7581,7 @@
           "mesh_terms": [],
           "supplementary_concepts": [],
           "evidence_grade": "journal_article",
-          "retracted": false,
+          "retracted": true,
           "supports_claims": [],
           "verification_source": "pubmed_eutils"
         },
@@ -7728,15 +7608,14 @@
       "external_ids": {
         "unii": "X72A60C9MT"
       },
-      "effect_direction": "positive_strong",
-      "primary_outcome": "Healthy Aging/Longevity",
-      "total_enrollment": 4203,
+      "effect_direction": "positive_weak",
+      "primary_outcome": "Eye & Vision",
+      "total_enrollment": 48,
       "registry_completed_trials_count": 94,
-      "effect_direction_confidence": "high",
-      "effect_direction_rationale": "Retained positive_strong classification; study_type=systematic_review_meta; evidence_level=ingredient-human; primary_outcome=Healthy Aging/Longevity; published_tags=systematic_review,meta-analysis,RCT; registry_completed_trials_count=94; total_enrollment=4203; endpoint_tags=cardiovascular,digestive_health; notes/citations contain no automated downgrade signals.",
+      "effect_direction_confidence": "low",
+      "effect_direction_rationale": "One retained small combination RCT supports selected visual outcomes. The pooled myopia paper is retracted; it supplies no positive eligibility or replication. General isolated-lutein applicability remains unestablished.",
       "endpoint_relevance_tags": [
-        "cardiovascular",
-        "digestive_health"
+        "eye_health"
       ]
     },
     {

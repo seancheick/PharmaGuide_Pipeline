@@ -28,6 +28,16 @@ def test_wave2_contexts_rerun_verifies_patched_rows_without_writing():
     ('is2_moderate_covid19_adjunct_39866999', 'population', {'age_group': 'adult', 'description': 'B. coagulans UBBC-07'}),
     ('mtcc5856_healthy_microbiome_37335737', 'blinding', 'unreported'),
     ('mtcc5856_functional_gas_bloating_36862903', 'funding', 'industry'),
+    ('lgg_bb12_preterm_administration_route_37020105', 'limitations', ['Route-comparison design without placebo']),
+    ('lgg_bb12_preterm_administration_route_37020105', 'sample_size', 54),
+    ('lgg_bb12_preterm_administration_route_37020105', 'source_pmids', ['33811784']),
+    ('m16v_synbiotic_formula_csection_39915586', 'sample_size', 284),
+    ('m16v_synbiotic_formula_csection_39915586', 'comparator', 'prebiotic-only formula'),
+    ('m16v_neonatal_jaundice_adjunct_41994268', 'outcomes', [
+        {'name': 'defecation_frequency', 'hierarchy': 'unresolved', 'kind': 'surrogate', 'direction': 'positive'},
+        {'name': 'transcutaneous_bilirubin_decline', 'hierarchy': 'unresolved', 'kind': 'surrogate', 'direction': 'positive'},
+        {'name': 'hospital_stay_duration', 'hierarchy': 'unresolved', 'kind': 'patient_important', 'direction': 'positive'},
+    ]),
 ])
 def test_wave2_rerun_rejects_drift_in_corrected_source_facts(tmp_path, monkeypatch, context_id, field, bad_value):
     import importlib.util

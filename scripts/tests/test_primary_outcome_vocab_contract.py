@@ -56,7 +56,14 @@ def _walk(obj, key, found):
     if isinstance(obj, dict):
         for k, v in obj.items():
             if k == key and isinstance(v, str):
-                found.add(v)
+                if not v:
+                    assert (obj.get("scoring_eligible") is False
+                            and obj.get("study_type") == "reference"
+                            and obj.get("key_endpoints") == []
+                            and obj.get("health_goals_supported") == []), (
+                        f"{obj.get('id')}: empty primary_outcome requires an explicit reference hold without benefit endpoints")
+                else:
+                    found.add(v)
             _walk(v, key, found)
     elif isinstance(obj, list):
         for x in obj:
@@ -88,3 +95,24 @@ def test_related_user_goal_ids_are_real(items):
         gid = i.get("related_user_goal_id")
         if gid:
             assert gid in goal_ids, f"{i['id']} references {gid} not in user_goals_vocab"
+
+
+@pytest.mark.parametrize("changes", [
+    {"scoring_eligible": True}, {"scoring_eligible": None},
+    {"study_type": "rct"}, {"key_endpoints": ["benefit"]},
+    {"health_goals_supported": ["immune_support"]},
+])
+def test_empty_outcome_cannot_hide_eligible_or_benefit_record(changes):
+    record = {"id": "HELD", "primary_outcome": "", "scoring_eligible": False,
+              "study_type": "reference", "key_endpoints": [], "health_goals_supported": []}
+    record.update(changes)
+    with pytest.raises(AssertionError, match="HELD"):
+        _walk(record, "primary_outcome", set())
+
+
+def test_explicit_reference_hold_has_no_vocabulary_outcome():
+    record = {"id": "HELD", "primary_outcome": "", "scoring_eligible": False,
+              "study_type": "reference", "key_endpoints": [], "health_goals_supported": []}
+    found = set()
+    _walk(record, "primary_outcome", found)
+    assert found == set()

@@ -67,6 +67,20 @@ def test_creatine_value_in_band(iqm, fname, vmin, vmax, basis):
     """Each creatine form's struct.value must sit in evidence band."""
     form = iqm['creatine_monohydrate']['forms'].get(fname)
     assert form is not None, f'creatine_monohydrate::{fname} missing'
+    reviewed_unknown = {'buffered creatine monohydrate': ['22971354', 'Efficacy/cost is distinct from absorption'],
+     'creatine nitrate': ['17997838', 'did not administer nitrate'],
+     'creatine hydrochloride': ['17997838', 'did not administer HCl'],
+     'creatine citrate': ['17997838', 'six participants'],
+     'creatine magnesium chelate': ['did not administer this chelate'],
+     'dicreatine malate': ['citrate/pyruvate comparison'],
+     'creatine monohydrate ((unspecified))': ['does not identify a creatine chemical form'],
+     'peg-creatine system': ['19387397', 'exercise outcomes'],
+     'creatine ethyl ester': ['23957855', 'in-vitro', '19228401']}
+    if fname in reviewed_unknown:
+        assert form['absorption_structured'] == dict(value=None, range_low=None, range_high=None, quality='unknown')
+        for source_limit in reviewed_unknown[fname]:
+            assert source_limit in form['notes']
+        return
     val = (form.get('absorption_structured') or {}).get('value')
     assert val is not None, f'creatine_monohydrate::{fname} struct.value should be populated'
     assert vmin <= val <= vmax, (
@@ -76,43 +90,37 @@ def test_creatine_value_in_band(iqm, fname, vmin, vmax, basis):
 
 
 def test_creatine_salts_class_equivalent(iqm):
-    """All creatine salts (HCl, citrate, nitrate, Mg-chelate) and KA-buffered
-    must have class-equivalent struct.value (within 0.05) to monohydrate per
-    Persky 2003 (PMID:12793840) and Jäger 2007 (PMID:17997838).
-    """
-    forms = iqm['creatine_monohydrate']['forms']
-    monohydrate = (forms['creatine monohydrate'].get('absorption_structured') or {}).get('value')
-    salt_names = (
-        'buffered creatine monohydrate',
-        'creatine nitrate',
-        'creatine hydrochloride',
-        'creatine citrate',
-        'creatine magnesium chelate',
-    )
-    salt_values = []
-    for name in salt_names:
-        v = (forms[name].get('absorption_structured') or {}).get('value')
-        salt_values.append((name, v))
-    for name, v in salt_values:
-        assert v is not None and abs(v - monohydrate) <= 0.05, (
-            f'{name} ({v}) must be class-equivalent (within 0.05) to '
-            f'monohydrate ({monohydrate}) per Persky 2003 (PMID:12793840) — '
-            f'all salts dissociate to deliver identical creatine ion'
-        )
+    # Source-qualified preparation/endpoints supersede inferred absolute-F hierarchy.
+    form = iqm['creatine_monohydrate']['forms']['buffered creatine monohydrate']
+    assert form['absorption_structured'] == dict(value=None, range_low=None, range_high=None, quality='unknown')
+    assert '22971354' in form['notes']
+    assert 'Efficacy/cost is distinct' in form['notes']
+    form = iqm['creatine_monohydrate']['forms']['creatine nitrate']
+    assert form['absorption_structured'] == dict(value=None, range_low=None, range_high=None, quality='unknown')
+    assert 'did not administer nitrate' in form['notes']
+    form = iqm['creatine_monohydrate']['forms']['creatine hydrochloride']
+    assert form['absorption_structured'] == dict(value=None, range_low=None, range_high=None, quality='unknown')
+    assert 'did not administer HCl' in form['notes']
+    form = iqm['creatine_monohydrate']['forms']['creatine citrate']
+    assert form['absorption_structured'] == dict(value=None, range_low=None, range_high=None, quality='unknown')
+    assert 'tri-creatine citrate in six' in form['notes']
+    form = iqm['creatine_monohydrate']['forms']['creatine magnesium chelate']
+    assert form['absorption_structured'] == dict(value=None, range_low=None, range_high=None, quality='unknown')
+    assert 'did not administer this chelate' in form['notes']
+
 
 
 def test_cee_failed_prodrug(iqm):
-    """Creatine ethyl ester must have struct.value ≤ 0.20 per Gufford 2013
-    (PMID:23957855) + Giese 2009 (PMID:19585404) + Spillane 2009 (PMID:19228401)
-    findings that CEE hydrolyzes to creatinine pre-absorption.
-    """
-    val = (iqm['creatine_monohydrate']['forms']['creatine ethyl ester']
-           .get('absorption_structured') or {}).get('value')
-    assert val is not None and val <= 0.20, (
-        f'CEE value={val} must be ≤0.20 per Gufford 2013 / Giese 2009 / '
-        f'Spillane 2009 — ester hydrolyzes to creatinine pre-absorption, '
-        f'near-zero functional F'
-    )
+    # Source-qualified preparation/endpoints supersede inferred absolute-F hierarchy.
+    form = iqm['creatine_monohydrate']['forms']['creatine ethyl ester']
+    assert form['absorption_structured'] == dict(value=None, range_low=None, range_high=None, quality='unknown')
+    assert '23957855' in form['notes']
+    assert 'in-vitro' in form['notes']
+    assert '19585404' in form['notes']
+    assert 'plasma rather than gastric' in form['notes']
+    assert '19228401' in form['notes']
+    assert 'above placebo' in form['notes']
+
 
 
 def test_no_phantom_schedel_2000_citation(iqm):
@@ -163,7 +171,6 @@ def test_class_authority_pmids_introduced(iqm):
     expected_pmids = {
         'PMID:22971354': 'Jagim 2012',
         'PMID:19228401': 'Spillane 2009',
-        'PMID:12793840': 'Persky 2003',
         'PMID:17997838': 'Jäger 2007',
         'PMID:23957855': 'Gufford 2013',
         'PMID:19585404': 'Giese 2009',
@@ -172,7 +179,8 @@ def test_class_authority_pmids_introduced(iqm):
     for form in iqm['creatine_monohydrate']['forms'].values():
         full_text += (form.get('notes') or '') + ' '
         full_text += (form.get('absorption') or '') + ' '
-    missing = [pmid for pmid in expected_pmids if pmid not in full_text]
+    missing = [pmid for pmid in expected_pmids if pmid.replace('PMID:', '') not in full_text]
+    assert 'six participants' in iqm['creatine_monohydrate']['forms']['creatine citrate']['notes']
     assert not missing, (
         f'Verified class-authority PMIDs missing from creatine notes: {missing}'
     )
@@ -268,22 +276,13 @@ def test_peg_creatine_bio_score_in_salt_tier(iqm):
 
 
 def test_peg_creatine_absorption_conservative(iqm):
-    """absorption_structured.value must be conservative (≤ 0.95, not
-    ≥ 0.99 like the salt forms) — the evidence base is limited (3 small
-    short-duration RCTs, no muscle-creatine PK measurements)."""
-    form = iqm['creatine_monohydrate']['forms'][PEG_FORM]
-    s = form.get('absorption_structured') or {}
-    val = s.get('value')
-    assert val is not None and 0.80 <= val <= 0.95, (
-        f"PEG-creatine absorption.value={val} outside conservative band "
-        f"[0.80, 0.95]. Setting it ≥0.99 would claim parity with the salt "
-        f"forms' class-equivalence-to-monohydrate evidence base, which "
-        f"PEG-creatine does not yet have."
-    )
-    assert s.get('quality') == 'good', (
-        f"absorption.quality={s.get('quality')!r}, expected 'good' (not "
-        "'excellent') — limited evidence base."
-    )
+    # Source-qualified preparation/endpoints supersede inferred absolute-F hierarchy.
+    form = iqm['creatine_monohydrate']['forms']['peg-creatine system']
+    assert form['absorption_structured'] == dict(value=None, range_low=None, range_high=None, quality='unknown')
+    assert '19387397' in form['notes']
+    assert 'exercise outcomes' in form['notes']
+    assert 'Neither matched strength outcomes' in form['notes']
+
 
 
 def test_peg_creatine_evidence_pmids_present(iqm):

@@ -9,8 +9,8 @@ already exists), three are net-new:
   - Germanium Ge-132 (organic)  -> alias-extend RISK_GERMANIUM (KEEP high_risk;
     the existing entry deliberately chose high_risk over banned despite the FDA
     import alert / fatal nephrotoxicity). Closes the "Ge-132" label gap.
-  - Broad Spectrum Phytocannabinoids -> alias-add to BANNED_CBD_US (banned, FDA
-    drug-exclusion). REAL safety gap: the bare label was slipping through unflagged.
+  - Explicit cannabidiol -> BANNED_CBD_US (FDA drug-exclusion). Broad
+    phytocannabinoid labeling does not establish cannabidiol identity.
   - Miroestrol      -> NEW high_risk (potent dual-ER phytoestrogen, Pueraria mirifica)
   - Ginkgolic Acid  -> NEW contaminant/watchlist (allergenic ginkgo impurity, <5 ppm spec)
   - Withaferin A    -> NEW watchlist (normal ashwagandha constituent; cytotoxic only
@@ -59,7 +59,7 @@ def _safety_ids(enricher, label):
         ("Bis-Beta Carboxyethyl Germanium Sesquioxide", "RISK_GERMANIUM"),
         ("Ge-132", "RISK_GERMANIUM"),
         ("Organic Germanium", "RISK_GERMANIUM"),
-        ("Broad Spectrum Phytocannabinoids", "BANNED_CBD_US"),
+        ("Cannabidiol", "BANNED_CBD_US"),
         ("Miroestrol", "RISK_MIROESTROL"),
         ("Ginkgolic Acid", "CONTAM_GINKGOLIC_ACID"),
         ("Withaferin A", "WATCH_WITHAFERIN_A"),
@@ -100,3 +100,8 @@ def test_withaferin_a_entry_verified(banned_by_id):
     assert e["external_ids"]["unii"] == "L6DO3QW4K5"    # GSRS-verified
     assert e["external_ids"]["cas"] == "5119-48-2"
     assert e["external_ids"]["pubchem_cid"] == 265237
+
+
+def test_broad_phytocannabinoids_do_not_establish_cbd_identity(enricher):
+    assert "BANNED_CBD_US" not in _safety_ids(enricher, "Broad Spectrum Phytocannabinoids")
+    assert "BANNED_CBD_US" in _safety_ids(enricher, "Cannabidiol")

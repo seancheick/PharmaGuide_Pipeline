@@ -135,11 +135,9 @@ def test_no_drug_class_rule_is_beneficial():
 # (canonical_id, sub-rule key) -> expected direction. Representative locks of the
 # benefit-vs-warning calls the rework exists to get right.
 BENEFICIAL_LOCK = {
-    ("milk_thistle", "liver_disease"),
     ("coq10", "heart_disease"),
     ("berberine_supplement", "high_cholesterol"),
     ("garlic", "high_cholesterol"),
-    ("citrus_bergamot", "high_cholesterol"),
     ("fish_oil", "pregnancy_lactation"),         # the "Continue omega-3" row
     ("inositol", "pregnancy_lactation"),
     ("vitamin_b12_cobalamin", "ttc"),
@@ -204,3 +202,11 @@ def test_biotin_never_harmful_and_diagnostic_contexts_neutral():
         assert x.get("direction") != "harmful", f"biotin/{key} must never be harmful"
         if key in diagnostic_neutral:
             assert x.get("direction") == "neutral", f"biotin/{key} should be neutral, got {x.get('direction')}"
+
+
+def test_unresolved_attribution_is_not_a_confirmed_benefit():
+    for canon, condition in (("citrus_bergamot", "high_cholesterol"), ("milk_thistle", "liver_disease")):
+        rows = _find_all(canon, condition)
+        assert rows
+        assert all(r["direction"] == "unknown" for r in rows)
+        assert all(r["materiality"] == "presence" and not r.get("min_effective_dose") for r in rows)

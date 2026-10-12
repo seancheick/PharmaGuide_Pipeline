@@ -3521,33 +3521,33 @@ class SupplementEnricherV3:
     # the primary canonical_id; Section C scoring (Phase 5) uses delivers_markers
     # at scaled confidence. See scripts/data/botanical_marker_contributions.json.
 
-    _STANDARDIZATION_PCT_RE = re.compile(r"(\d+(?:\.\d+)?)\s*%", re.IGNORECASE)
-    _STANDARDIZATION_TERMS_RE = re.compile(
-        r"\bstandardi[sz]ed\s+to\b|\bstd\.?\s+to\b|\bcontaining\s+\d|\bmin\.?\s+\d+\s*%",
-        re.IGNORECASE,
-    )
-
     def _scan_label_for_standardization(
         self, label_text: str, keywords: List[str]
     ) -> Tuple[bool, Optional[float]]:
         """Returns (has_standardization, pct_value_or_None).
 
-        has_standardization is True when the label text mentions ANY of the
-        botanical's standardization_keywords (e.g. 'curcuminoid', '95%',
-        'standardized to'). pct_value extracts the numeric standardization
-        percentage when the keyword appears alongside a percentage.
+        Require a named marker, and associate a percentage with that marker.
+        A generic standardization phrase or another constituent's percentage
+        cannot establish the target marker's mass.
         """
         if not label_text:
             return False, None
-        text_l = label_text.lower()
-        # Any keyword present?
-        keyword_hit = any(k.lower() in text_l for k in (keywords or []))
-        if not keyword_hit and not self._STANDARDIZATION_TERMS_RE.search(label_text):
-            return False, None
-        # Try to extract percentage if present
-        m = self._STANDARDIZATION_PCT_RE.search(label_text)
-        pct = float(m.group(1)) if m else None
-        return True, pct
+        marker_present = False
+        for keyword in keywords or []:
+            term = re.sub(r"^(?:%|mg)\s*", "", keyword.strip(), flags=re.IGNORECASE)
+            if not term or term.lower() == "standardized to" or not re.search(r"[a-z]", term, re.IGNORECASE):
+                continue
+            marker = rf"(?<![a-z0-9]){re.escape(term)}(?![a-z0-9])"
+            if not re.search(marker, label_text, re.IGNORECASE):
+                continue
+            marker_present = True
+            number = r"(\d+(?:\.\d+)?)\s*%"
+            patterns = (rf"{number}\s*{marker}", rf"{marker}\s*(?:[:=]|at)?\s*{number}")
+            for pattern in patterns:
+                match = re.search(pattern, label_text, re.IGNORECASE)
+                if match and 0 < float(match.group(1)) <= 100:
+                    return True, float(match.group(1))
+        return marker_present, None
 
     def _compute_delivers_markers(
         self, ingredient_record: Dict[str, Any]
@@ -11108,6 +11108,12 @@ class SupplementEnricherV3:
             )
 
             for botanical in botanicals_list:
+                # A retained identity is not a verified standardization claim.
+                # Existing explicit registry holds must precede both brand and
+                # percentage credit; missing legacy flags retain their meaning.
+                if botanical.get("bonus_eligible") is False or \
+                   botanical.get("data_quality") == "requires_verification":
+                    continue
                 bot_name = botanical.get('standard_name', '')
                 bot_aliases = botanical.get('aliases', [])
 
@@ -11276,6 +11282,12 @@ class SupplementEnricherV3:
                 item["markers"] = list(dict.fromkeys(entry_markers))
                 merged[key] = item
                 continue
+
+            # An explicit hold on either duplicate cannot be lost to ordering.
+            if entry.get("bonus_eligible") is False:
+                current["bonus_eligible"] = False
+            if entry.get("data_quality") == "requires_verification":
+                current["data_quality"] = "requires_verification"
 
             # Merge aliases/markers with stable order and conservative thresholding.
             current_aliases = current.get("aliases") if isinstance(current.get("aliases"), list) else []
@@ -15651,6 +15663,7 @@ class SupplementEnricherV3:
 
                     # Optional schema extensions (forward-compatible passthrough).
                     optional_fields = [
+                        "scoring_eligible",
                         "applicability",
                         "min_clinical_dose",
                         "max_studied_clinical_dose",
@@ -15761,6 +15774,7 @@ class SupplementEnricherV3:
                         "marker_evidence_id": marker_entry.get("evidence_id"),
                     }
                     optional_fields = [
+                        "scoring_eligible",
                         "applicability",
                         "min_clinical_dose", "max_studied_clinical_dose",
                         "max_clinical_dose", "max_studied_dose", "dose_unit",
@@ -22114,6 +22128,45 @@ class SupplementEnricherV3:
                             if _explicit_non_folic_folate
                             else "unknown_folate_form_lineage"
                         )
+                    elif (
+                        rule_id == "vitamin_a_beta_carotene_supplement"
+                        and resolved_canonical_id == "vitamin_a"
+                        and any(
+                            "water" in str(statement.get("notes") or "").lower()
+                            and "milk" in str(statement.get("notes") or "").lower()
+                            for statement in (product.get("statements") or [])
+                            if isinstance(statement, dict)
+                            and any(token in str(statement.get("type") or "").lower()
+                                    for token in ("directions", "suggested", "usage"))
+                        )
+                        and any(
+                            isinstance(variant, dict)
+                            and isinstance(variant.get("quantity"), (int, float))
+                            and 0 < variant["quantity"] < quantity_float
+                            and self._normalize_text(variant.get("unit") or "")
+                                in {"mcg", "mcg rae"}
+                            and self._normalize_text(unit) in {"mcg", "mcg rae"}
+                            and any(
+                                isinstance(selected, dict)
+                                and selected.get("quantity") == quantity_float
+                                and variant.get("serving_size_quantity") == selected.get("serving_size_quantity")
+                                and all(variant.get(key) == selected.get(key)
+                                        and variant.get(key) is not None
+                                        for key in ("serving_size_order", "serving_size_unit"))
+                                for selected in (ingredient.get("quantityVariants") or
+                                                 (ingredient.get("raw_taxonomy") or {}).get("quantityVariants") or [])
+                            )
+                            for variant in (ingredient.get("quantityVariants") or
+                                            (ingredient.get("raw_taxonomy") or {}).get("quantityVariants") or [])
+                        )
+                    ):
+                        # A larger prepared-serving total is not evidence that
+                        # its added activity has the powder's beta-carotene form.
+                        # Keep the selected total for adequacy; do not infer
+                        # either preformed excess or all-beta UL exclusion.
+                        skip_ul_check = True
+                        ul_only_skip = True
+                        skip_ul_reason = "mixed_vitamin_a_preformed_fraction_unknown"
                     elif rule_id == "vitamin_a_beta_carotene_supplement":
                         # Supplemental beta-carotene contributes vitamin A
                         # activity after conversion to mcg RAE, but the adult
@@ -23088,7 +23141,12 @@ class SupplementEnricherV3:
                         ),
                         "pct_rda": adequacy_dict.get("pct_rda"),
                         "adequacy_band": adequacy_dict.get("adequacy_band"),
-                        "warnings": [] if skip_ul_check else safety_warnings,
+                        "warnings": (
+                            ["Prepared-serving Vitamin A includes activity whose form is not identified; the preformed Vitamin A UL assessment is indeterminate."]
+                            if skip_ul_reason == "mixed_vitamin_a_preformed_fraction_unknown"
+                            and rule_id == "vitamin_a_beta_carotene_supplement"
+                            else [] if skip_ul_check else safety_warnings
+                        ),
                         "data_by_group": list(_nutrient_record.get("data") or []),
                         "reference_profile": dict(_RDA_REFERENCE_PROFILE),
                         "conversion_evidence": conv_evidence,  # Per-item evidence for coverage gate

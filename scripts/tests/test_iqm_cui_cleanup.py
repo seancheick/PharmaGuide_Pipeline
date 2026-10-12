@@ -227,3 +227,18 @@ def test_all_iqm_null_cui_entries_have_status_and_note():
             offenders.append(entry_id)
 
     assert offenders == []
+
+
+def test_withheld_mismatched_concepts_keep_explicit_unresolved_match_status():
+    iqm = load_iqm()
+    reviewed = {
+        'gallocatechin', 'verbascoside', 'nac', 'lactobacillus_rhamnosus',
+        'lactobacillus_casei', 'dha', 'chia_protein', 'beta_carotene',
+        'palmitoylethanolamide', 'anise', 'l_pyroglutamic_acid', 'paeoniflorin',
+        'phenylethylamine', 'lactobacillus_reuteri',
+    }
+    for parent in reviewed:
+        entry = iqm[parent]
+        assert entry['cui'] is None
+        assert entry['cui_status'] == 'no_confirmed_umls_match'
+        assert 'Exact ingredient concept remains unresolved' in entry['cui_note']

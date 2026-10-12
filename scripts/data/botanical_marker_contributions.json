@@ -122,12 +122,10 @@
           "evidence_keyword_coverage": 1.0,
           "fetched_at": "2026-05-11T07:45:42.096018+00:00",
           "standardization_keywords": [
-            "curcuminoid",
-            "95%",
-            "standardized to",
+            "curcumin",
             "% curcumin"
           ],
-          "notes": "Raw turmeric rhizome contains 2-9% curcuminoids; commercial standardized extracts (95% curcuminoids) are the clinical reference. Credit curcumin only when label declares 95%+ standardization (industry standard)."
+          "notes": "Curcuminoids include chemically distinct curcumin, demethoxycurcumin and bisdemethoxycurcumin. Total curcuminoids percentage is not measured curcumin percentage. This marker calculation requires explicit curcumin; clinical matching of standardized mixtures remains with its existing owner."
         }
       ],
       "source_db": "botanical_ingredients"
@@ -146,12 +144,9 @@
           "fetched_at": "2026-05-11T07:45:42.789820+00:00",
           "standardization_keywords": [
             "sulforaphane",
-            "glucoraphanin",
-            "% sulforaphane",
-            "% glucoraphanin",
-            "myrosinase"
+            "% sulforaphane"
           ],
-          "notes": "Sulforaphane is generated from glucoraphanin by myrosinase during chewing. Raw broccoli sprout glucoraphanin varies 0.5-13 mg/g; sulforaphane yield depends on processing. Credit only when label declares standardization."
+          "notes": "Glucoraphanin is a precursor requiring conversion by myrosinase. Its percentage, or the presence of myrosinase, does not establish sulforaphane mass. Credit measured sulforaphane only when its own percentage is explicitly declared."
         }
       ],
       "source_db": "MISSING_NEEDS_CREATION"
@@ -170,11 +165,9 @@
           "fetched_at": "2026-05-11T07:45:43.733710+00:00",
           "standardization_keywords": [
             "capsaicin",
-            "capsaicinoid",
-            "% capsaicin",
-            "Scoville"
+            "% capsaicin"
           ],
-          "notes": "Cayenne (Capsicum annuum) capsaicinoid content varies widely (0.1-2% w/w) by cultivar and growing conditions. Standardized commercial extracts (e.g., Capsimax 2%) are the clinical reference. Credit only when standardized."
+          "notes": "Total capsaicinoids and Scoville heat values do not establish capsaicin mass. This marker calculation requires an explicit capsaicin percentage."
         }
       ],
       "source_db": "botanical_ingredients"
@@ -263,11 +256,9 @@
           "fetched_at": "2026-05-11T17:02:54.927672+00:00",
           "standardization_keywords": [
             "lutein",
-            "% lutein",
-            "zeaxanthin",
-            "standardized to"
+            "% lutein"
           ],
-          "notes": "Tagetes erecta (Aztec marigold) flower petals are the commercial source of lutein/zeaxanthin via saponification of lutein esters. Petal lutein content is highly variable (0.1-3% w/w); commercial extracts are typically standardized to 5%, 10%, or 20% lutein. Credit lutein Section C only when label declares ≥5% standardization."
+          "notes": "Lutein and zeaxanthin are distinct carotenoids. This marker calculation requires an explicit lutein percentage; zeaxanthin is not credited as lutein."
         }
       ],
       "source_db": "botanical_ingredients"

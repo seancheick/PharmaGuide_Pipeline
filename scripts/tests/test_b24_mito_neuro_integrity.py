@@ -106,6 +106,18 @@ def test_b24_value_in_band(iqm, pid, fname, vmin, vmax, basis):
     """Each form's struct.value must sit in evidence band."""
     form = iqm[pid]['forms'].get(fname)
     assert form is not None, f'{pid}::{fname} missing'
+    reviewed_unknown = {'ornithine alpha-ketoglutarate': ['9022538', 'burn patients'],
+     'gaba (gamma-aminobutyric acid) (unspecified)': ['26500584', 'BBB'],
+     'milk thistle (unspecified)': ['23072776', 'Urinary recovery is not'],
+     'silychristin (minor flavonolignan)': ['23072776', 'Urinary recovery is not'],
+     'silydianin (minor flavonolignan)': ['23072776', 'Urinary recovery is not'],
+     'diindolylmethane (dim)': ['18843002', 'BR-DIM'],
+     'indole-3-carbinol (i3c)': ['17164373', 'rather than intact I3C']}
+    if fname in reviewed_unknown:
+        assert form['absorption_structured'] == dict(value=None, range_low=None, range_high=None, quality='unknown')
+        for source_limit in reviewed_unknown[fname]:
+            assert source_limit in form['notes']
+        return
     val = (form.get('absorption_structured') or {}).get('value')
     assert val is not None, f'{pid}::{fname} struct.value should be populated'
     assert vmin <= val <= vmax, (
@@ -166,37 +178,34 @@ def test_sod_6th_category_error_documented(iqm):
 
 
 def test_i3c_dim_class_equivalence(iqm):
-    """I3C and DIM must be class-equivalent (within 0.05) per Reed 2006
-    (PMID:17164373) — I3C undetectable in plasma; only DIM detected.
-    """
-    forms = iqm['diindolylmethane']['forms']
-    dim = (forms['diindolylmethane (dim)'].get('absorption_structured') or {}).get('value')
-    i3c = (forms['indole-3-carbinol (i3c)'].get('absorption_structured') or {}).get('value')
-    assert dim is not None and i3c is not None
-    assert abs(dim - i3c) <= 0.05, (
-        f'I3C ({i3c}) must equal DIM ({dim}) within 0.05 — I3C undetectable '
-        f'in plasma; only DIM detected as systemic species '
-        f'(PMID:17164373, PMID:11294972 acid-condensation in stomach).'
-    )
+    # Source-qualified preparation/endpoints supersede inferred absolute-F hierarchy.
+    form = iqm['diindolylmethane']['forms']['diindolylmethane (dim)']
+    assert form['absorption_structured'] == dict(value=None, range_low=None, range_high=None, quality='unknown')
+    assert '18843002' in form['notes']
+    assert 'BR-DIM' in form['notes']
+    form = iqm['diindolylmethane']['forms']['indole-3-carbinol (i3c)']
+    assert form['absorption_structured'] == dict(value=None, range_low=None, range_high=None, quality='unknown')
+    assert '17164373' in form['notes']
+    assert 'rather than intact I3C' in form['notes']
+    assert 'carcinoma-cell' in form['notes']
+
 
 
 def test_silychristin_silydianin_class_equivalent_to_silybin(iqm):
-    """silychristin/silydianin must be class-equivalent (within 0.02) per
-    Calani 2012 (PMID:23072776) — silymarin total F 0.45±0.28% across all
-    flavanolignans including silybin.
-    """
-    forms = iqm['milk_thistle']['forms']
-    silybin = (forms['silybin (isolated)'].get('absorption_structured') or {}).get('value')
-    silychristin = (forms['silychristin (minor flavonolignan)'].get('absorption_structured') or {}).get('value')
-    silydianin = (forms['silydianin (minor flavonolignan)'].get('absorption_structured') or {}).get('value')
-    assert silybin is not None
-    for nm, v in [('silychristin', silychristin), ('silydianin', silydianin)]:
-        assert v is not None, f'{nm} struct.value should be populated'
-        assert abs(v - silybin) <= 0.02, (
-            f'{nm} ({v}) must be class-equivalent to silybin ({silybin}) '
-            f'within 0.02 — same poor-F flavanolignan class '
-            f'(PMID:23072776).'
-        )
+    # Source-qualified preparation/endpoints supersede inferred absolute-F hierarchy.
+    form = iqm['milk_thistle']['forms']['silybin (isolated)']
+    assert form['absorption_structured'] == dict(value=None, range_low=None, range_high=None, quality='unknown')
+    assert '14692709' in form['notes']
+    assert 'without an intravenous reference' in form['notes']
+    form = iqm['milk_thistle']['forms']['silychristin (minor flavonolignan)']
+    assert form['absorption_structured'] == dict(value=None, range_low=None, range_high=None, quality='unknown')
+    assert '23072776' in form['notes']
+    assert 'Urinary recovery is not' in form['notes']
+    form = iqm['milk_thistle']['forms']['silydianin (minor flavonolignan)']
+    assert form['absorption_structured'] == dict(value=None, range_low=None, range_high=None, quality='unknown')
+    assert '23072776' in form['notes']
+    assert 'Urinary recovery is not' in form['notes']
+
 
 
 def test_liposomal_evidence_thin_documented_b24(iqm):
@@ -268,8 +277,6 @@ def test_class_authority_pmids_introduced_b24(iqm):
         'PMID:26500584': 'Boonstra 2015 GABA',
         'PMID:23072776': 'Calani 2012 silymarin',
         'PMID:17164373': 'Reed 2006 I3C',
-        'PMID:12749348': 'Marlett 2003 psyllium',
-        'PMID:15742357': 'Vouldoukis 2004 SOD',
     }
     full_text = ''
     for pid in ('alpha_lipoic_acid', 'l_carnitine', 'melatonin', 'gaba',
@@ -279,7 +286,9 @@ def test_class_authority_pmids_introduced_b24(iqm):
         for form in iqm[pid]['forms'].values():
             full_text += (form.get('notes') or '') + ' '
             full_text += (form.get('absorption') or '') + ' '
-    missing = [pmid for pmid in expected_pmids if pmid not in full_text]
+    missing = [pmid for pmid in expected_pmids if pmid.replace('PMID:', '') not in full_text]
+    assert 'local' in iqm['psyllium']['forms']['psyllium seed']['notes'].lower()
+    assert iqm['superoxide_dismutase']['forms']['sod supplement']['absorption_structured']['value'] is None
     assert not missing, (
         f'Verified class-authority PMIDs missing: {missing}'
     )
