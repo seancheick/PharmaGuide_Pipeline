@@ -122,6 +122,21 @@ class CanonicalIdentityRegistry:
             literal = self.resolve_preferred(strip_label_identity_qualifiers(str(value or "")))
         return literal is not None and literal[0] == canonical_id
 
+    def preparation_identity_matches(
+        self, value: Any, canonical_id: str, source_db: str, forms: Iterable[str] = (),
+    ) -> bool:
+        """An extract requires its own label/form evidence, never a stripped oil name."""
+        standard = self.standard_names.get((source_db, canonical_id), "")
+        if source_db != "other_ingredients" or not re.search(r"\bextract\b", standard, re.I):
+            return True
+        if self.literal_identity_matches(value, canonical_id):
+            return True
+        return any(
+            re.search(r"\bextract\b", str(form or ""), re.I)
+            and self.literal_identity_matches(form, canonical_id)
+            for form in forms
+        )
+
     def canonicalize(
         self,
         canonical_id: str,

@@ -6501,13 +6501,18 @@ class SupplementEnricherV3:
                 if cleaner_declared_total:
                     continue
                 if (
-                    (not source_label or ingredient.get("raw_category") == "fatty acid")
+                    (not source_label or (
+                        ingredient.get("raw_category") == "fatty acid"
+                        and ingredient.get("_sole_active_row") is True
+                        and not ingredient.get("isNestedIngredient")
+                        and not self._is_generic_unspecified_omega3(ingredient)
+                    ))
                     and ingredient.get("cleaner_row_role") == "active_scorable"
                     and ingredient.get("score_eligible_by_cleaner") is True
                     and self._has_valid_therapeutic_dose(ingredient)[0]
                     # The canonical identity owner already resolved this
                     # exact DSLD active row. Neither a generic standardized
-                    # name nor an explicitly classified discrete fatty acid
+                    # name nor a sole, discrete fatty-acid supplement
                     # can reclassify that owned identity as a nutrition total.
                     # Nutrition rollups remain cleaner-excluded. Do not rematch the display name
                     # here: that would create a second identity decision.
@@ -7001,6 +7006,13 @@ class SupplementEnricherV3:
             rules = (recognition.get("match_rules") or {}
                      if recognition.get("recognition_source") == "other_ingredients" else {})
             if negative_match_terms_veto(context, rules.get("negative_match_terms") or []):
+                return None
+            if not self._current_canonical_identity_registry().preparation_identity_matches(
+                (context_row or {}).get("raw_source_text") or ing_name,
+                recognition.get("matched_entry_id"), recognition.get("recognition_source"),
+                [form.get("name") or "" for form in (context_row or {}).get("forms") or []
+                 if isinstance(form, dict)],
+            ):
                 return None
             result = dict(recognition)
             result.pop("match_rules", None)

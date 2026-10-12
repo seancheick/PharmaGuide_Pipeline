@@ -211,3 +211,32 @@ def test_real_nutrition_panel_does_not_become_fatty_active(normalizer, enricher,
     scoring = get_scoring_ingredients(enriched)
     assert scoring.mapped_count == scoring.unmapped_count == 0, issues
     assert scoring.mapped_coverage == 0.0
+
+
+def test_fatty_acid_oil_profile_keeps_its_existing_exclusion(normalizer, enricher):
+    from scoring_input_contract import get_scoring_ingredients
+    raw = {'id': 'oil-composition', 'fullName': 'Flaxseed Oil 1250 mg', 'brandName': 'Test',
+           'ingredientRows': [{'name': 'Flaxseed Oil', 'ingredientGroup': 'Flaxseed Oil',
+               'category': 'fat', 'order': 1, 'forms': [],
+               'quantity': [{'quantity': 1250, 'unit': 'mg'}],
+               'nestedRows': [{'name': 'Oleic Acid', 'ingredientGroup': 'Oleic Acid',
+                   'category': 'fatty acid', 'order': 2, 'forms': [], 'nestedRows': [],
+                   'quantity': [{'quantity': 200, 'unit': 'mg'}]}]}],
+           'otheringredients': {'ingredients': []}}
+    enriched, issues = enricher.enrich_product(normalizer.normalize_product(raw))
+    scoring = get_scoring_ingredients(enriched)
+    assert not any(x.get('canonical_id') == 'oleic_acid' for x in scoring.rows), issues
+    leaf = next(x for x in enriched['ingredient_quality_data']['ingredients'] if x['name'] == 'Oleic Acid')
+    assert leaf['skip_reason'] == 'excluded_nutrition_fact'
+
+
+def test_sole_omega_total_is_not_a_discrete_fatty_acid(enricher):
+    # Cleaner-owned generic total reaches the same exclusion seam as a
+    # discrete fatty acid, but still has no constituent-specific quantity.
+    row = {'name': 'Total Omega-3 Fatty Acids',
+           'raw_source_text': 'Total Omega-3 Fatty Acids',
+           'raw_category': 'fatty acid', 'quantity': 600, 'unit': 'mg',
+           'cleaner_row_role': 'active_scorable', 'score_eligible_by_cleaner': True,
+           'canonical_id': 'fish_oil', 'canonical_source_db': 'ingredient_quality_map',
+           '_sole_active_row': True, 'forms': []}
+    assert enricher._should_skip_from_scoring(row, {}, {}) == 'excluded_nutrition_fact'
