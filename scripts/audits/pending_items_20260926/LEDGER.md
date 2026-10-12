@@ -2,56 +2,15 @@
 
 ## Current execution — October 12 approved integration and rebuild
 
-Sean approved merging PR106/103 and one full rebuild with catalog/app checks. Integrated pipeline9b320ab68/app35730234; both approved source heads contained in origin/main, merged temporary source branches deleted after proof. Source checkpoint65373635 has green CI38185185820; prior bounded measurements/source holds unchanged.
+Sean approved main integration and the full rebuild. Pipeline PR106/107 merged at6a969fe33; app PR103/104 merged atdb0285ee after exact schema3 importer CI38210190487 passed. Original merged source branches cleaned after containment proof. No Supabase/TestFlight/AppStore publication authorized.
 
-Owner: scripts/test_lock.py::inherited_lock_fds / scripts/test.sh preparation lock gate; scripts/tests/freeze_contract_snapshots.py and existing manifest; canonical snapshot/export/interaction owners and paired app importer. Evidence: saved user preparation failure, fail-first delayed-startup regression, same-raw original/c7/current captures and owner tests. Will NOT create: scorer, clinical rating, registry, waiver, restamp or external publication.
+Owner: existing normalizer/inactive resolver and curated ingredient/interaction registries; existing citation review/backlog gates; scripts/test_lock.py/test.sh; existing export and Flutter importer. Evidence: preserved user/preparation failure, actual raw canaries, live primary source content and fail-first owner regressions. Will NOT create: scorer, registry, clinical policy, identity owner, approval waiver, restamp or release bypass.
 
-User attempt stopped before brands: raw245156 score83.5→85 and stale-held-lock test wait-message failure. Lock test released its holder after a fixed sleep before delayed startup reached acquisition. A0.75second startup delay reproduces it; test now waits for actual contention, retaining bypass/exit/deadline guards.18 owner tests pass; independent review passes. Complete integrated raw check finds exactly2drifts of33:245156 removes unsupported placeholderV029 manufacturer deduction (historical event remains unverified, not proven absent/resolved),30638175.5→75.8 reflects reviewed citrulline parent-relative normalization. Only totals/mirrors refreshed, with original bytes/hashes preserved and qualified changelog; full33raw check passes and3structural snapshot tests pass. Tests-only correction batch329c1015, no runtime/data change; stored scored snapshot comparison is post-corpus by its existing profile owner.
+Original preparation repairs: lock-test fixed-sleep race reproduced with delayed startup and synchronized actual contention,18 owner cases passed; two33raw canary drifts traced to unsupportedV029 manufacturer deduction and reviewed citrulline normalization, original snapshots preserved and33canaries passed. Integrated full preparation then stopped before brands:7failed/22626passed/17declared skips, plus3citation gates. Five stale identity/scoring expectations are now stronger source-scope guards; verified HPMCP synonym resolves the existing derivative instead of source-group fallback to plainHPMC. CAS99011-02-6 belonged to imiquimod; manufacturer polymer CAS9050-31-1 replaces it, PubChem CID remainsnull because both CAS lookup synonyms are polluted. Stale OrangeFlavor/calcium-hydrate UNII exceptions removed with strict guards retained.
 
-One Clean→Enrich→Score corpus run is authorized after preparation passes.95GiB available, no competing corpus/broad job; prior catalog/core/interaction/manifests preserved under private audit rebuild_20261012/catalog_before. App importer discovered still accepts schema1/2 only although approved consumer now supports3; profile owns fail-first existing-owner compatibility repair, no override/bypass. Next: integrate reviewed test-only preparation repair, inspect every stage fingerprint, one pipeline-only run; then private catalog/interaction candidate, local app import/read/render checks and release rung. No Supabase/TestFlight/AppStore publication authorized here. Seven form-rating calibrations and other documented source/unit/policy holds remain.
+Two real source contradictions fixed: sage healthy-adult efficacy prose incorrectly cited dementia mixed aromatherapy; psyllium-lithium warning incorrectly cited/advised thyroid treatment and unsupported2hspacing. Lithium now uses its actual regulatory label/case-letter identity, monitoring advice and same monitor/class gate; letter fulltext remains unavailable. Seven interaction title flags, one retraction notice and eight broad citation flags receive exact limited existing-owner rationales only after real claim fixes. Strict backed/interaction/content gates pass; content reports0newmismatches/0unresolved and170historical reviewed/backlog mismatches, not whole clinical clearance. Named checks:61HPMCP/UNII,54CAS/owner,52source-claim,24verifier and5revised identity cases pass. NineHPMCP andfour source-claim frozen-raw score/pillar comparisons are unchanged; actual219048native enrichment retains monitor:lithium with corrected text/sources.
 
-Report/receipts: /Users/seancheick/pg_quality/clinical_registry_accuracy_20261011/REPORT.md and rebuild_20261012/. Whole-record clinical clearance remains zero; integration, generated artifacts, app acceptance and external publication are distinct.
-
-Readable phase checklist and preserved September 30 scope: [master completion plan](../../../docs/plans/PHARMAGUIDE_MASTER_COMPLETION_PLAN.md). This ledger remains the execution register. Pipeline source through `95af59fd` pushed to main on October 2 with Sean's approval; catalog release remains pending.
-
-October 2 execution-rule update: [x] shared instructions now require explicit failing nodes/files
-while iterating, one integrator-owned combined checkpoint after the batch is ready, and targeted
-repair of all failure classes before a checkpoint rerun. Scoring, clinical-data, curated-data and FDA-sync rules
-reference the same procedure. Agents resume from current handoffs and relevant plan/ledger items;
-completion requires named evidence, not an unqualified check mark. Documentation diff verified;
-no pytest needed, and no scoring/release/CI completion is implied.
-Owner: `AGENTS.md::Tests` and this existing register/master plan — evidence: reviewed and aligned
-their instructions. Will NOT create: another runner, profile manifest, tracker or release shortcut.
-
-One register for every open item found by the 2026-09-26 integration: the 25 lane handoffs (archived
-under `~/claude-attic/2026-09-26/worktree-state/`), the memory open-work index, Codex's v41 handoff and
-live API checks. Duplicates are merged. Every row was re-checked against pipeline main 8dbd621b and
-app main af472e5 on 2026-09-26; nothing here is carried forward from a handoff unverified.
-Evidence receipts for the data fixes: `research.md` in this folder.
-Second pass, 2026-09-26 evening: Sean decided D1, D5 (senna), D8 and D10; the "Audit Gemini and leftover work"
-session's final findings and the Codex RECONCILIATION remainder are folded in below. Resolved rows keep their
-text and gain a "Resolved" note with the commit.
-Third pass, 2026-09-27 (integrator): Codex's v41-recovery (0de250a2) and the Claude identity lane (c0022415)
-are on main through merges 177eab34 and 106a8d59. The rows touched below were re-checked on that tree; a docs
-audit's findings were re-verified one by one, and only the ones that reproduced are added (Q30-Q31).
-
-Fourth pass, 2026-09-28 (integrator): Codex's final lane landed as 0d4d59a6 and was audited; form
-curation batches 1-5 and the stage-code freshness gate are on main (b5ad5a8f). New rows D19-D21, Q32-Q34;
-R1 updated. Later the same day: form curation batches 7-11, a matcher fix and two IQM identity corrections
-(1eab691f..c456e479); Q32 and D21 updated, Q35-Q36 added. Then Q36 was rewritten to the BCAA ratio policy (a7351548) and Q37 added. Later: BCAA forms tie at 15 (296d5f3e), Q38 added, D19 gains the clean-test gate.
-
-Fifth pass, 2026-09-30 (Codex integrator): master completion work starts from clean main/origin
-`880b17a7`. The focused Evidence/role baseline is 103 passed, 7 skipped, 1 strict xfail (Ravage
-cinnamon, Q39/Lane 2B). Q3 and Q40 are landed; the uncommitted `codex/dose-calibration` draft is
-preserved as rejected decision material, not an integration source. Q42's missing interaction DB
-was confirmed generated output: all five canonical supp.ai files and curated inputs were present,
-132/132 curated rules verified, and the canonical builder regenerated/staged interaction DB 1.0.12
-(132 interactions, 39 drug classes, SHA-256 `1bd03ee457ae33a6f8c037994fb3670d3e12258e64c3a74289888bd83057e56b`).
-Nothing was imported into Flutter or published.
-
-Sixth pass,2026-10-01 (Codex): approved probiotic production model locally integrated at7262d192 after reconciling main d021061b. Policy is fixed10/6/(0,2,4); exact1259-label replay and fresh review passed. Phase2 cleaner fixb39328b9 closes the Ravage expected failure;17906 fast tests pass with167 artifact/opt-in skips and zero xfails. Generic/omega amount transfers, shared prominence/traceprotein/serving issues, broader Dose policies, final calibration, frozen Flutter integration and release remain outstanding. At that local checkpoint no push/publication had occurred; source was subsequently pushed through099d64b9 with Sean approval. Catalog publication remains pending.
-
-Close an item by editing this file in the commit that resolves it.
+PR108 completed source throughffcb4918 awaits final combined local/CI checkpoint and integration. First corpus attempt is preserved in rebuild_20261012/full_pipeline.log and integrated_failed_preparation.json; no brand stage ran. All114 prior manifests stale, earliestClean. Current audit receipts /Users/seancheick/pg_quality/clinical_registry_accuracy_20261011/rebuild_20261012/. Next: finish combined candidate checks, integrate, inspect every fingerprint, retry necessary pipeline-only pass; then private catalog/interaction export, local app import/consumer/native checks, release rung and final report. Seven form calibrations, printed-unit/source/legal and clinical applicability holds remain explicit.
 
 ## P1: safety
 
