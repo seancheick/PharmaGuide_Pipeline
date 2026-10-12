@@ -48762,7 +48762,7 @@
           "by": "Product owner approval",
           "date": "2026-08-08"
         },
-        "notes": "Hemp seed oil pressed without heat to preserve polyunsaturated fatty acids. Rich in ALA (omega-3), linoleic acid (omega-6), and gamma-linolenic acid (GLA). Balanced omega profile for cardiovascular and skin health. Non-organic but still cold-pressed for nutrient preservation. Evidence update 2026-04-25 (Batch 19): Fenugreek/SB/hemp/bioflavonoid audit — 10 PMIDs WebFetch-verified. CLASS FINDINGS: (1) Fenugreek saponin F is class-poor (~1-5%); testofen bio=14 was Crominex-pattern (clinical, not PK). (2) Sea buckthorn berry oil palmitoleic content does NOT translate to plasma palmitoleic delivery — Johansson 2000 (PMID:11120446) explicitly shows plasma FA UNCHANGED at 5g/4wk. (3) Bioflavonoids class-poor F: hesperidin 4-8% urinary (Manach 2003 PMID:12571654), rutin systemic 1-5% (Hollman 1995 PMID:7491892). (4) Hemp organic ≡ cold-pressed (same TG chemistry); refined retains TG/F structure. EMIQ exists as separately-absorbed bioflavonoid form (SGLT1-mediated) — should be added as separate parent if not already.",
+        "notes": "Cold-pressed hemp-seed oil is seed-derived oil. Pressing method and fatty-acid composition require label or analytical evidence. FDA distinguishes seed-derived oil from aerial extracts; trace THC or CBD may enter seed-derived ingredients during harvesting or processing. A product-specific absence claim requires analytical evidence. Source: https://www.fda.gov/food/hfp-constituent-updates/fda-responds-three-gras-notices-hemp-seed-derived-ingredients-use-human-food .",
         "aliases": [
           "cold-pressed"
         ],
@@ -48782,7 +48782,7 @@
           "by": "Product owner approval",
           "date": "2026-08-08"
         },
-        "notes": "Heat-processed or solvent-extracted hemp seed oil. Refining removes some phytonutrients, chlorophyll, and volatile compounds. Neutral taste and longer shelf life vs cold-pressed. Lower GLA and phytosterol content. Primarily a cooking/carrier oil rather than supplement-grade. Evidence update 2026-04-25 (Batch 19): Fenugreek/SB/hemp/bioflavonoid audit — 10 PMIDs WebFetch-verified. CLASS FINDINGS: (1) Fenugreek saponin F is class-poor (~1-5%); testofen bio=14 was Crominex-pattern (clinical, not PK). (2) Sea buckthorn berry oil palmitoleic content does NOT translate to plasma palmitoleic delivery — Johansson 2000 (PMID:11120446) explicitly shows plasma FA UNCHANGED at 5g/4wk. (3) Bioflavonoids class-poor F: hesperidin 4-8% urinary (Manach 2003 PMID:12571654), rutin systemic 1-5% (Hollman 1995 PMID:7491892). (4) Hemp organic ≡ cold-pressed (same TG chemistry); refined retains TG/F structure. EMIQ exists as separately-absorbed bioflavonoid form (SGLT1-mediated) — should be added as separate parent if not already.",
+        "notes": "Refined hemp-seed oil is processed seed-derived oil. The label does not establish retained fatty-acid composition or comparative absorption without preparation-specific evidence. FDA distinguishes seed-derived oil from aerial extracts; trace THC or CBD may enter seed-derived ingredients during harvesting or processing. A product-specific absence claim requires analytical evidence. Source: https://www.fda.gov/food/hfp-constituent-updates/fda-responds-three-gras-notices-hemp-seed-derived-ingredients-use-human-food .",
         "aliases": [
           "refined"
         ],
