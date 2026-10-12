@@ -12269,6 +12269,18 @@ class EnhancedDSLDNormalizer:
         if not strong_blend_signal and weak_blend_signal:
             name_lower = (ing.get("name") or "").lower().strip()
             std_lower = (ing.get("standardName") or "").lower().strip()
+            preparation = self._canonical_identity_registry.resolve_verified_preferred(
+                ing.get("name")
+            )
+            if preparation and preparation[1] == "standardized_botanicals" and not ing.get("nestedRows"):
+                entry = next((row for row in self.standardized_botanicals.get(
+                    "standardized_botanicals", []
+                ) if row.get("id") == preparation[0]), None)
+                if entry and entry.get("branded_form") is True:
+                    # A verified whole preparation is not a blend total merely
+                    # because its printed name ends in Complex. Strong blend
+                    # declarations and preparations with children stay excluded.
+                    return False
             iqm_forms = getattr(self, "_iqm_branded_form_names", frozenset())
             if (name_lower and name_lower in iqm_forms) or (
                 std_lower and std_lower in iqm_forms

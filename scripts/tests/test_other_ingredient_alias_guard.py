@@ -58,6 +58,11 @@ def test_silica_overlap_records_the_current_identity_review():
 # harmful_additives. The test allows this exact set so the suite passes today,
 # but any new collision must be reviewed and cleaned up before merge.
 BASELINE_ALIAS_DUPLICATES = {
+    # Reviewed2026-10-12: NHA_MALTODEXTRIN owns primary identity while
+    # ADD_MALTODEXTRIN retains independent safety recognition. The canonical
+    # registry excludes safety databases; test_next_release_identity_mapping
+    # checks that both decisions survive, so lookup order cannot steal identity.
+    "maltodextrin",
     "acacia gum",
     "annatto",
     "anthocyanins",
@@ -240,6 +245,7 @@ BASELINE_ALIAS_DUPLICATES = {
 }
 
 BASELINE_ALIAS_VS_STANDARD_COLLISIONS = {
+    "maltodextrin",  # Same reviewed primary-identity/safety separation above.
     "acacia gum",
     "beetroot powder",
     "blackstrap molasses",
