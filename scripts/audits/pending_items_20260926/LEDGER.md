@@ -1,3 +1,11 @@
+## 2026-10-12 — final identity-gate consumer alignment
+
+Owner: `audit_identity_integrity::main` adapter delegates eligibility to `build_final_db::_warning_only_identity_labels` and checksum/state proof to `release_catalog_artifact::verified_warning_only_products` — evidence: caller trace and failing CLI regression. Will NOT create: identity policy, mapping, scorer, registry, status or waiver. Class: executable release-gate adapter; no pipeline or emitted assessment change.
+
+Integrated447/app7791 canonical Clean/Enrich/Score completed all37brands+submissions; all114stage manifests fresh. Private export assembled15421products with zeroerrors, contractfailures or quarantines, then CLI rejected22 genuineunknown NOT_SCORED labels because it loaded scored context for BLOCKED only. Fix loads both proven catalog states with matching source assessment; numeric-score/missing-source/unverified-ban/mismatched-state guards remain. Source identities and scores are unchanged.
+
+Failfirst newCLI regression reproduced omission. Focused6regression/negativecontrols pass;280owner/consumer tests pass. Stagefingerprints remain current. Whole-fast CI, local checkpoint and independent review pending; final strict candidate reassembly and actual consumer/release checks remain. No additional upstream corpus run indicated.
+
 # Pending items register, 2026-09-26
 
 ## Current execution — October12 mapped-coverage169 batch
