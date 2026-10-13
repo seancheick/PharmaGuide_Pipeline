@@ -1681,6 +1681,16 @@ EXPORT_REQUIRED_IQD_FIELDS = {
 }
 
 
+def _has_verified_source_label(enriched: Dict[str, Any]) -> bool:
+    """Apply the existing label-record owner's provenance contract."""
+    try:
+        record = build_label_record_contract(enriched, enriched.get("display_ingredients"))
+        return bool(record.get("source_name") and record.get("source_record_id")
+                    and record.get("formula_fingerprint") and enriched.get("display_ingredients"))
+    except ValueError:
+        return False
+
+
 def validate_export_contract(enriched: Dict, scored: Dict) -> List[str]:
     """Validate the minimum upstream contract needed for final DB export.
 
@@ -1711,18 +1721,7 @@ def validate_export_contract(enriched: Dict, scored: Dict) -> List[str]:
     # its quality score is unavailable, without excusing malformed payloads.
     unscored_label_known = False
     if scored.get("quality_score_status") == "not_scored":
-        try:
-            label_record = build_label_record_contract(
-                enriched, enriched.get("display_ingredients")
-            )
-            unscored_label_known = bool(
-                label_record.get("source_name")
-                and label_record.get("source_record_id")
-                and label_record.get("formula_fingerprint")
-                and enriched.get("display_ingredients")
-            )
-        except ValueError:
-            pass
+        unscored_label_known = _has_verified_source_label(enriched)
         if not unscored_label_known:
             issues.append("review_queue: NOT_SCORED product lacks a verified source-label record.")
         if (
@@ -1850,6 +1849,18 @@ def validate_export_contract(enriched: Dict, scored: Dict) -> List[str]:
         and bool(strict_scoring_contract["findings"])
         and all(finding == "identity_disposition_not_scoreable:identity_conflict"
                 for finding in strict_scoring_contract["findings"])
+    ) or (
+        unscored_label_known
+        and scored.get("quality_score_status") == "not_scored"
+        and safety_only_paths and conflict_paths <= safety_only_paths
+        and strict_scoring_contract.get("passed") is False
+        and isinstance(strict_scoring_contract.get("findings"), list)
+        and bool(strict_scoring_contract["findings"])
+        and all(finding in {"identity_disposition_not_scoreable:identity_conflict", "disclosed_form_unmapped"}
+                for finding in strict_scoring_contract["findings"])
+        and any(row.get("raw_source_path") in safety_only_paths
+                and row.get("identity_decision_reason") == "form_unmapped"
+                for row in ingredients if isinstance(row, dict))
     ) or (
         # An unfinished preparation grade protects a score, not the existence
         # of a verified product label. No other strict failure is waived.
@@ -3355,17 +3366,26 @@ def _classify_export_contract_issues(
 def _warning_only_identity_labels(
     enriched: Dict[str, Any], scored: Dict[str, Any],
 ) -> Dict[str, str]:
-    """Contain safety-only identity gaps without authorizing a public score."""
+    """Preserve intact unresolved source rows without authorizing a score."""
+    known_unscored = (
+        scored.get("quality_score_status") == "not_scored"
+        and scored.get("quality_tier") is None and scored.get("grade") is None
+        and safe_str(scored.get("verdict")).upper() != "SAFE"
+        and bool(scored.get("score_unavailable_reason"))
+        and _has_verified_source_label(enriched)
+    )
     if not (
-        scored.get("quality_score_status") == "suppressed_safety"
-        and safe_str(scored.get("verdict")).upper() in {"BLOCKED", "UNSAFE"}
+        (known_unscored or (
+            scored.get("quality_score_status") == "suppressed_safety"
+            and safe_str(scored.get("verdict")).upper() in {"BLOCKED", "UNSAFE"}
+        ))
         and scored.get("quality_score_v4_100") is None
         and scored.get("score_100_equivalent") is None
         and scored.get("display_100") == "N/A"
     ):
         return {}
     rows = safe_list(safe_dict(enriched.get("ingredient_quality_data")).get("ingredients"))
-    paths = safety_only_conflict_paths(rows)
+    paths = set() if known_unscored else safety_only_conflict_paths(rows)
     labels = {
         row["raw_source_path"]: row["label_display_name"]
         for row in rows
@@ -3373,7 +3393,7 @@ def _warning_only_identity_labels(
         and isinstance(row.get("raw_source_path"), str)
         and row["raw_source_path"] in paths
     }
-    if not is_confirmed_ban_or_recall(scored):
+    if not known_unscored and not is_confirmed_ban_or_recall(scored):
         return labels
 
     # A separate unmapped label cannot hide a confirmed ban. Preserve its
@@ -3391,7 +3411,9 @@ def _warning_only_identity_labels(
             isinstance(path, str) and path.strip() and row_paths.count(path) == 1
             and len(source) == 1
             and row.get("identity_disposition") == "identity_conflict"
-            and row.get("identity_decision_reason") == "no_quality_map_match"
+            and row.get("identity_decision_reason") in (
+                {"no_quality_map_match", "form_unmapped"} if known_unscored else {"no_quality_map_match"}
+            )
             and row.get("scoreable_identity") is False
             and row.get("mapped") is False
             and not any(row.get(key) for key in

@@ -96,17 +96,11 @@ def test_fluvoxamine_melatonin_rule_is_not_broadened_to_all_ssris():
     assert "other ssris" not in rule["management"].lower()
 
 
-def test_zinc_copper_rule_only_fires_at_its_authored_screening_floor():
+def test_zinc_copper_does_not_use_an_unsupported_screening_floor():
     rule = BY_ID["SSI_ZINC_COPPER"]
-    management = rule["management"].lower()
-
-    assert rule["materiality"] == "dose_dependent"
-    assert rule["dose_threshold"]["agent_canonical_id"] == "zinc"
-    assert rule["dose_threshold"]["value"] == 25
-    assert rule["dose_threshold"]["unit"] == "mg"
-    assert "screening threshold" in management
-    assert "toxicity cutoff" in management
-    assert "separate" not in management
+    assert rule["materiality"] == "presence"
+    assert rule.get("dose_threshold") is None
+    assert "separate" not in rule["management"].lower()
 
 
 def test_alpha_lipoic_acid_uses_the_parent_ingredient_cui():
@@ -164,23 +158,14 @@ def test_warfarin_vitamin_k_copy_describes_direction_and_consistency():
     )
 
 
-def test_chromium_copy_explains_the_authored_screening_threshold():
+def test_chromium_retains_background_review_without_an_unsupported_floor():
     rule = BY_ID["DSI_DM_CHROMIUM"]
-    management = rule["management"].lower()
-    threshold = rule["dose_threshold"]
-
     assert rule["severity"] == "Minor"
     assert rule["display_layer"] == "background"
     assert rule["background_rationale"].strip()
-    assert threshold["value"] == 200
-    assert threshold["unit"] == "mcg"
-    assert threshold["confidence_basis"] == "inferred_from_dose_range"
-    assert "not a guideline cutoff" in threshold["rationale"].lower()
-    assert "at least 200 mcg/day" in management
-    assert "screening threshold" in management
-    assert "not a proven toxicity cutoff" in management
-    assert "do not change" in management
-    assert management.startswith("chromium may lower blood glucose")
+    assert rule["materiality"] == "presence"
+    assert rule.get("dose_threshold") is None
+    assert "do not change" in rule["management"].lower()
 
 
 def test_depletion_facts_have_one_owner_and_safety_warnings_stay():

@@ -98,19 +98,29 @@ def test_niacin_statin_warning_requires_lipid_modifying_nicotinic_acid_dose():
         "form_scope": ["nicotinic acid"],
         "confidence": "high",
         "confidence_basis": "regulatory_label_cutoff",
-        "source": "https://www.accessdata.fda.gov/drugsatfda_docs/label/2009/020381s039s041lbl.pdf",
+        "source": "https://dailymed.nlm.nih.gov/dailymed/fda/fdaDrugXsl.cfm?setid=e432e043-c019-4d58-94ca-7c1d85f5cd40&type=display",
         "rationale": (
-            "FDA NIASPAN labeling cautions about statin-associated "
-            "myopathy/rhabdomyolysis at niacin doses >=1 g/day. This is a "
-            "lipid-modifying nicotinic-acid interaction, not a presence-only "
-            "warning for multivitamin-dose niacinamide."
+            "Current rosuvastatin labeling reports statin-associated "
+            "myopathy/rhabdomyolysis with lipid-modifying niacin (nicotinic "
+            "acid) doses >=1 g/day. This qualifier does not establish universal "
+            "safety below the value or apply the same claim to niacinamide."
         ),
         "consumer_disposition_if_met": "review",
         "consumer_disposition_if_not_met": "suppress",
-        "amount_missing_disposition": "suppress",
-        "unknown_form_disposition": "suppress",
+        "amount_missing_disposition": "review",
+        "unknown_form_disposition": "review",
         "conversion_failure_policy": "release_block",
     }
+
+    e = SupplementEnricher()
+    for ingredient, status in [
+        (_ing(20, "niacin", form_id="niacin_unspecified"), "form_unknown"),
+        (_ing(None, "nicotinic acid"), "amount_unknown"),
+    ]:
+        decision = e._evaluate_min_effective_dose_decision(rule["min_effective_dose"], ingredient, 1.0, "caution")
+        assert decision["evaluation_status"] == status
+        assert decision["consumer_disposition"] == "review"
+        assert decision["clinical_severity"] == "caution"
 
 
 def test_iodine_authored_floor_retained_selenium_no_unsupported_floor():

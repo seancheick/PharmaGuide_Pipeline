@@ -1,7 +1,7 @@
 {
   "_metadata": {
     "schema_version": "1.1.0",
-    "last_updated": "2026-07-30",
+    "last_updated": "2026-10-13",
     "total_entries": 30,
     "purpose": "Med-Med interaction pairs for the PharmaGuide interaction database. Harvested from DailyMed SPL drug label 'Drug Interactions' sections and NIH/FDA authoritative sources. Covers the ~30 highest-risk drug-drug pairs for consumer safety alerting.",
     "sources": [
@@ -27,21 +27,22 @@
       "agent2_id": "class:ssris",
       "severity": "Contraindicated",
       "interaction_effect_type": "Additive",
-      "mechanism": "MAOIs irreversibly inhibit monoamine oxidase, preventing serotonin breakdown. SSRIs block serotonin reuptake. Combined serotonergic load causes rapid serotonin accumulation, triggering life-threatening serotonin syndrome (hyperthermia, seizures, cardiovascular collapse).",
-      "management": "Never combine. A 14-day washout after stopping an MAOI is required before starting any SSRI. After stopping fluoxetine, 5 weeks are needed before starting an MAOI due to its long half-life.",
+      "mechanism": "Combining an MAOI with an SSRI can cause life-threatening serotonin syndrome. MAOIs differ in selectivity, reversibility and route, but the reviewed antidepressant labels contraindicate the combination.",
+      "management": "Do not combine an MAOI with an SSRI. A prescriber must plan switching using the exact medicine labels. Fluoxetine labeling requires at least 14 days after stopping an antidepressant MAOI before starting fluoxetine and at least 5 weeks after stopping fluoxetine before starting an MAOI; other medicines have their own intervals. Do not stop or switch treatment yourself. Suspected serotonin syndrome requires emergency care.",
       "source_urls": [
-        "https://dailymed.nlm.nih.gov/dailymed/lookup.cfm?setid=f6c50c08-b777-4959-9b42-d6e5ca748c15",
-        "https://www.ncbi.nlm.nih.gov/books/NBK482377/"
+        "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=581fee7f-2c89-4815-8af7-9ee4ee4226f8",
+        "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=b891bd9f-fdb8-4862-89c5-ecdd700398a3"
       ],
       "verification": {
         "status": "verified",
-        "verified_at": "2026-04-13T16:37:00Z",
+        "verified_at": "2026-10-12",
         "verified_with": {
           "rxnorm": true,
           "umls": true,
           "pubmed": false
         },
-        "method": "live_api_batch_2026_04_13"
+        "method": "agent_source_content_review_2026_10_12",
+        "notes": "Primary source content reviewed for the corrected claim. Presence screening is not a declaration of harm at every dose or clinical clearance."
       },
       "evidence_basis": "label_regulatory",
       "clinical_confidence": "high",
@@ -60,21 +61,21 @@
       "agent2_id": "6754",
       "severity": "Contraindicated",
       "interaction_effect_type": "Additive",
-      "mechanism": "Meperidine (pethidine) inhibits serotonin reuptake in addition to opioid receptor activity. Combined with MAOIs, this causes an excitatory serotonin syndrome reaction: hyperthermia, rigidity, seizures, and potentially fatal cardiovascular instability.",
-      "management": "Absolutely contraindicated. Meperidine must never be used in patients on MAOIs or within 14 days of stopping them. Use morphine or other opioids that lack serotonergic activity if analgesia is required.",
+      "mechanism": "Meperidine labeling contraindicates use with MAO inhibitors or within 14 days after stopping them because severe, sometimes fatal reactions can occur, including serotonin toxicity.",
+      "management": "Do not combine meperidine with an MAOI or use it within 14 days after stopping an MAOI. The prescriber must select an appropriate analgesic after reviewing all medicines; another opioid is not automatically a safe replacement. Seek emergency care for suspected serotonin toxicity or severe breathing impairment.",
       "source_urls": [
-        "https://dailymed.nlm.nih.gov/dailymed/lookup.cfm?setid=5a1ffe5b-9b47-4b6c-9b3e-7f2f1df8f6b8",
-        "https://www.ncbi.nlm.nih.gov/books/NBK482377/"
+        "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=b31d1308-28c3-43f4-e0a6-2f3ed76b8975"
       ],
       "verification": {
         "status": "verified",
-        "verified_at": "2026-04-13T16:37:00Z",
+        "verified_at": "2026-10-12",
         "verified_with": {
           "rxnorm": true,
           "umls": true,
           "pubmed": false
         },
-        "method": "live_api_batch_2026_04_13"
+        "method": "agent_source_content_review_2026_10_12",
+        "notes": "Primary source content reviewed for the corrected claim. Presence screening is not a declaration of harm at every dose or clinical clearance."
       },
       "evidence_basis": "label_regulatory",
       "clinical_confidence": "high",
@@ -93,27 +94,28 @@
       "agent2_id": "class:stimulants",
       "severity": "Contraindicated",
       "interaction_effect_type": "Additive",
-      "mechanism": "MAOIs block the breakdown of norepinephrine and dopamine, so adding a sympathomimetic stimulant (amphetamine, lisdexamfetamine, methylphenidate) can trigger a hypertensive crisis — a sudden, severe, potentially fatal rise in blood pressure, with risk of stroke, heart attack, or seizure. FDA labels for amphetamine- and methylphenidate-family stimulants, and for the MAOIs phenelzine and tranylcypromine, explicitly contraindicate co-use with an MAOI or within 14 days of stopping one.",
-      "management": "Do not take an MAOI and a stimulant together. Allow at least 14 days between stopping an MAOI and starting a stimulant, and the same when switching the other way. If you are taking both, contact the prescriber managing your MAOI right away.",
+      "mechanism": "Amphetamine and methylphenidate labeling contraindicates use with MAO inhibitors because hypertensive crisis can occur. Exact instructions depend on both medicine labels; this is not evidence that every MAOI has an identical interaction profile.",
+      "management": "Do not combine these medicines without urgent prescriber review. The reviewed stimulant labels prohibit use during MAOI treatment and for 14 days after stopping an MAOI. Switching in the other direction must follow the exact labels and a clinician-directed plan. Severe headache, chest pain or neurological symptoms require emergency care.",
       "source_urls": [
         "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=aff45863-ffe1-4d4f-8acf-c7081512a6c0",
-        "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=b1b0f2ff-d9df-42ab-b471-226ecf97e075"
+        "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=b1b0f2ff-d9df-42ab-b471-226ecf97e075",
+        "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=b891bd9f-fdb8-4862-89c5-ecdd700398a3"
       ],
       "verification": {
         "status": "verified",
-        "verified_at": "2026-06-28T00:00:00Z",
+        "verified_at": "2026-10-12",
         "verified_with": {
           "rxnorm": true,
           "umls": false,
           "pubmed": false
         },
-        "method": "dailymed_label_check_2026_06_28",
-        "notes": "DailyMed label check confirmed the Adderall XR label published May 06, 2026 and methylphenidate extended-release tablet label published Jun 24, 2026, both from the DailyMed database published Jun 26, 2026."
+        "method": "agent_source_content_review_2026_10_12",
+        "notes": "Primary source content reviewed for the corrected claim. Presence screening is not a declaration of harm at every dose or clinical clearance."
       },
       "evidence_basis": "label_regulatory",
       "clinical_confidence": "high",
       "applies_to": "whole_class",
-      "evidence_notes": "Promoted from Major/avoid to Contraindicated on 2026-06-27: FDA labels for amphetamine, lisdexamfetamine, and methylphenidate products, and for the MAOIs phenelzine (Nardil) and tranylcypromine (Parnate), explicitly contraindicate or prohibit MAOI co-use (hypertensive-crisis risk, 14-day washout). The one class exception is selegiline — oral low-dose and transdermal (Emsam) labels say 'monitor blood pressure' rather than contraindicate — which warrants a selegiline-specific carve-out once the interaction engine supports most-specific-wins precedence. Until then the safe class default is Contraindicated, because over-warning rare selegiline use is preferable to under-warning the common, label-contraindicated amphetamine/methylphenidate pairs (under-warning is the bigger clinical risk).",
+      "evidence_notes": "Stimulant labels contraindicate MAOI co-use. EMSAM discusses blood-pressure monitoring with sympathomimetic medicines; that wording does not establish permission to override the stimulant label. Exact-pair review remains necessary.",
       "agent1_canonical_id": null,
       "agent2_canonical_id": null,
       "direction": "harmful",
@@ -128,21 +130,22 @@
       "agent2_id": "10829",
       "severity": "Contraindicated",
       "interaction_effect_type": "Additive",
-      "mechanism": "Both methotrexate and trimethoprim inhibit dihydrofolate reductase, depleting intracellular folate. Combined inhibition causes severe, additive bone marrow suppression — pancytopenia, megaloblastic anemia, and mucositis — that can be fatal.",
-      "management": "Avoid this combination. If anti-infective therapy is required in a patient on methotrexate, use an alternative antibiotic that does not inhibit folate metabolism (e.g., amoxicillin). If inadvertent exposure occurs, monitor CBC and initiate leucovorin rescue.",
+      "mechanism": "Trimethoprim has antifolate effects that raise concern with methotrexate. Trimethoprim-sulfamethoxazole labeling advises avoiding methotrexate co-use; its sulfonamide component can displace methotrexate from protein binding and compete with renal transport. That combination-label evidence does not quantify the risk of trimethoprim alone.",
+      "management": "Avoid adding trimethoprim or trimethoprim-sulfamethoxazole during methotrexate treatment without specialist review. The clinician must choose an antibiotic and any blood-count or kidney-function monitoring; other antibiotics are not automatically safe alternatives. Fever, mouth sores, unusual bruising or severe weakness need urgent medical assessment.",
       "source_urls": [
-        "https://dailymed.nlm.nih.gov/dailymed/lookup.cfm?setid=3a7b2e1c-8d4f-4a6e-b9c3-1f5e2d8a7b6c",
-        "https://www.ncbi.nlm.nih.gov/books/NBK537260/"
+        "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=f0e73842-6002-43c2-97fc-0cadc1bf6346",
+        "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=a76808f0-38a7-4b54-a4fb-3584f9058ae5"
       ],
       "verification": {
         "status": "verified",
-        "verified_at": "2026-04-13T16:37:00Z",
+        "verified_at": "2026-10-12",
         "verified_with": {
           "rxnorm": true,
           "umls": true,
           "pubmed": false
         },
-        "method": "live_api_batch_2026_04_13"
+        "method": "agent_source_content_review_2026_10_12",
+        "notes": "TMP-SMX label says avoid concurrent methotrexate. Standalone trimethoprim pair severity remains a clinical review limitation; no false claim that the combination label establishes identical risk for standalone TMP. Removed unsupported replacement antibiotic and patient-directed rescue treatment."
       },
       "evidence_basis": "label_regulatory",
       "clinical_confidence": "high",
@@ -160,21 +163,21 @@
       "agent2_id": "4053",
       "severity": "Contraindicated",
       "interaction_effect_type": "Enhancer",
-      "mechanism": "Erythromycin is a potent CYP3A4 inhibitor. Ergotamine is a CYP3A4 substrate with a narrow therapeutic index. CYP3A4 inhibition raises ergotamine plasma levels dramatically, causing severe vasospasm, peripheral ischemia, and potentially irreversible tissue necrosis.",
-      "management": "Contraindicated. Do not use erythromycin (or any potent CYP3A4 inhibitor: clarithromycin, ritonavir, itraconazole) in patients using ergotamine-containing migraine medications. Use a macrolide with lower CYP3A4 inhibition (azithromycin) if an antibiotic is needed.",
+      "mechanism": "Erythromycin inhibits CYP3A4 and can increase ergotamine exposure. Ergotamine labeling contraindicates the combination because of ergot toxicity, vasospasm and ischemia.",
+      "management": "Do not combine ergotamine with erythromycin. Contact the prescriber promptly to select treatment appropriate to the infection and migraine history. Severe limb pain, cold or pale extremities, or chest pain require urgent medical evaluation.",
       "source_urls": [
-        "https://dailymed.nlm.nih.gov/dailymed/lookup.cfm?setid=d1c3e2f4-a5b6-4c7d-8e9f-0a1b2c3d4e5f",
-        "https://www.ncbi.nlm.nih.gov/books/NBK548308/"
+        "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=19479eeb-f507-48a8-bca3-c9cc0a0f6021"
       ],
       "verification": {
         "status": "verified",
-        "verified_at": "2026-04-13T16:37:00Z",
+        "verified_at": "2026-10-12",
         "verified_with": {
           "rxnorm": true,
           "umls": true,
           "pubmed": false
         },
-        "method": "live_api_batch_2026_04_13"
+        "method": "agent_source_content_review_2026_10_12",
+        "notes": "Primary source content reviewed for the corrected claim. Presence screening is not a declaration of harm at every dose or clinical clearance."
       },
       "evidence_basis": "label_regulatory",
       "clinical_confidence": "high",
@@ -192,21 +195,21 @@
       "agent2_id": "class:nsaids",
       "severity": "Major",
       "interaction_effect_type": "Additive",
-      "mechanism": "NSAIDs inhibit platelet COX-1 and erode gastric mucosa, increasing GI bleeding risk. When combined with anticoagulants (warfarin, apixaban, rivaroxaban), the additive effect on hemostasis sharply elevates risk of serious or fatal GI hemorrhage. Some NSAIDs also displace warfarin from albumin, transiently raising free drug levels.",
-      "management": "Avoid chronic NSAID use with anticoagulants. If short-term NSAID use is unavoidable, use the lowest effective dose, add a PPI for gastric protection, and monitor closely for signs of bleeding.",
+      "mechanism": "NSAIDs can increase bleeding risk during anticoagulant treatment through effects on platelets and gastrointestinal injury. Anticoagulant labels warn about concomitant NSAID use; risk depends on the medicines and patient context.",
+      "management": "Avoid adding an NSAID without the anticoagulation prescriber reviewing it. If both are prescribed, the clinician should choose the dose, duration and monitoring. Seek urgent care for major bleeding, black stools or vomiting blood. Do not stop a prescribed anticoagulant on your own.",
       "source_urls": [
-        "https://www.ncbi.nlm.nih.gov/books/NBK470313/",
-        "https://dailymed.nlm.nih.gov/dailymed/lookup.cfm?setid=22c7cfba-cf98-4395-a09b-af31e2f0e9cf"
+        "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=a454cd24-0c6d-46e8-b1e4-197388606175"
       ],
       "verification": {
         "status": "verified",
-        "verified_at": "2026-04-13T16:37:00Z",
+        "verified_at": "2026-10-12",
         "verified_with": {
           "rxnorm": true,
           "umls": true,
           "pubmed": false
         },
-        "method": "live_api_batch_2026_04_13"
+        "method": "agent_source_content_review_2026_10_12",
+        "notes": "Primary source content reviewed for the corrected claim. Presence screening is not a declaration of harm at every dose or clinical clearance."
       },
       "evidence_basis": "label_regulatory",
       "clinical_confidence": "medium",
@@ -225,21 +228,21 @@
       "agent2_id": "class:ace_inhibitors",
       "severity": "Major",
       "interaction_effect_type": "Enhancer",
-      "mechanism": "ACE inhibitors reduce angiotensin II-mediated aldosterone secretion, decreasing renal sodium reabsorption. The sodium deficit triggers compensatory proximal tubular sodium and lithium retention, raising serum lithium levels into the toxic range (>1.5 mEq/L).",
-      "management": "If the combination is unavoidable, check serum lithium within 5–7 days of starting the ACE inhibitor and after any dose change. Maintain adequate sodium intake. Watch for early lithium toxicity signs: tremor, nausea, ataxia, confusion.",
+      "mechanism": "ACE inhibitors can increase steady-state serum lithium concentrations. Lithium toxicity can occur near therapeutic concentrations, so a single numerical toxicity boundary is not reliable.",
+      "management": "Have the prescribing clinician review this combination and arrange more frequent lithium monitoring; electrolyte and kidney-function checks may also be needed. The clinician should determine any dose change from measured concentrations and clinical response. Do not adjust lithium yourself. New tremor, vomiting, confusion or difficulty walking needs prompt medical assessment.",
       "source_urls": [
-        "https://www.ncbi.nlm.nih.gov/books/NBK519062/",
-        "https://dailymed.nlm.nih.gov/dailymed/lookup.cfm?setid=1d61c4b7-b095-4f25-b01f-d2a9bdb2f1db"
+        "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=ff9baf45-830f-4a8a-8986-5caeaa1b38cf"
       ],
       "verification": {
         "status": "verified",
-        "verified_at": "2026-04-13T16:37:00Z",
+        "verified_at": "2026-10-12",
         "verified_with": {
           "rxnorm": true,
           "umls": true,
           "pubmed": false
         },
-        "method": "live_api_batch_2026_04_13"
+        "method": "agent_source_content_review_2026_10_12",
+        "notes": "Primary source content reviewed for the corrected claim. Presence screening is not a declaration of harm at every dose or clinical clearance."
       },
       "evidence_basis": "label_regulatory",
       "clinical_confidence": "medium",
@@ -258,21 +261,21 @@
       "agent2_id": "class:diuretics",
       "severity": "Major",
       "interaction_effect_type": "Enhancer",
-      "mechanism": "Thiazide diuretics cause renal sodium wasting. Sodium depletion triggers compensatory proximal tubular reabsorption of both sodium and lithium, dramatically increasing serum lithium concentration and risk of toxicity.",
-      "management": "Avoid thiazide diuretics in patients on lithium if possible. If required, reduce lithium dose empirically, increase monitoring frequency (lithium level within 5–7 days), and ensure adequate sodium and fluid intake.",
+      "mechanism": "Diuretic-induced sodium loss can reduce lithium clearance and increase serum lithium concentrations; the lithium label addresses diuretics beyond thiazides. Lithium toxicity can occur near therapeutic concentrations, so a single numerical toxicity boundary is not reliable.",
+      "management": "Have the prescribing clinician review this combination and arrange more frequent lithium monitoring; electrolyte and kidney-function checks may also be needed. The clinician should determine any dose change from measured concentrations and clinical response. Do not adjust lithium yourself. New tremor, vomiting, confusion or difficulty walking needs prompt medical assessment.",
       "source_urls": [
-        "https://www.ncbi.nlm.nih.gov/books/NBK519062/",
-        "https://medlineplus.gov/druginfo/meds/a681039.html"
+        "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=ff9baf45-830f-4a8a-8986-5caeaa1b38cf"
       ],
       "verification": {
         "status": "verified",
-        "verified_at": "2026-04-13T16:37:00Z",
+        "verified_at": "2026-10-12",
         "verified_with": {
           "rxnorm": true,
           "umls": true,
           "pubmed": false
         },
-        "method": "live_api_batch_2026_04_13"
+        "method": "agent_source_content_review_2026_10_12",
+        "notes": "Primary source content reviewed for the corrected claim. Presence screening is not a declaration of harm at every dose or clinical clearance."
       },
       "evidence_basis": "label_regulatory",
       "clinical_confidence": "high",
@@ -290,23 +293,23 @@
       "agent1_id": "36567",
       "agent2_name": "Erythromycin",
       "agent2_id": "4053",
-      "severity": "Major",
+      "severity": "Contraindicated",
       "interaction_effect_type": "Enhancer",
-      "mechanism": "Simvastatin is a CYP3A4 substrate. Erythromycin is a potent CYP3A4 inhibitor that can raise simvastatin AUC up to 6-fold. Elevated simvastatin levels increase risk of myopathy and life-threatening rhabdomyolysis with acute kidney injury.",
-      "management": "Avoid combining erythromycin with simvastatin or lovastatin. Temporarily suspend the statin if short-course erythromycin is needed. Alternative statins with lower CYP3A4 dependence (pravastatin, rosuvastatin) carry lower interaction risk.",
+      "mechanism": "Erythromycin inhibits CYP3A4 and can increase simvastatin exposure, with myopathy and rhabdomyolysis risk. Erythromycin labeling contraindicates concomitant simvastatin.",
+      "management": "Do not combine simvastatin with erythromycin. Contact the prescribing clinician promptly to arrange an appropriate antibiotic or clinician-directed statin interruption. Unexplained muscle pain, weakness or dark urine requires urgent medical assessment.",
       "source_urls": [
-        "https://www.fda.gov/drugs/drug-safety-and-availability/fda-drug-safety-communication-new-restrictions-contraindications-and-dose-limitations-zocor",
-        "https://dailymed.nlm.nih.gov/dailymed/lookup.cfm?setid=a7b8c9d0-e1f2-4a3b-5c6d-7e8f9a0b1c2d"
+        "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=bc3d091b-1fc8-4f7a-a3c2-8ede87f5faa0"
       ],
       "verification": {
         "status": "verified",
-        "verified_at": "2026-04-13T16:37:00Z",
+        "verified_at": "2026-10-12",
         "verified_with": {
           "rxnorm": true,
           "umls": true,
           "pubmed": false
         },
-        "method": "live_api_batch_2026_04_13"
+        "method": "agent_source_content_review_2026_10_12",
+        "notes": "Primary source content reviewed for the corrected claim. Presence screening is not a declaration of harm at every dose or clinical clearance."
       },
       "evidence_basis": "label_regulatory",
       "clinical_confidence": "medium",
@@ -324,21 +327,22 @@
       "agent2_id": "82122",
       "severity": "Major",
       "interaction_effect_type": "Additive",
-      "mechanism": "Both ondansetron and fluoroquinolones (levofloxacin, ciprofloxacin, moxifloxacin) independently block cardiac hERG potassium channels, prolonging the QT interval. Additive QT prolongation raises the risk of torsades de pointes and sudden cardiac death, especially in patients with electrolyte abnormalities or underlying cardiac disease.",
-      "management": "Avoid co-administration when possible. If both are clinically necessary, obtain a baseline ECG, correct hypokalemia and hypomagnesemia before starting, and monitor ECG during treatment. Use the lowest effective dose of each.",
+      "mechanism": "Ondansetron and levofloxacin labels warn about QT prolongation and torsades de pointes. Combined QT effects are a concern, especially with low potassium or magnesium, bradycardia, cardiac disease or other QT-prolonging medicines; individual risk is not quantified by these labels.",
+      "management": "Ask the prescriber or pharmacist to review whether both medicines are needed and whether ECG or electrolyte monitoring is appropriate. Do not change prescribed treatment yourself. Fainting or a new irregular heartbeat requires prompt medical assessment.",
       "source_urls": [
-        "https://ods.od.nih.gov/factsheets/Potassium-HealthProfessional/",
-        "https://www.fda.gov/drugs/drug-safety-and-availability/fda-drug-safety-communication-updated-information-qt-prolongation-ondansetron"
+        "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=cb02f2d7-31a9-4f12-880e-7ce7d85440d4",
+        "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=15a80e60-5d8b-4085-ba4c-7616af1ac96b"
       ],
       "verification": {
         "status": "verified",
-        "verified_at": "2026-04-13T16:37:00Z",
+        "verified_at": "2026-10-12",
         "verified_with": {
           "rxnorm": true,
           "umls": true,
           "pubmed": true
         },
-        "method": "live_api_batch_2026_04_13"
+        "method": "agent_source_content_review_2026_10_12",
+        "notes": "Primary source content reviewed for the corrected claim. Presence screening is not a declaration of harm at every dose or clinical clearance."
       },
       "evidence_basis": "label_regulatory",
       "clinical_confidence": "high",
@@ -396,62 +400,76 @@
       "agent1_id": "class:ssris",
       "agent2_name": "Triptans (class)",
       "agent2_id": "class:triptans",
-      "severity": "Major",
+      "severity": "Moderate",
       "interaction_effect_type": "Additive",
-      "mechanism": "SSRIs increase synaptic serotonin via reuptake inhibition. Triptans are serotonin 5-HT1B/1D receptor agonists. Combined serotonergic activity can precipitate serotonin syndrome (agitation, hyperreflexia, diaphoresis, hyperthermia), though the absolute risk is debated.",
-      "management": "The FDA issued an alert (2006) on this combination. Use the lowest effective triptan dose if both are needed. Counsel patients on serotonin syndrome warning signs and seek immediate care for rapid-onset agitation, muscle twitching, fever, or rapid heart rate.",
+      "mechanism": "Triptan labeling warns that serotonin syndrome can occur with SSRIs, but does not contraindicate this pair. A large observational study found a low incidence among patients coprescribed triptans and SSRIs/SNRIs; that does not eliminate the possibility of a serious reaction.",
+      "management": "Ask the prescribing clinician to review the combination and explain symptoms to watch for, particularly when treatment starts or doses change. Do not stop prescribed treatment or assume a lower dose removes the risk. Suspected serotonin syndrome, including agitation with fever, muscle rigidity or altered consciousness, requires emergency care.",
       "source_urls": [
-        "https://www.fda.gov/drugs/information-drug-class/triptans",
-        "https://www.fda.gov/drugs/drug-safety-and-availability/serotonin-syndrome-5-hydroxytryptamine-agonists-triptans"
+        "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=2aab8786-b225-833a-e063-6394a90ac7ae",
+        "https://pubmed.ncbi.nlm.nih.gov/29482205/"
       ],
       "verification": {
         "status": "verified",
-        "verified_at": "2026-04-13T16:37:00Z",
+        "verified_at": "2026-10-12",
         "verified_with": {
           "rxnorm": true,
           "umls": true,
           "pubmed": true
         },
-        "method": "live_api_batch_2026_04_13"
+        "method": "agent_source_content_review_2026_10_12",
+        "notes": "Primary source content reviewed for the corrected claim. Presence screening is not a declaration of harm at every dose or clinical clearance."
       },
-      "evidence_basis": "label_regulatory",
-      "clinical_confidence": "high",
+      "evidence_basis": "observational",
+      "clinical_confidence": "medium",
       "applies_to": "dose_dependent",
       "agent1_canonical_id": null,
       "agent2_canonical_id": null,
       "direction": "harmful",
-      "materiality": "presence"
+      "materiality": "presence",
+      "source_pmids": [
+        "29482205"
+      ]
     },
     {
       "id": "DDI_METFORMIN_IVCONTRAST",
       "type": "Med-Procedure",
       "agent1_name": "Metformin",
       "agent1_id": "6809",
-      "agent2_name": "Iodinated IV Contrast Media",
+      "agent2_name": "Intravascular iodinated contrast imaging procedure",
       "agent2_id": "ref:iodinated_contrast",
       "severity": "Major",
       "interaction_effect_type": "Enhancer",
-      "mechanism": "Iodinated contrast agents can acutely impair renal function (contrast-induced nephropathy). Metformin is renally cleared; acute kidney injury causes metformin accumulation, blocking hepatic lactate metabolism and producing potentially fatal lactic acidosis. Note: this is a procedural drug-drug interaction, not a chronic DDI.",
-      "management": "Hold metformin at the time of or before any procedure using IV iodinated contrast. Restart only after renal function is confirmed stable — typically 48 hours post-procedure. Patients with pre-existing renal impairment require closer monitoring.",
+      "mechanism": "Iodinated contrast procedures can be associated with acute kidney-function deterioration, allowing metformin accumulation and lactic acidosis. The metformin label requires interruption for specified renal, medical-history or contrast-route risk factors, not every intravenous contrast procedure.",
+      "management": "Tell the imaging team and prescribing clinician that you take metformin. The label calls for a hold at or before iodinated contrast when eGFR is between 30 and 60 mL/min/1.73 m², there is a history of liver disease, alcoholism or heart failure, or contrast is intra-arterial. The clinician should reassess kidney function 48 hours after imaging and restart only if stable. Do not decide the hold or restart yourself; unknown renal or procedure details require review.",
       "source_urls": [
-        "https://www.fda.gov/drugs/postmarket-drug-safety-information-patients-and-providers/metformin-containing-drugs-drug-safety-communication-revised-warnings-certain-patients-kidney",
-        "https://www.ncbi.nlm.nih.gov/books/NBK557737/"
+        "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=a944a167-e3ac-4084-af1c-22b48713471c"
       ],
       "verification": {
         "status": "verified",
-        "verified_at": "2026-04-13T16:37:00Z",
+        "verified_at": "2026-10-13",
         "verified_with": {
           "rxnorm": true,
           "umls": true,
           "pubmed": false
         },
-        "method": "live_api_batch_2026_04_13"
+        "method": "agent_source_content_review_2026_10_13",
+        "notes": "Corrected to metformin label risk factors. Existing pairwise consumer does not automatically evaluate renal function, contrast route or history; presence warning remains a request for clinician review, not an instruction that all IV contrast requires interruption."
       },
       "evidence_basis": "label_regulatory",
       "clinical_confidence": "medium",
       "agent1_canonical_id": null,
       "direction": "harmful",
-      "materiality": "presence"
+      "materiality": "presence",
+      "evidence_notes": "Current September 2026 FDA label is the rule authority. IV versus intra-arterial exposure and renal/history context matter. ACR guidance is less restrictive for some IV procedures; this rule does not silently adopt that alternative or infer an actual procedure from metformin use alone.",
+      "medication_exceptions": [
+        {
+          "ingredient_rxcuis": [
+            "6809"
+          ],
+          "use_context": "iv_iodinated_contrast_egfr_over_60_no_label_risk_factors_confirmed",
+          "notes": "Confirm with the imaging team for this actual procedure: intravenous iodinated contrast, current eGFR above 60, no acute kidney injury, and no history of liver disease, alcoholism or heart failure. If any fact is unknown, leave this unconfirmed. Do not change metformin yourself."
+        }
+      ]
     },
     {
       "id": "DDI_CLOPIDOGREL_OMEPRAZOLE",
@@ -462,21 +480,21 @@
       "agent2_id": "7646",
       "severity": "Major",
       "interaction_effect_type": "Inhibitor",
-      "mechanism": "Clopidogrel is a prodrug that requires CYP2C19 activation to its active antiplatelet metabolite. Omeprazole (and esomeprazole) are potent CYP2C19 inhibitors. Co-administration reduces clopidogrel active metabolite exposure by up to 45%, diminishing platelet inhibition and potentially increasing cardiovascular event risk in high-risk patients (post-ACS, post-stent).",
-      "management": "Avoid omeprazole and esomeprazole with clopidogrel. If a PPI is needed for gastric protection, use pantoprazole or rabeprazole, which have minimal CYP2C19 inhibitory activity.",
+      "mechanism": "Omeprazole inhibits CYP2C19 activation of clopidogrel and reduces its antiplatelet activity. Clopidogrel labeling advises avoiding omeprazole and esomeprazole; separating doses by 12 hours does not eliminate the documented effect.",
+      "management": "Avoid this combination unless the prescribing clinician has reviewed it. Ask the clinician or pharmacist to select an appropriate acid-reducing medicine if needed; do not change clopidogrel or stomach treatment on your own.",
       "source_urls": [
-        "https://www.fda.gov/drugs/postmarket-drug-safety-information-patients-and-providers/information-healthcare-professionals-update-prasugrel-plavix-clopidogrel-bisulfate-and-omeprazole",
-        "https://dailymed.nlm.nih.gov/dailymed/lookup.cfm?setid=6e7f8a9b-0c1d-4e5f-a6b7-c8d9e0f1a2b3"
+        "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=8d0ed864-bbb3-4d6b-892d-64754eec1494"
       ],
       "verification": {
         "status": "verified",
-        "verified_at": "2026-04-13T16:37:00Z",
+        "verified_at": "2026-10-12",
         "verified_with": {
           "rxnorm": true,
           "umls": true,
           "pubmed": false
         },
-        "method": "live_api_batch_2026_04_13"
+        "method": "agent_source_content_review_2026_10_12",
+        "notes": "Primary source content reviewed for the corrected claim. Presence screening is not a declaration of harm at every dose or clinical clearance."
       },
       "evidence_basis": "label_regulatory",
       "clinical_confidence": "medium",
@@ -490,25 +508,27 @@
       "type": "Med-Med",
       "agent1_name": "Fluconazole",
       "agent1_id": "4450",
-      "agent2_name": "Statins (class)",
-      "agent2_id": "class:statins",
+      "agent2_name": "Fluconazole-sensitive statins",
+      "agent2_id": "class:fluconazole_sensitive_statins",
       "severity": "Major",
       "interaction_effect_type": "Enhancer",
-      "mechanism": "Fluconazole is a potent inhibitor of CYP2C9 and moderate inhibitor of CYP3A4. Most statins (simvastatin, lovastatin, atorvastatin) depend on CYP3A4; fluvastatin and rosuvastatin depend on CYP2C9. CYP inhibition raises statin AUC substantially, increasing myopathy and rhabdomyolysis risk.",
-      "management": "Avoid combining fluconazole with simvastatin, lovastatin, or fluvastatin. If antifungal azole therapy is required, temporarily suspend the statin or switch to pravastatin (CYP-independent). Resume statin after completing the fluconazole course.",
+      "mechanism": "Fluconazole can increase exposure to CYP3A4-metabolized statins such as atorvastatin and simvastatin, and to CYP2C9-metabolized fluvastatin, increasing myopathy and rhabdomyolysis risk. Lovastatin shares CYP3A4 metabolism, a mechanistic scope inference. This is not a uniform clinically important interaction with every statin.",
+      "management": "Have the prescriber or pharmacist review the exact statin, fluconazole course and doses before combining them. Statin-specific labeling may call for dose limits, adjustment or monitoring rather than a universal prohibition. Do not stop or replace a statin on your own. Seek prompt medical advice for unexplained muscle pain, weakness or dark urine.",
       "source_urls": [
-        "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=91245b83-3b8a-40cb-a4ed-abfefdcd1e28",
-        "https://dailymed.nlm.nih.gov/dailymed/lookup.cfm?setid=b1c2d3e4-f5a6-4b7c-8d9e-0f1a2b3c4d5e"
+        "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=737e0fac-a2d2-4053-a0d7-edbfb6248f69",
+        "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=48801d7c-99ac-4a78-b714-299e2a5562ea",
+        "https://pubmed.ncbi.nlm.nih.gov/12451430/"
       ],
       "verification": {
         "status": "verified",
-        "verified_at": "2026-04-13T16:37:00Z",
+        "verified_at": "2026-10-12",
         "verified_with": {
           "rxnorm": true,
           "umls": true,
           "pubmed": true
         },
-        "method": "live_api_batch_2026_04_13"
+        "method": "agent_source_content_review_2026_10_12",
+        "notes": "Fluconazole label names atorvastatin/simvastatin and fluvastatin. Lovastatin inclusion is a CYP3A4-based inference, not a claimed direct pair trial. Rosuvastatin study 12451430 reports small changes not considered clinically relevant; pravastatin and rosuvastatin excluded from this pair. Fluvastatin label permits a limited dose with fluconazole; no blanket stop instruction."
       },
       "evidence_basis": "label_regulatory",
       "clinical_confidence": "high",
@@ -516,7 +536,10 @@
       "agent1_canonical_id": null,
       "agent2_canonical_id": null,
       "direction": "harmful",
-      "materiality": "presence"
+      "materiality": "presence",
+      "source_pmids": [
+        "12451430"
+      ]
     },
     {
       "id": "DDI_BETABLOCKER_VERAPAMIL",
@@ -620,35 +643,38 @@
     {
       "id": "DDI_ANTICOAG_ACETAMINOPHEN",
       "type": "Med-Med",
-      "agent1_name": "Anticoagulants (class)",
-      "agent1_id": "class:anticoagulants",
+      "agent1_name": "Warfarin",
+      "agent1_id": "11289",
       "agent2_name": "Acetaminophen",
       "agent2_id": "161",
       "severity": "Moderate",
       "interaction_effect_type": "Enhancer",
-      "mechanism": "Acetaminophen at higher doses (>2 g/day regularly) inhibits vitamin K-dependent clotting factor synthesis via an unclear mechanism, potentiating warfarin's anticoagulant effect and raising INR. The interaction is dose-dependent — occasional low-dose use has minimal impact.",
-      "management": "Acetaminophen at ≤2 g/day is the preferred analgesic over NSAIDs for patients on anticoagulants. At higher or chronic doses, monitor INR more frequently. Advise patients to report any signs of unusual bruising or bleeding.",
+      "mechanism": "In a randomized trial of patients on stable warfarin, repeated acetaminophen at 2 g/day or 3 g/day for 10 days increased INR compared with placebo, with a significant increase by day 3. These studied doses do not establish a safe-below cutoff or prove the same effect for every anticoagulant.",
+      "management": "Tell the warfarin prescriber before repeated acetaminophen use, including over-the-counter combination products, so INR monitoring can be arranged if needed. Do not assume 2 g/day or a lower dose guarantees no interaction, and do not adjust warfarin yourself. Report unusual bruising or bleeding promptly.",
       "source_urls": [
-        "https://pubmed.ncbi.nlm.nih.gov/21191575/",
-        "https://www.ncbi.nlm.nih.gov/books/NBK470313/"
+        "https://pubmed.ncbi.nlm.nih.gov/21191575/"
       ],
       "verification": {
         "status": "verified",
-        "verified_at": "2026-04-13T16:37:00Z",
+        "verified_at": "2026-10-12",
         "verified_with": {
           "rxnorm": true,
           "umls": true,
           "pubmed": true
         },
-        "method": "live_api_batch_2026_04_13"
+        "method": "agent_source_content_review_2026_10_12",
+        "notes": "Primary source content reviewed for the corrected claim. Presence screening is not a declaration of harm at every dose or clinical clearance."
       },
       "evidence_basis": "clinical_literature",
       "clinical_confidence": "medium",
-      "applies_to": "dose_dependent",
+      "applies_to": "specific_drug",
       "agent1_canonical_id": null,
       "agent2_canonical_id": null,
       "direction": "harmful",
-      "materiality": "presence"
+      "materiality": "presence",
+      "source_pmids": [
+        "21191575"
+      ]
     },
     {
       "id": "DDI_ANTICONV_OCP",
@@ -951,24 +977,24 @@
       "agent1_name": "Benzodiazepines (class)",
       "agent1_id": "class:benzodiazepines",
       "agent2_name": "Opioids (class)",
-      "agent2_id": "class:sedatives",
+      "agent2_id": "class:opioids",
       "severity": "Major",
       "interaction_effect_type": "Additive",
-      "mechanism": "Benzodiazepines potentiate GABA-A-mediated CNS depression. Opioids cause mu-receptor-mediated respiratory depression independent of GABAergic pathways. Combined, the two mechanisms act synergistically — not merely additively — to suppress respiratory drive, causing profound hypoventilation, hypoxia, and death. FDA issued a Black Box Warning in 2016 for this combination.",
-      "management": "Avoid concurrent prescribing. When both are medically necessary, use the lowest effective dose of each, limit duration, monitor respiratory status closely, and prescribe naloxone to patients and caregivers. Never take with alcohol. Counsel patients on the combination's lethality.",
+      "mechanism": "Benzodiazepines and opioids both depress the central nervous system. Combined use can cause profound sedation, respiratory depression, coma and death; FDA warnings apply even to prescribed use.",
+      "management": "Avoid combining these medicines unless the prescriber has reviewed the need and arranged careful monitoring. Do not suddenly stop prescribed benzodiazepines or opioids. Methadone or buprenorphine treatment for opioid use disorder should not be withheld solely because a benzodiazepine is used; the treatment team must manage the risk. Ask whether an opioid overdose reversal medicine is appropriate. Trouble breathing or inability to wake requires emergency care.",
       "source_urls": [
-        "https://medlineplus.gov/ency/article/000813.htm",
-        "https://www.fda.gov/drugs/drug-safety-and-availability/fda-drug-safety-communication-fda-warns-about-serious-risks-and-death-when-combining-opioid-pain-or"
+        "https://www.fda.gov/drugs/drug-safety-and-availability/fda-requiring-boxed-warning-updated-improve-safe-use-benzodiazepine-drug-class"
       ],
       "verification": {
         "status": "verified",
-        "verified_at": "2026-04-13T16:37:00Z",
+        "verified_at": "2026-10-12",
         "verified_with": {
           "rxnorm": true,
           "umls": true,
           "pubmed": true
         },
-        "method": "live_api_batch_2026_04_13"
+        "method": "agent_source_content_review_2026_10_12",
+        "notes": "FDA 2020 communication supports the serious CNS-depression concern and cautions against withholding opioid-use-disorder treatment. Opioid IN membership verified via live RxNorm/RxClass, excluding nonopioid sleep agents, antagonists and nonopioid antitussives. No lower-dose safe boundary established."
       },
       "evidence_basis": "label_regulatory",
       "clinical_confidence": "high",

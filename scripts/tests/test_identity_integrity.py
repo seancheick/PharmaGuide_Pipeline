@@ -1054,7 +1054,10 @@ def test_registered_compound_alias_does_not_become_its_nutrient_moiety():
     [{"name": "PoliSure", "ingredientGroup": "Policosanol", "category": "non-nutrient/non-botanical", "prefix": "provides"}],
     [{"name": "PoliSure", "ingredientGroup": "Policosanol", "category": "non-nutrient/non-botanical", "prefix": "contains"}],
 ])
-def test_source_material_form_does_not_validate_partial_mixed_or_unidentified_preparation(forms):
+@pytest.mark.parametrize("category", ["non-nutrient/non-botanical", "complex carbohydrate"])
+def test_source_material_form_does_not_validate_partial_mixed_or_unidentified_preparation(forms, category):
+    forms = [dict(form, category=category) if form.get("category") == "non-nutrient/non-botanical"
+             else dict(form) for form in forms]
     registry = build_canonical_identity_registry({"ingredient_quality_map": {
         "policosanol": {"standard_name": "Policosanol", "aliases": ["Sugar Cane Wax"]},
         "sugar": {"standard_name": "Sugar cane"},
@@ -1069,14 +1072,15 @@ def test_source_material_form_does_not_validate_partial_mixed_or_unidentified_pr
 
 
 @pytest.mark.parametrize("name", ["Sugar Cane", "Magnesium"])
-def test_declared_material_group_cannot_override_missing_source_alias_or_chemical_conflict(name):
+@pytest.mark.parametrize("category", ["non-nutrient/non-botanical", "complex carbohydrate"])
+def test_declared_material_group_cannot_override_missing_source_alias_or_chemical_conflict(name, category):
     registry = build_canonical_identity_registry({"ingredient_quality_map": {
         "policosanol": {"standard_name": "Policosanol", "aliases": ["Sugar Cane Wax"]},
         "sugar": {"standard_name": "Sugar cane"}, "magnesium": {"standard_name": "Magnesium"},
     }})
     decision = resolve_identity(
         {"raw_source_text": name, "ingredientGroup": "Sugar cane", "forms": [
-            {"name": "PoliSure", "ingredientGroup": "Policosanol", "category": "non-nutrient/non-botanical"}]},
+            {"name": "PoliSure", "ingredientGroup": "Policosanol", "category": category}]},
         "policosanol", lambda value: {"sugar cane": "sugar", "policosanol": "policosanol", "magnesium": "magnesium"}.get(value.casefold()),
         canonical_registry=registry,
     )
@@ -1084,7 +1088,8 @@ def test_declared_material_group_cannot_override_missing_source_alias_or_chemica
 
 
 @pytest.mark.parametrize("form_name,retained", [("Sucrose", False), ("Magnesium", False), ("Creatine Hydrochloride", False), ("PoliSure", True)])
-def test_complete_material_group_cannot_hide_a_known_conflicting_form_name(form_name, retained):
+@pytest.mark.parametrize("category", ["non-nutrient/non-botanical", "complex carbohydrate"])
+def test_complete_material_group_cannot_hide_a_known_conflicting_form_name(form_name, retained, category):
     registry = build_canonical_identity_registry({"ingredient_quality_map": {
         "policosanol": {"standard_name": "Policosanol", "aliases": ["Sugar Cane Wax"]},
         "sugar": {"standard_name": "Sugar cane", "aliases": ["Sucrose"]},
@@ -1093,10 +1098,28 @@ def test_complete_material_group_cannot_hide_a_known_conflicting_form_name(form_
     }})
     decision = resolve_identity(
         {"raw_source_text": "Sugar Cane Wax Extract", "ingredientGroup": "Sugar cane", "forms": [
-            {"name": form_name, "ingredientGroup": "Policosanol", "category": "non-nutrient/non-botanical"}]},
+            {"name": form_name, "ingredientGroup": "Policosanol", "category": category}]},
         "policosanol", lambda value: {"sugar cane": "sugar", "policosanol": "policosanol"}.get(value.casefold()),
         canonical_registry=registry,
     )
     assert (decision.canonical_id == "policosanol") is retained
     if retained:
         assert decision.label_display_name == "Sugar Cane Wax Extract"
+
+
+@pytest.mark.parametrize("literal,group", [
+    ("organic Chamomile (flower) extract", "Chamomile (unspecified)"),
+    ("Kelp Thallus Extract", "Kelp"),
+    ("organic Hemp powder", "Hemp"),
+])
+def test_unresolved_identity_keeps_literal_preparation_display(literal, group):
+    decision = resolve_identity(
+        row={"raw_source_text": literal, "name": literal, "ingredientGroup": group},
+        supplied_canonical_id=None,
+        resolve_candidate=lambda value: "generic_parent" if value == group else None,
+    )
+    assert decision.disposition == "identity_conflict"
+    assert decision.canonical_id is None
+    assert decision.scoreable_identity is False
+    assert decision.source_label_name == literal
+    assert decision.label_display_name == normalize_label_display(literal)

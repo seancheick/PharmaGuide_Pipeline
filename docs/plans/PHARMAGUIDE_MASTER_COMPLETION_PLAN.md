@@ -1,10 +1,26 @@
 # PharmaGuide master completion plan
 
-Updated October 9, 2026. Pipeline integrator: Codex. Original scope: Sean's accepted September 30 master plan. This document is the readable checklist; [LEDGER.md](../../scripts/audits/pending_items_20260926/LEDGER.md) remains the execution register, and the [ownership matrix](../../scripts/contracts/source_of_truth_matrix.json) defines production owners. Historical descriptions below do not override current code or approved decisions.
+Updated October 13, 2026. Pipeline integrator: Codex. Original scope: Sean's accepted September 30 master plan. This document is the readable checklist; [LEDGER.md](../../scripts/audits/pending_items_20260926/LEDGER.md) remains the execution register, and the [ownership matrix](../../scripts/contracts/source_of_truth_matrix.json) defines production owners. Historical descriptions below do not override current code or approved decisions.
+
+October 13: the supported warning/context corrections are implemented, measured, independently reviewed and validation-complete. Seven source records changed. The schema-4 export and app consumer now evaluate confirmed forms, actual daily amounts and current food/procedure context. All 24 native data comparisons and three frozen raw replays pass, with no product-quality movement.
+
+Pipeline source `4b74d1b1` passed CI run `38377932566`: 20,559 tests and 192 declared skips, with every skip guard passing. The 174 focused tests and local 546 tests also pass; local has 24 declared opt-in skips. App source `545c4138` passed CI run `38378191655`; its local check passes clean analysis and 3,885 tests. PR134 merged at `e4c944a15f8c533fcb1a101db3892704a40d02d9`; app PR113 merged at `fdd5ca054b4c41927336c123f98302dc00b3dfb2` on October 13. Both approved heads are ancestors of origin/main. Exact-head pipeline CI38382804581/38382810605 and app CI38380987827 passed. Both merged local and remote branches were deleted after containment verification. No catalog rebuild, bundle/pin replacement, visual acceptance or release occurred. The full catalog, paired artifacts, visual acceptance and release remain deferred. Clinical preparation, form and source holds remain documented in the existing LEDGER, research and private FOLLOWUP_20261013.md.
 
 A checked implementation box means that specific deliverable is implemented, measured and independently reviewed where required. It does **not** mean the whole phase is finished or the catalog is released. Repository code pushed to GitHub and catalog publication are separate events.
 
-## Current delivery checkpoint — October 9
+## Current delivery checkpoint — October 13
+
+- [x] Integrate the14-product batch and verified169 mapping corrections; preserve realunknowns/69 safety blocks. Source/independent/raw/CI/local receipts are in the execution ledger.
+- [x] Correct the PreticX taxonomy regression in the shared identity owner; complete corrected38dataset regeneration/114fresh, strict15,421 catalog, independent all-detail accounting and actualFlutter safety/stack/depletion checks. Prior candidate coverage99.1108456% mean ingredient mapping;45oforiginal169fullymapped/146belowfull overall.
+- [x] Complete prior frozen-candidate release139tests/no skips plus artifact/live gates; no new citation mismatch or unresolved source. Existing168 citation backlog mismatches remain reported.
+- [x] Integrate the private submission optional-taxonomy adapter and qualified-input publication mode (PR132/f752fe614; exact CI38350861845 passed). Preserve private raw sources and all clinical gates.
+- [x] Integrate the compound-parent correction (PR133/46230e587) and finish the frozen mapping candidate:38datasets/114fresh fingerprints,15,426products/details, strict gates and independent9-pair/5-addition accounting pass; all69blocks/225NOT_SCORED retained. Actual app safety/stack/depletion probes pass; latest-source focused checks92pipeline/117app and read-only execution preflight pass.
+- [ ] Refresh artifacts for the later approved warning/context PR134/app113 before any release: latest source invalidates38Clean/38Enrich/38Score reference fingerprints. Full schema4 research-preserving interaction DB, paired artifact/app/release checks remain. Sean stopped further runs/builds/publication and owns future execution.
+- [ ] Publish the accepted catalog/interaction/reference bundle and verify signed build22; Sean performs Apple upload. No publication/build22 has occurred at this checkpoint.
+
+Owner: existing private-label importer/provenance validator, DSLDValidator requirements and `_match_quality_map_impl` parent/form selection. Evidence: actualfive new approvals, three missing-taxonomy review records, failfirst16/ownerconsumer145/native14 and compound-parent controls; [LEDGER](../../scripts/audits/pending_items_20260926/LEDGER.md). Will NOT create: taxonomy, clinical/scoring policy, registry, normalizer, score/status/public field or release waiver.
+
+## Historical delivery checkpoint — October 9
 
 Catalog `2026.10.09.085312` is published and independently verified. Its core SHA-256 is `bd21963197ab987204c986dd8485ad602a732386b98d6cc40aa34a4644d97290`. All 15,414 live detail-index entries and 113 risk-selected detail bodies match the candidate, including all 73 BLOCKED products. The release profile passed 129 tests and its attached gates. App analysis and all 3,756 tests passed. The approved safety corrections retain every original boundary.
 

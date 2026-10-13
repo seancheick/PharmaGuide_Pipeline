@@ -944,7 +944,7 @@ def resolve_identity(
         and declared_forms[0].get("amount") is None
         and str(declared_forms[0].get("prefix") or "").strip().casefold() in {"", "as"}
         and str(declared_forms[0].get("category") or "").casefold()
-            == "non-nutrient/non-botanical"
+            in {"non-nutrient/non-botanical", "complex carbohydrate"}
         and canonical_registry.literal_identity_matches(
             str(declared_forms[0].get("ingredientGroup") or ""), canonical_before
         )
@@ -1167,6 +1167,13 @@ def resolve_identity(
         disposition = "identity_conflict"
         canonical_after = None
         rationale = "The external taxonomy confidence contract was not satisfied."
+
+    # A provisional taxonomy match must not replace the literal preparation
+    # after the final decision declines to establish its identity. Keep the
+    # structured evidence for diagnosis, but display the actual unknown label.
+    if canonical_after is None and raw_evidence:
+        source_name = raw_evidence[0].value
+        display_name = normalize_label_display(source_name) or None
 
     scoreable = (
         not allow_unscoreable_taxonomy_only

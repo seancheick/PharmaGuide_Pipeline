@@ -21,6 +21,8 @@ committed outcome after a lost response without borrowing another attempt's resu
 
 | Term | Meaning |
 |---|---|
+| **Curated opioid class** | Existing `drug_classes.json` membership group `class:opioids`, using verified opioid agonist/partial agonist ingredient RxCUIs. Opioid antagonists, nonopioid antitussives and nonopioid sleep medicines are excluded. |
+| **Interaction-specific statin class** | Existing membership-owner subsets used by the fluconazole and St. John's wort pairs. These do not replace the general statin class or create new profile choices; exact membership limits those pair warnings. |
 | **Full-corpus run** | `bash batch_run_all_datasets.sh` with no `--targets`. Runs Clean → Enrich → Score for every eligible brand directory, then rebuilds the snapshot and starts the full release if every brand succeeded. |
 | **Targeted run** | A batch run with `--targets`. It is pipeline-only by default; downstream snapshot/release work requires explicit `--release`. |
 | **Pipeline-only** | Clean/Enrich/Score work without rebuilding or publishing the catalog. Selected explicitly with `--pipeline-only`; also the safe default for targeted runs. |
@@ -246,3 +248,5 @@ part of the supported operator contract.
 **Explicit label function claim (ingredient role):** a preserved affirmative formulation statement naming a substantial active and its function. The existing role classifier records `named_in_label_function_claim` with the statement location; the Evidence resolver includes that role alongside route drivers. It is label-purpose provenance, not proof of efficacy: all clinical applicability gates still apply. Titles, incidental nutrients, Nutrition Facts, warnings, and trace adjuncts do not establish this additional role.
 
 **Product context:** existing enrichment assessments projected into `warnings[]` as informational `category_contamination_risk`, `manufacturer_violation`, or `marketing_claim` rows. Category heuristics, company history and label wording are separate from a verified product/lot hazard. They do not change catalog safety or personal interaction tiers. The app renders the pipeline-authored assessment; it does not detect claims or classify brands itself.
+
+- **Pairwise form/context applicability**: authored `profile_gate` and `medication_exceptions` on existing curated pairs, stored in interaction schema4 JSON columns. Existing shared gate/exception evaluators consume canonical form facts and current-check confirmations; missing or stale facts do not clear a relevant warning. `dose_threshold.form_scope` reuses the existing form-specific dose meaning. A label serving total is not a confirmed actual daily intake.

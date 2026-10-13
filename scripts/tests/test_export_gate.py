@@ -1807,3 +1807,72 @@ def test_confirmed_ban_or_recall_export_failures_cannot_be_nonblocking(decision)
         'policy_verification_status': 'needs_review'}}
     assert _classify_export_error('review_queue: identity conflict',
         scored={**product, 'safety_decision': unverified}) == 'excluded_by_gate'
+
+
+def _known_unscored_unmapped_preparation(reason="no_quality_map_match"):
+    enriched, scored = _confirmed_ban_with_unmapped_carrier()
+    enriched["dsld_id"] = "31063"
+    enriched["product_name"] = "Verified unresolved preparation label"
+    enriched["ingredient_quality_data"]["ingredients"] = enriched["ingredient_quality_data"]["ingredients"][:1]
+    enriched["ingredient_quality_data"]["ingredients"][0]["identity_decision_reason"] = reason
+    for key in ["activeIngredients", "label_source_rows", "display_ingredients"]:
+        enriched[key] = enriched[key][:1]
+    enriched["display_ingredients"][0].update(
+        label_order=0, nested_depth=0, label_display_name="Hemp Oil Extract", exact_dose_text="25 mg")
+    enriched["raw_actives_count"] = 1
+    enriched["contaminant_data"]["banned_substances"]["safety_flags"] = []
+    scored.pop("safety_decision")
+    scored.update(verdict="NOT_SCORED", quality_score_status="not_scored",
+                  quality_score_v4_100=None, score_100_equivalent=None,
+                  quality_tier=None, grade=None, display_100="N/A",
+                  score_unavailable_reason="incomplete_product_data")
+    if reason == "form_unmapped":
+        scored["strict_scoring_contract"]["findings"].append("disclosed_form_unmapped")
+    return enriched, scored
+
+
+@pytest.mark.parametrize("reason", ["no_quality_map_match", "form_unmapped"])
+def test_verified_unknown_preparation_stays_visible_without_score_or_fake_coverage(reason):
+    enriched, scored = _known_unscored_unmapped_preparation(reason)
+    assert validate_export_contract(enriched, scored) == []
+    blob = build_detail_blob(enriched, scored)
+    assert blob["row_ledger_summary"]["mapped_coverage"] == 0.0
+    row = blob["row_ledger"][0]
+    assert row["source_label"] == "Hemp Oil Extract"
+    assert row["canonical_id"] is None
+    assert row["mapping_disposition"] == "unresolved_score_active"
+
+
+@pytest.mark.parametrize("defect", ["unknown_source", "missing_label", "competing_identity", "canonical_id",
+    "numeric_score", "numeric_mirror", "numeric_display", "tier", "grade", "scored", "safe", "wrong_label",
+    "duplicate_source", "duplicate_path", "other_strict_failure"])
+def test_unknown_preparation_visibility_cannot_authorize_false_identity_or_score(defect):
+    enriched, scored = _known_unscored_unmapped_preparation()
+    row = enriched["ingredient_quality_data"]["ingredients"][0]
+    if defect == "unknown_source": enriched["dsld_id"] = "UNKNOWN"
+    elif defect == "missing_label": enriched["display_ingredients"] = []
+    elif defect == "competing_identity": row["identity_decision_reason"] = "competing_identity"
+    elif defect == "canonical_id": row["canonical_id_before"] = "hemp_seed_oil"
+    elif defect == "numeric_score": scored["quality_score_v4_100"] = 50
+    elif defect == "numeric_mirror": scored["score_100_equivalent"] = 50
+    elif defect == "numeric_display": scored["display_100"] = "50/100"
+    elif defect == "tier": scored["quality_tier"] = "GOOD"
+    elif defect == "grade": scored["grade"] = "B"
+    elif defect == "scored": scored["quality_score_status"] = "scored"
+    elif defect == "safe": scored["verdict"] = "SAFE"
+    elif defect == "wrong_label": row["label_display_name"] = "Hemp Seed Oil"
+    elif defect == "duplicate_source": enriched["label_source_rows"].append(dict(enriched["label_source_rows"][0]))
+    elif defect == "duplicate_path": enriched["ingredient_quality_data"]["ingredients"].append(dict(row))
+    else: scored["strict_scoring_contract"]["findings"].append("missing_required_fields:dose_class")
+    assert validate_export_contract(enriched, scored)
+
+
+@pytest.mark.parametrize("replace_literal", [False, True])
+def test_unscored_label_cannot_inherit_safety_only_identity_exception(replace_literal):
+    enriched, scored = _known_unscored_unmapped_preparation()
+    row = enriched["ingredient_quality_data"]["ingredients"][0]
+    row.update(identity_decision_reason="safety_recognition_without_primary_identity",
+               recognition_source="harmful_additives", safety_identity_id="ADD_UNKNOWN")
+    if replace_literal:
+        row.update(source_label_name="Different Ingredient", label_display_name="Different Ingredient")
+    assert validate_export_contract(enriched, scored)

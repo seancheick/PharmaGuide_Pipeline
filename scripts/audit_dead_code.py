@@ -69,7 +69,6 @@ KEEP: dict[str, str] = {
     "scripts/evidence_resolver.py::resolve_evidence_for_canonical": "tests drive the live resolve_evidence_for_row through it (builds the row)",
     # Cross-repo reference implementations the app must match.
     "scripts/profile_gate_evaluator.py::evaluate_profile_gate": "reference evaluator; Flutter must match it on scripts/data/profile_gate_test_cases.json",
-    "scripts/profile_gate_evaluator.py::validate_profile_gate": "reference validator; Flutter must match it on scripts/data/profile_gate_test_cases.json",
     "scripts/safety_alerts.py::applies_to": "reference of the device-side alert applicability the app implements",
     "scripts/export_schema.py::resolve_warning_rule_refs": "reference of schema-3 warning-ref rehydration (app: warning_rule_ref_resolver.dart)",
     # Owned elsewhere: another lane or Sean decides.

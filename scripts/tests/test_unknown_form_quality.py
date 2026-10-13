@@ -754,7 +754,6 @@ def test_a_held_source_or_marker_token_leaves_the_row_unheld(enricher, parent, l
     ('aloe_vera', 'Aloe vera Leaf Extract', {'name': 'Aloe barbadensis leaf extract', 'category': _B, 'ingredientGroup': 'Aloe'}, 'aloe vera (unspecified)'),
     ('rose_hips', 'Rosehip Fruit Extract', {'name': 'Rosae canina Fruit Extract', 'category': _B, 'ingredientGroup': 'Dog Rose'}, 'rose hips extract'),
     ('rose_hips', 'Rose Hip Fruit Extract', {'name': 'Rosa canina Fruit Extract', 'category': _B, 'ingredientGroup': 'Rose Hip'}, 'rose hips extract'),
-    ('corn_silk', 'Corn Silk, Powder', {'name': 'Zea mays, Powder', 'category': _B, 'ingredientGroup': 'Corn'}, 'corn silk extract'),
     ('perilla_oil', 'Perilla Seed Extract', {'name': 'Perilla frutescens Seed Extract', 'category': _B, 'ingredientGroup': 'perilla'}, 'perilla seed oil'),
     ('horse_chestnut_seed', 'Horse Chestnut Seed Extract', {'name': 'Aesculus hippocastanum Seed Extract', 'category': _B, 'ingredientGroup': 'Horse Chestnut'}, 'horse chestnut seed (unspecified)'),
     ('chamomile', 'Chamomile Flower Extract', {'name': 'Matricaria recutita Flower Extract', 'category': _B, 'ingredientGroup': 'German Chamomile '}, 'chamomile extract'),
@@ -1116,3 +1115,64 @@ def test_exact_nih_label_forms_replace_crossed_structured_sources(pid, nutrient,
     row = next(r for r in product['activeIngredients'] if r['name'] == nutrient)
     assert [f['name'] for f in row['forms']] == expected
     assert row.get('label_correction') or row.get('label_correction_applied') or row.get('source_correction')
+
+
+def test_a_named_corn_silk_powder_cannot_claim_extract_form_credit(enricher):
+    # Both source fields say Powder; the old alias selected an extract.
+    form = {"name": "Zea mays, Powder", "category": _B, "ingredientGroup": "Corn"}
+    match = enricher._match_quality_map("Corn Silk, Powder", "Corn Silk, Powder",
+        enricher.databases["ingredient_quality_map"], cleaned_forms=[form], cleaner_canonical_id="corn_silk")
+    assert match["canonical_id"] == "corn_silk"
+    assert match["form_id"] is None
+    assert match["bio_score"] is None
+    assert match["match_status"] == "FORM_DISCLOSED_UNMAPPED"
+    assert match["unmapped_forms"] == ["Zea mays, Powder"]
+
+
+@pytest.mark.parametrize("label", ["Dried Rose Hips (Rosa canina)", "Rose Hips, dried", "Rose Hips Powder (Rosa canina)"])
+def test_whole_rose_hips_cannot_claim_extract_credit(enricher, label):
+    match = enricher._match_quality_map(label, "Rose Hips", enricher.databases["ingredient_quality_map"], cleaner_canonical_id="rose_hips")
+    assert match["canonical_id"] == "rose_hips"
+    assert not match.get("form_id") or "extract" not in match["form_id"]
+    assert match["bio_score"] <= unknown_form_quality(IQM["rose_hips"])["bio_score"]
+
+
+def test_printed_spermidine_salt_survives_parenthetical_abbreviation(enricher):
+    match = enricher._match_quality_map("Spermidine Trihydrochloride (3HCl)", "Spermidine", enricher.databases["ingredient_quality_map"], cleaner_canonical_id="spermidine")
+    assert match["canonical_id"] == "spermidine"
+    assert match["form_id"] == "spermidine trihydrochloride"
+
+
+@pytest.mark.parametrize("label,std_name,expected", [
+    ("Rose Hips Extract", "Rose Hips", "rose hips extract"),
+    ("Dried Rose Hips Extract", "Rose Hips", "rose hips extract"),
+    ("Rose Hips Powder Extract", "Rose Hips", "rose hips extract"),
+    ("Spermidine", "Spermidine", "spermidine (free base)"),
+    ("Spermidine Trihydrochloride", "Spermidine", "spermidine trihydrochloride"),
+    ("Spermidine (as spermidine trihydrochloride)", "Spermidine", "spermidine trihydrochloride"),
+])
+def test_explicit_named_forms_and_bare_spermidine_keep_existing_owner(enricher, label, std_name, expected):
+    parent = "rose_hips" if "Rose" in label else "spermidine"
+    match = enricher._match_quality_map(label, std_name, enricher.databases["ingredient_quality_map"], cleaner_canonical_id=parent)
+    assert match["canonical_id"] == parent
+    assert match["form_id"] == expected
+
+
+@pytest.mark.parametrize("name,group,parent,form,amount", [
+    ("Dried Rose Hips (Rosa canina)", "Rose Hips", "rose_hips", None, 100),
+    ("Spermidine Trihydrochloride (3HCl)", "Spermidine", "spermidine", "spermidine trihydrochloride", 5),
+])
+def test_declared_whole_material_and_salt_reach_real_scored_artifact(enricher, name, group, parent, form, amount):
+    from enhanced_normalizer import EnhancedDSLDNormalizer
+    from scoring_v4.scored_artifact import build_scored_artifact
+    raw = json.loads((FIXTURES / "resveratrol_source_328280_raw.json").read_text())
+    raw["ingredientRows"] = [{"name": name, "ingredientGroup": group, "forms": [],
+        "quantity": [{"quantity": amount, "unit": "mg"}], "nestedRows": [], "order": 1}]
+    product, _ = enricher.enrich_product(EnhancedDSLDNormalizer().normalize_product(raw))
+    row = next(r for r in product["ingredient_quality_data"]["ingredients"] if r.get("canonical_id") == parent)
+    assert row["matched_form"] == (form or "unspecified")
+    if form is None:
+        assert row["bio_score"] <= unknown_form_quality(IQM[parent])["bio_score"]
+    artifact = build_scored_artifact(product)
+    assert artifact["quality_score_status"] in {"scored", "not_scored"}
+    assert artifact.get("product_safety_status") != "blocked"

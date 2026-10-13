@@ -977,6 +977,16 @@
       ],
       "source_commit": "9b320ab683759b4b550dc6b5f832721cad2b5842",
       "notes": "Complete native raw canary check found exactly two drifts; other 31 matched. Frozen original fixture source 786f4a0d4 reproduces 245156=83.5 and 306381=75.5; pre-clinical baseline c7acfb930 reproduces 85.0 and 75.5; integrated main reproduces 85.0 and 75.8 on identical raw inputs. Goli 245156: Verification 4.5->6.0 removes a 1.5 deduction from unsupported V029 (placeholder FDA F-27XX, asserted Apple Cider Vinegar Gummies expiration-label event), excluded by the existing primary-source eligibility owner. Historical recall assertions remain unknown; this does not verify absence or resolution of a real recall. All other pillars unchanged. 306381: Formulation 12.9->13.2 reflects the source-reviewed removal of unsupported citrulline-malate premium (15->14) and corresponding parent reference, weighted normalized formulation 9.6728->9.9124. Free-taurine chemistry rename retains its existing 11 anchor. Other pillars, snapshot identity, status, flags and safety fields unchanged. Absorption metadata is not scored. Canonical freeze_contract_snapshots.py regenerated only these two snapshots from raw; receipts and immutable old bytes/hashes retained in private rebuild_20261012/canary_review."
+    },
+    {
+      "date": "2026-10-12",
+      "action": "refrozen_two_approved_form_parent_relative_canaries",
+      "products": [
+        306381,
+        269278
+      ],
+      "source_commit": "0bc54320b278639b6937d0c50ec11f7d36d5b2af",
+      "notes": "Sean approved provisional form ceilings11 for magnesium taurate and Nitrosigine in the independent clinical-audit task. Existing free-taurine and arginine-AKG ratings remain11; existing parent normalization maximum changes taurine13->11 and arginine14->12. Source-qualified native replay of identical frozen NIH raw labels from586d02f68 to integrated0bc54320b changes only Formulation:30638113.2->13.5,total75.8->76.1;26927815.7->18.3,total63.2->65.8. Other five pillars, routes and score status stay unchanged. Selective canonical raw freezer changes only quality_score_v4_100 and its compatibility mirror; all identity, coverage, grades, flags and safety snapshot fields remain identical. No rating assigned to these two products and no new clinical efficacy claim. Receipts /Users/seancheick/pg_quality/mapped_coverage_169_20261012/approved_form_canary_{baseline,candidate}.jsonl with source/output hashes and independent review."
     }
   ]
 }

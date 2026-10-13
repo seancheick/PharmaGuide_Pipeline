@@ -801,7 +801,7 @@ def test_pragma_integrity_check_ok(build_ctx):
 def test_pragma_user_version_set(build_ctx):
     _build(build_ctx)
     con = _conn(build_ctx.output_db)
-    assert con.execute("PRAGMA user_version").fetchone()[0] == 3
+    assert con.execute("PRAGMA user_version").fetchone()[0] == 4
 
 
 def test_profile_warning_rules_are_versioned_and_queryable(build_ctx):
@@ -1010,3 +1010,19 @@ def test_explicit_class_exclusions_export_without_becoming_members(build_ctx):
         "SELECT excluded_drug_rxcuis_json FROM drug_class_map WHERE class_id='class:warfarin_family'"
     ).fetchone()
     assert json.loads(other[0]) == []
+
+def test_approved_pairwise_predicates_are_inserted_in_native_database(build_ctx):
+    drafts = json.loads(build_ctx.normalized_drafts_path.read_text())
+    # Preserve the actual normalizer payload shape; attach optional predicates.
+    rows = drafts['interactions'] if isinstance(drafts, dict) else drafts
+    rows[0]['profile_gate'] = {'gate_type': 'nutrient_form', 'excludes': {'nutrient_forms_any': ['niacinamide']}}
+    rows[0]['medication_exceptions'] = [{'ingredient_rxcuis': ['9639'], 'use_context': 'confirmed'}]
+    build_ctx.normalized_drafts_path.write_text(json.dumps(drafts))
+    _build(build_ctx)
+    con = sqlite3.connect(build_ctx.output_db)
+    try:
+        gate, exceptions = con.execute('select profile_gate_json, medication_exceptions_json from interactions where id=?', (rows[0]['id'],)).fetchone()
+        assert json.loads(gate) == rows[0]['profile_gate']
+        assert json.loads(exceptions) == rows[0]['medication_exceptions']
+    finally:
+        con.close()

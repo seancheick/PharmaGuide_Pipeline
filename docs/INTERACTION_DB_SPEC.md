@@ -1202,3 +1202,13 @@ Do not build these unless explicitly reopened:
   3. Confirm the user is ready to start M1.
   4. Start M1 with TDD: write `stack_nutrient_aggregator_test.dart` first.
   5. Never touch M2+ until M1 is merged and green.
+
+## Approved pairwise form/context extension — October13,2026
+
+Interaction schema4.0.0 / SQLite user_version4 adds nullable interactions.profile_gate_json and medication_exceptions_json, carrying the existing authored profile_gate and medication_exceptions vocabularies. Current pairwise form gates support canonical nutrient-form exclusions only; unsupported context axes fail validation. JSON absence in older artifacts preserves review. Flutter migrates schema1–3 by adding missing tables/columns; older max-schema3 consumers refuse schema4 before use. No current release/pin is advanced by this source batch.
+
+Form-specific dose thresholds reuse form_scope. Excluding niacinamide from the lipid-modifying nicotinic-acid claim requires complete canonical form identity; mixed/unknown forms are never cleared by finding one excluded form. Only explicit source quantities that reconcile to existing normalized totals can be allocated by form. A label-serving amount does not prove actual daily intake: scoped suppression requires a current confirmed daily amount, with incomplete dose/form facts retaining review. FDA dose qualification is not universal safety below the value.
+
+Medication exceptions use existing ingredient_rxcuis, dose_mg_exact/range, route and use_context conjunctions. Notes carry the complete confirmation statement for UI display, not decision logic. The shared matcher is reused. Pairwise exceptions require a current non-persisted confirmation and explicit reference context; they cannot leak from food advice to tyramine supplements or unrelated medication pairs. Actual procedural selection is required. FDA metformin labeling remains the source; the less restrictive ACR IV30–60 position is recorded but not silently substituted. EMSAM food criteria include exact delivered6mg24h/transdermal and no recent9/12mg exposure for14days.
+
+Owner: existing curated pair records, build_interaction_db, shared ProfileGateEvaluator/MedicationProfileGateEvaluator and existing pairwise consumers. Sean approved the supported extension October13; no second clinical engine, registry or inferred cutoff.

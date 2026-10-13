@@ -59,6 +59,10 @@
 #     # Check publishing prerequisites without processing or publishing:
 #     bash scripts/release_full.sh --preflight-only
 #
+#     # Publish the already-prepared submission set without fetching new inbox labels:
+#     bash scripts/release_full.sh --prepared-inputs
+#     # Stale prepared submission manifests still fail; all release gates run.
+#
 #     # Skip cloud/device steps (local-only iteration):
 #     bash scripts/release_full.sh --skip-supabase
 #     bash scripts/release_full.sh --skip-flutter
@@ -114,6 +118,7 @@ fi
 FLUTTER_REPO="/Users/seancheick/PharmaGuide ai"
 FORCE=0
 PREFLIGHT_ONLY=0
+PREPARED_INPUTS=0
 SKIP_SUPABASE=0
 SKIP_FLUTTER=0
 SKIP_PRODUCT_IMAGES=0
@@ -128,6 +133,7 @@ SCORING_SNAPSHOT_GATE_RAN=0
 while (($# > 0)); do
   case "$1" in
     --preflight-only)    PREFLIGHT_ONLY=1; shift ;;
+    --prepared-inputs)   PREPARED_INPUTS=1; shift ;;
     --force)             FORCE=1; shift ;;
     --skip-assemble)     shift ;;  # accepted for backward compat; no-op now
     --skip-supabase)     SKIP_SUPABASE=1; shift ;;
@@ -267,6 +273,7 @@ fi
 info "skip-product-images: $SKIP_PRODUCT_IMAGES"
 info "skip-supabase:    $SKIP_SUPABASE  (supabase-dry-run: $SUPABASE_DRY_RUN)"
 info "skip-flutter:     $SKIP_FLUTTER"
+info "prepared-inputs:  $PREPARED_INPUTS"
 info "keep-versions:    $KEEP_VERSIONS"
 info "flutter-repo:     $FLUTTER_REPO"
 info "================================================================"
@@ -403,7 +410,13 @@ submission_pipeline_needs_run() {
     -newer "$SUBMISSION_SCORE_MANIFEST" -print -quit 2>/dev/null | grep -q .
 }
 
-if (( SKIP_SUPABASE == 0 && SUPABASE_DRY_RUN == 0 )); then
+if (( PREPARED_INPUTS == 1 )); then
+  if submission_labels_exist && submission_pipeline_needs_run; then
+    err "Prepared submission inputs are stale; prepare and validate them before publishing."
+    exit 1
+  fi
+  skip "Product submissions: prepared input set preserved; inbox fetch deferred"
+elif (( SKIP_SUPABASE == 0 && SUPABASE_DRY_RUN == 0 )); then
   info "Product submissions: fetching human-approved records..."
   "$PG_PYTHON" scripts/product_submission_import.py --fetch \
     --output-dir "$SUBMISSION_OUTPUT_DIR"

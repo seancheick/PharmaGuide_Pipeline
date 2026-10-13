@@ -9484,6 +9484,8 @@ class SupplementEnricherV3:
         3. Form-level outranks parent-level (if applicable)
         4. Canonical key alphabetical
         5. Form key alphabetical
+        After parent selection, prefer a literal raw/base form name only within
+        that same parent, configured priority and match tier.
 
         Multi-Form Enhancement:
         - Uses pre-parsed cleaned_forms[] from cleaning stage when available
@@ -10221,6 +10223,15 @@ class SupplementEnricherV3:
         def add_candidate(candidate: Dict):
             if _blocks_false_omega_parent(str(candidate.get("parent_key") or "")):
                 return
+            # A bare parent alias cannot turn a printed powder/dried material
+            # into an extract. Retain the parent and its shared unknown
+            # form treatment; row-owned explicit extract forms remain valid.
+            if (
+                re.search(r"\b(?:powder|dried)\b", ing_name, re.I)
+                and not re.search(r"\bextract\b", ing_name, re.I)
+                and re.search(r"\bextract\b", _resolved_candidate_form_id(candidate) or "", re.I)
+            ):
+                return
 
             # Multiple aliases often describe the same scoring identity
             # (canonical parent + resolved form). Collapse those paths here so
@@ -10642,6 +10653,20 @@ class SupplementEnricherV3:
 
         candidates.sort(key=_candidate_sort_key)
         best = candidates[0]
+
+        # Refine the form only after the existing rules select its parent.
+        # A literal salt/form must survive a standardized generic parent alias,
+        # but cannot override nutrient context (e.g. B3 versus vitamin C).
+        literal_forms = [
+            candidate for candidate in candidates
+            if candidate["parent_key"] == best["parent_key"]
+            and candidate.get("priority", 1) == best.get("priority", 1)
+            and candidate["tier"] == best["tier"]
+            and candidate.get("matched_on") == "form_name"
+            and candidate.get("match_source") in (0, 2)
+        ]
+        if literal_forms:
+            best = min(literal_forms, key=_candidate_sort_key)
 
         winning_tier = best["tier"]
         winning_candidates = [c for c in candidates if c["tier"] == winning_tier]

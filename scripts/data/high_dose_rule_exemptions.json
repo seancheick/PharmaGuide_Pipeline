@@ -2,16 +2,15 @@
   "_metadata": {
     "version": "1.0.1",
     "schema_version": "6.2.4",
-    "last_updated": "2026-10-11",
+    "last_updated": "2026-10-12",
     "description": "Explicit reviewed exemptions for active pairwise interaction rules that must remain visible without a numeric high-dose threshold.",
     "purpose": "Reviewed exemptions for active pairwise rules whose clinical copy mentions high-dose use but must not be suppressed by a numeric app gate."
   },
   "pairwise_interaction_ids": {
     "DSI_LEVOTHYROXINE_SOY": "The actionable issue is absorption timing for supplemental soy isoflavones; high-dose wording only adds follow-up monitoring and does not define a safe no-action floor.",
     "DSI_ANTICONV_FOLATE": "Folate management with anticonvulsants depends on seizure history, medication, and pregnancy context; a generic numeric floor cannot safely suppress clinician-review guidance.",
-    "SSI_ZINC_COPPER": "Copper depletion reflects prolonged cumulative zinc exposure and baseline copper status, which a one-day label dose cannot fully model; retain the non-suppressed monitoring signal.",
-    "SSI_KAVA_ACETAMINOPHEN": "This is a major shared-hepatotoxicity concern. It must remain visible regardless of an incomplete or low apparent supplement dose.",
     "DSI_WAR_OMEGA3": "This source-reviewed interaction remains a prescriber/INR context warning without a numeric suppression cutoff. The mechanism and evidence belong to DSI_WAR_OMEGA3 in curated_interactions_v1.json, not this exemption map. Agent source review 2026-10-11; not a new clinician sign-off.",
-    "DSI_WAR_GINGER": "The source-reviewed ginger/warfarin precaution has mixed human platelet evidence and no established 2g/day safe-below boundary. Retain prescriber/INR review without inventing a numeric suppression threshold."
+    "DSI_WAR_GINGER": "The source-reviewed ginger/warfarin precaution has mixed human platelet evidence and no established 2g/day safe-below boundary. Retain prescriber/INR review without inventing a numeric suppression threshold.",
+    "DSI_FISHOIL_VITE": "ODS describes vitamin E bleeding concerns and uncertain clinically significant amounts; neither the vitamin E upper limit nor fish-oil trial doses establish a combination safe-below boundary. Retain the qualified review without a numeric suppression floor."
   }
 }

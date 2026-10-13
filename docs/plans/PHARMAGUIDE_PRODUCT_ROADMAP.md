@@ -4,6 +4,10 @@ Written October 1, 2026 from the business strategists' review (pipeline, app and
 recommendations), checked against the three repositories and the live market. Sean approved the
 order below on October 1.
 
+October 13: the supported warning/context corrections are implemented, measured, independently reviewed and validation-complete. Seven source records changed. The schema-4 export and app consumer now evaluate confirmed forms, actual daily amounts and current food/procedure context. All 24 native data comparisons and three frozen raw replays pass, with no product-quality movement.
+
+Pipeline source `4b74d1b1` passed CI run `38377932566`: 20,559 tests and 192 declared skips, with every skip guard passing. The 174 focused tests and local 546 tests also pass; local has 24 declared opt-in skips. App source `545c4138` passed CI run `38378191655`; its local check passes clean analysis and 3,885 tests. PR134 merged at `e4c944a15f8c533fcb1a101db3892704a40d02d9`; app PR113 merged at `fdd5ca054b4c41927336c123f98302dc00b3dfb2` on October 13. Both approved heads are ancestors of origin/main. Exact-head pipeline CI38382804581/38382810605 and app CI38380987827 passed. Both merged local and remote branches were deleted after containment verification. No catalog rebuild, bundle/pin replacement, visual acceptance or release occurred. The full catalog, paired artifacts, visual acceptance and release remain deferred. Clinical preparation, form and source holds remain documented in the existing LEDGER, research and private FOLLOWUP_20261013.md.
+
 How this document relates to the others:
 
 - [Master completion plan](PHARMAGUIDE_MASTER_COMPLETION_PLAN.md) is **Phase 0** here: the scoring
@@ -35,6 +39,8 @@ Every result answers three separate questions, never merged into one number:
 | Analysis Coverage | How complete is this analysis? | Pipeline (to be exported as one value, item 1.3) |
 
 A critical product safety gate (recall, ban, adulteration) sits above all three: BLOCKED, no score.
+
+October 12 pairwise-source candidate: all 52 hard warnings and 16 dose floors reviewed (plus acetaminophen/warfarin). Fifty pair corrections and approved EPO pair removal implemented;15 unsupported floors removed, one niacin qualifier retained with form hold. Native131-row build and54 actual Flutter before/after probes pass;506 focused owner tests and independent surgical review pass. Exact-source8ba68dbe whole-fast CI38314549265 passes20,455tests/192declared skips; local546passed/24declared opt-in skips, guards green. No catalog run or delivery claim. MAOI-ginseng/kava-acetaminophen hard grades, niacin form eligibility and pairwise context remain open. Details: `scripts/audits/pending_items_20260926/research.md` / `LEDGER.md`.
 
 ## Decisions already made
 
