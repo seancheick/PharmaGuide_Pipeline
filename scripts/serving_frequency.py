@@ -115,7 +115,7 @@ def resolve_facts_panel_serving_basis(record: Dict[str, Any]) -> Optional[Dict[s
         serving.get("minDailyServings"),
         serving.get("maxDailyServings"),
     )
-    if serving_quantity is None or not serving_unit or daily_range is None:
+    if serving_quantity is None or not serving_unit:
         return None
 
     facts_bases: set[float] = set()
@@ -157,26 +157,30 @@ def resolve_facts_panel_serving_basis(record: Dict[str, Any]) -> Optional[Dict[s
     facts_basis = next(iter(facts_bases))
     quantity_range = _ordered_pair(serving.get("minQuantity"), serving.get("maxQuantity"))
     if facts_basis <= serving_quantity:
-        # A ranged count regimen (1-4 capsules) can describe the intake while
-        # the selected nutrient column is for one capsule. Do not generalize
-        # this to weight/volume rounding or ambiguous/multiple Facts columns.
-        if (quantity_range is None or quantity_range[0] == quantity_range[1]
-                or not quantity_range[0] <= facts_basis <= quantity_range[1]
-                or serving_unit not in {"capsule", "vegcapsule", "vegetablecapsule", "tablet", "softgel", "caplet", "gummy"}):
+        # Use an explicit matching Facts column for all dosage forms. A
+        # container ratio cannot override the printed nutrient amount basis.
+        # A ranged intake is scaled onto that column, never assumed to be a
+        # different quantity declaration.
+        quantity_range = quantity_range or (serving_quantity, serving_quantity)
+        if not quantity_range[0] <= facts_basis <= quantity_range[1]:
             return None
     else:
         quantity_range = (serving_quantity, serving_quantity)
     # The facts-panel basis cannot exceed every physical unit the label allows
     # in a day. Larger values are known DSLD field defects (for example a
     # 30-count package copied into a one-chew serving row), not dose evidence.
-    if facts_basis > serving_quantity * daily_range[1] * 1.05:
+    if facts_basis > serving_quantity and (
+        daily_range is None or facts_basis > serving_quantity * daily_range[1] * 1.05
+    ):
         return None
 
-    return {
-        "basis_count": facts_basis,
-        "min_servings_per_day": quantity_range[0] * daily_range[0] / facts_basis,
-        "max_servings_per_day": quantity_range[1] * daily_range[1] / facts_basis,
-    }
+    result = {"basis_count": facts_basis}
+    if daily_range is not None:
+        result.update(
+            min_servings_per_day=quantity_range[0] * daily_range[0] / facts_basis,
+            max_servings_per_day=quantity_range[1] * daily_range[1] / facts_basis,
+        )
+    return result
 
 
 def select_canonical_serving(serving_sizes: Any) -> Optional[Dict[str, Any]]:
@@ -321,7 +325,7 @@ def resolve_daily_serving_range(record: Dict[str, Any]) -> Tuple[float, float, b
         return composite[0], composite[1], False
 
     facts_panel = resolve_facts_panel_serving_basis(record)
-    if facts_panel is not None:
+    if facts_panel is not None and "min_servings_per_day" in facts_panel:
         return facts_panel["min_servings_per_day"], facts_panel["max_servings_per_day"], False
 
     label = _label_declared_daily_range(record)

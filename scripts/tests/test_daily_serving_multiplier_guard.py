@@ -516,15 +516,16 @@ def test_daily_frequency_copy_preserves_fractional_regimens(
     ([{"serving_size_quantity": 1}, {"serving_size_quantity": 4, "selected_for_analysis": True}], (0.25, 1)),
     ([{"serving_size_quantity": 90}], (1, 1)),
     ([{"serving_size_quantity": 1}, {"serving_size_quantity": 1, "serving_size_unit": "Tablet(s)"}], (1, 1)),
-    ([{"serving_size_quantity": 1, "serving_size_unit": "Gram(s)"}], (1, 1)),
+    ([{"serving_size_quantity": 1, "serving_size_unit": "Unknown"}], (1, 1)),
 ])
-def test_ranged_regimen_rebases_only_a_single_selected_matching_facts_column(variants, expected):
+@pytest.mark.parametrize("unit", ["Capsule(s)", "Gram(s)", "mL"])
+def test_ranged_regimen_rebases_only_a_single_selected_matching_facts_column(variants, expected, unit):
     from serving_frequency import resolve_daily_serving_range
     product = {
-        "servingSizes": [{"minQuantity": 1, "maxQuantity": 4, "unit": "Capsule(s)",
+        "servingSizes": [{"minQuantity": 1, "maxQuantity": 4, "unit": unit,
                           "minDailyServings": 1, "maxDailyServings": 1}],
         "activeIngredients": [{"raw_taxonomy": {"quantityVariants": [
-            {"serving_size_unit": "Capsule(s)", **v} for v in variants
+            {"serving_size_unit": unit, **v} for v in variants
         ]}}],
     }
     assert resolve_daily_serving_range(product)[:2] == expected

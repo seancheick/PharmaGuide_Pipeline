@@ -291,7 +291,7 @@ def serving_frequency_violations(record: dict) -> list[str]:
             violations.append("Facts-column provenance has no supported amount basis")
         else:
             for key in ("basis_count", "min_servings_per_day", "max_servings_per_day"):
-                if basis.get(key) != facts[key]:
+                if key in facts and basis.get(key) != facts[key]:
                     violations.append(f"{key} differs from selected Facts column")
         return violations
 
@@ -436,3 +436,38 @@ def test_rebased_facts_panel_does_not_relabel_milligrams_as_grams():
                           "basis_reason": "ingredient_quantity_variants"},
     }
     assert generate_dosing_summary(product)["dosing_summary"] == "Mix 500 mg twice daily"
+
+
+@pytest.mark.parametrize("frequency", [1, 0.5, None])
+def test_explicit_facts_basis_outranks_container_rounding(frequency):
+    # Thorne298074: 200mg is declared per3.11g scoop, not187g/60=3.11667g.
+    product = {
+        "servingSizes": [{"minQuantity": 3.11, "maxQuantity": 3.11, "unit": "Gram(s)",
+                          "minDailyServings": frequency, "maxDailyServings": frequency}],
+        "netContents": [{"quantity": 187, "unit": "Gram(s)"}],
+        "servingsPerContainer": 60,
+        "activeIngredients": [{"raw_taxonomy": {"quantityVariants": [
+            {"serving_size_quantity": 3.11, "serving_size_unit": "Gram(s)", "selected_for_analysis": True}
+        ]}}],
+    }
+    basis = _enricher()._collect_serving_basis_data(product)["serving_basis"]
+    assert basis["basis_count"] == 3.11
+    assert basis["min_servings_per_day"] == basis["max_servings_per_day"] == frequency
+    from serving_frequency import resolve_daily_serving_range
+    assert resolve_daily_serving_range(product) == ((1, 1, True) if frequency is None else (frequency, frequency, False))
+
+
+def test_directions_convert_using_the_explicit_facts_basis():
+    product = {
+        "servingSizes": [{"minQuantity": 1, "maxQuantity": 1, "unit": "Capsule(s)"}],
+        "netContents": [{"quantity": 180, "unit": "Capsule(s)"}],
+        "servingsPerContainer": 90,
+        "labelText": {"parsed": {"directions": "Take 2 capsules daily."}},
+        "activeIngredients": [{"raw_taxonomy": {"quantityVariants": [
+            {"serving_size_quantity": 1, "serving_size_unit": "Capsule(s)"}
+        ]}}],
+    }
+    basis = _enricher()._collect_serving_basis_data(product)["serving_basis"]
+    assert basis["basis_count"] == 1
+    assert basis["servings_per_day_source"] == "directions"
+    assert basis["min_servings_per_day"] == basis["max_servings_per_day"] == 2
