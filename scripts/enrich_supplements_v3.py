@@ -101,6 +101,7 @@ from inactive_ingredient_resolver import (
     active_form_duplicate_candidate,
 )
 from serving_frequency import (
+    resolve_facts_panel_serving_basis,
     resolve_daily_serving_multiplier,
     resolve_daily_serving_range,
     select_canonical_serving,
@@ -18387,6 +18388,17 @@ class SupplementEnricherV3:
                     max_recommended, basis_count
                 )
                 servings_per_day_source = "directions"
+
+        # Ingredient quantities and daily exposure must use the same selected
+        # Facts column. A maximum intake count is not the nutrient amount basis.
+        facts_panel = resolve_facts_panel_serving_basis(product)
+        if facts_panel is not None:
+            basis_count = facts_panel["basis_count"]
+            canonical_serving_size_qty = basis_count
+            min_servings_per_day = facts_panel["min_servings_per_day"]
+            max_servings_per_day = facts_panel["max_servings_per_day"]
+            servings_per_day_source = "servingSizes"
+            basis_reason = "ingredient_quantity_variants"
 
         # Determine selection policy
         selection_policy = "first_serving"

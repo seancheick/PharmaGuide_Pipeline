@@ -96,6 +96,7 @@ from identity_integrity import (
 )
 from scoring_input_contract import DOSE_NOT_PROVIDED_UNITS, dose_disclosure_status, get_scoring_ingredients
 from serving_frequency import (
+    resolve_daily_serving_range,
     format_daily_frequency,
     resolve_daily_serving_multiplier,
 )
@@ -9956,6 +9957,15 @@ def generate_dosing_summary(enriched: Dict) -> Dict:
 
         if _collagen_serving_looks_implausible(enriched, max_qty, unit, max_daily):
             summary = "See product label"
+        elif sb.get("basis_reason") == "ingredient_quantity_variants":
+            # The Facts column may be one capsule while directions permit
+            # 1-4 capsules daily. Report the total range, not an invented
+            # schedule of four separate intake occasions.
+            daily_min, daily_max, _ = resolve_daily_serving_range(enriched)
+            low, high = min_qty * daily_min, max_qty * daily_max
+            qty_text = _format_quantity(low) if low == high else f"{_format_quantity(low)}-{_format_quantity(high)}"
+            noun = noun_singular if low == high == 1 else noun_plural
+            summary = f"{verb} {qty_text} {noun} daily".strip()
         elif min_qty == max_qty:
             qty_text = _format_quantity(min_qty)
             noun = noun_singular if min_qty == 1 else noun_plural

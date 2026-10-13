@@ -375,3 +375,25 @@ def serving_frequency_violations(record: dict) -> list[str]:
 )
 def test_frequency_invariants_catch_both_directions(record: dict, expected: bool) -> None:
     assert bool(serving_frequency_violations(record)) is expected
+
+
+@pytest.mark.parametrize("pid,amount", [("201495", 150), ("184671", 120)])
+def test_ranged_capsule_regimen_keeps_the_facts_panel_amount_basis(pid, amount):
+    from enhanced_normalizer import EnhancedDSLDNormalizer
+    from serving_frequency import resolve_daily_serving_range
+    from scoring_v4.scored_artifact import build_scored_artifact
+
+    raw = json.loads((Path(__file__).parent / "fixtures" / f"serving_column_{pid}_raw.json").read_text())
+    cleaned = EnhancedDSLDNormalizer().normalize_product(raw)
+    enriched, _ = SupplementEnricherV3().enrich_product(cleaned)
+    assert enriched["serving_basis"]["basis_count"] == 1
+    assert enriched["serving_basis"]["min_servings_per_day"] == 1
+    assert enriched["serving_basis"]["max_servings_per_day"] == 4
+    assert resolve_daily_serving_range(enriched) == (1, 4, False)
+    row = next(r for r in enriched["rda_ul_data"]["analyzed_ingredients"] if r["ingredient"] == "Magnesium")
+    assert row["per_day_min"] == amount
+    assert row["per_day_max"] == amount * 4
+    from build_final_db import generate_dosing_summary
+    assert generate_dosing_summary(enriched)["dosing_summary"] == "Take 1-4 capsules daily"
+    artifact = build_scored_artifact(enriched)
+    assert artifact["quality_score_status"] in {"scored", "suppressed_safety", "not_scored"}
