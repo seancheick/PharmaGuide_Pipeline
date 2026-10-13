@@ -53,12 +53,34 @@ class DSLDValidator:
                 missing_fields.extend(missing_critical)
                 validation_details["critical_fields_complete"] = False
                 
+            # NIH taxonomy is optional in the already-verified private-label
+            # contract. Reuse its provenance validator; never invent taxonomy.
+            important_fields = self.important_fields
+            provenance = product_data.get("manual_product_provenance")
+            if (
+                product_data.get("source_type") == "external_manual"
+                and isinstance(provenance, dict)
+                and provenance.get("source_kind") == "private_product_submission"
+                and provenance.get("review_status") == "verified"
+                and product_data.get("productType") is None
+            ):
+                from dsld_api_sync import _validate_external_manual_label
+                from product_submission_import import _required_uuid
+
+                try:
+                    _validate_external_manual_label(product_data)
+                    _required_uuid(provenance.get("source_record_id"), "source_record_id")
+                except ValueError:
+                    pass  # Invalid provenance retains the ordinary requirements.
+                else:
+                    important_fields = self.important_fields - {"productType"}
+
             # Check important fields
-            missing_important = self._check_fields(product_data, self.important_fields)
+            missing_important = self._check_fields(product_data, important_fields)
             missing_fields.extend(missing_important)
             
             # Calculate completeness score (only count critical + important fields)
-            critical_important_fields = len(self.critical_fields) + len(self.important_fields)
+            critical_important_fields = len(self.critical_fields) + len(important_fields)
             missing_critical_important = len(missing_critical) + len(missing_important)
             present_critical_important = critical_important_fields - missing_critical_important
             validation_details["completeness_score"] = round((present_critical_important / critical_important_fields) * 100, 2)

@@ -178,6 +178,82 @@ def test_generated_private_provenance_passes_canonical_manual_validator():
     dsld_api_sync._validate_external_manual_label(build_manual_label(_export()))
 
 
+@pytest.mark.parametrize("target_id", [None, "12345"])
+@pytest.mark.parametrize("explicit_null", [False, True])
+def test_verified_private_submission_without_nih_taxonomy_passes_clean(target_id, explicit_null):
+    from dsld_validator import DSLDValidator
+    from product_submission_import import build_manual_label
+
+    payload = _payload()
+    payload.pop("productType")
+    if explicit_null:
+        payload["productType"] = None
+    overrides = {} if target_id is None else {
+        "correction_target_dsld_id": target_id,
+    }
+    label = build_manual_label(_export(payload, **overrides))
+    status, missing, details = DSLDValidator().validate_product(label)
+    assert status == "success"
+    assert "productType" not in missing
+    assert label.get("productType") is None  # No invented NIH taxonomy.
+    assert details["critical_fields_complete"] is True
+
+
+@pytest.mark.parametrize("mutation", [
+    "nih", "unverified", "no_provenance", "bad_private_id", "bad_private_id_with_url",
+    "no_reviewer", "public_manual", "no_physical_state", "no_name",
+])
+def test_optional_nih_taxonomy_never_bypasses_other_source_guards(mutation):
+    from dsld_validator import DSLDValidator
+    from product_submission_import import build_manual_label
+
+    payload = _payload()
+    payload.pop("productType")
+    label = build_manual_label(_export(payload))
+    provenance = label["manual_product_provenance"]
+    if mutation == "nih":
+        label["id"] = 12345
+        label["source_type"] = "nih_dsld"
+    elif mutation == "unverified":
+        provenance["review_status"] = "pending"
+    elif mutation == "no_provenance":
+        label.pop("manual_product_provenance")
+    elif mutation in {"bad_private_id", "bad_private_id_with_url"}:
+        provenance["source_record_id"] = "not-a-uuid"
+        if mutation == "bad_private_id_with_url":
+            provenance["source_url"] = "https://example.com/label"
+    elif mutation == "no_reviewer":
+        provenance.pop("reviewer")
+    elif mutation == "public_manual":
+        provenance["source_kind"] = "external_label"
+        provenance["source_url"] = "https://example.com/label"
+    elif mutation == "no_physical_state":
+        label.pop("physicalState")
+    else:
+        label.pop("fullName")
+    status, missing, details = DSLDValidator().validate_product(label)
+    assert status != "success"
+    if mutation not in {"no_physical_state", "no_name"}:
+        assert "productType" in missing
+    elif mutation == "no_physical_state":
+        assert "physicalState" in missing
+    else:
+        assert "fullName" in missing
+        assert details["critical_fields_complete"] is False
+
+
+@pytest.mark.parametrize("taxonomy", [{}, [], ""])
+def test_empty_populated_taxonomy_retains_the_normal_clean_requirement(taxonomy):
+    from dsld_validator import DSLDValidator
+    from product_submission_import import build_manual_label
+
+    label = build_manual_label(_export())
+    label["productType"] = taxonomy
+    status, missing, _ = DSLDValidator().validate_product(label)
+    assert status == "needs_review"
+    assert "productType" in missing
+
+
 def test_committed_submission_labels_keep_reviewer_accounts_private():
     labels_dir = Path(__file__).resolve().parents[2] / "manual_labels/product_submissions"
     labels = list(labels_dir.glob("*.json"))
@@ -1151,10 +1227,9 @@ def test_release_train_runs_approved_submissions_through_existing_pipeline():
 def test_release_train_refreshes_submissions_after_reference_data_change():
     release = Path("scripts/release_full.sh").read_text(encoding="utf-8")
 
+    freshness_start = release.index("submission_pipeline_needs_run() {")
     freshness_function = release[
-        release.index("submission_pipeline_needs_run() {") : release.index(
-            "\n}\n\nif (( SKIP_SUPABASE", release.index("submission_pipeline_needs_run() {")
-        )
+        freshness_start : release.index("\n}\n", freshness_start)
     ]
     assert "pipeline_freshness.py" in freshness_function
     assert "check-stage-manifests" in freshness_function
