@@ -1074,6 +1074,7 @@ CATALOG_SEARCH_COLUMNS = (
     "product_status",
     "quality_tier",
     "quality_score_status",
+    "quality_score_v4_100",
     "product_safety_status",
     "mapped_coverage",
     "quality_score_confidence",
@@ -1120,6 +1121,12 @@ def catalog_search_rows_from_connection(conn, catalog_version):
                     f"{raw['mapped_coverage']!r} outside [0, 1]"
                 )
         row["mapped_coverage"] = coverage
+        score = raw["quality_score_v4_100"]
+        if score is not None:
+            score = float(score)
+            if not math.isfinite(score) or not 0 <= score <= 100:
+                raise ValueError("catalog_search: quality_score_v4_100 outside [0, 100]")
+        row["quality_score_v4_100"] = score
         if row["dsld_id"] is None or row["product_name"] is None:
             raise ValueError(
                 "catalog_search: products_core row without dsld_id/product_name: "
