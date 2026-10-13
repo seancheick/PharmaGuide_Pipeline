@@ -1,5 +1,7 @@
 # PharmaGuide master completion plan
 
+October 13 connector audit is a separate, unreleased behavioral batch. Its catalog publication fixes do not change clinical scores or validate a new corpus. Existing completed scoring phases remain as recorded; personal connector authorization, deployment and live gates remain open in the product roadmap and existing LEDGER.
+
 Updated October 13, 2026. Pipeline integrator: Codex. Original scope: Sean's accepted September 30 master plan. This document is the readable checklist; [LEDGER.md](../../scripts/audits/pending_items_20260926/LEDGER.md) remains the execution register, and the [ownership matrix](../../scripts/contracts/source_of_truth_matrix.json) defines production owners. Historical descriptions below do not override current code or approved decisions.
 
 October 13: the supported warning/context corrections are implemented, measured, independently reviewed and validation-complete. Seven source records changed. The schema-4 export and app consumer now evaluate confirmed forms, actual daily amounts and current food/procedure context. All 24 native data comparisons and three frozen raw replays pass, with no product-quality movement.
