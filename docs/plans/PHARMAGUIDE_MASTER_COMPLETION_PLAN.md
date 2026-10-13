@@ -1,10 +1,20 @@
 # PharmaGuide master completion plan
 
-Updated October 9, 2026. Pipeline integrator: Codex. Original scope: Sean's accepted September 30 master plan. This document is the readable checklist; [LEDGER.md](../../scripts/audits/pending_items_20260926/LEDGER.md) remains the execution register, and the [ownership matrix](../../scripts/contracts/source_of_truth_matrix.json) defines production owners. Historical descriptions below do not override current code or approved decisions.
+Updated October 13, 2026. Pipeline integrator: Codex. Original scope: Sean's accepted September 30 master plan. This document is the readable checklist; [LEDGER.md](../../scripts/audits/pending_items_20260926/LEDGER.md) remains the execution register, and the [ownership matrix](../../scripts/contracts/source_of_truth_matrix.json) defines production owners. Historical descriptions below do not override current code or approved decisions.
 
 A checked implementation box means that specific deliverable is implemented, measured and independently reviewed where required. It does **not** mean the whole phase is finished or the catalog is released. Repository code pushed to GitHub and catalog publication are separate events.
 
-## Current delivery checkpoint — October 9
+## Current delivery checkpoint — October 13
+
+- [x] Integrate the14-product batch and verified169 mapping corrections; preserve realunknowns/69 safety blocks. Source/independent/raw/CI/local receipts are in the execution ledger.
+- [x] Correct the PreticX taxonomy regression in the shared identity owner; complete corrected38dataset regeneration/114fresh, strict15,421 catalog, independent all-detail accounting and actualFlutter safety/stack/depletion checks. Prior candidate coverage99.1108456% mean ingredient mapping;45oforiginal169fullymapped/146belowfull overall.
+- [x] Complete prior frozen-candidate release139tests/no skips plus artifact/live gates; no new citation mismatch or unresolved source. Existing168 citation backlog mismatches remain reported.
+- [ ] Close the newly exposed private submission optional-taxonomy adapter boundary, validate/integrate its exact source, regenerate from actual fingerprints and accept the resulting final catalog/app artifacts.
+- [ ] Publish the accepted catalog/interaction/reference bundle and verify signed build22; Sean performs Apple upload. No publication/build22 has occurred at this checkpoint.
+
+Owner: existing private-label importer/provenance validator and DSLDValidator requirements. Evidence: actualfive new approvals/three missing-taxonomy review records, failfirst16/ownerconsumer145/native14 controls; [LEDGER](../../scripts/audits/pending_items_20260926/LEDGER.md). Will NOT create: taxonomy, clinical/scoring policy, registry, normalizer, score/status/public field or release waiver.
+
+## Historical delivery checkpoint — October 9
 
 Catalog `2026.10.09.085312` is published and independently verified. Its core SHA-256 is `bd21963197ab987204c986dd8485ad602a732386b98d6cc40aa34a4644d97290`. All 15,414 live detail-index entries and 113 risk-selected detail bodies match the candidate, including all 73 BLOCKED products. The release profile passed 129 tests and its attached gates. App analysis and all 3,756 tests passed. The approved safety corrections retain every original boundary.
 
