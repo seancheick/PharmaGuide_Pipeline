@@ -1,3 +1,9 @@
+## 2026-10-13 — newly approved whole-material and salt forms
+
+Owner: `SupplementEnricherV3._match_quality_map_impl::add_candidate/_candidate_sort_key`, canonical ingredient and IQD owners in the matrix; evidence: actual newly approved vitaminC/NAD source rows and native Clean→Enrich→Score replay. Will NOT create: alias, normalizer, registry, rating, score, clinical policy or public field.
+
+Source-grounded defects: dried Rose Hips100mg acquired extract credit; printed Spermidine Trihydrochloride(3HCl)5mg acquired free-base form. Four regressions failed first. Extend existing whole-material guard to powder/dried descriptors without an extract declaration. Within the existing priority/tier, retain an exact named raw/base form before standardized parent aliases; preserve cleaner parent constraints and alias/pattern precedence. Ten direct controls and two native scored-artifact cases pass; 726 owner/canonical/cache cases pass. A first salt attempt still failed and is superseded; one incorrectly named owner-test invocation collected zero tests and is not counted. Completed source measurement, independent review and final combined CI/local are pending. Five newly approved private labels remain unaccepted until final artifacts qualify.
+
 ## 2026-10-13 — preserve qualified submission inputs at publication
 
 Owner: `scripts/release_full.sh::submission_pipeline_needs_run` and its existing Step0 intake boundary; evidence: source-of-truth final_db_export owner, glossary Release, actual late inbox widening after completed candidate validation. Will NOT create: second freshness owner, publisher, clinical policy, assessment field or gate waiver.

@@ -9479,11 +9479,12 @@ class SupplementEnricherV3:
         3. Raw-label, standard-name, then base-name source
 
         Tie-breakers (within same tier):
-        1. Context parent preference (when available)
-        2. Longest matched alias wins
-        3. Form-level outranks parent-level (if applicable)
-        4. Canonical key alphabetical
-        5. Form key alphabetical
+        1. Literal named form from the raw/base label
+        2. Context parent preference (when available)
+        3. Longest matched alias wins
+        4. Form-level outranks parent-level (if applicable)
+        5. Canonical key alphabetical
+        6. Form key alphabetical
 
         Multi-Form Enhancement:
         - Uses pre-parsed cleaned_forms[] from cleaning stage when available
@@ -10204,6 +10205,10 @@ class SupplementEnricherV3:
             return (
                 candidate.get("priority", 1),           # 1. Configured priority (0 > 1 > 2)
                 candidate["tier"],                      # 2. Tier (exact > normalized > contains/pattern)
+                # Within that tier, a literal named form in the row/base
+                # survives standardized parent aliases (salt + abbreviation).
+                0 if (candidate.get("matched_on") == "form_name"
+                    and candidate.get("match_source") in (0, 2)) else 1,
                 candidate.get("match_source", 1),       # 3. Match source (raw > std > base)
                 parent_pref,                            # 4. Prefer parent matching base ingredient
                 -candidate["alias_len"],                # 5. Longer alias wins within same priority
@@ -10221,11 +10226,11 @@ class SupplementEnricherV3:
         def add_candidate(candidate: Dict):
             if _blocks_false_omega_parent(str(candidate.get("parent_key") or "")):
                 return
-            # A bare parent alias cannot turn a printed whole powder into
-            # an extract. Retain the parent candidate and its shared unknown
+            # A bare parent alias cannot turn a printed powder/dried material
+            # into an extract. Retain the parent and its shared unknown
             # form treatment; row-owned explicit extract forms remain valid.
             if (
-                re.search(r"\bpowder$", ing_name, re.I)
+                re.search(r"\b(?:powder|dried)\b", ing_name, re.I)
                 and not re.search(r"\bextract\b", ing_name, re.I)
                 and re.search(r"\bextract\b", _resolved_candidate_form_id(candidate) or "", re.I)
             ):
