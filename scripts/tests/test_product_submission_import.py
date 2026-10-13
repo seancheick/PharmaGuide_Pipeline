@@ -1227,10 +1227,9 @@ def test_release_train_runs_approved_submissions_through_existing_pipeline():
 def test_release_train_refreshes_submissions_after_reference_data_change():
     release = Path("scripts/release_full.sh").read_text(encoding="utf-8")
 
+    freshness_start = release.index("submission_pipeline_needs_run() {")
     freshness_function = release[
-        release.index("submission_pipeline_needs_run() {") : release.index(
-            "\n}\n\nif (( SKIP_SUPABASE", release.index("submission_pipeline_needs_run() {")
-        )
+        freshness_start : release.index("\n}\n", freshness_start)
     ]
     assert "pipeline_freshness.py" in freshness_function
     assert "check-stage-manifests" in freshness_function
