@@ -96,7 +96,7 @@ from identity_integrity import (
 )
 from scoring_input_contract import DOSE_NOT_PROVIDED_UNITS, dose_disclosure_status, get_scoring_ingredients
 from serving_frequency import (
-    resolve_daily_serving_range,
+    select_canonical_serving,
     format_daily_frequency,
     resolve_daily_serving_multiplier,
 )
@@ -9958,14 +9958,25 @@ def generate_dosing_summary(enriched: Dict) -> Dict:
         if _collagen_serving_looks_implausible(enriched, max_qty, unit, max_daily):
             summary = "See product label"
         elif sb.get("basis_reason") == "ingredient_quantity_variants":
-            # The Facts column may be one capsule while directions permit
-            # 1-4 capsules daily. Report the total range, not an invented
-            # schedule of four separate intake occasions.
-            daily_min, daily_max, _ = resolve_daily_serving_range(enriched)
-            low, high = min_qty * daily_min, max_qty * daily_max
-            qty_text = _format_quantity(low) if low == high else f"{_format_quantity(low)}-{_format_quantity(high)}"
-            noun = noun_singular if low == high == 1 else noun_plural
-            summary = f"{verb} {qty_text} {noun} daily".strip()
+            # Display the original intake range/cadence. The Facts basis is
+            # for nutrient analysis; converting it to an average daily count
+            # would turn an every-other-day schedule into daily use.
+            label_serving = select_canonical_serving(enriched.get("servingSizes")) or {}
+            low = safe_float(label_serving.get("minQuantity"))
+            high = safe_float(label_serving.get("maxQuantity"))
+            cadence_values = [safe_float(label_serving.get(key)) for key in ("minDailyServings", "maxDailyServings")]
+            if low is None or high is None or any(value is None for value in cadence_values):
+                summary = "See product label"
+            else:
+                low, high = sorted((low, high))
+                low, high, intake_unit = _normalize_weight_serving_for_display(
+                    low, high, safe_str(label_serving.get("unit")),
+                )
+                verb, noun_singular, noun_plural = _derive_serving_verb_and_noun(intake_unit, form_factor)
+                qty_text = _format_quantity(low) if low == high else f"{_format_quantity(low)}-{_format_quantity(high)}"
+                noun = noun_singular if low == high == 1 else noun_plural
+                cadence = format_daily_frequency(max(cadence_values))
+                summary = f"{verb} {qty_text} {noun} {cadence}".strip()
         elif min_qty == max_qty:
             qty_text = _format_quantity(min_qty)
             noun = noun_singular if min_qty == 1 else noun_plural

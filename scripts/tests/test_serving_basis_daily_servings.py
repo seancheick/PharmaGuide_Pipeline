@@ -284,6 +284,17 @@ def serving_frequency_violations(record: dict) -> list[str]:
                 f"but the label declares {sorted(declared)}"
             )
 
+    if basis.get("basis_reason") == "ingredient_quantity_variants":
+        from serving_frequency import resolve_facts_panel_serving_basis
+        facts = resolve_facts_panel_serving_basis(record)
+        if facts is None:
+            violations.append("Facts-column provenance has no supported amount basis")
+        else:
+            for key in ("basis_count", "min_servings_per_day", "max_servings_per_day"):
+                if basis.get(key) != facts[key]:
+                    violations.append(f"{key} differs from selected Facts column")
+        return violations
+
     if label:
         for key, value in values.items():
             if value > label[1] + 1e-9:
@@ -390,10 +401,38 @@ def test_ranged_capsule_regimen_keeps_the_facts_panel_amount_basis(pid, amount):
     assert enriched["serving_basis"]["min_servings_per_day"] == 1
     assert enriched["serving_basis"]["max_servings_per_day"] == 4
     assert resolve_daily_serving_range(enriched) == (1, 4, False)
+    assert serving_frequency_violations(enriched) == []
     row = next(r for r in enriched["rda_ul_data"]["analyzed_ingredients"] if r["ingredient"] == "Magnesium")
     assert row["per_day_min"] == amount
     assert row["per_day_max"] == amount * 4
     from build_final_db import generate_dosing_summary
     assert generate_dosing_summary(enriched)["dosing_summary"] == "Take 1-4 capsules daily"
     artifact = build_scored_artifact(enriched)
-    assert artifact["quality_score_status"] in {"scored", "suppressed_safety", "not_scored"}
+    assert artifact["quality_score_status"] == "scored"
+    assert artifact["quality_pillars_v4"]["dose"]["score"] == (0 if amount == 150 else 10)
+    assert artifact["dose_safety_evaluation"]["flags"][0]["state"] == "confirmed_over_threshold"
+
+
+def test_rebased_facts_panel_preserves_every_other_day_schedule():
+    from build_final_db import generate_dosing_summary
+    product = {
+        "servingSizes": [{"minQuantity": 1, "maxQuantity": 4, "unit": "Capsule(s)",
+                          "minDailyServings": 0.5, "maxDailyServings": 0.5}],
+        "serving_basis": {"basis_count": 1, "basis_unit": "capsule",
+                          "basis_reason": "ingredient_quantity_variants"},
+        "activeIngredients": [{"raw_taxonomy": {"quantityVariants": [
+            {"serving_size_quantity": 1, "serving_size_unit": "Capsule(s)"}
+        ]}}],
+    }
+    assert generate_dosing_summary(product)["dosing_summary"] == "Take 1-4 capsules every other day"
+
+
+def test_rebased_facts_panel_does_not_relabel_milligrams_as_grams():
+    from build_final_db import generate_dosing_summary
+    product = {
+        "servingSizes": [{"minQuantity": 500, "maxQuantity": 500, "unit": "mg",
+                          "minDailyServings": 2, "maxDailyServings": 2}],
+        "serving_basis": {"basis_count": 1000, "basis_unit": "mg",
+                          "basis_reason": "ingredient_quantity_variants"},
+    }
+    assert generate_dosing_summary(product)["dosing_summary"] == "Mix 500 mg twice daily"

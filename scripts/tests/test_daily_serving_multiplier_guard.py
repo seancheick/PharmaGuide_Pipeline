@@ -515,6 +515,7 @@ def test_daily_frequency_copy_preserves_fractional_regimens(
     ([{"serving_size_quantity": 1}, {"serving_size_quantity": 4}], (1, 1)),
     ([{"serving_size_quantity": 1}, {"serving_size_quantity": 4, "selected_for_analysis": True}], (0.25, 1)),
     ([{"serving_size_quantity": 90}], (1, 1)),
+    ([{"serving_size_quantity": 1}, {"serving_size_quantity": 1, "serving_size_unit": "Tablet(s)"}], (1, 1)),
     ([{"serving_size_quantity": 1, "serving_size_unit": "Gram(s)"}], (1, 1)),
 ])
 def test_ranged_regimen_rebases_only_a_single_selected_matching_facts_column(variants, expected):

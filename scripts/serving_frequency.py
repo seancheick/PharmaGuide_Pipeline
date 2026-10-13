@@ -119,8 +119,10 @@ def resolve_facts_panel_serving_basis(record: Dict[str, Any]) -> Optional[Dict[s
         return None
 
     facts_bases: set[float] = set()
+    conflicting_basis = False
 
     def visit(rows: Any) -> None:
+        nonlocal conflicting_basis
         if not isinstance(rows, list):
             return
         for row in rows:
@@ -145,10 +147,12 @@ def resolve_facts_panel_serving_basis(record: Dict[str, Any]) -> Optional[Dict[s
                     )
                     if basis is not None and basis_unit == serving_unit:
                         facts_bases.add(basis)
+                    else:
+                        conflicting_basis = True
             visit(row.get("nestedIngredients"))
 
     visit(record.get("activeIngredients"))
-    if len(facts_bases) != 1:
+    if conflicting_basis or len(facts_bases) != 1:
         return None
     facts_basis = next(iter(facts_bases))
     quantity_range = _ordered_pair(serving.get("minQuantity"), serving.get("maxQuantity"))
