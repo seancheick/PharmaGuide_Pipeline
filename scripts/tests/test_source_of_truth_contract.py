@@ -116,6 +116,31 @@ def test_interaction_matrix_declares_every_curated_source():
     assert not any('*' in path for path in sources)
 
 
+def test_stage_freshness_checks_new_submission_labels_not_only_references(tmp_path):
+    from pipeline_freshness import stage_manifest_issue
+    repo = tmp_path / 'repo'
+    write_json(repo / 'scripts/data/reference.json', {'value': 1})
+    (repo / 'scripts' / STAGES['score']['entry']).write_text('VALUE = 1\n')
+    raw = repo / 'manual_labels/product_submissions'
+    raw.mkdir(parents=True)
+    label = raw / 'approved.json'
+    write_json(label, {'id': 'approved'})
+    score = repo / 'score'
+    score.mkdir()
+    output = score / 'scored_batch_1.json'
+    write_json(output, [])
+    manifest = write_stage_manifest(score, 'score', [output],
+                                    input_fingerprints=stage_input_fingerprints(repo, 'score'))
+    # The old receipt is correct for code/data, but not for newly arrived raw labels.
+    stamp = manifest.stat().st_mtime_ns
+    os.utime(label, ns=(stamp - 1000, stamp - 1000))
+    assert stage_manifest_issue(repo, manifest, 'score', raw_input_dir=raw) is None
+    os.utime(label, ns=(stamp + 1000, stamp + 1000))
+    assert 'raw input newer' in stage_manifest_issue(repo, manifest, 'score', raw_input_dir=raw)
+    assert stage_manifest_issue(repo, manifest, 'score') is None
+    assert 'missing raw input' in stage_manifest_issue(repo, manifest, 'score', raw_input_dir=repo / 'missing')
+
+
 def test_source_of_truth_matrix_declares_enrichment_contract_concepts():
     matrix = json.loads(MATRIX_PATH.read_text(encoding="utf-8"))
     required = {

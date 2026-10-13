@@ -403,11 +403,11 @@ submission_pipeline_needs_run() {
       --repo-root "$REPO_ROOT" \
       --clean "$SUBMISSION_CLEAN_MANIFEST" \
       --enrich "$SUBMISSION_ENRICH_MANIFEST" \
-      --score "$SUBMISSION_SCORE_MANIFEST" >/dev/null 2>&1; then
+      --score "$SUBMISSION_SCORE_MANIFEST" \
+      --raw-inputs "$SUBMISSION_OUTPUT_DIR" >/dev/null 2>&1; then
     return 0
   fi
-  find "$SUBMISSION_OUTPUT_DIR" -maxdepth 1 -type f -name '*.json' \
-    -newer "$SUBMISSION_SCORE_MANIFEST" -print -quit 2>/dev/null | grep -q .
+  return 1
 }
 
 if (( PREPARED_INPUTS == 1 )); then
