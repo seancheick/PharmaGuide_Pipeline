@@ -1083,15 +1083,16 @@ def run_preparation(repo_root, raw_root, *, checks=None, runner=None, report_pat
             if not previous:
                 _atomic_report(report_path, result)
         if checks is None:
+            prerequisites = ['raw_inputs', 'references', 'ownership_matrix', 'fda_freshness']
             checks = [
                 {'name': 'references', 'command': [sys.executable, 'scripts/preflight.py', '--json'], 'evidence': 'references'},
                 {'name': 'ownership_matrix', 'command': [sys.executable, 'scripts/audit_source_of_truth_contract.py', 'matrix', '--strict-release']},
                 {'name': 'fda_freshness', 'command': [sys.executable, 'scripts/api_audit/fda_manufacturer_violations_sync.py', '--check']},
                 {'name': 'raw_canaries', 'command': [sys.executable, 'scripts/tests/freeze_contract_snapshots.py',
-                    '--check', '--raw-root', str(raw_root)], 'requires': ['raw_inputs', 'references'], 'evidence': 'canaries',
+                    '--check', '--raw-root', str(raw_root)], 'requires': prerequisites, 'evidence': 'canaries',
                     'identifiers': _preparation_canary_identifiers(repo_root)},
                 {'name': 'source_tests', 'command': ['bash', 'scripts/test.sh', 'preparation'],
-                    'evidence': 'pytest'},
+                    'requires': prerequisites + ['raw_canaries'], 'evidence': 'pytest'},
             ]
             # The release runner owns these commands. Inventory mode never
             # invokes the gates, live identifiers, OCR or remote writes.
@@ -1105,11 +1106,21 @@ def run_preparation(repo_root, raw_root, *, checks=None, runner=None, report_pat
                     raise ValueError('Incomplete release-gate inventory')
                 result['post_run_gates'] = [g for g in inventory if g['phase'] == 'artifact']
                 result['live_verification'] = [g for g in inventory if g['phase'] == 'live']
-                checks += [{'name': g['phase'] + '_gate_' + str(i), 'command': g['command'],
-                            'phase': g['phase'], 'reuse': g['phase'] != 'live'}
-                           for i, g in enumerate(inventory) if g['phase'] in {'source', 'live'}]
+                source_prerequisites = prerequisites + ['raw_canaries', 'source_tests']
+                for i, gate in enumerate(inventory):
+                    if gate['phase'] not in {'source', 'live'}:
+                        continue
+                    name = gate['phase'] + '_gate_' + str(i)
+                    checks.append({'name': name, 'command': gate['command'],
+                                   'phase': gate['phase'], 'reuse': gate['phase'] != 'live',
+                                   'requires': list(source_prerequisites)})
+                    if gate['phase'] == 'source':
+                        source_prerequisites.append(name)
             except Exception as exc:
                 result['checks'].append({'name': 'release_gate_inventory', 'status': 'failed', 'issues': [str(exc)]})
+                for specification in checks:
+                    if specification['name'] in {'raw_canaries', 'source_tests'}:
+                        specification['requires'] = specification['requires'] + ['release_gate_inventory']
             # The FDA owner evaluates local calendar age buckets. Recheck at
             # final acceptance even when an earlier same-epoch receipt reused,
             # retaining both outcomes without inferring calendar policy here.
