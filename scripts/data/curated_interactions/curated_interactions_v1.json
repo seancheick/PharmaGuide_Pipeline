@@ -1,7 +1,7 @@
 {
   "_metadata": {
     "schema_version": "1.2.5",
-    "last_updated": "2026-10-12",
+    "last_updated": "2026-10-13",
     "total_entries": 91,
     "purpose": "Tier 1 curated drug-supplement and supplement-supplement interactions for the interaction database",
     "sources": [
@@ -659,9 +659,29 @@
         "confidence": "medium",
         "confidence_basis": "label_regulatory",
         "source": "https://dailymed.nlm.nih.gov/dailymed/fda/fdaDrugXsl.cfm?setid=e432e043-c019-4d58-94ca-7c1d85f5cd40&type=display",
-        "rationale": "Rosuvastatin labeling reports myopathy/rhabdomyolysis with lipid-modifying niacin doses of at least 1 g/day. This label threshold does not establish universal safety below it."
+        "rationale": "Rosuvastatin labeling reports myopathy/rhabdomyolysis with lipid-modifying niacin doses of at least 1 g/day. This label threshold does not establish universal safety below it.",
+        "form_scope": [
+          "nicotinic acid"
+        ]
       },
-      "evidence_notes": "Label-supported ≥1 g/day lipid-modifying nicotinic-acid qualifier retained. Existing pairwise canonical vitamin_b3_niacin also includes niacinamide and other forms; automatic form-specific gating is unresolved. Copy must not claim all B3 forms have identical risk."
+      "evidence_notes": "Approved form/context extension October13. The lipid-modifying nicotinic-acid label qualifier is evaluated only from complete canonical form and dose facts; explicit niacinamide is excluded from this pair-specific claim. Mixed or unknown forms retain review; no estimate of the nicotinic-acid fraction is invented. Other B3 profile risks remain independent.",
+      "profile_gate": {
+        "gate_type": "nutrient_form",
+        "requires": {
+          "conditions_any": [],
+          "drug_classes_any": [],
+          "profile_flags_any": []
+        },
+        "excludes": {
+          "conditions_any": [],
+          "drug_classes_any": [],
+          "profile_flags_any": [],
+          "product_forms_any": [],
+          "nutrient_forms_any": [
+            "niacinamide"
+          ]
+        }
+      }
     },
     {
       "id": "DSI_SSRI_SJW",
@@ -1743,7 +1763,7 @@
       "severity": "Contraindicated",
       "interaction_effect_type": "Enhancer",
       "mechanism": "Tyramine-rich food can provoke a hypertensive crisis with MAOIs that impair dietary tyramine metabolism. Dietary restrictions depend on the exact medicine, route and dose; they are not identical for all MAOIs.",
-      "management": "Confirm the exact MAOI, route and dose with the prescriber and follow its food instructions. EMSAM 6 mg/24 hours does not require a modified diet under its label; EMSAM 9 or 12 mg/24 hours requires avoidance of tyramine-rich foods, continuing for 2 weeks after stopping or reducing to 6 mg/24 hours. Other MAOIs have different instructions. This food exception is not clearance for concentrated tyramine supplements. Severe headache, chest pain or neurological symptoms require emergency care.",
+      "management": "Confirm the exact MAOI, route and dose with the prescriber and follow its food instructions. EMSAM 6 mg/24 hours does not require a modified diet only when 9 or 12 mg/24 hours has not been used during the previous 2 weeks; EMSAM 9 or 12 mg/24 hours requires avoidance of tyramine-rich foods, continuing for 2 weeks after stopping or reducing to 6 mg/24 hours. Other MAOIs have different instructions. This food exception is not clearance for concentrated tyramine supplements. Severe headache, chest pain or neurological symptoms require emergency care.",
       "source_urls": [
         "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=b891bd9f-fdb8-4862-89c5-ecdd700398a3",
         "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=513a41d0-37d4-4355-8a6d-a2c643bce6fa"
@@ -1751,15 +1771,15 @@
       "source_pmids": [],
       "verification": {
         "status": "verified",
-        "verified_at": "2026-10-12",
+        "verified_at": "2026-10-13",
         "verified_with": {
           "rxnorm": true,
           "umls": true,
           "pubmed": true
         },
-        "method": "agent_source_content_review_2026_10_12",
+        "method": "agent_source_content_review_2026_10_13",
         "verified_pmids": [],
-        "notes": "Primary source content reviewed for the corrected claim. Presence screening is not a declaration of harm at every dose or clinical clearance."
+        "notes": "Current primary/regulatory content and applicability reviewed; uncertain evidence remains explicit. No clinician review or universal clearance is claimed."
       },
       "evidence_basis": "label_regulatory",
       "clinical_confidence": "high",
@@ -1769,9 +1789,20 @@
       "agent2_canonical_id": "tyramine",
       "alert_style": "food_advisory_note",
       "note_body": "Some MAOIs impair the breakdown of tyramine from foods and can cause a dangerous rise in blood pressure. The food restrictions depend on your exact medicine, route and dose.",
-      "practical_guidance": "Ask your prescriber which food list applies. The EMSAM 6 mg/24-hour label does not require a modified diet, while 9 and 12 mg/24-hour treatment does, including for 2 weeks after stopping or reducing the dose. Severe headache or chest pain after a meal needs emergency care.",
+      "practical_guidance": "Ask your prescriber which food list applies. EMSAM 6 mg/24-hour treatment does not require a modified diet only after confirming no 9 or 12 mg/24-hour use during the previous 2 weeks, while 9 and 12 mg/24-hour treatment does, including for 2 weeks after stopping or reducing the dose. Severe headache or chest pain after a meal needs emergency care.",
       "direction": "harmful",
-      "materiality": "presence"
+      "materiality": "presence",
+      "medication_exceptions": [
+        {
+          "ingredient_rxcuis": [
+            "9639"
+          ],
+          "dose_mg_exact": 6,
+          "route": "transdermal",
+          "use_context": "emsam_6mg_food_diet_no_9_or_12mg_previous_14days_confirmed",
+          "notes": "Confirm your prescribed product is EMSAM delivering 6 mg over 24 hours, used as a transdermal patch, with no 9 or 12 mg patch use during the previous 14 days. This confirmation applies to food instructions only, not tyramine supplements or other medicine interactions."
+        }
+      ]
     },
     {
       "id": "DSI_MAOI_SJW",
@@ -1881,40 +1912,41 @@
     {
       "id": "DSI_MAOI_GINSENG",
       "type": "Med-Sup",
-      "agent1_name": "MAOIs (class)",
-      "agent1_id": "class:maois",
+      "agent1_name": "Phenelzine",
+      "agent1_id": "8123",
       "agent2_name": "Ginseng (Panax)",
       "agent2_id": "C1119918",
-      "severity": "Major",
+      "severity": "Moderate",
       "interaction_effect_type": "Additive",
-      "mechanism": "A historical case-report publication concerns ginseng with phenelzine. The available indexed record has no abstract, so it does not verify the previously stated symptom details or a catecholamine/hypertensive-crisis mechanism across all MAOIs.",
+      "mechanism": "Historical phenelzine case reports involved poorly characterized ginseng products and other medicines; one included a ginseng/bee-pollen mixture. The EMA final assessment regards causal attribution as doubtful because the medicine and mixed preparations confound the reports. This does not establish a hypertensive-crisis mechanism or harm across the whole MAOI class.",
       "management": "Have the prescriber review ginseng before combining it with an MAOI. The evidence is limited and does not establish a safe dose or a universal washout period. Do not change prescribed MAOI treatment yourself.",
       "source_urls": [
         "https://pubmed.ncbi.nlm.nih.gov/3597812/",
-        "https://www.nccih.nih.gov/health/asian-ginseng"
+        "https://www.nccih.nih.gov/health/asian-ginseng",
+        "https://www.ema.europa.eu/en/documents/herbal-report/final-assessment-report-panax-ginseng-camey-radix-revision-1_en.pdf"
       ],
       "source_pmids": [
         "3597812"
       ],
       "verification": {
         "status": "verified",
-        "verified_at": "2026-10-12",
+        "verified_at": "2026-10-13",
         "verified_with": {
           "rxnorm": true,
           "umls": true,
           "pubmed": true
         },
-        "method": "agent_source_content_review_2026_10_12",
-        "notes": "Primary source content reviewed for the corrected claim. Presence screening is not a declaration of harm at every dose or clinical clearance."
+        "method": "agent_source_content_review_2026_10_13",
+        "notes": "Current primary/regulatory content and applicability reviewed; uncertain evidence remains explicit. No clinician review or universal clearance is claimed."
       },
       "evidence_basis": "clinical_literature",
       "clinical_confidence": "low",
-      "applies_to": "whole_class",
+      "applies_to": "specific_drug",
       "agent1_canonical_id": null,
       "agent2_canonical_id": "ginseng",
       "direction": "harmful",
       "materiality": "presence",
-      "evidence_notes": "Historical hard severity is retained pending full-text clinical review. Indexed publication identity is verified; the detailed original case and whole-class severity are unresolved."
+      "evidence_notes": "Agent source review 2026-10-13 under existing authoring SOP: uncertain evidence uses caution. Warning narrowed to the reported medicine, phenelzine. EMA assessment provides the case summary; original 1987 full text remains inaccessible, and causality/preparation remain uncertain. Not clinician clearance."
     },
     {
       "id": "DSI_NSAID_FISHOIL",
@@ -2548,36 +2580,38 @@
       "agent1_id": "C5789747",
       "agent2_name": "acetaminophen",
       "agent2_id": "161",
-      "severity": "Major",
+      "severity": "Moderate",
       "interaction_effect_type": "Additive",
-      "mechanism": "Kava and acetaminophen have separate liver-toxicity concerns. A preclinical study found that kava extract increased acetaminophen-induced cytotoxicity in rat hepatic cells, with glutathione depletion and mitochondrial effects. The magnitude and dose boundary of this combined risk in humans are not established by that experiment.",
-      "management": "Avoid combining kava with repeated acetaminophen use without clinician review, particularly when liver risk is present. Ask the clinician or pharmacist to review all acetaminophen-containing products; do not assume a lower dose guarantees no interaction. Possible liver-injury symptoms need prompt medical assessment.",
+      "mechanism": "Rat hepatic-cell and mouse experiments found that certain kava extracts potentiated acetaminophen toxicity. In the mouse experiment flavokawains A and B reproduced the effect, whereas the tested kavalactone dihydromethysticin did not. These preclinical findings do not establish the magnitude or dose boundary of the combination risk in humans or the same effect for every purified kavalactone.",
+      "management": "Ask a clinician or pharmacist to review kava with acetaminophen, especially with repeated use or liver risk. Risk may depend on the preparation; labels often do not establish flavokawain content. Do not assume a low dose or a kavalactone percentage establishes absence of risk. Symptoms of possible liver injury need prompt medical assessment.",
       "source_urls": [
         "https://www.nccih.nih.gov/health/kava",
-        "https://pubmed.ncbi.nlm.nih.gov/21397479/"
+        "https://pubmed.ncbi.nlm.nih.gov/21397479/",
+        "https://pubmed.ncbi.nlm.nih.gov/25185080/"
       ],
       "source_pmids": [
-        "21397479"
+        "21397479",
+        "25185080"
       ],
       "verification": {
         "status": "verified",
-        "verified_at": "2026-10-12",
+        "verified_at": "2026-10-13",
         "verified_with": {
           "rxnorm": true,
           "umls": true,
           "pubmed": true
         },
-        "method": "agent_source_content_review_2026_10_12",
-        "notes": "Primary source content reviewed for the corrected claim. Presence screening is not a declaration of harm at every dose or clinical clearance."
+        "method": "agent_source_content_review_2026_10_13",
+        "notes": "Current primary/regulatory content and applicability reviewed; uncertain evidence remains explicit. No clinician review or universal clearance is claimed."
       },
       "evidence_basis": "preclinical",
       "clinical_confidence": "low",
-      "applies_to": "dose_dependent",
+      "applies_to": "preparation_specific",
       "agent1_canonical_id": "kavalactones",
       "agent2_canonical_id": null,
       "direction": "harmful",
       "materiality": "presence",
-      "evidence_notes": "Historical hard severity retained as a precaution pending clinical regrading. Primary combination evidence is rat-cell cytotoxicity, not quantified human harm or a validated suppression threshold."
+      "evidence_notes": "Agent source review 2026-10-13: caution follows the existing uncertain-evidence policy. Preparation composition and human combined risk remain unresolved. Existing kavalactones identity includes extracts and individual compounds; identity alone does not establish the flavokawain content. No suppression floor or universal purified-compound harm claim."
     },
     {
       "id": "DSI_ANTIHYP_MAGNESIUM",

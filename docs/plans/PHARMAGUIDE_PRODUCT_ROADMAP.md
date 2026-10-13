@@ -4,6 +4,10 @@ Written October 1, 2026 from the business strategists' review (pipeline, app and
 recommendations), checked against the three repositories and the live market. Sean approved the
 order below on October 1.
 
+October 13: the supported warning/context corrections are implemented, measured, independently reviewed and validation-complete. Seven source records changed. The schema-4 export and app consumer now evaluate confirmed forms, actual daily amounts and current food/procedure context. All 24 native data comparisons and three frozen raw replays pass, with no product-quality movement.
+
+Pipeline source `4b74d1b1` passed CI run `38377932566`: 20,559 tests and 192 declared skips, with every skip guard passing. The 174 focused tests and local 546 tests also pass; local has 24 declared opt-in skips. App source `545c4138` passed CI run `38378191655`; its local check passes clean analysis and 3,885 tests. PR134 and paired app PR113 await integration. The full catalog, paired artifacts, visual acceptance and release remain deferred. Clinical preparation, form and source holds remain documented in the existing LEDGER, research and private FOLLOWUP_20261013.md.
+
 How this document relates to the others:
 
 - [Master completion plan](PHARMAGUIDE_MASTER_COMPLETION_PLAN.md) is **Phase 0** here: the scoring

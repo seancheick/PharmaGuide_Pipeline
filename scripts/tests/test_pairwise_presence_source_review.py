@@ -147,3 +147,104 @@ def test_approved_epo_retirement_removes_the_unsupported_pair():
     # PMID17764919 disputes the original seizure attribution; Sean approved
     # retirement on2026-10-12. Preserve this negative guard and serious controls.
     assert 'DSI_ANTICONV_EPO' not in PAIRS
+
+@pytest.mark.parametrize('rule_id', ['DSI_MAOI_GINSENG', 'SSI_KAVA_ACETAMINOPHEN'])
+def test_uncertain_followup_pairs_use_caution_under_existing_authoring_policy(rule_id):
+    pair = PAIRS[rule_id]
+    assert normalize_severity(pair['severity']) == 'caution'
+    assert pair['materiality'] == 'presence'
+    assert not pair.get('dose_threshold')
+    assert pair['clinical_confidence'] == 'low'
+
+
+def test_ginseng_followup_matches_the_reported_medicine_and_qualified_assessment():
+    pair = PAIRS['DSI_MAOI_GINSENG']
+    assert pair['agent1_id'] == '8123'
+    assert pair['agent1_name'] == 'Phenelzine'
+    assert any('ema.europa.eu' in url for url in pair['source_urls'])
+    assert 'confound' in pair['mechanism'].lower()
+    assert 'do not change' in pair['management'].lower()
+
+
+def test_kava_preparation_uncertainty_is_not_purified_kavalactone_harm():
+    pair = PAIRS['SSI_KAVA_ACETAMINOPHEN']
+    assert '25185080' in pair['source_pmids']
+    assert 'flavokawain' in pair['mechanism'].lower()
+    assert 'human' in pair['mechanism'].lower()
+    assert 'preparation' in pair['evidence_notes'].lower()
+
+
+def test_emsam_food_exception_copy_requires_recent_high_dose_history():
+    pair = PAIRS['DSI_MAOI_TYRAMINE']
+    assert 'previous 2 weeks' in pair['management'].lower()
+    assert 'supplements' in pair['management'].lower()
+
+
+def test_approved_pairwise_context_contract_survives_native_row_build():
+    expected = {
+        'DSI_STATINS_NIACIN': 'profile_gate_json',
+        'DSI_MAOI_TYRAMINE': 'medication_exceptions_json',
+    }
+    for rule_id, column in expected.items():
+        row = build_interaction_row(PAIRS[rule_id], rxcui_to_class={}, build_time='2026-10-13', interaction_db_version='audit')
+        assert json.loads(row[column])
+
+
+def test_pairwise_scope_validation_rejects_unchecked_or_unsupported_context():
+    from copy import deepcopy
+    from api_audit.verify_interactions import validate_schema
+    bad = deepcopy(PAIRS['DSI_STATINS_NIACIN'])
+    bad['profile_gate']['requires']['conditions_any'] = ['kidney_disease']
+    assert validate_schema(bad)
+    bad = deepcopy(PAIRS['DSI_MAOI_TYRAMINE'])
+    bad['medication_exceptions'] = [{'notes': 'not a predicate'}]
+    assert validate_schema(bad)
+
+
+def test_existing_profile_rules_do_not_repeat_the_old_overclaims():
+    data = json.loads((DATA / 'ingredient_interaction_rules.json').read_text())
+    rules = {r['id']: r for r in data['interaction_rules']}
+    ginseng = next(r for r in rules['RULE_INGREDIENT_GINSENG']['drug_class_rules'] if r['drug_class_id']=='maois')
+    assert 'doubtful' in ginseng['mechanism'].lower()
+    assert 'mixed' in ginseng['mechanism'].lower()
+    assert 'may raise blood pressure' not in ginseng['alert_headline'].lower()
+    niacin = next(r for r in rules['RULE_IQM_NIACIN_DIABETES']['drug_class_rules'] if r['drug_class_id']=='statins')
+    assert niacin['profile_gate']['excludes']['nutrient_forms_any']==['niacinamide']
+    assert niacin['min_effective_dose']['unknown_form_disposition']=='review'
+    assert niacin['min_effective_dose']['amount_missing_disposition']=='review'
+    assert '0.12%' not in niacin['mechanism']
+
+
+def test_authoritative_form_vocab_canonical_keys_are_validated():
+    from profile_gate_evaluator import validate_profile_gate
+    gate = PAIRS['DSI_STATINS_NIACIN']['profile_gate']
+    vocab = json.loads((DATA / 'form_keywords_vocab.json').read_text())
+    assert not validate_profile_gate(gate,form_vocab=vocab)
+    from copy import deepcopy
+    bad = deepcopy(gate)
+    bad['excludes']['nutrient_forms_any']=['invented_form_xyz']
+    assert validate_profile_gate(bad,form_vocab=vocab)
+
+def test_pairwise_gate_rejects_malformed_axis_without_crashing():
+    from copy import deepcopy
+    from api_audit.verify_interactions import validate_schema
+    for value in (1, 'niacinamide', {'bad': 'shape'}):
+        bad = deepcopy(PAIRS['DSI_STATINS_NIACIN'])
+        bad['profile_gate']['excludes']['nutrient_forms_any'] = value
+        assert validate_schema(bad)
+
+@pytest.mark.parametrize('target', ['gate', 'threshold', 'axis', 'exception'])
+def test_pairwise_schema_rejects_invented_forms_and_unscoped_exceptions(target):
+    from copy import deepcopy
+    from api_audit.verify_interactions import validate_schema
+    bad = deepcopy(PAIRS['DSI_STATINS_NIACIN'])
+    if target == 'gate':
+        bad['profile_gate']['excludes']['nutrient_forms_any'] = ['invented_form_xyz']
+    elif target == 'threshold':
+        bad['dose_threshold']['form_scope'] = ['invented_form_xyz']
+    elif target == 'axis':
+        bad['profile_gate']['requires']['invented_axis'] = []
+    else:
+        bad = deepcopy(PAIRS['DSI_MAOI_TYRAMINE'])
+        bad['medication_exceptions'] = [{'ingredient_rxcuis': ['9639']}]
+    assert validate_schema(bad), target

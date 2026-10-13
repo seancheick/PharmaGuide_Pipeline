@@ -1,7 +1,7 @@
 {
   "_metadata": {
     "schema_version": "1.1.0",
-    "last_updated": "2026-10-12",
+    "last_updated": "2026-10-13",
     "total_entries": 30,
     "purpose": "Med-Med interaction pairs for the PharmaGuide interaction database. Harvested from DailyMed SPL drug label 'Drug Interactions' sections and NIH/FDA authoritative sources. Covers the ~30 highest-risk drug-drug pairs for consumer safety alerting.",
     "sources": [
@@ -435,31 +435,41 @@
       "type": "Med-Procedure",
       "agent1_name": "Metformin",
       "agent1_id": "6809",
-      "agent2_name": "Iodinated IV Contrast Media",
+      "agent2_name": "Intravascular iodinated contrast imaging procedure",
       "agent2_id": "ref:iodinated_contrast",
       "severity": "Major",
       "interaction_effect_type": "Enhancer",
       "mechanism": "Iodinated contrast procedures can be associated with acute kidney-function deterioration, allowing metformin accumulation and lactic acidosis. The metformin label requires interruption for specified renal, medical-history or contrast-route risk factors, not every intravenous contrast procedure.",
       "management": "Tell the imaging team and prescribing clinician that you take metformin. The label calls for a hold at or before iodinated contrast when eGFR is between 30 and 60 mL/min/1.73 m², there is a history of liver disease, alcoholism or heart failure, or contrast is intra-arterial. The clinician should reassess kidney function 48 hours after imaging and restart only if stable. Do not decide the hold or restart yourself; unknown renal or procedure details require review.",
       "source_urls": [
-        "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=54bb8030-8e80-4b38-8deb-89c99d73bf09"
+        "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=a944a167-e3ac-4084-af1c-22b48713471c"
       ],
       "verification": {
         "status": "verified",
-        "verified_at": "2026-10-12",
+        "verified_at": "2026-10-13",
         "verified_with": {
           "rxnorm": true,
           "umls": true,
           "pubmed": false
         },
-        "method": "agent_source_content_review_2026_10_12",
+        "method": "agent_source_content_review_2026_10_13",
         "notes": "Corrected to metformin label risk factors. Existing pairwise consumer does not automatically evaluate renal function, contrast route or history; presence warning remains a request for clinician review, not an instruction that all IV contrast requires interruption."
       },
       "evidence_basis": "label_regulatory",
       "clinical_confidence": "medium",
       "agent1_canonical_id": null,
       "direction": "harmful",
-      "materiality": "presence"
+      "materiality": "presence",
+      "evidence_notes": "Current September 2026 FDA label is the rule authority. IV versus intra-arterial exposure and renal/history context matter. ACR guidance is less restrictive for some IV procedures; this rule does not silently adopt that alternative or infer an actual procedure from metformin use alone.",
+      "medication_exceptions": [
+        {
+          "ingredient_rxcuis": [
+            "6809"
+          ],
+          "use_context": "iv_iodinated_contrast_egfr_over_60_no_label_risk_factors_confirmed",
+          "notes": "Confirm with the imaging team for this actual procedure: intravenous iodinated contrast, current eGFR above 60, no acute kidney injury, and no history of liver disease, alcoholism or heart failure. If any fact is unknown, leave this unconfirmed. Do not change metformin yourself."
+        }
+      ]
     },
     {
       "id": "DDI_CLOPIDOGREL_OMEPRAZOLE",
