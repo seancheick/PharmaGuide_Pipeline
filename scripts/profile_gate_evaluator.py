@@ -145,7 +145,8 @@ def validate_profile_gate(
 def _collect_form_vocab_ids(form_vocab: dict[str, Any]) -> set[str]:
     """Walk form_keywords_vocab.json shape to collect every form id we recognize.
 
-    The vocab file is structured as `categories[].name` plus a `forms[].id`-like
+    The current vocab uses categories mapped to forms[].canonical; older
+    versions used a forms[].id-like
     layout in some versions. We accept any string under category->forms->id, and
     also accept the lowercased category name as an id (for top-level forms like
     'beta_carotene' vs 'mixed_carotenoids' which may live at category root).
@@ -157,8 +158,10 @@ def _collect_form_vocab_ids(form_vocab: dict[str, Any]) -> set[str]:
     for cat in cats:
         if isinstance(cat, dict):
             for f in cat.get("forms", []) or []:
-                if isinstance(f, dict) and isinstance(f.get("id"), str):
-                    ids.add(f["id"])
+                if isinstance(f, dict):
+                    value = f.get("canonical") or f.get("id")
+                    if isinstance(value, str) and value.strip():
+                        ids.add(value)
                 elif isinstance(f, str):
                     ids.add(f)
     # Fallback: also accept commonly-cited explicit ids that may be top-level

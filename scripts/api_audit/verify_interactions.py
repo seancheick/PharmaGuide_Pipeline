@@ -38,6 +38,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import math
 import os
 import re
 import ssl
@@ -51,6 +52,10 @@ from datetime import datetime, timezone
 
 UTC = timezone.utc
 from pathlib import Path
+
+# The standalone CLI also imports the shared script-level gate owner.
+if str(Path(__file__).resolve().parents[1]) not in sys.path:
+    sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 from typing import Any, Protocol
 
 # --------------------------------------------------------------------------- #
@@ -544,6 +549,53 @@ def validate_schema(entry: dict[str, Any]) -> list[str]:
             for idx, p in enumerate(pmids):
                 if not isinstance(p, str) or not p.strip().isdigit():
                     errors.append(f"source_pmids[{idx}] must be a digit string")
+
+    # Approved pairwise extension reuses the existing form-gate schema.
+    gate = entry.get("profile_gate")
+    if gate is not None:
+        from profile_gate_evaluator import validate_profile_gate
+        if not isinstance(gate, dict) or not isinstance(gate.get("requires"), dict) or not isinstance(gate.get("excludes"), dict):
+            errors.append("pairwise profile_gate requires structured requires/excludes")
+        else:
+            if any(not isinstance(v, list) for axis in ("requires", "excludes") for v in gate[axis].values()):
+                errors.append("pairwise profile_gate axes must be lists")
+            else:
+                errors.extend(validate_profile_gate(gate))
+            if gate.get("gate_type") != "nutrient_form":
+                errors.append("pairwise profile_gate requires supported nutrient_form context")
+            if any(gate["requires"].get(k) for k in ("conditions_any", "drug_classes_any", "profile_flags_any")):
+                errors.append("pairwise profile requires unsupported user context")
+            if any(gate["excludes"].get(k) for k in ("conditions_any", "drug_classes_any", "profile_flags_any", "product_forms_any")):
+                errors.append("pairwise profile excludes unsupported user/product context")
+    threshold = entry.get("dose_threshold")
+    if isinstance(threshold, dict) and "form_scope" in threshold:
+        forms = threshold["form_scope"]
+        if not isinstance(forms, list) or not forms or any(not isinstance(f, str) or not f.strip() for f in forms):
+            errors.append("dose_threshold.form_scope requires nonempty canonical form strings")
+    exceptions = entry.get("medication_exceptions")
+    if exceptions is not None:
+        if entry.get("type") not in {"Med-Food", "Med-Procedure"}:
+            errors.append("medication exceptions require food/procedural context")
+        if not isinstance(exceptions, list) or not exceptions:
+            errors.append("medication_exceptions requires nonempty list")
+        else:
+            allowed = {"ingredient_rxcuis", "dose_mg_exact", "dose_mg_range_inclusive", "route", "use_context", "notes"}
+            for exception in exceptions:
+                if not isinstance(exception, dict) or not exception or set(exception) - allowed or not (set(exception) - {"notes"}) or not exception.get("ingredient_rxcuis"):
+                    errors.append("invalid medication exception predicate")
+                    continue
+                for key, value in exception.items():
+                    valid = True
+                    if key == "ingredient_rxcuis":
+                        valid = isinstance(value, list) and bool(value) and all(isinstance(v, str) and v.isdigit() for v in value)
+                    elif key == "dose_mg_exact":
+                        valid = type(value) in (int, float) and math.isfinite(value) and value > 0
+                    elif key == "dose_mg_range_inclusive":
+                        valid = isinstance(value, list) and len(value) == 2 and all(type(v) in (int, float) and math.isfinite(v) and v > 0 for v in value) and value[0] <= value[1]
+                    else:
+                        valid = isinstance(value, str) and bool(value.strip())
+                    if not valid:
+                        errors.append(f"invalid medication exception {key}")
 
     return errors
 

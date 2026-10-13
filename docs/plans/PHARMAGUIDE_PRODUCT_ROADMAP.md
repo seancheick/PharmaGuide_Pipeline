@@ -1,6 +1,8 @@
 # PharmaGuide product roadmap
 
 Written October 1, 2026 from the business strategists' review (pipeline, app and market
+
+October13 approved follow-up candidate: ginseng/phenelzine and kava/APAP hard grades corrected to source-supported cautions; niacin form/daily-dose and explicit medication food/procedure confirmation contracts implemented in paired app/source lanes. Seven exact records;24 native app checks and3 frozen raw replays pass with no product quality movement. Schema4 reader/export and transient confirmation guards implemented. Independent review, final local/CI acceptance and integration remain pending; no full catalog run or publication. Evidence and remaining clinical holds: existing LEDGER/research and private presence_warning_audit_20261012/FOLLOWUP_20261013.md.
 recommendations), checked against the three repositories and the live market. Sean approved the
 order below on October 1.
 

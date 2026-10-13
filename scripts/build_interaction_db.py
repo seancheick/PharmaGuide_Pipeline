@@ -69,8 +69,8 @@ from api_audit.verify_interactions import (
 )
 from identity.interaction import normalize_interaction_canonical_id
 
-SCHEMA_VERSION = "3.0.0"
-SCHEMA_USER_VERSION = 3
+SCHEMA_VERSION = "4.0.0"
+SCHEMA_USER_VERSION = 4
 DEFAULT_PROFILE_WARNING_RULES = (
     Path(__file__).parent / "data" / "ingredient_interaction_rules.json"
 )
@@ -388,7 +388,9 @@ CREATE TABLE interactions (
     -- app dose gate may suppress; at/above it the pair fires. Null when no floor
     -- is authored yet. `dose_dependent` is now derived from `materiality`
     -- (fixes the historical builder read of an absent `dose_dependent` key).
-    dose_threshold_json     TEXT
+    dose_threshold_json     TEXT,
+    profile_gate_json       TEXT,
+    medication_exceptions_json TEXT
 );
 
 CREATE INDEX idx_int_a1_canon ON interactions(agent1_canonical_id)
@@ -581,6 +583,8 @@ def build_interaction_row(
         # Smart-flagging Phase 2 classification (advisory-only, app routes later)
         "direction": draft.get("direction"),
         "materiality": draft.get("materiality"),
+        "profile_gate_json": json.dumps(draft["profile_gate"], sort_keys=True) if isinstance(draft.get("profile_gate"), dict) else None,
+        "medication_exceptions_json": json.dumps(draft["medication_exceptions"], sort_keys=True) if isinstance(draft.get("medication_exceptions"), list) else None,
         "dose_threshold_json": (
             json.dumps(draft["dose_threshold"], sort_keys=True)
             if isinstance(draft.get("dose_threshold"), dict) else None
@@ -693,6 +697,8 @@ def _column_order(table: str) -> list[str]:
             "materiality",
             # Phase 3 structured dose floor (2026-07-02)
             "dose_threshold_json",
+            "profile_gate_json",
+            "medication_exceptions_json",
         ]
     if table == "research_pairs":
         return [

@@ -3,7 +3,7 @@
     "description": "Deterministic ingredient-level interaction rules keyed by canonical database identity",
     "purpose": "interaction_alert_rules",
     "schema_version": "6.3.0",
-    "last_updated": "2026-10-12",
+    "last_updated": "2026-10-13",
     "total_entries": 152,
     "structure_note": "One entry per ingredient (or per form-scoped variant). All conditions, drug classes, and dose thresholds for that ingredient are in one object. As of v6.0.0, every sub-rule (condition_rules[], drug_class_rules[], dose_thresholds[], pregnancy_lactation block) carries an explicit profile_gate predicate that consumers MUST evaluate against the user profile before firing the alert.",
     "total_rules": 152,
@@ -4190,14 +4190,15 @@
           "drug_class_id": "maois",
           "severity": "caution",
           "evidence_level": "theoretical",
-          "mechanism": "Historical letters describe possible ginseng–phenelzine interactions, including mood activation, but their complete contents are unavailable in the retained receipts. The retained monograph does not establish multiple hypertensive crises.",
-          "action": "Do not combine ginseng with an MAOI without prescriber review. Report unusual agitation, mood activation or cardiovascular symptoms; medication changes require the prescriber.",
+          "mechanism": "Historical reports concerned phenelzine and poorly characterized ginseng preparations, sometimes mixed with other products or medicines. The EMA assessment regards causal attribution as doubtful. These reports do not establish hypertensive crises or a uniform risk across all MAOIs.",
+          "action": "Ask your MAOI prescriber to review ginseng use. The reported medicine was phenelzine; preparation and causality remain uncertain. Do not change prescribed treatment yourself.",
           "sources": [
-            "https://www.nccih.nih.gov/health/asian-ginseng"
+            "https://pubmed.ncbi.nlm.nih.gov/3597812/",
+            "https://www.ema.europa.eu/en/documents/herbal-report/final-assessment-report-panax-ginseng-camey-radix-revision-1_en.pdf"
           ],
-          "alert_headline": "May raise blood pressure with MAOIs",
-          "alert_body": "Panax ginseng combined with MAO-inhibitor antidepressants has been linked to high blood pressure in case reports.",
-          "informational_note": "Ginseng may interact with MAOIs — relevant to anyone on phenelzine or similar drugs.",
+          "alert_headline": "Review ginseng with your MAOI prescriber",
+          "alert_body": "Historical phenelzine reports are confounded and do not prove a uniform risk from ginseng with every MAOI. Ask your prescriber to review the combination.",
+          "informational_note": "Uncertain ginseng/phenelzine reports warrant prescriber review, not a claim of established harm across the MAOI class.",
           "profile_gate": {
             "gate_type": "drug_class",
             "requires": {
@@ -7561,12 +7562,10 @@
           "drug_class_id": "statins",
           "severity": "caution",
           "evidence_level": "established",
-          "mechanism": "High-dose niacin combined with statins increases the risk of myopathy and rhabdomyolysis beyond that of statin monotherapy. This risk is particularly elevated with gemfibrozil-statin combinations, but niacin-statin combinations also carry increased myopathy risk, estimated at approximately 0.12% incidence in combination therapy trials. The mechanism involves pharmacodynamic additive muscle toxicity.",
-          "action": "If high-dose niacin (≥1g/day) is co-prescribed with statins, monitor for myopathy symptoms (muscle pain, weakness, dark urine). Obtain baseline and periodic CK levels. Avoid high-intensity statin doses in this combination.",
+          "mechanism": "Current statin labeling reports muscle-injury risk with lipid-modifying nicotinic acid doses of at least 1 g/day. It does not establish the same interaction for niacinamide or quantify a universal incidence across preparations.",
+          "action": "Use lipid-modifying nicotinic acid with a statin only under prescriber supervision. Report unexplained muscle pain, weakness or dark urine promptly. Do not change statin treatment or initiate laboratory schedules yourself.",
           "sources": [
-            "https://pubmed.ncbi.nlm.nih.gov/12622602/",
-            "https://pubmed.ncbi.nlm.nih.gov/11485144/",
-            "https://pubmed.ncbi.nlm.nih.gov/17466224/"
+            "https://dailymed.nlm.nih.gov/dailymed/fda/fdaDrugXsl.cfm?setid=e432e043-c019-4d58-94ca-7c1d85f5cd40&type=display"
           ],
           "alert_headline": "May affect statin tolerability",
           "alert_body": "High-dose nicotinic acid (1,000 mg/day or more) can increase muscle-injury risk with statins. If you take a statin, use it only with prescriber guidance and report muscle pain or weakness.",
@@ -7585,7 +7584,9 @@
               "drug_classes_any": [],
               "profile_flags_any": [],
               "product_forms_any": [],
-              "nutrient_forms_any": []
+              "nutrient_forms_any": [
+                "niacinamide"
+              ]
             },
             "dose": null
           },
@@ -7600,12 +7601,12 @@
             ],
             "confidence": "high",
             "confidence_basis": "regulatory_label_cutoff",
-            "source": "https://www.accessdata.fda.gov/drugsatfda_docs/label/2009/020381s039s041lbl.pdf",
+            "source": "https://dailymed.nlm.nih.gov/dailymed/fda/fdaDrugXsl.cfm?setid=e432e043-c019-4d58-94ca-7c1d85f5cd40&type=display",
             "rationale": "FDA NIASPAN labeling cautions about statin-associated myopathy/rhabdomyolysis at niacin doses >=1 g/day. This is a lipid-modifying nicotinic-acid interaction, not a presence-only warning for multivitamin-dose niacinamide.",
             "consumer_disposition_if_met": "review",
             "consumer_disposition_if_not_met": "suppress",
-            "amount_missing_disposition": "suppress",
-            "unknown_form_disposition": "suppress",
+            "amount_missing_disposition": "review",
+            "unknown_form_disposition": "review",
             "conversion_failure_policy": "release_block"
           }
         },

@@ -2,6 +2,8 @@
 
 Updated October 13, 2026. Pipeline integrator: Codex. Original scope: Sean's accepted September 30 master plan. This document is the readable checklist; [LEDGER.md](../../scripts/audits/pending_items_20260926/LEDGER.md) remains the execution register, and the [ownership matrix](../../scripts/contracts/source_of_truth_matrix.json) defines production owners. Historical descriptions below do not override current code or approved decisions.
 
+October13 approved follow-up candidate: ginseng/phenelzine and kava/APAP hard grades corrected to source-supported cautions; niacin form/daily-dose and explicit medication food/procedure confirmation contracts implemented in paired app/source lanes. Seven exact records;24 native app checks and3 frozen raw replays pass with no product quality movement. Schema4 reader/export and transient confirmation guards implemented. Independent review, final local/CI acceptance and integration remain pending; no full catalog run or publication. Evidence and remaining clinical holds: existing LEDGER/research and private presence_warning_audit_20261012/FOLLOWUP_20261013.md.
+
 A checked implementation box means that specific deliverable is implemented, measured and independently reviewed where required. It does **not** mean the whole phase is finished or the catalog is released. Repository code pushed to GitHub and catalog publication are separate events.
 
 ## Current delivery checkpoint — October 13
