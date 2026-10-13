@@ -1239,13 +1239,14 @@ def test_main_succeeds_when_stale_input_with_allow_stale(
     assert "WARNING" in err and "--allow-stale" in err
 
 
-def test_scoring_form_backlog_can_ship_only_after_actual_null_score_export(good_release_dir):
+@pytest.mark.parametrize("strict_reason", ["disclosed_form_unmapped", "identity_disposition_not_scoreable:identity_conflict"])
+def test_scoring_form_backlog_can_ship_only_after_actual_null_score_export(good_release_dir, strict_reason):
     from audit_source_of_truth_contract import audit_scoring
     from test_scoring_source_of_truth_audit import _args, _scored, _write
     _warning_only_candidate(good_release_dir, verdict="NOT_SCORED", status="not_scored")
     product = _scored(dsld_id="ID00000", verdict="NOT_SCORED", quality_score_status="not_scored",
         quality_score_v4_100=None, score_100_equivalent=None,
-        strict_scoring_contract={"passed": False, "findings": ["disclosed_form_unmapped"]})
+        strict_scoring_contract={"passed": False, "findings": [strict_reason]})
     path = good_release_dir.parent / "unscored.json"
     _write(path, product)
     args = _args(path)
@@ -1268,6 +1269,26 @@ def test_unscored_export_proof_rejects_any_numeric_quality_score(good_release_di
     manifest["checksum"] = "sha256:" + rca.compute_sha256(db)
     path.write_text(json.dumps(manifest))
     assert "ID00000" not in rca.verified_warning_only_products(good_release_dir)
+
+
+@pytest.mark.parametrize("source_status,catalog_status", [
+    ("not_scored", "suppressed_safety"), ("suppressed_safety", "not_scored")])
+def test_scoring_identity_hold_requires_matching_source_and_catalog_state(
+    good_release_dir, source_status, catalog_status,
+):
+    from audit_source_of_truth_contract import audit_scoring
+    from test_scoring_source_of_truth_audit import _args, _scored, _write
+    verdict = lambda status: "NOT_SCORED" if status == "not_scored" else "BLOCKED"
+    _warning_only_candidate(good_release_dir, verdict=verdict(catalog_status), status=catalog_status)
+    product = _scored(dsld_id="ID00000", verdict=verdict(source_status),
+        quality_score_status=source_status, quality_score_v4_100=None, score_100_equivalent=None,
+        strict_scoring_contract={"passed": False,
+            "findings": ["identity_disposition_not_scoreable:identity_conflict"]})
+    path = good_release_dir.parent / "mismatched-scored.json"
+    _write(path, product)
+    args = _args(path)
+    args.dist_dir = str(good_release_dir)
+    assert any(f.code == "SCORING_STRICT_CONTRACT_FAILED" for f in audit_scoring(args))
 
 
 @pytest.mark.parametrize('defect', [None, 'numeric_catalog_score', 'unscored_catalog', 'unverified_source', 'missing_source'])
