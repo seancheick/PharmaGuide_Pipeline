@@ -284,6 +284,17 @@ def serving_frequency_violations(record: dict) -> list[str]:
                 f"but the label declares {sorted(declared)}"
             )
 
+    if basis.get("basis_reason") == "ingredient_quantity_variants":
+        from serving_frequency import resolve_facts_panel_serving_basis
+        facts = resolve_facts_panel_serving_basis(record)
+        if facts is None:
+            violations.append("Facts-column provenance has no supported amount basis")
+        else:
+            for key in ("basis_count", "min_servings_per_day", "max_servings_per_day"):
+                if key in facts and basis.get(key) != facts[key]:
+                    violations.append(f"{key} differs from selected Facts column")
+        return violations
+
     if label:
         for key, value in values.items():
             if value > label[1] + 1e-9:
@@ -375,3 +386,117 @@ def serving_frequency_violations(record: dict) -> list[str]:
 )
 def test_frequency_invariants_catch_both_directions(record: dict, expected: bool) -> None:
     assert bool(serving_frequency_violations(record)) is expected
+
+
+@pytest.mark.parametrize("pid,amount", [("201495", 150), ("184671", 120)])
+def test_ranged_capsule_regimen_keeps_the_facts_panel_amount_basis(pid, amount):
+    from enhanced_normalizer import EnhancedDSLDNormalizer
+    from serving_frequency import resolve_daily_serving_range
+    from scoring_v4.scored_artifact import build_scored_artifact
+
+    raw = json.loads((Path(__file__).parent / "fixtures" / f"serving_column_{pid}_raw.json").read_text())
+    cleaned = EnhancedDSLDNormalizer().normalize_product(raw)
+    enriched, _ = SupplementEnricherV3().enrich_product(cleaned)
+    assert enriched["serving_basis"]["basis_count"] == 1
+    assert enriched["serving_basis"]["min_servings_per_day"] == 1
+    assert enriched["serving_basis"]["max_servings_per_day"] == 4
+    assert resolve_daily_serving_range(enriched) == (1, 4, False)
+    assert serving_frequency_violations(enriched) == []
+    row = next(r for r in enriched["rda_ul_data"]["analyzed_ingredients"] if r["ingredient"] == "Magnesium")
+    assert row["per_day_min"] == amount
+    assert row["per_day_max"] == amount * 4
+    from build_final_db import generate_dosing_summary
+    assert generate_dosing_summary(enriched)["dosing_summary"] == "Take 1-4 capsules daily"
+    artifact = build_scored_artifact(enriched)
+    assert artifact["quality_score_status"] == "scored"
+    assert artifact["quality_pillars_v4"]["dose"]["score"] == (0 if amount == 150 else 10)
+    assert artifact["dose_safety_evaluation"]["flags"][0]["state"] == "confirmed_over_threshold"
+
+
+def test_rebased_facts_panel_preserves_every_other_day_schedule():
+    from build_final_db import generate_dosing_summary
+    product = {
+        "servingSizes": [{"minQuantity": 1, "maxQuantity": 4, "unit": "Capsule(s)",
+                          "minDailyServings": 0.5, "maxDailyServings": 0.5}],
+        "serving_basis": {"basis_count": 1, "basis_unit": "capsule",
+                          "basis_reason": "ingredient_quantity_variants"},
+        "activeIngredients": [{"raw_taxonomy": {"quantityVariants": [
+            {"serving_size_quantity": 1, "serving_size_unit": "Capsule(s)"}
+        ]}}],
+    }
+    assert generate_dosing_summary(product)["dosing_summary"] == "Take 1-4 capsules every other day"
+
+
+def test_rebased_facts_panel_does_not_relabel_milligrams_as_grams():
+    from build_final_db import generate_dosing_summary
+    product = {
+        "servingSizes": [{"minQuantity": 500, "maxQuantity": 500, "unit": "mg",
+                          "minDailyServings": 2, "maxDailyServings": 2}],
+        "serving_basis": {"basis_count": 1000, "basis_unit": "mg",
+                          "basis_reason": "ingredient_quantity_variants"},
+    }
+    assert generate_dosing_summary(product)["dosing_summary"] == "Mix 500 mg twice daily"
+
+
+@pytest.mark.parametrize("frequency", [1, 0.5, None])
+def test_explicit_facts_basis_outranks_container_rounding(frequency):
+    # Thorne298074: 200mg is declared per3.11g scoop, not187g/60=3.11667g.
+    product = {
+        "servingSizes": [{"minQuantity": 3.11, "maxQuantity": 3.11, "unit": "Gram(s)",
+                          "minDailyServings": frequency, "maxDailyServings": frequency}],
+        "netContents": [{"quantity": 187, "unit": "Gram(s)"}],
+        "servingsPerContainer": 60,
+        "activeIngredients": [{"raw_taxonomy": {"quantityVariants": [
+            {"serving_size_quantity": 3.11, "serving_size_unit": "Gram(s)", "selected_for_analysis": True}
+        ]}}],
+    }
+    basis = _enricher()._collect_serving_basis_data(product)["serving_basis"]
+    assert basis["basis_count"] == 3.11
+    assert basis["min_servings_per_day"] == basis["max_servings_per_day"] == frequency
+    from serving_frequency import resolve_daily_serving_range
+    assert resolve_daily_serving_range(product) == ((1, 1, True) if frequency is None else (frequency, frequency, False))
+
+
+def test_directions_convert_using_the_explicit_facts_basis():
+    product = {
+        "servingSizes": [{"minQuantity": 1, "maxQuantity": 1, "unit": "Capsule(s)"}],
+        "netContents": [{"quantity": 180, "unit": "Capsule(s)"}],
+        "servingsPerContainer": 90,
+        "labelText": {"parsed": {"directions": "Take 2 capsules daily."}},
+        "activeIngredients": [{"raw_taxonomy": {"quantityVariants": [
+            {"serving_size_quantity": 1, "serving_size_unit": "Capsule(s)"}
+        ]}}],
+    }
+    basis = _enricher()._collect_serving_basis_data(product)["serving_basis"]
+    assert basis["basis_count"] == 1
+    assert basis["servings_per_day_source"] == "directions"
+    assert basis["min_servings_per_day"] == basis["max_servings_per_day"] == 2
+
+
+@pytest.mark.parametrize("pid,basis_count,daily,quantity_text", [("12077", 2, 3, "2 teaspoons"), ("173920", 20, 1, "20 grams")])
+def test_child_adult_range_exports_only_the_selected_adult_column(pid, basis_count, daily, quantity_text):
+    from enhanced_normalizer import EnhancedDSLDNormalizer
+    from build_final_db import generate_dosing_summary
+    from serving_frequency import resolve_daily_serving_range
+    raw = json.loads((Path(__file__).parent / "fixtures" / f"serving_column_{pid}_raw.json").read_text())
+    cleaned = EnhancedDSLDNormalizer().normalize_product(raw)
+    enriched, _ = SupplementEnricherV3().enrich_product(cleaned)
+    assert enriched["serving_basis"]["basis_count"] == basis_count
+    assert resolve_daily_serving_range(enriched) == (daily, daily, False)
+    assert quantity_text in generate_dosing_summary(enriched)["dosing_summary"]
+
+
+@pytest.mark.parametrize("unit,form,expected", [
+    ("teaspoon", "powder", "Mix 2 teaspoons daily"),
+    ("tablespoon", "liquid", "Take 2 tablespoons daily"),
+    ("fl oz", "liquid", "Take 2 fl oz daily"),
+    ("mL", "drops", "Take 2 mL daily"),
+    ("gram", "capsule", "Mix 2 grams daily"),
+])
+def test_explicit_serving_unit_is_not_relabelled_by_form(unit, form, expected):
+    from build_final_db import generate_dosing_summary
+    assert generate_dosing_summary({
+        "form_factor": form,
+        "serving_basis": {"basis_count": 2, "basis_unit": unit,
+                          "min_servings_per_day": 1, "max_servings_per_day": 1},
+    })["dosing_summary"] == expected

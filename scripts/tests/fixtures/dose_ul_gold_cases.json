@@ -2,9 +2,9 @@
  "_metadata": {
   "description": "Gold benchmark (roadmap 1.10) for dose/UL resolution: real DSLD labels through the production enricher must yield the hand-computed per-day exposure and upper-limit verdict.",
   "expectation_basis": "Hand-computed from each label's per-row serving basis (DSLD quantityVariants), the directions' maximum daily servings, ODS unit conversions (vitamin D 40 IU/mcg; vitamin A 0.3 mcg RAE/IU; vitamin E UL mass 0.67 mg/IU natural, 0.90 mg/IU synthetic (nutritional activity remains 0.45 mg/IU synthetic); folic acid 1.667 mcg DFE/mcg) and the adult 19-30 ULs in rda_optimal_uls.json, written before the enricher ran. 'basis' states the arithmetic.",
-  "assertions": "over_ul must match on the nutrient's UL-assessed row (and no row of that nutrient may be over when the verdict is false); safety_per_day, when given, must match a UL-assessed row within 0.5%. Compound-mass rows (salt weight) must never carry the verdict. When safety_unit is given, the matching row's safety_exposure unit must equal it.",
+  "assertions": "over_ul must match on the nutrient's UL-assessed row (and no row of that nutrient may be over when the verdict is false); safety_per_day, when given, must match a UL-assessed row within 0.5%. Compound-mass rows (salt weight) must never carry the verdict. When safety_unit is given, the matching row's safety_exposure unit must equal it. For an explicitly indeterminate case, assert the unknown-form status, skipped numeric UL comparison, scoring ineligibility, maximum label exposure and conservative mass bound; never interpret over_ul=false as a within-limit finding.",
   "case_count": 44,
-  "last_updated": "2026-10-04"
+  "last_updated": "2026-10-13"
  },
  "cases": [
   {
@@ -1279,10 +1279,16 @@
    },
    "expect": {
     "canonical_id": "vitamin_e",
-    "safety_per_day": 720,
-    "over_ul": false
+    "safety_per_day": null,
+    "over_ul": false,
+    "ul_assessment_status": "indeterminate",
+    "per_day_max": 1600,
+    "safety_exposure": {
+     "per_day": 1440,
+     "unit": "mg"
+    }
    },
-   "basis": "Form unstated: the UL screen uses the conservative all-stereoisomer bound 0.90 mg/IU = 720 mg < UL 1,000 mg."
+   "basis": "800 IU per 1 softgel; label range 1–2 softgels daily gives a maximum of 1,600 IU. Form unstated: the conservative all-stereoisomer bound 0.90 mg/IU = 1,440 mg exceeds the adult 1,000 mg UL, so it cannot establish a within-limit screen. Exact form-dependent exposure and UL verdict remain indeterminate; over_ul=false is not a within-limit finding."
   },
   {
    "id": "e-d-alpha-671mg",

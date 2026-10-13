@@ -349,6 +349,7 @@ CREATE TABLE IF NOT EXISTS public.catalog_search (
   product_status           text,
   quality_tier             text,
   quality_score_status     text,
+  quality_score_v4_100     double precision CHECK (quality_score_v4_100 BETWEEN 0 AND 100),
   product_safety_status    text,
   -- The detail blob carries neither mapped_coverage nor quality_score_confidence;
   -- quality_assessment_status lets search results apply the completion rule.
@@ -399,7 +400,8 @@ SELECT cs.catalog_version,
        cs.mapped_coverage,
        cs.quality_score_confidence,
        cs.quality_assessment_status,
-       cs.search_tsv
+       cs.search_tsv,
+       cs.quality_score_v4_100
   FROM public.catalog_search cs
   JOIN public.export_manifest m
     ON m.db_version = cs.catalog_version
@@ -417,7 +419,11 @@ CREATE OR REPLACE FUNCTION public.search_catalog(
   p_query text,
   p_brand text DEFAULT NULL,
   p_form  text DEFAULT NULL,
-  p_limit integer DEFAULT 10
+  p_limit integer DEFAULT 10,
+  p_sort text DEFAULT 'relevance',
+  p_offset integer DEFAULT 0,
+  p_catalog_version text DEFAULT NULL,
+  p_supplement_type text DEFAULT NULL
 )
 RETURNS TABLE (
   catalog_version          text,
@@ -436,7 +442,9 @@ RETURNS TABLE (
   mapped_coverage          double precision,
   quality_score_confidence text,
   quality_assessment_status text,
-  match_score              real
+  match_score              real,
+  quality_score_v4_100     double precision,
+  total_matches           bigint
 )
 LANGUAGE sql STABLE SECURITY INVOKER
 SET search_path = public, extensions, pg_catalog
@@ -456,18 +464,26 @@ AS $$
                q.text, concat_ws(' ', c.brand_name, c.product_name, c.product_line))
            ) * 0.8
            + ts_rank_cd(c.search_tsv, q.tsq, 32) * 0.2
-         )::real AS match_score
+         )::real AS match_score,
+         c.quality_score_v4_100, count(*) OVER () AS total_matches
     FROM public.catalog_search_current c, q
    WHERE length(q.text) > 0
+     AND p_sort IN ('relevance', 'quality')
+     AND (p_supplement_type IS NULL OR c.supplement_type = p_supplement_type)
+     AND (p_catalog_version IS NULL OR c.catalog_version = p_catalog_version)
      AND (c.search_tsv @@ q.tsq OR q.text <% c.product_name OR q.text <% c.brand_name)
      AND (p_brand IS NULL OR strpos(lower(concat_ws(' ', c.brand_name, c.brand_family)),
                                     lower(btrim(p_brand))) > 0)
      AND (p_form IS NULL OR strpos(lower(coalesce(c.form_factor, '')), lower(btrim(p_form))) > 0)
-   ORDER BY match_score DESC, c.dsld_id
-   LIMIT LEAST(GREATEST(coalesce(p_limit, 10), 1), 25);
+   ORDER BY CASE WHEN p_sort = 'quality' AND c.quality_score_status = 'scored'
+                       AND c.quality_assessment_status = 'complete'
+                 THEN c.quality_score_v4_100 END DESC NULLS LAST,
+            match_score DESC, c.dsld_id
+   LIMIT LEAST(GREATEST(coalesce(p_limit, 10), 1), 25)
+   OFFSET GREATEST(coalesce(p_offset, 0), 0);
 $$;
 
-REVOKE ALL ON FUNCTION public.search_catalog(text, text, text, integer)
+REVOKE ALL ON FUNCTION public.search_catalog(text, text, text, integer, text, integer, text, text)
   FROM PUBLIC, anon, authenticated;
-GRANT EXECUTE ON FUNCTION public.search_catalog(text, text, text, integer)
+GRANT EXECUTE ON FUNCTION public.search_catalog(text, text, text, integer, text, integer, text, text)
   TO service_role;

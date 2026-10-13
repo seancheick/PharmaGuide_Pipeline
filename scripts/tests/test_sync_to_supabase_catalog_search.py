@@ -28,7 +28,7 @@ def _create_products_core(conn):
           brand_family TEXT, product_line TEXT, upc_sku TEXT, form_factor TEXT,
           supplement_type TEXT, product_status TEXT, quality_tier TEXT,
           quality_score_status TEXT, product_safety_status TEXT,
-          mapped_coverage REAL, quality_score_confidence TEXT, quality_assessment_status TEXT,
+          quality_score_v4_100 REAL, mapped_coverage REAL, quality_score_confidence TEXT, quality_assessment_status TEXT,
           verdict TEXT, top_warnings TEXT
         )
         """
@@ -48,6 +48,7 @@ def _insert(conn, **values):
         "product_status": "active",
         "quality_tier": "Good",
         "quality_score_status": "scored",
+        "quality_score_v4_100": 82,
         "product_safety_status": "no_known_catalog_concern",
         "mapped_coverage": 1.0,
         "quality_score_confidence": "high",
@@ -95,6 +96,7 @@ def test_row_mapping_from_in_memory_products_core():
             "product_status": "active",
             "quality_tier": "Needs improvement",
             "quality_score_status": "scored",
+            "quality_score_v4_100": 82,
             "product_safety_status": "caution",
             "mapped_coverage": 0.25,
             "quality_score_confidence": "low",
@@ -332,7 +334,7 @@ def _catalog_search_sql():
 def test_schema_declares_every_published_column():
     _, section = _catalog_search_sql()
     table = section[: section.index(");\n")]
-    declared = set(re.findall(r"^\s+([a-z_]+)\s+(?:text|double precision|tsvector|timestamptz)", table, re.M))
+    declared = set(re.findall(r"^\s+([a-z_][a-z_0-9]*)\s+(?:text|double precision|tsvector|timestamptz)", table, re.M))
     assert set(sync.CATALOG_SEARCH_COLUMNS) | {"catalog_version"} <= declared
     assert "PRIMARY KEY (catalog_version, dsld_id)" in table
 
@@ -345,7 +347,7 @@ def test_schema_keeps_catalog_search_service_role_only():
     assert "REVOKE ALL ON TABLE public.catalog_search_current FROM PUBLIC, anon, authenticated;" in section
     assert "WITH (security_invoker = true)" in section
     assert "AND m.is_current = true" in section
-    assert "REVOKE ALL ON FUNCTION public.search_catalog(text, text, text, integer)\n  FROM PUBLIC, anon, authenticated;" in section
+    assert "REVOKE ALL ON FUNCTION public.search_catalog(text, text, text, integer, text, integer, text, text)\n  FROM PUBLIC, anon, authenticated;" in section
     # No policy may open these rows to client roles.
     assert "CREATE POLICY" not in section
     for index in (
@@ -355,3 +357,29 @@ def test_schema_keeps_catalog_search_service_role_only():
         "idx_catalog_search_upc_sku",
     ):
         assert f"CREATE INDEX IF NOT EXISTS {index}" in section
+
+@pytest.mark.parametrize("score", [None, 0, 82, 100])
+def test_search_preserves_canonical_numeric_quality_score(score):
+    conn = sqlite3.connect(":memory:")
+    _create_products_core(conn)
+    _insert(conn, quality_score_v4_100=score)
+    assert sync.catalog_search_rows_from_connection(conn, "v1")[0]["quality_score_v4_100"] == score
+
+@pytest.mark.parametrize("score", [-1, 101, float("inf")])
+def test_search_rejects_invalid_quality_score(score):
+    conn = sqlite3.connect(":memory:")
+    _create_products_core(conn)
+    _insert(conn, quality_score_v4_100=score)
+    with pytest.raises(ValueError, match="quality_score_v4_100"):
+        sync.catalog_search_rows_from_connection(conn, "v1")
+
+
+def test_comparison_migration_matches_bootstrap_search_owner():
+    schema = SCHEMA_SQL.read_text()
+    migration = (SCHEMA_SQL.parent / "migrations/20261013213803_public_catalog_comparison.sql").read_text()
+    start = "CREATE OR REPLACE FUNCTION public.search_catalog("
+    assert schema[schema.index(start):] == migration[migration.index(start):]
+    assert "count(*) OVER () AS total_matches" in migration
+    assert "c.quality_score_status = 'scored'" in migration
+    assert "c.quality_assessment_status = 'complete'" in migration
+    assert "THEN c.quality_score_v4_100 END DESC NULLS LAST" in migration

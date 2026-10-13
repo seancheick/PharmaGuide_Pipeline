@@ -73,6 +73,7 @@ from inactive_ingredient_resolver import (
 )
 from iqm_form_evidence import validate_iqm_form
 from rda_ul_calculator import ul_display_severity
+from scoring_v4.dose_safety import dose_safety_consumer_explanation
 from identity.safety import (
     has_explicit_form_evidence,
     normalize_safety_source,
@@ -96,6 +97,7 @@ from identity_integrity import (
 )
 from scoring_input_contract import DOSE_NOT_PROVIDED_UNITS, dose_disclosure_status, get_scoring_ingredients
 from serving_frequency import (
+    select_canonical_serving,
     format_daily_frequency,
     resolve_daily_serving_multiplier,
 )
@@ -5926,6 +5928,12 @@ def _build_v4_score_explanation(pillars: Any) -> Optional[Dict[str, Any]]:
     strength. Returns None for a non-scored product (no pillars)."""
     if not isinstance(pillars, dict) or not pillars:
         return None
+    safety = pillars.get("safety_hygiene")
+    safety_components = safety.get("components") if isinstance(safety, dict) else None
+    dose_concern = dose_safety_consumer_explanation(
+        safety_components.get("dose_safety_state_counts")
+        if isinstance(safety_components, dict) else None
+    )
     ranked = []
     for name, p in pillars.items():
         if not isinstance(p, dict):
@@ -5934,13 +5942,15 @@ def _build_v4_score_explanation(pillars: Any) -> Optional[Dict[str, Any]]:
             delta = float(p.get("score")) - float(p.get("max"))
         except (TypeError, ValueError):
             continue
-        ranked.append((delta, name, p.get("reason")))
+        concern = bool(dose_concern) and name in {"dose", "safety_hygiene"}
+        ranked.append((delta, name, p.get("reason"), concern))
     if not ranked:
         return None
     ranked.sort(key=lambda r: r[0])  # ascending: biggest drags first
-    drags = [{"pillar": n, "reason": rs} for d, n, rs in ranked if d < -1e-9][:3]
+    drags = [{"pillar": n, "reason": rs} for d, n, rs, _ in ranked if d < -1e-9][:3]
     strengths = [
-        {"pillar": n, "reason": rs} for d, n, rs in reversed(ranked) if d >= -1e-9
+        {"pillar": n, "reason": rs} for d, n, rs, concern in reversed(ranked)
+        if d >= -1e-9 and not concern
     ][:3]
     return {"strengths": strengths, "drags": drags}
 
@@ -9850,6 +9860,22 @@ def _derive_serving_verb_and_noun(unit: str, form_factor: str) -> tuple[str, str
             return needle in unit_l or needle in form_l
         return needle in haystack
 
+    # Preserve explicitly quantified units before form-factor fallbacks.
+    # A spoon/ounce value is not mL, and a powder form does not make grams scoops.
+    volume_verb = "Mix" if "powder" in form_l else "Take"
+    if "teaspoon" in unit_l or unit_l.strip() in {"tsp", "tsp.", "tsp(s)"}:
+        return (volume_verb, "teaspoon", "teaspoons")
+    if "tablespoon" in unit_l or unit_l.strip() in {"tbsp", "tbsp.", "tbsp(s)"}:
+        return (volume_verb, "tablespoon", "tablespoons")
+    if any(token in unit_l for token in ("fl oz", "fl. oz", "fluid ounce")):
+        return ("Take", "fl oz", "fl oz")
+    if "ml" in unit_l or "milliliter" in unit_l:
+        return ("Take", "mL", "mL")
+    if "milligram" in unit_l or unit_l.strip() in ("mg", "mg."):
+        return ("Mix", "mg", "mg")
+    if "gram" in unit_l or unit_l.strip() in ("g", "g.") or unit_l.strip().endswith(" g"):
+        return ("Mix", "gram", "grams")
+
     # Most specific unit-driven cases first.
     if has("gummy") or has("gummie"):
         return ("Chew", "gummy", "gummies")
@@ -9875,26 +9901,8 @@ def _derive_serving_verb_and_noun(unit: str, form_factor: str) -> tuple[str, str
         return ("Use", "spray", "sprays")
     if has("patch"):
         return ("Apply", "patch", "patches")
-    # Liquid/volume units — "mL" is a constant label.
-    if (
-        "ml" in unit_l
-        or "milliliter" in unit_l
-        or "teaspoon" in unit_l
-        or "tablespoon" in unit_l
-        or "fl oz" in unit_l
-        or "fl. oz" in unit_l
-        or "fluid ounce" in unit_l
-    ) or has("liquid"):
+    if has("liquid"):
         return ("Take", "mL", "mL")
-    # Weight units — must come before powder/scoop fallback.
-    if "milligram" in unit_l or unit_l.strip() in ("mg", "mg."):
-        return ("Mix", "mg", "mg")
-    if (
-        "gram" in unit_l
-        or unit_l.strip() in ("g", "g.")
-        or unit_l.strip().endswith(" g")
-    ):
-        return ("Mix", "gram", "grams")
     # Scoop is a unit; powder is a form_factor fallback.
     if has("scoop") or has("powder"):
         return ("Mix", "scoop", "scoops")
@@ -9956,6 +9964,28 @@ def generate_dosing_summary(enriched: Dict) -> Dict:
 
         if _collagen_serving_looks_implausible(enriched, max_qty, unit, max_daily):
             summary = "See product label"
+        elif sb.get("basis_reason") == "ingredient_quantity_variants":
+            # Display the original intake range/cadence. The Facts basis is
+            # for nutrient analysis; converting it to an average daily count
+            # would turn an every-other-day schedule into daily use.
+            label_serving = select_canonical_serving(enriched.get("servingSizes")) or {}
+            low = safe_float(label_serving.get("minQuantity"))
+            high = safe_float(label_serving.get("maxQuantity"))
+            cadence_values = [safe_float(label_serving.get(key)) for key in ("minDailyServings", "maxDailyServings")]
+            if low is None or high is None or any(value is None for value in cadence_values):
+                summary = "See product label"
+            else:
+                low, high = sorted((low, high))
+                if safe_float(sb.get("basis_count")) == high:
+                    low = high  # retain the selected adult/highest Facts column
+                low, high, intake_unit = _normalize_weight_serving_for_display(
+                    low, high, safe_str(label_serving.get("unit")),
+                )
+                verb, noun_singular, noun_plural = _derive_serving_verb_and_noun(intake_unit, form_factor)
+                qty_text = _format_quantity(low) if low == high else f"{_format_quantity(low)}-{_format_quantity(high)}"
+                noun = noun_singular if low == high == 1 else noun_plural
+                cadence = format_daily_frequency(max(cadence_values))
+                summary = f"{verb} {qty_text} {noun} {cadence}".strip()
         elif min_qty == max_qty:
             qty_text = _format_quantity(min_qty)
             noun = noun_singular if min_qty == 1 else noun_plural

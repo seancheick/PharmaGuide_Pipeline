@@ -415,3 +415,34 @@ def test_manufacturer_facility_gmp_export_carries_registry_provenance_and_fails_
     assert stale["audited_facility"] is False
     assert stale["audited_facility_basis"] is None
     assert "audited_facility_registration" not in stale
+
+
+@pytest.mark.parametrize("penalized", [True, False])
+@pytest.mark.parametrize("dose", [12, 25])
+def test_confirmed_dose_concern_is_not_a_strength_even_at_full_credit(penalized, dose):
+    from build_final_db import _build_v4_score_explanation
+    bd = _module_bd(dose=dose)
+    bd["dimensions"]["dose"]["metadata"] = {
+        "B7_safety_evaluation": {
+            "state_counts": {"confirmed_over_threshold": 1},
+            "flags": [{"state": "confirmed_over_threshold", "penalized": penalized}],
+        }
+    }
+    pillars = _assemble(_shadow(module="generic", bd=bd))["quality_pillars_v4"]
+    assert "exceed" in pillars["dose"]["reason"]
+    assert not {"dose", "safety_hygiene"}.intersection({
+        item["pillar"] for item in _build_v4_score_explanation(pillars)["strengths"]
+    })
+
+
+def test_parent_total_disclosure_check_does_not_claim_amounts_are_hidden():
+    bd = _module_bd(transparency=6)
+    bd["dimensions"]["transparency"]["metadata"] = {
+        "complete_active_disclosure": {
+            "qualifies": False, "blockers": ["incomplete_active_rows"],
+            "incomplete_rows": [{"name": "Magnesium", "blockers": ["parent_total_row"]}],
+        }
+    }
+    pillar = _assemble(_shadow(module="generic", bd=bd))["quality_pillars_v4"]["transparency"]
+    assert pillar["score"] == 9
+    assert pillar["reason"] == "The label includes an ingredient total; complete individual-amount disclosure was not verified."

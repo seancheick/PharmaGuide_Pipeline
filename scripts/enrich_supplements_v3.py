@@ -101,6 +101,7 @@ from inactive_ingredient_resolver import (
     active_form_duplicate_candidate,
 )
 from serving_frequency import (
+    resolve_facts_panel_serving_basis,
     resolve_daily_serving_multiplier,
     resolve_daily_serving_range,
     select_canonical_serving,
@@ -18342,6 +18343,22 @@ class SupplementEnricherV3:
                     # here divided a servings-per-day count by grams (or
                     # capsules) per serving and shipped the reciprocal of the
                     # serving size: 22.7 g became "0.044 servings per day".
+
+        # Ingredient quantities and daily exposure must use the same selected
+        # Facts column. A maximum intake count is not the nutrient amount basis.
+        facts_panel = resolve_facts_panel_serving_basis(product)
+        if facts_panel is not None and (
+            basis_count != facts_panel["basis_count"]
+            or min_servings_per_day != facts_panel.get("min_servings_per_day", min_servings_per_day)
+            or max_servings_per_day != facts_panel.get("max_servings_per_day", max_servings_per_day)
+        ):
+            basis_count = facts_panel["basis_count"]
+            canonical_serving_size_qty = basis_count
+            if "min_servings_per_day" in facts_panel:
+                min_servings_per_day = facts_panel["min_servings_per_day"]
+                max_servings_per_day = facts_panel["max_servings_per_day"]
+                servings_per_day_source = "servingSizes"
+            basis_reason = "ingredient_quantity_variants"
 
         # Parse directions for min/max recommended
         min_recommended = None
