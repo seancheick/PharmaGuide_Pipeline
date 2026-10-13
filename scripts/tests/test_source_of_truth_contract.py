@@ -106,6 +106,16 @@ def test_source_of_truth_matrix_is_complete():
     assert findings == []
 
 
+def test_interaction_matrix_declares_every_curated_source():
+    matrix = json.loads(MATRIX_PATH.read_text())
+    concept = next(c for c in matrix['concepts'] if c['concept_id'] == 'interaction_db')
+    sources = set(concept['source_data_files'])
+    authored = {str(p.relative_to(REPO_ROOT)) for p in
+                (REPO_ROOT / 'scripts/data/curated_interactions').glob('*.json')}
+    assert authored and authored <= sources
+    assert not any('*' in path for path in sources)
+
+
 def test_source_of_truth_matrix_declares_enrichment_contract_concepts():
     matrix = json.loads(MATRIX_PATH.read_text(encoding="utf-8"))
     required = {
