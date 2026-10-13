@@ -2,6 +2,8 @@ import json
 import re
 from pathlib import Path
 
+import pytest
+
 
 SCRIPT = Path(__file__).resolve().parents[1] / "release_full.sh"
 INTERACTION_SCRIPT = Path(__file__).resolve().parents[1] / "rebuild_interaction_db.sh"
@@ -113,3 +115,69 @@ def test_release_checks_flutter_main_with_existing_release_base_owner():
     publishing = source.split('if (( SKIP_FLUTTER == 0 ||', 1)[1].split('START_TS=', 1)[0]
     assert 'require_release_base "$FLUTTER_REPO" || exit 1' in publishing
     assert publishing.index('require_release_base "$FLUTTER_REPO"') < publishing.index('PREFLIGHT_ONLY == 1')
+
+
+@pytest.mark.parametrize("prepared,stale,expected", [
+    (True, False, "preserved"), (True, True, "refused"),
+    (False, False, "fetched"),
+])
+def test_release_prepared_inputs_preserve_verified_submission_set(tmp_path, prepared, stale, expected):
+    import os
+    import shlex
+    import subprocess
+
+    source = SCRIPT.read_text()
+    start = source.index("submission_labels_exist() {")
+    stage_zero = source[start:source.index("# Step 1:", start)]
+    raw = tmp_path / "raw"
+    raw.mkdir()
+    (raw / "label.json").write_text("{}")
+    manifests = [tmp_path / name for name in ["clean.json", "enrich.json", "score.json"]]
+    for manifest in manifests:
+        manifest.write_text("{}")
+    os.utime(raw / "label.json", (1, 1))
+    fake_python = tmp_path / "python"
+    fake_python.write_text(
+        "#!/bin/bash\n"
+        'if [[ "$*" == *check-stage-manifests* ]]; then exit ' + str(int(stale)) + '; fi\n'
+        'echo "$*" >> "$RELEASE_PROBE_CALLS"\n'
+    )
+    fake_python.chmod(0o755)
+    calls = tmp_path / "calls"
+    variables = {
+        "PG_PYTHON": str(fake_python), "REPO_ROOT": str(tmp_path),
+        "SUBMISSION_OUTPUT_DIR": str(raw), "SUBMISSION_PIPELINE_PREFIX": str(tmp_path / "out"),
+        "SUBMISSION_CLEAN_MANIFEST": str(manifests[0]),
+        "SUBMISSION_ENRICH_MANIFEST": str(manifests[1]),
+        "SUBMISSION_SCORE_MANIFEST": str(manifests[2]),
+    }
+    harness = "set -e\nFORCE=0\nSKIP_SUPABASE=0\nSUPABASE_DRY_RUN=0\nPREPARED_INPUTS=" + str(int(prepared)) + "\n"
+    harness += "\n".join(f"{k}={shlex.quote(v)}" for k, v in variables.items()) + "\n"
+    harness += 'info(){ :; }; ok(){ :; }; skip(){ echo "$*"; }; err(){ echo "$*"; };\n'
+    result = subprocess.run(["bash", "-c", harness + stage_zero], text=True, capture_output=True,
+                            env={**os.environ, "RELEASE_PROBE_CALLS": str(calls)}, timeout=15)
+    recorded = calls.read_text() if calls.exists() else ""
+    if expected == "refused":
+        assert result.returncode != 0
+        assert "prepared" in (result.stdout + result.stderr).lower()
+        assert "--fetch" not in recorded
+        assert "run_pipeline.py" not in recorded
+    elif expected == "preserved":
+        assert result.returncode == 0, result.stdout + result.stderr
+        assert "--fetch" not in recorded
+        assert "run_pipeline.py" not in recorded
+    else:
+        assert result.returncode == 0, result.stdout + result.stderr
+        assert "--fetch" in recorded
+
+
+def test_release_cli_accepts_prepared_inputs_in_read_only_preflight():
+    import os
+    import subprocess
+    result = subprocess.run(
+        ["bash", str(SCRIPT), "--preflight-only", "--skip-supabase", "--skip-flutter", "--prepared-inputs"],
+        capture_output=True, text=True, env={**os.environ}, timeout=30,
+    )
+    assert result.returncode == 0, result.stdout + result.stderr
+    assert "Release prerequisites passed" in result.stdout
+    assert "Step 1/8" not in result.stdout
