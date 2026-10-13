@@ -5,6 +5,31 @@ from pathlib import Path
 import pytest
 
 
+@pytest.mark.parametrize('branch,require_branch,expected', [('main', 1, 0), ('', 1, 1), ('', 0, 0)])
+def test_release_base_rejects_detached_flutter_before_expensive_work(branch, require_branch, expected):
+    import subprocess
+    source = SCRIPT.read_text()
+    start = source.index('require_release_base() {')
+    end = source.index('\n# Manufacturer penalties', start)
+    harness = '''
+err() { echo "$*" >&2; }
+git() {
+  case "$*" in
+    *"branch --show-current"*) printf '%s' "$TEST_BRANCH" ;;
+    *"rev-parse"*) echo aabbccdd ;;
+    *) return 0 ;;
+  esac
+}
+'''
+    result = subprocess.run(['bash', '-c', harness + source[start:end] +
+                             f'\nrequire_release_base /fake/repo {require_branch}\n'],
+                            capture_output=True, text=True,
+                            env={'TEST_BRANCH': branch})
+    assert result.returncode == expected, result.stdout + result.stderr
+    if expected:
+        assert 'detached' in result.stderr.lower()
+
+
 SCRIPT = Path(__file__).resolve().parents[1] / "release_full.sh"
 INTERACTION_SCRIPT = Path(__file__).resolve().parents[1] / "rebuild_interaction_db.sh"
 INTERACTION_VERSION_CONFIG = (
@@ -113,7 +138,7 @@ def test_release_preflight_only_local_run_never_reaches_artifact_gates():
 def test_release_checks_flutter_main_with_existing_release_base_owner():
     source = SCRIPT.read_text()
     publishing = source.split('if (( SKIP_FLUTTER == 0 ||', 1)[1].split('START_TS=', 1)[0]
-    assert 'require_release_base "$FLUTTER_REPO" || exit 1' in publishing
+    assert 'require_release_base "$FLUTTER_REPO" "$(( SKIP_SUPABASE == 0 && SUPABASE_DRY_RUN == 0 ))" || exit 1' in publishing
     assert publishing.index('require_release_base "$FLUTTER_REPO"') < publishing.index('PREFLIGHT_ONLY == 1')
 
 

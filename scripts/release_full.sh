@@ -200,7 +200,7 @@ CATALOG_BUILD_SOURCES=(
 # every gate passed because its outputs were current for that checkout.
 # Local-only runs (no Supabase upload, no Flutter bundle) may use any checkout.
 require_release_base() {
-  local repo="$1" head origin
+  local repo="$1" require_branch="${2:-0}" head origin
   if ! git -C "$repo" fetch --quiet origin main; then
     err "Cannot fetch origin/main to confirm this checkout is the release base."
     return 1
@@ -214,6 +214,10 @@ require_release_base() {
   if [[ "$head" != "$origin" ]]; then
     err "This checkout is at ${head:0:8}; origin/main is ${origin:0:8}."
     err "Fast-forward (git merge --ff-only origin/main), rebuild from the earliest stale stage, then release."
+    return 1
+  fi
+  if (( require_branch == 1 )) && [[ -z "$(git -C "$repo" branch --show-current)" ]]; then
+    err "Flutter repository is in detached HEAD state; switch to its main branch before release."
     return 1
   fi
 }
@@ -242,7 +246,7 @@ if (( SKIP_FLUTTER == 0 || (SKIP_SUPABASE == 0 && SUPABASE_DRY_RUN == 0) )); the
   ok "Release base: clean checkout at origin/main $(git -C "$REPO_ROOT" rev-parse --short HEAD)"
   require_manufacturer_penalties_current || exit 1
   if (( SKIP_FLUTTER == 0 )); then
-    require_release_base "$FLUTTER_REPO" || exit 1
+    require_release_base "$FLUTTER_REPO" "$(( SKIP_SUPABASE == 0 && SUPABASE_DRY_RUN == 0 ))" || exit 1
     ok "Flutter release base: clean checkout at origin/main"
   fi
 else
@@ -963,7 +967,8 @@ if (( SKIP_FLUTTER == 0 && SKIP_SUPABASE == 0 && SUPABASE_DRY_RUN == 0 )); then
   if git -C "$FLUTTER_REPO" rev-parse --is-inside-work-tree >/dev/null 2>&1; then
     FLUTTER_RELEASE_BRANCH="$(git -C "$FLUTTER_REPO" branch --show-current)"
     if [[ -z "$FLUTTER_RELEASE_BRANCH" ]]; then
-      die "Flutter repository is in detached HEAD state; refusing aligned storage cleanup"
+      err "Flutter repository is in detached HEAD state; refusing aligned storage cleanup"
+      exit 1
     fi
 
     if git -C "$FLUTTER_REPO" status --porcelain -- assets/db tool/interaction_db.release.json assets/reference_data/rda_optimal_uls.json assets/reference_data/medication_depletions.json assets/reference_data/clinical_risk_taxonomy.json assets/reference_data/timing_rules.json assets/reference_data/reference_data_manifest.json assets/data/product_type_vocab.json 'assets/data/*_vocab.json' | grep -q .; then
