@@ -9479,12 +9479,13 @@ class SupplementEnricherV3:
         3. Raw-label, standard-name, then base-name source
 
         Tie-breakers (within same tier):
-        1. Literal named form from the raw/base label
-        2. Context parent preference (when available)
-        3. Longest matched alias wins
-        4. Form-level outranks parent-level (if applicable)
-        5. Canonical key alphabetical
-        6. Form key alphabetical
+        1. Context parent preference (when available)
+        2. Longest matched alias wins
+        3. Form-level outranks parent-level (if applicable)
+        4. Canonical key alphabetical
+        5. Form key alphabetical
+        After parent selection, prefer a literal raw/base form name only within
+        that same parent, configured priority and match tier.
 
         Multi-Form Enhancement:
         - Uses pre-parsed cleaned_forms[] from cleaning stage when available
@@ -10205,10 +10206,6 @@ class SupplementEnricherV3:
             return (
                 candidate.get("priority", 1),           # 1. Configured priority (0 > 1 > 2)
                 candidate["tier"],                      # 2. Tier (exact > normalized > contains/pattern)
-                # Within that tier, a literal named form in the row/base
-                # survives standardized parent aliases (salt + abbreviation).
-                0 if (candidate.get("matched_on") == "form_name"
-                    and candidate.get("match_source") in (0, 2)) else 1,
                 candidate.get("match_source", 1),       # 3. Match source (raw > std > base)
                 parent_pref,                            # 4. Prefer parent matching base ingredient
                 -candidate["alias_len"],                # 5. Longer alias wins within same priority
@@ -10656,6 +10653,20 @@ class SupplementEnricherV3:
 
         candidates.sort(key=_candidate_sort_key)
         best = candidates[0]
+
+        # Refine the form only after the existing rules select its parent.
+        # A literal salt/form must survive a standardized generic parent alias,
+        # but cannot override nutrient context (e.g. B3 versus vitamin C).
+        literal_forms = [
+            candidate for candidate in candidates
+            if candidate["parent_key"] == best["parent_key"]
+            and candidate.get("priority", 1) == best.get("priority", 1)
+            and candidate["tier"] == best["tier"]
+            and candidate.get("matched_on") == "form_name"
+            and candidate.get("match_source") in (0, 2)
+        ]
+        if literal_forms:
+            best = min(literal_forms, key=_candidate_sort_key)
 
         winning_tier = best["tier"]
         winning_candidates = [c for c in candidates if c["tier"] == winning_tier]
