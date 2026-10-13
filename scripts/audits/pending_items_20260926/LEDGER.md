@@ -1,3 +1,11 @@
+## 2026-10-12 — zero-quarantine release-test correction
+
+Owner: `test_catalog_stamp_parity_release::test_no_quarantined_product_reaches_the_catalog`, using the existing `build_final_db` quarantine count/list contract. Evidence: real strict candidate failfirst; manifest explicitly records zero exclusions. Will NOT create: quarantine policy, export exception, registry or second assessment owner. Class: tests only; production decisions unchanged.
+
+First release rung: 127 passed, one stale nonempty-quarantine assertion failed, one interaction-artifact check skipped because candidate-only catalog staging did not include the separately built DB. Canonical `release_interaction_artifact.py --output-dir candidate/dist` staged qualified full v1.0.15 (131 curated/31,768 research pairs; SHA bdc8432d06d89c782955e7f68cf821f121ab830d297a10e92ffe3a361100b38b). No rebuild or publication occurred.
+
+Test now requires explicit well-formed quarantine count/list/unique IDs, including zero, and retains original core/blob leak checks. Ten synthetic controls cover zero/nonzero, core/blob leaks, count mismatch, duplicates, missing metadata, invalid IDs and boolean count. Focused candidate + controls + live interaction parity: 12 passed. Full diff/independent review and final repeated release rung are the remaining checks. No corpus rerun indicated.
+
 ## 2026-10-12 — adjacent scoring-readiness adapter alignment
 
 Owner: `audit_source_of_truth_contract::audit_scoring` delegates actual catalog proof to `release_catalog_artifact::verified_warning_only_products`; export remains assessment/containment owner. Evidence: second final gate failure and failfirst actual-catalog regression. Will NOT create: mapping, scoring, identity policy, registry, field or waiver. Class: executable release-gate adapter, no emitted assessment change.
