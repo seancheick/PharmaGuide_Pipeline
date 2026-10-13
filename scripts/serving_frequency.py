@@ -156,7 +156,12 @@ def resolve_facts_panel_serving_basis(record: Dict[str, Any]) -> Optional[Dict[s
         return None
     facts_basis = next(iter(facts_bases))
     quantity_range = _ordered_pair(serving.get("minQuantity"), serving.get("maxQuantity"))
-    if facts_basis <= serving_quantity:
+    if facts_basis == serving_quantity:
+        # The canonical/highest Facts column already owns adult analysis.
+        # A smaller raw range endpoint may be a child serving, not an adult
+        # regimen minimum (DSLD12077/173920). Preserve that selected column.
+        quantity_range = (serving_quantity, serving_quantity)
+    elif facts_basis < serving_quantity:
         # Use an explicit matching Facts column for all dosage forms. A
         # container ratio cannot override the printed nutrient amount basis.
         # A ranged intake is scaled onto that column, never assumed to be a

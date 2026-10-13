@@ -471,3 +471,32 @@ def test_directions_convert_using_the_explicit_facts_basis():
     assert basis["basis_count"] == 1
     assert basis["servings_per_day_source"] == "directions"
     assert basis["min_servings_per_day"] == basis["max_servings_per_day"] == 2
+
+
+@pytest.mark.parametrize("pid,basis_count,daily,quantity_text", [("12077", 2, 3, "2 teaspoons"), ("173920", 20, 1, "20 grams")])
+def test_child_adult_range_exports_only_the_selected_adult_column(pid, basis_count, daily, quantity_text):
+    from enhanced_normalizer import EnhancedDSLDNormalizer
+    from build_final_db import generate_dosing_summary
+    from serving_frequency import resolve_daily_serving_range
+    raw = json.loads((Path(__file__).parent / "fixtures" / f"serving_column_{pid}_raw.json").read_text())
+    cleaned = EnhancedDSLDNormalizer().normalize_product(raw)
+    enriched, _ = SupplementEnricherV3().enrich_product(cleaned)
+    assert enriched["serving_basis"]["basis_count"] == basis_count
+    assert resolve_daily_serving_range(enriched) == (daily, daily, False)
+    assert quantity_text in generate_dosing_summary(enriched)["dosing_summary"]
+
+
+@pytest.mark.parametrize("unit,form,expected", [
+    ("teaspoon", "powder", "Mix 2 teaspoons daily"),
+    ("tablespoon", "liquid", "Take 2 tablespoons daily"),
+    ("fl oz", "liquid", "Take 2 fl oz daily"),
+    ("mL", "drops", "Take 2 mL daily"),
+    ("gram", "capsule", "Mix 2 grams daily"),
+])
+def test_explicit_serving_unit_is_not_relabelled_by_form(unit, form, expected):
+    from build_final_db import generate_dosing_summary
+    assert generate_dosing_summary({
+        "form_factor": form,
+        "serving_basis": {"basis_count": 2, "basis_unit": unit,
+                          "min_servings_per_day": 1, "max_servings_per_day": 1},
+    })["dosing_summary"] == expected

@@ -9851,6 +9851,22 @@ def _derive_serving_verb_and_noun(unit: str, form_factor: str) -> tuple[str, str
             return needle in unit_l or needle in form_l
         return needle in haystack
 
+    # Preserve explicitly quantified units before form-factor fallbacks.
+    # A spoon/ounce value is not mL, and a powder form does not make grams scoops.
+    volume_verb = "Mix" if "powder" in form_l else "Take"
+    if "teaspoon" in unit_l or unit_l.strip() in {"tsp", "tsp.", "tsp(s)"}:
+        return (volume_verb, "teaspoon", "teaspoons")
+    if "tablespoon" in unit_l or unit_l.strip() in {"tbsp", "tbsp.", "tbsp(s)"}:
+        return (volume_verb, "tablespoon", "tablespoons")
+    if any(token in unit_l for token in ("fl oz", "fl. oz", "fluid ounce")):
+        return ("Take", "fl oz", "fl oz")
+    if "ml" in unit_l or "milliliter" in unit_l:
+        return ("Take", "mL", "mL")
+    if "milligram" in unit_l or unit_l.strip() in ("mg", "mg."):
+        return ("Mix", "mg", "mg")
+    if "gram" in unit_l or unit_l.strip() in ("g", "g.") or unit_l.strip().endswith(" g"):
+        return ("Mix", "gram", "grams")
+
     # Most specific unit-driven cases first.
     if has("gummy") or has("gummie"):
         return ("Chew", "gummy", "gummies")
@@ -9876,26 +9892,8 @@ def _derive_serving_verb_and_noun(unit: str, form_factor: str) -> tuple[str, str
         return ("Use", "spray", "sprays")
     if has("patch"):
         return ("Apply", "patch", "patches")
-    # Liquid/volume units — "mL" is a constant label.
-    if (
-        "ml" in unit_l
-        or "milliliter" in unit_l
-        or "teaspoon" in unit_l
-        or "tablespoon" in unit_l
-        or "fl oz" in unit_l
-        or "fl. oz" in unit_l
-        or "fluid ounce" in unit_l
-    ) or has("liquid"):
+    if has("liquid"):
         return ("Take", "mL", "mL")
-    # Weight units — must come before powder/scoop fallback.
-    if "milligram" in unit_l or unit_l.strip() in ("mg", "mg."):
-        return ("Mix", "mg", "mg")
-    if (
-        "gram" in unit_l
-        or unit_l.strip() in ("g", "g.")
-        or unit_l.strip().endswith(" g")
-    ):
-        return ("Mix", "gram", "grams")
     # Scoop is a unit; powder is a form_factor fallback.
     if has("scoop") or has("powder"):
         return ("Mix", "scoop", "scoops")
@@ -9969,6 +9967,8 @@ def generate_dosing_summary(enriched: Dict) -> Dict:
                 summary = "See product label"
             else:
                 low, high = sorted((low, high))
+                if safe_float(sb.get("basis_count")) == high:
+                    low = high  # retain the selected adult/highest Facts column
                 low, high, intake_unit = _normalize_weight_serving_for_display(
                     low, high, safe_str(label_serving.get("unit")),
                 )

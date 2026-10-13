@@ -511,9 +511,9 @@ def test_daily_frequency_copy_preserves_fractional_regimens(
 
 @pytest.mark.parametrize("variants,expected", [
     ([{"serving_size_quantity": 1}], (1, 4)),
-    ([{"serving_size_quantity": 4}], (0.25, 1)),
+    ([{"serving_size_quantity": 4}], (1, 1)),
     ([{"serving_size_quantity": 1}, {"serving_size_quantity": 4}], (1, 1)),
-    ([{"serving_size_quantity": 1}, {"serving_size_quantity": 4, "selected_for_analysis": True}], (0.25, 1)),
+    ([{"serving_size_quantity": 1}, {"serving_size_quantity": 4, "selected_for_analysis": True}], (1, 1)),
     ([{"serving_size_quantity": 90}], (1, 1)),
     ([{"serving_size_quantity": 1}, {"serving_size_quantity": 1, "serving_size_unit": "Tablet(s)"}], (1, 1)),
     ([{"serving_size_quantity": 1, "serving_size_unit": "Unknown"}], (1, 1)),
@@ -529,3 +529,18 @@ def test_ranged_regimen_rebases_only_a_single_selected_matching_facts_column(var
         ]}}],
     }
     assert resolve_daily_serving_range(product)[:2] == expected
+
+
+@pytest.mark.parametrize("low,high,unit,daily", [(1, 2, "tsp", 3), (10, 20, "Gram(s)", 1)])
+def test_selected_adult_facts_column_does_not_borrow_child_minimum(low, high, unit, daily):
+    # DSLD12077 and173920 combine child/adult quantities in one servingSizes
+    # range. The existing canonical policy selected the adult/highest column.
+    from serving_frequency import resolve_daily_serving_range
+    product = {
+        "servingSizes": [{"minQuantity": low, "maxQuantity": high, "unit": unit,
+                          "minDailyServings": daily, "maxDailyServings": daily}],
+        "activeIngredients": [{"raw_taxonomy": {"quantityVariants": [
+            {"serving_size_quantity": high, "serving_size_unit": unit, "selected_for_analysis": True}
+        ]}}],
+    }
+    assert resolve_daily_serving_range(product) == (daily, daily, False)
