@@ -73,6 +73,7 @@ from inactive_ingredient_resolver import (
 )
 from iqm_form_evidence import validate_iqm_form
 from rda_ul_calculator import ul_display_severity
+from scoring_v4.dose_safety import dose_safety_consumer_explanation
 from identity.safety import (
     has_explicit_form_evidence,
     normalize_safety_source,
@@ -5935,13 +5936,17 @@ def _build_v4_score_explanation(pillars: Any) -> Optional[Dict[str, Any]]:
             delta = float(p.get("score")) - float(p.get("max"))
         except (TypeError, ValueError):
             continue
-        ranked.append((delta, name, p.get("reason")))
+        dose_concern = dose_safety_consumer_explanation(
+            (p.get("components") or {}).get("dose_safety_state_counts")
+        )
+        ranked.append((delta, name, p.get("reason"), bool(dose_concern)))
     if not ranked:
         return None
     ranked.sort(key=lambda r: r[0])  # ascending: biggest drags first
-    drags = [{"pillar": n, "reason": rs} for d, n, rs in ranked if d < -1e-9][:3]
+    drags = [{"pillar": n, "reason": rs} for d, n, rs, _ in ranked if d < -1e-9][:3]
     strengths = [
-        {"pillar": n, "reason": rs} for d, n, rs in reversed(ranked) if d >= -1e-9
+        {"pillar": n, "reason": rs} for d, n, rs, concern in reversed(ranked)
+        if d >= -1e-9 and not concern
     ][:3]
     return {"strengths": strengths, "drags": drags}
 

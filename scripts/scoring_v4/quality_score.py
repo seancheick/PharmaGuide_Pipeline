@@ -203,7 +203,7 @@ def _unassessed_primary_dose_reason(dim: Dict[str, Any]) -> Optional[str]:
 
 
 def _over_limit_dose_reason(dim: Dict[str, Any]) -> Optional[str]:
-    """Return safety-limit copy when B7 confirms an actionable excess."""
+    """Explain a confirmed excess independently of its point deduction."""
     metadata = dim.get("metadata") if isinstance(dim, dict) else None
     if not isinstance(metadata, dict):
         return None
@@ -215,7 +215,6 @@ def _over_limit_dose_reason(dim: Dict[str, Any]) -> Optional[str]:
         is_actionable = any(
             isinstance(flag, dict)
             and flag.get("state") == "confirmed_over_threshold"
-            and flag.get("penalized") is not False
             for flag in flags
         )
     else:
@@ -417,6 +416,16 @@ def _pillar_from_dim(name: str, dim: Dict[str, Any], weight: float, src: str) ->
             and _band(val, weight) == "high"
         ):
             reason = "The label includes a proprietary blend."
+        elif not blends_hide:
+            disclosure = metadata.get("complete_active_disclosure") or {}
+            incomplete = disclosure.get("incomplete_rows") or []
+            if incomplete and all(
+                row.get("blockers") == ["parent_total_row"] for row in incomplete
+            ):
+                reason = (
+                    "The label includes an ingredient total; complete "
+                    "individual-amount disclosure was not verified."
+                )
     return {
         "score": val,
         "max": weight,
