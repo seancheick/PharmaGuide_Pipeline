@@ -730,6 +730,7 @@ def score_dose(product: Dict[str, Any]) -> Dict[str, Any]:
         "deferred_data_dependency": DEFERRED_DATA,
         "B7_safety_evaluation": b7_metadata,
         # Source-owned context, not another assessment or a clinical efficacy claim.
+        "dose_safety_policy": dict(_B7),
         "reference_assessments": [
             {key: row.get(key) for key in (
                 "nutrient", "canonical_id", "unit", "rda_ai", "rda_ai_source", "ul", "ul_status",

@@ -275,6 +275,7 @@ def test_generic_dose_exposes_reference_policy_without_claiming_clinical_range()
     assert context["reference_assessments"][0]["per_day_max"] == 405
     assert context["ul_partial_credit_above_pct"] == 100
     assert context["ul_zero_credit_at_pct"] == 150
+    assert context["dose_safety_policy"] == {"ul_pct_threshold": 150, "per_flag_penalty": 2, "cap": 3}
     assert context["raw_dose_safety_penalty"] == 0
     assert context["safety_hygiene_over_ul_penalty"] == 0
     assert out["dose"]["score"] == 10
