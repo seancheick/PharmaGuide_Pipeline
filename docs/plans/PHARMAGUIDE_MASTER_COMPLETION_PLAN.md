@@ -10,6 +10,8 @@ A checked implementation box means that specific deliverable is implemented, mea
 
 ## Current delivery checkpoint — October 13
 
+- [ ] Repair the normal batch preparation/release path: concrete curated references, dependent expensive checks, early approved intake with preserved inputs, shared raw-label freshness and early Flutter commit-target validation.112focused infrastructure tests and mocked A-to-Z pass; exact CI/integration pending. No real pipeline or publication run.
+
 - [x] Integrate the14-product batch and verified169 mapping corrections; preserve realunknowns/69 safety blocks. Source/independent/raw/CI/local receipts are in the execution ledger.
 - [x] Correct the PreticX taxonomy regression in the shared identity owner; complete corrected38dataset regeneration/114fresh, strict15,421 catalog, independent all-detail accounting and actualFlutter safety/stack/depletion checks. Prior candidate coverage99.1108456% mean ingredient mapping;45oforiginal169fullymapped/146belowfull overall.
 - [x] Complete prior frozen-candidate release139tests/no skips plus artifact/live gates; no new citation mismatch or unresolved source. Existing168 citation backlog mismatches remain reported.
