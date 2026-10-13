@@ -364,3 +364,10 @@ def test_thorne_vitamin_a_unspecified_emits_explicit_unknown():
     assert vit_a["form_status"] == "unknown"
     assert vit_a["form_match_status"] == "n/a"
     assert vit_a["dose_status"] == "disclosed"
+
+
+def test_form_contract_preserves_every_declared_form_in_display():
+    from build_final_db import _compute_form_contract
+    ingredient = {"name": "Magnesium", "forms": [{"name": "citrate"}, {"name": "malate"}]}
+    match = {"identity_disposition": "clean", "label_display_form": "citrate", "form_match_status": "mapped"}
+    assert _compute_form_contract(ingredient, match)["display_form_label"] == "citrate, malate"
