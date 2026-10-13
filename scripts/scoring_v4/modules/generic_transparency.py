@@ -370,8 +370,8 @@ def _score_complete_active_disclosure_bonus(
     without making any gluten-free / vegan / allergen-free claim, so keep
     that disclosure credit in its own lane. The gate is intentionally
     conservative: every declared active must be represented by an
-    individually dose-bearing row, and proprietary/parent-total rows do
-    not qualify.
+    individually disclosed row. A printed parent total can be disclosed even
+    though Formulation excludes it to avoid counting its children twice.
     """
     rows = [row for row in get_active_ingredients(product) if isinstance(row, dict)]
     # A bioavailability aid the enricher demoted (piperine <= 10 mg) is a
@@ -401,7 +401,15 @@ def _score_complete_active_disclosure_bonus(
         row_blockers: List[str] = []
         if row.get("is_proprietary_blend"):
             row_blockers.append("proprietary_blend_row")
-        if row.get("is_parent_total"):
+        variants = _safe_list(_safe_dict(row.get("raw_taxonomy")).get("quantityVariants"))
+        printed_total = bool(row.get("raw_source_path")) and any(
+            isinstance(v, dict) and v.get("selected_for_analysis") is True
+            and _as_float(v.get("quantity"), None) == _as_float(row.get("quantity"), None)
+            and _as_float(v.get("quantity"), 0) > 0
+            and _norm_text(v.get("unit")) == _norm_text(row.get("unit"))
+            for v in variants
+        )
+        if row.get("is_parent_total") and not printed_total:
             row_blockers.append("parent_total_row")
         if not _has_active_identity(row):
             row_blockers.append("missing_identity")
