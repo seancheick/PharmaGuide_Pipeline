@@ -551,6 +551,9 @@ def validate_schema(entry: dict[str, Any]) -> list[str]:
                     errors.append(f"source_pmids[{idx}] must be a digit string")
 
     # Approved pairwise extension reuses the existing form-gate schema.
+    form_vocab = None
+    if entry.get("profile_gate") is not None or isinstance(entry.get("dose_threshold"), dict) and "form_scope" in entry["dose_threshold"]:
+        form_vocab = json.loads((Path(__file__).resolve().parents[1] / "data" / "form_keywords_vocab.json").read_text())
     gate = entry.get("profile_gate")
     if gate is not None:
         from profile_gate_evaluator import validate_profile_gate
@@ -560,7 +563,9 @@ def validate_schema(entry: dict[str, Any]) -> list[str]:
             if any(not isinstance(v, list) for axis in ("requires", "excludes") for v in gate[axis].values()):
                 errors.append("pairwise profile_gate axes must be lists")
             else:
-                errors.extend(validate_profile_gate(gate))
+                errors.extend(validate_profile_gate(gate, form_vocab=form_vocab))
+            if set(gate["requires"]) - {"conditions_any", "drug_classes_any", "profile_flags_any"} or set(gate["excludes"]) - {"conditions_any", "drug_classes_any", "profile_flags_any", "product_forms_any", "nutrient_forms_any"}:
+                errors.append("pairwise profile_gate contains unsupported axes")
             if gate.get("gate_type") != "nutrient_form":
                 errors.append("pairwise profile_gate requires supported nutrient_form context")
             if any(gate["requires"].get(k) for k in ("conditions_any", "drug_classes_any", "profile_flags_any")):
@@ -572,6 +577,10 @@ def validate_schema(entry: dict[str, Any]) -> list[str]:
         forms = threshold["form_scope"]
         if not isinstance(forms, list) or not forms or any(not isinstance(f, str) or not f.strip() for f in forms):
             errors.append("dose_threshold.form_scope requires nonempty canonical form strings")
+        else:
+            from profile_gate_evaluator import _collect_form_vocab_ids
+            if any(f not in _collect_form_vocab_ids(form_vocab) for f in forms):
+                errors.append("dose_threshold.form_scope contains unknown canonical forms")
     exceptions = entry.get("medication_exceptions")
     if exceptions is not None:
         if entry.get("type") not in {"Med-Food", "Med-Procedure"}:
@@ -581,7 +590,7 @@ def validate_schema(entry: dict[str, Any]) -> list[str]:
         else:
             allowed = {"ingredient_rxcuis", "dose_mg_exact", "dose_mg_range_inclusive", "route", "use_context", "notes"}
             for exception in exceptions:
-                if not isinstance(exception, dict) or not exception or set(exception) - allowed or not (set(exception) - {"notes"}) or not exception.get("ingredient_rxcuis"):
+                if not isinstance(exception, dict) or not exception or set(exception) - allowed or not (set(exception) - {"notes"}) or not exception.get("ingredient_rxcuis") or not exception.get("use_context"):
                     errors.append("invalid medication exception predicate")
                     continue
                 for key, value in exception.items():

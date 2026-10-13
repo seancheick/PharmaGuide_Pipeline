@@ -232,3 +232,19 @@ def test_pairwise_gate_rejects_malformed_axis_without_crashing():
         bad = deepcopy(PAIRS['DSI_STATINS_NIACIN'])
         bad['profile_gate']['excludes']['nutrient_forms_any'] = value
         assert validate_schema(bad)
+
+@pytest.mark.parametrize('target', ['gate', 'threshold', 'axis', 'exception'])
+def test_pairwise_schema_rejects_invented_forms_and_unscoped_exceptions(target):
+    from copy import deepcopy
+    from api_audit.verify_interactions import validate_schema
+    bad = deepcopy(PAIRS['DSI_STATINS_NIACIN'])
+    if target == 'gate':
+        bad['profile_gate']['excludes']['nutrient_forms_any'] = ['invented_form_xyz']
+    elif target == 'threshold':
+        bad['dose_threshold']['form_scope'] = ['invented_form_xyz']
+    elif target == 'axis':
+        bad['profile_gate']['requires']['invented_axis'] = []
+    else:
+        bad = deepcopy(PAIRS['DSI_MAOI_TYRAMINE'])
+        bad['medication_exceptions'] = [{'ingredient_rxcuis': ['9639']}]
+    assert validate_schema(bad), target
