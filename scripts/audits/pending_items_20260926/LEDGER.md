@@ -1,3 +1,11 @@
+## 2026-10-12 — adjacent scoring-readiness adapter alignment
+
+Owner: `audit_source_of_truth_contract::audit_scoring` delegates actual catalog proof to `release_catalog_artifact::verified_warning_only_products`; export remains assessment/containment owner. Evidence: second final gate failure and failfirst actual-catalog regression. Will NOT create: mapping, scoring, identity policy, registry, field or waiver. Class: executable release-gate adapter, no emitted assessment change.
+
+PR128 source9ec350476 merged5503dd008 after CI38327995776 green20,492/192declaredskips/all4guards, local546/24guard and independent acceptance. Reassembly built15421/zeroerrors/quarantines; identitygate passed113584rows, with41 intact source conflicts contained. Adjacent scoringgate rejected22 NOT_SCORED identity holds due suppressed-only containment. Reuse existing null-score catalog proof for matching NOT_SCORED source state and exact expected strictidentity failures. Missing-source/numeric-score/unrelated-strict-failure/source-catalog-state guards remain.
+
+New actual-catalog identityhold regression failed first (formcontrolpassed). Final310 combined owner/consumer checks pass, including both state-mismatch directions; all114stagefingerprints current. Whole-fastCI, localcheckpoint and independentreview pending; final strict candidate assembly/actualapp/release/IPAchecks remain. No extra upstream corpus indicated.
+
 ## 2026-10-12 — final identity-gate consumer alignment
 
 Owner: `audit_identity_integrity::main` adapter delegates eligibility to `build_final_db::_warning_only_identity_labels` and checksum/state proof to `release_catalog_artifact::verified_warning_only_products` — evidence: caller trace and failing CLI regression. Will NOT create: identity policy, mapping, scorer, registry, status or waiver. Class: executable release-gate adapter; no pipeline or emitted assessment change.

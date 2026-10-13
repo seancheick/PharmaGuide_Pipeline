@@ -709,12 +709,16 @@ def audit_scoring(args: argparse.Namespace) -> list[Finding]:
 
     quarantines = {}
     warning_only = set()
+    blocked_warning_only = set()
     if getattr(args, "dist_dir", None):
         try:
             quarantines = verified_contract_quarantines(repo_path(args.dist_dir))
             warning_only = verified_warning_only_products(repo_path(args.dist_dir))
+            blocked_warning_only = verified_warning_only_products(repo_path(args.dist_dir), blocked_only=True)
         except (ReleaseValidationError, OSError, ValueError) as exc:
             return [Finding("SCORING_QUARANTINE_PROOF_INVALID", str(exc), str(args.dist_dir))]
+
+    unscored_warning_only = warning_only - blocked_warning_only
 
     allowed_sources = {
         "ingredient_quality_data.ingredients_scorable",
@@ -938,8 +942,10 @@ def audit_scoring(args: argparse.Namespace) -> list[Finding]:
                         for issue in quarantines.get(pid, ()))
             )
             warning_contained = (
-                pid in warning_only and quality_status == "suppressed_safety"
-                and verdict in {"BLOCKED", "UNSAFE"}
+                ((pid in blocked_warning_only and quality_status == "suppressed_safety"
+                  and verdict in {"BLOCKED", "UNSAFE"})
+                 or (pid in unscored_warning_only and quality_status == "not_scored"
+                     and verdict == "NOT_SCORED"))
                 and product.get("quality_score_v4_100") is None
                 and product.get("score_100_equivalent") is None
             )
@@ -959,7 +965,7 @@ def audit_scoring(args: argparse.Namespace) -> list[Finding]:
                 and strict_contract.get("passed") is False
                 and strict_reasons == ["disclosed_form_unmapped"]
                 and (
-                    pid in warning_only
+                    pid in unscored_warning_only
                     or (
                         "review_queue: export cannot ship score with failed "
                         "strict scoring contract."
