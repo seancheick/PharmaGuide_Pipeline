@@ -281,3 +281,32 @@ def test_identity_audit_reuses_export_containment_without_resolving_source_ident
     scored['safety_decision']['policy_basis']['policy_verification_status'] = 'needs_review'
     carrier = next(r for r in audit_product(enriched, scored=scored) if r.source_path == 'ingredientRows[0]')
     assert carrier.failed and not carrier.safety_only_identity
+
+
+def test_cli_loads_scored_context_for_verified_unscored_catalog_labels(tmp_path, monkeypatch):
+    import audit_identity_integrity as audit
+    from test_export_gate import _known_unscored_unmapped_preparation
+
+    enriched, scored = _known_unscored_unmapped_preparation()
+    scored["dsld_id"] = enriched["dsld_id"]
+    path = tmp_path / "scored.json"
+    path.write_text(json.dumps([scored]))
+    pid = enriched["dsld_id"]
+    monkeypatch.setattr(sys, "argv", ["audit_identity_integrity", "--products-dir", str(tmp_path),
+                                     "--export-dir", str(tmp_path / "export")])
+    monkeypatch.setattr(audit, "verified_warning_only_products",
+                        lambda export_dir, blocked_only=False: set() if blocked_only else {pid})
+    monkeypatch.setattr(audit, "select_stage_files", lambda dirs, stage: [path])
+    captured = {}
+
+    def scan(**kwargs):
+        captured.update(kwargs["scored_context"])
+        return audit_product(enriched, scored=kwargs["scored_context"].get(pid))
+
+    monkeypatch.setattr(audit, "audit_enriched_outputs", scan)
+    monkeypatch.setattr(audit, "verified_contract_quarantines", lambda directory: {})
+    assert audit.main() == 0
+    assert captured[pid] == scored
+    record = audit_product(enriched, scored=captured[pid])[0]
+    assert record.failed and not record.scoreable_identity
+    assert record.final_canonical is None and record.safety_only_identity

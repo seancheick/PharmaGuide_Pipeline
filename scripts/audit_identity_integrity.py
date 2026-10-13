@@ -25,7 +25,7 @@ the product must be absent from SQLite, the detail index, and local blobs.
 All other identity-contract failures still block the release.
 
 An intact warning-only unresolved row may instead be contained by a verified
-BLOCKED/UNSAFE catalog record with no numeric public score. This uses
+BLOCKED/UNSAFE or NOT_SCORED catalog record with no numeric public score. This uses
 the same row eligibility policy as export; source dispositions stay unchanged.
 """
 
@@ -404,7 +404,9 @@ def main() -> int:
     scored_context = {}
     if args.export_dir is not None:
         try:
-            warning_only = verified_warning_only_products(args.export_dir, blocked_only=True)
+            warning_only = verified_warning_only_products(args.export_dir)
+            blocked = verified_warning_only_products(args.export_dir, blocked_only=True)
+            unscored = warning_only - blocked
             score_dirs = Path(args.products_dir).glob("output_*_scored/scored")
             for path in select_stage_files(score_dirs, "score"):
                 products = json.loads(path.read_text(encoding="utf-8"))
@@ -414,7 +416,10 @@ def main() -> int:
                     if not isinstance(product, dict):
                         continue
                     pid = str(product.get("dsld_id") or product.get("id") or "unknown")
-                    if pid in warning_only:
+                    # A null-score catalog row proves only its actual state;
+                    # it cannot contain a different scored-stage assessment.
+                    eligible = unscored if product.get("quality_score_status") == "not_scored" else blocked
+                    if pid in eligible:
                         scored_context[pid] = product
         except (ReleaseValidationError, OSError, ValueError) as exc:
             print(f"identity integrity gate FAILED: {exc}")
