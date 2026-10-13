@@ -228,12 +228,23 @@ def stage_manifest_issue(
     repo_root: Path,
     manifest_path: Path,
     stage: str,
+    *,
+    raw_input_dir: Path | None = None,
 ) -> str | None:
     """Explain why one stage manifest is stale, or return None if current."""
-    return _manifest_issue(
+    issue = _manifest_issue(
         Path(manifest_path).resolve(),
         stage_input_fingerprints(Path(repo_root).resolve(), stage),
     )
+    if issue or raw_input_dir is None:
+        return issue
+    raw_input_dir = Path(raw_input_dir)
+    if not raw_input_dir.is_dir():
+        return f"{raw_input_dir}: missing raw input directory"
+    stamp = Path(manifest_path).stat().st_mtime_ns
+    newer = next((path for path in sorted(raw_input_dir.glob('*.json'))
+                  if path.is_file() and path.stat().st_mtime_ns > stamp), None)
+    return f"{manifest_path}: raw input newer than stage manifest: {newer}" if newer else None
 
 
 def stage_freshness_issues(repo_root: Path) -> list[str]:
@@ -284,6 +295,8 @@ def _main() -> int:
         ),
     )
     check.add_argument("--repo-root", type=Path, required=True)
+    check.add_argument("--raw-inputs", type=Path,
+                       help="Also reject a score manifest older than its raw submission labels")
     for stage in STAGES:
         check.add_argument(f"--{stage}", type=Path, metavar="MANIFEST")
     args = parser.parse_args()
@@ -296,10 +309,13 @@ def _main() -> int:
         ]
         if not checks:
             parser.error("name at least one stage manifest")
+        if args.raw_inputs is not None and args.score is None:
+            parser.error("--raw-inputs requires --score")
         issues = [
             issue
             for stage, manifest in checks
-            if (issue := stage_manifest_issue(args.repo_root, manifest, stage))
+            if (issue := stage_manifest_issue(args.repo_root, manifest, stage,
+                                             raw_input_dir=args.raw_inputs if stage == 'score' else None))
         ]
         for issue in issues:
             print(issue, file=sys.stderr)

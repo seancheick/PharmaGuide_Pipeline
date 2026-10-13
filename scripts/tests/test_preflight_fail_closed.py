@@ -6,9 +6,71 @@ import json
 import sys
 from pathlib import Path
 
+import pytest
+
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
 import preflight
+
+
+@pytest.mark.parametrize('failure', [None, 'references', 'ownership_matrix',
+                                    'fda_freshness', 'raw_canaries', 'source_tests',
+                                    'release_gate_inventory'])
+def test_default_preparation_blocks_expensive_checks_after_failure(tmp_path, monkeypatch, failure):
+    import subprocess
+    monkeypatch.setattr(preflight, '_preparation_inputs',
+                        lambda *args, **kwargs: {'files': {}, 'errors': [], 'raw_count': 1})
+    monkeypatch.setattr(preflight, '_preparation_runtime', lambda: {'environment': {}})
+    monkeypatch.setattr(preflight, '_preparation_canary_identifiers', lambda *args: ['1'])
+    calls = []
+
+    def run(command, **kwargs):
+        if command[-1] == 'preparation-gates':
+            calls.append('release_gate_inventory')
+            gates = [{'phase': phase, 'command': [phase + '-probe']}
+                     for phase in ('source', 'live', 'artifact')]
+            return subprocess.CompletedProcess(command, int(failure == 'release_gate_inventory'),
+                                               '\n'.join(json.dumps(g) for g in gates), '')
+        name = kwargs['env']['PG_PREPARATION_CHECK']
+        calls.append(name)
+        output = 'ok'
+        if name == 'references':
+            output = json.dumps({'summary': {'all_ok': True, 'exit_code': 0},
+                                 **{key: {'failed': []} for key in
+                                    ('critical', 'configs', 'scripts', 'json_valid')}})
+        elif name == 'raw_canaries':
+            output = '[1] UNCHANGED\nChecked: 1  Failed: 0  Total: 1\n'
+        elif name == 'source_tests':
+            evidence = {'completed': True, 'exit_code': 0, 'collection_errors': [],
+                        'collection_skips': [], 'selection': {'args': ['scripts/tests']},
+                        'nodes': [{'nodeid': 'owner::source', 'phase': 'source', 'reason': 'owner'}],
+                        'outcomes': {'owner::source': [{'when': phase, 'outcome': 'passed'}
+                                     for phase in ('setup', 'call', 'teardown')]}}
+            Path(kwargs['env']['PG_PREPARATION_REPORT']).write_text(json.dumps(evidence))
+        return subprocess.CompletedProcess(command, int(name == failure), output,
+                                           'known prerequisite failure' if name == failure else '')
+
+    result = preflight.run_preparation(tmp_path, tmp_path, runner=run,
+                                      report_path=tmp_path / 'receipt.json')
+    states = {check['name']: check['status'] for check in result['checks']}
+    assert result['completed'] and result['publication_ready'] is False
+    assert result['ready'] is (failure is None)
+    # Calendar freshness remains checked finally even after an early failure.
+    assert states['fda_freshness_final'] == 'passed'
+    if failure is None:
+        assert states['raw_canaries'] == states['source_tests'] == 'passed'
+        assert states['source_gate_0'] == states['live_gate_1'] == 'passed'
+    elif failure == 'release_gate_inventory':
+        assert states['raw_canaries'] == states['source_tests'] == 'blocked'
+        assert 'raw_canaries' not in calls and 'source_tests' not in calls
+    else:
+        assert states[failure] == 'failed'
+        assert states['source_gate_0'] == states['live_gate_1'] == 'blocked'
+        assert 'source_gate_0' not in calls and 'live_gate_1' not in calls
+        if failure != 'source_tests':
+            assert states['source_tests'] == 'blocked' and 'source_tests' not in calls
+        if failure not in ('raw_canaries', 'source_tests'):
+            assert states['raw_canaries'] == 'blocked' and 'raw_canaries' not in calls
 
 
 def test_schema_respects_condition_synonyms_and_rejects_deprecated_ingredient_fields(tmp_path, monkeypatch):
