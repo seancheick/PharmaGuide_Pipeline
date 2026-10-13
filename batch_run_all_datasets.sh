@@ -226,6 +226,17 @@ if [ "$PIPELINE_ONLY" != "1" ] && [ "${SKIP_SNAPSHOT:-0}" != "1" ] \
         echo "STOP: release prerequisites failed before corpus work. Fix the reported prerequisite and rerun this command."
         exit 1
     fi
+    # Materialize approved inputs through the existing importer before the
+    # preparation fingerprint and any brand work. The final release keeps
+    # this verified set instead of fetching another batch after the long run.
+    if [ "$RELEASE_SKIP_SUPABASE" = "0" ] && [ "$RELEASE_SUPABASE_DRY_RUN" = "0" ]; then
+        if ! "$PYTHON" "$SCRIPTS_DIR/product_submission_import.py" --fetch \
+            --output-dir "$SUBMISSION_OUTPUT_DIR" 2>&1 | tee -a "$SUMMARY_FILE"; then
+            echo "STOP: approved submission intake failed before preparation or corpus work."
+            exit 1
+        fi
+    fi
+    RELEASE_ARGS+=(--prepared-inputs)
 fi
 
 # A full corpus run must first exercise every reviewed canary through current
@@ -386,7 +397,8 @@ if { [ "$SKIP_SNAPSHOT" != "1" ] || { [ "$PIPELINE_ONLY" = "1" ] && [ -z "$TARGE
         --repo-root "$REPO_ROOT" \
         --clean "$SUBMISSION_CLEAN_MANIFEST" \
         --enrich "$SUBMISSION_ENRICH_MANIFEST" \
-        --score "$SUBMISSION_SCORE_MANIFEST" >/dev/null 2>&1; then
+        --score "$SUBMISSION_SCORE_MANIFEST" \
+        --raw-inputs "$SUBMISSION_OUTPUT_DIR" >/dev/null 2>&1; then
         echo -e "${BLUE}Refreshing Product Submissions against current reference data and pipeline code...${NC}"
         if "$PYTHON" run_pipeline.py \
             --raw-dir "$SUBMISSION_OUTPUT_DIR" \

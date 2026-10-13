@@ -3,6 +3,8 @@ import stat
 import subprocess
 from pathlib import Path
 
+import pytest
+
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
 SCRIPT_PATH = REPO_ROOT / "batch_run_all_datasets.sh"
@@ -24,6 +26,11 @@ def _install_batch_dependencies(tmp_path):
     )
     if not (scripts_dir / "release_full.sh").exists():
         (scripts_dir / "release_full.sh").write_text("#!/bin/bash\nexit 0\n")
+    if not (scripts_dir / "product_submission_import.py").exists():
+        (scripts_dir / "product_submission_import.py").write_text(
+            "import sys\nassert sys.argv[1:3] == ['--fetch', '--output-dir']\n"
+            "assert len(sys.argv) == 4\nprint('approved-intake-reached')\n"
+        )
     (scripts_dir / "tests").mkdir(exist_ok=True)
     (scripts_dir / "preflight.py").write_text(
         "import sys\n"
@@ -339,3 +346,52 @@ def test_batch_full_run_refuses_release_prerequisites_before_preparation_or_bran
     assert "release-prerequisite-refused" in output
     assert "aggregate-preparation-reached" not in output
     assert "brand-must-not-run" not in output
+
+
+@pytest.mark.parametrize('intake_fails', [False, True])
+def test_default_batch_intake_precedes_validation_and_reaches_flutter_commit(tmp_path, intake_fails):
+    data = tmp_path / 'data'
+    (data / 'ExampleBrand').mkdir(parents=True)
+    _install_batch_dependencies(tmp_path)
+    scripts = tmp_path / 'scripts'
+    events = tmp_path / 'events'
+    event_code = f"from pathlib import Path\np=Path({str(events)!r})\n"
+    submissions = tmp_path / 'manual_labels/product_submissions'
+    (scripts / 'product_submission_import.py').write_text(event_code +
+        "import sys\nassert sys.argv[1:3] == ['--fetch', '--output-dir']\n"
+        "with p.open('a') as out: out.write('intake\\n')\n" +
+        ("raise SystemExit(4)\n" if intake_fails else
+         "raw=Path(sys.argv[3]);raw.mkdir(parents=True,exist_ok=True)\n"
+         "(raw/'approved.json').write_text('{}')\n"))
+    (scripts / 'preflight.py').write_text(event_code +
+        f"assert Path({str(submissions / 'approved.json')!r}).exists(), 'intake must precede preparation'\n"
+        "with p.open('a') as out: out.write('preparation\\n')\n")
+    (scripts / 'run_pipeline.py').write_text(event_code +
+        "import sys\nkind='submissions' if 'products/output_Product_Submissions' in sys.argv else 'brand'\n"
+        "with p.open('a') as out: out.write(kind+'\\n')\n")
+    (scripts / 'pipeline_freshness.py').write_text(
+        "import sys\nassert '--raw-inputs' in sys.argv\nraise SystemExit(1)\n")
+    snapshot = scripts / 'rebuild_dashboard_snapshot.sh'
+    snapshot.write_text(f"#!/bin/bash\nprintf 'snapshot\\n' >> '{events}'\n")
+    snapshot.chmod(0o755)
+    (scripts / 'release_full.sh').write_text(f'''#!/bin/bash
+if [[ "$1" == --preflight-only ]]; then
+  printf 'prerequisites\\n' >> '{events}'
+  exit 0
+fi
+[[ " $* " == *" --prepared-inputs "* ]] || exit 90
+printf 'supabase\\nflutter-import\\nflutter-commit\\n' >> '{events}'
+''')
+    (scripts / 'release_full.sh').chmod(0o755)
+    batch = tmp_path / 'batch_run_all_datasets.sh'
+    batch.write_text(SCRIPT_PATH.read_text())
+    result = subprocess.run(['bash', str(batch)], capture_output=True, text=True,
+                            env={**os.environ, 'PHARMAGUIDE_DATASET_ROOT': str(data)})
+    actual = events.read_text().splitlines()
+    if intake_fails:
+        assert result.returncode != 0
+        assert actual == ['prerequisites', 'intake']
+    else:
+        assert result.returncode == 0, result.stdout + result.stderr
+        assert actual == ['prerequisites', 'intake', 'preparation', 'brand',
+                          'submissions', 'snapshot', 'supabase', 'flutter-import', 'flutter-commit']
