@@ -43,6 +43,15 @@ def test_label_yields_expected_daily_exposure_and_ul_verdict(enricher, case):
     ]
     assert rows
     assert any(r.get("over_ul") for r in rows) == expect["over_ul"]
+    if expect.get("ul_assessment_status") == "indeterminate":
+        # A worst-case bound above the UL cannot establish either an exact
+        # exceedance or a within-limit result when the label omits the form.
+        assert all(r.get("ul_assessment_status") == "indeterminate" for r in rows)
+        assert all(r.get("pct_ul") is None and r.get("skip_ul_check") is True for r in rows)
+        assert all(r.get("scoring_eligible") is False for r in rows)
+        assert all(r.get("skip_ul_reason") == "unknown_vitamin_form" for r in rows)
+        assert rows[0]["per_day_max"] == expect["per_day_max"]
+        assert rows[0]["safety_exposure"] == expect["safety_exposure"]
     if expect["safety_per_day"] is not None:
         assessed = [r["safety_exposure"] for r in rows if r.get("pct_ul") is not None]
         target = expect["safety_per_day"]
