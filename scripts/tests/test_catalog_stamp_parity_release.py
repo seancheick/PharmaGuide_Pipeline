@@ -120,12 +120,17 @@ def _scored_products():
 def test_no_quarantined_product_reaches_the_catalog() -> None:
     _require_build()
     manifest = json.loads(MANIFEST.read_text(encoding="utf-8"))
-    excluded = {
-        str(entry.get("dsld_id"))
-        for entry in manifest.get("excluded_by_gate") or []
-        if isinstance(entry, dict) and entry.get("dsld_id")
-    }
-    assert excluded, "no quarantine records; this gate would pass vacuously"
+    entries = manifest.get("excluded_by_gate")
+    assert isinstance(entries, list), "missing quarantine ledger"
+    count = manifest.get("integrity", {}).get("excluded_by_gate_count")
+    assert type(count) is int and count >= 0, "missing quarantine count"
+    assert all(isinstance(entry, dict) and entry.get("dsld_id") for entry in entries), (
+        "quarantine ledger contains invalid product IDs"
+    )
+    excluded = {str(entry["dsld_id"]) for entry in entries}
+    assert count == len(entries) == len(excluded), (
+        "quarantine count and unique ledger IDs disagree"
+    )
 
     core, _ = _core_rows([])
     leaked = sorted(excluded & set(core))
@@ -149,6 +154,45 @@ def test_unscored_catalog_products_never_publish_a_quality_score_or_tier() -> No
         and any(row.get(key) is not None for key in
             ("quality_score_v4_100", "score_100_equivalent", "quality_tier")))
     assert not bad, f"Unscored products publish a quality result: {bad[:10]}"
+
+
+@pytest.mark.parametrize(
+    "manifest,core_ids,blob_ids,error",
+    [
+        ({"excluded_by_gate": [], "integrity": {"excluded_by_gate_count": 0}}, ["live"], ["live"], None),
+        ({"excluded_by_gate": [{"dsld_id": "held"}], "integrity": {"excluded_by_gate_count": 1}}, ["live"], ["live"], None),
+        ({"excluded_by_gate": [{"dsld_id": "held"}], "integrity": {"excluded_by_gate_count": 1}}, ["held"], [], "in products_core"),
+        ({"excluded_by_gate": [{"dsld_id": "held"}], "integrity": {"excluded_by_gate_count": 1}}, [], ["held"], "detail blob"),
+        ({"excluded_by_gate": [], "integrity": {"excluded_by_gate_count": 1}}, [], [], "count and unique"),
+        ({"excluded_by_gate": [{"dsld_id": "held"}, {"dsld_id": "held"}], "integrity": {"excluded_by_gate_count": 2}}, [], [], "count and unique"),
+        ({"excluded_by_gate": []}, [], [], "missing quarantine count"),
+        ({"integrity": {"excluded_by_gate_count": 0}}, [], [], "missing quarantine ledger"),
+        ({"excluded_by_gate": [{}], "integrity": {"excluded_by_gate_count": 1}}, [], [], "invalid product IDs"),
+        ({"excluded_by_gate": [], "integrity": {"excluded_by_gate_count": False}}, [], [], "missing quarantine count"),
+    ],
+)
+def test_quarantine_boundary_accepts_zero_and_rejects_leaks(
+    tmp_path, monkeypatch, manifest, core_ids, blob_ids, error
+):
+    dist = tmp_path / "dist"
+    blobs = dist / "detail_blobs"
+    blobs.mkdir(parents=True)
+    manifest_path = dist / "export_manifest.json"
+    manifest_path.write_text(json.dumps(manifest), encoding="utf-8")
+    database = dist / "pharmaguide_core.db"
+    with sqlite3.connect(database) as con:
+        con.execute("create table products_core (dsld_id text primary key)")
+        con.executemany("insert into products_core values (?)", [(pid,) for pid in core_ids])
+    for pid in blob_ids:
+        (blobs / f"{pid}.json").write_text("{}", encoding="utf-8")
+    monkeypatch.setattr(sys.modules[__name__], "DIST", dist)
+    monkeypatch.setattr(sys.modules[__name__], "CORE_DB", database)
+    monkeypatch.setattr(sys.modules[__name__], "MANIFEST", manifest_path)
+    if error is None:
+        test_no_quarantined_product_reaches_the_catalog()
+    else:
+        with pytest.raises(AssertionError, match=error):
+            test_no_quarantined_product_reaches_the_catalog()
 
 
 def test_every_live_product_has_a_blob_and_every_blob_a_row() -> None:
