@@ -141,42 +141,94 @@ class _FakeQuery:
     def __init__(self, client, table):
         self.client = client
         self.table = table
+        self.operation = "read"
+        self.filters = {}
+        self.after = None
+        self.count = None
+        self.negated = False
 
     def upsert(self, rows, on_conflict):
         self.client.calls.append(("upsert", self.table, len(rows), on_conflict))
+        self.operation = "upsert"
+        self.rows = rows
         return self
 
     def delete(self):
+        self.operation = "delete"
         return self
 
     @property
     def not_(self):
+        self.negated = True
         return self
 
     def in_(self, column, values):
-        self.client.calls.append(("delete_not_in", self.table, column, list(values)))
+        self.column, self.values = column, list(values)
+        label = "delete_not_in" if self.negated else "delete_in"
+        self.client.calls.append((label, self.table, column, self.values))
+        return self
+
+    def eq(self, column, value):
+        self.filters[column] = value
+        return self
+
+    def gt(self, column, value):
+        assert column == "dsld_id"
+        self.after = value
         return self
 
     def select(self, _columns):
         return self
 
-    def order(self, _column, desc=False):
-        assert desc is True
+    def order(self, column, desc=False):
+        assert desc is (column == "created_at")
         return self
 
-    def limit(self, _count):
+    def limit(self, count):
+        self.count = count
         return self
 
     def execute(self):
         if self.table == "export_manifest":
-            return SimpleNamespace(data=self.client.manifest_rows)
-        return SimpleNamespace(data=[])
+            rows = self.client.manifest_rows
+        elif self.operation == "upsert":
+            upserts = sum(call[0] == "upsert" for call in self.client.calls)
+            if self.client.fail_upsert and upserts >= self.client.fail_upsert:
+                raise RuntimeError("injected upsert failure")
+            for row in self.rows:
+                self.client.rows[(row["catalog_version"], row["dsld_id"])] = dict(row)
+            return SimpleNamespace(data=[])
+        else:
+            rows = list(self.client.rows.values())
+        rows = [r for r in rows if all(r.get(k) == v for k, v in self.filters.items())]
+        if self.operation == "delete":
+            if self.client.fail_delete:
+                self.client.fail_delete = False
+                raise RuntimeError("injected delete failure")
+            for row in rows:
+                if (row[self.column] in self.values) != self.negated:
+                    del self.client.rows[(row["catalog_version"], row["dsld_id"])]
+            return SimpleNamespace(data=[])
+        if self.table == "catalog_search":
+            rows = sorted(rows, key=lambda r: r["dsld_id"])
+            if self.after is not None:
+                rows = [r for r in rows if r["dsld_id"] > self.after]
+            self.client.read_pages += 1
+        count = self.count
+        if self.table == "catalog_search" and self.client.page_cap is not None:
+            count = min(count or self.client.page_cap, self.client.page_cap)
+        return SimpleNamespace(data=rows[:count])
 
 
 class _FakeClient:
-    def __init__(self, manifest_rows):
+    def __init__(self, manifest_rows, rows=(), page_cap=None):
         self.manifest_rows = manifest_rows
         self.calls = []
+        self.rows = {(r["catalog_version"], r["dsld_id"]): dict(r) for r in rows}
+        self.page_cap = page_cap
+        self.read_pages = 0
+        self.fail_upsert = False
+        self.fail_delete = False
 
     def table(self, name):
         return _FakeQuery(self, name)
@@ -226,6 +278,49 @@ def test_keep_versions_when_release_is_already_current_and_rows_repeat():
 
 def test_first_release_keeps_only_itself():
     assert sync.catalog_search_keep_versions(_FakeClient([]), "2026.10.12") == ["2026.10.12"]
+
+
+def test_republish_reconciles_removed_ids_across_capped_pages_and_retries(tmp_path):
+    db_path = tmp_path / "core.db"
+    _write_db(db_path, 2)
+    client = _FakeClient(
+        [{"db_version": "v1", "is_current": True}],
+        rows=[{"catalog_version": version, "dsld_id": str(100000 + i)}
+              for version in ("v1", "v0") for i in range(1203)],
+        page_cap=137,
+    )
+    client.manifest_rows.append({"db_version": "v0", "is_current": False})
+    client.fail_delete = True
+    sync.publish_catalog_search(client, db_path=str(db_path), catalog_version="v1",
+                                sleep_fn=lambda _s: None)
+    assert {key[1] for key in client.rows if key[0] == "v1"} == {"100000", "100001"}
+    assert len([key for key in client.rows if key[0] == "v0"]) == 1203
+    assert client.read_pages > 2
+    deletes = [call for call in client.calls if call[0] == "delete_in"]
+    assert deletes and all(len(call[3]) <= 500 for call in deletes)
+    before = dict(client.rows)
+    sync.publish_catalog_search(client, db_path=str(db_path), catalog_version="v1")
+    assert client.rows == before
+
+
+def test_failed_upsert_does_not_delete_existing_catalog_rows(tmp_path):
+    db_path = tmp_path / "core.db"
+    _write_db(db_path, 2)
+    client = _FakeClient([], rows=[{"catalog_version": "v1", "dsld_id": "removed"}])
+    client.fail_upsert = 2
+    with pytest.raises(RuntimeError, match="upsert failure"):
+        sync.publish_catalog_search(client, db_path=str(db_path), catalog_version="v1",
+                                    batch_size=1, retries=0)
+    assert ("v1", "100000") in client.rows  # First batch succeeded.
+    assert ("v1", "removed") in client.rows
+    assert not any(call[0].startswith("delete") for call in client.calls)
+
+
+def test_pruning_keeps_current_even_outside_recent_manifest_window():
+    manifests = [{"db_version": f"recent{i}", "is_current": False} for i in range(12)]
+    manifests.append({"db_version": "live", "is_current": True})
+    client = _FakeClient(manifests)
+    assert sync.catalog_search_keep_versions(client, "candidate") == ["candidate", "live"]
 
 
 def _catalog_search_sql():

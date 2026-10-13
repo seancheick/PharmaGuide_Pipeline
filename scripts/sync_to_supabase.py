@@ -39,6 +39,9 @@ import env_loader  # noqa: F401
 from supabase_client import CACHE_CONTROL_IMMUTABLE, STORAGE_BUCKET, core_db_remote_path
 from audit_source_of_truth_contract import check_v4_pillar_contract
 
+# Same-version corrections are supported, so version-stamped DB/index paths
+# can change. Only SHA-addressed detail blobs receive the immutable TTL.
+CATALOG_MUTABLE_CACHE_SECONDS = 60
 DETAIL_BLOB_STORAGE_PREFIX = "shared/details/sha256"
 SHARE_INDEX_DIRNAME = "share_index"
 #: v3 adds the "assessment_incomplete" catalogDisposition. A v2 reader that
@@ -115,7 +118,7 @@ def write_share_index(*, db_path, output_dir, catalog_version):
     """Write the server-owned public-share projection for one catalog release.
 
     The checksum-verified SQLite catalog remains the source of truth. The
-    website reads this compact, immutable projection instead of accepting a
+    website reads this compact catalog projection instead of accepting a
     product name, score, safety disposition, or trust claim from the app.
     """
     columns = [
@@ -1054,7 +1057,7 @@ def upload_product_images(
 
 CATALOG_SEARCH_TABLE = "catalog_search"
 CATALOG_SEARCH_BATCH_SIZE = 500
-#: The release being published plus the newest other manifest version.
+#: Retain this many versions, always including the release and current manifest.
 CATALOG_SEARCH_KEEP_VERSIONS = 2
 #: products_core columns copied into catalog_search (scripts/sql/supabase_schema.sql
 #: section 9). Values pass through unchanged except: blank text -> NULL, and
@@ -1136,7 +1139,19 @@ def catalog_search_rows(db_path, catalog_version):
 
 
 def catalog_search_keep_versions(client, catalog_version, keep=CATALOG_SEARCH_KEEP_VERSIONS):
-    """The release being published plus the newest other manifest versions."""
+    """Keep the published and current versions before filling recent-history slots."""
+    current = (
+        client.table("export_manifest")
+        .select("db_version")
+        .eq("is_current", True)
+        .limit(1)
+        .execute()
+    )
+    kept = [catalog_version]
+    for record in current.data or []:
+        version = (record or {}).get("db_version")
+        if version and version not in kept:
+            kept.append(version)
     response = (
         client.table("export_manifest")
         .select("db_version")
@@ -1144,7 +1159,6 @@ def catalog_search_keep_versions(client, catalog_version, keep=CATALOG_SEARCH_KE
         .limit(10)
         .execute()
     )
-    kept = [catalog_version]
     for record in response.data or []:
         if len(kept) >= keep:
             break
@@ -1167,9 +1181,10 @@ def publish_catalog_search(
 ):
     """Upsert this release's catalog_search rows, then prune older versions.
 
-    Runs before the manifest rotation, so readers of catalog_search_current
-    (joined on export_manifest.is_current) switch versions together with the
-    manifest. Upserts are idempotent; a failed run is safe to repeat.
+    New versions become visible with the manifest rotation. A same-version
+    correction updates the current view batch by batch; it is not atomic.
+    Reconcile removed IDs only after every upsert succeeds. Retrying either
+    phase is idempotent, including an interrupted deletion batch.
     """
     rows = catalog_search_rows(db_path, catalog_version)
     if not rows:
@@ -1179,6 +1194,39 @@ def publish_catalog_search(
         upload_with_retries(
             lambda batch=batch: client.table(CATALOG_SEARCH_TABLE)
             .upsert(batch, on_conflict="catalog_version,dsld_id")
+            .execute(),
+            retries,
+            base_delay,
+            sleep_fn,
+        )
+    # Read every existing ID before deleting: offset pagination during deletion
+    # can skip rows, and the server may cap a page below the requested limit.
+    desired_ids = {row["dsld_id"] for row in rows}
+    stale_ids = []
+    last_id = None
+    while True:
+        query = (
+            client.table(CATALOG_SEARCH_TABLE)
+            .select("dsld_id")
+            .eq("catalog_version", catalog_version)
+            .order("dsld_id")
+            .limit(CATALOG_SEARCH_BATCH_SIZE)
+        )
+        if last_id is not None:
+            query = query.gt("dsld_id", last_id)
+        response = upload_with_retries(query.execute, retries, base_delay, sleep_fn)
+        existing = response.data or []
+        if not existing:
+            break
+        stale_ids.extend(row["dsld_id"] for row in existing if row["dsld_id"] not in desired_ids)
+        last_id = existing[-1]["dsld_id"]
+    for start in range(0, len(stale_ids), CATALOG_SEARCH_BATCH_SIZE):
+        obsolete = stale_ids[start:start + CATALOG_SEARCH_BATCH_SIZE]
+        upload_with_retries(
+            lambda obsolete=obsolete: client.table(CATALOG_SEARCH_TABLE)
+            .delete()
+            .eq("catalog_version", catalog_version)
+            .in_("dsld_id", obsolete)
             .execute(),
             retries,
             base_delay,
@@ -1321,7 +1369,7 @@ def sync(
                 f"v{version}/{SHARE_INDEX_DIRNAME}/{shard}.json",
                 os.path.join(build_stats["share_index_dir"], f"{shard}.json"),
                 content_type="application/json",
-                cache_control=CACHE_CONTROL_IMMUTABLE,
+                cache_control=CATALOG_MUTABLE_CACHE_SECONDS,
             )
         _publish_catalog_search_step(
             client,
@@ -1379,7 +1427,7 @@ def sync(
     print(f"\nUploading {remote_db_path}...")
     start = time.time()
     upload_file(client, bucket, remote_db_path, db_path,
-                cache_control=CACHE_CONTROL_IMMUTABLE)
+                cache_control=CATALOG_MUTABLE_CACHE_SECONDS)
     db_time = time.time() - start
     db_size_mb = build_stats["db_size_mb"]
     print(f"  Done ({db_size_mb:.1f} MB in {db_time:.1f}s)")
@@ -1389,7 +1437,7 @@ def sync(
     print(f"\nUploading {remote_detail_index_path}...")
     start = time.time()
     upload_file(client, bucket, remote_detail_index_path, detail_index_path,
-                content_type="application/json", cache_control=CACHE_CONTROL_IMMUTABLE)
+                content_type="application/json", cache_control=CATALOG_MUTABLE_CACHE_SECONDS)
     detail_index_time = time.time() - start
     print(f"  Done ({detail_index_time:.1f}s)")
 
@@ -1402,7 +1450,7 @@ def sync(
             f"v{version}/{SHARE_INDEX_DIRNAME}/{shard}.json",
             os.path.join(build_stats["share_index_dir"], f"{shard}.json"),
             content_type="application/json",
-            cache_control=CACHE_CONTROL_IMMUTABLE,
+            cache_control=CATALOG_MUTABLE_CACHE_SECONDS,
         )
     share_index_time = time.time() - start
     print(f"  Done ({share_index_time:.1f}s)")

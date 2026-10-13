@@ -58,10 +58,25 @@ python scripts/sync_to_supabase.py <output_dir> --dry-run
 Before the manifest rotates (and on an already-current re-run), the sync reads the
 release's `pharmaguide_core.db` with stdlib `sqlite3` and upserts one slim row per
 product into `catalog_search` in batches of 500 (`on_conflict=catalog_version,dsld_id`),
-then deletes every version except this release and the newest other manifest version.
+then reads existing IDs with pagination and deletes products absent from this release
+in bounded batches. Deletion starts only after every upsert succeeds; retries reconcile
+an interrupted run. It retains this release and the actual current manifest version,
+filling the two-version retention target with recent history when those are the same.
 Readers use the `catalog_search_current` view (joined on `export_manifest.is_current`)
-or the `search_catalog()` RPC, so a release becomes searchable exactly when the manifest
-flips. Only the service role can read it; the app repo's public MCP edge function
+or the `search_catalog()` RPC. A **new version** becomes searchable when the manifest
+flips. A same-version correction changes the current rows batch by batch, so readers
+can temporarily see mixed old/new data. The public MCP reloads its index on the next
+lookup once the local cache reaches 60 seconds; facts follow the refreshed index hash
+and current catalog row. Mutable version-stamped DB, detail-index and share-index uploads
+use a 60-second cache-control max-age, while SHA-addressed detail blobs retain their
+one-year immutable policy. These are separate cache layers, not a 60-second end-to-end
+freshness guarantee: CDN propagation can add delay, and historical long-lived cached
+responses are not retroactively expired by changing the upload policy. Supabase's
+[Smart CDN documentation](https://supabase.com/docs/guides/storage/cdn/smart-cdn)
+states that update invalidation may take up to 60 seconds. Use a new release version
+when an atomic catalog switch and fresh version-keyed caches are required. Keep one
+publisher active: concurrent same-version writers are not transactionally isolated.
+Only the service role can read the table; the app repo's public MCP edge function
 (`supabase/functions/mcp-public`) is the consumer. Columns: `CATALOG_SEARCH_COLUMNS` in
 `sync_to_supabase.py`; `upc_sku` is stored normalized like the app's barcode lookup.
 `--dry-run` prints the row count without touching Supabase. **Apply section 9 of
@@ -72,7 +87,7 @@ step**: a missing table fails the step, and the manifest then does not rotate.
 
 The script compares the local `export_manifest.json` to the current Supabase manifest:
 - If versions differ or no remote manifest exists: uploads everything
-- If versions and checksums match: skips (already synced)
+- If versions and checksums match: refreshes share-index shards and search rows without rotating the manifest
 
 ## Client-side safety expectations
 
@@ -123,7 +138,7 @@ Run `build_final_db.py` before `sync_to_supabase.py`.
 ### Partial upload (some blobs failed)
 Re-run `sync_to_supabase.py`. It uses upsert mode -- re-uploading is safe and idempotent. Failed blobs will be retried.
 
-### Crash during sync (DB uploaded, blobs partially done, manifest not rotated)
+### Crash during a new-version sync (DB uploaded, blobs partially done, manifest not rotated)
 This is safe. Supabase Storage has the new DB file but the manifest still points to the old version — the app won't see it. Re-run `sync_to_supabase.py` and it will re-upload the DB (upsert), retry all blobs, and then call `rotate_manifest`. No data is lost or corrupted.
 
 ### Version conflict

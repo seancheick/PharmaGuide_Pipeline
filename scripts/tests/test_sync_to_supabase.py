@@ -232,9 +232,11 @@ def test_sync_skips_bucket_capacity_check_when_catalog_is_already_current(
     local = sync_to_supabase.load_local_manifest(str(tmp_path))
     client = object()
     uploaded_paths = []
+    uploaded_cache_controls = []
 
     def capture_upload(_client, _bucket, remote_path, *_args, **_kwargs):
         uploaded_paths.append(remote_path)
+        uploaded_cache_controls.append(_kwargs["cache_control"])
 
     monkeypatch.setattr(supabase_client, "get_supabase_client", lambda: client)
     monkeypatch.setattr(
@@ -286,6 +288,47 @@ def test_sync_skips_bucket_capacity_check_when_catalog_is_already_current(
         f"v{local['db_version']}/share_index/{shard}.json"
         for shard in (f"{value:02x}" for value in range(256))
     ]
+    assert all(0 <= int(ttl) <= 60 for ttl in uploaded_cache_controls)
+
+
+@pytest.mark.parametrize("already_published", [False, True])
+def test_sync_bounds_mutable_release_cache_but_keeps_hashed_blobs_immutable(
+    tmp_path, monkeypatch, already_published,
+):
+    """New and same-version uploads must both permit later corrections."""
+    import supabase_client
+    import sync_to_supabase as sync
+
+    _make_build_output(str(tmp_path), product_count=2)
+    local = sync.load_local_manifest(str(tmp_path))
+    client = object()
+    uploads = {}
+    manifests = []
+    monkeypatch.setattr(supabase_client, "get_supabase_client", lambda: client)
+    monkeypatch.setattr(supabase_client, "fetch_current_manifest", lambda _client: (
+        {"db_version": local["db_version"], "checksum": "previous"} if already_published else None
+    ))
+    monkeypatch.setattr(supabase_client, "upload_file", lambda _c, _b, path, _file, **kw: uploads.update({path: kw}))
+    monkeypatch.setattr(supabase_client, "insert_manifest", lambda _c, manifest: manifests.append(manifest))
+    monkeypatch.setattr(sync, "validate_bucket_upload_capacity", lambda *_a, **_kw: None)
+    monkeypatch.setattr(sync, "discover_existing_remote_blob_paths", lambda *_a, **_kw: set())
+    monkeypatch.setattr(sync, "_publish_catalog_search_step", lambda *_a, **_kw: None)
+    monkeypatch.setattr(sync, "_ensure_registry_validating", lambda *_a, **_kw: None)
+    monkeypatch.setattr(sync, "_promote_registry_release", lambda *_a, **_kw: None)
+
+    result = sync.sync(str(tmp_path), max_workers=1)
+    assert result["status"] == "synced"
+    assert manifests == [local]
+    prefix = f"v{local['db_version']}/"
+    mutable = {path: opts for path, opts in uploads.items() if path.startswith(prefix)}
+    assert set(mutable) == {
+        prefix + "pharmaguide_core.db", prefix + "detail_index.json",
+        *(prefix + f"share_index/{shard}.json" for shard in sync.SHARE_INDEX_SHARDS),
+    }
+    assert all(0 <= int(opts["cache_control"]) <= 60 for opts in mutable.values())
+    hashed = {path: opts for path, opts in uploads.items() if path.startswith("shared/details/sha256/")}
+    assert len(hashed) == 2
+    assert all(opts["cache_control"] == supabase_client.CACHE_CONTROL_IMMUTABLE for opts in hashed.values())
 
 
 def test_detail_index_blob_paths_extracts_storage_paths():
