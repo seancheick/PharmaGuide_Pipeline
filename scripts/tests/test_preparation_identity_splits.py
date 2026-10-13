@@ -717,6 +717,25 @@ def test_shared_carotenoid_brand_keeps_disclosed_component_identity_and_amount(p
     assert all(not r["unmapped_forms"] for r in quality)
 
 
+def test_printed_xos_preparation_beats_contradictory_carbohydrate_taxonomy(pipeline):
+    # NIH DSLD302463 names PreticX and its XOS form, but groups it as
+    # maltodextrin. The exact authored identity owns the printed dose.
+    row = _raw_row(1, "PreticX", "Maltodextrin", category="complex carbohydrate",
+                   quantity=1.4, unit="Gram(s)")
+    row["forms"] = [{"order": 1, "name": "Xylo-oligosaccharides",
+                     "ingredientGroup": "Xylooligosaccharides",
+                     "category": "complex carbohydrate", "prefix": None,
+                     "percent": None, "uniiCode": "0"}]
+    enriched = pipeline(_raw_product(302463, [row]))
+    quality = next(r for r in enriched["ingredient_quality_data"]["ingredients"]
+                   if r["name"] == "PreticX")
+    assert quality["canonical_id"] == "prebiotics"
+    assert quality["matched_form"] == "xylooligosaccharides (XOS)"
+    assert quality["identity_disposition"] != "identity_conflict"
+    assert quality["quantity"] == 1.4
+    assert quality["raw_source_text"] == "PreticX"
+
+
 @pytest.mark.parametrize("case", ["partial", "multiple", "nested", "unreviewed_source", "marker_note"])
 def test_source_component_routing_requires_one_complete_reviewed_declaration(case):
     from enhanced_normalizer import EnhancedDSLDNormalizer
