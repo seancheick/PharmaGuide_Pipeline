@@ -944,7 +944,7 @@ def resolve_identity(
         and declared_forms[0].get("amount") is None
         and str(declared_forms[0].get("prefix") or "").strip().casefold() in {"", "as"}
         and str(declared_forms[0].get("category") or "").casefold()
-            == "non-nutrient/non-botanical"
+            in {"non-nutrient/non-botanical", "complex carbohydrate"}
         and canonical_registry.literal_identity_matches(
             str(declared_forms[0].get("ingredientGroup") or ""), canonical_before
         )

@@ -1,3 +1,9 @@
+## 2026-10-12 — printed XOS identity beats contradictory carbohydrate taxonomy
+
+Owner: `identity_integrity::resolve_identity` existing complete-material-form guard. Evidence: full semantic cause review found NIH302463 PreticX / Xylo-oligosaccharides with contradictory Maltodextrin group; failfirst actual clean-to-enrich regression reproduced NHA_MALTODEXTRIN. Cleaner already owns exact PreticX/prebiotics; repair omitted DSLD complex-carbohydrate form category. Will NOT create: registry, alias, normalizer, score, clinical policy or second priority owner.
+
+Fix includes complex carbohydrate in the existing declared-material guard. Exact curated literal/form identity, one complete declaration, absence of partial/mixed amounts and known conflicting-form guards remain. 330 owner/consumer tests pass, including new real-shape XOS1.4g regression and existing negative families across both categories. Independent review, qualified raw replay, exact whole-fastCI and local checkpoint pending. Final release repeat was interrupted after85 passes when independent review found this actual blocker; it is not a release pass. No publication occurred. Inspect fingerprints after integration and regenerate once from earliest affected stage; previously qualified catalog is withheld.
+
 ## 2026-10-12 — zero-quarantine release-test correction
 
 Owner: `test_catalog_stamp_parity_release::test_no_quarantined_product_reaches_the_catalog`, using the existing `build_final_db` quarantine count/list contract. Evidence: real strict candidate failfirst; manifest explicitly records zero exclusions. Will NOT create: quarantine policy, export exception, registry or second assessment owner. Class: tests only; production decisions unchanged.
