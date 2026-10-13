@@ -418,9 +418,10 @@ def test_manufacturer_facility_gmp_export_carries_registry_provenance_and_fails_
 
 
 @pytest.mark.parametrize("penalized", [True, False])
-def test_confirmed_dose_concern_is_not_a_strength_even_at_full_credit(penalized):
+@pytest.mark.parametrize("dose", [12, 25])
+def test_confirmed_dose_concern_is_not_a_strength_even_at_full_credit(penalized, dose):
     from build_final_db import _build_v4_score_explanation
-    bd = _module_bd(dose=12)
+    bd = _module_bd(dose=dose)
     bd["dimensions"]["dose"]["metadata"] = {
         "B7_safety_evaluation": {
             "state_counts": {"confirmed_over_threshold": 1},
@@ -429,9 +430,9 @@ def test_confirmed_dose_concern_is_not_a_strength_even_at_full_credit(penalized)
     }
     pillars = _assemble(_shadow(module="generic", bd=bd))["quality_pillars_v4"]
     assert "exceed" in pillars["dose"]["reason"]
-    assert "safety_hygiene" not in {
+    assert not {"dose", "safety_hygiene"}.intersection({
         item["pillar"] for item in _build_v4_score_explanation(pillars)["strengths"]
-    }
+    })
 
 
 def test_parent_total_disclosure_check_does_not_claim_amounts_are_hidden():

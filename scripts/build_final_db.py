@@ -5928,6 +5928,12 @@ def _build_v4_score_explanation(pillars: Any) -> Optional[Dict[str, Any]]:
     strength. Returns None for a non-scored product (no pillars)."""
     if not isinstance(pillars, dict) or not pillars:
         return None
+    safety = pillars.get("safety_hygiene")
+    safety_components = safety.get("components") if isinstance(safety, dict) else None
+    dose_concern = dose_safety_consumer_explanation(
+        safety_components.get("dose_safety_state_counts")
+        if isinstance(safety_components, dict) else None
+    )
     ranked = []
     for name, p in pillars.items():
         if not isinstance(p, dict):
@@ -5936,10 +5942,8 @@ def _build_v4_score_explanation(pillars: Any) -> Optional[Dict[str, Any]]:
             delta = float(p.get("score")) - float(p.get("max"))
         except (TypeError, ValueError):
             continue
-        dose_concern = dose_safety_consumer_explanation(
-            (p.get("components") or {}).get("dose_safety_state_counts")
-        )
-        ranked.append((delta, name, p.get("reason"), bool(dose_concern)))
+        concern = bool(dose_concern) and name in {"dose", "safety_hygiene"}
+        ranked.append((delta, name, p.get("reason"), concern))
     if not ranked:
         return None
     ranked.sort(key=lambda r: r[0])  # ascending: biggest drags first
