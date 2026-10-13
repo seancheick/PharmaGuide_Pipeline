@@ -141,9 +141,9 @@ def _omega_formulation_reason(dim: Dict[str, Any], fallback: str) -> str:
 
 def _reason_dose(band: str) -> str:
     return {
-        "high": "Doses land in the clinically studied range.",
-        "mid": "Doses are reasonable but not fully in the studied range.",
-        "low": "Doses fall short of the amounts shown to work.",
+        "high": "Doses receive high credit against the applicable PharmaGuide dose benchmarks.",
+        "mid": "Doses receive partial credit against the applicable PharmaGuide dose benchmarks.",
+        "low": "Doses receive limited credit against the applicable PharmaGuide dose benchmarks.",
     }[band]
 
 

@@ -147,6 +147,7 @@ class NutrientAdequacyResult:
     # canonical highest_ul field surfaced wherever the per-nutrient record
     # appears.
     highest_ul: Optional[float] = None
+    reference: Optional[Dict] = None
 
     def to_dict(self) -> Dict:
         return {
@@ -171,6 +172,7 @@ class NutrientAdequacyResult:
             "age_group": self.age_group,
             "sex_group": self.sex_group,
             "highest_ul": self.highest_ul,
+            "reference": self.reference,
         }
 
 
@@ -500,6 +502,8 @@ class RDAULCalculator:
         elif _highest_ul_raw is not None and not isinstance(_highest_ul_raw, (int, float)):
             _highest_ul_raw = None
 
+        reference_url = (self.rda_db.get("consumer_ul_warnings", {}).get(nutrient_data.get("id"), {}) or {}).get("source_url")
+        authoritative_ul = isinstance(reference_url, str) and reference_url.startswith("https://ods.od.nih.gov/factsheets/") and ul_status == "established"
         return NutrientAdequacyResult(
             nutrient=nutrient,
             amount=amount,
@@ -522,6 +526,14 @@ class RDAULCalculator:
             age_group=norm_age,
             sex_group=norm_sex,
             highest_ul=_highest_ul_raw,
+            reference={
+                "source_owner": "rda_ul_data",
+                "source_url": reference_url,
+                "basis_type": "authoritative_safety_reference" if authoritative_ul else "catalog_reference",
+                "evidence_grade_applicable": False if authoritative_ul else None,
+                "ul_basis": nutrient_data.get("ul_basis"),
+                "ul_note": nutrient_data.get("ul_note"),
+            },
         )
 
     def _lookup_key(self, key: str) -> Optional[Dict]:

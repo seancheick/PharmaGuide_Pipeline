@@ -121,3 +121,10 @@ def test_scoring_reference_maps_agree_with_the_lookup(calculator) -> None:
 def test_alcar_does_not_borrow_the_nonacetylated_carnitine_reference(calculator, form):
     assert calculator._find_nutrient('L-Carnitine', form_name=form) is None
     assert calculator._find_nutrient('L-Carnitine', form_name='l-carnitine (free base)')['id'] == 'l_carnitine'
+
+
+def test_magnesium_preserves_reference_scope_and_source(calculator):
+    result = calculator.compute_nutrient_adequacy("Magnesium", 405, "mg").to_dict()
+    assert result["reference"]["ul_basis"] == "supplemental_only"
+    assert result["reference"]["source_url"] == "https://ods.od.nih.gov/factsheets/Magnesium-HealthProfessional/"
+    assert result["reference"]["ul_note"] == "UL applies to supplemental magnesium only, not food sources"

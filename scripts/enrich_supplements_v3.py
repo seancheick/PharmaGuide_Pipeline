@@ -23137,6 +23137,7 @@ class SupplementEnricherV3:
                                     float(ul_amount or 0.0), float(safety_ul or 0.0), str(ul_unit or "")
                                 ),
                                 "severity": ul_display_severity(pct_ul_val),
+                                "reference": adequacy_dict.get("reference"),
                                 **ul_exposure,
                             }
                         ))
@@ -23450,6 +23451,7 @@ class SupplementEnricherV3:
                                 )
                             ),
                             "severity": ul_display_severity(pct_ul_val),
+                            "reference": agg_adequacy.to_dict().get("reference"),
                             "aggregation": "canonical_sum",
                             "canonical_id": cid,
                             "contributing_rows": group["rows"],
