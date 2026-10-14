@@ -8110,7 +8110,7 @@
           "by": "Product owner approval",
           "date": "2026-08-08"
         },
-        "notes": "Schuette1994 (PMID:7815675) compared100mg isotope-labeled magnesium diglycinate with oxide in12ileal-resection patients. Overall absorption did not differ (23.5% versus22.8%); a four-patient subgroup with poor oxide absorption benefited and diglycinate was better tolerated. This does not establish superiority or inferiority versus citrate in healthy adults. Walker2003 (PMID:14596323) tested an amino-acid chelate; its abstract does not identify that preparation as exact glycinate. The existing bio_score12 is retained pending clinical calibration review; tolerability and absorption are distinct outcomes.",
+        "notes": "Schuette 1994 (PMID:7815675) compared 100 mg isotope-labeled magnesium diglycinate with oxide in 12 ileal-resection patients. Overall absorption did not differ (23.5% versus 22.8%); a four-patient subgroup with poor oxide absorption benefited and diglycinate was better tolerated. This does not establish superiority or inferiority versus citrate in healthy adults. Walker 2003 (PMID:14596323) tested an amino-acid chelate; its abstract does not identify that preparation as exact glycinate. The existing bio_score 12 is retained pending clinical calibration review; tolerability and absorption are distinct outcomes.",
         "aliases": [
           "magnesium bisglycinate",
           "mag glycinate",
@@ -8296,7 +8296,7 @@
           "by": "Product owner approval",
           "date": "2026-08-08"
         },
-        "notes": "Walker2003 (PMID:14596323) compared citrate, an amino-acid chelate, oxide and placebo in46healthy participants at300mg/day for60days. Citrate had favorable serum/saliva results and organic preparations outperformed oxide on urinary measures. This does not establish a universal exact glycinate-versus-citrate ranking. Firoz2001 (PMID:11794633) did not test citrate; it compared oxide with chloride, lactate and aspartate. Existing bio_score14 retained pending clinical calibration review.",
+        "notes": "Walker 2003 (PMID:14596323) compared citrate, an amino-acid chelate, oxide and placebo in 46 healthy participants at 300 mg/day for 60 days. Citrate had favorable serum/saliva results and organic preparations outperformed oxide on urinary measures. This does not establish a universal exact glycinate-versus-citrate ranking. Firoz 2001 (PMID:11794633) did not test citrate; it compared oxide with chloride, lactate and aspartate. Existing bio_score 14 retained pending clinical calibration review.",
         "aliases": [
           "mag citrate",
           "trimagnesium citrate",
