@@ -14,8 +14,8 @@ Step 1 of the V4.1 accounting and ownership consolidation. Sean approved the pla
 
 **What holds.**
 - For every one of the 15,123 scored products, the public total equals the sum of the six pillars (`quality_score.py:1233`).
-- Every pillar except Formulation equals `clip(round(raw ÷ reference × weight, 1))`.
-- Formulation differs only in the 204 products that receive the unrated-form neutral.
+- Every Dose, Evidence and Transparency pillar equals `clip(round(raw ÷ reference × weight, 1))`. Formulation follows the same rule except for the 204 products that receive the unrated-form neutral.
+- Verification is tier-assembled and Safety is a base minus deductions (§3.5–§3.6).
 - `raw_score_v4_100` is internal only (`FINAL_EXPORT_SCHEMA_V1.md:12`).
 
 **What does not hold.**
@@ -23,12 +23,12 @@ Step 1 of the V4.1 accounting and ownership consolidation. Sean approved the pla
 | # | Finding | Products | Owner |
 |---|---|---:|---|
 | F1 | Additive/sugar charged in Formulation (B1) **and** again in Safety (`formula_quality_checks` mirror, cap 4). `safety_hygiene.py:87-90` itself says that zeroing hygiene for these would double-penalise. | 3,509 | `quality_score.py:545-560` |
-| F2 | UL ≥150%: window credit zeroed, **and** B7 −2/flag, **and** the Safety mirror (cap 3) | 403 | `generic_dose.py:191-195`, `dose_safety.py`, `quality_score.py:563-573` |
+| F2 | UL ≥150%: window credit zeroed, **and** B7 −2/flag, **and** the Safety mirror (cap 3). B-complex also loses `moderate_dose_fit` 3, a fourth charge. | 403 | `generic_dose.py:191-195`, `dose_safety.py`, `quality_score.py:563-573` |
 | F3 | UL 100–150%: Safety pillar stays 10/10 (shown as "Strong") with a "Safety concern" reason and `caution` status | 339 | `quality_score.py:610-672` |
 | F4 | Confirmed high-risk/watchlist: Formulation B0 −10/−5 **and** Safety base zeroed (−10). The two owners also use different match rules (B0 counts confirmed matches only; the base also counts likely and review matches). | 348 | `generic_formulation.py:278-290`, `safety_hygiene.py:80-147` |
 | F5 | Printed amount or identity earns points in Formulation, Dose and Transparency. Meru's single "500 mg" earns about 15.3 points: Dose 6.6 (live probe), Formulation 2.7, Transparency 6.0. | thousands (§3) | botanical/collagen/probiotic/sports/fiber/multi/b_complex modules |
-| F6 | Fact-independent baselines (unknown Verification 6, unconditional Transparency base 9, clean Safety screen 10, unrated and route bases) make up 28.6% of the median total (p90 44.6%). They carry no label. | all | §3 |
-| F7 | Unknown dose adequacy is treated inconsistently: botanical 11.4, generic 14.5, collagen 9.5 public. A botanical verified below or above its studied range scores the same as one with no reference (12 = 12 = 12 raw). | 1,718 botanical no-reference products | `botanical_profile.py:796-892`, `generic_dose.py:400-445` |
+| F6 | Fact-independent baselines (unknown Verification 6, unconditional Transparency base 9, clean Safety screen 10, unrated and route bases) make up 28.6% of the median total (p90 44.6%). They carry no label. The Verification 6 is also the starting point of every tier below product level (claim 6 + signals ≤ 8; manufacturing ≤ 10). | all | §3 |
+| F7 | Unknown dose adequacy is treated inconsistently: botanical 11.4, generic 14.5, collagen 9.5 public. A botanical verified below or above its studied range scores the same as one with no reference (12 = 12 = 12 raw). A collagen verified below range equals no reference (10 = 10), and a verified collagen overdose (12) outranks both. | 1,718 botanical no-reference products | `botanical_profile.py:796-892`, `generic_dose.py:400-445` |
 | F8 | Evidence zero copy: the fact "0 in PharmaGuide's current evidence data" is attached to applicability and not-yet-reviewed states, and the authority copy appears at 0 points. | 3,210 / 40 | `pillar_explanations.py:105-120`, `quality_score.py:939-942` |
 | F9 | Positive Evidence points are withheld from display (the pillar shows no number) yet still count in the total | 104 | app `pg_score_breakdown_card.dart:508` |
 | F10 | Explanation text claims things that were not measured. **Dose:** "applicable PharmaGuide dose benchmarks" with no benchmark. **Formulation:** "well-absorbed forms" on profile routes. **Transparency:** "hidden in a proprietary blend" with no blend. | 1,712 / 1,572 / 4 | `quality_score.py:86-247` |
@@ -38,6 +38,8 @@ Step 1 of the V4.1 accounting and ownership consolidation. Sean approved the pla
 | F14 | 155 `partial` products ship a total that counts 0 for Evidence still under review. The app already labels them "Assessment incomplete". | 155 | app `catalog_product_semantics.dart:137-155` |
 | F15 | Probiotic Evidence certainty earns up to 10 points while applicability is 0; generic routes give the same state 0 | 103 | `probiotic_evidence.py:115-118` |
 | F16 | Many magnitudes are literals, not config; two dead registry keys; stale raw metadata says `production_score: rubric_raw_score_100` | — | §3 (LIT, DEAD); `generic.py:441-444` |
+| F17 | A proprietary blend is charged twice in Transparency: B5, plus withholding of the complete-disclosure bonus (4 raw = 6 public) whenever B5 or B6 is non-zero. On sports protein, an opaque blend also costs source quality (3), focus (1) and the named-source point. | 2,251 B5 products | `generic_transparency.py:114-118`; `sports_formulation.py` |
+| F18 | A raw Dose of `None` ("fail-open") is read by the public pillar as 0/20 (`quality_score.py:967`). Dormant: 0 stored scored products. | 0 | `generic_dose.py:718-723` |
 
 **Already single-owner (correct).**
 - Manufacturer violations: Class I → Safety, otherwise → Verification.
@@ -86,11 +88,12 @@ In the tables below:
 | `formulation.A4_absorption_enhancer` | generic, sports, fiber | Enhancer paired with enhanced nutrient | earned | 0 | 3 `a4_absorption_cap` | 530 | — |
 | `formulation.A5b_standardized_botanical` | generic, sports, fiber (0 under profiles) | `standardized_botanicals` meets threshold / marker only | earned | 0 | 1 / 0.5 `a5b_*` | 126 | — |
 | `botanical_formulation.recognized_botanical_identity` | botanical profile | Primary botanical identity recognized | neutral (identity, not quality) | Not recognized → −4 row | 6 literal | 3,970 | BASE, LIT |
-| `botanical_formulation.weak_or_unidentified_botanical` | botanical profile | Identity not recognized | deduction (clamped at 0; unregistered) | — | −4 literal | 83 | LIT |
+| `botanical_formulation.weak_or_unidentified_botanical` | botanical profile | Identity not recognized. The sum clamps at 0, so −4 never subtracts anything; the real effect is the missing +6 identity point. | deduction, effective 0 (unregistered) | — | −4 literal | 83 | LIT |
 | `botanical_formulation.plant_part_disclosed` | botanical profile | `row.plantPart` present | disclosure | 0 | 2 literal | 2,233 | DUP-A, LIT |
 | `botanical_formulation.quantified_dose_present` | botanical profile | `_mass_mg(row)` parsed | disclosure | 0 | 2 literal | 3,967 | DUP-A, LIT |
 | `botanical_formulation.extract_not_whole_herb` | botanical profile | Extract token present and no "powder" | earned (wording) | 0 | 2 literal | 2,786 | LIT |
 | `botanical_formulation.marker_standardization_declared` | botanical profile | Branded or meets threshold → 4; ≥75% → 3; ≥50% → 2; marker named with no amount → 1 | earned (tier 1 = disclosure) | 0 | `formulation_variant_magnitudes.botanical.standardization_tier_*` | 645 | DUP-W |
+| `botanical_formulation.formulation_cap` | botanical profile | Profile sum capped (raw can reach 19) | cap | — | 15 `formulation_variant_magnitudes.botanical.botanical_formulation_cap` | not counted | FLOOR |
 | `botanical_formulation.branded_clinically_studied_extract` | botanical profile | `_branded_studied_row` (also sets standardization to 4) | earned (evidence-derived) | 0 | 3 literal | 119 | DUP-W, LIT |
 | `collagen_formulation.recognized_collagen_identity` | collagen profile | Collagen identity | neutral | — | 6 literal | 139 | BASE, LIT |
 | `collagen_formulation.hydrolyzed_peptides` | collagen | Hydrolyzed / peptide wording | earned | 0 | 2 literal | 95 | LIT |
@@ -98,32 +101,33 @@ In the tables below:
 | `collagen_formulation.source_disclosed` | collagen | Source stated | disclosure | 0 | 3 literal | 68 | DUP-A, LIT |
 | `collagen_formulation.quantified_dose_present` | collagen | Mass parsed | disclosure | 0 | 2 literal | 139 | DUP-A, LIT |
 | `collagen_formulation.branded_clinically_studied` | collagen | Branded studied collagen | earned | 0 | 3 literal | 29 | LIT |
-| `pillar.formulation.presence_floor` | generic, multi, sports, fiber | Mapped active, positive > 0, net < 2 | floor | — | 2 `formulation_magnitudes.presence_floor` / multi `formulation_presence_floor` | 582 | FLOOR (absorbs B0/B1) |
-| `pillar.formulation.unrated_neutral` | generic_iqm with 0 rated forms | `iqm_form_quality_assessed_count == 0` | neutral | — | 12/20 public = `panel_form_neutral_floor ÷ bio_score_max` | 204 | BASE |
-| `formulation.panel_form_quality` | multi | Row IQM ratings; unrated mapped row = 9 | earned + neutral | 9 per row | `(max(avg, 9) ÷ 15) × 12` (`cap_panel_form_quality`, `panel_form_neutral_floor`) | 2,052 | BASE |
+| `collagen_formulation.formulation_cap` | collagen | Profile sum capped | cap | — | 15 `collagen.collagen_formulation_cap` | not counted | FLOOR |
+| `formulation.presence_floor` | generic formulation engine (generic, sports non-protein, fiber fallback) and multi; not sports-protein or fiber profiles | Module-level: mapped active, positive > 0, net < 2 | floor | — | 2 `formulation_magnitudes.presence_floor` / multi `formulation_presence_floor` | 582 | FLOOR (absorbs B0/B1) |
+| `pillar.formulation.unrated_neutral` | generic_iqm with 0 rated forms | `iqm_form_quality_assessed_count == 0`; applied as `max(val, neutral)` **after** penalties | neutral floor | — | 12/20 public = `panel_form_neutral_floor ÷ bio_score_max` | 204 | BASE, FLOOR (absorbs B0/B1 while the Safety mirror still charges B1) |
+| `formulation.panel_form_quality` | multi | Row IQM ratings; the **panel average** is floored at 9, so a panel of poorly rated forms is also lifted to neutral | earned + neutral floor | 9 (panel average) | `(max(avg, 9) ÷ 15) × 12` (`cap_panel_form_quality`, `panel_form_neutral_floor`) | 2,052 | BASE, FLOOR |
 | `formulation.panel_disclosure_structure` | multi | Share of rows dosed (≥90% → 2, ≥60% → 1) | disclosure | 0 | cap 2 `cap_panel_disclosure_structure`; thresholds literal | 1,997 | DUP-A, LIT |
 | `formulation.b_form_quality` | B-complex | IQM rating; unrated mapped row = 10 | earned + neutral | 10 | (avg ÷ 15) × 8 literal | 146 | BASE, LIT |
 | `formulation.core_b_panel_coverage` | B-complex | Core B rows present ÷ core panel | category panel | 0 | × 10 literal | 146 | LIT (panel kept) |
 | `formulation.b_complex_focus_purity` | B-complex | Number of non-B actives → 3/2/0 | count | — | literal | 90 | COUNT, LIT |
 | `formulation.dose_disclosure` | B-complex | Share of rows dosed | disclosure | 0 | × 2 literal | 146 | DUP-A, LIT |
-| `formulation.form_tier` | omega | IQM parent-relative form rating (IQM "unspecified" rating when not disclosed) | earned | IQM unspecified | `omega_rubric.json formulation.form_quality` | 709 | — |
+| `formulation.form_tier` | omega | IQM parent-relative form rating (IQM "unspecified" rating when not disclosed) | earned | IQM unspecified | `omega_rubric.json formulation.form_quality` | 709 | DUP-A (with `transparency.form_disclosed`) |
 | `formulation.epa_dha_concentration` | omega | EPA+DHA ÷ oil mass (Total Fat fallback) | earned | Total Fat fallback | 4/3/2/1 `omega_rubric.json` | 620 | — |
 | `formulation.total_cfu_disclosed` | probiotic | Total CFU > 0 | disclosure | 0 | 4 `probiotic.cap_total_potency_disclosure` | 519 | DUP-A |
 | `formulation.exact_identity_completeness` | probiotic | Strains identified to strain level | disclosure | 0 | 8 × ratio `cap_exact_identity_completeness` | 424 | DUP-A |
-| `formulation.delivery_survivability` | probiotic | Delivery coating + tier | earned | 0 | 3; tier 2 → 2.5, tier 3 → 1.5 (literal) | 224 | CTX (F12), LIT |
-| `formulation.native_potency_disclosed` | probiotic studied formula | Studied formula potency | earned | 0 | 4 | 1 | — |
+| `formulation.delivery_survivability` | probiotic | Delivery coating + tier; a studied formula gets 3 unconditionally | earned | 0 | 3; tier 2 → 2.5, tier 3 → 1.5 (literal) | 224 | CTX (F12), LIT |
+| `formulation.native_potency_disclosed` | probiotic studied formula | Studied formula potency (same detector feeds `transparency.aggregate_native_afu_disclosure` and the studied Dose) | earned | 0 | 4 | 1 | DUP-A |
 | `formulation.studied_formula_strain_identity` | probiotic studied formula | Studied formula identity | earned | 0 | 8 | 1 | — |
-| `formulation.sports_protein_source_quality` | sports protein | Source class | earned (3 = unclear) | 3 | 15–3 literal | 512 | LIT |
+| `formulation.sports_protein_source_quality` | sports protein | Source class: whey isolate 15, casein 14, whey/soy 13, complete plant 12, pea 9, rice 8, unnamed protein 6, collagen 4, opaque blend 3 | earned | 6 (unnamed) | literal | 512 | LIT, DUP-D (opaque blend also charged by B5, focus 1, lost named-source point) |
 | `formulation.sports_protein_dose_transparency` | sports protein | Protein grams + named source | disclosure / earned | 0 | ≤5 literal | 512 | DUP-A, LIT |
 | `formulation.sports_amino_profile_disclosure` | sports protein | EAA / BCAA / leucine rows present | disclosure | 0 | 3/2/1.5 literal | 139 | DUP-A, LIT |
 | `formulation.sports_protein_focus` | sports protein | Count of non-accessory dosed rows (≤2 → 4, else 3; collagen/opaque 1) | count | — | literal | 512 | COUNT, LIT |
 | `formulation.sports_route_base` | sports protein | Unconditional | neutral | — | 2 `formulation_variant_magnitudes.sports.route_base` | 512 | BASE |
-| `formulation.fiber_source_quality` | fiber | Fiber source class (3 = claim with no mapped fiber) | earned | 3 | 12–3 literal | 192 | LIT |
+| `formulation.fiber_source_quality` | fiber | Fiber source class (3 = claim with no mapped fiber) | earned | 3 | 12–3 literal | 192 | LIT, DUP-A (fiber type also earns `dose.fiber_type_specificity`) |
 | `formulation.fiber_disclosure` | fiber | Grams and/or named type | disclosure | 0 | 6/4/3 literal | 190 | DUP-A, LIT |
 | `formulation.fiber_formula_focus` | fiber | Active-row count; stimulant laxative → 1 | count + reduced award | 2 (no rows) | 5/3/2/1 literal | 192 | COUNT, HIDE, LIT |
 | `formulation.fiber_route_base` | fiber | Unconditional | neutral | — | 5 `fiber_digestive.route_base` | 192 | BASE |
 | `formulation.fiber_practicality` | fiber | Product name contains cleanse/detox → 0.5 | neutral (name-based) + reduced award | 2 | 2 / 0.5 literal | 192 | HIDE, LIT |
-| `formulation.B0_moderate_watchlist` | all | Gate concern with `match_resolution == confirmed`: high-risk 10, watchlist 5, moderate severity 10 | deduction | — | cap 30 `formulation_magnitudes.b0_*` | 348 | DUP-D (F4), MATCH |
+| `formulation.B0_moderate_watchlist` | all | Gate concern with `match_resolution == confirmed`: high-risk 10, watchlist 5, moderate severity 10 (moderate severity does not affect the Safety base) | deduction | — | `b0_high_risk_penalty` / `b0_watchlist_penalty` / `b0_moderate_penalty`; cap 30 = `formulation_magnitudes.dimension_cap` | 348 | DUP-D (F4), MATCH |
 | `formulation.B1_harmful_additives` | all | `harmful_additives` rows after active-source suppression | deduction | — | 4/3/2/0.5, cap 15 `formulation_penalties` | 7,891 | DUP-D (F1) |
 | `formulation.B1_dietary_sugar` | all | `dietary_sensitivity_data.sugar` | deduction | — | 1/1/2/3/4, cap 4 `fm.dietary_sugar_*` | 2,534 | DUP-D (F1) |
 | `formulation.immune_high_variability_botanical_stack` | immune profile | ≥3 high-variability botanicals | deduction | — | 3 `category_magnitudes.immune_support` | 0 | — |
@@ -137,18 +141,27 @@ In the tables below:
 
 | Key | Routes | Fact → condition | Kind | When unknown | Magnitude | Products | Classes |
 |---|---|---|---|---|---|---:|---|
-| `dose.supplemental_window_proxy` | generic, fiber | `rda_ul_data` % of RDA/AI at minimum directed intake, % of UL at maximum. DRI: 11 → 22 across 20–100% RDA; clinical anchor proportional; legacy 25% threshold; UL > 100% → 11; ≥150% → 0. | earned (UL reduces it) | No reference: 16 if individually dosed, 12 for a blend anchor; nothing → fail-open | `dose_magnitudes.generic.*` | 6,144 | DUP-A (no-reference credit is a disclosure reward), HIDE (UL), COPY |
+| `dose.supplemental_window_proxy` | generic, fiber | `rda_ul_data` % of RDA/AI at minimum directed intake, % of UL at maximum. DRI: 11 → 22 across 20–100% RDA; clinical anchor proportional; legacy 25% threshold; UL > 100% → 11; ≥150% → 0. Also averages per-purpose specialized owners (botanical, collagen, sleep, joint, immune purpose dose; immune purpose zeroes zinc > 40 mg and vitamin D > 100 mcg), aggregate-formula benchmarks and clinical benchmarks (`generic_dose.py:312-375`). Capped at 16 when a mass-primary active is unassessed (686-694). | earned (UL reduces it) | No reference: 16 if individually dosed, 12 for a blend anchor; nothing → raw `None`, which the public pillar reads as 0 (F18, dormant) | `dose_magnitudes.generic.*`; immune purpose scale 22 literal | 6,144 | DUP-A (no-reference credit is a disclosure reward), HIDE (UL; the 16 cap), COPY |
 | `dose.botanical_clinical_dose` | botanical | Primary row mass × minimum servings vs `botanical_dosing` range. Within 21, near 16, above 12, below 12, no reference 12, blend total or product anchor 10, no amount 5, no botanical 0. | earned / graded / neutral + disclosure | 12 with amount, 5 without | `formulation_variant_magnitudes.botanical.botanical_dose_*` | 3,827 | DUP-A, COPY (1,712), F7 tie |
-| `dose.collagen_clinical_dose` | collagen | Collagen grams vs reference; no reference 10 | earned / neutral | 10 | literal (`collagen_profile.py:196`) | 115 | LIT |
+| `dose.collagen_clinical_dose` | collagen | Collagen grams vs reference: within 21, near 16, above 12, below 10, no reference 10, blend 7, no amount 0 | earned / graded / neutral | 10 (amount printed), 0 (none) | literal (`collagen_profile.py:180-206`) | 115 | LIT, DUP-A, F7 (below = no reference; overdose outranks both) |
 | `dose.joint_support_dose` | joint | Glucosamine / chondroitin / MSM / UC-II / HA vs target | earned | — | 22 / 20 / ratio × 20 literal; targets `category_magnitudes.joint_support` | 162 | LIT |
 | `dose.sleep_support_dose` | sleep | Melatonin bands 8/22/20/17/11/5/2; 5-HTP bands 8/16/12/8 (minimum and maximum directed intake) | earned (graded) | — | literal (`sleep_support.py:113-136`) | 210 | LIT |
+| `dose.vitamin_c_daily_range` | immune whole-route adapter (single purpose) | Vitamin C daily mg band 100–1,000 | earned | 0 | 3 `category_magnitudes.immune_support.dose_bands`; above band × 0.5 | 0 (dormant) | — |
+| `dose.vitamin_d_daily_range` | immune adapter | Vitamin D band 15–50 mcg; zeroed above 100 mcg | earned + UL zero | 0 | 3; `high_vitamin_d_threshold_mcg` | 0 (dormant) | HIDE |
+| `dose.zinc_daily_range` | immune adapter | Zinc band 8–25 mg; zeroed above 40 mg | earned + UL zero | 0 | 3; `high_zinc_threshold_mg` | 0 (dormant) | HIDE |
+| `dose.copper_balance` | immune adapter | Copper band 0.5–2 mg | earned | 0 | 1.5 | 0 (dormant) | — |
+| `dose.selenium_daily_range` | immune adapter | Selenium band 45–200 mcg | earned | 0 | 1.5 | 0 (dormant) | — |
+| `dose.beta_glucan_disclosed` | immune adapter | Beta-glucan band 100–250 mg | earned | 0 | 3 | 0 (dormant) | — |
+| `dose.quercetin_disclosed` | immune adapter | Quercetin band 250–1,000 mg | earned | 0 | 2.5 | 0 (dormant) | — |
+| `dose.elderberry_disclosed` | immune adapter | Elderberry band 100–600 mg | earned | 0 | 2.5 | 0 (dormant) | — |
+| `dose.daily_use_discipline` | immune adapter | No zinc > 40 mg and no vitamin D > 100 mcg | neutral (absence) | — | 2 `daily_use_discipline_points`; cap 22 `dose_cap` | 0 (dormant) | BASE, HIDE, DUP-D (with B7) |
 | `dose.rda_ai_coverage` | multi | Panel RDA/AI coverage | earned | — | avg × 15 `multi_prenatal.cap_rda_ai_coverage` | 2,052 | — |
-| `dose.panel_breadth` | multi | Rows with coverage ÷ 18 | category panel | — | × 3 `cap_panel_breadth`, `panel_breadth_full_count` | 2,052 | — |
+| `dose.panel_breadth` | multi | Count of covered nutrients ÷ 18 (open-ended: adding a nutrient raises Dose) | count | — | × 3 `cap_panel_breadth`, `panel_breadth_full_count` | 2,052 | COUNT |
 | `dose.critical_nutrient_coverage` | multi | Folate/iron/iodine/D/B12/choline minimum % RDA | earned | — | × 5 `cap_critical_nutrient_coverage` | 2,050 | — |
-| `dose.prenatal_complement_support` | prenatal | DHA 200/100 mg | earned | — | × 2 `cap_prenatal_complement_support` | 72 | — |
+| `dose.prenatal_complement_support` | prenatal | Choline (pregnancy threshold) and DHA 200/100 mg | earned | — | × 2 `cap_prenatal_complement_support` | 72 | DUP-W (choline also earns `critical_nutrient_coverage`) |
 | `dose.b_rda_ai_coverage` | B-complex | Coverage average | earned | — | × 18 literal | 146 | LIT |
 | `dose.core_b_panel_breadth` | B-complex | Covered ÷ core | category panel | — | × 4 literal | 146 | LIT |
-| `dose.moderate_dose_fit` | B-complex | b7 == 0 and coverage | neutral (absence) | — | 3 literal | 97 | BASE, LIT |
+| `dose.moderate_dose_fit` | B-complex | b7 == 0 and coverage; withdrawn whenever B7 > 0 | neutral (absence) | — | 3 literal | 97 | BASE, LIT, HIDE, DUP-D (F2) |
 | `dose.epa_dha_band` | omega | EPA+DHA per day bands; prenatal DHA 20/14/10 | earned | — | 20/20/16/10/5/4/2.5/0 `omega_rubric.json`; prenatal literal | 605 | — |
 | `dose.per_strain_cfu_disclosure` | probiotic | Strains with individual CFU | disclosure | 0 | 10 × ratio `cap_per_strain_cfu_disclosure` | 145 | DUP-A |
 | `dose.cfu_adequacy` | probiotic | Strain-owned CFU tiers; aggregate floor 2/4; strain-mass floor 5; guarantee ×0.9 / ×0.85 | earned + floors | Floors | `dose_magnitudes.probiotic.*`; multipliers literal | 464 | FLOOR, LIT |
@@ -158,7 +171,7 @@ In the tables below:
 | `dose.sports_ratio_or_completeness` | sports | BCAA ratio / complete EAA | earned | — | 2 literal | 102 | LIT |
 | `dose.sports_focused_single_completion` | sports | Primary ≥20 and single group | single-only bonus | — | 5 literal | 456 | COUNT, LIT |
 | `dose.fiber_effective_dose` | fiber | Daily grams: 22/18/13/7, or max(1, 4 × g) | earned | — | literal | 190 | LIT |
-| `dose.fiber_type_specificity` | fiber | Psyllium etc. 2 / inulin etc. 1 | earned | — | literal | 183 | LIT |
+| `dose.fiber_type_specificity` | fiber | Psyllium etc. 2 / inulin etc. 1 | earned | — | literal | 183 | LIT, DUP-A (with `fiber_source_quality`) |
 | `dose.fiber_dose_disclosure` | fiber | Grams > 0 | disclosure | 0 | 1 literal | 190 | DUP-A, LIT |
 | `dose.B7_dose_safety` | all (universal adapter) | Confirmed ≥150% UL flags, plus the fail-closed unresolved case | deduction | — | −2/flag, cap 3 `dose_safety_policy` | 403 | DUP-D (F2) |
 | `dose.opaque_primary_sports_blend` | sports | Primary dose 0 and blend none/partial | deduction | — | −10 literal | 9 | DUP-D (with B5), LIT |
@@ -170,7 +183,7 @@ In the tables below:
 | `evidence.clinical_evidence_pipeline` | generic, sports, fiber | Applicable matched records (effect × enrollment × design), top-N | earned | 0 | ≤7 per ingredient, weights `evidence_magnitudes.generic` | 6,694 | — |
 | `evidence.depth_bonus` | generic, sports, fiber | Published study count ≥20 / ≥40 | earned | 0 | 0.25 / 0.5 | 439 | — |
 | `evidence.primary_evidence_floor` | generic, sports, fiber | Prominent active with positive strong/moderate evidence (14/11, branded 18/17), or nutrition authority (10). **Not additive:** the score is the maximum of pipeline and floor. | floor | — | `primary_floor_*`, `nutrition_authority_floor` | 6,909 | FLOOR |
-| `evidence.immune_support_evidence_cap` | immune | Cap 17 (minimum) | cap | — | `category_magnitudes.immune_support.evidence_cap` | 44 | FLOOR |
+| `evidence.immune_support_evidence_cap` | immune | Cap 17 (minimum). It equals the immune Evidence reference (17), so public Evidence is 20 with or without it | cap, no public effect | — | `category_magnitudes.immune_support.evidence_cap` | 44 | RAW |
 | `evidence.joint_support_evidence_cap` | joint | Cap 14 | cap | — | `joint_support.evidence_cap` | 25 | FLOOR |
 | `evidence.evidence_family_certainty` | probiotic | Strain-family research certainty, counted even when applicability is 0 | earned | 0 | ≤10 `probiotic.certainty_cap` | 339 | F15 |
 | `evidence.product_applicability` | probiotic | Identity/purpose alignment | earned | 0 | ≤6 | 236 | — |
@@ -185,17 +198,17 @@ In the tables below:
 | Key | Routes | Fact → condition | Kind | When unknown | Magnitude | Products | Classes |
 |---|---|---|---|---|---|---:|---|
 | `transparency.clear_disclosure_base` | generic, sports, fiber, B-complex | **Unconditional** | neutral | — | 6 → 9 public `transparency_magnitudes.generic.clear_disclosure_base` | 11,827 | BASE (named as disclosure) |
-| `transparency.complete_active_identity_dose_disclosure` | generic, sports, fiber, B-complex | Every declared active identified and dosed; no B5/B6 | disclosure | 0 | 4 → 6 public | 10,315 | DUP-A |
-| `transparency.B3_claim_compliance` | same | All b3 magnitudes 0 | — | — | 0 | 0 | inert |
+| `transparency.complete_active_identity_dose_disclosure` | generic, sports, fiber, B-complex | Every declared active identified and dosed; withheld whenever B5 or B6 is non-zero | disclosure | 0 | 4 → 6 public | 10,315 | DUP-A, HIDE, DUP-D (F17) |
+| `transparency.B3_claim_compliance` | generic, sports, fiber, B-complex, multi | All b3 magnitudes 0 | — | — | 0 | 0 | inert |
 | `transparency.hypoallergenic_bonus` | same | Literal 0 | — | — | 0 | 0 | inert |
 | `transparency.panel_identity_disclosure` | multi | Panel identity ratio | disclosure | 0 | 5 × ratio | 2,052 | — |
 | `transparency.panel_individual_dose_disclosure` | multi | Panel dose ratio | disclosure | 0 | 10 × ratio | 2,052 | DUP-A |
 | `transparency.strain_identities_named` | probiotic | Strains named | disclosure | 0 | ≤8 | 530 | DUP-A |
 | `transparency.per_strain_cfu_on_label` | probiotic | Per-strain CFU | disclosure | 0 | 7 × ratio | 145 | DUP-A |
 | `transparency.aggregate_cfu_disclosure_proxy` | probiotic | Total CFU (4/3/2 minus per-strain points) | disclosure | 0 | 4 `cap_aggregate_cfu_disclosure_proxy`; 3/2 literal | 381 | DUP-A, LIT |
-| `transparency.aggregate_native_afu_disclosure` | probiotic studied formula | Studied formula potency | disclosure | 0 | 4 | 1 | — |
-| `transparency.epa_or_dha_disclosed` | omega | EPA or DHA printed | disclosure | 0 | 5 `omega_rubric.json` | 656 | — |
-| `transparency.form_disclosed` | omega | Molecular form printed | disclosure | 0 | 3 | 261 | — |
+| `transparency.aggregate_native_afu_disclosure` | probiotic studied formula | Studied formula potency | disclosure | 0 | 4 | 1 | DUP-A |
+| `transparency.epa_or_dha_disclosed` | omega | EPA or DHA printed | disclosure | 0 | 5 `omega_rubric.json` | 656 | DUP-A (the same printed amounts feed the Dose band and concentration) |
+| `transparency.form_disclosed` | omega | Molecular form printed | disclosure | 0 | 3 | 261 | DUP-A (with `form_tier`) |
 | `transparency.source_disclosed` | omega | Source printed | disclosure | 0 | 3 | 687 | — |
 | `transparency.B2_false_allergen_free_claim` | all | Free-from claim contradicted | deduction | — | 2/1.5/1, cap 2 | 809 | COPY (4 products show blend text) |
 | `transparency.B5_proprietary_blend_opacity` | all | Blend hides amounts | deduction | — | base + proportional × class multiplier, cap 10 (multi adjunct 2) | 2,251 | DUP-D (sports Dose / Formulation, botanical blend band) |
@@ -205,7 +218,7 @@ In the tables below:
 
 | Key | Fact → condition | Kind | When unknown | Magnitude | Products | Classes |
 |---|---|---|---|---|---:|---|
-| `pillar.verification.neutral_baseline` | Tier unknown: evaluated, no stronger evidence | neutral (policy baseline, kept at 6) | — | 6 `verification_subscale.neutral_baseline` | 5,623 | BASE (to be labelled, not removed) |
+| `pillar.verification.neutral_baseline` | Starting point of every tier: `base = 6 + signals` (claim ceiling 8, manufacturing ceiling 10, product floor 11). Pure unknown = 6. | neutral (policy baseline, kept at 6) | — | 6 `verification_subscale.neutral_baseline` | 5,623 pure unknown; part of 14,302 below product level | BASE (to be labelled, not removed) |
 | `verification_bonus.B4a_verified_certifications` (omega `b4a_…`) | Registry SKU/product-line cert → pillar `cert` 12/9/5; label-asserted → 2 | earned | 0 | `cert_tiers`, `label_asserted_cert_points` | 1,342 (pillar `cert`) | — |
 | `verification_bonus.B4b_gmp` (omega `b4b_…`) | Audited basis and b4b ≥ 4 → pillar `gmp` 2 | earned | 0 | `gmp_certified_points` | 4,112 | — |
 | `verification_bonus.B4c_batch_traceability` (omega `b4c_…`) | COA or batch lookup (label/QR-derived) → `coa_batch` (b4c ÷ 2) × 5 | earned (claim tier) | 0 | `coa_batch_max` | 183 | — |
@@ -226,7 +239,7 @@ In the tables below:
 | `safety_hygiene_base.no_banned_high_risk_or_watchlist_match` | No banned/high-risk/watchlist gate concern of any match resolution. Any one match zeroes **both** base components. | neutral (absence) | — | 2 literal → contributes to `clean_base` 10 | 14,766 | BASE, DUP-D (F4), MATCH, LIT |
 | `safety_hygiene_base.no_recalled_match` | No recalled gate concern | neutral (absence) | — | 2 literal | 14,766 | BASE, LIT |
 | `pillar.safety_hygiene.class_i_recall_penalty` | Manufacturer Class I recall within 3 years | deduction | — | Raw violation magnitude | 0 | — |
-| `pillar.safety_hygiene.clean_label_penalty` | `clean_label_hits` (for example TiO2): base × role multiplier | deduction (unregistered) | — | cap 5 `clean_label_subscale` | 1,423 | — |
+| `pillar.safety_hygiene.clean_label_penalty` | `clean_label_hits` (for example TiO2): base × role multiplier; unmapped role uses 0.5 | deduction (unregistered) | — | cap 5 `clean_label_subscale`; default multiplier literal | 1,423 | LIT |
 | `pillar.safety_hygiene.additive_or_sweetener_penalty` | Mirror of B1, excluding low severity | deduction | — | cap 4 `additive_or_sweetener_max_penalty` | 3,509 | DUP-D (F1) |
 | `pillar.safety_hygiene.over_ul_penalty` | Mirror of B7 | deduction | — | cap 3 `over_ul_max_penalty` | 403 | DUP-D (F2) |
 | `pillar.safety_hygiene.dose_safety_state_counts` | UL explanation only (0 points) | display | — | — | 1,085 | COPY (F3: 339 caution at 10/10) |
@@ -243,8 +256,8 @@ In the tables below:
 |---|---|---|
 | No Verification record | 6/15 neutral policy baseline (kept) | "treated as unknown, not penalized" |
 | No dose benchmark | Botanical 11.4 / generic 14.5 / collagen 9.5 public, only if the amount is printed | "partial credit against the applicable benchmarks" (botanical) |
-| Amount hidden in a blend | Botanical 9.5; sports Dose −10 penalty | Not separated from verified bands |
-| Form unrated | 12/20 (generic), 9/15 per row (multi), 10 (B-complex) | "not rated" (generic only) |
+| Amount hidden in a blend | Botanical 9.5, collagen 6.7; sports Dose −10 penalty; Transparency also withholds the complete-disclosure bonus | Not separated from verified bands |
+| Form unrated | 12/20 floor after penalties (generic); panel average floored at 9/15 (multi); 10 per row (B-complex) | "not rated" (generic only) |
 | Botanical identity recognized, quality unrated | 6 raw (8.0 public) | Folded into `A1_bio_score` |
 | Evidence under review | 0 counted in the total; app shows "Assessment incomplete" | Pillar number withheld |
 | Evidence applicability not established | 0 (generic) or up to 10 (probiotic) | Number withheld, even when positive |
@@ -281,7 +294,8 @@ Verification stays at 6 throughout. Tier review comes only after the new distrib
 | App partial handling exists | `catalog_product_semantics.dart:137-155`; `pg_hero_section.dart:363` |
 | B7 is emitted on every route | Corpus census: B7 key present on all 15,123; non-zero on generic, multi, B-complex, fiber and sports |
 | Verification census | Corpus probe (§7, `verification`) |
-| Every census key maps to one matrix row | `check_matrix` in §7 |
+| Every census key maps to one matrix row | `check_matrix` in §7. It checks keys observed in the stored corpus. Dormant keys (the immune whole-route adapter, the immune stack penalty, B6) were added from the code review. |
+| Matrix accuracy | Fresh-context review: 106 of 124 original rows checked against code; 88 correct; the 18 defects (scope, magnitude, key, class) are corrected in this revision and each was rechecked in code |
 
 ## 7. Reproduction probe
 

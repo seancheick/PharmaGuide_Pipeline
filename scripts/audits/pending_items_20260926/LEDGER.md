@@ -1,6 +1,6 @@
 ## Current execution — V4.1 score accounting consolidation, October 14
 
-Sean froze scoring policy and approved a five-step plan. Step 1 is the acceptance matrix in `scripts/audits/score_accounting_20261014/AUDIT.md`: 124 rows, one for each of the 114 score-bearing keys in the stored catalog plus 10 assembler items. Branch `claude/score-ledger`. Class: documentation. No score, catalog or publication change.
+Sean froze scoring policy and approved a five-step plan. Step 1 is the acceptance matrix in `scripts/audits/score_accounting_20261014/AUDIT.md`: 135 rows: the 114 score-bearing keys observed in the stored catalog, dormant code-only keys and assembler items. A fresh-context review checked 106 rows against code and found 18 defects; all are corrected. Branch `claude/score-ledger`. Class: documentation. No score, catalog or publication change.
 
 Owner: quality_score.py::_build_pillars, module assessment owners, penalty_registry.py, scored_artifact.py. Evidence: AUDIT.md §6–§7 probe; a live Meru rescore on codex/shilajit-mapping returned 55.7. Will NOT create: a scorer, registry, assessment or partial status, or ranking rule.
 
