@@ -261,3 +261,9 @@ def test_magnesium_absorption_rationale_does_not_substitute_clinical_benefits(iq
     assert '8656' in forms['magnesium threonate']['notes']
     assert '9528' in forms['magnesium orotate']['notes']
     assert '5484' in forms['magnesium citrate-malate']['notes']
+
+
+def test_no_magnesium_form_repeats_unverified_class_absorption_fraction(iqm):
+    for name, form in iqm['magnesium']['forms'].items():
+        assert 'cluster F ~25-45%' not in form.get('notes', ''), name
+    assert 'form unknown' not in iqm['magnesium']['forms']['magnesium glycerophosphate']['absorption']
