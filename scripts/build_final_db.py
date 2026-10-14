@@ -310,20 +310,6 @@ def compact_dose_decision(value: Any) -> Optional[Dict[str, Any]]:
     return compact
 
 
-def _first_form_name(forms: Any) -> str:
-    """Return the first DSLD-declared form name, e.g. 'Palmitate'.
-
-    The cleaner emits forms[] from DSLD's parsed forms array or from
-    name-extraction. When it succeeds, this is the user-visible label form.
-    When it fails (cleaner regex misses inline forms like
-    'Vitamin A Palmitate'), the canonical contract falls back to the
-    enricher's matched_form via _compute_form_contract.
-    """
-    if forms and isinstance(forms, list) and isinstance(forms[0], dict):
-        return safe_str(forms[0].get("name"))
-    return ""
-
-
 # Placeholder tokens IQM uses when no specific form was matched. A
 # matched_form equal to any of these (or carrying an "(unspecified)"
 # parenthetical) means the enricher fell back to the parent canonical
