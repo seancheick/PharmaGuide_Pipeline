@@ -713,3 +713,23 @@ def test_parent_tier_requires_canonical_lineage_or_a_linked_lent_member(monkeypa
     owners = evidence_resolver.evidence_owner_canonicals({})
     assert ("member" in owners) is expected
     assert "other" in owners
+
+
+@pytest.mark.parametrize('purpose,accepted', [('skin hydration', True), ('testosterone', False), ('energy', False)])
+def test_collagen_recovery_retains_canonical_endpoint_scope(purpose, accepted):
+    from scoring_v4.modules.generic_evidence import resolved_clinical_matches
+    product = _product(product_name='Collagen Peptides', ingredients=[
+        _row('Hydrolyzed Collagen Peptides', 'collagen', 5, unit='g',
+             path='ingredientRows[0]', standard_name='Collagen'),
+    ], matches=[])
+    product['statements'] = [{'type': 'Formula re: Contains', 'notes': f'Collagen supports {purpose}.'}]
+    artifact = _evidence(product)
+    assert (artifact['score'] > 0) is accepted
+    matches, _ = resolved_clinical_matches(product, owner_scoped=True)
+    if accepted:
+        from clinical_applicability import reviewed_entries
+        source = reviewed_entries()['INGR_COLLAGEN_PEPTIDES']
+        recovered = next(e for e in matches if e['id'] == 'RECOVERED_COLLAGEN_PEPTIDES_V1')
+        for key in ('primary_outcome', 'health_goals_supported', 'endpoint_relevance_tags', 'key_endpoints', 'applicability'):
+            assert recovered.get(key) == source.get(key)
+        assert recovered['matched_source_row_refs'] == ['ingredientRows[0]']
