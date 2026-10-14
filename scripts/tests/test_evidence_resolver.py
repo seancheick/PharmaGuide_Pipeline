@@ -655,7 +655,11 @@ def test_phase4_batch4_food_matrix_and_umbrella_guards():
 
 def test_phase4_batch4_standardized_clinical_canaries():
     """Batch 4 standardized clinical botanicals and nutrients."""
-    clinical_cids = ["peppermint", "cranberry_fruit", "butchers_broom_root", "horse_chestnut_seed", "boswellia_serrata_resin"]
+    peppermint = er.resolve_evidence_for_canonical("peppermint")
+    assert peppermint.disposition == EvidenceDisposition.RESEARCH_PRESENT_APPLICABILITY_UNESTABLISHED.value
+    assert peppermint.points_eligible is False
+    assert "24100754" in peppermint.owner_facts["literature_evidence"]["pmids"]
+    clinical_cids = ["cranberry_fruit", "butchers_broom_root", "horse_chestnut_seed", "boswellia_serrata_resin"]
     for cid in clinical_cids:
         res = er.resolve_evidence_for_canonical(cid)
         assert res.disposition == EvidenceDisposition.RESOLVED_BY_REVIEWED_CLINICAL_EVIDENCE.value, (

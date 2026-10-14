@@ -3,7 +3,7 @@
     "description": "Ingredients backed by clinical research and studies - Enhanced for Section C v3.4.0",
     "purpose": "evidence_scoring",
     "schema_version": "5.6.3",
-    "last_updated": "2026-10-11",
+    "last_updated": "2026-10-14",
     "total_entries": 210,
     "changelog": [
       "2026-10-05: Sean-approved four amount transfers. Descriptive research exposure is owned by Dose, with no new positive adequacy benchmark. Zinc uses discrete clusters, WKB retains preparation/reference uncertainty, D-mannose and DAA retain no affirmative credit; added content-verified PMID 25844073 and distinguished its negative 6 g/day result. Supersedes the four historical applicability amount floors.",
@@ -16663,7 +16663,7 @@
         "purified shilajit",
         "fulvic acid shilajit"
       ],
-      "category": "sports_performance",
+      "category": "hormonal_endocrine",
       "evidence_level": "branded-rct",
       "published_studies": [
         "RCT",
@@ -16672,20 +16672,15 @@
       ],
       "score_contribution": "tier_1",
       "key_endpoints": [
-        "total testosterone ↑",
-        "free testosterone ↑",
-        "fatigue ↓",
-        "mitochondrial function support ↑"
+        "Total testosterone",
+        "Free testosterone",
+        "DHEAS"
       ],
-      "health_goals_supported": [
-        "Increase Energy",
-        "Healthy Aging/Longevity",
-        "Muscle Growth & Recovery"
-      ],
-      "notes": "Purified shilajit ingredient with one clear randomized placebo-controlled trial in healthy middle-aged men and supportive older fertility literature on processed shilajit.",
-      "notable_studies": "Pandit et al. (2016, PMID 26395129) randomized healthy volunteers and found higher total and free testosterone after 90 days of purified shilajit. Supportive older fertility data include processed shilajit in oligospermia (PMID 20078516), though that study is not clearly PrimaVie-branded.",
-      "study_type": "rct_multiple",
-      "last_updated": "2026-02-17",
+      "health_goals_supported": [],
+      "notes": "One randomized placebo-controlled trial used Natreon PrimaVie purified shilajit, 250 mg twice daily for 90 days. Product eligibility requires the explicitly disclosed studied branded preparation; merely purified or fulvic-acid material is not demonstrated equivalent.",
+      "notable_studies": "PMID 26395129 randomized 96 healthy men aged 45-55; 75 completed (38 active, 37 placebo). Total/free testosterone and DHEAS increased versus placebo. These biomarker outcomes do not demonstrate energy, longevity or muscle-recovery benefits. PMID 20078516 is retained as separate context: processed shilajit in oligospermia, 35 enrolled/28 completed, uncontrolled baseline comparison; its equivalence to PrimaVie is unverified and it is not a second branded RCT.",
+      "study_type": "rct_single",
+      "last_updated": "2026-10-14",
       "references_structured": [
         {
           "type": "pubmed",
@@ -16756,16 +16751,28 @@
           "verification_source": "pubmed_eutils"
         }
       ],
-      "effect_direction": "positive_strong",
-      "primary_outcome": "Increase Energy",
-      "total_enrollment": 60,
-      "registry_completed_trials_count": 3,
-      "effect_direction_confidence": "medium",
-      "effect_direction_rationale": "Retained positive_strong classification; study_type=rct_multiple; evidence_level=branded-rct; primary_outcome=Increase Energy; published_tags=RCT,double-blind,placebo-controlled; registry_completed_trials_count=3; total_enrollment=60; endpoint_tags=glycemic_control,muscle_recovery; notes/citations contain no automated downgrade signals.",
-      "endpoint_relevance_tags": [
-        "glycemic_control",
-        "muscle_recovery"
-      ]
+      "effect_direction": "positive_weak",
+      "primary_outcome": "Androgen biomarkers in healthy men aged 45-55",
+      "total_enrollment": 96,
+      "effect_direction_confidence": "low",
+      "effect_direction_rationale": "One short manufacturer-supplied preparation trial reports positive androgen biomarkers with attrition; patient-important benefits were not established. Existing positive_weak classification reflects these limitations rather than broad efficacy.",
+      "endpoint_relevance_tags": [],
+      "applicability": {
+        "scope": "ingredient",
+        "require_source_label_form": true,
+        "required_form_terms": [
+          "primavie",
+          "prima vie"
+        ],
+        "supported_outcomes": [
+          "testosterone"
+        ],
+        "studied_population": "Healthy men aged 45-55; androgen biomarkers after 90 days of the specific PrimaVie preparation.",
+        "source_pmids": [
+          "26395129"
+        ],
+        "reviewed_at": "2026-10-14"
+      }
     },
     {
       "id": "BRAND_PUREWAY_C",
@@ -19246,25 +19253,22 @@
         "shilajit",
         "fulvic acid complex"
       ],
-      "category": "mitochondrial_energy",
-      "evidence_level": "ingredient-human",
+      "category": "hormonal_endocrine",
+      "evidence_level": "reference",
       "published_studies": [
-        "RCT",
-        "mechanistic"
+        "randomized placebo-controlled trial of PrimaVie",
+        "uncontrolled before-after study of processed shilajit"
       ],
-      "score_contribution": "tier_1",
+      "score_contribution": "tier_3",
       "key_endpoints": [
-        "mitochondrial function support ↑",
-        "fatigue resistance ↑ (preclinical)"
+        "Androgen biomarkers in healthy men aged 45-55 receiving PrimaVie",
+        "Semen parameters, testosterone and FSH in oligospermic men receiving processed shilajit"
       ],
-      "health_goals_supported": [
-        "Increase Energy",
-        "Healthy Aging/Longevity"
-      ],
-      "notes": "Generic shilajit evidence is weaker and less standardized than purified branded forms, but it is no longer fair to describe it as purely preclinical. Human studies of processed or purified shilajit report effects on testosterone and male-fertility outcomes, while composition variability and contamination risk remain major caveats for non-standardized products (PMID 26395129; PMID 20078516).",
-      "notable_studies": "Processed or purified shilajit has human clinical support in oligospermia (PMID 20078516) and in a placebo-controlled testosterone trial in healthy middle-aged men (PMID 26395129). These data support a cautious ingredient-human posture, but the evidence should be interpreted through the lens of product purification and standardization rather than assumed to apply to any generic shilajit resin.",
-      "study_type": "rct_multiple",
-      "last_updated": "2026-03-07",
+      "health_goals_supported": [],
+      "notes": "Human research is retained as preparation-specific context, not generic-product efficacy. Neither unspecified resin/extract nor the words processed or purified establish equivalence to the studied interventions. The marketed preparation and specification of the older processed material remain unverified.",
+      "notable_studies": "PMID 26395129: PrimaVie, 250 mg twice daily for 90 days, 96 healthy men aged 45-55 randomized and 75 completed; androgen biomarkers increased versus placebo. PMID 20078516: processed shilajit 100 mg twice daily for 90 days in oligospermia; 60 screened, 35 enrolled, 28 completed; semen and hormone changes compared with baseline, without a randomized control group. These are not multiple generic-shilajit RCTs.",
+      "study_type": "reference",
+      "last_updated": "2026-10-14",
       "references_structured": [
         {
           "type": "pubmed",
@@ -19335,14 +19339,12 @@
           "verification_source": "pubmed_eutils"
         }
       ],
-      "effect_direction": "positive_strong",
-      "primary_outcome": "Increase Energy",
-      "total_enrollment": 60,
-      "effect_direction_confidence": "medium",
-      "effect_direction_rationale": "Retained positive_strong classification; study_type=rct_multiple; evidence_level=ingredient-human; primary_outcome=Increase Energy; published_tags=RCT,mechanistic; total_enrollment=60; endpoint_tags=muscle_recovery; notes/citations contain no automated downgrade signals.",
-      "endpoint_relevance_tags": [
-        "muscle_recovery"
-      ]
+      "effect_direction": "positive_weak",
+      "primary_outcome": "Preparation-specific androgen and semen biomarkers",
+      "total_enrollment": 131,
+      "effect_direction_confidence": "low",
+      "effect_direction_rationale": "Positive preparation-specific biomarker findings are retained with low confidence; an uncontrolled fertility cohort and one short branded trial do not establish clinical efficacy or preparation equivalence for generic products. Reference-only handling prevents numerical transfer.",
+      "endpoint_relevance_tags": []
     },
     {
       "id": "INGR_PEA",
@@ -19566,16 +19568,15 @@
       ],
       "score_contribution": "tier_1",
       "key_endpoints": [
-        "IBS abdominal pain ↓",
-        "global IBS symptom scores ↓",
-        "bloating ↓"
+        "Global IBS symptoms",
+        "IBS abdominal pain"
       ],
       "health_goals_supported": [
         "Digestive Health"
       ],
-      "notes": "Human evidence supports enteric-coated peppermint oil for IBS symptom relief. Benefits are formulation-dependent and strongest for GI-targeted products.",
-      "last_updated": "2026-03-23",
-      "notable_studies": "Peppermint oil has systematic-review and randomized-trial support for IBS symptom relief. The 2022 systematic review/meta-analysis (PMID 35942669) found benefit across pooled trials, and a later multicenter randomized controlled trial (PMID 31470006) provided higher-quality modern confirmation for formulation-specific IBS use.",
+      "notes": "Preparation-specific IBS research concerns enteric-coated or small-intestinal-release peppermint oil. Pooled benefit is uncertain and adverse events were more frequent; extract, uncoated oil and ileocolonic formulations cannot inherit that finding.",
+      "last_updated": "2026-10-14",
+      "notable_studies": "PMID 35942669 pooled 10 RCTs (1030 patients), finding benefit for global IBS symptoms and abdominal pain but very low-quality evidence and more adverse events. PMID 31470006 randomized 190 patients (189 intention-to-treat, 178 completed); neither small-intestinal nor ileocolonic release significantly improved either primary endpoint. Small-intestinal release improved secondary pain/discomfort/severity outcomes; this is not confirmation of primary-endpoint efficacy. The pooled total is not added to its constituent trial enrollment.",
       "references_structured": [
         {
           "type": "pubmed",
@@ -19650,22 +19651,72 @@
           "retracted": false,
           "supports_claims": [],
           "verification_source": "pubmed_eutils"
+        },
+        {
+          "type": "pubmed",
+          "authority": "NCBI PubMed",
+          "pmid": "24100754",
+          "title": "Peppermint oil for the treatment of irritable bowel syndrome: a systematic review and meta-analysis.",
+          "doi": "10.1097/MCG.0b013e3182a88357",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/24100754/",
+          "verification_source": "Europe PMC core API and primary text, 2026-10-14",
+          "retracted": false
+        },
+        {
+          "type": "pubmed",
+          "authority": "NCBI PubMed",
+          "pmid": "26319955",
+          "title": "A Novel Delivery System of Peppermint Oil Is an Effective Therapy for Irritable Bowel Syndrome Symptoms.",
+          "doi": "10.1007/s10620-015-3858-7",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/26319955/",
+          "verification_source": "Europe PMC core API and primary text, 2026-10-14",
+          "retracted": false
         }
       ],
       "external_ids": {
         "unii": "V95R5KMY2B"
       },
-      "effect_direction": "positive_strong",
+      "effect_direction": "mixed",
       "primary_outcome": "Digestive Health",
-      "total_enrollment": 660,
-      "registry_completed_trials_count": 77,
-      "effect_direction_confidence": "high",
-      "effect_direction_rationale": "Retained positive_strong classification; study_type=systematic_review_meta; evidence_level=ingredient-human; primary_outcome=Digestive Health; published_tags=RCT,systematic_review,meta-analysis; registry_completed_trials_count=77; total_enrollment=660; endpoint_tags=joint_pain,stress_mood,sleep; notes/citations contain no automated downgrade signals.",
+      "total_enrollment": 1030,
+      "effect_direction_confidence": "low",
+      "effect_direction_rationale": "Mixed: pooled very-low-quality benefit alongside a modern trial with null primary endpoints and some positive secondary findings. No sleep, stress, joint or generic extract claim follows.",
       "endpoint_relevance_tags": [
-        "joint_pain",
-        "stress_mood",
-        "sleep"
-      ]
+        "digestive_health"
+      ],
+      "applicability": {
+        "scope": "ingredient",
+        "require_source_label_form": true,
+        "required_form_terms": [
+          "peppermint oil",
+          "peppermint aerial parts oil",
+          "mentha piperita oil",
+          "mentha x piperita oil",
+          "ibgard"
+        ],
+        "excluded_form_terms": [
+          "ileocolonic",
+          "ileo colonic",
+          "non enteric",
+          "not enteric",
+          "ileocolon",
+          "colon targeted"
+        ],
+        "supported_outcomes": [
+          "digestive_health"
+        ],
+        "studied_population": "Adults with IBS; enteric-coated/small-intestinal-release peppermint oil. Delivery-specific and short-term findings do not establish generic extract efficacy.",
+        "source_pmids": [
+          "35942669",
+          "31470006",
+          "24100754",
+          "26319955"
+        ],
+        "reviewed_at": "2026-10-14",
+        "dosage_forms": [
+          "enteric-coated"
+        ]
+      }
     },
     {
       "id": "STRAIN_LGG",

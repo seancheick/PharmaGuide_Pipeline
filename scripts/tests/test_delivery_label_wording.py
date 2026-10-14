@@ -73,3 +73,12 @@ def test_probiotic_survivability_reads_the_net_contents_form(enricher):
         "inactiveIngredients": [],
     }
     assert enricher._collect_probiotic_data(product)["has_survivability_coating"] is True
+
+
+@pytest.mark.parametrize('product', [
+    {'statements': [{'type': 'Formula re: Contains', 'notes': 'Enteric Coated Peppermint Oil Capsules'}]},
+    {'statements': [{'type': 'Formulation re: Other', 'notes': 'Enteric coating withstands stomach acid'}]},
+    {'activeIngredients': [{'name': 'IBgard Peppermint Oil', 'raw_source_text': 'IBgard Peppermint Oil'}]},
+])
+def test_source_enteric_variants_reach_existing_delivery_owner(enricher, product):
+    assert 'enteric-coated' in _names(enricher._collect_delivery_data(product))

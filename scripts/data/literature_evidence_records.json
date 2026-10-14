@@ -3,7 +3,7 @@
     "description": "Phase 4 shadow literature resolution registry for high-impact canonical actives",
     "purpose": "literature_evidence_resolution",
     "schema_version": "5.0.0",
-    "last_updated": "2026-10-11",
+    "last_updated": "2026-10-14",
     "total_entries": 807,
     "verification_pipeline": "scripts/api_audit/verify_literature_records.py",
     "verified_studies_count": 279,
@@ -6158,10 +6158,10 @@
           "pmid": "24100754",
           "title": "Peppermint oil for the treatment of irritable bowel syndrome: a systematic review and meta-analysis.",
           "study_type": "systematic_review_meta",
-          "sample_size": 392,
+          "sample_size": 726,
           "dose": "180-225 mg enteric-coated oil 2-3 times daily",
           "duration": "2 to 8 weeks",
-          "outcome": "significantly superior to placebo for global symptom improvement and reduction in abdominal pain in IBS (RR 2.23, 95% CI 1.78-2.81)",
+          "outcome": "Nine studies, 726 participants overall; global-symptom subset 5 studies/392 participants RR 2.23; abdominal-pain subset 5 studies/357 participants RR 2.14. Enteric-coated oil versus placebo.",
           "effect_direction": "positive_moderate",
           "verification_provenance": {
             "pmid_verified": true,
@@ -6169,27 +6169,112 @@
             "human_subjects_verified": true,
             "topic_match_verified": true,
             "retracted": false,
-            "verified_source": "https://pubmed.ncbi.nlm.nih.gov/24100754/",
-            "verified_at": "2026-09-21T07:39:42.986936+00:00",
-            "abstract_evidence_quote": "Outc"
+            "verified_source": "https://www.ebi.ac.uk/europepmc/webservices/rest/search?query=EXT_ID:24100754&resultType=core&format=json",
+            "verified_at": "2026-10-14",
+            "abstract_evidence_quote": "Nine studies that evaluated 726 patients were identified."
+          }
+        },
+        {
+          "pmid": "26319955",
+          "title": "A Novel Delivery System of Peppermint Oil Is an Effective Therapy for Irrritable Bowel Syndrome Symptoms.",
+          "study_type": "rct_single",
+          "sample_size": 72,
+          "dose": "180 mg peppermint oil three times daily; IBgard triple-coated microspheres",
+          "duration": "4 weeks",
+          "outcome": "IBS-D/IBS-M: Total IBS Symptom Score reduction 40% versus 24.3% with placebo at 4 weeks; P=0.0246.",
+          "effect_direction": "positive_moderate",
+          "verification_provenance": {
+            "pmid_verified": true,
+            "authoritative_live_title": "A Novel Delivery System of Peppermint Oil Is an Effective Therapy for Irrritable Bowel Syndrome Symptoms.",
+            "human_subjects_verified": true,
+            "topic_match_verified": true,
+            "retracted": false,
+            "verified_source": "https://pubmed.ncbi.nlm.nih.gov/26319955/",
+            "verified_at": "2026-10-14"
+          }
+        },
+        {
+          "pmid": "35942669",
+          "title": "Systematic review and meta-analysis: efficacy of peppermint oil in irritable bowel syndrome.",
+          "study_type": "systematic_review_meta",
+          "sample_size": 1030,
+          "dose": "Trial-specific oral peppermint oil formulations",
+          "duration": "Trial-specific short courses",
+          "outcome": "10 RCTs; pooled global symptoms and pain favored oil, with very low-quality evidence and more adverse events.",
+          "effect_direction": "mixed",
+          "verification_provenance": {
+            "pmid_verified": true,
+            "authoritative_live_title": "Systematic review and meta-analysis: efficacy of peppermint oil in irritable bowel syndrome.",
+            "human_subjects_verified": true,
+            "topic_match_verified": true,
+            "retracted": false,
+            "verified_source": "https://pubmed.ncbi.nlm.nih.gov/35942669/",
+            "verified_at": "2026-10-14"
+          }
+        },
+        {
+          "pmid": "31470006",
+          "title": "Efficacy and Safety of Peppermint Oil in a Randomized, Double-Blind Trial of Patients With Irritable Bowel Syndrome.",
+          "study_type": "rct_single",
+          "sample_size": 190,
+          "dose": "182 mg small-intestinal-release or ileocolonic-release peppermint oil",
+          "duration": "8 weeks",
+          "outcome": "Both primary endpoints not significantly different from placebo; small-intestinal arm improved secondary pain/discomfort/severity. Ileocolonic delivery did not show benefit.",
+          "effect_direction": "mixed",
+          "verification_provenance": {
+            "pmid_verified": true,
+            "authoritative_live_title": "Efficacy and Safety of Peppermint Oil in a Randomized, Double-Blind Trial of Patients With Irritable Bowel Syndrome.",
+            "human_subjects_verified": true,
+            "topic_match_verified": true,
+            "retracted": false,
+            "verified_source": "https://pubmed.ncbi.nlm.nih.gov/31470006/",
+            "verified_at": "2026-10-14"
           }
         }
       ],
-      "effect_direction": "positive_moderate",
-      "population_context": "patients with irritable bowel syndrome",
-      "studied_dose_exposure": {
-        "values": [
-          180
-        ],
-        "unit": "mg"
-      },
-      "applicability_decision": "Gastrointestinal antispasmodic and IBS abdominal comfort supported for enteric-coated peppermint oil at >= 180 mg/serving.",
+      "effect_direction": "mixed",
+      "population_context": "Adults with IBS; later trials include IBS-D/IBS-M and Rome IV IBS cohorts.",
+      "studied_dose_exposure": {},
+      "applicability_decision": "Preparation-specific, mixed IBS evidence for enteric-coated/small-intestinal-release peppermint oil. Requires source-label oil and delivery correspondence; no universal efficacy threshold is inferred from a per-serving amount. Generic extract and unspecified delivery remain unestablished.",
       "verification_result": "authoritative_pubmed_verified",
       "verification_provenance": {
-        "verified_by": "scripts/api_audit/verify_literature_records.py",
-        "verified_at": "2026-09-21T07:39:42.986936+00:00",
+        "verified_by": "Codex per-entry review of live Europe PMC API and primary text",
+        "verified_at": "2026-10-14",
         "all_pmids_verified": true,
         "retractions_found": false
+      },
+      "applicability": {
+        "scope": "ingredient",
+        "require_source_label_form": true,
+        "required_form_terms": [
+          "peppermint oil",
+          "peppermint aerial parts oil",
+          "mentha piperita oil",
+          "mentha x piperita oil",
+          "ibgard"
+        ],
+        "excluded_form_terms": [
+          "ileocolonic",
+          "ileo colonic",
+          "non enteric",
+          "not enteric",
+          "ileocolon",
+          "colon targeted"
+        ],
+        "supported_outcomes": [
+          "digestive_health"
+        ],
+        "studied_population": "Adults with IBS; enteric-coated/small-intestinal-release peppermint oil. Delivery-specific and short-term findings do not establish generic extract efficacy.",
+        "source_pmids": [
+          "35942669",
+          "31470006",
+          "24100754",
+          "26319955"
+        ],
+        "reviewed_at": "2026-10-14",
+        "dosage_forms": [
+          "enteric-coated"
+        ]
       }
     },
     {

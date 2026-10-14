@@ -10871,6 +10871,10 @@ class SupplementEnricherV3:
             ).strip()
             if row_text:
                 evidence_sources.append((f"activeIngredients[{index}]", row_text))
+            taxonomy = ingredient.get("raw_taxonomy") or {}
+            for form in taxonomy.get("forms") or []:
+                if isinstance(form, dict) and form.get("name"):
+                    evidence_sources.append((f"activeIngredients[{index}]", str(form["name"])))
 
         # Structured DSLD label statements are product-authored evidence. Keep
         # them separate from the broad synthesized product text, which also
@@ -10878,6 +10882,7 @@ class SupplementEnricherV3:
         # untyped/free-form statement is deliberately not trusted here.
         trusted_statement_types = {
             "Formulation re: Other",
+            "Formula re: Contains",
             "Suggested/Recommended/Usage/Directions",
             "FDA Statement of Identity",
         }

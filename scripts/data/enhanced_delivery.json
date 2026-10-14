@@ -3,7 +3,7 @@
     "description": "Tiered enhanced delivery systems for bioavailability scoring",
     "purpose": "bonus_scoring",
     "schema_version": "5.0.0",
-    "last_updated": "2026-09-16",
+    "last_updated": "2026-10-14",
     "total_entries": 78,
     "scoring_rule": "Award bonus points based on delivery technology tier. Only the HIGHEST tier match counts (no stacking).",
     "tier_definitions": {
@@ -143,7 +143,11 @@
   "enteric-coated": {
     "tier": 2,
     "description": "Stomach-acid protection – critical for probiotics/enzymes",
-    "category": "delivery"
+    "category": "delivery",
+    "aliases": [
+      "enteric coating",
+      "IBgard"
+    ]
   },
   "micronized": {
     "tier": 2,

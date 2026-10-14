@@ -836,3 +836,110 @@ def test_meriva_verified_disease_research_keeps_existing_reference_only_guard():
     assert entry["external_ids"].get("unii") is None  # pure curcumin is not the whole phytosome
     decision = assess_clinical_applicability({}, entry)
     assert decision == {"status": "not_applicable", "reason_code": "reference_only_clinical_record"}
+
+
+@pytest.mark.parametrize('label,forms,accepted', [
+    ('Shilajit', [], False),
+    ('Himalayan Shilajit Extract', [], False),
+    ('Purified Shilajit', [], False),
+    ('Processed Shilajit', [], False),
+    ('PrimaVie Shilajit', [], True),
+    ('PrimaVie', [{'name': 'Shilajit Extract'}], True),
+])
+def test_shilajit_native_evidence_requires_studied_preparation(enricher, label, forms, accepted):
+    from enhanced_normalizer import EnhancedDSLDNormalizer
+    from scoring_v4.scored_artifact import build_scored_artifact
+    raw = {'id': 'SHILAJIT_SCOPE', 'fullName': 'Shilajit tablets', 'brandName': 'Regression',
+           'physicalState': {'name': 'Tablet'},
+           'servingSizes': [{'minQuantity': 1, 'maxQuantity': 1, 'unit': 'Tablet(s)'}],
+           'ingredientRows': [{'name': label, 'forms': forms, 'nestedRows': [],
+                               'quantity': [{'quantity': 500, 'unit': 'mg'}]}],
+           'otherIngredients': {'ingredients': []}}
+    product, _ = enricher.enrich_product(EnhancedDSLDNormalizer().normalize_product(raw))
+    artifact = build_scored_artifact(product)
+    matches, _ = resolved_clinical_matches(product)
+    ids = {m['id'] for m in matches}
+    assert 'PRECLIN_SHILAJIT_GENERIC' not in ids
+    assert ('BRAND_PRIMAVIE_SHILAJIT' in ids) is accepted
+    if label == 'Processed Shilajit':
+        assert artifact['quality_score_status'] == 'not_scored'  # Unmapped named form stays held.
+    else:
+        assert len(artifact['quality_pillars_v4']) == 6
+    if accepted:
+        match = next(m for m in matches if m['id'] == 'BRAND_PRIMAVIE_SHILAJIT')
+        assert match['study_type'] == 'rct_single'
+        assert match['effect_direction'] == 'positive_weak'
+        assert match['applicability_assessment']['supported_outcomes'] == ['testosterone']
+
+
+def test_shilajit_records_preserve_research_without_unsupported_outcomes():
+    records = reviewed_entries()
+    for key in ['PRECLIN_SHILAJIT_GENERIC', 'BRAND_PRIMAVIE_SHILAJIT']:
+        entry = records[key]
+        assert {r['pmid'] for r in entry['references_structured']} == {'20078516', '26395129'}
+        assert entry['health_goals_supported'] == []
+        assert entry['endpoint_relevance_tags'] == []
+        assert 'registry_completed_trials_count' not in entry
+        assert 'rct_multiple' not in json.dumps(entry)
+    assert records['PRECLIN_SHILAJIT_GENERIC']['study_type'] == 'reference'
+    assert records['BRAND_PRIMAVIE_SHILAJIT']['total_enrollment'] == 96
+
+
+@pytest.mark.parametrize('label,source_forms,guessed_form,accepted', [
+    ('Peppermint Extract', [], '', False),
+    ('Mentha Piperita Extract', [], '', False),
+    ('Peppermint Oil', [], '', False),
+    ('Enteric-coated Peppermint Extract', [], '', False),
+    ('Peppermint Extract', [], 'enteric-coated peppermint oil', False),
+    ('Enteric-coated Peppermint Oil', [], '', True),
+    ('Peppermint Oil', [{'name': 'enteric-coated'}], '', True),
+    ('IBgard Peppermint Oil', [], '', True),
+])
+def test_peppermint_literature_requires_source_oil_and_delivery(enricher, label, source_forms, guessed_form, accepted):
+    import evidence_resolver as er
+    from scoring_v4.scored_artifact import build_scored_artifact
+    row = {'name': label, 'canonical_id': 'peppermint', 'quantity': 200, 'unit': 'mg',
+           'raw_source_path': 'ingredientRows[0]', 'raw_source_text': label,
+           'raw_taxonomy': {'forms': source_forms}, 'matched_form': guessed_form}
+    product = {'id': 'PEPPERMINT_SCOPE', 'activeIngredients': [row],
+               'ingredient_quality_data': {'ingredients': [row], 'ingredients_scorable': [row]}}
+    product['delivery_data'] = enricher._collect_delivery_data(product)
+    result = er.resolve_evidence_for_row(row, product)
+    assert (result.disposition == er.EvidenceDisposition.RESOLVED_BY_REVIEWED_CLINICAL_EVIDENCE.value) is accepted
+    if 'literature_evidence' in result.owner_facts:
+        assert '24100754' in result.owner_facts['literature_evidence']['pmids']
+    if 'IBgard' in label:
+        assert '26319955' in {r['pmid'] for r in reviewed_entries()['INGR_PEPPERMINT_OIL']['references_structured']}
+    artifact = build_scored_artifact(product)
+    assert len(artifact['quality_pillars_v4']) == 6
+
+
+def test_peppermint_scored_record_retains_mixed_primary_outcome_evidence():
+    entry = reviewed_entries()['INGR_PEPPERMINT_OIL']
+    assert entry['effect_direction'] == 'mixed'
+    assert entry['total_enrollment'] == 1030
+    assert 'registry_completed_trials_count' not in entry
+    assert not {'joint_pain', 'sleep', 'stress_mood'} & set(entry['endpoint_relevance_tags'])
+    assert {r['pmid'] for r in entry['references_structured']} >= {'35942669', '31470006'}
+    assert 'primary' in entry['notable_studies'] and 'not' in entry['notable_studies']
+
+
+@pytest.mark.parametrize('label,notes,source,extra,accepted', [
+    ('Peppermint Oil', 'Enteric coated to minimize aftertaste', 'statements[0]', False, True),
+    ('Peppermint Aerial Parts Oil', 'Enteric coating withstands stomach acid', 'statements[0]', False, True),
+    ('Peppermint Extract', 'Enteric coated to minimize aftertaste', 'statements[0]', False, False),
+    ('Peppermint Oil', 'Ordinary softgel', 'statements[0]', False, False),
+    ('Peppermint Oil', 'Not enteric coated', 'statements[0]', False, False),
+    ('Peppermint Oil', 'Enteric coated to minimize aftertaste', 'statements[99]', False, False),
+    ('Peppermint Oil', 'Enteric coated fish oil', 'statements[0]', True, False),
+])
+def test_clinical_delivery_binds_existing_source_provenance(label, notes, source, extra, accepted):
+    entry = reviewed_entries()['INGR_PEPPERMINT_OIL']
+    row = {'name': label, 'canonical_id': 'peppermint', 'raw_source_text': label,
+           'quantity': 200, 'unit': 'mg', 'raw_source_path': 'ingredientRows[0]'}
+    product = {'activeIngredients': [row], 'statements': [{'type': 'Formulation re: Other', 'notes': notes}],
+               'delivery_data': {'systems': [{'canonical_name': 'enteric-coated', 'raw_source_text': 'Enteric coating' if 'coating' in notes else 'Enteric coated', 'match_source': source}]}}
+    if extra:
+        product['activeIngredients'].append({'name': 'Fish Oil', 'raw_source_text': 'Fish Oil', 'quantity': 1000, 'unit': 'mg', 'raw_source_path': 'ingredientRows[1]'})
+    scope = {**entry, 'ingredient': label, 'matched_source_row_refs': ['ingredientRows[0]']}
+    assert (assess_clinical_applicability(product, scope, assess_amount=False)['status'] == 'applicable') is accepted
