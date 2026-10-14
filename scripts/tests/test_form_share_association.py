@@ -68,7 +68,8 @@ def test_source_proteins_are_not_forms_of_an_amino_acid(enricher):
     assert row['bio_score'] == 14.0
 
 
-@pytest.mark.parametrize('pid, name, expected', [('47815', 'Magnesium', 10.0),
+# 47815 averages six named magnesium forms; citrate 14 -> 15 (2026-10-13) moves 60/6 to 61/6.
+@pytest.mark.parametrize('pid, name, expected', [('47815', 'Magnesium', 10.2),
                                                 ('17118', 'Calcium', 5.3)])
 def test_curated_salts_map_without_an_invented_form(enricher, pid, name, expected):
     row = _row(enricher, pid, name)

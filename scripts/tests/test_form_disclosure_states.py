@@ -290,3 +290,59 @@ def test_non_delivering_iron_is_zero_adequacy_not_missing_reference(pipeline):
     iron = next(row for row in enriched['rda_ul_data']['adequacy_results'] if row['canonical_id'] == 'iron')
     assert iron['pct_rda'] == 0.0
     assert iron['pct_ul'] is not None
+
+
+@pytest.mark.parametrize('form', [
+    'Magnesium Bisglycinate Chelate Buffered',
+    'Magnesium Lysinate Glycinate Chelate',
+])
+@pytest.mark.parametrize('source_mode', ['structured', 'inline'])
+def test_distinct_magnesium_preparations_do_not_inherit_plain_glycinate(pipeline, form, source_mode):
+    raw = _label(900001, [_row(1, 'Magnesium' if source_mode == 'structured' else form,
+                               'Magnesium', 'mineral', forms=[form] if source_mode == 'structured' else [])])
+    _, readiness, rows, queue = _run(pipeline, raw)
+    row = next(r for r in rows.values() if r.get('canonical_id') == 'magnesium')
+    assert row['form_id'] is None
+    assert row['bio_score'] is None
+    assert row['form_match_status'] == 'unmapped'
+    assert readiness['is_live_ready'] is False
+    assert any(q[0] == 'disclosed_form_unmapped' for q in queue)
+
+
+def test_unknown_magnesium_keeps_unknown_identity_not_floor_basis(pipeline):
+    raw = _label(900002, [_row(1, 'Magnesium', 'Magnesium', 'mineral')])
+    _, _, rows, _ = _run(pipeline, raw)
+    row = rows['Magnesium']
+    assert row['form_id'] in (None, 'magnesium (unspecified)')
+    assert row.get('matched_form') != 'magnesium glycerophosphate'
+    assert row['bio_score'] == _unspecified('magnesium')
+
+
+def test_nested_amount_source_preserves_named_magnesium_preparation(pipeline):
+    parent = _row(1, 'Magnesium', 'Magnesium', 'mineral')
+    child = _row(2, 'from 2,000 mg magnesium glycinate/lysinate chelate',
+                 'Magnesium', 'non-nutrient/non-botanical')
+    child['quantity'][0]['quantity'] = 2000
+    parent['nestedRows'] = [child]
+    _, readiness, rows, queue = _run(pipeline, _label(900003, [parent]))
+    row = rows['Magnesium']
+    assert row['form_match_status'] == 'unmapped'
+    assert row['bio_score'] is None
+    assert row['quantity'] == 100
+    assert readiness['is_live_ready'] is False
+    assert any('lysinate' in q[1].lower() for q in queue)
+
+
+@pytest.mark.parametrize('name', [
+    'Magnesium (as magnesium glycinate and lysinate chelate)',
+    'Magnesium (as magnesium bisglycinate chelate) buffered',
+    'Magnesium (as magnesium bisglycinate chelate buffered)',
+])
+def test_parenthetical_qualified_preparation_keeps_full_identity(pipeline, name):
+    raw = _label(900004, [_row(1, name, 'Magnesium', 'mineral')])
+    _, readiness, rows, queue = _run(pipeline, raw)
+    row = next(r for r in rows.values() if r.get('canonical_id') == 'magnesium')
+    assert row['form_match_status'] == 'unmapped'
+    assert row['bio_score'] is None
+    assert readiness['is_live_ready'] is False
+    assert any(q[0] == 'disclosed_form_unmapped' for q in queue)

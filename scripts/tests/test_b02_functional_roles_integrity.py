@@ -53,7 +53,6 @@ EXPECTED_ROLES = {
     "ADD_POTASSIUM_SORBATE":                ["preservative"],
     "ADD_PROPYLENE_GLYCOL":                 ["solvent", "humectant"],
     "ADD_PROPYLPARABEN":                    ["preservative"],
-    "ADD_PUREFRUIT_SELECT":                 ["sweetener_natural"],
     "ADD_RED40":                            ["colorant_artificial"],
     "ADD_SACCHARIN":                        ["sweetener_artificial"],
     "ADD_SHELLAC":                          ["coating", "glazing_agent"],
@@ -63,13 +62,14 @@ EXPECTED_ROLES = {
 DEFERRED_EMPTY = {
     "ADD_NICKEL":  "contaminant",
 }
+# ADD_PUREFRUIT_SELECT moved to NHA_MONK_FRUIT with Sean approval October13,2026.
 # ADD_SENNA left harmful_additives on 2026-09-25: the planned "move-to-actives
 # (laxative drug)" landed as banned_recalled WATCH_SENNA.
 
 
 def test_batch_2_scope_complete(by_id):
     in_scope = set(EXPECTED_ROLES) | set(DEFERRED_EMPTY)
-    assert len(in_scope) == 40
+    assert len(in_scope) == 39
     missing = in_scope - set(by_id)
     assert not missing, f"missing: {missing}"
 
@@ -95,4 +95,4 @@ def test_batch_2_deferred_empty(by_id):
 def test_batch_2_coverage(by_id):
     in_scope = set(EXPECTED_ROLES) | set(DEFERRED_EMPTY)
     populated = sum(1 for e in in_scope if by_id[e].get("functional_roles"))
-    assert populated == 39, f"want 39/41 populated; got {populated}"
+    assert populated == 38, f"want 38/40 populated; got {populated}"

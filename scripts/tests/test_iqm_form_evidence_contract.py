@@ -1008,7 +1008,8 @@ def test_shipped_iqm_carries_no_nested_axis_and_full_canonical_coverage():
     # class-equivalence evidence (62 -> 66); BCAA unspecified rose to 14 under the
     # unknown-form floor. Q38 then lowered eight unsupported authored unspecified
     # Excellent forms to their evidence ceiling, leaving 232 Excellent forms total.
-    assert coverage.canonical == 65
+    # 2026-10-13: magnesium glycinate (12) gained a verified systemic axis (65 -> 66).
+    assert coverage.canonical == 66
     # 2026-09-25: 18 legacy unspecified forms fell below Excellent under the
     # unknown-form floor and left the backlog (250 -> 232, 195 -> 177).
     # Source-qualified corrections remove three Excellent ratings: liposomal

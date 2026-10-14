@@ -3,8 +3,8 @@
     "description": "Comprehensive database of harmful additives, contaminants, and concerning ingredients found in dietary supplements. Used for scoring penalties and consumer warnings.",
     "purpose": "penalty_scoring",
     "schema_version": "5.4.0",
-    "last_updated": "2026-10-11",
-    "total_entries": 116,
+    "last_updated": "2026-10-13",
+    "total_entries": 115,
     "functional_roles_field": {
       "added_in": "5.2.0",
       "type": "string[]",
@@ -42,7 +42,7 @@
     },
     "risk_breakdown": {
       "high": 21,
-      "low": 62,
+      "low": 61,
       "moderate": 33
     },
     "categories_count": 20,
@@ -10333,118 +10333,6 @@
       "functional_roles": [
         "solvent",
         "humectant"
-      ]
-    },
-    {
-      "id": "ADD_PUREFRUIT_SELECT",
-      "standard_name": "Purefruit Select",
-      "aliases": [
-        "purefruit select",
-        "purefruit",
-        "pure fruit select"
-      ],
-      "category": "sweetener_natural",
-      "mechanism_of_harm": "The manufacturer identifies PUREFRUIT Select as monk fruit extract standardized to 48–52% mogroside V. the composition of any separate blend or carrier requires its own label assessment.",
-      "regulatory_status": {
-        "US": "Manufacturer specification states compliance with GRAS notice GRN000301; this is not an FDA approval of every product blend.",
-        "EU": "Not evaluated",
-        "WHO": "Not evaluated"
-      },
-      "population_warnings": [
-        "Review the full product’s carriers and sweetener blend; this monk fruit ingredient alone does not establish sugar or fructose exposure."
-      ],
-      "notes": "Tate & Lyle’s exact PUREFRUIT Select specification identifies monk fruit extract and references GRN000301. Its current PUREFRUIT page describes a calorie-free sweetener. Do not infer fructose or added-sugar exposure from the brand name.",
-      "scientific_references": [],
-      "last_updated": "2026-03-27",
-      "match_rules": {
-        "match_mode": "alias_and_fuzzy",
-        "fuzzy_threshold": 0.72,
-        "case_sensitive": false,
-        "preferred_alias": "Purefruit Select"
-      },
-      "references_structured": [
-        {
-          "type": "primary_study",
-          "authority": "OTHER",
-          "title": "PUREFRUIT Select manufacturer specification",
-          "citation": "PUREFRUIT Select manufacturer specification",
-          "url": "https://www.tateandlyle.com/sites/default/files/2018-01/Purefruit%20Select%20SPEC.pdf",
-          "published_date": null,
-          "evidence_grade": "C",
-          "supports_claims": []
-        }
-      ],
-      "jurisdictional_statuses": [
-        {
-          "authority": "US",
-          "jurisdiction": "US",
-          "status_code": "approved",
-          "scope": "supplement",
-          "effective_range": {
-            "start": "2015-01-01",
-            "end": null
-          },
-          "source_ref": "https://www.fda.gov/food/food-additives-petitions/food-additive-status-list"
-        },
-        {
-          "authority": "EU",
-          "jurisdiction": "EU",
-          "status_code": "approved",
-          "scope": "supplement",
-          "effective_range": {
-            "start": "2015-01-01",
-            "end": null
-          },
-          "source_ref": "https://www.efsa.europa.eu/en/efsajournal"
-        },
-        {
-          "authority": "WHO",
-          "jurisdiction": "WHO",
-          "status_code": "approved",
-          "scope": "supplement",
-          "effective_range": {
-            "start": "2015-01-01",
-            "end": null
-          },
-          "source_ref": "https://www.who.int/publications"
-        }
-      ],
-      "review": {
-        "status": "validated",
-        "last_reviewed_at": "2026-03-27",
-        "reviewed_by": "harmful_additives_deep_audit_batch7",
-        "next_review_due": "2026-09-27",
-        "change_log": [
-          {
-            "date": "2026-02-18",
-            "change": "Initial entry added from unmapped ingredient audit",
-            "reason": "unmapped_ingredient_coverage"
-          },
-          {
-            "date": "2026-03-22",
-            "change": "Schema v5.1 migration: removed top-level CUI (→ external_ids.umls_cui), removed label_tokens/regex from match_rules, normalized external_ids casing, standardized references_structured fields, mapped status_codes to canonical enum, removed exposure_context/entity_type(ingredient)/class_tags dead-weight fields.",
-            "reason": "schema_v5.1_migration"
-          },
-          {
-            "date": "2026-03-27",
-            "change": "Deep audit batch 7: CUI null (proprietary blend, added cui_status/cui_note). GSRS not found. All identifiers legitimately null for branded blend.",
-            "reason": "harmful_additives_deep_audit_batch7"
-          }
-        ]
-      },
-      "confidence": "low",
-      "severity_level": "low",
-      "cui_status": "no_confirmed_umls_match",
-      "cui_note": "Proprietary branded sweetener blend; no discrete UMLS concept exists.",
-      "external_ids": {
-        "cas": null,
-        "pubchem_cid": null,
-        "unii": null
-      },
-      "safety_summary": "A branded monk-fruit sweetener. Sugar exposure depends on the full formulation and carriers.",
-      "safety_summary_one_liner": "Monk-fruit extract. Assess separate carriers.",
-      "functional_roles": [
-        "sweetener_natural"
       ]
     },
     {

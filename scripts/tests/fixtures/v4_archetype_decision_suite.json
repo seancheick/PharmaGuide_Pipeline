@@ -123,7 +123,7 @@
         "archetype": "generic_single_molecule",
         "quality_score_status": "scored",
         "product_safety_status": "no_known_catalog_concern",
-        "quality_score_v4_100": 100.0,
+        "quality_score_v4_100": 98.7,
         "quality_tier": "Exceptional",
         "v4_confidence": "high",
         "normalization_references": {
@@ -132,7 +132,7 @@
           "evidence": 18.0
         },
         "pillars": {
-          "formulation": 20.0,
+          "formulation": 18.7,
           "dose": 20.0,
           "evidence": 20.0,
           "transparency": 15.0,
@@ -140,7 +140,7 @@
           "safety_hygiene": 10.0
         },
         "raw_dimensions": {
-          "formulation": 15.0,
+          "formulation": 14.0,
           "dose": 22.0,
           "evidence": 18.0,
           "transparency": 10.0
@@ -1179,7 +1179,7 @@
           "safety_hygiene": 10.0
         },
         "raw_dimensions": {
-          "formulation": 13.54,
+          "formulation": 13.5,
           "dose": 23.8517,
           "evidence": 20.0,
           "transparency": 15.0

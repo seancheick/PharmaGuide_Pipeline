@@ -612,7 +612,7 @@ class TestBioScore:
     """Enforce bio_score validity."""
 
     def test_bio_score_valid_range(self, entries):
-        """bio_score must be between 0 and 15."""
+        """bio_score must be a whole integer from 0 to 15 (Sean, 2026-10-13)."""
         invalid = []
 
         for ing_key, entry in entries.items():
@@ -620,7 +620,7 @@ class TestBioScore:
                 if isinstance(form_data, dict):
                     bio = form_data.get('bio_score')
                     if bio is not None:
-                        if isinstance(bio, bool) or not isinstance(bio, (int, float)) or not 0 <= bio <= 15:
+                        if type(bio) is not int or not 0 <= bio <= 15:
                             invalid.append((ing_key, form_name, bio))
 
         assert len(invalid) == 0, (

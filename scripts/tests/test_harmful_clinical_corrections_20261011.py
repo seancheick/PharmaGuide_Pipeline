@@ -45,8 +45,6 @@ def test_regulatory_references_identify_the_actual_chemical():
 
 def test_source_species_and_identity_do_not_transfer_to_other_additives():
     rows=records()
-    assert 'monk fruit' in rows['ADD_PUREFRUIT_SELECT']['mechanism_of_harm'].lower()
-    assert 'concentrated fruit sugar' not in json.dumps(rows['ADD_PUREFRUIT_SELECT']).lower()
     assert '388' not in rows['ADD_POLYSORBATE_20']['mechanism_of_harm']
     assert '25731862' not in json.dumps(rows['ADD_POLYSORBATE_20'])
     assert 'specific' in rows['ADD_SOY_MONOGLYCERIDES']['population_warnings'][0].lower()
@@ -63,3 +61,11 @@ def test_total_intake_and_route_context_are_explicit():
         assert 'conditional' not in rows[key]['dose_thresholds']['source'].lower()
     assert 'EFSA 2018 re-evaluation' not in rows['ADD_SODIUM_LAURYL_SULFATE']['regulatory_status']['EU']
     assert 'spikes blood sugar quickly' not in rows['ADD_TAPIOCA_FILLER']['safety_summary']
+
+
+def test_purefruit_select_uses_verified_monk_fruit_owner_without_harm_penalty():
+    """Manufacturer identity is monk fruit; no sourced harm supports ADD classification."""
+    assert 'ADD_PUREFRUIT_SELECT' not in records()
+    other = json.loads((DATA.parent / 'other_ingredients.json').read_text())
+    rows = {r['id']: r for r in other['other_ingredients']}
+    assert 'purefruit select' in rows['NHA_MONK_FRUIT']['aliases']

@@ -774,14 +774,14 @@ def check_iqm(findings: List[Finding], data: Dict[str, Any], file: str) -> None:
                 if q not in valid_abs_quality:
                     findings.append(Finding("error", file, f"{ing_key}.forms.{form_name}.absorption_structured.quality", "enum_value_not_supported", "|".join(sorted(valid_abs_quality)), str(q)))
 
-            # bio_score must be a number (used directly by scorer).
+            # bio_score is a whole integer 0-15 (used directly by scorer).
             bs = form.get("bio_score")
             if bs is None:
                 findings.append(Finding("error", file, f"{ing_key}.forms.{form_name}.bio_score", "missing_required_key", "number", "missing"))
-            elif isinstance(bs, bool) or not isinstance(bs, (int, float)):
-                findings.append(Finding("error", file, f"{ing_key}.forms.{form_name}.bio_score", "type_mismatch", "number", _type_name(bs)))
-            elif not math.isfinite(bs) or not 0 <= bs <= 15:
-                findings.append(Finding("error", file, f"{ing_key}.forms.{form_name}.bio_score", "out_of_range", "finite number in [0, 15]", str(bs)))
+            elif type(bs) is not int:
+                findings.append(Finding("error", file, f"{ing_key}.forms.{form_name}.bio_score", "type_mismatch", "integer", _type_name(bs)))
+            elif not 0 <= bs <= 15:
+                findings.append(Finding("error", file, f"{ing_key}.forms.{form_name}.bio_score", "out_of_range", "integer in [0, 15]", str(bs)))
 
             # score and natural are retired (IQM 5.6.0): bio_score is the only
             # form-quality value, and neither field may come back.

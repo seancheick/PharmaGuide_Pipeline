@@ -3,7 +3,7 @@
     "description": "Other/inactive ingredients database for supplement excipients and additives",
     "purpose": "inactive_ingredient_classification",
     "schema_version": "5.4.3",
-    "last_updated": "2026-10-12",
+    "last_updated": "2026-10-13",
     "total_entries": 736,
     "functional_roles_field": {
       "added_in": "5.1.0",
@@ -11824,13 +11824,16 @@
         "monk fruit extract",
         "monk fruit juice concentrate",
         "monk fruit sweetener",
-        "siraitia grosvenorii"
+        "siraitia grosvenorii",
+        "purefruit select",
+        "purefruit",
+        "pure fruit select"
       ],
       "category": "sweetener_natural",
       "is_additive": true,
       "additive_type": "natural_sweetener",
       "allergen": false,
-      "notes": "Monk fruit (Siraitia grosvenorii, also known as lo han guo/luo han guo) extract. FDA GRAS (GRN 301, 795). Natural zero-calorie sweetener 150-300× sweeter than sucrose. Active compounds are mogrosides (triterpenoid glycosides), primarily mogroside V. No ADI restriction per JECFA.",
+      "notes": "Monk fruit (Siraitia grosvenorii, also known as lo han guo/luo han guo) extract. FDA GRAS (GRN 301, 795). Natural zero-calorie sweetener 150-300× sweeter than sucrose. Active compounds are mogrosides (triterpenoid glycosides), primarily mogroside V. No ADI restriction per JECFA. PUREFRUIT Select is the manufacturer-identified monk fruit extract standardized to 48–52% mogroside V (Tate & Lyle specification: https://www.tateandlyle.com/sites/default/files/2018-01/Purefruit%20Select%20SPEC.pdf). Assess separately declared carriers and sweetener blends independently; the brand name does not establish sugar exposure.",
       "common_uses": [
         "flavor enhancement",
         "sugar replacement",
