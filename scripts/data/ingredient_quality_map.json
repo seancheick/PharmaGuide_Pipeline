@@ -53,7 +53,7 @@
       "vitamins": 25
     },
     "schema_version": "5.6.1",
-    "last_updated": "2026-10-12",
+    "last_updated": "2026-10-13",
     "pipeline_integration": "Used by enrichment to assign form quality (bio_score) to matched ingredient forms. Match ingredient name against forms aliases (case-insensitive).",
     "matching_notes": [
       "Match ingredient name + forms text against aliases array (case-insensitive)",
@@ -8104,13 +8104,13 @@
     "forms": {
       "magnesium glycinate": {
         "bio_score": 12,
-        "absorption": "well-absorbed chelate; class-typical soluble-Mg F, not proven superior to citrate/lactate/aspartate (no head-to-head human PK; NIH ODS)",
+        "absorption": "Human diglycinate-versus-oxide absorption data exist in intestinal-resection patients; comparative absorption against citrate in healthy adults is not established by the reviewed sources.",
         "consumer_note": "Magnesium glycinate is magnesium paired with glycine. The named glycine ligand distinguishes it from magnesium salts and from unspecified amino-acid chelates.",
         "consumer_note_review": {
           "by": "Product owner approval",
           "date": "2026-08-08"
         },
-        "notes": "Magnesium glycinate/bisglycinate is a plausible premium, gentle chelated form, but the clinician/API pass did not verify direct human comparative evidence proving it is superior to citrate/aspartate/chloride/lactate. Scored as good/solid bioavailability rather than top-tier. API evidence trail: scripts/audits/mineral_forms_20260602/api_verification.json.",
+        "notes": "Schuette1994 (PMID:7815675) compared100mg isotope-labeled magnesium diglycinate with oxide in12ileal-resection patients. Overall absorption did not differ (23.5% versus22.8%); a four-patient subgroup with poor oxide absorption benefited and diglycinate was better tolerated. This does not establish superiority or inferiority versus citrate in healthy adults. Walker2003 (PMID:14596323) tested an amino-acid chelate; its abstract does not identify that preparation as exact glycinate. The existing bio_score12 is retained pending clinical calibration review; tolerability and absorption are distinct outcomes.",
         "aliases": [
           "magnesium bisglycinate",
           "mag glycinate",
@@ -8296,7 +8296,7 @@
           "by": "Product owner approval",
           "date": "2026-08-08"
         },
-        "notes": "Magnesium citrate is one of the better-supported oral magnesium salts. PubMed API verified Walker 2003 (PMID:14596323) and Firoz & Graber 2001 (PMID:11794633): citrate/chloride/lactate/aspartate outperform oxide, with overlapping human absorption ranges among soluble organic salts. Clinician recalibration 2026-06-02 assigns top magnesium bio_score for direct human comparative evidence, not laxative/tolerability effects.",
+        "notes": "Walker2003 (PMID:14596323) compared citrate, an amino-acid chelate, oxide and placebo in46healthy participants at300mg/day for60days. Citrate had favorable serum/saliva results and organic preparations outperformed oxide on urinary measures. This does not establish a universal exact glycinate-versus-citrate ranking. Firoz2001 (PMID:11794633) did not test citrate; it compared oxide with chloride, lactate and aspartate. Existing bio_score14 retained pending clinical calibration review.",
         "aliases": [
           "mag citrate",
           "trimagnesium citrate",
@@ -8711,13 +8711,13 @@
           "magnesium d-aspartate"
         ],
         "bio_score": 1,
-        "absorption": "form unknown; assume oxide-tier worst-case for scoring",
+        "absorption": "Chemical form is not established from the label; the conservative scoring fallback is not a measured absorption estimate or identification as oxide.",
         "consumer_note": "The label names magnesium without identifying the magnesium salt. That limits comparison with named forms such as oxide, citrate, or glycinate.",
         "consumer_note_review": {
           "by": "Product owner approval",
           "date": "2026-08-08"
         },
-        "notes": "The supplement label does not specify which magnesium form is used. This is a major red flag — cheap supplements overwhelmingly use magnesium oxide, which has only ~4% absorption. Quality brands specify the form (glycinate, citrate, threonate, etc.). Always check the form. Evidence update 2026-04-25 (Batch 15): Magnesium audit — 11 PMIDs WebFetch-verified. CLASS FINDING: organic chelates (glycinate, malate, taurate, orotate, AAC, gluconate, aspartate, lactate, chloride) cluster F ~25-45% in humans with overlapping CIs; only robustly-replicated human ranking is citrate ≥ organic chelates > carbonate > oxide. THREONATE FINDING: BBB-crossing claim is RAT-ONLY (Slutsky 2010 PMID:20152124, Neuron). Liu 2016 + Zhang 2022 human cognitive RCTs have NO brain Mg PK. ACETYL-TAURATE: rodent-only (Ates 2019 mice, Uysal 2019 rats); no human PK. BROWN RICE CHELATE: re-confirmed 0 PubMed hits (Batch 11). Misattributions caught: Slutsky PMID 20152120→20152124; Walker 2003 did NOT test glycinate; Schwalfenberg 2017 muscle-cramps RCT does not exist; Coudray PMID 16253138→16548135. Clinician recalibration 2026-06-02: bio_score is absorption/bioavailability only; natural/source and tolerability claims are not counted in bio_score. API evidence trail: scripts/audits/mineral_forms_20260602/api_verification.json.",
+        "notes": "The source label does not establish a specific magnesium form. Preserve that uncertainty without inferring oxide or another salt. The existing unspecified score is a conservative scoring convention, not evidence of the product’s biological absorption or personal suitability.",
         "aliases": [
           "magnesium",
           "mag",

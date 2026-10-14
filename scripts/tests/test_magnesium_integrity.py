@@ -241,3 +241,12 @@ def test_magnesium_oxide_copy_matches_structured_absorption(iqm):
     assert '4%' in text
     assert 'pmid:11794633' in text
     assert 'firoz 2001 pmid:16548135' not in text
+
+
+def test_magnesium_form_copy_distinguishes_source_evidence_and_unknown_identity(iqm):
+    forms = iqm['magnesium']['forms']
+    assert '7815675' in forms['magnesium glycinate']['notes']
+    assert 'no head-to-head human PK' not in forms['magnesium glycinate']['absorption']
+    assert 'did not test citrate' in forms['magnesium citrate']['notes']
+    assert 'assume oxide' not in forms['magnesium (unspecified)']['absorption']
+    assert 'cheap supplements overwhelmingly' not in forms['magnesium (unspecified)']['notes']
