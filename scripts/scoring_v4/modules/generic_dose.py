@@ -729,6 +729,21 @@ def score_dose(product: Dict[str, Any]) -> Dict[str, Any]:
         "method": METHOD_MARKER,
         "deferred_data_dependency": DEFERRED_DATA,
         "B7_safety_evaluation": b7_metadata,
+        # Source-owned context, not another assessment or a clinical efficacy claim.
+        "dose_safety_policy": dict(_B7),
+        "reference_assessments": [
+            {key: row.get(key) for key in (
+                "nutrient", "canonical_id", "unit", "rda_ai", "rda_ai_source", "ul", "ul_status",
+                "pct_rda", "pct_ul", "per_day_min", "per_day_max", "reference_profile", "reference",
+                "scoring_eligible", "skip_ul_check", "ul_gate_eligible", "source_label_key",
+            )}
+            for row in _safe_list(_safe_dict(product.get("rda_ul_data")).get("adequacy_results"))
+            if isinstance(row, dict)
+        ],
+        "ul_partial_credit_above_pct": WINDOW_UL_PARTIAL_BAND,
+        "ul_zero_credit_at_pct": B7_UL_PCT_THRESHOLD,
+        "ul_partial_credit_raw": WINDOW_OVERDOSE_CREDIT,
+        "supplemental_window_max_raw": CAP_SUPPLEMENTAL_WINDOW,
     }
     if purpose_credit is not None:
         metadata["dose_participation_basis"] = "declared_purpose_equal_weight"

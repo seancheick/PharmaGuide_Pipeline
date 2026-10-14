@@ -663,3 +663,31 @@ def test_b5_same_named_totals_respect_raw_parent_ownership(same_owner):
     evidence = payload["metadata"]["B5_blend_evidence"]
     assert len(evidence) == (1 if same_owner else 2)
     assert payload["penalties"]["B5_proprietary_blend_opacity"] == (0 if same_owner else pytest.approx(-1.9))
+
+
+def test_printed_parent_total_and_individually_disclosed_children_are_transparent():
+    """A form-averaging exclusion is not label nondisclosure (CitraMate)."""
+    from scoring_v4.scored_artifact import build_scored_artifact
+    p = _product(total_active_ingredients=3)
+    rows = [_ingredient(), _ingredient("Magnesium Citrate", "Magnesium"),
+            _ingredient("Dimagnesium Malate", "Magnesium")]
+    for row, amount, path in zip(rows, (135, 55, 80),
+            ("ingredientRows[0]", "ingredientRows[0].nestedRows[0]", "ingredientRows[0].nestedRows[1]")):
+        row.update(quantity=amount, raw_source_path=path, source_section="active",
+                   raw_taxonomy={"quantityVariants": [{"quantity": amount, "unit": "mg", "selected_for_analysis": True}]})
+    rows[0]["is_parent_total"] = True
+    p["ingredient_quality_data"].update(ingredients=rows, ingredients_scorable=rows)
+    out = build_scored_artifact(p)
+    assert out["quality_pillars_v4"]["transparency"]["score"] == 15
+    # No quantity capture, derived allocation, or missing child earns the bonus.
+    for mutation in ("missing_child", "unproven_total", "allocated_total"):
+        import copy
+        bad = copy.deepcopy(p)
+        bad_rows = bad["ingredient_quality_data"]["ingredients_scorable"]
+        if mutation == "missing_child":
+            bad_rows[1].update(quantity=None, unit="")
+        elif mutation == "unproven_total":
+            bad_rows[0].pop("raw_taxonomy")
+        else:
+            bad_rows[0]["quantity"] = 999
+        assert build_scored_artifact(bad)["quality_pillars_v4"]["transparency"]["score"] < 15

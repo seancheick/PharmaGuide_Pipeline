@@ -24,7 +24,7 @@ import re
 from typing import Any, Dict, List, Optional, Tuple
 
 from constants import CLEANER_NON_EFFICACY_ROLES
-from scoring_input_contract import dose_disclosure_status, is_nutrition_fact_declaration
+from scoring_input_contract import dose_disclosure_status, has_source_printed_amount, is_nutrition_fact_declaration
 from scoring_v4.modules.generic_helpers import (
     _as_float,
     _norm_text,
@@ -370,8 +370,8 @@ def _score_complete_active_disclosure_bonus(
     without making any gluten-free / vegan / allergen-free claim, so keep
     that disclosure credit in its own lane. The gate is intentionally
     conservative: every declared active must be represented by an
-    individually dose-bearing row, and proprietary/parent-total rows do
-    not qualify.
+    individually disclosed row. A printed parent total can be disclosed even
+    though Formulation excludes it to avoid counting its children twice.
     """
     rows = [row for row in get_active_ingredients(product) if isinstance(row, dict)]
     # A bioavailability aid the enricher demoted (piperine <= 10 mg) is a
@@ -401,7 +401,7 @@ def _score_complete_active_disclosure_bonus(
         row_blockers: List[str] = []
         if row.get("is_proprietary_blend"):
             row_blockers.append("proprietary_blend_row")
-        if row.get("is_parent_total"):
+        if row.get("is_parent_total") and not has_source_printed_amount(row):
             row_blockers.append("parent_total_row")
         if not _has_active_identity(row):
             row_blockers.append("missing_identity")

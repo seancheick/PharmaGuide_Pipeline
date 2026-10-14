@@ -310,20 +310,6 @@ def compact_dose_decision(value: Any) -> Optional[Dict[str, Any]]:
     return compact
 
 
-def _first_form_name(forms: Any) -> str:
-    """Return the first DSLD-declared form name, e.g. 'Palmitate'.
-
-    The cleaner emits forms[] from DSLD's parsed forms array or from
-    name-extraction. When it succeeds, this is the user-visible label form.
-    When it fails (cleaner regex misses inline forms like
-    'Vitamin A Palmitate'), the canonical contract falls back to the
-    enricher's matched_form via _compute_form_contract.
-    """
-    if forms and isinstance(forms, list) and isinstance(forms[0], dict):
-        return safe_str(forms[0].get("name"))
-    return ""
-
-
 # Placeholder tokens IQM uses when no specific form was matched. A
 # matched_form equal to any of these (or carrying an "(unspecified)"
 # parenthetical) means the enricher fell back to the parent canonical
@@ -441,17 +427,23 @@ def _compute_form_contract(
                           an IQM form, a generic descriptor or context).
 
     Resolution order:
-      1. Cleaner forms[0].name present     -> known
+      1. Cleaner forms[].name present     -> known; preserve every declared form
       2. Enricher matched_form non-placeholder -> known (bridge for cleaner gaps)
       3. Otherwise                          -> unknown
     """
-    label_form = _first_form_name(ingredient.get("forms"))
+    declared_forms = list(dict.fromkeys(
+        safe_str(form.get("name")) for form in (ingredient.get("forms") or [])
+        if isinstance(form, dict) and safe_str(form.get("name"))
+        and not _label_form_repeats_identity(safe_str(form.get("name")), ingredient, match)
+    ))
+    label_form = ", ".join(declared_forms)
     # Label-native form (label-first export): the identity contract's approved
     # display form wins for resolved rows, so "as Ethyl Esters" survives instead
     # of collapsing to a bare "Ethyl Esters" reconstruction.
     label_display_form = safe_str(match.get("label_display_form"))
     if (
         label_display_form
+        and len(declared_forms) <= 1
         and is_identity_scoreable(safe_str(match.get("identity_disposition")))
         and not _label_form_repeats_identity(label_display_form, ingredient, match)
     ):

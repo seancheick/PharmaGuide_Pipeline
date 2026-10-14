@@ -259,3 +259,26 @@ def test_dose_reference_fact_uses_existing_owner_counts_without_changing_points(
     assert "cannot be determined confidently" in fact["value_display"]
     for key in ("score", "max", "reason"):
         assert pillars["Dose"][key] == before["Dose"][key]
+
+
+def test_generic_dose_exposes_reference_policy_without_claiming_clinical_range():
+    from scoring_v4.scored_artifact import build_scored_artifact
+    from test_v4_generic_transparency_p135 import _product
+    p = _product(total_active_ingredients=1)
+    p["rda_ul_data"] = {"adequacy_results": [{"nutrient": "Magnesium", "canonical_id": "magnesium",
+        "pct_rda": 33.75, "pct_ul": 115.714, "rda_ai": 400, "ul": 350,
+        "per_day_min": 135, "per_day_max": 405, "unit": "mg", "scoring_eligible": True,
+        "reference": {"ul_basis": "supplemental_only"}}]}
+    out = build_scored_artifact(p)["quality_pillars_v4"]
+    context = out["dose"]["explanation"]["assessment"]
+    assert context["method"] == "rda_ul_proxy_until_dietary_intake_table"
+    assert context["reference_assessments"][0]["per_day_max"] == 405
+    assert context["ul_partial_credit_above_pct"] == 100
+    assert context["ul_zero_credit_at_pct"] == 150
+    assert context["dose_safety_policy"] == {"ul_pct_threshold": 150, "per_flag_penalty": 2, "cap": 3}
+    assert context["raw_dose_safety_penalty"] == 0
+    assert context["safety_hygiene_over_ul_penalty"] == 0
+    assert out["dose"]["score"] == 10
+    p["rda_ul_data"]["adequacy_results"][0]["pct_ul"] = 50
+    out = build_scored_artifact(p)["quality_pillars_v4"]
+    assert "studied" not in out["dose"]["reason"].lower()
