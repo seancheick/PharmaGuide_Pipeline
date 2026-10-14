@@ -1,3 +1,11 @@
+## Step3 independent review — measurement corrections, October14
+
+Owner: existing Step3 diagnostic harness and STEP3_OPTIONS.md; production owners remain botanical/collagen dose adapters, probiotic_dose::score_dose and quality_score pillar assemblers. Evidence: original/corrected product182953 counterfactual and corrected full15,123 diagnostic. Will NOT create: scorer, public field, clinical policy, registry or new neutral value. Class: documentation/private diagnostic; no production code change.
+
+Original B3 applies neutral to hidden amounts despite an established benchmark. Corrected diagnostic:10,749 movers, mean−0.13,2,354 tiers,0 arithmetic errors;1,422 hidden benchmark-availability gaps and34 mixed fallback gaps. Explicit invariant exception counts now included; synthetic checks0 failures/0 exceptions, but these do not qualify raw-label behavior. Additional report findings: probiotic counterfactual drops guarantee/eligibility logic; marginal disclosure references assume other transforms; unrated forms/Transparency base/multi breadth and some Dose overlap decisions remain unresolved. No policy approval. Steps1–2 acceptance remains valid.
+
+Evidence in primary reports/step3_review_20261014; original private receipts retained. Source regression product182953: original hidden Dose11.4, corrected current missing-amount band4.8. Next: one bounded owner-faithful measurement correction pass, including collagen/mixed/raw-label hiding and complete policy/reference proposal, then Sean chooses. No corpus rebuild/publication.
+
 ## Current execution — V4.1 score accounting consolidation, October 14
 
 Sean froze scoring policy and approved a five-step plan. Draft PRs: [PharmaGuide_Pipeline#144](https://github.com/seancheick/PharmaGuide_Pipeline/pull/144), branch `claude/score-ledger`, and the paired [Pharmaguide.ai#122](https://github.com/seancheick/Pharmaguide.ai/pull/122), branch `claude/score-receipts`. Nothing is merged, rebuilt or published.

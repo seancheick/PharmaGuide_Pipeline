@@ -2,6 +2,35 @@
 
 Read-only. Nothing here changes a score; each option needs Sean's choice before Step 4.
 
+## Independent review correction — approval pending
+
+Codex reproduced a mismatch between B3's stated policy and its implementation. The original `t_neutral` applies 11.4 to `primary_no_dose` and `blend_total_only` without checking whether a benchmark exists. Product182953 has a `within_studied_range` botanical assessment; hiding its amount receives11.4 in the original harness. The corrected diagnostic preserves its current missing-amount band instead (4.8 public), with a regression assertion. Neither result is an approved scoring policy.
+
+Corrected diagnostic evidence is in the primary checkout's `reports/step3_review_20261014/`: `corrected_whatif.py`, `corrected_b3.json`. This retains the original private receipts unchanged. The diagnostic adds benchmark guarding for B3 and explicit invariant error counts; it does not implement the production policy or claim a completed raw-label replay.
+
+| Corrected B3 diagnostic | Result |
+|---|---:|
+| Scored products |15,123|
+| Moved |10,749|
+| Mean movement |−0.13|
+| Tier changes |2,354|
+| Arithmetic errors |0|
+| Hidden amounts with unresolved benchmark availability |1,422|
+| Unmeasured mixed fallback windows |34|
+
+The synthetic hiding checks still report0 violations /0 exceptions among2,413 botanical,901 sports and145 probiotic counterfactuals. These checks change stored components, not original label inputs; they cannot establish end-to-end monotonicity or current-scorer behavior. Collagen is excluded. A zero-error receipt establishes arithmetic reconciliation only.
+
+Additional corrections required before an option can be approved:
+- Probiotic counterfactuals and proposed floors hard-code2/4 without replaying the existing guarantee multiplier (0.85/0.9/1.0), live-strain eligibility and direct-mass fallback. `probiotic_dose::score_dose` owns these conditions. The currently reported baseline and floor-policy hiding results are therefore diagnostic approximations, not owner-faithful results.
+- The isolated `disclosure` transform uses reference values that assume count/route-base and branded credits have already been removed. Its marginal table conflates component removal with additional recalibration. References must be derived separately for each complete option, and baseline replay must use the production owners.
+- A near-zero mean and preserving the55 tier boundary do not establish fairness or justify N=11.4. Compare adequacy ordering, information hiding, affected routes and controls before choosing; tier preservation is not an acceptance criterion.
+- B3 leaves the existing unrated-form treatment and unconditional Transparency base unchanged. It also leaves the multi panel-breadth question open, and does not resolve all dose-window/B7/withdrawn-fit overlaps. The claim that every concern has one numerical owner is withdrawn.
+- Step3 options do not address the known delivery-context correctness defect, which remains a required Step4 repair.
+
+**Disposition:** Step3 remains incomplete for policy approval. Do not implement B3 on these measurements. Finish one bounded measurement correction pass: source-owned benchmark availability; owner-faithful probiotic counterfactuals; raw-label hiding cases including collagen and mixed purposes; explicit treatment of every remaining decision; and independently checked reference derivations. Then return a complete owner/config proposal to Sean. Steps1–2 receipt PR acceptance is unchanged. Numerical changes, merge authorization, rebuild and publication remain separate.
+
+The tables below are the ORIGINAL harness results retained for traceability. B3's figures and universal claims are superseded by this correction. Other scenarios remain unqualified approximations until their noted owner/reference gaps are resolved.
+
 ## Method
 
 - **Data.** The stored Stage-3 module breakdowns of all 15,123 scored products (config 1.23.0, scored October 14, before PR143's Formulation delivery change). Absolute numbers will shift slightly on delivery-affected products after the rebuild. The comparisons between options do not depend on that.
@@ -21,7 +50,7 @@ Read-only. Nothing here changes a score; each option needs Sean's choice before 
 |---|---|---|
 | mirrors | Removes the B1 and B7 Safety mirrors (F1, F2). | — |
 | b0_sixth | Removes Formulation B0; the sixth-pillar base stays the only owner (F4). | — |
-| b0_none | b0_sixth, plus the base no longer zeroes for high-risk or watchlist matches (Codex's variant). | — |
+| b0_none | b0_sixth, plus the base no longer zeroes for high-risk or watchlist matches (measured alternative; not the current Codex recommendation). | — |
 | b0_formulation_owner | Keeps Formulation B0; the base no longer zeroes for high-risk or watchlist matches. | — |
 | branded | Removes the branded-studied extra (+3) in Formulation; standardization stays (F13). | — |
 | probiotic_gate | Probiotic Evidence certainty and replication earn nothing when applicability is 0 (F15). | — |
