@@ -12,7 +12,8 @@ match candidates:
     its neighbouring compound, tried as "compound, salt" then the compound.
 (b) When the cleaner extracts a brand token ("Albion"), the match name is the
     brand and a bare salt qualifier built "Albion malate" instead of
-    "Magnesium malate" (328832, 322515). The nutrient builds the salt too.
+    "Magnesium malate" (328832). The nutrient builds the salt too.
+The distinct lysinate/glycinate preparation (322515) remains a named-form hold.
 """
 import json
 import logging
@@ -56,8 +57,17 @@ def test_a_folate_salt_reads_one_compound(pipeline, pid, forms):
 
 @pytest.mark.parametrize("pid,form", [
     ("328832", "magnesium malate"),
-    ("322515", "magnesium glycinate"),
 ])
 def test_an_albion_salt_reads_the_nutrient_salt(pipeline, pid, form):
     rows = [r for r in _rows(pipeline, pid, "magnesium") if "Albion" in (r.get("name") or "")]
     assert [(r.get("matched_form"), r.get("form_match_status")) for r in rows] == [(form, "mapped")]
+
+
+def test_albion_mixed_ligand_preparation_does_not_become_plain_glycinate(pipeline):
+    rows = [r for r in _rows(pipeline, "322515", "magnesium")
+            if "Albion" in (r.get("name") or "")]
+    assert len(rows) == 1
+    assert "Lysinate Glycinate" in rows[0]["name"]
+    assert rows[0]["matched_form"] is None
+    assert rows[0]["form_match_status"] == "unmapped"
+    assert rows[0]["bio_score"] is None

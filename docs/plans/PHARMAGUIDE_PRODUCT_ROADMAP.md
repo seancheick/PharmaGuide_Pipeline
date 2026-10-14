@@ -153,6 +153,8 @@ CI. Pushes to main stay Sean's.
 
 ### Phase 0 — finish the current remediation
 
+October 13 magnesium checkpoint: combined Option C calibration, Purefruit owner correction and preparation/source identity fixes are implemented and measured on289 frozen labels. Eight exact-preparation assessment holds are intentional; glycerophosphate calibration remains held. App Formulation explanation is integrated. Final pipeline main integration awaits green CI. Sean owns the subsequent full Clean→Enrich→Score run; no phase or catalog-release completion is implied. Evidence is in the existing pending-items LEDGER, October13 magnesium entry.
+
 The [master completion plan](PHARMAGUIDE_MASTER_COMPLETION_PLAN.md), Phases 1–7, owned by the
 integrator. No export-schema change mixes into it. Work that can run beside it because it touches
 no shared pipeline owner: items 1.1, 1.2 and authoring the benchmark scenarios for 1.10.
