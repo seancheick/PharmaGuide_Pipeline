@@ -1008,3 +1008,23 @@ def test_explicit_sole_active_delivery_exclusion_overrides_other_positive_source
     product['delivery_data']=enricher._collect_delivery_data(product)
     entry={**reviewed_entries()['INGR_PEPPERMINT_OIL'],'matched_source_row_refs':['ingredientRows[0]']}
     assert assess_clinical_applicability(product,entry,assess_amount=False)['status']=='not_applicable'
+
+
+def test_native_two_explicit_functions_keep_unbenchmarked_caffeine_in_dose(enricher):
+    from enhanced_normalizer import EnhancedDSLDNormalizer
+    from scoring_v4.scored_artifact import build_scored_artifact
+    raw = {'id': 'TWO_SOURCE_FUNCTIONS', 'fullName': 'Everyday Energy', 'brandName': 'Regression',
+           'physicalState': {'name': 'Powder'},
+           'servingSizes': [{'minQuantity': 1, 'maxQuantity': 1, 'unit': 'Scoop(s)'}],
+           'ingredientRows': [
+               {'name': 'CoQ10', 'forms': [], 'nestedRows': [], 'quantity': [{'quantity': 100, 'unit': 'mg'}]},
+               {'name': 'Caffeine', 'forms': [], 'nestedRows': [], 'quantity': [{'quantity': 40, 'unit': 'mg'}]}],
+           'statements': [{'type': 'Formula re: Contains', 'notes':
+               'Caffeine helps aid attention and alertness. CoQ10 supports energy production.'}],
+           'otherIngredients': {'ingredients': []}}
+    product, _ = enricher.enrich_product(EnhancedDSLDNormalizer().normalize_product(raw))
+    artifact = build_scored_artifact(product)
+    dose = artifact['_v4_module_breakdown']['dimensions']['dose']['metadata']
+    assert dose['purpose_ingredient_count'] == 2
+    assert 'caffeine' in dose['unbenchmarked_purpose_ingredients']
+    assert not dose['positive_clinical_benchmark_assessments']

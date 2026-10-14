@@ -1323,3 +1323,20 @@ def test_generic_nettle_review_cannot_invent_root_preparation_threshold(name, fo
     assert record["studied_dose_exposure"] == {}
     assert "600" not in json.dumps(record)
     assert "leaf" in record["applicability_decision"].lower()
+
+
+@pytest.mark.parametrize('text,expected', [
+    ('attention and alertness', {'cognitive_neurological'}),
+    ('memory, focus and cognition', {'cognitive_neurological'}),
+    ('cognitive performance', {'cognitive_neurological'}),
+    ('short-term memory and focus problems associated with aging', {'cognitive_neurological'}),
+    ('immune, skin, and eye health', {'immune', 'skin_hair_collagen', 'eye_health'}),
+    ('healthy aging', {'aging_longevity'}),
+    ('anti-aging', {'aging_longevity'}),
+    ('healthy ageing and longevity', {'aging_longevity'}),
+    ('Certified renewable energy. We buy 100% renewable energy.', set()),
+    ('cellular energy production', {'mitochondrial_energy'}),
+    ('renewable energy manufacturing; supports cellular energy', {'mitochondrial_energy'}),
+])
+def test_explicit_purpose_categories_preserve_endpoints_and_reject_context(text, expected):
+    assert er.evidence_indication_categories(text) == expected
