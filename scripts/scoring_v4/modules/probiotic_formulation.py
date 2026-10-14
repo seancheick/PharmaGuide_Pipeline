@@ -119,10 +119,24 @@ def _score_delivery_survivability(product: Dict[str, Any], pdata: Dict[str, Any]
     if pdata.get("has_survivability_coating"):
         return CAP_DELIVERY_SURVIVABILITY
 
-    tier = product.get("delivery_tier")
-    if tier is None:
-        tier = _safe_dict(product.get("delivery_data")).get("highest_tier")
-    tier_int = _as_int(tier, 0)
+    # The generic delivery tier also includes vitamin forms and food
+    # processing. Only the existing probiotic-delivery vocabulary can
+    # establish survivability; an unrelated ingredient's tier cannot.
+    from form_vocab import matches_probiotic_delivery
+    from clinical_applicability import _rows, _source_delivery_forms
+    from probiotic_measurements import is_probiotic_source_identity
+    rows = [row for row in _rows(product, source_only=True) if is_probiotic_source_identity(row)]
+    systems = _safe_dict(product.get("delivery_data")).get("systems") or []
+    tiers = [
+        _as_int(system.get("tier"), 0)
+        for system in systems if isinstance(system, dict)
+        and matches_probiotic_delivery(str(system.get("canonical_name") or system.get("name") or ""))
+        and _as_int(system.get("tier"), 0) in (1, 2, 3)
+        and any(_source_delivery_forms(
+            {**product, "delivery_data": {"systems": [system]}}, row,
+        ) for row in rows)
+    ]
+    tier_int = min(tiers) if tiers else 0
     return {1: CAP_DELIVERY_SURVIVABILITY, 2: 2.5, 3: 1.5}.get(tier_int, 0.0)
 
 

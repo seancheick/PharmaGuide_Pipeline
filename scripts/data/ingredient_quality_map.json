@@ -32,7 +32,7 @@
     "statistics": {
       "total_parents": 655,
       "total_forms": 1474,
-      "total_form_aliases": 12301,
+      "total_form_aliases": 12302,
       "parents_with_parent_aliases": 149,
       "parents_with_contains_aliases": 0,
       "parents_with_pattern_aliases": 0
@@ -46815,7 +46815,8 @@
         "aliases": [
           "primavie",
           "patented shilajit",
-          "primavie purified shilajit"
+          "primavie purified shilajit",
+          "primavie shilajit extract"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {

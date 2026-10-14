@@ -10860,14 +10860,16 @@ class SupplementEnricherV3:
         # Enteric-Coated Tablet(s)", "30 Delayed-Release Veg. Capsule(s)").
         for index, text in enumerate(_net_contents_texts(product)):
             evidence_sources.append((f"netContents[{index}]", text))
+        # Preparation disclosure is source evidence even when its mass is NP
+        # or owned by a blend. Dose eligibility must not erase label wording.
         for index, ingredient in enumerate(
-            self._primary_active_ingredients_for_enrichment(product)
+            self._flatten_active_ingredients_for_analysis(product.get("activeIngredients") or [])
         ):
             if not isinstance(ingredient, dict):
                 continue
             row_text = " ".join(
                 str(ingredient.get(field) or "")
-                for field in ("name", "raw_source_text", "standardName", "notes")
+                for field in ("name", "raw_source_text", "notes")
             ).strip()
             if row_text:
                 evidence_sources.append((ingredient.get("raw_source_path") or f"activeIngredients[{index}]", row_text))
@@ -10915,7 +10917,7 @@ class SupplementEnricherV3:
             # Scoring still consumes only highest_tier, never source count.
             seen_sources = set()
             for source_path, source_text in [("physical_state", physical_state), *evidence_sources]:
-                row_match = pattern.search(source_text)
+                row_match = norm_module.find_affirmative_label_match(pattern, source_text)
                 if not row_match or source_path in seen_sources:
                     continue
                 seen_sources.add(source_path)
@@ -12593,22 +12595,7 @@ class SupplementEnricherV3:
         return "critical"
 
     def _is_negated_match_phrase(self, text: str, matched_term: str) -> bool:
-        """Detect explicit negation patterns around a matched term."""
-        term = (matched_term or "").strip().lower()
-        if not text or not term:
-            return False
-
-        text_lower = text.lower()
-        escaped_term = re.escape(term)
-        negation_patterns = (
-            rf"\b{escaped_term}\s*-\s*free\b",
-            rf"\bfree\s+from\s+{escaped_term}\b",
-            rf"\bcontains?\s+no\s+{escaped_term}\b",
-            rf"\bno\s+{escaped_term}\b",
-            rf"\bwithout\s+{escaped_term}\b",
-            rf"\bnon[-\s]+{escaped_term}\b",
-        )
-        return any(re.search(pattern, text_lower) for pattern in negation_patterns)
+        return norm_module.is_negated_match_phrase(text, matched_term)
 
     @property
     def NATURAL_COLOR_INDICATORS(self) -> List[str]:
@@ -24041,9 +24028,7 @@ class SupplementEnricherV3:
             # Section A: Ingredient Quality
             enriched["ingredient_quality_data"] = self._collect_ingredient_quality_data(product)
 
-            enriched["delivery_data"] = self._collect_delivery_data({
-                **product, "ingredient_quality_data": enriched["ingredient_quality_data"],
-            })
+            enriched["delivery_data"] = self._collect_delivery_data(product)
             enriched["absorption_data"] = self._collect_absorption_data(enriched)
             enriched["formulation_data"] = self._collect_formulation_data(enriched)
 

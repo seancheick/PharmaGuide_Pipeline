@@ -16,7 +16,7 @@ from pathlib import Path
 from typing import Any
 
 from constants import DELIVERY_SOURCE_STATEMENT_TYPES
-from normalization import canonicalize_mass_unit
+from normalization import canonicalize_mass_unit, find_affirmative_label_match
 from serving_frequency import resolve_daily_serving_range
 
 
@@ -53,7 +53,7 @@ def _number(value: Any) -> float | None:
         return None
 
 
-def _row_text(row: Mapping, *, source_only: bool = False) -> str:
+def _row_text(row: Mapping, *, source_only: bool = False, preserve_punctuation: bool = False) -> str:
     if source_only:
         label = row.get("raw_source_text") or row.get("source_label_name")
         if not isinstance(label, str) or not label.strip():
@@ -72,7 +72,10 @@ def _row_text(row: Mapping, *, source_only: bool = False) -> str:
         values.extend(f.get("name") for f in forms if isinstance(f, Mapping))
     # Parent/source notation is one linked label assertion: Zinc (as acetate)
     # is zinc acetate. Never assemble this from different ingredient rows.
-    return " " + _key(" ".join(str(v) for v in values if v)).replace(" as ", " ") + " "
+    text = " ".join(str(v) for v in values if v)
+    if preserve_punctuation:
+        return text
+    return " " + _key(text).replace(" as ", " ") + " "
 
 
 def _is_exposure_row(row: Mapping) -> bool:
@@ -319,20 +322,20 @@ def _source_delivery_forms(product: Mapping, row: Mapping, excluded_terms=()) ->
     for system in (product.get("delivery_data") or {}).get("systems", []):
         if not isinstance(system, Mapping):
             continue
-        marker, source = _key(system.get("raw_source_text")), system.get("match_source")
+        marker, source = str(system.get("raw_source_text") or ""), system.get("match_source")
         if not marker or not isinstance(source, str):
             continue
         source_text = ""
         match = re.fullmatch(r"activeIngredients\[(\d+)\]", source)
         if source == row.get("raw_source_path"):
-            source_text = _row_text(row, source_only=True)
+            source_text = _row_text(row, source_only=True, preserve_punctuation=True)
         elif match:
             active = product.get("activeIngredients") or []
             index = int(match.group(1))
             if index < len(active) and isinstance(active[index], Mapping):
                 original = active[index]
                 if original.get("raw_source_path") == row.get("raw_source_path"):
-                    source_text = _row_text(original, source_only=True)
+                    source_text = _row_text(original, source_only=True, preserve_punctuation=True)
         elif len(originals) == 1 and originals[0].get("raw_source_path") == row.get("raw_source_path"):
             match = re.fullmatch(r"statements\[(\d+)\]", source)
             if match:
@@ -340,17 +343,18 @@ def _source_delivery_forms(product: Mapping, row: Mapping, excluded_terms=()) ->
                 index = int(match.group(1))
                 if (index < len(statements) and isinstance(statements[index], Mapping)
                         and statements[index].get("type") in DELIVERY_SOURCE_STATEMENT_TYPES):
-                    source_text = _key(statements[index].get("notes"))
+                    source_text = str(statements[index].get("notes") or "")
             elif source in {"name", "fullName", "productName"}:
-                source_text = _key(product.get(source))
+                source_text = str(product.get(source) or "")
             elif source == "physical_state":
-                source_text = _key(json.dumps(product.get("physicalState") or {}))
+                source_text = json.dumps(product.get("physicalState") or {})
             elif re.fullmatch(r"netContents\[\d+\]", source):
-                source_text = _key(json.dumps(product.get("netContents") or []))
-        source_text = " " + source_text.strip() + " "
-        if any(" " + _key(term) + " " in source_text for term in excluded_terms):
+                source_text = json.dumps(product.get("netContents") or [])
+        normalized_source = " " + _key(source_text) + " "
+        if any(" " + _key(term) + " " in normalized_source for term in excluded_terms):
             continue
-        if " " + marker + " " in source_text:
+        marker_pattern = re.compile(r"(?<!\w)" + re.escape(marker) + r"(?!\w)", re.I)
+        if find_affirmative_label_match(marker_pattern, source_text):
             result.add(_key(system.get("canonical_name") or system.get("name")))
     return result
 

@@ -844,6 +844,7 @@ def test_meriva_verified_disease_research_keeps_existing_reference_only_guard():
     ('Purified Shilajit', [], False),
     ('Processed Shilajit', [], False),
     ('PrimaVie Shilajit', [], True),
+    ('PrimaVie Shilajit extract', [], True),
     ('PrimaVie', [{'name': 'Shilajit Extract'}], True),
 ])
 def test_shilajit_native_evidence_requires_studied_preparation(enricher, label, forms, accepted):
@@ -867,6 +868,11 @@ def test_shilajit_native_evidence_requires_studied_preparation(enricher, label, 
         assert len(artifact['quality_pillars_v4']) == 6
     if accepted:
         match = next(m for m in matches if m['id'] == 'BRAND_PRIMAVIE_SHILAJIT')
+        assert match['matched_source_row_refs'] == ['ingredientRows[0]']
+        row = product['ingredient_quality_data']['ingredients_scorable'][0]
+        assert row['matched_form'] == 'primavie shilajit'
+        assessed = artifact['assessment_readiness']['evidence']['ingredient_assessments'][0]
+        assert 'BRAND_PRIMAVIE_SHILAJIT' in assessed['evidence_ids']
         assert match['study_type'] == 'rct_single'
         assert match['effect_direction'] == 'positive_weak'
         assert match['applicability_assessment']['supported_outcomes'] == ['testosterone']
