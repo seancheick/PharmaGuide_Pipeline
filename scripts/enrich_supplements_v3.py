@@ -18136,7 +18136,7 @@ class SupplementEnricherV3:
             "warnings": warnings,
             # Quick boolean flags for filtering
             # P0.2: Use contains_sugar from sugar_data (considers both amount AND ingredient sources)
-            "contains_sugar": sugar_data.get("contains_sugar", sugar_data["amount_g"] > 0),
+            "contains_sugar": sugar_data["contains_sugar"],
             "contains_sodium": sodium_data["amount_mg"] > 0,
             # P0.2: diabetes_friendly must be false if contains_sugar is true
             "diabetes_friendly": not sugar_data.get("contains_sugar", False) and sugar_data["level"] in ["sugar_free", "low"],
@@ -18653,11 +18653,19 @@ class SupplementEnricherV3:
             level = "high"
             level_display = "High Sugar"
 
+        # Missing sugar disclosure plus an unresolved source is unassessed,
+        # not evidence of sugar absence. Keep existing fields nullable instead
+        # of inventing a chemical identity or a sugar-free assurance. Positive
+        # sugar declarations and independently identified sugars still prevail.
+        unresolved = not contains_sugar and not sugar_info and any(
+            self._is_unresolved_source_descriptor(ing)
+            for ing in product.get('activeIngredients', []) + product.get('inactiveIngredients', [])
+        )
         return {
-            "amount_g": round(amount_g, 1),
+            "amount_g": None if unresolved else round(amount_g, 1),
             "unit": "g",
-            "level": level,
-            "level_display": level_display,
+            "level": None if unresolved else level,
+            "level_display": "Sugar content unverified" if unresolved else level_display,
             "contains_sugar": contains_sugar,
             "exceeds_diabetic_threshold": amount_g > self.SUGAR_THRESHOLDS["low_sugar"],
             "sugar_sources": sugar_in_ingredients,
@@ -18715,6 +18723,28 @@ class SupplementEnricherV3:
             "sodium_sources": sodium_sources
         }
 
+    @staticmethod
+    def _is_unresolved_source_descriptor(ingredient: Dict) -> bool:
+        """Cleaner-declared provenance without a verified chemical identity."""
+        return (ingredient.get('cleaner_row_role') == 'source_descriptor'
+                and not ingredient.get('canonical_id'))
+
+    def _dietary_name_matches(self, ingredient: Dict, term: str) -> bool:
+        """Unresolved provenance permits exact known names, never substring identity."""
+        names = [str(ingredient.get(key) or '').strip().lower() for key in ('name', 'standardName')]
+        if self._is_unresolved_source_descriptor(ingredient):
+            if term in names:
+                return True
+            # Preserve exact curated aliases (e.g. dextrose monohydrate)
+            # without promoting a partial match such as resistant dextrose.
+            for entry in (self.databases.get('harmful_additives') or {}).get('harmful_additives', []):
+                standard = str(entry.get('standard_name') or '').strip().lower()
+                aliases = [str(alias).strip().lower() for alias in entry.get('aliases', [])]
+                if term in standard and any(name in [standard, *aliases] for name in names if name):
+                    return True
+            return False
+        return any(term in name for name in names)
+
     def _find_sugar_in_ingredients(self, product: Dict) -> List[str]:
         """Find sugar-containing ingredients in the product."""
         sugar_keywords = [
@@ -18730,11 +18760,9 @@ class SupplementEnricherV3:
         )
 
         for ing in all_ingredients:
-            name = ing.get('name', '').lower()
-            std_name = ing.get('standardName', '').lower()
 
             for keyword in sugar_keywords:
-                if keyword in name or keyword in std_name:
+                if self._dietary_name_matches(ing, keyword):
                     found.append(ing.get('name', ''))
                     break
 
@@ -18820,27 +18848,24 @@ class SupplementEnricherV3:
         )
 
         for ing in all_ingredients:
-            name = ing.get('name', '').lower()
-            std_name = ing.get('standardName', '').lower()
-            combined = f"{name} {std_name}"
 
             for sweetener in high_glycemic_sweeteners:
-                if sweetener in combined:
+                if self._dietary_name_matches(ing, sweetener):
                     found_high_glycemic.append(ing.get('name', ''))
                     break
 
             for sweetener in artificial_sweeteners:
-                if sweetener in combined:
+                if self._dietary_name_matches(ing, sweetener):
                     found_artificial.append(ing.get('name', ''))
                     break
 
             for sweetener in sugar_alcohols:
-                if sweetener in combined:
+                if self._dietary_name_matches(ing, sweetener):
                     found_sugar_alcohols.append(ing.get('name', ''))
                     break
 
             for sweetener in safer_alternatives:
-                if sweetener in combined:
+                if self._dietary_name_matches(ing, sweetener):
                     found_safer.append(ing.get('name', ''))
                     break
 

@@ -358,3 +358,41 @@ def test_real_sunfiber_label_retains_disclosed_parent_fiber(normalizer):
     assert info["amount"] == 5
     assert info["unit"] in {"g", "Gram(s)"}
     assert info["raw_source_path"] == "ingredientRows[1].nestedRows[0]"
+
+
+@pytest.mark.parametrize('source', ['Resistant Dextrose', 'Unidentified Fiber Source'])
+def test_unresolved_fiber_source_is_a_descriptor_not_an_extra_active(normalizer, source):
+    """The panel declares fiber mass, not a second undosed active or glucose.
+
+    FDA distinguishes glucose (21 CFR 184.1857) from nondigestible fiber;
+    neither a substring nor an unresolved source establishes equivalence.
+    """
+    from enrich_supplements_v3 import SupplementEnricherV3
+    from scoring_v4.scored_artifact import build_scored_artifact
+    raw = {'id': 'TEST-FIBER-SOURCE', 'fullName': 'Vitamin C',
+           'ingredientRows': [
+               {'name': 'Vitamin C', 'quantity': [{'quantity': 100, 'unit': 'mg'}]},
+               {'name': 'Dietary Fiber', 'quantity': [{'quantity': 50, 'unit': 'mg'}],
+                'forms': [{'name': source}]}]}
+    cleaned = normalizer.normalize_product(raw)
+    row = next(r for r in cleaned['activeIngredients'] if r['name'] == source)
+    assert row['cleaner_row_role'] == 'source_descriptor'
+    assert row['score_eligible_by_cleaner'] is False
+    assert row['canonical_id'] is None
+    assert cleaned['nutritionalInfo']['dietaryFiber']['amount'] == 50
+    enriched, _ = SupplementEnricherV3().enrich_product(cleaned)
+    source_row = next(r for r in enriched['ingredient_quality_data']['ingredients'] if r['name'] == source)
+    assert source_row.get('recognized_entry_name') != 'dextrose'
+    assert source_row.get('matched_entry_name') != 'dextrose'
+    dietary = enriched['dietary_sensitivity_data']
+    assert dietary['sugar']['sugar_sources'] == []
+    assert dietary['sweeteners']['high_glycemic'] == []
+    assert dietary['sugar']['level'] is None
+    assert dietary['sugar']['amount_g'] is None
+    assert dietary['diabetes_friendly'] is False
+    from build_final_db import _diabetes_friendly_from_dietary
+    assert _diabetes_friendly_from_dietary(dietary) is False
+    scored = build_scored_artifact(enriched)
+    disclosure = scored['_v4_module_breakdown']['dimensions']['transparency']['metadata']['complete_active_disclosure']
+    assert disclosure['declared_active_count'] == disclosure['active_row_count'] == 1
+    assert disclosure['qualifies'] is True
