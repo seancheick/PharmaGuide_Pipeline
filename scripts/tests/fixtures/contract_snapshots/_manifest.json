@@ -1015,6 +1015,18 @@
       ],
       "source_commit": "codex/magnesium-form-review",
       "notes": "Catalyte discloses a magnesium lysinate/glycinate preparation. Removing the false plain-glycinate alias and preserving that full disclosure yields an unmapped named form, a partial assessment and not_scored instead of 78.4. Safety is retained. This is an identity correction, not a calibration pin adjustment."
+    },
+    {
+      "date": "2026-10-14",
+      "action": "refrozen_independent_delivery_credit",
+      "products": [
+        298102,
+        306237,
+        336337,
+        337853
+      ],
+      "source_commit": "bb78c75c",
+      "notes": "Sean-approved general rule counts a form characteristic once. Thorne Vitamin D drops lose presentation-as-delivery credit (98.5 to97.1); Nutricost KSM-66 BioPerine loses duplicate delivery credit with existing absorption-enhancer assessment preserved (93.0 to91.7); Thorne green tea and boswellia phytosomes already represented in form quality lose duplicate A3 credit (77.8 to73.8;83.7 to79.7). All33 fixtures update artifact schema4.3 to4.4 for shared qualified delivery projection; no other frozen fields changed. Raw canary checks review source before refresh."
     }
   ]
 }
