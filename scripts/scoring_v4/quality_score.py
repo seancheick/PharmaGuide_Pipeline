@@ -27,8 +27,12 @@ from typing import Any, Dict, List, Optional
 from scoring_v4.dose_safety import dose_safety_consumer_explanation
 from scoring_v4.penalty_registry import (
     DOSE_LIMIT_MIRROR,
+    EVIDENCE_CAP_KEYS,
+    EVIDENCE_FLOOR_KEYS,
     FORMULA_QUALITY_MIRROR,
+    component_kind,
     mirrored_penalty_magnitude,
+    penalty_spec,
 )
 from scoring_v4.pillar_explanations import attach_pillar_explanations, _proprietary_blend_facts
 
@@ -97,6 +101,66 @@ _OMEGA_MOLECULAR_FORM_COPY = {
     "pl": "phospholipid",
     "ee": "ethyl ester",
 }
+
+
+_PROFILE_COPY = {
+    "botanical_formulation": (
+        (("recognized_botanical_identity", "recognized botanical identity"),
+         ("plant_part_disclosed", "plant part"),
+         ("extract_not_whole_herb", "extract preparation"),
+         ("quantified_dose_present", "disclosed amount"),
+         ("marker_standardization_declared", "standardization"),
+         ("branded_clinically_studied_extract", "branded studied extract")),
+        (("plant_part_disclosed", "plant part"),
+         ("marker_standardization_declared", "verified standardization")),
+    ),
+    "collagen_formulation": (
+        (("recognized_collagen_identity", "recognized collagen identity"),
+         ("hydrolyzed_peptides", "hydrolyzed peptides"),
+         ("type_disclosed", "collagen type"),
+         ("source_disclosed", "collagen source"),
+         ("quantified_dose_present", "disclosed amount"),
+         ("branded_clinically_studied", "branded studied collagen")),
+        (("hydrolyzed_peptides", "hydrolyzed peptides"),
+         ("type_disclosed", "collagen type"),
+         ("source_disclosed", "collagen source")),
+    ),
+}
+
+#: Formulation engines that do not rate ingredient forms, and what they credit.
+_ROUTE_FORMULATION_SUBJECT = (
+    ("sports_protein_", "protein source, amino profile and dose disclosure"),
+    ("fiber_", "fiber source, disclosure and formula focus"),
+    ("total_cfu_disclosed", "strain identity, potency disclosure and delivery protection"),
+    ("studied_formula_strain_identity", "strain identity, potency disclosure and delivery protection"),
+)
+
+
+def _profile_formulation_reason(metadata: Dict[str, Any]) -> Optional[str]:
+    """Name the botanical/collagen facts that earned (and did not earn) points."""
+    profile = _profile_detail(metadata)
+    if profile is None:
+        return None
+    section, detail = profile
+    if section == "botanical_formulation" and _num(detail.get("weak_or_unidentified_botanical")) < 0:
+        return "Botanical identity could not be confirmed, so no formulation credit was given."
+    credited_map, missing_map = _PROFILE_COPY[section]
+    credited = [label for key, label in credited_map if _num(detail.get(key)) > 0]
+    missing = [label for key, label in missing_map if _num(detail.get(key)) <= 0]
+    reason = "Credited: " + ", ".join(credited) + "." if credited else "No formulation credit."
+    if missing:
+        reason += " Not credited: " + ", ".join(missing) + "."
+    return reason
+
+
+def _route_formulation_reason(dim: Dict[str, Any], band: str) -> Optional[str]:
+    """Band copy for engines that score something other than ingredient forms."""
+    keys = list((dim.get("components") or {}).keys())
+    for prefix, subject in _ROUTE_FORMULATION_SUBJECT:
+        if any(key.startswith(prefix) for key in keys):
+            level = {"high": "Strong", "mid": "Partial", "low": "Limited"}[band]
+            return f"{level} formulation credit for {subject}."
+    return None
 
 
 def _omega_formulation_reason(dim: Dict[str, Any], fallback: str) -> str:
@@ -178,7 +242,7 @@ def _undisclosed_component_dose_reason(dim: Dict[str, Any]) -> Optional[str]:
     metadata = dim.get("metadata") if isinstance(dim, dict) else None
     if not isinstance(metadata, dict):
         return None
-    if metadata.get("botanical_dose_band") == "blend_total_only":
+    if "blend_total_only" in (metadata.get("botanical_dose_band"), metadata.get("collagen_dose_band")):
         return (
             "The blend total is disclosed, but individual ingredient amounts aren't."
         )
@@ -190,7 +254,10 @@ def _unassessed_primary_dose_reason(dim: Dict[str, Any]) -> Optional[str]:
     metadata = dim.get("metadata") if isinstance(dim, dict) else None
     if not isinstance(metadata, dict):
         return None
-    if metadata.get("window_proxy_status") in {
+    bands = (metadata.get("botanical_dose_band"), metadata.get("collagen_dose_band"))
+    if "primary_no_dose" in bands:
+        return "No amount is disclosed for the main ingredient, so its dose cannot be assessed."
+    if "disclosed_no_reference" in bands or metadata.get("window_proxy_status") in {
         "partial_credit_without_rda_proxy",
         "partial_credit_primary_active_unassessed",
         "limited_assessability_unbenchmarked_purpose",
@@ -224,6 +291,13 @@ def _over_limit_dose_reason(dim: Dict[str, Any]) -> Optional[str]:
             and _num(state_counts.get("confirmed_over_threshold")) > 0
         )
     if not is_actionable:
+        # An unresolved check is not an excess, but it is still a dose-safety
+        # finding; Dose owns saying so (the sixth pillar only names concerns
+        # it actually deducts).
+        state_counts = evaluation.get("state_counts")
+        if isinstance(state_counts, dict) and _num(state_counts.get("material_but_unresolved")) > 0:
+            unresolved = dose_safety_consumer_explanation({"material_but_unresolved": 1}) or ""
+            return unresolved[:1].upper() + unresolved[1:] + "."
         return None
     return (
         "At the label's maximum daily use, one or more nutrients exceed "
@@ -426,6 +500,18 @@ def _pillar_from_dim(name: str, dim: Dict[str, Any], weight: float, src: str) ->
                     "The label includes an ingredient total; complete "
                     "individual-amount disclosure was not verified."
                 )
+            elif (
+                reason == _reason_transparency("low")
+                and "PROPRIETARY_BLEND_PRESENT" not in (metadata.get("flags") or [])
+            ):
+                # The low-band sentence blames a blend; say what actually lowered it.
+                penalties = dim.get("penalties") or {}
+                if _num(penalties.get("B6_marketing_claims")) < 0:
+                    reason = "The label makes disease or marketing claims, which lowers transparency."
+                elif _num(penalties.get("B2_false_allergen_free_claim")) < 0:
+                    reason = "A free-from claim on the label conflicts with its ingredients."
+                else:
+                    reason = "Not all active ingredient identities or individual amounts are disclosed."
     return {
         "score": val,
         "max": weight,
@@ -609,7 +695,8 @@ def _safety_base_cause(base: Dict[str, Any]) -> Optional[str]:
 
 def _pillar_safety_hygiene(module_bd: Dict[str, Any], weight: float,
                            cfg: Dict[str, Any],
-                           clean_label_penalty: float = 0.0) -> Dict[str, Any]:
+                           clean_label_penalty: float = 0.0,
+                           catalog_caution: bool = False) -> Dict[str, Any]:
     """Product-level safety pillar (/10). Clean base (no banned/recalled/watchlist) maps
     to full credit; banned/recalled/watchlist present already zeroes the raw base. PR3:
     a Class I (critical) manufacturer recall deducts the raw violation magnitude here (the
@@ -646,15 +733,25 @@ def _pillar_safety_hygiene(module_bd: Dict[str, Any], weight: float,
         deductions.append("it contains a restricted additive")
     if additive_pen > 0:
         deductions.append("it contains additive or sweetener/form-factor concerns")
-    if dose_safety_explanation:
+    # A recorded dose-safety finding joins this pillar's concern list whenever
+    # the pillar deducts; at full points it is worded as not deducted here.
+    if dose_safety_explanation and (deductions or over_ul_pen > 0):
         deductions.append(dose_safety_explanation)
     elif over_ul_pen > 0:
         deductions.append("one or more dose-safety checks require attention")
     if deductions:
         # Plain-English join: "A and B" rather than a comma list.
         reason = "Safety concern: " + " and ".join(deductions) + "."
+    elif dose_safety_explanation:
+        # A recorded dose-safety finding stays visible here, worded so a full
+        # score does not read as "no concern" or as this pillar's deduction.
+        reason = "Not deducted here: " + dose_safety_explanation + "."
+    elif catalog_caution:
+        reason = ("These formula checks found no concern, but this product carries a separate "
+                  "safety caution.")
     else:
-        reason = "No banned, recalled, or watchlisted ingredients."
+        reason = ("No catalog-level formula concerns found in the checks performed. "
+                  "Personal suitability was not assessed.")
     components = {"clean_base": clean, "class_i_recall_penalty": safety_pen}
     if cl_pen > 0:
         components["clean_label_penalty"] = cl_pen
@@ -735,7 +832,11 @@ def _pillar_formulation(dim: Dict[str, Any], weight: float, archetype: str,
     )
     score = _num(dim.get("score"))
     val = round(max(0.0, min(float(weight), (score / ref) * weight)), 1) if ref else 0.0
-    reason = _reason_formulation(_band(val, weight))
+    reason = (
+        _profile_formulation_reason(meta)
+        or _route_formulation_reason(dim, _band(val, weight))
+        or _reason_formulation(_band(val, weight))
+    )
     assessed_count = meta.get("iqm_form_quality_assessed_count")
     if (
         type(assessed_count) is int and assessed_count == 0
@@ -919,6 +1020,9 @@ def _pillar_evidence(dim: Dict[str, Any], weight: float, archetype: str,
         zero_copy = _EVIDENCE_ZERO_REASON.get(state)
         if archetype == "probiotic" and state == "evaluated_unfavorable":
             zero_copy = "Reviewed research is unfavorable for the assessed outcome; this is distinct from missing research."
+        if state == "evaluated_authority":
+            zero_copy = ("These ingredients were reviewed against established nutritional authority, "
+                         "which earned no Evidence points for this product.")
         if archetype == "probiotic" and state == "applicability_unestablished":
             zero_copy = ("Our reviewed evidence does not establish probiotic benefit for this "
                          "product's assessed preparation, purpose and population; this is not "
@@ -936,9 +1040,10 @@ def _pillar_evidence(dim: Dict[str, Any], weight: float, archetype: str,
     # re-deriving it from a number that cannot tell the two kinds of zero apart.
     result_state = metadata.get("evidence_result_state") or (
         metadata.get("generic_evidence_metadata") or {}).get("evidence_result_state")
-    if result_state == "evaluated_authority":
+    if result_state == "evaluated_authority" and val > 0:
         # Result-state ownership outranks generic floor copy: when established
-        # nutrition authority set the Evidence result, say so at any score.
+        # nutrition authority set the Evidence result, say so. A zero keeps its
+        # own sentence: authority cannot be credited with points never awarded.
         reason = _EVIDENCE_ZERO_REASON["evaluated_authority"]
     if val > 0 and evidence_display_state(result_state) == "not_yet_reviewed":
         # Credit already earned cannot finish the assessment while other
@@ -1101,7 +1206,10 @@ def _pillar_verification(module_bd: Dict[str, Any], weight: float,
     else:
         # Fail-open: no verification data on file. Say it's unknown, not that the
         # product failed — and make clear it isn't penalized for the gap.
-        reason = "No third-party testing on file — treated as unknown, not penalized."
+        reason = (
+            f"Unknown: no independent verification on file; neutral {_g(sub['neutral_baseline'])} "
+            f"of {_g(cap)}, {_g(cap - sub['neutral_baseline'])} points need verified evidence."
+        )
 
     # PR3: a quality-system (non-critical) manufacturer violation lowers verification.
     # Applied AFTER the positive cert logic + clamp so it composes with future baseline
@@ -1144,9 +1252,331 @@ def _verification_scope_counts(trust_meta: Dict[str, Any]) -> Dict[str, int]:
     return counts
 
 
+# ── Score receipts (V4.1 accounting contract, AUDIT.md §8) ───────────────────
+# A receipt itemizes a pillar the assembler already produced. It never changes
+# a score: each receipt must replay the module result exactly and sum to the
+# public pillar, or scoring fails closed (as an unregistered penalty does).
+
+# Some modules round a dimension score to 0.01 (omega, probiotic) while their
+# components keep four decimals, so a faithful replay can differ by up to 0.005.
+_RECEIPT_TOLERANCE = 0.006
+# Pillars round to 0.1 (residue ≤ 0.05); entries are reported to four decimals,
+# which can add a few ten-thousandths to that residue.
+_ROUNDING_BOUND = 0.0505
+# A clamp or cap at least this large is itemized; smaller gaps are four-decimal
+# component rounding and stay inside the rounding residue.
+_ITEMIZE_THRESHOLD = 1e-4
+_NEUTRAL_DOSE_BANDS = frozenset({"disclosed_no_reference", "blend_total_only", "primary_no_dose"})
+_NEUTRAL_WINDOW_STATUSES = frozenset({
+    "partial_credit_without_rda_proxy",
+    "partial_credit_primary_active_unassessed",
+})
+_BONUS_WITHHOLDERS = frozenset({"proprietary_blend_opacity", "disease_or_marketing_claim"})
+
+
+def _receipt_entry(entry_id: str, kind: str, source: str, raw: Optional[float],
+                   points: float, **extra: Any) -> Dict[str, Any]:
+    entry = {"id": entry_id, "kind": kind, "source": source}
+    if raw is not None:
+        entry["raw"] = round(float(raw), 4)
+    entry["points"] = round(float(points), 4)
+    entry.update({key: value for key, value in extra.items() if value is not None})
+    return entry
+
+
+def _receipt_mismatch(name: str, expected: Any, replayed: Any) -> RuntimeError:
+    return RuntimeError(
+        f"score receipt does not reconcile for {name}: scorer {expected!r}, receipt {replayed!r}")
+
+
+def _dose_component_kind(key: str, kind: str, metadata: Dict[str, Any]) -> tuple[str, Optional[str]]:
+    """Dose credit is neutral when it rests on a missing or unbenchmarked amount."""
+    if key == "botanical_clinical_dose":
+        band = metadata.get("botanical_dose_band")
+        return ("neutral" if band in _NEUTRAL_DOSE_BANDS else kind), band
+    if key == "collagen_clinical_dose":
+        band = metadata.get("collagen_dose_band")
+        return ("neutral" if band in _NEUTRAL_DOSE_BANDS else kind), band
+    if key == "supplemental_window_proxy":
+        status = metadata.get("window_proxy_status")
+        return ("neutral" if status in _NEUTRAL_WINDOW_STATUSES else kind), status
+    return kind, None
+
+
+def _profile_detail(metadata: Dict[str, Any]) -> Optional[tuple[str, Dict[str, Any]]]:
+    for section, applied_key in (("botanical_formulation", "botanical_profile_applied"),
+                                 ("collagen_formulation", "collagen_profile_applied")):
+        detail = metadata.get(section)
+        if metadata.get(applied_key) and isinstance(detail, dict):
+            return section, detail
+    return None
+
+
+def _itemize_dimension(name: str, dim: Dict[str, Any]) -> tuple[List[tuple], float, float]:
+    """Raw-scale items for one module dimension, its replay, and its no-deduction value.
+
+    Items are (id, kind, source, raw, extra). The replay must equal the module's
+    own score; the no-deduction value repeats the same bounds without penalties.
+    """
+    components = dim.get("components") or {}
+    penalties = dim.get("penalties") or {}
+    metadata = dim.get("metadata") or {}
+    mx = _num(dim.get("max"))
+    items: List[tuple] = []
+    additive = 0.0
+    deductions = 0.0
+    evidence_floor: Optional[float] = None
+    evidence_caps: List[tuple] = []
+    for key, value in components.items():
+        amount = _num(value)
+        if name == "evidence" and key in EVIDENCE_FLOOR_KEYS:
+            evidence_floor = amount
+            continue
+        if name == "evidence" and key in EVIDENCE_CAP_KEYS:
+            evidence_caps.append((key, amount))
+            continue
+        profile = _profile_detail(metadata) if (name == "formulation" and key == "A1_bio_score") else None
+        if profile is not None:
+            # Nested detail replaces its aggregate; it is never added on top of it.
+            section, detail = profile
+            detail_sum = 0.0
+            for sub_key, sub_value in detail.items():
+                sub_amount = _num(sub_value)
+                if sub_amount == 0:
+                    continue
+                items.append((sub_key, component_kind(section, sub_key), f"{section}.{sub_key}", sub_amount, {}))
+                detail_sum += sub_amount
+            bound = amount - detail_sum
+            if abs(bound) > _ITEMIZE_THRESHOLD:
+                items.append((f"{section}_bounds", "cap" if bound < 0 else "floor",
+                              f"{section}.cap", bound, {}))
+            additive += amount
+            continue
+        if amount == 0:
+            continue
+        if name == "formulation" and key == "panel_form_quality" and metadata.get("relative_bio_score") is not None:
+            # The panel average is floored at a neutral rating; show that lift
+            # as neutral credit instead of earned form quality.
+            from scoring_v4.modules.multi_prenatal_formulation import BIO_SCORE_MAX, CAP_PANEL_FORM_QUALITY
+            earned = max(0.0, min(CAP_PANEL_FORM_QUALITY,
+                                  _num(metadata["relative_bio_score"]) / BIO_SCORE_MAX * CAP_PANEL_FORM_QUALITY))
+            if amount - earned > _RECEIPT_TOLERANCE:
+                items.append((key, "earned", f"{name}.{key}", earned, {}))
+                items.append(("panel_form_neutral_floor", "neutral", "multi_prenatal.panel_form_neutral_floor",
+                              amount - earned, {}))
+                additive += amount
+                continue
+        kind = component_kind(name, key)
+        basis = None
+        if name == "dose":
+            kind, basis = _dose_component_kind(key, kind, metadata)
+        items.append((key, kind, f"{name}.{key}", amount, {"basis": basis}))
+        additive += amount
+    for key, value in penalties.items():
+        amount = _num(value)
+        if amount == 0:
+            continue
+        penalty_spec(key)
+        items.append((key, "deduction", f"{name}.{key}", -abs(amount), {}))
+        deductions -= abs(amount)
+
+    if name == "transparency":
+        disclosure = metadata.get("complete_active_disclosure") or {}
+        withheld = [b for b in (disclosure.get("blockers") or []) if b in _BONUS_WITHHOLDERS]
+        if ("complete_active_identity_dose_disclosure" in components and disclosure.get("qualifies") is False
+                and withheld):
+            items.append(("complete_active_identity_dose_disclosure", "disclosure",
+                          "transparency.complete_active_identity_dose_disclosure", 0.0,
+                          {"withheld_by": withheld}))
+
+    score = dim.get("score")
+    if score is None:
+        return items, 0.0, 0.0
+
+    if name == "evidence":
+        running = additive + deductions
+        if evidence_floor is not None and evidence_floor > running:
+            items.append(("primary_evidence_floor", "floor", "evidence.primary_evidence_floor",
+                          evidence_floor - running, {}))
+            running = evidence_floor
+        bounded = max(0.0, min(mx, running))
+        if abs(bounded - running) > _ITEMIZE_THRESHOLD:
+            items.append(("evidence_dimension_bounds", "cap" if bounded < running else "floor",
+                          "evidence.max", bounded - running, {}))
+        running = bounded
+        for key, cap in evidence_caps:
+            if running > cap:
+                items.append((key, "cap", f"evidence.{key}", cap - running, {}))
+                running = cap
+        replay, without_deductions = running, running
+    else:
+        running = additive + deductions
+        bounded = max(0.0, min(mx, running))
+        if abs(bounded - running) > _ITEMIZE_THRESHOLD:
+            items.append((f"{name}_dimension_bounds", "cap" if bounded < running else "floor",
+                          f"{name}.max", bounded - running, {}))
+        replay = bounded
+        without_deductions = max(0.0, min(mx, additive))
+        presence = metadata.get("presence_floor") if name == "formulation" else None
+        if isinstance(presence, dict) and presence.get("applied"):
+            target = _num(presence.get("target"))
+            if replay < target:
+                items.append(("presence_floor", "floor", "formulation_magnitudes.presence_floor",
+                              target - replay, {}))
+                replay = target
+            if 0 < additive < target:
+                without_deductions = max(without_deductions, target)
+    if abs(replay - _num(score)) > _RECEIPT_TOLERANCE:
+        raise _receipt_mismatch(f"{name} dimension", score, round(replay, 4))
+    if abs(_num(score) - replay) > 1e-9:
+        # The module rounded its dimension score coarser than its components;
+        # the no-deduction value carries the same rounding so they stay comparable.
+        offset = _num(score) - replay
+        items.append(("module_rounding", "rounding", f"{name}.score", offset, {}))
+        replay = _num(score)
+        without_deductions = max(0.0, min(mx, without_deductions + offset))
+    if deductions == 0:
+        without_deductions = replay
+    return items, replay, without_deductions
+
+
+def _finish_receipt(pillar: Dict[str, Any], entries: List[Dict[str, Any]],
+                    without_deductions_score: float) -> Dict[str, Any]:
+    """Close a receipt: rounding residue, deductions and unawarded capacity."""
+    score = _num(pillar.get("score"))
+    residue = round(score - sum(entry["points"] for entry in entries), 4)
+    if abs(residue) > _ROUNDING_BOUND:
+        raise _receipt_mismatch("pillar", score, round(score - residue, 4))
+    if residue:
+        entries.append(_receipt_entry("rounding", "rounding", "pillar.round_0_1", None, residue))
+    realized = round(score - without_deductions_score, 4)
+    return {
+        "entries": entries,
+        "nominal_deductions": round(sum(e["points"] for e in entries if e["kind"] == "deduction"), 4),
+        "realized_deductions": realized,
+        "unawarded": round(_num(pillar.get("max")) - without_deductions_score, 4),
+    }
+
+
+def _normalized_receipt(name: str, pillar: Dict[str, Any], dim: Dict[str, Any],
+                        weight: float, rebuild) -> Dict[str, Any]:
+    """Receipt for a pillar computed as clip(raw / reference × weight)."""
+    components = pillar.get("components") or {}
+    reference = _num(components.get("raw_max") if name == "transparency" else components.get("reference"))
+    factor = (float(weight) / reference) if reference else 0.0
+    items, replay, without_deductions = _itemize_dimension(name, dim)
+    entries = [_receipt_entry(item_id, kind, source, raw, raw * factor, **extra)
+               for item_id, kind, source, raw, extra in items]
+    if dim.get("score") is None:
+        entries.append(_receipt_entry(f"{name}_not_evaluable", "neutral", f"{name}.score", None, 0.0))
+    public = replay * factor
+    clipped = max(0.0, min(float(weight), public))
+    if abs(clipped - public) > 1e-9:
+        entries.append(_receipt_entry(f"{name}_pillar_bounds", "cap" if clipped < public else "floor",
+                                      f"pillars.{name}.weight", None, clipped - public))
+    rounded = round(clipped, 1)
+    neutral_lift = round(_num(pillar.get("score")) - rounded, 4)
+    if neutral_lift > 1e-9 and name == "formulation":
+        rounding = round(rounded - clipped, 4)
+        if rounding:
+            entries.append(_receipt_entry("rounding", "rounding", "pillar.round_0_1", None, rounding))
+        entries.append(_receipt_entry("unrated_form_neutral", "neutral",
+                                      "multi_prenatal_formulation.PANEL_FORM_NEUTRAL_FLOOR", None, neutral_lift))
+    without_score = _num(rebuild({**dim, "score": without_deductions})["score"])
+    return _finish_receipt(pillar, entries, without_score)
+
+
+def _verification_receipt(pillar: Dict[str, Any], cfg: Dict[str, Any]) -> Dict[str, Any]:
+    sub = cfg["verification_subscale"]
+    components = pillar.get("components") or {}
+    baseline = _num(sub["neutral_baseline"])
+    entries = [_receipt_entry("neutral_baseline", "neutral", "verification_subscale.neutral_baseline",
+                              baseline, baseline)]
+    running = baseline
+    for key in ("cert", "coa_batch", "gmp", "brand_testing", "brand_only_cert", "reputation"):
+        amount = _num(components.get(key))
+        if amount:
+            entries.append(_receipt_entry(key, "earned", f"verification.{key}", amount, amount))
+            running += amount
+    tier = components.get("tier")
+    ceilings = sub["tier_ceilings"]
+    if tier == "product" and running < _num(sub["product_level_floor"]):
+        lift = _num(sub["product_level_floor"]) - running
+        entries.append(_receipt_entry("product_level_floor", "floor", "verification_subscale.product_level_floor",
+                                      None, lift))
+        running += lift
+    elif tier in ("manufacturing", "claim_or_brand") and running > _num(ceilings[tier]):
+        cut = _num(ceilings[tier]) - running
+        entries.append(_receipt_entry(f"{tier}_ceiling", "cap", f"verification_subscale.tier_ceilings.{tier}",
+                                      None, cut))
+        running += cut
+    elif tier == "unknown" and abs(running - baseline) > 1e-9:
+        raise _receipt_mismatch("verification tier", baseline, running)
+    cap = _num(sub["cap"])
+    if running > cap:
+        entries.append(_receipt_entry("verification_cap", "cap", "verification_subscale.cap", None, cap - running))
+        running = cap
+    without_deductions = round(running, 1)
+    violation = _num(components.get("quality_system_violation_penalty"))
+    if violation:
+        entries.append(_receipt_entry("quality_system_violation_penalty", "deduction",
+                                      "manufacturer_violations.manufacturer_violation_deduction",
+                                      -violation, -violation))
+        if running - violation < 0:
+            entries.append(_receipt_entry("verification_floor", "floor", "pillars.verification.min",
+                                          None, violation - running))
+    return _finish_receipt(pillar, entries, without_deductions)
+
+
+def _safety_receipt(pillar: Dict[str, Any], weight: float) -> Dict[str, Any]:
+    components = pillar.get("components") or {}
+    clean = _num(components.get("clean_base"))
+    entries = [_receipt_entry("catalog_screen", "neutral", "safety_hygiene_base", None, clean)]
+    running = clean
+    for key, source in (("class_i_recall_penalty", "manufacturer_violations.class_i"),
+                        ("clean_label_penalty", "clean_label_subscale"),
+                        ("additive_or_sweetener_penalty", "penalty_registry.formula_quality_checks"),
+                        ("over_ul_penalty", "penalty_registry.dose_limit")):
+        amount = _num(components.get(key))
+        if amount:
+            entries.append(_receipt_entry(key, "deduction", source, -amount, -amount))
+            running -= amount
+    if running < 0:
+        entries.append(_receipt_entry("safety_hygiene_floor", "floor", "pillars.safety_hygiene.min",
+                                      None, -running))
+    return _finish_receipt(pillar, entries, round(max(0.0, min(float(weight), clean)), 1))
+
+
+def _attach_score_receipts(pillars: Dict[str, Any], module_bd: Dict[str, Any],
+                           cfg: Dict[str, Any], archetype: str) -> Dict[str, Any]:
+    """Attach a reconciling receipt to every scored pillar (in place).
+
+    A legacy breakdown without itemized components gets no receipt at all,
+    never a partial one.
+    """
+    dims = module_bd.get("dimensions") or {}
+    names = ("formulation", "dose", "evidence", "transparency")
+    if not all(isinstance((dims.get(name) or {}).get("components"), dict) for name in names):
+        return pillars
+    weights = {name: spec["weight"] for name, spec in cfg["pillars"].items()}
+    rebuilders = {
+        "formulation": lambda dim: _pillar_formulation(dim, weights["formulation"], archetype, cfg),
+        "dose": lambda dim: _pillar_dose(dim, weights["dose"], archetype, cfg),
+        "evidence": lambda dim: _pillar_evidence(dim, weights["evidence"], archetype, cfg),
+        "transparency": lambda dim: _pillar_from_dim("transparency", dim, weights["transparency"], "transparency"),
+    }
+    for name in names:
+        pillars[name]["receipt"] = _normalized_receipt(name, pillars[name], dims[name], weights[name],
+                                                       rebuilders[name])
+    pillars["verification"]["receipt"] = _verification_receipt(pillars["verification"], cfg)
+    pillars["safety_hygiene"]["receipt"] = _safety_receipt(pillars["safety_hygiene"], weights["safety_hygiene"])
+    return pillars
+
+
 def _build_pillars(module_bd: Dict[str, Any], cfg: Dict[str, Any],
                    module: Optional[str],
-                   clean_label_penalty: float = 0.0) -> Dict[str, Any]:
+                   clean_label_penalty: float = 0.0,
+                   catalog_caution: bool = False) -> Dict[str, Any]:
     dims = module_bd.get("dimensions") or {}
     archetype = _archetype(module, module_bd)
     pillars: Dict[str, Any] = {}
@@ -1157,7 +1587,7 @@ def _build_pillars(module_bd: Dict[str, Any], cfg: Dict[str, Any],
             pillars[name] = _pillar_verification(module_bd, weight, cfg)
         elif assembler == "safety_hygiene":
             pillars[name] = _pillar_safety_hygiene(module_bd, weight, cfg,
-                                                   clean_label_penalty)
+                                                   clean_label_penalty, catalog_caution)
         elif assembler == "formulation":
             pillars[name] = _pillar_formulation(dims.get("formulation") or {},
                                                 weight, archetype, cfg)
@@ -1226,7 +1656,8 @@ def assemble_quality_score(result: Dict[str, Any]) -> Dict[str, Any]:
         result["quality_score_suppressed_reason"] = blocking_reason or (verdict or None)
         return result
 
-    pillars = _build_pillars(module_bd, cfg, module, clean_label_penalty=cl_penalty)
+    pillars = _build_pillars(module_bd, cfg, module, clean_label_penalty=cl_penalty,
+                             catalog_caution=verdict == "CAUTION")
     # The public total is the literal sum of the six published pillars. No
     # post-sum cap, clamp or category adjustment may change it; a category
     # concern belongs in its owning pillar or the safety gate.
@@ -1236,6 +1667,7 @@ def assemble_quality_score(result: Dict[str, Any]) -> Dict[str, Any]:
     # breakdown metadata. Pure adapter over already-computed pillars: it never
     # changes score/max/reason or the total above.
     pillars = attach_pillar_explanations(pillars, module_bd, cfg, module)
+    pillars = _attach_score_receipts(pillars, module_bd, cfg, _archetype(module, module_bd))
 
     # Scored (SAFE / CAUTION — CAUTION keeps the score, verdict stays prominent elsewhere)
     result["quality_score_v4_100"] = total

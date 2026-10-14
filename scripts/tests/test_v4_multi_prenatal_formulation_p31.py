@@ -325,5 +325,5 @@ def test_omega_evidence_row_does_not_count_its_label_row_twice(monkeypatch) -> N
     rows = [_ingredient("vitamin_d", bio_score=12.0), label_row, evidence_row]
     monkeypatch.setattr(formulation, "_active_ingredients", lambda product: rows)
 
-    panel, avg, _ = formulation._score_panel_form_quality(_product())
+    panel, avg, _, _ = formulation._score_panel_form_quality(_product())
     assert avg == 10.0  # (12 + 8) / 2; the evidence row adds no second vote

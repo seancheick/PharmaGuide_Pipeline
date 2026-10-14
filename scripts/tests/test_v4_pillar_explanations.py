@@ -54,9 +54,10 @@ def _generic_cfg():
     }
 
 
-def _generic_pillars(evidence_score=0.0):
+def _generic_pillars(evidence_score=0.0, display_state="assessed"):
     return {
-        "Evidence": {"score": evidence_score, "max": 20, "reason": "Evidence reason."},
+        "Evidence": {"score": evidence_score, "max": 20, "reason": "Evidence reason.",
+                     "display_state": display_state},
         "Transparency": {"score": 0.0, "max": 15, "reason": "Transparency reason."},
     }
 
@@ -163,6 +164,8 @@ def test_generic_transparency_emits_sku_282638_shaped_blend_facts_in_order():
 
 
 def test_zero_evidence_pillar_emits_current_data_fact():
+    """A finished review that found nothing reports its record count. Zeros in
+    applicability or coverage-gap states do not (test_v4_pillar_copy_honesty)."""
     pillars = attach_pillar_explanations(
         _generic_pillars(evidence_score=0.0),
         _generic_module_bd(matched_entries=0),

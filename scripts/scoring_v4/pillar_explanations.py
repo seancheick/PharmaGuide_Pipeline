@@ -107,6 +107,10 @@ def _zero_evidence_facts(
 ) -> List[Dict[str, Any]]:
     if _num(pillar.get("score")) != 0:
         return []
+    # Only a finished review may report "0 records": for an applicability or
+    # coverage-gap zero that reads as "no research", which the state denies.
+    if pillar.get("display_state") != "assessed":
+        return []
     metadata = evidence_dim.get("metadata") if isinstance(evidence_dim, dict) else None
     matched_entries = metadata.get("matched_entries") if isinstance(metadata, dict) else None
     if type(matched_entries) is not int or matched_entries != 0:
@@ -198,7 +202,7 @@ def attach_pillar_explanations(
                             f"Confirmed upper-limit findings trigger the separate dose-safety penalty at {policy['ul_pct_threshold']:g}% "
                             f"of the limit: {policy['per_flag_penalty']:g} raw points per flag, capped at {policy['cap']:g}. "
                             "A concern below that scoring threshold still appears even when Safety/Hygiene retains full points. "
-                            "Unresolved dose assessments can also trigger the fail-closed penalty."
+                            "Unresolved dose assessments are shown but do not trigger this penalty."
                         ),
                     })
             purpose_count = _nonnegative_int(metadata.get("purpose_ingredient_count"))

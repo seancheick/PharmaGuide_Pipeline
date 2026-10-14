@@ -128,7 +128,9 @@ def test_gras_excipients_do_not_reduce_the_safety_pillar():
 
     assert pillar["score"] == 10.0
     assert "additive_or_sweetener_penalty" not in pillar["components"]
-    assert pillar["reason"] == "No banned, recalled, or watchlisted ingredients."
+    assert pillar["reason"] == (
+        "No catalog-level formula concerns found in the checks performed. "
+        "Personal suitability was not assessed.")
 
 
 def test_a_moderate_additive_still_reduces_the_safety_pillar():

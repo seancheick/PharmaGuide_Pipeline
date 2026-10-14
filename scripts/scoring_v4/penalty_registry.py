@@ -73,6 +73,124 @@ PENALTY_ALIASES = {
 }
 
 
+#: What each score-bearing component key represents in the public receipt
+#: (quality_pillars_v4.<pillar>.receipt). Keys are ``<section>.<key>``; the
+#: botanical and collagen profile sections replace ``formulation.A1_bio_score``
+#: when a profile applies. Kinds: earned (an assessed property), neutral (a
+#: policy baseline or credit for an unknown), disclosure (credit for printing
+#: a fact). Penalty keys are always deductions and stay in PENALTY_REGISTRY.
+#: An unregistered non-zero component fails closed, as an unregistered penalty
+#: does. Rationale: scripts/audits/score_accounting_20261014/AUDIT.md §3.
+COMPONENT_KINDS: Dict[str, str] = {
+    "formulation.A1_bio_score": "earned",
+    "formulation.A3_delivery_system": "earned",
+    "formulation.A4_absorption_enhancer": "earned",
+    "formulation.A5b_standardized_botanical": "earned",
+    "formulation.panel_form_quality": "earned",
+    "formulation.panel_disclosure_structure": "disclosure",
+    "formulation.b_form_quality": "earned",
+    "formulation.core_b_panel_coverage": "earned",
+    "formulation.b_complex_focus_purity": "earned",
+    "formulation.dose_disclosure": "disclosure",
+    "formulation.form_tier": "earned",
+    "formulation.epa_dha_concentration": "earned",
+    "formulation.total_cfu_disclosed": "disclosure",
+    "formulation.exact_identity_completeness": "disclosure",
+    "formulation.delivery_survivability": "earned",
+    "formulation.native_potency_disclosed": "disclosure",
+    "formulation.studied_formula_strain_identity": "disclosure",
+    "formulation.sports_protein_source_quality": "earned",
+    "formulation.sports_protein_dose_transparency": "disclosure",
+    "formulation.sports_amino_profile_disclosure": "disclosure",
+    "formulation.sports_protein_focus": "earned",
+    "formulation.sports_route_base": "neutral",
+    "formulation.fiber_source_quality": "earned",
+    "formulation.fiber_disclosure": "disclosure",
+    "formulation.fiber_formula_focus": "earned",
+    "formulation.fiber_route_base": "neutral",
+    "formulation.fiber_practicality": "neutral",
+    "botanical_formulation.recognized_botanical_identity": "neutral",
+    "botanical_formulation.plant_part_disclosed": "disclosure",
+    "botanical_formulation.quantified_dose_present": "disclosure",
+    "botanical_formulation.extract_not_whole_herb": "earned",
+    "botanical_formulation.marker_standardization_declared": "earned",
+    "botanical_formulation.branded_clinically_studied_extract": "earned",
+    "botanical_formulation.weak_or_unidentified_botanical": "deduction",
+    "collagen_formulation.recognized_collagen_identity": "neutral",
+    "collagen_formulation.hydrolyzed_peptides": "earned",
+    "collagen_formulation.type_disclosed": "disclosure",
+    "collagen_formulation.source_disclosed": "disclosure",
+    "collagen_formulation.quantified_dose_present": "disclosure",
+    "collagen_formulation.branded_clinically_studied": "earned",
+    "dose.supplemental_window_proxy": "earned",
+    "dose.botanical_clinical_dose": "earned",
+    "dose.collagen_clinical_dose": "earned",
+    "dose.joint_support_dose": "earned",
+    "dose.sleep_support_dose": "earned",
+    "dose.rda_ai_coverage": "earned",
+    "dose.panel_breadth": "earned",
+    "dose.critical_nutrient_coverage": "earned",
+    "dose.prenatal_complement_support": "earned",
+    "dose.b_rda_ai_coverage": "earned",
+    "dose.core_b_panel_breadth": "earned",
+    "dose.moderate_dose_fit": "neutral",
+    "dose.epa_dha_band": "earned",
+    "dose.per_strain_cfu_disclosure": "disclosure",
+    "dose.cfu_adequacy": "earned",
+    "dose.studied_formula_dose_adequacy": "earned",
+    "dose.sports_primary_active_dose": "earned",
+    "dose.sports_stack_support": "earned",
+    "dose.sports_ratio_or_completeness": "earned",
+    "dose.sports_focused_single_completion": "earned",
+    "dose.fiber_effective_dose": "earned",
+    "dose.fiber_type_specificity": "earned",
+    "dose.fiber_dose_disclosure": "disclosure",
+    "dose.vitamin_c_daily_range": "earned",
+    "dose.vitamin_d_daily_range": "earned",
+    "dose.zinc_daily_range": "earned",
+    "dose.copper_balance": "earned",
+    "dose.selenium_daily_range": "earned",
+    "dose.beta_glucan_disclosed": "earned",
+    "dose.quercetin_disclosed": "earned",
+    "dose.elderberry_disclosed": "earned",
+    "dose.daily_use_discipline": "neutral",
+    "evidence.clinical_evidence_pipeline": "earned",
+    "evidence.depth_bonus": "earned",
+    "evidence.evidence_family_certainty": "earned",
+    "evidence.product_applicability": "earned",
+    "evidence.independent_replication_consistency": "earned",
+    "evidence.clinical_evidence": "earned",
+    "evidence.essential_panel_authority": "earned",
+    "evidence.b_nutrient_authority_panel": "earned",
+    "transparency.clear_disclosure_base": "neutral",
+    "transparency.complete_active_identity_dose_disclosure": "disclosure",
+    "transparency.B3_claim_compliance": "earned",
+    "transparency.hypoallergenic_bonus": "earned",
+    "transparency.panel_identity_disclosure": "disclosure",
+    "transparency.panel_individual_dose_disclosure": "disclosure",
+    "transparency.strain_identities_named": "disclosure",
+    "transparency.per_strain_cfu_on_label": "disclosure",
+    "transparency.aggregate_cfu_disclosure_proxy": "disclosure",
+    "transparency.aggregate_native_afu_disclosure": "disclosure",
+    "transparency.epa_or_dha_disclosed": "disclosure",
+    "transparency.form_disclosed": "disclosure",
+    "transparency.source_disclosed": "disclosure",
+}
+
+#: Evidence components that bound the score instead of adding to it:
+#: score = min(caps, clamp(max(Σ additive, floor))).
+EVIDENCE_FLOOR_KEYS = frozenset({"primary_evidence_floor"})
+EVIDENCE_CAP_KEYS = frozenset({"immune_support_evidence_cap", "joint_support_evidence_cap"})
+
+
+def component_kind(section: str, key: Any) -> str:
+    """Receipt kind for one score-bearing component; unknown keys fail closed."""
+    kind = COMPONENT_KINDS.get(f"{section}.{key}")
+    if kind is None:
+        raise RuntimeError(f"unregistered v4 score component: {section}.{key}")
+    return kind
+
+
 def canonical_penalty_key(key: Any) -> str:
     text = str(key)
     return PENALTY_ALIASES.get(text, text)

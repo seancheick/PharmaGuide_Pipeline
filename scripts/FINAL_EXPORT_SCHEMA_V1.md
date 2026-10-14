@@ -28,6 +28,16 @@ Assumptions:
 - `quality_pillars_v4` is the canonical score-detail surface for Flutter. The v3
   `section_breakdown` / `omega3_detail` blocks were removed on 2026-09-21 (they
   read a v3 `breakdown` the v4 scorer never emits and shipped zeros).
+- Each scored pillar carries a `receipt` (October 14, 2026; V4.1 accounting contract,
+  `scripts/audits/score_accounting_20261014/AUDIT.md` §8):
+  - `entries` are signed public points `{id, kind, source, raw?, points}` with `kind`
+    one of `earned | neutral | disclosure | deduction | floor | cap | rounding`. They sum
+    exactly to the pillar `score`.
+  - `nominal_deductions` is the sum of deduction entries.
+  - `realized_deductions` is the score minus the score without deductions.
+  - `unawarded` is capacity not earned; it is not an entry and never adds into the sum.
+  - Flutter renders receipts; it never recomputes them. The receipt is absent only for an
+    unitemized legacy breakdown, and suppressed or not-scored products carry none.
 - `key_ingredient_tags` is safe for Flutter product-row parsing: mapped actives use
   canonical IDs, and unmapped active rows fall back to cleaner `normalized_key` so
   product cards/search/stack intelligence are not empty while waiting for detail blobs.
@@ -426,7 +436,7 @@ compatibility/audit fallback. The payload is cached on-device in
   "warnings": [...],
   "score_bonuses": [...],
   "score_penalties": [...],
-  "quality_pillars_v4": {"formulation": {"score", "max", "reason", "components"}, "dose": {...}, "evidence": {..., "evidence_result_state", "display_state"}, "transparency": {...}, "verification": {...}, "safety_hygiene": {...}},
+  "quality_pillars_v4": {"formulation": {"score", "max", "reason", "components", "receipt": {"entries": [{"id", "kind", "source", "raw", "points"}], "nominal_deductions", "realized_deductions", "unawarded"}}, "dose": {...}, "evidence": {..., "evidence_result_state", "display_state"}, "transparency": {...}, "verification": {...}, "safety_hygiene": {...}},
   "compliance_detail": {...},
   "certification_detail": {"claimed_programs": [{"name", "program"}], "verified_programs": [{"name", "program", "record_id", "scope", "source_url", "snapshot_date", "recency_status"}], "third_party_programs": {"programs": [{"name", "verified": true, "source": "registry", "record_id"}]}, "gmp": {...}, "purity_verified", "heavy_metal_tested", "label_accuracy_verified"},
   "proprietary_blend_detail": {...},
