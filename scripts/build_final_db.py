@@ -2666,7 +2666,7 @@ def derive_v4_tradeoffs(
     dose = safe_dict(dims.get("dose"))
     dose_c = safe_dict(dose.get("components"))
     dose_m = safe_dict(dose.get("metadata"))
-    delivery_data = safe_dict(enriched.get("delivery_data"))
+    delivery_data = safe_dict(scored.get("delivery_data"))
 
     def _pos(d: Dict[str, Any], k: str) -> bool:
         return safe_float(d.get(k), 0) > 0
@@ -2678,7 +2678,7 @@ def derive_v4_tradeoffs(
     bonuses: List[Dict[str, Any]] = []
     if _pos(form, "A3_delivery_system"):
         bonuses.append({"id": "A3", "label": "Advanced delivery system", "score": form["A3_delivery_system"],
-                        "detail": safe_str(enriched.get("delivery_tier") or delivery_data.get("highest_tier"))})
+                        "detail": safe_str(delivery_data.get("highest_tier"))})
     if _pos(form, "A4_absorption_enhancer"):
         bonuses.append({"id": "A4", "label": "Absorption enhancer present", "score": form["A4_absorption_enhancer"]})
     if _pos(form, "A5b_standardized_botanical"):
@@ -8031,7 +8031,7 @@ def build_detail_blob(
         }
 
     # Formulation context — explains A3/A4/A5a/A5b bonus reasons
-    delivery_data = safe_dict(enriched.get("delivery_data"))
+    delivery_data = safe_dict(scored.get("delivery_data"))
     absorption_data = safe_dict(enriched.get("absorption_data"))
     delivery_systems = [
         system
@@ -8046,10 +8046,7 @@ def build_detail_blob(
     )
     primary_delivery = delivery_systems[0] if delivery_systems else {}
     blob["formulation_detail"] = {
-        "delivery_tier": safe_str(
-            enriched.get("delivery_tier")
-            or delivery_data.get("highest_tier")
-        ),
+        "delivery_tier": safe_str(delivery_data.get("highest_tier")),
         "delivery_form": safe_str(
             primary_delivery.get("canonical_name") or primary_delivery.get("name")
         ),

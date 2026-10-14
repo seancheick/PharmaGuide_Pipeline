@@ -80,7 +80,8 @@ def test_every_allowlisted_read_is_a_named_kind_and_the_live_tree_passes() -> No
     owners = {key.split("|")[0] + "|" + key.split("|")[1]
               for key, reason in audit.ALLOWLIST.items() if reason.startswith("canonical_owner: ")}
     assert owners == {"scripts/scoring_v4/exposure.py|row_exposure",
-                      "scripts/scoring_v4/modules/fiber_digestive_helpers.py|nutrition_fiber_exposure"}
+                      "scripts/scoring_v4/modules/fiber_digestive_helpers.py|nutrition_fiber_exposure",
+                      "scripts/scoring_v4/modules/generic_helpers.py|eligible_delivery_data"}
     findings = [f for path in audit.iter_scan_files() for f in audit._scan_file(path)]
     assert findings and all(f["allowlisted"] for f in findings)
     assert set(audit.ALLOWLIST) <= {f["id"] for f in findings}, "stale allowlist entry"

@@ -70,6 +70,7 @@ committed outcome after a lost response without borrowing another attempt's resu
 | **IQM** | Ingredient Quality Map: `scripts/data/ingredient_quality_map.json`. Read the live `_metadata` block for its schema version and parent count; do not copy those drifting values into documentation. |
 | **Parent** | Canonical ingredient family identified by a stable snake-case key, such as `magnesium`. |
 | **Form** | A specific salt, chelate, extract, strain, source, or delivery form under a parent. |
+| **Independent delivery credit** | Credit for a source-supported delivery mechanism distinct from the resolved ingredient/form-quality assessment. Detection, marketing wording, chemistry, presentation and an already-assessed preparation cannot earn a second delivery bonus. The shared owner is `scoring_v4.modules.generic_helpers.eligible_delivery_data`; export renders its scored-artifact result. |
 | **Canonical ID** | Stable machine identity selected by deterministic exact/canonical/bounded-alias matching. Display text is not identity. |
 | **Printed name** | Full ingredient name as printed on the label. It is retained even when a verified branded token is extracted. |
 | **Branded token** | Separately stored verified brand marker; it never replaces the printed name. |

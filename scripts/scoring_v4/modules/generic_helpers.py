@@ -13,6 +13,10 @@ duplicated to keep v4 evolvable without v3 entanglement.
 
 from __future__ import annotations
 
+from functools import lru_cache
+import json
+from pathlib import Path
+import re
 from typing import Any, Dict, List, Optional, Tuple
 
 from scoring_input_contract import (
@@ -20,8 +24,74 @@ from scoring_input_contract import (
     get_source_score_eligible_active_rows,
     is_lent_blend_mass,
 )
-from scoring_reference_resolver import delivers_parent_nutrient
+from scoring_reference_resolver import delivers_parent_nutrient, iqm_reference_entry
 from serving_frequency import resolve_daily_serving_range
+
+
+@lru_cache(maxsize=1)
+def _delivery_definitions() -> Dict[str, Any]:
+    """Reviewed delivery definitions, separate from label detection."""
+    path = Path(__file__).resolve().parents[2] / "data" / "enhanced_delivery.json"
+    return json.loads(path.read_text())
+
+
+def _delivery_patterns(terms: List[str]) -> List[Any]:
+    return [re.compile(r"(?<![a-z0-9])" + r"[\s-]*".join(
+        re.escape(part) for part in re.split(r"[\s-]+", _norm_text(term)))
+        + r"(?![a-z0-9])", re.IGNORECASE)
+        for term in terms if isinstance(term, str) and term.strip()]
+
+
+def eligible_delivery_data(product: Dict[str, Any]) -> Dict[str, Any]:
+    """Separate delivery credit from an already-assessed ingredient form.
+
+    Recognition is not eligibility: a tier alone, intrinsic chemistry, a
+    presentation descriptor, or an unsupported technology cannot earn points.
+    IQM retains ownership of form identity and quality; this seam only checks
+    whether a detected technology is already represented by that resolved form.
+    """
+    definitions = _delivery_definitions()
+    form_terms = []
+    for row in scorable_ingredients(product, require_dose=False, allow_sole_mapped_blend=True):
+        form_name = row.get("form_id") or row.get("matched_form")
+        if not isinstance(form_name, str) or not form_name.strip():
+            continue
+        parent = iqm_reference_entry(row.get("canonical_id")) or {}
+        forms = _safe_dict(parent.get("forms"))
+        form = next((value for name, value in forms.items()
+                     if _norm_text(name) == _norm_text(form_name) and isinstance(value, dict)), {})
+        form_terms.extend([form_name, *form.get("aliases", [])])
+
+    eligible = []
+    seen = set()
+    for system in _safe_list(_safe_dict(product.get("delivery_data")).get("systems")):
+        if not isinstance(system, dict):
+            continue
+        name = _norm_text(system.get("canonical_name") or system.get("name"))
+        definition = definitions.get(name)
+        if (name in seen or not isinstance(definition, dict)
+                or definition.get("category") != "delivery"
+                or not str(definition.get("source_url") or "").startswith("https://")
+                or not isinstance(system.get("match_source"), str) or not system["match_source"].strip()
+                or not isinstance(system.get("raw_source_text"), str) or not system["raw_source_text"].strip()):
+            continue
+        label_terms = [name, *definition.get("aliases", [])]
+        if not any(pattern.search(system["raw_source_text"]) for pattern in _delivery_patterns(label_terms)):
+            continue
+        patterns = _delivery_patterns([
+            *label_terms, *_safe_dict(definition.get("relationships")).get("form_quality_terms", []),
+        ])
+        if any(pattern.search(term) for pattern in patterns for term in form_terms):
+            continue
+        tier = definition.get("tier")
+        if isinstance(tier, bool) or tier not in (1, 2, 3):
+            continue
+        seen.add(name)
+        eligible.append({**system, "tier": tier, "category": "delivery",
+                         "description": definition.get("description", ""),
+                         "source_url": definition["source_url"]})
+    return {"matched": bool(eligible), "systems": eligible,
+            "highest_tier": min((system["tier"] for system in eligible), default=None)}
 
 
 _DOSE_UNIT_WHITELIST = frozenset(

@@ -170,7 +170,8 @@ def test_retired_generic_proxies_are_absent_and_cannot_move_score() -> None:
 def test_delivery_tiers(tier: int, expected: float) -> None:
     from scoring_v4.modules.generic_formulation import score_formulation
 
-    result = score_formulation(_product(delivery_tier=tier))
+    name = {1: "liposomal", 2: "delayed-release", 3: "microencapsulation"}.get(tier, "unsupported")
+    result = score_formulation(_delivery_product(name, tier=tier))
     assert result["components"]["A3_delivery_system"] == expected
 
 
@@ -285,3 +286,90 @@ def test_generic_formulation_does_not_import_retired_scorer() -> None:
     import scoring_v4.modules.generic_formulation as module
 
     assert "score_supplements" not in inspect.getsource(module)
+
+
+def _delivery_product(name, *, form="magnesium glycinate", canonical_id="magnesium", tier=2, systems=None):
+    return _product(
+        ingredients=[_ingredient(canonical_id=canonical_id, bio_score=12, matched_form=form, form_id=form)],
+        delivery_tier=tier,
+        delivery_data={"matched": True, "highest_tier": tier, "systems": systems or [{
+            "name": name, "canonical_name": name, "tier": tier, "category": "delivery",
+            "raw_source_text": name, "match_source": "statements[0]",
+        }]},
+    )
+
+
+def _artifact_delivery(product):
+    from scoring_v4.scored_artifact import build_scored_artifact
+    artifact = build_scored_artifact(product)
+    components = artifact["_v4_module_breakdown"]["dimensions"]["formulation"]["components"]
+    return artifact, components.get("A3_delivery_system", 0)
+
+
+@pytest.mark.parametrize("name", ["chelated", "traacs", "albion", "threonate", "methylcobalamin", "ubiquinol"])
+def test_intrinsic_form_cannot_earn_an_additional_delivery_bonus(name):
+    artifact, credit = _artifact_delivery(_delivery_product(name))
+    assert credit == 0
+    assert artifact["delivery_data"]["highest_tier"] is None
+
+
+def test_carrier_already_owned_by_the_assessed_form_is_not_counted_again():
+    _, credit = _artifact_delivery(_delivery_product(
+        "liposomal", canonical_id="vitamin_c", form="liposomal vitamin C", tier=1,
+    ))
+    assert credit == 0
+
+
+def test_independent_carrier_is_retained_when_it_is_not_the_assessed_form():
+    _, credit = _artifact_delivery(_delivery_product(
+        "liposomal", canonical_id="vitamin_c", form="ascorbic acid", tier=1,
+    ))
+    assert credit == 3
+
+
+def test_duplicate_premium_system_does_not_hide_independent_release_system():
+    systems = [{"name": name, "canonical_name": name, "tier": tier, "category": "delivery",
+                "raw_source_text": name, "match_source": "statements[0]"}
+               for name, tier in [("phytosome", 1), ("meriva", 1), ("delayed-release", 2)]]
+    artifact, credit = _artifact_delivery(_delivery_product(
+        "meriva", canonical_id="curcumin", form="meriva curcumin", tier=1, systems=systems,
+    ))
+    assert credit == 2
+    assert artifact["delivery_data"]["highest_tier"] == 2
+    assert [row["canonical_name"] for row in artifact["delivery_data"]["systems"]] == ["delayed-release"]
+
+
+def test_tier_or_marketing_word_without_a_supported_system_cannot_create_credit():
+    product = _delivery_product("unknown technology", tier=1)
+    _, credit = _artifact_delivery(product)
+    assert credit == 0
+    product["delivery_data"]["systems"] = []
+    _, credit = _artifact_delivery(product)
+    assert credit == 0
+
+
+@pytest.mark.parametrize("name", ["microactive", "micronized", "sustained-release"])
+def test_named_preparation_already_assessed_cannot_reearn_its_component_delivery_traits(name):
+    _, credit = _artifact_delivery(_delivery_product(
+        name, canonical_id="curcumin", form="liposomal curcumin", tier=2,
+    ))
+    assert credit == 0
+
+
+@pytest.mark.parametrize("field,value", [("raw_source_text", "ordinary capsule"), ("raw_source_text", True), ("match_source", False)])
+def test_incoherent_or_untyped_detection_cannot_create_delivery_credit(field, value):
+    product = _delivery_product("delayed-release")
+    product["delivery_data"]["systems"][0][field] = value
+    _, credit = _artifact_delivery(product)
+    assert credit == 0
+
+
+@pytest.mark.parametrize("text", ["entericcoated", "enteric-coated", "enteric coated"])
+def test_recognized_delivery_separator_variants_keep_independent_credit(text):
+    product = _delivery_product("enteric-coated")
+    product["delivery_data"]["systems"][0]["raw_source_text"] = text
+    assert _artifact_delivery(product)[1] == 2
+
+
+def test_generic_micronization_cannot_borrow_named_microactive_architecture_evidence():
+    assert _artifact_delivery(_delivery_product("micronized"))[1] == 0

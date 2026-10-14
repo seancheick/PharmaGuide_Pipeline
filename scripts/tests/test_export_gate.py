@@ -1063,7 +1063,7 @@ class TestFormulationDetail:
         assert "synergy_cluster_qualified" in fd
         assert "claim_non_gmo_verified" in fd
 
-    def test_formulation_detail_reads_the_enricher_canonical_keys(self):
+    def test_formulation_detail_reads_scored_delivery_and_enriched_absorption(self):
         enriched = _base_enriched()
         enriched["delivery_data"] = {
             "highest_tier": 1,
@@ -1086,7 +1086,10 @@ class TestFormulationDetail:
             ],
         }
 
-        detail = build_detail_blob(enriched, _base_scored())["formulation_detail"]
+        scored = _base_scored()
+        scored["delivery_data"] = enriched["delivery_data"]
+        enriched["delivery_data"] = {"highest_tier": 2, "systems": [{"name": "chelated", "tier": 2}]}
+        detail = build_detail_blob(enriched, scored)["formulation_detail"]
 
         assert detail["delivery_form"] == "liposomal"
         assert detail["delivery_tier"] == "1"

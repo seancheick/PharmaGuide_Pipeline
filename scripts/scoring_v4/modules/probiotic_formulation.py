@@ -12,6 +12,7 @@ import math
 from typing import Any, Dict
 
 from scoring_v4.modules.generic_formulation import shared_formulation_penalty_detail
+from scoring_v4.modules.generic_helpers import eligible_delivery_data
 from probiotic_measurements import declared_total_cfu, probiotic_label_identity_summary
 
 
@@ -64,11 +65,12 @@ def score_formulation(product: Any) -> Dict[str, Any]:
     identities = probiotic_label_identity_summary(product)
     strain_count = identities["total_strain_count"]
     identity_count = identities["identified_strain_count"]
+    delivery_data = eligible_delivery_data(product)
 
     components = {
         "total_cfu_disclosed": _score_total_cfu_disclosed(total_billion),
         "exact_identity_completeness": CAP_EXACT_IDENTITY_COMPLETENESS * identity_count / strain_count if strain_count else 0.0,
-        "delivery_survivability": _score_delivery_survivability(product, pdata),
+        "delivery_survivability": _score_delivery_survivability(delivery_data, pdata),
     }
     from studied_formulas import assess_studied_formula
     formula = assess_studied_formula(product)
@@ -88,6 +90,7 @@ def score_formulation(product: Any) -> Dict[str, Any]:
     score = max(0.0, min(CAP_FORMULATION, raw_score - penalty_magnitude))
     metadata = {
         "phase": PHASE_MARKER,
+        "delivery_data": delivery_data,
         "raw_score": round(raw_score, 4),
         "pre_penalty_score": round(raw_score, 4),
         "total_billion_count": total_billion,
@@ -115,13 +118,10 @@ def _score_total_cfu_disclosed(total_billion: float) -> float:
     return CAP_TOTAL_POTENCY_DISCLOSURE if total_billion > 0 else 0.0
 
 
-def _score_delivery_survivability(product: Dict[str, Any], pdata: Dict[str, Any]) -> float:
-    if pdata.get("has_survivability_coating"):
+def _score_delivery_survivability(delivery_data: Dict[str, Any], pdata: Dict[str, Any]) -> float:
+    tier = delivery_data.get("highest_tier")
+    if pdata.get("has_survivability_coating") and tier is not None:
         return CAP_DELIVERY_SURVIVABILITY
-
-    tier = product.get("delivery_tier")
-    if tier is None:
-        tier = _safe_dict(product.get("delivery_data")).get("highest_tier")
     tier_int = _as_int(tier, 0)
     return {1: CAP_DELIVERY_SURVIVABILITY, 2: 2.5, 3: 1.5}.get(tier_int, 0.0)
 

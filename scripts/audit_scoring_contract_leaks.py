@@ -64,6 +64,9 @@ PROFILE_SELECTOR_FORBIDDEN_FIELDS: dict[str, str] = {
 # Any other raw read fails the audit; a scoring module is never allowlisted
 # for convenience.
 ALLOWLIST: dict[str, str] = {
+    'scripts/scoring_v4/modules/generic_helpers.py|eligible_delivery_data|get|raw_source_text|9f43e033ffb4': 'canonical_owner: generic_helpers.eligible_delivery_data verifies the detected technology against its label evidence before credit; all formulation scorers and export consume this shared result',
+    'scripts/scoring_v4/modules/generic_helpers.py|eligible_delivery_data|subscript|raw_source_text|ddd26cf12576': 'canonical_owner: generic_helpers.eligible_delivery_data verifies the detected technology against its label evidence before credit; all formulation scorers and export consume this shared result',
+
     "scripts/scoring_v4/gate_completeness.py|_has_enzyme_activity_evidence|get|unit|30c24beac47d": "pass_a_known_pending_native_evidence_contract",
     "scripts/scoring_v4/gate_safety.py|_ingredient_name_terms|get|raw_source_text|defe2b573198": "pass_a_known_pending_native_safety_signal_contract",
     "scripts/scoring_v4/gate_safety.py|_dose_mg|get|quantity|437869d0a4ab": "pass_a_known_pending_native_evidence_contract",

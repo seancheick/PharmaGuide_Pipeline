@@ -373,7 +373,10 @@ Structure: Object keyed by delivery system name (e.g., `liposomal`, `chelated`, 
 |-------|------|----------|-------------|
 | `tier` | int | YES | Quality tier (1=highest, 4=lowest) |
 | `description` | string | YES | What this delivery system does |
-| `category` | string | YES | Delivery category |
+| `category` | string | YES | `delivery`, `form`, `presentation`, or `absorption_enhancer`; recognition is not scoring eligibility |
+| `source_url` | string | NO | Reviewed mechanism source; required for separate delivery credit, not proof of universal clinical benefit |
+| `relationships` | object | NO | `form_quality_terms` links a mechanism to a named preparation already represented by resolved IQM form identity; does not change ingredient matching |
+| `notes` | string | NO | Qualification scope and limitations |
 
 ---
 

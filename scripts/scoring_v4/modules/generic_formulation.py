@@ -25,6 +25,7 @@ from scoring_v4.modules.collagen_profile import (
 )
 from scoring_v4.modules.generic_helpers import (
     bio_score_of,
+    eligible_delivery_data,
     canonical_key,
     is_scorable,
     is_nutrient_form_quality_signal,
@@ -143,13 +144,9 @@ def _bio_score_assessment(product: Dict[str, Any]) -> tuple[float, int]:
 # --- A3 delivery system ---------------------------------------------------
 
 
-def _score_delivery_system(product: Dict[str, Any]) -> float:
-    """Lookup delivery_tier (1/2/3) → 3/2/1 points. Reads `delivery_tier`
-    at the top level first, then falls back to `delivery_data.highest_tier`
-    (matches v3's lookup order)."""
-    tier = (product or {}).get("delivery_tier")
-    if tier is None:
-        tier = _safe_dict((product or {}).get("delivery_data")).get("highest_tier")
+def _score_delivery_system(delivery_data: Dict[str, Any]) -> float:
+    """Credit only the strongest independent, supported delivery system."""
+    tier = delivery_data.get("highest_tier")
     tier_int = int(_as_float(tier, 0) or 0)
     return _clamp(0.0, CAP_DELIVERY, DELIVERY_TIER_POINTS.get(tier_int, 0.0))
 
@@ -449,9 +446,10 @@ def score_formulation(product: Dict[str, Any]) -> Dict[str, Any]:
         product = {}
 
     bio_score, form_assessed_count = _bio_score_assessment(product)
+    delivery_data = eligible_delivery_data(product)
     components: Dict[str, float] = {
         "A1_bio_score": round(bio_score, 4),
-        "A3_delivery_system": round(_score_delivery_system(product), 4),
+        "A3_delivery_system": round(_score_delivery_system(delivery_data), 4),
         "A4_absorption_enhancer": round(_score_absorption_enhancer(product), 4),
         "A5b_standardized_botanical": round(_score_a5b_standardized_botanical(product), 4),
     }
@@ -507,6 +505,7 @@ def score_formulation(product: Dict[str, Any]) -> Dict[str, Any]:
         "phase": PHASE_MARKER_COMPLETE,
         "metadata": {
             "phase": PHASE_MARKER_COMPLETE,
+            "delivery_data": delivery_data,
             "deferred_components": [],
             "deferred_penalties": [],
             "formulation_profile": formulation_profile,
