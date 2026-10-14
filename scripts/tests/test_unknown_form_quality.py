@@ -1185,6 +1185,7 @@ def test_declared_whole_material_and_salt_reach_real_scored_artifact(enricher, n
     ('Shilajit', 'shilajit (unspecified)'),
     ('Purified Shilajit Extract', 'purified shilajit extract'),
     ('PrimaVie Shilajit', 'primavie shilajit'),
+    ('PrimaVie', 'primavie shilajit'),
     ('Himalayan Shilajit Resin', 'shilajit resin'),
     ('Shilajit Powder', 'shilajit powder'),
 ])
@@ -1199,7 +1200,9 @@ def test_shilajit_geography_and_generic_extract_do_not_claim_purification(
         'brandName': 'Label regression', 'offMarket': 0,
         'physicalState': {'name': 'Tablet'},
         'servingSizes': [{'minQuantity': 2, 'maxQuantity': 2, 'unit': 'Tablet(s)'}],
-        'ingredientRows': [{'name': name, 'forms': [], 'nestedRows': [],
+        'ingredientRows': [{'name': name,
+                            'forms': [{'name': 'Shilajit Extract'}] if name == 'PrimaVie' else [],
+                            'nestedRows': [],
                             'quantity': [{'quantity': 500, 'unit': 'mg'}]}],
         'otherIngredients': {'ingredients': []},
     }
@@ -1218,3 +1221,9 @@ def test_shilajit_geography_and_generic_extract_do_not_claim_purification(
     assert artifact['quality_score_status'] == 'scored'
     assert artifact['quality_score_v4_100'] is not None
     assert len(artifact['quality_pillars_v4']) == 6
+
+    if name == 'PrimaVie':
+        assessment = next(r for r in artifact['assessment_readiness']['evidence']['ingredient_assessments']
+                          if r['canonical_id'] == 'shilajit')
+        assert assessment['source_row_ref'] == 'ingredientRows[0]'
+        assert 'BRAND_PRIMAVIE_SHILAJIT' in assessment['evidence_ids']
