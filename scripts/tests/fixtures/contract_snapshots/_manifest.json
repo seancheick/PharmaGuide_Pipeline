@@ -1006,6 +1006,15 @@
       ],
       "source_commit": "claude/magnesium-bio-calibration",
       "notes": "Sean-approved magnesium calibration: citrate, chloride, lactate and aspartate tie at 15 and threonate 11 (Option C; glycerophosphate and the unspecified floor are held). Raising the parent's best form 14->15 lowers the parent-relative value of unchanged forms. Ritual 278454 magnesium malate 11.79->11: total 85.6->85.5. Pure 293924 citrate+malate average 13.39->13: total 83.2->82.9. Complete raw 33-canary check showed only these two drifts; no identity, status, route or safety field changed."
+    },
+    {
+      "date": "2026-10-13",
+      "action": "refrozen_distinct_magnesium_preparation",
+      "products": [
+        323080
+      ],
+      "source_commit": "codex/magnesium-form-review",
+      "notes": "Catalyte discloses a magnesium lysinate/glycinate preparation. Removing the false plain-glycinate alias and preserving that full disclosure yields an unmapped named form, a partial assessment and not_scored instead of 78.4. Safety is retained. This is an identity correction, not a calibration pin adjustment."
     }
   ]
 }

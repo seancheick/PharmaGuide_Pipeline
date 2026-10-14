@@ -9835,6 +9835,14 @@ class EnhancedDSLDNormalizer:
         name = ingredient_name.lower()
         extracted_forms = []
 
+        from form_vocab import extract_forms as _vocab_extract_forms
+        # A preparation qualifier is part of the chemical disclosure. Do not
+        # manufacture a simpler glycine-chelate identity from a buffered or
+        # mixed-ligand label whose exact preparation is not in the registry.
+        # Structured/parenthetical forms above already preserve their phrase.
+        if (re.search(r'\b(?:buffered|lysinate)\b', name)
+                and _vocab_extract_forms(name, categories=['mineral_salts'])):
+            return [ingredient_name.strip()]
         # Pass 1 — Parenthetical extraction for complex DSLD formats
         paren_matches = re.findall(r'\(([^)]+)\)', name)
         for match in paren_matches:
@@ -9877,14 +9885,6 @@ class EnhancedDSLDNormalizer:
         # across cleaner / scorer / enricher. Vocab lives at
         # scripts/data/form_keywords_vocab.json.
         from form_vocab import extract_forms as _vocab_extract_forms
-        # A preparation qualifier is part of the chemical disclosure. Do not
-        # manufacture a simpler glycine-chelate identity from a buffered or
-        # mixed-ligand label whose exact preparation is not in the registry.
-        # Structured/parenthetical forms above already preserve their phrase.
-        if (not extracted_forms
-                and re.search(r'\b(?:buffered|lysinate)\b', name)
-                and _vocab_extract_forms(name, categories=['mineral_salts'])):
-            return [ingredient_name.strip()]
         form_identifiers = list(_vocab_extract_forms(name))
 
         # Generic descriptors — not chemical forms, kept here because

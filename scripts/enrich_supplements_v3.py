@@ -8979,6 +8979,13 @@ class SupplementEnricherV3:
             if unwrapped and unwrapped not in match_candidates:
                 match_candidates.append(unwrapped)
 
+            # A preserved full-label preparation must not match the bare
+            # parent after the general matcher removes its parentheses.
+            if (form.get('source') == 'name_extraction'
+                    and self._norm_form_name(form_name) == self._norm_form_name(ing_name)
+                    and unwrapped != stripped):
+                match_candidates = [unwrapped]
+
             # Reuse the label-text form parser for source-qualified forms,
             # including multi-word sources such as "from sunflower oil".
             # Keep the complete phrase first and preserve it for display.

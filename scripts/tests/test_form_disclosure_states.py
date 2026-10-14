@@ -331,3 +331,18 @@ def test_nested_amount_source_preserves_named_magnesium_preparation(pipeline):
     assert row['quantity'] == 100
     assert readiness['is_live_ready'] is False
     assert any('lysinate' in q[1].lower() for q in queue)
+
+
+@pytest.mark.parametrize('name', [
+    'Magnesium (as magnesium glycinate and lysinate chelate)',
+    'Magnesium (as magnesium bisglycinate chelate) buffered',
+    'Magnesium (as magnesium bisglycinate chelate buffered)',
+])
+def test_parenthetical_qualified_preparation_keeps_full_identity(pipeline, name):
+    raw = _label(900004, [_row(1, name, 'Magnesium', 'mineral')])
+    _, readiness, rows, queue = _run(pipeline, raw)
+    row = next(r for r in rows.values() if r.get('canonical_id') == 'magnesium')
+    assert row['form_match_status'] == 'unmapped'
+    assert row['bio_score'] is None
+    assert readiness['is_live_ready'] is False
+    assert any(q[0] == 'disclosed_form_unmapped' for q in queue)
