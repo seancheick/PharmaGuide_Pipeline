@@ -95,7 +95,6 @@ def test_intentional_null_cuis_are_annotated():
         "ADD_CANDURIN_SILVER",
         "ADD_MAGNESIUM_CITRATE_LAURATE",
         "ADD_MALTOTAME",
-        "ADD_PUREFRUIT_SELECT",
         "ADD_SLIMSWEET",
         "ADD_SYNTHETIC_B_VITAMINS",
         "ADD_SYNTHETIC_VITAMINS",
