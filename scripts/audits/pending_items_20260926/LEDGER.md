@@ -1,3 +1,29 @@
+## Current execution — V4.1 score accounting consolidation, October 14
+
+Sean froze scoring policy and approved a five-step plan. Step 1 is the acceptance matrix in `scripts/audits/score_accounting_20261014/AUDIT.md`: 124 rows, one for each of the 114 score-bearing keys in the stored catalog plus 10 assembler items. Branch `claude/score-ledger`. Class: documentation. No score, catalog or publication change.
+
+Owner: quality_score.py::_build_pillars, module assessment owners, penalty_registry.py, scored_artifact.py. Evidence: AUDIT.md §6–§7 probe; a live Meru rescore on codex/shilajit-mapping returned 55.7. Will NOT create: a scorer, registry, assessment or partial status, or ranking rule.
+
+Measured on 15,123 stored scored products, config 1.23.0:
+- Total = Σ pillars in every product (0 failures).
+- Additive and sugar charged twice: 3,509 products. B7 charged twice: 403. High-risk/watchlist charged twice: 348.
+- 339 `caution` products show Safety 10/10.
+- 104 products have positive Evidence points with the number hidden; 155 `partial` products.
+- 3,210 Evidence zero facts and 40 authority-copy zeros contradict their state.
+- 1,712 no-benchmark Dose explanations and 1,572 "well-absorbed" explanations claim unmeasured facts.
+- The printed amount is credited in up to three pillars.
+- Baselines make up 28.6% of the median total.
+- Delivery claim subject is not established (259879).
+
+Verification 6/15 stays as a labelled policy baseline (unknown 37.2%, product-level 5.4%).
+
+Next unchecked:
+- Sean and a fresh-context reviewer accept the matrix.
+- Step 2: receipts, with zero score change.
+- Step 3: measure the AUDIT §5 option sets.
+
+The pending PR143 Clean→Enrich→Score run is held: one rebuild after V4.1, with the Meru branch integrated first.
+
 ## Current execution — normal batch preflight/release repair, October 13
 
 Sean's reported run stopped in preparation: matrix reference `scripts/data/curated_interactions/*.json` was interpreted literally, while the wrapper spent another764seconds on22940source cases and live gates after the ownership failure. This batch repairs infrastructure only; no corpus, live intake, publication or app build is run.
