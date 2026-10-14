@@ -996,6 +996,16 @@
       ],
       "source_commit": "e85b485f",
       "notes": "Shared Transparency owner now recognizes a source-selected printed parent total as disclosure, while Formulation still excludes that total from duplicate form counting. Raw Thorne Catalyte323080 declares Folate33.3mcgDFE and nested L-5-Methyltetrahydrofolate20mcg; every active amount is disclosed. Transparency9->15,total72.4->78.4; all other frozen identity/status/safety fields unchanged. Complete raw33canary check identified only this common-cause movement.1510stored parent products measured,341Transparency-only movements,zero safety/status/route changes. No scoring weights or clinical policy changed."
+    },
+    {
+      "date": "2026-10-13",
+      "action": "refrozen_magnesium_bio_calibration",
+      "products": [
+        278454,
+        293924
+      ],
+      "source_commit": "claude/magnesium-bio-calibration",
+      "notes": "Sean-approved magnesium calibration: citrate, chloride, lactate and aspartate tie at 15 and threonate 11 (Option C; glycerophosphate and the unspecified floor are held). Raising the parent's best form 14->15 lowers the parent-relative value of unchanged forms. Ritual 278454 magnesium malate 11.79->11: total 85.6->85.5. Pure 293924 citrate+malate average 13.39->13: total 83.2->82.9. Complete raw 33-canary check showed only these two drifts; no identity, status, route or safety field changed."
     }
   ]
 }

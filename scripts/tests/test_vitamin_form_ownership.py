@@ -76,11 +76,13 @@ def test_prenatal_formulation_canary_at_equal_iqm_12() -> None:
     formulation = _dimension(artifact, "formulation")
 
     assert artifact["_v4_module"] == "multi_or_prenatal"
+    # Magnesium's best form became 15 on 2026-10-13, so a magnesium row at 12
+    # now normalizes to 12 instead of 12/14*15 (11.12 -> 11.08 panel average).
     assert formulation["components"] == {
-        "panel_form_quality": 11.12,
+        "panel_form_quality": 11.08,
         "panel_disclosure_structure": 2.0,
     }
-    assert formulation["score"] == 13.12
+    assert formulation["score"] == 13.08
     assert artifact["quality_pillars_v4"]["formulation"]["components"]["reference"] == 14.0
     assert artifact["quality_pillars_v4"]["formulation"]["score"] == 18.7
 

@@ -20,31 +20,8 @@ def iqm():
 
 
 EXPECTED_BIO_SCORES = {
-    "magnesium": {
-        "magnesium citrate": 14,
-        "magnesium aspartate": 13,
-        "magnesium lactate": 13,
-        "magnesium chloride": 13,
-        "magnesium glycinate": 12,
-        "magnesium citrate-malate": 11,
-        "magnesium malate": 11,
-        "magnesium amino acid chelate": 11,
-        "magnesium threonate": 10,
-        "magnesium taurate": 10,
-        "magnesium gluconate": 10,
-        "magnesium ascorbate (as magnesium source)": 10,
-        "magnesium acetyl-taurate": 9,
-        "magnesium orotate": 9,
-        "magnesium pyruvate": 9,
-        "magnesium succinate": 9,
-        "magnesium brown rice chelate": 6,
-        "magnesium carbonate": 6,
-        "magnesium phosphate": 6,
-        "magnesium (unspecified)": 1,
-        "magnesium sulfate": 4,
-        "magnesium oxide": 3,
-        "magnesium hydroxide": 3,
-    },
+    # Magnesium was superseded by Sean's 2026-10-13 calibration; its complete
+    # table is pinned in test_magnesium_bio_calibration_20261013.py.
     "zinc": {
         "zinc picolinate": 13,
         "zinc bisglycinate": 13,

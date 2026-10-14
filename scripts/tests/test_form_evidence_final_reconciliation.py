@@ -16,6 +16,18 @@ CLINICAL_PATH = SCRIPTS_DIR / "data" / "backed_clinical_studies.json"
 AUDIT_DIR = SCRIPTS_DIR / "audits" / "form_evidence_20260813"
 REFERENCE_LEDGER_PATH = AUDIT_DIR / "reference_level_reconciliation_20260818.json"
 FINAL_MANIFEST_PATH = AUDIT_DIR / "final_reconciliation_manifest_20260818.json"
+# Sean-approved later review that supersedes named forms of this ledger.
+MAGNESIUM_CALIBRATION_PATH = (
+    SCRIPTS_DIR / "audits" / "magnesium_calibration_20261013" / "manifest.json"
+)
+
+
+def _later_review(ingredient_key: str, form_key: str) -> dict:
+    """The exact values the 2026-10-13 magnesium calibration set on a form."""
+    for change in json.loads(MAGNESIUM_CALIBRATION_PATH.read_text())["changes"]:
+        if (change["ingredient_key"], change["form_key"]) == (ingredient_key, form_key):
+            return change["set"]
+    return {}
 
 KEEP = "KEEP_FORM_SOURCE"
 REPLACEMENTS = {
@@ -92,6 +104,12 @@ def test_iqm_uses_only_retained_or_verified_replacement_form_sources():
         if current_key == 'free taurine':
             assert form['bio_score'] == 11
         assert isinstance(form.get("aliases"), list) and form["aliases"]
+        later = _later_review(ingredient_key, form_key).get("form_evidence")
+        if later is not None:
+            # Retained sources stay; only the later review's own citations are added.
+            assert expected[(ingredient_key, form_key)] <= _reference_ids(form)
+            assert form["form_evidence"] == later
+            continue
         assert _reference_ids(form) == expected[(ingredient_key, form_key)]
         if (ingredient_key, form_key) == ("hmb", "hmb free acid (hmb-fa)"):
             assert form["bio_score"] == 11
@@ -115,7 +133,7 @@ def test_score_corrections_are_narrow_and_match_the_reviewed_form_axis():
 
     for (ingredient_key, form_key), (bio_score, _retired_total) in expected.items():
         form = _form(iqm, ingredient_key, form_key)
-        assert form["bio_score"] == bio_score
+        assert form["bio_score"] == _later_review(ingredient_key, form_key).get("bio_score", bio_score)
 
 
 def test_backlog_exactly_tracks_legacy_excellent_forms_without_verified_evidence():
