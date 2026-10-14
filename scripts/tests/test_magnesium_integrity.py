@@ -267,3 +267,7 @@ def test_no_magnesium_form_repeats_unverified_class_absorption_fraction(iqm):
     for name, form in iqm['magnesium']['forms'].items():
         assert 'cluster F ~25-45%' not in form.get('notes', ''), name
     assert 'form unknown' not in iqm['magnesium']['forms']['magnesium glycerophosphate']['absorption']
+
+
+def test_gluconate_notes_do_not_promise_absence_of_side_effects(iqm):
+    assert 'without GI side effects' not in iqm['magnesium']['forms']['magnesium gluconate']['notes']
