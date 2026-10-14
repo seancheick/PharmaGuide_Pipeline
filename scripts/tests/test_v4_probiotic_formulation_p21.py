@@ -57,6 +57,14 @@ def _product(
             "ingredients_scorable": ingredients_scorable,
         },
         "delivery_tier": delivery_tier,
+        "delivery_data": {
+            "matched": bool(survivability or delivery_tier),
+            "highest_tier": delivery_tier or (2 if survivability else None),
+            "systems": [{"canonical_name": {1: "liposomal", 2: "delayed-release", 3: "microencapsulation"}.get(delivery_tier, "delayed-release"),
+                         "tier": delivery_tier or 2, "match_source": "physical_state",
+                         "raw_source_text": {1: "liposomal", 2: "delayed-release", 3: "microencapsulation"}.get(delivery_tier, "delayed-release")}]
+                       if survivability or delivery_tier else [],
+        },
         "probiotic_data": {
             "is_probiotic": True,
             "is_probiotic_product": True,
@@ -241,3 +249,10 @@ def test_probiotic_formulation_resilient_to_malformed_input() -> None:
         payload = score_formulation(bad)  # type: ignore[arg-type]
         assert payload["score"] == 0.0
         assert payload["max"] == 15.0
+
+
+def test_survivability_boolean_alone_is_not_a_supported_delivery_system():
+    from scoring_v4.modules.probiotic_formulation import score_formulation
+    product = _product(survivability=True)
+    product.pop("delivery_data", None)
+    assert score_formulation(product)["components"]["delivery_survivability"] == 0

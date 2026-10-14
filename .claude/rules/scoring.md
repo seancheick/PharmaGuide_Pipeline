@@ -14,6 +14,7 @@ paths:
   `scoring_v4/scored_artifact.py`.
 - Every magnitude lives in `scoring_v4/config/quality_score.json`. Recalibrate there, never with
   literals in code.
+- **Distinct formulation qualities count once.** The same characteristic may not earn both form-quality and delivery credit. Separate delivery credit requires a source-supported mechanism not represented by the resolved form; label recognition or a tier alone is insufficient. `generic_helpers.eligible_delivery_data` owns this decision, and export reads the scored projection. Verification is independent and unchanged.
 - **Complexity creates obligations, not bonuses.**
   - No ingredient-count or single-only bonuses or floors.
   - Adding an ingredient never raises a score by its presence.

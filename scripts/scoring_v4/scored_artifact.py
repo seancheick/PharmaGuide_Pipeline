@@ -20,7 +20,7 @@ from scoring_v4.gate_safety import safety_resolvers_failed, stated_safety_signal
 from supplement_taxonomy import percentile_label_for
 
 
-SCORED_ARTIFACT_SCHEMA_VERSION = "4.3.0"
+SCORED_ARTIFACT_SCHEMA_VERSION = "4.4.0"
 LOW_COVERAGE_TRUST_FLOOR = 0.3
 
 #: Compatibility disposition precedence, including retired POOR for reading
@@ -207,6 +207,8 @@ def assemble_scored_artifact(
     dose_safety = _safe_dict(breakdown.get("dose_safety"))
     provenance = _safe_dict(breakdown.get("provenance"))
     module_breakdown = breakdown.get("module")
+    formulation = _safe_dict(_safe_dict(_safe_dict(module_breakdown).get("dimensions")).get("formulation"))
+    delivery_data = _safe_dict(_safe_dict(formulation.get("metadata")).get("delivery_data"))
 
     gate_coverage = completeness_gate.get("mapped_coverage")
     try:
@@ -280,6 +282,7 @@ def assemble_scored_artifact(
         "evaluation_stage": "scored_v4",
         "output_schema_version": SCORED_ARTIFACT_SCHEMA_VERSION,
         "score_basis": "v4_six_pillar",
+        "delivery_data": delivery_data or {"matched": False, "systems": [], "highest_tier": None},
         "not_scorable_reason": (
             (
                 completeness_gate.get("reason")

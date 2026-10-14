@@ -1,15 +1,9 @@
 # PharmaGuide Scoring Engine Specification
 
-> Production scoring engine: **4.5.0**
-> V4 quality configuration: **1.21.2-omega-evidence-ownership**
-> Export schema: **2.5.0** / **117 core columns**
-> Stage-3 artifact schema: **4.3.0**
-> Last verified against code: **2026-09-18**
-> Live versions: `SCORING_ENGINE_VERSION` (score_supplements_v4.py), the config's
-> `_metadata.version` (scoring_v4/config/quality_score.json),
-> `SCORED_ARTIFACT_SCHEMA_VERSION` (scoring_v4/scored_artifact.py),
-> `EXPORT_SCHEMA_VERSION` (build_final_db.py). If this header disagrees with
-> those stamps, this header is wrong.
+Read the current versions from `SCORING_ENGINE_VERSION` in `score_supplements_v4.py`,
+`_metadata.version` in `scoring_v4/config/quality_score.json`,
+`SCORED_ARTIFACT_SCHEMA_VERSION` in `scoring_v4/scored_artifact.py`, and
+`EXPORT_SCHEMA_VERSION` in `build_final_db.py`. These source stamps own versions.
 
 ## 1. Scope
 
@@ -347,7 +341,11 @@ enriched product into one scored product artifact. It:
 and summary reporting. `build_final_db.py` validates and exports the artifact;
 it does not rescore or overlay another result.
 
+The scored artifact projects `delivery_data` from its formulation module’s single eligibility result. Export uses that projection rather than restoring raw/enriched delivery tiers. Chemistry, presentation and an already-assessed preparation cannot earn a second delivery bonus. Definitions and preparation relationships remain in the existing `enhanced_delivery.json`; no Verification or bio-score magnitude changes are implied.
+
 ### 13.1 Change history worth knowing
+
+Artifact schema 4.4.0 adds the canonical eligible-delivery projection (October 14, 2026). The historical version transitions below describe scoring-engine changes, not that new artifact field.
 
 - **4.2.0 → 4.3.0** (2026-08-20, `17db3e50`): confidence separated from gate
   state; then AFU dose uncertainty and submission identity preserved (`4b870138`).

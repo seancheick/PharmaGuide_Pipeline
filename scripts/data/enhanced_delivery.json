@@ -2,25 +2,25 @@
   "_metadata": {
     "description": "Tiered enhanced delivery systems for bioavailability scoring",
     "purpose": "bonus_scoring",
-    "schema_version": "5.0.0",
-    "last_updated": "2026-09-16",
+    "schema_version": "5.1.0",
+    "last_updated": "2026-10-14",
     "total_entries": 78,
-    "scoring_rule": "Award bonus points based on delivery technology tier. Only the HIGHEST tier match counts (no stacking).",
+    "scoring_rule": "Detection is not scoring eligibility. Ingredient chemistry/form quality and delivery may not count the same characteristic twice. Only a distinct, source-supported delivery mechanism not represented by the resolved form can earn separate credit; only the strongest eligible system counts.",
     "tier_definitions": {
       "tier_1": {
         "name": "Premium Delivery",
         "points": 3.0,
-        "description": "Advanced technologies with clinically proven 10x+ bioavailability increase (liposomal, phytosome, nanoemulsion, patented curcumin forms)"
+        "description": "Historical premium delivery magnitude, awarded only after independent mechanism and form-overlap checks."
       },
       "tier_2": {
         "name": "Enhanced Delivery",
         "points": 2.0,
-        "description": "Proven absorption enhancement (chelated minerals, sublingual, enteric coating, active vitamin forms)"
+        "description": "Historical enhanced delivery magnitude, awarded only after independent mechanism and form-overlap checks."
       },
       "tier_3": {
         "name": "Basic Enhanced",
         "points": 1.0,
-        "description": "Modest improvements over standard forms (softgels, powders, fermented, freeze-dried)"
+        "description": "Historical basic delivery magnitude, awarded only after independent mechanism and form-overlap checks."
       }
     },
     "tier_points": {
@@ -29,8 +29,8 @@
       "3": 1.0
     },
     "max_bonus": 3.0,
-    "detection_note": "Search labelText.raw + ingredient forms + product name (case-insensitive). Award only the single highest tier match.",
-    "pipeline_integration": "Used by enrichment script to award delivery bonus points during scoring preparation",
+    "detection_note": "Label recognition retains all source matches. The shared scoring owner selects the strongest source-supported independent system after checking overlap with resolved form identity; a detected name or tier alone is not credit.",
+    "pipeline_integration": "Enrichment preserves detected terms; v4 scoring owns delivery eligibility and projects qualifying systems for export.",
     "sources": [
       "https://www.nutritionaloutlook.com/view/innovative-delivery-technologies-that-enhance-bioavailability-and-stability",
       "https://balchem.com/hnh/mn/albion-minerals/",
@@ -42,395 +42,522 @@
   },
   "liposomal": {
     "tier": 1,
-    "description": "Phospholipid encapsulation – routinely 300-1000%+ bioavailability increase",
-    "category": "delivery"
+    "description": "Phospholipid vesicle encapsulation; preparation-specific delivery architecture.",
+    "category": "delivery",
+    "source_url": "https://pubmed.ncbi.nlm.nih.gov/27375360/",
+    "notes": "Source supports the described delivery architecture in its evaluated preparation, not universal absorption superiority or personal benefit. Separate credit is withheld when that technology is already represented by the resolved IQM form."
   },
   "lypospheric": {
     "tier": 1,
-    "description": "Branded liposomal technology",
-    "category": "delivery"
+    "description": "Named delivery candidate; mechanism qualification is not established by the label term alone.",
+    "category": "delivery",
+    "notes": "Delivery candidate retained for label recognition; separate credit is unqualified until a preparation-relevant mechanism source is reviewed."
   },
   "vesisorb": {
     "tier": 1,
-    "description": "Colloidal droplet system – clinically proven superior absorption",
-    "category": "delivery"
+    "description": "Named lipid-based self-assembling colloidal delivery system.",
+    "category": "delivery",
+    "source_url": "https://pubmed.ncbi.nlm.nih.gov/19284181/",
+    "notes": "Source supports the described delivery architecture in its evaluated preparation, not universal absorption superiority or personal benefit. Separate credit is withheld when that technology is already represented by the resolved IQM form."
   },
   "capsoil": {
     "tier": 1,
-    "description": "Micronized lipophilic powder technology",
-    "category": "delivery"
+    "description": "Named delivery candidate; mechanism qualification is not established by the label term alone.",
+    "category": "delivery",
+    "notes": "Delivery candidate retained for label recognition; separate credit is unqualified until a preparation-relevant mechanism source is reviewed."
   },
   "nanoemulsion": {
     "tier": 1,
-    "description": "Ultra-fine oil-in-water emulsion – rapid high absorption",
-    "category": "delivery"
+    "description": "Named delivery candidate; mechanism qualification is not established by the label term alone.",
+    "category": "delivery",
+    "notes": "Delivery candidate retained for label recognition; separate credit is unqualified until a preparation-relevant mechanism source is reviewed."
   },
   "phytosome": {
     "tier": 1,
-    "description": "Phospholipid-bound botanicals (e.g., Meriva, Greenselect)",
-    "category": "delivery"
+    "description": "Botanical dispersion in a lecithin-based matrix.",
+    "category": "delivery",
+    "source_url": "https://www.indena.com/products/phytosome/?lang=en",
+    "notes": "Source supports the described delivery architecture in its evaluated preparation, not universal absorption superiority or personal benefit. Separate credit is withheld when that technology is already represented by the resolved IQM form.",
+    "relationships": {
+      "form_quality_terms": [
+        "meriva",
+        "siliphos",
+        "greenselect"
+      ]
+    }
   },
   "double liposomal": {
     "tier": 1,
-    "description": "Dual-layer liposomal encapsulation",
-    "category": "delivery"
+    "description": "Label describes liposomal encapsulation; layering does not establish a universal performance advantage.",
+    "category": "delivery",
+    "source_url": "https://pubmed.ncbi.nlm.nih.gov/27375360/",
+    "notes": "Source supports the described delivery architecture in its evaluated preparation, not universal absorption superiority or personal benefit. Separate credit is withheld when that technology is already represented by the resolved IQM form."
   },
   "capsule-in-capsule": {
     "tier": 1,
-    "description": "Dual-stage release technology",
-    "category": "delivery"
+    "description": "Named delivery candidate; mechanism qualification is not established by the label term alone.",
+    "category": "delivery",
+    "notes": "Delivery candidate retained for label recognition; separate credit is unqualified until a preparation-relevant mechanism source is reviewed."
   },
   "novasol": {
     "tier": 1,
-    "description": "Micellar solubilization – up to 185x bioavailability increase for curcumin",
-    "category": "delivery"
+    "description": "Named polysorbate-based micellar curcumin preparation.",
+    "category": "delivery",
+    "notes": "Source establishes the named preparation or delivery architecture; it does not establish universal absorption superiority, clinical effectiveness, finished-product certification or personal suitability. No separate credit when the resolved form already represents the same preparation.",
+    "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC12144411/"
   },
   "micellar": {
     "tier": 1,
-    "description": "Micelle encapsulation – superior intestinal wall interaction, pH resistant",
-    "category": "delivery"
+    "description": "Named delivery candidate; mechanism qualification is not established by the label term alone.",
+    "category": "delivery",
+    "notes": "Delivery candidate retained for label recognition; separate credit is unqualified until a preparation-relevant mechanism source is reviewed."
   },
   "licaps": {
     "tier": 1,
-    "description": "Liquid-filled hard capsule technology for enhanced absorption",
-    "category": "delivery"
+    "description": "Named delivery candidate; mechanism qualification is not established by the label term alone.",
+    "category": "delivery",
+    "notes": "Delivery candidate retained for label recognition; separate credit is unqualified until a preparation-relevant mechanism source is reviewed."
   },
   "longvida": {
     "tier": 1,
-    "description": "SLCP (Solid Lipid Curcumin Particle) – 65x more bioavailable",
-    "category": "delivery"
+    "description": "Named solid-lipid curcumin particle preparation; carrier identity is not proof of superior clinical benefit.",
+    "category": "delivery",
+    "notes": "Source establishes the named preparation or delivery architecture; it does not establish universal absorption superiority, clinical effectiveness, finished-product certification or personal suitability. No separate credit when the resolved form already represents the same preparation.",
+    "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC12144411/"
   },
   "theracurmin": {
     "tier": 1,
-    "description": "Colloidal dispersion curcumin – 27x more bioavailable",
-    "category": "delivery"
+    "description": "Named colloidal submicron curcumin preparation.",
+    "category": "delivery",
+    "notes": "Source establishes the named preparation or delivery architecture; it does not establish universal absorption superiority, clinical effectiveness, finished-product certification or personal suitability. No separate credit when the resolved form already represents the same preparation.",
+    "source_url": "https://pubmed.ncbi.nlm.nih.gov/21532153/"
   },
   "meriva": {
     "tier": 1,
-    "description": "Curcumin-phosphatidylcholine phytosome – 29x more bioavailable",
-    "category": "delivery"
+    "description": "Named curcumin phytosome preparation; the same preparation may already be assessed by IQM.",
+    "category": "delivery",
+    "source_url": "https://www.indena.com/products/phytosome/?lang=en",
+    "notes": "Source supports the described delivery architecture in its evaluated preparation, not universal absorption superiority or personal benefit. Separate credit is withheld when that technology is already represented by the resolved IQM form."
   },
   "lozenge": {
     "tier": 2,
-    "description": "Partial sublingual + mechanical dissolution – excellent for oral/immune actives",
-    "category": "delivery"
+    "description": "Presentation or processing descriptor; not independently sufficient for delivery credit.",
+    "category": "presentation",
+    "notes": "Presentation or processing wording alone does not establish a distinct supported delivery mechanism."
   },
   "sublingual": {
     "tier": 2,
-    "description": "True under-tongue absorption bypassing first-pass",
-    "category": "delivery"
+    "description": "Named delivery candidate; mechanism qualification is not established by the label term alone.",
+    "category": "delivery",
+    "notes": "Delivery candidate retained for label recognition; separate credit is unqualified until a preparation-relevant mechanism source is reviewed."
   },
   "oral spray": {
     "tier": 2,
-    "description": "Sublingual spray – fast onset, high bioavailability",
-    "category": "delivery"
+    "description": "Presentation or processing descriptor; not independently sufficient for delivery credit.",
+    "category": "presentation",
+    "notes": "Presentation or processing wording alone does not establish a distinct supported delivery mechanism."
   },
   "chelated": {
     "tier": 2,
-    "description": "Amino-acid bound minerals – 40-90% better absorption than oxides",
-    "category": "delivery"
+    "description": "Ingredient form, chemistry or preparation descriptor; assessed by the existing form-quality owner.",
+    "category": "form",
+    "notes": "Ingredient chemistry or preparation belongs to the existing form-quality owner; it is not a separate delivery technology."
   },
   "traacs": {
     "tier": 2,
-    "description": "Albion patented chelates – gold-standard mineral chelation",
-    "category": "delivery"
+    "description": "Ingredient form, chemistry or preparation descriptor; assessed by the existing form-quality owner.",
+    "category": "form",
+    "notes": "Ingredient chemistry or preparation belongs to the existing form-quality owner; it is not a separate delivery technology."
   },
   "albion": {
     "tier": 2,
-    "description": "Albion chelated minerals",
-    "category": "delivery"
+    "description": "Ingredient form, chemistry or preparation descriptor; assessed by the existing form-quality owner.",
+    "category": "form",
+    "notes": "Ingredient chemistry or preparation belongs to the existing form-quality owner; it is not a separate delivery technology."
   },
   "enteric-coated": {
     "tier": 2,
-    "description": "Stomach-acid protection – critical for probiotics/enzymes",
-    "category": "delivery"
+    "description": "Label describes a coating intended to delay release through gastric transit.",
+    "category": "delivery",
+    "source_url": "https://t2.capsugel.com/media/library/c1a-32029_DRCaps-A4_FIN.PDF",
+    "notes": "Source supports the described delivery architecture in its evaluated preparation, not universal absorption superiority or personal benefit. Separate credit is withheld when that technology is already represented by the resolved IQM form."
   },
   "micronized": {
     "tier": 2,
-    "description": "Particle size reduction – proven 2-5× surface area increase",
-    "category": "delivery"
+    "description": "Particle-size processing descriptor; separate credit requires that it is not already represented by the assessed form.",
+    "category": "delivery",
+    "source_url": "https://bioactives.com/microactive-technology/",
+    "notes": "Source supports the described delivery architecture in its evaluated preparation, not universal absorption superiority or personal benefit. Separate credit is withheld when that technology is already represented by the resolved IQM form.",
+    "relationships": {
+      "form_quality_terms": [
+        "microactive"
+      ]
+    }
   },
   "time-release": {
     "tier": 2,
-    "description": "Sustained delivery – stable blood levels",
+    "description": "Label describes release over time; performance depends on the specific preparation.",
     "category": "delivery",
     "aliases": [
       "timed-release"
-    ]
+    ],
+    "source_url": "https://pubmed.ncbi.nlm.nih.gov/11441529/",
+    "notes": "Source supports the described delivery architecture in its evaluated preparation, not universal absorption superiority or personal benefit. Separate credit is withheld when that technology is already represented by the resolved IQM form."
   },
   "sustained-release": {
     "tier": 2,
-    "description": "Gradual release matrix",
-    "category": "delivery"
+    "description": "Label describes release over time; performance depends on the specific preparation.",
+    "category": "delivery",
+    "source_url": "https://pubmed.ncbi.nlm.nih.gov/11441529/",
+    "notes": "Source supports the described delivery architecture in its evaluated preparation, not universal absorption superiority or personal benefit. Separate credit is withheld when that technology is already represented by the resolved IQM form.",
+    "relationships": {
+      "form_quality_terms": [
+        "microactive"
+      ]
+    }
   },
   "tincture": {
     "tier": 2,
-    "description": "Alcohol/glycerin extract – rapid absorption",
-    "category": "delivery"
+    "description": "Presentation or processing descriptor; not independently sufficient for delivery credit.",
+    "category": "presentation",
+    "notes": "Presentation or processing wording alone does not establish a distinct supported delivery mechanism."
   },
   "drcaps": {
     "tier": 2,
-    "description": "Delayed-release capsule – releases 75-120 min after ingestion, protects from stomach acid",
-    "category": "delivery"
+    "description": "Named delayed-disintegration capsule architecture.",
+    "category": "delivery",
+    "source_url": "https://t2.capsugel.com/media/library/c1a-32029_DRCaps-A4_FIN.PDF",
+    "notes": "Source supports the described delivery architecture in its evaluated preparation, not universal absorption superiority or personal benefit. Separate credit is withheld when that technology is already represented by the resolved IQM form."
   },
   "bio-tract": {
     "tier": 2,
-    "description": "Time-release tablet – delivers 15x more probiotics, 8-10 hour release",
-    "category": "delivery"
+    "description": "Named probiotic protective-release tablet architecture.",
+    "category": "delivery",
+    "source_url": "https://www.probi.com/probiotics/applications/dietary-supplements/",
+    "notes": "Source supports the described delivery architecture in its evaluated preparation, not universal absorption superiority or personal benefit. Separate credit is withheld when that technology is already represented by the resolved IQM form."
   },
   "maktrek": {
     "tier": 2,
-    "description": "MAKTrek 3-D bypass technology for probiotics",
-    "category": "delivery"
+    "description": "Named delivery candidate; mechanism qualification is not established by the label term alone.",
+    "category": "delivery",
+    "notes": "Delivery candidate retained for label recognition; separate credit is unqualified until a preparation-relevant mechanism source is reviewed."
   },
   "delayed-release": {
     "tier": 2,
-    "description": "Enteric protection for intestinal delivery",
-    "category": "delivery"
+    "description": "Label describes delayed disintegration or release rather than ingredient chemistry.",
+    "category": "delivery",
+    "source_url": "https://t2.capsugel.com/media/library/c1a-32029_DRCaps-A4_FIN.PDF",
+    "notes": "Source supports the described delivery architecture in its evaluated preparation, not universal absorption superiority or personal benefit. Separate credit is withheld when that technology is already represented by the resolved IQM form."
   },
   "acid-resistant": {
     "tier": 2,
-    "description": "Stomach acid protection for sensitive ingredients",
-    "category": "delivery"
+    "description": "Label describes an acid-resistant release system; not a clinical safety assessment.",
+    "category": "delivery",
+    "source_url": "https://t2.capsugel.com/media/library/c1a-32029_DRCaps-A4_FIN.PDF",
+    "notes": "Source supports the described delivery architecture in its evaluated preparation, not universal absorption superiority or personal benefit. Separate credit is withheld when that technology is already represented by the resolved IQM form."
   },
   "microencapsulation": {
     "tier": 3,
-    "description": "Stability coating",
-    "category": "delivery"
+    "description": "Coating or carrier architecture around an active; evidence and performance are preparation-specific.",
+    "category": "delivery",
+    "source_url": "https://pubmed.ncbi.nlm.nih.gov/25276184/",
+    "notes": "Source supports the described delivery architecture in its evaluated preparation, not universal absorption superiority or personal benefit. Separate credit is withheld when that technology is already represented by the resolved IQM form."
   },
   "beadlet": {
     "tier": 3,
-    "description": "Multi-phase pellets",
-    "category": "delivery"
+    "description": "Named delivery candidate; mechanism qualification is not established by the label term alone.",
+    "category": "delivery",
+    "notes": "Delivery candidate retained for label recognition; separate credit is unqualified until a preparation-relevant mechanism source is reviewed."
   },
   "cold-processed": {
     "tier": 3,
-    "description": "Preserves heat-sensitive actives",
-    "category": "delivery"
+    "description": "Presentation or processing descriptor; not independently sufficient for delivery credit.",
+    "category": "presentation",
+    "notes": "Presentation or processing wording alone does not establish a distinct supported delivery mechanism."
   },
   "hydrolyzed": {
     "tier": 3,
-    "description": "Pre-digested proteins/peptides",
-    "category": "delivery"
+    "description": "Ingredient form, chemistry or preparation descriptor; assessed by the existing form-quality owner.",
+    "category": "form",
+    "notes": "Ingredient chemistry or preparation belongs to the existing form-quality owner; it is not a separate delivery technology."
   },
   "fermented": {
     "tier": 3,
-    "description": "Pre-metabolized for better tolerance",
-    "category": "delivery"
+    "description": "Presentation or processing descriptor; not independently sufficient for delivery credit.",
+    "category": "presentation",
+    "notes": "Presentation or processing wording alone does not establish a distinct supported delivery mechanism."
   },
   "curcuwin": {
     "tier": 1,
-    "description": "UltraSOL nutrient delivery – 46x more bioavailable curcumin",
-    "category": "delivery"
+    "description": "Named water-dispersible curcumin complex using UltraSOL technology.",
+    "category": "delivery",
+    "notes": "Source establishes the named preparation or delivery architecture; it does not establish universal absorption superiority, clinical effectiveness, finished-product certification or personal suitability. No separate credit when the resolved form already represents the same preparation.",
+    "source_url": "https://omniactives.com/product/curcuwin/"
   },
   "curcugen": {
     "tier": 1,
-    "description": "Dispersible curcumin with enhanced bioavailability",
-    "category": "delivery"
+    "description": "Named dispersible oleoresin-based curcuminoid preparation.",
+    "category": "delivery",
+    "notes": "Source establishes the named preparation or delivery architecture; it does not establish universal absorption superiority, clinical effectiveness, finished-product certification or personal suitability. No separate credit when the resolved form already represents the same preparation.",
+    "source_url": "https://pubmed.ncbi.nlm.nih.gov/34232211/"
   },
   "bcm-95": {
     "tier": 1,
-    "description": "Curcumin with essential oils – 7x more bioavailable (Curcugreen)",
-    "category": "delivery"
+    "description": "Named curcumin preparation incorporating turmeric essential oils.",
+    "category": "delivery",
+    "notes": "Source establishes the named preparation or delivery architecture; it does not establish universal absorption superiority, clinical effectiveness, finished-product certification or personal suitability. No separate credit when the resolved form already represents the same preparation.",
+    "source_url": "https://pubmed.ncbi.nlm.nih.gov/20046768/"
   },
   "c3 reduct": {
     "tier": 1,
-    "description": "Tetrahydrocurcuminoids – enhanced stability and absorption",
-    "category": "delivery"
+    "description": "Ingredient form, chemistry or preparation descriptor; assessed by the existing form-quality owner.",
+    "category": "form",
+    "notes": "Ingredient chemistry or preparation belongs to the existing form-quality owner; it is not a separate delivery technology."
   },
   "cavacurmin": {
     "tier": 1,
-    "description": "Gamma-cyclodextrin curcumin – 85x more bioavailable",
-    "category": "delivery"
+    "description": "Named delivery candidate; mechanism qualification is not established by the label term alone.",
+    "category": "delivery",
+    "notes": "Delivery candidate retained for label recognition; separate credit is unqualified until a preparation-relevant mechanism source is reviewed."
   },
   "self-emulsifying": {
     "tier": 1,
-    "description": "SEDDS/SMEDDS – forms nanoemulsion in GI tract",
-    "category": "delivery"
+    "description": "Named delivery candidate; mechanism qualification is not established by the label term alone.",
+    "category": "delivery",
+    "notes": "Delivery candidate retained for label recognition; separate credit is unqualified until a preparation-relevant mechanism source is reviewed."
   },
   "cyclodextrin": {
     "tier": 1,
-    "description": "Molecular encapsulation – enhanced solubility and stability",
-    "category": "delivery"
+    "description": "Inclusion-complex carrier descriptor; may already identify the preparation assessed by IQM.",
+    "category": "delivery",
+    "source_url": "https://bioactives.com/microactive-technology/",
+    "notes": "Source supports the described delivery architecture in its evaluated preparation, not universal absorption superiority or personal benefit. Separate credit is withheld when that technology is already represented by the resolved IQM form.",
+    "relationships": {
+      "form_quality_terms": [
+        "microactive coq10",
+        "microactive co-q10"
+      ]
+    }
   },
   "nanoparticle": {
     "tier": 1,
-    "description": "Nano-sized particles for enhanced cellular uptake",
-    "category": "delivery"
+    "description": "Named delivery candidate; mechanism qualification is not established by the label term alone.",
+    "category": "delivery",
+    "notes": "Delivery candidate retained for label recognition; separate credit is unqualified until a preparation-relevant mechanism source is reviewed."
   },
   "zeta potential": {
     "tier": 1,
-    "description": "Optimized surface charge for enhanced absorption",
-    "category": "delivery"
+    "description": "Named delivery candidate; mechanism qualification is not established by the label term alone.",
+    "category": "delivery",
+    "notes": "Delivery candidate retained for label recognition; separate credit is unqualified until a preparation-relevant mechanism source is reviewed."
   },
   "nutrivida": {
     "tier": 1,
-    "description": "Patented absorption enhancement technology",
-    "category": "delivery"
+    "description": "Named delivery candidate; mechanism qualification is not established by the label term alone.",
+    "category": "delivery",
+    "notes": "Delivery candidate retained for label recognition; separate credit is unqualified until a preparation-relevant mechanism source is reviewed."
   },
   "bioperine": {
     "tier": 1,
-    "description": "Piperine absorption enhancer – increases bioavailability 30-2000%",
-    "category": "delivery"
+    "description": "Absorption-enhancer ingredient; assessed by the existing pairing owner.",
+    "category": "absorption_enhancer",
+    "notes": "The existing absorption-enhancer pairing owner assesses this ingredient; the same enhancer is not also a delivery system."
   },
   "threonate": {
     "tier": 2,
-    "description": "Threonic acid chelate – crosses blood-brain barrier (Magtein)",
-    "category": "delivery"
+    "description": "Ingredient form, chemistry or preparation descriptor; assessed by the existing form-quality owner.",
+    "category": "form",
+    "notes": "Ingredient chemistry or preparation belongs to the existing form-quality owner; it is not a separate delivery technology."
   },
   "taurate": {
     "tier": 2,
-    "description": "Taurine-bound mineral – cardiovascular support",
-    "category": "delivery"
+    "description": "Ingredient form, chemistry or preparation descriptor; assessed by the existing form-quality owner.",
+    "category": "form",
+    "notes": "Ingredient chemistry or preparation belongs to the existing form-quality owner; it is not a separate delivery technology."
   },
   "arginate": {
     "tier": 2,
-    "description": "Arginine chelate – supports nitric oxide production",
-    "category": "delivery"
+    "description": "Ingredient form, chemistry or preparation descriptor; assessed by the existing form-quality owner.",
+    "category": "form",
+    "notes": "Ingredient chemistry or preparation belongs to the existing form-quality owner; it is not a separate delivery technology."
   },
   "lysinate": {
     "tier": 2,
-    "description": "Lysine-bound mineral – amino acid chelation",
-    "category": "delivery"
+    "description": "Ingredient form, chemistry or preparation descriptor; assessed by the existing form-quality owner.",
+    "category": "form",
+    "notes": "Ingredient chemistry or preparation belongs to the existing form-quality owner; it is not a separate delivery technology."
   },
   "aspartate": {
     "tier": 2,
-    "description": "Aspartic acid chelate – supports energy metabolism",
-    "category": "delivery"
+    "description": "Ingredient form, chemistry or preparation descriptor; assessed by the existing form-quality owner.",
+    "category": "form",
+    "notes": "Ingredient chemistry or preparation belongs to the existing form-quality owner; it is not a separate delivery technology."
   },
   "hydroxyapatite": {
     "tier": 2,
-    "description": "Bone-derived calcium form – highly bioavailable MCHA/MCHC",
-    "category": "delivery"
+    "description": "Ingredient form, chemistry or preparation descriptor; assessed by the existing form-quality owner.",
+    "category": "form",
+    "notes": "Ingredient chemistry or preparation belongs to the existing form-quality owner; it is not a separate delivery technology."
   },
   "buccal": {
     "tier": 2,
-    "description": "Cheek absorption – bypasses first-pass metabolism",
-    "category": "delivery"
+    "description": "Named delivery candidate; mechanism qualification is not established by the label term alone.",
+    "category": "delivery",
+    "notes": "Delivery candidate retained for label recognition; separate credit is unqualified until a preparation-relevant mechanism source is reviewed."
   },
   "transdermal": {
     "tier": 2,
-    "description": "Skin absorption – bypasses digestive system",
-    "category": "delivery"
+    "description": "Named delivery candidate; mechanism qualification is not established by the label term alone.",
+    "category": "delivery",
+    "notes": "Delivery candidate retained for label recognition; separate credit is unqualified until a preparation-relevant mechanism source is reviewed."
   },
   "aquasome": {
     "tier": 2,
-    "description": "Water-soluble nano-carrier delivery system",
-    "category": "delivery"
+    "description": "Named delivery candidate; mechanism qualification is not established by the label term alone.",
+    "category": "delivery",
+    "notes": "Delivery candidate retained for label recognition; separate credit is unqualified until a preparation-relevant mechanism source is reviewed."
   },
   "vcaps": {
     "tier": 2,
-    "description": "Vegetable capsule – HPMC plant-based delivery",
-    "category": "delivery"
+    "description": "Presentation or processing descriptor; not independently sufficient for delivery credit.",
+    "category": "presentation",
+    "notes": "Presentation or processing wording alone does not establish a distinct supported delivery mechanism."
   },
   "plantcaps": {
     "tier": 2,
-    "description": "Pullulan-based plant capsule – natural fermentation derived",
-    "category": "delivery"
+    "description": "Presentation or processing descriptor; not independently sufficient for delivery credit.",
+    "category": "presentation",
+    "notes": "Presentation or processing wording alone does not establish a distinct supported delivery mechanism."
   },
   "optimsm": {
     "tier": 2,
-    "description": "Purified MSM with enhanced absorption profile",
-    "category": "delivery"
+    "description": "Ingredient form, chemistry or preparation descriptor; assessed by the existing form-quality owner.",
+    "category": "form",
+    "notes": "Ingredient chemistry or preparation belongs to the existing form-quality owner; it is not a separate delivery technology."
   },
   "quatrefolic": {
     "tier": 2,
-    "description": "Glucosamine salt of 5-MTHF – superior folate bioavailability",
-    "category": "delivery"
+    "description": "Ingredient form, chemistry or preparation descriptor; assessed by the existing form-quality owner.",
+    "category": "form",
+    "notes": "Ingredient chemistry or preparation belongs to the existing form-quality owner; it is not a separate delivery technology."
   },
   "methylcobalamin": {
     "tier": 2,
-    "description": "Active coenzyme B12 form – no conversion needed",
-    "category": "delivery"
+    "description": "Ingredient form, chemistry or preparation descriptor; assessed by the existing form-quality owner.",
+    "category": "form",
+    "notes": "Ingredient chemistry or preparation belongs to the existing form-quality owner; it is not a separate delivery technology."
   },
   "p5p": {
     "tier": 2,
-    "description": "Pyridoxal-5-phosphate – active B6, no liver conversion",
-    "category": "delivery"
+    "description": "Ingredient form, chemistry or preparation descriptor; assessed by the existing form-quality owner.",
+    "category": "form",
+    "notes": "Ingredient chemistry or preparation belongs to the existing form-quality owner; it is not a separate delivery technology."
   },
   "ubiquinol": {
     "tier": 2,
-    "description": "Reduced CoQ10 form – 8x more bioavailable than ubiquinone",
-    "category": "delivery"
+    "description": "Ingredient form, chemistry or preparation descriptor; assessed by the existing form-quality owner.",
+    "category": "form",
+    "notes": "Ingredient chemistry or preparation belongs to the existing form-quality owner; it is not a separate delivery technology."
   },
   "r-lipoic acid": {
     "tier": 2,
-    "description": "Natural R-isomer – more bioactive than racemic ALA",
-    "category": "delivery"
+    "description": "Ingredient form, chemistry or preparation descriptor; assessed by the existing form-quality owner.",
+    "category": "form",
+    "notes": "Ingredient chemistry or preparation belongs to the existing form-quality owner; it is not a separate delivery technology."
   },
   "chewable": {
     "tier": 3,
-    "description": "Mechanical breakdown aids dissolution",
-    "category": "delivery"
+    "description": "Presentation or processing descriptor; not independently sufficient for delivery credit.",
+    "category": "presentation",
+    "notes": "Presentation or processing wording alone does not establish a distinct supported delivery mechanism."
   },
   "drops": {
     "tier": 3,
-    "description": "Liquid form – flexible dosing, faster than tablets",
-    "category": "delivery"
+    "description": "Presentation or processing descriptor; not independently sufficient for delivery credit.",
+    "category": "presentation",
+    "notes": "Presentation or processing wording alone does not establish a distinct supported delivery mechanism."
   },
   "syrup": {
     "tier": 3,
-    "description": "Liquid suspension – easier for children/elderly",
-    "category": "delivery"
+    "description": "Presentation or processing descriptor; not independently sufficient for delivery credit.",
+    "category": "presentation",
+    "notes": "Presentation or processing wording alone does not establish a distinct supported delivery mechanism."
   },
   "freeze-dried": {
     "tier": 3,
-    "description": "Lyophilized – preserves potency and stability",
-    "category": "delivery"
+    "description": "Presentation or processing descriptor; not independently sufficient for delivery credit.",
+    "category": "presentation",
+    "notes": "Presentation or processing wording alone does not establish a distinct supported delivery mechanism."
   },
   "spray-dried": {
     "tier": 3,
-    "description": "Rapid drying preserves active compounds",
-    "category": "delivery"
+    "description": "Presentation or processing descriptor; not independently sufficient for delivery credit.",
+    "category": "presentation",
+    "notes": "Presentation or processing wording alone does not establish a distinct supported delivery mechanism."
   },
   "whole food": {
     "tier": 3,
-    "description": "Food-based nutrients with natural cofactors",
-    "category": "delivery"
+    "description": "Presentation or processing descriptor; not independently sufficient for delivery credit.",
+    "category": "presentation",
+    "notes": "Presentation or processing wording alone does not establish a distinct supported delivery mechanism."
   },
   "food-grown": {
     "tier": 3,
-    "description": "Nutrients grown in food matrix for recognition",
-    "category": "delivery"
+    "description": "Presentation or processing descriptor; not independently sufficient for delivery credit.",
+    "category": "presentation",
+    "notes": "Presentation or processing wording alone does not establish a distinct supported delivery mechanism."
   },
   "raw": {
     "tier": 3,
-    "description": "Unprocessed, heat-sensitive actives preserved",
-    "category": "delivery"
+    "description": "Presentation or processing descriptor; not independently sufficient for delivery credit.",
+    "category": "presentation",
+    "notes": "Presentation or processing wording alone does not establish a distinct supported delivery mechanism."
   },
   "microactive": {
     "tier": 2,
-    "description": "BioActives sustained-release micronized technology – enhanced bioavailability for CoQ10, curcumin, and other compounds",
-    "category": "delivery"
+    "description": "Named micronized and encapsulated release architecture.",
+    "category": "delivery",
+    "source_url": "https://bioactives.com/microactive-technology/",
+    "notes": "Source supports the described delivery architecture in its evaluated preparation, not universal absorption superiority or personal benefit. Separate credit is withheld when that technology is already represented by the resolved IQM form."
   },
   "siliphos": {
     "tier": 1,
-    "description": "Silybin-phosphatidylcholine phytosome complex – 10x improved milk thistle bioavailability",
-    "category": "delivery"
+    "description": "Named silybin phytosome preparation; the same preparation may already be assessed by IQM.",
+    "category": "delivery",
+    "source_url": "https://www.indena.com/products/phytosome/?lang=en",
+    "notes": "Source supports the described delivery architecture in its evaluated preparation, not universal absorption superiority or personal benefit. Separate credit is withheld when that technology is already represented by the resolved IQM form."
   },
   "greenselect": {
     "tier": 1,
-    "description": "EGCG-phospholipid phytosome – enhanced green tea catechin absorption",
-    "category": "delivery"
+    "description": "Named botanical phytosome preparation; the same preparation may already be assessed by IQM.",
+    "category": "delivery",
+    "source_url": "https://www.indena.com/products/phytosome/?lang=en",
+    "notes": "Source supports the described delivery architecture in its evaluated preparation, not universal absorption superiority or personal benefit. Separate credit is withheld when that technology is already represented by the resolved IQM form."
   },
   "maxsimil": {
     "tier": 1,
-    "description": "Self-microemulsifying fish oil technology – 3x improved omega-3 absorption",
-    "category": "delivery"
+    "description": "Named delivery candidate; mechanism qualification is not established by the label term alone.",
+    "category": "delivery",
+    "notes": "Delivery candidate retained for label recognition; separate credit is unqualified until a preparation-relevant mechanism source is reviewed."
   },
   "suprabio": {
     "tier": 1,
-    "description": "Tocomin SupraBio – self-emulsifying delivery system for enhanced tocotrienol absorption",
-    "category": "delivery"
+    "description": "Named self-emulsifying delivery platform.",
+    "category": "delivery",
+    "notes": "Source establishes the named preparation or delivery architecture; it does not establish universal absorption superiority, clinical effectiveness, finished-product certification or personal suitability. No separate credit when the resolved form already represents the same preparation.",
+    "source_url": "https://hovid.com/research-development/"
   },
   "hydrocurc": {
     "tier": 1,
-    "description": "LipiSperse cold water dispersible curcumin – enhanced bioavailability via colloidal dispersion",
-    "category": "delivery"
+    "description": "Named delivery candidate; mechanism qualification is not established by the label term alone.",
+    "category": "delivery",
+    "notes": "Delivery candidate retained for label recognition; separate credit is unqualified until a preparation-relevant mechanism source is reviewed."
   },
   "curqfen": {
     "tier": 1,
-    "description": "Fenugreek galactomannan-curcumin complex – 45x improved curcumin bioavailability",
-    "category": "delivery"
+    "description": "Named curcumin preparation using a fenugreek-galactomannan matrix.",
+    "category": "delivery",
+    "notes": "Source establishes the named preparation or delivery architecture; it does not establish universal absorption superiority, clinical effectiveness, finished-product certification or personal suitability. No separate credit when the resolved form already represents the same preparation.",
+    "source_url": "https://www.akay-group.com/index.php/fenumat-green-approach-phyto-micro-nutrients-delivery"
   }
 }
