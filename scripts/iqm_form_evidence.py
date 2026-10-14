@@ -341,7 +341,7 @@ def validate_exported_form_evidence(form_evidence: Any, *, label: str) -> list[s
     problems: list[str] = []
     for field in sorted(INTERNAL_EVIDENCE_FIELDS & set(form_evidence)):
         problems.append(f"{label}: internal field {field} must not be exported")
-    if form_evidence.get("evidence_level") not in EXCELLENT_EVIDENCE_LEVELS:
+    if form_evidence.get("evidence_level") not in SUPPORTED_EVIDENCE_LEVELS:
         problems.append(f"{label}: unsupported exported evidence_level")
     references = form_evidence.get("references_structured")
     if not isinstance(references, list) or not references:

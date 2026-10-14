@@ -1020,3 +1020,13 @@ def test_shipped_iqm_carries_no_nested_axis_and_full_canonical_coverage():
     # Frozen initial backlog remains unchanged; only outstanding keys shrink.
     assert coverage.total == 226
     assert sorted(coverage.missing) == sorted(load_backlog_file(BACKLOG_PATH))
+
+
+@pytest.mark.parametrize("level", ["strong", "moderate", "limited", "mechanistic_only", "none"])
+def test_export_preserves_every_source_supported_evidence_level(level):
+    compact = {"evidence_level": level, "references_structured": [_reference()]}
+    assert validate_exported_form_evidence(compact, label="row") == []
+
+def test_export_rejects_unknown_grade_and_still_requires_valid_sources():
+    assert validate_exported_form_evidence({"evidence_level": "unverified", "references_structured": [_reference()]}, label="row") == ["row: unsupported exported evidence_level"]
+    assert validate_exported_form_evidence({"evidence_level": "limited", "references_structured": []}, label="row") == ["row: references_structured must be non-empty"]
