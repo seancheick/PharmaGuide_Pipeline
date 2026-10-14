@@ -1,28 +1,34 @@
 ## Current execution — V4.1 score accounting consolidation, October 14
 
-Sean froze scoring policy and approved a five-step plan. Step 1 is the acceptance matrix in `scripts/audits/score_accounting_20261014/AUDIT.md`: 135 rows: the 114 score-bearing keys observed in the stored catalog, dormant code-only keys and assembler items. A fresh-context review checked 106 rows against code and found 18 defects; all are corrected. Branch `claude/score-ledger`. Class: documentation. No score, catalog or publication change.
+Sean froze scoring policy and approved a five-step plan. Draft PRs: [PharmaGuide_Pipeline#144](https://github.com/seancheick/PharmaGuide_Pipeline/pull/144), branch `claude/score-ledger`, and the paired [Pharmaguide.ai#122](https://github.com/seancheick/Pharmaguide.ai/pull/122), branch `claude/score-receipts`. Nothing is merged, rebuilt or published.
 
-Owner: quality_score.py::_build_pillars, module assessment owners, penalty_registry.py, scored_artifact.py. Evidence: AUDIT.md §6–§7 probe; a live Meru rescore on codex/shilajit-mapping returned 55.7. Will NOT create: a scorer, registry, assessment or partial status, or ranking rule.
+Owner: quality_score.py::_build_pillars, module assessment owners, penalty_registry.py, scored_artifact.py; Flutter renders. Will NOT create: a scorer, registry, assessment or partial status, or ranking rule.
 
-Measured on 15,123 stored scored products, config 1.23.0:
-- Total = Σ pillars in every product (0 failures).
-- Additive and sugar charged twice: 3,509 products. B7 charged twice: 403. High-risk/watchlist charged twice: 348.
-- 339 `caution` products show Safety 10/10.
-- 104 products have positive Evidence points with the number hidden; 155 `partial` products.
-- 3,210 Evidence zero facts and 40 authority-copy zeros contradict their state.
-- 1,712 no-benchmark Dose explanations and 1,572 "well-absorbed" explanations claim unmeasured facts.
-- The printed amount is credited in up to three pillars.
-- Baselines make up 28.6% of the median total.
-- Delivery claim subject is not established (259879).
+**Step 1 — matrix (documentation).** `scripts/audits/score_accounting_20261014/AUDIT.md`: 135 rows; all 114 corpus keys map to exactly one row. A fresh-context review checked 106 rows and found 18 defects, all corrected; Claude then checked the rest in code. A second review corrected the DUP-A rule, the authority-Evidence class and the causal counts, and added F17 and F19. Awaiting Sean's acceptance.
 
-Verification 6/15 stays as a labelled policy baseline (unknown 37.2%, product-level 5.4%).
+**Step 2 — receipts and copy (behavioral public contract, zero score change).**
+- Every scored pillar carries a `receipt` (AUDIT §8). Component kinds live in `penalty_registry.COMPONENT_KINDS`, and a receipt fails closed.
+- Copy no longer claims what was not assessed. The sixth pillar keeps any dose finding visible.
+- Fail-first tests: 16 receipt and 17 copy.
+- 5,681 tests in every scorer-touching file pass. The 7 corpus-dependent cases pass with the corpus present.
+- Re-assembling all 15,123 stored products: 0 deltas in totals, tiers, statuses, pillar score/max/components and Evidence states; every receipt reconciles; 0 remaining copy contradictions.
+- Live clean main vs branch, 4,594 products from five brands: 0 deltas.
+- Whole-fast CI 38648490506 is green on `e0d33c34f`.
+- Local rung: 532 passed, 0 failed, 24 declared opt-in skips. Another 14 skips need a build directory that does not exist anywhere until the rebuild.
+- Receipts add a median of about 2.4 KB per product to the blob.
 
-Next unchecked:
-- Sean and a fresh-context reviewer accept the matrix.
-- Step 2: receipts, with zero score change.
-- Step 3: measure the AUDIT §5 option sets.
+**App.**
+- Awarded points now show under no-verdict states (104 products).
+- Receipt rows render; the caption is fixed.
+- Fixed: Compare showed a definitive tier for `partial` assessments.
+- Tests: 7 new plus 1 fail-first. Full `flutter test` 3,922 passed; analyze clean.
+- No device screenshot yet: it needs a catalog that carries receipts.
 
-The pending PR143 Clean→Enrich→Score run is held: one rebuild after V4.1, with the Meru branch integrated first.
+**Next.**
+- Sean accepts the matrix and reviews both PRs.
+- Step 3: measure the AUDIT §5 option sets, read-only.
+- Deferred to Step 4: the delivery claim-subject fix (F12), moving magnitudes into config, the stale `production_score` label (pinned by 7 test files), the two dead registry keys, and the inert Verification product floor.
+- The pending PR143 rebuild stays held; the Meru branch integrates first.
 
 ## Current execution — normal batch preflight/release repair, October 13
 
