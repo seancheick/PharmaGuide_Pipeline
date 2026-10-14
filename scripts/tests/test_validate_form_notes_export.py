@@ -75,3 +75,15 @@ def test_gate_b_ignores_legacy_workspace_notes_without_form_note(tmp_path):
     assert scanned == 1
     assert notes == 0
     assert violations == []
+
+
+def test_real_lower_grade_forms_survive_source_to_export_gate():
+    from build_final_db import _derive_form_evidence, load_iqm_reference_index
+    index = load_iqm_reference_index()
+    for name in ("magnesium threonate", "magnesium gluconate"):
+        score = index["magnesium"]["forms"][name]["bio_score"]
+        evidence = _derive_form_evidence({"canonical_id": "magnesium",
+                                        "matched_form": name, "bio_score": score}, index)
+        assert evidence["evidence_level"] == "limited"
+        assert evidence["references_structured"]
+        assert check_row(_row(bio_score=score, form_evidence=evidence)) == []
