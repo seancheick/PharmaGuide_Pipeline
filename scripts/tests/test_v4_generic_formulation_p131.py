@@ -362,3 +362,14 @@ def test_incoherent_or_untyped_detection_cannot_create_delivery_credit(field, va
     product["delivery_data"]["systems"][0][field] = value
     _, credit = _artifact_delivery(product)
     assert credit == 0
+
+
+@pytest.mark.parametrize("text", ["entericcoated", "enteric-coated", "enteric coated"])
+def test_recognized_delivery_separator_variants_keep_independent_credit(text):
+    product = _delivery_product("enteric-coated")
+    product["delivery_data"]["systems"][0]["raw_source_text"] = text
+    assert _artifact_delivery(product)[1] == 2
+
+
+def test_generic_micronization_cannot_borrow_named_microactive_architecture_evidence():
+    assert _artifact_delivery(_delivery_product("micronized"))[1] == 0

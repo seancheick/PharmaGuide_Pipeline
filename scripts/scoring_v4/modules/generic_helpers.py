@@ -36,7 +36,7 @@ def _delivery_definitions() -> Dict[str, Any]:
 
 
 def _delivery_patterns(terms: List[str]) -> List[Any]:
-    return [re.compile(r"(?<![a-z0-9])" + r"[\s-]+".join(
+    return [re.compile(r"(?<![a-z0-9])" + r"[\s-]*".join(
         re.escape(part) for part in re.split(r"[\s-]+", _norm_text(term)))
         + r"(?![a-z0-9])", re.IGNORECASE)
         for term in terms if isinstance(term, str) and term.strip()]

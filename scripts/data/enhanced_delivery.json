@@ -186,8 +186,7 @@
     "tier": 2,
     "description": "Particle-size processing descriptor; separate credit requires that it is not already represented by the assessed form.",
     "category": "delivery",
-    "source_url": "https://bioactives.com/microactive-technology/",
-    "notes": "Source supports the described delivery architecture in its evaluated preparation, not universal absorption superiority or personal benefit. Separate credit is withheld when that technology is already represented by the resolved IQM form.",
+    "notes": "Unqualified particle-size descriptor. MicroActive evidence evaluates a combined encapsulation and carrier architecture and does not qualify generic micronization for separate delivery credit.",
     "relationships": {
       "form_quality_terms": [
         "microactive"
