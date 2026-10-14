@@ -23,8 +23,8 @@ Step 1 of the V4.1 accounting and ownership consolidation. Sean approved the pla
 | # | Finding | Products | Owner |
 |---|---|---:|---|
 | F1 | Additive/sugar charged in Formulation (B1) **and** again in Safety (`formula_quality_checks` mirror, cap 4). `safety_hygiene.py:87-90` itself says that zeroing hygiene for these would double-penalise. | 3,509 | `quality_score.py:545-560` |
-| F2 | UL ≥150%: window credit zeroed, **and** B7 −2/flag, **and** the Safety mirror (cap 3). B-complex also loses `moderate_dose_fit` 3, a fourth charge. | 403 | `generic_dose.py:191-195`, `dose_safety.py`, `quality_score.py:563-573` |
-| F3 | UL 100–150%: Safety pillar stays 10/10 (shown as "Strong") with a "Safety concern" reason and `caution` status | 339 | `quality_score.py:610-672` |
+| F2 | B7 and its Safety mirror (cap 3) coexist in 403 products. Every one of them has a penalized `confirmed_over_threshold` flag at ≥150% of a UL. By code, the generic window credit for that nutrient is also zeroed (`generic_dose.py:191-193`), and B-complex withdraws `moderate_dose_fit` 3. Per-product window loss was **not** measured. | 403 (mirror + B7, measured) | `generic_dose.py:191-195`, `dose_safety.py`, `quality_score.py:563-573` |
+| F3 | `caution` products whose sixth pillar shows 10/10 ("Strong"). Measured split: 333 have a confirmed over-UL state below the B7 threshold ("Safety concern" reason, no deduction); 1 has an unresolved dose state; 5 are cautions for an undisclosed stimulant blend, with no dose state and the reason "No banned, recalled, or watchlisted ingredients". | 339 | `quality_score.py:610-672` |
 | F4 | Confirmed high-risk/watchlist: Formulation B0 −10/−5 **and** Safety base zeroed (−10). The two owners also use different match rules (B0 counts confirmed matches only; the base also counts likely and review matches). | 348 | `generic_formulation.py:278-290`, `safety_hygiene.py:80-147` |
 | F5 | Printed amount or identity earns points in Formulation, Dose and Transparency. Meru's single "500 mg" earns about 15.3 points: Dose 6.6 (live probe), Formulation 2.7, Transparency 6.0. | thousands (§3) | botanical/collagen/probiotic/sports/fiber/multi/b_complex modules |
 | F6 | Fact-independent baselines (unknown Verification 6, unconditional Transparency base 9, clean Safety screen 10, unrated and route bases) make up 28.6% of the median total (p90 44.6%). They carry no label. The Verification 6 is also the starting point of every tier below product level (claim 6 + signals ≤ 8; manufacturing ≤ 10). | all | §3 |
@@ -35,11 +35,12 @@ Step 1 of the V4.1 accounting and ownership consolidation. Sean approved the pla
 | F11 | Count, focus and single-only bonuses survive despite `.claude/rules/scoring.md` | 512 sports protein, 192 fiber, 456 sports single, 90 B-complex | §3 (COUNT) |
 | F12 | Delivery claim subject is not established. Enrichment stores only the matched token; eligibility re-matches it. Example: 259879 "My probiotic blend contains acid resistant strains" was read as capsule delivery. | not yet censused | `enrich_supplements_v3.py:10916-10933`, `generic_helpers.py:73-76` |
 | F13 | One detector, two awards: a branded studied botanical earns standardization 4 and branded 3 | 119 | `botanical_profile.py:667,727` |
-| F14 | 155 `partial` products ship a total that counts 0 for Evidence still under review. The app already labels them "Assessment incomplete". | 155 | app `catalog_product_semantics.dart:137-155` |
+| F14 | 155 `partial` products: 153 have unfinished Evidence at 0, 1 has unfinished Evidence at 4.4, and 1 is partial with an applicability state at 0. The total counts the unfinished pillar as scored. The app already labels these "Assessment incomplete". | 155 | app `catalog_product_semantics.dart:137-155` |
 | F15 | Probiotic Evidence certainty earns up to 10 points while applicability is 0; generic routes give the same state 0 | 103 | `probiotic_evidence.py:115-118` |
 | F16 | Many magnitudes are literals, not config; two dead registry keys; stale raw metadata says `production_score: rubric_raw_score_100` | — | §3 (LIT, DEAD); `generic.py:441-444` |
-| F17 | A proprietary blend is charged twice in Transparency: B5, plus withholding of the complete-disclosure bonus (4 raw = 6 public) whenever B5 or B6 is non-zero. On sports protein, an opaque blend also costs source quality (3), focus (1) and the named-source point. | 2,251 B5 products | `generic_transparency.py:114-118`; `sports_formulation.py` |
-| F18 | A raw Dose of `None` ("fail-open") is read by the public pillar as 0/20 (`quality_score.py:967`). Dormant: 0 stored scored products. | 0 | `generic_dose.py:718-723` |
+| F17 | A non-zero B5 or B6 blocks the complete-disclosure bonus (nominal 4 raw = 6 public). Measured: 2,251 products carry B5; 1,282 are on routes that have the bonus; 995 of those fail the bonus for other reasons anyway; in **287** the blend is the only blocker, so the double charge is realized. On sports protein an opaque blend also costs source quality (3), focus (1) and the named-source point. | 287 realized (2,251 nominal) | `generic_transparency.py:114-118`; `sports_formulation.py` |
+| F18 | A raw Dose of `None` ("fail-open") is read by the public pillar as 0/20 (`quality_score.py:967`). Dormant: 0 stored scored products. | 0 | `generic_dose.py:718-723`; probiotic pending-AFU path `probiotic_dose.py:87-90` |
+| F19 | A shipped Dose explanation fact says "Unresolved dose assessments can also trigger the fail-closed penalty". `_classify` penalizes only `confirmed_over_threshold` at ≥ threshold; `material_but_unresolved` is never penalized. | every product showing the dose-safety policy fact | `pillar_explanations.py:201`; `dose_safety.py:413-478` |
 
 **Already single-owner (correct).**
 - Manufacturer violations: Class I → Safety, otherwise → Verification.
@@ -56,6 +57,10 @@ Step 1 of the V4.1 accounting and ownership consolidation. Sean approved the pla
 - **Transparency:** public = raw × 15 ÷ raw max.
 - **Verification and Safety:** assembled directly in `quality_score.py`.
 - **Total:** `round(Σ pillars, 1)`; tier from the whole number.
+
+**Classification rule for DUP-A.** A fact may inform several assessments. DUP-A is used only when the **same property** earns points in two places, which a counterfactual shows: remove the fact and more than one pillar drops for the same reason.
+- Assessing the quality or adequacy of a disclosed fact is not a duplicate of the disclosure credit. Examples: omega form quality vs form disclosure; EPA+DHA adequacy vs EPA/DHA disclosure.
+- A pillar awarding points merely because something is printed, without assessing it, is a duplicate.
 
 **Classes.**
 
@@ -110,7 +115,7 @@ In the tables below:
 | `formulation.core_b_panel_coverage` | B-complex | Core B rows present ÷ core panel | category panel | 0 | × 10 literal | 146 | LIT (panel kept) |
 | `formulation.b_complex_focus_purity` | B-complex | Number of non-B actives → 3/2/0 | count | — | literal | 90 | COUNT, LIT |
 | `formulation.dose_disclosure` | B-complex | Share of rows dosed | disclosure | 0 | × 2 literal | 146 | DUP-A, LIT |
-| `formulation.form_tier` | omega | IQM parent-relative form rating (IQM "unspecified" rating when not disclosed) | earned | IQM unspecified | `omega_rubric.json formulation.form_quality` | 709 | DUP-A (with `transparency.form_disclosed`) |
+| `formulation.form_tier` | omega | IQM parent-relative form rating (IQM "unspecified" rating when not disclosed) | earned | IQM unspecified | `omega_rubric.json formulation.form_quality` | 709 | — (assesses form quality; the disclosure credit is `transparency.form_disclosed`) |
 | `formulation.epa_dha_concentration` | omega | EPA+DHA ÷ oil mass (Total Fat fallback) | earned | Total Fat fallback | 4/3/2/1 `omega_rubric.json` | 620 | — |
 | `formulation.total_cfu_disclosed` | probiotic | Total CFU > 0 | disclosure | 0 | 4 `probiotic.cap_total_potency_disclosure` | 519 | DUP-A |
 | `formulation.exact_identity_completeness` | probiotic | Strains identified to strain level | disclosure | 0 | 8 × ratio `cap_exact_identity_completeness` | 424 | DUP-A |
@@ -122,7 +127,7 @@ In the tables below:
 | `formulation.sports_amino_profile_disclosure` | sports protein | EAA / BCAA / leucine rows present | disclosure | 0 | 3/2/1.5 literal | 139 | DUP-A, LIT |
 | `formulation.sports_protein_focus` | sports protein | Count of non-accessory dosed rows (≤2 → 4, else 3; collagen/opaque 1) | count | — | literal | 512 | COUNT, LIT |
 | `formulation.sports_route_base` | sports protein | Unconditional | neutral | — | 2 `formulation_variant_magnitudes.sports.route_base` | 512 | BASE |
-| `formulation.fiber_source_quality` | fiber | Fiber source class (3 = claim with no mapped fiber) | earned | 3 | 12–3 literal | 192 | LIT, DUP-A (fiber type also earns `dose.fiber_type_specificity`) |
+| `formulation.fiber_source_quality` | fiber | Fiber source class (3 = claim with no mapped fiber) | earned | 3 | 12–3 literal | 192 | LIT, DUP-A (the same property, fiber type, also earns `dose.fiber_type_specificity`) |
 | `formulation.fiber_disclosure` | fiber | Grams and/or named type | disclosure | 0 | 6/4/3 literal | 190 | DUP-A, LIT |
 | `formulation.fiber_formula_focus` | fiber | Active-row count; stimulant laxative → 1 | count + reduced award | 2 (no rows) | 5/3/2/1 literal | 192 | COUNT, HIDE, LIT |
 | `formulation.fiber_route_base` | fiber | Unconditional | neutral | — | 5 `fiber_digestive.route_base` | 192 | BASE |
@@ -173,7 +178,7 @@ In the tables below:
 | `dose.fiber_effective_dose` | fiber | Daily grams: 22/18/13/7, or max(1, 4 × g) | earned | — | literal | 190 | LIT |
 | `dose.fiber_type_specificity` | fiber | Psyllium etc. 2 / inulin etc. 1 | earned | — | literal | 183 | LIT, DUP-A (with `fiber_source_quality`) |
 | `dose.fiber_dose_disclosure` | fiber | Grams > 0 | disclosure | 0 | 1 literal | 190 | DUP-A, LIT |
-| `dose.B7_dose_safety` | all (universal adapter) | Confirmed ≥150% UL flags, plus the fail-closed unresolved case | deduction | — | −2/flag, cap 3 `dose_safety_policy` | 403 | DUP-D (F2) |
+| `dose.B7_dose_safety` | all (universal adapter) | Only `confirmed_over_threshold` flags at ≥150% of a UL are penalized. Unresolved, not-applicable and conversion-failed states are not. | deduction | — | −2/flag, cap 3 `dose_safety_policy` | 403 | DUP-D (F2), COPY (F19) |
 | `dose.opaque_primary_sports_blend` | sports | Primary dose 0 and blend none/partial | deduction | — | −10 literal | 9 | DUP-D (with B5), LIT |
 
 ### 3.3 Evidence (20)
@@ -186,11 +191,11 @@ In the tables below:
 | `evidence.immune_support_evidence_cap` | immune | Cap 17 (minimum). It equals the immune Evidence reference (17), so public Evidence is 20 with or without it | cap, no public effect | — | `category_magnitudes.immune_support.evidence_cap` | 44 | RAW |
 | `evidence.joint_support_evidence_cap` | joint | Cap 14 | cap | — | `joint_support.evidence_cap` | 25 | FLOOR |
 | `evidence.evidence_family_certainty` | probiotic | Strain-family research certainty, counted even when applicability is 0 | earned | 0 | ≤10 `probiotic.certainty_cap` | 339 | F15 |
-| `evidence.product_applicability` | probiotic | Identity/purpose alignment | earned | 0 | ≤6 | 236 | — |
-| `evidence.independent_replication_consistency` | probiotic | Independent same-condition replication | earned | 0 | 0/2/4 | 4 | — |
-| `evidence.clinical_evidence` | omega | Purpose standard: weak 10.4, triglyceride 20, prenatal DHA 11.1; amount-independent | neutral (identity/claim) | Held states score nothing | `evidence_magnitudes.omega.purpose_standards` | 453 | BASE |
-| `evidence.essential_panel_authority` | multi | Covered ÷ expected essential nutrients × 20 | neutral (authority) | — | `multi_prenatal.cap_evidence` | 2,048 | BASE |
-| `evidence.b_nutrient_authority_panel` | B-complex | Same | neutral (authority) | — | 20 | 146 | BASE |
+| `evidence.product_applicability` | probiotic | 6 × alignment (direct 1, partial 0.75, broad 0.5) × identity weight; 0 whenever certainty is 0 | earned | 0 | ≤6 `applicability_cap`, `alignment_weights` | 236 | — |
+| `evidence.independent_replication_consistency` | probiotic | Independent same-condition replication: 4 × consistency credit (the config doc states 0/2/4; the credit steps themselves were not traced) | earned | 0 | ≤4 `replication_cap` | 4 | — |
+| `evidence.clinical_evidence` | omega | Reviewed purpose standard, gated on explicit EPA+DHA identity, population and purpose (`evidence_resolver.py:333-355`): weak 10.4, triglyceride 20, prenatal DHA 11.1; amount-independent | earned (reviewed purpose evidence) | Held states score 0 | `evidence_magnitudes.omega.purpose_standards` | 453 | — |
+| `evidence.essential_panel_authority` | multi | Expected essential nutrients whose resolver disposition is `RESOLVED_BY_AUTHORITY`, ÷ expected × 20 (`evidence_resolver.py:1580-1625`) | earned (authority-backed) | Unresolved nutrients score 0 | `multi_prenatal.cap_evidence` | 2,048 | — (magnitude is a separate policy question) |
+| `evidence.b_nutrient_authority_panel` | B-complex | Same resolver over the fixed core B panel | earned (authority-backed) | Unresolved nutrients score 0 | 20 | 146 | — |
 | `pillar.evidence.result_state` | all | `evidence_result_state` → `display_state` → copy and facts | display | not_yet_reviewed / applicability / not_applicable withhold the number in the app | — | 15,123 | COPY (F8), HIDE (F9, F14) |
 
 ### 3.4 Transparency (15)
@@ -207,8 +212,8 @@ In the tables below:
 | `transparency.per_strain_cfu_on_label` | probiotic | Per-strain CFU | disclosure | 0 | 7 × ratio | 145 | DUP-A |
 | `transparency.aggregate_cfu_disclosure_proxy` | probiotic | Total CFU (4/3/2 minus per-strain points) | disclosure | 0 | 4 `cap_aggregate_cfu_disclosure_proxy`; 3/2 literal | 381 | DUP-A, LIT |
 | `transparency.aggregate_native_afu_disclosure` | probiotic studied formula | Studied formula potency | disclosure | 0 | 4 | 1 | DUP-A |
-| `transparency.epa_or_dha_disclosed` | omega | EPA or DHA printed | disclosure | 0 | 5 `omega_rubric.json` | 656 | DUP-A (the same printed amounts feed the Dose band and concentration) |
-| `transparency.form_disclosed` | omega | Molecular form printed | disclosure | 0 | 3 | 261 | DUP-A (with `form_tier`) |
+| `transparency.epa_or_dha_disclosed` | omega | EPA or DHA printed | disclosure | 0 | 5 `omega_rubric.json` | 656 | — (disclosure only; adequacy is the Dose band, concentration is Formulation) |
+| `transparency.form_disclosed` | omega | Molecular form printed | disclosure | 0 | 3 | 261 | — |
 | `transparency.source_disclosed` | omega | Source printed | disclosure | 0 | 3 | 687 | — |
 | `transparency.B2_false_allergen_free_claim` | all | Free-from claim contradicted | deduction | — | 2/1.5/1, cap 2 | 809 | COPY (4 products show blend text) |
 | `transparency.B5_proprietary_blend_opacity` | all | Blend hides amounts | deduction | — | base + proportional × class multiplier, cap 10 (multi adjunct 2) | 2,251 | DUP-D (sports Dose / Formulation, botanical blend band) |
@@ -294,8 +299,10 @@ Verification stays at 6 throughout. Tier review comes only after the new distrib
 | App partial handling exists | `catalog_product_semantics.dart:137-155`; `pg_hero_section.dart:363` |
 | B7 is emitted on every route | Corpus census: B7 key present on all 15,123; non-zero on generic, multi, B-complex, fiber and sports |
 | Verification census | Corpus probe (§7, `verification`) |
-| Every census key maps to one matrix row | `check_matrix` in §7. It checks keys observed in the stored corpus. Dormant keys (the immune whole-route adapter, the immune stack penalty, B6) were added from the code review. |
-| Matrix accuracy | Fresh-context review: 106 of 124 original rows checked against code; 88 correct; the 18 defects (scope, magnitude, key, class) are corrected in this revision and each was rechecked in code |
+| Corpus coverage: every key observed in the stored catalog has a row | `check_matrix` in §7 (114 observed keys, 0 missing). This proves inventory coverage only, not that each row's description is correct. |
+| Code-path coverage | From code review, not the corpus: dormant keys (immune whole-route adapter, immune stack penalty, B6, the `None` Dose paths) and assembler operations (floors, caps, mirrors, tier bounds, rounding). |
+| No duplicate rows | `dup_rows` check in §7 (the set-based `check_matrix` cannot detect duplicates) |
+| Matrix accuracy | Fresh-context review checked 106 of the original 124 rows: 88 correct, 18 defective, all corrected after re-verification in code. The reviewer's reconstructed list of its 18 unchecked rows (A4, probiotic CFU and Evidence rows, sports Dose rows, B7 unresolved case, essential panel, probiotic Transparency, D2–D5, dose-state counts) and the 11 rows added in revision were then verified in code by Claude. A second review corrected the omega DUP-A, authority-Evidence and causal-count claims (F2, F3, F14, F17) and found F19. |
 
 ## 7. Reproduction probe
 
@@ -305,7 +312,9 @@ Run from the primary checkout, which holds the stored corpus. It writes nothing.
 PYTHONDONTWRITEBYTECODE=1 python3 - <<'EOF'
 import json, glob, collections, re, statistics
 AUDIT = '.claude/worktrees/score-ledger/scripts/audits/score_accounting_20261014/AUDIT.md'
-rows = set(re.findall(r'^\| `([a-z_0-9]+\.[A-Za-z_0-9.]+)`', open(AUDIT).read(), re.M))
+row_list = re.findall(r'^\| `([a-z_0-9]+\.[A-Za-z_0-9.]+)`', open(AUDIT).read(), re.M)
+rows = set(row_list)
+dup_rows = sorted(k for k, c in collections.Counter(row_list).items() if c > 1)
 n = lambda x: float(x) if isinstance(x, (int, float)) and not isinstance(x, bool) else 0.0
 C = collections.Counter(); keys = set(); ver = collections.defaultdict(list)
 for f in sorted(glob.glob('scripts/products/output_*_scored/scored/*.json')):
@@ -337,6 +346,46 @@ print({t: (len(v), round(statistics.median(v), 1)) for t, v in ver.items()})
 def norm(k):  # omega lowercase verification keys share the uppercase row
     return re.sub(r'^verification_bonus\.b4([a-d])_', lambda m: f'verification_bonus.B4{m.group(1)}_', k)
 missing = sorted(k for k in keys if norm(k) not in rows)
-print('check_matrix: census keys', len(keys), 'missing rows', missing)
+print('check_matrix: census keys', len(keys), 'missing rows', missing, '| rows', len(row_list), 'duplicates', dup_rows)
 EOF
 ```
+
+## 8. Step 2 receipt contract (zero numerical or state change)
+
+Each scored pillar in `quality_pillars_v4` gains `ledger`, built by `quality_score.py` from the module breakdown it already reads.
+
+**Fields.**
+- `entries`: ordered signed score effects in public pillar points. Each entry is `{id, kind, source, raw, points}`.
+  - `kind` is one of `earned | neutral | disclosure | deduction | floor | cap | rounding`.
+  - Positive kinds add points, `deduction` is negative, and `floor` and `cap` carry their own sign.
+  - `rounding` is the residue of the pillar's 0.1 rounding.
+- `nominal_deductions`: the sum of `deduction` entries (≤ 0).
+- `realized_deductions`: the pillar score minus the score the same assembler returns with every deduction set to zero (≤ 0). It is computed, not inferred, so a floor that absorbs a penalty shows as a realized effect smaller than the nominal one.
+- `unawarded`: `max − score_without_deductions`. This is capacity not earned. It is **not** an entry and does not add into the sum.
+
+**Invariants.** The contract test checks each of these on every product.
+1. `Σ entries.points == pillar.score`, exactly, after rounding.
+2. `max == score + unawarded − realized_deductions`.
+3. `Σ pillar.score == quality_score_v4_100`, exactly, after rounding.
+4. **Nested detail replaces its aggregate.** On botanical and collagen routes, the profile components replace `A1_bio_score`; they are never added on top of it. Evidence floors and caps are `floor`/`cap` entries, never addends.
+5. **Every public score-bearing operation appears once:**
+   - normalization (the raw × weight ÷ reference factor on every raw entry);
+   - clamps at 0 and at max;
+   - the module presence floor and the pillar unrated-form neutral;
+   - multi panel-average floor lift, B5 or B6 bonus withholding (a zero-valued disclosure entry with a reason);
+   - Verification baseline, signals, tier ceilings, product floor and violation;
+   - Safety base, Class I, clean-label and both mirrors;
+   - per-pillar rounding.
+6. **Excluded keys are listed with a reason and never become entries:**
+   - raw-only: D2–D5, the verification-bonus rescale, the safety-base raw adjustment, `botanical_raw_floor`;
+   - inert zeros: `B3_claim_compliance`, `hypoallergenic_bonus`;
+   - nested subtotals: `A1_bio_score` when a profile applied;
+   - display-only: `dose_safety_state_counts`.
+7. **Zero delta.** Re-assembling every stored module breakdown with the new code reproduces the stored `score`, `max`, tier, statuses and `evidence_result_state` byte-for-byte. Only `reason`, `explanation` and the new `ledger` may differ.
+
+**Proof order.**
+- First, representative fixtures: one per route, plus floors, caps, both mirrors, unknown baselines, an unrated form, an Evidence floor and cap, a hidden positive Evidence number, a partial product and each dormant path.
+- Then reconciliation across all 15,123 stored scored products.
+- Existing partial-assessment behaviour (`quality_assessment_status`, `catalogProductAssessmentIncomplete`) is preserved; its consumers are verified, not replaced.
+
+**Copy corrections in the same step:** F8, F10, F19, the Verification "neutral 6, 9 not earned" wording, the sixth-pillar scope wording, baselines removed from `strengths`, and the stale `production_score` label. Scores, states and safety stay unchanged.
