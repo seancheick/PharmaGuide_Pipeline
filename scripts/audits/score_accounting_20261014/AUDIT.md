@@ -230,7 +230,7 @@ In the tables below:
 | `verification_bonus.B4d_brand_testing_posture` (omega `b4d_…`) | Brand testing posture → `brand_testing` 2 | earned (claim tier) | 0 | `brand_testing_points` | 9,030 | — |
 | `pillar.verification.brand_only_cert` | Verified brand/facility-scoped cert, no registry cert | earned | 0 | 2 `brand_only_cert_points` | 1,296 | — |
 | `manufacturer_trust.D1_manufacturer_reputation` | Reputation → `reputation` ≤2; excluded when mid-tier comes from verified evidence | earned (claim tier) | 0 | `reputation_cap` | 9,340 | — |
-| `pillar.verification.tier_bounds` | Claim/brand ceiling 8, manufacturing ceiling 10, product floor 11, cap 15 | cap / floor | — | `tier_ceilings`, `product_level_floor`, `cap` | 15,123 | FLOOR |
+| `pillar.verification.tier_bounds` | Claim/brand ceiling 8, manufacturing ceiling 10, product floor 11 (inert: 6 + the minimum product cert of 5 already equals 11), cap 15 | cap / floor | — | `tier_ceilings`, `product_level_floor`, `cap` | 15,123 | FLOOR |
 | `manufacturer_violations.manufacturer_violation_deduction` | Without Class I → Verification `quality_system_violation_penalty`; with Class I in 3 years → Safety `class_i_recall_penalty` | deduction (single owner) | — | Raw magnitude, floor −25 / −35 / −50 `verification_magnitudes.manufacturer` | 8 | — |
 | `manufacturer_trust.D2_disclosure_quality` | Raw score only | — | — | 1 | 12,123 | RAW |
 | `manufacturer_trust.D3_physician_formulated` | Raw score only | — | — | 0.5 | 45 | RAW |
@@ -352,13 +352,13 @@ EOF
 
 ## 8. Step 2 receipt contract (zero numerical or state change)
 
-Each scored pillar in `quality_pillars_v4` gains `ledger`, built by `quality_score.py` from the module breakdown it already reads.
+Each scored pillar in `quality_pillars_v4` gains `receipt` (named so to avoid the existing "Row ledger"), built by `quality_score.py` from the module breakdown it already reads.
 
 **Fields.**
 - `entries`: ordered signed score effects in public pillar points. Each entry is `{id, kind, source, raw, points}`.
   - `kind` is one of `earned | neutral | disclosure | deduction | floor | cap | rounding`.
   - Positive kinds add points, `deduction` is negative, and `floor` and `cap` carry their own sign.
-  - `rounding` is the residue of the pillar's 0.1 rounding.
+  - `rounding` entries: `rounding` is the residue of the pillar's 0.1 rounding (≤ 0.05 plus four-decimal reporting residue). `module_rounding` is where a module rounds its dimension to 0.01 (omega, probiotic), at most 0.006 raw.
 - `nominal_deductions`: the sum of `deduction` entries (≤ 0).
 - `realized_deductions`: the pillar score minus the score the same assembler returns with every deduction set to zero (≤ 0). It is computed, not inferred, so a floor that absorbs a penalty shows as a realized effect smaller than the nominal one.
 - `unawarded`: `max − score_without_deductions`. This is capacity not earned. It is **not** an entry and does not add into the sum.
