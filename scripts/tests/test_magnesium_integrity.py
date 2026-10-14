@@ -250,3 +250,14 @@ def test_magnesium_form_copy_distinguishes_source_evidence_and_unknown_identity(
     assert 'did not test citrate' in forms['magnesium citrate']['notes']
     assert 'assume oxide' not in forms['magnesium (unspecified)']['absorption']
     assert 'cheap supplements overwhelmingly' not in forms['magnesium (unspecified)']['notes']
+
+
+def test_magnesium_absorption_rationale_does_not_substitute_clinical_benefits(iqm):
+    forms=iqm['magnesium']['forms']
+    assert 'synergistic heart' not in forms['magnesium taurate']['notes']
+    assert 'top choice' not in forms['magnesium taurate']['notes'].lower()
+    assert 'fibromyalgia' not in forms['magnesium malate']['notes'].lower()
+    assert '5292' in forms['magnesium malate']['notes']
+    assert '8656' in forms['magnesium threonate']['notes']
+    assert '9528' in forms['magnesium orotate']['notes']
+    assert '5484' in forms['magnesium citrate-malate']['notes']

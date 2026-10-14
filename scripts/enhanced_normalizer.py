@@ -7615,6 +7615,33 @@ class EnhancedDSLDNormalizer:
             )
             return None
 
+        # A same-nutrient nested "from <amount> <compound>" declaration
+        # supplies the parent's form, not another elemental dose. Preserve its
+        # source text before the display-only wrapper leaves active scoring.
+        nested_source_forms = []
+        if (is_active and not forms and ing.get('category') == 'mineral'
+                and self.matcher.preprocess_text(name) ==
+                    self.matcher.preprocess_text(ing.get('ingredientGroup') or '')):
+            from form_vocab import extract_forms as _vocab_extract_forms
+            for child in nested_rows or []:
+                if not isinstance(child, dict) or child.get('ingredientGroup') != ing.get('ingredientGroup'):
+                    continue
+                source_name = str(child.get('name') or '').strip()
+                if not source_name.lower().startswith('from '):
+                    continue
+                compound = norm_module.strip_extraction_noise(source_name)
+                if (compound.lower() == source_name.lower()
+                        or not _vocab_extract_forms(compound, categories=['mineral_salts'])):
+                    continue
+                nested_source_forms.append({
+                    'name': compound, 'prefix': 'from', 'source': 'name_extraction',
+                    'category': child.get('category'),
+                    'ingredientGroup': child.get('ingredientGroup'),
+                    'raw_source_text': source_name,
+                    'raw_source_path': child.get('raw_source_path'),
+                })
+            forms.extend(form['name'] for form in nested_source_forms)
+
         # Extract form information from ingredient name if no explicit forms provided
         if not forms and name:
             extracted_forms = self._extract_forms_from_ingredient_name(name)
@@ -8066,6 +8093,8 @@ class EnhancedDSLDNormalizer:
         # If DSLD source had no forms but we extracted them from the ingredient
         # name (e.g., "Zinc (as Zinc Picolinate)" → "Zinc Picolinate"), write
         # them to forms_structured so the enricher gets the form info.
+        if not forms_structured and nested_source_forms:
+            forms_structured.extend(nested_source_forms)
         if not forms_structured and forms:
             for extracted_form in forms:
                 forms_structured.append({
@@ -9848,6 +9877,14 @@ class EnhancedDSLDNormalizer:
         # across cleaner / scorer / enricher. Vocab lives at
         # scripts/data/form_keywords_vocab.json.
         from form_vocab import extract_forms as _vocab_extract_forms
+        # A preparation qualifier is part of the chemical disclosure. Do not
+        # manufacture a simpler glycine-chelate identity from a buffered or
+        # mixed-ligand label whose exact preparation is not in the registry.
+        # Structured/parenthetical forms above already preserve their phrase.
+        if (not extracted_forms
+                and re.search(r'\b(?:buffered|lysinate)\b', name)
+                and _vocab_extract_forms(name, categories=['mineral_salts'])):
+            return [ingredient_name.strip()]
         form_identifiers = list(_vocab_extract_forms(name))
 
         # Generic descriptors — not chemical forms, kept here because

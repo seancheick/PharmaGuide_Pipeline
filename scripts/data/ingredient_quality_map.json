@@ -32,7 +32,7 @@
     "statistics": {
       "total_parents": 655,
       "total_forms": 1474,
-      "total_form_aliases": 12311,
+      "total_form_aliases": 12302,
       "parents_with_parent_aliases": 148,
       "parents_with_contains_aliases": 0,
       "parents_with_pattern_aliases": 0
@@ -8110,14 +8110,12 @@
           "by": "Product owner approval",
           "date": "2026-08-08"
         },
-        "notes": "Schuette 1994 (PMID:7815675) compared 100 mg isotope-labeled magnesium diglycinate with oxide in 12 ileal-resection patients. Overall absorption did not differ (23.5% versus 22.8%); a four-patient subgroup with poor oxide absorption benefited and diglycinate was better tolerated. This does not establish superiority or inferiority versus citrate in healthy adults. Walker 2003 (PMID:14596323) tested an amino-acid chelate; its abstract does not identify that preparation as exact glycinate. The existing bio_score 12 is retained pending clinical calibration review; tolerability and absorption are distinct outcomes.",
+        "notes": "Schuette 1994 (PMID:7815675) compared 100 mg isotope-labeled magnesium diglycinate with oxide in 12 ileal-resection patients. Overall absorption did not differ (23.5% versus 22.8%); a four-patient subgroup with poor oxide absorption benefited and diglycinate was better tolerated. This does not establish superiority or inferiority versus citrate in healthy adults. Walker 2003 (PMID:14596323) tested an amino-acid chelate; its abstract does not identify that preparation as exact glycinate. The existing bio_score 12 is retained pending clinical calibration review; tolerability and absorption are distinct outcomes. Buffered bisglycinate and lysinate/glycinate preparations are not aliases for this exact glycine-chelate form. Unresolved named preparations retain the existing disclosed-form-unmapped assessment hold; generic amino-acid chelate has its own owner. EFSA 2018 opinion 10.2903/j.efsa.2018.5292 also reports an unpublished 14-volunteer healthy-adult crossover comparing bisglycinate, buffered bisglycinate, dimagnesium malate and oxide. These are distinct preparations; this dossier does not justify treating every buffered or mixed-ligand product as plain glycinate.",
         "aliases": [
           "magnesium bisglycinate",
           "mag glycinate",
           "mg glycinate",
           "magnesium diglycinate",
-          "albion magnesium",
-          "traacs magnesium",
           "chelated magnesium glycinate",
           "fully reacted magnesium bisglycinate",
           "magnesium glycinate chelate",
@@ -8127,13 +8125,6 @@
           "TRAACS Magnesium Bisglycinate Chelate",
           "TRAACS Magnesium Bisglycinate Chelate supplement",
           "magnesium bisglycinate chelate supplement",
-          "TRAACS Magnesium supplement",
-          "magnesium lysinate glycinate chelate",
-          "magnesium lysinate glycinate",
-          "Magnesium Glycinate Buffered",
-          "Magnesium Bisglycinate Chelate Buffered",
-          "TRAACS Magnesium Lysinate Glycinate Chelate",
-          "Albion Magnesium Lysinate Glycinate Chelate",
           "magnesium glycinate amino acid chelate",
           "traacs magnesium bis-glycinate chelate",
           "magnesium bisglycinate, fermented"
@@ -8176,13 +8167,13 @@
       },
       "magnesium threonate": {
         "bio_score": 10,
-        "absorption": "rat-only brain Mg elevation; human cognitive RCTs lack PK; F not established",
+        "absorption": "Bioavailability supported for the evaluated preparation; comparative systemic absorption and human brain-magnesium delivery are not established by this assessment.",
         "consumer_note": "Magnesium threonate pairs magnesium with threonic acid, distinguishing it from other magnesium salts.",
         "consumer_note_review": {
           "by": "Product owner approval",
           "date": "2026-08-08"
         },
-        "notes": "Magnesium L-threonate/Magtein is bioavailable and clinically studied for cognitive endpoints, but the blood-brain-barrier magnesium claim is rat-only for PK (Slutsky 2010 PMID:20152124). PubMed API-verified human RCTs such as Liu 2016 (PMID:26519439) and Zhang 2022 (PMID:36558392) do not measure human brain magnesium PK. Clinician recalibration 2026-06-02: good/solid, not top-tier systemic magnesium bioavailability.",
+        "notes": "EFSA 2024 opinion 10.2903/j.efsa.2024.8656 concludes magnesium is bioavailable from the exact evaluated L-threonate preparation, using dissociation, animal and human magnesium-status evidence. The human trial included 51 adults and urinary magnesium findings. This does not establish superior systemic absorption versus other salts or human brain-magnesium delivery. Cognitive efficacy and tolerability do not determine this form rating. Bio_score 10 retained pending calibration. Liu2016 (PMID:26519439) is a human clinical trial, not a measurement of human brain magnesium.",
         "aliases": [
           "magtein",
           "magtein magnesium l-threonate",
@@ -8204,13 +8195,13 @@
       },
       "magnesium taurate": {
         "bio_score": 10,
-        "absorption": "organic chelate; cardiovascular synergy claims; no human PK head-to-head",
+        "absorption": "Comparative human absorption is not established by the current registry evidence; clinical-benefit hypotheses are assessed separately.",
         "consumer_note": "Magnesium taurate is magnesium combined with taurine. The named taurine ligand distinguishes it from citrate, glycinate, oxide, and other magnesium forms.",
         "consumer_note_review": {
           "by": "Product owner approval",
           "date": "2026-08-08"
         },
-        "notes": "Magnesium chelated with the amino acid taurine — both nutrients independently support cardiovascular health. The combination provides synergistic heart and blood pressure benefits. Well-absorbed and calming. A top choice for people focused on heart health. Also provides taurine — see taurine entry for that nutrient's scoring. Evidence update 2026-04-25 (Batch 15): Magnesium audit — 11 PMIDs WebFetch-verified. CLASS FINDING: organic chelates (glycinate, malate, taurate, orotate, AAC, gluconate, aspartate, lactate, chloride) cluster F ~25-45% in humans with overlapping CIs; only robustly-replicated human ranking is citrate ≥ organic chelates > carbonate > oxide. THREONATE FINDING: BBB-crossing claim is RAT-ONLY (Slutsky 2010 PMID:20152124, Neuron). Liu 2016 + Zhang 2022 human cognitive RCTs have NO brain Mg PK. ACETYL-TAURATE: rodent-only (Ates 2019 mice, Uysal 2019 rats); no human PK. BROWN RICE CHELATE: re-confirmed 0 PubMed hits (Batch 11). Misattributions caught: Slutsky PMID 20152120→20152124; Walker 2003 did NOT test glycinate; Schwalfenberg 2017 muscle-cramps RCT does not exist; Coudray PMID 16253138→16548135. Clinician recalibration 2026-06-02: bio_score is absorption/bioavailability only; natural/source and tolerability claims are not counted in bio_score. API evidence trail: scripts/audits/mineral_forms_20260602/api_verification.json.",
+        "notes": "Magnesium taurate identifies a taurine-containing source. Existing bio_score 10 is retained pending preparation-specific comparative absorption review. Cardiovascular synergy, calming effects and tolerability are not evidence of superior magnesium absorption; no such benefit is used to justify this rating.",
         "aliases": [
           "mag taurate",
           "magnesium taurinate",
@@ -8258,13 +8249,13 @@
       },
       "magnesium malate": {
         "bio_score": 11,
-        "absorption": "organic chelate; sustained serum Mg in rats; no human head-to-head PK",
+        "absorption": "Limited preparation-specific human serum-response evidence; a general absolute absorption fraction or superiority over citrate is not established.",
         "consumer_note": "Magnesium malate is magnesium combined with malic acid. The named malate ligand distinguishes it from citrate, glycinate, oxide, and other magnesium forms.",
         "consumer_note_review": {
           "by": "Product owner approval",
           "date": "2026-08-08"
         },
-        "notes": "Magnesium bound to malic acid, a key molecule in cellular energy production (Krebs cycle). Well-absorbed and often recommended for fatigue, fibromyalgia, and muscle pain. The malic acid component supports ATP synthesis. The Albion DiMagnesium Malate is a well-studied form. Evidence update 2026-04-25 (Batch 15): Magnesium audit — 11 PMIDs WebFetch-verified. CLASS FINDING: organic chelates (glycinate, malate, taurate, orotate, AAC, gluconate, aspartate, lactate, chloride) cluster F ~25-45% in humans with overlapping CIs; only robustly-replicated human ranking is citrate ≥ organic chelates > carbonate > oxide. THREONATE FINDING: BBB-crossing claim is RAT-ONLY (Slutsky 2010 PMID:20152124, Neuron). Liu 2016 + Zhang 2022 human cognitive RCTs have NO brain Mg PK. ACETYL-TAURATE: rodent-only (Ates 2019 mice, Uysal 2019 rats); no human PK. BROWN RICE CHELATE: re-confirmed 0 PubMed hits (Batch 11). Misattributions caught: Slutsky PMID 20152120→20152124; Walker 2003 did NOT test glycinate; Schwalfenberg 2017 muscle-cramps RCT does not exist; Coudray PMID 16253138→16548135. Clinician recalibration 2026-06-02: bio_score is absorption/bioavailability only; natural/source and tolerability claims are not counted in bio_score. API evidence trail: scripts/audits/mineral_forms_20260602/api_verification.json.",
+        "notes": "EFSA 2018 opinion 10.2903/j.efsa.2018.5292 reports an unpublished 14-person crossover with 150 mg magnesium from dimagnesium malate, bisglycinate, buffered bisglycinate and oxide. Serum AUC was higher for the three non-oxide preparations than oxide. The panel could not establish dimagnesium malate as distinct from magnesium malate. Exact preparation and endpoint matter; Indication-specific clinical benefits are not magnesium-absorption evidence. Bio_score 11 retained pending calibration.",
         "aliases": [
           "mag malate",
           "dimagnesium malate",
@@ -8373,13 +8364,13 @@
       },
       "magnesium orotate": {
         "bio_score": 9,
-        "absorption": "clinical CHF/MVP benefit (MACH); no published human oral PK comparison",
+        "absorption": "Exact evaluated dihydrate bioavailability undetermined; clinical-use outcomes do not establish comparative absorption.",
         "consumer_note": "Magnesium orotate is magnesium combined with orotic acid. The named orotate ligand distinguishes it from citrate, glycinate, oxide, and other magnesium forms.",
         "consumer_note_review": {
           "by": "Product owner approval",
           "date": "2026-08-08"
         },
-        "notes": "Magnesium chelated with orotic acid, which may support cellular energy production and cardiovascular function. Some European clinical studies show heart health benefits. Well-absorbed but lower elemental magnesium content than simpler forms. A premium specialty option. Evidence update 2026-04-25 (Batch 15): Magnesium audit — 11 PMIDs WebFetch-verified. CLASS FINDING: organic chelates (glycinate, malate, taurate, orotate, AAC, gluconate, aspartate, lactate, chloride) cluster F ~25-45% in humans with overlapping CIs; only robustly-replicated human ranking is citrate ≥ organic chelates > carbonate > oxide. THREONATE FINDING: BBB-crossing claim is RAT-ONLY (Slutsky 2010 PMID:20152124, Neuron). Liu 2016 + Zhang 2022 human cognitive RCTs have NO brain Mg PK. ACETYL-TAURATE: rodent-only (Ates 2019 mice, Uysal 2019 rats); no human PK. BROWN RICE CHELATE: re-confirmed 0 PubMed hits (Batch 11). Misattributions caught: Slutsky PMID 20152120→20152124; Walker 2003 did NOT test glycinate; Schwalfenberg 2017 muscle-cramps RCT does not exist; Coudray PMID 16253138→16548135. Clinician recalibration 2026-06-02: bio_score is absorption/bioavailability only; natural/source and tolerability claims are not counted in bio_score. API evidence trail: scripts/audits/mineral_forms_20260602/api_verification.json.",
+        "notes": "EFSA 2025 opinion 10.2903/j.efsa.2025.9528 concludes bioavailability has not been determined for the evaluated magnesium orotate dihydrate and safety cannot be established under its proposed conditions of use. Cardiac clinical-use studies do not establish comparative magnesium absorption. Bio_score 9 retained pending clinical calibration; do not present a premium-absorption claim.",
         "aliases": [
           "mag orotate",
           "magnesium orate"
@@ -8848,13 +8839,13 @@
       },
       "magnesium citrate-malate": {
         "bio_score": 11,
-        "absorption": "mixed citrate-malate salt; likely good, evidence thinner than citrate alone",
+        "absorption": "Bioavailable in the evaluated preparation; extent and comparative bioavailability not established.",
         "consumer_note": "Magnesium citrate-malate combines magnesium with citrate and malate. The two organic-acid ligands distinguish it from a single-salt magnesium form.",
         "consumer_note_review": {
           "by": "Product owner approval",
           "date": "2026-08-08"
         },
-        "notes": "Magnesium citrate-malate is an accepted nutritional magnesium source, but the reviewed EFSA record (PMID:32625777) addresses source suitability rather than comparative human absorption. Without exact-form human bioavailability evidence, it remains below the public Excellent tier.",
+        "notes": "EFSA 2018 opinion 10.2903/j.efsa.2018.5484 concludes magnesium from the evaluated mixed citrate-malate source is bioavailable, but its extent and comparative bioavailability could not be established. Do not transfer pure-citrate comparative findings to this mixed preparation. Bio_score 11 retained pending calibration.",
         "aliases": [
           "magnesium citrate-malate",
           "magnesium citrate malate",

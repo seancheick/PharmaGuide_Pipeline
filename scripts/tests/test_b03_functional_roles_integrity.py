@@ -84,7 +84,8 @@ def test_harmful_additives_total_coverage_after_batch_3(by_id):
     interaction rule); +1 functional_roles population from db8f73c7
     "Resolve unmapped ingredient identity gaps" (103 -> 104 populated, 116 -> 117 total).
     """
+    # PUREFRUIT Select moved to NHA_MONK_FRUIT with Sean approval on October13.
     populated = sum(1 for e in by_id.values() if e.get("functional_roles"))
-    assert populated == 104, (
-        f"expected 104/117 populated after batch 3 + tyramine + identity-gap fixes; got {populated}"
+    assert populated == 103, (
+        f"expected 103/116 after approved Purefruit owner retirement; got {populated}"
     )

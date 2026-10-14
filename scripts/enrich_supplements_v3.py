@@ -9047,9 +9047,18 @@ class SupplementEnricherV3:
             for f in forms_without_pct:
                 f['percent_share'] = equal_share
 
+        # A generated full-label form is a preparation of the cleaner-owned
+        # nutrient. Its full source name is not the nutrient's bare identity;
+        # treating it as the base would erase an unmapped named preparation.
+        base_name = ing_name
+        if (std_name and self._norm_form_name(std_name) != self._norm_form_name(ing_name)
+                and any(form.get('source') == 'name_extraction'
+                        and self._norm_form_name(form.get('name')) == self._norm_form_name(ing_name)
+                        for form in cleaned_forms)):
+            base_name = std_name
         return {
             'original': ing_name,
-            'base_name': ing_name,
+            'base_name': base_name,
             'extracted_forms': extracted_forms,
             'is_dual_form': len(extracted_forms) > 1,
             'form_extraction_success': True,
