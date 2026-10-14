@@ -916,6 +916,7 @@ def test_peppermint_literature_requires_source_oil_and_delivery(enricher, label,
 
 def test_peppermint_scored_record_retains_mixed_primary_outcome_evidence():
     entry = reviewed_entries()['INGR_PEPPERMINT_OIL']
+    assert entry['external_ids']['unii'] == 'AV092KU4JH'
     assert entry['effect_direction'] == 'mixed'
     assert entry['total_enrollment'] == 1030
     assert 'registry_completed_trials_count' not in entry
@@ -943,3 +944,61 @@ def test_clinical_delivery_binds_existing_source_provenance(label, notes, source
         product['activeIngredients'].append({'name': 'Fish Oil', 'raw_source_text': 'Fish Oil', 'quantity': 1000, 'unit': 'mg', 'raw_source_path': 'ingredientRows[1]'})
     scope = {**entry, 'ingredient': label, 'matched_source_row_refs': ['ingredientRows[0]']}
     assert (assess_clinical_applicability(product, scope, assess_amount=False)['status'] == 'applicable') is accepted
+
+
+@pytest.mark.parametrize('nested,title', [(False,'Ingredient capsules'),(False,'Enteric-coated peppermint capsules'),(True,'Ingredient capsules')])
+def test_native_delivery_keeps_nested_and_row_local_evidence(enricher,nested,title):
+    from enhanced_normalizer import EnhancedDSLDNormalizer
+    from scoring_v4.scored_artifact import build_scored_artifact
+    rows=[{'name':'Peppermint Oil','forms':[{'name':'enteric-coated'}],'nestedRows':[], 'quantity':[{'quantity':200,'unit':'mg'}]},
+          {'name':'Ginger Root','forms':[],'nestedRows':[],'quantity':[{'quantity':200,'unit':'mg'}]}]
+    if nested:
+        rows=[{'name':'Digestive Blend','nestedRows':rows,'quantity':[{'quantity':400,'unit':'mg'}]}]
+    raw={'id':'DELIVERY_SCOPE','fullName':title,'brandName':'Regression','physicalState':{'name':'Capsule'},
+         'servingSizes':[{'minQuantity':1,'maxQuantity':1,'unit':'Capsule(s)'}],
+         'ingredientRows':rows,'otherIngredients':{'ingredients':[]}}
+    product,_=enricher.enrich_product(EnhancedDSLDNormalizer().normalize_product(raw))
+    matches,_=resolved_clinical_matches(product)
+    assert 'INGR_PEPPERMINT_OIL' in {m['id'] for m in matches}
+    if title.startswith('Enteric-coated'):
+        sources = [x for x in product['delivery_data']['systems'] if x['name'] == 'enteric-coated']
+        assert len(sources) >= 2  # Title cannot erase the ingredient-local proof.
+        assert product['match_ledger']['domains']['delivery']['matched'] == 1
+    artifact=build_scored_artifact(product)
+    assert artifact['quality_score_status'] in {'scored', 'not_scored'}
+    # Form mapping remains an independent gate; source applicability must not
+    # manufacture a mapped ingredient form to make the overall score visible.
+    assert score_evidence(product, owner_scoped=True)['score'] > 0
+
+
+def test_source_strict_delivery_cannot_trust_generated_form_factor():
+    row={'name':'Peppermint Oil','raw_source_text':'Peppermint Oil','raw_source_path':'ingredientRows[0]', 'quantity':200,'unit':'mg'}
+    entry={**reviewed_entries()['INGR_PEPPERMINT_OIL'],'matched_source_row_refs':['ingredientRows[0]']}
+    product={'activeIngredients':[row],'form_factor_canonical':'enteric-coated','physicalState':{'name':'Capsule'},'delivery_data':{'systems':[]}}
+    assert assess_clinical_applicability(product,entry,assess_amount=False)['status']=='not_applicable'
+
+
+@pytest.mark.parametrize('purpose,accepted',[('energy',False),('longevity',False),('testosterone',True)])
+def test_primavie_native_trial_cannot_substitute_unrelated_declared_purpose(enricher,purpose,accepted):
+    from enhanced_normalizer import EnhancedDSLDNormalizer
+    from scoring_v4.scored_artifact import build_scored_artifact
+    raw={'id':'PRIMAVIE_PURPOSE','fullName':'PrimaVie capsules','brandName':'Regression','physicalState':{'name':'Capsule'},
+         'servingSizes':[{'minQuantity':1,'maxQuantity':1,'unit':'Capsule(s)'}],
+         'ingredientRows':[{'name':'PrimaVie Shilajit','forms':[],'nestedRows':[],'quantity':[{'quantity':500,'unit':'mg'}]}],
+         'statements':[{'type':'Formula re: Contains','notes':f'Shilajit supports {purpose}.'}], 'otherIngredients':{'ingredients':[]}}
+    product,_=enricher.enrich_product(EnhancedDSLDNormalizer().normalize_product(raw))
+    artifact=build_scored_artifact(product)
+    assert (artifact['quality_pillars_v4']['evidence']['score'] > 0) is accepted
+
+
+@pytest.mark.parametrize('context', [
+    {'fullName':'Ileocolonic Peppermint Oil'},
+    {'statements':[{'type':'Formula re: Contains','notes':'Ileocolonic-release peppermint oil'}]},
+])
+def test_explicit_sole_active_delivery_exclusion_overrides_other_positive_source(enricher,context):
+    row={'name':'Peppermint Oil','raw_source_text':'Peppermint Oil','raw_source_path':'ingredientRows[0]',
+         'quantity':200,'unit':'mg','raw_taxonomy':{'forms':[{'name':'enteric-coated'}]}}
+    product={'activeIngredients':[row],**context}
+    product['delivery_data']=enricher._collect_delivery_data(product)
+    entry={**reviewed_entries()['INGR_PEPPERMINT_OIL'],'matched_source_row_refs':['ingredientRows[0]']}
+    assert assess_clinical_applicability(product,entry,assess_amount=False)['status']=='not_applicable'

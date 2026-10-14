@@ -10870,26 +10870,21 @@ class SupplementEnricherV3:
                 for field in ("name", "raw_source_text", "standardName", "notes")
             ).strip()
             if row_text:
-                evidence_sources.append((f"activeIngredients[{index}]", row_text))
+                evidence_sources.append((ingredient.get("raw_source_path") or f"activeIngredients[{index}]", row_text))
             taxonomy = ingredient.get("raw_taxonomy") or {}
             for form in taxonomy.get("forms") or []:
                 if isinstance(form, dict) and form.get("name"):
-                    evidence_sources.append((f"activeIngredients[{index}]", str(form["name"])))
+                    evidence_sources.append((ingredient.get("raw_source_path") or f"activeIngredients[{index}]", str(form["name"])))
 
         # Structured DSLD label statements are product-authored evidence. Keep
         # them separate from the broad synthesized product text, which also
         # contains reference notes and can manufacture delivery matches. An
         # untyped/free-form statement is deliberately not trusted here.
-        trusted_statement_types = {
-            "Formulation re: Other",
-            "Formula re: Contains",
-            "Suggested/Recommended/Usage/Directions",
-            "FDA Statement of Identity",
-        }
+        from constants import DELIVERY_SOURCE_STATEMENT_TYPES
         for index, statement in enumerate(product.get("statements", [])):
             if not isinstance(statement, dict):
                 continue
-            if statement.get("type") not in trusted_statement_types:
+            if statement.get("type") not in DELIVERY_SOURCE_STATEMENT_TYPES:
                 continue
             notes = statement.get("notes")
             if isinstance(notes, str) and notes.strip():
@@ -10915,27 +10910,20 @@ class SupplementEnricherV3:
                 flags=re.IGNORECASE,
             )
 
-            match_source = None
-            matched_text = None
-            physical_match = pattern.search(physical_state)
-            if physical_match:
-                match_source = "physical_state"
-                matched_text = physical_match.group(0)
-            else:
-                for source_path, source_text in evidence_sources:
-                    row_match = pattern.search(source_text)
-                    if row_match:
-                        match_source = source_path
-                        matched_text = row_match.group(0)
-                        break
-
-            if match_source:
+            # Keep every source location: a product-title match cannot erase
+            # stronger row-local evidence needed by clinical applicability.
+            # Scoring still consumes only highest_tier, never source count.
+            seen_sources = set()
+            for source_path, source_text in [("physical_state", physical_state), *evidence_sources]:
+                row_match = pattern.search(source_text)
+                if not row_match or source_path in seen_sources:
+                    continue
+                seen_sources.add(source_path)
                 matched_systems.append({
-                    # LABEL NAME PRESERVATION:
-                    "name": delivery_name,  # Canonical from DB (used for scoring)
-                    "canonical_name": delivery_name,  # Explicit canonical field
-                    "raw_source_text": matched_text,
-                    "match_source": match_source,  # Where it was found
+                    "name": delivery_name,
+                    "canonical_name": delivery_name,
+                    "raw_source_text": row_match.group(0),
+                    "match_source": source_path,
                     "tier": delivery_data.get('tier', 3),
                     "category": delivery_data.get('category', 'delivery'),
                     "description": delivery_data.get('description', '')
@@ -24053,7 +24041,9 @@ class SupplementEnricherV3:
             # Section A: Ingredient Quality
             enriched["ingredient_quality_data"] = self._collect_ingredient_quality_data(product)
 
-            enriched["delivery_data"] = self._collect_delivery_data(product)
+            enriched["delivery_data"] = self._collect_delivery_data({
+                **product, "ingredient_quality_data": enriched["ingredient_quality_data"],
+            })
             enriched["absorption_data"] = self._collect_absorption_data(enriched)
             enriched["formulation_data"] = self._collect_formulation_data(enriched)
 
@@ -24745,10 +24735,15 @@ class SupplementEnricherV3:
         # DELIVERY SYSTEMS DOMAIN
         # =====================================================================
         delivery_data = enriched.get("delivery_data", {})
-        # delivery_data lists its matches under `systems` (never `matched_systems`).
+        # Source locations may repeat a technology; coverage counts the
+        # technology once, not how often the label repeats its name.
+        seen_delivery = set()
         for system in delivery_data.get("systems") or []:
             raw_text = system.get("name", "")
             canonical_id = system.get("canonical_id") or raw_text.lower().replace(" ", "_")
+            if canonical_id in seen_delivery:
+                continue
+            seen_delivery.add(canonical_id)
             normalized_key = norm_module.make_normalized_key(raw_text)
 
             ledger.record_match(

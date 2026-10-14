@@ -15,6 +15,7 @@ from functools import lru_cache
 from pathlib import Path
 from typing import Any
 
+from constants import DELIVERY_SOURCE_STATEMENT_TYPES
 from normalization import canonicalize_mass_unit
 from serving_frequency import resolve_daily_serving_range
 
@@ -306,6 +307,15 @@ def _source_delivery_forms(product: Mapping, row: Mapping, excluded_terms=()) ->
     """
     result = set()
     originals = [r for r in _rows(product, source_only=True) if _is_exposure_row(r)]
+    if len(originals) == 1 and originals[0].get("raw_source_path") == row.get("raw_source_path"):
+        # A sole-active product's explicitly excluded delivery cannot be
+        # rescued by a positive coating marker in a different source field.
+        context = [product.get(key) for key in ("name", "fullName", "productName", "physicalState", "netContents")]
+        context.extend(statement.get("notes") for statement in product.get("statements") or []
+                       if isinstance(statement, Mapping) and statement.get("type") in DELIVERY_SOURCE_STATEMENT_TYPES)
+        text = " " + _key(json.dumps(context)) + " "
+        if any(" " + _key(term) + " " in text for term in excluded_terms):
+            return result
     for system in (product.get("delivery_data") or {}).get("systems", []):
         if not isinstance(system, Mapping):
             continue
@@ -314,7 +324,9 @@ def _source_delivery_forms(product: Mapping, row: Mapping, excluded_terms=()) ->
             continue
         source_text = ""
         match = re.fullmatch(r"activeIngredients\[(\d+)\]", source)
-        if match:
+        if source == row.get("raw_source_path"):
+            source_text = _row_text(row, source_only=True)
+        elif match:
             active = product.get("activeIngredients") or []
             index = int(match.group(1))
             if index < len(active) and isinstance(active[index], Mapping):
@@ -326,7 +338,8 @@ def _source_delivery_forms(product: Mapping, row: Mapping, excluded_terms=()) ->
             if match:
                 statements = product.get("statements") or []
                 index = int(match.group(1))
-                if index < len(statements) and isinstance(statements[index], Mapping):
+                if (index < len(statements) and isinstance(statements[index], Mapping)
+                        and statements[index].get("type") in DELIVERY_SOURCE_STATEMENT_TYPES):
                     source_text = _key(statements[index].get("notes"))
             elif source in {"name", "fullName", "productName"}:
                 source_text = _key(product.get(source))
@@ -377,6 +390,11 @@ def assess_clinical_applicability(product: Mapping, entry: Mapping, *, assess_am
     lower, upper, _ = resolve_daily_serving_range(dict(product))
     reasons = []
     source_only = policy.get("require_source_label_form", False)
+    if source_only:
+        # A generated/stale canonical form cannot establish source-only delivery.
+        # Reuse the physical-form owner on the retained label, not on its guess.
+        from form_factor_normalizer import canonicalize_form_factor
+        dosage_form = _key(canonicalize_form_factor(physical)) if physical else ""
     excluded_canonicals = {_key(value) for value in policy.get("excluded_canonical_ids", [])}
     exclusion_only = bool(excluded_canonicals or policy.get("excluded_form_terms")) and not any(
         policy.get(field) for field in (

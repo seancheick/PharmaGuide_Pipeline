@@ -87,6 +87,11 @@ INDICATION_KEYWORDS: Dict[str, Set[str]] = {
     "mood": {"mood", "stress", "anxiety", "cognition", "psychobiotic", "sleep",
              "relax", "relaxation", "cortisol"},
     "bone": {"bone", "density"},
+    # Existing clinical-indication vocabulary; shared by source claims and
+    # reviewed study outcomes. These categories never imply efficacy.
+    "hormonal_endocrine": {"testosterone", "androgen", "androgens", "dheas"},
+    "mitochondrial_energy": {"energy", "fatigue", "mitochondrial"},
+    "aging_longevity": {"longevity", "aging", "ageing"},
 }
 
 def evidence_indication_categories(text: str) -> Set[str]:

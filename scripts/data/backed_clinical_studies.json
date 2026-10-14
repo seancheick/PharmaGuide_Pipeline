@@ -16752,7 +16752,7 @@
         }
       ],
       "effect_direction": "positive_weak",
-      "primary_outcome": "Androgen biomarkers in healthy men aged 45-55",
+      "primary_outcome": "Hormone Balance",
       "total_enrollment": 96,
       "effect_direction_confidence": "low",
       "effect_direction_rationale": "One short manufacturer-supplied preparation trial reports positive androgen biomarkers with attrition; patient-important benefits were not established. Existing positive_weak classification reflects these limitations rather than broad efficacy.",
@@ -19340,7 +19340,7 @@
         }
       ],
       "effect_direction": "positive_weak",
-      "primary_outcome": "Preparation-specific androgen and semen biomarkers",
+      "primary_outcome": "Hormone Balance",
       "total_enrollment": 131,
       "effect_direction_confidence": "low",
       "effect_direction_rationale": "Positive preparation-specific biomarker findings are retained with low confidence; an uncontrolled fertility cohort and one short branded trial do not establish clinical efficacy or preparation equivalence for generic products. Reference-only handling prevents numerical transfer.",
@@ -19674,7 +19674,7 @@
         }
       ],
       "external_ids": {
-        "unii": "V95R5KMY2B"
+        "unii": "AV092KU4JH"
       },
       "effect_direction": "mixed",
       "primary_outcome": "Digestive Health",
