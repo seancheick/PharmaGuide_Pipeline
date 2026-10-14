@@ -17,12 +17,16 @@ Owner: quality_score.py::_build_pillars, module assessment owners, penalty_regis
 - Local rung: 532 passed, 0 failed, 24 declared opt-in skips. Another 14 skips need a build directory that does not exist anywhere until the rebuild.
 - Receipts add a median of about 2.4 KB per product to the blob.
 
+**Independent acceptance — Codex, October 14.** Re-ran the stored corpus reconciliation: 15,123 scored / 69 suppressed / 234 not-scored inventoried; all scored receipts reconcile, zero numeric/state/component deltas or enumerated copy contradictions. Re-ran main versus candidate live scorer on the same 4,594 enriched products across BulkSupplements, Centrum, Thorne, Airborne and Culturelle: identical ID sets, totals, statuses, tiers, safety, pillar values/components and Evidence states. This does not establish delivery-context correctness or release readiness.
+
+Rendered actual Flutter receipt widgets using five real candidate products (19028, 252349, 252413, 18174, 205211), all six expanded pillars, at 375-point width and normal/1.4 text scale; 60 layout captures pass. Inspected representative deduction/floor, neutral rounding, applicability-positive and unfinished-review renders. No rebuilt catalog or installed-device claim. Fixed app receipt rounding visibility (c9f2d99e) and unfinished Evidence capacity mislabeled Not earned (e9d12103), both fail-first. Latest focused app receipt/completion tests:18 pass; scoped analysis clean. Pipeline focused receipt/copy:33 pass. Whole-fast pipeline CI38648490506 passed runtime-equivalent e0d33c34f; latest app CI pending after e9d12103. Compact local evidence: reports/score_receipt_acceptance_20261014 in primary checkout. Steps 1–2 technically accepted for paired integration after applicable CI; Step 3 read-only measurements may start. No numerical policy, merge, rebuild or publication authorized by this receipt.
+
 **App.**
 - Awarded points now show under no-verdict states (104 products).
 - Receipt rows render; the caption is fixed.
 - Fixed: Compare showed a definitive tier for `partial` assessments.
 - Tests: 7 new plus 1 fail-first. Full `flutter test` 3,922 passed; analyze clean.
-- No device screenshot yet: it needs a catalog that carries receipts.
+- Candidate widget renders visually checked independently; installed-device/fresh catalog acceptance remains Step 5.
 
 **Next.**
 - Sean accepts the matrix and reviews both PRs.
