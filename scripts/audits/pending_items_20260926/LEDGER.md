@@ -28,11 +28,25 @@ Rendered actual Flutter receipt widgets using five real candidate products (1902
 - Tests: 7 new plus 1 fail-first. Full `flutter test` 3,922 passed; analyze clean.
 - Candidate widget renders visually checked independently; installed-device/fresh catalog acceptance remains Step 5.
 
+**Step 3 — measured options (read-only).** `scripts/audits/score_accounting_20261014/STEP3_OPTIONS.md`; private receipts in `~/pg_quality/score_accounting_20261014/`.
+- Twelve transforms and six complete options were measured on all 15,123 stored products, with 0 receipt errors.
+- Key finding: removing the Dose disclosure credits breaks the hiding invariant. Hiding the amount raises the total in 46 sports and 39 probiotic products under option B.
+- Option B3 fixes that with two rules: the neutral applies only where no benchmark exists, and the probiotic floor is a minimum for disclosed doses too. Hiding then raises nothing (botanical 0/2,413, sports 0/901, probiotic 0/145).
+- B3: mean +0.05, 11,008 products move, 2,135 tier changes.
+
+**Decisions D1–D11 for Sean.** Recommended:
+- Remove the mirrors.
+- Make the sixth pillar the high-risk/watchlist owner.
+- Give disclosure one owner under B3's rules, with N = 11.4.
+- Keep the B1 owner in Formulation.
+- Gate probiotic certainty on applicability.
+- Remove the count, route-base, blend and branded doubles.
+- Keep or measure multi `panel_breadth`.
+
 **Next.**
-- Sean accepts the matrix and reviews both PRs.
-- Step 3: measure the AUDIT §5 option sets, read-only.
-- Deferred to Step 4: the delivery claim-subject fix (F12), moving magnitudes into config, the stale `production_score` label (pinned by 7 test files), the two dead registry keys, and the inert Verification product floor.
-- The pending PR143 rebuild stays held; the Meru branch integrates first.
+- Sean chooses D1–D11 and accepts the PRs.
+- Step 4 is one `/pg-scoring-change` batch implementing the chosen option. It also includes the delivery claim-subject fix (F12), moving magnitudes into config, the stale `production_score` label, the two dead registry keys and the inert Verification product floor.
+- Then the tier review and the single rebuild. The pending PR143 rebuild stays held; the Meru branch integrates first.
 
 ## Current execution — normal batch preflight/release repair, October 13
 
