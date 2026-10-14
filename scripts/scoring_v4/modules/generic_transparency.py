@@ -24,7 +24,7 @@ import re
 from typing import Any, Dict, List, Optional, Tuple
 
 from constants import CLEANER_NON_EFFICACY_ROLES
-from scoring_input_contract import dose_disclosure_status, is_nutrition_fact_declaration
+from scoring_input_contract import dose_disclosure_status, has_source_printed_amount, is_nutrition_fact_declaration
 from scoring_v4.modules.generic_helpers import (
     _as_float,
     _norm_text,
@@ -401,15 +401,7 @@ def _score_complete_active_disclosure_bonus(
         row_blockers: List[str] = []
         if row.get("is_proprietary_blend"):
             row_blockers.append("proprietary_blend_row")
-        variants = _safe_list(_safe_dict(row.get("raw_taxonomy")).get("quantityVariants"))
-        printed_total = bool(row.get("raw_source_path")) and any(
-            isinstance(v, dict) and v.get("selected_for_analysis") is True
-            and _as_float(v.get("quantity"), None) == _as_float(row.get("quantity"), None)
-            and _as_float(v.get("quantity"), 0) > 0
-            and _norm_text(v.get("unit")) == _norm_text(row.get("unit"))
-            for v in variants
-        )
-        if row.get("is_parent_total") and not printed_total:
+        if row.get("is_parent_total") and not has_source_printed_amount(row):
             row_blockers.append("parent_total_row")
         if not _has_active_identity(row):
             row_blockers.append("missing_identity")

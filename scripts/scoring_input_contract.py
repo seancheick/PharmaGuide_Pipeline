@@ -479,6 +479,23 @@ def epa_dha_row_is_trustworthy(row: Dict[str, Any]) -> bool:
 DOSE_NOT_PROVIDED_UNITS = frozenset({"np", "n/p", "not provided", ""})
 
 
+def has_source_printed_amount(row: Mapping[str, Any]) -> bool:
+    """Whether the selected source-label amount proves this row's quantity.
+
+    A derived parent total can have a usable amount without printed disclosure.
+    Keep source selection here; Transparency consumes the result without reading
+    raw quantities or confusing Formulation's double-count exclusion with opacity.
+    """
+    variants = _safe_list(_safe_dict(row.get("raw_taxonomy")).get("quantityVariants"))
+    return bool(row.get("raw_source_path")) and any(
+        isinstance(v, dict) and v.get("selected_for_analysis") is True
+        and _as_float(v.get("quantity"), None) == _as_float(row.get("quantity"), None)
+        and _as_float(v.get("quantity"), 0) > 0
+        and _norm(v.get("unit")) == _norm(row.get("unit"))
+        for v in variants
+    )
+
+
 def dose_disclosure_status(row: Mapping[str, Any]) -> str:
     """'disclosed' | 'not_disclosed_blend' | 'missing' for one label row; the one
     owner the export's dose_status and display label and v4 Transparency read.
