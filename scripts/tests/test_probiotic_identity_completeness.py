@@ -28,6 +28,10 @@ def product_with_identities(exact=1, unknown=0):
             clinical.append({"strain": name, "clinical_id": cid, "source_row_ref": ref})
     return {
         "activeIngredients": rows,
+        "delivery_data": {"matched": True, "highest_tier": 2, "systems": [{
+            "canonical_name": "delayed-release", "tier": 2,
+            "match_source": "physical_state", "raw_source_text": "delayed-release capsule",
+        }]},
         "probiotic_data": {
             "total_billion_count": 1, "total_strain_count": 99,
             "has_survivability_coating": True,

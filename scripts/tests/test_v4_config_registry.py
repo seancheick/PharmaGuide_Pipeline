@@ -59,7 +59,7 @@ def test_config_version_reads_metadata_schema_version():
     from scoring_v4.config_registry import config_version
 
     assert config_version("omega") == "2.2.0-verification-owned-oxidation"
-    assert config_version("quality_score") == "1.23.0-dose-evidence-ownership"
+    assert config_version("quality_score") == "1.24.0-independent-delivery"
 
 
 def test_all_config_provenance_shape():
