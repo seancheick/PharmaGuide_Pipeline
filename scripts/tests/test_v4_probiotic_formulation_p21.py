@@ -314,3 +314,18 @@ def test_probiotic_delivery_retains_owned_source_note_assertion():
         'raw_source_text': note, 'match_source': 'ingredientRows[0].nestedRows[0]',
     }]}
     assert score_formulation(product)['components']['A3_delivery_system'] == 1.0
+
+
+def test_a_rated_co_ingredient_cannot_supply_probiotic_form_quality() -> None:
+    # 188755 EasySticks shape: the strains are unrated and a rated prebiotic
+    # (inulin, IQM 12) sits beside them. Probiotic form quality belongs to the
+    # strains (1.20.0: an optional prebiotic does not manufacture it), so the
+    # unrated strains keep the shared neutral and the prebiotic adds nothing.
+    from scoring_v4.modules.probiotic_formulation import score_formulation
+
+    plain = _product(prebiotic_present=False)
+    with_rated_prebiotic = _product(prebiotic_present=True)
+    for row in with_rated_prebiotic["ingredient_quality_data"]["ingredients_scorable"]:
+        if row["canonical_id"] == "inulin":
+            row["bio_score"] = 12
+    assert score_formulation(with_rated_prebiotic)["components"] == score_formulation(plain)["components"] == CANONICAL

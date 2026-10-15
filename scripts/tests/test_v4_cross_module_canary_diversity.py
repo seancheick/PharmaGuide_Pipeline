@@ -194,9 +194,10 @@ PROBIOTIC_CANARIES = {
     },
     "PG_SUB_35E0BD3374BF494B80FEABE87FC559E7": {
         "label": "Seed DS-01 Daily Synbiotic",
-        # V4.1 Step 4: Formulation is the IQM form rating (8.33) without the
-        # former studied-formula identity/potency credits.
-        "score_range": (67.9, 67.9),
+        # V4.1 Step 4: Formulation is canonical strain form quality (unrated
+        # strains keep the neutral 9; a rated co-ingredient no longer supplies
+        # it) without the former studied-formula identity/potency credits.
+        "score_range": (68.6, 68.6),
         "traits": {"studied_formula_afu": True, "dose_score": 25.0},
     },
 }

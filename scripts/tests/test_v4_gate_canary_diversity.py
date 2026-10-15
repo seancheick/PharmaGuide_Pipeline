@@ -31,6 +31,8 @@ if str(SCRIPTS_ROOT) not in sys.path:
 # probiotic Formulation/Dose are canonical form quality and measured adequacy.
 # The raw module score still divides by unchanged module caps (fiber 30), so a
 # route whose retired components were large (12932 fiber gummies) moves most.
+# Probiotic form quality is the strains' own (241707, 206362: a rated
+# co-ingredient no longer supplies it).
 V4_CANARIES = {
     # Safety short-circuit: no module block; gate state is not confidence.
     "246324": {
@@ -71,7 +73,7 @@ V4_CANARIES = {
         "module": "probiotic",
         "verdict": "SAFE",
         "confidence": "low",
-        "score_range": (36.1, 36.1),
+        "score_range": (30.1, 30.1),
     },
     # Fish-oil parent mass with no EPA/DHA breakdown: scoreable as aggregate
     # evidence with moderate uncertainty, no score cap, and no CAUTION ceiling.
@@ -162,7 +164,7 @@ V4_CANARIES = {
         "confidence": "moderate",
         # V4.1 (Oct 15, 2026): its strain research does not apply to this
         # product, so the former 10 certainty points are gated to 0.
-        "score_range": (32.9, 32.9),
+        "score_range": (29.1, 29.1),
     },
 }
 

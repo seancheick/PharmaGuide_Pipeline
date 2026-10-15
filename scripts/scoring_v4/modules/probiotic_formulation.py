@@ -62,7 +62,11 @@ def score_formulation(product: Any) -> Dict[str, Any]:
 
     total_billion = _total_billion_count(pdata)
     identities = probiotic_label_identity_summary(product)
-    bio_score, form_assessed_count = _bio_score_assessment(product)
+    from probiotic_measurements import is_probiotic_source_identity
+
+    # Form quality belongs to the strains: a rated co-ingredient (an optional
+    # prebiotic, a vitamin) cannot supply probiotic form quality (1.20.0).
+    bio_score, form_assessed_count = _bio_score_assessment(product, is_probiotic_source_identity)
     if form_assessed_count == 0:
         bio_score = UNRATED_FORM_NEUTRAL
     delivery_data = _probiotic_delivery(product, eligible_delivery_data(product))

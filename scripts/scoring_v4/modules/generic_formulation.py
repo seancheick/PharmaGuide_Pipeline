@@ -13,7 +13,7 @@ from __future__ import annotations
 from functools import lru_cache
 import json
 from pathlib import Path
-from typing import Any, Dict
+from typing import Any, Callable, Dict, Optional
 
 from scoring_v4.modules.botanical_profile import (
     is_botanical_product,
@@ -110,18 +110,23 @@ PHASE_MARKER_COMPLETE = "P1.3.1b_formulation_complete"
 # --- A1 bio_score ---------------------------------------------------------
 
 
-def _bio_score_assessment(product: Dict[str, Any]) -> tuple[float, int]:
+def _bio_score_assessment(product: Dict[str, Any],
+                          row_filter: Optional[Callable[[Dict[str, Any]], bool]] = None) -> tuple[float, int]:
     """Return the parent-relative A1 average and available-rating count.
 
     No rating and an explicit zero both contribute zero numerically, but they
     must not produce the same consumer explanation. Use the same eligible
     rows and bio_score reader for both the arithmetic and that distinction.
+    ``row_filter`` limits the average to a route's purpose rows (probiotic
+    strains), so a co-ingredient cannot supply that route's form quality.
     """
     scorable = scorable_ingredients(
         product,
         allow_sole_mapped_blend=True,
         require_dose=False,
     )
+    if row_filter is not None:
+        scorable = [row for row in scorable if row_filter(row)]
     scores = []
     for ingredient in scorable:
         raw_score = bio_score_of(ingredient)
