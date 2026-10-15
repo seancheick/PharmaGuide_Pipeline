@@ -31,11 +31,20 @@ def _assemble(module: str, breakdown: dict) -> dict:
 
 # --- unfinished work vs label limitation ------------------------------------
 
-@pytest.mark.parametrize(("printed", "expected"), [(6.0, "partial"), (0.0, "complete"), (None, "complete")])
-def test_a_printed_nutrient_amount_we_could_not_read_holds_the_assessment(printed, expected):
+@pytest.mark.parametrize(("printed", "reference", "expected"), [
+    (6.0, True, "partial"),     # 331688 shape: a printed zinc number with an "NP" unit
+    (0.0, True, "complete"),    # nothing printed: the label's limitation
+    (None, True, "complete"),
+    (6.0, False, "complete"),   # 54463 shape: a non-nutrient (phytosterols) with no RDA/UL reference
+])
+def test_a_printed_nutrient_amount_we_could_not_read_holds_the_assessment(printed, reference, expected):
     product = _fixture("prenatal_multi__ideal")
+    # The adequacy owner's real skipped-row shape: no amount, no RDA/AI (it was
+    # never computed), but the nutrient's reference record when one exists.
     product["rda_ul_data"]["adequacy_results"].append({
-        "canonical_id": "zinc", "nutrient": "Zinc", "rda_ai": 8.0, "scoring_eligible": False,
+        "canonical_id": "zinc" if reference else "phytosterols", "nutrient": "Zinc",
+        "rda_ai": None, "amount": None, "scoring_eligible": False,
+        "data_by_group": {"19-30": {"rda": 11.0, "ul": 40.0}} if reference else {},
         "ul_status": "skipped_amount_not_declared", "original_quantity": printed, "original_unit": "NP",
     })
     artifact = build_scored_artifact(product)

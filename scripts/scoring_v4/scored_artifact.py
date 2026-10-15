@@ -144,16 +144,17 @@ def unfinished_source_assessment(enriched_product: Dict[str, Any],
     ]
     if any(item.get("benchmark") == "unresolved" for item in assessments):
         return "dose_benchmark_identity_unresolved"
-    # Only a nutrient the route's Dose benchmarks against an RDA/AI, and only
-    # when the adequacy owner recorded a printed number it could not read: an
-    # incidental vitamin on a protein or fiber label does not hold the tier,
-    # and an amount the label never printed is the label's limitation.
+    # Only a nutrient the route's Dose benchmarks (the adequacy owner found its
+    # RDA/UL reference record; its RDA/AI is never computed for an unread
+    # amount), and only when the owner recorded a printed number it could not
+    # read: an incidental vitamin on a protein or fiber label does not hold the
+    # tier, and an amount the label never printed is the label's limitation.
     if module_breakdown.get("module") in _NUTRIENT_DOSE_ROUTES:
         for row in _safe_dict(enriched_product.get("rda_ul_data")).get("adequacy_results") or []:
             if not isinstance(row, dict) or row.get("ul_status") not in _UNREAD_NUTRIENT_AMOUNT_STATUSES:
                 continue
             printed = row.get("original_quantity")
-            if (row.get("rda_ai") is not None and isinstance(printed, (int, float))
+            if (row.get("data_by_group") and isinstance(printed, (int, float))
                     and not isinstance(printed, bool) and printed > 0):
                 return "nutrient_amount_unread"
     # The enricher owns the sugar reading: a printed sugars line it classified
