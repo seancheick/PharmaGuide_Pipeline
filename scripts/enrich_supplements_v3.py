@@ -12964,7 +12964,7 @@ class SupplementEnricherV3:
         # CRITICAL: Check for negation patterns FIRST - skip entire statement if negated
         # These statements list allergens the product is FREE FROM, not containing
         negation_patterns = [
-            r'contains?\s+no\s+',           # "Contains no milk"
+            r'\bcontains?(?:\s*:\s*|\s+)no\b\s*:?\s*',  # Contains No: / Contains: no
             r'does\s+not\s+contain',        # "Does not contain milk"
             r'free\s+(?:from|of)\s+',       # "Free from milk"
             r'without\s+',                  # "Without milk"
