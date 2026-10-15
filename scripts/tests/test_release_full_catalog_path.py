@@ -37,6 +37,50 @@ INTERACTION_VERSION_CONFIG = (
 )
 
 
+@pytest.mark.parametrize('accepted', [True, False])
+def test_producer_compatibility_uses_importer_before_any_candidate_exists(tmp_path, accepted):
+    import subprocess
+    import sys
+    import shlex
+    scripts = tmp_path / 'scripts'
+    scripts.mkdir()
+    (scripts / 'build_final_db.py').write_text('EXPORT_SCHEMA_VERSION = "2.5.0"\n')
+    (scripts / 'build_interaction_db.py').write_text('SCHEMA_VERSION = "4.0.0"\n')
+    app = tmp_path / 'app/scripts'
+    app.mkdir(parents=True)
+    importer = app / 'import_catalog_artifact.sh'
+    importer.write_text('#!/bin/bash\n[[ "$*" == "--check-compatibility 2.5.0 4.0.0" ]] || exit 9\nexit ' + str(0 if accepted else 1))
+    importer.chmod(0o755)
+    source = SCRIPT.read_text()
+    function = source.split('require_producer_compatibility() {', 1)[1].split('\n}', 1)[0]
+    harness = f'''REPO_ROOT={shlex.quote(str(tmp_path))}
+FLUTTER_REPO={shlex.quote(str(app.parent))}
+PG_PYTHON={shlex.quote(sys.executable)}
+err() {{ echo "$*" >&2; }}
+require_producer_compatibility() {{{function}
+}}
+require_producer_compatibility
+'''
+    result = subprocess.run(['bash', '-c', harness], capture_output=True, text=True)
+    assert (result.returncode == 0) is accepted, result.stdout + result.stderr
+    assert not (tmp_path / 'dist').exists()
+
+
+def test_compatibility_precedes_preflight_exit_and_any_release_step():
+    source = SCRIPT.read_text()
+    call = source.index('require_producer_compatibility || exit 1')
+    assert call < source.index('if (( PREFLIGHT_ONLY == 1 ))')
+    assert call < source.index('run_strict_gate "source-of-truth matrix"')
+
+
+def test_compatibility_only_mode_precedes_git_and_publication_checks():
+    source = SCRIPT.read_text()
+    assert '--compatibility-only)' in source
+    call = source.index('if (( COMPATIBILITY_ONLY == 1 )); then')
+    assert call < source.index('require_release_base "$REPO_ROOT"')
+    assert call < source.index('scripts/sync_to_supabase.py" --preflight-only')
+
+
 def test_release_full_uses_only_gated_snapshot_for_catalog_mutation() -> None:
     source = SCRIPT.read_text()
 
