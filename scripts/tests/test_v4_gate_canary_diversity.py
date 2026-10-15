@@ -153,7 +153,9 @@ V4_CANARIES = {
         "module": "probiotic",
         "verdict": "SAFE",
         "confidence": "moderate",
-        "score_range": (43.5, 43.5),
+        # V4.1 (Oct 15, 2026): its strain research does not apply to this
+        # product, so the former 10 certainty points are gated to 0.
+        "score_range": (33.5, 33.5),
     },
 }
 

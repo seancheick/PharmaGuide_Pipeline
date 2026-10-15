@@ -474,7 +474,7 @@
         "archetype": "b_complex",
         "quality_score_status": "scored",
         "product_safety_status": "caution",
-        "quality_score_v4_100": 59.8,
+        "quality_score_v4_100": 62.8,
         "quality_tier": "Needs improvement",
         "v4_confidence": "moderate",
         "normalization_references": {
@@ -488,7 +488,7 @@
           "evidence": 17.5,
           "transparency": 15.0,
           "verification": 6.0,
-          "safety_hygiene": 3.0
+          "safety_hygiene": 6.0
         },
         "raw_dimensions": {
           "formulation": 13.0858,
@@ -625,7 +625,7 @@
         "archetype": "immune_support",
         "quality_score_status": "scored",
         "product_safety_status": "caution",
-        "quality_score_v4_100": 57.7,
+        "quality_score_v4_100": 59.7,
         "quality_tier": "Needs improvement",
         "v4_confidence": "moderate",
         "normalization_references": {
@@ -639,7 +639,7 @@
           "evidence": 16.5,
           "transparency": 15.0,
           "verification": 6.0,
-          "safety_hygiene": 4.0
+          "safety_hygiene": 6.0
         },
         "raw_dimensions": {
           "formulation": 4.1538,
@@ -1243,7 +1243,7 @@
         "archetype": "prenatal_multi",
         "quality_score_status": "scored",
         "product_safety_status": "caution",
-        "quality_score_v4_100": 62.6,
+        "quality_score_v4_100": 64.6,
         "quality_tier": "Needs improvement",
         "v4_confidence": "moderate",
         "normalization_references": {
@@ -1257,7 +1257,7 @@
           "evidence": 20.0,
           "transparency": 15.0,
           "verification": 6.0,
-          "safety_hygiene": 4.0
+          "safety_hygiene": 6.0
         },
         "raw_dimensions": {
           "formulation": 5.2,

@@ -276,3 +276,27 @@ def test_raw_snapshot_runs_clean_enrich_score_from_the_checkout(tmp_path, worker
     assert proc.returncode == 0, proc.stderr
     rows = [json.loads(line) for line in out.read_text().splitlines()]
     assert [(r['id'], r['name'], r['total'], r['route']) for r in rows] == [('1', 'One', 50.0, 'fixture'), ('2', 'Two', 50.0, 'fixture')]
+
+
+def test_snapshot_resolves_paths_before_switching_to_checkout(tmp_path, monkeypatch):
+    from types import SimpleNamespace
+
+    monkeypatch.chdir(tmp_path)
+    checkout = tmp_path / 'other-checkout'
+    checkout.mkdir()
+    (tmp_path / 'frozen').mkdir()
+    (tmp_path / 'manifest.json').write_text(json.dumps({'product_count': 1}))
+    monkeypatch.setattr(replay, 'repository_provenance', lambda path: {'commit': 'test'})
+
+    def run(command, cwd):
+        assert Path(command[command.index('--products-root') + 1]) == tmp_path / 'frozen'
+        assert Path(command[command.index('--manifest') + 1]) == tmp_path / 'manifest.json'
+        output = Path(command[command.index('--out') + 1])
+        assert output == tmp_path / 'snapshot.jsonl'
+        output.write_text(json.dumps({'id': '1'}) + '\n')
+        return SimpleNamespace(returncode=0)
+
+    from pathlib import Path
+    monkeypatch.setattr(replay.subprocess, 'run', run)
+    replay.snapshot(checkout, 'frozen', 'manifest.json', 'snapshot.jsonl')
+    assert replay.read_rows(tmp_path / 'snapshot.jsonl') == [{'id': '1'}]

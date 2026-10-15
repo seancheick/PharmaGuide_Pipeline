@@ -78,11 +78,18 @@ def score_evidence(product: Any) -> Dict[str, Any]:
                  else _EM["alignment_weights"].get(relevance["level"], 0.0))
     applicability = alignment * family["identity_weight"] if family["certainty"] > 0 else 0.0
     consistency = _independent_consistency(family_assessment, relevance)
-    components = {
+    # Certainty and confirmation describe research that must first apply to this
+    # product; without applicability they earn nothing (V4.1, October 15, 2026).
+    # The result state still describes the research found, before that gate.
+    research = {
         "evidence_family_certainty": round(_EM["certainty_cap"] * family["certainty"], 4),
         "product_applicability": round(_EM["applicability_cap"] * applicability, 4),
         "independent_replication_consistency": round(_EM["replication_cap"] * consistency["credit"], 4),
     }
+    research_score = min(CAP_EVIDENCE, sum(research.values()))
+    applies = research["product_applicability"] > 0
+    components = {key: value if applies or key == "product_applicability" else 0.0
+                  for key, value in research.items()}
     score = min(CAP_EVIDENCE, sum(components.values()))
     completeness_gap = evidence_completeness_gap(product)
     strain_review_open = formula.get("status") != "assessed_studied_formula" and (
@@ -108,13 +115,13 @@ def score_evidence(product: Any) -> Dict[str, Any]:
         state = completeness_gap
     elif strain_review_open:
         state = "native_research_review_incomplete"
-    elif score == 0 and "negative" in directions:
+    elif research_score == 0 and "negative" in directions:
         state = "evaluated_unfavorable"
-    elif score == 0 and directions and all(d == "null" for d in directions):
+    elif research_score == 0 and directions and all(d == "null" for d in directions):
         state = "evaluated_null"
     elif components["product_applicability"] > 0:
         state = "evaluated_applicable"
-    elif score > 0:
+    elif research_score > 0:
         state = "research_present_applicability_unestablished"
     elif any(not _human_research_reviewed({"clinical_id": row.get("clinical_id")}, assessment)
              for row in assessment["strain_assessments"]

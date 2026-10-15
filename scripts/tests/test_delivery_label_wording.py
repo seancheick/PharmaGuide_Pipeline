@@ -113,3 +113,11 @@ def test_delivery_source_preparation_does_not_require_mass_eligibility(enricher,
     result=enricher._collect_delivery_data(product)
     assert technology in _names(result)
     assert next(x for x in result['systems'] if x['name']==technology)['match_source']==row['raw_source_path']
+
+def test_delivery_detection_preserves_the_label_claim_subject(enricher):
+    claim = 'My probiotic blend contains acid resistant strains.'
+    delivery = enricher._collect_delivery_data({'statements': [
+        {'type': 'Formulation re: Other', 'notes': claim},
+    ]})
+    system = next(s for s in delivery['systems'] if s['name'] == 'acid-resistant')
+    assert system['raw_source_text'] == claim

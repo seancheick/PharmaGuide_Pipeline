@@ -10867,11 +10867,12 @@ class SupplementEnricherV3:
         ):
             if not isinstance(ingredient, dict):
                 continue
-            row_text = " ".join(
-                str(ingredient.get(field) or "")
-                for field in ("name", "raw_source_text", "notes")
-            ).strip()
-            if row_text:
+            # Preserve real source assertions separately. Concatenating a
+            # resolved name, repeated label and notes fabricates a phrase that
+            # no source-specific clinical consumer can verify verbatim.
+            row_sources = [ingredient.get("raw_source_text") or ingredient.get("name"),
+                           ingredient.get("notes")]
+            for row_text in dict.fromkeys(str(value).strip() for value in row_sources if value):
                 evidence_sources.append((ingredient.get("raw_source_path") or f"activeIngredients[{index}]", row_text))
             taxonomy = ingredient.get("raw_taxonomy") or {}
             for form in taxonomy.get("forms") or []:
@@ -10918,13 +10919,13 @@ class SupplementEnricherV3:
             seen_sources = set()
             for source_path, source_text in [("physical_state", physical_state), *evidence_sources]:
                 row_match = norm_module.find_affirmative_label_match(pattern, source_text)
-                if not row_match or source_path in seen_sources:
+                if not row_match or (source_path, source_text) in seen_sources:
                     continue
-                seen_sources.add(source_path)
+                seen_sources.add((source_path, source_text))
                 matched_systems.append({
                     "name": delivery_name,
                     "canonical_name": delivery_name,
-                    "raw_source_text": row_match.group(0),
+                    "raw_source_text": source_text,
                     "match_source": source_path,
                     "tier": delivery_data.get('tier', 3),
                     "category": delivery_data.get('category', 'delivery'),
@@ -18130,8 +18131,8 @@ class SupplementEnricherV3:
         are in grams.  Macro values are accepted only when the source unit is
         explicitly grams.  A malformed source unit must be corrected through
         the reviewer-signed label-correction registry; it must not be silently
-        relabelled here.  Missing or zero-amount fields are emitted as None so
-        the Flutter side can distinguish "not declared" from "zero".
+        relabelled here.  Missing fields are emitted as None; a declared zero with a
+        genuine gram unit remains zero, distinct from "not declared".
 
         This is ADDITIVE — it does not replace dietary_sensitivity_data
         (sugar/sodium). Routing consumes declared protein mass. Fiber scoring
@@ -18141,7 +18142,7 @@ class SupplementEnricherV3:
         """
         ni = product.get("nutritionalInfo") or {}
 
-        def _amount(key: str):
+        def _amount(key: str, *, declared_gram_value: bool = False):
             entry = ni.get(key)
             if not isinstance(entry, dict):
                 return None
@@ -18152,7 +18153,7 @@ class SupplementEnricherV3:
                 fval = float(val)
             except (TypeError, ValueError):
                 return None
-            return fval if fval != 0.0 else None
+            return fval if math.isfinite(fval) and (fval != 0.0 or declared_gram_value) else None
 
         def _gram_amount(key: str):
             entry = ni.get(key)
@@ -18161,7 +18162,21 @@ class SupplementEnricherV3:
             unit = str(entry.get("unit") or "").strip().lower()
             if unit not in {"g", "gram", "grams", "gram(s)"}:
                 return None
-            return _amount(key)
+            variants = entry.get("quantityVariants") or []
+            selected = next((v for v in variants if isinstance(v, dict)
+                             and v.get("selected_for_analysis")), None)
+            if selected is not None and selected.get("quantity_parsed") is False:
+                return None
+            if key == "sugars":
+                from scoring_v4.exposure import row_exposure
+                exposure = row_exposure(product, {
+                    **entry, "quantity": entry.get("amount"),
+                }, basis="per_use", unit="g")
+                if not exposure.exact:
+                    # Printed qualifiers remain in the source ledger. A flat
+                    # summary has no place to represent them as an exact mass.
+                    return None
+            return _amount(key, declared_gram_value=True)
 
         return {
             "calories_per_serving": _amount("calories"),

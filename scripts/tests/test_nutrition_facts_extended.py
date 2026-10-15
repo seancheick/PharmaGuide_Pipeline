@@ -279,7 +279,12 @@ class TestNutrientIdentityBinding:
             {"name": "Added Sugars", "quantity": 1, "unit": "g"},
         ])
 
-        assert result["sugars"] == {"amount": 4.0, "unit": "g"}
+        sugar = result["sugars"]
+        assert sugar["amount"] == 4.0
+        assert sugar["unit"] == "g"
+        assert sugar["raw_source_path"] == "ingredientRows[0]"
+        assert sugar["quantityVariants"][0]["quantity"] == 4.0
+        assert sugar["quantityVariants"][0]["selected_for_analysis"] is True
 
 
 # ---------------------------------------------------------------------------

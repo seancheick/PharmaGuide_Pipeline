@@ -207,7 +207,7 @@ def test_b_complex_evidence_tracks_core_authority_panel_not_generic_breadth() ->
     assert partial["metadata"]["authority_covered_count"] == 1
 
 
-def test_over_ul_b_complex_carries_dose_and_safety_hygiene_penalty() -> None:
+def test_over_ul_b_complex_keeps_dose_penalty_and_visible_safety_concern() -> None:
     scored = score_product_v4(_megadose_b_complex())
 
     dose = scored["v4_breakdown"]["module"]["dimensions"]["dose"]
@@ -215,5 +215,7 @@ def test_over_ul_b_complex_carries_dose_and_safety_hygiene_penalty() -> None:
 
     assert scored["v4_module"] == "b_complex"
     assert dose["penalties"]["B7_dose_safety"] < 0
-    assert safety["score"] < safety["max"]
+    assert safety["score"] == safety["max"] - safety["components"]["additive_or_sweetener_penalty"]
+    assert "over_ul_penalty" not in safety["components"]
+    assert "exceed an established upper limit" in safety["reason"]
     assert scored["quality_score_v4_100"] < 75.0

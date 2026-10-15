@@ -113,7 +113,15 @@ def test_an_opaque_sports_blend_is_not_an_off_list_primary():
     result = score_dose(enriched)
     assert result["metadata"]["dose_basis"] != "generic_dose_proxy_for_offlist_primary"
     assert result["metadata"]["not_evaluable_reason"] == "opaque_primary_sports_blend"
-    assert result["penalties"]["opaque_primary_sports_blend"] < 0
+    assert "opaque_primary_sports_blend" not in result["penalties"]
+    assert result["components"]["sports_primary_active_dose"] == 0.0
+
+    # The public Dose explains the hidden amount instead of claiming a benchmark.
+    from scoring_v4.scored_artifact import build_scored_artifact
+    dose = build_scored_artifact(enriched)["quality_pillars_v4"]["dose"]
+    assert dose["score"] == 0.0
+    assert dose["reason"] == ("The main ingredient's amount is hidden in a proprietary blend, so its "
+                              "dose cannot be assessed or credited.")
 
 
 def test_nested_botanical_anchor_preserves_identity_without_borrowing_a_child_dose():

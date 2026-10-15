@@ -113,7 +113,6 @@ def score_transparency(product: Dict[str, Any]) -> Dict[str, Any]:
     b6 = _score_b6_disease_claim_penalty(product, flags)
     complete_active_bonus, complete_active_meta = _score_complete_active_disclosure_bonus(
         product,
-        b5_penalty=b5,
         b6_penalty=b6,
     )
 
@@ -360,7 +359,6 @@ def _score_b3_claim_compliance(
 def _score_complete_active_disclosure_bonus(
     product: Dict[str, Any],
     *,
-    b5_penalty: float,
     b6_penalty: float,
 ) -> Tuple[float, Dict[str, Any]]:
     """Reward complete active identity + dose disclosure.
@@ -372,6 +370,8 @@ def _score_complete_active_disclosure_bonus(
     conservative: every declared active must be represented by an
     individually disclosed row. A printed parent total can be disclosed even
     though Formulation excludes it to avoid counting its children twice.
+    Proprietary-blend opacity is charged once, by B5; it does not also
+    withhold this credit (V4.1 Step 4, October 15, 2026).
     """
     rows = [row for row in get_active_ingredients(product) if isinstance(row, dict)]
     # A bioavailability aid the enricher demoted (piperine <= 10 mg) is a
@@ -390,8 +390,6 @@ def _score_complete_active_disclosure_bonus(
         blockers.append("no_declared_active_count")
     if declared_count > len(rows):
         blockers.append("declared_count_exceeds_rows")
-    if b5_penalty > 0.0:
-        blockers.append("proprietary_blend_opacity")
     if b6_penalty > 0.0:
         blockers.append("disease_or_marketing_claim")
 
