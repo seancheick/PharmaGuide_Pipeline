@@ -53,7 +53,7 @@
       "vitamins": 25
     },
     "schema_version": "5.6.1",
-    "last_updated": "2026-10-13",
+    "last_updated": "2026-10-15",
     "pipeline_integration": "Used by enrichment to assign form quality (bio_score) to matched ingredient forms. Match ingredient name against forms aliases (case-insensitive).",
     "matching_notes": [
       "Match ingredient name + forms text against aliases array (case-insensitive)",
@@ -26212,7 +26212,8 @@
         },
         "source_form_aliases": [
           "50% EGCG",
-          "green tea 50% EGCG"
+          "green tea 50% EGCG",
+          "50% Epigallocatechin Gallate"
         ]
       },
       "green tea catechins": {

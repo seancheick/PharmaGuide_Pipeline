@@ -3540,7 +3540,12 @@ def test_hemp_label_scope_reaches_public_scored_artifact(normalizer, enricher, n
 
 @pytest.mark.parametrize("percent,marker", [(14, "Polyphenols"), (50, "EGCG"), (30, "EGCG"),
                                          (0, "EGCG"), (101, "EGCG"), (None, "EGCG"),
-                                         ("unknown", "EGCG")])
+                                         ("unknown", "EGCG"),
+                                         # Spelled-out EGCG (PubChem CID 65064), as HUM
+                                         # Ripped Rooster 241706 prints it.
+                                         (50, "Epigallocatechin Gallate"),
+                                         # Epigallocatechin (EGC, CID 72277) is not EGCG.
+                                         (50, "Epigallocatechin")])
 def test_green_tea_standardization_requires_own_row_evidence(normalizer, enricher, percent, marker):
     raw = {
         "id": "green-tea-row-scope", "fullName": "Green Tea Extract",
@@ -3552,7 +3557,7 @@ def test_green_tea_standardization_requires_own_row_evidence(normalizer, enriche
     enriched, _ = enricher.enrich_product(normalizer.normalize_product(raw))
     row = enriched["ingredient_quality_data"]["ingredients"][0]
     assert row["quantity"] == 250.0
-    if marker == "EGCG" and percent == 50:
+    if marker in {"EGCG", "Epigallocatechin Gallate"} and percent == 50:
         assert row["matched_form"] == "green tea extract (50% EGCG)"
         assert row["bio_score"] == 9.0
     else:
