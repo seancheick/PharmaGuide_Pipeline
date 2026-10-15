@@ -1,10 +1,10 @@
-## Step3 independent review — measurement corrections, October14
+## Step3 corrected measurement review — October 14
 
-Owner: existing Step3 diagnostic harness and STEP3_OPTIONS.md; production owners remain botanical/collagen dose adapters, probiotic_dose::score_dose and quality_score pillar assemblers. Evidence: original/corrected product182953 counterfactual and corrected full15,123 diagnostic. Will NOT create: scorer, public field, clinical policy, registry or new neutral value. Class: documentation/private diagnostic; no production code change.
+Owner: existing dimension owners and `quality_score.py::assemble_quality_score`; completion `scored_artifact.py::_quality_assessment_status`. Evidence: STEP3_OPTIONS.md; primary reports/step3_review_20261014. Will NOT create: a second scorer, public status or clinical registry. Class: documentation/private diagnostic only. Runtime baseline remains green `e0d33c34f`; no executable/config/data change in this review.
 
-Original B3 applies neutral to hidden amounts despite an established benchmark. Corrected diagnostic:10,749 movers, mean−0.13,2,354 tiers,0 arithmetic errors;1,422 hidden benchmark-availability gaps and34 mixed fallback gaps. Explicit invariant exception counts now included; synthetic checks0 failures/0 exceptions, but these do not qualify raw-label behavior. Additional report findings: probiotic counterfactual drops guarantee/eligibility logic; marginal disclosure references assume other transforms; unrated forms/Transparency base/multi breadth and some Dose overlap decisions remain unresolved. No policy approval. Steps1–2 acceptance remains valid.
+Measured all15,123 stored scored products for three corrected options, zero arithmetic exceptions/unexplained untouched movements. Recommended source-based ownership option: 12,661 totals move; mean +0.57; 2,747 provisional tier changes; 1,033 assessments incomplete under proposed completion rules. These are projections, not publishable tier counts.72/1,331/19 benchmark-present/absent/unresolved among1,422 hidden assessments; all34 mixed-window cases recomputed by owner. Raw41 complete hiding +36 partial cases: zero higher completed/eligible assessments. Source sugar-to-zero and missing VitaminA denominator bugs are reproduced and explicitly remain production fixes for Step4, alongside delivery context. Input hashes58/58 unchanged.
 
-Evidence in primary reports/step3_review_20261014; original private receipts retained. Source regression product182953: original hidden Dose11.4, corrected current missing-amount band4.8. Next: one bounded owner-faithful measurement correction pass, including collagen/mixed/raw-label hiding and complete policy/reference proposal, then Sean chooses. No corpus rebuild/publication.
+Recommendation: single owners, canonical IQM, graded daily Dose with proposed11.4 absent-reference neutral and10 confirmed-UL ceiling; supported additives/high-risk in sixth, disclosure in Transparency, expected panels retained without count bonuses. Exact policy remains Sean’s decision. Production score changes and rebuild ON HOLD. No new broad tests needed for documentation/private measurements; final diff/reference checks recorded at handoff. Previous B3 recommendation/figures are superseded, not approved.
 
 ## Current execution — V4.1 score accounting consolidation, October 14
 
@@ -36,25 +36,7 @@ Rendered actual Flutter receipt widgets using five real candidate products (1902
 - Tests: 7 new plus 1 fail-first. Full `flutter test` 3,922 passed; analyze clean.
 - Candidate widget renders visually checked independently; installed-device/fresh catalog acceptance remains Step 5.
 
-**Step 3 — measured options (read-only).** `scripts/audits/score_accounting_20261014/STEP3_OPTIONS.md`; private receipts in `~/pg_quality/score_accounting_20261014/`.
-- Twelve transforms and six complete options were measured on all 15,123 stored products, with 0 receipt errors.
-- Key finding: removing the Dose disclosure credits breaks the hiding invariant. Hiding the amount raises the total in 46 sports and 39 probiotic products under option B.
-- Option B3 fixes that with two rules: the neutral applies only where no benchmark exists, and the probiotic floor is a minimum for disclosed doses too. Hiding then raises nothing (botanical 0/2,413, sports 0/901, probiotic 0/145).
-- B3: mean +0.05, 11,008 products move, 2,135 tier changes.
-
-**Decisions D1–D11 for Sean.** Recommended:
-- Remove the mirrors.
-- Make the sixth pillar the high-risk/watchlist owner.
-- Give disclosure one owner under B3's rules, with N = 11.4.
-- Keep the B1 owner in Formulation.
-- Gate probiotic certainty on applicability.
-- Remove the count, route-base, blend and branded doubles.
-- Keep or measure multi `panel_breadth`.
-
-**Next.**
-- Sean chooses D1–D11 and accepts the PRs.
-- Step 4 is one `/pg-scoring-change` batch implementing the chosen option. It also includes the delivery claim-subject fix (F12), moving magnitudes into config, the stale `production_score` label, the two dead registry keys and the inert Verification product floor.
-- Then the tier review and the single rebuild. The pending PR143 rebuild stays held; the Meru branch integrates first.
+**Step 3 — corrected options.** See the leading entry and STEP3_OPTIONS.md; original B3 is superseded. Measurements complete; policy approval and all production changes/rebuild remain held.
 
 ## Current execution — normal batch preflight/release repair, October 13
 

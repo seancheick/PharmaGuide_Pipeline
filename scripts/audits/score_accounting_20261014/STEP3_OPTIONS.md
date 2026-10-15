@@ -1,198 +1,62 @@
-# V4.1 Step 3: measured policy options (October 14, 2026)
+# V4.1 Step 3 — corrected measurements and implementation recommendation
 
-Read-only. Nothing here changes a score; each option needs Sean's choice before Step 4.
+October 14, 2026. **Measurement work only. No production score/config/data changes, catalog rebuild, merge or release.** This report supersedes the original B3 recommendation and earlier diagnostic figures; Git history retains them.
 
-## Independent review correction — approval pending
+## Decision
 
-Codex reproduced a mismatch between B3's stated policy and its implementation. The original `t_neutral` applies 11.4 to `primary_no_dose` and `blend_total_only` without checking whether a benchmark exists. Product182953 has a `within_studied_range` botanical assessment; hiding its amount receives11.4 in the original harness. The corrected diagnostic preserves its current missing-amount band instead (4.8 public), with a regression assertion. Neither result is an approved scoring policy.
+Recommend the **source-based ownership option**, measured as `R:canonical_N11.4_sixth_all`. Keep the six pillar weights, existing statuses and Verification unknown at 6/15. Implement the existing owners consistently, remove duplicate charges/credits, and make unfinished required assessments explicit. Do not implement original B3.
 
-Corrected diagnostic evidence is in the primary checkout's `reports/step3_review_20261014/`: `corrected_whatif.py`, `corrected_b3.json`. This retains the original private receipts unchanged. The diagnostic adds benchmark guarding for B3 and explicit invariant error counts; it does not implement the production policy or claim a completed raw-label replay.
+11.4/20 is an explicit operational neutral for a genuinely absent applicable Dose benchmark, not earned adequacy or a clinical probability. The exact neutral and the proposed 10/20 confirmed-UL ceiling are product-policy choices for Sean. Neither a near-zero mean nor preservation of a tier boundary justifies them. Prefer 11.4 over 10 here because removing unsupported ownership charges need not also lower the established no-benchmark allowance; the graded curve and confirmed-excess ceiling address the demonstrated ordering problems directly. This is a recommendation, not approval of new policy.
 
-| Corrected B3 diagnostic | Result |
-|---|---:|
-| Scored products |15,123|
-| Moved |10,749|
-| Mean movement |−0.13|
-| Tier changes |2,354|
-| Arithmetic errors |0|
-| Hidden amounts with unresolved benchmark availability |1,422|
-| Unmeasured mixed fallback windows |34|
+Owner: `quality_score.py::assemble_quality_score` and the existing dimension owners; `generic_helpers.bio_score_of` / `parent_relative_form_quality` own form ratings, `rda_ul_data.adequacy_results` and botanical/collagen/probiotic adapters own benchmarks, `exposure.py::row_exposure` owns daily exposure, and `scored_artifact.py::_quality_assessment_status` owns completion. Evidence: ownership matrix concepts `quality_score_v4_contract` and IQM form/delivery ownership, GLOSSARY Adequacy/Safety exposure, owner replay and frozen-label probes below. Will NOT create: a second scorer, public status, reference registry or downstream app score calculation.
 
-The synthetic hiding checks still report0 violations /0 exceptions among2,413 botanical,901 sports and145 probiotic counterfactuals. These checks change stored components, not original label inputs; they cannot establish end-to-end monotonicity or current-scorer behavior. Collagen is excluded. A zero-error receipt establishes arithmetic reconciliation only.
+## Corrected option comparison
 
-Additional corrections required before an option can be approved:
-- Probiotic counterfactuals and proposed floors hard-code2/4 without replaying the existing guarantee multiplier (0.85/0.9/1.0), live-strain eligibility and direct-mass fallback. `probiotic_dose::score_dose` owns these conditions. The currently reported baseline and floor-policy hiding results are therefore diagnostic approximations, not owner-faithful results.
-- The isolated `disclosure` transform uses reference values that assume count/route-base and branded credits have already been removed. Its marginal table conflates component removal with additional recalibration. References must be derived separately for each complete option, and baseline replay must use the production owners.
-- A near-zero mean and preserving the55 tier boundary do not establish fairness or justify N=11.4. Compare adequacy ordering, information hiding, affected routes and controls before choosing; tier preservation is not an acceptance criterion.
-- B3 leaves the existing unrated-form treatment and unconditional Transparency base unchanged. It also leaves the multi panel-breadth question open, and does not resolve all dose-window/B7/withdrawn-fit overlaps. The claim that every concern has one numerical owner is withdrawn.
-- Step3 options do not address the known delivery-context correctness defect, which remains a required Step4 repair.
+All 15,123 stored scored products were assembled for each option, with **zero arithmetic/receipt exceptions and zero unexplained movements on untouched products**.
 
-**Disposition:** Step3 remains incomplete for policy approval. Do not implement B3 on these measurements. Finish one bounded measurement correction pass: source-owned benchmark availability; owner-faithful probiotic counterfactuals; raw-label hiding cases including collagen and mixed purposes; explicit treatment of every remaining decision; and independently checked reference derivations. Then return a complete owner/config proposal to Sean. Steps1–2 receipt PR acceptance is unchanged. Numerical changes, merge authorization, rebuild and publication remain separate.
-
-The tables below are the ORIGINAL harness results retained for traceability. B3's figures and universal claims are superseded by this correction. Other scenarios remain unqualified approximations until their noted owner/reference gaps are resolved.
-
-## Method
-
-- **Data.** The stored Stage-3 module breakdowns of all 15,123 scored products (config 1.23.0, scored October 14, before PR143's Formulation delivery change). Absolute numbers will shift slightly on delivery-affected products after the rebuild. The comparisons between options do not depend on that.
-- **Harness.** Each option is a set of transforms applied in memory to a deep copy of each breakdown, for example removing a component or penalty, replacing a band value, or rebasing a reference.
-  - The changed dimensions are recomputed with the module arithmetic the receipts replay. The result is re-assembled by the `claude/score-ledger` assembler.
-  - Every option's receipts still reconcile: **0 errors in every run**, so the option arithmetic is self-consistent.
-  - The harness and its result files are private receipts in `~/pg_quality/score_accounting_20261014/` (`step3_whatif.py`, `step3_*.json`), alongside the Step 2 reconciliation scripts. This report records every number they produced.
-- **References.** When an option removes a component, the route's normalization reference is rebased to the maximum the retained components can reach. Otherwise every product on the route would drop for no new fact. Each rebased reference is listed with its transform.
-- **Not simulated:**
-  - A generic DRI product with a hidden amount: readiness already withholds a score when a required amount is missing.
-  - Collagen, which is excluded from the hiding check.
-  - B1 moving to the sixth pillar assumes a cap of 10 and keeps excluding low-severity excipients, as the current mirror does.
-
-## Transforms
-
-| Transform | What it does | References rebased |
-|---|---|---|
-| mirrors | Removes the B1 and B7 Safety mirrors (F1, F2). | — |
-| b0_sixth | Removes Formulation B0; the sixth-pillar base stays the only owner (F4). | — |
-| b0_none | b0_sixth, plus the base no longer zeroes for high-risk or watchlist matches (measured alternative; not the current Codex recommendation). | — |
-| b0_formulation_owner | Keeps Formulation B0; the base no longer zeroes for high-risk or watchlist matches. | — |
-| branded | Removes the branded-studied extra (+3) in Formulation; standardization stays (F13). | — |
-| probiotic_gate | Probiotic Evidence certainty and replication earn nothing when applicability is 0 (F15). | — |
-| count | Removes sports protein focus and route base, fiber focus, route base and practicality, B-complex focus purity, the sports single-only completion and stack support. | Formulation: sports protein 29→23, fiber 28→18, B-complex 23→20. Dose: sports 25→20. |
-| blend | Transparency is the only owner of blend opacity. Removes the sports Dose −10 and the sports opaque-protein penalty; a blend alone no longer withholds the complete-disclosure bonus (F17). | — |
-| disclosure | Removes points awarded only because something is printed: multi and B-complex disclosure structure, probiotic total CFU, sports protein dose and amino disclosure, fiber disclosure, botanical plant part and printed amount, collagen type, source and amount, fiber dose disclosure, probiotic per-strain CFU disclosure. Strain identity stays: it is the probiotic's form. | Formulation: botanical 15→12, collagen 15→8, multi 14→12, B-complex 20→18, probiotic 15→11, sports protein 23→15, fiber 18→12. Dose: probiotic 22→15, fiber 25→24. |
-| neutral(N) | One public Dose value N wherever no benchmark applies, whether or not the amount is printed: botanical and collagen no-reference, blend and no-amount bands, and generic no-reference credit. | — |
-| probiotic_floor | A disclosed strain dose never scores below the aggregate-CFU floor that an undisclosed one gets. | — |
-| additive_sixth | B1 additive and sugar move entirely to the sixth pillar (cap 10, low-severity excluded); Formulation stops charging them. | — |
-
-## Measured effect of each transform alone and of each option
-
-| Scenario | Moved | Mean Δ | p5 / p95 | Tier changes | Errors |
-|---|---:|---:|---|---:|---:|
-| M:mirrors | 3,710 | +0.66 | +0.0 / +4.0 | 902 | 0 |
-| M:b0_sixth | 332 | +0.21 | +0.0 / +0.0 | 80 | 0 |
-| M:b0_none | 357 | +0.43 | +0.0 / +0.0 | 300 | 0 |
-| M:b0_formulation_owner | 357 | +0.22 | +0.0 / +0.0 | 63 | 0 |
-| M:branded | 56 | -0.01 | +0.0 / +0.0 | 21 | 0 |
-| M:probiotic_gate | 103 | -0.07 | +0.0 / +0.0 | 42 | 0 |
-| M:count | 1,118 | -0.01 | +0.0 / +0.0 | 177 | 0 |
-| M:blend | 309 | +0.12 | +0.0 / +0.0 | 110 | 0 |
-| M:disclosure | 7,027 | -0.41 | -2.8 / +1.8 | 1,307 | 0 |
-| M:neutral_10 | 5,549 | -0.73 | -4.5 / +0.5 | 826 | 0 |
-| M:neutral_11.4 | 3,776 | -0.22 | -3.1 / +1.9 | 684 | 0 |
-| M:additive_sixth (with mirrors) | 7,693 | +1.63 | +0.0 / +7.2 | 2,185 | 0 |
-| A: ownership (mirrors, b0_sixth, branded, probiotic_gate, count, blend) | 4,756 | +0.90 | +0.0 / +5.0 | 1,222 | 0 |
-| B: A + disclosure + neutral 11.4 | 11,020 | +0.02 | -3.1 / +4.4 | 2,141 | 0 |
-| B': B with b0_none | 11,021 | +0.25 | -3.1 / +5.1 | 2,372 | 0 |
-| **B3: B, neutral only without a benchmark, probiotic floor** | 11,008 | +0.05 | -3.1 / +4.4 | 2,135 | 0 |
-| C: A + disclosure + neutral 10 + additive_sixth | 12,552 | +0.71 | -4.5 / +8.1 | 3,949 | 0 |
-
-Mean change by route:
-
-| Option | b_complex | fiber | generic | multi/prenatal | omega | probiotic | sports |
-|---|---:|---:|---:|---:|---:|---:|---:|
-| A | +1.90 | -0.11 | +0.65 | +2.06 | +0.44 | -1.50 | +3.18 |
-| B | +1.48 | -1.88 | -0.22 | +1.36 | +0.44 | -4.92 | +2.82 |
-| B3 | +1.48 | -1.88 | -0.22 | +1.36 | +0.44 | -3.83 | +2.71 |
-| C | +3.29 | -1.25 | -0.12 | +4.42 | +1.02 | -3.27 | +4.27 |
-
-## Invariant: hiding information must never raise the total
-
-**This is the main Step 3 finding.**
-- Today's disclosure credits in Dose are what keep the invariant true for sports and probiotics.
-- Removing them (B, C) breaks it:
-  - Hiding a sports primary amount scores a neutral above a verified low band (8 for low creatine or protein).
-  - Hiding per-strain CFU earns the aggregate-CFU floor, which beats a verified-low strain dose (0).
-- B3 restores it with two rules, and nothing else:
-  1. The neutral applies only where **no benchmark exists**. When a benchmark exists and the amount is hidden, the dose cannot be assessed and gets no neutral uplift, as sports already work today.
-  2. The probiotic aggregate floor is the minimum for disclosed strain doses too.
-- Counterfactuals:
-  - Botanical: the primary amount is removed, the Dose band becomes "no amount", the Formulation printed-amount credit and the Transparency complete-disclosure bonus are lost.
-  - Sports: the primary amount is removed and the complete-disclosure bonus is lost.
-  - Probiotic: per-strain CFU is removed but the total CFU stays printed.
-
-| Option | Botanical | Sports | Probiotic |
-|---|---|---|---|
-| Today | 0 of 2,413 | 0 of 901 | 0 of 145 |
-| A | 0 of 2,413 | 0 of 901 | 0 of 145 |
-| B | 0 of 2,413 | 46 of 901 (max +9.0) | 39 of 145 (max +2.9) |
-| C | 0 of 2,413 | 26 of 901 (max +7.6) | 39 of 145 (max +2.9) |
-| B2: B with a sports neutral of 8 and the probiotic floor | 0 of 2,413 | 4 of 901 (max +5.6) | 0 of 145 |
-| **B3** | 0 of 2,413 | 0 of 901 | 0 of 145 |
-
-## Representative products
-
-| Product | Today | A | B3 | C |
+| Complete option | Totals moved | Mean delta /100 | Provisional tier changes | Incomplete assessments |
 |---|---:|---:|---:|---:|
-| 180213 Airborne Citrus | 45.7 | 51.7 | 50.8 | 56.8 |
-| 240372 Airborne Elderberry | 67.9 | 70.9 | 69.9 | 73.6 |
-| 64233 Airborne Everyday | 68.8 | 70.8 | 70.4 | 76.0 |
-| 223147 Creatine HCl | 53.1 | 54.7 | 54.7 | 54.7 |
-| 252349 Bamboo Extract (Meru-like) | 55.7 | 55.7 | 55.7 | 54.3 |
-| 252413 Garcinia Cambogia Extract | 35.1 | 45.7 | 45.7 | 44.3 |
-| 252461 Glycerol Monostearate | 57.5 | 57.5 | 54.4 | 53.0 |
-| 252510 Grass-Fed Whey Protein Isolate | 80.8 | 81.0 | 83.6 | 83.6 |
-| 252551 Inulin | 64.8 | 62.2 | 60.0 | 60.0 |
-| 252686 Manganese Gluconate | 70.3 | 70.3 | 70.3 | 70.3 |
-| 294458 Collagen Softgels | 51.2 | 51.2 | 57.4 | 56.0 |
-| 310750 Magnesium Glycinate | 81.6 | 81.6 | 81.6 | 81.6 |
-| 18174 Adult 50+ Probiotic | 42.6 | 32.6 | 32.3 | 29.4 |
-| 64540 CVS Prenatal Gummy | 67.7 | 69.7 | 68.3 | 70.5 |
-| 19028 Centrum Specialist Prenatal | 69.7 | 73.7 | 74.1 | 76.8 |
-| 218073 Culturelle Advanced Care | 68.6 | 70.6 | 62.3 | 67.5 |
-| 322633 Whey Protein French Vanilla | 67.9 | 69.9 | 72.9 | 72.9 |
-| 306220 Folic Acid 1,200 mcg | 70.3 | 70.3 | 70.3 | 70.3 |
-| 313920 Thorne Omega Superb | 72.2 | 72.2 | 72.2 | 72.2 |
+| One owner; additives in Formulation; Dose neutral 11.4 | 11,318 | +0.02 | 2,429 | 1,033 |
+| Same; Dose neutral 10 | 11,274 | -0.48 | 2,561 | 1,033 |
+| Recommended: additives in sixth; Dose neutral 11.4 | 12,661 | +0.57 | 2,747 | 1,033 |
 
-**Tier changes.**
-- **A:** Needs improvement → Good 546; Good → Very good 347; Poor → Needs improvement 178; Needs improvement → Poor 60; Very good → Excellent 51; Good → Needs improvement 12; Very good → Good 11; Excellent → Exceptional 9; Needs improvement → Very good 4; Excellent → Very good 3; Exceptional → Excellent 1.
-- **B3:** Needs improvement → Good 521; Poor → Needs improvement 407; Needs improvement → Poor 376; Good → Needs improvement 298; Good → Very good 289; Very good → Good 163; Very good → Excellent 52; Excellent → Very good 21; Exceptional → Excellent 3; Excellent → Exceptional 3; Needs improvement → Very good 2.
-- **C:** Needs improvement → Poor 1,238; Good → Very good 907; Needs improvement → Good 855; Good → Needs improvement 333; Poor → Needs improvement 296; Very good → Excellent 137; Very good → Good 112; Excellent → Exceptional 40; Needs improvement → Very good 13; Excellent → Very good 12; Poor → Good 5; Very good → Exceptional 1.
+These are provisional mathematical tiers, including incomplete assessments, **not a count of publishable tier changes**. Completion is a private eligibility projection using existing complete/partial semantics. It is not yet implemented in the scored-artifact owner or app. Numeric projections retain provisional arithmetic for inspection; incomplete judgments must not be presented/ranked as final.
 
-## Pillar-level detail of the largest movers
+Recommended option: median delta 0.2, 5th–95th percentile -4.1 to +6.5. Route means: b_complex -2.24, fiber_digestive -1.16, generic +0.31, multi_or_prenatal +1.69, omega +0.83, probiotic -2.00, sports +3.43. Route means diagnose redistribution; they are not fairness targets. Verification mean movement is zero.
 
-- **Restore Advance XR** (`caution`), A: 45.7 → 63.0. Formulation 2.7 → 20.0 once Formulation B0 is removed; its sixth pillar stays 0/10.
-- **Resveratrol Plus+** (`caution`), A: 34.0 → 55.3. Formulation 2.7 → 18.0 (B0), and Transparency 5.3 → 11.3 because a blend alone no longer withholds the disclosure bonus.
-- **Ravage Grape** (`caution`), A and B3: 22.0 → 31.4. Formulation 2.7 → 12.1 (B0 and the opaque-protein penalty removed). Dose stays 0 under B3: the amount is hidden while a benchmark exists.
-- **Multi-Acidophilus Powder**, B3: 63.2 → 43.6.
-  - Evidence 10 → 0: certainty without applicability.
-  - Dose 9.1 → 2.7: the per-strain disclosure credit is gone and adequacy is low.
-  - Formulation 11.1 → 7.9: the total-CFU disclosure credit is gone.
-- **Culturelle Advanced Care**, B3: 68.6 → 62.3. The Formulation and Dose disclosure credits leave, and the Safety mirror gives back 2.
+## Proposed owner/config decisions
 
-## Decisions for Sean
+| Concern | One numerical owner and required behavior |
+|---|---|
+| Additives, sugar and supported high-risk/watchlist findings | Sixth pillar, total deduction bounded by its existing 10 points; remove Formulation B0/B1 and sixth-pillar mirrors. Include existing low-severity quality signals, rather than silently deleting their effects. Their explanation remains a quality consideration, not an invented clinical warning. Only confirmed high-risk matches affect quality; preserve unresolved findings and warnings. |
+| Dose safety | Dose alone: remove repeated B7 subtraction and the B-complex withdrawn `moderate_dose_fit` credit. Confirmed >100% applicable UL caps Dose at 10/20 without raising an already lower score. Findings/status/warnings remain separate. This proposed ceiling is not a clinical safe/unsafe boundary. |
+| Disclosure and opacity | Transparency alone: remove label-presence credits from other pillars and the sports opacity penalty. Do not withhold the disclosure bonus a second time solely because a blend opacity penalty exists. Replace generic free identity base with credit conditional on resolved active identity. Printed quantity/strain names alone cannot establish adequacy/form quality. |
+| Benchmark absence versus missing information | Neutral 11.4 only when the applicable benchmark is absent. An established benchmark with a missing amount does not receive neutral credit; leave the required assessment incomplete. Unresolved benchmark identity is also incomplete. Do not strip every botanical blend of its score merely because amounts are hidden. |
+| Assessed botanical/collagen doses | Use shared daily minimum for adequacy and maximum for excess. Retain within/near/above band shape; grade below-range credit by fraction of the lower bound, instead of one flat severe-underdose credit. No new clinical benchmark is invented. |
+| Probiotic Dose | Use the existing strain, aggregate-CFU eligibility and guarantee/viability owners; assessed strain credit cannot fall below the owner-derived eligible aggregate floor. Preserve native AFU assessment. Remove pure mass/CFU-label-presence fallback credit; incomplete if the required viable-dose assessment remains unperformed. |
+| Form quality | Canonical IQM rating, including probiotics; no second reward for naming a strain. Explicit unrated Formulation neutral 12/20 before deductions. Remove known-low panel averaging floors; keep owner-derived parent-relative ratings and original panel weights. Botanical recognized identity becomes the same neutral treatment, not earned form quality. |
+| Category purpose | Keep expected nutrient/core-panel denominators and source-backed composition criteria. Retire ingredient-count/focus/base bonuses and duplicate B-complex panel-presence awards. Choline participates once in prenatal critical coverage; retain original DHA complement allocation. |
+| Evidence and branded traits | Gate probiotic certainty/replication on applicability; remove branded-study credit duplicated in Formulation. Retain evidence eligibility and the existing clinical source owners. |
+| Missing nutrient or sugar amount | Preserve unknown source quantities; never coerce them to assessed zero/sugar-free. Extend existing completion owner, using existing nutrition/source-label and nutrient-reference facts. The private probe covers missing benchmarked vitamin/mineral label rows, not all optional blend ingredients. |
 
-| # | Decision | Options measured | Recommendation |
-|---|---|---|---|
-| D1 | Safety mirrors (F1, F2) | Remove: 3,710 products up, mean +0.66, 902 tier changes | **Remove.** One fact, one numerical owner; the copy keeps every concern visible. |
-| D2 | High-risk/watchlist owner (F4) | (a) Sixth pillar: 332 products up, mean +0.21, largest +17.3. (b) Formulation: 357 products +10, and their sixth pillar returns to 10/10 beside `caution`. (c) None (Codex): 357, mean +0.43, sixth pillar 10/10. | **(a) Sixth pillar.** (b) and (c) put a full screen beside a caution. With one owner, the quality consequence of a high-risk ingredient caps at 10 instead of up to about 23. The caution status and warnings stay. |
-| D3 | Disclosure has one owner (F5) | With rebased references: 7,027 products move, mean −0.41. Probiotics are hit hardest (B3 route mean −3.83). | **Adopt, with B3's rules**, because without them the hiding invariant breaks. |
-| D4 | Neutral value N for unknown adequacy (F7) | 11.4 (today's botanical value): 3,776 move, mean −0.22. 10: 5,549 move, mean −0.73, and Meru-like botanicals drop below the 55 tier line (C: 1,238 "Needs improvement → Poor"). | **N = 11.4**, applied only where no benchmark exists. Choose 10 only together with a tier review. |
-| D5 | Probiotic floor as a minimum | Needed for the invariant once the per-strain disclosure credit leaves. | **Adopt** with D3. |
-| D6 | B1 additive/sugar owner | Formulation (A, B3), or the sixth pillar with cap 10 (alone: 7,693 move, mean +1.63, 2,185 tier changes). Under the sixth pillar, low-severity excipients stop charging at all. | **Formulation.** Moving it is the largest single redistribution and weakens additive consequences for multis. Decide separately if wanted. |
-| D7 | Probiotic certainty without applicability (F15) | Gate it: 103 products lose 10 Evidence. | **Gate.** "Applicability not established" then means the same on every route. |
-| D8 | Count and route-base bonuses (F11) | Remove with rebased references: 1,118 move, mean −0.01. | **Remove.** |
-| D9 | Blend opacity owner | Transparency only: 309 move, mean +0.12. | **Adopt.** |
-| D10 | Branded studied double (F13) | Remove the +3: 56 move. | **Remove.** |
-| D11 | Multi `panel_breadth` (open-ended count) | Not measured. | Keep as a category panel, or measure in Step 4; Sean decides. |
+Rebase references to retained attainable components, rather than applying unrelated marginal changes. Final shadow references include Formulation botanical12, collagen8, multi12, B-complex8, probiotic15, protein15, fiber12; Dose ordinary sports20, complete EAA/BCAA22, fiber22, B-complex18, adult multi20, prenatal21, probiotic15. Other existing references remain. Formula configuration and metadata must express the same reference; check receipts at the public pillar boundary.
 
-**Recommended option: B3** (A + D3 + D4 at 11.4 + D5).
-- Mean effect +0.05; 11,008 products move; 2,135 tier changes.
-- The hiding invariant holds in all three routes.
-- Every concern has one numerical owner.
-- Unchanged: Verification 6 and the six pillars and their weights.
-- Tier thresholds are reviewed after this distribution exists (Stage 3 of the plan), not before.
+## What was corrected and verified
 
-## Step 4 change summary for B3 (not applied)
+- **Benchmark census:** all 15,123 scored IDs join exactly one enriched input; zero missing/duplicate IDs or owner errors. Among 1,422 hidden botanical/collagen assessments: 72 have an applicable benchmark, 1,331 have no applicable registry benchmark, and 19 have unresolved identity/context. The last 19 receive no neutral uplift and remain explicitly unresolved, not silently counted as assessed. All 34 mixed fallback-window cases now use the actual Dose owner rather than a hand-written average.
+- **Owner reproduction:** 529 probiotic Dose component sets and 2,484 generic fallback-window component sets reproduce their stored baseline exactly. Probiotic floors include the actual guarantee multipliers and live-strain eligibility. Form quality uses the canonical IQM owner. Collagen daily exposure and botanical maximum-use comparison follow the existing GLOSSARY contract in the shadow.
+- **Reference accounting:** the isolated disclosure transform now derives its own references, rather than assuming the other transforms ran. It affects 7,391 products, mean −1.25, with 2,090 provisional tier changes; the original −0.41 marginal claim was conflated. Complete-option transforms order removal before profile rescaling, keep prenatal reference/choline logic after breadth retirement, and prevent graded reassessment from restoring a removed neutral/hidden fallback. Twelve targeted botanical/collagen ordering cases plus a real prenatal reference/choline case pass.
+- **Frozen real labels:** 41 complete-quantity-removal cases pass through Clean → Enrich → Score and become not-scored. Another 36 source-preserving partial mutations retain other quantities or actual parent totals. Across these 77 cases, the corrected recommended shadow has **zero increases in a completed/eligible assessment and zero receipt failures**. This is a bounded counterfactual test, not universal proof. The final pass rechecks the 36 partial cases; the 41 all-amount cases are reused because they never reach scored assembly and the subsequent change only narrows the private completion probe.
+- **Real bugs retained for Step 4:** product173803 (Men’s Multi 40+ Organic Berry) rises 76.5→83.8 under current production when nested sugar/fiber amounts are removed, while still complete: missing sugar becomes zero and penalties disappear. Product12031 (Energy And Metabolism) gains 0.1 in the revised shadow when Vitamin A’s amount is hidden because the strict active set excludes the unquantified row. The proposed completion checks make both incomplete; their provisional arithmetic is still reported. These are not claimed fixed in production.
 
-- **Config** (`quality_score.json`):
-  - `safety_hygiene_subscale` mirror caps go to 0, or the mirror code is removed.
-  - The rebased references listed above.
-  - Botanical and collagen no-benchmark, blend and no-amount bands become one neutral entry (11.4 public).
-  - Generic `no_reference_*` credits are expressed as the same neutral.
-  - Sports and fiber route bases are removed.
-- **Code owners:**
-  - `generic_formulation` B0 is removed.
-  - Profile components are removed from `botanical_profile` and `collagen_profile`.
-  - Disclosure and count components are removed from `sports_formulation`, `fiber_digestive_formulation`, `b_complex`, `multi_prenatal_formulation`, `probiotic_formulation`, `probiotic_dose` and `fiber_digestive_dose`.
-  - `sports_dose` loses its opaque penalty, single-only and stack components.
-  - `probiotic_evidence` gates certainty on applicability; `probiotic_dose` applies the floor as a minimum.
-  - `generic_transparency` no longer withholds the bonus for a blend alone.
-- **Shared updates:** `penalty_registry` (`COMPONENT_KINDS` and the two dead keys), the copy, every affected test, the canary manifest changelog, and the delivery claim-subject fix (F12).
-- **Validation:** `/pg-scoring-change`, a fail-first test per class, a raw-label replay by cause with controls, an independent review, then CI and the `local` rung.
+The hiding acceptance criterion is **no higher completed, eligible judgment after information is removed**, not that every provisional scalar must decrease. An unknown hazard cannot honestly be assigned a made-up worst-case penalty. Keep the unknown visible and prevent a definitive tier/rank. Safety findings that are no longer assessable must remain unknown, never become a positive reassurance.
+
+## Evidence, scope and limits
+
+Private, durable receipts: primary checkout `reports/step3_review_20261014/` — `verified_options.py`, `owner_facts.json`, `graded_owner.py`, `final_verified_options.json`, `raw_hiding.json`, `raw_partial_hiding.json`, `raw_policy_acceptance.py/json`, and checksum manifest. The original private harness is retained separately. All 58 enriched input SHA256s were rechecked unchanged. Result summaries enumerate arithmetic errors and unresolved cases explicitly.
+
+This is a full **stored scored-corpus policy projection**, not a new production full-corpus replay. Inputs remain stored config1.23 artifacts with current1.24 source owners. Suppressed69/not-scored234 products are inventoried but excluded from numerical option averages. The source delivery-context defect (acid-resistant strain claims versus actual delivery systems) remains a required Step4 repair; its final impact is not qualified by these projections. Final source implementation, source-specific completeness tests, catalog parity and app rendering must be checked on the completed candidate. We do not claim all clinical source records were re-audited or that these tier thresholds are calibrated.
+
+## Next authorized boundary
+
+Step3 measurement corrections are complete, with the 19 unresolved records and source defects explicitly bounded. **Recommend the owner/config proposal above for Sean’s decision.** Keep production changes and rebuild on hold now. Once Sean approves the policy, Step4 is one bounded implementation batch: extend the existing owners; repair delivery context, missing-quantity provenance/completion and daily exposure; move magnitudes into config; remove proven dead entries; validate affected products and controls plus receipts/eligibility. Then use the required owner/consumer tests, local rung and one green exact-candidate CI checkpoint. Review tiers separately; do not tune the mean or preserve old product scores as a target. A later single pipeline run starts from verified stage fingerprints and requires the separate rebuild/release authorization.
