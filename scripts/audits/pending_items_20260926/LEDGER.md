@@ -1,3 +1,11 @@
+## Combined integration — October 15
+
+Sean authorized merging the real pipeline/app fixes and deleting integrated branches. Rebuild and release remain held. App PR122 merged57ab077b. Pipeline PR145 integrates PR142, PR144 and Claude canary research, preserving branch ancestry. D28 remains undecided:
+
+| D28 | Should a declared EGCG percentage count as a lower bound toward the green-tea total-polyphenol standardization threshold? Since 85d4e8402 (Oct 11) `standardized_botanicals.json` green_tea measures polyphenols only, so "50% EGCG" labels (e.g. HUM Ripped Rooster 241706) lose the 4-point marker credit even though EGCG is a polyphenol. Raw corpus: 35 rows with 45%/50% "Epigallocatechin Gallate", 22 with 45%/50% "EGCG". | Packet: `scripts/audits/canary_drift_20261015/research.md`. Historical canary pin superseded by the independently verified allergen correction; polyphenol policy remains open. |
+
+Owner: existing delivery/source, probiotic formulation, clinical applicability and receipt owners; evidence: focused source tests and source call graph. Will NOT create: a scorer, public field/status, mechanism or points policy. Integration corrections retain both independent-delivery eligibility and ingredient-owned affirmative source evidence; quality carrier claims can cover owned probiotic strains while clinical preparation callers retain strict scope. Retain whole actual assertions without concatenating duplicated ingredient text. Canonical microencapsulation receives its existing noun spelling in probiotic vocabulary. Failures reproduced before fixes; final focused/local/CI and frozen raw comparison pending. Existing historical artifacts are linked read-only; no rebuild.
+
 
 
 ## Step3 closed; Step4 started — October15
