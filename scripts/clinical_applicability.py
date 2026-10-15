@@ -331,6 +331,10 @@ def _source_delivery_forms(product: Mapping, row: Mapping, excluded_terms=(), *,
         match = re.fullmatch(r"activeIngredients\[(\d+)\]", source)
         if source == row.get("raw_source_path"):
             source_text = _row_text(row, source_only=True, preserve_punctuation=True)
+            if product_level:
+                # Delivery extraction also retains this same label row's notes.
+                # Quality can use that assertion without borrowing another row.
+                source_text += " " + str(row.get("notes") or "")
         elif match:
             active = product.get("activeIngredients") or []
             index = int(match.group(1))
