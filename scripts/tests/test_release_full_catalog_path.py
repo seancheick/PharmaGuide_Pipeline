@@ -389,3 +389,55 @@ def test_batch_preparation_is_opt_in_but_quick_checks_remain(tmp_path, pre_check
         if prep:
             assert invocations.index(quick[0]) < invocations.index(prep[0]) < invocations.index(pipeline[0])
     assert not any('rebuild_dashboard_snapshot.sh' in call or 'release_full.sh' in call for call in invocations)
+
+
+@pytest.mark.parametrize("pre_check", [False, True])
+def test_batch_precheck_flag_preserves_full_release_path(tmp_path, pre_check):
+    import os
+    import shutil
+    import subprocess
+    import sys
+
+    root = tmp_path / "repo"
+    scripts = root / "scripts"
+    scripts.mkdir(parents=True)
+    shutil.copyfile(SCRIPT.parents[1] / "batch_run_all_datasets.sh", root / "batch_run_all_datasets.sh")
+    shutil.copyfile(SCRIPT.parent / "python_env.sh", scripts / "python_env.sh")
+    raw = tmp_path / "raw"
+    (raw / "Brand").mkdir(parents=True)
+    calls = tmp_path / "calls"
+    fake = tmp_path / "python"
+    fake.write_text(f"#!{sys.executable}\nimport sys\nfrom pathlib import Path\n"
+                    f"with Path({str(calls)!r}).open('a') as f: f.write(' '.join(sys.argv[1:])+'\\n')\n")
+    fake.chmod(0o755)
+    # Only dispatch is exercised: no real importer, pipeline, snapshot, cloud
+    # operation or Flutter mutation is available inside this synthetic repo.
+    release = scripts / "release_full.sh"
+    release.write_text('#!/bin/bash\n'
+                       'if [[ "$1" == "--preflight-only" ]]; then\n'
+                       '  echo prerequisites >> "$TEST_CALLS"\n'
+                       'else\n'
+                       '  echo "release $*" >> "$TEST_CALLS"\n'
+                       'fi\n')
+    release.chmod(0o755)
+    snapshot = scripts / "rebuild_dashboard_snapshot.sh"
+    snapshot.write_text('#!/bin/bash\necho snapshot >> "$TEST_CALLS"\n')
+    snapshot.chmod(0o755)
+    env = dict(os.environ, PG_PYTHON=sys.executable, PYTHON=str(fake), TEST_CALLS=str(calls),
+               SKIP_SNAPSHOT="0", SKIP_RELEASE="0")
+    command = ["bash", str(root / "batch_run_all_datasets.sh"), "--root", str(raw)]
+    if pre_check:
+        command.append("--pre-check")
+    result = subprocess.run(command, env=env, text=True, capture_output=True, timeout=20)
+    assert result.returncode == 0, result.stdout + result.stderr
+    invocations = calls.read_text().splitlines()
+    assert invocations[0] == 'prerequisites'
+    assert 'product_submission_import.py --fetch' in invocations[1]
+    assert 'preflight.py --quick' in invocations[2]
+    prepare = [call for call in invocations if '--prepare' in call.split()]
+    assert len(prepare) == int(pre_check)
+    pipeline = next(call for call in invocations if 'run_pipeline.py' in call)
+    assert '--stages clean,enrich,score --strict-release-gates' in pipeline
+    if prepare:
+        assert invocations.index(prepare[0]) < invocations.index(pipeline)
+    assert invocations[-2:] == ['snapshot', 'release --prepared-inputs']

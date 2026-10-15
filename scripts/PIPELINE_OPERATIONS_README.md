@@ -1,18 +1,62 @@
 # PharmaGuide Pipeline Operations
 
-> Canonical operator runbook | Last verified: 2026-07-16
+> Canonical operator runbook | Last verified against candidate PR #150: 2026-10-15
 
 ## 1. Which command should I run?
 
-| Intent                                                               | Command                                                                          | What follows automatically                                                |
-| -------------------------------------------------------------------- | -------------------------------------------------------------------------------- | ------------------------------------------------------------------------- |
-| Reprocess and release the complete catalog                           | `bash batch_run_all_datasets.sh`                                                 | All brands Clean → Enrich → Score → Snapshot → Release                    |
-| Reprocess every brand but stop before catalog build                  | `bash batch_run_all_datasets.sh --pipeline-only`                                 | Pipeline only                                                             |
-| Reprocess selected brands safely                                     | `bash batch_run_all_datasets.sh --targets Brand_A,Brand_B --stages enrich,score` | Pipeline only by default                                                  |
-| Reprocess selected brands and intentionally release the full catalog | Add `--release` to the targeted command                                          | Target pipeline → Snapshot → Release                                      |
-| Rebuild the catalog from existing brand outputs                      | `bash scripts/rebuild_dashboard_snapshot.sh`                                     | Candidate build/gates/promotion only                                      |
-| Finish/retry downstream release work                                 | `bash scripts/release_full.sh`                                                   | Auto-detect snapshot need, images, interactions, gates, Supabase, Flutter |
-| Collect weekly FDA/DEA regulatory signals                            | `bash scripts/run_fda_sync.sh`                                                   | Report only; exits 3 when clinical review is required                     |
+Run these commands from `/Users/seancheick/Downloads/dsld_clean`. Select the supported Python once per terminal:
+
+```bash
+source scripts/python_env.sh
+export PYTHON="$PG_PYTHON"
+```
+
+`--pipeline-only` chooses where the run stops. `--pre-check` independently chooses
+whether aggregate preparation runs before processing. The new flag is available
+when PR #150 is integrated; do not use it on an older checkout.
+
+| Intent | Command | Result |
+| --- | --- | --- |
+| Compute only, essential startup checks | `bash batch_run_all_datasets.sh --pipeline-only` | Clean → Enrich → Score; no snapshot, upload or Flutter import |
+| Compute only, with full preparation | `bash batch_run_all_datasets.sh --pipeline-only --pre-check` | Aggregate preparation → Clean → Enrich → Score; then stop |
+| Compute and release, essential startup checks | `bash batch_run_all_datasets.sh` | Clean → Enrich → Score → Snapshot → Release → Supabase → Flutter bundle |
+| Compute and release, with full preparation | `bash batch_run_all_datasets.sh --pre-check` | Aggregate preparation first, then the full compute/release path |
+| Reprocess selected brands | `bash batch_run_all_datasets.sh --targets Brand_A,Brand_B --stages enrich,score` | Selected pipeline only; upstream stages must be current |
+| Selected brands, then release whole catalog | Add `--release` to the targeted command | Target pipeline → Snapshot → Release; all catalog inputs must be current |
+| Build catalog without publishing | `bash scripts/rebuild_dashboard_snapshot.sh` | Candidate build, gates and local promotion |
+| Finish/retry release after a successful pipeline-only run | `bash scripts/release_full.sh` | Reuse current outputs; build snapshot if needed, then release |
+| Collect weekly regulatory signals | `bash scripts/run_fda_sync.sh` | Report only; exits 3 when clinical review is required |
+
+Flutter bundle import updates the app repository's data assets; it does **not**
+build, install or distribute a new phone/TestFlight binary. The release makes a
+local bundle commit; pushing it and distributing an app build are separate steps.
+
+### Startup checks versus release checks
+
+Every batch checks the runtime, raw-root path and critical reference JSON files.
+The existing phone schema compatibility check also applies to a full pipeline-only
+run unless `--skip-flutter` is explicit. Publishing runs additionally validate
+publishing prerequisites and prepare approved submission inputs before processing.
+Those steps can involve disk/network work, so total startup is not guaranteed to
+finish within five or ten seconds. The isolated critical-data check measured 0.07
+seconds locally on October 15.
+
+`--pre-check` adds aggregate raw/reference/ownership/freshness, canary, and source/live
+verification. It can take minutes and stops processing if it fails. For targeted
+runs it checks the supplied raw root, not only the selected brands. It does not
+include the broad developer test suite. That suite belongs to development/CI;
+explicitly repeating it is a separate audit:
+
+```bash
+"$PG_PYTHON" scripts/preflight.py --prepare \
+  --raw-root "$HOME/Downloads/PharmaGuide_Datasets/staging/brands" \
+  --include-source-tests
+```
+
+Omitting `--pre-check` skips aggregate preparation only. Strict per-stage validation
+and mandatory snapshot/publication gates remain enabled. They can still reject
+invalid generated data: no advance check guarantees that future outputs will pass.
+Source/clinical changes still require their development validation before merge.
 
 `release_full.sh` does include `rebuild_dashboard_snapshot.sh`. It calls it only
 when the current catalog is missing, stale, or inconsistent. When you already
@@ -29,7 +73,10 @@ bash batch_run_all_datasets.sh
 
 the script performs this exact sequence.
 
-### 2.1 Dataset discovery
+### 2.1 Essential startup and dataset discovery
+
+First run the essential checks described above. Aggregate preparation runs only
+when `--pre-check` is present. Publishing prerequisites precede optional preparation.
 
 - Root defaults to `$HOME/Downloads/PharmaGuide_Datasets/staging/brands`
   so iCloud cannot evict inputs during a long run.
@@ -82,7 +129,8 @@ partial catalog cannot move downstream.
 
 ### 2.4 Snapshot
 
-If every brand passed, the batch invokes:
+If every brand passed, the batch refreshes any stale locally prepared Product
+Submissions through Clean → Enrich → Score as well, then invokes:
 
 ```bash
 bash scripts/rebuild_dashboard_snapshot.sh
@@ -138,15 +186,14 @@ For a targeted run:
 targeted runs already default to pipeline-only unless `--release` is supplied.
 
 When the target output has been reviewed and you intend to publish the whole
-catalog, run the two downstream owners:
+catalog, use the release owner:
 
 ```bash
-bash scripts/rebuild_dashboard_snapshot.sh
 bash scripts/release_full.sh
 ```
 
-The first command builds and promotes the catalog. The second auto-skips
-duplicate catalog work and finishes release.
+It builds the snapshot if needed, then finishes release. A separate snapshot
+command is useful for inspection, but is not a prerequisite to this command.
 
 To authorize that automatically in one targeted batch invocation:
 
@@ -163,7 +210,7 @@ conflict.
 ## 4. Stage selection
 
 ```bash
-bash batch_run_all_datasets.sh --stages clean
+bash batch_run_all_datasets.sh --stages clean --pipeline-only
 bash batch_run_all_datasets.sh --stages enrich,score --pipeline-only
 bash batch_run_all_datasets.sh --stages score --pipeline-only
 ```
@@ -207,7 +254,12 @@ Standard command:
 bash scripts/release_full.sh
 ```
 
-The eight auto-smart steps are:
+Release preserves the already-prepared submission set by default. It refuses stale
+submission stage manifests. `--refresh-submissions` explicitly fetches/processes
+new approved intake; prepare new intake before the final corpus run rather than
+introducing it during publication.
+
+The downstream steps are:
 
 1. refresh the catalog through the snapshot path if upstream/build inputs are
    newer
@@ -235,7 +287,8 @@ bash scripts/release_full.sh --flutter-repo "/path/to/PharmaGuide ai"
 bash scripts/release_full.sh --force
 ```
 
-`--force` overrides freshness decisions. It does not bypass gates.
+`--force` requests catalog assembly even when it would otherwise be reused. It
+does not bypass gates or turn stale prepared submission manifests into current ones.
 
 ### Diagnostic high-resolution DSLD images
 
@@ -245,7 +298,7 @@ separate directory; this mode never updates `products_core`, the export
 manifest, or Flutter assets:
 
 ```bash
-python scripts/extract_product_images.py \
+"$PG_PYTHON" scripts/extract_product_images.py \
   --db-path scripts/dist/pharmaguide_core.db \
   --diagnostic-ids-file /path/to/ids.txt \
   --diagnostic-output-dir /tmp/pharmaguide-dsld-diagnostic \
@@ -274,6 +327,8 @@ Other batch controls:
 
 - `--skip-release`: build/promote snapshot but do not run full release
 - `--pipeline-only`: stop after requested compute stages
+- `--pre-check`: opt into aggregate preparation before processing; does not change
+  whether the command publishes
 - `SKIP_SNAPSHOT=1`: legacy environment switch; skips snapshot and release
 - `SKIP_RELEASE=1`: snapshot only
 
@@ -308,11 +363,16 @@ are quarantined and a new manifest is written.
 
 This occurs before Supabase and Flutter publication.
 
-1. Review every changed product's score, status, verdict, route, pillars, and
-   clinical/safety reason.
-2. Fix unintended changes at the owning layer.
-3. Re-freeze only reviewed, intentional per-product deltas.
-4. Rerun `release_full.sh`; completed/current earlier steps auto-skip.
+1. Group score/tier changes by shared cause and compare representative affected
+   products plus unaffected controls. Inspect changed safety, status, identity,
+   amounts, routing, unsupported credit and unexplained differences.
+2. Fix unintended changes at the canonical owner. Do not preserve an obsolete
+   score or require per-product approval for expected development movement.
+3. Refresh only source-grounded, reviewed expectations through the existing owner;
+   never overwrite a baseline to hide an unresolved difference. Clinical holds and
+   new scoring policy still require Sean.
+4. Check fingerprints and regenerate from the earliest stale stage if needed.
+   Otherwise rerun `release_full.sh`; current earlier outputs are reused.
 
 ### Supabase or Flutter step fails
 
@@ -324,11 +384,15 @@ freshness/checksum checks reuse already-gated artifacts.
 Use only the supported test runner:
 
 ```bash
-scripts/test.sh fast
-scripts/test.sh fast -k folate
-scripts/test.sh release
-scripts/test.sh full
+scripts/test.sh fast scripts/tests/test_release_full_catalog_path.py
+scripts/test.sh local     # Required corpus checks for a completed behavioral batch
+scripts/test.sh release   # Release validation against current generated artifacts
+scripts/test.sh full      # Post-pipeline backstop, never alongside a corpus run
 ```
+
+Use named files/nodes while fixing a defect. Whole-fast validation normally runs
+in CI; run it locally only when CI is unavailable. Do not run broad local/release/
+full suites alongside an active corpus job.
 
 For a fresh artifact audit, first build through the snapshot owner. Then use
 the pinned runtime:
@@ -419,9 +483,10 @@ Freshness is advisory and never changes the exit code.
   SKUs are not obtainable from DSLD at any price. Coverage is partial, not
   useless: older SKUs still on shelf keep scanning. Do NOT infer that the
   manufacturer stopped filing — only that DSLD has not published those labels.
-- **DSLD-wide lag.** DSLD loads monthly (20th-25th) but has published no batch
-  since **2025-09-25**. Every brand is therefore missing roughly the last year
-  of product changes. Re-check the leading edge before blaming a single brand:
+- **DSLD-wide lag.** Compare the latest live results before drawing conclusions
+  about a single brand. The dates in the sample above are historical examples,
+  not a current statement of DSLD coverage. A brand's newest published label does
+  not establish the manufacturer's filing behavior.
 
   ```bash
   "$PG_PYTHON" scripts/audit_brand_coverage.py --targets Thorne,Nature_Made
