@@ -2,7 +2,7 @@
 
 ## What is ready, and what is not
 
-This audit separates release-tooling repairs from scoring completion and actual publication. The earlier infrastructure batch is integrated (pipeline PR146, app PR123). The follow-up implementation below is integrated through PR147, merge `0b42496d8`, with exact runtime `3277ef6db` passing whole-fast CI `38775770313` (all four groups and skip checks). This is release-tooling readiness, not a released catalog. No pipeline, catalog build, cloud publication or phone build was run for this follow-up. Sean owns the final necessary pipeline run. Do not run it while Claude's approved output-changing batch is unfinished.
+This audit separates release-tooling repairs from scoring completion and actual publication. The earlier infrastructure batch is integrated (pipeline PR146, app PR123). The follow-up implementation below is integrated through PR147, merge `0b42496d8`, with exact runtime `3277ef6db` passing whole-fast CI `38775770313` (all four groups and skip checks). This is release-tooling readiness, not a released catalog. No pipeline, catalog build, cloud publication or phone build was run for this follow-up. Sean owns the final necessary pipeline run. Claude's finished Step4 batch and the remaining shared identity/routing fixes passed final qualification through PR148: whole-fast CI 38792484069, all four groups; 601 focused tests; local 546 passed with 24 declared optional live-service skips. PR148 merged 8d206befa; source is qualified for the user-owned pipeline, not yet a published catalog. Companion app reference-copy and owner-generated manifest closeout passed full CI 38794457811.
 
 Owner: `scripts/promote_release_artifacts.py::promote_release_artifacts` owns the local candidate transaction; `scripts/audits/run_verification_gate.py` owns content/runtime bindings and verification receipts; `release_full.sh` and `rebuild_dashboard_snapshot.sh` orchestrate them. Existing stage freshness, app importer/schema policy, OTA activation and iOS distribution owners remain authoritative. Evidence: caller search, matrix/glossary review, candidate/promotion paths and actual reader checks. Will NOT create another scorer, public status, release runner, clinical cache policy or schema allowlist.
 
@@ -10,7 +10,7 @@ Owner: `scripts/promote_release_artifacts.py::promote_release_artifacts` owns th
 
 | Finding | Disposition and acceptance boundary |
 |---|---|
-| Unfinished scoring, config, fixtures/canaries and associated policy decisions | **Claude's separate lane.** It must finish, pass its behavioral measurements and integrate before the final stage decision. This infrastructure batch does not change any scoring policy or mark that work complete. |
+| Unfinished scoring, config, fixtures/canaries and associated policy decisions | **Integrated through PR148 (8d206befa).** Approved Step4 and source-grounded sugar/routing corrections pass CI 38792484069/all four groups, local and focused checks. Paired 415-label replay, 33 raw canaries and 46 public-artifact comparisons pass. This does not establish new-catalog acceptance. |
 | Source can change while a catalog is assembled | **Implemented here.** Bind source/reference/enriched/scored/manual-label content, runtime/packages and effective environment before assembly; compare before candidate preservation or live promotion. A changed binding aborts. Release also checks before outward publication, including cloud-only release. This detects boundary drift; it does not make another agent's checkout immutable. One integrator must still own the final checkpoint. |
 | Late producer/consumer schema mismatch | **Already integrated.** Early read-only compatibility calls the app importer's actual supported-schema helpers and reads actual producer constants. Final candidate import validation still runs before cloud publication. No second allowlist. |
 | Predictable runtime/access/disk prerequisites discovered late | **Access/tool/schema checks integrated; disk estimate added here.** Read actual Supabase manifest/bucket access before expensive work; check importer tools and compatibility. Disk check budgets existing mirrors, source bytes and working headroom before assembly, including external candidate destinations. This is an estimate, not a promise against unexpected output growth. Actual upload capacity and write success remain checked against the new artifact by the upload owner. |
@@ -33,10 +33,22 @@ The follow-up has fail-first regressions for content reuse, output corruption/mi
 
 Measured earlier: cleaner source audit 72.913 seconds, unchanged verified retry 6.025 seconds; cheap IQM audit 0.068 seconds. Preparation source tests took 712.8 seconds and raw canaries 17.384 seconds. These figures do not establish an eight-hour post-pipeline duration or a guaranteed future duration. Logs/receipts now expose actual expensive assembly and gate time so the next release can be measured rather than guessed.
 
+## What the source review fixed, in plain language
+
+The system should recognize what is on a label, choose the right product category, and assess each distinct quality once. It should not reward a marketing word twice or mistake one ingredient for another.
+
+- Claude's approved Step4 work separates pillar responsibilities and removes the reviewed duplicate/count-based credits. This changes scores across the catalog; a changed score alone is not evidence of a defect.
+- The remaining dietary matcher used pieces of names. That could mistake polydextrose for dextrose, or honeysuckle for honey. Matching now respects complete names and preserves genuine sweeteners.
+- A label saying “less than 1 g” must keep “less than” in its explanation. The shared formatter preserves the qualifier without changing the accepted numeric benchmark or its scoring thresholds.
+- Product routing no longer treats every positive ingredient amount as a vitamin/mineral panel. It uses the canonical panel and existing protein evidence; the stored result and final exported assessment use the same classifier.
+- Reference descriptions now distinguish legacy evidence weights from the actual production scorer. IDs, weights, verification policy and certification scopes remain unchanged by this reference-copy correction.
+
+The extra source fixes were measured on 415 frozen raw labels: 180 score movements, no score-status or safety-result movements. A separate 46-product final-artifact check also preserves assessment completeness and safety. All 33 raw-label canaries pass. These are development validation results, not a new published catalog or personal clinical recommendation. Remaining existing unknowns/clinical holds stay explicit.
+
 ## Simple workflow for the next update
 
-1. Finish and integrate Claude's bounded source batch. Resolve explicit policy holds together; list any remaining blockers once.
-2. Run read-only release prerequisites and inspect actual Clean/Enrich/Score fingerprints. Tell Sean the earliest necessary stage. **No pipeline go-ahead yet.**
+1. PR148 is integrated after final CI/local qualification. Existing unresolved clinical holds remain explicit; they are not silently recalibrated.
+2. Actual stage fingerprints now show 114 stale manifests, including Clean code and reference mismatches. Sean must run Clean → Enrich → Score once with publication disabled.
 3. Sean runs that necessary pipeline once with publication disabled. Keep the prepared intake fixed.
 4. Assemble one candidate. Changed inputs stop it before promotion. On retry, unchanged catalog assembly and eligible source checks reuse verified work; actual candidate/live checks still execute.
 5. Publish the validated candidate through the existing release command. Confirm remote catalog version/checksum and installed-app OTA activation, then repeat magnesium name search and all-glycinate comparison in Codex against that actual published catalog.
@@ -49,3 +61,18 @@ Do not delete validation because a run failed late. Fix the ordering, preserve m
 The authorized staging-only request was sent October 15 in the existing private support thread. No new support email was found in the latest October 15 check. Identifiers and correspondence remain outside this public repository. Production personal/snapshot access remains disabled.
 
 Next requires WorkOS confirming staging resource-binding activation and the behavior of missing-resource grants, then new-grant/refresh/concurrency tests. Exact snapshot-consent authorization is separately unresolved; neither a token audience nor reusable consent ID proves an immutable authorization attempt. Public catalog work does not depend on enabling personal access, and this release-tooling batch does not claim that authorization is fixed.
+
+## Exact user-owned pipeline command
+
+From the integrated main checkout, after the read-only prerequisites pass, run:
+
+```bash
+cd /Users/seancheick/Downloads/dsld_clean
+source scripts/python_env.sh
+PYTHON="$PG_PYTHON" bash batch_run_all_datasets.sh \
+  --root /Users/seancheick/Downloads/PharmaGuide_Datasets/staging/brands \
+  --stages clean,enrich,score \
+  --pipeline-only
+```
+
+This rebuilds the necessary stage outputs and stops before snapshot assembly or publication. Do not remove source/provenance checks or add a release flag. The new outputs still need catalog parity, release validation, published-version verification and app/Codex acceptance.
