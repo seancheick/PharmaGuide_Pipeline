@@ -41,7 +41,7 @@ Options:
 USAGE
 }
 
-SNAPSHOT_ARGS=("$@")
+SNAPSHOT_ARGS=("$REPO_ROOT/scripts/rebuild_dashboard_snapshot.sh" "$@")
 CANDIDATE_ONLY=false
 CANDIDATE_ROOT=""
 while [[ $# -gt 0 ]]; do
@@ -108,7 +108,7 @@ source "$REPO_ROOT/scripts/python_env.sh"
 if [[ "${PG_RELEASE_LOCK_WRAPPED:-0}" != "1" ]]; then
   exec "$PG_PYTHON" scripts/run_with_release_lock.py \
     --lock-path "$REPO_ROOT/scripts/.release.lock" \
-    -- bash "$0" "${SNAPSHOT_ARGS[@]}"
+    -- bash "${SNAPSHOT_ARGS[@]}"
 fi
 CATALOG_STATE_SCRIPT="$REPO_ROOT/scripts/promote_release_artifacts.py"
 CATALOG_INPUT_BINDING=$("$PG_PYTHON" "$CATALOG_STATE_SCRIPT" --catalog-input-binding)

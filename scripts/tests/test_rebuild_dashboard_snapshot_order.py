@@ -1,5 +1,7 @@
 from pathlib import Path
 
+import pytest
+
 
 SCRIPT = Path(__file__).resolve().parents[1] / "rebuild_dashboard_snapshot.sh"
 
@@ -89,7 +91,25 @@ def test_snapshot_freezes_inputs_before_build_and_checks_before_promotion():
 
 def test_standalone_snapshot_uses_existing_release_lock_before_any_build():
     source = SCRIPT.read_text()
-    assert 'SNAPSHOT_ARGS=("$@")' in source
+    assert 'SNAPSHOT_ARGS=("$REPO_ROOT/scripts/rebuild_dashboard_snapshot.sh" "$@")' in source
     lock = source.index('scripts/run_with_release_lock.py')
     assert lock < source.index('--catalog-input-binding')
-    assert '-- bash "$0" "${SNAPSHOT_ARGS[@]}"' in source
+    assert '-- bash "${SNAPSHOT_ARGS[@]}"' in source
+
+
+@pytest.mark.parametrize("script_name", ["rebuild_dashboard_snapshot.sh", "release_full.sh"])
+def test_snapshot_lock_reentry_works_when_started_from_scripts_directory(tmp_path, script_name):
+    import shutil
+    import subprocess
+    import sys
+    scripts = tmp_path / 'scripts'
+    scripts.mkdir()
+    shutil.copy(SCRIPT.parent / script_name, scripts / script_name)
+    (scripts / 'python_env.sh').write_text(f'PG_PYTHON="{sys.executable}"\n')
+    (scripts / 'run_with_release_lock.py').write_text(
+        'import sys\nfrom pathlib import Path\n'
+        'child=sys.argv[sys.argv.index("--")+2]\n'
+        'assert Path(child).is_absolute() and Path(child).is_file(), child\n'
+    )
+    result = subprocess.run(['bash', script_name], cwd=scripts, capture_output=True, text=True)
+    assert result.returncode == 0, result.stderr

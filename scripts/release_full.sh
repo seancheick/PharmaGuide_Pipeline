@@ -8,17 +8,17 @@
 # up-to-date and accurate output without shortcuts.
 #
 # Steps (in order):
-#   0. Import approved submissions  Fetches service-approved records and runs
-#                                  only fresh labels through the same canonical
-#                                  Clean → Enrich → Score pipeline as every
-#                                  other catalog source.
+#   0. Validate prepared intake    Preserves the prepared submission set.
+#                                  --refresh-submissions explicitly fetches and
+#                                  processes new approved labels; prefer doing
+#                                  that before the final corpus.
 #   1. Gate, assemble, and promote (rebuild_dashboard_snapshot.sh)
 #                                  AUTO-SKIPS when dist/ catalog is already
 #                                  fresh relative to per-brand outputs.
 #                                  The snapshot path validates candidates before
 #                                  atomically promoting dist/final_db_output.
-#   2. Confirm catalog parity      No direct staging; the same safe snapshot
-#                                  path handles any final/dist mismatch.
+#   2. Catalog already staged      Step 1 builds or validates both mirrors;
+#                                  no second assembly/staging decision.
 #   3. Extract DSLD product images (extract_product_images.py)
 #                                  AUTO-SKIPS when dist/ image backfill is
 #                                  already complete and current.
@@ -53,7 +53,7 @@
 #     # Standard: detect what needs running, do it, no flags needed.
 #     bash scripts/release_full.sh
 #
-#     # Force every step to run (override auto-detect — emergency rebuild):
+#     # Force assembly, preserving the prepared intake set:
 #     bash scripts/release_full.sh --force
 #
 #     # Check publishing prerequisites without processing or publishing:
@@ -114,7 +114,7 @@ source "$REPO_ROOT/scripts/python_env.sh"
 if [[ "${PG_RELEASE_LOCK_WRAPPED:-0}" != "1" ]]; then
   exec "$PG_PYTHON" scripts/run_with_release_lock.py \
     --lock-path "$REPO_ROOT/scripts/.release.lock" \
-    -- bash "$0" "$@"
+    -- bash "$REPO_ROOT/scripts/release_full.sh" "$@"
 fi
 
 # ---------------------------------------------------------------------------
@@ -152,7 +152,7 @@ while (($# > 0)); do
     --keep-versions)     KEEP_VERSIONS="${2:?--keep-versions requires N}"; shift 2 ;;
     --flutter-repo)      FLUTTER_REPO="${2:?--flutter-repo requires path}"; shift 2 ;;
     -h|--help)
-      sed -n '2,55p' "$0" | sed 's/^# \{0,1\}//'
+      sed -n '2,102p' "$0" | sed 's/^# \{0,1\}//'
       exit 0
       ;;
     *) echo "Unknown flag: $1" >&2; exit 2 ;;
