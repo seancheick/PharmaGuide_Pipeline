@@ -73,3 +73,43 @@ def test_probiotic_survivability_reads_the_net_contents_form(enricher):
         "inactiveIngredients": [],
     }
     assert enricher._collect_probiotic_data(product)["has_survivability_coating"] is True
+
+
+@pytest.mark.parametrize('product', [
+    {'statements': [{'type': 'Formula re: Contains', 'notes': 'Enteric Coated Peppermint Oil Capsules'}]},
+    {'statements': [{'type': 'Formulation re: Other', 'notes': 'Enteric coating withstands stomach acid'}]},
+    {'activeIngredients': [{'name': 'IBgard Peppermint Oil', 'raw_source_text': 'IBgard Peppermint Oil'}]},
+])
+def test_source_enteric_variants_reach_existing_delivery_owner(enricher, product):
+    assert 'enteric-coated' in _names(enricher._collect_delivery_data(product))
+
+@pytest.mark.parametrize('text,expected', [
+    ('No high fructose corn syrup, gelatin, added flavors', set()),
+    ('No gelatin or syrup', set()),
+    ('Not enteric-coated', set()),
+    ('Syrup-free capsules', set()),
+    ('Without enteric coating', set()),
+    ('No syrup; enteric-coated capsules', {'enteric-coated'}),
+    ('No syrup but enteric-coated capsules', {'enteric-coated'}),
+    ('Enteric-coated capsules without syrup', {'enteric-coated'}),
+    ('Enteric-coated syrup-free capsules', {'enteric-coated'}),
+    ('Enteric-coated capsules', {'enteric-coated'}),
+])
+def test_delivery_statement_requires_affirmative_preparation(enricher,text,expected):
+    product={'statements':[{'type':'Formula re: Contains','notes':text}]}
+    assert _names(enricher._collect_delivery_data(product))==expected
+
+
+@pytest.mark.parametrize('nested,label,forms,technology', [
+    (True,'L-Arginine, Micronized',[],'micronized'),
+    (False,'Lycopene',[{'name':'micronized Lycopene'}],'micronized'),
+    (False,'Collagen Peptide Complex, Hydrolyzed',[],'hydrolyzed'),
+])
+def test_delivery_source_preparation_does_not_require_mass_eligibility(enricher,nested,label,forms,technology):
+    row={'name':label,'raw_source_text':label,'raw_source_path':'ingredientRows[0].nestedRows[0]' if nested else 'ingredientRows[0]',
+         'quantity':0,'unit':'NP','raw_taxonomy':{'forms':forms}}
+    active=[{'name':'Blend','raw_source_text':'Blend','raw_source_path':'ingredientRows[0]','nestedIngredients':[row]}] if nested else [row]
+    product={'activeIngredients':active,'ingredient_quality_data':{'ingredients_scorable':[],'ingredients':[]}}
+    result=enricher._collect_delivery_data(product)
+    assert technology in _names(result)
+    assert next(x for x in result['systems'] if x['name']==technology)['match_source']==row['raw_source_path']

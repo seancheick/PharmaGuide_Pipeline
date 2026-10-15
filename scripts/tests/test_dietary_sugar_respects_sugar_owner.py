@@ -20,6 +20,8 @@ Safety correctly.
 These tests are written against the sugar DETERMINATION, never the ingredient
 name, so a future carrier classified the same way is covered without a patch.
 """
+import pytest
+
 from scoring_v4.modules.generic_formulation import _dietary_sugar_penalty_detail
 
 SUGAR_FREE = {"amount_g": 0.0, "level": "sugar_free", "contains_sugar": False,
@@ -103,3 +105,33 @@ def test_a_carrier_plus_a_real_polyol_lands_on_the_polyol_not_the_carrier():
         SUGAR_FREE, {"high_glycemic": ["maltodextrin"], "sugar_alcohols": ["xylitol"]}))
 
     assert detail["reason"] == "sugar_alcohol_source"
+
+
+def test_unresolved_source_does_not_hide_separate_dextrose_or_measured_sugars():
+    from enrich_supplements_v3 import SupplementEnricherV3
+    enricher = SupplementEnricherV3()
+    product = {'activeIngredients': [
+        {'name': 'Resistant Dextrose', 'standardName': 'Resistant Dextrose',
+         'canonical_id': None, 'cleaner_row_role': 'source_descriptor'}],
+        'inactiveIngredients': [{'name': 'Dextrose', 'standardName': 'Dextrose'}]}
+    sugar = enricher._analyze_sugar_content(product, {'sugars': {'amount': 3, 'unit': 'g'}})
+    assert sugar['sugar_sources'] == ['Dextrose']
+    assert sugar['amount_g'] == 3
+    assert sugar['contains_sugar'] is True
+    assert sugar['has_added_sugar'] is True
+    assert enricher._check_problematic_sweeteners(product)['high_glycemic'] == ['Dextrose']
+
+
+@pytest.mark.parametrize('name', ['Dextrose', 'Dextrose Monohydrate', 'Tapioca Dextrose'])
+def test_exact_dextrose_is_still_sugar_when_a_fiber_label_misdescribes_it(name):
+    from enhanced_normalizer import EnhancedDSLDNormalizer
+    from enrich_supplements_v3 import SupplementEnricherV3
+    cleaned = EnhancedDSLDNormalizer().normalize_product({
+        'id': 'TEST-EXACT-DEXTROSE', 'fullName': 'Fiber source control',
+        'ingredientRows': [{'name': 'Dietary Fiber',
+            'quantity': [{'quantity': 50, 'unit': 'mg'}], 'forms': [{'name': name}]}]})
+    dietary = SupplementEnricherV3()._collect_dietary_sensitivity_data(cleaned)
+    assert dietary['sugar']['sugar_sources'] == [name]
+    assert dietary['sugar']['contains_sugar'] is True
+    assert dietary['sweeteners']['high_glycemic'] == [name]
+    assert dietary['diabetes_friendly'] is False

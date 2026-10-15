@@ -33,7 +33,7 @@
       "total_parents": 655,
       "total_forms": 1474,
       "total_form_aliases": 12302,
-      "parents_with_parent_aliases": 148,
+      "parents_with_parent_aliases": 149,
       "parents_with_contains_aliases": 0,
       "parents_with_pattern_aliases": 0
     },
@@ -46816,7 +46816,8 @@
         "aliases": [
           "primavie",
           "patented shilajit",
-          "primavie purified shilajit"
+          "primavie purified shilajit",
+          "primavie shilajit extract"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -46840,7 +46841,6 @@
         "notes": "Shilajit processed to remove heavy metals and contaminants while preserving fulvic acid and dibenzo-α-pyrones. Purification is critical — raw shilajit from Himalayan/Altai sources may contain unsafe levels of lead, arsenic, or mycotoxins. Look for third-party heavy metal testing. Evidence update 2026-04-25 (Batch 18): Marine oils + specialty audit — 9 PMIDs WebFetch-verified. CLASS FINDINGS: krill PL is class-equivalent to fish-TG at matched n-3 dose per Yurko-Mauro 2015 (PMID:26328782, definitive n=66 dose-matched RCT). Schuchardt \"+33% AUC\" was non-significant trend (p=0.057, n=12) confounded by free-FA contamination. CATEGORY ERROR caught: manuka honey MGO is LOCAL-ACTION antibacterial (Tenci 2017 PMID:27789370), not systemically absorbed — bio_score in absorption framework is mismatched. CROMINEX-PATTERN RELAPSE on PrimaVie shilajit: Pandit 2016 (PMID:26395129) is endpoint RCT not PK. GHOST REFERENCES caught: Wilson 2011 fulvic acid PK (NOT FOUND); Alkharfy 2015 human TQ PK (actual PMID:26434126 is a RAT glibenclamide study, not human TQ PK).",
         "aliases": [
           "purified shilajit",
-          "shilajit extract",
           "standardized shilajit",
           "shilajit 50% fulvic acid"
         ],
@@ -46975,7 +46975,11 @@
       "unii": null,
       "unii_note": "Cleared 2026-05-27: XII14C5FXV resolves to FULVIC ACID, which is not an exact UNII for Shilajit. Shilajit/mumie is a complex mineral-organic substance; fulvic acid is a component marker, not the ingredient identity. Leave UNII null until GSRS exposes an exact approved record."
     },
-    "aliases": []
+    "aliases": [
+      "himalayan shilajit",
+      "himalayan shilajit extract",
+      "shilajit extract"
+    ]
   },
   "fenugreek": {
     "standard_name": "Fenugreek",

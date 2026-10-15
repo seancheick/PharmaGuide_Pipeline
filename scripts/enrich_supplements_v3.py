@@ -10860,31 +10860,33 @@ class SupplementEnricherV3:
         # Enteric-Coated Tablet(s)", "30 Delayed-Release Veg. Capsule(s)").
         for index, text in enumerate(_net_contents_texts(product)):
             evidence_sources.append((f"netContents[{index}]", text))
+        # Preparation disclosure is source evidence even when its mass is NP
+        # or owned by a blend. Dose eligibility must not erase label wording.
         for index, ingredient in enumerate(
-            self._primary_active_ingredients_for_enrichment(product)
+            self._flatten_active_ingredients_for_analysis(product.get("activeIngredients") or [])
         ):
             if not isinstance(ingredient, dict):
                 continue
             row_text = " ".join(
                 str(ingredient.get(field) or "")
-                for field in ("name", "raw_source_text", "standardName", "notes")
+                for field in ("name", "raw_source_text", "notes")
             ).strip()
             if row_text:
-                evidence_sources.append((f"activeIngredients[{index}]", row_text))
+                evidence_sources.append((ingredient.get("raw_source_path") or f"activeIngredients[{index}]", row_text))
+            taxonomy = ingredient.get("raw_taxonomy") or {}
+            for form in taxonomy.get("forms") or []:
+                if isinstance(form, dict) and form.get("name"):
+                    evidence_sources.append((ingredient.get("raw_source_path") or f"activeIngredients[{index}]", str(form["name"])))
 
         # Structured DSLD label statements are product-authored evidence. Keep
         # them separate from the broad synthesized product text, which also
         # contains reference notes and can manufacture delivery matches. An
         # untyped/free-form statement is deliberately not trusted here.
-        trusted_statement_types = {
-            "Formulation re: Other",
-            "Suggested/Recommended/Usage/Directions",
-            "FDA Statement of Identity",
-        }
+        from constants import DELIVERY_SOURCE_STATEMENT_TYPES
         for index, statement in enumerate(product.get("statements", [])):
             if not isinstance(statement, dict):
                 continue
-            if statement.get("type") not in trusted_statement_types:
+            if statement.get("type") not in DELIVERY_SOURCE_STATEMENT_TYPES:
                 continue
             notes = statement.get("notes")
             if isinstance(notes, str) and notes.strip():
@@ -10910,27 +10912,20 @@ class SupplementEnricherV3:
                 flags=re.IGNORECASE,
             )
 
-            match_source = None
-            matched_text = None
-            physical_match = pattern.search(physical_state)
-            if physical_match:
-                match_source = "physical_state"
-                matched_text = physical_match.group(0)
-            else:
-                for source_path, source_text in evidence_sources:
-                    row_match = pattern.search(source_text)
-                    if row_match:
-                        match_source = source_path
-                        matched_text = row_match.group(0)
-                        break
-
-            if match_source:
+            # Keep every source location: a product-title match cannot erase
+            # stronger row-local evidence needed by clinical applicability.
+            # Scoring still consumes only highest_tier, never source count.
+            seen_sources = set()
+            for source_path, source_text in [("physical_state", physical_state), *evidence_sources]:
+                row_match = norm_module.find_affirmative_label_match(pattern, source_text)
+                if not row_match or source_path in seen_sources:
+                    continue
+                seen_sources.add(source_path)
                 matched_systems.append({
-                    # LABEL NAME PRESERVATION:
-                    "name": delivery_name,  # Canonical from DB (used for scoring)
-                    "canonical_name": delivery_name,  # Explicit canonical field
-                    "raw_source_text": matched_text,
-                    "match_source": match_source,  # Where it was found
+                    "name": delivery_name,
+                    "canonical_name": delivery_name,
+                    "raw_source_text": row_match.group(0),
+                    "match_source": source_path,
                     "tier": delivery_data.get('tier', 3),
                     "category": delivery_data.get('category', 'delivery'),
                     "description": delivery_data.get('description', '')
@@ -12600,22 +12595,7 @@ class SupplementEnricherV3:
         return "critical"
 
     def _is_negated_match_phrase(self, text: str, matched_term: str) -> bool:
-        """Detect explicit negation patterns around a matched term."""
-        term = (matched_term or "").strip().lower()
-        if not text or not term:
-            return False
-
-        text_lower = text.lower()
-        escaped_term = re.escape(term)
-        negation_patterns = (
-            rf"\b{escaped_term}\s*-\s*free\b",
-            rf"\bfree\s+from\s+{escaped_term}\b",
-            rf"\bcontains?\s+no\s+{escaped_term}\b",
-            rf"\bno\s+{escaped_term}\b",
-            rf"\bwithout\s+{escaped_term}\b",
-            rf"\bnon[-\s]+{escaped_term}\b",
-        )
-        return any(re.search(pattern, text_lower) for pattern in negation_patterns)
+        return norm_module.is_negated_match_phrase(text, matched_term)
 
     @property
     def NATURAL_COLOR_INDICATORS(self) -> List[str]:
@@ -18136,7 +18116,7 @@ class SupplementEnricherV3:
             "warnings": warnings,
             # Quick boolean flags for filtering
             # P0.2: Use contains_sugar from sugar_data (considers both amount AND ingredient sources)
-            "contains_sugar": sugar_data.get("contains_sugar", sugar_data["amount_g"] > 0),
+            "contains_sugar": sugar_data["contains_sugar"],
             "contains_sodium": sodium_data["amount_mg"] > 0,
             # P0.2: diabetes_friendly must be false if contains_sugar is true
             "diabetes_friendly": not sugar_data.get("contains_sugar", False) and sugar_data["level"] in ["sugar_free", "low"],
@@ -18653,11 +18633,19 @@ class SupplementEnricherV3:
             level = "high"
             level_display = "High Sugar"
 
+        # Missing sugar disclosure plus an unresolved source is unassessed,
+        # not evidence of sugar absence. Keep existing fields nullable instead
+        # of inventing a chemical identity or a sugar-free assurance. Positive
+        # sugar declarations and independently identified sugars still prevail.
+        unresolved = not contains_sugar and not sugar_info and any(
+            self._is_unresolved_source_descriptor(ing)
+            for ing in product.get('activeIngredients', []) + product.get('inactiveIngredients', [])
+        )
         return {
-            "amount_g": round(amount_g, 1),
+            "amount_g": None if unresolved else round(amount_g, 1),
             "unit": "g",
-            "level": level,
-            "level_display": level_display,
+            "level": None if unresolved else level,
+            "level_display": "Sugar content unverified" if unresolved else level_display,
             "contains_sugar": contains_sugar,
             "exceeds_diabetic_threshold": amount_g > self.SUGAR_THRESHOLDS["low_sugar"],
             "sugar_sources": sugar_in_ingredients,
@@ -18715,6 +18703,28 @@ class SupplementEnricherV3:
             "sodium_sources": sodium_sources
         }
 
+    @staticmethod
+    def _is_unresolved_source_descriptor(ingredient: Dict) -> bool:
+        """Cleaner-declared provenance without a verified chemical identity."""
+        return (ingredient.get('cleaner_row_role') == 'source_descriptor'
+                and not ingredient.get('canonical_id'))
+
+    def _dietary_name_matches(self, ingredient: Dict, term: str) -> bool:
+        """Unresolved provenance permits exact known names, never substring identity."""
+        names = [str(ingredient.get(key) or '').strip().lower() for key in ('name', 'standardName')]
+        if self._is_unresolved_source_descriptor(ingredient):
+            if term in names:
+                return True
+            # Preserve exact curated aliases (e.g. dextrose monohydrate)
+            # without promoting a partial match such as resistant dextrose.
+            for entry in (self.databases.get('harmful_additives') or {}).get('harmful_additives', []):
+                standard = str(entry.get('standard_name') or '').strip().lower()
+                aliases = [str(alias).strip().lower() for alias in entry.get('aliases', [])]
+                if term in standard and any(name in [standard, *aliases] for name in names if name):
+                    return True
+            return False
+        return any(term in name for name in names)
+
     def _find_sugar_in_ingredients(self, product: Dict) -> List[str]:
         """Find sugar-containing ingredients in the product."""
         sugar_keywords = [
@@ -18730,11 +18740,9 @@ class SupplementEnricherV3:
         )
 
         for ing in all_ingredients:
-            name = ing.get('name', '').lower()
-            std_name = ing.get('standardName', '').lower()
 
             for keyword in sugar_keywords:
-                if keyword in name or keyword in std_name:
+                if self._dietary_name_matches(ing, keyword):
                     found.append(ing.get('name', ''))
                     break
 
@@ -18820,27 +18828,24 @@ class SupplementEnricherV3:
         )
 
         for ing in all_ingredients:
-            name = ing.get('name', '').lower()
-            std_name = ing.get('standardName', '').lower()
-            combined = f"{name} {std_name}"
 
             for sweetener in high_glycemic_sweeteners:
-                if sweetener in combined:
+                if self._dietary_name_matches(ing, sweetener):
                     found_high_glycemic.append(ing.get('name', ''))
                     break
 
             for sweetener in artificial_sweeteners:
-                if sweetener in combined:
+                if self._dietary_name_matches(ing, sweetener):
                     found_artificial.append(ing.get('name', ''))
                     break
 
             for sweetener in sugar_alcohols:
-                if sweetener in combined:
+                if self._dietary_name_matches(ing, sweetener):
                     found_sugar_alcohols.append(ing.get('name', ''))
                     break
 
             for sweetener in safer_alternatives:
-                if sweetener in combined:
+                if self._dietary_name_matches(ing, sweetener):
                     found_safer.append(ing.get('name', ''))
                     break
 
@@ -24715,10 +24720,15 @@ class SupplementEnricherV3:
         # DELIVERY SYSTEMS DOMAIN
         # =====================================================================
         delivery_data = enriched.get("delivery_data", {})
-        # delivery_data lists its matches under `systems` (never `matched_systems`).
+        # Source locations may repeat a technology; coverage counts the
+        # technology once, not how often the label repeats its name.
+        seen_delivery = set()
         for system in delivery_data.get("systems") or []:
             raw_text = system.get("name", "")
             canonical_id = system.get("canonical_id") or raw_text.lower().replace(" ", "_")
+            if canonical_id in seen_delivery:
+                continue
+            seen_delivery.add(canonical_id)
             normalized_key = norm_module.make_normalized_key(raw_text)
 
             ledger.record_match(

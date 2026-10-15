@@ -84,9 +84,17 @@ INDICATION_KEYWORDS: Dict[str, Set[str]] = {
     },
     "oral": {"oral", "dental", "teeth", "gum", "gingivitis", "plaque", "caries", "halitosis"},
     "metabolic": {"weight", "metabolic", "glucose", "glycemic", "visceral", "fat"},
-    "mood": {"mood", "stress", "anxiety", "cognition", "psychobiotic", "sleep",
+    "mood": {"mood", "stress", "anxiety", "psychobiotic", "sleep",
              "relax", "relaxation", "cortisol"},
     "bone": {"bone", "density"},
+    # Existing clinical-indication vocabulary; shared by source claims and
+    # reviewed study outcomes. These categories never imply efficacy.
+    "hormonal_endocrine": {"testosterone", "androgen", "androgens", "dheas"},
+    "mitochondrial_energy": {"energy", "fatigue", "mitochondrial"},
+    "aging_longevity": {"longevity", "antiaging", "antiageing"},
+    "cognitive_neurological": {"attention", "alertness", "memory", "focus", "cognition", "cognitive"},
+    "skin_hair_collagen": {"skin"},
+    "eye_health": {"eye", "eyes", "vision"},
 }
 
 def evidence_indication_categories(text: str) -> Set[str]:
@@ -96,8 +104,14 @@ def evidence_indication_categories(text: str) -> Set[str]:
     # categorizer must not transfer antioxidant or manufacturing evidence to
     # a mood claim merely because both contain the word "stress".
     normalized = re.sub(r"\b(?:oxidative|cellular|mechanical|thermal|osmotic|endoplasmic reticulum) stress\b", " ", normalized)
+    # Packaging energy procurement is not a physiological product purpose.
+    normalized = re.sub(r"\brenewable energy\b", " ", normalized)
     words = set(normalized.split())
     categories = {category for category, keywords in INDICATION_KEYWORDS.items() if words & keywords}
+    # Age can qualify the population/context of a memory claim; it does not
+    # itself assert an anti-aging outcome. Keep explicit aging-purpose phrases.
+    if re.search(r"\b(?:healthy|anti) (?:aging|ageing)\b", normalized):
+        categories.add("aging_longevity")
     if "bone" in categories and "bone" not in words:
         categories.discard("bone")  # density alone may describe a capsule
     if "metabolic" in categories and not (words & (INDICATION_KEYWORDS["metabolic"] - {"fat"})):

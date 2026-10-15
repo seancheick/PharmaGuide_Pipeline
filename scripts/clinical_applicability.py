@@ -15,7 +15,8 @@ from functools import lru_cache
 from pathlib import Path
 from typing import Any
 
-from normalization import canonicalize_mass_unit
+from constants import DELIVERY_SOURCE_STATEMENT_TYPES
+from normalization import canonicalize_mass_unit, find_affirmative_label_match
 from serving_frequency import resolve_daily_serving_range
 
 
@@ -52,7 +53,7 @@ def _number(value: Any) -> float | None:
         return None
 
 
-def _row_text(row: Mapping, *, source_only: bool = False) -> str:
+def _row_text(row: Mapping, *, source_only: bool = False, preserve_punctuation: bool = False) -> str:
     if source_only:
         label = row.get("raw_source_text") or row.get("source_label_name")
         if not isinstance(label, str) or not label.strip():
@@ -71,7 +72,10 @@ def _row_text(row: Mapping, *, source_only: bool = False) -> str:
         values.extend(f.get("name") for f in forms if isinstance(f, Mapping))
     # Parent/source notation is one linked label assertion: Zinc (as acetate)
     # is zinc acetate. Never assemble this from different ingredient rows.
-    return " " + _key(" ".join(str(v) for v in values if v)).replace(" as ", " ") + " "
+    text = " ".join(str(v) for v in values if v)
+    if preserve_punctuation:
+        return text
+    return " " + _key(text).replace(" as ", " ") + " "
 
 
 def _is_exposure_row(row: Mapping) -> bool:
@@ -297,6 +301,66 @@ def _linked_rows(product: Mapping, entry: Mapping, *, source_only: bool = False,
     return discriminated if len(discriminated) == 1 else []
 
 
+def _source_delivery_forms(product: Mapping, row: Mapping, excluded_terms=(), *, product_level: bool = False) -> set[str]:
+    """Consume delivery-owner provenance, never infer coating from form guesses.
+
+    Row-local evidence stays on that row. Product-level coating can bind an
+    unambiguous sole active; mixed products need row-local delivery evidence.
+    A stale marker must still be present in the retained label source.
+    Product-level quality checks may consume a whole-product carrier claim;
+    preparation-specific clinical callers retain the default sole-active scope.
+    """
+    result = set()
+    originals = [r for r in _rows(product, source_only=True) if _is_exposure_row(r)]
+    if len(originals) == 1 and originals[0].get("raw_source_path") == row.get("raw_source_path"):
+        # A sole-active product's explicitly excluded delivery cannot be
+        # rescued by a positive coating marker in a different source field.
+        context = [product.get(key) for key in ("name", "fullName", "productName", "physicalState", "netContents")]
+        context.extend(statement.get("notes") for statement in product.get("statements") or []
+                       if isinstance(statement, Mapping) and statement.get("type") in DELIVERY_SOURCE_STATEMENT_TYPES)
+        text = " " + _key(json.dumps(context)) + " "
+        if any(" " + _key(term) + " " in text for term in excluded_terms):
+            return result
+    for system in (product.get("delivery_data") or {}).get("systems", []):
+        if not isinstance(system, Mapping):
+            continue
+        marker, source = str(system.get("raw_source_text") or ""), system.get("match_source")
+        if not marker or not isinstance(source, str):
+            continue
+        source_text = ""
+        match = re.fullmatch(r"activeIngredients\[(\d+)\]", source)
+        if source == row.get("raw_source_path"):
+            source_text = _row_text(row, source_only=True, preserve_punctuation=True)
+        elif match:
+            active = product.get("activeIngredients") or []
+            index = int(match.group(1))
+            if index < len(active) and isinstance(active[index], Mapping):
+                original = active[index]
+                if original.get("raw_source_path") == row.get("raw_source_path"):
+                    source_text = _row_text(original, source_only=True, preserve_punctuation=True)
+        elif product_level or (len(originals) == 1 and originals[0].get("raw_source_path") == row.get("raw_source_path")):
+            match = re.fullmatch(r"statements\[(\d+)\]", source)
+            if match:
+                statements = product.get("statements") or []
+                index = int(match.group(1))
+                if (index < len(statements) and isinstance(statements[index], Mapping)
+                        and statements[index].get("type") in DELIVERY_SOURCE_STATEMENT_TYPES):
+                    source_text = str(statements[index].get("notes") or "")
+            elif source in {"name", "fullName", "productName"}:
+                source_text = str(product.get(source) or "")
+            elif source == "physical_state":
+                source_text = json.dumps(product.get("physicalState") or {})
+            elif re.fullmatch(r"netContents\[\d+\]", source):
+                source_text = json.dumps(product.get("netContents") or [])
+        normalized_source = " " + _key(source_text) + " "
+        if any(" " + _key(term) + " " in normalized_source for term in excluded_terms):
+            continue
+        marker_pattern = re.compile(r"(?<!\w)" + re.escape(marker) + r"(?!\w)", re.I)
+        if find_affirmative_label_match(marker_pattern, source_text):
+            result.add(_key(system.get("canonical_name") or system.get("name")))
+    return result
+
+
 def assess_clinical_applicability(product: Mapping, entry: Mapping, *, assess_amount: bool = True) -> dict:
     reference = reviewed_entries().get(str(entry.get("id") or entry.get("study_id")), {})
     # The curated owner can retain research for context while withdrawing
@@ -328,12 +392,15 @@ def assess_clinical_applicability(product: Mapping, entry: Mapping, *, assess_am
         physical = physical.get("name")
     dosage_form = _key(product.get("form_factor_canonical") or product.get("form_factor") or physical)
     allowed = {_key(f) for f in policy.get("dosage_forms") or []}
-    if allowed and dosage_form not in allowed:
-        return {"status": "not_applicable", "reason_code": "clinical_delivery_mismatch"}
 
     lower, upper, _ = resolve_daily_serving_range(dict(product))
     reasons = []
     source_only = policy.get("require_source_label_form", False)
+    if source_only:
+        # A generated/stale canonical form cannot establish source-only delivery.
+        # Reuse the physical-form owner on the retained label, not on its guess.
+        from form_factor_normalizer import canonicalize_form_factor
+        dosage_form = _key(canonicalize_form_factor(physical)) if physical else ""
     excluded_canonicals = {_key(value) for value in policy.get("excluded_canonical_ids", [])}
     exclusion_only = bool(excluded_canonicals or policy.get("excluded_form_terms")) and not any(
         policy.get(field) for field in (
@@ -349,6 +416,9 @@ def assess_clinical_applicability(product: Mapping, entry: Mapping, *, assess_am
     for row in _linked_rows(product, entry, source_only=source_only, evidence_only=not exposure_required,
                             discriminating_terms=policy.get("required_form_terms")):
         text = _row_text(row, source_only=source_only)
+        if allowed and not (allowed & ({dosage_form} | _source_delivery_forms(product, row, policy.get("excluded_form_terms", [])))):
+            reasons.append("clinical_delivery_mismatch")
+            continue
         if source_only and not text:
             reasons.append("clinical_source_label_unresolved")
             continue

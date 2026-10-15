@@ -726,6 +726,15 @@ def _recover_contract_evidence_matches(
         and is_collagen_product(product)
     ):
         entry = dict(_RECOVERED_COLLAGEN_PEPTIDES_MATCH)
+        # Recovery keeps its existing identity/dose contract, but the cited
+        # registry remains the owner of supported purposes and applicability.
+        source_id = entry["source_data"].split(":", 1)[1]
+        source = next((row for row in _verified_ingredient_human_evidence_entries()
+                       if _entry_id(row) == source_id), {})
+        for key in ("primary_outcome", "health_goals_supported", "endpoint_relevance_tags",
+                    "key_endpoints", "applicability"):
+            if key in source:
+                entry[key] = source[key]
         entry["matched_term"] = peptide_row.get("name") or peptide_row.get("standard_name")
         entry["matched_canonical_id"] = peptide_row.get("canonical_id")
         _stamp_recovery_source_ref(entry, peptide_row)

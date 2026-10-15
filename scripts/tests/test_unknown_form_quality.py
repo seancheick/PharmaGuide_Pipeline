@@ -1176,3 +1176,54 @@ def test_declared_whole_material_and_salt_reach_real_scored_artifact(enricher, n
     artifact = build_scored_artifact(product)
     assert artifact["quality_score_status"] in {"scored", "not_scored"}
     assert artifact.get("product_safety_status") != "blocked"
+
+
+@pytest.mark.parametrize('name, expected_form', [
+    ('Himalayan Shilajit Extract', 'shilajit (unspecified)'),
+    ('Himalayan Shilajit', 'shilajit (unspecified)'),
+    ('Shilajit Extract', 'shilajit (unspecified)'),
+    ('Shilajit', 'shilajit (unspecified)'),
+    ('Purified Shilajit Extract', 'purified shilajit extract'),
+    ('PrimaVie Shilajit', 'primavie shilajit'),
+    ('PrimaVie', 'primavie shilajit'),
+    ('Himalayan Shilajit Resin', 'shilajit resin'),
+    ('Shilajit Powder', 'shilajit powder'),
+])
+def test_shilajit_geography_and_generic_extract_do_not_claim_purification(
+    normalizer, enricher, name, expected_form,
+):
+    """Printed geography/extract establishes identity, not purification or a brand."""
+    from scoring_v4.scored_artifact import build_scored_artifact
+
+    raw = {
+        'id': 'SHILAJIT_MAPPING_REGRESSION', 'fullName': 'Shilajit tablets',
+        'brandName': 'Label regression', 'offMarket': 0,
+        'physicalState': {'name': 'Tablet'},
+        'servingSizes': [{'minQuantity': 2, 'maxQuantity': 2, 'unit': 'Tablet(s)'}],
+        'ingredientRows': [{'name': name,
+                            'forms': [{'name': 'Shilajit Extract'}] if name == 'PrimaVie' else [],
+                            'nestedRows': [],
+                            'quantity': [{'quantity': 500, 'unit': 'mg'}]}],
+        'otherIngredients': {'ingredients': []},
+    }
+    cleaned = normalizer.normalize_product(raw)
+    enriched, _ = enricher.enrich_product(cleaned)
+    row = enriched['ingredient_quality_data']['ingredients'][0]
+    assert row['canonical_id'] == 'shilajit'
+    assert row['matched_form'] == expected_form
+    assert row['raw_source_text'] == name
+    assert (row['quantity'], row['unit']) == (500, 'mg')
+    assert row['identity_disposition'] == 'clean'
+    if expected_form == 'shilajit (unspecified)':
+        assert row['bio_score'] == unknown_form_quality(IQM['shilajit'])['bio_score']
+        assert row['matched_form'] not in ('purified shilajit extract', 'primavie shilajit')
+    artifact = build_scored_artifact(enriched)
+    assert artifact['quality_score_status'] == 'scored'
+    assert artifact['quality_score_v4_100'] is not None
+    assert len(artifact['quality_pillars_v4']) == 6
+
+    if name == 'PrimaVie':
+        assessment = next(r for r in artifact['assessment_readiness']['evidence']['ingredient_assessments']
+                          if r['canonical_id'] == 'shilajit')
+        assert assessment['source_row_ref'] == 'ingredientRows[0]'
+        assert 'BRAND_PRIMAVIE_SHILAJIT' in assessment['evidence_ids']

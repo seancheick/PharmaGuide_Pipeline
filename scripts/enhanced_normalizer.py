@@ -7721,6 +7721,11 @@ class EnhancedDSLDNormalizer:
             # gates, so we don't smuggle rollups back in.
             if is_active and ing.get("forms"):
                 extracted = []
+                fiber_declaration = self._extract_nutritional_info([ing]).get("dietaryFiber", {})
+                is_fiber_source = bool(fiber_declaration) and (
+                    fiber_declaration.get("raw_source_path")
+                    == (ing.get("raw_source_path") or "ingredientRows[0]")
+                )
                 for form_ing in self._expand_header_forms_for_processing(
                     ing, source_path="activeIngredients"
                 ):
@@ -7728,10 +7733,21 @@ class EnhancedDSLDNormalizer:
                         form_ing, is_active=True
                     )
                     if processed_form is not None:
-                        if isinstance(processed_form, list):
-                            extracted.extend(processed_form)
-                        else:
-                            extracted.append(processed_form)
+                        form_rows = processed_form if isinstance(processed_form, list) else [processed_form]
+                        for row in form_rows:
+                            # An unidentified, undosed source of a printed fiber
+                            # total is provenance, not another active. Preserve
+                            # the text without inventing its chemistry or lending
+                            # the total's mass to it. Known/dosed children retain
+                            # ordinary handling (e.g. psyllium, inulin).
+                            if is_fiber_source and not row.get("mapped") and not row.get("quantity"):
+                                row.update({
+                                    "cleaner_row_role": "source_descriptor",
+                                    "score_eligible_by_cleaner": False,
+                                    "score_exclusion_reason": "source_descriptor",
+                                    "dose_class": "source_material_mass",
+                                })
+                            extracted.append(row)
                 if extracted:
                     logger.debug(
                         "Rescued %d form child(ren) from nutrition-fact parent %r",
