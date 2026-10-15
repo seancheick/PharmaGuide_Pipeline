@@ -48,8 +48,8 @@ The extra source fixes were measured on 415 frozen raw labels: 180 score movemen
 ## Simple workflow for the next update
 
 1. PR148 is integrated after final CI/local qualification. Existing unresolved clinical holds remain explicit; they are not silently recalibrated.
-2. Actual stage fingerprints now show 114 stale manifests, including Clean code and reference mismatches. Sean must run Clean → Enrich → Score once with publication disabled.
-3. Sean runs that necessary pipeline once with publication disabled. Keep the prepared intake fixed.
+2. **Completed October15:** Sean ran Clean → Enrich → Score with publication disabled:38successful stage runs (37brands plus prepared Product Submissions), no failures.
+3. Post-run stage fingerprints are current and36scoring-snapshot checks pass. Keep the prepared intake fixed; no new corpus rerun is required by the optional-precheck infrastructure change.
 4. Assemble one candidate. Changed inputs stop it before promotion. On retry, unchanged catalog assembly and eligible source checks reuse verified work; actual candidate/live checks still execute.
 5. Publish the validated candidate through the existing release command. Confirm remote catalog version/checksum and installed-app OTA activation, then repeat magnesium name search and all-glycinate comparison in Codex against that actual published catalog.
 6. Build/install a new phone app only when app executable/UI/reader or compatibility changes require it. Catalog-only scoring/data updates can use the existing compatible OTA path. Bundled fallback updates and live catalog publication are distinct from IPA distribution.

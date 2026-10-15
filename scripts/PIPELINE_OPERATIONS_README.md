@@ -1,6 +1,6 @@
 # PharmaGuide Pipeline Operations
 
-> Canonical operator runbook | Last verified against candidate PR #150: 2026-10-15
+> Canonical operator runbook | Last verified: 2026-10-15 (PR #150 integrated)
 
 ## 1. Which command should I run?
 
@@ -12,8 +12,8 @@ export PYTHON="$PG_PYTHON"
 ```
 
 `--pipeline-only` chooses where the run stops. `--pre-check` independently chooses
-whether aggregate preparation runs before processing. The new flag is available
-when PR #150 is integrated; do not use it on an older checkout.
+whether aggregate preparation runs before processing. Both combinations are
+available on main after PR #150; update an older checkout before using the flag.
 
 | Intent | Command | Result |
 | --- | --- | --- |
