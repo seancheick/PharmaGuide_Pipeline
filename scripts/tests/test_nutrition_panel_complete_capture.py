@@ -61,3 +61,33 @@ def test_unparsed_sugar_quantity_does_not_become_a_declared_zero() -> None:
     ])
     assert info["sugars"]["quantityVariants"][0]["quantity_parsed"] is False
     assert SupplementEnricherV3()._collect_nutrition_summary({"nutritionalInfo": info})["total_sugars_g"] is None
+
+
+def test_nested_sugar_alcohol_is_not_a_total_sugar_declaration() -> None:
+    info = EnhancedDSLDNormalizer()._extract_nutritional_info([
+        {"name": "Total Carbohydrates", "quantity": 4, "unit": "g", "nestedRows": [
+            {"name": "Sugar Alcohols", "quantity": 3, "unit": "g"},
+        ]},
+    ])
+    assert "sugars" not in info
+
+
+def test_sugar_summary_does_not_present_a_bound_as_an_exact_amount() -> None:
+    from enrich_supplements_v3 import SupplementEnricherV3
+
+    normalizer = EnhancedDSLDNormalizer()
+    info = normalizer._extract_nutritional_info([
+        {"name": "Total Sugars", "quantity": [{"quantity": 1, "unit": "g", "operator": "<"}]},
+    ])
+    assert info["sugars"]["amount"] == 1.0
+    assert info["sugars"]["quantityVariants"][0]["operator"] == "<"
+    assert SupplementEnricherV3()._collect_nutrition_summary({"nutritionalInfo": info})["total_sugars_g"] is None
+
+
+def test_nested_sugar_mixture_is_not_a_total_sugar_declaration() -> None:
+    info = EnhancedDSLDNormalizer()._extract_nutritional_info([
+        {"name": "Total Carbohydrates", "quantity": 4, "unit": "g", "nestedRows": [
+            {"name": "Sugar Alcohols and Sugars", "quantity": 3, "unit": "g"},
+        ]},
+    ])
+    assert "sugars" not in info

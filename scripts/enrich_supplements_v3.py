@@ -18186,6 +18186,15 @@ class SupplementEnricherV3:
                              and v.get("selected_for_analysis")), None)
             if selected is not None and selected.get("quantity_parsed") is False:
                 return None
+            if key == "sugars":
+                from scoring_v4.exposure import row_exposure
+                exposure = row_exposure(product, {
+                    **entry, "quantity": entry.get("amount"),
+                }, basis="per_use", unit="g")
+                if not exposure.exact:
+                    # Printed qualifiers remain in the source ledger. A flat
+                    # summary has no place to represent them as an exact mass.
+                    return None
             return _amount(key, declared_gram_value=True)
 
         return {

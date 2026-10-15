@@ -7227,7 +7227,7 @@ class EnhancedDSLDNormalizer:
                 nested_qty, nested_unit, _, nested_variants = self._process_quantity(nested_qty_data)
 
                 # Extract sugar from nested row (only if not already found at top level)
-                if nested_name == "sugar" or "sugars" in nested_name:
+                if re.fullmatch(r"(?:total\s+|added\s+)?sugars?", nested_name.strip()):
                     accepted = self._record_nutrition_fact(
                         nutritional_info, "sugars", nested_qty, nested_unit, "g",
                         source_priority=_sugar_summary_priority(nested_name),
