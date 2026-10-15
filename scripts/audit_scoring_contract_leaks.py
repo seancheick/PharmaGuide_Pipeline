@@ -64,6 +64,7 @@ PROFILE_SELECTOR_FORBIDDEN_FIELDS: dict[str, str] = {
 # Any other raw read fails the audit; a scoring module is never allowlisted
 # for convenience.
 ALLOWLIST: dict[str, str] = {
+    'scripts/scoring_v4/exposure.py|format_nutrition_mass|get|unit|7d8612ac5a11': 'canonical_owner: exposure.format_nutrition_mass adapts the Nutrition Facts source row for row_exposure; it reads only the panel unit and delegates quantity/operator resolution to that shared owner before all copy consumers render it',
     'scripts/scoring_v4/modules/generic_helpers.py|eligible_delivery_data|get|raw_source_text|9f43e033ffb4': 'canonical_owner: generic_helpers.eligible_delivery_data verifies the detected technology against its label evidence before credit; all formulation scorers and export consume this shared result',
     'scripts/scoring_v4/modules/generic_helpers.py|eligible_delivery_data|subscript|raw_source_text|ddd26cf12576': 'canonical_owner: generic_helpers.eligible_delivery_data verifies the detected technology against its label evidence before credit; all formulation scorers and export consume this shared result',
 
