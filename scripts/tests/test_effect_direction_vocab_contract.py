@@ -82,3 +82,9 @@ def test_every_clinical_study_effect_direction_in_vocab(items):
     _walk(json.load(open(path, encoding="utf-8")), "effect_direction", found)
     vocab_ids = {i["id"] for i in items}
     assert found <= vocab_ids, f"effect_directions NOT in vocab: {found - vocab_ids}"
+
+
+def test_legacy_reference_weights_are_not_advertised_as_current_scoring(vocab, items):
+    assert 'legacy v3' in vocab['_metadata']['purpose'].lower()
+    assert 'quality_score.json' in vocab['_metadata']['alignment']
+    assert all('multiplier' not in item['notes'].lower() for item in items)
