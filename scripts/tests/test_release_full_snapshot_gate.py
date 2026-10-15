@@ -87,7 +87,7 @@ def test_release_does_not_repeat_snapshot_contract_after_snapshot_rebuild():
     source = RELEASE_SCRIPT.read_text(encoding="utf-8")
 
     assert "SCORING_SNAPSHOT_GATE_RAN=0" in source
-    assert source.count("SCORING_SNAPSHOT_GATE_RAN=1") == 2
+    assert source.count("SCORING_SNAPSHOT_GATE_RAN=1") == 1
     assert "if (( SCORING_SNAPSHOT_GATE_RAN == 0 )); then" in source
     assert "already passed before candidate promotion" in source
 
@@ -101,53 +101,9 @@ def test_identity_contract_gate_runs_even_when_catalog_is_fresh():
     publication = source.index("# Step 3: Extract/backfill DSLD product images")
     assert freshness_branch < identity_gate < publication
     assert '--export-dir "$DIST_DIR"' in source[identity_gate:publication]
-    for path in (
-        "scripts/audit_identity_integrity.py",
-        "scripts/identity_integrity.py",
-        "scripts/build_final_db.py",
-        "scripts/scoring_input_contract.py",
-        "scripts/scoring_v4/quality_score.py",
-        "scripts/scoring_v4/pillar_explanations.py",
-    ):
-        assert path in source
-
-
-def test_banned_recalled_reference_change_forces_catalog_rebuild():
-    """A safety-data edit cannot be skipped by auto-smart release freshness."""
-    source = RELEASE_SCRIPT.read_text(encoding="utf-8")
-
-    assert 'BANNED_RECALLED_REFERENCE_SOURCE=' in source
-    assert 'scripts/data/banned_recalled_ingredients.json' in source
-    freshness_check = source.index('if is_path_newer_than "$BANNED_RECALLED_REFERENCE_SOURCE"')
-    skip_branch = source.index('return 1  # safe to skip')
-    assert freshness_check < skip_branch
-
-
-def test_iqm_reference_change_forces_catalog_rebuild():
-    """Form-note source changes must not reuse an older exported catalog."""
-    source = RELEASE_SCRIPT.read_text(encoding="utf-8")
-
-    assert 'IQM_REFERENCE_SOURCE=' in source
-    assert 'scripts/data/ingredient_quality_map.json' in source
-    freshness_check = source.index('if is_path_newer_than "$IQM_REFERENCE_SOURCE"')
-    skip_branch = source.index('return 1  # safe to skip')
-    assert freshness_check < skip_branch
-
-
-def test_safety_and_formulation_reference_changes_force_catalog_rebuild():
-    """The assembled catalog embeds all three reference sources."""
-    source = RELEASE_SCRIPT.read_text(encoding="utf-8")
-    skip_branch = source.index('return 1  # safe to skip')
-
-    for variable, path in (
-        ("HARMFUL_ADDITIVES_REFERENCE_SOURCE", "scripts/data/harmful_additives.json"),
-        ("OTHER_INGREDIENTS_REFERENCE_SOURCE", "scripts/data/other_ingredients.json"),
-        ("ABSORPTION_ENHANCERS_REFERENCE_SOURCE", "scripts/data/absorption_enhancers.json"),
-    ):
-        assert f'{variable}=' in source
-        assert path in source
-        freshness_check = source.index(f'if is_path_newer_than "${variable}"')
-        assert freshness_check < skip_branch
+    # Source invalidation is exercised through the actual content owner in
+    # test_release_artifact_promotion, rather than pinning a shell path list.
+    assert '--catalog-current' in source
 
 
 def test_version_cleanup_is_separate_from_branch_aware_orphan_reconciliation():
@@ -174,3 +130,36 @@ def test_version_cleanup_is_separate_from_branch_aware_orphan_reconciliation():
     deferred = source[deferred_start:deferred_end]
     assert "--branch" in deferred
     assert "FLUTTER_RELEASE_BRANCH" in deferred
+
+
+def test_release_reuses_content_receipt_and_does_not_force_double_build():
+    source = RELEASE_SCRIPT.read_text()
+    start = source.index('step1_needs_run()')
+    end = source.index('if step1_needs_run;')
+    assert '--catalog-current' in source[start:end]
+    assert 'any_pipeline_output_newer_than' not in source[start:end]
+    assert 'step2_needs_run()' not in source
+
+
+def test_release_reseals_only_after_owned_image_mutation_and_checks_before_upload():
+    source = RELEASE_SCRIPT.read_text()
+    images = source.index('sync_final_db_output_catalog_from_dist\n', source.index('# Step 3 mutates'))
+    record = source.index('--record-catalog "$CATALOG_INPUT_BINDING"', images)
+    check = source.index('--check-input-binding "$CATALOG_INPUT_BINDING"', record)
+    upload = source.index('scripts/sync_to_supabase.py "$DIST_DIR"')
+    assert images < record < check < upload
+
+
+def test_cloud_only_publication_has_its_own_source_freeze_check():
+    source = RELEASE_SCRIPT.read_text()
+    step5 = source[source.index('if (( SKIP_SUPABASE == 0 )); then', source.index('# Step 5:')):]
+    check = step5.index('--check-input-binding "$CATALOG_INPUT_BINDING"')
+    upload = step5.index('scripts/sync_to_supabase.py "$DIST_DIR"\n')
+    assert check < upload
+    assert 'SKIP_FLUTTER' not in step5[:upload]
+
+
+def test_catalog_staging_has_no_second_build_or_mtime_decision():
+    source = RELEASE_SCRIPT.read_text()
+    assert source.count('bash scripts/rebuild_dashboard_snapshot.sh') == 1
+    assert 'step2_needs_run()' not in source

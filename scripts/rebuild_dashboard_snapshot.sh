@@ -41,6 +41,7 @@ Options:
 USAGE
 }
 
+SNAPSHOT_ARGS=("$REPO_ROOT/scripts/rebuild_dashboard_snapshot.sh" "$@")
 CANDIDATE_ONLY=false
 CANDIDATE_ROOT=""
 while [[ $# -gt 0 ]]; do
@@ -102,6 +103,18 @@ fi
 
 cd "$REPO_ROOT"
 source "$REPO_ROOT/scripts/python_env.sh"
+# Reuse the existing release/maintenance lock for direct snapshot invocations.
+# A snapshot nested inside release already runs under that same owner.
+if [[ "${PG_RELEASE_LOCK_WRAPPED:-0}" != "1" ]]; then
+  exec "$PG_PYTHON" scripts/run_with_release_lock.py \
+    --lock-path "$REPO_ROOT/scripts/.release.lock" \
+    -- bash "${SNAPSHOT_ARGS[@]}"
+fi
+CATALOG_STATE_SCRIPT="$REPO_ROOT/scripts/promote_release_artifacts.py"
+CATALOG_INPUT_BINDING=$("$PG_PYTHON" "$CATALOG_STATE_SCRIPT" --catalog-input-binding)
+DISK_DESTINATION="$REPO_ROOT/scripts"
+[[ "$CANDIDATE_ONLY" == "true" ]] && DISK_DESTINATION="$CANDIDATE_PARENT"
+"$PG_PYTHON" "$CATALOG_STATE_SCRIPT" --check-disk "$DISK_DESTINATION"
 
 if [[ "$CANDIDATE_ONLY" == "true" ]]; then
   CANDIDATE_STAGE="${CANDIDATE_ROOT}.staging.$$"
@@ -242,6 +255,9 @@ run_strict_gate "catalog artifact freshness" \
     --skip-interaction-inputs \
     --strict-release
 
+# Reject a mixed-source build before either preservation or live promotion.
+"$PG_PYTHON" "$CATALOG_STATE_SCRIPT" --check-input-binding "$CATALOG_INPUT_BINDING"
+
 # 5a. Candidate-only mode stops after all gates and atomically preserves the
 # verified pair at the caller's explicit destination. It never reaches the live
 # promotion helper below.
@@ -267,6 +283,7 @@ fi
   --final-candidate "$FINAL_CANDIDATE" \
   --dist-dir scripts/dist \
   --final-dir scripts/final_db_output
+"$PG_PYTHON" "$CATALOG_STATE_SCRIPT" --record-catalog "$CATALOG_INPUT_BINDING"
 
 PRODUCT_COUNT=$("$PG_PYTHON" -c "import sqlite3; print(sqlite3.connect('scripts/dist/pharmaguide_core.db').execute('SELECT COUNT(*) FROM products_core').fetchone()[0])")
 BLOB_COUNT=$(ls scripts/dist/detail_blobs | wc -l | tr -d ' ')

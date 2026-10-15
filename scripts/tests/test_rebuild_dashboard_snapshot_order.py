@@ -1,5 +1,7 @@
 from pathlib import Path
 
+import pytest
+
 
 SCRIPT = Path(__file__).resolve().parents[1] / "rebuild_dashboard_snapshot.sh"
 
@@ -7,7 +9,7 @@ SCRIPT = Path(__file__).resolve().parents[1] / "rebuild_dashboard_snapshot.sh"
 def test_snapshot_gates_candidates_before_live_promotion() -> None:
     source = SCRIPT.read_text()
 
-    promotion = source.index("promote_release_artifacts.py")
+    promotion = source.index('"$PG_PYTHON" scripts/promote_release_artifacts.py')
     freshness_gate = source.index('run_strict_gate "catalog artifact freshness"')
     candidate_stage = source.index("--output-dir \"$DIST_CANDIDATE\"")
 
@@ -74,3 +76,40 @@ def test_snapshot_build_uses_strict_export_error_gate() -> None:
 def test_snapshot_does_not_discard_product_failure_diagnostics() -> None:
     source = SCRIPT.read_text()
     assert "| tail" not in source
+
+
+def test_snapshot_freezes_inputs_before_build_and_checks_before_promotion():
+    source = SCRIPT.read_text()
+    freeze = source.index('--catalog-input-binding')
+    build = source.index('"$PG_PYTHON" scripts/build_final_db.py')
+    check = source.index('--check-input-binding "$CATALOG_INPUT_BINDING"')
+    promote = source.index('"$PG_PYTHON" scripts/promote_release_artifacts.py')
+    assert freeze < build < check < promote
+    assert source.index('--check-disk') < build
+    assert source.index('--record-catalog "$CATALOG_INPUT_BINDING"') > promote
+
+
+def test_standalone_snapshot_uses_existing_release_lock_before_any_build():
+    source = SCRIPT.read_text()
+    assert 'SNAPSHOT_ARGS=("$REPO_ROOT/scripts/rebuild_dashboard_snapshot.sh" "$@")' in source
+    lock = source.index('scripts/run_with_release_lock.py')
+    assert lock < source.index('--catalog-input-binding')
+    assert '-- bash "${SNAPSHOT_ARGS[@]}"' in source
+
+
+@pytest.mark.parametrize("script_name", ["rebuild_dashboard_snapshot.sh", "release_full.sh"])
+def test_snapshot_lock_reentry_works_when_started_from_scripts_directory(tmp_path, script_name):
+    import shutil
+    import subprocess
+    import sys
+    scripts = tmp_path / 'scripts'
+    scripts.mkdir()
+    shutil.copy(SCRIPT.parent / script_name, scripts / script_name)
+    (scripts / 'python_env.sh').write_text(f'PG_PYTHON="{sys.executable}"\n')
+    (scripts / 'run_with_release_lock.py').write_text(
+        'import sys\nfrom pathlib import Path\n'
+        'child=sys.argv[sys.argv.index("--")+2]\n'
+        'assert Path(child).is_absolute() and Path(child).is_file(), child\n'
+    )
+    result = subprocess.run(['bash', script_name], cwd=scripts, capture_output=True, text=True)
+    assert result.returncode == 0, result.stderr
