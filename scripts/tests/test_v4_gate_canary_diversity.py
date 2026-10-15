@@ -24,6 +24,15 @@ if str(SCRIPTS_ROOT) not in sys.path:
     sys.path.insert(0, str(SCRIPTS_ROOT))
 
 
+# V4.1 Step 4 (2026-10-15) re-pinned the internal raw_score_v4_100 values below
+# without any module, verdict, confidence or readiness change: formula checks
+# own additive/sugar findings; count, disclosure, focus and route-base credits
+# are retired; unbenchmarked amounts take the shared 11.4-public neutral; and
+# probiotic Formulation/Dose are canonical form quality and measured adequacy.
+# The raw module score still divides by unchanged module caps (fiber 30), so a
+# route whose retired components were large (12932 fiber gummies) moves most.
+# Probiotic form quality is the strains' own (241707, 206362: a rated
+# co-ingredient no longer supplies it).
 V4_CANARIES = {
     # Safety short-circuit: no module block; gate state is not confidence.
     "246324": {
@@ -39,7 +48,7 @@ V4_CANARIES = {
     # separate substance warning must remain CAUTION rather than become SAFE.
     "241706": {
         "label": "HUM Ripped Rooster", "module": "generic", "verdict": "CAUTION",
-        "confidence": "moderate", "score_unavailable_reason": None, "score": 38.4,
+        "confidence": "moderate", "score_unavailable_reason": None, "score": 45.2,
         "safety_verdict": "CAUTION", "completeness_ready": True,
         # Two independent repairs: retain the explicitly printed50%-EGCG form,
         # and read Contains No: as a negative list. Existing enriched corpus is
@@ -54,7 +63,7 @@ V4_CANARIES = {
         "verdict": "SAFE",
         "confidence": "low",
         "score_unavailable_reason": None,
-        "score": 33.4,
+        "score": 39.0,
         "unevaluated_canonicals": set(),
     },
     # No total CFU and no demonstrated dose applicability: dose remains zero.
@@ -64,7 +73,7 @@ V4_CANARIES = {
         "module": "probiotic",
         "verdict": "SAFE",
         "confidence": "low",
-        "score_range": (29.1, 29.1),
+        "score_range": (30.1, 30.1),
     },
     # Fish-oil parent mass with no EPA/DHA breakdown: scoreable as aggregate
     # evidence with moderate uncertainty, no score cap, and no CAUTION ceiling.
@@ -89,7 +98,7 @@ V4_CANARIES = {
         "module": "sports",
         "verdict": "SAFE",
         "confidence": "moderate",
-        "score_range": (79.2, 79.2),  # Distinct BioPerine A4 credit only; reviewed HMB reference.
+        "score_range": (78.2, 78.2),  # Distinct BioPerine A4 credit only; reviewed HMB reference.
     },
     # Assessment coverage is separate from quality. This disclosed fiber total
     # remains module-owned; completed limited/negative evidence stays explicit.
@@ -99,7 +108,7 @@ V4_CANARIES = {
         "verdict": "SAFE",
         "confidence": "moderate",
         "score_unavailable_reason": None,
-        "score": 56.0,
+        "score": 41.0,
         "evidence_driver": "evidence_review_complete_limited_or_negative",
         "unevaluated_canonicals": set(),
     },
@@ -111,7 +120,7 @@ V4_CANARIES = {
         "verdict": "SAFE",
         "confidence": "moderate",
         "score_unavailable_reason": None,
-        "score": 34.2,
+        "score": 34.7,
         "no_primary_evidence_floor": True,
         "evidence_driver": "evidence_review_complete_limited_or_negative",
         "unevaluated_canonicals": set(),
@@ -125,7 +134,7 @@ V4_CANARIES = {
         "verdict": "SAFE",
         "confidence": "moderate",
         "score_unavailable_reason": None,
-        "score": 53.9,
+        "score": 53.0,
         "limited_canonicals": {"paba", "fo_ti"},
     },
     # Typed confidence high on the probiotic module.
@@ -135,7 +144,7 @@ V4_CANARIES = {
         "verdict": "SAFE",
         "confidence": "high",
         # Contextual MTCC5856 evidence; no unestablished DE111 human credit.
-        "score_range": (67.7, 67.7),
+        "score_range": (63.7, 63.7),
         "no_independent_delivery": True,
     },
     # Fully ready verdict-diversity anchors. These replace products that are now
@@ -155,7 +164,7 @@ V4_CANARIES = {
         "confidence": "moderate",
         # V4.1 (Oct 15, 2026): its strain research does not apply to this
         # product, so the former 10 certainty points are gated to 0.
-        "score_range": (33.5, 33.5),
+        "score_range": (29.1, 29.1),
     },
 }
 
@@ -244,7 +253,7 @@ def test_v4_real_catalog_gate_and_confidence_canary(dsld_id: str, expected: dict
         assert tea["matched_form"] == "green tea extract (50% EGCG)"
         assert tea["bio_score"] == 9.0
     if expected.get("no_independent_delivery"):
-        assert breakdown["module"]["dimensions"]["formulation"]["components"]["delivery_survivability"] == 0.0
+        assert breakdown["module"]["dimensions"]["formulation"]["components"]["A3_delivery_system"] == 0.0
     if expected.get("no_primary_evidence_floor"):
         evidence_dimension = breakdown["module"]["dimensions"]["evidence"]
         assert evidence_dimension["score"] == 0.0

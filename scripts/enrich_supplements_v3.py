@@ -18108,7 +18108,7 @@ class SupplementEnricherV3:
         sweetener_data = self._check_problematic_sweeteners(product)
 
         # Generate user-facing warnings
-        warnings = self._generate_dietary_warnings(sugar_data, sodium_data, sweetener_data)
+        warnings = self._generate_dietary_warnings(sugar_data, sodium_data, sweetener_data, product=product)
 
         return {
             "sugar": sugar_data,
@@ -18656,8 +18656,24 @@ class SupplementEnricherV3:
             self._is_unresolved_source_descriptor(ing)
             for ing in product.get('activeIngredients', []) + product.get('inactiveIngredients', [])
         )
+        # The shared exposure owner decides whether the printed mass can be read
+        # (V4.1 Step 4). A blank unit keeps the panel default above (FDA
+        # declares sugars in grams), and a printed bound ("<1 g") is the
+        # label's own permitted wording, read as stated. An unusable unit
+        # ("NP", "Gram(s) - estimated") still classifies the level but records
+        # no amount, which the scored artifact reports as unfinished work.
+        readable_amount = True
+        if sugar_info and amount_g > 0:
+            from scoring_v4.exposure import row_exposure
+            printed_unit = str(unit or "").strip()
+            if printed_unit.lower() in {"", "unspecified"}:
+                printed_unit = "Gram(s)"
+            readable_amount = row_exposure(
+                product, {**sugar_info, "quantity": sugar_info.get("amount"), "unit": printed_unit},
+                basis="per_use", unit="g",
+            ).per_serving_amount is not None
         return {
-            "amount_g": None if unresolved else round(amount_g, 1),
+            "amount_g": None if (unresolved or not readable_amount) else round(amount_g, 1),
             "unit": "g",
             "level": None if unresolved else level,
             "level_display": "Sugar content unverified" if unresolved else level_display,
@@ -18725,7 +18741,7 @@ class SupplementEnricherV3:
                 and not ingredient.get('canonical_id'))
 
     def _dietary_name_matches(self, ingredient: Dict, term: str) -> bool:
-        """Unresolved provenance permits exact known names, never substring identity."""
+        """Match dietary terms as whole words; unresolved provenance needs exact identity."""
         names = [str(ingredient.get(key) or '').strip().lower() for key in ('name', 'standardName')]
         if self._is_unresolved_source_descriptor(ingredient):
             if term in names:
@@ -18738,7 +18754,11 @@ class SupplementEnricherV3:
                 if term in standard and any(name in [standard, *aliases] for name in names if name):
                     return True
             return False
-        return any(term in name for name in names)
+        # A contained spelling is not an ingredient identity: polydextrose is
+        # not dextrose, and honeysuckle is not honey. Keep modifiers such as
+        # organic cane sugar and dextrose monohydrate eligible.
+        pattern = r"(?<!\w)" + re.escape(term) + r"(?!\w)"
+        return any(re.search(pattern, name) for name in names)
 
     def _find_sugar_in_ingredients(self, product: Dict) -> List[str]:
         """Find sugar-containing ingredients in the product."""
@@ -18876,7 +18896,7 @@ class SupplementEnricherV3:
         }
 
     def _generate_dietary_warnings(self, sugar_data: Dict, sodium_data: Dict,
-                                   sweetener_data: Dict) -> List[Dict]:
+                                   sweetener_data: Dict, *, product: Optional[Dict] = None) -> List[Dict]:
         """
         Generate user-facing warnings for dietary sensitivities.
         """
@@ -18884,11 +18904,15 @@ class SupplementEnricherV3:
 
         # Sugar warnings for diabetics
         if sugar_data["exceeds_diabetic_threshold"]:
+            # An inexact printed amount still warns, without inventing a number.
+            from scoring_v4.exposure import format_nutrition_mass
+            amount = format_nutrition_mass(product or {}, "sugars", sugar_data.get("amount_g"))
+            amount_text = (f"Contains {amount} sugar per serving. " if amount is not None
+                           else "Contains sugar; the exact amount per serving could not be read. ")
             warnings.append({
                 "type": "diabetes",
                 "severity": "high" if sugar_data["level"] == "high" else "moderate",
-                "message": f"Contains {sugar_data['amount_g']}g sugar per serving. "
-                          f"May affect blood glucose levels.",
+                "message": amount_text + "May affect blood glucose levels.",
                 "recommendation": "Consult healthcare provider if managing diabetes."
             })
 

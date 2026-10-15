@@ -14,10 +14,8 @@ sys.path.insert(0, str(SCRIPTS_DIR))
 
 from enrich_supplements_v3 import SupplementEnricherV3  # noqa: E402
 from scoring_v4.modules.generic_evidence import score_evidence  # noqa: E402
-from scoring_v4.modules.generic_dose import (  # noqa: E402
-    NO_REFERENCE_INDIVIDUAL_DOSE_CREDIT,
-    score_dose,
-)
+from scoring_v4.modules.generic_dose import score_dose  # noqa: E402
+from scoring_v4.modules.generic_helpers import unbenchmarked_dose_credit  # noqa: E402
 
 
 DATA_PATH = SCRIPTS_DIR / "data" / "backed_clinical_studies.json"
@@ -221,8 +219,9 @@ def test_bcaa_formula_and_another_declared_purpose_are_averaged_equally(
     assert payload["metadata"]["purpose_ingredient_count"] == 2
     assert payload["metadata"]["aggregate_dose_band"] == "within_studied_range"
     assert payload["metadata"]["unbenchmarked_purpose_ingredients"] == ["l_glutamine"]
+    # Glutamine has no benchmark: the shared unbenchmarked neutral (V4.1 Step 4).
     assert payload["score"] == pytest.approx(
-        (22.0 + NO_REFERENCE_INDIVIDUAL_DOSE_CREDIT) / 2.0
+        (22.0 + unbenchmarked_dose_credit()) / 2.0, abs=1e-4
     )
 
 

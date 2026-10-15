@@ -62,6 +62,7 @@ from dataclasses import dataclass, field
 from typing import Any, Dict, Optional
 
 from scoring_v4.modules.generic_dose import score_dose
+from scoring_v4.modules.generic_helpers import archetype_dose_reference, dose_reference_scope
 from scoring_v4.modules.generic_evidence import score_evidence
 from scoring_v4.modules.generic_formulation import score_formulation
 from scoring_v4.modules.generic_manufacturer import (
@@ -281,7 +282,8 @@ def score_generic(product: Any) -> GenericModuleResult:
     # explicit proxy-method metadata; the metadata is the contract that tells
     # audit / score-delta / Flutter tooling not to mistake the proxy band
     # for final NIH/NHANES supplemental-window math.
-    dose_payload = score_dose(product)
+    with dose_reference_scope(archetype_dose_reference("generic", formulation_dim.metadata)):
+        dose_payload = score_dose(product)
     dose_dim = result.dimensions["dose"]
     dose_dim.score = dose_payload["score"]
     dose_dim.components = dose_payload["components"]
@@ -440,7 +442,6 @@ def _assemble_score(result: GenericModuleResult) -> None:
         "botanical_raw_floor_applied": botanical_floor_applied,
         "score_policy": {
             "method": "rubric_raw_is_production_score",
-            "production_score": "rubric_raw_score_100",
             "raw_score_100": result.raw_score_100,
             "score_100": result.score_100,
             # Audit-only: the retired P1.5 affine, kept for v3-comparison reports.

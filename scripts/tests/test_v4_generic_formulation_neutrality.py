@@ -158,7 +158,9 @@ def test_dose_gated_synergy_does_not_change_formulation() -> None:
     assert score_formulation(qualified)["score"] == score_formulation(base)["score"]
 
 
-def test_single_product_floor_cannot_hide_a_watchlist_penalty() -> None:
+def test_watchlist_finding_leaves_formulation_to_the_safety_base_without_a_floor() -> None:
+    """V4.1 Step 4: a watchlist ingredient is owned once, by the formula-checks
+    pillar's safety base; Formulation neither charges it nor adds a floor."""
     from scoring_v4.modules.generic_formulation import score_formulation
 
     product = _product(1, bio=14.0)
@@ -175,8 +177,8 @@ def test_single_product_floor_cannot_hide_a_watchlist_penalty() -> None:
 
     result = score_formulation(product)
 
-    assert result["penalties"]["B0_moderate_watchlist"] == -5.0
-    assert result["score"] == 9.0
+    assert "B0_moderate_watchlist" not in result["penalties"]
+    assert result["score"] == 14.0
     assert "premium_single_ingredient_floor_adjustment" not in result["components"]
     assert "standard_single_ingredient_floor_adjustment" not in result["components"]
 
@@ -192,7 +194,7 @@ def test_formulation_reference_follows_engine_not_product_archetype() -> None:
         cfg,
     )
     botanical = _pillar_formulation(
-        {"score": 15.0, "metadata": {"formulation_profile": "botanical"}},
+        {"score": 12.0, "metadata": {"formulation_profile": "botanical"}},
         20.0,
         "generic_botanical_branded",
         cfg,
@@ -206,7 +208,9 @@ def test_formulation_reference_follows_engine_not_product_archetype() -> None:
 
     assert generic["score"] == 20.0
     assert generic["components"]["reference"] == 15.0
+    # V4.1 Step 4: the botanical engine's attainable maximum is 12 (identity
+    # neutral 7.2 + extract 1.6 + standardization 3.2).
     assert botanical["score"] == 20.0
-    assert botanical["components"]["reference"] == 15.0
+    assert botanical["components"]["reference"] == 12.0
     assert dedicated_sports["score"] == 20.0
     assert dedicated_sports["components"]["reference"] == 24.0

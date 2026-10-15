@@ -18,14 +18,11 @@ from scoring_v4.modules.sports_helpers import (
     ALPHA_GPC_CANONICALS,
     ATP_CANONICALS,
     BCAA_AGGREGATE_CANONICALS,
-    BCAA_CANONICALS,
     BETA_ALANINE_CANONICALS,
     BETAINE_CANONICALS,
     CAFFEINE_CANONICALS,
     CITRULLINE_CANONICALS,
     CREATINE_CANONICALS,
-    EAA_CANONICALS,
-    EAA_AGGREGATE_CANONICALS,
     HMB_CANONICALS,
     SPORTS_BAND_CANONICALS,
     SPORTS_PROTEIN_CANONICALS,
@@ -61,9 +58,7 @@ def score_dose(product: Dict[str, Any]) -> Dict[str, Any]:
 
     identity, primary, basis = _best_primary_score(product)
     identity, primary, basis = _apply_offlist_dose_floor(product, identity, primary, basis)
-    support = _score_stack_support(product, identity)
     completeness = _score_ratio_or_completeness(product, identity)
-    focused_single = _score_focused_single_completion(product, identity, primary)
     not_evaluable = _not_evaluable_reason(product, primary)
     if (
         primary <= 0
@@ -76,9 +71,7 @@ def score_dose(product: Dict[str, Any]) -> Dict[str, Any]:
 
     components = {
         "sports_primary_active_dose": round(primary, 4),
-        "sports_stack_support": round(support, 4),
         "sports_ratio_or_completeness": round(completeness, 4),
-        "sports_focused_single_completion": round(focused_single, 4),
     }
     # Transparency B5 owns blend opacity; a hidden primary amount is recorded
     # as not evaluable here and earns no substitute credit (V4.1 Step 4).
@@ -161,8 +154,12 @@ def _apply_offlist_dose_floor(
         return identity, primary, basis
     try:
         from scoring_v4.modules.generic_dose import score_dose as _generic_dose
+        from scoring_v4.modules.generic_helpers import archetype_dose_reference, dose_reference_scope
+        from scoring_v4.modules.sports_helpers import sports_subtype
 
-        proxy = float((_generic_dose(product) or {}).get("score") or 0.0)
+        reference = archetype_dose_reference("sports", module_metadata={"sports_subtype": sports_subtype(product)})
+        with dose_reference_scope(reference):
+            proxy = float((_generic_dose(product) or {}).get("score") or 0.0)
     except Exception:
         proxy = 0.0
     if proxy > primary:
@@ -390,23 +387,6 @@ def _best_primary_score(product: Dict[str, Any]) -> Tuple[Optional[str], float, 
     return best_identity, best_score, best_basis
 
 
-def _score_stack_support(product: Dict[str, Any], identity: Optional[str]) -> float:
-    if not identity:
-        return 0.0
-    rows = sports_rows(product)
-    support_groups = 0
-    canons = {canonical(row) for row in rows}
-    if identity != "creatine" and canons & CREATINE_CANONICALS:
-        support_groups += 1
-    if identity != "beta_alanine" and canons & BETA_ALANINE_CANONICALS:
-        support_groups += 1
-    if identity != "citrulline" and canons & CITRULLINE_CANONICALS:
-        support_groups += 1
-    if identity != "hmb" and canons & HMB_CANONICALS:
-        support_groups += 1
-    return min(3.0, float(support_groups))
-
-
 def _score_ratio_or_completeness(product: Dict[str, Any], identity: Optional[str]) -> float:
     rows = sports_rows(product)
     if identity == "bcaa" and _bcaa_ratio_is_close(group_bcaa(rows).get("ratio")):
@@ -414,41 +394,6 @@ def _score_ratio_or_completeness(product: Dict[str, Any], identity: Optional[str
     if identity == "eaa" and group_eaa(rows)["complete"]:
         return 2.0
     return 0.0
-
-
-def _score_focused_single_completion(
-    product: Dict[str, Any],
-    identity: Optional[str],
-    primary_score: float,
-) -> float:
-    """Fill the sports dose dimension for transparent focused singles.
-
-    A standalone creatine/HMB/protein product with a fully adequate primary dose
-    should not lose the final 5 dose points merely because it is not a stack.
-    Multi-active stacks still earn those points through stack/completeness logic.
-    """
-    if primary_score < 20.0 or not identity:
-        return 0.0
-    rows = sports_rows(product)
-    groups = set()
-    canons = {canonical(row) for row in rows}
-    if canons & SPORTS_PROTEIN_CANONICALS:
-        groups.add("protein")
-    if canons & CREATINE_CANONICALS:
-        groups.add("creatine")
-    if canons & BETA_ALANINE_CANONICALS:
-        groups.add("beta_alanine")
-    if canons & CITRULLINE_CANONICALS:
-        groups.add("citrulline")
-    if canons & HMB_CANONICALS:
-        groups.add("hmb")
-    if canons & ALPHA_GPC_CANONICALS:
-        groups.add("alpha_gpc")
-    if canons and canons.issubset(BCAA_CANONICALS):
-        groups.add("bcaa")
-    elif canons and canons.issubset(EAA_CANONICALS | EAA_AGGREGATE_CANONICALS):
-        groups.add("eaa")
-    return 5.0 if groups == {identity} else 0.0
 
 
 def _not_evaluable_reason(product: Dict[str, Any], primary_score: float) -> Optional[str]:

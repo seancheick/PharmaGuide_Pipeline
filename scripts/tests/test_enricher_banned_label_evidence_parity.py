@@ -138,14 +138,15 @@ def test_every_gate_resolver_hit_is_in_contaminant_data(pipeline) -> None:
     assert gate_ids <= _contaminant_ids(enriched)
 
 
-def test_safety_pillar_and_b0_agree_with_the_verdict(pipeline) -> None:
+def test_safety_pillar_agrees_with_the_verdict_and_owns_the_finding_once(pipeline) -> None:
     _enriched, scored = pipeline
     assert scored["v4_verdict"] == "CAUTION"
     pillar = scored["quality_pillars_v4"]["safety_hygiene"]
     assert pillar["score"] == 0, pillar
     assert "watchlisted ingredient" in pillar["reason"], pillar["reason"]
+    # V4.1 Step 4: the safety base is the one numerical owner; no Formulation B0.
     penalties = scored["v4_breakdown"]["module"]["dimensions"]["formulation"]["penalties"]
-    assert penalties["B0_moderate_watchlist"] < 0, penalties
+    assert "B0_moderate_watchlist" not in penalties, penalties
 
 
 def test_rule_retired_for_the_role_is_not_a_hit(enricher) -> None:

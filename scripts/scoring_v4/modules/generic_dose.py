@@ -82,6 +82,7 @@ from scoring_v4.modules.generic_helpers import (
     get_active_ingredients,
     has_usable_individual_dose,
     nutrient_delivering_rows,
+    unbenchmarked_dose_credit,
     _as_float,
     _norm_text,
     _safe_dict,
@@ -120,8 +121,6 @@ B7_UL_PCT_THRESHOLD = _B7["ul_pct_threshold"]      # at/above this triggers B7 +
 WINDOW_OVERDOSE_CREDIT = _DM["window_overdose_credit"]    # 100% < pct_ul < 150% credit (half of 22)
 WINDOW_HIGH_SOURCE_PCT = _DM["window_high_source_pct"]    # 21 CFR 101.54(b) "high source"
 WINDOW_FULL_ADEQUACY_PCT = _DM["window_full_adequacy_pct"]
-NO_REFERENCE_INDIVIDUAL_DOSE_CREDIT = _DM["no_reference_individual_dose_credit"]
-NO_REFERENCE_PRODUCT_EVIDENCE_CREDIT = _DM["no_reference_product_evidence_credit"]
 
 # B7 penalty.
 B7_PER_FLAG_PENALTY = _B7["per_flag_penalty"]
@@ -374,8 +373,8 @@ def _score_declared_purpose_window(
             clinical_assessments.append(clinical.to_dict())
             continue
         if has_usable_individual_dose(purpose):
-            contributions.append(NO_REFERENCE_INDIVIDUAL_DOSE_CREDIT)
-            fallback_values.append(NO_REFERENCE_INDIVIDUAL_DOSE_CREDIT)
+            contributions.append(unbenchmarked_dose_credit())
+            fallback_values.append(unbenchmarked_dose_credit())
             unbenchmarked.append(key)
         elif not is_lent_blend_mass(purpose):
             # A disclosed whole preparation remains assessable at the existing
@@ -416,11 +415,11 @@ def _score_no_reference_quantified_dose(product: Dict[str, Any]) -> tuple[float,
         dose_class = _norm_text(ingredient.get("dose_class"))
         quantity = _as_float(ingredient.get("quantity"), None)
         if dose_class == "enzyme_activity" and quantity is not None and quantity > 0:
-            return NO_REFERENCE_INDIVIDUAL_DOSE_CREDIT, "enzyme_activity_quantified_dose_no_rda_reference"
+            return unbenchmarked_dose_credit(), "enzyme_activity_quantified_dose_no_rda_reference"
         if dose_class == "probiotic_cfu" and quantity is not None and quantity > 0:
-            return NO_REFERENCE_INDIVIDUAL_DOSE_CREDIT, "probiotic_cfu_quantified_dose_no_rda_reference"
+            return unbenchmarked_dose_credit(), "probiotic_cfu_quantified_dose_no_rda_reference"
         if has_usable_individual_dose(ingredient):
-            return NO_REFERENCE_INDIVIDUAL_DOSE_CREDIT, "individual_quantified_dose_no_rda_reference"
+            return unbenchmarked_dose_credit(), "individual_quantified_dose_no_rda_reference"
 
     for evidence in _safe_list(product.get("product_scoring_evidence")):
         credit, reason = _product_evidence_dose_credit(evidence)
@@ -441,8 +440,8 @@ def _product_evidence_dose_credit(evidence: Any) -> tuple[float, Optional[str]]:
     if dose_class not in {"therapeutic_mass", "enzyme_activity", "probiotic_cfu"}:
         return 0.0, None
     if _norm_text(evidence.get("evidence_type")) == "blend_anchor_mass":
-        return NO_REFERENCE_PRODUCT_EVIDENCE_CREDIT, "blend_anchor_quantified_dose_no_rda_reference"
-    return NO_REFERENCE_INDIVIDUAL_DOSE_CREDIT, "product_evidence_quantified_dose_no_rda_reference"
+        return unbenchmarked_dose_credit(), "blend_anchor_quantified_dose_no_rda_reference"
+    return unbenchmarked_dose_credit(), "product_evidence_quantified_dose_no_rda_reference"
 
 
 def _mass_primary_without_reference(product: Dict[str, Any]) -> Optional[str]:
@@ -686,12 +685,12 @@ def score_dose(product: Dict[str, Any]) -> Dict[str, Any]:
     unassessed_primary: Optional[str] = None
     if not no_rda_reference and purpose_credit is None:
         unassessed_primary = _mass_primary_without_reference(product)
-        if unassessed_primary and window_credit > NO_REFERENCE_INDIVIDUAL_DOSE_CREDIT:
+        if unassessed_primary and window_credit > unbenchmarked_dose_credit():
             # The assessed nutrients' window average must not present a
             # complete product-dose assessment while the mass-primary active
             # has no reference at all; it can earn no more than the existing
             # partial credit for a disclosed dose without a reference.
-            window_credit = NO_REFERENCE_INDIVIDUAL_DOSE_CREDIT
+            window_credit = unbenchmarked_dose_credit()
 
     components: Dict[str, float] = {
         "supplemental_window_proxy": round(
@@ -763,16 +762,14 @@ def score_dose(product: Dict[str, Any]) -> Dict[str, Any]:
             }
         if unbenchmarked_purposes:
             metadata["window_proxy_status"] = "limited_assessability_unbenchmarked_purpose"
-            # A mixed whole-preparation/individual fallback has no single
-            # value. Keep the uncertainty status without misreporting 16 for
-            # a preparation that actually contributes 12.
-            if len(set(purpose_fallback_values)) == 1:
-                metadata["partial_credit_value"] = purpose_fallback_values[0]
+            # V4.1 Step 4: a whole preparation and an individual amount share
+            # the one unbenchmarked neutral, so the fallback has one value.
+            metadata["partial_credit_value"] = purpose_fallback_values[0]
     if window_reason is not None:
         metadata["window_proxy_reason"] = window_reason
     if unassessed_primary:
         metadata["primary_active_unassessed"] = unassessed_primary
-        if components["supplemental_window_proxy"] <= NO_REFERENCE_INDIVIDUAL_DOSE_CREDIT:
+        if components["supplemental_window_proxy"] <= unbenchmarked_dose_credit():
             metadata["window_proxy_status"] = "partial_credit_primary_active_unassessed"
             metadata["partial_credit_value"] = round(components["supplemental_window_proxy"], 4)
     if no_rda_reference:

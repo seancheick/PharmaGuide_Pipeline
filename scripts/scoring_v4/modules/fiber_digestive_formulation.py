@@ -12,7 +12,6 @@ from scoring_v4.modules.fiber_digestive_helpers import (
     has_fiber_context,
     GUAR_CANONICALS,
     is_hydrolyzed_guar_fiber_row,
-    nutrition_fiber_grams,
     product_name_text,
     row_text,
 )
@@ -24,22 +23,16 @@ from scoring_v4.modules.generic_helpers import (
     _norm_text,
     _safe_dict,
     _safe_list,
-    get_active_ingredients,
 )
 
 
-from scoring_v4.route_features import is_fiber_declaring_anchor
 from scoring_v4.quality_score_config import block as _cfg_block
 
 _FVM = _cfg_block("formulation_variant_magnitudes", "fiber_digestive")["fiber_digestive"]
 
 
 DIMENSION_CAP = _FVM["dimension_cap"]
-# Former clean-daily-use points, kept as a fixed base (1.21.4): sugar and sweeteners are
-# charged once, by the shared B1 owners in shared_formulation_penalty_detail.
-ROUTE_BASE = _FVM["route_base"]
 PHASE_MARKER = "P1.8_fiber_digestive_formulation_v1"
-STIMULANT_LAXATIVE_CANONICALS = {"senna", "cascara_sagrada", "aloe_latex", "aloe_emodin"}
 
 
 def score_formulation(product: Dict[str, Any]) -> Dict[str, Any]:
@@ -50,18 +43,15 @@ def score_formulation(product: Dict[str, Any]) -> Dict[str, Any]:
     if not rows and not has_fiber_context(product):
         return score_generic_formulation(product)
 
-    all_rows = get_active_ingredients(product)
     source_quality, source_class = _source_quality(rows, product)
-    disclosure = _fiber_disclosure(rows, product)
-    focus = _fiber_focus(all_rows, rows)
-    practicality = _practicality(product)
 
+    # V4.1 Step 4: disclosure belongs to Transparency, and focus, route-base
+    # and name-based practicality bonuses are retired. A stimulant laxative
+    # (senna, cascara, aloe latex) is a banned_recalled watchlist/high-risk
+    # identity: the safety gate reports it and the formula-checks pillar
+    # charges it once when the match is confirmed.
     components: Dict[str, float] = {
         "fiber_source_quality": round(source_quality, 4),
-        "fiber_disclosure": round(disclosure, 4),
-        "fiber_formula_focus": round(focus, 4),
-        "fiber_route_base": ROUTE_BASE,
-        "fiber_practicality": round(practicality, 4),
     }
 
     shared = shared_formulation_penalty_detail(product)
@@ -135,47 +125,3 @@ def _has_row_owned_guar_signal(row: Dict[str, Any]) -> bool:
         )
     )
     return bool(re.search(r"\bguar\b", owned_text))
-
-
-def _fiber_disclosure(rows: List[Dict[str, Any]], product: Dict[str, Any]) -> float:
-    has_grams = nutrition_fiber_grams(product) is not None or any(row.get("quantity") for row in rows)
-    has_named_type = bool(rows)
-    if has_grams and has_named_type:
-        return 6.0
-    if has_grams:
-        return 4.0
-    if has_named_type:
-        return 3.0
-    return 0.0
-
-
-def _fiber_focus(all_rows: List[Dict[str, Any]], rows: List[Dict[str, Any]]) -> float:
-    if _has_stimulant_laxative(all_rows):
-        return 1.0
-    if not all_rows:
-        return 2.0
-    # A label-taxonomy anchor that declares fiber ("Proprietary Fiber Blend",
-    # a Nutrition Facts "Insoluble Fiber" sub-row) is on-focus; any other
-    # anchor ("Superfood, Greens & Herbal Blends") stays off-focus.
-    fiber_like = len(rows) + sum(1 for r in all_rows if r not in rows and is_fiber_declaring_anchor(r))
-    if len(all_rows) <= max(2, fiber_like + 1):
-        return 5.0
-    return 3.0
-
-
-def _practicality(product: Dict[str, Any]) -> float:
-    text = product_name_text(product)
-    if any(term in text for term in ("cleanse", "detox")):
-        return 0.5
-    return 2.0
-
-
-def _has_stimulant_laxative(rows: List[Dict[str, Any]]) -> bool:
-    for row in rows:
-        cid = canonical(row)
-        text = row_text(row)
-        if cid in STIMULANT_LAXATIVE_CANONICALS:
-            return True
-        if any(term in text for term in ("senna", "cascara", "aloe latex", "aloe-emodin")):
-            return True
-    return False

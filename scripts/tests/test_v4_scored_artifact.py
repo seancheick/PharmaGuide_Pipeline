@@ -161,25 +161,32 @@ def test_build_scored_artifact_is_v4_native(monkeypatch: pytest.MonkeyPatch) -> 
     assert not any("mapped_coverage" in issue for issue in issues)
 
 
-def test_scored_artifact_exports_the_canonical_route_decision() -> None:
+@pytest.mark.parametrize("native", ["current", "stale", "missing"])
+def test_scored_artifact_exports_the_canonical_route_decision(native: str) -> None:
+    from copy import deepcopy
+    from scoring_input_contract import build_scoring_classification
+
     product = _product()
-    product["product_scoring_classification"] = {
-        "route_module": "generic",
-        "route_confidence": "high",
-        "route_evidence": ["single_mineral", "scoring_rows_present"],
-        "route_decision": {
-            "module": "generic",
-            "reason_codes": ["single_mineral", "scoring_rows_present"],
-            "confidence": "high",
-            "classifier_version": "1.2.0",
-        },
-    }
-
+    expected = build_scoring_classification(product, classification_origin="native_enrichment")
+    if native != "missing":
+        product["product_scoring_classification"] = deepcopy(expected)
+        if native == "stale":
+            product["product_scoring_classification"]["route_decision"].update(
+                module="sports", classifier_version="1.3.1",
+            )
+            product["product_scoring_classification"]["route_module"] = "sports"
+    before = deepcopy(product)
     artifact = scored_artifact.assemble_scored_artifact(product, _canned_v4())
+    assert artifact["route_decision"] == expected["route_decision"]
+    assert artifact["route_confidence"] == expected["route_confidence"]
+    assert product == before
 
-    expected = product["product_scoring_classification"]["route_decision"]
-    assert artifact["route_decision"] == expected
-    assert artifact["route_confidence"] == "high"
+
+def test_scored_artifact_rejects_a_genuinely_divergent_scoring_module() -> None:
+    v4 = _canned_v4()
+    v4["v4_module"] = "sports"
+    with pytest.raises(RuntimeError, match="canonical route decision diverged"):
+        scored_artifact.assemble_scored_artifact(_product(), v4)
 
 
 def test_unresolved_dose_safety_exports_typed_summary_and_partial_assessment() -> None:
@@ -278,7 +285,8 @@ def test_b1_inactive_penalty_details_follow_the_scoring_decision() -> None:
 
     detail = generic_formulation.shared_formulation_penalty_detail(product)
 
-    assert detail["penalties"]["B1_harmful_additives"] == -5.5
+    assert detail["metadata"]["formula_checks"]["B1_harmful_additives"] == 5.5
+    assert "B1_harmful_additives" not in detail["penalties"]
     # matched_labels carries EVERY non-active label that contributed to the id,
     # not just the winning row's: exporters join on it when the display resolver
     # assigns the same label a different rule id (see

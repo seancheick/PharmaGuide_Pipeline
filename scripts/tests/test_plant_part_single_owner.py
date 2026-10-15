@@ -44,9 +44,13 @@ def _botanical_components(artifact):
 
 
 @pytest.mark.parametrize("dsld_id", ["60306", "330145"])
-def test_label_disclosed_plant_part_earns_the_credit(scored, dsld_id):
+def test_label_disclosed_plant_part_is_not_a_formulation_credit(scored, dsld_id):
     # 60306: DSLD note "PlantPart: root". 330145: label row "Okra Pods Extract, Fresh".
-    assert _botanical_components(scored[dsld_id]).get("plant_part_disclosed") == 2.0
+    # V4.1 Step 4: the plant part stays a cleaner-owned label fact (the
+    # projection test below), but it is disclosure, not formulation quality.
+    components = _botanical_components(scored[dsld_id])
+    assert "plant_part_disclosed" not in components
+    assert components.get("recognized_botanical_identity") == 7.2
 
 
 def test_database_form_name_is_not_label_disclosure(scored):

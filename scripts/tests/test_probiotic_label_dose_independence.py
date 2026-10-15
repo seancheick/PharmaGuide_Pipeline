@@ -11,6 +11,8 @@ from scoring_v4.modules.probiotic_formulation import score_formulation
 from scoring_v4.modules.probiotic_transparency import score_transparency
 from test_probiotic_applicability_rubric import strain_product
 from test_studied_formula_assessment import seed_label
+from test_probiotic_identity_completeness import _disclosure_points, _total_cfu_points
+from scoring_v4.modules.generic_formulation import UNRATED_FORM_NEUTRAL
 
 
 def owned_label(dose=1e10):
@@ -34,7 +36,7 @@ def test_nonlive_source_invalidates_stale_live_clinical_and_cfu_projection(legac
     product["activeIngredients"][0]["forms"] = [{"name": "heat killed"}]
     assert studied_formulas.label_owned_native_strains(product) == []
     assert studied_formulas.measured_native_strain_doses(product) == []
-    assert score_formulation(product)["components"]["exact_identity_completeness"] == 0
+    assert score_formulation(product)["metadata"]["identified_strain_count"] == 0
     assert score_evidence(product)["score"] == 0
     assert score_dose(product)["metadata"]["cfu_adequacy_v3_points"] == 0
     assert product["probiotic_data"]["clinical_strains"] == original
@@ -80,14 +82,14 @@ def test_citation_review_does_not_change_label_dose_or_formulation(monkeypatch, 
         assert all(r["research_accepted"] is False for r in rows if r["clinical_id"] == "STRAIN_LGG")
 
 
-def test_aggregate_blend_keeps_presence_credit_without_inventing_strain_allocations():
+def test_aggregate_blend_is_a_label_limit_without_invented_strain_allocations():
+    # V4.1 Step 4: a total CFU without per-strain amounts is recorded, not credited.
     dose = score_dose(aggregate_label())
-    assert dose["components"]["per_strain_cfu_disclosure"] == 0
-    assert dose["components"]["cfu_adequacy"] == 4
+    assert _disclosure_points(dose) == 0
+    assert dose["components"]["cfu_adequacy"] == 0
     proxy = dose["metadata"]["aggregate_cfu_proxy"]
-    assert proxy["reason"] == "aggregate_cfu_named_label_presence"
-    assert "proxy_cfu_per_strain" not in proxy
-    assert "proxy_tier" not in proxy
+    assert proxy == {"applied": True, "reason": "aggregate_cfu_label_presence",
+                     "total_billion_count": 11.0}
     assert dose["metadata"]["cfu_adequacy_basis"] == "aggregate_cfu_disclosed_only"
 
 
@@ -147,7 +149,7 @@ def test_export_consolidates_native_projections_without_losing_holds(conflict):
         assert exported["block_reason"] == "Rejected source identity"
         # A caller's rejected clinical projection does not erase the actual LGG
         # label. The rejected row remains excluded from the clinical gate.
-        assert score_formulation(p)["components"]["exact_identity_completeness"] == 8
+        assert score_formulation(p)["metadata"]["identified_strain_count"] == 1
         assert studied_formulas.label_owned_native_strains(p) == []
     elif conflict == "inactivated":
         assert exported["is_inactivated"] is True
@@ -160,7 +162,7 @@ def test_has_cfu_flag_cannot_manufacture_numeric_disclosure(count):
     product["probiotic_data"].update(total_cfu=0, total_billion_count=0)
     product["probiotic_data"]["probiotic_blends"][0]["cfu_data"]["cfu_count"] = count
     dose = score_dose(product)
-    assert dose["components"]["per_strain_cfu_disclosure"] == 0
+    assert _disclosure_points(dose) == 0
     assert dose["score"] == 0
     json.dumps(dose, allow_nan=False)
 
@@ -171,8 +173,12 @@ def test_nonfinite_summary_cannot_crash_or_inflate_potency(field, value):
     product = {"probiotic_data": {field: value}}
     for scorer in (score_dose, score_formulation):
         result = scorer(product)
-        assert result["score"] == 0
         json.dumps(result, allow_nan=False)
+    assert score_dose(product)["score"] == 0
+    # No row, rating or delivery: only the shared unrated-form neutral.
+    formulation = score_formulation(product)
+    assert formulation["components"] == {"A1_bio_score": UNRATED_FORM_NEUTRAL, "A3_delivery_system": 0.0}
+    assert formulation["metadata"]["total_billion_count"] == 0
 
 
 @pytest.mark.parametrize("count", [True, float("nan"), float("inf"), -1, None, 11])
@@ -300,14 +306,15 @@ def test_direct_mass_floor_requires_exact_source_owner_not_substring():
     p = _no_cfu_probiotic(active_rows=[{"name": "Lactobacillus rhamnosus GGX",
         "quantity": 25, "unit": "mg"}], clinical_strains=[_strain(
             "Lactobacillus rhamnosus GG", cfu_per_day=None)])
-    assert score_dose(p)["score"] == 0
+    dose = score_dose(p)
+    assert dose["score"] == 0
+    assert dose["metadata"]["direct_strain_mass_floor"]["applied"] is False
 
 
 def test_actual_source_identity_overrides_stale_clinical_and_blend_names():
     p = owned_label()
     p["activeIngredients"][0]["name"] = "Lactobacillus rhamnosus HN001"
     result = score_formulation(p)
-    assert result["components"]["exact_identity_completeness"] == 8
     assert result["metadata"]["total_strain_count"] == 1
     assert result["metadata"]["identified_strain_count"] == 1  # Actual HN001, not projected LGG.
     assert studied_formulas.label_owned_native_strains(p) == []
@@ -320,7 +327,7 @@ def test_normalized_billion_count_can_prove_disclosure_without_clinical_review()
     m = p["probiotic_data"]["probiotic_blends"][0]["cfu_data"]
     m.pop("cfu_count")
     m["billion_count"] = 10
-    assert score_dose(p)["components"]["per_strain_cfu_disclosure"] == 10
+    assert _disclosure_points(score_dose(p)) == 10
     assert score_dose(p)["components"]["cfu_adequacy"] == 10
 
 
@@ -336,7 +343,7 @@ def test_product_total_or_conflicting_measure_cannot_pose_as_individual_disclosu
     else:
         m["billion_count"] = 50
     dose = score_dose(p)
-    assert dose["components"]["per_strain_cfu_disclosure"] == 0
+    assert _disclosure_points(dose) == 0
     assert dose["score"] == 0
 
 
@@ -350,7 +357,7 @@ def test_pillars_do_not_reconstruct_a_conflicting_or_missing_total_from_child_pr
             p["probiotic_data"].pop("total_cfu")
             p["probiotic_data"].pop("total_billion_count")
         assert score_dose(p)["components"]["cfu_adequacy"] == 0
-        assert score_formulation(p)["components"]["total_cfu_disclosed"] == 0
+        assert _total_cfu_points(score_formulation(p)) == 0
         assert score_transparency(p)["components"]["aggregate_cfu_disclosure_proxy"] == 0
 
 
@@ -387,7 +394,7 @@ def test_matching_path_does_not_authorize_another_strains_measurement():
     result = score_dose(p)
     assert result["metadata"]["per_strain_cfu_disclosed_count"] == 0
     assert result["metadata"]["cfu_adequacy_v3_points"] == 0
-    # The valid product total still earns its existing aggregate disclosure floor;
+    # The valid product total is recorded as a label limit, not credited;
     # neither projected identity owns an individual measured potency.
     assert result["metadata"]["cfu_adequacy_basis"] == "aggregate_cfu_disclosed_only"
-    assert result["components"]["cfu_adequacy"] == 4
+    assert result["components"]["cfu_adequacy"] == 0

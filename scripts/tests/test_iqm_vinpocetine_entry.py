@@ -185,7 +185,9 @@ def test_real_single_active_label_reaches_the_scored_artifact():
     dose = artifact['quality_pillars_v4']['dose']
     assert 'dose benchmark is unavailable' in dose['reason']
     assert 'adequacy cannot be determined confidently' in dose['reason']
-    assert dose['components']['raw_dose'] == 16.0
+    # V4.1 Step 4: the shared unbenchmarked neutral (11.4 public, 12.54 raw on 22).
+    assert dose['components']['raw_dose'] == 12.54
+    assert dose['score'] == 11.4
     assert 'studied range' not in dose['reason']
 
 

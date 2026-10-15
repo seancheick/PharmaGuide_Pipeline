@@ -64,6 +64,7 @@ PROFILE_SELECTOR_FORBIDDEN_FIELDS: dict[str, str] = {
 # Any other raw read fails the audit; a scoring module is never allowlisted
 # for convenience.
 ALLOWLIST: dict[str, str] = {
+    'scripts/scoring_v4/exposure.py|format_nutrition_mass|get|unit|7d8612ac5a11': 'canonical_owner: exposure.format_nutrition_mass adapts the Nutrition Facts source row for row_exposure; it reads only the panel unit and delegates quantity/operator resolution to that shared owner before all copy consumers render it',
     'scripts/scoring_v4/modules/generic_helpers.py|eligible_delivery_data|get|raw_source_text|9f43e033ffb4': 'canonical_owner: generic_helpers.eligible_delivery_data verifies the detected technology against its label evidence before credit; all formulation scorers and export consume this shared result',
     'scripts/scoring_v4/modules/generic_helpers.py|eligible_delivery_data|subscript|raw_source_text|ddd26cf12576': 'canonical_owner: generic_helpers.eligible_delivery_data verifies the detected technology against its label evidence before credit; all formulation scorers and export consume this shared result',
 
@@ -115,7 +116,6 @@ ALLOWLIST: dict[str, str] = {
     "scripts/scoring_v4/gate_completeness.py|_has_missing_micronutrient_amount_panel|get|unit|d22733e3184e": "legacy_debt_main_0b7bf3f7: downstream raw read present on origin/main 0b7bf3f7 (or moved unchanged by Task 2); retire by reading the canonical provider",
     "scripts/scoring_v4/gate_safety.py|_clean_label_candidate_terms|get|activeIngredients|33d332e2e210": "legacy_debt_main_0b7bf3f7: downstream raw read present on origin/main 0b7bf3f7 (or moved unchanged by Task 2); retire by reading the canonical provider",
     "scripts/scoring_v4/gate_safety.py|_iter_resolver_safety_hits|get|activeIngredients|33d332e2e210": "legacy_debt_main_0b7bf3f7: downstream raw read present on origin/main 0b7bf3f7 (or moved unchanged by Task 2); retire by reading the canonical provider",
-    "scripts/scoring_v4/modules/fiber_digestive_formulation.py|_fiber_disclosure|get|quantity|437869d0a4ab": "legacy_debt_main_0b7bf3f7: downstream raw read present on origin/main 0b7bf3f7 (or moved unchanged by Task 2); retire by reading the canonical provider",
     "scripts/scoring_v4/modules/fiber_digestive_formulation.py|_has_row_owned_guar_signal|get|raw_source_text|2574dd84d909": "legacy_debt_main_0b7bf3f7: downstream raw read present on origin/main 0b7bf3f7 (or moved unchanged by Task 2); retire by reading the canonical provider",
     "scripts/scoring_v4/modules/fiber_digestive_helpers.py|nutrition_fiber_exposure|get|unit|7d8612ac5a11": "canonical_owner: nutrition_fiber_exposure owns the Nutrition Facts dietary-fiber quantity (Task 2); it reads the panel unit, not an ingredient row",
     "scripts/scoring_v4/modules/generic_evidence.py|_evidence_matching_mass_mg|get|quantity|437869d0a4ab": "legacy_debt_main_0b7bf3f7: downstream raw read present on origin/main 0b7bf3f7 (or moved unchanged by Task 2); retire by reading the canonical provider",

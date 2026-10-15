@@ -8,25 +8,17 @@ vs the studied 2.5-10 g for peptides) over-scores. This profile scores collagen 
 clinical dose range and formulation quality, mass-dominance routed (a multivitamin
 with a token collagen add-on stays on the generic path).
 
-  Formulation adapter (replaces A1/A2, max 15):
-    recognized collagen identity         +6
-    hydrolyzed peptides (not gelatin)    +2
-    collagen type disclosed (I/II/III…)  +2
-    source disclosed (marine/bovine/…)   +3
-    quantified dose present              +2
-    branded clinically-studied collagen  +3
+  Formulation adapter (replaces A1/A2; reference 8), V4.1 Step 4:
+    recognized collagen identity         collagen_identity_neutral (neutral baseline)
+    hydrolyzed peptides (not gelatin)    collagen_hydrolyzed
+  Type, source and the printed amount are Transparency facts; a brand name is
+  an Evidence fact.
 
   Dose adapter (replaces RDA/UL proxy), via rda_therapeutic_dosing.json
   per collagen subtype (peptides 2.5-10 g, UC-II 40 mg, BioCell 500-2000 mg,
   gelatin 5-15 g, NEM 500 mg) — UNIT-AWARE (gram entries vs mg, masses are
-  normalized to mg):
-    within studied range   -> 21
-    near studied range     -> 16
-    below studied range    -> 10   (the underdosed-collagen honesty case)
-    above studied range    -> 12
-    disclosed, no reference-> 10
-    blend / anchor total   -> 7
-    primary, no dose       -> 0    (NOT denominator exclusion)
+  normalized to mg). It uses the botanical owner's graded studied-range bands
+  and its benchmark-aware neutral for an unassessed amount.
 
 Reuses the shared identity/mass/dosing helpers from botanical_profile so unit
 normalization (incl. DSLD "Gram(s)") and routing stay consistent across profiles.
@@ -50,6 +42,8 @@ from scoring_input_contract import (
     classify_ingredient_roles,
 )
 from scoring_v4.modules.botanical_profile import (
+    graded_studied_range,
+    unassessed_amount_band,
     _norm,
     _mass_mg,
     _scoring_actives,
@@ -66,17 +60,11 @@ _FVM = _cfg_block("formulation_variant_magnitudes", "collagen")["collagen"]
 
 
 COLLAGEN_FORMULATION_CAP = _FVM["collagen_formulation_cap"]
+COLLAGEN_IDENTITY_NEUTRAL = _FVM["collagen_identity_neutral"]
+COLLAGEN_HYDROLYZED = _FVM["collagen_hydrolyzed"]
 
 _COLLAGEN_TOKENS = ("collagen", "gelatin")
 _HYDROLYZED_TOKENS = ("hydrolyzed", "hydrolysed", "hydrolysate", "peptide")
-_SOURCE_TOKENS = ("marine", "bovine", "chicken", "porcine", "fish", "grass-fed",
-                  "grass fed", "eggshell", "sternal cartilage")
-_TYPE_RE = re.compile(r"\btype\s*(i{1,3}|1|2|3|iv|v|x)\b|\buc-?ii\b|undenatured")
-# Real branded clinically-studied collagen ingredients. This is a label-fidelity
-# (formulation-quality) signal — "the product uses a recognized branded extract" —
-# NOT an evidence/citation claim.
-_COLLAGEN_BRANDS = ("verisol", "biocell", "fortigel", "fortibone", "peptan",
-                    "naticol", "bodybalance", "tendoforte", "ucii", "uc-ii")
 
 
 def _identity_text(row: Dict[str, Any]) -> str:
@@ -179,31 +167,26 @@ def _range_mg(entry: Dict[str, Any]) -> Optional[tuple]:
 
 
 def _score_collagen_row(row: Dict[str, Any], product: Dict[str, Any]) -> Dict[str, Any]:
+    """The botanical owner's graded studied-range bands, on the collagen range
+    (V4.1 Step 4); unassessed amounts follow the same benchmark rule."""
+    entry = _collagen_dosing_entry(row, product)
+    rng = _range_mg(entry) if entry else None
+    benchmark = "present" if rng is not None else "absent"
     if row.get("is_blend_header") or row.get("blend_total_weight_only") or row.get("is_parent_total"):
-        return {"score": 7.0, "band": "blend_total_only", "metadata": {}}
+        return unassessed_amount_band("blend_total_only", benchmark)
     # anchor / product-level total is not a verified per-ingredient dose
     if (row.get("scoring_input_kind") == "product_level_evidence"
             or row.get("evidence_type") == "blend_anchor_mass"):
-        return {"score": 7.0, "band": "blend_total_only", "metadata": {}}
+        return unassessed_amount_band("blend_total_only", benchmark)
 
     mass = _mass_mg(row)
     if mass is None:
-        return {"score": 0.0, "band": "primary_no_dose", "metadata": {}}
-
-    entry = _collagen_dosing_entry(row, product)
-    rng = _range_mg(entry) if entry else None
+        return unassessed_amount_band("primary_no_dose", benchmark)
     if rng is None:
-        return {"score": 10.0, "band": "disclosed_no_reference", "metadata": {}}
+        return unassessed_amount_band("disclosed_no_reference", benchmark)
 
     lo, hi = rng
-    meta = {"dose_mg": mass, "range_mg": [lo, hi]}
-    if lo <= mass <= hi:
-        return {"score": 21.0, "band": "within_studied_range", "metadata": meta}
-    if 0.8 * lo <= mass < lo or hi < mass <= 1.2 * hi:
-        return {"score": 16.0, "band": "near_studied_range", "metadata": meta}
-    if mass < 0.8 * lo:
-        return {"score": 10.0, "band": "below_studied_range", "metadata": meta}
-    return {"score": 12.0, "band": "above_studied_range", "metadata": meta}
+    return graded_studied_range(product, row, lo, hi, "mg", {"dose_mg": mass, "range_mg": [lo, hi]})
 
 
 def score_collagen_dose(product: Dict[str, Any]) -> Dict[str, Any]:
@@ -274,17 +257,12 @@ def score_collagen_formulation(product: Dict[str, Any]) -> Dict[str, Any]:
                 "metadata": {"reason": "no_collagen_active"}}
 
     text = _identity_text(row)
-    components: Dict[str, float] = {"recognized_collagen_identity": 6.0}
+    # V4.1 Step 4: identity is a neutral baseline and hydrolysis the earned
+    # trait; type, source and amount are Transparency facts, and a brand name
+    # is an Evidence fact.
+    components: Dict[str, float] = {"recognized_collagen_identity": COLLAGEN_IDENTITY_NEUTRAL}
     if any(t in text for t in _HYDROLYZED_TOKENS):
-        components["hydrolyzed_peptides"] = 2.0
-    if _TYPE_RE.search(text):
-        components["type_disclosed"] = 2.0
-    if any(t in text for t in _SOURCE_TOKENS):
-        components["source_disclosed"] = 3.0
-    if _mass_mg(row) is not None:
-        components["quantified_dose_present"] = 2.0
-    if any(b in text for b in _COLLAGEN_BRANDS):
-        components["branded_clinically_studied"] = 3.0
+        components["hydrolyzed_peptides"] = COLLAGEN_HYDROLYZED
 
     raw = sum(components.values())
     return {"score": round(min(COLLAGEN_FORMULATION_CAP, max(0.0, raw)), 4),

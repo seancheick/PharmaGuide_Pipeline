@@ -19,8 +19,10 @@ from scoring_v4.modules.generic_helpers import _safe_dict, _safe_list
 # Phase 5: rebalanced +10 -> +4. Hygiene keeps ONLY the two non-overlapping
 # clean-safety components (no banned/high-risk/watchlist, no recalled). The
 # overdose / harmful-additive / manufacturer-violation passes were removed
-# because each is already penalised by its own dimension (B7 / B1 /
-# manufacturer_violations) — crediting "absence" here double-counted.
+# because each is already penalised by its own owner (B7 in Dose; additive
+# and sugar findings by this pillar's formula checks since V4.1 Step 4;
+# manufacturer violations) — crediting "absence" here double-counted. A
+# high-risk or watchlist match zeroes the base only when confirmed.
 from scoring_v4.quality_score_config import block as _cfg_block
 
 _CM = _cfg_block("category_magnitudes", "safety_hygiene")["safety_hygiene"]
@@ -132,6 +134,7 @@ def _has_product_payload(product: Dict[str, Any]) -> bool:
 
 
 _B0_STATUSES = ("banned", "high_risk", "watchlist")
+_CONFIRMATION_REQUIRED = ("high_risk", "watchlist")
 # Most severe first: the explanation leads with the strongest cause.
 _DRIVER_ORDER = ("banned", "recalled", "high_risk", "watchlist")
 _REGISTRY_ID_RE = re.compile(r"^[A-Z0-9_]+$")
@@ -141,10 +144,14 @@ def _hard_failure_drivers(product: Dict[str, Any]) -> List[Dict[str, Any]]:
     """Concerns that survived the safety gate's policy and zero the hygiene base.
 
     One list decides the failure and explains it, so the explanation can never
-    name a different cause than the one that removed the points."""
+    name a different cause than the one that removed the points. A high-risk or
+    watchlist match counts only once confirmed; a likely or review match keeps
+    its gate warning but is not a numerical finding (V4.1 Step 4)."""
     drivers: List[Dict[str, Any]] = []
     for sig in resolve_safety_gate(product).ingredient_concerns:
         if sig.status not in _DRIVER_ORDER:
+            continue
+        if sig.status in _CONFIRMATION_REQUIRED and sig.match_resolution != "confirmed":
             continue
         name = (sig.evidence_text or "").strip() or None
         if name and _REGISTRY_ID_RE.match(name):

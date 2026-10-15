@@ -13,7 +13,7 @@ from __future__ import annotations
 from functools import lru_cache
 import json
 from pathlib import Path
-from typing import Any, Dict
+from typing import Any, Callable, Dict, Optional
 
 from scoring_v4.modules.botanical_profile import (
     is_botanical_product,
@@ -35,7 +35,6 @@ from scoring_v4.modules.generic_helpers import (
     _safe_dict,
     _safe_list,
 )
-from scoring_v4.gate_safety import resolve_safety_gate
 from scoring_v4.modules.immune_support import immune_support_formulation_adjustment
 from scoring_reference_resolver import parent_relative_form_quality
 
@@ -80,15 +79,10 @@ DELIVERY_TIER_POINTS = {int(k): v for k, v in _FM["a3_delivery_tier_points"].ite
 
 A5B_STANDARDIZED_FULL = _FM["a5b_standardized_full"]
 A5B_STANDARDIZED_MARKER_ONLY = _FM["a5b_standardized_marker_only"]
+# One owner for "this form is not rated": a row (or a whole product) without a
+# form rating keeps this neutral on the 15-point form scale (12/20 public).
+UNRATED_FORM_NEUTRAL = _FM["unrated_form_neutral"]
 
-B0_HIGH_RISK_PENALTY = _FM["b0_high_risk_penalty"]
-B0_WATCHLIST_PENALTY = _FM["b0_watchlist_penalty"]
-B0_MODERATE_PENALTY = _FM["b0_moderate_penalty"]
-# B0 safety-signal penalties ACCUMULATE per substance (2 high_risk = -20, a
-# high_risk + watchlist mix = -15) so a product carrying more risk is tanked more.
-# Bounded by the formulation dimension itself (a B0 of 30 can fully consume the
-# 30-pt dimension, not exceed it). Was 10.0 (which collapsed 2 high_risk into 1).
-B0_CAP = DIMENSION_CAP  # 30.0
 
 # B1 harmful-additive points/cap are HOISTED to scripts/scoring_v4/config/
 # quality_score.json (formulation_penalties). Single source: the safety_hygiene
@@ -116,18 +110,23 @@ PHASE_MARKER_COMPLETE = "P1.3.1b_formulation_complete"
 # --- A1 bio_score ---------------------------------------------------------
 
 
-def _bio_score_assessment(product: Dict[str, Any]) -> tuple[float, int]:
+def _bio_score_assessment(product: Dict[str, Any],
+                          row_filter: Optional[Callable[[Dict[str, Any]], bool]] = None) -> tuple[float, int]:
     """Return the parent-relative A1 average and available-rating count.
 
     No rating and an explicit zero both contribute zero numerically, but they
     must not produce the same consumer explanation. Use the same eligible
     rows and bio_score reader for both the arithmetic and that distinction.
+    ``row_filter`` limits the average to a route's purpose rows (probiotic
+    strains), so a co-ingredient cannot supply that route's form quality.
     """
     scorable = scorable_ingredients(
         product,
         allow_sole_mapped_blend=True,
         require_dose=False,
     )
+    if row_filter is not None:
+        scorable = [row for row in scorable if row_filter(row)]
     scores = []
     for ingredient in scorable:
         raw_score = bio_score_of(ingredient)
@@ -216,14 +215,14 @@ def _dietary_sugar_penalty_detail(product: Dict[str, Any]) -> Dict[str, Any]:
     # sub-2% capsule carrier it is not dietary sugar, and the sugar owner had
     # already said so: level "sugar_free", contains_sugar false, sugar_sources
     # empty. The branch below fired anyway, so 1,146 products classified
-    # SUGAR-FREE took a dietary-sugar penalty - and because B1_dietary_sugar
-    # mirrors into Safety (penalty_registry FORMULA_QUALITY_MIRROR) while the
-    # low-severity additive clamp does not apply to it, 1,101 of them were also
-    # told "Safety concern: additive or sweetener concerns" on no other basis.
+    # SUGAR-FREE took a dietary-sugar penalty - and because B1_dietary_sugar then
+    # mirrored into Safety (the FORMULA_QUALITY_MIRROR group, removed in V4.1
+    # Step 4), 1,101 of them were also told "Safety concern: additive or
+    # sweetener concerns" on no other basis.
     #
     # Maltodextrin keeps its own treatment: the additive owner already scores it
-    # as ADD_MALTODEXTRIN, category filler, severity_level low, 0.5 - and that
-    # penalty IS low-severity, so it correctly clamps out of Safety. One label
+    # as ADD_MALTODEXTRIN, category filler, severity_level low, 0.5, charged once
+    # by the formula checks as a low-concern formula-quality finding. One label
     # occurrence, one owner. This guard is deliberately written against the sugar
     # determination rather than the ingredient name, so any future carrier
     # classified the same way is covered without another patch.
@@ -270,24 +269,6 @@ def _dietary_sugar_penalty_detail(product: Dict[str, Any]) -> Dict[str, Any]:
         "sugar_alcohols": sugar_alcohols,
         "syrup_sources": syrup_sources,
     }
-
-
-def _penalty_b0_moderate_watchlist(product: Dict[str, Any]) -> float:
-    """Moderate/high-risk/watchlist concerns that survived the safety gate's
-    policy (US jurisdiction, role-retired rules, role scope, excipient
-    warnings) and are not short-circuit verdicts. Only confirmed matches
-    score here; likely and review items stay non-scoring until reviewed."""
-    total = 0.0
-    for signal in resolve_safety_gate(product).ingredient_concerns:
-        if signal.match_resolution != "confirmed":
-            continue
-        if signal.status == "high_risk":
-            total += B0_HIGH_RISK_PENALTY
-        elif signal.status == "watchlist":
-            total += B0_WATCHLIST_PENALTY
-        elif signal.severity == "moderate":
-            total += B0_MODERATE_PENALTY
-    return _clamp(0.0, B0_CAP, total)
 
 
 def _b1_harmful_additive_penalty_detail(product: Dict[str, Any]) -> Dict[str, Any]:
@@ -377,24 +358,24 @@ def _b1_harmful_additive_penalty_detail(product: Dict[str, Any]) -> Dict[str, An
 
 
 def shared_formulation_penalty_detail(product: Dict[str, Any]) -> Dict[str, Any]:
-    """Shared B0/B1 formulation penalties for every v4 module.
+    """Shared formula-check findings for every v4 module.
 
     Generic, sports, omega, probiotic, and multi/prenatal products all read the
-    same enriched safety/sugar contracts. Keep the penalty math here so
-    module-specific formulation scorers cannot drift on watchlist additives,
-    harmful additives, or dietary sugar.
+    same enriched safety/sugar contracts, so the additive and dietary-sugar math
+    lives here once. Since V4.1 Step 4 these findings are charged by the
+    formula-checks (sixth) pillar, which reads ``formula_checks``; Formulation
+    no longer subtracts them, and a high-risk or watchlist ingredient is owned
+    by that pillar's safety base. ``penalties`` stays for route callers.
     """
     dietary_sugar_detail = _dietary_sugar_penalty_detail(product)
     harmful_additive_detail = _b1_harmful_additive_penalty_detail(product)
     return {
-        "penalties": {
-            "B1_dietary_sugar": round(-float(dietary_sugar_detail["penalty"]), 4),
-            "B0_moderate_watchlist": round(-_penalty_b0_moderate_watchlist(product), 4),
-            "B1_harmful_additives": round(
-                -float(harmful_additive_detail["penalty"]), 4
-            ),
-        },
+        "penalties": {},
         "metadata": {
+            "formula_checks": {
+                "B1_harmful_additives": round(float(harmful_additive_detail["penalty"]), 4),
+                "B1_dietary_sugar": round(float(dietary_sugar_detail["penalty"]), 4),
+            },
             "dietary_sugar": dietary_sugar_detail,
             "inactive_penalty_details": harmful_additive_detail[
                 "inactive_penalty_details"
@@ -446,6 +427,10 @@ def score_formulation(product: Dict[str, Any]) -> Dict[str, Any]:
         product = {}
 
     bio_score, form_assessed_count = _bio_score_assessment(product)
+    if form_assessed_count == 0:
+        # V4.1 Step 4: an unrated form is an explicit neutral before deductions,
+        # not a pillar-level lift applied after them.
+        bio_score = UNRATED_FORM_NEUTRAL
     delivery_data = eligible_delivery_data(product)
     components: Dict[str, float] = {
         "A1_bio_score": round(bio_score, 4),

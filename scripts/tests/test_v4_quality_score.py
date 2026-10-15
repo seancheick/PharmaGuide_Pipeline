@@ -148,10 +148,10 @@ def test_formulation_cheap_form_stays_low() -> None:
 
 def test_formulation_multi_uses_panel_reference() -> None:
     from scoring_v4.quality_score import assemble_quality_score
-    # multi/prenatal raw formulation is IQM panel form quality 12 + disclosure 2; ref 14
-    out = assemble_quality_score(_shadow(module="multi_or_prenatal", bd=_module_bd(form=12, form_max=14)))
+    # V4.1 Step 4: multi/prenatal raw formulation is IQM panel form quality alone; ref 12
+    out = assemble_quality_score(_shadow(module="multi_or_prenatal", bd=_module_bd(form=10, form_max=12)))
     f = out["quality_pillars_v4"]["formulation"]["score"]
-    assert f == 17.1  # 12/14*20
+    assert f == 16.7  # 10/12*20
 
 
 def test_formulation_never_exceeds_20() -> None:
@@ -315,14 +315,14 @@ def test_violation_penalty_floors_pillar_at_zero() -> None:
     assert viol["quality_pillars_v4"]["safety_hygiene"]["score"] == 0.0
 
 
-def test_b1_additive_and_sugar_penalties_reduce_public_safety_pillar() -> None:
-    # The additive/sweetener signal still lowers formulation, but the public
-    # Safety Hygiene pillar must not claim 10/10 when additive concerns exist.
+def test_b1_additive_and_sugar_findings_are_charged_once_by_the_safety_pillar() -> None:
+    # V4.1 Step 4: Formulation records the findings; the public formula-checks
+    # pillar is their one numerical owner and cannot claim 10/10 with them.
     from scoring_v4.quality_score import assemble_quality_score
     bd = _module_bd(form=2, form_max=30, hygiene=4)
-    bd["dimensions"]["formulation"]["penalties"] = {
-        "B1_harmful_additives": -1.0,
-        "B1_dietary_sugar": -2.0,
+    bd["dimensions"]["formulation"].setdefault("metadata", {})["formula_checks"] = {
+        "B1_harmful_additives": 1.0,
+        "B1_dietary_sugar": 2.0,
     }
 
     out = assemble_quality_score(_shadow(module="generic", bd=bd))

@@ -12,10 +12,10 @@ from __future__ import annotations
 import json
 import math
 from datetime import datetime, timezone
-from typing import Any, Dict
+from typing import Any, Dict, Optional
 
 from score_supplements_v4 import score_product_v4
-from scoring_input_contract import get_scoring_ingredients, scoring_input_scope
+from scoring_input_contract import build_scoring_classification, get_scoring_ingredients, scoring_input_scope
 from scoring_v4.gate_safety import safety_resolvers_failed, stated_safety_signal
 from supplement_taxonomy import percentile_label_for
 
@@ -117,10 +117,74 @@ def _product_safety_status(
 UNASSESSED_EVIDENCE_DISPLAY_STATES = frozenset({"not_yet_reviewed"})
 
 
+#: Routes whose Dose assesses vitamin and mineral adequacy.
+_NUTRIENT_DOSE_ROUTES = frozenset({"generic", "multi_or_prenatal", "b_complex"})
+#: Generic Dose methods that read vitamin/mineral amounts (the botanical,
+#: collagen, sleep and joint profiles never do).
+_GENERIC_NUTRIENT_DOSE_METHODS = frozenset({
+    "rda_ul_proxy_until_dietary_intake_table",
+    "immune_support_daily_dose_v1",
+})
+#: Adequacy statuses recorded when a printed nutrient amount could not be read.
+#: An unstated vitamin form is the label's limitation (its upper-limit risk is
+#: dose-safety's unresolved state), so it is not listed here.
+_UNREAD_NUTRIENT_AMOUNT_STATUSES = frozenset({
+    "skipped_unit_unrecognized",
+    "skipped_amount_not_declared",
+})
+
+
+def unfinished_source_assessment(enriched_product: Dict[str, Any],
+                                 module_breakdown: Dict[str, Any]) -> Optional[str]:
+    """Name PharmaGuide's own unfinished work, never a label limitation (V4.1 Step 4).
+
+    A hidden or missing amount is the label's limitation and stays scored. These
+    are ours: a botanical whose benchmark identity we could not resolve, a
+    printed nutrient amount or unit we could not read, and a printed sugars
+    line whose amount we could not read.
+    """
+    dose_meta = _safe_dict(_safe_dict(_safe_dict(module_breakdown.get("dimensions")).get("dose")).get("metadata"))
+    assessments = [_safe_dict(dose_meta.get("botanical_dose"))] + [
+        _safe_dict(_safe_dict(item).get("metadata"))
+        for item in dose_meta.get("specialized_purpose_assessments") or []
+    ]
+    if any(item.get("benchmark") == "unresolved" for item in assessments):
+        return "dose_benchmark_identity_unresolved"
+    # A printed botanical/collagen amount the exposure owner could not read.
+    bands = {dose_meta.get("botanical_dose_band"), dose_meta.get("collagen_dose_band")} | {
+        _safe_dict(item).get("band") for item in dose_meta.get("specialized_purpose_assessments") or []
+    }
+    if "amount_not_assessable" in bands:
+        return "dose_amount_unread"
+    # Only a nutrient the route's Dose benchmarks (the adequacy owner found its
+    # RDA/UL reference record; its RDA/AI is never computed for an unread
+    # amount), and only when the owner recorded a printed number it could not
+    # read: an incidental vitamin on a protein or fiber label does not hold the
+    # tier, and an amount the label never printed is the label's limitation.
+    module = module_breakdown.get("module")
+    if module in _NUTRIENT_DOSE_ROUTES and (
+        module != "generic" or dose_meta.get("method") in _GENERIC_NUTRIENT_DOSE_METHODS
+    ):
+        for row in _safe_dict(enriched_product.get("rda_ul_data")).get("adequacy_results") or []:
+            if not isinstance(row, dict) or row.get("ul_status") not in _UNREAD_NUTRIENT_AMOUNT_STATUSES:
+                continue
+            printed = row.get("original_quantity")
+            if (row.get("data_by_group") and isinstance(printed, (int, float))
+                    and not isinstance(printed, bool) and printed > 0):
+                return "nutrient_amount_unread"
+    # The enricher owns the sugar reading: a printed sugars line it classified
+    # but could not read as an exact mass keeps its level with no amount.
+    sugar = _safe_dict(_safe_dict(enriched_product.get("dietary_sensitivity_data")).get("sugar"))
+    if sugar.get("contains_sugar") and sugar.get("level") and sugar.get("amount_g") is None:
+        return "sugar_amount_unread"
+    return None
+
+
 def _quality_assessment_status(
     quality_score_status: str,
     dose_safety: Dict[str, Any],
     pillars: Dict[str, Any] | None = None,
+    unfinished: Optional[str] = None,
 ) -> str:
     """Report whether the assessment the rubric REQUIRES actually completed.
 
@@ -155,6 +219,8 @@ def _quality_assessment_status(
     # profile does not make the sixth pillar assessed.
     evidence = _safe_dict(_safe_dict(pillars).get("evidence"))
     if evidence.get("display_state") in UNASSESSED_EVIDENCE_DISPLAY_STATES:
+        return "partial"
+    if unfinished and quality_score_status == "scored":
         return "partial"
     if quality_score_status in {"scored", "suppressed_safety"}:
         return "complete"
@@ -238,8 +304,9 @@ def assemble_scored_artifact(
         safety_gate,
         was_assessed=safety_was_assessed,
     )
+    unfinished = unfinished_source_assessment(enriched_product, _safe_dict(module_breakdown))
     quality_assessment_status = _quality_assessment_status(
-        status, dose_safety, v4.get("quality_pillars_v4")
+        status, dose_safety, v4.get("quality_pillars_v4"), unfinished
     )
     quality_score = v4.get("quality_score_v4_100")
     verdict = _public_verdict(v4, mapped_coverage)
@@ -261,9 +328,7 @@ def assemble_scored_artifact(
     strict_contract = dict(diagnostics["strict_scoring_contract"])
     scored_at = datetime.now(timezone.utc).isoformat()
     config_fingerprint = _config_fingerprint(provenance)
-    classification = _safe_dict(
-        enriched_product.get("product_scoring_classification")
-    )
+    classification = build_scoring_classification(enriched_product)
     route_decision = dict(_safe_dict(classification.get("route_decision")))
     route_confidence = (
         route_decision.get("confidence")

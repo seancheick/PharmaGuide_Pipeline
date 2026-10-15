@@ -33,7 +33,7 @@ if str(SCRIPTS_ROOT) not in sys.path:
 
 
 EXPECTED_DIMENSION_CAPS = {
-    "formulation": 14,  # IQM panel form quality 12 + disclosure 2 (quality_score 1.7.0)
+    "formulation": 12,  # IQM panel form quality alone (disclosure retired in 1.26.0)
     "dose": 25,
     "evidence": 20,
     "transparency": 15,

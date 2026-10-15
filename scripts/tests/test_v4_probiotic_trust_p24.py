@@ -287,7 +287,9 @@ def test_probiotic_trust_independent_of_formulation_dose_evidence() -> None:
 
     breakdown = score_probiotic(high_form_no_certs).to_breakdown()
     formulation = breakdown["dimensions"]["formulation"]
-    assert formulation["components"]["exact_identity_completeness"] == 8
+    # V4.1 Step 4: identity completeness is recorded, not a Formulation credit.
+    assert formulation["metadata"]["identified_strain_count"] == formulation["metadata"]["total_strain_count"]
+    assert "exact_identity_completeness" not in formulation["components"]
     assert formulation["max"] == 15
     assert _trust_view(breakdown)["score"] == 0.0
 

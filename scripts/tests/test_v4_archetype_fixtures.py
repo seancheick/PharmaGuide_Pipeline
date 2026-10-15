@@ -156,15 +156,16 @@ def test_category_fixture_contracts() -> None:
         suite.by_id("prenatal_multi__ideal")
     ).actual
 
-    # Probiotic Dose no longer rewards strain count. This fixture's disclosed
-    # potency earns 20 raw points and one strong strain can carry Evidence;
-    # neither pillar manufactures breadth from additional strains.
-    assert probiotic["raw_dimensions"]["dose"] == 20.0
-    assert probiotic["pillars"]["dose"] == 18.2
-    assert probiotic["normalization_references"]["dose"] == 22.0
-    assert probiotic["raw_dimensions"]["formulation"] == 15.0
+    # Probiotic Dose no longer rewards strain count. V4.1 Step 4: Dose is the
+    # measured CFU adequacy alone (reference 15; per-strain disclosure is a
+    # Transparency fact), and Formulation is canonical form quality: the
+    # unrated-strain neutral 9 plus tier-2 delayed-release delivery 2.
+    assert probiotic["raw_dimensions"]["dose"] == 10.0
+    assert probiotic["pillars"]["dose"] == 13.3
+    assert probiotic["normalization_references"]["dose"] == 15.0
+    assert probiotic["raw_dimensions"]["formulation"] == 11.0
     assert probiotic["normalization_references"]["formulation"] == 15.0
-    assert probiotic["pillars"]["formulation"] == 20.0
+    assert probiotic["pillars"]["formulation"] == 14.7
     # Unspecified clinical study design earns 6.6667 certainty plus 3
     # applicability; extra strain names do not establish trial replication.
     assert probiotic["raw_dimensions"]["evidence"] == 9.6667
@@ -194,17 +195,18 @@ def test_references_use_reviewed_engine_limits_not_observed_catalog_maxima() -> 
     dose = rubric["dose_subscale"]["archetype_reference"]
     evidence = rubric["evidence_subscale"]["archetype_reference"]
 
-    # The protein adapter can earn 15 + 5 + 3 + 4 + 2 = 29.  Pre-workout
+    # V4.1 Step 4: the protein adapter is source quality alone (15). Pre-workout
     # and BCAA/EAA still use the broader generic-formulation contract; their
     # historical purpose-fit references must not be replaced by a corpus p99.
-    assert form["sports_protein"] == 29.0
+    assert form["sports_protein"] == 15.0
     assert form["sports_pre_workout"] == 30.0
     assert form["sports_bcaa_eaa"] == 25.0
 
-    # A product classified by name as pre-workout can still be a focused
-    # single and earn the sports module's full 25.  The immune adapter's own
-    # component sum is capped at 22.
-    assert dose["sports_pre_workout"] == 25.0
+    # The single-active completion bonus is retired, so every sports subtype's
+    # primary dose tops out at 20 (BCAA/EAA composition adds an assessed 2 via
+    # assessed_component_reference).  The immune adapter's own component sum is
+    # capped at 22.
+    assert dose["sports_pre_workout"] == 20.0
     assert dose["immune_support"] == 22.0
 
     # Omega explicitly reserves 15 points for clinical evidence and 5 for

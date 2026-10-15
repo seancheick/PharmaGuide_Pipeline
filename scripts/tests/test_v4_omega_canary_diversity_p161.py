@@ -45,6 +45,10 @@ CANARY_TARGETS = {
     # Bands below are stated against the dimension's own declared ceiling
     # (``max_reachable_in_p161``, 12/25 since 2026-09-18: molecular form 8 +
     # EPA/DHA concentration 4; disclosure moved to Transparency).
+    # V4.1 Step 4 (C1): additive findings are charged by the formula-checks
+    # pillar, not subtracted here, so 179775/239845 (+0.5) and 179447 (+5.57,
+    # formerly wiped to 0 by a 6.0 additive charge) re-pin to their form and
+    # concentration points; the charge stays visible in metadata.formula_checks.
     # --- Max reachable (12/12): TG/rTG + full concentration ---
     "326270": ("omega", "rtg", 12.0, 12.0,
                "Sports Research Omega-3 1055 mg Fish Oil 1250 mg (one of several SKUs)"),
@@ -61,18 +65,21 @@ CANARY_TARGETS = {
     # the catalog and their pins had gone unchecked (the loader skipped them).
     # Replaced by the same brands' current krill SKUs.
     "1073":   ('omega', 'pl', 7.43, 7.43, 'GNC Fish Oil +Krill'),
-    "179775": ('omega', 'pl', 7.93, 7.93, 'Nature Made Krill Oil 300 mg'),
+    "179775": ('omega', 'pl', 8.43, 8.43, 'Nature Made Krill Oil 300 mg'),
     "269559": ('omega', 'pl', 5.57, 5.57, 'Nutricost Krill Oil 1000 mg'),
     "184654": ('omega', 'pl', 8.43, 8.43, 'Pure Encapsulations Krill-Plex'),
 
     # --- EE form with concentration (rare in catalog) ---
-    "239845": ('omega', 'ee', 8.64, 8.64, 'Spring Valley Omega-3 520 mg Natural Lemon Flavor — EE form'),
+    "239845": ('omega', 'ee', 9.14, 9.14, 'Spring Valley Omega-3 520 mg Natural Lemon Flavor — EE form'),
     # --- Undefined form, concentration only ---
     # Nordic Naturals Ultimate Omega + CoQ10 — label omits molecular form in
     # this artifact, so form remains 'undefined'. Concentration still scores.
     "288740": ('omega', 'undefined', 6.57, 6.57, 'Nordic Naturals Ultimate Omega + CoQ10 Lemon'),
     # --- Low band: plain fish oil, no molecular form, low concentration ---
-    "179447": ('omega', 'undefined', 0.0, 0.0, 'Nature Made Fish Oil 1200 mg'),
+    "179447": ('omega', 'undefined', 5.57, 5.57, 'Nature Made Fish Oil 1200 mg'),
+    # Low tier without any penalty: no rated molecular form and no EPA/DHA
+    # concentration credit (replaces 179447, whose 0 came from additive charges).
+    "314032": ('omega', 'undefined', 0.0, 0.0, 'GNC Kids Gummy DHA for Kids 2-12 Raspberry Lemon'),
 }
 
 

@@ -65,17 +65,18 @@ def _flagged_product() -> dict:
     }
 
 
-def test_shared_formulation_penalties_are_identical_across_module_formulators() -> None:
+def test_shared_formula_checks_are_identical_across_module_formulators() -> None:
     from scoring_v4.modules.generic_formulation import score_formulation as score_generic_formulation
     from scoring_v4.modules.multi_prenatal_formulation import score_formulation as score_multi_formulation
     from scoring_v4.modules.omega_formulation import score_formulation as score_omega_formulation
     from scoring_v4.modules.probiotic_formulation import score_formulation as score_probiotic_formulation
 
     product = _flagged_product()
+    # V4.1 Step 4: recorded once for the formula-checks pillar; no route
+    # subtracts them, and the watchlist finding belongs to the safety base.
     expected = {
-        "B1_dietary_sugar": -2.0,
-        "B0_moderate_watchlist": -5.0,
-        "B1_harmful_additives": -3.0,  # S6 (2026-07-04): single high additive = 3.0
+        "B1_dietary_sugar": 2.0,
+        "B1_harmful_additives": 3.0,  # S6 (2026-07-04): single high additive = 3.0
     }
 
     for scorer in (
@@ -84,9 +85,9 @@ def test_shared_formulation_penalties_are_identical_across_module_formulators() 
         score_omega_formulation,
         score_probiotic_formulation,
     ):
-        penalties = scorer(product)["penalties"]
-        for key, value in expected.items():
-            assert penalties[key] == value, f"{scorer.__module__} drifted on {key}"
+        payload = scorer(product)
+        assert not any(key.startswith(("B0_", "B1_")) for key in payload["penalties"])
+        assert payload["metadata"]["formula_checks"] == expected, f"{scorer.__module__} drifted"
 
 
 def test_shared_formulation_penalties_keep_dietary_sugar_metadata() -> None:

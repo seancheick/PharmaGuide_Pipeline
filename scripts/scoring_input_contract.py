@@ -85,7 +85,7 @@ _LENT_BLEND_MASS_REASONS = {
     "proprietary_blend_total_from_botanical_child",
 }
 SCORING_CLASSIFICATION_SCHEMA_VERSION = "1.3.0"
-ROUTE_CLASSIFIER_VERSION = "1.3.1"
+ROUTE_CLASSIFIER_VERSION = "1.3.2"
 SCORING_CLASSIFICATION_ORIGINS = {"compatibility_derived", "native_enrichment"}
 SCORING_ROUTE_MODULES = {"generic", "probiotic", "multi_or_prenatal", "b_complex", "omega", "sports", "fiber_digestive"}
 SCORING_ROUTE_CONFIDENCE = {"high", "medium", "low", "failed"}
@@ -199,7 +199,6 @@ _SPORTS_PRIMARY_CANONICALS = _PROTEIN_CANONICALS | {
     "l_isoleucine",
     "l_valine",
 }
-_ROUTE_MULTIVITAMIN_BROAD_PANEL_MIN = 8
 _OMEGA_PRODUCT_TYPES = {"omega_3", "fish_oil"}
 _OMEGA_EVIDENCE_CANONICALS = {
     "fish_oil",
@@ -4386,7 +4385,10 @@ def _route_is_multivitamin_eligible(
     vitamin_count = int(facts.get("b_vitamin_count") or 0) + int(
         facts.get("non_b_vitamin_count") or 0
     )
-    if facts.get("title_multivitamin_intent"):
+    if (
+        facts.get("title_multivitamin_intent")
+        or _ROUTE_DECLARED_MULTI_NAME_RE.search(_route_product_label_text(product))
+    ):
         return vitamin_count >= 1
     if facts.get("title_multimineral_intent") and vitamin_count == 0:
         return False
@@ -4398,22 +4400,7 @@ def _route_is_multivitamin_eligible(
         >= _ROUTE_LEGACY_MULTIVITAMIN_MIN_MULTI_NUTRIENTS
     ):
         return True
-    if _primary_type(product) == "multivitamin":
-        return (
-            _route_positive_scorable_row_count(product)
-            >= _ROUTE_MULTIVITAMIN_BROAD_PANEL_MIN
-        )
     return False
-
-
-def _route_positive_scorable_row_count(product: Dict[str, Any]) -> int:
-    count = 0
-    for row in _route_scoring_rows(product):
-        if row.get("scoring_input_kind") == "product_level_evidence":
-            continue
-        if _route_has_positive_quantity(row):
-            count += 1
-    return count
 
 
 def _route_has_broad_prenatal_multi_panel(product: Dict[str, Any]) -> bool:
@@ -4553,6 +4540,12 @@ def _route_is_sports_class(
     if (
         float(facts.get("row_level_protein_mass_mg") or 0.0)
         >= _ROUTE_PROTEIN_MATERIAL_MIN_MG
+        or any(
+            _norm(row.get("canonical_id")) in ROUTE_FEATURE_PROTEIN_CANONICALS
+            and (_role_mass_mg(row) or 0.0) >= _ROUTE_PROTEIN_MATERIAL_MIN_MG
+            for row in _route_scoring_rows(product)
+            if row.get("scoring_input_kind") != "product_level_evidence"
+        )
     ):
         return True
     if protein_intent and (protein_identities or has_protein_mass or primary_type == "protein_powder"):

@@ -78,9 +78,10 @@ def test_formulation_payload_shape_and_phase() -> None:
 
     assert payload["metadata"]["phase"] == "P3.1_multi_prenatal_formulation"
     assert set(payload.keys()) == {"score", "components", "penalties", "metadata"}
-    assert set(payload["components"]) == {"panel_form_quality", "panel_disclosure_structure"}
+    # V4.1 Step 4: panel form quality is the whole multi/prenatal Formulation.
+    assert set(payload["components"]) == {"panel_form_quality"}
     assert payload["score"] is not None
-    assert payload["score"] <= CAP_FORMULATION == 14.0
+    assert payload["score"] <= CAP_FORMULATION == 12.0
 
 
 def test_panel_form_quality_uses_neutral_value_as_a_true_floor() -> None:
@@ -199,10 +200,12 @@ def test_presence_floor_preserves_positive_multi_form_signal_after_penalty_clamp
 def test_presence_floor_applies_when_penalty_leaves_sub_floor_positive_score(monkeypatch) -> None:
     import scoring_v4.modules.multi_prenatal_formulation as formulation
 
+    # Rated above the floor (3.2 of 12) so that only the penalty crosses it.
     product = _product(
-        ingredients=[_ingredient("vitamin_c", bio_score=1, matched_form="ascorbic acid")],
+        ingredients=[_ingredient("vitamin_c", bio_score=4, matched_form="ascorbic acid")],
     )
     unpenalized = formulation.score_formulation(product)["score"]
+    assert unpenalized > formulation.FORMULATION_PRESENCE_FLOOR
     penalty = unpenalized - 0.1
     monkeypatch.setattr(
         formulation,
@@ -234,7 +237,7 @@ def test_presence_floor_does_not_apply_to_multi_with_no_positive_form_signal(mon
     assert payload["metadata"]["presence_floor"]["applied"] is False
 
 
-def test_dose_panel_structure_rewards_individual_dose_disclosure() -> None:
+def test_dose_disclosure_is_not_formulation_credit() -> None:
     from scoring_v4.modules.multi_prenatal_formulation import score_formulation
 
     full = score_formulation(_product(ingredients=_premium_prenatal_ingredients()))
@@ -243,9 +246,11 @@ def test_dose_panel_structure_rewards_individual_dose_disclosure() -> None:
         row.pop("unit", None)
     partial = score_formulation(_product(ingredients=partial_rows))
 
-    assert full["components"]["panel_disclosure_structure"] == 2.0
-    assert partial["components"]["panel_disclosure_structure"] == 1.0
-    assert partial["metadata"]["dose_coverage"] == 0.625
+    # V4.1 Step 4: printed amounts are a Transparency fact and earn no
+    # Formulation component. (The shared is_scorable gate still averages form
+    # quality over dosed rows only, so the average itself can shift slightly.)
+    assert set(full["components"]) == set(partial["components"]) == {"panel_form_quality"}
+    assert "dose_coverage" not in partial["metadata"]
 
 
 def test_dosage_form_alone_neither_earns_nor_loses_formulation_points() -> None:

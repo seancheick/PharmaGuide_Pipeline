@@ -1,44 +1,28 @@
 """Single policy registry for every v4 dimension penalty.
 
 Scoring modules detect facts and calculate magnitudes. This registry owns the
-cross-cutting contract: canonical key, primary dimension, optional consumer
-mirror group, and whether an old location may be migrated centrally. Unknown
-keys and unapproved dimension drift fail closed.
+cross-cutting contract: canonical key, primary dimension, and whether an old
+location may be migrated centrally. Unknown keys and unapproved dimension drift
+fail closed. Additive, sugar and high-risk findings are not dimension penalties:
+the formula-checks pillar owns them (V4.1 Step 4).
 """
 
 from __future__ import annotations
 
 from dataclasses import dataclass
-from typing import Any, Dict, Mapping, Optional
+from typing import Any, Dict
 
 
 @dataclass(frozen=True)
 class PenaltySpec:
     primary_dimension: str
     consumer_materiality: str
-    mirror_group: Optional[str] = None
     relocate_legacy_dimension: bool = False
 
 
-FORMULA_QUALITY_MIRROR = "formula_quality_checks"
-
-
 PENALTY_REGISTRY: Dict[str, PenaltySpec] = {
-    "B0_moderate_watchlist": PenaltySpec("formulation", "safety_context"),
-    "B1_dietary_sugar": PenaltySpec(
-        "formulation", "consumer_material", FORMULA_QUALITY_MIRROR
-    ),
-    "B1_harmful_additives": PenaltySpec(
-        "formulation", "consumer_material", FORMULA_QUALITY_MIRROR
-    ),
     "immune_high_variability_botanical_stack": PenaltySpec(
         "formulation", "quality_context"
-    ),
-    "fiber_cleanse_detox_penalty": PenaltySpec(
-        "formulation", "quality_context"
-    ),
-    "fiber_stimulant_laxative_penalty": PenaltySpec(
-        "formulation", "consumer_material"
     ),
     "sports_amino_spiking_risk": PenaltySpec(
         "formulation", "quality_context"
@@ -82,64 +66,32 @@ COMPONENT_KINDS: Dict[str, str] = {
     "formulation.A4_absorption_enhancer": "earned",
     "formulation.A5b_standardized_botanical": "earned",
     "formulation.panel_form_quality": "earned",
-    "formulation.panel_disclosure_structure": "disclosure",
     "formulation.b_form_quality": "earned",
-    "formulation.core_b_panel_coverage": "earned",
-    "formulation.b_complex_focus_purity": "earned",
-    "formulation.dose_disclosure": "disclosure",
     "formulation.form_tier": "earned",
     "formulation.epa_dha_concentration": "earned",
-    "formulation.total_cfu_disclosed": "disclosure",
-    "formulation.exact_identity_completeness": "disclosure",
-    "formulation.delivery_survivability": "earned",
-    "formulation.native_potency_disclosed": "disclosure",
-    "formulation.studied_formula_strain_identity": "disclosure",
     "formulation.sports_protein_source_quality": "earned",
-    "formulation.sports_protein_dose_transparency": "disclosure",
-    "formulation.sports_amino_profile_disclosure": "disclosure",
-    "formulation.sports_protein_focus": "earned",
-    "formulation.sports_route_base": "neutral",
     "formulation.fiber_source_quality": "earned",
-    "formulation.fiber_disclosure": "disclosure",
-    "formulation.fiber_formula_focus": "earned",
-    "formulation.fiber_route_base": "neutral",
-    "formulation.fiber_practicality": "neutral",
     "botanical_formulation.recognized_botanical_identity": "neutral",
-    "botanical_formulation.plant_part_disclosed": "disclosure",
-    "botanical_formulation.quantified_dose_present": "disclosure",
     "botanical_formulation.extract_not_whole_herb": "earned",
     "botanical_formulation.marker_standardization_declared": "earned",
-    "botanical_formulation.branded_clinically_studied_extract": "earned",
     "botanical_formulation.weak_or_unidentified_botanical": "deduction",
     "collagen_formulation.recognized_collagen_identity": "neutral",
     "collagen_formulation.hydrolyzed_peptides": "earned",
-    "collagen_formulation.type_disclosed": "disclosure",
-    "collagen_formulation.source_disclosed": "disclosure",
-    "collagen_formulation.quantified_dose_present": "disclosure",
-    "collagen_formulation.branded_clinically_studied": "earned",
     "dose.supplemental_window_proxy": "earned",
     "dose.botanical_clinical_dose": "earned",
     "dose.collagen_clinical_dose": "earned",
     "dose.joint_support_dose": "earned",
     "dose.sleep_support_dose": "earned",
     "dose.rda_ai_coverage": "earned",
-    "dose.panel_breadth": "earned",
     "dose.critical_nutrient_coverage": "earned",
     "dose.prenatal_complement_support": "earned",
     "dose.b_rda_ai_coverage": "earned",
-    "dose.core_b_panel_breadth": "earned",
-    "dose.moderate_dose_fit": "neutral",
     "dose.epa_dha_band": "earned",
-    "dose.per_strain_cfu_disclosure": "disclosure",
     "dose.cfu_adequacy": "earned",
     "dose.studied_formula_dose_adequacy": "earned",
     "dose.sports_primary_active_dose": "earned",
-    "dose.sports_stack_support": "earned",
     "dose.sports_ratio_or_completeness": "earned",
-    "dose.sports_focused_single_completion": "earned",
     "dose.fiber_effective_dose": "earned",
-    "dose.fiber_type_specificity": "earned",
-    "dose.fiber_dose_disclosure": "disclosure",
     "dose.vitamin_c_daily_range": "earned",
     "dose.vitamin_d_daily_range": "earned",
     "dose.zinc_daily_range": "earned",
@@ -283,36 +235,3 @@ def apply_penalty_registry(module_result: Any) -> bool:
             raise RuntimeError("v4 module result has no metadata for penalty policy")
         metadata["penalty_relocations"] = relocations
     return changed
-
-
-def mirrored_penalty_magnitude(
-    module_breakdown: Mapping[str, Any],
-    mirror_group: str,
-) -> float:
-    """Return registered negative penalty magnitude for one consumer mirror."""
-    dimensions = module_breakdown.get("dimensions")
-    if not isinstance(dimensions, Mapping):
-        return 0.0
-    total = 0.0
-    for dimension_name, raw_dimension in dimensions.items():
-        if not isinstance(raw_dimension, Mapping):
-            continue
-        penalties = raw_dimension.get("penalties")
-        if not isinstance(penalties, Mapping):
-            continue
-        for raw_key, raw_value in penalties.items():
-            spec = penalty_spec(raw_key)
-            if spec.primary_dimension != dimension_name:
-                raise RuntimeError(
-                    f"artifact penalty {raw_key!r} is in {dimension_name!r}, "
-                    f"expected {spec.primary_dimension!r}"
-                )
-            try:
-                value = float(raw_value)
-            except (TypeError, ValueError) as exc:
-                raise RuntimeError(
-                    f"penalty {raw_key!r} has non-numeric value"
-                ) from exc
-            if spec.mirror_group == mirror_group and value < 0:
-                total += abs(value)
-    return round(total, 4)

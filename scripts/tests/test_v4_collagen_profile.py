@@ -12,12 +12,28 @@ Spec: docs/superpowers/specs/2026-06-01-v4-collagen-profile-design.md
 """
 from __future__ import annotations
 
+import pytest
+
 from scoring_v4.modules.collagen_profile import (  # noqa: E402
     is_collagen_product,
     score_collagen_formulation,
     score_collagen_dose,
     COLLAGEN_FORMULATION_CAP,
 )
+from scoring_v4.modules.generic_helpers import (
+    archetype_dose_reference,
+    dose_reference_scope,
+    unbenchmarked_dose_credit,
+)
+
+# Production scores the collagen profile on its archetype Dose reference (21).
+COLLAGEN_DOSE_REFERENCE = archetype_dose_reference("generic", {"collagen_profile_applied": True})
+
+
+@pytest.fixture(autouse=True)
+def _collagen_dose_reference():
+    with dose_reference_scope(COLLAGEN_DOSE_REFERENCE):
+        yield
 
 
 def _collagen(name="Verisol Bioactive Collagen Peptides", standard_name="Collagen Peptides",
@@ -104,7 +120,8 @@ def test_dose_within_studied_range_grams():
 def test_dose_below_studied_range_underdosed_collagen():
     # genuinely underdosed: 0.5 g is below even the 2.5 g skin floor.
     out = score_collagen_dose(_product([_collagen(quantity=500, unit="mg")]))
-    assert out["score"] == 10.0
+    # V4.1 Step 4: graded inadequacy, 16 x 500 / (0.8 x 2500).
+    assert out["score"] == 4.0
     assert out["band"] == "below_studied_range"
 
 
@@ -142,7 +159,8 @@ def test_bare_collagen_does_not_borrow_the_peptide_benchmark():
         unit="Gram(s)",
     )
     out = score_collagen_dose(_product([row]))
-    assert out["score"] == 10.0
+    # No exact subtype, so no benchmark: the shared unbenchmarked neutral.
+    assert out["score"] == unbenchmarked_dose_credit() == 11.97
     assert out["band"] == "disclosed_no_reference"
 
 
@@ -162,7 +180,8 @@ def test_declared_collagen_preparations_are_averaged_equally():
         raw_source_path="ingredientRows[1]",
     )
     out = score_collagen_dose(_product([generic, peptides]))
-    assert out["score"] == 13.0
+    # Neutral 11.97 for the bare preparation; 2 g peptides is near the 2.5 g floor (16).
+    assert out["score"] == round((11.97 + 16.0) / 2, 4)
     assert out["band"] == "mixed_purpose_average"
     assert out["metadata"]["purpose_ingredient_count"] == 2
 
@@ -262,8 +281,10 @@ def test_dose_anchor_only_treated_as_blend_total():
     out = score_collagen_dose(_product([_collagen(quantity=12, unit="Gram(s)",
                                                   scoring_input_kind="product_level_evidence",
                                                   evidence_type="blend_anchor_mass")]))
-    assert out["score"] == 7.0
+    # Hydrolyzed peptides have a studied range: a hidden amount earns nothing.
+    assert out["score"] == 0.0
     assert out["band"] == "blend_total_only"
+    assert out["metadata"]["assessments"][0]["benchmark"] == "present"
 
 
 def test_product_level_collagen_evidence_is_visible_to_profile_scorer():
@@ -278,50 +299,39 @@ def test_product_level_collagen_evidence_is_visible_to_profile_scorer():
 
     assert is_collagen_product(product) is True
     out = score_collagen_dose(product)
-    assert out["score"] == 7.0
+    # A bare collagen complex has no exact subtype: the shared neutral applies.
+    assert out["score"] == unbenchmarked_dose_credit()
     assert out["band"] == "blend_total_only"
+    assert out["metadata"]["assessments"][0]["benchmark"] == "absent"
 
 
 # --- formulation adapter (max 15) ------------------------------------------
 
-def test_formulation_full_signal_caps_at_15():
-    # recognized(6)+hydrolyzed(2)+type(2)+source(3)+quantified(2)+branded(3)=18 -> cap 15
+def test_formulation_earns_hydrolysis_only():
+    # V4.1 Step 4: neutral identity 4.8 + hydrolyzed 3.2. Type, source and
+    # amount are Transparency facts; a brand name is an Evidence fact.
     row = _collagen(name="Verisol Bioactive Collagen Peptides",
                     form="hydrolyzed type I type III bovine collagen peptides")
     out = score_collagen_formulation(_product([row]))
-    assert out["score"] == COLLAGEN_FORMULATION_CAP == 15.0
-    c = out["components"]
-    assert c["recognized_collagen_identity"] == 6.0
-    assert c["hydrolyzed_peptides"] == 2.0
-    assert c["type_disclosed"] == 2.0
-    assert c["source_disclosed"] == 3.0
-    assert c["quantified_dose_present"] == 2.0
-    assert c["branded_clinically_studied"] == 3.0
+    assert COLLAGEN_FORMULATION_CAP == 15.0
+    assert out["components"] == {"recognized_collagen_identity": 4.8, "hydrolyzed_peptides": 3.2}
+    assert out["score"] == 8.0
 
 
 def test_formulation_plain_hydrolyzed_no_type_no_source_modest():
     row = _collagen(name="Collagen Peptides", form="hydrolyzed collagen peptides",
                     canonical_id="collagen")
     out = score_collagen_formulation(_product([row]))
-    c = out["components"]
-    assert c.get("recognized_collagen_identity") == 6.0
-    assert c.get("hydrolyzed_peptides") == 2.0
-    assert c.get("quantified_dose_present") == 2.0
-    assert "type_disclosed" not in c
-    assert "source_disclosed" not in c
-    assert out["score"] == 10.0
+    assert out["components"] == {"recognized_collagen_identity": 4.8, "hydrolyzed_peptides": 3.2}
+    assert out["score"] == 8.0
 
 
 def test_formulation_unhydrolyzed_gelatin_scores_lower_than_peptides():
-    # Gelatin (not hydrolyzed peptides) is lower bioavailability — it gets the
-    # recognized base + dose but no hydrolyzed credit, so it scores below an
+    # Gelatin (not hydrolyzed peptides) is lower bioavailability — it keeps the
+    # neutral identity baseline but no hydrolyzed credit, so it scores below an
     # equivalent hydrolyzed-peptide product.
     gelatin = _collagen(name="Gelatin", standard_name="Gelatin", canonical_id="collagen",
                         form="bovine gelatin")
     out = score_collagen_formulation(_product([gelatin]))
-    c = out["components"]
-    assert c.get("recognized_collagen_identity") == 6.0
-    assert "hydrolyzed_peptides" not in c
-    assert c.get("source_disclosed") == 3.0  # bovine
-    assert c.get("quantified_dose_present") == 2.0
-    assert out["score"] == 11.0  # 6 + 3 source + 2 dose, no hydrolyzed bonus
+    assert out["components"] == {"recognized_collagen_identity": 4.8}
+    assert out["score"] == 4.8

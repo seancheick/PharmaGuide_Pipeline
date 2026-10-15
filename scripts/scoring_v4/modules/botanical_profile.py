@@ -4,23 +4,27 @@ Botanicals are not vitamins. The generic A1/A2 (bio_score / premium forms) and
 the RDA/UL dose proxy structurally disadvantage herbs. This profile replaces
 both for botanical products:
 
-  Formulation adapter (replaces A1/A2, max 15):
-    recognized botanical identity        +6
-    plant part disclosed                 +2
-    quantified dose present              +2
-    extract (not whole-herb powder)      +2
-    marker standardization declared      +4
-    branded clinically-studied extract   +3
-    weak / unidentified botanical        -4   (replaces the +6 identity credit)
+  Formulation adapter (replaces A1/A2; reference 12), magnitudes in
+  quality_score.json formulation_variant_magnitudes.botanical. V4.1 Step 4:
+    recognized botanical identity        botanical_identity_neutral (neutral baseline)
+    extract (not whole-herb powder)      botanical_extract
+    marker standardization (tiered)      standardization_tier_full / _near / _half
+    weak / unidentified botanical        -4   (replaces the identity baseline)
+  Plant part and the printed amount are Transparency facts; a brand name is an
+  Evidence fact (a branded studied extract still earns the full standardization
+  tier, once).
 
-  Dose adapter (replaces RDA/UL proxy), via rda_therapeutic_dosing.json; points
-  are quality_score.json formulation_variant_magnitudes.botanical:
+  Dose adapter (replaces RDA/UL proxy), via rda_therapeutic_dosing.json, grades
+  the minimum directed daily amount against the studied range on scale
+  botanical_dose_band_scale, rescaled to the caller's Dose reference:
     within studied range    -> botanical_dose_within
     near studied range      -> botanical_dose_near
-    above / below range     -> botanical_dose_above / botanical_dose_below
-    disclosed, no reference -> botanical_dose_disclosed_no_ref
-    blend total only        -> botanical_dose_blend_total
-    primary, no dose        -> botanical_dose_primary_no_dose (NOT denominator exclusion)
+    above studied range     -> botanical_dose_above
+    below studied range     -> botanical_dose_near x amount / (0.8 x low end)
+    disclosed, no reference -> the shared unbenchmarked neutral
+    blend total / no amount -> the shared neutral when no benchmark exists,
+                               otherwise 0 (hiding must never beat a low dose);
+                               an unresolved identity marks the assessment partial
 
 The A5b standardized-botanical bonus is DISABLED inside the profile (marker
 standardization is now core formulation, not a duplicate +1 bonus). Botanical
@@ -650,19 +654,23 @@ def _standardized_match(product: Dict[str, Any], row: Dict[str, Any]) -> bool:
 # unparsed amount. Tiers reward genuine standardization proportionally while a
 # plain powder / no-evidence ingredient still earns nothing — good products score
 # higher without inflating weak ones.
-#   4 = branded clinically-studied extract OR full threshold met
-#   3 = marker disclosed and >= 75% of threshold
-#   2 = marker disclosed and >= 50% of threshold
-#   1 = marker/standardization disclosed but no usable quantified amount
-#   0 = below 50% of threshold / plain powder / no evidence
+# V4.1 Step 4: the earned traits (extract, standardization) fill what the
+# neutral identity credit leaves of the reference; a marker word without a
+# quantified amount, the plant part, the printed amount and a brand name earn
+# nothing here (Transparency owns disclosure; Evidence owns branded studies).
+#   full  = branded clinically-studied extract OR full threshold met
+#   near  = marker disclosed and >= 75% of threshold
+#   half  = marker disclosed and >= 50% of threshold
+#   0     = below 50% of threshold / unquantified marker / plain powder
 STANDARDIZATION_TIER_FULL = _FVM["standardization_tier_full"]
 STANDARDIZATION_TIER_NEAR = _FVM["standardization_tier_near"]
 STANDARDIZATION_TIER_HALF = _FVM["standardization_tier_half"]
-STANDARDIZATION_TIER_DISCLOSED = _FVM["standardization_tier_disclosed"]
+BOTANICAL_IDENTITY_NEUTRAL = _FVM["botanical_identity_neutral"]
+BOTANICAL_EXTRACT = _FVM["botanical_extract"]
 
 
 def _standardization_tier_credit(product: Dict[str, Any], row: Dict[str, Any]) -> float:
-    """Return the 0-4 tiered marker-standardization credit for ``row``."""
+    """Return the tiered marker-standardization credit for ``row``."""
     keys = set(_ingredient_identity_keys(row))
     # A branded clinically-studied extract is standardized by definition.
     if _branded_studied_row(product, row):
@@ -680,7 +688,6 @@ def _standardization_tier_credit(product: Dict[str, Any], row: Dict[str, Any]) -
             return STANDARDIZATION_TIER_FULL
         found = _as_float(item.get("percentage_found")) or 0.0
         thr = _as_float(item.get("min_threshold")) or 0.0
-        src = _norm(item.get("evidence_source"))
         if found > 0 and thr > 0:
             frac = found / thr
             if frac >= 0.75:
@@ -688,10 +695,6 @@ def _standardization_tier_credit(product: Dict[str, Any], row: Dict[str, Any]) -
             elif frac >= 0.50:
                 best = max(best, STANDARDIZATION_TIER_HALF)
             # < 50% of the spec is genuinely under-standardized -> no credit.
-        elif src and src not in ("none",):
-            # A marker/standardization was disclosed (e.g. marker_word_match) but
-            # carries no usable quantified amount -> conservative partial credit.
-            best = max(best, STANDARDIZATION_TIER_DISCLOSED)
     return best
 
 
@@ -712,20 +715,13 @@ def score_botanical_formulation(product: Dict[str, Any]) -> Dict[str, Any]:
                 "components": components, "metadata": {"recognized": False}}
 
     forms = _forms_text(row)
-    components["recognized_botanical_identity"] = 6.0
-    # The cleaner owns plant part (DSLD PlantPart note, else the label row's
-    # name or forms). IQM form and standard names are not label disclosure.
-    if row.get("plantPart"):
-        components["plant_part_disclosed"] = 2.0
-    if _mass_mg(row) is not None:
-        components["quantified_dose_present"] = 2.0
+    # A recognized identity is a neutral baseline, not earned quality.
+    components["recognized_botanical_identity"] = BOTANICAL_IDENTITY_NEUTRAL
     if any(tok in forms for tok in _EXTRACT_TOKENS) and "powder" not in forms:
-        components["extract_not_whole_herb"] = 2.0
+        components["extract_not_whole_herb"] = BOTANICAL_EXTRACT
     std_credit = _standardization_tier_credit(product, row)
     if std_credit > 0:
         components["marker_standardization_declared"] = std_credit
-    if _branded_studied_row(product, row):
-        components["branded_clinically_studied_extract"] = 3.0
 
     raw = sum(components.values())
     return {"score": round(min(BOTANICAL_FORMULATION_CAP, max(0.0, raw)), 4),
@@ -747,8 +743,9 @@ def _dosing_entry_for(row: Dict[str, Any]) -> Optional[Dict[str, Any]]:
                 and not any(token in forms for token in _EXTRACT_TOKENS)
             ):
                 # Whole-herb mass is not the extract mass studied by this
-                # reference. Retain disclosure credit without inventing a
-                # concentration ratio or treating it as an ineffective dose.
+                # reference. Assess it as a disclosed amount without a
+                # benchmark rather than inventing a concentration ratio or
+                # treating it as an ineffective dose.
                 continue
             return entry
     return None
@@ -793,26 +790,62 @@ def _range_mg(entry: Dict[str, Any]) -> Optional[tuple]:
     return None
 
 
-# Botanical dose band scores (0-22 scale). Calibration v2 — softened floors so an
-# incomplete/opaque label is no longer destroyed, while transparency (a disclosed,
-# in-range dose) is still clearly rewarded. The *verified* bands (within / near /
-# above) are unchanged; only the low/no-information bands were lifted off the floor.
-#   within  21  (verified in the studied clinical range)
-#   near    16  (verified just outside the range)
-#   above   12  (verified megadose — not evidence-backed)
-#   below   12  (verified under the range — was 10)
-#   no_ref  12  (disclosed dose, no clinical reference in our DB — was 10)
-#   blend   10  (opaque blend / anchor total — dose not per-ingredient — was 7)
-#   no_dose  5  (primary botanical, no disclosed dose — was 0; "lose credit, not all")
-#   no_active 0 (no botanical active at all)
+# Botanical dose bands (V4.1 Step 4), on a 21-point band scale normalized to
+# the product's Dose reference so "within the studied range" is full marks on
+# every route. Daily minimum exposure owns adequacy; the daily maximum owns
+# excess:
+#   within  21                       minimum and maximum inside the range
+#   near    16                       minimum >= 80% of the low end, or
+#                                    maximum <= 120% of the high end
+#   above   12                       maximum beyond 120% of the high end
+#   below   16 x minimum / (0.8 low) proportional below the near band
+# Without an applicable benchmark a disclosed amount earns the shared
+# unbenchmarked neutral; a hidden or missing amount whose benchmark exists
+# earns nothing; an unresolved benchmark identity is an unfinished assessment.
 BOTANICAL_DOSE_WITHIN = _FVM["botanical_dose_within"]
 BOTANICAL_DOSE_NEAR = _FVM["botanical_dose_near"]
 BOTANICAL_DOSE_ABOVE = _FVM["botanical_dose_above"]
-BOTANICAL_DOSE_BELOW = _FVM["botanical_dose_below"]
-BOTANICAL_DOSE_DISCLOSED_NO_REF = _FVM["botanical_dose_disclosed_no_ref"]
-BOTANICAL_DOSE_BLEND_TOTAL = _FVM["botanical_dose_blend_total"]
-BOTANICAL_DOSE_PRIMARY_NO_DOSE = _FVM["botanical_dose_primary_no_dose"]
+BOTANICAL_DOSE_BAND_SCALE = _FVM["botanical_dose_band_scale"]
 BOTANICAL_DOSE_NO_ACTIVE = _FVM["botanical_dose_no_active"]
+
+
+def graded_studied_range(product: Dict[str, Any], row: Dict[str, Any], low_end: float,
+                         high_end: Optional[float], unit: str,
+                         metadata: Dict[str, Any]) -> Dict[str, Any]:
+    """Grade one declared amount against a studied range (botanical and collagen)."""
+    from scoring_v4.exposure import row_exposure
+    from scoring_v4.modules.generic_helpers import current_dose_reference
+
+    exposure = row_exposure(product, row, basis="daily", unit=unit)
+    low, high = exposure.benchmark_amount, exposure.benchmark_maximum
+    meta = dict(metadata)
+    if "dose_mg" in meta and low is not None:
+        meta["dose_mg"] = low  # the minimum directed daily amount, as before Step 4
+    else:
+        meta["measurement_daily_min"] = low
+    meta["measurement_daily_max"] = high
+    if low is None:
+        return {"score": 0.0, "band": "amount_not_assessable", "metadata": meta}
+    if high is not None and high_end is not None and high > high_end:
+        band = "near_studied_range" if high <= 1.2 * high_end else "above_studied_range"
+        value = BOTANICAL_DOSE_NEAR if band == "near_studied_range" else BOTANICAL_DOSE_ABOVE
+    elif low < low_end:
+        band = "near_studied_range" if low >= 0.8 * low_end else "below_studied_range"
+        value = (BOTANICAL_DOSE_NEAR if band == "near_studied_range"
+                 else BOTANICAL_DOSE_NEAR * low / (0.8 * low_end))
+    else:
+        band, value = "within_studied_range", BOTANICAL_DOSE_WITHIN
+    score = value * current_dose_reference() / BOTANICAL_DOSE_BAND_SCALE
+    return {"score": round(score, 4), "band": band, "metadata": meta}
+
+
+def unassessed_amount_band(band: str, benchmark: str) -> Dict[str, Any]:
+    """A disclosed amount without a benchmark, or a hidden/missing one."""
+    from scoring_v4.modules.generic_helpers import unbenchmarked_dose_credit
+
+    neutral = band == "disclosed_no_reference" or benchmark == "absent"
+    return {"score": unbenchmarked_dose_credit() if neutral else 0.0, "band": band,
+            "metadata": {"benchmark": benchmark}}
 
 
 def score_botanical_dose(product: Dict[str, Any]) -> Dict[str, Any]:
@@ -838,18 +871,14 @@ def score_botanical_purpose_dose(
     clinical = positive_clinical_benchmark(product, row)
     if clinical is not None:
         meta = {"positive_clinical_benchmark": clinical.to_dict()}
-        if clinical.benchmark_maximum and clinical.exposure_value > clinical.benchmark_maximum:
-            return {"score": BOTANICAL_DOSE_ABOVE, "band": "above_studied_range", "metadata": meta}
-        if clinical.ratio >= 1.0:
-            return {"score": BOTANICAL_DOSE_WITHIN, "band": "within_studied_range", "metadata": meta}
-        if clinical.ratio >= 0.8:
-            return {"score": BOTANICAL_DOSE_NEAR, "band": "near_studied_range", "metadata": meta}
-        return {"score": BOTANICAL_DOSE_BELOW, "band": "below_studied_range", "metadata": meta}
+        return graded_studied_range(product, row, clinical.benchmark_value,
+                                    clinical.benchmark_maximum, clinical.benchmark_unit, meta)
 
+    benchmark = _botanical_benchmark(row)
     if row.get("is_blend_header") or row.get("blend_total_weight_only"):
-        return {"score": BOTANICAL_DOSE_BLEND_TOTAL, "band": "blend_total_only", "metadata": {}}
+        return unassessed_amount_band("blend_total_only", benchmark)
     if row.get("is_parent_total") and not _is_named_standardized_botanical_complex(product, row):
-        return {"score": BOTANICAL_DOSE_BLEND_TOTAL, "band": "blend_total_only", "metadata": {}}
+        return unassessed_amount_band("blend_total_only", benchmark)
 
     # P6 review (P2#3): an anchor / product-level-evidence mass is a blend/product
     # TOTAL, not a verified per-ingredient dose. It must not earn within-range
@@ -857,36 +886,26 @@ def score_botanical_purpose_dose(
     # over-credit opaque blends. Score it like a blend total.
     if (row.get("scoring_input_kind") == "product_level_evidence"
             or row.get("evidence_type") == "blend_anchor_mass"):
-        return {"score": BOTANICAL_DOSE_BLEND_TOTAL, "band": "blend_total_only", "metadata": {}}
+        return unassessed_amount_band("blend_total_only", benchmark)
 
     mass = _mass_mg(row)
     if mass is None:
-        return {"score": BOTANICAL_DOSE_PRIMARY_NO_DOSE, "band": "primary_no_dose", "metadata": {}}
+        return unassessed_amount_band("primary_no_dose", benchmark)
+    if benchmark != "present":
+        return unassessed_amount_band("disclosed_no_reference", benchmark)
 
-    entry = _dosing_entry_for(row)
-    if entry is None:
-        return {"score": BOTANICAL_DOSE_DISCLOSED_NO_REF, "band": "disclosed_no_reference", "metadata": {}}
-
-    rng = _range_mg(entry)
-    if rng is None:
-        return {"score": BOTANICAL_DOSE_DISCLOSED_NO_REF, "band": "disclosed_no_reference", "metadata": {}}
-
-    from serving_frequency import resolve_daily_serving_range
-
-    # Adequacy uses the minimum directed daily exposure, as in the shared
-    # nutrient and omega contracts. The row amount is per serving.
-    servings_min, _, _ = resolve_daily_serving_range(product)
-    mass *= servings_min
-    lo, hi = rng
-    meta = {"dose_mg": mass, "range_mg": [lo, hi]}
-    if lo <= mass <= hi:
-        return {"score": BOTANICAL_DOSE_WITHIN, "band": "within_studied_range", "metadata": meta}
-    if 0.8 * lo <= mass < lo or hi < mass <= 1.2 * hi:
-        return {"score": BOTANICAL_DOSE_NEAR, "band": "near_studied_range", "metadata": meta}
-    if mass < 0.8 * lo:
-        return {"score": BOTANICAL_DOSE_BELOW, "band": "below_studied_range", "metadata": meta}
+    lo, hi = _range_mg(_dosing_entry_for(row))
     # Well above the studied range (P6 review P2#2): a megadose is not evidence-
     # backed and B7 cannot fire for botanicals (no RDA/UL safety flags), so it
-    # must NOT earn the same near-range credit as a dose just outside the window.
-    # True toxicity is still caught by the Layer-1 safety gate; this is fairness.
-    return {"score": BOTANICAL_DOSE_ABOVE, "band": "above_studied_range", "metadata": meta}
+    # earns less than a dose just outside the window. True toxicity is still
+    # caught by the Layer-1 safety gate; this is fairness.
+    meta = {"dose_mg": _mass_mg(row), "range_mg": [lo, hi]}
+    return graded_studied_range(product, row, lo, hi, "mg", meta)
+
+
+def _botanical_benchmark(row: Dict[str, Any]) -> str:
+    """Whether this botanical has a studied range: present, absent or unresolved."""
+    entry = _dosing_entry_for(row)
+    if entry is not None and _range_mg(entry) is not None:
+        return "present"
+    return "absent" if _recognized_botanical_identity(row) else "unresolved"

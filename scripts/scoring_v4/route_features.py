@@ -501,11 +501,6 @@ def is_declared_fiber_blend(row: Mapping[str, Any]) -> bool:
     return bool(_FIBER_DECLARATION_RE.search(row_name(row)))
 
 
-def is_fiber_declaring_anchor(row: Mapping[str, Any]) -> bool:
-    """A structural label-taxonomy anchor whose own name declares fiber."""
-    return row.get("identity_kind") == "label_taxonomy_anchor" and bool(_FIBER_DECLARATION_RE.search(row_name(row)))
-
-
 def is_dual_use_enzyme_row(row: Mapping[str, Any]) -> bool:
     return (
         row_canonical(row) in DUAL_USE_ENZYME_CANONICALS

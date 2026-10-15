@@ -278,23 +278,26 @@ def test_ambiguous_dual_purpose_claim_remains_digestive_competitor(identity):
 
 
 
-def test_fiber_declaring_anchors_are_on_focus_other_anchors_and_ingredients_are_not():
+def test_fiber_formulation_ignores_anchors_and_ingredient_count():
     # 293400 Fiber Fusion Daily: Dietary Fiber, Oat Bran, stevia, plus a
     # "Proprietary Fiber Blend" header and an "Insoluble Fiber" sub-row the
-    # contract marks as label-taxonomy anchors. The formula is all fiber.
+    # contract marks as label-taxonomy anchors; 213810 adds a greens anchor.
+    # V4.1 Step 4 retired the count-based focus component: fiber source
+    # quality is the whole fiber Formulation, so neither anchors nor added
+    # off-focus ingredients move it.
     from scoring_v4.modules.fiber_digestive_formulation import score_formulation
-    focus = lambda rows: score_formulation(product(rows))["components"]["fiber_formula_focus"]
+    components = lambda rows: score_formulation(product(rows))["components"]
     fiber, oat, stevia = row("fiber", 3), row("oat_bran", 3), row("nha_stevia", 44, "mg")
+    base = components([fiber, oat, stevia])
+    assert set(base) == {"fiber_source_quality"}
     fiber_anchors = [row("proprietary_fiber_blend", 3, identity_kind="label_taxonomy_anchor"),
                      row("fiber_unspecified", 2, identity_kind="label_taxonomy_anchor")]
-    assert focus([fiber, oat, stevia, *fiber_anchors]) == 5.0
-    # 213810 shape: a greens/herbal blend anchor is off-focus content.
+    assert components([fiber, oat, stevia, *fiber_anchors]) == base
     greens = row("superfood_greens_herbal_blends", 2, identity_kind="label_taxonomy_anchor")
     greens["name"] = "Superfood, Greens & Herbal Blends"
-    assert focus([fiber, oat, stevia, greens, row("orange", 1)]) == 3.0
-    # A disclosed off-focus ingredient counts, mapped identity or not.
+    assert components([fiber, oat, stevia, greens, row("orange", 1)]) == base
     turmeric = row("turmeric", 0.5, identity_disposition="taxonomy_only")
-    assert focus([fiber, stevia, turmeric, row("ginger", 0.5)]) == 3.0
+    assert components([fiber, stevia, turmeric, row("ginger", 0.5)]) == components([fiber, stevia])
 
 
 def _directions(value, text, low, high):

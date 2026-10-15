@@ -1027,6 +1027,39 @@
       ],
       "source_commit": "bb78c75c",
       "notes": "Sean-approved general rule counts a form characteristic once. Thorne Vitamin D drops lose presentation-as-delivery credit (98.5 to97.1); Nutricost KSM-66 BioPerine loses duplicate delivery credit with existing absorption-enhancer assessment preserved (93.0 to91.7); Thorne green tea and boswellia phytosomes already represented in form quality lose duplicate A3 credit (77.8 to73.8;83.7 to79.7). All33 fixtures update artifact schema4.3 to4.4 for shared qualified delivery projection; no other frozen fields changed. Raw canary checks review source before refresh."
+    },
+    {
+      "date": "2026-10-15",
+      "action": "refrozen_reviewed_step4_from_raw",
+      "products": [
+        12012,
+        18141,
+        180417,
+        182730,
+        183275,
+        204571,
+        223084,
+        239600,
+        239741,
+        241353,
+        245156,
+        269278,
+        270256,
+        270831,
+        274498,
+        278454,
+        288344,
+        298070,
+        306237,
+        306381,
+        321405,
+        321969,
+        327416,
+        336337,
+        337853
+      ],
+      "source_commit": "c5b55b0f",
+      "notes": "Independent review of all33 raw canaries:24 score movements exactly match the approved Step4 cause-grouped measurement (C1 ownership, retired duplicate/breadth/disclosure rewards, shared neutral and attainable references). Thorne336337 also captures a source-declared independent Time-Sorb matrix after fresh enrichment: overlapping phytosome credit is excluded, independent delivery0->2raw adds3.3Formulation; mechanism reference is not a green-tea clinical-efficacy trial. All non-score frozen fields unchanged except score-derived grade/tier crossings.8 controls unchanged. Full415 frozen raw A/B replay has zero scoring errors and no score-status, safety-gate or dose-safety changes;15 routing and165 false sugar-credit corrections measured separately."
     }
   ]
 }

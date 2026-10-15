@@ -34,6 +34,12 @@ if str(SCRIPTS_ROOT) not in sys.path:
     sys.path.insert(0, str(SCRIPTS_ROOT))
 
 
+from scoring_v4.modules.generic_helpers import unbenchmarked_dose_credit
+
+# V4.1 Step 4: every disclosed amount without a benchmark earns the one shared
+# unbenchmarked neutral (11.4 public points), here on the generic reference 22.
+NEUTRAL = unbenchmarked_dose_credit()
+
 def _ingredient(
     *,
     name: str = "Magnesium",
@@ -390,7 +396,7 @@ def test_potassium_single_supplement_is_not_scored_against_total_dietary_ai() ->
         )],
     ))
 
-    assert payload["components"]["supplemental_window_proxy"] == 16.0
+    assert payload["components"]["supplemental_window_proxy"] == NEUTRAL
     assert payload["metadata"]["window_proxy_reason"] == "dietary_intake_dominant_reference_excluded"
     assert payload["metadata"]["partial_credit_reason"] == "individual_quantified_dose_no_rda_reference"
 
@@ -433,8 +439,8 @@ def test_window_proxy_no_rda_data_with_label_dose_gets_partial_credit() -> None:
     from scoring_v4.modules.generic_dose import score_dose
 
     payload = score_dose(_product(adequacy_results=[]))
-    assert payload["score"] == 16.0
-    assert payload["components"]["supplemental_window_proxy"] == 16.0
+    assert payload["score"] == NEUTRAL
+    assert payload["components"]["supplemental_window_proxy"] == NEUTRAL
     assert payload["metadata"]["window_proxy_reason"] == "no_rda_reference_data"
     assert payload["metadata"]["window_proxy_status"] == "partial_credit_without_rda_proxy"
     assert payload["metadata"]["partial_credit_reason"] == "individual_quantified_dose_no_rda_reference"
@@ -484,8 +490,8 @@ def test_enzyme_activity_evidence_gets_no_reference_partial_dose_credit(declared
         assert payload["score"] is None
         assert payload["components"]["supplemental_window_proxy"] == 0.0
         return
-    assert payload["score"] == 16.0
-    assert payload["components"]["supplemental_window_proxy"] == 16.0
+    assert payload["score"] == NEUTRAL
+    assert payload["components"]["supplemental_window_proxy"] == NEUTRAL
     assert payload["metadata"]["partial_credit_reason"] == "enzyme_activity_quantified_dose_no_rda_reference"
 
 
@@ -494,8 +500,10 @@ def test_ksm66_style_botanical_no_rda_is_not_punished_as_zero_dose() -> None:
     Phase 6: instead of the conservative generic proxy (16), a recognized
     botanical with a clinical dose range is scored against that range. KSM-66
     ashwagandha at 600 mg sits within the studied 250-600 mg window, so it
-    earns the within-range credit (21) — strictly better than being treated
-    as a no-RDA nutrient, and never punished as zero dose."""
+    earns the full within-range credit — strictly better than being treated
+    as a no-RDA nutrient, and never punished as zero dose. V4.1 Step 4 scales
+    the band to the caller's Dose reference (22 here), so within range is full
+    Dose credit on every route."""
     from scoring_v4.modules.generic_dose import score_dose
 
     payload = score_dose(
@@ -516,8 +524,8 @@ def test_ksm66_style_botanical_no_rda_is_not_punished_as_zero_dose() -> None:
             ],
         )
     )
-    assert payload["score"] == 21.0
-    assert payload["components"]["botanical_clinical_dose"] == 21.0
+    assert payload["score"] == 22.0
+    assert payload["components"]["botanical_clinical_dose"] == 22.0
     assert payload["metadata"]["method"] == "botanical_clinical_dose_v1"
     assert payload["metadata"]["botanical_dose_band"] == "within_studied_range"
 
@@ -748,17 +756,17 @@ def test_unassessed_mass_primary_caps_window_credit_at_partial() -> None:
     # 304628-style label: two in-window vitamins, a 250 mg botanical with no
     # reference. The vitamins' window average must not present a complete
     # product-dose assessment while the mass-primary active is unassessed.
-    from scoring_v4.modules.generic_dose import score_dose, NO_REFERENCE_INDIVIDUAL_DOSE_CREDIT
+    from scoring_v4.modules.generic_dose import score_dose
 
     payload = score_dose(_mixed_product(250.0))
-    assert payload["components"]["supplemental_window_proxy"] == NO_REFERENCE_INDIVIDUAL_DOSE_CREDIT
+    assert payload["components"]["supplemental_window_proxy"] == NEUTRAL
     assert payload["metadata"]["window_proxy_status"] == "partial_credit_primary_active_unassessed"
     assert payload["metadata"]["primary_active_unassessed"] == "cognigrape"
-    assert payload["metadata"]["partial_credit_value"] == NO_REFERENCE_INDIVIDUAL_DOSE_CREDIT
+    assert payload["metadata"]["partial_credit_value"] == NEUTRAL
 
 
 def test_declared_purpose_rows_are_averaged_equally_with_unbenchmarked_fallback() -> None:
-    from scoring_v4.modules.generic_dose import score_dose, NO_REFERENCE_INDIVIDUAL_DOSE_CREDIT
+    from scoring_v4.modules.generic_dose import score_dose
 
     product = _product(
         ingredients=[
@@ -775,7 +783,7 @@ def test_declared_purpose_rows_are_averaged_equally_with_unbenchmarked_fallback(
     payload = score_dose(product)
 
     assert payload["components"]["supplemental_window_proxy"] == pytest.approx(
-        (22.0 + NO_REFERENCE_INDIVIDUAL_DOSE_CREDIT) / 2.0
+        (22.0 + NEUTRAL) / 2.0
     )
     assert payload["metadata"]["purpose_ingredient_count"] == 2
     assert payload["metadata"]["unbenchmarked_purpose_ingredients"] == ["lactoferrin"]
@@ -863,10 +871,13 @@ def test_multi_purpose_average_retains_collagen_preparation_benchmark() -> None:
     below = assessed(100.0)
     within = assessed(5000.0)
 
-    assert below["components"]["supplemental_window_proxy"] == 16.0
-    assert within["components"]["supplemental_window_proxy"] == 21.5
-    assert below["metadata"]["specialized_purpose_assessments"][0]["score"] == 10.0
-    assert within["metadata"]["specialized_purpose_assessments"][0]["score"] == 21.0
+    # Graded inadequacy: 100 mg against the 2.5 g peptide range scores in
+    # proportion (16 x 100 / 2000, scaled to reference 22); within range is full.
+    below_score = round(16 * 100 / 2000 * 22 / 21, 4)
+    assert below["metadata"]["specialized_purpose_assessments"][0]["score"] == below_score
+    assert below["components"]["supplemental_window_proxy"] == round((below_score + 22) / 2, 4)
+    assert within["metadata"]["specialized_purpose_assessments"][0]["score"] == 22.0
+    assert within["components"]["supplemental_window_proxy"] == 22.0
     assert below["metadata"]["unbenchmarked_purpose_ingredients"] == []
 
 
@@ -956,7 +967,7 @@ def test_positive_benchmark_requires_label_purpose_applicability() -> None:
 
 @pytest.mark.parametrize("record_id", ["INGR_D_MANNOSE", "INGR_L_CARNITINE"])
 def test_null_or_mixed_trial_amount_is_not_a_dose_benchmark(record_id: str) -> None:
-    from scoring_v4.modules.generic_dose import score_dose, NO_REFERENCE_INDIVIDUAL_DOSE_CREDIT
+    from scoring_v4.modules.generic_dose import score_dose
 
     row = _ingredient(
         name="D-Mannose" if record_id == "INGR_D_MANNOSE" else "L-Carnitine",
@@ -970,7 +981,7 @@ def test_null_or_mixed_trial_amount_is_not_a_dose_benchmark(record_id: str) -> N
 
     payload = score_dose(product)
 
-    assert payload["components"]["supplemental_window_proxy"] == NO_REFERENCE_INDIVIDUAL_DOSE_CREDIT
+    assert payload["components"]["supplemental_window_proxy"] == NEUTRAL
     assert payload["metadata"]["positive_clinical_benchmark_assessments"] == []
 
 
@@ -1108,28 +1119,28 @@ def test_opaque_blend_total_is_not_a_dose_primary() -> None:
 def test_empty_assessment_row_does_not_restore_full_credit() -> None:
     # An adequacy row for the primary with neither reference percentage is not
     # an assessment; the cap must hold exactly as if the row were absent.
-    from scoring_v4.modules.generic_dose import score_dose, NO_REFERENCE_INDIVIDUAL_DOSE_CREDIT
+    from scoring_v4.modules.generic_dose import score_dose
 
     product = _mixed_product(250.0)
     product["rda_ul_data"]["adequacy_results"].append(
         {"canonical_id": "cognigrape", "nutrient": "Cognigrape", "pct_rda": None, "pct_ul": None}
     )
     payload = score_dose(product)
-    assert payload["components"]["supplemental_window_proxy"] == NO_REFERENCE_INDIVIDUAL_DOSE_CREDIT
+    assert payload["components"]["supplemental_window_proxy"] == NEUTRAL
     assert payload["metadata"]["primary_active_unassessed"] == "cognigrape"
 
 
 def test_ul_only_assessment_row_is_not_a_usable_assessment() -> None:
     # The window proxy skips a row with pct_ul but no pct_rda (no band); the
     # guard must use the same usability rule as the proxy it protects.
-    from scoring_v4.modules.generic_dose import score_dose, NO_REFERENCE_INDIVIDUAL_DOSE_CREDIT
+    from scoring_v4.modules.generic_dose import score_dose
 
     product = _mixed_product(250.0)
     product["rda_ul_data"]["adequacy_results"].append(
         {"canonical_id": "cognigrape", "nutrient": "Cognigrape", "pct_rda": None, "pct_ul": 4.0}
     )
     payload = score_dose(product)
-    assert payload["components"]["supplemental_window_proxy"] == NO_REFERENCE_INDIVIDUAL_DOSE_CREDIT
+    assert payload["components"]["supplemental_window_proxy"] == NEUTRAL
 
 
 def test_rda_only_assessment_row_is_a_usable_assessment() -> None:
@@ -1161,11 +1172,11 @@ def _tied_product(unassessed_first: bool):
 
 
 def test_tied_mass_primaries_cap_regardless_of_label_order() -> None:
-    from scoring_v4.modules.generic_dose import score_dose, NO_REFERENCE_INDIVIDUAL_DOSE_CREDIT
+    from scoring_v4.modules.generic_dose import score_dose
 
     for unassessed_first in (False, True):
         payload = score_dose(_tied_product(unassessed_first))
-        assert payload["components"]["supplemental_window_proxy"] == NO_REFERENCE_INDIVIDUAL_DOSE_CREDIT, unassessed_first
+        assert payload["components"]["supplemental_window_proxy"] == NEUTRAL, unassessed_first
         assert payload["metadata"]["primary_active_unassessed"] == "cognigrape"
 
 
@@ -1187,7 +1198,7 @@ def test_nested_constituent_does_not_assess_its_parent() -> None:
     # reference, flaxseed oil does not. A constituent is a different substance:
     # shared ancestry is not assessment applicability, so the parent stays
     # capped (Codex round-3 audit).
-    from scoring_v4.modules.generic_dose import score_dose, NO_REFERENCE_INDIVIDUAL_DOSE_CREDIT
+    from scoring_v4.modules.generic_dose import score_dose
 
     rows = [
         _ingredient(name="Flaxseed Oil", canonical_id="flaxseed", quantity=1000.0, unit="mg", bio_score=None,
@@ -1203,7 +1214,7 @@ def test_nested_constituent_does_not_assess_its_parent() -> None:
         ],
     )
     payload = score_dose(product)
-    assert payload["components"]["supplemental_window_proxy"] == NO_REFERENCE_INDIVIDUAL_DOSE_CREDIT
+    assert payload["components"]["supplemental_window_proxy"] == NEUTRAL
     assert payload["metadata"]["primary_active_unassessed"] == "flaxseed"
 
 
@@ -1233,7 +1244,7 @@ def test_title_projection_of_an_assessed_row_is_not_a_second_primary() -> None:
 def test_parent_with_unassessed_constituents_is_still_capped() -> None:
     # Fish oil 500 mg with EPA/DHA rows that carry no reference, beside an
     # assessed 5 mg lutein: the primary's source has no benchmark anywhere.
-    from scoring_v4.modules.generic_dose import score_dose, NO_REFERENCE_INDIVIDUAL_DOSE_CREDIT
+    from scoring_v4.modules.generic_dose import score_dose
 
     rows = [
         _ingredient(name="Omega-3 Fatty Acids", canonical_id="fish_oil", quantity=500.0, unit="mg", bio_score=None,
@@ -1252,7 +1263,7 @@ def test_parent_with_unassessed_constituents_is_still_capped() -> None:
         supp_type="multi",
     )
     payload = score_dose(product)
-    assert payload["components"]["supplemental_window_proxy"] == NO_REFERENCE_INDIVIDUAL_DOSE_CREDIT
+    assert payload["components"]["supplemental_window_proxy"] == NEUTRAL
     assert payload["metadata"]["primary_active_unassessed"] == "fish_oil"
 
 
@@ -1282,7 +1293,7 @@ def test_nested_projection_under_an_assessed_parent_is_not_a_second_primary() ->
 def test_nested_child_without_the_title_projection_marker_is_not_the_parent() -> None:
     # Same shape as above but a real nested child: an ordinary projection or
     # constituent nested under an assessed row does not inherit its assessment.
-    from scoring_v4.modules.generic_dose import score_dose, NO_REFERENCE_INDIVIDUAL_DOSE_CREDIT, _band_credit
+    from scoring_v4.modules.generic_dose import score_dose, _band_credit
 
     rows = [
         _ingredient(name="Vitamin K", canonical_id="vitamin_k", quantity=45.0, unit="mcg",
@@ -1297,7 +1308,7 @@ def test_nested_child_without_the_title_projection_marker_is_not_the_parent() ->
     )
     payload = score_dose(product)
     # The unassessed primary caps the window at the no-reference credit; it never raises it.
-    expected = min(NO_REFERENCE_INDIVIDUAL_DOSE_CREDIT, _band_credit(37.5, None, "vitamin_k"))
+    expected = min(NEUTRAL, _band_credit(37.5, None, "vitamin_k"))
     assert payload["components"]["supplemental_window_proxy"] == pytest.approx(expected, abs=1e-4)
     assert payload["metadata"]["primary_active_unassessed"] == "oleic_acid"
 
@@ -1305,7 +1316,7 @@ def test_nested_child_without_the_title_projection_marker_is_not_the_parent() ->
 def test_sibling_constituent_row_does_not_assess_the_primary() -> None:
     # Some labels print ALA as a sibling of flaxseed oil, not under it. Shared
     # identity never creates lineage, so the parent stays unassessed.
-    from scoring_v4.modules.generic_dose import score_dose, NO_REFERENCE_INDIVIDUAL_DOSE_CREDIT
+    from scoring_v4.modules.generic_dose import score_dose
 
     rows = [
         _ingredient(name="Flaxseed Oil", canonical_id="flaxseed", quantity=1000.0, unit="mg", bio_score=None,
@@ -1321,7 +1332,7 @@ def test_sibling_constituent_row_does_not_assess_the_primary() -> None:
         ],
     )
     payload = score_dose(product)
-    assert payload["components"]["supplemental_window_proxy"] == NO_REFERENCE_INDIVIDUAL_DOSE_CREDIT
+    assert payload["components"]["supplemental_window_proxy"] == NEUTRAL
     assert payload["metadata"]["primary_active_unassessed"] == "flaxseed"
 
 
@@ -1329,7 +1340,7 @@ def test_assessed_constituent_nested_under_the_primary_does_not_assess_it() -> N
     # Codex round-3 audit: vitamin C nested under Cognigrape in the label tree
     # must not transfer its assessment upward. Shared ancestry is not
     # assessment applicability; only the primary's own assessment counts.
-    from scoring_v4.modules.generic_dose import score_dose, NO_REFERENCE_INDIVIDUAL_DOSE_CREDIT
+    from scoring_v4.modules.generic_dose import score_dose
 
     rows = [
         _ingredient(name="Cognigrape", canonical_id="cognigrape", quantity=250.0, unit="mg", bio_score=None,
@@ -1343,7 +1354,7 @@ def test_assessed_constituent_nested_under_the_primary_does_not_assess_it() -> N
         supp_type="multi",
     )
     payload = score_dose(product)
-    assert payload["components"]["supplemental_window_proxy"] == NO_REFERENCE_INDIVIDUAL_DOSE_CREDIT
+    assert payload["components"]["supplemental_window_proxy"] == NEUTRAL
     assert payload["metadata"]["primary_active_unassessed"] == "cognigrape"
 
 
@@ -1441,7 +1452,7 @@ def test_clinical_anchor_map_lists_only_pubmed_verified_anchors() -> None:
 @pytest.mark.parametrize("count", [1, 2, 3, 4])
 @pytest.mark.parametrize("with_benchmark", [False, True])
 def test_approved_fallback_calibration_keeps_all_purpose_rows(count, with_benchmark):
-    from scoring_v4.modules.generic_dose import score_dose, NO_REFERENCE_INDIVIDUAL_DOSE_CREDIT
+    from scoring_v4.modules.generic_dose import score_dose
     unknowns = [("Lactoferrin", "lactoferrin"), ("D-Mannose", "d_mannose"),
                 ("D-Aspartic Acid", "d_aspartic_acid"), ("CogniGrape", "cognigrape")]
     chosen = ([("Vitamin C", "vitamin_c")] if with_benchmark else [])
@@ -1456,9 +1467,9 @@ def test_approved_fallback_calibration_keeps_all_purpose_rows(count, with_benchm
     p = _product(ingredients=rows, adequacy_results=adequacy,
                  product_name=" and ".join(name for name, _ in chosen))
     payload = score_dose(p)
-    expected = ((22.0 if with_benchmark else 16.0) + 16.0 * (count - 1)) / count
-    assert NO_REFERENCE_INDIVIDUAL_DOSE_CREDIT == 16.0
-    assert payload["components"]["supplemental_window_proxy"] == pytest.approx(expected)
+    expected = ((22.0 if with_benchmark else NEUTRAL) + NEUTRAL * (count - 1)) / count
+    assert NEUTRAL == 12.54
+    assert payload["components"]["supplemental_window_proxy"] == pytest.approx(expected, abs=1e-4)
     assert payload["metadata"]["purpose_ingredient_count"] == count
     assert len(payload["metadata"]["unbenchmarked_purpose_ingredients"]) == count - int(with_benchmark)
 
@@ -1502,7 +1513,6 @@ def test_raw_blend_total_never_becomes_an_individual_dose(pid):
     from enhanced_normalizer import EnhancedDSLDNormalizer
     from enrich_supplements_v3 import SupplementEnricherV3
     from scoring_v4.scored_artifact import build_scored_artifact
-    from scoring_v4.modules.generic_dose import NO_REFERENCE_INDIVIDUAL_DOSE_CREDIT
 
     raw = json.loads((Path(__file__).parent / "fixtures" / f"dose_blend_{pid}_raw.json").read_text())
     clean = EnhancedDSLDNormalizer().normalize_product(deepcopy(raw))
@@ -1516,20 +1526,19 @@ def test_raw_blend_total_never_becomes_an_individual_dose(pid):
         assert any(item["active"] == "glucosamine" and item["daily_mg"] == 1500
                    for item in dose["metadata"]["specialized_purpose_assessments"])
     elif pid == "204571":
-        from scoring_v4.modules.generic_dose import NO_REFERENCE_PRODUCT_EVIDENCE_CREDIT
-        assert dose["components"]["supplemental_window_proxy"] == NO_REFERENCE_PRODUCT_EVIDENCE_CREDIT
-        assert dose["metadata"]["partial_credit_value"] == NO_REFERENCE_PRODUCT_EVIDENCE_CREDIT
+        assert dose["components"]["supplemental_window_proxy"] == NEUTRAL
+        assert dose["metadata"]["partial_credit_value"] == NEUTRAL
         assert dose["metadata"]["unbenchmarked_purpose_ingredients"]
     else:
         # The raw notes disclose individual enzyme activity (DU/HUT/FCCPU);
         # reject container mass while preserving that distinct usable exposure.
         assert dose["metadata"]["partial_credit_reason"] == "enzyme_activity_quantified_dose_no_rda_reference"
-        assert dose["score"] == NO_REFERENCE_INDIVIDUAL_DOSE_CREDIT
+        assert dose["score"] == NEUTRAL
 
 
 def test_structural_blend_fallback_preserves_existing_product_credit():
     from scoring_v4.modules.generic_dose import (
-        _score_no_reference_quantified_dose, NO_REFERENCE_PRODUCT_EVIDENCE_CREDIT,
+        _score_no_reference_quantified_dose,
     )
     total = _ingredient(name="Digestive enzyme blend", canonical_id="enzyme_blend", quantity=500,
                         evidence_type="blend_anchor_mass", evidence_scope="blend_level",
@@ -1537,14 +1546,14 @@ def test_structural_blend_fallback_preserves_existing_product_credit():
                         dose_value=500, dose_unit="mg", scoreable=True)
     product = _product(ingredients=[total], product_scoring_evidence=[total])
     score, reason = _score_no_reference_quantified_dose(product)
-    assert score == NO_REFERENCE_PRODUCT_EVIDENCE_CREDIT
+    assert score == NEUTRAL
     assert reason == "blend_anchor_quantified_dose_no_rda_reference"
 
 
-@pytest.mark.parametrize("lent,disclosed,expected", [(False, True, 12), (True, True, 0), (False, False, 0)])
+@pytest.mark.parametrize("lent,disclosed,expected", [(False, True, True), (True, True, False), (False, False, False)])
 def test_declared_structural_purpose_keeps_product_total_fallback(lent, disclosed, expected):
     from scoring_v4.modules.generic_dose import (
-        _score_declared_purpose_window, NO_REFERENCE_PRODUCT_EVIDENCE_CREDIT,
+        _score_declared_purpose_window,
     )
     total = _ingredient(name="Digestive enzyme blend", canonical_id="enzyme_blend", quantity=500,
                         evidence_type="blend_anchor_mass", evidence_scope="blend_level",
@@ -1558,10 +1567,10 @@ def test_declared_structural_purpose_keeps_product_total_fallback(lent, disclose
         total["quantity"] = total["dose_value"] = None
     score, unknown, count, clinical, specialized, fallbacks = _score_declared_purpose_window(product)
     assert count == 1
-    assert score == (NO_REFERENCE_PRODUCT_EVIDENCE_CREDIT if expected else 0)
+    assert score == (NEUTRAL if expected else 0)
     assert unknown == (["enzyme_blend"] if expected else [])
     assert not clinical and not specialized
-    assert fallbacks == ([NO_REFERENCE_PRODUCT_EVIDENCE_CREDIT] if expected else [])
+    assert fallbacks == ([NEUTRAL] if expected else [])
 
 
 def test_mixed_preparation_and_individual_fallbacks_keep_each_purpose_vote():
@@ -1575,6 +1584,8 @@ def test_mixed_preparation_and_individual_fallbacks_keep_each_purpose_vote():
                        fullName="Digestive enzyme blend with Astragalus")
     dose = score_dose(product)
     assert dose["metadata"]["purpose_ingredient_count"] == 2
-    assert dose["components"]["supplemental_window_proxy"] == 14
+    # A disclosed preparation total and an individual amount, both without a
+    # benchmark, each keep one vote at the same shared neutral.
+    assert dose["components"]["supplemental_window_proxy"] == NEUTRAL
     assert dose["metadata"]["unbenchmarked_purpose_ingredients"] == ["astragalus", "enzyme_blend"]
-    assert "partial_credit_value" not in dose["metadata"]
+    assert dose["metadata"]["partial_credit_value"] == NEUTRAL

@@ -8,6 +8,7 @@ from scoring_v4.modules.probiotic_formulation import score_formulation
 from studied_formulas import label_owned_native_strains
 from test_native_clinical_strain_provenance import _owned_product
 from test_probiotic_identity_completeness import product_with_identities
+from test_probiotic_identity_completeness import _disclosure_points, _identity_points
 
 
 @pytest.mark.parametrize("forms", [42, True, None, {"name": "invalid"}])
@@ -37,7 +38,7 @@ def test_mixed_malformed_header_forms_cannot_authorize_partial_identity_or_cfu(m
     formulation = score_formulation(product)
     assert formulation["metadata"]["total_strain_count"] == 0
     assert formulation["metadata"]["identified_strain_count"] == 0
-    assert formulation["components"]["exact_identity_completeness"] == 0
+    assert _identity_points(formulation) == 0
     assert score_dose(product)["metadata"]["per_strain_cfu_disclosed_count"] == 0
     assert score_transparency(product)["components"]["per_strain_cfu_on_label"] == 0
     assert build_detail_blob(product, {})["probiotic_detail"]["total_strain_count"] == 0
@@ -80,8 +81,8 @@ def test_actual_blend_context_respects_cleaner_nonmicrobial_categories(category_
     formulation = score_formulation(product)
     assert formulation["metadata"]["total_strain_count"] == 2
     assert formulation["metadata"]["identified_strain_count"] == 1
-    assert formulation["components"]["exact_identity_completeness"] == 4
-    assert score_dose(product)["components"]["per_strain_cfu_disclosure"] == 5
+    assert _identity_points(formulation) == 4
+    assert _disclosure_points(score_dose(product)) == 5
     assert score_transparency(product)["components"]["per_strain_cfu_on_label"] == 3.5
     assert build_detail_blob(product, {})["probiotic_detail"]["total_strain_count"] == 2
 
@@ -225,7 +226,7 @@ def test_existing_sources_reject_dangling_projected_members_and_aggregate_disclo
     formulation = score_formulation(product)
     assert formulation["metadata"]["total_strain_count"] == 1
     assert formulation["metadata"]["identified_strain_count"] == 1
-    assert formulation["components"]["exact_identity_completeness"] == 8
+    assert _identity_points(formulation) == 8
     assert score_dose(product)["metadata"]["per_strain_cfu_disclosed_count"] == 0
     assert score_transparency(product)["components"]["per_strain_cfu_on_label"] == 0
     assert build_detail_blob(product, {})["probiotic_detail"]["total_strain_count"] == 1
@@ -279,11 +280,11 @@ def test_ancestor_source_state_controls_child_identity_clinical_and_cfu(layout, 
         # not a preparation that automatically applies to nested children.
         assert formulation["metadata"]["total_strain_count"] == 2
         assert formulation["metadata"]["identified_strain_count"] == 1
-        assert formulation["components"]["exact_identity_completeness"] == 4
+        assert _identity_points(formulation) == 4
         return
     assert formulation["metadata"]["total_strain_count"] == 1
     assert formulation["metadata"]["identified_strain_count"] == 0
-    assert formulation["components"]["exact_identity_completeness"] == 0
+    assert _identity_points(formulation) == 0
     assert label_owned_native_strains(product) == []
     assert measured_native_strain_doses(product) == []
     assert score_evidence(product)["score"] == 0
@@ -324,7 +325,7 @@ def test_actual_descendants_make_stale_active_role_parent_a_container(flattened,
     formulation = score_formulation(product)
     assert formulation["metadata"]["total_strain_count"] == 1
     assert formulation["metadata"]["identified_strain_count"] == 1
-    assert formulation["components"]["exact_identity_completeness"] == 8
+    assert _identity_points(formulation) == 8
     assert score_dose(product)["metadata"]["per_strain_cfu_disclosed_count"] == 0
     assert score_transparency(product)["components"]["per_strain_cfu_on_label"] == 0
     assert build_detail_blob(product, {})["probiotic_detail"]["total_strain_count"] == 1
@@ -352,7 +353,7 @@ def test_actual_multimember_scope_never_lends_aggregate_cfu_to_shortened_project
     dose = score_dose(product)
     assert dose["metadata"]["total_strain_count"] == 2
     assert dose["metadata"]["per_strain_cfu_disclosed_count"] == 0
-    assert dose["components"]["per_strain_cfu_disclosure"] == 0
+    assert _disclosure_points(dose) == 0
 
 
 @pytest.mark.parametrize("nonlive_evidence", ["name", "forms"])
@@ -399,10 +400,10 @@ def test_actual_parent_scope_owns_membership_not_stale_aggregate_names(nonlive_e
     result = score_formulation(product)
     assert result["metadata"]["total_strain_count"] == count
     assert result["metadata"]["identified_strain_count"] == 1
-    assert result["components"]["exact_identity_completeness"] == 8 / count
+    assert _identity_points(result) == 8 / count
     dose = score_dose(product)
     assert dose["metadata"]["per_strain_cfu_disclosed_count"] == 1
-    assert dose["components"]["per_strain_cfu_disclosure"] == 10 / count
+    assert _disclosure_points(dose) == 10 / count
     assert score_transparency(product)["components"]["per_strain_cfu_on_label"] == 7 / count
     assert build_detail_blob(product, {})["probiotic_detail"]["total_strain_count"] == count
 
@@ -431,10 +432,10 @@ def test_source_membership_does_not_shrink_when_unresolved_projection_is_missing
     formulation = score_formulation(product)
     assert formulation["metadata"]["total_strain_count"] == 2
     assert formulation["metadata"]["identified_strain_count"] == 1
-    assert formulation["components"]["exact_identity_completeness"] == 4
+    assert _identity_points(formulation) == 4
     dose = score_dose(product)
     assert dose["metadata"]["total_strain_count"] == 2
-    assert dose["components"]["per_strain_cfu_disclosure"] == (0 if projections == "none" else 5)
+    assert _disclosure_points(dose) == (0 if projections == "none" else 5)
     transparency = score_transparency(product)
     assert transparency["metadata"]["total_strain_count"] == 2
     assert transparency["components"]["per_strain_cfu_on_label"] == (0 if projections == "none" else 3.5)
@@ -458,7 +459,7 @@ def test_source_completion_keeps_existing_eligibility_and_header_boundaries(sour
     product["activeIngredients"].append({**source, "raw_source_path": "ingredientRows[1]"})
     result = score_formulation(product)
     assert result["metadata"]["total_strain_count"] == 1
-    assert result["components"]["exact_identity_completeness"] == 8
+    assert _identity_points(result) == 8
 
 
 def test_source_completion_retains_explicit_probiotic_role_without_inventing_identity():
@@ -467,7 +468,7 @@ def test_source_completion_retains_explicit_probiotic_role_without_inventing_ide
                                           "raw_source_path": "ingredientRows[1]"})
     result = score_formulation(product)
     assert result["metadata"]["total_strain_count"] == 2
-    assert result["components"]["exact_identity_completeness"] == 4
+    assert _identity_points(result) == 4
 
 
 @pytest.mark.parametrize("stale_projection", [False, True])
@@ -494,10 +495,10 @@ def test_nonlive_projection_cannot_change_live_identity_denominator_or_disclosur
     formulation = score_formulation(product)
     assert formulation["metadata"]["total_strain_count"] == 1
     assert formulation["metadata"]["identified_strain_count"] == 1
-    assert formulation["components"]["exact_identity_completeness"] == 8
+    assert _identity_points(formulation) == 8
     dose = score_dose(product)
     assert dose["metadata"]["per_strain_cfu_disclosed_count"] == 1
-    assert dose["components"]["per_strain_cfu_disclosure"] == 10
+    assert _disclosure_points(dose) == 10
     assert score_transparency(product)["components"]["per_strain_cfu_on_label"] == 7
     assert build_detail_blob(product, {})["probiotic_detail"]["total_strain_count"] == 1
 
@@ -517,7 +518,7 @@ def test_source_path_guard_keeps_unresolved_live_labels_without_inventing_proof(
     result = score_formulation(product)
     assert result["metadata"]["total_strain_count"] == 2
     assert result["metadata"]["identified_strain_count"] == 1
-    assert result["components"]["exact_identity_completeness"] == 4
+    assert _identity_points(result) == 4
     assert score_dose(product)["metadata"]["per_strain_cfu_disclosed_count"] == (2 if ref == "ingredientRows[1]" else 1)
 
 
@@ -539,7 +540,7 @@ def test_source_alias_case_does_not_change_exact_identity_specificity(name):
     product["activeIngredients"][0]["name"] = name
     product["probiotic_data"]["probiotic_blends"][0]["strains"] = [name]
     product["probiotic_data"]["clinical_strains"] = []
-    assert score_formulation(product)["components"]["exact_identity_completeness"] == 8
+    assert _identity_points(score_formulation(product)) == 8
 
 
 @pytest.mark.parametrize("duplicate_owner", [False, True])
@@ -552,7 +553,7 @@ def test_legacy_exact_label_retains_existing_unique_owner_proof(duplicate_owner)
     assert len(label_owned_native_strains(product)) == (0 if duplicate_owner else 1)
     for clinical in (product["probiotic_data"]["clinical_strains"], []):
         product["probiotic_data"]["clinical_strains"] = clinical
-        assert score_formulation(product)["components"]["exact_identity_completeness"] == (0 if duplicate_owner else 8)
+        assert _identity_points(score_formulation(product)) == (0 if duplicate_owner else 8)
 
 
 @pytest.mark.parametrize("ref", [["ingredientRows[1]"], {"path": "ingredientRows[1]"}, 1, True, ""])
@@ -563,14 +564,14 @@ def test_malformed_sibling_source_path_cannot_rescue_legacy_owner(ref):
     product["activeIngredients"].append({**owner, "raw_source_path": ref})
     product["probiotic_data"]["probiotic_blends"][0].pop("raw_source_path")
     product["probiotic_data"]["clinical_strains"] = []
-    assert score_formulation(product)["components"]["exact_identity_completeness"] == 0
+    assert _identity_points(score_formulation(product)) == 0
 
 
 @pytest.mark.parametrize("form", [42, True, False, {}, {"name": 42}, {"name": True}])
 def test_malformed_form_members_cannot_authorize_exact_identity(form):
     product = product_with_identities(1)
     product["activeIngredients"][0]["forms"] = [form]
-    assert score_formulation(product)["components"]["exact_identity_completeness"] == 0
+    assert _identity_points(score_formulation(product)) == 0
     assert label_owned_native_strains(product) == []
 
 
@@ -590,7 +591,7 @@ def test_conflicting_representations_of_same_source_path_fail_closed(conflict):
         owner["forms"].append({"name": "Lactobacillus rhamnosus HN001"})
         product["probiotic_data"]["probiotic_blends"][0]["strains"] = ["HOWARU"]
     product["activeIngredients"].append(duplicate)
-    assert score_formulation(product)["components"]["exact_identity_completeness"] == 0
+    assert _identity_points(score_formulation(product)) == 0
 
 
 @pytest.mark.parametrize("stale_projection", [False, True])
@@ -614,7 +615,7 @@ def test_nonlive_same_path_representation_cannot_be_hidden_by_live_duplicate(sta
     result = score_formulation(product)
     assert result["metadata"]["total_strain_count"] == 0
     assert result["metadata"]["identified_strain_count"] == 0
-    assert result["components"]["exact_identity_completeness"] == 0
+    assert _identity_points(result) == 0
     assert label_owned_native_strains(product) == []
     assert score_dose(product)["metadata"]["per_strain_cfu_disclosed_count"] == 0
     assert len(product["probiotic_data"]["clinical_strains"]) == 1  # Original diagnostic survives.
@@ -625,7 +626,7 @@ def test_ambiguous_registry_alias_does_not_select_an_identity(monkeypatch):
     registry = deepcopy(studied_formulas._clinical_strain_registry())
     registry["STRAIN_LONGUM_BB536"]["aliases"].append("Lactobacillus rhamnosus GG")
     monkeypatch.setattr(studied_formulas, "_clinical_strain_registry", lambda: registry)
-    assert score_formulation(product_with_identities(1))["components"]["exact_identity_completeness"] == 0
+    assert _identity_points(score_formulation(product_with_identities(1))) == 0
 
 
 @pytest.mark.parametrize("policy", ["BLOCKED_PROBIOTIC_STRAINS", "HOLD_PROBIOTIC_STRAINS"])
@@ -638,7 +639,7 @@ def test_source_blocking_policy_is_independent_of_projection_presence(monkeypatc
     product["probiotic_data"]["probiotic_blends"][0]["strains"] = [label]
     for clinical in (product["probiotic_data"]["clinical_strains"], []):
         product["probiotic_data"]["clinical_strains"] = clinical
-        assert score_formulation(product)["components"]["exact_identity_completeness"] == 0
+        assert _identity_points(score_formulation(product)) == 0
 
 
 @pytest.mark.parametrize("mutation", ["wrong_species", "wrong_code", "missing_ref", "mismatched_ref", "sibling_form"])
@@ -670,6 +671,6 @@ def test_structured_identity_requires_its_compatible_source_owner(mutation):
         product["activeIngredients"].append(sibling)
         result = score_formulation(product)
         assert result["metadata"]["total_strain_count"] == 2
-        assert result["components"]["exact_identity_completeness"] == 4
+        assert _identity_points(result) == 4
         return
-    assert score_formulation(product)["components"]["exact_identity_completeness"] == 0
+    assert _identity_points(score_formulation(product)) == 0

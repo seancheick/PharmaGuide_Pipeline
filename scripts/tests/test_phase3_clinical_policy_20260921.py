@@ -440,8 +440,18 @@ def _formulation_pillar(assessed_count: int, *, raw_score: float = 0.0) -> dict:
 
 
 def test_unrated_discrete_enzyme_earns_the_neutral_floor_not_zero() -> None:
-    pillar = _formulation_pillar(0)
-    assert pillar["score"] > 0.0
+    # V4.1 Step 4: the generic module itself scores an unrated form at the
+    # shared neutral; the pillar reports it as not rated.
+    from scoring_v4.modules.generic_formulation import score_formulation
+    from test_v4_generic_formulation_p131 import _ingredient, _product
+
+    dim = score_formulation(_product(ingredients=[_ingredient(
+        name="Bromelain", canonical_id="bromelain", bio_score=None)]))
+    from scoring_v4.quality_score import _pillar_formulation, _config
+
+    pillar = _pillar_formulation(dim, 20.0, "generic_single_molecule", _config())
+    assert dim["metadata"]["iqm_form_quality_assessed_count"] == 0
+    assert pillar["score"] == 12.0
     assert "not rated" in pillar["reason"].lower()
 
 

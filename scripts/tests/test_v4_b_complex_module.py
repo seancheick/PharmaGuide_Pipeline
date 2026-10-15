@@ -173,7 +173,7 @@ def test_b_complex_form_quality_uses_parent_relative_iqm_scale() -> None:
     # Riboflavin-5-phosphate is tied for the best reviewed B2 form at IQM 10.
     # Formulation therefore gives it the full within-parent contribution while
     # preserving the authored raw IQM value in metadata.
-    contribution, average_bio = _score_form_quality({
+    contribution, average_bio, neutral_points = _score_form_quality({
         "vitamin_b2_riboflavin": _row(
             "vitamin_b2_riboflavin",
             "Riboflavin-5-Phosphate",
@@ -186,6 +186,7 @@ def test_b_complex_form_quality_uses_parent_relative_iqm_scale() -> None:
 
     assert contribution == 8.0
     assert average_bio == 10.0
+    assert neutral_points == 0.0  # rated, so no unrated neutral share
 
 
 def test_b_complex_evidence_tracks_core_authority_panel_not_generic_breadth() -> None:
@@ -218,4 +219,9 @@ def test_over_ul_b_complex_keeps_dose_penalty_and_visible_safety_concern() -> No
     assert safety["score"] == safety["max"] - safety["components"]["additive_or_sweetener_penalty"]
     assert "over_ul_penalty" not in safety["components"]
     assert "exceed an established upper limit" in safety["reason"]
-    assert scored["quality_score_v4_100"] < 75.0
+    # The over-UL finding holds Dose low; the total stays below "Very good".
+    # V4.1 Step 4 removed the Formulation copy of the additive charge
+    # (74.1 -> 75.8), which the formula-checks pillar still charges once.
+    assert scored["quality_pillars_v4"]["dose"]["score"] <= 7.2
+    assert "B1_harmful_additives" not in scored["v4_breakdown"]["module"]["dimensions"]["formulation"]["penalties"]
+    assert scored["quality_score_v4_100"] < 80.0

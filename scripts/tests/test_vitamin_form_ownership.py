@@ -7,6 +7,11 @@ The component math and canaries were presented to the owner before
 implementation (docs/superpowers/plans/2026-09-15-probiotic-completeness.md,
 "Next bounded implementation: vitamin form ownership").
 
+V4.1 Step 4 (config 1.26.0) also retired the count- and disclosure-based
+components that sat beside it: panel disclosure structure, B-complex panel
+coverage, focus purity and dose disclosure. Form quality is the whole
+Formulation pillar on both routes; disclosure belongs to Transparency.
+
 Every case scores a reviewed archetype fixture through the single production
 seam, mutating one source fact at a time.
 """
@@ -68,7 +73,7 @@ def _rename(product: dict, names: dict[str, str]) -> dict:
     return product
 
 
-# --- multi/prenatal Formulation: panel form quality 12 + disclosure 2 --------
+# --- multi/prenatal Formulation: panel form quality only (reference 12) ------
 
 
 def test_prenatal_formulation_canary_at_equal_iqm_12() -> None:
@@ -78,19 +83,16 @@ def test_prenatal_formulation_canary_at_equal_iqm_12() -> None:
     assert artifact["_v4_module"] == "multi_or_prenatal"
     # Magnesium's best form became 15 on 2026-10-13, so a magnesium row at 12
     # now normalizes to 12 instead of 12/14*15 (11.12 -> 11.08 panel average).
-    assert formulation["components"] == {
-        "panel_form_quality": 11.08,
-        "panel_disclosure_structure": 2.0,
-    }
-    assert formulation["score"] == 13.08
-    assert artifact["quality_pillars_v4"]["formulation"]["components"]["reference"] == 14.0
-    assert artifact["quality_pillars_v4"]["formulation"]["score"] == 18.7
+    assert formulation["components"] == {"panel_form_quality": 11.08}
+    assert formulation["score"] == 11.08
+    assert artifact["quality_pillars_v4"]["formulation"]["components"]["reference"] == 12.0
+    assert artifact["quality_pillars_v4"]["formulation"]["score"] == 18.5
 
 
 def test_prenatal_formulation_reaches_full_pillar_at_iqm_15() -> None:
     artifact = _score(_set_bio(_fixture(PRENATAL), 15))
 
-    assert _dimension(artifact, "formulation")["score"] == 14.0
+    assert _dimension(artifact, "formulation")["score"] == 12.0
     assert artifact["quality_pillars_v4"]["formulation"]["score"] == 20.0
 
 
@@ -128,23 +130,31 @@ def test_prenatal_panel_size_adds_no_points_at_equal_iqm() -> None:
 def test_prenatal_payload_has_no_duplicate_form_rankings() -> None:
     formulation = _dimension(_score(_fixture(PRENATAL)), "formulation")
 
-    assert set(formulation["components"]) == {"panel_form_quality", "panel_disclosure_structure"}
+    assert set(formulation["components"]) == {"panel_form_quality"}
     assert "premium_form_count" not in formulation["metadata"]
     assert "key_form_details" not in formulation["metadata"]
 
 
-def test_prenatal_missing_dose_disclosure_still_loses_formulation_credit() -> None:
-    product = _set_bio(_fixture(PRENATAL), 12)
-    for row in _rows(product)[:8]:
+def _hide_amounts(product: dict, count: int) -> dict:
+    for row in _rows(product)[:count]:
         row.pop("quantity", None)
         row.pop("unit", None)
-
-    formulation = _dimension(_score(product), "formulation")
-
-    assert formulation["components"]["panel_disclosure_structure"] < 2.0
+    return product
 
 
-# --- B-complex Formulation: panel 10 + IQM form 8 + focus 3 + disclosure 2 ---
+@pytest.mark.parametrize(("case_id", "count"), [(PRENATAL, 8), (B_COMPLEX, 4)])
+def test_missing_dose_disclosure_loses_transparency_not_formulation_components(case_id, count) -> None:
+    base = _score(_set_bio(_fixture(case_id), 12))
+    hidden = _score(_hide_amounts(_set_bio(_fixture(case_id), 12), count))
+
+    # Disclosure is a Transparency fact; Formulation holds only form quality.
+    assert set(_dimension(hidden, "formulation")["components"]) == set(_dimension(base, "formulation")["components"])
+    assert _pillars(hidden)["transparency"] < _pillars(base)["transparency"]
+    # Hiding information can never raise the overall score.
+    assert hidden["quality_score_v4_100"] < base["quality_score_v4_100"]
+
+
+# --- B-complex Formulation: IQM form quality only (reference 8) --------------
 
 
 def test_b_complex_formulation_canary_at_equal_iqm_12() -> None:
@@ -152,21 +162,16 @@ def test_b_complex_formulation_canary_at_equal_iqm_12() -> None:
     formulation = _dimension(artifact, "formulation")
 
     assert artifact["_v4_module"] == "b_complex"
-    assert formulation["components"] == {
-        "core_b_panel_coverage": 10.0,
-        "b_form_quality": 7.5143,
-        "b_complex_focus_purity": 3.0,
-        "dose_disclosure": 2.0,
-    }
-    assert formulation["score"] == 22.5143
-    assert artifact["quality_pillars_v4"]["formulation"]["components"]["reference"] == 23.0
-    assert artifact["quality_pillars_v4"]["formulation"]["score"] == 19.6
+    assert formulation["components"] == {"b_form_quality": 7.5143}
+    assert formulation["score"] == 7.5143
+    assert artifact["quality_pillars_v4"]["formulation"]["components"]["reference"] == 8.0
+    assert artifact["quality_pillars_v4"]["formulation"]["score"] == 18.8
 
 
 def test_b_complex_formulation_reaches_full_pillar_at_iqm_15() -> None:
     artifact = _score(_set_bio(_fixture(B_COMPLEX), 15))
 
-    assert _dimension(artifact, "formulation")["score"] == 23.0
+    assert _dimension(artifact, "formulation")["score"] == 8.0
     assert artifact["quality_pillars_v4"]["formulation"]["score"] == 20.0
 
 
@@ -183,7 +188,9 @@ def test_b_complex_preferred_form_names_add_no_points_at_equal_iqm() -> None:
     assert _dimension(_score(standard), "formulation") == _dimension(_score(preferred), "formulation")
 
 
-def test_b_complex_unrelated_active_still_changes_focus_by_existing_rule() -> None:
+def test_b_complex_unrelated_active_does_not_change_form_quality() -> None:
+    # The count-based focus rule is retired: an unrelated active neither adds
+    # nor removes Formulation points at equal B-vitamin form quality.
     product = _set_bio(_fixture(B_COMPLEX), 12)
     extra = copy.deepcopy(_rows(product)[0])
     extra.update({"canonical_id": "coenzyme_q10", "name": "Coenzyme Q10", "standard_name": "Coenzyme Q10",
@@ -192,22 +199,7 @@ def test_b_complex_unrelated_active_still_changes_focus_by_existing_rule() -> No
 
     formulation = _dimension(_score(product), "formulation")
 
-    assert formulation["components"]["b_complex_focus_purity"] == 2.0
-    assert formulation["score"] == 21.5143
-
-
-def test_b_complex_missing_dose_disclosure_still_loses_credit() -> None:
-    product = _set_bio(_fixture(B_COMPLEX), 12)
-    for row in _rows(product)[:4]:
-        row.pop("quantity", None)
-        row.pop("unit", None)
-
-    formulation = _dimension(_score(product), "formulation")
-
-    assert formulation["components"]["dose_disclosure"] < 2.0
-    assert formulation["score"] < _dimension(
-        _score(_set_bio(_fixture(B_COMPLEX), 12)), "formulation"
-    )["score"]
+    assert formulation["components"] == {"b_form_quality": 7.5143}
 
 
 def test_b_complex_payload_has_no_preferred_form_ranking() -> None:
@@ -224,15 +216,17 @@ def test_config_references_match_retained_component_ceilings() -> None:
     cfg = _config()
     multi = cfg["formulation_variant_magnitudes"]["multi_prenatal"]
 
-    assert cfg["formulation_subscale"]["archetype_reference"]["prenatal_multi"] == 14.0
-    assert multi["cap_formulation"] == multi["cap_panel_form_quality"] + multi["cap_panel_disclosure_structure"] == 14.0
+    assert cfg["formulation_subscale"]["archetype_reference"]["prenatal_multi"] == 12.0
+    assert multi["cap_formulation"] == multi["cap_panel_form_quality"] == 12.0
     assert not {"cap_premium_form_diversity", "cap_key_form_support", "premium_form_threshold",
-                "premium_points_per_additional"} & set(multi)
-    assert dict(cfg["category_magnitudes"]["multi_prenatal"]["dimension_caps"])["formulation"] == 14
-    assert cfg["formulation_subscale"]["archetype_reference"]["b_complex"] == 23.0
-    assert cfg["category_magnitudes"]["b_complex"]["formulation_cap"] == 23.0
-    # Removing an ordinal multiplier that never exceeded 1.0 leaves the dose ceiling alone.
-    assert cfg["dose_subscale"]["archetype_reference"]["prenatal_multi"] == 23.0
+                "premium_points_per_additional", "cap_panel_disclosure_structure",
+                "panel_form_neutral_floor"} & set(multi)
+    assert dict(cfg["category_magnitudes"]["multi_prenatal"]["dimension_caps"])["formulation"] == 12
+    # B-complex Formulation is the 8-point form-quality component alone.
+    assert cfg["formulation_subscale"]["archetype_reference"]["b_complex"] == 8.0
+    assert cfg["category_magnitudes"]["b_complex"]["formulation_cap"] == 8.0
+    # Dose loses only the count-based panel breadth (3 of 23).
+    assert cfg["dose_subscale"]["archetype_reference"]["prenatal_multi"] == 20.0
 
 
 # --- isolated variants: each mutation moves only its own pillar --------------
@@ -316,9 +310,9 @@ def test_unnecessary_complexity_variant_never_adds_formulation_points(case_id: s
     assert after["formulation"] <= before["formulation"]
     assert after["verification"] == before["verification"]
     if case_id == B_COMPLEX:
-        # Only the focused B-complex adapter has a focus rule; the broad panel
-        # adapter is count-neutral at equal form quality.
-        assert after["formulation"] < before["formulation"]
+        # The B-complex adapter scores B-vitamin forms only, so unrelated
+        # actives are count-neutral (the focus rule is retired).
+        assert after["formulation"] == before["formulation"]
 
 
 @pytest.mark.parametrize("case_id", [PRENATAL, B_COMPLEX])

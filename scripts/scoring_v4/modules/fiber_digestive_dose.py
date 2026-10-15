@@ -13,6 +13,7 @@ from scoring_v4.modules.fiber_digestive_helpers import (
     nutrition_fiber_exposure,
 )
 from scoring_v4.modules.generic_dose import score_dose as score_generic_dose
+from scoring_v4.modules.generic_helpers import archetype_dose_reference, dose_reference_scope
 
 
 from scoring_v4.quality_score_config import block as _cfg_block
@@ -39,7 +40,8 @@ def score_dose(product: Dict[str, Any]) -> Dict[str, Any]:
     # A marketing title cannot establish fiber mass or a fiber benchmark.
     # Nonfiber digestive preparations use the existing ingredient Dose owner.
     if not rows and not (has_fiber_context(product) and nutrition_exposure is not None):
-        return score_generic_dose(product)
+        with dose_reference_scope(archetype_dose_reference("fiber_digestive")):
+            return score_generic_dose(product)
     # Preserve the distinction between
     # total dietary fiber and ingredient mass (neither implies soluble fiber).
     exposures = ([nutrition_exposure] if nutrition_exposure is not None else
@@ -50,18 +52,16 @@ def score_dose(product: Dict[str, Any]) -> Dict[str, Any]:
     daily_minimum = sum(e.minimum for e in exposures) if exact else None
     daily_maximum = sum(e.maximum for e in exposures) if exact else None
     daily_amount = sum(e.benchmark_amount for e in exposures if e.benchmark_amount is not None)
+    # V4.1 Step 4: fiber-type and amount-printed bonuses are retired;
+    # Transparency owns disclosure and Dose owns the effective amount.
     effective = _fiber_effective_dose_points(daily_amount)
-    type_bonus = _fiber_type_bonus(rows)
-    disclosure_bonus = 1.0 if grams > 0 else 0.0
-    score = max(0.0, min(DIMENSION_CAP, effective + type_bonus + disclosure_bonus))
+    score = max(0.0, min(DIMENSION_CAP, effective))
 
     return {
         "score": round(score, 4),
         "max": DIMENSION_CAP,
         "components": {
             "fiber_effective_dose": round(effective, 4),
-            "fiber_type_specificity": round(type_bonus, 4),
-            "fiber_dose_disclosure": round(disclosure_bonus, 4),
         },
         "penalties": {},
         "phase": PHASE_MARKER,
@@ -93,15 +93,4 @@ def _fiber_effective_dose_points(grams: float) -> float:
         return 7.0
     if grams > 0.0:
         return max(1.0, grams * 4.0)
-    return 0.0
-
-
-def _fiber_type_bonus(rows: list[Dict[str, Any]]) -> float:
-    if not rows:
-        return 0.0
-    text = " ".join(str(row.get("canonical_id") or row.get("name") or "").lower() for row in rows)
-    if any(term in text for term in ("psyllium", "acacia", "guar", "glucomannan", "beta_glucan")):
-        return 2.0
-    if any(term in text for term in ("inulin", "prebiotic", "fiber")):
-        return 1.0
     return 0.0

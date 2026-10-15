@@ -191,7 +191,7 @@ def test_under_dosed_fiber_gummy_stays_low_despite_category_membership() -> None
     assert "fiber_gummy_delivery_penalty" not in breakdown["dimensions"]["formulation"]["penalties"]
 
 
-def test_stimulant_laxative_cleanse_is_not_rewarded_as_fiber() -> None:
+def test_stimulant_laxative_cleanse_earns_only_its_fiber_source_quality() -> None:
     product = _fiber_product(
         [
             _row("psyllium", 2.0, name="Psyllium Husk"),
@@ -206,10 +206,18 @@ def test_stimulant_laxative_cleanse_is_not_rewarded_as_fiber() -> None:
     result = score_fiber_digestive(product)
     formulation = result.to_breakdown()["dimensions"]["formulation"]
 
+    # V4.1 Step 4: senna (watchlist) and cascara (high risk) are charged once
+    # by their banned_recalled owner through the formula-checks pillar and the
+    # product safety status; Formulation no longer re-charges them by name, and
+    # the stimulant herbs add no fiber quality.
     assert "fiber_stimulant_laxative_penalty" not in formulation["penalties"]
     assert "fiber_cleanse_detox_penalty" not in formulation["penalties"]
-    assert formulation["components"]["fiber_formula_focus"] == 1.0
-    assert formulation["components"]["fiber_practicality"] == 0.5
+    assert set(formulation["components"]) == {"fiber_source_quality"}
+    psyllium_only = score_fiber_digestive(_fiber_product(
+        [_row("psyllium", 2.0, name="Psyllium Husk")],
+        name="Fiber Cleanse Detox", dietary_fiber_g=2.0, matches=[],
+    )).to_breakdown()["dimensions"]["formulation"]
+    assert formulation["components"] == psyllium_only["components"]
     assert formulation["metadata"]["fiber_profile_applied"] is True
 
 

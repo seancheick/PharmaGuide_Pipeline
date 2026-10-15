@@ -1,10 +1,42 @@
-"""Formulation rewards complete label identity, independently of count/potency."""
+"""Label identity is measured once and never changes Formulation (V4.1 Step 4).
+
+Strain identity and CFU disclosure are Transparency facts; Formulation keeps the
+canonical form quality: the shared unrated-form neutral plus probiotic-applicable
+delivery. The identity counts stay in metadata for every consumer.
+"""
 
 from copy import deepcopy
 
 import pytest
 
+from scoring_v4.modules.generic_formulation import UNRATED_FORM_NEUTRAL
 from scoring_v4.modules.probiotic_formulation import score_formulation
+
+# Unrated strain forms keep the shared neutral; the delayed-release capsule is a
+# probiotic-applicable tier-2 delivery system.
+CANONICAL = {"A1_bio_score": UNRATED_FORM_NEUTRAL, "A3_delivery_system": 2.0}
+
+
+def _total_cfu_points(formulation):
+    """Total-CFU disclosure on its former 4-point scale (retired from
+    Formulation in V4.1 Step 4; the declared total stays in metadata)."""
+    return 4.0 if formulation["metadata"]["total_billion_count"] > 0 else 0.0
+
+
+def _disclosure_points(dose):
+    """Per-strain CFU disclosure on its former 10-point scale. V4.1 Step 4 moved
+    disclosure credit to Transparency; the counts stay in Dose metadata."""
+    meta = dose["metadata"]
+    total, disclosed = meta["total_strain_count"], meta["per_strain_cfu_disclosed_count"]
+    return round(10 * min(1.0, disclosed / total), 2) if total and disclosed else 0.0
+
+
+def _identity_points(formulation):
+    """Identity completeness on its former 8-point scale. V4.1 Step 4 retired
+    the Formulation credit; the identity counts it measured stay in metadata."""
+    meta = formulation["metadata"]
+    total = meta["total_strain_count"]
+    return 8 * meta["identified_strain_count"] / total if total else 0.0
 
 
 IDENTITIES = [
@@ -44,10 +76,11 @@ def product_with_identities(exact=1, unknown=0):
 def test_complete_single_and_five_strains_receive_same_formulation():
     single = score_formulation(product_with_identities(1))
     five = score_formulation(product_with_identities(5))
-    assert single["score"] == five["score"] == 15
+    assert single["components"] == five["components"] == CANONICAL
+    assert single["score"] == five["score"] == 11
     assert single["max"] == five["max"] == 15
-    assert single["components"]["exact_identity_completeness"] == 8
-    assert five["components"]["exact_identity_completeness"] == 8
+    assert _identity_points(single) == 8
+    assert _identity_points(five) == 8
     assert "cfu_amount" not in single["components"]
     assert "named_species_diversity" not in single["components"]
 
@@ -66,7 +99,7 @@ def test_partial_identity_uses_label_denominator_in_every_dimension(stale_count)
     assert formulation["metadata"]["total_strain_count"] == 4
     dose = score_dose(product)
     assert dose["metadata"]["total_strain_count"] == 4
-    assert dose["components"]["per_strain_cfu_disclosure"] == 5
+    assert _disclosure_points(dose) == 5
     assert score_transparency(product)["components"]["per_strain_cfu_on_label"] == 3.5
 
 
@@ -92,7 +125,9 @@ def test_species_only_and_potency_invariance():
     product = product_with_identities(0)
     product["activeIngredients"] = [{"name": "Lactobacillus rhamnosus", "raw_source_text": "Lactobacillus rhamnosus", "raw_source_path": "ingredientRows[0]", "category": "probiotic"}]
     product["probiotic_data"]["probiotic_blends"] = [{"strains": ["Lactobacillus rhamnosus"], "raw_source_path": "ingredientRows[0]"}]
-    assert score_formulation(product)["score"] == 7
+    species_only = score_formulation(product)
+    assert _identity_points(species_only) == 0
+    assert species_only["components"] == CANONICAL
     product = product_with_identities(1)
     before = score_formulation(product)
     product["probiotic_data"]["total_billion_count"] = 50
@@ -115,7 +150,7 @@ def test_duplicate_alias_and_projection_share_identity_and_disclosure_key(within
     product["activeIngredients"].append(deepcopy(product["activeIngredients"][0]))
     result = score_formulation(product)
     assert result["metadata"]["total_strain_count"] == 1
-    assert result["components"]["exact_identity_completeness"] == 8
+    assert _identity_points(result) == 8
     assert score_dose(product)["metadata"]["per_strain_cfu_disclosed_count"] == 1
     assert score_transparency(product)["components"]["per_strain_cfu_on_label"] == 7
 
@@ -135,7 +170,7 @@ def test_exact_identity_requires_matching_source_proof(mutation):
     else:
         product["probiotic_data"]["probiotic_blends"] = []
     result = score_formulation(product)
-    assert result["components"]["exact_identity_completeness"] == (0 if mutation == "no_owner" else 8)
+    assert _identity_points(result) == (0 if mutation == "no_owner" else 8)
     assert result["metadata"]["total_strain_count"] == 1
     if mutation != "no_blends":
         assert label_owned_native_strains(product) == []
@@ -148,7 +183,10 @@ def test_count_only_and_detached_ids_cannot_supply_missing_label_names():
     from scoring_v4.modules.probiotic_transparency import score_transparency
     product = {"probiotic_data": {"total_strain_count": 12,
                                  "clinical_strains": [{"clinical_id": "STRAIN_LGG"}]}}
-    assert score_formulation(product)["score"] == 0
+    formulation = score_formulation(product)
+    assert formulation["metadata"]["identified_strain_count"] == 0
+    # No delivery system or form rating: only the shared unrated neutral.
+    assert formulation["components"] == {"A1_bio_score": UNRATED_FORM_NEUTRAL, "A3_delivery_system": 0.0}
     assert score_dose(product)["score"] == 0
     assert score_transparency(product)["score"] == 0
 
@@ -163,17 +201,18 @@ def test_species_general_registry_identity_is_not_exact():
     product["activeIngredients"][0]["name"] = name
     product["probiotic_data"]["probiotic_blends"][0]["strains"] = [name]
     product["probiotic_data"]["clinical_strains"][0].update(strain=name, clinical_id=cid)
-    assert score_formulation(product)["components"]["exact_identity_completeness"] == 0
+    assert _identity_points(score_formulation(product)) == 0
 
 
 @pytest.mark.parametrize("amount", [None, True, 0, -1, "nan", "infinity"])
 def test_invalid_total_cfu_does_not_receive_potency_disclosure(amount):
     product = product_with_identities(1)
     product["probiotic_data"]["total_billion_count"] = amount
-    assert score_formulation(product)["components"]["total_cfu_disclosed"] == 0
+    assert _total_cfu_points(score_formulation(product)) == 0
 
 
-@pytest.mark.parametrize("exact,unknown,expected", [(1, 0, 20.0), (5, 0, 20.0), (2, 2, 14.7), (0, 1, 9.3)])
+# Identity completeness no longer moves Formulation: every mix scores 11/15 raw.
+@pytest.mark.parametrize("exact,unknown,expected", [(1, 0, 14.7), (5, 0, 14.7), (2, 2, 14.7), (0, 1, 14.7)])
 def test_public_formulation_uses_15_point_reference(exact, unknown, expected):
     from scoring_v4.modules.probiotic import score_probiotic
     from scoring_v4.quality_score import assemble_quality_score
@@ -198,7 +237,7 @@ def test_optional_prebiotic_does_not_change_public_formulation():
     without_public = assemble_quality_score({"v4_module": "probiotic", "v4_verdict": "SAFE", "raw_score_v4_100": 50,
                                             "v4_breakdown": {"module": without_prebiotic}})
     assert with_public["quality_pillars_v4"]["formulation"] == without_public["quality_pillars_v4"]["formulation"]
-    assert with_public["quality_pillars_v4"]["formulation"]["score"] == 20
+    assert with_public["quality_pillars_v4"]["formulation"]["score"] == 14.7
 
 
 def test_registered_alias_dedup_does_not_require_clinical_projection():
@@ -213,8 +252,8 @@ def test_registered_alias_dedup_does_not_require_clinical_projection():
         blend["strains"] = names
         formulation = score_formulation(product)
         assert formulation["metadata"]["total_strain_count"] == 1
-        assert formulation["components"]["exact_identity_completeness"] == 8
-        assert score_dose(product)["components"]["per_strain_cfu_disclosure"] == 10
+        assert _identity_points(formulation) == 8
+        assert _disclosure_points(score_dose(product)) == 10
         assert score_transparency(product)["components"]["per_strain_cfu_on_label"] == 7
         assert label_owned_native_strains(product) == independent_clinical_strains(product) == []
 
@@ -235,8 +274,8 @@ def test_source_local_unknown_group_codes_match_form_denominator(field):
     product["probiotic_data"]["probiotic_blends"].append(deepcopy(product["probiotic_data"]["probiotic_blends"][0]))
     formulation = score_formulation(product)
     assert formulation["metadata"]["total_strain_count"] == 2
-    assert formulation["components"]["exact_identity_completeness"] == 0
-    assert score_dose(product)["components"]["per_strain_cfu_disclosure"] == 5
+    assert _identity_points(formulation) == 0
+    assert _disclosure_points(score_dose(product)) == 5
     assert score_transparency(product)["components"]["per_strain_cfu_on_label"] == 3.5
 
 

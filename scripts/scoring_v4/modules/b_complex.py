@@ -20,7 +20,7 @@ from scoring_v4.dose_safety import resolve_dose_safety
 from scoring_v4.modules.generic import GenericModuleResult, _assemble_score, _empty_dimensions
 from evidence_resolver import resolve_authority_panel_evidence
 from scoring_v4.modules.generic_evidence import authority_panel_result_state
-from scoring_v4.modules.generic_formulation import shared_formulation_penalty_detail
+from scoring_v4.modules.generic_formulation import UNRATED_FORM_NEUTRAL, shared_formulation_penalty_detail
 from scoring_v4.modules.generic_helpers import (
     _as_float,
     _norm_text,
@@ -28,7 +28,6 @@ from scoring_v4.modules.generic_helpers import (
     _safe_list,
     bio_score_of,
     get_active_ingredients,
-    has_usable_individual_dose,
 )
 from scoring_v4.modules.generic_manufacturer import (
     score_manufacturer_trust,
@@ -130,74 +129,58 @@ def _b_rows(product: Dict[str, Any]) -> Dict[str, Dict[str, Any]]:
     return rows
 
 
-def _score_form_quality(rows: Dict[str, Dict[str, Any]]) -> tuple[float, Optional[float]]:
+def _score_form_quality(rows: Dict[str, Dict[str, Any]]) -> tuple[float, Optional[float], float]:
+    """Core-B form quality; a mapped row without a rating keeps the shared
+    unrated neutral (V4.1 Step 4). Returns (points, raw average, neutral points)."""
     raw_scores = []
     relative_scores = []
+    neutral_scores = []
     for key in B_CORE:
         row = rows.get(key)
         if not row:
             continue
         score = bio_score_of(row)
         if score is None:
-            score = 10.0 if row.get("mapped") else 0.0
-        raw_score = _clamp(0.0, 15.0, float(score))
-        relative_score = parent_relative_form_quality(row.get("canonical_id"), raw_score)
-        if relative_score is None:
+            raw_score = UNRATED_FORM_NEUTRAL if row.get("mapped") else 0.0
             relative_score = raw_score
+            if row.get("mapped"):
+                neutral_scores.append(raw_score)
+        else:
+            raw_score = _clamp(0.0, 15.0, float(score))
+            relative_score = parent_relative_form_quality(row.get("canonical_id"), raw_score)
+            if relative_score is None:
+                relative_score = raw_score
         raw_scores.append(raw_score)
         relative_scores.append(_clamp(0.0, 15.0, relative_score))
     if not relative_scores:
-        return 0.0, None
+        return 0.0, None, 0.0
     raw_avg = sum(raw_scores) / len(raw_scores)
     relative_avg = sum(relative_scores) / len(relative_scores)
-    return _round((relative_avg / 15.0) * 8.0), _round(raw_avg)
-
-
-def _score_focus_purity(product: Dict[str, Any], rows: Dict[str, Dict[str, Any]]) -> tuple[float, int]:
-    b_keys = set(rows)
-    non_b = 0
-    for row in _active_rows(product):
-        if _row_b_key(row) in b_keys:
-            continue
-        canonical = _norm_text(row.get("canonical_id") or row.get("standard_name") or row.get("name"))
-        if not canonical:
-            continue
-        non_b += 1
-    if non_b == 0:
-        return 3.0, 0
-    if non_b == 1:
-        return 2.0, non_b
-    return 0.0, non_b
-
-
-def _score_dose_disclosure(rows: Dict[str, Dict[str, Any]]) -> float:
-    if not rows:
-        return 0.0
-    disclosed = sum(1 for row in rows.values() if has_usable_individual_dose(row))
-    return _round(_clamp(0.0, 2.0, (disclosed / len(rows)) * 2.0))
+    points = _round((relative_avg / 15.0) * FORMULATION_CAP)
+    neutral = min(points, _round((sum(neutral_scores) / len(relative_scores) / 15.0) * FORMULATION_CAP))
+    return points, _round(raw_avg), neutral
 
 
 def _score_formulation(product: Dict[str, Any]) -> Dict[str, Any]:
+    """Form quality of the core B panel (V4.1 Step 4).
+
+    Panel coverage is a Dose fact, dose disclosure a Transparency fact, and
+    focus purity a count bonus, so none of them earns Formulation points.
+    """
     rows = _b_rows(product)
     core_count = len(set(rows) & set(B_CORE))
-    core_panel = _round((core_count / len(B_CORE)) * 10.0)
-    form_quality, avg_bio = _score_form_quality(rows)
-    focus_purity, non_b_count = _score_focus_purity(product, rows)
-    dose_disclosure = _score_dose_disclosure(rows)
+    form_quality, avg_bio, neutral_points = _score_form_quality(rows)
 
     shared = shared_formulation_penalty_detail(product)
     penalties = dict(shared["penalties"])
-    positive = core_panel + form_quality + focus_purity + dose_disclosure
+    positive = form_quality
     penalty_total = sum(abs(float(value)) for value in penalties.values())
     score = _round(_clamp(0.0, FORMULATION_CAP, positive - penalty_total))
     return {
         "score": score,
         "max": FORMULATION_CAP,
         "components": {
-            "core_b_panel_coverage": core_panel,
             "b_form_quality": form_quality,
-            "b_complex_focus_purity": focus_purity,
-            "dose_disclosure": dose_disclosure,
         },
         "penalties": penalties,
         "metadata": {
@@ -206,7 +189,7 @@ def _score_formulation(product: Dict[str, Any]) -> Dict[str, Any]:
             "core_b_count": core_count,
             "optional_support_count": len(set(rows) & B_OPTIONAL_SUPPORT),
             "average_bio_score": avg_bio,
-            "non_b_active_count": non_b_count,
+            "b_form_neutral_points": neutral_points,
             **shared.get("metadata", {}),
         },
     }
@@ -265,7 +248,6 @@ def _score_dose(product: Dict[str, Any]) -> Dict[str, Any]:
     else:
         avg = 0.0
     rda_ai_coverage = _round(avg * 18.0)
-    panel_breadth = _round((len(core_scores) / len(B_CORE)) * 4.0)
     b7_evaluation = resolve_dose_safety(
         product,
         threshold=B7_UL_PCT_THRESHOLD,
@@ -273,15 +255,14 @@ def _score_dose(product: Dict[str, Any]) -> Dict[str, Any]:
         cap=B7_CAP,
     )
     b7 = _round(b7_evaluation.penalty)
-    moderate_dose_fit = 3.0 if b7 == 0.0 and core_scores else 0.0
-    score = _round(_clamp(0.0, DOSE_CAP, rda_ai_coverage + panel_breadth + moderate_dose_fit - b7))
+    # V4.1 Step 4: panel breadth (a count, already inside the coverage average)
+    # and the moderate-fit credit for the mere absence of a finding are retired.
+    score = _round(_clamp(0.0, DOSE_CAP, rda_ai_coverage - b7))
     return {
         "score": score,
         "max": DOSE_CAP,
         "components": {
             "b_rda_ai_coverage": rda_ai_coverage,
-            "core_b_panel_breadth": panel_breadth,
-            "moderate_dose_fit": moderate_dose_fit,
         },
         "penalties": {"B7_dose_safety": -b7},
         "metadata": {

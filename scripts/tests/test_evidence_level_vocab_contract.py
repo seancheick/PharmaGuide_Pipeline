@@ -116,3 +116,8 @@ def test_every_clinical_study_evidence_level_in_vocab(levels):
     vocab_ids = {l["id"] for l in levels}
     unknown = found - vocab_ids
     assert not unknown, f"clinical study evidence_levels NOT in vocab: {unknown}"
+
+
+def test_reference_weight_scope_names_the_production_owner(vocab):
+    assert 'legacy v3' in vocab['_metadata']['purpose'].lower()
+    assert 'generic_evidence.py' in vocab['_metadata']['alignment']

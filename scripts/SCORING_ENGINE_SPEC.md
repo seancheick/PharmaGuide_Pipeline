@@ -217,6 +217,34 @@ owns that amount (1.10.x). Since engine 4.4.0, null earns no affirmative
 Evidence credit (Wave 2) and Evidence norms use the primary-mass-floor
 calibration (Wave 3). Dose and Evidence never manufacture Formulation credit.
 
+Since config 1.26.0 (V4.1 Step 4) every fact earns or loses points once:
+
+- Additive, dietary-sugar and confirmed high-risk/watchlist findings are
+  charged only by the formula-checks pillar, within its shared 10-point budget.
+  Low-severity findings are worded as formula quality.
+- Excessive dose is charged only in Dose (B7).
+- Blend opacity is charged only in Transparency (B5). The Transparency base
+  requires every active to have a resolved identity.
+- Formulation credits form quality only:
+  - A product or row with no form rating keeps one shared neutral (12/20).
+  - A recognized botanical or collagen identity is neutral credit.
+  - Presence, count, focus, route-base, disclosure and duplicate branded
+    credits are retired, and references are the retained attainable maximum.
+- Dose:
+  - The daily minimum owns adequacy and the daily maximum owns excess.
+  - Studied-range bands are reference-normalized, with proportional credit
+    below the near band.
+  - An amount without an applicable benchmark earns the 11.4/20 neutral on the
+    generic, botanical, collagen and sports off-list paths; a hidden amount
+    whose benchmark exists earns nothing.
+  - Probiotic Dose is measured strain adequacy only. A total count or a strain
+    mass is a recorded label limitation with no credit, and a strain CFU
+    without a strain benchmark earns no Dose credit.
+- Probiotic research certainty counts only when it applies to the product.
+- A score is `partial` when the unfinished work is ours (an unresolved
+  benchmark identity, or a printed nutrient or sugars amount we could not
+  read), never when the label withheld something.
+
 Besides the eight routes, the generic module applies **sub-profiles** for
 botanical and collagen products, and generic routing recognizes
 **immune-support** and **joint-support** profiles with their own Evidence caps.
