@@ -716,13 +716,13 @@ def _pillar_safety_hygiene(module_bd: Dict[str, Any], weight: float,
         deductions.append("it contains a restricted additive")
     if additive_pen > 0:
         deductions.append("it contains additive or sweetener/form-factor concerns")
-    # A recorded dose-safety finding joins this pillar's concern list whenever
-    # the pillar deducts; at full points it is worded as not deducted here.
-    if dose_safety_explanation and deductions:
-        deductions.append(dose_safety_explanation)
+    # Dose owns the B7 deduction, so a recorded dose-safety finding is always
+    # worded as not deducted here, whether or not this pillar deducts.
     if deductions:
         # Plain-English join: "A and B" rather than a comma list.
         reason = "Safety concern: " + " and ".join(deductions) + "."
+        if dose_safety_explanation:
+            reason += " Not deducted here: " + dose_safety_explanation + "."
     elif dose_safety_explanation:
         # A recorded dose-safety finding stays visible here, worded so a full
         # score does not read as "no concern" or as this pillar's deduction.

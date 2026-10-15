@@ -187,7 +187,7 @@ def test_dose_safety_policy_fact_matches_the_classifier():
         "method": "rda_ul_proxy_until_dietary_intake_table",
         "dose_safety_policy": {"ul_pct_threshold": 150.0, "per_flag_penalty": 2.0, "cap": 3.0}}}}}
     pillars = {"dose": {"score": 10.0, "max": 20, "reason": "", "components": {"raw_dose": 11.0}},
-               "safety_hygiene": {"score": 8.0, "max": 10, "components": {"over_ul_penalty": 2.0}}}
+               "safety_hygiene": {"score": 10.0, "max": 10, "components": {}}}
     out = attach_pillar_explanations(pillars, bd, _cfg(), "generic")
     fact = next(f for f in out["dose"]["explanation"]["facts"] if f["id"] == "dose_safety_penalty_policy")
     assert "can also trigger" not in fact["value_display"]
@@ -205,12 +205,12 @@ def test_a_clean_screen_is_not_listed_as_a_strength():
     assert [s["pillar"] for s in explanation["strengths"]] == ["transparency"]
 
 
-def test_dose_finding_stays_in_the_concern_list_when_the_pillar_deducts_for_other_reasons():
+def test_dose_finding_is_not_worded_as_this_pillars_deduction_when_it_deducts_for_other_reasons():
     bd = _module_bd(state_counts={"confirmed_over_threshold": 1})
     safety = qs._pillar_safety_hygiene(bd, 10, _cfg(), clean_label_penalty=1.0)
     assert safety["score"] == 9.0
-    assert safety["reason"] == ("Safety concern: it contains a restricted additive and one or more "
-                                "supplemental amounts exceed an established upper limit.")
+    assert safety["reason"] == ("Safety concern: it contains a restricted additive. Not deducted here: "
+                                "one or more supplemental amounts exceed an established upper limit.")
 
 
 def test_dose_safety_copy_names_its_single_numerical_owner():
