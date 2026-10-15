@@ -59,6 +59,7 @@ TEXT_CITATION_RE = re.compile(
 DOI_RE = re.compile(r"\b(10\.\d{4,9}/[^\s\"<>,;]+)")
 CROSSREF_WORKS = "https://api.crossref.org/works/"
 RATE_LIMIT = 0.35  # seconds between API calls
+_SHORT_COMPOUND_IDENTITY = re.compile(r"[a-z]{1,3}-[0-9]+[a-z]{0,3}")
 
 # ── Data file definitions ─────────────────────────────────────────────
 
@@ -392,6 +393,12 @@ def extract_topic_words(entry: dict, config: dict) -> list[str]:
         # Treat those as absent instead of crashing the whole citation audit.
         if not isinstance(text, str):
             continue
+        # Short alphanumeric identities such as MK-7 or BCM-95 disappear if
+        # both sides of the hyphen are discarded by the word-length filter.
+        # Preserve the literal identity, never a bare number or dose unit.
+        for compound in re.findall(r"\b" + _SHORT_COMPOUND_IDENTITY.pattern + r"\b", text.lower()):
+            if all(len(part) <= 3 for part in compound.split("-")):
+                words.add(compound)
         for word in re.split(r"[\s/,\(\)_\-]+", text.lower()):
             if len(word) > 3 and word not in {
                 "with", "that", "this", "from", "into", "when", "your",
@@ -441,7 +448,9 @@ def content_matches(article: dict, topic_words: list[str]) -> tuple[str, float]:
         + " ".join(article.get("mesh_terms", []))
     ).lower()
 
-    matches = [w for w in topic_words if w in text]
+    matches = [w for w in topic_words if (
+        bool(re.search(r"(?<![a-z0-9])" + re.escape(w) + r"(?![0-9])", text))
+        if _SHORT_COMPOUND_IDENTITY.fullmatch(w) else w in text)]
     ratio = len(matches) / max(len(topic_words), 1)
 
     if len(matches) >= 2:
@@ -631,7 +640,7 @@ def verify_file(config: dict, only_ids: set[str] | None = None) -> dict:
     client = citation_client()
     before = (client.cache_hits, client.live_requests)
     print(f"\n  {config['file']}: fetching {len(all_pmids)} unique PMIDs...")
-    articles = fetch_articles(list(all_pmids.keys()))
+    articles = fetch_articles(list(all_pmids.keys()), abstract_chars=None)
 
     # Verify content match
     for pmid, contexts in all_pmids.items():

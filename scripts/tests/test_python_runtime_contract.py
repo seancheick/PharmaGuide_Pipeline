@@ -130,34 +130,6 @@ def test_raw_snapshot_preflight_detects_drift_while_stored_outputs_match(tmp_pat
     assert json.loads((stored / "old.json").read_text()) == [frozen]
 
 
-def test_batch_runner_stops_before_processing_when_canary_preflight_fails(tmp_path):
-    import os
-    import shutil
-    import subprocess
-    import sys
-
-    root = tmp_path / "repo"
-    scripts = root / "scripts"
-    scripts.mkdir(parents=True)
-    shutil.copyfile(REPO_ROOT / "batch_run_all_datasets.sh", root / "batch_run_all_datasets.sh")
-    shutil.copyfile(REPO_ROOT / "scripts/python_env.sh", scripts / "python_env.sh")
-    raw_root = tmp_path / "raw"
-    (raw_root / "Brand").mkdir(parents=True)
-    calls = tmp_path / "calls.txt"
-    fake_python = tmp_path / "fake-python"
-    fake_python.write_text(f"#!{sys.executable}\nimport sys\nfrom pathlib import Path\n"
-        f"with Path({str(calls)!r}).open('a') as f:f.write(' '.join(sys.argv[1:])+'\\n')\n"
-        "sys.exit(7 if '--prepare' in sys.argv else 0)\n")
-    fake_python.chmod(0o755)
-    env = dict(os.environ, PG_PYTHON=sys.executable, PYTHON=str(fake_python))
-    result = subprocess.run(["bash", str(root / "batch_run_all_datasets.sh"),
-        "--root", str(raw_root), "--pipeline-only"], env=env, capture_output=True, text=True)
-    assert result.returncode != 0
-    invocations = calls.read_text().splitlines()
-    assert any("--prepare" in call and "--raw-root" in call for call in invocations)
-    assert not any("run_pipeline.py" in call or "release_full.sh" in call for call in invocations)
-
-
 def test_raw_snapshot_preflight_refuses_missing_ambiguous_and_wrong_identity(tmp_path, monkeypatch, capsys):
     import json
     import sys

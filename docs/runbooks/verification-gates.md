@@ -13,26 +13,24 @@ source scripts/python_env.sh
 ```
 
 The full all-dataset runner invokes this preparation before processing any brand.
-The report collects independent failures and blocked prerequisites, inventories source,
-generated-artifact and external/opt-in test requirements, checks current raw canaries,
-and asks the existing freshness owner which stages need regeneration. Source-backed
-assertions run before the expensive corpus pass; checks requiring newly generated
-outputs remain in their existing post-run gates. Synthetic fixtures belong to source
-tests even when they model enriched fields; real stored-product checks belong to
-artifact tests. Worker phase selection finishes before parallel test IDs are announced. Optional OCR or disposable-service
-tests are listed with their prerequisites and never enabled automatically.
+Routine preparation checks raw input integrity, references, ownership, calendar freshness,
+current raw-label canaries, and the existing source/live verification gates. It asks the
+freshness owner which stages need regeneration. It does **not** repeat the broad developer
+test suite. Required development tests and CI belong before merge, under AGENTS.md's risk
+classes. Checks requiring newly generated outputs remain in their post-run release gates;
+preparation cannot guarantee those future artifacts will pass.
 
-An intact completed successful check can be reused only while its command, runtime
-and the complete source/input inventory still match. This includes source-test fixtures
-and the existing FDA UNII identity cache, even though that cache is excluded from
-stage-freshness calculations. Successful checks survive interrupted attempts only in
-sealed checkpoints that proved input stability; failed or incomplete checks never reuse.
-Source tests collect and execute once, preserving the full inventory and deferred phases
-in that execution evidence. Matching complete coverage avoids repeated collection and
-execution. Live verifiers and the final FDA freshness check run again under their existing
-cache and freshness rules. Changed or incomplete evidence cannot grant readiness.
+For an explicit developer audit, add `--include-source-tests` to the command above, or run
+`scripts/test.sh preparation` separately. This opt-in retains the full collected inventory,
+source/artifact/opt-in classification, execution evidence and fail-closed coverage checks.
+The full all-dataset command does not enable it.
 
-Preparation displays each check immediately, then elapsed time and source-test progress
+Preparation seals per-check command, evidence, input/runtime fingerprints and completion.
+Unchanged successful source checkpoints may be reused; failed or changed checks rerun.
+Opting into the developer suite cannot reuse a routine receipt as test-coverage evidence.
+Live verifiers and final FDA freshness still run under their existing cache/freshness rules.
+
+Preparation displays each check immediately, then elapsed time and, when explicitly requested, source-test progress
 every ten seconds, including the current test and failing node names. Source tests use
 at most two workers, clamped to the existing memory budget under the exclusive suite
 lock. Only the controller writes the report; worker inventories must match and execution

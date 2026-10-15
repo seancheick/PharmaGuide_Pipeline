@@ -62,6 +62,21 @@ The authorized staging-only request was sent October 15 in the existing private 
 
 Next requires WorkOS confirming staging resource-binding activation and the behavior of missing-resource grants, then new-grant/refresh/concurrency tests. Exact snapshot-consent authorization is separately unresolved; neither a token audience nor reusable consent ID proves an immutable authorization attempt. Public catalog work does not depend on enabling personal access, and this release-tooling batch does not claim that authorization is fixed.
 
+## Routine preparation correction — October 15
+
+The reported 811.9-second failure occurred before Clean/Enrich/Score. The broad developer
+suite passed 23,303 cases but its batch-entry fixture omitted the newly required compatibility
+script. That release-only test was outside whole-fast CI. The fixture is now isolated against
+both existing entry boundaries, strengthened for compatibility pass/fail/skip, and moved into
+the CI-covered release-entry test file.
+
+Sean authorized removing the repeated broad suite from routine pipeline preparation. The normal
+command now retains input/reference/runtime/compatibility/canary and source/live prerequisites,
+without running all developer tests. `--include-source-tests` remains an explicit developer
+preparation option. Final catalog/artifact checks still run after outputs exist; pre-checks do
+not guarantee that a future build, network write or catalog will succeed. No scoring policy,
+clinical data, stage output or publication gate changes in this correction.
+
 ## Exact user-owned pipeline command
 
 The final read-only prerequisites passed on pipeline main `6259c5f34` and app main `5652e7d5`: clean repository bases, current manufacturer deductions, schemas/tools, remote read access and disk. No artifact was rebuilt or published. The subsequent closeout changes documentation only. From the integrated main checkout, run:

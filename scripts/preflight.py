@@ -1025,11 +1025,13 @@ def _preparation_process(command, *, cwd, env=None, timeout=None, pass_fds=(), *
         return subprocess.CompletedProcess(command, process.returncode, out.read(), stderr)
 
 
-def run_preparation(repo_root, raw_root, *, checks=None, runner=None, report_path=None):
+def run_preparation(repo_root, raw_root, *, checks=None, runner=None, report_path=None,
+                    include_source_tests=False):
     """Aggregate read-only checks. Readiness permits regeneration, never publication.
 
-    CLI callers use the pinned test runner and its suite lock. Injectable checks
-    and runner are the orchestration test seam, not a receipt-import API.
+    Routine runs check actual inputs, canaries and source/live prerequisites.
+    The broad developer suite is explicit opt-in, not repeated before a corpus.
+    Injectable checks and runner are the orchestration test seam, not a receipt-import API.
     """
     import os
     import subprocess
@@ -1091,9 +1093,10 @@ def run_preparation(repo_root, raw_root, *, checks=None, runner=None, report_pat
                 {'name': 'raw_canaries', 'command': [sys.executable, 'scripts/tests/freeze_contract_snapshots.py',
                     '--check', '--raw-root', str(raw_root)], 'requires': prerequisites, 'evidence': 'canaries',
                     'identifiers': _preparation_canary_identifiers(repo_root)},
-                {'name': 'source_tests', 'command': ['bash', 'scripts/test.sh', 'preparation'],
-                    'requires': prerequisites + ['raw_canaries'], 'evidence': 'pytest'},
             ]
+            if include_source_tests:
+                checks.append({'name': 'source_tests', 'command': ['bash', 'scripts/test.sh', 'preparation'],
+                               'requires': prerequisites + ['raw_canaries'], 'evidence': 'pytest'})
             # The release runner owns these commands. Inventory mode never
             # invokes the gates, live identifiers, OCR or remote writes.
             try:
@@ -1106,7 +1109,9 @@ def run_preparation(repo_root, raw_root, *, checks=None, runner=None, report_pat
                     raise ValueError('Incomplete release-gate inventory')
                 result['post_run_gates'] = [g for g in inventory if g['phase'] == 'artifact']
                 result['live_verification'] = [g for g in inventory if g['phase'] == 'live']
-                source_prerequisites = prerequisites + ['raw_canaries', 'source_tests']
+                source_prerequisites = prerequisites + ['raw_canaries']
+                if include_source_tests:
+                    source_prerequisites.append('source_tests')
                 for i, gate in enumerate(inventory):
                     if gate['phase'] not in {'source', 'live'}:
                         continue
@@ -1246,9 +1251,13 @@ Exit codes:
     )
 
     parser.add_argument('--prepare', action='store_true', help='Aggregate read-only source readiness before regeneration')
+    parser.add_argument('--include-source-tests', action='store_true',
+                        help='With --prepare, explicitly repeat the full developer source-test suite')
     parser.add_argument('--raw-root', type=Path)
     parser.add_argument('--report', type=Path, default=SCRIPTS_DIR / 'reports/pipeline_preparation.json')
     args = parser.parse_args()
+    if args.include_source_tests and not args.prepare:
+        parser.error('--include-source-tests requires --prepare')
     if args.prepare:
         if args.raw_root is None:
             parser.error('--prepare requires --raw-root')
@@ -1266,7 +1275,8 @@ Exit codes:
         def interrupted(signum, frame):
             raise KeyboardInterrupt()
         signal.signal(signal.SIGTERM, interrupted)
-        results = run_preparation(SCRIPTS_DIR.parent, args.raw_root, report_path=args.report)
+        results = run_preparation(SCRIPTS_DIR.parent, args.raw_root, report_path=args.report,
+                                  include_source_tests=args.include_source_tests)
         print(json.dumps(results, indent=2) if args.json else
               '\n'.join(f"{check['status'].upper()}: {check['name']}" for check in results['checks']))
         sys.exit(0 if results['ready'] else 1)
