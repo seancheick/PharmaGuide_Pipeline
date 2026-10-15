@@ -17,12 +17,11 @@ Formulation for multis and prenatals is panel-aware:
 
 from __future__ import annotations
 
-from typing import Any, Dict, Iterable, List
+from typing import Any, Dict, List
 
 from scoring_v4.modules.generic_helpers import (
     bio_score_of,
     get_active_ingredients,
-    has_usable_individual_dose,
     is_scorable,
     restates_label_row,
     _as_float,
@@ -110,14 +109,6 @@ def _score_panel_form_quality(
     contribution = _clamp(0.0, CAP_PANEL_FORM_QUALITY, (relative_avg / BIO_SCORE_MAX) * CAP_PANEL_FORM_QUALITY)
     neutral_points = min(contribution, (neutral_avg / BIO_SCORE_MAX) * CAP_PANEL_FORM_QUALITY)
     return _round(contribution), _round(avg), _round(relative_avg), _round(neutral_points)
-
-
-def _dose_coverage(rows: Iterable[Dict[str, Any]]) -> float:
-    rows_list = [row for row in rows if isinstance(row, dict)]
-    if not rows_list:
-        return 0.0
-    dose_count = sum(1 for row in rows_list if has_usable_individual_dose(row))
-    return round(dose_count / len(rows_list), 4)
 
 
 def score_formulation(product: Any) -> Dict[str, Any]:

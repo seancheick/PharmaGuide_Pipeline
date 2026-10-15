@@ -442,7 +442,6 @@ def _assemble_score(result: GenericModuleResult) -> None:
         "botanical_raw_floor_applied": botanical_floor_applied,
         "score_policy": {
             "method": "rubric_raw_is_production_score",
-            "production_score": "rubric_raw_score_100",
             "raw_score_100": result.raw_score_100,
             "score_100": result.score_100,
             # Audit-only: the retired P1.5 affine, kept for v3-comparison reports.

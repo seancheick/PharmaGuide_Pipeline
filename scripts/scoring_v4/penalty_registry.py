@@ -24,12 +24,6 @@ PENALTY_REGISTRY: Dict[str, PenaltySpec] = {
     "immune_high_variability_botanical_stack": PenaltySpec(
         "formulation", "quality_context"
     ),
-    "fiber_cleanse_detox_penalty": PenaltySpec(
-        "formulation", "quality_context"
-    ),
-    "fiber_stimulant_laxative_penalty": PenaltySpec(
-        "formulation", "consumer_material"
-    ),
     "sports_amino_spiking_risk": PenaltySpec(
         "formulation", "quality_context"
     ),
