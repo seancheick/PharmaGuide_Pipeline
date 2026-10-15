@@ -1,14 +1,14 @@
-## Step3 source-qualified review — October15
+## Step3 closed; Step4 started — October15
 
-Owner: existing source/quantity/purpose/Dose/quality assembly and completion owners. Evidence: STEP3_OPTIONS.md; primary reports/step3_review_20261014. Will NOT create: scorer, public status/registry, runtime product exception or restamped artifacts. Class: documentation/private diagnostics only; baselineafa85ca0, runtimee0d33c34f unchanged. Production/rebuild held.
+Owner: `enhanced_normalizer.py::_extract_nutritional_info`, `enrich_supplements_v3.py::_collect_nutrition_summary`; scoring/quality/completion owners for the remaining batch. Evidence: matrix/GLOSSARY/stem search and STEP3_OPTIONS.md. Will NOT create: scorer, status/registry, runtime product-ID exemptions or restamped artifacts. Sean authorized the recommended option and starting Step4; main merge, rebuild and release held.
 
-Fixed private sports-neutral/duplicate-key bug:9hidden sportsDose0;2219 projects39.3, not50.7. Fixed counterfactual probiotic classifier:112old cases include44already-disclosed/no-adequacy and1assessed; true floor class381aggregate+1mass, removed in reviewed proposal while82assessed doses remain. No fabricated strain allocation.
+Step3: all70 remaining NIH label records reviewed (61 unique rendered pages), matched to their own component where a pack shares one image. All omit a sugar quantity. Conditional per-component bounds only; never exact0 or whole-pack inference.88 total PDF review receipts. Proposed incomplete223=155existing+68unfinished, down from293. Reviewed-bound/incidental class136. Full15123 comparison rerun: recommended mean+0.64,2637 provisional tier changes;0errors/untouched changes; all three options223partial. No numeric projection changed solely because the70 source reviews completed.
 
-Four-group receipts cover864frozen raw labels:223unfinished/source-context,463label-dose-limit,66reviewed bounds/incidental sources,70unverified sugar,45cleared missing-fact cases; groups overlap. Partial union293=155existing+138additional. 52context holds are mapped ingredients, not unidentified ingredients.18original PDFs reviewed;4macro omissions+7of77sampled omissions verified individually,70remain unverified.213411actually prints0g: previous false-reassurance accusation withdrawn, capture defect retained;69317<1g qualifier and271617serving columns preserved in receipts. %DV bounds not converted to exact masses.
+Missing-data validation expanded: fresh77 amount mutations+9 sports guards+23 new cases (18 identity,3 sugar-line,2 strain-to-total),109 unique cases; no higher eligible score or incomplete→complete upgrade. Retain fail-first receipts for173776/206322/69317. Source-aware private guards distinguish lost source declarations from newly verified manufacturer omissions; they are not production acceptance. Aggregate conversions preserve15billion total, remove5/10billion per-strain allocations, Dose13.3→0 and60.1→41.2; no "underdosed" inference. Existing9sports/382probiotic/82retained and transform-order guards rechecked;58enriched input hashes unchanged.
 
-Reviewed three15123-product options: sixth+existingB7 once mean+0.64/2637provisional tiers; sixth+cap10 +0.46/2736; Formulation-additives+existingB7 +0.08/2252; all293partial,0arithmetic/untouched exceptions. Pairedcap:627lower/89higher, so defer new ceiling. Recommendation: sixth owner, existingB7 once, no unsupported benchmarked-amount neutral, retain explicit reference-absent neutral, source-qualified completion. Newowner/budget/eligibility choices still Sean's decision.
+Step4 first source slice: three fail-first regressions; preserves sugar qualifiers/serving variants/source paths and declared gram zeros, leaves unknown units and unparsed quantities unknown.76 focused tests pass;7full real-label before/after probes preserve every score/pillar/state/safety, with3 declared-zero summaries restored. Existing total-sugar-over-added-sugar test now also asserts source provenance. Runtime source commit `ddc30703ae8fe15f8ece565602e3c1d2c89a5f50`. Classification: behavioral source/contract change. No broad local/CI claim for unfinished Step4. No numeric scoring config or scoring policy has been deployed.
 
-Validation:77raw hiding cases+9live sports guards,0higher eligible scores. Final two botanical eligibility regressions retain unresolved review across quantity deletion;0partial→complete upgrades in final86receipts. Focused9sports/duplicate-key,382retired+82assessed-probiotic,8quantity/source and12order+prenatal cases pass.58inputs unchanged; source/raw/PDF/checksum evidence retained. Full docs diff/reference review and git diff --check; no broad tests required for this docs/private class. No fresh app, warning-copy, production corpus or release claim. Next: Sean's bounded Step4 policy decision;293source holds persist until source work resolves them.
+Next unchecked: production missing-data/completion and bounded sugar/source consumer repairs; delivery subject, purpose/exposure and the approved ownership/config cleanup; honest probiotic copy; final source-based measurements and combined local+CI checkpoint. No rebuild or release.
 
 ## Current execution — V4.1 score accounting consolidation, October 14
 
@@ -16,7 +16,7 @@ Sean froze scoring policy and approved a five-step plan. Draft PRs: [PharmaGuide
 
 Owner: quality_score.py::_build_pillars, module assessment owners, penalty_registry.py, scored_artifact.py; Flutter renders. Will NOT create: a scorer, registry, assessment or partial status, or ranking rule.
 
-**Step 1 — matrix (documentation).** `scripts/audits/score_accounting_20261014/AUDIT.md`: 135 rows; all 114 corpus keys map to exactly one row. A fresh-context review checked 106 rows and found 18 defects, all corrected; Claude then checked the rest in code. A second review corrected the DUP-A rule, the authority-Evidence class and the causal counts, and added F17 and F19. Awaiting Sean's acceptance.
+**Step 1 — matrix (documentation).** `scripts/audits/score_accounting_20261014/AUDIT.md`: 135 rows; all 114 corpus keys map to exactly one row. A fresh-context review checked 106 rows and found 18 defects, all corrected; Claude then checked the rest in code. A second review corrected the DUP-A rule, the authority-Evidence class and the causal counts, and added F17 and F19. Technical acceptance recorded below; current implementation authorization is in the leading entry.
 
 **Step 2 — receipts and copy (behavioral public contract, zero score change).**
 - Every scored pillar carries a `receipt` (AUDIT §8). Component kinds live in `penalty_registry.COMPONENT_KINDS`, and a receipt fails closed.
@@ -40,7 +40,7 @@ Rendered actual Flutter receipt widgets using five real candidate products (1902
 - Tests: 7 new plus 1 fail-first. Full `flutter test` 3,922 passed; analyze clean.
 - Candidate widget renders visually checked independently; installed-device/fresh catalog acceptance remains Step 5.
 
-**Step 3 — corrected options.** See the leading entry and STEP3_OPTIONS.md; original B3 is superseded. Measurements complete; policy approval and all production changes/rebuild remain held.
+**Step 3 — corrected options.** See the leading entry and STEP3_OPTIONS.md; original B3 is superseded. Step3 closed October15; recommended option authorized and Step4 started. Rebuild/main merge/release remain held.
 
 ## Current execution — normal batch preflight/release repair, October 13
 

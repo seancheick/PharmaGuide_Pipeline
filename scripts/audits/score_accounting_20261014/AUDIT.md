@@ -268,9 +268,10 @@ In the tables below:
 | Evidence applicability not established | 0 (generic) or up to 10 (probiotic) | Number withheld, even when positive |
 | No catalog concern matched | 10/10 | "Strong"; listed as a strength |
 
-## 5. Open decisions for Step 3
+## 5. Step3 decision inventory — resolved October15
 
-Measure each as a complete option set; nothing changes until Sean chooses.
+The list below preserves the original options, not current implementation instructions. The completed comparison and accepted option are in [STEP3_OPTIONS.md](STEP3_OPTIONS.md). Sean authorized starting Step4 on October15; rebuild/main merge/release remain held. In particular, items4–5 below were narrowed: reference-absent Dose may retain neutral11.4, while a missing benchmarked amount earns no unsupported adequacy; the tested hiding invariant concerns eligible assessments, not every provisional number.
+
 1. Remove the Safety mirrors (F1, F2).
 2. B0 owner (F4): the sixth pillar (Claude) or none (Codex), with one match rule.
 3. Retire points awarded only because something is printed (F5): Transparency owns disclosure.
