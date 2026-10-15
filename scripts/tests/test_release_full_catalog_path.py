@@ -292,3 +292,53 @@ run_strict_gate() {{
                             cwd=tmp_path, text=True, capture_output=True)
     assert result.returncode == 0, result.stderr
     assert (tmp_path / 'builds').read_text().splitlines() == ['built']
+
+
+@pytest.mark.parametrize("compatibility_fails,skip_flutter", [(False, False), (True, False), (False, True)])
+def test_batch_runner_stops_before_processing_when_canary_preflight_fails(tmp_path, compatibility_fails, skip_flutter):
+    import os
+    import shutil
+    import subprocess
+    import sys
+
+    root = tmp_path / "repo"
+    scripts = root / "scripts"
+    scripts.mkdir(parents=True)
+    repo = SCRIPT.parents[1]
+    shutil.copyfile(repo / "batch_run_all_datasets.sh", root / "batch_run_all_datasets.sh")
+    shutil.copyfile(repo / "scripts/python_env.sh", scripts / "python_env.sh")
+    raw_root = tmp_path / "raw"
+    (raw_root / "Brand").mkdir(parents=True)
+    calls = tmp_path / "calls.txt"
+    calls.write_text("")
+    # Isolate the existing earlier compatibility boundary; never run the real
+    # release script, importer, pipeline or a cloud request from this harness.
+    compatibility = scripts / "release_full.sh"
+    compatibility.write_text(
+        '#!/bin/bash\n'
+        '[[ "$1" == "--compatibility-only" ]] || exit 91\n'
+        'echo compatibility >> "$TEST_CALLS"\n'
+        'exit "$TEST_COMPATIBILITY_EXIT"\n')
+    fake_python = tmp_path / "fake-python"
+    fake_python.write_text(f"#!{sys.executable}\nimport sys\nfrom pathlib import Path\n"
+        f"with Path({str(calls)!r}).open('a') as f:f.write(' '.join(sys.argv[1:])+'\\n')\n"
+        "sys.exit(7 if '--prepare' in sys.argv else 0)\n")
+    fake_python.chmod(0o755)
+    env = dict(os.environ, PG_PYTHON=sys.executable, PYTHON=str(fake_python),
+               TEST_CALLS=str(calls), TEST_COMPATIBILITY_EXIT=str(int(compatibility_fails)))
+    command = ["bash", str(root / "batch_run_all_datasets.sh"),
+               "--root", str(raw_root), "--pipeline-only"]
+    if skip_flutter:
+        command.append("--skip-flutter")
+    result = subprocess.run(command, env=env, capture_output=True, text=True, timeout=20)
+    assert result.returncode != 0, result.stdout + result.stderr
+    invocations = calls.read_text().splitlines()
+    preparation = [call for call in invocations if "--prepare" in call and "--raw-root" in call]
+    if compatibility_fails:
+        assert invocations == ["compatibility"]
+        assert "phone consumer compatibility failed" in result.stdout
+    else:
+        assert len(preparation) == 1
+        assert "aggregate preparation failed" in result.stdout
+        assert invocations == (preparation if skip_flutter else ["compatibility", *preparation])
+    assert not any("run_pipeline.py" in call or "release_full.sh" in call for call in invocations)
