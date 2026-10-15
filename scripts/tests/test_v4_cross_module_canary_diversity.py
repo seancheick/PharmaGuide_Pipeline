@@ -46,12 +46,14 @@ GENERIC_CANARIES = {
         # 1 g complex and two daily servings mean 2,000 mg/day, above the
         # existing 500–1,000 mg studied-preparation window. Keep that source
         # exposure and component attribution pinned instead of the old
-        # per-serving/interim total. Formulation is 9 + 3 - 1.5 = 10.5.
-        "score_range": (62.5, 62.5),
+        # per-serving/interim total. Formulation is 9 - 1.5 = 7.5: phytosome
+        # (Meriva) is the resolved form itself, so it earns no separate
+        # delivery credit (bf12ae68d, distinct formulation qualities once).
+        "score_range": (59.5, 59.5),
         "traits": {
             "trust_high": True,
             "dimension_scores": {
-                "formulation": 10.5, "dose": 12.0,
+                "formulation": 7.5, "dose": 12.0,
                 "evidence": 14.0, "transparency": 10.0,
             },
             "botanical_dose": {"dose_mg": 2000.0, "range_mg": [500.0, 1000.0]},
@@ -86,7 +88,10 @@ SPORTS_CANARIES = {
     # High sports scorer after the P1.7 sports module split.
     "325587": {
         "label": "Transparent Labs Creatine HMB",
-        "score_range": (82.0, 82.0),
+        # bf12ae68d: BioPerine keeps its absorption-enhancer credit and no
+        # longer earns the same 3 points again as delivery; cd2baf4f3 (HMB
+        # provisional form ceiling, approved Oct 12) moves A1 10.98 -> 11.25.
+        "score_range": (79.2, 79.2),
         "traits": {"trust_positive": True, "dose_max": True},
     },
 }
@@ -116,7 +121,9 @@ PROBIOTIC_CANARIES = {
         "label": "Spring Valley Advanced Strength Probiotic 50B",
         # Ten species and no owned strain doses: aggregate disclosure receives
         # its existing floor, never an invented even allocation of total CFU.
-        "score_range": (24.2, 24.2),
+        # "Acid and bile resistant strains" is an intrinsic strain claim, not a
+        # delivery mechanism: no survivability credit (bf12ae68d).
+        "score_range": (21.2, 21.2),
         "traits": {
             "aggregate_cfu_proxy": True,
             "trust_zero": True,
@@ -131,7 +138,9 @@ PROBIOTIC_CANARIES = {
     # Per-strain CFU disclosed path; Dose > 0 with no Trust credit.
     "286725": {
         "label": "vitafusion Probiotic 5B",
-        "score_range": (44.0, 44.0),
+        # Bacillus coagulans spore resistance is intrinsic to the strain, so a
+        # gummy earns no delivery survivability credit (bf12ae68d).
+        "score_range": (41.0, 41.0),
         "traits": {"dose_positive": True, "trust_zero": True},
     },
     # Per-strain CFU + positive Trust path.

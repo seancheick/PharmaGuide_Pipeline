@@ -37,7 +37,9 @@ V4_CANARIES = {
     },
     # Reviewed identity resolution makes the current label assessable; its
     # separate substance warning must remain CAUTION rather than become SAFE.
-    "241706": {'label': 'HUM Ripped Rooster', 'module': 'generic', 'verdict': 'CAUTION', 'confidence': 'moderate', 'score_unavailable_reason': None, 'score': 38.4, 'safety_verdict': 'CAUTION', 'completeness_ready': True},
+    # 85d4e8402 measures green tea standardization on total polyphenols, so the
+    # label's declared 50% EGCG no longer earns the 4-point marker credit.
+    "241706": {'label': 'HUM Ripped Rooster', 'module': 'generic', 'verdict': 'CAUTION', 'confidence': 'moderate', 'score_unavailable_reason': None, 'score': 36.4, 'safety_verdict': 'CAUTION', 'completeness_ready': True},
     # The dedicated digestive route remains correct. Both the activity rows and
     # proprietary-blend anchor are module-owned product projections.
     "241684": {
@@ -81,7 +83,10 @@ V4_CANARIES = {
         "module": "sports",
         "verdict": "SAFE",
         "confidence": "moderate",
-        "score_range": (82.0, 82.0),  # Phase 4: 88 → 84.6; cert→GMP: +2.2 (Informed Choice sku implies GMP)
+        # Phase 4: 88 → 84.6; cert→GMP: +2.2 (Informed Choice sku implies GMP).
+        # bf12ae68d: BioPerine no longer earns delivery credit on top of its
+        # enhancer credit (-3); cd2baf4f3 HMB form ceiling moves A1 (+0.2).
+        "score_range": (79.2, 79.2),
     },
     # Assessment coverage is separate from quality. This disclosed fiber total
     # remains module-owned; completed limited/negative evidence stays explicit.
@@ -127,7 +132,9 @@ V4_CANARIES = {
         "verdict": "SAFE",
         "confidence": "high",
         # Contextual MTCC5856 evidence; no unestablished DE111 human credit.
-        "score_range": (70.7, 70.7),
+        # Bacillus coagulans spore resistance is intrinsic, so this gummy earns
+        # no delivery survivability credit (bf12ae68d).
+        "score_range": (67.7, 67.7),
     },
     # Fully ready verdict-diversity anchors. These replace products that are now
     # correctly quarantined for material evidence that has not been reviewed.
