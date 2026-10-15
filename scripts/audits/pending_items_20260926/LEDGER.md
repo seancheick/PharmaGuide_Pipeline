@@ -10,7 +10,31 @@ Step4 source + B7 slices: commits478a4e8d/27a60266/6d0b6321/1a161d9c/3a7b3143. E
 
 Canonical raw + artifact checks13labels against clean7ae56ad0a:25987964→60 unsupported delivery removed;24228454.8→56.8 duplicate B7 removed, Dose unchanged. Other11 totals unchanged;13/13 assessment,score-status and safety outcomes unchanged. Legitimate capsule controls retain credit; original sugar qualifier/columns retained. Evidence private step4_source/dose replay manifests, snapshots/deltas and step4_artifact_* receipts. Behavioral scoring/source class. Local rung on runtime3a7b3143:532passed,38skipped,exit1;14required checks lack rebuilt catalog/detail-blob files,24are declared opt-ins. Do not mark local green or rebuild to bypass the hold. CI71de577f runs38694630261/38694625337 remain pending. Historical7ae CI38690059255 and38690055312 passed; those do not validate3a7b3143.
 
-Next unchecked: production missing-data/completion and bound-aware dietary consumers; purpose/exposure and remaining approved owner/config cleanup; probiotic copy; final measurements/review. Step4 remains unfinished. No main merge, rebuild or release.
+**Claude audit + two reference-free slices, October 15.**
+- **CI fix.** CI on 583f014f failed: the config 1.25.0 fingerprint was missing, and 3 locked fixtures still expected the B7 mirror. Fixed in f5a2ef9a (tests only; the deltas are exactly the removed mirror). Display fixes:
+  - cd398042: a dose finding reads "Not deducted here" even when the sixth pillar deducts for another reason.
+  - 0018a811: removed the dead constant `safety_hygiene_over_ul_penalty`; it has no pipeline, app or website reader.
+  - CI 38696611129 is green on 0018a811.
+- **`probiotic_gate` (509d36fb, bded6e92).** Certainty and replication earn points only when applicability is above 0; the state is still taken from the ungated research. Across all 530 stored probiotic inputs:
+  - 103 fall by exactly their Evidence change (mean −9.84).
+  - No other pillar or state changes.
+  - 41 tiers move from Needs improvement to Poor.
+  - Canaries 184730, 76803 and 206362 were re-pinned by the gated certainty.
+- **`blend` (f32c5ed4, be843285).** B5 alone owns blend opacity.
+  - Removed the Dose `opaque_primary_sports_blend` and Formulation `sports_opaque_protein_blend` penalties and their registry keys.
+  - B5 no longer withholds the complete-disclosure credit.
+  - A hidden sports primary stays at Dose 0, with copy saying it is hidden.
+  - A charged blend is always named in the headline. This also fixes 39 stored multis that said "fully disclosed".
+  - Across 1,282 stored products: 309 rise (mean +5.87), none fall, 0 state changes, 102 tiers rise, 0 "fully transparent" headlines while B5 is charged.
+- **Harness parity.** Per-product totals equal Codex's `verified_options.py` transforms applied alone: 530/530 and 1,282/1,282.
+- **Note for completion guards.** A B5-charged blend now earns the disclosure credit (minus B5), while a plain row without a dose earns neither. Plain-row missing amounts must stay partial (101.36(c)), or a blend can beat an undosed row.
+- **Focused tests.** 1,920 pass in the opacity owner/consumer files and 1,116 in the probiotic files. Fail-first nodes were shown for every behavior change.
+- **Pre-existing local failures.** These fail identically on main 47c746537 against the corpus re-enriched on October 14 and are not caused by Step 4:
+  - `test_v4_cross_module_canary_diversity` (4): 328825, 325587, 178346, 286725.
+  - `test_v4_gate_canary_diversity` (3): 241706, 325587, 230149.
+  - Causes are mixed (328825 lost a phytosome delivery credit; the probiotics have no delivery data). A separate task is proposed.
+
+Next unchecked: production missing-data/completion and bound-aware dietary consumers; purpose/exposure and remaining approved owner/config cleanup (count/panel, disclosure, neutral, graded dose, unrated form, canonical probiotic, sixth-pillar move, source guards — must match the full harness scenario); probiotic copy; final measurements/review. Step4 remains unfinished. No main merge, rebuild or release.
 
 ## Current execution — V4.1 score accounting consolidation, October 14
 
