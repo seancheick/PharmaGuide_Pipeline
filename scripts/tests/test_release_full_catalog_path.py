@@ -327,7 +327,7 @@ def test_batch_runner_stops_before_processing_when_canary_preflight_fails(tmp_pa
     env = dict(os.environ, PG_PYTHON=sys.executable, PYTHON=str(fake_python),
                TEST_CALLS=str(calls), TEST_COMPATIBILITY_EXIT=str(int(compatibility_fails)))
     command = ["bash", str(root / "batch_run_all_datasets.sh"),
-               "--root", str(raw_root), "--pipeline-only"]
+               "--root", str(raw_root), "--pipeline-only", "--pre-check"]
     if skip_flutter:
         command.append("--skip-flutter")
     result = subprocess.run(command, env=env, capture_output=True, text=True, timeout=20)
@@ -340,5 +340,52 @@ def test_batch_runner_stops_before_processing_when_canary_preflight_fails(tmp_pa
     else:
         assert len(preparation) == 1
         assert "aggregate preparation failed" in result.stdout
-        assert invocations == (preparation if skip_flutter else ["compatibility", *preparation])
+        quick = [call for call in invocations if "--quick" in call]
+        assert len(quick) == 1
+        assert invocations == ([*quick, *preparation] if skip_flutter else ["compatibility", *quick, *preparation])
     assert not any("run_pipeline.py" in call or "release_full.sh" in call for call in invocations)
+
+
+@pytest.mark.parametrize("pre_check,quick_fails", [(False, False), (True, False), (False, True)])
+def test_batch_preparation_is_opt_in_but_quick_checks_remain(tmp_path, pre_check, quick_fails):
+    import os
+    import shutil
+    import subprocess
+    import sys
+
+    root = tmp_path / "repo"
+    scripts = root / "scripts"
+    scripts.mkdir(parents=True)
+    shutil.copyfile(SCRIPT.parents[1] / "batch_run_all_datasets.sh", root / "batch_run_all_datasets.sh")
+    shutil.copyfile(SCRIPT.parent / "python_env.sh", scripts / "python_env.sh")
+    raw = tmp_path / "raw"
+    (raw / "Brand").mkdir(parents=True)
+    calls = tmp_path / "calls"
+    fake = tmp_path / "python"
+    fake.write_text(f"#!{sys.executable}\nimport sys\nfrom pathlib import Path\n"
+                    f"with Path({str(calls)!r}).open('a') as f: f.write(' '.join(sys.argv[1:])+'\\n')\n"
+                    f"sys.exit(8 if {quick_fails!r} and '--quick' in sys.argv else 0)\n")
+    fake.chmod(0o755)
+    command = ["bash", str(root / "batch_run_all_datasets.sh"), "--root", str(raw),
+               "--pipeline-only", "--skip-flutter"]
+    if pre_check:
+        command.append("--pre-check")
+    result = subprocess.run(command, env=dict(os.environ, PG_PYTHON=sys.executable, PYTHON=str(fake)),
+                            capture_output=True, text=True, timeout=20)
+    invocations = calls.read_text().splitlines()
+    quick = [call for call in invocations if '--quick' in call]
+    prep = [call for call in invocations if '--prepare' in call]
+    pipeline = [call for call in invocations if 'run_pipeline.py' in call]
+    assert len(quick) == 1
+    if quick_fails:
+        assert result.returncode != 0
+        assert not prep and not pipeline
+    else:
+        assert result.returncode == 0, result.stdout + result.stderr
+        assert len(prep) == int(pre_check)
+        assert len(pipeline) == 1
+        assert '--stages clean,enrich,score --strict-release-gates' in pipeline[0]
+        assert invocations.index(quick[0]) < invocations.index(pipeline[0])
+        if prep:
+            assert invocations.index(quick[0]) < invocations.index(prep[0]) < invocations.index(pipeline[0])
+    assert not any('rebuild_dashboard_snapshot.sh' in call or 'release_full.sh' in call for call in invocations)

@@ -1,4 +1,10 @@
-## Current execution — routine preparation separation, October 15 (Codex)
+## Current execution — optional aggregate pre-check, October 15 (Codex)
+
+User authorized aggregate preparation as explicit `--pre-check`; default batch should proceed after inexpensive essential checks. Infrastructure class. Owner: batch_run_all_datasets.sh argument/preparation dispatch; preflight.py::run_preflight quick critical-file/JSON owner. Evidence: matrix/glossary and prepare/quick caller inspection. Will NOT create another validator, scoring/clinical policy, public field or release bypass. Work isolated from the actively running primary-checkout corpus; no pipeline run performed.
+
+Three fail-first cases reproduced absent quick dispatch/default versus flag behavior. Existing entry harness now explicitly requests --pre-check for aggregate-failure coverage. All 32 release-entry tests pass, including compatibility failure/skip, opt-in preparation, default Clean/Enrich/Score dispatch and quick failure before processing. Actual read-only quick check on primary data passed in 0.07 seconds; this does not promise total startup latency or publication readiness. Publishing prerequisite, compatibility and final release gates remain unchanged. CI and independent review pending; do not merge source into the active corpus checkout while it runs.
+
+## Previous execution — routine preparation separation, October 15 (Codex)
 
 Sean reported an 811.9-second preparation failure before corpus work and authorized removing the repeated broad developer suite from the normal run. Baseline ae2eea178; integrated PR149/851d93e8b. Infrastructure class. Owner: preflight.py::run_preparation for prerequisite graph/evidence and test.sh preparation profile for developer coverage; test_release_full_catalog_path.py owns the CI-covered shell boundary. Evidence: exact reported failure reproduced, matrix/caller/profile search. Will NOT create another gate runner, clinical/scoring policy, report/status or skip of actual inputs/canaries/source/live/publication checks.
 
