@@ -740,8 +740,10 @@ def _pillar_safety_hygiene(module_bd: Dict[str, Any], weight: float,
         # score does not read as "no concern" or as this pillar's deduction.
         reason = "Not deducted here: " + dose_safety_explanation + "."
     elif catalog_caution:
-        reason = ("These formula checks found no concern, but this product carries a separate "
-                  "safety caution.")
+        # An unconfirmed (likely/review) high-risk or watchlist match is not
+        # charged here, so the sentence claims no more than "not confirmed".
+        reason = ("These formula checks did not confirm a concern, but this product carries a "
+                  "separate safety caution.")
     else:
         reason = ("No catalog-level formula concerns found in the checks performed. "
                   "Personal suitability was not assessed.")

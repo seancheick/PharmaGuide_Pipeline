@@ -178,8 +178,9 @@ def test_deducted_ul_concern_still_named_in_the_sixth_pillar():
 def test_full_screen_beside_a_safety_caution_says_so():
     pillar = qs._pillar_safety_hygiene(_module_bd(), 10, _cfg(), catalog_caution=True)
     assert pillar["score"] == 10.0
-    assert pillar["reason"] == ("These formula checks found no concern, but this product carries a separate "
-                                "safety caution.")
+    assert pillar["reason"] == ("These formula checks did not confirm a concern, but this product carries a "
+                                "separate safety caution.")
+    assert "found no concern" not in pillar["reason"]
 
 
 # ---- F19 and the export strengths list -------------------------------------
