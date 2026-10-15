@@ -37,7 +37,7 @@ REUSABLE_RELEASE_GATES = frozenset({
 RELEASE_SOURCE_INPUTS = (
     '.env', 'scripts/**/*.py', 'scripts/**/*.sh',
     'requirements*.txt', '.python-version',
-    'scripts/data/*.json', 'scripts/data/curated_overrides/*.json', 'scripts/config/**/*.json',
+    'scripts/data/*.json', 'scripts/data/curated*/*.json', 'scripts/config/**/*.json',
     'scripts/contracts/*.json', 'scripts/scoring_v4/config/*.json',
     'scripts/tests/**/*.json',
     'scripts/products/*_enriched/enriched/*.json',

@@ -160,6 +160,24 @@ def test_actual_shared_gate_commands_match_between_snapshot_and_release():
         assert scripts[0][name] == scripts[1][name], name
 
 
+def test_curated_interaction_changes_invalidate_shared_release_receipts(tmp_path):
+    from audits.run_verification_gate import RELEASE_SOURCE_INPUTS
+    args = _reusable_probe(tmp_path)
+    args['input_globs'] = RELEASE_SOURCE_INPUTS
+    scripts = tmp_path / 'scripts'
+    scripts.mkdir()
+    (tmp_path / 'probe.py').replace(scripts / 'probe.py')
+    args['command'] = [sys.executable, str(scripts / 'probe.py')]
+    curated = scripts / 'data/curated_interactions'
+    curated.mkdir(parents=True)
+    rules = curated / 'rules.json'
+    rules.write_text('{}')
+    assert run_gate(**args) == 0
+    rules.write_text('{"reviewed":true}')
+    assert run_gate(**args) == 0
+    assert (tmp_path / 'calls').read_text() == 'xx'
+
+
 def test_success_receipt_binds_exit_code_command_and_log(tmp_path: Path) -> None:
     log = tmp_path / "gate.log"
     receipt = tmp_path / "gate.receipt.json"
