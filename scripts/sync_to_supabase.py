@@ -1621,7 +1621,9 @@ def parse_args(argv=None):
     parser = argparse.ArgumentParser(
         description="Sync PharmaGuide build output to Supabase Storage and manifest."
     )
-    parser.add_argument("build_dir", help="Build output directory containing manifest, DB, and detail_blobs")
+    parser.add_argument("build_dir", nargs='?', help="Build output directory containing manifest, DB, and detail_blobs")
+    parser.add_argument("--preflight-only", action='store_true',
+                        help='Read-only credential/manifest/bucket access check; no catalog required')
     parser.add_argument("--dry-run", action="store_true", help="Show what would be uploaded without uploading")
     parser.add_argument("--force", action="store_true", help="Upload and rotate manifest even if version/checksum match")
     parser.add_argument("--max-workers", type=int, default=DEFAULT_MAX_WORKERS,
@@ -1634,7 +1636,12 @@ def parse_args(argv=None):
                         help="After successful sync, clean up old versions (keep last 2)")
     parser.add_argument("--cleanup-keep", type=int, default=2,
                         help="Number of versions to keep during cleanup (default: 2)")
-    return parser.parse_args(argv)
+    args = parser.parse_args(argv)
+    if not args.preflight_only and not args.build_dir:
+        parser.error('build_dir is required outside --preflight-only')
+    if args.preflight_only and (args.cleanup or args.force):
+        parser.error('--preflight-only cannot be combined with --cleanup or --force')
+    return args
 
 
 def _build_cleanup_args(cleanup_keep):
@@ -1648,6 +1655,18 @@ def _build_cleanup_args(cleanup_keep):
 
 def main(argv=None):
     args = parse_args(argv)
+
+    if args.preflight_only:
+        from supabase_client import get_supabase_client, fetch_current_manifest
+        try:
+            client = get_supabase_client()
+            fetch_current_manifest(client)
+            client.storage.get_bucket(STORAGE_BUCKET)
+        except Exception:
+            print('Error: Supabase preflight could not read manifest/bucket; check credentials, network and access', file=sys.stderr)
+            raise SystemExit(1)
+        print('Supabase manifest/bucket read access passed; no uploads or writes attempted')
+        return 0
 
     if not os.path.isdir(args.build_dir):
         print(f"Error: {args.build_dir} is not a directory")

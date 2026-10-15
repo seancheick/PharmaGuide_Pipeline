@@ -58,6 +58,8 @@
 #
 #     # Check publishing prerequisites without processing or publishing:
 #     bash scripts/release_full.sh --preflight-only
+#     # Read-only producer/consumer schema check; no clean main or catalog needed:
+#     bash scripts/release_full.sh --compatibility-only
 #
 #     # Publish the already-prepared submission set without fetching new inbox labels:
 #     bash scripts/release_full.sh --prepared-inputs
@@ -118,6 +120,7 @@ fi
 FLUTTER_REPO="/Users/seancheick/PharmaGuide ai"
 FORCE=0
 PREFLIGHT_ONLY=0
+COMPATIBILITY_ONLY=0
 PREPARED_INPUTS=0
 SKIP_SUPABASE=0
 SKIP_FLUTTER=0
@@ -133,6 +136,7 @@ SCORING_SNAPSHOT_GATE_RAN=0
 while (($# > 0)); do
   case "$1" in
     --preflight-only)    PREFLIGHT_ONLY=1; shift ;;
+    --compatibility-only) COMPATIBILITY_ONLY=1; shift ;;
     --prepared-inputs)   PREPARED_INPUTS=1; shift ;;
     --force)             FORCE=1; shift ;;
     --skip-assemble)     shift ;;  # accepted for backward compat; no-op now
@@ -241,6 +245,46 @@ require_manufacturer_penalties_current() {
   ok "Manufacturer penalties current: $(printf '%s\n' "$out" | tail -n 1)"
 }
 
+# Ask the real consumer before a multi-hour corpus, without importing producer
+# modules or requiring a candidate. The importer owns accepted schema versions.
+require_producer_compatibility() {
+  local catalog_schema interaction_schema
+  if [[ ! -x "$FLUTTER_REPO/scripts/import_catalog_artifact.sh" ]]; then
+    err "Flutter import script is missing or not executable: $FLUTTER_REPO/scripts/import_catalog_artifact.sh"
+    return 1
+  fi
+  if ! read -r catalog_schema interaction_schema < <(
+    "$PG_PYTHON" - "$REPO_ROOT" <<'PY'
+import ast
+import pathlib
+import sys
+root = pathlib.Path(sys.argv[1]) / 'scripts'
+values = []
+for filename, key in [('build_final_db.py', 'EXPORT_SCHEMA_VERSION'),
+                      ('build_interaction_db.py', 'SCHEMA_VERSION')]:
+    tree = ast.parse((root / filename).read_text())
+    assignments = [node for node in tree.body if isinstance(node, ast.Assign)
+                   and any(isinstance(target, ast.Name) and target.id == key
+                           for target in node.targets)]
+    if len(assignments) != 1:
+        raise SystemExit(f'Cannot resolve producer schema: {filename}::{key}')
+    values.append(str(ast.literal_eval(assignments[0].value)))
+print(*values)
+PY
+  ); then
+    err "Cannot read canonical producer schemas"
+    return 1
+  fi
+  "$FLUTTER_REPO/scripts/import_catalog_artifact.sh" \
+    --check-compatibility "$catalog_schema" "$interaction_schema"
+}
+
+if (( COMPATIBILITY_ONLY == 1 )); then
+  require_producer_compatibility || exit 1
+  ok "Producer/consumer compatibility passed; no artifacts rebuilt or published"
+  exit 0
+fi
+
 if (( SKIP_FLUTTER == 0 || (SKIP_SUPABASE == 0 && SUPABASE_DRY_RUN == 0) )); then
   require_release_base "$REPO_ROOT" || exit 1
   ok "Release base: clean checkout at origin/main $(git -C "$REPO_ROOT" rev-parse --short HEAD)"
@@ -255,6 +299,15 @@ fi
 
 # Read-only prerequisite mode is shared with the corpus runner. Final artifact,
 # clinical, change-approval and publication gates still run in a normal release.
+if (( SKIP_FLUTTER == 0 )); then
+  require_producer_compatibility || exit 1
+  for tool in sqlite3 shasum python3; do
+    command -v "$tool" >/dev/null 2>&1 || { err "Required importer tool is missing: $tool"; exit 1; }
+  done
+fi
+if (( SKIP_SUPABASE == 0 && SUPABASE_DRY_RUN == 0 )); then
+  "$PG_PYTHON" "$REPO_ROOT/scripts/sync_to_supabase.py" --preflight-only || exit 1
+fi
 if (( PREFLIGHT_ONLY == 1 )); then
   if (( SKIP_FLUTTER == 0 )) && [[ ! -x "$FLUTTER_REPO/scripts/import_catalog_artifact.sh" ]]; then
     err "Flutter import script is missing or not executable: $FLUTTER_REPO/scripts/import_catalog_artifact.sh"
@@ -369,7 +422,9 @@ print(h.hexdigest())
 run_strict_gate() {
   local label="$1"; shift
   info "Strict gate: $label"
-  "$@"
+  "$PG_PYTHON" "$REPO_ROOT/scripts/audits/run_verification_gate.py" \
+    --name "$label" --receipt-dir "$REPO_ROOT/scripts/reports/release-gates" \
+    --cwd "$REPO_ROOT" --release-check -- "$@"
   ok "Strict gate passed: $label"
 }
 

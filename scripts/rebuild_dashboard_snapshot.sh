@@ -133,7 +133,9 @@ trap cleanup_candidates EXIT
 run_strict_gate() {
   local label="$1"; shift
   echo "◦ Strict gate: $label"
-  "$@"
+  "$PG_PYTHON" "$REPO_ROOT/scripts/audits/run_verification_gate.py" \
+    --name "$label" --receipt-dir "$REPO_ROOT/scripts/reports/release-gates" \
+    --cwd "$REPO_ROOT" --release-check -- "$@"
 }
 
 run_strict_gate "source-of-truth matrix" \
@@ -141,13 +143,13 @@ run_strict_gate "source-of-truth matrix" \
 run_strict_gate "IQM form-evidence contract" \
   "$PG_PYTHON" scripts/iqm_form_evidence.py audit
 run_strict_gate "cleaner/IQD row contract" \
-  "$PG_PYTHON" "$SOURCE_OF_TRUTH_AUDIT" cleaner --products-dir scripts/products --strict-release
+  "$PG_PYTHON" "$SOURCE_OF_TRUTH_AUDIT" cleaner --products-dir "$REPO_ROOT/scripts/products" --strict-release
 run_strict_gate "enrichment/IQD source-of-truth contract" \
-  "$PG_PYTHON" "$SOURCE_OF_TRUTH_AUDIT" enrichment --products-dir scripts/products --strict-release
+  "$PG_PYTHON" "$SOURCE_OF_TRUTH_AUDIT" enrichment --products-dir "$REPO_ROOT/scripts/products" --strict-release
 run_strict_gate "clinical drift contract" \
-  "$PG_PYTHON" "$SOURCE_OF_TRUTH_AUDIT" clinical --products-dir scripts/products --strict-release
+  "$PG_PYTHON" "$SOURCE_OF_TRUTH_AUDIT" clinical --products-dir "$REPO_ROOT/scripts/products" --strict-release
 run_strict_gate "RDA/UL emitted-reference stamp parity" \
-  "$PG_PYTHON" scripts/audit_rda_ul_reference_stamps.py --products-dir scripts/products
+  "$PG_PYTHON" scripts/audit_rda_ul_reference_stamps.py --products-dir "$REPO_ROOT/scripts/products"
 run_strict_gate "scoring snapshot contract" \
   bash scripts/test.sh fast scripts/tests/test_scoring_snapshot_v1.py
 

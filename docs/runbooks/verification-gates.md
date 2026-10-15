@@ -50,6 +50,36 @@ the combined batch, and then run from the earliest required stage. The current s
 owner proves code/reference/output freshness; it does not prove historical raw-to-Clean
 provenance. Changed raw datasets require Clean unless reuse is independently established.
 
+## Release retries and early compatibility
+
+`release_full.sh --compatibility-only` asks the app's actual importer whether the
+current producer schema constants are supported, without requiring a catalog,
+clean main checkout or cloud access. The full `--pipeline-only` runner calls it
+before preparation unless `--skip-flutter` was explicitly selected; targeted
+runs remain independent. Actual candidate checksums, SQLite/schema integrity and
+minimum app version are still checked before upload/import.
+
+Publishing preflight also checks importer tool availability and reads the
+Supabase manifest/bucket through the existing sync owner. This catches missing
+credentials and read-access failures early; it cannot prove a future write will
+succeed and never performs an upload.
+
+Both snapshot and release use `audits/run_verification_gate.py` for per-gate logs,
+exit codes and timings in `scripts/reports/release-gates/`. Its single allowlist
+permits reuse only for cleaner, enrichment, clinical and RDA/UL corpus checks.
+A successful sealed receipt must have an intact log, be less than 24 hours old,
+and match current command, working directory, runtime/packages, configuration,
+source/reference content and enriched batches/manifests. These inputs must also
+stay unchanged during execution. A per-receipt lock serializes writers; failed,
+interrupted, expired or damaged evidence reruns. File touches alone do not
+invalidate content. Ordinary shell/lock bookkeeping is excluded from runtime
+identity, never effective policy or credentials (only their digest is stored).
+
+Cheap source checks run again instead of paying corpus hashing cost. Live,
+artifact and mutating/publication checks never use this reuse path. Retrying
+publication still relies on the upload/bundle owners' existing state checks.
+This is not permission to reuse a different candidate or skip safety gates.
+
 ## Data-integrity gates
 
 Run against `scripts/final_db_output` or a fresh `/tmp/pharmaguide_release_build*/`.

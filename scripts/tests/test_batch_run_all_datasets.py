@@ -11,6 +11,22 @@ SCRIPT_PATH = REPO_ROOT / "batch_run_all_datasets.sh"
 PYTHON_ENV_PATH = REPO_ROOT / "scripts" / "python_env.sh"
 
 
+def test_full_pipeline_only_checks_phone_consumer_before_preparation(tmp_path):
+    dataset = tmp_path / 'raw/Test'
+    dataset.mkdir(parents=True)
+    (dataset / 'one.json').write_text('{}')
+    _install_batch_dependencies(tmp_path)
+    release = tmp_path / 'scripts/release_full.sh'
+    release.write_text('#!/bin/bash\necho compatibility-probe\nexit 17\n')
+    runner = tmp_path / 'batch_run_all_datasets.sh'
+    runner.write_text(SCRIPT_PATH.read_text())
+    result = subprocess.run(['bash', str(runner), '--root', str(dataset.parent), '--pipeline-only'],
+                            env={**os.environ}, text=True, capture_output=True)
+    assert result.returncode != 0
+    assert 'compatibility-probe' in result.stdout
+    assert 'aggregate-preparation-reached' not in result.stdout
+
+
 def _install_batch_dependencies(tmp_path):
     """Install the runtime selector and a successful preflight in the fake repo.
 

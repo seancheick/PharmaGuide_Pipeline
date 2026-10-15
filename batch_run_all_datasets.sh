@@ -239,6 +239,17 @@ if [ "$PIPELINE_ONLY" != "1" ] && [ "${SKIP_SNAPSHOT:-0}" != "1" ] \
     RELEASE_ARGS+=(--prepared-inputs)
 fi
 
+# Sean runs the full corpus with --pipeline-only and publishes later. Catch
+# the paired app's schema mismatch before that expensive run as well, without
+# demanding a publishing checkout, cloud credentials or a built catalog.
+# Targeted/offline work can omit the app explicitly with --skip-flutter.
+if [ "$PIPELINE_ONLY" = "1" ] && [ -z "$TARGET_DATASETS" ] && [ "$RELEASE_SKIP_FLUTTER" != "1" ]; then
+    if ! bash "$SCRIPTS_DIR/release_full.sh" --compatibility-only "${RELEASE_ARGS[@]}" 2>&1 | tee -a "$SUMMARY_FILE"; then
+        echo "STOP: phone consumer compatibility failed before corpus work."
+        exit 1
+    fi
+fi
+
 # A full corpus run must first exercise every reviewed canary through current
 # Clean/Enrich/Score. Checking yesterday's stored scores cannot reveal today's
 # code/data changes. This check is read-only and runs before any brand or release.
