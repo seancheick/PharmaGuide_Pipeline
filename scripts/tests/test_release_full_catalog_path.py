@@ -84,7 +84,7 @@ def test_compatibility_only_mode_precedes_git_and_publication_checks():
 def test_release_full_uses_only_gated_snapshot_for_catalog_mutation() -> None:
     source = SCRIPT.read_text()
 
-    assert source.count("bash scripts/rebuild_dashboard_snapshot.sh") == 2
+    assert source.count("bash scripts/rebuild_dashboard_snapshot.sh") == 1
     assert '"$PG_PYTHON" scripts/build_all_final_dbs.py' not in source
     assert '"$PG_PYTHON" scripts/release_catalog_artifact.py' not in source
 
@@ -190,7 +190,8 @@ def test_release_checks_flutter_main_with_existing_release_base_owner():
     (True, False, "preserved"), (True, True, "refused"),
     (False, False, "fetched"),
 ])
-def test_release_prepared_inputs_preserve_verified_submission_set(tmp_path, prepared, stale, expected):
+@pytest.mark.parametrize("force", [False, True])
+def test_release_prepared_inputs_preserve_verified_submission_set(tmp_path, prepared, stale, expected, force):
     import os
     import shlex
     import subprocess
@@ -220,7 +221,7 @@ def test_release_prepared_inputs_preserve_verified_submission_set(tmp_path, prep
         "SUBMISSION_ENRICH_MANIFEST": str(manifests[1]),
         "SUBMISSION_SCORE_MANIFEST": str(manifests[2]),
     }
-    harness = "set -e\nFORCE=0\nSKIP_SUPABASE=0\nSUPABASE_DRY_RUN=0\nPREPARED_INPUTS=" + str(int(prepared)) + "\n"
+    harness = "set -e\nFORCE=" + str(int(force)) + "\nSKIP_SUPABASE=0\nSUPABASE_DRY_RUN=0\nPREPARED_INPUTS=" + str(int(prepared)) + "\n"
     harness += "\n".join(f"{k}={shlex.quote(v)}" for k, v in variables.items()) + "\n"
     harness += 'info(){ :; }; ok(){ :; }; skip(){ echo "$*"; }; err(){ echo "$*"; };\n'
     result = subprocess.run(["bash", "-c", harness + stage_zero], text=True, capture_output=True,
@@ -250,3 +251,44 @@ def test_release_cli_accepts_prepared_inputs_in_read_only_preflight():
     assert result.returncode == 0, result.stdout + result.stderr
     assert "Release prerequisites passed" in result.stdout
     assert "Step 1/8" not in result.stdout
+
+
+def test_release_defaults_to_prepared_intake_with_explicit_refresh_opt_in():
+    source = SCRIPT.read_text()
+    defaults = source[source.index('FLUTTER_REPO='):source.index('# CLI parsing')]
+    assert 'PREPARED_INPUTS=1' in defaults
+    assert '--refresh-submissions)' in source
+    assert '--refresh-submissions) PREPARED_INPUTS=0' in source
+
+
+@pytest.mark.parametrize('force', [0, 1])
+def test_stale_catalog_is_assembled_only_once_even_when_forced(tmp_path, force):
+    import subprocess
+    source = SCRIPT.read_text()
+    start = source.index('step1_needs_run()')
+    end = source.index('# Run even when assembly/staging was skipped.', start)
+    scripts = tmp_path / 'scripts'
+    scripts.mkdir()
+    (scripts / 'rebuild_dashboard_snapshot.sh').write_text('echo built >> builds\n')
+    fake = tmp_path / 'python'
+    fake.write_text('#!/bin/bash\nexit 1\n')  # receipt not current
+    fake.chmod(0o755)
+    header = f'''set -e
+FORCE={force}
+SCORING_SNAPSHOT_GATE_RAN=0
+PG_PYTHON='{fake}'
+CATALOG_STATE_SCRIPT=unused
+DIST_CATALOG=absent
+FINAL_CATALOG=absent
+info() {{ :; }}
+ok() {{ :; }}
+skip() {{ :; }}
+run_strict_gate() {{
+  local label="$1"; shift
+  if [[ "$label" == "catalog assembly" ]]; then "$@"; fi
+}}
+'''
+    result = subprocess.run(['bash', '-c', header + source[start:end]],
+                            cwd=tmp_path, text=True, capture_output=True)
+    assert result.returncode == 0, result.stderr
+    assert (tmp_path / 'builds').read_text().splitlines() == ['built']

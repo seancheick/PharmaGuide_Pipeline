@@ -7,7 +7,7 @@ SCRIPT = Path(__file__).resolve().parents[1] / "rebuild_dashboard_snapshot.sh"
 def test_snapshot_gates_candidates_before_live_promotion() -> None:
     source = SCRIPT.read_text()
 
-    promotion = source.index("promote_release_artifacts.py")
+    promotion = source.index('"$PG_PYTHON" scripts/promote_release_artifacts.py')
     freshness_gate = source.index('run_strict_gate "catalog artifact freshness"')
     candidate_stage = source.index("--output-dir \"$DIST_CANDIDATE\"")
 
@@ -74,3 +74,22 @@ def test_snapshot_build_uses_strict_export_error_gate() -> None:
 def test_snapshot_does_not_discard_product_failure_diagnostics() -> None:
     source = SCRIPT.read_text()
     assert "| tail" not in source
+
+
+def test_snapshot_freezes_inputs_before_build_and_checks_before_promotion():
+    source = SCRIPT.read_text()
+    freeze = source.index('--catalog-input-binding')
+    build = source.index('"$PG_PYTHON" scripts/build_final_db.py')
+    check = source.index('--check-input-binding "$CATALOG_INPUT_BINDING"')
+    promote = source.index('"$PG_PYTHON" scripts/promote_release_artifacts.py')
+    assert freeze < build < check < promote
+    assert source.index('--check-disk') < build
+    assert source.index('--record-catalog "$CATALOG_INPUT_BINDING"') > promote
+
+
+def test_standalone_snapshot_uses_existing_release_lock_before_any_build():
+    source = SCRIPT.read_text()
+    assert 'SNAPSHOT_ARGS=("$@")' in source
+    lock = source.index('scripts/run_with_release_lock.py')
+    assert lock < source.index('--catalog-input-binding')
+    assert '-- bash "$0" "${SNAPSHOT_ARGS[@]}"' in source
