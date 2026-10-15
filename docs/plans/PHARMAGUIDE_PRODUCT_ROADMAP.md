@@ -220,10 +220,13 @@ publication is complete.
   found within reviewed coverage"). Remove the unused /20 arithmetic (`scoreFit20`, `e2cPenalty`,
   `maxPossible` in `app:lib/services/fit_score/`), which no screen reads [V], after the dead-code
   proof AGENTS.md requires. "Works against your goal" needs pipeline-authored data first.
+
+October15 receipt checkpoint: pipeline PR145 combines the verified PR142/144 source and receipt work; app PR122 is integrated57ab077b. Six pillar receipts reconcile and render, including real-product narrow-width/text-scale checks. This implements the receipt portion of1.6; remaining provenance/presentation requirements and final rebuilt-catalog acceptance keep the full box open. Step4 scoring consolidation remains partial; next are production missing-data/completion and bound-aware consumers, then the remaining approved ownership/config and probiotic copy changes. Sean authorized source integration/branch cleanup, while rebuild and release remain held.
+
 - [ ] **1.6 Why this score.** One ledger per pillar in public pillar points (rule id, delta, reason,
-  ingredient, source), extending `quality_pillars_v4[].components`. Today the exported bonuses and
-  penalties (`scripts/build_final_db.py::derive_v4_tradeoffs`) are in raw module points and do not
-  sum to the pillar [A]. Pillar wording becomes pillar-specific and pipeline-authored; the app's
+  ingredient, source). Implemented receipts extend `quality_pillars_v4` with reconciled public
+  pillar points; legacy tradeoffs remain a separate raw-module projection. Complete remaining
+  ingredient/source attribution and final catalog acceptance. Pillar wording is pipeline-authored; the app's
   universal scale (`app:lib/core/scoring/v4_pillars.dart::statusForPillar`: Strong, Mixed, Limited
   by percentage) [A] is retired.
 - [ ] **1.7 Interaction and depletion rule typing.** Ledger Q26 (`dose_evidence`: studied dose kept
@@ -434,4 +437,6 @@ October 12 form/unit follow-up: PR120 merged 5a58f3fd2. Sean approved three prov
 
 October 14 post-run checkpoint: Sean completed the corpus, but the final export rejected legitimate limited evidence. Export-contract repair PR141 is merged18ef2564c after exact-source CI; source evidence and Excellent eligibility stay unchanged. All22 glycinate capsule producer records match validated expectations. App PR119 preserves evidence grades and approved manual IDs, merged13f314a0 after green exact-source CI38517203803. Shared-module fingerprints require fresh regeneration; rerun ownership is awaiting Sean’s answer. Catalog release, app bundle parity and live Codex comparison remain unchecked; no deployment is claimed.
 
-October14 release checkpoint: importer schema4 repairPR120 is integrated after exact CI38596182610. Sean subsequently approved correcting the shared chemistry/delivery bonus before publication. The current source is implemented and independently reviewed;2665frozen raw labels measure1112Formulation-only totals and179tier movements, zero safety/status/route/other-pillar changes,93identical controls. NatureMade exports90; Pure87 and Thornepowder92 remain. All33rawcanaries pass. Final local546passed/24declared opt-in skips and exact9358db1e CI38620446987 pass/allfourshards; PR143 integratedd845319a4, appcopyPR121 integratedb152702c; source changes invalidate114manifests, so Sean retains the necessary Clean→Enrich→Score rerun. The older qualified candidate is not relabeled or published. Catalog/app/live Codex acceptance stays open. Exact receipts are in the existing LEDGER.
+
+
+October 14 bounded shilajit label qualification: PR142 source da1bc55f preserves recognized aliases and accepted sugar/count corrections, and closes preparation-specific shilajit/peppermint Evidence transfer. Native Meru55.7/100 (13.3/11.4/0/15/6/10); research remains reference context where label applicability is unestablished.6,585 frozen labels reviewed,375 explained score changes; identities/amounts/safety/status unchanged. Final named1,458 tests, CI20,749/192declaredskips and local546/24declaredoptinskips pass; independent review closed. Source/measurement complete; draft PR not integrated, corpus not rebuilt or released. Concurrent main policy reconciliation and final delivery validation remain; no launch-track box is closed. Details: existing LEDGER/research and private clinical RESULT.

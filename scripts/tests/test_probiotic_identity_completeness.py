@@ -22,12 +22,13 @@ def product_with_identities(exact=1, unknown=0):
         IDENTITIES[:exact] + [(f"Unknown organism {i}", None) for i in range(unknown)]
     ):
         ref = f"ingredientRows[{index}]"
-        rows.append({"name": name, "raw_source_path": ref})
+        rows.append({"name": name, "raw_source_path": ref, "category": "probiotic"})
         blends.append({"name": name, "raw_source_path": ref, "strains": [name]})
         if cid:
             clinical.append({"strain": name, "clinical_id": cid, "source_row_ref": ref})
     return {
         "activeIngredients": rows,
+        "physicalState": {"langualCodeDescription": "delayed-release capsule"},
         "delivery_data": {"matched": True, "highest_tier": 2, "systems": [{
             "canonical_name": "delayed-release", "tier": 2,
             "match_source": "physical_state", "raw_source_text": "delayed-release capsule",
@@ -89,7 +90,8 @@ def test_malformed_names_and_count_only_payloads_never_create_identity_credit(ma
 
 def test_species_only_and_potency_invariance():
     product = product_with_identities(0)
-    product["probiotic_data"]["probiotic_blends"] = [{"strains": ["Lactobacillus rhamnosus"]}]
+    product["activeIngredients"] = [{"name": "Lactobacillus rhamnosus", "raw_source_text": "Lactobacillus rhamnosus", "raw_source_path": "ingredientRows[0]", "category": "probiotic"}]
+    product["probiotic_data"]["probiotic_blends"] = [{"strains": ["Lactobacillus rhamnosus"], "raw_source_path": "ingredientRows[0]"}]
     assert score_formulation(product)["score"] == 7
     product = product_with_identities(1)
     before = score_formulation(product)

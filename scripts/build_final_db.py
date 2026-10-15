@@ -5940,9 +5940,11 @@ def _build_v4_score_explanation(pillars: Any) -> Optional[Dict[str, Any]]:
         return None
     ranked.sort(key=lambda r: r[0])  # ascending: biggest drags first
     drags = [{"pillar": n, "reason": rs} for d, n, rs, _ in ranked if d < -1e-9][:3]
+    # The sixth pillar at full points is a screen that found nothing, not an
+    # affirmative quality finding, so it is never presented as a strength.
     strengths = [
         {"pillar": n, "reason": rs} for d, n, rs, concern in reversed(ranked)
-        if d >= -1e-9 and not concern
+        if d >= -1e-9 and not concern and n != "safety_hygiene"
     ][:3]
     return {"strengths": strengths, "drags": drags}
 

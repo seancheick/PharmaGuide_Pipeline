@@ -655,7 +655,11 @@ def test_phase4_batch4_food_matrix_and_umbrella_guards():
 
 def test_phase4_batch4_standardized_clinical_canaries():
     """Batch 4 standardized clinical botanicals and nutrients."""
-    clinical_cids = ["peppermint", "cranberry_fruit", "butchers_broom_root", "horse_chestnut_seed", "boswellia_serrata_resin"]
+    peppermint = er.resolve_evidence_for_canonical("peppermint")
+    assert peppermint.disposition == EvidenceDisposition.RESEARCH_PRESENT_APPLICABILITY_UNESTABLISHED.value
+    assert peppermint.points_eligible is False
+    assert "24100754" in peppermint.owner_facts["literature_evidence"]["pmids"]
+    clinical_cids = ["cranberry_fruit", "butchers_broom_root", "horse_chestnut_seed", "boswellia_serrata_resin"]
     for cid in clinical_cids:
         res = er.resolve_evidence_for_canonical(cid)
         assert res.disposition == EvidenceDisposition.RESOLVED_BY_REVIEWED_CLINICAL_EVIDENCE.value, (
@@ -1319,3 +1323,20 @@ def test_generic_nettle_review_cannot_invent_root_preparation_threshold(name, fo
     assert record["studied_dose_exposure"] == {}
     assert "600" not in json.dumps(record)
     assert "leaf" in record["applicability_decision"].lower()
+
+
+@pytest.mark.parametrize('text,expected', [
+    ('attention and alertness', {'cognitive_neurological'}),
+    ('memory, focus and cognition', {'cognitive_neurological'}),
+    ('cognitive performance', {'cognitive_neurological'}),
+    ('short-term memory and focus problems associated with aging', {'cognitive_neurological'}),
+    ('immune, skin, and eye health', {'immune', 'skin_hair_collagen', 'eye_health'}),
+    ('healthy aging', {'aging_longevity'}),
+    ('anti-aging', {'aging_longevity'}),
+    ('healthy ageing and longevity', {'aging_longevity'}),
+    ('Certified renewable energy. We buy 100% renewable energy.', set()),
+    ('cellular energy production', {'mitochondrial_energy'}),
+    ('renewable energy manufacturing; supports cellular energy', {'mitochondrial_energy'}),
+])
+def test_explicit_purpose_categories_preserve_endpoints_and_reject_context(text, expected):
+    assert er.evidence_indication_categories(text) == expected

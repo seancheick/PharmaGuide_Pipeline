@@ -57,6 +57,7 @@ def _product(
             "ingredients_scorable": ingredients_scorable,
         },
         "delivery_tier": delivery_tier,
+        "physicalState": {"langualCodeDescription": "Delayed-release capsules"} if survivability else {},
         "delivery_data": {
             "matched": bool(survivability or delivery_tier),
             "highest_tier": delivery_tier or (2 if survivability else None),
@@ -173,14 +174,14 @@ def test_identity_credit_is_proportional_to_resolved_fraction(
 @pytest.mark.parametrize(
     ("survivability", "delivery_tier", "expected"),
     [
-        (True, None, 3.0),
-        (False, 1, 3.0),
-        (False, 2, 2.5),
-        (False, 3, 1.5),
+        (True, None, 3.0),  # Supported source-owned delayed-release capsule.
+        (False, 1, 0.0),  # A generic unsourced tier is not survivability evidence.
+        (False, 2, 0.0),
+        (False, 3, 0.0),
         (False, None, 0.0),
     ],
 )
-def test_delivery_survivability_uses_enriched_survivability_then_delivery_tier(
+def test_delivery_survivability_does_not_infer_coating_from_unsourced_tier(
     survivability: bool,
     delivery_tier: int | None,
     expected: float,
@@ -251,8 +252,56 @@ def test_probiotic_formulation_resilient_to_malformed_input() -> None:
         assert payload["max"] == 15.0
 
 
-def test_survivability_boolean_alone_is_not_a_supported_delivery_system():
+
+@pytest.mark.parametrize('technology,tier,expected',[
+    ('methylcobalamin',2,0.0),('fermented',3,0.0),('whole food',3,0.0),
+    ('enteric-coated',2,2.5),('microencapsulation',3,1.5),
+])
+def test_probiotic_survivability_requires_relevant_delivery(technology,tier,expected):
     from scoring_v4.modules.probiotic_formulation import score_formulation
-    product = _product(survivability=True)
-    product.pop("delivery_data", None)
-    assert score_formulation(product)["components"]["delivery_survivability"] == 0
+    product=_product(survivability=False,delivery_tier=tier)
+    product['activeIngredients']=[{'name':'Lactobacillus rhamnosus '+technology,'raw_source_text':'Lactobacillus rhamnosus '+technology,'category':'probiotic','quantity':10,'unit':'billion CFU','raw_source_path':'ingredientRows[0]'}]
+    product['delivery_data']={'highest_tier':tier,'systems':[{'canonical_name':technology,'name':technology,'tier':tier,'raw_source_text':technology,'match_source':'ingredientRows[0]'}]}
+    assert score_formulation(product)['components']['delivery_survivability']==expected
+
+
+def test_probiotic_cannot_borrow_other_rows_enteric_delivery():
+    from scoring_v4.modules.probiotic_formulation import score_formulation
+    product=_product(survivability=False,delivery_tier=2)
+    product['activeIngredients']=[
+        {'name':'Lactobacillus rhamnosus','category':'probiotic','quantity':10,'unit':'billion CFU','raw_source_path':'ingredientRows[0]','raw_source_text':'Lactobacillus rhamnosus'},
+        {'name':'Enteric-coated Peppermint Oil','quantity':200,'unit':'mg','raw_source_path':'ingredientRows[1]','raw_source_text':'Enteric-coated Peppermint Oil'},
+    ]
+    product['delivery_data']={'highest_tier':2,'systems':[{'canonical_name':'enteric-coated','tier':2,'match_source':'ingredientRows[1]','raw_source_text':'Enteric-coated'}]}
+    assert score_formulation(product)['components']['delivery_survivability']==0.0
+
+@pytest.mark.parametrize('source,expected',[
+    ('Enteric-coated Lactobacillus rhamnosus',2.5),
+    ('Non-enteric-coated Lactobacillus rhamnosus',0.0),
+    ('Lactobacillus rhamnosus, not enteric-coated',0.0),
+    ('Lactobacillus rhamnosus without enteric-coated delivery',0.0),
+])
+def test_probiotic_stale_delivery_marker_requires_affirmative_source(source,expected):
+    from scoring_v4.modules.probiotic_formulation import score_formulation
+    product=_product(survivability=False,delivery_tier=2)
+    product['activeIngredients']=[{'name':source,'raw_source_text':source,'category':'probiotic','quantity':10,'unit':'billion CFU','raw_source_path':'ingredientRows[0]'}]
+    product['delivery_data']={'highest_tier':2,'systems':[{'canonical_name':'enteric-coated','tier':2,'match_source':'ingredientRows[0]','raw_source_text':'enteric-coated'}]}
+    assert score_formulation(product)['components']['delivery_survivability']==expected
+
+
+def test_probiotic_delivery_retains_owned_source_note_assertion():
+    from scoring_v4.modules.probiotic_formulation import score_formulation
+    product = _product(survivability=False, delivery_tier=3)
+    note = 'ME refers to microencapsulation process that protects the probiotics'
+    product['activeIngredients'] = [{
+        'name': 'Lactobacillus helveticus Rosell-52',
+        'raw_source_text': 'Lactobacillus helveticus Rosell-52',
+        'raw_source_path': 'ingredientRows[0].nestedRows[0]',
+        'category': 'probiotic', 'quantity': 3, 'unit': 'billion CFU',
+        'notes': note,
+    }]
+    product['delivery_data'] = {'highest_tier': 3, 'systems': [{
+        'canonical_name': 'microencapsulation', 'tier': 3,
+        'raw_source_text': note, 'match_source': 'ingredientRows[0].nestedRows[0]',
+    }]}
+    assert score_formulation(product)['components']['delivery_survivability'] == 1.5

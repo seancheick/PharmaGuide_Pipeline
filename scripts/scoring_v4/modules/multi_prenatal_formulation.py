@@ -67,11 +67,17 @@ def _scorable_ingredients(product: Dict[str, Any]) -> List[Dict[str, Any]]:
     return [ing for ing in rows if is_scorable(ing) and not restates_label_row(ing, rows)]
 
 
-def _score_panel_form_quality(product: Dict[str, Any]) -> tuple[float, float | None, float | None]:
-    """Panel-wide A1 analogue with a non-decreasing neutral floor."""
+def _score_panel_form_quality(
+    product: Dict[str, Any],
+) -> tuple[float, float | None, float | None, float | None]:
+    """Panel-wide A1 analogue with a non-decreasing neutral floor.
+
+    Returns (contribution, raw average, effective average, parent-relative
+    average before the neutral floor) so a receipt can show the floor lift.
+    """
     rows = _scorable_ingredients(product)
     if not rows:
-        return 0.0, None, None
+        return 0.0, None, None, None
 
     weighted: List[tuple[float, float, float]] = []
     for ing in rows:
@@ -92,12 +98,12 @@ def _score_panel_form_quality(product: Dict[str, Any]) -> tuple[float, float | N
 
     denom = sum(weight for _, _, weight in weighted)
     if denom <= 0:
-        return 0.0, None, None
+        return 0.0, None, None, None
     avg = sum(raw_score * weight for raw_score, _, weight in weighted) / denom
     relative_avg = sum(score * weight for _, score, weight in weighted) / denom
     effective = max(relative_avg, PANEL_FORM_NEUTRAL_FLOOR)
     contribution = _clamp(0.0, CAP_PANEL_FORM_QUALITY, (effective / BIO_SCORE_MAX) * CAP_PANEL_FORM_QUALITY)
-    return _round(contribution), _round(avg), _round(effective)
+    return _round(contribution), _round(avg), _round(effective), _round(relative_avg)
 
 
 def _dose_coverage(rows: Iterable[Dict[str, Any]]) -> float:
@@ -131,10 +137,11 @@ def score_formulation(product: Any) -> Dict[str, Any]:
     penalties: Dict[str, float] = {}
     metadata: Dict[str, Any] = {"phase": PHASE_MARKER}
 
-    panel_score, avg_bio_score, smoothed_bio_score = _score_panel_form_quality(product)
+    panel_score, avg_bio_score, smoothed_bio_score, relative_bio_score = _score_panel_form_quality(product)
     components["panel_form_quality"] = panel_score
     metadata["avg_bio_score"] = avg_bio_score
     metadata["smoothed_bio_score"] = smoothed_bio_score
+    metadata["relative_bio_score"] = relative_bio_score
 
     disclosure_score, coverage = _score_panel_disclosure_structure(product)
     components["panel_disclosure_structure"] = disclosure_score

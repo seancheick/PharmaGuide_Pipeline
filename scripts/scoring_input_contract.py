@@ -6342,15 +6342,13 @@ def _classify_one(row: Dict[str, Any], ctx: Dict[str, Any]) -> Dict[str, Any]:
     if module == "probiotic" and _role_is_probiotic_strain(row):
         return out(ROLE_PRIMARY, "drives_module_probiotic", "router_driver", "high")
 
-    # L2 — named in the product title.
-    if _named_in_title(row, ctx["title_norm"]):
-        return out(ROLE_CLAIM_PROMINENT, "named_in_product_title", "product_name", "high")
-
-    # L3 — explicit function claim preserved on the label. This adds a
-    # purpose owner alongside the route driver, without awarding Evidence.
+    # L2/L3 share claim prominence. Prefer the explicit function provenance:
+    # a title mention must not erase the purpose needed by Evidence and Dose.
     claim_source = _role_function_claim_source(row, ctx)
     if claim_source:
         return out(ROLE_CLAIM_PROMINENT, "named_in_label_function_claim:" + claim_source[1], claim_source[0], "high")
+    if _named_in_title(row, ctx["title_norm"]):
+        return out(ROLE_CLAIM_PROMINENT, "named_in_product_title", "product_name", "high")
 
     is_blend = _role_is_blend_member(row)
     mass_mg = _role_mass_mg(row)

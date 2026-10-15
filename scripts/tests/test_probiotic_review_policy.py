@@ -235,6 +235,10 @@ def test_pediatric_context_cannot_supply_adult_summary_applicability(registry):
     product["evidence_data"] = {"clinical_matches": [_match(id=STUB,
         ingredient="Lactobacillus acidophilus La-14", standard_name="Lactobacillus acidophilus La-14")]}
     evidence = score_evidence(product)
-    assert evidence["components"]["evidence_family_certainty"] == 6.6667
+    # The pediatric study is real research, but it does not apply to an adult
+    # product, so its certainty earns nothing here (V4.1 applicability gate).
+    assert evidence["components"]["evidence_family_certainty"] == 0
     assert evidence["components"]["product_applicability"] == 0
     assert evidence["components"]["independent_replication_consistency"] == 0
+    assert evidence["score"] == 0
+    assert evidence["metadata"]["evidence_result_state"] == "research_present_applicability_unestablished"

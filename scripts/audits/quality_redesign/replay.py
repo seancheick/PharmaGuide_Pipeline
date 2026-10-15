@@ -429,6 +429,8 @@ def repository_provenance(checkout):
 
 def snapshot(checkout, products_root, manifest, out, workers=1):
     checkout = Path(checkout).resolve()
+    # The child runs in another checkout: bind caller-relative paths first.
+    products_root, manifest, out = (Path(path).resolve() for path in (products_root, manifest, out))
     before = repository_provenance(checkout)
     command = [sys.executable, str(Path(__file__).resolve()), '_worker', '--checkout', str(checkout), '--products-root', str(products_root), '--manifest', str(manifest), '--out', str(out), '--workers', str(workers)]
     result = subprocess.run(command, cwd=checkout)

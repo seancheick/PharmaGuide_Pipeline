@@ -308,3 +308,26 @@ class TestProduct10040Simulation:
 
 if __name__ == "__main__":
     pytest.main([__file__, "-v"])
+
+
+@pytest.mark.parametrize('statement', [
+    'Contains No: Sugar, dairy, yeast, wheat, gluten, corn, soy, preservatives, artificial colors or flavors.',
+    'Contains: no milk, wheat or soy.',
+    'Contains no: milk or soy.',
+])
+def test_punctuated_contains_no_list_is_not_positive_evidence(statement):
+    enricher = SupplementEnricher()
+    found = enricher._extract_allergen_presence_from_text({
+        'statements': [{'type': 'Formulation re: Does NOT Contain', 'notes': statement}],
+    })
+    assert found == []
+
+
+def test_punctuated_no_list_does_not_erase_separate_positive_or_trace_statement():
+    enricher = SupplementEnricher()
+    found = enricher._extract_allergen_presence_from_text({
+        'statements': [{'notes': 'Contains No: wheat or soy; Contains: milk. May contain peanuts.'}],
+    })
+    assert {(row['allergen_id'], row['presence_type']) for row in found} == {
+        ('ALLERGEN_MILK', 'contains'), ('ALLERGEN_PEANUTS', 'may_contain'),
+    }

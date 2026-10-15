@@ -112,6 +112,23 @@ def test_disclosed_panel_with_opaque_blends_is_not_called_fully_disclosed():
     )
 
 
+def test_a_charged_blend_is_never_called_fully_transparent():
+    # Gluten Defense (DSLD 213831): an undisclosed enzyme blend with no captured
+    # member rows costs B5 2 points. Once B5 alone owns opacity (V4.1 Step 4) the
+    # pillar reaches the high band, but it must still name the blend.
+    pillar = _pillar_from_dim("transparency", {
+        "score": 8.0, "max": 10.0,
+        "penalties": {"B5_proprietary_blend_opacity": -2.0},
+        "metadata": {"B5_blend_evidence": [{"children_without_amount_count": 0}],
+                     "flags": ["PROPRIETARY_BLEND_PRESENT"]},
+    }, 15, "transparency")
+    assert "every amount is disclosed" not in pillar["reason"]
+    assert pillar["reason"] == (
+        "Most amounts are disclosed, but ingredients in a proprietary "
+        "blend are listed without their individual amounts."
+    )
+
+
 def test_panel_gap_and_opaque_blends_are_both_named():
     pillar = _pillar_from_dim("transparency", {
         "score": 2.0, "max": 15.0,

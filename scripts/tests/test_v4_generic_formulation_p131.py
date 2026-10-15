@@ -373,3 +373,24 @@ def test_recognized_delivery_separator_variants_keep_independent_credit(text):
 
 def test_generic_micronization_cannot_borrow_named_microactive_architecture_evidence():
     assert _artifact_delivery(_delivery_product("micronized"))[1] == 0
+
+
+@pytest.mark.parametrize('claim,expected', [
+    ('My probiotic blend contains acid resistant strains.', 0),
+    ('The bacteria are naturally acid-resistant.', 0),
+    ('Acid-resistant capsules; Supports digestive function', 2),
+    ('This product is in an acid-resistant capsule', 2),
+    ('This product is not in acid-resistant capsules', 0),
+    ('Unlike acid-resistant capsules, this product is a powder.', 0),
+])
+def test_acid_resistance_requires_a_positive_delivery_subject(claim, expected):
+    product = _delivery_product('acid-resistant')
+    # Retained source context is authoritative even for old cached token-only detections.
+    product['statements'] = [{'type': 'Formulation re: Other', 'notes': claim}]
+    artifact, credit = _artifact_delivery(product)
+    assert credit == expected
+    assert bool(artifact['delivery_data']['matched']) is bool(expected)
+
+
+def test_acid_resistance_token_without_its_subject_is_not_delivery_evidence():
+    assert _artifact_delivery(_delivery_product('acid-resistant'))[1] == 0

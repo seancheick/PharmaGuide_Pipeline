@@ -65,4 +65,4 @@ def test_consumer_mirror_is_registry_driven_across_dimensions() -> None:
     assert mirrored_penalty_magnitude(
         breakdown, "formula_quality_checks"
     ) == 2.5
-    assert mirrored_penalty_magnitude(breakdown, "dose_limit") == 2.0
+    assert mirrored_penalty_magnitude(breakdown, "dose_limit") == 0.0

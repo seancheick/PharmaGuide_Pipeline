@@ -82,7 +82,7 @@ def score_formulation(product: Dict[str, Any]) -> Dict[str, Any]:
 
     shared = shared_formulation_penalty_detail(product)
     penalties: Dict[str, float] = dict(shared["penalties"])
-    penalties.update(_protein_penalties(product, rows, protein_rows, source_class))
+    penalties.update(_protein_penalties(rows, protein_rows, source_class))
 
     positive = sum(components.values())
     penalty_total = sum(abs(float(v or 0.0)) for v in penalties.values())
@@ -247,39 +247,15 @@ def _protein_focus(rows: List[Dict[str, Any]], source_class: str) -> float:
 
 
 def _protein_penalties(
-    product: Dict[str, Any],
     rows: List[Dict[str, Any]],
     protein_rows: List[Dict[str, Any]],
     source_class: str,
 ) -> Dict[str, float]:
     penalties: Dict[str, float] = {
-        "sports_opaque_protein_blend": -_opaque_protein_penalty(product, protein_rows, source_class),
         "sports_amino_spiking_risk": -_amino_spiking_penalty(rows, protein_rows, source_class),
         "sports_collagen_not_complete_protein": -_collagen_penalty(source_class),
     }
     return {key: round(value, 4) for key, value in penalties.items() if value < 0}
-
-
-def _opaque_protein_penalty(
-    product: Dict[str, Any],
-    protein_rows: List[Dict[str, Any]],
-    source_class: str,
-) -> float:
-    if source_class == "opaque_protein_matrix":
-        return 8.0
-    blends = [
-        blend
-        for blend in _safe_list((product or {}).get("proprietary_blends"))
-        if isinstance(blend, dict)
-    ]
-    if any(row.get("is_proprietary_blend") for row in protein_rows):
-        return 6.0
-    for blend in blends:
-        level = _norm_text(blend.get("disclosure_level"))
-        name = _norm_text(blend.get("name"))
-        if "protein" in name and level in {"", "none", "partial"}:
-            return 8.0
-    return 0.0
 
 
 def _amino_spiking_penalty(

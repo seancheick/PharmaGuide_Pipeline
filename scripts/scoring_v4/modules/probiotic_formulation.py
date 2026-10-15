@@ -70,7 +70,7 @@ def score_formulation(product: Any) -> Dict[str, Any]:
     components = {
         "total_cfu_disclosed": _score_total_cfu_disclosed(total_billion),
         "exact_identity_completeness": CAP_EXACT_IDENTITY_COMPLETENESS * identity_count / strain_count if strain_count else 0.0,
-        "delivery_survivability": _score_delivery_survivability(delivery_data, pdata),
+        "delivery_survivability": _score_delivery_survivability(product, pdata, delivery_data),
     }
     from studied_formulas import assess_studied_formula
     formula = assess_studied_formula(product)
@@ -118,11 +118,32 @@ def _score_total_cfu_disclosed(total_billion: float) -> float:
     return CAP_TOTAL_POTENCY_DISCLOSURE if total_billion > 0 else 0.0
 
 
-def _score_delivery_survivability(delivery_data: Dict[str, Any], pdata: Dict[str, Any]) -> float:
-    tier = delivery_data.get("highest_tier")
-    if pdata.get("has_survivability_coating") and tier is not None:
+def _score_delivery_survivability(
+    product: Dict[str, Any], pdata: Dict[str, Any], delivery_data: Dict[str, Any],
+) -> float:
+    # Independent supported delivery and source-specific applicability are both
+    # required: an unrelated ingredient cannot supply probiotic protection.
+    from form_vocab import matches_probiotic_delivery
+    from clinical_applicability import _source_delivery_forms
+    from studied_formulas import label_owned_strain_identities
+
+    from probiotic_measurements import is_probiotic_source_identity
+
+    rows = [owner for owner, _ in label_owned_strain_identities(product)
+            if is_probiotic_source_identity(owner)]
+    systems = _safe_dict(delivery_data).get("systems") or []
+    tiers = [
+        _as_int(system.get("tier"), 0)
+        for system in systems if isinstance(system, dict)
+        and matches_probiotic_delivery(str(system.get("canonical_name") or system.get("name") or ""))
+        and _as_int(system.get("tier"), 0) in (1, 2, 3)
+        and any(_source_delivery_forms(
+            {**product, "delivery_data": {"systems": [system]}}, row, product_level=True,
+        ) for row in rows)
+    ]
+    if tiers and pdata.get("has_survivability_coating"):
         return CAP_DELIVERY_SURVIVABILITY
-    tier_int = _as_int(tier, 0)
+    tier_int = min(tiers) if tiers else 0
     return {1: CAP_DELIVERY_SURVIVABILITY, 2: 2.5, 3: 1.5}.get(tier_int, 0.0)
 
 

@@ -203,6 +203,27 @@ def test_unrelated_positioning_receives_no_product_applicability():
     assert payload["components"]["product_applicability"] == 0
 
 
+def test_research_that_does_not_apply_to_the_product_earns_no_evidence_points():
+    """V4.1 Step 4: certainty and replication count only when applicability is established."""
+    from scoring_v4.scored_artifact import build_scored_artifact
+    product = _product(product_name="Women's Vaginal Probiotic")
+    artifact = build_scored_artifact(product)
+    dim = artifact["_v4_module_breakdown"]["dimensions"]["evidence"]
+    assert dim["components"] == {"evidence_family_certainty": 0.0, "product_applicability": 0.0,
+                                 "independent_replication_consistency": 0.0}
+    assert dim["metadata"]["evidence_result_state"] == "research_present_applicability_unestablished"
+    assert dim["metadata"]["credit_owner"] == "none"
+    pillar = artifact["quality_pillars_v4"]["evidence"]
+    assert pillar["score"] == 0.0
+    assert pillar["display_state"] == "applicability_unestablished"
+    assert pillar["reason"].startswith("Research on these probiotic strains exists")
+    assert "0/10" not in pillar["reason"]
+    # Applicable research keeps every component.
+    direct = build_scored_artifact(_product())["_v4_module_breakdown"]["dimensions"]["evidence"]
+    assert direct["components"]["product_applicability"] > 0
+    assert direct["components"]["evidence_family_certainty"] > 0
+
+
 @pytest.mark.parametrize("direction,certainty,total", [("negative",0,0), ("null",0,0), ("mixed",4,7)])
 def test_independent_record_direction_is_not_replaced_by_strain_support(direction, certainty, total):
     from scoring_v4.modules.probiotic_evidence import score_evidence

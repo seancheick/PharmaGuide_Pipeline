@@ -7178,10 +7178,15 @@ class EnhancedDSLDNormalizer:
             elif "total carbohydrate" in name or "carbohydrates" in name:
                 self._record_nutrition_fact(nutritional_info, "totalCarbohydrates", quantity, unit, "g")
             elif re.fullmatch(r"(?:total\s+|added\s+)?sugars?", nutrient_name):
-                self._record_nutrition_fact(
+                accepted = self._record_nutrition_fact(
                     nutritional_info, "sugars", quantity, unit, "g",
                     source_priority=_sugar_summary_priority(nutrient_name),
                 )
+                if accepted:
+                    nutritional_info["sugars"].update({
+                        "quantityVariants": quantity_variants,
+                        "raw_source_path": ing.get("raw_source_path") or f"ingredientRows[{row_index}]",
+                    })
             elif re.fullmatch(r"(?:total\s+)?fat", nutrient_name):
                 self._record_nutrition_fact(nutritional_info, "totalFat", quantity, unit, "g")
             elif re.fullmatch(r"saturated\s+fat", nutrient_name):
@@ -7222,12 +7227,16 @@ class EnhancedDSLDNormalizer:
                 nested_qty, nested_unit, _, nested_variants = self._process_quantity(nested_qty_data)
 
                 # Extract sugar from nested row (only if not already found at top level)
-                if nested_name == "sugar" or "sugars" in nested_name:
+                if re.fullmatch(r"(?:total\s+|added\s+)?sugars?", nested_name.strip()):
                     accepted = self._record_nutrition_fact(
                         nutritional_info, "sugars", nested_qty, nested_unit, "g",
                         source_priority=_sugar_summary_priority(nested_name),
                     )
                     if accepted:
+                        nutritional_info["sugars"].update({
+                            "quantityVariants": nested_variants,
+                            "raw_source_path": nested.get("raw_source_path") or f"ingredientRows[{row_index}].nestedRows[{nested_index}]",
+                        })
                         logger.debug(f"Extracted sugar from nested row: {nested_qty}{nested_unit or 'g'}")
 
                 # Aggregate fiber owns the summary; subtype rows remain in the
@@ -7721,6 +7730,11 @@ class EnhancedDSLDNormalizer:
             # gates, so we don't smuggle rollups back in.
             if is_active and ing.get("forms"):
                 extracted = []
+                fiber_declaration = self._extract_nutritional_info([ing]).get("dietaryFiber", {})
+                is_fiber_source = bool(fiber_declaration) and (
+                    fiber_declaration.get("raw_source_path")
+                    == (ing.get("raw_source_path") or "ingredientRows[0]")
+                )
                 for form_ing in self._expand_header_forms_for_processing(
                     ing, source_path="activeIngredients"
                 ):
@@ -7728,10 +7742,21 @@ class EnhancedDSLDNormalizer:
                         form_ing, is_active=True
                     )
                     if processed_form is not None:
-                        if isinstance(processed_form, list):
-                            extracted.extend(processed_form)
-                        else:
-                            extracted.append(processed_form)
+                        form_rows = processed_form if isinstance(processed_form, list) else [processed_form]
+                        for row in form_rows:
+                            # An unidentified, undosed source of a printed fiber
+                            # total is provenance, not another active. Preserve
+                            # the text without inventing its chemistry or lending
+                            # the total's mass to it. Known/dosed children retain
+                            # ordinary handling (e.g. psyllium, inulin).
+                            if is_fiber_source and not row.get("mapped") and not row.get("quantity"):
+                                row.update({
+                                    "cleaner_row_role": "source_descriptor",
+                                    "score_eligible_by_cleaner": False,
+                                    "score_exclusion_reason": "source_descriptor",
+                                    "dose_class": "source_material_mass",
+                                })
+                            extracted.append(row)
                 if extracted:
                     logger.debug(
                         "Rescued %d form child(ren) from nutrition-fact parent %r",

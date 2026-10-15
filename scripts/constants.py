@@ -559,6 +559,15 @@ HARMFUL_CATEGORIES = [
 ]
 
 # Statement types to extract
+# Typed, product-authored delivery assertions; shared by recognition and
+# clinical source validation so they cannot disagree about trusted sources.
+DELIVERY_SOURCE_STATEMENT_TYPES = frozenset({
+    "Formulation re: Other",
+    "Formula re: Contains",
+    "Suggested/Recommended/Usage/Directions",
+    "FDA Statement of Identity",
+})
+
 STATEMENT_TYPES_OF_INTEREST = [
     "Seals/Symbols",
     "Formulation re: Does NOT Contain",

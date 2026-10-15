@@ -474,7 +474,7 @@ def test_untyped_eaa_aggregate_cannot_bypass_product_evidence_contract() -> None
     assert payload["metadata"].get("primary_identity") is None
 
 
-def test_opaque_preworkout_without_sports_dose_is_not_evaluable_with_penalty() -> None:
+def test_opaque_preworkout_without_sports_dose_is_not_evaluable_without_a_second_opacity_charge() -> None:
     product = {
         "fullName": "Pre-Workout Elite",
         "product_name": "Pre-Workout Elite",
@@ -486,6 +486,9 @@ def test_opaque_preworkout_without_sports_dose_is_not_evaluable_with_penalty() -
 
     payload = score_dose(product)
 
+    # Transparency B5 owns the opacity; Dose records why it cannot assess the
+    # hidden amount and supplies no substitute credit (V4.1 Step 4).
     assert payload["score"] == 0.0
-    assert payload["penalties"]["opaque_primary_sports_blend"] == pytest.approx(-10.0)
+    assert payload["components"]["sports_primary_active_dose"] == 0.0
+    assert "opaque_primary_sports_blend" not in payload["penalties"]
     assert payload["metadata"]["not_evaluable_reason"] == "opaque_primary_sports_blend"

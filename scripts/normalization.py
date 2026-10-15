@@ -827,3 +827,34 @@ def strip_label_identity_qualifiers(name: str) -> str:
             break
         result = stripped
     return result
+
+
+def is_negated_match_phrase(text: str, matched_term: str) -> bool:
+    """Recognize explicit negation around a term; shared label-text predicate."""
+    term = (matched_term or "").strip().lower()
+    if not text or not term:
+        return False
+
+    text_lower = text.lower()
+    escaped_term = re.escape(term)
+    negation_patterns = (
+        rf"\b{escaped_term}\s*-\s*free\b",
+        rf"\bfree\s+from\s+{escaped_term}\b",
+        rf"\bcontains?\s+no\s+{escaped_term}\b",
+        rf"\bno\s+{escaped_term}\b",
+        rf"\bwithout\s+{escaped_term}\b",
+        rf"\bnon[-\s]+{escaped_term}\b",
+    )
+    return any(re.search(pattern, text_lower) for pattern in negation_patterns)
+
+
+def find_affirmative_label_match(pattern, text: str):
+    """Return a positive label occurrence, preserving clause/list negation."""
+    for clause in re.split(r"[.;!?\r\n]+|\b(?:but|however)\b", text, flags=re.I):
+        for candidate in pattern.finditer(clause):
+            if is_negated_match_phrase(clause, candidate.group(0)):
+                continue
+            if re.search(r"\b(?:no|not|without|free\s+(?:of|from))\b", clause[:candidate.start()], re.I):
+                continue
+            return candidate
+    return None
