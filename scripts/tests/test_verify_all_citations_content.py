@@ -428,3 +428,37 @@ def test_baseline_console_separates_known_and_new_without_dropping_report(monkey
     assert 'NEW MISMATCH x.json new PMID 222' in console
     assert 'UNRESOLVED x.json missing PMID 333' in console
     assert len(json.loads(report.read_text())[0]['entries']) == 3
+
+
+def test_verification_reads_complete_abstract_not_display_excerpt(tmp_path, monkeypatch):
+    """A named preparation in a later abstract section must remain verifiable."""
+    monkeypatch.setattr(vac, 'DATA_DIR', tmp_path)
+    (tmp_path / 'enhanced_delivery.json').write_text(json.dumps({
+        'curcugen': {'source_url': 'https://pubmed.ncbi.nlm.nih.gov/34232211/'},
+        'unrelatedbrand': {'source_url': 'https://pubmed.ncbi.nlm.nih.gov/34232211/'},
+    }))
+    raw = ('<PubmedArticleSet><PubmedArticle><MedlineCitation><PMID>34232211</PMID>'
+           '<Article><ArticleTitle>A turmeric formulation study</ArticleTitle><Abstract>'
+           '<AbstractText Label="BACKGROUND">' + ('Background prose. ' * 80) + '</AbstractText>'
+           '<AbstractText Label="METHODS">CURCUGEN was the preparation evaluated.</AbstractText>'
+           '</Abstract></Article></MedlineCitation></PubmedArticle></PubmedArticleSet>')
+    monkeypatch.setattr(vac.citation_client(), 'efetch', lambda *args, **kwargs: raw)
+    config = next(c for c in vac.FILE_CONFIGS if c['file'] == 'enhanced_delivery.json')
+    result = vac.verify_file(config)
+    entries = {row['entry_id']: row for row in result['entries']}
+    assert entries['curcugen']['status'] == 'partial'
+    assert entries['unrelatedbrand']['status'] == 'mismatch'
+    # The caller's optional display excerpt remains bounded; verification must
+    # explicitly request the full source rather than changing display behavior.
+    assert len(vac.fetch_articles(['34232211'])['34232211']['abstract']) == 800
+
+
+def test_short_hyphenated_alphanumeric_identity_is_not_discarded():
+    config = next(c for c in vac.FILE_CONFIGS if c['file'] == 'enhanced_delivery.json')
+    words = vac.extract_topic_words({'_key': 'bcm-95'}, config)
+    assert 'bcm-95' in words
+    assert vac.content_matches({'title': 'Human oral bioavailability of BCM-95CG', 'abstract': ''}, words)[0] == 'partial'
+    assert vac.content_matches({'title': 'Human oral bioavailability of BCM-90', 'abstract': ''}, words)[0] == 'mismatch'
+    assert vac.content_matches({'title': 'BCM-950 and ABCM-95', 'abstract': ''}, words)[0] == 'mismatch'
+    assert vac.extract_topic_words({'_key': '20-30'}, config) == []
+    assert vac.extract_topic_words({'_key': '12-mg'}, config) == []
