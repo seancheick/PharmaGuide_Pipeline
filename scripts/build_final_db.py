@@ -2705,13 +2705,11 @@ def derive_v4_tradeoffs(
         if band:
             omega_bonus["detail"] = band
         bonuses.append(omega_bonus)
-    # Physical identity disclosure is independent of clinical efficacy. Native
-    # formula identity uses the same budget without claiming per-strain trials.
-    identity_key = ("exact_identity_completeness" if "exact_identity_completeness" in form
-                    else "studied_formula_strain_identity")
-    if _pos(form, identity_key):
+    # Physical identity disclosure is independent of clinical efficacy. Since
+    # V4.1 Step 4 it is credited by probiotic Transparency, not Formulation.
+    if _pos(transp_comp, "strain_identities_named"):
         bonuses.append({"id": "probiotic", "label": "Probiotic identity disclosure",
-                        "score": safe_float(form.get(identity_key), 0)})
+                        "score": safe_float(transp_comp.get("strain_identities_named"), 0)})
 
     # ── Penalties ────────────────────────────────────────────────────────────
     penalties: List[Dict[str, Any]] = []

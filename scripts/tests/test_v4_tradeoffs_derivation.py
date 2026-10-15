@@ -108,10 +108,16 @@ def test_omega3_dose_bonus_from_v4_module():
     assert omega["detail"] == "high clinical"
 
 
-@pytest.mark.parametrize("identity_key", ["exact_identity_completeness", "studied_formula_strain_identity"])
-def test_probiotic_quality_bonus_from_v4_module(identity_key):
-    """Identity disclosure is explicit; removed size/diversity components add nothing."""
-    scored = _scored_v4(form={identity_key: 8.0, "named_species_diversity": 2.0, "cfu_amount": 5.0})
+def test_probiotic_identity_chip_reads_its_transparency_owner():
+    """V4.1 Step 4: strain identity disclosure is a Transparency fact. The chip
+    reads probiotic Transparency's strain_identities_named; retired Formulation
+    identity, size and diversity components add nothing."""
+    scored = _scored_v4(form={"exact_identity_completeness": 8.0, "named_species_diversity": 2.0,
+                              "cfu_amount": 5.0})
+    bonuses, _ = derive_v4_tradeoffs(scored, {})
+    assert "probiotic" not in _ids(bonuses)
+    scored["_v4_module_breakdown"]["dimensions"]["transparency"] = {
+        "components": {"strain_identities_named": 8.0}, "penalties": {}, "metadata": {}}
     bonuses, _ = derive_v4_tradeoffs(scored, {})
     prob = _by_id(bonuses, "probiotic")
     assert prob["label"] == "Probiotic identity disclosure"
