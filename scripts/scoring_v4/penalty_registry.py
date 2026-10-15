@@ -21,7 +21,6 @@ class PenaltySpec:
 
 
 FORMULA_QUALITY_MIRROR = "formula_quality_checks"
-DOSE_LIMIT_MIRROR = "dose_limit"
 
 
 PENALTY_REGISTRY: Dict[str, PenaltySpec] = {
@@ -51,7 +50,7 @@ PENALTY_REGISTRY: Dict[str, PenaltySpec] = {
         "formulation", "quality_context"
     ),
     "B7_dose_safety": PenaltySpec(
-        "dose", "safety_material", DOSE_LIMIT_MIRROR
+        "dose", "safety_material"
     ),
     "opaque_primary_sports_blend": PenaltySpec("dose", "quality_context"),
     "B2_false_allergen_free_claim": PenaltySpec(

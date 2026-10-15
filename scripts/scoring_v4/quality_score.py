@@ -26,7 +26,6 @@ from typing import Any, Dict, List, Optional
 
 from scoring_v4.dose_safety import dose_safety_consumer_explanation
 from scoring_v4.penalty_registry import (
-    DOSE_LIMIT_MIRROR,
     EVIDENCE_CAP_KEYS,
     EVIDENCE_FLOOR_KEYS,
     FORMULA_QUALITY_MIRROR,
@@ -646,19 +645,6 @@ def _formulation_additive_safety_penalty(module_bd: Dict[str, Any], cfg: Dict[st
     return round(min(raw, cap), 1) if raw > 0 else 0.0
 
 
-def _dose_safety_penalty(module_bd: Dict[str, Any], cfg: Dict[str, Any]) -> float:
-    """Small public Safety Hygiene deduction for material dose-safety flags.
-
-    The Dose pillar remains the main dose-safety penalty. This capped cross-pillar
-    deduction only prevents Safety Hygiene from displaying 10/10 when the same
-    product carries an explicit B7 dose-safety flag.
-    """
-    raw = mirrored_penalty_magnitude(module_bd, DOSE_LIMIT_MIRROR)
-    sub = cfg.get("safety_hygiene_subscale") or {}
-    cap = _num(sub.get("over_ul_max_penalty"), 3.0)
-    return round(min(raw, cap), 1) if raw > 0 else 0.0
-
-
 def _dose_safety_state_counts(module_bd: Dict[str, Any]) -> Dict[str, Any]:
     dose = ((module_bd.get("dimensions") or {}).get("dose") or {})
     metadata = dose.get("metadata") or {}
@@ -704,10 +690,8 @@ def _pillar_safety_hygiene(module_bd: Dict[str, Any], weight: float,
     (titanium dioxide / E171) deducts a SMALL graduated penalty here (inform + penalize,
     no forced CAUTION). B1 additive/sweetener concerns also deduct a capped public
     truthfulness penalty so the Safety Hygiene pillar cannot remain perfect when
-    additive concerns are present. Material B7 findings also receive the
-    configured capped cross-pillar deduction. Confirmed or unresolved findings
-    remain visible in the explanation even when their magnitude is below the
-    separate numeric B7 threshold."""
+    additive concerns are present. Dose owns the B7 deduction once; confirmed
+    or unresolved dose findings remain visible here without another deduction."""
     base = module_bd.get("safety_hygiene_base") or {}
     bscore = _num(base.get("score"))
     bmax = _num(base.get("max"))
@@ -716,12 +700,11 @@ def _pillar_safety_hygiene(module_bd: Dict[str, Any], weight: float,
     safety_pen = _manuf_violation_split(module_bd)["safety"]
     cl_pen = max(0.0, _num(clean_label_penalty))
     additive_pen = _formulation_additive_safety_penalty(module_bd, cfg)
-    over_ul_pen = _dose_safety_penalty(module_bd, cfg)
     dose_safety_state_counts = _dose_safety_state_counts(module_bd)
     dose_safety_explanation = dose_safety_consumer_explanation(
         dose_safety_state_counts
     )
-    val = round(max(0.0, min(float(weight), clean - safety_pen - cl_pen - additive_pen - over_ul_pen)), 1)
+    val = round(max(0.0, min(float(weight), clean - safety_pen - cl_pen - additive_pen)), 1)
     deductions = []
     # The base failure removes the most points, so its cause always leads.
     base_cause = _safety_base_cause(base) if bmax > 0 and bscore <= 0 else None
@@ -735,10 +718,8 @@ def _pillar_safety_hygiene(module_bd: Dict[str, Any], weight: float,
         deductions.append("it contains additive or sweetener/form-factor concerns")
     # A recorded dose-safety finding joins this pillar's concern list whenever
     # the pillar deducts; at full points it is worded as not deducted here.
-    if dose_safety_explanation and (deductions or over_ul_pen > 0):
+    if dose_safety_explanation and deductions:
         deductions.append(dose_safety_explanation)
-    elif over_ul_pen > 0:
-        deductions.append("one or more dose-safety checks require attention")
     if deductions:
         # Plain-English join: "A and B" rather than a comma list.
         reason = "Safety concern: " + " and ".join(deductions) + "."
@@ -757,8 +738,6 @@ def _pillar_safety_hygiene(module_bd: Dict[str, Any], weight: float,
         components["clean_label_penalty"] = cl_pen
     if additive_pen > 0:
         components["additive_or_sweetener_penalty"] = additive_pen
-    if over_ul_pen > 0:
-        components["over_ul_penalty"] = over_ul_pen
     if dose_safety_state_counts:
         components["dose_safety_state_counts"] = dose_safety_state_counts
     return {
@@ -1535,8 +1514,7 @@ def _safety_receipt(pillar: Dict[str, Any], weight: float) -> Dict[str, Any]:
     running = clean
     for key, source in (("class_i_recall_penalty", "manufacturer_violations.class_i"),
                         ("clean_label_penalty", "clean_label_subscale"),
-                        ("additive_or_sweetener_penalty", "penalty_registry.formula_quality_checks"),
-                        ("over_ul_penalty", "penalty_registry.dose_limit")):
+                        ("additive_or_sweetener_penalty", "penalty_registry.formula_quality_checks")):
         amount = _num(components.get(key))
         if amount:
             entries.append(_receipt_entry(key, "deduction", source, -amount, -amount))

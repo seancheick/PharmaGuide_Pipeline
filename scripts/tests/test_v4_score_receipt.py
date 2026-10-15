@@ -193,10 +193,10 @@ def test_mirrored_deductions_are_separate_entries_in_both_pillars():
     out = _assemble(bd, module="multi_or_prenatal", verdict="CAUTION")
     assert out["quality_pillars_v4"]["formulation"]["score"] == 4.4
     assert out["quality_pillars_v4"]["dose"]["score"] == 8.6
-    assert out["quality_pillars_v4"]["safety_hygiene"]["score"] == 4.0
+    assert out["quality_pillars_v4"]["safety_hygiene"]["score"] == 6.0
     assert _entry(out, "formulation", "B1_harmful_additives")["kind"] == "deduction"
     assert _entry(out, "safety_hygiene", "additive_or_sweetener_penalty")["points"] == -4.0
-    assert _entry(out, "safety_hygiene", "over_ul_penalty")["points"] == -2.0
+    assert not any(entry["id"] == "over_ul_penalty" for entry in out["quality_pillars_v4"]["safety_hygiene"]["receipt"]["entries"])
     assert _entry(out, "dose", "B7_dose_safety")["points"] == pytest.approx(-2.0 * 20 / 23, abs=1e-4)
     _assert_reconciles(out)
 

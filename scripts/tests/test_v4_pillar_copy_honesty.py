@@ -169,7 +169,7 @@ def test_unresolved_dose_check_is_also_explained_by_dose():
 def test_deducted_ul_concern_still_named_in_the_sixth_pillar():
     bd = _module_bd(state_counts={"confirmed_over_threshold": 1}, b7=2.0)
     safety = qs._pillar_safety_hygiene(bd, 10, _cfg())
-    assert safety["score"] == 8.0
+    assert safety["score"] == 10.0
     assert "exceed an established upper limit" in safety["reason"]
 
 
@@ -211,3 +211,13 @@ def test_dose_finding_stays_in_the_concern_list_when_the_pillar_deducts_for_othe
     assert safety["score"] == 9.0
     assert safety["reason"] == ("Safety concern: it contains a restricted additive and one or more "
                                 "supplemental amounts exceed an established upper limit.")
+
+
+def test_dose_safety_copy_names_its_single_numerical_owner():
+    bd = {"dimensions": {"dose": {"penalties": {"B7_dose_safety": -2.0},
+        "metadata": {"method": "rda_ul_proxy_until_dietary_intake_table"}}}}
+    pillars = {"dose": {"score": 10.0, "max": 20, "reason": "", "components": {"raw_dose": 11.0}}}
+    out = attach_pillar_explanations(pillars, bd, _cfg(), "generic")
+    fact = next(f for f in out["dose"]["explanation"]["facts"] if f["id"] == "dose_safety_scoring")
+    assert "Dose only" in fact["value_display"]
+    assert "across two pillars" not in fact["value_display"]

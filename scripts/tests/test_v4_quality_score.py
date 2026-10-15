@@ -333,7 +333,7 @@ def test_b1_additive_and_sugar_penalties_reduce_public_safety_pillar() -> None:
     assert "additive or sweetener" in pillar["reason"]
 
 
-def test_b7_over_ul_penalty_reduces_public_safety_pillar() -> None:
+def test_b7_over_ul_penalty_is_owned_by_dose_only() -> None:
     from scoring_v4.quality_score import assemble_quality_score
     bd = _module_bd(hygiene=4)
     bd["dimensions"]["dose"]["penalties"] = {"B7_dose_safety": -2.0}
@@ -346,8 +346,8 @@ def test_b7_over_ul_penalty_reduces_public_safety_pillar() -> None:
     out = assemble_quality_score(_shadow(module="generic", bd=bd))
     pillar = out["quality_pillars_v4"]["safety_hygiene"]
 
-    assert pillar["score"] == 8.0
-    assert pillar["components"]["over_ul_penalty"] == 2.0
+    assert pillar["score"] == 10.0
+    assert "over_ul_penalty" not in pillar["components"]
     assert "exceed an established upper limit" in pillar["reason"]
 
 
@@ -390,8 +390,8 @@ def test_b7_unresolved_only_explains_incomplete_check_without_claiming_excess() 
     out = assemble_quality_score(_shadow(module="generic", bd=bd))
     pillar = out["quality_pillars_v4"]["safety_hygiene"]
 
-    assert pillar["score"] == 8.0
-    assert pillar["components"]["over_ul_penalty"] == 2.0
+    assert pillar["score"] == 10.0
+    assert "over_ul_penalty" not in pillar["components"]
     assert pillar["components"]["dose_safety_state_counts"] == {
         "material_but_unresolved": 1,
     }
@@ -419,7 +419,7 @@ def test_b7_mixed_state_explains_confirmed_excess_and_unresolved_checks() -> Non
     out = assemble_quality_score(_shadow(module="generic", bd=bd))
     pillar = out["quality_pillars_v4"]["safety_hygiene"]
 
-    assert pillar["score"] == 7.0
+    assert pillar["score"] == 10.0
     assert "exceed an established upper limit" in pillar["reason"]
     assert "additional dose-safety checks remain unresolved" in pillar["reason"]
 

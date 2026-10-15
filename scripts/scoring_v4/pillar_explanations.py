@@ -160,7 +160,6 @@ def attach_pillar_explanations(
             metadata = ((dims.get("dose") or {}).get("metadata") or {})
             if metadata.get("method") == "rda_ul_proxy_until_dietary_intake_table":
                 dose = dims.get("dose") or {}
-                safety = pillars.get("safety_hygiene") or {}
                 assessment = {key: metadata.get(key) for key in (
                     "method", "deferred_data_dependency", "reference_assessments",
                     "ul_partial_credit_above_pct", "ul_zero_credit_at_pct", "ul_partial_credit_raw",
@@ -169,7 +168,7 @@ def attach_pillar_explanations(
                     "dose_safety_policy",
                 )}
                 assessment["raw_dose_safety_penalty"] = abs(_num((dose.get("penalties") or {}).get("B7_dose_safety")) or 0)
-                assessment["safety_hygiene_over_ul_penalty"] = _num((safety.get("components") or {}).get("over_ul_penalty")) or 0
+                assessment["safety_hygiene_over_ul_penalty"] = 0
                 assessment["raw_dose"] = (pillar.get("components") or {}).get("raw_dose")
                 assessment["normalization_reference"] = (pillar.get("components") or {}).get("reference")
                 pillar["explanation"] = {"schema_version": PILLAR_EXPLANATION_SCHEMA_VERSION, "assessment": assessment}
@@ -189,10 +188,10 @@ def attach_pillar_explanations(
                             "These are PharmaGuide scoring thresholds, not new clinical limits. Raw credit is normalized to the published Dose scale and bounded at zero."
                         ),
                     })
-                if assessment["raw_dose_safety_penalty"] or assessment["safety_hygiene_over_ul_penalty"]:
+                if assessment["raw_dose_safety_penalty"]:
                     facts.append({
                         "id": "dose_safety_scoring", "label": "Upper-limit scoring",
-                        "value_display": f"The existing scoring policy applies {assessment['raw_dose_safety_penalty']:g} raw Dose penalty points and {assessment['safety_hygiene_over_ul_penalty']:g} Safety/Hygiene points for dose-safety findings. These reflect the same concern across two pillars, not separate hazards.",
+                        "value_display": f"Dose-safety findings deduct {assessment['raw_dose_safety_penalty']:g} raw penalty points in Dose only. The same concern remains visible in the formula checks without another deduction.",
                     })
                 policy = metadata.get("dose_safety_policy") or {}
                 if all(_num(policy.get(key)) is not None for key in ("ul_pct_threshold", "per_flag_penalty", "cap")):
