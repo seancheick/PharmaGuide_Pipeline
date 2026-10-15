@@ -73,6 +73,7 @@ from inactive_ingredient_resolver import (
 )
 from iqm_form_evidence import validate_iqm_form
 from rda_ul_calculator import ul_display_severity
+from scoring_v4.exposure import format_nutrition_mass
 from scoring_v4.dose_safety import dose_safety_consumer_explanation
 from identity.safety import (
     has_explicit_form_evidence,
@@ -2774,9 +2775,9 @@ def derive_v4_tradeoffs(
         else:
             sugar_label = "Added sugar source"
         detail_parts: List[str] = []
-        amount_g = safe_float(sugar.get("amount_g"))
-        if amount_g:
-            detail_parts.append(f"{amount_g:g}g sugar per serving")
+        amount_text = format_nutrition_mass(enriched, "sugars", sugar.get("amount_g"))
+        if amount_text and sugar.get("amount_g"):
+            detail_parts.append(f"{amount_text} sugar per serving")
         named_sources = high_glycemic or sugar_alcohols or sources
         if named_sources:
             detail_parts.append(", ".join(safe_str(s) for s in named_sources if safe_str(s)))
@@ -5610,11 +5611,11 @@ def build_top_warnings(enriched: Dict, detail_blob: Optional[Dict] = None) -> Li
         sodium = safe_dict(ds.get("sodium"))
         if sugar.get("level") in ("moderate", "high"):
             # An unreadable printed amount keeps its level without a number.
-            sugar_amount = sugar.get("amount_g")
+            sugar_amount = format_nutrition_mass(enriched, "sugars", sugar.get("amount_g"))
             level_display = safe_str(sugar.get("level_display"))
             add_warning(
                 "dietary", "informational",
-                f"Sugar: {sugar_amount}g ({level_display})" if sugar_amount is not None
+                f"Sugar: {sugar_amount} ({level_display})" if sugar_amount is not None
                 else f"Sugar: {level_display}"
             )
         if sodium.get("level") in ("moderate", "high"):
@@ -7514,11 +7515,12 @@ def build_detail_blob(
         sugar = safe_dict(ds.get("sugar"))
         sodium = safe_dict(ds.get("sodium"))
         if sugar.get("level") in ("moderate", "high"):
+            sugar_amount = format_nutrition_mass(enriched, "sugars", sugar.get("amount_g"))
             warnings.append({
                 "type": "dietary",
                 "severity": "moderate",
                 "title": "Sugar Content",
-                "detail": (f"{sugar.get('amount_g')}g sugar per serving" if sugar.get("amount_g") is not None
+                "detail": (f"{sugar_amount} sugar per serving" if sugar_amount is not None
                            else "Sugar per serving") + f" ({safe_str(sugar.get('level_display'))})",
                 "source": "dietary_sensitivity_data",
                 "display_mode_default": "informational",
@@ -7543,7 +7545,8 @@ def build_detail_blob(
     _sugar = safe_dict(ds.get("sugar"))
     _has_added = bool(_sugar.get("has_added_sugar"))
     if _has_added or _sugar.get("level") in ("moderate", "high"):
-        _amt = _sugar.get("amount_g")
+        _amt = (format_nutrition_mass(enriched, "sugars", _sugar.get("amount_g"))
+                if _sugar.get("amount_g") else None)
         # `level` is computed from TOTAL sugar grams, independent of whether an
         # added-sugar ingredient was found. Only call it "added" when it truly is;
         # a whole-food/fruit powder with no added-sugar ingredient is "Sugar".
@@ -7554,7 +7557,7 @@ def build_detail_blob(
             "severity": "monitor",
             "title": _label,
             "detail": _lead
-            + (f" ({_amt} g/serving)" if _amt else "")
+            + (f" ({_amt}/serving)" if _amt else "")
             + " - relevant if you have diabetes.",
             "condition_ids": ["diabetes"],
             "direction": "harmful",

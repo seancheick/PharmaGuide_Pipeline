@@ -135,3 +135,74 @@ def test_exact_dextrose_is_still_sugar_when_a_fiber_label_misdescribes_it(name):
     assert dietary['sugar']['contains_sugar'] is True
     assert dietary['sweeteners']['high_glycemic'] == [name]
     assert dietary['diabetes_friendly'] is False
+
+
+@pytest.mark.parametrize(('name', 'is_sugar'), [
+    ('Polydextrose', False), ('Honeysuckle Flower Extract', False),
+    ('Organic Polydextrose', False), ('Dextrose Monohydrate', True),
+    ('Tapioca Dextrose', True), ('Organic Cane Sugar', True),
+    ('Honey', True), ('Brown Rice Syrup', True),
+])
+def test_dietary_identity_uses_whole_names_through_enrichment_and_scoring(name, is_sugar):
+    from enhanced_normalizer import EnhancedDSLDNormalizer
+    from enrich_supplements_v3 import SupplementEnricherV3
+    from scoring_v4.scored_artifact import build_scored_artifact
+    cleaned = EnhancedDSLDNormalizer().normalize_product({
+        'id': 'TEST-DIETARY-IDENTITY', 'fullName': 'Dietary identity control',
+        'brandName': 'Test',
+        'ingredientRows': [{'name': name, 'quantity': [{'quantity': 100, 'unit': 'mg'}]}],
+    })
+    enriched, issues = SupplementEnricherV3().enrich_product(cleaned)
+    assert enriched.get('enrichment_status') != 'validation_failed', issues
+    dietary = enriched['dietary_sensitivity_data']
+    assert dietary['sugar']['sugar_sources'] == ([name] if is_sugar else [])
+    assert dietary['sugar']['contains_sugar'] is is_sugar
+    if not is_sugar:
+        assert dietary['sweeteners']['high_glycemic'] == []
+    artifact = build_scored_artifact(enriched)
+    # Assert the public scorer consumes the corrected owner, without a false charge.
+    checks = artifact['_v4_module_breakdown']['dimensions']['formulation']['metadata']['formula_checks']
+    assert (checks.get('B1_dietary_sugar', 0) > 0) is is_sugar
+
+
+@pytest.mark.parametrize(('operator', 'amount', 'unit', 'expected'), [
+    ('<', 1, 'g', '<1 g'), ('=', 1, 'g', '1 g'),
+    ('<=', 1, 'g', '<=1 g'), ('>', 1, 'g', '>1 g'),
+    ('<', 1000, 'mg', '<1 g'), ('<', 1, 'NP', None),
+])
+def test_sugar_bound_survives_warning_and_export_copy(operator, amount, unit, expected):
+    from enrich_supplements_v3 import SupplementEnricherV3
+    from build_final_db import build_detail_blob
+    from test_build_final_db import make_enriched, make_scored
+    product = make_enriched()
+    product['nutritionalInfo'] = {'sugars': {
+        'amount': amount, 'unit': unit, 'quantityVariants': [
+            {'operator': operator, 'selected_for_analysis': True}]}}
+    enricher = SupplementEnricherV3()
+    dietary = enricher._collect_dietary_sensitivity_data(product)
+    assert dietary['sugar']['amount_g'] == (None if unit == 'NP' else 1.0)
+    assert dietary['sugar']['level'] == 'low'
+    if operator != '=':
+        assert enricher._collect_nutrition_summary(product)['total_sugars_g'] is None
+    # Use a separate genuine sugar source so even <1 g reaches penalty copy.
+    dietary['sugar'].update(contains_sugar=True, has_added_sugar=True, sugar_sources=['Honey'])
+    product['dietary_sensitivity_data'] = dietary
+    blob = build_detail_blob(product, make_scored())
+    penalty = next(p for p in blob['score_penalties'] if p['id'] == 'B1_dietary_sugar')
+    warning = next(w for w in blob['warnings'] if w.get('title') == 'Added sugar')
+    if expected is None:
+        assert 'g sugar per serving' not in penalty['detail']
+        assert 'g/serving' not in warning['detail']
+    else:
+        assert expected + ' sugar per serving' in penalty['detail']
+        assert expected + '/serving' in warning['detail']
+    # Force the existing threshold warning path without changing its determination.
+    dietary['sugar']['exceeds_diabetic_threshold'] = True
+    warnings = enricher._generate_dietary_warnings(
+        dietary['sugar'], dietary['sodium'], dietary['sweeteners'], product=product)
+    text = next(w['message'] for w in warnings if 'sugar per serving' in w['message']
+                or 'exact amount' in w['message'])
+    if expected:
+        assert expected + ' sugar per serving' in text
+    else:
+        assert 'exact amount' in text

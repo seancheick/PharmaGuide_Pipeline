@@ -73,6 +73,32 @@ def _quantity_operator(row: Mapping[str, Any]) -> str:
     return next(iter(operators)) if len(operators) == 1 else "ambiguous" if operators else "="
 
 
+def format_nutrition_mass(product: dict, key: str, amount: float | None, *, unit: str = "g") -> str | None:
+    """Display a nutrition assessment's amount with its source-owned qualifier.
+
+    The assessment amount remains the scoring authority. Its source supplies
+    only the operator; a valid printed bound must never look like an exact mass.
+    Older enriched inputs without a source row retain their existing scalar copy.
+    """
+    if amount is None:
+        return None
+    source = (product.get("nutritionalInfo") or {}).get(key) or {}
+    operator = "="
+    if source:
+        printed_unit = str(source.get("unit") or "").strip()
+        if printed_unit.lower() in {"", "unspecified"}:
+            printed_unit = "Gram(s)"
+        exposure = row_exposure(product, {**source, "quantity": source.get("amount"),
+                                         "unit": printed_unit}, basis="per_use", unit=unit)
+        if exposure.per_serving_amount is None or exposure.quantity_operator in UNRESOLVED_OPERATORS:
+            return None
+        operator = exposure.quantity_operator
+    if not math.isfinite(float(amount)):
+        return None
+    prefix = "" if operator in {"", "="} else operator
+    return f"{prefix}{amount:g} {unit}"
+
+
 def _decimal_product(*values: Decimal) -> float:
     """Multiply supplied decimal representations before the public float cast."""
     with localcontext() as context:
