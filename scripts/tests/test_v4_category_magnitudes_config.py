@@ -37,13 +37,15 @@ ORIGINAL = {
         "botanical_raw_floor": 40.0,
     },
     # 1.7.0: multi/prenatal Formulation is IQM panel form quality 12 + disclosure 2.
-    "multi_prenatal": {"dimension_caps": [["formulation", 14], ["dose", 25], ["evidence", 20], ["transparency", 15]]},
+    # 1.26.0 (V4.1 Step 4): Formulation caps follow the retained form-quality
+    # component (multi panel 12, B-complex 8); disclosure and count credits are retired.
+    "multi_prenatal": {"dimension_caps": [["formulation", 12], ["dose", 25], ["evidence", 20], ["transparency", 15]]},
     # 1.21.3: the cap is the 5 + 3 + 3 live disclosure components; oxidation
     # remains Verification-owned and contributes no Transparency points.
     "omega": {"dimension_caps": [["formulation", 25], ["dose", 25], ["evidence", 20], ["transparency", 11]]},
     # 1.20.0: optional prebiotics do not increase probiotic Formulation.
     "probiotic": {"dimension_caps": [["formulation", 15], ["dose", 25], ["evidence", 20], ["transparency", 15]]},
-    "b_complex": {"formulation_cap": 23.0, "dose_cap": 25.0, "evidence_cap": 20.0},
+    "b_complex": {"formulation_cap": 8.0, "dose_cap": 25.0, "evidence_cap": 20.0},
     # 1.21.1 (authored as 1.13.1 + 1.13.2): the high-variability botanical stack penalty moved out of
     # immune_support.py literals (pure refactor, values unchanged).
     # Then the Dose bands, above-band fraction, daily-use points, Dose cap
@@ -92,10 +94,10 @@ def test_runtime_constants_read_from_config_no_drift():
     assert generic.DIMENSION_CAPS == (("formulation", 30), ("dose", 25), ("evidence", 20), ("transparency", 10))
     assert generic.MANUFACTURER_TRUST_CAP == 5
     assert generic.MANUFACTURER_VIOLATIONS_FLOOR == -25
-    assert multi_prenatal.DIMENSION_CAPS == (("formulation", 14), ("dose", 25), ("evidence", 20), ("transparency", 15))
+    assert multi_prenatal.DIMENSION_CAPS == (("formulation", 12), ("dose", 25), ("evidence", 20), ("transparency", 15))
     assert omega.DIMENSION_CAPS == (("formulation", 25), ("dose", 25), ("evidence", 20), ("transparency", 11))
     assert probiotic.DIMENSION_CAPS == (("formulation", 15), ("dose", 25), ("evidence", 20), ("transparency", 15))
-    assert b_complex.FORMULATION_CAP == 23.0 and b_complex.B7_CAP == 3.0
+    assert b_complex.FORMULATION_CAP == 8.0 and b_complex.B7_CAP == 3.0
     assert immune_support.IMMUNE_EVIDENCE_CAP == 17.0
     assert immune_support.HIGH_VARIABILITY_BOTANICAL_STACK_MIN_COUNT == 3
     assert immune_support.HIGH_VARIABILITY_BOTANICAL_STACK_PENALTY == 3.0

@@ -194,7 +194,7 @@ def test_formulation_reference_follows_engine_not_product_archetype() -> None:
         cfg,
     )
     botanical = _pillar_formulation(
-        {"score": 15.0, "metadata": {"formulation_profile": "botanical"}},
+        {"score": 12.0, "metadata": {"formulation_profile": "botanical"}},
         20.0,
         "generic_botanical_branded",
         cfg,
@@ -208,7 +208,9 @@ def test_formulation_reference_follows_engine_not_product_archetype() -> None:
 
     assert generic["score"] == 20.0
     assert generic["components"]["reference"] == 15.0
+    # V4.1 Step 4: the botanical engine's attainable maximum is 12 (identity
+    # neutral 7.2 + extract 1.6 + standardization 3.2).
     assert botanical["score"] == 20.0
-    assert botanical["components"]["reference"] == 15.0
+    assert botanical["components"]["reference"] == 12.0
     assert dedicated_sports["score"] == 20.0
     assert dedicated_sports["components"]["reference"] == 24.0

@@ -345,7 +345,8 @@ def test_no_rda_dose_reference_lowers_confidence_without_zeroing_score() -> None
     module = out["v4_breakdown"]["module"]
     confidence = out["v4_breakdown"]["confidence"]
 
-    assert module["dimensions"]["dose"]["score"] == 16.0
+    # V4.1 Step 4: the shared unbenchmarked neutral on the generic reference 22.
+    assert module["dimensions"]["dose"]["score"] == 12.54
     assert "dose" not in module["metadata"]["excluded_dimensions"]
     assert confidence["label_completeness"]["level"] == "moderate"
     assert "dose_window_partial_without_rda_reference" in confidence["label_completeness"]["drivers"]
