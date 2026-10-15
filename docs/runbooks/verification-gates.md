@@ -57,7 +57,8 @@ current producer schema constants are supported, without requiring a catalog,
 clean main checkout or cloud access. The full `--pipeline-only` runner calls it
 before preparation unless `--skip-flutter` was explicitly selected; targeted
 runs remain independent. Actual candidate checksums, SQLite/schema integrity and
-minimum app version are still checked before upload/import.
+minimum app version are still checked before upload/import. Compatibility-only mode
+uses declared supported schemas; importer override flags do not apply.
 
 Publishing preflight also checks importer tool availability and reads the
 Supabase manifest/bucket through the existing sync owner. This catches missing
