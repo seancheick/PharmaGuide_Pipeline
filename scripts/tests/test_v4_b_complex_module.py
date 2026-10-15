@@ -218,4 +218,9 @@ def test_over_ul_b_complex_keeps_dose_penalty_and_visible_safety_concern() -> No
     assert safety["score"] == safety["max"] - safety["components"]["additive_or_sweetener_penalty"]
     assert "over_ul_penalty" not in safety["components"]
     assert "exceed an established upper limit" in safety["reason"]
-    assert scored["quality_score_v4_100"] < 75.0
+    # The over-UL finding holds Dose low; the total stays below "Very good".
+    # V4.1 Step 4 removed the Formulation copy of the additive charge
+    # (74.1 -> 75.8), which the formula-checks pillar still charges once.
+    assert scored["quality_pillars_v4"]["dose"]["score"] <= 7.2
+    assert "B1_harmful_additives" not in scored["v4_breakdown"]["module"]["dimensions"]["formulation"]["penalties"]
+    assert scored["quality_score_v4_100"] < 80.0

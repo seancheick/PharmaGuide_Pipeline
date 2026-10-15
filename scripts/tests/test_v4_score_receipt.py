@@ -158,10 +158,12 @@ def test_unbenchmarked_dose_and_unconditional_bases_are_labelled_neutral():
 # ---- Garcinia: a penalty absorbed by the presence floor --------------------
 
 def test_presence_floor_absorption_is_visible_as_realized_vs_nominal():
+    # A route penalty still registered to Formulation (V4.1 Step 4 moved
+    # B0/B1 to the formula-checks pillar).
     bd = _meru_breakdown()
     bd["dimensions"]["formulation"] = _botanical_formulation(
         {"recognized_botanical_identity": 6.0, "quantified_dose_present": 2.0, "extract_not_whole_herb": 2.0},
-        penalties={"B1_dietary_sugar": 0.0, "B0_moderate_watchlist": -10.0, "B1_harmful_additives": 0.0},
+        penalties={"sports_collagen_not_complete_protein": -10.0},
         floor_applied=True, score=2.0)
     bd["safety_hygiene_base"] = _base(passed=False)
     out = _assemble(bd, verdict="CAUTION")
@@ -174,15 +176,15 @@ def test_presence_floor_absorption_is_visible_as_realized_vs_nominal():
     _assert_reconciles(out)
 
 
-# ---- Airborne-style multi: B1 and B7 mirrored into the sixth pillar --------
+# ---- Airborne-style multi: each finding is one entry in its one owner ------
 
-def test_mirrored_deductions_are_separate_entries_in_both_pillars():
+def test_formula_checks_and_b7_are_each_one_entry_in_their_owner():
     bd = _meru_breakdown()
     bd["dimensions"]["formulation"] = _dim(
-        3.08, 14.0, {"panel_form_quality": 8.08, "panel_disclosure_structure": 1.0},
-        {"B1_dietary_sugar": -2.0, "B0_moderate_watchlist": 0.0, "B1_harmful_additives": -4.0},
-        {"presence_floor": {"target": 2.0, "pre_floor_score": 3.08, "applied": False},
-         "inactive_penalty_details": []})
+        9.08, 14.0, {"panel_form_quality": 8.08, "panel_disclosure_structure": 1.0}, {},
+        {"presence_floor": {"target": 2.0, "pre_floor_score": 9.08, "applied": False},
+         "inactive_penalty_details": [],
+         "formula_checks": {"B1_dietary_sugar": 2.0, "B1_harmful_additives": 4.0}})
     bd["dimensions"]["dose"] = _dim(
         9.9015, 25.0, {"rda_ai_coverage": 9.0681, "panel_breadth": 1.1667, "critical_nutrient_coverage": 1.6667},
         {"B7_dose_safety": -2.0},
@@ -191,11 +193,12 @@ def test_mirrored_deductions_are_separate_entries_in_both_pillars():
     bd["dimensions"]["evidence"] = _dim(10.0, 20.0, {"essential_panel_authority": 10.0}, {},
                                         {"evidence_result_state": "evaluated_authority"})
     out = _assemble(bd, module="multi_or_prenatal", verdict="CAUTION")
-    assert out["quality_pillars_v4"]["formulation"]["score"] == 4.4
+    assert out["quality_pillars_v4"]["formulation"]["score"] == 13.0
     assert out["quality_pillars_v4"]["dose"]["score"] == 8.6
-    assert out["quality_pillars_v4"]["safety_hygiene"]["score"] == 6.0
-    assert _entry(out, "formulation", "B1_harmful_additives")["kind"] == "deduction"
-    assert _entry(out, "safety_hygiene", "additive_or_sweetener_penalty")["points"] == -4.0
+    assert out["quality_pillars_v4"]["safety_hygiene"]["score"] == 4.0
+    assert not any(entry["id"].startswith("B1_")
+                   for entry in out["quality_pillars_v4"]["formulation"]["receipt"]["entries"])
+    assert _entry(out, "safety_hygiene", "additive_or_sweetener_penalty")["points"] == -6.0
     assert not any(entry["id"] == "over_ul_penalty" for entry in out["quality_pillars_v4"]["safety_hygiene"]["receipt"]["entries"])
     assert _entry(out, "dose", "B7_dose_safety")["points"] == pytest.approx(-2.0 * 20 / 23, abs=1e-4)
     _assert_reconciles(out)

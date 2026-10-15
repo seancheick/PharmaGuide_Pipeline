@@ -63,7 +63,7 @@ def _real_products_charging_b1(limit: int = 400):
             continue
         for rec in (data if isinstance(data, list) else data.get("products", [])):
             detail = shared_formulation_penalty_detail(rec)
-            if detail["penalties"]["B1_harmful_additives"] < 0:
+            if detail["metadata"]["formula_checks"]["B1_harmful_additives"] > 0:
                 out.append((rec, detail))
                 if len(out) >= limit:
                     return out

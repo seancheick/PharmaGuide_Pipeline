@@ -1,36 +1,26 @@
 """Single policy registry for every v4 dimension penalty.
 
 Scoring modules detect facts and calculate magnitudes. This registry owns the
-cross-cutting contract: canonical key, primary dimension, optional consumer
-mirror group, and whether an old location may be migrated centrally. Unknown
-keys and unapproved dimension drift fail closed.
+cross-cutting contract: canonical key, primary dimension, and whether an old
+location may be migrated centrally. Unknown keys and unapproved dimension drift
+fail closed. Additive, sugar and high-risk findings are not dimension penalties:
+the formula-checks pillar owns them (V4.1 Step 4).
 """
 
 from __future__ import annotations
 
 from dataclasses import dataclass
-from typing import Any, Dict, Mapping, Optional
+from typing import Any, Dict
 
 
 @dataclass(frozen=True)
 class PenaltySpec:
     primary_dimension: str
     consumer_materiality: str
-    mirror_group: Optional[str] = None
     relocate_legacy_dimension: bool = False
 
 
-FORMULA_QUALITY_MIRROR = "formula_quality_checks"
-
-
 PENALTY_REGISTRY: Dict[str, PenaltySpec] = {
-    "B0_moderate_watchlist": PenaltySpec("formulation", "safety_context"),
-    "B1_dietary_sugar": PenaltySpec(
-        "formulation", "consumer_material", FORMULA_QUALITY_MIRROR
-    ),
-    "B1_harmful_additives": PenaltySpec(
-        "formulation", "consumer_material", FORMULA_QUALITY_MIRROR
-    ),
     "immune_high_variability_botanical_stack": PenaltySpec(
         "formulation", "quality_context"
     ),
@@ -283,36 +273,3 @@ def apply_penalty_registry(module_result: Any) -> bool:
             raise RuntimeError("v4 module result has no metadata for penalty policy")
         metadata["penalty_relocations"] = relocations
     return changed
-
-
-def mirrored_penalty_magnitude(
-    module_breakdown: Mapping[str, Any],
-    mirror_group: str,
-) -> float:
-    """Return registered negative penalty magnitude for one consumer mirror."""
-    dimensions = module_breakdown.get("dimensions")
-    if not isinstance(dimensions, Mapping):
-        return 0.0
-    total = 0.0
-    for dimension_name, raw_dimension in dimensions.items():
-        if not isinstance(raw_dimension, Mapping):
-            continue
-        penalties = raw_dimension.get("penalties")
-        if not isinstance(penalties, Mapping):
-            continue
-        for raw_key, raw_value in penalties.items():
-            spec = penalty_spec(raw_key)
-            if spec.primary_dimension != dimension_name:
-                raise RuntimeError(
-                    f"artifact penalty {raw_key!r} is in {dimension_name!r}, "
-                    f"expected {spec.primary_dimension!r}"
-                )
-            try:
-                value = float(raw_value)
-            except (TypeError, ValueError) as exc:
-                raise RuntimeError(
-                    f"penalty {raw_key!r} has non-numeric value"
-                ) from exc
-            if spec.mirror_group == mirror_group and value < 0:
-                total += abs(value)
-    return round(total, 4)

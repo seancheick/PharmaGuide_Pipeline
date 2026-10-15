@@ -207,10 +207,12 @@ def test_artificially_sweetened_whey_pays_the_shared_additive_charge_once() -> N
 
     # 1.21.4: B1_harmful_additives owns the sucralose/acesulfame charge; the protein adapter no
     # longer adds its own sweetener penalty or withholds clean-daily-use points for the same rows.
-    additive = abs(payload["penalties"]["B1_harmful_additives"])
+    # V4.1 Step 4: the formula-checks pillar charges it once; Formulation is unchanged.
+    additive = payload["metadata"]["formula_checks"]["B1_harmful_additives"]
     assert additive > 0
     assert "sports_artificial_sweeteners" not in payload["penalties"]
-    assert payload["score"] == clean["score"] - additive
+    assert "B1_harmful_additives" not in payload["penalties"]
+    assert payload["score"] == clean["score"]
 
 
 def test_opaque_proprietary_or_amino_spiked_protein_matrix_scores_low() -> None:

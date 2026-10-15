@@ -28,9 +28,7 @@ from scoring_v4.dose_safety import dose_safety_consumer_explanation
 from scoring_v4.penalty_registry import (
     EVIDENCE_CAP_KEYS,
     EVIDENCE_FLOOR_KEYS,
-    FORMULA_QUALITY_MIRROR,
     component_kind,
-    mirrored_penalty_magnitude,
     penalty_spec,
 )
 from scoring_v4.pillar_explanations import attach_pillar_explanations, _proprietary_blend_facts
@@ -605,49 +603,28 @@ def _build_clean_label_flags(enriched_hits: List[Dict[str, Any]]) -> List[Dict[s
     return flags
 
 
-_ADDITIVE_PENALTY_KEY = "B1_harmful_additives"
+def _formula_check_charge(module_bd: Dict[str, Any], cfg: Dict[str, Any]) -> tuple[float, bool]:
+    """The formula-checks pillar's one charge for additive and sugar findings.
 
-
-def _low_severity_additive_magnitude(module_bd: Dict[str, Any]) -> float:
-    """Points the formulation penalty took for additives with no safety finding.
-
-    An entry PharmaGuide's own additive data describes as GRAS and "tracked
-    purely as a non-nutritive excipient quality signal" (silicon dioxide,
-    magnesium stearate, microcrystalline cellulose, stearic acid …) is a
-    formulation-quality signal, not a clinical safety concern.
+    V4.1 Step 4: Formulation no longer subtracts these findings; this pillar
+    charges them once, low-severity entries included, within its shared budget
+    (``safety_hygiene_subscale.additive_or_sweetener_max_penalty``). Returns the
+    charge and whether any charged finding is above low severity.
     """
     formulation = ((module_bd.get("dimensions") or {}).get("formulation") or {})
-    details = (formulation.get("metadata") or {}).get("inactive_penalty_details") or []
-    low = sum(
-        abs(_num(detail.get("penalty_applied")))
-        for detail in details
-        if isinstance(detail, dict) and str(detail.get("penalty_tier") or "").lower() == "low"
+    metadata = formulation.get("metadata") or {}
+    checks = metadata.get("formula_checks") or {}
+    raw = sum(max(0.0, _num(value)) for value in checks.values())
+    if raw <= 0:
+        return 0.0, False
+    cap = _num((cfg.get("safety_hygiene_subscale") or {}).get("additive_or_sweetener_max_penalty"), 10.0)
+    details = [d for d in metadata.get("inactive_penalty_details") or [] if isinstance(d, dict)]
+    low_only = (
+        _num(checks.get("B1_dietary_sugar")) <= 0
+        and bool(details)
+        and all(str(d.get("penalty_tier") or "").lower() == "low" for d in details)
     )
-    # The ledger is uncapped and lists every matched excipient, while the charge
-    # it explains is clamped at b1_harmful_additive_cap. Give back no more than
-    # was taken, or the excess comes out of the sweetener penalty standing beside
-    # it in the same mirror group — and a sugary product quietly stops losing
-    # Safety points.
-    charged = abs(_num((formulation.get("penalties") or {}).get(_ADDITIVE_PENALTY_KEY)))
-    return min(low, charged)
-
-
-def _formulation_additive_safety_penalty(module_bd: Dict[str, Any], cfg: Dict[str, Any]) -> float:
-    """Small public Safety Hygiene deduction for additive/sweetener concerns.
-
-    The underlying B1 formulation penalties remain the main scoring signal. This
-    separate, capped deduction prevents the public Safety Hygiene pillar from
-    claiming 10/10 when the product carries additive or glycemic-sweetener flags.
-
-    2026-09-18: low-severity entries are excluded. Their own reviewed records
-    state no meaningful safety concern, so they keep their formulation-quality
-    penalty and no longer read as a clinical safety finding.
-    """
-    raw = mirrored_penalty_magnitude(module_bd, FORMULA_QUALITY_MIRROR)
-    raw = max(0.0, raw - _low_severity_additive_magnitude(module_bd))
-    sub = cfg.get("safety_hygiene_subscale") or {}
-    cap = _num(sub.get("additive_or_sweetener_max_penalty"), 4.0)
-    return round(min(raw, cap), 1) if raw > 0 else 0.0
+    return round(min(raw, cap), 1), not low_only
 
 
 def _dose_safety_state_counts(module_bd: Dict[str, Any]) -> Dict[str, Any]:
@@ -693,9 +670,10 @@ def _pillar_safety_hygiene(module_bd: Dict[str, Any], weight: float,
     a Class I (critical) manufacturer recall deducts the raw violation magnitude here (the
     safety/contamination half of the violation split). Step 3a: a clean-label additive
     (titanium dioxide / E171) deducts a SMALL graduated penalty here (inform + penalize,
-    no forced CAUTION). B1 additive/sweetener concerns also deduct a capped public
-    truthfulness penalty so the Safety Hygiene pillar cannot remain perfect when
-    additive concerns are present. Dose owns the B7 deduction once; confirmed
+    no forced CAUTION). V4.1 Step 4: this pillar is the one numerical owner of
+    additive and dietary-sugar findings (formulation metadata ``formula_checks``,
+    low severity included, worded as quality) within its shared budget, and only
+    a confirmed high-risk or watchlist match zeroes its base. Dose owns the B7 deduction once; confirmed
     or unresolved dose findings remain visible here without another deduction."""
     base = module_bd.get("safety_hygiene_base") or {}
     bscore = _num(base.get("score"))
@@ -704,7 +682,7 @@ def _pillar_safety_hygiene(module_bd: Dict[str, Any], weight: float,
     clean = max(0.0, min(float(weight), clean))
     safety_pen = _manuf_violation_split(module_bd)["safety"]
     cl_pen = max(0.0, _num(clean_label_penalty))
-    additive_pen = _formulation_additive_safety_penalty(module_bd, cfg)
+    additive_pen, additive_concern = _formula_check_charge(module_bd, cfg)
     dose_safety_state_counts = _dose_safety_state_counts(module_bd)
     dose_safety_explanation = dose_safety_consumer_explanation(
         dose_safety_state_counts
@@ -719,13 +697,22 @@ def _pillar_safety_hygiene(module_bd: Dict[str, Any], weight: float,
         deductions.append("the maker had a serious product recall")
     if cl_pen > 0:
         deductions.append("it contains a restricted additive")
-    if additive_pen > 0:
+    if additive_pen > 0 and additive_concern:
         deductions.append("it contains additive or sweetener/form-factor concerns")
     # Dose owns the B7 deduction, so a recorded dose-safety finding is always
     # worded as not deducted here, whether or not this pillar deducts.
     if deductions:
         # Plain-English join: "A and B" rather than a comma list.
         reason = "Safety concern: " + " and ".join(deductions) + "."
+        if additive_pen > 0 and not additive_concern:
+            reason += (" Formula check: it also contains low-concern additives or "
+                       "sweeteners that lower formula quality.")
+        if dose_safety_explanation:
+            reason += " Not deducted here: " + dose_safety_explanation + "."
+    elif additive_pen > 0:
+        # Low-concern excipients are a formula-quality signal, never a safety claim.
+        reason = ("Formula check: it contains low-concern additives or sweeteners that "
+                  "lower formula quality.")
         if dose_safety_explanation:
             reason += " Not deducted here: " + dose_safety_explanation + "."
     elif dose_safety_explanation:
@@ -1524,7 +1511,7 @@ def _safety_receipt(pillar: Dict[str, Any], weight: float) -> Dict[str, Any]:
     running = clean
     for key, source in (("class_i_recall_penalty", "manufacturer_violations.class_i"),
                         ("clean_label_penalty", "clean_label_subscale"),
-                        ("additive_or_sweetener_penalty", "penalty_registry.formula_quality_checks")):
+                        ("additive_or_sweetener_penalty", "formulation.metadata.formula_checks")):
         amount = _num(components.get(key))
         if amount:
             entries.append(_receipt_entry(key, "deduction", source, -amount, -amount))

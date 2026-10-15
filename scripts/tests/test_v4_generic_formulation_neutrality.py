@@ -158,7 +158,9 @@ def test_dose_gated_synergy_does_not_change_formulation() -> None:
     assert score_formulation(qualified)["score"] == score_formulation(base)["score"]
 
 
-def test_single_product_floor_cannot_hide_a_watchlist_penalty() -> None:
+def test_watchlist_finding_leaves_formulation_to_the_safety_base_without_a_floor() -> None:
+    """V4.1 Step 4: a watchlist ingredient is owned once, by the formula-checks
+    pillar's safety base; Formulation neither charges it nor adds a floor."""
     from scoring_v4.modules.generic_formulation import score_formulation
 
     product = _product(1, bio=14.0)
@@ -175,8 +177,8 @@ def test_single_product_floor_cannot_hide_a_watchlist_penalty() -> None:
 
     result = score_formulation(product)
 
-    assert result["penalties"]["B0_moderate_watchlist"] == -5.0
-    assert result["score"] == 9.0
+    assert "B0_moderate_watchlist" not in result["penalties"]
+    assert result["score"] == 14.0
     assert "premium_single_ingredient_floor_adjustment" not in result["components"]
     assert "standard_single_ingredient_floor_adjustment" not in result["components"]
 

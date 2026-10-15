@@ -278,7 +278,8 @@ def test_b1_inactive_penalty_details_follow_the_scoring_decision() -> None:
 
     detail = generic_formulation.shared_formulation_penalty_detail(product)
 
-    assert detail["penalties"]["B1_harmful_additives"] == -5.5
+    assert detail["metadata"]["formula_checks"]["B1_harmful_additives"] == 5.5
+    assert "B1_harmful_additives" not in detail["penalties"]
     # matched_labels carries EVERY non-active label that contributed to the id,
     # not just the winning row's: exporters join on it when the display resolver
     # assigns the same label a different rule id (see

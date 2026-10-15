@@ -16,9 +16,9 @@
     "safety_hygiene": { "weight": 10, "assembler": "safety_hygiene" }
   },
   "safety_hygiene_subscale": {
-    "_doc": "PR3 + public truthfulness: product-level safety pillar. Clean base (no banned/recalled/watchlist match) → full 10; banned/recalled/watchlist present zeroes the raw safety_hygiene_base → 0. A Class I (critical) manufacturer recall in the last 3y deducts the raw violation magnitude HERE (safety/contamination half of the violation split); non-critical quality-system violations go to the verification pillar instead. B1 additive/sweetener penalties still mainly lower formulation, but they also take a small capped Safety Hygiene deduction so products with additive or glycemic-sweetener concerns do not show 10/10 safety hygiene. B7 excessive-dose deductions belong to Dose only; their concerns remain visible in Safety/Hygiene without another numerical charge.",
+    "_doc": "PR3 + public truthfulness: product-level safety pillar. Clean base (no banned/recalled/watchlist match) → full 10; banned/recalled/watchlist present zeroes the raw safety_hygiene_base → 0. A Class I (critical) manufacturer recall in the last 3y deducts the raw violation magnitude HERE (safety/contamination half of the violation split); non-critical quality-system violations go to the verification pillar instead. Additive and sugar findings (formulation metadata formula_checks, low severity included) are charged here once, within this pillar's shared 10-point budget; Formulation no longer subtracts them (V4.1 Step 4). Only a confirmed high-risk or watchlist match zeroes the base. B7 excessive-dose deductions belong to Dose only; their concerns remain visible in Safety/Hygiene without another numerical charge.",
     "base_max": 10.0,
-    "additive_or_sweetener_max_penalty": 4.0
+    "additive_or_sweetener_max_penalty": 10.0
   },
   "clean_label_subscale": {
     "_doc": "Clean-label preferences are separate from safety verdicts. An active, source-complete policy INFORMS through clean_label_flags_v4 and may take a small graduated safety_hygiene penalty without forcing CAUTION. penalty = penalty_base (from clean_label_policy.json) × role_multiplier[role], summed across flagged additives and clamped to max_total_penalty per product. A coating/excipient (role=inactive) is penalized lightly (×0.5); an active is penalized harder (×1.5). The titanium-dioxide value is preserved from the pre-registry production policy; calibration is intentionally outside this correctness release. tier_base is a compatibility fallback only.",
@@ -86,7 +86,7 @@
     "default_reference": 25.0
   },
   "formulation_penalties": {
-    "_doc": "B1 harmful-additive severity points subtracted from the raw formulation dimension (and re-read, capped at safety_hygiene_subscale.additive_or_sweetener_max_penalty, by the safety_hygiene pillar). Hoisted from generic_formulation.py's hardcoded constants 2026-07-04 so calibration is a config edit, not a code edit. S6 calibration: moderate/high/critical raised to 2/3/4 for real severity separation; LOW held at 0.5 so benign fillers (silicon dioxide, stearates, maltodextrin) stay quiet and clean products don't move. generic_formulation.py reads these at runtime (single source; logic stays in code per the module's §13 lock). test_v4_additive_points_config guards config<->runtime drift. NOTE: the retiring v3 scorer keeps its OWN copy in scoring_config.json (B1_harmful_additives.risk_points, still 3/2/1/0.5) — the two are DIFFERENT models and are not expected to match; do not sync them.",
+    "_doc": "B1 harmful-additive severity points. Since V4.1 Step 4 they are charged once, by the safety_hygiene (formula checks) pillar from formulation metadata formula_checks, capped at safety_hygiene_subscale.additive_or_sweetener_max_penalty; Formulation no longer subtracts them. Hoisted from generic_formulation.py's hardcoded constants 2026-07-04 so calibration is a config edit, not a code edit. S6 calibration: moderate/high/critical raised to 2/3/4 for real severity separation; LOW held at 0.5 so benign fillers (silicon dioxide, stearates, maltodextrin) stay quiet and clean products don't move. generic_formulation.py reads these at runtime (single source; logic stays in code per the module's §13 lock). test_v4_additive_points_config guards config<->runtime drift. NOTE: the retiring v3 scorer keeps its OWN copy in scoring_config.json (B1_harmful_additives.risk_points, still 3/2/1/0.5) — the two are DIFFERENT models and are not expected to match; do not sync them.",
     "b1_harmful_additive_points": { "critical": 4.0, "high": 3.0, "moderate": 2.0, "low": 0.5, "none": 0.0 },
     "b1_harmful_additive_cap": 15.0
   },
@@ -100,9 +100,6 @@
     "a4_absorption_cap": 3.0,
     "a5b_standardized_full": 1.0,
     "a5b_standardized_marker_only": 0.5,
-    "b0_high_risk_penalty": 10.0,
-    "b0_watchlist_penalty": 5.0,
-    "b0_moderate_penalty": 10.0,
     "dietary_sugar_low_added_penalty": 1.0,
     "dietary_sugar_sugar_alcohol_penalty": 1.0,
     "dietary_sugar_high_glycemic_or_syrup_penalty": 2.0,

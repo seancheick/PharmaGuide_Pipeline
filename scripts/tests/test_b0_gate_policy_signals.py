@@ -12,8 +12,9 @@ its own filter over enricher signals only. On the full corpus that meant:
   CAUTION (B0_HIGH_RISK_SUBSTANCE), but no B0 and Safety/Hygiene 9/10.
 - 315305 (GNC Yohimbe 451): one yohimbe rule on two label rows -> B0 charged twice.
 
-Both consumers now read SafetyResult.ingredient_concerns (the signals that survived
-the gate's policy) through one scoped gate evaluation.
+Both consumers read SafetyResult.ingredient_concerns (the signals that survived
+the gate's policy) through one scoped gate evaluation. Since V4.1 Step 4 the
+Safety/Hygiene base is the only numerical owner: Formulation has no B0.
 """
 
 from __future__ import annotations
@@ -56,40 +57,43 @@ def _score(enriched: dict) -> dict:
     return score_product_v4(copy.deepcopy(enriched))
 
 
-def _b0(scored: dict) -> float:
-    formulation = scored["v4_breakdown"]["module"]["dimensions"]["formulation"]
-    return formulation["penalties"]["B0_moderate_watchlist"]
+def _base(scored: dict) -> dict:
+    """The formula-checks pillar's safety base: the one owner of a confirmed
+    high-risk or watchlist finding since V4.1 Step 4 (no Formulation B0)."""
+    module = scored["v4_breakdown"]["module"]
+    assert "B0_moderate_watchlist" not in module["dimensions"]["formulation"]["penalties"]
+    return module["safety_hygiene_base"]
 
 
-def test_regional_rule_costs_no_b0(pipeline) -> None:
+def test_regional_rule_does_not_zero_the_safety_base(pipeline) -> None:
     scored = _score(pipeline["328464"])
     assert "B0_REGIONAL_ADVISORY" in scored["v4_breakdown"]["safety_gate"]["safety_signals"]
-    assert _b0(scored) == 0
-    assert scored["quality_pillars_v4"]["safety_hygiene"]["score"] == 10
+    assert _base(scored)["score"] == 4.0
+    assert scored["quality_pillars_v4"]["safety_hygiene"]["components"]["clean_base"] == 10
 
 
-def test_gate_concern_charges_b0_and_the_safety_base(pipeline) -> None:
+def test_gate_concern_zeroes_the_safety_base_once(pipeline) -> None:
     scored = _score(pipeline["19598"])
     assert scored["v4_verdict"] == "CAUTION"
     assert "B0_HIGH_RISK_SUBSTANCE" in scored["v4_breakdown"]["safety_gate"]["safety_signals"]
-    assert _b0(scored) < 0
+    assert _base(scored)["score"] == 0.0
     pillar = scored["quality_pillars_v4"]["safety_hygiene"]
     assert pillar["score"] == 0, pillar
     assert "high-risk ingredient" in pillar["reason"], pillar["reason"]
 
 
 def test_one_rule_on_two_rows_is_one_charge(pipeline) -> None:
-    from scoring_v4.modules.generic_formulation import B0_HIGH_RISK_PENALTY
-
     enriched = pipeline["315305"]
     substances = enriched["contaminant_data"]["banned_substances"]["substances"]
     assert [s["banned_id"] for s in substances].count("RISK_YOHIMBE") == 2
-    assert _b0(_score(enriched)) == -B0_HIGH_RISK_PENALTY
+    base = _base(_score(enriched))
+    assert base["score"] == 0.0
+    assert [d["status"] for d in base["metadata"]["drivers"]] == ["high_risk"]
 
 
 def test_routed_module_reuses_the_gate_evaluation(pipeline, monkeypatch) -> None:
-    """score_product_v4 evaluates the gate once; B0 and the Safety/Hygiene base
-    read that scoped result instead of re-interpreting the product."""
+    """score_product_v4 evaluates the gate once; the Safety/Hygiene base reads
+    that scoped result instead of re-interpreting the product."""
     import scoring_v4.gate_safety as gate
 
     calls = []
@@ -101,5 +105,5 @@ def test_routed_module_reuses_the_gate_evaluation(pipeline, monkeypatch) -> None
 
     monkeypatch.setattr(gate, "evaluate_safety_gate", counting)
     scored = _score(pipeline["19598"])
-    assert _b0(scored) < 0
+    assert _base(scored)["score"] == 0.0
     assert calls == []

@@ -211,7 +211,9 @@ def test_dietary_sugar_penalty_bands(level: str, expected: float) -> None:
         "sugar": {"level": level},
         "sweeteners": {},
     }))
-    assert result["penalties"]["B1_dietary_sugar"] == expected
+    # V4.1 Step 4: recorded for the formula-checks pillar, not subtracted here.
+    assert "B1_dietary_sugar" not in result["penalties"]
+    assert result["metadata"]["formula_checks"]["B1_dietary_sugar"] == abs(expected)
 
 
 def test_gummy_format_alone_has_no_formulation_penalty() -> None:
@@ -222,15 +224,20 @@ def test_gummy_format_alone_has_no_formulation_penalty() -> None:
     assert gummy["score"] == capsule["score"]
 
 
-def test_watchlist_penalties_accumulate_and_fuzzy_does_not_charge() -> None:
+def test_watchlist_findings_are_owned_by_the_safety_base_and_fuzzy_does_not_count() -> None:
     from scoring_v4.modules.generic_formulation import score_formulation
+    from scoring_v4.modules.safety_hygiene import score_safety_hygiene_base
 
-    result = score_formulation(_product(contaminant_data={"banned_substances": {"substances": [
+    product = _product(contaminant_data={"banned_substances": {"substances": [
         {"status": "high_risk", "match_type": "exact"},
         {"status": "watchlist", "match_type": "alias"},
         {"status": "watchlist", "match_type": "fuzzy"},
-    ]}}))
-    assert result["penalties"]["B0_moderate_watchlist"] == -15.0
+    ]}})
+    # V4.1 Step 4: no Formulation B0; the base is zeroed by confirmed matches.
+    assert "B0_moderate_watchlist" not in score_formulation(product)["penalties"]
+    base = score_safety_hygiene_base(product)
+    assert base.score == 0.0
+    assert sorted(d["status"] for d in base.metadata["drivers"]) == ["high_risk", "watchlist"]
 
 
 def test_harmful_additives_dedupe_by_rule_and_keep_applied_ledger() -> None:
@@ -240,11 +247,14 @@ def test_harmful_additives_dedupe_by_rule_and_keep_applied_ledger() -> None:
         {"id": "ADD_X", "severity": "high", "source_section": "inactive", "ingredient": "X"},
         {"id": "ADD_X", "severity": "moderate", "source_section": "inactive", "ingredient": "X alias"},
     ]}}))
-    assert result["penalties"]["B1_harmful_additives"] == -3.0
+    assert result["metadata"]["formula_checks"]["B1_harmful_additives"] == 3.0
+    assert "B1_harmful_additives" not in result["penalties"]
     assert result["metadata"]["inactive_penalty_details"][0]["matched_rule_id"] == "ADD_X"
 
 
-def test_presence_floor_is_monotonic_and_cannot_hide_large_penalty() -> None:
+def test_presence_floor_is_untouched_by_formula_check_findings() -> None:
+    """V4.1 Step 4: sugar and watchlist findings no longer lower Formulation,
+    so they neither trigger the presence floor nor hide behind it."""
     from scoring_v4.modules.generic_formulation import score_formulation
 
     tiny = _product(ingredients=[_ingredient(bio_score=0.1)])
@@ -260,8 +270,10 @@ def test_presence_floor_is_monotonic_and_cannot_hide_large_penalty() -> None:
     )
 
     assert score_formulation(tiny)["score"] == 2.0
-    assert score_formulation(tiny_penalized)["score"] == 2.0
-    assert score_formulation(strong_penalized)["score"] == 9.0
+    sugary = score_formulation(tiny_penalized)
+    assert sugary["score"] == 2.0
+    assert sugary["metadata"]["formula_checks"]["B1_dietary_sugar"] == 4.0
+    assert score_formulation(strong_penalized)["score"] == 14.0
 
 
 def test_metadata_names_the_engine_and_contract_is_complete() -> None:
