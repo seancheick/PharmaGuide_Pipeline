@@ -37,7 +37,15 @@ V4_CANARIES = {
     },
     # Reviewed identity resolution makes the current label assessable; its
     # separate substance warning must remain CAUTION rather than become SAFE.
-    "241706": {'label': 'HUM Ripped Rooster', 'module': 'generic', 'verdict': 'CAUTION', 'confidence': 'moderate', 'score_unavailable_reason': None, 'score': 38.4, 'safety_verdict': 'CAUTION', 'completeness_ready': True},
+    "241706": {
+        "label": "HUM Ripped Rooster", "module": "generic", "verdict": "CAUTION",
+        "confidence": "moderate", "score_unavailable_reason": None, "score": 38.4,
+        "safety_verdict": "CAUTION", "completeness_ready": True,
+        # Two independent repairs: retain the explicitly printed50%-EGCG form,
+        # and read Contains No: as a negative list. Existing enriched corpus is
+        # stale for both; run its original NIH fixture through the real owners.
+        "raw_fixture": "safety_only_row_241706_raw.json", "source_allergen_form_checks": True,
+    },
     # The dedicated digestive route remains correct. Both the activity rows and
     # proprietary-blend anchor are module-owned product projections.
     "241684": {
@@ -81,7 +89,7 @@ V4_CANARIES = {
         "module": "sports",
         "verdict": "SAFE",
         "confidence": "moderate",
-        "score_range": (82.0, 82.0),  # Phase 4: 88 → 84.6; cert→GMP: +2.2 (Informed Choice sku implies GMP)
+        "score_range": (79.2, 79.2),  # Distinct BioPerine A4 credit only; reviewed HMB reference.
     },
     # Assessment coverage is separate from quality. This disclosed fiber total
     # remains module-owned; completed limited/negative evidence stays explicit.
@@ -127,7 +135,8 @@ V4_CANARIES = {
         "verdict": "SAFE",
         "confidence": "high",
         # Contextual MTCC5856 evidence; no unestablished DE111 human credit.
-        "score_range": (70.7, 70.7),
+        "score_range": (67.7, 67.7),
+        "no_independent_delivery": True,
     },
     # Fully ready verdict-diversity anchors. These replace products that are now
     # correctly quarantined for material evidence that has not been reviewed.
@@ -187,7 +196,16 @@ def _load_canaries() -> dict[str, dict]:
 def test_v4_real_catalog_gate_and_confidence_canary(dsld_id: str, expected: dict) -> None:
     from score_supplements_v4 import score_product_v4
 
-    product = _load_canaries().get(dsld_id)
+    if expected.get("raw_fixture"):
+        from enhanced_normalizer import EnhancedDSLDNormalizer
+        from enrich_supplements_v3 import SupplementEnricherV3
+
+        raw = json.loads((Path(__file__).parent / "fixtures" / expected["raw_fixture"]).read_text())
+        product, _ = SupplementEnricherV3().enrich_product(
+            EnhancedDSLDNormalizer().normalize_product(raw)
+        )
+    else:
+        product = _load_canaries().get(dsld_id)
     if product is None:
         pytest.skip(f"v4 canary {dsld_id} not found: {expected['label']}")
     if expected["verdict"] not in {"BLOCKED", "UNSAFE"}:
@@ -215,6 +233,16 @@ def test_v4_real_catalog_gate_and_confidence_canary(dsld_id: str, expected: dict
         assert lo <= out["raw_score_v4_100"] <= hi
 
     breakdown = out["v4_breakdown"]
+    if expected.get("source_allergen_form_checks"):
+        assert product["allergen_hits"] == []
+        assert breakdown["module"]["dimensions"]["transparency"]["penalties"]["B2_false_allergen_free_claim"] == 0.0
+        assert "B0_HIGH_RISK_SUBSTANCE" in breakdown["safety_gate"]["safety_signals"]
+        tea = next(row for row in product["ingredient_quality_data"]["ingredients"]
+                   if row.get("canonical_id") == "green_tea_extract")
+        assert tea["matched_form"] == "green tea extract (50% EGCG)"
+        assert tea["bio_score"] == 9.0
+    if expected.get("no_independent_delivery"):
+        assert breakdown["module"]["dimensions"]["formulation"]["components"]["delivery_survivability"] == 0.0
     if expected.get("no_primary_evidence_floor"):
         evidence_dimension = breakdown["module"]["dimensions"]["evidence"]
         assert evidence_dimension["score"] == 0.0

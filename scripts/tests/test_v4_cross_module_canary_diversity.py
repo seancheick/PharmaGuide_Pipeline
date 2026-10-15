@@ -46,12 +46,13 @@ GENERIC_CANARIES = {
         # 1 g complex and two daily servings mean 2,000 mg/day, above the
         # existing 500–1,000 mg studied-preparation window. Keep that source
         # exposure and component attribution pinned instead of the old
-        # per-serving/interim total. Formulation is 9 + 3 - 1.5 = 10.5.
-        "score_range": (62.5, 62.5),
+        # per-serving/interim total. Meriva/phytosome is already the form;
+        # independent-delivery policy removes the duplicate3. Formulation9−1.5=7.5.
+        "score_range": (59.5, 59.5),
         "traits": {
             "trust_high": True,
             "dimension_scores": {
-                "formulation": 10.5, "dose": 12.0,
+                "formulation": 7.5, "dose": 12.0,
                 "evidence": 14.0, "transparency": 10.0,
             },
             "botanical_dose": {"dose_mg": 2000.0, "range_mg": [500.0, 1000.0]},
@@ -86,8 +87,13 @@ SPORTS_CANARIES = {
     # High sports scorer after the P1.7 sports module split.
     "325587": {
         "label": "Transparent Labs Creatine HMB",
-        "score_range": (82.0, 82.0),
-        "traits": {"trust_positive": True, "dose_max": True},
+        # BioPerine remains A4=3, not also A3=3. The approved HMB parent
+        # ceiling changes A1 10.9821→11.25; native79.25 rounds to79.2.
+        "score_range": (79.2, 79.2),
+        "traits": {"trust_positive": True, "dose_max": True,
+                   "dimension_scores": {"formulation": 14.25},
+                   "form_components": {"A1_bio_score": 11.25, "A3_delivery_system": 0.0,
+                                       "A4_absorption_enhancer": 3.0}},
     },
 }
 
@@ -116,9 +122,10 @@ PROBIOTIC_CANARIES = {
         "label": "Spring Valley Advanced Strength Probiotic 50B",
         # Ten species and no owned strain doses: aggregate disclosure receives
         # its existing floor, never an invented even allocation of total CFU.
-        "score_range": (24.2, 24.2),
+        "score_range": (21.2, 21.2),
         "traits": {
             "aggregate_cfu_proxy": True,
+            "no_independent_delivery": True,
             "trust_zero": True,
             "dose_score": 1.7,
             "aggregate_proxy_detail": {
@@ -131,8 +138,8 @@ PROBIOTIC_CANARIES = {
     # Per-strain CFU disclosed path; Dose > 0 with no Trust credit.
     "286725": {
         "label": "vitafusion Probiotic 5B",
-        "score_range": (44.0, 44.0),
-        "traits": {"dose_positive": True, "trust_zero": True},
+        "score_range": (41.0, 41.0),
+        "traits": {"dose_positive": True, "trust_zero": True, "no_independent_delivery": True},
     },
     # Per-strain CFU + positive Trust path.
     "184730": {
@@ -301,6 +308,10 @@ def test_sports_real_catalog_canary_score_and_traits(dsld_id: str, expected: dic
     assert lo <= score <= hi, (expected["label"], score, breakdown)
 
     traits = expected["traits"]
+    for name, value in traits.get("dimension_scores", {}).items():
+        assert _dimension_score(breakdown, name) == pytest.approx(value)
+    for name, value in traits.get("form_components", {}).items():
+        assert breakdown["dimensions"]["formulation"]["components"][name] == pytest.approx(value)
     if traits.get("dose_max"):
         # re-baseline 2026-06-06: TL Creatine HMB sports dose 20 -> 21.
         assert _dimension_score(breakdown, "dose") == 21
@@ -329,6 +340,10 @@ def test_probiotic_real_catalog_canary_score_and_traits(dsld_id: str, expected: 
     assert lo <= score <= hi, (expected["label"], score, breakdown)
 
     traits = expected["traits"]
+    if traits.get("no_independent_delivery"):
+        form = breakdown["dimensions"]["formulation"]
+        assert form["components"]["delivery_survivability"] == 0.0
+        assert form["metadata"]["delivery_data"]["systems"] == []
     for dimension, value in traits.get("dimension_scores", {}).items():
         assert _dimension_score(breakdown, dimension) == pytest.approx(value)
     if "identity_counts" in traits:
