@@ -5611,9 +5611,13 @@ def build_top_warnings(enriched: Dict, detail_blob: Optional[Dict] = None) -> Li
         sugar = safe_dict(ds.get("sugar"))
         sodium = safe_dict(ds.get("sodium"))
         if sugar.get("level") in ("moderate", "high"):
+            # An unreadable printed amount keeps its level without a number.
+            sugar_amount = sugar.get("amount_g")
+            level_display = safe_str(sugar.get("level_display"))
             add_warning(
                 "dietary", "informational",
-                f"Sugar: {sugar.get('amount_g', 0)}g ({safe_str(sugar.get('level_display'))})"
+                f"Sugar: {sugar_amount}g ({level_display})" if sugar_amount is not None
+                else f"Sugar: {level_display}"
             )
         if sodium.get("level") in ("moderate", "high"):
             add_warning(
@@ -7516,7 +7520,8 @@ def build_detail_blob(
                 "type": "dietary",
                 "severity": "moderate",
                 "title": "Sugar Content",
-                "detail": f"{sugar.get('amount_g', 0)}g sugar per serving ({safe_str(sugar.get('level_display'))})",
+                "detail": (f"{sugar.get('amount_g')}g sugar per serving" if sugar.get("amount_g") is not None
+                           else "Sugar per serving") + f" ({safe_str(sugar.get('level_display'))})",
                 "source": "dietary_sensitivity_data",
                 "display_mode_default": "informational",
             })

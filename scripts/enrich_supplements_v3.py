@@ -18656,8 +18656,23 @@ class SupplementEnricherV3:
             self._is_unresolved_source_descriptor(ing)
             for ing in product.get('activeIngredients', []) + product.get('inactiveIngredients', [])
         )
+        # The shared exposure owner decides whether the printed mass is exact
+        # (V4.1 Step 4). A blank unit keeps the panel default above (FDA
+        # declares sugars in grams); an unusable unit ("NP", "Gram(s) -
+        # estimated") still classifies the level but records no exact amount,
+        # which the scored artifact reports as unfinished work.
+        exact_amount = True
+        if sugar_info and amount_g > 0:
+            from scoring_v4.exposure import row_exposure
+            printed_unit = str(unit or "").strip()
+            if printed_unit.lower() in {"", "unspecified"}:
+                printed_unit = "Gram(s)"
+            exact_amount = row_exposure(
+                product, {**sugar_info, "quantity": sugar_info.get("amount"), "unit": printed_unit},
+                basis="per_use", unit="g",
+            ).exact
         return {
-            "amount_g": None if unresolved else round(amount_g, 1),
+            "amount_g": None if (unresolved or not exact_amount) else round(amount_g, 1),
             "unit": "g",
             "level": None if unresolved else level,
             "level_display": "Sugar content unverified" if unresolved else level_display,
@@ -18884,11 +18899,14 @@ class SupplementEnricherV3:
 
         # Sugar warnings for diabetics
         if sugar_data["exceeds_diabetic_threshold"]:
+            # An inexact printed amount still warns, without inventing a number.
+            amount = sugar_data.get("amount_g")
+            amount_text = (f"Contains {amount}g sugar per serving. " if amount is not None
+                           else "Contains sugar; the exact amount per serving could not be read. ")
             warnings.append({
                 "type": "diabetes",
                 "severity": "high" if sugar_data["level"] == "high" else "moderate",
-                "message": f"Contains {sugar_data['amount_g']}g sugar per serving. "
-                          f"May affect blood glucose levels.",
+                "message": amount_text + "May affect blood glucose levels.",
                 "recommendation": "Consult healthcare provider if managing diabetes."
             })
 
