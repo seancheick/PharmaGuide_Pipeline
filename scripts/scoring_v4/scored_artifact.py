@@ -15,7 +15,7 @@ from datetime import datetime, timezone
 from typing import Any, Dict, Optional
 
 from score_supplements_v4 import score_product_v4
-from scoring_input_contract import get_scoring_ingredients, scoring_input_scope
+from scoring_input_contract import build_scoring_classification, get_scoring_ingredients, scoring_input_scope
 from scoring_v4.gate_safety import safety_resolvers_failed, stated_safety_signal
 from supplement_taxonomy import percentile_label_for
 
@@ -328,9 +328,7 @@ def assemble_scored_artifact(
     strict_contract = dict(diagnostics["strict_scoring_contract"])
     scored_at = datetime.now(timezone.utc).isoformat()
     config_fingerprint = _config_fingerprint(provenance)
-    classification = _safe_dict(
-        enriched_product.get("product_scoring_classification")
-    )
+    classification = build_scoring_classification(enriched_product)
     route_decision = dict(_safe_dict(classification.get("route_decision")))
     route_confidence = (
         route_decision.get("confidence")

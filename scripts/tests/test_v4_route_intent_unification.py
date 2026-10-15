@@ -796,3 +796,79 @@ def test_hyphenated_acid_ease_title_is_digestive_intent() -> None:
     )
 
     assert facts["title_digestive_intent"] is True
+
+
+@pytest.mark.parametrize("quantity,expected", [(30, "sports"), (20, "sports"), (18, "generic")])
+def test_material_scorable_protein_row_without_title_intent(quantity: float, expected: str) -> None:
+    """Legion 248662 has a misspelled Casien+ title and a 30 g casein row."""
+    from scoring_v4.scored_artifact import build_scored_artifact
+
+    product = _product(
+        "Casien+ Milk Chocolate",
+        [_row("calcium", 732, "mg"), _row("iron", 1, "mg"),
+         _row("potassium", 202, "mg"), _row("casein", quantity, "Gram(s)")],
+    )
+    product["product_scoring_classification"] = _classification(product)
+    artifact = build_scored_artifact(product)
+    assert artifact["route_decision"]["module"] == expected
+
+
+@pytest.mark.parametrize("panel", [
+    ["vitamin_d", "vitamin_b6_pyridoxine", "vitamin_b12_cobalamin", "zinc"],
+    ["vitamin_b1_thiamine", "vitamin_b3_niacin", "vitamin_b6_pyridoxine",
+     "vitamin_b9_folate", "vitamin_b12_cobalamin"],
+])
+@pytest.mark.parametrize("declared_multi", [False, True])
+def test_preworkout_statement_respects_declared_or_defining_multi_panel(panel: list[str], declared_multi: bool) -> None:
+    """Sports statements do not override a defining or explicitly declared multi."""
+    from scoring_v4.scored_artifact import build_scored_artifact
+
+    product = _product(
+        "Daily Multivitamin" if declared_multi else "PRE-SF Blue Raspberry",
+        [_row(canonical, 10, "mg") for canonical in panel]
+        + [_row(canonical, 1000, "mg") for canonical in
+           ("l_citrulline", "beta-alanine", "tmg_betaine", "taurine", "l_tyrosine")],
+        primary_type="multivitamin",
+    )
+    product["statements"] = [{"type": "General Statements: All Other Content", "notes": "Pre-workout formula"}]
+    product["product_scoring_classification"] = _classification(product)
+    artifact = build_scored_artifact(product)
+    assert artifact["route_decision"]["module"] == ("multi_or_prenatal" if declared_multi or len(panel) >= 5 else "sports")
+
+
+@pytest.mark.parametrize("extras", [
+    ("l_citrulline", "beta-alanine", "tmg_betaine", "taurine", "l_tyrosine", "l_theanine"),
+    ("zinc",) * 6,
+])
+def test_sports_rows_do_not_supply_multivitamin_panel_count(extras: tuple[str, ...]) -> None:
+    product = _product(
+        "Mixed Formula",
+        [_row("vitamin_d", 10, "mcg"), _row("zinc", 10, "mg")]
+        + [_row(canonical, 1000, "mg", raw_source_path=f"ingredientRows[extra{index}]")
+           for index, canonical in enumerate(extras)],
+        primary_type="multivitamin",
+    )
+    assert _classification(product)["route_module"] == "generic"
+
+
+@pytest.mark.parametrize("name", ["Vision Multi 50+", "Multi + Probiotic"])
+def test_declared_multi_name_uses_the_existing_title_owner(name: str) -> None:
+    product = _product(name, [
+        _row("vitamin_c", 150, "mg"), _row("vitamin_e", 20, "mg"),
+        _row("zinc", 9, "mg"), _row("copper", 1, "mg"),
+        _row("fish_oil", 250, "mg"), _row("epa", 160, "mg"),
+        _row("dha", 90, "mg"), _row("lutein", 5, "mg"), _row("zeaxanthin", 1, "mg"),
+    ], primary_type="multivitamin")
+    assert _classification(product)["route_module"] == "multi_or_prenatal"
+
+
+def test_stale_native_route_classification_recomputes_material_protein() -> None:
+    from scoring_v4.scored_artifact import build_scored_artifact
+
+    product = _product("Casien+ Milk Chocolate", [_row("casein", 30, "Gram(s)")])
+    stale = _classification(product)
+    stale["route_module"] = "generic"
+    stale["route_decision"].update(module="generic", classifier_version="1.3.1")
+    product["product_scoring_classification"] = stale
+    assert build_scoring_classification(product)["route_module"] == "sports"
+    assert build_scored_artifact(product)["_v4_module"] == "sports"
