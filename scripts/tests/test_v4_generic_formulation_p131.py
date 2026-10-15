@@ -80,10 +80,16 @@ def test_unrated_form_is_distinct_from_an_explicit_rating(bio_score, assessed) -
         "v4_breakdown": {"module": {"dimensions": {"formulation": dim}}},
     })
 
+    from scoring_v4.modules.generic_formulation import UNRATED_FORM_NEUTRAL
+
     assert dim["metadata"]["iqm_form_quality_assessed_count"] == assessed
-    assert dim["components"]["A1_bio_score"] == (bio_score or 0.0)
+    # V4.1 Step 4: an unrated form is the module's explicit neutral (9 of 15,
+    # 12/20 public); an explicit 0 rating stays 0.
+    assert dim["components"]["A1_bio_score"] == (UNRATED_FORM_NEUTRAL if bio_score is None else bio_score)
     reason = result["quality_pillars_v4"]["formulation"]["reason"]
     assert ("not rated" in reason) is (bio_score is None)
+    if bio_score is None:
+        assert result["quality_pillars_v4"]["formulation"]["score"] == 12.0
 
 
 def test_a1_is_equal_weight_mean_and_clamped() -> None:
@@ -137,9 +143,15 @@ def test_a1_skips_structural_rows_but_keeps_sole_mapped_blend() -> None:
         _ingredient(name="Mystery Blend", canonical_id="", bio_score=12, is_proprietary_blend=True),
     ]))
 
+    from scoring_v4.modules.generic_formulation import UNRATED_FORM_NEUTRAL
+
     assert mixed["components"]["A1_bio_score"] == 14.0
     assert sole_mapped["components"]["A1_bio_score"] == 12.0
-    assert sole_unmapped["components"]["A1_bio_score"] == 0.0
+    # An unmapped blend's bio_score is not an IQM rating: no rated form, so
+    # the shared unrated neutral (the pillar applied the same neutral before
+    # V4.1 Step 4 moved it into the module).
+    assert sole_unmapped["metadata"]["iqm_form_quality_assessed_count"] == 0
+    assert sole_unmapped["components"]["A1_bio_score"] == UNRATED_FORM_NEUTRAL
 
 
 def test_retired_generic_proxies_are_absent_and_cannot_move_score() -> None:
@@ -286,12 +298,13 @@ def test_metadata_names_the_engine_and_contract_is_complete() -> None:
     assert result["max"] == 30.0
 
 
-def test_empty_product_is_safe_and_zero() -> None:
-    from scoring_v4.modules.generic_formulation import score_formulation
+def test_empty_product_is_safe_and_keeps_only_the_unrated_neutral() -> None:
+    from scoring_v4.modules.generic_formulation import UNRATED_FORM_NEUTRAL, score_formulation
 
     result = score_formulation({})
-    assert result["score"] == 0.0
-    assert result["components"]["A1_bio_score"] == 0.0
+    assert result["components"] == {"A1_bio_score": UNRATED_FORM_NEUTRAL, "A3_delivery_system": 0.0,
+                                    "A4_absorption_enhancer": 0.0, "A5b_standardized_botanical": 0.0}
+    assert result["score"] == UNRATED_FORM_NEUTRAL
 
 
 def test_generic_formulation_does_not_import_retired_scorer() -> None:

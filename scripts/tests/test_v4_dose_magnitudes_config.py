@@ -33,22 +33,24 @@ ORIGINAL = {
         "cap_supplemental_window": 22.0, "dimension_cap": 25.0,
         "window_rda_threshold": 25.0, "window_ul_partial_band": 100.0,
         "window_overdose_credit": 11.0, "window_high_source_pct": 20.0, "window_full_adequacy_pct": 100.0,
-        "no_reference_individual_dose_credit": 16.0,
-        "no_reference_product_evidence_credit": 12.0,
+        # 1.26.0 (V4.1 Step 4): the 16/12 no-reference credits are replaced by
+        # the one dose_subscale.unbenchmarked_neutral_public owner.
     },
     "multi_prenatal": {
-        "dimension_cap": 25.0, "cap_rda_ai_coverage": 15.0, "cap_panel_breadth": 3.0,
-        "cap_critical_nutrient_coverage": 5.0, "cap_prenatal_complement_support": 2.0,
-        "panel_breadth_full_count": 18, "prenatal_dha_full_mg": 200.0, "prenatal_dha_partial_mg": 100.0,
+        # 1.26.0: panel breadth is count-based and retired; the prenatal
+        # complement scores DHA only (the reviewed prenatal anchor).
+        "dimension_cap": 25.0, "cap_rda_ai_coverage": 15.0,
+        "cap_critical_nutrient_coverage": 5.0, "cap_prenatal_complement_support": 1.0,
+        "prenatal_dha_full_mg": 200.0, "prenatal_dha_partial_mg": 100.0,
         "targeted_multi_selected_anchors": 5,
         "critical_min_pct_rda": {"folate": 50.0, "iron": 50.0, "iodine": 50.0,
                                  "vitamin_d": 50.0, "vitamin_b12": 50.0, "choline": 25.0},
     },
     "probiotic": {
-        "cap_dose": 25.0, "cap_per_strain_cfu_disclosure": 10.0, "cap_cfu_adequacy": 15.0,
         # 2026-09-04: remove invented allocations / clinical support from Dose.
-        "aggregate_cfu_low_tier_presence_floor": 2.0,
-        "aggregate_cfu_low_named_strain_total_floor": 4.0, "cap_direct_strain_mass_floor": 5.0,
+        # 1.26.0: per-strain disclosure moves to Transparency, and a total CFU or
+        # a strain mass is a recorded label limit with no floor credit.
+        "cap_dose": 25.0, "cap_cfu_adequacy": 15.0,
         "v3_cfu_adequacy_cap": 5.0,
         "tier_points": {"low": 0.0, "adequate": 1.0, "good": 2.0, "excellent": 3.0},
         "dose_applicability_policy": {"credit": {"EXACT_TESTED_DOSE": 1.0,
@@ -88,7 +90,10 @@ def test_runtime_constants_read_from_config_no_drift():
     assert multi_prenatal_dose.B7_CAP == DOSE_SAFETY["cap"]
     assert multi_prenatal_dose.DIMENSION_CAP == DM["multi_prenatal"]["dimension_cap"] == 25.0
     assert multi_prenatal_dose.CRITICAL_MIN_PCT_RDA == DM["multi_prenatal"]["critical_min_pct_rda"]
-    assert multi_prenatal_dose.PANEL_BREADTH_FULL_COUNT == 18
+    assert not hasattr(multi_prenatal_dose, "PANEL_BREADTH_FULL_COUNT")
+    assert not hasattr(generic_dose, "NO_REFERENCE_INDIVIDUAL_DOSE_CREDIT")
+    assert not hasattr(probiotic_dose, "AGGREGATE_CFU_LOW_NAMED_STRAIN_TOTAL_FLOOR")
+    assert CFG["dose_subscale"]["unbenchmarked_neutral_public"] == 11.4
     assert probiotic_dose.TIER_POINTS == DM["probiotic"]["tier_points"]
     assert "support_level_caps" not in DM["probiotic"]
     assert probiotic_dose.CAP_CFU_ADEQUACY == 15.0

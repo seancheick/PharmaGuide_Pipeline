@@ -116,17 +116,17 @@ def test_unreviewed_formula_strains_do_not_earn_independent_strain_credit():
     assert result["metadata"]["strain_indication_categories"] == []
 
 
-def test_formula_formulation_recognizes_native_potency_without_cfu_tiers():
+def test_studied_formula_earns_only_canonical_formulation_credit():
+    # V4.1 Step 4: a reviewed formula's potency and identity are Dose,
+    # Evidence and Transparency facts; Formulation is the canonical form
+    # quality (unrated strains keep the neutral; this fixture states no
+    # delivery system) and never converts AFU to CFU.
+    from scoring_v4.modules.generic_formulation import UNRATED_FORM_NEUTRAL
     from scoring_v4.modules.probiotic_formulation import score_formulation
     result = score_formulation(seed_label())
-    assert result["components"]["native_potency_disclosed"] == 4
-    assert "studied_formula_potency" not in result["components"]
-    assert result["score"] == result["max"] == 15
-    assert result["components"]["studied_formula_strain_identity"] == 8
-    assert "prebiotic_complement" not in result["components"]
-    assert result["components"]["delivery_survivability"] == 3
+    assert result["components"] == {"A1_bio_score": UNRATED_FORM_NEUTRAL, "A3_delivery_system": 0.0}
+    assert result["score"] == UNRATED_FORM_NEUTRAL
     assert result["metadata"]["total_billion_count"] == 0
-    assert "cfu_amount" not in result["components"]
 
 
 def test_formula_transparency_credits_total_afu_but_not_per_strain_amounts():

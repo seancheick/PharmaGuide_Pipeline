@@ -35,7 +35,6 @@ _B7 = _cfg_block("dose_safety_policy", "ul_pct_threshold")
 
 DIMENSION_CAP = _DM["dimension_cap"]
 CAP_RDA_AI_COVERAGE = _DM["cap_rda_ai_coverage"]
-CAP_PANEL_BREADTH = _DM["cap_panel_breadth"]
 CAP_CRITICAL_NUTRIENT_COVERAGE = _DM["cap_critical_nutrient_coverage"]
 CAP_PRENATAL_COMPLEMENT_SUPPORT = _DM["cap_prenatal_complement_support"]
 
@@ -43,7 +42,6 @@ B7_UL_PCT_THRESHOLD = _B7["ul_pct_threshold"]
 B7_PER_FLAG_PENALTY = _B7["per_flag_penalty"]
 B7_CAP = _B7["cap"]
 
-PANEL_BREADTH_FULL_COUNT = _DM["panel_breadth_full_count"]
 PRENATAL_DHA_FULL_MG = _DM["prenatal_dha_full_mg"]
 PRENATAL_DHA_PARTIAL_MG = _DM["prenatal_dha_partial_mg"]
 
@@ -82,7 +80,9 @@ PRENATAL_CORE_ANCHORS = (
     "vitamin_d",
     "vitamin_b12",
 )
-PRENATAL_COMPLEMENT_ANCHORS = ("choline", "dha")
+# Choline already counts in critical-nutrient coverage; DHA keeps its original
+# one-point share of the complement support (V4.1 Step 4).
+PRENATAL_COMPLEMENT_ANCHORS = ("dha",)
 
 CRITICAL_MIN_PCT_RDA = dict(_DM["critical_min_pct_rda"])
 
@@ -348,13 +348,6 @@ def _score_rda_ai_coverage(scores: Dict[str, float]) -> float:
     return _round(_clamp(0.0, CAP_RDA_AI_COVERAGE, avg * CAP_RDA_AI_COVERAGE))
 
 
-def _score_panel_breadth(scores: Dict[str, float]) -> float:
-    count = len(scores)
-    if count <= 0:
-        return 0.0
-    return _round(_clamp(0.0, CAP_PANEL_BREADTH, (count / PANEL_BREADTH_FULL_COUNT) * CAP_PANEL_BREADTH))
-
-
 def _is_dha_ingredient(ingredient: Dict[str, Any]) -> bool:
     canonical = _norm_text(ingredient.get("canonical_id") or ingredient.get("standard_name") or "")
     if canonical in {"dha", "epa_dha", "docosahexaenoic_acid"}:
@@ -467,12 +460,7 @@ def _critical_scores(product: Dict[str, Any], coverage_scores: Dict[str, float])
 def _prenatal_complement_scores(product: Dict[str, Any]) -> Dict[str, float]:
     if not _is_prenatal(product):
         return {}
-    threshold_scores = _critical_threshold_scores(product, rda_group="Pregnancy")
-    scores = {
-        "choline": _round(_clamp(0.0, 1.0, threshold_scores.get("choline", 0.0))),
-        "dha": _round(_clamp(0.0, 1.0, _dha_score(product))),
-    }
-    return scores
+    return {"dha": _round(_clamp(0.0, 1.0, _dha_score(product)))}
 
 
 def _score_critical_coverage(scores: Dict[str, float]) -> float:
@@ -496,7 +484,6 @@ def score_dose(product: Any) -> Dict[str, Any]:
     prenatal = _is_prenatal(product)
     coverage_scores = _coverage_scores(product, rda_group="Pregnancy" if prenatal else None)
     rda_ai_coverage = _score_rda_ai_coverage(coverage_scores)
-    panel_breadth = _score_panel_breadth(coverage_scores)
     critical_mode, critical_scores, critical_missing = _critical_scores(product, coverage_scores)
     critical_coverage = _score_critical_coverage(critical_scores)
     prenatal_complement_scores = _prenatal_complement_scores(product)
@@ -512,7 +499,6 @@ def score_dose(product: Any) -> Dict[str, Any]:
 
     components = {
         "rda_ai_coverage": rda_ai_coverage,
-        "panel_breadth": panel_breadth,
         "critical_nutrient_coverage": critical_coverage,
     }
     if prenatal_complement_support > 0:
@@ -527,7 +513,6 @@ def score_dose(product: Any) -> Dict[str, Any]:
         "method": METHOD_MARKER,
         "coverage_nutrient_count": len(coverage_scores),
         "coverage_nutrient_scores": dict(sorted(coverage_scores.items())),
-        "panel_breadth_count": len(coverage_scores),
         "critical_nutrient_mode": critical_mode,
         "critical_nutrient_scores": dict(sorted(critical_scores.items())),
         "critical_nutrients_missing": critical_missing,

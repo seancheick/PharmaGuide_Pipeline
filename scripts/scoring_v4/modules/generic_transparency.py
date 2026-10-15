@@ -24,7 +24,12 @@ import re
 from typing import Any, Dict, List, Optional, Tuple
 
 from constants import CLEANER_NON_EFFICACY_ROLES
-from scoring_input_contract import dose_disclosure_status, has_source_printed_amount, is_nutrition_fact_declaration
+from scoring_input_contract import (
+    dose_disclosure_status,
+    get_scoring_ingredients,
+    has_source_printed_amount,
+    is_nutrition_fact_declaration,
+)
 from scoring_v4.modules.generic_helpers import (
     _as_float,
     _norm_text,
@@ -116,8 +121,11 @@ def score_transparency(product: Dict[str, Any]) -> Dict[str, Any]:
         b6_penalty=b6,
     )
 
+    identity_complete = _active_identity_complete(product)
     components = {
-        "clear_disclosure_base": CLEAR_DISCLOSURE_BASE,
+        # V4.1 Step 4: the base credits identity disclosure, so it is earned
+        # only when every scored active has a resolved identity.
+        "clear_disclosure_base": CLEAR_DISCLOSURE_BASE if identity_complete else 0.0,
         "complete_active_identity_dose_disclosure": round(complete_active_bonus, 4),
         "B3_claim_compliance": round(b3, 4),
         # The v3 feature gate for hypoallergenic bonus is disabled in the
@@ -139,6 +147,7 @@ def score_transparency(product: Dict[str, Any]) -> Dict[str, Any]:
     metadata = {
         "phase": PHASE_MARKER,
         "raw_transparency": round(raw_total, 4),
+        "active_identity_complete": identity_complete,
         "cap_applied": raw_total > DIMENSION_CAP,
         "floor_applied": raw_total < 0.0,
         "claim_validations": {
@@ -167,6 +176,15 @@ def score_transparency(product: Dict[str, Any]) -> Dict[str, Any]:
         "phase": PHASE_MARKER,
         "metadata": metadata,
     }
+
+
+def _active_identity_complete(product: Dict[str, Any]) -> bool:
+    """Every scored active (excipients aside) resolves to a mapped identity."""
+    rows = get_scoring_ingredients(product, strict=True).rows
+    return bool(rows) and all(
+        bool(row.get("mapped") or row.get("mapped_identity") or row.get("canonical_id"))
+        for row in rows if not row.get("is_excipient")
+    )
 
 
 def _score_b2_false_allergen_claim_penalty(product: Dict[str, Any]) -> Tuple[float, Dict[str, Any]]:

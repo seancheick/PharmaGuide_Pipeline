@@ -171,13 +171,16 @@ def test_an_unrated_ingredient_form_is_neutral_not_zero():
     """Nature's Bounty Ultra Soya Lecithin (17091): lecithin has no form rating,
     so Formulation read 0/20 while Dose on the same product gave partial credit
     for an unavailable benchmark. Unknown is neutral, not worst-case."""
+    from scoring_v4.modules.generic_formulation import score_formulation
     from scoring_v4.quality_score import _config, _pillar_formulation
+    from test_v4_generic_formulation_p131 import _ingredient, _product
 
-    dim = {"score": 0.0, "max": 30.0, "metadata": {
-        "iqm_form_quality_assessed_count": 0, "formulation_profile": "generic_iqm"}}
+    dim = score_formulation(_product(ingredients=[_ingredient(
+        name="Soya Lecithin", canonical_id="lecithin", bio_score=None)]))
+    assert dim["metadata"]["iqm_form_quality_assessed_count"] == 0
     pillar = _pillar_formulation(dim, 20, "generic_single_molecule", _config())
 
-    assert pillar["score"] == 12.0  # the module's own neutral floor, 0.6 of the pillar
+    assert pillar["score"] == 12.0  # the module's own neutral (9 of 15), 0.6 of the pillar
     assert "not rated" in pillar["reason"].lower()
 
 

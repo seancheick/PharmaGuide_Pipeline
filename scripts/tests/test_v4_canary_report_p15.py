@@ -251,8 +251,9 @@ def test_score_canaries_routes_sports_canary_to_sports_module() -> None:
     assert rows[0]["status"] == "scored"
     assert rows[0]["v4_module"] == "sports"
     # re-baseline 2026-06-06: 3 g creatine monohydrate is a clinically-effective
-    # maintenance dose -> full sports dose credit (25), was under-credited at 16.
-    assert rows[0]["v4_dimensions"]["dose"] == 25.0
+    # maintenance dose -> full sports dose credit. V4.1 Step 4 retired the +5
+    # single-active completion bonus, so full credit is 20 (reference 20).
+    assert rows[0]["v4_dimensions"]["dose"] == 20.0
 
 
 def test_diagnose_compression_flags_sports_generic_routing_regression() -> None:

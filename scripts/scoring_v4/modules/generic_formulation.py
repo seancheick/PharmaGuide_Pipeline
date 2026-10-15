@@ -79,6 +79,9 @@ DELIVERY_TIER_POINTS = {int(k): v for k, v in _FM["a3_delivery_tier_points"].ite
 
 A5B_STANDARDIZED_FULL = _FM["a5b_standardized_full"]
 A5B_STANDARDIZED_MARKER_ONLY = _FM["a5b_standardized_marker_only"]
+# One owner for "this form is not rated": a row (or a whole product) without a
+# form rating keeps this neutral on the 15-point form scale (12/20 public).
+UNRATED_FORM_NEUTRAL = _FM["unrated_form_neutral"]
 
 
 # B1 harmful-additive points/cap are HOISTED to scripts/scoring_v4/config/
@@ -419,6 +422,10 @@ def score_formulation(product: Dict[str, Any]) -> Dict[str, Any]:
         product = {}
 
     bio_score, form_assessed_count = _bio_score_assessment(product)
+    if form_assessed_count == 0:
+        # V4.1 Step 4: an unrated form is an explicit neutral before deductions,
+        # not a pillar-level lift applied after them.
+        bio_score = UNRATED_FORM_NEUTRAL
     delivery_data = eligible_delivery_data(product)
     components: Dict[str, float] = {
         "A1_bio_score": round(bio_score, 4),

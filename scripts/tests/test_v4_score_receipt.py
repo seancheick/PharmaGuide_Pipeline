@@ -55,9 +55,18 @@ def _transparency(base=6.0, bonus=4.0, penalties=None, metadata=None):
                               "B6_marketing_claims": 0.0}, metadata)
 
 
+# V4.1 Step 4 shapes: a recognized identity is a neutral baseline and the word
+# "extract" is earned; the printed amount no longer earns Formulation points,
+# and B0/B1 belong to the formula-checks pillar.
+MERU_PROFILE = {"recognized_botanical_identity": 7.2, "extract_not_whole_herb": 1.6}
+# Meru's 500 mg has no studied range: the shared 11.4-public neutral on the
+# botanical Dose reference 21.
+MERU_DOSE = round(11.4 * 21 / 20, 4)
+
+
 def _botanical_formulation(profile, penalties=None, floor_applied=False, score=None):
     a1 = min(15.0, max(0.0, sum(profile.values())))
-    pen = penalties or {"B1_dietary_sugar": 0.0, "B0_moderate_watchlist": 0.0, "B1_harmful_additives": 0.0}
+    pen = penalties or {}
     running = a1 + sum(pen.values())
     return _dim(score if score is not None else max(0.0, running), 30.0,
                 {"A1_bio_score": a1, "A3_delivery_system": 0.0, "A4_absorption_enhancer": 0.0,
@@ -71,10 +80,8 @@ def _botanical_formulation(profile, penalties=None, floor_applied=False, score=N
 def _meru_breakdown():
     return {
         "dimensions": {
-            "formulation": _botanical_formulation({"recognized_botanical_identity": 6.0,
-                                                   "quantified_dose_present": 2.0,
-                                                   "extract_not_whole_herb": 2.0}),
-            "dose": _dim(12.0, 25.0, {"botanical_clinical_dose": 12.0}, {"B7_dose_safety": 0.0},
+            "formulation": _botanical_formulation(dict(MERU_PROFILE)),
+            "dose": _dim(MERU_DOSE, 25.0, {"botanical_clinical_dose": MERU_DOSE}, {"B7_dose_safety": 0.0},
                          {"botanical_dose_band": "disclosed_no_reference"}),
             "evidence": _dim(0.0, 20.0, {"clinical_evidence_pipeline": 0.0, "depth_bonus": 0.0}, {},
                              {"evidence_result_state": "applicability_unestablished", "matched_entries": 0}),
@@ -123,13 +130,15 @@ def _ids(out, pillar):
 
 # ---- Meru: baselines, disclosure credit and an applicability zero ----------
 
-def test_meru_receipt_reconciles_to_55_7_without_changing_any_pillar():
+def test_meru_receipt_reconciles_without_changing_any_pillar():
     out = _assemble(_meru_breakdown())
     pillars = out["quality_pillars_v4"]
+    # Formulation 8.8 / 12 x 20; Dose is the neutral 11.4 whether or not the
+    # amount is printed (disclosure is Transparency's).
     assert {k: p["score"] for k, p in pillars.items()} == {
-        "formulation": 13.3, "dose": 11.4, "evidence": 0.0, "transparency": 15.0,
+        "formulation": 14.7, "dose": 11.4, "evidence": 0.0, "transparency": 15.0,
         "verification": 6.0, "safety_hygiene": 10.0}
-    assert out["quality_score_v4_100"] == 55.7
+    assert out["quality_score_v4_100"] == 57.1
     _assert_reconciles(out)
 
 
@@ -138,9 +147,9 @@ def test_botanical_profile_detail_replaces_its_aggregate():
     ids = _ids(out, "formulation")
     assert "A1_bio_score" not in ids
     assert _entry(out, "formulation", "recognized_botanical_identity")["kind"] == "neutral"
-    assert _entry(out, "formulation", "quantified_dose_present")["kind"] == "disclosure"
+    assert "quantified_dose_present" not in ids
     assert _entry(out, "formulation", "extract_not_whole_herb")["kind"] == "earned"
-    assert _entry(out, "formulation", "recognized_botanical_identity")["points"] == pytest.approx(8.0)
+    assert _entry(out, "formulation", "recognized_botanical_identity")["points"] == pytest.approx(12.0)
 
 
 def test_unbenchmarked_dose_and_unconditional_bases_are_labelled_neutral():
@@ -162,16 +171,18 @@ def test_presence_floor_absorption_is_visible_as_realized_vs_nominal():
     # B0/B1 to the formula-checks pillar).
     bd = _meru_breakdown()
     bd["dimensions"]["formulation"] = _botanical_formulation(
-        {"recognized_botanical_identity": 6.0, "quantified_dose_present": 2.0, "extract_not_whole_herb": 2.0},
+        dict(MERU_PROFILE),
         penalties={"sports_collagen_not_complete_protein": -10.0},
         floor_applied=True, score=2.0)
     bd["safety_hygiene_base"] = _base(passed=False)
     out = _assemble(bd, verdict="CAUTION")
     form = out["quality_pillars_v4"]["formulation"]
-    assert form["score"] == 2.7
+    # Floor 2 on reference 12: 3.3 public; the nominal -10 raw is -16.67 public,
+    # of which the floor gives back 2 - (8.8 - 10) = 3.2 raw.
+    assert form["score"] == 3.3
     assert _entry(out, "formulation", "presence_floor")["kind"] == "floor"
-    assert form["receipt"]["nominal_deductions"] == pytest.approx(-13.3333, abs=1e-3)
-    assert form["receipt"]["realized_deductions"] == pytest.approx(-10.6, abs=1e-6)
+    assert form["receipt"]["nominal_deductions"] == pytest.approx(-16.6667, abs=1e-3)
+    assert form["receipt"]["realized_deductions"] == pytest.approx(-11.4, abs=1e-6)
     assert out["quality_pillars_v4"]["safety_hygiene"]["score"] == 0.0
     _assert_reconciles(out)
 
@@ -181,26 +192,26 @@ def test_presence_floor_absorption_is_visible_as_realized_vs_nominal():
 def test_formula_checks_and_b7_are_each_one_entry_in_their_owner():
     bd = _meru_breakdown()
     bd["dimensions"]["formulation"] = _dim(
-        9.08, 14.0, {"panel_form_quality": 8.08, "panel_disclosure_structure": 1.0}, {},
+        8.08, 12.0, {"panel_form_quality": 8.08}, {},
         {"presence_floor": {"target": 2.0, "pre_floor_score": 9.08, "applied": False},
          "inactive_penalty_details": [],
          "formula_checks": {"B1_dietary_sugar": 2.0, "B1_harmful_additives": 4.0}})
     bd["dimensions"]["dose"] = _dim(
-        9.9015, 25.0, {"rda_ai_coverage": 9.0681, "panel_breadth": 1.1667, "critical_nutrient_coverage": 1.6667},
+        8.7348, 25.0, {"rda_ai_coverage": 9.0681, "critical_nutrient_coverage": 1.6667},
         {"B7_dose_safety": -2.0},
         {"B7_safety_evaluation": {"state_counts": {"confirmed_over_threshold": 2}, "flags": [
             {"state": "confirmed_over_threshold", "penalized": True, "pct_ul": 160.0}]}})
     bd["dimensions"]["evidence"] = _dim(10.0, 20.0, {"essential_panel_authority": 10.0}, {},
                                         {"evidence_result_state": "evaluated_authority"})
     out = _assemble(bd, module="multi_or_prenatal", verdict="CAUTION")
-    assert out["quality_pillars_v4"]["formulation"]["score"] == 13.0
-    assert out["quality_pillars_v4"]["dose"]["score"] == 8.6
+    assert out["quality_pillars_v4"]["formulation"]["score"] == 13.5
+    assert out["quality_pillars_v4"]["dose"]["score"] == 8.7
     assert out["quality_pillars_v4"]["safety_hygiene"]["score"] == 4.0
     assert not any(entry["id"].startswith("B1_")
                    for entry in out["quality_pillars_v4"]["formulation"]["receipt"]["entries"])
     assert _entry(out, "safety_hygiene", "additive_or_sweetener_penalty")["points"] == -6.0
     assert not any(entry["id"] == "over_ul_penalty" for entry in out["quality_pillars_v4"]["safety_hygiene"]["receipt"]["entries"])
-    assert _entry(out, "dose", "B7_dose_safety")["points"] == pytest.approx(-2.0 * 20 / 23, abs=1e-4)
+    assert _entry(out, "dose", "B7_dose_safety")["points"] == pytest.approx(-2.0 * 20 / 20, abs=1e-4)
     _assert_reconciles(out)
 
 
@@ -253,16 +264,19 @@ def test_quality_system_violation_is_a_verification_deduction():
 
 def test_unrated_form_neutral_is_a_neutral_floor_entry():
     bd = _meru_breakdown()
+    # V4.1 Step 4: the module itself carries the neutral as A1 (9 of 15).
     bd["dimensions"]["formulation"] = _dim(
-        0.0, 30.0, {"A1_bio_score": 0.0, "A3_delivery_system": 0.0, "A4_absorption_enhancer": 0.0,
+        9.0, 30.0, {"A1_bio_score": 9.0, "A3_delivery_system": 0.0, "A4_absorption_enhancer": 0.0,
                     "A5b_standardized_botanical": 0.0},
-        {"B1_dietary_sugar": 0.0, "B0_moderate_watchlist": 0.0, "B1_harmful_additives": 0.0},
+        {},
         {"formulation_profile": "generic_iqm", "iqm_form_quality_assessed_count": 0,
-         "presence_floor": {"target": 2.0, "pre_floor_score": 0.0, "applied": False}})
+         "presence_floor": {"target": 2.0, "pre_floor_score": 9.0, "applied": False}})
     out = _assemble(bd)
     assert out["quality_pillars_v4"]["formulation"]["score"] == 12.0
-    entry = _entry(out, "formulation", "unrated_form_neutral")
+    entry = _entry(out, "formulation", "A1_unrated_neutral")
     assert entry["kind"] == "neutral" and entry["points"] == 12.0
+    assert entry["source"] == "generic_formulation.UNRATED_FORM_NEUTRAL"
+    assert "A1_bio_score" not in _ids(out, "formulation")
     _assert_reconciles(out)
 
 

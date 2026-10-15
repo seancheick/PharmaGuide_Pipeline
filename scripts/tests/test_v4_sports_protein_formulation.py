@@ -115,9 +115,10 @@ def test_clean_whey_isolate_gets_elite_protein_formulation_credit() -> None:
     )
 
     assert payload["metadata"]["sports_protein_profile_applied"] is True
-    assert payload["score"] >= 24.0
-    assert payload["components"]["sports_protein_source_quality"] >= 15.0
-    assert payload["components"]["sports_amino_profile_disclosure"] > 0.0
+    # V4.1 Step 4: source quality is the whole protein Formulation (reference
+    # 15); amino-profile and dose disclosure are Transparency facts.
+    assert payload["components"] == {"sports_protein_source_quality": 15.0}
+    assert payload["score"] == 15.0
 
 
 def test_protein_purpose_survives_a_stimulant_calibration_subtype() -> None:
@@ -132,7 +133,7 @@ def test_protein_purpose_survives_a_stimulant_calibration_subtype() -> None:
     assert sports_subtype(product) == "stimulant_fat_burner"
     assert score_formulation(product)["metadata"]["sports_protein_profile_applied"] is True
     components = build_scored_artifact(product)["quality_pillars_v4"]["formulation"]["components"]
-    assert components["raw_formulation"] > 20.0
+    assert components["raw_formulation"] == 15.0
 
 
 def test_complete_plant_blend_gets_strong_but_not_isolate_level_credit() -> None:
@@ -146,7 +147,8 @@ def test_complete_plant_blend_gets_strong_but_not_isolate_level_credit() -> None
         )
     )
 
-    assert 20.0 <= payload["score"] < 24.0
+    # Strong (12 of 15) but below the 15 an isolate earns.
+    assert payload["score"] == 12.0
     assert payload["metadata"]["protein_source_class"] == "complete_plant_blend"
 
 
@@ -159,7 +161,7 @@ def test_generic_protein_row_uses_clear_casein_product_name_for_source_class() -
     )
 
     assert payload["metadata"]["protein_source_class"] == "casein"
-    assert payload["score"] >= 24.0
+    assert payload["score"] == 14.0
 
 
 def test_soy_protein_isolate_does_not_get_whey_isolate_source_class() -> None:
@@ -249,4 +251,4 @@ def test_sports_module_uses_protein_formulation_adapter() -> None:
 
     formulation = result.to_breakdown()["dimensions"]["formulation"]
     assert formulation["metadata"]["sports_protein_profile_applied"] is True
-    assert formulation["score"] >= 24.0
+    assert formulation["score"] == 15.0

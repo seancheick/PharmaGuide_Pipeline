@@ -3,9 +3,9 @@
 The generic formulation scorer under-recognizes protein powders because it is
 built around vitamin/mineral form quality and broad supplement composition.
 This adapter keeps the shared safety/sugar penalties (the only sugar and
-sweetener charge, 1.21.4) and scores protein powders on the formulation facts
-that matter for the category: source quality, transparent protein dosing,
-amino-profile disclosure and focus.
+sweetener charge, 1.21.4) and scores protein powders on protein source
+quality. V4.1 Step 4 retired the dose-transparency and amino-profile disclosure
+credits (Transparency owns disclosure) and the focus and route-base bonuses.
 """
 
 from __future__ import annotations
@@ -18,16 +18,11 @@ from scoring_v4.modules.generic_formulation import (
 )
 from scoring_v4.modules.generic_helpers import (
     _norm_text,
-    _safe_list,
     get_active_ingredients,
 )
 from scoring_v4.modules.sports_helpers import (
-    BCAA_CANONICALS,
-    EAA_CANONICALS,
-    EAA_AGGREGATE_CANONICALS,
     SPORTS_PROTEIN_CANONICALS,
     canonical,
-    dose_g,
     primary_sports_identity,
     sports_subtype,
 )
@@ -39,9 +34,6 @@ _FVM = _cfg_block("formulation_variant_magnitudes", "sports")["sports"]
 
 
 DIMENSION_CAP = _FVM["dimension_cap"]
-# Former clean-daily-use points, kept as a fixed base (1.21.4): sugar and sweeteners are
-# charged once, by the shared B1 owners in shared_formulation_penalty_detail.
-ROUTE_BASE = _FVM["route_base"]
 PHASE_MARKER = "P1.7_sports_protein_formulation_v1"
 
 _WHEY_TERMS = ("whey",)
@@ -68,16 +60,9 @@ def score_formulation(product: Dict[str, Any]) -> Dict[str, Any]:
         return score_generic_formulation(product)
 
     source_quality, source_class = _source_quality(protein_rows, product)
-    dose_transparency = _dose_transparency(protein_rows, source_class)
-    amino_disclosure = _amino_profile_disclosure(rows)
-    focus = _protein_focus(rows, source_class)
 
     components: Dict[str, float] = {
         "sports_protein_source_quality": round(source_quality, 4),
-        "sports_protein_dose_transparency": round(dose_transparency, 4),
-        "sports_amino_profile_disclosure": round(amino_disclosure, 4),
-        "sports_protein_focus": round(focus, 4),
-        "sports_route_base": ROUTE_BASE,
     }
 
     shared = shared_formulation_penalty_detail(product)
@@ -186,64 +171,6 @@ def _has_named_complete_source(canons: set[str], text: str) -> bool:
         or _has_any(text, _WHEY_TERMS + _CASEIN_TERMS + _SOY_TERMS)
         or ("pea_protein" in canons and "rice_protein" in canons)
     )
-
-
-def _dose_transparency(protein_rows: List[Dict[str, Any]], source_class: str) -> float:
-    best_g = max((dose_g(row) or 0.0) for row in protein_rows)
-    if best_g >= 20.0:
-        points = 4.0
-    elif best_g >= 10.0:
-        points = 2.5
-    elif best_g > 0.0:
-        points = 1.0
-    else:
-        points = 0.0
-
-    if source_class not in {"opaque_protein_matrix", "generic_protein"}:
-        points += 1.0
-    return min(5.0, points)
-
-
-def _amino_profile_disclosure(rows: List[Dict[str, Any]]) -> float:
-    canons = {canonical(row) for row in rows}
-    if EAA_CANONICALS.issubset(canons):
-        return 3.0
-    if any(
-        canonical(row) in EAA_AGGREGATE_CANONICALS
-        and {
-            _norm_text(value)
-            for value in _safe_list(row.get("verified_child_canonicals"))
-            if _norm_text(value)
-        }
-        == set(EAA_CANONICALS)
-        for row in rows
-    ):
-        return 3.0
-    if BCAA_CANONICALS.issubset(canons):
-        return 2.0
-    if "l_leucine" in canons:
-        return 1.5
-    return 0.0
-
-
-def _protein_focus(rows: List[Dict[str, Any]], source_class: str) -> float:
-    if source_class == "collagen_or_gelatin":
-        return 1.0
-    if source_class == "opaque_protein_matrix":
-        return 1.0
-
-    non_accessory = 0
-    for row in rows:
-        canon = canonical(row)
-        if canon in EAA_CANONICALS or canon in BCAA_CANONICALS:
-            continue
-        if canon in {"vitamin_d", "calcium", "sodium", "potassium"}:
-            continue
-        if dose_g(row) is not None:
-            non_accessory += 1
-    if non_accessory <= 2:
-        return 4.0
-    return 3.0
 
 
 def _protein_penalties(

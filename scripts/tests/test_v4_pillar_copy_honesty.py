@@ -80,17 +80,19 @@ def test_missing_botanical_amount_is_not_called_a_partial_dose():
 
 
 def test_botanical_formulation_names_what_earned_the_points():
-    dim = {"score": 10.0, "max": 30.0, "components": {"A1_bio_score": 10.0},
+    # V4.1 Step 4: identity is a neutral baseline and the printed amount earns
+    # nothing here, so the copy says neither is earned quality.
+    dim = {"score": 8.8, "max": 30.0, "components": {"A1_bio_score": 8.8},
            "metadata": {"formulation_profile": "botanical", "botanical_profile_applied": True,
                         "iqm_form_quality_assessed_count": 3,
-                        "botanical_formulation": {"recognized_botanical_identity": 6.0,
-                                                  "quantified_dose_present": 2.0,
-                                                  "extract_not_whole_herb": 2.0}}}
+                        "botanical_formulation": {"recognized_botanical_identity": 7.2,
+                                                  "extract_not_whole_herb": 1.6}}}
     pillar = qs._pillar_formulation(dim, 20, "generic_botanical_branded", _cfg())
-    assert pillar["score"] == 13.3
+    assert pillar["score"] == 14.7
     assert pillar["reason"] == (
-        "Credited: recognized botanical identity, extract preparation, disclosed amount. "
-        "Not credited: plant part, verified standardization.")
+        "The recognized botanical identity receives neutral credit. "
+        "Credited: extract preparation. Not credited: marker standardization.")
+    assert "disclosed amount" not in pillar["reason"] and "verified" not in pillar["reason"]
     assert "absorbed" not in pillar["reason"] and "forms" not in pillar["reason"]
 
 

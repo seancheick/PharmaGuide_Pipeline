@@ -15,6 +15,7 @@ if str(SCRIPTS_ROOT) not in sys.path:
 from scoring_v4.modules.probiotic_evidence import score_evidence  # noqa: E402
 import studied_formulas  # noqa: E402
 from studied_formulas import independent_clinical_strains  # noqa: E402
+from test_probiotic_identity_completeness import _disclosure_points, _identity_points
 
 
 def _clinical_row(**fields) -> dict:
@@ -397,16 +398,13 @@ def test_pending_strain_keeps_label_potency_without_clinical_adequacy() -> None:
     })
 
     dose = score_dose(product)
-    assert dose["components"]["per_strain_cfu_disclosure"] == 10
+    assert _disclosure_points(dose) == 10
     assert dose["components"]["cfu_adequacy"] == 10
     assert "dose_applicability" not in score_evidence(product)["components"]
 
 
 def test_pending_strain_cannot_supply_an_aggregate_clinical_dose_proxy() -> None:
-    from scoring_v4.modules.probiotic_dose import (
-        AGGREGATE_CFU_LOW_NAMED_STRAIN_TOTAL_FLOOR,
-        score_dose,
-    )
+    from scoring_v4.modules.probiotic_dose import score_dose
 
     product = _owned_product(
         strain="Bifidobacterium longum subsp. infantis M-63",
@@ -421,13 +419,13 @@ def test_pending_strain_cannot_supply_an_aggregate_clinical_dose_proxy() -> None
     })
 
     dose = score_dose(product)
-    assert dose["components"]["per_strain_cfu_disclosure"] == 0
-    assert dose["components"]["cfu_adequacy"] == AGGREGATE_CFU_LOW_NAMED_STRAIN_TOTAL_FLOOR
-    assert dose["metadata"]["aggregate_cfu_proxy"]["reason"] == (
-        "aggregate_cfu_named_label_presence"
-    )
-    assert "proxy_cfu_per_strain" not in dose["metadata"]["aggregate_cfu_proxy"]
-    assert "proxy_tier" not in dose["metadata"]["aggregate_cfu_proxy"]
+    assert _disclosure_points(dose) == 0
+    # The total is a recorded label limit; the pending strain owns no measurement.
+    assert dose["components"]["cfu_adequacy"] == 0
+    assert dose["metadata"]["cfu_adequacy_basis"] == "aggregate_cfu_disclosed_only"
+    assert dose["metadata"]["aggregate_cfu_proxy"] == {
+        "applied": True, "reason": "aggregate_cfu_label_presence", "total_billion_count": 10.0,
+    }
 
 
 def test_unreviewed_strains_keep_label_identity_but_no_clinical_credit() -> None:
@@ -445,7 +443,7 @@ def test_unreviewed_strains_keep_label_identity_but_no_clinical_credit() -> None
 
     formulation = score_formulation(product)
     assert "named_species_diversity" not in formulation["components"]
-    assert formulation["components"]["exact_identity_completeness"] == 8
+    assert _identity_points(formulation) == 8
     assert formulation["metadata"]["identified_strain_count"] == 1
     assert score_evidence(product)["score"] == 0
 
@@ -503,7 +501,7 @@ def test_producer_cannot_export_a_badge_for_a_different_strain(
     assert product["probiotic_data"]["probiotic_blends"][0]["strains"] == [strain]
     dose = score_dose(product)
     assert dose["metadata"]["per_strain_cfu_disclosed_count"] == 1
-    assert dose["components"]["per_strain_cfu_disclosure"] == 10
+    assert _disclosure_points(dose) == 10
     assert dose["components"]["cfu_adequacy"] == 0
 
 

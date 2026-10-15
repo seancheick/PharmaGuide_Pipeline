@@ -23,6 +23,8 @@ import sys
 from pathlib import Path
 
 import pytest
+from test_probiotic_identity_completeness import _disclosure_points
+
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
 SCRIPTS_ROOT = REPO_ROOT / "scripts"
@@ -48,14 +50,17 @@ GENERIC_CANARIES = {
         # exposure and component attribution pinned instead of the old
         # per-serving/interim total. Meriva/phytosome is already the form;
         # independent-delivery policy removes the duplicate3. Formulation9−1.5=7.5.
-        "score_range": (59.5, 59.5),
+        # V4.1 Step 4: the profile keeps only the neutral identity (7.2); the
+        # printed amount is a Transparency fact. Above range stays 12 (ref 21).
+        "score_range": (59.2, 59.2),
         "traits": {
             "trust_high": True,
             "dimension_scores": {
-                "formulation": 7.5, "dose": 12.0,
+                "formulation": 7.2, "dose": 12.0,
                 "evidence": 14.0, "transparency": 10.0,
             },
-            "botanical_dose": {"dose_mg": 2000.0, "range_mg": [500.0, 1000.0]},
+            "botanical_dose": {"dose_mg": 2000.0, "range_mg": [500.0, 1000.0],
+                               "measurement_daily_max": 2000.0},
             "botanical_dose_band": "above_studied_range",
         },
     },
@@ -65,7 +70,10 @@ GENERIC_CANARIES = {
     # that product correctly route to fiber_digestive.
     "251998": {
         "label": "Nature's Way DHEA-25 mg",
-        "score_range": (37.7, 37.7),
+        # V4.1 Step 4: the unbenchmarked purpose takes the shared 11.4-public
+        # neutral (12.54 raw on reference 22, was 16), and formula checks own
+        # the additive findings Formulation used to charge.
+        "score_range": (44.7, 44.7),
         "traits": {"dose_partial_no_rda": True, "trust_positive": True},
     },
     # False-positive guard from omega routing: liposomal delivery/lecithin
@@ -89,7 +97,8 @@ SPORTS_CANARIES = {
         "label": "Transparent Labs Creatine HMB",
         # BioPerine remains A4=3, not also A3=3. The approved HMB parent
         # ceiling changes A1 10.9821→11.25; native79.25 rounds to79.2.
-        "score_range": (79.2, 79.2),
+        # V4.1 Step 4: the +1 stack-support presence credit is retired (Dose 20).
+        "score_range": (78.2, 78.2),
         "traits": {"trust_positive": True, "dose_max": True,
                    "dimension_scores": {"formulation": 14.25},
                    "form_components": {"A1_bio_score": 11.25, "A3_delivery_system": 0.0,
@@ -105,40 +114,45 @@ PROBIOTIC_CANARIES = {
         "label": "Thorne FloraSport 20B",
         # DE111/HN019 reviewed native outcomes do not establish benefit here;
         # the other two source identities lack exact registered strain codes.
-        "score_range": (52.5, 52.5),
+        # V4.1 Step 4: canonical Formulation (unrated strains, neutral 9) and
+        # Dose as measured adequacy only (per-strain disclosure is Transparency's).
+        "score_range": (44.0, 44.0),
         "traits": {"trust_positive": True,
-                   "dimension_scores": {"formulation": 7.5, "dose": 15.0, "evidence": 0.0, "transparency": 15.0},
+                   "dimension_scores": {"formulation": 9.0, "dose": 5.0, "evidence": 0.0, "transparency": 15.0},
                    "identity_counts": (2, 4), "evidence_state": "evaluated_null"},
     },
     # Low end of current probiotic score distribution.
     "201158": {
         "label": "OLLY Kids Quick Melt Probiotic Sticks",
-        "score_range": (48.5, 48.5),
+        # V4.1 Step 4: its total CFU is a recorded label limit, not Dose credit.
+        "score_range": (44.1, 44.1),
         "traits": {"trust_positive": True},
     },
-    # Aggregate-CFU-only canary: gets Formulation credit and capped dose proxy,
-    # but not full per-strain disclosure/adequacy.
+    # Aggregate-CFU-only canary: the total is recorded as a label limit with no
+    # Dose credit (V4.1 Step 4), never an invented per-strain allocation.
     "178346": {
         "label": "Spring Valley Advanced Strength Probiotic 50B",
-        # Ten species and no owned strain doses: aggregate disclosure receives
-        # its existing floor, never an invented even allocation of total CFU.
-        "score_range": (21.2, 21.2),
+        # Ten species and no owned strain doses. Formulation is the shared
+        # unrated neutral (9); the old disclosure-based Formulation and the
+        # 2-point aggregate floor are retired, so the module total rises.
+        "score_range": (25.0, 25.0),
         "traits": {
             "aggregate_cfu_proxy": True,
             "no_independent_delivery": True,
             "trust_zero": True,
-            "dose_score": 1.7,
+            "dose_score": 0.0,
             "aggregate_proxy_detail": {
-                "score": 2.0,
-                "reason": "aggregate_cfu_label_presence",
                 "total_strain_count": 10,
+                "cfu_guarantee_reason": "cfu_guarantee_not_disclosed",
             },
         },
     },
     # Per-strain CFU disclosed path; Dose > 0 with no Trust credit.
     "286725": {
         "label": "vitafusion Probiotic 5B",
-        "score_range": (41.0, 41.0),
+        # V4.1 Step 4: measured adequacy (5) stays; per-strain disclosure moves
+        # to Transparency and Formulation is the unrated neutral.
+        "score_range": (34.5, 34.5),
         "traits": {"dose_positive": True, "trust_zero": True, "no_independent_delivery": True},
     },
     # Per-strain CFU + positive Trust path.
@@ -149,9 +163,11 @@ PROBIOTIC_CANARIES = {
         # The CFU disclosure component owns that limitation, without a second B5.
         # V4.1 (Oct 15, 2026): its reviewed research does not apply to this
         # product, so the former 10 certainty points are gated to 0.
-        "score_range": (36.6, 36.6),
-        "traits": {"dose_positive": True, "trust_positive": True,
-                   "dimension_scores": {"formulation": 12.0, "dose": 3.4, "evidence": 0.0, "transparency": 11.0},
+        # V4.1 Step 4: the disclosed total is a label limit (Dose 0); Formulation
+        # is the unrated neutral.
+        "score_range": (30.2, 30.2),
+        "traits": {"dose_zero": True, "trust_positive": True,
+                   "dimension_scores": {"formulation": 9.0, "dose": 0.0, "evidence": 0.0, "transparency": 11.0},
                    "identity_counts": (3, 3),
                    "evidence_state": "research_present_applicability_unestablished"},
     },
@@ -159,28 +175,28 @@ PROBIOTIC_CANARIES = {
     "76803": {
         "label": "GNC Probiotic Solutions Prenatal 20B",
         # LGG has contextual evidence, but undisclosed per-strain CFU cannot
-        # establish its studied dose. The named-strain disclosure floor applies.
+        # establish its studied dose. V4.1 Step 4: the total is a recorded label
+        # limit with no Dose credit (the named-strain floor is retired).
         # V4.1 (Oct 15, 2026): LGG certainty without applicability no longer
         # earns its 6.67 Evidence points.
-        "score_range": (29.7, 31.1),
+        "score_range": (29.1, 29.1),
         "traits": {
             "prenatal_name_routes_probiotic": True,
             "trust_positive": True,
-            "dose_score": 4.0,
+            "dose_score": 0.0,
             "aggregate_proxy_detail": {
-                "score": 4.0,
-                "reason": "aggregate_cfu_named_label_presence",
                 "total_strain_count": 2,
-                # The label reads "Guaranteed potency through expiration date",
-                # so no shelf-life discount applies (read correctly since the
-                # 2026-09-16 guarantee fix; the old pin assumed not-disclosed).
-                "cfu_guarantee": {"applied": False, "reason": "cfu_guaranteed_through_expiration"},
+                # The label reads "Guaranteed potency through expiration date"
+                # (read correctly since the 2026-09-16 guarantee fix).
+                "cfu_guarantee_reason": "cfu_guaranteed_through_expiration",
             },
         },
     },
     "PG_SUB_35E0BD3374BF494B80FEABE87FC559E7": {
         "label": "Seed DS-01 Daily Synbiotic",
-        "score_range": (74.6, 74.6),
+        # V4.1 Step 4: Formulation is the IQM form rating (8.33) without the
+        # former studied-formula identity/potency credits.
+        "score_range": (67.9, 67.9),
         "traits": {"studied_formula_afu": True, "dose_score": 25.0},
     },
 }
@@ -276,7 +292,8 @@ def test_generic_real_catalog_canary_score_and_traits(dsld_id: str, expected: di
     if traits.get("dose_none"):
         assert _dimension_score(breakdown, "dose") is None
     if traits.get("dose_partial_no_rda"):
-        assert _dimension_score(breakdown, "dose") == 16.0
+        # The shared unbenchmarked neutral on the generic reference 22.
+        assert _dimension_score(breakdown, "dose") == 12.54
         assert (
             breakdown["dimensions"]["dose"]["metadata"]["window_proxy_status"]
             == "limited_assessability_unbenchmarked_purpose"
@@ -317,8 +334,9 @@ def test_sports_real_catalog_canary_score_and_traits(dsld_id: str, expected: dic
     for name, value in traits.get("form_components", {}).items():
         assert breakdown["dimensions"]["formulation"]["components"][name] == pytest.approx(value)
     if traits.get("dose_max"):
-        # re-baseline 2026-06-06: TL Creatine HMB sports dose 20 -> 21.
-        assert _dimension_score(breakdown, "dose") == 21
+        # re-baseline 2026-06-06: TL Creatine HMB sports dose 20 -> 21; V4.1
+        # Step 4 retired the +1 stack support, so the full primary dose is 20.
+        assert _dimension_score(breakdown, "dose") == 20
     if traits.get("trust_positive"):
         assert _verification_strength(breakdown) > 0
 
@@ -346,7 +364,7 @@ def test_probiotic_real_catalog_canary_score_and_traits(dsld_id: str, expected: 
     traits = expected["traits"]
     if traits.get("no_independent_delivery"):
         form = breakdown["dimensions"]["formulation"]
-        assert form["components"]["delivery_survivability"] == 0.0
+        assert form["components"]["A3_delivery_system"] == 0.0
         assert form["metadata"]["delivery_data"]["systems"] == []
     for dimension, value in traits.get("dimension_scores", {}).items():
         assert _dimension_score(breakdown, dimension) == pytest.approx(value)
@@ -367,29 +385,25 @@ def test_probiotic_real_catalog_canary_score_and_traits(dsld_id: str, expected: 
             expected["label"], dose,
         )
     if "aggregate_proxy_detail" in traits:
-        # Aggregate disclosure is not a per-strain adequacy estimate.
+        # Aggregate disclosure is not a per-strain adequacy estimate: V4.1
+        # Step 4 records it as a label limit and credits nothing.
         want = traits["aggregate_proxy_detail"]
         meta = breakdown["dimensions"]["dose"]["metadata"]
         proxy = meta["aggregate_cfu_proxy"]
         assert proxy["applied"] is True
-        assert proxy["reason"] == want["reason"]
-        assert proxy["floor"] == want["score"]
-        assert proxy["score"] == pytest.approx(want["score"])
-        assert not proxy.get("contributions")
+        assert proxy["reason"] == "aggregate_cfu_label_presence"
+        assert not {"score", "floor", "cap", "contributions"} & set(proxy)
         assert meta["total_strain_count"] == want["total_strain_count"]
         assert meta["per_strain_cfu_disclosed_count"] == 0
         assert meta["cfu_adequacy_basis"] == "aggregate_cfu_disclosed_only"
         assert meta["reference_basis"] == "industry_potency_not_trial_efficacy"
         guarantee = meta["cfu_guarantee"]
-        want_guarantee = want.get("cfu_guarantee", {"applied": True, "reason": "cfu_guarantee_not_disclosed"})
-        assert guarantee["applied"] is want_guarantee["applied"]
-        assert guarantee["reason"] == want_guarantee["reason"]
-        assert breakdown["dimensions"]["dose"]["score"] == pytest.approx(
-            round(proxy["score"] * guarantee["multiplier"], 2)
-        )
-        assert dose["components"]["per_strain_cfu_disclosure"] == 0.0
+        assert guarantee["reason"] == want["cfu_guarantee_reason"]
+        assert guarantee["applied"] is False  # nothing measured to discount
+        dose = breakdown["dimensions"]["dose"]
+        assert dose["score"] == 0.0
+        assert _disclosure_points(dose) == 0.0
         assert dose["metadata"]["window_proxy_reason"] == "aggregate_cfu_not_per_strain"
-        assert proxy["score"] <= proxy["cap"]
     if traits.get("studied_formula_afu"):
         meta = breakdown["dimensions"]["dose"]["metadata"]
         assert meta["assessment_status"] == "assessed_studied_formula"

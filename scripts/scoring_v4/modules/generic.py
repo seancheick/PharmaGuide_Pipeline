@@ -62,6 +62,7 @@ from dataclasses import dataclass, field
 from typing import Any, Dict, Optional
 
 from scoring_v4.modules.generic_dose import score_dose
+from scoring_v4.modules.generic_helpers import archetype_dose_reference, dose_reference_scope
 from scoring_v4.modules.generic_evidence import score_evidence
 from scoring_v4.modules.generic_formulation import score_formulation
 from scoring_v4.modules.generic_manufacturer import (
@@ -281,7 +282,8 @@ def score_generic(product: Any) -> GenericModuleResult:
     # explicit proxy-method metadata; the metadata is the contract that tells
     # audit / score-delta / Flutter tooling not to mistake the proxy band
     # for final NIH/NHANES supplemental-window math.
-    dose_payload = score_dose(product)
+    with dose_reference_scope(archetype_dose_reference("generic", formulation_dim.metadata)):
+        dose_payload = score_dose(product)
     dose_dim = result.dimensions["dose"]
     dose_dim.score = dose_payload["score"]
     dose_dim.components = dose_payload["components"]

@@ -6,6 +6,7 @@ import pytest
 import studied_formulas
 from scoring_v4.modules.probiotic_evidence import score_evidence
 from test_studied_formula_assessment import seed_label
+from test_probiotic_identity_completeness import _disclosure_points
 
 
 def strain_product(*, dose=None, clinical_id="STRAIN_LGG", name="Lactobacillus rhamnosus GG"):
@@ -225,7 +226,7 @@ def test_caller_stamp_alone_does_not_create_disclosed_strain_dose():
     p = strain_product()
     p["probiotic_data"]["clinical_strains"][0]["cfu_per_day"] = 1e10
     p["probiotic_data"]["clinical_strains"][0]["adequacy_tier"] = "excellent"
-    assert score_dose(p)["components"]["per_strain_cfu_disclosure"] == 0
+    assert _disclosure_points(score_dose(p)) == 0
 
 
 def test_blend_total_cannot_be_borrowed_by_one_strain(reviewed_dose):

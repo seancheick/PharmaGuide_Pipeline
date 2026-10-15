@@ -7,6 +7,8 @@ import sys
 from pathlib import Path
 
 import pytest
+from test_probiotic_identity_completeness import _disclosure_points
+
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
 SCRIPTS_ROOT = REPO_ROOT / "scripts"
@@ -163,17 +165,16 @@ def _product(
     }
 
 
-def test_probiotic_dose_scores_full_25_when_all_strains_have_cfu_and_adequacy_caps() -> None:
+def test_probiotic_dose_scores_full_adequacy_when_all_strains_have_cfu() -> None:
     from scoring_v4.modules.probiotic_dose import score_dose
 
     payload = score_dose(_product())
 
-    assert payload["score"] == 25.0
+    # V4.1 Step 4: measured adequacy is the whole Dose assessment (reference 15);
+    # per-strain disclosure is Transparency's.
+    assert payload["score"] == 15.0
     assert payload["max"] == 25.0
-    assert payload["components"] == {
-        "per_strain_cfu_disclosure": 10.0,
-        "cfu_adequacy": 15.0,
-    }
+    assert payload["components"] == {"cfu_adequacy": 15.0}
     assert payload["metadata"]["phase"] == "P2.2_probiotic_dose"
     assert payload["metadata"]["cfu_adequacy_v3_points"] == 5.0
     assert payload["metadata"]["cfu_adequacy_scaled_points"] == 15.0
@@ -193,11 +194,8 @@ def test_single_excellent_strain_can_reach_full_dose_without_count_bonus() -> No
         )],
     ))
 
-    assert payload["score"] == 25.0
-    assert payload["components"] == {
-        "per_strain_cfu_disclosure": 10.0,
-        "cfu_adequacy": 15.0,
-    }
+    assert payload["score"] == 15.0
+    assert payload["components"] == {"cfu_adequacy": 15.0}
 
 
 def test_at_manufacture_cfu_guarantee_reduces_adequacy_not_disclosure() -> None:
@@ -205,9 +203,9 @@ def test_at_manufacture_cfu_guarantee_reduces_adequacy_not_disclosure() -> None:
 
     payload = score_dose(_product(guarantee_type="at_manufacture"))
 
-    assert payload["components"]["per_strain_cfu_disclosure"] == 10.0
+    assert _disclosure_points(payload) == 10.0
     assert payload["components"]["cfu_adequacy"] == 13.5
-    assert payload["score"] == 23.5
+    assert payload["score"] == 13.5
     assert payload["metadata"]["cfu_guarantee"]["type"] == "at_manufacture"
     assert payload["metadata"]["cfu_guarantee"]["multiplier"] == 0.9
     assert payload["metadata"]["cfu_guarantee"]["applied"] is True
@@ -218,14 +216,14 @@ def test_missing_cfu_guarantee_reduces_adequacy_more_than_at_manufacture() -> No
 
     payload = score_dose(_product(guarantee_type=None))
 
-    assert payload["components"]["per_strain_cfu_disclosure"] == 10.0
+    assert _disclosure_points(payload) == 10.0
     assert payload["components"]["cfu_adequacy"] == 12.75
-    assert payload["score"] == 22.75
+    assert payload["score"] == 12.75
     assert payload["metadata"]["cfu_guarantee"]["type"] == "unknown"
     assert payload["metadata"]["cfu_guarantee"]["applied"] is True
 
 
-def test_aggregate_blend_cfu_gets_presence_floor_not_invented_allocations() -> None:
+def test_aggregate_blend_cfu_is_a_label_limit_not_invented_allocations() -> None:
     from scoring_v4.modules.probiotic_dose import score_dose
 
     aggregate_blend = {
@@ -243,9 +241,9 @@ def test_aggregate_blend_cfu_gets_presence_floor_not_invented_allocations() -> N
         _product(total_strain_count=3, blends=[aggregate_blend], clinical_strains=clinical_strains)
     )
 
-    assert payload["score"] == 4.0
-    assert payload["components"]["per_strain_cfu_disclosure"] == 0.0
-    assert payload["components"]["cfu_adequacy"] == 4.0
+    assert payload["score"] == 0.0
+    assert _disclosure_points(payload) == 0.0
+    assert payload["components"]["cfu_adequacy"] == 0.0
     assert payload["metadata"]["per_strain_cfu_disclosed_count"] == 0
     assert payload["metadata"]["window_proxy_reason"] == "aggregate_cfu_not_per_strain"
     assert payload["metadata"]["cfu_adequacy_basis"] == "aggregate_cfu_disclosed_only"
@@ -253,7 +251,7 @@ def test_aggregate_blend_cfu_gets_presence_floor_not_invented_allocations() -> N
     assert "proxy_cfu_per_strain" not in payload["metadata"]["aggregate_cfu_proxy"]
 
 
-def test_low_aggregate_cfu_gets_small_numeric_total_cfu_floor() -> None:
+def test_low_aggregate_cfu_is_recorded_without_dose_credit() -> None:
     from scoring_v4.modules.probiotic_dose import score_dose
 
     aggregate_blend = {
@@ -272,15 +270,15 @@ def test_low_aggregate_cfu_gets_small_numeric_total_cfu_floor() -> None:
 
     payload = score_dose(product)
 
-    assert payload["score"] == 2.0
-    assert payload["components"]["cfu_adequacy"] == 2.0
+    assert payload["score"] == 0.0
+    assert payload["components"]["cfu_adequacy"] == 0.0
     assert payload["metadata"]["cfu_adequacy_basis"] == "aggregate_cfu_disclosed_only"
     assert payload["metadata"]["aggregate_cfu_proxy"]["applied"] is True
     assert payload["metadata"]["aggregate_cfu_proxy"]["reason"] == "aggregate_cfu_label_presence"
     assert "proxy_tier" not in payload["metadata"]["aggregate_cfu_proxy"]
 
 
-def test_named_strain_low_aggregate_cfu_gets_modest_total_cfu_floor() -> None:
+def test_named_strain_aggregate_cfu_is_recorded_without_dose_credit() -> None:
     from scoring_v4.modules.probiotic_dose import score_dose
 
     aggregate_blend = {
@@ -309,10 +307,12 @@ def test_named_strain_low_aggregate_cfu_gets_modest_total_cfu_floor() -> None:
 
     payload = score_dose(product)
 
-    assert payload["score"] == 4.0
-    assert payload["components"]["per_strain_cfu_disclosure"] == 0.0
-    assert payload["components"]["cfu_adequacy"] == 4.0
-    assert payload["metadata"]["aggregate_cfu_proxy"]["reason"] == "aggregate_cfu_named_label_presence"
+    assert payload["score"] == 0.0
+    assert _disclosure_points(payload) == 0.0
+    assert payload["components"]["cfu_adequacy"] == 0.0
+    assert payload["metadata"]["aggregate_cfu_proxy"] == {
+        "applied": True, "reason": "aggregate_cfu_label_presence", "total_billion_count": 2.0,
+    }
 
 
 def test_missing_aggregate_cfu_still_gets_zero_dose_credit() -> None:
@@ -341,7 +341,7 @@ def test_missing_aggregate_cfu_still_gets_zero_dose_credit() -> None:
     assert payload["metadata"]["aggregate_cfu_proxy"]["reason"] == "aggregate_cfu_missing"
 
 
-def test_total_cfu_without_clinical_strain_mapping_gets_small_floor() -> None:
+def test_total_cfu_without_clinical_strain_mapping_is_a_label_limit() -> None:
     from scoring_v4.modules.probiotic_dose import score_dose
 
     product = _product(total_strain_count=5, blends=[
@@ -357,7 +357,7 @@ def test_total_cfu_without_clinical_strain_mapping_gets_small_floor() -> None:
 
     payload = score_dose(product)
 
-    assert payload["score"] == 2.0
+    assert payload["score"] == 0.0
     assert payload["metadata"]["cfu_adequacy_basis"] == "aggregate_cfu_disclosed_only"
     assert payload["metadata"]["aggregate_cfu_proxy"]["reason"] == "aggregate_cfu_label_presence"
 
@@ -370,7 +370,7 @@ def test_probiotic_dose_accepts_final_blob_probiotic_detail_alias() -> None:
 
     payload = score_dose(product)
 
-    assert payload["score"] == 25.0
+    assert payload["score"] == 15.0
     assert payload["metadata"]["total_strain_count"] == 3
 
 
@@ -396,19 +396,18 @@ def test_per_strain_cfu_disclosure_is_proportional_to_named_strain_count() -> No
 
     payload = score_dose(_product(total_strain_count=2, blends=blends, clinical_strains=clinical_strains))
 
-    assert payload["components"]["per_strain_cfu_disclosure"] == 5.0
+    assert _disclosure_points(payload) == 5.0
     assert payload["metadata"]["per_strain_cfu_disclosed_count"] == 1
     assert payload["metadata"]["total_strain_count"] == 2
 
 
 def test_incomplete_per_strain_cfu_keeps_total_presence_without_numeric_disclosure() -> None:
-    """Aggregate CFU is dose evidence even when a label discloses CFU for
-    only part of a multi-strain blend.
+    """A total CFU stays the recorded basis even when a label discloses CFU
+    for only part of a multi-strain blend.
 
     Real case: a probiotic with total 10B CFU and 8 named strains disclosed
-    one per-strain CFU-like row. The old logic treated "one per-strain CFU
-    present" as a reason to discard the aggregate CFU proxy entirely, causing
-    Dose to collapse to disclosure-only points.
+    one per-strain CFU-like row without a number. That row must not discard
+    the aggregate record; V4.1 Step 4 records it as a label limit, uncredited.
     """
     from scoring_v4.modules.probiotic_dose import score_dose
 
@@ -450,11 +449,11 @@ def test_incomplete_per_strain_cfu_keeps_total_presence_without_numeric_disclosu
 
     payload = score_dose(product)
 
-    assert payload["components"]["per_strain_cfu_disclosure"] == 0
-    assert payload["components"]["cfu_adequacy"] == 4.0
+    assert _disclosure_points(payload) == 0
+    assert payload["components"]["cfu_adequacy"] == 0.0
     assert payload["metadata"]["per_strain_cfu_disclosed_count"] == 0
     assert payload["metadata"]["aggregate_cfu_proxy"]["applied"] is True
-    assert payload["metadata"]["aggregate_cfu_proxy"]["reason"] == "aggregate_cfu_named_label_presence"
+    assert payload["metadata"]["aggregate_cfu_proxy"]["reason"] == "aggregate_cfu_label_presence"
     assert payload["metadata"]["cfu_adequacy_basis"] == "aggregate_cfu_disclosed_only"
 
 
@@ -472,8 +471,9 @@ def test_single_strain_has_cfu_boolean_does_not_substitute_for_numeric_disclosur
 
     payload = score_dose(_product(total_strain_count=1, blends=blends, clinical_strains=clinical_strains))
 
-    assert payload["components"]["per_strain_cfu_disclosure"] == 0.0
-    assert payload["components"]["cfu_adequacy"] == 4.0
+    assert _disclosure_points(payload) == 0.0
+    assert payload["components"]["cfu_adequacy"] == 0.0
+    assert payload["metadata"]["cfu_adequacy_basis"] == "aggregate_cfu_disclosed_only"
 
 
 @pytest.mark.parametrize(
@@ -569,7 +569,7 @@ def test_score_probiotic_wires_dose_dimension_at_p22() -> None:
     breakdown = score_probiotic(_product()).to_breakdown()
     dose = breakdown["dimensions"]["dose"]
 
-    assert dose["score"] == 25.0
+    assert dose["score"] == 15.0
     assert dose["max"] == 25.0
     assert dose["metadata"]["phase"] == "P2.2_probiotic_dose"
     # Module-level phase rolls forward as each P2.x slice lands; per-dimension
@@ -587,13 +587,13 @@ def test_probiotic_dose_resilient_to_malformed_input() -> None:
         payload = score_dose(bad)  # type: ignore[arg-type]
         assert payload["score"] == 0.0
         assert payload["max"] == 25.0
-        assert payload["components"]["per_strain_cfu_disclosure"] == 0.0
+        assert _disclosure_points(payload) == 0.0
         assert payload["components"]["cfu_adequacy"] == 0.0
 
-# Direct per-strain mass floor (Bifido-style: named strain disclosed at a mass
-# but no CFU). The existing 5/25 disclosure floor is not a viable-count claim.
-# Dose is not treated as absent, but this floor must not fire for
-# proprietary-blend mass, because opacity is not rewarded.
+# Direct per-strain mass (Bifido-style: named strain disclosed at a mass but no
+# CFU). V4.1 Step 4 records it as a label limit with no Dose credit; mass is
+# never a viable-count claim, and a proprietary-blend mass is never read as one
+# strain's own mass.
 
 def _scorable_row(row: dict, index: int) -> dict:
     name = str(row.get("name") or "").strip()
@@ -658,31 +658,32 @@ def _no_cfu_probiotic(*, active_rows, clinical_strains, total_billion=0.0,
     }
 
 
-def test_direct_strain_mass_floors_dose_when_named_strain_has_mass_no_cfu() -> None:
+def test_direct_strain_mass_is_a_label_limit_when_named_strain_has_mass_no_cfu() -> None:
     from scoring_v4.modules.probiotic_dose import score_dose
     product = _no_cfu_probiotic(
         active_rows=[{"name": "Bifidobacterium longum BB536", "quantity": "25.0", "unit": "mg"}],
         clinical_strains=[_strain("Bifidobacterium longum BB536", cfu_per_day=None, adequacy_tier=None)],
     )
     payload = score_dose(product)
-    assert payload["components"]["cfu_adequacy"] == 5.0
-    assert payload["score"] == 5.0  # disclosure 0 + floor 5
+    assert payload["components"]["cfu_adequacy"] == 0.0
+    assert payload["score"] == 0.0
     assert payload["metadata"]["cfu_adequacy_basis"] == "direct_strain_mass_no_cfu_floor"
     assert payload["metadata"]["direct_strain_mass_floor"]["applied"] is True
 
 
-def test_strict_scorable_ingredient_shape_can_floor_direct_strain_mass() -> None:
+def test_strict_scorable_ingredient_shape_records_direct_strain_mass() -> None:
     from scoring_v4.modules.probiotic_dose import score_dose
     product = _no_cfu_probiotic(
         active_rows=[{"name": "Bifidobacterium longum BB536", "quantity": 25.0, "unit": "mg"}],
         clinical_strains=[_strain("Bifidobacterium longum BB536", cfu_per_day=None, adequacy_tier=None)],
     )
     payload = score_dose(product)
-    assert payload["components"]["cfu_adequacy"] == 5.0
+    assert payload["components"]["cfu_adequacy"] == 0.0
+    assert payload["metadata"]["cfu_adequacy_basis"] == "direct_strain_mass_no_cfu_floor"
     assert payload["metadata"]["direct_strain_mass_floor"]["applied"] is True
 
 
-def test_proprietary_blend_mass_does_not_floor_dose() -> None:
+def test_proprietary_blend_mass_is_not_a_strain_mass() -> None:
     from scoring_v4.modules.probiotic_dose import score_dose
     product = _no_cfu_probiotic(
         active_rows=[
@@ -700,9 +701,10 @@ def test_proprietary_blend_mass_does_not_floor_dose() -> None:
     assert payload["components"]["cfu_adequacy"] == 0.0
     assert payload["score"] == 0.0
     assert payload["metadata"]["direct_strain_mass_floor"]["applied"] is False
+    assert payload["metadata"]["cfu_adequacy_basis"] == "no_cfu_adequacy_credit"
 
 
-def test_aggregate_cfu_proxy_still_wins_over_direct_mass_floor() -> None:
+def test_aggregate_cfu_record_still_wins_over_direct_mass() -> None:
     from scoring_v4.modules.probiotic_dose import score_dose
     # named strains + a real total CFU + a strain row that ALSO discloses a mass:
     # Viable-count disclosure owns this assessment, not a mass-to-CFU inference.
@@ -715,7 +717,7 @@ def test_aggregate_cfu_proxy_still_wins_over_direct_mass_floor() -> None:
         total_billion=20.0,
     )
     payload = score_dose(product)
-    assert payload["components"]["cfu_adequacy"] == 4.0
+    assert payload["components"]["cfu_adequacy"] == 0.0
     assert payload["metadata"]["cfu_adequacy_basis"] == "aggregate_cfu_disclosed_only"
     assert payload["metadata"]["direct_strain_mass_floor"]["applied"] is False
 

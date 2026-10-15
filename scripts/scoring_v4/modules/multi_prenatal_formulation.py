@@ -28,6 +28,7 @@ from scoring_v4.modules.generic_helpers import (
     _as_float,
 )
 from scoring_v4.modules.generic_formulation import (
+    UNRATED_FORM_NEUTRAL,
     apply_formulation_presence_floor,
     shared_formulation_penalty_detail,
 )
@@ -42,9 +43,7 @@ _FVM = _cfg_block("formulation_variant_magnitudes", "multi_prenatal")["multi_pre
 CAP_FORMULATION = _FVM["cap_formulation"]
 FORMULATION_PRESENCE_FLOOR = _FVM["formulation_presence_floor"]
 CAP_PANEL_FORM_QUALITY = _FVM["cap_panel_form_quality"]
-CAP_PANEL_DISCLOSURE_STRUCTURE = _FVM["cap_panel_disclosure_structure"]
 
-PANEL_FORM_NEUTRAL_FLOOR = _FVM["panel_form_neutral_floor"]
 BIO_SCORE_MAX = _FVM["bio_score_max"]
 
 PHASE_MARKER = "P3.1_multi_prenatal_formulation"
@@ -69,24 +68,29 @@ def _scorable_ingredients(product: Dict[str, Any]) -> List[Dict[str, Any]]:
 
 def _score_panel_form_quality(
     product: Dict[str, Any],
-) -> tuple[float, float | None, float | None, float | None]:
-    """Panel-wide A1 analogue with a non-decreasing neutral floor.
+) -> tuple[float, float | None, float | None, float]:
+    """Panel-wide A1 analogue (V4.1 Step 4).
 
-    Returns (contribution, raw average, effective average, parent-relative
-    average before the neutral floor) so a receipt can show the floor lift.
+    A mapped row without a form rating keeps the shared unrated neutral; a rated
+    row keeps its parent-relative rating, however low. There is no panel floor.
+    Returns (contribution, raw average, parent-relative average, the share of
+    the contribution that comes from unrated neutral rows).
     """
     rows = _scorable_ingredients(product)
     if not rows:
-        return 0.0, None, None, None
+        return 0.0, None, None, 0.0
 
-    weighted: List[tuple[float, float, float]] = []
+    weighted: List[tuple[float, float, float, bool]] = []
     for ing in rows:
         raw_score = bio_score_of(ing)
-        if raw_score is None:
-            raw_score = PANEL_FORM_NEUTRAL_FLOOR if ing.get("mapped") else 0.0
-        score = parent_relative_form_quality(ing.get("canonical_id"), raw_score)
-        if score is None:
+        unrated = raw_score is None
+        if unrated:
+            raw_score = UNRATED_FORM_NEUTRAL if ing.get("mapped") else 0.0
             score = raw_score
+        else:
+            score = parent_relative_form_quality(ing.get("canonical_id"), raw_score)
+            if score is None:
+                score = raw_score
         weight = _as_float(ing.get("dosage_importance"), 1.0) or 1.0
         if weight <= 0:
             weight = 1.0
@@ -94,16 +98,18 @@ def _score_panel_form_quality(
             _clamp(0.0, BIO_SCORE_MAX, raw_score),
             _clamp(0.0, BIO_SCORE_MAX, score),
             weight,
+            unrated and bool(ing.get("mapped")),
         ))
 
-    denom = sum(weight for _, _, weight in weighted)
+    denom = sum(weight for _, _, weight, _ in weighted)
     if denom <= 0:
-        return 0.0, None, None, None
-    avg = sum(raw_score * weight for raw_score, _, weight in weighted) / denom
-    relative_avg = sum(score * weight for _, score, weight in weighted) / denom
-    effective = max(relative_avg, PANEL_FORM_NEUTRAL_FLOOR)
-    contribution = _clamp(0.0, CAP_PANEL_FORM_QUALITY, (effective / BIO_SCORE_MAX) * CAP_PANEL_FORM_QUALITY)
-    return _round(contribution), _round(avg), _round(effective), _round(relative_avg)
+        return 0.0, None, None, 0.0
+    avg = sum(raw_score * weight for raw_score, _, weight, _ in weighted) / denom
+    relative_avg = sum(score * weight for _, score, weight, _ in weighted) / denom
+    neutral_avg = sum(score * weight for _, score, weight, neutral in weighted if neutral) / denom
+    contribution = _clamp(0.0, CAP_PANEL_FORM_QUALITY, (relative_avg / BIO_SCORE_MAX) * CAP_PANEL_FORM_QUALITY)
+    neutral_points = min(contribution, (neutral_avg / BIO_SCORE_MAX) * CAP_PANEL_FORM_QUALITY)
+    return _round(contribution), _round(avg), _round(relative_avg), _round(neutral_points)
 
 
 def _dose_coverage(rows: Iterable[Dict[str, Any]]) -> float:
@@ -112,16 +118,6 @@ def _dose_coverage(rows: Iterable[Dict[str, Any]]) -> float:
         return 0.0
     dose_count = sum(1 for row in rows_list if has_usable_individual_dose(row))
     return round(dose_count / len(rows_list), 4)
-
-
-def _score_panel_disclosure_structure(product: Dict[str, Any]) -> tuple[float, float]:
-    rows = _active_ingredients(product)
-    coverage = _dose_coverage(rows)
-    if coverage >= 0.9:
-        return 2.0, coverage
-    if coverage >= 0.6:
-        return 1.0, coverage
-    return 0.0, coverage
 
 
 def score_formulation(product: Any) -> Dict[str, Any]:
@@ -137,15 +133,13 @@ def score_formulation(product: Any) -> Dict[str, Any]:
     penalties: Dict[str, float] = {}
     metadata: Dict[str, Any] = {"phase": PHASE_MARKER}
 
-    panel_score, avg_bio_score, smoothed_bio_score, relative_bio_score = _score_panel_form_quality(product)
+    panel_score, avg_bio_score, relative_bio_score, neutral_points = _score_panel_form_quality(product)
     components["panel_form_quality"] = panel_score
     metadata["avg_bio_score"] = avg_bio_score
-    metadata["smoothed_bio_score"] = smoothed_bio_score
     metadata["relative_bio_score"] = relative_bio_score
+    metadata["panel_form_neutral_points"] = neutral_points
 
-    disclosure_score, coverage = _score_panel_disclosure_structure(product)
-    components["panel_disclosure_structure"] = disclosure_score
-    metadata["dose_coverage"] = coverage
+    # V4.1 Step 4: dose disclosure is a Transparency fact, not Formulation credit.
 
     shared_penalties = shared_formulation_penalty_detail(product)
     penalties.update(shared_penalties["penalties"])

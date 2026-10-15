@@ -1,10 +1,10 @@
 {
   "_metadata": {
     "config_name": "quality_score",
-    "version": "1.25.0-dose-single-owner",
+    "version": "1.26.0-v41-step4-ownership",
     "schema_version": "1.0.0",
     "last_updated": "2026-10-15",
-    "description": "PharmaGuide public six-pillar Quality Score (decision score) in the 20/20/20/15/15/10 frame. Pillars are category-aware purpose-fit adapters, NOT raw linear remaps: formulation/dose/evidence normalize against the engine's reviewed structural ceiling; verification saturates hard third-party signals with a fail-open neutral baseline and recognizes verified brand/facility-scoped certs as a small non-stacking signal; safety_hygiene is product-level. Rubric proxies are removed: ingredient-count breadth (including immune-support ingredient counts), focus bonuses/floors, generic enzyme recognition, blanket gummy format penalties, organic/Non-GMO/natural-source and marine-sustainability points, the omega EPA:DHA ratio bonus, the generic Dose premium-form count (1.21.0), astaxanthin/CoQ10 public caps, ingredient-presence Evidence floors, and certification-derived omega Formulation/Transparency floors. Fish/krill/algal oil carrier mass never becomes EPA+DHA dose; an omega-3 row printed as EPA and/or DHA owns that EPA/DHA amount (1.10.1), and omega concentration may use the declared Total Fat plus its FDA rounding half-increment when no oil mass is printed (1.10.1). Dose and Evidence never manufacture Formulation credit. Only transparency remains a faithful linear source-dimension map. raw_score_v4_100 is audit/math only and is NEVER shown as the shipped score when quality_score_status suppresses display. Audited GMP facility credit comes only from a sourced link to an audited GMP facility registry row, and mid-tier reputation that restates verified certifications or audited GMP is not counted twice (1.9.0). Quality tiers are independent of safety; quality assembly never writes POOR or converts quality thresholds into SAFE. POOR is a read-only old-catalog compatibility value (October 1, 2026). Omega label ownership is enforced in 1.10.0. Sugar and sweetener charges come only from the shared B1 dietary-sugar and harmful-additive owners: the sports-protein and fiber adapters no longer add their own, and their former clean-daily-use points are a fixed route_base (1.21.4). Probiotic Evidence uses shared evidence-family certainty (10), identity/purpose applicability (6), and independent same-condition replication (0/2/4); CFU and studied-amount adequacy belong exclusively to Dose (1.22.0). v4 is the production catalog scoring contract as of export schema 2.2.0. Delivery credit uses the shared source-supported, form-aware eligibility decision. Intrinsic chemistry and a technology already represented by the resolved form cannot earn a second delivery bonus; Verification policy is unchanged.",
+    "description": "PharmaGuide public six-pillar Quality Score (decision score) in the 20/20/20/15/15/10 frame. Pillars are category-aware purpose-fit adapters, NOT raw linear remaps: formulation/dose/evidence normalize against the engine's reviewed structural ceiling; verification saturates hard third-party signals with a fail-open neutral baseline and recognizes verified brand/facility-scoped certs as a small non-stacking signal; safety_hygiene is product-level. Rubric proxies are removed: ingredient-count breadth (including immune-support ingredient counts), focus bonuses/floors, generic enzyme recognition, blanket gummy format penalties, organic/Non-GMO/natural-source and marine-sustainability points, the omega EPA:DHA ratio bonus, the generic Dose premium-form count (1.21.0), astaxanthin/CoQ10 public caps, ingredient-presence Evidence floors, and certification-derived omega Formulation/Transparency floors. Fish/krill/algal oil carrier mass never becomes EPA+DHA dose; an omega-3 row printed as EPA and/or DHA owns that EPA/DHA amount (1.10.1), and omega concentration may use the declared Total Fat plus its FDA rounding half-increment when no oil mass is printed (1.10.1). Dose and Evidence never manufacture Formulation credit. Only transparency remains a faithful linear source-dimension map. raw_score_v4_100 is audit/math only and is NEVER shown as the shipped score when quality_score_status suppresses display. Audited GMP facility credit comes only from a sourced link to an audited GMP facility registry row, and mid-tier reputation that restates verified certifications or audited GMP is not counted twice (1.9.0). Quality tiers are independent of safety; quality assembly never writes POOR or converts quality thresholds into SAFE. POOR is a read-only old-catalog compatibility value (October 1, 2026). Omega label ownership is enforced in 1.10.0. Sugar and sweetener charges come only from the shared B1 dietary-sugar and harmful-additive owners: the sports-protein and fiber adapters no longer add their own, and their former clean-daily-use points became a fixed route_base (1.21.4), retired in 1.26.0. Probiotic Evidence uses shared evidence-family certainty (10), identity/purpose applicability (6), and independent same-condition replication (0/2/4); CFU and studied-amount adequacy belong exclusively to Dose (1.22.0). v4 is the production catalog scoring contract as of export schema 2.2.0. Delivery credit uses the shared source-supported, form-aware eligibility decision. Intrinsic chemistry and a technology already represented by the resolved form cannot earn a second delivery bonus; Verification policy is unchanged. 1.26.0 (V4.1 Step 4): the formula-checks pillar owns additive and sugar findings within one 10-point budget; count, disclosure, focus, route-base and duplicate branded credits are retired; an unrated form and an unbenchmarked amount each take one shared neutral; probiotic Formulation is canonical form quality and probiotic Dose is measured adequacy; a label limitation stays scored while PharmaGuide's own unfinished work marks the assessment partial.",
     "phase": "scoring_fairness_recalibration"
   },
   "pillars": {
@@ -45,43 +45,51 @@
     "default_reference": 20.0
   },
   "dose_subscale": {
-    "_doc": "PR5: category-aware purpose-fit dose. References come from the reviewed dose contract, never the highest score in the current catalog. Generic singles top out at 22 in the supplemental/clinical window; botanical profiles top out at 21; the immune adapter's component sum caps at 22. Sports pre-workout retains the sports engine's 25-point reference because products classified by context can still earn its focused-single completion path. Adequately dosed citrulline, complete BCAA/EAA, and alpha-GPC reach the reviewed top Dose band; Evidence owns evidence certainty. An overdosed product already gets low raw dose and a sub-clinical one gets proportional credit; normalization never repairs excess or underdosing. 1.2.0 (2026-09-14): omega raw dose tops out at 20 after the +5 EPA:DHA ratio bonus was removed; its reference is 20, the raw ceiling: the rubric gives full band credit at 2 g/day EPA+DHA, and the former 23 only existed to absorb ratio completion credit (1.2.1, reviewed on all 719 omega products). 1.7.0 (2026-09-15): multi/prenatal RDA/AI coverage no longer multiplies by the ordinal 0.75 + bio_score/60 form factor; that factor never exceeded 1.0, so the prenatal_multi reference stays 23.",
+    "_doc": "PR5: category-aware purpose-fit dose. References come from the reviewed dose contract, never the highest score in the current catalog. Generic singles top out at 22 in the supplemental/clinical window; botanical profiles top out at 21; the immune adapter's component sum caps at 22. 1.26.0 retired the focused-single completion and stack-support credits, so every sports subtype is referenced to its 20-point primary dose (22 when BCAA/EAA composition is assessed). Adequately dosed citrulline, complete BCAA/EAA, and alpha-GPC reach the reviewed top Dose band; Evidence owns evidence certainty. An overdosed product already gets low raw dose and a sub-clinical one gets proportional credit; normalization never repairs excess or underdosing. 1.2.0 (2026-09-14): omega raw dose tops out at 20 after the +5 EPA:DHA ratio bonus was removed; its reference is 20, the raw ceiling: the rubric gives full band credit at 2 g/day EPA+DHA, and the former 23 only existed to absorb ratio completion credit (1.2.1, reviewed on all 719 omega products). 1.7.0 (2026-09-15): multi/prenatal RDA/AI coverage no longer multiplies by the ordinal 0.75 + bio_score/60 form factor; that factor never exceeded 1.0, so the prenatal_multi reference stayed 23; 1.26.0 retired the 3-point count-based panel breadth (reference 20, or 21 when the prenatal DHA complement is assessed).",
     "archetype_reference": {
-      "sports_single": 25.0,
-      "sports_pre_workout": 25.0,
-      "sports_protein": 25.0,
-      "sports_bcaa_eaa": 25.0,
+      "sports_single": 20.0,
+      "sports_pre_workout": 20.0,
+      "sports_protein": 20.0,
+      "sports_bcaa_eaa": 20.0,
       "generic_single_molecule": 22.0,
       "generic_botanical_branded": 21.0,
       "immune_support": 22.0,
-      "fiber_digestive": 25.0,
-      "b_complex": 25.0,
+      "fiber_digestive": 22.0,
+      "b_complex": 18.0,
       "omega": 20.0,
-      "probiotic": 22.0,
-      "prenatal_multi": 23.0
+      "probiotic": 15.0,
+      "prenatal_multi": 20.0
     },
+    "_assessed_component_reference_doc": "V4.1 Step 4: references are the retained attainable maximum. Sports keeps its 20-point primary dose plus the 2-point BCAA/EAA composition check when that check applies; an adult multi keeps 20 and a prenatal adds the 1-point DHA complement. Count, breadth, single-focus, moderate-fit and disclosure credits are retired.",
+    "assessed_component_reference": {
+      "sports_composition_assessed": 22.0,
+      "prenatal_complement_assessed": 21.0
+    },
+    "_unbenchmarked_neutral_doc": "V4.1 Step 4: a disclosed amount with no applicable benchmark earns this neutral public Dose value wherever the Dose owner has no benchmark for it: generic purposes and fallbacks, the botanical and collagen profiles, and the sports off-list proxy, which delegates to the generic owner (raw = value x the product's Dose reference / the Dose pillar weight). A probiotic CFU amount without a strain benchmark earns no Dose credit (approved option R). A hidden or missing amount whose benchmark exists earns nothing; an unresolved benchmark identity is an unfinished assessment.",
+    "unbenchmarked_neutral_public": 11.4,
     "default_reference": 22.0
   },
   "formulation_subscale": {
-    "_doc": "PR4: category-aware purpose-fit formulation. A reference follows the formulation engine that produced the raw score, not the product archetype alone. Generic IQM, botanical and collagen engines use a 15-point structural reference; their optional delivery, absorption and standardization signals can still reach the 20-point public pillar cap. Ingredient count, dose adequacy, evidence strength, organic/Non-GMO/natural badges, single-focus bonuses and generic enzyme recognition do not create Formulation points. Dedicated category engines retain their reviewed archetype references. Probiotic identity completeness remains a label property, not efficacy; an optional prebiotic is displayed as composition but does not manufacture probiotic form-quality credit.",
+    "_doc": "PR4: category-aware purpose-fit formulation. A reference follows the formulation engine that produced the raw score, not the product archetype alone. The generic IQM engine uses a 15-point structural reference (botanical 12 and collagen 8 since 1.26.0; see _reference_doc_v41); its optional delivery, absorption and standardization signals can still reach the 20-point public pillar cap. Ingredient count, dose adequacy, evidence strength, organic/Non-GMO/natural badges, single-focus bonuses and generic enzyme recognition do not create Formulation points. Dedicated category engines retain their reviewed archetype references. Probiotic identity completeness is a Transparency fact, not efficacy (1.26.0); an optional prebiotic is displayed as composition but does not manufacture probiotic form-quality credit.",
     "profile_reference": {
       "generic_iqm": 15.0,
-      "botanical": 15.0,
-      "collagen": 15.0
+      "botanical": 12.0,
+      "collagen": 8.0
     },
+    "_reference_doc_v41": "V4.1 Step 4: references are the retained attainable maximum after count, disclosure, route-base, printed-amount and duplicate branded credits were retired (the mapped-active presence floor of 2 is unchanged): botanical 12 (identity neutral 7.2 + extract 1.6 + standardization 3.2), collagen 8 (identity neutral 4.8 + hydrolysis 3.2), protein 15 (source quality), fiber 12 (source quality), B-complex 8 (form quality), multi 12 (panel form quality), probiotic 15 (form rating + delivery).",
     "archetype_reference": {
       "sports_single": 24.0,
       "sports_pre_workout": 30.0,
-      "sports_protein": 29.0,
+      "sports_protein": 15.0,
       "sports_bcaa_eaa": 25.0,
       "generic_single_molecule": 24.0,
       "generic_botanical_branded": 24.0,
       "immune_support": 30.0,
-      "fiber_digestive": 28.0,
-      "b_complex": 23.0,
+      "fiber_digestive": 12.0,
+      "b_complex": 8.0,
       "omega": 12.0,
       "probiotic": 15.0,
-      "prenatal_multi": 14.0
+      "prenatal_multi": 12.0
     },
     "default_reference": 25.0
   },
@@ -100,6 +108,7 @@
     "a4_absorption_cap": 3.0,
     "a5b_standardized_full": 1.0,
     "a5b_standardized_marker_only": 0.5,
+    "unrated_form_neutral": 9.0,
     "dietary_sugar_low_added_penalty": 1.0,
     "dietary_sugar_sugar_alcohol_penalty": 1.0,
     "dietary_sugar_high_glycemic_or_syrup_penalty": 2.0,
@@ -122,8 +131,6 @@
       "window_overdose_credit": 11.0,
       "window_high_source_pct": 20.0,
       "window_full_adequacy_pct": 100.0,
-      "no_reference_individual_dose_credit": 16.0,
-      "no_reference_product_evidence_credit": 12.0,
       "_clinical_anchor_reference_by_canonical": {
         "quercetin": "quercetin",
         "tmg_betaine": "betaine_tmg",
@@ -144,10 +151,8 @@
     "multi_prenatal": {
       "dimension_cap": 25.0,
       "cap_rda_ai_coverage": 15.0,
-      "cap_panel_breadth": 3.0,
       "cap_critical_nutrient_coverage": 5.0,
-      "cap_prenatal_complement_support": 2.0,
-      "panel_breadth_full_count": 18,
+      "cap_prenatal_complement_support": 1.0,
       "prenatal_dha_full_mg": 200.0,
       "prenatal_dha_partial_mg": 100.0,
       "targeted_multi_selected_anchors": 5,
@@ -155,12 +160,8 @@
     },
     "probiotic": {
       "cap_dose": 25.0,
-      "cap_per_strain_cfu_disclosure": 10.0,
       "cap_cfu_adequacy": 15.0,
-      "aggregate_cfu_low_tier_presence_floor": 2.0,
-      "aggregate_cfu_low_named_strain_total_floor": 4.0,
-      "cap_direct_strain_mass_floor": 5.0,
-      "_aggregate_cfu_doc": "1.1.6 (2026-09-13): an aggregate CFU total earns only a conservative label-presence floor (2 points, or 4 when named live strains and at least 1 billion total CFU are disclosed). Aggregate count is not divided among strains and is not treated as efficacy: NIH ODS states that higher CFU counts do not necessarily provide greater health benefits. Adequacy credit requires a strain-owned measurement. Counts guaranteed only at manufacture or with no guarantee basis retain the conservative 0.90/0.85 reliability adjustment because viable counts can decline before expiration.",
+      "_aggregate_cfu_doc": "1.26.0 (V4.1 Step 4): a total CFU count, or a named strain at its own mass with no CFU, is a label limitation and earns no Dose credit; it is recorded for the explanation only. Aggregate count is never divided among strains and is not treated as efficacy: NIH ODS states that higher CFU counts do not necessarily provide greater health benefits. Adequacy credit requires a strain-owned measurement. Measured counts guaranteed only at manufacture or with no guarantee basis retain the conservative 0.90/0.85 reliability adjustment because viable counts can decline before expiration.",
       "v3_cfu_adequacy_cap": 5.0,
       "tier_points": {
         "low": 0.0,
@@ -317,45 +318,40 @@
     "omega": { "cap_transparency": 11.0 }
   },
   "formulation_variant_magnitudes": {
-    "_doc": "Category-specific formulation/profile caps, form-quality points, standardization tiers and botanical dose-band credits — hoisted from the variant score_formulation / botanical / collagen modules 2026-07-04 as a PURE REFACTOR (values unchanged; empty diff verified across all variant + profile entrypoints). Canonical-ID sets stay in code. Drift-guarded by test_v4_formulation_variant_magnitudes_config. (The generic formulation module's magnitudes live in the flat formulation_magnitudes block.)",
+    "_doc": "Category-specific formulation/profile caps, form-quality points, standardization tiers and botanical dose-band credits — hoisted from the variant score_formulation / botanical / collagen modules 2026-07-04 as a PURE REFACTOR (values unchanged; empty diff verified across all variant + profile entrypoints). 1.26.0 (V4.1 Step 4) changed values and retired keys deliberately; see the formulation_subscale and dose_subscale docs. Canonical-ID sets stay in code. Drift-guarded by test_v4_formulation_variant_magnitudes_config. (The generic formulation module's magnitudes live in the flat formulation_magnitudes block.)",
     "multi_prenatal": {
-      "cap_formulation": 14.0, "formulation_presence_floor": 2.0, "cap_panel_form_quality": 12.0,
-      "cap_panel_disclosure_structure": 2.0,
-      "panel_form_neutral_floor": 9.0,
+      "cap_formulation": 12.0, "formulation_presence_floor": 2.0, "cap_panel_form_quality": 12.0,
       "bio_score_max": 15.0
     },
     "omega": { "cap_formulation": 25.0 },
     "probiotic": {
-      "cap_formulation": 15.0,
-      "cap_total_potency_disclosure": 4.0,
-      "cap_exact_identity_completeness": 8.0,
-      "cap_delivery_survivability": 3.0
+      "cap_formulation": 15.0
     },
-    "sports": { "dimension_cap": 30.0, "route_base": 2.0 },
-    "fiber_digestive": { "dimension_cap": 30.0, "route_base": 5.0 },
+    "sports": { "dimension_cap": 30.0 },
+    "fiber_digestive": { "dimension_cap": 30.0 },
     "botanical": {
       "botanical_formulation_cap": 15.0,
-      "standardization_tier_full": 4.0, "standardization_tier_near": 3.0,
-      "standardization_tier_half": 2.0, "standardization_tier_disclosed": 1.0,
+      "botanical_identity_neutral": 7.2, "botanical_extract": 1.6,
+      "standardization_tier_full": 3.2, "standardization_tier_near": 2.4,
+      "standardization_tier_half": 1.6,
       "botanical_dose_within": 21.0, "botanical_dose_near": 16.0, "botanical_dose_above": 12.0,
-      "botanical_dose_below": 12.0, "botanical_dose_disclosed_no_ref": 12.0, "botanical_dose_blend_total": 10.0,
-      "botanical_dose_primary_no_dose": 5.0, "botanical_dose_no_active": 0.0
+      "botanical_dose_band_scale": 21.0, "botanical_dose_no_active": 0.0
     },
-    "collagen": { "collagen_formulation_cap": 15.0 }
+    "collagen": { "collagen_formulation_cap": 15.0, "collagen_identity_neutral": 4.8, "collagen_hydrolyzed": 3.2 }
   },
   "category_magnitudes": {
-    "_doc": "Category-router dimension caps and category-adapter magnitudes (b_complex/immune/joint/sleep/safety_hygiene) — hoisted from the router + adapter modules 2026-07-04 as a PURE REFACTOR (values unchanged; empty diff verified across score_generic/multi_prenatal/omega/probiotic/b_complex + the adapter fns). Canonical-ID sets, regex form patterns, and the retired affine constants stay in code. Drift-guarded by test_v4_category_magnitudes_config. 1.21.1 (2026-09-26; authored as 1.13.1 and 1.13.2): the immune high-variability botanical stack penalty and its botanical-count threshold joined immune_support, also a pure refactor. The immune Dose bands (low/high/points; below low is linear, above high earns dose_above_band_fraction), daily-use points, Dose cap and the strictly-greater-than high-zinc / high-vitamin-D thresholds joined immune_support, also a pure refactor.",
+    "_doc": "Category-router dimension caps and category-adapter magnitudes (b_complex/immune/joint/sleep/safety_hygiene) — hoisted from the router + adapter modules 2026-07-04 as a PURE REFACTOR (values unchanged; empty diff verified across score_generic/multi_prenatal/omega/probiotic/b_complex + the adapter fns). 1.26.0 (V4.1 Step 4) aligned the multi/prenatal (12) and B-complex (8) Formulation caps with their retained components. Canonical-ID sets, regex form patterns, and the retired affine constants stay in code. Drift-guarded by test_v4_category_magnitudes_config. 1.21.1 (2026-09-26; authored as 1.13.1 and 1.13.2): the immune high-variability botanical stack penalty and its botanical-count threshold joined immune_support, also a pure refactor. The immune Dose bands (low/high/points; below low is linear, above high earns dose_above_band_fraction), daily-use points, Dose cap and the strictly-greater-than high-zinc / high-vitamin-D thresholds joined immune_support, also a pure refactor.",
     "generic": {
       "dimension_caps": [["formulation", 30], ["dose", 25], ["evidence", 20], ["transparency", 10]],
       "manufacturer_trust_cap": 5,
       "manufacturer_violations_floor": -25,
       "botanical_raw_floor": 40.0
     },
-    "multi_prenatal": { "dimension_caps": [["formulation", 14], ["dose", 25], ["evidence", 20], ["transparency", 15]] },
+    "multi_prenatal": { "dimension_caps": [["formulation", 12], ["dose", 25], ["evidence", 20], ["transparency", 15]] },
     "omega": { "dimension_caps": [["formulation", 25], ["dose", 25], ["evidence", 20], ["transparency", 11]] },
     "probiotic": { "dimension_caps": [["formulation", 15], ["dose", 25], ["evidence", 20], ["transparency", 15]] },
     "b_complex": {
-      "formulation_cap": 23.0, "dose_cap": 25.0, "evidence_cap": 20.0
+      "formulation_cap": 8.0, "dose_cap": 25.0, "evidence_cap": 20.0
     },
     "immune_support": {
       "evidence_cap": 17.0,

@@ -148,10 +148,10 @@ def test_formulation_cheap_form_stays_low() -> None:
 
 def test_formulation_multi_uses_panel_reference() -> None:
     from scoring_v4.quality_score import assemble_quality_score
-    # multi/prenatal raw formulation is IQM panel form quality 12 + disclosure 2; ref 14
-    out = assemble_quality_score(_shadow(module="multi_or_prenatal", bd=_module_bd(form=12, form_max=14)))
+    # V4.1 Step 4: multi/prenatal raw formulation is IQM panel form quality alone; ref 12
+    out = assemble_quality_score(_shadow(module="multi_or_prenatal", bd=_module_bd(form=10, form_max=12)))
     f = out["quality_pillars_v4"]["formulation"]["score"]
-    assert f == 17.1  # 12/14*20
+    assert f == 16.7  # 10/12*20
 
 
 def test_formulation_never_exceeds_20() -> None:

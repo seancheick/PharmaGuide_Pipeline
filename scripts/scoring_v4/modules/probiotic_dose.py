@@ -1,14 +1,12 @@
 """v4 Probiotic Dose dimension — P2.2.
 
-Scores probiotic dose quality against the 25-point rubric in
-SCORING_V4_PROPOSAL §6:
+Scores measured CFU adequacy (15 of the 25-point rubric in
+SCORING_V4_PROPOSAL §6) from strain-owned measurements only.
 
-  - per-strain CFU disclosure: 10
-  - measured CFU adequacy: 15, using strain-owned measurements only
-
-Aggregate CFU is not treated as per-strain disclosure. When named strains and
-a total CFU are present but strain-level CFU is absent, only the existing limited
-total-disclosure floor applies. Unknown blend shares are never allocated equally.
+V4.1 Step 4: per-strain CFU disclosure is a Transparency fact, and a total CFU
+count or a strain's own mass without per-strain CFU is a label limitation, not
+demonstrated adequacy. Both limitations are recorded for the explanation and
+earn no Dose credit. Unknown blend shares are never allocated equally.
 
 A reviewed complete-formula dose instead owns the full dimension: unknown
 individual allocations cannot invalidate an assessed formula-level dose.
@@ -35,15 +33,9 @@ _DM = _cfg_block("dose_magnitudes", "probiotic")["probiotic"]
 
 
 CAP_DOSE = _DM["cap_dose"]
-CAP_PER_STRAIN_CFU_DISCLOSURE = _DM["cap_per_strain_cfu_disclosure"]
 CAP_CFU_ADEQUACY = _DM["cap_cfu_adequacy"]
-AGGREGATE_CFU_LOW_TIER_PRESENCE_FLOOR = _DM["aggregate_cfu_low_tier_presence_floor"]
-AGGREGATE_CFU_LOW_NAMED_STRAIN_TOTAL_FLOOR = _DM["aggregate_cfu_low_named_strain_total_floor"]
-# A named strain disclosed at its OWN mass (e.g. BB536 25 mg) with no CFU gets a
-# small disclosure floor. It is not a conversion from mass to viable count.
-CAP_DIRECT_STRAIN_MASS_FLOOR = _DM["cap_direct_strain_mass_floor"]
 # Rows whose NAME marks them as a blend/header/container, not a single strain at a
-# disclosed mass. The floor must never fire on these (opacity is not rewarded).
+# disclosed mass. A blend mass is never read as one strain's own mass.
 _BLEND_ROW_RE = re.compile(
     r"\b(blend|proprietary|complex|matrix|formula|formulation|cultures?|"
     r"prebiotic|probiotic\s+blend|bacteria)\b",
@@ -107,47 +99,30 @@ def score_dose(product: Any) -> Dict[str, Any]:
     identities = probiotic_label_identity_summary(product)
     total_strain_count = identities["total_strain_count"]
     disclosed_count = identities["per_strain_cfu_disclosed_count"]
-    disclosure_score = _score_per_strain_cfu_disclosure(disclosed_count, total_strain_count)
 
     adequacy = _compute_cfu_adequacy(measured_strains)
     cfu_adequacy_v3 = adequacy["v3_points"]
     cfu_adequacy_scaled = min(CAP_CFU_ADEQUACY, cfu_adequacy_v3 * 3.0)
+    # V4.1 Step 4: a total CFU count, or a named strain at its own mass with no
+    # CFU (BB536 25 mg), is a label limitation rather than demonstrated
+    # adequacy. Both are recorded for the explanation and earn no Dose credit;
+    # they never replace a measured strain's adequacy.
+    # "applied" marks the limitation that explains the Dose basis: only when
+    # no strain was measured, and a disclosed total CFU takes precedence.
+    measured = cfu_adequacy_scaled > 0.0
     aggregate_proxy = _compute_aggregate_cfu_proxy(
         pdata,
-        clinical_strains,
         total_strain_count=total_strain_count,
         disclosed_count=disclosed_count,
     )
-    aggregate_proxy["applied"] = aggregate_proxy["score"] > cfu_adequacy_scaled
-    if aggregate_proxy["applied"]:
-        cfu_adequacy_scaled = aggregate_proxy["score"]
-    # Direct per-strain mass floor: a named strain disclosed at its OWN mass (e.g.
-    # BB536 25 mg) with no CFU is not "no dose disclosed". Give a conservative floor
-    # so dose isn't treated as fully absent. This is not viable-count adequacy.
-    # Never fires for proprietary-blend mass — opacity is not rewarded.
+    aggregate_proxy["applied"] = aggregate_proxy["applied"] and not measured
     direct_strain_mass_floor = _compute_direct_strain_mass_floor(product, clinical_strains)
-    # Only when NO per-strain CFU is disclosed (disclosed_count == 0) AND adequacy is
-    # otherwise 0. A product that discloses per-strain CFU already has its dose
-    # assessed — mass must not stack a floor on top of real CFU disclosure.
-    if (
-        disclosed_count == 0
-        and cfu_adequacy_scaled <= 0.0
-        and direct_strain_mass_floor["score"] > 0.0
-    ):
-        cfu_adequacy_scaled = direct_strain_mass_floor["score"]
-        direct_strain_mass_floor["applied"] = True
-    cfu_adequacy_basis = _cfu_adequacy_basis(
-        cfu_adequacy_scaled,
-        aggregate_proxy,
-        direct_strain_mass_floor,
-        disclosed_count=disclosed_count,
+    direct_strain_mass_floor["applied"] = bool(
+        disclosed_count == 0 and direct_strain_mass_floor["matched_strains"]
+        and not measured and not aggregate_proxy["applied"]
     )
     cfu_guarantee = _cfu_guarantee_adjustment(pdata)
-    if (
-        cfu_adequacy_scaled > 0.0
-        and cfu_guarantee["multiplier"] < 1.0
-        and cfu_adequacy_basis != "direct_strain_mass_no_cfu_floor"
-    ):
+    if cfu_adequacy_scaled > 0.0 and cfu_guarantee["multiplier"] < 1.0:
         cfu_adequacy_scaled *= cfu_guarantee["multiplier"]
         cfu_guarantee["applied"] = True
         cfu_guarantee["adjusted_score"] = round(cfu_adequacy_scaled, 4)
@@ -159,7 +134,6 @@ def score_dose(product: Any) -> Dict[str, Any]:
     )
 
     components = {
-        "per_strain_cfu_disclosure": round(disclosure_score, 2),
         "cfu_adequacy": round(cfu_adequacy_scaled, 2),
     }
     raw_score = sum(components.values())
@@ -253,14 +227,14 @@ def _cfu_adequacy_basis(
     *,
     disclosed_count: int,
 ) -> str:
-    if aggregate_proxy.get("applied"):
-        return "aggregate_cfu_disclosed_only"
-    if direct_strain_mass_floor.get("applied"):
-        return "direct_strain_mass_no_cfu_floor"
     if cfu_adequacy_scaled > 0.0 and disclosed_count > 0:
         return "per_strain_cfu_disclosed"
     if cfu_adequacy_scaled > 0.0:
         return "strain_level_cfu_evidence"
+    if aggregate_proxy.get("applied"):
+        return "aggregate_cfu_disclosed_only"
+    if direct_strain_mass_floor.get("applied"):
+        return "direct_strain_mass_no_cfu_floor"
     return "no_cfu_adequacy_credit"
 
 
@@ -336,15 +310,12 @@ def _compute_direct_strain_mass_floor(
     product: Dict[str, Any],
     clinical_strains: Iterable[Any],
 ) -> Dict[str, Any]:
-    """Conservative dose floor for a named strain disclosed at its OWN mass with no
-    CFU (Bifido BB536 25 mg). Matches a clinical strain to an ingredient row that
-    (a) carries that strain's name, (b) has a positive disclosed mass, and (c) is
-    NOT a blend/header row. Never fires for proprietary-blend mass. Payload is
-    shaped like the aggregate-CFU proxy."""
+    """Record a named strain disclosed at its OWN mass with no CFU (Bifido BB536
+    25 mg): a row that (a) carries that strain's name, (b) has a positive
+    disclosed mass, and (c) is NOT a blend/header row. A label limitation for
+    the explanation; mass is never converted to a viable count."""
     payload: Dict[str, Any] = {
         "applied": False,
-        "score": 0.0,
-        "cap": CAP_DIRECT_STRAIN_MASS_FLOOR,
         "reason": None,
         "matched_strains": [],
         "excluded_blend_rows": [],
@@ -375,7 +346,6 @@ def _compute_direct_strain_mass_floor(
             matched.append(name[:48])
 
     if matched:
-        payload["score"] = CAP_DIRECT_STRAIN_MASS_FLOOR
         payload["reason"] = "direct_strain_mass_no_cfu"
         payload["matched_strains"] = matched
     else:
@@ -385,22 +355,17 @@ def _compute_direct_strain_mass_floor(
 
 def _compute_aggregate_cfu_proxy(
     pdata: Dict[str, Any],
-    clinical_strains: Iterable[Any],
     *,
     total_strain_count: int,
     disclosed_count: int,
 ) -> Dict[str, Any]:
-    """Limited total-disclosure credit; never invent per-strain allocations.
+    """Record a total CFU disclosed without every strain's own CFU.
 
-    Keep the existing two presence floors. Neither is a clinical dose claim;
-    the equal-split model and source-strength multiplier have no label basis.
+    A label limitation for the explanation, never a per-strain allocation or
+    an efficacy claim: NIH ODS states that higher CFU counts do not necessarily
+    provide greater health benefits.
     """
-    payload = {
-        "applied": False,
-        "score": 0.0,
-        "cap": AGGREGATE_CFU_LOW_NAMED_STRAIN_TOTAL_FLOOR,
-        "reason": None,
-    }
+    payload: Dict[str, Any] = {"applied": False, "reason": None}
     if disclosed_count >= total_strain_count:
         payload["reason"] = "full_per_strain_cfu_present"
         return payload
@@ -413,41 +378,12 @@ def _compute_aggregate_cfu_proxy(
         payload["reason"] = "aggregate_cfu_missing"
         return payload
 
-    strains = [_safe_dict(item) for item in clinical_strains or []]
-    live_strains = [
-        strain for strain in strains
-        if strain and not strain.get("is_inactivated") and not strain.get("is_postbiotic")
-    ]
-    if not live_strains:
-        payload.update({
-            "applied": True,
-            "score": AGGREGATE_CFU_LOW_TIER_PRESENCE_FLOOR,
-            "reason": "aggregate_cfu_label_presence",
-            "total_billion_count": round(total_billion, 4),
-            "floor": AGGREGATE_CFU_LOW_TIER_PRESENCE_FLOOR,
-        })
-        return payload
-
-    floor = (AGGREGATE_CFU_LOW_NAMED_STRAIN_TOTAL_FLOOR
-             if total_billion >= 1.0
-             else AGGREGATE_CFU_LOW_TIER_PRESENCE_FLOOR)
     payload.update({
-        "applied": floor > 0.0,
-        "score": floor,
-        "reason": ("aggregate_cfu_named_label_presence"
-                   if total_billion >= 1.0 else "aggregate_cfu_label_presence"),
+        "applied": True,
+        "reason": "aggregate_cfu_label_presence",
         "total_billion_count": round(total_billion, 4),
-        "floor": floor,
-        "cap": AGGREGATE_CFU_LOW_NAMED_STRAIN_TOTAL_FLOOR,
     })
     return payload
-
-
-def _score_per_strain_cfu_disclosure(disclosed_count: int, total_strain_count: int) -> float:
-    if total_strain_count <= 0 or disclosed_count <= 0:
-        return 0.0
-    ratio = min(1.0, disclosed_count / total_strain_count)
-    return CAP_PER_STRAIN_CFU_DISCLOSURE * ratio
 
 
 def _disclosure_reason(pdata: Dict[str, Any], total_strain_count: int, disclosed_count: int) -> str | None:

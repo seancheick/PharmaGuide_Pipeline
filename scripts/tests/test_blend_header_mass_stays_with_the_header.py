@@ -163,5 +163,7 @@ def test_overlapping_constituents_do_not_reconcile_a_partly_disclosed_preparatio
                for row in candidates)
     scored = build_scored_artifact(enriched)
     components = scored["_v4_module_breakdown"]["dimensions"]["formulation"]["metadata"]["botanical_formulation"]
-    assert components.get("plant_part_disclosed", 0) > 0
+    # The disclosed preparation keeps its own recognized identity and extract
+    # quality (plant part is a Transparency fact since V4.1 Step 4).
+    assert components.get("recognized_botanical_identity", 0) > 0
     assert components.get("extract_not_whole_herb", 0) > 0

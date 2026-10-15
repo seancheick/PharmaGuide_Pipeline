@@ -173,7 +173,7 @@ def test_b_complex_form_quality_uses_parent_relative_iqm_scale() -> None:
     # Riboflavin-5-phosphate is tied for the best reviewed B2 form at IQM 10.
     # Formulation therefore gives it the full within-parent contribution while
     # preserving the authored raw IQM value in metadata.
-    contribution, average_bio = _score_form_quality({
+    contribution, average_bio, neutral_points = _score_form_quality({
         "vitamin_b2_riboflavin": _row(
             "vitamin_b2_riboflavin",
             "Riboflavin-5-Phosphate",
@@ -186,6 +186,7 @@ def test_b_complex_form_quality_uses_parent_relative_iqm_scale() -> None:
 
     assert contribution == 8.0
     assert average_bio == 10.0
+    assert neutral_points == 0.0  # rated, so no unrated neutral share
 
 
 def test_b_complex_evidence_tracks_core_authority_panel_not_generic_breadth() -> None:

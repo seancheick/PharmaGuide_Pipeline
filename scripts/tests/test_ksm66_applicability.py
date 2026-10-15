@@ -69,9 +69,12 @@ def test_subclinical_ksm66_dose_does_not_borrow_plain_ashwagandha_powder(
     assert evidence["score"] > 0
     assert not evidence["metadata"]["flags"]
     assert dose["metadata"]["botanical_dose_band"] == "below_studied_range"
+    # V4.1 Step 4 grades the daily exposure the shared owner measured:
+    # dose_mg is the minimum directed daily amount, plus the daily maximum.
     assert dose["metadata"]["botanical_dose"] == {
         "dose_mg": 100.0,
         "range_mg": [250.0, 600.0],
+        "measurement_daily_max": 100.0,
     }
 
 

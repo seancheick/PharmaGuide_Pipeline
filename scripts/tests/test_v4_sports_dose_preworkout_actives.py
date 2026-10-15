@@ -71,8 +71,9 @@ def test_alpha_gpc_600mg_full_credit() -> None:
     product = _product(_row("alpha_gpc", 600, "mg"))
     assert _primary(product) == (20.0, "alpha_gpc_at_least_600_mg")
     payload = score_dose(product)
-    assert payload["components"]["sports_focused_single_completion"] == 5.0
-    assert payload["score"] == 25.0
+    # V4.1 Step 4: no single-active completion bonus; the primary is the assessment.
+    assert "sports_focused_single_completion" not in payload["components"]
+    assert payload["score"] == 20.0
 
 
 def test_alpha_gpc_300mg_moderate_credit() -> None:
@@ -123,8 +124,9 @@ def test_undisclosed_alpha_gpc_earns_no_dose_credit() -> None:
 def test_offlist_dominant_active_uses_generic_dose_proxy() -> None:
     # 67304 shape: L-carnitine 1 g (mass-dominant, no sports band) + a token BCAA.
     # The sports rubric must NOT discard the carnitine and crater to the token BCAA;
-    # it falls back to the generic dose-adequacy proxy so the disclosed primary is
-    # credited (proxy ~16, not the ~1 token-BCAA band).
+    # it falls back to the generic dose-adequacy proxy. Carnitine has no
+    # benchmark, so the disclosed primary keeps the shared unbenchmarked
+    # neutral on the sports reference (11.4 of 20), not the ~1 token-BCAA band.
     res = score_dose(
         _product(
             _row("l_carnitine", 1, "Gram(s)"),
@@ -133,7 +135,7 @@ def test_offlist_dominant_active_uses_generic_dose_proxy() -> None:
             primary_type="amino_acid",
         )
     )
-    assert res["score"] >= 12.0
+    assert res["score"] == 11.4
     assert res["metadata"]["dose_basis"] == "generic_dose_proxy_for_offlist_primary"
 
 
@@ -200,7 +202,7 @@ def test_bcaa_header_does_not_duplicate_individually_disclosed_members():
                        _row("l_valine",1750,"mg"), primary_type="amino_acid")
     payload = score_dose(product)
     assert payload["components"]["sports_primary_active_dose"] == 20
-    assert payload["components"]["sports_focused_single_completion"] == 5
+    assert "sports_focused_single_completion" not in payload["components"]
 
 
 @pytest.mark.parametrize("pid", ["306183", "307773"])

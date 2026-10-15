@@ -27,23 +27,31 @@ def _botanical_formulation(name):
     return (formulation.get("metadata") or {}).get("botanical_formulation") or {}
 
 
+# V4.1 Step 4: a brand name earns no separate Formulation award (it is an
+# Evidence fact). A recognized branded studied extract is standardized by
+# definition, so the brand still decides the full standardization tier (3.2),
+# and only when the label actually names the brand.
+
+
 def test_plain_black_pepper_extract_is_not_bioperine():
     components = _botanical_formulation("branded_form_plain_pepper_311167_raw.json")
     assert "branded_clinically_studied_extract" not in components
-    assert components.get("marker_standardization_declared", 0) < 4.0
+    assert components.get("marker_standardization_declared", 0) < 3.2
 
 
-def test_a_label_naming_ksm66_keeps_the_branded_credit():
+def test_a_label_naming_ksm66_keeps_the_full_standardization_tier():
     components = _botanical_formulation("branded_form_ksm66_305203_raw.json")
-    assert components.get("branded_clinically_studied_extract") == 3.0
+    assert "branded_clinically_studied_extract" not in components
+    assert components.get("marker_standardization_declared") == 3.2
 
 
-def test_a_brand_named_blend_total_keeps_the_branded_credit():
+def test_a_brand_named_blend_total_keeps_the_full_standardization_tier():
     """54775 prints one "Sytrinol" total over its two extracts. The row scored is a
     label-level projection the enricher's evidence matcher never assesses, so its
     own label name is what names the brand."""
     components = _botanical_formulation("branded_form_sytrinol_54775_raw.json")
-    assert components.get("branded_clinically_studied_extract") == 3.0
+    assert "branded_clinically_studied_extract" not in components
+    assert components.get("marker_standardization_declared") == 3.2
 
 
 def test_reviewed_preparation_recognition_does_not_follow_a_shared_container_path():

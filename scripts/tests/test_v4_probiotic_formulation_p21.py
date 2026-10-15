@@ -1,4 +1,10 @@
-"""v4 Probiotic Formulation — P2.1 tests."""
+"""v4 Probiotic Formulation — P2.1 tests.
+
+V4.1 Step 4: Formulation is canonical form quality only — the shared IQM
+rating (unrated strains keep the shared neutral) plus shared delivery-tier
+points for delivery that protects the probiotic strains. Total CFU and strain
+identity are Transparency facts and stay recorded in metadata.
+"""
 
 from __future__ import annotations
 
@@ -6,6 +12,14 @@ import sys
 from pathlib import Path
 
 import pytest
+from test_probiotic_identity_completeness import _total_cfu_points
+
+from scoring_v4.modules.generic_formulation import UNRATED_FORM_NEUTRAL
+
+# Unrated strain forms keep the neutral; a supported delayed-release capsule is
+# a tier-2 probiotic delivery system.
+CANONICAL = {"A1_bio_score": UNRATED_FORM_NEUTRAL, "A3_delivery_system": 2.0}
+
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
 SCRIPTS_ROOT = REPO_ROOT / "scripts"
@@ -115,13 +129,9 @@ def test_clean_exact_probiotic_reaches_full_formulation_without_optional_prebiot
 
     payload = score_formulation(_product(prebiotic_present=False))
 
-    assert payload["score"] == 15.0
+    assert payload["score"] == 11.0
     assert payload["max"] == 15.0
-    assert payload["components"] == {
-        "total_cfu_disclosed": 4.0,
-        "exact_identity_completeness": 8.0,
-        "delivery_survivability": 3.0,
-    }
+    assert payload["components"] == CANONICAL
     assert payload["metadata"]["phase"] == "P2.1_probiotic_formulation"
 
 
@@ -133,8 +143,8 @@ def test_only_valid_cfu_disclosure_matters_to_formulation(total_billion: float) 
 
     payload = score_formulation(_product(total_billion=total_billion))
 
-    assert "cfu_amount" not in payload["components"]
-    assert payload["components"]["total_cfu_disclosed"] == (4.0 if total_billion > 0 else 0.0)
+    assert payload["components"] == CANONICAL
+    assert _total_cfu_points(payload) == (4.0 if total_billion > 0 else 0.0)
 
 
 @pytest.mark.parametrize(
@@ -146,35 +156,32 @@ def test_complete_identity_credit_is_independent_of_strain_count(strain_count: i
     payload = score_formulation(
         _product(strain_count=strain_count, clinical_strain_count=strain_count)
     )
-    assert "named_species_diversity" not in payload["components"]
-    assert payload["components"]["exact_identity_completeness"] == 8
+    assert payload["components"] == CANONICAL
+    assert payload["metadata"]["identified_strain_count"] == strain_count
 
 
 @pytest.mark.parametrize(
-    ("clinical_strain_count", "expected"),
-    [
-        (0, 0.0),
-        (1, 1.6),
-        (2, 3.2),
-        (3, 4.8),
-        (5, 8.0),
-    ],
+    "clinical_strain_count", [0, 1, 2, 3, 5],
 )
-def test_identity_credit_is_proportional_to_resolved_fraction(
+def test_resolved_identity_fraction_is_recorded_without_formulation_credit(
     clinical_strain_count: int,
-    expected: float,
 ) -> None:
     from scoring_v4.modules.probiotic_formulation import score_formulation
 
     payload = score_formulation(_product(clinical_strain_count=clinical_strain_count))
 
-    assert payload["components"]["exact_identity_completeness"] == expected
+    # Identity earns nothing here. With no recognizable probiotic row ("Strain 1"
+    # placeholders only) the capsule cannot be shown to protect a probiotic.
+    expected_delivery = 2.0 if clinical_strain_count else 0.0
+    assert payload["components"] == {**CANONICAL, "A3_delivery_system": expected_delivery}
+    assert payload["metadata"]["identified_strain_count"] == clinical_strain_count
+    assert payload["metadata"]["total_strain_count"] == 5
 
 
 @pytest.mark.parametrize(
     ("survivability", "delivery_tier", "expected"),
     [
-        (True, None, 3.0),  # Supported source-owned delayed-release capsule.
+        (True, None, 2.0),  # Supported source-owned delayed-release capsule (tier 2).
         (False, 1, 0.0),  # A generic unsourced tier is not survivability evidence.
         (False, 2, 0.0),
         (False, 3, 0.0),
@@ -190,7 +197,7 @@ def test_delivery_survivability_does_not_infer_coating_from_unsourced_tier(
 
     payload = score_formulation(_product(survivability=survivability, delivery_tier=delivery_tier))
 
-    assert payload["components"]["delivery_survivability"] == expected
+    assert payload["components"]["A3_delivery_system"] == expected
 
 
 def test_optional_prebiotic_does_not_change_probiotic_formulation_quality() -> None:
@@ -210,7 +217,7 @@ def test_probiotic_formulation_accepts_final_blob_probiotic_detail_alias() -> No
 
     payload = score_formulation(product)
 
-    assert payload["score"] == 15.0
+    assert payload["score"] == 11.0
     assert payload["metadata"]["total_billion_count"] == 50.0
 
 
@@ -224,7 +231,7 @@ def test_strain_count_falls_back_to_unique_blend_strains() -> None:
     payload = score_formulation(_product(strain_count=0, clinical_strain_count=0, blends=blends))
 
     assert payload["metadata"]["total_strain_count"] == 3
-    assert payload["components"]["exact_identity_completeness"] == 0.0
+    assert payload["metadata"]["identified_strain_count"] == 0
 
 
 def test_score_probiotic_wires_formulation_and_preserves_p21_payload_at_p23() -> None:
@@ -233,7 +240,7 @@ def test_score_probiotic_wires_formulation_and_preserves_p21_payload_at_p23() ->
     breakdown = score_probiotic(_product()).to_breakdown()
     formulation = breakdown["dimensions"]["formulation"]
 
-    assert formulation["score"] == 15.0
+    assert formulation["score"] == 11.0
     assert formulation["max"] == 15.0
     assert formulation["metadata"]["phase"] == "P2.1_probiotic_formulation"
     assert breakdown["dimensions"]["dose"]["score"] is not None
@@ -248,21 +255,23 @@ def test_probiotic_formulation_resilient_to_malformed_input() -> None:
 
     for bad in (None, {}, {"probiotic_data": None}, 42, "oops"):
         payload = score_formulation(bad)  # type: ignore[arg-type]
-        assert payload["score"] == 0.0
+        # No rating, delivery or identity: only the shared unrated neutral.
+        assert payload["components"] == {"A1_bio_score": UNRATED_FORM_NEUTRAL, "A3_delivery_system": 0.0}
+        assert payload["score"] == UNRATED_FORM_NEUTRAL
         assert payload["max"] == 15.0
 
 
 
 @pytest.mark.parametrize('technology,tier,expected',[
     ('methylcobalamin',2,0.0),('fermented',3,0.0),('whole food',3,0.0),
-    ('enteric-coated',2,2.5),('microencapsulation',3,1.5),
+    ('enteric-coated',2,2.0),('microencapsulation',3,1.0),
 ])
 def test_probiotic_survivability_requires_relevant_delivery(technology,tier,expected):
     from scoring_v4.modules.probiotic_formulation import score_formulation
     product=_product(survivability=False,delivery_tier=tier)
     product['activeIngredients']=[{'name':'Lactobacillus rhamnosus '+technology,'raw_source_text':'Lactobacillus rhamnosus '+technology,'category':'probiotic','quantity':10,'unit':'billion CFU','raw_source_path':'ingredientRows[0]'}]
     product['delivery_data']={'highest_tier':tier,'systems':[{'canonical_name':technology,'name':technology,'tier':tier,'raw_source_text':technology,'match_source':'ingredientRows[0]'}]}
-    assert score_formulation(product)['components']['delivery_survivability']==expected
+    assert score_formulation(product)['components']['A3_delivery_system']==expected
 
 
 def test_probiotic_cannot_borrow_other_rows_enteric_delivery():
@@ -273,10 +282,10 @@ def test_probiotic_cannot_borrow_other_rows_enteric_delivery():
         {'name':'Enteric-coated Peppermint Oil','quantity':200,'unit':'mg','raw_source_path':'ingredientRows[1]','raw_source_text':'Enteric-coated Peppermint Oil'},
     ]
     product['delivery_data']={'highest_tier':2,'systems':[{'canonical_name':'enteric-coated','tier':2,'match_source':'ingredientRows[1]','raw_source_text':'Enteric-coated'}]}
-    assert score_formulation(product)['components']['delivery_survivability']==0.0
+    assert score_formulation(product)['components']['A3_delivery_system']==0.0
 
 @pytest.mark.parametrize('source,expected',[
-    ('Enteric-coated Lactobacillus rhamnosus',2.5),
+    ('Enteric-coated Lactobacillus rhamnosus',2.0),
     ('Non-enteric-coated Lactobacillus rhamnosus',0.0),
     ('Lactobacillus rhamnosus, not enteric-coated',0.0),
     ('Lactobacillus rhamnosus without enteric-coated delivery',0.0),
@@ -286,7 +295,7 @@ def test_probiotic_stale_delivery_marker_requires_affirmative_source(source,expe
     product=_product(survivability=False,delivery_tier=2)
     product['activeIngredients']=[{'name':source,'raw_source_text':source,'category':'probiotic','quantity':10,'unit':'billion CFU','raw_source_path':'ingredientRows[0]'}]
     product['delivery_data']={'highest_tier':2,'systems':[{'canonical_name':'enteric-coated','tier':2,'match_source':'ingredientRows[0]','raw_source_text':'enteric-coated'}]}
-    assert score_formulation(product)['components']['delivery_survivability']==expected
+    assert score_formulation(product)['components']['A3_delivery_system']==expected
 
 
 def test_probiotic_delivery_retains_owned_source_note_assertion():
@@ -304,4 +313,4 @@ def test_probiotic_delivery_retains_owned_source_note_assertion():
         'canonical_name': 'microencapsulation', 'tier': 3,
         'raw_source_text': note, 'match_source': 'ingredientRows[0].nestedRows[0]',
     }]}
-    assert score_formulation(product)['components']['delivery_survivability'] == 1.5
+    assert score_formulation(product)['components']['A3_delivery_system'] == 1.0

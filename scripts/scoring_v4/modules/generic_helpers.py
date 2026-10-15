@@ -13,11 +13,13 @@ duplicated to keep v4 evolvable without v3 entanglement.
 
 from __future__ import annotations
 
+from contextlib import contextmanager
+from contextvars import ContextVar
 from functools import lru_cache
 import json
 from pathlib import Path
 import re
-from typing import Any, Dict, List, Optional, Tuple
+from typing import Any, Dict, Iterator, List, Optional, Tuple
 
 from scoring_input_contract import (
     get_scoring_ingredients,
@@ -161,6 +163,56 @@ def _safe_list(value: Any) -> list:
 
 def _safe_dict(value: Any) -> Dict[str, Any]:
     return value if isinstance(value, dict) else {}
+
+
+# --- Dose reference scope (V4.1 Step 4) ------------------------------------
+# A Dose credit that must mean the same public value on every route (the
+# unbenchmarked neutral, the studied-range bands) is expressed against the
+# archetype reference the Dose pillar will divide by. The module that owns the
+# product's archetype opens this scope around Dose scoring; with no scope, the
+# config default reference applies.
+_DOSE_REFERENCE: ContextVar[Optional[float]] = ContextVar("dose_reference", default=None)
+
+
+@contextmanager
+def dose_reference_scope(reference: float) -> Iterator[None]:
+    token = _DOSE_REFERENCE.set(float(reference))
+    try:
+        yield
+    finally:
+        _DOSE_REFERENCE.reset(token)
+
+
+def current_dose_reference() -> float:
+    value = _DOSE_REFERENCE.get()
+    if value is not None:
+        return value
+    from scoring_v4.quality_score_config import block
+    return float(block("dose_subscale", "default_reference")["default_reference"])
+
+
+def archetype_dose_reference(module: str, formulation_metadata: Optional[Dict[str, Any]] = None,
+                             module_metadata: Optional[Dict[str, Any]] = None) -> float:
+    """The archetype Dose reference the public Dose pillar will use.
+
+    Reads the one archetype owner (quality_score._archetype) from the facts a
+    module already recorded, so Dose credits and the pillar agree on the scale.
+    """
+    from scoring_v4.quality_score import _archetype
+    from scoring_v4.quality_score_config import block
+
+    archetype = _archetype(module, {"metadata": dict(module_metadata or {}), "dimensions": {
+        "formulation": {"metadata": dict(formulation_metadata or {})}}})
+    sub = block("dose_subscale", "archetype_reference")
+    return float(sub["archetype_reference"].get(archetype, sub["default_reference"]))
+
+
+def unbenchmarked_dose_credit() -> float:
+    """Raw Dose credit worth the shared unbenchmarked neutral in public points."""
+    from scoring_v4.quality_score_config import block, config
+    neutral = float(block("dose_subscale", "unbenchmarked_neutral_public")["unbenchmarked_neutral_public"])
+    weight = float(config()["pillars"]["dose"]["weight"])
+    return round(neutral * current_dose_reference() / weight, 4)
 
 
 def daily_serving_range(product: Dict[str, Any]) -> Tuple[float, float, bool]:

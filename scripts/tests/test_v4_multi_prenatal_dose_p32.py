@@ -256,14 +256,16 @@ def test_folate_mg_dfe_stale_pct_rows_are_corrected_for_prenatal_core() -> None:
     assert payload["metadata"]["coverage_nutrient_scores"]["folate"] > 0.45
 
 
-def test_panel_breadth_scales_to_five_points_at_eighteen_nutrients() -> None:
+def test_panel_size_earns_no_breadth_points() -> None:
     from scoring_v4.modules.multi_prenatal_dose import score_dose
 
+    # V4.1 Step 4: panel breadth was count-based and is retired; eighteen
+    # nutrients earn coverage only through their own adequacy.
     nutrients = [f"Nutrient {i}" for i in range(18)]
     payload = score_dose(_product(adequacy_results=[_adequacy(n) for n in nutrients]))
 
-    assert payload["components"]["panel_breadth"] == 3.0
-    assert payload["metadata"]["panel_breadth_count"] == 18
+    assert "panel_breadth" not in payload["components"]
+    assert "panel_breadth_count" not in payload["metadata"]
 
 
 def test_general_multi_core_anchor_coverage_uses_non_prenatal_anchor_set() -> None:
@@ -328,7 +330,9 @@ def test_prenatal_core_coverage_does_not_require_choline_or_dha() -> None:
     assert payload["components"]["critical_nutrient_coverage"] == 5.0
     assert payload["metadata"]["critical_nutrient_mode"] == "prenatal"
     assert payload["metadata"]["critical_nutrients_missing"] == []
-    assert payload["metadata"]["prenatal_complement_scores"] == {"choline": 0.0, "dha": 0.0}
+    # The complement scores DHA only (choline is an RDA/AI nutrient already
+    # covered by the adequacy panel).
+    assert payload["metadata"]["prenatal_complement_scores"] == {"dha": 0.0}
     assert "prenatal_complement_support" not in payload["components"]
 
 

@@ -7,6 +7,7 @@ once by the enricher and carried on the blend row into the blob.
 import pytest
 
 from probiotic_measurements import label_strain_identity_resolution
+from test_probiotic_identity_completeness import _identity_points
 
 
 REGISTRY = {
@@ -64,4 +65,4 @@ def test_species_general_research_does_not_earn_exact_code_points(name, clinical
     from scoring_v4.modules.probiotic_formulation import score_formulation
     product = {"activeIngredients": [{"name": name, "raw_source_path": "ingredientRows[0]"}],
                "probiotic_data": {"clinical_strains": [{"strain": name, "clinical_id": clinical_id, "source_row_ref": "ingredientRows[0]"}]}}
-    assert score_formulation(product)["components"]["exact_identity_completeness"] == 0
+    assert _identity_points(score_formulation(product)) == 0
