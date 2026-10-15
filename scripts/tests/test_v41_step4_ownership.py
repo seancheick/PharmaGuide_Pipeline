@@ -161,3 +161,33 @@ def test_enricher_dietary_warning_never_prints_a_sugar_amount_it_does_not_have()
     # The diabetic warning still fires (under-warning is worse), without a number.
     assert len(sugar) == 1
     assert "None" not in sugar[0]["message"]
+
+
+@pytest.mark.parametrize(("module", "method", "expected"), [
+    ("generic", "rda_ul_proxy_until_dietary_intake_table", "nutrient_amount_unread"),
+    ("generic", "immune_support_daily_dose_v1", "nutrient_amount_unread"),
+    ("generic", "botanical_clinical_dose_v1", None),   # the profile never reads the vitamin
+    ("generic", "collagen_clinical_dose_v1", None),
+    ("multi_or_prenatal", None, "nutrient_amount_unread"),
+    ("sports", None, None),
+])
+def test_an_unread_vitamin_holds_only_a_dose_that_assesses_it(module, method, expected):
+    enriched = {"rda_ul_data": {"adequacy_results": [{
+        "canonical_id": "zinc", "data_by_group": {"19-30": {"rda": 11.0}},
+        "ul_status": "skipped_amount_not_declared", "original_quantity": 6.0, "original_unit": "NP",
+    }]}}
+    breakdown = {"module": module, "dimensions": {"dose": {"metadata": {"method": method}}}}
+    assert unfinished_source_assessment(enriched, breakdown) == expected
+
+
+def test_an_unreadable_profile_amount_is_unfinished_work_with_honest_copy():
+    from scoring_v4.quality_score import _pillar_dose, _config
+
+    meta = {"method": "botanical_clinical_dose_v1", "botanical_dose_band": "amount_not_assessable",
+            "botanical_dose": {"dose_mg": 500.0, "range_mg": [250.0, 600.0]}}
+    assert unfinished_source_assessment({}, {"module": "generic", "dimensions": {"dose": {"metadata": meta}}}) \
+        == "dose_amount_unread"
+    pillar = _pillar_dose({"score": 0.0, "max": 25.0, "components": {"botanical_clinical_dose": 0.0},
+                           "metadata": meta}, 20, "generic_botanical_branded", _config())
+    assert pillar["reason"] == ("The printed amount could not be read yet, so its dose has not been "
+                                "assessed.")

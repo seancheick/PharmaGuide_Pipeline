@@ -119,6 +119,12 @@ UNASSESSED_EVIDENCE_DISPLAY_STATES = frozenset({"not_yet_reviewed"})
 
 #: Routes whose Dose assesses vitamin and mineral adequacy.
 _NUTRIENT_DOSE_ROUTES = frozenset({"generic", "multi_or_prenatal", "b_complex"})
+#: Generic Dose methods that read vitamin/mineral amounts (the botanical,
+#: collagen, sleep and joint profiles never do).
+_GENERIC_NUTRIENT_DOSE_METHODS = frozenset({
+    "rda_ul_proxy_until_dietary_intake_table",
+    "immune_support_daily_dose_v1",
+})
 #: Adequacy statuses recorded when a printed nutrient amount could not be read.
 #: An unstated vitamin form is the label's limitation (its upper-limit risk is
 #: dose-safety's unresolved state), so it is not listed here.
@@ -144,12 +150,21 @@ def unfinished_source_assessment(enriched_product: Dict[str, Any],
     ]
     if any(item.get("benchmark") == "unresolved" for item in assessments):
         return "dose_benchmark_identity_unresolved"
+    # A printed botanical/collagen amount the exposure owner could not read.
+    bands = {dose_meta.get("botanical_dose_band"), dose_meta.get("collagen_dose_band")} | {
+        _safe_dict(item).get("band") for item in dose_meta.get("specialized_purpose_assessments") or []
+    }
+    if "amount_not_assessable" in bands:
+        return "dose_amount_unread"
     # Only a nutrient the route's Dose benchmarks (the adequacy owner found its
     # RDA/UL reference record; its RDA/AI is never computed for an unread
     # amount), and only when the owner recorded a printed number it could not
     # read: an incidental vitamin on a protein or fiber label does not hold the
     # tier, and an amount the label never printed is the label's limitation.
-    if module_breakdown.get("module") in _NUTRIENT_DOSE_ROUTES:
+    module = module_breakdown.get("module")
+    if module in _NUTRIENT_DOSE_ROUTES and (
+        module != "generic" or dose_meta.get("method") in _GENERIC_NUTRIENT_DOSE_METHODS
+    ):
         for row in _safe_dict(enriched_product.get("rda_ul_data")).get("adequacy_results") or []:
             if not isinstance(row, dict) or row.get("ul_status") not in _UNREAD_NUTRIENT_AMOUNT_STATUSES:
                 continue

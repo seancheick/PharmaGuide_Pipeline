@@ -271,6 +271,8 @@ def _unassessed_primary_dose_reason(dim: Dict[str, Any]) -> Optional[str]:
     if not isinstance(metadata, dict):
         return None
     bands = (metadata.get("botanical_dose_band"), metadata.get("collagen_dose_band"))
+    if "amount_not_assessable" in bands:
+        return "The printed amount could not be read yet, so its dose has not been assessed."
     if "primary_no_dose" in bands:
         return "No amount is disclosed for the main ingredient, so its dose cannot be assessed."
     if "disclosed_no_reference" in bands or metadata.get("window_proxy_status") in {
