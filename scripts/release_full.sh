@@ -8,17 +8,17 @@
 # up-to-date and accurate output without shortcuts.
 #
 # Steps (in order):
-#   0. Import approved submissions  Fetches service-approved records and runs
-#                                  only fresh labels through the same canonical
-#                                  Clean → Enrich → Score pipeline as every
-#                                  other catalog source.
+#   0. Validate prepared intake    Preserves the prepared submission set.
+#                                  --refresh-submissions explicitly fetches and
+#                                  processes new approved labels; prefer doing
+#                                  that before the final corpus.
 #   1. Gate, assemble, and promote (rebuild_dashboard_snapshot.sh)
 #                                  AUTO-SKIPS when dist/ catalog is already
 #                                  fresh relative to per-brand outputs.
 #                                  The snapshot path validates candidates before
 #                                  atomically promoting dist/final_db_output.
-#   2. Confirm catalog parity      No direct staging; the same safe snapshot
-#                                  path handles any final/dist mismatch.
+#   2. Catalog already staged      Step 1 builds or validates both mirrors;
+#                                  no second assembly/staging decision.
 #   3. Extract DSLD product images (extract_product_images.py)
 #                                  AUTO-SKIPS when dist/ image backfill is
 #                                  already complete and current.
@@ -53,7 +53,7 @@
 #     # Standard: detect what needs running, do it, no flags needed.
 #     bash scripts/release_full.sh
 #
-#     # Force every step to run (override auto-detect — emergency rebuild):
+#     # Force assembly, preserving the prepared intake set:
 #     bash scripts/release_full.sh --force
 #
 #     # Check publishing prerequisites without processing or publishing:
@@ -78,6 +78,10 @@
 #
 # Legacy flags (still accepted for backward compat; redundant now):
 #     --skip-assemble    same effect as auto-detection when dist/ is fresh
+#
+# Input policy: release preserves the prepared submission set by default.
+# --refresh-submissions explicitly opts into fetching and processing new intake.
+# Prefer preparing intake before the final corpus, never during publication.
 #
 # Prerequisites:
 #     - Per-brand pipeline outputs under scripts/products/output_*/ (only
@@ -110,7 +114,7 @@ source "$REPO_ROOT/scripts/python_env.sh"
 if [[ "${PG_RELEASE_LOCK_WRAPPED:-0}" != "1" ]]; then
   exec "$PG_PYTHON" scripts/run_with_release_lock.py \
     --lock-path "$REPO_ROOT/scripts/.release.lock" \
-    -- bash "$0" "$@"
+    -- bash "$REPO_ROOT/scripts/release_full.sh" "$@"
 fi
 
 # ---------------------------------------------------------------------------
@@ -121,7 +125,7 @@ FLUTTER_REPO="/Users/seancheick/PharmaGuide ai"
 FORCE=0
 PREFLIGHT_ONLY=0
 COMPATIBILITY_ONLY=0
-PREPARED_INPUTS=0
+PREPARED_INPUTS=1
 SKIP_SUPABASE=0
 SKIP_FLUTTER=0
 SKIP_PRODUCT_IMAGES=0
@@ -138,6 +142,7 @@ while (($# > 0)); do
     --preflight-only)    PREFLIGHT_ONLY=1; shift ;;
     --compatibility-only) COMPATIBILITY_ONLY=1; shift ;;
     --prepared-inputs)   PREPARED_INPUTS=1; shift ;;
+    --refresh-submissions) PREPARED_INPUTS=0; shift ;;
     --force)             FORCE=1; shift ;;
     --skip-assemble)     shift ;;  # accepted for backward compat; no-op now
     --skip-supabase)     SKIP_SUPABASE=1; shift ;;
@@ -147,7 +152,7 @@ while (($# > 0)); do
     --keep-versions)     KEEP_VERSIONS="${2:?--keep-versions requires N}"; shift 2 ;;
     --flutter-repo)      FLUTTER_REPO="${2:?--flutter-repo requires path}"; shift 2 ;;
     -h|--help)
-      sed -n '2,55p' "$0" | sed 's/^# \{0,1\}//'
+      sed -n '2,102p' "$0" | sed 's/^# \{0,1\}//'
       exit 0
       ;;
     *) echo "Unknown flag: $1" >&2; exit 2 ;;
@@ -167,12 +172,6 @@ DIST_PRODUCT_IMAGES_DIR="$DIST_DIR/product_images"
 DIST_PRODUCT_IMAGE_INDEX="$DIST_PRODUCT_IMAGES_DIR/product_image_index.json"
 PRODUCTS_DIR="$REPO_ROOT/scripts/products"
 SOURCE_OF_TRUTH_AUDIT="$REPO_ROOT/scripts/audit_source_of_truth_contract.py"
-RDA_REFERENCE_SOURCE="$REPO_ROOT/scripts/data/rda_optimal_uls.json"
-BANNED_RECALLED_REFERENCE_SOURCE="$REPO_ROOT/scripts/data/banned_recalled_ingredients.json"
-HARMFUL_ADDITIVES_REFERENCE_SOURCE="$REPO_ROOT/scripts/data/harmful_additives.json"
-OTHER_INGREDIENTS_REFERENCE_SOURCE="$REPO_ROOT/scripts/data/other_ingredients.json"
-ABSORPTION_ENHANCERS_REFERENCE_SOURCE="$REPO_ROOT/scripts/data/absorption_enhancers.json"
-IQM_REFERENCE_SOURCE="$REPO_ROOT/scripts/data/ingredient_quality_map.json"
 IDENTITY_AUDIT_SCRIPT="$REPO_ROOT/scripts/audit_identity_integrity.py"
 SUBMISSION_OUTPUT_DIR="$REPO_ROOT/manual_labels/product_submissions"
 SUBMISSION_RECEIPTS="$SUBMISSION_OUTPUT_DIR/.product_submission_import_receipts"
@@ -180,23 +179,6 @@ SUBMISSION_PIPELINE_PREFIX="$PRODUCTS_DIR/output_Product_Submissions"
 SUBMISSION_SCORE_MANIFEST="$SUBMISSION_PIPELINE_PREFIX"_scored/scored/.stage_manifest.json
 SUBMISSION_ENRICH_MANIFEST="$SUBMISSION_PIPELINE_PREFIX"_enriched/enriched/.stage_manifest.json
 SUBMISSION_CLEAN_MANIFEST="$SUBMISSION_PIPELINE_PREFIX"/cleaned/.stage_manifest.json
-
-# Code that changes emitted catalog identity, scoring, or explanation fields is
-# a catalog-build input, just like the source product outputs. Without this,
-# a release after an exporter change can incorrectly reuse an older catalog.
-CATALOG_BUILD_SOURCES=(
-  "$REPO_ROOT/scripts/build_all_final_dbs.py"
-  "$REPO_ROOT/scripts/build_final_db.py"
-  "$REPO_ROOT/scripts/enhanced_normalizer.py"
-  "$REPO_ROOT/scripts/enrich_supplements_v3.py"
-  "$REPO_ROOT/scripts/identity_integrity.py"
-  "$REPO_ROOT/scripts/score_products_v4.py"
-  "$REPO_ROOT/scripts/scoring_input_contract.py"
-  "$REPO_ROOT/scripts/scoring_v4/scored_artifact.py"
-  "$REPO_ROOT/scripts/scoring_v4/quality_score.py"
-  "$REPO_ROOT/scripts/scoring_v4/pillar_explanations.py"
-  "$REPO_ROOT/scripts/release_catalog_artifact.py"
-)
 
 # A release publishes what this checkout builds, so a publishing run must start
 # from a clean checkout at the freshly fetched origin/main. On 2026-09-29 a
@@ -308,6 +290,7 @@ fi
 if (( SKIP_SUPABASE == 0 && SUPABASE_DRY_RUN == 0 )); then
   "$PG_PYTHON" "$REPO_ROOT/scripts/sync_to_supabase.py" --preflight-only || exit 1
 fi
+"$PG_PYTHON" "$REPO_ROOT/scripts/promote_release_artifacts.py" --check-disk "$REPO_ROOT/scripts"
 if (( PREFLIGHT_ONLY == 1 )); then
   if (( SKIP_FLUTTER == 0 )) && [[ ! -x "$FLUTTER_REPO/scripts/import_catalog_artifact.sh" ]]; then
     err "Flutter import script is missing or not executable: $FLUTTER_REPO/scripts/import_catalog_artifact.sh"
@@ -337,22 +320,9 @@ info "================================================================"
 
 # ---------------------------------------------------------------------------
 # Helpers — freshness primitives. All return 0 (true) or 1 (false) for use
-# in `if` blocks. We use mtime comparisons because they're cheap, accurate
-# enough at this scale, and don't require parsing JSON manifests.
+# in `if` blocks. Catalog assembly uses sealed content receipts; interaction
+# assembly retains its existing mtime trigger plus final parity gates.
 # ---------------------------------------------------------------------------
-
-# is_path_newer_than <input_path> <output_path>
-# Returns 0 if input mtime > output mtime (i.e. input is newer, output is stale).
-# Returns 0 when output doesn't exist (must be built).
-# Returns 1 when output is at least as fresh as input (skip is safe).
-is_path_newer_than() {
-  local input="$1"
-  local output="$2"
-  [[ ! -e "$output" ]] && return 0  # output missing → must build
-  [[ ! -e "$input"  ]] && return 1  # input missing → can't be stale; skip
-  # -nt = "newer than"; bash mtime check
-  [[ "$input" -nt "$output" ]]
-}
 
 # any_newer_input <output_path> <input_path...>
 # Returns 0 if any input is newer than output (or output is missing).
@@ -363,29 +333,6 @@ any_newer_input() {
   for i in "$@"; do
     [[ -e "$i" && "$i" -nt "$output" ]] && return 0
   done
-  return 1
-}
-
-# any_pipeline_output_newer_than <output_path> <products_dir>
-# Returns 0 if any per-brand pipeline-output file (i.e. JSON inside
-# `output_*_enriched/enriched/` or `output_*_scored/scored/`) has mtime
-# newer than <output>. Deliberately scoped — does NOT match `reports/`,
-# `logs/`, or other side-effect directories under products/, which get
-# touched by the release run itself and would cause false positives.
-any_pipeline_output_newer_than() {
-  local output="$1"
-  local products_dir="$2"
-  [[ ! -e "$output"      ]] && return 0
-  [[ ! -d "$products_dir" ]] && return 1
-  # Scope: only the canonical per-brand output folders. -path filters
-  # match the `*_enriched/enriched/` and `*_scored/scored/` segments.
-  if find "$products_dir" \
-       -type d \( -name 'reports' -o -name 'logs' -o -name '__pycache__' \) -prune -o \
-       -type f -name '*.json' \
-       \( -path '*_enriched/enriched/*' -o -path '*_scored/scored/*' \) \
-       -newer "$output" -print -quit 2>/dev/null | grep -q .; then
-    return 0
-  fi
   return 1
 }
 
@@ -455,7 +402,6 @@ submission_labels_exist() {
 }
 
 submission_pipeline_needs_run() {
-  (( FORCE == 1 )) && return 0
   [[ ! -f "$SUBMISSION_SCORE_MANIFEST" ]] && return 0
   if ! "$PG_PYTHON" "$REPO_ROOT/scripts/pipeline_freshness.py" \
       check-stage-manifests \
@@ -485,7 +431,7 @@ else
 fi
 
 if submission_labels_exist; then
-  if submission_pipeline_needs_run; then
+  if (( PREPARED_INPUTS == 0 && FORCE == 1 )) || submission_pipeline_needs_run; then
     info "Product submissions: running fresh labels through Clean → Enrich → Score..."
     "$PG_PYTHON" scripts/run_pipeline.py --raw-dir "$SUBMISSION_OUTPUT_DIR" \
       --output-prefix "$SUBMISSION_PIPELINE_PREFIX" \
@@ -501,15 +447,8 @@ fi
 # ---------------------------------------------------------------------------
 # Step 1: Assemble final DB from per-brand outputs
 #
-# Skip when: dist/pharmaguide_core.db already exists AND no per-brand
-#            output is newer than it AND final_db_output/ also has a copy
-#            that's at least as fresh (or doesn't need refreshing).
-#
-# Net effect:
-#   • Cold start (no dist, no final_db_output): assemble.
-#   • Pipeline ran (per-brand outputs newer than dist): assemble.
-#   • Chained from snapshot (dist fresh, final_db_output absent): SKIP.
-#   • Re-running release_full with no upstream changes: SKIP.
+# Reuse only with a sealed receipt for current input/output content. Old
+# catalogs without such evidence rebuild once. Assembly also stages both mirrors.
 # ---------------------------------------------------------------------------
 
 DIST_CATALOG="$DIST_DIR/pharmaguide_core.db"
@@ -528,57 +467,22 @@ sync_final_db_output_catalog_from_dist() {
   ok "final_db_output catalog mirror synced from dist/"
 }
 
+CATALOG_STATE_SCRIPT="$REPO_ROOT/scripts/promote_release_artifacts.py"
+CATALOG_INPUT_BINDING=$("$PG_PYTHON" "$CATALOG_STATE_SCRIPT" --catalog-input-binding)
+
 step1_needs_run() {
   (( FORCE == 1 )) && return 0
-  # If we have NO catalog anywhere → must assemble
-  if [[ ! -f "$DIST_CATALOG" && ! -f "$FINAL_CATALOG" ]]; then
-    return 0
+  # A sealed content receipt binds both complete catalog mirrors. Every final
+  # artifact/live gate still runs; timestamps cannot qualify a catalog.
+  if "$PG_PYTHON" "$CATALOG_STATE_SCRIPT" --catalog-current; then
+    return 1
   fi
-  # If per-brand outputs are newer than the freshest assembled output → must reassemble
-  local newest_output="$DIST_CATALOG"
-  [[ -f "$FINAL_CATALOG" && "$FINAL_CATALOG" -nt "$DIST_CATALOG" ]] && newest_output="$FINAL_CATALOG"
-  [[ ! -f "$newest_output" ]] && return 0
-  if [[ -d "$PRODUCTS_DIR" ]]; then
-    if any_pipeline_output_newer_than "$newest_output" "$PRODUCTS_DIR"; then
-      return 0
-    fi
-  fi
-  # A reference-table change alters every emitted rda_ul_data stamp and can
-  # change product UL outcomes, so it requires a catalog rebuild even when no
-  # source label changed.
-  if is_path_newer_than "$RDA_REFERENCE_SOURCE" "$newest_output"; then
-    return 0
-  fi
-  # A safety-reference edit can change exported product safety state without
-  # changing a source label. Never reuse a catalog built before it.
-  if is_path_newer_than "$BANNED_RECALLED_REFERENCE_SOURCE" "$newest_output"; then
-    return 0
-  fi
-  # These references shape emitted safety flags, excipient explanations, and
-  # absorption-enhancer treatment. They must not be able to change underneath
-  # a catalog that auto-smart release considers current.
-  if is_path_newer_than "$HARMFUL_ADDITIVES_REFERENCE_SOURCE" "$newest_output"; then
-    return 0
-  fi
-  if is_path_newer_than "$OTHER_INGREDIENTS_REFERENCE_SOURCE" "$newest_output"; then
-    return 0
-  fi
-  if is_path_newer_than "$ABSORPTION_ENHANCERS_REFERENCE_SOURCE" "$newest_output"; then
-    return 0
-  fi
-  # IQM changes can alter exported form notes even when source labels are unchanged.
-  if is_path_newer_than "$IQM_REFERENCE_SOURCE" "$newest_output"; then
-    return 0
-  fi
-  if any_newer_input "$newest_output" "${CATALOG_BUILD_SOURCES[@]}"; then
-    return 0
-  fi
-  return 1  # safe to skip
+  return 0
 }
 
 if step1_needs_run; then
   info "Step 1/8: Catalog refresh required — gating and building candidates..."
-  bash scripts/rebuild_dashboard_snapshot.sh
+  run_strict_gate "catalog assembly" bash scripts/rebuild_dashboard_snapshot.sh
   SCORING_SNAPSHOT_GATE_RAN=1
   ok "Catalog candidates gated and promoted"
 else
@@ -593,38 +497,10 @@ run_strict_gate "RDA/UL emitted-reference stamp parity" \
 # ---------------------------------------------------------------------------
 # Step 2: Stage catalog to dist/
 #
-# Skip when: dist/ catalog is at least as fresh as final_db_output/ catalog.
-# This handles all three valid input paths:
-#   • Standalone after step 1 ran (final_db_output newer) → stage.
-#   • Chained-from-snapshot (final_db_output absent, dist already populated) → skip.
-#   • Re-running with no changes (final_db_output equal to dist) → skip.
+# Assembly already stages both mirrors atomically, and content reuse above
+# validates both. There is no second assembly or mtime-based staging decision.
 # ---------------------------------------------------------------------------
-
-step2_needs_run() {
-  (( FORCE == 1 )) && return 0
-  # If final_db_output exists and is newer than dist → must re-stage
-  if [[ -f "$FINAL_CATALOG" ]]; then
-    if [[ ! -f "$DIST_CATALOG" ]] || [[ "$FINAL_CATALOG" -nt "$DIST_CATALOG" ]]; then
-      return 0
-    fi
-  fi
-  # If neither catalog exists, this is a hard fail (caller bug)
-  if [[ ! -f "$DIST_CATALOG" && ! -f "$FINAL_CATALOG" ]]; then
-    err "Step 2/8: No catalog anywhere — step 1 should have caught this."
-    err "         Run 'bash scripts/build_all_final_dbs.py' or rebuild_dashboard_snapshot.sh."
-    exit 1
-  fi
-  return 1  # dist is current; skip
-}
-
-if step2_needs_run; then
-  info "Step 2/8: final/dist mismatch — rebuilding through the gated candidate path..."
-  bash scripts/rebuild_dashboard_snapshot.sh
-  SCORING_SNAPSHOT_GATE_RAN=1
-  ok "Catalog candidates gated and promoted"
-else
-  skip "Step 2/8: dist/ catalog already current — skipping stage"
-fi
+skip "Step 2/8: Both catalog mirrors already staged and content-bound"
 
 # Run even when assembly/staging was skipped. Unresolved identities must have
 # a verified quarantine receipt and be absent from the actual outgoing catalog.
@@ -670,7 +546,8 @@ PY
 if (( SKIP_PRODUCT_IMAGES == 0 )); then
   if step3_needs_run; then
     info "Step 3/8: Catalog/images out of sync — extracting DSLD product images..."
-    "$PG_PYTHON" scripts/extract_product_images.py --db-path "$DIST_CATALOG"
+    run_strict_gate "product image extraction" \
+      "$PG_PYTHON" scripts/extract_product_images.py --db-path "$DIST_CATALOG"
     ok "DSLD product images extracted + DB backfilled"
   else
     skip "Step 3/8: DSLD product images already current — skipping extraction"
@@ -698,6 +575,9 @@ fi
 # image_thumbnail_url and refreshes export_manifest.json. Mirror that canonical
 # catalog back to final_db_output before freshness compares the two manifests.
 sync_final_db_output_catalog_from_dist
+# Image owners legitimately mutate catalog checksums; bind their resulting
+# mirrors only while the exact validated source remains unchanged.
+"$PG_PYTHON" "$CATALOG_STATE_SCRIPT" --record-catalog "$CATALOG_INPUT_BINDING"
 
 # ---------------------------------------------------------------------------
 # Step 4: Rebuild interaction DB (delegates verify → build → stage)
@@ -731,7 +611,7 @@ step4_needs_run() {
 
 if step4_needs_run; then
   info "Step 4/8: Interaction-rule inputs newer than bundled DB — rebuilding..."
-  bash scripts/rebuild_interaction_db.sh
+  run_strict_gate "interaction database assembly" bash scripts/rebuild_interaction_db.sh
   ok "Interaction DB rebuilt + staged"
 else
   skip "Step 4/8: Interaction DB up to date with rule sources — skipping rebuild"
@@ -882,6 +762,10 @@ fi
 # manifest. Publish the staged asset and move the pin with the bundle, so the
 # bundle commit never names an interaction DB the app cannot hydrate. Only when
 # this run commits the bundle; a no-op without network when the pin is current.
+# All candidate gates above may stamp their owned metadata. Reseal that exact
+# result, then verify the freeze regardless of which publication flags are set.
+"$PG_PYTHON" "$CATALOG_STATE_SCRIPT" --record-catalog "$CATALOG_INPUT_BINDING"
+"$PG_PYTHON" "$CATALOG_STATE_SCRIPT" --check-input-binding "$CATALOG_INPUT_BINDING"
 if (( SKIP_FLUTTER == 0 && SKIP_SUPABASE == 0 && SUPABASE_DRY_RUN == 0 )); then
   run_strict_gate "interaction DB release asset + app hydration pin" \
     "$PG_PYTHON" scripts/release_interaction_artifact.py \
@@ -905,6 +789,7 @@ if (( SKIP_SUPABASE == 0 )); then
     "$PG_PYTHON" scripts/sync_to_supabase.py "$DIST_DIR" --dry-run
     warn "Supabase sync was DRY-RUN — nothing actually uploaded"
   else
+    "$PG_PYTHON" "$CATALOG_STATE_SCRIPT" --check-input-binding "$CATALOG_INPUT_BINDING"
     info "Step 5/8: Syncing dist/ to Supabase (upload only; cleanup deferred)..."
     # Storage cleanup (version dirs + orphan blobs) is NO LONGER run here.
     # It moved to the aligned-cleanup step below, AFTER the Flutter bundle is
