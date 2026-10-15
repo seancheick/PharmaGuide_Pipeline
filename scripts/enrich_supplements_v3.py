@@ -18656,23 +18656,24 @@ class SupplementEnricherV3:
             self._is_unresolved_source_descriptor(ing)
             for ing in product.get('activeIngredients', []) + product.get('inactiveIngredients', [])
         )
-        # The shared exposure owner decides whether the printed mass is exact
+        # The shared exposure owner decides whether the printed mass can be read
         # (V4.1 Step 4). A blank unit keeps the panel default above (FDA
-        # declares sugars in grams); an unusable unit ("NP", "Gram(s) -
-        # estimated") still classifies the level but records no exact amount,
-        # which the scored artifact reports as unfinished work.
-        exact_amount = True
+        # declares sugars in grams), and a printed bound ("<1 g") is the
+        # label's own permitted wording, read as stated. An unusable unit
+        # ("NP", "Gram(s) - estimated") still classifies the level but records
+        # no amount, which the scored artifact reports as unfinished work.
+        readable_amount = True
         if sugar_info and amount_g > 0:
             from scoring_v4.exposure import row_exposure
             printed_unit = str(unit or "").strip()
             if printed_unit.lower() in {"", "unspecified"}:
                 printed_unit = "Gram(s)"
-            exact_amount = row_exposure(
+            readable_amount = row_exposure(
                 product, {**sugar_info, "quantity": sugar_info.get("amount"), "unit": printed_unit},
                 basis="per_use", unit="g",
-            ).exact
+            ).per_serving_amount is not None
         return {
-            "amount_g": None if (unresolved or not exact_amount) else round(amount_g, 1),
+            "amount_g": None if (unresolved or not readable_amount) else round(amount_g, 1),
             "unit": "g",
             "level": None if unresolved else level,
             "level_display": "Sugar content unverified" if unresolved else level_display,

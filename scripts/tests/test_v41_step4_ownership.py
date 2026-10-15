@@ -79,6 +79,18 @@ def test_sugar_owner_keeps_the_level_but_no_amount_it_could_not_read(amount, uni
     assert unfinished == (None if amount_g is not None else "sugar_amount_unread")
 
 
+def test_a_printed_sugar_bound_is_the_label_wording_not_unfinished_work():
+    from enrich_supplements_v3 import SupplementEnricherV3
+
+    # The cleaner's real shape for "Sugars <1 g": the operator rides on the
+    # row's quantityVariants. FDA permits that wording, and we read it.
+    sugars = {"amount": 1.0, "unit": "Gram(s)",
+              "quantityVariants": [{"operator": "<", "selected_for_analysis": True}]}
+    sugar = SupplementEnricherV3()._analyze_sugar_content({}, {"sugars": sugars})
+    assert sugar["amount_g"] == 1.0 and sugar["level"] == "low"
+    assert unfinished_source_assessment({"dietary_sensitivity_data": {"sugar": sugar}}, {}) is None
+
+
 def test_export_never_prints_a_sugar_amount_it_does_not_have():
     from build_final_db import build_top_warnings
 
