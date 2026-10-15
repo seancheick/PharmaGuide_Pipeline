@@ -10,6 +10,8 @@ PR148 / measured fixture candidate 3fceeeaf / final audit candidate 5dc5af6c: 60
 
 The historical “do not run” notes below describe earlier incomplete candidates and are superseded by this current checkpoint after companion reference packaging and read-only prerequisites pass. D28 and PRE-SF retain existing policy; no new clinical/scoring decision is invented. Publication and new-catalog acceptance still need the user-owned outputs. App PR124 reference-copy CI found only a stale two-hash manifest; owner-generated correction 5891da6a has 11 passing vocabulary/integrity tests and fresh review. App PR125 full CI 38794457811 passed. No extra corpus run is needed for that packaging-only correction.
 
+Final integration receipt: pipeline main6259c5f34 and app main5652e7d5 contain the validated source (pipeline PR148/8d206befa; app PR125/80ff532f). Own temporary integration branches removed. Actual read-only release preflight on those clean main checkouts passed repository bases, current manufacturer deductions, schemas2.5.0/4.0.0, tools, disk and Supabase manifest/bucket read access. No upload, build, pipeline or publication. Source is ready for Sean's exact Clean→Enrich→Score --pipeline-only command; new-catalog acceptance follows that run. This subsequent closeout is documentation only and needs no duplicate runtime checkpoint.
+
 ## Historical execution receipts — superseded by the current checkpoint above
 
 ## Step4 implemented — October15 (Claude, branch claude/step4-finish)

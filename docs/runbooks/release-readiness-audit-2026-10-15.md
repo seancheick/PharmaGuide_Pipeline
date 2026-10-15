@@ -64,7 +64,7 @@ Next requires WorkOS confirming staging resource-binding activation and the beha
 
 ## Exact user-owned pipeline command
 
-From the integrated main checkout, after the read-only prerequisites pass, run:
+The final read-only prerequisites passed on pipeline main `6259c5f34` and app main `5652e7d5`: clean repository bases, current manufacturer deductions, schemas/tools, remote read access and disk. No artifact was rebuilt or published. The subsequent closeout changes documentation only. From the integrated main checkout, run:
 
 ```bash
 cd /Users/seancheick/Downloads/dsld_clean
