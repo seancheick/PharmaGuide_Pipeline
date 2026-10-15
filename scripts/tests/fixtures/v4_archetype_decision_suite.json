@@ -790,6 +790,7 @@
       "variant": "ideal",
       "product": {
         "dsld_id": "synthetic-probiotic-ideal",
+        "physicalState": {"langualCodeDescription": "delayed-release capsule"},
         "delivery_data": {"matched": true, "highest_tier": 2, "systems": [{"canonical_name": "delayed-release", "tier": 2, "match_source": "physical_state", "raw_source_text": "delayed-release capsule"}]},
         "product_name": "Benchmark Five-Strain Digestive Probiotic 50B",
         "brand_name": "PharmaGuide Benchmark",

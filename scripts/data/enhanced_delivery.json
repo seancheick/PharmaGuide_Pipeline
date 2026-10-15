@@ -181,7 +181,10 @@
     "category": "delivery",
     "source_url": "https://t2.capsugel.com/media/library/c1a-32029_DRCaps-A4_FIN.PDF",
     "notes": "Source supports the described delivery architecture in its evaluated preparation, not universal absorption superiority or personal benefit. Separate credit is withheld when that technology is already represented by the resolved IQM form.",
-    "aliases": ["enteric coating", "IBgard"]
+    "aliases": [
+      "enteric coating",
+      "IBgard"
+    ]
   },
   "micronized": {
     "tier": 2,
