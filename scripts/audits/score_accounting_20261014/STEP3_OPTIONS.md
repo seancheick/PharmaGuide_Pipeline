@@ -1,6 +1,6 @@
 # V4.1 Step3 — source-qualified comparison, October15,2026
 
-**Step3 measurement completed; Step4 implementation authorized and started October15. Main merge, catalog rebuild and publication remain on hold.** This replaces the earlier Step3 recommendation and completion figures; history remains in Git. It is a stored-corpus policy projection, not a production corpus rebuild or release acceptance.
+**Step3 measurement completed; Step4 implementation authorized and started October15. Sean subsequently authorized main integration and branch cleanup; catalog rebuild and publication remain on hold.** This replaces the earlier Step3 recommendation and completion figures; history remains in Git. It is a stored-corpus policy projection, not a production corpus rebuild or release acceptance.
 
 ## Recommendation and decision boundary
 

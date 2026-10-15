@@ -220,10 +220,13 @@ publication is complete.
   found within reviewed coverage"). Remove the unused /20 arithmetic (`scoreFit20`, `e2cPenalty`,
   `maxPossible` in `app:lib/services/fit_score/`), which no screen reads [V], after the dead-code
   proof AGENTS.md requires. "Works against your goal" needs pipeline-authored data first.
+
+October15 receipt checkpoint: pipeline PR145 combines the verified PR142/144 source and receipt work; app PR122 is integrated57ab077b. Six pillar receipts reconcile and render, including real-product narrow-width/text-scale checks. This implements the receipt portion of1.6; remaining provenance/presentation requirements and final rebuilt-catalog acceptance keep the full box open. Step4 scoring consolidation remains partial; next are production missing-data/completion and bound-aware consumers, then the remaining approved ownership/config and probiotic copy changes. Sean authorized source integration/branch cleanup, while rebuild and release remain held.
+
 - [ ] **1.6 Why this score.** One ledger per pillar in public pillar points (rule id, delta, reason,
-  ingredient, source), extending `quality_pillars_v4[].components`. Today the exported bonuses and
-  penalties (`scripts/build_final_db.py::derive_v4_tradeoffs`) are in raw module points and do not
-  sum to the pillar [A]. Pillar wording becomes pillar-specific and pipeline-authored; the app's
+  ingredient, source). Implemented receipts extend `quality_pillars_v4` with reconciled public
+  pillar points; legacy tradeoffs remain a separate raw-module projection. Complete remaining
+  ingredient/source attribution and final catalog acceptance. Pillar wording is pipeline-authored; the app's
   universal scale (`app:lib/core/scoring/v4_pillars.dart::statusForPillar`: Strong, Mixed, Limited
   by percentage) [A] is retired.
 - [ ] **1.7 Interaction and depletion rule typing.** Ledger Q26 (`dose_evidence`: studied dose kept
