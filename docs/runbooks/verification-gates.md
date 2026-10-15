@@ -12,7 +12,12 @@ source scripts/python_env.sh
 "$PG_PYTHON" scripts/preflight.py --prepare --raw-root <raw-brands-root> --report <durable-report.json>
 ```
 
-The full all-dataset runner invokes this preparation before processing any brand.
+The batch runner performs offline critical-file/JSON startup checks by default, plus the
+existing phone compatibility check where applicable. Aggregate preparation is opt-in:
+`bash batch_run_all_datasets.sh --pipeline-only --pre-check`. The flag also applies to
+targeted runs and checks the supplied raw root. Without it, Clean/Enrich/Score starts after
+the essential startup checks. Publishing prerequisites and final release gates remain
+mandatory on publishing runs; `--pre-check` neither enables publishing nor bypasses gates.
 Routine preparation checks raw input integrity, references, ownership, calendar freshness,
 current raw-label canaries, and the existing source/live verification gates. It asks the
 freshness owner which stages need regeneration. It does **not** repeat the broad developer

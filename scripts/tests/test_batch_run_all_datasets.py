@@ -50,9 +50,12 @@ def _install_batch_dependencies(tmp_path):
     (scripts_dir / "tests").mkdir(exist_ok=True)
     (scripts_dir / "preflight.py").write_text(
         "import sys\n"
-        "assert sys.argv[1:3] == ['--prepare', '--raw-root']\n"
-        "assert len(sys.argv) == 4\n"
-        "print('aggregate-preparation-reached')\n",
+        "if sys.argv[1:] == ['--quick']:\n"
+        "    print('essential-preflight-reached')\n"
+        "else:\n"
+        "    assert sys.argv[1:3] == ['--prepare', '--raw-root']\n"
+        "    assert len(sys.argv) == 4\n"
+        "    print('aggregate-preparation-reached')\n",
         encoding="utf-8",
     )
 
@@ -97,7 +100,8 @@ def test_batch_runner_defaults_to_local_non_icloud_dataset_root(tmp_path):
     combined_output = result.stdout + result.stderr
     assert str(dataset_root) in combined_output
     assert "local-root-runner-reached" in combined_output
-    assert combined_output.index("aggregate-preparation-reached") < combined_output.index("local-root-runner-reached")
+    assert combined_output.index("essential-preflight-reached") < combined_output.index("local-root-runner-reached")
+    assert "aggregate-preparation-reached" not in combined_output
     assert result.returncode == 1, combined_output
 
 

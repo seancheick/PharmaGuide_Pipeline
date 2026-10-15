@@ -17,7 +17,8 @@
 #   bash batch_run_all_datasets.sh --stages enrich,score    # Enrich + score, then snapshot + full release
 #   bash batch_run_all_datasets.sh --targets Thorne,Olly    # Specific brands, pipeline only (safe default)
 #   bash batch_run_all_datasets.sh --targets Thorne,Olly --release  # Explicit catalog + release
-#   bash batch_run_all_datasets.sh --pipeline-only          # All brands, no snapshot/release
+#   bash batch_run_all_datasets.sh --pipeline-only          # Quick startup, no snapshot/release
+#   bash batch_run_all_datasets.sh --pipeline-only --pre-check  # Also run aggregate preparation
 #   bash batch_run_all_datasets.sh --stages score --targets Nature_Made
 #   bash batch_run_all_datasets.sh --root "$HOME/Downloads/PharmaGuide_Datasets/staging/forms"
 #   bash batch_run_all_datasets.sh --root "$HOME/Downloads/PharmaGuide_Datasets/delta/olly"
@@ -87,10 +88,15 @@ SUBMISSION_ENRICH_MANIFEST="$SCRIPTS_DIR/${SUBMISSION_PIPELINE_PREFIX}_enriched/
 SUBMISSION_SCORE_MANIFEST="$SCRIPTS_DIR/${SUBMISSION_PIPELINE_PREFIX}_scored/scored/.stage_manifest.json"
 PIPELINE_ONLY=0
 RELEASE_EXPLICIT=0
+PRE_CHECK=0                 # Aggregate preparation is explicit opt-in
 
 # Parse arguments
 while [[ $# -gt 0 ]]; do
     case $1 in
+        --pre-check)
+            PRE_CHECK=1
+            shift
+            ;;
         --targets)
             TARGET_DATASETS="$2"
             shift 2
@@ -250,15 +256,24 @@ if [ "$PIPELINE_ONLY" = "1" ] && [ -z "$TARGET_DATASETS" ] && [ "$RELEASE_SKIP_F
     fi
 fi
 
-# A full corpus run must first exercise every reviewed canary through current
-# Clean/Enrich/Score. Checking yesterday's stored scores cannot reveal today's
-# code/data changes. This check is read-only and runs before any brand or release.
-if [ -z "$TARGET_DATASETS" ]; then
-    echo "Collecting aggregate pipeline preparation before the full corpus run..."
+# Reuse the critical-file/JSON owner for inexpensive offline startup checks.
+# This does not claim the future generated catalog is ready to publish.
+echo "Checking essential pipeline inputs..."
+if ! "$PYTHON" preflight.py --quick 2>&1 | tee -a "$SUMMARY_FILE"; then
+    echo "STOP: essential pipeline input checks failed before corpus work."
+    exit 1
+fi
+
+# Aggregate source/live/canary preparation is optional. Publication still runs
+# its own mandatory output-dependent gates, regardless of this flag.
+if [ "$PRE_CHECK" = "1" ]; then
+    echo "Collecting aggregate pipeline preparation (--pre-check)..."
     if ! "$PYTHON" preflight.py --prepare --raw-root "$DATASET_ROOT" 2>&1 | tee -a "$SUMMARY_FILE"; then
         echo "STOP: aggregate preparation failed. Review scripts/reports/pipeline_preparation.json before any corpus or publication work."
         exit 1
     fi
+else
+    echo "Aggregate preparation skipped; add --pre-check to request it. Release gates remain required."
 fi
 
 # Track results
