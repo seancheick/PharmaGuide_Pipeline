@@ -456,9 +456,11 @@ def _pillar_from_dim(name: str, dim: Dict[str, Any], weight: float, src: str) ->
         blend_facts = _proprietary_blend_facts(dim)
         hidden_fact = next((fact for fact in blend_facts
                             if fact["id"] == "undisclosed_ingredient_amount_count"), None)
+        # A charged blend is always named, even when no member rows were captured
+        # to count: B5 alone owns opacity, so the band can no longer hide it.
         blends_hide = (
-            _num(hidden_fact["value_display"]) > 0 if hidden_fact is not None
-            else _num((dim.get("penalties") or {}).get("B5_proprietary_blend_opacity")) < 0
+            (hidden_fact is not None and _num(hidden_fact["value_display"]) > 0)
+            or _num((dim.get("penalties") or {}).get("B5_proprietary_blend_opacity")) < 0
         )
         if count > 0:
             panel_full = (
