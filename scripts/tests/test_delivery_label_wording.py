@@ -73,3 +73,12 @@ def test_probiotic_survivability_reads_the_net_contents_form(enricher):
         "inactiveIngredients": [],
     }
     assert enricher._collect_probiotic_data(product)["has_survivability_coating"] is True
+
+
+def test_delivery_detection_preserves_the_label_claim_subject(enricher):
+    claim = 'My probiotic blend contains acid resistant strains.'
+    delivery = enricher._collect_delivery_data({'statements': [
+        {'type': 'Formulation re: Other', 'notes': claim},
+    ]})
+    system = next(s for s in delivery['systems'] if s['name'] == 'acid-resistant')
+    assert system['raw_source_text'] == claim

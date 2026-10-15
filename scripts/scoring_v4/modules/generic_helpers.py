@@ -78,6 +78,30 @@ def eligible_delivery_data(product: Dict[str, Any]) -> Dict[str, Any]:
         label_terms = [name, *definition.get("aliases", [])]
         if not any(pattern.search(system["raw_source_text"]) for pattern in _delivery_patterns(label_terms)):
             continue
+        # Acid resistance may be intrinsic to a strain rather than a separate
+        # capsule mechanism. Keep the original subject, including for stored
+        # detections whose raw_source_text was truncated to the matched token.
+        if name == "acid-resistant":
+            context = system["raw_source_text"]
+            statement_ref = re.fullmatch(r"statements\[(\d+)\]", system["match_source"])
+            statements = _safe_list(product.get("statements"))
+            if statement_ref and int(statement_ref[1]) < len(statements):
+                original = _safe_dict(statements[int(statement_ref[1])]).get("notes")
+                if isinstance(original, str) and original.strip():
+                    context = original
+            physical_subject = False
+            for clause in re.split(r"[.;\n]", context):
+                for pattern in _delivery_patterns(label_terms):
+                    for match in pattern.finditer(clause):
+                        prefix, suffix = clause[:match.start()], clause[match.end():]
+                        if re.search(r"\b(?:not|no|without|non|unlike)\b(?:[\s-]+\w+){0,2}[\s-]*$", prefix, re.I):
+                            continue
+                        physical_subject |= bool(
+                            re.match(r"\s+(?:(?:vegetarian|vegan|vegetable|protective)\s+){0,2}(?:capsules?|tablets?|coatings?|shells?)\b", suffix, re.I)
+                            or re.search(r"\b(?:capsules?|tablets?|coatings?|shells?)\s+(?:(?:are|is|made|to|be)\s+){0,3}$", prefix, re.I)
+                        )
+            if not physical_subject:
+                continue
         patterns = _delivery_patterns([
             *label_terms, *_safe_dict(definition.get("relationships")).get("form_quality_terms", []),
         ])

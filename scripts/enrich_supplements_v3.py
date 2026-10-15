@@ -10915,13 +10915,13 @@ class SupplementEnricherV3:
             physical_match = pattern.search(physical_state)
             if physical_match:
                 match_source = "physical_state"
-                matched_text = physical_match.group(0)
+                matched_text = physical_state
             else:
                 for source_path, source_text in evidence_sources:
                     row_match = pattern.search(source_text)
                     if row_match:
                         match_source = source_path
-                        matched_text = row_match.group(0)
+                        matched_text = source_text
                         break
 
             if match_source:
