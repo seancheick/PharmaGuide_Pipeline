@@ -241,7 +241,8 @@ def test_complete_active_disclosure_credit_requires_usable_dose() -> None:
     ]
 
 
-def test_complete_active_disclosure_credit_blocked_by_proprietary_opacity() -> None:
+def test_proprietary_opacity_is_charged_once_by_b5_not_by_withholding_disclosure() -> None:
+    """V4.1 Step 4: B5 owns blend opacity; it no longer also withholds this credit."""
     from scoring_v4.modules.generic_transparency import score_transparency
 
     payload = score_transparency(
@@ -252,8 +253,9 @@ def test_complete_active_disclosure_credit_blocked_by_proprietary_opacity() -> N
         )
     )
 
-    assert payload["components"]["complete_active_identity_dose_disclosure"] == 0.0
-    assert "proprietary_blend_opacity" in payload["metadata"]["complete_active_disclosure"]["blockers"]
+    assert payload["penalties"]["B5_proprietary_blend_opacity"] < 0
+    assert payload["components"]["complete_active_identity_dose_disclosure"] == 4.0
+    assert "proprietary_blend_opacity" not in payload["metadata"]["complete_active_disclosure"]["blockers"]
 
 
 def test_complete_active_disclosure_and_claims_still_cap_at_ten() -> None:

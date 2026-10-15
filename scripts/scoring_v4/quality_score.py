@@ -245,6 +245,9 @@ def _undisclosed_component_dose_reason(dim: Dict[str, Any]) -> Optional[str]:
         return (
             "The blend total is disclosed, but individual ingredient amounts aren't."
         )
+    if metadata.get("not_evaluable_reason") == "opaque_primary_sports_blend":
+        return ("The main ingredient's amount is hidden in a proprietary blend, so its dose "
+                "cannot be assessed or credited.")
     return None
 
 
@@ -1257,7 +1260,7 @@ _NEUTRAL_WINDOW_STATUSES = frozenset({
     "partial_credit_without_rda_proxy",
     "partial_credit_primary_active_unassessed",
 })
-_BONUS_WITHHOLDERS = frozenset({"proprietary_blend_opacity", "disease_or_marketing_claim"})
+_BONUS_WITHHOLDERS = frozenset({"disease_or_marketing_claim"})
 
 
 def _receipt_entry(entry_id: str, kind: str, source: str, raw: Optional[float],

@@ -234,7 +234,7 @@ def test_opaque_proprietary_or_amino_spiked_protein_matrix_scores_low() -> None:
     )
 
     assert payload["score"] <= 8.0
-    assert payload["penalties"]["sports_opaque_protein_blend"] < 0
+    assert "sports_opaque_protein_blend" not in payload["penalties"]
     assert payload["penalties"]["sports_amino_spiking_risk"] < 0
 
 

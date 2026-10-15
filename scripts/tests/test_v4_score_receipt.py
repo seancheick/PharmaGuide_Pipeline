@@ -263,16 +263,16 @@ def test_unrated_form_neutral_is_a_neutral_floor_entry():
     _assert_reconciles(out)
 
 
-def test_blend_blocked_disclosure_bonus_is_shown_as_withheld():
+def test_claim_blocked_disclosure_bonus_is_shown_as_withheld():
     bd = _meru_breakdown()
     bd["dimensions"]["transparency"] = _transparency(
         bonus=0.0,
-        penalties={"B2_false_allergen_free_claim": 0.0, "B5_proprietary_blend_opacity": -3.0,
-                   "B6_marketing_claims": 0.0},
-        metadata={"complete_active_disclosure": {"qualifies": False, "blockers": ["proprietary_blend_opacity"]}})
+        penalties={"B2_false_allergen_free_claim": 0.0, "B5_proprietary_blend_opacity": 0.0,
+                   "B6_marketing_claims": -5.0},
+        metadata={"complete_active_disclosure": {"qualifies": False, "blockers": ["disease_or_marketing_claim"]}})
     out = _assemble(bd)
     withheld = _entry(out, "transparency", "complete_active_identity_dose_disclosure")
-    assert withheld["points"] == 0.0 and withheld["withheld_by"] == ["proprietary_blend_opacity"]
+    assert withheld["points"] == 0.0 and withheld["withheld_by"] == ["disease_or_marketing_claim"]
     _assert_reconciles(out)
 
 

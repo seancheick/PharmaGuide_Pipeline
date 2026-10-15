@@ -64,7 +64,7 @@ def score_dose(product: Dict[str, Any]) -> Dict[str, Any]:
     support = _score_stack_support(product, identity)
     completeness = _score_ratio_or_completeness(product, identity)
     focused_single = _score_focused_single_completion(product, identity, primary)
-    opaque_penalty, not_evaluable = _opaque_penalty(product, primary)
+    not_evaluable = _not_evaluable_reason(product, primary)
     if (
         primary <= 0
         and identity
@@ -80,9 +80,9 @@ def score_dose(product: Dict[str, Any]) -> Dict[str, Any]:
         "sports_ratio_or_completeness": round(completeness, 4),
         "sports_focused_single_completion": round(focused_single, 4),
     }
-    penalties = {
-        "opaque_primary_sports_blend": round(-opaque_penalty, 4),
-    }
+    # Transparency B5 owns blend opacity; a hidden primary amount is recorded
+    # as not evaluable here and earns no substitute credit (V4.1 Step 4).
+    penalties: Dict[str, float] = {}
     score = _clamp(
         0.0,
         DIMENSION_CAP,
@@ -451,16 +451,13 @@ def _score_focused_single_completion(
     return 5.0 if groups == {identity} else 0.0
 
 
-def _opaque_penalty(product: Dict[str, Any], primary_score: float) -> Tuple[float, Optional[str]]:
+def _not_evaluable_reason(product: Dict[str, Any], primary_score: float) -> Optional[str]:
     if primary_score > 0:
-        return 0.0, None
+        return None
     blends = [b for b in _safe_list((product or {}).get("proprietary_blends")) if isinstance(b, dict)]
-    if not blends:
-        return 0.0, "no_sports_primary_dose"
-    for blend in blends:
-        if _norm_text(blend.get("disclosure_level")) in {"none", "partial", ""}:
-            return 10.0, "opaque_primary_sports_blend"
-    return 0.0, "no_sports_primary_dose"
+    if any(_norm_text(blend.get("disclosure_level")) in {"none", "partial", ""} for blend in blends):
+        return "opaque_primary_sports_blend"
+    return "no_sports_primary_dose"
 
 
 def _max_benchmark_amount(product: Dict[str, Any], rows: list[Dict[str, Any]], canonicals: frozenset[str], *, basis: str, unit: str, top: bool = False) -> Optional[float]:

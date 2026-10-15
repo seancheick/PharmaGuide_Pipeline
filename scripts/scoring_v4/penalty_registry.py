@@ -40,9 +40,6 @@ PENALTY_REGISTRY: Dict[str, PenaltySpec] = {
     "fiber_stimulant_laxative_penalty": PenaltySpec(
         "formulation", "consumer_material"
     ),
-    "sports_opaque_protein_blend": PenaltySpec(
-        "formulation", "quality_context"
-    ),
     "sports_amino_spiking_risk": PenaltySpec(
         "formulation", "quality_context"
     ),
@@ -52,7 +49,6 @@ PENALTY_REGISTRY: Dict[str, PenaltySpec] = {
     "B7_dose_safety": PenaltySpec(
         "dose", "safety_material"
     ),
-    "opaque_primary_sports_blend": PenaltySpec("dose", "quality_context"),
     "B2_false_allergen_free_claim": PenaltySpec(
         "transparency", "label_integrity"
     ),
