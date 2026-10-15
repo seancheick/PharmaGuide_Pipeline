@@ -16,7 +16,7 @@ import preflight
 @pytest.mark.parametrize('failure', [None, 'references', 'ownership_matrix',
                                     'fda_freshness', 'raw_canaries', 'source_tests',
                                     'release_gate_inventory'])
-def test_default_preparation_blocks_expensive_checks_after_failure(tmp_path, monkeypatch, failure):
+def test_explicit_full_preparation_blocks_expensive_checks_after_failure(tmp_path, monkeypatch, failure):
     import subprocess
     monkeypatch.setattr(preflight, '_preparation_inputs',
                         lambda *args, **kwargs: {'files': {}, 'errors': [], 'raw_count': 1})
@@ -51,7 +51,7 @@ def test_default_preparation_blocks_expensive_checks_after_failure(tmp_path, mon
                                            'known prerequisite failure' if name == failure else '')
 
     result = preflight.run_preparation(tmp_path, tmp_path, runner=run,
-                                      report_path=tmp_path / 'receipt.json')
+                                      report_path=tmp_path / 'receipt.json', include_source_tests=True)
     states = {check['name']: check['status'] for check in result['checks']}
     assert result['completed'] and result['publication_ready'] is False
     assert result['ready'] is (failure is None)
@@ -872,7 +872,7 @@ def test_preparation_real_process_reports_elapsed_and_current_test(tmp_path, cap
     assert 'FAILED: sample::test_broken' in output
 
 
-def test_default_preparation_collects_executes_once_and_reuses_full_coverage(tmp_path, monkeypatch):
+def test_explicit_full_preparation_collects_executes_once_and_reuses_full_coverage(tmp_path, monkeypatch):
     import subprocess
     monkeypatch.setattr(preflight, '_preparation_inputs', lambda *args, **kwargs: {'files': {}, 'errors': [], 'raw_count': 1})
     monkeypatch.setattr(preflight, '_preparation_runtime', lambda: {'version': 'same'})
@@ -895,11 +895,11 @@ def test_default_preparation_collects_executes_once_and_reuses_full_coverage(tmp
             Path(kwargs['env']['PG_PREPARATION_REPORT']).write_text(json.dumps(evidence))
         return subprocess.CompletedProcess(command, 0, stdout, '')
     receipt = tmp_path / 'receipt.json'
-    first = preflight.run_preparation(tmp_path, tmp_path, runner=run, report_path=receipt)
+    first = preflight.run_preparation(tmp_path, tmp_path, runner=run, report_path=receipt, include_source_tests=True)
     assert first['ready']
     assert not any('--collect-only' in command for command in calls)
     assert sum('preparation' in command for command in calls) == 1
-    second = preflight.run_preparation(tmp_path, tmp_path, runner=run, report_path=receipt)
+    second = preflight.run_preparation(tmp_path, tmp_path, runner=run, report_path=receipt, include_source_tests=True)
     assert second['ready']
     assert sum('preparation' in command for command in calls) == 1
     assert next(check for check in second['checks'] if check['name'] == 'source_tests')['reused']
@@ -1013,3 +1013,62 @@ def test_scoring_evidence_checks_follow_source_and_artifact_owners():
     assert artifact_tests
     assert all(preparation_phase(artifact.name, name)[0] == 'artifact' for name in artifact_tests)
     assert preparation_phase(source.name, 'test_galu_enzyme_activity_reaches_v4_as_non_mass_dose_evidence')[0] == 'source'
+
+
+@pytest.mark.parametrize("failure", [None, "raw_canaries", "source_gate_0", "live_gate_1"])
+def test_routine_preparation_keeps_required_checks_without_repeating_developer_suite(tmp_path, monkeypatch, failure):
+    import subprocess
+    monkeypatch.setattr(preflight, '_preparation_inputs',
+                        lambda *args, **kwargs: {'files': {}, 'errors': [], 'raw_count': 1})
+    monkeypatch.setattr(preflight, '_preparation_runtime', lambda: {'environment': {}})
+    monkeypatch.setattr(preflight, '_preparation_canary_identifiers', lambda *args: ['1'])
+    calls = []
+    def run(command, **kwargs):
+        assert command != ['bash', 'scripts/test.sh', 'preparation'], "Routine pipeline must not repeat the developer suite"
+        if command[-1] == 'preparation-gates':
+            gates = [{'phase': phase, 'command': [phase + '-probe']}
+                     for phase in ('source', 'live', 'artifact')]
+            return subprocess.CompletedProcess(command, 0, '\n'.join(json.dumps(g) for g in gates), '')
+        name = kwargs['env']['PG_PREPARATION_CHECK']
+        calls.append(name)
+        output = 'ok'
+        if name == 'references':
+            output = json.dumps({'summary': {'all_ok': True, 'exit_code': 0},
+                    **{key: {'failed': []} for key in ('critical', 'configs', 'scripts', 'json_valid')}})
+        elif name == 'raw_canaries':
+            output = '[1] UNCHANGED\nChecked: 1  Failed: 0  Total: 1\n'
+        return subprocess.CompletedProcess(command, int(name == failure), output, '')
+    result = preflight.run_preparation(tmp_path, tmp_path, runner=run, report_path=tmp_path / 'receipt.json')
+    states = {check['name']: check['status'] for check in result['checks']}
+    assert 'source_tests' not in states
+    assert result['ready'] is (failure is None)
+    assert result['publication_ready'] is False
+    assert states['inputs_stable'] == 'passed'
+    if failure is None:
+        assert {'references', 'ownership_matrix', 'fda_freshness', 'raw_canaries',
+                'source_gate_0', 'live_gate_1', 'fda_freshness_final'} <= set(calls)
+    else:
+        assert states[failure] == 'failed'
+        if failure in {'raw_canaries', 'source_gate_0'}:
+            assert states['live_gate_1'] == 'blocked'
+
+
+@pytest.mark.parametrize("full", [False, True])
+def test_preparation_cli_forwards_explicit_developer_suite_choice(tmp_path, monkeypatch, full):
+    import signal
+    import test_lock
+    received = []
+    def prepare(*args, **kwargs):
+        received.append(kwargs['include_source_tests'])
+        return {'ready': True, 'checks': []}
+    monkeypatch.setattr(preflight, 'run_preparation', prepare)
+    monkeypatch.setattr(test_lock, 'inherited_lock_fds', lambda **kwargs: (42,))
+    monkeypatch.setattr(signal, 'signal', lambda *args: None)
+    argv = ['preflight.py', '--prepare', '--raw-root', str(tmp_path)]
+    if full:
+        argv.append('--include-source-tests')
+    monkeypatch.setattr(sys, 'argv', argv)
+    with pytest.raises(SystemExit) as exited:
+        preflight.main()
+    assert exited.value.code == 0
+    assert received == [full]
