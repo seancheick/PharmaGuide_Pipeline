@@ -6,8 +6,8 @@
     "scope": "Only fires for an exact (dsld_id, raw_ingredient_text) tuple match. Case-sensitive on raw_ingredient_text by design — manufacturers may print 'Insulin' in one product and 'INSULIN' in another, and each needs independent reviewer sign-off because the surrounding context (sibling ingredients, product category, regulatory status) must be re-evaluated per occurrence.",
     "review_policy": "Every product entry is keyed by dsld_id and must carry: brand, product_name (for human-readable audit trail), raw_ingredient_text (the source row being corrected), corrected_ingredient_text (the text the cleaner should see, unchanged for unit-only corrections), correction_fields, evidence (free-text rationale with regulatory citations), sources (authoritative URLs — FDA, NIH, DailyMed, etc.), reviewer, and review_date (ISO 8601 YYYY-MM-DD). A verified cross-row defect may add additional_row_corrections, which inherit the product-level evidence, sources, reviewer, review_date, scope, and provenance tag. Quantity changes require exact raw and corrected value/unit pairs and must be supported by the official manufacturer or label image. Restoring a quantity absent from a form row additionally requires raw_quantity_missing=true, a positive corrected value/unit, and exact same-record source text that states the dose; the applier refuses to overwrite any existing quantity representation. A reviewed Daily Value correction requires an exact raw_daily_value and corrected_daily_value from the same official label; it rewrites only matching source percentages, never derives a percentage or changes a different value. A reviewed unresolved_unit scoring_disposition preserves exact raw_quantity_value/raw_quantity_unit, makes no inferred unit correction, and marks dose and upper-limit assessment unresolved until independent exact-label evidence resolves the conflict. It applies only when the raw name, value and unit all match.",
     "unmatched_drug_tokens_policy": "When a row's raw_ingredient_text matches a known regulated-drug name (e.g., 'Insulin', 'Acetaminophen', 'Ibuprofen') and there is NO matching override for the product, the row must NOT be silently mapped. The cleaner emits the row to a quarantine path with reason='requires_human_review_drug_token_in_supplement' and excludes the product from scoring. New occurrences enter the reviewer pipeline via the same schema.",
-    "last_updated": "2026-10-12",
-    "total_entries": 70,
+    "last_updated": "2026-10-15",
+    "total_entries": 73,
     "loaded_by": "scripts/enhanced_normalizer.py via _load_label_corrections (cached on first product)"
   },
   "corrections": {
@@ -1617,6 +1617,69 @@
       "review_date": "2026-10-12",
       "scope": "dsld_id_only",
       "provenance_tag": "official_label_identity_correction"
+    },
+    "213411": {
+      "brand": "Nature's Way",
+      "product_name": "Biotin 1,000 mcg Cherry Flavored",
+      "raw_ingredient_text": "Total Sugars",
+      "corrected_ingredient_text": "Total Sugars",
+      "raw_quantity_value": 0,
+      "raw_quantity_unit": "NP",
+      "corrected_quantity_unit": "g",
+      "correction_fields": [
+        "quantity.unit"
+      ],
+      "evidence": "The NIH-hosted label prints Total Sugars 0 g per one-lozenge serving. The structured source preserves zero but uses the NP unit sentinel. Restore only the printed gram unit; this is a declared zero, not an inferred zero from an omitted line.",
+      "sources": [
+        "https://api.ods.od.nih.gov/dsld/v9/label/213411",
+        "https://api.ods.od.nih.gov/dsld/s3/pdf/213411.pdf"
+      ],
+      "reviewer": "Codex source-label review at Sean's request",
+      "review_date": "2026-10-15",
+      "scope": "dsld_id_only",
+      "provenance_tag": "official_label_unit_correction"
+    },
+    "69317": {
+      "brand": "GNC Beyond Raw",
+      "product_name": "Iso-Peptide Protein Chocolate",
+      "raw_ingredient_text": "Sugar",
+      "corrected_ingredient_text": "Sugar",
+      "raw_quantity_value": 1,
+      "raw_quantity_unit": "NP",
+      "corrected_quantity_unit": "g",
+      "correction_fields": [
+        "quantity.unit"
+      ],
+      "evidence": "The NIH-hosted label prints Sugars <1 g per 48.77 g packet. The structured source preserves quantity 1 and operator < but uses the NP unit sentinel. Restore only the printed gram unit; retain the less-than qualifier, never report an exact 1 g.",
+      "sources": [
+        "https://api.ods.od.nih.gov/dsld/v9/label/69317",
+        "https://api.ods.od.nih.gov/dsld/s3/pdf/69317.pdf"
+      ],
+      "reviewer": "Codex source-label review at Sean's request",
+      "review_date": "2026-10-15",
+      "scope": "dsld_id_only",
+      "provenance_tag": "official_label_unit_correction"
+    },
+    "271617": {
+      "brand": "Equate",
+      "product_name": "Kid's Multivitamin Gummies",
+      "raw_ingredient_text": "Total Sugars",
+      "corrected_ingredient_text": "Total Sugars",
+      "raw_quantity_value": 3,
+      "raw_quantity_unit": "Gram(s) - estimated",
+      "corrected_quantity_unit": "g",
+      "correction_fields": [
+        "quantity.unit"
+      ],
+      "evidence": "The NIH-hosted label explicitly prints Total Sugars 1 g for one gummy (ages 2–3) and 3 g for two gummies (ages 4 and up). The structured second column incorrectly calls the printed gram unit estimated. Correct only that exact 3-unit tuple; preserve both serving-age columns without estimating or combining them.",
+      "sources": [
+        "https://api.ods.od.nih.gov/dsld/v9/label/271617",
+        "https://api.ods.od.nih.gov/dsld/s3/pdf/271617.pdf"
+      ],
+      "reviewer": "Codex source-label review at Sean's request",
+      "review_date": "2026-10-15",
+      "scope": "dsld_id_only",
+      "provenance_tag": "official_label_unit_correction"
     }
   }
 }

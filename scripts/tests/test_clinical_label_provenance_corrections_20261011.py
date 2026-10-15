@@ -44,3 +44,27 @@ def test_reviewed_unit_conflict_preserves_printed_source(normalizer, product_id,
     changed = [{"name": name, "quantity": [{"quantity": value + 1, "unit": unit}]}]
     assert normalizer._apply_label_corrections(copy.deepcopy(changed), product_id) == changed
     assert normalizer._apply_label_corrections(copy.deepcopy(rows), "999999") == rows
+
+
+@pytest.mark.parametrize('product_id,name,value,unit,operator', [
+    ('213411', 'Total Sugars', 0, 'NP', '='),
+    ('69317', 'Sugar', 1, 'NP', '<'),
+    ('271617', 'Total Sugars', 3, 'Gram(s) - estimated', '='),
+])
+def test_reviewed_sugar_units_preserve_printed_quantity_and_qualifier(
+    normalizer, product_id, name, value, unit, operator
+):
+    # Exact NIH label images: /dsld/s3/pdf/{product_id}.pdf. The third
+    # record has separate 1 g and 3 g serving-age columns.
+    quantity = {'quantity': value, 'unit': unit, 'operator': operator,
+                'servingSize': 'reviewed column'}
+    control = {'quantity': 1, 'unit': 'Gram(s)', 'operator': '='}
+    rows = [{'name': name, 'quantity': [quantity, control]}]
+    corrected = normalizer._apply_label_corrections(copy.deepcopy(rows), product_id)[0]
+    assert corrected['quantity'][0] == {**quantity, 'unit': 'g'}
+    assert corrected['quantity'][1] == control
+    assert rows[0]['quantity'][0] == quantity
+    assert corrected['_pre_correction_quantity_unit'] == unit
+    changed = [{'name': name, 'quantity': [{**quantity, 'quantity': value + 10}]}]
+    assert normalizer._apply_label_corrections(copy.deepcopy(changed), product_id) == changed
+    assert normalizer._apply_label_corrections(copy.deepcopy(rows), '999999') == rows
