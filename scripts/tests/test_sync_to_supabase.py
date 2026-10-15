@@ -13,6 +13,42 @@ if _scripts_dir not in sys.path:
     sys.path.insert(0, os.path.abspath(_scripts_dir))
 
 
+def test_remote_preflight_checks_access_without_catalog_or_mutations(monkeypatch):
+    import sync_to_supabase as syncer
+    import supabase_client
+    calls = []
+    class Storage:
+        def get_bucket(self, bucket):
+            calls.append(('bucket', bucket))
+            return {'id': bucket}
+    class Client:
+        storage = Storage()
+    monkeypatch.setattr(supabase_client, 'get_supabase_client', lambda: Client())
+    monkeypatch.setattr(supabase_client, 'fetch_current_manifest', lambda client: calls.append(('manifest', None)))
+    assert syncer.main(['--preflight-only']) == 0
+    assert calls == [('manifest', None), ('bucket', supabase_client.STORAGE_BUCKET)]
+
+
+def test_remote_preflight_failure_is_not_success(monkeypatch):
+    import sync_to_supabase as syncer
+    import supabase_client
+    calls = []
+    def fail():
+        calls.append('client')
+        raise ValueError('missing credential')
+    monkeypatch.setattr(supabase_client, 'get_supabase_client', fail)
+    with pytest.raises(SystemExit) as error:
+        syncer.main(['--preflight-only'])
+    assert error.value.code != 0
+    assert calls == ['client']
+
+
+def test_sync_still_requires_build_dir_outside_read_only_preflight():
+    from sync_to_supabase import parse_args
+    with pytest.raises(SystemExit):
+        parse_args([])
+
+
 def _make_manifest(tmp_dir, db_version="2026.03.27.5", product_count=100, checksum="sha256:abc123def456"):
     """Helper: write a fake export_manifest.json and return its path."""
     manifest = {

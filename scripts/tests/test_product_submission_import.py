@@ -1264,9 +1264,12 @@ def test_release_train_registers_submission_images_before_cloud_sync():
 
     snapshot = release.index("bash scripts/rebuild_dashboard_snapshot.sh")
     copy_images = release.index("product_submission_import.py --copy-images")
-    cloud_sync = release.index("scripts/sync_to_supabase.py")
+    preflight = release.index('scripts/sync_to_supabase.py" --preflight-only')
+    # A read-only access probe is not an upload. Match the actual candidate
+    # argument, covering both dry-run and live upload branches in their order.
+    cloud_sync = release.index('scripts/sync_to_supabase.py "$DIST_DIR"')
 
-    assert snapshot < copy_images < cloud_sync
+    assert preflight < snapshot < copy_images < cloud_sync
 
 
 def test_dashboard_snapshot_applies_reviewed_submission_corrections_last():

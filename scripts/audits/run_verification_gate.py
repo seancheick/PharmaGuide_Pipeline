@@ -9,9 +9,12 @@ Candidate reports consume these receipts instead of trusting hand-authored
 from __future__ import annotations
 
 import argparse
+import fcntl
 import hashlib
+import importlib.metadata
 import json
 import os
+import shutil
 import subprocess
 import sys
 import time
@@ -21,6 +24,24 @@ from typing import Sequence
 
 
 RECEIPT_SCHEMA_VERSION = "1.0.0"
+
+REUSABLE_RELEASE_GATES = frozenset({
+    'cleaner/IQD row contract',
+    'enrichment/IQD source-of-truth contract', 'clinical drift contract',
+    'RDA/UL emitted-reference stamp parity',
+})
+
+# Read-only source/corpus gates share these inputs across snapshot and release.
+# Generated reports, live catalogs and audit caches are deliberately outside
+# this set. Artifact/live/mutating gates never opt into this reuse policy.
+RELEASE_SOURCE_INPUTS = (
+    '.env', 'scripts/**/*.py', 'scripts/**/*.sh',
+    'requirements*.txt', '.python-version',
+    'scripts/data/*.json', 'scripts/data/curated*/*.json', 'scripts/config/**/*.json',
+    'scripts/contracts/*.json', 'scripts/scoring_v4/config/*.json',
+    'scripts/tests/**/*.json',
+    'scripts/products/*_enriched/enriched/*.json',
+)
 
 
 def _utc_now() -> str:
@@ -64,7 +85,56 @@ def run_gate(
     log_path: Path,
     receipt_path: Path,
     cwd: Path,
+    input_globs: Sequence[str] = (),
+    max_age_seconds: float = 86400,
 ) -> int:
+    """Serialize receipt writers; reuse is opt-in for bound read-only checks."""
+    receipt_path = Path(receipt_path).resolve()
+    receipt_path.parent.mkdir(parents=True, exist_ok=True)
+    with receipt_path.with_suffix(receipt_path.suffix + '.lock').open('a') as lock:
+        fcntl.flock(lock, fcntl.LOCK_EX)
+        return _run_gate(name=name, command=command, log_path=log_path,
+                         receipt_path=receipt_path, cwd=cwd,
+                         input_globs=input_globs, max_age_seconds=max_age_seconds)
+
+
+def _input_binding(cwd: Path, command: Sequence[str], patterns: Sequence[str]) -> str:
+    # Never persist credentials or environment values. The fingerprint binds
+    # effective configuration, not shell bookkeeping or the per-run lock token.
+    ignored = {'_', 'PWD', 'OLDPWD', 'SHLVL', 'SHELL_PID',
+               'PG_RELEASE_LOCK_TOKEN', 'PG_RELEASE_LOCK_WRAPPED'}
+    environment = {key: value for key, value in os.environ.items() if key not in ignored}
+    files = {}
+    for pattern in patterns:
+        files[pattern] = [(str(path.relative_to(cwd)), _sha256(path))
+                          for path in sorted(cwd.glob(pattern)) if path.is_file()]
+    executable = shutil.which(str(command[0]))
+    return _canonical_sha256({
+        'files': files, 'environment': environment, 'python': sys.version,
+        'packages': sorted((dist.metadata['Name'], dist.version)
+                           for dist in importlib.metadata.distributions()),
+        'executable': (executable, _sha256(Path(executable))) if executable else None,
+        'cwd': str(cwd), 'command': list(command),
+    })
+
+
+def _can_reuse(receipt_path: Path, log_path: Path, *, name: str,
+               binding: str, max_age_seconds: float) -> bool:
+    try:
+        receipt = json.loads(receipt_path.read_text())
+        seal = receipt.pop('receipt_sha256')
+        age = (datetime.now(timezone.utc) - datetime.fromisoformat(receipt['completed_at'])).total_seconds()
+        return (seal == _canonical_sha256(receipt) and receipt['exit_code'] == 0
+                and receipt['gate_name'] == name and receipt.get('input_binding') == binding
+                and receipt['log'] == str(log_path) and receipt['log_sha256'] == _sha256(log_path)
+                and 0 <= age < max_age_seconds)
+    except (OSError, ValueError, KeyError, TypeError, AttributeError):
+        return False
+
+
+def _run_gate(*, name: str, command: Sequence[str], log_path: Path,
+              receipt_path: Path, cwd: Path, input_globs: Sequence[str],
+              max_age_seconds: float) -> int:
     """Run ``command`` and return its actual exit code after writing a receipt."""
     if not name.strip():
         raise ValueError("gate name must not be empty")
@@ -75,9 +145,18 @@ def run_gate(
     log_path = Path(log_path).resolve()
     receipt_path = Path(receipt_path).resolve()
     log_path.parent.mkdir(parents=True, exist_ok=True)
+    binding = _input_binding(cwd, command, input_globs) if input_globs else None
+    if binding and _can_reuse(receipt_path, log_path, name=name, binding=binding,
+                             max_age_seconds=max_age_seconds):
+        print(f'REUSED: {name} — verified unchanged inputs and successful log', flush=True)
+        return 0
     started_at = _utc_now()
     started_monotonic = time.monotonic()
     exit_code = 125
+    # Invalidate an older success BEFORE launching: killed or incomplete
+    # attempts must never leave a previous receipt looking like this success.
+    _write_receipt(receipt_path, {'gate_name': name, 'exit_code': 125,
+                                 'started_at': started_at, 'completed_at': None})
 
     with log_path.open("wb") as log_handle:
         process = subprocess.Popen(
@@ -88,7 +167,7 @@ def run_gate(
         )
         assert process.stdout is not None
         try:
-            for chunk in iter(lambda: process.stdout.read(64 * 1024), b""):
+            for chunk in iter(lambda: process.stdout.read1(64 * 1024), b""):
                 log_handle.write(chunk)
                 log_handle.flush()
                 sys.stdout.buffer.write(chunk)
@@ -105,6 +184,10 @@ def run_gate(
         finally:
             process.stdout.close()
 
+    if binding and _input_binding(cwd, command, input_globs) != binding:
+        print(f'FAILED: {name} — inputs changed during verification', file=sys.stderr)
+        exit_code = exit_code or 125
+
     payload = {
         "receipt_schema_version": RECEIPT_SCHEMA_VERSION,
         "gate_name": name,
@@ -116,28 +199,46 @@ def run_gate(
         "exit_code": exit_code,
         "log": str(log_path),
         "log_sha256": _sha256(log_path),
+        "input_binding": binding,
     }
     _write_receipt(receipt_path, payload)
+    print(f'FINISHED: {name} | exit {exit_code} | {payload["duration_seconds"]:.3f}s', flush=True)
     return exit_code
 
 
 def main(argv: Sequence[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--name", required=True)
-    parser.add_argument("--log", required=True, type=Path)
-    parser.add_argument("--receipt", required=True, type=Path)
+    parser.add_argument("--log", type=Path)
+    parser.add_argument("--receipt", type=Path)
+    parser.add_argument("--receipt-dir", type=Path,
+                        help='Keep per-gate logs and receipts in this existing report directory')
     parser.add_argument("--cwd", default=Path.cwd(), type=Path)
+    parser.add_argument("--input-glob", action='append', default=[],
+                        help='Bind and reuse a read-only check against these content globs')
+    parser.add_argument("--max-age-seconds", type=float, default=86400)
+    parser.add_argument("--release-check", action='store_true',
+                        help='Apply the shared read-only release-gate reuse policy')
     parser.add_argument("command", nargs=argparse.REMAINDER)
     args = parser.parse_args(argv)
     command = list(args.command)
     if command and command[0] == "--":
         command.pop(0)
+    if args.receipt_dir:
+        key = hashlib.sha256(args.name.encode()).hexdigest()[:20]
+        args.log = args.receipt_dir / f'{key}.log'
+        args.receipt = args.receipt_dir / f'{key}.json'
+    if not args.log or not args.receipt:
+        parser.error('supply --receipt-dir or both --log and --receipt')
     return run_gate(
         name=args.name,
         command=command,
         log_path=args.log,
         receipt_path=args.receipt,
         cwd=args.cwd,
+        input_globs=[*args.input_glob, *(RELEASE_SOURCE_INPUTS
+                     if args.release_check and args.name in REUSABLE_RELEASE_GATES else ())],
+        max_age_seconds=args.max_age_seconds,
     )
 
 
