@@ -140,9 +140,11 @@ PROBIOTIC_CANARIES = {
         # Alternative serving headers retain one source-owned pure blend.
         # Its 2.25B total is disclosed; individual strain quantities are not.
         # The CFU disclosure component owns that limitation, without a second B5.
-        "score_range": (46.6, 46.6),
+        # V4.1 (Oct 15, 2026): its reviewed research does not apply to this
+        # product, so the former 10 certainty points are gated to 0.
+        "score_range": (36.6, 36.6),
         "traits": {"dose_positive": True, "trust_positive": True,
-                   "dimension_scores": {"formulation": 12.0, "dose": 3.4, "evidence": 10.0, "transparency": 11.0},
+                   "dimension_scores": {"formulation": 12.0, "dose": 3.4, "evidence": 0.0, "transparency": 11.0},
                    "identity_counts": (3, 3),
                    "evidence_state": "research_present_applicability_unestablished"},
     },
@@ -151,7 +153,9 @@ PROBIOTIC_CANARIES = {
         "label": "GNC Probiotic Solutions Prenatal 20B",
         # LGG has contextual evidence, but undisclosed per-strain CFU cannot
         # establish its studied dose. The named-strain disclosure floor applies.
-        "score_range": (36.4, 37.8),
+        # V4.1 (Oct 15, 2026): LGG certainty without applicability no longer
+        # earns its 6.67 Evidence points.
+        "score_range": (29.7, 31.1),
         "traits": {
             "prenatal_name_routes_probiotic": True,
             "trust_positive": True,

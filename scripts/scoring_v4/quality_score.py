@@ -1006,6 +1006,11 @@ def _pillar_evidence(dim: Dict[str, Any], weight: float, archetype: str,
             zero_copy = ("Our reviewed evidence does not establish probiotic benefit for this "
                          "product's assessed preparation, purpose and population; this is not "
                          "a product-quality finding.")
+        if archetype == "probiotic" and state == "research_present_applicability_unestablished":
+            zero_copy = ("Research on these probiotic strains exists, but our review did not "
+                         "establish that it applies to this product's strains, purpose and "
+                         "population, so it earns no Evidence points. This is not a "
+                         "product-quality finding.")
         if zero_copy is None:
             zero_copy = _EVIDENCE_ZERO_REASON.get(
                 _EVIDENCE_ZERO_CLASS_FALLBACK.get(
