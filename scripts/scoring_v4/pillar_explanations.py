@@ -168,7 +168,6 @@ def attach_pillar_explanations(
                     "dose_safety_policy",
                 )}
                 assessment["raw_dose_safety_penalty"] = abs(_num((dose.get("penalties") or {}).get("B7_dose_safety")) or 0)
-                assessment["safety_hygiene_over_ul_penalty"] = 0
                 assessment["raw_dose"] = (pillar.get("components") or {}).get("raw_dose")
                 assessment["normalization_reference"] = (pillar.get("components") or {}).get("reference")
                 pillar["explanation"] = {"schema_version": PILLAR_EXPLANATION_SCHEMA_VERSION, "assessment": assessment}
