@@ -46,8 +46,10 @@ def score_formulation(product: Dict[str, Any]) -> Dict[str, Any]:
     source_quality, source_class = _source_quality(rows, product)
 
     # V4.1 Step 4: disclosure belongs to Transparency, and focus, route-base
-    # and name-based practicality bonuses are retired. A stimulant laxative is
-    # charged once by the formula-checks pillar through its additive finding.
+    # and name-based practicality bonuses are retired. A stimulant laxative
+    # (senna, cascara, aloe latex) is a banned_recalled watchlist/high-risk
+    # identity: the safety gate reports it and the formula-checks pillar
+    # charges it once when the match is confirmed.
     components: Dict[str, float] = {
         "fiber_source_quality": round(source_quality, 4),
     }

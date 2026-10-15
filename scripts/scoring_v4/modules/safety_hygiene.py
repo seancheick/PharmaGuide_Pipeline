@@ -19,8 +19,10 @@ from scoring_v4.modules.generic_helpers import _safe_dict, _safe_list
 # Phase 5: rebalanced +10 -> +4. Hygiene keeps ONLY the two non-overlapping
 # clean-safety components (no banned/high-risk/watchlist, no recalled). The
 # overdose / harmful-additive / manufacturer-violation passes were removed
-# because each is already penalised by its own dimension (B7 / B1 /
-# manufacturer_violations) — crediting "absence" here double-counted.
+# because each is already penalised by its own owner (B7 in Dose; additive
+# and sugar findings by this pillar's formula checks since V4.1 Step 4;
+# manufacturer violations) — crediting "absence" here double-counted. A
+# high-risk or watchlist match zeroes the base only when confirmed.
 from scoring_v4.quality_score_config import block as _cfg_block
 
 _CM = _cfg_block("category_magnitudes", "safety_hygiene")["safety_hygiene"]

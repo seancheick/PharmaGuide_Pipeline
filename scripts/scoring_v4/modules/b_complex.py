@@ -156,8 +156,8 @@ def _score_form_quality(rows: Dict[str, Dict[str, Any]]) -> tuple[float, Optiona
         return 0.0, None, 0.0
     raw_avg = sum(raw_scores) / len(raw_scores)
     relative_avg = sum(relative_scores) / len(relative_scores)
-    points = _round((relative_avg / 15.0) * 8.0)
-    neutral = min(points, _round((sum(neutral_scores) / len(relative_scores) / 15.0) * 8.0))
+    points = _round((relative_avg / 15.0) * FORMULATION_CAP)
+    neutral = min(points, _round((sum(neutral_scores) / len(relative_scores) / 15.0) * FORMULATION_CAP))
     return points, _round(raw_avg), neutral
 
 
