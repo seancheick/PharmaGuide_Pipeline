@@ -55,7 +55,8 @@ gates → `release_catalog_artifact.py` → `stamp-manifest` → `promote_releas
 → `build_interaction_db.py` → `release_interaction_artifact.py`) → preflight gates
 → `release_interaction_artifact.py --publish-flutter-pin` → `sync_to_supabase.py`
 → B's `scripts/import_catalog_artifact.sh` → B's `tool/fetch_interaction_db.sh` gate
-→ prune + commit + `cleanup_old_versions.py`.
+→ prune + commit. Version cleanup and orphan reconciliation are separate gated
+maintenance commands printed at completion; neither blocks publication.
 
 ## 3. Verify in B before committing
 
