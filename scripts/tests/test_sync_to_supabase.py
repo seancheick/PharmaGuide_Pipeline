@@ -1019,3 +1019,42 @@ def test_rebuild_dashboard_snapshot_has_no_manual_detail_artifact_copies():
             f"release_catalog_artifact.py is the single owner — remove the "
             f"workaround."
         )
+
+
+@pytest.mark.parametrize("existing_count,page_cap", [
+    (0, 1500), (1500, 1500), (1501, 1500), (10000, None), (10001, None),
+])
+def test_product_images_reuse_all_remote_pages_and_upload_changes(tmp_path, existing_count, page_cap):
+    from sync_to_supabase import upload_product_images
+
+    image_dir = tmp_path / "product_images"
+    image_dir.mkdir()
+    index = {}
+    remote = []
+    for i in range(existing_count):
+        name = f"{i:05d}.webp"
+        (image_dir / name).write_bytes(b"x" * 2048)
+        index[str(i)] = {"filename": name, "size_bytes": 2048}
+        remote.append({"name": name, "metadata": {"size": 2048}})
+    for name in ("changed.webp", "new.webp"):
+        (image_dir / name).write_bytes(b"x" * 4096)
+        index[name] = {"filename": name, "size_bytes": 4096}
+    remote.append({"name": "changed.webp", "metadata": {"size": 100}})
+    (image_dir / "product_image_index.json").write_text(json.dumps(index))
+    calls, uploaded = [], []
+
+    def listing(client, bucket, prefix, limit, offset):
+        calls.append(offset)
+        assert bucket == "product-images"
+        assert prefix == ""
+        returned_limit = min(limit, page_cap) if page_cap else limit
+        return remote[offset:offset + returned_limit]
+
+    def upload(client, bucket, remote_path, local_path, **kwargs):
+        uploaded.append(remote_path)
+
+    result = upload_product_images(
+        object(), str(tmp_path), upload, listing, max_workers=1, retries=0,
+    )
+    assert sorted(uploaded) == ["changed.webp", "new.webp"]
+    assert result == {"uploaded": 2, "skipped": existing_count, "failed": 0}
