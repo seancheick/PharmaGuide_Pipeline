@@ -253,7 +253,7 @@ def test_probiotic_assembly_metadata_carries_audit_fields() -> None:
     assert "manufacturer_trust_adjustment" in meta
     assert "manufacturer_violation_adjustment" in meta
     assert "score_policy" in meta
-    assert meta["score_policy"]["method"] == "rubric_raw_is_production_score"
+    assert meta["score_policy"]["method"] == "module_rubric_raw_audit"
     assert meta["score_policy"]["audit_affine_v3_compare"]["intercept"] == 25.0
     assert meta["score_policy"]["audit_affine_v3_compare"]["slope"] == 0.75
 

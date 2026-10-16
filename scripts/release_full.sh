@@ -39,10 +39,10 @@
 #                                  manifests already match dist/ checksums.
 #   7. Prune .previous backups     (assets/db/*.previous)
 #                                  No-ops cleanly when none exist.
-#   8. Commit bundle + version     (git commit assets/db/ then
-#      cleanup                     cleanup_old_versions.py --execute ...)
-#                                  Commits the Flutter bundle LOCALLY, then
-#                                  prunes old version DIRECTORIES only.
+#   8. Commit bundle locally      (git commit assets/db/)
+#                                  Reports separate version-directory and
+#                                  orphan maintenance commands; neither runs
+#                                  during publication.
 #                                  Orphan-blob reconciliation is a SEPARATE
 #                                  maintenance step (reconcile_orphan_blobs.py):
 #                                  it needs a ~6 min full-bucket inventory and
@@ -102,6 +102,9 @@
 #     N  the failing step's exit code
 
 set -Eeuo pipefail
+
+# Progress must remain visible when a release is piped or redirected to a log.
+export PYTHONUNBUFFERED=1
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 REPO_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
@@ -791,14 +794,7 @@ if (( SKIP_SUPABASE == 0 )); then
   else
     "$PG_PYTHON" "$CATALOG_STATE_SCRIPT" --check-input-binding "$CATALOG_INPUT_BINDING"
     info "Step 5/8: Syncing dist/ to Supabase (upload only; cleanup deferred)..."
-    # Storage cleanup (version dirs + orphan blobs) is NO LONGER run here.
-    # It moved to the aligned-cleanup step below, AFTER the Flutter bundle is
-    # committed. Reason: the orphan-cleanup bundle_alignment gate compares
-    # Flutter main HEAD to the just-built dist version, but at THIS point the
-    # new bundle has not been imported or committed yet — so the gate rejected
-    # the sweep on every release and orphan blobs accumulated to ~84% of
-    # storage (cleanup quarantined 0 across 80 runs). Deferring cleanup until
-    # after the bundle commit lets the gate pass.
+    # Storage inventory/deletion runs separately after publication.
     "$PG_PYTHON" scripts/sync_to_supabase.py "$DIST_DIR"
   fi
   ok "Supabase step done (uploaded if changed; up-to-date otherwise)"
@@ -895,47 +891,37 @@ CATALOG_VERSION="$("$PG_PYTHON" -c "import json,sys; print(json.load(open(sys.ar
 INTERACTION_VERSION="$("$PG_PYTHON" -c "import json,sys; print(json.load(open(sys.argv[1])).get('interaction_db_version','unknown'))" "$ASSETS_DIR/interaction_db_manifest.json" 2>/dev/null || echo unknown)"
 
 # ---------------------------------------------------------------------------
-# Commit the Flutter bundle + run ALIGNED storage cleanup.
+# Commit the Flutter bundle + report deferred storage maintenance.
 #
-# The orphan-blob cleanup was moved out of Step 5 to here: its bundle_alignment
-# gate needs the committed Flutter manifest to equal the just-built dist
-# version. We commit the bundle LOCALLY first (push stays manual), then verify
-# the exact branch that received that commit. This keeps feature-branch release
-# workspaces from being compared against an unrelated main HEAD.
+# Commit locally (push stays manual). Report the exact branch for separately
+# gated orphan maintenance, whose alignment check needs the committed bundle.
 # ---------------------------------------------------------------------------
 if (( SKIP_FLUTTER == 0 && SKIP_SUPABASE == 0 && SUPABASE_DRY_RUN == 0 )); then
   if git -C "$FLUTTER_REPO" rev-parse --is-inside-work-tree >/dev/null 2>&1; then
     FLUTTER_RELEASE_BRANCH="$(git -C "$FLUTTER_REPO" branch --show-current)"
     if [[ -z "$FLUTTER_RELEASE_BRANCH" ]]; then
-      err "Flutter repository is in detached HEAD state; refusing aligned storage cleanup"
+      err "Flutter repository is in detached HEAD state; refusing to commit a release bundle without a branch"
       exit 1
     fi
 
     if git -C "$FLUTTER_REPO" status --porcelain -- assets/db tool/interaction_db.release.json assets/reference_data/rda_optimal_uls.json assets/reference_data/medication_depletions.json assets/reference_data/clinical_risk_taxonomy.json assets/reference_data/timing_rules.json assets/reference_data/reference_data_manifest.json assets/data/product_type_vocab.json 'assets/data/*_vocab.json' | grep -q .; then
-      info "Committing Flutter bundle and canonical reference data (local) so storage cleanup runs aligned..."
+      info "Committing Flutter bundle and canonical reference data (local)..."
       git -C "$FLUTTER_REPO" add assets/db/ tool/interaction_db.release.json assets/reference_data/rda_optimal_uls.json assets/reference_data/medication_depletions.json assets/reference_data/clinical_risk_taxonomy.json assets/reference_data/timing_rules.json assets/reference_data/reference_data_manifest.json assets/data/product_type_vocab.json 'assets/data/*_vocab.json'
       if git -C "$FLUTTER_REPO" commit -q -m "chore(catalog): bundle catalog v${CATALOG_VERSION} + interaction v${INTERACTION_VERSION}"; then
         ok "Flutter bundle committed locally (push remains manual)"
       else
-        warn "Flutter bundle commit failed — cleanup may reject on bundle_alignment"
+        warn "Flutter bundle commit failed — review the app repository before pushing"
       fi
     else
       skip "Flutter bundle already committed — nothing to commit"
     fi
 
-    info "Step 8/8: Version-directory cleanup (keeping $KEEP_VERSIONS)..."
-    # Orphan-blob reconciliation is deliberately NOT run here. It requires a
-    # full 256-shard inventory of ~134k objects (~6 min wall-clock) and is pure
-    # housekeeping: a published catalog must not wait on it, and a maintenance
-    # blip must not be reported as a release-step failure. It is a separate,
-    # resumable step — see the deferred command printed below.
-    if "$PG_PYTHON" scripts/cleanup_old_versions.py \
-        --execute --cleanup-db \
-        --keep "$KEEP_VERSIONS"; then
-      ok "Version cleanup: OK (retained the $KEEP_VERSIONS newest version dirs)"
-    else
-      warn "Version cleanup: FAILED (non-fatal) — see reports/release_audit/"
-    fi
+    info "Step 8/8: Bundle step finished; storage maintenance deferred"
+    # Publication and bundle verification are complete. Storage inventories
+    # and deletion are gated maintenance, not prerequisites for using this release.
+    warn "Version cleanup: DEFERRED (not attempted by the release)"
+    info "  Run version-directory maintenance when convenient:"
+    info "    \"$PG_PYTHON\" scripts/cleanup_old_versions.py --execute --cleanup-db --keep $KEEP_VERSIONS"
 
     # Reported separately, and never as a success this step did not achieve.
     warn "Orphan cleanup: DEFERRED (not attempted by the release)"
@@ -949,10 +935,10 @@ if (( SKIP_FLUTTER == 0 && SKIP_SUPABASE == 0 && SUPABASE_DRY_RUN == 0 )); then
     info "  --execute --approval-report reports/orphan_report.json --expected-count N"
     info "  to quarantine the frozen set (recoverable, 30d TTL)."
   else
-    warn "$FLUTTER_REPO is not a git work tree — skipping bundle commit + cleanup"
+    warn "$FLUTTER_REPO is not a git work tree — skipping bundle commit and maintenance instructions"
   fi
 else
-  skip "Bundle commit + aligned cleanup skipped (flutter/supabase disabled or dry-run)"
+  skip "Bundle commit and maintenance instructions skipped (flutter/supabase disabled or dry-run)"
 fi
 
 # A submission becomes user-visible only after the exact product identity is

@@ -269,8 +269,12 @@ The downstream steps are:
 5. sync `dist/` to Supabase after all publication gates pass
 6. atomically import and verify Flutter bundle
 7. prune `.previous` Flutter DB backups
-8. locally commit the Flutter bundle and perform aligned recoverable storage
-   cleanup; push remains manual
+8. locally commit the Flutter bundle and print separate storage-maintenance
+   commands; push remains manual. Version and orphan cleanup do not run during
+   release. Run the printed gated commands separately when convenient.
+
+Release progress is unbuffered when saved to a log. Sync elapsed time includes
+images, search-index updates, registry work and activation, not just blob upload.
 
 Before Supabase, release runs the cleaner/enrichment/clinical/interaction/
 freshness/export/RDA/scoring-snapshot contracts. A failure there stops cloud

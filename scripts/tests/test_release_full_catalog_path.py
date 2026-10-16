@@ -441,3 +441,72 @@ def test_batch_precheck_flag_preserves_full_release_path(tmp_path, pre_check):
     if prepare:
         assert invocations.index(prepare[0]) < invocations.index(pipeline)
     assert invocations[-2:] == ['snapshot', 'release --prepared-inputs']
+
+
+@pytest.mark.parametrize("commit_outcome", ["unchanged", "success", "failure"])
+def test_release_finishes_bundle_without_running_storage_maintenance(tmp_path, commit_outcome):
+    import shlex
+    import subprocess
+
+    source = SCRIPT.read_text()
+    block = source[source.index('# Commit the Flutter bundle'):source.index('# A submission becomes')]
+    calls = tmp_path / 'maintenance_calls'
+    python = tmp_path / 'python'
+    python.write_text('#!/bin/bash\nprintf "%s\\n" "$*" >> ' + shlex.quote(str(calls)) + '\nexit 17\n')
+    python.chmod(0o755)
+    harness = f'''SKIP_FLUTTER=0
+SKIP_SUPABASE=0
+SUPABASE_DRY_RUN=0
+FLUTTER_REPO={shlex.quote(str(tmp_path))}
+KEEP_VERSIONS=2
+PG_PYTHON={shlex.quote(str(python))}
+CATALOG_VERSION=test
+INTERACTION_VERSION=test
+info() {{ printf '%s\\n' "$*"; }}
+warn() {{ printf '%s\\n' "$*"; }}
+err() {{ printf '%s\\n' "$*"; }}
+skip() {{ printf '%s\\n' "$*"; }}
+ok() {{ printf '%s\\n' "$*"; }}
+git() {{
+  case "$*" in
+    *"rev-parse --is-inside-work-tree"*) echo true ;;
+    *"branch --show-current"*) echo main ;;
+    *"status --porcelain"*) {":" if commit_outcome == "unchanged" else "echo modified"} ;;
+    *" add "*) return 0 ;;
+    *" commit "*) return {1 if commit_outcome == "failure" else 0} ;;
+    *) return 9 ;;
+  esac
+}}
+'''
+    result = subprocess.run(['bash', '-c', harness + block + '\necho RELEASE_FINISHED\n'], capture_output=True, text=True)
+    assert result.returncode == 0, result.stdout + result.stderr
+    assert not calls.exists(), 'release must not wait on optional storage listing/deletion'
+    assert 'Version cleanup: DEFERRED' in result.stdout
+    assert 'Orphan cleanup: DEFERRED' in result.stdout
+    assert 'cleanup_old_versions.py' in result.stdout
+    assert 'RELEASE_FINISHED' in result.stdout
+    if commit_outcome == 'failure':
+        assert 'commit failed' in result.stdout
+        assert 'committed locally' not in result.stdout
+        assert 'Bundle committed' not in result.stdout
+    elif commit_outcome == 'success':
+        assert 'Flutter bundle committed locally' in result.stdout
+    else:
+        assert 'already committed' in result.stdout
+
+
+def test_release_python_progress_is_visible_through_a_pipe():
+    import os
+    import shlex
+    import subprocess
+    import sys
+
+    # Exercise the real release initialization, stopping before runtime selection,
+    # locks, configuration, network or filesystem mutation.
+    prefix = SCRIPT.read_text().split('SCRIPT_DIR=', 1)[0]
+    env = dict(os.environ)
+    env.pop('PYTHONUNBUFFERED', None)
+    command = shlex.quote(sys.executable) + " -c 'import sys; print(sys.stdout.write_through)'"
+    result = subprocess.run(['bash', '-c', prefix + command], env=env, capture_output=True, text=True)
+    assert result.returncode == 0, result.stderr
+    assert result.stdout.strip() == 'True', 'piped release progress must not sit in Python buffers'

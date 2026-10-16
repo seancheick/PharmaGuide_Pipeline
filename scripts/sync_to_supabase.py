@@ -1311,6 +1311,8 @@ def sync(
     5. Publish catalog_search rows (public MCP search); prune old versions
     6. Insert new manifest row
     """
+    sync_started_at = time.monotonic()
+
     from supabase_client import (
         download_file,
         get_supabase_client,
@@ -1549,7 +1551,7 @@ def sync(
             "blob_count": blob_count,
             "unique_blob_count": unique_blob_count,
             "error_count": len(errors),
-            "time_seconds": round(db_time + detail_index_time + discover_time + blob_time, 1),
+            "time_seconds": round(time.monotonic() - sync_started_at, 1),
         }
 
     # Public MCP search rows for this release go in BEFORE the manifest flip;
@@ -1590,7 +1592,7 @@ def sync(
     print(f"  [registry] {version} is ACTIVE; release fully visible to cleanup gates")
 
     # Summary
-    total_time = db_time + detail_index_time + discover_time + blob_time
+    total_time = time.monotonic() - sync_started_at
     print(f"\n{'=' * 50}")
     print(f"Sync complete: v{version}")
     print(f"  Products:    {product_count}")

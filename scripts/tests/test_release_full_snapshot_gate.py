@@ -115,10 +115,11 @@ def test_version_cleanup_is_separate_from_branch_aware_orphan_reconciliation():
     bundle_commit = source.index(
         'git -C "$FLUTTER_REPO" commit -q -m "chore(catalog): bundle catalog'
     )
-    cleanup = source.index('"$PG_PYTHON" scripts/cleanup_old_versions.py')
+    cleanup = source.index('warn "Version cleanup: DEFERRED')
 
     assert branch_resolution < bundle_commit < cleanup
-    cleanup_call = source[cleanup:source.index('; then', cleanup)]
+    cleanup_call = source[cleanup:source.index('warn "Orphan cleanup: DEFERRED', cleanup)]
+    assert "--execute --cleanup-db --keep" in cleanup_call
     assert "--branch" not in cleanup_call
     assert "--flutter-repo" not in cleanup_call
     assert "--dist-dir" not in cleanup_call

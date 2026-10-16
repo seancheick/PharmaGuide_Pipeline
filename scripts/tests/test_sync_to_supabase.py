@@ -1058,3 +1058,42 @@ def test_product_images_reuse_all_remote_pages_and_upload_changes(tmp_path, exis
     )
     assert sorted(uploaded) == ["changed.webp", "new.webp"]
     assert result == {"uploaded": 2, "skipped": existing_count, "failed": 0}
+
+
+@pytest.mark.parametrize("blob_failed", [False, True])
+def test_sync_elapsed_time_includes_images_and_publication(tmp_path, monkeypatch, capsys, blob_failed):
+    import supabase_client
+    import sync_to_supabase as syncer
+
+    _make_build_output(str(tmp_path), product_count=1)
+    client = object()
+    clock = {"now": 100.0}
+    monkeypatch.setattr(syncer.time, "monotonic", lambda: clock["now"])
+    monkeypatch.setattr(supabase_client, "get_supabase_client", lambda: client)
+    monkeypatch.setattr(supabase_client, "fetch_current_manifest", lambda _c: None)
+    monkeypatch.setattr(syncer, "validate_bucket_upload_capacity", lambda *_a, **_k: None)
+    monkeypatch.setattr(syncer, "discover_existing_remote_blob_paths", lambda *_a, **_k: set())
+
+    def advance(*_args, **_kwargs):
+        clock["now"] += 10.0
+
+    def upload(_client, _bucket, path, _file, **_kwargs):
+        clock["now"] += 1.0
+        if blob_failed and path.startswith("shared/details/"):
+            raise RuntimeError("simulated detail upload failure")
+
+    def images(**_kwargs):
+        clock["now"] += 60.0
+        return {"uploaded": 1, "skipped": 0, "failed": 0}
+
+    monkeypatch.setattr(supabase_client, "upload_file", upload)
+    monkeypatch.setattr(syncer, "upload_product_images", images)
+    monkeypatch.setattr(syncer, "_publish_catalog_search_step", advance)
+    monkeypatch.setattr(syncer, "_ensure_registry_validating", advance)
+    monkeypatch.setattr(syncer, "_promote_registry_release", advance)
+    monkeypatch.setattr(supabase_client, "insert_manifest", advance)
+    result = syncer.sync(str(tmp_path), max_workers=1, retry_count=0)
+    assert result["status"] == ("partial_failure" if blob_failed else "synced")
+    assert result["time_seconds"] == clock["now"] - 100.0
+    if not blob_failed:
+        assert f"Total time:  {result['time_seconds']:.1f}s" in capsys.readouterr().out

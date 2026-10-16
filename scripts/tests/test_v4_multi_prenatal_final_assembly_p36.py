@@ -175,7 +175,7 @@ def test_multi_prenatal_rubric_score_policy_applied() -> None:
     expected = round(max(0.0, min(100.0, 1.0 * raw)), 1)
 
     assert breakdown["score_100"] == expected
-    assert breakdown["metadata"]["score_policy"]["method"] == "rubric_raw_is_production_score"
+    assert breakdown["metadata"]["score_policy"]["method"] == "module_rubric_raw_audit"
 
 
 def test_multi_prenatal_raw_score_sums_dimensions_and_manufacturer_adjustments() -> None:

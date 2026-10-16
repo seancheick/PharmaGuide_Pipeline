@@ -28,7 +28,7 @@ Owner: `scripts/promote_release_artifacts.py::promote_release_artifacts` owns th
 | Release can introduce new intake after Sean finishes the corpus | **Fixed here.** Standalone release now defaults to the prepared submission set and refuses stale manifests. `--prepared-inputs` remains accepted. New intake is explicit via `--refresh-submissions`; prefer preparing it before the final corpus. `--force` does not misclassify fresh prepared submissions as stale. The full publishing batch already prepares intake early and preserves it through release. |
 | Catalog publication confused with a new phone executable | **Operational distinction documented below.** The installed app already has compatible OTA catalog activation with integrity/schema gates. This release command imports bundled assets; it does not compile/sign/install an IPA. Existing iOS preflight/build owners apply when executable/UI/reader changes require a new app. Signing does not belong in every catalog-only release. |
 | mtime-based catalog rebuild triggers | **Replaced here.** Assembly reuse uses actual input and output content, not timestamps or a hand-maintained exporter list. Touching identical source does not invalidate it. Old catalogs without a valid receipt rebuild once; no old output is relabeled as newly built. Interaction assembly retains its existing trigger and mandatory parity gates; catalog receipt does not claim interaction provenance. |
-| Images/cleanup slow the critical path | **Correctness dependencies preserved; optional maintenance already separated.** Image processing binds image URLs/indexes before upload and therefore stays before publication; it now has its own timing/log. Version cleanup runs after bundle commit and failure is nonfatal. Full orphan reconciliation is already deferred. No evidence justifies removing image correctness or retention controls. Measure the next actual release before further optimization. |
+| Images/cleanup slow the critical path | **Correctness dependencies preserved; optional maintenance already separated.** Image processing binds image URLs/indexes before upload and therefore stays before publication; it now has its own timing/log. Version and orphan cleanup are now separate gated maintenance commands, printed after the bundle step and not executed during publication. No evidence justifies removing image correctness or retention controls. Measure the next actual release before further optimization. |
 | Multiple agents or standalone snapshots can collide | **Existing lock extended to direct snapshots.** The existing release/maintenance lock serializes standalone snapshot mutation; nested release snapshots reuse that owner. Input-binding checks detect concurrent source changes at candidate boundaries. Claude's separate worktree is preserved; only the final integrator runs publication. |
 
 ## Evidence and limits
@@ -51,7 +51,7 @@ The system should recognize what is on a label, choose the right product categor
 
 The extra source fixes were measured on 415 frozen raw labels: 180 score movements, no score-status or safety-result movements. A separate 46-product final-artifact check also preserves assessment completeness and safety. All 33 raw-label canaries pass. These are development validation results, not a new published catalog or personal clinical recommendation. Remaining existing unknowns/clinical holds stay explicit.
 
-## Simple workflow for the next update
+## Completed delivery workflow (historical)
 
 1. PR148 is integrated after final CI/local qualification. Existing unresolved clinical holds remain explicit; they are not silently recalibrated.
 2. **Completed October15:** Sean ran Clean → Enrich → Score with publication disabled:38successful stage runs (37brands plus prepared Product Submissions), no failures.
@@ -97,3 +97,17 @@ PYTHON="$PG_PYTHON" bash batch_run_all_datasets.sh \
 ```
 
 This rebuilds the necessary stage outputs and stops before snapshot assembly or publication. Do not remove source/provenance checks or add a release flag. The new outputs still need catalog parity, release validation, published-version verification and app/Codex acceptance.
+
+## Enricher/config follow-up audit
+
+Current source follow-up: PR152. Clean/Enrich fingerprints remain current; the config/audit-metadata change makes Score artifacts stale for this new source. Existing published artifacts remain bound to the prior qualified source. No immediate rerun or republication is required for a numerical change: the measured numerical change is zero. To regenerate metadata later, select Score if fingerprints remain current. The batch runner separately refreshes Product Submissions through Clean/Enrich/Score if that auxiliary input is stale; this is not a whole-brand corpus rerun.
+
+Claude's historical audit was checked against current production owners, not applied as a list of assumed defects. Sugar substring matching and sports/Casein routing were already corrected before the published catalog. Generic Formulation already evaluates mapped forms without requiring a dose; missing amount remains a Dose concern. Existing regressions verify these boundaries.
+
+The clean-label role multipliers still feed the public assessment and must remain. The older scoring config still serves the legacy dashboard. Evidence vocabulary multipliers explicitly describe legacy v3, while v4's evidence owner applies its own accepted policy; changing those numbers to match would be an unapproved policy change. App vocabulary models parse the legacy values but no production consumer reads their multiplier.
+
+This bounded batch removes only the unused safety/hygiene `base_max`, versions the config and its fingerprint history, and corrects module metadata that incorrectly called a rubric subtotal the production score. The public six-pillar assembler and all arithmetic remain unchanged. The same 46 actual enriched products across all five routes have exactly identical scores, pillars, tiers, assessment states and safety results. Only audit method, timestamps and provenance/version fields differ.
+
+Release fixes measure complete sync time, make Python progress visible through log pipes, and keep optional storage inventories/deletion outside publication. Cleanup remains available through existing gated commands; it has not been performed by this audit. No pipeline or new catalog publication is authorized by these source-only checks.
+
+Unbenchmarked probiotic CFU scoring and the D28 EGCG lower-bound proposal remain specific policy questions, not silently recalibrated under cleanup. No numerical or clinical policy changes are part of this batch. Current validation and integration evidence is recorded in the LEDGER; local detailed receipts are in `reports/enricher_config_audit_20261015/`.
