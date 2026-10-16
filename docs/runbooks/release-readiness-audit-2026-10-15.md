@@ -1,6 +1,12 @@
 # Release readiness audit — October 15, 2026
 
-## What is ready, and what is not
+## Completed delivery — October 15
+
+Catalog **2026.10.15.235610** is published with 15,426 products; interaction DB **1.0.15** is published and pinned. Sean’s completed 38 dataset runs were reused; Codex did not rerun the corpus. App bundle `8d4bfb1d` passes clean analysis, 3,923 tests and `make verify-bundle` (full checksum plus 20 remote details). Fresh Codex testing passes **38 calls/29 records**, with all **51 magnesium capsule candidates** paged in quality order. Live testing found an older deployed public handler; it was corrected after 41 targeted tests. The comparison SQL was already current. Physical phone acceptance is unchecked. Personal/snapshot access still returns 503; WorkOS authorization remains unresolved.
+
+PR151 fixes a measured release cost: the image inventory requested 10,000 objects once, but the API returned only 1,500. The existing uploader now reads 1,000-object pages through completion. Fail-first regressions, 93 targeted tests, independent review and CI `38839654956` passed; merged as `9a16a932b`. No stage dependency changed, so no additional corpus run is required. The release reused assembly and four heavy audit receipts. Detail transfer took 3,769 seconds; the image phase took another 1,803 seconds. These are separate from pipeline/preparation time. Old-version cleanup was interrupted after publication and reported nonfatal/deferred; orphan cleanup was not attempted. Neither housekeeping completion nor instant publication is claimed. See the current LEDGER and local `reports/post_pipeline_20261015/README.md` for full receipts and limits.
+
+## Historical source qualification and readiness
 
 This audit separates release-tooling repairs from scoring completion and actual publication. The earlier infrastructure batch is integrated (pipeline PR146, app PR123). The follow-up implementation below is integrated through PR147, merge `0b42496d8`, with exact runtime `3277ef6db` passing whole-fast CI `38775770313` (all four groups and skip checks). This is release-tooling readiness, not a released catalog. No pipeline, catalog build, cloud publication or phone build was run for this follow-up. Sean owns the final necessary pipeline run. Claude's finished Step4 batch and the remaining shared identity/routing fixes passed final qualification through PR148: whole-fast CI 38792484069, all four groups; 601 focused tests; local 546 passed with 24 declared optional live-service skips. PR148 merged 8d206befa; source is qualified for the user-owned pipeline, not yet a published catalog. Companion app reference-copy and owner-generated manifest closeout passed full CI 38794457811.
 
