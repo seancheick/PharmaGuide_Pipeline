@@ -1,4 +1,12 @@
-## Current execution — post-pipeline delivery complete, October15 (Codex)
+## Current execution — enricher/config audit, October15 (Codex)
+
+PR152 candidatea65cd3b32 (runtime commits180dbd072,7ed569c21), baseline156b3ee1c. Owner: existing sync/release orchestration and scoring config/module audit metadata; matrix/glossary/callers checked. Will NOT create a scorer, registry, public field/status or clinical calibration. Full dispositions and bounded measurements are in the October15 audit entry below.
+
+Confirmed historical sugar/routing/A1 issues already fixed; live clean-label/dashboard config retained. Corrected full sync duration, piped progress, optional maintenance delay and internal module-score wording; removed only unused base_max with config1.26.1/history.46real products across all5routes retain identical scores/fullpillars/status/tier/safety.150followup and50finalrelease tests pass; local546pass/24declaredoptional skips with skipguard pass. Independent review clear after fail-first correction of misleading bundle-success logging. Rawcanaries33/33 unchanged. Automated review suggested stronger commit-path coverage: all3 actual shell paths (unchanged/success/failure) pass; test-only enhancement does not change candidate runtime. Required whole-fast CI38844550865 is pending, NOT green. Five user submission labels preserved. No pipeline/publication/cleanup executed.
+
+Current fingerprints: Clean and Enrich remain current;38Score manifests are stale against newconfig/auditmetadata. Existing published catalog2026.10.15.235610 remains qualified on its prior source/config. This numerically equivalent audit does not require immediate republication; a future regeneration incorporating these changes starts at Score only if fingerprints still agree. Sean owns any corpus run. Next: green CI, integrate approved batch, recordexactSHA, remove only integrated temporarybranch.
+
+## Previous delivery — post-pipeline complete, October15 (Codex)
 
 Sean’s38dataset Clean→Enrich→Score runs succeeded; all stage fingerprints current. No Codex corpus rerun. Owner: existing batch/preflight, promote_release_artifacts/catalog assembly, release_full/sync uploader, app importer/reference owners and mcp-public/catalog projection. Evidence: matrix/glossary/caller checks, current manifests, actual artifact and deployed-tool probes. Will NOT create scorer, clinical policy, public fields, registry or release bypass. Optional-precheck infrastructure PR150 merged1f1579c93 after6164dbbe CI38823813104/all4;46named checks and independent review pass. Commands updated; essential quick probe0.07s, aggregate --pre-check independent of --pipeline-only. Earlier failed/cancelled runs remain historical, not passes.
 

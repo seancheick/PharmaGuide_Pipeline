@@ -443,8 +443,8 @@ def test_batch_precheck_flag_preserves_full_release_path(tmp_path, pre_check):
     assert invocations[-2:] == ['snapshot', 'release --prepared-inputs']
 
 
-@pytest.mark.parametrize("commit_fails", [False, True])
-def test_release_finishes_bundle_without_running_storage_maintenance(tmp_path, commit_fails):
+@pytest.mark.parametrize("commit_outcome", ["unchanged", "success", "failure"])
+def test_release_finishes_bundle_without_running_storage_maintenance(tmp_path, commit_outcome):
     import shlex
     import subprocess
 
@@ -471,8 +471,9 @@ git() {{
   case "$*" in
     *"rev-parse --is-inside-work-tree"*) echo true ;;
     *"branch --show-current"*) echo main ;;
-    *"status --porcelain"*) {"echo modified" if commit_fails else ":"} ;;
+    *"status --porcelain"*) {":" if commit_outcome == "unchanged" else "echo modified"} ;;
     *" add "*) return 0 ;;
+    *" commit "*) return {1 if commit_outcome == "failure" else 0} ;;
     *) return 9 ;;
   esac
 }}
@@ -484,9 +485,14 @@ git() {{
     assert 'Orphan cleanup: DEFERRED' in result.stdout
     assert 'cleanup_old_versions.py' in result.stdout
     assert 'RELEASE_FINISHED' in result.stdout
-    if commit_fails:
+    if commit_outcome == 'failure':
         assert 'commit failed' in result.stdout
+        assert 'committed locally' not in result.stdout
         assert 'Bundle committed' not in result.stdout
+    elif commit_outcome == 'success':
+        assert 'Flutter bundle committed locally' in result.stdout
+    else:
+        assert 'already committed' in result.stdout
 
 
 def test_release_python_progress_is_visible_through_a_pipe():

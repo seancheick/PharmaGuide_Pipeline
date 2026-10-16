@@ -51,7 +51,7 @@ The system should recognize what is on a label, choose the right product categor
 
 The extra source fixes were measured on 415 frozen raw labels: 180 score movements, no score-status or safety-result movements. A separate 46-product final-artifact check also preserves assessment completeness and safety. All 33 raw-label canaries pass. These are development validation results, not a new published catalog or personal clinical recommendation. Remaining existing unknowns/clinical holds stay explicit.
 
-## Simple workflow for the next update
+## Completed delivery workflow (historical)
 
 1. PR148 is integrated after final CI/local qualification. Existing unresolved clinical holds remain explicit; they are not silently recalibrated.
 2. **Completed October15:** Sean ran Clean → Enrich → Score with publication disabled:38successful stage runs (37brands plus prepared Product Submissions), no failures.
@@ -99,6 +99,8 @@ PYTHON="$PG_PYTHON" bash batch_run_all_datasets.sh \
 This rebuilds the necessary stage outputs and stops before snapshot assembly or publication. Do not remove source/provenance checks or add a release flag. The new outputs still need catalog parity, release validation, published-version verification and app/Codex acceptance.
 
 ## Enricher/config follow-up audit
+
+Current source follow-up: PR152. Clean/Enrich fingerprints remain current; the config/audit-metadata change makes Score artifacts stale for this new source. Existing published artifacts remain bound to the prior qualified source. No immediate rerun or republication is required for a numerical change: the measured numerical change is zero. To regenerate metadata later, start at Score only if fingerprints remain current.
 
 Claude's historical audit was checked against current production owners, not applied as a list of assumed defects. Sugar substring matching and sports/Casein routing were already corrected before the published catalog. Generic Formulation already evaluates mapped forms without requiring a dose; missing amount remains a Dose concern. Existing regressions verify these boundaries.
 
