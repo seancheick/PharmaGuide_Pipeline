@@ -100,7 +100,7 @@ This rebuilds the necessary stage outputs and stops before snapshot assembly or 
 
 ## Enricher/config follow-up audit
 
-Current source follow-up: PR152. Clean/Enrich fingerprints remain current; the config/audit-metadata change makes Score artifacts stale for this new source. Existing published artifacts remain bound to the prior qualified source. No immediate rerun or republication is required for a numerical change: the measured numerical change is zero. To regenerate metadata later, start at Score only if fingerprints remain current.
+Current source follow-up: PR152. Clean/Enrich fingerprints remain current; the config/audit-metadata change makes Score artifacts stale for this new source. Existing published artifacts remain bound to the prior qualified source. No immediate rerun or republication is required for a numerical change: the measured numerical change is zero. To regenerate metadata later, select Score if fingerprints remain current. The batch runner separately refreshes Product Submissions through Clean/Enrich/Score if that auxiliary input is stale; this is not a whole-brand corpus rerun.
 
 Claude's historical audit was checked against current production owners, not applied as a list of assumed defects. Sugar substring matching and sports/Casein routing were already corrected before the published catalog. Generic Formulation already evaluates mapped forms without requiring a dose; missing amount remains a Dose concern. Existing regressions verify these boundaries.
 
