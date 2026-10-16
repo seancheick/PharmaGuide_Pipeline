@@ -1021,8 +1021,10 @@ def test_rebuild_dashboard_snapshot_has_no_manual_detail_artifact_copies():
         )
 
 
-@pytest.mark.parametrize("existing_count", [0, 10000, 10001])
-def test_product_images_reuse_all_remote_pages_and_upload_changes(tmp_path, existing_count):
+@pytest.mark.parametrize("existing_count,page_cap", [
+    (0, 1500), (1500, 1500), (1501, 1500), (10000, None), (10001, None),
+])
+def test_product_images_reuse_all_remote_pages_and_upload_changes(tmp_path, existing_count, page_cap):
     from sync_to_supabase import upload_product_images
 
     image_dir = tmp_path / "product_images"
@@ -1045,7 +1047,8 @@ def test_product_images_reuse_all_remote_pages_and_upload_changes(tmp_path, exis
         calls.append(offset)
         assert bucket == "product-images"
         assert prefix == ""
-        return remote[offset:offset + limit]
+        returned_limit = min(limit, page_cap) if page_cap else limit
+        return remote[offset:offset + returned_limit]
 
     def upload(client, bucket, remote_path, local_path, **kwargs):
         uploaded.append(remote_path)
