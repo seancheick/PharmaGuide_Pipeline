@@ -230,7 +230,7 @@ def test_final_score_assembles_dimensions_plus_manufacturer_adjustments() -> Non
     # raw_score_100 is rounded to 1dp in the assembler; allow that rounding.
     assert breakdown["raw_score_100"] == pytest.approx(raw_score, abs=0.05)
     assert breakdown["score_100"] == pytest.approx(1.0 * breakdown["raw_score_100"], abs=0.05)
-    assert breakdown["metadata"]["score_policy"]["method"] == "rubric_raw_is_production_score"
+    assert breakdown["metadata"]["score_policy"]["method"] == "module_rubric_raw_audit"
     assert breakdown["metadata"]["score_policy"]["audit_affine_v3_compare"]["intercept"] == 25.0
     assert breakdown["metadata"]["score_policy"]["audit_affine_v3_compare"]["slope"] == 0.75
     assert breakdown["phase"] == "P9_rubric_is_score"
@@ -328,7 +328,7 @@ def test_rubric_score_policy_preserves_retired_affine_for_audit() -> None:
     assert raw is not None
     assert production_score == pytest.approx(round(1.0 * raw, 1), rel=1e-6)
     assert breakdown["metadata"]["raw_score_100_pre_score_policy"] == raw
-    assert breakdown["metadata"]["score_policy"]["method"] == "rubric_raw_is_production_score"
+    assert breakdown["metadata"]["score_policy"]["method"] == "module_rubric_raw_audit"
     assert production_score == raw  # production score IS the rubric raw (no affine lift)
 
 
@@ -548,3 +548,15 @@ def test_non_botanical_none_dose_is_not_floored() -> None:
 
     assert breakdown["metadata"]["botanical_dose_deferred"] is False
     assert breakdown["metadata"]["botanical_raw_floor_applied"] is False
+
+
+def test_module_audit_policy_never_claims_to_be_the_public_score():
+    from scoring_v4.scored_artifact import build_scored_artifact
+
+    artifact = build_scored_artifact(_base_product())
+    policy = artifact["_v4_module_breakdown"]["metadata"]["score_policy"]
+    assert policy["method"] == "module_rubric_raw_audit"
+    assert policy["raw_score_100"] == artifact["raw_score_v4_100"]
+    assert artifact["quality_score_v4_100"] == round(sum(
+        p["score"] for p in artifact["quality_pillars_v4"].values()
+    ), 1)

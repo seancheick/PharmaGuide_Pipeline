@@ -128,7 +128,7 @@ def test_score_100_policy_metadata_present() -> None:
 
     bd = score_omega(_premium_omega()).to_breakdown()
     cal = bd["metadata"]["score_policy"]
-    assert cal["method"] == "rubric_raw_is_production_score"
+    assert cal["method"] == "module_rubric_raw_audit"
     assert cal["audit_affine_v3_compare"]["intercept"] == 25.0
     assert cal["audit_affine_v3_compare"]["slope"] == 0.75
 

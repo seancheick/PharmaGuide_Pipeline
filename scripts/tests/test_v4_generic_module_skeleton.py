@@ -180,7 +180,7 @@ def test_score_100_is_populated_with_raw_rubric_score() -> None:
     assert 0.0 <= breakdown["score_100"] <= 100.0
     assert 0.0 <= breakdown["raw_score_100"] <= 100.0
     assert breakdown["metadata"]["phase"] == "P9_rubric_is_score"
-    assert breakdown["metadata"]["score_policy"]["method"] == "rubric_raw_is_production_score"
+    assert breakdown["metadata"]["score_policy"]["method"] == "module_rubric_raw_audit"
 
 
 def test_phase_marker_in_breakdown() -> None:

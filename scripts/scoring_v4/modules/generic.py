@@ -408,12 +408,9 @@ def _assemble_score(result: GenericModuleResult) -> None:
     if result.botanical_dose_deferred and raw_score_100 < BOTANICAL_RAW_FLOOR:
         raw_score_100 = BOTANICAL_RAW_FLOOR
         botanical_floor_applied = True
-    # Phase 9: the PRODUCTION score is the rubric raw score. The affine (25+0.75)
-    # was a cosmetic stretch that split raw from displayed and over-shot/clamped at
-    # 100 — it is retained ONLY as an audit / v3-comparison value, never the
-    # user-facing score. With score_100 == raw, the verdict 40-line is one
-    # consistent threshold (no raw-vs-calibrated gap) and 100 is reachable only by a
-    # product that maxes every dimension + bonus with zero penalties (true ceiling).
+    # These are module-rubric audit values. The public six-pillar assembler
+    # owns quality_score_v4_100; neither this subtotal nor the retired affine
+    # comparison is the shipped score. Keep module arithmetic unchanged.
     affine_audit_v3 = max(
         0.0,
         min(100.0, RETIRED_AFFINE_INTERCEPT + RETIRED_AFFINE_SLOPE * raw_score_100),
@@ -441,7 +438,7 @@ def _assemble_score(result: GenericModuleResult) -> None:
         "botanical_dose_deferred": result.botanical_dose_deferred,
         "botanical_raw_floor_applied": botanical_floor_applied,
         "score_policy": {
-            "method": "rubric_raw_is_production_score",
+            "method": "module_rubric_raw_audit",
             "raw_score_100": result.raw_score_100,
             "score_100": result.score_100,
             # Audit-only: the retired P1.5 affine, kept for v3-comparison reports.
