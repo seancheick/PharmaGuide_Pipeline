@@ -974,14 +974,19 @@ def upload_product_images(
     # Discover existing remote images to skip re-uploads
     existing_sizes = {}
     try:
-        page = list_fn(client, PRODUCT_IMAGE_BUCKET, "", limit=10000, offset=0)
-        if page:
-            for item in page:
+        page_size = 1000
+        offset = 0
+        while True:
+            page = list_fn(client, PRODUCT_IMAGE_BUCKET, "", limit=page_size, offset=offset)
+            for item in page or []:
                 name = item.get("name", "")
                 metadata = item.get("metadata", {}) or {}
                 size = metadata.get("size") or metadata.get("contentLength") or 0
                 if name:
                     existing_sizes[name] = int(size) if size else 0
+            if not page or len(page) < page_size:
+                break
+            offset += len(page)
     except Exception:
         pass  # Bucket may not exist yet — upload all
 
