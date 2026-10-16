@@ -64,9 +64,9 @@ Do not delete validation because a run failed late. Fix the ordering, preserve m
 
 ## WorkOS: separate external dependency
 
-The authorized staging-only request was sent October 15 in the existing private support thread. No new support email was found in the latest October 15 check. Identifiers and correspondence remain outside this public repository. Production personal/snapshot access remains disabled.
+The authorized staging retest and sanitized support follow-up were completed October 15. Explicit-resource binding now passes the manual-client staging cases. Two authorization blockers remain: a resource-less grant can still obtain a resource through refresh, and the observed reusable/mutable consent claims do not identify one immutable authorization attempt for an exact snapshot. WorkOS must provide a supported enforcement and binding contract; production personal access and snapshot uploads remain disabled. Both production containment probes still returned 503 after public catalog publication. No private environment/client identifiers are published here.
 
-Next requires WorkOS confirming staging resource-binding activation and the behavior of missing-resource grants, then new-grant/refresh/concurrency tests. Exact snapshot-consent authorization is separately unresolved; neither a token audience nor reusable consent ID proves an immutable authorization attempt. Public catalog work does not depend on enabling personal access, and this release-tooling batch does not claim that authorization is fixed.
+Public catalog search works independently. No WorkOS runtime or personal-account end-to-end success is claimed. The next step is the provider’s technical resolution, then fresh grant/refresh/concurrency tests before any production enablement.
 
 ## Routine preparation correction — October 15
 
@@ -83,9 +83,9 @@ preparation option. Final catalog/artifact checks still run after outputs exist;
 not guarantee that a future build, network write or catalog will succeed. No scoring policy,
 clinical data, stage output or publication gate changes in this correction.
 
-## Exact user-owned pipeline command
+## Historical user-owned pipeline command (completed)
 
-The final read-only prerequisites passed on pipeline main `6259c5f34` and app main `5652e7d5`: clean repository bases, current manufacturer deductions, schemas/tools, remote read access and disk. No artifact was rebuilt or published. The subsequent closeout changes documentation only. From the integrated main checkout, run:
+The final read-only prerequisites passed on pipeline main `6259c5f34` and app main `5652e7d5`: clean repository bases, current manufacturer deductions, schemas/tools, remote read access and disk. No artifact was rebuilt or published. The subsequent closeout changes documentation only. Sean completed the following pipeline-only command. It is retained as a reference; do not rerun it for this delivered catalog:
 
 ```bash
 cd /Users/seancheick/Downloads/dsld_clean
