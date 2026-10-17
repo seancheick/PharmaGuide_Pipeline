@@ -410,9 +410,17 @@ def _score_v4_core(enriched_product: Dict[str, Any]) -> Dict[str, Any]:
     scorer = scorers.get(module)
     if scorer is None:
         raise RuntimeError(f"no v4 scorer registered for module route {module!r}")
-    with dose_safety_scope(dose_safety), safety_gate_scope(safety):
+    # Quality Dose uses a serving; the safety gate above retains maximum use.
+    from scoring_input_contract import declared_serving_dose_input
+    quality_dose_safety = evaluate_dose_safety(
+        declared_serving_dose_input(enriched_product),
+        threshold=float(dose_policy["ul_pct_threshold"]),
+        per_flag_penalty=float(dose_policy["per_flag_penalty"]),
+        cap=float(dose_policy["cap"]),
+    )
+    with dose_safety_scope(quality_dose_safety), safety_gate_scope(safety):
         module_result = scorer(enriched_product)
-    apply_universal_dose_safety(module_result, dose_safety)
+    apply_universal_dose_safety(module_result, quality_dose_safety)
     if apply_penalty_registry(module_result):
         _assemble_score(module_result)
 

@@ -318,7 +318,7 @@ def _over_limit_dose_reason(dim: Dict[str, Any]) -> Optional[str]:
             return unresolved[:1].upper() + unresolved[1:] + "."
         return None
     return (
-        "At the label's maximum daily use, one or more nutrients exceed "
+        "At the declared serving, one or more nutrients exceed "
         "established safety limits."
     )
 

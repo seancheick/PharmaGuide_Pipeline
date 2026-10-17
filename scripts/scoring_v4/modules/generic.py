@@ -58,6 +58,8 @@ for test fixtures + direct callers that bypass the gate.
 
 from __future__ import annotations
 
+from scoring_v4.modules.generic_helpers import score_declared_serving_dose
+
 from dataclasses import dataclass, field
 from typing import Any, Dict, Optional
 
@@ -283,7 +285,7 @@ def score_generic(product: Any) -> GenericModuleResult:
     # audit / score-delta / Flutter tooling not to mistake the proxy band
     # for final NIH/NHANES supplemental-window math.
     with dose_reference_scope(archetype_dose_reference("generic", formulation_dim.metadata)):
-        dose_payload = score_dose(product)
+        dose_payload = score_declared_serving_dose(product, score_dose)
     dose_dim = result.dimensions["dose"]
     dose_dim.score = dose_payload["score"]
     dose_dim.components = dose_payload["components"]
