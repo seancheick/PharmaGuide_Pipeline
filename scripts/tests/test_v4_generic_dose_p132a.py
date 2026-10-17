@@ -1525,12 +1525,15 @@ def test_declared_structural_purpose_keeps_product_total_fallback(lent, disclose
         total["reason"] = "identity_bearing_blend_header_mass_from_nested_child"
     if not disclosed:
         total["quantity"] = total["dose_value"] = None
-    score, unknown, count, clinical, specialized, fallbacks = _score_declared_purpose_window(product)
+    score, unknown, count, clinical, specialized, fallbacks, hidden = _score_declared_purpose_window(product)
     assert count == 1
-    assert score == (NEUTRAL if expected else 0)
+    # Dose V4.1 section 2.3: a disclosed total without a benchmark and a hidden
+    # (lent or undisclosed) amount both take the neutral, recorded apart.
+    assert score == NEUTRAL
     assert unknown == (["enzyme_blend"] if expected else [])
+    assert hidden == ([] if expected else ["enzyme_blend"])
     assert not clinical and not specialized
-    assert fallbacks == ([NEUTRAL] if expected else [])
+    assert fallbacks == [NEUTRAL]
 
 
 def test_mixed_preparation_and_individual_fallbacks_keep_each_purpose_vote():

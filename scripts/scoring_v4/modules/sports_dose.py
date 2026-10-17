@@ -100,6 +100,17 @@ def score_dose(product: Dict[str, Any]) -> Dict[str, Any]:
         not_evaluable = unknown_daily[0]["uncertainty"]
     if not_evaluable:
         metadata["not_evaluable_reason"] = not_evaluable
+    if not_evaluable == "opaque_primary_sports_blend" and sports_identity_rows(product):
+        # Dose V4.1 section 2.3: named sports actives whose amounts the label
+        # hides take the shared neutral; Transparency B5 keeps the opacity.
+        # With no identified active there is nothing to assess (strict hold).
+        from scoring_v4.modules.generic_helpers import archetype_dose_reference, dose_reference_scope, unbenchmarked_dose_credit
+        from scoring_v4.modules.sports_helpers import sports_subtype
+
+        with dose_reference_scope(archetype_dose_reference("sports", module_metadata={"sports_subtype": sports_subtype(product)})):
+            components["sports_primary_active_dose"] = round(unbenchmarked_dose_credit(), 4)
+        metadata["dose_basis"] = "hidden_amount_neutral"
+        score = _clamp(0.0, DIMENSION_CAP, sum(components.values()))
 
     return {
         "score": round(score, 4),

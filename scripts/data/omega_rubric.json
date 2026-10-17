@@ -127,6 +127,23 @@
       }
     ],
     "epa_dha_band_cap": 20,
+    "epa_dha_band_semantics": {
+      "review_date": "2026-10-17",
+      "reference_type": "nutritional_reference",
+      "scope": "child_or_baby_omega",
+      "preparation": "epa_plus_dha",
+      "purpose": "general_nutrition",
+      "population": "pediatric",
+      "exposure_basis": "minimum_directed_daily_use",
+      "units": "mg",
+      "curve": "interpolated_epa_dha_bands",
+      "source_ids": [
+        "https://www.efsa.europa.eu/en/efsajournal/pub/1461"
+      ],
+      "rationale": "Child/baby products keep their existing EPA+DHA bands (plan section 3.1: pediatric standards keep their own references); the bands' own _source notes cite each anchor.",
+      "owner": "scripts/scoring_v4/modules/omega_dose.py::score_dose",
+      "approval_status": "current_production_omega_rubric_2.2.0"
+    },
     "adequacy_references": {
         "_doc": "Dose V4.1 §3.1 (Sean, 2026-10-17): EPA+DHA adequacy is 20 x min(amount at minimum directed daily use / reference, 1). The purpose comes from evidence_resolver.resolve_omega_evidence_standard: an explicit adult triglyceride-lowering purpose uses its own reference; a prenatal product uses the prenatal DHA reference (scoring_input_contract.PRENATAL_DHA_TARGET_MG, DHA only; combined EPA+DHA cannot stand in for undisclosed DHA); child/baby products keep epa_dha_bands. Above a reference earns no extra credit; 4 g/day keeps only the prescription context flag.",
         "ordinary_adult": {

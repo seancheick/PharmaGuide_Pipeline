@@ -267,7 +267,7 @@ def _undisclosed_component_dose_reason(dim: Dict[str, Any]) -> Optional[str]:
         )
     if metadata.get("not_evaluable_reason") == "opaque_primary_sports_blend":
         return ("The main ingredient's amount is hidden in a proprietary blend, so its dose "
-                "cannot be assessed or credited.")
+                "cannot be assessed; Dose takes the neutral assessment value.")
     return None
 
 

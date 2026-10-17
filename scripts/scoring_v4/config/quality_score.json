@@ -4,7 +4,7 @@
     "version": "1.28.0-dose-v41",
     "schema_version": "1.0.0",
     "last_updated": "2026-10-17",
-    "description": "PharmaGuide public six-pillar Quality Score (decision score) in the 20/20/20/15/15/10 frame. Pillars are category-aware purpose-fit adapters, NOT raw linear remaps: formulation/dose/evidence normalize against the engine's reviewed structural ceiling; verification saturates hard third-party signals with a fail-open neutral baseline and recognizes verified brand/facility-scoped certs as a small non-stacking signal; safety_hygiene is product-level. Rubric proxies are removed: ingredient-count breadth (including immune-support ingredient counts), focus bonuses/floors, generic enzyme recognition, blanket gummy format penalties, organic/Non-GMO/natural-source and marine-sustainability points, the omega EPA:DHA ratio bonus, the generic Dose premium-form count (1.21.0), astaxanthin/CoQ10 public caps, ingredient-presence Evidence floors, and certification-derived omega Formulation/Transparency floors. Fish/krill/algal oil carrier mass never becomes EPA+DHA dose; an omega-3 row printed as EPA and/or DHA owns that EPA/DHA amount (1.10.1), and omega concentration may use the declared Total Fat plus its FDA rounding half-increment when no oil mass is printed (1.10.1). Dose and Evidence never manufacture Formulation credit. Only transparency remains a faithful linear source-dimension map. raw_score_v4_100 is a module-rubric audit subtotal, not the public six-pillar score. quality_score_status controls whether any public quality score may be shown. Audited GMP facility credit comes only from a sourced link to an audited GMP facility registry row, and mid-tier reputation that restates verified certifications or audited GMP is not counted twice (1.9.0). Quality tiers are independent of safety; quality assembly never writes POOR or converts quality thresholds into SAFE. POOR is a read-only old-catalog compatibility value (October 1, 2026). Omega label ownership is enforced in 1.10.0. Sugar and sweetener charges come only from the shared B1 dietary-sugar and harmful-additive owners: the sports-protein and fiber adapters no longer add their own, and their former clean-daily-use points became a fixed route_base (1.21.4), retired in 1.26.0. Probiotic Evidence uses shared evidence-family certainty (10), identity/purpose applicability (6), and independent same-condition replication (0/2/4); CFU and studied-amount adequacy belong exclusively to Dose (1.22.0). v4 is the production catalog scoring contract as of export schema 2.2.0. Delivery credit uses the shared source-supported, form-aware eligibility decision. Intrinsic chemistry and a technology already represented by the resolved form cannot earn a second delivery bonus; Verification policy is unchanged. 1.26.0 (V4.1 Step 4): the formula-checks pillar owns additive and sugar findings within one 10-point budget; count, disclosure, focus, route-base and duplicate branded credits are retired; an unrated form and an unbenchmarked amount each take one shared neutral; probiotic Formulation is canonical form quality and probiotic Dose is measured adequacy; a label limitation stays scored while PharmaGuide's own unfinished work marks the assessment partial. 1.27.0: Sean approved Dose quality per one declared Facts-panel serving across all routes; daily maximum safety findings remain separate and unchanged. Formulation, Evidence, Verification and personal intake policies are unchanged. 1.28.0 (Dose V4.1, Sean 2026-10-17): Dose adequacy uses the minimum directed daily use and safety the maximum on every route; the per-nutrient UL bands and B7 subtraction are replaced by one product-level Dose ceiling (dose_safety_ceiling). Ordinary-adult magnesium (84 mg) and calcium (260 mg) contribution-policy targets and the potassium completed neutral are in dose_magnitudes.generic (Dose V4.1 section 3.1). Sports adequacy plateaus above former studied ranges; total daily caffeine feeds the product-level ceiling (dose_safety_ceiling.caffeine); sports co-primaries and probiotic strains average, hidden or unbenchmarked strains taking the shared neutral; evidence certainty no longer caps ATP, betaine or taurine Dose.",
+    "description": "PharmaGuide public six-pillar Quality Score (decision score) in the 20/20/20/15/15/10 frame. Pillars are category-aware purpose-fit adapters, NOT raw linear remaps: formulation/dose/evidence normalize against the engine's reviewed structural ceiling; verification saturates hard third-party signals with a fail-open neutral baseline and recognizes verified brand/facility-scoped certs as a small non-stacking signal; safety_hygiene is product-level. Rubric proxies are removed: ingredient-count breadth (including immune-support ingredient counts), focus bonuses/floors, generic enzyme recognition, blanket gummy format penalties, organic/Non-GMO/natural-source and marine-sustainability points, the omega EPA:DHA ratio bonus, the generic Dose premium-form count (1.21.0), astaxanthin/CoQ10 public caps, ingredient-presence Evidence floors, and certification-derived omega Formulation/Transparency floors. Fish/krill/algal oil carrier mass never becomes EPA+DHA dose; an omega-3 row printed as EPA and/or DHA owns that EPA/DHA amount (1.10.1), and omega concentration may use the declared Total Fat plus its FDA rounding half-increment when no oil mass is printed (1.10.1). Dose and Evidence never manufacture Formulation credit. Only transparency remains a faithful linear source-dimension map. raw_score_v4_100 is a module-rubric audit subtotal, not the public six-pillar score. quality_score_status controls whether any public quality score may be shown. Audited GMP facility credit comes only from a sourced link to an audited GMP facility registry row, and mid-tier reputation that restates verified certifications or audited GMP is not counted twice (1.9.0). Quality tiers are independent of safety; quality assembly never writes POOR or converts quality thresholds into SAFE. POOR is a read-only old-catalog compatibility value (October 1, 2026). Omega label ownership is enforced in 1.10.0. Sugar and sweetener charges come only from the shared B1 dietary-sugar and harmful-additive owners: the sports-protein and fiber adapters no longer add their own, and their former clean-daily-use points became a fixed route_base (1.21.4), retired in 1.26.0. Probiotic Evidence uses shared evidence-family certainty (10), identity/purpose applicability (6), and independent same-condition replication (0/2/4); CFU and studied-amount adequacy belong exclusively to Dose (1.22.0). v4 is the production catalog scoring contract as of export schema 2.2.0. Delivery credit uses the shared source-supported, form-aware eligibility decision. Intrinsic chemistry and a technology already represented by the resolved form cannot earn a second delivery bonus; Verification policy is unchanged. 1.26.0 (V4.1 Step 4): the formula-checks pillar owns additive and sugar findings within one 10-point budget; count, disclosure, focus, route-base and duplicate branded credits are retired; an unrated form and an unbenchmarked amount each take one shared neutral; probiotic Formulation is canonical form quality and probiotic Dose is measured adequacy; a label limitation stays scored while PharmaGuide's own unfinished work marks the assessment partial. 1.27.0: Sean approved Dose quality per one declared Facts-panel serving across all routes; daily maximum safety findings remain separate and unchanged. Formulation, Evidence, Verification and personal intake policies are unchanged. 1.28.0 (Dose V4.1, Sean 2026-10-17): Dose adequacy uses the minimum directed daily use and safety the maximum on every route; the per-nutrient UL bands and B7 subtraction are replaced by one product-level Dose ceiling (dose_safety_ceiling). Ordinary-adult magnesium (84 mg) and calcium (260 mg) contribution-policy targets and the potassium completed neutral are in dose_magnitudes.generic (Dose V4.1 section 3.1). Sports adequacy plateaus above former studied ranges; total daily caffeine feeds the product-level ceiling (dose_safety_ceiling.caffeine); sports co-primaries and probiotic strains average, hidden or unbenchmarked strains taking the shared neutral; evidence certainty no longer caps ATP, betaine or taurine Dose. Hidden amounts and completed no-reference conclusions take the shared Dose neutral on every route (section 2.3); config-owned Dose anchors carry reference semantics validated by schemas/dose_reference_semantics.schema.json.",
     "phase": "scoring_fairness_recalibration"
   },
   "pillars": {
@@ -117,6 +117,24 @@
   },
   "dose_safety_ceiling": {
     "_doc": "Dose V4.1 \u00a72.4 (Sean D1, 2026-10-17): one product-level ceiling on the public Dose pillar, applied once after route aggregation and normalization, from the strongest confirmed exceedance at maximum directed daily use (rda_ul_data.safety_flags via scoring_v4.dose_safety). Exactly exceeds_above_pct is not an exceedance; above it and below zero_at_pct Dose is at most partial_ceiling_public; at or above zero_at_pct Dose is 0. A ceiling never raises a lower score; material_but_unresolved sets none. These bands are PharmaGuide scoring policy, not medically established toxicity grades. Replaces the per-nutrient UL bands and the B7 subtraction (-2/flag, cap 3).",
+    "reference_semantics": {
+      "review_date": "2026-10-17",
+      "reference_type": "safety_only_reference",
+      "scope": "all_routes_confirmed_ul_exceedance",
+      "preparation": "nutrient_as_assessed_by_rda_ul_data",
+      "purpose": "dose_safety_screen",
+      "population": "label_population_lowest_established_ul",
+      "exposure_basis": "maximum_directed_daily_use",
+      "units": "percent_of_ul",
+      "curve": "dose_safety_ceiling_bands",
+      "source_ids": [
+        "https://ods.od.nih.gov/factsheets/Calcium-HealthProfessional/",
+        "https://ods.od.nih.gov/factsheets/Magnesium-HealthProfessional/"
+      ],
+      "rationale": "Sean D1/D2 (2026-10-17): a confirmed exceedance of the lowest established UL for the label population caps public Dose once; the 100/150% bands and 10/0 points are PharmaGuide scoring policy, not toxicity grades.",
+      "owner": "scripts/scoring_v4/dose_safety.py::DoseSafetyResult.dose_ceiling",
+      "approval_status": "approved_sean_d1_d2_2026-10-17"
+    },
     "exceeds_above_pct": 100.0,
     "zero_at_pct": 150.0,
     "partial_ceiling_public": 10.0,
@@ -148,6 +166,61 @@
       "window_overdose_credit": 11.0,
       "window_high_source_pct": 20.0,
       "window_full_adequacy_pct": 100.0,
+      "reference_semantics": {
+        "_doc": "Dose V4.1 section 2.2: meaning of the generic window curve, one record per reference kind (generic_dose._adequacy_reference_kind).",
+        "dri": {
+          "review_date": "2026-10-17",
+          "reference_type": "nutritional_reference",
+          "scope": "official_dri_vitamin_or_trace_mineral",
+          "preparation": "nutrient_as_declared",
+          "purpose": "nutrient_adequacy",
+          "population": "general_adult",
+          "exposure_basis": "minimum_directed_daily_use",
+          "units": "percent_of_rda_or_ai",
+          "curve": "half_credit_at_fda_high_source_20pct_then_linear_to_full_at_100pct",
+          "source_ids": [
+            "https://www.ecfr.gov/current/title-21/chapter-I/subchapter-B/part-101/subpart-D/section-101.54",
+            "https://www.fda.gov/food/nutrition-facts-label/daily-value-nutrition-and-supplement-facts-labels"
+          ],
+          "rationale": "20% of the reference is FDA's high/excellent-source threshold (21 CFR 101.54(b)); full credit at the requirement itself. Higher-sourced adult RDA/AI (adequacy_basis).",
+          "owner": "scripts/scoring_v4/modules/generic_dose.py::_band_credit",
+          "approval_status": "current_production_quality_score_1.4.0"
+        },
+        "clinical_anchor": {
+          "review_date": "2026-10-17",
+          "reference_type": "supported_minimum",
+          "scope": "no_dri_reviewed_clinical_anchor",
+          "preparation": "reviewed_anchor_preparation",
+          "purpose": "nutrient_or_active_adequacy",
+          "population": "general_adult",
+          "exposure_basis": "minimum_directed_daily_use",
+          "units": "percent_of_anchor",
+          "curve": "proportional_then_plateau",
+          "source_ids": [
+            "https://github.com/seancheick/PharmaGuide_Pipeline/tree/main/scripts/audits/clinical_anchor_verification_2026_09_15"
+          ],
+          "rationale": "Lowest clinically effective daily dose per reviewed anchor (content-verified against PubMed 2026-09-15); per-anchor PMIDs live in rda_optimal_uls.json. Proportional to the anchor, no credit above it.",
+          "owner": "scripts/scoring_v4/modules/generic_dose.py::_band_credit",
+          "approval_status": "current_production_quality_score_1.5.1"
+        },
+        "legacy": {
+          "review_date": "2026-10-17",
+          "reference_type": "nutritional_reference",
+          "scope": "macrominerals_and_unreviewed_references",
+          "preparation": "nutrient_as_declared",
+          "purpose": "nutrient_adequacy",
+          "population": "general_adult",
+          "exposure_basis": "minimum_directed_daily_use",
+          "units": "percent_of_reference",
+          "curve": "proportional_to_25pct_then_plateau",
+          "source_ids": [
+            "https://www.ecfr.gov/current/title-21/chapter-I/subchapter-B/part-101/subpart-D/section-101.54"
+          ],
+          "rationale": "Interim proxy until a dietary-intake table exists: full credit at 25% of the reference. Magnesium and calcium now use their contribution-policy targets instead.",
+          "owner": "scripts/scoring_v4/modules/generic_dose.py::_band_credit",
+          "approval_status": "current_production_interim_until_dietary_intake_table"
+        }
+      },
       "contribution_policy_targets": {
         "_doc": "Dose V4.1 §3.1 (Sean, 2026-10-17): ordinary-adult contribution-policy targets, scored 20 x min(elemental amount at minimum directed daily use / target, 1) on the public scale. Prenatal, pediatric, panel and clinical-purpose standards keep their own references. Each target must stay below its adult supplemental UL.",
         "magnesium": {
@@ -213,6 +286,26 @@
       "cap_prenatal_complement_support": 1.0,
       "prenatal_dha_full_mg": 200.0,
       "prenatal_dha_partial_mg": 100.0,
+      "reference_semantics": {
+        "_doc": "Dose V4.1 section 2.2: meaning of the prenatal DHA complement anchor.",
+        "prenatal_dha": {
+          "review_date": "2026-10-17",
+          "reference_type": "nutritional_reference",
+          "scope": "prenatal_multi_dha_complement",
+          "preparation": "dha",
+          "purpose": "pregnancy_dha_intake",
+          "population": "pregnancy_lactation",
+          "exposure_basis": "minimum_directed_daily_use",
+          "units": "mg",
+          "curve": "partial_at_100_mg_full_at_200_mg",
+          "source_ids": [
+            "PMID:18184094"
+          ],
+          "rationale": "Consensus intake recommendation of at least 200 mg DHA/day in pregnancy and lactation (the omega purpose owner's prenatal_dha_intake_authority record). Combined EPA+DHA cannot substitute for undisclosed DHA.",
+          "owner": "scripts/scoring_v4/modules/multi_prenatal_dose.py::_prenatal_complement_scores",
+          "approval_status": "current_production_quality_score_1.26.0"
+        }
+      },
       "targeted_multi_selected_anchors": 5,
       "critical_min_pct_rda": { "folate": 50.0, "iron": 50.0, "iodine": 50.0, "vitamin_d": 50.0, "vitamin_b12": 50.0, "choline": 25.0 }
     },

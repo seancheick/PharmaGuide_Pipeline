@@ -1,0 +1,26 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Dose reference semantics (Dose V4.1 section 2.2)",
+  "description": "One shared schema for the meaning of every active Dose numerical anchor, carried on the anchor's existing record in its owner config. Validated by scripts/tests/test_dose_reference_semantics.py.",
+  "type": "object",
+  "required": ["reference_type", "scope", "preparation", "purpose", "population", "exposure_basis",
+               "units", "curve", "source_ids", "rationale", "owner", "review_date", "approval_status"],
+  "properties": {
+    "reference_type": {"enum": ["nutritional_reference", "supplement_contribution_policy", "supported_minimum",
+                                "bounded_window", "discrete_studied_regimen", "null_regimen",
+                                "safety_only_reference", "no_benchmark", "unfinished_review"]},
+    "scope": {"type": "string", "minLength": 3},
+    "preparation": {"type": "string", "minLength": 2},
+    "purpose": {"type": "string", "minLength": 3},
+    "population": {"type": "string", "minLength": 3},
+    "exposure_basis": {"enum": ["minimum_directed_daily_use", "maximum_directed_daily_use", "per_use"]},
+    "units": {"type": "string", "minLength": 1},
+    "curve": {"type": "string", "minLength": 3},
+    "source_ids": {"type": "array", "minItems": 1,
+                   "items": {"type": "string", "pattern": "^(https://|PMID:[0-9]+$|21 CFR )"}},
+    "rationale": {"type": "string", "minLength": 20},
+    "owner": {"type": "string", "pattern": "^scripts/.+::.+"},
+    "review_date": {"type": "string", "pattern": "^20[0-9]{2}-[01][0-9]-[0-3][0-9]$"},
+    "approval_status": {"type": "string", "pattern": "^(approved_|approved_direction_|current_production_)"}
+  }
+}

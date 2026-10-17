@@ -67,7 +67,7 @@ ORIGINAL = {
 def test_config_matches_pre_hoist_values():
     for mod, vals in ORIGINAL.items():
         values = {k: v for k, v in DM[mod].items()
-                  if not k.startswith("_") and k != "contribution_policy_targets"}  # _doc strings are not magnitudes
+                  if not k.startswith("_") and k not in {"contribution_policy_targets", "reference_semantics"}}  # _doc strings are not magnitudes
         assert values == vals, f"dose_magnitudes.{mod} drifted from pinned values"
 
 
@@ -79,7 +79,7 @@ def test_contribution_policy_targets_are_pinned():
 
 
 def test_dose_safety_ceiling_has_one_config_owner():
-    assert {k: v for k, v in DOSE_CEILING.items() if not k.startswith("_") and k != "caffeine"} == {
+    assert {k: v for k, v in DOSE_CEILING.items() if not k.startswith("_") and k not in {"caffeine", "reference_semantics"}} == {
         "exceeds_above_pct": 100.0,
         "zero_at_pct": 150.0,
         "partial_ceiling_public": 10.0,

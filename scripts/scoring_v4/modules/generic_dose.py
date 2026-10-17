@@ -94,6 +94,7 @@ from scoring_input_contract import (
     source_linked_rows,
 )
 from scoring_v4.dose_safety import resolve_dose_safety
+from scoring_v4.exposure import quantity_is_unresolved
 from dose_assessment import positive_aggregate_clinical_benchmark, positive_clinical_benchmark
 from scoring_v4.modules.immune_support import score_immune_purpose_dose, score_immune_support_dose
 from scoring_v4.modules.joint_support import score_joint_purpose_dose, score_joint_support_dose
@@ -295,7 +296,7 @@ def _score_declared_purpose_window(
         and _norm_text(row.get("canonical_id")) not in aggregate_members
     ]
     if not purpose_rows and aggregate is None:
-        return None, [], 0, [], [], []
+        return None, [], 0, [], [], [], []
 
     # A physical purpose may have a compatibility projection of the same
     # source row.  Count it once by canonical identity, falling back to source.
@@ -313,6 +314,7 @@ def _score_declared_purpose_window(
     ]
     contributions: List[float] = []
     unbenchmarked: List[str] = []
+    hidden: List[str] = []
     fallback_values: List[float] = []
     clinical_assessments: List[Dict[str, Any]] = []
     specialized_assessments: List[Dict[str, Any]] = []
@@ -390,7 +392,8 @@ def _score_declared_purpose_window(
             contributions.append(unbenchmarked_dose_credit())
             fallback_values.append(unbenchmarked_dose_credit())
             unbenchmarked.append(key)
-        elif not is_lent_blend_mass(purpose):
+            continue
+        if not is_lent_blend_mass(purpose):
             # A disclosed whole preparation remains assessable at the existing
             # product-evidence fallback. A borrowed child amount cannot own
             # that preparation's contribution in the purpose average.
@@ -399,9 +402,18 @@ def _score_declared_purpose_window(
                 contributions.append(credit)
                 fallback_values.append(credit)
                 unbenchmarked.append(key)
+                continue
+        if not quantity_is_unresolved(purpose):
+            # Dose V4.1 section 2.3: a declared purpose whose amount the label
+            # hides keeps its one vote at the shared neutral; Transparency
+            # keeps the disclosure consequence. A pipeline-lost amount
+            # (unresolved quantity) keeps its strict readiness hold instead.
+            contributions.append(unbenchmarked_dose_credit())
+            fallback_values.append(unbenchmarked_dose_credit())
+            hidden.append(key)
 
     if not contributions:
-        return 0.0, sorted(unbenchmarked), len(purposes) + int(aggregate is not None), clinical_assessments, specialized_assessments, fallback_values
+        return 0.0, sorted(unbenchmarked), len(purposes) + int(aggregate is not None), clinical_assessments, specialized_assessments, fallback_values, sorted(hidden)
     return (
         round(_clamp(0.0, CAP_SUPPLEMENTAL_WINDOW, sum(contributions) / len(contributions)), 4),
         sorted(unbenchmarked),
@@ -409,6 +421,7 @@ def _score_declared_purpose_window(
         clinical_assessments,
         specialized_assessments,
         fallback_values,
+        sorted(hidden),
     )
 
 
@@ -555,6 +568,7 @@ def score_dose(product: Dict[str, Any]) -> Dict[str, Any]:
         clinical_benchmarks,
         specialized_purpose_assessments,
         purpose_fallback_values,
+        hidden_purposes,
     ) = (
         _score_declared_purpose_window(product)
     )
@@ -747,6 +761,8 @@ def score_dose(product: Dict[str, Any]) -> Dict[str, Any]:
         metadata["unbenchmarked_purpose_ingredients"] = unbenchmarked_purposes
         metadata["positive_clinical_benchmark_assessments"] = clinical_benchmarks
         metadata["specialized_purpose_assessments"] = specialized_purpose_assessments
+        if hidden_purposes:
+            metadata["hidden_amount_purpose_ingredients"] = hidden_purposes
         aggregate_assessment = next((
             assessment for assessment in clinical_benchmarks
             if assessment.get("assessment_kind") == "aggregate_formula"

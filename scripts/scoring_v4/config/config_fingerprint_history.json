@@ -15,7 +15,7 @@
    "2.0.1-disclosure-owned-transparency": "72ede2446f4eec12",
    "2.1.0-iqm-form-quality": "615b33edc61b2036",
    "2.2.0-verification-owned-oxidation": "bc61a6a15bf1d9bb",
-   "2.3.0-dose-v41-references": "0edd707bcd0c1216"
+   "2.3.0-dose-v41-references": "358128decb31e0be"
   },
   "quality_score": {
    "1.0.4-sports-subtypes": "4e040a97fe26f559",
@@ -70,7 +70,7 @@
    "1.26.0-v41-step4-ownership": "1de31d82d3e1160a",
    "1.26.1-config-audit-hygiene": "9d178acdb7e85152",
    "1.27.0-declared-serving-dose": "9c400418c2ec89ca",
-   "1.28.0-dose-v41": "6045c33eee90068a"
+   "1.28.0-dose-v41": "9348e78f8a5faf79"
   }
  }
 }
