@@ -73,7 +73,6 @@ from scoring_v4.modules.sports import score_sports
 from scoring_v4.penalty_registry import apply_penalty_registry
 from scoring_v4.router import class_for_product
 from scoring_v4.quality_score import assemble_quality_score
-from scoring_v4.quality_score_config import block as _quality_config_block
 
 
 # Schema lock — these are the v4 scorer result fields consumed by the single
@@ -223,12 +222,10 @@ def apply_universal_dose_safety(
     module_result: Any,
     dose_safety: DoseSafetyResult,
 ) -> None:
-    """Guarantee one typed B7 result is represented in every module.
+    """Record the one typed dose-safety result on every route's Dose.
 
-    The three historical B7-aware modules still consume the scoped result
-    internally because B-complex uses it while calculating dose-fit credit.
-    This adapter validates that representation and fills the missing seam for
-    all other routes. An existing penalty is never subtracted twice.
+    The public Dose ceiling it sets is applied once by the public assembler
+    (``quality_score._pillar_dose``); no module subtracts for an exceedance.
     """
     dimensions = getattr(module_result, "dimensions", None)
     if not isinstance(dimensions, dict) or "dose" not in dimensions:
@@ -238,26 +235,9 @@ def apply_universal_dose_safety(
     metadata = getattr(dose, "metadata", None)
     if not isinstance(penalties, dict) or not isinstance(metadata, dict):
         raise RuntimeError("v4 dose dimension has no penalty/metadata contract")
-
-    expected = round(float(dose_safety.penalty), 4)
-    existing_raw = penalties.get("B7_dose_safety")
-    existing = abs(float(existing_raw or 0.0))
-    if existing_raw is not None and abs(existing - expected) > 0.0001:
-        raise RuntimeError(
-            "module B7 dose-safety penalty diverged from the shared evaluation"
-        )
-
-    changed = False
-    if existing_raw is None:
-        penalties["B7_dose_safety"] = -expected
-        if expected > 0:
-            current = float(getattr(dose, "score", 0.0) or 0.0)
-            dose.score = round(max(0.0, current - expected), 4)
-            changed = True
+    if "B7_dose_safety" in penalties:
+        raise RuntimeError("a module subtracted dose safety; the public ceiling owns it")
     metadata["B7_safety_evaluation"] = dose_safety.audit_metadata()
-
-    if changed:
-        _assemble_score(module_result)
 
 
 def _score_v4_core(enriched_product: Dict[str, Any]) -> Dict[str, Any]:
@@ -326,13 +306,7 @@ def _score_v4_core(enriched_product: Dict[str, Any]) -> Dict[str, Any]:
     issues = dose_safety_contract_issues(enriched_product)
     if issues:
         raise ValueError(f"dose-safety contract failed: {issues}")
-    dose_policy = _quality_config_block("dose_safety_policy", "ul_pct_threshold")
-    dose_safety = evaluate_dose_safety(
-        enriched_product,
-        threshold=float(dose_policy["ul_pct_threshold"]),
-        per_flag_penalty=float(dose_policy["per_flag_penalty"]),
-        cap=float(dose_policy["cap"]),
-    )
+    dose_safety = evaluate_dose_safety(enriched_product)
     result["v4_breakdown"]["dose_safety"] = dose_safety.audit_metadata()
 
     # Layer 1 — Safety Gate.

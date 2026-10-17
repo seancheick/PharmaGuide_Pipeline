@@ -30,17 +30,12 @@ from scoring_input_contract import PRENATAL_TITLE_RE
 from scoring_v4.quality_score_config import block as _cfg_block
 
 _DM = _cfg_block("dose_magnitudes", "multi_prenatal")["multi_prenatal"]
-_B7 = _cfg_block("dose_safety_policy", "ul_pct_threshold")
 
 
 DIMENSION_CAP = _DM["dimension_cap"]
 CAP_RDA_AI_COVERAGE = _DM["cap_rda_ai_coverage"]
 CAP_CRITICAL_NUTRIENT_COVERAGE = _DM["cap_critical_nutrient_coverage"]
 CAP_PRENATAL_COMPLEMENT_SUPPORT = _DM["cap_prenatal_complement_support"]
-
-B7_UL_PCT_THRESHOLD = _B7["ul_pct_threshold"]
-B7_PER_FLAG_PENALTY = _B7["per_flag_penalty"]
-B7_CAP = _B7["cap"]
 
 PRENATAL_DHA_FULL_MG = _DM["prenatal_dha_full_mg"]
 PRENATAL_DHA_PARTIAL_MG = _DM["prenatal_dha_partial_mg"]
@@ -184,16 +179,11 @@ def _active_ingredients(product: Dict[str, Any]) -> List[Dict[str, Any]]:
 
 
 def _coverage_unit_credit(pct_rda: Optional[float], pct_ul: Optional[float]) -> Optional[float]:
-    """Return 0..1 per distinct nutrient, or None when not evaluable."""
-    if pct_rda is None and pct_ul is None:
-        return None
+    """Return 0..1 adequacy per distinct nutrient, or None when not evaluable.
 
-    if pct_ul is not None:
-        if pct_ul >= B7_UL_PCT_THRESHOLD:
-            return 0.0
-        if pct_ul > 100.0:
-            return 0.5
-
+    ``pct_ul`` is unused: an upper-limit exceedance is the product-level Dose
+    ceiling's (Dose V4.1 §2.4), never a per-nutrient reduction here.
+    """
     if pct_rda is None:
         return None
     if pct_rda <= 0:
@@ -488,13 +478,7 @@ def score_dose(product: Any) -> Dict[str, Any]:
     critical_coverage = _score_critical_coverage(critical_scores)
     prenatal_complement_scores = _prenatal_complement_scores(product)
     prenatal_complement_support = _score_prenatal_complement_support(prenatal_complement_scores)
-    b7_evaluation = resolve_dose_safety(
-        product,
-        threshold=B7_UL_PCT_THRESHOLD,
-        per_flag_penalty=B7_PER_FLAG_PENALTY,
-        cap=B7_CAP,
-    )
-    b7 = _round(b7_evaluation.penalty)
+    b7_evaluation = resolve_dose_safety(product)
     b7_ignored_flags = b7_evaluation.ignored_flags
 
     components = {
@@ -503,10 +487,10 @@ def score_dose(product: Any) -> Dict[str, Any]:
     }
     if prenatal_complement_support > 0:
         components["prenatal_complement_support"] = prenatal_complement_support
-    penalties = {"B7_dose_safety": -b7}
+    penalties: Dict[str, float] = {}
 
     positive = sum(components.values())
-    score = _round(_clamp(0.0, DIMENSION_CAP, positive - b7))
+    score = _round(_clamp(0.0, DIMENSION_CAP, positive))
 
     metadata: Dict[str, Any] = {
         "phase": PHASE_MARKER,

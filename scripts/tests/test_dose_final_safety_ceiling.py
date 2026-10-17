@@ -1,0 +1,83 @@
+"""Dose V4.1 §2.4 (D1): one product-level safety ceiling, applied once after
+normalization. ≤100% none; >100% and <150% → at most 10; ≥150% → 0."""
+import pytest
+
+from test_v4_generic_dose_p132a import _ingredient, _product
+from scoring_v4.scored_artifact import build_scored_artifact
+
+
+def _row(nutrient, canonical, pct_rda, pct_ul, *, low=1, high=1):
+    return {'nutrient': nutrient, 'canonical_id': canonical, 'unit': 'mg', 'rda_ai': 400, 'ul': 350,
+            'ul_status': 'established', 'pct_rda': pct_rda, 'pct_ul': pct_ul,
+            'servings_per_day_min': low, 'servings_per_day_max': high,
+            'scoring_eligible': True, 'ul_gate_eligible': True}
+
+
+def _flag(nutrient, canonical, pct_ul, eligible=True):
+    return {'nutrient': nutrient, 'canonical_id': canonical, 'pct_ul': pct_ul, 'amount': 3.5 * pct_ul,
+            'ul': 350, 'ul_gate_eligible': eligible}
+
+
+def product(pct_ul, *, pct_rda=60.0, low=1, high=1, eligible=True, rows=None, flags=None):
+    p = _product(ingredients=[_ingredient(quantity=120)],
+                 adequacy_results=rows or [_row('Magnesium', 'magnesium', pct_rda, pct_ul, low=low, high=high)],
+                 safety_flags=flags if flags is not None else (
+                     [_flag('Magnesium', 'magnesium', pct_ul, eligible)] if pct_ul > 100 else []))
+    p['serving_basis'] = {'min_servings_per_day': low, 'max_servings_per_day': high,
+                          'servings_per_day_source': 'directions'}
+    return p
+
+
+def dose(p):
+    return build_scored_artifact(p)['quality_pillars_v4']['dose']
+
+
+@pytest.mark.parametrize('pct,expected', [(100.0, 20.0), (100.01, 10.0), (149.99, 10.0), (150.0, 0.0), (240.0, 0.0)])
+def test_exact_ceiling_boundaries(pct, expected):
+    assert dose(product(pct))['score'] == expected
+
+
+def test_ceiling_never_raises_a_lower_adequacy_score():
+    low = dose(product(50.0, pct_rda=5.0))['score']
+    assert 0 < low < 10
+    assert dose(product(120.0, pct_rda=5.0))['score'] == low
+
+
+def test_one_excessive_nutrient_is_not_diluted_by_a_panel():
+    rows = [_row('Magnesium', 'magnesium', 60.0, 30.0), _row('Zinc', 'zinc', 300.0, 160.0)]
+    assert dose(product(0, rows=rows, flags=[_flag('Zinc', 'zinc', 160.0)]))['score'] == 0.0
+
+
+def test_an_incidental_nutrient_without_an_adequacy_vote_still_counts():
+    flags = [_flag('Vitamin B6', 'vitamin_b6_pyridoxine', 120.0)]
+    assert dose(product(30.0, flags=flags))['score'] == 10.0
+
+
+def test_unresolved_comparison_keeps_review_state_without_a_ceiling():
+    assert dose(product(130.0, eligible=False))['score'] == 20.0
+
+
+def test_no_dose_safety_subtraction_remains_and_the_evaluation_is_kept():
+    a = build_scored_artifact(product(160.0))
+    dim = a['_v4_module_breakdown']['dimensions']['dose']
+    assert 'B7_dose_safety' not in dim['penalties']
+    assert dim['metadata']['B7_safety_evaluation']['state_counts'] == {'confirmed_over_threshold': 1}
+    assert a['quality_pillars_v4']['safety_hygiene']['score'] == 10.0
+
+
+def test_explanation_distinguishes_minimum_from_maximum_exceedance():
+    always = dose(product(120.0))['reason']
+    ranged = dose(product(137.0, pct_rda=30.0, low=1, high=4))['reason']
+    assert 'even the lowest directed daily use' in always.lower()
+    assert 'higher directed daily amounts' in ranged.lower()
+    for reason in (always, ranged):
+        assert 'pharmaguide scoring policy' in reason.lower()
+
+
+def test_receipt_itemizes_the_ceiling_and_reconciles():
+    pillar = dose(product(137.0, pct_rda=30.0, low=1, high=4))
+    assert pillar['score'] == 10.0
+    entries = pillar['receipt']['entries']
+    cap = [e for e in entries if e['id'] == 'dose_safety_ceiling']
+    assert cap and cap[0]['kind'] == 'cap' and cap[0]['points'] == -10.0
+    assert round(sum(e['points'] for e in entries), 4) == 10.0

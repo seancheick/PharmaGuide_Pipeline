@@ -208,20 +208,21 @@ def test_b_complex_evidence_tracks_core_authority_panel_not_generic_breadth() ->
     assert partial["metadata"]["authority_covered_count"] == 1
 
 
-def test_over_ul_b_complex_keeps_dose_penalty_and_visible_safety_concern() -> None:
+def test_over_ul_b_complex_takes_the_dose_ceiling_and_keeps_the_safety_concern() -> None:
     scored = score_product_v4(_megadose_b_complex())
 
     dose = scored["v4_breakdown"]["module"]["dimensions"]["dose"]
     safety = scored["quality_pillars_v4"]["safety_hygiene"]
 
     assert scored["v4_module"] == "b_complex"
-    assert dose["penalties"]["B7_dose_safety"] < 0
+    assert dose["penalties"] == {}
+    assert dose["metadata"]["B7_safety_evaluation"]["dose_ceiling"]["cap_public"] == 0.0
     assert safety["score"] == safety["max"] - safety["components"]["additive_or_sweetener_penalty"]
     assert "over_ul_penalty" not in safety["components"]
     assert "exceed an established upper limit" in safety["reason"]
-    # The over-UL finding holds Dose low; the total stays below "Very good".
-    # V4.1 Step 4 removed the Formulation copy of the additive charge
-    # (74.1 -> 75.8), which the formula-checks pillar still charges once.
-    assert scored["quality_pillars_v4"]["dose"]["score"] <= 7.2
+    # B6 at 588% of its UL sets Dose to 0 (Dose V4.1 §2.4); the total stays
+    # below "Very good".
+    assert scored["quality_pillars_v4"]["dose"]["score"] == 0.0
+    assert "no daily directions" in scored["quality_pillars_v4"]["dose"]["reason"]
     assert "B1_harmful_additives" not in scored["v4_breakdown"]["module"]["dimensions"]["formulation"]["penalties"]
     assert scored["quality_score_v4_100"] < 80.0

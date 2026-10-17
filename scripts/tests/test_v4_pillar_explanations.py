@@ -276,12 +276,11 @@ def test_generic_dose_exposes_reference_policy_without_claiming_clinical_range()
     context = out["dose"]["explanation"]["assessment"]
     assert context["method"] == "rda_ul_proxy_until_dietary_intake_table"
     assert context["reference_assessments"][0]["per_day_max"] == 405
-    assert context["ul_partial_credit_above_pct"] == 100
-    assert context["ul_zero_credit_at_pct"] == 150
-    assert context["dose_safety_policy"] == {"ul_pct_threshold": 150, "per_flag_penalty": 2, "cap": 3}
-    assert context["raw_dose_safety_penalty"] == 0
-    assert "safety_hygiene_over_ul_penalty" not in context
-    assert out["dose"]["score"] == 10
+    for retired in ("ul_partial_credit_above_pct", "ul_zero_credit_at_pct", "dose_safety_policy",
+                    "raw_dose_safety_penalty", "safety_hygiene_over_ul_penalty"):
+        assert retired not in context
+    # No safety flag was emitted, so no ceiling: adequacy (33.75% legacy band) is full.
+    assert out["dose"]["score"] == 20
     p["rda_ul_data"]["adequacy_results"][0]["pct_ul"] = 50
     out = build_scored_artifact(p)["quality_pillars_v4"]
     assert "studied" not in out["dose"]["reason"].lower()

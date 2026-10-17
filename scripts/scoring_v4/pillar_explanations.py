@@ -170,46 +170,25 @@ def attach_pillar_explanations(
                         + "These are catalog assessments, not a personal dose recommendation."),
                 })
             if metadata.get("method") == "rda_ul_proxy_until_dietary_intake_table":
-                dose = dims.get("dose") or {}
                 assessment = {key: metadata.get(key) for key in (
-                    "method", "assessment_basis", "deferred_data_dependency", "reference_assessments",
-                    "ul_partial_credit_above_pct", "ul_zero_credit_at_pct", "ul_partial_credit_raw",
+                    "method", "assessment_basis", "daily_use", "deferred_data_dependency", "reference_assessments",
                     "supplemental_window_max_raw", "positive_clinical_benchmark_assessments",
                     "dose_participation_basis", "unbenchmarked_purpose_ingredients",
-                    "dose_safety_policy",
                 )}
-                assessment["raw_dose_safety_penalty"] = abs(_num((dose.get("penalties") or {}).get("B7_dose_safety")) or 0)
                 assessment["raw_dose"] = (pillar.get("components") or {}).get("raw_dose")
                 assessment["normalization_reference"] = (pillar.get("components") or {}).get("reference")
                 pillar["explanation"] = {"schema_version": PILLAR_EXPLANATION_SCHEMA_VERSION, "assessment": assessment}
-                if all(_num(assessment.get(key)) is not None for key in (
-                        "ul_partial_credit_above_pct", "ul_zero_credit_at_pct", "ul_partial_credit_raw", "supplemental_window_max_raw")):
-                    facts.append({
-                        "id": "dose_ul_credit_policy", "label": "Nutrient upper-limit scoring rule",
-                        "value_display": (
-                            f"For assessed nutrient references, maximum daily intake above {assessment['ul_partial_credit_above_pct']:g}% "
-                            f"but below {assessment['ul_zero_credit_at_pct']:g}% of the upper limit receives "
-                            f"{assessment['ul_partial_credit_raw']:g}/{assessment['supplemental_window_max_raw']:g} raw window credit; "
-                            f"at or above {assessment['ul_zero_credit_at_pct']:g}% it receives zero. "
-                            "These are PharmaGuide scoring thresholds, not new clinical limits. Raw credit is normalized to the published Dose scale and bounded at zero."
-                        ),
-                    })
-                if assessment["raw_dose_safety_penalty"]:
-                    facts.append({
-                        "id": "dose_safety_scoring", "label": "Upper-limit scoring",
-                        "value_display": f"Dose-safety findings deduct {assessment['raw_dose_safety_penalty']:g} raw penalty points in Dose only. The same concern remains visible in the formula checks without another deduction.",
-                    })
-                policy = metadata.get("dose_safety_policy") or {}
-                if all(_num(policy.get(key)) is not None for key in ("ul_pct_threshold", "per_flag_penalty", "cap")):
-                    facts.append({
-                        "id": "dose_safety_penalty_policy", "label": "Dose-safety penalty trigger",
-                        "value_display": (
-                            f"Confirmed upper-limit findings trigger the separate dose-safety penalty at {policy['ul_pct_threshold']:g}% "
-                            f"of the limit: {policy['per_flag_penalty']:g} raw points per flag, capped at {policy['cap']:g}. "
-                            "A concern below that scoring threshold still appears even when Safety/Hygiene retains full points. "
-                            "Unresolved dose assessments are shown but do not trigger this penalty."
-                        ),
-                    })
+            ceiling = ((metadata.get("B7_safety_evaluation") or {}).get("dose_ceiling") or {})
+            if _num(ceiling.get("cap_public")) is not None:
+                facts.append({
+                    "id": "dose_safety_ceiling", "label": "Upper-limit scoring rule",
+                    "value_display": (
+                        f"When the highest directed daily use exceeds an established upper limit, Dose is at most "
+                        f"{ceiling['partial_ceiling_public']:g}; at {ceiling['zero_at_pct']:g}% of the limit or more it is 0. "
+                        "This product-level cap is applied once, after the ingredient assessment, and never raises a lower score. "
+                        "It is PharmaGuide scoring policy, not a medical toxicity grade. Upper limits cover total intake from all sources."
+                    ),
+                })
             purpose_count = _nonnegative_int(metadata.get("purpose_ingredient_count"))
             unbenchmarked = metadata.get("unbenchmarked_purpose_ingredients")
             if (purpose_count and isinstance(unbenchmarked, list) and unbenchmarked

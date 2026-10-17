@@ -27,12 +27,7 @@ from score_supplements_v4 import apply_universal_dose_safety  # noqa: E402
 
 
 def _evaluate(flag: dict):
-    return evaluate_dose_safety(
-        {"rda_ul_data": {"safety_flags": [flag]}},
-        threshold=150.0,
-        per_flag_penalty=2.0,
-        cap=3.0,
-    )
+    return evaluate_dose_safety({"rda_ul_data": {"safety_flags": [flag]}})
 
 
 def _module_result(*, dose_score: float = 12.0) -> GenericModuleResult:
@@ -46,7 +41,7 @@ def _module_result(*, dose_score: float = 12.0) -> GenericModuleResult:
     return result
 
 
-def test_unresolved_material_exposure_is_review_only_not_a_deduction() -> None:
+def test_unresolved_material_exposure_is_review_only_not_a_ceiling() -> None:
     result = _evaluate(
         {
             "nutrient": "Magnesium Hydroxide",
@@ -56,9 +51,8 @@ def test_unresolved_material_exposure_is_review_only_not_a_deduction() -> None:
         }
     )
 
-    assert result.penalty == 0.0
+    assert result.dose_ceiling() is None
     assert result.flags[0].state == MATERIAL_BUT_UNRESOLVED
-    assert result.flags[0].penalized is False
 
 
 def test_safety_gate_consumes_typed_unresolved_state_without_exceedance_copy() -> None:
@@ -84,41 +78,26 @@ def test_safety_gate_consumes_typed_unresolved_state_without_exceedance_copy() -
     assert not any(signal.startswith("DOSE_OVER_UL") for signal in gate.safety_signals)
 
 
-def test_universal_adapter_applies_confirmed_b7_once_to_uncovered_module() -> None:
-    typed = _evaluate(
-        {
-            "nutrient": "Zinc",
-            "pct_ul": 200.0,
-            "ul_gate_eligible": True,
-        }
-    )
+def test_universal_adapter_records_the_evaluation_without_subtracting() -> None:
+    typed = _evaluate({"nutrient": "Zinc", "pct_ul": 200.0, "ul_gate_eligible": True})
     module_result = _module_result()
 
     apply_universal_dose_safety(module_result, typed)
 
     dose = module_result.dimensions["dose"]
     assert typed.flags[0].state == CONFIRMED_OVER_THRESHOLD
-    assert dose.score == 10.0
-    assert dose.penalties["B7_dose_safety"] == -2.0
+    assert dose.score == 12.0 and dose.penalties == {}
     assert dose.metadata["B7_safety_evaluation"] == typed.audit_metadata()
-    assert module_result.raw_score_100 == 10.0
+    assert dose.metadata["B7_safety_evaluation"]["dose_ceiling"]["cap_public"] == 0.0
 
 
-def test_universal_adapter_does_not_double_existing_b7_penalty() -> None:
-    typed = _evaluate(
-        {
-            "nutrient": "Zinc",
-            "pct_ul": 200.0,
-            "ul_gate_eligible": True,
-        }
-    )
+def test_universal_adapter_rejects_a_module_side_dose_safety_subtraction() -> None:
+    typed = _evaluate({"nutrient": "Zinc", "pct_ul": 200.0, "ul_gate_eligible": True})
     module_result = _module_result(dose_score=10.0)
     module_result.dimensions["dose"].penalties["B7_dose_safety"] = -2.0
 
-    apply_universal_dose_safety(module_result, typed)
-
-    assert module_result.dimensions["dose"].score == 10.0
-    assert module_result.raw_score_100 == 10.0
+    with pytest.raises(RuntimeError, match="public ceiling owns it"):
+        apply_universal_dose_safety(module_result, typed)
 
 
 @pytest.mark.parametrize("bad_value", [True, -1, "not-a-number", float("nan")])

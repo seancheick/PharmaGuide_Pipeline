@@ -287,14 +287,38 @@ def _unassessed_primary_dose_reason(dim: Dict[str, Any]) -> Optional[str]:
     return None
 
 
+def _dose_ceiling(dim: Dict[str, Any]) -> Optional[Dict[str, Any]]:
+    """The one product-level Dose ceiling recorded by scoring_v4.dose_safety."""
+    metadata = dim.get("metadata") if isinstance(dim, dict) else None
+    evaluation = metadata.get("B7_safety_evaluation") if isinstance(metadata, dict) else None
+    ceiling = evaluation.get("dose_ceiling") if isinstance(evaluation, dict) else None
+    return ceiling if isinstance(ceiling, dict) and _num(ceiling.get("cap_public"), -1) >= 0 else None
+
+
 def _over_limit_dose_reason(dim: Dict[str, Any]) -> Optional[str]:
-    """Explain a confirmed excess independently of its point deduction."""
+    """Explain a confirmed excess and the ceiling it sets."""
     metadata = dim.get("metadata") if isinstance(dim, dict) else None
     if not isinstance(metadata, dict):
         return None
     evaluation = metadata.get("B7_safety_evaluation")
     if not isinstance(evaluation, dict):
         return None
+    ceiling = _dose_ceiling(dim)
+    if ceiling is not None:
+        nutrient = str(ceiling.get("nutrient") or "One nutrient")
+        cap = _num(ceiling.get("cap_public"))
+        outcome = ("so Dose is set to 0" if cap == 0 else f"so Dose is capped at {cap:g}")
+        if ceiling.get("frequency_defaulted"):
+            exposure = (f"The label gives no daily directions; at one serving a day {nutrient} exceeds its "
+                        f"established upper limit ({_num(ceiling.get('pct_ul')):.0f}% of the limit)")
+        elif ceiling.get("minimum_exceeds"):
+            exposure = (f"Even the lowest directed daily use of {nutrient} exceeds its established "
+                        f"upper limit ({_num(ceiling.get('pct_ul')):.0f}% of the limit at the highest directed use)")
+        else:
+            exposure = (f"The higher directed daily amounts of {nutrient} exceed its established "
+                        f"upper limit ({_num(ceiling.get('pct_ul')):.0f}% of the limit at the highest directed use)")
+        return (f"{exposure}, {outcome}. This cap is PharmaGuide scoring policy, "
+                "not a medical toxicity grade.")
     flags = evaluation.get("flags")
     if isinstance(flags, list) and flags:
         is_actionable = any(
@@ -1072,7 +1096,11 @@ def _pillar_dose(dim: Dict[str, Any], weight: float, archetype: str,
     rewards excess."""
     ref = _dose_reference(dim, archetype, cfg["dose_subscale"])
     score = _num(dim.get("score"))
-    val = round(max(0.0, min(float(weight), (score / ref) * weight)), 1) if ref else 0.0
+    adequacy = round(max(0.0, min(float(weight), (score / ref) * weight)), 1) if ref else 0.0
+    # Dose V4.1 §2.4: the strongest confirmed exceedance caps Dose once, after
+    # aggregation and normalization; a ceiling never raises a lower score.
+    ceiling = _dose_ceiling(dim)
+    val = adequacy if ceiling is None else min(adequacy, _num(ceiling.get("cap_public")))
     over_limit_reason = _over_limit_dose_reason(dim)
     reason = over_limit_reason
     if reason is None:
@@ -1083,11 +1111,15 @@ def _pillar_dose(dim: Dict[str, Any], weight: float, archetype: str,
         reason = _reason_dose(_band(val, weight))
     if archetype == "probiotic" and over_limit_reason is None:
         reason = _probiotic_dose_reason(dim, reason)
+    components = {"raw_dose": score, "archetype": archetype, "reference": ref}
+    if ceiling is not None:
+        components["adequacy_before_safety"] = adequacy
+        components["safety_ceiling"] = _num(ceiling.get("cap_public"))
     return {
         "score": val,
         "max": weight,
         "reason": reason,
-        "components": {"raw_dose": score, "archetype": archetype, "reference": ref},
+        "components": components,
     }
 
 
@@ -1484,6 +1516,10 @@ def _normalized_receipt(name: str, pillar: Dict[str, Any], dim: Dict[str, Any],
     if abs(clipped - public) > 1e-9:
         entries.append(_receipt_entry(f"{name}_pillar_bounds", "cap" if clipped < public else "floor",
                                       f"pillars.{name}.weight", None, clipped - public))
+    ceiling = components.get("safety_ceiling") if name == "dose" else None
+    if ceiling is not None and clipped > _num(ceiling):
+        entries.append(_receipt_entry("dose_safety_ceiling", "cap", "dose_safety_ceiling", None,
+                                      _num(ceiling) - clipped))
     without_score = _num(rebuild({**dim, "score": without_deductions})["score"])
     return _finish_receipt(pillar, entries, without_score)
 

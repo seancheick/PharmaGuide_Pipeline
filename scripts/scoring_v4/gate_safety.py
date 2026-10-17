@@ -69,7 +69,6 @@ from scoring_v4.dose_safety import (
     DoseSafetyResult,
     resolve_dose_safety,
 )
-from scoring_v4.quality_score_config import block as _quality_config_block
 
 
 # The verdicts that carry a safety warning, most severe first (index = rank).
@@ -1208,8 +1207,8 @@ def _apply_typed_dose_safety_policy(
 ) -> None:
     """Apply verdict policy to the typed result at maximum directed daily use.
 
-    A confirmed exposure above an established UL cannot ship SAFE. The score's
-    B7 penalty remains a separate, deliberately more severe 150% threshold:
+    A confirmed exposure above an established UL cannot ship SAFE. The Dose
+    pillar's ceiling (dose_safety.dose_ceiling) is separate quality policy:
       - 100–199% → CAUTION
       - >= 200%  → CAUTION + a critical dose signal
     An unresolved material exposure routes to CAUTION/review without claiming an
@@ -1293,13 +1292,7 @@ def evaluate_safety_gate(
                 result.ingredient_assessment_errors.append(
                     f'{_CAPTURE_GAP_PREFIX}{source_key}[{index}]')
     if dose_safety is None:
-        policy = _quality_config_block("dose_safety_policy", "ul_pct_threshold")
-        dose_safety = resolve_dose_safety(
-            product,
-            threshold=float(policy["ul_pct_threshold"]),
-            per_flag_penalty=float(policy["per_flag_penalty"]),
-            cap=float(policy["cap"]),
-        )
+        dose_safety = resolve_dose_safety(product)
 
     # Consume the canonical SafetySignal[] contract. The kernel
     # (identity/safety.py) owns ALL matcher-internal knowledge and emits a

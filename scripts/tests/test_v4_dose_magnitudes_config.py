@@ -24,14 +24,15 @@ from scoring_v4.modules import (   # noqa: E402
 
 CFG = json.loads((SCRIPTS_ROOT / "scoring_v4" / "config" / "quality_score.json").read_text())
 DM = CFG["dose_magnitudes"]
-DOSE_SAFETY = CFG["dose_safety_policy"]
+DOSE_CEILING = CFG["dose_safety_ceiling"]
 
 ORIGINAL = {
     "generic": {
         # 1.21.0: the multi-form bonus and its two thresholds are retired
         # (IQM bio_score owns form quality); exact equality keeps them out.
         "cap_supplemental_window": 22.0, "dimension_cap": 25.0,
-        "window_rda_threshold": 25.0, "window_ul_partial_band": 100.0,
+        # Dose V4.1 (§2.4): the per-nutrient UL band key is retired.
+        "window_rda_threshold": 25.0,
         "window_overdose_credit": 11.0, "window_high_source_pct": 20.0, "window_full_adequacy_pct": 100.0,
         # 1.26.0 (V4.1 Step 4): the 16/12 no-reference credits are replaced by
         # the one dose_subscale.unbenchmarked_neutral_public owner.
@@ -69,12 +70,13 @@ def test_config_matches_pre_hoist_values():
         assert values == vals, f"dose_magnitudes.{mod} drifted from pinned values"
 
 
-def test_b7_policy_has_one_config_owner():
-    assert DOSE_SAFETY == {
-        "ul_pct_threshold": 150.0,
-        "per_flag_penalty": 2.0,
-        "cap": 3.0,
+def test_dose_safety_ceiling_has_one_config_owner():
+    assert {k: v for k, v in DOSE_CEILING.items() if not k.startswith("_")} == {
+        "exceeds_above_pct": 100.0,
+        "zero_at_pct": 150.0,
+        "partial_ceiling_public": 10.0,
     }
+    assert "dose_safety_policy" not in CFG
     serialized_nested_blocks = json.dumps({
         "dose_magnitudes": DM,
         "category_magnitudes": CFG["category_magnitudes"],
@@ -86,8 +88,8 @@ def test_b7_policy_has_one_config_owner():
 
 def test_runtime_constants_read_from_config_no_drift():
     assert generic_dose.CAP_SUPPLEMENTAL_WINDOW == DM["generic"]["cap_supplemental_window"] == 22.0
-    assert generic_dose.B7_CAP == DOSE_SAFETY["cap"] == 3.0
-    assert multi_prenatal_dose.B7_CAP == DOSE_SAFETY["cap"]
+    for module in (generic_dose, multi_prenatal_dose):
+        assert not hasattr(module, "B7_CAP") and not hasattr(module, "B7_UL_PCT_THRESHOLD")
     assert multi_prenatal_dose.DIMENSION_CAP == DM["multi_prenatal"]["dimension_cap"] == 25.0
     assert multi_prenatal_dose.CRITICAL_MIN_PCT_RDA == DM["multi_prenatal"]["critical_min_pct_rda"]
     assert not hasattr(multi_prenatal_dose, "PANEL_BREADTH_FULL_COUNT")

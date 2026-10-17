@@ -408,25 +408,17 @@ def test_window_proxy_zero_dose_no_credit() -> None:
     assert payload["components"]["supplemental_window_proxy"] == 0.0
 
 
-# --- Supplemental-window proxy: overdose cases ---------------------------
+# --- Supplemental-window proxy: above an upper limit ----------------------
 
 
-def test_window_proxy_over_ul_under_150_partial_credit() -> None:
-    """101%-149% of UL → overdose territory, half credit (11 pts).
-    150%+ is B7's job; this band penalises mild over-dose without B7."""
+@pytest.mark.parametrize("pct_rda,pct_ul", [(300.0, 120.0), (400.0, 180.0)])
+def test_window_proxy_over_ul_keeps_adequacy_credit(pct_rda, pct_ul) -> None:
+    """Dose V4.1 §2.4: adequacy is scored alone; the one product-level ceiling
+    (scoring_v4.dose_safety) caps the public pillar, never this band."""
     from scoring_v4.modules.generic_dose import score_dose
 
-    payload = score_dose(_product(adequacy_results=[_adequacy(pct_rda=300.0, pct_ul=120.0)]))
-    assert payload["components"]["supplemental_window_proxy"] == 11.0
-
-
-def test_window_proxy_over_150_ul_returns_zero() -> None:
-    """≥150% UL — the window proxy contributes 0; B7 penalty handles
-    the dose-safety issue. (Avoids double-penalising.)"""
-    from scoring_v4.modules.generic_dose import score_dose
-
-    payload = score_dose(_product(adequacy_results=[_adequacy(pct_rda=400.0, pct_ul=180.0)]))
-    assert payload["components"]["supplemental_window_proxy"] == 0.0
+    payload = score_dose(_product(adequacy_results=[_adequacy(pct_rda=pct_rda, pct_ul=pct_ul)]))
+    assert payload["components"]["supplemental_window_proxy"] == 22.0
 
 
 # --- Supplemental-window proxy: no data case -----------------------------
@@ -603,58 +595,26 @@ def test_premium_form_count_earns_no_dose_credit() -> None:
     assert "multi_form_bonus" not in premium_pair["components"]
 
 
-# --- B7 dose safety penalty ---------------------------------------------
+# --- Dose safety is recorded, not subtracted ------------------------------
 
 
-def test_b7_penalty_single_over_150_ul_returns_minus_2() -> None:
+def test_module_records_the_dose_safety_ceiling_without_a_subtraction() -> None:
     from scoring_v4.modules.generic_dose import score_dose
 
-    payload = score_dose(_product(safety_flags=[{
-        "nutrient": "Vit B6",
-        "pct_ul": 200,
-        "ul": 100,
-        "amount": 200,
-        "ul_gate_eligible": True,
-    }]))
-    assert payload["penalties"]["B7_dose_safety"] == -2.0
-
-
-def test_b7_penalty_two_over_ul_caps_at_minus_3() -> None:
-    """Two over-UL flags: 2.0 + 2.0 = 4.0, capped at 3.0 → -3.0."""
-    from scoring_v4.modules.generic_dose import score_dose
-
-    payload = score_dose(
-        _product(
-            safety_flags=[
-                {"nutrient": "A", "pct_ul": 180, "ul_gate_eligible": True},
-                {"nutrient": "B", "pct_ul": 200, "ul_gate_eligible": True},
-            ]
-        )
-    )
-    assert payload["penalties"]["B7_dose_safety"] == -3.0
-
-
-def test_b7_penalty_below_150_pct_returns_zero() -> None:
-    """pct_ul = 120 (above UL but below 150% threshold) → no B7 penalty."""
-    from scoring_v4.modules.generic_dose import score_dose
-
-    payload = score_dose(_product(safety_flags=[{"nutrient": "A", "pct_ul": 120}]))
-    assert payload["penalties"]["B7_dose_safety"] == 0.0
-
-
-def test_b7_penalty_no_safety_flags_returns_zero() -> None:
-    from scoring_v4.modules.generic_dose import score_dose
-
-    payload = score_dose(_product())
-    assert payload["penalties"]["B7_dose_safety"] == 0.0
+    payload = score_dose(_product(safety_flags=[
+        {"nutrient": "A", "pct_ul": 180, "ul_gate_eligible": True},
+        {"nutrient": "B", "pct_ul": 120, "ul_gate_eligible": True},
+    ]))
+    assert payload["penalties"] == {}
+    assert payload["metadata"]["B7_safety_evaluation"]["dose_ceiling"]["cap_public"] == 0.0
+    assert score_dose(_product())["metadata"]["B7_safety_evaluation"]["dose_ceiling"] is None
 
 
 # --- Dimension score assembly --------------------------------------------
 
 
 def test_dimension_score_thorne_canary_22_of_25() -> None:
-    """Thorne Mg Bisglycinate 200mg: window proxy 22 - B7 0
-    = 22/25. Matches §6 line 425 worked example."""
+    """Thorne Mg Bisglycinate 200mg: window proxy 22 = 22/25. Matches §6 line 425 worked example."""
     from scoring_v4.modules.generic_dose import score_dose
 
     payload = score_dose(
@@ -668,7 +628,7 @@ def test_dimension_score_thorne_canary_22_of_25() -> None:
 
 
 def test_dimension_score_floors_at_zero() -> None:
-    """When a real B7 dose-safety flag exists, the dimension is evaluable
+    """When a real dose-safety flag exists, the dimension is evaluable
     and still floors at zero."""
     from scoring_v4.modules.generic_dose import score_dose
 
@@ -688,7 +648,7 @@ def test_dimension_score_handles_malformed_input() -> None:
     assert payload["score"] is None
     assert payload["max"] == 25.0
     assert "supplemental_window_proxy" in payload["components"]
-    assert "B7_dose_safety" in payload["penalties"]
+    assert payload["penalties"] == {}
 
 
 # --- Shadow integration --------------------------------------------------
@@ -1384,12 +1344,12 @@ def test_macrominerals_unverified_anchors_and_unclassified_references_keep_the_l
     assert _band_credit(10.0, 5.0, canonical) == pytest.approx(8.8)
 
 
-def test_over_ul_bands_are_unchanged_for_every_reference_kind() -> None:
+def test_over_ul_amounts_keep_adequacy_credit_for_every_reference_kind() -> None:
     from scoring_v4.modules.generic_dose import _band_credit
 
     for canonical in ("vitamin_d", "quercetin", "calcium"):
-        assert _band_credit(300.0, 120.0, canonical) == 11.0
-        assert _band_credit(400.0, 180.0, canonical) == 0.0
+        assert _band_credit(300.0, 120.0, canonical) == 22.0
+        assert _band_credit(400.0, 180.0, canonical) == 22.0
 
 
 def test_higher_dose_up_to_the_requirement_never_scores_lower() -> None:

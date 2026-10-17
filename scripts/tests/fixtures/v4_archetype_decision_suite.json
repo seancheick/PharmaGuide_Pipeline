@@ -5,7 +5,7 @@
     "production_entry_point": "scoring_v4.scored_artifact.build_scored_artifact",
     "scoring_formulas_embedded": false,
     "external_identifiers": "none; FIXTURE_* and SYNTHETIC_* values are synthetic case labels, not clinical references",
-  "review_status": "reviewed archetype decision set; expectations re-locked 2026-09-25 after measured IQM parent-relative Formulation, purpose-owner Evidence, disclosure-owned Transparency, probiotic fairness, prenatal population-reference, and sports Dose-separation checkpoints. Frozen real-product replays showed each checkpoint changed only its owning pillar with no route, status, safety, readiness, or unrelated-pillar drift. Re-locked 2026-10-15 for V4.1 Step 4 (config 1.26.0): formula checks own additive/sugar findings (Formulation stops charging; sixth-pillar budget 10); count, disclosure, focus and route-base components retired with their references (b_complex 8/18, sports protein 15, sports Dose 20, fiber 12/22, prenatal 12/21, probiotic Dose 15); canonical probiotic form quality; botanical identity neutral and the 11.4 unbenchmarked Dose neutral. Every movement stays in its owning pillar; no route, status or safety-status drift. Earlier review history remains in git."
+  "review_status": "reviewed archetype decision set; expectations re-locked 2026-09-25 after measured IQM parent-relative Formulation, purpose-owner Evidence, disclosure-owned Transparency, probiotic fairness, prenatal population-reference, and sports Dose-separation checkpoints. Frozen real-product replays showed each checkpoint changed only its owning pillar with no route, status, safety, readiness, or unrelated-pillar drift. Re-locked 2026-10-15 for V4.1 Step 4 (config 1.26.0): formula checks own additive/sugar findings (Formulation stops charging; sixth-pillar budget 10); count, disclosure, focus and route-base components retired with their references (b_complex 8/18, sports protein 15, sports Dose 20, fiber 12/22, prenatal 12/21, probiotic Dose 15); canonical probiotic form quality; botanical identity neutral and the 11.4 unbenchmarked Dose neutral. Every movement stays in its owning pillar; no route, status or safety-status drift. Earlier review history remains in git. Re-locked 2026-10-17 for Dose V4.1 B2 (Sean D1): one product-level ceiling replaces the per-nutrient UL bands and B7 subtraction, so a confirmed exposure at or above 150% of a UL sets public Dose to 0 instead of being diluted by the panel (B-complex B6 588%, immune zinc 200%, prenatal folate 160%); raw Dose now records adequacy only. Only Dose, total and derived tier moved."
   },
   "fixtures": [
     {
@@ -474,8 +474,8 @@
         "archetype": "b_complex",
         "quality_score_status": "scored",
         "product_safety_status": "caution",
-        "quality_score_v4_100": 58.5,
-        "quality_tier": "Needs improvement",
+        "quality_score_v4_100": 52.8,
+        "quality_tier": "Poor",
         "v4_confidence": "moderate",
         "normalization_references": {
           "formulation": 8.0,
@@ -484,7 +484,7 @@
         },
         "pillars": {
           "formulation": 8.3,
-          "dose": 5.7,
+          "dose": 0.0,
           "evidence": 17.5,
           "transparency": 15.0,
           "verification": 6.0,
@@ -492,7 +492,7 @@
         },
         "raw_dimensions": {
           "formulation": 3.3358,
-          "dose": 5.1,
+          "dose": 13.1625,
           "evidence": 17.5,
           "transparency": 10.0
         }
@@ -625,8 +625,8 @@
         "archetype": "immune_support",
         "quality_score_status": "scored",
         "product_safety_status": "caution",
-        "quality_score_v4_100": 65.1,
-        "quality_tier": "Needs improvement",
+        "quality_score_v4_100": 54.4,
+        "quality_tier": "Poor",
         "v4_confidence": "moderate",
         "normalization_references": {
           "formulation": 15.0,
@@ -635,7 +635,7 @@
         },
         "pillars": {
           "formulation": 10.9,
-          "dose": 10.7,
+          "dose": 0.0,
           "evidence": 16.5,
           "transparency": 15.0,
           "verification": 6.0,
@@ -643,7 +643,7 @@
         },
         "raw_dimensions": {
           "formulation": 8.1538,
-          "dose": 11.75,
+          "dose": 13.75,
           "evidence": 14.0,
           "transparency": 10.0
         }
@@ -1244,8 +1244,8 @@
         "archetype": "prenatal_multi",
         "quality_score_status": "scored",
         "product_safety_status": "caution",
-        "quality_score_v4_100": 64.1,
-        "quality_tier": "Needs improvement",
+        "quality_score_v4_100": 54.2,
+        "quality_tier": "Poor",
         "v4_confidence": "moderate",
         "normalization_references": {
           "formulation": 12.0,
@@ -1254,7 +1254,7 @@
         },
         "pillars": {
           "formulation": 7.2,
-          "dose": 9.9,
+          "dose": 0.0,
           "evidence": 20.0,
           "transparency": 15.0,
           "verification": 6.0,
@@ -1262,7 +1262,7 @@
         },
         "raw_dimensions": {
           "formulation": 4.35,
-          "dose": 10.3588,
+          "dose": 14.6088,
           "evidence": 20.0,
           "transparency": 15.0
         }

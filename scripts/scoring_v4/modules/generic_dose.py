@@ -5,7 +5,6 @@ Per `docs/plans/SCORING_V4_PROPOSAL.md` §6 generic rubric — Dose 25:
     | Item                                  | Cap | Notes                  |
     |---------------------------------------|----:|------------------------|
     | Dose inside the supplemental window   |  22 | NEW per §6 line 369    |
-    | B7 dose safety penalty (>150% UL)     |  -3 | up to -3               |
 
 The "supplemental window" per §6 line 369 is:
 
@@ -21,12 +20,10 @@ enriched data (`rda_ul_data.adequacy_results[].pct_rda` /
 carries explicit metadata so audit / score-delta / Flutter tooling
 never mistakes the proxy band for final NIH/NHANES window math.
 
-Proxy rule (per scorable nutrient with `pct_rda` AND `pct_ul`):
-
-    pct_ul >= 150%             →  0    (B7 handles separately; danger zone)
-    100% < pct_ul < 150%       →  11   (overdose territory, half credit)
-
-Below the UL, credit depends on what the reference is (quality_score 1.4.0):
+Proxy rule (per scorable nutrient with `pct_rda`). Credit is adequacy only;
+an exceedance of an upper limit is not scored here. The one product-level
+ceiling (Dose V4.1 §2.4, `scoring_v4.dose_safety`) caps the public Dose pillar
+after aggregation. Credit depends on what the reference is (quality_score 1.4.0):
 
     official DRI vitamin / trace mineral (RDA or AI):
         pct_rda >= 100%        →  22   (meets the requirement)
@@ -57,8 +54,8 @@ Form quality is not a Dose input. IQM forms[].bio_score is its one owner
 +3 for >= 2 premium forms of one nutrient was retired in quality_score
 1.21.0: a count of forms is neither an amount nor a reference.
 
-B7 penalty: read `rda_ul_data.safety_flags[]`, sum 2.0 per flag with
-`pct_ul >= 150%`, cap at 3.0. v3-equivalent.
+The typed dose-safety evaluation (`rda_ul_data.safety_flags[]`) is recorded
+as `B7_safety_evaluation` metadata; it subtracts nothing in this module.
 
 Per §13 architecture lock, this module does not import from
 `score_supplements.py` (v3).
@@ -108,7 +105,6 @@ from scoring_v4.modules.sleep_support import score_sleep_purpose_dose, score_sle
 from scoring_v4.quality_score_config import block as _cfg_block
 
 _DM = _cfg_block("dose_magnitudes", "generic")["generic"]
-_B7 = _cfg_block("dose_safety_policy", "ul_pct_threshold")
 
 
 CAP_SUPPLEMENTAL_WINDOW = _DM["cap_supplemental_window"]
@@ -116,15 +112,9 @@ DIMENSION_CAP = _DM["dimension_cap"]
 
 # Proxy band cutoffs.
 WINDOW_RDA_THRESHOLD = _DM["window_rda_threshold"]      # pct_rda below this is sub-clinical
-WINDOW_UL_PARTIAL_BAND = _DM["window_ul_partial_band"]   # above this and below 150 → half credit
-B7_UL_PCT_THRESHOLD = _B7["ul_pct_threshold"]      # at/above this triggers B7 + zeroes window
-WINDOW_OVERDOSE_CREDIT = _DM["window_overdose_credit"]    # 100% < pct_ul < 150% credit (half of 22)
+WINDOW_OVERDOSE_CREDIT = _DM["window_overdose_credit"]    # above a studied range (half of 22)
 WINDOW_HIGH_SOURCE_PCT = _DM["window_high_source_pct"]    # 21 CFR 101.54(b) "high source"
 WINDOW_FULL_ADEQUACY_PCT = _DM["window_full_adequacy_pct"]
-
-# B7 penalty.
-B7_PER_FLAG_PENALTY = _B7["per_flag_penalty"]
-B7_CAP = _B7["cap"]
 
 PHASE_MARKER = "P1.3.2a_dose_proxy"
 METHOD_MARKER = "rda_ul_proxy_until_dietary_intake_table"
@@ -177,25 +167,13 @@ def _band_credit(
     pct_ul: Optional[float],
     canonical: object = None,
 ) -> Optional[float]:
-    """Per-nutrient proxy band credit on the 0-22 scale.
+    """Per-nutrient adequacy credit on the 0-22 scale, at minimum daily use.
 
-    Returns None when the row lacks BOTH pct_rda and pct_ul (no signal).
-    Caller treats None as "skip this row from the average."
+    Returns None when the row has no reference percentage (``pct_rda``); the
+    caller skips it from the average. ``pct_ul`` is accepted for call-site
+    symmetry and deliberately unused: excess is the product-level ceiling's.
     """
-    if pct_rda is None and pct_ul is None:
-        return None
-
-    # pct_ul takes precedence in the upper bands — pct_ul tells us about
-    # toxicity proximity, which is the load-bearing safety signal.
-    if pct_ul is not None:
-        if pct_ul >= B7_UL_PCT_THRESHOLD:
-            return 0.0
-        if pct_ul > WINDOW_UL_PARTIAL_BAND:
-            return WINDOW_OVERDOSE_CREDIT
-
     if pct_rda is None:
-        # We know we're under UL (or it was None) but have no RDA signal.
-        # No safe band assignment; skip from the average.
         return None
 
     if pct_rda <= 0:
@@ -517,9 +495,7 @@ def score_dose(product: Dict[str, Any]) -> Dict[str, Any]:
                 "components": {
                     "supplemental_window_proxy": <0..22>,
                 },
-                "penalties": {
-                    "B7_dose_safety": <0 or -2 or -3>,
-                },
+                "penalties": {},
                 "phase": "P1.3.2a_dose_proxy",
                 "metadata": {
                     "phase": "P1.3.2a_dose_proxy",
@@ -535,14 +511,7 @@ def score_dose(product: Dict[str, Any]) -> Dict[str, Any]:
     """
     if not isinstance(product, dict):
         product = {}
-    b7_evaluation = resolve_dose_safety(
-        product,
-        threshold=B7_UL_PCT_THRESHOLD,
-        per_flag_penalty=B7_PER_FLAG_PENALTY,
-        cap=B7_CAP,
-    )
-    b7 = b7_evaluation.penalty
-    b7_metadata = b7_evaluation.audit_metadata()
+    b7_metadata = resolve_dose_safety(product).audit_metadata()
     (
         purpose_credit,
         unbenchmarked_purposes,
@@ -562,8 +531,8 @@ def score_dose(product: Dict[str, Any]) -> Dict[str, Any]:
         components = {
             "collagen_clinical_dose": round(float(col["score"]), 4),
         }
-        penalties = {"B7_dose_safety": round(-b7, 4)}
-        score = _clamp(0.0, DIMENSION_CAP, float(col["score"]) - b7)
+        penalties: Dict[str, float] = {}
+        score = _clamp(0.0, DIMENSION_CAP, float(col["score"]))
         return {
             "score": round(score, 4),
             "max": DIMENSION_CAP,
@@ -592,8 +561,8 @@ def score_dose(product: Dict[str, Any]) -> Dict[str, Any]:
         components = {
             "botanical_clinical_dose": round(float(bot["score"]), 4),
         }
-        penalties = {"B7_dose_safety": round(-b7, 4)}
-        score = _clamp(0.0, DIMENSION_CAP, float(bot["score"]) - b7)
+        penalties: Dict[str, float] = {}
+        score = _clamp(0.0, DIMENSION_CAP, float(bot["score"]))
         return {
             "score": round(score, 4),
             "max": DIMENSION_CAP,
@@ -614,8 +583,8 @@ def score_dose(product: Dict[str, Any]) -> Dict[str, Any]:
         components = {
             "sleep_support_dose": round(float(sleep["score"]), 4),
         }
-        penalties = {"B7_dose_safety": round(-b7, 4)}
-        score = _clamp(0.0, DIMENSION_CAP, float(sleep["score"]) - b7)
+        penalties: Dict[str, float] = {}
+        score = _clamp(0.0, DIMENSION_CAP, float(sleep["score"]))
         return {
             "score": round(score, 4),
             "max": DIMENSION_CAP,
@@ -633,8 +602,8 @@ def score_dose(product: Dict[str, Any]) -> Dict[str, Any]:
     immune = score_immune_support_dose(product) if purpose_count <= 1 else None
     if immune is not None:
         components = dict(immune["components"])
-        penalties = {"B7_dose_safety": round(-b7, 4)}
-        score = _clamp(0.0, DIMENSION_CAP, float(immune["score"]) - b7)
+        penalties: Dict[str, float] = {}
+        score = _clamp(0.0, DIMENSION_CAP, float(immune["score"]))
         return {
             "score": round(score, 4),
             "max": DIMENSION_CAP,
@@ -654,8 +623,8 @@ def score_dose(product: Dict[str, Any]) -> Dict[str, Any]:
         components = {
             "joint_support_dose": round(float(joint["score"]), 4),
         }
-        penalties = {"B7_dose_safety": round(-b7, 4)}
-        score = _clamp(0.0, DIMENSION_CAP, float(joint["score"]) - b7)
+        penalties: Dict[str, float] = {}
+        score = _clamp(0.0, DIMENSION_CAP, float(joint["score"]))
         return {
             "score": round(score, 4),
             "max": DIMENSION_CAP,
@@ -702,11 +671,7 @@ def score_dose(product: Dict[str, Any]) -> Dict[str, Any]:
             4,
         ),
     }
-    penalties: Dict[str, float] = {
-        # Stored as negatives for JSON readability; _sum_penalty_magnitudes
-        # takes abs() so sign convention is defense-in-depth.
-        "B7_dose_safety":            round(-b7, 4),
-    }
+    penalties: Dict[str, float] = {}
 
     positive = components["supplemental_window_proxy"]
     penalty_total = _sum_penalty_magnitudes(penalties)
@@ -714,7 +679,7 @@ def score_dose(product: Dict[str, Any]) -> Dict[str, Any]:
         "no_rda_reference_data",
         "dietary_intake_dominant_reference_excluded",
     }
-    if no_rda_reference and b7 <= 0 and no_reference_credit <= 0:
+    if no_rda_reference and no_reference_credit <= 0:
         # Botanicals / herbal actives can have clinically meaningful mg
         # dosing with no RDA/UL reference. Fail open as "not evaluable by
         # this proxy" rather than treating missing dietary-reference data
@@ -729,7 +694,6 @@ def score_dose(product: Dict[str, Any]) -> Dict[str, Any]:
         "deferred_data_dependency": DEFERRED_DATA,
         "B7_safety_evaluation": b7_metadata,
         # Source-owned context, not another assessment or a clinical efficacy claim.
-        "dose_safety_policy": dict(_B7),
         "reference_assessments": [
             {key: row.get(key) for key in (
                 "nutrient", "canonical_id", "unit", "rda_ai", "rda_ai_source", "ul", "ul_status",
@@ -739,9 +703,6 @@ def score_dose(product: Dict[str, Any]) -> Dict[str, Any]:
             for row in _safe_list(_safe_dict(product.get("rda_ul_data")).get("adequacy_results"))
             if isinstance(row, dict)
         ],
-        "ul_partial_credit_above_pct": WINDOW_UL_PARTIAL_BAND,
-        "ul_zero_credit_at_pct": B7_UL_PCT_THRESHOLD,
-        "ul_partial_credit_raw": WINDOW_OVERDOSE_CREDIT,
         "supplemental_window_max_raw": CAP_SUPPLEMENTAL_WINDOW,
     }
     if purpose_credit is not None:

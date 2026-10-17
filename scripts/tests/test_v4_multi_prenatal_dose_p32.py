@@ -138,18 +138,19 @@ def test_high_b_vitamin_without_ul_is_softly_downweighted_not_zeroed() -> None:
     assert payload["metadata"]["coverage_nutrient_scores"]["vitamin_b1_thiamine"] == 0.65
 
 
-def test_over_ul_but_below_b7_threshold_gets_partial_credit_without_penalty() -> None:
+def test_over_ul_coverage_keeps_its_adequacy_credit() -> None:
+    """Dose V4.1 §2.4: coverage is adequacy only (300% RDA → 0.85 of 15)."""
     from scoring_v4.modules.multi_prenatal_dose import score_dose
 
     payload = score_dose(_product(adequacy_results=[
         _adequacy("Niacin", pct_rda=300, pct_ul=120),
     ]))
 
-    assert payload["components"]["rda_ai_coverage"] == 7.5
-    assert payload["penalties"]["B7_dose_safety"] == -0.0
+    assert payload["components"]["rda_ai_coverage"] == 12.75
+    assert payload["penalties"] == {}
 
 
-def test_b7_penalty_caps_at_three_and_zeroes_over_150_ul_coverage() -> None:
+def test_over_150_ul_panel_records_one_zero_ceiling_without_module_subtraction() -> None:
     from scoring_v4.modules.multi_prenatal_dose import score_dose
 
     payload = score_dose(_product(
@@ -163,12 +164,13 @@ def test_b7_penalty_caps_at_three_and_zeroes_over_150_ul_coverage() -> None:
         ],
     ))
 
-    assert payload["components"]["rda_ai_coverage"] == 0.0
-    assert payload["penalties"]["B7_dose_safety"] == -3.0
-    assert payload["score"] == 0.0
+    assert payload["components"]["rda_ai_coverage"] == 12.75
+    assert payload["penalties"] == {}
+    ceiling = payload["metadata"]["B7_safety_evaluation"]["dose_ceiling"]
+    assert ceiling["cap_public"] == 0.0 and ceiling["nutrient"] == "Iron"
 
 
-def test_b7_ignores_folate_parent_total_plus_form_breakdown_duplicate() -> None:
+def test_dose_safety_ignores_folate_parent_total_plus_form_breakdown_duplicate() -> None:
     """Pure PreNatal-style labels can carry a Folate parent total plus the
     component forms used to make that total. The safety flag should not sum
     the parent and forms together as if the consumer receives both twice."""
@@ -211,7 +213,8 @@ def test_b7_ignores_folate_parent_total_plus_form_breakdown_duplicate() -> None:
         ],
     ))
 
-    assert payload["penalties"]["B7_dose_safety"] == -0.0
+    assert payload["penalties"] == {}
+    assert payload["metadata"]["B7_safety_evaluation"]["dose_ceiling"] is None
     ignored = payload["metadata"]["B7_ignored_safety_flags"]
     assert ignored[0]["reason"] == "folate_parent_total_plus_form_breakdown_duplicate"
 

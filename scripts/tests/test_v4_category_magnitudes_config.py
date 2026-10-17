@@ -97,7 +97,7 @@ def test_runtime_constants_read_from_config_no_drift():
     assert multi_prenatal.DIMENSION_CAPS == (("formulation", 12), ("dose", 25), ("evidence", 20), ("transparency", 15))
     assert omega.DIMENSION_CAPS == (("formulation", 25), ("dose", 25), ("evidence", 20), ("transparency", 11))
     assert probiotic.DIMENSION_CAPS == (("formulation", 15), ("dose", 25), ("evidence", 20), ("transparency", 15))
-    assert b_complex.FORMULATION_CAP == 8.0 and b_complex.B7_CAP == 3.0
+    assert b_complex.FORMULATION_CAP == 8.0 and not hasattr(b_complex, "B7_CAP")
     assert immune_support.IMMUNE_EVIDENCE_CAP == 17.0
     assert immune_support.HIGH_VARIABILITY_BOTANICAL_STACK_MIN_COUNT == 3
     assert immune_support.HIGH_VARIABILITY_BOTANICAL_STACK_PENALTY == 3.0

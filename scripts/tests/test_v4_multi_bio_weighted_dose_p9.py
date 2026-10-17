@@ -4,8 +4,8 @@ Phase 9 multiplied each nutrient's RDA/AI coverage by ``0.75 + bio_score / 60``.
 bio_score is an ordinal IQM form rating, not a measured absorption fraction, and
 the same rating already drives Formulation panel form quality; an unknown form
 received 1.0 and could out-dose a known one. Since quality_score 1.7.0 Dose
-scores the disclosed amount only. Genuine underdosing and upper-limit handling
-are unchanged.
+scores the disclosed amount only. Genuine underdosing is unchanged; an
+upper-limit exceedance is the product-level Dose ceiling's (Dose V4.1 §2.4).
 """
 from __future__ import annotations
 
@@ -18,7 +18,7 @@ SCRIPTS = Path(__file__).resolve().parents[1]
 if str(SCRIPTS) not in sys.path:
     sys.path.insert(0, str(SCRIPTS))
 
-from scoring_v4.modules.multi_prenatal_dose import B7_UL_PCT_THRESHOLD, score_dose  # noqa: E402
+from scoring_v4.modules.multi_prenatal_dose import score_dose  # noqa: E402
 
 _NUTRIENTS = ["Magnesium", "Vitamin B12", "Folate", "Zinc", "Vitamin B6"]
 _CANONICALS = ["magnesium", "vitamin_b12", "folate", "zinc", "vitamin_b6"]
@@ -68,12 +68,13 @@ def test_genuine_underdose_keeps_its_dose_response(bio):
     assert payload["components"]["rda_ai_coverage"] == 6.0
 
 
-def test_upper_limit_violation_keeps_zero_credit_and_dose_safety_penalty():
+def test_upper_limit_exceedance_is_left_to_the_one_product_ceiling():
     adequacy = [_adeq(n) for n in _NUTRIENTS]
-    adequacy[3] = _adeq("Zinc", pct_rda=100.0, pct_ul=B7_UL_PCT_THRESHOLD)
-    flags = [{"nutrient": "Zinc", "pct_ul": B7_UL_PCT_THRESHOLD, "severity": "high", "ul_gate_eligible": True}]
+    adequacy[3] = _adeq("Zinc", pct_rda=100.0, pct_ul=150.0)
+    flags = [{"nutrient": "Zinc", "pct_ul": 150.0, "severity": "high", "ul_gate_eligible": True}]
 
     payload = score_dose(_product(15, adequacy=adequacy, safety_flags=flags))
 
-    assert payload["metadata"]["coverage_nutrient_scores"]["zinc"] == 0.0
-    assert payload["penalties"]["B7_dose_safety"] < 0
+    assert payload["metadata"]["coverage_nutrient_scores"]["zinc"] == 1.0
+    assert payload["penalties"] == {}
+    assert payload["metadata"]["B7_safety_evaluation"]["dose_ceiling"]["cap_public"] == 0.0
