@@ -52,3 +52,14 @@ def test_intermittent_directions_are_assessed_at_their_daily_exposure():
     a = build_scored_artifact(product(quantity=600, low=.5, high=.5))
     assert a['product_safety_status'] == 'no_known_catalog_concern'
     assert a['_v4_module_breakdown']['dimensions']['dose']['penalties'].get('B7_dose_safety', 0) == 0
+
+
+def test_module_reassembly_keeps_the_sports_subtype():
+    # A cross-cutting reassembly once rebuilt module metadata without the sports
+    # subtype, so a protein product fell back to the sports_single archetype.
+    from scoring_v4.modules.generic import _assemble_score
+    from scoring_v4.modules.sports import score_sports
+    result = score_sports({'product_name': 'Whey Protein', 'primary_type': 'protein_powder'})
+    subtype = result.metadata['sports_subtype']
+    _assemble_score(result)
+    assert result.metadata['sports_subtype'] == subtype

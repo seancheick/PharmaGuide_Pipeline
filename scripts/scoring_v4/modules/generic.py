@@ -374,6 +374,9 @@ def _assemble_score(result: GenericModuleResult) -> None:
     penalty_relocations = list(
         (result.metadata or {}).get("penalty_relocations") or []
     )
+    # The route's own classification (the sports subtype selects the public
+    # archetype reference) is not assembly state; reassembly must keep it.
+    sports_subtype = (result.metadata or {}).get("sports_subtype")
 
     # Phase 4: the core dimensions are summed on their NATIVE scale (max 85).
     # There is NO renormalization to 100 — the former `(sum/evaluable_max)*100`
@@ -456,3 +459,5 @@ def _assemble_score(result: GenericModuleResult) -> None:
     }
     if penalty_relocations:
         result.metadata["penalty_relocations"] = penalty_relocations
+    if sports_subtype is not None:
+        result.metadata["sports_subtype"] = sports_subtype
