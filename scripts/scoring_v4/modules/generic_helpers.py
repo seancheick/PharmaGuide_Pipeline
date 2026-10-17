@@ -464,5 +464,8 @@ def score_declared_serving_dose(product, scorer):
     projected = declared_serving_dose_input(product)
     with declared_serving_score_scope():
         payload = scorer(projected)
-    payload.setdefault("metadata", {})["assessment_basis"] = "declared_serving"
+    metadata = payload.setdefault("metadata", {})
+    metadata["assessment_basis"] = "declared_serving"
+    if "daily_interval_selection" in metadata:
+        metadata["daily_interval_selection"] = "declared_serving"
     return payload

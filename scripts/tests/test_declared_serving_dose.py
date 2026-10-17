@@ -59,8 +59,18 @@ def test_serving_context_is_scoped_and_does_not_change_label_frequency():
     observed = []
     def consumer(projected):
         observed.append(resolve_daily_serving_range(projected)[:2])
-        return {'metadata': {}}
+        return {'metadata': {'daily_interval_selection': 'minimum_directed_use'}}
     result = score_declared_serving_dose(p, consumer)
     assert observed == [(1, 1)]
     assert resolve_daily_serving_range(p)[:2] == (2, 4)
     assert result['metadata']['assessment_basis'] == 'declared_serving'
+    assert result['metadata']['daily_interval_selection'] == 'declared_serving'
+
+
+def test_intermittent_directions_do_not_hide_a_high_single_serving_b7():
+    p = product(quantity=600, low=.5, high=.5)
+    assert not p['rda_ul_data']['safety_flags']
+    a = build_scored_artifact(p)
+    dose = a['_v4_module_breakdown']['dimensions']['dose']
+    assert dose['penalties']['B7_dose_safety'] == -2
+    assert a['product_safety_status'] == 'no_known_catalog_concern'

@@ -6405,9 +6405,11 @@ def declared_serving_dose_input(product: Dict[str, Any]) -> Dict[str, Any]:
     low, high, _ = resolve_daily_serving_range(product)
     projected = dict(product)
     rda = deepcopy(product.get("rda_ul_data") or {})
+    serving_only_flags = []
     for row in rda.get("adequacy_results") or []:
         if not isinstance(row, dict):
             continue
+        original_pct_ul = row.get("pct_ul")
         for key, frequency_key, fallback in (
             ("pct_rda", "servings_per_day_min", low),
             ("pct_ul", "servings_per_day_max", high),
@@ -6429,6 +6431,13 @@ def declared_serving_dose_input(product: Dict[str, Any]) -> Dict[str, Any]:
                 row[key] = value / frequency
         if isinstance(row.get("pct_ul"), (int, float)):
             row["over_ul"] = row["pct_ul"] > 100
+        if (isinstance(original_pct_ul, (int, float)) and not isinstance(original_pct_ul, bool)
+                and 0 <= original_pct_ul <= 100 and row.get("over_ul") is True
+                and row.get("skip_ul_check") is not True):
+            # Intermittent directions can be below the daily UL while one
+            # serving is above it. Reuse the source-resolved comparison and
+            # eligibility; no new clinical limit or identity inference.
+            serving_only_flags.append(dict(row, amount=row.get("per_day_max")))
         row["servings_per_day_min"] = row["servings_per_day_max"] = 1.0
     for flag in rda.get("safety_flags") or []:
         if not isinstance(flag, dict):
@@ -6437,5 +6446,6 @@ def declared_serving_dose_input(product: Dict[str, Any]) -> Dict[str, Any]:
             value = flag.get(key)
             if isinstance(value, (int, float)) and not isinstance(value, bool):
                 flag[key] = value / high
+    rda["safety_flags"] = list(rda.get("safety_flags") or []) + serving_only_flags
     projected["rda_ul_data"] = rda
     return projected
