@@ -367,3 +367,15 @@ def test_gmp_tradeoff_label_matches_the_audited_basis():
 
     assert _by_id(facility, "B4b")["label"] == "GMP-registered manufacturer"
     assert _by_id(certified, "B4b")["label"] == "Audited GMP facility"
+
+
+def test_ul_tradeoff_names_maximum_daily_use_without_claiming_a_serving_penalty():
+    enriched = {'rda_ul_data': {'safety_flags': [{
+        'nutrient': 'Magnesium', 'amount': 480, 'unit': 'mg', 'ul': 350,
+        'pct_ul': 137.14, 'ul_gate_eligible': True,
+    }]}}
+    _, penalties = derive_v4_tradeoffs(_scored_v4(), enriched)
+    flag = _by_id(penalties, 'B7')
+    assert flag['label'] == 'At maximum labeled daily use: Magnesium exceeds the upper limit (137% of UL)'
+    assert 'score' not in flag
+    assert flag['reason'] == 'Magnesium: 480 vs UL 350'

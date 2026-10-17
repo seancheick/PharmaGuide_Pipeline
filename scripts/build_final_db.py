@@ -2796,7 +2796,7 @@ def derive_v4_tradeoffs(
         pct = safe_float(ev.get("pct_ul"), 0)
         penalties.append({
             "id": "B7",
-            "label": f"Exceeds safe dose limit: {nutrient} at {pct:.0f}% of UL",
+            "label": f"At maximum labeled daily use: {nutrient} exceeds the upper limit ({pct:.0f}% of UL)",
             "severity": ul_flag_display_severity(ev),
             "reason": f"{nutrient}: {ev.get('amount')} vs UL {ev.get('ul')}",
         })
