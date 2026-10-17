@@ -80,10 +80,11 @@ def test_alpha_gpc_300mg_moderate_credit() -> None:
     assert _primary(_product(_row("alpha_gpc", 300, "mg"))) == (14.0, "alpha_gpc_300_to_600_mg")
 
 
-# --- ATP (weak-equivocal -> capped at 12) -----------------------------------
+# --- ATP: evidence certainty never caps Dose (Dose V4.1 section 2.2) --------
 
-def test_atp_400mg_capped_credit() -> None:
-    assert _primary(_product(_row("adenosine_triphosphate", 450, "mg"))) == (12.0, "atp_at_least_400_mg")
+def test_atp_400mg_reaches_full_adequacy() -> None:
+    assert _primary(_product(_row("adenosine_triphosphate", 450, "mg"))) == (20.0, "atp_at_least_400_mg")
+    assert _primary(_product(_row("adenosine_triphosphate", 200, "mg"))) == (10.0, "atp_under_400_mg")
 
 
 # --- caffeine (strong) ------------------------------------------------------
@@ -92,16 +93,16 @@ def test_caffeine_200mg_full_credit() -> None:
     assert _primary(_product(_row("caffeine", 200, "mg"))) == (18.0, "caffeine_200_to_400_mg")
 
 
-# --- betaine (moderate) -----------------------------------------------------
+# --- betaine: certainty is Evidence's (Dose V4.1 section 2.2) ---------------
 
 def test_betaine_2500mg_full_credit() -> None:
-    assert _primary(_product(_row("betaine", 2500, "mg"))) == (16.0, "betaine_at_least_2_5_g")
+    assert _primary(_product(_row("betaine", 2500, "mg"))) == (20.0, "betaine_at_least_2_5_g")
 
 
-# --- taurine (weak -> capped at 10, no under-dose penalty) -------------------
+# --- taurine: flat dose-response plateau at 1 g; certainty is Evidence's ----
 
-def test_taurine_1500mg_capped_credit() -> None:
-    assert _primary(_product(_row("taurine", 1500, "mg"))) == (10.0, "taurine_at_least_1_g")
+def test_taurine_1500mg_plateaus() -> None:
+    assert _primary(_product(_row("taurine", 1500, "mg"))) == (20.0, "taurine_at_least_1_g")
 
 
 # --- BCAA aggregate (recovery aid -> capped) --------------------------------

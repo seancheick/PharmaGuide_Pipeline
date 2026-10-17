@@ -79,12 +79,15 @@ def test_contribution_policy_targets_are_pinned():
 
 
 def test_dose_safety_ceiling_has_one_config_owner():
-    assert {k: v for k, v in DOSE_CEILING.items() if not k.startswith("_")} == {
+    assert {k: v for k, v in DOSE_CEILING.items() if not k.startswith("_") and k != "caffeine"} == {
         "exceeds_above_pct": 100.0,
         "zero_at_pct": 150.0,
         "partial_ceiling_public": 10.0,
     }
     assert "dose_safety_policy" not in CFG
+    # Dose V4.1 D3: caffeine is the one approved non-UL upper reference.
+    caffeine = DOSE_CEILING["caffeine"]
+    assert (caffeine["exceeds_above_mg_day"], caffeine["zero_at_mg_day"]) == (400.0, 600.0)
     serialized_nested_blocks = json.dumps({
         "dose_magnitudes": DM,
         "category_magnitudes": CFG["category_magnitudes"],

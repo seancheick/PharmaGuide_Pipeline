@@ -115,7 +115,8 @@ def test_missing_cfu_is_not_reported_as_proven_underdose():
     copy = _probiotic_dose_reason({"metadata": {
         "window_proxy_reason": "per_strain_cfu_missing",
     }}, "Doses fall short of the amounts shown to work.")
-    assert copy == "No live count (CFU) is disclosed, so dose adequacy cannot be assessed."
+    assert copy == ("No live count (CFU) is disclosed, so dose adequacy cannot be assessed; "
+                    "Dose takes the neutral assessment value.")
     assert "fall short" not in copy
 
 

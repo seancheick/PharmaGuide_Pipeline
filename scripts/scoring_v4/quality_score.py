@@ -214,8 +214,9 @@ def _probiotic_dose_reason(dim: Dict[str, Any], fallback: str) -> str:
         return "AFU amounts are disclosed, but a compatible dose benchmark has not been verified."
     if metadata.get("dose_adequacy_basis") == "studied_formula_native_afu":
         return "The complete formula matches its studied AFU dose; individual strain amounts are not disclosed."
-    # V4.1 Step 4: a label limitation and a missing benchmark earn no Dose
-    # credit, and neither means the product is underdosed.
+    # Dose V4.1 section 2.3: a hidden per-strain amount or a missing benchmark
+    # takes the shared neutral; neither means the product is underdosed, and
+    # Transparency keeps the disclosure consequence.
     # The Dose owner records the same limitation in window_proxy_reason; read
     # it when a payload carries only that field, never the underdose fallback.
     basis = metadata.get("cfu_adequacy_basis") or {
@@ -230,11 +231,11 @@ def _probiotic_dose_reason(dim: Dict[str, Any], fallback: str) -> str:
         )
         return (
             "Total potency is disclosed, but per-strain amounts are not, so they cannot "
-            "be checked against strain dose benchmarks or credited." + note
+            "be checked against strain dose benchmarks; Dose takes the neutral assessment value." + note
         )
     if basis == "direct_strain_mass_no_cfu_floor":
         return ("Strain amounts are given by weight, not live count, so they cannot be "
-                "checked against strain dose benchmarks or credited.")
+                "checked against strain dose benchmarks; Dose takes the neutral assessment value.")
     if basis == "no_cfu_adequacy_credit":
         tiers = {str(item.get("tier")) for item in metadata.get("cfu_adequacy_contributions") or []
                  if isinstance(item, dict)}
@@ -243,9 +244,14 @@ def _probiotic_dose_reason(dim: Dict[str, Any], fallback: str) -> str:
                     "that have one, so they earn no dose credit.")
         if _num(metadata.get("per_strain_cfu_disclosed_count")) > 0:
             return ("Per-strain amounts are disclosed, but no strain dose benchmark applies, "
-                    "so dose adequacy cannot be credited.")
-        return "No live count (CFU) is disclosed, so dose adequacy cannot be assessed."
+                    "so Dose takes the neutral assessment value.")
+        return ("No live count (CFU) is disclosed, so dose adequacy cannot be assessed; "
+                "Dose takes the neutral assessment value.")
     if metadata.get("reference_basis") == "industry_potency_not_trial_efficacy":
+        if _num(metadata.get("strain_neutral_count")) > 0:
+            return ("Strains with a disclosed CFU are assessed against potency benchmarks; strains without "
+                    "an assessable amount or benchmark take the neutral value, and Dose averages them. "
+                    "Potency benchmarks are not proof of clinical benefit.")
         return "Disclosed CFU is assessed against potency benchmarks, not proof of clinical benefit."
     return fallback
 
@@ -308,6 +314,14 @@ def _over_limit_dose_reason(dim: Dict[str, Any]) -> Optional[str]:
         nutrient = str(ceiling.get("nutrient") or "One nutrient")
         cap = _num(ceiling.get("cap_public"))
         outcome = ("so Dose is set to 0" if cap == 0 else f"so Dose is capped at {cap:g}")
+        if ceiling.get("kind") == "caffeine_daily_total":
+            use = ("at one serving a day (the label gives no daily directions)" if ceiling.get("frequency_defaulted")
+                   else "even at the lowest directed daily use" if ceiling.get("minimum_exceeds")
+                   else "at the highest directed daily use")
+            return (f"The label provides {_num(ceiling.get('amount_mg_day')):.0f} mg of caffeine a day {use}, "
+                    f"above the {_num(ceiling.get('exceeds_above_mg_day')):.0f} mg/day that FDA describes as generally "
+                    f"not associated with negative effects for most adults, {outcome}. This cap is PharmaGuide "
+                    "scoring policy, not a medical toxicity grade.")
         if ceiling.get("frequency_defaulted"):
             exposure = (f"The label gives no daily directions; at one serving a day {nutrient} exceeds its "
                         f"established upper limit ({_num(ceiling.get('pct_ul')):.0f}% of the limit)")

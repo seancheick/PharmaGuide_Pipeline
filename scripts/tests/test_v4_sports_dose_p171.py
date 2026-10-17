@@ -272,10 +272,11 @@ def test_creatine_hmb_stack_scores_the_same_as_its_primary_active() -> None:
     assert payload["score"] == pytest.approx(20.0)
 
 
-def test_creatine_above_ten_grams_drops_without_loading_protocol() -> None:
+def test_creatine_above_ten_grams_plateaus_and_keeps_its_regimen_label() -> None:
+    # Dose V4.1 D3: exceeding a studied range is not a reduction.
     payload = score_dose(_product(_row("creatine_monohydrate", 12, "Gram(s)"), name="Creatine Monohydrate"))
 
-    assert payload["components"]["sports_primary_active_dose"] == pytest.approx(16.0)
+    assert payload["components"]["sports_primary_active_dose"] == pytest.approx(20.0)
     assert payload["metadata"]["dose_basis"] == "creatine_above_10_g_no_loading_protocol"
 
 

@@ -6375,6 +6375,7 @@ def classify_ingredient_roles(
     *,
     module: Optional[str] = None,
     rows: Optional[List[Dict[str, Any]]] = None,
+    materiality_only: bool = False,
 ) -> List[Dict[str, Any]]:
     """Classify every scoring row's role (compatibility mode, Phase 2).
 
@@ -6386,9 +6387,15 @@ def classify_ingredient_roles(
     ``rows`` lets a caller that has already derived the scoring rows (e.g. the
     completeness gate) pass them in to avoid a second derivation pass. When
     omitted they are derived from ``product``.
+
+    ``materiality_only`` skips the route-driver rule (L1), which makes every
+    active a route recognizes primary, so claim prominence and mass ratio
+    separate a route's co-primaries from its accessories (Dose V4.1 §3.2).
     """
     product = product or {}
     if rows is None:
         rows = get_scoring_ingredients(product, strict=True).rows
     ctx = _role_context(product, module, rows)
+    if materiality_only:
+        ctx = {**ctx, "driver_canonicals": set(), "module": None}
     return [_classify_one(row, ctx) for row in rows]

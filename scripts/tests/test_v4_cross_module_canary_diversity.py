@@ -163,11 +163,13 @@ PROBIOTIC_CANARIES = {
         # The CFU disclosure component owns that limitation, without a second B5.
         # V4.1 (Oct 15, 2026): its reviewed research does not apply to this
         # product, so the former 10 certainty points are gated to 0.
-        # V4.1 Step 4: the disclosed total is a label limit (Dose 0); Formulation
-        # is the unrated neutral.
-        "score_range": (30.2, 30.2),
-        "traits": {"dose_zero": True, "trust_positive": True,
-                   "dimension_scores": {"formulation": 9.0, "dose": 0.0, "evidence": 0.0, "transparency": 11.0},
+        # Dose V4.1 (plan section 2.3/3.2): its three strains' amounts are hidden,
+        # so each takes the shared neutral (8.55 raw = 11.4 public) instead of
+        # 0; Transparency keeps the disclosure consequence. Formulation is the
+        # unrated neutral.
+        "score_range": (38.8, 38.8),
+        "traits": {"dose_positive": True, "trust_positive": True,
+                   "dimension_scores": {"formulation": 9.0, "dose": 8.55, "evidence": 0.0, "transparency": 11.0},
                    "identity_counts": (3, 3),
                    "evidence_state": "research_present_applicability_unestablished"},
     },

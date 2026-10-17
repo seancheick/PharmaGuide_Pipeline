@@ -13,7 +13,7 @@ from scoring_v4.exposure import row_exposure
 from serving_frequency import has_loading_protocol
 
 from scoring_v4.modules.generic_helpers import _norm_text, _safe_list, get_active_ingredients
-from scoring_input_contract import is_lent_blend_mass, normalize_product_evidence_scope
+from scoring_input_contract import classify_ingredient_roles, is_lent_blend_mass, normalize_product_evidence_scope
 from scoring_v4.modules.sports_helpers import (
     ALPHA_GPC_CANONICALS,
     ATP_CANONICALS,
@@ -56,7 +56,7 @@ def score_dose(product: Dict[str, Any]) -> Dict[str, Any]:
     if not isinstance(product, dict):
         product = {}
 
-    identity, primary, basis = _best_primary_score(product)
+    identity, primary, basis, aggregation = _best_primary_score(product)
     identity, primary, basis = _apply_offlist_dose_floor(product, identity, primary, basis)
     completeness = _score_ratio_or_completeness(product, identity)
     not_evaluable = _not_evaluable_reason(product, primary)
@@ -86,6 +86,7 @@ def score_dose(product: Dict[str, Any]) -> Dict[str, Any]:
         "method": METHOD_MARKER,
         "primary_identity": identity,
         "dose_basis": basis,
+        "dose_aggregation": aggregation,
         "benchmark_exposures": [
             asdict(row_exposure(product, row, basis="daily" if canonical(row) in _DAILY_CANONICALS else "per_use", unit="g"))
             for row in sports_dosed_rows(product)
@@ -179,7 +180,8 @@ def _score_primary(product: Dict[str, Any], identity: Optional[str]) -> Tuple[fl
             return 16.0, "protein_15_to_20_g"
         if grams <= 40:
             return 20.0, "protein_20_to_40_g"
-        return 16.0, "protein_above_40_g"
+        # Dose V4.1 D3: above a studied range adequacy plateaus.
+        return 20.0, "protein_above_40_g"
 
     if identity == "creatine":
         def creatine_band(grams: float) -> Tuple[float, str]:
@@ -195,7 +197,8 @@ def _score_primary(product: Dict[str, Any], identity: Optional[str]) -> Tuple[fl
             # above it, or without loading directions, keeps the high-dose band.
             if grams <= 20 and has_loading_protocol(product):
                 return 20.0, "creatine_loading_protocol_up_to_20_g"
-            return 16.0, "creatine_above_10_g_no_loading_protocol"
+            # Dose V4.1 D3: the label still names the regimen; adequacy plateaus.
+            return 20.0, "creatine_above_10_g_no_loading_protocol"
 
         return _daily_band(product, rows, CREATINE_CANONICALS, creatine_band, "creatine_no_dose")
 
@@ -207,7 +210,7 @@ def _score_primary(product: Dict[str, Any], identity: Optional[str]) -> Tuple[fl
                 return 16.0, "beta_alanine_2_to_4_g"
             if grams <= 6:
                 return 20.0, "beta_alanine_4_to_6_g"
-            return 16.0, "beta_alanine_above_6_g"
+            return 20.0, "beta_alanine_above_6_g"
 
         return _daily_band(product, rows, BETA_ALANINE_CANONICALS, beta_alanine_band, "beta_alanine_no_dose")
 
@@ -238,7 +241,7 @@ def _score_primary(product: Dict[str, Any], identity: Optional[str]) -> Tuple[fl
                 return 16.0, "hmb_1_5_to_3_g"
             if grams <= 6:
                 return 20.0, "hmb_3_to_6_g"
-            return 16.0, "hmb_above_6_g"
+            return 20.0, "hmb_above_6_g"
 
         return _daily_band(product, rows, HMB_CANONICALS, hmb_band, "hmb_no_dose")
 
@@ -316,9 +319,10 @@ def _score_primary(product: Dict[str, Any], identity: Optional[str]) -> Tuple[fl
         if mg is None:
             return 0.0, "atp_no_dose"
         if mg < 400:
-            return _partial(mg, 400.0, 6.0), "atp_under_400_mg"
-        # Oral ATP (PeakATP) ergogenic evidence is weak-equivocal (PMID 34957398) -> capped.
-        return 12.0, "atp_at_least_400_mg"
+            return _partial(mg, 400.0, 20.0), "atp_under_400_mg"
+        # Dose V4.1 §2.2: evidence strength never caps Dose. Oral ATP's
+        # weak-equivocal evidence (PMID 34957398) is the Evidence pillar's.
+        return 20.0, "atp_at_least_400_mg"
 
     if identity == "caffeine":
         mg = _max_benchmark_amount(product, rows, CAFFEINE_CANONICALS, basis="per_use", unit="mg")
@@ -331,41 +335,87 @@ def _score_primary(product: Dict[str, Any], identity: Optional[str]) -> Tuple[fl
         if mg <= 400:
             # 3-6 mg/kg (~200-400 mg) ergogenic (ISSN PMID 33388079; strong).
             return 18.0, "caffeine_200_to_400_mg"
-        # >= ~9 mg/kg adds no benefit and raises AEs.
-        return 14.0, "caffeine_above_400_mg"
+        # Dose V4.1 D3: per-use adequacy plateaus; total daily caffeine is
+        # judged once by the product-level dose-safety ceiling.
+        return 18.0, "caffeine_above_400_mg"
 
     if identity == "betaine":
         grams = _max_g(rows, BETAINE_CANONICALS)
         if grams is None:
             return 0.0, "betaine_no_dose"
         if grams < 2.5:
-            return _partial(grams, 2.5, 10.0), "betaine_under_2_5_g"
-        # 2.5 g/day chronic for strength/power (PMC2915951; moderate).
-        return 16.0, "betaine_at_least_2_5_g"
+            return _partial(grams, 2.5, 20.0), "betaine_under_2_5_g"
+        # 2.5 g/day chronic for strength/power (PMC2915951). Dose V4.1 §2.2:
+        # its moderate certainty is the Evidence pillar's, not a Dose cap.
+        return 20.0, "betaine_at_least_2_5_g"
 
     if identity == "taurine":
         grams = _max_g(rows, TAURINE_CANONICALS)
         if grams is None:
             return 0.0, "taurine_no_dose"
-        # Flat dose-response, weak certainty (PMID 40852891): modest flat credit,
-        # no under-dose penalty above a token amount.
+        # Flat dose-response (PMID 40852891): adequacy plateaus at 1 g. Dose
+        # V4.1 §2.2: its weak certainty is the Evidence pillar's, not a Dose cap.
         if grams < 1.0:
-            return _partial(grams, 1.0, 6.0), "taurine_under_1_g"
-        return 10.0, "taurine_at_least_1_g"
+            return _partial(grams, 1.0, 20.0), "taurine_under_1_g"
+        return 20.0, "taurine_at_least_1_g"
 
     return 0.0, "no_sports_primary_dose"
 
 
-def _best_primary_score(product: Dict[str, Any]) -> Tuple[Optional[str], float, Optional[str]]:
-    """Pick the dose-supported primary anchor with the highest credit.
+_IDENTITY_CANONICALS = (
+    ("protein", SPORTS_PROTEIN_CANONICALS), ("creatine", CREATINE_CANONICALS),
+    ("beta_alanine", BETA_ALANINE_CANONICALS), ("citrulline", CITRULLINE_CANONICALS),
+    ("hmb", HMB_CANONICALS), ("alpha_gpc", ALPHA_GPC_CANONICALS), ("atp", ATP_CANONICALS),
+    ("caffeine", CAFFEINE_CANONICALS), ("betaine", BETAINE_CANONICALS), ("taurine", TAURINE_CANONICALS),
+)
 
-    A fixed canonical priority is unsafe for pre-workouts: tiny accessory
-    rows can coexist with therapeutic-dose beta-alanine/citrulline/BCAA.
+
+def _co_primary_identities(product: Dict[str, Any]) -> list[str]:
+    """Banded identities that are claim-prominent or mass-major on the label.
+
+    Every sports active drives the route, so the shared role owner's
+    materiality mode decides which of them are co-primaries.
     """
+    rows = sports_identity_rows(product)
+    roles = classify_ingredient_roles(product, module="sports", rows=rows, materiality_only=True)
+    found = []
+    for row, role in zip(rows, roles):
+        if role.get("role") not in {"claim_prominent", "major"}:
+            continue
+        key = canonical(row)
+        identity = next((name for name, canons in _IDENTITY_CANONICALS if key in canons), None)
+        if identity and identity not in found:
+            found.append(identity)
+    return found
+
+
+def _best_primary_score(product: Dict[str, Any]) -> Tuple[Optional[str], float, Optional[str], str]:
+    """Score the product's sports primary (Dose V4.1 \u00a73.2).
+
+    One banded primary from the shared role owner scores against its own
+    benchmark; several co-primaries average. Without a role-owned banded
+    primary, the dose-supported anchor with the highest credit is used, since
+    a fixed canonical priority is unsafe for pre-workouts.
+    """
+    shared_primary = primary_sports_identity(product)
+    co_primaries = [identity for identity in _co_primary_identities(product)
+                    if identity != "protein" or shared_primary == "protein"]
+    if len(co_primaries) > 1:
+        scored = [(identity, *_score_primary(product, identity)) for identity in co_primaries]
+        average = sum(score for _, score, _ in scored) / len(scored)
+        lead = max(scored, key=lambda item: item[1])
+        return lead[0], round(average, 4), lead[2], "co_primary_average"
+    if co_primaries:
+        score, basis = _score_primary(product, co_primaries[0])
+        return co_primaries[0], score, basis, "single_primary"
+    identity, score, basis = _strongest_primary_score(product, shared_primary)
+    return identity, score, basis, "strongest_dosed_anchor"
+
+
+def _strongest_primary_score(product: Dict[str, Any], shared_primary: Optional[str]) -> Tuple[Optional[str], float, Optional[str]]:
     best_identity: Optional[str] = None
     best_score = 0.0
     best_basis: Optional[str] = "no_sports_primary_dose"
-    shared_primary = primary_sports_identity(product)
     for identity in (
         "protein", "creatine", "bcaa", "eaa", "beta_alanine", "citrulline", "hmb",
         "alpha_gpc", "atp", "caffeine", "betaine", "taurine",

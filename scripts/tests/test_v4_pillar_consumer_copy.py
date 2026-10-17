@@ -326,7 +326,7 @@ def test_probiotic_aggregate_cfu_dose_copy_does_not_claim_the_total_is_too_low()
     reason = out["quality_pillars_v4"]["dose"]["reason"]
     assert reason == (
         "Total potency is disclosed, but per-strain amounts are not, so they cannot "
-        "be checked against strain dose benchmarks or credited."
+        "be checked against strain dose benchmarks; Dose takes the neutral assessment value."
     )
     assert "low" not in reason.lower() and "fall short" not in reason.lower()
     assert "fall short" not in reason.lower()

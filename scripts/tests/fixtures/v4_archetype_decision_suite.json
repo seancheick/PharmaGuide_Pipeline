@@ -5,7 +5,7 @@
     "production_entry_point": "scoring_v4.scored_artifact.build_scored_artifact",
     "scoring_formulas_embedded": false,
     "external_identifiers": "none; FIXTURE_* and SYNTHETIC_* values are synthetic case labels, not clinical references",
-  "review_status": "reviewed archetype decision set; expectations re-locked 2026-09-25 after measured IQM parent-relative Formulation, purpose-owner Evidence, disclosure-owned Transparency, probiotic fairness, prenatal population-reference, and sports Dose-separation checkpoints. Frozen real-product replays showed each checkpoint changed only its owning pillar with no route, status, safety, readiness, or unrelated-pillar drift. Re-locked 2026-10-15 for V4.1 Step 4 (config 1.26.0): formula checks own additive/sugar findings (Formulation stops charging; sixth-pillar budget 10); count, disclosure, focus and route-base components retired with their references (b_complex 8/18, sports protein 15, sports Dose 20, fiber 12/22, prenatal 12/21, probiotic Dose 15); canonical probiotic form quality; botanical identity neutral and the 11.4 unbenchmarked Dose neutral. Every movement stays in its owning pillar; no route, status or safety-status drift. Earlier review history remains in git. Re-locked 2026-10-17 for Dose V4.1 B2 (Sean D1): one product-level ceiling replaces the per-nutrient UL bands and B7 subtraction, so a confirmed exposure at or above 150% of a UL sets public Dose to 0 instead of being diluted by the panel (B-complex B6 588%, immune zinc 200%, prenatal folate 160%); raw Dose now records adequacy only. Only Dose, total and derived tier moved. Re-locked 2026-10-17 for Dose V4.1 B4 (Sean, plan section 3.1): ordinary omega EPA+DHA is proportional to the 250 mg/day reference, so the failure fixture's trace 70 mg/day earns 5.6 instead of the former below-100 mg zero cliff. Only Dose and total moved."
+  "review_status": "reviewed archetype decision set; expectations re-locked 2026-09-25 after measured IQM parent-relative Formulation, purpose-owner Evidence, disclosure-owned Transparency, probiotic fairness, prenatal population-reference, and sports Dose-separation checkpoints. Frozen real-product replays showed each checkpoint changed only its owning pillar with no route, status, safety, readiness, or unrelated-pillar drift. Re-locked 2026-10-15 for V4.1 Step 4 (config 1.26.0): formula checks own additive/sugar findings (Formulation stops charging; sixth-pillar budget 10); count, disclosure, focus and route-base components retired with their references (b_complex 8/18, sports protein 15, sports Dose 20, fiber 12/22, prenatal 12/21, probiotic Dose 15); canonical probiotic form quality; botanical identity neutral and the 11.4 unbenchmarked Dose neutral. Every movement stays in its owning pillar; no route, status or safety-status drift. Earlier review history remains in git. Re-locked 2026-10-17 for Dose V4.1 B2 (Sean D1): one product-level ceiling replaces the per-nutrient UL bands and B7 subtraction, so a confirmed exposure at or above 150% of a UL sets public Dose to 0 instead of being diluted by the panel (B-complex B6 588%, immune zinc 200%, prenatal folate 160%); raw Dose now records adequacy only. Only Dose, total and derived tier moved. Re-locked 2026-10-17 for Dose V4.1 B4 (Sean, plan section 3.1): ordinary omega EPA+DHA is proportional to the 250 mg/day reference, so the failure fixture's trace 70 mg/day earns 5.6 instead of the former below-100 mg zero cliff. Only Dose and total moved. Re-locked 2026-10-17 for Dose V4.1 B5 (plan sections 2.3/3.2/3.3): probiotic Dose averages strain assessments and a strain with a hidden amount takes the shared neutral (failure fixture 0 -> 11.4); a sports product's single co-primary is scored on its own benchmark, so the failure fixture's underdosed 10 g protein (8) is no longer anchored by a 1 g taurine accessory (10). Only Dose, total and tier moved."
   },
   "fixtures": [
     {
@@ -936,7 +936,7 @@
         "archetype": "probiotic",
         "quality_score_status": "scored",
         "product_safety_status": "no_known_catalog_concern",
-        "quality_score_v4_100": 32.0,
+        "quality_score_v4_100": 43.4,
         "quality_tier": "Poor",
         "v4_confidence": "low",
         "normalization_references": {
@@ -946,7 +946,7 @@
         },
         "pillars": {
           "formulation": 12.0,
-          "dose": 0.0,
+          "dose": 11.4,
           "evidence": 0.0,
           "transparency": 8.0,
           "verification": 6.0,
@@ -954,7 +954,7 @@
         },
         "raw_dimensions": {
           "formulation": 9.0,
-          "dose": 0.0,
+          "dose": 8.55,
           "evidence": 0.0,
           "transparency": 8.0
         }
@@ -1679,7 +1679,7 @@
         "archetype": "sports_protein",
         "quality_score_status": "scored",
         "product_safety_status": "no_known_catalog_concern",
-        "quality_score_v4_100": 28.8,
+        "quality_score_v4_100": 26.8,
         "quality_tier": "Poor",
         "v4_confidence": "moderate",
         "normalization_references": {
@@ -1689,7 +1689,7 @@
         },
         "pillars": {
           "formulation": 0.0,
-          "dose": 10.0,
+          "dose": 8.0,
           "evidence": 0.0,
           "transparency": 6.8,
           "verification": 6.0,
@@ -1697,7 +1697,7 @@
         },
         "raw_dimensions": {
           "formulation": 0.0,
-          "dose": 10.0,
+          "dose": 8.0,
           "evidence": 0.0,
           "transparency": 4.5
         }

@@ -148,6 +148,8 @@ class DoseSafetyResult:
     conversion_failures: int = 0
     # No daily directions: one Facts-panel serving a day was assessed.
     frequency_defaulted: bool = False
+    # Total declared daily caffeine (Dose V4.1 D3); None when none is declared.
+    caffeine: Optional[Dict[str, Any]] = None
 
     def dose_ceiling(self) -> Optional[Dict[str, Any]]:
         """The strongest confirmed exceedance and the public Dose ceiling it sets.
@@ -155,6 +157,31 @@ class DoseSafetyResult:
         Exactly 100% is not an exceedance. The maximum directed daily use sets
         the band; the minimum only says whether even the lowest use exceeds.
         """
+        candidates = [ceiling for ceiling in (self._ul_ceiling(), self._caffeine_ceiling()) if ceiling]
+        return min(candidates, key=lambda ceiling: ceiling["cap_public"]) if candidates else None
+
+    def _caffeine_ceiling(self) -> Optional[Dict[str, Any]]:
+        policy = _CEILING["caffeine"]
+        total = (self.caffeine or {}).get("total_mg_day_max")
+        if not isinstance(total, (int, float)) or total <= float(policy["exceeds_above_mg_day"]):
+            return None
+        minimum = (self.caffeine or {}).get("total_mg_day_min")
+        cap = (0.0 if total >= float(policy["zero_at_mg_day"])
+               else float(_CEILING["partial_ceiling_public"]))
+        return {
+            "cap_public": cap,
+            "kind": "caffeine_daily_total",
+            "nutrient": "Caffeine",
+            "amount_mg_day": round(float(total), 4),
+            "amount_mg_day_at_minimum": minimum,
+            "minimum_exceeds": (minimum > float(policy["exceeds_above_mg_day"])) if minimum is not None else None,
+            "frequency_defaulted": self.frequency_defaulted,
+            "exceeds_above_mg_day": float(policy["exceeds_above_mg_day"]),
+            "zero_at_mg_day": float(policy["zero_at_mg_day"]),
+            "partial_ceiling_public": float(_CEILING["partial_ceiling_public"]),
+        }
+
+    def _ul_ceiling(self) -> Optional[Dict[str, Any]]:
         confirmed = [flag for flag in self.flags
                      if flag.state == CONFIRMED_OVER_THRESHOLD and isinstance(flag.pct_ul, (int, float))
                      and flag.pct_ul > float(_CEILING["exceeds_above_pct"])]
@@ -166,6 +193,7 @@ class DoseSafetyResult:
         minimum = driver.pct_ul_at_minimum
         return {
             "cap_public": cap,
+            "kind": "established_upper_limit",
             "nutrient": driver.nutrient,
             "canonical_id": driver.canonical_id,
             "pct_ul": driver.pct_ul,
@@ -193,6 +221,7 @@ class DoseSafetyResult:
                 }
                 for flag in self.flags
             ],
+            "caffeine": self.caffeine,
             "dose_ceiling": self.dose_ceiling(),
         }
 
@@ -573,4 +602,41 @@ def evaluate_dose_safety(product: Dict[str, Any]) -> DoseSafetyResult:
         ignored_flags=ignored,
         conversion_failures=conversion_failures,
         frequency_defaulted=bool(defaulted),
+        caffeine=_declared_daily_caffeine(product) if isinstance(product, dict) else None,
     )
+
+
+def _declared_daily_caffeine(product: Dict[str, Any]) -> Optional[Dict[str, Any]]:
+    """Total declared daily caffeine at minimum and maximum directed use.
+
+    Quantified caffeine rows are summed once each; a declared total (parent
+    total), a compound duplicate or a restatement of another row is not a
+    second exposure. A caffeine row without a usable amount stays unknown.
+    """
+    from scoring_input_contract import get_scoring_ingredients, is_lent_blend_mass
+    from scoring_v4.exposure import row_exposure
+    from scoring_v4.modules.generic_helpers import restates_label_row
+    from scoring_v4.modules.sports_helpers import CAFFEINE_CANONICALS
+
+    try:
+        rows = [row for row in get_scoring_ingredients(product, strict=True).rows if isinstance(row, dict)]
+    except Exception:
+        return None
+    caffeine = [row for row in rows if _norm_text(row.get("canonical_id")) in CAFFEINE_CANONICALS]
+    if not caffeine:
+        return None
+    counted = [row for row in caffeine
+               if not (row.get("is_parent_total") or row.get("is_compound_duplicate")
+                       or is_lent_blend_mass(row) or restates_label_row(row, rows))]
+    low = high = 0.0
+    unknown = 0
+    for row in counted:
+        exposure = row_exposure(product, row, basis="daily", unit="mg")
+        if exposure.benchmark_maximum is None or exposure.benchmark_amount is None:
+            unknown += 1
+            continue
+        low += exposure.benchmark_amount
+        high += exposure.benchmark_maximum
+    return {"total_mg_day_min": round(low, 4), "total_mg_day_max": round(high, 4),
+            "rows": len(counted), "unknown_rows": unknown,
+            "excluded_duplicate_rows": len(caffeine) - len(counted)}

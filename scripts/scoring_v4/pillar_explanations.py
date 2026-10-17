@@ -180,13 +180,20 @@ def attach_pillar_explanations(
                 pillar["explanation"] = {"schema_version": PILLAR_EXPLANATION_SCHEMA_VERSION, "assessment": assessment}
             ceiling = ((metadata.get("B7_safety_evaluation") or {}).get("dose_ceiling") or {})
             if _num(ceiling.get("cap_public")) is not None:
+                if ceiling.get("kind") == "caffeine_daily_total":
+                    rule = (f"When the highest directed daily use provides more than {ceiling['exceeds_above_mg_day']:g} mg "
+                            f"of caffeine, Dose is at most {ceiling['partial_ceiling_public']:g}; at "
+                            f"{ceiling['zero_at_mg_day']:g} mg/day or more it is 0. Single doses above 200 mg are "
+                            "a separate consideration, even within a daily amount. ")
+                else:
+                    rule = (f"When the highest directed daily use exceeds an established upper limit, Dose is at most "
+                            f"{ceiling['partial_ceiling_public']:g}; at {ceiling['zero_at_pct']:g}% of the limit or more it is 0. ")
                 facts.append({
                     "id": "dose_safety_ceiling", "label": "Upper-limit scoring rule",
                     "value_display": (
-                        f"When the highest directed daily use exceeds an established upper limit, Dose is at most "
-                        f"{ceiling['partial_ceiling_public']:g}; at {ceiling['zero_at_pct']:g}% of the limit or more it is 0. "
-                        "This product-level cap is applied once, after the ingredient assessment, and never raises a lower score. "
-                        "It is PharmaGuide scoring policy, not a medical toxicity grade. Upper limits cover total intake from all sources."
+                        rule
+                        + "This product-level cap is applied once, after the ingredient assessment, and never raises a lower score. "
+                        "It is PharmaGuide scoring policy, not a medical toxicity grade. Limits cover total intake from all sources."
                     ),
                 })
             purpose_count = _nonnegative_int(metadata.get("purpose_ingredient_count"))

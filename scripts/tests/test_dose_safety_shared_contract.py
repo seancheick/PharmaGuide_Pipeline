@@ -235,5 +235,6 @@ def test_audit_metadata_preserves_unresolved_state_and_reason():
             "reason": "compound_mass_not_elemental",
             "pct_ul_at_minimum": None,
         }],
+        "caffeine": None,
         "dose_ceiling": None,
     }
