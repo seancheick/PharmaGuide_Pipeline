@@ -330,6 +330,10 @@ bug-fix notes are history, not specifications.
 
 ## Navigation
 
+- Canonical operator commands (pipeline, release, retries and app packaging handoff):
+  `scripts/PIPELINE_OPERATIONS_README.md`. The app README owns app Make commands;
+  historical audit/design notes are not operational instructions.
+
 - `graphify-out/` is a navigation hint, never evidence: compare `graph.json` `built_at_commit` with
   `git rev-parse HEAD`, and verify with `rg`/Read when they differ.
 - New terms go into `scripts/GLOSSARY.md` first. Deeper references: `scripts/SCORING_ENGINE_SPEC.md`,

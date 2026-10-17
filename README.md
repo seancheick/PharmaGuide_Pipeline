@@ -130,7 +130,9 @@ trails. Read `schema_version` from the file rather than trusting a number writte
 ```bash
 git clone https://github.com/seancheick/PharmaGuide_Pipeline.git
 cd PharmaGuide_Pipeline
-pip install -r requirements-dev.txt
+source scripts/python_env.sh
+export PYTHON="$PG_PYTHON"
+"$PG_PYTHON" -m pip install -r requirements-dev.txt
 ```
 
 ### Run the Pipeline
