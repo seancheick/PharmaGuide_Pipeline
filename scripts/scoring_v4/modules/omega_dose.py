@@ -185,17 +185,20 @@ def score_dose(product: Any) -> Dict[str, Any]:
     purpose = standard.get("applicability_reason")
     references = dose_cfg["adequacy_references"]
     reference: Dict[str, Any]
-    if purpose == _CHILD_OR_BABY:
+    prenatal = bool(standard.get("prenatal"))
+    if purpose == _CHILD_OR_BABY and not prenatal:
+        # A prenatal title can mention a baby ("Baby & Me Prenatal"); it is a
+        # maternal product and keeps the prenatal DHA reference below.
         band_score = min(minimum_score, band_cap)
         reference = {"purpose": "child_or_baby", "curve": "epa_dha_bands"}
-    elif standard.get("prenatal") and dha_ps <= 0:
+    elif prenatal and dha_ps <= 0:
         # Combined EPA+DHA cannot stand in for the undisclosed prenatal DHA.
         with dose_reference_scope(archetype_dose_reference("omega")):
             band_score = unbenchmarked_dose_credit()
         reference = {"purpose": "prenatal_dha", "curve": "unbenchmarked_neutral",
                      "reason": "prenatal_dha_amount_not_disclosed"}
     else:
-        if purpose == _PRENATAL:
+        if purpose == _PRENATAL or prenatal:
             amount, target, name = dha_ps * min_daily, PRENATAL_DHA_TARGET_MG, "prenatal_dha"
         elif purpose == _TRIGLYCERIDE:
             amount, target, name = per_day_min, references["triglyceride_purpose"]["target_mg_day"], "triglyceride"
@@ -204,7 +207,7 @@ def score_dose(product: Any) -> Dict[str, Any]:
         band_score = round(min(band_cap, band_cap * min(amount / float(target), 1.0)), 2)
         reference = {"purpose": name, "curve": "proportional_then_plateau",
                      "target_mg_day": float(target), "amount_mg_day": round(amount, 2)}
-    indication_label = reference["purpose"] if purpose == _PRENATAL else None
+    indication_label = reference["purpose"] if reference["purpose"] == "prenatal_dha" else None
 
     components: Dict[str, float] = {}
     if band_score > 0:

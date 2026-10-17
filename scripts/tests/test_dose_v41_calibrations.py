@@ -111,3 +111,13 @@ def test_potassium_named_as_the_product_purpose_is_also_a_completed_neutral():
     artifact = build_scored_artifact(product)
     assert artifact['quality_pillars_v4']['dose']['score'] == 11.4
     assert artifact['quality_assessment_status'] == 'complete'
+
+
+def test_a_prenatal_title_that_mentions_baby_still_uses_the_prenatal_dha_reference():
+    # "Baby & Me 2 Prenatal DHA" is a maternal product; the Evidence hold for a
+    # child/baby title must not send its Dose to the child bands.
+    product = _omega_product(epa=None, dha=250)
+    product['product_name'] = 'Baby & Me 2 Prenatal DHA & Choline'
+    payload = omega_dose(product)
+    assert payload['metadata']['adequacy_reference']['purpose'] == 'prenatal_dha'
+    assert payload['components']['epa_dha_band'] == 20.0
