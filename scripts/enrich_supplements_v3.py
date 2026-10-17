@@ -195,8 +195,22 @@ _RDA_REFERENCE_PROFILE = {
     "id": "adult_neutral_compatibility",
     "age_range": "19-30",
     "adequacy_basis": "higher_sourced_adult_male_female_rda_ai",
-    "ul_basis": "lower_sourced_adult_male_female_ul",
+    # Safety screening is separate (Dose V4.1 D2): the lowest established UL
+    # across the label population; see rda_ul_calculator.UL_SCREENING_POPULATIONS.
+    "ul_basis": "lowest_established_ul_across_label_population",
 }
+
+# DSLD target groups that state a narrower population. DSLD files its generic
+# adult category ("Adult (18 - 50 Years)" and the male/female variants) on
+# most labels (12,102 of 15,426 stored inputs carry it alone), so those tags
+# do not narrow the general adult screen.
+_UL_POPULATION_TAGS = (
+    ("pregnancy_lactation", ("pregnant", "lactating")),
+    ("adults_51_plus", ("seniors/mature (>50",)),
+    ("pediatric", ("child", "infant", "boys", "girls")),
+)
+_GENERAL_ADULT_TAGS = ("adult (18 - 50", "adult male (18", "adult female (18", "women (not pregnant",
+                       "menopause")
 
 # FDA/NIH labeling basis: 1,000 mcg synthetic folic acid is the adult UL;
 # current Supplement Facts labels express its equivalent as 1,700 mcg DFE.
@@ -21690,6 +21704,26 @@ class SupplementEnricherV3:
     # RDA/UL DATA COLLECTOR (for user profile scoring on device)
     # =========================================================================
 
+    @staticmethod
+    def _ul_screening_population(product: Dict) -> str:
+        """The label population whose lowest UL screens this product (D2)."""
+        tags = []
+        for group in product.get("targetGroups") or []:
+            text = group if isinstance(group, str) else (
+                (group.get("text") or group.get("name") or "") if isinstance(group, dict) else "")
+            tags.append(str(text).strip().lower())
+        found = {population for population, needles in _UL_POPULATION_TAGS
+                 if any(needle in tag for tag in tags for needle in needles)}
+        if "pregnancy_lactation" in found:
+            return "pregnancy_lactation"
+        if any(needle in tag for tag in tags for needle in _GENERAL_ADULT_TAGS):
+            return "general_adult"
+        if "adults_51_plus" in found:
+            return "adults_51_plus"
+        if "pediatric" in found:
+            return "pediatric"
+        return "general_adult"
+
     def _collect_rda_ul_data(
         self,
         product: Dict,
@@ -21707,6 +21741,7 @@ class SupplementEnricherV3:
         """
         active_ingredients = self._dose_active_ingredients_for_enrichment(product)
         special_use_flags = self._collect_special_use_flags(active_ingredients)
+        ul_population = self._ul_screening_population(product)
         quality_identity_rows = [
             row
             for row in (
@@ -22547,6 +22582,7 @@ class SupplementEnricherV3:
                                 age_group=_RDA_REFERENCE_PROFILE["age_range"],
                                 sex="adult_neutral",
                                 form_name=matched_form,
+                                ul_population=ul_population,
                             )
                         except Exception as calculation_error:
                             assessment_error = str(calculation_error)[:500]
@@ -22566,6 +22602,7 @@ class SupplementEnricherV3:
                         safety_over_ul = safety.over_ul
                         safety_over_ul_amount = safety.over_ul_amount
                         safety_warnings = list(safety.warnings)
+                        safety_ul_population = safety.ul_population
                         adequacy_unit = _nutrient_record.get("unit") or adequacy.unit
                         adequacy_optimal_min = adequacy.optimal_min
                         adequacy_optimal_max = adequacy.optimal_max
@@ -22577,6 +22614,7 @@ class SupplementEnricherV3:
                         safety_over_ul = False
                         safety_over_ul_amount = None
                         safety_warnings = []
+                        safety_ul_population = None
                         adequacy_unit = _nutrient_record.get("unit") or unit
                         adequacy_optimal_min = None
                         adequacy_optimal_max = None
@@ -22617,6 +22655,7 @@ class SupplementEnricherV3:
                         "over_ul": safety_over_ul,
                         "over_ul_amount": safety_over_ul_amount,
                         "warnings": safety_warnings,
+                        "ul_population": safety_ul_population,
                         "adequacy_exposure": {
                             "per_day": per_day_min,
                             "unit": converted_unit,
@@ -23194,10 +23233,12 @@ class SupplementEnricherV3:
                                 "pct_ul": pct_ul_val,
                                 "over_amount": over_ul_amount,
                                 "warning": ul_exceedance_sentence(
-                                    float(ul_amount or 0.0), float(safety_ul or 0.0), str(ul_unit or "")
+                                    float(ul_amount or 0.0), float(safety_ul or 0.0), str(ul_unit or ""),
+                                    (safety_ul_population or {}).get("label") or "general adult",
                                 ),
                                 "severity": ul_display_severity(pct_ul_val),
                                 "reference": adequacy_dict.get("reference"),
+                                "ul_population": safety_ul_population,
                                 **ul_exposure,
                             }
                         ))
@@ -23362,6 +23403,7 @@ class SupplementEnricherV3:
                             unit=group["unit"],
                             age_group=_RDA_REFERENCE_PROFILE["age_range"],
                             sex="adult_neutral",
+                            ul_population=ul_population,
                         )
                     except Exception as agg_err:
                         self.logger.debug(
@@ -23507,11 +23549,13 @@ class SupplementEnricherV3:
                             "warning": (
                                 f"Across {len(group['rows'])} forms, "
                                 + ul_exceedance_sentence(
-                                    float(group["total_amount"] or 0.0), float(agg_adequacy.ul or 0.0), str(group["unit"] or "")
+                                    float(group["total_amount"] or 0.0), float(agg_adequacy.ul or 0.0), str(group["unit"] or ""),
+                                    (agg_adequacy.ul_population or {}).get("label") or "general adult",
                                 )
                             ),
                             "severity": ul_display_severity(pct_ul_val),
                             "reference": agg_adequacy.to_dict().get("reference"),
+                            "ul_population": agg_adequacy.ul_population,
                             "aggregation": "canonical_sum",
                             "canonical_id": cid,
                             "contributing_rows": group["rows"],

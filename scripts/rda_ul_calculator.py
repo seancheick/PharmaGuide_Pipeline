@@ -98,11 +98,35 @@ def ul_display_severity(pct_ul: Any) -> str:
     return "critical" if pct >= 200.0 else "warning"
 
 
-def ul_exceedance_sentence(amount: float, ul: float, unit: str) -> str:
+# Dose V4.1 §2.5 (Sean D2, 2026-10-17): catalog safety screening uses the
+# lowest established UL across the product's whole population. With no stated
+# population that is every ordinary adult group; a stated population narrows
+# it. Adequacy keeps its own reference profile. A UL is a total-intake limit:
+# a product below it does not establish that food plus supplements stays below.
+_ADULT_AGES = ("19-30", "31-50", "51-70", "71+")
+UL_SCREENING_POPULATIONS = {
+    "general_adult": {"groups": ("Male", "Female"), "ages": _ADULT_AGES, "label": "general adult"},
+    "adults_19_50": {"groups": ("Male", "Female"), "ages": ("19-30", "31-50"), "label": "adults 19-50"},
+    "adults_51_plus": {"groups": ("Male", "Female"), "ages": ("51-70", "71+"), "label": "adults 51+"},
+    # Ordinary adult pregnancy and lactation (19-50); adolescent life stages
+    # belong with the pediatric gap below, as for the general adult screen.
+    "pregnancy_lactation": {"groups": ("Pregnancy", "Lactation"), "ages": ("19-30", "31-50"),
+                            "label": "pregnancy and lactation"},
+    # The reference data has no pediatric UL rows. An exceedance of the adult
+    # limit is still an exceedance of a child's (lower) limit; amounts below
+    # the adult limit are not cleared for children. Recorded as a data gap.
+    "pediatric": {"groups": ("Male", "Female"), "ages": _ADULT_AGES, "label": "general adult",
+                  "reference_gap": "pediatric_ul_rows_not_in_reference_data"},
+}
+_AGE_LABELS = {("51-70", "71+"): "adults 51+", ("71+",): "adults 71+", ("51-70",): "adults 51-70",
+               ("19-30", "31-50"): "adults 19-50", ("19-30",): "adults 19-30", ("31-50",): "adults 31-50"}
+
+
+def ul_exceedance_sentence(amount: float, ul: float, unit: str, scope_label: str = "general adult") -> str:
     """The consumer sentence for an amount above the upper limit.
 
-    Says what this product alone provides, names the general adult upper
-    limit, and says that other sources are not yet counted: the UL applies to
+    Says what this product alone provides, names whose upper limit applies,
+    and says that other sources are not yet counted: the UL applies to
     total daily intake, and this app sees one label at a time. It does not
     say "unsafe" or "do not use"; a clinician can direct a higher dose, and the
     action copy beside it says so.
@@ -111,9 +135,11 @@ def ul_exceedance_sentence(amount: float, ul: float, unit: str) -> str:
         return f"{value:.0f}" if abs(value - round(value)) < 0.05 else f"{value:.1f}"
 
     pct = amount / ul * 100.0 if ul else 0.0
+    limit = ("general adult upper limit" if scope_label == "general adult"
+             else f"upper limit for {scope_label}")
     return (
-        f"Provides {_n(amount)} {unit} per day on its own, {pct:.0f}% of the general "
-        f"adult upper limit of {_n(ul)} {unit}, before other sources are counted."
+        f"Provides {_n(amount)} {unit} per day on its own, {pct:.0f}% of the "
+        f"{limit} of {_n(ul)} {unit}, before other sources are counted."
     )
 
 
@@ -148,6 +174,9 @@ class NutrientAdequacyResult:
     # appears.
     highest_ul: Optional[float] = None
     reference: Optional[Dict] = None
+    # Which population's lowest UL screened this exposure (D2); None when the
+    # UL came from the single age/sex reference row.
+    ul_population: Optional[Dict] = None
 
     def to_dict(self) -> Dict:
         return {
@@ -173,6 +202,7 @@ class NutrientAdequacyResult:
             "sex_group": self.sex_group,
             "highest_ul": self.highest_ul,
             "reference": self.reference,
+            "ul_population": self.ul_population,
         }
 
 
@@ -339,6 +369,7 @@ class RDAULCalculator:
         age_group: str = "19-30",
         sex: str = "both",
         form_name: Optional[str] = None,
+        ul_population: Optional[str] = None,
     ) -> NutrientAdequacyResult:
         """
         Compute nutrient adequacy with full evidence.
@@ -349,6 +380,8 @@ class RDAULCalculator:
             unit: Unit of amount
             age_group: Age range (e.g., "19-30", "51-70")
             sex: "male", "female", or "both"
+            ul_population: a ``UL_SCREENING_POPULATIONS`` key; when given, the UL
+                is the lowest established UL across that population (D2)
 
         Returns:
             NutrientAdequacyResult with all evidence
@@ -389,6 +422,9 @@ class RDAULCalculator:
 
         # Get age/sex specific values
         rda_ai, ul = self._get_age_sex_values(nutrient_data, norm_age, norm_sex)
+        population = None
+        if ul_population is not None:
+            ul, population = self._screening_ul(nutrient_data, ul_population)
 
         # Determine RDA source
         nutrient_id = nutrient_data.get("id")
@@ -445,7 +481,9 @@ class RDAULCalculator:
                 if amount_in_ref > ul:
                     over_ul = True
                     over_ul_amount = amount_in_ref - ul
-                    warnings.append(ul_exceedance_sentence(amount_in_ref, ul, ref_unit_label))
+                    warnings.append(ul_exceedance_sentence(
+                        amount_in_ref, ul, ref_unit_label,
+                        (population or {}).get("label") or "general adult"))
 
         # Determine adequacy band. Magnesium is a special case because the UL
         # applies to supplemental intake only while the RDA is total intake.
@@ -534,6 +572,7 @@ class RDAULCalculator:
                 "ul_basis": nutrient_data.get("ul_basis"),
                 "ul_note": nutrient_data.get("ul_note"),
             },
+            ul_population=population,
         )
 
     def _lookup_key(self, key: str) -> Optional[Dict]:
@@ -650,6 +689,26 @@ class RDAULCalculator:
             except ValueError:
                 fallback_ul = None
         return None, fallback_ul
+
+    def _screening_ul(self, nutrient_data: Dict, population_id: str) -> Tuple[Optional[float], Dict]:
+        """Lowest established UL across one screening population, and its scope."""
+        spec = UL_SCREENING_POPULATIONS[population_id]
+        rows = [row for row in nutrient_data.get("data", [])
+                if row.get("group") in spec["groups"] and row.get("age_range") in spec["ages"]
+                and isinstance(row.get("ul"), (int, float)) and not isinstance(row.get("ul"), bool)
+                and row.get("ul") > 0]
+        scope = {"id": population_id, "label": spec["label"]}
+        if spec.get("reference_gap"):
+            scope["reference_gap"] = spec["reference_gap"]
+        if not rows:
+            return None, scope
+        ul = min(row["ul"] for row in rows)
+        ages = tuple(age for age in spec["ages"] if any(
+            row["age_range"] == age and row["ul"] == ul for row in rows))
+        if population_id == "general_adult" and len({row["ul"] for row in rows}) > 1:
+            scope["label"] = _AGE_LABELS.get(ages, scope["label"])
+        scope["age_ranges"] = list(ages)
+        return ul, scope
 
     def _get_ai_value(
         self,
