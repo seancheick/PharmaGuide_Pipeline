@@ -50,9 +50,9 @@ def _omega_dose_facts(dose_dim: Dict[str, Any]) -> List[Dict[str, Any]]:
     return [
         {
             "id": "epa_dha_per_day",
-            "label": "EPA + DHA per serving" if (metadata or {}).get("assessment_basis") == "declared_serving" else "EPA + DHA per day",
+            "label": "EPA + DHA per day",
             "value_mg": round(per_day, 1),
-            "value_display": f"{int(round(per_day))} mg per serving" if (metadata or {}).get("assessment_basis") == "declared_serving" else _format_mg_per_day(per_day),
+            "value_display": _format_mg_per_day(per_day),
         }
     ]
 
@@ -158,10 +158,16 @@ def attach_pillar_explanations(
             facts.extend(builder(dim_by_assembler.get(assembler) or {}))
         if assembler == "dose":
             metadata = ((dims.get("dose") or {}).get("metadata") or {})
-            if metadata.get("assessment_basis") == "declared_serving":
+            if metadata.get("assessment_basis") == "directed_daily_use":
+                daily_use = metadata.get("daily_use") or {}
                 facts.append({
                     "id": "dose_reference_method", "label": "Dose assessment basis",
-                    "value_display": "Dose quality is assessed per declared serving using recorded nutrient references and applicable preparation benchmarks. Higher labeled daily use is assessed separately for safety. This is not a personal dose recommendation.",
+                    "value_display": (
+                        "Dose uses recorded nutrient references and applicable preparation benchmarks. "
+                        + ("The label gives no daily directions, so one serving a day is assessed. "
+                           if daily_use.get("defaulted") else
+                           "Adequacy uses the lowest directed daily use; upper-limit checks use the highest. ")
+                        + "These are catalog assessments, not a personal dose recommendation."),
                 })
             if metadata.get("method") == "rda_ul_proxy_until_dietary_intake_table":
                 dose = dims.get("dose") or {}
@@ -181,7 +187,7 @@ def attach_pillar_explanations(
                     facts.append({
                         "id": "dose_ul_credit_policy", "label": "Nutrient upper-limit scoring rule",
                         "value_display": (
-                            f"For assessed nutrient references, the declared serving above {assessment['ul_partial_credit_above_pct']:g}% "
+                            f"For assessed nutrient references, maximum daily intake above {assessment['ul_partial_credit_above_pct']:g}% "
                             f"but below {assessment['ul_zero_credit_at_pct']:g}% of the upper limit receives "
                             f"{assessment['ul_partial_credit_raw']:g}/{assessment['supplemental_window_max_raw']:g} raw window credit; "
                             f"at or above {assessment['ul_zero_credit_at_pct']:g}% it receives zero. "

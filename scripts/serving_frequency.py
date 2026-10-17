@@ -24,8 +24,6 @@ them removes the drift surface, not just the defect.
 
 from __future__ import annotations
 
-from contextlib import contextmanager
-from contextvars import ContextVar
 import math
 import re
 from typing import Any, Dict, Optional, Tuple
@@ -310,19 +308,6 @@ def _label_declared_daily_range(record: Dict[str, Any]) -> Optional[Tuple[float,
     )
 
 
-_DECLARED_SERVING_SCORE = ContextVar("declared_serving_score", default=False)
-
-
-@contextmanager
-def declared_serving_score_scope():
-    """One Facts-panel serving for quality Dose only; never for actual intake."""
-    token = _DECLARED_SERVING_SCORE.set(True)
-    try:
-        yield
-    finally:
-        _DECLARED_SERVING_SCORE.reset(token)
-
-
 def resolve_daily_serving_range(record: Dict[str, Any]) -> Tuple[float, float, bool]:
     """Return (min_servings_per_day, max_servings_per_day, was_defaulted).
 
@@ -340,8 +325,6 @@ def resolve_daily_serving_range(record: Dict[str, Any]) -> Tuple[float, float, b
 
     Falls back to one serving a day, which neither inflates nor crushes a dose.
     """
-    if _DECLARED_SERVING_SCORE.get():
-        return 1.0, 1.0, False
     composite = _composite_pack_daily_range(record)
     if composite is not None:
         return composite[0], composite[1], False

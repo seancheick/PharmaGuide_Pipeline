@@ -13,7 +13,7 @@ rubric treatment. This module rewards:
 
 from __future__ import annotations
 
-from scoring_v4.modules.generic_helpers import score_declared_serving_dose
+from scoring_v4.modules.generic_helpers import score_directed_daily_dose
 
 import re
 from typing import Any, Dict, Optional
@@ -321,7 +321,7 @@ def score_b_complex(product: Any) -> GenericModuleResult:
     result = GenericModuleResult(module="b_complex", dimensions=_empty_dimensions())
 
     _fill_dimension(result, "formulation", _score_formulation(product))
-    _fill_dimension(result, "dose", score_declared_serving_dose(product, _score_dose))
+    _fill_dimension(result, "dose", score_directed_daily_dose(product, _score_dose))
     _fill_dimension(result, "evidence", _score_evidence(product))
     _fill_dimension(result, "transparency", score_transparency(product))
 

@@ -1206,7 +1206,7 @@ def _apply_typed_dose_safety_policy(
     result: SafetyResult,
     dose_safety: DoseSafetyResult,
 ) -> None:
-    """Apply verdict policy to the maximum labeled daily safety result.
+    """Apply verdict policy to the typed result at maximum directed daily use.
 
     A confirmed exposure above an established UL cannot ship SAFE. The score's
     B7 penalty remains a separate, deliberately more severe 150% threshold:

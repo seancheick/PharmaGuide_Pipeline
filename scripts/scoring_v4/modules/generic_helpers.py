@@ -457,18 +457,14 @@ from inactive_ingredient_resolver import (  # noqa: E402,F401
 )
 
 
-def score_declared_serving_dose(product, scorer):
-    """All route Dose consumers assess one declared serving, not directions."""
-    from scoring_input_contract import declared_serving_dose_input
-    from serving_frequency import declared_serving_score_scope
-    projected = declared_serving_dose_input(product)
-    with declared_serving_score_scope():
-        payload = scorer(projected)
+def score_directed_daily_dose(product, scorer):
+    """Every route's Dose: adequacy at the minimum directed daily use, safety at
+    the maximum (Dose V4.1, Sean 2026-10-17). Without daily directions one
+    Facts-panel serving is assessed and recorded as the default."""
+    low, high, defaulted = resolve_daily_serving_range(product)
+    payload = scorer(product)
     metadata = payload.setdefault("metadata", {})
-    metadata["assessment_basis"] = "declared_serving"
-    if "daily_interval_selection" in metadata:
-        metadata["daily_interval_selection"] = "declared_serving"
-    for exposure in metadata.get("benchmark_exposures") or []:
-        if isinstance(exposure, dict) and exposure.get("basis") == "daily":
-            exposure["basis"] = "per_use"
+    metadata["assessment_basis"] = "directed_daily_use"
+    metadata["daily_use"] = {"minimum_servings": float(low), "maximum_servings": float(high),
+                             "defaulted": bool(defaulted)}
     return payload

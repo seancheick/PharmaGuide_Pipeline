@@ -287,11 +287,12 @@ def test_generic_dose_exposes_reference_policy_without_claiming_clinical_range()
     assert "studied" not in out["dose"]["reason"].lower()
 
 
-def test_omega_serving_assessment_does_not_present_a_personal_daily_amount():
-    bd = _module_bd()
-    bd['dimensions']['dose']['metadata']['assessment_basis'] = 'declared_serving'
-    pillars = attach_pillar_explanations(_pillars(), bd, _cfg(), 'omega')
-    fact = next(f for f in pillars['Dose']['explanation']['facts'] if f['id'] == 'epa_dha_per_day')
-    assert fact['label'] == 'EPA + DHA per serving'
-    assert '/day' not in fact['value_display']
-    assert 'per serving' in fact['value_display']
+def test_dose_basis_names_directed_daily_use_or_the_default_serving():
+    for defaulted, phrase in ((False, 'lowest directed daily use'), (True, 'one serving a day')):
+        bd = _module_bd()
+        bd['dimensions']['dose']['metadata'].update(assessment_basis='directed_daily_use', daily_use={
+            'minimum_servings': 1.0, 'maximum_servings': 1.0 if defaulted else 4.0, 'defaulted': defaulted})
+        pillars = attach_pillar_explanations(_pillars(), bd, _cfg(), 'omega')
+        fact = next(f for f in pillars['Dose']['explanation']['facts'] if f['id'] == 'dose_reference_method')
+        assert phrase in fact['value_display']
+        assert 'not a personal dose recommendation' in fact['value_display']
