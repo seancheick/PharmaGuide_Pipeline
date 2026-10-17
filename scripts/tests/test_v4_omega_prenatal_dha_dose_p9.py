@@ -1,10 +1,9 @@
-"""Phase 9.5 — indication-aware omega dose for prenatal DHA.
+"""Indication-aware omega dose for prenatal DHA (Dose V4.1 §3.1).
 
-The general EPA+DHA bands target cardiovascular intakes (~1000-2000 mg/day),
-under-crediting a prenatal DHA-dominant product. The prenatal DHA target is
-~200 mg DHA/day (EFSA NDA Panel 2014; ACOG). A DHA-dominant prenatal product is
-scored against the DHA target (take the higher of it and the general band), so a
-650 mg-DHA prenatal product is credited for being generous for its indication.
+A product the purpose owner (evidence_resolver.resolve_omega_evidence_standard)
+classifies as prenatal is scored only against the 200 mg/day DHA reference,
+proportionally then plateau; combined EPA+DHA never stands in for DHA. Ordinary
+adult products use the 250 mg/day EPA+DHA reference.
 """
 from __future__ import annotations
 
@@ -27,27 +26,27 @@ def _omega(name, epa, dha):
             "ingredient_quality_data": {"ingredients_scorable": rows, "ingredients": rows}}
 
 
-def test_prenatal_dha_within_target_scores_high():
-    # 650 mg DHA prenatal -> >=200 mg target -> within (20), not the modest
-    # general-band score for ~850 mg combined EPA+DHA.
+def test_prenatal_dha_at_or_above_target_scores_full():
     out = score_dose(_omega("Prenatal DHA 650 mg", epa=200, dha=650))
-    assert out["metadata"]["prenatal_dha_indication"] == "prenatal_dha_within_target"
+    assert out["metadata"]["prenatal_dha_indication"] == "prenatal_dha"
+    assert out["metadata"]["adequacy_reference"]["target_mg_day"] == 200.0
     assert out["components"]["epa_dha_band"] == 20.0
 
 
-def test_prenatal_dha_below_target_modest():
+def test_prenatal_dha_below_target_is_proportional():
     out = score_dose(_omega("Prenatal DHA", epa=10, dha=80))
-    assert out["metadata"]["prenatal_dha_indication"] == "prenatal_dha_below_target"
+    assert out["metadata"]["prenatal_dha_indication"] == "prenatal_dha"
+    assert out["components"]["epa_dha_band"] == 8.0
 
 
 def test_non_prenatal_omega_unaffected_by_indication():
-    # A general fish oil (not prenatal) is scored on the general EPA+DHA bands.
     out = score_dose(_omega("Triple Strength Fish Oil", epa=650, dha=450))
     assert out["metadata"]["prenatal_dha_indication"] is None
+    assert out["metadata"]["adequacy_reference"]["purpose"] == "ordinary_adult"
 
 
-def test_prenatal_but_epa_dominant_not_dha_indication():
-    # prenatal name but EPA-dominant (not a DHA product) -> general band, no
-    # prenatal-DHA indication (the DHA-target only applies to DHA-dominant).
+def test_prenatal_epa_dominant_product_is_still_judged_on_its_dha():
+    # EPA cannot substitute for the prenatal DHA reference: 100 mg DHA -> 10.
     out = score_dose(_omega("Prenatal Omega EPA Forte", epa=900, dha=100))
-    assert out["metadata"]["prenatal_dha_indication"] is None
+    assert out["metadata"]["prenatal_dha_indication"] == "prenatal_dha"
+    assert out["components"]["epa_dha_band"] == 10.0

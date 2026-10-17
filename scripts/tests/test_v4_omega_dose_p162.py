@@ -155,8 +155,8 @@ def test_band_aha_cvd() -> None:
 
     product = _omega_product(epa=700, dha=400)  # 1100 mg/day
     payload = score_dose(product)
-    # Band values are anchors: 1000 -> 16, 2000 -> 20, so 1100 sits just above 16.
-    assert payload["components"]["epa_dha_band"] == 16.4
+    # Dose V4.1: ordinary adults plateau at the 250 mg/day reference.
+    assert payload["components"]["epa_dha_band"] == 20.0
     assert payload["metadata"]["epa_dha_band_label"] == "aha_cvd"
 
 
@@ -166,8 +166,7 @@ def test_band_general_health() -> None:
 
     product = _omega_product(epa=400, dha=300)  # 700 mg/day
     payload = score_dose(product)
-    # 500 -> 10 and 1000 -> 16 are anchors; 700 interpolates between them.
-    assert payload["components"]["epa_dha_band"] == 12.4
+    assert payload["components"]["epa_dha_band"] == 20.0  # above the 250 mg/day reference
     assert payload["metadata"]["epa_dha_band_label"] == "general_health"
 
 
@@ -177,7 +176,7 @@ def test_band_efsa_ai_zone() -> None:
 
     product = _omega_product(epa=200, dha=100)  # 300 mg/day
     payload = score_dose(product)
-    assert payload["components"]["epa_dha_band"] == 6.0  # between 250 -> 5 and 500 -> 10
+    assert payload["components"]["epa_dha_band"] == 20.0  # at or above 250 mg/day
     assert payload["metadata"]["epa_dha_band_label"] == "efsa_ai_zone"
 
 
@@ -192,7 +191,7 @@ def test_band_near_efsa_ai_partial_credit() -> None:
 
     product = _omega_product(epa=125, dha=100)  # 225 mg/day
     payload = score_dose(product)
-    assert payload["components"]["epa_dha_band"] == 4.5  # between 200 -> 4 and 250 -> 5
+    assert payload["components"]["epa_dha_band"] == 18.0  # 20 x 225/250
     assert payload["metadata"]["epa_dha_band_label"] == "near_efsa_ai"
 
 
@@ -202,17 +201,18 @@ def test_band_low_disclosed_epa_dha_partial_credit() -> None:
 
     product = _omega_product(epa=100, dha=50)  # 150 mg/day
     payload = score_dose(product)
-    assert payload["components"]["epa_dha_band"] == 3.25  # between 100 -> 2.5 and 200 -> 4
+    assert payload["components"]["epa_dha_band"] == 12.0  # 20 x 150/250
     assert payload["metadata"]["epa_dha_band_label"] == "low_disclosed_epa_dha"
 
 
-def test_band_trace_epa_dha_still_zero() -> None:
-    """<100 mg/day → below_efsa_ai (0). Trace-dose gummies stay zero."""
+def test_band_trace_epa_dha_is_proportional_not_a_cliff() -> None:
+    """<100 mg/day keeps its below_efsa_ai label; Dose V4.1's approved
+    proportional curve replaces the former zero cliff (20 x 50/250 = 4)."""
     from scoring_v4.modules.omega_dose import score_dose
 
     product = _omega_product(epa=30, dha=20)  # 50 mg/day
     payload = score_dose(product)
-    assert "epa_dha_band" not in payload["components"]
+    assert payload["components"]["epa_dha_band"] == 4.0
     assert payload["metadata"]["epa_dha_band_label"] == "below_efsa_ai"
 
 
@@ -577,8 +577,9 @@ def test_dose_has_no_cliff_at_a_band_edge() -> None:
     5-point Evidence bonus) for one milligram of EPA+DHA."""
     from scoring_v4.modules.omega_dose import score_dose
 
-    below = score_dose(_omega_product(epa=599, dha=400))   # 999 mg/day
-    at = score_dose(_omega_product(epa=600, dha=400))      # 1000 mg/day
+    # The retained bands are the child/baby reference (Dose V4.1).
+    below, at = (score_dose({**_omega_product(epa=epa, dha=400), "product_name": "Kids Omega"})
+                 for epa in (599, 600))
     assert at["components"]["epa_dha_band"] == 16.0
     assert abs(at["components"]["epa_dha_band"] - below["components"]["epa_dha_band"]) < 0.1
 
@@ -589,7 +590,7 @@ def test_every_shipped_band_value_is_still_its_anchor() -> None:
 
     anchors = {250: 5.0, 500: 10.0, 1000: 16.0, 2000: 20.0, 4000: 20.0}
     for per_day, expected in anchors.items():
-        payload = score_dose(_omega_product(epa=per_day / 2, dha=per_day / 2))
+        payload = score_dose({**_omega_product(epa=per_day / 2, dha=per_day / 2), "product_name": "Kids Omega"})
         assert payload["components"]["epa_dha_band"] == expected, per_day
 
 

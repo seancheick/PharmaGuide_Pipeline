@@ -115,6 +115,11 @@ WINDOW_RDA_THRESHOLD = _DM["window_rda_threshold"]      # pct_rda below this is 
 WINDOW_OVERDOSE_CREDIT = _DM["window_overdose_credit"]    # above a studied range (half of 22)
 WINDOW_HIGH_SOURCE_PCT = _DM["window_high_source_pct"]    # 21 CFR 101.54(b) "high source"
 WINDOW_FULL_ADEQUACY_PCT = _DM["window_full_adequacy_pct"]
+# Dose V4.1 §3.1: ordinary-adult contribution-policy targets (elemental mg/day).
+_CONTRIBUTION_TARGETS = {key: value for key, value in _DM["contribution_policy_targets"].items()
+                         if not key.startswith("_")}
+# Life stages that keep their own references instead of the adult targets.
+_OWN_REFERENCE_POPULATIONS = frozenset({"pregnancy_lactation", "pediatric"})
 
 PHASE_MARKER = "P1.3.2a_dose_proxy"
 METHOD_MARKER = "rda_ul_proxy_until_dietary_intake_table"
@@ -166,6 +171,7 @@ def _band_credit(
     pct_rda: Optional[float],
     pct_ul: Optional[float],
     canonical: object = None,
+    row: Optional[Dict[str, Any]] = None,
 ) -> Optional[float]:
     """Per-nutrient adequacy credit on the 0-22 scale, at minimum daily use.
 
@@ -178,6 +184,10 @@ def _band_credit(
 
     if pct_rda <= 0:
         return 0.0
+    target = _contribution_target(canonical, row)
+    if target is not None:
+        amount = pct_rda / 100.0 * float(row["rda_ai"])
+        return CAP_SUPPLEMENTAL_WINDOW * min(amount / float(target["target_mg"]), 1.0)
     kind = _adequacy_reference_kind(canonical)
     if pct_rda >= (WINDOW_RDA_THRESHOLD if kind == "legacy" else WINDOW_FULL_ADEQUACY_PCT):
         return CAP_SUPPLEMENTAL_WINDOW
@@ -190,6 +200,22 @@ def _band_credit(
     if kind == "clinical_anchor":
         return CAP_SUPPLEMENTAL_WINDOW * pct_rda / WINDOW_FULL_ADEQUACY_PCT
     return (pct_rda / WINDOW_RDA_THRESHOLD) * CAP_SUPPLEMENTAL_WINDOW
+
+
+def _contribution_target(canonical: object, row: Optional[Dict[str, Any]]) -> Optional[Dict[str, Any]]:
+    """The ordinary-adult contribution target for this assessment row, if any.
+
+    Only a row the caller vouches for (single-nutrient or declared purpose)
+    with a sourced RDA/AI and an ordinary adult population qualifies.
+    """
+    target = _CONTRIBUTION_TARGETS.get(_norm_text(canonical))
+    if target is None or not isinstance(row, dict):
+        return None
+    rda = _as_float(row.get("rda_ai"), None)
+    population = (_safe_dict(row.get("ul_population")).get("id"))
+    if rda is None or rda <= 0 or population in _OWN_REFERENCE_POPULATIONS:
+        return None
+    return target
 
 
 def _score_supplemental_window_proxy(product: Dict[str, Any]) -> tuple[float, Optional[str]]:
@@ -205,6 +231,10 @@ def _score_supplemental_window_proxy(product: Dict[str, Any]) -> tuple[float, Op
 
     contributions: List[float] = []
     dietary_reference_exclusions = 0
+    # The ordinary-adult contribution targets apply to a single-nutrient
+    # product here; a multi-nutrient formula needs a declared purpose.
+    single_nutrient = sum(1 for row in adequacy_results if isinstance(row, dict)
+                          and _as_float(row.get("pct_rda"), None) is not None) == 1
     for row in adequacy_results:
         if not isinstance(row, dict):
             continue
@@ -215,7 +245,7 @@ def _score_supplemental_window_proxy(product: Dict[str, Any]) -> tuple[float, Op
             continue
         pct_rda = _as_float(row.get("pct_rda"), None)
         pct_ul = _as_float(row.get("pct_ul"), None)
-        credit = _band_credit(pct_rda, pct_ul, row.get("canonical_id"))
+        credit = _band_credit(pct_rda, pct_ul, row.get("canonical_id"), row if single_nutrient else None)
         if credit is None:
             continue
         contributions.append(credit)
@@ -329,10 +359,16 @@ def _score_declared_purpose_window(
         for assessment in adequacy:
             if not (identities & _row_identity_keys(assessment)):
                 continue
+            if _row_identity_keys(assessment) & _DIETARY_INTAKE_DOMINANT_CANONICALS:
+                # Same exclusion as the proxy path: an ordinary amount is a
+                # small fraction of the dietary AI by design. It is assessed
+                # below as a completed neutral, not against the AI.
+                continue
             credit = _band_credit(
                 _as_float(assessment.get("pct_rda"), None),
                 _as_float(assessment.get("pct_ul"), None),
                 assessment.get("canonical_id"),
+                assessment,
             )
             if credit is not None:
                 credits.append(credit)

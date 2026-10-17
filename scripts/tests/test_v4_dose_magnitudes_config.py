@@ -66,8 +66,16 @@ ORIGINAL = {
 
 def test_config_matches_pre_hoist_values():
     for mod, vals in ORIGINAL.items():
-        values = {k: v for k, v in DM[mod].items() if not k.startswith("_")}  # _doc strings are not magnitudes
+        values = {k: v for k, v in DM[mod].items()
+                  if not k.startswith("_") and k != "contribution_policy_targets"}  # _doc strings are not magnitudes
         assert values == vals, f"dose_magnitudes.{mod} drifted from pinned values"
+
+
+def test_contribution_policy_targets_are_pinned():
+    # Dose V4.1 section 3.1 (Sean, 2026-10-17): 20% of the FDA Daily Value.
+    targets = DM["generic"]["contribution_policy_targets"]
+    assert {k: v["target_mg"] for k, v in targets.items() if not k.startswith("_")} == {
+        "magnesium": 84.0, "calcium": 260.0}
 
 
 def test_dose_safety_ceiling_has_one_config_owner():

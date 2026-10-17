@@ -42,8 +42,14 @@ from __future__ import annotations
 import re
 from typing import Any, Dict, List, Optional, Tuple
 
-from scoring_input_contract import PRENATAL_DHA_TARGET_MG, PRENATAL_TITLE_RE, epa_dha_amounts_per_serving
-from scoring_v4.modules.generic_helpers import daily_serving_range
+from evidence_resolver import resolve_omega_evidence_standard
+from scoring_input_contract import PRENATAL_DHA_TARGET_MG, epa_dha_amounts_per_serving
+from scoring_v4.modules.generic_helpers import (
+    archetype_dose_reference,
+    daily_serving_range,
+    dose_reference_scope,
+    unbenchmarked_dose_credit,
+)
 
 
 PHASE_MARKER = "P1.6.2_omega_dose"
@@ -54,15 +60,11 @@ _DM = _cfg_block("dose_magnitudes", "omega")["omega"]
 
 CAP_DOSE = _DM["cap_dose"]
 
-# Indication-aware dosing for prenatal DHA. The general EPA+DHA bands target
-# cardiovascular intakes (~1000-2000 mg/day), which under-credits a prenatal
-# DHA-dominant product: the prenatal DHA target is ~200 mg DHA/day (EFSA NDA
-# Panel 2014; ACOG/March of Dimes ~200-300 mg), so a 650 mg-DHA prenatal product
-# is generous for its indication. A DHA-dominant product named for prenatal use
-# is scored against the DHA target; we take the higher of this and the general band.
-_PRENATAL_DHA_WITHIN = 20.0
-_PRENATAL_DHA_NEAR = 14.0
-_PRENATAL_DHA_BELOW = 10.0
+# Dose V4.1 §3.1: the purpose owner selects the reference; see the rubric's
+# dose.adequacy_references. A child/baby product keeps the epa_dha_bands.
+_CHILD_OR_BABY = "held_child_or_baby_population"
+_PRENATAL = "prenatal_dha_intake_authority"
+_TRIGLYCERIDE = "explicit_adult_triglyceride_lowering_purpose"
 
 
 def _load_rubric() -> Dict[str, Any]:
@@ -170,42 +172,39 @@ def score_dose(product: Any) -> Dict[str, Any]:
     per_day_max = total_per_serving * max_daily
     per_day_mid = (per_day_min + per_day_max) / 2.0
 
-    # Adequacy uses the minimum directed daily exposure (shared with
-    # Evidence and RDA adequacy). Keep the upper endpoint for interval
-    # explanation and safety; it cannot increase adequacy credit.
+    # Band labels and the prescription context flag stay descriptive; the
+    # upper endpoint never increases adequacy credit.
     minimum_score, minimum_label, minimum_flag = _band_score(per_day_min, bands)
     maximum_score, maximum_label, maximum_flag = _band_score(per_day_max, bands)
-    band_score = min(minimum_score, band_cap)
     band_label = minimum_label if minimum_label == maximum_label else f"{minimum_label}_to_{maximum_label}"
     band_flag = minimum_flag or maximum_flag
     interval_crosses_band = minimum_label != maximum_label
 
-    # Indication-aware: a prenatal, DHA-dominant product is scored against the
-    # prenatal DHA target (EFSA/ACOG ~200 mg DHA/day), not the general EPA+DHA
-    # bands. Take the higher of the two so a generous prenatal DHA isn't penalized
-    # for a modest combined EPA+DHA total.
-    name_text = " ".join(str(product.get(k) or "") for k in ("product_name", "fullName", "brand_name"))
-    prenatal_dha = bool(PRENATAL_TITLE_RE.search(name_text)) and dha_ps >= epa_ps and dha_ps > 0
-    indication_label: Optional[str] = None
-    if prenatal_dha:
-        def prenatal_score(dha_per_day: float) -> Tuple[float, str]:
-            if dha_per_day >= PRENATAL_DHA_TARGET_MG:
-                return _PRENATAL_DHA_WITHIN, "prenatal_dha_within_target"
-            if dha_per_day >= PRENATAL_DHA_TARGET_MG * 0.5:
-                return _PRENATAL_DHA_NEAR, "prenatal_dha_near_target"
-            return _PRENATAL_DHA_BELOW, "prenatal_dha_below_target"
-
-        prenatal_min_score, prenatal_min_label = prenatal_score(dha_ps * min_daily)
-        prenatal_max_score, prenatal_max_label = prenatal_score(dha_ps * max_daily)
-        ind_score = prenatal_min_score
-        indication_label = (
-            prenatal_min_label
-            if prenatal_min_label == prenatal_max_label
-            else f"{prenatal_min_label}_to_{prenatal_max_label}"
-        )
-        ind_score = min(ind_score, band_cap)
-        if ind_score > band_score:
-            band_score, band_label = ind_score, indication_label
+    # Adequacy at the minimum directed daily use against the purpose's reference.
+    standard = resolve_omega_evidence_standard(product)
+    purpose = standard.get("applicability_reason")
+    references = dose_cfg["adequacy_references"]
+    reference: Dict[str, Any]
+    if purpose == _CHILD_OR_BABY:
+        band_score = min(minimum_score, band_cap)
+        reference = {"purpose": "child_or_baby", "curve": "epa_dha_bands"}
+    elif standard.get("prenatal") and dha_ps <= 0:
+        # Combined EPA+DHA cannot stand in for the undisclosed prenatal DHA.
+        with dose_reference_scope(archetype_dose_reference("omega")):
+            band_score = unbenchmarked_dose_credit()
+        reference = {"purpose": "prenatal_dha", "curve": "unbenchmarked_neutral",
+                     "reason": "prenatal_dha_amount_not_disclosed"}
+    else:
+        if purpose == _PRENATAL:
+            amount, target, name = dha_ps * min_daily, PRENATAL_DHA_TARGET_MG, "prenatal_dha"
+        elif purpose == _TRIGLYCERIDE:
+            amount, target, name = per_day_min, references["triglyceride_purpose"]["target_mg_day"], "triglyceride"
+        else:
+            amount, target, name = per_day_min, references["ordinary_adult"]["target_mg_day"], "ordinary_adult"
+        band_score = round(min(band_cap, band_cap * min(amount / float(target), 1.0)), 2)
+        reference = {"purpose": name, "curve": "proportional_then_plateau",
+                     "target_mg_day": float(target), "amount_mg_day": round(amount, 2)}
+    indication_label = reference["purpose"] if purpose == _PRENATAL else None
 
     components: Dict[str, float] = {}
     if band_score > 0:
@@ -228,6 +227,8 @@ def score_dose(product: Any) -> Dict[str, Any]:
         "per_day_mid_mg": round(per_day_mid, 2),
         "per_day_max_mg": round(per_day_max, 2),
         "epa_dha_band_label": band_label,
+        "adequacy_reference": reference,
+        "omega_purpose": purpose,
         "epa_dha_band_flag": band_flag,
         "interval_crosses_band": interval_crosses_band,
         "minimum_band_score": round(minimum_score, 2),
