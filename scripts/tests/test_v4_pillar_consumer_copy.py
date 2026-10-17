@@ -297,7 +297,7 @@ def test_over_limit_dose_reason_does_not_claim_the_dose_falls_short() -> None:
     reason = _assemble(_shadow(module="generic", bd=bd))["quality_pillars_v4"]["dose"]["reason"]
 
     assert reason == (
-        "At the label's maximum daily use, one or more nutrients exceed "
+        "At the declared serving, one or more nutrients exceed "
         "established safety limits."
     )
 

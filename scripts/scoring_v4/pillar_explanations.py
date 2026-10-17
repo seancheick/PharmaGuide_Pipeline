@@ -50,9 +50,9 @@ def _omega_dose_facts(dose_dim: Dict[str, Any]) -> List[Dict[str, Any]]:
     return [
         {
             "id": "epa_dha_per_day",
-            "label": "EPA + DHA per day",
+            "label": "EPA + DHA per serving" if (metadata or {}).get("assessment_basis") == "declared_serving" else "EPA + DHA per day",
             "value_mg": round(per_day, 1),
-            "value_display": _format_mg_per_day(per_day),
+            "value_display": f"{int(round(per_day))} mg per serving" if (metadata or {}).get("assessment_basis") == "declared_serving" else _format_mg_per_day(per_day),
         }
     ]
 
@@ -158,10 +158,15 @@ def attach_pillar_explanations(
             facts.extend(builder(dim_by_assembler.get(assembler) or {}))
         if assembler == "dose":
             metadata = ((dims.get("dose") or {}).get("metadata") or {})
+            if metadata.get("assessment_basis") == "declared_serving":
+                facts.append({
+                    "id": "dose_reference_method", "label": "Dose assessment basis",
+                    "value_display": "Dose quality is assessed per declared serving using recorded nutrient references and applicable preparation benchmarks. Higher labeled daily use is assessed separately for safety. This is not a personal dose recommendation.",
+                })
             if metadata.get("method") == "rda_ul_proxy_until_dietary_intake_table":
                 dose = dims.get("dose") or {}
                 assessment = {key: metadata.get(key) for key in (
-                    "method", "deferred_data_dependency", "reference_assessments",
+                    "method", "assessment_basis", "deferred_data_dependency", "reference_assessments",
                     "ul_partial_credit_above_pct", "ul_zero_credit_at_pct", "ul_partial_credit_raw",
                     "supplemental_window_max_raw", "positive_clinical_benchmark_assessments",
                     "dose_participation_basis", "unbenchmarked_purpose_ingredients",
@@ -171,16 +176,12 @@ def attach_pillar_explanations(
                 assessment["raw_dose"] = (pillar.get("components") or {}).get("raw_dose")
                 assessment["normalization_reference"] = (pillar.get("components") or {}).get("reference")
                 pillar["explanation"] = {"schema_version": PILLAR_EXPLANATION_SCHEMA_VERSION, "assessment": assessment}
-                facts.append({
-                    "id": "dose_reference_method", "label": "Dose assessment basis",
-                    "value_display": "Dose uses recorded nutrient references and applicable preparation benchmarks. Adequacy uses minimum directed daily intake; upper-limit checks use maximum intake. These are catalog assessments, not a personal dose recommendation.",
-                })
                 if all(_num(assessment.get(key)) is not None for key in (
                         "ul_partial_credit_above_pct", "ul_zero_credit_at_pct", "ul_partial_credit_raw", "supplemental_window_max_raw")):
                     facts.append({
                         "id": "dose_ul_credit_policy", "label": "Nutrient upper-limit scoring rule",
                         "value_display": (
-                            f"For assessed nutrient references, maximum daily intake above {assessment['ul_partial_credit_above_pct']:g}% "
+                            f"For assessed nutrient references, the declared serving above {assessment['ul_partial_credit_above_pct']:g}% "
                             f"but below {assessment['ul_zero_credit_at_pct']:g}% of the upper limit receives "
                             f"{assessment['ul_partial_credit_raw']:g}/{assessment['supplemental_window_max_raw']:g} raw window credit; "
                             f"at or above {assessment['ul_zero_credit_at_pct']:g}% it receives zero. "

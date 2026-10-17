@@ -6392,3 +6392,60 @@ def classify_ingredient_roles(
         rows = get_scoring_ingredients(product, strict=True).rows
     ctx = _role_context(product, module, rows)
     return [_classify_one(row, ctx) for row in rows]
+
+
+def declared_serving_dose_input(product: Dict[str, Any]) -> Dict[str, Any]:
+    """Transient Dose projection, preserving the source daily safety assessment.
+
+    Ratios retain their source's converted nutrient units and applicability.
+    No label quantity, identity, clinical threshold or exported field changes.
+    Legacy rows without frequency metadata use the shared label resolver.
+    """
+    from serving_frequency import resolve_daily_serving_range
+    low, high, _ = resolve_daily_serving_range(product)
+    projected = dict(product)
+    rda = deepcopy(product.get("rda_ul_data") or {})
+    serving_only_flags = []
+    for row in rda.get("adequacy_results") or []:
+        if not isinstance(row, dict):
+            continue
+        original_pct_ul = row.get("pct_ul")
+        for key, frequency_key, fallback in (
+            ("pct_rda", "servings_per_day_min", low),
+            ("pct_ul", "servings_per_day_max", high),
+        ):
+            value = row.get(key)
+            frequency = row.get(frequency_key, fallback)
+            if (isinstance(value, (int, float)) and not isinstance(value, bool)
+                    and isinstance(frequency, (int, float)) and not isinstance(frequency, bool)
+                    and math.isfinite(frequency) and frequency > 0):
+                row[key] = value / frequency
+        for key, frequency in (
+            ("per_day_min", row.get("servings_per_day_min", low)),
+            ("per_day_max", row.get("servings_per_day_max", high)),
+        ):
+            value = row.get(key)
+            if (isinstance(value, (int, float)) and not isinstance(value, bool)
+                    and isinstance(frequency, (int, float)) and not isinstance(frequency, bool)
+                    and math.isfinite(frequency) and frequency > 0):
+                row[key] = value / frequency
+        if isinstance(row.get("pct_ul"), (int, float)):
+            row["over_ul"] = row["pct_ul"] > 100
+        if (isinstance(original_pct_ul, (int, float)) and not isinstance(original_pct_ul, bool)
+                and 0 <= original_pct_ul <= 100 and row.get("over_ul") is True
+                and row.get("skip_ul_check") is not True):
+            # Intermittent directions can be below the daily UL while one
+            # serving is above it. Reuse the source-resolved comparison and
+            # eligibility; no new clinical limit or identity inference.
+            serving_only_flags.append(dict(row, amount=row.get("per_day_max")))
+        row["servings_per_day_min"] = row["servings_per_day_max"] = 1.0
+    for flag in rda.get("safety_flags") or []:
+        if not isinstance(flag, dict):
+            continue
+        for key in ("pct_ul", "amount"):
+            value = flag.get(key)
+            if isinstance(value, (int, float)) and not isinstance(value, bool):
+                flag[key] = value / high
+    rda["safety_flags"] = list(rda.get("safety_flags") or []) + serving_only_flags
+    projected["rda_ul_data"] = rda
+    return projected

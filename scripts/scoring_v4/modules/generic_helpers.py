@@ -455,3 +455,20 @@ def primary_type_of(product: Any) -> str:
 from inactive_ingredient_resolver import (  # noqa: E402,F401
     is_nutrient_form_quality_signal,
 )
+
+
+def score_declared_serving_dose(product, scorer):
+    """All route Dose consumers assess one declared serving, not directions."""
+    from scoring_input_contract import declared_serving_dose_input
+    from serving_frequency import declared_serving_score_scope
+    projected = declared_serving_dose_input(product)
+    with declared_serving_score_scope():
+        payload = scorer(projected)
+    metadata = payload.setdefault("metadata", {})
+    metadata["assessment_basis"] = "declared_serving"
+    if "daily_interval_selection" in metadata:
+        metadata["daily_interval_selection"] = "declared_serving"
+    for exposure in metadata.get("benchmark_exposures") or []:
+        if isinstance(exposure, dict) and exposure.get("basis") == "daily":
+            exposure["basis"] = "per_use"
+    return payload

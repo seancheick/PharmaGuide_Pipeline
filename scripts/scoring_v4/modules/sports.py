@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+from scoring_v4.modules.generic_helpers import score_declared_serving_dose
+
 from typing import Any
 
 from scoring_v4.modules.generic import GenericModuleResult, _assemble_score, _empty_dimensions
@@ -35,7 +37,7 @@ def score_sports(product: Any) -> GenericModuleResult:
     formulation_dim.penalties = formulation_payload["penalties"]
     formulation_dim.metadata = formulation_payload.get("metadata", {})
 
-    dose_payload = score_dose(product)
+    dose_payload = score_declared_serving_dose(product, score_dose)
     dose_dim = result.dimensions["dose"]
     dose_dim.score = dose_payload["score"]
     dose_dim.components = dose_payload["components"]
