@@ -800,8 +800,9 @@ def _range_mg(entry: Dict[str, Any]) -> Optional[tuple]:
 #   above   12                       maximum beyond 120% of the high end
 #   below   16 x minimum / (0.8 low) proportional below the near band
 # Without an applicable benchmark a disclosed amount earns the shared
-# unbenchmarked neutral; a hidden or missing amount whose benchmark exists
-# earns nothing; an unresolved benchmark identity is an unfinished assessment.
+# unbenchmarked neutral, and so does a hidden or missing amount (Dose V4.1
+# section 2.3; Transparency keeps the disclosure consequence); an unresolved
+# benchmark identity is an unfinished assessment.
 BOTANICAL_DOSE_WITHIN = _FVM["botanical_dose_within"]
 BOTANICAL_DOSE_NEAR = _FVM["botanical_dose_near"]
 BOTANICAL_DOSE_ABOVE = _FVM["botanical_dose_above"]
@@ -843,7 +844,11 @@ def unassessed_amount_band(band: str, benchmark: str) -> Dict[str, Any]:
     """A disclosed amount without a benchmark, or a hidden/missing one."""
     from scoring_v4.modules.generic_helpers import unbenchmarked_dose_credit
 
-    neutral = band == "disclosed_no_reference" or benchmark == "absent"
+    # A disclosed amount without a benchmark is neutral, as is a hidden amount
+    # whose benchmark exists or is absent (Dose V4.1 section 2.3). A hidden
+    # amount whose benchmark identity is unresolved stays unfinished (0,
+    # reported partial).
+    neutral = band == "disclosed_no_reference" or benchmark != "unresolved"
     return {"score": unbenchmarked_dose_credit() if neutral else 0.0, "band": band,
             "metadata": {"benchmark": benchmark}}
 

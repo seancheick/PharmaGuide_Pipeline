@@ -239,5 +239,6 @@ def test_scoring_receives_the_reviewed_bcaa_upper_range(entries: dict[str, dict]
 
     payload = score_dose(_scoring_product(rows, match))
 
-    assert payload["metadata"]["aggregate_dose_band"] == "above_studied_range"
+    # Dose V4.1 section 2.2: above the highest studied dose adequacy plateaus.
+    assert payload["metadata"]["aggregate_dose_band"] == "above_highest_studied_dose"
     assert payload["metadata"]["aggregate_clinical_benchmark"]["benchmark_maximum"] == 29300

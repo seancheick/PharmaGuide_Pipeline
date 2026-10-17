@@ -61,7 +61,9 @@ def test_immune_high_zinc_reads_the_maximum_and_bands_the_minimum():
     assert immune_active_doses(value)["zinc_mg"] == pytest.approx(per_serving)
     result = score_immune_support_dose(value)
     assert result["metadata"]["high_zinc"] is True
-    assert result["components"]["zinc_daily_range"] == 0.0
+    # The range band reads the maximum (48 mg, above the 25 mg band high: half
+    # credit); the UL itself is the product-level ceiling's (Dose V4.1).
+    assert result["components"]["zinc_daily_range"] == 1.5
 
 
 def test_sleep_high_dose_band_reads_the_maximum():

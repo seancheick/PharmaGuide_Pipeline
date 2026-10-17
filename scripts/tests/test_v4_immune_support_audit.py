@@ -315,7 +315,9 @@ def test_immune_high_dose_thresholds_are_strictly_greater(canonical_id, amount, 
 
     assert dose["metadata"]["high_zinc"] is (flag == "high_zinc")
     assert dose["metadata"]["high_vitamin_d"] is (flag == "high_vitamin_d")
-    assert dose["components"]["daily_use_discipline"] == (0.0 if flag else 2.0)
+    # Dose V4.1 section 2.4: the UL flags are metadata; the product-level
+    # ceiling, not a withheld component, reduces Dose once.
+    assert dose["components"]["daily_use_discipline"] == 2.0
     formulation = immune_support.immune_support_formulation_adjustment(product)
     assert formulation["metadata"]["high_zinc"] is (flag == "high_zinc")
 

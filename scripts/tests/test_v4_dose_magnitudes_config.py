@@ -33,7 +33,8 @@ ORIGINAL = {
         "cap_supplemental_window": 22.0, "dimension_cap": 25.0,
         # Dose V4.1 (§2.4): the per-nutrient UL band key is retired.
         "window_rda_threshold": 25.0,
-        "window_overdose_credit": 11.0, "window_high_source_pct": 20.0, "window_full_adequacy_pct": 100.0,
+        # Dose V4.1 section 2.2: the above-studied-range credit is retired.
+        "window_high_source_pct": 20.0, "window_full_adequacy_pct": 100.0,
         # 1.26.0 (V4.1 Step 4): the 16/12 no-reference credits are replaced by
         # the one dose_subscale.unbenchmarked_neutral_public owner.
     },

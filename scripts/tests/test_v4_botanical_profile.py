@@ -356,10 +356,10 @@ def test_dose_grape_seed_matches_clinical_range_by_canonical_id():
 def test_primary_botanical_no_dose_floors_low_not_excluded():
     ing = _botanical_ingredient(quantity=0, unit="")
     out = score_botanical_dose(_botanical_product(ingredient=ing))
-    # V4.1 Step 4: ashwagandha has a studied range, so a missing amount earns
-    # nothing (hiding it must never beat a graded low dose). Still never None:
-    # it stays in the denominator.
-    assert out["score"] == 0.0
+    # Dose V4.1 section 2.3: a hidden amount takes the shared neutral even when
+    # a studied range exists; Transparency keeps the disclosure consequence.
+    # Still never None: it stays in the denominator.
+    assert out["score"] == pytest.approx(unbenchmarked_dose_credit())
     assert out["band"] == "primary_no_dose"
     assert out["metadata"]["benchmark"] == "present"
     assert out["score"] is not None
@@ -425,12 +425,12 @@ def test_megadose_above_studied_range_credited_below_near():
 def test_anchor_only_dose_treated_as_blend_total_not_within_range():
     # A blend/anchor total (scoring_input_kind=product_level_evidence) is NOT a
     # verified per-ingredient dose and never earns within_studied_range credit.
-    # Ashwagandha has a studied range, so the hidden amount earns nothing.
+    # Dose V4.1 section 2.3: the hidden amount takes the shared neutral.
     ing = _botanical_ingredient(quantity=500, scoring_input_kind="product_level_evidence",
                                 evidence_type="blend_anchor_mass")
     out = score_botanical_dose(_botanical_product(ingredient=ing))
     assert out["band"] == "blend_total_only"
-    assert out["score"] == 0.0
+    assert out["score"] == pytest.approx(unbenchmarked_dose_credit())
     assert out["metadata"]["benchmark"] == "present"
 
 

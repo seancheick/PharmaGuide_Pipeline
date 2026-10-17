@@ -80,16 +80,18 @@ def score_immune_support_dose(product: Dict[str, Any]) -> Optional[Dict[str, Any
         # maximum: the lower of the two.
         return min(_band_score(doses, dose_key), _band_score(peak, dose_key))
 
+    # Dose V4.1 section 2.4: zinc and vitamin D above their adult ULs are
+    # reduced once, by the product-level ceiling; the flags stay as metadata.
     components = {
         "vitamin_c_daily_range": band("vitamin_c_mg"),
-        "vitamin_d_daily_range": 0.0 if high_d else band("vitamin_d_mcg"),
-        "zinc_daily_range": 0.0 if high_zinc else band("zinc_mg"),
+        "vitamin_d_daily_range": band("vitamin_d_mcg"),
+        "zinc_daily_range": band("zinc_mg"),
         "copper_balance": band("copper_mg"),
         "selenium_daily_range": band("selenium_mcg"),
         "beta_glucan_disclosed": band("beta_glucan_mg"),
         "quercetin_disclosed": band("quercetin_mg"),
         "elderberry_disclosed": band("elderberry_mg"),
-        "daily_use_discipline": 0.0 if (high_zinc or high_d) else IMMUNE_DAILY_USE_DISCIPLINE_POINTS,
+        "daily_use_discipline": IMMUNE_DAILY_USE_DISCIPLINE_POINTS,
     }
 
     score = min(IMMUNE_DOSE_CAP, sum(components.values()))

@@ -113,7 +113,6 @@ DIMENSION_CAP = _DM["dimension_cap"]
 
 # Proxy band cutoffs.
 WINDOW_RDA_THRESHOLD = _DM["window_rda_threshold"]      # pct_rda below this is sub-clinical
-WINDOW_OVERDOSE_CREDIT = _DM["window_overdose_credit"]    # above a studied range (half of 22)
 WINDOW_HIGH_SOURCE_PCT = _DM["window_high_source_pct"]    # 21 CFR 101.54(b) "high source"
 WINDOW_FULL_ADEQUACY_PCT = _DM["window_full_adequacy_pct"]
 # Dose V4.1 §3.1: ordinary-adult contribution-policy targets (elemental mg/day).
@@ -319,9 +318,11 @@ def _score_declared_purpose_window(
     clinical_assessments: List[Dict[str, Any]] = []
     specialized_assessments: List[Dict[str, Any]] = []
     if aggregate is not None:
+        # Dose V4.1 section 2.2: the highest studied dose is no upper limit;
+        # above it adequacy plateaus. Excess is the product-level ceiling's.
         if aggregate.benchmark_maximum and aggregate.exposure_value > aggregate.benchmark_maximum:
-            aggregate_credit = WINDOW_OVERDOSE_CREDIT
-            aggregate_band = "above_studied_range"
+            aggregate_credit = CAP_SUPPLEMENTAL_WINDOW
+            aggregate_band = "above_highest_studied_dose"
         elif aggregate.ratio >= 1.0:
             aggregate_credit = CAP_SUPPLEMENTAL_WINDOW
             aggregate_band = "within_studied_range"
@@ -382,10 +383,7 @@ def _score_declared_purpose_window(
             continue
         clinical = positive_clinical_benchmark(product, purpose)
         if clinical is not None:
-            if clinical.benchmark_maximum and clinical.exposure_value > clinical.benchmark_maximum:
-                contributions.append(WINDOW_OVERDOSE_CREDIT)
-            else:
-                contributions.append(min(CAP_SUPPLEMENTAL_WINDOW, clinical.ratio * CAP_SUPPLEMENTAL_WINDOW))
+            contributions.append(min(CAP_SUPPLEMENTAL_WINDOW, clinical.ratio * CAP_SUPPLEMENTAL_WINDOW))
             clinical_assessments.append(clinical.to_dict())
             continue
         if has_usable_individual_dose(purpose):

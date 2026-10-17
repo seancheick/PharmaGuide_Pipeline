@@ -131,9 +131,10 @@ def test_dose_above_studied_range():
     assert out["band"] == "above_studied_range"
 
 
-def test_dose_primary_no_dose_scores_zero_not_excluded():
+def test_dose_primary_no_dose_takes_the_neutral_not_excluded():
+    # Dose V4.1 section 2.3: a hidden amount takes the shared neutral.
     out = score_collagen_dose(_product([_collagen(quantity=0, unit="")]))
-    assert out["score"] == 0.0
+    assert out["score"] == pytest.approx(unbenchmarked_dose_credit())
     assert out["band"] == "primary_no_dose"
 
 
@@ -281,8 +282,8 @@ def test_dose_anchor_only_treated_as_blend_total():
     out = score_collagen_dose(_product([_collagen(quantity=12, unit="Gram(s)",
                                                   scoring_input_kind="product_level_evidence",
                                                   evidence_type="blend_anchor_mass")]))
-    # Hydrolyzed peptides have a studied range: a hidden amount earns nothing.
-    assert out["score"] == 0.0
+    # Dose V4.1 section 2.3: the hidden amount takes the shared neutral.
+    assert out["score"] == pytest.approx(unbenchmarked_dose_credit())
     assert out["band"] == "blend_total_only"
     assert out["metadata"]["assessments"][0]["benchmark"] == "present"
 
