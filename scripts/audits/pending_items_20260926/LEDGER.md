@@ -1,4 +1,12 @@
-## Current execution — enricher/config audit integrated, October15 (Codex)
+## Current execution — operator commands and fresh IPA, October 17 (Codex)
+
+Sean authorized a fresh IPA and cleanup of stale commands across active app/pipeline instructions. Owner: existing Makefile/README and PIPELINE_OPERATIONS_README, shared iOS builder/reservation, preflight/hydration tests and app CI. Evidence: actual recipes, lib flag consumers, batch parser and Make subprocess fixtures. Will NOT create a build variant, command registry, publisher, clinical policy or pipeline runner. Pipeline files are documentation-only: full diff/reference review and git diff --check pass; no pipeline, pytest or pre-merge CI wait. App infrastructure is separately gated by focused checks and finished CI.
+
+Build 1.0.0 (22) exported via PHARMAGUIDE_IOS_DISTRIBUTION=testflight make build-ios from current app runtime, catalog 2026.10.15.235610 with 15,426 products. Strict signing passes, get-task-allow=false; all 42 packaged data assets match local files byte-for-byte. IPA SHA256 905dc932f828f26b8930b711cdd279e9a13ca50b4ba757e52fa94a4ae382eaba. No Apple upload. Bundle verification passes core checksum and 20 remote JSON samples; version tests 9 pass. Receipts reports/ipa_build_20261017/.
+
+Removed 9 obsolete USE_V2 Make targets; retained live DEV_ROUTE previews and design audit. Reproduced help owner hiding digit names and printing Makefile filename instead of target names; fixed shared help recipe. Final Make/preflight harness 10 pass, hydration 19 pass. Preflight harness now runs in app CI. Current commands consolidated in app README and pipeline operations runbook; 7 historical app records clearly marked non-operational. Pipeline README removes raw stage/export/upload bypass examples and broad keyword-only test command. No calculation or default distribution policy change. Independent fresh review clear. App PR and final CI pending; no green or integrated claim yet.
+
+## Previous execution — enricher/config audit integrated, October15 (Codex)
 
 PR152 candidatea65cd3b32 (runtime commits180dbd072,7ed569c21), baseline156b3ee1c. Owner: existing sync/release orchestration and scoring config/module audit metadata; matrix/glossary/callers checked. Will NOT create a scorer, registry, public field/status or clinical calibration. Full dispositions and bounded measurements are in the October15 audit entry below.
 

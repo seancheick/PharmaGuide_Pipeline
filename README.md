@@ -135,44 +135,35 @@ pip install -r requirements-dev.txt
 
 ### Run the Pipeline
 
+The [operator runbook](scripts/PIPELINE_OPERATIONS_README.md) is the canonical
+command guide. Select the pinned Python first:
+
 ```bash
-# Full corpus continues through release; targeted runs stop after pipeline unless --release is explicit
-bash batch_run_all_datasets.sh
-bash batch_run_all_datasets.sh --targets Garden,Doctors --stages enrich,score  # pipeline only
-bash batch_run_all_datasets.sh --targets Garden,Doctors --stages enrich,score --release
-bash batch_run_all_datasets.sh --root "$HOME/Downloads/PharmaGuide_Datasets/staging/brands"
-
-# Rebuild the catalog/dashboard snapshot from existing brand outputs
-bash scripts/rebuild_dashboard_snapshot.sh
-
-# Release-stage work: catalog staging, product images, interaction DB, Supabase, Flutter bundle
-bash scripts/release_full.sh
-
-# Single-brand/stage iteration only
-python3 scripts/run_pipeline.py --raw-dir <dataset_dir> --output-prefix scripts/products/output_<brand> --stages clean,enrich,score
-
-# Individual stages
-python3 scripts/clean_dsld_data.py <input> <output>
-python3 scripts/enrich_supplements_v3.py <cleaned_input> <output>
-python3 scripts/score_products_v4.py --input-dir <enriched_dir> --output-dir <scored_dir>
-
-# Manual/internal export tools; normal shipping goes through rebuild_dashboard_snapshot.sh + release_full.sh
-python3 scripts/build_final_db.py --enriched-dir <enriched_dir> --scored-dir <scored_dir> --output-dir <output_dir>
-python3 scripts/sync_to_supabase.py scripts/dist --dry-run
+source scripts/python_env.sh
+export PYTHON="$PG_PYTHON"
+bash batch_run_all_datasets.sh --pipeline-only
 ```
+
+This computes Clean → Enrich → Score without publication. Add `--pre-check`
+for aggregate preparation. Omitting `--pipeline-only` continues through the
+catalog release, so do that only when you intend to publish. Stage selection,
+targeted brands, release retries, storage maintenance and the Flutter build
+handoff are documented in that runbook. Do not hand-run stage/export/upload
+internals as a substitute for the strict pipeline and release owners.
 
 ### Run Tests
 
+Use `scripts/test.sh` with the validation class in [AGENTS.md](AGENTS.md).
+For targeted iteration, name the test file before selecting a keyword:
+
 ```bash
-# Fast development suite (pinned Python)
-scripts/test.sh fast
-
-# Specific module
 scripts/test.sh fast scripts/tests/test_v4_scored_artifact.py
-
-# By keyword
-scripts/test.sh fast -k banned
+scripts/test.sh fast scripts/tests/test_v4_scored_artifact.py -k artifact
 ```
+
+Behavioral pipeline batches also require the local rung and a green finished
+whole-fast CI checkpoint. The runbook explains optional operator preparation;
+it does not replace source-change qualification.
 
 ---
 
