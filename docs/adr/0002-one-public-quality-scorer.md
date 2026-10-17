@@ -42,3 +42,26 @@ Legacy `verdict` remains a compatibility/readiness field, with POOR readable onl
 in older catalogs and never newly emitted. Flutter and release comparison consume
 the independent owners. A quality improvement cannot be called a safer product.
 This extends existing owners and fields; it creates no second scorer or registry.
+
+## Declared-serving Dose quality — Sean, October 17, 2026
+
+Product Dose quality assesses one declared Facts-panel serving across every
+category. Higher labeled daily use remains a separate safety assessment. A
+manufacturer's maximum does not establish what a person actually takes.
+
+The existing scoring input contract projects reference percentages using their
+recorded frequency and units. Every route calls the shared Dose wrapper and
+opens a declared-serving scope at the existing frequency owner. The one typed
+UL evaluator handles both contexts: serving quality for Dose, original maximum
+labeled daily exposure for the safety gate. Source directions, quantities,
+identity and applicability guards remain intact; intermittent directions cannot
+erase a high-serving quality deduction. The other five pillars, clinical limits
+and Verification policy are unchanged.
+
+This keeps the product score tied to a visible reference amount while retaining
+higher-use concerns. The app renders those concerns with their assessment basis,
+groups explanations for one nutrient without losing severity, and never
+recalculates a pipeline UL decision. This is not a personal dose recommendation.
+Config 1.27.0 and engine 4.6.0 identify the change. The existing LEDGER records the
+cause-grouped measurement and validation; publication still requires fresh
+pipeline artifacts and the normal release checks.

@@ -231,7 +231,7 @@ Since config 1.26.0 (V4.1 Step 4) every fact earns or loses points once:
   - Presence, count, focus, route-base, disclosure and duplicate branded
     credits are retired, and references are the retained attainable maximum.
 - Dose:
-  - The daily minimum owns adequacy and the daily maximum owns excess.
+  - Product Dose quality assesses one declared Facts-panel serving. Maximum labeled daily-use safety remains separate; it is not confirmed personal intake.
   - Studied-range bands are reference-normalized, with proportional credit
     below the near band.
   - An amount without an applicable benchmark earns the 11.4/20 neutral on the
@@ -316,8 +316,10 @@ rendering consume the typed `product_safety_status` field.
 
 ### 11.1 Exposure range
 
-- adequacy uses `per_day_min`
-- UL/safety uses `per_day_max`
+- Source exposure records retain `per_day_min` for minimum directed daily use and `per_day_max` for maximum directed daily use.
+- Product Dose quality uses one declared Facts-panel serving across every category. `scoring_input_contract.declared_serving_dose_input` projects the source percentages without changing nutrient units or eligibility; the shared Dose wrapper opens the declared-serving frequency scope for benchmark amounts.
+- The quality Dose upper-limit band and B7 deduction use that serving. The safety gate and exported safety findings retain maximum labeled daily exposure. Neither context establishes a user's actual intake.
+- Original source quantities, directions, reference profiles and unknown states remain unchanged. Intermittent directions cannot erase a high-serving quality deduction.
 - all units enter the shared canonicalizer before conversion
 - demographic references are retained in `data_by_group`
 - `reference_profile` identifies the adult-neutral compatibility summary
@@ -382,6 +384,7 @@ Artifact schema 4.4.0 adds the canonical eligible-delivery projection (October 1
   owner decisions (null earns no affirmative credit), primary-mass-floor
   calibration for Evidence norms, and the vitamin-D bone-goal ownership change
   (bone goal is synergy-owned, not Evidence-owned).
+- **4.5.0 → 4.6.0** (2026-10-17): Sean approved product Dose quality per declared serving across every category. Maximum labeled daily safety remains separate. Config 1.27.0 identifies this policy; other five quality pillars and clinical limits are unchanged.
 - **4.4.0 → 4.5.0** (2026-10-03): clinical amount adequacy moved to Dose;
   declared-purpose Dose votes are equal; omega Evidence is selected by applicable
   purpose and population instead of EPA+DHA amount; duplicate fiber detox/laxative

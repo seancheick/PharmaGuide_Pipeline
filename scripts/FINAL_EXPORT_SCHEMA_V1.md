@@ -866,7 +866,7 @@ ambiguity.
   material but indeterminate UL assessment (currently unknown-form folate at or above the
   possible synthetic-folic-acid threshold). It routes the catalog verdict to `CAUTION` and
   review without asserting `over_ul=true` or applying an over-UL score penalty.
-- `v4_dose_safety` is the scorer-owned typed summary. Its states distinguish confirmed
+- `v4_dose_safety` is the scorer-owned typed maximum-labeled-daily-use safety summary. Its potential B7 evaluation is not the declared-serving Dose deduction; the published Dose pillar owns its actual deductions. Its states distinguish confirmed
   over-threshold exposure from material-but-unresolved comparison, non-applicable duplicate
   lineage, and conversion defects. Unresolved rows route to partial review without an
   exceedance deduction or exceedance language.
@@ -888,9 +888,9 @@ ambiguity.
   - `B3` (compliance claim): `{id, label, score}`
   - `B5` (proprietary blend): `{id, label, score, blend_count}`
   - `B6` (disease claims): `{id, label, score}`
-  - `B7` (dose safety): `{id, label, severity, reason}` — one entry per ingredient exceeding 150% of highest adult UL. `severity` is `"critical"` at 200%+ or `"warning"` at 150-200%. `reason` includes nutrient name, amount, and UL value.
+  - `B7` (dose safety): `{id, label, severity, reason}` — one consideration per source-confirmed, eligible daily-use UL flag. Its label explicitly states maximum labeled daily use, and `reason` retains nutrient name, amount and source-resolved UL. This is a safety consideration, not necessarily a deduction from the serving-based Dose score.
   - `violation` (scoring violation): `{id, label, score}`
-    The app can render these as a "What hurt this score" section.
+    The app renders this legacy list as “What to consider.” Actual numerical deductions are owned by `quality_pillars_v4`; safety considerations need not deduct points.
 - `formulation_detail` carries the context behind A3/A4/A5 bonuses: delivery tier,
   absorption enhancers found, organic certification, standardized botanicals, synergy
   qualification, and non-GMO verification.
