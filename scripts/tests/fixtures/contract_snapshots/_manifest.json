@@ -1060,6 +1060,17 @@
       ],
       "source_commit": "c5b55b0f",
       "notes": "Independent review of all33 raw canaries:24 score movements exactly match the approved Step4 cause-grouped measurement (C1 ownership, retired duplicate/breadth/disclosure rewards, shared neutral and attainable references). Thorne336337 also captures a source-declared independent Time-Sorb matrix after fresh enrichment: overlapping phytosome credit is excluded, independent delivery0->2raw adds3.3Formulation; mechanism reference is not a green-tea clinical-efficacy trial. All non-score frozen fields unchanged except score-derived grade/tier crossings.8 controls unchanged. Full415 frozen raw A/B replay has zero scoring errors and no score-status, safety-gate or dose-safety changes;15 routing and165 false sugar-credit corrections measured separately."
+    },
+    {
+      "date": "2026-10-17",
+      "dsld_ids": [
+        245156,
+        183275,
+        180417,
+        293924
+      ],
+      "source_commit": "82de5c7c",
+      "notes": "Sean approved Dose quality per declared Facts-panel serving, with maximum daily safety separate. Frozen raw A/B of all four movers plus Pure205309 and299065 shows only Dose changes: Goli245156 20->11.4 (2 daily servings no longer supply quality credit); Silymarin183275 11.4->20 (1-4 serving range maximum no longer reduces serving quality); Ginkgo180417 20->9.5 (3 daily servings no longer supply quality credit); Pure calcium/magnesium293924 14->19 (1-2 daily use separate). Total changes exactly match Dose; other five pillars unchanged. Complete33 raw check originally had only these four scoring/derived-tier drifts and no safety, identity or status drifts. Freezer refreshed these four from raw only; receipt reports/declared_serving_20261017/raw-{old,new}.jsonl and raw-delta.json. Full stored-input impact comparison is a separate pending checkpoint; no pipeline or publication."
     }
   ]
 }

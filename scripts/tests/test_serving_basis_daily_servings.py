@@ -409,7 +409,11 @@ def test_ranged_capsule_regimen_keeps_the_facts_panel_amount_basis(pid, amount):
     assert generate_dosing_summary(enriched)["dosing_summary"] == "Take 1-4 capsules daily"
     artifact = build_scored_artifact(enriched)
     assert artifact["quality_score_status"] == "scored"
-    assert artifact["quality_pillars_v4"]["dose"]["score"] == (0 if amount == 150 else 10)
+    # Quality assesses one 120/150 mg serving; the four-serving concern
+    # remains a separate source-owned daily safety assessment.
+    assert artifact["quality_pillars_v4"]["dose"]["score"] == 20
+    assert artifact["product_safety_status"] == "caution"
+    assert artifact["_v4_module_breakdown"]["dimensions"]["dose"]["metadata"]["assessment_basis"] == "declared_serving"
     assert artifact["dose_safety_evaluation"]["flags"][0]["state"] == "confirmed_over_threshold"
 
 

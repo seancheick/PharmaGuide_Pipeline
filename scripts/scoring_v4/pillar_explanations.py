@@ -50,9 +50,9 @@ def _omega_dose_facts(dose_dim: Dict[str, Any]) -> List[Dict[str, Any]]:
     return [
         {
             "id": "epa_dha_per_day",
-            "label": "EPA + DHA per day",
+            "label": "EPA + DHA per serving" if (metadata or {}).get("assessment_basis") == "declared_serving" else "EPA + DHA per day",
             "value_mg": round(per_day, 1),
-            "value_display": _format_mg_per_day(per_day),
+            "value_display": f"{int(round(per_day))} mg per serving" if (metadata or {}).get("assessment_basis") == "declared_serving" else _format_mg_per_day(per_day),
         }
     ]
 

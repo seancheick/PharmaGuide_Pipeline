@@ -468,4 +468,7 @@ def score_declared_serving_dose(product, scorer):
     metadata["assessment_basis"] = "declared_serving"
     if "daily_interval_selection" in metadata:
         metadata["daily_interval_selection"] = "declared_serving"
+    for exposure in metadata.get("benchmark_exposures") or []:
+        if isinstance(exposure, dict) and exposure.get("basis") == "daily":
+            exposure["basis"] = "per_use"
     return payload
