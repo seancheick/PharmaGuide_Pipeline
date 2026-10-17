@@ -12,6 +12,9 @@ Two repos:
 `scripts/release_full.sh` in A already orchestrates the whole chain and auto-skips
 fresh steps. **Do not hand-run its internals** — that is how gates get bypassed.
 A release is Sean's decision (AGENTS.md); run it only when asked.
+Canonical operator commands: `scripts/PIPELINE_OPERATIONS_README.md`. App IPA
+commands live in B's `README.md` (Supported commands); this train imports the
+bundle but does not build or upload an IPA.
 
 ## 1. Pre-flight (always, in A)
 

@@ -1,6 +1,6 @@
 # PharmaGuide Pipeline Operations
 
-> Canonical operator runbook | Last verified: 2026-10-15 (PR #150 integrated)
+> Canonical operator runbook | Last verified: 2026-10-17 (current batch/release entry points and Flutter build handoff)
 
 ## 1. Which command should I run?
 
@@ -21,6 +21,8 @@ available on main after PR #150; update an older checkout before using the flag.
 | Compute only, with full preparation | `bash batch_run_all_datasets.sh --pipeline-only --pre-check` | Aggregate preparation → Clean → Enrich → Score; then stop |
 | Compute and release, essential startup checks | `bash batch_run_all_datasets.sh` | Clean → Enrich → Score → Snapshot → Release → Supabase → Flutter bundle |
 | Compute and release, with full preparation | `bash batch_run_all_datasets.sh --pre-check` | Aggregate preparation first, then the full compute/release path |
+| Re-score the corpus from current Enrich outputs | `bash batch_run_all_datasets.sh --stages score --pipeline-only` | Score only for brands; refuses stale upstream inputs |
+| Build a snapshot after processing, without publishing | `bash batch_run_all_datasets.sh --skip-release` | Clean → Enrich → Score → local snapshot; no cloud upload or Flutter import |
 | Reprocess selected brands | `bash batch_run_all_datasets.sh --targets Brand_A,Brand_B --stages enrich,score` | Selected pipeline only; upstream stages must be current |
 | Selected brands, then release whole catalog | Add `--release` to the targeted command | Target pipeline → Snapshot → Release; all catalog inputs must be current |
 | Build catalog without publishing | `bash scripts/rebuild_dashboard_snapshot.sh` | Candidate build, gates and local promotion |
@@ -30,6 +32,31 @@ available on main after PR #150; update an older checkout before using the flag.
 Flutter bundle import updates the app repository's data assets; it does **not**
 build, install or distribute a new phone/TestFlight binary. The release makes a
 local bundle commit; pushing it and distributing an app build are separate steps.
+
+### Phone package and Transporter handoff
+
+Run app commands from `/Users/seancheick/PharmaGuide ai`, after the reviewed
+source and desired catalog bundle are on app `main`:
+
+```bash
+cd "/Users/seancheick/PharmaGuide ai"
+make verify-bundle
+PHARMAGUIDE_IOS_DISTRIBUTION=testflight make build-ios
+```
+
+`make build-ios` is the one iOS packaging target. The explicit TestFlight
+setting tags beta builds correctly; plain `make build-ios` is the App Store
+production configuration. Both export `build/ios/ipa/pharmaguide.ipa` locally
+and do not upload it. The builder reserves the build number automatically.
+Commit and push that reservation after verifying the exported IPA, then upload
+the new file through Transporter yourself. Catalog publication and a Git push
+do not update an already exported IPA.
+
+All app commands live in the [Flutter command guide](../../../PharmaGuide%20ai/README.md#supported-commands).
+Its online source is the [app README](https://github.com/seancheick/Pharmaguide.ai/blob/main/README.md#supported-commands).
+Old per-screen UI-toggle targets are retired. Use `make help` for supported
+app targets, not historical design checklists. No pipeline run is needed
+merely to package already qualified app/catalog assets.
 
 ### Startup checks versus release checks
 
@@ -214,6 +241,9 @@ bash batch_run_all_datasets.sh --stages clean --pipeline-only
 bash batch_run_all_datasets.sh --stages enrich,score --pipeline-only
 bash batch_run_all_datasets.sh --stages score --pipeline-only
 ```
+
+The auxiliary Product Submissions source is independently refreshed through
+Clean/Enrich/Score if stale; selecting Score does not bypass its input checks.
 
 Use a later-stage-only run only when its upstream owned output is current and
 valid. Strict mode validates manifests and checksums rather than trusting every
