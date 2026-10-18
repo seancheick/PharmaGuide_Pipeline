@@ -319,6 +319,41 @@ def missing_doses_are_label_hidden(rows: List[Dict[str, Any]]) -> bool:
     )
 
 
+def _row_quantity_mg(row: Dict[str, Any]) -> Optional[float]:
+    """Positive row mass in mg when the row has a usable individual dose; None
+    for any other unit (IU, CFU, units), a blend total or a missing amount."""
+    if not has_usable_individual_dose(row):
+        return None
+    quantity = _as_float(row.get("quantity"), None)
+    if quantity is None or quantity <= 0:
+        return None
+    unit = _norm_text(row.get("unit_normalized") or row.get("unit"))
+    compact = unit.replace(" ", "")
+    if unit in {"mg", "milligram", "milligrams", "milligram(s)"} or compact in {
+        "mg",
+        "milligram",
+        "milligrams",
+        "milligram(s)",
+    }:
+        return quantity
+    if unit in {"g", "gram", "grams", "gram(s)"} or compact in {
+        "g",
+        "gram",
+        "grams",
+        "gram(s)",
+    }:
+        return quantity * 1000.0
+    if unit in {"mcg", "ug", "microgram", "micrograms", "microgram(s)"} or compact in {
+        "mcg",
+        "ug",
+        "microgram",
+        "micrograms",
+        "microgram(s)",
+    }:
+        return quantity / 1000.0
+    return None
+
+
 def is_scorable(ingredient: Dict[str, Any]) -> bool:
     """An ingredient counts toward Formulation sub-rubrics only when it is
     not a proprietary-blend container, not a parent-total roll-up row,

@@ -47,8 +47,8 @@ alternative release process.
 | V4 module dispatch adapter | `scoring_v4/router.py` |
 | Safety identity normalization | `identity/safety.py` |
 | V4 safety verdict policy | `scoring_v4/gate_safety.py` |
-| Production score | `score_supplements_v4.py` (engine 4.5.0) + `scoring_v4/` |
-| Complete scored artifact | `scoring_v4/scored_artifact.py` (Stage-3 artifact schema 4.3.0) |
+| Production score | `score_supplements_v4.py` (engine version: its `SCORING_ENGINE_VERSION`) + `scoring_v4/` |
+| Complete scored artifact | `scoring_v4/scored_artifact.py` (schema version: its `SCORED_ARTIFACT_SCHEMA_VERSION`) |
 | Stage-3 batch I/O | `score_products_v4.py` |
 | Export schema/quarantine | `build_final_db.py` |
 | Snapshot promotion | `rebuild_dashboard_snapshot.sh` + `promote_release_artifacts.py` |
@@ -122,7 +122,7 @@ Authority:
 
 - `score_products_v4.py`
 - `scoring_v4/scored_artifact.py`
-- `score_supplements_v4.py` (engine 4.5.0)
+- `score_supplements_v4.py` (engine version: `SCORING_ENGINE_VERSION` in that file)
 - `scoring_v4/`
 - `scoring_v4/config/quality_score.json`
 

@@ -16,11 +16,10 @@ from collagen_taxonomy import (
 from scoring_v4.modules.generic_helpers import (
     daily_serving_multiplier,
     get_active_ingredients,
-    has_usable_individual_dose,
     primary_type_of,
     unbenchmarked_dose_credit,
-    _as_float,
     _norm_text,
+    _row_quantity_mg,
 )
 
 
@@ -150,39 +149,6 @@ def _is_undenatured_type_ii(
 
 def _any_alias_matches(aliases: Iterable[str], text: str) -> bool:
     return any(alias in text for alias in aliases)
-
-
-def _row_quantity_mg(row: Dict[str, Any]) -> Optional[float]:
-    if not has_usable_individual_dose(row):
-        return None
-    quantity = _as_float(row.get("quantity"), None)
-    if quantity is None or quantity <= 0:
-        return None
-    unit = _norm_text(row.get("unit_normalized") or row.get("unit"))
-    compact = unit.replace(" ", "")
-    if unit in {"mg", "milligram", "milligrams", "milligram(s)"} or compact in {
-        "mg",
-        "milligram",
-        "milligrams",
-        "milligram(s)",
-    }:
-        return quantity
-    if unit in {"g", "gram", "grams", "gram(s)"} or compact in {
-        "g",
-        "gram",
-        "grams",
-        "gram(s)",
-    }:
-        return quantity * 1000.0
-    if unit in {"mcg", "ug", "microgram", "micrograms", "microgram(s)"} or compact in {
-        "mcg",
-        "ug",
-        "microgram",
-        "micrograms",
-        "microgram(s)",
-    }:
-        return quantity / 1000.0
-    return None
 
 
 def _daily_serving_multiplier(product: Dict[str, Any]) -> float:

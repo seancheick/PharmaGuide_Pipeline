@@ -35,11 +35,10 @@ identical to the generic module so downstream tooling can read both classes
 uniformly.
 
 Per §13 architecture lock, this module does not import from
-`score_supplements.py` (v3). Shared infrastructure (DimensionResult,
-ManufacturerTrustResult, ManufacturerViolationsResult) is imported from
-`scoring_v4.modules.generic` since the breakdown contract is identical
-across modules — only the dimension caps and per-dimension sub-rubrics
-differ between classes.
+`score_supplements.py` (v3). Shared infrastructure (DimensionResult and
+the one ModuleResult) is imported from `scoring_v4.modules.generic` since
+the breakdown contract is identical across modules — only the dimension caps
+and per-dimension sub-rubrics differ between classes.
 
 The module never raises on malformed input — empty / non-dict products
 get the same zero-math skeleton. Real input validation lives in the
@@ -51,14 +50,11 @@ from __future__ import annotations
 
 from scoring_v4.modules.generic_helpers import score_directed_daily_dose
 
-from dataclasses import dataclass, field
-from typing import Any, Dict, Optional
+from typing import Any, Dict
 
 from scoring_v4.modules.generic import (
     DimensionResult,
-    ManufacturerTrustResult,
-    ManufacturerViolationsResult,
-    VerificationBonusResult,
+    ModuleResult,
     _assemble_score,
 )
 from scoring_v4.modules.generic_manufacturer import (
@@ -70,10 +66,7 @@ from scoring_v4.modules.probiotic_dose import score_dose
 from scoring_v4.modules.probiotic_evidence import score_evidence
 from scoring_v4.modules.probiotic_formulation import score_formulation
 from scoring_v4.modules.probiotic_transparency import score_transparency
-from scoring_v4.modules.safety_hygiene import (
-    SafetyHygieneResult,
-    score_safety_hygiene_base,
-)
+from scoring_v4.modules.safety_hygiene import score_safety_hygiene_base
 
 
 PHASE_MARKER = "P2.6_probiotic_final_assembly"
@@ -89,59 +82,13 @@ _CM = _cfg_block("category_magnitudes", "probiotic")["probiotic"]
 DIMENSION_CAPS = tuple((n, c) for n, c in _CM["dimension_caps"])
 
 
-@dataclass
-class ProbioticModuleResult:
-    """Container for the probiotic-module breakdown.
-
-    Mirrors `GenericModuleResult` shape so audit / score-delta / Flutter
-    tooling can read a single `v4_breakdown["module"]`
-    contract regardless of which class scored the product.
-
-    Final assembly (Phase 4) uses the shared generic._assemble_score: core
-    dimensions summed on native scale (max 76, NO renormalization) plus the
-    additive verification_bonus / manufacturer adjustments / safety_hygiene,
-    clamped to [0, 100]. Since Phase 9 this raw rubric score is the
-    production score.
-    """
-
-    module: str = "probiotic"
-    dimensions: Dict[str, DimensionResult] = field(default_factory=dict)
-    verification_bonus: VerificationBonusResult = field(default_factory=VerificationBonusResult)
-    manufacturer_trust: ManufacturerTrustResult = field(default_factory=ManufacturerTrustResult)
-    manufacturer_violations: ManufacturerViolationsResult = field(default_factory=ManufacturerViolationsResult)
-    safety_hygiene_base: SafetyHygieneResult = field(default_factory=SafetyHygieneResult)
-    botanical_dose_deferred: bool = False
-    raw_score_100: Optional[float] = None
-    score_100: Optional[float] = None
-    phase: str = PHASE_MARKER
-    metadata: Dict[str, Any] = field(default_factory=dict)
-
-    def to_breakdown(self) -> Dict[str, Any]:
-        """Render as the dict shape used in `v4_breakdown["module"]`.
-        This is the public contract for audit / score-delta tooling and the
-        Flutter score-detail view. Matches `GenericModuleResult.to_breakdown`
-        shape so consumers don't need class-aware unpacking."""
-        return {
-            "module": self.module,
-            "dimensions": {name: dim.to_dict() for name, dim in self.dimensions.items()},
-            "verification_bonus": self.verification_bonus.to_dict(),
-            "manufacturer_trust": self.manufacturer_trust.to_dict(),
-            "manufacturer_violations": self.manufacturer_violations.to_dict(),
-            "safety_hygiene_base": self.safety_hygiene_base.to_dict(),
-            "raw_score_100": self.raw_score_100,
-            "score_100": self.score_100,
-            "phase": self.phase,
-            "metadata": dict(self.metadata),
-        }
-
-
 def _empty_dimensions() -> Dict[str, DimensionResult]:
     """Build the 4-dimension skeleton with caps locked from DIMENSION_CAPS.
     Insertion order matches rendering order in audit / UI."""
     return {name: DimensionResult(max=float(cap)) for name, cap in DIMENSION_CAPS}
 
 
-def score_probiotic(product: Any) -> ProbioticModuleResult:
+def score_probiotic(product: Any) -> ModuleResult:
     """Score a probiotic-class product against the v4 probiotic rubric.
 
     P2.6 state: returns a fully-instantiated result with all dimensions,
@@ -154,12 +101,12 @@ def score_probiotic(product: Any) -> ProbioticModuleResult:
         product: Enriched product dict consumed by all four dimension scorers.
 
     Returns:
-        ProbioticModuleResult with the locked breakdown shape.
+        ModuleResult with the locked breakdown shape.
     """
     if not isinstance(product, dict):
         product = {}
 
-    result = ProbioticModuleResult(dimensions=_empty_dimensions())
+    result = ModuleResult(module="probiotic", phase=PHASE_MARKER, dimensions=_empty_dimensions())
     formulation_payload = score_formulation(product)
     formulation_dim = result.dimensions["formulation"]
     formulation_dim.score = formulation_payload["score"]

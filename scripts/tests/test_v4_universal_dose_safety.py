@@ -18,7 +18,7 @@ from scoring_v4.dose_safety import (  # noqa: E402
 )
 from scoring_v4.gate_safety import evaluate_safety_gate  # noqa: E402
 from scoring_v4.modules.generic import (  # noqa: E402
-    GenericModuleResult,
+    ModuleResult,
     _assemble_score,
     _empty_dimensions,
 )
@@ -30,8 +30,8 @@ def _evaluate(flag: dict):
     return evaluate_dose_safety({"rda_ul_data": {"safety_flags": [flag]}})
 
 
-def _module_result(*, dose_score: float = 12.0) -> GenericModuleResult:
-    result = GenericModuleResult(dimensions=_empty_dimensions())
+def _module_result(*, dose_score: float = 12.0) -> ModuleResult:
+    result = ModuleResult(dimensions=_empty_dimensions())
     for dimension in result.dimensions.values():
         dimension.score = 0.0
     result.dimensions["dose"].score = dose_score

@@ -39,3 +39,85 @@ Clinical comparisons remain explicitly pending. `check` must therefore return no
 - Final replay results, raw-capture preservation, and hashes: see `baseline_provenance.json`.
 
 The first replay began before expanded receipt/profile projection safeguards were added. Its original capture is retained, and any post-run receipt/projection is explicitly labeled as such. Newly covered dependency hashes are compared with the initial committed baseline; they are not presented as observed pre-run hashes. The independent repeated replay uses the complete revised provenance boundary. An interrupted earlier repeat attempt is retained only as failed-run metadata and is not counted as a successful replay.
+
+## Full-artifact baseline — October 18, 2026 (architecture audit F.3, wave 1.5)
+
+`snapshot --full --blob` keeps, per product, a sha256 of the whole cleaned, enriched and scored record and of
+the detail blob (clock stamps removed through `replay.VOLATILE_FIELDS`), stores the records under
+`<out>.records/<id>.json.gz`, and `compare` names the changed record and its first differing JSON path.
+Score-only snapshots and their compare output are unchanged. Blob path: the same `build_scored_artifact` +
+`build_detail_blob` calls as `scripts/reports/canary_rebuild.py::rebuild_one`; on frozen Hum labels 241665 and
+276704 the harness blob hash equals `record_hash(rebuild_one(label), 'blob')`.
+
+### Inputs
+
+(The September receipts above under `/tmp/pg_quality` are historical; `/tmp` is wiped on reboot. Everything below lives under `~/pg_quality`.)
+
+- Raw root: `~/Downloads/PharmaGuide_Datasets/staging/brands` (the batch runner's `DATASET_ROOT`): 37 brand
+  directories, 15,414 raw DSLD labels, unique ids. The 38th stage manifest of a corpus run is
+  `Product_Submissions`, whose inputs are submission JSONs keyed by submission id (`PG_SUB_*`), not DSLD labels;
+  `freeze-raw` cannot freeze them and they are not in this baseline.
+- Frozen root `/Users/seancheick/pg_quality/full_artifact_baseline_20261018/frozen_raw` (176 MB); manifest
+  `/Users/seancheick/pg_quality/full_artifact_baseline_20261018/manifest.json`, sha256
+  `fd4f3ca7d4b5963d578230cc13e8c75753c7993b9b33bf0315c625480174b02b`; ids list `ids.json` beside it.
+
+### Volatile fields (the whole list; the harness's `VOLATILE_FIELDS` carries a reason per path)
+
+Found, not assumed: DSLD 19067 (Nature Made) run twice more than a second apart through clean → enrich →
+scored artifact → detail blob and every JSON path of all four records diffed; then the 22 frozen Hum labels run
+twice through the harness and every stored record diffed with the stamps still in (`probe_hum/`). The only clock
+stamps are `cleaned.metadata.lastCleaned`, `enriched.enriched_date`, `enriched.enrichment_metadata.generated_at`,
+`enriched.match_ledger.generated_at` and `scored.scoring_metadata.scored_date`; the detail blob carries none.
+`run_id` (named in AUDIT.md F.3) is stamped by the enricher's batch driver `process_all()` and never appears in a
+per-product record. No path was added to make a comparison pass.
+
+### Finding: one enriched field is ordered by the process hash seed (production defect, not fixed here)
+
+`scripts/enrich_supplements_v3.py:5574` writes `"scorable_ingredient_names_normalized": list(scorable_names_normalized)`,
+a set rendered as a list. Two harness runs of the 22 Hum labels differ on that path for 16 of 22 products
+(`probe_hum/run1_vs_run2.json`); with `PYTHONHASHSEED=0` both runs are byte-identical
+(`probe_hum/seeded3.jsonl` and `seeded4.jsonl`, sha256 `c08936b3fe1d839ded148960d373d77a03d54603a982876b778a10621f7616c3`,
+compare: 0 changed). Scores, the scored artifact and the detail blob do not move; nothing outside tests reads the
+field (`rg scorable_ingredient_names_normalized scripts/ "/Users/seancheick/PharmaGuide ai/lib"`). So that the
+harness compares code and inputs rather than seeds, the `--full` worker runs with `PYTHONHASHSEED=0`
+(`replay.FULL_WORKER_ENV`, recorded in the receipt); the field itself stays in the hash. Sorting that list is a
+Clean/Enrich behavioral change for its own fix task (see the memory gotcha on set iteration).
+
+### Baseline run
+
+- Production source: `5fb2be1ca` (main). The snapshot's `repository.head` is `5fb2be1ca` and `source_sha256`
+  covers every production module, scoring config and data file at that commit (tests and `scripts/audits/` are
+  outside the fingerprint, so the harness edit does not appear in it). Harness used: `replay.py` sha256
+  `2d2a0612387d6c4bab2fc1c8e611e84742a30795d478eba0858ca8927db1ab71` (`full.harness_sha256` in the receipt), commit ce5694b88.
+  The review fixes that followed change only the compare side (receipt guard on `volatile_fields` / `worker_env`;
+  leaves compared by canonical JSON so `-0.0` vs `0.0` is reported like the hash sees it; `compare --all-paths`), never
+  capture: `compare` of this baseline against itself under the PR head harness reports 15,414 products, 0 changed
+  (`self_compare_guard_check.json`, rerun after each compare-side change).
+- Command (from the worktree, `PG_PYTHON` = pinned 3.13.3):
+  `replay.py snapshot --checkout <worktree at 5fb2be1ca> --products-root .../frozen_raw --manifest .../manifest.json --out .../baseline_5fb2be1ca.jsonl --workers 4 --full --blob`
+- Output: `/Users/seancheick/pg_quality/full_artifact_baseline_20261018/baseline_5fb2be1ca.jsonl`
+  (+ `.meta.json`, `.records/`, `.log`). 15,414/15,414 products, exit 0, `source_unchanged` true, 4 workers, about 32 minutes wall (03:04 to 03:36 local, 2026-10-18). Status: 15,109 scored, 236 not_scored, 69 suppressed_safety; routes: generic 10,674, multi_or_prenatal 2,071, sports 922, omega 714, probiotic 539, fiber_digestive 348, b_complex 146 (the September score-only section replayed stored enrichment of 38 manifests, so its counts are not comparable). Every product carries all four hashes; no two products share one. Snapshot sha256 `96d7ec7ac3762b7586965d6339b4a7f3f245e457cecaa34034065cd626e7c704` (355 MB); receipt sha256 `29263ce852f5f8f9d68de1ae353353bbc80573892bdbb5513a707954aab55438`; records 15,414 files, 1.1 GB.
+- Not done: a second full run of all 15,414 labels. Determinism of the capture rests on the 22-label Hum
+  receipt above (byte-identical twice under the pinned seed) and on the earlier 15,421-product score-only
+  repeat recorded in the September section.
+
+### Using it
+
+```
+replay.py snapshot --checkout <candidate worktree> --products-root .../frozen_raw --manifest .../manifest.json \
+    --out .../candidate_<sha>.jsonl --workers 4 --full --blob
+replay.py compare --baseline .../baseline_5fb2be1ca.jsonl --candidate .../candidate_<sha>.jsonl --out .../delta.json
+```
+
+`compare` writes one entry per product whose row differs, each with `changed` (cleaned / enriched / scored /
+blob) and `first_difference` per changed record, and prints a one-line summary to stderr. `--all-paths` adds every
+differing path of each changed record (`differences`) and, to the summary, the number of products carrying each
+path with list indices generalized to `[*]`: the "only this path differs" receipt of a PR comes from that summary.
+Every listed difference is justified in the PR that produced it; none is removed by widening `VOLATILE_FIELDS`.
+
+### Follow-ups
+
+- **Measure set-order nondeterminism instead of masking it.** The `--full` worker pins `PYTHONHASHSEED=0` and `compare`
+  requires both receipts' `worker_env` to equal the harness constant, so dropping the pin later would refuse today's
+  baseline. For the next recapture after the sorted list (PR #156) lands: record the observed seed in the receipt,
+  require baseline and candidate receipts to agree with each other rather than with the constant, and drop the pin.

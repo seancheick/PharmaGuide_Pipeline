@@ -12,15 +12,15 @@ if str(SCRIPTS_ROOT) not in sys.path:
     sys.path.insert(0, str(SCRIPTS_ROOT))
 
 from scoring_v4.modules.generic import (  # noqa: E402
-    GenericModuleResult,
+    ModuleResult,
     _assemble_score,
     _empty_dimensions,
 )
 from scoring_v4.penalty_registry import apply_penalty_registry  # noqa: E402
 
 
-def _result() -> GenericModuleResult:
-    result = GenericModuleResult(dimensions=_empty_dimensions())
+def _result() -> ModuleResult:
+    result = ModuleResult(dimensions=_empty_dimensions())
     for dimension in result.dimensions.values():
         dimension.score = 10.0
     result.manufacturer_trust.score = 0.0

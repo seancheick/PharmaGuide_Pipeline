@@ -10,7 +10,7 @@ The dashboard is an internal, read-only operator tool for the PharmaGuide data p
 - inspect products in the final export
 - review release health and gate status
 - triage quality issues and missing data
-- audit Section A (ingredient quality) scoring
+- audit the six V4 quality pillars, suppressions and scoring integrity
 - compare builds and batch runs
 - monitor observability and alert conditions
 - review market / ingredient / brand intelligence derived from the export
@@ -39,7 +39,7 @@ View files:
 - `scripts/dashboard/views/inspector.py`
 - `scripts/dashboard/views/health.py`
 - `scripts/dashboard/views/quality.py`
-- `scripts/dashboard/views/audit_section_a.py`
+- `scripts/dashboard/views/audit_pillars.py`
 - `scripts/dashboard/views/observability.py`
 - `scripts/dashboard/views/diff.py`
 - `scripts/dashboard/views/batch_diff.py`
@@ -131,7 +131,7 @@ Open a specific main view directly with the `view` query param after the app sta
 - `http://127.0.0.1:8501/?view=product-inspector`
 - `http://127.0.0.1:8501/?view=pipeline-health`
 - `http://127.0.0.1:8501/?view=data-quality`
-- `http://127.0.0.1:8501/?view=section-a-audit`
+- `http://127.0.0.1:8501/?view=pillar-audit`
 - `http://127.0.0.1:8501/?view=observability`
 - `http://127.0.0.1:8501/?view=release-diff`
 - `http://127.0.0.1:8501/?view=batch-diff`
@@ -145,6 +145,20 @@ streamlit run scripts/dashboard/app.py -- \
   --build-root /path/to/dist \
   --dataset-root /optional/path/to/dataset/root
 ```
+
+To compare pipeline data with the app's `assets/reference_data` copies on the
+`Clinical Copy` view, name the Flutter checkout with `FLUTTER_REPO` (the convention
+the release scripts and CI use) or `--flutter-repo`:
+
+```bash
+FLUTTER_REPO="/path/to/app" streamlit run scripts/dashboard/app.py
+```
+
+Without it the view says the Flutter asset sync is not configured; a path whose
+`assets/reference_data` directory is missing is reported as unavailable. Missing,
+unreadable or unversioned expected banned/recalled, medication depletion and synergy
+assets also produce an unavailable check. The comparison reports schema versions
+only, not content parity or release readiness.
 
 ## Expected Startup Behavior
 
@@ -226,7 +240,7 @@ Better:
 2. Open Product Inspector and search a known product.
 3. Open Health and confirm release gate / batch sections render.
 4. Open Quality and confirm distributions plus queue tabs render.
-5. Open Section A Audit and confirm ingredient quality scoring and probiotic CFU sections render.
+5. Open Pillar Audit and confirm the six pillar distributions and lowest-scorer tables render.
 6. Open Observability and confirm integrity / analytics tabs render.
 7. Open Diff and Batch Diff and confirm selectors and tables render.
 8. Open Intelligence and confirm category, ingredient, brand, and driver sections render.
@@ -247,7 +261,7 @@ streamlit run scripts/dashboard/app.py --server.headless true --server.port 8599
 - `http://127.0.0.1:8599/?view=product-inspector`
 - `http://127.0.0.1:8599/?view=pipeline-health`
 - `http://127.0.0.1:8599/?view=data-quality`
-- `http://127.0.0.1:8599/?view=section-a-audit`
+- `http://127.0.0.1:8599/?view=pillar-audit`
 - `http://127.0.0.1:8599/?view=observability`
 - `http://127.0.0.1:8599/?view=release-diff`
 - `http://127.0.0.1:8599/?view=batch-diff`
@@ -260,7 +274,7 @@ streamlit run scripts/dashboard/app.py --server.headless true --server.port 8599
 - `product-inspector.png`
 - `pipeline-health.png`
 - `data-quality.png`
-- `section-a-audit.png`
+- `pillar-audit.png`
 - `observability.png`
 - `release-diff.png`
 - `batch-diff.png`

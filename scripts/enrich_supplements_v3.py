@@ -389,19 +389,6 @@ BOTANICAL_CANONICAL_SOURCE_DBS = {
 }
 
 
-# ---------------------------------------------------------------------------
-# Sprint 1 UNII-first matching: canonical UNII normalizer (must stay in sync
-# with `enhanced_normalizer._normalize_unii` — duplicated rather than imported
-# to keep the cleaner and enricher independently testable). Contract:
-#
-#   FDA UNIIs are exactly 10 alphanumeric uppercase characters. Strip
-#   whitespace, uppercase, and reject DSLD placeholder values ("0", "1", "").
-#
-# Returns: Optional[str] — 10-char canonical UNII, or None for placeholder/garbage.
-# ---------------------------------------------------------------------------
-_UNII_PLACEHOLDERS = frozenset({"", "0", "1"})
-
-
 def _rda_mass_unit_key(value) -> Optional[str]:
     unit = "" if value is None else str(value)
     compact = (
@@ -541,18 +528,6 @@ def _has_no_official_ul_reference(nutrient_record: Dict[str, Any]) -> bool:
         ]
         return bool(statuses) and all(status == "not_determined" for status in statuses)
     return True
-
-
-def _normalize_unii(value):
-    """Canonicalize a UNII string. Returns None for placeholders/garbage."""
-    if not isinstance(value, str):
-        return None
-    canon = value.strip().upper()
-    if not canon or canon in _UNII_PLACEHOLDERS:
-        return None
-    if len(canon) != 10 or not canon.isalnum():
-        return None
-    return canon
 
 
 from probiotic_measurements import (
@@ -2083,7 +2058,7 @@ class SupplementEnricherV3:
                 if not isinstance(entry, dict):
                     continue
                 eid = entry.get("external_ids") or {}
-                entry_unii = _normalize_unii(
+                entry_unii = norm_module.normalize_unii(
                     (eid.get("unii") if isinstance(eid, dict) else None)
                     or entry.get("unii")
                 )
@@ -2111,7 +2086,7 @@ class SupplementEnricherV3:
             if entity_type not in {"ingredient", "contaminant", "class", None, ""}:
                 continue
             eid = entry.get("external_ids") or {}
-            entry_unii = _normalize_unii(
+            entry_unii = norm_module.normalize_unii(
                 (eid.get("unii") if isinstance(eid, dict) else None)
                 or entry.get("unii")
             )
@@ -3714,7 +3689,7 @@ class SupplementEnricherV3:
         values = set()
 
         def add(value: Any) -> None:
-            normalized = _normalize_unii(value)
+            normalized = norm_module.normalize_unii(value)
             if normalized:
                 values.add(normalized)
 
@@ -5572,8 +5547,10 @@ class SupplementEnricherV3:
             "contains_match_wins_count": contains_match_wins_count,
             "parent_fallback_count": parent_fallback_count,
 
-            # Quick-lookup normalized names for scoring efficiency
-            "scorable_ingredient_names_normalized": list(scorable_names_normalized),
+            # Quick-lookup normalized names for scoring efficiency. Sorted: a set
+            # rendered as a list follows the process hash seed, and the enriched
+            # record must not change between identical runs.
+            "scorable_ingredient_names_normalized": sorted(scorable_names_normalized),
             # Sprint E1.23 — ingredients demoted from scorable because they
             # are sub-threshold absorption enhancers (e.g. BioPerine 5 mg).
             # Carried for audit; Flutter can surface them as info chips.
@@ -7021,7 +6998,7 @@ class SupplementEnricherV3:
 
         # ── Sprint 1 Tier-0: UNII-anchored fast path ──
         if raw_row is not None and self._nonscorable_unii_index:
-            raw_unii = _normalize_unii(raw_row.get("uniiCode"))
+            raw_unii = norm_module.normalize_unii(raw_row.get("uniiCode"))
             if raw_unii and raw_unii in self._nonscorable_unii_index:
                 return validated_recognition(self._nonscorable_unii_index[raw_unii])
             # Walk forms[*].uniiCode if top-level missed
@@ -7030,7 +7007,7 @@ class SupplementEnricherV3:
                 for form in forms:
                     if not isinstance(form, dict):
                         continue
-                    form_unii = _normalize_unii(form.get("uniiCode"))
+                    form_unii = norm_module.normalize_unii(form.get("uniiCode"))
                     if form_unii and form_unii in self._nonscorable_unii_index:
                         return validated_recognition(self._nonscorable_unii_index[form_unii])
 
@@ -20795,7 +20772,7 @@ class SupplementEnricherV3:
             and isinstance(parent.get("external_ids"), dict)
             else {}
         )
-        parent_unii = _normalize_unii(parent_external_ids.get("unii"))
+        parent_unii = norm_module.normalize_unii(parent_external_ids.get("unii"))
         source_uniis = self._identity_unii_values(
             ingredient,
             include_forms=False,

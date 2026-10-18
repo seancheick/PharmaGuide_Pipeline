@@ -3,7 +3,8 @@ CAERS Adverse Events Audit Dashboard
 
 Deep-dive into FDA CAERS pharmacovigilance data: ingredient-level signals,
 outcome breakdowns, cross-reference with banned/recalled and IQM data,
-and B8 scoring impact analysis.
+and the scoring status. These signals are audit analytics only: the production
+v4 score applies no CAERS penalty (the v3 B8 penalty was retired 2026-06-24).
 """
 
 from __future__ import annotations
@@ -16,7 +17,6 @@ import pandas as pd
 import plotly.express as px
 import streamlit as st
 
-from scripts.dashboard.components.data_table import data_table
 from scripts.dashboard.components.metric_cards import metric_row
 
 
@@ -35,10 +35,10 @@ def render_audit_caers(data):
     _render_overview(signals, metadata)
     st.divider()
 
-    tab_signals, tab_cross, tab_impact, tab_reactions, tab_raw = st.tabs([
+    tab_signals, tab_cross, tab_status, tab_reactions, tab_raw = st.tabs([
         "Signal Explorer",
         "Cross-Reference Audit",
-        "B8 Scoring Impact",
+        "Scoring Status",
         "Reaction Analysis",
         "Raw Data",
     ])
@@ -46,8 +46,8 @@ def render_audit_caers(data):
         _render_signal_explorer(signals)
     with tab_cross:
         _render_cross_reference(signals, data)
-    with tab_impact:
-        _render_scoring_impact(signals, data)
+    with tab_status:
+        _render_scoring_status(signals)
     with tab_reactions:
         _render_reaction_analysis(signals)
     with tab_raw:
@@ -127,7 +127,6 @@ def _render_signal_explorer(signals):
             "Life Threat": outcomes.get("life_threatening", 0),
             "Disabled": outcomes.get("disability", 0),
             "Years": sig.get("year_range", ""),
-            "B8 Penalty": _b8_penalty(sig.get("signal_strength", "")),
         })
 
     df = pd.DataFrame(rows)
@@ -140,7 +139,7 @@ def _render_signal_explorer(signals):
 
     display_cols = [
         "Ingredient", "Signal", "Serious", "Total", "Deaths",
-        "Hospitalized", "ER", "Life Threat", "Years", "B8 Penalty",
+        "Hospitalized", "ER", "Life Threat", "Years",
     ]
     st.dataframe(df[display_cols], use_container_width=True, height=500)
 
@@ -233,68 +232,42 @@ def _render_cross_reference(signals, data):
             st.dataframe(both_df, use_container_width=True, height=350)
 
 
-def _render_scoring_impact(signals, data):
-    """Show how B8 CAERS penalties affect product scores."""
-    st.write("### B8 Scoring Impact Analysis")
-
-    # Load scoring config
-    scoring_config = data.scoring_config or {}
-    b8_cfg = scoring_config.get("section_B_safety_purity", {}).get("B8_caers_adverse_events", {})
-
-    col1, col2 = st.columns(2)
-    with col1:
-        st.write("#### Current B8 Config")
-        st.json(b8_cfg)
-    with col2:
-        st.write("#### Penalty Schedule")
-        schedule = pd.DataFrame([
-            {"Signal": "Strong (100+ serious)", "Penalty": b8_cfg.get("strong_penalty", 4.0), "Example": "kratom, green tea extract"},
-            {"Signal": "Moderate (25-99)", "Penalty": b8_cfg.get("moderate_penalty", 2.0), "Example": "turmeric, ashwagandha"},
-            {"Signal": "Weak (10-24)", "Penalty": b8_cfg.get("weak_penalty", 1.0), "Example": "elderberry, boswellia"},
-        ])
-        data_table(schedule)
-        st.write(f"**Cap:** {b8_cfg.get('cap', 5.0)} pts per product")
-        st.write(f"**Enabled:** {'Yes' if b8_cfg.get('enabled') else 'No'}")
+def _render_scoring_status(signals):
+    """State what the production score does with CAERS signals: nothing."""
+    st.write("### Scoring Status")
+    st.info(
+        "The production v4 score applies no CAERS penalty. No v4 pillar, penalty "
+        "or safety gate reads these signals, and the exported catalog does not "
+        "surface them. This page is audit analytics only."
+    )
+    st.markdown(
+        "**History of the retired v3 B8 penalty**\n"
+        "- 2026-04-14: v3 added B8 (strong -4, moderate -2, weak -1 points, capped at 5).\n"
+        "- 2026-04-30: B8 was disabled. Raw report counts track how widely an "
+        "ingredient is used, not its risk: calcium landed in the same tier as kratom.\n"
+        "- 2026-06-24: the B8 code and its config block were removed. The recorded "
+        "rationale is that ingredients with established hazards are covered by the "
+        "banned/recalled and harmful-additive data."
+    )
+    st.caption(
+        "Using CAERS in scoring again would need exposure-normalized signals or a "
+        "curated, causally attributable list, plus a new policy decision."
+    )
 
     st.divider()
-
-    # Impact simulation — how many ingredients at each penalty level
-    st.write("#### Impact Distribution")
-    penalty_data = []
-    for cid, sig in signals.items():
-        strength = sig.get("signal_strength", "")
-        pen = _b8_penalty(strength)
-        if pen > 0:
-            penalty_data.append({
-                "Ingredient": cid.replace("_", " ").title(),
-                "Signal": strength,
-                "Penalty": pen,
-                "Serious Reports": sig.get("serious_reports", 0),
-            })
-
-    if penalty_data:
-        pen_df = pd.DataFrame(penalty_data)
-        fig = px.histogram(
-            pen_df, x="Penalty", color="Signal",
-            color_discrete_map={"strong": "#dc2626", "moderate": "#f59e0b", "weak": "#6b7280"},
-            title="Ingredients by B8 Penalty Level",
-            nbins=10,
-        )
-        st.plotly_chart(fig, use_container_width=True)
-
-        # Total penalty impact summary
-        total_strong = pen_df[pen_df["Signal"] == "strong"].shape[0]
-        total_moderate = pen_df[pen_df["Signal"] == "moderate"].shape[0]
-        total_weak = pen_df[pen_df["Signal"] == "weak"].shape[0]
-        st.write(
-            f"**Products containing strong-signal ingredients will lose up to "
-            f"{b8_cfg.get('strong_penalty', 4.0)} pts** (capped at {b8_cfg.get('cap', 5.0)})."
-        )
-        st.write(
-            f"Distribution: {total_strong} ingredients at -{b8_cfg.get('strong_penalty', 4.0)}, "
-            f"{total_moderate} at -{b8_cfg.get('moderate_penalty', 2.0)}, "
-            f"{total_weak} at -{b8_cfg.get('weak_penalty', 1.0)}"
-        )
+    st.write("#### Ingredients by Signal Strength")
+    counts = defaultdict(int)
+    for sig in signals.values():
+        counts[sig.get("signal_strength") or "unclassified"] += 1
+    strength_df = pd.DataFrame(
+        [{"Signal": strength, "Ingredients": count} for strength, count in sorted(counts.items())]
+    )
+    fig = px.bar(
+        strength_df, x="Signal", y="Ingredients", color="Signal",
+        color_discrete_map={"strong": "#dc2626", "moderate": "#f59e0b", "weak": "#6b7280"},
+        title="CAERS signal strength (report counts, not risk)",
+    )
+    st.plotly_chart(fig, use_container_width=True)
 
 
 def _render_reaction_analysis(signals):
@@ -359,8 +332,3 @@ def _render_raw_data(signals, metadata):
             continue
         with st.expander(f"{cid} — {signals[cid].get('signal_strength', '')} ({signals[cid].get('serious_reports', 0)} serious)"):
             st.json(signals[cid])
-
-
-def _b8_penalty(signal_strength: str) -> float:
-    """Map signal strength to default B8 penalty."""
-    return {"strong": 4.0, "moderate": 2.0, "weak": 1.0}.get(signal_strength, 0.0)

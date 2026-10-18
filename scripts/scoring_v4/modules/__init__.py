@@ -18,9 +18,8 @@ gate results passed by the v4 entry point. They MUST NOT import the
 legacy scorer (§13 architecture lock).
 
 Each module emits a normalized breakdown shape compatible with
-`v4_breakdown["module"]`. See `generic.GenericModuleResult`,
-`probiotic.ProbioticModuleResult`, and `omega.OmegaModuleResult` for the
-canonical contract.
+`v4_breakdown["module"]`. See `generic.ModuleResult`, the one
+result type every route returns, for the canonical contract.
 """
 
 from __future__ import annotations

@@ -32,6 +32,7 @@ from typing import Any, Dict, List, Tuple
 
 from scoring_v4.cert_evidence import (
     audited_gmp_evidence,
+    cert_program_key,
     is_verified_product_cert_entry,
     verified_cert_entries,
 )
@@ -132,7 +133,7 @@ def _score_b4a(
             })
             continue
         raw += pts
-        scored_programs.add(_cert_program_key(_norm(entry.get("program")), ""))
+        scored_programs.add(cert_program_key(_norm(entry.get("program")), ""))
         scored_entries.append({
             "program": entry.get("program"),
             "scope": scope,
@@ -178,7 +179,7 @@ def _label_asserted_quality_programs(product: Dict[str, Any]) -> List[str]:
             continue
         display = _norm(entry.get("display_name") or entry.get("program") or "")
         rule_id = _norm(entry.get("rule_id") or "")
-        program = _cert_program_key(display, rule_id)
+        program = cert_program_key(display, rule_id)
         if not program:
             continue
         if not _is_label_asserted_quality_program(display, rule_id):
@@ -195,27 +196,6 @@ def _is_label_asserted_quality_program(display: str, rule_id: str) -> bool:
     if any(program in haystack for program in SUSTAINABILITY_ONLY_PROGRAMS):
         return False
     return any(program in haystack for program in LABEL_ASSERTED_QUALITY_PROGRAMS)
-
-
-def _cert_program_key(display: str, rule_id: str) -> str:
-    haystack = f"{display} {rule_id}"
-    if "ifos" in haystack:
-        return "ifos"
-    if "usp" in haystack:
-        return "usp verified"
-    if "informed choice" in haystack:
-        return "informed choice"
-    if "informed sport" in haystack:
-        return "informed sport"
-    if "bscg" in haystack:
-        return "bscg"
-    if "labdoor" in haystack:
-        return "labdoor tested"
-    if "nsf" in haystack and "sport" in haystack:
-        return "nsf sport"
-    if "nsf" in haystack:
-        return "nsf certified"
-    return display or rule_id
 
 
 def _score_b4b(product: Dict[str, Any], cfg: Dict[str, Any]) -> Tuple[float, Dict[str, Any]]:

@@ -71,10 +71,10 @@ sys.path.insert(0, str(_THIS_DIR))
 sys.path.insert(0, str(_THIS_DIR.parent))
 from dataset_paths import brand_dataset_root  # noqa: E402
 from run_artifacts import atomic_write_json  # noqa: E402
+from normalization import normalize_unii  # noqa: E402
 
 from audit_unii_data_quality import (
     REFERENCE_FILES,
-    _normalize_unii,
     _extract_entry_unii,
     load_reference_data,
     load_fda_unii_cache,
@@ -182,7 +182,7 @@ def _index_row(
     raw_name = (row.get("name") or "").strip()
     if not raw_name:
         return
-    unii = _normalize_unii(row.get("uniiCode"))
+    unii = normalize_unii(row.get("uniiCode"))
     if not unii:
         return
     key = (raw_name.lower(), unii)
@@ -239,7 +239,7 @@ def query_fda_cache(
         unii = name_to_unii.get(nm_lower)
         if not unii:
             continue
-        unii_canon = _normalize_unii(unii)
+        unii_canon = normalize_unii(unii)
         if not unii_canon:
             continue
         bucket = result.setdefault(

@@ -21,10 +21,18 @@ from typing import Any, Dict
 _PATH = Path(__file__).resolve().parent / "config" / "quality_score.json"
 
 
-@lru_cache(maxsize=1)
-def config() -> Dict[str, Any]:
-    """Parsed quality_score.json, cached (fresh parse once per process)."""
+def _read_config() -> Dict[str, Any]:
     return json.loads(_PATH.read_text())
+
+
+@lru_cache(maxsize=1)
+def _cached_config() -> Dict[str, Any]:
+    return _read_config()
+
+
+def config(*, fresh: bool = False) -> Dict[str, Any]:
+    """Parsed config, cached for scoring; fresh reads serve dashboard reloads."""
+    return _read_config() if fresh else _cached_config()
 
 
 def block(name: str, sentinel: str) -> Dict[str, Any]:

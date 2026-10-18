@@ -6,7 +6,7 @@ from scoring_v4.modules.generic_helpers import score_directed_daily_dose
 
 from typing import Any
 
-from scoring_v4.modules.generic import GenericModuleResult, _assemble_score, _empty_dimensions
+from scoring_v4.modules.generic import ModuleResult, _assemble_score, _empty_dimensions
 from scoring_v4.modules.generic_evidence import score_evidence
 from scoring_v4.modules.generic_manufacturer import (
     score_manufacturer_trust,
@@ -23,12 +23,12 @@ from scoring_v4.modules.sports_helpers import sports_subtype
 PHASE_MARKER = "P1.7_sports_module"
 
 
-def score_sports(product: Any) -> GenericModuleResult:
+def score_sports(product: Any) -> ModuleResult:
     """Score an explicit sports-nutrition product against the v4 module."""
     if not isinstance(product, dict):
         product = {}
 
-    result = GenericModuleResult(module="sports", dimensions=_empty_dimensions())
+    result = ModuleResult(module="sports", dimensions=_empty_dimensions())
 
     formulation_payload = score_formulation(product)
     formulation_dim = result.dimensions["formulation"]
