@@ -33,12 +33,11 @@ ORIGINAL = {
     "sports": {"dimension_cap": 30.0},
     "fiber_digestive": {"dimension_cap": 30.0},
     # 1.26.0: identity is a neutral baseline; plant part, amount, brand and the
-    # disclosed-marker tier earn nothing here; Dose bands are graded on scale 21.
+    # disclosed-marker tier earn nothing here; unsupported Dose bands are retired.
     "botanical": {
         "botanical_formulation_cap": 15.0, "botanical_identity_neutral": 7.2, "botanical_extract": 1.6,
         "standardization_tier_full": 3.2, "standardization_tier_near": 2.4, "standardization_tier_half": 1.6,
-        "botanical_dose_within": 21.0, "botanical_dose_near": 16.0, "botanical_dose_above": 12.0,
-        "botanical_dose_band_scale": 21.0, "botanical_dose_no_active": 0.0,
+        "botanical_dose_no_active": 0.0,
     },
     "collagen": {"collagen_formulation_cap": 15.0, "collagen_identity_neutral": 4.8, "collagen_hydrolyzed": 3.2},
 }
@@ -46,7 +45,9 @@ ORIGINAL = {
 
 def test_config_matches_reviewed_values():
     for mod, vals in ORIGINAL.items():
-        assert FVM[mod] == vals, f"formulation_variant_magnitudes.{mod} drifted from pre-hoist values"
+        assert FVM[mod] == vals, f"formulation_variant_magnitudes.{mod} retained magnitudes drifted"
+    for retired in ("botanical_dose_within", "botanical_dose_near", "botanical_dose_above", "botanical_dose_band_scale"):
+        assert retired not in FVM["botanical"]
 
 
 def test_runtime_constants_read_from_config_no_drift():
@@ -60,6 +61,7 @@ def test_runtime_constants_read_from_config_no_drift():
     assert botanical_profile.STANDARDIZATION_TIER_FULL == 3.2
     assert botanical_profile.BOTANICAL_IDENTITY_NEUTRAL == 7.2
     assert collagen_profile.COLLAGEN_IDENTITY_NEUTRAL == 4.8
-    assert botanical_profile.BOTANICAL_DOSE_WITHIN == 21.0
+    for retired in ("BOTANICAL_DOSE_WITHIN", "BOTANICAL_DOSE_NEAR", "BOTANICAL_DOSE_ABOVE", "BOTANICAL_DOSE_BAND_SCALE"):
+        assert not hasattr(botanical_profile, retired)
     assert botanical_profile.BOTANICAL_DOSE_NO_ACTIVE == 0.0
     assert collagen_profile.COLLAGEN_FORMULATION_CAP == 15.0

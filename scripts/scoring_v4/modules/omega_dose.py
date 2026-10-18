@@ -3,10 +3,8 @@
 Scores omega-3 dose adequacy against the 25-point rubric in
 scripts/data/omega_rubric.json:
 
-    epa_dha_band         /20  EPA+DHA mg per day, six bands lifted from
-                              scoring_config.section_A_ingredient_quality.
-                              omega3_dose_bonus.bands (EFSA/FDA/AHA-grounded
-                              thresholds: 250/500/1000/2000/4000 mg/day)
+    epa_dha_band         /20  Purpose-qualified proportional contribution
+                              then plateau; no general pediatric target.
 
 The former +5 EPA:DHA ratio bonus was removed in quality_score 1.2.0: no
 clinical optimum ratio exists for a generic omega product. Per-serving EPA
@@ -61,7 +59,7 @@ _DM = _cfg_block("dose_magnitudes", "omega")["omega"]
 CAP_DOSE = _DM["cap_dose"]
 
 # Dose V4.1 §3.1: the purpose owner selects the reference; see the rubric's
-# dose.adequacy_references. A child/baby product keeps the epa_dha_bands.
+# dose.adequacy_references. Child/baby products receive the existing neutral.
 _CHILD_OR_BABY = "held_child_or_baby_population"
 _PRENATAL = "prenatal_dha_intake_authority"
 _TRIGLYCERIDE = "explicit_adult_triglyceride_lowering_purpose"
@@ -85,48 +83,12 @@ def _extract_daily_servings(product: Dict[str, Any]) -> Tuple[float, float, bool
     return daily_serving_range(product)
 
 
-def _band_score(per_day_mg: float, bands: List[Dict[str, Any]]) -> Tuple[float, str, Optional[str]]:
-    """Score EPA+DHA per day against the rubric bands. Return (score, label, flag).
-
-    The reviewed band values are anchors, not steps: between two anchors the
-    score follows a straight line, so 999 mg and 1000 mg differ by a hair
-    instead of 6 points. No band value moves — 250 still scores 5, 1000 still
-    scores 16, 2000 and above still score 20. The label and context flag come
-    from the band the amount actually falls in, exactly as before.
-
-    Bands in omega_rubric are in descending-threshold order
-    (4000, 2000, 1000, 500, 250, 200, 100, 0).
-    """
-    label, flag = "below_efsa_ai", None
+def _dose_context(per_day_mg: float, bands: List[Dict[str, Any]]) -> Tuple[str, Optional[str]]:
+    """Return a descriptive exposure label and context flag, never points."""
     for band in bands:
         if per_day_mg >= float(band.get("min_mg_day", 0) or 0):
-            label = str(band.get("label") or "")
-            flag = band.get("flag")
-            break
-    if per_day_mg <= 0:
-        return 0.0, "below_efsa_ai", None
-
-    anchors = sorted(
-        (float(band.get("min_mg_day", 0) or 0), float(band.get("score", 0) or 0))
-        for band in bands
-    )
-    if not anchors:
-        return 0.0, label, flag
-    # Below the lowest scoring anchor the rubric is a floor, not a ramp: a trace
-    # omega gummy earns nothing, which is the reviewed policy for <100 mg/day.
-    lowest_scoring = next((mg for mg, score in anchors if score > 0), None)
-    if lowest_scoring is not None and per_day_mg < lowest_scoring:
-        return 0.0, label, flag
-    if per_day_mg >= anchors[-1][0]:
-        return anchors[-1][1], label, flag
-    for (low_mg, low_score), (high_mg, high_score) in zip(anchors, anchors[1:]):
-        if per_day_mg <= high_mg:
-            span = high_mg - low_mg
-            if span <= 0:
-                return high_score, label, flag
-            value = low_score + (high_score - low_score) * (per_day_mg - low_mg) / span
-            return round(value, 2), label, flag
-    return anchors[-1][1], label, flag
+            return str(band.get("label") or ""), band.get("flag")
+    return "below_efsa_ai", None
 
 
 def score_dose(product: Any) -> Dict[str, Any]:
@@ -174,8 +136,8 @@ def score_dose(product: Any) -> Dict[str, Any]:
 
     # Band labels and the prescription context flag stay descriptive; the
     # upper endpoint never increases adequacy credit.
-    minimum_score, minimum_label, minimum_flag = _band_score(per_day_min, bands)
-    maximum_score, maximum_label, maximum_flag = _band_score(per_day_max, bands)
+    minimum_label, minimum_flag = _dose_context(per_day_min, bands)
+    maximum_label, maximum_flag = _dose_context(per_day_max, bands)
     band_label = minimum_label if minimum_label == maximum_label else f"{minimum_label}_to_{maximum_label}"
     band_flag = minimum_flag or maximum_flag
     interval_crosses_band = minimum_label != maximum_label
@@ -189,8 +151,9 @@ def score_dose(product: Any) -> Dict[str, Any]:
     if purpose == _CHILD_OR_BABY and not prenatal:
         # A prenatal title can mention a baby ("Baby & Me Prenatal"); it is a
         # maternal product and keeps the prenatal DHA reference below.
-        band_score = min(minimum_score, band_cap)
-        reference = {"purpose": "child_or_baby", "curve": "epa_dha_bands"}
+        with dose_reference_scope(archetype_dose_reference("omega")):
+            band_score = unbenchmarked_dose_credit()
+        reference = {"purpose": "child_or_baby", "curve": "completed_no_benchmark_neutral"}
     elif prenatal and dha_ps <= 0:
         # Combined EPA+DHA cannot stand in for the undisclosed prenatal DHA.
         with dose_reference_scope(archetype_dose_reference("omega")):
@@ -234,8 +197,6 @@ def score_dose(product: Any) -> Dict[str, Any]:
         "omega_purpose": purpose,
         "epa_dha_band_flag": band_flag,
         "interval_crosses_band": interval_crosses_band,
-        "minimum_band_score": round(minimum_score, 2),
-        "maximum_band_score": round(maximum_score, 2),
         "raw_score": round(raw_score, 4),
         "cap_applied": raw_score > CAP_DOSE,
     }

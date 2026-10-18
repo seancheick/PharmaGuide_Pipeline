@@ -2,11 +2,11 @@
   "_metadata": {
     "description": "Clinically relevant probiotic strains and prebiotic compounds",
     "purpose": "probiotic_strain_validation",
-    "schema_version": "5.1.0",
+    "schema_version": "5.1.1",
     "last_updated": "2026-10-18",
     "total_entries": 132,
     "data_source": null,
-    "version": "2.4.0",
+    "version": "2.4.1",
     "native_context_note": "2026-09-04 bounded primary-source review: 16 outcome/population/dose contexts across eight native identities, authored once and joined to explicit combination members. Contexts are source-verified, pending clinical review, not new clinician approval or universal efficacy ranges. Historical approval flags and primary PMID anchors remain unchanged; Lpc-37's primary null result and stale source-description fields are corrected separately from context approval.",
     "signoff_status_note": "36/131 entries carry a clinician sign-off, each recorded by Dr Pham or a clinical reviewer (2026-04-21 or 2026-09-22); none rests on an automated PMID check alone. On 2026-09-22 Dr Pham restored Bi-07 and BB-12 (suspended 2026-09-04) on identity-correct human evidence, confirmed 12 citations, replaced 5 with direct human trials and withdrew 6 as single-strain evidence (combination or ex vivo records). Sign-off does not establish positive effect, applicability to every label, or completeness of the literature search.",
     "clinical_validation_note": "Historical abstract-level validation is retained where not re-reviewed. Per-entry source reviews and study_contexts distinguish identity, dose, clinical outcome and review completion; binary question counts are not efficacy approval. New PMID scoring anchors require clinical review.",
@@ -872,6 +872,34 @@
         "dr_pham_signoff_verified_by": "Dr Pham (2026-09-22 clinical review) + agent:claude-code (PubMed API-verified 2026-09-22)",
         "dr_pham_signoff_verified_date": "2026-09-22",
         "dr_pham_signoff_verification_note": "Dr Pham 2026-09-22: confirmed. PMID 26756877 (ESPGHAN 2016) recommends LGG for paediatric antibiotic-associated diarrhoea prevention from strain-specified RCTs: moderate quality of evidence, strong recommendation. Recorded as medium because this field grades evidential certainty, not recommendation strength."
+      },
+      "reference_semantics": {
+        "reference_type": "no_benchmark",
+        "scope": "General catalog Dose for this exact source identity; source-specific study facts and established safety references remain separate.",
+        "preparation": "Lactobacillus rhamnosus GG",
+        "purpose": "Descriptive source regimen; no general clinical Dose benchmark",
+        "population": "No general population-specific clinical Dose curve follows from current tier sources; study-context populations remain recorded.",
+        "exposure_basis": "minimum_directed_daily_use",
+        "units": "CFU/day",
+        "curve": "completed_no_benchmark_neutral",
+        "source_ids": [
+          "PMID:26756877",
+          "PMID:17229242",
+          "PMID:40702885",
+          "PMID:39060543",
+          "PMID:34546300",
+          "PMID:38103462",
+          "PMID:25473176",
+          "PMID:41883407",
+          "PMID:42477222",
+          "PMID:40891819",
+          "PMID:30462938",
+          "https://pubmed.ncbi.nlm.nih.gov/26756877/"
+        ],
+        "rationale": "Pediatric AAD guideline has no exact dose in abstract; numeric LGG20B contexts include null acute gastroenteritis/ICU trials. Do not equate50B with superior efficacy. Unsupported numerical inference rejected: Universal increasing clinical adequacy from viable count; clinical review of source identity does not approve tier boundaries. The completed general Dose conclusion uses existing PharmaGuide neutral policy, not clinical approval of a numerical benchmark.",
+        "owner": "scripts/data/clinically_relevant_strains.json::STRAIN_LGG",
+        "review_date": "2026-10-18",
+        "approval_status": "approved_existing_neutral_2026_10_18"
       }
     },
     {
@@ -937,6 +965,24 @@
         "dr_pham_signoff_verified_by": "Dr Pham (2026-09-22 clinical review) + agent:claude-code (PubMed API-verified 2026-09-22)",
         "dr_pham_signoff_verified_date": "2026-09-22",
         "dr_pham_signoff_verification_note": "Dr Pham 2026-09-22: confirmed. PMID 29390535 is directly strain-specific (32 RCTs, 2,242 infants; favourable crying-duration result for DSM 17938)."
+      },
+      "reference_semantics": {
+        "reference_type": "no_benchmark",
+        "scope": "General catalog Dose for this exact source identity; source-specific study facts and established safety references remain separate.",
+        "preparation": "Lactobacillus reuteri DSM 17938",
+        "purpose": "Descriptive source regimen; no general clinical Dose benchmark",
+        "population": "No general population-specific clinical Dose curve follows from current tier sources; study-context populations remain recorded.",
+        "exposure_basis": "minimum_directed_daily_use",
+        "units": "CFU/day",
+        "curve": "completed_no_benchmark_neutral",
+        "source_ids": [
+          "PMID:29390535",
+          "https://pubmed.ncbi.nlm.nih.gov/29390535/"
+        ],
+        "rationale": "Infant-colic source/meta-analysis; infant regimen cannot be replaced by generic adult-style1B/10B/50B grading. Unsupported numerical inference rejected: Universal increasing clinical adequacy from viable count; clinical review of source identity does not approve tier boundaries. The completed general Dose conclusion uses existing PharmaGuide neutral policy, not clinical approval of a numerical benchmark.",
+        "owner": "scripts/data/clinically_relevant_strains.json::STRAIN_REUTERI_DSM17938",
+        "review_date": "2026-10-18",
+        "approval_status": "approved_existing_neutral_2026_10_18"
       }
     },
     {
@@ -1030,6 +1076,26 @@
         "dr_pham_signoff_verified_by": "clinical-reviewer:2026-04-21 + agent:claude-code",
         "dr_pham_signoff_verified_date": "2026-04-21",
         "dr_pham_signoff_verification_note": "PMID 35805491 → 23176716 swap executed per clinical-reviewer 2026-04-21 verdict. Full-text read confirmed human RCT with strain-specific evidence. Evidence upgraded weak → medium; clinical_support_level upgraded weak → moderate."
+      },
+      "reference_semantics": {
+        "reference_type": "no_benchmark",
+        "scope": "General catalog Dose for this exact source identity; source-specific study facts and established safety references remain separate.",
+        "preparation": "Lactobacillus reuteri Prodentis",
+        "purpose": "Descriptive source regimen; no general clinical Dose benchmark",
+        "population": "No general population-specific clinical Dose curve follows from current tier sources; study-context populations remain recorded.",
+        "exposure_basis": "minimum_directed_daily_use",
+        "units": "CFU/day",
+        "curve": "completed_no_benchmark_neutral",
+        "source_ids": [
+          "PMID:23176716",
+          "PMID:40856866",
+          "https://pubmed.ncbi.nlm.nih.gov/23176716/",
+          "https://pubmed.ncbi.nlm.nih.gov/40856866/"
+        ],
+        "rationale": "Two-strain preparation DSM17938+PTA5289; single-strain identity cannot inherit formula evidence; later trial null. Dose tiers do not fix formula identity. Unsupported numerical inference rejected: Universal increasing clinical adequacy from viable count; clinical review of source identity does not approve tier boundaries. The completed general Dose conclusion uses existing PharmaGuide neutral policy, not clinical approval of a numerical benchmark.",
+        "owner": "scripts/data/clinically_relevant_strains.json::STRAIN_REUTERI_PRODENTIS",
+        "review_date": "2026-10-18",
+        "approval_status": "approved_existing_neutral_2026_10_18"
       }
     },
     {
@@ -1085,6 +1151,24 @@
         "dr_pham_signoff_verified_by": "Dr Pham (2026-09-22 clinical review) + agent:claude-code (PubMed API-verified 2026-09-22)",
         "dr_pham_signoff_verified_date": "2026-09-22",
         "dr_pham_signoff_verification_note": "Dr Pham 2026-09-22: confirmed. PMID 38215354: randomized double-blind placebo-controlled trial, n = 160 patients undergoing head-and-neck radiotherapy; primary severe oral mucositis 36.6% vs 54.2% (P = .0351). Strong is reasonable for this population and use only."
+      },
+      "reference_semantics": {
+        "reference_type": "no_benchmark",
+        "scope": "General catalog Dose for this exact source identity; source-specific study facts and established safety references remain separate.",
+        "preparation": "Streptococcus salivarius K12",
+        "purpose": "Descriptive source regimen; no general clinical Dose benchmark",
+        "population": "No general population-specific clinical Dose curve follows from current tier sources; study-context populations remain recorded.",
+        "exposure_basis": "minimum_directed_daily_use",
+        "units": "CFU/day",
+        "curve": "completed_no_benchmark_neutral",
+        "source_ids": [
+          "PMID:38215354",
+          "https://pubmed.ncbi.nlm.nih.gov/38215354/"
+        ],
+        "rationale": "Recorded source supports oral/throat setting; no universal1B/10B/50B clinical threshold is established by identity/source signoff. Unsupported numerical inference rejected: Universal increasing clinical adequacy from viable count; clinical review of source identity does not approve tier boundaries. The completed general Dose conclusion uses existing PharmaGuide neutral policy, not clinical approval of a numerical benchmark.",
+        "owner": "scripts/data/clinically_relevant_strains.json::STRAIN_K12",
+        "review_date": "2026-10-18",
+        "approval_status": "approved_existing_neutral_2026_10_18"
       }
     },
     {
@@ -1159,6 +1243,26 @@
         "dr_pham_signoff_verified_by": "Dr Pham (2026-09-22 clinical review) + agent:claude-code (PubMed API-verified 2026-09-22)",
         "dr_pham_signoff_verified_date": "2026-09-22",
         "dr_pham_signoff_verification_note": "Dr Pham 2026-09-22: citation replaced. PMID 32250565 is an in-vitro study and cannot carry human evidence; replaced by the direct M18 RCT 23449874 (supported by 37764667). Plaque scores were lower with M18 at treatment end (P = 0.05). A 2023 RCT of an M18-only lozenge (37764667, >= 5 x 10^8 CFU per lozenge, young adults with gingivitis) reduced the Gingival Index."
+      },
+      "reference_semantics": {
+        "reference_type": "no_benchmark",
+        "scope": "General catalog Dose for this exact source identity; source-specific study facts and established safety references remain separate.",
+        "preparation": "Streptococcus salivarius M18",
+        "purpose": "Descriptive source regimen; no general clinical Dose benchmark",
+        "population": "No general population-specific clinical Dose curve follows from current tier sources; study-context populations remain recorded.",
+        "exposure_basis": "minimum_directed_daily_use",
+        "units": "CFU/day",
+        "curve": "completed_no_benchmark_neutral",
+        "source_ids": [
+          "PMID:23449874",
+          "PMID:37764667",
+          "https://pubmed.ncbi.nlm.nih.gov/23449874/",
+          "https://pubmed.ncbi.nlm.nih.gov/37764667/"
+        ],
+        "rationale": "Single-strain oral/dental setting; recorded pediatric/adult outcomes do not supply universal daily systemic/gut potency thresholds. Unsupported numerical inference rejected: Universal increasing clinical adequacy from viable count; clinical review of source identity does not approve tier boundaries. The completed general Dose conclusion uses existing PharmaGuide neutral policy, not clinical approval of a numerical benchmark.",
+        "owner": "scripts/data/clinically_relevant_strains.json::STRAIN_M18",
+        "review_date": "2026-10-18",
+        "approval_status": "approved_existing_neutral_2026_10_18"
       }
     },
     {
@@ -1468,7 +1572,28 @@
           },
           "scoring_eligible": false
         }
-      ]
+      ],
+      "reference_semantics": {
+        "reference_type": "no_benchmark",
+        "scope": "General catalog Dose for this exact source identity; source-specific study facts and established safety references remain separate.",
+        "preparation": "Bacillus coagulans GBI-30, 6086",
+        "purpose": "Descriptive source regimen; no general clinical Dose benchmark",
+        "population": "No general population-specific clinical Dose curve follows from current tier sources; study-context populations remain recorded.",
+        "exposure_basis": "minimum_directed_daily_use",
+        "units": "CFU/day",
+        "curve": "completed_no_benchmark_neutral",
+        "source_ids": [
+          "PMID:33110439",
+          "PMID:40707016",
+          "PMID:31162597",
+          "PMID:32318476",
+          "https://pubmed.ncbi.nlm.nih.gov/33110439/"
+        ],
+        "rationale": "Legacy primary source is protein-associated absorption context; GI studies remain separate exact source contexts, not universal potency tiers. Unsupported numerical inference rejected: Universal increasing clinical adequacy from viable count; clinical review of source identity does not approve tier boundaries. The completed general Dose conclusion uses existing PharmaGuide neutral policy, not clinical approval of a numerical benchmark.",
+        "owner": "scripts/data/clinically_relevant_strains.json::STRAIN_COAGULANS_GBI30",
+        "review_date": "2026-10-18",
+        "approval_status": "approved_existing_neutral_2026_10_18"
+      }
     },
     {
       "id": "STRAIN_COAGULANS_MTCC5856",
@@ -2013,7 +2138,31 @@
             "decision": "approve_with_correction"
           }
         }
-      ]
+      ],
+      "reference_semantics": {
+        "reference_type": "no_benchmark",
+        "scope": "General catalog Dose for this exact source identity; source-specific study facts and established safety references remain separate.",
+        "preparation": "Bacillus coagulans MTCC 5856",
+        "purpose": "Descriptive source regimen; no general clinical Dose benchmark",
+        "population": "No general population-specific clinical Dose curve follows from current tier sources; study-context populations remain recorded.",
+        "exposure_basis": "minimum_directed_daily_use",
+        "units": "CFU/day",
+        "curve": "completed_no_benchmark_neutral",
+        "source_ids": [
+          "PMID:37686889",
+          "PMID:26922379",
+          "PMID:29997457",
+          "PMID:36862903",
+          "PMID:38269290",
+          "PMID:37335737",
+          "PMID:41682832",
+          "https://pubmed.ncbi.nlm.nih.gov/37686889/"
+        ],
+        "rationale": "Different IBS-D,mood,bloating,pediatric and healthy-microbiome contexts; avoid mixing populations/outcomes into a universal curve. Unsupported numerical inference rejected: Universal increasing clinical adequacy from viable count; clinical review of source identity does not approve tier boundaries. The completed general Dose conclusion uses existing PharmaGuide neutral policy, not clinical approval of a numerical benchmark.",
+        "owner": "scripts/data/clinically_relevant_strains.json::STRAIN_COAGULANS_MTCC5856",
+        "review_date": "2026-10-18",
+        "approval_status": "approved_existing_neutral_2026_10_18"
+      }
     },
     {
       "id": "STRAIN_COAGULANS_IS2",
@@ -2801,7 +2950,34 @@
           },
           "scoring_eligible": true
         }
-      ]
+      ],
+      "reference_semantics": {
+        "reference_type": "no_benchmark",
+        "scope": "General catalog Dose for this exact source identity; source-specific study facts and established safety references remain separate.",
+        "preparation": "Bacillus coagulans Unique IS-2",
+        "purpose": "Descriptive source regimen; no general clinical Dose benchmark",
+        "population": "No general population-specific clinical Dose curve follows from current tier sources; study-context populations remain recorded.",
+        "exposure_basis": "minimum_directed_daily_use",
+        "units": "CFU/day",
+        "curve": "completed_no_benchmark_neutral",
+        "source_ids": [
+          "PMID:35249118",
+          "PMID:31434935",
+          "PMID:29695183",
+          "PMID:30911991",
+          "PMID:34599466",
+          "PMID:40456531",
+          "PMID:36372047",
+          "PMID:41682832",
+          "PMID:37686889",
+          "PMID:39866999",
+          "https://pubmed.ncbi.nlm.nih.gov/35249118/"
+        ],
+        "rationale": "Separate IBS/constipation and protein/exercise regimens;2B in an adjunct study does not prove generic clinical minimum. Unsupported numerical inference rejected: Universal increasing clinical adequacy from viable count; clinical review of source identity does not approve tier boundaries. The completed general Dose conclusion uses existing PharmaGuide neutral policy, not clinical approval of a numerical benchmark.",
+        "owner": "scripts/data/clinically_relevant_strains.json::STRAIN_COAGULANS_IS2",
+        "review_date": "2026-10-18",
+        "approval_status": "approved_existing_neutral_2026_10_18"
+      }
     },
     {
       "id": "STRAIN_COAGULANS_SNZ1969",
@@ -2865,6 +3041,24 @@
         "dr_pham_signoff_verified_by": "Dr Pham (2026-09-22 clinical review) + agent:claude-code (PubMed API-verified 2026-09-22)",
         "dr_pham_signoff_verified_date": "2026-09-22",
         "dr_pham_signoff_verification_note": "Dr Pham 2026-09-22: citation replaced. PMID 36372047 does not name SNZ 1969 (its abstract names B. coagulans Unique IS2); replaced by the direct SNZ 1969 RCT 34119240. Colonic transit time, complete spontaneous bowel movements (weeks 2 and 9) and bowel discomfort improved vs placebo."
+      },
+      "reference_semantics": {
+        "reference_type": "no_benchmark",
+        "scope": "General catalog Dose for this exact source identity; source-specific study facts and established safety references remain separate.",
+        "preparation": "Bacillus coagulans SNZ 1969",
+        "purpose": "Descriptive source regimen; no general clinical Dose benchmark",
+        "population": "No general population-specific clinical Dose curve follows from current tier sources; study-context populations remain recorded.",
+        "exposure_basis": "minimum_directed_daily_use",
+        "units": "CFU/day",
+        "curve": "completed_no_benchmark_neutral",
+        "source_ids": [
+          "PMID:34119240",
+          "https://pubmed.ncbi.nlm.nih.gov/34119240/"
+        ],
+        "rationale": "Recorded replacement source34119240 exact-strain source approval does not approve universal tier boundaries. Unsupported numerical inference rejected: Universal increasing clinical adequacy from viable count; clinical review of source identity does not approve tier boundaries. The completed general Dose conclusion uses existing PharmaGuide neutral policy, not clinical approval of a numerical benchmark.",
+        "owner": "scripts/data/clinically_relevant_strains.json::STRAIN_COAGULANS_SNZ1969",
+        "review_date": "2026-10-18",
+        "approval_status": "approved_existing_neutral_2026_10_18"
       }
     },
     {
@@ -3468,6 +3662,30 @@
         "dr_pham_signoff_verified_by": "Dr Pham (2026-09-22 clinical review) + agent:claude-code (PubMed API-verified 2026-09-22)",
         "dr_pham_signoff_verified_date": "2026-09-22",
         "dr_pham_signoff_verification_note": "Dr Pham 2026-09-22: confirmed as strong null evidence. PMID 39356506: 229-person triple-blind RCT; no difference from placebo in the primary complete-spontaneous-bowel-movement outcome (P = .37). No constipation efficacy credit from this trial."
+      },
+      "reference_semantics": {
+        "reference_type": "no_benchmark",
+        "scope": "General catalog Dose for this exact source identity; source-specific study facts and established safety references remain separate.",
+        "preparation": "Bifidobacterium lactis HN019",
+        "purpose": "Descriptive source regimen; no general clinical Dose benchmark",
+        "population": "No general population-specific clinical Dose curve follows from current tier sources; study-context populations remain recorded.",
+        "exposure_basis": "minimum_directed_daily_use",
+        "units": "CFU/day",
+        "curve": "completed_no_benchmark_neutral",
+        "source_ids": [
+          "PMID:39356506",
+          "PMID:40320938",
+          "PMID:29227175",
+          "PMID:27275105",
+          "PMID:28245559",
+          "PMID:37078654",
+          "PMID:40085083",
+          "https://pubmed.ncbi.nlm.nih.gov/39356506/"
+        ],
+        "rationale": "Primary constipation trial39356506 null at7B nominal with4.69B end potency; measured variation is not tested efficacy range;29227175 discrete arms remain separate. Unsupported numerical inference rejected: Universal increasing clinical adequacy from viable count; clinical review of source identity does not approve tier boundaries. The completed general Dose conclusion uses existing PharmaGuide neutral policy, not clinical approval of a numerical benchmark.",
+        "owner": "scripts/data/clinically_relevant_strains.json::STRAIN_LACTIS_HN019",
+        "review_date": "2026-10-18",
+        "approval_status": "approved_existing_neutral_2026_10_18"
       }
     },
     {
@@ -3681,6 +3899,26 @@
         "dr_pham_signoff_verified_by": "Dr Pham (2026-09-22 clinical review) + agent:claude-code (PubMed API-verified 2026-09-22)",
         "dr_pham_signoff_verified_date": "2026-09-22",
         "dr_pham_signoff_verification_note": "Dr Pham 2026-09-22: sign-off restored on identity-correct human evidence. PMID 36149331 (two randomized, placebo- and lactase-controlled crossover lactose-challenge trials of Bi-07 alone, 2 x 10^12 CFU taken with the challenge): the prespecified primary outcome, breath-hydrogen iAUC, improved in both trials - a surrogate of acute lactose digestion; GI symptoms were secondary and not improved; nausea rose with Bi-07 in Booster Omega (OR 4.0). PMID 21436726 tested NCFM + Bi-07 together (primary global relief and satisfaction; bloating secondary) and gives Bi-07 alone no credit. Clinically reviewed; not evidence of broad GI symptom efficacy or of ordinary daily-use benefit."
+      },
+      "reference_semantics": {
+        "reference_type": "no_benchmark",
+        "scope": "General catalog Dose for this exact source identity; source-specific study facts and established safety references remain separate.",
+        "preparation": "Bifidobacterium lactis Bi-07",
+        "purpose": "Descriptive source regimen; no general clinical Dose benchmark",
+        "population": "No general population-specific clinical Dose curve follows from current tier sources; study-context populations remain recorded.",
+        "exposure_basis": "minimum_directed_daily_use",
+        "units": "CFU/day",
+        "curve": "completed_no_benchmark_neutral",
+        "source_ids": [
+          "PMID:21436726",
+          "PMID:36149331",
+          "https://pubmed.ncbi.nlm.nih.gov/21436726/",
+          "https://pubmed.ncbi.nlm.nih.gov/36149331/"
+        ],
+        "rationale": "Acute lactose-challenge2.34–2.4e12CFU surrogate,not daily symptom efficacy; NCFM combination cannot credit Bi07 alone. Persisted signoff explicitly permits no efficacy credit. Unsupported numerical inference rejected: Universal increasing clinical adequacy from viable count; clinical review of source identity does not approve tier boundaries. The completed general Dose conclusion uses existing PharmaGuide neutral policy, not clinical approval of a numerical benchmark.",
+        "owner": "scripts/data/clinically_relevant_strains.json::STRAIN_LACTIS_BI07",
+        "review_date": "2026-10-18",
+        "approval_status": "approved_existing_neutral_2026_10_18"
       }
     },
     {
@@ -4432,7 +4670,35 @@
             "decision": "approve"
           }
         }
-      ]
+      ],
+      "reference_semantics": {
+        "reference_type": "no_benchmark",
+        "scope": "General catalog Dose for this exact source identity; source-specific study facts and established safety references remain separate.",
+        "preparation": "Lactobacillus plantarum 299v",
+        "purpose": "Descriptive source regimen; no general clinical Dose benchmark",
+        "population": "No general population-specific clinical Dose curve follows from current tier sources; study-context populations remain recorded.",
+        "exposure_basis": "minimum_directed_daily_use",
+        "units": "CFU/day",
+        "curve": "completed_no_benchmark_neutral",
+        "source_ids": [
+          "PMID:11711768",
+          "PMID:37541528",
+          "PMID:30388595",
+          "PMID:39271063",
+          "PMID:31816981",
+          "PMID:32365981",
+          "PMID:33015813",
+          "PMID:12450890",
+          "PMID:28101105",
+          "PMID:22434095",
+          "PMID:22912552",
+          "https://pubmed.ncbi.nlm.nih.gov/11711768/"
+        ],
+        "rationale": "Multiple source-specific indications; source11711768 small IBS trial; dose-context/supplement matrix and purpose stay separate from universal tiers. Unsupported numerical inference rejected: Universal increasing clinical adequacy from viable count; clinical review of source identity does not approve tier boundaries. The completed general Dose conclusion uses existing PharmaGuide neutral policy, not clinical approval of a numerical benchmark.",
+        "owner": "scripts/data/clinically_relevant_strains.json::STRAIN_PLANTARUM_299V",
+        "review_date": "2026-10-18",
+        "approval_status": "approved_existing_neutral_2026_10_18"
+      }
     },
     {
       "id": "STRAIN_PLANTARUM_HEAL9",
@@ -4667,6 +4933,26 @@
         "verified_on": "2026-09-22",
         "method": "PubMed efetch XML title/abstract read for the designation and species",
         "note": "2026-09-22: the designation and species are named in PMID(s) 31734734."
+      },
+      "reference_semantics": {
+        "reference_type": "no_benchmark",
+        "scope": "General catalog Dose for this exact source identity; source-specific study facts and established safety references remain separate.",
+        "preparation": "Lactobacillus plantarum HEAL9",
+        "purpose": "Descriptive source regimen; no general clinical Dose benchmark",
+        "population": "No general population-specific clinical Dose curve follows from current tier sources; study-context populations remain recorded.",
+        "exposure_basis": "minimum_directed_daily_use",
+        "units": "CFU/day",
+        "curve": "completed_no_benchmark_neutral",
+        "source_ids": [
+          "PMID:31734734",
+          "PMID:37571403",
+          "https://pubmed.ncbi.nlm.nih.gov/31734734/",
+          "https://pubmed.ncbi.nlm.nih.gov/37571403/"
+        ],
+        "rationale": "Old combination withdrawal retained; later exploratory exact-strain context exists. False historical signoff is not a potency gate; no universal clinical tier approved. Unsupported numerical inference rejected: Universal increasing clinical adequacy from viable count; clinical review of source identity does not approve tier boundaries. The completed general Dose conclusion uses existing PharmaGuide neutral policy, not clinical approval of a numerical benchmark.",
+        "owner": "scripts/data/clinically_relevant_strains.json::STRAIN_PLANTARUM_HEAL9",
+        "review_date": "2026-10-18",
+        "approval_status": "approved_existing_neutral_2026_10_18"
       }
     },
     {
@@ -4814,7 +5100,26 @@
             "decision": "approve"
           }
         }
-      ]
+      ],
+      "reference_semantics": {
+        "reference_type": "no_benchmark",
+        "scope": "General catalog Dose for this exact source identity; source-specific study facts and established safety references remain separate.",
+        "preparation": "Lactobacillus paracasei 8700:2",
+        "purpose": "Descriptive source regimen; no general clinical Dose benchmark",
+        "population": "No general population-specific clinical Dose curve follows from current tier sources; study-context populations remain recorded.",
+        "exposure_basis": "minimum_directed_daily_use",
+        "units": "CFU/day",
+        "curve": "completed_no_benchmark_neutral",
+        "source_ids": [
+          "PMID:36741903",
+          "PMID:37506599",
+          "https://pubmed.ncbi.nlm.nih.gov/36741903/"
+        ],
+        "rationale": "Legacy source36741903 laboratory method;37506599 human context separate; cold combination HEAL9 cannot credit components independently. Unsupported numerical inference rejected: Universal increasing clinical adequacy from viable count; clinical review of source identity does not approve tier boundaries. The completed general Dose conclusion uses existing PharmaGuide neutral policy, not clinical approval of a numerical benchmark.",
+        "owner": "scripts/data/clinically_relevant_strains.json::STRAIN_PARACASEI_8700",
+        "review_date": "2026-10-18",
+        "approval_status": "approved_existing_neutral_2026_10_18"
+      }
     },
     {
       "id": "STRAIN_INFANTIS_35624",
@@ -4935,7 +5240,26 @@
           }
         }
       ],
-      "notes": " Genome-based subspecies assignment is longum (PMID 27656878); older infantis designations are retained as historical label aliases, not a distinct strain."
+      "notes": " Genome-based subspecies assignment is longum (PMID 27656878); older infantis designations are retained as historical label aliases, not a distinct strain.",
+      "reference_semantics": {
+        "reference_type": "no_benchmark",
+        "scope": "General catalog Dose for this exact source identity; source-specific study facts and established safety references remain separate.",
+        "preparation": "Bifidobacterium longum subsp. longum 35624",
+        "purpose": "Descriptive source regimen; no general clinical Dose benchmark",
+        "population": "No general population-specific clinical Dose curve follows from current tier sources; study-context populations remain recorded.",
+        "exposure_basis": "minimum_directed_daily_use",
+        "units": "CFU/day",
+        "curve": "completed_no_benchmark_neutral",
+        "source_ids": [
+          "PMID:28166427",
+          "PMID:16863564",
+          "https://pubmed.ncbi.nlm.nih.gov/28166427/"
+        ],
+        "rationale": "Legacy meta-analysis28166427 null; primary IBS context16863564 uses discrete arms,not monotonic higher-is-better window. Unsupported numerical inference rejected: Universal increasing clinical adequacy from viable count; clinical review of source identity does not approve tier boundaries. The completed general Dose conclusion uses existing PharmaGuide neutral policy, not clinical approval of a numerical benchmark.",
+        "owner": "scripts/data/clinically_relevant_strains.json::STRAIN_INFANTIS_35624",
+        "review_date": "2026-10-18",
+        "approval_status": "approved_existing_neutral_2026_10_18"
+      }
     },
     {
       "id": "STRAIN_INFANTIS_M63",
@@ -5206,7 +5530,29 @@
             "countersign_note": "Section 3 spot-check: disposition unchanged."
           }
         }
-      ]
+      ],
+      "reference_semantics": {
+        "reference_type": "no_benchmark",
+        "scope": "General catalog Dose for this exact source identity; source-specific study facts and established safety references remain separate.",
+        "preparation": "Bifidobacterium longum subsp. infantis M-63",
+        "purpose": "Descriptive source regimen; no general clinical Dose benchmark",
+        "population": "No general population-specific clinical Dose curve follows from current tier sources; study-context populations remain recorded.",
+        "exposure_basis": "minimum_directed_daily_use",
+        "units": "CFU/day",
+        "curve": "completed_no_benchmark_neutral",
+        "source_ids": [
+          "PMID:36986131",
+          "PMID:40681696",
+          "PMID:42056537",
+          "https://pubmed.ncbi.nlm.nih.gov/36986131/",
+          "https://pubmed.ncbi.nlm.nih.gov/40681696/",
+          "https://pubmed.ncbi.nlm.nih.gov/42056537/"
+        ],
+        "rationale": "CUSTOM1B/5B clinical-labelled tiers: newborn1B/day and older-infant/toddler5B/day are separate regimens; surrogate/exploratory outcomes and different populations do not establish increasing tiers. Unsupported numerical inference rejected: Universal increasing clinical adequacy from viable count; clinical review of source identity does not approve tier boundaries. The completed general Dose conclusion uses existing PharmaGuide neutral policy, not clinical approval of a numerical benchmark.",
+        "owner": "scripts/data/clinically_relevant_strains.json::STRAIN_INFANTIS_M63",
+        "review_date": "2026-10-18",
+        "approval_status": "approved_existing_neutral_2026_10_18"
+      }
     },
     {
       "id": "STRAIN_ACIDOPHILUS_NCFM",
@@ -6184,6 +6530,35 @@
         "dr_pham_signoff_verified_by": "Dr Pham (2026-04-21 weak-is-honest confirmation) + agent:claude-code",
         "dr_pham_signoff_verified_date": "2026-04-21",
         "dr_pham_signoff_verification_note": "Dr Pham 2026-04-21: 'weak is honest' — no stronger citation available; retain weak evidence classification. Scorer caps contribution at 50% per E1.3.2 tier rules."
+      },
+      "reference_semantics": {
+        "reference_type": "no_benchmark",
+        "scope": "General catalog Dose for this exact source identity; source-specific study facts and established safety references remain separate.",
+        "preparation": "Lactobacillus acidophilus NCFM",
+        "purpose": "Descriptive source regimen; no general clinical Dose benchmark",
+        "population": "No general population-specific clinical Dose curve follows from current tier sources; study-context populations remain recorded.",
+        "exposure_basis": "minimum_directed_daily_use",
+        "units": "CFU/day",
+        "curve": "completed_no_benchmark_neutral",
+        "source_ids": [
+          "PMID:24717228",
+          "PMID:28082816",
+          "PMID:19651563",
+          "PMID:41998618",
+          "PMID:33763399",
+          "PMID:31131616",
+          "PMID:36235651",
+          "PMID:41379184",
+          "PMID:35766604",
+          "PMID:33443719",
+          "PMID:35987956",
+          "PMID:39842252",
+          "https://pubmed.ncbi.nlm.nih.gov/24717228/"
+        ],
+        "rationale": "Legacy24717228 mouse source does not own human efficacy; current exact contexts include IBS/infant-colic/combination courses,each kept scoped. Unsupported numerical inference rejected: Universal increasing clinical adequacy from viable count; clinical review of source identity does not approve tier boundaries. The completed general Dose conclusion uses existing PharmaGuide neutral policy, not clinical approval of a numerical benchmark.",
+        "owner": "scripts/data/clinically_relevant_strains.json::STRAIN_ACIDOPHILUS_NCFM",
+        "review_date": "2026-10-18",
+        "approval_status": "approved_existing_neutral_2026_10_18"
       }
     },
     {
@@ -6237,6 +6612,28 @@
         "dr_pham_signoff_verified_by": "Dr Pham (2026-09-22 clinical review) + agent:claude-code (PubMed API-verified 2026-09-22)",
         "dr_pham_signoff_verified_date": "2026-09-22",
         "dr_pham_signoff_verification_note": "Dr Pham 2026-09-22: confirmed as legitimate null strain-specific evidence. PMID 36372047 addresses Shirota and reports no significant pooled stool-frequency benefit; RCT 23432408 found no advantage over control at alpha = .05; the older RCT 14631461 was favourable. Keep the review; no positive constipation credit."
+      },
+      "reference_semantics": {
+        "reference_type": "no_benchmark",
+        "scope": "General catalog Dose for this exact source identity; source-specific study facts and established safety references remain separate.",
+        "preparation": "Lactobacillus casei Shirota",
+        "purpose": "Descriptive source regimen; no general clinical Dose benchmark",
+        "population": "No general population-specific clinical Dose curve follows from current tier sources; study-context populations remain recorded.",
+        "exposure_basis": "minimum_directed_daily_use",
+        "units": "CFU/day",
+        "curve": "completed_no_benchmark_neutral",
+        "source_ids": [
+          "PMID:36372047",
+          "PMID:23432408",
+          "PMID:14631461",
+          "https://pubmed.ncbi.nlm.nih.gov/36372047/",
+          "https://pubmed.ncbi.nlm.nih.gov/23432408/",
+          "https://pubmed.ncbi.nlm.nih.gov/14631461/"
+        ],
+        "rationale": "Recorded clinical review null constipation disposition; industry tier grading is physical potency only,not efficacy rescued at higher dose. Unsupported numerical inference rejected: Universal increasing clinical adequacy from viable count; clinical review of source identity does not approve tier boundaries. The completed general Dose conclusion uses existing PharmaGuide neutral policy, not clinical approval of a numerical benchmark.",
+        "owner": "scripts/data/clinically_relevant_strains.json::STRAIN_CASEI_SHIROTA",
+        "review_date": "2026-10-18",
+        "approval_status": "approved_existing_neutral_2026_10_18"
       }
     },
     {
@@ -6684,6 +7081,32 @@
         "dr_pham_signoff_verified_by": "Dr Pham (2026-09-22 clinical review) + agent:claude-code (PubMed API-verified 2026-09-22)",
         "dr_pham_signoff_verified_date": "2026-09-22",
         "dr_pham_signoff_verification_note": "Dr Pham 2026-09-22: confirmed. PMID 26756877: paediatric antibiotic-associated diarrhoea prevention, moderate quality of evidence, strong recommendation (recorded as medium certainty). For C. difficile-associated diarrhoea the paper grades the evidence low quality with a conditional recommendation; the strong label does not extend to that indication."
+      },
+      "reference_semantics": {
+        "reference_type": "no_benchmark",
+        "scope": "General catalog Dose for this exact source identity; source-specific study facts and established safety references remain separate.",
+        "preparation": "Saccharomyces boulardii",
+        "purpose": "Descriptive source regimen; no general clinical Dose benchmark",
+        "population": "No general population-specific clinical Dose curve follows from current tier sources; study-context populations remain recorded.",
+        "exposure_basis": "minimum_directed_daily_use",
+        "units": "CFU/day",
+        "curve": "completed_no_benchmark_neutral",
+        "source_ids": [
+          "PMID:26756877",
+          "PMID:22472744",
+          "PMID:41675330",
+          "PMID:40865583",
+          "PMID:41247686",
+          "PMID:40251486",
+          "PMID:40012609",
+          "PMID:37400812",
+          "PMID:38458507",
+          "https://pubmed.ncbi.nlm.nih.gov/26756877/"
+        ],
+        "rationale": "Species-level evidence is not CNCMI745 authentication; exact strain/population/antibiotic purpose cannot be inferred from the species CFU tier. Unsupported numerical inference rejected: Universal increasing clinical adequacy from viable count; clinical review of source identity does not approve tier boundaries. The completed general Dose conclusion uses existing PharmaGuide neutral policy, not clinical approval of a numerical benchmark.",
+        "owner": "scripts/data/clinically_relevant_strains.json::STRAIN_SACCHAROMYCES",
+        "review_date": "2026-10-18",
+        "approval_status": "approved_existing_neutral_2026_10_18"
       }
     },
     {
@@ -7788,6 +8211,33 @@
         "dr_pham_signoff_verified_by": "Dr Pham (2026-09-22 clinical review) + agent:claude-code (PubMed API-verified 2026-09-22)",
         "dr_pham_signoff_verified_date": "2026-09-22",
         "dr_pham_signoff_verification_note": "Dr Pham 2026-09-22: sign-off restored; human evidence reviewed - mixed/limited. PMID 26382580 (1,248 adults, BB-12 1 or 10 billion CFU/day vs placebo for 4 weeks): GI well-being not improved; the original defecation-frequency responder endpoint missed significance (OR 1.31, 95% CI 0.98-1.75, P = .071); a tightened responder definition and mean defecation frequency were favourable. PMID 39271904 (71 preterm infants <= 32 weeks, BB-12 alone): lower serum inflammatory markers and less feeding intolerance; specialised neonatal population; dose not in the abstract. Combination studies credit no single strain."
+      },
+      "reference_semantics": {
+        "reference_type": "no_benchmark",
+        "scope": "General catalog Dose for this exact source identity; source-specific study facts and established safety references remain separate.",
+        "preparation": "Bifidobacterium lactis BB-12",
+        "purpose": "Descriptive source regimen; no general clinical Dose benchmark",
+        "population": "No general population-specific clinical Dose curve follows from current tier sources; study-context populations remain recorded.",
+        "exposure_basis": "minimum_directed_daily_use",
+        "units": "CFU/day",
+        "curve": "completed_no_benchmark_neutral",
+        "source_ids": [
+          "PMID:26382580",
+          "PMID:39271904",
+          "PMID:33811784",
+          "PMID:39310372",
+          "PMID:37020105",
+          "PMID:31797399",
+          "PMID:34550055",
+          "https://pubmed.ncbi.nlm.nih.gov/26382580/",
+          "https://pubmed.ncbi.nlm.nih.gov/39271904/",
+          "https://pubmed.ncbi.nlm.nih.gov/33811784/",
+          "https://pubmed.ncbi.nlm.nih.gov/39310372/"
+        ],
+        "rationale": "1B and10B adult stool-frequency arms similar; posthoc outcomes do not create dose superiority. Infant colic and other contexts separate. Unsupported numerical inference rejected: Universal increasing clinical adequacy from viable count; clinical review of source identity does not approve tier boundaries. The completed general Dose conclusion uses existing PharmaGuide neutral policy, not clinical approval of a numerical benchmark.",
+        "owner": "scripts/data/clinically_relevant_strains.json::STRAIN_LACTIS_BB12",
+        "review_date": "2026-10-18",
+        "approval_status": "approved_existing_neutral_2026_10_18"
       }
     },
     {
@@ -8215,7 +8665,30 @@
           },
           "scoring_eligible": true
         }
-      ]
+      ],
+      "reference_semantics": {
+        "reference_type": "no_benchmark",
+        "scope": "General catalog Dose for this exact source identity; source-specific study facts and established safety references remain separate.",
+        "preparation": "Bifidobacterium longum BB536",
+        "purpose": "Descriptive source regimen; no general clinical Dose benchmark",
+        "population": "No general population-specific clinical Dose curve follows from current tier sources; study-context populations remain recorded.",
+        "exposure_basis": "minimum_directed_daily_use",
+        "units": "CFU/day",
+        "curve": "completed_no_benchmark_neutral",
+        "source_ids": [
+          "PMID:23192454",
+          "PMID:38201872",
+          "PMID:42046285",
+          "PMID:39519413",
+          "PMID:36792187",
+          "PMID:42533554",
+          "https://pubmed.ncbi.nlm.nih.gov/23192454/"
+        ],
+        "rationale": "Legacy/source-context outcomes include immune-surrogate,GIsymptoms and mixtures; counts and preparation-specific evidence remain separate. Unsupported numerical inference rejected: Universal increasing clinical adequacy from viable count; clinical review of source identity does not approve tier boundaries. The completed general Dose conclusion uses existing PharmaGuide neutral policy, not clinical approval of a numerical benchmark.",
+        "owner": "scripts/data/clinically_relevant_strains.json::STRAIN_LONGUM_BB536",
+        "review_date": "2026-10-18",
+        "approval_status": "approved_existing_neutral_2026_10_18"
+      }
     },
     {
       "id": "STRAIN_SUBTILIS_DE111",
@@ -8847,7 +9320,33 @@
           },
           "scoring_eligible": true
         }
-      ]
+      ],
+      "reference_semantics": {
+        "reference_type": "no_benchmark",
+        "scope": "General catalog Dose for this exact source identity; source-specific study facts and established safety references remain separate.",
+        "preparation": "Bacillus subtilis DE111",
+        "purpose": "Descriptive source regimen; no general clinical Dose benchmark",
+        "population": "No general population-specific clinical Dose curve follows from current tier sources; study-context populations remain recorded.",
+        "exposure_basis": "minimum_directed_daily_use",
+        "units": "CFU/day",
+        "curve": "completed_no_benchmark_neutral",
+        "source_ids": [
+          "PMID:39631408",
+          "PMID:34408741",
+          "PMID:36790091",
+          "PMID:33671071",
+          "PMID:33161737",
+          "PMID:33105368",
+          "PMID:30049931",
+          "PMID:33161736",
+          "PMID:33462163",
+          "https://pubmed.ncbi.nlm.nih.gov/39631408/"
+        ],
+        "rationale": "Legacy source nonclinical; newer human germination,immune/training contexts do not validate1B/10B/50B efficacy tiers. Unsupported numerical inference rejected: Universal increasing clinical adequacy from viable count; clinical review of source identity does not approve tier boundaries. The completed general Dose conclusion uses existing PharmaGuide neutral policy, not clinical approval of a numerical benchmark.",
+        "owner": "scripts/data/clinically_relevant_strains.json::STRAIN_SUBTILIS_DE111",
+        "review_date": "2026-10-18",
+        "approval_status": "approved_existing_neutral_2026_10_18"
+      }
     },
     {
       "id": "STRAIN_CLAUSII",
@@ -8905,6 +9404,24 @@
         "dr_pham_signoff_verified_by": "Dr Pham (2026-04-21 review and downgrade) + agent:claude-code",
         "dr_pham_signoff_verified_date": "2026-04-21",
         "dr_pham_signoff_verification_note": "PMID 36018495 verified, title-match=YES | 2026-04-21: Dr Pham reviewed + downgraded evidence to medium."
+      },
+      "reference_semantics": {
+        "reference_type": "no_benchmark",
+        "scope": "General catalog Dose for this exact source identity; source-specific study facts and established safety references remain separate.",
+        "preparation": "Bacillus clausii",
+        "purpose": "Descriptive source regimen; no general clinical Dose benchmark",
+        "population": "No general population-specific clinical Dose curve follows from current tier sources; study-context populations remain recorded.",
+        "exposure_basis": "minimum_directed_daily_use",
+        "units": "CFU/day",
+        "curve": "completed_no_benchmark_neutral",
+        "source_ids": [
+          "PMID:36018495",
+          "https://pubmed.ncbi.nlm.nih.gov/36018495/"
+        ],
+        "rationale": "Species/narrative record is not exact four-strain Enterogermina. Formula null acute-diarrhea evidence cannot become species efficacy tiers. Unsupported numerical inference rejected: Universal increasing clinical adequacy from viable count; clinical review of source identity does not approve tier boundaries. The completed general Dose conclusion uses existing PharmaGuide neutral policy, not clinical approval of a numerical benchmark.",
+        "owner": "scripts/data/clinically_relevant_strains.json::STRAIN_CLAUSII",
+        "review_date": "2026-10-18",
+        "approval_status": "approved_existing_neutral_2026_10_18"
       }
     },
     {
@@ -9630,6 +10147,34 @@
         "verified_on": "2026-09-22",
         "method": "PubMed efetch XML title/abstract read for the designation and species",
         "note": "2026-09-22: the designation and species are named in PMID(s) 30439760, 39102225."
+      },
+      "reference_semantics": {
+        "reference_type": "no_benchmark",
+        "scope": "General catalog Dose for this exact source identity; source-specific study facts and established safety references remain separate.",
+        "preparation": "Lactobacillus acidophilus LA-5",
+        "purpose": "Descriptive source regimen; no general clinical Dose benchmark",
+        "population": "No general population-specific clinical Dose curve follows from current tier sources; study-context populations remain recorded.",
+        "exposure_basis": "minimum_directed_daily_use",
+        "units": "CFU/day",
+        "curve": "completed_no_benchmark_neutral",
+        "source_ids": [
+          "PMID:41255078",
+          "PMID:24772726",
+          "PMID:17356555",
+          "PMID:25588782",
+          "PMID:21871144",
+          "PMID:30439760",
+          "PMID:39102225",
+          "PMID:41748464",
+          "https://pubmed.ncbi.nlm.nih.gov/41255078/",
+          "https://pubmed.ncbi.nlm.nih.gov/24772726/",
+          "https://pubmed.ncbi.nlm.nih.gov/17356555/",
+          "https://pubmed.ncbi.nlm.nih.gov/25588782/"
+        ],
+        "rationale": "Recorded single-strain citation withdrawal; combinations/exvivo sources cannot credit LA5 alone; physical count policy remains distinct. Unsupported numerical inference rejected: Universal increasing clinical adequacy from viable count; clinical review of source identity does not approve tier boundaries. The completed general Dose conclusion uses existing PharmaGuide neutral policy, not clinical approval of a numerical benchmark.",
+        "owner": "scripts/data/clinically_relevant_strains.json::STRAIN_ACIDOPHILUS_LA5",
+        "review_date": "2026-10-18",
+        "approval_status": "approved_existing_neutral_2026_10_18"
       }
     },
     {
@@ -10204,7 +10749,32 @@
           },
           "scoring_eligible": true
         }
-      ]
+      ],
+      "reference_semantics": {
+        "reference_type": "no_benchmark",
+        "scope": "General catalog Dose for this exact source identity; source-specific study facts and established safety references remain separate.",
+        "preparation": "Lactobacillus rhamnosus HN001",
+        "purpose": "Descriptive source regimen; no general clinical Dose benchmark",
+        "population": "No general population-specific clinical Dose curve follows from current tier sources; study-context populations remain recorded.",
+        "exposure_basis": "minimum_directed_daily_use",
+        "units": "CFU/day",
+        "curve": "completed_no_benchmark_neutral",
+        "source_ids": [
+          "PMID:28943228",
+          "PMID:37622257",
+          "PMID:37642166",
+          "PMID:36705702",
+          "PMID:40976401",
+          "PMID:39275252",
+          "PMID:41783815",
+          "PMID:37614109",
+          "https://pubmed.ncbi.nlm.nih.gov/28943228/"
+        ],
+        "rationale": "Pregnancy/postpartum and other context-specific research; mood secondary endpoint does not establish generaladult digestive CFU target. Unsupported numerical inference rejected: Universal increasing clinical adequacy from viable count; clinical review of source identity does not approve tier boundaries. The completed general Dose conclusion uses existing PharmaGuide neutral policy, not clinical approval of a numerical benchmark.",
+        "owner": "scripts/data/clinically_relevant_strains.json::STRAIN_RHAMNOSUS_HN001",
+        "review_date": "2026-10-18",
+        "approval_status": "approved_existing_neutral_2026_10_18"
+      }
     },
     {
       "id": "STRAIN_RHAMNOSUS_GR1",
@@ -10728,6 +11298,32 @@
         "verified_on": "2026-09-22",
         "method": "PubMed efetch XML title/abstract read for the designation and species",
         "note": "2026-09-22: the designation and species are named in PMID(s) 12628548."
+      },
+      "reference_semantics": {
+        "reference_type": "no_benchmark",
+        "scope": "General catalog Dose for this exact source identity; source-specific study facts and established safety references remain separate.",
+        "preparation": "Lactobacillus rhamnosus GR-1",
+        "purpose": "Descriptive source regimen; no general clinical Dose benchmark",
+        "population": "No general population-specific clinical Dose curve follows from current tier sources; study-context populations remain recorded.",
+        "exposure_basis": "minimum_directed_daily_use",
+        "units": "CFU/day",
+        "curve": "completed_no_benchmark_neutral",
+        "source_ids": [
+          "PMID:34295831",
+          "PMID:30932317",
+          "PMID:32325794",
+          "PMID:27590374",
+          "PMID:31953482",
+          "PMID:12628548",
+          "https://pubmed.ncbi.nlm.nih.gov/34295831/",
+          "https://pubmed.ncbi.nlm.nih.gov/30932317/",
+          "https://pubmed.ncbi.nlm.nih.gov/32325794/",
+          "https://pubmed.ncbi.nlm.nih.gov/27590374/"
+        ],
+        "rationale": "GR1+RC14 combination and pregnancy/BV settings; component allocation/efficacy cannot be inferred;signoff withdrawn for old single-strain attribution. Unsupported numerical inference rejected: Universal increasing clinical adequacy from viable count; clinical review of source identity does not approve tier boundaries. The completed general Dose conclusion uses existing PharmaGuide neutral policy, not clinical approval of a numerical benchmark.",
+        "owner": "scripts/data/clinically_relevant_strains.json::STRAIN_RHAMNOSUS_GR1",
+        "review_date": "2026-10-18",
+        "approval_status": "approved_existing_neutral_2026_10_18"
       }
     },
     {
@@ -11023,7 +11619,28 @@
           },
           "scoring_eligible": true
         }
-      ]
+      ],
+      "reference_semantics": {
+        "reference_type": "no_benchmark",
+        "scope": "General catalog Dose for this exact source identity; source-specific study facts and established safety references remain separate.",
+        "preparation": "Bifidobacterium breve M-16V",
+        "purpose": "Descriptive source regimen; no general clinical Dose benchmark",
+        "population": "No general population-specific clinical Dose curve follows from current tier sources; study-context populations remain recorded.",
+        "exposure_basis": "minimum_directed_daily_use",
+        "units": "CFU/day",
+        "curve": "completed_no_benchmark_neutral",
+        "source_ids": [
+          "PMID:28796951",
+          "PMID:41515257",
+          "PMID:41994268",
+          "PMID:39915586",
+          "https://pubmed.ncbi.nlm.nih.gov/28796951/"
+        ],
+        "rationale": "Strain-specific preterm review28796951 null; later neonatal adjunct context distinct; no universal clinical minimum established. Unsupported numerical inference rejected: Universal increasing clinical adequacy from viable count; clinical review of source identity does not approve tier boundaries. The completed general Dose conclusion uses existing PharmaGuide neutral policy, not clinical approval of a numerical benchmark.",
+        "owner": "scripts/data/clinically_relevant_strains.json::STRAIN_BREVE_M16V",
+        "review_date": "2026-10-18",
+        "approval_status": "approved_existing_neutral_2026_10_18"
+      }
     },
     {
       "id": "STRAIN_CASEI_431",
@@ -11088,6 +11705,24 @@
         "dr_pham_signoff_verified_by": "Dr Pham (2026-04-21 review and downgrade) + agent:claude-code",
         "dr_pham_signoff_verified_date": "2026-04-21",
         "dr_pham_signoff_verification_note": "PMID 25926507 verified, title-match=YES | 2026-04-21: Dr Pham reviewed + downgraded evidence to weak."
+      },
+      "reference_semantics": {
+        "reference_type": "no_benchmark",
+        "scope": "General catalog Dose for this exact source identity; source-specific study facts and established safety references remain separate.",
+        "preparation": "Lactobacillus paracasei L.CASEI 431",
+        "purpose": "Descriptive source regimen; no general clinical Dose benchmark",
+        "population": "No general population-specific clinical Dose curve follows from current tier sources; study-context populations remain recorded.",
+        "exposure_basis": "minimum_directed_daily_use",
+        "units": "CFU/day",
+        "curve": "completed_no_benchmark_neutral",
+        "source_ids": [
+          "PMID:25926507",
+          "https://pubmed.ncbi.nlm.nih.gov/25926507/"
+        ],
+        "rationale": "25926507 adult vaccine-response trial primary null; any illness-duration secondary result does not approve universal CFU tiers. Unsupported numerical inference rejected: Universal increasing clinical adequacy from viable count; clinical review of source identity does not approve tier boundaries. The completed general Dose conclusion uses existing PharmaGuide neutral policy, not clinical approval of a numerical benchmark.",
+        "owner": "scripts/data/clinically_relevant_strains.json::STRAIN_CASEI_431",
+        "review_date": "2026-10-18",
+        "approval_status": "approved_existing_neutral_2026_10_18"
       }
     },
     {
@@ -11161,6 +11796,23 @@
         "verified_on": "2026-09-22",
         "method": "PubMed efetch XML title/abstract read for the designation and species",
         "note": "2026-09-22: the designation and species are named in PMID(s) 12628548."
+      },
+      "reference_semantics": {
+        "reference_type": "no_benchmark",
+        "scope": "General catalog Dose for this exact source identity; source-specific study facts and established safety references remain separate.",
+        "preparation": "Lactobacillus reuteri RC-14",
+        "purpose": "Descriptive source regimen; no general clinical Dose benchmark",
+        "population": "No general population-specific clinical Dose curve follows from current tier sources; study-context populations remain recorded.",
+        "exposure_basis": "minimum_directed_daily_use",
+        "units": "CFU/day",
+        "curve": "completed_no_benchmark_neutral",
+        "source_ids": [
+          "https://ods.od.nih.gov/factsheets/Probiotics-HealthProfessional/"
+        ],
+        "rationale": "Biological name corrected to reuteriRC14; GR1+RC14 combination evidence stays combination;single-strain signoff withdrawn. Unsupported numerical inference rejected: Universal increasing clinical adequacy from viable count; clinical review of source identity does not approve tier boundaries. The completed general Dose conclusion uses existing PharmaGuide neutral policy, not clinical approval of a numerical benchmark.",
+        "owner": "scripts/data/clinically_relevant_strains.json::STRAIN_FERMENTUM_RC14",
+        "review_date": "2026-10-18",
+        "approval_status": "approved_existing_neutral_2026_10_18"
       }
     },
     {
@@ -11615,6 +12267,29 @@
         "dr_pham_signoff_verified_by": "Dr Pham (2026-04-21 weak-is-honest confirmation) + agent:claude-code",
         "dr_pham_signoff_verified_date": "2026-04-21",
         "dr_pham_signoff_verification_note": "Dr Pham 2026-04-21: 'weak is honest' — no stronger citation available; retain weak evidence classification. Scorer caps contribution at 50% per E1.3.2 tier rules."
+      },
+      "reference_semantics": {
+        "reference_type": "no_benchmark",
+        "scope": "General catalog Dose for this exact source identity; source-specific study facts and established safety references remain separate.",
+        "preparation": "Bifidobacterium lactis Bl-04",
+        "purpose": "Descriptive source regimen; no general clinical Dose benchmark",
+        "population": "No general population-specific clinical Dose curve follows from current tier sources; study-context populations remain recorded.",
+        "exposure_basis": "minimum_directed_daily_use",
+        "units": "CFU/day",
+        "curve": "completed_no_benchmark_neutral",
+        "source_ids": [
+          "PMID:38665561",
+          "PMID:24268677",
+          "PMID:28343401",
+          "PMID:34927036",
+          "PMID:34062085",
+          "PMID:33161737",
+          "https://pubmed.ncbi.nlm.nih.gov/38665561/"
+        ],
+        "rationale": "Legacy38665561 in-vitro source; newer respiratory/challenge source contexts not general digestive evidence;review statuses stay source-specific. Unsupported numerical inference rejected: Universal increasing clinical adequacy from viable count; clinical review of source identity does not approve tier boundaries. The completed general Dose conclusion uses existing PharmaGuide neutral policy, not clinical approval of a numerical benchmark.",
+        "owner": "scripts/data/clinically_relevant_strains.json::STRAIN_LACTIS_BL04",
+        "review_date": "2026-10-18",
+        "approval_status": "approved_existing_neutral_2026_10_18"
       }
     },
     {
@@ -11704,6 +12379,24 @@
         "dr_pham_signoff_verified_by": "clinical-reviewer:2026-04-21 + agent:claude-code",
         "dr_pham_signoff_verified_date": "2026-04-21",
         "dr_pham_signoff_verification_note": "PMID 27293560 → 23614897 swap executed per clinical-reviewer 2026-04-21 verdict. Full-text read confirmed human RCT with strain-specific evidence. Evidence upgraded weak → medium; clinical_support_level upgraded weak → moderate."
+      },
+      "reference_semantics": {
+        "reference_type": "no_benchmark",
+        "scope": "General catalog Dose for this exact source identity; source-specific study facts and established safety references remain separate.",
+        "preparation": "Lactobacillus gasseri SBT2055",
+        "purpose": "Descriptive source regimen; no general clinical Dose benchmark",
+        "population": "No general population-specific clinical Dose curve follows from current tier sources; study-context populations remain recorded.",
+        "exposure_basis": "minimum_directed_daily_use",
+        "units": "CFU/day",
+        "curve": "completed_no_benchmark_neutral",
+        "source_ids": [
+          "PMID:23614897",
+          "https://pubmed.ncbi.nlm.nih.gov/23614897/"
+        ],
+        "rationale": "23614897 human fermented-milk/body-fat context; legacy note claiming bestsource animal stale. Do not use shared numerical tiers as preparation/purpose evidence. Unsupported numerical inference rejected: Universal increasing clinical adequacy from viable count; clinical review of source identity does not approve tier boundaries. The completed general Dose conclusion uses existing PharmaGuide neutral policy, not clinical approval of a numerical benchmark.",
+        "owner": "scripts/data/clinically_relevant_strains.json::STRAIN_GASSERI_SBT2055",
+        "review_date": "2026-10-18",
+        "approval_status": "approved_existing_neutral_2026_10_18"
       }
     },
     {
@@ -11791,6 +12484,24 @@
         "dr_pham_signoff_verified_by": "clinical-reviewer:2026-04-21 + agent:claude-code",
         "dr_pham_signoff_verified_date": "2026-04-21",
         "dr_pham_signoff_verification_note": "PMID 38574296 → 29688793 swap executed per clinical-reviewer 2026-04-21 verdict. Full-text read confirmed human RCT with strain-specific evidence. Evidence upgraded weak → medium; clinical_support_level upgraded weak → moderate."
+      },
+      "reference_semantics": {
+        "reference_type": "no_benchmark",
+        "scope": "General catalog Dose for this exact source identity; source-specific study facts and established safety references remain separate.",
+        "preparation": "Lactobacillus gasseri BNR17",
+        "purpose": "Descriptive source regimen; no general clinical Dose benchmark",
+        "population": "No general population-specific clinical Dose curve follows from current tier sources; study-context populations remain recorded.",
+        "exposure_basis": "minimum_directed_daily_use",
+        "units": "CFU/day",
+        "curve": "completed_no_benchmark_neutral",
+        "source_ids": [
+          "PMID:29688793",
+          "https://pubmed.ncbi.nlm.nih.gov/29688793/"
+        ],
+        "rationale": "29688793 human obesity trial; old weak-source boilerplate is not current clinical interpretation. No universal clinical CFU thresholds. Unsupported numerical inference rejected: Universal increasing clinical adequacy from viable count; clinical review of source identity does not approve tier boundaries. The completed general Dose conclusion uses existing PharmaGuide neutral policy, not clinical approval of a numerical benchmark.",
+        "owner": "scripts/data/clinically_relevant_strains.json::STRAIN_GASSERI_BNR17",
+        "review_date": "2026-10-18",
+        "approval_status": "approved_existing_neutral_2026_10_18"
       }
     },
     {
@@ -11924,7 +12635,26 @@
             "decision": "approve"
           }
         }
-      ]
+      ],
+      "reference_semantics": {
+        "reference_type": "no_benchmark",
+        "scope": "General catalog Dose for this exact source identity; source-specific study facts and established safety references remain separate.",
+        "preparation": "Lactobacillus fermentum ME-3",
+        "purpose": "Descriptive source regimen; no general clinical Dose benchmark",
+        "population": "No general population-specific clinical Dose curve follows from current tier sources; study-context populations remain recorded.",
+        "exposure_basis": "minimum_directed_daily_use",
+        "units": "CFU/day",
+        "curve": "completed_no_benchmark_neutral",
+        "source_ids": [
+          "PMID:36644601",
+          "PMID:16080791",
+          "https://pubmed.ncbi.nlm.nih.gov/36644601/"
+        ],
+        "rationale": "Legacy36644601 unresolved;16080791 human oxidative-stress biomarker context separate. Surrogate cannot become clinical outcome threshold. Unsupported numerical inference rejected: Universal increasing clinical adequacy from viable count; clinical review of source identity does not approve tier boundaries. The completed general Dose conclusion uses existing PharmaGuide neutral policy, not clinical approval of a numerical benchmark.",
+        "owner": "scripts/data/clinically_relevant_strains.json::STRAIN_FERMENTUM_ME3",
+        "review_date": "2026-10-18",
+        "approval_status": "approved_existing_neutral_2026_10_18"
+      }
     },
     {
       "id": "STRAIN_HELVETICUS_R0052",
@@ -12287,6 +13017,30 @@
         "verified_on": "2026-09-22",
         "method": "PubMed efetch XML title/abstract read for the designation and species",
         "note": "2026-09-22: the designation and species are named in PMID(s) 20974015."
+      },
+      "reference_semantics": {
+        "reference_type": "no_benchmark",
+        "scope": "General catalog Dose for this exact source identity; source-specific study facts and established safety references remain separate.",
+        "preparation": "Lactobacillus helveticus R0052",
+        "purpose": "Descriptive source regimen; no general clinical Dose benchmark",
+        "population": "No general population-specific clinical Dose curve follows from current tier sources; study-context populations remain recorded.",
+        "exposure_basis": "minimum_directed_daily_use",
+        "units": "CFU/day",
+        "curve": "completed_no_benchmark_neutral",
+        "source_ids": [
+          "PMID:20974015",
+          "PMID:32989186",
+          "PMID:33658952",
+          "PMID:37049546",
+          "https://pubmed.ncbi.nlm.nih.gov/20974015/",
+          "https://pubmed.ncbi.nlm.nih.gov/32989186/",
+          "https://pubmed.ncbi.nlm.nih.gov/33658952/",
+          "https://pubmed.ncbi.nlm.nih.gov/37049546/"
+        ],
+        "rationale": "R0052+R0175 psychological combination regimens; do not allocate total count to one strain or treat coformula benefit as individual. Unsupported numerical inference rejected: Universal increasing clinical adequacy from viable count; clinical review of source identity does not approve tier boundaries. The completed general Dose conclusion uses existing PharmaGuide neutral policy, not clinical approval of a numerical benchmark.",
+        "owner": "scripts/data/clinically_relevant_strains.json::STRAIN_HELVETICUS_R0052",
+        "review_date": "2026-10-18",
+        "approval_status": "approved_existing_neutral_2026_10_18"
       }
     },
     {
@@ -12361,6 +13115,23 @@
         "verified_on": "2026-09-22",
         "method": "PubMed efetch XML title/abstract read for the designation and species",
         "note": "2026-09-22: the designation and species are named in PMID(s) 20974015."
+      },
+      "reference_semantics": {
+        "reference_type": "no_benchmark",
+        "scope": "General catalog Dose for this exact source identity; source-specific study facts and established safety references remain separate.",
+        "preparation": "Bifidobacterium longum R0175",
+        "purpose": "Descriptive source regimen; no general clinical Dose benchmark",
+        "population": "No general population-specific clinical Dose curve follows from current tier sources; study-context populations remain recorded.",
+        "exposure_basis": "minimum_directed_daily_use",
+        "units": "CFU/day",
+        "curve": "completed_no_benchmark_neutral",
+        "source_ids": [
+          "https://ods.od.nih.gov/factsheets/Probiotics-HealthProfessional/"
+        ],
+        "rationale": "R0052+R0175 combination evidence cannot independently substantiate R0175 tiers. Unsupported numerical inference rejected: Universal increasing clinical adequacy from viable count; clinical review of source identity does not approve tier boundaries. The completed general Dose conclusion uses existing PharmaGuide neutral policy, not clinical approval of a numerical benchmark.",
+        "owner": "scripts/data/clinically_relevant_strains.json::STRAIN_LONGUM_R0175",
+        "review_date": "2026-10-18",
+        "approval_status": "approved_existing_neutral_2026_10_18"
       }
     },
     {
@@ -12582,7 +13353,27 @@
             "decision": "approve"
           }
         }
-      ]
+      ],
+      "reference_semantics": {
+        "reference_type": "no_benchmark",
+        "scope": "General catalog Dose for this exact source identity; source-specific study facts and established safety references remain separate.",
+        "preparation": "Bifidobacterium longum 1714",
+        "purpose": "Descriptive source regimen; no general clinical Dose benchmark",
+        "population": "No general population-specific clinical Dose curve follows from current tier sources; study-context populations remain recorded.",
+        "exposure_basis": "minimum_directed_daily_use",
+        "units": "CFU/day",
+        "curve": "completed_no_benchmark_neutral",
+        "source_ids": [
+          "PMID:41607522",
+          "PMID:38355674",
+          "PMID:42060410",
+          "https://pubmed.ncbi.nlm.nih.gov/41607522/"
+        ],
+        "rationale": "Legacy41607522 unresolved; source38355674/42060410 contexts distinct. Existing review does not create continuous higher-CFU efficacy policy. Unsupported numerical inference rejected: Universal increasing clinical adequacy from viable count; clinical review of source identity does not approve tier boundaries. The completed general Dose conclusion uses existing PharmaGuide neutral policy, not clinical approval of a numerical benchmark.",
+        "owner": "scripts/data/clinically_relevant_strains.json::STRAIN_LONGUM_1714",
+        "review_date": "2026-10-18",
+        "approval_status": "approved_existing_neutral_2026_10_18"
+      }
     },
     {
       "id": "STRAIN_ACIDOPHILUS_DDS1",
@@ -13232,7 +14023,32 @@
           },
           "scoring_eligible": true
         }
-      ]
+      ],
+      "reference_semantics": {
+        "reference_type": "no_benchmark",
+        "scope": "General catalog Dose for this exact source identity; source-specific study facts and established safety references remain separate.",
+        "preparation": "Lactobacillus acidophilus DDS-1",
+        "purpose": "Descriptive source regimen; no general clinical Dose benchmark",
+        "population": "No general population-specific clinical Dose curve follows from current tier sources; study-context populations remain recorded.",
+        "exposure_basis": "minimum_directed_daily_use",
+        "units": "CFU/day",
+        "curve": "completed_no_benchmark_neutral",
+        "source_ids": [
+          "PMID:32019158",
+          "PMID:27207411",
+          "PMID:36308983",
+          "PMID:33584665",
+          "PMID:37686889",
+          "PMID:36071965",
+          "PMID:26463725",
+          "PMID:20642296",
+          "https://pubmed.ncbi.nlm.nih.gov/32019158/"
+        ],
+        "rationale": "32019158 has separate DDS1 andUABla12 arms,not a mixture;1e10/day6wk exact IBS regimen. Other combination/surrogate contexts remain separate. Unsupported numerical inference rejected: Universal increasing clinical adequacy from viable count; clinical review of source identity does not approve tier boundaries. The completed general Dose conclusion uses existing PharmaGuide neutral policy, not clinical approval of a numerical benchmark.",
+        "owner": "scripts/data/clinically_relevant_strains.json::STRAIN_ACIDOPHILUS_DDS1",
+        "review_date": "2026-10-18",
+        "approval_status": "approved_existing_neutral_2026_10_18"
+      }
     },
     {
       "id": "STRAIN_REUTERI_ATCC6475",
@@ -13299,6 +14115,26 @@
         "dr_pham_signoff_verified_by": "Dr Pham (2026-09-22 clinical review) + agent:claude-code (PubMed API-verified 2026-09-22)",
         "dr_pham_signoff_verified_date": "2026-09-22",
         "dr_pham_signoff_verification_note": "Dr Pham 2026-09-22: citation replaced. PMID 36261538 is an exploratory secondary analysis of 20 selected good and poor responders; replaced by the primary RCT 29926979. Predefined primary endpoint met: less loss of tibia total volumetric BMD vs placebo (ITT mean difference 1.02%, 95% CI 0.02-2.03); secondary bone variables were not significant in ITT."
+      },
+      "reference_semantics": {
+        "reference_type": "no_benchmark",
+        "scope": "General catalog Dose for this exact source identity; source-specific study facts and established safety references remain separate.",
+        "preparation": "Lactobacillus reuteri ATCC 6475",
+        "purpose": "Descriptive source regimen; no general clinical Dose benchmark",
+        "population": "No general population-specific clinical Dose curve follows from current tier sources; study-context populations remain recorded.",
+        "exposure_basis": "minimum_directed_daily_use",
+        "units": "CFU/day",
+        "curve": "completed_no_benchmark_neutral",
+        "source_ids": [
+          "PMID:29926979",
+          "PMID:38865129",
+          "https://pubmed.ncbi.nlm.nih.gov/29926979/",
+          "https://pubmed.ncbi.nlm.nih.gov/38865129/"
+        ],
+        "rationale": "Bone-density surrogate and later null trial38865129 yield mixed direction; universal potency table cannot become clinical efficacy. Unsupported numerical inference rejected: Universal increasing clinical adequacy from viable count; clinical review of source identity does not approve tier boundaries. The completed general Dose conclusion uses existing PharmaGuide neutral policy, not clinical approval of a numerical benchmark.",
+        "owner": "scripts/data/clinically_relevant_strains.json::STRAIN_REUTERI_ATCC6475",
+        "review_date": "2026-10-18",
+        "approval_status": "approved_existing_neutral_2026_10_18"
       }
     },
     {
@@ -13521,6 +14357,25 @@
         "dr_pham_signoff_verified_by": "Dr Pham (authored swap) + agent:claude-code (API-verified 2026-04-21)",
         "dr_pham_signoff_verified_date": "2026-04-21",
         "dr_pham_signoff_verification_note": "Dr Pham 2026-04-21: citation swap. PMID 39842252 (abstract didn't name Lpc-37) → PMID 33385020 (Sisu Study, strain-specific clinical evidence per Dr Pham's selection)."
+      },
+      "reference_semantics": {
+        "reference_type": "no_benchmark",
+        "scope": "General catalog Dose for this exact source identity; source-specific study facts and established safety references remain separate.",
+        "preparation": "Lactobacillus paracasei Lpc-37",
+        "purpose": "Descriptive source regimen; no general clinical Dose benchmark",
+        "population": "No general population-specific clinical Dose curve follows from current tier sources; study-context populations remain recorded.",
+        "exposure_basis": "minimum_directed_daily_use",
+        "units": "CFU/day",
+        "curve": "completed_no_benchmark_neutral",
+        "source_ids": [
+          "PMID:33385020",
+          "PMID:37662485",
+          "https://pubmed.ncbi.nlm.nih.gov/33385020/"
+        ],
+        "rationale": "Sisu primary stress null;nominal and assayed doses distinct;ChillEx null. Recorded contexts do not establish efficacy curve. Unsupported numerical inference rejected: Universal increasing clinical adequacy from viable count; clinical review of source identity does not approve tier boundaries. The completed general Dose conclusion uses existing PharmaGuide neutral policy, not clinical approval of a numerical benchmark.",
+        "owner": "scripts/data/clinically_relevant_strains.json::STRAIN_PARACASEI_LPC37",
+        "review_date": "2026-10-18",
+        "approval_status": "approved_existing_neutral_2026_10_18"
       }
     },
     {
@@ -13590,6 +14445,26 @@
         "dr_pham_signoff_verified_by": "Dr Pham (2026-09-22 clinical review) + agent:claude-code (PubMed API-verified 2026-09-22)",
         "dr_pham_signoff_verified_date": "2026-09-22",
         "dr_pham_signoff_verification_note": "Dr Pham 2026-09-22: citation replaced. PMID 35659905 is an immunology substudy (IL-1 alpha, soluble E-cadherin); replaced by the primary phase-2b efficacy RCT 32402161. Primary outcome met: BV recurrence by week 12 in 30% vs 45% (RR 0.66, 95% CI 0.44-0.87, P = .01). The 66-person immunology substudy 35659905 is supportive mechanistic evidence only."
+      },
+      "reference_semantics": {
+        "reference_type": "no_benchmark",
+        "scope": "General catalog Dose for this exact source identity; source-specific study facts and established safety references remain separate.",
+        "preparation": "Lactobacillus crispatus CTV-05",
+        "purpose": "Descriptive source regimen; no general clinical Dose benchmark",
+        "population": "No general population-specific clinical Dose curve follows from current tier sources; study-context populations remain recorded.",
+        "exposure_basis": "minimum_directed_daily_use",
+        "units": "CFU/day",
+        "curve": "completed_no_benchmark_neutral",
+        "source_ids": [
+          "PMID:32402161",
+          "PMID:35659905",
+          "https://pubmed.ncbi.nlm.nih.gov/32402161/",
+          "https://pubmed.ncbi.nlm.nih.gov/35659905/"
+        ],
+        "rationale": "32402161/35659905 intravaginalLactinV evidence; oral labels receive no oral efficacy approval. Generic daily CFU potency table cannot override route. Unsupported numerical inference rejected: Universal increasing clinical adequacy from viable count; clinical review of source identity does not approve tier boundaries. The completed general Dose conclusion uses existing PharmaGuide neutral policy, not clinical approval of a numerical benchmark.",
+        "owner": "scripts/data/clinically_relevant_strains.json::STRAIN_CRISPATUS_CTV05",
+        "review_date": "2026-10-18",
+        "approval_status": "approved_existing_neutral_2026_10_18"
       }
     },
     {
@@ -13666,6 +14541,26 @@
         "dr_pham_signoff_verified_by": "Dr Pham (2026-09-22 clinical review) + agent:claude-code (PubMed API-verified 2026-09-22)",
         "dr_pham_signoff_verified_date": "2026-09-22",
         "dr_pham_signoff_verification_note": "Dr Pham 2026-09-22: the replacement citation 15479682 is a substantial human efficacy trial, not 'not a human trial': randomized, double-blind, double-dummy, 327 adults with ulcerative colitis in remission, Nissle 1917 vs mesalazine for 12 months, prespecified equivalence in relapse prevention met. Record as positive/supportive active-comparator equivalence evidence for UC maintenance, medium strength, not the evidential class of placebo superiority; no ordinary superiority credit until the scorer can weight active-comparator evidence."
+      },
+      "reference_semantics": {
+        "reference_type": "no_benchmark",
+        "scope": "General catalog Dose for this exact source identity; source-specific study facts and established safety references remain separate.",
+        "preparation": "Escherichia coli Nissle 1917",
+        "purpose": "Descriptive source regimen; no general clinical Dose benchmark",
+        "population": "No general population-specific clinical Dose curve follows from current tier sources; study-context populations remain recorded.",
+        "exposure_basis": "minimum_directed_daily_use",
+        "units": "CFU/day",
+        "curve": "completed_no_benchmark_neutral",
+        "source_ids": [
+          "PMID:15479682",
+          "PMID:9354192",
+          "https://pubmed.ncbi.nlm.nih.gov/15479682/",
+          "https://pubmed.ncbi.nlm.nih.gov/9354192/"
+        ],
+        "rationale": "15479682 affirmative active-comparator UCmaintenance equivalence;not general placebo superiority or all-purpose CFU minimum. Unsupported numerical inference rejected: Universal increasing clinical adequacy from viable count; clinical review of source identity does not approve tier boundaries. The completed general Dose conclusion uses existing PharmaGuide neutral policy, not clinical approval of a numerical benchmark.",
+        "owner": "scripts/data/clinically_relevant_strains.json::STRAIN_NISSLE_1917",
+        "review_date": "2026-10-18",
+        "approval_status": "approved_existing_neutral_2026_10_18"
       }
     },
     {
@@ -13718,6 +14613,26 @@
         "dr_pham_signoff_verified_by": "Dr Pham (2026-09-22 clinical review) + agent:claude-code (PubMed API-verified 2026-09-22)",
         "dr_pham_signoff_verified_date": "2026-09-22",
         "dr_pham_signoff_verification_note": "Dr Pham 2026-09-22: confirmed. PMID 30963591: randomized triple-blind trial of SP1 alone in 36 institutionalized elders with denture stomatitis; severity and Candida counts improved. Small trial; medium is appropriate."
+      },
+      "reference_semantics": {
+        "reference_type": "no_benchmark",
+        "scope": "General catalog Dose for this exact source identity; source-specific study facts and established safety references remain separate.",
+        "preparation": "Lactobacillus rhamnosus SP1",
+        "purpose": "Descriptive source regimen; no general clinical Dose benchmark",
+        "population": "No general population-specific clinical Dose curve follows from current tier sources; study-context populations remain recorded.",
+        "exposure_basis": "minimum_directed_daily_use",
+        "units": "CFU/day",
+        "curve": "completed_no_benchmark_neutral",
+        "source_ids": [
+          "PMID:30963591",
+          "PMID:27596801",
+          "https://pubmed.ncbi.nlm.nih.gov/30963591/",
+          "https://pubmed.ncbi.nlm.nih.gov/27596801/"
+        ],
+        "rationale": "Denture-stomatitis/dental source setting; population/route/purpose not generalized by CFU tiers. Unsupported numerical inference rejected: Universal increasing clinical adequacy from viable count; clinical review of source identity does not approve tier boundaries. The completed general Dose conclusion uses existing PharmaGuide neutral policy, not clinical approval of a numerical benchmark.",
+        "owner": "scripts/data/clinically_relevant_strains.json::STRAIN_RHAMNOSUS_SP1",
+        "review_date": "2026-10-18",
+        "approval_status": "approved_existing_neutral_2026_10_18"
       }
     },
     {
@@ -13862,7 +14777,25 @@
             "decision": "approve"
           }
         }
-      ]
+      ],
+      "reference_semantics": {
+        "reference_type": "no_benchmark",
+        "scope": "General catalog Dose for this exact source identity; source-specific study facts and established safety references remain separate.",
+        "preparation": "Bifidobacterium lactis UABla-12",
+        "purpose": "Descriptive source regimen; no general clinical Dose benchmark",
+        "population": "No general population-specific clinical Dose curve follows from current tier sources; study-context populations remain recorded.",
+        "exposure_basis": "minimum_directed_daily_use",
+        "units": "CFU/day",
+        "curve": "completed_no_benchmark_neutral",
+        "source_ids": [
+          "PMID:32019158",
+          "https://pubmed.ncbi.nlm.nih.gov/32019158/"
+        ],
+        "rationale": "32019158 independent UABla12 IBS arm at1e10/day6wk; does not establish1Badequate/50Bexcellent clinical hierarchy. Unsupported numerical inference rejected: Universal increasing clinical adequacy from viable count; clinical review of source identity does not approve tier boundaries. The completed general Dose conclusion uses existing PharmaGuide neutral policy, not clinical approval of a numerical benchmark.",
+        "owner": "scripts/data/clinically_relevant_strains.json::STRAIN_LACTIS_UABla12",
+        "review_date": "2026-10-18",
+        "approval_status": "approved_existing_neutral_2026_10_18"
+      }
     },
     {
       "id": "STRAIN_PLANTARUM_LP01",
@@ -14072,6 +15005,24 @@
         "ineligible_single_strain_pmids": [],
         "basis": "scripts/audits/closure_20260921/D1_STRAIN_REVIEW_20260922.json",
         "note": "Every human study pairs LP01 with other strains (BR03, LA02, LF15, LPC09, LR06, LPS01, LDD01, LF16, BL04) or other actives; the retired agent summary had cited the two-strain LF15 + LP01 vaginal study as strain-specific."
+      },
+      "reference_semantics": {
+        "reference_type": "no_benchmark",
+        "scope": "General catalog Dose for this exact source identity; source-specific study facts and established safety references remain separate.",
+        "preparation": "Lactiplantibacillus plantarum LP01",
+        "purpose": "Descriptive source regimen; no general clinical Dose benchmark",
+        "population": "No general population-specific clinical Dose curve follows from current tier sources; study-context populations remain recorded.",
+        "exposure_basis": "minimum_directed_daily_use",
+        "units": "CFU/day",
+        "curve": "completed_no_benchmark_neutral",
+        "source_ids": [
+          "PMID:29949873",
+          "https://pubmed.ncbi.nlm.nih.gov/29949873/"
+        ],
+        "rationale": "Explicit historical clinician-review hold retained. Current context is combination; prior identity/source research does not approve numeric curve. Unsupported numerical inference rejected: Universal increasing clinical adequacy from viable count; clinical review of source identity does not approve tier boundaries. The completed general Dose conclusion uses existing PharmaGuide neutral policy, not clinical approval of a numerical benchmark.",
+        "owner": "scripts/data/clinically_relevant_strains.json::STRAIN_PLANTARUM_LP01",
+        "review_date": "2026-10-18",
+        "approval_status": "approved_existing_neutral_2026_10_18"
       }
     },
     {
@@ -14233,7 +15184,25 @@
             "countersign_note": "Section 3 spot-check: disposition unchanged."
           }
         }
-      ]
+      ],
+      "reference_semantics": {
+        "reference_type": "no_benchmark",
+        "scope": "General catalog Dose for this exact source identity; source-specific study facts and established safety references remain separate.",
+        "preparation": "Bifidobacterium animalis subsp. lactis BS01",
+        "purpose": "Descriptive source regimen; no general clinical Dose benchmark",
+        "population": "No general population-specific clinical Dose curve follows from current tier sources; study-context populations remain recorded.",
+        "exposure_basis": "minimum_directed_daily_use",
+        "units": "CFU/day",
+        "curve": "completed_no_benchmark_neutral",
+        "source_ids": [
+          "PMID:20697291",
+          "https://pubmed.ncbi.nlm.nih.gov/20697291/"
+        ],
+        "rationale": "Explicit historical clinician-review hold retained;source20697291 not a tier-policy approval. Do not propagate29799760 wrong-topic citation. Unsupported numerical inference rejected: Universal increasing clinical adequacy from viable count; clinical review of source identity does not approve tier boundaries. The completed general Dose conclusion uses existing PharmaGuide neutral policy, not clinical approval of a numerical benchmark.",
+        "owner": "scripts/data/clinically_relevant_strains.json::STRAIN_LACTIS_BS01",
+        "review_date": "2026-10-18",
+        "approval_status": "approved_existing_neutral_2026_10_18"
+      }
     },
     {
       "id": "STRAIN_BREVE_SD_BR3_IT",
@@ -14287,6 +15256,23 @@
         "ineligible_single_strain_pmids": [],
         "basis": "scripts/audits/closure_20260921/D1_STRAIN_REVIEW_20260922.json",
         "note": "No PubMed record names this designation. Its only human research is the Seed DS-01 whole-formula trials, owned by backed_clinical_studies FORMULA_SEED_DS01; the retired formula-level summary duplicated that owner."
+      },
+      "reference_semantics": {
+        "reference_type": "no_benchmark",
+        "scope": "General catalog Dose for this exact source identity; source-specific study facts and established safety references remain separate.",
+        "preparation": "Bifidobacterium breve SD-BR3-IT",
+        "purpose": "Descriptive source regimen; no general clinical Dose benchmark",
+        "population": "No general population-specific clinical Dose curve follows from current tier sources; study-context populations remain recorded.",
+        "exposure_basis": "minimum_directed_daily_use",
+        "units": "CFU/day",
+        "curve": "completed_no_benchmark_neutral",
+        "source_ids": [
+          "https://ods.od.nih.gov/factsheets/Probiotics-HealthProfessional/"
+        ],
+        "rationale": "DS01 formula evidence only; no individual dose allocation or single-strain efficacy from53.6BAFU. Unsupported numerical inference rejected: Universal increasing clinical adequacy from viable count; clinical review of source identity does not approve tier boundaries. The completed general Dose conclusion uses existing PharmaGuide neutral policy, not clinical approval of a numerical benchmark.",
+        "owner": "scripts/data/clinically_relevant_strains.json::STRAIN_BREVE_SD_BR3_IT",
+        "review_date": "2026-10-18",
+        "approval_status": "approved_existing_neutral_2026_10_18"
       }
     },
     {
@@ -14342,6 +15328,23 @@
         "ineligible_single_strain_pmids": [],
         "basis": "scripts/audits/closure_20260921/D1_STRAIN_REVIEW_20260922.json",
         "note": "No PubMed record names this designation. Its only human research is the Seed DS-01 whole-formula trials, owned by backed_clinical_studies FORMULA_SEED_DS01; the retired formula-level summary duplicated that owner."
+      },
+      "reference_semantics": {
+        "reference_type": "no_benchmark",
+        "scope": "General catalog Dose for this exact source identity; source-specific study facts and established safety references remain separate.",
+        "preparation": "Ligilactobacillus salivarius SD-LS1-IT",
+        "purpose": "Descriptive source regimen; no general clinical Dose benchmark",
+        "population": "No general population-specific clinical Dose curve follows from current tier sources; study-context populations remain recorded.",
+        "exposure_basis": "minimum_directed_daily_use",
+        "units": "CFU/day",
+        "curve": "completed_no_benchmark_neutral",
+        "source_ids": [
+          "https://ods.od.nih.gov/factsheets/Probiotics-HealthProfessional/"
+        ],
+        "rationale": "DS01 formula evidence only; no individual dose allocation or single-strain efficacy from53.6BAFU. Unsupported numerical inference rejected: Universal increasing clinical adequacy from viable count; clinical review of source identity does not approve tier boundaries. The completed general Dose conclusion uses existing PharmaGuide neutral policy, not clinical approval of a numerical benchmark.",
+        "owner": "scripts/data/clinically_relevant_strains.json::STRAIN_SALIVARIUS_SD_LS1_IT",
+        "review_date": "2026-10-18",
+        "approval_status": "approved_existing_neutral_2026_10_18"
       }
     },
     {
@@ -14397,6 +15400,23 @@
         "ineligible_single_strain_pmids": [],
         "basis": "scripts/audits/closure_20260921/D1_STRAIN_REVIEW_20260922.json",
         "note": "No PubMed record names this designation. Its only human research is the Seed DS-01 whole-formula trials, owned by backed_clinical_studies FORMULA_SEED_DS01; the retired formula-level summary duplicated that owner."
+      },
+      "reference_semantics": {
+        "reference_type": "no_benchmark",
+        "scope": "General catalog Dose for this exact source identity; source-specific study facts and established safety references remain separate.",
+        "preparation": "Lactiplantibacillus plantarum SD-LP1-IT",
+        "purpose": "Descriptive source regimen; no general clinical Dose benchmark",
+        "population": "No general population-specific clinical Dose curve follows from current tier sources; study-context populations remain recorded.",
+        "exposure_basis": "minimum_directed_daily_use",
+        "units": "CFU/day",
+        "curve": "completed_no_benchmark_neutral",
+        "source_ids": [
+          "https://ods.od.nih.gov/factsheets/Probiotics-HealthProfessional/"
+        ],
+        "rationale": "DS01 formula evidence only; no individual dose allocation or single-strain efficacy from53.6BAFU. Unsupported numerical inference rejected: Universal increasing clinical adequacy from viable count; clinical review of source identity does not approve tier boundaries. The completed general Dose conclusion uses existing PharmaGuide neutral policy, not clinical approval of a numerical benchmark.",
+        "owner": "scripts/data/clinically_relevant_strains.json::STRAIN_PLANTARUM_SD_LP1_IT",
+        "review_date": "2026-10-18",
+        "approval_status": "approved_existing_neutral_2026_10_18"
       }
     },
     {
@@ -14453,6 +15473,23 @@
         "ineligible_single_strain_pmids": [],
         "basis": "scripts/audits/closure_20260921/D1_STRAIN_REVIEW_20260922.json",
         "note": "No PubMed record names this designation. Its only human research is the Seed DS-01 whole-formula trials, owned by backed_clinical_studies FORMULA_SEED_DS01; the retired formula-level summary duplicated that owner."
+      },
+      "reference_semantics": {
+        "reference_type": "no_benchmark",
+        "scope": "General catalog Dose for this exact source identity; source-specific study facts and established safety references remain separate.",
+        "preparation": "Lactiplantibacillus plantarum SD-LPLDL-UK",
+        "purpose": "Descriptive source regimen; no general clinical Dose benchmark",
+        "population": "No general population-specific clinical Dose curve follows from current tier sources; study-context populations remain recorded.",
+        "exposure_basis": "minimum_directed_daily_use",
+        "units": "CFU/day",
+        "curve": "completed_no_benchmark_neutral",
+        "source_ids": [
+          "https://ods.od.nih.gov/factsheets/Probiotics-HealthProfessional/"
+        ],
+        "rationale": "DS01 formula evidence only;heart-health label positioning is not individual verified lipid efficacy or CFU threshold. Unsupported numerical inference rejected: Universal increasing clinical adequacy from viable count; clinical review of source identity does not approve tier boundaries. The completed general Dose conclusion uses existing PharmaGuide neutral policy, not clinical approval of a numerical benchmark.",
+        "owner": "scripts/data/clinically_relevant_strains.json::STRAIN_PLANTARUM_SD_LPLDL_UK",
+        "review_date": "2026-10-18",
+        "approval_status": "approved_existing_neutral_2026_10_18"
       }
     },
     {

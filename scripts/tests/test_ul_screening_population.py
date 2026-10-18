@@ -7,7 +7,7 @@ from __future__ import annotations
 import pytest
 
 from enrich_supplements_v3 import SupplementEnricherV3
-from rda_ul_calculator import RDAULCalculator
+from rda_ul_calculator import RDAULCalculator, label_population_members
 
 
 @pytest.fixture(scope="module")
@@ -76,6 +76,7 @@ def test_warning_names_the_population_whose_limit_applies(calculator):
     (["Menopause"], ("general_adult",)),
 ])
 def test_label_population_from_dsld_target_groups(enricher, groups, expected):
+    assert label_population_members({"targetGroups": groups}) == tuple(sorted(expected))
     assert enricher._ul_screening_population({"targetGroups": groups}) == tuple(sorted(expected))
 
 

@@ -17,14 +17,14 @@ from scoring_v4.modules.botanical_profile import score_botanical_dose
 from scoring_v4.modules.generic_helpers import unbenchmarked_dose_credit
 
 
-def test_aggregate_formula_above_its_highest_studied_dose_plateaus():
+def test_aggregate_formula_regimens_do_not_infer_a_general_dose_window():
     entries = {entry["id"]: entry for entry in json.loads(DATA_PATH.read_text())["backed_clinical_studies"]}
     match = dict(entries["INGR_BRANCHED_CHAIN_AMINO_ACIDS"])
     match.update({"matched_term": "Branched Chain Amino Acids", "ingredient": "Branched Chain Amino Acids"})
     payload = score_dose(_scoring_product(
         [_active("l_leucine", 45000), _active("l_isoleucine", 22500), _active("l_valine", 22500)], match))
-    assert payload["metadata"]["aggregate_dose_band"] == "above_highest_studied_dose"
-    assert payload["components"]["supplemental_window_proxy"] == 22.0
+    assert "aggregate_dose_band" not in payload["metadata"]
+    assert payload["components"]["supplemental_window_proxy"] == unbenchmarked_dose_credit()
 
 
 def _immune(zinc_mg, servings=1):
@@ -32,6 +32,10 @@ def _immune(zinc_mg, servings=1):
     rows = [_row("Zinc", "zinc", zinc_mg, "mg"), _row("Vitamin C", "vitamin_c", 500, "mg")]
     return {"primary_type": "immune_support",
             "ingredient_quality_data": {"ingredients_scorable": rows, "ingredients": rows},
+            "rda_ul_data": {"adequacy_results": [
+                {"nutrient": "Zinc", "canonical_id": "zinc", "pct_rda": zinc_mg / 11 * 100},
+                {"nutrient": "Vitamin C", "canonical_id": "vitamin_c", "pct_rda": 500 / 90 * 100},
+            ]},
             "servingSizes": [{"minDailyServings": 1, "maxDailyServings": servings}]}
 
 
@@ -40,9 +44,8 @@ def test_immune_zinc_at_its_ul_is_not_zeroed_a_second_time():
     over = score_immune_support_dose(_immune(50))
     within = score_immune_support_dose(_immune(20))
     assert over["metadata"]["high_zinc"] is True
-    # Range credit is adequacy only (above the 25 mg band high it keeps the
-    # existing half credit); the UL is the ceiling's alone.
-    assert over["components"]["zinc_daily_range"] == 1.5
+    # Nutritional adequacy plateaus; the UL is the ceiling's alone.
+    assert over["components"]["zinc_daily_range"] == 3.0
     assert over["components"]["daily_use_discipline"] == within["components"]["daily_use_discipline"]
 
 
@@ -50,7 +53,7 @@ def test_immune_zinc_at_its_ul_is_not_zeroed_a_second_time():
     ("zinc", "Zinc", "mg", 50.0, 40.0),
     ("vitamin_d3", "Vitamin D3", "mcg", 125.0, 100.0),
 ])
-@pytest.mark.parametrize("vitamin_c_mg,expected", [(5.0, 5.5), (500.0, 10.0)])
+@pytest.mark.parametrize("vitamin_c_mg,expected", [(5.0, 10.0), (500.0, 10.0)])
 def test_immune_purpose_excess_is_reduced_only_by_final_ceiling(
     active, name, unit, amount, ul, vitamin_c_mg, expected,
 ):
@@ -64,21 +67,23 @@ def test_immune_purpose_excess_is_reduced_only_by_final_ceiling(
         "primary_type": "immune_support",
         "ingredient_quality_data": {"ingredients_scorable": rows, "ingredients": rows},
         "servingSizes": [{"minDailyServings": 1, "maxDailyServings": 1}],
-        "rda_ul_data": {"adequacy_results": [], "safety_flags": [{
+        "rda_ul_data": {"adequacy_results": [
+            {"nutrient": name, "canonical_id": active, "pct_rda": 500, "scoring_eligible": True},
+            {"nutrient": "Vitamin C", "canonical_id": "vitamin_c", "pct_rda": vitamin_c_mg / 90 * 100, "scoring_eligible": True},
+        ], "safety_flags": [{
             "nutrient": name, "canonical_id": active, "pct_ul": amount / ul * 100,
             "ul": ul, "unit": unit, "ul_gate_eligible": True,
         }]},
     }
-    # Preserve the existing above-band editorial half credit. A confirmed UL
-    # exceedance must not zero this individual purpose before aggregation.
-    assert score_immune_purpose_dose(product, rows[0])["score"] == 11.0
+    # A confirmed UL exceedance must not reduce individual adequacy before aggregation.
+    assert score_immune_purpose_dose(product, rows[0])["score"] == 22.0
     artifact = build_scored_artifact(product)
     assert artifact["quality_score_status"] == "scored"
     dose = artifact["quality_pillars_v4"]["dose"]
     assert dose["score"] == expected
     receipt = dose["explanation"]["dose_receipt"]
     assert receipt["upper_reference"]["pct_ul"] == 125.0
-    assert receipt["adequacy_before_safety"] == (5.5 if vitamin_c_mg == 5 else 15.0)
+    assert receipt["adequacy_before_safety"] == (11.4 if vitamin_c_mg == 5 else 20.0)
     assert receipt["reconciles"] is True
 
 
@@ -124,5 +129,5 @@ def test_immune_milligram_purposes_keep_equivalent_units(active, mg):
 ])
 def test_hidden_botanical_amount_with_a_studied_range_takes_the_neutral(ingredient, band):
     out = score_botanical_dose(_botanical_product(ingredient=ingredient))
-    assert out["band"] == band and out["metadata"]["benchmark"] == "present"
+    assert out["band"] == band and out["metadata"]["benchmark"] == "absent"
     assert out["score"] == pytest.approx(unbenchmarked_dose_credit())

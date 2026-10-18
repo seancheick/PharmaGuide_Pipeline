@@ -1084,9 +1084,8 @@ def _pillar_evidence(dim: Dict[str, Any], weight: float, archetype: str,
 def _dose_reference(dim: Dict[str, Any], archetype: str, sub: Dict[str, Any]) -> float:
     """The attainable Dose maximum for this product (V4.1 Step 4).
 
-    Two assessed components exist only for some products in an archetype: the
-    BCAA/EAA composition check and the prenatal DHA complement. Their retained
-    maximum, not a count of what the label lists, sets the reference.
+    The prenatal DHA complement has its existing route reference. Sports
+    primaries use the common reference after composition credit retirement.
     """
     ref = sub["archetype_reference"].get(archetype, sub["default_reference"])
     variants = sub.get("assessed_component_reference") or {}
@@ -1095,11 +1094,6 @@ def _dose_reference(dim: Dict[str, Any], archetype: str, sub: Dict[str, Any]) ->
     if metadata.get("dose_aggregation") == "co_primary_average":
         # Each primary already uses its own assessed-component reference.
         return ref
-    if "sports_primary_active_dose" in components and (
-        metadata.get("primary_identity") in {"bcaa", "eaa"}
-        or _num(components.get("sports_ratio_or_completeness")) > 0
-    ):
-        return float(variants.get("sports_composition_assessed", ref))
     if archetype == "prenatal_multi" and str(metadata.get("critical_nutrient_mode") or "").startswith("prenatal"):
         return float(variants.get("prenatal_complement_assessed", ref))
     return ref
@@ -1354,6 +1348,12 @@ def _dose_component_kind(key: str, kind: str, metadata: Dict[str, Any]) -> tuple
     if key == "collagen_clinical_dose":
         band = metadata.get("collagen_dose_band")
         return ("neutral" if band in _NEUTRAL_DOSE_BANDS else kind), band
+    if key == "sports_primary_active_dose":
+        labels = [str(e.get("assessment") or "") for e in metadata.get("dose_contributions") or []]
+        if labels and all(label.endswith("_completed_no_general_benchmark") or label == "hidden_amount_neutral" for label in labels):
+            return "neutral", "completed_no_general_benchmark"
+    if key in {"fiber_effective_dose", "sleep_support_dose", "joint_support_dose"}:
+        return "neutral", "completed_no_general_benchmark"
     if key == "supplemental_window_proxy":
         status = metadata.get("window_proxy_status")
         return ("neutral" if status in _NEUTRAL_WINDOW_STATUSES else kind), status
@@ -1525,8 +1525,11 @@ def _normalized_receipt(name: str, pillar: Dict[str, Any], dim: Dict[str, Any],
     reference = _num(components.get("raw_max") if name == "transparency" else components.get("reference"))
     factor = (float(weight) / reference) if reference else 0.0
     items, replay, without_deductions = _itemize_dimension(name, dim)
-    entries = [_receipt_entry(item_id, kind, source, raw, raw * factor, **extra)
-               for item_id, kind, source, raw, extra in items]
+    # An incomplete dimension retains diagnostic peer assessments, but those
+    # are not awarded points in the unfinished public pillar.
+    entries = ([] if dim.get("score") is None else
+               [_receipt_entry(item_id, kind, source, raw, raw * factor, **extra)
+                for item_id, kind, source, raw, extra in items])
     if dim.get("score") is None:
         entries.append(_receipt_entry(f"{name}_not_evaluable", "neutral", f"{name}.score", None, 0.0))
     public = replay * factor

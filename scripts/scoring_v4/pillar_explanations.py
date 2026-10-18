@@ -178,8 +178,14 @@ def _dose_contributions(module: Optional[str], metadata: Dict[str, Any], factor:
             continue
         label, kind = _ASSESSMENT_COPY.get(str(entry.get("assessment")), (
             str(entry.get("band") or entry.get("assessment") or "assessment").replace("_", " "), "clinical_reference"))
+        assessment = str(entry.get("assessment") or "")
+        if assessment.endswith("_contribution_policy"):
+            label, kind = "PharmaGuide contribution target", "pharmaguide_policy"
+        elif (assessment.endswith("_completed_no_general_benchmark")
+              or entry.get("band") in {"no_benchmark_neutral", "disclosed_no_reference"}):
+            label, kind = "no applicable general benchmark: neutral value", "pharmaguide_policy"
         out.append({"ingredient": str(entry.get("ingredient") or ""), "assessment": entry.get("assessment"),
-                    "reference": ("printed-amount band; qualified label amount" if entry.get("quantity_operator") not in (None, "=")
+                    "reference": ("qualified printed amount; " + label if entry.get("quantity_operator") not in (None, "=")
                                   else label), "reference_kind": kind,
                     **{key: entry.get(key) for key in ("amount_at_minimum", "amount_at_maximum", "amount_unit",
                                                        "amount_per_serving", "reference_value", "pct_of_reference",
@@ -202,7 +208,7 @@ def _dose_contributions(module: Optional[str], metadata: Dict[str, Any], factor:
     if isinstance(reference, dict) and _num(reference.get("target_mg_day")) is not None:
         omega = {"ingredient": "DHA" if reference.get("purpose") == "prenatal_dha" else "EPA + DHA",
                     "assessment": reference.get("purpose"), "reference": f"{reference['target_mg_day']:g} mg/day reference",
-                    "reference_kind": "supported_minimum" if reference.get("purpose") == "triglyceride" else "nutritional_reference",
+                    "reference_kind": "pharmaguide_policy" if reference.get("purpose") == "triglyceride" else "nutritional_reference",
                     "reference_value": reference.get("target_mg_day"), "amount_unit": "mg",
                     "amount_mg_day": reference.get("amount_mg_day"), "amount_at_minimum": reference.get("amount_mg_day")}
         minimum_servings = _num((metadata.get("daily_use") or {}).get("minimum_servings"))
@@ -260,14 +266,24 @@ def _dose_receipt(pillar: Dict[str, Any], dose: Dict[str, Any], module: Optional
         receipt["primary_active_unassessed"] = metadata["primary_active_unassessed"]
         receipt["partial_credit_value"] = round(constraint, 2)
         accounted = min(accounted, constraint)
+    if dose.get("score") is None:
+        # A partial assessment has no final Dose arithmetic. Preserve its
+        # diagnostic contributions without presenting the placeholder0 as a
+        # completed score or a neutral award.
+        receipt.update(assessment_status="incomplete", adequacy_before_safety=None,
+                       final=None, reconciles=None)
+        return receipt
     receipt["reconciles"] = (score is not None and adequacy is not None
                              and abs(adequacy - min(weight, accounted)) < 0.051
                              and abs(score - (min(adequacy, cap) if cap is not None else adequacy)) < 0.05)
     return receipt
 
 
-def _dose_receipt_facts(receipt: Dict[str, Any]) -> List[Dict[str, Any]]:
+def _dose_receipt_facts(receipt: Dict[str, Any], metadata: Optional[Dict[str, Any]] = None) -> List[Dict[str, Any]]:
     facts: List[Dict[str, Any]] = []
+    if receipt.get("assessment_status") == "incomplete":
+        return [{"id": "dose_assessment_incomplete", "label": "Dose assessment incomplete",
+                 "value_display": "A required ingredient amount could not be assessed. Known ingredient contributions do not establish a final Dose score."}]
     aggregation = receipt.get("aggregation")
     contributions = receipt.get("contributions") or []
     if contributions:
@@ -323,6 +339,25 @@ def _dose_receipt_facts(receipt: Dict[str, Any]) -> List[Dict[str, Any]]:
                           f"The main active {receipt['primary_active_unassessed']} has no applicable reference. "
                           f"The existing assessment limits adequacy to {receipt['partial_credit_value']:g}/20; "
                           "the assessed secondary nutrients cannot establish the main active's dose adequacy.")})
+    metadata = metadata or {}
+    if str(metadata.get("critical_nutrient_mode") or "").startswith("prenatal"):
+        row = next((r for r in receipt.get("reference_assessments") or []
+                    if str(r.get("canonical_id") or r.get("nutrient") or "").lower() == "choline"), None)
+        amount = _num((row or {}).get("per_day_min"))
+        pct = _num((row or {}).get("pct_rda"))
+        if amount is not None and pct is not None:
+            broad = _num((metadata.get("coverage_nutrient_scores") or {}).get("choline"))
+            critical = _num((metadata.get("critical_nutrient_scores") or {}).get("choline"))
+            text = (f"This prenatal provides {amount:g} {(row or {}).get('unit') or 'mg'} per minimum directed day, "
+                    f"approximately {pct:g}% of the pregnancy Adequate Intake. "
+                    "The full AI includes food and is not a required supplement amount. "
+                    f"Recorded broad panel coverage: {broad:g}; critical prenatal coverage: {critical:g} "
+                    "on the contribution scale from0 to1, not percent effectiveness.")
+        else:
+            text = ("No choline contribution identified. Choline is included in PharmaGuide's critical prenatal nutrient review. "
+                    "Food can contribute choline, so this does not mean the user's total intake is zero. "
+                    "The full AI includes food and is not a required supplement amount.")
+        facts.append({"id":"dose_prenatal_choline", "label":"Choline contribution", "value_display":text})
     upper = receipt.get("upper_reference")
     adequacy, final = _num(receipt.get("adequacy_before_safety")), _num(receipt.get("final"))
     if upper:
@@ -390,9 +425,9 @@ def attach_pillar_explanations(
                            "Adequacy uses the lowest directed daily use; upper-limit checks use the highest. ")
                         + "These are catalog assessments, not a personal dose recommendation."),
                 })
-            if metadata.get("method") == "rda_ul_proxy_until_dietary_intake_table":
+            if metadata.get("method") == "source_qualified_contribution_and_completed_neutral":
                 assessment = {key: metadata.get(key) for key in (
-                    "method", "assessment_basis", "daily_use", "deferred_data_dependency", "reference_assessments",
+                    "method", "assessment_basis", "daily_use", "reference_assessments",
                     "supplemental_window_max_raw", "positive_clinical_benchmark_assessments",
                     "dose_participation_basis", "unbenchmarked_purpose_ingredients",
                 )}
@@ -440,7 +475,7 @@ def attach_pillar_explanations(
                 pillar["explanation"] = {**(pillar.get("explanation") or {}),
                                          "schema_version": PILLAR_EXPLANATION_SCHEMA_VERSION,
                                          "dose_receipt": dose_receipt}
-                facts.extend(_dose_receipt_facts(dose_receipt))
+                facts.extend(_dose_receipt_facts(dose_receipt, (dims.get("dose") or {}).get("metadata") or {}))
             assessments = ((dims.get("dose") or {}).get("metadata") or {}).get("clinical_exposure_assessments") or []
             for index, assessment in enumerate(assessments):
                 if isinstance(assessment, dict) and assessment.get("kind") == "studied_regimen" and assessment.get("notes"):

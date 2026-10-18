@@ -12,9 +12,23 @@ from __future__ import annotations
 import sys
 from pathlib import Path
 
+import pytest
+
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
 from score_supplements_v4 import score_product_v4  # noqa: E402
+
+
+@pytest.mark.parametrize("pct,expected", [(0, 0), (10, .25), (20, .5), (50, .6875),
+                                         (100, 1), (600, 1), (20000, 1)])
+def test_b_complex_uses_shared_nutritional_curve_with_fixed_core_denominator(pct, expected):
+    from scoring_v4.modules.b_complex import _score_dose, B_CORE
+
+    product = _ideal_b_complex()
+    product["rda_ul_data"]["adequacy_results"] = [_rda("Vitamin B12", pct)]
+    dose = _score_dose(product)
+    assert dose["metadata"]["coverage_nutrient_scores"]["vitamin_b12_cobalamin"] == expected
+    assert dose["components"]["b_rda_ai_coverage"] == round(expected * 18 / len(B_CORE), 4)
 
 
 def _row(

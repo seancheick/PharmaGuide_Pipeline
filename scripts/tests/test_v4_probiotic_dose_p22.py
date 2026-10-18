@@ -178,17 +178,17 @@ def test_probiotic_dose_averages_the_measured_strain_assessments() -> None:
 
     # Dose V4.1 section 3.2: the average of the label's strain assessments
     # (excellent 5, good 3.33, good 3.33 on the 0-5 scale), not the strongest.
-    assert payload["score"] == 11.67
+    assert payload["score"] == NEUTRAL_DOSE
     assert payload["max"] == 25.0
-    assert payload["components"] == {"cfu_adequacy": 11.67}
+    assert payload["components"] == {"cfu_adequacy": NEUTRAL_DOSE}
     assert payload["metadata"]["phase"] == "P2.2_probiotic_dose"
-    assert payload["metadata"]["cfu_adequacy_v3_points"] == 3.8889
-    assert payload["metadata"]["cfu_adequacy_scaled_points"] == 11.6667
+    assert payload["metadata"]["cfu_adequacy_v3_points"] == NEUTRAL_V3
+    assert payload["metadata"]["cfu_adequacy_scaled_points"] == NEUTRAL_DOSE
     assert payload["metadata"]["dose_aggregation"] == "strain_average_with_neutral_states"
     assert payload["metadata"]["cfu_adequacy_basis"] == "per_strain_cfu_disclosed"
 
 
-def test_single_excellent_strain_can_reach_full_dose_without_count_bonus() -> None:
+def test_single_excellent_strain_uses_neutral_without_clinical_curve() -> None:
     from scoring_v4.modules.probiotic_dose import score_dose
 
     payload = score_dose(_product(
@@ -201,34 +201,34 @@ def test_single_excellent_strain_can_reach_full_dose_without_count_bonus() -> No
         )],
     ))
 
-    assert payload["score"] == 15.0
-    assert payload["components"] == {"cfu_adequacy": 15.0}
+    assert payload["score"] == NEUTRAL_DOSE
+    assert payload["components"] == {"cfu_adequacy": NEUTRAL_DOSE}
 
 
-def test_at_manufacture_cfu_guarantee_reduces_adequacy_not_disclosure() -> None:
+def test_at_manufacture_cfu_guarantee_is_descriptive() -> None:
     from scoring_v4.modules.probiotic_dose import score_dose
 
     payload = score_dose(_product(guarantee_type="at_manufacture"))
 
     assert _disclosure_points(payload) == 10.0
-    # The guarantee multiplier applies to each measured strain (11.67 x 0.9).
-    assert payload["components"]["cfu_adequacy"] == 10.5
-    assert payload["score"] == 10.5
+    # Guarantee type is retained without multiplying Dose points.
+    assert payload["components"]["cfu_adequacy"] == NEUTRAL_DOSE
+    assert payload["score"] == NEUTRAL_DOSE
     assert payload["metadata"]["cfu_guarantee"]["type"] == "at_manufacture"
-    assert payload["metadata"]["cfu_guarantee"]["multiplier"] == 0.9
-    assert payload["metadata"]["cfu_guarantee"]["applied"] is True
+    assert payload["metadata"]["cfu_guarantee"]["multiplier"] == 1.0
+    assert payload["metadata"]["cfu_guarantee"]["applied"] is False
 
 
-def test_missing_cfu_guarantee_reduces_adequacy_more_than_at_manufacture() -> None:
+def test_missing_cfu_guarantee_does_not_change_neutral_dose() -> None:
     from scoring_v4.modules.probiotic_dose import score_dose
 
     payload = score_dose(_product(guarantee_type=None))
 
     assert _disclosure_points(payload) == 10.0
-    assert payload["components"]["cfu_adequacy"] == 9.92
-    assert payload["score"] == 9.92
+    assert payload["components"]["cfu_adequacy"] == NEUTRAL_DOSE
+    assert payload["score"] == NEUTRAL_DOSE
     assert payload["metadata"]["cfu_guarantee"]["type"] == "unknown"
-    assert payload["metadata"]["cfu_guarantee"]["applied"] is True
+    assert payload["metadata"]["cfu_guarantee"]["applied"] is False
 
 
 def test_aggregate_blend_cfu_is_a_label_limit_not_invented_allocations() -> None:
@@ -378,7 +378,7 @@ def test_probiotic_dose_accepts_final_blob_probiotic_detail_alias() -> None:
 
     payload = score_dose(product)
 
-    assert payload["score"] == 11.67
+    assert payload["score"] == NEUTRAL_DOSE
     assert payload["metadata"]["total_strain_count"] == 3
 
 
@@ -497,13 +497,13 @@ def test_single_strain_has_cfu_boolean_does_not_substitute_for_numeric_disclosur
 @pytest.mark.parametrize(
     ("tier", "support", "expected_points"),
     [
-        ("low", "high", 0.0),
-        ("adequate", "high", 1.6667),
-        ("good", "high", 3.3333),
-        ("excellent", "high", 5.0),
-        ("good", "moderate", 3.3333),
-        ("excellent", "weak", 5.0),
-        ("good", "unknown", 3.3333),
+        ("low", "high", NEUTRAL_V3),
+        ("adequate", "high", NEUTRAL_V3),
+        ("good", "high", NEUTRAL_V3),
+        ("excellent", "high", NEUTRAL_V3),
+        ("good", "moderate", NEUTRAL_V3),
+        ("excellent", "weak", NEUTRAL_V3),
+        ("good", "unknown", NEUTRAL_V3),
     ],
 )
 def test_cfu_potency_tier_is_independent_of_clinical_support(
@@ -521,7 +521,7 @@ def test_cfu_potency_tier_is_independent_of_clinical_support(
     assert payload["strain_contributions"][0]["points"] == pytest.approx(expected_points)
 
 
-def test_cfu_adequacy_caps_v3_five_points_to_v4_fifteen_points() -> None:
+def test_many_excellent_strains_do_not_create_a_clinical_dose_bonus() -> None:
     from scoring_v4.modules.probiotic_dose import score_dose
 
     strains = [
@@ -535,8 +535,8 @@ def test_cfu_adequacy_caps_v3_five_points_to_v4_fifteen_points() -> None:
 
     payload = score_dose(_product(total_strain_count=4, clinical_strains=strains))
 
-    assert payload["metadata"]["cfu_adequacy_v3_points"] == 5.0
-    assert payload["components"]["cfu_adequacy"] == 15.0
+    assert payload["metadata"]["cfu_adequacy_v3_points"] == NEUTRAL_V3
+    assert payload["components"]["cfu_adequacy"] == NEUTRAL_DOSE
 
 
 def test_shared_strain_count_ignores_missing_blank_and_malformed_clinical_ids() -> None:
@@ -589,7 +589,7 @@ def test_score_probiotic_wires_dose_dimension_at_p22() -> None:
     breakdown = score_probiotic(_product()).to_breakdown()
     dose = breakdown["dimensions"]["dose"]
 
-    assert dose["score"] == 11.67
+    assert dose["score"] == NEUTRAL_DOSE
     assert dose["max"] == 25.0
     assert dose["metadata"]["phase"] == "P2.2_probiotic_dose"
     # Module-level phase rolls forward as each P2.x slice lands; per-dimension

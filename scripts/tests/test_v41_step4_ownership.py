@@ -120,7 +120,9 @@ def test_an_offlist_sports_primary_is_the_shared_neutral():
         _row("l_carnitine", 1, "Gram(s)"), _row("branched_chain_amino_acids", 250, "mg"),
         name="Carnitine 1000 + BCAA", primary_type="amino_acid",
     )).to_breakdown()
-    assert breakdown["dimensions"]["dose"]["metadata"]["dose_basis"] == "generic_dose_proxy_for_offlist_primary"
+    metadata = breakdown["dimensions"]["dose"]["metadata"]
+    assert metadata["dose_aggregation"] == "co_primary_average"
+    assert {row["ingredient"] for row in metadata["dose_contributions"]} == {"l_carnitine", "bcaa"}
     assert _assemble("sports", breakdown)["quality_pillars_v4"]["dose"]["score"] == 11.4
 
 
@@ -164,7 +166,7 @@ def test_enricher_dietary_warning_never_prints_a_sugar_amount_it_does_not_have()
 
 
 @pytest.mark.parametrize(("module", "method", "expected"), [
-    ("generic", "rda_ul_proxy_until_dietary_intake_table", "nutrient_amount_unread"),
+    ("generic", "source_qualified_contribution_and_completed_neutral", "nutrient_amount_unread"),
     ("generic", "immune_support_daily_dose_v1", "nutrient_amount_unread"),
     ("generic", "botanical_clinical_dose_v1", None),   # the profile never reads the vitamin
     ("generic", "collagen_clinical_dose_v1", None),

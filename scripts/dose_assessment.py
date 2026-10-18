@@ -204,6 +204,13 @@ def _positive_clinical_benchmark_records() -> tuple[Dict[str, Any], ...]:
         if isinstance(record, dict)
         and str(record.get("effect_direction") or "").strip().lower() in _POSITIVE_BENCHMARK_DIRECTIONS
         and (_finite_number(record.get("min_clinical_dose")) or 0) > 0
+        # A studied regimen and positive outcome do not establish a minimum
+        # or interpolation curve. Only explicitly reviewed numerical meaning
+        # is eligible; missing metadata fails closed.
+        and (record.get("reference_semantics") or {}).get("reference_type")
+            in {"supported_minimum", "bounded_window", "supplement_contribution_policy"}
+        and str((record.get("reference_semantics") or {}).get("approval_status") or "").startswith("approved_")
+        and (record.get("reference_semantics") or {}).get("curve") != "completed_no_benchmark_neutral"
     )
 
 

@@ -26,6 +26,52 @@ from scoring_v4.modules import immune_support  # noqa: E402
 DATA_DIR = SCRIPTS_DIR / "data"
 
 
+@pytest.mark.parametrize("active", ["vitamin_c", "vitamin_d3", "zinc", "copper", "selenium"])
+@pytest.mark.parametrize("pct,credit", [(10, .25), (20, .5), (50, .6875), (100, 1), (600, 1)])
+def test_immune_nutrient_purpose_uses_source_rda_curve(active, pct, credit):
+    product = _immune_product()
+    row = next(r for r in product["ingredient_quality_data"]["ingredients_scorable"] if r["canonical_id"] == active)
+    product["rda_ul_data"]["adequacy_results"] = [{
+        "nutrient": row["name"], "canonical_id": active, "pct_rda": pct,
+        "rda_ai": 777, "scoring_eligible": True,
+    }]
+    result = immune_support.score_immune_purpose_dose(product, row)
+    assert result["score"] == pytest.approx(credit * 22)
+    assert result["reference"]["rda_ai"] == 777
+    assert "target_range" not in result
+    # One declared purpose must not be replaced by a whole-formula score.
+    product["ingredient_quality_data"]["ingredients_scorable"] = [row]
+    product["ingredient_quality_data"]["ingredients"] = [row]
+    from scoring_v4.scored_artifact import build_scored_artifact
+    artifact = build_scored_artifact(product)
+    assert artifact["quality_score_status"] == "scored"
+    assert artifact["quality_pillars_v4"]["dose"]["score"] == round(credit * 20, 1)
+
+
+@pytest.mark.parametrize("active", ["beta_glucan", "quercetin", "elderberry"])
+@pytest.mark.parametrize("quantity", [1, 250, 1000, 5000])
+def test_immune_non_nutrient_purpose_has_no_general_dose_curve(active, quantity):
+    from scoring_v4.modules.generic_helpers import unbenchmarked_dose_credit
+
+    product = _immune_product()
+    row = next(r for r in product["ingredient_quality_data"]["ingredients_scorable"] if r["canonical_id"] == active)
+    row["quantity"] = quantity
+    result = immune_support.score_immune_purpose_dose(product, row)
+    assert result["score"] == unbenchmarked_dose_credit()
+    assert result["band"] == "disclosed_no_reference"
+
+
+def test_immune_nutrient_does_not_invent_an_rda_from_disclosed_mass():
+    product = _immune_product()
+    row = product["ingredient_quality_data"]["ingredients_scorable"][0]
+    product["rda_ul_data"]["adequacy_results"] = []
+    assert immune_support.score_immune_purpose_dose(product, row) is None
+    product["rda_ul_data"]["adequacy_results"] = [{
+        "canonical_id": "vitamin_c", "nutrient": "Vitamin C", "pct_rda": 100,
+        "scoring_eligible": False}]
+    assert immune_support.score_immune_purpose_dose(product, row) is None
+
+
 def _row(
     name: str,
     canonical_id: str,
@@ -131,7 +177,8 @@ def _immune_product(*, high_zinc: bool = False, gummy: bool = False) -> Dict[str
         },
         "rda_ul_data": {
             "safety_flags": (
-                [{"nutrient": "Zinc", "pct_ul": 125.0, "flag": "OVER_UL_Zinc"}]
+                [{"nutrient": "Zinc", "canonical_id": "zinc", "pct_ul": 125.0,
+                  "ul": 40.0, "unit": "mg", "ul_gate_eligible": True, "flag": "OVER_UL_Zinc"}]
                 if high_zinc
                 else []
             ),
@@ -192,14 +239,12 @@ def _botanical_stack_with_duplicate_rows() -> Dict[str, Any]:
     return product
 
 
-def test_clean_daily_immune_formula_reaches_realistic_high_80s() -> None:
+def test_daily_immune_formula_uses_nutritional_and_completed_neutral_purposes() -> None:
     out = score_product_v4(_immune_product())
 
     assert out["v4_module"] == "generic"
-    # 96 ceiling since quality_score 1.3.0: the fixture carries a verified registry cert,
-    # so verification is product-level (15/15).
-    assert 86.0 <= out["quality_score_v4_100"] <= 96.0
-    assert out["quality_pillars_v4"]["dose"]["score"] >= 17.0
+    # Five nutrient purposes meet their RDA; three non-nutrients use .57 neutral.
+    assert out["quality_pillars_v4"]["dose"]["score"] == 16.8
     assert out["quality_pillars_v4"]["formulation"]["score"] >= 16.0
     immune_meta = out["v4_breakdown"]["module"]["dimensions"]["formulation"][
         "metadata"
@@ -222,9 +267,9 @@ def test_gummy_high_zinc_immune_formula_not_benchmark_clean() -> None:
         item for item in dose["metadata"]["specialized_purpose_assessments"]
         if item.get("active") == "zinc"
     )
-    # Dose V4.1 D1: keep the existing range-fit half credit; confirmed excess
-    # belongs to the one product-level ceiling after purpose aggregation.
-    assert zinc["score"] == 11.0
+    # Nutritional adequacy plateaus; confirmed excess is the final ceiling's.
+    assert zinc["score"] == 22.0
+    assert pillars["dose"]["score"] == 10.0
 
 
 def test_high_zinc_changes_dose_not_formulation_quality() -> None:
@@ -274,30 +319,34 @@ def _with_dose(canonical_id: str, amount: float, unit: str | None = None) -> Dic
     return product
 
 
-# (canonical_id, component, low, high, points): below low is linear, the band
-# edges earn full points, anything above the band earns half.
-_DOSE_BANDS = [
-    ("vitamin_c", "vitamin_c_daily_range", 100.0, 1000.0, 3.0),
-    ("vitamin_d3", "vitamin_d_daily_range", 15.0, 50.0, 3.0),
-    ("zinc", "zinc_daily_range", 8.0, 25.0, 3.0),
-    ("copper", "copper_balance", 0.5, 2.0, 1.5),
-    ("selenium", "selenium_daily_range", 45.0, 200.0, 1.5),
-    ("beta_glucan", "beta_glucan_disclosed", 100.0, 250.0, 3.0),
-    ("quercetin", "quercetin_disclosed", 250.0, 1000.0, 2.5),
-    ("elderberry", "elderberry_disclosed", 100.0, 600.0, 2.5),
-]
+@pytest.mark.parametrize("canonical_id,component,points", [
+    ("vitamin_c", "vitamin_c_daily_range", 3),
+    ("vitamin_d3", "vitamin_d_daily_range", 3),
+    ("zinc", "zinc_daily_range", 3),
+    ("copper", "copper_balance", 1.5),
+    ("selenium", "selenium_daily_range", 1.5),
+])
+def test_immune_formula_nutrients_follow_source_rda_with_existing_budgets(canonical_id, component, points):
+    product = _immune_product()
+    for pct, fraction in [(10, .25), (20, .5), (50, .6875), (100, 1), (1000, 1)]:
+        product["rda_ul_data"]["adequacy_results"] = [{
+            "canonical_id": canonical_id, "pct_rda": pct, "scoring_eligible": True}]
+        dose = immune_support.score_immune_support_dose(product)
+        assert dose["components"][component] == round(points * fraction, 4)
 
 
-@pytest.mark.parametrize(("canonical_id", "component", "low", "high", "points"), _DOSE_BANDS)
-def test_immune_dose_band_edges(canonical_id, component, low, high, points) -> None:
-    def credit(amount: float) -> float:
+@pytest.mark.parametrize("canonical_id,component,points", [
+    ("beta_glucan", "beta_glucan_disclosed", 3),
+    ("quercetin", "quercetin_disclosed", 2.5),
+    ("elderberry", "elderberry_disclosed", 2.5),
+])
+def test_immune_formula_botanicals_keep_completed_neutral_within_component_budget(canonical_id, component, points):
+    from scoring_v4.modules.generic_helpers import unbenchmarked_dose_credit
+    from scoring_v4.modules.generic_dose import CAP_SUPPLEMENTAL_WINDOW
+
+    for amount in (1, 250, 1000, 10000):
         dose = immune_support.score_immune_support_dose(_with_dose(canonical_id, amount))
-        return dose["components"][component]
-
-    assert credit(low / 2) == points / 2
-    assert credit(low) == points
-    assert credit(high) == points
-    assert credit(high * 1.25) == points / 2
+        assert dose["components"][component] == round(points * unbenchmarked_dose_credit() / CAP_SUPPLEMENTAL_WINDOW, 4)
 
 
 @pytest.mark.parametrize(
@@ -324,25 +373,25 @@ def test_immune_high_dose_thresholds_are_strictly_greater(canonical_id, amount, 
     assert formulation["metadata"]["high_zinc"] is (flag == "high_zinc")
 
 
-def test_immune_all_bands_full_lands_exactly_on_dose_cap() -> None:
+def test_immune_full_nutrient_formula_preserves_neutral_non_nutrient_shares() -> None:
     dose = immune_support.score_immune_support_dose(_immune_product())
 
-    assert sum(dose["components"].values()) == 22.0
-    assert dose["score"] == 22.0 and isinstance(dose["score"], float)
+    # 12 nutrient points + 8 non-nutrient points at .57 + existing 2-point compatibility component.
+    assert sum(dose["components"].values()) == 18.56
+    assert dose["score"] == 18.56 and isinstance(dose["score"], float)
 
 
 def test_immune_dose_reads_every_magnitude_from_config(monkeypatch) -> None:
     # A literal left beside a matching constant passes the drift guard; this does not.
     product = _immune_product()
     with monkeypatch.context() as m:
-        m.setitem(immune_support.IMMUNE_DOSE_BANDS, "vitamin_c_mg", {"low": 600.0, "high": 900.0, "points": 4.0})
-        m.setitem(immune_support.IMMUNE_DOSE_BANDS, "copper_mg", {"low": 0.1, "high": 0.5, "points": 2.0})
-        m.setattr(immune_support, "IMMUNE_DOSE_ABOVE_BAND_FRACTION", 0.25)
+        m.setitem(immune_support.IMMUNE_DOSE_BANDS, "vitamin_c_mg", {"points": 4.0})
+        m.setitem(immune_support.IMMUNE_DOSE_BANDS, "copper_mg", {"points": 2.0})
         m.setattr(immune_support, "IMMUNE_DAILY_USE_DISCIPLINE_POINTS", 1.0)
         m.setattr(immune_support, "IMMUNE_DOSE_CAP", 5.0)
         dose = immune_support.score_immune_support_dose(product)
-        assert dose["components"]["vitamin_c_daily_range"] == round(500 / 600 * 4.0, 4)
-        assert dose["components"]["copper_balance"] == 0.5
+        assert dose["components"]["vitamin_c_daily_range"] == 4.0
+        assert dose["components"]["copper_balance"] == 2.0
         assert dose["components"]["daily_use_discipline"] == 1.0
         assert dose["score"] == 5.0
     with monkeypatch.context() as m:

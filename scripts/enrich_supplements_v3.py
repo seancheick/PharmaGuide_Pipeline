@@ -151,7 +151,7 @@ from proprietary_blend_detector import ProprietaryBlendDetector, disclosure_tier
 
 # One direct child row of a raw label row: "<parent>.nestedRows[3]".
 _RAW_CHILD_ROW = re.compile(r"\.nestedRows\[\d+\]")
-from rda_ul_calculator import RDAULCalculator, ul_display_severity, ul_exceedance_sentence
+from rda_ul_calculator import RDAULCalculator, label_population_members, ul_display_severity, ul_exceedance_sentence
 from reference_data_contract import reference_stamp
 from collagen_taxonomy import classify_collagen_subtype_strict, UNSPECIFIED as _COLLAGEN_UNSPECIFIED
 import normalization as norm_module  # Single-source normalization
@@ -199,20 +199,6 @@ _RDA_REFERENCE_PROFILE = {
     # across the label population; see rda_ul_calculator.UL_SCREENING_POPULATIONS.
     "ul_basis": "lowest_established_ul_across_label_population",
 }
-
-# DSLD target groups that state a narrower population. DSLD files its generic
-# adult category ("Adult (18 - 50 Years)" and the male/female variants) on
-# most labels (12,102 of 15,426 stored inputs carry it alone), so those tags
-# do not narrow the general adult screen.
-# Checked in order per tag: a negated life stage ("Women (not pregnant or
-# lactating)", 959 stored labels) is an ordinary adult, never that stage.
-_UL_POPULATION_TAGS = (
-    ("general_adult", ("not pregnant", "not lactating")),
-    ("pregnancy_lactation", ("pregnant", "lactating")),
-    ("adults_51_plus", ("seniors/mature (>50",)),
-    ("pediatric", ("child", "infant", "boys", "girls")),
-    ("general_adult", ("adult (18 - 50", "adult male (18", "adult female (18", "menopause")),
-)
 
 # FDA/NIH labeling basis: 1,000 mcg synthetic folic acid is the adult UL;
 # current Supplement Facts labels express its equivalent as 1,700 mcg DFE.
@@ -21715,23 +21701,7 @@ class SupplementEnricherV3:
         Plan section 2.5: the lowest UL across the whole stated population, so
         a label naming two populations screens against the rows of both.
         """
-        found = set()
-        for group in product.get("targetGroups") or []:
-            text = group if isinstance(group, str) else (
-                (group.get("text") or group.get("name") or "") if isinstance(group, dict) else "")
-            tag = str(text).strip().lower()
-            population = next((population for population, needles in _UL_POPULATION_TAGS
-                               if any(needle in tag for needle in needles)), None)
-            # An explicit 19-50 restriction reaches its existing UL owner. The
-            # broad DSLD 18-50 category remains general adult. Life-stage tags
-            # retain precedence; negated pregnancy/lactation is ordinary adult.
-            if population in {None, "general_adult"} and re.search(
-                r"(?<![\d-])19\s*[-–—]\s*50(?!\d)", tag
-            ):
-                population = "adults_19_50"
-            if population:
-                found.add(population)
-        return tuple(sorted(found or {"general_adult"}))
+        return label_population_members(product)
 
     @staticmethod
     def _ul_screening_pediatric_age_groups(product: Dict) -> Optional[Tuple[str, ...]]:

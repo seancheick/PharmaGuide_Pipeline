@@ -16,7 +16,8 @@ def test_trial_exposures_are_not_unverified_safety_ceilings(id):
 
 def test_biocell_daily_dose_counts_both_administrations():
     row=rows('rda_therapeutic_dosing.json','therapeutic_dosing')['biocell_collagen']
-    assert collagen_profile._range_mg(row)==(1000,2000)
+    assert row['typical_dosing_range'] == '1000-2000'
+    assert row['reference_semantics']['curve'] == 'completed_no_benchmark_neutral'
     assert '500 mg validated for skin' not in row['upper_limit_notes']
 
 @pytest.mark.parametrize('id',['curcumin_absorption','magnesium_nervous_system','joint_inflammation','eye_health','bone_health','thyroid_support','urinary_tract_health','kidney_health_support','omega3_niacin_lipid'])
@@ -36,6 +37,7 @@ def test_synergy_sources_represent_actual_design_and_result():
 def test_study_preparation_does_not_become_generic_botanical_dose():
     r=rows('rda_therapeutic_dosing.json','therapeutic_dosing')
     for id in ['valerian_root','phosphatidylserine','reishi_mushroom_extract','passionflower','sage','saffron']:
-        assert botanical_profile._range_mg(r[id]) is None
+        assert r[id]['typical_dosing_range'] == ''
+        assert r[id]['reference_semantics']['curve'] == 'completed_no_benchmark_neutral'
     assert r['l_theanine']['typical_dosing_range']=='100.6'
     assert 'Suntheanine' in r['l_theanine']['upper_limit_notes']

@@ -198,23 +198,10 @@ def _pct_values(row: Dict[str, Any]) -> tuple[Optional[float], Optional[float]]:
 
 
 def _coverage_credit(key: str, pct_rda: Optional[float], pct_ul: Optional[float]) -> Optional[float]:
-    # Adequacy only: an upper-limit exceedance is the product-level Dose
-    # ceiling's (Dose V4.1 §2.4); pct_ul still marks a UL-free B vitamin below.
-    if pct_rda is None:
-        return None
-    if pct_rda <= 0:
-        return 0.0
-    if pct_rda < 25.0:
-        return pct_rda / 50.0
-    if pct_rda < 50.0:
-        return 0.5 + ((pct_rda - 25.0) / 25.0) * 0.35
-    if pct_rda <= 300.0:
-        return 1.0
-    if key in {"vitamin_b12_cobalamin", "vitamin_b7_biotin"} and pct_ul is None:
-        return 0.95
-    if pct_rda <= 1000.0:
-        return 0.9
-    return 0.75
+    # Safety remains the single product-level Dose ceiling.
+    from scoring_v4.modules.generic_dose import nutritional_unit_credit
+
+    return nutritional_unit_credit(pct_rda)
 
 
 def _coverage_scores(product: Dict[str, Any]) -> Dict[str, float]:
@@ -254,7 +241,7 @@ def _score_dose(product: Dict[str, Any]) -> Dict[str, Any]:
         "penalties": {},
         "metadata": {
             "phase": PHASE_MARKER,
-            "method": "b_complex_rda_ai_moderate_dose_window",
+            "method": "b_complex_rda_ai_coverage",
             "coverage_nutrient_count": len(coverage),
             "coverage_nutrient_scores": dict(sorted(coverage.items())),
             "B7_safety_evaluation": b7_evaluation.audit_metadata(),

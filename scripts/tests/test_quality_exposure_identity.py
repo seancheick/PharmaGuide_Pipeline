@@ -199,8 +199,10 @@ def test_raw_nested_fiber_operator_survives_cleaner_enricher_exposure():
     assert exposure.minimum == 0 and exposure.maximum == 3
     assert not exposure.exact
     scored = fiber_dose(value | {"fullName": "Fiber"})
-    # "<1 g" three times a day is scored on its stated 3 g, as main scored it.
-    assert scored["components"]["fiber_effective_dose"] == 13.0
+    # The qualified exposure stays 0–3 g/day; the retired fiber-mass curve
+    # cannot turn its upper bound into an efficacy threshold.
+    from scoring_v4.modules.generic_helpers import unbenchmarked_dose_credit
+    assert scored["components"]["fiber_effective_dose"] == unbenchmarked_dose_credit()
     assert scored["metadata"]["exposure_uncertainty"] == "quantity_qualified"
 
 
@@ -307,20 +309,18 @@ def _directions(value, text, low, high):
 
 
 
-def test_creatine_loading_peak_is_a_loading_protocol_not_an_overdose():
-    # DSLD 77130 prints 1-4 scoops a day because days 1-5 load at 4 scoops.
-    loading = _directions(product([row("creatine", 5)]), "Loading Phase: Day 1 through 5: 4 scoops daily. Then 1 scoop daily.", 1, 4)
-    result = sports_dose(loading)
-    assert result["metadata"]["dose_basis"] == "creatine_loading_protocol_up_to_20_g"
-    # Without loading directions, 20 g/day stays the no-protocol band.
-    plain = _directions(product([row("creatine", 5)]), "Take 1 scoop up to four times a day.", 1, 4)
-    assert sports_dose(plain)["metadata"]["dose_basis"] == "creatine_above_10_g_no_loading_protocol"
-    # Dose V4.1 section 3.3 (D3): creatine above 10 g plateaus, so the regimen
-    # distinction is recorded in the basis, not in points.
-    assert result["score"] == sports_dose(plain)["score"]
-    # Loading wording does not make any amount a protocol: 40 g/day stays high-dose.
-    heavy = _directions(product([row("creatine", 10)]), "Loading Phase: Day 1 through 5: 4 scoops daily. Then 1 scoop daily.", 1, 4)
-    assert sports_dose(heavy)["metadata"]["dose_basis"] == "creatine_above_10_g_no_loading_protocol"
+def test_creatine_loading_peak_preserves_directions_without_extra_dose_credit():
+    loading = _directions(product([row("creatine_monohydrate", 5)]),
+                          "Loading Phase: Day 1 through 5: 4 scoops daily. Then 1 scoop daily.", 1, 4)
+    plain = _directions(product([row("creatine_monohydrate", 5)]),
+                        "Take 1 scoop up to four times a day.", 1, 4)
+    assert sports_dose(loading)["metadata"]["dose_basis"] == "creatine_contribution_policy"
+    assert sports_dose(plain)["metadata"]["dose_basis"] == "creatine_contribution_policy"
+    assert sports_dose(loading)["score"] == sports_dose(plain)["score"] == 20
+    assert loading["statements"][0]["notes"].startswith("Loading Phase")
+    heavy = _directions(product([row("creatine_monohydrate", 10)]),
+                        "Loading Phase: Day 1 through 5: 4 scoops daily. Then 1 scoop daily.", 1, 4)
+    assert sports_dose(heavy)["score"] == 20
 
 
 # Wording of the seven real creatine labels (77130, 306203, 307782-307784,
@@ -348,8 +348,8 @@ def test_contingent_directions_are_not_loading(text):
     from serving_frequency import has_loading_protocol
     record = {"statements": [{"type": "Suggested/Recommended/Usage/Directions", "notes": text}]}
     assert not has_loading_protocol(record)
-    loading = _directions(product([row("creatine", 5)]), text, 1, 4)
-    assert sports_dose(loading)["metadata"]["dose_basis"] == "creatine_above_10_g_no_loading_protocol"
+    loading = _directions(product([row("creatine_monohydrate", 5)]), text, 1, 4)
+    assert sports_dose(loading)["metadata"]["dose_basis"] == "creatine_contribution_policy"
 
 
 def test_reviewed_fiber_identities_added_in_task2():

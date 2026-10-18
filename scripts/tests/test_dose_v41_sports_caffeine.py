@@ -15,20 +15,20 @@ def _primary(product):
 
 @pytest.mark.parametrize("canonical,amount,unit,name", [
     ("whey_protein", 50, "Gram(s)", "Whey Protein"),
-    ("creatine_monohydrate", 15, "Gram(s)", "Creatine"),
+    ("creatine_monohydrate", 15, "Gram(s)", "Creatine Monohydrate"),
     ("beta_alanine", 8, "Gram(s)", "Beta-Alanine"),
-    ("hmb", 8, "Gram(s)", "HMB"),
+    ("hmb", 8, "Gram(s)", "HMB-Ca"),
 ])
 def test_above_former_studied_ranges_plateau(canonical, amount, unit, name):
     primary_type = "protein_powder" if canonical == "whey_protein" else "amino_acid"
-    rows = [_row(canonical, amount, unit)]
+    rows = [_row(canonical, amount, unit, name=name)]
     if canonical == "whey_protein":
         rows.append(_declared_protein_row(amount))
     assert _primary(_product(*rows, name=name, primary_type=primary_type)) == 20.0
 
 
 def test_caffeine_above_400_keeps_its_per_use_adequacy():
-    assert _primary(_product(_row("caffeine", 450, "mg"), name="Caffeine", primary_type="pre_workout")) == 18.0
+    assert _primary(_product(_row("caffeine", 450, "mg"), name="Caffeine", primary_type="pre_workout")) == 20.0
 
 
 def _caffeine(per_serving, servings=1, extra=()):
@@ -76,17 +76,17 @@ def test_two_co_primaries_average_instead_of_the_strongest():
                        name="Creatine + Beta-Alanine", primary_type="pre_workout")
     payload = score_dose(product)
     assert payload["metadata"]["dose_aggregation"] == "co_primary_average"
-    assert payload["components"]["sports_primary_active_dose"] == 14.0  # (20 + 8) / 2
+    assert payload["components"]["sports_primary_active_dose"] == 12.5  # (20 + 5) / 2
 
 
 def test_one_co_primary_is_scored_on_its_own_benchmark_not_an_accessory():
-    # 10 g protein is the primary (8); a 1 g taurine accessory (20) cannot stand in.
+    # 10 g actual protein is the primary (10); a taurine accessory cannot stand in.
     product = _product(_row("whey_protein", 12, "Gram(s)"), _declared_protein_row(10), _row("taurine", 1, "Gram(s)"),
                        name="Protein Shake", primary_type="protein_powder")
     payload = score_dose(product)
     assert payload["metadata"]["dose_aggregation"] == "single_primary"
     assert payload["metadata"]["primary_identity"] == "protein"
-    assert payload["components"]["sports_primary_active_dose"] == 8.0
+    assert payload["components"]["sports_primary_active_dose"] == 10.0
 
 
 def test_caffeine_that_is_not_a_primary_still_reaches_the_ceiling_on_the_generic_route():
@@ -163,7 +163,7 @@ def test_upper_bound_caffeine_does_not_claim_exact_six_hundred_or_minimum_excess
                        name="Caffeine", primary_type="pre_workout")
     artifact = build_scored_artifact(product)
     dose = artifact["quality_pillars_v4"]["dose"]
-    assert dose["score"] == 18
+    assert dose["score"] == 20
     assert "label provides 600 mg" not in dose["reason"]
     assert artifact["dose_safety_evaluation"]["state_counts"]["material_but_unresolved"] == 1
 
@@ -246,3 +246,111 @@ def test_uncounted_raw_caffeine_source_cannot_erase_its_counted_projection():
     result = evaluate_dose_safety(product)
     assert result.caffeine["total_mg_day_max"] == 600
     assert result.dose_ceiling()["cap_public"] == 0
+
+
+@pytest.mark.parametrize('canonical,amount,unit,name,expected', [
+    ('creatine_monohydrate', 2, 'g', 'Creatine Monohydrate', 13.3),
+    ('creatine_monohydrate', 20, 'g', 'Creatine Monohydrate', 20),
+    ('beta_alanine', 2, 'g', 'Beta-Alanine', 10),
+    ('hmb', 2, 'g', 'HMB Calcium Salt (HMB-Ca)', 13.3),
+    ('hmb', 2, 'g', 'HMB Free Acid (HMB-FA)', 13.3),
+    ('caffeine', 100, 'mg', 'Caffeine', 10),
+    ('caffeine', 200, 'mg', 'Caffeine', 20),
+])
+def test_approved_sports_contributions_through_public_scorer(canonical, amount, unit, name, expected):
+    product = _product(_row(canonical, amount, unit, name=name), name=name, primary_type='pre_workout')
+    assert build_scored_artifact(product)['quality_pillars_v4']['dose']['score'] == expected
+
+
+@pytest.mark.parametrize('source,expected', [('whey_protein', 10), ('casein', 10), ('pea_protein', 11.4)])
+def test_actual_facts_protein_requires_applicable_source(source, expected):
+    product = _product(_row(source, 30, 'g'), _declared_protein_row(10),
+                       name='Protein Shake', primary_type='protein_powder')
+    assert build_scored_artifact(product)['quality_pillars_v4']['dose']['score'] == expected
+
+
+@pytest.mark.parametrize('canonical,name,form', [
+    ('creatine_hcl', 'Creatine Hydrochloride', None),
+    ('creatine_monohydrate', 'Creatine Hydrochloride', 'creatine hydrochloride'),
+    ('creatine_monohydrate', 'Creatine', 'creatine monohydrate ((unspecified))'),
+    ('hmb', 'HMB', None),
+])
+def test_unqualified_preparations_do_not_inherit_approved_targets(canonical, name, form):
+    row = _row(canonical, 3, 'g', name=name)
+    if form:
+        row['matched_form'] = form
+    artifact = build_scored_artifact(_product(row, name=name, primary_type='pre_workout'))
+    assert artifact['quality_pillars_v4']['dose']['score'] == 11.4
+
+
+@pytest.mark.parametrize('canonical,name,unit', [
+    ('l_citrulline', 'L-Citrulline', 'g'),
+    ('l_citrulline', 'Citrulline Malate', 'g'),
+    ('alpha_gpc', 'Alpha GPC', 'mg'),
+    ('atp', 'PEAK ATP', 'mg'),
+    ('betaine', 'Betaine Anhydrous', 'g'),
+    ('taurine', 'Taurine', 'g'),
+    ('branched_chain_amino_acids', 'BCAA', 'g'),
+])
+@pytest.mark.parametrize('amount', [0.1, 10])
+def test_reviewed_descriptive_sports_regimens_are_completed_neutral(canonical, name, unit, amount):
+    product = _product(_row(canonical, amount, unit, name=name), name=name, primary_type='pre_workout')
+    artifact = build_scored_artifact(product)
+    assert artifact['quality_pillars_v4']['dose']['score'] == 11.4
+    assert artifact.get('assessment_status') != 'partial'
+
+
+def test_missing_sports_amount_cannot_complete_a_reviewed_neutral_assessment():
+    product = _product(_row('taurine', None, 'g'), name='Taurine', primary_type='pre_workout')
+    artifact = build_scored_artifact(product)
+    dim = artifact['_v4_module_breakdown']['dimensions']['dose']
+    assert dim['score'] is None
+    assert dim['metadata']['assessment_status'] == 'incomplete'
+
+
+def test_approved_sports_targets_keep_minimum_daily_and_per_use_separate():
+    daily = _product(_row('beta_alanine', 1, 'g'), name='Beta-Alanine', primary_type='pre_workout')
+    daily['servingSizes'][0].update(minDailyServings=2, maxDailyServings=8)
+    acute = _caffeine(100, 3)
+    assert build_scored_artifact(daily)['quality_pillars_v4']['dose']['score'] == 10
+    assert build_scored_artifact(acute)['quality_pillars_v4']['dose']['score'] == 10
+
+
+def test_approved_co_primary_average_includes_completed_neutral():
+    product = _product(_row('creatine_monohydrate', 3, 'g'), _row('taurine', 3, 'g'),
+                       name='Creatine + Taurine', primary_type='pre_workout')
+    artifact = build_scored_artifact(product)
+    assert artifact['quality_pillars_v4']['dose']['score'] == 15.7
+
+
+@pytest.mark.parametrize('declared_total', [False, True])
+def test_caffeine_per_use_target_sums_sources_and_counts_a_total_once(declared_total):
+    sources = [_row('caffeine', 100, 'mg', name='Caffeine from Coffee'),
+               _row('caffeine_anhydrous', 100, 'mg')]
+    if declared_total:
+        sources.append({**_row('caffeine', 200, 'mg', name='Total Caffeine'),
+                        'is_parent_total': True, 'raw_source_path': 'activeIngredients[total]'})
+    product = _product(*sources, name='Caffeine', primary_type='pre_workout')
+    product['servingSizes'][0].update(minDailyServings=1, maxDailyServings=2)
+    artifact = build_scored_artifact(product)
+    assert artifact['quality_pillars_v4']['dose']['score'] == 20
+    assert artifact['dose_safety_evaluation']['caffeine']['total_mg_day_max'] == 400
+    contribution = artifact['_v4_module_breakdown']['dimensions']['dose']['metadata']['dose_contributions'][0]
+    assert contribution['amount_per_serving'] == 200
+    assert contribution['amount_at_minimum'] == 200 and contribution['amount_at_maximum'] == 400
+
+
+def test_a_lost_eaa_component_amount_cannot_become_completed_neutral():
+    from scoring_v4.modules.sports_helpers import EAA_CANONICALS
+    rows = [_row(key, None if key == 'l_histidine' else 1, 'g') for key in sorted(EAA_CANONICALS)]
+    product = _product(*rows, name='Essential Amino Acids', primary_type='amino_acid')
+    dim = build_scored_artifact(product)['_v4_module_breakdown']['dimensions']['dose']
+    assert dim['score'] is None
+    assert dim['metadata']['assessment_status'] == 'incomplete'
+
+
+def test_a_named_alternate_creatine_form_cannot_borrow_a_monohydrate_form_match():
+    row = {**_row('creatine_monohydrate', 3, 'g', name='Creatine Hydrochloride'),
+           'matched_form': 'creatine monohydrate'}
+    artifact = build_scored_artifact(_product(row, name='Creatine Hydrochloride', primary_type='pre_workout'))
+    assert artifact['quality_pillars_v4']['dose']['score'] == 11.4

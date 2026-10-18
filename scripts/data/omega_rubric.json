@@ -1,16 +1,16 @@
 {
   "_metadata": {
     "schema_version": "1.0.0",
-    "version": "2.3.0-dose-v41-references",
-    "description": "P1.6 omega/fish-oil rubric. Reviewed purpose evidence is resolved from INGR_OMEGA3 through evidence_resolver against the shared directed daily-exposure interval; the 250 mg Evidence floor and prenatal additive bonus are retired. Dose scores both interval endpoints. Molecular-form quality comes only from IQM. Optional free-from and dietary-preference claims are validated but earn no Transparency points.",
+    "version": "2.3.1-dose-v41-references",
+    "description": "Purpose-qualified omega Dose contribution scoring; daily exposure context labels never award points. Child/baby general Dose is completed neutral. Evidence and IQM form quality retain their existing owners.",
     "purpose": "scoring_v4_omega_module_rubric",
-    "last_updated": "2026-10-17",
+    "last_updated": "2026-10-18",
     "owners": [
       "Claude",
       "Codex",
       "Sean"
     ],
-    "notes": "Config-driven per Codex's P1.5 omega-debt plan + Sean's 2026-05-20 instruction. Every weight here must be referenced by code AND locked by tests (no untested policy blob). Backed by scoring_config.section_A_ingredient_quality.omega3_dose_bonus for the dose-band heritage. Purpose-fit calibration 2026-06-07 adds low-dose EPA/DHA bands below EFSA AI (100 and 200 mg/day) to remove the zero-credit cliff while preserving zero for trace-dose products."
+    "notes": "October18 source review retired generic pediatric numerical bands; preserves descriptive exposure context and prescription flag without recreating a clinical curve."
   },
   "phase": "P1.6.0_skeleton",
   "dimension_caps": {
@@ -75,77 +75,69 @@
     }
   },
   "dose": {
-    "_doc": "EPA+DHA per-day dose adequacy bands (lifted and rescaled from scoring_config.section_A_ingredient_quality.omega3_dose_bonus.bands). Band cap /20. 1.2.0 (2026-09-14): the +5 EPA:DHA 1:3..3:1 ratio bonus was removed -- no clinical optimum ratio is established for a generic omega product; per-serving EPA and DHA stay in dose metadata for indication-specific logic.",
+    "_doc": "Purpose-qualified contribution scoring uses adequacy_references; epa_dha_bands carry descriptive exposure labels and prescription context only, never Dose points. Child/baby general Dose is completed neutral.",
     "epa_dha_bands": [
       {
         "min_mg_day": 4000,
-        "score": 20,
         "label": "prescription_dose",
         "flag": "PRESCRIPTION_DOSE_OMEGA3",
         "_source": "AHA science advisory dose for prescription omega-3 in hypertriglyceridemia (4 g/day). Indication-specific therapy, not a supplement-quality target: this band carries the context flag and no extra credit"
       },
       {
         "min_mg_day": 2000,
-        "score": 20,
         "label": "high_clinical",
         "_source": "EFSA approved health claim for blood triglycerides: >= 2 g/day. Full dose credit at 2 g/day: a genuine high-clinical consumer dose, no longer gated behind the prescription-level 4000 mg band (purpose-fit calibration 2026-06-05). The 4000 mg band gives no extra credit but keeps its PRESCRIPTION_DOSE_OMEGA3 context flag"
       },
       {
         "min_mg_day": 1000,
-        "score": 16.0,
         "label": "aha_cvd",
         "_source": "AHA recommendation for CVD patients: ~1 g/day EPA+DHA"
       },
       {
         "min_mg_day": 500,
-        "score": 10.0,
         "label": "general_health",
-        "_source": "PharmaGuide calibration point between the 250 mg/day reference intake and the ~1 g/day cardiovascular intake. NOT an FDA threshold: FDA's omega-3 qualified health claim condition is 0.8 g EPA+DHA per serving, and a qualified-claim condition is a labeling requirement, not an optimal-dose recommendation. Corrected 2026-09-18; the earlier 'FDA qualified health claim minimum' citation was wrong"
+        "_source": "Historical descriptive exposure label; retired as a numerical Dose anchor. No clinical target or minimum is established by this label."
       },
       {
         "min_mg_day": 250,
-        "score": 5.0,
         "label": "efsa_ai_zone",
         "_source": "EFSA adequate intake for EPA+DHA, 250 mg/day for adults (2010 dietary reference values opinion); 250 mg/day is also the intake condition for the EU/GB 'contributes to the normal function of the heart' claim"
       },
       {
         "min_mg_day": 200,
-        "score": 4.0,
         "label": "near_efsa_ai",
-        "_source": "Purpose-fit calibration 2026-06-07: disclosed EPA/DHA just below the 250 mg EFSA adequate-intake threshold is not equivalent to no EPA/DHA; awards small partial dose credit while keeping full AI credit at 250 mg."
+        "_source": "Historical descriptive exposure label; retired as a numerical Dose anchor. No clinical target or minimum is established by this label."
       },
       {
         "min_mg_day": 100,
-        "score": 2.5,
         "label": "low_disclosed_epa_dha",
-        "_source": "Purpose-fit calibration 2026-06-07: 100-199 mg/day disclosed EPA/DHA earns minimal partial dose credit; <100 mg/day remains zero to avoid inflating gummies/trace omega products."
+        "_source": "Historical descriptive exposure label; retired as a numerical Dose anchor. No clinical target or minimum is established by this label."
       },
       {
         "min_mg_day": 0,
-        "score": 0.0,
         "label": "below_efsa_ai"
       }
     ],
     "epa_dha_band_cap": 20,
     "epa_dha_band_semantics": {
-      "review_date": "2026-10-17",
-      "reference_type": "nutritional_reference",
+      "review_date": "2026-10-18",
+      "reference_type": "no_benchmark",
       "scope": "child_or_baby_omega",
       "preparation": "epa_plus_dha",
       "purpose": "general_nutrition",
       "population": "pediatric",
       "exposure_basis": "minimum_directed_daily_use",
       "units": "mg",
-      "curve": "interpolated_epa_dha_bands",
+      "curve": "completed_no_benchmark_neutral",
       "source_ids": [
         "https://www.efsa.europa.eu/en/efsajournal/pub/1461"
       ],
-      "rationale": "Child/baby products keep their existing EPA+DHA bands (plan section 3.1: pediatric standards keep their own references); the bands' own _source notes cite each anchor.",
+      "rationale": "Adult EFSA, cardiovascular and prescription references do not establish a universal child/baby EPA+DHA curve. Retain source context descriptively; existing PharmaGuide completed-neutral policy applies without a new infant target.",
       "owner": "scripts/scoring_v4/modules/omega_dose.py::score_dose",
-      "approval_status": "current_production_omega_rubric_2.2.0"
+      "approval_status": "approved_existing_neutral_2026_10_18"
     },
     "adequacy_references": {
-      "_doc": "Dose V4.1 §3.1 (Sean, 2026-10-17): EPA+DHA adequacy is 20 x min(amount at minimum directed daily use / reference, 1). The purpose comes from evidence_resolver.resolve_omega_evidence_standard: an explicit adult triglyceride-lowering purpose uses its own reference; a prenatal product uses the prenatal DHA reference (scoring_input_contract.PRENATAL_DHA_TARGET_MG, DHA only; combined EPA+DHA cannot stand in for undisclosed DHA); child/baby products keep epa_dha_bands. Above a reference earns no extra credit; 4 g/day keeps only the prescription context flag.",
+      "_doc": "Dose V4.1 §3.1 (Sean, 2026-10-17): EPA+DHA adequacy is 20 x min(amount at minimum directed daily use / reference, 1). The purpose comes from evidence_resolver.resolve_omega_evidence_standard: an explicit adult triglyceride-lowering purpose uses its own reference; a prenatal product uses the prenatal DHA reference (scoring_input_contract.PRENATAL_DHA_TARGET_MG, DHA only; combined EPA+DHA cannot stand in for undisclosed DHA); child/baby products receive the completed no-general-benchmark neutral. Above a reference earns no extra credit; 4 g/day keeps only the prescription context flag.",
       "ordinary_adult": {
         "target_mg_day": 250.0,
         "reference_type": "nutritional_reference",
@@ -166,7 +158,7 @@
       },
       "triglyceride_purpose": {
         "target_mg_day": 2000.0,
-        "reference_type": "supported_minimum",
+        "reference_type": "supplement_contribution_policy",
         "scope": "explicit_adult_triglyceride_lowering_purpose",
         "preparation": "epa_plus_dha",
         "purpose": "blood_triglyceride_maintenance",
@@ -177,9 +169,9 @@
         "source_ids": [
           "https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=consolidation%3A2012R0432%2F20240819_0110010"
         ],
-        "rationale": "EU authorized claim condition for maintaining normal blood triglycerides: 2 g/day EPA+DHA. Endpoint-specific; no prescription-equivalence claim.",
+        "rationale": "EU authorized health-claim condition for maintaining normal blood triglycerides is 2g/day EPA+DHA. PharmaGuide adapts this to a proportional contribution policy, not a clinical minimum or prescription equivalence.",
         "owner": "scripts/scoring_v4/modules/omega_dose.py::score_dose",
-        "review_date": "2026-10-17",
+        "review_date": "2026-10-18",
         "approval_status": "approved_direction_sean_2026-10-17_dose_v41_plan_s3_1"
       }
     }

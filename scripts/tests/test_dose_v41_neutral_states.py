@@ -73,4 +73,6 @@ def test_an_amount_missing_without_a_label_nondisclosure_is_not_the_hidden_neutr
     artifact = build_scored_artifact(_two_purposes())
     dim = artifact["_v4_module_breakdown"]["dimensions"]["dose"]
     assert "ashwagandha" not in dim["metadata"].get("hidden_amount_purpose_ingredients", [])
-    assert artifact["quality_pillars_v4"]["dose"]["score"] == 20.0
+    assert dim["metadata"]["assessment_status"] == "incomplete"
+    assert artifact["quality_assessment_status"] == "partial"
+    assert artifact["quality_pillars_v4"]["dose"]["score"] == 0.0

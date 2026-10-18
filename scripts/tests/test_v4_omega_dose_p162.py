@@ -559,12 +559,8 @@ def test_dose_weights_match_rubric_config() -> None:
     thresholds = [b["min_mg_day"] for b in bands]
     assert thresholds == [4000, 2000, 1000, 500, 250, 200, 100, 0]
 
-    # Scores at boundaries
-    assert bands[0]["score"] == 20  # prescription
-    assert bands[2]["score"] == 16  # aha_cvd
-    assert bands[5]["score"] == 4.0  # near_efsa_ai
-    assert bands[6]["score"] == 2.5  # low_disclosed_epa_dha
-    assert bands[-1]["score"] == 0  # below_efsa_ai
+    # Exposure context no longer carries a second numerical scoring curve.
+    assert all("score" not in band for band in bands)
 
     # The EPA:DHA ratio bonus is gone from the rubric (quality_score 1.2.0).
     assert "ratio_sanity" not in rubric["dose"]
@@ -582,18 +578,18 @@ def test_dose_has_no_cliff_at_a_band_edge() -> None:
     # The retained bands are the child/baby reference (Dose V4.1).
     below, at = (score_dose({**_omega_product(epa=epa, dha=400), "product_name": "Kids Omega"})
                  for epa in (599, 600))
-    assert at["components"]["epa_dha_band"] == 16.0
+    assert at["components"]["epa_dha_band"] == 11.4
     assert abs(at["components"]["epa_dha_band"] - below["components"]["epa_dha_band"]) < 0.1
 
 
-def test_every_shipped_band_value_is_still_its_anchor() -> None:
-    """Interpolation must not move any reviewed policy value."""
+def test_child_exposure_context_labels_do_not_award_numerical_dose_points() -> None:
+    """Historical adult exposure labels do not establish pediatric targets."""
     from scoring_v4.modules.omega_dose import score_dose
 
     anchors = {250: 5.0, 500: 10.0, 1000: 16.0, 2000: 20.0, 4000: 20.0}
-    for per_day, expected in anchors.items():
+    for per_day in anchors:
         payload = score_dose({**_omega_product(epa=per_day / 2, dha=per_day / 2), "product_name": "Kids Omega"})
-        assert payload["components"]["epa_dha_band"] == expected, per_day
+        assert payload["components"]["epa_dha_band"] == 11.4, per_day
 
 
 def test_dose_rises_monotonically_with_epa_dha() -> None:

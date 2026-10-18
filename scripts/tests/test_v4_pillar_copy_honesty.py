@@ -189,7 +189,7 @@ def test_dose_ceiling_fact_names_the_policy_once_and_its_scope():
     ceiling = {"cap_public": 10.0, "partial_ceiling_public": 10.0, "zero_at_pct": 150.0,
                "exceeds_above_pct": 100.0, "nutrient": "Zinc", "pct_ul": 120.0}
     bd = {"dimensions": {"dose": {"penalties": {}, "metadata": {
-        "method": "rda_ul_proxy_until_dietary_intake_table",
+        "method": "source_qualified_contribution_and_completed_neutral",
         "B7_safety_evaluation": {"state_counts": {"confirmed_over_threshold": 1}, "dose_ceiling": ceiling}}}}}
     pillars = {"dose": {"score": 10.0, "max": 20, "reason": "", "components": {"raw_dose": 22.0}},
                "safety_hygiene": {"score": 10.0, "max": 10, "components": {}}}

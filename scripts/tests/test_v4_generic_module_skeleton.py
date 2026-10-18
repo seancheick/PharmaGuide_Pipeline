@@ -119,7 +119,7 @@ def test_dimension_skeleton_has_components_and_penalties_subdicts() -> None:
     dose = breakdown["dimensions"]["dose"]
     assert dose["score"] is None
     assert "supplemental_window_proxy" in dose["components"]
-    assert dose["metadata"]["method"] == "rda_ul_proxy_until_dietary_intake_table"
+    assert dose["metadata"]["method"] == "source_qualified_contribution_and_completed_neutral"
     assert dose["metadata"]["window_proxy_status"] == "not_evaluable_by_rda_proxy"
 
     # Evidence is online at P1.3.3. Magnesium has nutrition-authority evidence

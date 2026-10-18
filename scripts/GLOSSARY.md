@@ -175,6 +175,8 @@ never be reintroduced. Final export rejects any non-v4 Stage-3 artifact.
 
 | Term | Meaning |
 |---|---|
+| **Nutritional contribution curve** | Sean-approved PharmaGuide policy:20% of applicable RDA/AI earns half unit credit,100% earns full credit,then plateau. `generic_dose.nutritional_unit_credit` is the single calculation used by nutritional/panel/immune consumers. These are scoring points,not percentages of clinical effectiveness. |
+| **Prenatal critical coverage** | Intentional extra weighting of the fixed folate,iron,iodine,vitaminD,B12,choline subset within the existing5-point raw budget. All6members remain in the denominator,evenwhenabsent. The applicable pregnancyAI/RDA includes food; full supplement provision is not a requirement. DHA retains its separate complement. |
 | **Adequacy exposure** | Source-recorded amount at minimum directed daily use (`per_day_min`), used by product Dose quality through `generic_helpers::score_directed_daily_dose` (Dose V4.1). Missing directions default explicitly to one declared serving daily. Personal intake stays separate. |
 | **Safety exposure** | Maximum daily exposure (`per_day_max`) used for UL and other safety comparisons. |
 | **Daily serving resolver** | `serving_frequency.py`, the sole policy for converting label serving directions and their provenance into a daily range. Interaction thresholds, reviewer facts, audits and consumer cadence copy use the original daily range. Product Dose quality uses its minimum for adequacy and maximum for safety through the shared directed-daily wrapper. |

@@ -17,6 +17,9 @@ from scoring_v4.modules.generic_helpers import (
     get_active_ingredients,
     has_usable_individual_dose,
     primary_type_of,
+    unbenchmarked_dose_credit,
+    _safe_dict,
+    _safe_list,
 )
 from scoring_input_contract import get_source_score_eligible_active_rows
 
@@ -31,7 +34,6 @@ HIGH_VARIABILITY_BOTANICAL_STACK_MIN_COUNT = _CM["high_variability_botanical_sta
 HIGH_VARIABILITY_BOTANICAL_STACK_PENALTY = _CM["high_variability_botanical_stack_penalty"]
 IMMUNE_DOSE_CAP = _CM["dose_cap"]
 IMMUNE_DOSE_BANDS = {key: dict(band) for key, band in _CM["dose_bands"].items()}
-IMMUNE_DOSE_ABOVE_BAND_FRACTION = _CM["dose_above_band_fraction"]
 IMMUNE_DAILY_USE_DISCIPLINE_POINTS = _CM["daily_use_discipline_points"]
 HIGH_ZINC_THRESHOLD_MG = _CM["high_zinc_threshold_mg"]
 HIGH_VITAMIN_D_THRESHOLD_MCG = _CM["high_vitamin_d_threshold_mcg"]
@@ -76,9 +78,18 @@ def score_immune_support_dose(product: Dict[str, Any]) -> Optional[Dict[str, Any
     high_d = design_flags["high_vitamin_d"]
 
     def band(dose_key: str) -> float:
-        # Adequacy at the minimum directed use, the above-band reduction at the
-        # maximum: the lower of the two.
-        return min(_band_score(doses, dose_key), _band_score(peak, dose_key))
+        # Preserve legacy formula component budgets, using the same assessment
+        # as an individually declared purpose rather than a second dose curve.
+        active = dose_key.rsplit("_", 1)[0]
+        reference = _nutritional_reference(product, active)
+        if reference is not None:
+            fraction = reference[0]
+        elif dose_key in doses:
+            from scoring_v4.modules.generic_dose import CAP_SUPPLEMENTAL_WINDOW
+            fraction = unbenchmarked_dose_credit() / CAP_SUPPLEMENTAL_WINDOW
+        else:
+            fraction = 0.0
+        return fraction * IMMUNE_DOSE_BANDS[dose_key]["points"]
 
     # Dose V4.1 section 2.4: zinc and vitamin D above their adult ULs are
     # reduced once, by the product-level ceiling; the flags stay as metadata.
@@ -118,32 +129,44 @@ def score_immune_purpose_dose(
     amount = _row_amount(row, active)
     if amount is None:
         return None
-    key = {
-        "vitamin_c": "vitamin_c_mg",
-        "vitamin_d": "vitamin_d_mcg",
-        "zinc": "zinc_mg",
-        "copper": "copper_mg",
-        "selenium": "selenium_mcg",
-        "beta_glucan": "beta_glucan_mg",
-        "quercetin": "quercetin_mg",
-        "elderberry": "elderberry_mg",
-    }[active]
     daily = amount * _daily_serving_multiplier(product)
     daily_max = amount * daily_serving_range(product)[1]
-    band = IMMUNE_DOSE_BANDS[key]
-    score = min(
-        _range_score(daily, band["low"], band["high"], 22.0),
-        _range_score(daily_max, band["low"], band["high"], 22.0),
-    )
-    # Confirmed excess is evaluated once after purpose aggregation, by the
-    # shared product-level Dose ceiling. Keep the existing range-fit policy.
+    if active in {"vitamin_c", "vitamin_d", "zinc", "copper", "selenium"}:
+        reference = _nutritional_reference(product, active)
+        if reference is None:
+            # The generic owner retains its completed no-benchmark fallback;
+            # a disclosed mass alone cannot invent a nutritional reference.
+            return None
+        from scoring_v4.modules.generic_dose import CAP_SUPPLEMENTAL_WINDOW
+        fraction, assessment = reference
+        score = fraction * CAP_SUPPLEMENTAL_WINDOW
+        detail = {"band": "nutritional_reference", "reference": assessment}
+    else:
+        score = unbenchmarked_dose_credit()
+        detail = {"band": "disclosed_no_reference"}
     return {
         "score": round(score, 4),
         "active": active,
         "daily_amount": round(daily, 4),
         "daily_amount_max": round(daily_max, 4),
-        "target_range": [band["low"], band["high"]],
+        **detail,
     }
+
+
+def _nutritional_reference(product: Dict[str, Any], active: str) -> Optional[tuple[float, Dict[str, Any]]]:
+    """Consume qualified RDA-owner percentages; never derive them from mass."""
+    from scoring_v4.modules.generic_dose import nutritional_unit_credit
+
+    candidates = []
+    for row in _safe_list(_safe_dict(product.get("rda_ul_data")).get("adequacy_results")):
+        if not isinstance(row, dict) or row.get("scoring_eligible") is False:
+            continue
+        if _active_id(row) != active:
+            continue
+        credit = nutritional_unit_credit(_as_float(row.get("pct_rda"), None))
+        if credit is not None:
+            candidates.append((credit, row))
+    return min(candidates, key=lambda candidate: candidate[0]) if candidates else None
 
 
 def immune_support_formulation_adjustment(product: Dict[str, Any]) -> Optional[Dict[str, Any]]:
@@ -235,6 +258,7 @@ def _active_id(row: Dict[str, Any]) -> Optional[str]:
 
 def _row_keys(row: Dict[str, Any]) -> set[str]:
     fields = (
+        row.get("nutrient"),
         row.get("canonical_id"),
         row.get("scoring_parent_id"),
         row.get("evidence_canonical_id"),
@@ -276,21 +300,6 @@ def _row_amount(row: Dict[str, Any], active: str) -> Optional[float]:
     if compact == "iu" and active == "vitamin_d":
         return quantity / 40.0
     return None
-
-
-def _band_score(doses: Dict[str, float], dose_key: str) -> float:
-    band = IMMUNE_DOSE_BANDS[dose_key]
-    return _range_score(doses.get(dose_key), band["low"], band["high"], band["points"])
-
-
-def _range_score(amount: Optional[float], low: float, high: float, cap: float) -> float:
-    if amount is None or amount <= 0:
-        return 0.0
-    if low <= amount <= high:
-        return cap
-    if amount < low:
-        return max(0.0, min(cap, (amount / low) * cap))
-    return max(0.0, cap * IMMUNE_DOSE_ABOVE_BAND_FRACTION)
 
 
 def _daily_serving_multiplier(product: Dict[str, Any]) -> float:

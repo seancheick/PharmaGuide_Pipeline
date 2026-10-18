@@ -1,5 +1,24 @@
 # Dose V4.1 review packet (plan §5.1)
 
+## Current candidate — October 18 approved reference implementation
+
+Sean explicitly approved all 43 revised decisions and choline as the sixth fixed prenatal critical nutrient within the existing 5-point budget. The approval is recorded in [the decision table](DOSE_V41_REFERENCE_DECISIONS.md). The following current status supersedes the historical candidate sections below.
+
+Implementation uses existing owners: shared nutritional contribution credit; ordinary-adult magnesium/calcium targets with no quarter-RDA fallback; completed-neutral sodium/chloride and unsupported study-dose curves; five explicitly approved sports targets; six-member prenatal critical denominator and separate DHA complement. Choline requires an actual source-qualified amount. Lecithin, phosphatidylcholine and blend mass cannot supply it without the canonical supported conversion. No pillar budget, Verification rule, safety ceiling, public top-level field or assessment status is added.
+
+The exhaustive semantics gate covers all active native/config numerical owners. Descriptive study quantities and 83 strain identity records with all-null inactive thresholds are retained without fabricated scientific approvals. Native RDA semantic qualification now participates in its existing provenance fingerprint. Engine 4.8.0; quality config 1.29.0-dose-v41-approved-reference-policy; omega rubric 2.3.1-dose-v41-references.
+
+Fresh review reproduced and fixed the following additional defects with fail-first tests: prenatal DHA ignored minimum daily directions; sports omitted a named co-primary outside its target list; fiber omitted an independently named non-fiber purpose. The latter two now reuse the existing generic purpose owner, preserve hidden-amount neutral states, and keep missing captured amounts incomplete. The sports mass floor that could override equal weighting is retired. Adult sports targets now qualify the whole DSLD label population through the existing selector, shared by enrichment and scoring; pediatric/life-stage labels cannot borrow adult targets. A named positive quantity with an unreadable unit also keeps generic/fiber assessments incomplete. Incomplete receipts no longer claim completed arithmetic or award a known peer while the assessment is held.
+
+Source verifiers: RDA 74 citations and therapeutic 71 citations have no mismatched/unresolved sources; backed clinical 91 claims verified; strain 255 claims retain two documented pre-existing mismatches, zero new mismatches or unresolved sources. These are source checks, not proof of numerical policy; policy authorization is Sean’s separate approval. Raw choline converter/source probes and public-profile invariance checks pass.
+
+Validation in progress: combined named owner/consumer checks, fresh independent review, checksum-bound scorer replay of all 15,426 frozen inputs against baseline 832c1bd7f, exact-source CI and applicable local acceptance. The earlier 119-product choline probe is membership-only and is not the final combined report. No current catalog regeneration or release is claimed. The known e1_2_2 baseline failures and missing host screenshot remain explicit; neither is waived.
+
+Do not run the full pipeline, deploy, push main or build an IPA from this packet. The final movement report and remaining merge/run requirements must be returned first.
+
+## Historical candidate records
+
+
 Branch `claude/dose-v41` (pipeline) and `claude/dose-v41` (app), October 17, 2026. Spec:
 [`DOSE_V41_PLAN.md`](DOSE_V41_PLAN.md) with Sean's decisions D1–D4. Baseline `main` 5fb2be1ca,
 engine 4.6.0, config 1.27.0. Candidate engine 4.7.0, config `1.28.0-dose-v41`, omega rubric

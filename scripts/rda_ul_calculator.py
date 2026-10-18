@@ -120,6 +120,45 @@ UL_SCREENING_POPULATIONS = {
 _AGE_LABELS = {("51-70", "71+"): "adults 51+", ("71+",): "adults 71+", ("51-70",): "adults 51-70",
                ("19-30", "31-50"): "adults 19-50", ("19-30",): "adults 19-30", ("31-50",): "adults 31-50"}
 
+# DSLD target groups that state a narrower population. DSLD files its generic
+# adult category ("Adult (18 - 50 Years)" and the male/female variants) on
+# most labels (12,102 of 15,426 stored inputs carry it alone), so those tags
+# do not narrow the general adult screen.
+# Checked in order per tag: a negated life stage ("Women (not pregnant or
+# lactating)", 959 stored labels) is an ordinary adult, never that stage.
+_UL_POPULATION_TAGS = (
+    ("general_adult", ("not pregnant", "not lactating")),
+    ("pregnancy_lactation", ("pregnant", "lactating")),
+    ("adults_51_plus", ("seniors/mature (>50",)),
+    ("pediatric", ("child", "infant", "boys", "girls")),
+    ("general_adult", ("adult (18 - 50", "adult male (18", "adult female (18", "menopause")),
+)
+
+
+def label_population_members(product: Dict) -> Tuple[str, ...]:
+    """The existing label-population selection shared by source consumers.
+
+    The UL screen and reference applicability read the same DSLD target groups;
+    a label naming several populations retains every member.
+    """
+    found = set()
+    for group in product.get("targetGroups") or []:
+        text = group if isinstance(group, str) else (
+            (group.get("text") or group.get("name") or "") if isinstance(group, dict) else "")
+        tag = str(text).strip().lower()
+        population = next((population for population, needles in _UL_POPULATION_TAGS
+                           if any(needle in tag for needle in needles)), None)
+        # An explicit 19-50 restriction reaches its existing UL owner. The
+        # broad DSLD 18-50 category remains general adult. Life-stage tags
+        # retain precedence; negated pregnancy/lactation is ordinary adult.
+        if population in {None, "general_adult"} and re.search(
+            r"(?<![\d-])19\s*[-–—]\s*50(?!\d)", tag
+        ):
+            population = "adults_19_50"
+        if population:
+            found.add(population)
+    return tuple(sorted(found or {"general_adult"}))
+
 
 def ul_exceedance_sentence(amount: float, ul: float, unit: str, scope_label: str = "general adult") -> str:
     """The consumer sentence for an amount above the upper limit.

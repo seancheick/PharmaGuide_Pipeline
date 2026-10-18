@@ -1,9 +1,8 @@
 """v4 multi/prenatal Dose dimension (P3.2).
 
-Dose for multis/prenatals is RDA/AI-centered, but not punitive toward
-common above-RDA B-vitamin dosing when no UL exists. It uses the
-enricher's `rda_ul_data.adequacy_results` and `safety_flags`; no v3 scorer
-imports.
+Dose for multis/prenatals uses the shared nutritional RDA/AI curve and the
+enricher's `rda_ul_data.adequacy_results`. Safety stays in the single
+product-level ceiling; no v3 scorer imports.
 """
 
 from __future__ import annotations
@@ -12,6 +11,7 @@ import re
 from typing import Any, Dict, List, Optional
 
 from scoring_v4.dose_safety import resolve_dose_safety
+from scoring_v4.exposure import row_exposure
 from scoring_v4.modules.generic_helpers import (
     get_active_ingredients,
     has_usable_individual_dose,
@@ -38,7 +38,6 @@ CAP_CRITICAL_NUTRIENT_COVERAGE = _DM["cap_critical_nutrient_coverage"]
 CAP_PRENATAL_COMPLEMENT_SUPPORT = _DM["cap_prenatal_complement_support"]
 
 PRENATAL_DHA_FULL_MG = _DM["prenatal_dha_full_mg"]
-PRENATAL_DHA_PARTIAL_MG = _DM["prenatal_dha_partial_mg"]
 
 PHASE_MARKER = "P3.2_multi_prenatal_dose"
 METHOD_MARKER = "rda_ai_panel_coverage_from_enriched_rda_ul_data"
@@ -74,12 +73,11 @@ PRENATAL_CORE_ANCHORS = (
     "iodine",
     "vitamin_d",
     "vitamin_b12",
+    "choline",
 )
-# Choline already counts in critical-nutrient coverage; DHA keeps its original
-# one-point share of the complement support (V4.1 Step 4).
+# Choline belongs to the fixed prenatal critical core; DHA retains its separate
+# one-point complement budget.
 PRENATAL_COMPLEMENT_ANCHORS = ("dha",)
-
-CRITICAL_MIN_PCT_RDA = dict(_DM["critical_min_pct_rda"])
 
 
 def _clamp(low: float, high: float, value: float) -> float:
@@ -184,19 +182,9 @@ def _coverage_unit_credit(pct_rda: Optional[float], pct_ul: Optional[float]) -> 
     ``pct_ul`` is unused: an upper-limit exceedance is the product-level Dose
     ceiling's (Dose V4.1 §2.4), never a per-nutrient reduction here.
     """
-    if pct_rda is None:
-        return None
-    if pct_rda <= 0:
-        return 0.0
-    if pct_rda < 25.0:
-        return pct_rda / 50.0
-    if pct_rda < 50.0:
-        return 0.5 + ((pct_rda - 25.0) / 25.0) * 0.35
-    if pct_rda <= 200.0:
-        return 1.0
-    if pct_rda <= 500.0:
-        return 0.85
-    return 0.65
+    from scoring_v4.modules.generic_dose import nutritional_unit_credit
+
+    return nutritional_unit_credit(pct_rda)
 
 
 def _coverage_scores(
@@ -306,41 +294,6 @@ def _normalized_pct_values(
     return pct_rda, pct_ul
 
 
-def _critical_threshold_scores(
-    product: Dict[str, Any],
-    *,
-    rda_group: Optional[str] = None,
-) -> Dict[str, float]:
-    """Raw RDA/AI threshold credit for prenatal-critical nutrients.
-
-    Broad dose coverage credits the disclosed amount across the panel.
-    Critical prenatal adequacy is a different question: did the label disclose enough folate/iron/iodine/choline to clear
-    the clinically meaningful minimum? Use raw pct_rda for that threshold, then
-    let formulation carry form quality and B7 carry excess-dose safety.
-    """
-    rda_ul = _safe_dict(product.get("rda_ul_data"))
-    rows = _safe_list(rda_ul.get("adequacy_results"))
-    scores: Dict[str, float] = {}
-    for row in rows:
-        if not isinstance(row, dict):
-            continue
-        if row.get("scoring_eligible") is False:
-            continue
-        key = _nutrient_key(row.get("nutrient") or row.get("standard_name"))
-        min_pct = CRITICAL_MIN_PCT_RDA.get(key)
-        if min_pct is None:
-            continue
-        pct_rda, _ = _normalized_pct_values(row, key, rda_group=rda_group)
-        if pct_rda is None or pct_rda <= 0:
-            credit = 0.0
-        elif pct_rda >= min_pct:
-            credit = 1.0
-        else:
-            credit = 0.5
-        scores[key] = max(scores.get(key, 0.0), credit)
-    return scores
-
-
 def _score_rda_ai_coverage(scores: Dict[str, float]) -> float:
     if not scores:
         return 0.0
@@ -357,25 +310,6 @@ def _is_dha_ingredient(ingredient: Dict[str, Any]) -> bool:
     return bool(DHA_RE.search(canonical.replace("_", "-")))
 
 
-def _quantity_mg(ingredient: Dict[str, Any]) -> Optional[float]:
-    qty = _as_float(ingredient.get("quantity"), None)
-    if qty is None or qty <= 0:
-        return None
-    unit = _norm_text(
-        ingredient.get("unit_normalized")
-        or ingredient.get("normalized_unit")
-        or ingredient.get("unit")
-    )
-    compact = unit.replace(" ", "")
-    if compact in {"mg", "milligram", "milligrams", "milligram(s)"}:
-        return qty
-    if compact in {"g", "gram", "grams", "gram(s)"}:
-        return qty * 1000.0
-    if compact in {"mcg", "ug", "microgram", "micrograms", "microgram(s)"}:
-        return qty / 1000.0
-    return None
-
-
 def _dha_score(product: Dict[str, Any]) -> float:
     best = 0.0
     for ing in _active_ingredients(product):
@@ -383,47 +317,23 @@ def _dha_score(product: Dict[str, Any]) -> float:
             continue
         if not has_usable_individual_dose(ing):
             continue
-        qty = _quantity_mg(ing)
+        qty = row_exposure(product, ing, basis="daily", unit="mg").benchmark_amount
         if qty is None:
             continue
         canonical = _norm_text(ing.get("canonical_id") or ing.get("standard_name") or "")
-        is_combined_epa_dha = canonical == "epa_dha"
-        if is_combined_epa_dha:
-            # EPA+DHA aggregate is useful omega evidence, but it does not prove
-            # the DHA component alone reaches the prenatal DHA target. Give
-            # partial critical-nutrient credit without pretending itemization.
-            if qty >= PRENATAL_DHA_FULL_MG:
-                best = max(best, 0.5)
-            elif qty > 0:
-                best = max(best, 0.25)
+        name = _norm_text(ing.get("name"))
+        if canonical == "epa_dha" or re.search(r"\bepa\b", name):
+            # An aggregate does not establish the explicit DHA amount.
             continue
-        if qty >= PRENATAL_DHA_FULL_MG:
-            best = max(best, 1.0)
-        elif qty >= PRENATAL_DHA_PARTIAL_MG:
-            best = max(best, 0.5)
-        elif qty > 0:
-            best = max(best, 0.25)
+        best = max(best, min(qty / PRENATAL_DHA_FULL_MG, 1.0))
     return best
-
-
-def _anchor_critical_value(anchor: str, coverage_scores: Dict[str, float], threshold_scores: Dict[str, float]) -> float:
-    if anchor in threshold_scores:
-        return threshold_scores[anchor]
-    coverage = coverage_scores.get(anchor, 0.0)
-    # Critical coverage uses stricter minimums than the broad RDA average. If a
-    # nutrient is present but below the minimum, it can still earn half credit.
-    min_pct = CRITICAL_MIN_PCT_RDA.get(anchor)
-    if min_pct is None:
-        return coverage
-    return coverage if coverage >= 1.0 else (0.5 if coverage > 0 else 0.0)
 
 
 def _targeted_multi_critical_scores(
     coverage_scores: Dict[str, float],
-    threshold_scores: Dict[str, float],
 ) -> tuple[Dict[str, float], Dict[str, float]]:
     scored = {
-        anchor: _round(_clamp(0.0, 1.0, _anchor_critical_value(anchor, coverage_scores, threshold_scores)))
+        anchor: _round(_clamp(0.0, 1.0, coverage_scores.get(anchor, 0.0)))
         for anchor in TARGETED_MULTI_ANCHORS
     }
     selected = sorted(scored.items(), key=lambda item: (-item[1], item[0]))[:TARGETED_MULTI_SELECTED_ANCHORS]
@@ -435,20 +345,16 @@ def _critical_scores(product: Dict[str, Any], coverage_scores: Dict[str, float])
     targeted_multi = (not prenatal) and _is_targeted_multi(product)
     anchors = PRENATAL_CORE_ANCHORS if prenatal else CORE_MULTI_ANCHORS
     mode = "prenatal" if prenatal else ("targeted_core_multi" if targeted_multi else "core_multi")
-    threshold_scores = _critical_threshold_scores(product, rda_group="Pregnancy" if prenatal else None)
 
     if targeted_multi:
-        scores, all_scores = _targeted_multi_critical_scores(coverage_scores, threshold_scores)
+        scores, all_scores = _targeted_multi_critical_scores(coverage_scores)
         missing = [anchor for anchor in TARGETED_MULTI_ANCHORS if all_scores.get(anchor, 0.0) <= 0]
         return mode, scores, missing
 
     scores: Dict[str, float] = {}
     missing: List[str] = []
     for anchor in anchors:
-        if anchor == "dha":
-            value = _dha_score(product)
-        else:
-            value = _anchor_critical_value(anchor, coverage_scores, threshold_scores)
+        value = coverage_scores.get(anchor, 0.0)
         value = _round(_clamp(0.0, 1.0, value))
         scores[anchor] = value
         if value <= 0:

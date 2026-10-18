@@ -92,7 +92,7 @@ def test_a_self_named_bcaa_total_stays_a_sports_dose():
     # leucine or counting its header as an individually dosed sports ingredient.
     assert not any(r.get("canonical_id") == "branched_chain_amino_acids"
                    for r in sports_dosed_rows(enriched))
-    assert _score_primary(enriched, "bcaa") == (1.0, "bcaa_aggregate_under_2_g")
+    assert _score_primary(enriched, "bcaa") == (11.4, "bcaa_completed_no_general_benchmark")
 
 
 def test_an_opaque_sports_blend_is_not_an_off_list_primary():
@@ -147,7 +147,16 @@ def test_nested_botanical_anchor_preserves_identity_without_borrowing_a_child_do
     scored = build_scored_artifact(enriched)
     assert scored["_v4_module_breakdown"]["dimensions"]["formulation"]["metadata"]["formulation_profile"] == "botanical"
     dose = scored["_v4_module_breakdown"]["dimensions"]["dose"]["metadata"]
-    assert dose["botanical_dose"]["dose_mg"] == 250  # disclosed Sensoril, never the 1000 mg fungal blend
+    sensoril = next(row for row in rows if row.get("name") == "Sensoril")
+    assert sensoril["raw_source_path"] == "ingredientRows[3]"
+    assert sensoril["quantity"] == 250
+    [assessment] = dose["reference_assessments"]
+    assert assessment["canonical_id"] == "ashwagandha"
+    assert assessment["amount"] == assessment["per_day_min"] == assessment["per_day_max"] == 250
+    # Source exposure is retained without reintroducing the retired window or
+    # borrowing the separate 1000 mg fungal blend's mass.
+    assert dose["botanical_dose_band"] == "disclosed_no_reference"
+    assert scored["quality_pillars_v4"]["dose"]["score"] == 11.4
 
 
 def test_overlapping_constituents_do_not_reconcile_a_partly_disclosed_preparation():

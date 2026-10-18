@@ -274,7 +274,7 @@ def test_generic_dose_exposes_reference_policy_without_claiming_clinical_range()
         "reference": {"ul_basis": "supplemental_only"}}]}
     out = build_scored_artifact(p)["quality_pillars_v4"]
     context = out["dose"]["explanation"]["assessment"]
-    assert context["method"] == "rda_ul_proxy_until_dietary_intake_table"
+    assert context["method"] == "source_qualified_contribution_and_completed_neutral"
     assert context["reference_assessments"][0]["per_day_max"] == 405
     for retired in ("ul_partial_credit_above_pct", "ul_zero_credit_at_pct", "dose_safety_policy",
                     "raw_dose_safety_penalty", "safety_hygiene_over_ul_penalty"):

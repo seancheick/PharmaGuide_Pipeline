@@ -636,7 +636,7 @@ def evaluate_dose_safety(product: Dict[str, Any]) -> DoseSafetyResult:
     )
 
 
-def _declared_daily_caffeine(product: Dict[str, Any]) -> Optional[Dict[str, Any]]:
+def _declared_caffeine_rows(product: Dict[str, Any]) -> tuple[list, dict, int]:
     """Caffeine's analyte total, preserving declarations and confirmed bounds.
 
     Ingredient-count deduplication is not analyte deduplication: a quantified
@@ -652,10 +652,10 @@ def _declared_daily_caffeine(product: Dict[str, Any]) -> Optional[Dict[str, Any]
     try:
         rows = [row for row in get_scoring_ingredients(product, strict=True).rows if isinstance(row, dict)]
     except Exception:
-        return None
+        return [], {}, 0
     caffeine = [row for row in rows if _norm_text(row.get("canonical_id")) in CAFFEINE_CANONICALS]
     if not caffeine:
-        return None
+        return [], {}, 0
     candidates = [row for row in caffeine if not (row.get("is_compound_duplicate") or is_lent_blend_mass(row))]
     counted = []
     for row in candidates:
@@ -709,6 +709,16 @@ def _declared_daily_caffeine(product: Dict[str, Any]) -> Optional[Dict[str, Any]
         excluded.update(id(row) for row in children)
     counted = [row for row in counted if id(row) not in excluded]
 
+    return counted, total_bounds, len(caffeine)
+
+
+def _declared_daily_caffeine(product: Dict[str, Any]) -> Optional[Dict[str, Any]]:
+    """Daily safety totals from the shared caffeine analyte declarations."""
+    from scoring_v4.exposure import row_exposure
+
+    counted, total_bounds, source_count = _declared_caffeine_rows(product)
+    if not source_count:
+        return None
     low, high, _defaulted = resolve_daily_serving_range(product)
     per_serving_lower = 0.0
     strict_lower = False
@@ -738,5 +748,5 @@ def _declared_daily_caffeine(product: Dict[str, Any]) -> Optional[Dict[str, Any]
         "confirmed_mg_day_max": confirmed_max,
         "quantity_operator": ">" if strict_lower else ">=" if unknown else "=",
         "rows": len(counted), "unknown_rows": unknown,
-        "excluded_duplicate_rows": len(caffeine) - len(counted),
+        "excluded_duplicate_rows": source_count - len(counted),
     }

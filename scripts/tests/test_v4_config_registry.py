@@ -58,8 +58,8 @@ def test_config_fingerprint_is_stable_hex():
 def test_config_version_reads_metadata_schema_version():
     from scoring_v4.config_registry import config_version
 
-    assert config_version("omega") == "2.3.0-dose-v41-references"
-    assert config_version("quality_score") == "1.28.2-dose-v41-reference-corrections"
+    assert config_version("omega") == "2.3.1-dose-v41-references"
+    assert config_version("quality_score") == "1.29.0-dose-v41-approved-reference-policy"
 
 
 def test_all_config_provenance_shape():

@@ -179,8 +179,8 @@ def test_standardized_botanical_identity_routes_even_when_taxonomy_category_drif
     assert formulation["components"]["marker_standardization_declared"] == 3.2
 
     dose = score_botanical_dose(product)
-    assert dose["band"] == "within_studied_range"
-    assert dose["score"] == 21.0
+    assert dose["band"] == "disclosed_no_reference"
+    assert dose["score"] == _neutral()
 
 
 def test_standardized_botanical_parent_complex_total_is_dose_evaluable():
@@ -220,8 +220,8 @@ def test_standardized_botanical_parent_complex_total_is_dose_evaluable():
     }
 
     dose = score_botanical_dose(product)
-    assert dose["band"] == "within_studied_range"
-    assert dose["score"] == 21.0
+    assert dose["band"] == "disclosed_no_reference"
+    assert dose["score"] == _neutral()
 
 
 def test_vitamin_product_is_not_botanical():
@@ -297,11 +297,11 @@ def test_weak_unidentified_botanical_penalised():
 
 # --- dose adapter ----------------------------------------------------------
 
-def test_dose_within_studied_range():
-    # ashwagandha 250-600; 600mg is within range
+def test_disclosed_studied_regimen_remains_neutral():
+    # Source exposure envelopes do not establish clinical scoring windows.
     out = score_botanical_dose(_botanical_product())
-    assert out["score"] == 21.0
-    assert out["band"] == "within_studied_range"
+    assert out["score"] == _neutral()
+    assert out["band"] == "disclosed_no_reference"
 
 
 def test_dose_exact_target_reference_counts_within_range():
@@ -314,17 +314,19 @@ def test_dose_exact_target_reference_counts_within_range():
         quantity=320,
     )
     out = score_botanical_dose(_botanical_product(ingredient=ing))
-    assert out["band"] == "within_studied_range"
-    assert out["score"] == 21.0
-    assert out["metadata"]["range_mg"] == [320.0, 320.0]
+    assert out["band"] == "disclosed_no_reference"
+    assert out["score"] == _neutral()
+    from scoring_v4.modules.botanical_profile import _dosing_entry_for
+    assert _dosing_entry_for(ing)["id"] == "saw_palmetto_extract"
+    assert _dosing_entry_for(ing)["typical_dosing_range"] == "320"
 
 
-def test_dose_below_studied_range():
+def test_below_studied_regimen_remains_neutral():
     ing = _botanical_ingredient(quantity=100)  # below 250
     out = score_botanical_dose(_botanical_product(ingredient=ing))
-    # V4.1 Step 4: inadequacy is graded below the near band, 16 x 100 / (0.8 x 250).
-    assert out["score"] == 8.0
-    assert out["band"] == "below_studied_range"
+    # Completed general benchmark review uses neutral at every disclosed amount.
+    assert out["score"] == _neutral()
+    assert out["band"] == "disclosed_no_reference"
 
 
 def test_dose_disclosed_no_clinical_reference():
@@ -348,9 +350,11 @@ def test_dose_grape_seed_matches_clinical_range_by_canonical_id():
         canonical_id="grape_seed_extract", form="Grape Seed Extract", quantity=100,
     )
     out = score_botanical_dose(_botanical_product(ingredient=ing, standardized=False))
-    assert out["band"] == "within_studied_range"
-    assert out["score"] == 21.0
-    assert out["metadata"]["range_mg"] == [100.0, 800.0]
+    assert out["band"] == "disclosed_no_reference"
+    assert out["score"] == _neutral()
+    from scoring_v4.modules.botanical_profile import _dosing_entry_for
+    assert _dosing_entry_for(ing)["id"] == "grape_seed_extract"
+    assert _dosing_entry_for(ing)["typical_dosing_range"] == "100-800"
 
 
 def test_primary_botanical_no_dose_floors_low_not_excluded():
@@ -364,7 +368,7 @@ def test_primary_botanical_no_dose_floors_low_not_excluded():
     hidden = score_botanical_dose(_botanical_product(
         ingredient=_botanical_ingredient(quantity=0, unit="", isNestedIngredient=True)))
     assert hidden["score"] == pytest.approx(unbenchmarked_dose_credit())
-    assert out["metadata"]["benchmark"] == "present"
+    assert out["metadata"]["benchmark"] == "absent"
     assert out["score"] is not None
     # critical: 0, NOT None (must not be excluded from the denominator)
     assert out["score"] is not None
@@ -414,13 +418,12 @@ def test_pure_botanical_with_no_competing_mineral_is_botanical():
 
 # --- megadose (P6 review P2#2) ---------------------------------------------
 
-def test_megadose_above_studied_range_credited_below_near():
-    # ashwagandha 10000 mg (studied 250-600). A 16x megadose must NOT earn the
-    # same near-range credit (16) as a dose just outside the window.
+def test_above_studied_regimen_does_not_infer_a_safety_ceiling():
+    # High study exposure is not a safety upper limit or numerical Dose penalty.
     ing = _botanical_ingredient(quantity=10000)
     out = score_botanical_dose(_botanical_product(ingredient=ing))
-    assert out["band"] == "above_studied_range"
-    assert out["score"] == 12.0  # < near_studied_range (16)
+    assert out["band"] == "disclosed_no_reference"
+    assert out["score"] == _neutral()
 
 
 # --- anchor-only dose (P6 review P2#3) -------------------------------------
@@ -434,7 +437,7 @@ def test_anchor_only_dose_treated_as_blend_total_not_within_range():
     out = score_botanical_dose(_botanical_product(ingredient=ing))
     assert out["band"] == "blend_total_only"
     assert out["score"] == pytest.approx(unbenchmarked_dose_credit())
-    assert out["metadata"]["benchmark"] == "present"
+    assert out["metadata"]["benchmark"] == "absent"
 
 
 def test_product_level_botanical_evidence_is_visible_to_profile_scorer():
@@ -492,8 +495,8 @@ def test_disclosed_ksm66_row_outranks_synthetic_blend_total():
 
     assert "branded_clinically_studied_extract" not in formulation["components"]
     assert formulation["components"]["marker_standardization_declared"] == 3.2
-    assert dose["band"] == "within_studied_range"
-    assert dose["score"] == 21.0
+    assert dose["band"] == "disclosed_no_reference"
+    assert dose["score"] == _neutral()
 
 
 def test_blend_reconciliation_counts_nonbotanical_disclosed_children():
@@ -542,8 +545,8 @@ def test_blend_reconciliation_counts_nonbotanical_disclosed_children():
 
     assert "branded_clinically_studied_extract" not in formulation["components"]
     assert formulation["components"]["marker_standardization_declared"] == 3.2
-    assert dose["band"] == "within_studied_range"
-    assert dose["score"] == 21.0
+    assert dose["band"] == "disclosed_no_reference"
+    assert dose["score"] == _neutral()
 
 
 def test_top_level_proprietary_botanical_blend_total_gets_conservative_profile():
@@ -655,9 +658,9 @@ def test_botanical_dose_compares_minimum_daily_exposure_to_daily_reference():
         'min_servings_per_day': 2, 'max_servings_per_day': 2,
         'servings_per_day_source': 'servingSizes',
     }
-    assert score_botanical_dose(product)['band'] == 'within_studied_range'
+    assert score_botanical_dose(product)['band'] == 'disclosed_no_reference'
     product['serving_basis']['min_servings_per_day'] = 1
-    assert score_botanical_dose(product)['band'] == 'below_studied_range'
+    assert score_botanical_dose(product)['band'] == 'disclosed_no_reference'
 
 
 def test_whole_herb_mass_cannot_use_an_extract_dose_reference():
