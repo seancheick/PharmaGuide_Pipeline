@@ -7749,7 +7749,20 @@ class EnhancedDSLDNormalizer:
                             # the text without inventing its chemistry or lending
                             # the total's mass to it. Known/dosed children retain
                             # ordinary handling (e.g. psyllium, inulin).
-                            if is_fiber_source and not row.get("mapped") and not row.get("quantity"):
+                            # Undosed nutrition-composition forms (e.g. Lactose
+                            # under Sugars) describe the panel total too. Reuse
+                            # the nutrition classifier with the child's own
+                            # normalized fields; no parent mass becomes a dose.
+                            # Named bioactives and independently dosed children
+                            # retain their ordinary active-row handling.
+                            is_nutrition_composition = not row.get("quantity") and self._is_nutrition_fact(
+                                row.get("raw_source_text") or row.get("name", ""),
+                                row.get("ingredientGroup"), row.get("unit"),
+                                dsld_category=row.get("raw_category"),
+                            )
+                            if is_nutrition_composition or (
+                                is_fiber_source and not row.get("mapped") and not row.get("quantity")
+                            ):
                                 row.update({
                                     "cleaner_row_role": "source_descriptor",
                                     "score_eligible_by_cleaner": False,
