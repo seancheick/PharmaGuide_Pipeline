@@ -1,6 +1,6 @@
 # Dose V4.1: finish the shared rules before one pipeline run
 
-Status: **plan, approved direction; not implemented.** Revised October 17, 2026 after Sean's
+Status: **implemented on branch `claude/dose-v41` (pipeline and app), not activated; see [the review packet](DOSE_V41_REVIEW_PACKET.md).** Revised October 17, 2026 after Sean's
 design review (grill). Baseline: `main` at `b043fc513`, engine 4.6.0, config
 `1.27.0-declared-serving-dose`. This plan supersedes the serving-only Dose decision recorded in
 `reports/declared_serving_20261017/README.md` (PR #154).
