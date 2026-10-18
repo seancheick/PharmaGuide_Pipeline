@@ -57,13 +57,15 @@ PROFILE_SELECTOR_FORBIDDEN_FIELDS: dict[str, str] = {
     "forms": "PROFILE_SELECTOR_ROW_FORM",
 }
 
-# Stable finding id -> justification. Three kinds, and no others:
+# Stable finding id -> justification. Four kinds, and no others:
 #   pass_a_known_pending_*      Pass-A reads pending native evidence/safety contracts.
 #   canonical_owner: <why>      the provider whose job is reading the raw field.
+#   typed_contract_consumer:    a named read of an assessed contract, not a raw label.
 #   legacy_debt_main_0b7bf3f7   pre-existing downstream reads recorded as debt.
 # Any other raw read fails the audit; a scoring module is never allowlisted
 # for convenience.
 ALLOWLIST: dict[str, str] = {
+    'scripts/scoring_v4/pillar_explanations.py|_dose_receipt_facts|get|unit|51190fd86a8b': 'typed_contract_consumer: _dose_receipt_facts renders reference_assessments from the multi/prenatal and B-complex Dose owners; unit is paired with their assessed per_day_min/per_day_max and rda_ai, not read from an ingredient label',
     'scripts/scoring_v4/exposure.py|format_nutrition_mass|get|unit|7d8612ac5a11': 'canonical_owner: exposure.format_nutrition_mass adapts the Nutrition Facts source row for row_exposure; it reads only the panel unit and delegates quantity/operator resolution to that shared owner before all copy consumers render it',
     'scripts/scoring_v4/modules/generic_helpers.py|eligible_delivery_data|get|raw_source_text|9f43e033ffb4': 'canonical_owner: generic_helpers.eligible_delivery_data verifies the detected technology against its label evidence before credit; all formulation scorers and export consume this shared result',
     'scripts/scoring_v4/modules/generic_helpers.py|eligible_delivery_data|subscript|raw_source_text|ddd26cf12576': 'canonical_owner: generic_helpers.eligible_delivery_data verifies the detected technology against its label evidence before credit; all formulation scorers and export consume this shared result',

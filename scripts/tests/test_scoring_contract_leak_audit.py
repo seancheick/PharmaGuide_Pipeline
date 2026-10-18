@@ -75,7 +75,7 @@ def test_every_allowlisted_read_is_a_named_kind_and_the_live_tree_passes() -> No
     """Exceptions are pass-A pending contracts, named canonical owners, or legacy
     debt recorded from origin/main; any other downstream raw read fails."""
     import audit_scoring_contract_leaks as audit
-    kinds = ("pass_a_known_pending_", "canonical_owner: ", "legacy_debt_main_0b7bf3f7")
+    kinds = ("pass_a_known_pending_", "canonical_owner: ", "typed_contract_consumer: ", "legacy_debt_main_0b7bf3f7")
     assert all(reason.startswith(kinds) for reason in audit.ALLOWLIST.values())
     owners = {key.split("|")[0] + "|" + key.split("|")[1]
               for key, reason in audit.ALLOWLIST.items() if reason.startswith("canonical_owner: ")}
@@ -83,6 +83,13 @@ def test_every_allowlisted_read_is_a_named_kind_and_the_live_tree_passes() -> No
                       "scripts/scoring_v4/exposure.py|format_nutrition_mass",
                       "scripts/scoring_v4/modules/fiber_digestive_helpers.py|nutrition_fiber_exposure",
                       "scripts/scoring_v4/modules/generic_helpers.py|eligible_delivery_data"}
+    # A contract's assessed unit must remain paired with its amount in copy.
+    # This precise AST-bound read does not authorize new downstream raw reads.
+    consumers = {key for key, reason in audit.ALLOWLIST.items()
+                 if reason.startswith("typed_contract_consumer: ")}
+    assert consumers == {
+        "scripts/scoring_v4/pillar_explanations.py|_dose_receipt_facts|get|unit|51190fd86a8b"
+    }
     findings = [f for path in audit.iter_scan_files() for f in audit._scan_file(path)]
     assert findings and all(f["allowlisted"] for f in findings)
     assert set(audit.ALLOWLIST) <= {f["id"] for f in findings}, "stale allowlist entry"

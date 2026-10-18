@@ -90,6 +90,26 @@ def test_decision_fixture_matches_locked_production_outcome(case_id: str) -> Non
     assert result.passed, result.diff
 
 
+def test_immune_failure_retains_adequacy_before_one_final_ul_ceiling() -> None:
+    validation = _validation_module()
+    fixture = validation.load_fixture_suite().by_id("immune_support__failure")
+    artifact = validation.build_scored_artifact(fixture.product)
+    dose = artifact["quality_pillars_v4"]["dose"]
+    receipt = dose["explanation"]["dose_receipt"]
+
+    # D1 removes the duplicate zinc-purpose zero, preserving the existing
+    # above-band half credit. Raw (22 + 11 + 11 + 22) / 4 = 16.5; the
+    # recorded 200% UL safety flag still sets final public Dose to zero once.
+    assert {item["ingredient"]: item["points"] for item in receipt["contributions"]} == {
+        "vitamin_c": 20.0, "vitamin_d3": 10.0, "zinc": 10.0, "elderberry": 20.0,
+    }
+    assert receipt["adequacy_before_safety"] == 15.0
+    assert receipt["upper_reference"]["pct_ul"] == 200.0
+    assert receipt["upper_reference"]["cap_public"] == 0.0
+    assert receipt["final"] == dose["score"] == 0.0
+    assert receipt["reconciles"] is True
+
+
 @pytest.mark.parametrize(
     ("ideal_id", "failure_id"),
     [

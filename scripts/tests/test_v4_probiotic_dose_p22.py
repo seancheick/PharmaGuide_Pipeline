@@ -415,9 +415,11 @@ def test_incomplete_per_strain_cfu_keeps_total_presence_without_numeric_disclosu
 
     Real case: a probiotic with total 10B CFU and 8 named strains disclosed
     one per-strain CFU-like row without a number. That row must not discard
-    the aggregate record; V4.1 Step 4 records it as a label limit, uncredited.
+    the aggregate record. An asserted CFU measurement with no number is an
+    unresolved producer quantity, rather than a completed neutral assessment.
     """
     from scoring_v4.modules.probiotic_dose import score_dose
+    from probiotic_measurements import declared_total_cfu, probiotic_label_identity_summary
 
     blends = [
         {
@@ -457,16 +459,18 @@ def test_incomplete_per_strain_cfu_keeps_total_presence_without_numeric_disclosu
 
     payload = score_dose(product)
 
-    assert _disclosure_points(payload) == 0
-    assert payload["components"]["cfu_adequacy"] == NEUTRAL_DOSE
-    assert payload["metadata"]["per_strain_cfu_disclosed_count"] == 0
-    assert payload["metadata"]["aggregate_cfu_proxy"]["applied"] is True
-    assert payload["metadata"]["aggregate_cfu_proxy"]["reason"] == "aggregate_cfu_label_presence"
-    assert payload["metadata"]["cfu_adequacy_basis"] == "aggregate_cfu_disclosed_only"
+    assert declared_total_cfu(product["probiotic_data"]) == 10_000_000_000
+    assert probiotic_label_identity_summary(product)["per_strain_cfu_disclosed_count"] == 0
+    assert payload["score"] is None
+    assert payload["components"] == {}
+    assert payload["metadata"]["assessment_status"] == "incomplete"
+    assert payload["metadata"]["reason_code"] == "unresolved_source_quantity"
+    assert payload["metadata"]["measurements"][0]["reason_code"] == "invalid_cfu_measurement"
 
 
 def test_single_strain_has_cfu_boolean_does_not_substitute_for_numeric_disclosure() -> None:
     from scoring_v4.modules.probiotic_dose import score_dose
+    from probiotic_measurements import probiotic_label_identity_summary
 
     blends = [
         {
@@ -477,11 +481,17 @@ def test_single_strain_has_cfu_boolean_does_not_substitute_for_numeric_disclosur
     ]
     clinical_strains = [_strain("Lactobacillus rhamnosus GG", cfu_per_day=None, adequacy_tier="good")]
 
-    payload = score_dose(_product(total_strain_count=1, blends=blends, clinical_strains=clinical_strains))
+    product = _product(total_strain_count=1, blends=blends, clinical_strains=clinical_strains)
+    payload = score_dose(product)
 
-    assert _disclosure_points(payload) == 0.0
-    assert payload["components"]["cfu_adequacy"] == NEUTRAL_DOSE
-    assert payload["metadata"]["cfu_adequacy_basis"] == "aggregate_cfu_disclosed_only"
+    summary = probiotic_label_identity_summary(product)
+    assert summary["total_strain_count"] == 1
+    assert summary["per_strain_cfu_disclosed_count"] == 0
+    assert payload["score"] is None
+    assert payload["components"] == {}
+    assert payload["metadata"]["assessment_status"] == "incomplete"
+    assert payload["metadata"]["reason_code"] == "unresolved_source_quantity"
+    assert payload["metadata"]["measurements"][0]["reason_code"] == "invalid_cfu_measurement"
 
 
 @pytest.mark.parametrize(
