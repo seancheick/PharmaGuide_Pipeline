@@ -331,9 +331,9 @@ def test_creatine_loading_peak_preserves_directions_without_extra_dose_credit():
     "For the first 5 days take 4 scoops daily, then 1 scoop daily.",
     "Days 1-7: 4 servings a day. Thereafter 1 serving a day.",
 ])
-def test_explicit_loading_protocols(text):
-    from serving_frequency import has_loading_protocol
-    assert has_loading_protocol({"statements": [{"type": "Suggested/Recommended/Usage/Directions", "notes": text}]})
+def test_explicit_loading_directions_keep_the_contribution_plateau(text):
+    loading = _directions(product([row("creatine_monohydrate", 5)]), text, 1, 4)
+    assert sports_dose(loading)["metadata"]["dose_basis"] == "creatine_contribution_policy"
 
 
 @pytest.mark.parametrize("text", [
@@ -344,10 +344,7 @@ def test_explicit_loading_protocols(text):
     "For maintenance, take 1 scoop daily.",
     "Take 1 scoop daily, then drink plenty of water.",
 ])
-def test_contingent_directions_are_not_loading(text):
-    from serving_frequency import has_loading_protocol
-    record = {"statements": [{"type": "Suggested/Recommended/Usage/Directions", "notes": text}]}
-    assert not has_loading_protocol(record)
+def test_contingent_directions_keep_the_contribution_plateau(text):
     loading = _directions(product([row("creatine_monohydrate", 5)]), text, 1, 4)
     assert sports_dose(loading)["metadata"]["dose_basis"] == "creatine_contribution_policy"
 

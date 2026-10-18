@@ -17,7 +17,7 @@ from scoring_v4.modules.sports_helpers import (
     pre_workout_goal_cluster_ids,
     primary_sports_identity,
     sports_identity_rows,
-    sports_rows,
+    sports_dosed_rows,
     sports_subtype,
 )
 
@@ -79,7 +79,7 @@ def test_sports_rows_filters_incidental_minerals() -> None:
         _row("creatine_monohydrate", 5, "Gram(s)"),
     )
 
-    assert [row["canonical_id"] for row in sports_rows(product)] == ["creatine_monohydrate"]
+    assert [row["canonical_id"] for row in sports_dosed_rows(product)] == ["creatine_monohydrate"]
 
 
 def test_sports_identity_rows_preserve_undosed_sports_actives() -> None:
@@ -94,7 +94,7 @@ def test_sports_identity_rows_preserve_undosed_sports_actives() -> None:
     )
 
     assert [row["canonical_id"] for row in sports_identity_rows(product)] == ["creatine_monohydrate"]
-    assert sports_rows(product) == []
+    assert sports_dosed_rows(product) == []
     assert primary_sports_identity(product) == "creatine"
 
 
@@ -105,7 +105,7 @@ def test_group_bcaa_totals_ratio_and_components() -> None:
         _row("l_valine", 2.5, "Gram(s)"),
     )
 
-    grouped = group_bcaa(sports_rows(product))
+    grouped = group_bcaa(sports_dosed_rows(product))
 
     assert grouped["complete"] is True
     assert grouped["total_g"] == pytest.approx(10.0)
@@ -122,7 +122,7 @@ def test_group_eaa_treats_six_to_eight_essential_amino_acids_as_partial() -> Non
         _row("l_threonine", 500, "mg"),
     )
 
-    grouped = group_eaa(sports_rows(product))
+    grouped = group_eaa(sports_dosed_rows(product))
 
     assert grouped["complete"] is False
     assert grouped["partial"] is True
@@ -143,7 +143,7 @@ def test_group_eaa_requires_all_nine_for_full_completeness() -> None:
         _row("l_valine", 500, "mg"),
     )
 
-    grouped = group_eaa(sports_rows(product))
+    grouped = group_eaa(sports_dosed_rows(product))
 
     assert grouped["complete"] is True
     assert grouped["partial"] is False

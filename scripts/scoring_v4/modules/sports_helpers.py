@@ -159,11 +159,6 @@ def sports_dosed_rows(product: Dict[str, Any]) -> List[Dict[str, Any]]:
     return rows
 
 
-def sports_rows(product: Dict[str, Any]) -> List[Dict[str, Any]]:
-    """Backward-compatible alias for dose-bearing sports rows."""
-    return sports_dosed_rows(product)
-
-
 def _row_by_canonical(rows: Iterable[Dict[str, Any]], target: str) -> Optional[Dict[str, Any]]:
     for row in rows:
         if canonical(row) == target:

@@ -396,32 +396,3 @@ def format_daily_frequency(servings_per_day: Any) -> str:
         return "four times daily"
     formatted = f"{count:g}"
     return f"{formatted} times daily"
-
-
-_DIRECTIONS_TYPE = "Suggested/Recommended/Usage/Directions"
-_NUMBER = r"(?:\d+|one|two|three|four|five|six|seven|eight|nine|ten|fourteen)"
-
-
-_LOADING_WORDING_RE = re.compile(r"\bloading\b|\bload\s+(?:phase|period|dose|protocol)\b", re.IGNORECASE)
-_INITIAL_PERIOD_RE = re.compile(
-    r"\bfirst\s+" + _NUMBER + r"\s*(?:days?|weeks?)\b|\bdays?\s*\d+\s*(?:-|through|to)\s*\d+\b", re.IGNORECASE)
-_LATER_MAINTENANCE_RE = re.compile(r"\b(?:then|thereafter|maintenance|maintain|after that|afterwards?)\b", re.IGNORECASE)
-
-
-def has_loading_protocol(record: Dict[str, Any]) -> bool:
-    """True only when a direction describes a loading regimen: explicit loading
-    wording ("Loading Phase: Day 1 through 5"), or a defined initial period
-    followed by a later maintenance regimen ("first 5 days ... then 1 scoop").
-    Workout timing, as-needed use, cycling, "Phase 1" names and maintenance
-    wording alone are contingent use, not loading.
-    """
-    for statement in record.get("statements") or ():
-        if not isinstance(statement, dict) or statement.get("type") != _DIRECTIONS_TYPE:
-            continue
-        text = str(statement.get("notes") or "")
-        if _LOADING_WORDING_RE.search(text):
-            return True
-        initial = _INITIAL_PERIOD_RE.search(text)
-        if initial and _LATER_MAINTENANCE_RE.search(text, initial.end()):
-            return True
-    return False

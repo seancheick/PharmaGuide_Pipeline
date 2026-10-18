@@ -88,7 +88,8 @@ def test_every_allowlisted_read_is_a_named_kind_and_the_live_tree_passes() -> No
     consumers = {key for key, reason in audit.ALLOWLIST.items()
                  if reason.startswith("typed_contract_consumer: ")}
     assert consumers == {
-        "scripts/scoring_v4/pillar_explanations.py|_dose_receipt_facts|get|unit|51190fd86a8b"
+        "scripts/scoring_v4/pillar_explanations.py|_dose_receipt_facts|get|unit|51190fd86a8b",
+        "scripts/scoring_v4/pillar_explanations.py|_dose_receipt_facts|get|unit|eb9242da2406"
     }
     findings = [f for path in audit.iter_scan_files() for f in audit._scan_file(path)]
     assert findings and all(f["allowlisted"] for f in findings)

@@ -65,6 +65,7 @@ PROFILE_SELECTOR_FORBIDDEN_FIELDS: dict[str, str] = {
 # Any other raw read fails the audit; a scoring module is never allowlisted
 # for convenience.
 ALLOWLIST: dict[str, str] = {
+    'scripts/scoring_v4/pillar_explanations.py|_dose_receipt_facts|get|unit|eb9242da2406': 'typed_contract_consumer: renders prenatal choline from the existing Dose receipt reference_assessments, pairing assessed per_day_min with its source-qualified unit and pregnancy RDA/AI; no ingredient quantity or benchmark is recomputed',
     'scripts/scoring_v4/pillar_explanations.py|_dose_receipt_facts|get|unit|51190fd86a8b': 'typed_contract_consumer: _dose_receipt_facts renders reference_assessments from the multi/prenatal and B-complex Dose owners; unit is paired with their assessed per_day_min/per_day_max and rda_ai, not read from an ingredient label',
     'scripts/scoring_v4/exposure.py|format_nutrition_mass|get|unit|7d8612ac5a11': 'canonical_owner: exposure.format_nutrition_mass adapts the Nutrition Facts source row for row_exposure; it reads only the panel unit and delegates quantity/operator resolution to that shared owner before all copy consumers render it',
     'scripts/scoring_v4/modules/generic_helpers.py|eligible_delivery_data|get|raw_source_text|9f43e033ffb4': 'canonical_owner: generic_helpers.eligible_delivery_data verifies the detected technology against its label evidence before credit; all formulation scorers and export consume this shared result',
@@ -78,9 +79,7 @@ ALLOWLIST: dict[str, str] = {
     "scripts/scoring_v4/modules/botanical_profile.py|_mass_mg|get|quantity|437869d0a4ab": "pass_a_known_pending_native_evidence_contract",
     "scripts/scoring_v4/modules/botanical_profile.py|_mass_mg|get|unit|d22733e3184e": "pass_a_known_pending_native_evidence_contract",
     "scripts/scoring_v4/modules/botanical_profile.py|_mass_mg|get|unit_normalized|c7a08b90a025": "pass_a_known_pending_native_evidence_contract",
-    "scripts/scoring_v4/modules/botanical_profile.py|_range_mg|get|unit|83418ab1801f": "pass_a_known_pending_native_evidence_contract",
     "scripts/scoring_v4/modules/brand_testing_posture.py|score_brand_testing_posture|get|match_type|2d68ef6686e9": "pass_a_known_pending_native_safety_signal_contract",
-    "scripts/scoring_v4/modules/collagen_profile.py|_range_mg|get|unit|83418ab1801f": "pass_a_known_pending_native_evidence_contract",
     "scripts/scoring_v4/modules/generic_helpers.py|has_usable_individual_dose|get|quantity|3fd4e11ae842": "pass_a_known_pending_native_evidence_contract",
     "scripts/scoring_v4/modules/generic_helpers.py|has_usable_individual_dose|get|unit_normalized|dcf5fcc7cc91": "pass_a_known_pending_native_evidence_contract",
     "scripts/scoring_v4/modules/generic_helpers.py|has_usable_individual_dose|get|unit|30c24beac47d": "pass_a_known_pending_native_evidence_contract",
@@ -97,9 +96,6 @@ ALLOWLIST: dict[str, str] = {
     "scripts/scoring_v4/modules/generic_transparency.py|_sum_total_active_mg|get|quantity|aacd9ff64a58": "pass_a_known_pending_native_evidence_contract",
     "scripts/scoring_v4/modules/generic_transparency.py|_sum_total_active_mg|get|unit_normalized|320965a122ab": "pass_a_known_pending_native_evidence_contract",
     "scripts/scoring_v4/modules/generic_transparency.py|_sum_total_active_mg|get|unit|44abae5cc7d8": "pass_a_known_pending_native_evidence_contract",
-    "scripts/scoring_v4/modules/multi_prenatal_dose.py|_quantity_mg|get|quantity|3fd4e11ae842": "pass_a_known_pending_native_evidence_contract",
-    "scripts/scoring_v4/modules/multi_prenatal_dose.py|_quantity_mg|get|unit_normalized|dcf5fcc7cc91": "pass_a_known_pending_native_evidence_contract",
-    "scripts/scoring_v4/modules/multi_prenatal_dose.py|_quantity_mg|get|unit|30c24beac47d": "pass_a_known_pending_native_evidence_contract",
     "scripts/scoring_v4/modules/omega_formulation.py|_row_mg|get|unit|d22733e3184e": "pass_a_known_pending_native_evidence_contract",
     "scripts/scoring_v4/modules/omega_transparency.py|_epa_or_dha_disclosed|get|unit|44abae5cc7d8": "pass_a_known_pending_native_evidence_contract",
     "scripts/scoring_v4/modules/omega_transparency.py|_epa_or_dha_disclosed|get|unit_normalized|320965a122ab": "pass_a_known_pending_native_evidence_contract",
