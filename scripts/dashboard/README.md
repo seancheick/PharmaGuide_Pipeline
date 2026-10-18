@@ -61,6 +61,18 @@ Important: the dashboard intentionally blends different data planes.
 
 Those timelines may not match. The UI now labels that explicitly per page.
 
+## Scoring config and CAERS
+
+- The `Config Snapshot` tab of `Data Quality` shows the production v4 config: the
+  version and fingerprint of `scripts/scoring_v4/config/quality_score.json` and
+  `scripts/data/omega_rubric.json` from `scoring_v4/config_registry.py`, the
+  pillar maxima, and whether the released catalog was scored with the same
+  config (`products_core.v4_config_fingerprint`).
+- `CAERS Audit` is analytics only. The v4 score applies no CAERS penalty; the
+  v3 B8 penalty was disabled on 2026-04-30 and removed on 2026-06-24, and the
+  `Scoring Status` tab records why.
+- No view reads the retired v3 file `scripts/config/scoring_config.json`.
+
 ## Verification
 
 Primary dashboard verification:
