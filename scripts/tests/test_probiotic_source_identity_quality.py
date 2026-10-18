@@ -298,6 +298,7 @@ def test_ancestor_source_state_controls_child_identity_clinical_and_cfu(layout, 
 @pytest.mark.parametrize("structured_child", [False, True])
 def test_actual_descendants_make_stale_active_role_parent_a_container(flattened, structured_child):
     from build_final_db import build_detail_blob
+    from probiotic_measurements import probiotic_label_identity_summary
     from scoring_v4.modules.probiotic_dose import score_dose
     from scoring_v4.modules.probiotic_transparency import score_transparency
 
@@ -326,7 +327,13 @@ def test_actual_descendants_make_stale_active_role_parent_a_container(flattened,
     assert formulation["metadata"]["total_strain_count"] == 1
     assert formulation["metadata"]["identified_strain_count"] == 1
     assert _identity_points(formulation) == 8
-    assert score_dose(product)["metadata"]["per_strain_cfu_disclosed_count"] == 0
+    # Physical identity remains source-owned even when a mismatched producer
+    # CFU projection makes the numerical Dose assessment incomplete.
+    assert probiotic_label_identity_summary(product)["per_strain_cfu_disclosed_count"] == 0
+    dose = score_dose(product)
+    assert dose["score"] is None
+    assert dose["metadata"]["assessment_status"] == "incomplete"
+    assert dose["metadata"]["reason_code"] == "unresolved_source_quantity"
     assert score_transparency(product)["components"]["per_strain_cfu_on_label"] == 0
     assert build_detail_blob(product, {})["probiotic_detail"]["total_strain_count"] == 1
 

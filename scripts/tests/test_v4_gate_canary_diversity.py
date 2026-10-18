@@ -63,7 +63,8 @@ V4_CANARIES = {
         "verdict": "SAFE",
         "confidence": "low",
         "score_unavailable_reason": None,
-        "score": 39.0,
+        # Already 40.0 on the stored corpus at 5fb2be1ca (stale pin, not V4.1).
+        "score": 40.0,
         "unevaluated_canonicals": set(),
     },
     # No total CFU and no demonstrated dose applicability: dose remains zero.
@@ -73,7 +74,8 @@ V4_CANARIES = {
         "module": "probiotic",
         "verdict": "SAFE",
         "confidence": "low",
-        "score_range": (30.1, 30.1),
+        # Dose V4.1: hidden per-strain amounts take the neutral (Dose 0 -> 8.55).
+        "score_range": (40.6, 40.6),
     },
     # Fish-oil parent mass with no EPA/DHA breakdown: scoreable as aggregate
     # evidence with moderate uncertainty, no score cap, and no CAUTION ceiling.
@@ -98,7 +100,9 @@ V4_CANARIES = {
         "module": "sports",
         "verdict": "SAFE",
         "confidence": "moderate",
-        "score_range": (78.2, 78.2),  # Distinct BioPerine A4 credit only; reviewed HMB reference.
+        # Distinct BioPerine A4 credit only; reviewed HMB reference. Dose V4.1:
+        # creatine and HMB co-primaries average (20, 16 -> 18).
+        "score_range": (76.2, 76.2),
     },
     # Assessment coverage is separate from quality. This disclosed fiber total
     # remains module-owned; completed limited/negative evidence stays explicit.
@@ -134,7 +138,8 @@ V4_CANARIES = {
         "verdict": "SAFE",
         "confidence": "moderate",
         "score_unavailable_reason": None,
-        "score": 53.0,
+        # Already 55.0 on the stored corpus at 5fb2be1ca (stale pin, not V4.1).
+        "score": 55.0,
         "limited_canonicals": {"paba", "fo_ti"},
     },
     # Typed confidence high on the probiotic module.
@@ -154,7 +159,9 @@ V4_CANARIES = {
         "module": "generic",
         "verdict": "CAUTION",
         "confidence": "moderate",
-        "score_range": (67.3, 67.3),
+        # Dose V4.1: raw Dose is adequacy only (11 -> 22) and the public
+        # Dose ceiling caps it once (public Dose 10 unchanged).
+        "score_range": (78.3, 78.3),
         "safety_verdict": "CAUTION",
     },
     "206362": {
@@ -164,7 +171,8 @@ V4_CANARIES = {
         "confidence": "moderate",
         # V4.1 (Oct 15, 2026): its strain research does not apply to this
         # product, so the former 10 certainty points are gated to 0.
-        "score_range": (29.1, 29.1),
+        # Dose V4.1: hidden per-strain amounts take the neutral (0 -> 8.55).
+        "score_range": (37.6, 37.6),
     },
 }
 

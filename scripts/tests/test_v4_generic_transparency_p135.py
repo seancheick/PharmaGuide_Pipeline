@@ -241,6 +241,48 @@ def test_complete_active_disclosure_credit_requires_usable_dose() -> None:
     ]
 
 
+@pytest.mark.parametrize('zero_kind', ['vitamin', 'fiber'])
+def test_disclosed_nonactive_zero_does_not_create_a_false_missing_active_census(zero_kind):
+    from copy import deepcopy
+    from test_dose_disclosure_status import _printed_zero
+    from scoring_v4.modules.generic_transparency import score_transparency
+    product = _product(total_active_ingredients=2)
+    active = product['ingredient_quality_data']['ingredients_scorable'][0]
+    active.update(raw_source_path='ingredientRows[0]', source_section='active')
+    zero = _printed_zero('mcg' if zero_kind == 'vitamin' else 'g')
+    zero.update(source_section='active', cleaner_row_role='active_scorable',
+                score_eligible_by_cleaner=True, score_exclusion_reason='recognized_non_scorable',
+                identity_decision_reason='no_dose_evidence')
+    if zero_kind == 'fiber':
+        zero.update(name='Dietary Fiber', canonical_id='fiber',
+                    cleaner_row_role='nested_display_only', score_eligible_by_cleaner=False,
+                    score_exclusion_reason='nested_display_only')
+    product['ingredient_quality_data']['ingredients'] = [deepcopy(active), zero]
+    payload = score_transparency(product)
+    assert payload['metadata']['complete_active_disclosure'] == {
+        'qualifies': True, 'bonus': 4.0, 'declared_active_count': 1,
+        'active_row_count': 1, 'complete_row_count': 1,
+        'blockers': [], 'incomplete_rows': [],
+    }
+    assert len(product['ingredient_quality_data']['ingredients_scorable']) == 1
+    assert product['proprietary_data']['total_active_ingredients'] == 2
+
+
+def test_np_zero_source_keeps_the_genuine_missing_active_census_guard():
+    from copy import deepcopy
+    from test_dose_disclosure_status import _printed_zero
+    from scoring_v4.modules.generic_transparency import score_transparency
+    product = _product(total_active_ingredients=2)
+    active = product['ingredient_quality_data']['ingredients_scorable'][0]
+    active['source_section'] = 'active'
+    zero = _printed_zero('NP')
+    zero.update(source_section='active', cleaner_row_role='active_scorable')
+    product['ingredient_quality_data']['ingredients'] = [deepcopy(active), zero]
+    payload = score_transparency(product)
+    assert payload['metadata']['complete_active_disclosure']['qualifies'] is False
+    assert 'declared_count_exceeds_rows' in payload['metadata']['complete_active_disclosure']['blockers']
+
+
 def test_proprietary_opacity_is_charged_once_by_b5_not_by_withholding_disclosure() -> None:
     """V4.1 Step 4: B5 owns blend opacity; it no longer also withholds this credit."""
     from scoring_v4.modules.generic_transparency import score_transparency

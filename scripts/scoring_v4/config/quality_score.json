@@ -1,28 +1,55 @@
 {
   "_metadata": {
     "config_name": "quality_score",
-    "version": "1.28.0-bounded-omega-policy",
+    "version": "1.29.1-dose-v41-omega-integration",
     "schema_version": "1.0.0",
     "last_updated": "2026-10-18",
-    "description": "PharmaGuide public six-pillar Quality Score (decision score) in the 20/20/20/15/15/10 frame. Pillars are category-aware purpose-fit adapters, NOT raw linear remaps: formulation/dose/evidence normalize against the engine's reviewed structural ceiling; verification saturates hard third-party signals with a fail-open neutral baseline and recognizes verified brand/facility-scoped certs as a small non-stacking signal; safety_hygiene is product-level. Rubric proxies are removed: ingredient-count breadth (including immune-support ingredient counts), focus bonuses/floors, generic enzyme recognition, blanket gummy format penalties, organic/Non-GMO/natural-source and marine-sustainability points, the omega EPA:DHA ratio bonus, the generic Dose premium-form count (1.21.0), astaxanthin/CoQ10 public caps, ingredient-presence Evidence floors, and certification-derived omega Formulation/Transparency floors. Fish/krill/algal oil carrier mass never becomes EPA+DHA dose; an omega-3 row printed as EPA and/or DHA owns that EPA/DHA amount (1.10.1), and omega concentration may use the declared Total Fat plus its FDA rounding half-increment when no oil mass is printed (1.10.1). Dose and Evidence never manufacture Formulation credit. Only transparency remains a faithful linear source-dimension map. raw_score_v4_100 is a module-rubric audit subtotal, not the public six-pillar score. quality_score_status controls whether any public quality score may be shown. Audited GMP facility credit comes only from a sourced link to an audited GMP facility registry row, and mid-tier reputation that restates verified certifications or audited GMP is not counted twice (1.9.0). Quality tiers are independent of safety; quality assembly never writes POOR or converts quality thresholds into SAFE. POOR is a read-only old-catalog compatibility value (October 1, 2026). Omega label ownership is enforced in 1.10.0. Sugar and sweetener charges come only from the shared B1 dietary-sugar and harmful-additive owners: the sports-protein and fiber adapters no longer add their own, and their former clean-daily-use points became a fixed route_base (1.21.4), retired in 1.26.0. Probiotic Evidence uses shared evidence-family certainty (10), identity/purpose applicability (6), and independent same-condition replication (0/2/4); CFU and studied-amount adequacy belong exclusively to Dose (1.22.0). v4 is the production catalog scoring contract as of export schema 2.2.0. Delivery credit uses the shared source-supported, form-aware eligibility decision. Intrinsic chemistry and a technology already represented by the resolved form cannot earn a second delivery bonus; Verification policy is unchanged. 1.26.0 (V4.1 Step 4): the formula-checks pillar owns additive and sugar findings within one 10-point budget; count, disclosure, focus, route-base and duplicate branded credits are retired; an unrated form and an unbenchmarked amount each take one shared neutral; probiotic Formulation is canonical form quality and probiotic Dose is measured adequacy; a label limitation stays scored while PharmaGuide's own unfinished work marks the assessment partial. 1.27.0: Sean approved Dose quality per one declared Facts-panel serving across all routes; daily maximum safety findings remain separate and unchanged. Formulation, Evidence, Verification and personal intake policies are unchanged. 1.28.0: approved ordinary-adult omega nutritional reference contribution at 250 mg EPA+DHA per serving, exclusive prenatal additional-DHA reference at 200 mg; therapeutic contexts and maximum-daily safety remain separate.",
+    "description": "PharmaGuide public six-pillar Quality Score (decision score) in the 20/20/20/15/15/10 frame. Pillars are category-aware purpose-fit adapters, NOT raw linear remaps: formulation/dose/evidence normalize against the engine's reviewed structural ceiling; verification saturates hard third-party signals with a fail-open neutral baseline and recognizes verified brand/facility-scoped certs as a small non-stacking signal; safety_hygiene is product-level. Rubric proxies are removed: ingredient-count breadth (including immune-support ingredient counts), focus bonuses/floors, generic enzyme recognition, blanket gummy format penalties, organic/Non-GMO/natural-source and marine-sustainability points, the omega EPA:DHA ratio bonus, the generic Dose premium-form count (1.21.0), astaxanthin/CoQ10 public caps, ingredient-presence Evidence floors, and certification-derived omega Formulation/Transparency floors. Fish/krill/algal oil carrier mass never becomes EPA+DHA dose; an omega-3 row printed as EPA and/or DHA owns that EPA/DHA amount (1.10.1), and omega concentration may use the declared Total Fat plus its FDA rounding half-increment when no oil mass is printed (1.10.1). Dose and Evidence never manufacture Formulation credit. Only transparency remains a faithful linear source-dimension map. raw_score_v4_100 is a module-rubric audit subtotal, not the public six-pillar score. quality_score_status controls whether any public quality score may be shown. Audited GMP facility credit comes only from a sourced link to an audited GMP facility registry row, and mid-tier reputation that restates verified certifications or audited GMP is not counted twice (1.9.0). Quality tiers are independent of safety; quality assembly never writes POOR or converts quality thresholds into SAFE. POOR is a read-only old-catalog compatibility value (October 1, 2026). Omega label ownership is enforced in 1.10.0. Sugar and sweetener charges come only from the shared B1 dietary-sugar and harmful-additive owners: the sports-protein and fiber adapters no longer add their own, and their former clean-daily-use points became a fixed route_base (1.21.4), retired in 1.26.0. Probiotic Evidence uses shared evidence-family certainty (10), identity/purpose applicability (6), and independent same-condition replication (0/2/4); CFU and studied-amount adequacy belong exclusively to Dose (1.22.0). v4 is the production catalog scoring contract as of export schema 2.2.0. Delivery credit uses the shared source-supported, form-aware eligibility decision. Intrinsic chemistry and a technology already represented by the resolved form cannot earn a second delivery bonus; Verification policy is unchanged. 1.26.0 (V4.1 Step 4): the formula-checks pillar owns additive and sugar findings within one 10-point budget; count, disclosure, focus, route-base and duplicate branded credits are retired; an unrated form and an unbenchmarked amount each take one shared neutral; probiotic Formulation is canonical form quality and probiotic Dose is measured adequacy; a label limitation stays scored while PharmaGuide's own unfinished work marks the assessment partial. 1.27.0: Sean approved Dose quality per one declared Facts-panel serving across all routes; daily maximum safety findings remain separate and unchanged. Formulation, Evidence, Verification and personal intake policies are unchanged. 1.28.0 (Dose V4.1, Sean 2026-10-17): Dose adequacy uses the minimum directed daily use and safety the maximum on every route; the per-nutrient UL bands and B7 subtraction are replaced by one product-level Dose ceiling (dose_safety_ceiling). Ordinary-adult magnesium (84 mg) and calcium (260 mg) contribution-policy targets and the potassium completed neutral are in dose_magnitudes.generic (Dose V4.1 section 3.1). Sports adequacy plateaus above former studied ranges; total daily caffeine feeds the product-level ceiling (dose_safety_ceiling.caffeine); sports co-primaries and probiotic strains average, hidden or unbenchmarked strains taking the shared neutral; evidence certainty no longer caps ATP, betaine or taurine Dose. Hidden amounts and completed no-reference conclusions take the shared Dose neutral on every route (section 2.3); config-owned Dose anchors carry reference semantics validated by schemas/dose_reference_semantics.schema.json. Above a highest studied dose adequacy plateaus (the above-studied-range credit is retired); immune zinc and vitamin D at their ULs are reduced only by the product-level ceiling; hidden botanical and collagen amounts take the neutral. 1.29.0: Sean approved revised43reference decisions and six-member prenatal critical group inside existing5-pointbudget on2026-10-18. One shared nutritional curve; unsupported discrete-dose extrapolations completed neutral; sports contribution targets are policy, not clinical minima; generic quarter-RDA/clinical-anchor shortcuts and sports composition credit retired. 1.29.1 integrates the reviewed omega marketing Evidence and molecular-form safeguards while retaining Dose V4.1 minimum-directed-daily exposure and native omega reference ownership.",
     "phase": "scoring_fairness_recalibration"
   },
   "pillars": {
-    "formulation":    { "weight": 20, "assembler": "formulation" },
-    "dose":           { "weight": 20, "assembler": "dose" },
-    "evidence":       { "weight": 20, "assembler": "evidence" },
-    "transparency":   { "weight": 15, "source_dim": "transparency" },
-    "verification":   { "weight": 15, "assembler": "verification" },
-    "safety_hygiene": { "weight": 10, "assembler": "safety_hygiene" }
+    "formulation": {
+      "weight": 20,
+      "assembler": "formulation"
+    },
+    "dose": {
+      "weight": 20,
+      "assembler": "dose"
+    },
+    "evidence": {
+      "weight": 20,
+      "assembler": "evidence"
+    },
+    "transparency": {
+      "weight": 15,
+      "source_dim": "transparency"
+    },
+    "verification": {
+      "weight": 15,
+      "assembler": "verification"
+    },
+    "safety_hygiene": {
+      "weight": 10,
+      "assembler": "safety_hygiene"
+    }
   },
   "safety_hygiene_subscale": {
-    "_doc": "PR3 + public truthfulness: product-level safety pillar. Clean base (no banned/recalled/watchlist match) → full 10; banned/recalled/watchlist present zeroes the raw safety_hygiene_base → 0. A Class I (critical) manufacturer recall in the last 3y deducts the raw violation magnitude HERE (safety/contamination half of the violation split); non-critical quality-system violations go to the verification pillar instead. Additive and sugar findings (formulation metadata formula_checks, low severity included) are charged here once, within this pillar's shared 10-point budget; Formulation no longer subtracts them (V4.1 Step 4). Only a confirmed high-risk or watchlist match zeroes the base. B7 excessive-dose deductions belong to Dose only; their concerns remain visible in Safety/Hygiene without another numerical charge.",
+    "_doc": "PR3 + public truthfulness: product-level safety pillar. Clean base (no banned/recalled/watchlist match) \u2192 full 10; banned/recalled/watchlist present zeroes the raw safety_hygiene_base \u2192 0. A Class I (critical) manufacturer recall in the last 3y deducts the raw violation magnitude HERE (safety/contamination half of the violation split); non-critical quality-system violations go to the verification pillar instead. Additive and sugar findings (formulation metadata formula_checks, low severity included) are charged here once, within this pillar's shared 10-point budget; Formulation no longer subtracts them (V4.1 Step 4). Only a confirmed high-risk or watchlist match zeroes the base. B7 excessive-dose deductions belong to Dose only; their concerns remain visible in Safety/Hygiene without another numerical charge.",
     "additive_or_sweetener_max_penalty": 10.0
   },
   "clean_label_subscale": {
-    "_doc": "Clean-label preferences are separate from safety verdicts. An active, source-complete policy INFORMS through clean_label_flags_v4 and may take a small graduated safety_hygiene penalty without forcing CAUTION. penalty = penalty_base (from clean_label_policy.json) × role_multiplier[role], summed across flagged additives and clamped to max_total_penalty per product. A coating/excipient (role=inactive) is penalized lightly (×0.5); an active is penalized harder (×1.5). The titanium-dioxide value is preserved from the pre-registry production policy; calibration is intentionally outside this correctness release. tier_base is a compatibility fallback only.",
-    "role_multiplier": { "active": 1.5, "major": 1.5, "claim_prominent": 1.0, "adjunct": 0.5, "inactive": 0.5 },
-    "tier_base": { "elevated": 2.0, "informational": 0.5 },
+    "_doc": "Clean-label preferences are separate from safety verdicts. An active, source-complete policy INFORMS through clean_label_flags_v4 and may take a small graduated safety_hygiene penalty without forcing CAUTION. penalty = penalty_base (from clean_label_policy.json) \u00d7 role_multiplier[role], summed across flagged additives and clamped to max_total_penalty per product. A coating/excipient (role=inactive) is penalized lightly (\u00d70.5); an active is penalized harder (\u00d71.5). The titanium-dioxide value is preserved from the pre-registry production policy; calibration is intentionally outside this correctness release. tier_base is a compatibility fallback only.",
+    "role_multiplier": {
+      "active": 1.5,
+      "major": 1.5,
+      "claim_prominent": 1.0,
+      "adjunct": 0.5,
+      "inactive": 0.5
+    },
+    "tier_base": {
+      "elevated": 2.0,
+      "informational": 0.5
+    },
     "max_total_penalty": 5.0
   },
   "evidence_subscale": {
@@ -44,7 +71,7 @@
     "default_reference": 20.0
   },
   "dose_subscale": {
-    "_doc": "PR5: category-aware purpose-fit dose. References come from the reviewed dose contract, never the highest score in the current catalog. Generic singles top out at 22 in the supplemental/clinical window; botanical profiles top out at 21; the immune adapter's component sum caps at 22. 1.26.0 retired the focused-single completion and stack-support credits, so every sports subtype is referenced to its 20-point primary dose (22 when BCAA/EAA composition is assessed). Adequately dosed citrulline, complete BCAA/EAA, and alpha-GPC reach the reviewed top Dose band; Evidence owns evidence certainty. An overdosed product already gets low raw dose and a sub-clinical one gets proportional credit; normalization never repairs excess or underdosing. 1.2.0 (2026-09-14): omega raw dose tops out at 20 after the +5 EPA:DHA ratio bonus was removed; its reference is 20, the raw ceiling: the rubric gives full band credit at 2 g/day EPA+DHA, and the former 23 only existed to absorb ratio completion credit (1.2.1, reviewed on all 719 omega products). 1.7.0 (2026-09-15): multi/prenatal RDA/AI coverage no longer multiplies by the ordinal 0.75 + bio_score/60 form factor; that factor never exceeded 1.0, so the prenatal_multi reference stayed 23; 1.26.0 retired the 3-point count-based panel breadth (reference 20, or 21 when the prenatal DHA complement is assessed).",
+    "_doc": "Dose references normalize existing route component budgets to public20. Generic contribution reference22; sports common primary reference20 after composition-credit retirement. Prenatal keeps the existing separate DHA complement reference. Single final maximum-use safety ceiling applies after normalization. Discrete research amounts do not establish a minimum or continuous curve. See approved DoseV4.1 reference decisions2026-10-18.",
     "archetype_reference": {
       "sports_single": 20.0,
       "sports_pre_workout": 20.0,
@@ -61,7 +88,6 @@
     },
     "_assessed_component_reference_doc": "V4.1 Step 4: references are the retained attainable maximum. Sports keeps its 20-point primary dose plus the 2-point BCAA/EAA composition check when that check applies; an adult multi keeps 20 and a prenatal adds the 1-point DHA complement. Count, breadth, single-focus, moderate-fit and disclosure credits are retired.",
     "assessed_component_reference": {
-      "sports_composition_assessed": 22.0,
       "prenatal_complement_assessed": 21.0
     },
     "_unbenchmarked_neutral_doc": "V4.1 Step 4: a disclosed amount with no applicable benchmark earns this neutral public Dose value wherever the Dose owner has no benchmark for it: generic purposes and fallbacks, the botanical and collagen profiles, and the sports off-list proxy, which delegates to the generic owner (raw = value x the product's Dose reference / the Dose pillar weight). On the probiotic route a strain CFU amount without a strain benchmark earns no Dose credit (approved option R); a CFU-dosed row on the generic route keeps the generic owner's neutral. A hidden or missing amount whose benchmark exists earns nothing; an unresolved benchmark identity is an unfinished assessment.",
@@ -93,8 +119,14 @@
     "default_reference": 25.0
   },
   "formulation_penalties": {
-    "_doc": "B1 harmful-additive severity points. Since V4.1 Step 4 they are charged once, by the safety_hygiene (formula checks) pillar from formulation metadata formula_checks, capped at safety_hygiene_subscale.additive_or_sweetener_max_penalty; Formulation no longer subtracts them. Hoisted from generic_formulation.py's hardcoded constants 2026-07-04 so calibration is a config edit, not a code edit. S6 calibration: moderate/high/critical raised to 2/3/4 for real severity separation; LOW held at 0.5 so benign fillers (silicon dioxide, stearates, maltodextrin) cost little; since V4.1 Step 4 they are charged once by the formula checks and worded as formula quality, never as a safety concern. generic_formulation.py reads these at runtime (single source; logic stays in code per the module's §13 lock). test_v4_additive_points_config guards config<->runtime drift. NOTE: the retiring v3 scorer keeps its OWN copy in scoring_config.json (B1_harmful_additives.risk_points, still 3/2/1/0.5) — the two are DIFFERENT models and are not expected to match; do not sync them.",
-    "b1_harmful_additive_points": { "critical": 4.0, "high": 3.0, "moderate": 2.0, "low": 0.5, "none": 0.0 },
+    "_doc": "B1 harmful-additive severity points. Since V4.1 Step 4 they are charged once, by the safety_hygiene (formula checks) pillar from formulation metadata formula_checks, capped at safety_hygiene_subscale.additive_or_sweetener_max_penalty; Formulation no longer subtracts them. Hoisted from generic_formulation.py's hardcoded constants 2026-07-04 so calibration is a config edit, not a code edit. S6 calibration: moderate/high/critical raised to 2/3/4 for real severity separation; LOW held at 0.5 so benign fillers (silicon dioxide, stearates, maltodextrin) cost little; since V4.1 Step 4 they are charged once by the formula checks and worded as formula quality, never as a safety concern. generic_formulation.py reads these at runtime (single source; logic stays in code per the module's \u00a713 lock). test_v4_additive_points_config guards config<->runtime drift. NOTE: the retiring v3 scorer keeps its OWN copy in scoring_config.json (B1_harmful_additives.risk_points, still 3/2/1/0.5) \u2014 the two are DIFFERENT models and are not expected to match; do not sync them.",
+    "b1_harmful_additive_points": {
+      "critical": 4.0,
+      "high": 3.0,
+      "moderate": 2.0,
+      "low": 0.5,
+      "none": 0.0
+    },
     "b1_harmful_additive_cap": 15.0
   },
   "formulation_magnitudes": {
@@ -103,7 +135,11 @@
     "presence_floor": 2.0,
     "a1_bio_score_cap": 15.0,
     "a3_delivery_cap": 3.0,
-    "a3_delivery_tier_points": { "1": 3.0, "2": 2.0, "3": 1.0 },
+    "a3_delivery_tier_points": {
+      "1": 3.0,
+      "2": 2.0,
+      "3": 1.0
+    },
     "a4_absorption_cap": 3.0,
     "a5b_standardized_full": 1.0,
     "a5b_standardized_marker_only": 0.5,
@@ -115,36 +151,262 @@
     "dietary_sugar_high_penalty": 4.0,
     "dietary_sugar_cap": 4.0
   },
-  "dose_safety_policy": {
-    "ul_pct_threshold": 150.0,
-    "per_flag_penalty": 2.0,
-    "cap": 3.0
+  "dose_safety_ceiling": {
+    "_doc": "Dose V4.1 \u00a72.4 (Sean D1, 2026-10-17): one product-level ceiling on the public Dose pillar, applied once after route aggregation and normalization, from the strongest confirmed exceedance at maximum directed daily use (rda_ul_data.safety_flags via scoring_v4.dose_safety). Exactly exceeds_above_pct is not an exceedance; above it and below zero_at_pct Dose is at most partial_ceiling_public; at or above zero_at_pct Dose is 0. A ceiling never raises a lower score; material_but_unresolved sets none. These bands are PharmaGuide scoring policy, not medically established toxicity grades. Replaces the per-nutrient UL bands and the B7 subtraction (-2/flag, cap 3).",
+    "reference_semantics": {
+      "review_date": "2026-10-17",
+      "reference_type": "safety_only_reference",
+      "scope": "all_routes_confirmed_ul_exceedance",
+      "preparation": "nutrient_as_assessed_by_rda_ul_data",
+      "purpose": "dose_safety_screen",
+      "population": "label_population_lowest_established_ul",
+      "exposure_basis": "maximum_directed_daily_use",
+      "units": "percent_of_ul",
+      "curve": "dose_safety_ceiling_bands",
+      "source_ids": [
+        "https://ods.od.nih.gov/factsheets/Calcium-HealthProfessional/",
+        "https://ods.od.nih.gov/factsheets/Magnesium-HealthProfessional/"
+      ],
+      "rationale": "Sean D1/D2 (2026-10-17): a confirmed exceedance of the lowest established UL for the label population caps public Dose once; the 100/150% bands and 10/0 points are PharmaGuide scoring policy, not toxicity grades.",
+      "owner": "scripts/scoring_v4/dose_safety.py::DoseSafetyResult.dose_ceiling",
+      "approval_status": "approved_sean_d1_d2_2026-10-17"
+    },
+    "exceeds_above_pct": 100.0,
+    "zero_at_pct": 150.0,
+    "partial_ceiling_public": 10.0,
+    "caffeine": {
+      "_doc": "Dose V4.1 \u00a73.3 (Sean D3): total declared daily caffeine at maximum directed daily use, quantified caffeine rows summed without counting a declared total and its components twice, feeds the same ceiling as an approved non-UL upper reference. Unknown amounts stay unknown. 400 mg/day is FDA's amount generally not associated with negative effects for most adults; the 600 mg boundary and the points are PharmaGuide policy. EFSA context: single doses up to 200 mg. The per-use performance benchmark stays a separate adequacy assessment.",
+      "exceeds_above_mg_day": 400.0,
+      "zero_at_mg_day": 600.0,
+      "reference_type": "safety_only_reference",
+      "scope": "all_routes_declared_caffeine",
+      "preparation": "caffeine",
+      "purpose": "daily_intake_safety_screen",
+      "population": "general_adult",
+      "exposure_basis": "maximum_directed_daily_use",
+      "units": "mg",
+      "curve": "dose_safety_ceiling_bands",
+      "source_ids": [
+        "https://www.fda.gov/consumers/consumer-updates/spilling-beans-how-much-caffeine-too-much",
+        "https://www.efsa.europa.eu/en/topics/topic/caffeine"
+      ],
+      "rationale": "FDA 400 mg/day reference for most adults; PharmaGuide policy sets >400 and <600 mg/day to at most 10 and >=600 mg/day to 0.",
+      "owner": "scripts/scoring_v4/dose_safety.py::DoseSafetyResult.dose_ceiling",
+      "review_date": "2026-10-17",
+      "approval_status": "approved_sean_d3_2026-10-17"
+    }
   },
   "dose_magnitudes": {
-    "_doc": "Dose-dimension caps, windows, thresholds and penalties per category module — hoisted from the score_dose modules 2026-07-04 as a PURE REFACTOR (values unchanged; verified byte-identical score_dose diff on a real-product sample). Each module reads its sub-block via scoring_v4.quality_score_config. Structural constants stay in code. Drift-guarded by test_v4_dose_magnitudes_config. 1.4.0 (2026-09-14): the generic window no longer gives full credit at 25% of any reference. Official DRI vitamins/trace minerals: half credit at window_high_source_pct (20% = FDA 'high/excellent source', 21 CFR 101.54(b), read from eCFR 2026-09-11), linear to full at window_full_adequacy_pct (100% of the RDA/AI). No-DRI clinical anchors reviewed against PubMed on 2026-09-15 (1.5.1): only the aliases in _clinical_anchor_reference_by_canonical receive proportional credit, using the cited and corrected anchor in rda_optimal_uls.json; all other references keep window_rda_threshold (25%). UL bands unchanged. 1.21.0 (2026-09-26; authored as 1.14.0 on claude/angry-khayyam-155ede): the generic +3 for >= 2 forms with bio_score >= 12 in one nutrient family is removed with its three keys; IQM forms[].bio_score owns form quality (matrix concept ingredient_form_quality) and a form count is not a dose.",
+    "_doc": "Dose-dimension caps, windows, thresholds and penalties per category module \u2014 hoisted from the score_dose modules 2026-07-04 as a PURE REFACTOR (values unchanged; verified byte-identical score_dose diff on a real-product sample). Each module reads its sub-block via scoring_v4.quality_score_config. Structural constants stay in code. Drift-guarded by test_v4_dose_magnitudes_config. 1.4.0 (2026-09-14): the generic window no longer gives full credit at 25% of any reference. Official DRI vitamins/trace minerals: half credit at window_high_source_pct (20% of RDA/AI, PharmaGuide point calibration; FDA's high/excellent-source claim uses Daily Value per RACC instead), linear to full at window_full_adequacy_pct (100% of the RDA/AI). No-DRI clinical anchors reviewed against PubMed on 2026-09-15 (1.5.1): only the aliases in _clinical_anchor_reference_by_canonical receive proportional credit, using the cited and corrected anchor in rda_optimal_uls.json; all other references keep window_rda_threshold (25%). UL bands unchanged. 1.21.0 (2026-09-26; authored as 1.14.0 on claude/angry-khayyam-155ede): the generic +3 for >= 2 forms with bio_score >= 12 in one nutrient family is removed with its three keys; IQM forms[].bio_score owns form quality (matrix concept ingredient_form_quality) and a form count is not a dose.",
     "generic": {
       "cap_supplemental_window": 22.0,
       "dimension_cap": 25.0,
-      "window_rda_threshold": 25.0,
-      "window_ul_partial_band": 100.0,
-      "window_overdose_credit": 11.0,
       "window_high_source_pct": 20.0,
       "window_full_adequacy_pct": 100.0,
-      "_clinical_anchor_reference_by_canonical": {
-        "quercetin": "quercetin",
-        "tmg_betaine": "betaine_tmg",
-        "l_glycine": "glycine",
-        "gaba": "gaba_gamma_aminobutyric_acid",
-        "berberine": "berberine",
-        "berberine_supplement": "berberine",
-        "beta-alanine": "beta_alanine",
-        "beta_alanine": "beta_alanine",
-        "glucosamine": "glucosamine_sulfate",
-        "hyaluronic_acid": "hyaluronic_acid",
-        "nmn": "nmn_nicotinamide_mononucleotide",
-        "pqq": "pqq_pyrroloquinoline_quinone",
-        "colostrum": "bovine_colostrum",
-        "urolithin_a": "urolithin_a"
+      "reference_semantics": {
+        "_doc": "Dose V4.1 section 2.2: meaning of the generic window curve, one record per reference kind (generic_dose._adequacy_reference_kind).",
+        "dri": {
+          "review_date": "2026-10-18",
+          "reference_type": "nutritional_reference",
+          "scope": "official_dri_nutritional_reference",
+          "preparation": "nutrient_as_declared",
+          "purpose": "nutrient_adequacy",
+          "population": "general_adult",
+          "exposure_basis": "minimum_directed_daily_use",
+          "units": "percent_of_rda_or_ai",
+          "curve": "policy_half_credit_at_20pct_rda_ai_then_linear_to_full_at_100pct",
+          "source_ids": [
+            "https://www.ecfr.gov/current/title-21/chapter-I/subchapter-B/part-101/subpart-D/section-101.54",
+            "https://www.fda.gov/food/nutrition-facts-label/daily-value-nutrition-and-supplement-facts-labels"
+          ],
+          "rationale": "The RDA/AI is a total-intake nutritional reference; PharmaGuide policy awards half credit at 20% and full credit at 100% of that reference. FDA's high/excellent-source claim instead uses 20% of the Daily Value per RACC. RDA/AI and Daily Value are not interchangeable, and FDA does not prescribe this point curve. Higher-sourced adult RDA/AI remains the existing adequacy_basis.",
+          "owner": "scripts/scoring_v4/modules/generic_dose.py::nutritional_unit_credit",
+          "approval_status": "approved_sean_2026_10_18"
+        },
+        "no_benchmark": {
+          "review_date": "2026-10-18",
+          "reference_type": "no_benchmark",
+          "scope": "completed_review_without_applicable_general_benchmark",
+          "preparation": "nutrient_as_declared",
+          "purpose": "nutrient_adequacy",
+          "population": "general_adult",
+          "exposure_basis": "minimum_directed_daily_use",
+          "units": "percent_of_rda_or_ai",
+          "curve": "completed_no_benchmark_neutral",
+          "source_ids": [
+            "https://github.com/seancheick/PharmaGuide_Pipeline/blob/claude/dose-v41/docs/plans/DOSE_V41_REFERENCE_DECISIONS.md"
+          ],
+          "rationale": "Completed source review supplies no defensible general supplement target. Study regimens stay descriptive. Use the existing neutral only with genuinely disclosed/hidden amounts, never pipeline-lost quantities.",
+          "owner": "scripts/scoring_v4/modules/generic_dose.py::nutritional_unit_credit",
+          "approval_status": "approved_sean_2026_10_18"
+        },
+        "collagen_collagen_peptides": {
+          "reference_type": "discrete_studied_regimen",
+          "scope": "generic_collagen_contribution",
+          "preparation": "exact_source_peptides",
+          "purpose": "skin_joint_bone_must_be_separate",
+          "population": "source_specific_adults",
+          "exposure_basis": "minimum_directed_daily_use",
+          "units": "g",
+          "curve": "completed_no_benchmark_neutral",
+          "source_ids": [
+            "https://pubmed.ncbi.nlm.nih.gov/24401291/",
+            "https://pubmed.ncbi.nlm.nih.gov/28177710/",
+            "https://pubmed.ncbi.nlm.nih.gov/29337906/",
+            "https://pubmed.ncbi.nlm.nih.gov/18416885/",
+            "https://pubmed.ncbi.nlm.nih.gov/31627309/"
+          ],
+          "rationale": "Different specific peptides were studied at 2.5 g for skin, 5 g for joint or bone outcomes, and 10 g for joint symptoms. Distinct regimens and purposes do not establish a generic continuous window, minimum, upper limit, or preparation equivalence. Completed review retains descriptive regimen facts; no general Dose curve is established.",
+          "owner": "scripts/scoring_v4/modules/collagen_profile.py::_score_collagen_row",
+          "review_date": "2026-10-18",
+          "approval_status": "approved_existing_neutral_2026_10_18"
+        },
+        "collagen_uc_ii_collagen": {
+          "reference_type": "discrete_studied_regimen",
+          "scope": "generic_collagen_contribution",
+          "preparation": "UC_II",
+          "purpose": "knee_symptoms",
+          "population": "adult_knee_OA",
+          "exposure_basis": "minimum_directed_daily_use",
+          "units": "mg",
+          "curve": "completed_no_benchmark_neutral",
+          "source_ids": [
+            "https://pubmed.ncbi.nlm.nih.gov/26822714/"
+          ],
+          "rationale": "UC-II at 40 mg/day for 180 days was studied in adult knee OA using the exact preparation. That preparation mass is not a universal minimum, a continuous window, or a safety UL. Completed review retains descriptive regimen facts; no general Dose curve is established.",
+          "owner": "scripts/scoring_v4/modules/collagen_profile.py::_score_collagen_row",
+          "review_date": "2026-10-18",
+          "approval_status": "approved_existing_neutral_2026_10_18"
+        },
+        "collagen_biocell_collagen": {
+          "reference_type": "discrete_studied_regimen",
+          "scope": "generic_collagen_contribution",
+          "preparation": "BioCell_matrix",
+          "purpose": "skin_or_OA_must_be_separate",
+          "population": "source_specific_adult",
+          "exposure_basis": "minimum_directed_daily_use",
+          "units": "mg",
+          "curve": "completed_no_benchmark_neutral",
+          "source_ids": [
+            "https://pubmed.ncbi.nlm.nih.gov/31221944/",
+            "https://pubmed.ncbi.nlm.nih.gov/22486722/"
+          ],
+          "rationale": "BioCell was studied at 1 g/day for skin and 2 g/day for OA; matrix and purpose remain qualified. Different-purpose regimens do not establish one generic interval or equivalence to isolated hydrolyzed type II collagen. Completed review retains descriptive regimen facts; no general Dose curve is established.",
+          "owner": "scripts/scoring_v4/modules/collagen_profile.py::_score_collagen_row",
+          "review_date": "2026-10-18",
+          "approval_status": "approved_existing_neutral_2026_10_18"
+        },
+        "collagen_gelatin": {
+          "reference_type": "discrete_studied_regimen",
+          "scope": "generic_collagen_contribution",
+          "preparation": "vitamin_C_enriched_gelatin",
+          "purpose": "mechanistic_collagen_synthesis",
+          "population": "healthy_active_men",
+          "exposure_basis": "minimum_directed_daily_use",
+          "units": "g",
+          "curve": "completed_no_benchmark_neutral",
+          "source_ids": [
+            "https://pubmed.ncbi.nlm.nih.gov/27852613/"
+          ],
+          "rationale": "Vitamin C enriched gelatin at 5/15 g per use before exercise was repeated three times daily; the outcome was a synthesis biomarker. This does not establish a generic daily 5\u201315 g window, clinical injury prevention, or a 20 g UL. Completed review retains descriptive regimen facts; no general Dose curve is established.",
+          "owner": "scripts/scoring_v4/modules/collagen_profile.py::_score_collagen_row",
+          "review_date": "2026-10-18",
+          "approval_status": "approved_existing_neutral_2026_10_18"
+        },
+        "collagen_eggshell_membrane_nem": {
+          "reference_type": "discrete_studied_regimen",
+          "scope": "generic_collagen_contribution",
+          "preparation": "NEM",
+          "purpose": "pain_stiffness",
+          "population": "adult_knee_OA",
+          "exposure_basis": "minimum_directed_daily_use",
+          "units": "mg",
+          "curve": "completed_no_benchmark_neutral",
+          "source_ids": [
+            "https://pubmed.ncbi.nlm.nih.gov/19340512/"
+          ],
+          "rationale": "NEM at 500 mg/day for eight weeks was studied in adult knee OA, with pain/stiffness signals but no significant overall WOMAC result. The exact preparation regimen does not establish a universal minimum, continuous curve, or safety UL. Completed review retains descriptive regimen facts; no general Dose curve is established.",
+          "owner": "scripts/scoring_v4/modules/collagen_profile.py::_score_collagen_row",
+          "review_date": "2026-10-18",
+          "approval_status": "approved_existing_neutral_2026_10_18"
+        },
+        "sleep_melatonin": {
+          "reference_type": "discrete_studied_regimen",
+          "scope": "generic_sleep_contribution",
+          "preparation": "melatonin",
+          "purpose": "sleep",
+          "population": "source_specific_older_adults",
+          "exposure_basis": "minimum_directed_daily_use",
+          "units": "mg",
+          "curve": "completed_no_benchmark_neutral",
+          "source_ids": [
+            "https://pubmed.ncbi.nlm.nih.gov/11600532/"
+          ],
+          "rationale": "Adults over 50 received 0.1/0.3/3 mg 30 minutes before bed for one week each; 0.3 mg improved sleep efficiency. The generic preferred window, high-dose cuts, low floor, release equivalence and population generalization are not established. Completed review retains descriptive regimen facts; no general Dose curve is established.",
+          "owner": "scripts/scoring_v4/modules/sleep_support.py::score_sleep_purpose_dose",
+          "review_date": "2026-10-18",
+          "approval_status": "approved_existing_neutral_2026_10_18"
+        },
+        "sleep_5_htp": {
+          "reference_type": "discrete_studied_regimen",
+          "scope": "generic_sleep_contribution",
+          "preparation": "5_htp",
+          "purpose": "sleep",
+          "population": "source_specific_older_adults",
+          "exposure_basis": "minimum_directed_daily_use",
+          "units": "mg",
+          "curve": "completed_no_benchmark_neutral",
+          "source_ids": [
+            "https://pubmed.ncbi.nlm.nih.gov/38309227/"
+          ],
+          "rationale": "Thirty older adults received 100 mg/day for 12 weeks; certain subjective sleep components improved. The generic 50\u2013300 mg window, 300/400 mg cuts and low-dose floor are not established. Completed review retains descriptive regimen facts; no general Dose curve is established.",
+          "owner": "scripts/scoring_v4/modules/sleep_support.py::score_sleep_purpose_dose",
+          "review_date": "2026-10-18",
+          "approval_status": "approved_existing_neutral_2026_10_18"
+        }
+      },
+      "contribution_policy_targets": {
+        "_doc": "Dose V4.1 \u00a73.1 (Sean, 2026-10-17): ordinary-adult contribution-policy targets, scored 20 x min(elemental amount at minimum directed daily use / target, 1) on the public scale. Prenatal, pediatric, panel and clinical-purpose standards keep their own references. Each target must stay below its adult supplemental UL.",
+        "magnesium": {
+          "target_mg": 84.0,
+          "reference_type": "supplement_contribution_policy",
+          "scope": "ordinary_adult_single_nutrient_or_declared_nutrient_purpose",
+          "preparation": "elemental",
+          "purpose": "nutrient_adequacy",
+          "population": "general_adult",
+          "exposure_basis": "minimum_directed_daily_use",
+          "units": "mg",
+          "curve": "proportional_then_plateau",
+          "source_ids": [
+            "https://www.ecfr.gov/current/title-21/chapter-I/subchapter-B/part-101/subpart-D/section-101.54",
+            "https://www.fda.gov/food/nutrition-facts-label/daily-value-nutrition-and-supplement-facts-labels"
+          ],
+          "rationale": "20% of the FDA Daily Value for magnesium (420 mg), FDA's 'high/excellent source' threshold, applied per minimum directed day as PharmaGuide's contribution-policy adaptation; FDA applies 20% per RACC, so this is not a label-claim certification. Above the target earns no extra credit.",
+          "owner": "scripts/scoring_v4/modules/generic_dose.py::_band_credit",
+          "review_date": "2026-10-18",
+          "approval_status": "approved_sean_2026_10_18"
+        },
+        "calcium": {
+          "target_mg": 260.0,
+          "absorption_context_per_administration_mg": 500.0,
+          "absorption_context_source": "https://ods.od.nih.gov/factsheets/Calcium-HealthProfessional/",
+          "reference_type": "supplement_contribution_policy",
+          "scope": "ordinary_adult_single_nutrient_or_declared_nutrient_purpose",
+          "preparation": "elemental",
+          "purpose": "nutrient_adequacy",
+          "population": "general_adult",
+          "exposure_basis": "minimum_directed_daily_use",
+          "units": "mg",
+          "curve": "proportional_then_plateau",
+          "source_ids": [
+            "https://www.ecfr.gov/current/title-21/chapter-I/subchapter-B/part-101/subpart-D/section-101.54",
+            "https://www.fda.gov/food/nutrition-facts-label/daily-value-nutrition-and-supplement-facts-labels"
+          ],
+          "rationale": "20% of the FDA Daily Value for calcium (1300 mg), FDA's 'high/excellent source' threshold, applied per minimum directed day as PharmaGuide's contribution-policy adaptation; FDA applies 20% per RACC, so this is not a label-claim certification. Above the target earns no extra credit.",
+          "owner": "scripts/scoring_v4/modules/generic_dose.py::_band_credit",
+          "review_date": "2026-10-18",
+          "approval_status": "approved_sean_2026_10_18"
+        }
       }
     },
     "multi_prenatal": {
@@ -153,21 +415,68 @@
       "cap_critical_nutrient_coverage": 5.0,
       "cap_prenatal_complement_support": 1.0,
       "prenatal_dha_full_mg": 200.0,
-      "prenatal_dha_partial_mg": 100.0,
-      "targeted_multi_selected_anchors": 5,
-      "critical_min_pct_rda": { "folate": 50.0, "iron": 50.0, "iodine": 50.0, "vitamin_d": 50.0, "vitamin_b12": 50.0, "choline": 25.0 }
+      "reference_semantics": {
+        "_doc": "Dose V4.1 section 2.2: meaning of the prenatal DHA complement anchor.",
+        "prenatal_dha": {
+          "reference_type": "nutritional_reference",
+          "scope": "pregnancy_DHA_contribution",
+          "preparation": "explicit_DHA",
+          "purpose": "pregnancy_DHA_contribution",
+          "population": "pregnancy_lactation",
+          "exposure_basis": "minimum_directed_daily_use",
+          "units": "mg",
+          "curve": "proportional_then_plateau",
+          "source_ids": [
+            "https://pubmed.ncbi.nlm.nih.gov/18184094/"
+          ],
+          "rationale": "The consensus recommends average intake of at least 200 mg DHA/day during pregnancy and lactation. The 100 mg half/quarter steps and partial credit for unknown DHA from a combined EPA+DHA total are editorial. Sean approved the explicit PharmaGuide policy on2026-10-18; no percent clinical efficacy is implied.",
+          "owner": "scripts/scoring_v4/modules/multi_prenatal_dose.py::_dha_score",
+          "review_date": "2026-10-18",
+          "approval_status": "approved_sean_2026_10_18"
+        },
+        "panel_curve": {
+          "reference_type": "nutritional_reference",
+          "scope": "multi_nutrient_contribution",
+          "preparation": "source_qualified_nutrients",
+          "purpose": "multi_nutrient_contribution",
+          "population": "label_applicable_demographic",
+          "exposure_basis": "minimum_directed_daily_use",
+          "units": "percent_RDA_AI",
+          "curve": "shared_nutritional_unit_credit",
+          "source_ids": [
+            "https://ods.od.nih.gov/HealthInformation/nutrientrecommendations.aspx"
+          ],
+          "rationale": "Underlying RDA/AI values are source-owned total-intake references, with pregnancy rebasing from the existing records. Full credit at 50%, the 200/500% cuts, and component weights are editorial rather than FNB clinical thresholds. Sean approved the explicit PharmaGuide policy on2026-10-18; no percent clinical efficacy is implied.",
+          "owner": "scripts/scoring_v4/modules/multi_prenatal_dose.py::_coverage_unit_credit",
+          "review_date": "2026-10-18",
+          "approval_status": "approved_sean_2026_10_18"
+        },
+        "critical_thresholds": {
+          "reference_type": "supplement_contribution_policy",
+          "scope": "critical_nutrient_contribution",
+          "preparation": "source_qualified_nutrients",
+          "purpose": "critical_nutrient_contribution",
+          "population": "label_applicable_demographic",
+          "exposure_basis": "minimum_directed_daily_use",
+          "units": "percent_RDA_AI",
+          "curve": "shared_nutritional_unit_credit",
+          "source_ids": [
+            "https://ods.od.nih.gov/HealthInformation/nutrientrecommendations.aspx",
+            "https://ods.od.nih.gov/factsheets/Choline-HealthProfessional/"
+          ],
+          "rationale": "Nutritional reference intake varies by nutrient and life stage. The 50/25% cutoffs and half credit are supplement-contribution policy. Choline is not in the current fixed critical core. The runtime comment claiming choline already counts in the fixed critical group is false; broad coverage can count disclosed choline, but the current five-member critical tuple excludes it. Sources do not prescribe critical membership or point weights. Sean approved the explicit PharmaGuide policy on2026-10-18; no percent clinical efficacy is implied.",
+          "owner": "scripts/scoring_v4/modules/multi_prenatal_dose.py::_critical_scores",
+          "review_date": "2026-10-18",
+          "approval_status": "approved_sean_2026_10_18"
+        }
+      },
+      "targeted_multi_selected_anchors": 5
     },
     "probiotic": {
       "cap_dose": 25.0,
       "cap_cfu_adequacy": 15.0,
-      "_aggregate_cfu_doc": "1.26.0 (V4.1 Step 4): a total CFU count, or a named strain at its own mass with no CFU, is a label limitation and earns no Dose credit; it is recorded for the explanation only. Aggregate count is never divided among strains and is not treated as efficacy: NIH ODS states that higher CFU counts do not necessarily provide greater health benefits. Adequacy credit requires a strain-owned measurement. Measured counts guaranteed only at manufacture or with no guarantee basis retain the conservative 0.90/0.85 reliability adjustment because viable counts can decline before expiration.",
+      "_aggregate_cfu_doc": "DoseV4.1: general CFUtiers and manufacture/unknown-guarantee numericalmultipliers are retired. Exact strain/formula source factsremain descriptive; perstrain completedneutral preservesitsvote. Label-hiding staysdistinct from lost/invalidCFU quantities. Exactapprovedstudiedformula policy remainsqualified and independent.",
       "v3_cfu_adequacy_cap": 5.0,
-      "tier_points": {
-        "low": 0.0,
-        "adequate": 1.0,
-        "good": 2.0,
-        "excellent": 3.0
-      },
       "dose_applicability_policy": {
         "credit": {
           "EXACT_TESTED_DOSE": 1.0,
@@ -179,17 +488,292 @@
       }
     },
     "omega": {
-      "cap_dose": 25.0,
-      "adult_nutritional_reference_mg": 250.0,
-      "prenatal_dha_reference_mg": 200.0,
-      "reference_contribution_cap": 20.0,
-      "_doc": "Reference contribution, not treatment efficacy or personal adequacy. EFSA 2010 adult total-intake AI: 250 mg EPA+DHA; pregnancy adds 100-200 mg DHA. PharmaGuide selects 200 mg additional DHA and proportional partial credit. Clinical-purpose 2 g/4 g bands remain in omega_rubric. https://www.efsa.europa.eu/en/efsajournal/pub/1461"
+      "cap_dose": 25.0
     },
-    "sports": { "dimension_cap": 25.0 },
-    "fiber_digestive": { "dimension_cap": 25.0 }
+    "sports": {
+      "dimension_cap": 25.0,
+      "primary_points": 20.0,
+      "contribution_targets": {
+        "protein": 20.0,
+        "creatine": 3.0,
+        "beta_alanine": 4.0,
+        "hmb": 3.0,
+        "caffeine": 200.0
+      },
+      "reference_semantics": {
+        "protein": {
+          "reference_type": "supplement_contribution_policy",
+          "scope": "muscle_protein_synthesis",
+          "preparation": "high_quality_intact_protein",
+          "purpose": "muscle_protein_synthesis",
+          "population": "healthy_exercising_adult",
+          "exposure_basis": "per_use",
+          "units": "g",
+          "curve": "proportional_then_plateau",
+          "source_ids": [
+            "https://pubmed.ncbi.nlm.nih.gov/28642676/"
+          ],
+          "rationale": "ISSN recommends high-quality protein at 0.25 g/kg or 20\u201340 g per serving, qualified by age and exercise. Actual protein grams must be established; whey/powder ingredient mass is not protein content. The 15 g cutoff and raw 8/16 points are editorial. Different protein preparations cannot be assumed equivalent. Sean approved the explicit PharmaGuide policy on2026-10-18; no percent clinical efficacy is implied.",
+          "owner": "scripts/scoring_v4/modules/sports_dose.py::_score_primary",
+          "review_date": "2026-10-18",
+          "approval_status": "approved_sean_2026_10_18"
+        },
+        "creatine": {
+          "reference_type": "supplement_contribution_policy",
+          "scope": "chronic_muscle_creatine_saturation",
+          "preparation": "creatine_monohydrate",
+          "purpose": "chronic_muscle_creatine_saturation",
+          "population": "healthy_exercising_adult",
+          "exposure_basis": "minimum_directed_daily_use",
+          "units": "g",
+          "curve": "proportional_then_plateau",
+          "source_ids": [
+            "https://pubmed.ncbi.nlm.nih.gov/28615996/"
+          ],
+          "rationale": "ISSN describes creatine monohydrate maintenance at 3\u20135 g/day, up to 5\u201310 g for larger athletes, and loading at 20 g/day for 5\u20137 days. The 2 g cutoff and point steps are editorial. Different salts and unconfirmed loading duration cannot inherit the exact monohydrate regimen. Sean approved the explicit PharmaGuide policy on2026-10-18; no percent clinical efficacy is implied.",
+          "owner": "scripts/scoring_v4/modules/sports_dose.py::_score_primary",
+          "review_date": "2026-10-18",
+          "approval_status": "approved_sean_2026_10_18"
+        },
+        "beta_alanine": {
+          "reference_type": "supplement_contribution_policy",
+          "scope": "chronic_carnosine_exercise",
+          "preparation": "beta_alanine",
+          "purpose": "chronic_carnosine_exercise",
+          "population": "healthy_exercising_adult",
+          "exposure_basis": "minimum_directed_daily_use",
+          "units": "g",
+          "curve": "proportional_then_plateau",
+          "source_ids": [
+            "https://pubmed.ncbi.nlm.nih.gov/26175657/"
+          ],
+          "rationale": "ISSN describes 4\u20136 g/day for at least 2\u20134 weeks, with performance context especially 1\u20134 minute efforts. The 2 g cutoff and raw 8/16 points are editorial. A daily amount does not establish duration adherence. Sean approved the explicit PharmaGuide policy on2026-10-18; no percent clinical efficacy is implied.",
+          "owner": "scripts/scoring_v4/modules/sports_dose.py::_score_primary",
+          "review_date": "2026-10-18",
+          "approval_status": "approved_sean_2026_10_18"
+        },
+        "l_citrulline": {
+          "reference_type": "no_benchmark",
+          "scope": "acute_exercise",
+          "preparation": "l_citrulline",
+          "purpose": "acute_exercise",
+          "population": "general_adult",
+          "exposure_basis": "per_use",
+          "units": "g",
+          "curve": "completed_no_benchmark_neutral",
+          "source_ids": [
+            "https://pubmed.ncbi.nlm.nih.gov/39662304/",
+            "https://pubmed.ncbi.nlm.nih.gov/40470618/"
+          ],
+          "rationale": "Retrieved primary trials tested acute 5.3 g and chronic 8 g under distinct conditions. They do not establish generic 3/6 g thresholds or continuous interpolation across preparations and purposes. Completed review: exact regimens remain descriptive; no defensible general continuous Dose benchmark.",
+          "owner": "scripts/scoring_v4/modules/sports_dose.py::_score_primary",
+          "review_date": "2026-10-18",
+          "approval_status": "approved_existing_neutral_2026_10_18"
+        },
+        "citrulline_malate": {
+          "reference_type": "discrete_studied_regimen",
+          "scope": "acute_exercise",
+          "preparation": "citrulline_malate",
+          "purpose": "acute_exercise",
+          "population": "general_adult",
+          "exposure_basis": "per_use",
+          "units": "g",
+          "curve": "completed_no_benchmark_neutral",
+          "source_ids": [
+            "https://pubmed.ncbi.nlm.nih.gov/26658899/",
+            "https://pubmed.ncbi.nlm.nih.gov/30097067/",
+            "https://pubmed.ncbi.nlm.nih.gov/29057836/"
+          ],
+          "rationale": "Eight-gram acute preparations produced positive and null results; a 6 g recovery trial was null. The 6/8 g thresholds, malate-ratio equivalence and continuous window are unsupported. Completed review: exact regimens remain descriptive; no defensible general continuous Dose benchmark.",
+          "owner": "scripts/scoring_v4/modules/sports_dose.py::_score_primary",
+          "review_date": "2026-10-18",
+          "approval_status": "approved_existing_neutral_2026_10_18"
+        },
+        "hmb": {
+          "reference_type": "supplement_contribution_policy",
+          "scope": "exercise_recovery",
+          "preparation": "source_qualified_HMB_Ca_or_HMB_FA",
+          "purpose": "exercise_recovery",
+          "population": "general_adult",
+          "exposure_basis": "minimum_directed_daily_use",
+          "units": "g",
+          "curve": "proportional_then_plateau",
+          "source_ids": [
+            "https://pmc.ncbi.nlm.nih.gov/articles/PMC11740297/"
+          ],
+          "rationale": "The 2025 ISSN stand describes 3 g/day in most studies and 1.5 g efficacy in some untrained cohorts. Formulation and training context matter. The 1.5 g cutoff and raw 8/16 points do not establish a universal clinical threshold; 3 g is a reference contribution proposal. Sean approved the explicit PharmaGuide policy on2026-10-18; no percent clinical efficacy is implied.",
+          "owner": "scripts/scoring_v4/modules/sports_dose.py::_score_primary",
+          "review_date": "2026-10-18",
+          "approval_status": "approved_sean_2026_10_18"
+        },
+        "bcaa_split": {
+          "reference_type": "no_benchmark",
+          "scope": "exercise_recovery",
+          "preparation": "bcaa_split",
+          "purpose": "exercise_recovery",
+          "population": "general_adult",
+          "exposure_basis": "per_use",
+          "units": "g",
+          "curve": "completed_no_benchmark_neutral",
+          "source_ids": [
+            "https://pubmed.ncbi.nlm.nih.gov/33586928/"
+          ],
+          "rationale": "The review describes 2\u201310 g/day at 2:1:1 across varied regimens, not the current per-use thresholds. The 3/5 g thresholds, ratio tolerance and two-point composition bonus lack a source-established dose-response basis. Completed review: exact regimens remain descriptive; no defensible general continuous Dose benchmark.",
+          "owner": "scripts/scoring_v4/modules/sports_dose.py::_score_primary",
+          "review_date": "2026-10-18",
+          "approval_status": "approved_existing_neutral_2026_10_18"
+        },
+        "bcaa_aggregate": {
+          "reference_type": "no_benchmark",
+          "scope": "exercise_recovery",
+          "preparation": "bcaa_aggregate",
+          "purpose": "exercise_recovery",
+          "population": "general_adult",
+          "exposure_basis": "per_use",
+          "units": "g",
+          "curve": "completed_no_benchmark_neutral",
+          "source_ids": [
+            "https://pubmed.ncbi.nlm.nih.gov/33586928/"
+          ],
+          "rationale": "The review describes 2\u201310 g/day at 2:1:1 across varied regimens. The 2/5 g thresholds and lower aggregate-only cap can reflect disclosure or Evidence rather than dose appropriateness. Completed review: exact regimens remain descriptive; no defensible general continuous Dose benchmark.",
+          "owner": "scripts/scoring_v4/modules/sports_dose.py::_score_primary",
+          "review_date": "2026-10-18",
+          "approval_status": "approved_existing_neutral_2026_10_18"
+        },
+        "eaa": {
+          "reference_type": "no_benchmark",
+          "scope": "muscle_protein_synthesis",
+          "preparation": "eaa",
+          "purpose": "muscle_protein_synthesis",
+          "population": "general_adult",
+          "exposure_basis": "per_use",
+          "units": "g",
+          "curve": "completed_no_benchmark_neutral",
+          "source_ids": [
+            "https://pubmed.ncbi.nlm.nih.gov/37800468/"
+          ],
+          "rationale": "ISSN describes MPS response at 1.5\u20133 g at rest and a plateau around 15\u201318 g, with composition and population qualifications. Current 5/8 g thresholds, six-amino-acid floor and completeness bonus are editorial. Completed review: exact regimens remain descriptive; no defensible general continuous Dose benchmark.",
+          "owner": "scripts/scoring_v4/modules/sports_dose.py::_score_primary",
+          "review_date": "2026-10-18",
+          "approval_status": "approved_existing_neutral_2026_10_18"
+        },
+        "alpha_gpc": {
+          "reference_type": "discrete_studied_regimen",
+          "scope": "acute_exercise",
+          "preparation": "alpha_gpc",
+          "purpose": "acute_exercise",
+          "population": "general_adult",
+          "exposure_basis": "per_use",
+          "units": "mg",
+          "curve": "completed_no_benchmark_neutral",
+          "source_ids": [
+            "https://pubmed.ncbi.nlm.nih.gov/26582972/",
+            "https://pmc.ncbi.nlm.nih.gov/articles/PMC3313098/",
+            "https://pubmed.ncbi.nlm.nih.gov/39683633/"
+          ],
+          "rationale": "Studies tested 600 mg/day for six days for strength, an acute 600 mg conference abstract, and 315/630 mg for acute cognition. Generic 300/600 mg thresholds, continuous interpolation, chronic/acute equivalence and carrier/active mass equivalence are not established. Completed review: exact regimens remain descriptive; no defensible general continuous Dose benchmark.",
+          "owner": "scripts/scoring_v4/modules/sports_dose.py::_score_primary",
+          "review_date": "2026-10-18",
+          "approval_status": "approved_existing_neutral_2026_10_18"
+        },
+        "atp": {
+          "reference_type": "discrete_studied_regimen",
+          "scope": "acute_squat_performance",
+          "preparation": "PEAK_ATP",
+          "purpose": "acute_squat_performance",
+          "population": "general_adult",
+          "exposure_basis": "per_use",
+          "units": "mg",
+          "curve": "completed_no_benchmark_neutral",
+          "source_ids": [
+            "https://pubmed.ncbi.nlm.nih.gov/34957398/"
+          ],
+          "rationale": "PEAK ATP dose-ranging at 100/200/400 mg found a first-set repetition signal at 400 mg; total repetitions and weight were not significant. Other ATP preparations and outcomes are not equivalent, and sampled doses do not establish continuous interpolation. Completed review: exact regimens remain descriptive; no defensible general continuous Dose benchmark.",
+          "owner": "scripts/scoring_v4/modules/sports_dose.py::_score_primary",
+          "review_date": "2026-10-18",
+          "approval_status": "approved_existing_neutral_2026_10_18"
+        },
+        "caffeine": {
+          "reference_type": "supplement_contribution_policy",
+          "scope": "acute_exercise",
+          "preparation": "caffeine",
+          "purpose": "acute_exercise",
+          "population": "general_adult",
+          "exposure_basis": "per_use",
+          "units": "mg",
+          "curve": "proportional_then_plateau",
+          "source_ids": [
+            "https://pubmed.ncbi.nlm.nih.gov/33388079/"
+          ],
+          "rationale": "ISSN describes acute performance doses of 3\u20136 mg/kg, possibly as low as 2 mg/kg, with timing/source qualifications. Fixed 150/200 mg thresholds replace bodyweight-based guidance; the 18-point ceiling is editorial. Sean approved the explicit PharmaGuide policy on2026-10-18; no percent clinical efficacy is implied.",
+          "owner": "scripts/scoring_v4/modules/sports_dose.py::_score_primary",
+          "review_date": "2026-10-18",
+          "approval_status": "approved_sean_2026_10_18"
+        },
+        "betaine": {
+          "reference_type": "discrete_studied_regimen",
+          "scope": "chronic_strength_power",
+          "preparation": "betaine_anhydrous",
+          "purpose": "chronic_strength_power",
+          "population": "general_adult",
+          "exposure_basis": "minimum_directed_daily_use",
+          "units": "g",
+          "curve": "completed_no_benchmark_neutral",
+          "source_ids": [
+            "https://pubmed.ncbi.nlm.nih.gov/20642826/",
+            "https://pmc.ncbi.nlm.nih.gov/articles/PMC2915951/"
+          ],
+          "rationale": "Twelve trained men used 1.25 g twice daily for 14 days, with selected strength/power outcomes. One tested regimen does not establish a minimum or continuous adequacy curve. Completed review: exact regimens remain descriptive; no defensible general continuous Dose benchmark.",
+          "owner": "scripts/scoring_v4/modules/sports_dose.py::_score_primary",
+          "review_date": "2026-10-18",
+          "approval_status": "approved_existing_neutral_2026_10_18"
+        },
+        "taurine": {
+          "reference_type": "discrete_studied_regimen",
+          "scope": "acute_exercise",
+          "preparation": "taurine",
+          "purpose": "acute_exercise",
+          "population": "general_adult",
+          "exposure_basis": "per_use",
+          "units": "g",
+          "curve": "completed_no_benchmark_neutral",
+          "source_ids": [
+            "https://pubmed.ncbi.nlm.nih.gov/22855206/",
+            "https://pubmed.ncbi.nlm.nih.gov/27380030/",
+            "https://pubmed.ncbi.nlm.nih.gov/40852891/"
+          ],
+          "rationale": "One gram two hours before a 3 km run improved performance in eight men; one gram before a 4 km cycling trial was null in eleven men. The meta-analysis found no linear dose-response across 1\u20136 g. A universal one-gram threshold and exercise-independent interpolation are not established. Completed review: exact regimens remain descriptive; no defensible general continuous Dose benchmark.",
+          "owner": "scripts/scoring_v4/modules/sports_dose.py::_score_primary",
+          "review_date": "2026-10-18",
+          "approval_status": "approved_existing_neutral_2026_10_18"
+        }
+      }
+    },
+    "fiber_digestive": {
+      "dimension_cap": 25.0,
+      "reference_semantics": {
+        "fiber_aggregate": {
+          "reference_type": "no_benchmark",
+          "scope": "generic_fiber_contribution",
+          "preparation": "generic_total_dietary_fiber_or_ingredient_mass",
+          "purpose": "general_fiber_contribution",
+          "population": "general_adult",
+          "exposure_basis": "minimum_directed_daily_use",
+          "units": "g",
+          "curve": "completed_no_benchmark_neutral",
+          "source_ids": [
+            "https://www.ecfr.gov/current/title-21/chapter-I/subchapter-B/part-101/subpart-E/section-101.81"
+          ],
+          "rationale": "The regulation describes 7 g/day psyllium soluble fiber or 3 g/day oat/barley beta-glucan soluble fiber in qualified CHD claim contexts. It does not support one generic total-fiber or ingredient-mass curve, the 1/3/5/7 g scoring steps, or their points. Completed review retains descriptive regimen facts; no general Dose curve is established.",
+          "owner": "scripts/scoring_v4/modules/fiber_digestive_dose.py::_fiber_effective_dose_points",
+          "review_date": "2026-10-18",
+          "approval_status": "approved_existing_neutral_2026_10_18"
+        }
+      }
+    }
   },
   "evidence_magnitudes": {
-    "_doc": "Evidence-dimension caps, primary-evidence floors, enrollment/depth bands and effect-direction multipliers per category module — hoisted from the score_evidence modules 2026-07-04 as a PURE REFACTOR (values unchanged; empty score_evidence diff verified, incl. generic's primary-floor path). Structural constants (eligible study-type sets, positioning/relevance sets) stay in code. Drift-guarded by test_v4_evidence_magnitudes_config.",
+    "_doc": "Evidence-dimension caps, primary-evidence floors, enrollment/depth bands and effect-direction multipliers per category module \u2014 hoisted from the score_evidence modules 2026-07-04 as a PURE REFACTOR (values unchanged; empty score_evidence diff verified, incl. generic's primary-floor path). Structural constants (eligible study-type sets, positioning/relevance sets) stay in code. Drift-guarded by test_v4_evidence_magnitudes_config.",
     "generic": {
       "cap_total": 20.0,
       "cap_per_ingredient": 7.0,
@@ -199,10 +783,47 @@
       "primary_floor_branded_strong": 18.0,
       "primary_floor_branded_moderate": 17.0,
       "nutrition_authority_floor": 10.0,
-      "enrollment_quality_bands": [[50.0, 0.6], [200.0, 0.8], [500.0, 1.0], [1000.0, 1.1]],
-      "effect_direction_multipliers": { "positive_strong": 1.0, "positive_weak": 0.85, "mixed": 0.6, "null": 0.0, "negative": 0.0 },
-      "top_n_weights": [1.0, 0.7, 0.5, 0.3],
-      "depth_bonus_bands": [[20.0, 0.25], [40.0, 0.5]]
+      "enrollment_quality_bands": [
+        [
+          50.0,
+          0.6
+        ],
+        [
+          200.0,
+          0.8
+        ],
+        [
+          500.0,
+          1.0
+        ],
+        [
+          1000.0,
+          1.1
+        ]
+      ],
+      "effect_direction_multipliers": {
+        "positive_strong": 1.0,
+        "positive_weak": 0.85,
+        "mixed": 0.6,
+        "null": 0.0,
+        "negative": 0.0
+      },
+      "top_n_weights": [
+        1.0,
+        0.7,
+        0.5,
+        0.3
+      ],
+      "depth_bonus_bands": [
+        [
+          20.0,
+          0.25
+        ],
+        [
+          40.0,
+          0.5
+        ]
+      ]
     },
     "probiotic": {
       "cap_evidence": 20.0,
@@ -231,7 +852,10 @@
       },
       "unspecified_human_design_weight": 0.6666666666666666
     },
-    "multi_prenatal": { "cap_evidence": 20.0, "generic_cap_evidence": 20.0 },
+    "multi_prenatal": {
+      "cap_evidence": 20.0,
+      "generic_cap_evidence": 20.0
+    },
     "omega": {
       "cap_evidence": 20.0,
       "_doc": "Editorial, amount-independent Evidence mapping. Clinical facts and source identifiers live in INGR_OMEGA3.purpose_evidence; omega amount is judged only by Dose. Ordinary adult explicit EPA+DHA receives 10.4, a label triglyceride-lowering claim retains 10.4 (purpose alone cannot establish treatment-evidence applicability), and prenatal DHA intake authority receives 11.1. Child/baby, DHA-only, uncertain identity, specialized preparation and unresolved mixed-purpose labels are held. No prescription-equivalence, universal cardiovascular protection or preterm-birth efficacy claim is made. Safety remains outside this pillar.",
@@ -259,12 +883,47 @@
     }
   },
   "verification_magnitudes": {
-    "_doc": "Trust/verification point values, cert-scope points, and manufacturer D1-D5 + violation caps per module — hoisted from the trust/manufacturer/brand-testing/verification-bonus modules 2026-07-04 as a PURE REFACTOR (values unchanged; empty diff verified across score_trust / score_manufacturer_trust / score_manufacturer_violations / score_brand_testing_posture / score_verification_bonus). Structural cert-name sets stay in code; CLASS_I_LOOKBACK_DAYS (3*365) stays in code as a documented window. Drift-guarded by test_v4_verification_magnitudes_config.",
+    "_doc": "Trust/verification point values, cert-scope points, and manufacturer D1-D5 + violation caps per module \u2014 hoisted from the trust/manufacturer/brand-testing/verification-bonus modules 2026-07-04 as a PURE REFACTOR (values unchanged; empty diff verified across score_trust / score_manufacturer_trust / score_manufacturer_violations / score_brand_testing_posture / score_verification_bonus). Structural cert-name sets stay in code; CLASS_I_LOOKBACK_DAYS (3*365) stays in code as a documented window. Drift-guarded by test_v4_verification_magnitudes_config.",
     "generic_trust": {
       "dimension_cap": 15.0,
       "b4a_cap": 12.0,
-      "b4a_scope_points": { "sku": [8.0, 4.0, 2.0], "product_line": [6.0, 3.0, 1.0], "label_asserted_product": [2.0, 1.0, 0.0], "brand_only": [0.0, 0.0, 0.0], "needs_review": [0.0, 0.0, 0.0], "claimed_only": [0.0, 0.0, 0.0] },
-      "b4a_scope_strength": { "sku": 3, "product_line": 2, "label_asserted_product": 1 },
+      "b4a_scope_points": {
+        "sku": [
+          8.0,
+          4.0,
+          2.0
+        ],
+        "product_line": [
+          6.0,
+          3.0,
+          1.0
+        ],
+        "label_asserted_product": [
+          2.0,
+          1.0,
+          0.0
+        ],
+        "brand_only": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "needs_review": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "claimed_only": [
+          0.0,
+          0.0,
+          0.0
+        ]
+      },
+      "b4a_scope_strength": {
+        "sku": 3,
+        "product_line": 2,
+        "label_asserted_product": 1
+      },
       "b4b_gmp_certified": 4.0,
       "b4c_coa": 1.0,
       "b4c_batch_lookup": 1.0
@@ -282,9 +941,16 @@
       "mfg_cap_two_class_i": -35.0,
       "mfg_cap_three_or_more_class_i": -50.0
     },
-    "brand_testing": { "hard_evidence_score": 2.0, "soft_quality_score": 1.0 },
-    "verification_bonus": { "cap": 8.0 },
-    "omega_trust": { "cap_trust": 15.0 }
+    "brand_testing": {
+      "hard_evidence_score": 2.0,
+      "soft_quality_score": 1.0
+    },
+    "verification_bonus": {
+      "cap": 8.0
+    },
+    "omega_trust": {
+      "cap_trust": 15.0
+    }
   },
   "transparency_magnitudes": {
     "_doc": "Transparency measures what the label discloses. Complete identity and dose disclosure can reach the category cap without optional free-from, gluten-free, vegan, or vegetarian marketing claims. Those claims remain validated for contradiction and false-claim penalties but earn no positive quality points. Blend-opacity and disease-claim penalties remain in this pillar. Regex keyword patterns and the generic-override category set stay in code. Drift-guarded by test_v4_transparency_magnitudes_config.",
@@ -293,16 +959,33 @@
       "clear_disclosure_base": 6.0,
       "complete_active_disclosure_bonus": 4.0,
       "b2_cap": 2.0,
-      "b2_severity_points": { "high": 2.0, "moderate": 1.5, "low": 1.0 },
+      "b2_severity_points": {
+        "high": 2.0,
+        "moderate": 1.5,
+        "low": 1.0
+      },
       "b3_cap": 0.0,
       "b3_allergen_free": 0.0,
       "b3_gluten_free": 0.0,
       "b3_vegan_or_vegetarian": 0.0,
-      "b5_base": { "full": 0.0, "partial": 1.0, "none": 2.0 },
-      "b5_prop_coef": { "full": 0.0, "partial": 3.0, "none": 5.0 },
+      "b5_base": {
+        "full": 0.0,
+        "partial": 1.0,
+        "none": 2.0
+      },
+      "b5_prop_coef": {
+        "full": 0.0,
+        "partial": 3.0,
+        "none": 5.0
+      },
       "b5_cap": 10.0,
       "b5_count_denom_min": 8,
-      "b5_class_multipliers": { "probiotic": 0.4, "multi_or_prenatal": 1.3, "sports_active": 1.5, "generic": 1.0 },
+      "b5_class_multipliers": {
+        "probiotic": 0.4,
+        "multi_or_prenatal": 1.3,
+        "sports_active": 1.5,
+        "generic": 1.0
+      },
       "b5_trivial_micro_blend_hidden_mass_mg": 1.0,
       "b5_trivial_micro_blend_max_impact": 0.01,
       "b6_disease_claim_penalty": 5.0
@@ -320,43 +1003,153 @@
       "cap_per_strain_cfu": 7.0,
       "cap_aggregate_cfu_disclosure_proxy": 4.0
     },
-    "omega": { "cap_transparency": 11.0 }
+    "omega": {
+      "cap_transparency": 11.0
+    }
   },
   "formulation_variant_magnitudes": {
-    "_doc": "Category-specific formulation/profile caps, form-quality points, standardization tiers and botanical dose-band credits — hoisted from the variant score_formulation / botanical / collagen modules 2026-07-04 as a PURE REFACTOR (values unchanged; empty diff verified across all variant + profile entrypoints). 1.26.0 (V4.1 Step 4) changed values and retired keys deliberately; see the formulation_subscale and dose_subscale docs. Canonical-ID sets stay in code. Drift-guarded by test_v4_formulation_variant_magnitudes_config. (The generic formulation module's magnitudes live in the flat formulation_magnitudes block.)",
+    "_doc": "Category-specific formulation/profile caps, form-quality points, standardization tiers and botanical dose-band credits \u2014 hoisted from the variant score_formulation / botanical / collagen modules 2026-07-04 as a PURE REFACTOR (values unchanged; empty diff verified across all variant + profile entrypoints). 1.26.0 (V4.1 Step 4) changed values and retired keys deliberately; see the formulation_subscale and dose_subscale docs. Canonical-ID sets stay in code. Drift-guarded by test_v4_formulation_variant_magnitudes_config. (The generic formulation module's magnitudes live in the flat formulation_magnitudes block.)",
     "multi_prenatal": {
-      "cap_formulation": 12.0, "formulation_presence_floor": 2.0, "cap_panel_form_quality": 12.0,
+      "cap_formulation": 12.0,
+      "formulation_presence_floor": 2.0,
+      "cap_panel_form_quality": 12.0,
       "bio_score_max": 15.0
     },
-    "omega": { "cap_formulation": 25.0 },
+    "omega": {
+      "cap_formulation": 25.0
+    },
     "probiotic": {
       "cap_formulation": 15.0
     },
-    "sports": { "dimension_cap": 30.0 },
-    "fiber_digestive": { "dimension_cap": 30.0 },
+    "sports": {
+      "dimension_cap": 30.0
+    },
+    "fiber_digestive": {
+      "dimension_cap": 30.0
+    },
     "botanical": {
       "botanical_formulation_cap": 15.0,
-      "botanical_identity_neutral": 7.2, "botanical_extract": 1.6,
-      "standardization_tier_full": 3.2, "standardization_tier_near": 2.4,
+      "botanical_identity_neutral": 7.2,
+      "botanical_extract": 1.6,
+      "standardization_tier_full": 3.2,
+      "standardization_tier_near": 2.4,
       "standardization_tier_half": 1.6,
-      "botanical_dose_within": 21.0, "botanical_dose_near": 16.0, "botanical_dose_above": 12.0,
-      "botanical_dose_band_scale": 21.0, "botanical_dose_no_active": 0.0
+      "botanical_dose_no_active": 0.0
     },
-    "collagen": { "collagen_formulation_cap": 15.0, "collagen_identity_neutral": 4.8, "collagen_hydrolyzed": 3.2 }
+    "collagen": {
+      "collagen_formulation_cap": 15.0,
+      "collagen_identity_neutral": 4.8,
+      "collagen_hydrolyzed": 3.2
+    }
   },
   "category_magnitudes": {
-    "_doc": "Category-router dimension caps and category-adapter magnitudes (b_complex/immune/joint/sleep/safety_hygiene) — hoisted from the router + adapter modules 2026-07-04 as a PURE REFACTOR (values unchanged; empty diff verified across score_generic/multi_prenatal/omega/probiotic/b_complex + the adapter fns). 1.26.0 (V4.1 Step 4) aligned the multi/prenatal (12) and B-complex (8) Formulation caps with their retained components. Canonical-ID sets, regex form patterns, and the retired affine constants stay in code. Drift-guarded by test_v4_category_magnitudes_config. 1.21.1 (2026-09-26; authored as 1.13.1 and 1.13.2): the immune high-variability botanical stack penalty and its botanical-count threshold joined immune_support, also a pure refactor. The immune Dose bands (low/high/points; below low is linear, above high earns dose_above_band_fraction), daily-use points, Dose cap and the strictly-greater-than high-zinc / high-vitamin-D thresholds joined immune_support, also a pure refactor.",
+    "_doc": "Category-router dimension caps and category-adapter magnitudes (b_complex/immune/joint/sleep/safety_hygiene) \u2014 hoisted from the router + adapter modules 2026-07-04 as a PURE REFACTOR (values unchanged; empty diff verified across score_generic/multi_prenatal/omega/probiotic/b_complex + the adapter fns). 1.26.0 (V4.1 Step 4) aligned the multi/prenatal (12) and B-complex (8) Formulation caps with their retained components. Canonical-ID sets, regex form patterns, and the retired affine constants stay in code. Drift-guarded by test_v4_category_magnitudes_config. 1.21.1 (2026-09-26; authored as 1.13.1 and 1.13.2): the immune high-variability botanical stack penalty and its botanical-count threshold joined immune_support, also a pure refactor. The immune Dose bands (low/high/points; below low is linear, above high earns dose_above_band_fraction), daily-use points, Dose cap and the strictly-greater-than high-zinc / high-vitamin-D thresholds joined immune_support, also a pure refactor.",
     "generic": {
-      "dimension_caps": [["formulation", 30], ["dose", 25], ["evidence", 20], ["transparency", 10]],
+      "dimension_caps": [
+        [
+          "formulation",
+          30
+        ],
+        [
+          "dose",
+          25
+        ],
+        [
+          "evidence",
+          20
+        ],
+        [
+          "transparency",
+          10
+        ]
+      ],
       "manufacturer_trust_cap": 5,
       "manufacturer_violations_floor": -25,
       "botanical_raw_floor": 40.0
     },
-    "multi_prenatal": { "dimension_caps": [["formulation", 12], ["dose", 25], ["evidence", 20], ["transparency", 15]] },
-    "omega": { "dimension_caps": [["formulation", 25], ["dose", 25], ["evidence", 20], ["transparency", 11]] },
-    "probiotic": { "dimension_caps": [["formulation", 15], ["dose", 25], ["evidence", 20], ["transparency", 15]] },
+    "multi_prenatal": {
+      "dimension_caps": [
+        [
+          "formulation",
+          12
+        ],
+        [
+          "dose",
+          25
+        ],
+        [
+          "evidence",
+          20
+        ],
+        [
+          "transparency",
+          15
+        ]
+      ]
+    },
+    "omega": {
+      "dimension_caps": [
+        [
+          "formulation",
+          25
+        ],
+        [
+          "dose",
+          25
+        ],
+        [
+          "evidence",
+          20
+        ],
+        [
+          "transparency",
+          11
+        ]
+      ]
+    },
+    "probiotic": {
+      "dimension_caps": [
+        [
+          "formulation",
+          15
+        ],
+        [
+          "dose",
+          25
+        ],
+        [
+          "evidence",
+          20
+        ],
+        [
+          "transparency",
+          15
+        ]
+      ]
+    },
     "b_complex": {
-      "formulation_cap": 8.0, "dose_cap": 25.0, "evidence_cap": 20.0
+      "formulation_cap": 8.0,
+      "dose_cap": 25.0,
+      "evidence_cap": 20.0,
+      "reference_semantics": {
+        "panel_curve": {
+          "reference_type": "nutritional_reference",
+          "scope": "B_vitamin_contribution",
+          "preparation": "eight_source_qualified_B_nutrients",
+          "purpose": "B_vitamin_contribution",
+          "population": "label_applicable_demographic",
+          "exposure_basis": "minimum_directed_daily_use",
+          "units": "percent_RDA_AI",
+          "curve": "shared_nutritional_unit_credit",
+          "source_ids": [
+            "https://ods.od.nih.gov/HealthInformation/nutrientrecommendations.aspx"
+          ],
+          "rationale": "The eight essential B vitamins have applicable RDA/AI references. Full credit at 50%, the 300/1,000% cuts and B12/biotin exceptions are editorial, not evidence of harm or UL boundaries. Sean approved the explicit PharmaGuide policy on2026-10-18; no percent clinical efficacy is implied.",
+          "owner": "scripts/scoring_v4/modules/b_complex.py::_coverage_credit",
+          "review_date": "2026-10-18",
+          "approval_status": "approved_sean_2026_10_18"
+        }
+      }
     },
     "immune_support": {
       "evidence_cap": 17.0,
@@ -364,37 +1157,293 @@
       "high_variability_botanical_stack_penalty": 3.0,
       "dose_cap": 22.0,
       "dose_bands": {
-        "vitamin_c_mg": { "low": 100.0, "high": 1000.0, "points": 3.0 },
-        "vitamin_d_mcg": { "low": 15.0, "high": 50.0, "points": 3.0 },
-        "zinc_mg": { "low": 8.0, "high": 25.0, "points": 3.0 },
-        "copper_mg": { "low": 0.5, "high": 2.0, "points": 1.5 },
-        "selenium_mcg": { "low": 45.0, "high": 200.0, "points": 1.5 },
-        "beta_glucan_mg": { "low": 100.0, "high": 250.0, "points": 3.0 },
-        "quercetin_mg": { "low": 250.0, "high": 1000.0, "points": 2.5 },
-        "elderberry_mg": { "low": 100.0, "high": 600.0, "points": 2.5 }
+        "vitamin_c_mg": {
+          "points": 3.0
+        },
+        "vitamin_d_mcg": {
+          "points": 3.0
+        },
+        "zinc_mg": {
+          "points": 3.0
+        },
+        "copper_mg": {
+          "points": 1.5
+        },
+        "selenium_mcg": {
+          "points": 1.5
+        },
+        "beta_glucan_mg": {
+          "points": 3.0
+        },
+        "quercetin_mg": {
+          "points": 2.5
+        },
+        "elderberry_mg": {
+          "points": 2.5
+        }
       },
-      "dose_above_band_fraction": 0.5,
       "daily_use_discipline_points": 2.0,
       "high_zinc_threshold_mg": 40.0,
-      "high_vitamin_d_threshold_mcg": 100.0
+      "high_vitamin_d_threshold_mcg": 100.0,
+      "reference_semantics": {
+        "vitamin_c_mg": {
+          "reference_type": "supplement_contribution_policy",
+          "scope": "nutritional_immune_contribution",
+          "preparation": "actual_nutrient",
+          "purpose": "nutritional_immune_contribution",
+          "population": "general_adult",
+          "exposure_basis": "minimum_directed_daily_use",
+          "units": "mg",
+          "curve": "shared_nutritional_unit_credit",
+          "source_ids": [
+            "https://ods.od.nih.gov/factsheets/VitaminC-HealthProfessional/"
+          ],
+          "rationale": "Adult RDA is 75/90 mg and UL is 2,000 mg. The 100\u20131,000 mg window, upper half credit, nutrient weights and discipline points are editorial; they are not optimal immune intake guidance. Sean approved the explicit PharmaGuide policy on2026-10-18; no percent clinical efficacy is implied.",
+          "owner": "scripts/scoring_v4/modules/immune_support.py::score_immune_purpose_dose",
+          "review_date": "2026-10-18",
+          "approval_status": "approved_sean_2026_10_18"
+        },
+        "vitamin_d_mcg": {
+          "reference_type": "supplement_contribution_policy",
+          "scope": "nutritional_immune_contribution",
+          "preparation": "actual_nutrient",
+          "purpose": "nutritional_immune_contribution",
+          "population": "general_adult",
+          "exposure_basis": "minimum_directed_daily_use",
+          "units": "mcg",
+          "curve": "shared_nutritional_unit_credit",
+          "source_ids": [
+            "https://ods.od.nih.gov/factsheets/VitaminD-HealthProfessional/"
+          ],
+          "rationale": "RDA is 15 mcg at 19\u201370 and 20 mcg above 70; adult UL is 100 mcg. The 15\u201350 mcg window and half credit above 50 are editorial. Fifty mcg is not the UL. Sean approved the explicit PharmaGuide policy on2026-10-18; no percent clinical efficacy is implied.",
+          "owner": "scripts/scoring_v4/modules/immune_support.py::score_immune_purpose_dose",
+          "review_date": "2026-10-18",
+          "approval_status": "approved_sean_2026_10_18"
+        },
+        "zinc_mg": {
+          "reference_type": "supplement_contribution_policy",
+          "scope": "nutritional_immune_contribution",
+          "preparation": "elemental_zinc",
+          "purpose": "nutritional_immune_contribution",
+          "population": "general_adult",
+          "exposure_basis": "minimum_directed_daily_use",
+          "units": "mg",
+          "curve": "shared_nutritional_unit_credit",
+          "source_ids": [
+            "https://ods.od.nih.gov/factsheets/Zinc-HealthProfessional/"
+          ],
+          "rationale": "Adult RDA is 8 mg for women and 11 for men; UL is 40 mg. The 8\u201325 mg window and half credit above 25 are editorial. Twenty-five mg is not the UL. Sean approved the explicit PharmaGuide policy on2026-10-18; no percent clinical efficacy is implied.",
+          "owner": "scripts/scoring_v4/modules/immune_support.py::score_immune_purpose_dose",
+          "review_date": "2026-10-18",
+          "approval_status": "approved_sean_2026_10_18"
+        },
+        "copper_mg": {
+          "reference_type": "supplement_contribution_policy",
+          "scope": "nutritional_immune_contribution",
+          "preparation": "elemental_copper",
+          "purpose": "nutritional_immune_contribution",
+          "population": "general_adult",
+          "exposure_basis": "minimum_directed_daily_use",
+          "units": "mg",
+          "curve": "shared_nutritional_unit_credit",
+          "source_ids": [
+            "https://ods.od.nih.gov/factsheets/Copper-HealthProfessional/"
+          ],
+          "rationale": "Adult RDA is 0.9 mg and UL is 10 mg. The 0.5\u20132 mg window and upper half credit are editorial; the source establishes no particular zinc:copper requirement. Sean approved the explicit PharmaGuide policy on2026-10-18; no percent clinical efficacy is implied.",
+          "owner": "scripts/scoring_v4/modules/immune_support.py::score_immune_purpose_dose",
+          "review_date": "2026-10-18",
+          "approval_status": "approved_sean_2026_10_18"
+        },
+        "selenium_mcg": {
+          "reference_type": "supplement_contribution_policy",
+          "scope": "nutritional_immune_contribution",
+          "preparation": "elemental_selenium",
+          "purpose": "nutritional_immune_contribution",
+          "population": "general_adult",
+          "exposure_basis": "minimum_directed_daily_use",
+          "units": "mcg",
+          "curve": "shared_nutritional_unit_credit",
+          "source_ids": [
+            "https://ods.od.nih.gov/factsheets/Selenium-HealthProfessional/"
+          ],
+          "rationale": "Adult RDA is 55 mcg and US UL is 400 mcg. The 45\u2013200 mcg window and upper half credit are editorial, not those nutritional reference boundaries. Sean approved the explicit PharmaGuide policy on2026-10-18; no percent clinical efficacy is implied.",
+          "owner": "scripts/scoring_v4/modules/immune_support.py::score_immune_purpose_dose",
+          "review_date": "2026-10-18",
+          "approval_status": "approved_sean_2026_10_18"
+        },
+        "beta_glucan_mg": {
+          "reference_type": "discrete_studied_regimen",
+          "scope": "URTI",
+          "preparation": "yeast_beta_1_3_1_6_Wellmune",
+          "purpose": "URTI",
+          "population": "general_adult",
+          "exposure_basis": "minimum_directed_daily_use",
+          "units": "mg",
+          "curve": "completed_no_benchmark_neutral",
+          "source_ids": [
+            "https://pubmed.ncbi.nlm.nih.gov/28606567/"
+          ],
+          "rationale": "Wellmune at 250 mg/day in older adults had nonsignificant primary URTI results; marathon studies used 250/500 mg. The 100\u2013250 mg window, penalty above 250 and all-glucan equivalence are not established. Completed review: exact regimens remain descriptive; no defensible general continuous Dose benchmark.",
+          "owner": "scripts/scoring_v4/modules/immune_support.py::score_immune_purpose_dose",
+          "review_date": "2026-10-18",
+          "approval_status": "approved_existing_neutral_2026_10_18"
+        },
+        "quercetin_mg": {
+          "reference_type": "null_regimen",
+          "scope": "URTI",
+          "preparation": "quercetin_C_niacin_specific_combination",
+          "purpose": "URTI",
+          "population": "general_adult",
+          "exposure_basis": "minimum_directed_daily_use",
+          "units": "mg",
+          "curve": "completed_no_benchmark_neutral",
+          "source_ids": [
+            "https://pubmed.ncbi.nlm.nih.gov/20478383/"
+          ],
+          "rationale": "The 500/1,000 mg regimens included C/niacin for 12 weeks; overall URTI results were null, with an exploratory subgroup signal. The 250 mg lower bound, universal window, preparation equivalence and above-range cut are not established. Completed review: exact regimens remain descriptive; no defensible general continuous Dose benchmark.",
+          "owner": "scripts/scoring_v4/modules/immune_support.py::score_immune_purpose_dose",
+          "review_date": "2026-10-18",
+          "approval_status": "approved_existing_neutral_2026_10_18"
+        },
+        "elderberry_mg": {
+          "reference_type": "discrete_studied_regimen",
+          "scope": "URTI",
+          "preparation": "standardized_S_nigra_fruit_extract",
+          "purpose": "URTI",
+          "population": "general_adult",
+          "exposure_basis": "minimum_directed_daily_use",
+          "units": "mg",
+          "curve": "completed_no_benchmark_neutral",
+          "source_ids": [
+            "https://pubmed.ncbi.nlm.nih.gov/27023596/"
+          ],
+          "rationale": "Standardized extract was used at 600 mg for priming and 900 mg during travel; incidence was null, with duration/severity signals. The 100\u2013600 mg window, cut above 600, and generic fruit-powder/extract equivalence are not established. Completed review: exact regimens remain descriptive; no defensible general continuous Dose benchmark.",
+          "owner": "scripts/scoring_v4/modules/immune_support.py::score_immune_purpose_dose",
+          "review_date": "2026-10-18",
+          "approval_status": "approved_existing_neutral_2026_10_18"
+        }
+      }
     },
     "joint_support": {
       "evidence_cap": 14.0,
-      "target_dose_mg": { "glucosamine": 1500.0, "chondroitin": 1200.0, "msm": 1500.0, "uc_ii": 40.0, "hyaluronic_acid": 120.0 }
+      "reference_semantics": {
+        "glucosamine": {
+          "reference_type": "null_regimen",
+          "scope": "knee_symptoms",
+          "preparation": "glucosamine_hydrochloride",
+          "purpose": "knee_symptoms",
+          "population": "adult_knee_OA",
+          "exposure_basis": "minimum_directed_daily_use",
+          "units": "mg",
+          "curve": "completed_no_benchmark_neutral",
+          "source_ids": [
+            "https://pubmed.ncbi.nlm.nih.gov/16495392/",
+            "https://pubmed.ncbi.nlm.nih.gov/19912983/"
+          ],
+          "rationale": "GAIT tested hydrochloride at 1,500 mg/day and found an overall null pain result. This does not establish a generic sulfate/hydrochloride minimum or continuous efficacy curve. Completed review: exact regimens remain descriptive; no defensible general continuous Dose benchmark.",
+          "owner": "scripts/scoring_v4/modules/joint_support.py::score_joint_purpose_dose",
+          "review_date": "2026-10-18",
+          "approval_status": "approved_existing_neutral_2026_10_18"
+        },
+        "chondroitin": {
+          "reference_type": "null_regimen",
+          "scope": "knee_symptoms",
+          "preparation": "chondroitin_sulfate",
+          "purpose": "knee_symptoms",
+          "population": "adult_knee_OA",
+          "exposure_basis": "minimum_directed_daily_use",
+          "units": "mg",
+          "curve": "completed_no_benchmark_neutral",
+          "source_ids": [
+            "https://pubmed.ncbi.nlm.nih.gov/16495392/"
+          ],
+          "rationale": "GAIT tested sulfate at 1,200 mg/day with an overall null monotherapy result; the combination subgroup signal was exploratory. This does not establish a generic minimum, all-preparation equivalence or continuous efficacy curve. Completed review: exact regimens remain descriptive; no defensible general continuous Dose benchmark.",
+          "owner": "scripts/scoring_v4/modules/joint_support.py::score_joint_purpose_dose",
+          "review_date": "2026-10-18",
+          "approval_status": "approved_existing_neutral_2026_10_18"
+        },
+        "msm": {
+          "reference_type": "discrete_studied_regimen",
+          "scope": "knee_symptoms",
+          "preparation": "MSM",
+          "purpose": "knee_symptoms",
+          "population": "adult_knee_OA",
+          "exposure_basis": "minimum_directed_daily_use",
+          "units": "mg",
+          "curve": "completed_no_benchmark_neutral",
+          "source_ids": [
+            "https://pubmed.ncbi.nlm.nih.gov/17516722/",
+            "https://pubmed.ncbi.nlm.nih.gov/16309928/"
+          ],
+          "rationale": "A 1,500 mg/day regimen was tested for 12 weeks; a separate trial tested 6 g/day. The studies do not establish one minimum or a continuous effective interval. Completed review: exact regimens remain descriptive; no defensible general continuous Dose benchmark.",
+          "owner": "scripts/scoring_v4/modules/joint_support.py::score_joint_purpose_dose",
+          "review_date": "2026-10-18",
+          "approval_status": "approved_existing_neutral_2026_10_18"
+        },
+        "uc_ii": {
+          "reference_type": "discrete_studied_regimen",
+          "scope": "knee_symptoms",
+          "preparation": "UC_II",
+          "purpose": "knee_symptoms",
+          "population": "adult_knee_OA",
+          "exposure_basis": "minimum_directed_daily_use",
+          "units": "mg",
+          "curve": "completed_no_benchmark_neutral",
+          "source_ids": [
+            "https://pubmed.ncbi.nlm.nih.gov/26822714/"
+          ],
+          "rationale": "UC-II at 40 mg/day for 180 days was studied in adult knee OA. An exact preparation regimen does not establish a universal minimum or continuous efficacy curve. Completed review: exact regimens remain descriptive; no defensible general continuous Dose benchmark.",
+          "owner": "scripts/scoring_v4/modules/joint_support.py::score_joint_purpose_dose",
+          "review_date": "2026-10-18",
+          "approval_status": "approved_existing_neutral_2026_10_18"
+        },
+        "hyaluronic_acid": {
+          "reference_type": "no_benchmark",
+          "scope": "knee_symptoms",
+          "preparation": "oral_hyaluronic_acid_generic",
+          "purpose": "knee_symptoms",
+          "population": "adult_knee_OA",
+          "exposure_basis": "minimum_directed_daily_use",
+          "units": "mg",
+          "curve": "completed_no_benchmark_neutral",
+          "source_ids": [
+            "https://pubmed.ncbi.nlm.nih.gov/23226979/",
+            "https://pubmed.ncbi.nlm.nih.gov/24899570/"
+          ],
+          "rationale": "Retrieved joint primary sources used 200 mg/day or an Oralvisc mixture with dose absent from the abstract. A 120 mg skin trial addresses a different purpose. The generic 120 mg joint anchor is not established by the retrieved applicable sources. Completed review: exact regimens remain descriptive; no defensible general continuous Dose benchmark.",
+          "owner": "scripts/scoring_v4/modules/joint_support.py::score_joint_purpose_dose",
+          "review_date": "2026-10-18",
+          "approval_status": "approved_existing_neutral_2026_10_18"
+        }
+      }
     },
-    "safety_hygiene": { "cap": 4.0 }
+    "safety_hygiene": {
+      "cap": 4.0
+    }
   },
   "verification_subscale": {
     "_doc": "1.5.2 evidence boundary: the shared assembler starts at neutral_baseline and applies the strongest supported tier. Unknown stays neutral; label claims, own testing, reputation, and COA/QR/batch-lookup mentions are claim_or_brand signals, not independent laboratory verification. Verified facility evidence reaches manufacturing even when label claims coexist. Only registry-backed SKU/product-line certification authorizes the product tier; one sufficiently strong certification can saturate 15. Label-only GMP and FDA-registration wording earn no public GMP points. Generic and omega metadata feed this same rule. Consumer badges read the resulting pillar, never raw provisional module points. Quality-system violations remain a separate deduction.",
     "cap": 15.0,
     "neutral_baseline": 6.0,
     "reputation_cap": 2.0,
-    "tier_ceilings": { "claim_or_brand": 8.0, "manufacturing": 10.0 },
+    "tier_ceilings": {
+      "claim_or_brand": 8.0,
+      "manufacturing": 10.0
+    },
     "product_level_floor": 11.0,
     "cert_tiers": [
-      { "min_b4a": 10.0, "points": 12.0 },
-      { "min_b4a": 6.0,  "points": 9.0 },
-      { "min_b4a": 1.0,  "points": 5.0 }
+      {
+        "min_b4a": 10.0,
+        "points": 12.0
+      },
+      {
+        "min_b4a": 6.0,
+        "points": 9.0
+      },
+      {
+        "min_b4a": 1.0,
+        "points": 5.0
+      }
     ],
     "coa_batch_max": 5.0,
     "gmp_certified_points": 2.0,
@@ -403,15 +1452,38 @@
     "label_asserted_cert_points": 2.0
   },
   "tiers": [
-    { "min": 95.0, "name": "Exceptional" },
-    { "min": 90.0, "name": "Excellent" },
-    { "min": 80.0, "name": "Very good" },
-    { "min": 70.0, "name": "Good" },
-    { "min": 55.0, "name": "Needs improvement" },
-    { "min": 0.0,  "name": "Poor" }
+    {
+      "min": 95.0,
+      "name": "Exceptional"
+    },
+    {
+      "min": 90.0,
+      "name": "Excellent"
+    },
+    {
+      "min": 80.0,
+      "name": "Very good"
+    },
+    {
+      "min": 70.0,
+      "name": "Good"
+    },
+    {
+      "min": 55.0,
+      "name": "Needs improvement"
+    },
+    {
+      "min": 0.0,
+      "name": "Poor"
+    }
   ],
   "suppression": {
-    "suppressed_safety_verdicts": ["BLOCKED", "UNSAFE"],
-    "not_scored_verdicts": ["NOT_SCORED"]
+    "suppressed_safety_verdicts": [
+      "BLOCKED",
+      "UNSAFE"
+    ],
+    "not_scored_verdicts": [
+      "NOT_SCORED"
+    ]
   }
 }

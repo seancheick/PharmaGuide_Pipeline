@@ -1,6 +1,6 @@
 # Dose V4.1: finish the shared rules before one pipeline run
 
-Status: **plan, approved direction; not implemented.** Revised October 17, 2026 after Sean's
+Status: **Sean approved the revised 43 decisions and sixth prenatal choline member on October 18, 2026. Final runtime `5b34112b9` integrates main `2a9ee189e`; the three baseline failures are closed and bounded raw/omega comparisons are classified. App PR128 is merged. Final exact-source CI passes all four groups; local546/24declared opt-in skips and skip guard,33raw canaries,54strict baseline tests and independent review pass. Source qualification is complete for PR166; main must contain runtime5b before Sean runs the command. The older-source corpus was stopped with Sean’s approval and its owner notified. This session must not run the pipeline. See [the approved decision record](DOSE_V41_REFERENCE_DECISIONS.md) and [integration report](DOSE_V41_REVIEW_PACKET.md).** Revised October 17, 2026 after Sean's
 design review (grill). Baseline: `main` at `b043fc513`, engine 4.6.0, config
 `1.27.0-declared-serving-dose`. This plan supersedes the serving-only Dose decision recorded in
 `reports/declared_serving_20261017/README.md` (PR #154).
@@ -140,9 +140,9 @@ Order: adequacy per ingredient → route aggregation → normalize to public 0�
 - Change **safety** selection only. Adequacy (`adequacy_basis` = higher sourced adult RDA/AI) is
   unchanged; do not simply change `_RDA_REFERENCE_PROFILE.age_range`.
 - The one selection feeds both the shared warning/status owner and the Dose ceiling.
-- Wording names scope, e.g. "Maximum labeled use exceeds the calcium limit for adults 51+." These
-  are total-intake limits; a product below a limit does not establish that food plus supplements
-  stays below it.
+- Wording names scope, e.g. "Maximum labeled use exceeds the calcium limit for adults 51+." Calcium and phosphorus
+  have total-intake limits; other nutrients may have source-restricted limits. Use each reference
+  scope. A product below a total-intake limit does not establish that food plus supplements stays below it.
 
 | Nutrient | General-adult screening UL | Source rows |
 |---|---:|---|
@@ -355,7 +355,7 @@ capped at 10) and 3,000–<3,750 mg (10 → 0), plus any warning/status change.
 3. Required local checks (`scripts/test.sh local`) and one completed-candidate CI checkpoint per
    repo. Resolve all known failure classes before requesting another broad checkpoint.
 4. Bump config version/engine identifier; update `scripts/SCORING_ENGINE_SPEC.md`,
-   `docs/scoring/SCORING_TEAM_REVIEW_2026-10-17.md` and the existing handoff/LEDGER.
+   `docs/plans/DOSE_V41_REFERENCE_DECISIONS.md` and the existing handoff/LEDGER.
 5. Integrate validated source changes in both repos (main pushes are Sean's).
 6. Inspect actual stage fingerprints, then give Sean the exact earliest-stage command. Today's
    form, to be re-confirmed against the fingerprints:

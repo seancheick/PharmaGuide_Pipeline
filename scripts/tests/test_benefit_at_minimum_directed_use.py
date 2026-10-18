@@ -28,14 +28,16 @@ def test_exposure_benchmarks_the_minimum_and_keeps_the_top():
 
 def test_sports_adequacy_reads_the_minimum():
     # 1.5 g, 1-2 servings: everyone gets 1.5 g; only some reach 3 g.
-    result = sports_dose(ranged(product([row("creatine", 1.5)]), 1, 2))
-    assert result["metadata"]["dose_basis"] == "creatine_under_2_g"
+    result = sports_dose(ranged(product([row("creatine_monohydrate", 1.5)]), 1, 2))
+    assert result["metadata"]["dose_basis"] == "creatine_contribution_policy"
+    assert result["score"] == 10
 
 
-def test_sports_above_range_reads_the_maximum():
-    # 4 g, 1-3 servings without loading directions: 4 g is in range, 12 g is not.
-    result = sports_dose(ranged(product([row("creatine", 4)]), 1, 3))
-    assert result["metadata"]["dose_basis"] == "creatine_above_10_g_no_loading_protocol"
+def test_sports_above_target_plateaus_at_minimum_daily_use():
+    # 4 g at minimum daily use meets the contribution target; 12 g keeps plateau.
+    result = sports_dose(ranged(product([row("creatine_monohydrate", 4)]), 1, 3))
+    assert result["metadata"]["dose_basis"] == "creatine_contribution_policy"
+    assert result["score"] == 20
 
 
 def test_fiber_adequacy_reads_the_minimum():
@@ -57,15 +59,22 @@ def test_immune_high_zinc_reads_the_maximum_and_bands_the_minimum():
         "primary_type": "immune_support",
         "ingredient_quality_data": {"ingredients_scorable": rows, "ingredients": rows},
         "servingSizes": [{"minDailyServings": 1, "maxDailyServings": 2}],
+        "rda_ul_data": {"adequacy_results": [{
+            "nutrient": "Zinc", "canonical_id": "zinc", "pct_rda": per_serving / 11 * 100,
+            "scoring_eligible": True,
+        }]},
     }
     assert immune_active_doses(value)["zinc_mg"] == pytest.approx(per_serving)
     result = score_immune_support_dose(value)
     assert result["metadata"]["high_zinc"] is True
-    assert result["components"]["zinc_daily_range"] == 0.0
+    # The source-owned minimum use already exceeds the nutritional reference;
+    # the maximum determines the diagnostic flag, never another adequacy cut.
+    assert result["components"]["zinc_daily_range"] == 3.0
 
 
 def test_sleep_high_dose_band_reads_the_maximum():
     from scoring_v4.modules.sleep_support import score_sleep_support_dose
+    from scoring_v4.modules.generic_helpers import unbenchmarked_dose_credit
     from test_daily_serving_multiplier_guard import _row
 
     rows = [_row("Melatonin", "melatonin", 3.0, "mg")]
@@ -74,5 +83,10 @@ def test_sleep_high_dose_band_reads_the_maximum():
         "ingredient_quality_data": {"ingredients_scorable": rows, "ingredients": rows},
         "servingSizes": [{"minDailyServings": 1, "maxDailyServings": 3}],
     }
-    # 3 mg a day is the standard band; up to 9 mg a day is the high-dose band.
-    assert score_sleep_support_dose(value)["band"] == "high_dose"
+    # The retired sleep window cannot turn 9 mg into an extra Dose penalty.
+    # Both exposure endpoints remain available as label facts.
+    result = score_sleep_support_dose(value)
+    assert result["daily_mg"] == 3.0
+    assert result["daily_mg_max"] == 9.0
+    assert result["band"] == "no_benchmark_neutral"
+    assert result["score"] == unbenchmarked_dose_credit()

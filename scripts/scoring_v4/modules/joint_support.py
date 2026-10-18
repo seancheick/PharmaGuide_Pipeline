@@ -17,6 +17,7 @@ from scoring_v4.modules.generic_helpers import (
     daily_serving_multiplier,
     get_active_ingredients,
     primary_type_of,
+    unbenchmarked_dose_credit,
     _norm_text,
     _row_quantity_mg,
 )
@@ -28,8 +29,6 @@ _CM = _cfg_block("category_magnitudes", "joint_support")["joint_support"]
 
 
 JOINT_SUPPORT_EVIDENCE_CAP = _CM["evidence_cap"]
-
-JOINT_TARGET_DOSE_MG = dict(_CM["target_dose_mg"])
 
 _JOINT_ALIASES = {
     "glucosamine": ("glucosamine",),
@@ -57,24 +56,8 @@ def score_joint_support_dose(product: Dict[str, Any]) -> Optional[Dict[str, Any]
     if not actives:
         return None
 
-    adequate = [item["active"] for item in actives if item["ratio"] >= 1.0]
-    best_ratio = max(item["ratio"] for item in actives)
-    if len(adequate) >= 2:
-        score = 22.0
-        band = "multi_active_clinical_dose"
-    elif adequate:
-        score = 20.0
-        band = "single_active_clinical_dose"
-    else:
-        score = round(max(0.0, min(1.0, best_ratio)) * 20.0, 4)
-        band = "below_joint_support_range"
-
-    return {
-        "score": score,
-        "band": band,
-        "adequate_actives": adequate,
-        "actives": actives,
-    }
+    return {"score": unbenchmarked_dose_credit(), "band": "no_benchmark_neutral",
+            "adequate_actives": [], "actives": actives}
 
 
 def score_joint_purpose_dose(
@@ -88,16 +71,8 @@ def score_joint_purpose_dose(
     if active is None or mg is None:
         return None
     daily_mg = mg * _daily_serving_multiplier(product)
-    target = JOINT_TARGET_DOSE_MG[active]
-    ratio = daily_mg / target
-    return {
-        "score": round(max(0.0, min(1.0, ratio)) * 20.0, 4),
-        "band": "single_active_clinical_dose" if ratio >= 1.0 else "below_joint_support_range",
-        "active": active,
-        "daily_mg": round(daily_mg, 4),
-        "target_mg": target,
-        "ratio": round(ratio, 4),
-    }
+    return {"score": unbenchmarked_dose_credit(), "band": "no_benchmark_neutral",
+            "active": active, "daily_mg": round(daily_mg, 4)}
 
 
 def joint_active_doses(product: Dict[str, Any]) -> list[Dict[str, Any]]:
@@ -111,17 +86,14 @@ def joint_active_doses(product: Dict[str, Any]) -> list[Dict[str, Any]]:
         if mg is None:
             continue
         daily_mg = mg * daily_multiplier
-        target = JOINT_TARGET_DOSE_MG[active]
         payload = {
             "active": active,
             "daily_mg": round(daily_mg, 4),
-            "target_mg": target,
-            "ratio": round(daily_mg / target, 4),
         }
         current = by_active.get(active)
         if current is None or payload["daily_mg"] > current["daily_mg"]:
             by_active[active] = payload
-    return sorted(by_active.values(), key=lambda item: item["ratio"], reverse=True)
+    return sorted(by_active.values(), key=lambda item: item["daily_mg"], reverse=True)
 
 
 def _joint_active_id(row: Dict[str, Any]) -> Optional[str]:

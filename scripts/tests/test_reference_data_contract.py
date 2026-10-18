@@ -114,6 +114,15 @@ def test_semantic_fingerprint_covers_consumer_ul_warning_copy() -> None:
     ) != semantic_rda_ul_fingerprint(changed)
 
 
+def test_semantic_fingerprint_covers_dose_reference_qualification() -> None:
+    canonical = _rda_data()
+    changed = copy.deepcopy(canonical)
+    changed['nutrient_recommendations'][0]['reference_semantics'] = {
+        'reference_type': 'no_benchmark', 'curve': 'completed_no_benchmark_neutral',
+        'approval_status': 'approved_existing_neutral_2026_10_18'}
+    assert semantic_rda_ul_fingerprint(canonical) != semantic_rda_ul_fingerprint(changed)
+
+
 def test_v5_1_contract_rejects_established_ul_without_consumer_copy() -> None:
     canonical = _rda_data()
     canonical["_metadata"]["schema_version"] = "5.1.0"

@@ -14,7 +14,6 @@ from evidence_resolver import resolve_authority_panel_evidence
 from scoring_v4.modules.generic_evidence import authority_panel_result_state
 from scoring_v4.modules.multi_prenatal_dose import (
     CORE_MULTI_ANCHORS,
-    PRENATAL_CORE_ANCHORS,
     TARGETED_MULTI_ANCHORS,
     TARGETED_MULTI_SELECTED_ANCHORS,
     _is_prenatal,
@@ -32,10 +31,17 @@ _EM = _cfg_block("evidence_magnitudes", "multi_prenatal")["multi_prenatal"]
 CAP_EVIDENCE = _EM["cap_evidence"]
 GENERIC_CAP_EVIDENCE = _EM["generic_cap_evidence"]  # compatibility/config validation
 
+# Evidence authority coverage retains its existing five priority nutrients.
+# Dose's six-member critical contribution group is a separate policy; adding
+# choline there must not change Evidence's membership or denominator.
+_PRENATAL_AUTHORITY_PRIORITY_KEYS = (
+    "folate", "iron", "iodine", "vitamin_d", "vitamin_b12",
+)
+
 
 def _panel_contract(product: Dict[str, Any]) -> tuple[str, tuple[str, ...], int]:
     if _is_prenatal(product):
-        return "prenatal", PRENATAL_CORE_ANCHORS, len(PRENATAL_CORE_ANCHORS)
+        return "prenatal", _PRENATAL_AUTHORITY_PRIORITY_KEYS, len(_PRENATAL_AUTHORITY_PRIORITY_KEYS)
     if _is_targeted_multi(product):
         return "targeted_multi", TARGETED_MULTI_ANCHORS, TARGETED_MULTI_SELECTED_ANCHORS
     return "broad_multi", CORE_MULTI_ANCHORS, len(CORE_MULTI_ANCHORS)

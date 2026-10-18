@@ -1,12 +1,8 @@
 """V4 Phase 7 — Collagen Profile (formulation + dose adapters).
 
-Collagen is neither a vitamin nor a botanical. The plan's original premise
-(collagen evidence averages 1.1/20) was stale — by Phase 6 the generic evidence
-pipeline already gives collagen ~6.3/20. The real gap is DOSE: a collagen product
-borrows its co-formulated vitamins' RDA/UL dose, so an underdosed collagen (2.5 g
-vs the studied 2.5-10 g for peptides) over-scores. This profile scores collagen on its own
-clinical dose range and formulation quality, mass-dominance routed (a multivitamin
-with a token collagen add-on stays on the generic path).
+Collagen receives its own formulation and Dose assessments. Mass-dominance
+routing keeps a multivitamin with an incidental collagen row on its existing
+route. Exact subtype identity selects the existing source record.
 
   Formulation adapter (replaces A1/A2; reference 8), V4.1 Step 4:
     recognized collagen identity         collagen_identity_neutral (neutral baseline)
@@ -14,11 +10,9 @@ with a token collagen add-on stays on the generic path).
   Type, source and the printed amount are Transparency facts; a brand name is
   an Evidence fact.
 
-  Dose adapter (replaces RDA/UL proxy), via rda_therapeutic_dosing.json
-  per collagen subtype (peptides 2.5-10 g, UC-II 40 mg, BioCell 500-2000 mg,
-  gelatin 5-15 g, NEM 500 mg) — UNIT-AWARE (gram entries vs mg, masses are
-  normalized to mg). It uses the botanical owner's graded studied-range bands
-  and its benchmark-aware neutral for an unassessed amount.
+  Dose adapter: subtype-specific source regimens remain descriptive. Their
+  reviewed general benchmark conclusion uses the completed neutral; missing
+  amounts and unresolved source/preparation reviews retain their holds.
 
 Reuses the shared identity/mass/dosing helpers from botanical_profile so unit
 normalization (incl. DSLD "Gram(s)") and routing stay consistent across profiles.
@@ -40,9 +34,9 @@ from scoring_input_contract import (
     ROLE_CLAIM_PROMINENT,
     ROLE_PRIMARY,
     classify_ingredient_roles,
+    dose_disclosure_status,
 )
 from scoring_v4.modules.botanical_profile import (
-    graded_studied_range,
     unassessed_amount_band,
     _norm,
     _mass_mg,
@@ -142,36 +136,13 @@ def _collagen_dosing_entry(row: Dict[str, Any],
     return index.get(SUBTYPE_TO_DOSING_ALIAS[subtype])
 
 
-def _parse_dose_range(entry: Dict[str, Any]) -> Optional[tuple]:
-    """Parse 'lo-hi' or a single 'value' (point dose, e.g. UC-II '40')."""
-    rng = _norm(entry.get("typical_dosing_range"))
-    m = re.match(r"^\s*([0-9.]+)\s*[-–]\s*([0-9.]+)", rng)
-    if m:
-        return float(m.group(1)), float(m.group(2))
-    m1 = re.match(r"^\s*([0-9.]+)\s*$", rng)
-    if m1:
-        v = float(m1.group(1))
-        return v, v
-    return None
-
-
-def _range_mg(entry: Dict[str, Any]) -> Optional[tuple]:
-    """Parsed dosing range converted to mg. Entries may be grams (peptides,
-    gelatin) or mg (UC-II, BioCell, NEM); masses come back from _mass_mg in mg,
-    so the range must be unit-matched before comparison."""
-    rng = _parse_dose_range(entry)
-    if rng is None:
-        return None
-    factor = 1000.0 if _norm(entry.get("unit")) in {"g", "gram", "grams"} else 1.0
-    return rng[0] * factor, rng[1] * factor
-
-
 def _score_collagen_row(row: Dict[str, Any], product: Dict[str, Any]) -> Dict[str, Any]:
-    """The botanical owner's graded studied-range bands, on the collagen range
-    (V4.1 Step 4); unassessed amounts follow the same benchmark rule."""
+    """Use the completed source disposition while retaining amount holds."""
     entry = _collagen_dosing_entry(row, product)
-    rng = _range_mg(entry) if entry else None
-    benchmark = "present" if rng is not None else "absent"
+    semantics = (entry or {}).get("reference_semantics") or {}
+    completed = (semantics.get("curve") == "completed_no_benchmark_neutral"
+                 and str(semantics.get("approval_status") or "").startswith("approved_existing_neutral_"))
+    benchmark = "absent" if entry is None or completed else "unresolved"
     if row.get("is_blend_header") or row.get("blend_total_weight_only") or row.get("is_parent_total"):
         return unassessed_amount_band("blend_total_only", benchmark)
     # anchor / product-level total is not a verified per-ingredient dose
@@ -181,12 +152,9 @@ def _score_collagen_row(row: Dict[str, Any], product: Dict[str, Any]) -> Dict[st
 
     mass = _mass_mg(row)
     if mass is None:
-        return unassessed_amount_band("primary_no_dose", benchmark)
-    if rng is None:
-        return unassessed_amount_band("disclosed_no_reference", benchmark)
-
-    lo, hi = rng
-    return graded_studied_range(product, row, lo, hi, "mg", {"dose_mg": mass, "range_mg": [lo, hi]})
+        return unassessed_amount_band("primary_no_dose", benchmark,
+                                      label_hidden=dose_disclosure_status(row) == "not_disclosed_blend")
+    return unassessed_amount_band("disclosed_no_reference", benchmark)
 
 
 def score_collagen_dose(product: Dict[str, Any]) -> Dict[str, Any]:

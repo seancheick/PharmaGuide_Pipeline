@@ -2,8 +2,8 @@
   "_metadata": {
     "description": "Therapeutic dosing ranges for clinical efficacy validation",
     "purpose": "Provide therapeutic dosing ranges for dietary supplement ingredients not covered by traditional RDA/UL standards.",
-    "schema_version": "5.0.0",
-    "last_updated": "2026-10-11",
+    "schema_version": "5.0.1",
+    "last_updated": "2026-10-18",
     "total_entries": 43,
     "data_source": "Clinical research, meta-analyses, standard therapeutic guidelines"
   },
@@ -27,7 +27,25 @@
       "references": [
         "31517876",
         "23439798"
-      ]
+      ],
+      "reference_semantics": {
+        "reference_type": "discrete_studied_regimen",
+        "scope": "General catalog Dose for this exact source identity; source-specific study facts and established safety references remain separate.",
+        "preparation": "Only the exact preparations described in the reviewed source facts: Shoden standardized extract240mg once/day for60days in60 stressed healthy adults; root extract300mg twice/day for60days in64 stressed adults. General benchmark conclusion:the cited source(s) do not establish one universal dose minimum, bounded optimum or safety upper limit for every preparation represented by this broad entry. This general-no-benchmark assessment is completed; retain known study regimens separately.",
+        "purpose": "Adaptogen for stress, thyroid support, sleep",
+        "population": "Only source-specific cohorts described in rationale; no general efficacy dose for unstudied populations, pregnancy or lactation is inferred.",
+        "exposure_basis": "minimum_directed_daily_use",
+        "units": "mg",
+        "curve": "completed_no_benchmark_neutral",
+        "source_ids": [
+          "https://pubmed.ncbi.nlm.nih.gov/31517876/",
+          "https://pubmed.ncbi.nlm.nih.gov/23439798/"
+        ],
+        "rationale": "Shoden standardized extract240mg once/day for60days in60 stressed healthy adults; root extract300mg twice/day for60days in64 stressed adults. General benchmark conclusion:the cited source(s) do not establish one universal dose minimum, bounded optimum or safety upper limit for every preparation represented by this broad entry. This general-no-benchmark assessment is completed; retain known study regimens separately. Unsupported numerical inference rejected: 250mg lower boundary is not in either cited regimen. KSM66, Sensoril and Shoden must not share an unqualified250–600mg curve; thyroid/sleep are not the studied endpoint here. The completed general Dose conclusion uses existing PharmaGuide neutral policy, not clinical approval of a numerical benchmark.",
+        "owner": "scripts/data/rda_therapeutic_dosing.json::ashwagandha_root_extract",
+        "review_date": "2026-10-18",
+        "approval_status": "approved_existing_neutral_2026_10_18"
+      }
     },
     {
       "standard_name": "Bacopa Monnieri Extract",
@@ -47,7 +65,25 @@
       "references": [
         "24252493",
         "22747190"
-      ]
+      ],
+      "reference_semantics": {
+        "reference_type": "discrete_studied_regimen",
+        "scope": "General catalog Dose for this exact source identity; source-specific study facts and established safety references remain separate.",
+        "preparation": "Only the exact preparations described in the reviewed source facts: Three standardized extracts300–450mg/day for12weeks; adults without dementia/significant impairment in PMID22747190; memory free recall signal. General benchmark conclusion:the cited source(s) do not establish one universal dose minimum, bounded optimum or safety upper limit for every preparation represented by this broad entry. This general-no-benchmark assessment is completed; retain known study regimens separately.",
+        "purpose": "Cognitive function, memory, anxiety reduction",
+        "population": "Only source-specific cohorts described in rationale; no general efficacy dose for unstudied populations, pregnancy or lactation is inferred.",
+        "exposure_basis": "minimum_directed_daily_use",
+        "units": "mg",
+        "curve": "completed_no_benchmark_neutral",
+        "source_ids": [
+          "https://pubmed.ncbi.nlm.nih.gov/24252493/",
+          "https://pubmed.ncbi.nlm.nih.gov/22747190/"
+        ],
+        "rationale": "Three standardized extracts300–450mg/day for12weeks; adults without dementia/significant impairment in PMID22747190; memory free recall signal. General benchmark conclusion:the cited source(s) do not establish one universal dose minimum, bounded optimum or safety upper limit for every preparation represented by this broad entry. This general-no-benchmark assessment is completed; retain known study regimens separately. Unsupported numerical inference rejected: Range is a span across preparations, not a proven continuous optimum or600mg UL; anxiety and all cognitive domains not established. The completed general Dose conclusion uses existing PharmaGuide neutral policy, not clinical approval of a numerical benchmark.",
+        "owner": "scripts/data/rda_therapeutic_dosing.json::bacopa_monnieri_extract",
+        "review_date": "2026-10-18",
+        "approval_status": "approved_existing_neutral_2026_10_18"
+      }
     },
     {
       "standard_name": "Curcumin (from Turmeric)",
@@ -70,7 +106,24 @@
       "id": "curcumin_from_turmeric",
       "references": [
         "38576215"
-      ]
+      ],
+      "reference_semantics": {
+        "reference_type": "no_benchmark",
+        "scope": "General catalog Dose for this exact source identity; source-specific study facts and established safety references remain separate.",
+        "preparation": "Only the exact preparations described in the reviewed source facts: PMID38576215 umbrella meta-analysis of11 meta-analyses: OA pain/function; abstract contains no500–1000mg preparation-specific regimen. General benchmark conclusion:the cited source(s) do not establish one universal dose minimum, bounded optimum or safety upper limit for every preparation represented by this broad entry. This general-no-benchmark assessment is completed; retain known study regimens separately.",
+        "purpose": "Anti-inflammatory, antioxidant, joint health",
+        "population": "Only source-specific cohorts described in rationale; no general efficacy dose for unstudied populations, pregnancy or lactation is inferred.",
+        "exposure_basis": "minimum_directed_daily_use",
+        "units": "mg",
+        "curve": "completed_no_benchmark_neutral",
+        "source_ids": [
+          "https://pubmed.ncbi.nlm.nih.gov/38576215/"
+        ],
+        "rationale": "PMID38576215 umbrella meta-analysis of11 meta-analyses: OA pain/function; abstract contains no500–1000mg preparation-specific regimen. General benchmark conclusion:the cited source(s) do not establish one universal dose minimum, bounded optimum or safety upper limit for every preparation represented by this broad entry. This general-no-benchmark assessment is completed; retain known study regimens separately. Unsupported numerical inference rejected: Meriva/BCM95/Longvida/Theracurmin and native curcumin masses are not interchangeable. Neither500mg threshold nor8000mg UL established by citation. The completed general Dose conclusion uses existing PharmaGuide neutral policy, not clinical approval of a numerical benchmark.",
+        "owner": "scripts/data/rda_therapeutic_dosing.json::curcumin_from_turmeric",
+        "review_date": "2026-10-18",
+        "approval_status": "approved_existing_neutral_2026_10_18"
+      }
     },
     {
       "standard_name": "L-Theanine",
@@ -89,7 +142,24 @@
       "id": "l_theanine",
       "references": [
         "33751906"
-      ]
+      ],
+      "reference_semantics": {
+        "reference_type": "discrete_studied_regimen",
+        "scope": "General catalog Dose for this exact source identity; source-specific study facts and established safety references remain separate.",
+        "preparation": "Only the exact preparations described in the reviewed source facts: Suntheanine100.6mg/day,12weeks plus single-dose assessment, Japanese adults50–69; attention/working-memory tasks. Source33751906 abstract plus already-corrected entry full-Methods receipt. General benchmark conclusion:the cited source(s) do not establish one universal dose minimum, bounded optimum or safety upper limit for every preparation represented by this broad entry. This general-no-benchmark assessment is completed; retain known study regimens separately.",
+        "purpose": "Selected attention/working-memory tasks in adults aged 50–69 using Suntheanine; not a universal relaxation or caffeine-combination claim.",
+        "population": "Only source-specific cohorts described in rationale; no general efficacy dose for unstudied populations, pregnancy or lactation is inferred.",
+        "exposure_basis": "minimum_directed_daily_use",
+        "units": "mg",
+        "curve": "completed_no_benchmark_neutral",
+        "source_ids": [
+          "https://pubmed.ncbi.nlm.nih.gov/33751906/"
+        ],
+        "rationale": "Suntheanine100.6mg/day,12weeks plus single-dose assessment, Japanese adults50–69; attention/working-memory tasks. Source33751906 abstract plus already-corrected entry full-Methods receipt. General benchmark conclusion:the cited source(s) do not establish one universal dose minimum, bounded optimum or safety upper limit for every preparation represented by this broad entry. This general-no-benchmark assessment is completed; retain known study regimens separately. Unsupported numerical inference rejected: No minimum/window/UL. Generic relaxation and caffeine-combination claims were correctly removed, but numeric runtime still treats exact trial exposure as universal threshold. The completed general Dose conclusion uses existing PharmaGuide neutral policy, not clinical approval of a numerical benchmark.",
+        "owner": "scripts/data/rda_therapeutic_dosing.json::l_theanine",
+        "review_date": "2026-10-18",
+        "approval_status": "approved_existing_neutral_2026_10_18"
+      }
     },
     {
       "standard_name": "Lutein",
@@ -108,7 +178,25 @@
       "references": [
         "39025435",
         "23645227"
-      ]
+      ],
+      "reference_semantics": {
+        "reference_type": "discrete_studied_regimen",
+        "scope": "General catalog Dose for this exact source identity; source-specific study facts and established safety references remain separate.",
+        "preparation": "Only the exact preparations described in the reviewed source facts: AREDS2 lutein10mg AND zeaxanthin2mg/day; adults50–85 at AMD risk.39025435 is post-hoc noncentral-GA proximity outcome;23645227 overall cataract/vision outcomes null, lowest dietary quintile subgroup positive. General benchmark conclusion:the cited source(s) do not establish one universal dose minimum, bounded optimum or safety upper limit for every preparation represented by this broad entry. This general-no-benchmark assessment is completed; retain known study regimens separately.",
+        "purpose": "Eye health, macular pigment support",
+        "population": "Only source-specific cohorts described in rationale; no general efficacy dose for unstudied populations, pregnancy or lactation is inferred.",
+        "exposure_basis": "minimum_directed_daily_use",
+        "units": "mg",
+        "curve": "completed_no_benchmark_neutral",
+        "source_ids": [
+          "https://pubmed.ncbi.nlm.nih.gov/39025435/",
+          "https://pubmed.ncbi.nlm.nih.gov/23645227/"
+        ],
+        "rationale": "AREDS2 lutein10mg AND zeaxanthin2mg/day; adults50–85 at AMD risk.39025435 is post-hoc noncentral-GA proximity outcome;23645227 overall cataract/vision outcomes null, lowest dietary quintile subgroup positive. General benchmark conclusion:the cited source(s) do not establish one universal dose minimum, bounded optimum or safety upper limit for every preparation represented by this broad entry. This general-no-benchmark assessment is completed; retain known study regimens separately. Unsupported numerical inference rejected: No10–20mg standalone window or40mg safety ceiling; preserve combination, disease and post-hoc/subgroup context. The completed general Dose conclusion uses existing PharmaGuide neutral policy, not clinical approval of a numerical benchmark.",
+        "owner": "scripts/data/rda_therapeutic_dosing.json::lutein",
+        "review_date": "2026-10-18",
+        "approval_status": "approved_existing_neutral_2026_10_18"
+      }
     },
     {
       "standard_name": "Probiotics (General)",
@@ -125,7 +213,22 @@
       "upper_limit": "100 Billion",
       "upper_limit_notes": "Strain-specific effects are critical. High doses may cause initial bloating. Immunocompromised individuals should consult a doctor.",
       "evidence_tier": 1,
-      "id": "probiotics_general"
+      "id": "probiotics_general",
+      "reference_semantics": {
+        "reference_type": "no_benchmark",
+        "scope": "General catalog Dose for this exact source identity; source-specific study facts and established safety references remain separate.",
+        "preparation": "Only the exact preparations described in the reviewed source facts: No references;CFU string1–10Billion is rejected by botanical mass parser. General benchmark conclusion:the cited source(s) do not establish one universal dose minimum, bounded optimum or safety upper limit for every preparation represented by this broad entry. This general-no-benchmark assessment is completed; retain known study regimens separately.",
+        "purpose": "Gut microbiome support, immune function",
+        "population": "Only source-specific cohorts described in rationale; no general efficacy dose for unstudied populations, pregnancy or lactation is inferred.",
+        "exposure_basis": "minimum_directed_daily_use",
+        "units": "CFU",
+        "curve": "completed_no_benchmark_neutral",
+        "source_ids": [],
+        "rationale": "No references;CFU string1–10Billion is rejected by botanical mass parser. General benchmark conclusion:the cited source(s) do not establish one universal dose minimum, bounded optimum or safety upper limit for every preparation represented by this broad entry. This general-no-benchmark assessment is completed; retain known study regimens separately. Unsupported numerical inference rejected: Not active mass anchor. Strain/formula route owns applicable CFU; no universal genus dose or100Billion UL. The completed general Dose conclusion uses existing PharmaGuide neutral policy, not clinical approval of a numerical benchmark.",
+        "owner": "scripts/data/rda_therapeutic_dosing.json::probiotics_general",
+        "review_date": "2026-10-18",
+        "approval_status": "approved_existing_neutral_2026_10_18"
+      }
     },
     {
       "standard_name": "Resveratrol",
@@ -144,7 +247,25 @@
       "references": [
         "34320173",
         "29018489"
-      ]
+      ],
+      "reference_semantics": {
+        "reference_type": "no_benchmark",
+        "scope": "General catalog Dose for this exact source identity; source-specific study facts and established safety references remain separate.",
+        "preparation": "Only the exact preparations described in the reviewed source facts: 34320173 umbrella review: T2D/MetS/NAFLD, mostly trivial/low-certainty effects and conclusion does not support cardiometabolic supplementation;29018489 glycemic review, subgroup>=100mg vs<100mg. General benchmark conclusion:the cited source(s) do not establish one universal dose minimum, bounded optimum or safety upper limit for every preparation represented by this broad entry. This general-no-benchmark assessment is completed; retain known study regimens separately.",
+        "purpose": "Antioxidant, longevity, cardiovascular support",
+        "population": "Only source-specific cohorts described in rationale; no general efficacy dose for unstudied populations, pregnancy or lactation is inferred.",
+        "exposure_basis": "minimum_directed_daily_use",
+        "units": "mg",
+        "curve": "completed_no_benchmark_neutral",
+        "source_ids": [
+          "https://pubmed.ncbi.nlm.nih.gov/34320173/",
+          "https://pubmed.ncbi.nlm.nih.gov/29018489/"
+        ],
+        "rationale": "34320173 umbrella review: T2D/MetS/NAFLD, mostly trivial/low-certainty effects and conclusion does not support cardiometabolic supplementation;29018489 glycemic review, subgroup>=100mg vs<100mg. General benchmark conclusion:the cited source(s) do not establish one universal dose minimum, bounded optimum or safety upper limit for every preparation represented by this broad entry. This general-no-benchmark assessment is completed; retain known study regimens separately. Unsupported numerical inference rejected: No universal250–500mg window; preparation and disease-specific purpose required. Evidence is mixed, not a positive universal benchmark. The completed general Dose conclusion uses existing PharmaGuide neutral policy, not clinical approval of a numerical benchmark.",
+        "owner": "scripts/data/rda_therapeutic_dosing.json::resveratrol",
+        "review_date": "2026-10-18",
+        "approval_status": "approved_existing_neutral_2026_10_18"
+      }
     },
     {
       "standard_name": "Rhodiola Rosea Extract",
@@ -164,7 +285,24 @@
       "id": "rhodiola_rosea_extract",
       "references": [
         "21036578"
-      ]
+      ],
+      "reference_semantics": {
+        "reference_type": "no_benchmark",
+        "scope": "General catalog Dose for this exact source identity; source-specific study facts and established safety references remain separate.",
+        "preparation": "Only the exact preparations described in the reviewed source facts: 21036578 systematic review covers11 randomized trials across physical/mental performance and mental-health conditions; variable preparations. General benchmark conclusion:the cited source(s) do not establish one universal dose minimum, bounded optimum or safety upper limit for every preparation represented by this broad entry. This general-no-benchmark assessment is completed; retain known study regimens separately.",
+        "purpose": "Adaptogen for stress and fatigue, cognitive enhancement",
+        "population": "Only source-specific cohorts described in rationale; no general efficacy dose for unstudied populations, pregnancy or lactation is inferred.",
+        "exposure_basis": "minimum_directed_daily_use",
+        "units": "mg",
+        "curve": "completed_no_benchmark_neutral",
+        "source_ids": [
+          "https://pubmed.ncbi.nlm.nih.gov/21036578/"
+        ],
+        "rationale": "21036578 systematic review covers11 randomized trials across physical/mental performance and mental-health conditions; variable preparations. General benchmark conclusion:the cited source(s) do not establish one universal dose minimum, bounded optimum or safety upper limit for every preparation represented by this broad entry. This general-no-benchmark assessment is completed; retain known study regimens separately. Unsupported numerical inference rejected: Abstract does not establish universal200–400mg or600mg upper limit; SHR5-type extract cannot stand for every powder/extract. The completed general Dose conclusion uses existing PharmaGuide neutral policy, not clinical approval of a numerical benchmark.",
+        "owner": "scripts/data/rda_therapeutic_dosing.json::rhodiola_rosea_extract",
+        "review_date": "2026-10-18",
+        "approval_status": "approved_existing_neutral_2026_10_18"
+      }
     },
     {
       "standard_name": "Saw Palmetto Extract",
@@ -183,7 +321,24 @@
       "id": "saw_palmetto_extract",
       "references": [
         "42157952"
-      ]
+      ],
+      "reference_semantics": {
+        "reference_type": "no_benchmark",
+        "scope": "General catalog Dose for this exact source identity; source-specific study facts and established safety references remain separate.",
+        "preparation": "Only the exact preparations described in the reviewed source facts: 42157952 review reports heterogeneous formulations/doses; signals more consistent for hexanic lipidosterolic and beta-sitosterol-enriched preparations in benign prostate disorders. General benchmark conclusion:the cited source(s) do not establish one universal dose minimum, bounded optimum or safety upper limit for every preparation represented by this broad entry. This general-no-benchmark assessment is completed; retain known study regimens separately.",
+        "purpose": "Prostate health (BPH), hair loss support",
+        "population": "Only source-specific cohorts described in rationale; no general efficacy dose for unstudied populations, pregnancy or lactation is inferred.",
+        "exposure_basis": "minimum_directed_daily_use",
+        "units": "mg",
+        "curve": "completed_no_benchmark_neutral",
+        "source_ids": [
+          "https://pubmed.ncbi.nlm.nih.gov/42157952/"
+        ],
+        "rationale": "42157952 review reports heterogeneous formulations/doses; signals more consistent for hexanic lipidosterolic and beta-sitosterol-enriched preparations in benign prostate disorders. General benchmark conclusion:the cited source(s) do not establish one universal dose minimum, bounded optimum or safety upper limit for every preparation represented by this broad entry. This general-no-benchmark assessment is completed; retain known study regimens separately. Unsupported numerical inference rejected: 320mg exact regimen and upper bound need underlying trial/form-specific receipt; review explicitly seeks optimal dosing clarification. The completed general Dose conclusion uses existing PharmaGuide neutral policy, not clinical approval of a numerical benchmark.",
+        "owner": "scripts/data/rda_therapeutic_dosing.json::saw_palmetto_extract",
+        "review_date": "2026-10-18",
+        "approval_status": "approved_existing_neutral_2026_10_18"
+      }
     },
     {
       "standard_name": "St. John's Wort",
@@ -201,7 +356,24 @@
       "id": "st_john_s_wort",
       "references": [
         "18843608"
-      ]
+      ],
+      "reference_semantics": {
+        "reference_type": "no_benchmark",
+        "scope": "General catalog Dose for this exact source identity; source-specific study facts and established safety references remain separate.",
+        "preparation": "Only the exact preparations described in the reviewed source facts: 18843608 Cochrane review29 trials,5489 major-depression patients; hypericum extracts outperform placebo with heterogeneous findings. General benchmark conclusion:the cited source(s) do not establish one universal dose minimum, bounded optimum or safety upper limit for every preparation represented by this broad entry. This general-no-benchmark assessment is completed; retain known study regimens separately.",
+        "purpose": "Mood support (mild to moderate depression)",
+        "population": "Only source-specific cohorts described in rationale; no general efficacy dose for unstudied populations, pregnancy or lactation is inferred.",
+        "exposure_basis": "minimum_directed_daily_use",
+        "units": "mg",
+        "curve": "completed_no_benchmark_neutral",
+        "source_ids": [
+          "https://pubmed.ncbi.nlm.nih.gov/18843608/"
+        ],
+        "rationale": "18843608 Cochrane review29 trials,5489 major-depression patients; hypericum extracts outperform placebo with heterogeneous findings. General benchmark conclusion:the cited source(s) do not establish one universal dose minimum, bounded optimum or safety upper limit for every preparation represented by this broad entry. This general-no-benchmark assessment is completed; retain known study regimens separately. Unsupported numerical inference rejected: No unqualified300–900mg continuous window or1200mg safety ceiling from abstract; extract/hyperforin/hypericin/daily frequency needed. Existing pregnancy/interaction warnings remain independent. The completed general Dose conclusion uses existing PharmaGuide neutral policy, not clinical approval of a numerical benchmark.",
+        "owner": "scripts/data/rda_therapeutic_dosing.json::st_john_s_wort",
+        "review_date": "2026-10-18",
+        "approval_status": "approved_existing_neutral_2026_10_18"
+      }
     },
     {
       "standard_name": "Valerian Root",
@@ -220,7 +392,24 @@
       "id": "valerian_root",
       "references": [
         "38359657"
-      ]
+      ],
+      "reference_semantics": {
+        "reference_type": "no_benchmark",
+        "scope": "General catalog Dose for this exact source identity; source-specific study facts and established safety references remain separate.",
+        "preparation": "Only the exact preparations described in the reviewed source facts: 38359657 umbrella review: insomnia evidence weak/inconclusive; existing range already empty. General benchmark conclusion:the cited source(s) do not establish one universal dose minimum, bounded optimum or safety upper limit for every preparation represented by this broad entry. This general-no-benchmark assessment is completed; retain known study regimens separately.",
+        "purpose": "Subjective sleep-quality research; insomnia efficacy is unestablished.",
+        "population": "Only source-specific cohorts described in rationale; no general efficacy dose for unstudied populations, pregnancy or lactation is inferred.",
+        "exposure_basis": "minimum_directed_daily_use",
+        "units": "mg",
+        "curve": "completed_no_benchmark_neutral",
+        "source_ids": [
+          "https://pubmed.ncbi.nlm.nih.gov/38359657/"
+        ],
+        "rationale": "38359657 umbrella review: insomnia evidence weak/inconclusive; existing range already empty. General benchmark conclusion:the cited source(s) do not establish one universal dose minimum, bounded optimum or safety upper limit for every preparation represented by this broad entry. This general-no-benchmark assessment is completed; retain known study regimens separately. Unsupported numerical inference rejected: Empty range means unfinished applicability/benchmark review, not automatically a completed finding that no benchmark exists. The completed general Dose conclusion uses existing PharmaGuide neutral policy, not clinical approval of a numerical benchmark.",
+        "owner": "scripts/data/rda_therapeutic_dosing.json::valerian_root",
+        "review_date": "2026-10-18",
+        "approval_status": "approved_existing_neutral_2026_10_18"
+      }
     },
     {
       "standard_name": "Collagen Peptides",
@@ -257,7 +446,30 @@
         "39075819",
         "37432180"
       ],
-      "id": "collagen_peptides"
+      "id": "collagen_peptides",
+      "reference_semantics": {
+        "reference_type": "discrete_studied_regimen",
+        "scope": "General catalog Dose for this exact source identity; source-specific study facts and established safety references remain separate.",
+        "preparation": "Only the exact preparations described in the reviewed source facts: 24401291 Verisol2.5g/day skin wrinkles women45–65;31627309 multi-ingredient2.5g drink women>=35.28177710 Fortigel5g athletes knee discomfort;29337906 Fortibone5g postmenopausal BMD;18416885 hydrolysate10g athletes joint pain.39075819 tuna peptide skin, dose absent in abstract;37432180 pools26 trials. Reused collagen_phase7 receipt with qualifications. General benchmark conclusion:the cited source(s) do not establish one universal dose minimum, bounded optimum or safety upper limit for every preparation represented by this broad entry. This general-no-benchmark assessment is completed; retain known study regimens separately.",
+        "purpose": "Skin/hair/nail (2.5 g+) and joint/bone (5-10 g) health; hydrolyzed Type I & III peptides incl. marine",
+        "population": "Only source-specific cohorts described in rationale; no general efficacy dose for unstudied populations, pregnancy or lactation is inferred.",
+        "exposure_basis": "minimum_directed_daily_use",
+        "units": "g",
+        "curve": "completed_no_benchmark_neutral",
+        "source_ids": [
+          "https://pubmed.ncbi.nlm.nih.gov/24401291/",
+          "https://pubmed.ncbi.nlm.nih.gov/31627309/",
+          "https://pubmed.ncbi.nlm.nih.gov/28177710/",
+          "https://pubmed.ncbi.nlm.nih.gov/29337906/",
+          "https://pubmed.ncbi.nlm.nih.gov/18416885/",
+          "https://pubmed.ncbi.nlm.nih.gov/39075819/",
+          "https://pubmed.ncbi.nlm.nih.gov/37432180/"
+        ],
+        "rationale": "24401291 Verisol2.5g/day skin wrinkles women45–65;31627309 multi-ingredient2.5g drink women>=35.28177710 Fortigel5g athletes knee discomfort;29337906 Fortibone5g postmenopausal BMD;18416885 hydrolysate10g athletes joint pain.39075819 tuna peptide skin, dose absent in abstract;37432180 pools26 trials. Reused collagen_phase7 receipt with qualifications. General benchmark conclusion:the cited source(s) do not establish one universal dose minimum, bounded optimum or safety upper limit for every preparation represented by this broad entry. This general-no-benchmark assessment is completed; retain known study regimens separately. Unsupported numerical inference rejected: Pooled2.5–10g interval mixes preparations/purposes/populations. No20g UL.15g BodyBalance muscle context cannot be judged above a skin10g limit. The completed general Dose conclusion uses existing PharmaGuide neutral policy, not clinical approval of a numerical benchmark.",
+        "owner": "scripts/data/rda_therapeutic_dosing.json::collagen_peptides",
+        "review_date": "2026-10-18",
+        "approval_status": "approved_existing_neutral_2026_10_18"
+      }
     },
     {
       "standard_name": "Undenatured Type II Collagen (UC-II)",
@@ -280,7 +492,24 @@
       "references": [
         "26822714"
       ],
-      "id": "uc_ii_collagen"
+      "id": "uc_ii_collagen",
+      "reference_semantics": {
+        "reference_type": "discrete_studied_regimen",
+        "scope": "General catalog Dose for this exact source identity; source-specific study facts and established safety references remain separate.",
+        "preparation": "Only the exact preparations described in the reviewed source facts: 26822714 UCII40mg/day for180days in191 knee-OA subjects, compared with placebo/glucosamine+chondroitin. General benchmark conclusion:the cited source(s) do not establish one universal dose minimum, bounded optimum or safety upper limit for every preparation represented by this broad entry. This general-no-benchmark assessment is completed; retain known study regimens separately.",
+        "purpose": "Knee osteoarthritis / joint; undenatured (native) Type II, oral-tolerance mechanism (low mg dose, NOT the hydrolyzed-peptide gram range)",
+        "population": "Only source-specific cohorts described in rationale; no general efficacy dose for unstudied populations, pregnancy or lactation is inferred.",
+        "exposure_basis": "minimum_directed_daily_use",
+        "units": "mg",
+        "curve": "completed_no_benchmark_neutral",
+        "source_ids": [
+          "https://pubmed.ncbi.nlm.nih.gov/26822714/"
+        ],
+        "rationale": "26822714 UCII40mg/day for180days in191 knee-OA subjects, compared with placebo/glucosamine+chondroitin. General benchmark conclusion:the cited source(s) do not establish one universal dose minimum, bounded optimum or safety upper limit for every preparation represented by this broad entry. This general-no-benchmark assessment is completed; retain known study regimens separately. Unsupported numerical inference rejected: 40mg exact preparation mass is not40mg safety UL or a continuous minimum. Never transfer to hydrolyzed TypeII. The completed general Dose conclusion uses existing PharmaGuide neutral policy, not clinical approval of a numerical benchmark.",
+        "owner": "scripts/data/rda_therapeutic_dosing.json::uc_ii_collagen",
+        "review_date": "2026-10-18",
+        "approval_status": "approved_existing_neutral_2026_10_18"
+      }
     },
     {
       "standard_name": "Hydrolyzed Type II Collagen (BioCell)",
@@ -301,7 +530,25 @@
         "31221944",
         "22486722"
       ],
-      "id": "biocell_collagen"
+      "id": "biocell_collagen",
+      "reference_semantics": {
+        "reference_type": "discrete_studied_regimen",
+        "scope": "General catalog Dose for this exact source identity; source-specific study facts and established safety references remain separate.",
+        "preparation": "Only the exact preparations described in the reviewed source facts: 31221944 BioCell500mg twice/day=1000mg/day for12weeks in128 women39–59;22486722 BioCell2000mg/day70days in80 hip/knee OA patients. General benchmark conclusion:the cited source(s) do not establish one universal dose minimum, bounded optimum or safety upper limit for every preparation represented by this broad entry. This general-no-benchmark assessment is completed; retain known study regimens separately.",
+        "purpose": "Joint OA + skin; hydrolyzed Type II + hyaluronic acid + chondroitin (chicken sternal cartilage)",
+        "population": "Only source-specific cohorts described in rationale; no general efficacy dose for unstudied populations, pregnancy or lactation is inferred.",
+        "exposure_basis": "minimum_directed_daily_use",
+        "units": "mg",
+        "curve": "completed_no_benchmark_neutral",
+        "source_ids": [
+          "https://pubmed.ncbi.nlm.nih.gov/31221944/",
+          "https://pubmed.ncbi.nlm.nih.gov/22486722/"
+        ],
+        "rationale": "31221944 BioCell500mg twice/day=1000mg/day for12weeks in128 women39–59;22486722 BioCell2000mg/day70days in80 hip/knee OA patients. General benchmark conclusion:the cited source(s) do not establish one universal dose minimum, bounded optimum or safety upper limit for every preparation represented by this broad entry. This general-no-benchmark assessment is completed; retain known study regimens separately. Unsupported numerical inference rejected: Two discrete preparation/purpose-specific regimens do not establish every dose1000–2000mg. Existing notes correctly remove UL and skin-water claim. The completed general Dose conclusion uses existing PharmaGuide neutral policy, not clinical approval of a numerical benchmark.",
+        "owner": "scripts/data/rda_therapeutic_dosing.json::biocell_collagen",
+        "review_date": "2026-10-18",
+        "approval_status": "approved_existing_neutral_2026_10_18"
+      }
     },
     {
       "standard_name": "Gelatin",
@@ -319,7 +566,24 @@
       "references": [
         "27852613"
       ],
-      "id": "gelatin"
+      "id": "gelatin",
+      "reference_semantics": {
+        "reference_type": "discrete_studied_regimen",
+        "scope": "General catalog Dose for this exact source identity; source-specific study facts and established safety references remain separate.",
+        "preparation": "Only the exact preparations described in the reviewed source facts: 27852613 eight healthy males; vitamin-C-enriched gelatin5g or15g one hour before rope-skipping, repeated3times/day with>=6h between bouts for3days;15g increased collagen-synthesis biomarker. General benchmark conclusion:the cited source(s) do not establish one universal dose minimum, bounded optimum or safety upper limit for every preparation represented by this broad entry. This general-no-benchmark assessment is completed; retain known study regimens separately.",
+        "purpose": "Connective-tissue / collagen synthesis; denatured collagen with LOWER bioavailability than hydrolyzed peptides",
+        "population": "Only source-specific cohorts described in rationale; no general efficacy dose for unstudied populations, pregnancy or lactation is inferred.",
+        "exposure_basis": "minimum_directed_daily_use",
+        "units": "g",
+        "curve": "completed_no_benchmark_neutral",
+        "source_ids": [
+          "https://pubmed.ncbi.nlm.nih.gov/27852613/"
+        ],
+        "rationale": "27852613 eight healthy males; vitamin-C-enriched gelatin5g or15g one hour before rope-skipping, repeated3times/day with>=6h between bouts for3days;15g increased collagen-synthesis biomarker. General benchmark conclusion:the cited source(s) do not establish one universal dose minimum, bounded optimum or safety upper limit for every preparation represented by this broad entry. This general-no-benchmark assessment is completed; retain known study regimens separately. Unsupported numerical inference rejected: Current5–15g/day-like range loses per-administration/exercise schedule; marker/in-vitro ligament result is not clinical injury treatment, not20g UL. The completed general Dose conclusion uses existing PharmaGuide neutral policy, not clinical approval of a numerical benchmark.",
+        "owner": "scripts/data/rda_therapeutic_dosing.json::gelatin",
+        "review_date": "2026-10-18",
+        "approval_status": "approved_existing_neutral_2026_10_18"
+      }
     },
     {
       "standard_name": "Natural Eggshell Membrane (NEM)",
@@ -339,7 +603,24 @@
       "references": [
         "19340512"
       ],
-      "id": "eggshell_membrane_nem"
+      "id": "eggshell_membrane_nem",
+      "reference_semantics": {
+        "reference_type": "discrete_studied_regimen",
+        "scope": "General catalog Dose for this exact source identity; source-specific study facts and established safety references remain separate.",
+        "preparation": "Only the exact preparations described in the reviewed source facts: 19340512 NEM500mg/day8weeks in67 knee-OA patients; pain/stiffness positive, function/overall WOMAC not significant. General benchmark conclusion:the cited source(s) do not establish one universal dose minimum, bounded optimum or safety upper limit for every preparation represented by this broad entry. This general-no-benchmark assessment is completed; retain known study regimens separately.",
+        "purpose": "Knee osteoarthritis / joint; collagen + glycosaminoglycans",
+        "population": "Only source-specific cohorts described in rationale; no general efficacy dose for unstudied populations, pregnancy or lactation is inferred.",
+        "exposure_basis": "minimum_directed_daily_use",
+        "units": "mg",
+        "curve": "completed_no_benchmark_neutral",
+        "source_ids": [
+          "https://pubmed.ncbi.nlm.nih.gov/19340512/"
+        ],
+        "rationale": "19340512 NEM500mg/day8weeks in67 knee-OA patients; pain/stiffness positive, function/overall WOMAC not significant. General benchmark conclusion:the cited source(s) do not establish one universal dose minimum, bounded optimum or safety upper limit for every preparation represented by this broad entry. This general-no-benchmark assessment is completed; retain known study regimens separately. Unsupported numerical inference rejected: 500mg is a studied daily preparation dose, not500mg UL or a universal minimum. The completed general Dose conclusion uses existing PharmaGuide neutral policy, not clinical approval of a numerical benchmark.",
+        "owner": "scripts/data/rda_therapeutic_dosing.json::eggshell_membrane_nem",
+        "review_date": "2026-10-18",
+        "approval_status": "approved_existing_neutral_2026_10_18"
+      }
     },
     {
       "standard_name": "Lion's Mane Mushroom Extract",
@@ -360,7 +641,25 @@
       "references": [
         "18844328",
         "31413233"
-      ]
+      ],
+      "reference_semantics": {
+        "reference_type": "discrete_studied_regimen",
+        "scope": "General catalog Dose for this exact source identity; source-specific study facts and established safety references remain separate.",
+        "preparation": "Only the exact preparations described in the reviewed source facts: 18844328 dry powder96%,four250mg tablets three times/day=3000mg/day16weeks in30 Japanese adults50–80 with MCI;31413233 fruiting-body supplement12weeks, dose omitted abstract. General benchmark conclusion:the cited source(s) do not establish one universal dose minimum, bounded optimum or safety upper limit for every preparation represented by this broad entry. This general-no-benchmark assessment is completed; retain known study regimens separately.",
+        "purpose": "Cognitive function, neuroplasticity, nerve growth factor",
+        "population": "Only source-specific cohorts described in rationale; no general efficacy dose for unstudied populations, pregnancy or lactation is inferred.",
+        "exposure_basis": "minimum_directed_daily_use",
+        "units": "mg",
+        "curve": "completed_no_benchmark_neutral",
+        "source_ids": [
+          "https://pubmed.ncbi.nlm.nih.gov/18844328/",
+          "https://pubmed.ncbi.nlm.nih.gov/31413233/"
+        ],
+        "rationale": "18844328 dry powder96%,four250mg tablets three times/day=3000mg/day16weeks in30 Japanese adults50–80 with MCI;31413233 fruiting-body supplement12weeks, dose omitted abstract. General benchmark conclusion:the cited source(s) do not establish one universal dose minimum, bounded optimum or safety upper limit for every preparation represented by this broad entry. This general-no-benchmark assessment is completed; retain known study regimens separately. Unsupported numerical inference rejected: Powder is not generic extract.1000mg floor and5000mg ceiling unsupported; no nerve-growth-factor clinical outcome established. The completed general Dose conclusion uses existing PharmaGuide neutral policy, not clinical approval of a numerical benchmark.",
+        "owner": "scripts/data/rda_therapeutic_dosing.json::lion_s_mane_mushroom_extract",
+        "review_date": "2026-10-18",
+        "approval_status": "approved_existing_neutral_2026_10_18"
+      }
     },
     {
       "standard_name": "Phosphatidylserine",
@@ -379,7 +678,24 @@
       "id": "phosphatidylserine",
       "references": [
         "39317299"
-      ]
+      ],
+      "reference_semantics": {
+        "reference_type": "no_benchmark",
+        "scope": "General catalog Dose for this exact source identity; source-specific study facts and established safety references remain separate.",
+        "preparation": "Only the exact preparations described in the reviewed source facts: 39317299 MCI adults190; two capsules/day12months: PS63mg+ALA288mg+ginkgo flavonoids7.2mg+vitamins. General benchmark conclusion:the cited source(s) do not establish one universal dose minimum, bounded optimum or safety upper limit for every preparation represented by this broad entry. This general-no-benchmark assessment is completed; retain known study regimens separately.",
+        "purpose": "Cognitive research in a PS/ALA/ginkgo/vitamin combination in mild cognitive impairment; standalone PS attribution remains unestablished.",
+        "population": "Only source-specific cohorts described in rationale; no general efficacy dose for unstudied populations, pregnancy or lactation is inferred.",
+        "exposure_basis": "minimum_directed_daily_use",
+        "units": "mg",
+        "curve": "completed_no_benchmark_neutral",
+        "source_ids": [
+          "https://pubmed.ncbi.nlm.nih.gov/39317299/"
+        ],
+        "rationale": "39317299 MCI adults190; two capsules/day12months: PS63mg+ALA288mg+ginkgo flavonoids7.2mg+vitamins. General benchmark conclusion:the cited source(s) do not establish one universal dose minimum, bounded optimum or safety upper limit for every preparation represented by this broad entry. This general-no-benchmark assessment is completed; retain known study regimens separately. Unsupported numerical inference rejected: Combination cannot validate standalone PS or cortisol/athletic-recovery anchor; existing numeric range correctly empty; do not silently call absence completed. The completed general Dose conclusion uses existing PharmaGuide neutral policy, not clinical approval of a numerical benchmark.",
+        "owner": "scripts/data/rda_therapeutic_dosing.json::phosphatidylserine",
+        "review_date": "2026-10-18",
+        "approval_status": "approved_existing_neutral_2026_10_18"
+      }
     },
     {
       "standard_name": "Ginkgo Biloba Extract",
@@ -400,7 +716,25 @@
       "references": [
         "25352453",
         "9823823"
-      ]
+      ],
+      "reference_semantics": {
+        "reference_type": "discrete_studied_regimen",
+        "scope": "General catalog Dose for this exact source identity; source-specific study facts and established safety references remain separate.",
+        "preparation": "Only the exact preparations described in the reviewed source facts: 25352453 EGb761240mg/day predominantly dementia/AD/MCI with neuropsychiatric symptoms;9823823 standardized extract120–240mg for3–6months in AD. General benchmark conclusion:the cited source(s) do not establish one universal dose minimum, bounded optimum or safety upper limit for every preparation represented by this broad entry. This general-no-benchmark assessment is completed; retain known study regimens separately.",
+        "purpose": "Cognitive function, circulation, memory, tinnitus",
+        "population": "Only source-specific cohorts described in rationale; no general efficacy dose for unstudied populations, pregnancy or lactation is inferred.",
+        "exposure_basis": "minimum_directed_daily_use",
+        "units": "mg",
+        "curve": "completed_no_benchmark_neutral",
+        "source_ids": [
+          "https://pubmed.ncbi.nlm.nih.gov/25352453/",
+          "https://pubmed.ncbi.nlm.nih.gov/9823823/"
+        ],
+        "rationale": "25352453 EGb761240mg/day predominantly dementia/AD/MCI with neuropsychiatric symptoms;9823823 standardized extract120–240mg for3–6months in AD. General benchmark conclusion:the cited source(s) do not establish one universal dose minimum, bounded optimum or safety upper limit for every preparation represented by this broad entry. This general-no-benchmark assessment is completed; retain known study regimens separately. Unsupported numerical inference rejected: No general cognitive/circulation/tinnitus dose window or240mg safety UL. Above240mg bleeding assertion needs separate source; trial high dose is not harm threshold. The completed general Dose conclusion uses existing PharmaGuide neutral policy, not clinical approval of a numerical benchmark.",
+        "owner": "scripts/data/rda_therapeutic_dosing.json::ginkgo_biloba_extract",
+        "review_date": "2026-10-18",
+        "approval_status": "approved_existing_neutral_2026_10_18"
+      }
     },
     {
       "standard_name": "Astaxanthin",
@@ -421,7 +755,25 @@
       "references": [
         "35091276",
         "32755613"
-      ]
+      ],
+      "reference_semantics": {
+        "reference_type": "no_benchmark",
+        "scope": "General catalog Dose for this exact source identity; source-specific study facts and established safety references remain separate.",
+        "preparation": "Only the exact preparations described in the reviewed source facts: 35091276 biomarker meta-analysis: MDA and selected T2D IL6 signals;32755613 mostly null cardiometabolic outcomes, HDL signal and CRP subgroup>12mg/day>=12weeks. General benchmark conclusion:the cited source(s) do not establish one universal dose minimum, bounded optimum or safety upper limit for every preparation represented by this broad entry. This general-no-benchmark assessment is completed; retain known study regimens separately.",
+        "purpose": "Antioxidant, skin health, eye health, exercise recovery, anti-inflammatory",
+        "population": "Only source-specific cohorts described in rationale; no general efficacy dose for unstudied populations, pregnancy or lactation is inferred.",
+        "exposure_basis": "minimum_directed_daily_use",
+        "units": "mg",
+        "curve": "completed_no_benchmark_neutral",
+        "source_ids": [
+          "https://pubmed.ncbi.nlm.nih.gov/35091276/",
+          "https://pubmed.ncbi.nlm.nih.gov/32755613/"
+        ],
+        "rationale": "35091276 biomarker meta-analysis: MDA and selected T2D IL6 signals;32755613 mostly null cardiometabolic outcomes, HDL signal and CRP subgroup>12mg/day>=12weeks. General benchmark conclusion:the cited source(s) do not establish one universal dose minimum, bounded optimum or safety upper limit for every preparation represented by this broad entry. This general-no-benchmark assessment is completed; retain known study regimens separately. Unsupported numerical inference rejected: Not a universal4–12mg window for skin/eye/exercise or24mg safety UL. Above12mg cannot be penalized merely for exceeding an authored range. The completed general Dose conclusion uses existing PharmaGuide neutral policy, not clinical approval of a numerical benchmark.",
+        "owner": "scripts/data/rda_therapeutic_dosing.json::astaxanthin",
+        "review_date": "2026-10-18",
+        "approval_status": "approved_existing_neutral_2026_10_18"
+      }
     },
     {
       "standard_name": "Black Seed Oil (Nigella Sativa)",
@@ -443,7 +795,25 @@
       "references": [
         "27512971",
         "37341696"
-      ]
+      ],
+      "reference_semantics": {
+        "reference_type": "no_benchmark",
+        "scope": "General catalog Dose for this exact source identity; source-specific study facts and established safety references remain separate.",
+        "preparation": "Only the exact preparations described in the reviewed source facts: 27512971 BP meta-analysis11 RCTs860 participants, powder/oil distinct, powder favored;37341696 adult BP meta-analysis. General benchmark conclusion:the cited source(s) do not establish one universal dose minimum, bounded optimum or safety upper limit for every preparation represented by this broad entry. This general-no-benchmark assessment is completed; retain known study regimens separately.",
+        "purpose": "Immune support, blood sugar regulation, anti-inflammatory, lipid support",
+        "population": "Only source-specific cohorts described in rationale; no general efficacy dose for unstudied populations, pregnancy or lactation is inferred.",
+        "exposure_basis": "minimum_directed_daily_use",
+        "units": "mg",
+        "curve": "completed_no_benchmark_neutral",
+        "source_ids": [
+          "https://pubmed.ncbi.nlm.nih.gov/27512971/",
+          "https://pubmed.ncbi.nlm.nih.gov/37341696/"
+        ],
+        "rationale": "27512971 BP meta-analysis11 RCTs860 participants, powder/oil distinct, powder favored;37341696 adult BP meta-analysis. General benchmark conclusion:the cited source(s) do not establish one universal dose minimum, bounded optimum or safety upper limit for every preparation represented by this broad entry. This general-no-benchmark assessment is completed; retain known study regimens separately. Unsupported numerical inference rejected: Seed powder, oil and isolated thymoquinone are not equivalent mg exposures.500–2000mg oil window/3000mg ceiling require form-specific doses. The completed general Dose conclusion uses existing PharmaGuide neutral policy, not clinical approval of a numerical benchmark.",
+        "owner": "scripts/data/rda_therapeutic_dosing.json::black_seed_oil_nigella_sativa",
+        "review_date": "2026-10-18",
+        "approval_status": "approved_existing_neutral_2026_10_18"
+      }
     },
     {
       "standard_name": "Maca Root Extract",
@@ -463,7 +833,24 @@
       "id": "maca_root_extract",
       "references": [
         "27621241"
-      ]
+      ],
+      "reference_semantics": {
+        "reference_type": "no_benchmark",
+        "scope": "General catalog Dose for this exact source identity; source-specific study facts and established safety references remain separate.",
+        "preparation": "Only the exact preparations described in the reviewed source facts: 27621241 systematic review semen quality in healthy/infertile men; small trials/high bias, no firm conclusions. General benchmark conclusion:the cited source(s) do not establish one universal dose minimum, bounded optimum or safety upper limit for every preparation represented by this broad entry. This general-no-benchmark assessment is completed; retain known study regimens separately.",
+        "purpose": "Energy, libido, hormonal balance, adaptogenic stress support",
+        "population": "Only source-specific cohorts described in rationale; no general efficacy dose for unstudied populations, pregnancy or lactation is inferred.",
+        "exposure_basis": "minimum_directed_daily_use",
+        "units": "mg",
+        "curve": "completed_no_benchmark_neutral",
+        "source_ids": [
+          "https://pubmed.ncbi.nlm.nih.gov/27621241/"
+        ],
+        "rationale": "27621241 systematic review semen quality in healthy/infertile men; small trials/high bias, no firm conclusions. General benchmark conclusion:the cited source(s) do not establish one universal dose minimum, bounded optimum or safety upper limit for every preparation represented by this broad entry. This general-no-benchmark assessment is completed; retain known study regimens separately. Unsupported numerical inference rejected: Does not establish hormonal balance/adaptogen/general energy claim or universal1500–3000mg extract window5000mg ceiling; source may be powder. The completed general Dose conclusion uses existing PharmaGuide neutral policy, not clinical approval of a numerical benchmark.",
+        "owner": "scripts/data/rda_therapeutic_dosing.json::maca_root_extract",
+        "review_date": "2026-10-18",
+        "approval_status": "approved_existing_neutral_2026_10_18"
+      }
     },
     {
       "standard_name": "Milk Thistle (Silymarin)",
@@ -483,7 +870,24 @@
       "id": "milk_thistle_silymarin",
       "references": [
         "40221681"
-      ]
+      ],
+      "reference_semantics": {
+        "reference_type": "no_benchmark",
+        "scope": "General catalog Dose for this exact source identity; source-specific study facts and established safety references remain separate.",
+        "preparation": "Only the exact preparations described in the reviewed source facts: 40221681 liver-injury meta-analysis55 studies3545 patients; liver enzyme surrogate, greater reductions<400mg, no dose association on meta-regression; disease heterogeneity. General benchmark conclusion:the cited source(s) do not establish one universal dose minimum, bounded optimum or safety upper limit for every preparation represented by this broad entry. This general-no-benchmark assessment is completed; retain known study regimens separately.",
+        "purpose": "Liver support, hepatoprotective, detoxification, antioxidant",
+        "population": "Only source-specific cohorts described in rationale; no general efficacy dose for unstudied populations, pregnancy or lactation is inferred.",
+        "exposure_basis": "minimum_directed_daily_use",
+        "units": "mg",
+        "curve": "completed_no_benchmark_neutral",
+        "source_ids": [
+          "https://pubmed.ncbi.nlm.nih.gov/40221681/"
+        ],
+        "rationale": "40221681 liver-injury meta-analysis55 studies3545 patients; liver enzyme surrogate, greater reductions<400mg, no dose association on meta-regression; disease heterogeneity. General benchmark conclusion:the cited source(s) do not establish one universal dose minimum, bounded optimum or safety upper limit for every preparation represented by this broad entry. This general-no-benchmark assessment is completed; retain known study regimens separately. Unsupported numerical inference rejected: 140–420mg continuous generic range,800mg UL and safe-long-term assertion are not established. Silymarin mixture vs silybin/phytosome preparation needed. The completed general Dose conclusion uses existing PharmaGuide neutral policy, not clinical approval of a numerical benchmark.",
+        "owner": "scripts/data/rda_therapeutic_dosing.json::milk_thistle_silymarin",
+        "review_date": "2026-10-18",
+        "approval_status": "approved_existing_neutral_2026_10_18"
+      }
     },
     {
       "standard_name": "Cordyceps Mushroom Extract",
@@ -503,7 +907,24 @@
       "id": "cordyceps_mushroom_extract",
       "references": [
         "20804368"
-      ]
+      ],
+      "reference_semantics": {
+        "reference_type": "discrete_studied_regimen",
+        "scope": "General catalog Dose for this exact source identity; source-specific study facts and established safety references remain separate.",
+        "preparation": "Only the exact preparations described in the reviewed source facts: 20804368 Cs4(C.sinensis cultured product),20 healthy elderly50–75,333mg capsules three times/day12weeks; source abstract wording is ambiguous about capsules per dose. General benchmark conclusion:the cited source(s) do not establish one universal dose minimum, bounded optimum or safety upper limit for every preparation represented by this broad entry. This general-no-benchmark assessment is completed; retain known study regimens separately.",
+        "purpose": "Athletic performance, energy, respiratory function, immune support",
+        "population": "Only source-specific cohorts described in rationale; no general efficacy dose for unstudied populations, pregnancy or lactation is inferred.",
+        "exposure_basis": "minimum_directed_daily_use",
+        "units": "mg",
+        "curve": "completed_no_benchmark_neutral",
+        "source_ids": [
+          "https://pubmed.ncbi.nlm.nih.gov/20804368/"
+        ],
+        "rationale": "20804368 Cs4(C.sinensis cultured product),20 healthy elderly50–75,333mg capsules three times/day12weeks; source abstract wording is ambiguous about capsules per dose. General benchmark conclusion:the cited source(s) do not establish one universal dose minimum, bounded optimum or safety upper limit for every preparation represented by this broad entry. This general-no-benchmark assessment is completed; retain known study regimens separately. Unsupported numerical inference rejected: Need full Methods to settle333x3 vs multiple capsules each dose; cannot borrow C.militaris or raw fungus;1000–3000mg window/6000mg ceiling unestablished. The completed general Dose conclusion uses existing PharmaGuide neutral policy, not clinical approval of a numerical benchmark.",
+        "owner": "scripts/data/rda_therapeutic_dosing.json::cordyceps_mushroom_extract",
+        "review_date": "2026-10-18",
+        "approval_status": "approved_existing_neutral_2026_10_18"
+      }
     },
     {
       "standard_name": "Reishi Mushroom Extract",
@@ -523,7 +944,24 @@
       "id": "reishi_mushroom_extract",
       "references": [
         "33405051"
-      ]
+      ],
+      "reference_semantics": {
+        "reference_type": "no_benchmark",
+        "scope": "General catalog Dose for this exact source identity; source-specific study facts and established safety references remain separate.",
+        "preparation": "Only the exact preparations described in the reviewed source facts: 33405051 Ganoderma spore powder postoperative breast/lung-cancer120 patients; immune biomarkers. General benchmark conclusion:the cited source(s) do not establish one universal dose minimum, bounded optimum or safety upper limit for every preparation represented by this broad entry. This general-no-benchmark assessment is completed; retain known study regimens separately.",
+        "purpose": "Ganoderma spore-powder immune biomarker research in postoperative breast/lung cancer patients; generic extract sleep/stress benefits remain unestablished.",
+        "population": "Only source-specific cohorts described in rationale; no general efficacy dose for unstudied populations, pregnancy or lactation is inferred.",
+        "exposure_basis": "minimum_directed_daily_use",
+        "units": "mg",
+        "curve": "completed_no_benchmark_neutral",
+        "source_ids": [
+          "https://pubmed.ncbi.nlm.nih.gov/33405051/"
+        ],
+        "rationale": "33405051 Ganoderma spore powder postoperative breast/lung-cancer120 patients; immune biomarkers. General benchmark conclusion:the cited source(s) do not establish one universal dose minimum, bounded optimum or safety upper limit for every preparation represented by this broad entry. This general-no-benchmark assessment is completed; retain known study regimens separately. Unsupported numerical inference rejected: Not generic dual-extracted fruiting body/sleep/stress evidence. Existing range correctly empty; preparation/purpose unresolved. The completed general Dose conclusion uses existing PharmaGuide neutral policy, not clinical approval of a numerical benchmark.",
+        "owner": "scripts/data/rda_therapeutic_dosing.json::reishi_mushroom_extract",
+        "review_date": "2026-10-18",
+        "approval_status": "approved_existing_neutral_2026_10_18"
+      }
     },
     {
       "standard_name": "Boswellia serrata",
@@ -547,7 +985,25 @@
         "18667054",
         "35512759"
       ],
-      "id": "boswellia_serrata"
+      "id": "boswellia_serrata",
+      "reference_semantics": {
+        "reference_type": "discrete_studied_regimen",
+        "scope": "General catalog Dose for this exact source identity; source-specific study facts and established safety references remain separate.",
+        "preparation": "Only the exact preparations described in the reviewed source facts: 18667054 5Loxin30%AKBA100mg or250mg/day90days,75 kneeOA;35512759 Aflapin20%AKBA100mg/day30days,70 kneeOA. General benchmark conclusion:the cited source(s) do not establish one universal dose minimum, bounded optimum or safety upper limit for every preparation represented by this broad entry. This general-no-benchmark assessment is completed; retain known study regimens separately.",
+        "purpose": "Osteoarthritis / joint pain, anti-inflammatory",
+        "population": "Only source-specific cohorts described in rationale; no general efficacy dose for unstudied populations, pregnancy or lactation is inferred.",
+        "exposure_basis": "minimum_directed_daily_use",
+        "units": "mg",
+        "curve": "completed_no_benchmark_neutral",
+        "source_ids": [
+          "https://pubmed.ncbi.nlm.nih.gov/18667054/",
+          "https://pubmed.ncbi.nlm.nih.gov/35512759/"
+        ],
+        "rationale": "18667054 5Loxin30%AKBA100mg or250mg/day90days,75 kneeOA;35512759 Aflapin20%AKBA100mg/day30days,70 kneeOA. General benchmark conclusion:the cited source(s) do not establish one universal dose minimum, bounded optimum or safety upper limit for every preparation represented by this broad entry. This general-no-benchmark assessment is completed; retain known study regimens separately. Unsupported numerical inference rejected: Discrete specific preparations; crude resin/isolated AKBA not equivalent.100–250mg interpolation and1000mg UL not proven. The completed general Dose conclusion uses existing PharmaGuide neutral policy, not clinical approval of a numerical benchmark.",
+        "owner": "scripts/data/rda_therapeutic_dosing.json::boswellia_serrata",
+        "review_date": "2026-10-18",
+        "approval_status": "approved_existing_neutral_2026_10_18"
+      }
     },
     {
       "standard_name": "Soy Isoflavones",
@@ -570,7 +1026,25 @@
         "22433977",
         "25316502"
       ],
-      "id": "soy_isoflavones"
+      "id": "soy_isoflavones",
+      "reference_semantics": {
+        "reference_type": "no_benchmark",
+        "scope": "General catalog Dose for this exact source identity; source-specific study facts and established safety references remain separate.",
+        "preparation": "Only the exact preparations described in the reviewed source facts: 22433977 extracted/synthesized isoflavones,median54mg aglycone-equivalents6weeks–12months,peri/postmenopausal hot flashes;25316502 slight/slow symptom effects. General benchmark conclusion:the cited source(s) do not establish one universal dose minimum, bounded optimum or safety upper limit for every preparation represented by this broad entry. This general-no-benchmark assessment is completed; retain known study regimens separately.",
+        "purpose": "Menopausal vasomotor symptoms (hot flashes)",
+        "population": "Only source-specific cohorts described in rationale; no general efficacy dose for unstudied populations, pregnancy or lactation is inferred.",
+        "exposure_basis": "minimum_directed_daily_use",
+        "units": "mg",
+        "curve": "completed_no_benchmark_neutral",
+        "source_ids": [
+          "https://pubmed.ncbi.nlm.nih.gov/22433977/",
+          "https://pubmed.ncbi.nlm.nih.gov/25316502/"
+        ],
+        "rationale": "22433977 extracted/synthesized isoflavones,median54mg aglycone-equivalents6weeks–12months,peri/postmenopausal hot flashes;25316502 slight/slow symptom effects. General benchmark conclusion:the cited source(s) do not establish one universal dose minimum, bounded optimum or safety upper limit for every preparation represented by this broad entry. This general-no-benchmark assessment is completed; retain known study regimens separately. Unsupported numerical inference rejected: Requires actual aglycone-equivalent amount and composition/duration; no universal40–80mg window100mg UL; genistein alone not the mixture. The completed general Dose conclusion uses existing PharmaGuide neutral policy, not clinical approval of a numerical benchmark.",
+        "owner": "scripts/data/rda_therapeutic_dosing.json::soy_isoflavones",
+        "review_date": "2026-10-18",
+        "approval_status": "approved_existing_neutral_2026_10_18"
+      }
     },
     {
       "standard_name": "Vitex Agnus-Castus",
@@ -593,7 +1067,25 @@
         "28237870",
         "31780016"
       ],
-      "id": "vitex_agnus_castus"
+      "id": "vitex_agnus_castus",
+      "reference_semantics": {
+        "reference_type": "no_benchmark",
+        "scope": "General catalog Dose for this exact source identity; source-specific study facts and established safety references remain separate.",
+        "preparation": "Only the exact preparations described in the reviewed source facts: 31780016 only3 properly characterized Ze440/BNO1095 studies520 womenPMS usable;28237870 high bias/heterogeneity/publication bias. General benchmark conclusion:the cited source(s) do not establish one universal dose minimum, bounded optimum or safety upper limit for every preparation represented by this broad entry. This general-no-benchmark assessment is completed; retain known study regimens separately.",
+        "purpose": "Premenstrual syndrome (PMS), cyclic mastalgia",
+        "population": "Only source-specific cohorts described in rationale; no general efficacy dose for unstudied populations, pregnancy or lactation is inferred.",
+        "exposure_basis": "minimum_directed_daily_use",
+        "units": "mg",
+        "curve": "completed_no_benchmark_neutral",
+        "source_ids": [
+          "https://pubmed.ncbi.nlm.nih.gov/28237870/",
+          "https://pubmed.ncbi.nlm.nih.gov/31780016/"
+        ],
+        "rationale": "31780016 only3 properly characterized Ze440/BNO1095 studies520 womenPMS usable;28237870 high bias/heterogeneity/publication bias. General benchmark conclusion:the cited source(s) do not establish one universal dose minimum, bounded optimum or safety upper limit for every preparation represented by this broad entry. This general-no-benchmark assessment is completed; retain known study regimens separately. Unsupported numerical inference rejected: Extract-specific doses must be retrieved;4–40mg generic interval and40mg UL not established. Ze440 andBNO1095 masses not automatically equivalent. The completed general Dose conclusion uses existing PharmaGuide neutral policy, not clinical approval of a numerical benchmark.",
+        "owner": "scripts/data/rda_therapeutic_dosing.json::vitex_agnus_castus",
+        "review_date": "2026-10-18",
+        "approval_status": "approved_existing_neutral_2026_10_18"
+      }
     },
     {
       "standard_name": "Elderberry",
@@ -614,7 +1106,24 @@
       "references": [
         "30670267"
       ],
-      "id": "elderberry"
+      "id": "elderberry",
+      "reference_semantics": {
+        "reference_type": "no_benchmark",
+        "scope": "General catalog Dose for this exact source identity; source-specific study facts and established safety references remain separate.",
+        "preparation": "Only the exact preparations described in the reviewed source facts: 30670267 four-trial-style meta-analysis180 participants with upper-respiratory symptoms, formulations not dose-extracted in abstract. General benchmark conclusion:the cited source(s) do not establish one universal dose minimum, bounded optimum or safety upper limit for every preparation represented by this broad entry. This general-no-benchmark assessment is completed; retain known study regimens separately.",
+        "purpose": "Upper respiratory tract infection symptom duration",
+        "population": "Only source-specific cohorts described in rationale; no general efficacy dose for unstudied populations, pregnancy or lactation is inferred.",
+        "exposure_basis": "minimum_directed_daily_use",
+        "units": "mg",
+        "curve": "completed_no_benchmark_neutral",
+        "source_ids": [
+          "https://pubmed.ncbi.nlm.nih.gov/30670267/"
+        ],
+        "rationale": "30670267 four-trial-style meta-analysis180 participants with upper-respiratory symptoms, formulations not dose-extracted in abstract. General benchmark conclusion:the cited source(s) do not establish one universal dose minimum, bounded optimum or safety upper limit for every preparation represented by this broad entry. This general-no-benchmark assessment is completed; retain known study regimens separately. Unsupported numerical inference rejected: Syrup/lozenge/extract and anthocyanin standardization differ;600–1500mg threshold/window/1500mg UL unresolved. The completed general Dose conclusion uses existing PharmaGuide neutral policy, not clinical approval of a numerical benchmark.",
+        "owner": "scripts/data/rda_therapeutic_dosing.json::elderberry",
+        "review_date": "2026-10-18",
+        "approval_status": "approved_existing_neutral_2026_10_18"
+      }
     },
     {
       "standard_name": "Grape Seed Extract",
@@ -636,7 +1145,25 @@
         "27537554",
         "34798267"
       ],
-      "id": "grape_seed_extract"
+      "id": "grape_seed_extract",
+      "reference_semantics": {
+        "reference_type": "no_benchmark",
+        "scope": "General catalog Dose for this exact source identity; source-specific study facts and established safety references remain separate.",
+        "preparation": "Only the exact preparations described in the reviewed source facts: 27537554 BP meta-analysis16 trials810 subjects;34798267 19 trials,DBP/HR positive,FMD/SBP not significant,nonlinear DBP dose-response. General benchmark conclusion:the cited source(s) do not establish one universal dose minimum, bounded optimum or safety upper limit for every preparation represented by this broad entry. This general-no-benchmark assessment is completed; retain known study regimens separately.",
+        "purpose": "Blood pressure, endothelial / vascular support",
+        "population": "Only source-specific cohorts described in rationale; no general efficacy dose for unstudied populations, pregnancy or lactation is inferred.",
+        "exposure_basis": "minimum_directed_daily_use",
+        "units": "mg",
+        "curve": "completed_no_benchmark_neutral",
+        "source_ids": [
+          "https://pubmed.ncbi.nlm.nih.gov/27537554/",
+          "https://pubmed.ncbi.nlm.nih.gov/34798267/"
+        ],
+        "rationale": "27537554 BP meta-analysis16 trials810 subjects;34798267 19 trials,DBP/HR positive,FMD/SBP not significant,nonlinear DBP dose-response. General benchmark conclusion:the cited source(s) do not establish one universal dose minimum, bounded optimum or safety upper limit for every preparation represented by this broad entry. This general-no-benchmark assessment is completed; retain known study regimens separately. Unsupported numerical inference rejected: 100–800mg range/800mg ceiling need preparation-specific full tables; OPC standardization cannot live only in unparsed notes. The completed general Dose conclusion uses existing PharmaGuide neutral policy, not clinical approval of a numerical benchmark.",
+        "owner": "scripts/data/rda_therapeutic_dosing.json::grape_seed_extract",
+        "review_date": "2026-10-18",
+        "approval_status": "approved_existing_neutral_2026_10_18"
+      }
     },
     {
       "standard_name": "Pycnogenol",
@@ -657,7 +1184,25 @@
         "31585179",
         "31763928"
       ],
-      "id": "pycnogenol"
+      "id": "pycnogenol",
+      "reference_semantics": {
+        "reference_type": "no_benchmark",
+        "scope": "General catalog Dose for this exact source identity; source-specific study facts and established safety references remain separate.",
+        "preparation": "Only the exact preparations described in the reviewed source facts: 31585179 cardiometabolic meta-analysis24RCTs1594 positive selected metrics;31763928 BP7trials626 no significant SBP/DBP/MAP/pulse-pressure benefit. General benchmark conclusion:the cited source(s) do not establish one universal dose minimum, bounded optimum or safety upper limit for every preparation represented by this broad entry. This general-no-benchmark assessment is completed; retain known study regimens separately.",
+        "purpose": "Cardiometabolic / blood pressure, endothelial support",
+        "population": "Only source-specific cohorts described in rationale; no general efficacy dose for unstudied populations, pregnancy or lactation is inferred.",
+        "exposure_basis": "minimum_directed_daily_use",
+        "units": "mg",
+        "curve": "completed_no_benchmark_neutral",
+        "source_ids": [
+          "https://pubmed.ncbi.nlm.nih.gov/31585179/",
+          "https://pubmed.ncbi.nlm.nih.gov/31763928/"
+        ],
+        "rationale": "31585179 cardiometabolic meta-analysis24RCTs1594 positive selected metrics;31763928 BP7trials626 no significant SBP/DBP/MAP/pulse-pressure benefit. General benchmark conclusion:the cited source(s) do not establish one universal dose minimum, bounded optimum or safety upper limit for every preparation represented by this broad entry. This general-no-benchmark assessment is completed; retain known study regimens separately. Unsupported numerical inference rejected: Trademark procyanidin extract required; generic pine bark not synonymous. No universal50–360mg optimum or360mg safety ceiling. The completed general Dose conclusion uses existing PharmaGuide neutral policy, not clinical approval of a numerical benchmark.",
+        "owner": "scripts/data/rda_therapeutic_dosing.json::pycnogenol",
+        "review_date": "2026-10-18",
+        "approval_status": "approved_existing_neutral_2026_10_18"
+      }
     },
     {
       "standard_name": "Cinnamon (Cassia)",
@@ -679,7 +1224,25 @@
         "24019277",
         "37818728"
       ],
-      "id": "cinnamon_cassia"
+      "id": "cinnamon_cassia",
+      "reference_semantics": {
+        "reference_type": "no_benchmark",
+        "scope": "General catalog Dose for this exact source identity; source-specific study facts and established safety references remain separate.",
+        "preparation": "Only the exact preparations described in the reviewed source facts: 24019277 mixed cinnamon120mg–6g/day4–18weeksT2D,heterogeneous and preferred dose unclear;37818728 newer24RCT glycemic meta-analysis. General benchmark conclusion:the cited source(s) do not establish one universal dose minimum, bounded optimum or safety upper limit for every preparation represented by this broad entry. This general-no-benchmark assessment is completed; retain known study regimens separately.",
+        "purpose": "Glycemic control (modest)",
+        "population": "Only source-specific cohorts described in rationale; no general efficacy dose for unstudied populations, pregnancy or lactation is inferred.",
+        "exposure_basis": "minimum_directed_daily_use",
+        "units": "mg",
+        "curve": "completed_no_benchmark_neutral",
+        "source_ids": [
+          "https://pubmed.ncbi.nlm.nih.gov/24019277/",
+          "https://pubmed.ncbi.nlm.nih.gov/37818728/"
+        ],
+        "rationale": "24019277 mixed cinnamon120mg–6g/day4–18weeksT2D,heterogeneous and preferred dose unclear;37818728 newer24RCT glycemic meta-analysis. General benchmark conclusion:the cited source(s) do not establish one universal dose minimum, bounded optimum or safety upper limit for every preparation represented by this broad entry. This general-no-benchmark assessment is completed; retain known study regimens separately. Unsupported numerical inference rejected: Species/preparation/coumarin content required.6g studied maximum is not6g toxicity UL; coumarinTDI mg/kg cannot be converted to cinnamon mass without content/bodyweight. The completed general Dose conclusion uses existing PharmaGuide neutral policy, not clinical approval of a numerical benchmark.",
+        "owner": "scripts/data/rda_therapeutic_dosing.json::cinnamon_cassia",
+        "review_date": "2026-10-18",
+        "approval_status": "approved_existing_neutral_2026_10_18"
+      }
     },
     {
       "standard_name": "Fenugreek",
@@ -700,7 +1263,25 @@
         "26791805",
         "36837450"
       ],
-      "id": "fenugreek"
+      "id": "fenugreek",
+      "reference_semantics": {
+        "reference_type": "discrete_studied_regimen",
+        "scope": "General catalog Dose for this exact source identity; source-specific study facts and established safety references remain separate.",
+        "preparation": "Only the exact preparations described in the reviewed source facts: 26791805 Testofen600mg/day12weeks in120 men43–70;36837450 glycemic meta-analysis14trials894. General benchmark conclusion:the cited source(s) do not establish one universal dose minimum, bounded optimum or safety upper limit for every preparation represented by this broad entry. This general-no-benchmark assessment is completed; retain known study regimens separately.",
+        "purpose": "Male androgen/libido support; glycemic control",
+        "population": "Only source-specific cohorts described in rationale; no general efficacy dose for unstudied populations, pregnancy or lactation is inferred.",
+        "exposure_basis": "minimum_directed_daily_use",
+        "units": "mg",
+        "curve": "completed_no_benchmark_neutral",
+        "source_ids": [
+          "https://pubmed.ncbi.nlm.nih.gov/26791805/",
+          "https://pubmed.ncbi.nlm.nih.gov/36837450/"
+        ],
+        "rationale": "26791805 Testofen600mg/day12weeks in120 men43–70;36837450 glycemic meta-analysis14trials894. General benchmark conclusion:the cited source(s) do not establish one universal dose minimum, bounded optimum or safety upper limit for every preparation represented by this broad entry. This general-no-benchmark assessment is completed; retain known study regimens separately. Unsupported numerical inference rejected: Testofen and seed/powder/other extracts not interchangeable;500–1200mg universal interval and1200mg UL unsupported. The completed general Dose conclusion uses existing PharmaGuide neutral policy, not clinical approval of a numerical benchmark.",
+        "owner": "scripts/data/rda_therapeutic_dosing.json::fenugreek",
+        "review_date": "2026-10-18",
+        "approval_status": "approved_existing_neutral_2026_10_18"
+      }
     },
     {
       "standard_name": "Gymnema Sylvestre",
@@ -719,7 +1300,24 @@
       "references": [
         "34467577"
       ],
-      "id": "gymnema_sylvestre"
+      "id": "gymnema_sylvestre",
+      "reference_semantics": {
+        "reference_type": "no_benchmark",
+        "scope": "General catalog Dose for this exact source identity; source-specific study facts and established safety references remain separate.",
+        "preparation": "Only the exact preparations described in the reviewed source facts: 34467577 meta-analysis10studies419 T2D participants; pooled changes largely vs baseline with high heterogeneity. General benchmark conclusion:the cited source(s) do not establish one universal dose minimum, bounded optimum or safety upper limit for every preparation represented by this broad entry. This general-no-benchmark assessment is completed; retain known study regimens separately.",
+        "purpose": "Glycemic control, sugar-craving reduction",
+        "population": "Only source-specific cohorts described in rationale; no general efficacy dose for unstudied populations, pregnancy or lactation is inferred.",
+        "exposure_basis": "minimum_directed_daily_use",
+        "units": "mg",
+        "curve": "completed_no_benchmark_neutral",
+        "source_ids": [
+          "https://pubmed.ncbi.nlm.nih.gov/34467577/"
+        ],
+        "rationale": "34467577 meta-analysis10studies419 T2D participants; pooled changes largely vs baseline with high heterogeneity. General benchmark conclusion:the cited source(s) do not establish one universal dose minimum, bounded optimum or safety upper limit for every preparation represented by this broad entry. This general-no-benchmark assessment is completed; retain known study regimens separately. Unsupported numerical inference rejected: Cannot infer controlled minimum200mg/window200–600mg or1000mg UL; standardized gymnemic-acid amount/preparation needed. The completed general Dose conclusion uses existing PharmaGuide neutral policy, not clinical approval of a numerical benchmark.",
+        "owner": "scripts/data/rda_therapeutic_dosing.json::gymnema_sylvestre",
+        "review_date": "2026-10-18",
+        "approval_status": "approved_existing_neutral_2026_10_18"
+      }
     },
     {
       "standard_name": "Andrographis Paniculata",
@@ -742,7 +1340,25 @@
         "28783743",
         "14748896"
       ],
-      "id": "andrographis_paniculata"
+      "id": "andrographis_paniculata",
+      "reference_semantics": {
+        "reference_type": "no_benchmark",
+        "scope": "General catalog Dose for this exact source identity; source-specific study facts and established safety references remain separate.",
+        "preparation": "Only the exact preparations described in the reviewed source facts: 28783743 respiratory-infection33RCTs7175 adults/children;14748896 includes extracts alone OR A.senticosus combination. General benchmark conclusion:the cited source(s) do not establish one universal dose minimum, bounded optimum or safety upper limit for every preparation represented by this broad entry. This general-no-benchmark assessment is completed; retain known study regimens separately.",
+        "purpose": "Acute respiratory tract infection symptom relief",
+        "population": "Only source-specific cohorts described in rationale; no general efficacy dose for unstudied populations, pregnancy or lactation is inferred.",
+        "exposure_basis": "minimum_directed_daily_use",
+        "units": "mg",
+        "curve": "completed_no_benchmark_neutral",
+        "source_ids": [
+          "https://pubmed.ncbi.nlm.nih.gov/28783743/",
+          "https://pubmed.ncbi.nlm.nih.gov/14748896/"
+        ],
+        "rationale": "28783743 respiratory-infection33RCTs7175 adults/children;14748896 includes extracts alone OR A.senticosus combination. General benchmark conclusion:the cited source(s) do not establish one universal dose minimum, bounded optimum or safety upper limit for every preparation represented by this broad entry. This general-no-benchmark assessment is completed; retain known study regimens separately. Unsupported numerical inference rejected: Andrographolide amount,extract ratio,combination,population and short course required.1200–6000mg generic interval6000mg ceiling unverified. The completed general Dose conclusion uses existing PharmaGuide neutral policy, not clinical approval of a numerical benchmark.",
+        "owner": "scripts/data/rda_therapeutic_dosing.json::andrographis_paniculata",
+        "review_date": "2026-10-18",
+        "approval_status": "approved_existing_neutral_2026_10_18"
+      }
     },
     {
       "standard_name": "Saffron",
@@ -763,7 +1379,25 @@
         "30036891",
         "20579522"
       ],
-      "id": "saffron"
+      "id": "saffron",
+      "reference_semantics": {
+        "reference_type": "no_benchmark",
+        "scope": "General catalog Dose for this exact source identity; source-specific study facts and established safety references remain separate.",
+        "preparation": "Only the exact preparations described in the reviewed source facts: 20579522 Satiereal176.5mg/day8weeks60 mildly-overweight women,snacking/satiety;30036891 separate mild/moderate-depression meta-analysis. General benchmark conclusion:the cited source(s) do not establish one universal dose minimum, bounded optimum or safety upper limit for every preparation represented by this broad entry. This general-no-benchmark assessment is completed; retain known study regimens separately.",
+        "purpose": "Preparation-specific mood research and separate Satiereal weight/snacking research; generic dose equivalence is unresolved.",
+        "population": "Only source-specific cohorts described in rationale; no general efficacy dose for unstudied populations, pregnancy or lactation is inferred.",
+        "exposure_basis": "minimum_directed_daily_use",
+        "units": "mg",
+        "curve": "completed_no_benchmark_neutral",
+        "source_ids": [
+          "https://pubmed.ncbi.nlm.nih.gov/30036891/",
+          "https://pubmed.ncbi.nlm.nih.gov/20579522/"
+        ],
+        "rationale": "20579522 Satiereal176.5mg/day8weeks60 mildly-overweight women,snacking/satiety;30036891 separate mild/moderate-depression meta-analysis. General benchmark conclusion:the cited source(s) do not establish one universal dose minimum, bounded optimum or safety upper limit for every preparation represented by this broad entry. This general-no-benchmark assessment is completed; retain known study regimens separately. Unsupported numerical inference rejected: Affron/Satiereal not interchangeable. Existing empty range/removal100mg ceiling correct; depression/weight doses require separate context. The completed general Dose conclusion uses existing PharmaGuide neutral policy, not clinical approval of a numerical benchmark.",
+        "owner": "scripts/data/rda_therapeutic_dosing.json::saffron",
+        "review_date": "2026-10-18",
+        "approval_status": "approved_existing_neutral_2026_10_18"
+      }
     },
     {
       "standard_name": "Tongkat Ali",
@@ -786,7 +1420,25 @@
         "36013514",
         "23705671"
       ],
-      "id": "tongkat_ali"
+      "id": "tongkat_ali",
+      "reference_semantics": {
+        "reference_type": "no_benchmark",
+        "scope": "General catalog Dose for this exact source identity; source-specific study facts and established safety references remain separate.",
+        "preparation": "Only the exact preparations described in the reviewed source facts: 36013514 testosterone review healthy/hypogonadal men;23705671 standardized hot-water root extract4weeks63 moderately stressed men/women. General benchmark conclusion:the cited source(s) do not establish one universal dose minimum, bounded optimum or safety upper limit for every preparation represented by this broad entry. This general-no-benchmark assessment is completed; retain known study regimens separately.",
+        "purpose": "Testosterone support in stressed/aging men; stress/mood",
+        "population": "Only source-specific cohorts described in rationale; no general efficacy dose for unstudied populations, pregnancy or lactation is inferred.",
+        "exposure_basis": "minimum_directed_daily_use",
+        "units": "mg",
+        "curve": "completed_no_benchmark_neutral",
+        "source_ids": [
+          "https://pubmed.ncbi.nlm.nih.gov/36013514/",
+          "https://pubmed.ncbi.nlm.nih.gov/23705671/"
+        ],
+        "rationale": "36013514 testosterone review healthy/hypogonadal men;23705671 standardized hot-water root extract4weeks63 moderately stressed men/women. General benchmark conclusion:the cited source(s) do not establish one universal dose minimum, bounded optimum or safety upper limit for every preparation represented by this broad entry. This general-no-benchmark assessment is completed; retain known study regimens separately. Unsupported numerical inference rejected: Need full Methods dose/extract to validate200–400mg;LJ100/Physta and generic root not automatically equivalent;600mg ceiling unsupported. The completed general Dose conclusion uses existing PharmaGuide neutral policy, not clinical approval of a numerical benchmark.",
+        "owner": "scripts/data/rda_therapeutic_dosing.json::tongkat_ali",
+        "review_date": "2026-10-18",
+        "approval_status": "approved_existing_neutral_2026_10_18"
+      }
     },
     {
       "standard_name": "Bergamot",
@@ -807,7 +1459,25 @@
         "24239156",
         "30501605"
       ],
-      "id": "bergamot"
+      "id": "bergamot",
+      "reference_semantics": {
+        "reference_type": "discrete_studied_regimen",
+        "scope": "General catalog Dose for this exact source identity; source-specific study facts and established safety references remain separate.",
+        "preparation": "Only the exact preparations described in the reviewed source facts: 24239156 BPF1000mg/day30days in77 mixed-hyperlipidemia patients,alone orrosuvastatin;30501605 standardBPF versus phytosomalBPF60 T2D+hyperlipidemia,2.5fold absorption difference. General benchmark conclusion:the cited source(s) do not establish one universal dose minimum, bounded optimum or safety upper limit for every preparation represented by this broad entry. This general-no-benchmark assessment is completed; retain known study regimens separately.",
+        "purpose": "Lipid / cardiometabolic support",
+        "population": "Only source-specific cohorts described in rationale; no general efficacy dose for unstudied populations, pregnancy or lactation is inferred.",
+        "exposure_basis": "minimum_directed_daily_use",
+        "units": "mg",
+        "curve": "completed_no_benchmark_neutral",
+        "source_ids": [
+          "https://pubmed.ncbi.nlm.nih.gov/24239156/",
+          "https://pubmed.ncbi.nlm.nih.gov/30501605/"
+        ],
+        "rationale": "24239156 BPF1000mg/day30days in77 mixed-hyperlipidemia patients,alone orrosuvastatin;30501605 standardBPF versus phytosomalBPF60 T2D+hyperlipidemia,2.5fold absorption difference. General benchmark conclusion:the cited source(s) do not establish one universal dose minimum, bounded optimum or safety upper limit for every preparation represented by this broad entry. This general-no-benchmark assessment is completed; retain known study regimens separately. Unsupported numerical inference rejected: Generic500–1500mg interval/1500mg UL unsupported; whole fruit/essential oil/BPF/phytosome not equivalent. The completed general Dose conclusion uses existing PharmaGuide neutral policy, not clinical approval of a numerical benchmark.",
+        "owner": "scripts/data/rda_therapeutic_dosing.json::bergamot",
+        "review_date": "2026-10-18",
+        "approval_status": "approved_existing_neutral_2026_10_18"
+      }
     },
     {
       "standard_name": "Olive Leaf Extract",
@@ -828,7 +1498,25 @@
         "26951205",
         "40990594"
       ],
-      "id": "olive_leaf_extract"
+      "id": "olive_leaf_extract",
+      "reference_semantics": {
+        "reference_type": "discrete_studied_regimen",
+        "scope": "General catalog Dose for this exact source identity; source-specific study facts and established safety references remain separate.",
+        "preparation": "Only the exact preparations described in the reviewed source facts: 26951205 phenolic-rich OLE136mg oleuropein+6mg hydroxytyrosol/day6weeks60 prehypertensive men;40990594 OLE hypertension621 participants,dose absent abstract. General benchmark conclusion:the cited source(s) do not establish one universal dose minimum, bounded optimum or safety upper limit for every preparation represented by this broad entry. This general-no-benchmark assessment is completed; retain known study regimens separately.",
+        "purpose": "Blood pressure, antioxidant support",
+        "population": "Only source-specific cohorts described in rationale; no general efficacy dose for unstudied populations, pregnancy or lactation is inferred.",
+        "exposure_basis": "minimum_directed_daily_use",
+        "units": "mg",
+        "curve": "completed_no_benchmark_neutral",
+        "source_ids": [
+          "https://pubmed.ncbi.nlm.nih.gov/26951205/",
+          "https://pubmed.ncbi.nlm.nih.gov/40990594/"
+        ],
+        "rationale": "26951205 phenolic-rich OLE136mg oleuropein+6mg hydroxytyrosol/day6weeks60 prehypertensive men;40990594 OLE hypertension621 participants,dose absent abstract. General benchmark conclusion:the cited source(s) do not establish one universal dose minimum, bounded optimum or safety upper limit for every preparation represented by this broad entry. This general-no-benchmark assessment is completed; retain known study regimens separately. Unsupported numerical inference rejected: Marker exposure is not generic500–1000mg extract mass; no1000mg UL. Need extract yield/full Methods. The completed general Dose conclusion uses existing PharmaGuide neutral policy, not clinical approval of a numerical benchmark.",
+        "owner": "scripts/data/rda_therapeutic_dosing.json::olive_leaf_extract",
+        "review_date": "2026-10-18",
+        "approval_status": "approved_existing_neutral_2026_10_18"
+      }
     },
     {
       "standard_name": "Lemon Balm",
@@ -847,7 +1535,24 @@
       "references": [
         "15272110"
       ],
-      "id": "lemon_balm"
+      "id": "lemon_balm",
+      "reference_semantics": {
+        "reference_type": "discrete_studied_regimen",
+        "scope": "General catalog Dose for this exact source identity; source-specific study facts and established safety references remain separate.",
+        "preparation": "Only the exact preparations described in the reviewed source facts: 15272110 single standardized extract300mg or600mg crossover18 healthy volunteers;600mg calmness/reduced alertness;300mg arithmetic speed. General benchmark conclusion:the cited source(s) do not establish one universal dose minimum, bounded optimum or safety upper limit for every preparation represented by this broad entry. This general-no-benchmark assessment is completed; retain known study regimens separately.",
+        "purpose": "Acute stress/anxiety, calm",
+        "population": "Only source-specific cohorts described in rationale; no general efficacy dose for unstudied populations, pregnancy or lactation is inferred.",
+        "exposure_basis": "minimum_directed_daily_use",
+        "units": "mg",
+        "curve": "completed_no_benchmark_neutral",
+        "source_ids": [
+          "https://pubmed.ncbi.nlm.nih.gov/15272110/"
+        ],
+        "rationale": "15272110 single standardized extract300mg or600mg crossover18 healthy volunteers;600mg calmness/reduced alertness;300mg arithmetic speed. General benchmark conclusion:the cited source(s) do not establish one universal dose minimum, bounded optimum or safety upper limit for every preparation represented by this broad entry. This general-no-benchmark assessment is completed; retain known study regimens separately. Unsupported numerical inference rejected: Acute per-use regimen, not300–1600mg daily continuous window or1600mg UL;1600mg absent citation. The completed general Dose conclusion uses existing PharmaGuide neutral policy, not clinical approval of a numerical benchmark.",
+        "owner": "scripts/data/rda_therapeutic_dosing.json::lemon_balm",
+        "review_date": "2026-10-18",
+        "approval_status": "approved_existing_neutral_2026_10_18"
+      }
     },
     {
       "standard_name": "Passionflower",
@@ -866,7 +1571,24 @@
       "references": [
         "21294203"
       ],
-      "id": "passionflower"
+      "id": "passionflower",
+      "reference_semantics": {
+        "reference_type": "no_benchmark",
+        "scope": "General catalog Dose for this exact source identity; source-specific study facts and established safety references remain separate.",
+        "preparation": "Only the exact preparations described in the reviewed source facts: 21294203 tea one cup/day7days in41 healthy18–35year adults; subjective sleep signal. General benchmark conclusion:the cited source(s) do not establish one universal dose minimum, bounded optimum or safety upper limit for every preparation represented by this broad entry. This general-no-benchmark assessment is completed; retain known study regimens separately.",
+        "purpose": "Short-term subjective sleep-quality research with Passiflora incarnata tea in healthy young adults.",
+        "population": "Only source-specific cohorts described in rationale; no general efficacy dose for unstudied populations, pregnancy or lactation is inferred.",
+        "exposure_basis": "minimum_directed_daily_use",
+        "units": "mg",
+        "curve": "completed_no_benchmark_neutral",
+        "source_ids": [
+          "https://pubmed.ncbi.nlm.nih.gov/21294203/"
+        ],
+        "rationale": "21294203 tea one cup/day7days in41 healthy18–35year adults; subjective sleep signal. General benchmark conclusion:the cited source(s) do not establish one universal dose minimum, bounded optimum or safety upper limit for every preparation represented by this broad entry. This general-no-benchmark assessment is completed; retain known study regimens separately. Unsupported numerical inference rejected: Tea cannot become mg standardized extract without composition/extraction proof; empty range correct; no universal absence-of-benchmark completion. The completed general Dose conclusion uses existing PharmaGuide neutral policy, not clinical approval of a numerical benchmark.",
+        "owner": "scripts/data/rda_therapeutic_dosing.json::passionflower",
+        "review_date": "2026-10-18",
+        "approval_status": "approved_existing_neutral_2026_10_18"
+      }
     },
     {
       "standard_name": "Sage",
@@ -887,7 +1609,25 @@
         "18350281",
         "12895685"
       ],
-      "id": "sage"
+      "id": "sage",
+      "reference_semantics": {
+        "reference_type": "discrete_studied_regimen",
+        "scope": "General catalog Dose for this exact source identity; source-specific study facts and established safety references remain separate.",
+        "preparation": "Only the exact preparations described in the reviewed source facts: 18350281 S.officinalis extract167/333/666/1332mg acute in20 adults>65,strongest333mg memory/attention;12895685 S.lavandulaefolia essential oil25–150microl,50microl recall signal. General benchmark conclusion:the cited source(s) do not establish one universal dose minimum, bounded optimum or safety upper limit for every preparation represented by this broad entry. This general-no-benchmark assessment is completed; retain known study regimens separately.",
+        "purpose": "Preparation-specific acute memory/attention research; Salvia species and extract/oil doses are not interchangeable.",
+        "population": "Only source-specific cohorts described in rationale; no general efficacy dose for unstudied populations, pregnancy or lactation is inferred.",
+        "exposure_basis": "minimum_directed_daily_use",
+        "units": "mg",
+        "curve": "completed_no_benchmark_neutral",
+        "source_ids": [
+          "https://pubmed.ncbi.nlm.nih.gov/18350281/",
+          "https://pubmed.ncbi.nlm.nih.gov/12895685/"
+        ],
+        "rationale": "18350281 S.officinalis extract167/333/666/1332mg acute in20 adults>65,strongest333mg memory/attention;12895685 S.lavandulaefolia essential oil25–150microl,50microl recall signal. General benchmark conclusion:the cited source(s) do not establish one universal dose minimum, bounded optimum or safety upper limit for every preparation represented by this broad entry. This general-no-benchmark assessment is completed; retain known study regimens separately. Unsupported numerical inference rejected: Species/extract/oil and units differ; no common300–600mg chronic window or600mg UL. Empty generic range correct. The completed general Dose conclusion uses existing PharmaGuide neutral policy, not clinical approval of a numerical benchmark.",
+        "owner": "scripts/data/rda_therapeutic_dosing.json::sage",
+        "review_date": "2026-10-18",
+        "approval_status": "approved_existing_neutral_2026_10_18"
+      }
     },
     {
       "standard_name": "Holy Basil (Tulsi)",
@@ -908,7 +1648,25 @@
         "19253862",
         "26571987"
       ],
-      "id": "holy_basil_tulsi"
+      "id": "holy_basil_tulsi",
+      "reference_semantics": {
+        "reference_type": "discrete_studied_regimen",
+        "scope": "General catalog Dose for this exact source identity; source-specific study facts and established safety references remain separate.",
+        "preparation": "Only the exact preparations described in the reviewed source facts: 19253862 leaf extract500mg twice/day in35GAD subjects;26571987 ethanolic leaf extract300mg/day30days healthy adults,cognitive endpoints. General benchmark conclusion:the cited source(s) do not establish one universal dose minimum, bounded optimum or safety upper limit for every preparation represented by this broad entry. This general-no-benchmark assessment is completed; retain known study regimens separately.",
+        "purpose": "Stress / anxiety, metabolic support",
+        "population": "Only source-specific cohorts described in rationale; no general efficacy dose for unstudied populations, pregnancy or lactation is inferred.",
+        "exposure_basis": "minimum_directed_daily_use",
+        "units": "mg",
+        "curve": "completed_no_benchmark_neutral",
+        "source_ids": [
+          "https://pubmed.ncbi.nlm.nih.gov/19253862/",
+          "https://pubmed.ncbi.nlm.nih.gov/26571987/"
+        ],
+        "rationale": "19253862 leaf extract500mg twice/day in35GAD subjects;26571987 ethanolic leaf extract300mg/day30days healthy adults,cognitive endpoints. General benchmark conclusion:the cited source(s) do not establish one universal dose minimum, bounded optimum or safety upper limit for every preparation represented by this broad entry. This general-no-benchmark assessment is completed; retain known study regimens separately. Unsupported numerical inference rejected: Two different purposes/doses/preparations; generic300–1200mg interpolation/1200mg UL unsupported. Anxiety study design/control needs full review. The completed general Dose conclusion uses existing PharmaGuide neutral policy, not clinical approval of a numerical benchmark.",
+        "owner": "scripts/data/rda_therapeutic_dosing.json::holy_basil_tulsi",
+        "review_date": "2026-10-18",
+        "approval_status": "approved_existing_neutral_2026_10_18"
+      }
     }
   ]
 }

@@ -101,6 +101,7 @@ def semantic_rda_ul_payload(data: Mapping[str, Any]) -> dict[str, Any]:
                 "ul_note": _normalized_text(raw.get("ul_note")),
                 "ul_applies_to_forms": ul_forms,
                 "ul_scope_source": _normalized_text(raw.get("ul_scope_source")),
+                "reference_semantics": raw.get("reference_semantics"),
                 "data": groups,
             }
         )

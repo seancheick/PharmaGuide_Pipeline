@@ -462,3 +462,12 @@ def test_short_hyphenated_alphanumeric_identity_is_not_discarded():
     assert vac.content_matches({'title': 'BCM-950 and ABCM-95', 'abstract': ''}, words)[0] == 'mismatch'
     assert vac.extract_topic_words({'_key': '20-30'}, config) == []
     assert vac.extract_topic_words({'_key': '12-mg'}, config) == []
+
+
+def test_dose_reference_semantics_citations_reach_existing_content_verifier():
+    refs=vac.extract_pmids_from_entry({
+        'references':['18208600'],
+        'reference_semantics':{'source_ids':['PMID:18208600','PMID:21847611',
+            'https://pubmed.ncbi.nlm.nih.gov/29214616/','NIH_ODS_CHOLINE']},
+    },{'source_format':'pmid_list','sources_field':'references'})
+    assert {r['pmid'] for r in refs}=={'18208600','21847611','29214616'}

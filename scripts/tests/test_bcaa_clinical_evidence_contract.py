@@ -176,7 +176,7 @@ def test_bcaa_plus_non_eaa_coingredient_remains_eligible(
     assert len(_bcaa_matches(enricher, "BCAA + Glutamine", rows)) == 1
 
 
-def test_scoring_sums_the_complete_daily_bcaa_dose(entries: dict[str, dict]) -> None:
+def test_general_bcaa_dose_is_neutral_at_different_daily_exposures(entries: dict[str, dict]) -> None:
     match = dict(entries["INGR_BRANCHED_CHAIN_AMINO_ACIDS"])
     match.update({
         "matched_term": "Branched Chain Amino Acids",
@@ -189,12 +189,11 @@ def test_scoring_sums_the_complete_daily_bcaa_dose(entries: dict[str, dict]) -> 
     once = score_dose(once_product)
     twice = score_dose(twice_product)
 
-    assert once["metadata"]["aggregate_dose_band"] == "below_studied_range"
-    assert twice["metadata"]["aggregate_dose_band"] == "within_studied_range"
-    assert once["metadata"]["aggregate_clinical_benchmark"]["exposure_value"] == 3000
-    assert twice["metadata"]["aggregate_clinical_benchmark"]["exposure_value"] == 6000
-    assert set(once["metadata"]["aggregate_clinical_benchmark"]["member_canonical_ids"]) == BCAA_IDS
-    assert twice["score"] > once["score"]
+    # Source amounts remain descriptive. They establish no general minimum
+    # and no proportional efficacy or adequacy curve.
+    assert "aggregate_clinical_benchmark" not in once["metadata"]
+    assert "aggregate_clinical_benchmark" not in twice["metadata"]
+    assert once["score"] == twice["score"] == unbenchmarked_dose_credit()
     # Evidence strength is independent of the formula amount.
     assert score_evidence(once_product)["score"] == score_evidence(twice_product)["score"]
 
@@ -217,15 +216,15 @@ def test_bcaa_formula_and_another_declared_purpose_are_averaged_equally(
     payload = score_dose(_scoring_product(rows, match, name="BCAA + L-Glutamine"))
 
     assert payload["metadata"]["purpose_ingredient_count"] == 2
-    assert payload["metadata"]["aggregate_dose_band"] == "within_studied_range"
-    assert payload["metadata"]["unbenchmarked_purpose_ingredients"] == ["l_glutamine"]
+    assert "aggregate_clinical_benchmark" not in payload["metadata"]
+    assert payload["metadata"]["unbenchmarked_purpose_ingredients"] == ["bcaa", "l_glutamine"]
     # Glutamine has no benchmark: the shared unbenchmarked neutral (V4.1 Step 4).
     assert payload["score"] == pytest.approx(
-        (22.0 + unbenchmarked_dose_credit()) / 2.0, abs=1e-4
+        unbenchmarked_dose_credit(), abs=1e-4
     )
 
 
-def test_scoring_receives_the_reviewed_bcaa_upper_range(entries: dict[str, dict]) -> None:
+def test_studied_bcaa_high_amount_does_not_become_a_dose_ceiling(entries: dict[str, dict]) -> None:
     match = dict(entries["INGR_BRANCHED_CHAIN_AMINO_ACIDS"])
     match.update({
         "matched_term": "Branched Chain Amino Acids",
@@ -239,5 +238,37 @@ def test_scoring_receives_the_reviewed_bcaa_upper_range(entries: dict[str, dict]
 
     payload = score_dose(_scoring_product(rows, match))
 
-    assert payload["metadata"]["aggregate_dose_band"] == "above_studied_range"
-    assert payload["metadata"]["aggregate_clinical_benchmark"]["benchmark_maximum"] == 29300
+    # Highest studied amount is preserved as a fact, never a Dose ceiling.
+    assert entries["INGR_BRANCHED_CHAIN_AMINO_ACIDS"]["max_studied_clinical_dose"] == 29300
+    assert "aggregate_clinical_benchmark" not in payload["metadata"]
+    assert payload["score"] == unbenchmarked_dose_credit()
+
+
+@pytest.mark.parametrize('declared', [False, True])
+def test_bcaa_group_purpose_does_not_depend_on_a_clinical_record(declared):
+    rows = [_active('l_leucine', 3000), _active('l_isoleucine', 1500),
+            _active('l_valine', 1500), _active('l_glutamine', 1000)]
+    product = _scoring_product(rows, {}, name='BCAA + L-Glutamine' if declared else 'L-Glutamine')
+    product.pop('evidence_data')
+    result = score_dose(product)
+    assert result['metadata']['purpose_ingredient_count'] == (2 if declared else 1)
+    contributions = result['metadata']['dose_contributions']
+    assert ('bcaa' in {row['ingredient'] for row in contributions}) is declared
+    assert result['score'] == unbenchmarked_dose_credit()
+
+
+@pytest.mark.parametrize('hidden', [False, True])
+def test_missing_bcaa_member_requires_positive_label_hiding_for_neutral(hidden):
+    rows = [_active('l_leucine', 3000), _active('l_isoleucine', 1500),
+            _active('l_valine', 1500)]
+    product = _scoring_product(rows, {})
+    row = product['ingredient_quality_data']['ingredients_scorable'][-1]
+    row['quantity'] = None
+    if hidden:
+        row['isNestedIngredient'] = True
+    result = score_dose(product)
+    if hidden:
+        assert result['score'] == unbenchmarked_dose_credit()
+    else:
+        assert result['score'] is None
+        assert result['metadata']['assessment_status'] == 'incomplete'

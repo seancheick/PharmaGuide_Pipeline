@@ -361,10 +361,12 @@ def _unit_is_mass(unit: Any) -> bool:
     return _norm(unit).replace(" ", "") in {u.replace(" ", "") for u in _MASS_UNITS}
 
 
-def _positive_quantity(row: Dict[str, Any]) -> Optional[float]:
+def _positive_quantity(row: Dict[str, Any], *, allow_zero: bool = False) -> Optional[float]:
     for key in ("quantity", "amount", "dose", "dosage", "dose_value"):
         value = _as_float(row.get(key), None)
-        if value is not None and value > 0:
+        if value is not None and (value > 0 or (
+            allow_zero and value == 0 and not isinstance(row.get(key), bool)
+        )):
             return value
     return None
 
@@ -461,11 +463,14 @@ def _source_is_non_epa_dha_oil(row: Dict[str, Any]) -> bool:
     return bool(_NON_EPA_DHA_SOURCE_RE.search(_row_source_text(row)))
 
 
-def epa_dha_row_is_trustworthy(row: Dict[str, Any]) -> bool:
+def epa_dha_row_is_trustworthy(row: Dict[str, Any], *, allow_zero: bool = False) -> bool:
     canonical = _norm(row.get("canonical_id"))
     if canonical not in {"epa", "dha", "epa_dha"}:
         return False
-    if _positive_quantity(row) is None:
+    amount = _positive_quantity(row, allow_zero=allow_zero)
+    if amount is None:
+        return False
+    if amount == 0 and not has_source_printed_amount(row, allow_zero=True):
         return False
     if not _unit_is_mass(_row_unit(row)):
         return False
@@ -478,7 +483,7 @@ def epa_dha_row_is_trustworthy(row: Dict[str, Any]) -> bool:
 DOSE_NOT_PROVIDED_UNITS = frozenset({"np", "n/p", "not provided", ""})
 
 
-def has_source_printed_amount(row: Mapping[str, Any]) -> bool:
+def has_source_printed_amount(row: Mapping[str, Any], *, allow_zero: bool = False) -> bool:
     """Whether the selected source-label amount proves this row's quantity.
 
     A derived parent total can have a usable amount without printed disclosure.
@@ -486,10 +491,17 @@ def has_source_printed_amount(row: Mapping[str, Any]) -> bool:
     raw quantities or confusing Formulation's double-count exclusion with opacity.
     """
     variants = _safe_list(_safe_dict(row.get("raw_taxonomy")).get("quantityVariants"))
+    if allow_zero and _positive_quantity(row, allow_zero=True) == 0:
+        selected = [v for v in variants if isinstance(v, dict) and v.get("selected_for_analysis") is True]
+        if len(selected) != 1 or selected[0].get("quantity_parsed") is not True:
+            return False
     return bool(row.get("raw_source_path")) and any(
         isinstance(v, dict) and v.get("selected_for_analysis") is True
         and _as_float(v.get("quantity"), None) == _as_float(row.get("quantity"), None)
-        and _as_float(v.get("quantity"), 0) > 0
+        and (_as_float(v.get("quantity"), 0) > 0 or (
+            allow_zero and _as_float(v.get("quantity"), None) == 0
+            and not isinstance(v.get("quantity"), bool)
+        ))
         and _norm(v.get("unit")) == _norm(row.get("unit"))
         for v in variants
     )
@@ -502,7 +514,9 @@ def dose_disclosure_status(row: Mapping[str, Any]) -> str:
     Disclosure is a label fact: any positive printed amount with a stated unit
     (mg, HUT, mg NE, %DV) is disclosed, whether or not Dose can use it as an
     exposure. A probiotic strain whose CFU the enricher found on strain-side
-    fields carries has_dose. A blend member printed without its own amount is a
+    fields carries has_dose. A parsed exact zero with its selected source unit
+    is also disclosed, without becoming a positive efficacy exposure.
+    A blend member printed without its own amount is a
     label nondisclosure ("Amount not disclosed"); any other row with no amount
     is missing capture. Blend membership is the cleaner's flag on either row
     shape (export row or scoring row).
@@ -511,6 +525,18 @@ def dose_disclosure_status(row: Mapping[str, Any]) -> str:
     unit = _norm(_row_unit(row))
     if (amount is not None and math.isfinite(amount) and unit not in DOSE_NOT_PROVIDED_UNITS) or row.get("has_dose"):
         return "disclosed"
+    if (
+        _positive_quantity(row, allow_zero=True) == 0
+        and unit not in DOSE_NOT_PROVIDED_UNITS
+        and has_source_printed_amount(row, allow_zero=True)
+    ):
+        # A parsed exact zero is label disclosure, not a positive exposure.
+        # Reuse the unit/operator owner; defaults, NP and ambiguous captures
+        # must never become a statement that the label printed zero.
+        from scoring_v4.exposure import row_exposure
+        exposure = row_exposure({}, row, basis="per_use", unit="mg")
+        if exposure.exact and exposure.per_serving_amount == 0:
+            return "disclosed"
     member = (
         row.get("isNestedIngredient") or row.get("proprietaryBlend") or row.get("parent_blend")
         or row.get("cleaner_row_role") == "nested_display_only"
@@ -909,13 +935,6 @@ _EXPLICIT_EPA_DHA_AGGREGATE_RE = re.compile(
     re.IGNORECASE,
 )
 
-_EXPLICIT_EAA_AGGREGATE_NAMES = {
-    "essential amino acids",
-    "essential amino acids eaa",
-    "eaa essential amino acids",
-}
-
-
 def _is_explicit_epa_dha_aggregate_label(value: Any) -> bool:
     """True only when the label names a combined EPA+DHA dose owner."""
     normalized = re.sub(r"[^a-z0-9]+", " ", str(value or "").lower()).strip()
@@ -1008,11 +1027,13 @@ def _children_are_exactly_the_eaas(owner: Dict[str, Any], rows: List[Dict[str, A
     prefix = str(owner.get("raw_source_path") or "") + ".nestedRows["
     if prefix == ".nestedRows[":
         return False
-    children = [
-        row for row in rows
-        if str(row.get("raw_source_path") or "").startswith(prefix)
-        and "." not in str(row.get("raw_source_path"))[len(prefix):]
-    ]
+    descendants = [row for row in rows if str(row.get("raw_source_path") or "").startswith(prefix)]
+    # Nested BCAA and remaining-EAA subgroups are structure, not extra actives.
+    # Only this owner's source leaves can establish its nine-member profile.
+    children = [row for row in descendants if not any(
+        str(other.get("raw_source_path") or "").startswith(str(row.get("raw_source_path")) + ".nestedRows[")
+        for other in descendants
+    )]
     canonicals = [_norm(row.get("canonical_id")) for row in children]
     return len(canonicals) == len(EAA_CANONICALS) and set(canonicals) == set(EAA_CANONICALS)
 
@@ -1027,36 +1048,19 @@ def _derive_explicit_eaa_aggregate_evidence(
     the old false quarantine and the opposite error of counting the same 10 g
     nine times.
     """
-    child_rows = [
-        row
-        for row in rows
-        if _norm(row.get("canonical_id")) in EAA_CANONICALS
-    ]
-    verified_children = {
-        _norm(row.get("canonical_id"))
-        for row in child_rows
-        if row.get("identity_disposition") is not None
-        and is_identity_scoreable(row.get("identity_disposition"))
-    }
-    if verified_children != set(EAA_CANONICALS):
-        return []
-    if any(
-        _positive_quantity(row) is not None
-        and _unit_is_mass(_row_unit(row))
-        for row in child_rows
-    ):
-        return []
-
     evidence: List[Dict[str, Any]] = []
     for owner in rows:
-        owner_name = re.sub(
-            r"[^a-z0-9]+",
-            " ",
-            str(owner.get("raw_source_text") or owner.get("name") or "").lower(),
-        ).strip()
-        if owner_name not in _EXPLICIT_EAA_AGGREGATE_NAMES and not _children_are_exactly_the_eaas(owner, rows):
+        if not _children_are_exactly_the_eaas(owner, rows):
             continue
         if _norm(owner.get("cleaner_row_role")) != "blend_header_total":
+            continue
+        prefix = str(owner.get("raw_source_path")) + ".nestedRows["
+        child_rows = [row for row in rows if _norm(row.get("canonical_id")) in EAA_CANONICALS
+                      and str(row.get("raw_source_path") or "").startswith(prefix)]
+        verified_children = {_norm(row.get("canonical_id")) for row in child_rows
+                             if row.get("identity_disposition") is not None
+                             and is_identity_scoreable(row.get("identity_disposition"))}
+        if verified_children != set(EAA_CANONICALS):
             continue
         mass = _positive_quantity(owner)
         unit = _row_unit(owner)
@@ -1085,7 +1089,8 @@ def _derive_explicit_eaa_aggregate_evidence(
             *child_paths,
         ]))
         item["verified_child_canonicals"] = sorted(verified_children)
-        item["profile_disclosure_status"] = "complete_identity_profile_amounts_undisclosed"
+        if any(_positive_quantity(row) is None for row in child_rows):
+            item["profile_disclosure_status"] = "complete_identity_profile_amounts_undisclosed"
         item["canonical_source_db"] = "verified_label_child_aggregate"
         evidence.append(item)
     return evidence
@@ -1094,18 +1099,22 @@ def _derive_explicit_eaa_aggregate_evidence(
 def _derive_declared_nutrition_protein_evidence(
     product: Dict[str, Any],
     active_rows: List[Dict[str, Any]],
-    scorable_paths: set[str],
 ) -> List[Dict[str, Any]]:
     """Project a declared Nutrition Facts protein mass for protein products.
 
     Protein totals are display-only Nutrition Facts rows, so they are correctly
     absent from ``ingredients_scorable``.  A protein powder or mass gainer still
     needs that declared mass as typed sports-dose evidence.  The projection is
-    deliberately narrow: product-name intent, a gram-validated nutrition
-    summary, an exact display-ledger Protein row, and no dose-bearing protein
-    active already owned by the scoring contract.
+    deliberately narrow: canonical protein taxonomy or product-name intent,
+    a gram-validated nutrition summary and an exact display-ledger Protein row.
+    A separately declared whey/casein/powder ingredient mass cannot replace
+    actual protein grams.
     """
-    if not has_protein_product_intent(_route_product_label_text(product)):
+    if not (
+        has_protein_product_intent(_route_product_label_text(product))
+        or _primary_type(product) == "protein_powder"
+        or _route_has_material_protein_row(active_rows)
+    ):
         return []
 
     protein_g = _as_float(
@@ -1113,17 +1122,6 @@ def _derive_declared_nutrition_protein_evidence(
         None,
     )
     if protein_g is None or protein_g <= 0:
-        return []
-
-    if any(
-        str(row.get("raw_source_path") or "") in scorable_paths
-        and _norm(row.get("canonical_id")) in _PROTEIN_CANONICALS
-        and _positive_quantity(row) is not None
-        and _unit_is_mass(
-            _row_unit(row)
-        )
-        for row in active_rows
-    ):
         return []
 
     nutrition_protein_paths = {
@@ -1945,7 +1943,9 @@ def derive_product_scoring_evidence(product: Dict[str, Any]) -> List[Dict[str, A
             )
             evidence.append(item)
 
-    for item in _derive_explicit_eaa_aggregate_evidence(active_rows):
+    eaa_aggregates = _derive_explicit_eaa_aggregate_evidence(active_rows)
+    eaa_owner_paths = {item["raw_source_path"] for item in eaa_aggregates}
+    for item in eaa_aggregates:
         special_evidence_paths.update(
             str(path) for path in _safe_list(item.get("linked_rows")) if path
         )
@@ -1954,7 +1954,6 @@ def derive_product_scoring_evidence(product: Dict[str, Any]) -> List[Dict[str, A
     for item in _derive_declared_nutrition_protein_evidence(
         product,
         active_rows,
-        scorable_paths,
     ):
         special_evidence_paths.update(
             str(path) for path in _safe_list(item.get("linked_rows")) if path
@@ -1973,31 +1972,13 @@ def derive_product_scoring_evidence(product: Dict[str, Any]) -> List[Dict[str, A
         canonical = _norm(row.get("canonical_id"))
         anchor_canonical, anchor_name = _anchor_identity(row)
         text = _row_text(row).lower()
+        # Actual protein grams are owned by the declared Nutrition Facts join
+        # above; protein-source ingredient mass proves identity, not purity.
         if (
-            ptype in _SPORTS_PRIMARY_TYPES
-            and quantity is not None
-            and _unit_is_mass(unit)
-            and (canonical in _PROTEIN_CANONICALS or "protein" in text)
-            and str(row.get("raw_source_path") or "") not in scorable_paths
-        ):
-            special_evidence_paths.add(str(row.get("raw_source_path") or ""))
-            evidence.append(_evidence_base(
-                row=row,
-                evidence_type="sports_primary_dose",
-                canonical_id="protein",
-                clean_identity_id=canonical or None,
-                scoring_parent_id="protein",
-                dose_value=quantity,
-                dose_unit=str(unit),
-                evidence_scope="row_level",
-                confidence="high",
-                reason="protein_macro_or_primary_sports_dose",
-                name=row.get("name") or "Protein",
-            ))
-        elif (
             ptype in _SPORTS_PRIMARY_TYPES
             and canonical in _SPORTS_PRIMARY_CANONICALS
             and str(row.get("raw_source_path") or "") not in scorable_paths
+            and str(row.get("raw_source_path") or "") not in special_evidence_paths
         ):
             special_evidence_paths.add(str(row.get("raw_source_path") or ""))
             evidence.append(_sports_primary_identity_without_dose(row, canonical))
@@ -2097,6 +2078,7 @@ def derive_product_scoring_evidence(product: Dict[str, Any]) -> List[Dict[str, A
             and _unit_is_mass(unit)
             and anchor_canonical
             and str(row.get("raw_source_path") or "") not in scorable_paths
+            and str(row.get("raw_source_path") or "") not in eaa_owner_paths
             and (
                 cleaner_role == "blend_header_total"
                 or str(row.get("raw_source_path") or "") not in special_evidence_paths
@@ -2551,6 +2533,14 @@ def _product_scoring_evidence_rows(
         for item in derived_evidence_rows
         if _norm(item.get("evidence_type")) == "declared_active_fiber"
     }
+    valid_declared_protein_keys = {
+        evidence_key(item) for item in derived_evidence_rows
+        if item.get("reason") == "declared_nutrition_protein_mass"
+    }
+    eaa_owner_paths = {item.get("raw_source_path") for item in derived_evidence_rows
+                       if item.get("reason") == "explicit_complete_eaa_aggregate_owner"}
+    valid_eaa_keys = {evidence_key(item) for item in derived_evidence_rows
+                      if item.get("reason") == "explicit_complete_eaa_aggregate_owner"}
     context_fields = (
         "raw_taxonomy",
         "forms",
@@ -2596,6 +2586,33 @@ def _product_scoring_evidence_rows(
         _backfill_product_evidence_identity(product, item)
         evidence_type = _norm(item.get("evidence_type") or item.get("dose_class"))
         dose_class = _norm(item.get("dose_class"))
+        if item.get("reason") == "explicit_complete_eaa_aggregate_owner" and idx < len(native_evidence_rows):
+            # A cached profile cannot establish today's source composition.
+            # Even a valid cache defers to the freshly qualified projection,
+            # including its verified children and current source metadata.
+            if evidence_key(item) not in valid_eaa_keys:
+                rejected.append(_reject(item, "stale_explicit_eaa_aggregate_evidence"))
+            continue
+        if evidence_type == "blend_anchor_mass" and item.get("raw_source_path") in eaa_owner_paths:
+            # The verified EAA total owns this preparation, including when a
+            # stored generic projection predates that source-qualified join.
+            rejected.append(_reject(item, "superseded_eaa_total_projection"))
+            continue
+        if (
+            evidence_type == "sports_primary_dose"
+            and (
+                item.get("reason") == "protein_macro_or_primary_sports_dose"
+                or (
+                    item.get("reason") == "declared_nutrition_protein_mass"
+                    and evidence_key(item) not in valid_declared_protein_keys
+                )
+            )
+        ):
+            # A stored protein projection is a cache of the current Facts-row
+            # join, not permission to reuse a retired mass inference, duplicate
+            # actual protein, or retain grams after source quantity loss.
+            rejected.append(_reject(item, "stale_declared_nutrition_protein_evidence"))
+            continue
         if (
             evidence_type == "declared_active_fiber"
             and evidence_key(item) not in valid_declared_active_fiber_keys
@@ -3214,7 +3231,9 @@ DETERMINISTIC_NON_EFFICACY_CANONICALS = frozenset({
 })
 
 
-def get_assessable_evidence_ingredients(product: Mapping[str, Any]) -> List[Dict[str, Any]]:
+def get_assessable_evidence_ingredients(
+    product: Mapping[str, Any], *, source_bound: bool = False,
+) -> List[Dict[str, Any]]:
     """Return label rows eligible for clinical evidence assessment.
 
     The label-row fallback of ``get_evidence_subject_rows``, which is the one
@@ -3241,18 +3260,59 @@ def get_assessable_evidence_ingredients(product: Mapping[str, Any]) -> List[Dict
     - Preserves source provenance without inferring dose or fabricating IDs
     - Gracefully falls back to ``get_scoring_ingredients`` when the mirror is absent
       (pre-enrichment test fixtures that only supply ``ingredients_scorable``)
+
+    Dose can request ``source_bound`` membership: when an original active tree
+    exists, a mirror occurrence must still match one eligible current source
+    path and canonical identity. A stale mirror cannot repair a lost profile.
     """
     data = dict(product) if isinstance(product, Mapping) else {}
     quality = _safe_dict(data.get("ingredient_quality_data"))
     rows = quality.get("ingredients")
     if not isinstance(rows, list):
         # Pre-enrichment fixture fallback: mirror not present, use scored rows.
-        return list(get_scoring_ingredients(data, strict=True).rows)
+        rows = list(get_scoring_ingredients(data, strict=True).rows)
+        if not source_bound:
+            return rows
+
+    current_sources = None
+    eligible_sources = set()
+    if source_bound and isinstance(data.get("activeIngredients"), list):
+        current_sources = {}
+        source_rows = _source_tree_rows(data)
+        for source_row in source_rows:
+            key = (str(source_row.get("raw_source_path") or ""), _norm(source_row.get("canonical_id")))
+            current_sources.setdefault(key, []).append(source_row)
+        eligible_sources = {
+            (str(source_row.get("raw_source_path") or ""), _norm(source_row.get("canonical_id")))
+            for source_row in get_assessable_evidence_ingredients(
+                {"ingredient_quality_data": {"ingredients": source_rows}}
+            )
+        }
 
     result = []
     for row in rows:
         if not isinstance(row, Mapping):
             continue
+        if current_sources is not None:
+            key = (str(row.get("raw_source_path") or ""), _norm(row.get("canonical_id")))
+            sources = current_sources.get(key, [])
+            if not key[0] or len(sources) != 1 or key not in eligible_sources:
+                continue
+            disposition = sources[0].get("identity_disposition")
+            if disposition is not None and not is_identity_scoreable(disposition):
+                continue
+            source = sources[0]
+            if (source.get("is_nested_ingredient") or source.get("isNestedIngredient")
+                    or source.get("parent_blend") or source.get("parentBlend")):
+                # Moving a declared child outside its source tree does not
+                # turn the stale member into an independent preparation.
+                parent_path = _aggregate_parent_source_path(source)
+                if not key[0].startswith(parent_path + "."):
+                    continue
+            # Binding selects the current occurrence, including its quantity
+            # qualifications. A matching identity cannot launder stale amounts
+            # or erase an unresolved operator from the source.
+            row = source
 
         # 1. Active section only: drop inactives and excipients
         if _norm(row.get("source_section")) == "inactive":
@@ -4480,6 +4540,23 @@ def _route_has_collagen_primary_identity(product: Dict[str, Any], name_text: str
     return True
 
 
+def _route_has_material_protein_row(rows: Iterable[Dict[str, Any]]) -> bool:
+    """Use the route's existing protein-source mass threshold as product intent.
+
+    Source ingredient mass proves intent only; actual protein dose still needs
+    its separate, quantity-bearing Facts declaration.
+    """
+    return any(
+        _norm(row.get("canonical_id")) in ROUTE_FEATURE_PROTEIN_CANONICALS
+        and not is_nutrition_fact_declaration(row)
+        and row.get("scoring_input_kind") != "product_level_evidence"
+        and row.get("score_eligible_by_cleaner") is not False
+        and _norm(row.get("source_section")) != "inactive"
+        and (_role_mass_mg(row) or 0.0) >= _ROUTE_PROTEIN_MATERIAL_MIN_MG
+        for row in rows
+    )
+
+
 def _route_is_sports_class(
     product: Dict[str, Any],
     name_text: str,
@@ -4540,12 +4617,7 @@ def _route_is_sports_class(
     if (
         float(facts.get("row_level_protein_mass_mg") or 0.0)
         >= _ROUTE_PROTEIN_MATERIAL_MIN_MG
-        or any(
-            _norm(row.get("canonical_id")) in ROUTE_FEATURE_PROTEIN_CANONICALS
-            and (_role_mass_mg(row) or 0.0) >= _ROUTE_PROTEIN_MATERIAL_MIN_MG
-            for row in _route_scoring_rows(product)
-            if row.get("scoring_input_kind") != "product_level_evidence"
-        )
+        or _route_has_material_protein_row(_route_scoring_rows(product))
     ):
         return True
     if protein_intent and (protein_identities or has_protein_mass or primary_type == "protein_powder"):
@@ -6375,6 +6447,7 @@ def classify_ingredient_roles(
     *,
     module: Optional[str] = None,
     rows: Optional[List[Dict[str, Any]]] = None,
+    materiality_only: bool = False,
 ) -> List[Dict[str, Any]]:
     """Classify every scoring row's role (compatibility mode, Phase 2).
 
@@ -6386,66 +6459,15 @@ def classify_ingredient_roles(
     ``rows`` lets a caller that has already derived the scoring rows (e.g. the
     completeness gate) pass them in to avoid a second derivation pass. When
     omitted they are derived from ``product``.
+
+    ``materiality_only`` skips the route-driver rule (L1), which makes every
+    active a route recognizes primary, so claim prominence and mass ratio
+    separate a route's co-primaries from its accessories (Dose V4.1 §3.2).
     """
     product = product or {}
     if rows is None:
         rows = get_scoring_ingredients(product, strict=True).rows
     ctx = _role_context(product, module, rows)
+    if materiality_only:
+        ctx = {**ctx, "driver_canonicals": set(), "module": None}
     return [_classify_one(row, ctx) for row in rows]
-
-
-def declared_serving_dose_input(product: Dict[str, Any]) -> Dict[str, Any]:
-    """Transient Dose projection, preserving the source daily safety assessment.
-
-    Ratios retain their source's converted nutrient units and applicability.
-    No label quantity, identity, clinical threshold or exported field changes.
-    Legacy rows without frequency metadata use the shared label resolver.
-    """
-    from serving_frequency import resolve_daily_serving_range
-    low, high, _ = resolve_daily_serving_range(product)
-    projected = dict(product)
-    rda = deepcopy(product.get("rda_ul_data") or {})
-    serving_only_flags = []
-    for row in rda.get("adequacy_results") or []:
-        if not isinstance(row, dict):
-            continue
-        original_pct_ul = row.get("pct_ul")
-        for key, frequency_key, fallback in (
-            ("pct_rda", "servings_per_day_min", low),
-            ("pct_ul", "servings_per_day_max", high),
-        ):
-            value = row.get(key)
-            frequency = row.get(frequency_key, fallback)
-            if (isinstance(value, (int, float)) and not isinstance(value, bool)
-                    and isinstance(frequency, (int, float)) and not isinstance(frequency, bool)
-                    and math.isfinite(frequency) and frequency > 0):
-                row[key] = value / frequency
-        for key, frequency in (
-            ("per_day_min", row.get("servings_per_day_min", low)),
-            ("per_day_max", row.get("servings_per_day_max", high)),
-        ):
-            value = row.get(key)
-            if (isinstance(value, (int, float)) and not isinstance(value, bool)
-                    and isinstance(frequency, (int, float)) and not isinstance(frequency, bool)
-                    and math.isfinite(frequency) and frequency > 0):
-                row[key] = value / frequency
-        if isinstance(row.get("pct_ul"), (int, float)):
-            row["over_ul"] = row["pct_ul"] > 100
-        if (isinstance(original_pct_ul, (int, float)) and not isinstance(original_pct_ul, bool)
-                and 0 <= original_pct_ul <= 100 and row.get("over_ul") is True
-                and row.get("skip_ul_check") is not True):
-            # Intermittent directions can be below the daily UL while one
-            # serving is above it. Reuse the source-resolved comparison and
-            # eligibility; no new clinical limit or identity inference.
-            serving_only_flags.append(dict(row, amount=row.get("per_day_max")))
-        row["servings_per_day_min"] = row["servings_per_day_max"] = 1.0
-    for flag in rda.get("safety_flags") or []:
-        if not isinstance(flag, dict):
-            continue
-        for key in ("pct_ul", "amount"):
-            value = flag.get(key)
-            if isinstance(value, (int, float)) and not isinstance(value, bool):
-                flag[key] = value / high
-    rda["safety_flags"] = list(rda.get("safety_flags") or []) + serving_only_flags
-    projected["rda_ul_data"] = rda
-    return projected

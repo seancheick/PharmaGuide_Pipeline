@@ -151,7 +151,7 @@ from proprietary_blend_detector import ProprietaryBlendDetector, disclosure_tier
 
 # One direct child row of a raw label row: "<parent>.nestedRows[3]".
 _RAW_CHILD_ROW = re.compile(r"\.nestedRows\[\d+\]")
-from rda_ul_calculator import RDAULCalculator, ul_display_severity, ul_exceedance_sentence
+from rda_ul_calculator import RDAULCalculator, label_population_members, ul_display_severity, ul_exceedance_sentence
 from reference_data_contract import reference_stamp
 from collagen_taxonomy import classify_collagen_subtype_strict, UNSPECIFIED as _COLLAGEN_UNSPECIFIED
 import normalization as norm_module  # Single-source normalization
@@ -195,7 +195,9 @@ _RDA_REFERENCE_PROFILE = {
     "id": "adult_neutral_compatibility",
     "age_range": "19-30",
     "adequacy_basis": "higher_sourced_adult_male_female_rda_ai",
-    "ul_basis": "lower_sourced_adult_male_female_ul",
+    # Safety screening is separate (Dose V4.1 D2): the lowest established UL
+    # across the label population; see rda_ul_calculator.UL_SCREENING_POPULATIONS.
+    "ul_basis": "lowest_established_ul_across_label_population",
 }
 
 # FDA/NIH labeling basis: 1,000 mcg synthetic folic acid is the adult UL;
@@ -14347,6 +14349,29 @@ class SupplementEnricherV3:
                                   ("inactiveIngredients", inactive_ingredients))
             for index, row in enumerate(rows) if isinstance(row, dict)
         }
+        # A preparation's explicitly identified source organisms/materials are
+        # provenance, not hidden blend actives. Reconcile detector placeholders
+        # by the exact source owner, only when the canonical source inventory
+        # proves every descendant is a retained source descriptor. Missing or
+        # mixed active children continue through ordinary opacity assessment.
+        source_rows = [row for row in [*active_ingredients, *inactive_ingredients]
+                       if isinstance(row, dict)]
+        source_paths = {row.get("raw_source_path") for row in source_rows if row.get("raw_source_path")}
+        source_inventory = {row.get("raw_source_path") for row in product.get("label_source_rows") or []
+                            if isinstance(row, dict) and row.get("raw_source_path")}
+        children_by_parent: Dict[str, List[Dict]] = {}
+        for row in source_rows:
+            parent = row.get("parent_source_path")
+            if parent:
+                children_by_parent.setdefault(parent, []).append(row)
+        source_only_preparations = set()
+        for parent, children in children_by_parent.items():
+            descendants = {path for path in source_inventory
+                           if path.startswith((parent + ".nestedRows[", parent + ".forms["))}
+            if (parent in source_paths and descendants
+                    and descendants <= {row.get("raw_source_path") for row in children}
+                    and all(row.get("cleaner_row_role") == "source_descriptor" for row in children)):
+                source_only_preparations.add(parent)
 
         # Chemical-identity resolution handles for the branded single-active
         # escape below (same databases the scorer's skip logic trusts via
@@ -14391,6 +14416,8 @@ class SupplementEnricherV3:
             try:
                 result = self.blend_detector.analyze_product(product)
                 for blend in result.blends_detected:
+                    if label_source_refs.get(blend.source_field) in source_only_preparations:
+                        continue
                     detector_with_amounts = blend.ingredients_with_amounts or []
                     detector_without_amounts = blend.ingredients_without_amounts or []
                     detector_children = [
@@ -14451,6 +14478,8 @@ class SupplementEnricherV3:
             for child in children:
                 if not isinstance(child, dict):
                     continue
+                if child.get("cleaner_row_role") in CLEANER_NON_EFFICACY_ROLES:
+                    continue
                 child_name = (child.get("name", "") or "").strip()
                 child_qty = child.get("quantity")
                 if isinstance(child_qty, (int, float)) and child_qty > 0:
@@ -14495,6 +14524,9 @@ class SupplementEnricherV3:
                 }
 
             for idx, ingredient in enumerate(ingredient_list):
+                if (ingredient.get("cleaner_row_role") in CLEANER_NON_EFFICACY_ROLES
+                        or ingredient.get("raw_source_path") in source_only_preparations):
+                    continue
                 is_nested = bool(ingredient.get('isNestedIngredient', False))
                 parent_blend = (ingredient.get('parentBlend', '') or '').strip()
                 parent_source_path = str(
@@ -20851,7 +20883,7 @@ class SupplementEnricherV3:
             if isinstance(parent, dict)
             else set()
         )
-        if source_uniis & scoped_form_uniis:
+        if canonical_id != "nickel" and source_uniis & scoped_form_uniis:
             return {
                 "ul_gate_eligible": True,
                 "ul_exposure_basis": "ul_scoped_form_substance_amount",
@@ -20864,7 +20896,9 @@ class SupplementEnricherV3:
             ingredient.get("raw_source_text"),
         ):
             declared_form_keys.update(self._ul_scope_form_name_keys(value))
-        if declared_form_keys & self._ul_scoped_form_name_keys(standard_name):
+        # Nickel's soluble-salt scope qualifies chemistry, not salt mass:
+        # unlike a vitamin form, the compound amount is not elemental nickel.
+        if canonical_id != "nickel" and declared_form_keys & self._ul_scoped_form_name_keys(standard_name):
             return {
                 "ul_gate_eligible": True,
                 "ul_exposure_basis": "ul_scoped_form_named_substance_amount",
@@ -21667,6 +21701,43 @@ class SupplementEnricherV3:
     # RDA/UL DATA COLLECTOR (for user profile scoring on device)
     # =========================================================================
 
+    @staticmethod
+    def _ul_screening_population(product: Dict) -> Tuple[str, ...]:
+        """Every label population whose lowest UL screens this product (D2).
+
+        Plan section 2.5: the lowest UL across the whole stated population, so
+        a label naming two populations screens against the rows of both.
+        """
+        return label_population_members(product)
+
+    @staticmethod
+    def _ul_screening_pediatric_age_groups(product: Dict) -> Optional[Tuple[str, ...]]:
+        """Do not borrow adolescent rows for an explicitly younger-only label.
+
+        None retains the available pediatric rows for a broad children label;
+        an empty selection says no existing row covers the stated age range.
+        Population unions retain adolescent coverage if any tag includes it.
+        """
+        pediatric_tags = []
+        for group in product.get("targetGroups") or []:
+            text = group if isinstance(group, str) else (
+                (group.get("text") or group.get("name") or "") if isinstance(group, dict) else "")
+            tag = str(text).strip().lower()
+            if not any(word in tag for word in ("child", "infant", "boys", "girls")):
+                continue
+            age_range = re.search(r"(\d+)\s*[-–—]\s*(\d+)\s*(?:years?|yrs?)", tag)
+            under = re.search(r"(?:under|less than)\s*(\d+)\b", tag)
+            younger_only = ("infant" in tag and "child" not in tag or
+                            age_range is not None and int(age_range.group(2)) < 14 or
+                            under is not None and int(under.group(1)) <= 14)
+            adolescent_only = age_range is not None and 14 <= int(age_range.group(1)) <= int(age_range.group(2)) <= 18
+            pediatric_tags.append("younger" if younger_only else "adolescent" if adolescent_only else "broad")
+        if pediatric_tags and all(tag == "younger" for tag in pediatric_tags):
+            return ()
+        if pediatric_tags and all(tag == "adolescent" for tag in pediatric_tags):
+            return ("14-18",)
+        return None
+
     def _collect_rda_ul_data(
         self,
         product: Dict,
@@ -21684,6 +21755,8 @@ class SupplementEnricherV3:
         """
         active_ingredients = self._dose_active_ingredients_for_enrichment(product)
         special_use_flags = self._collect_special_use_flags(active_ingredients)
+        ul_population = self._ul_screening_population(product)
+        pediatric_age_groups = self._ul_screening_pediatric_age_groups(product)
         quality_identity_rows = [
             row
             for row in (
@@ -22524,6 +22597,8 @@ class SupplementEnricherV3:
                                 age_group=_RDA_REFERENCE_PROFILE["age_range"],
                                 sex="adult_neutral",
                                 form_name=matched_form,
+                                ul_population=ul_population,
+                                pediatric_age_groups=pediatric_age_groups,
                             )
                         except Exception as calculation_error:
                             assessment_error = str(calculation_error)[:500]
@@ -22543,6 +22618,7 @@ class SupplementEnricherV3:
                         safety_over_ul = safety.over_ul
                         safety_over_ul_amount = safety.over_ul_amount
                         safety_warnings = list(safety.warnings)
+                        safety_ul_population = safety.ul_population
                         adequacy_unit = _nutrient_record.get("unit") or adequacy.unit
                         adequacy_optimal_min = adequacy.optimal_min
                         adequacy_optimal_max = adequacy.optimal_max
@@ -22554,6 +22630,7 @@ class SupplementEnricherV3:
                         safety_over_ul = False
                         safety_over_ul_amount = None
                         safety_warnings = []
+                        safety_ul_population = None
                         adequacy_unit = _nutrient_record.get("unit") or unit
                         adequacy_optimal_min = None
                         adequacy_optimal_max = None
@@ -22584,6 +22661,46 @@ class SupplementEnricherV3:
                             "highest_ul": _nutrient_record.get("highest_ul"),
                         }
 
+                    worst_case_nickel_within_ul = False
+                    if resolved_canonical_id == "nickel" and safety_ul_status == "indeterminate":
+                        # Unknown solubility cannot prove an exceedance, but
+                        # all declared mass bounds the possible soluble nickel.
+                        # Reuse the existing sole-row active-moiety bound; no
+                        # salt identity or nutritional adequacy is inferred.
+                        nickel_ul, nickel_population = self.rda_calculator._screening_ul(
+                            _nutrient_record, ul_population or "general_adult", pediatric_age_groups
+                        )
+                        nickel_bound, nickel_unit_evaluable = self.rda_calculator._reconcile_amount_to_reference(
+                            amount_for_ul, converted_unit, _nutrient_record.get("unit")
+                        ) if converted_amount is not None else (None, False)
+                        worst_case_nickel_within_ul = bool(
+                            not skip_ul_check
+                            and positive_canonical_row_counts.get("nickel") == 1
+                            and nickel_unit_evaluable and nickel_bound is not None
+                            and nickel_ul is not None and 0 <= nickel_bound <= nickel_ul
+                            and not nickel_population.get("reference_gap")
+                        )
+                        if worst_case_nickel_within_ul:
+                            safety_ul = nickel_ul
+                            safety_pct_ul = nickel_bound / nickel_ul * 100.0
+                            safety_ul_population = nickel_population
+                            safety_warnings = []
+                        else:
+                            skip_ul_check = True
+                            skip_ul_reason = "unresolved_form"
+                            ul_exposure.update(ul_gate_eligible=False,
+                                               ul_gate_ineligible_reason="unresolved_form")
+
+                    pediatric_reference_gap = bool(
+                        isinstance(safety_ul_population, dict)
+                        and safety_ul_population.get("reference_gap")
+                        and "pediatric" in safety_ul_population.get("members", [])
+                    )
+                    if pediatric_reference_gap:
+                        if safety_ul is None:
+                            safety_ul_status = "indeterminate"
+                            skip_ul_check = True
+                        skip_ul_reason = "pediatric_reference_gap"
                     adequacy_dict.update({
                         "canonical_id": resolved_canonical_id or None,
                         "nutrient_group_id": nutrient_group_id,
@@ -22594,6 +22711,7 @@ class SupplementEnricherV3:
                         "over_ul": safety_over_ul,
                         "over_ul_amount": safety_over_ul_amount,
                         "warnings": safety_warnings,
+                        "ul_population": safety_ul_population,
                         "adequacy_exposure": {
                             "per_day": per_day_min,
                             "unit": converted_unit,
@@ -22614,7 +22732,7 @@ class SupplementEnricherV3:
                                 "explicit_label_preformed_vitamin_a_fraction"
                             ),
                         })
-                    worst_case_compound_mass_within_ul = bool(
+                    worst_case_compound_mass_within_ul = worst_case_nickel_within_ul or bool(
                         not skip_ul_check
                         and resolved_canonical_id
                         and positive_canonical_row_counts.get(
@@ -23158,6 +23276,12 @@ class SupplementEnricherV3:
                     # with a single aggregated flag if multiple forms of
                     # the same canonical combine to exceed UL.
                     _row_canonical = resolved_canonical_id or None
+                    if pediatric_reference_gap:
+                        _staged_row_flags.append((_row_canonical, {
+                            "nutrient": ing_name, "canonical_id": _row_canonical,
+                            "pct_ul": None, "ul": None, "ul_population": safety_ul_population,
+                            "ul_gate_eligible": False, "ul_gate_ineligible_reason": "pediatric_reference_gap",
+                        }))
                     if not skip_ul_check and safety_over_ul:
                         pct_ul_val = safety_pct_ul or 0
                         over_ul_amount = safety_over_ul_amount or 0
@@ -23165,16 +23289,21 @@ class SupplementEnricherV3:
                             _row_canonical,
                             {
                                 "nutrient": ing_name,
+                                # The reference nutrient whose limit applies;
+                                # `nutrient` keeps the label text.
+                                "reference_nutrient": adequacy_dict.get("nutrient"),
                                 "amount": ul_amount,
                                 "unit": ul_unit,
                                 "ul": safety_ul,
                                 "pct_ul": pct_ul_val,
                                 "over_amount": over_ul_amount,
                                 "warning": ul_exceedance_sentence(
-                                    float(ul_amount or 0.0), float(safety_ul or 0.0), str(ul_unit or "")
+                                    float(ul_amount or 0.0), float(safety_ul or 0.0), str(ul_unit or ""),
+                                    (safety_ul_population or {}).get("label") or "general adult",
                                 ),
                                 "severity": ul_display_severity(pct_ul_val),
                                 "reference": adequacy_dict.get("reference"),
+                                "ul_population": safety_ul_population,
                                 **ul_exposure,
                             }
                         ))
@@ -23339,6 +23468,8 @@ class SupplementEnricherV3:
                             unit=group["unit"],
                             age_group=_RDA_REFERENCE_PROFILE["age_range"],
                             sex="adult_neutral",
+                            ul_population=ul_population,
+                            pediatric_age_groups=pediatric_age_groups,
                         )
                     except Exception as agg_err:
                         self.logger.debug(
@@ -23484,11 +23615,13 @@ class SupplementEnricherV3:
                             "warning": (
                                 f"Across {len(group['rows'])} forms, "
                                 + ul_exceedance_sentence(
-                                    float(group["total_amount"] or 0.0), float(agg_adequacy.ul or 0.0), str(group["unit"] or "")
+                                    float(group["total_amount"] or 0.0), float(agg_adequacy.ul or 0.0), str(group["unit"] or ""),
+                                    (agg_adequacy.ul_population or {}).get("label") or "general adult",
                                 )
                             ),
                             "severity": ul_display_severity(pct_ul_val),
                             "reference": agg_adequacy.to_dict().get("reference"),
+                            "ul_population": agg_adequacy.ul_population,
                             "aggregation": "canonical_sum",
                             "canonical_id": cid,
                             "contributing_rows": group["rows"],
@@ -23507,7 +23640,7 @@ class SupplementEnricherV3:
                 # has an aggregated flag above; adding per-row flags for the
                 # same canonical would double-count the B7 penalty.
                 for row_cid, row_flag in _staged_row_flags:
-                    if row_cid and row_cid in _aggregated_canonicals:
+                    if row_cid and row_cid in _aggregated_canonicals and row_flag.get("pct_ul") is not None:
                         continue
                     safety_flags.append(row_flag)
 

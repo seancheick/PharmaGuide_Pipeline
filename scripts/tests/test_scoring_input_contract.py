@@ -1171,6 +1171,8 @@ def test_explicit_eaa_total_emits_one_verified_sports_aggregate():
         "raw_taxonomy": {"category": "blend", "ingredientGroup": "Blend"},
     }
     children = [_eaa_child(canonical, index) for index, canonical in enumerate(eaa_canonicals)]
+    for index, child in enumerate(children):
+        child["raw_source_path"] = f"ingredientRows[0].nestedRows[{index}]"
     product = _product(
         [],
         product_name="EAA",
@@ -1195,7 +1197,7 @@ def test_explicit_eaa_total_emits_one_verified_sports_aggregate():
     assert row["verified_child_canonicals"] == sorted(eaa_canonicals)
     assert row["linked_rows"] == [
         "ingredientRows[0]",
-        *[f"ingredientRows[1].nestedRows[{index}]" for index in range(9)],
+        *[f"ingredientRows[0].nestedRows[{index}]" for index in range(9)],
     ]
     assert result.mapped_coverage == 1.0
 
@@ -1460,6 +1462,40 @@ def test_nutrition_protein_mass_without_product_intent_is_not_sports_evidence():
     evidence = derive_product_scoring_evidence(product)
 
     assert not any(row.get("evidence_type") == "sports_primary_dose" for row in evidence)
+
+
+@pytest.mark.parametrize("primary_type,source_g,has_facts,expected", [
+    ("protein_powder", 26.4, True, 1),
+    ("protein_powder", 26.4, False, 0),
+    ("multivitamin", 1.0, True, 0),
+    ("collagen", 1.0, True, 0),
+])
+def test_protein_taxonomy_reuses_actual_facts_without_title_or_powder_mass_inference(
+    primary_type, source_g, has_facts, expected,
+):
+    # WheyBasics has no literal 'protein' in its name. Product taxonomy owns
+    # its intent, while the exact Nutrition Facts row owns actual protein mass.
+    # An incidental source in another subtype supplies neither protein intent
+    # nor permission to substitute its ingredient mass for actual protein.
+    source = _row(name="Whey Protein Isolate", canonical_id="whey_protein",
+                  quantity=source_g, unit="g", raw_source_path="ingredientRows[1]")
+    product = _product(
+        [], product_name="WheyBasics Natural Vanilla Bean Flavor",
+        primary_type=primary_type, activeIngredients=[source],
+        nutrition_summary={"protein_g": 21} if has_facts else {},
+        display_ingredients=[{
+            "raw_source_text": "Protein", "source_section": "activeIngredients",
+            "display_type": "nutrition_fact", "raw_source_path": "ingredientRows[0]",
+            "exact_dose_text": "21 g",
+        }] if has_facts else [],
+    )
+    protein = [r for r in derive_product_scoring_evidence(product)
+               if r.get("reason") == "declared_nutrition_protein_mass"]
+    assert len(protein) == expected
+    if expected:
+        assert protein[0]["dose_value"] == 21
+        assert protein[0]["dose_unit"] == "g"
+        assert protein[0]["raw_source_path"] == "ingredientRows[0]"
 
 
 def test_generic_amino_blend_total_does_not_become_eaa_aggregate():
@@ -2551,3 +2587,200 @@ def test_structural_product_total_does_not_require_an_ingredient_form_grade(disp
     artifact = build_scored_artifact(product)
     assert ("disclosed_form_unmapped" in artifact["strict_scoring_contract"]["findings"]) is expected_hold
     assert row["bio_score"] is None
+
+
+def test_declared_protein_grams_survive_a_separate_protein_ingredient_mass():
+    whey = _row(name="Whey Protein", canonical_id="whey_protein", quantity=30,
+                unit="g", raw_source_path="ingredientRows[0]")
+    product = _product(
+        [whey], product_name="Whey Protein", primary_type="protein_powder",
+        activeIngredients=[whey], nutrition_summary={"protein_g": 27.0},
+        display_ingredients=[{"raw_source_text": "Protein", "source_section": "activeIngredients",
+                              "display_type": "nutrition_fact", "raw_source_path": "ingredientRows[1]",
+                              "exact_dose_text": "27 g"}],
+    )
+    rows = get_scoring_ingredients(product, strict=True).rows
+    assert [(r["quantity"], r["reason"]) for r in rows
+            if r.get("evidence_type") == "sports_primary_dose"] == [(27.0, "declared_nutrition_protein_mass")]
+    assert next(r for r in rows if r.get("canonical_id") == "whey_protein")["quantity"] == 30
+
+
+def test_protein_source_ingredient_is_not_projected_as_actual_protein_mass():
+    whey = _row(name="Whey Protein", canonical_id="whey_protein", quantity=30,
+                unit="g", raw_source_path="ingredientRows[0]")
+    product = _product([], product_name="Whey Protein", primary_type="protein_powder",
+                       activeIngredients=[whey])
+    evidence = derive_product_scoring_evidence(product)
+    assert not any(r.get("evidence_type") == "sports_primary_dose" and r.get("dose_value", 0) > 0
+                   for r in evidence)
+
+
+def test_protein_macro_projection_is_not_duplicated_by_legacy_sports_branch():
+    protein = _row(name="Protein", canonical_id="protein", quantity=27, unit="g",
+                   cleaner_row_role="nutrition_fact", raw_source_path="ingredientRows[1]")
+    product = _product([], product_name="Whey Protein", primary_type="protein_powder",
+                       activeIngredients=[protein], nutrition_summary={"protein_g": 27.0},
+                       display_ingredients=[{"raw_source_text": "Protein", "source_section": "activeIngredients",
+                                             "display_type": "nutrition_fact", "raw_source_path": "ingredientRows[1]",
+                                             "exact_dose_text": "27 g"}])
+    evidence = derive_product_scoring_evidence(product)
+    assert [r["reason"] for r in evidence if r.get("canonical_id") == "protein"] == ["declared_nutrition_protein_mass"]
+
+
+@pytest.mark.parametrize("lost", ["summary", "display"])
+def test_stale_declared_protein_projection_cannot_replace_lost_source_quantity(lost):
+    from scoring_v4.scored_artifact import build_scored_artifact
+    product = _product([], product_name="Whey Protein", primary_type="protein_powder",
+                       nutrition_summary={"protein_g": 27.0},
+                       display_ingredients=[{"raw_source_text": "Protein", "source_section": "activeIngredients",
+                                             "display_type": "nutrition_fact", "raw_source_path": "ingredientRows[1]",
+                                             "exact_dose_text": "27 g"}])
+    product["product_scoring_evidence"] = derive_product_scoring_evidence(product)
+    if lost == "summary":
+        product["nutrition_summary"]["protein_g"] = None
+    else:
+        product["display_ingredients"] = []
+    rows = get_scoring_ingredients(product, strict=True)
+    assert not any(r.get("reason") == "declared_nutrition_protein_mass" for r in rows.rows)
+    assert any(r.reason == "stale_declared_nutrition_protein_evidence" for r in rows.rejected_rows)
+    artifact = build_scored_artifact(product)
+    assert artifact["quality_score_status"] == "not_scored"
+    assert artifact["quality_assessment_status"] == "partial"
+
+
+@pytest.mark.parametrize("lost", [None, "summary", "display"])
+def test_retired_native_protein_projections_cannot_change_current_facts_or_disclosure(lost):
+    from copy import deepcopy
+    from scoring_v4.scored_artifact import build_scored_artifact
+
+    product = _product([], product_name="Whey Protein", primary_type="protein_powder",
+                       nutrition_summary={"protein_g": 27.0},
+                       display_ingredients=[{
+                           "raw_source_text": "Protein", "source_section": "activeIngredients",
+                           "display_type": "nutrition_fact", "raw_source_path": "ingredientRows[1]",
+                           "exact_dose_text": "27 g",
+                       }])
+    declared, = derive_product_scoring_evidence(product)
+    legacy = {**deepcopy(declared), "reason": "protein_macro_or_primary_sports_dose",
+              "dose_unit": "Gram(s)"}
+    false_protein = {**deepcopy(legacy), "name": "Glutamic Acid and Glutamine",
+                     "raw_source_path": "ingredientRows[2]", "linked_rows": ["ingredientRows[2]"],
+                     "dose_value": 6.0}
+    cached = deepcopy(product)
+    cached["product_scoring_evidence"] = [declared, legacy, false_protein]
+    for candidate in (product, cached):
+        if lost == "summary":
+            candidate["nutrition_summary"]["protein_g"] = None
+        elif lost == "display":
+            candidate["display_ingredients"] = []
+
+    result = get_scoring_ingredients(cached, strict=True)
+    assert not any(r.get("reason") == "protein_macro_or_primary_sports_dose" for r in result.rows)
+    protein = [r for r in result.rows if r.get("canonical_id") == "protein"]
+    assert len(protein) == (0 if lost else 1)
+    if protein:
+        assert protein[0]["quantity"] == 27
+        assert protein[0]["reason"] == "declared_nutrition_protein_mass"
+    assert sum(r.reason == "stale_declared_nutrition_protein_evidence"
+               for r in result.rejected_rows) >= 2
+    current_artifact = build_scored_artifact(product)
+    cached_artifact = build_scored_artifact(cached)
+    for key in ("quality_pillars_v4", "quality_score_v4_100", "quality_score_status",
+                "quality_assessment_status"):
+        assert cached_artifact[key] == current_artifact[key]
+    if lost:
+        assert cached_artifact["quality_score_status"] == "not_scored"
+        assert cached_artifact["quality_assessment_status"] == "partial"
+
+
+@pytest.mark.parametrize("source_g", [20.0, 25.0, 26.0])
+def test_material_protein_source_joins_actual_facts_without_a_protein_title(source_g):
+    from scoring_v4.scored_artifact import build_scored_artifact
+
+    whey = _row(name="Whey Protein Concentrate", canonical_id="whey_protein",
+                quantity=source_g, unit="g", raw_source_path="ingredientRows[10]")
+    product = _product(
+        [whey], product_name="Perfect Meal Milk Chocolate", primary_type="vitamin_mineral_combo",
+        activeIngredients=[whey], nutrition_summary={"protein_g": 19.0},
+        display_ingredients=[{"raw_source_text": "Protein", "source_section": "activeIngredients",
+                              "display_type": "nutrition_fact", "raw_source_path": "ingredientRows[5]",
+                              "exact_dose_text": "19 g"}],
+    )
+    evidence = [r for r in derive_product_scoring_evidence(product)
+                if r.get("reason") == "declared_nutrition_protein_mass"]
+    assert [(r["dose_value"], r["dose_unit"], r["raw_source_path"]) for r in evidence] == [
+        (19.0, "g", "ingredientRows[5]")]
+    artifact = build_scored_artifact(product)
+    dose = artifact["_v4_module_breakdown"]["dimensions"]["dose"]["metadata"]
+    assert artifact["_v4_module"] == "sports"
+    assert artifact["quality_assessment_status"] == "complete"
+    assert artifact["_v4_module_breakdown"]["dimensions"]["dose"]["score"] == 19.0
+    protein, = [r for r in dose["dose_contributions"] if r["ingredient"] == "protein"]
+    assert protein["amount_per_serving"] == 19.0
+    assert protein["credit_raw"] == 19.0
+
+
+@pytest.mark.parametrize("source_change", ["low_mass", "inactive", "excluded", "projection", "bad_unit"])
+def test_nonmaterial_or_ineligible_source_cannot_supply_protein_product_intent(source_change):
+    whey = _row(name="Whey Protein Concentrate", canonical_id="whey_protein", quantity=25.0,
+                unit="g", raw_source_path="ingredientRows[10]")
+    if source_change == "low_mass":
+        whey["quantity"] = 19.99
+    elif source_change == "inactive":
+        whey["source_section"] = "inactive"
+    elif source_change == "excluded":
+        whey["score_eligible_by_cleaner"] = False
+    elif source_change == "projection":
+        whey["scoring_input_kind"] = "product_level_evidence"
+    else:
+        whey["unit"] = "IU"
+    product = _product([whey], product_name="Perfect Meal Milk Chocolate",
+                       primary_type="vitamin_mineral_combo", activeIngredients=[whey],
+                       nutrition_summary={"protein_g": 19.0},
+                       display_ingredients=[{"raw_source_text": "Protein", "source_section": "activeIngredients",
+                                             "display_type": "nutrition_fact", "raw_source_path": "ingredientRows[5]",
+                                             "exact_dose_text": "19 g"}])
+    assert not any(r.get("reason") == "declared_nutrition_protein_mass"
+                   for r in derive_product_scoring_evidence(product))
+
+
+def test_protein_facts_total_cannot_supply_its_own_product_intent():
+    from scoring_v4.scored_artifact import build_scored_artifact
+
+    protein = _row(name="Protein", canonical_id="protein", quantity=74.0, unit="g",
+                   raw_source_path="ingredientRows[4]", score_exclusion_reason="excluded_nutrition_fact")
+    product = _product([], product_name="Opaque Meal Vanilla", primary_type="vitamin_mineral_combo",
+                       activeIngredients=[protein], nutrition_summary={"protein_g": 74.0},
+                       display_ingredients=[{"raw_source_text": "Protein", "source_section": "activeIngredients",
+                                             "display_type": "nutrition_fact", "raw_source_path": "ingredientRows[4]",
+                                             "exact_dose_text": "74 g"}])
+    assert not any(r.get("reason") == "declared_nutrition_protein_mass"
+                   for r in derive_product_scoring_evidence(product))
+    assert build_scored_artifact(product)["_v4_module"] != "sports"
+
+
+@pytest.mark.parametrize("change", ["missing", "moved", "unresolved", "inactive", "descriptor"])
+def test_dose_source_membership_cannot_borrow_a_stale_identity_mirror(change):
+    from copy import deepcopy
+    from scoring_input_contract import get_assessable_evidence_ingredients
+
+    mirror = [{"canonical_id": key, "name": key, "quantity": 0, "unit": "NP",
+               "raw_source_path": f"ingredientRows[0].nestedRows[{i}]",
+               "source_section": "active", "cleaner_row_role": "nested_display_only",
+               "identity_disposition": "clean", "isNestedIngredient": True}
+              for i, key in enumerate(("l_leucine", "l_isoleucine", "l_valine"))]
+    current = deepcopy(mirror)
+    if change == "missing":
+        current.pop()
+    elif change == "moved":
+        current[-1]["raw_source_path"] = "ingredientRows[9]"
+    elif change == "unresolved":
+        current[-1]["identity_disposition"] = "unresolved"
+    elif change == "inactive":
+        current[-1]["source_section"] = "inactive"
+    else:
+        current[-1]["cleaner_row_role"] = "source_descriptor"
+    product = {"activeIngredients": current, "ingredient_quality_data": {"ingredients": mirror}}
+    assert len(get_assessable_evidence_ingredients(product)) == 3
+    bound = get_assessable_evidence_ingredients(product, source_bound=True)
+    assert {row["canonical_id"] for row in bound} == {"l_leucine", "l_isoleucine"}

@@ -214,8 +214,9 @@ def _probiotic_dose_reason(dim: Dict[str, Any], fallback: str) -> str:
         return "AFU amounts are disclosed, but a compatible dose benchmark has not been verified."
     if metadata.get("dose_adequacy_basis") == "studied_formula_native_afu":
         return "The complete formula matches its studied AFU dose; individual strain amounts are not disclosed."
-    # V4.1 Step 4: a label limitation and a missing benchmark earn no Dose
-    # credit, and neither means the product is underdosed.
+    # Dose V4.1 section 2.3: a hidden per-strain amount or a missing benchmark
+    # takes the shared neutral; neither means the product is underdosed, and
+    # Transparency keeps the disclosure consequence.
     # The Dose owner records the same limitation in window_proxy_reason; read
     # it when a payload carries only that field, never the underdose fallback.
     basis = metadata.get("cfu_adequacy_basis") or {
@@ -230,11 +231,11 @@ def _probiotic_dose_reason(dim: Dict[str, Any], fallback: str) -> str:
         )
         return (
             "Total potency is disclosed, but per-strain amounts are not, so they cannot "
-            "be checked against strain dose benchmarks or credited." + note
+            "be checked against strain dose benchmarks; Dose takes the neutral assessment value." + note
         )
     if basis == "direct_strain_mass_no_cfu_floor":
         return ("Strain amounts are given by weight, not live count, so they cannot be "
-                "checked against strain dose benchmarks or credited.")
+                "checked against strain dose benchmarks; Dose takes the neutral assessment value.")
     if basis == "no_cfu_adequacy_credit":
         tiers = {str(item.get("tier")) for item in metadata.get("cfu_adequacy_contributions") or []
                  if isinstance(item, dict)}
@@ -243,9 +244,17 @@ def _probiotic_dose_reason(dim: Dict[str, Any], fallback: str) -> str:
                     "that have one, so they earn no dose credit.")
         if _num(metadata.get("per_strain_cfu_disclosed_count")) > 0:
             return ("Per-strain amounts are disclosed, but no strain dose benchmark applies, "
-                    "so dose adequacy cannot be credited.")
-        return "No live count (CFU) is disclosed, so dose adequacy cannot be assessed."
+                    "so Dose takes the neutral assessment value.")
+        return ("No live count (CFU) is disclosed, so dose adequacy cannot be assessed; "
+                "Dose takes the neutral assessment value.")
+    if metadata.get("reference_basis") == "completed_no_general_strain_benchmark":
+        return ("Per-strain amounts are disclosed, but no general clinical dose benchmark applies; "
+                "Dose takes the neutral assessment value.")
     if metadata.get("reference_basis") == "industry_potency_not_trial_efficacy":
+        if _num(metadata.get("strain_neutral_count")) > 0:
+            return ("Strains with a disclosed CFU are assessed against potency benchmarks; strains without "
+                    "an assessable amount or benchmark take the neutral value, and Dose averages them. "
+                    "Potency benchmarks are not proof of clinical benefit.")
         return "Disclosed CFU is assessed against potency benchmarks, not proof of clinical benefit."
     return fallback
 
@@ -261,7 +270,7 @@ def _undisclosed_component_dose_reason(dim: Dict[str, Any]) -> Optional[str]:
         )
     if metadata.get("not_evaluable_reason") == "opaque_primary_sports_blend":
         return ("The main ingredient's amount is hidden in a proprietary blend, so its dose "
-                "cannot be assessed or credited.")
+                "cannot be assessed; Dose takes the neutral assessment value.")
     return None
 
 
@@ -287,14 +296,47 @@ def _unassessed_primary_dose_reason(dim: Dict[str, Any]) -> Optional[str]:
     return None
 
 
+def _dose_ceiling(dim: Dict[str, Any]) -> Optional[Dict[str, Any]]:
+    """The one product-level Dose ceiling recorded by scoring_v4.dose_safety."""
+    metadata = dim.get("metadata") if isinstance(dim, dict) else None
+    evaluation = metadata.get("B7_safety_evaluation") if isinstance(metadata, dict) else None
+    ceiling = evaluation.get("dose_ceiling") if isinstance(evaluation, dict) else None
+    return ceiling if isinstance(ceiling, dict) and _num(ceiling.get("cap_public"), -1) >= 0 else None
+
+
 def _over_limit_dose_reason(dim: Dict[str, Any]) -> Optional[str]:
-    """Explain a confirmed excess independently of its point deduction."""
+    """Explain a confirmed excess and the ceiling it sets."""
     metadata = dim.get("metadata") if isinstance(dim, dict) else None
     if not isinstance(metadata, dict):
         return None
     evaluation = metadata.get("B7_safety_evaluation")
     if not isinstance(evaluation, dict):
         return None
+    ceiling = _dose_ceiling(dim)
+    if ceiling is not None:
+        nutrient = str(ceiling.get("nutrient") or "One nutrient")
+        cap = _num(ceiling.get("cap_public"))
+        outcome = ("so Dose is set to 0" if cap == 0 else f"so Dose is capped at {cap:g}")
+        if ceiling.get("kind") == "caffeine_daily_total":
+            use = ("at one serving a day (the label gives no daily directions)" if ceiling.get("frequency_defaulted")
+                   else "even at the lowest directed daily use" if ceiling.get("minimum_exceeds")
+                   else "at the highest directed daily use")
+            qualifier = {">=": "at least ", ">": "more than "}.get(ceiling.get("quantity_operator"), "")
+            return (f"The label provides {qualifier}{_num(ceiling.get('amount_mg_day')):g} mg of caffeine a day {use}, "
+                    f"above the {_num(ceiling.get('exceeds_above_mg_day')):.0f} mg/day that FDA describes as generally "
+                    f"not associated with negative effects for most adults, {outcome}. This cap is PharmaGuide "
+                    "scoring policy, not a medical toxicity grade.")
+        if ceiling.get("frequency_defaulted"):
+            exposure = (f"The label gives no daily directions; at one serving a day {nutrient} exceeds its "
+                        f"established upper limit ({_num(ceiling.get('pct_ul')):.0f}% of the limit)")
+        elif ceiling.get("minimum_exceeds"):
+            exposure = (f"Even the lowest directed daily use of {nutrient} exceeds its established "
+                        f"upper limit ({_num(ceiling.get('pct_ul')):.0f}% of the limit at the highest directed use)")
+        else:
+            exposure = (f"The higher directed daily amounts of {nutrient} exceed its established "
+                        f"upper limit ({_num(ceiling.get('pct_ul')):.0f}% of the limit at the highest directed use)")
+        return (f"{exposure}, {outcome}. This cap is PharmaGuide scoring policy, "
+                "not a medical toxicity grade.")
     flags = evaluation.get("flags")
     if isinstance(flags, list) and flags:
         is_actionable = any(
@@ -318,7 +360,7 @@ def _over_limit_dose_reason(dim: Dict[str, Any]) -> Optional[str]:
             return unresolved[:1].upper() + unresolved[1:] + "."
         return None
     return (
-        "At the declared serving, one or more nutrients exceed "
+        "At the label's maximum daily use, one or more nutrients exceed "
         "established safety limits."
     )
 
@@ -1045,19 +1087,16 @@ def _pillar_evidence(dim: Dict[str, Any], weight: float, archetype: str,
 def _dose_reference(dim: Dict[str, Any], archetype: str, sub: Dict[str, Any]) -> float:
     """The attainable Dose maximum for this product (V4.1 Step 4).
 
-    Two assessed components exist only for some products in an archetype: the
-    BCAA/EAA composition check and the prenatal DHA complement. Their retained
-    maximum, not a count of what the label lists, sets the reference.
+    The prenatal DHA complement has its existing route reference. Sports
+    primaries use the common reference after composition credit retirement.
     """
     ref = sub["archetype_reference"].get(archetype, sub["default_reference"])
     variants = sub.get("assessed_component_reference") or {}
     components = dim.get("components") or {}
     metadata = dim.get("metadata") or {}
-    if "sports_primary_active_dose" in components and (
-        metadata.get("primary_identity") in {"bcaa", "eaa"}
-        or _num(components.get("sports_ratio_or_completeness")) > 0
-    ):
-        return float(variants.get("sports_composition_assessed", ref))
+    if metadata.get("dose_aggregation") == "co_primary_average":
+        # Each primary already uses its own assessed-component reference.
+        return ref
     if archetype == "prenatal_multi" and str(metadata.get("critical_nutrient_mode") or "").startswith("prenatal"):
         return float(variants.get("prenatal_complement_assessed", ref))
     return ref
@@ -1072,7 +1111,11 @@ def _pillar_dose(dim: Dict[str, Any], weight: float, archetype: str,
     rewards excess."""
     ref = _dose_reference(dim, archetype, cfg["dose_subscale"])
     score = _num(dim.get("score"))
-    val = round(max(0.0, min(float(weight), (score / ref) * weight)), 1) if ref else 0.0
+    adequacy = round(max(0.0, min(float(weight), (score / ref) * weight)), 1) if ref else 0.0
+    # Dose V4.1 §2.4: the strongest confirmed exceedance caps Dose once, after
+    # aggregation and normalization; a ceiling never raises a lower score.
+    ceiling = _dose_ceiling(dim)
+    val = adequacy if ceiling is None else min(adequacy, _num(ceiling.get("cap_public")))
     over_limit_reason = _over_limit_dose_reason(dim)
     reason = over_limit_reason
     if reason is None:
@@ -1082,20 +1125,23 @@ def _pillar_dose(dim: Dict[str, Any], weight: float, archetype: str,
     if reason is None:
         reason = _reason_dose(_band(val, weight))
     if archetype == "omega" and over_limit_reason is None:
-        label = str((dim.get("metadata") or {}).get("epa_dha_band_label") or "")
-        if label.startswith("adult_nutritional_reference_"):
-            reference_mg = cfg["dose_magnitudes"]["omega"]["adult_nutritional_reference_mg"]
-            reason = f"EPA + DHA per serving is compared with a {reference_mg:g} mg adult nutritional reference contribution; more earns no additional Dose credit."
-        elif label.startswith("prenatal_dha_"):
-            reference_mg = cfg["dose_magnitudes"]["omega"]["prenatal_dha_reference_mg"]
-            reason = f"DHA per serving is compared with a {reference_mg:g} mg additional-DHA reference contribution; this does not assess complete pregnancy nutrition."
+        reference = (dim.get("metadata") or {}).get("adequacy_reference") or {}
+        target_mg = reference.get("target_mg_day")
+        if reference.get("purpose") == "ordinary_adult" and isinstance(target_mg, (int, float)):
+            reason = f"EPA + DHA at minimum directed daily use is compared with a {target_mg:g} mg adult nutritional reference contribution; more earns no additional Dose credit."
+        elif reference.get("purpose") == "prenatal_dha" and isinstance(target_mg, (int, float)):
+            reason = f"DHA at minimum directed daily use is compared with a {target_mg:g} mg additional-DHA reference contribution; this does not assess complete pregnancy nutrition."
     if archetype == "probiotic" and over_limit_reason is None:
         reason = _probiotic_dose_reason(dim, reason)
+    components = {"raw_dose": score, "archetype": archetype, "reference": ref}
+    if ceiling is not None:
+        components["adequacy_before_safety"] = adequacy
+        components["safety_ceiling"] = _num(ceiling.get("cap_public"))
     return {
         "score": val,
         "max": weight,
         "reason": reason,
-        "components": {"raw_dose": score, "archetype": archetype, "reference": ref},
+        "components": components,
     }
 
 
@@ -1312,6 +1358,12 @@ def _dose_component_kind(key: str, kind: str, metadata: Dict[str, Any]) -> tuple
     if key == "collagen_clinical_dose":
         band = metadata.get("collagen_dose_band")
         return ("neutral" if band in _NEUTRAL_DOSE_BANDS else kind), band
+    if key == "sports_primary_active_dose":
+        labels = [str(e.get("assessment") or "") for e in metadata.get("dose_contributions") or []]
+        if labels and all(label.endswith("_completed_no_general_benchmark") or label == "hidden_amount_neutral" for label in labels):
+            return "neutral", "completed_no_general_benchmark"
+    if key in {"fiber_effective_dose", "sleep_support_dose", "joint_support_dose"}:
+        return "neutral", "completed_no_general_benchmark"
     if key == "supplemental_window_proxy":
         status = metadata.get("window_proxy_status")
         return ("neutral" if status in _NEUTRAL_WINDOW_STATUSES else kind), status
@@ -1483,8 +1535,11 @@ def _normalized_receipt(name: str, pillar: Dict[str, Any], dim: Dict[str, Any],
     reference = _num(components.get("raw_max") if name == "transparency" else components.get("reference"))
     factor = (float(weight) / reference) if reference else 0.0
     items, replay, without_deductions = _itemize_dimension(name, dim)
-    entries = [_receipt_entry(item_id, kind, source, raw, raw * factor, **extra)
-               for item_id, kind, source, raw, extra in items]
+    # An incomplete dimension retains diagnostic peer assessments, but those
+    # are not awarded points in the unfinished public pillar.
+    entries = ([] if dim.get("score") is None else
+               [_receipt_entry(item_id, kind, source, raw, raw * factor, **extra)
+                for item_id, kind, source, raw, extra in items])
     if dim.get("score") is None:
         entries.append(_receipt_entry(f"{name}_not_evaluable", "neutral", f"{name}.score", None, 0.0))
     public = replay * factor
@@ -1492,6 +1547,10 @@ def _normalized_receipt(name: str, pillar: Dict[str, Any], dim: Dict[str, Any],
     if abs(clipped - public) > 1e-9:
         entries.append(_receipt_entry(f"{name}_pillar_bounds", "cap" if clipped < public else "floor",
                                       f"pillars.{name}.weight", None, clipped - public))
+    ceiling = components.get("safety_ceiling") if name == "dose" else None
+    if ceiling is not None and clipped > _num(ceiling):
+        entries.append(_receipt_entry("dose_safety_ceiling", "cap", "dose_safety_ceiling", None,
+                                      _num(ceiling) - clipped))
     without_score = _num(rebuild({**dim, "score": without_deductions})["score"])
     return _finish_receipt(pillar, entries, without_score)
 

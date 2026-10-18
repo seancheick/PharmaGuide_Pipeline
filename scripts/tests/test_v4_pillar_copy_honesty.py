@@ -185,16 +185,20 @@ def test_full_screen_beside_a_safety_caution_says_so():
 
 # ---- F19 and the export strengths list -------------------------------------
 
-def test_dose_safety_policy_fact_matches_the_classifier():
-    bd = {"dimensions": {"dose": {"penalties": {"B7_dose_safety": -2.0}, "metadata": {
-        "method": "rda_ul_proxy_until_dietary_intake_table",
-        "dose_safety_policy": {"ul_pct_threshold": 150.0, "per_flag_penalty": 2.0, "cap": 3.0}}}}}
-    pillars = {"dose": {"score": 10.0, "max": 20, "reason": "", "components": {"raw_dose": 11.0}},
+def test_dose_ceiling_fact_names_the_policy_once_and_its_scope():
+    ceiling = {"cap_public": 10.0, "partial_ceiling_public": 10.0, "zero_at_pct": 150.0,
+               "exceeds_above_pct": 100.0, "nutrient": "Zinc", "pct_ul": 120.0}
+    bd = {"dimensions": {"dose": {"penalties": {}, "metadata": {
+        "method": "source_qualified_contribution_and_completed_neutral",
+        "B7_safety_evaluation": {"state_counts": {"confirmed_over_threshold": 1}, "dose_ceiling": ceiling}}}}}
+    pillars = {"dose": {"score": 10.0, "max": 20, "reason": "", "components": {"raw_dose": 22.0}},
                "safety_hygiene": {"score": 10.0, "max": 10, "components": {}}}
     out = attach_pillar_explanations(pillars, bd, _cfg(), "generic")
-    fact = next(f for f in out["dose"]["explanation"]["facts"] if f["id"] == "dose_safety_penalty_policy")
-    assert "can also trigger" not in fact["value_display"]
-    assert fact["value_display"].endswith("Unresolved dose assessments are shown but do not trigger this penalty.")
+    facts = out["dose"]["explanation"]["facts"]
+    fact = next(f for f in facts if f["id"] == "dose_safety_ceiling")
+    assert "PharmaGuide scoring policy, not a medical toxicity grade" in fact["value_display"]
+    assert "never raises a lower score" in fact["value_display"]
+    assert not {"dose_safety_penalty_policy", "dose_safety_scoring", "dose_ul_credit_policy"} & {f["id"] for f in facts}
 
 
 def test_a_clean_screen_is_not_listed_as_a_strength():
@@ -214,13 +218,3 @@ def test_dose_finding_is_not_worded_as_this_pillars_deduction_when_it_deducts_fo
     assert safety["score"] == 9.0
     assert safety["reason"] == ("Safety concern: it contains a restricted additive. Not deducted here: "
                                 "one or more supplemental amounts exceed an established upper limit.")
-
-
-def test_dose_safety_copy_names_its_single_numerical_owner():
-    bd = {"dimensions": {"dose": {"penalties": {"B7_dose_safety": -2.0},
-        "metadata": {"method": "rda_ul_proxy_until_dietary_intake_table"}}}}
-    pillars = {"dose": {"score": 10.0, "max": 20, "reason": "", "components": {"raw_dose": 11.0}}}
-    out = attach_pillar_explanations(pillars, bd, _cfg(), "generic")
-    fact = next(f for f in out["dose"]["explanation"]["facts"] if f["id"] == "dose_safety_scoring")
-    assert "Dose only" in fact["value_display"]
-    assert "across two pillars" not in fact["value_display"]

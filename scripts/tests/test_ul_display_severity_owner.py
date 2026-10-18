@@ -144,18 +144,12 @@ def test_stored_severity_is_used_only_when_percentage_is_unavailable():
 
 def test_other_ul_thresholds_are_unchanged():
     assert _CONFIRMED_UL_EXCEEDANCE_PCT == 100.0
-    policy = quality_block("dose_safety_policy", "ul_pct_threshold")
-    assert policy["ul_pct_threshold"] == 150.0
-    scored = evaluate_dose_safety(
-        {"rda_ul_data": {"safety_flags": [
-            {"nutrient": "Zinc", "pct_ul": 149, "ul_gate_eligible": True},
-            {"nutrient": "Zinc", "pct_ul": 150, "ul_gate_eligible": True},
-        ]}},
-        threshold=policy["ul_pct_threshold"],
-        per_flag_penalty=policy["per_flag_penalty"],
-        cap=policy["cap"],
-    )
-    assert [flag.penalized for flag in scored.flags] == [False, True]
+    policy = quality_block("dose_safety_ceiling", "zero_at_pct")
+    assert policy["zero_at_pct"] == 150.0
+    caps = [evaluate_dose_safety({"rda_ul_data": {"safety_flags": [
+        {"nutrient": "Zinc", "pct_ul": pct, "ul_gate_eligible": True}]}}).dose_ceiling()["cap_public"]
+        for pct in (149, 150)]
+    assert caps == [10.0, 0.0]
     below = evaluate_safety_gate({"rda_ul_data": {"safety_flags": [
         {"nutrient": "Zinc", "pct_ul": 199, "ul_gate_eligible": True},
     ]}})

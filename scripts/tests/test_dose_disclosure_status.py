@@ -54,3 +54,77 @@ def test_real_enzyme_label_rows_are_all_disclosed():
     scored = build_scored_artifact(enriched)
     disclosure = scored['_v4_module_breakdown']['dimensions']['transparency']['metadata']['complete_active_disclosure']
     assert disclosure['complete_row_count'] == disclosure['active_row_count'] == 11
+
+
+def _printed_zero(unit='mcg'):
+    return {'name': 'Vitamin D', 'canonical_id': 'vitamin_d', 'quantity': 0,
+            'unit': unit, 'raw_source_path': 'ingredientRows[1]',
+            'raw_taxonomy': {'quantityVariants': [{
+                'quantity': 0, 'unit': unit, 'operator': '=',
+                'quantity_parsed': True, 'selected_for_analysis': True,
+            }]}}
+
+
+@pytest.mark.parametrize('unit', ['mcg', 'g', 'Gram(s)'])
+def test_exact_printed_zero_is_disclosed_without_becoming_a_positive_dose(unit):
+    from scoring_input_contract import _positive_quantity, has_source_printed_amount
+    row = _printed_zero(unit)
+    assert dose_disclosure_status(row) == 'disclosed'
+    assert _positive_quantity(row) is None
+    assert has_source_printed_amount(row) is False
+    assert _positive_quantity(row, allow_zero=True) == 0
+    assert has_source_printed_amount(row, allow_zero=True) is True
+
+
+@pytest.mark.parametrize('change', [
+    'np', 'unspecified', 'unparsed', 'missing_parsed', 'missing_source',
+    'unselected', 'multiple_selected', 'ambiguous', 'qualified_bound',
+    'boolean', 'quantity_mismatch',
+])
+def test_zero_defaults_and_unresolved_quantities_do_not_prove_disclosure(change):
+    row = _printed_zero()
+    variant = row['raw_taxonomy']['quantityVariants'][0]
+    if change in {'np', 'unspecified'}:
+        row['unit'] = variant['unit'] = change
+    elif change == 'unparsed':
+        variant['quantity_parsed'] = False
+    elif change == 'missing_parsed':
+        variant.pop('quantity_parsed')
+    elif change == 'missing_source':
+        row.pop('raw_source_path')
+    elif change == 'unselected':
+        variant['selected_for_analysis'] = False
+    elif change == 'multiple_selected':
+        row['raw_taxonomy']['quantityVariants'].append({**variant, 'quantity': 10})
+    elif change == 'ambiguous':
+        row['quantity_operator'] = 'ambiguous'
+    elif change == 'qualified_bound':
+        variant['operator'] = '<'
+    elif change == 'boolean':
+        row['quantity'] = variant['quantity'] = False
+    elif change == 'quantity_mismatch':
+        variant['quantity'] = 10
+    assert dose_disclosure_status(row) == 'missing'
+
+
+def test_printed_zero_survives_clean_enrich_artifact_as_disclosure_only():
+    from enhanced_normalizer import EnhancedDSLDNormalizer
+    from enrich_supplements_v3 import SupplementEnricherV3
+    from scoring_input_contract import get_scoring_ingredients
+    from scoring_v4.scored_artifact import build_scored_artifact
+    raw = {'id': 'ZERO-DISCLOSURE', 'fullName': 'Vitamin C', 'ingredientRows': [
+        {'name': 'Vitamin C', 'category': 'vitamin', 'ingredientGroup': 'Vitamin C',
+         'quantity': [{'quantity': 100, 'unit': 'mg', 'operator': '='}]},
+        {'name': 'Vitamin D', 'category': 'vitamin', 'ingredientGroup': 'Vitamin D',
+         'quantity': [{'quantity': 0, 'unit': 'mcg', 'operator': '='}]},
+    ]}
+    product, _ = SupplementEnricherV3().enrich_product(EnhancedDSLDNormalizer().normalize_product(raw))
+    zero = next(r for r in product['ingredient_quality_data']['ingredients']
+                if r.get('canonical_id') == 'vitamin_d')
+    assert dose_disclosure_status(zero) == 'disclosed'
+    assert zero['scoreable_identity'] is False
+    assert [r['canonical_id'] for r in get_scoring_ingredients(product, strict=True).rows] == ['vitamin_c']
+    artifact = build_scored_artifact(product)
+    disclosure = artifact['_v4_module_breakdown']['dimensions']['transparency']['metadata']['complete_active_disclosure']
+    assert disclosure['qualifies'] is True
+    assert disclosure['declared_active_count'] == disclosure['active_row_count'] == 1

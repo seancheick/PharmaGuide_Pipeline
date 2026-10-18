@@ -107,7 +107,5 @@ def test_projection_on_a_real_label():
     enriched, _ = SupplementEnricherV3().enrich_product(EnhancedDSLDNormalizer().normalize_product(raw))
     projection = drive.review_projection(build_scored_artifact(enriched))
     assert projection['route'] == 'fiber_digestive' and projection['is_live_eligible'] is True
-    assert projection['exposures'] and projection['exposures'][0]['basis'] == 'per_use'
-    assert projection['exposures'][0]['benchmark_amount'] == 3.0
-    assert projection['exposures'][0]['unit'] == 'g'
+    assert projection['exposures'] and projection['exposures'][0]['basis'] == 'daily'
     assert ['Oat Bran', 'oat_bran'] in [row[1:3] for row in drive.identity_projection(enriched)]

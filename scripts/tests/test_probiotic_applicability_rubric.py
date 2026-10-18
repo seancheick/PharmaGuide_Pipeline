@@ -84,8 +84,12 @@ def test_native_dose_copy_distinguishes_potency_from_clinical_efficacy():
     from scoring_v4.quality_score import _probiotic_dose_reason
 
     dose = score_dose(strain_product(dose=1e10))
-    assert dose["metadata"]["reference_basis"] == "industry_potency_not_trial_efficacy"
-    assert "not proof of clinical benefit" in _probiotic_dose_reason(dose, "fallback")
+    assert dose["metadata"]["reference_basis"] == "completed_no_general_strain_benchmark"
+    reason = _probiotic_dose_reason(dose, "fallback")
+    assert "Per-strain amounts are disclosed" in reason
+    assert "no general clinical dose benchmark applies" in reason
+    assert "neutral assessment value" in reason
+    assert "potency benchmarks" not in reason
 
 
 def test_species_research_is_not_presented_as_exact_strain_evidence(monkeypatch):

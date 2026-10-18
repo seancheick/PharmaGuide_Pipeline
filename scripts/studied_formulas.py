@@ -1192,8 +1192,10 @@ def _owned_daily_cfu_range(product: Mapping, row: Mapping) -> tuple[float, float
             continue
         measure = blend.get("cfu_data") or {}
         if (len(blend.get("strains") or []) != 1 or not isinstance(measure, Mapping)
-                or _key(normalize_text(str(blend["strains"][0]))) != _key(normalize_text(
-                    str(row.get("label_name") or row.get("strain") or "")))
+                or not (clinical_strain_identity_matches(
+                    blend["strains"][0], _clinical_strain_registry().get(row.get("clinical_id"), {}))
+                    or _key(normalize_text(str(blend["strains"][0]))) == _key(normalize_text(
+                        str(row.get("label_name") or row.get("strain") or ""))))
                 or measure.get("raw_source_path") != ref
                 or measure.get("evidence_scope") != "row_level"):
             return None

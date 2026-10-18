@@ -234,6 +234,60 @@ def normalized_cfu_count(measure: Mapping) -> float | None:
     return values[0]
 
 
+def unresolved_cfu_measurements(product: Mapping) -> list[dict]:
+    """Find invalid/conflicting producer counts, distinct from label opacity.
+
+    An aggregate count with unallocated strain shares is still a valid label
+    limitation. A producer asserting a CFU measurement must supply one finite,
+    consistent count; two projections of the same source must agree. Consumers
+    share this result rather than turning a failed join into neutral credit.
+    """
+    pdata = product.get("probiotic_data") or product.get("probiotic_detail") or {}
+    if not isinstance(pdata, Mapping):
+        return []
+    blends = pdata.get("probiotic_blends") or []
+    if not isinstance(blends, list) or not any(
+            isinstance(blend, Mapping) and isinstance(blend.get("cfu_data"), Mapping)
+            and blend["cfu_data"].get("has_cfu") is True for blend in blends):
+        return []
+    from studied_formulas import probiotic_source_live_eligible, probiotic_source_scope
+    identities = probiotic_label_identity_summary(product)
+    resolutions = identities["blend_identity_resolutions"]
+    seen, unresolved = {}, []
+    for index, blend in enumerate(blends):
+        if not isinstance(blend, Mapping):
+            continue
+        measure = blend.get("cfu_data") or {}
+        if not isinstance(measure, Mapping) or measure.get("has_cfu") is not True:
+            continue
+        ref = str(blend.get("raw_source_path") or measure.get("raw_source_path") or "")
+        if ref and not probiotic_source_live_eligible(product, {"raw_source_path": ref}):
+            continue
+        count = normalized_cfu_count(measure)
+        names = tuple(sorted(str(name).strip().lower() for name in blend.get("strains") or []))
+        resolved = resolutions[index] if index < len(resolutions) else []
+        identities = tuple(sorted({state.get("clinical_id") or state.get("strain")
+                                   for state in resolved
+                                   if state.get("clinical_id") or state.get("strain")}))
+        key = (ref, identities or names)
+        reason = None
+        if count is None:
+            reason = "invalid_cfu_measurement"
+        elif key in seen and not math.isclose(count, seen[key], rel_tol=1e-9):
+            reason = "conflicting_cfu_measurements"
+        elif ref and measure.get("raw_source_path") not in (None, ref):
+            reason = "cfu_source_reference_mismatch"
+        elif (ref and measure.get("evidence_scope") == "row_level" and len(names) == 1
+              and probiotic_source_scope(product, ref)
+              and (index >= len(resolutions) or not resolutions[index])):
+            reason = "cfu_source_identity_mismatch"
+        if reason:
+            unresolved.append({"source_row_ref": ref or None, "reason_code": reason})
+        elif count is not None:
+            seen[key] = count
+    return unresolved
+
+
 def declared_total_cfu(pdata: Mapping) -> float:
     """Consume enrichment's ownership-reconciled total, never re-sum projections."""
     measure = {target: pdata[source] for source, target in (

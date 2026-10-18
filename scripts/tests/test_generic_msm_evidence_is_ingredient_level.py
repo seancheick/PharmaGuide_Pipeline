@@ -55,5 +55,9 @@ def test_500_mg_msm_is_below_the_studied_dose_and_not_branded():
         if item.get("active") == "msm"
     )
     assert msm["assessment_owner"] == "joint_support"
-    assert msm["band"] == "below_joint_support_range"
+    # The trial amounts remain source facts; they do not establish a general
+    # continuous Dose curve for every MSM preparation and purpose.
+    assert msm["band"] == "no_benchmark_neutral"
+    assert msm["score"] == 12.54
     assert msm["daily_mg"] == 500.0
+    assert msm["daily_mg"] < _entries()["INGR_MSM"]["min_clinical_dose"]

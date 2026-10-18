@@ -1,4 +1,4 @@
-"""Shared dose-safety (B7) evaluation — the single owner of over-UL scoring policy.
+"""Shared dose-safety evaluation — the single owner of over-UL scoring policy.
 
 Three modules used to interpret ``rda_ul_data.safety_flags`` three different ways.
 ``generic_dose`` carried the P0-2 fail-safe ("a flag is emitted only for an over-UL
@@ -7,22 +7,21 @@ and ``b_complex`` defaulted the same field to ``0.0`` and skipped the penalty.
 Conversely the folate parent-total de-duplication lived only in
 ``multi_prenatal_dose``, so one logical exposure was charged twice everywhere else.
 
-This module owns that policy once. Callers supply their own configured threshold,
-per-flag penalty and cap — the magnitudes stay module-owned and config-driven; only
-the *interpretation* is shared.
+This module owns that policy once, including the one product-level Dose ceiling
+(Dose V4.1 §2.4, Sean 2026-10-17): the strongest confirmed exceedance at maximum
+directed daily use caps the public Dose pillar once, after aggregation
+(``quality_score_config`` ``dose_safety_ceiling``). Nothing else deducts for it.
 
 The typed state exists so that "confirmed over the limit" never gets conflated with
-"we could not resolve this exposure". Both may deduct, but they must not claim the
-same thing to a reader:
+"we could not resolve this exposure"; only the first sets a ceiling:
 
     none                       flag present, resolved, at/below the UL
-    confirmed_over_threshold   resolved above the UL and gate-eligible; the
-                               ``penalized`` field records whether it also
-                               crosses the configured B7 scoring threshold
+    confirmed_over_threshold   resolved above the UL and gate-eligible; sets the
+                               Dose ceiling for its band
     material_but_unresolved    exposure is material but the check is incomplete
                                (magnitude absent, or the enricher marked the row
                                ineligible for the UL gate). Routes to review;
-                               never claims or deducts an unproven exceedance.
+                               never claims or caps an unproven exceedance.
     not_applicable             not a distinct exposure (a declared total plus its
                                own disclosed form breakdown). Never deducts.
     conversion_failed          a magnitude was supplied that cannot be parsed.
@@ -39,6 +38,11 @@ from dataclasses import dataclass, field
 from typing import Any, Dict, Iterator, List, Mapping, Optional
 
 from scoring_v4.modules.generic_helpers import _as_float, _norm_text, _safe_list
+from scoring_v4.quality_score_config import block as _cfg_block
+from serving_frequency import resolve_daily_serving_range
+
+_CEILING = _cfg_block("dose_safety_ceiling", "zero_at_pct")
+_FLAG_REFERENCE_FIELDS = {"unit": "ul_unit"}
 
 NONE = "none"
 CONFIRMED_OVER_THRESHOLD = "confirmed_over_threshold"
@@ -98,8 +102,11 @@ _FOLATE_BASIS_MASS = "mass"
 
 # A UL is the highest daily intake expected to pose no risk for nearly all
 # healthy people. A confirmed exposure above 100% is therefore consumer-
-# actionable even when the separate B7 scoring penalty starts at 150%.
+# actionable; the Dose ceiling's 150% zero band is PharmaGuide scoring policy.
 _CONFIRMED_UL_EXCEEDANCE_PCT = 100.0
+# Plan D1: the Dose ceiling starts at the UL itself. One meaning, two readers.
+if float(_CEILING["exceeds_above_pct"]) != _CONFIRMED_UL_EXCEEDANCE_PCT:
+    raise ValueError("dose_safety_ceiling.exceeds_above_pct must equal the confirmed UL exceedance (100%)")
 
 
 def _folate_dose_basis(value: Any) -> tuple[str, Optional[float]]:
@@ -132,17 +139,89 @@ class DoseSafetyFlag:
     canonical_id: Optional[str] = None
     pct_ul: Any = None
     reason: Optional[str] = None
-    penalized: bool = False
+    # The same exposure at the minimum directed daily use: explanation only.
+    pct_ul_at_minimum: Optional[float] = None
+    # The reference nutrient whose limit applies (the label text is `nutrient`).
+    reference_nutrient: Optional[str] = None
+    # The upper limit compared against and whose population it is (D2).
+    ul: Optional[float] = None
+    ul_unit: Optional[str] = None
+    ul_population: Optional[str] = None
 
 
 @dataclass(frozen=True)
 class DoseSafetyResult:
     """Aggregate outcome for one product."""
 
-    penalty: float = 0.0
     flags: List[DoseSafetyFlag] = field(default_factory=list)
     ignored_flags: List[Dict[str, Any]] = field(default_factory=list)
     conversion_failures: int = 0
+    # No daily directions: one Facts-panel serving a day was assessed.
+    frequency_defaulted: bool = False
+    # Total declared daily caffeine (Dose V4.1 D3); None when none is declared.
+    caffeine: Optional[Dict[str, Any]] = None
+
+    def dose_ceiling(self) -> Optional[Dict[str, Any]]:
+        """The strongest confirmed exceedance and the public Dose ceiling it sets.
+
+        Exactly 100% is not an exceedance. The maximum directed daily use sets
+        the band; the minimum only says whether even the lowest use exceeds.
+        """
+        candidates = [ceiling for ceiling in (self._ul_ceiling(), self._caffeine_ceiling()) if ceiling]
+        return min(candidates, key=lambda ceiling: ceiling["cap_public"]) if candidates else None
+
+    def _caffeine_ceiling(self) -> Optional[Dict[str, Any]]:
+        policy = _CEILING["caffeine"]
+        caffeine = self.caffeine or {}
+        total = caffeine.get("confirmed_mg_day_max", caffeine.get("total_mg_day_max"))
+        operator = caffeine.get("quantity_operator", "=")
+        threshold = float(policy["exceeds_above_mg_day"])
+        if not isinstance(total, (int, float)) or not (total > threshold or total == threshold and operator == ">"):
+            return None
+        minimum = caffeine.get("confirmed_mg_day_min", caffeine.get("total_mg_day_min"))
+        cap = (0.0 if total >= float(policy["zero_at_mg_day"])
+               else float(_CEILING["partial_ceiling_public"]))
+        return {
+            "cap_public": cap,
+            "kind": "caffeine_daily_total",
+            "nutrient": "Caffeine",
+            "amount_mg_day": round(float(total), 4),
+            "amount_mg_day_at_minimum": minimum,
+            "minimum_exceeds": (minimum > threshold or minimum == threshold and operator == ">") if minimum is not None else None,
+            "quantity_operator": operator,
+            "frequency_defaulted": self.frequency_defaulted,
+            "exceeds_above_mg_day": float(policy["exceeds_above_mg_day"]),
+            "zero_at_mg_day": float(policy["zero_at_mg_day"]),
+            "partial_ceiling_public": float(_CEILING["partial_ceiling_public"]),
+        }
+
+    def _ul_ceiling(self) -> Optional[Dict[str, Any]]:
+        confirmed = [flag for flag in self.flags
+                     if flag.state == CONFIRMED_OVER_THRESHOLD and isinstance(flag.pct_ul, (int, float))
+                     and flag.pct_ul > float(_CEILING["exceeds_above_pct"])]
+        if not confirmed:
+            return None
+        driver = max(confirmed, key=lambda flag: (flag.pct_ul, _norm_text(flag.nutrient)))
+        zero_at = float(_CEILING["zero_at_pct"])
+        cap = 0.0 if driver.pct_ul >= zero_at else float(_CEILING["partial_ceiling_public"])
+        minimum = driver.pct_ul_at_minimum
+        return {
+            "cap_public": cap,
+            "kind": "established_upper_limit",
+            "label_nutrient": driver.nutrient,
+            "ul": driver.ul,
+            "ul_unit": driver.ul_unit,
+            "ul_population": driver.ul_population or "general adult",
+            "nutrient": driver.reference_nutrient or driver.nutrient,
+            "canonical_id": driver.canonical_id,
+            "pct_ul": driver.pct_ul,
+            "pct_ul_at_minimum": minimum,
+            "minimum_exceeds": (minimum > float(_CEILING["exceeds_above_pct"])) if minimum is not None else None,
+            "frequency_defaulted": self.frequency_defaulted,
+            "exceeds_above_pct": float(_CEILING["exceeds_above_pct"]),
+            "zero_at_pct": zero_at,
+            "partial_ceiling_public": float(_CEILING["partial_ceiling_public"]),
+        }
 
     def audit_metadata(self) -> Dict[str, Any]:
         """Stable, JSON-ready detail for module breakdowns and corpus audits."""
@@ -156,10 +235,12 @@ class DoseSafetyResult:
                     "canonical_id": flag.canonical_id,
                     "pct_ul": flag.pct_ul,
                     "reason": flag.reason,
-                    "penalized": flag.penalized,
+                    "pct_ul_at_minimum": flag.pct_ul_at_minimum,
                 }
                 for flag in self.flags
             ],
+            "caffeine": self.caffeine,
+            "dose_ceiling": self.dose_ceiling(),
         }
 
 
@@ -184,23 +265,12 @@ def dose_safety_scope(result: DoseSafetyResult) -> Iterator[None]:
         _ACTIVE_RESULT.reset(token)
 
 
-def resolve_dose_safety(
-    product: Dict[str, Any],
-    *,
-    threshold: float,
-    per_flag_penalty: float,
-    cap: float,
-) -> DoseSafetyResult:
+def resolve_dose_safety(product: Dict[str, Any]) -> DoseSafetyResult:
     """Return the production-scoped result, or evaluate for a direct caller."""
     active = _ACTIVE_RESULT.get()
     if active is not None:
         return active
-    return evaluate_dose_safety(
-        product,
-        threshold=threshold,
-        per_flag_penalty=per_flag_penalty,
-        cap=cap,
-    )
+    return evaluate_dose_safety(product)
 
 
 def dose_safety_consumer_explanation(
@@ -208,7 +278,7 @@ def dose_safety_consumer_explanation(
 ) -> Optional[str]:
     """Return honest consumer copy for one typed dose-safety summary.
 
-    The penalty magnitude cannot distinguish confirmed excess from an
+    A ceiling alone cannot distinguish confirmed excess from an
     unresolved comparison. Consumer language must therefore use the typed
     states emitted by :meth:`DoseSafetyResult.audit_metadata`.
     """
@@ -410,7 +480,7 @@ def _resolve_pct_ul(flag: Dict[str, Any]) -> tuple[Optional[float], Optional[str
     return value, None
 
 
-def _classify(flag: Dict[str, Any], threshold: float) -> DoseSafetyFlag:
+def _classify(flag: Dict[str, Any], minimum_share: float = 1.0) -> DoseSafetyFlag:
     nutrient = flag.get("nutrient")
     canonical_id = flag.get("canonical_id")
     pct_ul, failure_reason = _resolve_pct_ul(flag)
@@ -422,7 +492,6 @@ def _classify(flag: Dict[str, Any], threshold: float) -> DoseSafetyFlag:
             canonical_id=canonical_id,
             pct_ul=flag.get("pct_ul"),
             reason=failure_reason,
-            penalized=False,
         )
 
     if pct_ul is not None and pct_ul <= _CONFIRMED_UL_EXCEEDANCE_PCT:
@@ -431,7 +500,6 @@ def _classify(flag: Dict[str, Any], threshold: float) -> DoseSafetyFlag:
             nutrient=nutrient,
             canonical_id=canonical_id,
             pct_ul=pct_ul,
-            penalized=False,
         )
 
     # From here the flag would deduct. Ask first whether it is a distinct
@@ -443,7 +511,6 @@ def _classify(flag: Dict[str, Any], threshold: float) -> DoseSafetyFlag:
             canonical_id=canonical_id,
             pct_ul=pct_ul,
             reason=REASON_FOLATE_PARENT_TOTAL_DUPLICATE,
-            penalized=False,
         )
 
     if pct_ul is None:
@@ -452,8 +519,7 @@ def _classify(flag: Dict[str, Any], threshold: float) -> DoseSafetyFlag:
             nutrient=nutrient,
             canonical_id=canonical_id,
             pct_ul=None,
-            reason=REASON_PCT_UL_NOT_RESOLVED,
-            penalized=False,
+            reason=_norm_text(flag.get("ul_gate_ineligible_reason")) or REASON_PCT_UL_NOT_RESOLVED,
         )
 
     # Same eligibility contract the safety gate applies to the UL verdict. An
@@ -467,7 +533,6 @@ def _classify(flag: Dict[str, Any], threshold: float) -> DoseSafetyFlag:
             canonical_id=canonical_id,
             pct_ul=pct_ul,
             reason=_norm_text(flag.get("ul_gate_ineligible_reason")) or "ul_gate_not_eligible",
-            penalized=False,
         )
 
     return DoseSafetyFlag(
@@ -475,7 +540,13 @@ def _classify(flag: Dict[str, Any], threshold: float) -> DoseSafetyFlag:
         nutrient=nutrient,
         canonical_id=canonical_id,
         pct_ul=pct_ul,
-        penalized=pct_ul >= threshold,
+        pct_ul_at_minimum=round(pct_ul * minimum_share, 4),
+        reference_nutrient=str(flag.get("reference_nutrient") or "") or None,
+        ul=_as_float(flag.get("ul"), None),
+        # The flag's own reference unit, projected from the rda_ul_data record.
+        ul_unit={name: flag.get(key) for key, name in _FLAG_REFERENCE_FIELDS.items()}.get("ul_unit") or None,
+        ul_population=(flag.get("ul_population") or {}).get("label")
+        if isinstance(flag.get("ul_population"), Mapping) else None,
     )
 
 
@@ -521,14 +592,8 @@ def dose_safety_contract_issues(product: Dict[str, Any]) -> List[Dict[str, Any]]
     return issues
 
 
-def evaluate_dose_safety(
-    product: Dict[str, Any],
-    *,
-    threshold: float,
-    per_flag_penalty: float,
-    cap: float,
-) -> DoseSafetyResult:
-    """Classify every safety flag on a product and total the B7 deduction.
+def evaluate_dose_safety(product: Dict[str, Any]) -> DoseSafetyResult:
+    """Classify every safety flag on a product (flags are at maximum daily use).
 
     Never raises. Malformed entries are contained, not guessed at.
     """
@@ -537,13 +602,14 @@ def evaluate_dose_safety(
 
     flags: List[DoseSafetyFlag] = []
     ignored: List[Dict[str, Any]] = []
-    total = 0.0
     conversion_failures = 0
+    low, high, defaulted = resolve_daily_serving_range(product if isinstance(product, dict) else {})
+    minimum_share = (low / high) if high else 1.0
 
     for raw in raw_flags:
         if not isinstance(raw, dict):
             continue
-        classified = _classify(raw, threshold)
+        classified = _classify(raw, minimum_share)
         flags.append(classified)
         if classified.state == CONVERSION_FAILED:
             conversion_failures += 1
@@ -554,12 +620,133 @@ def evaluate_dose_safety(
                 "pct_ul": classified.pct_ul,
                 "reason": classified.reason,
             })
-        if classified.penalized:
-            total += per_flag_penalty
 
+    caffeine = _declared_daily_caffeine(product) if isinstance(product, dict) else None
+    if caffeine and caffeine["unknown_rows"]:
+        flags.append(DoseSafetyFlag(
+            state=MATERIAL_BUT_UNRESOLVED, nutrient="Caffeine", canonical_id="caffeine",
+            reason="caffeine_daily_total_not_exact",
+        ))
     return DoseSafetyResult(
-        penalty=round(max(0.0, min(cap, total)), 4),
         flags=flags,
         ignored_flags=ignored,
         conversion_failures=conversion_failures,
+        frequency_defaulted=bool(defaulted),
+        caffeine=caffeine,
     )
+
+
+def _declared_caffeine_rows(product: Dict[str, Any]) -> tuple[list, dict, int]:
+    """Caffeine's analyte total, preserving declarations and confirmed bounds.
+
+    Ingredient-count deduplication is not analyte deduplication: a quantified
+    caffeine projection from guarana is the caffeine exposure even though its
+    carrier is already an ingredient. A declared total owns its components.
+    Qualified or missing amounts never become an exact daily total; only their
+    confirmed lower bound can establish a ceiling.
+    """
+    from scoring_input_contract import get_scoring_ingredients, is_lent_blend_mass, source_linked_rows
+    from scoring_v4.exposure import row_exposure
+    from scoring_v4.modules.sports_helpers import CAFFEINE_CANONICALS
+
+    try:
+        rows = [row for row in get_scoring_ingredients(product, strict=True).rows if isinstance(row, dict)]
+    except Exception:
+        return [], {}, 0
+    caffeine = [row for row in rows if _norm_text(row.get("canonical_id")) in CAFFEINE_CANONICALS]
+    if not caffeine:
+        return [], {}, 0
+    candidates = [row for row in caffeine if not (row.get("is_compound_duplicate") or is_lent_blend_mass(row))]
+    counted = []
+    for row in candidates:
+        # Skip a projection only if its physical source already supplies counted
+        # caffeine. A non-caffeine carrier cannot stand in for its analyte.
+        if row.get("scoring_input_kind") == "product_level_evidence" and any(
+            any(other is candidate for candidate in candidates)
+            and other.get("scoring_input_kind") != "product_level_evidence"
+            and _norm_text(other.get("canonical_id")) in CAFFEINE_CANONICALS
+            and not other.get("is_compound_duplicate") and not is_lent_blend_mass(other)
+            for other in source_linked_rows(product, row, candidates)
+        ):
+            continue
+        counted.append(row)
+
+    totals = [row for row in counted if row.get("is_parent_total")]
+    excluded = set()
+    total_bounds = {}
+    for total in totals:
+        name = _norm_text(total.get("name") or total.get("standard_name"))
+        path = str(total.get("raw_source_path") or "")
+        parent_exposure = row_exposure(product, total, basis="per_use", unit="mg")
+        children = [row for row in counted if row is not total and not row.get("is_parent_total") and (
+            name and _norm_text(row.get("parent_blend")) == name
+            or path and str(row.get("raw_source_path") or "").startswith(path + ".")
+            # The enricher also marks an exact top-level/nested restatement as
+            # a parent even when its wrapper has a different name. Keep the
+            # duplicate in that source group, not every independent caffeine.
+            or row.get("is_nested_ingredient") and name == _norm_text(row.get("name") or row.get("standard_name"))
+            and parent_exposure.exact
+            and (child_exposure := row_exposure(product, row, basis="per_use", unit="mg")).exact
+            and child_exposure.per_serving_amount == parent_exposure.per_serving_amount
+        )]
+        # Older scoring rows retain the total marker without the child links.
+        # A sole unscoped total owns the analyte declaration, including a partial
+        # or unquantified breakdown. Scoped totals leave independent sources in.
+        if not children and len(totals) == 1:
+            children = [row for row in counted if row is not total]
+        if not parent_exposure.exact:
+            # An upper-qualified or unread total may still disclose a useful
+            # component floor. They describe one exposure: take the stronger
+            # bound, rather than adding total and components or losing either.
+            child_exposures = [row_exposure(product, row, basis="per_use", unit="mg") for row in children]
+            parent_floor = parent_exposure.minimum or 0.0
+            child_floor = sum(exposure.minimum or 0.0 for exposure in child_exposures)
+            floor = max(parent_floor, child_floor)
+            strict = (parent_floor == floor and parent_exposure.quantity_operator == ">"
+                      or child_floor == floor and any(exposure.quantity_operator == ">"
+                                                     and exposure.minimum is not None for exposure in child_exposures))
+            total_bounds[id(total)] = (floor, strict)
+        excluded.update(id(row) for row in children)
+    counted = [row for row in counted if id(row) not in excluded]
+
+    return counted, total_bounds, len(caffeine)
+
+
+def _declared_daily_caffeine(product: Dict[str, Any]) -> Optional[Dict[str, Any]]:
+    """Daily safety totals from the shared caffeine analyte declarations."""
+    from scoring_v4.exposure import row_exposure
+
+    counted, total_bounds, source_count = _declared_caffeine_rows(product)
+    if not source_count:
+        return None
+    low, high, _defaulted = resolve_daily_serving_range(product)
+    per_serving_lower = 0.0
+    strict_lower = False
+    unknown = 0
+    for row in counted:
+        if id(row) in total_bounds:
+            floor, strict = total_bounds[id(row)]
+            per_serving_lower += floor
+            strict_lower = strict_lower or strict
+            unknown += 1
+            continue
+        exposure = row_exposure(product, row, basis="per_use", unit="mg")
+        operator = exposure.quantity_operator
+        if exposure.minimum is None:
+            unknown += 1
+            continue
+        per_serving_lower += exposure.minimum
+        if operator not in {"", "="}:
+            unknown += 1
+            strict_lower = strict_lower or operator == ">"
+    confirmed_min = per_serving_lower * low
+    confirmed_max = per_serving_lower * high
+    return {
+        "total_mg_day_min": confirmed_min if not unknown else None,
+        "total_mg_day_max": confirmed_max if not unknown else None,
+        "confirmed_mg_day_min": confirmed_min,
+        "confirmed_mg_day_max": confirmed_max,
+        "quantity_operator": ">" if strict_lower else ">=" if unknown else "=",
+        "rows": len(counted), "unknown_rows": unknown,
+        "excluded_duplicate_rows": source_count - len(counted),
+    }

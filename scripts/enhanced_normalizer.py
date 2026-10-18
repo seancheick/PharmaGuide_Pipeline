@@ -5375,6 +5375,30 @@ class EnhancedDSLDNormalizer:
             name = ing.get("name", "")
             nested = ing.get("nestedRows", [])
 
+            # DSLD can place an enzyme's source organisms in nestedRows,
+            # rather than forms[]. An explicit parent-owned "proteases from"
+            # clause identifies provenance, not live cultures or fruit doses.
+            # Keep the source rows and their NP amounts without borrowing the
+            # enzyme preparation's mass. Separately quantified children and
+            # enzyme members retain their ordinary handling.
+            source_notes = str(ing.get("notes") or "")
+            if (str(ing.get("category") or "").casefold() in {"enzyme", "blend"}
+                    and re.search(r"\b(?:enzymes?|proteases?)\s+(?:derived\s+)?from\b", source_notes, re.I)):
+                for child in nested:
+                    if not isinstance(child, dict):
+                        continue
+                    _, _, _, variants = self._process_quantity(child.get("quantity"))
+                    if (str(child.get("category") or "").casefold() in {"botanical", "bacteria", "animal part or source", "plant part", "source material"}
+                            and not child.get("nestedRows") and not child.get("forms")
+                            and all(variant.get("quantity") == 0
+                                    and str(variant.get("unit") or "").casefold() == "np"
+                                    and variant.get("quantity_parsed") is not False
+                                    for variant in variants)
+                            and not re.search(r"\b(?:cfu|live|viable)\b|colony[- ]forming", " ".join(
+                                str(child.get(key) or "") for key in ("name", "notes", "description")
+                            ), re.I)):
+                        child["_enzyme_source_descriptor"] = True
+
             # DSLD explicitly marks structural section headings with
             # ingredientGroup="Header". The heading is label context, not an
             # active ingredient, but every nested/form child must survive.
@@ -7720,7 +7744,20 @@ class EnhancedDSLDNormalizer:
                             # the text without inventing its chemistry or lending
                             # the total's mass to it. Known/dosed children retain
                             # ordinary handling (e.g. psyllium, inulin).
-                            if is_fiber_source and not row.get("mapped") and not row.get("quantity"):
+                            # Undosed nutrition-composition forms (e.g. Lactose
+                            # under Sugars) describe the panel total too. Reuse
+                            # the nutrition classifier with the child's own
+                            # normalized fields; no parent mass becomes a dose.
+                            # Named bioactives and independently dosed children
+                            # retain their ordinary active-row handling.
+                            is_nutrition_composition = not row.get("quantity") and self._is_nutrition_fact(
+                                row.get("raw_source_text") or row.get("name", ""),
+                                row.get("ingredientGroup"), row.get("unit"),
+                                dsld_category=row.get("raw_category"),
+                            )
+                            if is_nutrition_composition or (
+                                is_fiber_source and not row.get("mapped") and not row.get("quantity")
+                            ):
                                 row.update({
                                     "cleaner_row_role": "source_descriptor",
                                     "score_eligible_by_cleaner": False,
@@ -8506,7 +8543,7 @@ class EnhancedDSLDNormalizer:
             score_eligible_by_cleaner = False
             score_exclusion_reason = "source_descriptor"
             dose_class = "source_material_mass"
-        elif curated_scoring_disposition == "source_descriptor":
+        elif curated_scoring_disposition == "source_descriptor" or ing.get("_enzyme_source_descriptor"):
             cleaner_row_role = "source_descriptor"
             score_eligible_by_cleaner = False
             score_exclusion_reason = "source_descriptor"

@@ -58,7 +58,7 @@ for test fixtures + direct callers that bypass the gate.
 
 from __future__ import annotations
 
-from scoring_v4.modules.generic_helpers import score_declared_serving_dose
+from scoring_v4.modules.generic_helpers import score_directed_daily_dose
 
 from dataclasses import dataclass, field
 from typing import Any, Dict, Optional
@@ -288,7 +288,7 @@ def score_generic(product: Any) -> ModuleResult:
     # audit / score-delta / Flutter tooling not to mistake the proxy band
     # for final NIH/NHANES supplemental-window math.
     with dose_reference_scope(archetype_dose_reference("generic", formulation_dim.metadata)):
-        dose_payload = score_declared_serving_dose(product, score_dose)
+        dose_payload = score_directed_daily_dose(product, score_dose)
     dose_dim = result.dimensions["dose"]
     dose_dim.score = dose_payload["score"]
     dose_dim.components = dose_payload["components"]
@@ -377,6 +377,9 @@ def _assemble_score(result: ModuleResult) -> None:
     penalty_relocations = list(
         (result.metadata or {}).get("penalty_relocations") or []
     )
+    # The route's own classification (the sports subtype selects the public
+    # archetype reference) is not assembly state; reassembly must keep it.
+    sports_subtype = (result.metadata or {}).get("sports_subtype")
 
     # Phase 4: the core dimensions are summed on their NATIVE scale (max 85).
     # There is NO renormalization to 100 — the former `(sum/evaluable_max)*100`
@@ -459,3 +462,5 @@ def _assemble_score(result: ModuleResult) -> None:
     }
     if penalty_relocations:
         result.metadata["penalty_relocations"] = penalty_relocations
+    if sports_subtype is not None:
+        result.metadata["sports_subtype"] = sports_subtype

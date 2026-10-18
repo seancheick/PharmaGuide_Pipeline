@@ -96,14 +96,15 @@ def test_resolved_glucosamine_form_keeps_its_own_study_material(calculator, form
 
 
 def test_scoring_reference_maps_agree_with_the_lookup(calculator) -> None:
-    """generic_dose decides the dose curve by canonical id, but the enriched
-    pct_rda comes from this name lookup. The IQM name the enricher passes must
-    resolve to the reference the scoring map names, or to no reference."""
+    """Official DRI references agree across canonical and label-name lookup.
+
+    Retired clinical shortcuts stay absent; their source regimens remain
+    descriptive records rather than a second numerical Dose map.
+    """
     iqm = json.loads((SCRIPTS / "data/ingredient_quality_map.json").read_text())
-    maps = {
-        **generic_dose._DRI_REFERENCE_BY_CANONICAL,
-        **generic_dose._CLINICAL_ANCHOR_REFERENCE_BY_CANONICAL,
-    }
+    assert not hasattr(generic_dose, "_CLINICAL_ANCHOR_REFERENCE_BY_CANONICAL")
+    assert "_clinical_anchor_reference_by_canonical" not in generic_dose._DM
+    maps = generic_dose._DRI_REFERENCE_BY_CANONICAL
     mismatches = {}
     for canonical, reference in maps.items():
         entry = iqm.get(canonical) or {}
@@ -115,6 +116,18 @@ def test_scoring_reference_maps_agree_with_the_lookup(calculator) -> None:
         if resolved not in (reference, None):
             mismatches[canonical] = (name, resolved, reference)
     assert mismatches == {}
+    references = {row["id"]: row for row in json.loads(
+        (SCRIPTS / "data/rda_optimal_uls.json").read_text())["nutrient_recommendations"]}
+    for canonical, reference, source, amount in (
+        ("glycine", "glycine", "22529837", 3000),
+        ("betaine", "betaine_tmg", "31809615", 1500),
+    ):
+        record = references[reference]
+        assert source in record["references"]
+        assert any(row.get("rda_ai") == amount for row in record["data"])
+        assert record["reference_semantics"]["reference_type"] == "discrete_studied_regimen"
+        assert generic_dose._adequacy_reference_kind(canonical) == "no_benchmark"
+        assert _resolved_id(calculator, record["standard_name"]) == reference
 
 
 @pytest.mark.parametrize('form', ['acetyl-l-carnitine (alcar)', 'acetyl-l-carnitine', 'acetyl-l-carnitine hydrochloride'])

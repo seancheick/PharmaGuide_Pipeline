@@ -1093,11 +1093,12 @@ def test_omega_rubric_dose_bands_match_configured_thresholds() -> None:
     thresholds = [b["min_mg_day"] for b in bands]
     assert thresholds == [4000, 2000, 1000, 500, 250, 200, 100, 0]
 
-    # Top of band reaches the dim cap of 20.
-    assert bands[0]["score"] == 20  # 4000+ prescription
-    assert bands[5]["score"] == 4.0  # near EFSA AI
-    assert bands[6]["score"] == 2.5  # low disclosed EPA/DHA
-    assert bands[-1]["score"] == 0  # below_efsa_ai
+    # These bands retain exposure context only. The approved purpose-qualified
+    # references own numerical Dose; context labels must never award points.
+    assert all('score' not in band for band in bands)
+    references=rubric['dose']['adequacy_references']
+    assert references['ordinary_adult']['target_mg_day']==250.0
+    assert references['triglyceride_purpose']['target_mg_day']==2000.0
 
 
 def test_omega_rubric_trust_scope_policy_only_credits_verified_scopes() -> None:
