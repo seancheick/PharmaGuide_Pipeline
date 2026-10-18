@@ -442,6 +442,16 @@ class RDAULCalculator:
         # Check UL status
         ul_status = self._determine_ul_status(nutrient_data, ul, norm_age, norm_sex)
 
+        # NASEM's nickel upper reference covers soluble nickel salts. A
+        # nutrient declaration proves elemental mass, not salt solubility.
+        if nutrient_id == "nickel":
+            allowed = {self._normalize_nutrient_name(value)
+                       for value in nutrient_data.get("ul_applies_to_forms") or []}
+            if self._normalize_nutrient_name(form_name or nutrient) not in allowed:
+                ul_status = "indeterminate"
+                notes.append("Nickel UL not evaluated: soluble salt identity is unresolved.")
+            warnings.append(nutrient_data.get("ul_note") or "")
+
         # Get optimal range
         optimal_min, optimal_max = self._parse_optimal_range(nutrient_data.get("optimal_range", ""))
 
@@ -540,8 +550,9 @@ class RDAULCalculator:
         elif _highest_ul_raw is not None and not isinstance(_highest_ul_raw, (int, float)):
             _highest_ul_raw = None
 
-        reference_url = (self.rda_db.get("consumer_ul_warnings", {}).get(nutrient_data.get("id"), {}) or {}).get("source_url")
-        authoritative_ul = isinstance(reference_url, str) and reference_url.startswith("https://ods.od.nih.gov/factsheets/") and ul_status == "established"
+        reference_url = ((self.rda_db.get("consumer_ul_warnings", {}).get(nutrient_data.get("id"), {}) or {}).get("source_url")
+                         or nutrient_data.get("ul_scope_source"))
+        authoritative_ul = isinstance(reference_url, str) and reference_url.startswith(("https://ods.od.nih.gov/factsheets/", "https://www.nationalacademies.org/read/")) and ul_status == "established"
         return NutrientAdequacyResult(
             nutrient=nutrient,
             amount=amount,

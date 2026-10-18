@@ -20890,7 +20890,7 @@ class SupplementEnricherV3:
             if isinstance(parent, dict)
             else set()
         )
-        if source_uniis & scoped_form_uniis:
+        if canonical_id != "nickel" and source_uniis & scoped_form_uniis:
             return {
                 "ul_gate_eligible": True,
                 "ul_exposure_basis": "ul_scoped_form_substance_amount",
@@ -20903,7 +20903,9 @@ class SupplementEnricherV3:
             ingredient.get("raw_source_text"),
         ):
             declared_form_keys.update(self._ul_scope_form_name_keys(value))
-        if declared_form_keys & self._ul_scoped_form_name_keys(standard_name):
+        # Nickel's soluble-salt scope qualifies chemistry, not salt mass:
+        # unlike a vitamin form, the compound amount is not elemental nickel.
+        if canonical_id != "nickel" and declared_form_keys & self._ul_scoped_form_name_keys(standard_name):
             return {
                 "ul_gate_eligible": True,
                 "ul_exposure_basis": "ul_scoped_form_named_substance_amount",
@@ -22681,6 +22683,14 @@ class SupplementEnricherV3:
                             "sex_group": "Adult neutral",
                             "highest_ul": _nutrient_record.get("highest_ul"),
                         }
+
+                    if resolved_canonical_id == "nickel" and safety_ul_status == "indeterminate":
+                        # A readable elemental amount cannot establish that
+                        # the source is a soluble salt covered by nickel's UL.
+                        skip_ul_check = True
+                        skip_ul_reason = "unresolved_form"
+                        ul_exposure.update(ul_gate_eligible=False,
+                                           ul_gate_ineligible_reason="unresolved_form")
 
                     pediatric_reference_gap = bool(
                         isinstance(safety_ul_population, dict)

@@ -57,6 +57,7 @@ _BOUNDED_UL_REASONS = {
     "worst_case_vitamin_e_mass_within_ul",
 }
 _UNRESOLVED_FORM_REASONS = {
+    "unresolved_form",
     "unknown_folate_form_lineage",
     "unknown_vitamin_form",
     "mixed_vitamin_a_preformed_fraction_unknown",
