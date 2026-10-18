@@ -25,7 +25,6 @@ def test_volatile_field_list_is_exactly_the_documented_one():
         'blob': [],
     }
     assert all(isinstance(reason, str) and reason for paths in replay.VOLATILE_FIELDS.values() for reason in paths.values())
-    assert replay.FULL_WORKER_ENV == {'PYTHONHASHSEED': '0'}
 
 
 def test_hash_ignores_only_the_clock_stamps_and_leaves_absent_paths_alone():
@@ -228,7 +227,8 @@ def compare_cli(baseline, candidate, out, *extra):
 
 
 @pytest.mark.parametrize('workers', [1, 2])
-def test_full_snapshot_hashes_every_stage_and_two_runs_agree(tmp_path, workers):
+def test_full_snapshot_hashes_every_stage_and_two_runs_agree(tmp_path, workers, monkeypatch):
+    monkeypatch.delenv('PYTHONHASHSEED', raising=False)
     checkout = fake_checkout(tmp_path)
     frozen, manifest = frozen_labels(tmp_path)
     outs = [tmp_path / 'one.jsonl', tmp_path / 'two.jsonl']
@@ -247,7 +247,7 @@ def test_full_snapshot_hashes_every_stage_and_two_runs_agree(tmp_path, workers):
     assert replay.read_rows(outs[1]) == rows
     meta = json.loads(Path(str(outs[0]) + '.meta.json').read_text())
     assert meta['full'] == {'blob': True, 'records_dir': str(replay.records_dir(outs[0])), 'volatile_fields': replay.VOLATILE_FIELDS,
-                            'worker_env': {'PYTHONHASHSEED': '0'}, 'harness_sha256': replay.sha(HARNESS)}
+                            'worker_env': {}, 'harness_sha256': replay.sha(HARNESS)}
     assert compare_cli(outs[0], outs[1], tmp_path / 'delta.json') == ([], {'products': 2, 'changed': 0, 'by_record': {}})
 
 
@@ -327,3 +327,59 @@ def test_worker_accepts_the_dead_code_auditors_bare_namespace(tmp_path, monkeypa
     replay.worker(argparse.Namespace(checkout='unused', products_root=str(frozen), manifest=str(manifest), out=str(out), workers=1))
     assert [json.loads(line)['id'] for line in out.read_text().splitlines()] == ['1', '2']
     assert not replay.records_dir(out).exists()
+
+@pytest.mark.parametrize('seed', [None, '17', 'random'])
+def test_full_snapshot_observes_hash_seed_without_overriding_it(tmp_path, monkeypatch, seed):
+    if seed is None:
+        monkeypatch.delenv('PYTHONHASHSEED', raising=False)
+    else:
+        monkeypatch.setenv('PYTHONHASHSEED', seed)
+    checkout = fake_checkout(tmp_path)
+    cleaner = checkout / 'scripts' / 'enhanced_normalizer.py'
+    cleaner.write_text('import os\n' + cleaner.read_text().replace(
+        'return {**label,', 'return {**label, "observed_seed": os.environ.get("PYTHONHASHSEED"),'))
+    frozen, manifest = frozen_labels(tmp_path)
+    out = tmp_path / 'observed.jsonl'
+    replay.snapshot(checkout, frozen, manifest, out, 2, full=True, blob=True)
+    assert replay.load_records(replay.records_dir(out), '1')['cleaned']['observed_seed'] == seed
+    metadata = json.loads(Path(str(out) + '.meta.json').read_text())
+    assert metadata['full']['worker_env'] == ({} if seed is None else {'PYTHONHASHSEED': seed})
+
+
+@pytest.mark.parametrize('recorded_seed', ['0', '17'])
+def test_full_compare_uses_recorded_environment_not_current_process(tmp_path, monkeypatch, recorded_seed):
+    monkeypatch.setenv('PYTHONHASHSEED', recorded_seed)
+    checkout = fake_checkout(tmp_path)
+    frozen, manifest = frozen_labels(tmp_path)
+    outs = [tmp_path / 'one.jsonl', tmp_path / 'two.jsonl']
+    for out in outs:
+        replay.snapshot(checkout, frozen, manifest, out, 1, full=True, blob=True)
+        meta_path = Path(str(out) + '.meta.json')
+        meta = json.loads(meta_path.read_text())
+        assert meta['full']['worker_env'] == {'PYTHONHASHSEED': recorded_seed}
+    monkeypatch.setenv('PYTHONHASHSEED', '42')
+    assert compare_cli(*outs, tmp_path / 'delta.json')[1]['changed'] == 0
+    meta_path = Path(str(outs[1]) + '.meta.json')
+    meta = json.loads(meta_path.read_text())
+    meta['full']['worker_env'] = {}
+    meta_path.write_text(json.dumps(meta))
+    proc = subprocess.run([sys.executable, HARNESS, 'compare', '--baseline', str(outs[0]),
+                           '--candidate', str(outs[1]), '--out', str(tmp_path / 'bad.json')], capture_output=True, text=True)
+    assert proc.returncode == 1 and 'worker_env' in proc.stderr
+
+@pytest.mark.parametrize('invalid', [
+    None, [], {'PYTHONHASHSEED': 0}, {'OTHER': 'value'},
+    {'PYTHONHASHSEED': '0', 'OTHER': 'value'},
+])
+def test_full_compare_rejects_invalid_environment_receipts_even_when_equal(tmp_path, invalid):
+    checkout = fake_checkout(tmp_path)
+    frozen, manifest = frozen_labels(tmp_path)
+    out = tmp_path / 'one.jsonl'
+    replay.snapshot(checkout, frozen, manifest, out, 1, full=True, blob=True)
+    meta_path = Path(str(out) + '.meta.json')
+    meta = json.loads(meta_path.read_text())
+    meta['full']['worker_env'] = invalid
+    meta_path.write_text(json.dumps(meta))
+    proc = subprocess.run([sys.executable, HARNESS, 'compare', '--baseline', str(out),
+                           '--candidate', str(out), '--out', str(tmp_path / 'bad.json')], capture_output=True, text=True)
+    assert proc.returncode == 1 and 'worker_env' in proc.stderr

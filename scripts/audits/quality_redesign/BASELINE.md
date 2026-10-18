@@ -71,17 +71,17 @@ stamps are `cleaned.metadata.lastCleaned`, `enriched.enriched_date`, `enriched.e
 `run_id` (named in AUDIT.md F.3) is stamped by the enricher's batch driver `process_all()` and never appears in a
 per-product record. No path was added to make a comparison pass.
 
-### Finding: one enriched field is ordered by the process hash seed (production defect, not fixed here)
+### Historical finding: one enriched field was ordered by the process hash seed (fixed by PR #156)
 
 `scripts/enrich_supplements_v3.py:5574` writes `"scorable_ingredient_names_normalized": list(scorable_names_normalized)`,
 a set rendered as a list. Two harness runs of the 22 Hum labels differ on that path for 16 of 22 products
 (`probe_hum/run1_vs_run2.json`); with `PYTHONHASHSEED=0` both runs are byte-identical
 (`probe_hum/seeded3.jsonl` and `seeded4.jsonl`, sha256 `c08936b3fe1d839ded148960d373d77a03d54603a982876b778a10621f7616c3`,
 compare: 0 changed). Scores, the scored artifact and the detail blob do not move; nothing outside tests reads the
-field (`rg scorable_ingredient_names_normalized scripts/ "/Users/seancheick/PharmaGuide ai/lib"`). So that the
-harness compares code and inputs rather than seeds, the `--full` worker runs with `PYTHONHASHSEED=0`
-(`replay.FULL_WORKER_ENV`, recorded in the receipt); the field itself stays in the hash. Sorting that list is a
-Clean/Enrich behavioral change for its own fix task (see the memory gotcha on set iteration).
+field (`rg scorable_ingredient_names_normalized scripts/ "/Users/seancheick/PharmaGuide ai/lib"`). The
+historical harness pinned the `--full` worker to `PYTHONHASHSEED=0` (the former `replay.FULL_WORKER_ENV`,
+recorded in those receipts); the field itself stayed in the hash. PR #156 subsequently sorted the production
+field. The current harness inherits the environment without that override, as described below.
 
 ### Baseline run
 
@@ -101,12 +101,14 @@ Clean/Enrich behavioral change for its own fix task (see the memory gotcha on se
   receipt above (byte-identical twice under the pinned seed) and on the earlier 15,421-product score-only
   repeat recorded in the September section.
 
-### Using it
+### Comparing with this historical seed-0 baseline
 
-```
-replay.py snapshot --checkout <candidate worktree> --products-root .../frozen_raw --manifest .../manifest.json \
+Use an explicit seed only for compatibility with this historical capture; new unpinned captures use the separate recapture recipe below.
+
+```bash
+PYTHONHASHSEED=0 "$PG_PYTHON" scripts/audits/quality_redesign/replay.py snapshot --checkout <candidate worktree> --products-root .../frozen_raw --manifest .../manifest.json \
     --out .../candidate_<sha>.jsonl --workers 4 --full --blob
-replay.py compare --baseline .../baseline_5fb2be1ca.jsonl --candidate .../candidate_<sha>.jsonl --out .../delta.json
+"$PG_PYTHON" scripts/audits/quality_redesign/replay.py compare --baseline .../baseline_5fb2be1ca.jsonl --candidate .../candidate_<sha>.jsonl --out .../delta.json
 ```
 
 `compare` writes one entry per product whose row differs, each with `changed` (cleaned / enriched / scored /
@@ -115,9 +117,25 @@ differing path of each changed record (`differences`) and, to the summary, the n
 path with list indices generalized to `[*]`: the "only this path differs" receipt of a PR comes from that summary.
 Every listed difference is justified in the PR that produced it; none is removed by widening `VOLATILE_FIELDS`.
 
-### Follow-ups
+### Unpinned recapture — October 18 follow-up
 
-- **Measure set-order nondeterminism instead of masking it.** The `--full` worker pins `PYTHONHASHSEED=0` and `compare`
-  requires both receipts' `worker_env` to equal the harness constant, so dropping the pin later would refuse today's
-  baseline. For the next recapture after the sorted list (PR #156) lands: record the observed seed in the receipt,
-  require baseline and candidate receipts to agree with each other rather than with the constant, and drop the pin.
+PR #156 sorted `scorable_ingredient_names_normalized` at its production owner and is integrated through PR #163. The current harness no longer overrides `PYTHONHASHSEED`. It records an explicitly inherited setting in `full.worker_env`; `{}` means the variable was unset and Python selected its normal randomized process seed. It does not claim to know Python's internal seed.
+
+`compare` requires compatible recorded environments on the two captures, independently of the caller's current environment. Historical seed-0 captures still compare to each other. Pinned and unpinned captures deliberately do not compare directly; retain the historical receipts without editing/restamping them. Volatile-field declarations and all existing input/hash/count checks remain enforced.
+
+For the authorized new baseline, explicitly unset any shell pin:
+
+```bash
+env -u PYTHONHASHSEED "$PG_PYTHON" scripts/audits/quality_redesign/replay.py snapshot \
+  --checkout /Users/seancheick/Downloads/dsld_clean \
+  --products-root <fresh-frozen-raw-root> --manifest <fresh-input-manifest> \
+  --out <durable-baseline.jsonl> --workers 4 --full --blob
+```
+
+Validate independent unpinned repetitions and explicit cross-seed probes using whole-record hashes; do not expand the volatile-field list to hide ordering differences. The old baseline above excludes Product_Submissions by format; validate that source separately through its manifest-owned stages and a stored-enrichment snapshot. New capture and validation receipts will be recorded here after the pipeline completes. No release is implied.
+
+### Integrated harness qualification — October 18
+
+Final audit-tool source `b2b8daa238def94a2d148bdb6fb169de3739e5b5` includes Dose V4.1 main `0989ba966`. Whole-fast CI [39166519994](https://github.com/seancheick/PharmaGuide_Pipeline/actions/runs/39166519994) passed all four groups and skip guards; the two named replay test files pass 70 checks. Final review reproduced and fixed rejection of matching unsupported environment dictionaries and corrected the historical pinned comparison recipe. The malformed-environment regression failed twice before the fix, and independent review passes seven compatibility/rejection cases. No blocking finding or widened hash exclusion remains.
+
+Two independent unpinned `--full --blob` captures at `78dd06211` of the nine existing source-verified raw canaries agree across all four records: nine products, zero changed records or paths. Both original receipts record `worker_env={}`, successful capture and stable source. The final reader on `b2b8daa238def94a2d148bdb6fb169de3739e5b5` independently compares those unchanged receipts with zero differences; the captures retain their original SHA. Frozen inputs, original receipts, full records and final reader report remain in the primary checkout's `reports/worktree_closeout_20261018/real_harness/`. This is bounded harness qualification, not the new corpus baseline or a catalog rebuild. All three production-stage code/reference fingerprints equal the already-qualified Dose source. The later full baseline recapture and determinism audit still require Sean's completed new-source run, including separate validation of Product_Submissions. A documentation-only qualification update does not change this validated source or require another broad checkpoint.

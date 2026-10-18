@@ -16,13 +16,11 @@ Full-artifact equivalence (architecture audit 2026-10-17, AUDIT.md F.3): `snapsh
 also keeps, per product, a sha256 of the whole cleaned, enriched and scored record (and the
 detail blob with --blob), clock stamps removed through VOLATILE_FIELDS, plus the records
 themselves under <out>.records/ so `compare` can name which record changed and the first
-differing JSON path. Rows written without --full are unchanged. The --full worker runs with
-PYTHONHASHSEED=0 (FULL_WORKER_ENV): the enricher emits one set as a list
-(ingredient_quality_data.scorable_ingredient_names_normalized, enrich_supplements_v3.py
-`list(scorable_names_normalized)`), whose order changes with each process's hash seed, so an
-unpinned baseline and candidate differ on it for most products. The field stays in the hash
-(a content change is still reported); only the per-process ordering is made the same on both
-sides. The production ordering defect is recorded in BASELINE.md.
+differing JSON path. Rows written without --full are unchanged. Full workers inherit the caller's
+process environment without a hash-seed override. Receipts record an explicitly supplied
+PYTHONHASHSEED, or an empty worker_env when Python chooses a randomized process seed.
+Independent unpinned captures measure ordering stability rather than hiding it. Historical
+seed-pinned receipts remain comparable to each other, never silently restamped.
 """
 from __future__ import annotations
 
@@ -219,7 +217,6 @@ VOLATILE_FIELDS = {
     'blob': {},
 }
 RECORDS_SUFFIX = '.records'
-FULL_WORKER_ENV = {'PYTHONHASHSEED': '0'}  # see the module docstring; inherited by the pool's spawned workers
 VALUE_CHARS = 200
 ABSENT = '<absent>'
 
@@ -597,11 +594,12 @@ def snapshot(checkout, products_root, manifest, out, workers=1, full=False, blob
     command = [sys.executable, str(Path(__file__).resolve()), '_worker', '--checkout', str(checkout), '--products-root', str(products_root), '--manifest', str(manifest), '--out', str(out), '--workers', str(workers)]
     if full:
         command += ['--full'] + (['--blob'] if blob else [])
-    result = subprocess.run(command, cwd=checkout, **({'env': {**os.environ, **FULL_WORKER_ENV}} if full else {}))
+    worker_env = {'PYTHONHASHSEED': os.environ['PYTHONHASHSEED']} if 'PYTHONHASHSEED' in os.environ else {}
+    result = subprocess.run(command, cwd=checkout)
     after = repository_provenance(checkout)
     metadata = {'created_at': datetime.now(timezone.utc).isoformat(), 'checkout': str(checkout), 'repository': before, 'inputs_manifest_sha256': sha(manifest), 'exit_code': result.returncode, 'source_unchanged': before == after, 'expected_product_count': json.loads(Path(manifest).read_text())['product_count'], 'product_count': sum(1 for line in Path(out).open() if line.strip()) if Path(out).exists() else 0, 'output_sha256': sha(out) if Path(out).exists() else None, 'workers': workers, 'capture_version': 2}
     if full:
-        metadata['full'] = {'blob': blob, 'records_dir': str(records_dir(out)), 'volatile_fields': VOLATILE_FIELDS, 'worker_env': FULL_WORKER_ENV, 'harness_sha256': sha(__file__)}
+        metadata['full'] = {'blob': blob, 'records_dir': str(records_dir(out)), 'volatile_fields': VOLATILE_FIELDS, 'worker_env': worker_env, 'harness_sha256': sha(__file__)}
     write_json(str(out) + '.meta.json', metadata)
     if before != after:
         raise ValueError('Scoring source mutated during snapshot')
@@ -763,9 +761,17 @@ def main():
         full = baseline_meta.get('full'), candidate_meta.get('full')
         if (full[0] is None) != (full[1] is None) or (full[0] and full[0]['blob'] != full[1]['blob']):
             raise ValueError('Snapshots must both be --full with the same --blob setting, or neither')
-        if full[0] and any(meta.get('volatile_fields') != VOLATILE_FIELDS or meta.get('worker_env') != FULL_WORKER_ENV for meta in full):
-            # Row hashes come from the list of the harness that wrote them: an older list would read as changed or corrupt records.
-            raise ValueError('Snapshot volatile_fields or worker_env differ from this harness; recapture with the same harness')
+        if full[0]:
+            # Hash exclusions must be understood by this reader. Environment is
+            # capture provenance: compare receipts, not today's process setting.
+            if any(meta.get('volatile_fields') != VOLATILE_FIELDS for meta in full):
+                raise ValueError('Snapshot volatile_fields differ from this harness; recapture with the same harness')
+            environments = [meta.get('worker_env') for meta in full]
+            if any(not isinstance(env, dict) or (env and (
+                set(env) != {'PYTHONHASHSEED'}
+                or not isinstance(env.get('PYTHONHASHSEED'), str)
+            )) for env in environments) or environments[0] != environments[1]:
+                raise ValueError('Snapshot worker_env receipts are invalid or differ; recapture with matching environments')
         if args.all_paths and not full[0]:
             raise ValueError('--all-paths needs --full snapshots')
         records = (records_dir(args.baseline), records_dir(args.candidate)) if full[0] else None
