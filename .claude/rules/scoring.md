@@ -41,7 +41,8 @@ unchanged with the prescribed focused checks. Clinical meaning and safety advice
 
 **Changing a score:** follow the `/pg-scoring-change` skill. It covers the Owner Check, the
 one-product probe, a failing test, the brand probe, `shadow-diff` before/after on stored inputs,
-and a fresh-context review. Never re-run the ~45-minute full pipeline just to measure, and never run
+and a fresh-context review. Never re-run the full pipeline just to measure (a 38-brand run took 60-80
+minutes in the October 2026 `scripts/products/reports/batch_run_summary_*.txt`), and never run
 a pipeline while the tree has uncommitted scoring edits; its outputs are invalid.
 
 **Owners in the matrix:** `ingredient_form_quality` (ADR-0003), `quality_score_v4_contract` and
