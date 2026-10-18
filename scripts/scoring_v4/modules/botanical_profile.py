@@ -916,4 +916,23 @@ def _botanical_benchmark(row: Dict[str, Any]) -> str:
     entry = _dosing_entry_for(row)
     if entry is not None and _range_mg(entry) is not None:
         return "present"
+    # A source-owned completed no-benchmark review is not an identity gap.
+    # This does not promote all positive literature to botanical eligibility:
+    # only the exact canonical, verified record with the approved neutral
+    # disposition completes this Dose assessment. Study exposures stay
+    # descriptive and an unreadable amount still fails the strict input gate.
+    from evidence_resolver import _load_literature_evidence
+
+    record = _load_literature_evidence().get(_norm(row.get("canonical_id"))) or {}
+    semantics = record.get("reference_semantics") or {}
+    provenance = record.get("verification_provenance") or {}
+    if (
+        record.get("verification_result") == "authoritative_pubmed_verified"
+        and provenance.get("all_pmids_verified") is True
+        and not provenance.get("retractions_found")
+        and semantics.get("reference_type") == "no_benchmark"
+        and semantics.get("curve") == "completed_no_benchmark_neutral"
+        and str(semantics.get("approval_status") or "").startswith("approved_existing_neutral_")
+    ):
+        return "absent"
     return "absent" if _recognized_botanical_identity(row) else "unresolved"

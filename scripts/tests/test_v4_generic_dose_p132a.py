@@ -925,6 +925,128 @@ def test_positive_benchmark_requires_label_purpose_applicability() -> None:
     assert positive_clinical_benchmark(product, row) is None
 
 
+@pytest.mark.parametrize("canonical,name,studied_mg", [
+    ("l_leucine", "L-Leucine", 1742),
+    ("tmg_betaine", "TMG Betaine", 2500),
+    ("l_lysine", "L-Lysine", 1000),
+    ("mct_oil", "MCT Oil", 12000),
+    ("american_ginseng", "American Ginseng", 3000),
+    ("phosphatidic_acid", "Phosphatidic Acid", 750),
+    ("touchi_extract", "Touchi Extract", 900),
+])
+@pytest.mark.parametrize("amount_factor", [0.5, 1.0, 2.0])
+def test_literature_regimen_amounts_do_not_create_dose_targets(
+    canonical, name, studied_mg, amount_factor,
+) -> None:
+    """A verified intervention amount is not a reviewed effective minimum.
+
+    The MCT primary source uses 12 g; source correction must not make 12 g
+    full credit, or invent fractional efficacy below that discrete regimen.
+    All seven records that supplied the old fallback are covered, including
+    acute-only American ginseng and context-dependent TMG owner precedence.
+    """
+    from dose_assessment import positive_clinical_benchmark
+    from scoring_v4.scored_artifact import build_scored_artifact
+
+    row = _ingredient(
+        name=name, canonical_id=canonical, quantity=studied_mg * amount_factor,
+        unit="mg", raw_source_path="ingredientRows[0]", raw_source_text=name,
+        dose_class="therapeutic_mass", cleaner_row_role="active_scorable",
+        role_classification="active_scorable", scoreable_identity=True,
+        mapped_identity=True, identity_disposition="clean",
+        score_eligible_by_cleaner=True, source_section="active",
+    )
+    product = _product(
+        ingredients=[row], activeIngredients=[row], adequacy_results=[],
+        product_name=name, id=f"literature-regimen-{canonical}",
+        evidence_data={"clinical_matches": []},
+        servings_per_day_min=1, servings_per_day_max=1,
+    )
+
+    artifact = build_scored_artifact(product)
+
+    assert positive_clinical_benchmark(product, row) is None
+    assert artifact["quality_score_status"] == "scored"
+    assert artifact["strict_scoring_contract"]["passed"] is True
+    assert artifact["assessment_readiness"]["dose"]["readiness"] == "complete"
+    dose = artifact["quality_pillars_v4"]["dose"]
+    assert dose["score"] == 11.4
+    receipt = dose["explanation"]["dose_receipt"]
+    assert receipt["reconciles"] is True
+    assert receipt["contributions"][0]["points"] == 11.4
+    assert "clinical_reference" not in {
+        item.get("reference_kind") for item in receipt["contributions"]
+    }
+    if canonical == "touchi_extract":
+        assert receipt["aggregation"] == "single_profile_assessment"
+        contribution_fact = next(fact for fact in dose["explanation"]["facts"]
+                                 if fact["id"] == "dose_contributions")
+        assert "completed neutral when none applies" in contribution_fact["detail"]
+    assert "unfinished" not in dose["reason"].lower()
+
+
+@pytest.mark.parametrize("canonical,values,basis", [
+    ("l_leucine", [1742, 2747, 3000, 5000], "per_serving_threshold"),
+    ("tmg_betaine", [4000, 2500], "daily_intake"),
+    ("l_lysine", [1000, 3000], "daily_intake"),
+    ("mct_oil", [12000], "daily_intake"),
+    ("american_ginseng", [3000], "acute_challenge"),
+    ("phosphatidic_acid", [750], "daily_intake"),
+    ("touchi_extract", [900], "daily_intake"),
+])
+def test_retiring_literature_dose_targets_preserves_descriptive_source_exposure(
+    canonical, values, basis,
+) -> None:
+    from evidence_resolver import _load_literature_evidence
+
+    # Keep source-owned exposure facts and Evidence review provenance. Retiring
+    # the numeric projection must neither erase the studies nor change their
+    # acute/daily meaning, verification state, or native source amounts.
+    record = _load_literature_evidence()[canonical]
+    assert record["studied_dose_exposure"] == {
+        "values": values, "unit": "mg", "basis": basis,
+    }
+    assert record["verification_result"] == "authoritative_pubmed_verified"
+    assert record["verification_provenance"]["all_pmids_verified"] is True
+    assert record["qualifying_human_studies"]
+    semantics = record["reference_semantics"]
+    assert semantics["reference_type"] == "no_benchmark"
+    assert semantics["curve"] == "completed_no_benchmark_neutral"
+    assert semantics["approval_status"].startswith("approved_existing_neutral_")
+
+
+@pytest.mark.parametrize("canonical,operator", [
+    ("touchi_extract", "ambiguous"),
+    ("unrecognized_touchi_material", None),
+])
+def test_retired_literature_target_does_not_complete_capture_or_identity_gaps(canonical, operator):
+    from scoring_v4.modules.botanical_profile import score_botanical_purpose_dose
+    from scoring_v4.scored_artifact import build_scored_artifact
+
+    row = _ingredient(
+        name="Touchi Extract" if canonical == "touchi_extract" else "Unknown fermented material",
+        canonical_id=canonical, quantity=900, unit="mg", raw_source_path="ingredientRows[0]",
+        category="botanical", dose_class="therapeutic_mass", cleaner_row_role="active_scorable",
+        role_classification="active_scorable", scoreable_identity=True, mapped_identity=True,
+        identity_disposition="clean", score_eligible_by_cleaner=True, source_section="active",
+    )
+    if operator:
+        row["quantity_operator"] = operator
+    product = _product(
+        ingredients=[row], activeIngredients=[row], adequacy_results=[],
+        product_name=row["name"], servings_per_day_min=1, servings_per_day_max=1,
+    )
+    if operator:
+        artifact = build_scored_artifact(product)
+        assert artifact["quality_score_status"] == "not_scored"
+        assert artifact["score_unavailable_reason"] == "blocked_by_completeness_gate"
+        assert artifact["quality_pillars_v4"] is None
+    else:
+        assessment = score_botanical_purpose_dose(product, row)
+        assert assessment["metadata"]["benchmark"] == "unresolved"
+        assert assessment["score"] == 0.0
+
+
 @pytest.mark.parametrize("record_id", ["INGR_D_MANNOSE", "INGR_L_CARNITINE"])
 def test_null_or_mixed_trial_amount_is_not_a_dose_benchmark(record_id: str) -> None:
     from scoring_v4.modules.generic_dose import score_dose

@@ -240,7 +240,9 @@ def positive_clinical_benchmark(
     enrichment source linkage is authoritative.  A branded whole-preparation
     row may also match its own registry name/alias; generic parent or member
     identity never borrows that branded benchmark.  Null/mixed/inapplicable
-    records are absent from the eligible record set.
+    records are absent from the eligible record set. Literature studied-dose
+    exposures remain descriptive: a positive outcome at a discrete regimen
+    does not establish a minimum effective dose or an interpolation curve.
     """
     row_ref = str(row.get("raw_source_path") or row.get("source_row_ref") or "").strip()
     row_names = _row_names(row)
@@ -294,35 +296,6 @@ def positive_clinical_benchmark(
     ]
     if exact_branded:
         candidates = exact_branded
-
-    if not candidates:
-        # The verified literature registry has structured material/purpose
-        # applicability but stores its studied range separately from the
-        # backed-study registry. Reuse the canonical resolver's applicability
-        # decision, then project only a positive exact range into Dose.
-        from evidence_resolver import (
-            EvidenceDisposition,
-            resolve_evidence_for_row,
-        )
-        resolution = resolve_evidence_for_row(row, product=product)
-        literature = (resolution.owner_facts or {}).get("literature_evidence") or {}
-        studied = literature.get("studied_dose") or {}
-        values = studied.get("values") if isinstance(studied, dict) else None
-        if (
-            resolution.disposition == EvidenceDisposition.RESOLVED_BY_REVIEWED_CLINICAL_EVIDENCE.value
-            and str(literature.get("effect_direction") or "").strip().lower() in _POSITIVE_BENCHMARK_DIRECTIONS
-            and isinstance(values, list) and values
-            and str(studied.get("basis") or "").strip().lower() in {"daily_intake", "per_serving_threshold"}
-        ):
-            positive_values = [value for value in (_finite_number(item) for item in values) if value and value > 0]
-            if positive_values:
-                candidates.append({
-                    "id": "LIT_" + str(row.get("canonical_id") or row.get("name") or "").upper(),
-                    "effect_direction": literature.get("effect_direction"),
-                    "min_clinical_dose": min(positive_values),
-                    "max_studied_clinical_dose": max(positive_values),
-                    "dose_unit": studied.get("unit") or "mg",
-                })
 
     assessments = []
     for record in candidates:

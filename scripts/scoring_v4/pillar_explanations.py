@@ -144,7 +144,7 @@ _AGGREGATION_COPY = {
     "b_complex_panel": "The fixed B-vitamin panel is assessed; each vitamin counts equally.",
     "omega_purpose_reference": "EPA+DHA (DHA for prenatal products) is assessed against the reference for the product's purpose.",
     "fiber_aggregate": "The disclosed fiber is assessed as one aggregate amount.",
-    "single_profile_assessment": "One category profile assesses the product's main active against its studied range.",
+    "single_profile_assessment": "One category profile assesses the main active against an applicable reference, or records a completed neutral when none applies.",
 }
 _ASSESSMENT_COPY = {
     "panel_component": ("recorded rubric contribution", "pharmaguide_policy"),

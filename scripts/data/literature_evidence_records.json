@@ -3,7 +3,7 @@
     "description": "Phase 4 shadow literature resolution registry for high-impact canonical actives",
     "purpose": "literature_evidence_resolution",
     "schema_version": "5.0.0",
-    "last_updated": "2026-10-14",
+    "last_updated": "2026-10-18",
     "total_entries": 807,
     "verification_pipeline": "scripts/api_audit/verify_literature_records.py",
     "verified_studies_count": 279,
@@ -228,6 +228,25 @@
         "verified_at": "2026-09-21T07:39:42.986936+00:00",
         "all_pmids_verified": true,
         "retractions_found": false
+      },
+      "reference_semantics": {
+        "reference_type": "no_benchmark",
+        "scope": "General catalog Dose; source regimen amounts remain descriptive research exposures",
+        "preparation": "L-leucine (free form amino acid)",
+        "purpose": "General Dose assessment; retain each source-specific endpoint as descriptive evidence",
+        "population": "Young and older adult study participants; meal and exercise contexts differ",
+        "exposure_basis": "per_use",
+        "units": "mg",
+        "curve": "completed_no_benchmark_neutral",
+        "source_ids": [
+          "PMID:16507602",
+          "PMID:24284442",
+          "PMID:32483625"
+        ],
+        "rationale": "Acute amino-acid mixtures or leucine-enriched protein drinks do not establish a standalone daily leucine minimum or a proportional efficacy curve. Use the existing shared no-benchmark neutral; this conclusion is complete, not a future calibration hold.",
+        "owner": "scripts/dose_assessment.py::positive_clinical_benchmark",
+        "review_date": "2026-10-18",
+        "approval_status": "approved_existing_neutral_unsupported_threshold_removal_20261018"
       }
     },
     {
@@ -298,6 +317,24 @@
         "verified_at": "2026-09-21T07:39:42.986936+00:00",
         "all_pmids_verified": true,
         "retractions_found": false
+      },
+      "reference_semantics": {
+        "reference_type": "no_benchmark",
+        "scope": "General catalog Dose; source regimen amounts remain descriptive research exposures",
+        "preparation": "Betaine anhydrous / Trimethylglycine (TMG)",
+        "purpose": "General Dose assessment; retain each source-specific endpoint as descriptive evidence",
+        "population": "Adult homocysteine and resistance-training trial participants",
+        "exposure_basis": "minimum_directed_daily_use",
+        "units": "mg",
+        "curve": "completed_no_benchmark_neutral",
+        "source_ids": [
+          "PMID:23997720",
+          "PMID:23967897"
+        ],
+        "rationale": "The reviewed homocysteine-surrogate and training regimens do not establish a general effective minimum or an interpolation curve for catalog Dose. Use the existing shared no-benchmark neutral; this conclusion is complete, not a future calibration hold.",
+        "owner": "scripts/dose_assessment.py::positive_clinical_benchmark",
+        "review_date": "2026-10-18",
+        "approval_status": "approved_existing_neutral_unsupported_threshold_removal_20261018"
       }
     },
     {
@@ -736,9 +773,9 @@
           "pmid": "26252373",
           "title": "Interventions for prevention of herpes simplex labialis (cold sores on the lips).",
           "design": "systematic_review_meta",
-          "sample_size": 242,
-          "primary_endpoint": "HSV outbreak frequency (>1000 mg/day vs <1000 mg/day)",
-          "effect": "positive_weak",
+          "sample_size": 2640,
+          "primary_endpoint": "HSL incidence and adverse effects across 32 prevention RCTs; the review found no evidence of efficacy for lysine",
+          "effect": "null",
           "verification_provenance": {
             "pmid_verified": true,
             "authoritative_live_title": "Interventions for prevention of herpes simplex labialis (cold sores on the lips).",
@@ -761,13 +798,31 @@
         "unit": "mg",
         "basis": "daily_intake"
       },
-      "applicability_decision": "Dose applicable at >= 1,000 mg/day for HSV recurrence prophylaxis; doses < 1,000 mg/day ineffective in systematic review",
+      "applicability_decision": "One older placebo-controlled trial tested 1 g L-lysine three times daily for six months (3 g/day) and reported fewer recurrent HSV infections. The 2015 prevention review found no evidence of efficacy for lysine. These sources support no established 1 g/day threshold or universal continuous efficacy range.",
       "verification_result": "authoritative_pubmed_verified",
       "verification_provenance": {
         "verified_by": "scripts/api_audit/verify_literature_records.py",
         "verified_at": "2026-09-21T07:39:42.986936+00:00",
         "all_pmids_verified": true,
         "retractions_found": false
+      },
+      "reference_semantics": {
+        "reference_type": "no_benchmark",
+        "scope": "General catalog Dose; source regimen amounts remain descriptive research exposures",
+        "preparation": "L-lysine monohydrochloride / base",
+        "purpose": "General Dose assessment; retain each source-specific endpoint as descriptive evidence",
+        "population": "Adults in recurrent herpes simplex studies and the reviewed prevention literature",
+        "exposure_basis": "minimum_directed_daily_use",
+        "units": "mg",
+        "curve": "completed_no_benchmark_neutral",
+        "source_ids": [
+          "PMID:3115841",
+          "PMID:26252373"
+        ],
+        "rationale": "An older discrete 3 g/day regimen and a review without evidence of preventive efficacy do not establish a 1 g/day effective minimum or dose-response curve. Use the existing shared no-benchmark neutral; this conclusion is complete, not a future calibration hold.",
+        "owner": "scripts/dose_assessment.py::positive_clinical_benchmark",
+        "review_date": "2026-10-18",
+        "approval_status": "approved_existing_neutral_unsupported_threshold_removal_20261018"
       }
     },
     {
@@ -1361,8 +1416,8 @@
           "pmid": "41443401",
           "title": "Both a single dose and a 4-week daily regimen of medium-chain triglycerides boost certain aspects of cognitive function in young adults: A randomized controlled trial.",
           "design": "rct",
-          "sample_size": 28,
-          "primary_endpoint": "blood beta-hydroxybutyrate and acute working memory",
+          "sample_size": 36,
+          "primary_endpoint": "inhibitory control after a single dose and working memory after the 4-week daily regimen",
           "effect": "positive_weak",
           "verification_provenance": {
             "pmid_verified": true,
@@ -1373,7 +1428,9 @@
             "verified_source": "https://pubmed.ncbi.nlm.nih.gov/41443401/",
             "verified_at": "2026-09-21T07:39:42.986936+00:00",
             "abstract_evidence_quote": "In this randomized controlled trial, we evaluated whether acute and long-term effects of MCT on cognitive function on young individuals surpass those of long-chain triglycerides (LCT)."
-          }
+          },
+          "dose": "12 g MCT",
+          "duration": "single-dose assessment and a 4-week daily regimen"
         },
         {
           "pmid": "25636220",
@@ -1395,22 +1452,39 @@
         }
       ],
       "effect_direction": "positive_weak",
-      "population_context": "Adults seeking acute ketosis, satiety, or mild fat mass management",
+      "population_context": "Young adults in the discrete 12 g MCT cognition trial; healthy adult dietary MCT-versus-LCT replacement trials in the weight/body-composition meta-analysis",
       "studied_dose_exposure": {
         "values": [
-          10000,
-          20000
+          12000
         ],
         "unit": "mg",
         "basis": "daily_intake"
       },
-      "applicability_decision": "Dose applicable at >= 10 g/day for metabolic ketosis; low-dose capsules (< 2 g) do not reach studied exposure",
+      "applicability_decision": "The cognition trial tested a discrete 12 g MCT intervention with acute and four-week assessments. The weight/body-composition meta-analysis compared dietary MCT replacement for LCT and called for dose determination. Neither source establishes a universal 10 g/day minimum or a continuously effective 10–20 g/day window.",
       "verification_result": "authoritative_pubmed_verified",
       "verification_provenance": {
         "verified_by": "scripts/api_audit/verify_literature_records.py",
         "verified_at": "2026-09-21T07:39:42.986936+00:00",
         "all_pmids_verified": true,
         "retractions_found": false
+      },
+      "reference_semantics": {
+        "reference_type": "no_benchmark",
+        "scope": "General catalog Dose; source regimen amounts remain descriptive research exposures",
+        "preparation": "Medium-chain triglycerides (C8 caprylic acid, C10 capric acid)",
+        "purpose": "General Dose assessment; retain each source-specific endpoint as descriptive evidence",
+        "population": "Young adult cognition participants and adult dietary substitution trial participants",
+        "exposure_basis": "minimum_directed_daily_use",
+        "units": "mg",
+        "curve": "completed_no_benchmark_neutral",
+        "source_ids": [
+          "PMID:41443401",
+          "PMID:25636220"
+        ],
+        "rationale": "The discrete 12 g cognitive regimen and dietary MCT substitution meta-analysis do not establish a general minimum effective dose or a 12 g full-credit target. Use the existing shared no-benchmark neutral; this conclusion is complete, not a future calibration hold.",
+        "owner": "scripts/dose_assessment.py::positive_clinical_benchmark",
+        "review_date": "2026-10-18",
+        "approval_status": "approved_existing_neutral_unsupported_threshold_removal_20261018"
       }
     },
     {
@@ -19415,7 +19489,7 @@
     },
     {
       "canonical_id": "american_ginseng",
-      "material_form": "Panax quinquefolius root extract",
+      "material_form": "Panax quinquefolius capsules; extract standardization not established in the inspected abstract",
       "search_query": "American ginseng Panax quinquefolius reduces postprandial glycemia randomized Vuksan",
       "search_date": "2026-09-21",
       "databases_searched": [
@@ -19428,12 +19502,12 @@
           "pmid": "10761967",
           "title": "American ginseng (Panax quinquefolius L) reduces postprandial glycemia in nondiabetic subjects and subjects with type 2 diabetes mellitus.",
           "design": "randomized_controlled_trial",
-          "sample_size": 20,
+          "sample_size": 19,
           "primary_endpoint": "postprandial area under the glycemic curve",
           "effect": "positive_moderate",
-          "dose": "1000-3000 mg before meals",
+          "dose": "3000 mg once, 40 minutes before or together with a 25 g oral glucose challenge",
           "duration": "acute / postprandial",
-          "outcome": "Statistically significant reduction in postprandial blood glucose area under the curve in healthy and type 2 diabetic adults.",
+          "outcome": "Postprandial glycemia was reduced in timing-dependent glucose-challenge comparisons; simultaneous ginseng did not differ from placebo in the nondiabetic group.",
           "verification_provenance": {
             "pmid_verified": true,
             "authoritative_live_title": "American ginseng (Panax quinquefolius L) reduces postprandial glycemia in nondiabetic subjects and subjects with type 2 diabetes mellitus.",
@@ -19447,16 +19521,15 @@
         }
       ],
       "effect_direction": "positive_moderate",
-      "population_context": "adult clinical trial populations",
+      "population_context": "10 nondiabetic adults and 9 adults with type 2 diabetes in an acute glucose-challenge crossover study",
       "studied_dose_exposure": {
         "values": [
-          1000,
           3000
         ],
         "unit": "mg",
-        "basis": "daily_intake"
+        "basis": "acute_challenge"
       },
-      "applicability_decision": "Standardized Panax quinquefolius root extract supported at >= 1000-3000 mg before meals for healthy postprandial glucose management.",
+      "applicability_decision": "The cited study tested 3 g of American ginseng capsules once, 40 minutes before or together with a glucose challenge. It establishes an acute, timing-dependent research context, not a daily minimum, a 1 g threshold, or a standardized-extract benchmark.",
       "applicability_status": "applicable_reviewed_trials",
       "verification_provenance": {
         "verified_by": "scripts/api_audit/verify_literature_records.py",
@@ -19464,7 +19537,24 @@
         "all_pmids_verified": true,
         "retractions_found": false
       },
-      "verification_result": "authoritative_pubmed_verified"
+      "verification_result": "authoritative_pubmed_verified",
+      "reference_semantics": {
+        "reference_type": "no_benchmark",
+        "scope": "General catalog Dose; source regimen amounts remain descriptive research exposures",
+        "preparation": "Panax quinquefolius capsules; extract standardization not established in the inspected abstract",
+        "purpose": "General Dose assessment; retain each source-specific endpoint as descriptive evidence",
+        "population": "Adults with and without type 2 diabetes in an acute glucose challenge",
+        "exposure_basis": "per_use",
+        "units": "mg",
+        "curve": "completed_no_benchmark_neutral",
+        "source_ids": [
+          "PMID:10761967"
+        ],
+        "rationale": "The 3 g capsule glucose-challenge regimen is acute and preparation-specific; it does not establish a daily minimum, standardized extract equivalence, or fractional dose efficacy. Use the existing shared no-benchmark neutral; this conclusion is complete, not a future calibration hold.",
+        "owner": "scripts/dose_assessment.py::positive_clinical_benchmark",
+        "review_date": "2026-10-18",
+        "approval_status": "approved_existing_neutral_unsupported_threshold_removal_20261018"
+      }
     },
     {
       "canonical_id": "serrapeptase",
@@ -22907,7 +22997,7 @@
           "effect": "positive_moderate",
           "dose": "750 mg/day",
           "duration": "8 weeks",
-          "outcome": "Statistically significant increases in 1RM squat strength and a trend toward greater lean body mass in resistance-trained men receiving phosphatidic acid compared to placebo.",
+          "outcome": "Parametric analyses found no significant between-group differences. Exploratory magnitude-based inferences suggested likely benefit for squat strength and very likely benefit for lean body mass; these are not statistically significant between-group findings.",
           "verification_provenance": {
             "pmid_verified": true,
             "authoritative_live_title": "Efficacy of phosphatidic acid ingestion on lean body mass, muscle thickness and strength gains in resistance-trained men.",
@@ -22921,7 +23011,7 @@
         }
       ],
       "effect_direction": "positive_moderate",
-      "population_context": "Resistance-trained adults undergoing supervised progressive training",
+      "population_context": "Resistance-trained adult men following an 8-week, 4-day/week training program at local gyms without investigator supervision, with weekly training-log review and feedback",
       "studied_dose_exposure": {
         "values": [
           750
@@ -22929,7 +23019,7 @@
         "unit": "mg",
         "basis": "daily_intake"
       },
-      "applicability_decision": "Phosphatidic acid supported at >= 750 mg/day in resistance-trained adults for strength and lean mass adaptation.",
+      "applicability_decision": "The source tested 750 mg/day of Mediator phosphatidic acid capsules during eight weeks of resistance training with post-workout protein provided to both groups. Its exploratory magnitude-based inference is not a proven minimum effective dose or a proportional adequacy curve.",
       "applicability_status": "applicable_reviewed_trials",
       "verification_provenance": {
         "verified_by": "scripts/api_audit/verify_literature_records.py",
@@ -22937,7 +23027,24 @@
         "all_pmids_verified": true,
         "retractions_found": false
       },
-      "verification_result": "authoritative_pubmed_verified"
+      "verification_result": "authoritative_pubmed_verified",
+      "reference_semantics": {
+        "reference_type": "no_benchmark",
+        "scope": "General catalog Dose; source regimen amounts remain descriptive research exposures",
+        "preparation": "Diacylglycerol phosphate / phosphatidic acid standardized phospholipid",
+        "purpose": "General Dose assessment; retain each source-specific endpoint as descriptive evidence",
+        "population": "Resistance-trained adult men undergoing the trial training program",
+        "exposure_basis": "minimum_directed_daily_use",
+        "units": "mg",
+        "curve": "completed_no_benchmark_neutral",
+        "source_ids": [
+          "PMID:23035701"
+        ],
+        "rationale": "The 750 mg/day Mediator regimen had no significant parametric between-group difference; exploratory magnitude inferences do not establish a general minimum or dose-response curve. Use the existing shared no-benchmark neutral; this conclusion is complete, not a future calibration hold.",
+        "owner": "scripts/dose_assessment.py::positive_clinical_benchmark",
+        "review_date": "2026-10-18",
+        "approval_status": "approved_existing_neutral_unsupported_threshold_removal_20261018"
+      }
     },
     {
       "canonical_id": "sweet_clover",
@@ -22965,7 +23072,7 @@
     },
     {
       "canonical_id": "touchi_extract",
-      "material_form": "Fermented black soybean (Glycine max) Touchi water extract (alpha-glucosidase inhibitor)",
+      "material_form": "Water-extracted fermented soybean Touchi extract in powdered Houji-tea",
       "search_query": "Touchi extract fermented soybean alpha-glucosidase borderline diabetes Fujita",
       "search_date": "2026-09-21",
       "databases_searched": [
@@ -22978,12 +23085,12 @@
           "pmid": "11481402",
           "title": "Long-term ingestion of a fermented soybean-derived Touchi-extract with alpha-glucosidase inhibitory activity is safe and effective in humans with borderline and mild type-2 diabetes.",
           "design": "randomized_controlled_trial",
-          "sample_size": 49,
-          "primary_endpoint": "HbA1c and postprandial blood glucose levels",
+          "sample_size": 36,
+          "primary_endpoint": "fasting blood glucose and HbA1c",
           "effect": "positive_moderate",
-          "dose": "900 mg/day (300 mg three times daily with meals)",
-          "duration": "6 months",
-          "outcome": "Statistically significant reductions in HbA1c and postprandial glucose levels without gastrointestinal adverse effects in subjects with borderline or mild diabetes.",
+          "dose": "900 mg/day: 300 mg Touchi extract in Houji-tea before each of three meals",
+          "duration": "3 months",
+          "outcome": "Fasting blood glucose and HbA1c decreased in the Touchi-extract tea group during the three-month trial; the source does not establish a general minimum effective dose.",
           "verification_provenance": {
             "pmid_verified": true,
             "authoritative_live_title": "Long-term ingestion of a fermented soybean-derived Touchi-extract with alpha-glucosidase inhibitory activity is safe and effective in humans with borderline and mild type-2 diabetes.",
@@ -22997,7 +23104,7 @@
         }
       ],
       "effect_direction": "positive_moderate",
-      "population_context": "Adults with borderline or mild impaired fasting/postprandial glucose",
+      "population_context": "Adults with borderline or mild type 2 diabetes in a 36-participant three-month placebo-controlled tea-preparation trial",
       "studied_dose_exposure": {
         "values": [
           900
@@ -23005,7 +23112,7 @@
         "unit": "mg",
         "basis": "daily_intake"
       },
-      "applicability_decision": "Touchi fermented soybean extract supported at >= 300 mg per meal (900 mg/day) for postprandial glycemic support.",
+      "applicability_decision": "The cited study tested 300 mg of water-extracted Touchi in Houji-tea before each of three meals for three months (900 mg/day). This is a preparation-specific regimen, not an established minimum or a continuous dose-response range.",
       "applicability_status": "applicable_reviewed_trials",
       "verification_provenance": {
         "verified_by": "scripts/api_audit/verify_literature_records.py",
@@ -23013,7 +23120,24 @@
         "all_pmids_verified": true,
         "retractions_found": false
       },
-      "verification_result": "authoritative_pubmed_verified"
+      "verification_result": "authoritative_pubmed_verified",
+      "reference_semantics": {
+        "reference_type": "no_benchmark",
+        "scope": "General catalog Dose; source regimen amounts remain descriptive research exposures",
+        "preparation": "Water-extracted fermented soybean Touchi extract in powdered Houji-tea",
+        "purpose": "General Dose assessment; retain each source-specific endpoint as descriptive evidence",
+        "population": "Adults with borderline or mild type 2 diabetes in the cited trial",
+        "exposure_basis": "minimum_directed_daily_use",
+        "units": "mg",
+        "curve": "completed_no_benchmark_neutral",
+        "source_ids": [
+          "PMID:11481402"
+        ],
+        "rationale": "The 300 mg water-extract Houji-tea preparation before each of three meals for three months is a discrete regimen; it does not establish a generic 900 mg daily minimum or interpolation curve. Use the existing shared no-benchmark neutral; this conclusion is complete, not a future calibration hold.",
+        "owner": "scripts/dose_assessment.py::positive_clinical_benchmark",
+        "review_date": "2026-10-18",
+        "approval_status": "approved_existing_neutral_unsupported_threshold_removal_20261018"
+      }
     },
     {
       "canonical_id": "withaferin_a",

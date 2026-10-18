@@ -403,7 +403,15 @@ def _score_declared_purpose_window(
             specialized = score_immune_purpose_dose(product, purpose)
             specialized_owner = "immune_support"
         if specialized is not None:
-            vote(key, specialized_owner, float(specialized["score"]), band=specialized.get("band"))
+            completed_botanical_neutral = (
+                specialized_owner == "botanical_profile"
+                and specialized.get("band") == "disclosed_no_reference"
+            )
+            vote(key, "no_benchmark_neutral" if completed_botanical_neutral else specialized_owner,
+                 float(specialized["score"]), band=specialized.get("band"))
+            if completed_botanical_neutral:
+                fallback_values.append(float(specialized["score"]))
+                unbenchmarked.append(key)
             specialized_assessments.append({
                 "assessment_owner": specialized_owner,
                 **specialized,
@@ -685,7 +693,8 @@ def score_dose(product: Dict[str, Any]) -> Dict[str, Any]:
                 "phase": PHASE_MARKER,
                 "method": "botanical_clinical_dose_v1",
                 "dose_participation_basis": "single_profile_assessment",
-                "dose_contributions": [{"ingredient": "botanical", "assessment": "botanical_profile",
+                "dose_contributions": [{"ingredient": "botanical", "assessment": (
+                    "no_benchmark_neutral" if bot.get("band") == "disclosed_no_reference" else "botanical_profile"),
                                         "band": bot.get("band"), "credit_raw": round(float(bot["score"]), 4)}],
                 "botanical_dose_band": bot["band"],
                 "botanical_dose": bot.get("metadata", {}),
