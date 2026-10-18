@@ -176,15 +176,18 @@ release_preflight_corpus_check() {
     return 0
   fi
 
-  # BASELINE_DIR in test_e1_2_2_preflight_invariant.py is <repo>/reports, NOT
-  # <repo>/scripts/reports — getting this wrong hard-fails the canonical
-  # environment, which is worse than the silent skip it replaces.
+  # Read the same dated owner as test_e1_2_2_preflight_invariant.py. Obsolete
+  # root-level blobs cannot establish that the active baseline is available.
   local products_dir="$REPO_ROOT/scripts/products"
-  local baseline_dir="$REPO_ROOT/reports/baseline_pre_e1_2_2"
+  local baseline_dir
+  baseline_dir="$(PYTHONPATH="$REPO_ROOT/scripts${PYTHONPATH:+:$PYTHONPATH}" \
+    "${PG_PYTHON:-python3}" -c \
+    'from pathlib import Path; import sys; from release_artifact_paths import canary_baseline_dir; print(canary_baseline_dir(Path(sys.argv[1])))' \
+    "$REPO_ROOT")" || return 2
   local missing=()
 
   [[ -d "$products_dir" ]] || missing+=("scripts/products (enriched/scored product corpus)")
-  [[ -d "$baseline_dir" ]] || missing+=("scripts/reports/baseline_pre_e1_2_2 (canary baselines)")
+  [[ -d "$baseline_dir" ]] || missing+=("$baseline_dir (active canary baselines)")
 
   if ((${#missing[@]} == 0)); then
     # The directories exist; require the canary baselines the invariant tests

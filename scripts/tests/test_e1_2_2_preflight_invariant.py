@@ -16,17 +16,15 @@ that points to the exact dsld_id + field.
 
 Runs against the nine reviewed canary baseline blobs + their fresh rebuilds.
 
-The active baseline is the October 17 rebuild of the same nine frozen raw
-labels on main 5fb2be1ca; its manifest names each raw source and the commit
-behind every reviewed difference. Historical October 12, October 11, September
-and April blobs remain untouched. Pinned changes since October 12: 306237 loses
-the A3 BioPerine delivery bonus under the approved October 14 rule that one
-quality counts once (bf12ae68d; BioPerine is an absorption enhancer, not a
-delivery system); sugar details print the label amount ("2 g"); 1036 keeps
-every declared form in its display label, names maximum daily use in its UL
-tradeoff and carries the approved niacin/statin source correction. Safety
-status, warning fingerprints and ingredient counts are unchanged. Future output
-changes require another source-qualified review.
+The active baseline is the approved October18 Dose V4.1 capture. Original nine
+raw hashes are unchanged. Its manifest retains the source-qualified October17
+refresh (retired BioPerine delivery credit, printed sugar-unit formatting and
+reviewed display/warning text) and the approved ordinary-adult omega250mg
+reference:1002's600mgminimum now earns20Dose points instead of legacy11.2.
+All other pinned fields and all strict assertions remain unchanged. Historical
+baselines are retained. The shared artifact-path owner supplies the same dated
+baseline to these assertions and the release readiness check.
+
 """
 
 from __future__ import annotations
@@ -43,7 +41,9 @@ if str(ROOT) not in sys.path:
 
 # Keep historical snapshots unchanged; this dated baseline records the reviewed
 # native canary contract on main after the October 13-17 batches.
-BASELINE_DIR = ROOT / "reports" / "baseline_pre_e1_2_2" / "canary_refresh_20261017"
+from scripts.release_artifact_paths import canary_baseline_dir
+
+BASELINE_DIR = canary_baseline_dir(ROOT)
 REBUILD_DIR = ROOT / "reports" / "canary_rebuild"
 
 # Fields E1.2.2 is explicitly permitted to ADD (not mutate). Any other
