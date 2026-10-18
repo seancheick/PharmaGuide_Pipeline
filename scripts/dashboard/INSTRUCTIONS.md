@@ -155,7 +155,10 @@ FLUTTER_REPO="/path/to/app" streamlit run scripts/dashboard/app.py
 ```
 
 Without it the view says the Flutter asset sync is not configured; a path whose
-`assets/reference_data` directory is missing is reported as unavailable.
+`assets/reference_data` directory is missing is reported as unavailable. Missing,
+unreadable or unversioned expected banned/recalled, medication depletion and synergy
+assets also produce an unavailable check. The comparison reports schema versions
+only, not content parity or release readiness.
 
 ## Expected Startup Behavior
 

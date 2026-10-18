@@ -180,11 +180,30 @@ def _flutter_assets_dir(flutter_repo: Path | None) -> tuple[Path | None, str]:
     return assets, ""
 
 
-def _flutter_sync_row(name: str, pipeline_schema, flutter_schema):
-    if flutter_schema is None:
-        return {"file": name, "pipeline": pipeline_schema, "flutter": "not an asset", "status": "—"}
-    status = "✅ synced" if pipeline_schema == flutter_schema else "⚠️ stale"
-    return {"file": name, "pipeline": pipeline_schema, "flutter": flutter_schema, "status": status}
+def _flutter_sync_row(name: str, pipeline_schema, assets: Path, *, expected: bool):
+    row = {"file": name, "pipeline": pipeline_schema, "flutter": "unavailable", "status": "⚠️ unavailable"}
+    try:
+        payload = json.loads((assets / name).read_text(encoding="utf-8"))
+    except FileNotFoundError:
+        if not expected:
+            row.update(flutter="not bundled", status="—")
+        else:
+            row["flutter"] = "missing expected asset"
+        return row
+    except (OSError, ValueError) as exc:
+        row["flutter"] = f"unreadable asset ({type(exc).__name__})"
+        return row
+    metadata = payload.get("_metadata") if isinstance(payload, dict) else None
+    schema = metadata.get("schema_version") if isinstance(metadata, dict) else None
+    if not isinstance(schema, str) or not schema.strip():
+        row["flutter"] = "missing or invalid schema_version"
+        return row
+    row["flutter"] = schema
+    if not isinstance(pipeline_schema, str) or not pipeline_schema.strip():
+        row["pipeline"] = "missing or invalid schema_version"
+        return row
+    row["status"] = "✅ schema matches" if pipeline_schema == schema else "⚠️ stale"
+    return row
 
 
 def render_safety_copy(data):
@@ -315,41 +334,27 @@ def render_safety_copy(data):
             )
             st.dataframe(df, width="stretch", hide_index=True)
 
-    # Flutter asset sync
-    st.write("### Flutter asset sync status")
+    # Schema comparison only: this is not the release manifest's content-parity gate.
+    st.write("### Flutter asset schema status")
     st.caption(
-        "Files shipped as Flutter reference_data assets must stay "
-        "schema-synced with the pipeline source. Flutter falls back "
-        "to asset data when offline."
+        "Compare schema versions for the clinical-copy sources used as Flutter assets. "
+        "Matching versions do not prove matching content."
     )
     flutter_assets, flutter_note = _flutter_assets_dir(data.flutter_repo)
-
-    def _flutter_schema(fname):
-        p = flutter_assets / fname
-        if not p.exists():
-            return None
-        d = _safe_read(p) or {}
-        return (d.get("_metadata") or {}).get("schema_version")
-
+    # Required copies follow Flutter lib/data/repositories/reference_data_repository.dart:
+    # loadBannedRecalledIngredients, loadMedicationDepletions, loadSynergyClusters.
+    # The other three sources reach the app through exported assessments, not raw assets.
     sync_rows = [] if flutter_assets is None else [
-        _flutter_sync_row("banned_recalled_ingredients.json",
-                          (br.get("_metadata") or {}).get("schema_version"),
-                          _flutter_schema("banned_recalled_ingredients.json")),
-        _flutter_sync_row("medication_depletions.json",
-                          (dep.get("_metadata") or {}).get("schema_version"),
-                          _flutter_schema("medication_depletions.json")),
-        _flutter_sync_row("synergy_cluster.json",
-                          (syn.get("_metadata") or {}).get("schema_version"),
-                          _flutter_schema("synergy_cluster.json")),
-        _flutter_sync_row("ingredient_interaction_rules.json",
-                          (ir.get("_metadata") or {}).get("schema_version"),
-                          _flutter_schema("ingredient_interaction_rules.json")),
-        _flutter_sync_row("harmful_additives.json",
-                          (ha.get("_metadata") or {}).get("schema_version"),
-                          _flutter_schema("harmful_additives.json")),
-        _flutter_sync_row("manufacturer_violations.json",
-                          (vio.get("_metadata") or {}).get("schema_version"),
-                          _flutter_schema("manufacturer_violations.json")),
+        _flutter_sync_row(name, (source.get("_metadata") or {}).get("schema_version"),
+                          flutter_assets, expected=expected)
+        for name, source, expected in (
+            ("banned_recalled_ingredients.json", br, True),
+            ("medication_depletions.json", dep, True),
+            ("synergy_cluster.json", syn, True),
+            ("ingredient_interaction_rules.json", ir, False),
+            ("harmful_additives.json", ha, False),
+            ("manufacturer_violations.json", vio, False),
+        )
     ]
     if flutter_assets is None and data.flutter_repo is None:
         st.info(flutter_note)
@@ -465,6 +470,10 @@ def render_safety_copy(data):
     if vio_s["authored"] < vio_s["total"]:
         alerts.append(f"manufacturer_violations: {vio_s['total'] - vio_s['authored']} entries missing brand_trust_summary")
 
+    for row in sync_rows:
+        if row["status"] == "⚠️ unavailable":
+            alerts.append(f"Flutter schema check unavailable: {row['file']} (pipeline={row['pipeline']}; flutter={row['flutter']})")
+
     stale_sync = [r for r in sync_rows if r["status"] == "⚠️ stale"]
     for r in stale_sync:
         alerts.append(f"Flutter sync stale: {r['file']} (pipeline={r['pipeline']} vs flutter={r['flutter']})")
@@ -475,7 +484,7 @@ def render_safety_copy(data):
     elif flutter_assets is None:
         st.success("All six files fully authored. Flutter asset sync not checked (see above).")
     else:
-        st.success("All six files fully authored. Flutter assets in sync.")
+        st.success("All six files fully authored. Checked Flutter asset schema versions match; content parity not checked.")
 
     # Validator command hint
     st.write("### Validator commands")

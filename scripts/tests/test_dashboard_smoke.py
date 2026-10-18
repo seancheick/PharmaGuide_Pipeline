@@ -9,6 +9,8 @@ NULL pillar columns), so they must keep rendering all views, not skip them.
 import json
 from pathlib import Path
 
+import pytest
+
 from scripts.release_artifact_paths import final_build_dir
 
 
@@ -602,11 +604,77 @@ def test_safety_copy_with_flutter_repo_compares_asset_schema_versions(
 
     (table,) = _flutter_sync_tables(st)
     rows = table.set_index("file")
-    assert rows.loc["medication_depletions.json", "status"] == "✅ synced"
+    assert rows.loc["medication_depletions.json", "status"] == "✅ schema matches"
     assert rows.loc["banned_recalled_ingredients.json", "status"] == "⚠️ stale"
-    assert rows.loc["synergy_cluster.json", "flutter"] == "not an asset"
+    assert rows.loc["synergy_cluster.json", "status"] == "⚠️ unavailable"
     assert any(
         "Flutter sync stale: banned_recalled_ingredients.json" in m
         for m in _messages(st.warning)
     )
     assert not any("Flutter assets" in m for m in _messages(st.info))
+
+
+@pytest.mark.parametrize("defect", ["empty", "missing", "malformed", "unreadable", "wrong_shape", "missing_schema", "invalid_metadata", "empty_schema"])
+def test_safety_copy_expected_flutter_assets_cannot_report_success(
+    dashboard_app, tmp_path, monkeypatch, defect
+):
+    scan_dir, build_root = _empty_roots(tmp_path)
+    flutter = tmp_path / "app"
+    assets = flutter / "assets" / "reference_data"
+    assets.mkdir(parents=True)
+    expected = ("medication_depletions.json", "banned_recalled_ingredients.json", "synergy_cluster.json")
+    if defect != "empty":
+        for name in expected:
+            (assets / name).write_text(json.dumps({"_metadata": {"schema_version": _pipeline_schema(name)}}))
+        target = assets / "synergy_cluster.json"
+        if defect == "missing":
+            target.unlink()
+        elif defect == "malformed":
+            target.write_text("{broken")
+        elif defect == "wrong_shape":
+            target.write_text("[]")
+        elif defect == "missing_schema":
+            target.write_text('{"_metadata": {}}')
+        elif defect == "invalid_metadata":
+            target.write_text('{"_metadata": []}')
+        elif defect == "empty_schema":
+            target.write_text('{"_metadata": {"schema_version": " "}}')
+        elif defect == "unreadable":
+            original = Path.read_text
+            def read_text(path, *args, **kwargs):
+                if path == target:
+                    raise PermissionError("denied")
+                return original(path, *args, **kwargs)
+            monkeypatch.setattr(Path, "read_text", read_text)
+    data = dashboard_app.load_dashboard_data(dashboard_app.DashboardConfig(
+        scan_dir=scan_dir, build_root=build_root, flutter_repo=flutter
+    ))
+    dashboard_app.views.render_safety_copy(data)
+    (table,) = _flutter_sync_tables(dashboard_app.st)
+    rows = table.set_index("file")
+    assert rows.loc["synergy_cluster.json", "status"] == "⚠️ unavailable"
+    if defect == "empty":
+        assert all(rows.loc[name, "status"] == "⚠️ unavailable" for name in expected)
+    assert any("Flutter schema check unavailable: synergy_cluster.json" in m for m in _messages(dashboard_app.st.warning))
+    assert not any("schema versions match" in m or "Flutter assets in sync" in m for m in _messages(dashboard_app.st.success))
+
+
+def test_safety_copy_checks_expected_assets_and_excludes_unbundled_sources(dashboard_app, tmp_path):
+    scan_dir, build_root = _empty_roots(tmp_path)
+    flutter = tmp_path / "app"
+    assets = flutter / "assets" / "reference_data"
+    assets.mkdir(parents=True)
+    for name in ("medication_depletions.json", "banned_recalled_ingredients.json", "synergy_cluster.json"):
+        (assets / name).write_text(json.dumps({"_metadata": {"schema_version": _pipeline_schema(name)}}))
+    data = dashboard_app.load_dashboard_data(dashboard_app.DashboardConfig(
+        scan_dir=scan_dir, build_root=build_root, flutter_repo=flutter
+    ))
+    dashboard_app.views.render_safety_copy(data)
+    (table,) = _flutter_sync_tables(dashboard_app.st)
+    rows = table.set_index("file")
+    for name in ("medication_depletions.json", "banned_recalled_ingredients.json", "synergy_cluster.json"):
+        assert rows.loc[name, "status"] == "✅ schema matches"
+    for name in ("ingredient_interaction_rules.json", "harmful_additives.json", "manufacturer_violations.json"):
+        assert rows.loc[name, "flutter"] == "not bundled"
+    assert not any("Flutter assets in sync" in m for m in _messages(dashboard_app.st.success))
+    assert not any("Flutter schema check unavailable" in m for m in _messages(dashboard_app.st.warning))

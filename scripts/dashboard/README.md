@@ -30,7 +30,11 @@ The `Clinical Copy` view compares pipeline data files with the app's
 `assets/reference_data` copies. Point it at the Flutter checkout the same way the
 release scripts are pointed: `FLUTTER_REPO=/path/to/app` in the environment, or
 `-- --flutter-repo /path/to/app`. Without either, the view reports the Flutter asset
-sync as not configured instead of comparing.
+schema check as not configured instead of comparing. The comparison requires the
+banned/recalled, medication depletion and synergy assets used by the app's
+`ReferenceDataRepository`; missing or unreadable copies are reported as unavailable.
+Other displayed sources are not bundled unless an optional copy exists. A matching
+schema version does not establish content parity or release readiness.
 
 Open a specific view directly after launch with `?view=`:
 
