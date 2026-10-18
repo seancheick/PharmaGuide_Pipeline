@@ -50,6 +50,15 @@ def test_prenatal_population_keeps_its_own_reference():
     assert _dose(_mineral('magnesium', 'Magnesium', 84, 400, 350, population='pregnancy_lactation')) == 16.8
 
 
+def test_a_label_that_includes_pregnancy_keeps_the_prenatal_reference():
+    # A label stating adults and pregnancy screens both populations' limits;
+    # the ordinary-adult contribution target does not apply to it.
+    p = _mineral('magnesium', 'Magnesium', 84, 400, 350)
+    p['rda_ul_data']['adequacy_results'][0]['ul_population'] = {
+        'id': 'general_adult+pregnancy_lactation', 'members': ['general_adult', 'pregnancy_lactation']}
+    assert _dose(p) == 16.8
+
+
 def test_potassium_is_a_completed_neutral():
     artifact = build_scored_artifact(_mineral('potassium', 'Potassium', 99, 3400, 99000))
     assert artifact['quality_pillars_v4']['dose']['score'] == 11.4

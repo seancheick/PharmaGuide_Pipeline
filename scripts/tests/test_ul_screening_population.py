@@ -57,17 +57,46 @@ def test_warning_names_the_population_whose_limit_applies(calculator):
     assert calcium.ul_population["label"] == "adults 51+"
 
 
+# The screen covers every population the label states (plan section 2.5:
+# the lowest UL across the whole stated population), so a label naming two
+# populations screens against the rows of both.
 @pytest.mark.parametrize("groups,expected", [
-    ([], "general_adult"),
-    (["Adult (18 - 50 Years)"], "general_adult"),
-    (["Adult (18 - 50 Years)", "Gluten Free"], "general_adult"),
-    (["Seniors/Mature (>50 Years) - Women ONLY"], "adults_51_plus"),
-    (["Adult Female (18 - 50 Years)", "Lactating", "Pregnant Women"], "pregnancy_lactation"),
-    (["Children 4 or More Years of Age"], "pediatric"),
-    (["Adult (18 - 50 Years)", "Children 4 or More Years of Age"], "general_adult"),
+    ([], ("general_adult",)),
+    (["Adult (18 - 50 Years)"], ("general_adult",)),
+    (["Adult (18 - 50 Years)", "Gluten Free"], ("general_adult",)),
+    (["Seniors/Mature (>50 Years) - Women ONLY"], ("adults_51_plus",)),
+    (["Pregnant Women", "Lactating"], ("pregnancy_lactation",)),
+    (["Adult Female (18 - 50 Years)", "Lactating", "Pregnant Women"], ("general_adult", "pregnancy_lactation")),
+    (["Children 4 or More Years of Age"], ("pediatric",)),
+    (["Adult (18 - 50 Years)", "Children 4 or More Years of Age"], ("general_adult", "pediatric")),
+    # A negated life stage is not that life stage (959 stored labels).
+    (["Women (not pregnant or lactating)"], ("general_adult",)),
+    (["Seniors/Mature (>50 Years) - Women ONLY", "Women (not pregnant or lactating)"],
+     ("adults_51_plus", "general_adult")),
+    (["Menopause"], ("general_adult",)),
 ])
 def test_label_population_from_dsld_target_groups(enricher, groups, expected):
-    assert enricher._ul_screening_population({"targetGroups": groups}) == expected
+    assert enricher._ul_screening_population({"targetGroups": groups}) == tuple(sorted(expected))
+
+
+def test_not_pregnant_women_calcium_above_the_general_adult_limit_is_flagged(enricher):
+    product = {**_calcium(1100), "targetGroups": ["Women (not pregnant or lactating)",
+                                                  "Seniors/Mature (>50 Years) - Women ONLY"]}
+    result = enricher._collect_rda_ul_data(product, min_servings_per_day=1, max_servings_per_day=2)
+    flags = [f for f in result["safety_flags"] if f.get("nutrient") == "Calcium"]
+    assert flags and flags[0]["ul"] == 2000 and flags[0]["ul_gate_eligible"] is True
+    assert "pregnan" not in flags[0]["ul_population"]["label"]
+
+
+def test_a_union_takes_the_lowest_limit_across_every_stated_population(calculator):
+    union = calculator.compute_nutrient_adequacy("Calcium", 2200.0, "mg", sex="adult_neutral",
+                                                 ul_population=("general_adult", "pregnancy_lactation"))
+    assert union.ul == 2000 and union.over_ul
+    assert union.ul_population["members"] == ["general_adult", "pregnancy_lactation"]
+    assert union.ul_population["label"] == "adults 51+"
+    gap = calculator.compute_nutrient_adequacy("Zinc", 50.0, "mg", sex="adult_neutral",
+                                               ul_population=("general_adult", "pediatric"))
+    assert gap.ul == 40 and gap.ul_population["reference_gap"] == "pediatric_ul_rows_not_in_reference_data"
 
 
 def _calcium(quantity):

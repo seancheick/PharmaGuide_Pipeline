@@ -204,13 +204,15 @@ _RDA_REFERENCE_PROFILE = {
 # adult category ("Adult (18 - 50 Years)" and the male/female variants) on
 # most labels (12,102 of 15,426 stored inputs carry it alone), so those tags
 # do not narrow the general adult screen.
+# Checked in order per tag: a negated life stage ("Women (not pregnant or
+# lactating)", 959 stored labels) is an ordinary adult, never that stage.
 _UL_POPULATION_TAGS = (
+    ("general_adult", ("not pregnant", "not lactating")),
     ("pregnancy_lactation", ("pregnant", "lactating")),
     ("adults_51_plus", ("seniors/mature (>50",)),
     ("pediatric", ("child", "infant", "boys", "girls")),
+    ("general_adult", ("adult (18 - 50", "adult male (18", "adult female (18", "menopause")),
 )
-_GENERAL_ADULT_TAGS = ("adult (18 - 50", "adult male (18", "adult female (18", "women (not pregnant",
-                       "menopause")
 
 # FDA/NIH labeling basis: 1,000 mcg synthetic folic acid is the adult UL;
 # current Supplement Facts labels express its equivalent as 1,700 mcg DFE.
@@ -21705,24 +21707,22 @@ class SupplementEnricherV3:
     # =========================================================================
 
     @staticmethod
-    def _ul_screening_population(product: Dict) -> str:
-        """The label population whose lowest UL screens this product (D2)."""
-        tags = []
+    def _ul_screening_population(product: Dict) -> Tuple[str, ...]:
+        """Every label population whose lowest UL screens this product (D2).
+
+        Plan section 2.5: the lowest UL across the whole stated population, so
+        a label naming two populations screens against the rows of both.
+        """
+        found = set()
         for group in product.get("targetGroups") or []:
             text = group if isinstance(group, str) else (
                 (group.get("text") or group.get("name") or "") if isinstance(group, dict) else "")
-            tags.append(str(text).strip().lower())
-        found = {population for population, needles in _UL_POPULATION_TAGS
-                 if any(needle in tag for tag in tags for needle in needles)}
-        if "pregnancy_lactation" in found:
-            return "pregnancy_lactation"
-        if any(needle in tag for tag in tags for needle in _GENERAL_ADULT_TAGS):
-            return "general_adult"
-        if "adults_51_plus" in found:
-            return "adults_51_plus"
-        if "pediatric" in found:
-            return "pediatric"
-        return "general_adult"
+            tag = str(text).strip().lower()
+            population = next((population for population, needles in _UL_POPULATION_TAGS
+                               if any(needle in tag for needle in needles)), None)
+            if population:
+                found.add(population)
+        return tuple(sorted(found or {"general_adult"}))
 
     def _collect_rda_ul_data(
         self,

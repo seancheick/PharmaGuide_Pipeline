@@ -29,7 +29,7 @@ import logging
 import math
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Dict, List, Optional, Tuple, Any
+from typing import Dict, List, Optional, Sequence, Tuple, Any, Union
 
 from normalization import canonicalize_mass_unit
 
@@ -369,7 +369,7 @@ class RDAULCalculator:
         age_group: str = "19-30",
         sex: str = "both",
         form_name: Optional[str] = None,
-        ul_population: Optional[str] = None,
+        ul_population: Optional[Union[str, Sequence[str]]] = None,
     ) -> NutrientAdequacyResult:
         """
         Compute nutrient adequacy with full evidence.
@@ -380,8 +380,8 @@ class RDAULCalculator:
             unit: Unit of amount
             age_group: Age range (e.g., "19-30", "51-70")
             sex: "male", "female", or "both"
-            ul_population: a ``UL_SCREENING_POPULATIONS`` key; when given, the UL
-                is the lowest established UL across that population (D2)
+            ul_population: ``UL_SCREENING_POPULATIONS`` key(s); when given, the UL
+                is the lowest established UL across every listed population (D2)
 
         Returns:
             NutrientAdequacyResult with all evidence
@@ -690,24 +690,39 @@ class RDAULCalculator:
                 fallback_ul = None
         return None, fallback_ul
 
-    def _screening_ul(self, nutrient_data: Dict, population_id: str) -> Tuple[Optional[float], Dict]:
-        """Lowest established UL across one screening population, and its scope."""
-        spec = UL_SCREENING_POPULATIONS[population_id]
-        rows = [row for row in nutrient_data.get("data", [])
-                if row.get("group") in spec["groups"] and row.get("age_range") in spec["ages"]
-                and isinstance(row.get("ul"), (int, float)) and not isinstance(row.get("ul"), bool)
-                and row.get("ul") > 0]
-        scope = {"id": population_id, "label": spec["label"]}
-        if spec.get("reference_gap"):
-            scope["reference_gap"] = spec["reference_gap"]
-        if not rows:
+    def _screening_ul(self, nutrient_data: Dict, population: Union[str, Sequence[str]]) -> Tuple[Optional[float], Dict]:
+        """Lowest established UL across every listed screening population, and its scope."""
+        members = sorted({population} if isinstance(population, str) else set(population))
+        rows_by_member = {member: [
+            row for row in nutrient_data.get("data", [])
+            if row.get("group") in UL_SCREENING_POPULATIONS[member]["groups"]
+            and row.get("age_range") in UL_SCREENING_POPULATIONS[member]["ages"]
+            and isinstance(row.get("ul"), (int, float)) and not isinstance(row.get("ul"), bool)
+            and row.get("ul") > 0] for member in members}
+        scope = {"id": "+".join(members), "members": members,
+                 "label": " and ".join(dict.fromkeys(UL_SCREENING_POPULATIONS[m]["label"] for m in members))}
+        gaps = [UL_SCREENING_POPULATIONS[m]["reference_gap"] for m in members
+                if UL_SCREENING_POPULATIONS[m].get("reference_gap")]
+        if gaps:
+            scope["reference_gap"] = gaps[0]
+        all_rows = [row for rows in rows_by_member.values() for row in rows]
+        if not all_rows:
             return None, scope
-        ul = min(row["ul"] for row in rows)
-        ages = tuple(age for age in spec["ages"] if any(
-            row["age_range"] == age and row["ul"] == ul for row in rows))
-        if population_id == "general_adult" and len({row["ul"] for row in rows}) > 1:
-            scope["label"] = _AGE_LABELS.get(ages, scope["label"])
-        scope["age_ranges"] = list(ages)
+        ul = min(row["ul"] for row in all_rows)
+        labels, ages = [], []
+        for member, rows in rows_by_member.items():
+            spec = UL_SCREENING_POPULATIONS[member]
+            member_ages = tuple(age for age in spec["ages"] if any(
+                row["age_range"] == age and row["ul"] == ul for row in rows))
+            if not member_ages:
+                continue
+            label = spec["label"]
+            if member == "general_adult" and len({row["ul"] for row in rows}) > 1:
+                label = _AGE_LABELS.get(member_ages, label)
+            labels.append(label)
+            ages.extend(age for age in member_ages if age not in ages)
+        scope["label"] = " and ".join(dict.fromkeys(labels))
+        scope["age_ranges"] = ages
         return ul, scope
 
     def _get_ai_value(

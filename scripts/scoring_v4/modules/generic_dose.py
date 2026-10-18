@@ -212,8 +212,9 @@ def _contribution_target(canonical: object, row: Optional[Dict[str, Any]]) -> Op
     if target is None or not isinstance(row, dict):
         return None
     rda = _as_float(row.get("rda_ai"), None)
-    population = (_safe_dict(row.get("ul_population")).get("id"))
-    if rda is None or rda <= 0 or population in _OWN_REFERENCE_POPULATIONS:
+    population = _safe_dict(row.get("ul_population"))
+    members = population.get("members") or [population.get("id")]
+    if rda is None or rda <= 0 or _OWN_REFERENCE_POPULATIONS.intersection(members):
         return None
     return target
 
