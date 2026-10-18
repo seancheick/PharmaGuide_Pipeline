@@ -138,6 +138,8 @@ class DoseSafetyFlag:
     reason: Optional[str] = None
     # The same exposure at the minimum directed daily use: explanation only.
     pct_ul_at_minimum: Optional[float] = None
+    # The reference nutrient whose limit applies (the label text is `nutrient`).
+    reference_nutrient: Optional[str] = None
     # The upper limit compared against and whose population it is (D2).
     ul: Optional[float] = None
     ul_unit: Optional[str] = None
@@ -199,10 +201,11 @@ class DoseSafetyResult:
         return {
             "cap_public": cap,
             "kind": "established_upper_limit",
+            "label_nutrient": driver.nutrient,
             "ul": driver.ul,
             "ul_unit": driver.ul_unit,
             "ul_population": driver.ul_population or "general adult",
-            "nutrient": driver.nutrient,
+            "nutrient": driver.reference_nutrient or driver.nutrient,
             "canonical_id": driver.canonical_id,
             "pct_ul": driver.pct_ul,
             "pct_ul_at_minimum": minimum,
@@ -531,6 +534,7 @@ def _classify(flag: Dict[str, Any], minimum_share: float = 1.0) -> DoseSafetyFla
         canonical_id=canonical_id,
         pct_ul=pct_ul,
         pct_ul_at_minimum=round(pct_ul * minimum_share, 4),
+        reference_nutrient=str(flag.get("reference_nutrient") or "") or None,
         ul=_as_float(flag.get("ul"), None),
         # The flag's own reference unit, projected from the rda_ul_data record.
         ul_unit={name: flag.get(key) for key, name in _FLAG_REFERENCE_FIELDS.items()}.get("ul_unit") or None,

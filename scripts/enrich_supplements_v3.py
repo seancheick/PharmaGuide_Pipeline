@@ -23227,6 +23227,9 @@ class SupplementEnricherV3:
                             _row_canonical,
                             {
                                 "nutrient": ing_name,
+                                # The reference nutrient whose limit applies;
+                                # `nutrient` keeps the label text.
+                                "reference_nutrient": adequacy_dict.get("nutrient"),
                                 "amount": ul_amount,
                                 "unit": ul_unit,
                                 "ul": safety_ul,

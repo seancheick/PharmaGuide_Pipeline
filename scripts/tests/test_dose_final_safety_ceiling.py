@@ -81,3 +81,21 @@ def test_receipt_itemizes_the_ceiling_and_reconciles():
     cap = [e for e in entries if e['id'] == 'dose_safety_ceiling']
     assert cap and cap[0]['kind'] == 'cap' and cap[0]['points'] == -10.0
     assert round(sum(e['points'] for e in entries), 4) == 10.0
+
+
+def test_the_ceiling_names_the_reference_nutrient_not_the_label_brand():
+    # A row flag carries the label text (e.g. "VEGADELIGHT"); the explanation
+    # names the nutrient whose limit applies.
+    flags = [{**_flag('VEGADELIGHT', None, 125.0), 'reference_nutrient': 'Vitamin D'}]
+    reason = dose(product(30.0, flags=flags))['reason']
+    assert 'Vitamin D' in reason and 'VEGADELIGHT' not in reason
+
+
+def test_enriched_row_flags_carry_the_reference_nutrient():
+    from enrich_supplements_v3 import SupplementEnricherV3
+    product_in = {"activeIngredients": [{"name": "Zinc Gluconate Complex", "standardName": "Zinc",
+                                         "canonical_id": "zinc", "canonical_source_db": "ingredient_quality_map",
+                                         "quantity": 200, "unit": "mg", "dailyValue": 1818.0}],
+                  "inactiveIngredients": []}
+    result = SupplementEnricherV3()._collect_rda_ul_data(product_in, min_servings_per_day=1, max_servings_per_day=1)
+    assert result["safety_flags"][0]["reference_nutrient"] == "Zinc"
