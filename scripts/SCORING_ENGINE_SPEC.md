@@ -237,21 +237,24 @@ Since config 1.26.0 (V4.1 Step 4) every fact earns or loses points once:
   - Ordinary-adult references: magnesium 84 mg and calcium 260 mg elemental
     (PharmaGuide contribution targets, 20% of the FDA Daily Value), potassium a
     completed neutral, omega EPA+DHA 250 mg/day, an explicit triglyceride
-    purpose 2,000 mg/day, prenatal products 200 mg/day DHA only. All are
-    `20 x min(amount / reference, 1)`; above a reference earns no extra credit.
-  - The highest studied dose is no upper limit: sports protein, creatine,
-    beta-alanine and HMB, caffeine's per-use band and generic clinical or
-    formula benchmarks plateau above it. Evidence certainty never caps Dose
-    (ATP, betaine, taurine).
+    purpose 2,000 mg/day, prenatal products 200 mg/day DHA only. Applicable
+    numerical contribution targets use `20 x min(amount / reference, 1)`;
+    above a reference earns no extra credit. Potassium has no general
+    supplement benchmark and receives the completed neutral instead.
+  - Approved applicable contribution curves plateau above their reference;
+    the highest studied dose is not an upper limit. A discrete studied regimen
+    remains descriptive unless stronger amount semantics are established.
+    Evidence certainty never caps Dose (ATP, betaine, taurine).
   - Generic declared purposes and sports co-primaries count equally; probiotic
     Dose averages the label's strains unless an exact studied formula applies.
   - An amount without an applicable benchmark, and an amount the label hides,
     earn the shared 11.4/20 neutral; Transparency keeps the disclosure
     consequence. A pipeline-lost amount keeps its strict readiness hold.
-  - Every config-owned Dose anchor carries reference semantics validated by
-    `scoring_v4/schemas/dose_reference_semantics.schema.json`; anchors still
-    written in modules or data rows are listed in
-    `scripts/tests/test_dose_reference_semantics.py::PENDING_ANCHOR_FAMILIES`.
+  - Active config and native-reference anchors carry source/curve semantics
+    checked exhaustively by `scripts/tests/test_dose_reference_semantics.py`
+    against `scoring_v4/schemas/dose_reference_semantics.schema.json`. There is
+    no pending-anchor allow-list. Sean's approved policy and factual dispositions
+    are recorded in `docs/plans/DOSE_V41_REFERENCE_DECISIONS.md`.
   - The Dose explanation carries a `dose_receipt`: daily use, contributions
     and aggregation rule, adequacy before safety, the upper reference with its
     population and exposure, the cap and the reconciling final value.
@@ -434,7 +437,9 @@ Artifact schema 4.4.0 adds the canonical eligible-delivery projection (October 1
   calibration for Evidence norms, and the vitamin-D bone-goal ownership change
   (bone goal is synergy-owned, not Evidence-owned).
 - **4.8.0 → 4.8.1** (2026-10-18): combine the approved Dose V4.1 reference policy with PR164's shared omega population, marketing-Evidence and molecular-form safeguards. Minimum directed daily use and native omega_rubric reference ownership remain canonical; no duplicate250/200mg table or serving-only rule is restored. Config1.29.1 records this integration.
-  - **4.7.1 → 4.7.2** (2026-10-18, `claude/dose-v41`): remove leftover immune-purpose zinc/vitamin-D UL zeroing (one shared final ceiling); preserve equivalent mg/g/mcg amounts against microgram immune references. Config1.28.1 corrects FDA high-source terminology without numerical calibration changes. Source review still requires explicit disposition of unsupported legacy curves.
+- **4.7.3 → 4.8.0** (2026-10-18): implement Sean's 43 revised Dose reference decisions, including the sixth prenatal critical nutrient choline within the fixed 5-point budget. Config1.29.0 records the approved calibrations; exhaustive native-reference semantics replace the pending-family list. Earlier activation-blocker notes below describe their historical versions, not an outstanding policy decision.
+- **4.7.2 → 4.7.3** (2026-10-18, `claude/dose-v41`): stop projecting discrete literature regimens into clinical minima; complete reviewed no-benchmark literature assessments with existing neutral credit and honest receipts; require source-qualified actual protein grams; restore the established soluble-nickel-salt UL with elemental/form guards. Config1.28.2 clarifies RDA/AI versus FDA Daily Value policy without changing numerical config parameters. At this historical version, proposed calibrations remained unapplied pending the decision table; 4.8.0 implements the subsequently approved table.
+- **4.7.1 → 4.7.2** (2026-10-18, `claude/dose-v41`): remove leftover immune-purpose zinc/vitamin-D UL zeroing (one shared final ceiling); preserve equivalent mg/g/mcg amounts against microgram immune references. Config1.28.1 corrects FDA high-source terminology without numerical calibration changes. Source review still requires explicit disposition of unsupported legacy curves.
 - **4.7.0 → 4.7.1** (2026-10-18, branch `claude/dose-v41`): independent audit corrections to caffeine source/interval handling, labeled UL populations, sports co-primary normalization and exposure, unresolved CFU source holds, botanical missing amounts, and source-faithful Dose receipts. No numerical config calibration changed. Reference-semantics curation remains an activation blocker.
 - **4.6.0 → 4.7.0** (2026-10-17, branch `claude/dose-v41`): Dose V4.1. Directed daily use replaces the declared-serving basis; one product-level safety ceiling replaces the UL bands and B7; D2 UL screening selection; mineral, potassium and omega references; sports, caffeine and probiotic aggregation; hidden amounts take the neutral; reference semantics gate; Dose receipt. Config 1.28.0, omega rubric 2.3.0.
 - **4.5.0 → 4.6.0** (2026-10-17): Sean approved product Dose quality per declared serving across every category. Maximum labeled daily safety remains separate. Config 1.27.0 identifies this policy; other five quality pillars and clinical limits are unchanged.
@@ -499,5 +504,3 @@ scripts/test.sh fast
 scripts/test.sh release
 scripts/test.sh full
 ```
-
-- **4.7.2 → 4.7.3** (2026-10-18, `claude/dose-v41`): stop projecting discrete literature regimens into clinical minima; complete reviewed no-benchmark literature assessments with existing neutral credit and honest receipts; require source-qualified actual protein grams; restore the established soluble-nickel-salt UL with elemental/form guards. Config1.28.2 clarifies RDA/AI versus FDA Daily Value policy without changing numerical config parameters. Proposed calibrations remain unapplied pending the reference decision table.

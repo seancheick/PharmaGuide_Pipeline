@@ -1,6 +1,6 @@
 # Dose V4.1 review packet (plan §5.1)
 
-October 18, 2026. The clinical-reference decision blocker is closed: Sean directly approved the revised 43 decisions and six-member prenatal critical group. The three baseline failures are resolved and latest main `2a9ee189e` is integrated. Final runtime is `5b34112b9`; exact-source CI passes all four groups and final local qualification remains pending. **Do not run the pipeline until the final handoff confirms readiness.**
+October 18, 2026. The clinical-reference decision blocker is closed: Sean directly approved the revised 43 decisions and six-member prenatal critical group. The three baseline failures are resolved and latest main `2a9ee189e` is integrated. Final runtime is `5b34112b9`; exact-source CI passes all four groups and final local validation passes 546 tests with only 24 declared opt-in service skips. **Source qualification is complete. Run only from main containing this runtime, after the merge handoff.**
 
 ## What is approved and implemented
 
@@ -112,7 +112,7 @@ Fail-first cases, controls, source receipts and independent review cover these c
 - Earlier `2339ec8f` named owner/consumer slice: 499 passed. Final `5b34112b` raw canaries: 33 pass. Raw 63 comparison on 2339 retains the prior source-qualified results with zero further total/other-pillar/status/route movements.
 - App analysis clean and full Flutter suite 3,964 passed on runtime bb352dde; app CI [39148045039](https://github.com/seancheick/Pharmaguide.ai/actions/runs/39148045039) passes on 51567dae. The app renders pipeline scores; it does not recalculate them.
 - Independent final boundary review is clear after the current-source facts correction. Source verifiers confirm references, separately from Sean’s policy approval; two old strain alerts are an explicitly excluded wrong PMID and a correction/limitations reference, not active Dose anchors.
-- The earlier three-failure local result is superseded: integrated `6197a1be` passes **546 tests / 24 declared opt-in service skips**, with the skip guard passing. Its whole-fast CI [39160872917](https://github.com/seancheick/PharmaGuide_Pipeline/actions/runs/39160872917) passes all four groups. Final `5b34112b` CI [39162345603](https://github.com/seancheick/PharmaGuide_Pipeline/actions/runs/39162345603) passes all four groups and skip guards; final local qualification is pending.
+- The earlier three-failure local result is superseded: integrated `6197a1be` passes **546 tests / 24 declared opt-in service skips**, with the skip guard passing. Its whole-fast CI [39160872917](https://github.com/seancheick/PharmaGuide_Pipeline/actions/runs/39160872917) passes all four groups. Final `5b34112b` CI [39162345603](https://github.com/seancheick/PharmaGuide_Pipeline/actions/runs/39162345603) and PR CI [39162561006](https://github.com/seancheick/PharmaGuide_Pipeline/actions/runs/39162561006) pass all four groups and skip guards. Documentation-only `5bd18a6b` also passes CI [39163410088](https://github.com/seancheick/PharmaGuide_Pipeline/actions/runs/39163410088); all three stage code/reference fingerprints are identical to tested runtime5b. Final local checkpoint: **546 passed / 24 declared opt-in service skips**, 164.51 seconds, skip guard passed. Its nine actual canary rebuilds come from the final5b full capture; the separate strict slice passes54 tests. This establishes source/consumer qualification, not a regenerated catalog.
 
 ## Pure magnesium: what to expect
 
@@ -126,7 +126,9 @@ The architecture integration preserves approved Dose and shared quantity/module 
 
 A separate 715-product frozen omega comparison (`6197a1be` → final `5b34112b`) found 19 score changes (4 up / 15 down, −19.0 to +7.3), all recognized child labels receiving approved neutral Dose. Eleven also lose inapplicable adult Evidence credit. There are 15 tier crossings and four assessment completions, with zero safety/route/gate/flag/readiness or other-pillar changes and zero receipt errors. The remaining 696 score outcomes are unchanged: 695 equal numeric totals and 260262 still unscored. The final 71-label replay adds provenance and three Dose explanation changes, with no numeric movement; its final source-identity guard changes no artifacts. Full captures, clocks and source hashes are retained; this does not regenerate the catalog.
 
-Pending: the applicable final local checkpoint. Exact final whole-fast CI passes all four groups and skip guards; a separately authorized corpus job is already using primary main `2a9ee189e`, so this session will not change that checkout or start a broad local job until it finishes. App PR128 is already integrated. Sean authorized merging the pipeline candidate after green qualification. Older failed/pending candidate records below are historical, not current blockers.
+All source gates are complete: exact whole-fast CI, applicable local checkpoint, strict baselines, 33 current raw canaries, bounded measurements and independent review. App PR128 is integrated; pipeline integration is [PR166](https://github.com/seancheick/PharmaGuide_Pipeline/pull/166). Documentation-only closeout does not change the validated runtime. Main must contain runtime `5b34112b9` before the command below is used.
+
+Sean explicitly authorized stopping a separate older-source corpus job on main `2a9ee189e` and messaging its owner. Nine brands finished; GNC stopped during scoring. Its pre-run receipts remain preserved; the owner acknowledged this run is incomplete, will not restart it or capture a final harness baseline from it, and will wait for the integrated source and Sean's completed run. No publication occurred. Do not reuse the partial older-source outputs as Dose V4.1 results.
 
 After the final merge and source-fingerprint check, Sean's compute-only command is:
 
@@ -136,7 +138,7 @@ source scripts/python_env.sh
 PYTHON="$PG_PYTHON" bash batch_run_all_datasets.sh --pipeline-only
 ```
 
-**Do not start a second corpus run while the existing job is active.** That older-source job does not include Dose V4.1. Default startup uses essential checks; `--pre-check` is optional full preparation. No full pipeline was launched by this session. New artifacts still need catalog/export parity, release checks, app bundle validation and separately authorized publication. Existing phone build22 has not been replaced.
+The older-source job and its children are stopped. Default startup uses essential checks; `--pre-check` is optional full preparation. No full pipeline was launched by this session. New artifacts still need catalog/export parity, release checks, app bundle validation and separately authorized publication. Existing phone build22 has not been replaced.
 
 ## Local evidence files
 
