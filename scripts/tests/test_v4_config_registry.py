@@ -46,20 +46,20 @@ def test_unknown_rubric_raises():
 
 
 def test_config_fingerprint_is_stable_hex():
-    from scoring_v4.config_registry import config_fingerprint
+    from scoring_v4.config_registry import all_config_provenance
 
     for name in ("omega", "quality_score"):
-        fp = config_fingerprint(name)
+        fp = all_config_provenance()[name]["fingerprint"]
         assert isinstance(fp, str) and len(fp) == 16
         int(fp, 16)  # valid hex
-        assert config_fingerprint(name) == fp  # stable across calls
+        assert all_config_provenance()[name]["fingerprint"] == fp  # stable across calls
 
 
 def test_config_version_reads_metadata_schema_version():
-    from scoring_v4.config_registry import config_version
+    from scoring_v4.config_registry import all_config_provenance
 
-    assert config_version("omega") == "2.2.0-verification-owned-oxidation"
-    assert config_version("quality_score") == "1.27.0-declared-serving-dose"
+    assert all_config_provenance()["omega"]["version"] == "2.2.0-verification-owned-oxidation"
+    assert all_config_provenance()["quality_score"]["version"] == "1.27.0-declared-serving-dose"
 
 
 def test_all_config_provenance_shape():

@@ -11,8 +11,8 @@ Design notes:
   old per-call ``json.loads`` semantics, minus the file I/O.
 - The parse + schema validation run once and are cached; only the cheap deepcopy
   is per-call.
-- ``config_fingerprint`` is the sha256 of the on-disk bytes — the exact config
-  hash for provenance.
+- ``all_config_provenance`` stamps versions and sha256 fingerprints from the
+  same source read for each config.
 """
 from __future__ import annotations
 
@@ -93,18 +93,6 @@ def load_rubric(name: str) -> Dict[str, Any]:
     """Return the validated rubric config as a fresh, independent dict."""
     _, data = _load_raw(name)
     return copy.deepcopy(data)
-
-
-def config_fingerprint(name: str) -> str:
-    """sha256 (first 16 hex) of the rubric file bytes — the exact config hash."""
-    raw, _ = _load_provenance_source(name)
-    return hashlib.sha256(raw).hexdigest()[:16]
-
-
-def config_version(name: str) -> str:
-    """The config's policy version, falling back to its schema version."""
-    _, data = _load_provenance_source(name)
-    return _config_version(data)
 
 
 def _config_version(data: Dict[str, Any]) -> str:

@@ -595,15 +595,15 @@ def test_version_emitted() -> None:
     """The emitted version must be the config's, not a second copy of it.
 
     This used to pin the string literally, so every config bump broke it while
-    test_v4_config_registry (which reads config_version) stayed green — two
+    test_v4_config_registry (which reads config provenance) stayed green — two
     hand-maintained copies of one fact. What matters here is that the assembled
     score actually carries the shipped config version, whatever it currently is.
     """
-    from scoring_v4.config_registry import config_version
+    from scoring_v4.config_registry import all_config_provenance
     from scoring_v4.quality_score import assemble_quality_score
 
     out = assemble_quality_score(_shadow())
-    assert out["quality_score_version"] == config_version("quality_score")
+    assert out["quality_score_version"] == all_config_provenance()["quality_score"]["version"]
 
 
 def test_uncapped_product_can_reach_a_true_100() -> None:
