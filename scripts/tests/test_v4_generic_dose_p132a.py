@@ -1699,7 +1699,7 @@ def test_reviewed_generic_reference_cannot_borrow_an_unsupported_numeric_anchor(
 def test_ineligible_contribution_context_has_no_quarter_rda_fallback(canonical):
     from scoring_v4.modules.generic_dose import _band_credit
     assert _band_credit(25.0, None, canonical) is None
-    assert _band_credit(25.0, None, canonical, {"rda_ai":400.0,"ul_population":{"members":["pediatric"]}}) is None
+    assert _band_credit(25.0, None, canonical, {"rda_ai":400.0,"ul_population":{"members":["pediatric"]}}) == 22 * (.5 + .5 * 5 / 80)
 
 
 @pytest.mark.parametrize(("pct","expected"), [(0,0),(10,.25),(20,.5),(50,.6875),(100,1),(150,1)])
@@ -1724,9 +1724,10 @@ def _declared_companion_amount_product(companion):
 
 
 @pytest.mark.parametrize('unit', ['NP', '', 'scoop'])
-def test_positive_declared_quantity_with_unusable_unit_is_incomplete(unit):
+@pytest.mark.parametrize('quantity', [0,100])
+def test_declared_quantity_with_unusable_unit_is_incomplete(unit, quantity):
     from scoring_v4.scored_artifact import build_scored_artifact
-    companion = _ingredient(name='L-Tyrosine', canonical_id='l_tyrosine', quantity=100, unit=unit)
+    companion = _ingredient(name='L-Tyrosine', canonical_id='l_tyrosine', quantity=quantity, unit=unit)
     artifact = build_scored_artifact(_declared_companion_amount_product(companion))
     assert artifact['quality_assessment_status'] == 'partial' or artifact['quality_score_status'] == 'not_scored'
     dose = artifact['_v4_module_breakdown']['dimensions']['dose']
@@ -1734,7 +1735,7 @@ def test_positive_declared_quantity_with_unusable_unit_is_incomplete(unit):
     assert dose['metadata']['reason_code'] == 'unresolved_source_quantity'
 
 
-@pytest.mark.parametrize('unit', ['mg', 'NP', ''])
+@pytest.mark.parametrize('unit', ['mg', 'mcg', 'g'])
 def test_declared_zero_is_absence_rather_than_lost_source_quantity(unit):
     from scoring_v4.scored_artifact import build_scored_artifact
     from scoring_v4.modules.generic_dose import _unread_declared_purpose_rows

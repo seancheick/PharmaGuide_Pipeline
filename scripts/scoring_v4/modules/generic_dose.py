@@ -93,6 +93,7 @@ _DRI_REFERENCE_BY_CANONICAL = {
     "iron": "iron", "manganese": "manganese", "molybdenum": "molybdenum",
     "selenium": "selenium", "zinc": "zinc",
     "phosphorus": "phosphorus", "alpha_linolenic_acid": "alpha_linolenic_acid",
+    "magnesium": "magnesium", "calcium": "calcium",
 }
 
 def _adequacy_reference_kind(canonical: object) -> str:
@@ -139,9 +140,11 @@ def _band_credit(
     if target is not None:
         amount = max(0.0, pct_rda) / 100.0 * float(row["rda_ai"])
         return CAP_SUPPLEMENTAL_WINDOW * min(amount / float(target["target_mg"]), 1.0)
-    # Panel consumers call nutritional_unit_credit directly. An ineligible
-    # standalone Mg/Ca context cannot inherit a quarter-RDA or adult target.
-    if _norm_text(canonical) in _CONTRIBUTION_TARGETS:
+    # Life-stage contexts retain their sourced RDA/AI and use the approved
+    # shared nutritional curve. They cannot borrow the ordinary-adult target
+    # or the retired quarter-RDA shortcut. Missing source references stay absent.
+    if (_norm_text(canonical) in _CONTRIBUTION_TARGETS
+            and (not isinstance(row, dict) or (_as_float(row.get("rda_ai"), 0) or 0) <= 0)):
         return None
     if _adequacy_reference_kind(canonical) == "dri":
         credit = nutritional_unit_credit(pct_rda)
@@ -585,8 +588,7 @@ def _unread_declared_purpose_rows(product: Dict[str, Any]) -> List[Dict[str, Any
               and dose_disclosure_status(row) != "not_disclosed_blend"
               and not is_lent_blend_mass(row)
               and (quantity_is_unresolved(row) or (
-                  _as_float(row.get("quantity"), None) != 0
-                  and not has_usable_individual_dose(row)
+                  not has_usable_individual_dose(row, allow_zero=True)
                   and _product_evidence_dose_credit(row)[0] <= 0))]
 
 

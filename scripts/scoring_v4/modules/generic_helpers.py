@@ -267,10 +267,12 @@ def delivers_its_nutrient(row: Dict[str, Any]) -> bool:
     )
 
 
-def has_usable_individual_dose(ingredient: Dict[str, Any]) -> bool:
+def has_usable_individual_dose(ingredient: Dict[str, Any], *, allow_zero: bool = False) -> bool:
     """True when the ingredient has a positive quantity in a recognized
     dose unit (mg/mcg/g/IU/CFU) — or the enricher explicitly set
     `has_dose=True` to bypass unit checks (legacy probiotic CFU shapes).
+    `allow_zero` is for readiness only: a recognized printed zero is available
+    source information, while zero/NP still means the amount was not provided.
     """
     if not isinstance(ingredient, dict):
         return False
@@ -284,12 +286,16 @@ def has_usable_individual_dose(ingredient: Dict[str, Any]) -> bool:
         # their own amount; whole-preparation benchmarks use their own owner.
         return False
     qty = _as_float(ingredient.get("quantity"), None)
+    unit = _norm_text(ingredient.get("unit_normalized") or ingredient.get("unit"))
+    # Readiness may distinguish a printed zero in a recognized dose unit
+    # from missing capture. DSLD zero/NP remains not provided, never a dose.
+    if allow_zero and qty == 0 and (unit in _DOSE_UNIT_WHITELIST or unit.replace(" ", "") in _DOSE_UNIT_WHITELIST):
+        return True
     if qty is None or qty <= 0:
         # Probiotic ingredients sometimes lack a numeric quantity but
         # carry has_dose=True when CFU is disclosed via strain-side
         # fields. Honor that signal.
         return bool(ingredient.get("has_dose", False))
-    unit = _norm_text(ingredient.get("unit_normalized") or ingredient.get("unit"))
     if not unit:
         return bool(ingredient.get("has_dose", False))
     if unit in _DOSE_UNIT_WHITELIST:

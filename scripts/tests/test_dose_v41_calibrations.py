@@ -46,8 +46,9 @@ def test_calcium_is_proportional_to_260_mg_then_plateaus(amount, expected):
 
 
 def test_prenatal_population_keeps_its_own_reference():
-    # 84 mg against the legacy 25%-of-RDA band (100 mg), not the adult target.
-    assert _dose(_mineral('magnesium', 'Magnesium', 84, 400, 350, population='pregnancy_lactation')) == 16.8
+    # Approved life-stage routing: 84/400 = 21% RDA, shared contribution
+    # unit0.50625, not the retired quarter-RDA curve or ordinary adult84mg target.
+    assert _dose(_mineral('magnesium', 'Magnesium', 84, 400, 350, population='pregnancy_lactation')) == 10.1
 
 
 def test_a_label_that_includes_pregnancy_keeps_the_prenatal_reference():
@@ -56,7 +57,7 @@ def test_a_label_that_includes_pregnancy_keeps_the_prenatal_reference():
     p = _mineral('magnesium', 'Magnesium', 84, 400, 350)
     p['rda_ul_data']['adequacy_results'][0]['ul_population'] = {
         'id': 'general_adult+pregnancy_lactation', 'members': ['general_adult', 'pregnancy_lactation']}
-    assert _dose(p) == 16.8
+    assert _dose(p) == 10.1
 
 
 def test_potassium_is_a_completed_neutral():
@@ -108,10 +109,11 @@ def test_prenatal_omega_uses_the_dha_reference_only(epa, dha, expected):
     assert _score(product) == expected
 
 
-def test_child_omega_keeps_its_existing_reference():
+def test_child_omega_without_a_general_benchmark_is_completed_neutral():
     product = _omega_product(epa=300, dha=200)
     product['product_name'] = 'Kids Omega'
-    assert _score(product) == 10.0
+    assert _score(product) == 11.4
+    assert omega_dose(product)['metadata']['adequacy_reference']['curve'] == 'completed_no_benchmark_neutral'
 
 
 def test_potassium_named_as_the_product_purpose_is_also_a_completed_neutral():
@@ -162,3 +164,16 @@ def test_niacinamide_ceiling_copy_does_not_claim_flushing():
     dose = build_scored_artifact(p)['quality_pillars_v4']['dose']
     text = dose['reason'] + ' '.join(f['value_display'] for f in dose['explanation']['facts'])
     assert 'Niacin' in dose['reason'] and 'flush' not in text.lower()
+
+
+@pytest.mark.parametrize('canonical,name,amount,rda,ul,expected', [
+    ('magnesium','Magnesium',84,400,350,10.1),
+    ('calcium','Calcium',260,1000,2500,10.8),
+])
+@pytest.mark.parametrize('population',['pregnancy_lactation','pediatric'])
+def test_life_stage_mineral_purpose_uses_qualified_shared_nutritional_curve(canonical,name,amount,rda,ul,expected,population):
+    artifact=build_scored_artifact(_mineral(canonical,name,amount,rda,ul,population=population))
+    assert artifact['quality_pillars_v4']['dose']['score']==expected
+    receipt=artifact['quality_pillars_v4']['dose']['explanation']['dose_receipt']
+    assert receipt['contributions'][0]['reference_kind']=='nutritional_reference'
+    assert receipt['reconciles'] is True
