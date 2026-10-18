@@ -69,6 +69,7 @@ class DashboardData:
     scan_dir: Path = Path(".")
     build_root: Path = Path(".")
     dataset_root: Path | None = None
+    flutter_repo: Path | None = None
     discovered_datasets: list[str] = field(default_factory=list)
     missing_artifacts: dict[str, list[str]] = field(default_factory=dict)
     warnings: list[str] = field(default_factory=list)
@@ -1412,7 +1413,12 @@ def _compute_shared_metrics(
 
 @st.cache_resource(ttl=300)
 def load_dashboard_data(config: Any) -> DashboardData:
-    data = DashboardData(scan_dir=config.scan_dir, build_root=config.build_root, dataset_root=config.dataset_root)
+    data = DashboardData(
+        scan_dir=config.scan_dir,
+        build_root=config.build_root,
+        dataset_root=config.dataset_root,
+        flutter_repo=config.flutter_repo,
+    )
 
     data.db_path = config.build_root / "pharmaguide_core.db"
     data.db_conn = get_sqlite_connection(data.db_path)

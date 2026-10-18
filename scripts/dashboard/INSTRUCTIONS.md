@@ -146,6 +146,17 @@ streamlit run scripts/dashboard/app.py -- \
   --dataset-root /optional/path/to/dataset/root
 ```
 
+To compare pipeline data with the app's `assets/reference_data` copies on the
+`Clinical Copy` view, name the Flutter checkout with `FLUTTER_REPO` (the convention
+the release scripts and CI use) or `--flutter-repo`:
+
+```bash
+FLUTTER_REPO="/path/to/app" streamlit run scripts/dashboard/app.py
+```
+
+Without it the view says the Flutter asset sync is not configured; a path whose
+`assets/reference_data` directory is missing is reported as unavailable.
+
 ## Expected Startup Behavior
 
 Normal behavior:

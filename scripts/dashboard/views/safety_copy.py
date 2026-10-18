@@ -29,7 +29,8 @@ import pandas as pd
 import streamlit as st
 
 DATA_DIR = Path(__file__).resolve().parents[2] / "data"
-FLUTTER_ASSETS = Path("/Users/seancheick/PharmaGuide ai/assets/reference_data")
+# Inside the Flutter checkout named by FLUTTER_REPO / --flutter-repo (DashboardConfig).
+FLUTTER_REFERENCE_DATA = Path("assets") / "reference_data"
 
 
 def _safe_read(p: Path):
@@ -160,6 +161,23 @@ def _file_mtime(p: Path) -> str:
     if not p.exists():
         return "missing"
     return datetime.fromtimestamp(p.stat().st_mtime).strftime("%Y-%m-%d %H:%M")
+
+
+def _flutter_assets_dir(flutter_repo: Path | None) -> tuple[Path | None, str]:
+    """Locate the app's reference_data copies, or say why the sync check is off.
+
+    Returns ``(directory, "")`` when the directory exists, else ``(None, reason)``.
+    The dashboard never guesses where the app checkout lives.
+    """
+    if flutter_repo is None:
+        return None, (
+            "Flutter assets not configured: set FLUTTER_REPO or pass "
+            "`--flutter-repo <app checkout>` to compare asset schema versions."
+        )
+    assets = flutter_repo / FLUTTER_REFERENCE_DATA
+    if not assets.is_dir():
+        return None, f"Flutter assets unavailable: {assets} is not a directory."
+    return assets, ""
 
 
 def _flutter_sync_row(name: str, pipeline_schema, flutter_schema):
@@ -304,15 +322,16 @@ def render_safety_copy(data):
         "schema-synced with the pipeline source. Flutter falls back "
         "to asset data when offline."
     )
+    flutter_assets, flutter_note = _flutter_assets_dir(data.flutter_repo)
 
     def _flutter_schema(fname):
-        p = FLUTTER_ASSETS / fname
+        p = flutter_assets / fname
         if not p.exists():
             return None
         d = _safe_read(p) or {}
         return (d.get("_metadata") or {}).get("schema_version")
 
-    sync_rows = [
+    sync_rows = [] if flutter_assets is None else [
         _flutter_sync_row("banned_recalled_ingredients.json",
                           (br.get("_metadata") or {}).get("schema_version"),
                           _flutter_schema("banned_recalled_ingredients.json")),
@@ -332,7 +351,13 @@ def render_safety_copy(data):
                           (vio.get("_metadata") or {}).get("schema_version"),
                           _flutter_schema("manufacturer_violations.json")),
     ]
-    st.dataframe(pd.DataFrame(sync_rows), width="stretch", hide_index=True)
+    if flutter_assets is None and data.flutter_repo is None:
+        st.info(flutter_note)
+    elif flutter_assets is None:
+        st.warning(flutter_note)  # configured, but the directory is missing
+    else:
+        st.caption(f"Comparing with {flutter_assets}")
+        st.dataframe(pd.DataFrame(sync_rows), width="stretch", hide_index=True)
 
     # Sample spot-check
     st.write("### Spot-check a random entry")
@@ -447,6 +472,8 @@ def render_safety_copy(data):
     if alerts:
         for a in alerts:
             st.warning(a)
+    elif flutter_assets is None:
+        st.success("All six files fully authored. Flutter asset sync not checked (see above).")
     else:
         st.success("All six files fully authored. Flutter assets in sync.")
 

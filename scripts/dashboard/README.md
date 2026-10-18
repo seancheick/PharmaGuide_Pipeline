@@ -26,6 +26,12 @@ streamlit run scripts/dashboard/app.py -- \
   --build-root scripts/dist
 ```
 
+The `Clinical Copy` view compares pipeline data files with the app's
+`assets/reference_data` copies. Point it at the Flutter checkout the same way the
+release scripts are pointed: `FLUTTER_REPO=/path/to/app` in the environment, or
+`-- --flutter-repo /path/to/app`. Without either, the view reports the Flutter asset
+sync as not configured instead of comparing.
+
 Open a specific view directly after launch with `?view=`:
 
 - `command-center`
