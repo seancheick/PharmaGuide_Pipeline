@@ -70,7 +70,8 @@
    "1.26.0-v41-step4-ownership": "1de31d82d3e1160a",
    "1.26.1-config-audit-hygiene": "9d178acdb7e85152",
    "1.27.0-declared-serving-dose": "9c400418c2ec89ca",
-   "1.28.0-dose-v41": "e2342ada13ee92f9"
+   "1.28.0-dose-v41": "e2342ada13ee92f9",
+   "1.28.1-dose-v41-source-review": "4c3d52a784d37fcb"
   }
  }
 }

@@ -80,3 +80,11 @@ def test_pending_anchor_families_still_exist():
         assert source.exists(), owner
         if symbol:
             assert f"def {symbol}" in source.read_text(), owner
+
+
+@pytest.mark.parametrize('nutrient', ['magnesium', 'calcium'])
+def test_contribution_targets_do_not_misname_fda_high_source_threshold(nutrient):
+    # 21 CFR101.54(b)/(c): high >=20%, good source10-19%, perRACC.
+    rationale = CONFIG['dose_magnitudes']['generic']['contribution_policy_targets'][nutrient]['rationale']
+    assert "'good source'" not in rationale
+    assert 'high' in rationale and 'RACC' in rationale
