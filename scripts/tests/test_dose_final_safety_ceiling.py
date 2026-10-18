@@ -109,3 +109,8 @@ def test_a_neutral_adequacy_under_a_ceiling_takes_the_lower_value():
         p = _product(ingredients=[_ingredient(name="Ashwagandha", canonical_id="unbenchmarked_botanical", quantity=300)],
                      adequacy_results=[], safety_flags=[_flag('Zinc', 'zinc', pct)] if pct > 100 else [])
         assert dose(p)['score'] == expected, pct
+
+
+def test_the_ceiling_starts_where_a_confirmed_exceedance_starts():
+    from scoring_v4 import dose_safety
+    assert float(dose_safety._CEILING["exceeds_above_pct"]) == dose_safety._CONFIRMED_UL_EXCEEDANCE_PCT == 100.0

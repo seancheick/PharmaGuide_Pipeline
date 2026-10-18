@@ -104,6 +104,9 @@ _FOLATE_BASIS_MASS = "mass"
 # healthy people. A confirmed exposure above 100% is therefore consumer-
 # actionable; the Dose ceiling's 150% zero band is PharmaGuide scoring policy.
 _CONFIRMED_UL_EXCEEDANCE_PCT = 100.0
+# Plan D1: the Dose ceiling starts at the UL itself. One meaning, two readers.
+if float(_CEILING["exceeds_above_pct"]) != _CONFIRMED_UL_EXCEEDANCE_PCT:
+    raise ValueError("dose_safety_ceiling.exceeds_above_pct must equal the confirmed UL exceedance (100%)")
 
 
 def _folate_dose_basis(value: Any) -> tuple[str, Optional[float]]:

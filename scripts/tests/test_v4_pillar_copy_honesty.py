@@ -199,3 +199,22 @@ def test_dose_ceiling_fact_names_the_policy_once_and_its_scope():
     assert "PharmaGuide scoring policy, not a medical toxicity grade" in fact["value_display"]
     assert "never raises a lower score" in fact["value_display"]
     assert not {"dose_safety_penalty_policy", "dose_safety_scoring", "dose_ul_credit_policy"} & {f["id"] for f in facts}
+
+
+def test_a_clean_screen_is_not_listed_as_a_strength():
+    from build_final_db import _build_v4_score_explanation
+    pillars = {
+        "transparency": {"score": 15.0, "max": 15, "reason": "Fully transparent label."},
+        "safety_hygiene": {"score": 10.0, "max": 10, "reason": CLEAN_SCREEN, "components": {}},
+        "dose": {"score": 10.0, "max": 20, "reason": "partial"},
+    }
+    explanation = _build_v4_score_explanation(pillars)
+    assert [s["pillar"] for s in explanation["strengths"]] == ["transparency"]
+
+
+def test_dose_finding_is_not_worded_as_this_pillars_deduction_when_it_deducts_for_other_reasons():
+    bd = _module_bd(state_counts={"confirmed_over_threshold": 1})
+    safety = qs._pillar_safety_hygiene(bd, 10, _cfg(), clean_label_penalty=1.0)
+    assert safety["score"] == 9.0
+    assert safety["reason"] == ("Safety concern: it contains a restricted additive. Not deducted here: "
+                                "one or more supplemental amounts exceed an established upper limit.")
