@@ -24,8 +24,6 @@ them removes the drift surface, not just the defect.
 
 from __future__ import annotations
 
-from contextlib import contextmanager
-from contextvars import ContextVar
 import math
 import re
 from typing import Any, Dict, Optional, Tuple
@@ -310,19 +308,6 @@ def _label_declared_daily_range(record: Dict[str, Any]) -> Optional[Tuple[float,
     )
 
 
-_DECLARED_SERVING_SCORE = ContextVar("declared_serving_score", default=False)
-
-
-@contextmanager
-def declared_serving_score_scope():
-    """One Facts-panel serving for quality Dose only; never for actual intake."""
-    token = _DECLARED_SERVING_SCORE.set(True)
-    try:
-        yield
-    finally:
-        _DECLARED_SERVING_SCORE.reset(token)
-
-
 def resolve_daily_serving_range(record: Dict[str, Any]) -> Tuple[float, float, bool]:
     """Return (min_servings_per_day, max_servings_per_day, was_defaulted).
 
@@ -340,8 +325,6 @@ def resolve_daily_serving_range(record: Dict[str, Any]) -> Tuple[float, float, b
 
     Falls back to one serving a day, which neither inflates nor crushes a dose.
     """
-    if _DECLARED_SERVING_SCORE.get():
-        return 1.0, 1.0, False
     composite = _composite_pack_daily_range(record)
     if composite is not None:
         return composite[0], composite[1], False
@@ -413,32 +396,3 @@ def format_daily_frequency(servings_per_day: Any) -> str:
         return "four times daily"
     formatted = f"{count:g}"
     return f"{formatted} times daily"
-
-
-_DIRECTIONS_TYPE = "Suggested/Recommended/Usage/Directions"
-_NUMBER = r"(?:\d+|one|two|three|four|five|six|seven|eight|nine|ten|fourteen)"
-
-
-_LOADING_WORDING_RE = re.compile(r"\bloading\b|\bload\s+(?:phase|period|dose|protocol)\b", re.IGNORECASE)
-_INITIAL_PERIOD_RE = re.compile(
-    r"\bfirst\s+" + _NUMBER + r"\s*(?:days?|weeks?)\b|\bdays?\s*\d+\s*(?:-|through|to)\s*\d+\b", re.IGNORECASE)
-_LATER_MAINTENANCE_RE = re.compile(r"\b(?:then|thereafter|maintenance|maintain|after that|afterwards?)\b", re.IGNORECASE)
-
-
-def has_loading_protocol(record: Dict[str, Any]) -> bool:
-    """True only when a direction describes a loading regimen: explicit loading
-    wording ("Loading Phase: Day 1 through 5"), or a defined initial period
-    followed by a later maintenance regimen ("first 5 days ... then 1 scoop").
-    Workout timing, as-needed use, cycling, "Phase 1" names and maintenance
-    wording alone are contingent use, not loading.
-    """
-    for statement in record.get("statements") or ():
-        if not isinstance(statement, dict) or statement.get("type") != _DIRECTIONS_TYPE:
-            continue
-        text = str(statement.get("notes") or "")
-        if _LOADING_WORDING_RE.search(text):
-            return True
-        initial = _INITIAL_PERIOD_RE.search(text)
-        if initial and _LATER_MAINTENANCE_RE.search(text, initial.end()):
-            return True
-    return False

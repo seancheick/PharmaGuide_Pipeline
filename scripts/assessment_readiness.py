@@ -14,7 +14,7 @@ import re
 from typing import Any, Dict, Iterable, List, Mapping
 
 from dose_assessment import CONVERSION_FAILED, NO_UL_APPLICABLE
-from probiotic_measurements import AFU_REVIEW_REASON, pending_afu_measurements, declared_total_cfu
+from probiotic_measurements import AFU_REVIEW_REASON, pending_afu_measurements, declared_total_cfu, unresolved_cfu_measurements
 from scoring_input_contract import (
     ROLE_ADJUNCT,
     ROLE_CLAIM_PROMINENT,
@@ -903,6 +903,12 @@ def _dose_readiness(
     *,
     module: str,
 ) -> Dict[str, Any]:
+    unresolved = unresolved_cfu_measurements(product) if module == "probiotic" else []
+    if unresolved:
+        return {"readiness": READINESS_INCOMPLETE, "collection_status": "incomplete",
+                "assessment_source": "probiotic_measurements", "reason_code": "unresolved_source_quantity",
+                "incomplete_source_row_refs": sorted({r["source_row_ref"] for r in unresolved if r["source_row_ref"]}),
+                "measurements": unresolved}
     afu_rows = pending_afu_measurements(product) if module == "probiotic" else []
     if afu_rows:
         return {

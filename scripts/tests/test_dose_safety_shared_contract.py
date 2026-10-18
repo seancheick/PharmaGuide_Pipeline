@@ -1,4 +1,7 @@
-"""One shared dose-safety (B7) evaluator, consumed identically by every module.
+"""One shared dose-safety evaluator, consumed identically by every module.
+
+Dose V4.1 (§2.4): the evaluator no longer totals a B7 deduction; it sets the one
+product-level Dose ceiling from the strongest confirmed exceedance.
 
 The P0-2 fail-safe — "a safety_flag is emitted only for an over-UL row, so a
 missing ``pct_ul`` must never read as under-UL" — was implemented in
@@ -31,18 +34,13 @@ from scoring_v4.dose_safety import (
     evaluate_dose_safety,
 )
 
-THRESHOLD = 150.0
-PER_FLAG = 2.0
-CAP = 3.0
-
-
 def _evaluate(flags):
-    return evaluate_dose_safety(
-        {"rda_ul_data": {"safety_flags": flags}},
-        threshold=THRESHOLD,
-        per_flag_penalty=PER_FLAG,
-        cap=CAP,
-    )
+    return evaluate_dose_safety({"rda_ul_data": {"safety_flags": flags}})
+
+
+def _cap(result):
+    ceiling = result.dose_ceiling()
+    return None if ceiling is None else ceiling["cap_public"]
 
 
 def _states(result):
@@ -52,23 +50,22 @@ def _states(result):
 # ── the typed states ──────────────────────────────────────────────────────
 
 
-def test_no_safety_flags_produces_no_penalty_and_no_flags():
+def test_no_safety_flags_produces_no_ceiling_and_no_flags():
     result = _evaluate([])
-    assert result.penalty == 0.0
+    assert _cap(result) is None
     assert result.flags == []
 
 
-def test_flag_over_threshold_is_confirmed_and_penalized():
+def test_flag_at_or_above_150_pct_is_confirmed_and_zeroes_dose():
     result = _evaluate([{"nutrient": "Vitamin A", "pct_ul": 160.0, "ul_gate_eligible": True}])
     assert _states(result) == [CONFIRMED_OVER_THRESHOLD]
-    assert result.penalty == PER_FLAG
+    assert _cap(result) == 0.0
 
 
-def test_flag_over_ul_below_penalty_threshold_is_confirmed_and_not_penalized():
+def test_flag_over_ul_below_150_pct_is_confirmed_and_caps_dose_at_10():
     result = _evaluate([{"nutrient": "Vitamin A", "pct_ul": 120.0, "ul_gate_eligible": True}])
     assert _states(result) == [CONFIRMED_OVER_THRESHOLD]
-    assert result.flags[0].penalized is False
-    assert result.penalty == 0.0
+    assert _cap(result) == 10.0
 
 
 def test_missing_pct_ul_is_unresolved_review_only_not_a_deduction():
@@ -76,11 +73,11 @@ def test_missing_pct_ul_is_unresolved_review_only_not_a_deduction():
     exceedance. The gate routes it to review; B7 cannot deduct an unproven fact."""
     result = _evaluate([{"nutrient": "Vitamin A"}])
     assert _states(result) == [MATERIAL_BUT_UNRESOLVED]
-    assert result.penalty == 0.0
+    assert _cap(result) is None
 
     explicit_none = _evaluate([{"nutrient": "Vitamin A", "pct_ul": None}])
     assert _states(explicit_none) == [MATERIAL_BUT_UNRESOLVED]
-    assert explicit_none.penalty == 0.0
+    assert _cap(explicit_none) is None
 
 
 def test_gate_ineligible_flag_is_unresolved_not_confirmed():
@@ -94,7 +91,7 @@ def test_gate_ineligible_flag_is_unresolved_not_confirmed():
     }])
     assert _states(result) == [MATERIAL_BUT_UNRESOLVED]
     assert result.flags[0].reason == "compound_mass_not_elemental"
-    assert result.penalty == 0.0
+    assert _cap(result) is None
 
 
 def test_non_numeric_pct_ul_is_a_conversion_failure_and_never_deducts():
@@ -102,7 +99,7 @@ def test_non_numeric_pct_ul_is_a_conversion_failure_and_never_deducts():
     It must be surfaced for the release gate instead of silently deducting."""
     result = _evaluate([{"nutrient": "Vitamin A", "pct_ul": "not-a-number"}])
     assert _states(result) == [CONVERSION_FAILED]
-    assert result.penalty == 0.0
+    assert _cap(result) is None
     assert result.conversion_failures == 1
 
 
@@ -113,7 +110,7 @@ def test_non_finite_or_boolean_pct_ul_is_a_conversion_failure():
     for raw in (float("nan"), float("inf"), float("-inf"), True, False):
         result = _evaluate([{"nutrient": "Vitamin A", "pct_ul": raw}])
         assert _states(result) == [CONVERSION_FAILED]
-        assert result.penalty == 0.0
+        assert _cap(result) is None
         assert result.conversion_failures == 1
 
 
@@ -121,22 +118,34 @@ def test_negative_pct_ul_is_a_conversion_failure():
     result = _evaluate([{"nutrient": "Vitamin A", "pct_ul": -1.0}])
 
     assert _states(result) == [CONVERSION_FAILED]
-    assert result.penalty == 0.0
+    assert _cap(result) is None
     assert result.conversion_failures == 1
 
 
-def test_penalty_is_capped():
+def test_the_strongest_confirmed_exceedance_drives_one_ceiling():
     flags = [
-        {"nutrient": f"N{i}", "pct_ul": 200.0, "ul_gate_eligible": True}
-        for i in range(5)
+        {"nutrient": "Zinc", "pct_ul": 120.0, "ul_gate_eligible": True},
+        {"nutrient": "Niacin", "pct_ul": 210.0, "ul_gate_eligible": True},
+        {"nutrient": "Vitamin A", "pct_ul": 130.0, "ul_gate_eligible": True},
     ]
-    assert _evaluate(flags).penalty == CAP
+    ceiling = _evaluate(flags).dose_ceiling()
+    assert ceiling["cap_public"] == 0.0 and ceiling["nutrient"] == "Niacin"
 
 
 def test_malformed_flag_entries_are_contained():
     result = _evaluate(["not-a-dict", None, {"nutrient": "A", "pct_ul": 200.0, "ul_gate_eligible": True}])
     assert _states(result) == [CONFIRMED_OVER_THRESHOLD]
-    assert result.penalty == PER_FLAG
+    assert _cap(result) == 0.0
+
+
+def test_minimum_directed_use_only_changes_the_explanation():
+    product = {"rda_ul_data": {"safety_flags": [{"nutrient": "Magnesium", "pct_ul": 137.0,
+                                                 "ul_gate_eligible": True}]},
+               "serving_basis": {"min_servings_per_day": 1, "max_servings_per_day": 4,
+                                 "servings_per_day_source": "directions"}}
+    ceiling = evaluate_dose_safety(product).dose_ceiling()
+    assert ceiling["cap_public"] == 10.0
+    assert ceiling["pct_ul_at_minimum"] == 34.25 and ceiling["minimum_exceeds"] is False
 
 
 # ── logical-exposure de-duplication ───────────────────────────────────────
@@ -157,16 +166,16 @@ _FOLATE_DUPLICATE = {
 
 def test_folate_parent_total_plus_form_breakdown_is_one_exposure():
     """A declared total plus its own disclosed form breakdown is one logical
-    exposure, not two. It must not be charged twice."""
+    exposure, not two. It must not set a ceiling as a second exposure."""
     result = _evaluate([_FOLATE_DUPLICATE])
     assert _states(result) == [NOT_APPLICABLE]
-    assert result.penalty == 0.0
+    assert _cap(result) is None
     assert result.flags[0].reason == "folate_parent_total_plus_form_breakdown_duplicate"
 
 
 def test_genuinely_distinct_folate_exposures_are_not_collapsed():
     """Rows that do not reconcile to the parent total are separate exposures
-    and must still be penalized. Guards against over-de-duplication."""
+    and must still set the ceiling. Guards against over-de-duplication."""
     distinct = dict(_FOLATE_DUPLICATE)
     distinct["contributing_rows"] = [
         {"ingredient": "Folate", "amount": 400.0},
@@ -175,7 +184,7 @@ def test_genuinely_distinct_folate_exposures_are_not_collapsed():
     ]
     result = _evaluate([distinct])
     assert _states(result) == [CONFIRMED_OVER_THRESHOLD]
-    assert result.penalty == PER_FLAG
+    assert _cap(result) == 0.0
 
 
 def test_parent_row_that_is_not_an_aggregate_is_not_collapsed():
@@ -183,7 +192,7 @@ def test_parent_row_that_is_not_an_aggregate_is_not_collapsed():
     not_aggregated["aggregation"] = "single_row"
     result = _evaluate([not_aggregated])
     assert _states(result) == [CONFIRMED_OVER_THRESHOLD]
-    assert result.penalty == PER_FLAG
+    assert _cap(result) == 0.0
 
 
 def test_non_folate_nutrient_is_not_de_duplicated():
@@ -194,7 +203,7 @@ def test_non_folate_nutrient_is_not_de_duplicated():
     other["canonical_id"] = "vitamin_a"
     result = _evaluate([other])
     assert _states(result) == [CONFIRMED_OVER_THRESHOLD]
-    assert result.penalty == PER_FLAG
+    assert _cap(result) == 0.0
 
 
 def test_ignored_flags_carry_audit_detail():
@@ -224,6 +233,8 @@ def test_audit_metadata_preserves_unresolved_state_and_reason():
             "canonical_id": None,
             "pct_ul": 2400.0,
             "reason": "compound_mass_not_elemental",
-            "penalized": False,
+            "pct_ul_at_minimum": None,
         }],
+        "caffeine": None,
+        "dose_ceiling": None,
     }

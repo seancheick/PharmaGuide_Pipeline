@@ -1,8 +1,8 @@
 """Omega Dose policy contracts.
 
-Historical interpolation cases explicitly declare triglyceride-lowering purpose:
-these references remain scoped to that context. Public-seam cases below separately
-pin the approved ordinary-adult250mg and prenatal200mg-DHA contribution curves.
+Public-seam cases pin ordinary-adult250mg and prenatal200mg-DHA contribution
+curves. Historical band labels remain descriptive. Explicit triglyceride-purpose
+cases retain the separately approved2000mg proportional contribution target.
 Only disclosed EPA/DHA counts; no carrier-mass or personal-intake inference.
 """
 
@@ -22,7 +22,7 @@ if str(SCRIPTS_ROOT) not in sys.path:
 
 def _omega_product(
     *,
-    clinical_purpose: bool = True,
+    clinical_purpose: bool = False,
     epa: float | None = 600,
     dha: float | None = 300,
     epa_unit: str = "mg",
@@ -141,8 +141,8 @@ def test_band_aha_cvd() -> None:
 
     product = _omega_product(epa=700, dha=400)  # 1100 mg/day
     payload = score_dose(product)
-    # Band values are anchors: 1000 -> 16, 2000 -> 20, so 1100 sits just above 16.
-    assert payload["components"]["epa_dha_band"] == 16.4
+    # Dose V4.1: ordinary adults plateau at the 250 mg/day reference.
+    assert payload["components"]["epa_dha_band"] == 20.0
     assert payload["metadata"]["epa_dha_band_label"] == "aha_cvd"
 
 
@@ -152,8 +152,7 @@ def test_band_general_health() -> None:
 
     product = _omega_product(epa=400, dha=300)  # 700 mg/day
     payload = score_dose(product)
-    # 500 -> 10 and 1000 -> 16 are anchors; 700 interpolates between them.
-    assert payload["components"]["epa_dha_band"] == 12.4
+    assert payload["components"]["epa_dha_band"] == 20.0  # above the 250 mg/day reference
     assert payload["metadata"]["epa_dha_band_label"] == "general_health"
 
 
@@ -163,7 +162,7 @@ def test_band_efsa_ai_zone() -> None:
 
     product = _omega_product(epa=200, dha=100)  # 300 mg/day
     payload = score_dose(product)
-    assert payload["components"]["epa_dha_band"] == 6.0  # between 250 -> 5 and 500 -> 10
+    assert payload["components"]["epa_dha_band"] == 20.0  # at or above 250 mg/day
     assert payload["metadata"]["epa_dha_band_label"] == "efsa_ai_zone"
 
 
@@ -178,7 +177,7 @@ def test_band_near_efsa_ai_partial_credit() -> None:
 
     product = _omega_product(epa=125, dha=100)  # 225 mg/day
     payload = score_dose(product)
-    assert payload["components"]["epa_dha_band"] == 4.5  # between 200 -> 4 and 250 -> 5
+    assert payload["components"]["epa_dha_band"] == 18.0  # 20 x 225/250
     assert payload["metadata"]["epa_dha_band_label"] == "near_efsa_ai"
 
 
@@ -188,17 +187,18 @@ def test_band_low_disclosed_epa_dha_partial_credit() -> None:
 
     product = _omega_product(epa=100, dha=50)  # 150 mg/day
     payload = score_dose(product)
-    assert payload["components"]["epa_dha_band"] == 3.25  # between 100 -> 2.5 and 200 -> 4
+    assert payload["components"]["epa_dha_band"] == 12.0  # 20 x 150/250
     assert payload["metadata"]["epa_dha_band_label"] == "low_disclosed_epa_dha"
 
 
-def test_band_trace_epa_dha_still_zero() -> None:
-    """<100 mg/day → below_efsa_ai (0). Trace-dose gummies stay zero."""
+def test_band_trace_epa_dha_is_proportional_not_a_cliff() -> None:
+    """<100 mg/day keeps its below_efsa_ai label; Dose V4.1's approved
+    proportional curve replaces the former zero cliff (20 x 50/250 = 4)."""
     from scoring_v4.modules.omega_dose import score_dose
 
     product = _omega_product(epa=30, dha=20)  # 50 mg/day
     payload = score_dose(product)
-    assert "epa_dha_band" not in payload["components"]
+    assert payload["components"]["epa_dha_band"] == 4.0
     assert payload["metadata"]["epa_dha_band_label"] == "below_efsa_ai"
 
 
@@ -442,17 +442,19 @@ def _load_canaries(ids):
     return {did: _canary_cache[did] for did in ids if did in _canary_cache}
 
 
-# Approved adult nutritional contribution; held mixed/specialized/identity
-# cases retain their prior clinical-reference curve.
+# Values between two band anchors interpolate (Model C, 2026-09-18); the
+# anchors themselves and the band labels are unchanged.
+# Dose V4.1: ordinary adults score 20 x min(EPA+DHA at minimum use / 250, 1);
+# band labels are descriptive only.
 @pytest.mark.parametrize("dsld_id,expected_score,expected_band", [
-    ("327776", 20.0, "adult_nutritional_reference_met"),    # Sports Research: EPA 690 + DHA 310 = 1000 mg
-    ("326270", 20.0, "adult_nutritional_reference_met"),    # Sports Research alt SKU: same EPA/DHA
-    ("288740", 16.4, "aha_cvd"),    # Nordic Ultimate Omega + CoQ10: 1100 mg
-    ("273630", 20.0, "adult_nutritional_reference_met"),   # Garden of Life Advanced Omega: 1160 mg
-    ("239592", 5.92, "adult_nutritional_reference_partial"),  # CVS Krill 350: only 74 mg/day
-    ("184654", 17.12, "adult_nutritional_reference_partial"),  # Pure Encap Krill-Plex (2026-09-22: 182968 left the catalog)
-    ("261863", 4.5, "near_efsa_ai"),  # Pro-Resolve: EPA 225 mg + DHA 200 mcg
-    ("267461", 0.0, "below_efsa_ai"),  # Vitafusion gummy: only 50 mg aggregate
+    ("327776", 20.0, "aha_cvd"),    # Sports Research: EPA 690 + DHA 310 = 1000 mg
+    ("326270", 20.0, "aha_cvd"),    # Sports Research alt SKU: same EPA/DHA
+    ("288740", 20.0, "aha_cvd"),    # Nordic Ultimate Omega + CoQ10: 1100 mg
+    ("273630", 20.0, "aha_cvd"),    # Garden of Life Advanced Omega: 1160 mg
+    ("239592", 5.92, "below_efsa_ai"),  # CVS Krill 350: only 74 mg/day
+    ("184654", 17.12, "near_efsa_ai"),  # Pure Encap Krill-Plex: 214 mg/day
+    ("261863", 18.02, "near_efsa_ai"),  # Pro-Resolve: EPA 225 mg + DHA 200 mcg
+    ("267461", 4.0, "below_efsa_ai"),  # Vitafusion gummy: only 50 mg aggregate
 ])
 def test_canary_dose_scores(dsld_id, expected_score, expected_band):
     """Real-catalog dose scoring lock — protects against silent regressions
@@ -543,12 +545,8 @@ def test_dose_weights_match_rubric_config() -> None:
     thresholds = [b["min_mg_day"] for b in bands]
     assert thresholds == [4000, 2000, 1000, 500, 250, 200, 100, 0]
 
-    # Scores at boundaries
-    assert bands[0]["score"] == 20  # prescription
-    assert bands[2]["score"] == 16  # aha_cvd
-    assert bands[5]["score"] == 4.0  # near_efsa_ai
-    assert bands[6]["score"] == 2.5  # low_disclosed_epa_dha
-    assert bands[-1]["score"] == 0  # below_efsa_ai
+    # Exposure context no longer carries a second numerical scoring curve.
+    assert all("score" not in band for band in bands)
 
     # The EPA:DHA ratio bonus is gone from the rubric (quality_score 1.2.0).
     assert "ratio_sanity" not in rubric["dose"]
@@ -563,20 +561,21 @@ def test_dose_has_no_cliff_at_a_band_edge() -> None:
     5-point Evidence bonus) for one milligram of EPA+DHA."""
     from scoring_v4.modules.omega_dose import score_dose
 
-    below = score_dose(_omega_product(epa=599, dha=400))   # 999 mg/day
-    at = score_dose(_omega_product(epa=600, dha=400))      # 1000 mg/day
-    assert at["components"]["epa_dha_band"] == 16.0
+    # The retained bands are the child/baby reference (Dose V4.1).
+    below, at = (score_dose({**_omega_product(epa=epa, dha=400), "product_name": "Kids Omega"})
+                 for epa in (599, 600))
+    assert at["components"]["epa_dha_band"] == 11.4
     assert abs(at["components"]["epa_dha_band"] - below["components"]["epa_dha_band"]) < 0.1
 
 
-def test_every_shipped_band_value_is_still_its_anchor() -> None:
-    """Interpolation must not move any reviewed policy value."""
+def test_child_exposure_context_labels_do_not_award_numerical_dose_points() -> None:
+    """Historical adult exposure labels do not establish pediatric targets."""
     from scoring_v4.modules.omega_dose import score_dose
 
     anchors = {250: 5.0, 500: 10.0, 1000: 16.0, 2000: 20.0, 4000: 20.0}
-    for per_day, expected in anchors.items():
-        payload = score_dose(_omega_product(epa=per_day / 2, dha=per_day / 2))
-        assert payload["components"]["epa_dha_band"] == expected, per_day
+    for per_day in anchors:
+        payload = score_dose({**_omega_product(epa=per_day / 2, dha=per_day / 2), "product_name": "Kids Omega"})
+        assert payload["components"]["epa_dha_band"] == 11.4, per_day
 
 
 def test_dose_rises_monotonically_with_epa_dha() -> None:
@@ -602,7 +601,7 @@ def test_public_adult_nutritional_reference_contribution(amount, expected):
     assert result['quality_pillars_v4']['dose']['score'] == expected
 
 
-@pytest.mark.parametrize('epa,dha,expected', [(0,1,.1),(0,80,8),(0,100,10),(0,199,19.9),(0,200,20),(1999,1,.1),(2000,0,0)])
+@pytest.mark.parametrize('epa,dha,expected', [(0,1,.1),(0,80,8),(0,100,10),(0,199,19.9),(0,200,20),(1999,1,.1),(2000,0,11.4)])
 def test_public_prenatal_dha_reference_is_exclusive(epa, dha, expected):
     from scoring_v4.scored_artifact import build_scored_artifact
     product = _omega_product(epa=epa, dha=dha)
@@ -616,17 +615,17 @@ def test_public_claim_retains_clinical_dose_context_not_nutritional_target():
     product = _omega_product(epa=150,dha=100)
     product['statements'] = [{'notes':'EPA and DHA help lower triglyceride levels.'}]
     result = build_scored_artifact(product)
-    assert result['quality_pillars_v4']['dose']['score'] == 5
+    assert result['quality_pillars_v4']['dose']['score'] == 2.5
 
 
 @pytest.mark.parametrize("name,expected", [("Adult Omega",8.0),("Prenatal Omega DHA",4.0)])
-def test_nutritional_reference_uses_declared_serving_not_daily_frequency(name, expected):
+def test_nutritional_reference_uses_minimum_directed_daily_frequency(name, expected):
     from scoring_v4.scored_artifact import build_scored_artifact
     for daily in ((1,1),(2,4)):
         product = _omega_product(clinical_purpose=False, epa=60, dha=40, daily_servings=daily)
         product["product_name"] = name
         artifact = build_scored_artifact(product)
-        assert artifact["quality_pillars_v4"]["dose"]["score"] == expected
+        assert artifact["quality_pillars_v4"]["dose"]["score"] == min(expected * daily[0], 20)
 
 
 @pytest.mark.parametrize("name,groups", [
@@ -642,7 +641,7 @@ def test_child_population_does_not_receive_adult_reference(name, groups):
     purpose = resolve_omega_evidence_standard(product)
     assert purpose["applicability_reason"] == "held_child_or_baby_population"
     result = build_scored_artifact(product)
-    assert result["quality_pillars_v4"]["dose"]["score"] == 5
+    assert result["quality_pillars_v4"]["dose"]["score"] == 11.4
     assert result["quality_pillars_v4"]["evidence"]["score"] == 0
 
 

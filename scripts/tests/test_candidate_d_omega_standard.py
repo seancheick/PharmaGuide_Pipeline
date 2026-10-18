@@ -236,13 +236,13 @@ def test_unknown_frequency_records_default_without_inventing_a_range() -> None:
 def test_dose_scores_minimum_and_retains_directed_interval() -> None:
     from scoring_v4.modules.omega_dose import score_dose
 
-    payload = score_dose(_product(epa=900, dha=300, minimum=1, maximum=2,
-                                  name="Omega helps lower triglycerides"))
+    payload = score_dose(_product(epa=90, dha=30, minimum=1, maximum=2))
 
-    assert payload["metadata"]["per_day_min_mg"] == 1200.0
-    assert payload["metadata"]["per_day_max_mg"] == 2400.0
+    assert payload["metadata"]["per_day_min_mg"] == 120.0
+    assert payload["metadata"]["per_day_max_mg"] == 240.0
     assert payload["metadata"]["interval_crosses_band"] is True
-    assert payload["score"] == pytest.approx(16.8)
+    # Adequacy reads the minimum (20 x 120/250), never the 240 mg maximum.
+    assert payload["score"] == pytest.approx(9.6)
 
 
 def test_omega_registry_keeps_clinical_facts_not_scoring_magnitudes():

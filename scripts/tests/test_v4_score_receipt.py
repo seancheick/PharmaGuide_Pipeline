@@ -189,7 +189,7 @@ def test_presence_floor_absorption_is_visible_as_realized_vs_nominal():
 
 # ---- Airborne-style multi: each finding is one entry in its one owner ------
 
-def test_formula_checks_and_b7_are_each_one_entry_in_their_owner():
+def test_formula_checks_and_the_dose_ceiling_are_each_one_entry_in_their_owner():
     bd = _meru_breakdown()
     bd["dimensions"]["formulation"] = _dim(
         8.08, 12.0, {"panel_form_quality": 8.08}, {},
@@ -197,21 +197,26 @@ def test_formula_checks_and_b7_are_each_one_entry_in_their_owner():
          "inactive_penalty_details": [],
          "formula_checks": {"B1_dietary_sugar": 2.0, "B1_harmful_additives": 4.0}})
     bd["dimensions"]["dose"] = _dim(
-        8.7348, 25.0, {"rda_ai_coverage": 9.0681, "critical_nutrient_coverage": 1.6667},
-        {"B7_dose_safety": -2.0},
-        {"B7_safety_evaluation": {"state_counts": {"confirmed_over_threshold": 2}, "flags": [
-            {"state": "confirmed_over_threshold", "penalized": True, "pct_ul": 160.0}]}})
+        10.7348, 25.0, {"rda_ai_coverage": 9.0681, "critical_nutrient_coverage": 1.6667},
+        {},
+        {"B7_safety_evaluation": {"state_counts": {"confirmed_over_threshold": 1}, "flags": [
+            {"state": "confirmed_over_threshold", "pct_ul": 120.0}],
+            "dose_ceiling": {"cap_public": 10.0, "nutrient": "Zinc", "pct_ul": 120.0,
+                             "partial_ceiling_public": 10.0, "zero_at_pct": 150.0}}})
     bd["dimensions"]["evidence"] = _dim(10.0, 20.0, {"essential_panel_authority": 10.0}, {},
                                         {"evidence_result_state": "evaluated_authority"})
     out = _assemble(bd, module="multi_or_prenatal", verdict="CAUTION")
     assert out["quality_pillars_v4"]["formulation"]["score"] == 13.5
-    assert out["quality_pillars_v4"]["dose"]["score"] == 8.7
+    # Adequacy 10.7348/25 normalizes to 10.7 (reference 20 → 10.7); the 120% zinc
+    # ceiling caps it at 10, itemized once in Dose.
+    assert out["quality_pillars_v4"]["dose"]["score"] == 10.0
     assert out["quality_pillars_v4"]["safety_hygiene"]["score"] == 4.0
     assert not any(entry["id"].startswith("B1_")
                    for entry in out["quality_pillars_v4"]["formulation"]["receipt"]["entries"])
     assert _entry(out, "safety_hygiene", "additive_or_sweetener_penalty")["points"] == -6.0
     assert not any(entry["id"] == "over_ul_penalty" for entry in out["quality_pillars_v4"]["safety_hygiene"]["receipt"]["entries"])
-    assert _entry(out, "dose", "B7_dose_safety")["points"] == pytest.approx(-2.0 * 20 / 20, abs=1e-4)
+    assert _entry(out, "dose", "dose_safety_ceiling")["kind"] == "cap"
+    assert not any(entry["id"] == "B7_dose_safety" for entry in out["quality_pillars_v4"]["dose"]["receipt"]["entries"])
     _assert_reconciles(out)
 
 

@@ -17,7 +17,7 @@ from scoring_v4.modules.sports_helpers import (
     pre_workout_goal_cluster_ids,
     primary_sports_identity,
     sports_identity_rows,
-    sports_rows,
+    sports_dosed_rows,
     sports_subtype,
 )
 
@@ -49,6 +49,12 @@ def _row(
     }
 
 
+def _declared_protein_row(grams: float) -> dict:
+    return {**_row("protein", grams, "g", name="Protein"),
+            "scoring_input_kind": "product_level_evidence", "evidence_type": "sports_primary_dose",
+            "reason": "declared_nutrition_protein_mass"}
+
+
 def _product(*rows: dict, name: str = "Sports Product", primary_type: str = "amino_acid") -> dict:
     return {
         "servingSizes": [{"quantity": 1, "unit": "scoop", "minDailyServings": 1, "maxDailyServings": 1}],
@@ -73,7 +79,7 @@ def test_sports_rows_filters_incidental_minerals() -> None:
         _row("creatine_monohydrate", 5, "Gram(s)"),
     )
 
-    assert [row["canonical_id"] for row in sports_rows(product)] == ["creatine_monohydrate"]
+    assert [row["canonical_id"] for row in sports_dosed_rows(product)] == ["creatine_monohydrate"]
 
 
 def test_sports_identity_rows_preserve_undosed_sports_actives() -> None:
@@ -88,7 +94,7 @@ def test_sports_identity_rows_preserve_undosed_sports_actives() -> None:
     )
 
     assert [row["canonical_id"] for row in sports_identity_rows(product)] == ["creatine_monohydrate"]
-    assert sports_rows(product) == []
+    assert sports_dosed_rows(product) == []
     assert primary_sports_identity(product) == "creatine"
 
 
@@ -99,7 +105,7 @@ def test_group_bcaa_totals_ratio_and_components() -> None:
         _row("l_valine", 2.5, "Gram(s)"),
     )
 
-    grouped = group_bcaa(sports_rows(product))
+    grouped = group_bcaa(sports_dosed_rows(product))
 
     assert grouped["complete"] is True
     assert grouped["total_g"] == pytest.approx(10.0)
@@ -116,7 +122,7 @@ def test_group_eaa_treats_six_to_eight_essential_amino_acids_as_partial() -> Non
         _row("l_threonine", 500, "mg"),
     )
 
-    grouped = group_eaa(sports_rows(product))
+    grouped = group_eaa(sports_dosed_rows(product))
 
     assert grouped["complete"] is False
     assert grouped["partial"] is True
@@ -137,7 +143,7 @@ def test_group_eaa_requires_all_nine_for_full_completeness() -> None:
         _row("l_valine", 500, "mg"),
     )
 
-    grouped = group_eaa(sports_rows(product))
+    grouped = group_eaa(sports_dosed_rows(product))
 
     assert grouped["complete"] is True
     assert grouped["partial"] is False
@@ -232,7 +238,7 @@ def test_creatine_three_grams_scores_primary_dose_max() -> None:
     assert payload["components"]["sports_primary_active_dose"] == pytest.approx(20.0)
     assert "sports_focused_single_completion" not in payload["components"]
     assert payload["metadata"]["primary_identity"] == "creatine"
-    assert payload["metadata"]["dose_basis"] == "creatine_3_to_10_g"
+    assert payload["metadata"]["dose_basis"] == "creatine_contribution_policy"
 
 
 def test_creatine_without_dose_preserves_identity_diagnostic() -> None:
@@ -243,7 +249,8 @@ def test_creatine_without_dose_preserves_identity_diagnostic() -> None:
     }
     payload = score_dose(_product(row, name="Creatine Monohydrate"))
 
-    assert payload["score"] == pytest.approx(0.0)
+    assert payload["score"] is None
+    assert payload["metadata"]["assessment_status"] == "incomplete"
     assert payload["metadata"]["primary_identity"] == "creatine"
     assert payload["metadata"]["dose_basis"] == "creatine_no_dose"
     assert payload["metadata"]["not_evaluable_reason"] == "creatine_no_dose"
@@ -260,7 +267,7 @@ def test_creatine_hmb_stack_scores_the_same_as_its_primary_active() -> None:
     payload = score_dose(
         _product(
             _row("creatine_monohydrate", 5, "Gram(s)"),
-            _row("hmb", 3, "Gram(s)"),
+            _row("hmb", 3, "Gram(s)", name="HMB-Ca"),
             name="Creatine HMB",
         )
     )
@@ -272,11 +279,12 @@ def test_creatine_hmb_stack_scores_the_same_as_its_primary_active() -> None:
     assert payload["score"] == pytest.approx(20.0)
 
 
-def test_creatine_above_ten_grams_drops_without_loading_protocol() -> None:
+def test_creatine_above_ten_grams_plateaus() -> None:
+    # Dose V4.1 D3: exceeding a studied range is not a reduction.
     payload = score_dose(_product(_row("creatine_monohydrate", 12, "Gram(s)"), name="Creatine Monohydrate"))
 
-    assert payload["components"]["sports_primary_active_dose"] == pytest.approx(16.0)
-    assert payload["metadata"]["dose_basis"] == "creatine_above_10_g_no_loading_protocol"
+    assert payload["components"]["sports_primary_active_dose"] == pytest.approx(20.0)
+    assert payload["metadata"]["dose_basis"] == "creatine_contribution_policy"
 
 
 def test_whey_twenty_two_grams_uses_protein_serving_not_minerals() -> None:
@@ -284,7 +292,8 @@ def test_whey_twenty_two_grams_uses_protein_serving_not_minerals() -> None:
         _product(
             _row("calcium", 25, "mg"),
             _row("iron", 1, "mg"),
-            _row("whey_protein", 22.5, "Gram(s)", name="Whey Protein Isolate"),
+            _row("whey_protein", 30, "Gram(s)", name="Whey Protein Isolate"),
+            _declared_protein_row(22.5),
             name="Whey Protein Isolate",
             primary_type="protein_powder",
         )
@@ -292,21 +301,22 @@ def test_whey_twenty_two_grams_uses_protein_serving_not_minerals() -> None:
 
     assert payload["components"]["sports_primary_active_dose"] == pytest.approx(20.0)
     assert payload["metadata"]["primary_identity"] == "protein"
-    assert payload["metadata"]["dose_basis"] == "protein_20_to_40_g"
+    assert payload["metadata"]["dose_basis"] == "protein_contribution_policy"
 
 
-def test_casein_five_grams_uses_protein_serving_band() -> None:
+def test_casein_five_grams_uses_actual_protein_contribution() -> None:
     payload = score_dose(
         _product(
-            _row("casein", 5, "Gram(s)", name="Micellar Casein"),
+            _row("casein", 6, "Gram(s)", name="Micellar Casein"),
+            _declared_protein_row(5),
             name="Micellar Casein Protein",
             primary_type="protein_powder",
         )
     )
 
-    assert payload["components"]["sports_primary_active_dose"] == pytest.approx(8.0)
+    assert payload["components"]["sports_primary_active_dose"] == pytest.approx(5.0)
     assert payload["metadata"]["primary_identity"] == "protein"
-    assert payload["metadata"]["dose_basis"] == "protein_under_15_g"
+    assert payload["metadata"]["dose_basis"] == "protein_contribution_policy"
 
 
 def test_beta_alanine_three_point_two_grams_scores_below_max_band() -> None:
@@ -317,20 +327,20 @@ def test_beta_alanine_three_point_two_grams_scores_below_max_band() -> None:
 
 
 def test_hmb_three_grams_scores_primary_dose_max() -> None:
-    payload = score_dose(_product(_row("hmb", 3, "Gram(s)"), name="HMB"))
+    payload = score_dose(_product(_row("hmb", 3, "Gram(s)", name="HMB-Ca"), name="HMB"))
 
     assert payload["components"]["sports_primary_active_dose"] == pytest.approx(20.0)
     assert "sports_focused_single_completion" not in payload["components"]
     assert payload["score"] == pytest.approx(20.0)
     assert payload["metadata"]["primary_identity"] == "hmb"
-    assert payload["metadata"]["dose_basis"] == "hmb_3_to_6_g"
+    assert payload["metadata"]["dose_basis"] == "hmb_contribution_policy"
 
 
 def test_hmb_one_point_five_to_three_grams_scores_partial() -> None:
-    payload = score_dose(_product(_row("hmb", 1500, "mg"), name="HMB"))
+    payload = score_dose(_product(_row("hmb", 1500, "mg", name="HMB-Ca"), name="HMB"))
 
-    assert payload["components"]["sports_primary_active_dose"] == pytest.approx(16.0)
-    assert payload["metadata"]["dose_basis"] == "hmb_1_5_to_3_g"
+    assert payload["components"]["sports_primary_active_dose"] == pytest.approx(10.0)
+    assert payload["metadata"]["dose_basis"] == "hmb_contribution_policy"
 
 
 def test_preworkout_ignores_tiny_accessory_creatine_when_beta_alanine_is_better_anchor() -> None:
@@ -345,20 +355,23 @@ def test_preworkout_ignores_tiny_accessory_creatine_when_beta_alanine_is_better_
         )
     )
 
-    assert payload["components"]["sports_primary_active_dose"] == pytest.approx(16.0)
+    # The BCAA preparation contributes one completed neutral vote; the tiny
+    # creatine accessory remains excluded.
+    assert payload["components"]["sports_primary_active_dose"] == pytest.approx((16 + 11.4) / 2, abs=.0001)
+    assert [c["ingredient"] for c in payload["metadata"]["dose_contributions"]] == ["beta_alanine", "bcaa"]
     assert payload["metadata"]["primary_identity"] == "beta_alanine"
-    assert payload["metadata"]["dose_basis"] == "beta_alanine_2_to_4_g"
+    assert payload["metadata"]["dose_basis"] == "beta_alanine_contribution_policy"
 
 
-def test_citrulline_malate_six_grams_is_conservative_partial_credit() -> None:
+def test_citrulline_malate_six_grams_is_completed_neutral() -> None:
     payload = score_dose(_product(_row("l_citrulline", 6000, "mg", name="L-Citrulline Malate"), name="Citrulline Malate"))
 
-    assert payload["components"]["sports_primary_active_dose"] == pytest.approx(14.0)
+    assert payload["components"]["sports_primary_active_dose"] == pytest.approx(11.4)
     assert payload["metadata"]["primary_identity"] == "citrulline"
-    assert payload["metadata"]["dose_basis"] == "citrulline_malate_6_to_8_g"
+    assert payload["metadata"]["dose_basis"] == "citrulline_completed_no_general_benchmark"
 
 
-def test_focused_citrulline_at_reviewed_top_band_reaches_full_dose() -> None:
+def test_focused_citrulline_studied_regimen_is_completed_neutral() -> None:
     payload = score_dose(
         _product(
             _row("l_citrulline", 8000, "mg", name="L-Citrulline Malate"),
@@ -366,12 +379,12 @@ def test_focused_citrulline_at_reviewed_top_band_reaches_full_dose() -> None:
         )
     )
 
-    assert payload["components"]["sports_primary_active_dose"] == pytest.approx(20.0)
+    assert payload["components"]["sports_primary_active_dose"] == pytest.approx(11.4)
     assert "sports_focused_single_completion" not in payload["components"]
-    assert payload["score"] == pytest.approx(20.0)
+    assert payload["score"] == pytest.approx(11.4)
 
 
-def test_bcaa_2_1_1_ratio_scores_high_with_completeness_credit() -> None:
+def test_bcaa_2_1_1_ratio_remains_descriptive() -> None:
     payload = score_dose(
         _product(
             _row("l_leucine", 5, "Gram(s)"),
@@ -381,15 +394,15 @@ def test_bcaa_2_1_1_ratio_scores_high_with_completeness_credit() -> None:
         )
     )
 
-    assert payload["components"]["sports_primary_active_dose"] == pytest.approx(20.0)
+    assert payload["components"]["sports_primary_active_dose"] == pytest.approx(11.4)
     assert "sports_focused_single_completion" not in payload["components"]
-    assert payload["components"]["sports_ratio_or_completeness"] == pytest.approx(2.0)
-    # Composition is assessed, so the public reference is 22 (20 + 2).
-    assert payload["score"] == pytest.approx(22.0)
+    assert "sports_ratio_or_completeness" not in payload["components"]
+    # Composition remains descriptive and adds no Dose points.
+    assert payload["score"] == pytest.approx(11.4)
     assert payload["metadata"]["primary_identity"] == "bcaa"
 
 
-def test_eaa_partial_profile_does_not_get_full_completeness_credit() -> None:
+def test_eaa_partial_profile_remains_completed_neutral_without_composition_bonus() -> None:
     payload = score_dose(
         _product(
             _row("l_histidine", 1500, "mg"),
@@ -402,13 +415,13 @@ def test_eaa_partial_profile_does_not_get_full_completeness_credit() -> None:
         )
     )
 
-    assert payload["components"]["sports_primary_active_dose"] == pytest.approx(12.0)
-    assert payload["components"]["sports_ratio_or_completeness"] == pytest.approx(0.0)
+    assert payload["components"]["sports_primary_active_dose"] == pytest.approx(11.4)
+    assert "sports_ratio_or_completeness" not in payload["components"]
     assert payload["metadata"]["primary_identity"] == "eaa"
-    assert payload["metadata"]["dose_basis"] == "eaa_partial_profile_at_least_8_g"
+    assert payload["metadata"]["dose_basis"] == "eaa_completed_no_general_benchmark"
 
 
-def test_eaa_all_nine_with_eight_grams_scores_high_with_completeness_credit() -> None:
+def test_eaa_all_nine_with_eight_grams_is_completed_neutral() -> None:
     payload = score_dose(
         _product(
             _row("l_histidine", 900, "mg"),
@@ -424,10 +437,10 @@ def test_eaa_all_nine_with_eight_grams_scores_high_with_completeness_credit() ->
         )
     )
 
-    assert payload["components"]["sports_primary_active_dose"] == pytest.approx(20.0)
+    assert payload["components"]["sports_primary_active_dose"] == pytest.approx(11.4)
     assert "sports_focused_single_completion" not in payload["components"]
-    assert payload["components"]["sports_ratio_or_completeness"] == pytest.approx(2.0)
-    assert payload["score"] == pytest.approx(22.0)
+    assert "sports_ratio_or_completeness" not in payload["components"]
+    assert payload["score"] == pytest.approx(11.4)
     assert payload["metadata"]["primary_identity"] == "eaa"
 
 
@@ -451,10 +464,118 @@ def test_explicit_complete_eaa_aggregate_scores_one_combined_dose() -> None:
 
     payload = score_dose(_product(aggregate, name="EAA"))
 
-    assert payload["components"]["sports_primary_active_dose"] == pytest.approx(20.0)
-    assert payload["components"]["sports_ratio_or_completeness"] == pytest.approx(2.0)
+    assert payload["components"]["sports_primary_active_dose"] == pytest.approx(11.4)
+    assert "sports_ratio_or_completeness" not in payload["components"]
     assert payload["metadata"]["primary_identity"] == "eaa"
-    assert payload["metadata"]["dose_basis"] == "eaa_complete_aggregate_at_least_8_g"
+    assert payload["metadata"]["dose_basis"] == "eaa_completed_no_general_benchmark"
+
+
+def _nested_complete_eaa_source():
+    from scoring_v4.route_features import EAA_CANONICALS
+
+    owner = dict(_row("BLEND_GENERAL", 10, "g", name="Total Essential Amino Acids"),
+                 raw_source_path="ingredientRows[0]", cleaner_row_role="blend_header_total",
+                 score_eligible_by_cleaner=False, identity_disposition="taxonomy_only",
+                 dose_class="blend_total_weight")
+    children = []
+    for i, key in enumerate(sorted(EAA_CANONICALS)):
+        amount = {"l_leucine": 2.5, "l_isoleucine": 1.25, "l_valine": 1.25}.get(key)
+        children.append(dict(_row(key, amount or 0, "g" if amount else "NP"),
+                             raw_source_path=f"ingredientRows[0].nestedRows[0].nestedRows[{i}]",
+                             identity_disposition="clean", is_nested_ingredient=True,
+                             parent_blend="Total Essential Amino Acids"))
+    product = _product(*[row for row in children if row["quantity"]], name="Essential Amino Complete")
+    product["activeIngredients"] = [owner, *children]
+    product["ingredient_quality_data"]["ingredients"] = [owner, *children]
+    return product
+
+
+def test_eaa_total_owns_mixed_disclosure_without_lending_mass_to_children():
+    from scoring_v4.scored_artifact import build_scored_artifact
+    from scoring_input_contract import get_scoring_ingredients
+
+    product = _nested_complete_eaa_source()
+    artifact = build_scored_artifact(product)
+    dose = artifact["_v4_module_breakdown"]["dimensions"]["dose"]
+    assert dose["score"] == 11.4
+    assert dose["metadata"]["primary_identity"] == "eaa"
+    assert len(dose["metadata"]["dose_contributions"]) == 1
+    aggregate = next(row for row in get_scoring_ingredients(product, strict=True).rows
+                     if row.get("reason") == "explicit_complete_eaa_aggregate_owner")
+    assert aggregate["quantity"] == 10
+    # The six undisclosed individual shares remain undisclosed.
+    assert sum(row["quantity"] == 0 and row["unit"] == "NP"
+               for row in product["activeIngredients"]) == 6
+
+
+def test_an_independent_bcaa_preparation_is_not_absorbed_into_an_eaa_total():
+    from scoring_v4.scored_artifact import build_scored_artifact
+
+    product = _nested_complete_eaa_source()
+    independent = dict(_row("branched_chain_amino_acids", 3, "g", name="BCAA"),
+                       raw_source_path="ingredientRows[2]", identity_disposition="clean")
+    product["activeIngredients"].append(independent)
+    product["ingredient_quality_data"]["ingredients"].append(independent)
+    product["ingredient_quality_data"]["ingredients_scorable"].append(independent)
+    product["product_name"] = product["fullName"] = "Essential Amino Complete + BCAA"
+    dose = build_scored_artifact(product)["_v4_module_breakdown"]["dimensions"]["dose"]
+    contributions = {row["ingredient"]: row for row in dose["metadata"]["dose_contributions"]}
+    assert set(contributions) == {"eaa", "bcaa"}
+    assert contributions["eaa"]["amount_per_serving"] == 10
+    assert contributions["bcaa"]["amount_per_serving"] == 3
+
+
+@pytest.mark.parametrize("change", ["missing", "moved", "unresolved"])
+def test_cached_eaa_owner_cannot_override_lost_source_profile(change):
+    from scoring_input_contract import derive_product_scoring_evidence, get_scoring_ingredients
+    from scoring_v4.scored_artifact import build_scored_artifact
+
+    product = _nested_complete_eaa_source()
+    product["product_scoring_evidence"] = derive_product_scoring_evidence(product)
+    assert any(row.get("reason") == "explicit_complete_eaa_aggregate_owner"
+               for row in product["product_scoring_evidence"])
+    if change == "missing":
+        product["activeIngredients"].pop()
+    elif change == "moved":
+        product["activeIngredients"][-1]["raw_source_path"] = "ingredientRows[9]"
+    else:
+        product["activeIngredients"][-1]["identity_disposition"] = "unresolved"
+    rows = get_scoring_ingredients(product, strict=True)
+    assert not any(row.get("reason") == "explicit_complete_eaa_aggregate_owner" for row in rows.rows)
+    dose = build_scored_artifact(product)["_v4_module_breakdown"]["dimensions"]["dose"]
+    assert all(row["ingredient"] != "eaa" for row in dose["metadata"]["dose_contributions"])
+
+
+def test_cached_eaa_metadata_cannot_override_the_current_source_owner():
+    from scoring_input_contract import derive_product_scoring_evidence, get_scoring_ingredients
+    from scoring_v4.route_features import EAA_CANONICALS
+
+    product = _nested_complete_eaa_source()
+    product["product_scoring_evidence"] = derive_product_scoring_evidence(product)
+    cached = next(row for row in product["product_scoring_evidence"]
+                  if row.get("reason") == "explicit_complete_eaa_aggregate_owner")
+    cached["verified_child_canonicals"] = ["l_leucine"]
+    rows = get_scoring_ingredients(product, strict=True).rows
+    current = [row for row in rows if row.get("reason") == "explicit_complete_eaa_aggregate_owner"]
+    assert len(current) == 1
+    assert current[0]["verified_child_canonicals"] == sorted(EAA_CANONICALS)
+
+
+@pytest.mark.parametrize("defect", ["unrelated_child", "extra_non_eaa", "unresolved_child"])
+def test_eaa_total_cannot_borrow_another_profile_or_non_eaa_mass(defect):
+    from scoring_input_contract import get_scoring_ingredients
+
+    product = _nested_complete_eaa_source()
+    children = product["activeIngredients"]
+    if defect == "unrelated_child":
+        children[-1]["raw_source_path"] = "ingredientRows[9]"
+    elif defect == "extra_non_eaa":
+        children.append(dict(_row("taurine", 1, "g"), raw_source_path="ingredientRows[0].nestedRows[1]",
+                             identity_disposition="clean"))
+    else:
+        children[-1]["identity_disposition"] = "unresolved"
+    assert not any(row.get("reason") == "explicit_complete_eaa_aggregate_owner"
+                   for row in get_scoring_ingredients(product, strict=True).rows)
 
 
 def test_untyped_eaa_aggregate_cannot_bypass_product_evidence_contract() -> None:
@@ -497,3 +618,48 @@ def test_opaque_preworkout_without_sports_dose_is_not_evaluable_without_a_second
     assert payload["components"]["sports_primary_active_dose"] == 0.0
     assert "opaque_primary_sports_blend" not in payload["penalties"]
     assert payload["metadata"]["not_evaluable_reason"] == "opaque_primary_sports_blend"
+
+
+@pytest.mark.parametrize("canonical", ["whey_protein", "casein", "pea_protein", "rice_protein"])
+def test_protein_ingredient_mass_without_actual_protein_is_incomplete(canonical):
+    product = _product(_row(canonical, 30, "g"), name="Protein Powder", primary_type="protein_powder")
+    payload = score_dose(product)
+    assert payload["score"] is None
+    assert payload["metadata"]["assessment_status"] == "incomplete"
+    assert payload["metadata"]["reason_code"] == "unresolved_source_quantity"
+    assert all(c.get("amount_per_serving") is None for c in payload["metadata"]["dose_contributions"])
+
+
+def test_actual_protein_projection_takes_precedence_over_ingredient_mass():
+    actual = {**_row("protein", 17, "g"), "scoring_input_kind": "product_level_evidence",
+              "evidence_type": "sports_primary_dose", "reason": "declared_nutrition_protein_mass"}
+    product = _product(_row("whey_protein", 30, "g"), actual,
+                       name="Protein Powder", primary_type="protein_powder")
+    payload = score_dose(product)
+    assert payload["score"] == 17
+    contribution = payload["metadata"]["dose_contributions"][0]
+    assert contribution["amount_per_serving"] == 17
+
+
+def test_hidden_protein_blend_remains_neutral_and_missing_protein_is_incomplete():
+    missing = {**_row("whey_protein", None, ""), "isNestedIngredient": True}
+    hidden = score_dose(_product(missing, name="Protein Powder", primary_type="protein_powder"))
+    assert hidden["score"] == 11.4
+    assert hidden["metadata"].get("assessment_status") != "incomplete"
+    missing.pop("isNestedIngredient")
+    unresolved = score_dose(_product(missing, name="Protein Powder", primary_type="protein_powder"))
+    assert unresolved["score"] is None
+    assert unresolved["metadata"]["assessment_status"] == "incomplete"
+
+
+def test_unknown_actual_protein_keeps_strict_artifact_preliminary_without_erasing_ingredients():
+    from scoring_v4.scored_artifact import build_scored_artifact, unfinished_source_assessment
+    from scoring_input_contract import get_scoring_ingredients
+    product = _product(_row("whey_protein", 30, "g"), name="Protein Powder", primary_type="protein_powder")
+    artifact = build_scored_artifact(product)
+    assert get_scoring_ingredients(product, strict=True).rows[0]["quantity"] == 30
+    assert artifact["quality_score_status"] == "scored"
+    assert artifact["quality_assessment_status"] == "partial"
+    assert unfinished_source_assessment(product, artifact["_v4_module_breakdown"]) == "dose_amount_unread"
+    assert artifact["_v4_module_breakdown"]["dimensions"]["dose"]["score"] is None
+    assert artifact["quality_pillars_v4"]["formulation"]["score"] > 0

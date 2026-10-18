@@ -207,6 +207,27 @@
   ],
   "changelog": [
     {
+      "date": "2026-10-18",
+      "phase": "Sean-approved Dose V4.1 reference policy",
+      "source_commit": "3e6c2da3",
+      "products_updated": [
+        12012,
+        180417,
+        223084,
+        239600,
+        241353,
+        245156,
+        270256,
+        274498,
+        278454,
+        288344,
+        293943,
+        306237,
+        306381
+      ],
+      "notes": "Selective canonical raw-label freezer refresh. Initial comparison:20unchanged,13source-justified score/tier drifts; all other frozen fields unchanged. Shared nutritional curve changes six panels12012/239600/241353/274498/278454/288344. Ginkgo180417,ashwagandha245156/KSM306237,CoQ10293943 retire unsupported general dose thresholds to completed-neutral11.4; creatineethylester223084 cannot borrow monohydrate target and becomes neutral. Beta-alanine270256 actual3400mg/approved4000mg givesDose17. Co-primary306381 averages qualified contributions including neutral preparations(Dose12.6). Raw63 baseline832/candidate3e6c:21score changes,one separately verifiedTransparency+6 at294543(exactprintedVitaminD0mcg),zero route/status changes,zero receipt failures. No canary safety field changed. Receipts: reports/dose_v41_approved_candidate_20261018/raw_final_comparison.json and canary_{before,after}_refresh.log. Refresh helper wrote all13 fixtures, then failed on the manifest constant name; this separate manifest write fixes the documentation step. Full33check required after selective refresh; no catalog qualification inferred."
+    },
+    {
       "date": "2026-10-07",
       "phase": "Source-qualified creatine research correspondence",
       "products_updated": [
@@ -1071,6 +1092,29 @@
       ],
       "source_commit": "82de5c7c",
       "notes": "Sean approved Dose quality per declared Facts-panel serving, with maximum daily safety separate. Frozen raw A/B of all four movers plus Pure205309 and299065 shows only Dose changes: Goli245156 20->11.4 (2 daily servings no longer supply quality credit); Silymarin183275 11.4->20 (1-4 serving range maximum no longer reduces serving quality); Ginkgo180417 20->9.5 (3 daily servings no longer supply quality credit); Pure calcium/magnesium293924 14->19 (1-2 daily use separate). Total changes exactly match Dose; other five pillars unchanged. Complete33 raw check originally had only these four scoring/derived-tier drifts and no safety, identity or status drifts. Freezer refreshed these four from raw only; receipt reports/declared_serving_20261017/raw-{old,new}.jsonl and raw-delta.json. Full stored-input impact comparison is a separate pending checkpoint; no pipeline or publication."
+    },
+    {
+      "date": "2026-10-17",
+      "dsld_ids": [
+        180417,
+        182730,
+        183275,
+        245156,
+        293924,
+        298070,
+        306381,
+        74716
+      ],
+      "source_commit": "8db71366d",
+      "notes": "Dose V4.1 (docs/plans/DOSE_V41_PLAN.md, Sean D1-D4) on branch claude/dose-v41. Complete 33 raw-canary check from raw found exactly these 8 score/derived-tier drifts and no safety, identity or status drift; a raw replay (base 5fb2be1ca vs 8db71366d, ~/pg_quality/dose_v41_20261017/canary_{base,final}.jsonl) shows Dose is the only pillar that moved for all 8. Causes: B1 directed daily use reverses the PR154 serving-only movers (Ginkgo180417 9.5->20, Silymarin183275 20->11.4 since its 1-4 serving maximum is above the botanical studied range, Goli245156 11.4->20); B2 one product-level ceiling (Athletic Pure Pack182730 niacin 109% even at the lowest use -> 10; calcium/magnesium293924 magnesium 129% at maximum use -> 10); B4 ordinary omega 250 mg reference (Fish Oil74716 11.2->20); B5 probiotic strain average with the hidden-amount neutral (FloraMend298070 0->11.4) and sports co-primary average (PRE306381 18->16.7). Freezer refreshed these 8 from raw only; 25 unchanged."
+    },
+    {
+      "date": "2026-10-18",
+      "notes": "Generated selectively by freeze_contract_snapshots.py from the unchanged raw label through Clean/Enrich/Score at the audit-fix candidate. TargetGroups explicitly state Children more than 1 but less than 4. Existing reference data has no established UL rows covering those ages; adult/adolescent values cannot establish a completed pediatric screen. Source result correctly becomes not_scored/partial with a caution for unresolved UL assessment, replacing a misleading complete score56.9/no-known-catalog-concern. No clinical threshold was invented and no per-product score was assigned. Frozen raw63 replay also verifies the same shared hold for218441/256961/82319; remaining scored controls preserve nonDose numeric pillars. All33 canaries are checked after this source-reviewed refresh.",
+      "dsld_ids": [
+        327416
+      ],
+      "source_commit": "4148a7abb"
     }
   ]
 }

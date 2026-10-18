@@ -13,7 +13,7 @@ rubric treatment. This module rewards:
 
 from __future__ import annotations
 
-from scoring_v4.modules.generic_helpers import score_declared_serving_dose
+from scoring_v4.modules.generic_helpers import score_directed_daily_dose
 
 import re
 from typing import Any, Dict, Optional
@@ -58,15 +58,11 @@ B_OPTIONAL_SUPPORT = {"choline", "inositol"}
 from scoring_v4.quality_score_config import block as _cfg_block
 
 _CM = _cfg_block("category_magnitudes", "b_complex")["b_complex"]
-_B7 = _cfg_block("dose_safety_policy", "ul_pct_threshold")
 
 
 FORMULATION_CAP = _CM["formulation_cap"]
 DOSE_CAP = _CM["dose_cap"]
 EVIDENCE_CAP = _CM["evidence_cap"]
-B7_UL_PCT_THRESHOLD = _B7["ul_pct_threshold"]
-B7_PER_FLAG_PENALTY = _B7["per_flag_penalty"]
-B7_CAP = _B7["cap"]
 
 
 def _clamp(low: float, high: float, value: float) -> float:
@@ -202,28 +198,10 @@ def _pct_values(row: Dict[str, Any]) -> tuple[Optional[float], Optional[float]]:
 
 
 def _coverage_credit(key: str, pct_rda: Optional[float], pct_ul: Optional[float]) -> Optional[float]:
-    if pct_rda is None and pct_ul is None:
-        return None
-    if pct_ul is not None:
-        if pct_ul >= B7_UL_PCT_THRESHOLD:
-            return 0.0
-        if pct_ul > 100.0:
-            return 0.4
-    if pct_rda is None:
-        return None
-    if pct_rda <= 0:
-        return 0.0
-    if pct_rda < 25.0:
-        return pct_rda / 50.0
-    if pct_rda < 50.0:
-        return 0.5 + ((pct_rda - 25.0) / 25.0) * 0.35
-    if pct_rda <= 300.0:
-        return 1.0
-    if key in {"vitamin_b12_cobalamin", "vitamin_b7_biotin"} and pct_ul is None:
-        return 0.95
-    if pct_rda <= 1000.0:
-        return 0.9
-    return 0.75
+    # Safety remains the single product-level Dose ceiling.
+    from scoring_v4.modules.generic_dose import nutritional_unit_credit
+
+    return nutritional_unit_credit(pct_rda)
 
 
 def _coverage_scores(product: Dict[str, Any]) -> Dict[str, float]:
@@ -250,26 +228,20 @@ def _score_dose(product: Dict[str, Any]) -> Dict[str, Any]:
     else:
         avg = 0.0
     rda_ai_coverage = _round(avg * 18.0)
-    b7_evaluation = resolve_dose_safety(
-        product,
-        threshold=B7_UL_PCT_THRESHOLD,
-        per_flag_penalty=B7_PER_FLAG_PENALTY,
-        cap=B7_CAP,
-    )
-    b7 = _round(b7_evaluation.penalty)
+    b7_evaluation = resolve_dose_safety(product)
     # V4.1 Step 4: panel breadth (a count, already inside the coverage average)
     # and the moderate-fit credit for the mere absence of a finding are retired.
-    score = _round(_clamp(0.0, DOSE_CAP, rda_ai_coverage - b7))
+    score = _round(_clamp(0.0, DOSE_CAP, rda_ai_coverage))
     return {
         "score": score,
         "max": DOSE_CAP,
         "components": {
             "b_rda_ai_coverage": rda_ai_coverage,
         },
-        "penalties": {"B7_dose_safety": -b7},
+        "penalties": {},
         "metadata": {
             "phase": PHASE_MARKER,
-            "method": "b_complex_rda_ai_moderate_dose_window",
+            "method": "b_complex_rda_ai_coverage",
             "coverage_nutrient_count": len(coverage),
             "coverage_nutrient_scores": dict(sorted(coverage.items())),
             "B7_safety_evaluation": b7_evaluation.audit_metadata(),
@@ -321,7 +293,7 @@ def score_b_complex(product: Any) -> ModuleResult:
     result = ModuleResult(module="b_complex", dimensions=_empty_dimensions())
 
     _fill_dimension(result, "formulation", _score_formulation(product))
-    _fill_dimension(result, "dose", score_declared_serving_dose(product, _score_dose))
+    _fill_dimension(result, "dose", score_directed_daily_dose(product, _score_dose))
     _fill_dimension(result, "evidence", _score_evidence(product))
     _fill_dimension(result, "transparency", score_transparency(product))
 

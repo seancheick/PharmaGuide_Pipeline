@@ -65,6 +65,64 @@ def test_literature_population_dose_and_enrollment_match_cited_trials():
     assert s['duration']=='6–24 weeks'
     assert 4000 in rows['tmg_betaine']['studied_dose_exposure']['values']
 
+
+def test_american_ginseng_source_is_an_acute_glucose_challenge_not_a_daily_minimum():
+    row = literature()['american_ginseng']
+    study, = row['qualifying_human_studies']
+    assert study['pmid'] == '10761967'
+    assert study['sample_size'] == 19
+    assert row['studied_dose_exposure'] == {
+        'values': [3000], 'unit': 'mg', 'basis': 'acute_challenge',
+    }
+    assert 'glucose challenge' in study['dose']
+    assert 'daily minimum' in row['applicability_decision']
+    assert 'standardized' not in row['material_form'].lower()
+
+
+def test_touchi_source_retains_tea_preparation_three_month_course_and_before_meal_use():
+    row = literature()['touchi_extract']
+    study, = row['qualifying_human_studies']
+    assert study['pmid'] == '11481402'
+    assert study['sample_size'] == 36
+    assert study['duration'] == '3 months'
+    assert 'before each of three meals' in study['dose']
+    assert 'Houji-tea' in row['material_form']
+    assert 'fasting' in study['primary_endpoint']
+    assert 'minimum' in row['applicability_decision']
+
+
+def test_mct_source_reports_36_participants_and_a_discrete_12_g_regimen():
+    row = literature()['mct_oil']
+    study = next(study for study in row['qualifying_human_studies']
+                 if study['pmid'] == '41443401')
+    assert study['sample_size'] == 36
+    assert study['dose'] == '12 g MCT'
+    assert row['studied_dose_exposure']['values'] == [12000]
+    assert 'working memory' in study['primary_endpoint']
+    assert 'minimum' in row['applicability_decision']
+
+
+def test_phosphatidic_acid_source_keeps_parametric_null_and_magnitude_inference_distinct():
+    row = literature()['phosphatidic_acid']
+    study, = row['qualifying_human_studies']
+    assert study['pmid'] == '23035701'
+    assert 'no significant between-group differences' in study['outcome']
+    assert 'magnitude-based' in study['outcome']
+    assert 'statistically significant increases' not in study['outcome']
+    assert 'minimum' in row['applicability_decision']
+    assert 'without investigator supervision' in row['population_context']
+    assert 'weekly training-log review and feedback' in row['population_context']
+    assert 'supervised progressive training' not in row['population_context']
+
+
+def test_lysine_review_does_not_invent_a_positive_one_gram_threshold():
+    row = literature()['l_lysine']
+    study = next(study for study in row['qualifying_human_studies']
+                 if study['pmid'] == '26252373')
+    assert study['effect'] == 'null'
+    assert 'no evidence of efficacy for lysine' in study['primary_endpoint']
+    assert 'no established 1 g/day threshold' in row['applicability_decision']
+
 def strains():
     return records('clinically_relevant_strains.json','clinically_relevant_strains')
 

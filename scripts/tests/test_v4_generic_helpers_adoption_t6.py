@@ -67,3 +67,26 @@ def test_none_product_is_defensive():
 
 def test_non_dict_product_is_defensive():
     assert primary_type_of("not a dict") == ""
+
+
+def test_only_unavailable_doses_require_positive_label_hidden_evidence():
+    from scoring_v4.modules.generic_helpers import missing_doses_are_label_hidden
+
+    measured = {'quantity': 1000, 'unit': 'mg'}
+    hidden = {'quantity': 0, 'unit': 'NP', 'cleaner_row_role': 'nested_display_only'}
+    lost = {'quantity': None, 'unit': 'mg'}
+    assert missing_doses_are_label_hidden([measured, hidden])
+    assert missing_doses_are_label_hidden([hidden, hidden])
+    assert not missing_doses_are_label_hidden([])
+    assert not missing_doses_are_label_hidden([measured])
+    assert not missing_doses_are_label_hidden([measured, lost])
+    assert not missing_doses_are_label_hidden([hidden, lost])
+    assert not missing_doses_are_label_hidden([hidden, dict(hidden, quantity_operator='ambiguous')])
+
+
+def test_a_positive_unresolved_member_prevents_hidden_group_completion():
+    from scoring_v4.modules.generic_helpers import missing_doses_are_label_hidden
+    assert not missing_doses_are_label_hidden([
+        {'quantity': 1000, 'unit': 'mg', 'quantity_operator': 'unknown'},
+        {'quantity': 0, 'unit': 'NP', 'cleaner_row_role': 'nested_display_only'},
+    ])

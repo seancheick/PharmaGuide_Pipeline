@@ -2,8 +2,8 @@
   "_metadata": {
     "description": "Ingredients backed by clinical research and studies - Enhanced for Section C v3.4.0",
     "purpose": "evidence_scoring",
-    "schema_version": "5.6.3",
-    "last_updated": "2026-10-14",
+    "schema_version": "5.6.4",
+    "last_updated": "2026-10-18",
     "total_entries": 210,
     "changelog": [
       "2026-10-05: Sean-approved four amount transfers. Descriptive research exposure is owned by Dose, with no new positive adequacy benchmark. Zinc uses discrete clusters, WKB retains preparation/reference uncertainty, D-mannose and DAA retain no affirmative credit; added content-verified PMID 25844073 and distinguished its negative 6 g/day result. Supersedes the four historical applicability amount floors.",
@@ -319,7 +319,26 @@
           "cohort_independence": "Shared master protocol with PMID 40944126; exact participant overlap unresolved.",
           "funding_limitation": "Seed Health funding and author affiliations; not independent replication."
         }
-      ]
+      ],
+      "reference_semantics": {
+        "reference_type": "discrete_studied_regimen",
+        "scope": "General catalog Dose for this exact source identity; source-specific study facts and established safety references remain separate.",
+        "preparation": "Seed DS-01 Daily Synbiotic",
+        "purpose": "Digestive Health",
+        "population": "Adults with self-reported bloating, gas or abdominal discomfort; not pregnancy, pediatric or disease-treatment evidence.",
+        "exposure_basis": "minimum_directed_daily_use",
+        "units": "AFU/day plus coingredient mg/day",
+        "curve": "existing_exact_whole_formula_match_full_credit_no_interpolation",
+        "source_ids": [
+          "PMID:41599868",
+          "PMID:40944126",
+          "PMID:41750436"
+        ],
+        "rationale": "Complete24-strain capsule-in-capsule formula at source-reported total AFU and pomegranate; adult GI symptoms source; mechanistic companion papers not independent symptom replication. The point curve is PharmaGuide policy; reference amounts are not percentages of clinical efficacy.",
+        "owner": "scripts/data/backed_clinical_studies.json::FORMULA_SEED_DS01",
+        "review_date": "2026-10-18",
+        "approval_status": "approved_existing_policy_2026_10_18"
+      }
     },
     {
       "id": "BRAND_MERIVA",
@@ -579,11 +598,29 @@
       "primary_outcome": "Reduce Stress/Anxiety",
       "total_enrollment": 124,
       "effect_direction_confidence": "high",
-      "effect_direction_rationale": "Retained positive_strong classification for the two cited KSM-66 root-extract trials' short-term perceived-stress and cortisol findings, with sleep-quality findings in the dose-ranging trial. Applicability is extract-specific; the studied 250-600 mg/day dose envelope is assessed separately, and the 250 mg/day anxiety result was not significant.",
+      "effect_direction_rationale": "Retained positive_strong classification for the two cited KSM-66 root-extract trials' short-term perceived-stress and cortisol findings, with sleep-quality findings in the dose-ranging trial. Applicability is extract-specific; the separate 250 mg/day and 600 mg/day regimens remain descriptive and establish no continuous Dose window, and the 250 mg/day anxiety result was not significant.",
       "endpoint_relevance_tags": [
         "stress_mood",
         "sleep"
-      ]
+      ],
+      "reference_semantics": {
+        "reference_type": "discrete_studied_regimen",
+        "scope": "General catalog Dose for this exact source identity; source-specific study facts and established safety references remain separate.",
+        "preparation": "KSM-66",
+        "purpose": "Reduce Stress/Anxiety; Sleep Quality",
+        "population": "Adults with elevated perceived stress, studied for eight weeks or 60 days",
+        "exposure_basis": "minimum_directed_daily_use",
+        "units": "mg",
+        "curve": "completed_no_benchmark_neutral",
+        "source_ids": [
+          "PMID:23439798",
+          "PMID:32021735"
+        ],
+        "rationale": "[23439798](https://pubmed.ncbi.nlm.nih.gov/23439798/) / [32021735](https://pubmed.ncbi.nlm.nih.gov/32021735/). KSM-66 root extract; 600mg/day for 60d in stressed adults; separate RCT 250 or 600mg/day for 8wk (60 randomized). Full texts identify KSM-66; first standardizes root-only extract to >=5% withanolides. Stress scales, cortisol, sleep context. Unsupported numerical inference rejected: An isolated regimen or heterogeneous moderator signal does not establish a clinical minimum/continuous range and proportional below-dose adequacy. The completed general Dose conclusion uses existing PharmaGuide neutral policy, not clinical approval of a numerical benchmark.",
+        "owner": "scripts/data/backed_clinical_studies.json::BRAND_KSM66",
+        "review_date": "2026-10-18",
+        "approval_status": "approved_existing_neutral_2026_10_18"
+      }
     },
     {
       "id": "BRAND_SENSORIL",
@@ -2207,7 +2244,25 @@
         "energy_metabolism"
       ],
       "min_clinical_dose": 200,
-      "dose_unit": "mg"
+      "dose_unit": "mg",
+      "reference_semantics": {
+        "reference_type": "discrete_studied_regimen",
+        "scope": "General catalog Dose for this exact source identity; source-specific study facts and established safety references remain separate.",
+        "preparation": "Lactoferrin",
+        "purpose": "Increase Energy; Immune Support",
+        "population": "[19639462](https://pubmed.ncbi.nlm.nih.gov/19639462/) / [35276902](https://pmc.ncbi.nlm.nih.gov/articles/PMC8838920/). Bovine lactoferrin100mg BID/30d; pregnant IDA, active comparator; meta-analysis heterogeneous iron-status studies.",
+        "exposure_basis": "minimum_directed_daily_use",
+        "units": "mg",
+        "curve": "completed_no_benchmark_neutral",
+        "source_ids": [
+          "PMID:35276902",
+          "PMID:19639462"
+        ],
+        "rationale": "[19639462](https://pubmed.ncbi.nlm.nih.gov/19639462/) / [35276902](https://pmc.ncbi.nlm.nih.gov/articles/PMC8838920/). Bovine lactoferrin100mg BID/30d; pregnant IDA, active comparator; meta-analysis heterogeneous iron-status studies. Unsupported numerical inference rejected: An isolated regimen or heterogeneous moderator signal does not establish a clinical minimum/continuous range and proportional below-dose adequacy. The completed general Dose conclusion uses existing PharmaGuide neutral policy, not clinical approval of a numerical benchmark.",
+        "owner": "scripts/data/backed_clinical_studies.json::INGR_LACTOFERRIN",
+        "review_date": "2026-10-18",
+        "approval_status": "approved_existing_neutral_2026_10_18"
+      }
     },
     {
       "id": "BRAND_CARNIPURE",
@@ -2331,7 +2386,25 @@
       "effect_direction_rationale": "Both cited studies administered 2 g/day of active L-carnitine delivered as L-carnitine L-tartrate, not 2 g of tartrate salt. The 10- and 18-participant crossover studies emphasize recovery biomarkers rather than durable performance outcomes.",
       "endpoint_relevance_tags": [
         "muscle_recovery"
-      ]
+      ],
+      "reference_semantics": {
+        "reference_type": "discrete_studied_regimen",
+        "scope": "General catalog Dose for this exact source identity; source-specific study facts and established safety references remain separate.",
+        "preparation": "Carnipure L-Carnitine",
+        "purpose": "Muscle Growth & Recovery",
+        "population": "[11788381](https://pubmed.ncbi.nlm.nih.gov/11788381/): 10 resistance-trained men, 3wk,2g active L-carnitine/day as L-tartrate; recovery markers/MRI. [20045157](https://pubmed.ncbi.nlm.nih.gov/20045157/): named Carnipure tartrate,9men+9women,3wk+3d crossover; same active2g; biochemical recovery/soreness, physical performance unaffected.",
+        "exposure_basis": "minimum_directed_daily_use",
+        "units": "mg",
+        "curve": "completed_no_benchmark_neutral",
+        "source_ids": [
+          "PMID:11788381",
+          "PMID:20045157"
+        ],
+        "rationale": "[11788381](https://pubmed.ncbi.nlm.nih.gov/11788381/): 10 resistance-trained men, 3wk,2g active L-carnitine/day as L-tartrate; recovery markers/MRI. [20045157](https://pubmed.ncbi.nlm.nih.gov/20045157/): named Carnipure tartrate,9men+9women,3wk+3d crossover; same active2g; biochemical recovery/soreness, physical performance unaffected. Unsupported numerical inference rejected: An isolated regimen or heterogeneous moderator signal does not establish a clinical minimum/continuous range and proportional below-dose adequacy. The completed general Dose conclusion uses existing PharmaGuide neutral policy, not clinical approval of a numerical benchmark.",
+        "owner": "scripts/data/backed_clinical_studies.json::BRAND_CARNIPURE",
+        "review_date": "2026-10-18",
+        "approval_status": "approved_existing_neutral_2026_10_18"
+      }
     },
     {
       "id": "INGR_L_CARNITINE",
@@ -2499,7 +2572,24 @@
       "endpoint_relevance_tags": [
         "muscle_recovery",
         "weight_management"
-      ]
+      ],
+      "reference_semantics": {
+        "reference_type": "no_benchmark",
+        "scope": "General catalog Dose for this exact source identity; source-specific study facts and established safety references remain separate.",
+        "preparation": "Only the exact preparations described in the reviewed source facts: Healthy-adult studies used 1–4 g/day for 12 or 24 weeks with conditional performance effects; this is a studied exposure envelope, not a general efficacy minimum.",
+        "purpose": "Muscle Growth & Recovery; Weight Management",
+        "population": "Only source-specific cohorts described in rationale; no general efficacy dose for unstudied populations, pregnancy or lactation is inferred.",
+        "exposure_basis": "minimum_directed_daily_use",
+        "units": "mg",
+        "curve": "completed_no_benchmark_neutral",
+        "source_ids": [
+          "PMID:32958033"
+        ],
+        "rationale": "Healthy-adult studies used 1–4 g/day for 12 or 24 weeks with conditional performance effects; this is a studied exposure envelope, not a general efficacy minimum. Unsupported numerical inference rejected: Mixed source outcomes and source-specific regimens do not establish a universal numerical Dose curve. Existing clinical evidence facts remain unchanged. The completed general Dose conclusion uses existing PharmaGuide neutral policy, not clinical approval of a numerical benchmark.",
+        "owner": "scripts/data/backed_clinical_studies.json::INGR_L_CARNITINE",
+        "review_date": "2026-10-18",
+        "approval_status": "approved_existing_neutral_2026_10_18"
+      }
     },
     {
       "id": "BRAND_SEAKELP",
@@ -3556,7 +3646,25 @@
       ],
       "min_clinical_dose": 2000,
       "max_studied_clinical_dose": 6000,
-      "dose_unit": "mg"
+      "dose_unit": "mg",
+      "reference_semantics": {
+        "reference_type": "discrete_studied_regimen",
+        "scope": "General catalog Dose for this exact source identity; source-specific study facts and established safety references remain separate.",
+        "preparation": "OptiMSM",
+        "purpose": "Joint & Bone Health",
+        "population": "[37447322](https://pmc.ncbi.nlm.nih.gov/articles/PMC10346176/):88adults mild knee pain,2g/day/12wk,primary JKOM difference. Full text names OptiMSM; [16309928](https://pubmed.ncbi.nlm.nih.gov/16309928/):50adults knee OA,6g/day/12wk,pilot pain/function; abstract does not identify the brand.",
+        "exposure_basis": "minimum_directed_daily_use",
+        "units": "mg",
+        "curve": "completed_no_benchmark_neutral",
+        "source_ids": [
+          "PMID:16309928",
+          "PMID:37447322"
+        ],
+        "rationale": "[37447322](https://pmc.ncbi.nlm.nih.gov/articles/PMC10346176/):88adults mild knee pain,2g/day/12wk,primary JKOM difference. Full text names OptiMSM; [16309928](https://pubmed.ncbi.nlm.nih.gov/16309928/):50adults knee OA,6g/day/12wk,pilot pain/function; abstract does not identify the brand. Unsupported numerical inference rejected: An isolated regimen or heterogeneous moderator signal does not establish a clinical minimum/continuous range and proportional below-dose adequacy. The completed general Dose conclusion uses existing PharmaGuide neutral policy, not clinical approval of a numerical benchmark.",
+        "owner": "scripts/data/backed_clinical_studies.json::BRAND_OPTIMSM",
+        "review_date": "2026-10-18",
+        "approval_status": "approved_existing_neutral_2026_10_18"
+      }
     },
     {
       "id": "INGR_MSM",
@@ -3580,7 +3688,7 @@
       "health_goals_supported": [
         "Healthy Aging/Longevity"
       ],
-      "notes": "Ingredient-level record for methylsulfonylmethane. Two small randomized, double-blind, placebo-controlled trials: knee osteoarthritis, 50 adults, MSM 3 g twice daily (6 g/day) for 12 weeks, lower WOMAC pain and physical-function impairment, no change in stiffness or total symptoms (PMID 16309928, a pilot); mild knee pain, 88 adults, 2 g/day (OptiMSM) for 12 weeks, primary JKOM total score better than placebo (p = 0.046) (PMID 37447322). No benefit is established below 2 g/day. Not evidence for energy, recovery or general inflammation claims.",
+      "notes": "Ingredient-level record for methylsulfonylmethane. Two small randomized, double-blind, placebo-controlled trials: knee osteoarthritis, 50 adults, MSM 3 g twice daily (6 g/day) for 12 weeks, lower WOMAC pain and physical-function impairment, no change in stiffness or total symptoms (PMID 16309928, a pilot); mild knee pain, 88 adults, 2 g/day (OptiMSM) for 12 weeks, primary JKOM total score better than placebo (p = 0.046) (PMID 37447322). These discrete regimens do not establish a general 2 g/day efficacy minimum. Not evidence for energy, recovery or general inflammation claims.",
       "last_updated": "2026-09-29",
       "notable_studies": "Kim et al. (2006, PMID 16309928): 6 g/day MSM improved WOMAC pain and physical function in knee osteoarthritis over 12 weeks (pilot, n=50). Toguchi et al. (2023, PMID 37447322): 2 g/day MSM improved the JKOM total score in adults with mild knee pain over 12 weeks (n=88).",
       "references_structured": [
@@ -3667,7 +3775,25 @@
       ],
       "min_clinical_dose": 2000,
       "max_studied_clinical_dose": 6000,
-      "dose_unit": "mg"
+      "dose_unit": "mg",
+      "reference_semantics": {
+        "reference_type": "discrete_studied_regimen",
+        "scope": "General catalog Dose for this exact source identity; source-specific study facts and established safety references remain separate.",
+        "preparation": "MSM (Methylsulfonylmethane)",
+        "purpose": "Healthy Aging/Longevity",
+        "population": "Same two studies, generic MSM ingredient identity: different mild-pain and OA populations at2g and6g over12wk. Historical per-entry source receipt `scripts/audits/rr_correctness_20260928/research.md` MSM section (2026-09-29); current live verification agrees.",
+        "exposure_basis": "minimum_directed_daily_use",
+        "units": "mg",
+        "curve": "completed_no_benchmark_neutral",
+        "source_ids": [
+          "PMID:16309928",
+          "PMID:37447322"
+        ],
+        "rationale": "Same two studies, generic MSM ingredient identity: different mild-pain and OA populations at2g and6g over12wk. Historical per-entry source receipt `scripts/audits/rr_correctness_20260928/research.md` MSM section (2026-09-29); current live verification agrees. Unsupported numerical inference rejected: An isolated regimen or heterogeneous moderator signal does not establish a clinical minimum/continuous range and proportional below-dose adequacy. The completed general Dose conclusion uses existing PharmaGuide neutral policy, not clinical approval of a numerical benchmark.",
+        "owner": "scripts/data/backed_clinical_studies.json::INGR_MSM",
+        "review_date": "2026-10-18",
+        "approval_status": "approved_existing_neutral_2026_10_18"
+      }
     },
     {
       "id": "BRAND_AQUAMIN",
@@ -14103,7 +14229,24 @@
       "effect_direction_rationale": "Mixed is a high-confidence classification of conflicting, condition-specific systematic reviews, not a claim of moderate universal benefit. PubMed E-utilities verified all five references on 2026-08-06. The 2019 Cochrane diabetic-neuropathy review judged pain evidence very low certainty; another neuropathy review reported benefit. A positive MCI/early-Alzheimer meta-analysis conflicts with Cochrane reviews finding no objective dementia benefit and insufficient evidence in healthy adults.",
       "endpoint_relevance_tags": [
         "focus_memory"
-      ]
+      ],
+      "reference_semantics": {
+        "reference_type": "no_benchmark",
+        "scope": "General catalog Dose for this exact source identity; source-specific study facts and established safety references remain separate.",
+        "preparation": "Only the exact preparations described in the reviewed source facts: Four studies in diabetic peripheral neuropathy used discrete regimens; Cochrane judged the pain evidence very low certainty and cautioned interpretation of the greater-than-1500mg subgroup.",
+        "purpose": "Focus & Mental Clarity",
+        "population": "Only source-specific cohorts described in rationale; no general efficacy dose for unstudied populations, pregnancy or lactation is inferred.",
+        "exposure_basis": "minimum_directed_daily_use",
+        "units": "mg",
+        "curve": "completed_no_benchmark_neutral",
+        "source_ids": [
+          "PMID:31201734"
+        ],
+        "rationale": "Four studies in diabetic peripheral neuropathy used discrete regimens; Cochrane judged the pain evidence very low certainty and cautioned interpretation of the greater-than-1500mg subgroup. Unsupported numerical inference rejected: Mixed source outcomes and source-specific regimens do not establish a universal numerical Dose curve. Existing clinical evidence facts remain unchanged. The completed general Dose conclusion uses existing PharmaGuide neutral policy, not clinical approval of a numerical benchmark.",
+        "owner": "scripts/data/backed_clinical_studies.json::INGR_ACETYL_L_CARNITINE",
+        "review_date": "2026-10-18",
+        "approval_status": "approved_existing_neutral_2026_10_18"
+      }
     },
     {
       "id": "PRECLIN_NMN",
@@ -15128,7 +15271,27 @@
       "effect_direction_rationale": "Retained positive_strong classification; study_type=clinical_strain; evidence_level=strain-clinical; primary_outcome=Immune Support; published_tags=RCT,meta-analysis,brand; registry_completed_trials_count=6; total_enrollment=40; endpoint_tags=immune_support; notes/citations contain no automated downgrade signals.",
       "endpoint_relevance_tags": [
         "immune_support"
-      ]
+      ],
+      "reference_semantics": {
+        "reference_type": "no_benchmark",
+        "scope": "General catalog Dose for this exact source identity; source-specific study facts and established safety references remain separate.",
+        "preparation": "Lactobacillus reuteri Prodentis",
+        "purpose": "Immune Support",
+        "population": "No general population-specific clinical Dose curve follows from current tier sources; study-context populations remain recorded.",
+        "exposure_basis": "minimum_directed_daily_use",
+        "units": "CFU/day",
+        "curve": "completed_no_benchmark_neutral",
+        "source_ids": [
+          "PMID:23176716",
+          "PMID:40856866",
+          "https://pubmed.ncbi.nlm.nih.gov/23176716/",
+          "https://pubmed.ncbi.nlm.nih.gov/40856866/"
+        ],
+        "rationale": "Two-strain preparation DSM17938+PTA5289; single-strain identity cannot inherit formula evidence; later trial null. Dose tiers do not fix formula identity. Unsupported numerical inference rejected: Universal increasing clinical adequacy from viable count; clinical review of source identity does not approve tier boundaries. The completed general Dose conclusion uses existing PharmaGuide neutral policy, not clinical approval of a numerical benchmark.",
+        "owner": "scripts/data/backed_clinical_studies.json::STRAIN_REUTERI_PRODENTIS",
+        "review_date": "2026-10-18",
+        "approval_status": "approved_existing_neutral_2026_10_18"
+      }
     },
     {
       "id": "BRAND_NITROSIGINE",
@@ -19827,7 +19990,35 @@
         "stress_mood",
         "focus_memory",
         "digestive_health"
-      ]
+      ],
+      "reference_semantics": {
+        "reference_type": "no_benchmark",
+        "scope": "General catalog Dose for this exact source identity; source-specific study facts and established safety references remain separate.",
+        "preparation": "Lactobacillus rhamnosus GG",
+        "purpose": "Digestive Health; Immune Support",
+        "population": "No general population-specific clinical Dose curve follows from current tier sources; study-context populations remain recorded.",
+        "exposure_basis": "minimum_directed_daily_use",
+        "units": "CFU/day",
+        "curve": "completed_no_benchmark_neutral",
+        "source_ids": [
+          "PMID:26756877",
+          "PMID:17229242",
+          "PMID:40702885",
+          "PMID:39060543",
+          "PMID:34546300",
+          "PMID:38103462",
+          "PMID:25473176",
+          "PMID:41883407",
+          "PMID:42477222",
+          "PMID:40891819",
+          "PMID:30462938",
+          "https://pubmed.ncbi.nlm.nih.gov/26756877/"
+        ],
+        "rationale": "Pediatric AAD guideline has no exact dose in abstract; numeric LGG20B contexts include null acute gastroenteritis/ICU trials. Do not equate50B with superior efficacy. Unsupported numerical inference rejected: Universal increasing clinical adequacy from viable count; clinical review of source identity does not approve tier boundaries. The completed general Dose conclusion uses existing PharmaGuide neutral policy, not clinical approval of a numerical benchmark.",
+        "owner": "scripts/data/backed_clinical_studies.json::STRAIN_LGG",
+        "review_date": "2026-10-18",
+        "approval_status": "approved_existing_neutral_2026_10_18"
+      }
     },
     {
       "id": "STRAIN_BB12",
@@ -20699,7 +20890,25 @@
       "effect_direction_rationale": "A strain-specific meta-analysis of randomized trials reported positive colic and preterm-infant GI outcomes, while also identifying a null sepsis outcome and a need for further trials.",
       "endpoint_relevance_tags": [
         "digestive_health"
-      ]
+      ],
+      "reference_semantics": {
+        "reference_type": "no_benchmark",
+        "scope": "General catalog Dose for this exact source identity; source-specific study facts and established safety references remain separate.",
+        "preparation": "Lactobacillus reuteri DSM 17938",
+        "purpose": "Digestive Health",
+        "population": "No general population-specific clinical Dose curve follows from current tier sources; study-context populations remain recorded.",
+        "exposure_basis": "minimum_directed_daily_use",
+        "units": "CFU/day",
+        "curve": "completed_no_benchmark_neutral",
+        "source_ids": [
+          "PMID:29390535",
+          "https://pubmed.ncbi.nlm.nih.gov/29390535/"
+        ],
+        "rationale": "Infant-colic source/meta-analysis; infant regimen cannot be replaced by generic adult-style1B/10B/50B grading. Unsupported numerical inference rejected: Universal increasing clinical adequacy from viable count; clinical review of source identity does not approve tier boundaries. The completed general Dose conclusion uses existing PharmaGuide neutral policy, not clinical approval of a numerical benchmark.",
+        "owner": "scripts/data/backed_clinical_studies.json::STRAIN_REUTERI_DSM17938",
+        "review_date": "2026-10-18",
+        "approval_status": "approved_existing_neutral_2026_10_18"
+      }
     },
     {
       "id": "STRAIN_SBOULARDII",
@@ -21789,7 +21998,26 @@
       "effect_direction_rationale": "Classified positive_weak because systematic reviews consistently support a narrow soreness/creatine-kinase recovery signal but do not support broad performance, muscle-growth, or body-composition claims. Higher doses and longer use appear more favorable, while protocols and protein-intake reporting vary substantially.",
       "endpoint_relevance_tags": [
         "muscle_recovery"
-      ]
+      ],
+      "reference_semantics": {
+        "reference_type": "no_benchmark",
+        "scope": "General catalog Dose for this exact source identity; source-specific study facts and established safety references remain separate.",
+        "preparation": "Branched Chain Amino Acids",
+        "purpose": "Muscle Growth & Recovery",
+        "population": "[38625669/full text](https://pmc.ncbi.nlm.nih.gov/articles/PMC11021390/)18studies meta-regression: higher doses/longer supplementation associated with some CK/DOMS outcomes; >5g/day may be more favorable. [38241335](https://pubmed.ncbi.nlm.nih.gov/38241335/)11reviews:no performance-recovery effect. [36235655](https://pmc.ncbi.nlm.nih.gov/articles/PMC9571679/)24studies:performance/body-composition benefits negligible, protocols/protein intake heterogeneous.",
+        "exposure_basis": "minimum_directed_daily_use",
+        "units": "mg",
+        "curve": "completed_no_benchmark_neutral",
+        "source_ids": [
+          "PMID:38625669",
+          "PMID:38241335",
+          "PMID:36235655"
+        ],
+        "rationale": "[38625669/full text](https://pmc.ncbi.nlm.nih.gov/articles/PMC11021390/)18studies meta-regression: higher doses/longer supplementation associated with some CK/DOMS outcomes; >5g/day may be more favorable. [38241335](https://pubmed.ncbi.nlm.nih.gov/38241335/)11reviews:no performance-recovery effect. [36235655](https://pmc.ncbi.nlm.nih.gov/articles/PMC9571679/)24studies:performance/body-composition benefits negligible, protocols/protein intake heterogeneous. Unsupported numerical inference rejected: An isolated regimen or heterogeneous moderator signal does not establish a clinical minimum/continuous range and proportional below-dose adequacy. The completed general Dose conclusion uses existing PharmaGuide neutral policy, not clinical approval of a numerical benchmark.",
+        "owner": "scripts/data/backed_clinical_studies.json::INGR_BRANCHED_CHAIN_AMINO_ACIDS",
+        "review_date": "2026-10-18",
+        "approval_status": "approved_existing_neutral_2026_10_18"
+      }
     },
     {
       "id": "INGR_BLACK_SEED_OIL",
@@ -22689,7 +22917,24 @@
       "endpoint_relevance_tags": [
         "cardiovascular",
         "muscle_recovery"
-      ]
+      ],
+      "reference_semantics": {
+        "reference_type": "no_benchmark",
+        "scope": "General catalog Dose for this exact source identity; source-specific study facts and established safety references remain separate.",
+        "preparation": "Only the exact preparations described in the reviewed source facts: Adult blood-pressure meta-analysis found a nonlinear systolic signal at >=4g/day, with dose, duration and subgroup limitations; this does not establish the record's 1500mg sports exposure as a general minimum.",
+        "purpose": "Cardiovascular/Heart Health; Muscle Growth & Recovery",
+        "population": "Only source-specific cohorts described in rationale; no general efficacy dose for unstudied populations, pregnancy or lactation is inferred.",
+        "exposure_basis": "minimum_directed_daily_use",
+        "units": "mg",
+        "curve": "completed_no_benchmark_neutral",
+        "source_ids": [
+          "PMID:34967840"
+        ],
+        "rationale": "Adult blood-pressure meta-analysis found a nonlinear systolic signal at >=4g/day, with dose, duration and subgroup limitations; this does not establish the record's 1500mg sports exposure as a general minimum. Unsupported numerical inference rejected: Mixed source outcomes and source-specific regimens do not establish a universal numerical Dose curve. Existing clinical evidence facts remain unchanged. The completed general Dose conclusion uses existing PharmaGuide neutral policy, not clinical approval of a numerical benchmark.",
+        "owner": "scripts/data/backed_clinical_studies.json::INGR_L_ARGININE",
+        "review_date": "2026-10-18",
+        "approval_status": "approved_existing_neutral_2026_10_18"
+      }
     },
     {
       "id": "INGR_WHITE_KIDNEY_BEAN",
@@ -23664,7 +23909,25 @@
       "effect_direction_rationale": "Two positive double-blind placebo-controlled trials (240 men) on hormone levels and a symptom score, both from the ingredient's developer and without independent replication: positive_weak rather than positive_strong.",
       "endpoint_relevance_tags": [
         "hormone_balance"
-      ]
+      ],
+      "reference_semantics": {
+        "reference_type": "discrete_studied_regimen",
+        "scope": "General catalog Dose for this exact source identity; source-specific study facts and established safety references remain separate.",
+        "preparation": "Tesnor",
+        "purpose": "Hormone Balance",
+        "population": "Healthy men aged 21-55 years, studied for 56 days",
+        "exposure_basis": "minimum_directed_daily_use",
+        "units": "mg",
+        "curve": "completed_no_benchmark_neutral",
+        "source_ids": [
+          "PMID:35129040",
+          "PMID:35928723"
+        ],
+        "rationale": "[35129040](https://pubmed.ncbi.nlm.nih.gov/35129040/)120men21–35;[35928723/full text](https://pmc.ncbi.nlm.nih.gov/articles/PMC9346391/)120men36–55; LN18178 standardized pomegranate fruit-rind+cocoa seed blend,200or400mg/56d. Younger trial hormones primary; older trial AMS symptoms primary,hormones/strength secondary. Existing receipt `scripts/audits/rr_correctness_20260928/research.md` (2026-09-28) directly applies. Unsupported numerical inference rejected: An isolated regimen or heterogeneous moderator signal does not establish a clinical minimum/continuous range and proportional below-dose adequacy. The completed general Dose conclusion uses existing PharmaGuide neutral policy, not clinical approval of a numerical benchmark.",
+        "owner": "scripts/data/backed_clinical_studies.json::BRAND_TESNOR",
+        "review_date": "2026-10-18",
+        "approval_status": "approved_existing_neutral_2026_10_18"
+      }
     },
     {
       "id": "BRAND_SYTRINOL",
@@ -23756,7 +24019,24 @@
       "effect_direction_rationale": "A positive 2007 trial at 300 mg/day with open-label components against a null independent 2015 double-blind trial at lower doses: mixed.",
       "endpoint_relevance_tags": [
         "cardiovascular"
-      ]
+      ],
+      "reference_semantics": {
+        "reference_type": "no_benchmark",
+        "scope": "General catalog Dose for this exact source identity; source-specific study facts and established safety references remain separate.",
+        "preparation": "Only the exact preparations described in the reviewed source facts: The 12-week trial of 240 hypercholesterolemic adults using two specific tocotrienol/flavone combinations found no LDL-C or hsCRP advantage beyond placebo; source regimens do not establish a general 300mg minimum.",
+        "purpose": "Cardiovascular/Heart Health",
+        "population": "Only source-specific cohorts described in rationale; no general efficacy dose for unstudied populations, pregnancy or lactation is inferred.",
+        "exposure_basis": "minimum_directed_daily_use",
+        "units": "mg",
+        "curve": "completed_no_benchmark_neutral",
+        "source_ids": [
+          "PMID:25828621"
+        ],
+        "rationale": "The 12-week trial of 240 hypercholesterolemic adults using two specific tocotrienol/flavone combinations found no LDL-C or hsCRP advantage beyond placebo; source regimens do not establish a general 300mg minimum. Unsupported numerical inference rejected: Mixed source outcomes and source-specific regimens do not establish a universal numerical Dose curve. Existing clinical evidence facts remain unchanged. The completed general Dose conclusion uses existing PharmaGuide neutral policy, not clinical approval of a numerical benchmark.",
+        "owner": "scripts/data/backed_clinical_studies.json::BRAND_SYTRINOL",
+        "review_date": "2026-10-18",
+        "approval_status": "approved_existing_neutral_2026_10_18"
+      }
     }
   ]
 }

@@ -14,6 +14,7 @@ from scoring_v4.modules.generic_helpers import (
     daily_serving_range,
     get_active_ingredients,
     primary_type_of,
+    unbenchmarked_dose_credit,
     _norm_text,
     _row_quantity_mg,
 )
@@ -40,16 +41,16 @@ def score_sleep_support_dose(product: Dict[str, Any]) -> Optional[Dict[str, Any]
     if not is_sleep_support_product(product):
         return None
 
-    for active, canonicals, band in (
-        ("melatonin", MELATONIN_CANONICALS, _melatonin_score),
-        ("5_htp", FIVE_HTP_CANONICALS, _five_htp_sleep_score),
+    for active, canonicals in (
+        ("melatonin", MELATONIN_CANONICALS),
+        ("5_htp", FIVE_HTP_CANONICALS),
     ):
         daily_mg = active_daily_mg(product, canonicals)
         if daily_mg is not None:
-            # Adequacy at the minimum directed use, the high-dose bands at the
-            # maximum: the lower of the two.
+            # The daily exposure is descriptive; no clinical window follows
+            # from the isolated sleep regimens reviewed in this batch.
             top_mg = active_daily_mg(product, canonicals, top=True)
-            score, label = min(band(top_mg), band(daily_mg), key=lambda scored: scored[0])
+            score, label = unbenchmarked_dose_credit(), "no_benchmark_neutral"
             payload = _payload(active, daily_mg, score, label)
             payload["daily_mg_max"] = round(top_mg, 4)
             return payload
@@ -63,9 +64,9 @@ def score_sleep_purpose_dose(
     """Assess one declared sleep-active purpose on the shared 0..22 scale."""
     if not is_sleep_support_product(product):
         return None
-    for active, canonicals, band in (
-        ("melatonin", MELATONIN_CANONICALS, _melatonin_score),
-        ("5_htp", FIVE_HTP_CANONICALS, _five_htp_sleep_score),
+    for active, canonicals in (
+        ("melatonin", MELATONIN_CANONICALS),
+        ("5_htp", FIVE_HTP_CANONICALS),
     ):
         canonical_set = {_norm_text(value) for value in canonicals}
         if not _row_matches(row, canonical_set):
@@ -75,7 +76,7 @@ def score_sleep_purpose_dose(
             return None
         daily_mg = mg * _daily_serving_multiplier(product)
         daily_mg_max = mg * daily_serving_range(product)[1]
-        score, label = min(band(daily_mg_max), band(daily_mg), key=lambda scored: scored[0])
+        score, label = unbenchmarked_dose_credit(), "no_benchmark_neutral"
         payload = _payload(active, daily_mg, score, label)
         payload["daily_mg_max"] = round(daily_mg_max, 4)
         return payload
@@ -107,32 +108,6 @@ def _payload(active: str, daily_mg: float, score: float, band: str) -> Dict[str,
         "daily_mg": round(daily_mg, 4),
         "band": band,
     }
-
-
-def _melatonin_score(daily_mg: float) -> tuple[float, str]:
-    if daily_mg < 0.3:
-        return 8.0, "below_low_dose_range"
-    if daily_mg <= 1.0:
-        return 22.0, "low_dose_preferred"
-    if daily_mg <= 3.0:
-        return 20.0, "standard_dose"
-    if daily_mg <= 5.0:
-        return 17.0, "upper_common_dose"
-    if daily_mg <= 10.0:
-        return 11.0, "high_dose"
-    if daily_mg <= 20.0:
-        return 5.0, "very_high_dose"
-    return 2.0, "extreme_dose"
-
-
-def _five_htp_sleep_score(daily_mg: float) -> tuple[float, str]:
-    if daily_mg < 50.0:
-        return 8.0, "below_sleep_support_range"
-    if daily_mg <= 300.0:
-        return 16.0, "sleep_support_preliminary"
-    if daily_mg <= 400.0:
-        return 12.0, "high_sleep_support_dose"
-    return 8.0, "very_high_sleep_support_dose"
 
 
 def _row_matches(row: Dict[str, Any], canonical_set: set[str]) -> bool:

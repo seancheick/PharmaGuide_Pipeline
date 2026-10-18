@@ -30,11 +30,12 @@ def test_real_omega_rubric_passes():
     validate_rubric("omega", _rubric())  # must not raise
 
 
-def test_out_of_range_band_score_raises():
+@pytest.mark.parametrize("retired_score", [0, 20, 200])
+def test_retired_context_band_cannot_supply_points(retired_score):
     from scoring_v4.config_schema import validate_rubric, RubricValidationError
 
     bad = _rubric()
-    bad["dose"]["epa_dha_bands"][1]["score"] = 200  # the classic typo (18 -> 200)
+    bad["dose"]["epa_dha_bands"][1]["score"] = retired_score
     with pytest.raises(RubricValidationError):
         validate_rubric("omega", bad)
 

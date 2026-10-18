@@ -6,14 +6,26 @@ from typing import Any, Dict
 from dataclasses import asdict
 
 from scoring_v4.exposure import row_exposure
+from scoring_input_contract import dose_disclosure_status
 
 from scoring_v4.modules.fiber_digestive_helpers import (
     fiber_rows,
     has_fiber_context,
+    is_fiber_row,
     nutrition_fiber_exposure,
 )
-from scoring_v4.modules.generic_dose import score_dose as score_generic_dose
-from scoring_v4.modules.generic_helpers import archetype_dose_reference, dose_reference_scope
+from scoring_v4.modules.generic_dose import (
+    score_dose as score_generic_dose,
+    _score_declared_purpose_window,
+    _unread_declared_purpose_rows,
+    _row_identity_keys,
+)
+from scoring_v4.modules.generic_helpers import (
+    archetype_dose_reference,
+    dose_reference_scope,
+    unbenchmarked_dose_credit,
+    _norm_text,
+)
 
 
 from scoring_v4.quality_score_config import block as _cfg_block
@@ -52,22 +64,46 @@ def score_dose(product: Dict[str, Any]) -> Dict[str, Any]:
     daily_minimum = sum(e.minimum for e in exposures) if exact else None
     daily_maximum = sum(e.maximum for e in exposures) if exact else None
     daily_amount = sum(e.benchmark_amount for e in exposures if e.benchmark_amount is not None)
+    unread = (nutrition_exposure is None and any(
+        exposure.benchmark_amount is None and dose_disclosure_status(row) != "not_disclosed_blend"
+        for row, exposure in zip(rows, exposures)))
+    hidden = (nutrition_exposure is None and any(
+        exposure.benchmark_amount is None and dose_disclosure_status(row) == "not_disclosed_blend"
+        for row, exposure in zip(rows, exposures)))
     # V4.1 Step 4: fiber-type and amount-printed bonuses are retired;
     # Transparency owns disclosure and Dose owns the effective amount.
-    effective = _fiber_effective_dose_points(daily_amount)
-    score = max(0.0, min(DIMENSION_CAP, effective))
+    effective = unbenchmarked_dose_credit() if hidden else _fiber_effective_dose_points(daily_amount)
+    # Keep the original product for source-role classification: an incidental
+    # co-ingredient does not become a purpose when fiber rows are removed.
+    # Every physical fiber row belongs to the one existing aggregate vote.
+    fiber_keys = set()
+    for row in rows:
+        fiber_keys.update(_row_identity_keys(row))
+        fiber_keys.add(_norm_text(row.get("raw_source_path") or row.get("source_row_ref")))
+    peers = [entry for entry in _score_declared_purpose_window(product)[7]
+             if _norm_text(entry.get("ingredient")) not in fiber_keys]
+    unread = unread or any(not is_fiber_row(row) for row in _unread_declared_purpose_rows(product))
+    unread = unread or any(entry.get("assessment") == "unresolved_source_quantity" for entry in peers)
+    contributions = [{"ingredient": "fiber", "assessment": "hidden_amount_neutral" if hidden else "no_benchmark_neutral",
+                      "credit_raw": round(effective, 4)}, *peers]
+    count = len(contributions)
+    components = {"fiber_effective_dose": round(effective / count, 4)}
+    if peers:
+        components["supplemental_window_proxy"] = round(sum(entry["credit_raw"] for entry in peers) / count, 4)
+    score = max(0.0, min(DIMENSION_CAP, sum(components.values())))
 
     return {
-        "score": round(score, 4),
+        "score": None if unread else round(score, 4),
         "max": DIMENSION_CAP,
-        "components": {
-            "fiber_effective_dose": round(effective, 4),
-        },
+        "components": components,
         "penalties": {},
         "phase": PHASE_MARKER,
         "metadata": {
+            **({"assessment_status": "incomplete", "reason_code": "unresolved_source_quantity"} if unread else {}),
             "phase": PHASE_MARKER,
             "method": "fiber_effective_dose_v1",
+            "dose_participation_basis": "declared_purpose_equal_weight" if peers else "fiber_aggregate",
+            "dose_contributions": contributions,
             "fiber_dose_source": source,
             "fiber_grams_per_serving": round(grams, 4),
             "fiber_rows_evaluated": len(rows),
@@ -83,14 +119,5 @@ def score_dose(product: Dict[str, Any]) -> Dict[str, Any]:
 
 
 def _fiber_effective_dose_points(grams: float) -> float:
-    if grams >= 7.0:
-        return 22.0
-    if grams >= 5.0:
-        return 18.0
-    if grams >= 3.0:
-        return 13.0
-    if grams >= 1.0:
-        return 7.0
-    if grams > 0.0:
-        return max(1.0, grams * 4.0)
-    return 0.0
+    """Completed review: generic fiber mass establishes no clinical curve."""
+    return unbenchmarked_dose_credit() if grams > 0 else 0.0

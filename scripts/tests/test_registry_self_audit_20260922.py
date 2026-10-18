@@ -95,6 +95,30 @@ def test_bi07_single_strain_record_is_an_acute_crossover_surrogate():
     assert bi07["cfu_thresholds"]["dr_pham_signoff"] is True
 
 
+def test_ncfm_bi07_trial_retains_its_combination_total_not_a_member_dose():
+    from studied_formulas import assess_probiotic_evidence
+    from test_probiotic_applicability_rubric import strain_product
+
+    product = strain_product(
+        clinical_id="STRAIN_LACTIS_BI07", name="Bifidobacterium lactis Bi-07",
+        dose=200_000_000_000,
+    )
+    assessments = assess_probiotic_evidence(product)["strain_assessments"]
+    context = next(
+        context for row in assessments for context in row["study_contexts"]
+        if context.get("context_id") == "ncfm_bi07_bloating_21436726"
+    )
+    # PMID21436726 Methods: two daily pills, each containing 1e11 CFU
+    # of the combined equal NCFM/Bi-07 mixture, not 2e11 CFU per strain.
+    assert context["dose"]["values"] == [200_000_000_000]
+    assert context["dose"]["unit"] == "CFU"
+    assert context["dose"]["dose_basis"] == "combination_total_daily"
+    assert set(context["components"]) == {"STRAIN_ACIDOPHILUS_NCFM", "STRAIN_LACTIS_BI07"}
+    assert context["dose_comparison"] == "combination_not_individual_dose"
+    assert context["clinical_applicability"] == "not_established"
+    assert context["dose_applicability_credit"] == 0
+
+
 def test_bb12_reads_mixed_limited_not_strongly_positive():
     bb12 = _registry()["STRAIN_LACTIS_BB12"]
     contexts = {c["context_id"]: c for c in bb12["study_contexts"]}

@@ -1,22 +1,9 @@
-"""v4 Generic Dose dimension — P1.3.2a tests.
+"""Generic Dose owner regressions.
 
-Dose 25 has two lines (§6's multi-form bonus was retired in quality_score
-1.21.0; IQM bio_score owns form quality):
-
-    | Item                                  | Cap | Notes                  |
-    |---------------------------------------|----:|------------------------|
-    | Dose inside the supplemental window   |  22 | NEW framing per §6 line 369 |
-    | B7 dose safety penalty (>150% UL)     |  -3 | up to -3                |
-
-P1.3.2a state: supplemental-window math is implemented as an
-**RDA/UL proxy** (`pct_rda` / `pct_ul` from existing enriched
-`rda_ul_data.adequacy_results`). True window math per §6 line 369
-requires a `typical_dietary_intake` reference table that does NOT
-exist yet — tracked as a P1.3.2b / P1.5 calibration task.
-
-Guardrail: every test on a real product asserts the dimension
-breakdown carries the proxy-method metadata so no downstream tool
-mistakes the proxy band for final NIH/NHANES supplemental-window math.
+Nutritional contributions consume qualified RDA/AI assessments; ordinary-adult
+magnesium uses the approved 84 mg contribution target. Unsupported clinical
+amounts retain source facts and completed-neutral Dose. The product-level
+safety ceiling remains separate from adequacy and applies once.
 """
 
 from __future__ import annotations
@@ -97,10 +84,18 @@ def _adequacy(
     canonical_id: str | None = None,
     pct_rda: float | None = 50.0,
     pct_ul: float | None = 57.0,
+    rda_ai: float | None = None,
 ) -> dict:
+    # Explicit fixture identities and source reference values, never a
+    # name-to-clinical-reference fallback for an unknown ingredient.
+    references = {"Magnesium": ("magnesium", 400.0), "Zinc": ("zinc", 11.0),
+                  "Potassium": ("potassium", 3400.0)}
+    identity, reference = references.get(nutrient, (None, None))
     row = {"nutrient": nutrient, "pct_rda": pct_rda, "pct_ul": pct_ul}
-    if canonical_id is not None:
-        row["canonical_id"] = canonical_id
+    if canonical_id is not None or identity is not None:
+        row["canonical_id"] = canonical_id or identity
+    if rda_ai is not None or reference is not None:
+        row["rda_ai"] = rda_ai if rda_ai is not None else reference
     return row
 
 
@@ -162,17 +157,15 @@ def _joint_product(
 
 
 def test_dose_payload_carries_proxy_metadata() -> None:
-    """GUARDRAIL: every Dose payload must carry the proxy-method markers
-    so downstream tooling never mistakes the proxy band for final
-    NIH/NHANES supplemental-window math."""
+    """The method identifies approved contribution policy, not a deferred proxy."""
     from scoring_v4.modules.generic_dose import score_dose
 
     payload = score_dose(_product(adequacy_results=[_adequacy()]))
 
     meta = payload["metadata"]
     assert meta["phase"] == "P1.3.2a_dose_proxy"
-    assert meta["method"] == "rda_ul_proxy_until_dietary_intake_table"
-    assert meta["deferred_data_dependency"] == "typical_dietary_intake"
+    assert meta["method"] == "source_qualified_contribution_and_completed_neutral"
+    assert "deferred_data_dependency" not in meta
 
 
 def test_dose_phase_marker() -> None:
@@ -189,26 +182,26 @@ def test_dose_dimension_cap_25() -> None:
     assert payload["max"] == 25.0
 
 
-def test_sleep_melatonin_low_dose_gets_sleep_specific_full_credit() -> None:
+def test_sleep_melatonin_low_dose_keeps_completed_neutral() -> None:
     from scoring_v4.modules.generic_dose import score_dose
 
     payload = score_dose(_sleep_product(quantity=0.5))
 
-    assert payload["components"]["sleep_support_dose"] == 22.0
+    assert payload["components"]["sleep_support_dose"] == NEUTRAL
     assert payload["metadata"]["method"] == "sleep_support_clinical_dose_v1"
-    assert payload["metadata"]["sleep_support_dose"]["band"] == "low_dose_preferred"
+    assert payload["metadata"]["sleep_support_dose"]["band"] == "no_benchmark_neutral"
 
 
-def test_sleep_melatonin_high_dose_is_penalized_not_full_credit() -> None:
+def test_sleep_melatonin_high_dose_does_not_create_an_unsupported_curve() -> None:
     from scoring_v4.modules.generic_dose import score_dose
 
     payload = score_dose(_sleep_product(quantity=10))
 
-    assert payload["components"]["sleep_support_dose"] == 11.0
-    assert payload["metadata"]["sleep_support_dose"]["band"] == "high_dose"
+    assert payload["components"]["sleep_support_dose"] == NEUTRAL
+    assert payload["metadata"]["sleep_support_dose"]["band"] == "no_benchmark_neutral"
 
 
-def test_sleep_5htp_does_not_receive_full_generic_proxy_credit() -> None:
+def test_sleep_5htp_reference_amount_keeps_completed_neutral() -> None:
     from scoring_v4.modules.generic_dose import score_dose
 
     payload = score_dose(
@@ -220,21 +213,22 @@ def test_sleep_5htp_does_not_receive_full_generic_proxy_credit() -> None:
         )
     )
 
-    assert payload["components"]["sleep_support_dose"] == 16.0
-    assert payload["metadata"]["sleep_support_dose"]["band"] == "sleep_support_preliminary"
+    assert payload["components"]["sleep_support_dose"] == NEUTRAL
+    assert payload["metadata"]["sleep_support_dose"]["band"] == "no_benchmark_neutral"
 
 
-def test_joint_glucosamine_chondroitin_gets_joint_specific_full_dose_credit() -> None:
+def test_joint_glucosamine_chondroitin_keeps_completed_neutral_and_exposure() -> None:
     from scoring_v4.modules.generic_dose import score_dose
 
     payload = score_dose(_joint_product())
 
-    assert payload["components"]["joint_support_dose"] == 22.0
+    assert payload["components"]["joint_support_dose"] == NEUTRAL
     assert payload["metadata"]["method"] == "joint_support_clinical_dose_v1"
-    assert payload["metadata"]["joint_support_dose"]["adequate_actives"] == [
-        "glucosamine",
-        "chondroitin",
-    ]
+    assert payload["metadata"]["joint_support_dose"]["adequate_actives"] == []
+    assert {item["active"]: item["daily_mg"] for item in
+            payload["metadata"]["joint_support_dose"]["actives"]} == {
+        "glucosamine": 1500.0, "chondroitin": 1200.0}
+    assert payload["metadata"]["joint_support_dose"]["band"] == "no_benchmark_neutral"
 
 
 def test_joint_glucosamine_gram_units_do_not_fall_through_to_rda_proxy() -> None:
@@ -255,7 +249,7 @@ def test_joint_glucosamine_gram_units_do_not_fall_through_to_rda_proxy() -> None
         )
     )
 
-    assert payload["components"]["joint_support_dose"] == 20.0
+    assert payload["components"]["joint_support_dose"] == NEUTRAL
     assert payload["metadata"]["joint_support_dose"]["actives"][0]["daily_mg"] == 2000.0
 
 
@@ -338,17 +332,15 @@ def test_joint_active_routing_is_stable_across_python_hash_seeds() -> None:
 
 
 def test_window_proxy_in_window_returns_22() -> None:
-    """Thorne Mg Bisglycinate canary: 200mg = 50% of 400mg RDA, 57% of 350mg
-    supplemental UL → fully inside window → 22 pts."""
+    """200 mg magnesium meets the approved 84 mg adult contribution target."""
     from scoring_v4.modules.generic_dose import score_dose
 
     payload = score_dose(_product(adequacy_results=[_adequacy(pct_rda=50.0, pct_ul=57.0)]))
     assert payload["components"]["supplemental_window_proxy"] == 22.0
 
 
-def test_window_proxy_just_at_25_pct_rda_full_credit() -> None:
-    """Boundary: pct_rda exactly at 25% qualifies for full credit (the
-    sub-clinical proportional band is strictly < 25%)."""
+def test_magnesium_100mg_exceeds_84mg_contribution_target() -> None:
+    """25% of the explicit 400 mg reference gives 100 mg; 84 mg earns full."""
     from scoring_v4.modules.generic_dose import score_dose
 
     payload = score_dose(_product(adequacy_results=[_adequacy(pct_rda=25.0, pct_ul=10.0)]))
@@ -367,11 +359,11 @@ def test_window_proxy_over_rda_under_ul_full_credit() -> None:
 
 
 def test_window_proxy_subclinical_proportional() -> None:
-    """pct_rda = 10% → proportional: (10/25) * 22 = 8.8 pts."""
+    """10% of the explicit 400 mg RDA is 40 mg: 22 × 40/84 points."""
     from scoring_v4.modules.generic_dose import score_dose
 
     payload = score_dose(_product(adequacy_results=[_adequacy(pct_rda=10.0, pct_ul=2.0)]))
-    assert payload["components"]["supplemental_window_proxy"] == 8.8
+    assert payload["components"]["supplemental_window_proxy"] == round(22 * 40 / 84, 4)
 
 
 def test_potassium_single_supplement_is_not_scored_against_total_dietary_ai() -> None:
@@ -408,25 +400,17 @@ def test_window_proxy_zero_dose_no_credit() -> None:
     assert payload["components"]["supplemental_window_proxy"] == 0.0
 
 
-# --- Supplemental-window proxy: overdose cases ---------------------------
+# --- Supplemental-window proxy: above an upper limit ----------------------
 
 
-def test_window_proxy_over_ul_under_150_partial_credit() -> None:
-    """101%-149% of UL → overdose territory, half credit (11 pts).
-    150%+ is B7's job; this band penalises mild over-dose without B7."""
+@pytest.mark.parametrize("pct_rda,pct_ul", [(300.0, 120.0), (400.0, 180.0)])
+def test_window_proxy_over_ul_keeps_adequacy_credit(pct_rda, pct_ul) -> None:
+    """Dose V4.1 §2.4: adequacy is scored alone; the one product-level ceiling
+    (scoring_v4.dose_safety) caps the public pillar, never this band."""
     from scoring_v4.modules.generic_dose import score_dose
 
-    payload = score_dose(_product(adequacy_results=[_adequacy(pct_rda=300.0, pct_ul=120.0)]))
-    assert payload["components"]["supplemental_window_proxy"] == 11.0
-
-
-def test_window_proxy_over_150_ul_returns_zero() -> None:
-    """≥150% UL — the window proxy contributes 0; B7 penalty handles
-    the dose-safety issue. (Avoids double-penalising.)"""
-    from scoring_v4.modules.generic_dose import score_dose
-
-    payload = score_dose(_product(adequacy_results=[_adequacy(pct_rda=400.0, pct_ul=180.0)]))
-    assert payload["components"]["supplemental_window_proxy"] == 0.0
+    payload = score_dose(_product(adequacy_results=[_adequacy(pct_rda=pct_rda, pct_ul=pct_ul)]))
+    assert payload["components"]["supplemental_window_proxy"] == 22.0
 
 
 # --- Supplemental-window proxy: no data case -----------------------------
@@ -496,14 +480,8 @@ def test_enzyme_activity_evidence_gets_no_reference_partial_dose_credit(declared
 
 
 def test_ksm66_style_botanical_no_rda_is_not_punished_as_zero_dose() -> None:
-    """KSM-66 / botanical products have real mg dosing but no RDA/UL benchmark.
-    Phase 6: instead of the conservative generic proxy (16), a recognized
-    botanical with a clinical dose range is scored against that range. KSM-66
-    ashwagandha at 600 mg sits within the studied 250-600 mg window, so it
-    earns the full within-range credit — strictly better than being treated
-    as a no-RDA nutrient, and never punished as zero dose. V4.1 Step 4 scales
-    the band to the caller's Dose reference (22 here), so within range is full
-    Dose credit on every route."""
+    """A recognized preparation keeps its identity and source facts without
+    turning an isolated regimen into a universal continuous Dose curve."""
     from scoring_v4.modules.generic_dose import score_dose
 
     payload = score_dose(
@@ -524,10 +502,10 @@ def test_ksm66_style_botanical_no_rda_is_not_punished_as_zero_dose() -> None:
             ],
         )
     )
-    assert payload["score"] == 22.0
-    assert payload["components"]["botanical_clinical_dose"] == 22.0
+    assert payload["score"] == NEUTRAL
+    assert payload["components"]["botanical_clinical_dose"] == NEUTRAL
     assert payload["metadata"]["method"] == "botanical_clinical_dose_v1"
-    assert payload["metadata"]["botanical_dose_band"] == "within_studied_range"
+    assert payload["metadata"]["botanical_dose_band"] == "disclosed_no_reference"
 
 
 def test_window_proxy_no_rda_and_no_quantified_dose_stays_not_evaluable() -> None:
@@ -561,19 +539,19 @@ def test_window_proxy_partial_rda_data_skips_unscorable_rows() -> None:
 
 
 def test_window_proxy_averages_across_nutrients() -> None:
-    """Two scored nutrients: one in-window (22), one sub-clinical at 10%
-    (8.8) → avg = 15.4."""
+    """Declared magnesium and zinc each keep one source-qualified vote."""
     from scoring_v4.modules.generic_dose import score_dose
 
     payload = score_dose(
         _product(
+            ingredients=[_ingredient(), _ingredient(name="Zinc", canonical_id="zinc", quantity=1.1)],
             adequacy_results=[
                 _adequacy(nutrient="Magnesium", pct_rda=50.0, pct_ul=57.0),
                 _adequacy(nutrient="Zinc", pct_rda=10.0, pct_ul=2.0),
-            ]
+            ], product_name="Magnesium and Zinc",
         )
     )
-    assert payload["components"]["supplemental_window_proxy"] == 15.4
+    assert payload["components"]["supplemental_window_proxy"] == 13.75
 
 
 # --- Form quality is not a Dose input -----------------------------------
@@ -603,58 +581,26 @@ def test_premium_form_count_earns_no_dose_credit() -> None:
     assert "multi_form_bonus" not in premium_pair["components"]
 
 
-# --- B7 dose safety penalty ---------------------------------------------
+# --- Dose safety is recorded, not subtracted ------------------------------
 
 
-def test_b7_penalty_single_over_150_ul_returns_minus_2() -> None:
+def test_module_records_the_dose_safety_ceiling_without_a_subtraction() -> None:
     from scoring_v4.modules.generic_dose import score_dose
 
-    payload = score_dose(_product(safety_flags=[{
-        "nutrient": "Vit B6",
-        "pct_ul": 200,
-        "ul": 100,
-        "amount": 200,
-        "ul_gate_eligible": True,
-    }]))
-    assert payload["penalties"]["B7_dose_safety"] == -2.0
-
-
-def test_b7_penalty_two_over_ul_caps_at_minus_3() -> None:
-    """Two over-UL flags: 2.0 + 2.0 = 4.0, capped at 3.0 → -3.0."""
-    from scoring_v4.modules.generic_dose import score_dose
-
-    payload = score_dose(
-        _product(
-            safety_flags=[
-                {"nutrient": "A", "pct_ul": 180, "ul_gate_eligible": True},
-                {"nutrient": "B", "pct_ul": 200, "ul_gate_eligible": True},
-            ]
-        )
-    )
-    assert payload["penalties"]["B7_dose_safety"] == -3.0
-
-
-def test_b7_penalty_below_150_pct_returns_zero() -> None:
-    """pct_ul = 120 (above UL but below 150% threshold) → no B7 penalty."""
-    from scoring_v4.modules.generic_dose import score_dose
-
-    payload = score_dose(_product(safety_flags=[{"nutrient": "A", "pct_ul": 120}]))
-    assert payload["penalties"]["B7_dose_safety"] == 0.0
-
-
-def test_b7_penalty_no_safety_flags_returns_zero() -> None:
-    from scoring_v4.modules.generic_dose import score_dose
-
-    payload = score_dose(_product())
-    assert payload["penalties"]["B7_dose_safety"] == 0.0
+    payload = score_dose(_product(safety_flags=[
+        {"nutrient": "A", "pct_ul": 180, "ul_gate_eligible": True},
+        {"nutrient": "B", "pct_ul": 120, "ul_gate_eligible": True},
+    ]))
+    assert payload["penalties"] == {}
+    assert payload["metadata"]["B7_safety_evaluation"]["dose_ceiling"]["cap_public"] == 0.0
+    assert score_dose(_product())["metadata"]["B7_safety_evaluation"]["dose_ceiling"] is None
 
 
 # --- Dimension score assembly --------------------------------------------
 
 
 def test_dimension_score_thorne_canary_22_of_25() -> None:
-    """Thorne Mg Bisglycinate 200mg: window proxy 22 - B7 0
-    = 22/25. Matches §6 line 425 worked example."""
+    """The raw 22-point component retains the approved 84 mg magnesium target."""
     from scoring_v4.modules.generic_dose import score_dose
 
     payload = score_dose(
@@ -668,7 +614,7 @@ def test_dimension_score_thorne_canary_22_of_25() -> None:
 
 
 def test_dimension_score_floors_at_zero() -> None:
-    """When a real B7 dose-safety flag exists, the dimension is evaluable
+    """When a real dose-safety flag exists, the dimension is evaluable
     and still floors at zero."""
     from scoring_v4.modules.generic_dose import score_dose
 
@@ -688,7 +634,7 @@ def test_dimension_score_handles_malformed_input() -> None:
     assert payload["score"] is None
     assert payload["max"] == 25.0
     assert "supplemental_window_proxy" in payload["components"]
-    assert "B7_dose_safety" in payload["penalties"]
+    assert payload["penalties"] == {}
 
 
 # --- Shadow integration --------------------------------------------------
@@ -709,7 +655,7 @@ def test_shadow_wires_dose_dimension() -> None:
     # The proxy metadata must propagate through to the module breakdown so
     # audit / Flutter tooling sees it.
     assert dose_dim["metadata"]["phase"] == "P1.3.2a_dose_proxy"
-    assert dose_dim["metadata"]["method"] == "rda_ul_proxy_until_dietary_intake_table"
+    assert dose_dim["metadata"]["method"] == "source_qualified_contribution_and_completed_neutral"
 
 
 def test_shadow_top_level_score_populated_at_p136() -> None:
@@ -842,10 +788,10 @@ def test_specialized_adapter_does_not_bypass_equal_multi_purpose_average(adapter
 
     assert payload["metadata"]["dose_participation_basis"] == "declared_purpose_equal_weight"
     assert payload["metadata"]["purpose_ingredient_count"] == 2
-    assert payload["metadata"]["method"] == "rda_ul_proxy_until_dietary_intake_table"
+    assert payload["metadata"]["method"] == "source_qualified_contribution_and_completed_neutral"
 
 
-def test_multi_purpose_average_retains_collagen_preparation_benchmark() -> None:
+def test_multi_purpose_average_keeps_collagen_identity_without_inventing_a_dose_curve() -> None:
     from scoring_v4.modules.generic_dose import score_dose
 
     def assessed(quantity: float) -> dict:
@@ -871,25 +817,23 @@ def test_multi_purpose_average_retains_collagen_preparation_benchmark() -> None:
     below = assessed(100.0)
     within = assessed(5000.0)
 
-    # Graded inadequacy: 100 mg against the 2.5 g peptide range scores in
-    # proportion (16 x 100 / 2000, scaled to reference 22); within range is full.
-    below_score = round(16 * 100 / 2000 * 22 / 21, 4)
-    assert below["metadata"]["specialized_purpose_assessments"][0]["score"] == below_score
-    assert below["components"]["supplemental_window_proxy"] == round((below_score + 22) / 2, 4)
-    assert within["metadata"]["specialized_purpose_assessments"][0]["score"] == 22.0
-    assert within["components"]["supplemental_window_proxy"] == 22.0
-    assert below["metadata"]["unbenchmarked_purpose_ingredients"] == []
+    for payload in (below, within):
+        assessment = payload["metadata"]["specialized_purpose_assessments"][0]
+        assert assessment["score"] == NEUTRAL
+        assert assessment["band"] == "disclosed_no_reference"
+        assert payload["components"]["supplemental_window_proxy"] == round((NEUTRAL + 22) / 2, 4)
+        assert payload["metadata"]["purpose_ingredient_count"] == 2
 
 
 @pytest.mark.parametrize(
     "primary_type,active_name,canonical,low_amount,high_amount,expected_low,expected_high,owner",
     [
-        ("sleep_support", "Melatonin", "melatonin", 0.5, 20.0, 22.0, 13.5, "sleep_support"),
-        ("joint_support", "Glucosamine", "glucosamine", 750.0, 1500.0, 16.0, 21.0, "joint_support"),
-        ("immune_support", "Beta Glucan", "beta_glucan", 50.0, 200.0, 15.4, 20.9, "immune_support"),
+        ("sleep_support", "Melatonin", "melatonin", 0.5, 20.0, 17.27, 17.27, "sleep_support"),
+        ("joint_support", "Glucosamine", "glucosamine", 750.0, 1500.0, 17.27, 17.27, "joint_support"),
+        ("immune_support", "Beta Glucan", "beta_glucan", 50.0, 200.0, 17.27, 17.27, "immune_support"),
     ],
 )
-def test_multi_purpose_average_retains_category_purpose_benchmark(
+def test_multi_purpose_average_keeps_each_category_completed_neutral_vote(
     primary_type, active_name, canonical, low_amount, high_amount,
     expected_low, expected_high, owner,
 ) -> None:
@@ -923,7 +867,7 @@ def test_multi_purpose_average_retains_category_purpose_benchmark(
     assert low["metadata"]["unbenchmarked_purpose_ingredients"] == []
 
 
-def test_exact_positive_lactoferrin_benchmark_is_owned_by_dose() -> None:
+def test_lactoferrin_source_regimen_does_not_create_a_general_dose_minimum() -> None:
     from scoring_v4.modules.generic_dose import score_dose
 
     row = _ingredient(
@@ -940,10 +884,14 @@ def test_exact_positive_lactoferrin_benchmark_is_owned_by_dose() -> None:
 
     payload = score_dose(product)
 
-    assert payload["components"]["supplemental_window_proxy"] == 11.0
-    assessment = payload["metadata"]["positive_clinical_benchmark_assessments"][0]
-    assert assessment["record_id"] == "INGR_LACTOFERRIN"
-    assert assessment["benchmark_value"] == 200.0
+    assert payload["components"]["supplemental_window_proxy"] == NEUTRAL
+    assert payload["metadata"]["positive_clinical_benchmark_assessments"] == []
+    import json
+    data = json.loads((SCRIPTS_ROOT / "data/backed_clinical_studies.json").read_text())
+    record = next(item for item in data["backed_clinical_studies"] if item["id"] == "INGR_LACTOFERRIN")
+    assert record["min_clinical_dose"] == 200
+    assert {source["pmid"] for source in record["references_structured"]} == {"35276902", "19639462"}
+    assert record["reference_semantics"]["curve"] == "completed_no_benchmark_neutral"
 
 
 def test_positive_benchmark_requires_label_purpose_applicability() -> None:
@@ -963,6 +911,128 @@ def test_positive_benchmark_requires_label_purpose_applicability() -> None:
     )
 
     assert positive_clinical_benchmark(product, row) is None
+
+
+@pytest.mark.parametrize("canonical,name,studied_mg", [
+    ("l_leucine", "L-Leucine", 1742),
+    ("tmg_betaine", "TMG Betaine", 2500),
+    ("l_lysine", "L-Lysine", 1000),
+    ("mct_oil", "MCT Oil", 12000),
+    ("american_ginseng", "American Ginseng", 3000),
+    ("phosphatidic_acid", "Phosphatidic Acid", 750),
+    ("touchi_extract", "Touchi Extract", 900),
+])
+@pytest.mark.parametrize("amount_factor", [0.5, 1.0, 2.0])
+def test_literature_regimen_amounts_do_not_create_dose_targets(
+    canonical, name, studied_mg, amount_factor,
+) -> None:
+    """A verified intervention amount is not a reviewed effective minimum.
+
+    The MCT primary source uses 12 g; source correction must not make 12 g
+    full credit, or invent fractional efficacy below that discrete regimen.
+    All seven records that supplied the old fallback are covered, including
+    acute-only American ginseng and context-dependent TMG owner precedence.
+    """
+    from dose_assessment import positive_clinical_benchmark
+    from scoring_v4.scored_artifact import build_scored_artifact
+
+    row = _ingredient(
+        name=name, canonical_id=canonical, quantity=studied_mg * amount_factor,
+        unit="mg", raw_source_path="ingredientRows[0]", raw_source_text=name,
+        dose_class="therapeutic_mass", cleaner_row_role="active_scorable",
+        role_classification="active_scorable", scoreable_identity=True,
+        mapped_identity=True, identity_disposition="clean",
+        score_eligible_by_cleaner=True, source_section="active",
+    )
+    product = _product(
+        ingredients=[row], activeIngredients=[row], adequacy_results=[],
+        product_name=name, id=f"literature-regimen-{canonical}",
+        evidence_data={"clinical_matches": []},
+        servings_per_day_min=1, servings_per_day_max=1,
+    )
+
+    artifact = build_scored_artifact(product)
+
+    assert positive_clinical_benchmark(product, row) is None
+    assert artifact["quality_score_status"] == "scored"
+    assert artifact["strict_scoring_contract"]["passed"] is True
+    assert artifact["assessment_readiness"]["dose"]["readiness"] == "complete"
+    dose = artifact["quality_pillars_v4"]["dose"]
+    assert dose["score"] == 11.4
+    receipt = dose["explanation"]["dose_receipt"]
+    assert receipt["reconciles"] is True
+    assert receipt["contributions"][0]["points"] == 11.4
+    assert "clinical_reference" not in {
+        item.get("reference_kind") for item in receipt["contributions"]
+    }
+    if canonical == "touchi_extract":
+        assert receipt["aggregation"] == "single_profile_assessment"
+        contribution_fact = next(fact for fact in dose["explanation"]["facts"]
+                                 if fact["id"] == "dose_contributions")
+        assert "completed neutral when none applies" in contribution_fact["detail"]
+    assert "unfinished" not in dose["reason"].lower()
+
+
+@pytest.mark.parametrize("canonical,values,basis", [
+    ("l_leucine", [1742, 2747, 3000, 5000], "per_serving_threshold"),
+    ("tmg_betaine", [4000, 2500], "daily_intake"),
+    ("l_lysine", [1000, 3000], "daily_intake"),
+    ("mct_oil", [12000], "daily_intake"),
+    ("american_ginseng", [3000], "acute_challenge"),
+    ("phosphatidic_acid", [750], "daily_intake"),
+    ("touchi_extract", [900], "daily_intake"),
+])
+def test_retiring_literature_dose_targets_preserves_descriptive_source_exposure(
+    canonical, values, basis,
+) -> None:
+    from evidence_resolver import _load_literature_evidence
+
+    # Keep source-owned exposure facts and Evidence review provenance. Retiring
+    # the numeric projection must neither erase the studies nor change their
+    # acute/daily meaning, verification state, or native source amounts.
+    record = _load_literature_evidence()[canonical]
+    assert record["studied_dose_exposure"] == {
+        "values": values, "unit": "mg", "basis": basis,
+    }
+    assert record["verification_result"] == "authoritative_pubmed_verified"
+    assert record["verification_provenance"]["all_pmids_verified"] is True
+    assert record["qualifying_human_studies"]
+    semantics = record["reference_semantics"]
+    assert semantics["reference_type"] == "no_benchmark"
+    assert semantics["curve"] == "completed_no_benchmark_neutral"
+    assert semantics["approval_status"].startswith("approved_existing_neutral_")
+
+
+@pytest.mark.parametrize("canonical,operator", [
+    ("touchi_extract", "ambiguous"),
+    ("unrecognized_touchi_material", None),
+])
+def test_retired_literature_target_does_not_complete_capture_or_identity_gaps(canonical, operator):
+    from scoring_v4.modules.botanical_profile import score_botanical_purpose_dose
+    from scoring_v4.scored_artifact import build_scored_artifact
+
+    row = _ingredient(
+        name="Touchi Extract" if canonical == "touchi_extract" else "Unknown fermented material",
+        canonical_id=canonical, quantity=900, unit="mg", raw_source_path="ingredientRows[0]",
+        category="botanical", dose_class="therapeutic_mass", cleaner_row_role="active_scorable",
+        role_classification="active_scorable", scoreable_identity=True, mapped_identity=True,
+        identity_disposition="clean", score_eligible_by_cleaner=True, source_section="active",
+    )
+    if operator:
+        row["quantity_operator"] = operator
+    product = _product(
+        ingredients=[row], activeIngredients=[row], adequacy_results=[],
+        product_name=row["name"], servings_per_day_min=1, servings_per_day_max=1,
+    )
+    if operator:
+        artifact = build_scored_artifact(product)
+        assert artifact["quality_score_status"] == "not_scored"
+        assert artifact["score_unavailable_reason"] == "blocked_by_completeness_gate"
+        assert artifact["quality_pillars_v4"] is None
+    else:
+        assessment = score_botanical_purpose_dose(product, row)
+        assert assessment["metadata"]["benchmark"] == "unresolved"
+        assert assessment["score"] == 0.0
 
 
 @pytest.mark.parametrize("record_id", ["INGR_D_MANNOSE", "INGR_L_CARNITINE"])
@@ -985,8 +1055,10 @@ def test_null_or_mixed_trial_amount_is_not_a_dose_benchmark(record_id: str) -> N
     assert payload["metadata"]["positive_clinical_benchmark_assessments"] == []
 
 
-def test_carnipure_uses_its_exact_positive_preparation_benchmark() -> None:
+def test_carnipure_preserves_exact_preparation_source_without_a_general_dose_curve() -> None:
     from dose_assessment import positive_clinical_benchmark
+    from scoring_v4.modules.generic_dose import score_dose
+    import json
 
     row = _ingredient(
         name="Carnipure L-Carnitine Tartrate",
@@ -1008,10 +1080,15 @@ def test_carnipure_uses_its_exact_positive_preparation_benchmark() -> None:
         row,
     )
 
-    assert assessment is not None
-    assert assessment.record_id == "BRAND_CARNIPURE"
-    assert assessment.benchmark_value == 2000.0
-    assert assessment.ratio == 0.5
+    assert assessment is None
+    assert score_dose(_product(ingredients=[row], product_name="Carnipure L-Carnitine"))["score"] == NEUTRAL
+    data = json.loads((SCRIPTS_ROOT / "data/backed_clinical_studies.json").read_text())
+    record = next(item for item in data["backed_clinical_studies"] if item["id"] == "BRAND_CARNIPURE")
+    assert record["min_clinical_dose"] == 2000
+    assert record["dose_unit"] == "mg"
+    assert {source["pmid"] for source in record["references_structured"]} == {"11788381", "20045157"}
+    assert record["reference_semantics"]["preparation"] == "Carnipure L-Carnitine"
+    assert record["reference_semantics"]["curve"] == "completed_no_benchmark_neutral"
 
 
 def test_acetyl_l_carnitine_does_not_borrow_the_carnipure_benchmark() -> None:
@@ -1031,9 +1108,11 @@ def test_acetyl_l_carnitine_does_not_borrow_the_carnipure_benchmark() -> None:
     ) is None
 
 
-@pytest.mark.parametrize("quantity,ratio", [(200, 1.0), (400, 2.0)])
-def test_tesnor_uses_its_exact_positive_whole_preparation_range(quantity: float, ratio: float) -> None:
+@pytest.mark.parametrize("quantity", [200, 400])
+def test_tesnor_retains_studied_arms_without_continuous_dose_credit(quantity: float) -> None:
     from dose_assessment import positive_clinical_benchmark
+    from scoring_v4.modules.generic_dose import score_dose
+    import json
 
     row = _ingredient(
         name="Tesnor",
@@ -1047,11 +1126,15 @@ def test_tesnor_uses_its_exact_positive_whole_preparation_range(quantity: float,
         _product(ingredients=[row], product_name="Tesnor"), row,
     )
 
-    assert assessment is not None
-    assert assessment.record_id == "BRAND_TESNOR"
-    assert assessment.benchmark_value == 200.0
-    assert assessment.benchmark_maximum == 400.0
-    assert assessment.ratio == ratio
+    assert assessment is None
+    assert score_dose(_product(ingredients=[row], product_name="Tesnor"))["score"] == NEUTRAL
+    data = json.loads((SCRIPTS_ROOT / "data/backed_clinical_studies.json").read_text())
+    record = next(item for item in data["backed_clinical_studies"] if item["id"] == "BRAND_TESNOR")
+    assert record["min_clinical_dose"] == 200 and record["dose_unit"] == "mg"
+    assert {source["pmid"] for source in record["references_structured"]} == {"35129040", "35928723"}
+    assert record["reference_semantics"]["preparation"] == "Tesnor"
+    assert record["reference_semantics"]["curve"] == "completed_no_benchmark_neutral"
+    assert "200or400mg" in record["reference_semantics"]["rationale"].replace(" ", "")
 
 
 @pytest.mark.parametrize(
@@ -1143,7 +1226,7 @@ def test_ul_only_assessment_row_is_not_a_usable_assessment() -> None:
     assert payload["components"]["supplemental_window_proxy"] == NEUTRAL
 
 
-def test_rda_only_assessment_row_is_a_usable_assessment() -> None:
+def test_unknown_reference_percentage_cannot_turn_an_unbenchmarked_primary_into_an_assessment() -> None:
     from scoring_v4.modules.generic_dose import score_dose, CAP_SUPPLEMENTAL_WINDOW
 
     product = _mixed_product(250.0)
@@ -1151,8 +1234,8 @@ def test_rda_only_assessment_row_is_a_usable_assessment() -> None:
         {"canonical_id": "cognigrape", "nutrient": "Cognigrape", "pct_rda": 80.0, "pct_ul": None}
     )
     payload = score_dose(product)
-    assert payload["components"]["supplemental_window_proxy"] == CAP_SUPPLEMENTAL_WINDOW
-    assert "primary_active_unassessed" not in payload["metadata"]
+    assert payload["components"]["supplemental_window_proxy"] == NEUTRAL
+    assert payload["metadata"]["primary_active_unassessed"] == "cognigrape"
 
 
 def _tied_product(unassessed_first: bool):
@@ -1243,7 +1326,7 @@ def test_title_projection_of_an_assessed_row_is_not_a_second_primary() -> None:
 
 def test_parent_with_unassessed_constituents_is_still_capped() -> None:
     # Fish oil 500 mg with EPA/DHA rows that carry no reference, beside an
-    # assessed 5 mg lutein: the primary's source has no benchmark anywhere.
+    # assessed 90 mg vitamin C: the primary's source has no benchmark anywhere.
     from scoring_v4.modules.generic_dose import score_dose
 
     rows = [
@@ -1251,14 +1334,14 @@ def test_parent_with_unassessed_constituents_is_still_capped() -> None:
                     raw_source_path="ingredientRows[3]"),
         _ingredient(name="Eicosapentaenoic Acid", canonical_id="epa", quantity=325.0, unit="mg", bio_score=None,
                     raw_source_path="ingredientRows[3].nestedRows[0]"),
-        _ingredient(name="Lutein", canonical_id="lutein", quantity=5.0, unit="mg", raw_source_path="ingredientRows[4]"),
+        _ingredient(name="Vitamin C", canonical_id="vitamin_c", quantity=90.0, unit="mg", raw_source_path="ingredientRows[4]"),
     ]
     product = _product(
         ingredients=rows,
         adequacy_results=[
             {"canonical_id": "fish_oil", "nutrient": "Omega-3", "pct_rda": None, "pct_ul": None},
             {"canonical_id": "epa", "nutrient": "EPA", "pct_rda": None, "pct_ul": None},
-            {"canonical_id": "lutein", "nutrient": "Lutein", "pct_rda": 166.7, "pct_ul": None},
+            {"canonical_id": "vitamin_c", "nutrient": "Vitamin C", "pct_rda": 100.0, "pct_ul": None},
         ],
         supp_type="multi",
     )
@@ -1377,26 +1460,31 @@ def test_dri_nutrient_credit_grows_from_fda_high_source_to_full_requirement(pct_
 
 
 @pytest.mark.parametrize("canonical", ["calcium", "magnesium", "l_glutamine", "nac", "unmapped_compound", None])
-def test_macrominerals_unverified_anchors_and_unclassified_references_keep_the_legacy_window(canonical) -> None:
+def test_unqualified_reference_does_not_get_a_quarter_rda_fallback(canonical) -> None:
     from scoring_v4.modules.generic_dose import _band_credit
 
-    assert _band_credit(25.0, 10.0, canonical) == 22.0
-    assert _band_credit(10.0, 5.0, canonical) == pytest.approx(8.8)
+    assert _band_credit(25.0, 10.0, canonical) is None
+    assert _band_credit(10.0, 5.0, canonical) is None
 
 
-def test_over_ul_bands_are_unchanged_for_every_reference_kind() -> None:
+def test_over_ul_amounts_keep_qualified_adequacy_credit_without_a_second_reduction() -> None:
     from scoring_v4.modules.generic_dose import _band_credit
 
-    for canonical in ("vitamin_d", "quercetin", "calcium"):
-        assert _band_credit(300.0, 120.0, canonical) == 11.0
-        assert _band_credit(400.0, 180.0, canonical) == 0.0
+    for canonical, row in (("vitamin_d", None), ("magnesium", {"rda_ai": 400}),
+                           ("calcium", {"rda_ai": 1000})):
+        assert _band_credit(300.0, 120.0, canonical, row) == 22.0
+        assert _band_credit(400.0, 180.0, canonical, row) == 22.0
+    # An unsupported clinical percentage supplies no adequacy reference even
+    # when it carries an upper-limit percentage.
+    assert _band_credit(300.0, 120.0, "quercetin") is None
 
 
-def test_higher_dose_up_to_the_requirement_never_scores_lower() -> None:
+def test_higher_dose_up_to_the_qualified_reference_never_scores_lower() -> None:
     from scoring_v4.modules.generic_dose import _band_credit
 
-    for canonical in ("zinc", "l_glutamine", "calcium"):
-        credits = [_band_credit(float(pct), 10.0, canonical) for pct in range(0, 101, 5)]
+    for canonical, row in (("zinc", None), ("phosphorus", None),
+                           ("magnesium", {"rda_ai": 400}), ("calcium", {"rda_ai": 1000})):
+        credits = [_band_credit(float(pct), 10.0, canonical, row) for pct in range(0, 101, 5)]
         assert credits == sorted(credits)
 
 
@@ -1413,40 +1501,38 @@ def test_dri_map_points_at_official_dri_reference_entries() -> None:
         assert "no official dri" not in str(by_id[ref].get("notes") or "").lower(), ref
 
 
-@pytest.mark.parametrize(("pct_rda", "expected"), [(25.0, 5.5), (50.0, 11.0), (100.0, 22.0), (140.0, 22.0)])
-def test_verified_clinical_anchor_credit_is_proportional_to_the_lowest_effective_dose(pct_rda, expected) -> None:
-    from scoring_v4.modules.generic_dose import _band_credit
+@pytest.mark.parametrize("pct_rda", [25.0, 50.0, 100.0, 140.0])
+def test_verified_source_amount_does_not_create_a_general_quercetin_dose_curve(pct_rda) -> None:
+    from scoring_v4.modules.generic_dose import _band_credit, score_dose
 
-    assert _band_credit(pct_rda, None, "quercetin") == pytest.approx(expected)
+    assert _band_credit(pct_rda, None, "quercetin") is None
+    payload = score_dose(_product(
+        ingredients=[_ingredient(name="Quercetin", canonical_id="quercetin", quantity=500 * pct_rda / 100)],
+        adequacy_results=[_adequacy(nutrient="Quercetin", canonical_id="quercetin", pct_rda=pct_rda, pct_ul=None)]))
+    assert payload["score"] == NEUTRAL
 
 
-def test_clinical_anchor_map_lists_only_pubmed_verified_anchors() -> None:
-    """Every mapped anchor was verified or corrected in the 2026-09-15 review, cites at
-    least one of its verifying PMIDs, and carries the reviewed dose in the reference file."""
+def test_retired_clinical_anchor_map_preserves_reviewed_source_facts() -> None:
     import json
-    from pathlib import Path
     from scoring_v4.modules import generic_dose
     from scoring_v4.quality_score_config import block
 
     root = Path(generic_dose.__file__).resolve().parents[3]
     ledger = json.loads((root / "scripts/audits/clinical_anchor_verification_2026_09_15/anchor_verification.json").read_text())
-    reviewed = {item["id"]: item for item in ledger["anchors"]}
     data = json.loads((root / "scripts/data/rda_optimal_uls.json").read_text())
     by_id = {entry["id"]: entry for entry in data["nutrient_recommendations"]}
-    for ref in set(generic_dose._CLINICAL_ANCHOR_REFERENCE_BY_CANONICAL.values()):
-        item = reviewed[ref]
-        assert item["graduation_eligible"] and item["decision"] in {"verified", "corrected"}, ref
-        entry = by_id[ref]
-        assert {e["pmid"] for e in item["evidence"]} & set(entry["references"]), ref
-        expected = item.get("anchor_proposed", item["anchor_current"])
-        assert {row["rda_ai"] for row in entry["data"]} == {expected}, ref
-    # The applier is re-run; each reviewed entry keeps exactly one dated review sentence.
+    # Source verification and historical intervention amounts remain evidence;
+    # they no longer authorize continuous or quarter-reference Dose credit.
     for item in ledger["anchors"]:
-        assert by_id[item["id"]]["notes"].count("Anchor dose ") == 1, item["id"]
-    assert not set(generic_dose._DRI_REFERENCE_BY_CANONICAL) & set(generic_dose._CLINICAL_ANCHOR_REFERENCE_BY_CANONICAL)
-    assert generic_dose._CLINICAL_ANCHOR_REFERENCE_BY_CANONICAL == block(
-        "dose_magnitudes", "generic"
-    )["generic"]["_clinical_anchor_reference_by_canonical"]
+        entry = by_id[item["id"]]
+        assert entry["notes"].count("Anchor dose ") == 1, item["id"]
+        if item["graduation_eligible"]:
+            assert {e["pmid"] for e in item["evidence"]} & set(entry["references"]), item["id"]
+            expected = item.get("anchor_proposed", item["anchor_current"])
+            assert {row["rda_ai"] for row in entry["data"]} == {expected}, item["id"]
+        assert entry["reference_semantics"]["curve"] == "completed_no_benchmark_neutral"
+    assert not hasattr(generic_dose, "_CLINICAL_ANCHOR_REFERENCE_BY_CANONICAL")
+    assert "_clinical_anchor_reference_by_canonical" not in block("dose_magnitudes", "generic")["generic"]
 
 
 @pytest.mark.parametrize("count", [1, 2, 3, 4])
@@ -1565,12 +1651,16 @@ def test_declared_structural_purpose_keeps_product_total_fallback(lent, disclose
         total["reason"] = "identity_bearing_blend_header_mass_from_nested_child"
     if not disclosed:
         total["quantity"] = total["dose_value"] = None
-    score, unknown, count, clinical, specialized, fallbacks = _score_declared_purpose_window(product)
+    score, unknown, count, clinical, specialized, fallbacks, hidden, _entries = _score_declared_purpose_window(product)
     assert count == 1
-    assert score == (NEUTRAL if expected else 0)
+    # Dose V4.1 section 2.3: a disclosed total without a benchmark and an
+    # amount the label hides (lent to a nested child) both take the neutral,
+    # recorded apart; a missing amount with no label nondisclosure keeps 0.
+    assert score == (NEUTRAL if expected or lent else 0)
     assert unknown == (["enzyme_blend"] if expected else [])
+    assert hidden == (["enzyme_blend"] if lent else [])
     assert not clinical and not specialized
-    assert fallbacks == ([NEUTRAL] if expected else [])
+    assert fallbacks == ([NEUTRAL] if expected or lent else [])
 
 
 def test_mixed_preparation_and_individual_fallbacks_keep_each_purpose_vote():
@@ -1589,3 +1679,229 @@ def test_mixed_preparation_and_individual_fallbacks_keep_each_purpose_vote():
     assert dose["components"]["supplemental_window_proxy"] == NEUTRAL
     assert dose["metadata"]["unbenchmarked_purpose_ingredients"] == ["astragalus", "enzyme_blend"]
     assert dose["metadata"]["partial_credit_value"] == NEUTRAL
+
+
+@pytest.mark.parametrize("canonical", ["phosphorus", "alpha_linolenic_acid"])
+def test_approved_nutritional_replacements_remove_quarter_reference_shortcut(canonical):
+    from scoring_v4.modules.generic_dose import _band_credit
+    assert _band_credit(25.0, None, canonical) == pytest.approx(11.6875)
+    assert _band_credit(100.0, None, canonical) == 22.0
+
+
+@pytest.mark.parametrize("canonical", ["sodium", "chloride", "quercetin", "unmapped_compound"])
+def test_reviewed_generic_reference_cannot_borrow_an_unsupported_numeric_anchor(canonical):
+    from scoring_v4.modules.generic_dose import _band_credit
+    assert _band_credit(25.0, None, canonical) is None
+    assert _band_credit(1000.0, None, canonical) is None
+
+
+@pytest.mark.parametrize("canonical", ["magnesium", "calcium"])
+def test_ineligible_contribution_context_has_no_quarter_rda_fallback(canonical):
+    from scoring_v4.modules.generic_dose import _band_credit
+    assert _band_credit(25.0, None, canonical) is None
+    assert _band_credit(25.0, None, canonical, {"rda_ai":400.0,"ul_population":{"members":["pediatric"]}}) == 22 * (.5 + .5 * 5 / 80)
+
+
+@pytest.mark.parametrize(("pct","expected"), [(0,0),(10,.25),(20,.5),(50,.6875),(100,1),(150,1)])
+def test_shared_nutritional_curve_is_one_source_owned_policy(pct,expected):
+    from scoring_v4.modules.generic_dose import nutritional_unit_credit
+    assert nutritional_unit_credit(pct) == pytest.approx(expected)
+
+
+def test_completed_reference_review_has_no_interim_diet_table_dependency():
+    from scoring_v4.modules.generic_dose import score_dose
+    dose=score_dose(_product(adequacy_results=[]))
+    assert 'deferred_data_dependency' not in dose['metadata']
+    assert dose['metadata']['method']=='source_qualified_contribution_and_completed_neutral'
+
+
+def _declared_companion_amount_product(companion):
+    return _product(
+        ingredients=[_ingredient(name='Vitamin C', canonical_id='vitamin_c', quantity=90), companion],
+        product_name='Vitamin C + L-Tyrosine', primary_type='general_supplement',
+        adequacy_results=[{'nutrient': 'Vitamin C', 'canonical_id': 'vitamin_c',
+                           'amount': 90, 'unit': 'mg', 'rda_ai': 90, 'pct_rda': 100}])
+
+
+@pytest.mark.parametrize('unit', ['NP', '', 'scoop'])
+@pytest.mark.parametrize('quantity', [0,100])
+def test_declared_quantity_with_unusable_unit_is_incomplete(unit, quantity):
+    from scoring_v4.scored_artifact import build_scored_artifact
+    companion = _ingredient(name='L-Tyrosine', canonical_id='l_tyrosine', quantity=quantity, unit=unit)
+    artifact = build_scored_artifact(_declared_companion_amount_product(companion))
+    assert artifact['quality_assessment_status'] == 'partial' or artifact['quality_score_status'] == 'not_scored'
+    dose = artifact['_v4_module_breakdown']['dimensions']['dose']
+    assert dose['score'] is None
+    assert dose['metadata']['reason_code'] == 'unresolved_source_quantity'
+
+
+@pytest.mark.parametrize('unit', ['mg', 'mcg', 'g'])
+def test_declared_zero_is_absence_rather_than_lost_source_quantity(unit):
+    from scoring_v4.scored_artifact import build_scored_artifact
+    from scoring_v4.modules.generic_dose import _unread_declared_purpose_rows
+    companion = _ingredient(name='L-Tyrosine', canonical_id='l_tyrosine', quantity=0, unit=unit)
+    product = _declared_companion_amount_product(companion)
+    assert _unread_declared_purpose_rows(product) == []
+    artifact = build_scored_artifact(product)
+    dose = artifact['_v4_module_breakdown']['dimensions']['dose']
+    assert dose['metadata'].get('reason_code') != 'unresolved_source_quantity'
+
+
+def test_shared_unread_guard_retains_legitimate_cfu_has_dose_owner():
+    from scoring_v4.modules.generic_dose import _unread_declared_purpose_rows
+    row = _ingredient(name='Lactobacillus rhamnosus', canonical_id='lactobacillus_rhamnosus',
+                      quantity=None, unit='CFU', has_dose=True)
+    product = _declared_companion_amount_product(row)
+    product['product_name'] = 'Vitamin C + Lactobacillus rhamnosus'
+    assert _unread_declared_purpose_rows(product) == []
+
+
+def test_shared_unread_guard_retains_typed_product_evidence_owner():
+    from scoring_v4.modules.generic_dose import _unread_declared_purpose_rows
+    row = _ingredient(name='Digestive enzyme blend', canonical_id='enzyme_blend', quantity=None, unit='',
+                      scoring_input_kind='product_level_evidence', evidence_type='blend_anchor_mass',
+                      evidence_scope='blend_level', dose_class='therapeutic_mass',
+                      dose_value=500, dose_unit='mg', scoreable=True)
+    product = _declared_companion_amount_product(row)
+    product['product_scoring_evidence'] = [row]
+    product['product_name'] = 'Vitamin C + Digestive enzyme blend'
+    assert _unread_declared_purpose_rows(product) == []
+
+
+def _named_eaa_group_product(*, unavailable=0, hidden=False):
+    from scoring_v4.modules.sports_helpers import EAA_CANONICALS
+
+    rows = [_ingredient(name=key.replace('_', ' '), canonical_id=key,
+                        quantity=(0 if hidden else None) if index < unavailable else 1000,
+                        unit='NP' if hidden and index < unavailable else 'mg',
+                        cleaner_row_role='nested_display_only' if hidden and index < unavailable else 'active_scorable',
+                        raw_source_path=f'ingredientRows[{index}]')
+            for index, key in enumerate(sorted(EAA_CANONICALS))]
+    rows.extend([_ingredient(name='L-Theanine', canonical_id='l_theanine', quantity=100),
+                 _ingredient(name='Creatine', canonical_id='creatine_monohydrate', quantity=3000)])
+    return _product(ingredients=rows, supp_type='general_supplement',
+                    product_name='L-Theanine + Creatine + EAA', fullName='L-Theanine + Creatine + EAA',
+                    primary_type='general_supplement', supplement_taxonomy={'primary_type':'general_supplement'})
+
+
+@pytest.mark.parametrize('unavailable', [1, 4, 9])
+def test_named_eaa_group_keeps_lost_member_amounts_in_generic_and_public_dose(unavailable):
+    from scoring_v4.modules.generic_dose import _score_declared_purpose_window, score_dose
+    from scoring_v4.scored_artifact import build_scored_artifact
+
+    product = _named_eaa_group_product(unavailable=unavailable)
+    window = _score_declared_purpose_window(product)
+    assert window[2] == 3
+    assert [r['ingredient'] for r in window[7]].count('eaa') == 1
+    assert next(r for r in window[7] if r['ingredient'] == 'eaa')['assessment'] == 'unresolved_source_quantity'
+    assert score_dose(product)['score'] is None
+    artifact = build_scored_artifact(product)
+    dose = artifact['_v4_module_breakdown']['dimensions']['dose']
+    assert dose['score'] is None
+    assert dose['metadata']['reason_code'] == 'unresolved_source_quantity'
+    assert artifact['quality_assessment_status'] == 'partial' or artifact['quality_score_status'] == 'not_scored'
+
+
+@pytest.mark.parametrize('unavailable', [0, 1, 4, 9])
+def test_named_eaa_group_has_one_vote_with_disclosed_or_positively_hidden_members(unavailable):
+    from scoring_v4.modules.generic_dose import _score_declared_purpose_window, score_dose
+
+    product = _named_eaa_group_product(unavailable=unavailable, hidden=True)
+    window = _score_declared_purpose_window(product)
+    assert window[2] == 3
+    assert {r['ingredient'] for r in window[7]} == {'eaa', 'l_theanine', 'creatine_monohydrate'}
+    eaa = next(r for r in window[7] if r['ingredient'] == 'eaa')
+    assert eaa['credit_raw'] == pytest.approx(NEUTRAL)
+    assert eaa['assessment'] == ('hidden_amount_neutral' if unavailable else 'no_benchmark_neutral')
+    assert 'amount_per_serving' not in eaa
+    assert score_dose(product)['score'] is not None
+
+
+def test_one_unresolved_hidden_eaa_member_keeps_the_source_hold():
+    from scoring_v4.modules.generic_dose import score_dose
+    product = _named_eaa_group_product(unavailable=4, hidden=True)
+    product['ingredient_quality_data']['ingredients'][0]['quantity_operator'] = 'ambiguous'
+    assert score_dose(product)['score'] is None
+
+
+@pytest.mark.parametrize('unavailable', [0, 4])
+def test_positive_but_unresolved_eaa_member_cannot_complete_the_group(unavailable):
+    from scoring_v4.modules.generic_dose import score_dose
+    product = _named_eaa_group_product(unavailable=unavailable, hidden=True)
+    product['ingredient_quality_data']['ingredients'][8]['quantity_operator'] = 'unknown'
+    assert score_dose(product)['score'] is None
+
+
+def test_source_qualified_whole_eaa_owner_keeps_exactly_one_generic_vote():
+    from test_v4_sports_dose_p171 import _nested_complete_eaa_source
+    from scoring_v4.modules.generic_dose import _score_declared_purpose_window
+
+    product = _nested_complete_eaa_source()
+    product['product_name'] = product['fullName'] = 'EAA'
+    window = _score_declared_purpose_window(product)
+    assert window[2] == 1
+    assert len(window[7]) == 1
+    assert window[7][0]['ingredient'] == 'essential_amino_acids'
+    assert window[0] == pytest.approx(NEUTRAL)
+
+
+def test_exact_strict_amino_source_precedes_a_stale_unresolved_mirror_twin():
+    from copy import deepcopy
+    from scoring_v4.modules.generic_dose import _score_declared_purpose_window, score_dose
+
+    product = _named_eaa_group_product()
+    product['ingredient_quality_data']['ingredients'] = deepcopy(product['ingredient_quality_data']['ingredients'])
+    product['ingredient_quality_data']['ingredients'][0]['quantity_operator'] = 'unknown'
+    window = _score_declared_purpose_window(product)
+    assert window[2] == 3
+    assert next(r for r in window[7] if r['ingredient'] == 'eaa')['assessment'] == 'no_benchmark_neutral'
+    assert score_dose(product)['score'] is not None
+
+
+def test_unnamed_eaa_members_do_not_create_an_extra_purpose_or_hold():
+    from scoring_v4.modules.generic_dose import _score_declared_purpose_window, score_dose
+    product = _named_eaa_group_product(unavailable=9)
+    product['product_name'] = product['fullName'] = 'L-Theanine + Creatine'
+    window = _score_declared_purpose_window(product)
+    assert window[2] == 2
+    assert {r['ingredient'] for r in window[7]} == {'l_theanine', 'creatine_monohydrate'}
+    assert score_dose(product)['score'] is not None
+
+
+def _named_bcaa_with_whole_preparation(*, hidden=False, qualified=True, unresolved=False):
+    from scoring_v4.modules.sports_helpers import BCAA_CANONICALS
+    product = _named_eaa_group_product(unavailable=9 if hidden else 0, hidden=hidden)
+    rows = [r for r in product['ingredient_quality_data']['ingredients']
+            if r['canonical_id'] in BCAA_CANONICALS]
+    owner = _ingredient(name='BCAA', canonical_id='branched_chain_amino_acids', quantity=7000,
+                        raw_source_path='ingredientRows[20]')
+    if qualified:
+        owner.update(scoring_input_kind='product_level_evidence', evidence_type='blend_anchor_mass',
+                     evidence_scope='blend_level', dose_class='therapeutic_mass', scoreable=True, dose_value=7000)
+    if unresolved:
+        owner['quantity_operator'] = 'unknown'
+    rows.append(owner)
+    product['ingredient_quality_data']['ingredients'] = rows
+    product['ingredient_quality_data']['ingredients_scorable'] = rows
+    product['product_name'] = product['fullName'] = 'BCAA'
+    return product
+
+
+@pytest.mark.parametrize('hidden', [False, True])
+def test_qualified_bcaa_preparation_has_one_vote_despite_split_member_rows(hidden):
+    from scoring_v4.modules.generic_dose import _score_declared_purpose_window
+    product = _named_bcaa_with_whole_preparation(hidden=hidden)
+    window = _score_declared_purpose_window(product)
+    assert window[2] == len(window[7]) == 1
+    assert window[7][0]['ingredient'] == 'branched_chain_amino_acids'
+    assert window[0] == pytest.approx(NEUTRAL)
+
+
+@pytest.mark.parametrize('qualified,unresolved', [(False, False), (True, True)])
+def test_unqualified_or_unresolved_bcaa_header_cannot_suppress_missing_member_hold(qualified, unresolved):
+    from scoring_v4.modules.generic_dose import _score_declared_purpose_window, score_dose
+    product = _named_bcaa_with_whole_preparation(qualified=qualified, unresolved=unresolved)
+    product['ingredient_quality_data']['ingredients'][0]['quantity'] = None
+    window = _score_declared_purpose_window(product)
+    assert any(r['ingredient'] == 'bcaa' and r['assessment'] == 'unresolved_source_quantity' for r in window[7])
+    assert score_dose(product)['score'] is None

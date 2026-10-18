@@ -22,12 +22,14 @@ import re
 from typing import Any, Dict, Iterator, List, Optional, Tuple
 
 from scoring_input_contract import (
+    dose_disclosure_status,
     get_scoring_ingredients,
     get_source_score_eligible_active_rows,
     is_lent_blend_mass,
 )
 from scoring_reference_resolver import delivers_parent_nutrient, iqm_reference_entry
 from serving_frequency import resolve_daily_serving_range
+from scoring_v4.exposure import quantity_is_unresolved
 
 
 @lru_cache(maxsize=1)
@@ -267,10 +269,12 @@ def delivers_its_nutrient(row: Dict[str, Any]) -> bool:
     )
 
 
-def has_usable_individual_dose(ingredient: Dict[str, Any]) -> bool:
+def has_usable_individual_dose(ingredient: Dict[str, Any], *, allow_zero: bool = False) -> bool:
     """True when the ingredient has a positive quantity in a recognized
     dose unit (mg/mcg/g/IU/CFU) — or the enricher explicitly set
     `has_dose=True` to bypass unit checks (legacy probiotic CFU shapes).
+    `allow_zero` is for readiness only: a recognized printed zero is available
+    source information, while zero/NP still means the amount was not provided.
     """
     if not isinstance(ingredient, dict):
         return False
@@ -284,12 +288,16 @@ def has_usable_individual_dose(ingredient: Dict[str, Any]) -> bool:
         # their own amount; whole-preparation benchmarks use their own owner.
         return False
     qty = _as_float(ingredient.get("quantity"), None)
+    unit = _norm_text(ingredient.get("unit_normalized") or ingredient.get("unit"))
+    # Readiness may distinguish a printed zero in a recognized dose unit
+    # from missing capture. DSLD zero/NP remains not provided, never a dose.
+    if allow_zero and qty == 0 and (unit in _DOSE_UNIT_WHITELIST or unit.replace(" ", "") in _DOSE_UNIT_WHITELIST):
+        return True
     if qty is None or qty <= 0:
         # Probiotic ingredients sometimes lack a numeric quantity but
         # carry has_dose=True when CFU is disclosed via strain-side
         # fields. Honor that signal.
         return bool(ingredient.get("has_dose", False))
-    unit = _norm_text(ingredient.get("unit_normalized") or ingredient.get("unit"))
     if not unit:
         return bool(ingredient.get("has_dose", False))
     if unit in _DOSE_UNIT_WHITELIST:
@@ -298,6 +306,17 @@ def has_usable_individual_dose(ingredient: Dict[str, Any]) -> bool:
     if unit.replace(" ", "") in _DOSE_UNIT_WHITELIST:
         return True
     return bool(ingredient.get("has_dose", False))
+
+
+def missing_doses_are_label_hidden(rows: List[Dict[str, Any]]) -> bool:
+    """Every unavailable member amount is positively label-hidden, not lost."""
+    if any(quantity_is_unresolved(row) for row in rows):
+        return False
+    missing = [row for row in rows if not has_usable_individual_dose(row)]
+    return bool(missing) and all(
+        dose_disclosure_status(row) == "not_disclosed_blend"
+        for row in missing
+    )
 
 
 def _row_quantity_mg(row: Dict[str, Any]) -> Optional[float]:
@@ -492,18 +511,30 @@ from inactive_ingredient_resolver import (  # noqa: E402,F401
 )
 
 
-def score_declared_serving_dose(product, scorer):
-    """All route Dose consumers assess one declared serving, not directions."""
-    from scoring_input_contract import declared_serving_dose_input
-    from serving_frequency import declared_serving_score_scope
-    projected = declared_serving_dose_input(product)
-    with declared_serving_score_scope():
-        payload = scorer(projected)
+def score_directed_daily_dose(product, scorer):
+    """Every route's Dose: adequacy at the minimum directed daily use, safety at
+    the maximum (Dose V4.1, Sean 2026-10-17). Without daily directions one
+    Facts-panel serving is assessed and recorded as the default."""
+    low, high, defaulted = resolve_daily_serving_range(product)
+    payload = scorer(product)
     metadata = payload.setdefault("metadata", {})
-    metadata["assessment_basis"] = "declared_serving"
-    if "daily_interval_selection" in metadata:
-        metadata["daily_interval_selection"] = "declared_serving"
-    for exposure in metadata.get("benchmark_exposures") or []:
-        if isinstance(exposure, dict) and exposure.get("basis") == "daily":
-            exposure["basis"] = "per_use"
+    metadata["assessment_basis"] = "directed_daily_use"
+    metadata["daily_use"] = {"minimum_servings": float(low), "maximum_servings": float(high),
+                             "defaulted": bool(defaulted)}
+    # Receipt inputs are projections of the assessment already made upstream,
+    # never another benchmark calculation. Panels share this source record.
+    metadata.setdefault("reference_assessments", [
+        {key: row.get(key) for key in ("nutrient", "canonical_id", "amount", "unit", "per_day_min",
+                                      "per_day_max", "rda_ai", "pct_rda", "ul", "ul_basis", "ul_population")
+         if row.get(key) is not None}
+        for row in (product.get("rda_ul_data") or {}).get("adequacy_results") or []
+        if isinstance(row, dict)
+    ])
+    if (not metadata.get("dose_contributions") and not metadata.get("cfu_adequacy_contributions")
+            and payload.get("score") is not None):
+        metadata["dose_contributions"] = [
+            {"ingredient": key.replace("_", " "), "assessment": "panel_component", "credit_raw": value}
+            for key, value in (payload.get("components") or {}).items()
+            if isinstance(value, (int, float)) and not isinstance(value, bool)
+        ]
     return payload

@@ -561,6 +561,11 @@ def extract_pmids_from_entry(entry: dict, config: dict) -> list[dict]:
         if pmid:
             add_pmid(pmid)
 
+    # Native Dose review records may cite additional primary sources outside
+    # their historical references field; the same content verifier owns them.
+    for citation in scan_citations(entry.get("reference_semantics") or {}, HISTORY_KEYS):
+        add_pmid(citation)
+
     if config.get("scan_all"):
         for citation in scan_citations(entry, HISTORY_KEYS):
             add_pmid(citation)

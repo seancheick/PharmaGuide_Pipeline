@@ -92,7 +92,7 @@ def test_a_self_named_bcaa_total_stays_a_sports_dose():
     # leucine or counting its header as an individually dosed sports ingredient.
     assert not any(r.get("canonical_id") == "branched_chain_amino_acids"
                    for r in sports_dosed_rows(enriched))
-    assert _score_primary(enriched, "bcaa") == (1.0, "bcaa_aggregate_under_2_g")
+    assert _score_primary(enriched, "bcaa") == (11.4, "bcaa_completed_no_general_benchmark")
 
 
 def test_an_opaque_sports_blend_is_not_an_off_list_primary():
@@ -114,14 +114,16 @@ def test_an_opaque_sports_blend_is_not_an_off_list_primary():
     assert result["metadata"]["dose_basis"] != "generic_dose_proxy_for_offlist_primary"
     assert result["metadata"]["not_evaluable_reason"] == "opaque_primary_sports_blend"
     assert "opaque_primary_sports_blend" not in result["penalties"]
-    assert result["components"]["sports_primary_active_dose"] == 0.0
+    # Dose V4.1 section 2.3: the named actives' hidden amounts take the neutral.
+    assert result["components"]["sports_primary_active_dose"] == 11.4
+    assert result["metadata"]["dose_basis"] == "hidden_amount_neutral"
 
     # The public Dose explains the hidden amount instead of claiming a benchmark.
     from scoring_v4.scored_artifact import build_scored_artifact
     dose = build_scored_artifact(enriched)["quality_pillars_v4"]["dose"]
-    assert dose["score"] == 0.0
+    assert dose["score"] == 11.4
     assert dose["reason"] == ("The main ingredient's amount is hidden in a proprietary blend, so its "
-                              "dose cannot be assessed or credited.")
+                              "dose cannot be assessed; Dose takes the neutral assessment value.")
 
 
 def test_nested_botanical_anchor_preserves_identity_without_borrowing_a_child_dose():
@@ -145,7 +147,16 @@ def test_nested_botanical_anchor_preserves_identity_without_borrowing_a_child_do
     scored = build_scored_artifact(enriched)
     assert scored["_v4_module_breakdown"]["dimensions"]["formulation"]["metadata"]["formulation_profile"] == "botanical"
     dose = scored["_v4_module_breakdown"]["dimensions"]["dose"]["metadata"]
-    assert dose["botanical_dose"]["dose_mg"] == 250  # disclosed Sensoril, never the 1000 mg fungal blend
+    sensoril = next(row for row in rows if row.get("name") == "Sensoril")
+    assert sensoril["raw_source_path"] == "ingredientRows[3]"
+    assert sensoril["quantity"] == 250
+    [assessment] = dose["reference_assessments"]
+    assert assessment["canonical_id"] == "ashwagandha"
+    assert assessment["amount"] == assessment["per_day_min"] == assessment["per_day_max"] == 250
+    # Source exposure is retained without reintroducing the retired window or
+    # borrowing the separate 1000 mg fungal blend's mass.
+    assert dose["botanical_dose_band"] == "disclosed_no_reference"
+    assert scored["quality_pillars_v4"]["dose"]["score"] == 11.4
 
 
 def test_overlapping_constituents_do_not_reconcile_a_partly_disclosed_preparation():

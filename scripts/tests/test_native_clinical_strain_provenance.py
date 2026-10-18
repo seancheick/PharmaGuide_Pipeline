@@ -399,7 +399,14 @@ def test_pending_strain_keeps_label_potency_without_clinical_adequacy() -> None:
 
     dose = score_dose(product)
     assert _disclosure_points(dose) == 10
-    assert dose["components"]["cfu_adequacy"] == 10
+    # Label potency remains disclosed; historical potency tiers do not create
+    # a clinical Dose curve. Retain the completed neutral on the CFU budget.
+    assert dose["components"]["cfu_adequacy"] == 8.55
+    assert dose["metadata"]["reference_basis"] == "completed_no_general_strain_benchmark"
+    contribution, = dose["metadata"]["cfu_adequacy_contributions"]
+    assert contribution["state"] == "neutral_no_strain_benchmark"
+    assert contribution["cfu_per_day"] == 10_000_000_000
+    assert contribution["source_row_ref"] == "ingredientRows[0]"
     assert "dose_applicability" not in score_evidence(product)["components"]
 
 
@@ -420,8 +427,11 @@ def test_pending_strain_cannot_supply_an_aggregate_clinical_dose_proxy() -> None
 
     dose = score_dose(product)
     assert _disclosure_points(dose) == 0
-    # The total is a recorded label limit; the pending strain owns no measurement.
-    assert dose["components"]["cfu_adequacy"] == 0
+    # The total is a recorded label limit; the pending strain owns no
+    # measurement. Dose V4.1 section 3.2: an unmeasured label strain is a
+    # no-benchmark state and takes the shared neutral, never a measured tier.
+    assert dose["metadata"]["strain_measured_count"] == 0
+    assert dose["components"]["cfu_adequacy"] == 8.55
     assert dose["metadata"]["cfu_adequacy_basis"] == "aggregate_cfu_disclosed_only"
     assert dose["metadata"]["aggregate_cfu_proxy"] == {
         "applied": True, "reason": "aggregate_cfu_label_presence", "total_billion_count": 10.0,
@@ -502,7 +512,10 @@ def test_producer_cannot_export_a_badge_for_a_different_strain(
     dose = score_dose(product)
     assert dose["metadata"]["per_strain_cfu_disclosed_count"] == 1
     assert _disclosure_points(dose) == 10
-    assert dose["components"]["cfu_adequacy"] == 0
+    # Dose V4.1 section 3.2: the unregistered strain is a no-benchmark neutral,
+    # not a measured tier.
+    assert dose["metadata"]["strain_measured_count"] == 0
+    assert dose["components"]["cfu_adequacy"] == 8.55
 
 
 @pytest.mark.parametrize("strain,clinical_id,status", [

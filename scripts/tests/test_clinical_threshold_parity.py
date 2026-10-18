@@ -31,10 +31,11 @@ SCRIPTS = Path(__file__).resolve().parents[1]
 QUALITY_SCORE = SCRIPTS / "scoring_v4" / "config" / "quality_score.json"
 SCORING_CONFIG = SCRIPTS / "config" / "scoring_config.json"
 
-# B7 UL-exceedance threshold, as a percent of UL. MUST equal
-# pinnedB7UlPctThreshold in the app repo's
-# test/safety_invariants/clinical_threshold_parity_test.dart.
-PINNED_B7_UL_PCT_THRESHOLD = 150.0
+# Confirmed UL exceedance, as a percent of UL (Dose V4.1 §2.4: exactly 100% is
+# not an exceedance). MUST equal pinnedB7UlPctThreshold in the app repo's
+# test/safety_invariants/clinical_threshold_parity_test.dart. The 150% zero
+# band is Dose scoring policy only and is not the app's "over UL" test.
+PINNED_B7_UL_PCT_THRESHOLD = 100.0
 
 
 def _find_all(obj, key):
@@ -53,9 +54,9 @@ def _find_all(obj, key):
 
 def test_quality_score_b7_thresholds_match_pin():
     data = json.loads(QUALITY_SCORE.read_text())
-    value = data["dose_safety_policy"]["ul_pct_threshold"]
+    value = data["dose_safety_ceiling"]["exceeds_above_pct"]
     assert float(value) == PINNED_B7_UL_PCT_THRESHOLD, (
-        f"dose_safety_policy.ul_pct_threshold={value} != pinned "
+        f"dose_safety_ceiling.exceeds_above_pct={value} != pinned "
         f"{PINNED_B7_UL_PCT_THRESHOLD}.\n"
         "If B7 changed, update this pin AND the app pin "
         "(test/safety_invariants/clinical_threshold_parity_test.dart)."

@@ -122,7 +122,7 @@ _NUTRIENT_DOSE_ROUTES = frozenset({"generic", "multi_or_prenatal", "b_complex"})
 #: Generic Dose methods that read vitamin/mineral amounts (the botanical,
 #: collagen, sleep and joint profiles never do).
 _GENERIC_NUTRIENT_DOSE_METHODS = frozenset({
-    "rda_ul_proxy_until_dietary_intake_table",
+    "source_qualified_contribution_and_completed_neutral",
     "immune_support_daily_dose_v1",
 })
 #: Adequacy statuses recorded when a printed nutrient amount could not be read.
@@ -144,6 +144,9 @@ def unfinished_source_assessment(enriched_product: Dict[str, Any],
     line whose amount we could not read.
     """
     dose_meta = _safe_dict(_safe_dict(_safe_dict(module_breakdown.get("dimensions")).get("dose")).get("metadata"))
+    if (dose_meta.get("assessment_status") == "incomplete"
+            and dose_meta.get("reason_code") == "unresolved_source_quantity"):
+        return "dose_amount_unread"
     assessments = [_safe_dict(dose_meta.get("botanical_dose"))] + [
         _safe_dict(_safe_dict(item).get("metadata"))
         for item in dose_meta.get("specialized_purpose_assessments") or []

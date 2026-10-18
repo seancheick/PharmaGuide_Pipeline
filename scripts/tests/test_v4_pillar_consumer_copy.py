@@ -297,7 +297,7 @@ def test_over_limit_dose_reason_does_not_claim_the_dose_falls_short() -> None:
     reason = _assemble(_shadow(module="generic", bd=bd))["quality_pillars_v4"]["dose"]["reason"]
 
     assert reason == (
-        "At the declared serving, one or more nutrients exceed "
+        "At the label's maximum daily use, one or more nutrients exceed "
         "established safety limits."
     )
 
@@ -326,7 +326,7 @@ def test_probiotic_aggregate_cfu_dose_copy_does_not_claim_the_total_is_too_low()
     reason = out["quality_pillars_v4"]["dose"]["reason"]
     assert reason == (
         "Total potency is disclosed, but per-strain amounts are not, so they cannot "
-        "be checked against strain dose benchmarks or credited."
+        "be checked against strain dose benchmarks; Dose takes the neutral assessment value."
     )
     assert "low" not in reason.lower() and "fall short" not in reason.lower()
     assert "fall short" not in reason.lower()

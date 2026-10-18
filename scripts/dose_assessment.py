@@ -57,6 +57,7 @@ _BOUNDED_UL_REASONS = {
     "worst_case_vitamin_e_mass_within_ul",
 }
 _UNRESOLVED_FORM_REASONS = {
+    "unresolved_form",
     "unknown_folate_form_lineage",
     "unknown_vitamin_form",
     "mixed_vitamin_a_preformed_fraction_unknown",
@@ -203,6 +204,13 @@ def _positive_clinical_benchmark_records() -> tuple[Dict[str, Any], ...]:
         if isinstance(record, dict)
         and str(record.get("effect_direction") or "").strip().lower() in _POSITIVE_BENCHMARK_DIRECTIONS
         and (_finite_number(record.get("min_clinical_dose")) or 0) > 0
+        # A studied regimen and positive outcome do not establish a minimum
+        # or interpolation curve. Only explicitly reviewed numerical meaning
+        # is eligible; missing metadata fails closed.
+        and (record.get("reference_semantics") or {}).get("reference_type")
+            in {"supported_minimum", "bounded_window", "supplement_contribution_policy"}
+        and str((record.get("reference_semantics") or {}).get("approval_status") or "").startswith("approved_")
+        and (record.get("reference_semantics") or {}).get("curve") != "completed_no_benchmark_neutral"
     )
 
 
@@ -240,7 +248,9 @@ def positive_clinical_benchmark(
     enrichment source linkage is authoritative.  A branded whole-preparation
     row may also match its own registry name/alias; generic parent or member
     identity never borrows that branded benchmark.  Null/mixed/inapplicable
-    records are absent from the eligible record set.
+    records are absent from the eligible record set. Literature studied-dose
+    exposures remain descriptive: a positive outcome at a discrete regimen
+    does not establish a minimum effective dose or an interpolation curve.
     """
     row_ref = str(row.get("raw_source_path") or row.get("source_row_ref") or "").strip()
     row_names = _row_names(row)
@@ -294,35 +304,6 @@ def positive_clinical_benchmark(
     ]
     if exact_branded:
         candidates = exact_branded
-
-    if not candidates:
-        # The verified literature registry has structured material/purpose
-        # applicability but stores its studied range separately from the
-        # backed-study registry. Reuse the canonical resolver's applicability
-        # decision, then project only a positive exact range into Dose.
-        from evidence_resolver import (
-            EvidenceDisposition,
-            resolve_evidence_for_row,
-        )
-        resolution = resolve_evidence_for_row(row, product=product)
-        literature = (resolution.owner_facts or {}).get("literature_evidence") or {}
-        studied = literature.get("studied_dose") or {}
-        values = studied.get("values") if isinstance(studied, dict) else None
-        if (
-            resolution.disposition == EvidenceDisposition.RESOLVED_BY_REVIEWED_CLINICAL_EVIDENCE.value
-            and str(literature.get("effect_direction") or "").strip().lower() in _POSITIVE_BENCHMARK_DIRECTIONS
-            and isinstance(values, list) and values
-            and str(studied.get("basis") or "").strip().lower() in {"daily_intake", "per_serving_threshold"}
-        ):
-            positive_values = [value for value in (_finite_number(item) for item in values) if value and value > 0]
-            if positive_values:
-                candidates.append({
-                    "id": "LIT_" + str(row.get("canonical_id") or row.get("name") or "").upper(),
-                    "effect_direction": literature.get("effect_direction"),
-                    "min_clinical_dose": min(positive_values),
-                    "max_studied_clinical_dose": max(positive_values),
-                    "dose_unit": studied.get("unit") or "mg",
-                })
 
     assessments = []
     for record in candidates:
@@ -521,7 +502,10 @@ def build_dose_assessment(
             conversion_status = CONVERSION_FAILED
 
         normalized_ul_status = str(ul_status or "").strip().lower()
-        if reason in _NOT_DISTINCT_REASONS or role == "form_component":
+        if reason == "pediatric_reference_gap":
+            assessment_status = ASSESSMENT_ERROR
+            readiness = READINESS_INCOMPLETE
+        elif reason in _NOT_DISTINCT_REASONS or role == "form_component":
             assessment_status = NOT_DISTINCT_EXPOSURE
             readiness = READINESS_NOT_APPLICABLE
         elif (

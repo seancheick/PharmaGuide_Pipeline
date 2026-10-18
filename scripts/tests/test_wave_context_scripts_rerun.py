@@ -55,3 +55,23 @@ def test_wave2_rerun_rejects_drift_in_corrected_source_facts(tmp_path, monkeypat
     with pytest.raises(AssertionError, match=context_id):
         module.main()
     assert scratch.read_bytes() == before
+
+
+@pytest.mark.parametrize('version', ['2.4.0', '2.4.1', '2.5.0'])
+def test_materialized_wave2_uses_read_only_verification_after_later_registry_versions(tmp_path, monkeypatch, version):
+    import importlib.util
+    import json
+    spec = importlib.util.spec_from_file_location('wave2_later_registry_guard', SCRIPT)
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    data = json.loads(REGISTRY.read_text())
+    data['_metadata']['version'] = version
+    scratch = tmp_path / 'registry.json'
+    scratch.write_text(json.dumps(data))
+    before = scratch.read_bytes()
+    monkeypatch.setattr(module, 'REG', scratch)
+    def reject_write(*args, **kwargs):
+        raise AssertionError('materialized Wave 2 must not write registry data')
+    monkeypatch.setattr(Path, 'write_text', reject_write)
+    module.main()
+    assert scratch.read_bytes() == before

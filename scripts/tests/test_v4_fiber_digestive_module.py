@@ -7,6 +7,8 @@ or stimulant-laxative blends should remain low.
 
 from __future__ import annotations
 
+import pytest
+
 import os
 import sys
 from pathlib import Path
@@ -149,10 +151,10 @@ def test_clean_psyllium_fiber_routes_to_dedicated_module_and_scores_strong() -> 
 
     assert out["v4_module"] == "fiber_digestive"
     assert out["v4_breakdown"]["module"]["module"] == "fiber_digestive"
-    assert out["quality_score_v4_100"] >= 88.0
+    assert out["quality_pillars_v4"]["dose"]["score"] == 11.4
     dose = out["v4_breakdown"]["module"]["dimensions"]["dose"]
     assert dose["metadata"]["method"] == "fiber_effective_dose_v1"
-    assert dose["components"]["fiber_effective_dose"] >= 22.0
+    assert dose["components"]["fiber_effective_dose"] == 12.54
 
 
 def test_under_dosed_fiber_gummy_stays_low_despite_category_membership() -> None:
@@ -186,8 +188,8 @@ def test_under_dosed_fiber_gummy_stays_low_despite_category_membership() -> None
     result = score_fiber_digestive(product)
     breakdown = result.to_breakdown()
 
-    assert result.score_100 < 55.0
-    assert breakdown["dimensions"]["dose"]["score"] < 8.0
+    assert breakdown["dimensions"]["dose"]["score"] == 12.54
+    assert breakdown["dimensions"]["formulation"]["score"] < 30.0
     assert "fiber_gummy_delivery_penalty" not in breakdown["dimensions"]["formulation"]["penalties"]
 
 
@@ -232,7 +234,7 @@ def test_fiber_dose_prefers_label_fiber_grams_over_active_mass_noise() -> None:
 
     dose = score_dose(product)
 
-    assert dose["score"] >= 22.0
+    assert dose["score"] == 12.54
     assert dose["metadata"]["fiber_dose_source"] == "nutrition_facts"
     assert dose["metadata"]["fiber_grams_per_serving"] == 7.0
 
@@ -271,3 +273,121 @@ def test_incidental_nutrition_fiber_does_not_replace_digestive_ingredient_dose()
     from scoring_v4.modules.generic_dose import score_dose as generic_dose
     product = {"fullName": "Digestive Enzymes", "nutrition_summary": {"dietary_fiber_g": 1}, "activeIngredients": [{"name": "Protease", "canonical_id": "protease", "quantity": 1000, "unit": "HUT"}]}
     assert score_dose(product) == generic_dose(product)
+
+
+@pytest.mark.parametrize('grams', [.25,1,3,5,7,15])
+def test_reviewed_general_fiber_amount_is_not_a_clinical_dose_curve(grams):
+    from scoring_v4.modules.fiber_digestive_dose import _fiber_effective_dose_points
+    from scoring_v4.modules.generic_helpers import unbenchmarked_dose_credit
+    assert _fiber_effective_dose_points(grams) == unbenchmarked_dose_credit()
+
+
+
+@pytest.mark.parametrize("facts_amount", [None,8.0])
+def test_missing_fiber_capture_is_not_a_completed_zero_or_neutral(facts_amount):
+    from scoring_v4.scored_artifact import build_scored_artifact
+    product=_fiber_product([_row("psyllium", None, name="Psyllium Husk")], dietary_fiber_g=facts_amount)
+    artifact=build_scored_artifact(product)
+    if facts_amount is None:
+        assert artifact["quality_assessment_status"] == "partial" or artifact["quality_score_status"] == "not_scored"
+    else:
+        # A valid Nutrition Facts total owns aggregate fiber independently of
+        # an unquantified ingredient source. Never discard that declaration.
+        assert artifact["quality_assessment_status"] == "complete"
+        assert artifact["quality_pillars_v4"]["dose"]["score"] == 11.4
+
+
+def _fiber_with_named_vitamin(*, fiber_rows=None, vitamin_amount=1000, named=True, assessed=True):
+    product = _fiber_product(
+        (fiber_rows if fiber_rows is not None else [_row("psyllium", 8)])
+        + [_row("vitamin_c", vitamin_amount, "mg", name="Vitamin C", category="vitamin")],
+        name="Psyllium + Vitamin C" if named else "Psyllium Fiber",
+    )
+    product["rda_ul_data"] = {"adequacy_results": [{
+        "nutrient": "Vitamin C", "canonical_id": "vitamin_c", "amount": 1000,
+        "unit": "mg", "pct_rda": 1000 / 90 * 100, "rda_ai": 90, "scoring_eligible": True,
+    }] if assessed else [], "safety_flags": []}
+    return product
+
+
+@pytest.mark.parametrize("fibers", [[_row("psyllium", 8)],
+                                    [_row("psyllium", 4), _row("acacia", 4)],
+                                    [_row("psyllium", None)]])
+def test_fiber_aggregate_and_named_nutrient_each_keep_one_public_purpose_vote(fibers):
+    from scoring_v4.scored_artifact import build_scored_artifact
+
+    artifact = build_scored_artifact(_fiber_with_named_vitamin(fiber_rows=fibers))
+    assert artifact["quality_assessment_status"] == "complete"
+    dose = artifact["quality_pillars_v4"]["dose"]
+    assert dose["score"] == 15.7
+    receipt = dose["explanation"]["dose_receipt"]
+    assert receipt["aggregation"] == "declared_purpose_equal_weight"
+    assert len(receipt["contributions"]) == 2
+    assert sorted(entry["points"] for entry in receipt["contributions"]) == [11.4, 20]
+    assert receipt["reconciles"] is True
+
+
+def test_incidental_nutrient_does_not_enter_fiber_purpose_average():
+    from scoring_v4.scored_artifact import build_scored_artifact
+
+    artifact = build_scored_artifact(_fiber_with_named_vitamin(named=False))
+    dose = artifact["quality_pillars_v4"]["dose"]
+    assert dose["score"] == 11.4
+    assert len(dose["explanation"]["dose_receipt"]["contributions"]) == 1
+
+
+def test_missing_named_nutrient_amount_cannot_hide_behind_qualified_fiber_facts():
+    from scoring_v4.scored_artifact import build_scored_artifact
+
+    artifact = build_scored_artifact(_fiber_with_named_vitamin(vitamin_amount=None, assessed=False))
+    assert artifact["quality_assessment_status"] == "partial" or artifact["quality_score_status"] == "not_scored"
+
+
+@pytest.mark.parametrize("hidden", [False, True])
+def test_fiber_keeps_each_declared_unbenchmarked_or_hidden_peer_at_neutral(hidden):
+    from scoring_v4.scored_artifact import build_scored_artifact
+
+    peer = _row("l_theanine", None if hidden else 100, "mg", name="L-Theanine", category="amino acid")
+    if hidden:
+        peer.update(isNestedIngredient=True, parentBlend="Calm Blend", is_proprietary_blend=True)
+    product = _fiber_product([_row("psyllium", 8), peer], name="Psyllium + L-Theanine")
+    artifact = build_scored_artifact(product)
+    if not hidden:
+        assert artifact["quality_assessment_status"] == "complete"
+    # This compatibility fixture has no typed source-dose collection. Keep its
+    # independent readiness result while checking the completed Dose vote.
+    module_dose = artifact["_v4_module_breakdown"]["dimensions"]["dose"]
+    assert module_dose["metadata"].get("assessment_status") != "incomplete"
+    dose = artifact["quality_pillars_v4"]["dose"]
+    assert dose["score"] == 11.4
+    receipt = dose["explanation"]["dose_receipt"]
+    assert len(receipt["contributions"]) == 2
+    theanine = next(entry for entry in receipt["contributions"] if entry["ingredient"] == "l_theanine")
+    assert theanine["assessment"] == ("hidden_amount_neutral" if hidden else "no_benchmark_neutral")
+    assert receipt["reconciles"] is True
+
+
+def test_fiber_does_not_drop_an_unresolved_declared_group_entry():
+    from scoring_v4.scored_artifact import build_scored_artifact
+
+    product = _fiber_product([
+        _row("psyllium", 8),
+        _row("l_leucine", None, "mg", name="L-Leucine", category="amino acid"),
+        _row("l_isoleucine", 1000, "mg", name="L-Isoleucine", category="amino acid"),
+        _row("l_valine", 1000, "mg", name="L-Valine", category="amino acid"),
+    ], name="Psyllium + BCAA")
+    assert score_dose(product)["score"] is None
+    artifact = build_scored_artifact(product)
+    assert artifact["quality_assessment_status"] == "partial" or artifact["quality_score_status"] == "not_scored"
+
+
+@pytest.mark.parametrize('unit', ['NP', '', 'scoop'])
+def test_fiber_cannot_hide_a_named_peer_with_an_unusable_unit(unit):
+    from scoring_v4.scored_artifact import build_scored_artifact
+    product = _fiber_with_named_vitamin(assessed=False)
+    product['ingredient_quality_data']['ingredients_scorable'][-1].update(unit=unit, unit_normalized=unit.lower())
+    artifact = build_scored_artifact(product)
+    assert artifact['quality_assessment_status'] == 'partial' or artifact['quality_score_status'] == 'not_scored'
+    dose = artifact['_v4_module_breakdown']['dimensions']['dose']
+    assert dose['score'] is None
+    assert dose['metadata']['reason_code'] == 'unresolved_source_quantity'

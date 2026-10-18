@@ -401,3 +401,73 @@ def test_unresolved_fiber_source_is_a_descriptor_not_an_extra_active(normalizer,
     disclosure = scored['_v4_module_breakdown']['dimensions']['transparency']['metadata']['complete_active_disclosure']
     assert disclosure['declared_active_count'] == disclosure['active_row_count'] == 1
     assert disclosure['qualifies'] is True
+
+
+def test_undosed_sugar_form_retains_source_without_counting_as_declared_active(normalizer):
+    """252510's Sugars.forms[Lactose] describes composition, not another dose."""
+    from enrich_supplements_v3 import SupplementEnricherV3
+    from scoring_input_contract import get_scoring_ingredients
+    from scoring_v4.scored_artifact import build_scored_artifact
+
+    raw = {
+        'id': 'TEST-PROTEIN-SUGAR-FORM', 'fullName': 'Whey Protein Isolate',
+        'ingredientRows': [
+            {'name': 'Vitamin C', 'category': 'vitamin',
+             'quantity': [{'quantity': 100, 'unit': 'mg'}]},
+            {'name': 'Total Carbohydrates', 'category': 'sugar',
+             'ingredientGroup': 'Carbohydrate',
+             'quantity': [{'quantity': 1, 'operator': '<', 'unit': 'Gram(s)'}],
+             'nestedRows': [
+                 {'name': 'Sugars', 'category': 'sugar', 'ingredientGroup': 'Sugar',
+                  'quantity': [{'quantity': 1, 'operator': '<', 'unit': 'Gram(s)'}],
+                  'forms': [{'name': 'Lactose', 'category': 'sugar',
+                             'ingredientGroup': 'Lactose', 'uniiCode': 'J2B2A4N98G'}]}]},
+            {'name': 'Protein', 'category': 'protein', 'ingredientGroup': 'Protein (unspecified)',
+             'quantity': [{'quantity': 27, 'unit': 'Gram(s)'}]},
+        ],
+    }
+    cleaned = normalizer.normalize_product(raw)
+    lactose = next(r for r in cleaned['activeIngredients'] if r['name'] == 'Lactose')
+    assert lactose['raw_source_path'] == 'ingredientRows[1].nestedRows[0].forms[0]'
+    assert lactose['raw_source_text'] == 'Lactose'
+    assert lactose['quantity'] == 0
+    assert lactose['cleaner_row_role'] == 'source_descriptor'
+    assert lactose['score_eligible_by_cleaner'] is False
+    enriched, _ = SupplementEnricherV3().enrich_product(cleaned)
+    rows = get_scoring_ingredients(enriched, strict=True).rows
+    protein = [r for r in rows if r.get('canonical_id') == 'protein']
+    assert len(protein) == 1
+    assert protein[0]['quantity'] == 27
+    assert protein[0]['raw_source_path'] == 'ingredientRows[2]'
+    artifact = build_scored_artifact(enriched)
+    disclosure = artifact['_v4_module_breakdown']['dimensions']['transparency']['metadata']['complete_active_disclosure']
+    assert disclosure['declared_active_count'] == disclosure['active_row_count'] == 2
+    assert disclosure['complete_row_count'] == 2
+    assert disclosure['qualifies'] is True
+    assert disclosure['blockers'] == []
+
+
+@pytest.mark.parametrize('name,group,category,quantity', [
+    ('D-Ribose', 'Ribose', 'sugar', 100),
+    ('D-Ribose', 'Ribose', 'sugar', None),
+    ('DHA', 'DHA', 'fatty acid', 200),
+    ('Psyllium Husk', 'Psyllium', 'fiber', 500),
+    ('Unmapped Named Active QXZ', 'Unknown', 'other', None),
+])
+def test_nutrition_form_rescue_preserves_independent_and_real_active_children(
+    normalizer, name, group, category, quantity,
+):
+    form = {'name': name, 'category': category, 'ingredientGroup': group}
+    if quantity is not None:
+        form['quantity'] = [{'quantity': quantity, 'unit': 'mg'}]
+    raw = {'id': 'TEST-REAL-NUTRITION-FORM', 'fullName': 'Active Form',
+           'ingredientRows': [{'name': 'Total Carbohydrates', 'category': 'sugar',
+                               'ingredientGroup': 'Carbohydrate',
+                               'quantity': [{'quantity': 1, 'unit': 'Gram(s)'}],
+                               'forms': [form]}]}
+    cleaned = normalizer.normalize_product(raw)
+    row = next(r for r in cleaned['activeIngredients'] if r['raw_source_text'] == name)
+    assert row['cleaner_row_role'] == 'active_scorable'
+    assert row['score_eligible_by_cleaner'] is True
+    assert row['raw_source_path'] == 'ingredientRows[0].forms[0]'
+    assert row['quantity'] == (quantity or 0)

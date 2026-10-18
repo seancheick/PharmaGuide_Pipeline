@@ -1,67 +1,11 @@
-"""v4 generic-module Dose dimension (P1.3.2a).
+"""Generic Dose: approved nutrient contribution and completed-neutral assessments.
 
-Per `docs/plans/SCORING_V4_PROPOSAL.md` §6 generic rubric — Dose 25:
-
-    | Item                                  | Cap | Notes                  |
-    |---------------------------------------|----:|------------------------|
-    | Dose inside the supplemental window   |  22 | NEW per §6 line 369    |
-    | B7 dose safety penalty (>150% UL)     |  -3 | up to -3               |
-
-The "supplemental window" per §6 line 369 is:
-
-    max(0, RDA - typical_dietary_intake)  ≤  supplemental_dose  ≤  supplemental_UL
-
-True window math requires a per-nutrient `typical_dietary_intake`
-reference table (NIH ODS / NHANES) that does NOT exist yet. The spec
-itself lists this as an open task (line 1471-1474).
-
-P1.3.2a — THIS slice — implements a SAFE PROXY using only existing
-enriched data (`rda_ul_data.adequacy_results[].pct_rda` /
-`.pct_ul`). The proxy is honest about what it is: every payload
-carries explicit metadata so audit / score-delta / Flutter tooling
-never mistakes the proxy band for final NIH/NHANES window math.
-
-Proxy rule (per scorable nutrient with `pct_rda` AND `pct_ul`):
-
-    pct_ul >= 150%             →  0    (B7 handles separately; danger zone)
-    100% < pct_ul < 150%       →  11   (overdose territory, half credit)
-
-Below the UL, credit depends on what the reference is (quality_score 1.4.0):
-
-    official DRI vitamin / trace mineral (RDA or AI):
-        pct_rda >= 100%        →  22   (meets the requirement)
-        20% <= pct_rda < 100%  →  11 → 22 linear (20% = FDA "high/excellent
-                                   source", 21 CFR 101.54(b))
-        pct_rda < 20%          →  (pct_rda / 20) * 11
-    verified clinical anchor (no DRI; the reference is the lowest clinically
-    effective daily dose, content-verified against PubMed 2026-09-15 in
-    scripts/audits/clinical_anchor_verification_2026_09_15):
-        pct_rda >= 100%        →  22
-        pct_rda < 100%         →  (pct_rda / 100) * 22
-    macrominerals and every other reference, including anchors the review
-    could not establish (unchanged until a dietary intake table exists):
-        pct_rda >= 25%         →  22
-        0% < pct_rda < 25%     →  (pct_rda / 25) * 22
-
-The dimension contribution averages the per-nutrient band credit
-across nutrients that have RDA reference data. Nutrients without
-RDA data (most botanicals) are skipped without zeroing the average.
-If NO nutrient has RDA data, the line contributes a 0 component for
-audit readability but the Dose dimension score is `None` unless a dose
-safety flag is present. That distinction is intentional: "no RDA/UL
-benchmark exists" (common for botanicals like KSM-66) is not the same
-as "bad dose."
-
-Form quality is not a Dose input. IQM forms[].bio_score is its one owner
-(matrix concept `ingredient_form_quality`), read by Formulation; the former
-+3 for >= 2 premium forms of one nutrient was retired in quality_score
-1.21.0: a count of forms is neither an amount nor a reference.
-
-B7 penalty: read `rda_ul_data.safety_flags[]`, sum 2.0 per flag with
-`pct_ul >= 150%`, cap at 3.0. v3-equivalent.
-
-Per §13 architecture lock, this module does not import from
-`score_supplements.py` (v3).
+Minimum directed daily use determines contribution. Official nutritional
+references use the shared PharmaGuide20%-half/100%-full curve; eligible ordinary
+adult Mg/Ca purposes use their config-owned contribution targets. A trial amount
+is not a minimum-effective benchmark. Unqualified historical anchors never
+supply a fallback curve. Maximum-use excess is handled once by the final public
+Dose ceiling, independently of these adequacy components.
 """
 
 from __future__ import annotations
@@ -81,7 +25,9 @@ from scoring_v4.modules.collagen_profile import (
 from scoring_v4.modules.generic_helpers import (
     get_active_ingredients,
     has_usable_individual_dose,
+    missing_doses_are_label_hidden,
     nutrient_delivering_rows,
+    delivers_its_nutrient,
     unbenchmarked_dose_credit,
     _as_float,
     _norm_text,
@@ -92,11 +38,15 @@ from scoring_input_contract import (
     ROLE_CLAIM_PROMINENT,
     ROLE_PRIMARY,
     classify_ingredient_roles,
+    dose_disclosure_status,
+    get_assessable_evidence_ingredients,
     mass_primary_label_actives,
     is_lent_blend_mass,
     source_linked_rows,
+    scoring_row_key,
 )
 from scoring_v4.dose_safety import resolve_dose_safety
+from scoring_v4.exposure import quantity_is_unresolved
 from dose_assessment import positive_aggregate_clinical_benchmark, positive_clinical_benchmark
 from scoring_v4.modules.immune_support import score_immune_purpose_dose, score_immune_support_dose
 from scoring_v4.modules.joint_support import score_joint_purpose_dose, score_joint_support_dose
@@ -108,34 +58,29 @@ from scoring_v4.modules.sleep_support import score_sleep_purpose_dose, score_sle
 from scoring_v4.quality_score_config import block as _cfg_block
 
 _DM = _cfg_block("dose_magnitudes", "generic")["generic"]
-_B7 = _cfg_block("dose_safety_policy", "ul_pct_threshold")
 
 
 CAP_SUPPLEMENTAL_WINDOW = _DM["cap_supplemental_window"]
 DIMENSION_CAP = _DM["dimension_cap"]
 
 # Proxy band cutoffs.
-WINDOW_RDA_THRESHOLD = _DM["window_rda_threshold"]      # pct_rda below this is sub-clinical
-WINDOW_UL_PARTIAL_BAND = _DM["window_ul_partial_band"]   # above this and below 150 → half credit
-B7_UL_PCT_THRESHOLD = _B7["ul_pct_threshold"]      # at/above this triggers B7 + zeroes window
-WINDOW_OVERDOSE_CREDIT = _DM["window_overdose_credit"]    # 100% < pct_ul < 150% credit (half of 22)
 WINDOW_HIGH_SOURCE_PCT = _DM["window_high_source_pct"]    # 21 CFR 101.54(b) "high source"
 WINDOW_FULL_ADEQUACY_PCT = _DM["window_full_adequacy_pct"]
-
-# B7 penalty.
-B7_PER_FLAG_PENALTY = _B7["per_flag_penalty"]
-B7_CAP = _B7["cap"]
+# Dose V4.1 §3.1: ordinary-adult contribution-policy targets (elemental mg/day).
+_CONTRIBUTION_TARGETS = {key: value for key, value in _DM["contribution_policy_targets"].items()
+                         if not key.startswith("_")}
+# Life stages that keep their own references instead of the adult targets.
+_OWN_REFERENCE_POPULATIONS = frozenset({"pregnancy_lactation", "pediatric"})
 
 PHASE_MARKER = "P1.3.2a_dose_proxy"
-METHOD_MARKER = "rda_ul_proxy_until_dietary_intake_table"
-DEFERRED_DATA = "typical_dietary_intake"
+METHOD_MARKER = "source_qualified_contribution_and_completed_neutral"
 
 # These nutrients are supplied mainly by food, while ordinary standalone
 # supplements intentionally provide only a small fraction of the dietary AI.
 # Comparing a normal label dose directly with the full dietary target makes a
 # market-standard product look defective. Keep the RDA/AI in nutrient tracking;
 # only the generic product-quality proxy excludes it.
-_DIETARY_INTAKE_DOMINANT_CANONICALS = frozenset({"potassium"})
+_DIETARY_INTAKE_DOMINANT_CANONICALS = frozenset({"potassium", "sodium", "chloride"})
 
 # Which kind of reference an adequacy row's percentage is measured against,
 # keyed by the row canonical_id -> rda_optimal_uls.json reference id. Official
@@ -151,22 +96,31 @@ _DRI_REFERENCE_BY_CANONICAL = {
     "chromium": "chromium", "copper": "copper", "fluoride": "fluoride", "iodine": "iodine",
     "iron": "iron", "manganese": "manganese", "molybdenum": "molybdenum",
     "selenium": "selenium", "zinc": "zinc",
+    "phosphorus": "phosphorus", "alpha_linolenic_acid": "alpha_linolenic_acid",
+    "magnesium": "magnesium", "calcium": "calcium",
 }
-
-# No official DRI: the reference is the lowest clinically effective daily dose.
-# Alias-to-reference routing is owned by the production config, while the
-# clinical-anchor audit ledger supplies the evidence and eligibility review.
-# Keeping the map in config prevents a silent second scoring vocabulary here.
-_CLINICAL_ANCHOR_REFERENCE_BY_CANONICAL = _DM["_clinical_anchor_reference_by_canonical"]
-
 
 def _adequacy_reference_kind(canonical: object) -> str:
     key = _norm_text(canonical)
-    if key in _DRI_REFERENCE_BY_CANONICAL:
-        return "dri"
-    if key in _CLINICAL_ANCHOR_REFERENCE_BY_CANONICAL:
-        return "clinical_anchor"
-    return "legacy"
+    return "dri" if key in _DRI_REFERENCE_BY_CANONICAL else "no_benchmark"
+
+
+def nutritional_unit_credit(pct: Optional[float]) -> Optional[float]:
+    """The one approved RDA/AI contribution curve, independent of safety.
+
+    Percentages are dietary reference correspondence, not percent effectiveness.
+    Panel and nutrient consumers use the same config-owned20/100 thresholds.
+    """
+    value = _as_float(pct, None)
+    if value is None:
+        return None
+    value = max(0.0, value)
+    if value >= WINDOW_FULL_ADEQUACY_PCT:
+        return 1.0
+    half = 0.5
+    if value >= WINDOW_HIGH_SOURCE_PCT:
+        return half + half * (value - WINDOW_HIGH_SOURCE_PCT) / (WINDOW_FULL_ADEQUACY_PCT - WINDOW_HIGH_SOURCE_PCT)
+    return half * value / WINDOW_HIGH_SOURCE_PCT
 
 
 # --- Supplemental-window proxy -------------------------------------------
@@ -176,45 +130,82 @@ def _band_credit(
     pct_rda: Optional[float],
     pct_ul: Optional[float],
     canonical: object = None,
+    row: Optional[Dict[str, Any]] = None,
 ) -> Optional[float]:
-    """Per-nutrient proxy band credit on the 0-22 scale.
+    """Per-nutrient adequacy credit on the 0-22 scale, at minimum daily use.
 
-    Returns None when the row lacks BOTH pct_rda and pct_ul (no signal).
-    Caller treats None as "skip this row from the average."
+    Returns None when the row has no reference percentage (``pct_rda``); the
+    caller skips it from the average. ``pct_ul`` is accepted for call-site
+    symmetry and deliberately unused: excess is the product-level ceiling's.
     """
-    if pct_rda is None and pct_ul is None:
-        return None
-
-    # pct_ul takes precedence in the upper bands — pct_ul tells us about
-    # toxicity proximity, which is the load-bearing safety signal.
-    if pct_ul is not None:
-        if pct_ul >= B7_UL_PCT_THRESHOLD:
-            return 0.0
-        if pct_ul > WINDOW_UL_PARTIAL_BAND:
-            return WINDOW_OVERDOSE_CREDIT
-
     if pct_rda is None:
-        # We know we're under UL (or it was None) but have no RDA signal.
-        # No safe band assignment; skip from the average.
         return None
+    target = _contribution_target(canonical, row)
+    if target is not None:
+        amount = max(0.0, pct_rda) / 100.0 * float(row["rda_ai"])
+        return CAP_SUPPLEMENTAL_WINDOW * min(amount / float(target["target_mg"]), 1.0)
+    # Life-stage contexts retain their sourced RDA/AI and use the approved
+    # shared nutritional curve. They cannot borrow the ordinary-adult target
+    # or the retired quarter-RDA shortcut. Missing source references stay absent.
+    if (_norm_text(canonical) in _CONTRIBUTION_TARGETS
+            and (not isinstance(row, dict) or (_as_float(row.get("rda_ai"), 0) or 0) <= 0)):
+        return None
+    if _adequacy_reference_kind(canonical) == "dri":
+        credit = nutritional_unit_credit(pct_rda)
+        return None if credit is None else CAP_SUPPLEMENTAL_WINDOW * credit
+    return None
 
-    if pct_rda <= 0:
-        return 0.0
-    kind = _adequacy_reference_kind(canonical)
-    if pct_rda >= (WINDOW_RDA_THRESHOLD if kind == "legacy" else WINDOW_FULL_ADEQUACY_PCT):
-        return CAP_SUPPLEMENTAL_WINDOW
-    if kind == "dri":
-        half = CAP_SUPPLEMENTAL_WINDOW / 2.0
-        if pct_rda >= WINDOW_HIGH_SOURCE_PCT:
-            span = WINDOW_FULL_ADEQUACY_PCT - WINDOW_HIGH_SOURCE_PCT
-            return half + half * (pct_rda - WINDOW_HIGH_SOURCE_PCT) / span
-        return half * pct_rda / WINDOW_HIGH_SOURCE_PCT
-    if kind == "clinical_anchor":
-        return CAP_SUPPLEMENTAL_WINDOW * pct_rda / WINDOW_FULL_ADEQUACY_PCT
-    return (pct_rda / WINDOW_RDA_THRESHOLD) * CAP_SUPPLEMENTAL_WINDOW
+
+def _contribution_target(canonical: object, row: Optional[Dict[str, Any]]) -> Optional[Dict[str, Any]]:
+    """The ordinary-adult contribution target for this assessment row, if any.
+
+    Only a row the caller vouches for (single-nutrient or declared purpose)
+    with a sourced RDA/AI and an ordinary adult population qualifies.
+    """
+    target = _CONTRIBUTION_TARGETS.get(_norm_text(canonical))
+    if target is None or not isinstance(row, dict):
+        return None
+    rda = _as_float(row.get("rda_ai"), None)
+    population = _safe_dict(row.get("ul_population"))
+    members = population.get("members") or [population.get("id")]
+    if rda is None or rda <= 0 or _OWN_REFERENCE_POPULATIONS.intersection(members):
+        return None
+    return target
 
 
-def _score_supplemental_window_proxy(product: Dict[str, Any]) -> tuple[float, Optional[str]]:
+_RECEIPT_EXPOSURE_FIELDS = {"per_day_min": "amount_at_minimum", "per_day_max": "amount_at_maximum",
+                             "amount": "amount_per_serving", "unit": "amount_unit"}
+
+
+def _row_receipt(row: Dict[str, Any], kind: str) -> Dict[str, Any]:
+    """Amounts and the reference an adequacy row was credited against."""
+    rda = _as_float(row.get("rda_ai"), None)
+    pct = _as_float(row.get("pct_rda"), None)
+    # rda_ul_data rows are the source-owned exposure records; their amounts
+    # and reference unit are projected as recorded (as reference_assessments
+    # does), never re-derived.
+    detail = {name: row.get(key) for key, name in _RECEIPT_EXPOSURE_FIELDS.items()}
+    detail.update(reference_value=rda, pct_of_reference=pct)
+    target = _contribution_target(row.get("canonical_id"), row) if kind == "contribution_policy_target" else None
+    if target is not None and pct is not None and rda:
+        amount = pct / 100.0 * rda
+        detail.update(reference_value=float(target["target_mg"]),
+                      pct_of_reference=round(amount / float(target["target_mg"]) * 100.0, 2))
+    if target is not None and target.get("absorption_context_per_administration_mg") is not None:
+        # Plan section 3.1: per-administration absorption is context only.
+        detail["absorption_context_per_administration_mg"] = float(target["absorption_context_per_administration_mg"])
+    return {key: value for key, value in detail.items() if value is not None}
+
+
+def _assessment_kind(row: Dict[str, Any]) -> str:
+    """Which reference an adequacy row was credited against (receipt label)."""
+    if _contribution_target(row.get("canonical_id"), row) is not None:
+        return "contribution_policy_target"
+    return {"dri": "dri_reference", "clinical_anchor": "clinical_anchor"}.get(
+        _adequacy_reference_kind(row.get("canonical_id")), "legacy_reference")
+
+
+def _score_supplemental_window_proxy(product: Dict[str, Any], entries: Optional[List[Dict[str, Any]]] = None) -> tuple[float, Optional[str]]:
     """Average band credit across nutrients with RDA reference data.
 
     Returns (credit, reason). When no rows have RDA data, returns
@@ -227,6 +218,10 @@ def _score_supplemental_window_proxy(product: Dict[str, Any]) -> tuple[float, Op
 
     contributions: List[float] = []
     dietary_reference_exclusions = 0
+    # The ordinary-adult contribution targets apply to a single-nutrient
+    # product here; a multi-nutrient formula needs a declared purpose.
+    single_nutrient = sum(1 for row in adequacy_results if isinstance(row, dict)
+                          and _as_float(row.get("pct_rda"), None) is not None) == 1
     for row in adequacy_results:
         if not isinstance(row, dict):
             continue
@@ -237,10 +232,17 @@ def _score_supplemental_window_proxy(product: Dict[str, Any]) -> tuple[float, Op
             continue
         pct_rda = _as_float(row.get("pct_rda"), None)
         pct_ul = _as_float(row.get("pct_ul"), None)
-        credit = _band_credit(pct_rda, pct_ul, row.get("canonical_id"))
+        credit = _band_credit(pct_rda, pct_ul, row.get("canonical_id"), row if single_nutrient else None)
         if credit is None:
             continue
         contributions.append(credit)
+        if entries is not None:
+            kind = _assessment_kind(row) if single_nutrient else (
+                "dri_reference" if _adequacy_reference_kind(row.get("canonical_id")) == "dri"
+                else "clinical_anchor" if _adequacy_reference_kind(row.get("canonical_id")) == "clinical_anchor"
+                else "legacy_reference")
+            entries.append({"ingredient": row.get("nutrient") or row.get("canonical_id"), "assessment": kind,
+                            "credit_raw": round(credit, 4), **_row_receipt(row, kind)})
 
     if not contributions:
         if dietary_reference_exclusions:
@@ -261,7 +263,7 @@ def _row_identity_keys(row: Dict[str, Any]) -> set[str]:
 
 def _score_declared_purpose_window(
     product: Dict[str, Any],
-) -> tuple[Optional[float], List[str], int, List[Dict[str, Any]], List[Dict[str, Any]], List[float]]:
+) -> tuple[Optional[float], List[str], int, List[Dict[str, Any]], List[Dict[str, Any]], List[float], List[str], List[Dict[str, Any]]]:
     """Score each explicitly declared purpose once, using one equal vote.
 
     The shared role owner establishes purpose from the route, product title or
@@ -279,6 +281,49 @@ def _score_declared_purpose_window(
     rows = [row for row in nutrient_delivering_rows(product) if isinstance(row, dict)]
     aggregate = positive_aggregate_clinical_benchmark(product, rows)
     aggregate_members = set(aggregate.member_canonical_ids) if aggregate is not None else set()
+    # A declared mixture keeps one purpose vote when its clinical numerical
+    # benchmark is retired. Identity/purpose and amount ownership are separate
+    # from efficacy eligibility; use the existing role and mixture owners.
+    from scoring_v4.modules.sports_helpers import BCAA_CANONICALS, EAA_CANONICALS, group_bcaa, group_eaa
+    # Source-owned named blend members retain their identities even when the
+    # strict dose-bearing projection excludes their hidden amounts. Supplement
+    # group membership only; ordinary purpose rows still use the strict owner.
+    amino_sources = {scoring_row_key(row, index): row
+                     for index, row in enumerate(get_assessable_evidence_ingredients(product, source_bound=True))
+                     if delivers_its_nutrient(row)}
+    # The strict projection owns a source occurrence over its legacy mirror.
+    amino_sources.update({scoring_row_key(row, index): row for index, row in enumerate(rows)})
+    eaa_rows = [row for row in amino_sources.values() if _norm_text(row.get("canonical_id")) in EAA_CANONICALS]
+    strict_eaa = group_eaa(rows)
+    eaa_identity = {"canonical_id": "essential_amino_acids", "name": "EAA"}
+    eaa_role = classify_ingredient_roles(product, module="generic", rows=[eaa_identity])[0]
+    eaa_declared = (
+        aggregate is None
+        and not strict_eaa["aggregate_identity_complete"]
+        and eaa_role.get("role") in {ROLE_PRIMARY, ROLE_CLAIM_PROMINENT}
+        and EAA_CANONICALS <= {_norm_text(row.get("canonical_id")) for row in eaa_rows}
+    )
+    bcaa_rows = [row for row in amino_sources.values() if _norm_text(row.get("canonical_id")) in BCAA_CANONICALS]
+    bcaa_identity = {"canonical_id": "branched_chain_amino_acids", "name": "BCAA"}
+    bcaa_role = classify_ingredient_roles(product, module="generic", rows=[bcaa_identity])[0]
+    bcaa_whole_owned = any(
+        _norm_text(row.get("canonical_id")) == "branched_chain_amino_acids"
+        and not quantity_is_unresolved(row)
+        and _product_evidence_dose_credit(row)[0] > 0
+        for row in rows
+    )
+    bcaa_declared = (
+        aggregate is None
+        and not eaa_declared
+        and not bcaa_whole_owned
+        and bcaa_role.get("role") in {ROLE_PRIMARY, ROLE_CLAIM_PROMINENT}
+        and BCAA_CANONICALS <= {_norm_text(row.get("canonical_id")) for row in bcaa_rows}
+        and not strict_eaa["complete"]
+    )
+    amino_group = (("eaa", eaa_rows, group_eaa) if eaa_declared
+                   else ("bcaa", bcaa_rows, group_bcaa) if bcaa_declared else None)
+    if amino_group:
+        aggregate_members.update(EAA_CANONICALS if eaa_declared else BCAA_CANONICALS)
     roles = classify_ingredient_roles(product, module="generic", rows=rows)
     purpose_rows = [
         row for row, role in zip(rows, roles)
@@ -286,8 +331,8 @@ def _score_declared_purpose_window(
         and not row.get("is_parent_total")
         and _norm_text(row.get("canonical_id")) not in aggregate_members
     ]
-    if not purpose_rows and aggregate is None:
-        return None, [], 0, [], [], []
+    if not purpose_rows and aggregate is None and amino_group is None:
+        return None, [], 0, [], [], [], [], []
 
     # A physical purpose may have a compatibility projection of the same
     # source row.  Count it once by canonical identity, falling back to source.
@@ -305,20 +350,44 @@ def _score_declared_purpose_window(
     ]
     contributions: List[float] = []
     unbenchmarked: List[str] = []
+    hidden: List[str] = []
+    # One receipt entry per vote (Dose V4.1 section 4): what was assessed,
+    # how, and its raw credit. The explanation renders this; it never recomputes.
+    entries: List[Dict[str, Any]] = []
     fallback_values: List[float] = []
+
+    def vote(ingredient: str, assessment: str, credit: float, **detail: Any) -> None:
+        contributions.append(credit)
+        entries.append({"ingredient": ingredient, "assessment": assessment,
+                        "credit_raw": round(float(credit), 4),
+                        **{key: value for key, value in detail.items() if value is not None}})
     clinical_assessments: List[Dict[str, Any]] = []
     specialized_assessments: List[Dict[str, Any]] = []
+    if amino_group:
+        identity, members, measure = amino_group
+        measured = measure(members)
+        hidden_only = missing_doses_are_label_hidden(members)
+        if not any(quantity_is_unresolved(row) for row in members) and (measured["complete"] or hidden_only):
+            credit = unbenchmarked_dose_credit()
+            vote(identity, "hidden_amount_neutral" if hidden_only else "no_benchmark_neutral", credit)
+            fallback_values.append(credit)
+            (hidden if hidden_only else unbenchmarked).append(identity)
+        else:
+            vote(identity, "unresolved_source_quantity", 0.0)
     if aggregate is not None:
+        # Dose V4.1 section 2.2: the highest studied dose is no upper limit;
+        # above it adequacy plateaus. Excess is the product-level ceiling's.
         if aggregate.benchmark_maximum and aggregate.exposure_value > aggregate.benchmark_maximum:
-            aggregate_credit = WINDOW_OVERDOSE_CREDIT
-            aggregate_band = "above_studied_range"
+            aggregate_credit = CAP_SUPPLEMENTAL_WINDOW
+            aggregate_band = "above_highest_studied_dose"
         elif aggregate.ratio >= 1.0:
             aggregate_credit = CAP_SUPPLEMENTAL_WINDOW
             aggregate_band = "within_studied_range"
         else:
             aggregate_credit = aggregate.ratio * CAP_SUPPLEMENTAL_WINDOW
             aggregate_band = "below_studied_range"
-        contributions.append(_clamp(0.0, CAP_SUPPLEMENTAL_WINDOW, aggregate_credit))
+        vote("aggregate_formula", "aggregate_formula_benchmark", _clamp(0.0, CAP_SUPPLEMENTAL_WINDOW, aggregate_credit),
+             band=aggregate_band)
         clinical_assessments.append({
             "assessment_kind": "aggregate_formula",
             "dose_band": aggregate_band,
@@ -341,60 +410,91 @@ def _score_declared_purpose_window(
             specialized = score_immune_purpose_dose(product, purpose)
             specialized_owner = "immune_support"
         if specialized is not None:
-            contributions.append(float(specialized["score"]))
+            completed_botanical_neutral = (
+                specialized_owner == "botanical_profile"
+                and specialized.get("band") == "disclosed_no_reference"
+            )
+            vote(key, "no_benchmark_neutral" if completed_botanical_neutral else specialized_owner,
+                 float(specialized["score"]), band=specialized.get("band"))
+            if completed_botanical_neutral:
+                fallback_values.append(float(specialized["score"]))
+                unbenchmarked.append(key)
             specialized_assessments.append({
                 "assessment_owner": specialized_owner,
                 **specialized,
             })
             continue
         credits = []
+        assessed = []
         for assessment in adequacy:
             if not (identities & _row_identity_keys(assessment)):
+                continue
+            if _row_identity_keys(assessment) & _DIETARY_INTAKE_DOMINANT_CANONICALS:
+                # Same exclusion as the proxy path: an ordinary amount is a
+                # small fraction of the dietary AI by design. It is assessed
+                # below as a completed neutral, not against the AI.
                 continue
             credit = _band_credit(
                 _as_float(assessment.get("pct_rda"), None),
                 _as_float(assessment.get("pct_ul"), None),
                 assessment.get("canonical_id"),
+                assessment,
             )
             if credit is not None:
                 credits.append(credit)
+                assessed.append(assessment)
         if credits:
             # The producer normally emits one canonical assessment.  If a
             # compatibility artifact has duplicates, one purpose still gets
             # one conservative vote rather than extra denominator weight.
-            contributions.append(min(credits))
+            chosen = assessed[credits.index(min(credits))]
+            kind = _assessment_kind(chosen)
+            vote(key, kind, min(credits), **_row_receipt(chosen, kind))
             continue
         clinical = positive_clinical_benchmark(product, purpose)
         if clinical is not None:
-            if clinical.benchmark_maximum and clinical.exposure_value > clinical.benchmark_maximum:
-                contributions.append(WINDOW_OVERDOSE_CREDIT)
-            else:
-                contributions.append(min(CAP_SUPPLEMENTAL_WINDOW, clinical.ratio * CAP_SUPPLEMENTAL_WINDOW))
+            vote(key, "clinical_benchmark", min(CAP_SUPPLEMENTAL_WINDOW, clinical.ratio * CAP_SUPPLEMENTAL_WINDOW),
+                 pct_of_reference=round(clinical.ratio * 100.0, 2))
             clinical_assessments.append(clinical.to_dict())
             continue
         if has_usable_individual_dose(purpose):
-            contributions.append(unbenchmarked_dose_credit())
+            vote(key, "no_benchmark_neutral", unbenchmarked_dose_credit())
             fallback_values.append(unbenchmarked_dose_credit())
             unbenchmarked.append(key)
-        elif not is_lent_blend_mass(purpose):
+            continue
+        if not is_lent_blend_mass(purpose):
             # A disclosed whole preparation remains assessable at the existing
             # product-evidence fallback. A borrowed child amount cannot own
             # that preparation's contribution in the purpose average.
             credit, _ = _product_evidence_dose_credit(purpose)
             if credit:
-                contributions.append(credit)
+                vote(key, "no_benchmark_neutral", credit)
                 fallback_values.append(credit)
                 unbenchmarked.append(key)
+                continue
+        if not quantity_is_unresolved(purpose) and (
+                is_lent_blend_mass(purpose) or dose_disclosure_status(purpose) == "not_disclosed_blend"):
+            # Dose V4.1 section 2.3: a declared purpose whose amount the label
+            # hides (a blend member printed without its own amount) keeps its
+            # one vote at the shared neutral; Transparency keeps the
+            # disclosure consequence. A pipeline-lost amount (unresolved
+            # quantity) keeps its strict readiness hold, and a row missing an
+            # amount without a label nondisclosure earns no vote.
+            vote(key, "hidden_amount_neutral", unbenchmarked_dose_credit())
+            fallback_values.append(unbenchmarked_dose_credit())
+            hidden.append(key)
 
     if not contributions:
-        return 0.0, sorted(unbenchmarked), len(purposes) + int(aggregate is not None), clinical_assessments, specialized_assessments, fallback_values
+        return 0.0, sorted(unbenchmarked), len(purposes) + int(aggregate is not None) + int(amino_group is not None), clinical_assessments, specialized_assessments, fallback_values, sorted(hidden), entries
     return (
         round(_clamp(0.0, CAP_SUPPLEMENTAL_WINDOW, sum(contributions) / len(contributions)), 4),
         sorted(unbenchmarked),
-        len(purposes) + int(aggregate is not None),
+        len(purposes) + int(aggregate is not None) + int(amino_group is not None),
         clinical_assessments,
         specialized_assessments,
         fallback_values,
+        sorted(hidden),
+        entries,
     )
 
 
@@ -459,7 +559,7 @@ def _mass_primary_without_reference(product: Dict[str, Any]) -> Optional[str]:
     for row in _safe_list(_safe_dict((product or {}).get("rda_ul_data")).get("adequacy_results")):
         if not isinstance(row, dict):
             continue
-        if _band_credit(_as_float(row.get("pct_rda"), None), _as_float(row.get("pct_ul"), None), row.get("canonical_id")) is None:
+        if _band_credit(_as_float(row.get("pct_rda"), None), _as_float(row.get("pct_ul"), None), row.get("canonical_id"), row) is None:
             continue
         assessed.update(
             _norm_text(row.get(key)) for key in ("canonical_id", "nutrient") if row.get(key)
@@ -493,8 +593,7 @@ def _select_window_component(
 
     The fallback credit answers "a dose is disclosed but no reference range
     exists". It applies when there is no reference — never merely because the
-    evaluated window came out at zero. An evaluated 0.0 means every nutrient hit
-    at least 150% of its upper limit, or contributed no adequacy at all; that is
+    evaluated window came out at zero. An evaluated 0.0 means the evaluated amounts contributed no adequacy; that is
     a finding, not a missing value.
     """
     return no_reference_credit if no_rda_reference else window_credit
@@ -503,8 +602,26 @@ def _select_window_component(
 # --- Public entry point --------------------------------------------------
 
 
+def _unread_declared_purpose_rows(product: Dict[str, Any]) -> List[Dict[str, Any]]:
+    """Source-role purposes whose captured amount cannot be assessed.
+
+    Shared by ordinary-purpose and aggregate-route consumers. Label-hidden
+    blend children stay distinct from missing pipeline amounts.
+    """
+    source_rows = [row for row in nutrient_delivering_rows(product) if isinstance(row, dict)]
+    source_roles = classify_ingredient_roles(product, module="generic", rows=source_rows)
+    return [row for row, role in zip(source_rows, source_roles)
+              if role.get("role") in {ROLE_PRIMARY, ROLE_CLAIM_PROMINENT}
+              and not row.get("is_parent_total")
+              and dose_disclosure_status(row) != "not_disclosed_blend"
+              and not is_lent_blend_mass(row)
+              and (quantity_is_unresolved(row) or (
+                  not has_usable_individual_dose(row, allow_zero=True)
+                  and _product_evidence_dose_credit(row)[0] <= 0))]
+
+
 def score_dose(product: Dict[str, Any]) -> Dict[str, Any]:
-    """Compute the generic-module Dose dimension at P1.3.2a (proxy).
+    """Compute source-qualified contribution or completed-neutral Dose credit.
 
     Args:
         product: Enriched product dict. Treated as empty if not a dict.
@@ -517,32 +634,22 @@ def score_dose(product: Dict[str, Any]) -> Dict[str, Any]:
                 "components": {
                     "supplemental_window_proxy": <0..22>,
                 },
-                "penalties": {
-                    "B7_dose_safety": <0 or -2 or -3>,
-                },
+                "penalties": {},
                 "phase": "P1.3.2a_dose_proxy",
                 "metadata": {
                     "phase": "P1.3.2a_dose_proxy",
-                    "method": "rda_ul_proxy_until_dietary_intake_table",
-                    "deferred_data_dependency": "typical_dietary_intake",
+                    "method": "source_qualified_contribution_and_completed_neutral",
                     "window_proxy_reason": "no_rda_reference_data" | absent,
                     "window_proxy_status": "not_evaluable_by_rda_proxy" | absent,
                 },
             }
 
-    GUARDRAIL: the `metadata` field is the contract — Flutter / audit /
-    score-delta tooling MUST check it to know this is a proxy, not final.
+    The historical phase identifier remains compatible. Method and reference
+    assessments identify the approved policy and completed scientific review.
     """
     if not isinstance(product, dict):
         product = {}
-    b7_evaluation = resolve_dose_safety(
-        product,
-        threshold=B7_UL_PCT_THRESHOLD,
-        per_flag_penalty=B7_PER_FLAG_PENALTY,
-        cap=B7_CAP,
-    )
-    b7 = b7_evaluation.penalty
-    b7_metadata = b7_evaluation.audit_metadata()
+    b7_metadata = resolve_dose_safety(product).audit_metadata()
     (
         purpose_credit,
         unbenchmarked_purposes,
@@ -550,9 +657,21 @@ def score_dose(product: Dict[str, Any]) -> Dict[str, Any]:
         clinical_benchmarks,
         specialized_purpose_assessments,
         purpose_fallback_values,
+        hidden_purposes,
+        purpose_entries,
     ) = (
         _score_declared_purpose_window(product)
     )
+
+    unread = _unread_declared_purpose_rows(product)
+    if unread or any(item.get("assessment") == "unresolved_source_quantity" for item in purpose_entries):
+        return {"score": None, "max": DIMENSION_CAP,
+                "components": {"supplemental_window_proxy": 0.0}, "penalties": {},
+                "phase": PHASE_MARKER,
+                "metadata": {"phase": PHASE_MARKER, "method": METHOD_MARKER,
+                             "assessment_status": "incomplete",
+                             "reason_code": "unresolved_source_quantity",
+                             "B7_safety_evaluation": b7_metadata}}
 
     # Phase 7 — Collagen Profile: per-subtype clinical dose range (unit-aware) so an
     # underdosed collagen no longer borrows its co-formulated vitamins' RDA dose.
@@ -562,8 +681,8 @@ def score_dose(product: Dict[str, Any]) -> Dict[str, Any]:
         components = {
             "collagen_clinical_dose": round(float(col["score"]), 4),
         }
-        penalties = {"B7_dose_safety": round(-b7, 4)}
-        score = _clamp(0.0, DIMENSION_CAP, float(col["score"]) - b7)
+        penalties: Dict[str, float] = {}
+        score = _clamp(0.0, DIMENSION_CAP, float(col["score"]))
         return {
             "score": round(score, 4),
             "max": DIMENSION_CAP,
@@ -573,6 +692,9 @@ def score_dose(product: Dict[str, Any]) -> Dict[str, Any]:
             "metadata": {
                 "phase": PHASE_MARKER,
                 "method": "collagen_clinical_dose_v1",
+                "dose_participation_basis": "single_profile_assessment",
+                "dose_contributions": [{"ingredient": "collagen", "assessment": "collagen_profile",
+                                        "band": col.get("band"), "credit_raw": round(float(col["score"]), 4)}],
                 "collagen_dose_band": col["band"],
                 "collagen_dose": col.get("metadata", {}),
                 "B7_safety_evaluation": b7_metadata,
@@ -592,8 +714,8 @@ def score_dose(product: Dict[str, Any]) -> Dict[str, Any]:
         components = {
             "botanical_clinical_dose": round(float(bot["score"]), 4),
         }
-        penalties = {"B7_dose_safety": round(-b7, 4)}
-        score = _clamp(0.0, DIMENSION_CAP, float(bot["score"]) - b7)
+        penalties: Dict[str, float] = {}
+        score = _clamp(0.0, DIMENSION_CAP, float(bot["score"]))
         return {
             "score": round(score, 4),
             "max": DIMENSION_CAP,
@@ -603,6 +725,10 @@ def score_dose(product: Dict[str, Any]) -> Dict[str, Any]:
             "metadata": {
                 "phase": PHASE_MARKER,
                 "method": "botanical_clinical_dose_v1",
+                "dose_participation_basis": "single_profile_assessment",
+                "dose_contributions": [{"ingredient": "botanical", "assessment": (
+                    "no_benchmark_neutral" if bot.get("band") == "disclosed_no_reference" else "botanical_profile"),
+                                        "band": bot.get("band"), "credit_raw": round(float(bot["score"]), 4)}],
                 "botanical_dose_band": bot["band"],
                 "botanical_dose": bot.get("metadata", {}),
                 "B7_safety_evaluation": b7_metadata,
@@ -614,8 +740,8 @@ def score_dose(product: Dict[str, Any]) -> Dict[str, Any]:
         components = {
             "sleep_support_dose": round(float(sleep["score"]), 4),
         }
-        penalties = {"B7_dose_safety": round(-b7, 4)}
-        score = _clamp(0.0, DIMENSION_CAP, float(sleep["score"]) - b7)
+        penalties: Dict[str, float] = {}
+        score = _clamp(0.0, DIMENSION_CAP, float(sleep["score"]))
         return {
             "score": round(score, 4),
             "max": DIMENSION_CAP,
@@ -625,16 +751,19 @@ def score_dose(product: Dict[str, Any]) -> Dict[str, Any]:
             "metadata": {
                 "phase": PHASE_MARKER,
                 "method": "sleep_support_clinical_dose_v1",
+                "dose_participation_basis": "single_profile_assessment",
+                "dose_contributions": [{"ingredient": "sleep support", "assessment": "sleep_support",
+                                        "band": sleep.get("band"), "credit_raw": round(float(sleep["score"]), 4)}],
                 "sleep_support_dose": sleep,
                 "B7_safety_evaluation": b7_metadata,
             },
         }
 
-    immune = score_immune_support_dose(product) if purpose_count <= 1 else None
+    immune = score_immune_support_dose(product) if purpose_count == 0 else None
     if immune is not None:
         components = dict(immune["components"])
-        penalties = {"B7_dose_safety": round(-b7, 4)}
-        score = _clamp(0.0, DIMENSION_CAP, float(immune["score"]) - b7)
+        penalties: Dict[str, float] = {}
+        score = _clamp(0.0, DIMENSION_CAP, float(immune["score"]))
         return {
             "score": round(score, 4),
             "max": DIMENSION_CAP,
@@ -644,6 +773,9 @@ def score_dose(product: Dict[str, Any]) -> Dict[str, Any]:
             "metadata": {
                 "phase": PHASE_MARKER,
                 "method": "immune_support_daily_dose_v1",
+                "dose_participation_basis": "single_profile_assessment",
+                "dose_contributions": [{"ingredient": "immune support", "assessment": "immune_support",
+                                        "band": immune.get("band"), "credit_raw": round(float(immune["score"]), 4)}],
                 "immune_support_dose": immune.get("metadata", {}),
                 "B7_safety_evaluation": b7_metadata,
             },
@@ -654,8 +786,8 @@ def score_dose(product: Dict[str, Any]) -> Dict[str, Any]:
         components = {
             "joint_support_dose": round(float(joint["score"]), 4),
         }
-        penalties = {"B7_dose_safety": round(-b7, 4)}
-        score = _clamp(0.0, DIMENSION_CAP, float(joint["score"]) - b7)
+        penalties: Dict[str, float] = {}
+        score = _clamp(0.0, DIMENSION_CAP, float(joint["score"]))
         return {
             "score": round(score, 4),
             "max": DIMENSION_CAP,
@@ -665,12 +797,16 @@ def score_dose(product: Dict[str, Any]) -> Dict[str, Any]:
             "metadata": {
                 "phase": PHASE_MARKER,
                 "method": "joint_support_clinical_dose_v1",
+                "dose_participation_basis": "single_profile_assessment",
+                "dose_contributions": [{"ingredient": "joint support", "assessment": "joint_support",
+                                        "band": joint.get("band"), "credit_raw": round(float(joint["score"]), 4)}],
                 "joint_support_dose": joint,
                 "B7_safety_evaluation": b7_metadata,
             },
         }
 
-    window_credit, window_reason = _score_supplemental_window_proxy(product)
+    proxy_entries: List[Dict[str, Any]] = []
+    window_credit, window_reason = _score_supplemental_window_proxy(product, proxy_entries)
     if purpose_credit is not None:
         window_credit = purpose_credit
         window_reason = None
@@ -702,11 +838,7 @@ def score_dose(product: Dict[str, Any]) -> Dict[str, Any]:
             4,
         ),
     }
-    penalties: Dict[str, float] = {
-        # Stored as negatives for JSON readability; _sum_penalty_magnitudes
-        # takes abs() so sign convention is defense-in-depth.
-        "B7_dose_safety":            round(-b7, 4),
-    }
+    penalties: Dict[str, float] = {}
 
     positive = components["supplemental_window_proxy"]
     penalty_total = _sum_penalty_magnitudes(penalties)
@@ -714,7 +846,7 @@ def score_dose(product: Dict[str, Any]) -> Dict[str, Any]:
         "no_rda_reference_data",
         "dietary_intake_dominant_reference_excluded",
     }
-    if no_rda_reference and b7 <= 0 and no_reference_credit <= 0:
+    if no_rda_reference and no_reference_credit <= 0:
         # Botanicals / herbal actives can have clinically meaningful mg
         # dosing with no RDA/UL reference. Fail open as "not evaluable by
         # this proxy" rather than treating missing dietary-reference data
@@ -726,10 +858,8 @@ def score_dose(product: Dict[str, Any]) -> Dict[str, Any]:
     metadata: Dict[str, Any] = {
         "phase": PHASE_MARKER,
         "method": METHOD_MARKER,
-        "deferred_data_dependency": DEFERRED_DATA,
         "B7_safety_evaluation": b7_metadata,
         # Source-owned context, not another assessment or a clinical efficacy claim.
-        "dose_safety_policy": dict(_B7),
         "reference_assessments": [
             {key: row.get(key) for key in (
                 "nutrient", "canonical_id", "unit", "rda_ai", "rda_ai_source", "ul", "ul_status",
@@ -739,17 +869,20 @@ def score_dose(product: Dict[str, Any]) -> Dict[str, Any]:
             for row in _safe_list(_safe_dict(product.get("rda_ul_data")).get("adequacy_results"))
             if isinstance(row, dict)
         ],
-        "ul_partial_credit_above_pct": WINDOW_UL_PARTIAL_BAND,
-        "ul_zero_credit_at_pct": B7_UL_PCT_THRESHOLD,
-        "ul_partial_credit_raw": WINDOW_OVERDOSE_CREDIT,
         "supplemental_window_max_raw": CAP_SUPPLEMENTAL_WINDOW,
     }
+    if purpose_credit is None and proxy_entries and not no_rda_reference:
+        metadata["dose_participation_basis"] = "assessed_nutrient_average"
+        metadata["dose_contributions"] = proxy_entries
     if purpose_credit is not None:
         metadata["dose_participation_basis"] = "declared_purpose_equal_weight"
         metadata["purpose_ingredient_count"] = purpose_count
         metadata["unbenchmarked_purpose_ingredients"] = unbenchmarked_purposes
         metadata["positive_clinical_benchmark_assessments"] = clinical_benchmarks
         metadata["specialized_purpose_assessments"] = specialized_purpose_assessments
+        metadata["dose_contributions"] = purpose_entries
+        if hidden_purposes:
+            metadata["hidden_amount_purpose_ingredients"] = hidden_purposes
         aggregate_assessment = next((
             assessment for assessment in clinical_benchmarks
             if assessment.get("assessment_kind") == "aggregate_formula"

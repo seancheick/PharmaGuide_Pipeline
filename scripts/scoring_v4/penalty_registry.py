@@ -30,9 +30,6 @@ PENALTY_REGISTRY: Dict[str, PenaltySpec] = {
     "sports_collagen_not_complete_protein": PenaltySpec(
         "formulation", "quality_context"
     ),
-    "B7_dose_safety": PenaltySpec(
-        "dose", "safety_material"
-    ),
     "B2_false_allergen_free_claim": PenaltySpec(
         "transparency", "label_integrity"
     ),

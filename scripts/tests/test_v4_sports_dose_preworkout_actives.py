@@ -1,22 +1,8 @@
-"""Sports dose rubric — non-classic pre-workout / recovery actives.
+"""Sports Dose retains reviewed regimens without inventing general dose curves.
 
-A transparent, well-dosed pre-workout must not crater at dose=0 just because its
-primary actives are alpha-GPC / ATP / caffeine / betaine / taurine or a disclosed
-BCAA aggregate rather than the classic creatine/protein/BCAA-trio anchors.
-
-Dose bands are source-verified (no invented numbers); evidence strength sets the
-credit cap (strong=caffeine, moderate=alpha-GPC/betaine, weak=ATP/taurine, and
-BCAA credited as a recovery aid, not an ergogenic):
-  - alpha-GPC 600 mg  — Ziegenfuss 2008 (JISSN), moderate
-  - ATP 400 mg/day    — PMID 34957398, weak-equivocal -> capped
-  - caffeine 3-6 mg/kg ~ 200-400 mg — ISSN PMID 33388079, strong
-  - betaine 2.5 g/day — PMC2915951, moderate
-  - taurine 1-3 g (flat dose-response) — PMID 40852891, weak -> capped, no under-dose penalty
-  - BCAA 5-10 g       — PMID 33586928, recovery not performance -> capped
-
-Disclosed-dose-only: an undisclosed (NP / 0) active earns nothing, so opaque
-proprietary blends correctly stay cratered (parity with the opaque-fish-oil omega
-precedent and the B5 transparency penalty).
+Alpha-GPC, ATP, betaine, taurine and BCAA assessments are completed neutral;
+caffeine uses the approved contribution policy. Lost amounts remain incomplete,
+while genuine label hiding takes the shared neutral independently of opacity.
 """
 
 from __future__ import annotations
@@ -67,49 +53,50 @@ def _primary(product) -> tuple:
 
 # --- alpha-GPC (moderate) ---------------------------------------------------
 
-def test_alpha_gpc_600mg_full_credit() -> None:
+def test_alpha_gpc_600mg_completed_neutral() -> None:
     product = _product(_row("alpha_gpc", 600, "mg"))
-    assert _primary(product) == (20.0, "alpha_gpc_at_least_600_mg")
+    assert _primary(product) == (11.4, "alpha_gpc_completed_no_general_benchmark")
     payload = score_dose(product)
     # V4.1 Step 4: no single-active completion bonus; the primary is the assessment.
     assert "sports_focused_single_completion" not in payload["components"]
-    assert payload["score"] == 20.0
+    assert payload["score"] == 11.4
 
 
-def test_alpha_gpc_300mg_moderate_credit() -> None:
-    assert _primary(_product(_row("alpha_gpc", 300, "mg"))) == (14.0, "alpha_gpc_300_to_600_mg")
+def test_alpha_gpc_300mg_completed_neutral() -> None:
+    assert _primary(_product(_row("alpha_gpc", 300, "mg"))) == (11.4, "alpha_gpc_completed_no_general_benchmark")
 
 
-# --- ATP (weak-equivocal -> capped at 12) -----------------------------------
+# --- ATP: evidence certainty never caps Dose (Dose V4.1 section 2.2) --------
 
-def test_atp_400mg_capped_credit() -> None:
-    assert _primary(_product(_row("adenosine_triphosphate", 450, "mg"))) == (12.0, "atp_at_least_400_mg")
+def test_atp_studied_regimen_is_not_a_general_curve() -> None:
+    assert _primary(_product(_row("adenosine_triphosphate", 450, "mg"))) == (11.4, "atp_completed_no_general_benchmark")
+    assert _primary(_product(_row("adenosine_triphosphate", 200, "mg"))) == (11.4, "atp_completed_no_general_benchmark")
 
 
 # --- caffeine (strong) ------------------------------------------------------
 
 def test_caffeine_200mg_full_credit() -> None:
-    assert _primary(_product(_row("caffeine", 200, "mg"))) == (18.0, "caffeine_200_to_400_mg")
+    assert _primary(_product(_row("caffeine", 200, "mg"))) == (20.0, "caffeine_contribution_policy")
 
 
-# --- betaine (moderate) -----------------------------------------------------
+# --- betaine: certainty is Evidence's (Dose V4.1 section 2.2) ---------------
 
-def test_betaine_2500mg_full_credit() -> None:
-    assert _primary(_product(_row("betaine", 2500, "mg"))) == (16.0, "betaine_at_least_2_5_g")
+def test_betaine_2500mg_completed_neutral() -> None:
+    assert _primary(_product(_row("betaine", 2500, "mg"))) == (11.4, "betaine_completed_no_general_benchmark")
 
 
-# --- taurine (weak -> capped at 10, no under-dose penalty) -------------------
+# --- taurine: flat dose-response plateau at 1 g; certainty is Evidence's ----
 
-def test_taurine_1500mg_capped_credit() -> None:
-    assert _primary(_product(_row("taurine", 1500, "mg"))) == (10.0, "taurine_at_least_1_g")
+def test_taurine_1500mg_completed_neutral() -> None:
+    assert _primary(_product(_row("taurine", 1500, "mg"))) == (11.4, "taurine_completed_no_general_benchmark")
 
 
 # --- BCAA aggregate (recovery aid -> capped) --------------------------------
 
-def test_bcaa_aggregate_7g_recovery_credit() -> None:
+def test_bcaa_aggregate_7g_completed_neutral() -> None:
     assert _primary(
         _product(_row("branched_chain_amino_acids", 7000, "mg"), primary_type="amino_acid")
-    ) == (14.0, "bcaa_aggregate_at_least_5_g")
+    ) == (11.4, "bcaa_completed_no_general_benchmark")
 
 
 # --- disclosed-dose-only: opaque actives earn nothing -----------------------
@@ -121,12 +108,9 @@ def test_undisclosed_alpha_gpc_earns_no_dose_credit() -> None:
 
 # --- off-list dominant active: generic dose proxy instead of crater ---------
 
-def test_offlist_dominant_active_uses_generic_dose_proxy() -> None:
-    # 67304 shape: L-carnitine 1 g (mass-dominant, no sports band) + a token BCAA.
-    # The sports rubric must NOT discard the carnitine and crater to the token BCAA;
-    # it falls back to the generic dose-adequacy proxy. Carnitine has no
-    # benchmark, so the disclosed primary keeps the shared unbenchmarked
-    # neutral on the sports reference (11.4 of 20), not the ~1 token-BCAA band.
+def test_declared_offlist_active_keeps_one_equal_purpose_vote() -> None:
+    # The named carnitine and BCAA purposes each retain their completed-neutral
+    # assessment; neither a coverage floor nor the strongest purpose overrides it.
     res = score_dose(
         _product(
             _row("l_carnitine", 1, "Gram(s)"),
@@ -136,13 +120,14 @@ def test_offlist_dominant_active_uses_generic_dose_proxy() -> None:
         )
     )
     assert res["score"] == 11.4
-    assert res["metadata"]["dose_basis"] == "generic_dose_proxy_for_offlist_primary"
+    assert res["metadata"]["dose_aggregation"] == "co_primary_average"
+    assert {row["ingredient"] for row in res["metadata"]["dose_contributions"]} == {"l_carnitine", "bcaa"}
 
 
 def test_a_single_active_title_mass_is_still_an_offlist_primary() -> None:
     # A row-level active whose mass comes from the product title is also typed
     # blend_anchor_mass by the contract, but it is one disclosed active, not a
-    # blend total: the off-list floor must still credit it.
+    # blend total: its declared purpose keeps one equal vote.
     carnitine = dict(
         _row("l_carnitine", 1, "Gram(s)"),
         evidence_type="blend_anchor_mass",
@@ -157,29 +142,196 @@ def test_a_single_active_title_mass_is_still_an_offlist_primary() -> None:
             primary_type="amino_acid",
         )
     )
-    assert res["metadata"]["dose_basis"] == "generic_dose_proxy_for_offlist_primary"
+    assert res["metadata"]["dose_aggregation"] == "co_primary_average"
+    assert {row["ingredient"] for row in res["metadata"]["dose_contributions"]} == {"l_carnitine", "bcaa"}
+
+
+@pytest.mark.parametrize("heading", ["Wheybolic Complex", "Recovery Complex"])
+def test_structural_blend_heading_is_not_a_separate_sports_purpose(heading):
+    from scoring_v4.scored_artifact import build_scored_artifact
+
+    parent = dict(_row(heading.lower().replace(" ", "_"), 22.4, "g", name=heading),
+                  is_parent_total=True)
+    product = _product(parent, _row("creatine_monohydrate", 5, "g"),
+                       _row("branched_chain_amino_acids", 7, "g"),
+                       name=f"{heading} Creatine BCAA")
+    artifact = build_scored_artifact(product)
+    dose = artifact["_v4_module_breakdown"]["dimensions"]["dose"]
+    assert dose["score"] == 15.7  # two actual preparations, not a third vote for their container
+    assert {entry["ingredient"] for entry in dose["metadata"]["dose_contributions"]} == {"creatine", "bcaa"}
+    assert dose["metadata"].get("assessment_status") != "incomplete"
+
+
+def test_an_actual_offlist_purpose_with_lost_amount_still_holds_sports_dose():
+    from scoring_v4.scored_artifact import build_scored_artifact
+
+    product = _product(_row("l_carnitine", None, "mg"),
+                       _row("branched_chain_amino_acids", 7, "g"),
+                       name="Carnitine BCAA")
+    dose = build_scored_artifact(product)["_v4_module_breakdown"]["dimensions"]["dose"]
+    assert dose["score"] is None
+    assert dose["metadata"]["reason_code"] == "unresolved_source_quantity"
+
+
+def test_disclosed_whole_preparation_uses_the_generic_owner_assessment():
+    from scoring_v4.scored_artifact import build_scored_artifact
+
+    # A quantified, identity-bearing whole blend is a preparation, distinct
+    # from a structural parent total or an individual ingredient amount.
+    preparation = dict(_row("wheybolic_complex", 22.4, "g", name="Wheybolic Complex"),
+                       evidence_type="blend_anchor_mass", evidence_scope="blend_level",
+                       scoring_input_kind="product_level_evidence", scoreable=True,
+                       dose_value=22.4, dose_unit="g",
+                       reason="identity_bearing_blend_header_mass")
+    product = _product(preparation, _row("branched_chain_amino_acids", 7, "g"),
+                       name="Wheybolic Complex BCAA")
+    dose = build_scored_artifact(product)["_v4_module_breakdown"]["dimensions"]["dose"]
+    assert dose["score"] == 11.4
+    assert {entry["ingredient"] for entry in dose["metadata"]["dose_contributions"]} == {"wheybolic_complex", "bcaa"}
+    assert dose["metadata"].get("assessment_status") != "incomplete"
+
+
+def test_a_known_onlist_preparation_total_is_not_a_lost_individual_amount():
+    from scoring_v4.scored_artifact import build_scored_artifact
+
+    preparation = dict(_row("creatine_monohydrate", 2, "g", name="Con-Cret Creatine HCl"),
+                       matched_form="creatine hydrochloride", evidence_type="blend_anchor_mass",
+                       evidence_scope="blend_level", scoring_input_kind="product_level_evidence",
+                       scoreable=True, dose_value=2, dose_unit="g",
+                       reason="identity_bearing_blend_header_mass")
+    dose = build_scored_artifact(_product(preparation, name="Creatine"))[
+        "_v4_module_breakdown"]["dimensions"]["dose"]
+    assert dose["score"] == 11.4
+    assert dose["metadata"].get("assessment_status") != "incomplete"
+    # The total is not asserted to be two grams of qualified monohydrate.
+    assert "reference_value" not in dose["metadata"]["dose_contributions"][0]
+
+
+def test_one_branched_chain_amino_acid_does_not_invent_a_bcaa_preparation():
+    from scoring_v4.scored_artifact import build_scored_artifact
+
+    product = _product(_row("l_leucine", 2, "g"), _row("l_citrulline", 3, "g"),
+                       name="Recovery", primary_type="pre_workout")
+    dose = build_scored_artifact(product)["_v4_module_breakdown"]["dimensions"]["dose"]
+    assert dose["score"] == 11.4
+    assert all(row["ingredient"] != "bcaa" for row in dose["metadata"]["dose_contributions"])
+
+
+def test_an_individually_named_leucine_purpose_keeps_its_own_vote():
+    from scoring_v4.scored_artifact import build_scored_artifact
+
+    product = _product(_row("l_leucine", 2, "g"), _row("creatine_monohydrate", 3, "g"),
+                       name="Leucine + Creatine")
+    dose = build_scored_artifact(product)["_v4_module_breakdown"]["dimensions"]["dose"]
+    assert dose["score"] == 15.7
+    assert {row["ingredient"] for row in dose["metadata"]["dose_contributions"]} == {"l_leucine", "creatine"}
+
+
+@pytest.mark.parametrize("group,missing", [("bcaa", 1), ("bcaa", 3), ("eaa", 1), ("eaa", 4), ("eaa", 9)])
+def test_named_amino_preparation_keeps_missing_member_amounts(group, missing):
+    from scoring_v4.modules.sports_helpers import BCAA_CANONICALS, EAA_CANONICALS
+    from scoring_v4.scored_artifact import build_scored_artifact
+
+    members = sorted(BCAA_CANONICALS if group == "bcaa" else EAA_CANONICALS)
+    rows = [_row(key, None if index < missing else 1000, "mg")
+            for index, key in enumerate(members)]
+    product = _product(_row("l_theanine", 100, "mg"), _row("creatine_monohydrate", 3, "g"), *rows,
+                       name=f"L-Theanine + Creatine + {group.upper()}")
+    artifact = build_scored_artifact(product)
+    dose = artifact["_v4_module_breakdown"]["dimensions"]["dose"]
+    assert dose["score"] is None
+    assert dose["metadata"]["reason_code"] == "unresolved_source_quantity"
+    direct = score_dose(product)
+    assert direct["score"] is None
+    group_vote = next(row for row in direct["metadata"]["dose_contributions"] if row["ingredient"] == group)
+    assert "amount_per_serving" not in group_vote
+    assert artifact["quality_assessment_status"] == "partial" or artifact["quality_score_status"] == "not_scored"
+
+
+@pytest.mark.parametrize("group", ["bcaa", "eaa"])
+@pytest.mark.parametrize("lost", [False, True])
+@pytest.mark.parametrize("source_only", [False, True])
+def test_amino_preparation_distinguishes_hidden_members_from_lost_members(group, lost, source_only):
+    from scoring_v4.modules.sports_helpers import BCAA_CANONICALS, EAA_CANONICALS
+
+    members = sorted(BCAA_CANONICALS if group == "bcaa" else EAA_CANONICALS)
+    rows = [_row(key, 1000, "mg") for key in members]
+    rows[0].update(quantity=None, unit="NP", isNestedIngredient=True,
+                   parentBlend="Amino Blend", is_proprietary_blend=True)
+    if lost:
+        rows[1]["quantity"] = None
+    product = _product(*rows, name=group.upper())
+    if source_only:
+        rows[0].update(cleaner_row_role="nested_display_only", score_eligible_by_cleaner=False,
+                       is_proprietary_blend=False)
+        product["ingredient_quality_data"]["ingredients"] = rows
+        product["ingredient_quality_data"]["ingredients_scorable"] = rows[1:]
+    dose = score_dose(product)
+    vote = next(row for row in dose["metadata"]["dose_contributions"] if row["ingredient"] == group)
+    if lost:
+        assert dose["score"] is None
+        assert dose["metadata"]["reason_code"] == "unresolved_source_quantity"
+    else:
+        assert dose["score"] == 11.4
+        assert vote["assessment"] == "hidden_amount_neutral"
+    assert "amount_per_serving" not in vote
+
+
+@pytest.mark.parametrize("group", ["bcaa", "eaa"])
+def test_amino_preparation_cannot_sum_away_an_unknown_quantity_operator(group):
+    from scoring_v4.modules.sports_helpers import BCAA_CANONICALS, EAA_CANONICALS
+
+    rows = [_row(key, 1000, "mg") for key in sorted(BCAA_CANONICALS if group == "bcaa" else EAA_CANONICALS)]
+    rows[0]["quantity_operator"] = "unknown"
+    dose = score_dose(_product(*rows, name=group.upper()))
+    assert dose["score"] is None
+    assert dose["metadata"]["reason_code"] == "unresolved_source_quantity"
+
+
+@pytest.mark.parametrize("group", ["bcaa", "eaa"])
+@pytest.mark.parametrize("source_fact", [{"quantity_operator": "unknown"},
+                                        {"quantity_operator": "ambiguous"},
+                                        {"dose_data_quality": {"status": "unresolved_unit"}}])
+def test_amino_source_uncertainty_cannot_be_erased_by_a_hidden_mirror(group, source_fact):
+    from copy import deepcopy
+    from scoring_v4.modules.generic_dose import score_dose as generic_dose
+    from scoring_v4.modules.sports_helpers import BCAA_CANONICALS, EAA_CANONICALS
+
+    rows = [_row(key, 1000, "mg") for key in sorted(BCAA_CANONICALS if group == "bcaa" else EAA_CANONICALS)]
+    for i, row in enumerate(rows):
+        row["raw_source_path"] = f"ingredientRows[0].nestedRows[{i}]"
+    rows[0].update(quantity=0, unit="NP", cleaner_row_role="nested_display_only",
+                   score_eligible_by_cleaner=False, isNestedIngredient=True, parentBlend="Amino Blend")
+    product = _product(*rows[1:], name=group.upper())
+    product["ingredient_quality_data"]["ingredients"] = rows
+    product["activeIngredients"] = deepcopy(rows)
+    product["activeIngredients"][0].update(source_fact)
+    for scorer in (score_dose, generic_dose):
+        dose = scorer(product)
+        assert dose["score"] is None
+        assert dose["metadata"]["reason_code"] == "unresolved_source_quantity"
 
 
 def test_onlist_underdosed_active_is_not_rescued_by_proxy() -> None:
-    # An under-dosed creatine (1 g, on-list) keeps its strict sports band (8.0); the
+    # An under-target creatine (1 g, on-list) keeps proportional contribution; the
     # off-list proxy floor must NOT rescue it, because creatine has a sports band.
     res = score_dose(_product(_row("creatine_monohydrate", 1, "Gram(s)"), primary_type="general_supplement"))
-    assert res["components"]["sports_primary_active_dose"] == 8.0
-    assert res["metadata"]["dose_basis"] == "creatine_under_2_g"
+    assert res["components"]["sports_primary_active_dose"] == pytest.approx(20 / 3, abs=.0001)
+    assert res["metadata"]["dose_basis"] == "creatine_contribution_policy"
 
 
 # --- real Thorne Pre-Workout Elite shape: best disclosed primary wins -------
 
 def test_thorne_preworkout_alpha_gpc_atp_takes_alpha_gpc_primary() -> None:
-    # 323126: alpha-GPC 600 (-> 20) + ATP 450 (-> 12); best primary = alpha-GPC.
+    # The two reviewed sports preparations both contribute completed neutral.
     primary, basis = _primary(
         _product(_row("alpha_gpc", 600, "mg"), _row("adenosine_triphosphate", 450, "mg"))
     )
-    assert primary == 20.0
-    assert basis == "alpha_gpc_at_least_600_mg"
+    assert primary == 11.4
+    assert basis == "alpha_gpc_completed_no_general_benchmark"
 
 
-@pytest.mark.parametrize("lent,quantity,expected", [(False,7000,14), (True,7000,0), (False,None,0)])
+@pytest.mark.parametrize("lent,quantity,expected", [(False,7000,11.4), (True,7000,11.4), (False,None,0)])
 def test_bcaa_preparation_assessment_owns_aggregate_not_individual_mass(lent, quantity, expected):
     from scoring_v4.modules.generic_helpers import has_usable_individual_dose
     from scoring_v4.modules.sports_helpers import sports_dosed_rows
@@ -192,6 +344,12 @@ def test_bcaa_preparation_assessment_owns_aggregate_not_individual_mass(lent, qu
     assert not has_usable_individual_dose(row)
     assert not sports_dosed_rows(product)
     assert _primary(product)[0] == expected
+    if lent:
+        # The 7g blend total is not the child's amount. Positive source-owned
+        # hiding takes the shared neutral without inventing individual mass.
+        payload = score_dose(product)
+        assert payload["metadata"]["dose_basis"] == "hidden_amount_neutral"
+        assert payload["metadata"]["dose_contributions"][0].get("amount_per_serving") is None
 
 
 def test_bcaa_header_does_not_duplicate_individually_disclosed_members():
@@ -201,12 +359,12 @@ def test_bcaa_header_does_not_duplicate_individually_disclosed_members():
     product = _product(row, _row("l_leucine",3500,"mg"), _row("l_isoleucine",1750,"mg"),
                        _row("l_valine",1750,"mg"), primary_type="amino_acid")
     payload = score_dose(product)
-    assert payload["components"]["sports_primary_active_dose"] == 20
+    assert payload["components"]["sports_primary_active_dose"] == 11.4
     assert "sports_focused_single_completion" not in payload["components"]
 
 
 @pytest.mark.parametrize("pid", ["306183", "307773"])
-def test_raw_disclosed_bcaa_preparation_retains_its_existing_aggregate_band(pid):
+def test_raw_disclosed_bcaa_preparation_has_completed_neutral(pid):
     import json
     from pathlib import Path
     from enhanced_normalizer import EnhancedDSLDNormalizer
@@ -218,5 +376,5 @@ def test_raw_disclosed_bcaa_preparation_retains_its_existing_aggregate_band(pid)
     result = build_scored_artifact(enriched)
     dose = result["_v4_module_breakdown"]["dimensions"]["dose"]
     assert result["quality_score_status"] == "scored"
-    assert dose["components"]["sports_primary_active_dose"] == 14
-    assert dose["metadata"]["dose_basis"] == "bcaa_aggregate_at_least_5_g"
+    assert dose["components"]["sports_primary_active_dose"] == 11.4
+    assert dose["metadata"]["dose_basis"] == "bcaa_completed_no_general_benchmark"

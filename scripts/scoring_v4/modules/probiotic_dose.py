@@ -1,16 +1,13 @@
 """v4 Probiotic Dose dimension — P2.2.
 
-Scores measured CFU adequacy (15 of the 25-point rubric in
-SCORING_V4_PROPOSAL §6) from strain-owned measurements only.
+Without an applicable exact studied formula, each strain contributes the shared
+completed neutral. Historical CFU tiers and guarantee types remain descriptive
+label facts and never establish a monotonic clinical Dose curve. Unknown blend
+shares are never allocated equally; disclosure remains in Transparency.
 
-V4.1 Step 4: per-strain CFU disclosure is a Transparency fact, and a total CFU
-count or a strain's own mass without per-strain CFU is a label limitation, not
-demonstrated adequacy. Both limitations are recorded for the explanation and
-earn no Dose credit. Unknown blend shares are never allocated equally.
-
-A reviewed complete-formula dose instead owns the full dimension: unknown
-individual allocations cannot invalidate an assessed formula-level dose.
-Individual allocation disclosure remains separately visible in Transparency.
+The existing exact complete-formula policy owns its qualified full Dose award.
+Unresolved CFU capture, AFU references and material identity/preparation holds
+remain incomplete; completed general no-benchmark conclusions are distinct.
 """
 
 from __future__ import annotations
@@ -22,7 +19,10 @@ from typing import Any, Dict, Iterable, List
 from scoring_input_contract import get_scoring_ingredients
 from probiotic_measurements import (
     AFU_REVIEW_REASON, pending_afu_measurements, declared_total_cfu,
-    probiotic_label_identity_summary,
+    probiotic_label_identity_summary, unresolved_cfu_measurements,
+)
+from scoring_v4.modules.generic_helpers import (
+    archetype_dose_reference, dose_reference_scope, unbenchmarked_dose_credit,
 )
 
 
@@ -45,16 +45,12 @@ _MASS_UNITS = frozenset({"mg", "milligram", "milligrams", "g", "gram", "grams", 
                          "mcg", "microgram", "micrograms", "ug", "µg"})
 V3_CFU_ADEQUACY_CAP = _DM["v3_cfu_adequacy_cap"]
 
-TIER_POINTS = dict(_DM["tier_points"])
-
 
 def score_dose(product: Any) -> Dict[str, Any]:
     """Return the probiotic Dose dimension payload.
 
-    Per-strain disclosure is proportional to the number of named strains
-    with an individual CFU value. Physical potency uses the strongest
-    source-owned strain adequacy tier on the existing /5 to /15 scale, not
-    strain count or clinical review flags.
+    Exact formulas use their existing qualification. General strain assessments
+    use the completed neutral while retaining measurements and disclosure facts.
     """
     product = product if isinstance(product, dict) else {}
     from studied_formulas import (
@@ -62,6 +58,11 @@ def score_dose(product: Any) -> Dict[str, Any]:
     )
     if not product.get("probiotic_data") and isinstance(product.get("probiotic_detail"), dict):
         product = {**product, "probiotic_data": product["probiotic_detail"]}
+    unresolved = unresolved_cfu_measurements(product)
+    if unresolved:
+        return {"score": None, "max": CAP_DOSE, "components": {}, "penalties": {},
+                "metadata": {"phase": PHASE_MARKER, "assessment_status": "incomplete",
+                             "reason_code": "unresolved_source_quantity", "measurements": unresolved}}
     assessment = assess_probiotic_evidence(product)
     formula = assessment["formula_assessment"]
     if formula["status"] == "assessed_studied_formula":
@@ -100,7 +101,11 @@ def score_dose(product: Any) -> Dict[str, Any]:
     total_strain_count = identities["total_strain_count"]
     disclosed_count = identities["per_strain_cfu_disclosed_count"]
 
-    adequacy = _compute_cfu_adequacy(measured_strains)
+    cfu_guarantee = _cfu_guarantee_adjustment(pdata)
+    with dose_reference_scope(archetype_dose_reference("probiotic")):
+        neutral_v3 = unbenchmarked_dose_credit() / 3.0
+    adequacy = _compute_cfu_adequacy(measured_strains, total_strain_count=total_strain_count,
+                                     neutral_v3=neutral_v3, guarantee=cfu_guarantee)
     cfu_adequacy_v3 = adequacy["v3_points"]
     cfu_adequacy_scaled = min(CAP_CFU_ADEQUACY, cfu_adequacy_v3 * 3.0)
     # V4.1 Step 4: a total CFU count, or a named strain at its own mass with no
@@ -109,7 +114,8 @@ def score_dose(product: Any) -> Dict[str, Any]:
     # they never replace a measured strain's adequacy.
     # "applied" marks the limitation that explains the Dose basis: only when
     # no strain was measured, and a disclosed total CFU takes precedence.
-    measured = cfu_adequacy_scaled > 0.0
+    measured = any((_as_float(_safe_dict(strain).get("cfu_per_day"), 0.0) or 0.0) > 0
+                   for strain in measured_strains) or disclosed_count > 0
     aggregate_proxy = _compute_aggregate_cfu_proxy(
         pdata,
         total_strain_count=total_strain_count,
@@ -121,13 +127,8 @@ def score_dose(product: Any) -> Dict[str, Any]:
         disclosed_count == 0 and direct_strain_mass_floor["matched_strains"]
         and not measured and not aggregate_proxy["applied"]
     )
-    cfu_guarantee = _cfu_guarantee_adjustment(pdata)
-    if cfu_adequacy_scaled > 0.0 and cfu_guarantee["multiplier"] < 1.0:
-        cfu_adequacy_scaled *= cfu_guarantee["multiplier"]
-        cfu_guarantee["applied"] = True
-        cfu_guarantee["adjusted_score"] = round(cfu_adequacy_scaled, 4)
     cfu_adequacy_basis = _cfu_adequacy_basis(
-        cfu_adequacy_scaled,
+        adequacy,
         aggregate_proxy,
         direct_strain_mass_floor,
         disclosed_count=disclosed_count,
@@ -154,8 +155,12 @@ def score_dose(product: Any) -> Dict[str, Any]:
             "cfu_adequacy_v3_points": round(cfu_adequacy_v3, 4),
             "cfu_adequacy_scaled_points": round(cfu_adequacy_scaled, 4),
             "cfu_adequacy_basis": cfu_adequacy_basis,
-            "reference_basis": "industry_potency_not_trial_efficacy",
+            "reference_basis": "completed_no_general_strain_benchmark",
             "cfu_adequacy_contributions": adequacy["strain_contributions"],
+            "dose_aggregation": "strain_average_with_neutral_states",
+            "strain_assessment_count": adequacy["assessment_count"],
+            "strain_measured_count": adequacy["measured_count"],
+            "strain_neutral_count": adequacy["neutral_count"],
             "aggregate_cfu_proxy": aggregate_proxy,
             "direct_strain_mass_floor": direct_strain_mass_floor,
             "cfu_guarantee": cfu_guarantee,
@@ -164,10 +169,19 @@ def score_dose(product: Any) -> Dict[str, Any]:
     }
 
 
-def _compute_cfu_adequacy(clinical_strains: Iterable[Any]) -> Dict[str, Any]:
+def _compute_cfu_adequacy(clinical_strains: Iterable[Any], *, total_strain_count: int = 0,
+                          neutral_v3: float | None = None, guarantee: Dict[str, Any] | None = None) -> Dict[str, Any]:
+    """Average the label's strain assessments (Dose V4.1 §3.2).
+
+    Reviewed clinical counts and guarantee types describe the label. They do
+    not establish increasing clinical adequacy tiers. Each completed general
+    strain assessment takes the shared neutral; exact formulas are handled by
+    the qualified formula owner before this helper.
+    """
+    if neutral_v3 is None:
+        with dose_reference_scope(archetype_dose_reference("probiotic")):
+            neutral_v3 = unbenchmarked_dose_credit() / 3.0
     contributions: List[Dict[str, Any]] = []
-    total = 0.0
-    tier_max = max((float(value) for value in TIER_POINTS.values()), default=0.0)
 
     for item in clinical_strains or []:
         strain = _safe_dict(item)
@@ -179,57 +193,61 @@ def _compute_cfu_adequacy(clinical_strains: Iterable[Any]) -> Dict[str, Any]:
 
         if strain.get("is_inactivated") or strain.get("is_postbiotic"):
             contributions.append({
+                "strain": strain.get("strain"),
                 "tier": tier or strain.get("adequacy_tier"),
                 "cfu_per_day": cfu,
-                "points": 0.0,
-                "skipped_reason": "postbiotic_inactivated_no_cfu_credit",
+                "points": round(neutral_v3, 4),
+                "state": "neutral_no_live_count_reference",
             })
             continue
 
         if tier is None or cfu is None or cfu <= 0:
             contributions.append({
+                "strain": strain.get("strain"),
                 "tier": tier or strain.get("adequacy_tier"),
                 "cfu_per_day": cfu,
-                "points": 0.0,
+                "points": round(neutral_v3, 4),
+                "state": "neutral_amount_not_disclosed" if cfu is None or cfu <= 0 else "neutral_no_strain_benchmark",
             })
             continue
 
-        raw_points = float(TIER_POINTS.get(tier, 0.0))
-        points = (
-            raw_points / tier_max * V3_CFU_ADEQUACY_CAP
-            if tier_max > 0.0
-            else 0.0
-        )
-        # One correctly dosed excellent strain can satisfy adequacy. Adding
-        # strains cannot manufacture more Dose credit.
-        total = max(total, points)
+        # Counts and historical potency tiers remain descriptive. No reviewed
+        # strain source establishes a monotonic clinical Dose tier curve.
         contributions.append({
-            "tier": tier,
+            "state": "neutral_no_strain_benchmark",
+            "strain": strain.get("strain"), "tier": tier,
             "clinical_id": strain.get("clinical_id"),
             "source_row_ref": strain.get("source_row_ref"),
             "cfu_per_day": cfu,
             "maximum_cfu_per_day": strain.get("maximum_cfu_per_day"),
             "exposure_basis": "minimum_daily_servings",
-            "points": round(points, 4),
+            "points": round(neutral_v3, 4),
         })
 
-    total = round(min(V3_CFU_ADEQUACY_CAP, total), 4)
+    for _ in range(max(0, int(total_strain_count or 0) - len(contributions))):
+        contributions.append({"tier": None, "cfu_per_day": None, "points": round(neutral_v3, 4),
+                              "state": "neutral_no_strain_benchmark"})
+    measured = sum(1 for item in contributions if item["state"] == "measured")
+    average = (sum(item["points"] for item in contributions) / len(contributions)) if contributions else 0.0
     return {
-        "v3_points": total,
+        "v3_points": round(min(V3_CFU_ADEQUACY_CAP, average), 4),
         "strain_contributions": contributions,
+        "assessment_count": len(contributions),
+        "measured_count": measured,
+        "neutral_count": len(contributions) - measured,
     }
 
 
 def _cfu_adequacy_basis(
-    cfu_adequacy_scaled: float,
+    adequacy: Dict[str, Any],
     aggregate_proxy: Dict[str, Any],
     direct_strain_mass_floor: Dict[str, Any],
     *,
     disclosed_count: int,
 ) -> str:
-    if cfu_adequacy_scaled > 0.0 and disclosed_count > 0:
+    if disclosed_count > 0:
         return "per_strain_cfu_disclosed"
-    if cfu_adequacy_scaled > 0.0:
+    if adequacy["measured_count"]:
         return "strain_level_cfu_evidence"
     if aggregate_proxy.get("applied"):
         return "aggregate_cfu_disclosed_only"
@@ -256,13 +274,13 @@ def _cfu_guarantee_adjustment(pdata: Dict[str, Any]) -> Dict[str, Any]:
     if guarantee in {"at_manufacture", "manufacture", "time_of_manufacture"}:
         return {
             "type": "at_manufacture",
-            "multiplier": 0.9,
+            "multiplier": 1.0,
             "applied": False,
             "reason": "cfu_guaranteed_at_manufacture",
         }
     return {
         "type": "unknown",
-        "multiplier": 0.85,
+        "multiplier": 1.0,
         "applied": False,
         "reason": "cfu_guarantee_not_disclosed",
     }

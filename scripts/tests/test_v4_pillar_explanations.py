@@ -27,11 +27,11 @@ def _cfg():
     }
 
 
-def _module_bd(per_day_mid_mg=660.0, form="ee"):
+def _module_bd(per_day_min_mg=660.0, form="ee"):
     return {
         "dimensions": {
             "formulation": {"score": 12.0, "max": 25, "metadata": {"form_detected": form}},
-            "dose": {"score": 18.0, "max": 20, "metadata": {"per_day_mid_mg": per_day_mid_mg}},
+            "dose": {"score": 18.0, "max": 20, "metadata": {"per_day_min_mg": per_day_min_mg}},
             "evidence": {"score": 10.0, "max": 15, "metadata": {}},
         }
     }
@@ -80,7 +80,7 @@ def _generic_module_bd(*, matched_entries=0, blend_counts=None):
 
 
 def test_omega_dose_pillar_emits_epa_dha_per_day_fact():
-    pillars = attach_pillar_explanations(_pillars(), _module_bd(per_day_mid_mg=660.0), _cfg(), "omega")
+    pillars = attach_pillar_explanations(_pillars(), _module_bd(per_day_min_mg=660.0), _cfg(), "omega")
     explanation = pillars["Dose"]["explanation"]
     assert explanation["schema_version"] == 1
     fact = explanation["facts"][0]
@@ -109,7 +109,7 @@ def test_schema_version_constant_is_one_and_ids_are_stable():
 
 def test_absent_dose_metadata_emits_no_fact():
     bd = _module_bd()
-    bd["dimensions"]["dose"]["metadata"] = {}  # no per_day_mid_mg
+    bd["dimensions"]["dose"]["metadata"] = {}  # no per_day_min_mg
     pillars = attach_pillar_explanations(_pillars(), bd, _cfg(), "omega")
     assert "explanation" not in pillars["Dose"]
 
@@ -274,24 +274,24 @@ def test_generic_dose_exposes_reference_policy_without_claiming_clinical_range()
         "reference": {"ul_basis": "supplemental_only"}}]}
     out = build_scored_artifact(p)["quality_pillars_v4"]
     context = out["dose"]["explanation"]["assessment"]
-    assert context["method"] == "rda_ul_proxy_until_dietary_intake_table"
+    assert context["method"] == "source_qualified_contribution_and_completed_neutral"
     assert context["reference_assessments"][0]["per_day_max"] == 405
-    assert context["ul_partial_credit_above_pct"] == 100
-    assert context["ul_zero_credit_at_pct"] == 150
-    assert context["dose_safety_policy"] == {"ul_pct_threshold": 150, "per_flag_penalty": 2, "cap": 3}
-    assert context["raw_dose_safety_penalty"] == 0
-    assert "safety_hygiene_over_ul_penalty" not in context
-    assert out["dose"]["score"] == 10
+    for retired in ("ul_partial_credit_above_pct", "ul_zero_credit_at_pct", "dose_safety_policy",
+                    "raw_dose_safety_penalty", "safety_hygiene_over_ul_penalty"):
+        assert retired not in context
+    # No safety flag was emitted, so no ceiling: adequacy (33.75% legacy band) is full.
+    assert out["dose"]["score"] == 20
     p["rda_ul_data"]["adequacy_results"][0]["pct_ul"] = 50
     out = build_scored_artifact(p)["quality_pillars_v4"]
     assert "studied" not in out["dose"]["reason"].lower()
 
 
-def test_omega_serving_assessment_does_not_present_a_personal_daily_amount():
-    bd = _module_bd()
-    bd['dimensions']['dose']['metadata']['assessment_basis'] = 'declared_serving'
-    pillars = attach_pillar_explanations(_pillars(), bd, _cfg(), 'omega')
-    fact = next(f for f in pillars['Dose']['explanation']['facts'] if f['id'] == 'epa_dha_per_day')
-    assert fact['label'] == 'EPA + DHA per serving'
-    assert '/day' not in fact['value_display']
-    assert 'per serving' in fact['value_display']
+def test_dose_basis_names_directed_daily_use_or_the_default_serving():
+    for defaulted, phrase in ((False, 'lowest directed daily use'), (True, 'one serving a day')):
+        bd = _module_bd()
+        bd['dimensions']['dose']['metadata'].update(assessment_basis='directed_daily_use', daily_use={
+            'minimum_servings': 1.0, 'maximum_servings': 1.0 if defaulted else 4.0, 'defaulted': defaulted})
+        pillars = attach_pillar_explanations(_pillars(), bd, _cfg(), 'omega')
+        fact = next(f for f in pillars['Dose']['explanation']['facts'] if f['id'] == 'dose_reference_method')
+        assert phrase in fact['value_display']
+        assert 'not a personal dose recommendation' in fact['value_display']

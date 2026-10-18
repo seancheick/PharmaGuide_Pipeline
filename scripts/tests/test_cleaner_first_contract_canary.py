@@ -617,3 +617,138 @@ def test_iqd_activity_replaces_failed_mass_conversion_for_same_exposure():
     assert assessments[0]["reason_code"] == "not_ul_applicable"
     assert assessments[0]["readiness"] == "not_applicable"
 
+
+
+def _protease_source_product(*, notes='Protease Enzyme Blend Note: (Proteases from) (87,500 HUT)',
+                             species_quantity=0, species_unit='NP', species_category='bacteria'):
+    # Exact 82893 source tree shape: an enzyme blend, with source species
+    # under a parent-owned "Proteases from" clause, rather than forms[].
+    return {'id': 'protease-source-contract', 'fullName': 'Digestive Enzymes',
+            'brandName': 'Contract Brand', 'offMarket': 0, 'contacts': [], 'statements': [],
+            'ingredientRows': [{'name': 'Protease Enzyme Blend', 'category': 'blend',
+                'ingredientGroup': 'Proprietary Blend (non-nutrient/non-botanical)',
+                'notes': notes, 'quantity': [{'quantity': 250, 'unit': 'mg'}],
+                'nestedRows': [
+                    {'name': 'Bacillus subtilis', 'category': species_category,
+                     'ingredientGroup': 'Bacillus Subtilis',
+                     'quantity': [{'quantity': species_quantity, 'unit': species_unit}]},
+                    {'name': 'Ananas comosus', 'category': 'botanical', 'ingredientGroup': 'Pineapple',
+                     'quantity': [{'quantity': 0, 'unit': 'NP'}]},
+                ]}]}
+
+
+def test_explicit_nested_protease_sources_are_descriptors_through_public_score():
+    from scoring_input_contract import get_evidence_subject_rows
+    from scoring_v4.scored_artifact import build_scored_artifact
+
+    raw = _protease_source_product()
+    raw['ingredientRows'].append({'name': 'Vitamin C', 'category': 'vitamin',
+        'ingredientGroup': 'Vitamin C', 'quantity': [{'quantity': 100, 'unit': 'mg'}]})
+    cleaned = EnhancedDSLDNormalizer().normalize_product(raw)
+    children = [r for r in cleaned['activeIngredients']
+                if r.get('raw_source_path') in {'ingredientRows[0].nestedRows[0]',
+                                               'ingredientRows[0].nestedRows[1]'}]
+    assert len(children) == 2
+    assert {r['cleaner_row_role'] for r in children} == {'source_descriptor'}
+    assert all(r['score_eligible_by_cleaner'] is False and r['quantity'] == 0 and r['unit'] == 'NP'
+               for r in children)
+    assert {r['raw_source_text'] for r in children} == {'Bacillus subtilis', 'Ananas comosus'}
+    enriched, _ = SupplementEnricherV3().enrich_product(cleaned)
+    assert not {r.get('canonical_id') for r in get_evidence_subject_rows(enriched)} & {'bacillus_subtilis', 'pineapple'}
+    sources = [r for r in enriched['ingredient_quality_data']['ingredients']
+               if r.get('canonical_id') in {'bacillus_subtilis', 'pineapple'}]
+    assert all(not r.get('safety_hits') for r in sources)
+    scored = build_scored_artifact(enriched)
+    assert scored['_v4_module_breakdown']['dimensions']['transparency']['metadata'][
+        'complete_active_disclosure']['declared_active_count'] == (
+            enriched['proprietary_data']['total_active_ingredients'] - len(sources))
+
+
+def test_enzyme_source_context_preserves_separately_dosed_species_and_live_cultures():
+    for amount, unit in [(25, 'mg'), (1_000_000_000, 'CFU')]:
+        raw = _protease_source_product(species_quantity=amount, species_unit=unit)
+        cleaned = EnhancedDSLDNormalizer().normalize_product(raw)
+        culture = _first_named(cleaned['activeIngredients'], 'Bacillus subtilis')
+        assert culture['cleaner_row_role'] == 'active_scorable'
+        assert culture['quantity'] == amount and culture['unit'] == unit
+    raw = _protease_source_product(notes='Protease Enzyme Blend (87,500 HUT)')
+    cleaned = EnhancedDSLDNormalizer().normalize_product(raw)
+    assert _first_named(cleaned['activeIngredients'], 'Bacillus subtilis')['cleaner_row_role'] == 'nested_display_only'
+    raw = _protease_source_product(species_category='enzyme')
+    cleaned = EnhancedDSLDNormalizer().normalize_product(raw)
+    assert _first_named(cleaned['activeIngredients'], 'Bacillus subtilis')['cleaner_row_role'] == 'nested_display_only'
+    for amount, unit in [('25', 'mg'), (1_000_000_000, 'CFU')]:
+        raw = _protease_source_product()
+        raw['ingredientRows'][0]['nestedRows'][0]['quantity'].append({'quantity': amount, 'unit': unit})
+        cleaned = EnhancedDSLDNormalizer().normalize_product(raw)
+        assert _first_named(cleaned['activeIngredients'], 'Bacillus subtilis')['cleaner_row_role'] != 'source_descriptor'
+    raw = _protease_source_product()
+    raw['ingredientRows'][0]['nestedRows'][0]['notes'] = '1 billion CFU live culture'
+    cleaned = EnhancedDSLDNormalizer().normalize_product(raw)
+    assert _first_named(cleaned['activeIngredients'], 'Bacillus subtilis')['cleaner_row_role'] == 'nested_display_only'
+
+
+def test_explicit_enzyme_source_clause_does_not_require_an_activity_number():
+    raw = _protease_source_product(notes='Protease Enzyme Blend (Proteases from)')
+    cleaned = EnhancedDSLDNormalizer().normalize_product(raw)
+    assert _first_named(cleaned['activeIngredients'], 'Bacillus subtilis')['cleaner_row_role'] == 'source_descriptor'
+    assert _first_named(cleaned['activeIngredients'], 'Ananas comosus')['cleaner_row_role'] == 'source_descriptor'
+
+
+def test_enzyme_source_descriptors_do_not_create_proprietary_opacity():
+    from scoring_v4.scored_artifact import build_scored_artifact
+
+    raw = _protease_source_product()
+    raw['ingredientRows'].append({'name': 'Vitamin C', 'category': 'vitamin',
+        'ingredientGroup': 'Vitamin C', 'quantity': [{'quantity': 100, 'unit': 'mg'}]})
+    clean = EnhancedDSLDNormalizer().normalize_product(raw)
+    enriched, _ = SupplementEnricherV3().enrich_product(clean)
+    assert enriched['proprietary_data']['blends'] == []
+    scored = build_scored_artifact(enriched)
+    transparency = scored['_v4_module_breakdown']['dimensions']['transparency']
+    assert transparency['penalties']['B5_proprietary_blend_opacity'] == 0
+    assert transparency['metadata']['B5_blend_evidence'] == []
+
+
+def test_enzyme_source_descriptors_cannot_hide_unknown_or_actual_np_blend_members():
+    from scoring_v4.scored_artifact import build_scored_artifact
+
+    for notes, extra in [
+        ('Protease Enzyme Blend (Proteases from)',
+         {'name': 'Unidentified Active Enzyme Adjunct', 'category': 'other',
+          'quantity': [{'quantity': 0, 'unit': 'NP'}]}),
+        ('', None),
+    ]:
+        raw = _protease_source_product(notes=notes)
+        if extra:
+            raw['ingredientRows'][0]['nestedRows'].append(extra)
+        raw['ingredientRows'].append({'name': 'Vitamin C', 'category': 'vitamin',
+            'ingredientGroup': 'Vitamin C', 'quantity': [{'quantity': 100, 'unit': 'mg'}]})
+        enriched, _ = SupplementEnricherV3().enrich_product(
+            EnhancedDSLDNormalizer().normalize_product(raw))
+        blends = enriched['proprietary_data']['blends']
+        assert blends, 'a source descriptor must never erase a genuinely undisclosed active'
+        hidden = {name for b in blends for name in b.get('evidence', {}).get('ingredients_without_amounts', [])}
+        assert (extra['name'] if extra else 'Bacillus subtilis') in hidden
+        if extra:
+            assert not hidden & {'Bacillus subtilis', 'Ananas comosus'}
+        # The public scorer must retain opacity for the real missing amounts.
+        scored = build_scored_artifact(enriched)
+        transparency = scored['_v4_module_breakdown']['dimensions']['transparency']
+        assert transparency['penalties']['B5_proprietary_blend_opacity'] < 0
+
+
+def test_missing_source_descendant_cannot_suppress_detector_opacity():
+    from scoring_v4.scored_artifact import build_scored_artifact
+
+    raw = _protease_source_product()
+    raw['ingredientRows'].append({'name': 'Vitamin C', 'category': 'vitamin',
+        'ingredientGroup': 'Vitamin C', 'quantity': [{'quantity': 100, 'unit': 'mg'}]})
+    clean = EnhancedDSLDNormalizer().normalize_product(raw)
+    clean['activeIngredients'] = [r for r in clean['activeIngredients']
+                                  if r.get('raw_source_text') != 'Ananas comosus']
+    enriched, _ = SupplementEnricherV3().enrich_product(clean)
+    assert enriched['proprietary_data']['blends'], 'a lost source row cannot prove complete preparation composition'
+    scored = build_scored_artifact(enriched)
+    transparency = scored['_v4_module_breakdown']['dimensions']['transparency']
+    assert transparency['penalties']['B5_proprietary_blend_opacity'] < 0

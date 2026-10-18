@@ -33,12 +33,12 @@ def _raw():
 
 
 def test_the_complex_is_scored_as_an_eaa_total():
-    # Which primary wins is a separate question: the protein band credits the
-    # 100 mg whey line a flat 8 below 15 g (Dose-model proposal, 2026-09-28).
+    # The source-qualified aggregate remains one reviewed preparation; its
+    # studied regimen does not establish a general numerical adequacy curve.
     from scoring_v4.modules.sports_dose import _score_primary
 
     score, basis = _score_primary(_enrich(_raw()), "eaa")
-    assert basis == "eaa_under_5_g" and score > 0
+    assert basis == "eaa_completed_no_general_benchmark" and score == 11.4
 
 
 def test_no_amino_acid_borrows_the_complex_total():
@@ -56,7 +56,7 @@ def test_a_complex_with_a_non_eaa_child_is_not_an_eaa_total():
     header["nestedRows"].append(extra)
     from scoring_v4.modules.sports_dose import _score_primary
 
-    assert _score_primary(_enrich(raw), "eaa")[1] == "eaa_incomplete_under_6"
+    assert _score_primary(_enrich(raw), "eaa")[1] == "eaa_incomplete"
 
 
 @pytest.fixture(scope="module")

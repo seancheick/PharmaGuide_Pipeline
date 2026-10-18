@@ -251,7 +251,7 @@ def test_quantified_no_rda_dose_gets_partial_credit_not_excluded() -> None:
             # contract row classifier (and the scorer that consumes it) needs it
             # to recognise the row as botanical. A bare canonical_id with no
             # taxonomy never occurs in the corpus, so include the taxonomy here
-            # to exercise the real botanical clinical-dose path.
+            # to exercise the botanical assessment owner.
             raw_taxonomy={
                 "category": "botanical",
                 "ingredientGroup": "Ashwagandha",
@@ -266,13 +266,16 @@ def test_quantified_no_rda_dose_gets_partial_credit_not_excluded() -> None:
 
     breakdown = score_generic(product).to_breakdown()
 
-    # Phase 6: a recognized botanical with a quantified dose now scores via the
-    # clinical therapeutic-range adapter (ashwagandha 250-600; 600mg in range),
-    # not the old RDA-proxy partial credit. Never excluded from the denominator.
+    # The completed assessment has no general continuous benchmark. Its neutral
+    # credit remains in the denominator and makes no clinical-adequacy claim.
     dose = breakdown["dimensions"]["dose"]
-    assert dose["score"] == 21.0
+    assert dose["score"] == 11.97
     assert dose["metadata"]["method"] == "botanical_clinical_dose_v1"
-    assert dose["metadata"]["botanical_dose_band"] == "within_studied_range"
+    assert dose["metadata"]["botanical_dose_band"] == "disclosed_no_reference"
+    assert dose["metadata"]["dose_contributions"] == [{
+        "ingredient": "botanical", "assessment": "no_benchmark_neutral",
+        "band": "disclosed_no_reference", "credit_raw": 11.97,
+    }]
     assert breakdown["metadata"]["excluded_dimensions"] == []
     # Phase 4: core (form+dose+evid+transp) sums to 85; trust dim removed.
     assert breakdown["metadata"]["evaluable_class_max"] == 85.0

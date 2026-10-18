@@ -556,14 +556,15 @@ def test_recovered_peptide_amount_is_judged_by_dose_not_evidence(peptide_quantit
     # Production scores the collagen profile on its archetype reference (21).
     with dose_reference_scope(21.0):
         dose = score_dose(product)
-    assert dose["metadata"]["collagen_dose_band"] == "mixed_purpose_average"
+    assert dose["metadata"]["collagen_dose_band"] == "disclosed_no_reference"
     assessments = dose["metadata"]["collagen_dose"]["assessments"]
     assert [item["band"] for item in assessments] == [
-        "disclosed_no_reference", "near_studied_range",
+        "disclosed_no_reference", "disclosed_no_reference",
     ]
-    # V4.1 Step 4: the bare collagen has no benchmark (shared neutral 11.97);
-    # 2 g peptides is near the 2.5 g studied floor (16).
-    assert dose["score"] == round((11.97 + 16.0) / 2, 4)
+    # Neither source row has a qualified universal dose benchmark. Recovering
+    # the peptide amount preserves Evidence and completes Dose at shared neutral.
+    assert all(item["benchmark"] == "absent" for item in assessments)
+    assert dose["score"] == 11.97
 
 
 @pytest.mark.parametrize("reverse_rows", [False, True])

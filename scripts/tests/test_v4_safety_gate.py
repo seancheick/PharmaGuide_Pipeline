@@ -338,8 +338,9 @@ def test_hidden_caffeine_in_preworkout_blend_forces_caution_and_review() -> None
     assert "STIMULANT_CAFFEINE_UNDISCLOSED_PREWORKOUT" in result.safety_signals
 
 
-def test_undosed_green_tea_caffeine_outside_stimulant_context_is_review_signal_only() -> None:
+def test_undosed_green_tea_caffeine_keeps_unresolved_caution_without_exceedance() -> None:
     from scoring_v4.gate_safety import evaluate_safety_gate
+    from scoring_v4.dose_safety import evaluate_dose_safety
     product = _with_scorable_caffeine({
         "product_name": "Green Tea Extract",
         "primary_type": "botanical",
@@ -347,9 +348,14 @@ def test_undosed_green_tea_caffeine_outside_stimulant_context_is_review_signal_o
 
     result = evaluate_safety_gate(product)
 
-    assert result.verdict is None
+    # Dose V4.1 screens declared caffeine on every route. An unknown amount
+    # keeps material-unresolved review; it cannot establish a numerical excess.
+    assert result.verdict == "CAUTION"
     assert result.needs_review is True
     assert "STIMULANT_CAFFEINE_UNDISCLOSED_REVIEW" in result.safety_signals
+    assert "DOSE_SAFETY_UNRESOLVED_REVIEW" in result.safety_signals
+    assert not any(signal.startswith("DOSE_OVER_UL_") for signal in result.safety_signals)
+    assert evaluate_dose_safety(product).dose_ceiling() is None
 
 
 def test_clean_product_returns_none() -> None:

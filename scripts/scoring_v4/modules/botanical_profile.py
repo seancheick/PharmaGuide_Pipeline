@@ -14,17 +14,11 @@ both for botanical products:
   Evidence fact (a branded studied extract still earns the full standardization
   tier, once).
 
-  Dose adapter (replaces RDA/UL proxy), via rda_therapeutic_dosing.json, grades
-  the minimum directed daily amount against the studied range on scale
-  botanical_dose_band_scale, rescaled to the caller's Dose reference:
-    within studied range    -> botanical_dose_within
-    near studied range      -> botanical_dose_near
-    above studied range     -> botanical_dose_above
-    below studied range     -> botanical_dose_near x amount / (0.8 x low end)
-    disclosed, no reference -> the shared unbenchmarked neutral
-    blend total / no amount -> the shared neutral when no benchmark exists,
-                               otherwise 0 (hiding must never beat a low dose);
-                               an unresolved identity marks the assessment partial
+  Dose adapter: source-owned reference semantics in rda_therapeutic_dosing.json
+  distinguish descriptive study regimens from numerical benchmarks. The reviewed
+  broad botanical records establish no general minimum/window and use the
+  completed neutral for disclosed amounts. Genuinely hidden amounts retain the
+  neutral; lost amounts and unresolved identity/preparation retain their holds.
 
 The A5b standardized-botanical bonus is DISABLED inside the profile (marker
 standardization is now core formulation, not a duplicate +1 bonus). Botanical
@@ -42,6 +36,7 @@ from typing import Any, Dict, List, Optional
 
 _DATA_DIR = Path(__file__).resolve().parents[2] / "data"
 
+from scoring_input_contract import dose_disclosure_status
 from scoring_v4.modules.generic_helpers import bio_score_of
 from scoring_v4.quality_score_config import block as _cfg_block
 
@@ -762,95 +757,27 @@ def _is_named_standardized_botanical_complex(product: Dict[str, Any], row: Dict[
     return _standardized_match(product, row) or _branded_studied_row(product, row)
 
 
-def _parse_dose_range(entry: Dict[str, Any]) -> Optional[tuple]:
-    rng = _norm(entry.get("typical_dosing_range"))
-    m = re.match(r"^\s*([0-9.]+)\s*[-–]\s*([0-9.]+)", rng)
-    if not m:
-        exact = re.match(r"^\s*([0-9.]+)\s*$", rng)
-        if exact:
-            v = float(exact.group(1))
-            return v, v
-        return None
-    return float(m.group(1)), float(m.group(2))
-
-
-def _range_mg(entry: Dict[str, Any]) -> Optional[tuple]:
-    """Parsed therapeutic dose range converted to mg for _mass_mg comparison."""
-    rng = _parse_dose_range(entry)
-    if rng is None:
-        return None
-    unit = _norm(entry.get("unit"))
-    if unit in {"g", "gram", "grams"}:
-        return rng[0] * 1000.0, rng[1] * 1000.0
-    if unit in {"mcg", "ug", "µg", "μg", "microgram", "micrograms"}:
-        return rng[0] / 1000.0, rng[1] / 1000.0
-    if unit in {"mg", "milligram", "milligrams"}:
-        return rng
-    # Non-mass units (CFU, activity units) are not comparable to _mass_mg.
-    return None
-
-
-# Botanical dose bands (V4.1 Step 4), on a 21-point band scale normalized to
-# the product's Dose reference so "within the studied range" is full marks on
-# every route. Daily minimum exposure owns adequacy; the daily maximum owns
-# excess:
-#   within  21                       minimum and maximum inside the range
-#   near    16                       minimum >= 80% of the low end, or
-#                                    maximum <= 120% of the high end
-#   above   12                       maximum beyond 120% of the high end
-#   below   16 x minimum / (0.8 low) proportional below the near band
-# Without an applicable benchmark a disclosed amount earns the shared
-# unbenchmarked neutral; a hidden or missing amount whose benchmark exists
-# earns nothing; an unresolved benchmark identity is an unfinished assessment.
-BOTANICAL_DOSE_WITHIN = _FVM["botanical_dose_within"]
-BOTANICAL_DOSE_NEAR = _FVM["botanical_dose_near"]
-BOTANICAL_DOSE_ABOVE = _FVM["botanical_dose_above"]
-BOTANICAL_DOSE_BAND_SCALE = _FVM["botanical_dose_band_scale"]
+# Without an approved numerical benchmark, recognized disclosed amounts use
+# the shared neutral; missing amounts retain their existing disclosure holds.
 BOTANICAL_DOSE_NO_ACTIVE = _FVM["botanical_dose_no_active"]
 
 
-def graded_studied_range(product: Dict[str, Any], row: Dict[str, Any], low_end: float,
-                         high_end: Optional[float], unit: str,
-                         metadata: Dict[str, Any]) -> Dict[str, Any]:
-    """Grade one declared amount against a studied range (botanical and collagen)."""
-    from scoring_v4.exposure import row_exposure
-    from scoring_v4.modules.generic_helpers import current_dose_reference
-
-    exposure = row_exposure(product, row, basis="daily", unit=unit)
-    low, high = exposure.benchmark_amount, exposure.benchmark_maximum
-    meta = dict(metadata)
-    if "dose_mg" in meta and low is not None:
-        meta["dose_mg"] = low  # the minimum directed daily amount, as before Step 4
-    else:
-        meta["measurement_daily_min"] = low
-    meta["measurement_daily_max"] = high
-    if low is None:
-        return {"score": 0.0, "band": "amount_not_assessable", "metadata": meta}
-    if high is not None and high_end is not None and high > high_end:
-        band = "near_studied_range" if high <= 1.2 * high_end else "above_studied_range"
-        value = BOTANICAL_DOSE_NEAR if band == "near_studied_range" else BOTANICAL_DOSE_ABOVE
-    elif low < low_end:
-        band = "near_studied_range" if low >= 0.8 * low_end else "below_studied_range"
-        value = (BOTANICAL_DOSE_NEAR if band == "near_studied_range"
-                 else BOTANICAL_DOSE_NEAR * low / (0.8 * low_end))
-    else:
-        band, value = "within_studied_range", BOTANICAL_DOSE_WITHIN
-    score = value * current_dose_reference() / BOTANICAL_DOSE_BAND_SCALE
-    return {"score": round(score, 4), "band": band, "metadata": meta}
-
-
-def unassessed_amount_band(band: str, benchmark: str) -> Dict[str, Any]:
-    """A disclosed amount without a benchmark, or a hidden/missing one."""
+def unassessed_amount_band(band: str, benchmark: str, label_hidden: bool = True) -> Dict[str, Any]:
+    """Keep completed no-reference and hidden-label states distinct from gaps."""
     from scoring_v4.modules.generic_helpers import unbenchmarked_dose_credit
 
-    neutral = band == "disclosed_no_reference" or benchmark == "absent"
+    # Missing capture cannot become neutral merely because no benchmark was
+    # found. A valid disclosed amount with a completed no-reference conclusion,
+    # or positive label-hiding evidence, takes neutral (Dose V4.1 section 2.3).
+    # An unresolved benchmark identity stays unfinished (0, reported partial).
+    neutral = (benchmark != "unresolved"
+               and (band == "disclosed_no_reference" or label_hidden))
     return {"score": unbenchmarked_dose_credit() if neutral else 0.0, "band": band,
             "metadata": {"benchmark": benchmark}}
 
 
 def score_botanical_dose(product: Dict[str, Any]) -> Dict[str, Any]:
-    """Botanical dose adapter via clinical therapeutic ranges. Never returns
-    None (a primary botanical with no dose floors low, not denominator-excluded)."""
+    """Assess the source disposition without excluding missing primary amounts."""
     row = _primary_botanical_active(product)
     if row is None:
         return {"score": BOTANICAL_DOSE_NO_ACTIVE, "band": "no_botanical_active", "metadata": {}}
@@ -863,16 +790,6 @@ def score_botanical_purpose_dose(
     """Assess one declared botanical purpose through the botanical Dose owner."""
     if not _is_botanical_active(row):
         return None
-
-    # Exact positive branded whole-preparation benchmarks are Dose facts even
-    # when the cleaner represents the named preparation as product-level
-    # evidence. A member amount never substitutes for the preparation total.
-    from dose_assessment import positive_clinical_benchmark
-    clinical = positive_clinical_benchmark(product, row)
-    if clinical is not None:
-        meta = {"positive_clinical_benchmark": clinical.to_dict()}
-        return graded_studied_range(product, row, clinical.benchmark_value,
-                                    clinical.benchmark_maximum, clinical.benchmark_unit, meta)
 
     benchmark = _botanical_benchmark(row)
     if row.get("is_blend_header") or row.get("blend_total_weight_only"):
@@ -890,22 +807,40 @@ def score_botanical_purpose_dose(
 
     mass = _mass_mg(row)
     if mass is None:
-        return unassessed_amount_band("primary_no_dose", benchmark)
-    if benchmark != "present":
-        return unassessed_amount_band("disclosed_no_reference", benchmark)
-
-    lo, hi = _range_mg(_dosing_entry_for(row))
-    # Well above the studied range (P6 review P2#2): a megadose is not evidence-
-    # backed and B7 cannot fire for botanicals (no RDA/UL safety flags), so it
-    # earns less than a dose just outside the window. True toxicity is still
-    # caught by the Layer-1 safety gate; this is fairness.
-    meta = {"dose_mg": _mass_mg(row), "range_mg": [lo, hi]}
-    return graded_studied_range(product, row, lo, hi, "mg", meta)
+        return unassessed_amount_band("primary_no_dose", benchmark,
+                                      label_hidden=dose_disclosure_status(row) == "not_disclosed_blend")
+    # Reviewed source regimens remain descriptive. None of these broad
+    # preparation records establishes an approved general minimum/window.
+    return unassessed_amount_band("disclosed_no_reference", benchmark)
 
 
 def _botanical_benchmark(row: Dict[str, Any]) -> str:
-    """Whether this botanical has a studied range: present, absent or unresolved."""
+    """Return a completed absent general benchmark or unresolved review."""
     entry = _dosing_entry_for(row)
-    if entry is not None and _range_mg(entry) is not None:
-        return "present"
+    if entry is not None:
+        semantics = entry.get("reference_semantics") or {}
+        if (semantics.get("curve") == "completed_no_benchmark_neutral"
+                and str(semantics.get("approval_status") or "").startswith("approved_existing_neutral_")):
+            return "absent"
+        # A source/preparation still awaiting review is not completed neutral.
+        return "unresolved"
+    # A source-owned completed no-benchmark review is not an identity gap.
+    # This does not promote all positive literature to botanical eligibility:
+    # only the exact canonical, verified record with the approved neutral
+    # disposition completes this Dose assessment. Study exposures stay
+    # descriptive and an unreadable amount still fails the strict input gate.
+    from evidence_resolver import _load_literature_evidence
+
+    record = _load_literature_evidence().get(_norm(row.get("canonical_id"))) or {}
+    semantics = record.get("reference_semantics") or {}
+    provenance = record.get("verification_provenance") or {}
+    if (
+        record.get("verification_result") == "authoritative_pubmed_verified"
+        and provenance.get("all_pmids_verified") is True
+        and not provenance.get("retractions_found")
+        and semantics.get("reference_type") == "no_benchmark"
+        and semantics.get("curve") == "completed_no_benchmark_neutral"
+        and str(semantics.get("approval_status") or "").startswith("approved_existing_neutral_")
+    ):
+        return "absent"
     return "absent" if _recognized_botanical_identity(row) else "unresolved"

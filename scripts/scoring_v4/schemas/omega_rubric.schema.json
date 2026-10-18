@@ -29,11 +29,11 @@
           "minItems": 1,
           "items": {
             "type": "object",
-            "required": ["min_mg_day", "score"],
+            "required": ["min_mg_day", "label"],
+            "not": {"required": ["score"]},
             "additionalProperties": true,
             "properties": {
               "min_mg_day": {"type": "number", "minimum": 0},
-              "score": {"type": "number", "minimum": 0, "maximum": 30},
               "label": {"type": "string"},
               "flag": {"type": ["string", "null"]}
             }

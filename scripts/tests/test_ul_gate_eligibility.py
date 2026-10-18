@@ -1848,3 +1848,85 @@ def test_scoreable_taxonomy_only_botanical_gets_typed_non_ul_dose(enricher):
             "readiness": "not_applicable",
         }
     ]
+
+
+@pytest.mark.parametrize("amount,over,ceiling", [(1.0, False, None), (1.2, True, 10.0)])
+def test_soluble_nickel_salt_upper_limit_uses_elemental_nickel(enricher, amount, over, ceiling):
+    """NASEM nickel UL covers soluble salts, not a nutritional minimum."""
+    from scoring_v4.dose_safety import evaluate_dose_safety
+
+    result = enricher._collect_rda_ul_data(_mag([{
+        "name": "Nickel", "standardName": "Nickel", "canonical_id": "nickel",
+        "canonical_source_db": "ingredient_quality_map", "matched_form": "nickel sulfate",
+        "quantity": amount, "unit": "mg", "dailyValue": None,
+    }]), min_servings_per_day=1, max_servings_per_day=1)
+    row = next(r for r in result["adequacy_results"] if r["canonical_id"] == "nickel")
+    assert row["rda_ai"] is None and row["pct_rda"] is None
+    assert row["ul"] == 1.0 and row["pct_ul"] == pytest.approx(amount * 100)
+    assert row["over_ul"] is over
+    assessed = evaluate_dose_safety({"rda_ul_data": result})
+    cap = assessed.dose_ceiling()
+    assert (cap["cap_public"] if cap else None) == ceiling
+
+
+def test_unspecified_nickel_does_not_assume_soluble_salt_scope(enricher):
+    result = enricher._collect_rda_ul_data(_mag([{
+        "name": "Nickel", "standardName": "Nickel", "canonical_id": "nickel",
+        "canonical_source_db": "ingredient_quality_map", "matched_form": "nickel (unspecified)",
+        "quantity": 1.2, "unit": "mg", "dailyValue": None,
+    }]), min_servings_per_day=1, max_servings_per_day=1)
+    row = next(r for r in result["adequacy_results"] if r["canonical_id"] == "nickel")
+    assert row["pct_ul"] is None and row["over_ul"] is False
+    assessment = next(r for r in result["dose_assessments"] if r["canonical_id"] == "nickel")
+    assert assessment["ul_assessment_status"] == "unresolved_form"
+    assert assessment["readiness"] == "incomplete"
+
+
+def test_nickel_sulfate_compound_mass_cannot_become_elemental_nickel(enricher):
+    from scoring_v4.dose_safety import evaluate_dose_safety
+
+    result = enricher._collect_rda_ul_data(_mag([{
+        "name": "Nickel Sulfate", "standardName": "Nickel", "canonical_id": "nickel",
+        "canonical_source_db": "ingredient_quality_map", "matched_form": "nickel sulfate",
+        "quantity": 1.2, "unit": "mg", "dailyValue": None,
+    }]), min_servings_per_day=1, max_servings_per_day=1)
+    assert result["has_over_ul"] is False
+    assessment = next(r for r in result["dose_assessments"] if r["canonical_id"] == "nickel")
+    assert assessment["ul_assessment_status"] == "unresolved_compound_mass"
+    assert evaluate_dose_safety({"rda_ul_data": result}).dose_ceiling() is None
+
+
+@pytest.mark.parametrize("amount_mcg,max_servings", [(5, 1), (1000, 1), (5, 4)])
+def test_unspecified_nickel_within_worst_case_upper_bound_is_complete(enricher, amount_mcg, max_servings):
+    from scoring_v4.dose_safety import evaluate_dose_safety
+
+    result = enricher._collect_rda_ul_data(_mag([{
+        "name": "Nickel", "standardName": "Nickel", "canonical_id": "nickel",
+        "canonical_source_db": "ingredient_quality_map", "matched_form": "nickel (unspecified)",
+        "quantity": amount_mcg, "unit": "mcg", "dailyValue": None,
+    }]), min_servings_per_day=1, max_servings_per_day=max_servings)
+    row = next(r for r in result["adequacy_results"] if r["canonical_id"] == "nickel")
+    assessment = next(r for r in result["dose_assessments"] if r["canonical_id"] == "nickel")
+    assert assessment["ul_assessment_status"] == "assessed_within_limit"
+    assert assessment["readiness"] == "complete"
+    assert row["skip_ul_reason"] == "worst_case_compound_mass_within_ul"
+    assert row["ul_assessment_basis"] == "maximum_possible_active_moiety_exposure"
+    assert row["pct_ul"] == pytest.approx(amount_mcg * max_servings / 10)
+    assert row["rda_ai"] is None and row["pct_rda"] is None
+    assert row["warnings"] == [] and result["has_over_ul"] is False
+    assert evaluate_dose_safety({"rda_ul_data": result}).dose_ceiling() is None
+
+
+def test_unspecified_nickel_worst_case_uses_maximum_directed_exposure(enricher):
+    from scoring_v4.dose_safety import evaluate_dose_safety
+
+    result = enricher._collect_rda_ul_data(_mag([{
+        "name": "Nickel", "standardName": "Nickel", "canonical_id": "nickel",
+        "canonical_source_db": "ingredient_quality_map", "matched_form": "nickel (unspecified)",
+        "quantity": 500, "unit": "mcg", "dailyValue": None,
+    }]), min_servings_per_day=1, max_servings_per_day=3)
+    assessment = next(r for r in result["dose_assessments"] if r["canonical_id"] == "nickel")
+    assert assessment["ul_assessment_status"] == "unresolved_form"
+    assert assessment["readiness"] == "incomplete"
+    assert result["has_over_ul"] is False
+    assert evaluate_dose_safety({"rda_ul_data": result}).dose_ceiling() is None

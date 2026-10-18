@@ -235,6 +235,16 @@ def test_real_protein_source_in_ingredient_list_keeps_evidence(enricher):
     raw = json.loads((Path(__file__).parent / "fixtures" /
                       "protein_evidence_294073_raw.json").read_text())
     product, _ = enricher.enrich_product(EnhancedDSLDNormalizer().normalize_product(raw))
+    from scoring_input_contract import get_scoring_ingredients
+    assert raw["fullName"] == "WheyBasics Natural Vanilla Bean Flavor"
+    assert product["supplement_type"]["type"] == "protein_powder"
+    assert product["nutrition_summary"]["protein_g"] == 21
+    protein_rows = [r for r in get_scoring_ingredients(product, strict=True).rows
+                    if r.get("canonical_id") == "protein"]
+    assert len(protein_rows) == 1
+    assert protein_rows[0]["quantity"] == 21
+    assert protein_rows[0]["raw_source_path"] == "ingredientRows[2]"
+    assert protein_rows[0]["reason"] == "declared_nutrition_protein_mass"
     payload = score_evidence(product, owner_scoped=True)
     assert "INGR_WHEY_PROTEIN" in payload["metadata"]["recovered_matches"]
     assert payload["metadata"]["ingredient_points"]["protein"] > 0
