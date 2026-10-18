@@ -32,7 +32,7 @@ Open a specific view directly after launch with `?view=`:
 - `product-inspector`
 - `pipeline-health`
 - `data-quality`
-- `section-a-audit`
+- `pillar-audit`
 - `observability`
 - `release-diff`
 - `batch-diff`
