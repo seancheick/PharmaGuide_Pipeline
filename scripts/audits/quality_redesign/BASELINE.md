@@ -78,10 +78,10 @@ a set rendered as a list. Two harness runs of the 22 Hum labels differ on that p
 (`probe_hum/run1_vs_run2.json`); with `PYTHONHASHSEED=0` both runs are byte-identical
 (`probe_hum/seeded3.jsonl` and `seeded4.jsonl`, sha256 `c08936b3fe1d839ded148960d373d77a03d54603a982876b778a10621f7616c3`,
 compare: 0 changed). Scores, the scored artifact and the detail blob do not move; nothing outside tests reads the
-field (`rg scorable_ingredient_names_normalized scripts/ "/Users/seancheick/PharmaGuide ai/lib"`). So that the
-harness compares code and inputs rather than seeds, the `--full` worker runs with `PYTHONHASHSEED=0`
-(`replay.FULL_WORKER_ENV`, recorded in the receipt); the field itself stays in the hash. Sorting that list is a
-Clean/Enrich behavioral change for its own fix task (see the memory gotcha on set iteration).
+field (`rg scorable_ingredient_names_normalized scripts/ "/Users/seancheick/PharmaGuide ai/lib"`). The
+historical harness pinned the `--full` worker to `PYTHONHASHSEED=0` (the former `replay.FULL_WORKER_ENV`,
+recorded in those receipts); the field itself stayed in the hash. PR #156 subsequently sorted the production
+field. The current harness inherits the environment without that override, as described below.
 
 ### Baseline run
 
@@ -101,12 +101,14 @@ Clean/Enrich behavioral change for its own fix task (see the memory gotcha on se
   receipt above (byte-identical twice under the pinned seed) and on the earlier 15,421-product score-only
   repeat recorded in the September section.
 
-### Using it
+### Comparing with this historical seed-0 baseline
 
-```
-replay.py snapshot --checkout <candidate worktree> --products-root .../frozen_raw --manifest .../manifest.json \
+Use an explicit seed only for compatibility with this historical capture; new unpinned captures use the separate recapture recipe below.
+
+```bash
+PYTHONHASHSEED=0 "$PG_PYTHON" scripts/audits/quality_redesign/replay.py snapshot --checkout <candidate worktree> --products-root .../frozen_raw --manifest .../manifest.json \
     --out .../candidate_<sha>.jsonl --workers 4 --full --blob
-replay.py compare --baseline .../baseline_5fb2be1ca.jsonl --candidate .../candidate_<sha>.jsonl --out .../delta.json
+"$PG_PYTHON" scripts/audits/quality_redesign/replay.py compare --baseline .../baseline_5fb2be1ca.jsonl --candidate .../candidate_<sha>.jsonl --out .../delta.json
 ```
 
 `compare` writes one entry per product whose row differs, each with `changed` (cleaned / enriched / scored /

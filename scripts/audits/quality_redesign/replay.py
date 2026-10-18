@@ -767,10 +767,10 @@ def main():
             if any(meta.get('volatile_fields') != VOLATILE_FIELDS for meta in full):
                 raise ValueError('Snapshot volatile_fields differ from this harness; recapture with the same harness')
             environments = [meta.get('worker_env') for meta in full]
-            if any(not isinstance(env, dict) or any(
-                not isinstance(key, str) or not isinstance(value, str)
-                for key, value in env.items()
-            ) for env in environments) or environments[0] != environments[1]:
+            if any(not isinstance(env, dict) or (env and (
+                set(env) != {'PYTHONHASHSEED'}
+                or not isinstance(env.get('PYTHONHASHSEED'), str)
+            )) for env in environments) or environments[0] != environments[1]:
                 raise ValueError('Snapshot worker_env receipts are invalid or differ; recapture with matching environments')
         if args.all_paths and not full[0]:
             raise ValueError('--all-paths needs --full snapshots')

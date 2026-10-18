@@ -367,7 +367,10 @@ def test_full_compare_uses_recorded_environment_not_current_process(tmp_path, mo
                            '--candidate', str(outs[1]), '--out', str(tmp_path / 'bad.json')], capture_output=True, text=True)
     assert proc.returncode == 1 and 'worker_env' in proc.stderr
 
-@pytest.mark.parametrize('invalid', [None, [], {'PYTHONHASHSEED': 0}])
+@pytest.mark.parametrize('invalid', [
+    None, [], {'PYTHONHASHSEED': 0}, {'OTHER': 'value'},
+    {'PYTHONHASHSEED': '0', 'OTHER': 'value'},
+])
 def test_full_compare_rejects_invalid_environment_receipts_even_when_equal(tmp_path, invalid):
     checkout = fake_checkout(tmp_path)
     frozen, manifest = frozen_labels(tmp_path)
