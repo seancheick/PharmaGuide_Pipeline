@@ -1,6 +1,6 @@
 # Dose V4.1 review packet (plan §5.1)
 
-October 18, 2026. The clinical-reference decision blocker is closed: Sean directly approved the revised 43 decisions and six-member prenatal critical group. Source fixes are committed and validated as described below. **Not merge-ready or run-ready: the remaining gates are listed explicitly.**
+October 18, 2026. The clinical-reference decision blocker is closed: Sean directly approved the revised 43 decisions and six-member prenatal critical group. The three baseline failures are resolved and latest main `2a9ee189e` is integrated. Final runtime is `5b34112b9`; exact-source CI passes all four groups and final local qualification remains pending. **Do not run the pipeline until the final handoff confirms readiness.**
 
 ## What is approved and implemented
 
@@ -12,9 +12,9 @@ October 18, 2026. The clinical-reference decision blocker is closed: Sean direct
 
 ## Tested source and comparison scope
 
-Pipeline runtime: `2339ec8fb1da51e5eca77cbded5ed43f57c4e371`, feature branch `claude/dose-v41`. Engine 4.8.0, quality config 1.29.0, omega 2.3.1. App candidate: `51567daec8747b56091731b14f558ffec3c10809` (runtime `bb352dde`; subsequent docs/test-format changes).
+Final pipeline runtime: `5b34112b945f3d2a0b1b49fed07bd844490162e6`, including main `2a9ee189e` (PR163 architecture and PR164 omega safeguards). Engine 4.8.1, quality config `1.29.1-dose-v41-omega-integration`, omega 2.3.1. App PR128 is merged as `6fcd9e678c8f3678e4d0fb4967f5769b7d7e1040`, containing reviewed source `51567dae`; primary app checkout is synchronized. No app build or deployment occurred.
 
-The completed comparison scores **all 15,426 unique frozen enriched inputs** from 58 checksum-verified files, with zero replay errors and matching source hashes. Baseline `832c1bd7f756fd9b9d5f1e1b1204400e899a6481` is the pre-approval Dose candidate, **not production/main**. Candidate capture took 710.44 seconds. This is a scorer replay, not a full pipeline, regenerated catalog, app bundle, deployment or phone acceptance. Separate bounded raw-label replays validate affected producer paths.
+The earlier approved-policy comparison on `2339ec8f` scores **all 15,426 unique frozen enriched inputs** from 58 checksum-verified files, with zero replay errors and matching source hashes. Baseline `832c1bd7f756fd9b9d5f1e1b1204400e899a6481` is the pre-approval Dose candidate, **not production/main**. Candidate capture took 710.44 seconds. This is a scorer replay, not a full pipeline, regenerated catalog, app bundle, deployment or phone acceptance. Separate bounded raw-label replays validate affected producer paths.
 
 ## Full frozen-input movement
 
@@ -109,23 +109,26 @@ Fail-first cases, controls, source receipts and independent review cover these c
 ## Validation evidence and limits
 
 - Pipeline whole-fast CI [39157311609](https://github.com/seancheick/PharmaGuide_Pipeline/actions/runs/39157311609): all 4 groups and skip guards passed on exact runtime 2339ec8f.
-- Final named owner/consumer slice: 499 passed; 33 current raw canaries pass. Raw 63 comparison on 2339 retains the prior source-qualified results with zero further total/other-pillar/status/route movements.
+- Earlier `2339ec8f` named owner/consumer slice: 499 passed. Final `5b34112b` raw canaries: 33 pass. Raw 63 comparison on 2339 retains the prior source-qualified results with zero further total/other-pillar/status/route movements.
 - App analysis clean and full Flutter suite 3,964 passed on runtime bb352dde; app CI [39148045039](https://github.com/seancheick/Pharmaguide.ai/actions/runs/39148045039) passes on 51567dae. The app renders pipeline scores; it does not recalculate them.
 - Independent final boundary review is clear after the current-source facts correction. Source verifiers confirm references, separately from Sean’s policy approval; two old strain alerts are an explicitly excluded wrong PMID and a correction/limitations reference, not active Dose anchors.
-- Final local checkpoint with existing published artifacts linked read-only: **543 passed / 3 known failures / 24 declared opt-in service skips**, 160.09 seconds. The prior 41 missing-artifact skips are closed. The local rung remains **failed**, and its post-test skip guard is not claimed to have passed because pytest exits on those three failures. Neither historical artifacts nor a green CI run waive them. Initial sandbox lock denial was retried through the same authorized test harness; it was not a test result.
+- The earlier three-failure local result is superseded: integrated `6197a1be` passes **546 tests / 24 declared opt-in service skips**, with the skip guard passing. Its whole-fast CI [39160872917](https://github.com/seancheick/PharmaGuide_Pipeline/actions/runs/39160872917) passes all four groups. Final `5b34112b` CI [39162345603](https://github.com/seancheick/PharmaGuide_Pipeline/actions/runs/39162345603) passes all four groups and skip guards; final local qualification is pending.
 
 ## Pure magnesium: what to expect
 
 **Pure label 205309 / barcode 766298001753 stays 76.6 (display 77)** under the newer approved D1 policy: 120 mg minimum daily magnesium earns 20/20 contribution against the 84 mg target; maximum 480 mg/day is 137% of the 350 mg supplemental UL, so the single final ceiling caps Dose at 10. This is a maximum-directed-use policy consequence, not a claim that 120 mg is a high dose. A different one-capsule/day label 299065 has 120 mg minimum and maximum, no ceiling, and scores 86.6. Personal chosen use does not recalculate the catalog score. The newer D1 policy supersedes the historical serving-only77→87 expectation.
 
-## Exactly what remains before merge and pipeline
+## Integration closeout and remaining gates
 
-1. Resolve the three known out-of-scope e1_2_2 baseline failures through their existing owner, with source-based receipts; do not refresh them blindly or waive them. They concern306237 A3 bonus and246324/176872 sugar-copy spacing.
-2. Integrate/review the feature candidate with current pipeline main. A fresh fetch found main advanced independently to 60d8ea0e2 (PR163 architecture batch); the Dose candidate still forks from 5fb2be1ca. The green2339CI and this comparison do not prove the as-yet-unintegrated combination. Resolve overlapping owners, check equivalence/affected behavior and run one exact combined checkpoint. App main remains b62b075f1; app candidate 51567dae is pushed.
-3. Confirm green applicable local acceptance/skip policy on the integrated candidate. Reused published artifacts establish existing consumer coverage; current 33 raw canaries and bounded raw proofs supply candidate evidence. They do not establish a regenerated 15,426-product export.
-4. Merge the completed paired source branches only after those gates pass and under Sean’s merge authorization. Inspect actual final stage fingerprints again. Current 2339 fingerprints show 114 stale manifests (38 each Clean/Enrich/Score), so the earliest necessary regeneration is **Clean**. Never relabel old outputs.
+The three strict baseline failures are closed without weakening comparisons. Original raw labels and accepted source history establish: 306237 must not receive a duplicate BioPerine delivery bonus; 246324 and 176872 use canonical sugar spacing. All nine baseline pairs were regenerated through the actual owners, including the source-supported 250 mg ordinary-adult omega reference for 1002. Historical baselines are retained. The preflight now asks the same dated-baseline path owner as its strict consumer, so obsolete root files cannot falsely establish readiness.
 
-After those gates, Sean’s compute-only command, from the main pipeline checkout, is:
+The architecture integration preserves approved Dose and shared quantity/module owners. A 71-label Clean → Enrich → Score → detail-blob replay found only 50 deterministic enriched-name sorting changes against the pre-integration candidate, with no scored/blob changes. The latest omega integration retains main's marketing Evidence, molecular-form and child-population safeguards while preserving Sean's approved directed-daily Dose semantics. A source-verified printed zero DHA is distinct from a hidden amount; source identity and units are checked by the existing EPA/DHA qualifier, including MCT/flax and unknown-sibling controls.
+
+A separate 715-product frozen omega comparison (`6197a1be` → final `5b34112b`) found 19 score changes (4 up / 15 down, −19.0 to +7.3), all recognized child labels receiving approved neutral Dose. Eleven also lose inapplicable adult Evidence credit. There are 15 tier crossings and four assessment completions, with zero safety/route/gate/flag/readiness or other-pillar changes and zero receipt errors. The remaining 696 score outcomes are unchanged: 695 equal numeric totals and 260262 still unscored. The final 71-label replay adds provenance and three Dose explanation changes, with no numeric movement; its final source-identity guard changes no artifacts. Full captures, clocks and source hashes are retained; this does not regenerate the catalog.
+
+Pending: the applicable final local checkpoint. Exact final whole-fast CI passes all four groups and skip guards; a separately authorized corpus job is already using primary main `2a9ee189e`, so this session will not change that checkout or start a broad local job until it finishes. App PR128 is already integrated. Sean authorized merging the pipeline candidate after green qualification. Older failed/pending candidate records below are historical, not current blockers.
+
+After the final merge and source-fingerprint check, Sean's compute-only command is:
 
 ```bash
 cd /Users/seancheick/Downloads/dsld_clean
@@ -133,11 +136,11 @@ source scripts/python_env.sh
 PYTHON="$PG_PYTHON" bash batch_run_all_datasets.sh --pipeline-only
 ```
 
-**Do not run that command yet.** Default startup uses essential checks; `--pre-check` is optional full preparation. A successful pipeline-only run still needs new catalog/export parity, release checks, app bundle validation and any authorized publication. No pipeline, main push/merge, release or IPA build occurred in this review.
+**Do not start a second corpus run while the existing job is active.** That older-source job does not include Dose V4.1. Default startup uses essential checks; `--pre-check` is optional full preparation. No full pipeline was launched by this session. New artifacts still need catalog/export parity, release checks, app bundle validation and separately authorized publication. Existing phone build22 has not been replaced.
 
 ## Local evidence files
 
-Under `reports/dose_v41_approved_candidate_20261018/`: baseline/candidate JSONL captures and manifests; `final_comparison.json`; every numeric/status transition in `score_changes.csv`; all 119 prenatal rows in `prenatal_choline.csv`; source-classification and raw-proof receipts; exact CI/local logs; current stage fingerprints. Preserve final captures, baselines, checksum manifests and compact source proofs. Superseded partial captures are not accepted evidence.
+Final integration receipts are in `reports/dose_v41_integration_20261018/`, including the 71-label four-layer captures, nine source-verified baseline pairs, final 715-product classification, fail-first tests and review. Earlier full-policy evidence remains under `reports/dose_v41_approved_candidate_20261018/`: baseline/candidate JSONL captures and manifests; `final_comparison.json`; every numeric/status transition in `score_changes.csv`; all 119 prenatal rows in `prenatal_choline.csv`; source-classification and raw-proof receipts; exact CI/local logs; current stage fingerprints. Preserve final captures, baselines, checksum manifests and compact source proofs. Superseded partial captures are not accepted evidence.
 
 ## Historical candidate records
 
