@@ -252,6 +252,11 @@ def _co_primary_identities(product: Dict[str, Any]) -> list[str]:
         if eaa_preparation and key in EAA_CANONICALS | EAA_AGGREGATE_CANONICALS:
             identity = "eaa"
         if identity is None and key and role.get("role") == "claim_prominent":
+            # The generic purpose owner excludes structural parent totals.
+            # A named container is not another ingredient beside its children;
+            # typed on-list preparations retain their aggregate owners above.
+            if row.get("is_parent_total"):
+                continue
             # Off-list presence or mass alone does not establish a purpose.
             identity = key
         if identity and identity not in found:

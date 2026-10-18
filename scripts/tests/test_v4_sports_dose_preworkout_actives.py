@@ -146,6 +146,33 @@ def test_a_single_active_title_mass_is_still_an_offlist_primary() -> None:
     assert {row["ingredient"] for row in res["metadata"]["dose_contributions"]} == {"l_carnitine", "bcaa"}
 
 
+@pytest.mark.parametrize("heading", ["Wheybolic Complex", "Recovery Complex"])
+def test_structural_blend_heading_is_not_a_separate_sports_purpose(heading):
+    from scoring_v4.scored_artifact import build_scored_artifact
+
+    parent = dict(_row(heading.lower().replace(" ", "_"), 22.4, "g", name=heading),
+                  is_parent_total=True)
+    product = _product(parent, _row("creatine_monohydrate", 5, "g"),
+                       _row("branched_chain_amino_acids", 7, "g"),
+                       name=f"{heading} Creatine BCAA")
+    artifact = build_scored_artifact(product)
+    dose = artifact["_v4_module_breakdown"]["dimensions"]["dose"]
+    assert dose["score"] == 15.7  # two actual preparations, not a third vote for their container
+    assert {entry["ingredient"] for entry in dose["metadata"]["dose_contributions"]} == {"creatine", "bcaa"}
+    assert dose["metadata"].get("assessment_status") != "incomplete"
+
+
+def test_an_actual_offlist_purpose_with_lost_amount_still_holds_sports_dose():
+    from scoring_v4.scored_artifact import build_scored_artifact
+
+    product = _product(_row("l_carnitine", None, "mg"),
+                       _row("branched_chain_amino_acids", 7, "g"),
+                       name="Carnitine BCAA")
+    dose = build_scored_artifact(product)["_v4_module_breakdown"]["dimensions"]["dose"]
+    assert dose["score"] is None
+    assert dose["metadata"]["reason_code"] == "unresolved_source_quantity"
+
+
 def test_onlist_underdosed_active_is_not_rescued_by_proxy() -> None:
     # An under-target creatine (1 g, on-list) keeps proportional contribution; the
     # off-list proxy floor must NOT rescue it, because creatine has a sports band.
