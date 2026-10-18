@@ -164,7 +164,7 @@ def test_missing_pediatric_ul_does_not_borrow_adult_rows(calculator):
     assert scope["reference_gap"] == "pediatric_ul_rows_below_14_not_in_reference_data"
 
 
-@pytest.mark.parametrize("target", ["Infants", "Children 4-8 Years", "Children under 14 years"])
+@pytest.mark.parametrize("target", ["Infants", "Children 4-8 Years", "Children under 14 years", "Children more than 1 but less than 4"])
 def test_explicit_younger_children_do_not_claim_adolescent_reference(enricher, target):
     product = {**_calcium(2200), "targetGroups": [target]}
     result = enricher._collect_rda_ul_data(product, min_servings_per_day=1, max_servings_per_day=1)

@@ -21747,7 +21747,7 @@ class SupplementEnricherV3:
             if not any(word in tag for word in ("child", "infant", "boys", "girls")):
                 continue
             age_range = re.search(r"(\d+)\s*[-–—]\s*(\d+)\s*(?:years?|yrs?)", tag)
-            under = re.search(r"(?:under|less than)\s*(\d+)\s*(?:years?|yrs?)", tag)
+            under = re.search(r"(?:under|less than)\s*(\d+)\b", tag)
             younger_only = ("infant" in tag and "child" not in tag or
                             age_range is not None and int(age_range.group(2)) < 14 or
                             under is not None and int(under.group(1)) <= 14)
