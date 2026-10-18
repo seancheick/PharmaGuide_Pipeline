@@ -315,7 +315,9 @@ def test_creatine_loading_peak_is_a_loading_protocol_not_an_overdose():
     # Without loading directions, 20 g/day stays the no-protocol band.
     plain = _directions(product([row("creatine", 5)]), "Take 1 scoop up to four times a day.", 1, 4)
     assert sports_dose(plain)["metadata"]["dose_basis"] == "creatine_above_10_g_no_loading_protocol"
-    assert result["score"] > sports_dose(plain)["score"]
+    # Dose V4.1 section 3.3 (D3): creatine above 10 g plateaus, so the regimen
+    # distinction is recorded in the basis, not in points.
+    assert result["score"] == sports_dose(plain)["score"]
     # Loading wording does not make any amount a protocol: 40 g/day stays high-dose.
     heavy = _directions(product([row("creatine", 10)]), "Loading Phase: Day 1 through 5: 4 scoops daily. Then 1 scoop daily.", 1, 4)
     assert sports_dose(heavy)["metadata"]["dose_basis"] == "creatine_above_10_g_no_loading_protocol"

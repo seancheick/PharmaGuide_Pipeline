@@ -420,8 +420,11 @@ def test_pending_strain_cannot_supply_an_aggregate_clinical_dose_proxy() -> None
 
     dose = score_dose(product)
     assert _disclosure_points(dose) == 0
-    # The total is a recorded label limit; the pending strain owns no measurement.
-    assert dose["components"]["cfu_adequacy"] == 0
+    # The total is a recorded label limit; the pending strain owns no
+    # measurement. Dose V4.1 section 3.2: an unmeasured label strain is a
+    # no-benchmark state and takes the shared neutral, never a measured tier.
+    assert dose["metadata"]["strain_measured_count"] == 0
+    assert dose["components"]["cfu_adequacy"] == 8.55
     assert dose["metadata"]["cfu_adequacy_basis"] == "aggregate_cfu_disclosed_only"
     assert dose["metadata"]["aggregate_cfu_proxy"] == {
         "applied": True, "reason": "aggregate_cfu_label_presence", "total_billion_count": 10.0,
@@ -502,7 +505,10 @@ def test_producer_cannot_export_a_badge_for_a_different_strain(
     dose = score_dose(product)
     assert dose["metadata"]["per_strain_cfu_disclosed_count"] == 1
     assert _disclosure_points(dose) == 10
-    assert dose["components"]["cfu_adequacy"] == 0
+    # Dose V4.1 section 3.2: the unregistered strain is a no-benchmark neutral,
+    # not a measured tier.
+    assert dose["metadata"]["strain_measured_count"] == 0
+    assert dose["components"]["cfu_adequacy"] == 8.55
 
 
 @pytest.mark.parametrize("strain,clinical_id,status", [
