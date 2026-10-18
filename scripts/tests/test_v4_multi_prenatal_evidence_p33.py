@@ -184,3 +184,25 @@ def test_multi_prenatal_evidence_does_not_import_v3_scorer() -> None:
 
     assert "import score_supplements" not in source
     assert "from score_supplements" not in source
+
+
+def test_prenatal_evidence_keeps_its_five_priority_members_when_dose_adds_choline():
+    from copy import deepcopy
+    from scoring_v4.scored_artifact import build_scored_artifact
+    from scoring_v4.modules.multi_prenatal_dose import PRENATAL_CORE_ANCHORS
+
+    assert 'choline' in PRENATAL_CORE_ANCHORS  # Dose's approved six-member group.
+    original_members = ['folate', 'iron', 'iodine', 'vitamin_d', 'vitamin_b12']
+    for members, expected in [([], 0), (['folate'], 4), (original_members, 20)]:
+        product = _product(ingredients=[_ingredient('vitamin_c'), *[_ingredient(key) for key in members]])
+        product['product_name'] = 'Complete Prenatal'
+        product['primary_type'] = 'multivitamin'
+        product['supplement_taxonomy'] = {'primary_type': 'multivitamin'}
+        baseline = build_scored_artifact(product)
+        with_choline = deepcopy(product)
+        with_choline['ingredient_quality_data']['ingredients_scorable'].append(_ingredient('choline'))
+        for artifact in (baseline, build_scored_artifact(with_choline)):
+            evidence = artifact['_v4_module_breakdown']['dimensions']['evidence']
+            assert artifact['quality_pillars_v4']['evidence']['score'] == expected
+            assert evidence['metadata']['authority_full_count'] == 5
+            assert evidence['metadata']['authority_expected_keys'] == original_members
