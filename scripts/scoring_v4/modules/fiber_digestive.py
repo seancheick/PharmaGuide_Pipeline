@@ -8,7 +8,7 @@ from typing import Any
 
 from scoring_v4.modules.fiber_digestive_dose import score_dose
 from scoring_v4.modules.fiber_digestive_formulation import score_formulation
-from scoring_v4.modules.generic import GenericModuleResult, _assemble_score, _empty_dimensions
+from scoring_v4.modules.generic import ModuleResult, _assemble_score, _empty_dimensions
 from scoring_v4.modules.generic_evidence import score_evidence
 from scoring_v4.modules.generic_manufacturer import (
     score_manufacturer_trust,
@@ -22,12 +22,12 @@ from scoring_v4.modules.verification_bonus import score_verification_bonus
 PHASE_MARKER = "P1.8_fiber_digestive_module"
 
 
-def score_fiber_digestive(product: Any) -> GenericModuleResult:
+def score_fiber_digestive(product: Any) -> ModuleResult:
     """Score fiber/digestive products against category-specific dose/form facts."""
     if not isinstance(product, dict):
         product = {}
 
-    result = GenericModuleResult(module="fiber_digestive", dimensions=_empty_dimensions())
+    result = ModuleResult(module="fiber_digestive", dimensions=_empty_dimensions())
 
     formulation_payload = score_formulation(product)
     formulation_dim = result.dimensions["formulation"]

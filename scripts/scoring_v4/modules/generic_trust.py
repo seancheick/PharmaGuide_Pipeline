@@ -26,6 +26,7 @@ from scoring_v4.modules.generic_helpers import (
 from scoring_v4.cert_evidence import (
     audited_gmp_evidence,
     cert_entry_brand_matches_product,
+    cert_program_key,
     facility_audit_programs,
     is_verified_product_cert_entry,
     marine_cert_tokens,
@@ -239,7 +240,7 @@ def _label_asserted_quality_programs(product: Dict[str, Any], omega_like: bool) 
         program = display or rule_id
         if not program or not _is_label_asserted_quality_program(display, rule_id, omega_like):
             continue
-        program = _label_asserted_program_key(display, rule_id)
+        program = cert_program_key(display, rule_id)
         if program in seen:
             continue
         seen.add(program)
@@ -256,27 +257,6 @@ def _is_label_asserted_quality_program(display: str, rule_id: str, omega_like: b
     return omega_like and any(
         token in haystack for token in LABEL_ASSERTED_OMEGA_ONLY_WHITELIST
     )
-
-
-def _label_asserted_program_key(display: str, rule_id: str) -> str:
-    haystack = f"{display} {rule_id}"
-    if "ifos" in haystack:
-        return "ifos"
-    if "usp" in haystack:
-        return "usp verified"
-    if "informed choice" in haystack:
-        return "informed choice"
-    if "informed sport" in haystack:
-        return "informed sport"
-    if "bscg" in haystack:
-        return "bscg"
-    if "labdoor" in haystack:
-        return "labdoor tested"
-    if "nsf" in haystack and "sport" in haystack:
-        return "nsf sport"
-    if "nsf" in haystack:
-        return "nsf certified"
-    return display or rule_id
 
 
 def _score_b4b(product: Dict[str, Any]) -> tuple[float, Dict[str, Any]]:

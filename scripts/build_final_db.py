@@ -1133,13 +1133,24 @@ def _resolver_status_in(
     resolver's normalized-alias index does. Same alias coverage the per-
     ingredient blob entries use, applied at the product-level flag layer.
     """
+    # Fail closed (Sean, 2026-10-18). ``False`` below means "no banned or
+    # recalled match", so an unloadable safety index must raise, never read
+    # as a clean product. The per-product export loop quarantines the product
+    # and a --strict build stops, the same path the unguarded loader calls in
+    # ``build_detail_blob`` already take.
+    loader = "_get_active_banned_recalled_index"
     try:
         index = _get_active_banned_recalled_index()
+        loader = "_get_shared_inactive_resolver"
         inactive_resolver = _get_shared_inactive_resolver()
     except Exception:
-        # Defensive fallback — never crash a build because the resolver
-        # index couldn't load. Original contaminant_data path still runs.
-        return False
+        logger.error(
+            "banned/recalled bridge: %s failed; refusing to clear the product "
+            "without the safety index",
+            loader,
+            exc_info=True,
+        )
+        raise
     for src_key in ("activeIngredients", "inactiveIngredients"):
         for ing in safe_list(enriched.get(src_key)):
             if not isinstance(ing, dict):

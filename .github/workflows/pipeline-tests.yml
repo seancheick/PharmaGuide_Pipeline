@@ -55,7 +55,8 @@ jobs:
       - name: Fast rung
         run: |
           export PG_PYTHON="$(command -v python)"
-          # Each job selects a disjoint slice of the canonical fast profile.
+          # Each job selects a disjoint slice of the canonical fast profile,
+          # balanced by measured duration (scripts/tests/shard_plan.json).
           export PG_TEST_WORKERS=1
           export PG_TEST_SHARD_INDEX=${{ matrix.shard }}
           export PG_TEST_SHARD_COUNT=4

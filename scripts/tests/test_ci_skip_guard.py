@@ -83,14 +83,98 @@ def test_empty_junit_is_not_evidence_of_a_completed_suite(tmp_path):
     assert undeclared_skips(p)
 
 
-def test_shards_cover_every_fast_file_exactly_once():
+@pytest.mark.parametrize('shard_count', [1, 2, 3, 4, 5, 8])
+def test_shards_cover_every_fast_file_exactly_once(shard_count):
     from test_profiles import iter_profile_paths
     expected = set(iter_profile_paths('fast'))
-    shards = [list(iter_profile_paths('fast', shard_index=i, shard_count=4)) for i in range(4)]
+    shards = [list(iter_profile_paths('fast', shard_index=i, shard_count=shard_count)) for i in range(shard_count)]
     assert all(shards)
     flattened = [p for shard in shards for p in shard]
     assert len(flattened) == len(set(flattened))
     assert set(flattened) == expected
+    assert all(shard == sorted(shard) for shard in shards)
+
+
+def _touch_tests(tmp_path, names):
+    for name in names:
+        (tmp_path / name).write_text('')
+    return tmp_path
+
+
+def test_planned_files_go_longest_first_to_the_least_loaded_shard(tmp_path):
+    import json
+    from test_profiles import iter_profile_paths
+    root = _touch_tests(tmp_path, ['test_a.py', 'test_b.py', 'test_c.py', 'test_d.py', 'test_e.py', 'test_f.py', 'test_g.py'])
+    (root / 'shard_plan.json').write_text(json.dumps({'durations': {
+        'test_a.py': 10, 'test_b.py': 8, 'test_c.py': 6, 'test_d.py': 4, 'test_e.py': 2}}))
+    shards = [[p.name for p in iter_profile_paths('fast', root, shard_index=i, shard_count=2)] for i in range(2)]
+    # a->0 (10), b->1 (8), c->1 (14), d->0 (14), e->0 on the tie (16); f, g unplanned round-robin.
+    assert shards == [['test_a.py', 'test_d.py', 'test_e.py', 'test_f.py'], ['test_b.py', 'test_c.py', 'test_g.py']]
+    again = [[p.name for p in iter_profile_paths('fast', root, shard_index=i, shard_count=2)] for i in range(2)]
+    assert again == shards
+
+
+def test_without_a_plan_sharding_is_round_robin_by_sorted_name(tmp_path):
+    from test_profiles import iter_profile_paths
+    root = _touch_tests(tmp_path, [f'test_{i:02d}.py' for i in range(7)])
+    expected = sorted(root.glob('test_*.py'))
+    for index in range(3):
+        assert list(iter_profile_paths('fast', root, shard_index=index, shard_count=3)) == expected[index::3]
+
+
+def test_a_plan_with_a_negative_or_non_finite_duration_is_rejected(tmp_path):
+    import json
+    from test_profiles import iter_profile_paths, load_shard_plan
+    root = _touch_tests(tmp_path, ['test_a.py', 'test_b.py'])
+    for bad in (-1, 'NaN', 'Infinity'):
+        (root / 'shard_plan.json').write_text('{"durations": {"test_a.py": %s, "test_b.py": 1}}' % bad)
+        with pytest.raises(ValueError):
+            load_shard_plan(root)
+        with pytest.raises(ValueError):
+            list(iter_profile_paths('fast', root, shard_index=0, shard_count=2))
+    (root / 'shard_plan.json').write_text(json.dumps({'durations': {'test_a.py': 0, 'test_b.py': 1}}))
+    assert load_shard_plan(root) == {'test_a.py': 0.0, 'test_b.py': 1.0}
+
+
+def test_committed_shard_plan_names_its_source_run_and_balances_the_fast_rung():
+    """Periodic regeneration task: once fewer than 90% of fast files are in the plan
+    (new test files round-robin correctly until then), download the four junit-fast-<i>
+    artifacts of a recent green run and rerun scripts/test_shard_plan.py --run-id <id>.
+    Run 39070168203's artifacts expire 2027-01-15; any later green run serves."""
+    import json
+    from test_profiles import SHARD_PLAN_NAME, iter_profile_paths, load_shard_plan, shard_assignment
+    tests_dir = Path(__file__).resolve().parent
+    plan_file = json.loads((tests_dir / SHARD_PLAN_NAME).read_text())
+    assert plan_file['_metadata']['source_run_id'].isdigit()
+    plan = load_shard_plan(tests_dir)
+    assert plan and all(seconds >= 0 for seconds in plan.values())
+    fast = list(iter_profile_paths('fast'))
+    known = [p for p in fast if p.name in plan]
+    assert len(known) >= 0.9 * len(fast), 'regenerate scripts/tests/shard_plan.json (scripts/test_shard_plan.py)'
+    loads = [sum(plan.get(p.name, 0.0) for p in shard) for shard in shard_assignment(fast, 4, plan)]
+    assert max(loads) <= 1.05 * (sum(loads) / 4)
+
+
+def test_shard_plan_regenerates_per_file_seconds_from_junit(tmp_path):
+    import json
+    from test_shard_plan import build_plan, main
+    one = tmp_path / 'one.xml'
+    one.write_text('<testsuites><testsuite>'
+                   '<testcase classname="scripts.tests.test_slow.TestX" name="test_a" time="1.5"/>'
+                   '<testcase classname="scripts.tests.test_slow" name="test_b" time="2.25"/>'
+                   '<testcase classname="scripts.tests.test_quick" name="test_c" time="0.1"><skipped message="x"/></testcase>'
+                   '</testsuite></testsuites>')
+    two = tmp_path / 'two.xml'
+    two.write_text('<testsuites><testsuite>'
+                   '<testcase classname="scripts.tests.test_quick" name="test_d" time="0.4"/>'
+                   '</testsuite></testsuites>')
+    plan = build_plan([one, two], '123')
+    assert plan['durations'] == {'test_quick.py': 0.5, 'test_slow.py': 3.75}
+    assert plan['_metadata']['source_run_id'] == '123'
+    assert plan['_metadata']['files'] == 2 and plan['_metadata']['total_seconds'] == 4.2
+    out = tmp_path / 'plan.json'
+    assert main([str(one), str(two), '--run-id', '123', '--out', str(out)]) == 0
+    assert json.loads(out.read_text())['durations'] == plan['durations']
 
 
 def test_invalid_shard_does_not_fall_back_to_the_whole_suite():

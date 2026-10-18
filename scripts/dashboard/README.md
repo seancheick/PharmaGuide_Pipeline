@@ -26,13 +26,19 @@ streamlit run scripts/dashboard/app.py -- \
   --build-root scripts/dist
 ```
 
+The `Clinical Copy` view compares pipeline data files with the app's
+`assets/reference_data` copies. Point it at the Flutter checkout the same way the
+release scripts are pointed: `FLUTTER_REPO=/path/to/app` in the environment, or
+`-- --flutter-repo /path/to/app`. Without either, the view reports the Flutter asset
+sync as not configured instead of comparing.
+
 Open a specific view directly after launch with `?view=`:
 
 - `command-center`
 - `product-inspector`
 - `pipeline-health`
 - `data-quality`
-- `section-a-audit`
+- `pillar-audit`
 - `observability`
 - `release-diff`
 - `batch-diff`
@@ -60,6 +66,18 @@ Important: the dashboard intentionally blends different data planes.
 - `Dataset Outputs` come from `scripts/products/output_*`
 
 Those timelines may not match. The UI now labels that explicitly per page.
+
+## Scoring config and CAERS
+
+- The `Config Snapshot` tab of `Data Quality` shows the production v4 config: the
+  version and fingerprint of `scripts/scoring_v4/config/quality_score.json` and
+  `scripts/data/omega_rubric.json` from `scoring_v4/config_registry.py`, the
+  pillar maxima, and whether the released catalog was scored with the same
+  config (`products_core.v4_config_fingerprint`).
+- `CAERS Audit` is analytics only. The v4 score applies no CAERS penalty; the
+  v3 B8 penalty was disabled on 2026-04-30 and removed on 2026-06-24, and the
+  `Scoring Status` tab records why.
+- No view reads the retired v3 file `scripts/config/scoring_config.json`.
 
 ## Verification
 

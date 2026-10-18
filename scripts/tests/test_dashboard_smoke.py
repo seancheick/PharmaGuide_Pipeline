@@ -31,8 +31,10 @@ def test_all_dashboard_views_smoke_render(dashboard_app):
         ("intelligence", lambda: views.render_intelligence(data)),
         ("pillar-audit", lambda: views.render_pillar_audit(data)),
         ("suppression-audit", lambda: views.render_suppression_audit(data)),
+        ("caers-audit", lambda: views.render_audit_caers(data)),
         ("scoring-integrity", lambda: views.render_scoring_integrity(data)),
         ("module-health", lambda: views.render_module_health(data)),
+        ("clinical-copy", lambda: views.render_safety_copy(data)),
     ]
 
     for slug, renderer in view_renderers:
@@ -488,3 +490,123 @@ def test_safety_copy_depletion_summary_reads_the_real_file_key(dashboard_app):
     )
     summary = safety_copy._depletions_summary(data)
     assert summary["total"] == data["_metadata"]["total_entries"] > 0
+
+
+def _empty_roots(tmp_path):
+    scan_dir = tmp_path / "scan"
+    build_root = tmp_path / "build"
+    scan_dir.mkdir()
+    build_root.mkdir()
+    return scan_dir, build_root
+
+
+def _pipeline_schema(name):
+    data = json.loads((Path(__file__).resolve().parents[1] / "data" / name).read_text())
+    return data["_metadata"]["schema_version"]
+
+
+def _messages(widget):
+    return [str(call.args[0]) for call in widget.call_args_list]
+
+
+def _flutter_sync_tables(st):
+    """The Clinical Copy view renders exactly one table with a ``flutter`` column."""
+    return [
+        call.args[0]
+        for call in st.dataframe.call_args_list
+        if "flutter" in getattr(call.args[0], "columns", [])
+    ]
+
+
+def test_dashboard_config_resolves_flutter_repo_from_env_then_flag(
+    dashboard_app, monkeypatch, tmp_path
+):
+    """The dashboard finds the app checkout the way the release scripts do:
+    FLUTTER_REPO, overridden by --flutter-repo, and no personal-path default."""
+    import importlib
+    import sys
+
+    get_config = importlib.import_module("scripts.dashboard.config").get_config
+    monkeypatch.setattr(sys, "argv", ["app.py"])
+    monkeypatch.delenv("FLUTTER_REPO", raising=False)
+    assert get_config().flutter_repo is None
+
+    monkeypatch.setenv("FLUTTER_REPO", str(tmp_path / "from_env"))
+    assert get_config().flutter_repo == (tmp_path / "from_env").resolve()
+
+    monkeypatch.setattr(
+        sys, "argv", ["app.py", "--flutter-repo", str(tmp_path / "from_flag")]
+    )
+    assert get_config().flutter_repo == (tmp_path / "from_flag").resolve()
+
+
+def test_safety_copy_without_flutter_repo_reports_assets_not_configured(
+    dashboard_app, tmp_path
+):
+    scan_dir, build_root = _empty_roots(tmp_path)
+    data = dashboard_app.load_dashboard_data(
+        dashboard_app.DashboardConfig(scan_dir=scan_dir, build_root=build_root)
+    )
+    assert data.flutter_repo is None
+    st = dashboard_app.st
+
+    dashboard_app.views.render_safety_copy(data)
+
+    assert any("Flutter assets not configured" in m for m in _messages(st.info))
+    assert _flutter_sync_tables(st) == []
+    assert not any("Flutter assets in sync" in m for m in _messages(st.success))
+
+
+def test_safety_copy_with_missing_flutter_assets_reports_unavailable(
+    dashboard_app, tmp_path
+):
+    scan_dir, build_root = _empty_roots(tmp_path)
+    absent = tmp_path / "absent_app"
+    data = dashboard_app.load_dashboard_data(
+        dashboard_app.DashboardConfig(
+            scan_dir=scan_dir, build_root=build_root, flutter_repo=absent
+        )
+    )
+    st = dashboard_app.st
+
+    dashboard_app.views.render_safety_copy(data)
+
+    unavailable = [m for m in _messages(st.warning) if "Flutter assets unavailable" in m]
+    assert unavailable and str(absent / "assets" / "reference_data") in unavailable[0]
+    assert _flutter_sync_tables(st) == []
+    assert not any("Flutter assets in sync" in m for m in _messages(st.success))
+
+
+def test_safety_copy_with_flutter_repo_compares_asset_schema_versions(
+    dashboard_app, tmp_path
+):
+    scan_dir, build_root = _empty_roots(tmp_path)
+    flutter = tmp_path / "app"
+    assets = flutter / "assets" / "reference_data"
+    assets.mkdir(parents=True)
+    (assets / "medication_depletions.json").write_text(
+        json.dumps({"_metadata": {"schema_version": _pipeline_schema("medication_depletions.json")}})
+    )
+    (assets / "banned_recalled_ingredients.json").write_text(
+        json.dumps({"_metadata": {"schema_version": "0.0.0-stale"}})
+    )
+    data = dashboard_app.load_dashboard_data(
+        dashboard_app.DashboardConfig(
+            scan_dir=scan_dir, build_root=build_root, flutter_repo=flutter
+        )
+    )
+    assert data.flutter_repo == flutter
+    st = dashboard_app.st
+
+    dashboard_app.views.render_safety_copy(data)
+
+    (table,) = _flutter_sync_tables(st)
+    rows = table.set_index("file")
+    assert rows.loc["medication_depletions.json", "status"] == "✅ synced"
+    assert rows.loc["banned_recalled_ingredients.json", "status"] == "⚠️ stale"
+    assert rows.loc["synergy_cluster.json", "flutter"] == "not an asset"
+    assert any(
+        "Flutter sync stale: banned_recalled_ingredients.json" in m
+        for m in _messages(st.warning)
+    )
+    assert not any("Flutter assets" in m for m in _messages(st.info))

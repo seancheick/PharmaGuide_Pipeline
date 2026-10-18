@@ -19,7 +19,7 @@ import re
 from typing import Any, Dict, Optional
 
 from scoring_v4.dose_safety import resolve_dose_safety
-from scoring_v4.modules.generic import GenericModuleResult, _assemble_score, _empty_dimensions
+from scoring_v4.modules.generic import ModuleResult, _assemble_score, _empty_dimensions
 from evidence_resolver import resolve_authority_panel_evidence
 from scoring_v4.modules.generic_evidence import authority_panel_result_state
 from scoring_v4.modules.generic_formulation import UNRATED_FORM_NEUTRAL, shared_formulation_penalty_detail
@@ -306,7 +306,7 @@ def _score_evidence(product: Dict[str, Any]) -> Dict[str, Any]:
     }
 
 
-def _fill_dimension(result: GenericModuleResult, name: str, payload: Dict[str, Any]) -> None:
+def _fill_dimension(result: ModuleResult, name: str, payload: Dict[str, Any]) -> None:
     dim = result.dimensions[name]
     dim.score = payload["score"]
     dim.components = payload["components"]
@@ -314,11 +314,11 @@ def _fill_dimension(result: GenericModuleResult, name: str, payload: Dict[str, A
     dim.metadata = payload.get("metadata", {})
 
 
-def score_b_complex(product: Any) -> GenericModuleResult:
+def score_b_complex(product: Any) -> ModuleResult:
     if not isinstance(product, dict):
         product = {}
 
-    result = GenericModuleResult(module="b_complex", dimensions=_empty_dimensions())
+    result = ModuleResult(module="b_complex", dimensions=_empty_dimensions())
 
     _fill_dimension(result, "formulation", _score_formulation(product))
     _fill_dimension(result, "dose", score_declared_serving_dose(product, _score_dose))

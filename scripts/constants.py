@@ -857,7 +857,9 @@ FUZZY_MATCHING_THRESHOLDS = {
 }
 
 # NOTE: SCORING_CONSTANTS and EVIDENCE_SCORING were removed (dead code).
-# All scoring values are now in config/scoring_config.json per "_important_rules": "config_driven".
+# The production scorer (score_supplements_v4.py -> scoring_v4/) reads only
+# scoring_v4/config/quality_score.json; config/scoring_config.json is the retired v3 config
+# (see SCORING_README.md), kept for its vocabulary tests and the dashboard loader.
 
 # Unit conversion aliases and mappings
 UNIT_ALIASES = {

@@ -30,7 +30,7 @@ all scored classes uniformly.
 
 Per §13 architecture lock, this module does not import from
 `score_supplements.py` (v3). It reuses the shared v4 breakdown dataclasses
-from `scoring_v4.modules.generic` because the public shape is identical
+(the one ModuleResult) from `scoring_v4.modules.generic` because the public shape is identical
 across modules; only weights and sub-rubrics differ.
 """
 
@@ -38,14 +38,11 @@ from __future__ import annotations
 
 from scoring_v4.modules.generic_helpers import score_declared_serving_dose
 
-from dataclasses import dataclass, field
-from typing import Any, Dict, Optional
+from typing import Any, Dict
 
 from scoring_v4.modules.generic import (
     DimensionResult,
-    ManufacturerTrustResult,
-    ManufacturerViolationsResult,
-    VerificationBonusResult,
+    ModuleResult,
     _assemble_score,
 )
 from scoring_v4.modules.generic_manufacturer import (
@@ -57,10 +54,7 @@ from scoring_v4.modules.multi_prenatal_dose import score_dose
 from scoring_v4.modules.multi_prenatal_evidence import score_evidence
 from scoring_v4.modules.multi_prenatal_formulation import score_formulation
 from scoring_v4.modules.multi_prenatal_transparency import score_transparency
-from scoring_v4.modules.safety_hygiene import (
-    SafetyHygieneResult,
-    score_safety_hygiene_base,
-)
+from scoring_v4.modules.safety_hygiene import score_safety_hygiene_base
 
 
 PHASE_MARKER = "P3.6_multi_prenatal_final_assembly"
@@ -76,49 +70,11 @@ _CM = _cfg_block("category_magnitudes", "multi_prenatal")["multi_prenatal"]
 DIMENSION_CAPS = tuple((n, c) for n, c in _CM["dimension_caps"])
 
 
-@dataclass
-class MultiPrenatalModuleResult:
-    """Container for the multi/prenatal-module breakdown.
-
-    Mirrors GenericModuleResult / ProbioticModuleResult shape so consumers
-    can read `v4_breakdown["module"]` uniformly regardless of
-    class. P3.6 populates all four core dimensions, additive adjustments, and
-    final raw-score math.
-    """
-
-    module: str = "multi_or_prenatal"
-    dimensions: Dict[str, DimensionResult] = field(default_factory=dict)
-    verification_bonus: VerificationBonusResult = field(default_factory=VerificationBonusResult)
-    manufacturer_trust: ManufacturerTrustResult = field(default_factory=ManufacturerTrustResult)
-    manufacturer_violations: ManufacturerViolationsResult = field(default_factory=ManufacturerViolationsResult)
-    safety_hygiene_base: SafetyHygieneResult = field(default_factory=SafetyHygieneResult)
-    botanical_dose_deferred: bool = False
-    raw_score_100: Optional[float] = None
-    score_100: Optional[float] = None
-    phase: str = PHASE_MARKER
-    metadata: Dict[str, Any] = field(default_factory=dict)
-
-    def to_breakdown(self) -> Dict[str, Any]:
-        """Render as the public v4-breakdown dict contract."""
-        return {
-            "module": self.module,
-            "dimensions": {name: dim.to_dict() for name, dim in self.dimensions.items()},
-            "verification_bonus": self.verification_bonus.to_dict(),
-            "manufacturer_trust": self.manufacturer_trust.to_dict(),
-            "manufacturer_violations": self.manufacturer_violations.to_dict(),
-            "safety_hygiene_base": self.safety_hygiene_base.to_dict(),
-            "raw_score_100": self.raw_score_100,
-            "score_100": self.score_100,
-            "phase": self.phase,
-            "metadata": dict(self.metadata),
-        }
-
-
 def _empty_dimensions() -> Dict[str, DimensionResult]:
     return {name: DimensionResult(max=float(cap)) for name, cap in DIMENSION_CAPS}
 
 
-def score_multi_prenatal(product: Any) -> MultiPrenatalModuleResult:
+def score_multi_prenatal(product: Any) -> ModuleResult:
     """Score a multi/prenatal-class product against the current P3 state.
 
     Never raises on malformed input. Layer 2 completeness owns production
@@ -128,7 +84,9 @@ def score_multi_prenatal(product: Any) -> MultiPrenatalModuleResult:
     if not isinstance(product, dict):
         product = {}
 
-    result = MultiPrenatalModuleResult(
+    result = ModuleResult(
+        module="multi_or_prenatal",
+        phase=PHASE_MARKER,
         dimensions=_empty_dimensions(),
         metadata={
             "module_state": "complete",

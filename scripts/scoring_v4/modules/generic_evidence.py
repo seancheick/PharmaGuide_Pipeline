@@ -221,7 +221,7 @@ def score_evidence(product: Dict[str, Any], *, apply_primary_floor: bool = False
     """Compute the generic-module Evidence dimension.
 
     Returns a dimension payload compatible with
-    `GenericModuleResult.dimensions["evidence"]`.
+    `ModuleResult.dimensions["evidence"]`.
 
     `apply_primary_floor`: the Phase-8 primary-ingredient floor is opt-in per
     caller. The generic, sports and fiber modules pass True (with

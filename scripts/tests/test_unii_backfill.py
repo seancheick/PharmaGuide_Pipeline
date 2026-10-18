@@ -108,7 +108,7 @@ def test_apply_with_unknown_entry_ids_refused(tmp_path):
 
 
 # ============================================================================
-# Section 2 — _normalize_unii contract still applies inside backfill
+# Section 2 — the owner's normalize_unii contract still applies inside backfill
 # ============================================================================
 
 
@@ -129,7 +129,7 @@ def test_apply_with_unknown_entry_ids_refused(tmp_path):
 def test_normalize_unii_contract(inp, expected):
     import backfill_unii_from_cache as bf
 
-    assert bf._normalize_unii(inp) == expected
+    assert bf.normalize_unii(inp) == expected
 
 
 # ============================================================================

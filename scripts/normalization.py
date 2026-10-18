@@ -13,7 +13,7 @@ import math
 import string
 import unicodedata
 from functools import lru_cache
-from typing import Iterable, Optional, Tuple
+from typing import Any, Iterable, Optional, Tuple
 
 VERSION = "1.0.0"
 
@@ -328,6 +328,33 @@ def classify_folate_form(raw: str) -> str:
     ):
         return FOLATE_FORM_FOOD
     return FOLATE_FORM_UNKNOWN
+
+
+# DSLD writes "0" or "1" for "no UNII assigned".
+UNII_PLACEHOLDERS = frozenset({"", "0", "1"})
+
+
+def normalize_unii(value: Any) -> Optional[str]:
+    """Canonicalize a UNII string. Returns None for placeholders/garbage.
+
+    The one UNII normalizer: the cleaner's index build and lookups, the
+    enricher and the api_audit UNII tools all call it. FDA UNIIs are exactly
+    10 alphanumeric characters. DSLD raw labels and reference data may emit
+    them with whitespace or mixed case, and DSLD uses "0" and "1" as
+    placeholders. Strip whitespace, uppercase, and reject placeholders and
+    malformed values.
+
+    Returns:
+        Optional[str]: 10-char uppercase alphanumeric UNII, or None.
+    """
+    if not isinstance(value, str):
+        return None
+    canon = value.strip().upper()
+    if not canon or canon in UNII_PLACEHOLDERS:
+        return None
+    if len(canon) != 10 or not canon.isalnum():
+        return None
+    return canon
 
 
 @lru_cache(maxsize=65536)
