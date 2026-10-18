@@ -289,7 +289,6 @@ def resolve_omega_evidence_standard(product: Mapping[str, Any]) -> Dict[str, Any
 
     # Read magnitudes only from the shared config, never from clinical data.
     weak_score = float(policy["omega_reviewed_weak"]["pillar_score"])
-    strong_score = float(policy["triglyceride_strong"]["pillar_score"])
     prenatal_score = float(policy["prenatal_dha_intake_authority"]["pillar_score"])
 
     normalized_title = _canonical_text(title)
@@ -376,8 +375,11 @@ def resolve_omega_evidence_standard(product: Mapping[str, Any]) -> Dict[str, Any
     elif not explicit_epa_dha:
         applicability_reason = "held_dha_only_or_incomplete_epa_dha_identity" if dha_ps > 0 else "held_uncertain_identity"
     elif triglyceride_lowering:
-        selected = standards["triglyceride_strong"]
-        score = strong_score
+        # A claimed purpose selects the Dose context, but a label claim cannot
+        # establish the population/preparation applicability of treatment trials.
+        # Keep their clinical record without awarding prescription-level credit.
+        selected = standards["omega_reviewed_weak"]
+        score = weak_score
         applicability_reason = "explicit_adult_triglyceride_lowering_purpose"
     else:
         selected = standards["omega_reviewed_weak"]
