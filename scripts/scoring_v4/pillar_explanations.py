@@ -147,6 +147,7 @@ _AGGREGATION_COPY = {
     "single_profile_assessment": "One category profile assesses the product's main active against its studied range.",
 }
 _ASSESSMENT_COPY = {
+    "panel_component": ("recorded rubric contribution", "pharmaguide_policy"),
     "contribution_policy_target": ("PharmaGuide contribution target (20% of the FDA Daily Value)", "pharmaguide_policy"),
     "dri_reference": ("RDA/AI", "nutritional_reference"),
     "clinical_anchor": ("reviewed clinical anchor", "clinical_reference"),
@@ -178,24 +179,46 @@ def _dose_contributions(module: Optional[str], metadata: Dict[str, Any], factor:
         label, kind = _ASSESSMENT_COPY.get(str(entry.get("assessment")), (
             str(entry.get("band") or entry.get("assessment") or "assessment").replace("_", " "), "clinical_reference"))
         out.append({"ingredient": str(entry.get("ingredient") or ""), "assessment": entry.get("assessment"),
-                    "reference": label, "reference_kind": kind,
+                    "reference": ("printed-amount band; qualified label amount" if entry.get("quantity_operator") not in (None, "=")
+                                  else label), "reference_kind": kind,
                     **{key: entry.get(key) for key in ("amount_at_minimum", "amount_at_maximum", "amount_unit",
                                                        "amount_per_serving", "reference_value", "pct_of_reference",
-                                                       "absorption_context_per_administration_mg")
+                                                       "absorption_context_per_administration_mg", "quantity_operator", "frequency_defaulted")
                        if entry.get(key) is not None},
                     "points": round(_num(entry["credit_raw"]) * factor, 2)})
     for strain in metadata.get("cfu_adequacy_contributions") or []:
         if isinstance(strain, dict) and _num(strain.get("points")) is not None:
             state = str(strain.get("state") or "measured")
+            minimum_servings = _num((metadata.get("daily_use") or {}).get("minimum_servings"))
+            minimum_cfu = _num(strain.get("cfu_per_day"))
             out.append({"ingredient": str(strain.get("strain") or strain.get("clinical_id") or "unlisted strain"), "assessment": state,
                         "reference": "strain CFU benchmark" if state == "measured" else state.replace("_", " "),
                         "reference_kind": "industry_potency_reference" if state == "measured" else "pharmaguide_policy",
+                        "amount_at_minimum": strain.get("cfu_per_day"),
+                        "amount_at_maximum": strain.get("maximum_cfu_per_day"), "amount_unit": "CFU",
+                        "amount_per_serving": minimum_cfu / minimum_servings if minimum_cfu is not None and minimum_servings else None,
                         "points": round(_num(strain["points"]) * 3.0 * factor, 2)})
     reference = metadata.get("adequacy_reference")
     if isinstance(reference, dict) and _num(reference.get("target_mg_day")) is not None:
-        out.append({"ingredient": "DHA" if reference.get("purpose") == "prenatal_dha" else "EPA + DHA",
+        omega = {"ingredient": "DHA" if reference.get("purpose") == "prenatal_dha" else "EPA + DHA",
                     "assessment": reference.get("purpose"), "reference": f"{reference['target_mg_day']:g} mg/day reference",
-                    "reference_kind": "nutritional_reference", "amount_mg_day": reference.get("amount_mg_day")})
+                    "reference_kind": "supported_minimum" if reference.get("purpose") == "triglyceride" else "nutritional_reference",
+                    "reference_value": reference.get("target_mg_day"), "amount_unit": "mg",
+                    "amount_mg_day": reference.get("amount_mg_day"), "amount_at_minimum": reference.get("amount_mg_day")}
+        minimum_servings = _num((metadata.get("daily_use") or {}).get("minimum_servings"))
+        maximum_servings = _num((metadata.get("daily_use") or {}).get("maximum_servings"))
+        if minimum_servings and _num(reference.get("amount_mg_day")) is not None:
+            per_serving = _num(reference["amount_mg_day"]) / minimum_servings
+            omega.update(amount_per_serving=per_serving,
+                         amount_at_maximum=per_serving * maximum_servings if maximum_servings else None)
+        if out:
+            out[0].update(omega)
+        else:
+            out.append(omega)
+    if metadata.get("fiber_dose_source") and out:
+        out[0].update(amount_per_serving=metadata.get("fiber_grams_per_serving"),
+                      amount_at_minimum=metadata.get("fiber_grams_daily_benchmark"),
+                      amount_at_maximum=metadata.get("fiber_grams_daily_maximum"), amount_unit="g")
     return out
 
 
@@ -213,18 +236,25 @@ def _dose_receipt(pillar: Dict[str, Any], dose: Dict[str, Any], module: Optional
     if isinstance(ceiling, dict) and _num(ceiling.get("cap_public")) is not None:
         upper = {key: ceiling.get(key) for key in (
             "kind", "nutrient", "ul", "ul_unit", "ul_population", "pct_ul", "pct_ul_at_minimum", "amount_mg_day",
-            "amount_mg_day_at_minimum", "exceeds_above_mg_day", "minimum_exceeds", "cap_public") if ceiling.get(key) is not None}
+            "amount_mg_day_at_minimum", "exceeds_above_mg_day", "minimum_exceeds", "cap_public", "quantity_operator") if ceiling.get(key) is not None}
         upper["policy"] = "pharmaguide_scoring_policy"
     receipt = {
         "daily_use": metadata.get("daily_use"),
         "aggregation": _dose_aggregation(module, metadata),
         "contributions": _dose_contributions(module, metadata, factor),
+        "reference_assessments": metadata.get("reference_assessments") or [],
         "adequacy_before_safety": adequacy,
         "upper_reference": upper,
         "final": score,
     }
     cap = _num((upper or {}).get("cap_public"))
+    points = [_num(item.get("points")) for item in receipt["contributions"]]
+    accounted = sum(p for p in points if p is not None)
+    if receipt["aggregation"] in {"declared_purpose_equal_weight", "assessed_nutrient_average",
+                                 "co_primary_average", "strain_average_with_neutral_states"} and points:
+        accounted /= len(points)
     receipt["reconciles"] = (score is not None and adequacy is not None
+                             and abs(adequacy - min(weight, accounted)) < 0.051
                              and abs(score - (min(adequacy, cap) if cap is not None else adequacy)) < 0.05)
     return receipt
 
@@ -238,8 +268,12 @@ def _dose_receipt_facts(receipt: Dict[str, Any]) -> List[Dict[str, Any]]:
             low, high, unit = _num(item.get("amount_at_minimum")), _num(item.get("amount_at_maximum")), item.get("amount_unit") or ""
             if low is None:
                 return ""
-            span = f"{low:g} {unit}/day" if high in (None, low) else f"{low:g}-{high:g} {unit}/day"
-            return f", {span} by directions".replace(" /day", "/day")
+            operator = item.get("quantity_operator") or ""
+            operator = "" if operator == "=" else operator
+            span = f"{operator}{low:g} {unit}/day" if high in (None, low) else f"{operator}{low:g}-{high:g} {unit}/day"
+            defaulted = item.get("frequency_defaulted", (receipt.get("daily_use") or {}).get("defaulted"))
+            basis = "at the default of one serving a day" if defaulted else "by directions"
+            return f", {span} {basis}".replace(" /day", "/day")
 
         shown = "; ".join(
             f"{item['ingredient']}: {item['reference']}"
@@ -263,11 +297,25 @@ def _dose_receipt_facts(receipt: Dict[str, Any]) -> List[Dict[str, Any]]:
                               f"One serving provides {per_serving:g} {item.get('amount_unit') or 'mg'} of {item['ingredient']}. "
                               f"NIH notes the body absorbs calcium best in amounts of {context:g} mg or less at a time. "
                               "This is context only and does not change the score.")})
+    if aggregation in {"panel", "b_complex_panel"}:
+        for index, row in enumerate(receipt.get("reference_assessments") or []):
+            low, high = _num(row.get("per_day_min")), _num(row.get("per_day_max"))
+            reference, pct = _num(row.get("rda_ai")), _num(row.get("pct_rda"))
+            if reference is None or pct is None:
+                continue
+            exposure = ""
+            if low is not None:
+                span = f"{low:g}" if high in (None, low) else f"{low:g}-{high:g}"
+                exposure = f"{span} {row.get('unit') or ''}/day; "
+            population = f" ({row['reference_population']})" if row.get("reference_population") else ""
+            facts.append({"id": f"dose_panel_reference_{index}", "label": str(row.get("nutrient") or "Panel nutrient"),
+                          "value_display": f"{exposure}{pct:g}% of the assessed RDA/AI{population} at the lowest daily use."})
     upper = receipt.get("upper_reference")
     adequacy, final = _num(receipt.get("adequacy_before_safety")), _num(receipt.get("final"))
     if upper:
         if upper.get("kind") == "caffeine_daily_total":
-            limit = (f"{_num(upper.get('amount_mg_day')):.0f} mg of caffeine a day at the highest directed use, against "
+            qualifier = {">=": "At least ", ">": "More than "}.get(upper.get("quantity_operator"), "")
+            limit = (f"{qualifier}{_num(upper.get('amount_mg_day')):g} mg of caffeine a day at the highest directed use, against "
                      f"the {_num(upper.get('exceeds_above_mg_day')):.0f} mg/day reference for most adults")
         else:
             at_min = _num(upper.get("pct_ul_at_minimum"))
@@ -353,7 +401,8 @@ def attach_pillar_explanations(
                     "value_display": (
                         rule
                         + "This product-level cap is applied once, after the ingredient assessment, and never raises a lower score. "
-                        "It is PharmaGuide scoring policy, not a medical toxicity grade. Limits cover total intake from all sources."
+                        "It is PharmaGuide scoring policy, not a medical toxicity grade. "
+                        "The applicable reference determines which food, supplement or medication sources count; their limits are not interchangeable."
                     ),
                 })
             purpose_count = _nonnegative_int(metadata.get("purpose_ingredient_count"))

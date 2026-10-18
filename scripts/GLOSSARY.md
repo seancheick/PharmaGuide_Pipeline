@@ -175,9 +175,9 @@ never be reintroduced. Final export rejects any non-v4 Stage-3 artifact.
 
 | Term | Meaning |
 |---|---|
-| **Adequacy exposure** | Source-recorded amount at minimum directed daily use (`per_day_min`). Product Dose quality instead assesses one declared Facts-panel serving through the shared Dose wrapper and input projection (Sean, October17); daily source records and personal intake remain separate. |
+| **Adequacy exposure** | Source-recorded amount at minimum directed daily use (`per_day_min`), used by product Dose quality through `generic_helpers::score_directed_daily_dose` (Dose V4.1). Missing directions default explicitly to one declared serving daily. Personal intake stays separate. |
 | **Safety exposure** | Maximum daily exposure (`per_day_max`) used for UL and other safety comparisons. |
-| **Daily serving resolver** | `serving_frequency.py`, the sole policy for converting label serving directions and their provenance into a daily range. Interaction thresholds, reviewer facts, audits and consumer cadence copy use the original daily range. Product Dose quality opens its declared-serving scope at the existing shared resolver. |
+| **Daily serving resolver** | `serving_frequency.py`, the sole policy for converting label serving directions and their provenance into a daily range. Interaction thresholds, reviewer facts, audits and consumer cadence copy use the original daily range. Product Dose quality uses its minimum for adequacy and maximum for safety through the shared directed-daily wrapper. |
 | **CFU normalization** | Enrichment-owned parsing of probiotic label text into `probiotic_data.total_cfu`, `total_billion_count`, per-strain dose evidence, and guarantee provenance. The nutrient unit converter does not interpret CFU. |
 | **Label-owned strain identity** | An exact registry identity re-proved against its source label row, independently of whether the registry's clinical citation is approved. Duplicate projections of the same source are one identity; identity alone does not establish clinical benefit. |
 | **Aggregate CFU disclosure** | A disclosed viable count for a whole product or blend. It is not an equal-share estimate or a measured dose of any individual strain. |

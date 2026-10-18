@@ -203,6 +203,7 @@ def _coverage_scores(
     product: Dict[str, Any],
     *,
     rda_group: Optional[str] = None,
+    reference_assessments: Optional[List[Dict[str, Any]]] = None,
 ) -> Dict[str, float]:
     rda_ul = _safe_dict(product.get("rda_ul_data"))
     rows = _safe_list(rda_ul.get("adequacy_results"))
@@ -223,6 +224,15 @@ def _coverage_scores(
         )
         if credit is None:
             continue
+        if reference_assessments is not None:
+            reference = {name: row.get(name) for name in (
+                "nutrient", "canonical_id", "amount", "unit", "per_day_min", "per_day_max",
+                "rda_ai", "ul", "ul_basis", "ul_population") if row.get(name) is not None}
+            reference["pct_rda"] = pct_rda
+            group_reference = _group_rda_ai(row, rda_group) if rda_group else None
+            if group_reference is not None:
+                reference.update(rda_ai=group_reference, reference_population=rda_group)
+            reference_assessments.append(reference)
         # Multiple rows for the same nutrient (e.g. vitamin A forms) should
         # not overweight the average. Keep the best row-level coverage signal.
         scores[key] = max(scores.get(key, 0.0), _round(_clamp(0.0, 1.0, credit)))
@@ -472,7 +482,9 @@ def score_dose(product: Any) -> Dict[str, Any]:
     product = _safe_product(product)
 
     prenatal = _is_prenatal(product)
-    coverage_scores = _coverage_scores(product, rda_group="Pregnancy" if prenatal else None)
+    reference_assessments: List[Dict[str, Any]] = []
+    coverage_scores = _coverage_scores(product, rda_group="Pregnancy" if prenatal else None,
+                                       reference_assessments=reference_assessments)
     rda_ai_coverage = _score_rda_ai_coverage(coverage_scores)
     critical_mode, critical_scores, critical_missing = _critical_scores(product, coverage_scores)
     critical_coverage = _score_critical_coverage(critical_scores)
@@ -496,6 +508,7 @@ def score_dose(product: Any) -> Dict[str, Any]:
         "phase": PHASE_MARKER,
         "method": METHOD_MARKER,
         "coverage_nutrient_count": len(coverage_scores),
+        "reference_assessments": reference_assessments,
         "coverage_nutrient_scores": dict(sorted(coverage_scores.items())),
         "critical_nutrient_mode": critical_mode,
         "critical_nutrient_scores": dict(sorted(critical_scores.items())),

@@ -467,4 +467,20 @@ def score_directed_daily_dose(product, scorer):
     metadata["assessment_basis"] = "directed_daily_use"
     metadata["daily_use"] = {"minimum_servings": float(low), "maximum_servings": float(high),
                              "defaulted": bool(defaulted)}
+    # Receipt inputs are projections of the assessment already made upstream,
+    # never another benchmark calculation. Panels share this source record.
+    metadata.setdefault("reference_assessments", [
+        {key: row.get(key) for key in ("nutrient", "canonical_id", "amount", "unit", "per_day_min",
+                                      "per_day_max", "rda_ai", "pct_rda", "ul", "ul_basis", "ul_population")
+         if row.get(key) is not None}
+        for row in (product.get("rda_ul_data") or {}).get("adequacy_results") or []
+        if isinstance(row, dict)
+    ])
+    if (not metadata.get("dose_contributions") and not metadata.get("cfu_adequacy_contributions")
+            and payload.get("score") is not None):
+        metadata["dose_contributions"] = [
+            {"ingredient": key.replace("_", " "), "assessment": "panel_component", "credit_raw": value}
+            for key, value in (payload.get("components") or {}).items()
+            if isinstance(value, (int, float)) and not isinstance(value, bool)
+        ]
     return payload
