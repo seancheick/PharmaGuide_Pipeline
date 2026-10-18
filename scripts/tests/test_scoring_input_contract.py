@@ -1462,6 +1462,38 @@ def test_nutrition_protein_mass_without_product_intent_is_not_sports_evidence():
     assert not any(row.get("evidence_type") == "sports_primary_dose" for row in evidence)
 
 
+@pytest.mark.parametrize("primary_type,has_facts,expected", [
+    ("protein_powder", True, 1),
+    ("protein_powder", False, 0),
+    ("multivitamin", True, 0),
+    ("collagen", True, 0),
+])
+def test_protein_taxonomy_reuses_actual_facts_without_title_or_powder_mass_inference(
+    primary_type, has_facts, expected,
+):
+    # WheyBasics has no literal 'protein' in its name. Product taxonomy owns
+    # its intent, while the exact Nutrition Facts row owns actual protein mass.
+    source = _row(name="Whey Protein Isolate", canonical_id="whey_protein",
+                  quantity=26.4, unit="g", raw_source_path="ingredientRows[1]")
+    product = _product(
+        [], product_name="WheyBasics Natural Vanilla Bean Flavor",
+        primary_type=primary_type, activeIngredients=[source],
+        nutrition_summary={"protein_g": 21} if has_facts else {},
+        display_ingredients=[{
+            "raw_source_text": "Protein", "source_section": "activeIngredients",
+            "display_type": "nutrition_fact", "raw_source_path": "ingredientRows[0]",
+            "exact_dose_text": "21 g",
+        }] if has_facts else [],
+    )
+    protein = [r for r in derive_product_scoring_evidence(product)
+               if r.get("reason") == "declared_nutrition_protein_mass"]
+    assert len(protein) == expected
+    if expected:
+        assert protein[0]["dose_value"] == 21
+        assert protein[0]["dose_unit"] == "g"
+        assert protein[0]["raw_source_path"] == "ingredientRows[0]"
+
+
 def test_generic_amino_blend_total_does_not_become_eaa_aggregate():
     children = [
         _eaa_child(canonical, index)

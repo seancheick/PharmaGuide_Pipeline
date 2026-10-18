@@ -1100,11 +1100,15 @@ def _derive_declared_nutrition_protein_evidence(
     Protein totals are display-only Nutrition Facts rows, so they are correctly
     absent from ``ingredients_scorable``.  A protein powder or mass gainer still
     needs that declared mass as typed sports-dose evidence.  The projection is
-    deliberately narrow: product-name intent, a gram-validated nutrition
-    summary and an exact display-ledger Protein row. A separately declared
-    whey/casein/powder ingredient mass cannot replace actual protein grams.
+    deliberately narrow: canonical protein taxonomy or product-name intent,
+    a gram-validated nutrition summary and an exact display-ledger Protein row.
+    A separately declared whey/casein/powder ingredient mass cannot replace
+    actual protein grams.
     """
-    if not has_protein_product_intent(_route_product_label_text(product)):
+    if not (
+        has_protein_product_intent(_route_product_label_text(product))
+        or _primary_type(product) == "protein_powder"
+    ):
         return []
 
     protein_g = _as_float(
