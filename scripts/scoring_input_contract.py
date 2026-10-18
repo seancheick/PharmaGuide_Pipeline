@@ -463,11 +463,14 @@ def _source_is_non_epa_dha_oil(row: Dict[str, Any]) -> bool:
     return bool(_NON_EPA_DHA_SOURCE_RE.search(_row_source_text(row)))
 
 
-def epa_dha_row_is_trustworthy(row: Dict[str, Any]) -> bool:
+def epa_dha_row_is_trustworthy(row: Dict[str, Any], *, allow_zero: bool = False) -> bool:
     canonical = _norm(row.get("canonical_id"))
     if canonical not in {"epa", "dha", "epa_dha"}:
         return False
-    if _positive_quantity(row) is None:
+    amount = _positive_quantity(row, allow_zero=allow_zero)
+    if amount is None:
+        return False
+    if amount == 0 and not has_source_printed_amount(row, allow_zero=True):
         return False
     if not _unit_is_mass(_row_unit(row)):
         return False

@@ -43,7 +43,7 @@ from typing import Any, Dict, List, Optional, Tuple
 from evidence_resolver import resolve_omega_evidence_standard
 from scoring_input_contract import (
     PRENATAL_DHA_TARGET_MG, epa_dha_amounts_per_serving,
-    get_source_score_eligible_active_rows, has_source_printed_amount,
+    get_source_score_eligible_active_rows, epa_dha_row_is_trustworthy,
     has_unresolved_identity_reason,
 )
 from scoring_v4.exposure import row_exposure
@@ -104,7 +104,7 @@ def _prenatal_dha_is_source_printed_zero(product: Dict[str, Any]) -> bool:
         return False
     for row in rows:
         if (has_unresolved_identity_reason(row)
-                or not has_source_printed_amount(row, allow_zero=True)):
+                or not epa_dha_row_is_trustworthy(row, allow_zero=True)):
             return False
         exposure = row_exposure(product, row, basis="per_use", unit="mg")
         if not exposure.exact or exposure.per_serving_amount != 0:

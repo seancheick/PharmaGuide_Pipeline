@@ -121,3 +121,11 @@ def test_one_printed_zero_cannot_hide_another_unresolved_dha_owner():
          "raw_source_path": "ingredientRows[1]", "score_eligible_by_cleaner": True,
          "cleaner_row_role": "active_scorable"})
     assert score_dose(product)["metadata"]["adequacy_reference"]["reason"] == "prenatal_dha_amount_not_disclosed"
+
+
+@pytest.mark.parametrize("name", ["Medium Chain Triglycerides", "Flaxseed Oil"])
+def test_zero_from_a_non_epa_dha_oil_cannot_prove_prenatal_dha(name):
+    product = _source_zero_prenatal_dha()
+    product["ingredient_quality_data"]["ingredients"][0].update(
+        name=name, raw_source_text=name)
+    assert score_dose(product)["score"] == 11.4
