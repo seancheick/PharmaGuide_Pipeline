@@ -1,6 +1,6 @@
 # Dose V4.1: finish the shared rules before one pipeline run
 
-Status: **candidate on `claude/dose-v41`; reference research and factual bug fixes completed October18, calibration approval and final implementation/validation still required. Not merge/run/release-ready. See [the reference decision table](DOSE_V41_REFERENCE_DECISIONS.md) and [review packet](DOSE_V41_REVIEW_PACKET.md).** Revised October 17, 2026 after Sean's
+Status: **candidate on `claude/dose-v41`; reference research and factual bug fixes completed October18, revised 37/2/4 calibration decisions and explicit prenatal choline membership await Sean; final implementation/validation still required. Not merge/run/release-ready. See [the reference decision table](DOSE_V41_REFERENCE_DECISIONS.md) and [review packet](DOSE_V41_REVIEW_PACKET.md).** Revised October 17, 2026 after Sean's
 design review (grill). Baseline: `main` at `b043fc513`, engine 4.6.0, config
 `1.27.0-declared-serving-dose`. This plan supersedes the serving-only Dose decision recorded in
 `reports/declared_serving_20261017/README.md` (PR #154).

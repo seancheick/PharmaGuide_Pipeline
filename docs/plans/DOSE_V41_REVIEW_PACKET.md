@@ -227,14 +227,14 @@ captures, final_impact_summary.json, safety_changes.json, canary logs and finger
 No new whole-fast CI or local/release rung is claimed; historical CI does not cover these fixes.
 Those candidate merge gates remain pending. Local commits were requested; no remote push occurred.
 
-## Sean-only decisions remaining
+## Earlier decision inventory (superseded by the complete reference table below)
 
-Approve item 9 and the "kept, for Sean" lines in items 3–5 and the pediatric gap; activation;
+The earlier inventory was: approve item 9 and the "kept, for Sean" lines in items 3–5 and the pediatric gap; activation;
 merging both branches to `main`; the pipeline run; release; IPA.
 
 ## October18 reference review completion and factual corrections
 
-The [one reference decision table](DOSE_V41_REFERENCE_DECISIONS.md) supersedes generic pending-reference lists in earlier review notes. It contains237 concrete reference/consumer rows:43 ask for policy approval (29 retain existing nutritional curves;14 propose module calibration),194 retain accepted direction, retire unsupported inference to approved neutral, correct facts, or identify descriptive/inactive records. A completed no-general-benchmark conclusion is complete, not Preliminary. These are proposed implementation dispositions; table preparation does not mean all retirements have landed or policy is approved.
+The [one reference decision table](DOSE_V41_REFERENCE_DECISIONS.md) supersedes generic pending-reference lists in earlier review notes. It contains237 concrete reference/consumer rows:43 ask for policy approval; the external review recommends37 as written,2 magnesium/calcium routing amendments,4 replacements (phosphorus/ALA shared nutritional curve; ordinary generic sodium/chloride completed neutral),194 retain accepted direction, retire unsupported inference to approved neutral, correct facts, or identify descriptive/inactive records. A completed no-general-benchmark conclusion is complete, not Preliminary. These are proposed implementation dispositions; table preparation does not mean all retirements have landed or policy is approved.
 
 Unambiguous committed corrections: immune duplicate zinc/D zeroing and microgram units; Bi07 combination-total basis; five source-fact corrections; literature-regimen-to-minimum fallback retirement with seven existing source records completed-neutral; actual Facts protein quantity ownership; established soluble-nickel UL with form/elemental guards; FDA Daily Value versus RDA policy wording. Engine4.7.3/config1.28.2 identify this technical candidate. No new proposed numerical calibration has been applied.
 
@@ -245,3 +245,14 @@ Current validation:503 combined named pipeline checks pass;124 nickel owner chec
 Before merge: Sean approves the table; implement approved calibrations and remaining unsupported-curve retirements together in existing owners; make §2.2 exhaustive semantics acceptance executable (the current eleven-record inventory is insufficient); measure the combined candidate and unaffected controls; independent fresh-context review; one green exact completed-candidate CI per repo plus applicable local checks. Keep the separate e1_2_2 owner informed; do not weaken its assertions. Then inspect stage fingerprints and give Sean the required run command. No full pipeline before policy approval, no main push/release/IPA under this task.
 
 Final paired technical check: app sourcebb352dde passes clean full analysis and all3964Flutter tests (2m36s); first full run3963pass/one stale warning-copy fixture is preserved as failed, isolated fixture correction keeps its warning assertion and uses qualified exposure. Independent fresh-context review found no outstanding actionable defect in this technical batch. Feature commits remain local after the earlier remote checkpoints; no completed policy-batch CI or merge is claimed.
+
+
+## October 18 — external reviewer amendments verified
+
+The six concerns reproduce in the actual owners: generic `_adequacy_reference_kind` falls back to legacy for phosphorus/ALA/sodium/chloride; `_band_credit` then awards full credit at25%RDA/AI. Magnesium/calcium use the same fallback outside ordinary-adult contribution eligibility. The reference table is revised to37 proposals retained,2 routing amendments,4 replacements. These are reviewer recommendations awaiting Sean adoption, not43 approvals already granted. No runtime/source/config/reference data changed in this documentation batch.
+
+Prenatal choline membership is now a concrete proposed decision, not an incidental absence: add it as sixth member within the existing5-point critical budget, using the shared nutritional curve and applicable pregnancyAI; keep DHA separate. The explicit alternative is five-member priority weighting with choline only in broad disclosed coverage. The current source comment claiming choline already participates in the critical group is false and must be corrected with the chosen implementation.
+
+Membership-only isolated scorer what-if:119 frozen stored prenatal labels,5 non-prenatal controls;117 numeric scores/2 retained unscored.38 have choline broad-coverage data.113 scores decrease,1 increases,3 numeric scores unchanged; range−0.8..+0.3;5tier crossings. No safety/Dose-safety/status/assessment or other-pillar change; all controls identical. Source5bf2b0b1; receipt reports/dose_v41_reference_amendments_20261018/choline_membership_whatif.json, SHA25615583cdda7014066259632dd7c9175ee7ee3cce929bb6d88af3e6bdb4d56d036. This is an aggregation-choice measurement under the proposed shared panel curve, with other proposed changes not simulated; not final combined-policy impact or catalog regeneration. No pipeline stage ran.
+
+Before merge: Sean adopts the revised policy/membership; implement the complete bounded batch through existing owners, including exhaustive active-reference semantic coverage and residual fallback removal; measure the combined candidate against all15426 frozen inputs with controls; independent review; exact-source CI and applicable local/app checks. The three known e1_2_2 baseline failures remain unwaived and require source-based resolution with their existing owner; this external review does not justify weakening assertions or silently repinning. The missing simulator screenshot remains the declared host limitation. Sean still runs the eventual pipeline after candidate acceptance; no main push, release or IPA is authorized here.
