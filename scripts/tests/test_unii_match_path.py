@@ -104,8 +104,8 @@ def test_no_module_but_normalization_defines_a_unii_normalizer():
     assert copies == []
 
 
-def test_audit_scripts_import_the_owner():
-    sys.path.insert(0, str(SCRIPTS_DIR / "api_audit"))
+def test_audit_scripts_import_the_owner(monkeypatch):
+    monkeypatch.syspath_prepend(str(SCRIPTS_DIR / "api_audit"))
     import audit_unii_data_quality
     import audit_unii_same_tier_conflicts
     import backfill_unii_from_cache
