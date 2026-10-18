@@ -42,6 +42,7 @@ from scoring_v4.quality_score_config import block as _cfg_block
 from serving_frequency import resolve_daily_serving_range
 
 _CEILING = _cfg_block("dose_safety_ceiling", "zero_at_pct")
+_FLAG_REFERENCE_FIELDS = {"unit": "ul_unit"}
 
 NONE = "none"
 CONFIRMED_OVER_THRESHOLD = "confirmed_over_threshold"
@@ -137,6 +138,10 @@ class DoseSafetyFlag:
     reason: Optional[str] = None
     # The same exposure at the minimum directed daily use: explanation only.
     pct_ul_at_minimum: Optional[float] = None
+    # The upper limit compared against and whose population it is (D2).
+    ul: Optional[float] = None
+    ul_unit: Optional[str] = None
+    ul_population: Optional[str] = None
 
 
 @dataclass(frozen=True)
@@ -194,6 +199,9 @@ class DoseSafetyResult:
         return {
             "cap_public": cap,
             "kind": "established_upper_limit",
+            "ul": driver.ul,
+            "ul_unit": driver.ul_unit,
+            "ul_population": driver.ul_population or "general adult",
             "nutrient": driver.nutrient,
             "canonical_id": driver.canonical_id,
             "pct_ul": driver.pct_ul,
@@ -523,6 +531,11 @@ def _classify(flag: Dict[str, Any], minimum_share: float = 1.0) -> DoseSafetyFla
         canonical_id=canonical_id,
         pct_ul=pct_ul,
         pct_ul_at_minimum=round(pct_ul * minimum_share, 4),
+        ul=_as_float(flag.get("ul"), None),
+        # The flag's own reference unit, projected from the rda_ul_data record.
+        ul_unit={name: flag.get(key) for key, name in _FLAG_REFERENCE_FIELDS.items()}.get("ul_unit") or None,
+        ul_population=(flag.get("ul_population") or {}).get("label")
+        if isinstance(flag.get("ul_population"), Mapping) else None,
     )
 
 

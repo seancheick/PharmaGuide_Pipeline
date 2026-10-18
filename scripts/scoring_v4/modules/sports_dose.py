@@ -56,7 +56,7 @@ def score_dose(product: Dict[str, Any]) -> Dict[str, Any]:
     if not isinstance(product, dict):
         product = {}
 
-    identity, primary, basis, aggregation = _best_primary_score(product)
+    identity, primary, basis, aggregation, scored = _best_primary_score(product)
     identity, primary, basis = _apply_offlist_dose_floor(product, identity, primary, basis)
     completeness = _score_ratio_or_completeness(product, identity)
     not_evaluable = _not_evaluable_reason(product, primary)
@@ -87,6 +87,8 @@ def score_dose(product: Dict[str, Any]) -> Dict[str, Any]:
         "primary_identity": identity,
         "dose_basis": basis,
         "dose_aggregation": aggregation,
+        "dose_contributions": [{"ingredient": name, "assessment": label, "credit_raw": round(points, 4)}
+                               for name, points, label in scored],
         "benchmark_exposures": [
             asdict(row_exposure(product, row, basis="daily" if canonical(row) in _DAILY_CANONICALS else "per_use", unit="g"))
             for row in sports_dosed_rows(product)
@@ -400,7 +402,7 @@ def _co_primary_identities(product: Dict[str, Any]) -> list[str]:
     return found
 
 
-def _best_primary_score(product: Dict[str, Any]) -> Tuple[Optional[str], float, Optional[str], str]:
+def _best_primary_score(product: Dict[str, Any]) -> Tuple[Optional[str], float, Optional[str], str, list]:
     """Score the product's sports primary (Dose V4.1 \u00a73.2).
 
     One banded primary from the shared role owner scores against its own
@@ -415,12 +417,12 @@ def _best_primary_score(product: Dict[str, Any]) -> Tuple[Optional[str], float, 
         scored = [(identity, *_score_primary(product, identity)) for identity in co_primaries]
         average = sum(score for _, score, _ in scored) / len(scored)
         lead = max(scored, key=lambda item: item[1])
-        return lead[0], round(average, 4), lead[2], "co_primary_average"
+        return lead[0], round(average, 4), lead[2], "co_primary_average", scored
     if co_primaries:
         score, basis = _score_primary(product, co_primaries[0])
-        return co_primaries[0], score, basis, "single_primary"
+        return co_primaries[0], score, basis, "single_primary", [(co_primaries[0], score, basis)]
     identity, score, basis = _strongest_primary_score(product, shared_primary)
-    return identity, score, basis, "strongest_dosed_anchor"
+    return identity, score, basis, "strongest_dosed_anchor", ([(identity, score, basis)] if identity else [])
 
 
 def _strongest_primary_score(product: Dict[str, Any], shared_primary: Optional[str]) -> Tuple[Optional[str], float, Optional[str]]:

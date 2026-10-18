@@ -27,11 +27,11 @@ def _cfg():
     }
 
 
-def _module_bd(per_day_mid_mg=660.0, form="ee"):
+def _module_bd(per_day_min_mg=660.0, form="ee"):
     return {
         "dimensions": {
             "formulation": {"score": 12.0, "max": 25, "metadata": {"form_detected": form}},
-            "dose": {"score": 18.0, "max": 20, "metadata": {"per_day_mid_mg": per_day_mid_mg}},
+            "dose": {"score": 18.0, "max": 20, "metadata": {"per_day_min_mg": per_day_min_mg}},
             "evidence": {"score": 10.0, "max": 15, "metadata": {}},
         }
     }
@@ -80,7 +80,7 @@ def _generic_module_bd(*, matched_entries=0, blend_counts=None):
 
 
 def test_omega_dose_pillar_emits_epa_dha_per_day_fact():
-    pillars = attach_pillar_explanations(_pillars(), _module_bd(per_day_mid_mg=660.0), _cfg(), "omega")
+    pillars = attach_pillar_explanations(_pillars(), _module_bd(per_day_min_mg=660.0), _cfg(), "omega")
     explanation = pillars["Dose"]["explanation"]
     assert explanation["schema_version"] == 1
     fact = explanation["facts"][0]
@@ -109,7 +109,7 @@ def test_schema_version_constant_is_one_and_ids_are_stable():
 
 def test_absent_dose_metadata_emits_no_fact():
     bd = _module_bd()
-    bd["dimensions"]["dose"]["metadata"] = {}  # no per_day_mid_mg
+    bd["dimensions"]["dose"]["metadata"] = {}  # no per_day_min_mg
     pillars = attach_pillar_explanations(_pillars(), bd, _cfg(), "omega")
     assert "explanation" not in pillars["Dose"]
 

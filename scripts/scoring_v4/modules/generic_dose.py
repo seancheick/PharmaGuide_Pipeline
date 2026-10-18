@@ -218,7 +218,36 @@ def _contribution_target(canonical: object, row: Optional[Dict[str, Any]]) -> Op
     return target
 
 
-def _score_supplemental_window_proxy(product: Dict[str, Any]) -> tuple[float, Optional[str]]:
+_RECEIPT_EXPOSURE_FIELDS = {"per_day_min": "amount_at_minimum", "per_day_max": "amount_at_maximum",
+                             "unit": "amount_unit"}
+
+
+def _row_receipt(row: Dict[str, Any], kind: str) -> Dict[str, Any]:
+    """Amounts and the reference an adequacy row was credited against."""
+    rda = _as_float(row.get("rda_ai"), None)
+    pct = _as_float(row.get("pct_rda"), None)
+    # rda_ul_data rows are the source-owned exposure records; their amounts
+    # and reference unit are projected as recorded (as reference_assessments
+    # does), never re-derived.
+    detail = {name: row.get(key) for key, name in _RECEIPT_EXPOSURE_FIELDS.items()}
+    detail.update(reference_value=rda, pct_of_reference=pct)
+    target = _contribution_target(row.get("canonical_id"), row) if kind == "contribution_policy_target" else None
+    if target is not None and pct is not None and rda:
+        amount = pct / 100.0 * rda
+        detail.update(reference_value=float(target["target_mg"]),
+                      pct_of_reference=round(amount / float(target["target_mg"]) * 100.0, 2))
+    return {key: value for key, value in detail.items() if value is not None}
+
+
+def _assessment_kind(row: Dict[str, Any]) -> str:
+    """Which reference an adequacy row was credited against (receipt label)."""
+    if _contribution_target(row.get("canonical_id"), row) is not None:
+        return "contribution_policy_target"
+    return {"dri": "dri_reference", "clinical_anchor": "clinical_anchor"}.get(
+        _adequacy_reference_kind(row.get("canonical_id")), "legacy_reference")
+
+
+def _score_supplemental_window_proxy(product: Dict[str, Any], entries: Optional[List[Dict[str, Any]]] = None) -> tuple[float, Optional[str]]:
     """Average band credit across nutrients with RDA reference data.
 
     Returns (credit, reason). When no rows have RDA data, returns
@@ -249,6 +278,13 @@ def _score_supplemental_window_proxy(product: Dict[str, Any]) -> tuple[float, Op
         if credit is None:
             continue
         contributions.append(credit)
+        if entries is not None:
+            kind = _assessment_kind(row) if single_nutrient else (
+                "dri_reference" if _adequacy_reference_kind(row.get("canonical_id")) == "dri"
+                else "clinical_anchor" if _adequacy_reference_kind(row.get("canonical_id")) == "clinical_anchor"
+                else "legacy_reference")
+            entries.append({"ingredient": row.get("nutrient") or row.get("canonical_id"), "assessment": kind,
+                            "credit_raw": round(credit, 4), **_row_receipt(row, kind)})
 
     if not contributions:
         if dietary_reference_exclusions:
@@ -295,7 +331,7 @@ def _score_declared_purpose_window(
         and _norm_text(row.get("canonical_id")) not in aggregate_members
     ]
     if not purpose_rows and aggregate is None:
-        return None, [], 0, [], [], [], []
+        return None, [], 0, [], [], [], [], []
 
     # A physical purpose may have a compatibility projection of the same
     # source row.  Count it once by canonical identity, falling back to source.
@@ -314,7 +350,16 @@ def _score_declared_purpose_window(
     contributions: List[float] = []
     unbenchmarked: List[str] = []
     hidden: List[str] = []
+    # One receipt entry per vote (Dose V4.1 section 4): what was assessed,
+    # how, and its raw credit. The explanation renders this; it never recomputes.
+    entries: List[Dict[str, Any]] = []
     fallback_values: List[float] = []
+
+    def vote(ingredient: str, assessment: str, credit: float, **detail: Any) -> None:
+        contributions.append(credit)
+        entries.append({"ingredient": ingredient, "assessment": assessment,
+                        "credit_raw": round(float(credit), 4),
+                        **{key: value for key, value in detail.items() if value is not None}})
     clinical_assessments: List[Dict[str, Any]] = []
     specialized_assessments: List[Dict[str, Any]] = []
     if aggregate is not None:
@@ -329,7 +374,8 @@ def _score_declared_purpose_window(
         else:
             aggregate_credit = aggregate.ratio * CAP_SUPPLEMENTAL_WINDOW
             aggregate_band = "below_studied_range"
-        contributions.append(_clamp(0.0, CAP_SUPPLEMENTAL_WINDOW, aggregate_credit))
+        vote("aggregate_formula", "aggregate_formula_benchmark", _clamp(0.0, CAP_SUPPLEMENTAL_WINDOW, aggregate_credit),
+             band=aggregate_band)
         clinical_assessments.append({
             "assessment_kind": "aggregate_formula",
             "dose_band": aggregate_band,
@@ -352,13 +398,14 @@ def _score_declared_purpose_window(
             specialized = score_immune_purpose_dose(product, purpose)
             specialized_owner = "immune_support"
         if specialized is not None:
-            contributions.append(float(specialized["score"]))
+            vote(key, specialized_owner, float(specialized["score"]), band=specialized.get("band"))
             specialized_assessments.append({
                 "assessment_owner": specialized_owner,
                 **specialized,
             })
             continue
         credits = []
+        assessed = []
         for assessment in adequacy:
             if not (identities & _row_identity_keys(assessment)):
                 continue
@@ -375,19 +422,23 @@ def _score_declared_purpose_window(
             )
             if credit is not None:
                 credits.append(credit)
+                assessed.append(assessment)
         if credits:
             # The producer normally emits one canonical assessment.  If a
             # compatibility artifact has duplicates, one purpose still gets
             # one conservative vote rather than extra denominator weight.
-            contributions.append(min(credits))
+            chosen = assessed[credits.index(min(credits))]
+            kind = _assessment_kind(chosen)
+            vote(key, kind, min(credits), **_row_receipt(chosen, kind))
             continue
         clinical = positive_clinical_benchmark(product, purpose)
         if clinical is not None:
-            contributions.append(min(CAP_SUPPLEMENTAL_WINDOW, clinical.ratio * CAP_SUPPLEMENTAL_WINDOW))
+            vote(key, "clinical_benchmark", min(CAP_SUPPLEMENTAL_WINDOW, clinical.ratio * CAP_SUPPLEMENTAL_WINDOW),
+                 pct_of_reference=round(clinical.ratio * 100.0, 2))
             clinical_assessments.append(clinical.to_dict())
             continue
         if has_usable_individual_dose(purpose):
-            contributions.append(unbenchmarked_dose_credit())
+            vote(key, "no_benchmark_neutral", unbenchmarked_dose_credit())
             fallback_values.append(unbenchmarked_dose_credit())
             unbenchmarked.append(key)
             continue
@@ -397,7 +448,7 @@ def _score_declared_purpose_window(
             # that preparation's contribution in the purpose average.
             credit, _ = _product_evidence_dose_credit(purpose)
             if credit:
-                contributions.append(credit)
+                vote(key, "no_benchmark_neutral", credit)
                 fallback_values.append(credit)
                 unbenchmarked.append(key)
                 continue
@@ -406,12 +457,12 @@ def _score_declared_purpose_window(
             # hides keeps its one vote at the shared neutral; Transparency
             # keeps the disclosure consequence. A pipeline-lost amount
             # (unresolved quantity) keeps its strict readiness hold instead.
-            contributions.append(unbenchmarked_dose_credit())
+            vote(key, "hidden_amount_neutral", unbenchmarked_dose_credit())
             fallback_values.append(unbenchmarked_dose_credit())
             hidden.append(key)
 
     if not contributions:
-        return 0.0, sorted(unbenchmarked), len(purposes) + int(aggregate is not None), clinical_assessments, specialized_assessments, fallback_values, sorted(hidden)
+        return 0.0, sorted(unbenchmarked), len(purposes) + int(aggregate is not None), clinical_assessments, specialized_assessments, fallback_values, sorted(hidden), entries
     return (
         round(_clamp(0.0, CAP_SUPPLEMENTAL_WINDOW, sum(contributions) / len(contributions)), 4),
         sorted(unbenchmarked),
@@ -420,6 +471,7 @@ def _score_declared_purpose_window(
         specialized_assessments,
         fallback_values,
         sorted(hidden),
+        entries,
     )
 
 
@@ -567,6 +619,7 @@ def score_dose(product: Dict[str, Any]) -> Dict[str, Any]:
         specialized_purpose_assessments,
         purpose_fallback_values,
         hidden_purposes,
+        purpose_entries,
     ) = (
         _score_declared_purpose_window(product)
     )
@@ -590,6 +643,9 @@ def score_dose(product: Dict[str, Any]) -> Dict[str, Any]:
             "metadata": {
                 "phase": PHASE_MARKER,
                 "method": "collagen_clinical_dose_v1",
+                "dose_participation_basis": "single_profile_assessment",
+                "dose_contributions": [{"ingredient": "collagen", "assessment": "collagen_profile",
+                                        "band": col.get("band"), "credit_raw": round(float(col["score"]), 4)}],
                 "collagen_dose_band": col["band"],
                 "collagen_dose": col.get("metadata", {}),
                 "B7_safety_evaluation": b7_metadata,
@@ -620,6 +676,9 @@ def score_dose(product: Dict[str, Any]) -> Dict[str, Any]:
             "metadata": {
                 "phase": PHASE_MARKER,
                 "method": "botanical_clinical_dose_v1",
+                "dose_participation_basis": "single_profile_assessment",
+                "dose_contributions": [{"ingredient": "botanical", "assessment": "botanical_profile",
+                                        "band": bot.get("band"), "credit_raw": round(float(bot["score"]), 4)}],
                 "botanical_dose_band": bot["band"],
                 "botanical_dose": bot.get("metadata", {}),
                 "B7_safety_evaluation": b7_metadata,
@@ -642,6 +701,9 @@ def score_dose(product: Dict[str, Any]) -> Dict[str, Any]:
             "metadata": {
                 "phase": PHASE_MARKER,
                 "method": "sleep_support_clinical_dose_v1",
+                "dose_participation_basis": "single_profile_assessment",
+                "dose_contributions": [{"ingredient": "sleep support", "assessment": "sleep_support",
+                                        "band": sleep.get("band"), "credit_raw": round(float(sleep["score"]), 4)}],
                 "sleep_support_dose": sleep,
                 "B7_safety_evaluation": b7_metadata,
             },
@@ -661,6 +723,9 @@ def score_dose(product: Dict[str, Any]) -> Dict[str, Any]:
             "metadata": {
                 "phase": PHASE_MARKER,
                 "method": "immune_support_daily_dose_v1",
+                "dose_participation_basis": "single_profile_assessment",
+                "dose_contributions": [{"ingredient": "immune support", "assessment": "immune_support",
+                                        "band": immune.get("band"), "credit_raw": round(float(immune["score"]), 4)}],
                 "immune_support_dose": immune.get("metadata", {}),
                 "B7_safety_evaluation": b7_metadata,
             },
@@ -682,12 +747,16 @@ def score_dose(product: Dict[str, Any]) -> Dict[str, Any]:
             "metadata": {
                 "phase": PHASE_MARKER,
                 "method": "joint_support_clinical_dose_v1",
+                "dose_participation_basis": "single_profile_assessment",
+                "dose_contributions": [{"ingredient": "joint support", "assessment": "joint_support",
+                                        "band": joint.get("band"), "credit_raw": round(float(joint["score"]), 4)}],
                 "joint_support_dose": joint,
                 "B7_safety_evaluation": b7_metadata,
             },
         }
 
-    window_credit, window_reason = _score_supplemental_window_proxy(product)
+    proxy_entries: List[Dict[str, Any]] = []
+    window_credit, window_reason = _score_supplemental_window_proxy(product, proxy_entries)
     if purpose_credit is not None:
         window_credit = purpose_credit
         window_reason = None
@@ -753,12 +822,16 @@ def score_dose(product: Dict[str, Any]) -> Dict[str, Any]:
         ],
         "supplemental_window_max_raw": CAP_SUPPLEMENTAL_WINDOW,
     }
+    if purpose_credit is None and proxy_entries and not no_rda_reference:
+        metadata["dose_participation_basis"] = "assessed_nutrient_average"
+        metadata["dose_contributions"] = proxy_entries
     if purpose_credit is not None:
         metadata["dose_participation_basis"] = "declared_purpose_equal_weight"
         metadata["purpose_ingredient_count"] = purpose_count
         metadata["unbenchmarked_purpose_ingredients"] = unbenchmarked_purposes
         metadata["positive_clinical_benchmark_assessments"] = clinical_benchmarks
         metadata["specialized_purpose_assessments"] = specialized_purpose_assessments
+        metadata["dose_contributions"] = purpose_entries
         if hidden_purposes:
             metadata["hidden_amount_purpose_ingredients"] = hidden_purposes
         aggregate_assessment = next((

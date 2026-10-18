@@ -1525,7 +1525,7 @@ def test_declared_structural_purpose_keeps_product_total_fallback(lent, disclose
         total["reason"] = "identity_bearing_blend_header_mass_from_nested_child"
     if not disclosed:
         total["quantity"] = total["dose_value"] = None
-    score, unknown, count, clinical, specialized, fallbacks, hidden = _score_declared_purpose_window(product)
+    score, unknown, count, clinical, specialized, fallbacks, hidden, _entries = _score_declared_purpose_window(product)
     assert count == 1
     # Dose V4.1 section 2.3: a disclosed total without a benchmark and a hidden
     # (lent or undisclosed) amount both take the neutral, recorded apart.

@@ -198,6 +198,7 @@ def _compute_cfu_adequacy(clinical_strains: Iterable[Any], *, total_strain_count
 
         if strain.get("is_inactivated") or strain.get("is_postbiotic"):
             contributions.append({
+                "strain": strain.get("strain"),
                 "tier": tier or strain.get("adequacy_tier"),
                 "cfu_per_day": cfu,
                 "points": round(neutral_v3, 4),
@@ -207,6 +208,7 @@ def _compute_cfu_adequacy(clinical_strains: Iterable[Any], *, total_strain_count
 
         if tier is None or cfu is None or cfu <= 0:
             contributions.append({
+                "strain": strain.get("strain"),
                 "tier": tier or strain.get("adequacy_tier"),
                 "cfu_per_day": cfu,
                 "points": round(neutral_v3, 4),
@@ -222,6 +224,7 @@ def _compute_cfu_adequacy(clinical_strains: Iterable[Any], *, total_strain_count
         )
         contributions.append({
             "state": "measured",
+            "strain": strain.get("strain"),
             "tier": tier,
             "clinical_id": strain.get("clinical_id"),
             "source_row_ref": strain.get("source_row_ref"),

@@ -44,13 +44,14 @@ def _nonnegative_int(value: Any) -> Optional[int]:
 
 def _omega_dose_facts(dose_dim: Dict[str, Any]) -> List[Dict[str, Any]]:
     metadata = dose_dim.get("metadata") if isinstance(dose_dim, dict) else None
-    per_day = _num((metadata or {}).get("per_day_mid_mg"))
+    # Dose V4.1: adequacy reads the lowest directed daily use, not the midpoint.
+    per_day = _num((metadata or {}).get("per_day_min_mg"))
     if per_day is None or per_day <= 0:
         return []
     return [
         {
             "id": "epa_dha_per_day",
-            "label": "EPA + DHA per day",
+            "label": "EPA + DHA per day (lowest directed use)",
             "value_mg": round(per_day, 1),
             "value_display": _format_mg_per_day(per_day),
         }
@@ -126,6 +127,155 @@ def _zero_evidence_facts(
 
 # Fact builders keyed by the pillar assembler that owns them. Adding a new
 # fact-bearing pillar is a one-line entry here.
+# --- Dose receipt (Dose V4.1 section 4) -------------------------------------
+# Built only from what the Dose owners recorded; raw credits are converted to
+# the public scale by the pillar's own reference, never re-benchmarked.
+
+_AGGREGATION_COPY = {
+    "declared_purpose_equal_weight": "Each declared purpose ingredient counts equally; adequacy is their average.",
+    "assessed_nutrient_average": "Each assessed nutrient counts equally; adequacy is their average.",
+    "co_primary_average": "The main sports actives count equally; adequacy is their average.",
+    "single_primary": "Adequacy is the main sports active's assessment.",
+    "strongest_dosed_anchor": "Adequacy is the best-dosed recognized sports active's assessment.",
+    "strain_average_with_neutral_states": ("Each strain counts equally; a strain without an assessable amount "
+                                           "or benchmark takes the neutral value."),
+    "studied_formula": "The complete formula is assessed against its studied dose.",
+    "panel": "The nutrient panel is assessed as a whole: required coverage, critical nutrients and any prenatal complement.",
+    "b_complex_panel": "The fixed B-vitamin panel is assessed; each vitamin counts equally.",
+    "omega_purpose_reference": "EPA+DHA (DHA for prenatal products) is assessed against the reference for the product's purpose.",
+    "fiber_aggregate": "The disclosed fiber is assessed as one aggregate amount.",
+    "single_profile_assessment": "One category profile assesses the product's main active against its studied range.",
+}
+_ASSESSMENT_COPY = {
+    "contribution_policy_target": ("PharmaGuide contribution target (20% of the FDA Daily Value)", "pharmaguide_policy"),
+    "dri_reference": ("RDA/AI", "nutritional_reference"),
+    "clinical_anchor": ("reviewed clinical anchor", "clinical_reference"),
+    "legacy_reference": ("reference intake (interim)", "nutritional_reference"),
+    "clinical_benchmark": ("studied preparation benchmark", "clinical_reference"),
+    "aggregate_formula_benchmark": ("studied formula benchmark", "clinical_reference"),
+    "no_benchmark_neutral": ("no applicable benchmark: neutral value", "pharmaguide_policy"),
+    "hidden_amount_neutral": ("amount hidden: neutral value", "pharmaguide_policy"),
+}
+
+
+def _dose_aggregation(module: Optional[str], metadata: Dict[str, Any]) -> Optional[str]:
+    for key in ("dose_participation_basis", "dose_aggregation"):
+        value = metadata.get(key)
+        if value in _AGGREGATION_COPY:
+            return value
+    if metadata.get("dose_adequacy_basis") == "studied_formula_native_afu" or (
+            (metadata.get("studied_formula_assessment") or {}).get("status") == "assessed_studied_formula"):
+        return "studied_formula"
+    return {"multi_or_prenatal": "panel", "b_complex": "b_complex_panel", "omega": "omega_purpose_reference",
+            "fiber_digestive": "fiber_aggregate"}.get(module or "")
+
+
+def _dose_contributions(module: Optional[str], metadata: Dict[str, Any], factor: float) -> List[Dict[str, Any]]:
+    out: List[Dict[str, Any]] = []
+    for entry in metadata.get("dose_contributions") or []:
+        if not isinstance(entry, dict) or _num(entry.get("credit_raw")) is None:
+            continue
+        label, kind = _ASSESSMENT_COPY.get(str(entry.get("assessment")), (
+            str(entry.get("band") or entry.get("assessment") or "assessment").replace("_", " "), "clinical_reference"))
+        out.append({"ingredient": str(entry.get("ingredient") or ""), "assessment": entry.get("assessment"),
+                    "reference": label, "reference_kind": kind,
+                    **{key: entry.get(key) for key in ("amount_at_minimum", "amount_at_maximum", "amount_unit",
+                                                       "reference_value", "pct_of_reference") if entry.get(key) is not None},
+                    "points": round(_num(entry["credit_raw"]) * factor, 2)})
+    for strain in metadata.get("cfu_adequacy_contributions") or []:
+        if isinstance(strain, dict) and _num(strain.get("points")) is not None:
+            state = str(strain.get("state") or "measured")
+            out.append({"ingredient": str(strain.get("strain") or strain.get("clinical_id") or "unlisted strain"), "assessment": state,
+                        "reference": "strain CFU benchmark" if state == "measured" else state.replace("_", " "),
+                        "reference_kind": "industry_potency_reference" if state == "measured" else "pharmaguide_policy",
+                        "points": round(_num(strain["points"]) * 3.0 * factor, 2)})
+    reference = metadata.get("adequacy_reference")
+    if isinstance(reference, dict) and _num(reference.get("target_mg_day")) is not None:
+        out.append({"ingredient": "DHA" if reference.get("purpose") == "prenatal_dha" else "EPA + DHA",
+                    "assessment": reference.get("purpose"), "reference": f"{reference['target_mg_day']:g} mg/day reference",
+                    "reference_kind": "nutritional_reference", "amount_mg_day": reference.get("amount_mg_day")})
+    return out
+
+
+def _dose_receipt(pillar: Dict[str, Any], dose: Dict[str, Any], module: Optional[str]) -> Dict[str, Any]:
+    metadata = dose.get("metadata") or {}
+    components = pillar.get("components") or {}
+    reference = _num(components.get("reference")) or 0.0
+    weight = _num(pillar.get("max")) or 0.0
+    factor = weight / reference if reference else 0.0
+    score = _num(pillar.get("score"))
+    adequacy = _num(components.get("adequacy_before_safety"))
+    adequacy = score if adequacy is None else adequacy
+    ceiling = (metadata.get("B7_safety_evaluation") or {}).get("dose_ceiling")
+    upper = None
+    if isinstance(ceiling, dict) and _num(ceiling.get("cap_public")) is not None:
+        upper = {key: ceiling.get(key) for key in (
+            "kind", "nutrient", "ul", "ul_unit", "ul_population", "pct_ul", "pct_ul_at_minimum", "amount_mg_day",
+            "amount_mg_day_at_minimum", "exceeds_above_mg_day", "minimum_exceeds", "cap_public") if ceiling.get(key) is not None}
+        upper["policy"] = "pharmaguide_scoring_policy"
+    receipt = {
+        "daily_use": metadata.get("daily_use"),
+        "aggregation": _dose_aggregation(module, metadata),
+        "contributions": _dose_contributions(module, metadata, factor),
+        "adequacy_before_safety": adequacy,
+        "upper_reference": upper,
+        "final": score,
+    }
+    cap = _num((upper or {}).get("cap_public"))
+    receipt["reconciles"] = (score is not None and adequacy is not None
+                             and abs(score - (min(adequacy, cap) if cap is not None else adequacy)) < 0.05)
+    return receipt
+
+
+def _dose_receipt_facts(receipt: Dict[str, Any]) -> List[Dict[str, Any]]:
+    facts: List[Dict[str, Any]] = []
+    aggregation = receipt.get("aggregation")
+    contributions = receipt.get("contributions") or []
+    if contributions:
+        def amounts(item: Dict[str, Any]) -> str:
+            low, high, unit = _num(item.get("amount_at_minimum")), _num(item.get("amount_at_maximum")), item.get("amount_unit") or ""
+            if low is None:
+                return ""
+            span = f"{low:g} {unit}/day" if high in (None, low) else f"{low:g}-{high:g} {unit}/day"
+            return f", {span} by directions".replace(" /day", "/day")
+
+        shown = "; ".join(
+            f"{item['ingredient']}: {item['reference']}"
+            + (f" {item['reference_value']:g} {item.get('amount_unit') or ''}".rstrip() if _num(item.get("reference_value")) is not None else "")
+            + amounts(item)
+            + (f", {item['pct_of_reference']:.0f}% of it at the lowest daily use" if _num(item.get("pct_of_reference")) is not None else "")
+            + (f", {item['amount_mg_day']:g} mg/day at the lowest daily use" if _num(item.get("amount_mg_day")) is not None else "")
+            + (f" ({item['points']:g} points)" if _num(item.get("points")) is not None else "")
+            for item in contributions[:6])
+        more = f"; and {len(contributions) - 6} more" if len(contributions) > 6 else ""
+        facts.append({"id": "dose_contributions", "label": "What Dose assessed",
+                      "value_display": shown + more + ".",
+                      **({"detail": _AGGREGATION_COPY[aggregation]} if aggregation in _AGGREGATION_COPY else {})})
+    elif aggregation in _AGGREGATION_COPY:
+        facts.append({"id": "dose_contributions", "label": "What Dose assessed", "value_display": _AGGREGATION_COPY[aggregation]})
+    upper = receipt.get("upper_reference")
+    adequacy, final = _num(receipt.get("adequacy_before_safety")), _num(receipt.get("final"))
+    if upper:
+        if upper.get("kind") == "caffeine_daily_total":
+            limit = (f"{_num(upper.get('amount_mg_day')):.0f} mg of caffeine a day at the highest directed use, against "
+                     f"the {_num(upper.get('exceeds_above_mg_day')):.0f} mg/day reference for most adults")
+        else:
+            at_min = _num(upper.get("pct_ul_at_minimum"))
+            limit = (f"{_num(upper.get('pct_ul')):.0f}% of the {upper.get('nutrient')} upper limit"
+                     + (f" of {_num(upper.get('ul')):g} {upper.get('ul_unit') or ''}".rstrip() if _num(upper.get("ul")) else "")
+                     + f" ({upper.get('ul_population') or 'general adult'} limit) at the highest directed use"
+                     + (f", {at_min:.0f}% at the lowest" if at_min is not None else ""))
+        facts.append({"id": "dose_upper_reference", "label": "Upper-limit check",
+                      "value_display": f"{limit}; Dose is capped at {_num(upper['cap_public']):g} (PharmaGuide scoring policy)."})
+    if adequacy is not None and final is not None:
+        if upper:
+            arithmetic = (f"Adequacy {adequacy:g}/20, capped at {_num(upper['cap_public']):g}: Dose {final:g}/20.")
+        else:
+            arithmetic = f"Adequacy {adequacy:g}/20; no upper-limit cap applies: Dose {final:g}/20."
+        facts.append({"id": "dose_arithmetic", "label": "How Dose adds up", "value_display": arithmetic})
+    return facts
+
+
 _FACT_BUILDERS = {
     "dose": _omega_dose_facts,
     "formulation": _omega_formulation_facts,
@@ -211,6 +361,14 @@ def attach_pillar_explanations(
                         "they remain included with limited-assessment credit."
                     ),
                 })
+            if _num((pillar.get("components") or {}).get("reference")):
+                # Only an assembled public pillar has the reference that
+                # converts raw credits; a bare legacy pillar keeps its reason.
+                dose_receipt = _dose_receipt(pillar, dims.get("dose") or {}, module)
+                pillar["explanation"] = {**(pillar.get("explanation") or {}),
+                                         "schema_version": PILLAR_EXPLANATION_SCHEMA_VERSION,
+                                         "dose_receipt": dose_receipt}
+                facts.extend(_dose_receipt_facts(dose_receipt))
             assessments = ((dims.get("dose") or {}).get("metadata") or {}).get("clinical_exposure_assessments") or []
             for index, assessment in enumerate(assessments):
                 if isinstance(assessment, dict) and assessment.get("kind") == "studied_regimen" and assessment.get("notes"):
