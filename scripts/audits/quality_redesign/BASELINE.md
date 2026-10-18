@@ -71,7 +71,7 @@ stamps are `cleaned.metadata.lastCleaned`, `enriched.enriched_date`, `enriched.e
 `run_id` (named in AUDIT.md F.3) is stamped by the enricher's batch driver `process_all()` and never appears in a
 per-product record. No path was added to make a comparison pass.
 
-### Finding: one enriched field is ordered by the process hash seed (production defect, not fixed here)
+### Historical finding: one enriched field was ordered by the process hash seed (fixed by PR #156)
 
 `scripts/enrich_supplements_v3.py:5574` writes `"scorable_ingredient_names_normalized": list(scorable_names_normalized)`,
 a set rendered as a list. Two harness runs of the 22 Hum labels differ on that path for 16 of 22 products
@@ -115,9 +115,19 @@ differing path of each changed record (`differences`) and, to the summary, the n
 path with list indices generalized to `[*]`: the "only this path differs" receipt of a PR comes from that summary.
 Every listed difference is justified in the PR that produced it; none is removed by widening `VOLATILE_FIELDS`.
 
-### Follow-ups
+### Unpinned recapture — October 18 follow-up
 
-- **Measure set-order nondeterminism instead of masking it.** The `--full` worker pins `PYTHONHASHSEED=0` and `compare`
-  requires both receipts' `worker_env` to equal the harness constant, so dropping the pin later would refuse today's
-  baseline. For the next recapture after the sorted list (PR #156) lands: record the observed seed in the receipt,
-  require baseline and candidate receipts to agree with each other rather than with the constant, and drop the pin.
+PR #156 sorted `scorable_ingredient_names_normalized` at its production owner and is integrated through PR #163. The current harness no longer overrides `PYTHONHASHSEED`. It records an explicitly inherited setting in `full.worker_env`; `{}` means the variable was unset and Python selected its normal randomized process seed. It does not claim to know Python's internal seed.
+
+`compare` requires compatible recorded environments on the two captures, independently of the caller's current environment. Historical seed-0 captures still compare to each other. Pinned and unpinned captures deliberately do not compare directly; retain the historical receipts without editing/restamping them. Volatile-field declarations and all existing input/hash/count checks remain enforced.
+
+For the authorized new baseline, explicitly unset any shell pin:
+
+```bash
+env -u PYTHONHASHSEED "$PG_PYTHON" scripts/audits/quality_redesign/replay.py snapshot \
+  --checkout /Users/seancheick/Downloads/dsld_clean \
+  --products-root <fresh-frozen-raw-root> --manifest <fresh-input-manifest> \
+  --out <durable-baseline.jsonl> --workers 4 --full --blob
+```
+
+Validate independent unpinned repetitions and explicit cross-seed probes using whole-record hashes; do not expand the volatile-field list to hide ordering differences. The old baseline above excludes Product_Submissions by format; validate that source separately through its manifest-owned stages and a stored-enrichment snapshot. New capture and validation receipts will be recorded here after the pipeline completes. No release is implied.
