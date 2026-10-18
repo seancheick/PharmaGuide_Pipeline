@@ -253,6 +253,13 @@ def _dose_receipt(pillar: Dict[str, Any], dose: Dict[str, Any], module: Optional
     if receipt["aggregation"] in {"declared_purpose_equal_weight", "assessed_nutrient_average",
                                  "co_primary_average", "strain_average_with_neutral_states"} and points:
         accounted /= len(points)
+    if (metadata.get("window_proxy_status") == "partial_credit_primary_active_unassessed"
+            and metadata.get("primary_active_unassessed")
+            and _num(metadata.get("partial_credit_value")) is not None):
+        constraint = _num(metadata["partial_credit_value"]) * factor
+        receipt["primary_active_unassessed"] = metadata["primary_active_unassessed"]
+        receipt["partial_credit_value"] = round(constraint, 2)
+        accounted = min(accounted, constraint)
     receipt["reconciles"] = (score is not None and adequacy is not None
                              and abs(adequacy - min(weight, accounted)) < 0.051
                              and abs(score - (min(adequacy, cap) if cap is not None else adequacy)) < 0.05)
@@ -310,6 +317,12 @@ def _dose_receipt_facts(receipt: Dict[str, Any]) -> List[Dict[str, Any]]:
             population = f" ({row['reference_population']})" if row.get("reference_population") else ""
             facts.append({"id": f"dose_panel_reference_{index}", "label": str(row.get("nutrient") or "Panel nutrient"),
                           "value_display": f"{exposure}{pct:g}% of the assessed RDA/AI{population} at the lowest daily use."})
+    if receipt.get("primary_active_unassessed") and _num(receipt.get("partial_credit_value")) is not None:
+        facts.append({"id": "dose_primary_reference_gap", "label": "Primary active reference gap",
+                      "value_display": (
+                          f"The main active {receipt['primary_active_unassessed']} has no applicable reference. "
+                          f"The existing assessment limits adequacy to {receipt['partial_credit_value']:g}/20; "
+                          "the assessed secondary nutrients cannot establish the main active's dose adequacy.")})
     upper = receipt.get("upper_reference")
     adequacy, final = _num(receipt.get("adequacy_before_safety")), _num(receipt.get("final"))
     if upper:

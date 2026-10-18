@@ -116,3 +116,16 @@ def test_receipt_reconciliation_checks_recorded_contributions():
     receipt = _dose_receipt(pillar, {'metadata': {'dose_contributions': [
         {'ingredient': 'x', 'assessment': 'panel_component', 'credit_raw': 5}]}}, 'generic')
     assert receipt['reconciles'] is False
+
+
+def test_receipt_records_existing_unassessed_primary_constraint():
+    from scoring_v4.pillar_explanations import _dose_receipt, _dose_receipt_facts
+    pillar = {'score': 11.4, 'max': 20, 'components': {'reference': 22, 'adequacy_before_safety': 11.4}}
+    metadata = {'dose_participation_basis': 'assessed_nutrient_average',
+                'primary_active_unassessed': 'l_leucine', 'partial_credit_value': 12.54,
+                'window_proxy_status': 'partial_credit_primary_active_unassessed',
+                'dose_contributions': [{'ingredient': 'Vitamin D', 'assessment': 'dri_reference', 'credit_raw': 22}]}
+    receipt = _dose_receipt(pillar, {'metadata': metadata}, 'generic')
+    assert receipt['reconciles'] is True
+    assert any('l_leucine' in row['value_display'] and '11.4' in row['value_display']
+               for row in _dose_receipt_facts(receipt))
