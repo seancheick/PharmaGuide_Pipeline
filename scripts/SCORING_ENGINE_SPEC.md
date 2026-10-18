@@ -222,7 +222,7 @@ Since config 1.26.0 (V4.1 Step 4) every fact earns or loses points once:
 - Additive, dietary-sugar and confirmed high-risk/watchlist findings are
   charged only by the formula-checks pillar, within its shared 10-point budget.
   Low-severity findings are worded as formula quality.
-- Excessive dose is charged only in Dose (B7).
+- An upper-limit exceedance reduces only Dose, through one product-level ceiling (§11.3).
 - Blend opacity is charged only in Transparency (B5). The Transparency base
   requires every active to have a resolved identity.
 - Formulation credits form quality only:
@@ -230,16 +230,31 @@ Since config 1.26.0 (V4.1 Step 4) every fact earns or loses points once:
   - A recognized botanical or collagen identity is neutral credit.
   - Presence, count, focus, route-base, disclosure and duplicate branded
     credits are retired, and references are the retained attainable maximum.
-- Dose:
-  - Product Dose quality assesses one declared Facts-panel serving. Maximum labeled daily-use safety remains separate; it is not confirmed personal intake.
-  - Studied-range bands are reference-normalized, with proportional credit
-    below the near band.
-  - An amount without an applicable benchmark earns the 11.4/20 neutral on the
-    generic, botanical, collagen and sports off-list paths; a hidden amount
-    whose benchmark exists earns nothing.
-  - Probiotic Dose is measured strain adequacy only. A total count or a strain
-    mass is a recorded label limitation with no credit, and a strain CFU
-    without a strain benchmark earns no Dose credit.
+- Dose (Dose V4.1, config 1.28.0; plan `docs/plans/DOSE_V41_PLAN.md`):
+  - Adequacy reads the minimum directed daily use and safety the maximum on
+    every route; one Facts-panel serving a day is assessed, and recorded as the
+    default, when the label gives no daily directions (§11.1).
+  - Ordinary-adult references: magnesium 84 mg and calcium 260 mg elemental
+    (PharmaGuide contribution targets, 20% of the FDA Daily Value), potassium a
+    completed neutral, omega EPA+DHA 250 mg/day, an explicit triglyceride
+    purpose 2,000 mg/day, prenatal products 200 mg/day DHA only. All are
+    `20 x min(amount / reference, 1)`; above a reference earns no extra credit.
+  - The highest studied dose is no upper limit: sports protein, creatine,
+    beta-alanine and HMB, caffeine's per-use band and generic clinical or
+    formula benchmarks plateau above it. Evidence certainty never caps Dose
+    (ATP, betaine, taurine).
+  - Generic declared purposes and sports co-primaries count equally; probiotic
+    Dose averages the label's strains unless an exact studied formula applies.
+  - An amount without an applicable benchmark, and an amount the label hides,
+    earn the shared 11.4/20 neutral; Transparency keeps the disclosure
+    consequence. A pipeline-lost amount keeps its strict readiness hold.
+  - Every config-owned Dose anchor carries reference semantics validated by
+    `scoring_v4/schemas/dose_reference_semantics.schema.json`; anchors still
+    written in modules or data rows are listed in
+    `scripts/tests/test_dose_reference_semantics.py::PENDING_ANCHOR_FAMILIES`.
+  - The Dose explanation carries a `dose_receipt`: daily use, contributions
+    and aggregation rule, adequacy before safety, the upper reference with its
+    population and exposure, the cap and the reconciling final value.
 - Probiotic research certainty counts only when it applies to the product.
 - A score is `partial` when the unfinished work is ours (an unresolved
   benchmark identity, or a printed nutrient or sugars amount we could not
@@ -317,12 +332,21 @@ rendering consume the typed `product_safety_status` field.
 ### 11.1 Exposure range
 
 - Source exposure records retain `per_day_min` for minimum directed daily use and `per_day_max` for maximum directed daily use.
-- Product Dose quality uses one declared Facts-panel serving across every category. `scoring_input_contract.declared_serving_dose_input` projects the source percentages without changing nutrient units or eligibility; the shared Dose wrapper opens the declared-serving frequency scope for benchmark amounts.
-- The quality Dose upper-limit band and B7 deduction use that serving. The safety gate and exported safety findings retain maximum labeled daily exposure. Neither context establishes a user's actual intake.
-- Original source quantities, directions, reference profiles and unknown states remain unchanged. Intermittent directions cannot erase a high-serving quality deduction.
+- Every route's Dose runs through `generic_helpers.score_directed_daily_dose`: adequacy uses the minimum directed daily use, safety the maximum, and `metadata.daily_use` records the interval and whether it was defaulted (one serving a day without directions). The safety gate and Dose read one typed `DoseSafetyResult`. Neither establishes a user's actual intake.
+- Original source quantities, directions, reference profiles and unknown states remain unchanged. Ambiguous directions or unread amounts never become invented exposures.
 - all units enter the shared canonicalizer before conversion
 - demographic references are retained in `data_by_group`
 - `reference_profile` identifies the adult-neutral compatibility summary
+
+UL selection for catalog screening (Dose V4.1 §2.5, Sean D2) is
+`rda_ul_calculator.UL_SCREENING_POPULATIONS`, chosen per product by
+`SupplementEnricherV3._ul_screening_population`: with no stated population,
+the lowest established UL across ordinary adult groups (calcium 2,000 mg,
+phosphorus 3,000 mg); a DSLD life-stage tag narrows it (seniors 51+,
+pregnancy/lactation 19-50). DSLD's generic 18-50 adult tag does not narrow.
+Pediatric UL rows are not in the reference data: the adult limit still
+confirms an exceedance and the row records the gap. Adequacy references are
+unchanged. Rows and flags carry `ul_population`, and warnings name it.
 
 ### 11.2 Folate lineage
 
@@ -338,6 +362,29 @@ contribution.
 
 Absent or inconsistent `%DV` is not a conversion. Any future `%DV` recovery
 must be a named rule with consistency checks and dedicated tests.
+
+### 11.3 One product-level Dose ceiling
+
+`DoseSafetyResult.dose_ceiling` (config `dose_safety_ceiling`) takes the
+strongest confirmed exceedance at maximum directed daily use and
+`quality_score._pillar_dose` applies it once, after route aggregation and
+normalization:
+
+| Confirmed exposure vs applicable upper reference | Public Dose |
+|---|---:|
+| ≤100% (exactly 100% is not an exceedance) | no ceiling |
+| >100% and <150% | at most 10 |
+| ≥150% | 0 |
+| Total declared daily caffeine >400 and <600 mg | at most 10 |
+| Total declared daily caffeine ≥600 mg | 0 |
+
+The bands and points are PharmaGuide scoring policy, not toxicity grades.
+The ceiling never raises a lower score, cannot be diluted by other nutrients
+on a panel and counts incidental nutrients. `material_but_unresolved` keeps
+its review state with no ceiling. No module subtracts for an exceedance: the
+per-nutrient UL bands and the B7 subtraction are retired, and
+`B7_safety_evaluation` stays as metadata. The receipt itemizes the ceiling as
+a `cap` entry.
 
 ## 12. Confidence and provenance
 
@@ -384,6 +431,7 @@ Artifact schema 4.4.0 adds the canonical eligible-delivery projection (October 1
   owner decisions (null earns no affirmative credit), primary-mass-floor
   calibration for Evidence norms, and the vitamin-D bone-goal ownership change
   (bone goal is synergy-owned, not Evidence-owned).
+- **4.6.0 → 4.7.0** (2026-10-17, branch `claude/dose-v41`): Dose V4.1. Directed daily use replaces the declared-serving basis; one product-level safety ceiling replaces the UL bands and B7; D2 UL screening selection; mineral, potassium and omega references; sports, caffeine and probiotic aggregation; hidden amounts take the neutral; reference semantics gate; Dose receipt. Config 1.28.0, omega rubric 2.3.0.
 - **4.5.0 → 4.6.0** (2026-10-17): Sean approved product Dose quality per declared serving across every category. Maximum labeled daily safety remains separate. Config 1.27.0 identifies this policy; other five quality pillars and clinical limits are unchanged.
 - **4.4.0 → 4.5.0** (2026-10-03): clinical amount adequacy moved to Dose;
   declared-purpose Dose votes are equal; omega Evidence is selected by applicable
