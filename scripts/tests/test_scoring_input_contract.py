@@ -2642,3 +2642,48 @@ def test_stale_declared_protein_projection_cannot_replace_lost_source_quantity(l
     artifact = build_scored_artifact(product)
     assert artifact["quality_score_status"] == "not_scored"
     assert artifact["quality_assessment_status"] == "partial"
+
+
+@pytest.mark.parametrize("lost", [None, "summary", "display"])
+def test_retired_native_protein_projections_cannot_change_current_facts_or_disclosure(lost):
+    from copy import deepcopy
+    from scoring_v4.scored_artifact import build_scored_artifact
+
+    product = _product([], product_name="Whey Protein", primary_type="protein_powder",
+                       nutrition_summary={"protein_g": 27.0},
+                       display_ingredients=[{
+                           "raw_source_text": "Protein", "source_section": "activeIngredients",
+                           "display_type": "nutrition_fact", "raw_source_path": "ingredientRows[1]",
+                           "exact_dose_text": "27 g",
+                       }])
+    declared, = derive_product_scoring_evidence(product)
+    legacy = {**deepcopy(declared), "reason": "protein_macro_or_primary_sports_dose",
+              "dose_unit": "Gram(s)"}
+    false_protein = {**deepcopy(legacy), "name": "Glutamic Acid and Glutamine",
+                     "raw_source_path": "ingredientRows[2]", "linked_rows": ["ingredientRows[2]"],
+                     "dose_value": 6.0}
+    cached = deepcopy(product)
+    cached["product_scoring_evidence"] = [declared, legacy, false_protein]
+    for candidate in (product, cached):
+        if lost == "summary":
+            candidate["nutrition_summary"]["protein_g"] = None
+        elif lost == "display":
+            candidate["display_ingredients"] = []
+
+    result = get_scoring_ingredients(cached, strict=True)
+    assert not any(r.get("reason") == "protein_macro_or_primary_sports_dose" for r in result.rows)
+    protein = [r for r in result.rows if r.get("canonical_id") == "protein"]
+    assert len(protein) == (0 if lost else 1)
+    if protein:
+        assert protein[0]["quantity"] == 27
+        assert protein[0]["reason"] == "declared_nutrition_protein_mass"
+    assert sum(r.reason == "stale_declared_nutrition_protein_evidence"
+               for r in result.rejected_rows) >= 2
+    current_artifact = build_scored_artifact(product)
+    cached_artifact = build_scored_artifact(cached)
+    for key in ("quality_pillars_v4", "quality_score_v4_100", "quality_score_status",
+                "quality_assessment_status"):
+        assert cached_artifact[key] == current_artifact[key]
+    if lost:
+        assert cached_artifact["quality_score_status"] == "not_scored"
+        assert cached_artifact["quality_assessment_status"] == "partial"

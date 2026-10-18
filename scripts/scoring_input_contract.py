@@ -2575,11 +2575,17 @@ def _product_scoring_evidence_rows(
         dose_class = _norm(item.get("dose_class"))
         if (
             evidence_type == "sports_primary_dose"
-            and item.get("reason") == "declared_nutrition_protein_mass"
-            and evidence_key(item) not in valid_declared_protein_keys
+            and (
+                item.get("reason") == "protein_macro_or_primary_sports_dose"
+                or (
+                    item.get("reason") == "declared_nutrition_protein_mass"
+                    and evidence_key(item) not in valid_declared_protein_keys
+                )
+            )
         ):
             # A stored protein projection is a cache of the current Facts-row
-            # join, not permission to reuse grams after source quantity loss.
+            # join, not permission to reuse a retired mass inference, duplicate
+            # actual protein, or retain grams after source quantity loss.
             rejected.append(_reject(item, "stale_declared_nutrition_protein_evidence"))
             continue
         if (
