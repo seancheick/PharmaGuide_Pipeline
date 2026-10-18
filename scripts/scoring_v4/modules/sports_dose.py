@@ -344,13 +344,16 @@ def _assess_primary(product: Dict[str, Any], identity: str) -> Tuple[float, Opti
 def _offlist_primary_entry(product: Dict[str, Any], identity: str) -> Optional[dict]:
     """Consume the generic purpose owner's assessment on the sports scale."""
     from scoring_v4.exposure import quantity_is_unresolved
-    from scoring_v4.modules.generic_dose import CAP_SUPPLEMENTAL_WINDOW, _score_declared_purpose_window
+    from scoring_v4.modules.generic_dose import (
+        CAP_SUPPLEMENTAL_WINDOW, _product_evidence_dose_credit, _score_declared_purpose_window,
+    )
     from scoring_v4.modules.generic_helpers import dose_reference_scope
 
     rows = [row for row in get_active_ingredients(product) if canonical(row) == identity]
     if not rows or any(quantity_is_unresolved(row) or (
         not has_usable_individual_dose(row) and not is_lent_blend_mass(row)
-        and dose_disclosure_status(row) != "not_disclosed_blend") for row in rows):
+        and dose_disclosure_status(row) != "not_disclosed_blend"
+        and _product_evidence_dose_credit(row)[0] <= 0) for row in rows):
         return None
     # Generic nutritional and clinical calculations retain their own reference;
     # normalize the resulting contribution once, without borrowing their math.

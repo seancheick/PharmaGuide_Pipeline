@@ -173,6 +173,24 @@ def test_an_actual_offlist_purpose_with_lost_amount_still_holds_sports_dose():
     assert dose["metadata"]["reason_code"] == "unresolved_source_quantity"
 
 
+def test_disclosed_whole_preparation_uses_the_generic_owner_assessment():
+    from scoring_v4.scored_artifact import build_scored_artifact
+
+    # A quantified, identity-bearing whole blend is a preparation, distinct
+    # from a structural parent total or an individual ingredient amount.
+    preparation = dict(_row("wheybolic_complex", 22.4, "g", name="Wheybolic Complex"),
+                       evidence_type="blend_anchor_mass", evidence_scope="blend_level",
+                       scoring_input_kind="product_level_evidence", scoreable=True,
+                       dose_value=22.4, dose_unit="g",
+                       reason="identity_bearing_blend_header_mass")
+    product = _product(preparation, _row("branched_chain_amino_acids", 7, "g"),
+                       name="Wheybolic Complex BCAA")
+    dose = build_scored_artifact(product)["_v4_module_breakdown"]["dimensions"]["dose"]
+    assert dose["score"] == 11.4
+    assert {entry["ingredient"] for entry in dose["metadata"]["dose_contributions"]} == {"wheybolic_complex", "bcaa"}
+    assert dose["metadata"].get("assessment_status") != "incomplete"
+
+
 def test_onlist_underdosed_active_is_not_rescued_by_proxy() -> None:
     # An under-target creatine (1 g, on-list) keeps proportional contribution; the
     # off-list proxy floor must NOT rescue it, because creatine has a sports band.
