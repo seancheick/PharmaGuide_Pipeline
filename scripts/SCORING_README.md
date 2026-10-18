@@ -180,9 +180,10 @@ Every live key must have a behavioral test. Remove obsolete knobs instead of
 wiring them merely because they exist.
 
 `config/scoring_config.json` is the retired v3 config. The Stage-3 producer,
-final export and release path never read it; the local dashboard's CAERS page
-(`dashboard/data_loader.py`, `views/audit_caers.py`) and a few parity tests
-still do.
+final export, release path and dashboard never read it; only a few legacy
+parity tests still do. The dashboard's Config Snapshot shows the v4 config
+through `scoring_v4/config_registry.py`, and its CAERS page states that v4
+applies no CAERS penalty.
 
 ## Making a scoring change
 

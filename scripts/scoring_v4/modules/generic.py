@@ -197,8 +197,11 @@ class VerificationBonusResult:
 
 
 @dataclass
-class GenericModuleResult:
-    """Container for the generic-module breakdown.
+class ModuleResult:
+    """Container for every route's module breakdown (generic, omega, probiotic,
+    multi_or_prenatal, b_complex, fiber_digestive, sports). Each route stamps
+    its own ``module`` name and ``phase`` marker; ``to_breakdown`` is the one
+    renderer of the public ``v4_breakdown["module"]`` shape.
 
     Final score assembly (Phase 4 — Trust→Verification Bonus):
 
@@ -249,7 +252,7 @@ def _empty_dimensions() -> Dict[str, DimensionResult]:
     return {name: DimensionResult(max=float(cap)) for name, cap in DIMENSION_CAPS}
 
 
-def score_generic(product: Any) -> GenericModuleResult:
+def score_generic(product: Any) -> ModuleResult:
     """Score a generic-class product against the v4 rubric.
 
     P1.5 state: Formulation, Dose, Evidence, Trust, Transparency,
@@ -263,14 +266,14 @@ def score_generic(product: Any) -> GenericModuleResult:
         product: Enriched product dict (same contract as v3 consumes).
 
     Returns:
-        GenericModuleResult with the locked breakdown shape. The
+        ModuleResult with the locked breakdown shape. The
         populated dimensions have phase metadata; skeleton dimensions
         remain None until their slice lands.
     """
     if not isinstance(product, dict):
         product = {}
 
-    result = GenericModuleResult(dimensions=_empty_dimensions())
+    result = ModuleResult(dimensions=_empty_dimensions())
 
     # Layer 3 — Formulation dimension (P1.3.1b complete).
     formulation_payload = score_formulation(product)
@@ -354,7 +357,7 @@ def score_generic(product: Any) -> GenericModuleResult:
     return result
 
 
-def _assemble_score(result: GenericModuleResult) -> None:
+def _assemble_score(result: ModuleResult) -> None:
     """Assemble v4's final 0-100 score from populated dimensions.
 
     Phase 4: core dimensions (formulation + dose + evidence + transparency,

@@ -4,6 +4,7 @@
 from __future__ import annotations
 
 import argparse
+import json
 import re
 from pathlib import Path
 from typing import FrozenSet, Iterable
@@ -278,6 +279,47 @@ def preparation_phase(filename, test_name, *, markers=()):
     return 'source', 'Current source/reference/raw inputs or isolated synthetic fixtures; no generated output prerequisite'
 
 
+# Measured per-file durations of the fast rung (scripts/test_shard_plan.py regenerates
+# it from a CI run's junit reports). It lives beside the tests so a custom tests_dir
+# without one falls back to round-robin.
+SHARD_PLAN_NAME = "shard_plan.json"
+
+
+def load_shard_plan(tests_dir: Path) -> dict[str, float]:
+    """File name -> seconds; empty when no plan is committed beside the tests.
+
+    A negative or non-finite duration would be placed first by the greedy and skew
+    the partition, so the plan is rejected rather than silently used.
+    """
+    path = tests_dir / SHARD_PLAN_NAME
+    if not path.exists():
+        return {}
+    plan = {name: float(seconds) for name, seconds in json.loads(path.read_text())["durations"].items()}
+    bad = sorted(name for name, seconds in plan.items() if not (seconds >= 0 and seconds != float("inf")))
+    if bad:
+        raise ValueError(f"{path}: durations must be finite and >= 0: {bad[:5]}")
+    return plan
+
+
+def shard_assignment(paths: list[Path], shard_count: int, plan: dict[str, float]) -> list[list[Path]]:
+    """Partition `paths` into `shard_count` disjoint lists, balanced by the plan.
+
+    Planned files go greedy longest-first to the least-loaded shard (ties to the lowest
+    index); files the plan does not know are round-robined by sorted name, which is the
+    whole assignment when the plan is empty. Deterministic for a given plan.
+    """
+    loads = [0.0] * shard_count
+    shards: list[list[Path]] = [[] for _ in range(shard_count)]
+    planned = [p for p in paths if p.name in plan]
+    for path in sorted(planned, key=lambda p: (-plan[p.name], p.name)):
+        target = loads.index(min(loads))
+        loads[target] += plan[path.name]
+        shards[target].append(path)
+    for position, path in enumerate(sorted(p for p in paths if p.name not in plan)):
+        shards[position % shard_count].append(path)
+    return [sorted(shard) for shard in shards]
+
+
 def iter_profile_paths(profile: str, tests_dir: Path | None = None, *,
                        shard_index: int | None = None, shard_count: int | None = None) -> Iterable[Path]:
     """Yield deterministic test paths owned by one named profile."""
@@ -293,7 +335,7 @@ def iter_profile_paths(profile: str, tests_dir: Path | None = None, *,
         if (shard_index is None or shard_count is None or shard_count < 1
                 or not 0 <= shard_index < shard_count):
             raise ValueError("shard requires 0 <= index < positive count")
-        return iter(paths[shard_index::shard_count])
+        return iter(shard_assignment(paths, shard_count, load_shard_plan(root))[shard_index])
     if shard_index is not None or shard_count is not None:
         raise ValueError("only the fast profile can be sharded")
     if profile == "slow":

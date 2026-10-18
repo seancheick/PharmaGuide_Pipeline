@@ -11,8 +11,8 @@ Design notes:
   old per-call ``json.loads`` semantics, minus the file I/O.
 - The parse + schema validation run once and are cached; only the cheap deepcopy
   is per-call.
-- ``config_fingerprint`` is the sha256 of the on-disk bytes — the exact config
-  hash for provenance.
+- ``all_config_provenance`` stamps versions and sha256 fingerprints from the
+  same source read for each config.
 """
 from __future__ import annotations
 
@@ -54,8 +54,7 @@ def _rubric_path(name: str) -> Path:
         )
 
 
-@lru_cache(maxsize=None)
-def _load_provenance_source(name: str) -> Tuple[bytes, Dict[str, Any]]:
+def _read_provenance_source(name: str) -> Tuple[bytes, Dict[str, Any]]:
     """Read a registered score-affecting config for provenance."""
     try:
         path = _PROVENANCE_CONFIGS[name]
@@ -69,6 +68,11 @@ def _load_provenance_source(name: str) -> Tuple[bytes, Dict[str, Any]]:
     if not isinstance(parsed, dict):
         raise ValueError(f"scoring config {name!r} must be a JSON object")
     return raw, parsed
+
+
+@lru_cache(maxsize=None)
+def _load_provenance_source(name: str) -> Tuple[bytes, Dict[str, Any]]:
+    return _read_provenance_source(name)
 
 
 @lru_cache(maxsize=None)
@@ -91,15 +95,7 @@ def load_rubric(name: str) -> Dict[str, Any]:
     return copy.deepcopy(data)
 
 
-def config_fingerprint(name: str) -> str:
-    """sha256 (first 16 hex) of the rubric file bytes — the exact config hash."""
-    raw, _ = _load_provenance_source(name)
-    return hashlib.sha256(raw).hexdigest()[:16]
-
-
-def config_version(name: str) -> str:
-    """The config's policy version, falling back to its schema version."""
-    _, data = _load_provenance_source(name)
+def _config_version(data: Dict[str, Any]) -> str:
     meta = data.get("_metadata") if isinstance(data, dict) else None
     if isinstance(meta, dict):
         value = meta.get("version") or meta.get("schema_version")
@@ -108,15 +104,21 @@ def config_version(name: str) -> str:
     return "unknown"
 
 
-def all_config_provenance() -> Dict[str, Dict[str, str]]:
-    """Version + fingerprint for every score-affecting production config."""
-    return {
-        name: {
-            "version": config_version(name),
-            "fingerprint": config_fingerprint(name),
+def all_config_provenance(*, fresh: bool = False) -> Dict[str, Dict[str, str]]:
+    """Version + fingerprint for every production config.
+
+    Scoring keeps process-stable caches. Dashboard reloads request fresh reads
+    without invalidating those caches; each stamp describes one exact read.
+    """
+    read = _read_provenance_source if fresh else _load_provenance_source
+    provenance = {}
+    for name in _PROVENANCE_CONFIGS:
+        raw, data = read(name)
+        provenance[name] = {
+            "version": _config_version(data),
+            "fingerprint": hashlib.sha256(raw).hexdigest()[:16],
         }
-        for name in _PROVENANCE_CONFIGS
-    }
+    return provenance
 
 
 @lru_cache(maxsize=1)

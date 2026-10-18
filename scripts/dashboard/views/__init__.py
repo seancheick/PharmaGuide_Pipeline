@@ -5,10 +5,6 @@ from .observability import render_observability
 from .diff import render_diff
 from .batch_diff import render_batch_diff
 from .intelligence import render_intelligence
-from .audit_section_a import render_audit_section_a
-from .audit_section_b import render_audit_section_b
-from .audit_section_c import render_audit_section_c
-from .audit_section_d import render_audit_section_d
 from .audit_caers import render_audit_caers
 from .safety_copy import render_safety_copy
 from .audit_pillars import render_pillar_audit, render_suppression_audit

@@ -124,45 +124,6 @@ PAGE_META: dict[str, dict[str, Any]] = {
             "Use this page for cross-product insights, not pipeline run diagnosis.",
         ],
     },
-    "section-a-audit": {
-        "page_title": "Section A Audit",
-        "page_summary": "Deep-dive into ingredient quality (Section A) scoring: low-scoring products, probiotic CFU detection, and IQM coverage gaps.",
-        "data_planes": ["Release Snapshot", "Dataset Outputs"],
-        "source_paths": ["release_db", "dataset_outputs"],
-        "freshness_fields": ["latest_export_at", "latest_dataset_activity"],
-        "mixed_plane_warning": "Section A audit combines release snapshot scores with dataset-level ingredient detail.",
-        "related_views": ["Data Quality", "Section B Audit", "Product Inspector"],
-        "usage_notes": [
-            "Use audit filters to isolate brands or categories with low Section A scores.",
-            "Check probiotic CFU detection rates if supplement type includes probiotics.",
-        ],
-    },
-    "section-b-audit": {
-        "page_title": "Section B Audit",
-        "page_summary": "Safety and purity audit: banned substances, recalled ingredients, harmful additives, allergen risks, and dose safety analysis.",
-        "data_planes": ["Release Snapshot"],
-        "source_paths": ["release_db"],
-        "freshness_fields": ["latest_export_at"],
-        "mixed_plane_warning": "",
-        "related_views": ["Section A Audit", "Section C Audit", "Data Quality"],
-        "usage_notes": [
-            "Use safety flag filters to isolate products with specific risk types.",
-            "Check the blocked/unsafe tab for products that failed the safety gate.",
-        ],
-    },
-    "section-c-audit": {
-        "page_title": "Section C Audit",
-        "page_summary": "Evidence and research audit: clinical backing coverage, zero-evidence products, and evidence strength gaps by brand and type.",
-        "data_planes": ["Release Snapshot"],
-        "source_paths": ["release_db"],
-        "freshness_fields": ["latest_export_at"],
-        "mixed_plane_warning": "",
-        "related_views": ["Section A Audit", "Section D Audit", "Intelligence"],
-        "usage_notes": [
-            "Focus on SAFE products with zero evidence — these are the best candidates for clinical study enrichment.",
-            "Compare evidence coverage across supplement types to prioritize research investment.",
-        ],
-    },
     "scoring-integrity": {
         "page_title": "Scoring Integrity",
         "page_summary": "Automated V4 anomaly detection: pillar↔total reconciliation, pillars scoring exactly 0, and out-of-range / impossible values. Green = no anomalies; any row here is a scorer/data bug to investigate.",
@@ -216,29 +177,16 @@ PAGE_META: dict[str, dict[str, Any]] = {
     },
     "caers-audit": {
         "page_title": "CAERS Audit",
-        "page_summary": "FDA CAERS pharmacovigilance audit: adverse event signals, outcome breakdowns, cross-reference with banned/recalled, and B8 scoring impact.",
+        "page_summary": "FDA CAERS pharmacovigilance audit: adverse event signals, outcome breakdowns and cross-reference with banned/recalled. Audit analytics only; the v4 score applies no CAERS penalty.",
         "data_planes": ["Pipeline Data"],
         "source_paths": ["caers_signals"],
         "freshness_fields": [],
         "mixed_plane_warning": "",
-        "related_views": ["Section B Audit", "Intelligence"],
+        "related_views": ["Suppression Audit", "Intelligence"],
         "usage_notes": [
             "Cross-Reference tab shows ingredients with CAERS signals NOT in banned/recalled — review candidates.",
-            "B8 Scoring Impact shows how CAERS penalties affect product scores.",
+            "Scoring Status records that v4 applies no CAERS penalty and why the v3 B8 penalty was retired.",
             "Reaction Analysis surfaces the most commonly reported adverse reactions.",
-        ],
-    },
-    "section-d-audit": {
-        "page_title": "Section D Audit",
-        "page_summary": "Brand trust audit: manufacturer reputation, third-party testing, full disclosure, and certification gap analysis.",
-        "data_planes": ["Release Snapshot"],
-        "source_paths": ["release_db"],
-        "freshness_fields": ["latest_export_at"],
-        "mixed_plane_warning": "",
-        "related_views": ["Section B Audit", "Section C Audit", "Intelligence"],
-        "usage_notes": [
-            "Use trust gaps tab to find SAFE products that could score higher with better manufacturer data.",
-            "Brand leaderboard shows which manufacturers have the strongest trust signals.",
         ],
     },
 }
@@ -257,7 +205,11 @@ def _resolve_source_key(key: str, data: Any) -> list[str]:
         "batch_logs": [str(scan_dir / "logs")],
         "dataset_outputs": [str(scan_dir / "output_*")],
         "build_history": [str(build_root.parent)],
-        "scoring_config": [str(Path("scripts/config/scoring_config.json").resolve())],
+        # The production v4 configs that config_registry fingerprints.
+        "scoring_config": [
+            str(Path("scripts/scoring_v4/config/quality_score.json").resolve()),
+            str(Path("scripts/data/omega_rubric.json").resolve()),
+        ],
     }
     return source_map.get(key, [key])
 

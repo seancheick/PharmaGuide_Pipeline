@@ -574,24 +574,68 @@ def _render_fallback_tables(data, dataset_scope):
         data_table(fallback_df, max_rows=50)
 
 
+def _provenance_label(entry: dict | None) -> str:
+    if not isinstance(entry, dict):
+        return "not recorded"
+    return f"{entry.get('version', 'unknown')} ({entry.get('fingerprint', 'unknown')})"
+
+
+def _release_match(name: str, current: dict, release: list[dict]) -> str:
+    if not release:
+        return "Unknown: no release DB or no config stamp in it"
+    total = sum(item["products"] for item in release)
+    matching = sum(
+        item["products"]
+        for item in release
+        if isinstance(item.get("provenance"), dict) and item["provenance"].get(name) == current
+    )
+    if matching == total:
+        return f"Yes ({total} products)"
+    return f"No ({matching} of {total} products match)"
+
+
+def build_config_snapshot_rows(data) -> list[dict]:
+    """Rows for the Config Snapshot tab, from the production v4 config only.
+
+    Working-tree values come from scoring_v4.config_registry (the scorer's own
+    provenance stamp) and quality_score.json pillars; release values come from
+    the stamp each released product carries.
+    """
+    snapshot = data.scoring_config_snapshot or {}
+    provenance = snapshot.get("provenance") or {}
+    release = snapshot.get("release") or []
+    rows = [
+        {"field": "Scoring engine (release)", "value": str((data.export_manifest or {}).get("scoring_version", "N/A"))},
+        {"field": "Average coverage", "value": f"{data.shared_metrics.get('average_coverage_pct', 'N/A')}%"},
+    ]
+    for name in sorted(provenance):
+        current = provenance[name]
+        released = sorted(
+            {_provenance_label((item.get("provenance") or {}).get(name)) for item in release}
+        )
+        rows.append({"field": f"{name} config (working tree)", "value": _provenance_label(current)})
+        rows.append({"field": f"{name} config (release)", "value": ", ".join(released) or "not recorded"})
+        rows.append({"field": f"{name} matches release", "value": _release_match(name, current, release)})
+    weights = snapshot.get("pillar_weights") or {}
+    for name, weight in weights.items():
+        rows.append({"field": f"{name.replace('_', ' ').title()} max", "value": f"{weight:g}"})
+    if weights:
+        rows.append({"field": "Pillar total", "value": f"{sum(weights.values()):g}"})
+    return rows
+
+
 def _render_config_snapshot(data):
     st.write("### Config Snapshot")
-    config = data.scoring_config
-    if not config:
-        st.info("No scoring config was loaded.")
+    if not data.scoring_config_snapshot:
+        st.info("The v4 scoring config could not be read.")
         return
-    section_maxima = config.get("section_maximums") or {}
-    feature_gates = config.get("feature_gates") or {}
-    rows = [
-        {"field": "Scoring version", "value": str((data.export_manifest or {}).get("scoring_version", "N/A"))},
-        {"field": "Average coverage", "value": f"{data.shared_metrics.get('average_coverage_pct', 'N/A')}%"},
-        {"field": "Ingredient Quality Max", "value": str(section_maxima.get("A_ingredient_quality", 25))},
-        {"field": "Safety & Purity Max", "value": str(section_maxima.get("B_safety_purity", 30))},
-        {"field": "Evidence & Research Max", "value": str(section_maxima.get("C_evidence_research", 20))},
-        {"field": "Brand Trust Max", "value": str(section_maxima.get("D_brand_trust", 5))},
-        {"field": "Non-GMO bonus enabled", "value": str(bool(feature_gates.get("enable_non_gmo_bonus")))},
-    ]
-    st.dataframe(pd.DataFrame(rows), width="stretch", hide_index=True)
+    st.caption(
+        "Production v4 config: scripts/scoring_v4/config/quality_score.json and "
+        "scripts/data/omega_rubric.json, versioned and fingerprinted by "
+        "scoring_v4/config_registry.py. Release values are the stamp on each "
+        "product in products_core.v4_config_fingerprint."
+    )
+    st.dataframe(pd.DataFrame(build_config_snapshot_rows(data)), width="stretch", hide_index=True)
 
 
 def _scoped_dataset_reports(data, dataset_scope):
