@@ -1,48 +1,17 @@
-"""v4 Omega Dose dimension — P1.6.2.
+"""Omega Dose: reference contribution per declared serving in production.
 
-Scores omega-3 dose adequacy against the 25-point rubric in
-scripts/data/omega_rubric.json:
-
-    epa_dha_band         /20  EPA+DHA mg per day, six bands lifted from
-                              scoring_config.section_A_ingredient_quality.
-                              omega3_dose_bonus.bands (EFSA/FDA/AHA-grounded
-                              thresholds: 250/500/1000/2000/4000 mg/day)
-
-The former +5 EPA:DHA ratio bonus was removed in quality_score 1.2.0: no
-clinical optimum ratio exists for a generic omega product. Per-serving EPA
-and DHA stay in metadata for indication-specific logic.
-
-Per Sean's 'do not invent fields' rule:
-- EPA/DHA quantities are summed ONLY when canonical_id ∈ {epa, dha, epa_dha}
-  AND quantity > 0 AND unit is a recognized mg/g/mcg variant. Bare
-  fish_oil parent mass is NOT included (per §9: '3000 mg fish oil is
-  not the same as 3000 mg EPA+DHA').
-- Servings-per-day comes from `generic_helpers.daily_serving_range()`, the
-  single v4 resolver shared with the sleep/immune/joint/evidence modules. It
-  reads the label's canonical serving row (highest quantity, matching the
-  enricher's `_select_canonical_serving`) and falls back to `serving_basis`
-  only when the label declares no daily servings. When nothing is declared it
-  defaults to 1 serving/day (the safe baseline — products labeled without
-  daily-serving guidance can't be over-credited as multi-serving regimens).
-
-Per §13 architecture lock, this module does not import score_supplements (v3).
-The v3 omega3_dose_bonus math is independently reimplemented in policy
-terms.
-
-Conservative EPA+DHA handling:
-- epa rows sum to epa_per_serving
-- dha rows sum to dha_per_serving
-- epa_dha combined rows are summed separately. If epa+dha separates are
-  present, the combined row is treated as an alternative reporting form
-  and NOT additively double-counted (sum max, not both).
+The shared serving adapter owns the assessment basis. This owner selects the
+existing purpose resolver's ordinary-adult or prenatal reference; held and
+explicit triglyceride-purpose contexts retain their separate rubric bands.
+Only disclosed EPA/DHA counts; carrier oil never becomes active omega amount.
 """
 
 from __future__ import annotations
 
-import re
 from typing import Any, Dict, List, Optional, Tuple
 
-from scoring_input_contract import PRENATAL_DHA_TARGET_MG, PRENATAL_TITLE_RE, epa_dha_amounts_per_serving
+from scoring_input_contract import epa_dha_amounts_per_serving
+from evidence_resolver import resolve_omega_evidence_standard
 from scoring_v4.modules.generic_helpers import daily_serving_range
 
 
@@ -53,16 +22,6 @@ _DM = _cfg_block("dose_magnitudes", "omega")["omega"]
 
 
 CAP_DOSE = _DM["cap_dose"]
-
-# Indication-aware dosing for prenatal DHA. The general EPA+DHA bands target
-# cardiovascular intakes (~1000-2000 mg/day), which under-credits a prenatal
-# DHA-dominant product: the prenatal DHA target is ~200 mg DHA/day (EFSA NDA
-# Panel 2014; ACOG/March of Dimes ~200-300 mg), so a 650 mg-DHA prenatal product
-# is generous for its indication. A DHA-dominant product named for prenatal use
-# is scored against the DHA target; we take the higher of this and the general band.
-_PRENATAL_DHA_WITHIN = 20.0
-_PRENATAL_DHA_NEAR = 14.0
-_PRENATAL_DHA_BELOW = 10.0
 
 
 def _load_rubric() -> Dict[str, Any]:
@@ -180,32 +139,30 @@ def score_dose(product: Any) -> Dict[str, Any]:
     band_flag = minimum_flag or maximum_flag
     interval_crosses_band = minimum_label != maximum_label
 
-    # Indication-aware: a prenatal, DHA-dominant product is scored against the
-    # prenatal DHA target (EFSA/ACOG ~200 mg DHA/day), not the general EPA+DHA
-    # bands. Take the higher of the two so a generous prenatal DHA isn't penalized
-    # for a modest combined EPA+DHA total.
-    name_text = " ".join(str(product.get(k) or "") for k in ("product_name", "fullName", "brand_name"))
-    prenatal_dha = bool(PRENATAL_TITLE_RE.search(name_text)) and dha_ps >= epa_ps and dha_ps > 0
+    # Purpose/population selection is shared with Evidence, never inferred here
+    # from an independent title regex or from Evidence points.
+    purpose = resolve_omega_evidence_standard(product)
+    context = purpose["applicability_reason"]
     indication_label: Optional[str] = None
-    if prenatal_dha:
-        def prenatal_score(dha_per_day: float) -> Tuple[float, str]:
-            if dha_per_day >= PRENATAL_DHA_TARGET_MG:
-                return _PRENATAL_DHA_WITHIN, "prenatal_dha_within_target"
-            if dha_per_day >= PRENATAL_DHA_TARGET_MG * 0.5:
-                return _PRENATAL_DHA_NEAR, "prenatal_dha_near_target"
-            return _PRENATAL_DHA_BELOW, "prenatal_dha_below_target"
-
-        prenatal_min_score, prenatal_min_label = prenatal_score(dha_ps * min_daily)
-        prenatal_max_score, prenatal_max_label = prenatal_score(dha_ps * max_daily)
-        ind_score = prenatal_min_score
-        indication_label = (
-            prenatal_min_label
-            if prenatal_min_label == prenatal_max_label
-            else f"{prenatal_min_label}_to_{prenatal_max_label}"
-        )
-        ind_score = min(ind_score, band_cap)
-        if ind_score > band_score:
-            band_score, band_label = ind_score, indication_label
+    # Prenatal amount comparison and clinical Evidence applicability are
+    # separate policies. An Evidence hold cannot make EPA substitute for DHA.
+    prenatal_context = purpose["prenatal"]
+    reference = None
+    if prenatal_context:
+        reference = float(_DM["prenatal_dha_reference_mg"])
+        amount_min, amount_max = dha_ps * min_daily, dha_ps * max_daily
+        indication_label = "prenatal_dha_within_target" if amount_min >= reference else "prenatal_dha_below_target"
+        band_label = indication_label
+    elif context == "ordinary_adult_explicit_epa_dha":
+        reference = float(_DM["adult_nutritional_reference_mg"])
+        amount_min, amount_max = per_day_min, per_day_max
+        band_label = "adult_nutritional_reference_met" if amount_min >= reference else "adult_nutritional_reference_partial"
+    if reference is not None:
+        cap = float(_DM["reference_contribution_cap"])
+        minimum_score = round(cap * min(max(amount_min, 0.0) / reference, 1.0), 2)
+        maximum_score = round(cap * min(max(amount_max, 0.0) / reference, 1.0), 2)
+        band_score = minimum_score
+        interval_crosses_band = amount_min < reference <= amount_max
 
     components: Dict[str, float] = {}
     if band_score > 0:

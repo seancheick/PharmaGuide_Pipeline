@@ -57,7 +57,8 @@ ORIGINAL = {
             "WITHIN_TESTED_RANGE": 0.0, "NEAR_TESTED_RANGE": 0.0,
             "OUTSIDE_TESTED_RANGE": 0.0, "DOSE_UNKNOWN": 0.0}},
     },
-    "omega": {"cap_dose": 25.0},
+    "omega": {"cap_dose": 25.0, "adult_nutritional_reference_mg": 250.0,
+              "prenatal_dha_reference_mg": 200.0, "reference_contribution_cap": 20.0},
     "sports": {"dimension_cap": 25.0},
     "fiber_digestive": {"dimension_cap": 25.0},
 }

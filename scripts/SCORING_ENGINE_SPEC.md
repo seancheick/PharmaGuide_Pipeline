@@ -232,6 +232,13 @@ Since config 1.26.0 (V4.1 Step 4) every fact earns or loses points once:
     credits are retired, and references are the retained attainable maximum.
 - Dose:
   - Product Dose quality assesses one declared Facts-panel serving. Maximum labeled daily-use safety remains separate; it is not confirmed personal intake.
+  - Ordinary-adult explicit EPA+DHA uses proportional reference contribution to
+    250 mg per serving, capped at 20 Dose points. Prenatal omega uses DHA alone
+    against the selected 200 mg additional-DHA reference; EPA cannot substitute.
+    Child/specialized/identity holds and explicit triglyceride-purpose bands
+    remain separate. Maximum-daily safety is unchanged. A triglyceride claim
+    cannot establish treatment Evidence or molecular form. See the
+    [approved policy and measured receipt](../reports/omega_policy_20261018/README.md).
   - Studied-range bands are reference-normalized, with proportional credit
     below the near band.
   - An amount without an applicable benchmark earns the 11.4/20 neutral on the
@@ -384,6 +391,7 @@ Artifact schema 4.4.0 adds the canonical eligible-delivery projection (October 1
   owner decisions (null earns no affirmative credit), primary-mass-floor
   calibration for Evidence norms, and the vitamin-D bone-goal ownership change
   (bone goal is synergy-owned, not Evidence-owned).
+- **4.6.0 → 4.7.0** (2026-10-18): approved bounded omega reference-contribution policy (config 1.28.0), exclusive prenatal DHA, shared child-population eligibility, and removal of marketing-derived Evidence/form credit. The [measured receipt](../reports/omega_policy_20261018/README.md) distinguishes source qualification from pending corpus regeneration.
 - **4.5.0 → 4.6.0** (2026-10-17): Sean approved product Dose quality per declared serving across every category. Maximum labeled daily safety remains separate. Config 1.27.0 identifies this policy; other five quality pillars and clinical limits are unchanged.
 - **4.4.0 → 4.5.0** (2026-10-03): clinical amount adequacy moved to Dose;
   declared-purpose Dose votes are equal; omega Evidence is selected by applicable

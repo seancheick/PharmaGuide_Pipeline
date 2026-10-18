@@ -1,0 +1,64 @@
+{
+  "original": {
+    "total": 50.5,
+    "pillars": {
+      "formulation": 9.3,
+      "dose": 6.0,
+      "evidence": 10.4,
+      "transparency": 6.8,
+      "verification": 8.0,
+      "safety_hygiene": 10.0
+    },
+    "status": "scored",
+    "safety": "no_known_catalog_concern",
+    "forms": [
+      [
+        "epa",
+        "epa (unspecified)"
+      ],
+      [
+        "alpha_linolenic_acid",
+        "alpha-linolenic acid (unspecified)"
+      ],
+      [
+        "dha",
+        "dha (unspecified)"
+      ],
+      [
+        "gamma_linolenic_acid",
+        "gamma-linolenic acid (unspecified)"
+      ]
+    ]
+  },
+  "claim": {
+    "total": 67.1,
+    "pillars": {
+      "formulation": 12.2,
+      "dose": 6.0,
+      "evidence": 20.0,
+      "transparency": 10.9,
+      "verification": 8.0,
+      "safety_hygiene": 10.0
+    },
+    "status": "scored",
+    "safety": "no_known_catalog_concern",
+    "forms": [
+      [
+        "epa",
+        "EPA fish oil triglyceride"
+      ],
+      [
+        "alpha_linolenic_acid",
+        "alpha-linolenic acid (unspecified)"
+      ],
+      [
+        "dha",
+        "DHA fish oil triglyceride"
+      ],
+      [
+        "gamma_linolenic_acid",
+        "gamma-linolenic acid (unspecified)"
+      ]
+    ]
+  }
+}

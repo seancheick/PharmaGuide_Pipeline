@@ -96,23 +96,27 @@ _OMEGA_MOLECULAR_FORM_PATTERNS = (
         re.IGNORECASE,
     )),
     ("triglyceride", re.compile(
-        r"\b(natural[\s-]?triglyceride[s]?|triglyceride[s]?|tg\s+form|"
-        r"triglyceride\s+form)\b",
+        r"\b(?:triglycerides?[\s-]+form|tg\s+form)\b|"
+        r"^\s*(?:natural\s+)?triglycerides?(?:\s*\((?:mixed|unspecified)\))?\s*$|"
+        r"(?:^|\n)\s*true\s+triglycerides?\s*(?:$|\n)|"
+        r"\bas\s+(?:natural\s+)?triglycerides?\b|"
+        r"\btriglycerides?,\s*natural\b|"
+        r"\b(?:fish\s+oil|omega[\s-]*3\s+fatty\s+acids?|epa|dha|"
+        r"eicosapentaenoic\s+acid|docosahexaenoic\s+acid)\s+triglycerides?\b|"
+        r"\btriglyceride\s+algal\s+oil\b|"
+        r"\bomega[\s-]*3\s+triglyceride\s+oil\b|"
+        r"^\s*(?:triglyceride\s+fish\s+oil\b|omega[\s-]*3\s+(?:natural\s+)?triglycerides?\s+\d+(?:\.\d+)?\s*(?:mg|g)\b)|"
+        r"\b(?:forms?\s*:\s*(?:from\s+)?|as\s+)(?:ethyl[\s-]+esters?|phospholipids?)"
+        r"(?:\s|,|and|&)+triglycerides?\b|"
+        r"\btriglycerides?\s*[,/&][^.;\n]{0,64}\b(?:omega[\s-]*3\s+)?forms?\b",
         re.IGNORECASE,
     )),
 )
 _OMEGA_MCT_CONTEXT = re.compile(
-    r"\b(?:mct|medium[\s-]?chain|middle[\s-]?chain|caprylic|capric|c8|c10|"
-    r"coconut)\b.{0,48}\btriglyceride[s]?\b|"
-    r"\btriglyceride[s]?\b.{0,48}\b(?:mct|medium[\s-]?chain|"
-    r"middle[\s-]?chain|caprylic|capric|c8|c10|coconut)\b",
-    re.IGNORECASE,
-)
-_OMEGA_TRIGLYCERIDE_HEALTH_CLAIM = re.compile(
-    r"\b(?:healthy|normal|blood|serum|plasma|support(?:s|ing)?|maintain(?:s|ing)?|"
-    r"already\s+within)\b.{0,64}\btriglyceride[s]?\s+level[s]?\b|"
-    r"\btriglyceride[s]?\s+level[s]?\b.{0,64}\b(?:healthy|normal|range|blood|serum|"
-    r"plasma|support(?:s|ing)?|maintain(?:s|ing)?|already\s+within)\b",
+    r"\b(?:mct|c8|c10|medium[\s-]?chain|middle[\s-]?chain|caprylic|capric|coconut)"
+    r"(?:[\s/-]+(?:capric|caprylic))*(?:\s+oil)?(?:\s+in(?:\s+the)?)?"
+    r"[\s(-]+(?:natural\s+)?triglycerides?\b|"
+    r"\btriglycerides?(?:[\s-]+form)?\s*\(\s*(?:mct|c8|c10)(?:\s+oil)?\s*\)",
     re.IGNORECASE,
 )
 
@@ -135,11 +139,13 @@ def omega_molecular_form_disclosures(surfaces: Iterable[str]) -> Tuple[str, ...]
         if not surface:
             continue
         for token, pattern in _OMEGA_MOLECULAR_FORM_PATTERNS:
-            if token == "triglyceride" and _OMEGA_MCT_CONTEXT.search(surface):
-                continue
-            if token == "triglyceride" and _OMEGA_TRIGLYCERIDE_HEALTH_CLAIM.search(surface):
-                continue
-            if pattern.search(surface):
+            candidate = surface
+            if token == "triglyceride":
+                # Require affirmative form wording, never a bare mention in
+                # health prose. Remove only the MCT noun phrase so a separate
+                # fish-oil form disclosure remains available.
+                candidate = _OMEGA_MCT_CONTEXT.sub(" ", candidate)
+            if pattern.search(candidate):
                 detected.add(token)
     return tuple(
         token for token, _ in _OMEGA_MOLECULAR_FORM_PATTERNS if token in detected

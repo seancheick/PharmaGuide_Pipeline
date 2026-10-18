@@ -1081,6 +1081,14 @@ def _pillar_dose(dim: Dict[str, Any], weight: float, archetype: str,
         reason = _unassessed_primary_dose_reason(dim)
     if reason is None:
         reason = _reason_dose(_band(val, weight))
+    if archetype == "omega" and over_limit_reason is None:
+        label = str((dim.get("metadata") or {}).get("epa_dha_band_label") or "")
+        if label.startswith("adult_nutritional_reference_"):
+            reference_mg = cfg["dose_magnitudes"]["omega"]["adult_nutritional_reference_mg"]
+            reason = f"EPA + DHA per serving is compared with a {reference_mg:g} mg adult nutritional reference contribution; more earns no additional Dose credit."
+        elif label.startswith("prenatal_dha_"):
+            reference_mg = cfg["dose_magnitudes"]["omega"]["prenatal_dha_reference_mg"]
+            reason = f"DHA per serving is compared with a {reference_mg:g} mg additional-DHA reference contribution; this does not assess complete pregnancy nutrition."
     if archetype == "probiotic" and over_limit_reason is None:
         reason = _probiotic_dose_reason(dim, reason)
     return {

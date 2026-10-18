@@ -1,0 +1,5228 @@
+{
+  "source": "1521486e4e406dc43aa2c0ba70a4958106fa3076",
+  "n": 715,
+  "movers": 415,
+  "pillar_movers": {
+    "dose": 404,
+    "evidence": 11
+  },
+  "unchanged": 300,
+  "critical": [],
+  "assessment_changes": [
+    {
+      "id": "220343",
+      "before": "partial",
+      "after": "complete",
+      "identity_before": {
+        "blocking_contract_findings": [],
+        "contract_findings": [],
+        "mapped_count": 1,
+        "mapped_coverage": 1.0,
+        "mapped_product_evidence_count": 1,
+        "module": "omega",
+        "module_relevant_identity": true,
+        "product_evidence_count": 1,
+        "readiness": "complete",
+        "reason_code": "mapped_scoring_actives",
+        "source_mapped_count": 0,
+        "source_mapped_coverage": null,
+        "source_score_eligible_active_count": 0,
+        "source_unmapped_count": 0,
+        "unmapped_count": 0,
+        "zero_scorable_reason": null
+      },
+      "identity_after": {
+        "blocking_contract_findings": [],
+        "contract_findings": [],
+        "mapped_count": 1,
+        "mapped_coverage": 1.0,
+        "mapped_product_evidence_count": 1,
+        "module": "omega",
+        "module_relevant_identity": true,
+        "product_evidence_count": 1,
+        "readiness": "complete",
+        "reason_code": "mapped_scoring_actives",
+        "source_mapped_count": 0,
+        "source_mapped_coverage": null,
+        "source_score_eligible_active_count": 0,
+        "source_unmapped_count": 0,
+        "unmapped_count": 0,
+        "zero_scorable_reason": null
+      },
+      "soft_missing": [
+        "omega_aggregate_epa_dha_evidence"
+      ]
+    },
+    {
+      "id": "220662",
+      "before": "partial",
+      "after": "complete",
+      "identity_before": {
+        "blocking_contract_findings": [],
+        "contract_findings": [],
+        "mapped_count": 1,
+        "mapped_coverage": 1.0,
+        "mapped_product_evidence_count": 1,
+        "module": "omega",
+        "module_relevant_identity": true,
+        "product_evidence_count": 1,
+        "readiness": "complete",
+        "reason_code": "mapped_scoring_actives",
+        "source_mapped_count": 0,
+        "source_mapped_coverage": null,
+        "source_score_eligible_active_count": 0,
+        "source_unmapped_count": 0,
+        "unmapped_count": 0,
+        "zero_scorable_reason": null
+      },
+      "identity_after": {
+        "blocking_contract_findings": [],
+        "contract_findings": [],
+        "mapped_count": 1,
+        "mapped_coverage": 1.0,
+        "mapped_product_evidence_count": 1,
+        "module": "omega",
+        "module_relevant_identity": true,
+        "product_evidence_count": 1,
+        "readiness": "complete",
+        "reason_code": "mapped_scoring_actives",
+        "source_mapped_count": 0,
+        "source_mapped_coverage": null,
+        "source_score_eligible_active_count": 0,
+        "source_unmapped_count": 0,
+        "unmapped_count": 0,
+        "zero_scorable_reason": null
+      },
+      "soft_missing": [
+        "omega_aggregate_epa_dha_evidence"
+      ]
+    },
+    {
+      "id": "223405",
+      "before": "partial",
+      "after": "complete",
+      "identity_before": {
+        "blocking_contract_findings": [],
+        "contract_findings": [],
+        "mapped_count": 1,
+        "mapped_coverage": 1.0,
+        "mapped_product_evidence_count": 1,
+        "module": "omega",
+        "module_relevant_identity": true,
+        "product_evidence_count": 1,
+        "readiness": "complete",
+        "reason_code": "mapped_scoring_actives",
+        "source_mapped_count": 0,
+        "source_mapped_coverage": null,
+        "source_score_eligible_active_count": 0,
+        "source_unmapped_count": 0,
+        "unmapped_count": 0,
+        "zero_scorable_reason": null
+      },
+      "identity_after": {
+        "blocking_contract_findings": [],
+        "contract_findings": [],
+        "mapped_count": 1,
+        "mapped_coverage": 1.0,
+        "mapped_product_evidence_count": 1,
+        "module": "omega",
+        "module_relevant_identity": true,
+        "product_evidence_count": 1,
+        "readiness": "complete",
+        "reason_code": "mapped_scoring_actives",
+        "source_mapped_count": 0,
+        "source_mapped_coverage": null,
+        "source_score_eligible_active_count": 0,
+        "source_unmapped_count": 0,
+        "unmapped_count": 0,
+        "zero_scorable_reason": null
+      },
+      "soft_missing": [
+        "omega_aggregate_epa_dha_evidence"
+      ]
+    },
+    {
+      "id": "223408",
+      "before": "partial",
+      "after": "complete",
+      "identity_before": {
+        "blocking_contract_findings": [],
+        "contract_findings": [],
+        "mapped_count": 1,
+        "mapped_coverage": 1.0,
+        "mapped_product_evidence_count": 1,
+        "module": "omega",
+        "module_relevant_identity": true,
+        "product_evidence_count": 1,
+        "readiness": "complete",
+        "reason_code": "mapped_scoring_actives",
+        "source_mapped_count": 0,
+        "source_mapped_coverage": null,
+        "source_score_eligible_active_count": 0,
+        "source_unmapped_count": 0,
+        "unmapped_count": 0,
+        "zero_scorable_reason": null
+      },
+      "identity_after": {
+        "blocking_contract_findings": [],
+        "contract_findings": [],
+        "mapped_count": 1,
+        "mapped_coverage": 1.0,
+        "mapped_product_evidence_count": 1,
+        "module": "omega",
+        "module_relevant_identity": true,
+        "product_evidence_count": 1,
+        "readiness": "complete",
+        "reason_code": "mapped_scoring_actives",
+        "source_mapped_count": 0,
+        "source_mapped_coverage": null,
+        "source_score_eligible_active_count": 0,
+        "source_unmapped_count": 0,
+        "unmapped_count": 0,
+        "zero_scorable_reason": null
+      },
+      "soft_missing": [
+        "omega_aggregate_epa_dha_evidence"
+      ]
+    }
+  ],
+  "movements": [
+    {
+      "id": "252500",
+      "name": "Fish Oil Softgel 1000 mg",
+      "before": 66.4,
+      "after": 75.6,
+      "pillars": {
+        "dose": [
+          10.8,
+          20.0
+        ]
+      }
+    },
+    {
+      "id": "239592",
+      "name": "100% Pure Omega-3 Krill Oil 350 mg",
+      "before": 50.7,
+      "after": 56.6,
+      "pillars": {
+        "dose": [
+          0.0,
+          5.9
+        ]
+      }
+    },
+    {
+      "id": "25842",
+      "name": "Omega-3 Krill Oil",
+      "before": 50.7,
+      "after": 56.6,
+      "pillars": {
+        "dose": [
+          0.0,
+          5.9
+        ]
+      }
+    },
+    {
+      "id": "82342",
+      "name": "Cod Liver Oil",
+      "before": 48.5,
+      "after": 54.3,
+      "pillars": {
+        "dose": [
+          0.0,
+          5.8
+        ]
+      }
+    },
+    {
+      "id": "218457",
+      "name": "Omega 3",
+      "before": 62.3,
+      "after": 71.1,
+      "pillars": {
+        "dose": [
+          11.2,
+          20.0
+        ]
+      }
+    },
+    {
+      "id": "203390",
+      "name": "Purified & Clear Omega 3 Fish Oil 1000 mg",
+      "before": 66.7,
+      "after": 69.9,
+      "pillars": {
+        "dose": [
+          16.8,
+          20.0
+        ]
+      }
+    },
+    {
+      "id": "209394",
+      "name": "Pure Wild Alaskan Fish Oil with AlaskOmega 1000 mg",
+      "before": 66.7,
+      "after": 69.9,
+      "pillars": {
+        "dose": [
+          16.8,
+          20.0
+        ]
+      }
+    },
+    {
+      "id": "25175",
+      "name": "Best DHA 500 From Calamari",
+      "before": 62.2,
+      "after": 71.6,
+      "pillars": {
+        "dose": [
+          10.6,
+          20.0
+        ]
+      }
+    },
+    {
+      "id": "25537",
+      "name": "Real Krill",
+      "before": 55.2,
+      "after": 60.2,
+      "pillars": {
+        "dose": [
+          0.0,
+          5.0
+        ]
+      }
+    },
+    {
+      "id": "302643",
+      "name": "Calamari DHA Omega-3",
+      "before": 58.8,
+      "after": 68.2,
+      "pillars": {
+        "dose": [
+          10.6,
+          20.0
+        ]
+      }
+    },
+    {
+      "id": "302644",
+      "name": "Calamari DHA Omega-3",
+      "before": 67.2,
+      "after": 76.6,
+      "pillars": {
+        "dose": [
+          10.6,
+          20.0
+        ]
+      }
+    },
+    {
+      "id": "302654",
+      "name": "Enhanced Krill Plus Omega 3s",
+      "before": 64.0,
+      "after": 71.8,
+      "pillars": {
+        "dose": [
+          12.2,
+          20.0
+        ]
+      }
+    },
+    {
+      "id": "322517",
+      "name": "Vegan Omega-3 2000 mg",
+      "before": 68.4,
+      "after": 71.6,
+      "pillars": {
+        "dose": [
+          16.8,
+          20.0
+        ]
+      }
+    },
+    {
+      "id": "63303",
+      "name": "Real Krill",
+      "before": 48.5,
+      "after": 53.4,
+      "pillars": {
+        "dose": [
+          0.0,
+          4.9
+        ]
+      }
+    },
+    {
+      "id": "212007",
+      "name": "DHA",
+      "before": 55.6,
+      "after": 68.9,
+      "pillars": {
+        "dose": [
+          4.5,
+          17.8
+        ]
+      }
+    },
+    {
+      "id": "239883",
+      "name": "Superior 100% Pure Omega-3 Krill Oil 350 mg",
+      "before": 50.7,
+      "after": 56.6,
+      "pillars": {
+        "dose": [
+          0.0,
+          5.9
+        ]
+      }
+    },
+    {
+      "id": "272960",
+      "name": "DHA",
+      "before": 56.1,
+      "after": 69.4,
+      "pillars": {
+        "dose": [
+          4.5,
+          17.8
+        ]
+      }
+    },
+    {
+      "id": "69760",
+      "name": "MegaKrill",
+      "before": 48.7,
+      "after": 54.6,
+      "pillars": {
+        "dose": [
+          0.0,
+          5.9
+        ]
+      }
+    },
+    {
+      "id": "1024",
+      "name": "Fish Oil",
+      "before": 73.7,
+      "after": 78.9,
+      "pillars": {
+        "dose": [
+          14.8,
+          20.0
+        ]
+      }
+    },
+    {
+      "id": "1050",
+      "name": "Omega Complex",
+      "before": 63.4,
+      "after": 68.6,
+      "pillars": {
+        "dose": [
+          14.8,
+          20.0
+        ]
+      }
+    },
+    {
+      "id": "1073",
+      "name": "Fish Oil +Krill",
+      "before": 70.6,
+      "after": 75.8,
+      "pillars": {
+        "dose": [
+          14.8,
+          20.0
+        ]
+      }
+    },
+    {
+      "id": "11609",
+      "name": "Omega Complex",
+      "before": 50.5,
+      "after": 64.5,
+      "pillars": {
+        "dose": [
+          6.0,
+          20.0
+        ]
+      }
+    },
+    {
+      "id": "12444",
+      "name": "Fish Oil 1400 +Joint Support",
+      "before": 61.5,
+      "after": 66.7,
+      "pillars": {
+        "dose": [
+          14.8,
+          20.0
+        ]
+      }
+    },
+    {
+      "id": "14416",
+      "name": "Fish Oil 1500",
+      "before": 66.7,
+      "after": 71.9,
+      "pillars": {
+        "dose": [
+          14.8,
+          20.0
+        ]
+      }
+    },
+    {
+      "id": "14423",
+      "name": "Fish Oil 1500",
+      "before": 66.7,
+      "after": 71.9,
+      "pillars": {
+        "dose": [
+          14.8,
+          20.0
+        ]
+      }
+    },
+    {
+      "id": "15716",
+      "name": "Fish Oil with CoQ-10",
+      "before": 60.4,
+      "after": 69.2,
+      "pillars": {
+        "dose": [
+          11.2,
+          20.0
+        ]
+      }
+    },
+    {
+      "id": "1634",
+      "name": "Blood Pressure Formula",
+      "before": 55.1,
+      "after": 65.1,
+      "pillars": {
+        "dose": [
+          10.0,
+          20.0
+        ]
+      }
+    },
+    {
+      "id": "1651",
+      "name": "Fish Oil Sport",
+      "before": 66.7,
+      "after": 71.9,
+      "pillars": {
+        "dose": [
+          14.8,
+          20.0
+        ]
+      }
+    },
+    {
+      "id": "176266",
+      "name": "Vegetable Omega Complex",
+      "before": 44.5,
+      "after": 56.5,
+      "pillars": {
+        "dose": [
+          4.0,
+          16.0
+        ]
+      }
+    },
+    {
+      "id": "183092",
+      "name": "Fish Oil Orange Natural Flavor",
+      "before": 64.6,
+      "after": 68.6,
+      "pillars": {
+        "dose": [
+          16.0,
+          20.0
+        ]
+      }
+    },
+    {
+      "id": "183171",
+      "name": "Triple Strength Fish Oil plus Joint",
+      "before": 73.4,
+      "after": 77.4,
+      "pillars": {
+        "dose": [
+          16.0,
+          20.0
+        ]
+      }
+    },
+    {
+      "id": "19430",
+      "name": "Triple Strength Fish oil",
+      "before": 73.7,
+      "after": 78.9,
+      "pillars": {
+        "dose": [
+          14.8,
+          20.0
+        ]
+      }
+    },
+    {
+      "id": "19466",
+      "name": "Triple Strength Fish Oil",
+      "before": 73.7,
+      "after": 78.9,
+      "pillars": {
+        "dose": [
+          14.8,
+          20.0
+        ]
+      }
+    },
+    {
+      "id": "219248",
+      "name": "Fish Oil",
+      "before": 73.7,
+      "after": 78.9,
+      "pillars": {
+        "dose": [
+          14.8,
+          20.0
+        ]
+      }
+    },
+    {
+      "id": "219870",
+      "name": "High Potency Fish Oil",
+      "before": 66.7,
+      "after": 71.9,
+      "pillars": {
+        "dose": [
+          14.8,
+          20.0
+        ]
+      }
+    },
+    {
+      "id": "220279",
+      "name": "Heart & Eye Health",
+      "before": 62.6,
+      "after": 67.8,
+      "pillars": {
+        "dose": [
+          14.8,
+          20.0
+        ]
+      }
+    },
+    {
+      "id": "228060",
+      "name": "High Potency Omega-3",
+      "before": 65.0,
+      "after": 71.4,
+      "pillars": {
+        "dose": [
+          13.6,
+          20.0
+        ]
+      }
+    },
+    {
+      "id": "229383",
+      "name": "Essential Fatty Acid Support",
+      "before": 61.4,
+      "after": 67.8,
+      "pillars": {
+        "dose": [
+          13.6,
+          20.0
+        ]
+      }
+    },
+    {
+      "id": "243663",
+      "name": "Triple Strength Krill Oil Mini",
+      "before": 57.1,
+      "after": 70.3,
+      "pillars": {
+        "dose": [
+          4.4,
+          17.6
+        ]
+      }
+    },
+    {
+      "id": "243667",
+      "name": "Fish Oil Orange Natural Flavor",
+      "before": 64.6,
+      "after": 68.6,
+      "pillars": {
+        "dose": [
+          16.0,
+          20.0
+        ]
+      }
+    },
+    {
+      "id": "243671",
+      "name": "Fish Body Oil",
+      "before": 66.7,
+      "after": 71.9,
+      "pillars": {
+        "dose": [
+          14.8,
+          20.0
+        ]
+      }
+    },
+    {
+      "id": "259806",
+      "name": "Fish Oil Mini 1000 mg of EPA/DHA Omega-3s",
+      "before": 67.9,
+      "after": 71.9,
+      "pillars": {
+        "dose": [
+          16.0,
+          20.0
+        ]
+      }
+    },
+    {
+      "id": "259807",
+      "name": "Fish Oil Mini 1000 mg of EPA/DHA Omega-3s",
+      "before": 67.9,
+      "after": 71.9,
+      "pillars": {
+        "dose": [
+          16.0,
+          20.0
+        ]
+      }
+    },
+    {
+      "id": "259808",
+      "name": "Fish Oil 1000 mg of EPA/DHA Omega-3s",
+      "before": 67.9,
+      "after": 71.9,
+      "pillars": {
+        "dose": [
+          16.0,
+          20.0
+        ]
+      }
+    },
+    {
+      "id": "259810",
+      "name": "Triple Strength Fish Oil",
+      "before": 74.4,
+      "after": 78.4,
+      "pillars": {
+        "dose": [
+          16.0,
+          20.0
+        ]
+      }
+    },
+    {
+      "id": "259813",
+      "name": "Triple Strength Fish Oil plus Sambucus",
+      "before": 66.4,
+      "after": 70.4,
+      "pillars": {
+        "dose": [
+          16.0,
+          20.0
+        ]
+      }
+    },
+    {
+      "id": "259816",
+      "name": "High Potency EPA & DHA",
+      "before": 67.9,
+      "after": 71.9,
+      "pillars": {
+        "dose": [
+          16.0,
+          20.0
+        ]
+      }
+    },
+    {
+      "id": "259827",
+      "name": "High Potency EPA & DHA",
+      "before": 65.5,
+      "after": 71.9,
+      "pillars": {
+        "dose": [
+          13.6,
+          20.0
+        ]
+      }
+    },
+    {
+      "id": "26989",
+      "name": "Fish Oil 1240",
+      "before": 67.9,
+      "after": 71.9,
+      "pillars": {
+        "dose": [
+          16.0,
+          20.0
+        ]
+      }
+    },
+    {
+      "id": "27463",
+      "name": "Concentrated Fish Oil",
+      "before": 60.2,
+      "after": 70.2,
+      "pillars": {
+        "dose": [
+          10.0,
+          20.0
+        ]
+      }
+    },
+    {
+      "id": "27472",
+      "name": "Concentrated Mini Fish Oil",
+      "before": 60.2,
+      "after": 70.2,
+      "pillars": {
+        "dose": [
+          10.0,
+          20.0
+        ]
+      }
+    },
+    {
+      "id": "297220",
+      "name": "Essential Fatty Acid Support",
+      "before": 61.4,
+      "after": 67.8,
+      "pillars": {
+        "dose": [
+          13.6,
+          20.0
+        ]
+      }
+    },
+    {
+      "id": "304637",
+      "name": "High Potency Omega-3",
+      "before": 65.0,
+      "after": 71.4,
+      "pillars": {
+        "dose": [
+          13.6,
+          20.0
+        ]
+      }
+    },
+    {
+      "id": "305831",
+      "name": "DHA 600",
+      "before": 60.3,
+      "after": 66.1,
+      "pillars": {
+        "dose": [
+          14.2,
+          20.0
+        ]
+      }
+    },
+    {
+      "id": "305866",
+      "name": "Fish Oil",
+      "before": 74.4,
+      "after": 78.4,
+      "pillars": {
+        "dose": [
+          16.0,
+          20.0
+        ]
+      }
+    },
+    {
+      "id": "309900",
+      "name": "Triple Strength Fish Oil",
+      "before": 74.4,
+      "after": 78.4,
+      "pillars": {
+        "dose": [
+          16.0,
+          20.0
+        ]
+      }
+    },
+    {
+      "id": "309901",
+      "name": "Triple Strength Omega Complex Lemon Natural Flavor",
+      "before": 63.4,
+      "after": 68.6,
+      "pillars": {
+        "dose": [
+          14.8,
+          20.0
+        ]
+      }
+    },
+    {
+      "id": "313698",
+      "name": "Fish Oil",
+      "before": 53.3,
+      "after": 68.1,
+      "pillars": {
+        "dose": [
+          5.2,
+          20.0
+        ]
+      }
+    },
+    {
+      "id": "313699",
+      "name": "Omega 3-6-9 Lemon",
+      "before": 51.9,
+      "after": 65.9,
+      "pillars": {
+        "dose": [
+          6.0,
+          20.0
+        ]
+      }
+    },
+    {
+      "id": "315318",
+      "name": "Fish Oil Omega-3s",
+      "before": 61.4,
+      "after": 71.4,
+      "pillars": {
+        "dose": [
+          10.0,
+          20.0
+        ]
+      }
+    },
+    {
+      "id": "315335",
+      "name": "Fish Oil Mini",
+      "before": 61.9,
+      "after": 71.9,
+      "pillars": {
+        "dose": [
+          10.0,
+          20.0
+        ]
+      }
+    },
+    {
+      "id": "315812",
+      "name": "Fish Oil Mini",
+      "before": 61.9,
+      "after": 71.9,
+      "pillars": {
+        "dose": [
+          10.0,
+          20.0
+        ]
+      }
+    },
+    {
+      "id": "315840",
+      "name": "High Potency EPA & DHA",
+      "before": 67.9,
+      "after": 71.9,
+      "pillars": {
+        "dose": [
+          16.0,
+          20.0
+        ]
+      }
+    },
+    {
+      "id": "315851",
+      "name": "Fish Oil Mini",
+      "before": 61.9,
+      "after": 71.9,
+      "pillars": {
+        "dose": [
+          10.0,
+          20.0
+        ]
+      }
+    },
+    {
+      "id": "31993",
+      "name": "Heart & Health",
+      "before": 62.6,
+      "after": 67.8,
+      "pillars": {
+        "dose": [
+          14.8,
+          20.0
+        ]
+      }
+    },
+    {
+      "id": "328783",
+      "name": "Cod Liver Oil",
+      "before": 53.8,
+      "after": 68.6,
+      "pillars": {
+        "dose": [
+          5.2,
+          20.0
+        ]
+      }
+    },
+    {
+      "id": "328788",
+      "name": "Triple Strength Fish Oil",
+      "before": 74.4,
+      "after": 78.4,
+      "pillars": {
+        "dose": [
+          16.0,
+          20.0
+        ]
+      }
+    },
+    {
+      "id": "328789",
+      "name": "Triple Strength Fish Oil",
+      "before": 74.4,
+      "after": 78.4,
+      "pillars": {
+        "dose": [
+          16.0,
+          20.0
+        ]
+      }
+    },
+    {
+      "id": "328791",
+      "name": "Triple Strength Fish Oil plus CoQ-10",
+      "before": 74.4,
+      "after": 78.4,
+      "pillars": {
+        "dose": [
+          16.0,
+          20.0
+        ]
+      }
+    },
+    {
+      "id": "328792",
+      "name": "Triple Strength Krill Oil",
+      "before": 55.1,
+      "after": 68.3,
+      "pillars": {
+        "dose": [
+          4.4,
+          17.6
+        ]
+      }
+    },
+    {
+      "id": "33095",
+      "name": "Fish Oil 1240 Sport",
+      "before": 66.9,
+      "after": 70.9,
+      "pillars": {
+        "dose": [
+          16.0,
+          20.0
+        ]
+      }
+    },
+    {
+      "id": "33098",
+      "name": "Fish Oil 1240 Sport",
+      "before": 66.4,
+      "after": 70.4,
+      "pillars": {
+        "dose": [
+          16.0,
+          20.0
+        ]
+      }
+    },
+    {
+      "id": "331493",
+      "name": "High-Potency Fish Oil",
+      "before": 67.9,
+      "after": 71.9,
+      "pillars": {
+        "dose": [
+          16.0,
+          20.0
+        ]
+      }
+    },
+    {
+      "id": "331499",
+      "name": "Triple Strength Fish Oil",
+      "before": 74.4,
+      "after": 78.4,
+      "pillars": {
+        "dose": [
+          16.0,
+          20.0
+        ]
+      }
+    },
+    {
+      "id": "33540",
+      "name": "Concentrated Mini Fish Oil",
+      "before": 60.2,
+      "after": 70.2,
+      "pillars": {
+        "dose": [
+          10.0,
+          20.0
+        ]
+      }
+    },
+    {
+      "id": "33551",
+      "name": "Double Strength Fish Oil",
+      "before": 61.4,
+      "after": 70.2,
+      "pillars": {
+        "dose": [
+          11.2,
+          20.0
+        ]
+      }
+    },
+    {
+      "id": "33634",
+      "name": "Fish Oil with CoQ-10",
+      "before": 60.4,
+      "after": 69.2,
+      "pillars": {
+        "dose": [
+          11.2,
+          20.0
+        ]
+      }
+    },
+    {
+      "id": "336375",
+      "name": "Triple Strength Fish Oil Mini",
+      "before": 74.4,
+      "after": 78.4,
+      "pillars": {
+        "dose": [
+          16.0,
+          20.0
+        ]
+      }
+    },
+    {
+      "id": "33691",
+      "name": "Concentrated Fish Oil",
+      "before": 60.2,
+      "after": 70.2,
+      "pillars": {
+        "dose": [
+          10.0,
+          20.0
+        ]
+      }
+    },
+    {
+      "id": "3519",
+      "name": "Triple Strength Fish Oil",
+      "before": 73.7,
+      "after": 78.9,
+      "pillars": {
+        "dose": [
+          14.8,
+          20.0
+        ]
+      }
+    },
+    {
+      "id": "3534",
+      "name": "Fish Oil With Polysterols",
+      "before": 58.2,
+      "after": 69.2,
+      "pillars": {
+        "dose": [
+          9.0,
+          20.0
+        ]
+      }
+    },
+    {
+      "id": "3554",
+      "name": "Double Strength Fish Oil",
+      "before": 61.4,
+      "after": 70.2,
+      "pillars": {
+        "dose": [
+          11.2,
+          20.0
+        ]
+      }
+    },
+    {
+      "id": "3560",
+      "name": "Triple Strength Fish Oil",
+      "before": 73.7,
+      "after": 78.9,
+      "pillars": {
+        "dose": [
+          14.8,
+          20.0
+        ]
+      }
+    },
+    {
+      "id": "35969",
+      "name": "Fish Oil 1500",
+      "before": 66.7,
+      "after": 71.9,
+      "pillars": {
+        "dose": [
+          14.8,
+          20.0
+        ]
+      }
+    },
+    {
+      "id": "36095",
+      "name": "Fish Oil 1240 +Krill",
+      "before": 71.8,
+      "after": 75.8,
+      "pillars": {
+        "dose": [
+          16.0,
+          20.0
+        ]
+      }
+    },
+    {
+      "id": "36098",
+      "name": "Fish Oil 1500 +Krill",
+      "before": 70.8,
+      "after": 76.0,
+      "pillars": {
+        "dose": [
+          14.8,
+          20.0
+        ]
+      }
+    },
+    {
+      "id": "42241",
+      "name": "Concentrated Fish Oil",
+      "before": 56.9,
+      "after": 66.9,
+      "pillars": {
+        "dose": [
+          10.0,
+          20.0
+        ]
+      }
+    },
+    {
+      "id": "44713",
+      "name": "Triple Strength Fish Oil",
+      "before": 73.7,
+      "after": 78.9,
+      "pillars": {
+        "dose": [
+          14.8,
+          20.0
+        ]
+      }
+    },
+    {
+      "id": "45113",
+      "name": "Triple Strength Fish Oil",
+      "before": 73.7,
+      "after": 78.9,
+      "pillars": {
+        "dose": [
+          14.8,
+          20.0
+        ]
+      }
+    },
+    {
+      "id": "5893",
+      "name": "Double Strength Fish Oil",
+      "before": 61.4,
+      "after": 70.2,
+      "pillars": {
+        "dose": [
+          11.2,
+          20.0
+        ]
+      }
+    },
+    {
+      "id": "5895",
+      "name": "Triple Strength Fish Oil",
+      "before": 73.7,
+      "after": 78.9,
+      "pillars": {
+        "dose": [
+          14.8,
+          20.0
+        ]
+      }
+    },
+    {
+      "id": "63775",
+      "name": "Triple Strength Fish Oil",
+      "before": 73.7,
+      "after": 78.9,
+      "pillars": {
+        "dose": [
+          14.8,
+          20.0
+        ]
+      }
+    },
+    {
+      "id": "64189",
+      "name": "Fish Oil 1400 +Brain Support",
+      "before": 65.7,
+      "after": 70.9,
+      "pillars": {
+        "dose": [
+          14.8,
+          20.0
+        ]
+      }
+    },
+    {
+      "id": "64194",
+      "name": "Fish Oil Liquid Natural Citrus Flavor",
+      "before": 64.2,
+      "after": 68.6,
+      "pillars": {
+        "dose": [
+          15.6,
+          20.0
+        ]
+      }
+    },
+    {
+      "id": "64203",
+      "name": "Fish Oil Mini",
+      "before": 67.9,
+      "after": 71.9,
+      "pillars": {
+        "dose": [
+          16.0,
+          20.0
+        ]
+      }
+    },
+    {
+      "id": "65759",
+      "name": "Concentrated Mini Fish Oil",
+      "before": 60.2,
+      "after": 49.8,
+      "pillars": {
+        "evidence": [
+          10.4,
+          0.0
+        ]
+      }
+    },
+    {
+      "id": "65775",
+      "name": "Concentrated Mini Fish Oil",
+      "before": 60.2,
+      "after": 49.8,
+      "pillars": {
+        "evidence": [
+          10.4,
+          0.0
+        ]
+      }
+    },
+    {
+      "id": "66736",
+      "name": "Double Strength Fish Oil",
+      "before": 61.4,
+      "after": 70.2,
+      "pillars": {
+        "dose": [
+          11.2,
+          20.0
+        ]
+      }
+    },
+    {
+      "id": "69499",
+      "name": "Heart & Eye Health",
+      "before": 62.6,
+      "after": 67.8,
+      "pillars": {
+        "dose": [
+          14.8,
+          20.0
+        ]
+      }
+    },
+    {
+      "id": "69537",
+      "name": "High Potency Omega-3",
+      "before": 60.9,
+      "after": 67.3,
+      "pillars": {
+        "dose": [
+          13.6,
+          20.0
+        ]
+      }
+    },
+    {
+      "id": "69665",
+      "name": "Essential Fatty Acid Support",
+      "before": 61.4,
+      "after": 67.8,
+      "pillars": {
+        "dose": [
+          13.6,
+          20.0
+        ]
+      }
+    },
+    {
+      "id": "69676",
+      "name": "Fish Oil Orange Natural Flavor",
+      "before": 64.6,
+      "after": 68.6,
+      "pillars": {
+        "dose": [
+          16.0,
+          20.0
+        ]
+      }
+    },
+    {
+      "id": "69693",
+      "name": "Essential Fatty Acid Nutrition",
+      "before": 61.4,
+      "after": 67.8,
+      "pillars": {
+        "dose": [
+          13.6,
+          20.0
+        ]
+      }
+    },
+    {
+      "id": "69695",
+      "name": "High Potency EPA & DHA",
+      "before": 65.5,
+      "after": 71.9,
+      "pillars": {
+        "dose": [
+          13.6,
+          20.0
+        ]
+      }
+    },
+    {
+      "id": "75262",
+      "name": "DHA 1000 Mini",
+      "before": 68.1,
+      "after": 71.9,
+      "pillars": {
+        "dose": [
+          16.2,
+          20.0
+        ]
+      }
+    },
+    {
+      "id": "75278",
+      "name": "DHA 1000",
+      "before": 68.1,
+      "after": 71.9,
+      "pillars": {
+        "dose": [
+          16.2,
+          20.0
+        ]
+      }
+    },
+    {
+      "id": "75286",
+      "name": "Triple Strength Krill Oil Mini",
+      "before": 57.1,
+      "after": 70.3,
+      "pillars": {
+        "dose": [
+          4.4,
+          17.6
+        ]
+      }
+    },
+    {
+      "id": "79146",
+      "name": "Triple Strength Fish Oil",
+      "before": 74.9,
+      "after": 78.9,
+      "pillars": {
+        "dose": [
+          16.0,
+          20.0
+        ]
+      }
+    },
+    {
+      "id": "79150",
+      "name": "High Potency Omega-3",
+      "before": 60.9,
+      "after": 67.3,
+      "pillars": {
+        "dose": [
+          13.6,
+          20.0
+        ]
+      }
+    },
+    {
+      "id": "80094",
+      "name": "Clinical Strength Omega-3",
+      "before": 67.9,
+      "after": 71.9,
+      "pillars": {
+        "dose": [
+          16.0,
+          20.0
+        ]
+      }
+    },
+    {
+      "id": "82107",
+      "name": "Fish Oil Mini",
+      "before": 67.9,
+      "after": 71.9,
+      "pillars": {
+        "dose": [
+          16.0,
+          20.0
+        ]
+      }
+    },
+    {
+      "id": "83088",
+      "name": "Double Strength Fish Oil",
+      "before": 65.5,
+      "after": 74.3,
+      "pillars": {
+        "dose": [
+          11.2,
+          20.0
+        ]
+      }
+    },
+    {
+      "id": "831",
+      "name": "Fish Oil +Co Q-10",
+      "before": 72.7,
+      "after": 77.9,
+      "pillars": {
+        "dose": [
+          14.8,
+          20.0
+        ]
+      }
+    },
+    {
+      "id": "174029",
+      "name": "Omega-3 Fish Oil Orange Flavor",
+      "before": 64.5,
+      "after": 71.9,
+      "pillars": {
+        "dose": [
+          12.6,
+          20.0
+        ]
+      }
+    },
+    {
+      "id": "233603",
+      "name": "Platinum Omega-3 Fish Oil Orange Flavor",
+      "before": 73.6,
+      "after": 77.8,
+      "pillars": {
+        "dose": [
+          15.8,
+          20.0
+        ]
+      }
+    },
+    {
+      "id": "233615",
+      "name": "Platinum Omega-3 Fish Oil Orange Flavor",
+      "before": 73.6,
+      "after": 77.8,
+      "pillars": {
+        "dose": [
+          15.8,
+          20.0
+        ]
+      }
+    },
+    {
+      "id": "233683",
+      "name": "Once Daily Ultra Omega Orange Flavor",
+      "before": 69.4,
+      "after": 73.6,
+      "pillars": {
+        "dose": [
+          15.8,
+          20.0
+        ]
+      }
+    },
+    {
+      "id": "233684",
+      "name": "Once Daily Ultra Omega Orange Flavor",
+      "before": 66.7,
+      "after": 70.9,
+      "pillars": {
+        "dose": [
+          15.8,
+          20.0
+        ]
+      }
+    },
+    {
+      "id": "239674",
+      "name": "Platinum Omega-3 Fish Oil Orange Flavor",
+      "before": 76.3,
+      "after": 80.5,
+      "pillars": {
+        "dose": [
+          15.8,
+          20.0
+        ]
+      }
+    },
+    {
+      "id": "241345",
+      "name": "Omega-3 Fish Oil 850 mg Orange Flavor",
+      "before": 64.5,
+      "after": 71.9,
+      "pillars": {
+        "dose": [
+          12.6,
+          20.0
+        ]
+      }
+    },
+    {
+      "id": "273630",
+      "name": "Advanced Omega Lemon Flavor",
+      "before": 82.4,
+      "after": 85.8,
+      "pillars": {
+        "dose": [
+          16.6,
+          20.0
+        ]
+      }
+    },
+    {
+      "id": "277026",
+      "name": "Advanced Omega Lemon Flavor",
+      "before": 82.4,
+      "after": 85.8,
+      "pillars": {
+        "dose": [
+          16.6,
+          20.0
+        ]
+      }
+    },
+    {
+      "id": "28483",
+      "name": "CODmega",
+      "before": 65.7,
+      "after": 69.7,
+      "pillars": {
+        "dose": [
+          16.0,
+          20.0
+        ]
+      }
+    },
+    {
+      "id": "28605",
+      "name": "CardiO-3 Orange Flavor",
+      "before": 65.8,
+      "after": 71.9,
+      "pillars": {
+        "dose": [
+          13.9,
+          20.0
+        ]
+      }
+    },
+    {
+      "id": "28613",
+      "name": "MorDHA Lemon Flavor",
+      "before": 60.5,
+      "after": 70.2,
+      "pillars": {
+        "dose": [
+          10.3,
+          20.0
+        ]
+      }
+    },
+    {
+      "id": "28619",
+      "name": "MorEPA Platinum",
+      "before": 76.3,
+      "after": 80.5,
+      "pillars": {
+        "dose": [
+          15.8,
+          20.0
+        ]
+      }
+    },
+    {
+      "id": "28632",
+      "name": "MorEPA Chewable Orange Flavor",
+      "before": 57.0,
+      "after": 46.6,
+      "pillars": {
+        "evidence": [
+          10.4,
+          0.0
+        ]
+      }
+    },
+    {
+      "id": "28636",
+      "name": "MorO-3 Balanced EPA-DHA Formula Orange Flavor",
+      "before": 73.7,
+      "after": 78.9,
+      "pillars": {
+        "dose": [
+          14.8,
+          20.0
+        ]
+      }
+    },
+    {
+      "id": "28705",
+      "name": "Oceans 3 Beyond Omega-3 Cod Liver Oil Orange Tangerine Flavor",
+      "before": 58.9,
+      "after": 63.9,
+      "pillars": {
+        "dose": [
+          15.0,
+          20.0
+        ]
+      }
+    },
+    {
+      "id": "28707",
+      "name": "Oceans 3 Beyond Omega-3 Cod Liver Oil Orange Tangerine Flavor",
+      "before": 58.9,
+      "after": 63.9,
+      "pillars": {
+        "dose": [
+          15.0,
+          20.0
+        ]
+      }
+    },
+    {
+      "id": "292796",
+      "name": "Advanced Omega Citrus Flavor",
+      "before": 81.4,
+      "after": 84.8,
+      "pillars": {
+        "dose": [
+          16.6,
+          20.0
+        ]
+      }
+    },
+    {
+      "id": "297655",
+      "name": "Advanced Omega Citrus Flavor",
+      "before": 81.4,
+      "after": 84.8,
+      "pillars": {
+        "dose": [
+          16.6,
+          20.0
+        ]
+      }
+    },
+    {
+      "id": "297656",
+      "name": "Advanced Omega Citrus Flavor",
+      "before": 81.4,
+      "after": 84.8,
+      "pillars": {
+        "dose": [
+          16.6,
+          20.0
+        ]
+      }
+    },
+    {
+      "id": "297682",
+      "name": "Olde World Icelandic Cod Liver Oil Lemon Mint Flavor",
+      "before": 60.7,
+      "after": 65.9,
+      "pillars": {
+        "dose": [
+          14.8,
+          20.0
+        ]
+      }
+    },
+    {
+      "id": "321353",
+      "name": "Oceans 3 Beyond Omega-3",
+      "before": 63.4,
+      "after": 67.0,
+      "pillars": {
+        "dose": [
+          16.4,
+          20.0
+        ]
+      }
+    },
+    {
+      "id": "321376",
+      "name": "Supercritical Mood Omega-3 Fish Oil",
+      "before": 61.9,
+      "after": 71.9,
+      "pillars": {
+        "dose": [
+          10.0,
+          20.0
+        ]
+      }
+    },
+    {
+      "id": "40684",
+      "name": "MorEPA Platinum Orange Flavor",
+      "before": 76.3,
+      "after": 80.5,
+      "pillars": {
+        "dose": [
+          15.8,
+          20.0
+        ]
+      }
+    },
+    {
+      "id": "63117",
+      "name": "Cardio Omega-3 Fish Oil Orange Flavor",
+      "before": 65.9,
+      "after": 71.9,
+      "pillars": {
+        "dose": [
+          14.0,
+          20.0
+        ]
+      }
+    },
+    {
+      "id": "63123",
+      "name": "Platinum Omega- Fish Oil Orange Flavor",
+      "before": 76.3,
+      "after": 80.5,
+      "pillars": {
+        "dose": [
+          15.8,
+          20.0
+        ]
+      }
+    },
+    {
+      "id": "307582",
+      "name": "EPA-DHA Balance",
+      "before": 67.0,
+      "after": 70.2,
+      "pillars": {
+        "dose": [
+          16.8,
+          20.0
+        ]
+      }
+    },
+    {
+      "id": "307583",
+      "name": "EPA-DHA Balance",
+      "before": 67.0,
+      "after": 70.2,
+      "pillars": {
+        "dose": [
+          16.8,
+          20.0
+        ]
+      }
+    },
+    {
+      "id": "307633",
+      "name": "Krill Oil",
+      "before": 61.3,
+      "after": 72.3,
+      "pillars": {
+        "dose": [
+          3.8,
+          14.8
+        ]
+      }
+    },
+    {
+      "id": "207339",
+      "name": "Krill Oil 500 mg",
+      "before": 57.5,
+      "after": 64.7,
+      "pillars": {
+        "dose": [
+          0.0,
+          7.2
+        ]
+      }
+    },
+    {
+      "id": "210723",
+      "name": "Mega EPA/DHA",
+      "before": 70.7,
+      "after": 73.9,
+      "pillars": {
+        "dose": [
+          16.8,
+          20.0
+        ]
+      }
+    },
+    {
+      "id": "232112",
+      "name": "Mega EPA/DHA",
+      "before": 70.7,
+      "after": 73.9,
+      "pillars": {
+        "dose": [
+          16.8,
+          20.0
+        ]
+      }
+    },
+    {
+      "id": "232168",
+      "name": "Super Omega-3",
+      "before": 69.7,
+      "after": 72.9,
+      "pillars": {
+        "dose": [
+          16.8,
+          20.0
+        ]
+      }
+    },
+    {
+      "id": "232480",
+      "name": "Clearly EPA/DHA Fish Oil",
+      "before": 70.9,
+      "after": 73.9,
+      "pillars": {
+        "dose": [
+          17.0,
+          20.0
+        ]
+      }
+    },
+    {
+      "id": "232619",
+      "name": "Super Omega-3",
+      "before": 69.7,
+      "after": 72.9,
+      "pillars": {
+        "dose": [
+          16.8,
+          20.0
+        ]
+      }
+    },
+    {
+      "id": "232620",
+      "name": "Super Omega-3",
+      "before": 69.7,
+      "after": 72.9,
+      "pillars": {
+        "dose": [
+          16.8,
+          20.0
+        ]
+      }
+    },
+    {
+      "id": "232621",
+      "name": "Super Omega-3",
+      "before": 69.7,
+      "after": 72.9,
+      "pillars": {
+        "dose": [
+          16.8,
+          20.0
+        ]
+      }
+    },
+    {
+      "id": "232622",
+      "name": "Super Omega-3",
+      "before": 69.7,
+      "after": 72.9,
+      "pillars": {
+        "dose": [
+          16.8,
+          20.0
+        ]
+      }
+    },
+    {
+      "id": "232623",
+      "name": "Super Omega-3",
+      "before": 69.7,
+      "after": 72.9,
+      "pillars": {
+        "dose": [
+          16.8,
+          20.0
+        ]
+      }
+    },
+    {
+      "id": "232624",
+      "name": "Super Omega-3 Plus",
+      "before": 79.0,
+      "after": 82.0,
+      "pillars": {
+        "dose": [
+          17.0,
+          20.0
+        ]
+      }
+    },
+    {
+      "id": "328568",
+      "name": "Mega EPA/DHA",
+      "before": 70.7,
+      "after": 73.9,
+      "pillars": {
+        "dose": [
+          16.8,
+          20.0
+        ]
+      }
+    },
+    {
+      "id": "58974",
+      "name": "Omega-3 Lemon Whirl",
+      "before": 65.4,
+      "after": 69.1,
+      "pillars": {
+        "dose": [
+          16.3,
+          20.0
+        ]
+      }
+    },
+    {
+      "id": "58979",
+      "name": "Omega-3 Tropical Whirl",
+      "before": 65.4,
+      "after": 69.1,
+      "pillars": {
+        "dose": [
+          16.3,
+          20.0
+        ]
+      }
+    },
+    {
+      "id": "59028",
+      "name": "Heart Heath Omega-3 Fish Oil",
+      "before": 72.7,
+      "after": 73.9,
+      "pillars": {
+        "dose": [
+          18.8,
+          20.0
+        ]
+      }
+    },
+    {
+      "id": "59472",
+      "name": "Super Omega-3",
+      "before": 69.7,
+      "after": 72.9,
+      "pillars": {
+        "dose": [
+          16.8,
+          20.0
+        ]
+      }
+    },
+    {
+      "id": "60850",
+      "name": "Super Omega-3",
+      "before": 69.7,
+      "after": 72.9,
+      "pillars": {
+        "dose": [
+          16.8,
+          20.0
+        ]
+      }
+    },
+    {
+      "id": "62060",
+      "name": "Mega EPA/DHA",
+      "before": 70.7,
+      "after": 73.9,
+      "pillars": {
+        "dose": [
+          16.8,
+          20.0
+        ]
+      }
+    },
+    {
+      "id": "64935",
+      "name": "Super Omega-3",
+      "before": 69.7,
+      "after": 72.9,
+      "pillars": {
+        "dose": [
+          16.8,
+          20.0
+        ]
+      }
+    },
+    {
+      "id": "239930",
+      "name": "100 % Pure Omega-3 Krill Oil 500 mg",
+      "before": 50.7,
+      "after": 58.2,
+      "pillars": {
+        "dose": [
+          0.0,
+          7.5
+        ]
+      }
+    },
+    {
+      "id": "239940",
+      "name": "100% Pure Omega-3 Krill Oil 350 mg",
+      "before": 50.7,
+      "after": 56.6,
+      "pillars": {
+        "dose": [
+          0.0,
+          5.9
+        ]
+      }
+    },
+    {
+      "id": "240065",
+      "name": "Extra Strength 100% Pure Omega-3 Krill Oil 500 mg",
+      "before": 50.7,
+      "after": 58.2,
+      "pillars": {
+        "dose": [
+          0.0,
+          7.5
+        ]
+      }
+    },
+    {
+      "id": "272819",
+      "name": "Omega 3-6-9",
+      "before": 53.2,
+      "after": 68.2,
+      "pillars": {
+        "dose": [
+          5.0,
+          20.0
+        ]
+      }
+    },
+    {
+      "id": "47192",
+      "name": "Enteric Double Strength Fish Oil 1200 mg softgels 600 mg Omega-3",
+      "before": 58.7,
+      "after": 68.2,
+      "pillars": {
+        "dose": [
+          10.5,
+          20.0
+        ]
+      }
+    },
+    {
+      "id": "47200",
+      "name": "Enteric Triple Strength Fish Oil 1400 mg softgels 900 mg Omega-3",
+      "before": 64.7,
+      "after": 69.9,
+      "pillars": {
+        "dose": [
+          14.8,
+          20.0
+        ]
+      }
+    },
+    {
+      "id": "47202",
+      "name": "Enteric Regular Strength Fish Oil 600 mg softgels 300 mg Omega-3",
+      "before": 53.6,
+      "after": 68.2,
+      "pillars": {
+        "dose": [
+          5.4,
+          20.0
+        ]
+      }
+    },
+    {
+      "id": "47232",
+      "name": "Extra Strength Omega-3 Krill Oil Softgels, 500 mg",
+      "before": 48.2,
+      "after": 55.7,
+      "pillars": {
+        "dose": [
+          0.0,
+          7.5
+        ]
+      }
+    },
+    {
+      "id": "62006",
+      "name": "Fish Oil 1400 mg",
+      "before": 64.7,
+      "after": 69.9,
+      "pillars": {
+        "dose": [
+          14.8,
+          20.0
+        ]
+      }
+    },
+    {
+      "id": "12140",
+      "name": "Fish Oil 1200 mg 360 mg Omega-3",
+      "before": 66.8,
+      "after": 75.6,
+      "pillars": {
+        "dose": [
+          11.2,
+          20.0
+        ]
+      }
+    },
+    {
+      "id": "179441",
+      "name": "Fish Oil 1200 mg",
+      "before": 66.8,
+      "after": 75.6,
+      "pillars": {
+        "dose": [
+          11.2,
+          20.0
+        ]
+      }
+    },
+    {
+      "id": "179447",
+      "name": "Fish Oil 1200 mg",
+      "before": 60.8,
+      "after": 69.6,
+      "pillars": {
+        "dose": [
+          11.2,
+          20.0
+        ]
+      }
+    },
+    {
+      "id": "179681",
+      "name": "One Per Day Fish Oil 1200 mg",
+      "before": 70.9,
+      "after": 79.0,
+      "pillars": {
+        "dose": [
+          11.9,
+          20.0
+        ]
+      }
+    },
+    {
+      "id": "179689",
+      "name": "One Per Day Burp-less Fish Oil 1200 mg",
+      "before": 66.4,
+      "after": 74.5,
+      "pillars": {
+        "dose": [
+          11.9,
+          20.0
+        ]
+      }
+    },
+    {
+      "id": "179721",
+      "name": "Fish Oil 1200 mg",
+      "before": 60.8,
+      "after": 69.6,
+      "pillars": {
+        "dose": [
+          11.2,
+          20.0
+        ]
+      }
+    },
+    {
+      "id": "179744",
+      "name": "Ultra Fish Oil 1400 mg",
+      "before": 68.2,
+      "after": 73.0,
+      "pillars": {
+        "dose": [
+          15.2,
+          20.0
+        ]
+      }
+    },
+    {
+      "id": "179775",
+      "name": "Krill Oil 300 mg",
+      "before": 59.0,
+      "after": 66.4,
+      "pillars": {
+        "dose": [
+          0.0,
+          7.4
+        ]
+      }
+    },
+    {
+      "id": "179796",
+      "name": "Fish Oil 1200 mg Natural Lemon Flavor",
+      "before": 61.8,
+      "after": 70.6,
+      "pillars": {
+        "dose": [
+          11.2,
+          20.0
+        ]
+      }
+    },
+    {
+      "id": "179897",
+      "name": "Fish Oil Adult Gummies",
+      "before": 48.1,
+      "after": 52.7,
+      "pillars": {
+        "dose": [
+          0.0,
+          4.6
+        ]
+      }
+    },
+    {
+      "id": "179949",
+      "name": "Fish Oil Adult Gummies",
+      "before": 48.1,
+      "after": 52.7,
+      "pillars": {
+        "dose": [
+          0.0,
+          4.6
+        ]
+      }
+    },
+    {
+      "id": "179956",
+      "name": "Fish Oil 1200 mg",
+      "before": 64.1,
+      "after": 72.9,
+      "pillars": {
+        "dose": [
+          11.2,
+          20.0
+        ]
+      }
+    },
+    {
+      "id": "179958",
+      "name": "Fish Oil 1200 mg",
+      "before": 66.8,
+      "after": 75.6,
+      "pillars": {
+        "dose": [
+          11.2,
+          20.0
+        ]
+      }
+    },
+    {
+      "id": "179973",
+      "name": "Fish Oil 1200 mg",
+      "before": 64.1,
+      "after": 72.9,
+      "pillars": {
+        "dose": [
+          11.2,
+          20.0
+        ]
+      }
+    },
+    {
+      "id": "180092",
+      "name": "Fish Oil 1200 mg",
+      "before": 58.1,
+      "after": 66.9,
+      "pillars": {
+        "dose": [
+          11.2,
+          20.0
+        ]
+      }
+    },
+    {
+      "id": "180151",
+      "name": "Fish Oil Adult Gummies",
+      "before": 48.1,
+      "after": 52.7,
+      "pillars": {
+        "dose": [
+          0.0,
+          4.6
+        ]
+      }
+    },
+    {
+      "id": "180231",
+      "name": "Burp-less Fish Oil 1200 mg",
+      "before": 55.8,
+      "after": 64.6,
+      "pillars": {
+        "dose": [
+          11.2,
+          20.0
+        ]
+      }
+    },
+    {
+      "id": "180232",
+      "name": "One Per Day Fish Oil 1200 mg",
+      "before": 70.9,
+      "after": 79.0,
+      "pillars": {
+        "dose": [
+          11.9,
+          20.0
+        ]
+      }
+    },
+    {
+      "id": "180309",
+      "name": "Fish Oil 1200 mg",
+      "before": 66.8,
+      "after": 75.6,
+      "pillars": {
+        "dose": [
+          11.2,
+          20.0
+        ]
+      }
+    },
+    {
+      "id": "180328",
+      "name": "Ultra Fish Oil 1400 mg",
+      "before": 68.2,
+      "after": 73.0,
+      "pillars": {
+        "dose": [
+          15.2,
+          20.0
+        ]
+      }
+    },
+    {
+      "id": "180406",
+      "name": "Fish Oil 1200 mg",
+      "before": 64.1,
+      "after": 72.9,
+      "pillars": {
+        "dose": [
+          11.2,
+          20.0
+        ]
+      }
+    },
+    {
+      "id": "180407",
+      "name": "Fish Oil 1200 mg",
+      "before": 64.1,
+      "after": 72.9,
+      "pillars": {
+        "dose": [
+          11.2,
+          20.0
+        ]
+      }
+    },
+    {
+      "id": "180408",
+      "name": "One Per Day Fish Oil 1200 mg",
+      "before": 70.9,
+      "after": 79.0,
+      "pillars": {
+        "dose": [
+          11.9,
+          20.0
+        ]
+      }
+    },
+    {
+      "id": "180429",
+      "name": "Burp-less Fish Oil 1200 mg",
+      "before": 53.1,
+      "after": 61.9,
+      "pillars": {
+        "dose": [
+          11.2,
+          20.0
+        ]
+      }
+    },
+    {
+      "id": "180432",
+      "name": "Fish Oil 1200 mg",
+      "before": 64.1,
+      "after": 72.9,
+      "pillars": {
+        "dose": [
+          11.2,
+          20.0
+        ]
+      }
+    },
+    {
+      "id": "180435",
+      "name": "Fish Oil 1200 mg",
+      "before": 64.1,
+      "after": 72.9,
+      "pillars": {
+        "dose": [
+          11.2,
+          20.0
+        ]
+      }
+    },
+    {
+      "id": "180436",
+      "name": "Fish Oil 1200 mg",
+      "before": 66.8,
+      "after": 75.6,
+      "pillars": {
+        "dose": [
+          11.2,
+          20.0
+        ]
+      }
+    },
+    {
+      "id": "180438",
+      "name": "Fish Oil 1200 mg",
+      "before": 66.8,
+      "after": 75.6,
+      "pillars": {
+        "dose": [
+          11.2,
+          20.0
+        ]
+      }
+    },
+    {
+      "id": "180439",
+      "name": "Burp-less Fish Oil 1200 mg",
+      "before": 55.8,
+      "after": 64.6,
+      "pillars": {
+        "dose": [
+          11.2,
+          20.0
+        ]
+      }
+    },
+    {
+      "id": "19080",
+      "name": "Fish Oil 1200 mg 360 mg Omega-3",
+      "before": 66.8,
+      "after": 75.6,
+      "pillars": {
+        "dose": [
+          11.2,
+          20.0
+        ]
+      }
+    },
+    {
+      "id": "19098",
+      "name": "Fish Oil 1200 mg 360 mg Omega-3",
+      "before": 66.8,
+      "after": 75.6,
+      "pillars": {
+        "dose": [
+          11.2,
+          20.0
+        ]
+      }
+    },
+    {
+      "id": "211392",
+      "name": "Super Strength Omega-3 EPA Fish Oil",
+      "before": 73.1,
+      "after": 76.3,
+      "pillars": {
+        "dose": [
+          16.8,
+          20.0
+        ]
+      }
+    },
+    {
+      "id": "231416",
+      "name": "Fish Oil Pearls",
+      "before": 69.0,
+      "after": 79.0,
+      "pillars": {
+        "dose": [
+          10.0,
+          20.0
+        ]
+      }
+    },
+    {
+      "id": "239944",
+      "name": "Full Strength Mini Omega-3",
+      "before": 63.0,
+      "after": 73.0,
+      "pillars": {
+        "dose": [
+          10.0,
+          20.0
+        ]
+      }
+    },
+    {
+      "id": "26648",
+      "name": "Fish Oil 500 mg 360 mg Omega-3",
+      "before": 59.7,
+      "after": 67.7,
+      "pillars": {
+        "dose": [
+          12.0,
+          20.0
+        ]
+      }
+    },
+    {
+      "id": "270955",
+      "name": "Mini Omega-3 540 mg",
+      "before": 63.0,
+      "after": 73.0,
+      "pillars": {
+        "dose": [
+          10.0,
+          20.0
+        ]
+      }
+    },
+    {
+      "id": "271348",
+      "name": "Fish Oil 1200 mg",
+      "before": 66.8,
+      "after": 75.6,
+      "pillars": {
+        "dose": [
+          11.2,
+          20.0
+        ]
+      }
+    },
+    {
+      "id": "271567",
+      "name": "Omega-3 From Fish Oil 1400 mg",
+      "before": 68.2,
+      "after": 73.0,
+      "pillars": {
+        "dose": [
+          15.2,
+          20.0
+        ]
+      }
+    },
+    {
+      "id": "27674",
+      "name": "Fish Oil 1200 mg 360 mg Omega-3",
+      "before": 52.8,
+      "after": 61.6,
+      "pillars": {
+        "dose": [
+          11.2,
+          20.0
+        ]
+      }
+    },
+    {
+      "id": "285748",
+      "name": "Fish Oil Gummies",
+      "before": 48.1,
+      "after": 52.7,
+      "pillars": {
+        "dose": [
+          0.0,
+          4.6
+        ]
+      }
+    },
+    {
+      "id": "288083",
+      "name": "Burp-less Fish Oil 1200 mg",
+      "before": 64.9,
+      "after": 73.0,
+      "pillars": {
+        "dose": [
+          11.9,
+          20.0
+        ]
+      }
+    },
+    {
+      "id": "293800",
+      "name": "Burp-less Fish Oil Minis 1400 mg",
+      "before": 74.2,
+      "after": 79.0,
+      "pillars": {
+        "dose": [
+          15.2,
+          20.0
+        ]
+      }
+    },
+    {
+      "id": "302764",
+      "name": "Omega-3 from Fish Oil Pearls 550 mg",
+      "before": 74.0,
+      "after": 84.0,
+      "pillars": {
+        "dose": [
+          10.0,
+          20.0
+        ]
+      }
+    },
+    {
+      "id": "302768",
+      "name": "Full Strength Minis Super Omega-3",
+      "before": 63.5,
+      "after": 73.5,
+      "pillars": {
+        "dose": [
+          10.0,
+          20.0
+        ]
+      }
+    },
+    {
+      "id": "313830",
+      "name": "Krill Oil 500 mg",
+      "before": 57.0,
+      "after": 64.2,
+      "pillars": {
+        "dose": [
+          0.0,
+          7.2
+        ]
+      }
+    },
+    {
+      "id": "8789",
+      "name": "Omega-3 Fish Oil 1200 mg",
+      "before": 64.8,
+      "after": 72.2,
+      "pillars": {
+        "dose": [
+          12.6,
+          20.0
+        ]
+      }
+    },
+    {
+      "id": "9205",
+      "name": "Omega-3 Fish Oil 1200 mg Supplement",
+      "before": 64.8,
+      "after": 72.2,
+      "pillars": {
+        "dose": [
+          12.6,
+          20.0
+        ]
+      }
+    },
+    {
+      "id": "253052",
+      "name": "Fish Oil 1400 mg",
+      "before": 71.2,
+      "after": 76.4,
+      "pillars": {
+        "dose": [
+          14.8,
+          20.0
+        ]
+      }
+    },
+    {
+      "id": "253083",
+      "name": "Krill Oil 500 mg",
+      "before": 54.3,
+      "after": 59.5,
+      "pillars": {
+        "dose": [
+          0.0,
+          5.2
+        ]
+      }
+    },
+    {
+      "id": "253207",
+      "name": "Omega-3 Gummies",
+      "before": 46.1,
+      "after": 51.7,
+      "pillars": {
+        "dose": [
+          0.0,
+          5.6
+        ]
+      }
+    },
+    {
+      "id": "29256",
+      "name": "Triple Strength Red Krill Oil 1000 mg",
+      "before": 58.8,
+      "after": 66.2,
+      "pillars": {
+        "dose": [
+          3.0,
+          10.4
+        ]
+      }
+    },
+    {
+      "id": "35718",
+      "name": "Dual Spectrum Omega-3 Krill & Fish Oil 1085 mg",
+      "before": 68.9,
+      "after": 74.3,
+      "pillars": {
+        "dose": [
+          14.6,
+          20.0
+        ]
+      }
+    },
+    {
+      "id": "49570",
+      "name": "Liquid Omega-3 1330 mg Lemon Flavor",
+      "before": 63.5,
+      "after": 66.6,
+      "pillars": {
+        "dose": [
+          16.9,
+          20.0
+        ]
+      }
+    },
+    {
+      "id": "62148",
+      "name": "Salmon Oil 1000 mg",
+      "before": 63.1,
+      "after": 76.5,
+      "pillars": {
+        "dose": [
+          6.6,
+          20.0
+        ]
+      }
+    },
+    {
+      "id": "62290",
+      "name": "Dual Spectrum Co Q-10 With Krill Oil 600 mg",
+      "before": 56.0,
+      "after": 61.0,
+      "pillars": {
+        "dose": [
+          0.0,
+          5.0
+        ]
+      }
+    },
+    {
+      "id": "62312",
+      "name": "Omega-3 600 mg",
+      "before": 60.5,
+      "after": 70.2,
+      "pillars": {
+        "dose": [
+          10.3,
+          20.0
+        ]
+      }
+    },
+    {
+      "id": "65686",
+      "name": "Mini Omega-3 900 mg",
+      "before": 65.8,
+      "after": 71.9,
+      "pillars": {
+        "dose": [
+          13.9,
+          20.0
+        ]
+      }
+    },
+    {
+      "id": "73297",
+      "name": "Red Krill Oil 1000 mg",
+      "before": 57.3,
+      "after": 64.7,
+      "pillars": {
+        "dose": [
+          3.0,
+          10.4
+        ]
+      }
+    },
+    {
+      "id": "75760",
+      "name": "Omega-3 Norwegian Cod Liver Oil",
+      "before": 50.5,
+      "after": 56.3,
+      "pillars": {
+        "dose": [
+          0.0,
+          5.8
+        ]
+      }
+    },
+    {
+      "id": "76158",
+      "name": "Fish Oil 1400 mg",
+      "before": 71.2,
+      "after": 76.4,
+      "pillars": {
+        "dose": [
+          14.8,
+          20.0
+        ]
+      }
+    },
+    {
+      "id": "184600",
+      "name": "Omega-3 Juicy Citrus Flavored",
+      "before": 65.8,
+      "after": 67.8,
+      "pillars": {
+        "dose": [
+          18.0,
+          20.0
+        ]
+      }
+    },
+    {
+      "id": "201245",
+      "name": "EfaGold Krill Oil 500 mg",
+      "before": 56.6,
+      "after": 67.0,
+      "pillars": {
+        "dose": [
+          3.6,
+          14.0
+        ]
+      }
+    },
+    {
+      "id": "205159",
+      "name": "NutraVege Omega-3 Plant Extra Strength Zesty Lemon Flavored",
+      "before": 60.9,
+      "after": 66.1,
+      "pillars": {
+        "dose": [
+          14.8,
+          20.0
+        ]
+      }
+    },
+    {
+      "id": "213711",
+      "name": "Krill Oil",
+      "before": 56.7,
+      "after": 67.4,
+      "pillars": {
+        "dose": [
+          3.7,
+          14.4
+        ]
+      }
+    },
+    {
+      "id": "230176",
+      "name": "NutraSea Omega-3 Softgels Fresh Mint Flavored",
+      "before": 70.9,
+      "after": 73.9,
+      "pillars": {
+        "dose": [
+          17.0,
+          20.0
+        ]
+      }
+    },
+    {
+      "id": "241101",
+      "name": "Eskimo-3",
+      "before": 58.4,
+      "after": 70.6,
+      "pillars": {
+        "dose": [
+          7.8,
+          20.0
+        ]
+      }
+    },
+    {
+      "id": "242252",
+      "name": "Eskimo-3 Fish Oil",
+      "before": 58.4,
+      "after": 70.6,
+      "pillars": {
+        "dose": [
+          7.8,
+          20.0
+        ]
+      }
+    },
+    {
+      "id": "249590",
+      "name": "NutraSea +D Omega-3 Softgels 1250 mg Fresh Mint Flavored",
+      "before": 66.5,
+      "after": 69.5,
+      "pillars": {
+        "dose": [
+          17.0,
+          20.0
+        ]
+      }
+    },
+    {
+      "id": "259486",
+      "name": "Omega-3 Plant 500 mg Zesty Lemon Flavored",
+      "before": 61.2,
+      "after": 72.2,
+      "pillars": {
+        "dose": [
+          9.0,
+          20.0
+        ]
+      }
+    },
+    {
+      "id": "293326",
+      "name": "NutraVege Plant-Based Omega-3 500 mg Strawberry Orange Flavored",
+      "before": 61.2,
+      "after": 72.2,
+      "pillars": {
+        "dose": [
+          9.0,
+          20.0
+        ]
+      }
+    },
+    {
+      "id": "293396",
+      "name": "Ultra Pure Omega3 Grapefruit-Tangerine Flavored",
+      "before": 67.6,
+      "after": 70.6,
+      "pillars": {
+        "dose": [
+          17.0,
+          20.0
+        ]
+      }
+    },
+    {
+      "id": "293408",
+      "name": "NutraSea Omega-3 1250 mg Zesty Lemon Flavored",
+      "before": 67.6,
+      "after": 70.6,
+      "pillars": {
+        "dose": [
+          17.0,
+          20.0
+        ]
+      }
+    },
+    {
+      "id": "293409",
+      "name": "NutraVege Plant-Based Omega-3 1000 mg Cranberry Orange Flavored",
+      "before": 67.0,
+      "after": 72.2,
+      "pillars": {
+        "dose": [
+          14.8,
+          20.0
+        ]
+      }
+    },
+    {
+      "id": "293424",
+      "name": "Ultra Pure Omega3 Grapefruit-Tangerine Flavored",
+      "before": 67.6,
+      "after": 70.6,
+      "pillars": {
+        "dose": [
+          17.0,
+          20.0
+        ]
+      }
+    },
+    {
+      "id": "295195",
+      "name": "NutraVege Plant-Based Omega-3 500 mg",
+      "before": 57.7,
+      "after": 68.7,
+      "pillars": {
+        "dose": [
+          9.0,
+          20.0
+        ]
+      }
+    },
+    {
+      "id": "327962",
+      "name": "Fisol Fish Oil",
+      "before": 56.7,
+      "after": 71.7,
+      "pillars": {
+        "dose": [
+          5.0,
+          20.0
+        ]
+      }
+    },
+    {
+      "id": "327996",
+      "name": "Mega-DHA",
+      "before": 70.6,
+      "after": 73.9,
+      "pillars": {
+        "dose": [
+          16.7,
+          20.0
+        ]
+      }
+    },
+    {
+      "id": "328069",
+      "name": "Super Fisol Fish Oil",
+      "before": 58.7,
+      "after": 71.7,
+      "pillars": {
+        "dose": [
+          7.0,
+          20.0
+        ]
+      }
+    },
+    {
+      "id": "328070",
+      "name": "Super Fisol Fish Oil",
+      "before": 58.7,
+      "after": 71.7,
+      "pillars": {
+        "dose": [
+          7.0,
+          20.0
+        ]
+      }
+    },
+    {
+      "id": "333754",
+      "name": "Krill Oil",
+      "before": 56.7,
+      "after": 67.4,
+      "pillars": {
+        "dose": [
+          3.7,
+          14.4
+        ]
+      }
+    },
+    {
+      "id": "334425",
+      "name": "Krill Oil",
+      "before": 56.7,
+      "after": 67.4,
+      "pillars": {
+        "dose": [
+          3.7,
+          14.4
+        ]
+      }
+    },
+    {
+      "id": "78624",
+      "name": "Fisol Enteric-Coated Fish Oil",
+      "before": 56.7,
+      "after": 71.7,
+      "pillars": {
+        "dose": [
+          5.0,
+          20.0
+        ]
+      }
+    },
+    {
+      "id": "80373",
+      "name": "Fisol Enteric-Coated Fish Oil",
+      "before": 56.7,
+      "after": 71.7,
+      "pillars": {
+        "dose": [
+          5.0,
+          20.0
+        ]
+      }
+    },
+    {
+      "id": "269559",
+      "name": "Krill Oil 1000 mg",
+      "before": 56.7,
+      "after": 68.7,
+      "pillars": {
+        "dose": [
+          4.0,
+          16.0
+        ]
+      }
+    },
+    {
+      "id": "306218",
+      "name": "Fish Oil 1,000 mg",
+      "before": 66.7,
+      "after": 76.0,
+      "pillars": {
+        "dose": [
+          10.7,
+          20.0
+        ]
+      }
+    },
+    {
+      "id": "9693",
+      "name": "Prenatal DHA/EPA Liquid Gels",
+      "before": 59.1,
+      "after": 70.3,
+      "pillars": {
+        "dose": [
+          8.8,
+          20.0
+        ]
+      }
+    },
+    {
+      "id": "PG_SUB_F580FBD60E574699B47D0982663F17DD",
+      "name": "Omega-3 Fatty Acids",
+      "before": 65.2,
+      "after": 74.0,
+      "pillars": {
+        "dose": [
+          11.2,
+          20.0
+        ]
+      }
+    },
+    {
+      "id": "182871",
+      "name": "EPA/DHA Liquid",
+      "before": 62.8,
+      "after": 65.3,
+      "pillars": {
+        "dose": [
+          17.5,
+          20.0
+        ]
+      }
+    },
+    {
+      "id": "182879",
+      "name": "EPA/DHA Vegetarian",
+      "before": 61.0,
+      "after": 71.7,
+      "pillars": {
+        "dose": [
+          9.3,
+          20.0
+        ]
+      }
+    },
+    {
+      "id": "183296",
+      "name": "VisionPro EPA/DHA/GLA",
+      "before": 66.6,
+      "after": 68.6,
+      "pillars": {
+        "dose": [
+          18.0,
+          20.0
+        ]
+      }
+    },
+    {
+      "id": "184365",
+      "name": "DHA Enhance",
+      "before": 55.2,
+      "after": 68.6,
+      "pillars": {
+        "dose": [
+          6.6,
+          20.0
+        ]
+      }
+    },
+    {
+      "id": "184389",
+      "name": "DHA Ultimate",
+      "before": 71.3,
+      "after": 75.6,
+      "pillars": {
+        "dose": [
+          15.7,
+          20.0
+        ]
+      }
+    },
+    {
+      "id": "184442",
+      "name": "EPA/DHA Essentials",
+      "before": 63.9,
+      "after": 73.9,
+      "pillars": {
+        "dose": [
+          10.0,
+          20.0
+        ]
+      }
+    },
+    {
+      "id": "184456",
+      "name": "EPA/DHA Vegetarian",
+      "before": 61.0,
+      "after": 71.7,
+      "pillars": {
+        "dose": [
+          9.3,
+          20.0
+        ]
+      }
+    },
+    {
+      "id": "184590",
+      "name": "Cod Liver Oil",
+      "before": 61.9,
+      "after": 65.3,
+      "pillars": {
+        "dose": [
+          16.6,
+          20.0
+        ]
+      }
+    },
+    {
+      "id": "184613",
+      "name": "EPA/DHA Essentials",
+      "before": 63.9,
+      "after": 73.9,
+      "pillars": {
+        "dose": [
+          10.0,
+          20.0
+        ]
+      }
+    },
+    {
+      "id": "184654",
+      "name": "Krill-Plex",
+      "before": 63.8,
+      "after": 76.6,
+      "pillars": {
+        "dose": [
+          4.3,
+          17.1
+        ]
+      }
+    },
+    {
+      "id": "184655",
+      "name": "Krill-Plex",
+      "before": 63.8,
+      "after": 76.6,
+      "pillars": {
+        "dose": [
+          4.3,
+          17.1
+        ]
+      }
+    },
+    {
+      "id": "184761",
+      "name": "O.N.E. Omega",
+      "before": 79.5,
+      "after": 83.5,
+      "pillars": {
+        "dose": [
+          16.0,
+          20.0
+        ]
+      }
+    },
+    {
+      "id": "184794",
+      "name": "EFA Essentials",
+      "before": 72.5,
+      "after": 76.5,
+      "pillars": {
+        "dose": [
+          16.0,
+          20.0
+        ]
+      }
+    },
+    {
+      "id": "184850",
+      "name": "EPA Ultimate",
+      "before": 71.9,
+      "after": 75.6,
+      "pillars": {
+        "dose": [
+          16.3,
+          20.0
+        ]
+      }
+    },
+    {
+      "id": "184935",
+      "name": "UltraKrill+D",
+      "before": 57.0,
+      "after": 70.3,
+      "pillars": {
+        "dose": [
+          6.7,
+          20.0
+        ]
+      }
+    },
+    {
+      "id": "184941",
+      "name": "UltraKrill+D",
+      "before": 57.0,
+      "after": 70.3,
+      "pillars": {
+        "dose": [
+          6.7,
+          20.0
+        ]
+      }
+    },
+    {
+      "id": "185309",
+      "name": "VisionPro EPA/DHA/GLA",
+      "before": 74.5,
+      "after": 76.5,
+      "pillars": {
+        "dose": [
+          18.0,
+          20.0
+        ]
+      }
+    },
+    {
+      "id": "204573",
+      "name": "EPA/DHA with Lemon",
+      "before": 58.6,
+      "after": 68.6,
+      "pillars": {
+        "dose": [
+          10.0,
+          20.0
+        ]
+      }
+    },
+    {
+      "id": "204837",
+      "name": "O.N.E. Omega",
+      "before": 79.5,
+      "after": 83.5,
+      "pillars": {
+        "dose": [
+          16.0,
+          20.0
+        ]
+      }
+    },
+    {
+      "id": "261736",
+      "name": "EPA/DHA Essentials",
+      "before": 63.9,
+      "after": 73.9,
+      "pillars": {
+        "dose": [
+          10.0,
+          20.0
+        ]
+      }
+    },
+    {
+      "id": "261737",
+      "name": "EFA Essentials",
+      "before": 77.8,
+      "after": 81.8,
+      "pillars": {
+        "dose": [
+          16.0,
+          20.0
+        ]
+      }
+    },
+    {
+      "id": "287391",
+      "name": "DHA Ultimate",
+      "before": 71.3,
+      "after": 75.6,
+      "pillars": {
+        "dose": [
+          15.7,
+          20.0
+        ]
+      }
+    },
+    {
+      "id": "294049",
+      "name": "PureNutrients EPA/DHA Gummy Natural Lemon-Lime Flavor",
+      "before": 56.2,
+      "after": 70.2,
+      "pillars": {
+        "dose": [
+          6.0,
+          20.0
+        ]
+      }
+    },
+    {
+      "id": "299747",
+      "name": "EPA/DHA Vegetarian",
+      "before": 65.3,
+      "after": 76.3,
+      "pillars": {
+        "dose": [
+          9.0,
+          20.0
+        ]
+      }
+    },
+    {
+      "id": "299748",
+      "name": "EPA/DHA Vegetarian",
+      "before": 65.3,
+      "after": 76.3,
+      "pillars": {
+        "dose": [
+          9.0,
+          20.0
+        ]
+      }
+    },
+    {
+      "id": "309488",
+      "name": "EPA Ultimate",
+      "before": 71.9,
+      "after": 75.6,
+      "pillars": {
+        "dose": [
+          16.3,
+          20.0
+        ]
+      }
+    },
+    {
+      "id": "322385",
+      "name": "PureNutrients EPA/DHA Gummy Natural Lemon-Lime Flavor",
+      "before": 56.2,
+      "after": 70.2,
+      "pillars": {
+        "dose": [
+          6.0,
+          20.0
+        ]
+      }
+    },
+    {
+      "id": "13226",
+      "name": "MaxEPA 1000 mg Omega 3 Fish Oil",
+      "before": 64.3,
+      "after": 73.1,
+      "pillars": {
+        "dose": [
+          11.2,
+          20.0
+        ]
+      }
+    },
+    {
+      "id": "213952",
+      "name": "Lit'l Squirts Chewable DHA Yummy Natural Fruit Punch Flavor",
+      "before": 52.1,
+      "after": 41.7,
+      "pillars": {
+        "evidence": [
+          10.4,
+          0.0
+        ]
+      }
+    },
+    {
+      "id": "213957",
+      "name": "Chewable DHA Natural Fruit Flavor",
+      "before": 54.5,
+      "after": 67.1,
+      "pillars": {
+        "dose": [
+          7.4,
+          20.0
+        ]
+      }
+    },
+    {
+      "id": "213959",
+      "name": "Chewable DHA Natural Fruit Flavor",
+      "before": 54.5,
+      "after": 67.1,
+      "pillars": {
+        "dose": [
+          7.4,
+          20.0
+        ]
+      }
+    },
+    {
+      "id": "213963",
+      "name": "Chewable DHA Natural Fruit Flavor",
+      "before": 60.0,
+      "after": 74.8,
+      "pillars": {
+        "dose": [
+          5.0,
+          19.8
+        ]
+      }
+    },
+    {
+      "id": "218375",
+      "name": "Omega 3 Fish Oil Concentrate",
+      "before": 61.4,
+      "after": 70.2,
+      "pillars": {
+        "dose": [
+          11.2,
+          20.0
+        ]
+      }
+    },
+    {
+      "id": "218380",
+      "name": "Omega 3 Fish Oil Concentrate",
+      "before": 58.8,
+      "after": 68.6,
+      "pillars": {
+        "dose": [
+          10.2,
+          20.0
+        ]
+      }
+    },
+    {
+      "id": "218492",
+      "name": "EPA/GLA",
+      "before": 62.2,
+      "after": 70.2,
+      "pillars": {
+        "dose": [
+          12.0,
+          20.0
+        ]
+      }
+    },
+    {
+      "id": "218499",
+      "name": "EPA/GLA",
+      "before": 62.2,
+      "after": 70.2,
+      "pillars": {
+        "dose": [
+          12.0,
+          20.0
+        ]
+      }
+    },
+    {
+      "id": "218506",
+      "name": "Omega 3 Fish Oil Concentrate",
+      "before": 58.8,
+      "after": 68.6,
+      "pillars": {
+        "dose": [
+          10.2,
+          20.0
+        ]
+      }
+    },
+    {
+      "id": "218558",
+      "name": "Omega 3 700 mg",
+      "before": 65.3,
+      "after": 73.6,
+      "pillars": {
+        "dose": [
+          11.7,
+          20.0
+        ]
+      }
+    },
+    {
+      "id": "219365",
+      "name": "Minnows Omega 3 Mini Bursts Tutti Frutti Sorbert",
+      "before": 63.6,
+      "after": 71.9,
+      "pillars": {
+        "dose": [
+          11.7,
+          20.0
+        ]
+      }
+    },
+    {
+      "id": "263868",
+      "name": "Omega-3 675 mg",
+      "before": 65.1,
+      "after": 74.3,
+      "pillars": {
+        "dose": [
+          10.8,
+          20.0
+        ]
+      }
+    },
+    {
+      "id": "264155",
+      "name": "Omega-3 740 mg",
+      "before": 68.1,
+      "after": 76.0,
+      "pillars": {
+        "dose": [
+          12.1,
+          20.0
+        ]
+      }
+    },
+    {
+      "id": "264156",
+      "name": "Omega-3 675 mg",
+      "before": 65.1,
+      "after": 74.3,
+      "pillars": {
+        "dose": [
+          10.8,
+          20.0
+        ]
+      }
+    },
+    {
+      "id": "264157",
+      "name": "Omega-3 740 mg",
+      "before": 68.1,
+      "after": 76.0,
+      "pillars": {
+        "dose": [
+          12.1,
+          20.0
+        ]
+      }
+    },
+    {
+      "id": "270770",
+      "name": "Omega-3",
+      "before": 71.0,
+      "after": 71.9,
+      "pillars": {
+        "dose": [
+          19.1,
+          20.0
+        ]
+      }
+    },
+    {
+      "id": "304569",
+      "name": "Full Spectrum Omega",
+      "before": 64.1,
+      "after": 76.5,
+      "pillars": {
+        "dose": [
+          7.6,
+          20.0
+        ]
+      }
+    },
+    {
+      "id": "69123",
+      "name": "Omega-3 \"950\"",
+      "before": 66.5,
+      "after": 71.9,
+      "pillars": {
+        "dose": [
+          14.6,
+          20.0
+        ]
+      }
+    },
+    {
+      "id": "77182",
+      "name": "Triple Strength Omega 3 950 mg",
+      "before": 66.5,
+      "after": 71.9,
+      "pillars": {
+        "dose": [
+          14.6,
+          20.0
+        ]
+      }
+    },
+    {
+      "id": "305211",
+      "name": "Vegan Omega-3 Algae Oil",
+      "before": 61.3,
+      "after": 69.7,
+      "pillars": {
+        "dose": [
+          11.6,
+          20.0
+        ]
+      }
+    },
+    {
+      "id": "321410",
+      "name": "Omega-3 Krill Oil",
+      "before": 56.6,
+      "after": 68.4,
+      "pillars": {
+        "dose": [
+          3.9,
+          15.7
+        ]
+      }
+    },
+    {
+      "id": "326270",
+      "name": "Omega-3 1055 mg Fish Oil 1250 mg",
+      "before": 86.4,
+      "after": 90.4,
+      "pillars": {
+        "dose": [
+          16.0,
+          20.0
+        ]
+      }
+    },
+    {
+      "id": "326271",
+      "name": "Omega-3 1055 mg Fish Oil 1250 mg",
+      "before": 86.4,
+      "after": 90.4,
+      "pillars": {
+        "dose": [
+          16.0,
+          20.0
+        ]
+      }
+    },
+    {
+      "id": "326272",
+      "name": "Omega-3 1040 mg Fish Oil 1250 mg",
+      "before": 85.8,
+      "after": 90.4,
+      "pillars": {
+        "dose": [
+          15.4,
+          20.0
+        ]
+      }
+    },
+    {
+      "id": "326273",
+      "name": "Omega-3 1055 mg Fish Oil 1250 mg",
+      "before": 86.4,
+      "after": 90.4,
+      "pillars": {
+        "dose": [
+          16.0,
+          20.0
+        ]
+      }
+    },
+    {
+      "id": "326274",
+      "name": "Omega-3 120 mg Krill Oil 500 mg",
+      "before": 52.7,
+      "after": 60.5,
+      "pillars": {
+        "dose": [
+          0.0,
+          7.8
+        ]
+      }
+    },
+    {
+      "id": "326277",
+      "name": "Omega-3 240 mg Krill Oil 1000 mg",
+      "before": 56.6,
+      "after": 68.4,
+      "pillars": {
+        "dose": [
+          3.9,
+          15.7
+        ]
+      }
+    },
+    {
+      "id": "327775",
+      "name": "Omega-3 240 mg Krill Oil 1000 mg",
+      "before": 56.6,
+      "after": 68.4,
+      "pillars": {
+        "dose": [
+          3.9,
+          15.7
+        ]
+      }
+    },
+    {
+      "id": "327776",
+      "name": "Omega-3 1055 mg Fish Oil 1250 mg",
+      "before": 86.4,
+      "after": 90.4,
+      "pillars": {
+        "dose": [
+          16.0,
+          20.0
+        ]
+      }
+    },
+    {
+      "id": "12145",
+      "name": "Fish Oil 1200 mg",
+      "before": 61.1,
+      "after": 69.9,
+      "pillars": {
+        "dose": [
+          11.2,
+          20.0
+        ]
+      }
+    },
+    {
+      "id": "12155",
+      "name": "Fish Oil 1400 mg",
+      "before": 62.7,
+      "after": 67.9,
+      "pillars": {
+        "dose": [
+          14.8,
+          20.0
+        ]
+      }
+    },
+    {
+      "id": "19039",
+      "name": "Enteric Coated Fish Oil 1200 mg with Omega-3 Fatty Acids",
+      "before": 57.8,
+      "after": 66.6,
+      "pillars": {
+        "dose": [
+          11.2,
+          20.0
+        ]
+      }
+    },
+    {
+      "id": "19131",
+      "name": "Triple Strength Fish Oil 1400 mg / 900 mg Omega-3's",
+      "before": 67.1,
+      "after": 72.3,
+      "pillars": {
+        "dose": [
+          14.8,
+          20.0
+        ]
+      }
+    },
+    {
+      "id": "211415",
+      "name": "Fish Oil 1200 mg/360 mg Omega-3",
+      "before": 55.3,
+      "after": 64.1,
+      "pillars": {
+        "dose": [
+          11.2,
+          20.0
+        ]
+      }
+    },
+    {
+      "id": "211442",
+      "name": "Mini Softgels Fish Oil 600 mg",
+      "before": 53.6,
+      "after": 68.2,
+      "pillars": {
+        "dose": [
+          5.4,
+          20.0
+        ]
+      }
+    },
+    {
+      "id": "239797",
+      "name": "Krill Oil 350 mg",
+      "before": 50.7,
+      "after": 56.6,
+      "pillars": {
+        "dose": [
+          0.0,
+          5.9
+        ]
+      }
+    },
+    {
+      "id": "239840",
+      "name": "Fish Oil 1000 mg Natural Lemon Flavor",
+      "before": 69.3,
+      "after": 73.3,
+      "pillars": {
+        "dose": [
+          16.0,
+          20.0
+        ]
+      }
+    },
+    {
+      "id": "239845",
+      "name": "Omega-3 520 mg Natural Lemon Flavor",
+      "before": 66.1,
+      "after": 76.1,
+      "pillars": {
+        "dose": [
+          10.0,
+          20.0
+        ]
+      }
+    },
+    {
+      "id": "239848",
+      "name": "Fish Oil 1200 mg",
+      "before": 58.3,
+      "after": 67.7,
+      "pillars": {
+        "dose": [
+          10.6,
+          20.0
+        ]
+      }
+    },
+    {
+      "id": "239854",
+      "name": "Omega-3 from Fish Oil 1,040 mg Natural Lemon Flavor",
+      "before": 72.6,
+      "after": 76.6,
+      "pillars": {
+        "dose": [
+          16.0,
+          20.0
+        ]
+      }
+    },
+    {
+      "id": "239866",
+      "name": "Triple Strength Enteric Fish Oil 1400 mg",
+      "before": 64.1,
+      "after": 69.3,
+      "pillars": {
+        "dose": [
+          14.8,
+          20.0
+        ]
+      }
+    },
+    {
+      "id": "26889",
+      "name": "Fish Oil 1400 mg",
+      "before": 62.7,
+      "after": 67.9,
+      "pillars": {
+        "dose": [
+          14.8,
+          20.0
+        ]
+      }
+    },
+    {
+      "id": "271600",
+      "name": "Omega-3 500 mg Natural Lemon Flavor",
+      "before": 66.0,
+      "after": 76.6,
+      "pillars": {
+        "dose": [
+          9.4,
+          20.0
+        ]
+      }
+    },
+    {
+      "id": "271606",
+      "name": "Omega-3 1000 mg Natural Lemon Flavor",
+      "before": 72.1,
+      "after": 76.6,
+      "pillars": {
+        "dose": [
+          15.5,
+          20.0
+        ]
+      }
+    },
+    {
+      "id": "72351",
+      "name": "Norwegian Salmon Oil 1000 mg",
+      "before": 61.1,
+      "after": 74.5,
+      "pillars": {
+        "dose": [
+          6.6,
+          20.0
+        ]
+      }
+    },
+    {
+      "id": "73404",
+      "name": "Krill Oil 300 mg",
+      "before": 48.2,
+      "after": 54.1,
+      "pillars": {
+        "dose": [
+          0.0,
+          5.9
+        ]
+      }
+    },
+    {
+      "id": "73427",
+      "name": "Krill Oil 1000 mg",
+      "before": 56.8,
+      "after": 64.2,
+      "pillars": {
+        "dose": [
+          3.0,
+          10.4
+        ]
+      }
+    },
+    {
+      "id": "73430",
+      "name": "Adult Gummy Omega-3 Complex with EPA/DHA",
+      "before": 46.6,
+      "after": 51.4,
+      "pillars": {
+        "dose": [
+          0.0,
+          4.8
+        ]
+      }
+    },
+    {
+      "id": "82875",
+      "name": "Fish Oil 1400 mg",
+      "before": 66.1,
+      "after": 71.3,
+      "pillars": {
+        "dose": [
+          14.8,
+          20.0
+        ]
+      }
+    },
+    {
+      "id": "298106",
+      "name": "Advanced DHA 650 mg",
+      "before": 73.1,
+      "after": 78.9,
+      "pillars": {
+        "dose": [
+          14.2,
+          20.0
+        ]
+      }
+    },
+    {
+      "id": "313920",
+      "name": "Omega Superb Lemon Berry Flavored",
+      "before": 72.2,
+      "after": 61.8,
+      "pillars": {
+        "evidence": [
+          10.4,
+          0.0
+        ]
+      }
+    },
+    {
+      "id": "313923",
+      "name": "Super EPA 425 mg",
+      "before": 66.2,
+      "after": 73.9,
+      "pillars": {
+        "dose": [
+          12.3,
+          20.0
+        ]
+      }
+    },
+    {
+      "id": "313924",
+      "name": "Super EPA Pro",
+      "before": 72.4,
+      "after": 73.9,
+      "pillars": {
+        "dose": [
+          18.5,
+          20.0
+        ]
+      }
+    },
+    {
+      "id": "321972",
+      "name": "Super EPA 425 mg",
+      "before": 66.2,
+      "after": 73.9,
+      "pillars": {
+        "dose": [
+          12.3,
+          20.0
+        ]
+      }
+    },
+    {
+      "id": "337869",
+      "name": "Omega Superb Lemon Berry Flavored",
+      "before": 75.2,
+      "after": 64.8,
+      "pillars": {
+        "evidence": [
+          10.4,
+          0.0
+        ]
+      }
+    },
+    {
+      "id": "12067",
+      "name": "Fish Oil Double Strength 1,200 mg",
+      "before": 64.7,
+      "after": 67.9,
+      "pillars": {
+        "dose": [
+          16.8,
+          20.0
+        ]
+      }
+    },
+    {
+      "id": "211587",
+      "name": "MegaKrill Extra Strength",
+      "before": 48.7,
+      "after": 56.2,
+      "pillars": {
+        "dose": [
+          0.0,
+          7.5
+        ]
+      }
+    },
+    {
+      "id": "211608",
+      "name": "DHA supplement",
+      "before": 55.6,
+      "after": 68.9,
+      "pillars": {
+        "dose": [
+          4.5,
+          17.8
+        ]
+      }
+    },
+    {
+      "id": "239830",
+      "name": "MegaKrill 500 mg",
+      "before": 48.7,
+      "after": 56.2,
+      "pillars": {
+        "dose": [
+          0.0,
+          7.5
+        ]
+      }
+    },
+    {
+      "id": "240410",
+      "name": "Omega-3 Krill Oil 350 mg",
+      "before": 50.7,
+      "after": 56.6,
+      "pillars": {
+        "dose": [
+          0.0,
+          5.9
+        ]
+      }
+    },
+    {
+      "id": "26483",
+      "name": "100% Pure Omega-3 Krill Oil",
+      "before": 50.7,
+      "after": 56.6,
+      "pillars": {
+        "dose": [
+          0.0,
+          5.9
+        ]
+      }
+    },
+    {
+      "id": "74735",
+      "name": "Burp Less Fish Oil",
+      "before": 60.2,
+      "after": 67.7,
+      "pillars": {
+        "dose": [
+          12.5,
+          20.0
+        ]
+      }
+    },
+    {
+      "id": "187579",
+      "name": "Daily Omega Natural Fruit Flavor",
+      "before": 69.8,
+      "after": 79.2,
+      "pillars": {
+        "dose": [
+          10.6,
+          20.0
+        ]
+      }
+    },
+    {
+      "id": "206027",
+      "name": "ProEFA Junior",
+      "before": 68.0,
+      "after": 57.6,
+      "pillars": {
+        "evidence": [
+          10.4,
+          0.0
+        ]
+      }
+    },
+    {
+      "id": "214224",
+      "name": "Omega-3D Lemon",
+      "before": 68.2,
+      "after": 77.6,
+      "pillars": {
+        "dose": [
+          10.6,
+          20.0
+        ]
+      }
+    },
+    {
+      "id": "214236",
+      "name": "Omega-3D Lemon",
+      "before": 68.2,
+      "after": 77.6,
+      "pillars": {
+        "dose": [
+          10.6,
+          20.0
+        ]
+      }
+    },
+    {
+      "id": "214322",
+      "name": "Arctic Cod Liver Oil Lemon",
+      "before": 68.8,
+      "after": 77.6,
+      "pillars": {
+        "dose": [
+          11.2,
+          20.0
+        ]
+      }
+    },
+    {
+      "id": "221678",
+      "name": "Arctic Cod Liver Oil Lemon",
+      "before": 68.8,
+      "after": 77.6,
+      "pillars": {
+        "dose": [
+          11.2,
+          20.0
+        ]
+      }
+    },
+    {
+      "id": "223169",
+      "name": "Omega-3 Phospholipids",
+      "before": 62.5,
+      "after": 74.7,
+      "pillars": {
+        "dose": [
+          7.8,
+          20.0
+        ]
+      }
+    },
+    {
+      "id": "223173",
+      "name": "DHA Strawberry Flavor",
+      "before": 69.0,
+      "after": 76.8,
+      "pillars": {
+        "dose": [
+          12.2,
+          20.0
+        ]
+      }
+    },
+    {
+      "id": "223175",
+      "name": "DHA XTRA Strawberry Flavor",
+      "before": 78.4,
+      "after": 80.9,
+      "pillars": {
+        "dose": [
+          17.5,
+          20.0
+        ]
+      }
+    },
+    {
+      "id": "223176",
+      "name": "EPA Lemon Flavor",
+      "before": 75.4,
+      "after": 79.2,
+      "pillars": {
+        "dose": [
+          16.2,
+          20.0
+        ]
+      }
+    },
+    {
+      "id": "223177",
+      "name": "EPA Xtra Lemon Flavor",
+      "before": 78.2,
+      "after": 80.9,
+      "pillars": {
+        "dose": [
+          17.3,
+          20.0
+        ]
+      }
+    },
+    {
+      "id": "223218",
+      "name": "Ultimate Omega Jr. Strawberry",
+      "before": 70.2,
+      "after": 59.8,
+      "pillars": {
+        "evidence": [
+          10.4,
+          0.0
+        ]
+      }
+    },
+    {
+      "id": "223259",
+      "name": "Arctic Cod Liver Oil Lemon",
+      "before": 71.8,
+      "after": 77.6,
+      "pillars": {
+        "dose": [
+          14.2,
+          20.0
+        ]
+      }
+    },
+    {
+      "id": "223260",
+      "name": "Arctic-D Cod Liver Oil Lemon",
+      "before": 71.8,
+      "after": 77.6,
+      "pillars": {
+        "dose": [
+          14.2,
+          20.0
+        ]
+      }
+    },
+    {
+      "id": "223287",
+      "name": "Arctic Cod Liver Oil Strawberry",
+      "before": 71.8,
+      "after": 77.6,
+      "pillars": {
+        "dose": [
+          14.2,
+          20.0
+        ]
+      }
+    },
+    {
+      "id": "223293",
+      "name": "Arctic Cod Liver Oil Orange",
+      "before": 71.8,
+      "after": 77.6,
+      "pillars": {
+        "dose": [
+          14.2,
+          20.0
+        ]
+      }
+    },
+    {
+      "id": "223298",
+      "name": "Arctic Cod Liver Oil Orange",
+      "before": 71.8,
+      "after": 77.6,
+      "pillars": {
+        "dose": [
+          14.2,
+          20.0
+        ]
+      }
+    },
+    {
+      "id": "223301",
+      "name": "Arctic Cod Liver Oil",
+      "before": 71.8,
+      "after": 77.6,
+      "pillars": {
+        "dose": [
+          14.2,
+          20.0
+        ]
+      }
+    },
+    {
+      "id": "223305",
+      "name": "Omega-3 690 mg Lemon",
+      "before": 68.2,
+      "after": 77.6,
+      "pillars": {
+        "dose": [
+          10.6,
+          20.0
+        ]
+      }
+    },
+    {
+      "id": "223411",
+      "name": "Daily DHA Natural Fruit Flavor",
+      "before": 73.1,
+      "after": 80.9,
+      "pillars": {
+        "dose": [
+          12.2,
+          20.0
+        ]
+      }
+    },
+    {
+      "id": "223419",
+      "name": "Omega Vision",
+      "before": 77.7,
+      "after": 80.9,
+      "pillars": {
+        "dose": [
+          16.8,
+          20.0
+        ]
+      }
+    },
+    {
+      "id": "223431",
+      "name": "Omega Blood Sugar",
+      "before": 72.4,
+      "after": 79.2,
+      "pillars": {
+        "dose": [
+          13.2,
+          20.0
+        ]
+      }
+    },
+    {
+      "id": "223441",
+      "name": "Omega Joint Xtra",
+      "before": 74.0,
+      "after": 79.2,
+      "pillars": {
+        "dose": [
+          14.8,
+          20.0
+        ]
+      }
+    },
+    {
+      "id": "223471",
+      "name": "Omega One Lemon",
+      "before": 71.1,
+      "after": 80.9,
+      "pillars": {
+        "dose": [
+          10.2,
+          20.0
+        ]
+      }
+    },
+    {
+      "id": "223558",
+      "name": "Omega-3 Lemon",
+      "before": 74.6,
+      "after": 77.6,
+      "pillars": {
+        "dose": [
+          17.0,
+          20.0
+        ]
+      }
+    },
+    {
+      "id": "223560",
+      "name": "Omega-3 Lemon",
+      "before": 74.6,
+      "after": 77.6,
+      "pillars": {
+        "dose": [
+          17.0,
+          20.0
+        ]
+      }
+    },
+    {
+      "id": "223564",
+      "name": "Omega-3D Lemon",
+      "before": 74.6,
+      "after": 77.6,
+      "pillars": {
+        "dose": [
+          17.0,
+          20.0
+        ]
+      }
+    },
+    {
+      "id": "223609",
+      "name": "DHA Strawberry",
+      "before": 73.1,
+      "after": 80.9,
+      "pillars": {
+        "dose": [
+          12.2,
+          20.0
+        ]
+      }
+    },
+    {
+      "id": "224610",
+      "name": "Omega-3 Lemon",
+      "before": 68.2,
+      "after": 77.6,
+      "pillars": {
+        "dose": [
+          10.6,
+          20.0
+        ]
+      }
+    },
+    {
+      "id": "224615",
+      "name": "Ultimate Omega 2X Mini Soft Gels Strawberry",
+      "before": 77.1,
+      "after": 80.9,
+      "pillars": {
+        "dose": [
+          16.2,
+          20.0
+        ]
+      }
+    },
+    {
+      "id": "224620",
+      "name": "Nordic Omega-3 Fishies Yummy Tutti Frutti",
+      "before": 54.7,
+      "after": 44.3,
+      "pillars": {
+        "evidence": [
+          10.4,
+          0.0
+        ]
+      }
+    },
+    {
+      "id": "240264",
+      "name": "ProOmega-D",
+      "before": 75.6,
+      "after": 79.2,
+      "pillars": {
+        "dose": [
+          16.4,
+          20.0
+        ]
+      }
+    },
+    {
+      "id": "250743",
+      "name": "Omega Focus",
+      "before": 73.2,
+      "after": 76.8,
+      "pillars": {
+        "dose": [
+          16.4,
+          20.0
+        ]
+      }
+    },
+    {
+      "id": "26332",
+      "name": "DHA Junior",
+      "before": 67.6,
+      "after": 57.2,
+      "pillars": {
+        "evidence": [
+          10.4,
+          0.0
+        ]
+      }
+    },
+    {
+      "id": "277308",
+      "name": "Omega-3 690 mg Lemon",
+      "before": 68.2,
+      "after": 77.6,
+      "pillars": {
+        "dose": [
+          10.6,
+          20.0
+        ]
+      }
+    },
+    {
+      "id": "277309",
+      "name": "ProDHA Eye 360 EPA/845 DHA",
+      "before": 77.7,
+      "after": 80.9,
+      "pillars": {
+        "dose": [
+          16.8,
+          20.0
+        ]
+      }
+    },
+    {
+      "id": "277311",
+      "name": "ProOmega Lemon 650 EPA/450 DHA",
+      "before": 75.6,
+      "after": 79.2,
+      "pillars": {
+        "dose": [
+          16.4,
+          20.0
+        ]
+      }
+    },
+    {
+      "id": "288732",
+      "name": "Algae Omega",
+      "before": 59.2,
+      "after": 68.2,
+      "pillars": {
+        "dose": [
+          11.0,
+          20.0
+        ]
+      }
+    },
+    {
+      "id": "288734",
+      "name": "Algae Omega",
+      "before": 66.7,
+      "after": 75.7,
+      "pillars": {
+        "dose": [
+          11.0,
+          20.0
+        ]
+      }
+    },
+    {
+      "id": "288735",
+      "name": "Omega-3 Lemon",
+      "before": 68.2,
+      "after": 77.6,
+      "pillars": {
+        "dose": [
+          10.6,
+          20.0
+        ]
+      }
+    },
+    {
+      "id": "288736",
+      "name": "Postnatal Omega-3 Lemon",
+      "before": 70.1,
+      "after": 73.9,
+      "pillars": {
+        "dose": [
+          16.2,
+          20.0
+        ]
+      }
+    },
+    {
+      "id": "288747",
+      "name": "Ultimate Omega 2X Mini Soft Gels Strawberry",
+      "before": 77.1,
+      "after": 80.9,
+      "pillars": {
+        "dose": [
+          16.2,
+          20.0
+        ]
+      }
+    },
+    {
+      "id": "288750",
+      "name": "Ultimate Omega Lemon",
+      "before": 68.6,
+      "after": 72.2,
+      "pillars": {
+        "dose": [
+          16.4,
+          20.0
+        ]
+      }
+    },
+    {
+      "id": "288751",
+      "name": "Ultimate Omega Lemon",
+      "before": 68.6,
+      "after": 72.2,
+      "pillars": {
+        "dose": [
+          16.4,
+          20.0
+        ]
+      }
+    },
+    {
+      "id": "288752",
+      "name": "Ultimate Omega Lemon",
+      "before": 68.6,
+      "after": 72.2,
+      "pillars": {
+        "dose": [
+          16.4,
+          20.0
+        ]
+      }
+    },
+    {
+      "id": "288753",
+      "name": "Ultimate Omega Lemon",
+      "before": 68.6,
+      "after": 72.2,
+      "pillars": {
+        "dose": [
+          16.4,
+          20.0
+        ]
+      }
+    },
+    {
+      "id": "288754",
+      "name": "Ultimate Omega Lemon",
+      "before": 68.6,
+      "after": 72.2,
+      "pillars": {
+        "dose": [
+          16.4,
+          20.0
+        ]
+      }
+    },
+    {
+      "id": "288756",
+      "name": "Ultimate Omega Xtra Lemon",
+      "before": 71.0,
+      "after": 73.9,
+      "pillars": {
+        "dose": [
+          17.1,
+          20.0
+        ]
+      }
+    },
+    {
+      "id": "288759",
+      "name": "Algae Omega",
+      "before": 59.7,
+      "after": 68.7,
+      "pillars": {
+        "dose": [
+          11.0,
+          20.0
+        ]
+      }
+    },
+    {
+      "id": "288764",
+      "name": "Ultimate Omega Lemon",
+      "before": 68.6,
+      "after": 72.2,
+      "pillars": {
+        "dose": [
+          16.4,
+          20.0
+        ]
+      }
+    },
+    {
+      "id": "288769",
+      "name": "Ultimate Omega Lemon",
+      "before": 68.6,
+      "after": 72.2,
+      "pillars": {
+        "dose": [
+          16.4,
+          20.0
+        ]
+      }
+    },
+    {
+      "id": "313197",
+      "name": "Ultimate Omega Lemon",
+      "before": 72.7,
+      "after": 76.3,
+      "pillars": {
+        "dose": [
+          16.4,
+          20.0
+        ]
+      }
+    },
+    {
+      "id": "321716",
+      "name": "Ultimate Omega 1280 mg Lemon",
+      "before": 75.6,
+      "after": 79.2,
+      "pillars": {
+        "dose": [
+          16.4,
+          20.0
+        ]
+      }
+    },
+    {
+      "id": "321717",
+      "name": "Omega-3 Lemon",
+      "before": 61.2,
+      "after": 70.6,
+      "pillars": {
+        "dose": [
+          10.6,
+          20.0
+        ]
+      }
+    },
+    {
+      "id": "321719",
+      "name": "Zero Sugar Ultimate Omega Gummy Chews Tropical Fruit",
+      "before": 75.1,
+      "after": 78.9,
+      "pillars": {
+        "dose": [
+          16.2,
+          20.0
+        ]
+      }
+    },
+    {
+      "id": "42683",
+      "name": "Algae Omega Lemon",
+      "before": 74.1,
+      "after": 83.5,
+      "pillars": {
+        "dose": [
+          10.6,
+          20.0
+        ]
+      }
+    },
+    {
+      "id": "42686",
+      "name": "Omega Boost Tropical Mango",
+      "before": 70.2,
+      "after": 81.0,
+      "pillars": {
+        "dose": [
+          9.2,
+          20.0
+        ]
+      }
+    },
+    {
+      "id": "43191",
+      "name": "Algae Omega",
+      "before": 73.5,
+      "after": 83.5,
+      "pillars": {
+        "dose": [
+          10.0,
+          20.0
+        ]
+      }
+    },
+    {
+      "id": "45143",
+      "name": "Omega Boost Creamy Lemon",
+      "before": 70.2,
+      "after": 81.0,
+      "pillars": {
+        "dose": [
+          9.2,
+          20.0
+        ]
+      }
+    },
+    {
+      "id": "45145",
+      "name": "Omega Boost Creamy Lemon",
+      "before": 70.2,
+      "after": 81.0,
+      "pillars": {
+        "dose": [
+          9.2,
+          20.0
+        ]
+      }
+    },
+    {
+      "id": "62098",
+      "name": "Arctic Cod Liver Oil Peach",
+      "before": 71.8,
+      "after": 77.6,
+      "pillars": {
+        "dose": [
+          14.2,
+          20.0
+        ]
+      }
+    },
+    {
+      "id": "62101",
+      "name": "Arctic Cod Liver Oil Strawberry",
+      "before": 71.8,
+      "after": 77.6,
+      "pillars": {
+        "dose": [
+          14.2,
+          20.0
+        ]
+      }
+    },
+    {
+      "id": "71900",
+      "name": "ProEFA-3-6-9 Lemon",
+      "before": 72.5,
+      "after": 83.5,
+      "pillars": {
+        "dose": [
+          9.0,
+          20.0
+        ]
+      }
+    },
+    {
+      "id": "74030",
+      "name": "Omega Boost Tropical Mango",
+      "before": 60.2,
+      "after": 71.0,
+      "pillars": {
+        "dose": [
+          9.2,
+          20.0
+        ]
+      }
+    },
+    {
+      "id": "74246",
+      "name": "Omega Boost Junior Paradise Punch",
+      "before": 55.6,
+      "after": 45.2,
+      "pillars": {
+        "evidence": [
+          10.4,
+          0.0
+        ]
+      }
+    },
+    {
+      "id": "74252",
+      "name": "Omega-3D Lemon",
+      "before": 74.6,
+      "after": 77.6,
+      "pillars": {
+        "dose": [
+          17.0,
+          20.0
+        ]
+      }
+    },
+    {
+      "id": "81952",
+      "name": "ProEPA 850 EPA/200 DHA Lemon",
+      "before": 75.4,
+      "after": 79.2,
+      "pillars": {
+        "dose": [
+          16.2,
+          20.0
+        ]
+      }
+    },
+    {
+      "id": "81953",
+      "name": "ProOmega Lemon",
+      "before": 75.6,
+      "after": 79.2,
+      "pillars": {
+        "dose": [
+          16.4,
+          20.0
+        ]
+      }
+    }
+  ],
+  "path_counts": {
+    "$._v4_config_fingerprint": 715,
+    "$._v4_provenance.config_versions.quality_score.fingerprint": 715,
+    "$._v4_provenance.config_versions.quality_score.version": 715,
+    "$._v4_provenance.scoring_engine_version": 715,
+    "$._v4_quality_version": 715,
+    "$.scoring_metadata.scoring_version": 715,
+    "$._v4_module_breakdown.dimensions.dose.components.epa_dha_band": 404,
+    "$._v4_module_breakdown.dimensions.dose.metadata.epa_dha_band_label": 421,
+    "$._v4_module_breakdown.dimensions.dose.metadata.maximum_band_score": 427,
+    "$._v4_module_breakdown.dimensions.dose.metadata.minimum_band_score": 427,
+    "$._v4_module_breakdown.dimensions.dose.metadata.raw_score": 404,
+    "$._v4_module_breakdown.dimensions.dose.score": 404,
+    "$._v4_module_breakdown.metadata.adjusted_score_before_clamp": 415,
+    "$._v4_module_breakdown.metadata.class_subtotal": 415,
+    "$._v4_module_breakdown.metadata.production_score_before_clamp": 415,
+    "$._v4_module_breakdown.metadata.raw_dimension_sum": 415,
+    "$._v4_module_breakdown.metadata.raw_score_100_pre_score_policy": 415,
+    "$._v4_module_breakdown.metadata.rubric_score_100": 415,
+    "$._v4_module_breakdown.metadata.score_policy.audit_affine_v3_compare.value": 415,
+    "$._v4_module_breakdown.metadata.score_policy.raw_score_100": 415,
+    "$._v4_module_breakdown.metadata.score_policy.score_100": 415,
+    "$._v4_module_breakdown.raw_score_100": 415,
+    "$._v4_module_breakdown.score_100": 415,
+    "$.display_100": 415,
+    "$.grade": 231,
+    "$.quality_pillars_v4.dose.components.raw_dose": 404,
+    "$.quality_pillars_v4.dose.reason": 444,
+    "$.quality_pillars_v4.dose.receipt.entries[*].points": 383,
+    "$.quality_pillars_v4.dose.receipt.entries[*].raw": 374,
+    "$.quality_pillars_v4.dose.receipt.entries[*]": 166,
+    "$.quality_pillars_v4.dose.receipt.unawarded": 404,
+    "$.quality_pillars_v4.dose.score": 404,
+    "$.quality_score_v4_100": 415,
+    "$.quality_tier": 231,
+    "$.raw_score_v4_100": 415,
+    "$.score_100_equivalent": 415,
+    "$._v4_confidence_detail.evidence.drivers[*]": 22,
+    "$._v4_module_breakdown.dimensions.evidence.components.clinical_evidence": 11,
+    "$._v4_module_breakdown.dimensions.evidence.metadata.applicability_qualified": 11,
+    "$._v4_module_breakdown.dimensions.evidence.metadata.applicability_reason": 19,
+    "$._v4_module_breakdown.dimensions.evidence.metadata.clinical_evidence_after_cap": 11,
+    "$._v4_module_breakdown.dimensions.evidence.metadata.evidence_result_state": 15,
+    "$._v4_module_breakdown.dimensions.evidence.metadata.evidence_source_pmids[*]": 22,
+    "$._v4_module_breakdown.dimensions.evidence.metadata.evidence_standard": 11,
+    "$._v4_module_breakdown.dimensions.evidence.metadata.raw_score": 11,
+    "$._v4_module_breakdown.dimensions.evidence.score": 11,
+    "$.quality_pillars_v4.evidence.components.raw_evidence": 11,
+    "$.quality_pillars_v4.evidence.display_state": 15,
+    "$.quality_pillars_v4.evidence.evidence_result_state": 15,
+    "$.quality_pillars_v4.evidence.reason": 15,
+    "$.quality_pillars_v4.evidence.receipt.entries[*]": 11,
+    "$.quality_pillars_v4.evidence.receipt.unawarded": 11,
+    "$.quality_pillars_v4.evidence.score": 11,
+    "$._v4_module_breakdown.dimensions.dose.metadata.prenatal_dha_indication": 1,
+    "$.quality_assessment_status": 4
+  }
+}

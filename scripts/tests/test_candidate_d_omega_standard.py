@@ -98,7 +98,7 @@ def test_prenatal_intake_authority_is_not_preterm_outcome_credit() -> None:
     assert payload["metadata"]["evidence_result_state"] == "evaluated_authority"
 
 
-def test_explicit_adult_triglyceride_lowering_purpose_owns_strong_evidence() -> None:
+def test_triglyceride_claim_cannot_establish_strong_evidence() -> None:
     from scoring_v4.modules.omega_evidence import score_evidence
 
     product = _product(epa=150, dha=100, name="Adult Omega-3 Triglyceride Support")
@@ -108,8 +108,9 @@ def test_explicit_adult_triglyceride_lowering_purpose_owns_strong_evidence() -> 
     }]
     payload = score_evidence(product)
 
-    assert payload["score"] == 20.0
-    assert payload["metadata"]["evidence_standard"] == "triglyceride_strong"
+    assert payload["score"] == 10.4
+    assert payload["metadata"]["evidence_standard"] == "omega_reviewed_weak"
+    assert payload["metadata"]["applicability_reason"] == "explicit_adult_triglyceride_lowering_purpose"
 
 
 def test_triglyceride_form_wording_is_not_a_lowering_purpose() -> None:
@@ -235,7 +236,8 @@ def test_unknown_frequency_records_default_without_inventing_a_range() -> None:
 def test_dose_scores_minimum_and_retains_directed_interval() -> None:
     from scoring_v4.modules.omega_dose import score_dose
 
-    payload = score_dose(_product(epa=900, dha=300, minimum=1, maximum=2))
+    payload = score_dose(_product(epa=900, dha=300, minimum=1, maximum=2,
+                                  name="Omega helps lower triglycerides"))
 
     assert payload["metadata"]["per_day_min_mg"] == 1200.0
     assert payload["metadata"]["per_day_max_mg"] == 2400.0
@@ -266,3 +268,14 @@ def test_omega_points_are_read_from_shared_scoring_config(monkeypatch):
 
     monkeypatch.setattr(quality_score_config, "block", configured)
     assert score_evidence(_product(epa=300, dha=200))["score"] == 7.0
+
+
+@pytest.mark.parametrize("epa,dha", [(150,100),(2400,1600)])
+def test_public_evidence_cannot_be_raised_by_marketing_claim(epa, dha):
+    from scoring_v4.scored_artifact import build_scored_artifact
+    product = _product(epa=epa, dha=dha)
+    before = build_scored_artifact(product)
+    product["statements"] = [{"notes": "EPA and DHA help lower triglyceride levels."}]
+    after = build_scored_artifact(product)
+    assert before["quality_pillars_v4"]["evidence"]["score"] == 10.4
+    assert after["quality_pillars_v4"]["evidence"] == before["quality_pillars_v4"]["evidence"]
