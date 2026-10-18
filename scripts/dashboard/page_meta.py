@@ -216,7 +216,7 @@ PAGE_META: dict[str, dict[str, Any]] = {
     },
     "caers-audit": {
         "page_title": "CAERS Audit",
-        "page_summary": "FDA CAERS pharmacovigilance audit: adverse event signals, outcome breakdowns, cross-reference with banned/recalled, and B8 scoring impact.",
+        "page_summary": "FDA CAERS pharmacovigilance audit: adverse event signals, outcome breakdowns and cross-reference with banned/recalled. Audit analytics only; the v4 score applies no CAERS penalty.",
         "data_planes": ["Pipeline Data"],
         "source_paths": ["caers_signals"],
         "freshness_fields": [],
@@ -224,7 +224,7 @@ PAGE_META: dict[str, dict[str, Any]] = {
         "related_views": ["Section B Audit", "Intelligence"],
         "usage_notes": [
             "Cross-Reference tab shows ingredients with CAERS signals NOT in banned/recalled — review candidates.",
-            "B8 Scoring Impact shows how CAERS penalties affect product scores.",
+            "Scoring Status records that v4 applies no CAERS penalty and why the v3 B8 penalty was retired.",
             "Reaction Analysis surfaces the most commonly reported adverse reactions.",
         ],
     },
@@ -257,7 +257,11 @@ def _resolve_source_key(key: str, data: Any) -> list[str]:
         "batch_logs": [str(scan_dir / "logs")],
         "dataset_outputs": [str(scan_dir / "output_*")],
         "build_history": [str(build_root.parent)],
-        "scoring_config": [str(Path("scripts/config/scoring_config.json").resolve())],
+        # The production v4 configs that config_registry fingerprints.
+        "scoring_config": [
+            str(Path("scripts/scoring_v4/config/quality_score.json").resolve()),
+            str(Path("scripts/data/omega_rubric.json").resolve()),
+        ],
     }
     return source_map.get(key, [key])
 

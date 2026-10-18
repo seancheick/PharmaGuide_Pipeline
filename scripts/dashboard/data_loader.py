@@ -13,6 +13,9 @@ from typing import Any
 import pandas as pd
 import streamlit as st
 
+from scripts.scoring_v4.config_registry import all_config_provenance
+from scripts.scoring_v4.quality_score_config import config as quality_score_config
+
 
 DEFAULT_ALERT_THRESHOLDS = {
     "coverage_min_pct": 95,
@@ -56,7 +59,7 @@ class DashboardData:
     dataset_reports: dict[str, dict[str, Any]] = field(default_factory=dict)
 
     processing_state: dict[str, Any] | None = None
-    scoring_config: dict[str, Any] | None = None
+    scoring_config_snapshot: dict[str, Any] = field(default_factory=dict)
     batch_run_files: list[Path] = field(default_factory=list)
     batch_history: list[dict[str, Any]] = field(default_factory=list)
     latest_batch_summary: dict[str, Any] | None = None
@@ -1410,6 +1413,48 @@ def _compute_shared_metrics(
 
 
 
+def _load_release_config_provenance(db_conn: sqlite3.Connection | None) -> list[dict[str, Any]]:
+    """Scoring-config provenance stamped on released products, with product counts.
+
+    Reads products_core.v4_config_fingerprint, the scored artifact's
+    config_registry.all_config_provenance() stamp. An older DB without the
+    column, or no DB, yields an empty list (comparison unknown).
+    """
+    if db_conn is None:
+        return []
+    try:
+        rows = db_conn.execute(
+            "SELECT v4_config_fingerprint AS stamp, COUNT(*) AS products "
+            "FROM products_core GROUP BY v4_config_fingerprint"
+        ).fetchall()
+    except sqlite3.Error:
+        return []
+    release = []
+    for stamp, products in rows:
+        try:
+            provenance = json.loads(stamp) if stamp else None
+        except (TypeError, json.JSONDecodeError):
+            provenance = None
+        release.append({"provenance": provenance, "products": int(products)})
+    return release
+
+
+def _load_scoring_config_snapshot(db_conn: sqlite3.Connection | None, warnings: list[str]) -> dict[str, Any]:
+    """Production v4 scoring config as the scorer stamps it, plus the release's stamp."""
+    try:
+        provenance = all_config_provenance()
+        pillars = quality_score_config()["pillars"]
+        pillar_weights = {name: spec["weight"] for name, spec in pillars.items()}
+    except (OSError, ValueError, KeyError, TypeError) as exc:
+        warnings.append(f"v4 scoring config could not be read: {exc}")
+        return {}
+    return {
+        "provenance": provenance,
+        "pillar_weights": pillar_weights,
+        "release": _load_release_config_provenance(db_conn),
+    }
+
+
 @st.cache_resource(ttl=300)
 def load_dashboard_data(config: Any) -> DashboardData:
     data = DashboardData(scan_dir=config.scan_dir, build_root=config.build_root, dataset_root=config.dataset_root)
@@ -1421,7 +1466,7 @@ def load_dashboard_data(config: Any) -> DashboardData:
     data.detail_index = safe_load_json(config.build_root / "detail_index.json")
     data.detail_blobs_dir = config.build_root / "detail_blobs"
     data.processing_state = safe_load_json(config.scan_dir / "logs" / "processing_state.json")
-    data.scoring_config = safe_load_json(Path("scripts/config/scoring_config.json"))
+    data.scoring_config_snapshot = _load_scoring_config_snapshot(data.db_conn, data.warnings)
 
     data.integrity_data = (data.export_manifest or {}).get("integrity", {}) or None
     data.alert_thresholds = _load_alert_thresholds()

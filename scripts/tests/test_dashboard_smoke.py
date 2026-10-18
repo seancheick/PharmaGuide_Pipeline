@@ -31,6 +31,7 @@ def test_all_dashboard_views_smoke_render(dashboard_app):
         ("intelligence", lambda: views.render_intelligence(data)),
         ("pillar-audit", lambda: views.render_pillar_audit(data)),
         ("suppression-audit", lambda: views.render_suppression_audit(data)),
+        ("caers-audit", lambda: views.render_audit_caers(data)),
         ("scoring-integrity", lambda: views.render_scoring_integrity(data)),
         ("module-health", lambda: views.render_module_health(data)),
     ]
