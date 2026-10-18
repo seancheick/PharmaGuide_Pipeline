@@ -343,7 +343,9 @@ UL selection for catalog screening (Dose V4.1 §2.5, Sean D2) is
 `SupplementEnricherV3._ul_screening_population`: with no stated population,
 the lowest established UL across ordinary adult groups (calcium 2,000 mg,
 phosphorus 3,000 mg); a DSLD life-stage tag narrows it (seniors 51+,
-pregnancy/lactation 19-50). DSLD's generic 18-50 adult tag does not narrow.
+pregnancy/lactation 19-50). A label stating several populations screens the
+lowest UL across all of them, and a negated tag ("Women (not pregnant or
+lactating)") is an ordinary adult. DSLD's generic 18-50 adult tag does not narrow.
 Pediatric UL rows are not in the reference data: the adult limit still
 confirms an exceedance and the row records the gap. Adequacy references are
 unchanged. Rows and flags carry `ul_population`, and warnings name it.

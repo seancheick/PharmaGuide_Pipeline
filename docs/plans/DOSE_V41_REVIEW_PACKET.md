@@ -80,9 +80,12 @@ not performance": purpose applicability rather than certainty).
 
 ## 5. Disclosure → Dose dependencies
 
-Changed (§2.3): a hidden amount now takes the 11.4 neutral on generic purposes, sports
-co-primaries, botanical/collagen profiles and probiotic strains (previously 0 or skipped);
-Transparency keeps its B5/disclosure deductions. A pipeline-lost amount keeps its strict hold.
+Changed (§2.3): an amount the label hides now takes the 11.4 neutral on generic purposes,
+sports co-primaries, botanical/collagen profiles and probiotic strains (previously 0 or skipped);
+Transparency keeps its B5/disclosure deductions. "Hidden" is a positive label fact
+(`dose_disclosure_status` = `not_disclosed_blend`, a lent blend mass, an opaque sports blend, or a
+per-strain CFU under a total); a row missing its amount without one keeps main's 0 or no vote,
+and a pipeline-lost amount keeps its strict hold (review fix e8ab8f439; 0 stored-input changes).
 Risk for Sean: a hidden underdose now scores 11.4 in Dose where a disclosed low dose may score
 less; Transparency carries the counterweight. **Kept:** probiotic CFU guarantee multiplier
 (0.9 at manufacture, 0.85 unstated) on measured strains only.
@@ -117,15 +120,18 @@ a prenatal title that mentions a baby (f3614ec7c fixed a 20 → 5 regression fou
 - Omega `dose.adequacy_references` (ordinary 250, triglyceride 2,000) and `epa_dha_band_semantics`.
 - D2 (code, `rda_ul_calculator.UL_SCREENING_POPULATIONS`): general adult = lowest UL across
   Male/Female 19+ (calcium 2,000, phosphorus 3,000); seniors tag 51+; pregnancy/lactation tag
-  19–50 rows; DSLD's 18–50 adult tag (on 12,102 of 15,426 labels) does not narrow; pediatric
+  19–50 rows; a label stating several populations screens the lowest UL across all of them, and
+  a negated tag ("Women (not pregnant or lactating)", 959 labels) is an ordinary adult (review
+  fix b69d8acdf: pregnancy-only screens 1,146 → 46, plus 142 unions; the ≥90%-of-UL cohort is
+  unchanged at 12); DSLD's 18–50 adult tag (on 12,102 of 15,426 labels) does not narrow; pediatric
   rows are absent from the reference data, so the adult limit still confirms an exceedance and
   the row records the gap (**for Sean:** curate pediatric UL rows).
 
 ## 10. Permanent golden-case tests and results
 
-Pipeline (128 tests, all pass): `test_directed_daily_dose` 5, `test_dose_final_safety_ceiling`
-15, `test_ul_screening_population` 21, `test_dose_v41_calibrations` 23, `test_dose_v41_sports_caffeine`
-18, `test_dose_v41_neutral_states` 3, `test_dose_v41_above_range` 4, `test_dose_reference_semantics`
+Pipeline (137 tests, all pass): `test_directed_daily_dose` 5, `test_dose_final_safety_ceiling`
+16, `test_ul_screening_population` 27, `test_dose_v41_calibrations` 24, `test_dose_v41_sports_caffeine`
+18, `test_dose_v41_neutral_states` 4, `test_dose_v41_above_range` 4, `test_dose_reference_semantics`
 14, `test_dose_v41_receipt` 25 (every archetype fixture's receipt reconciles). App (25 tests across these four files, all pass):
 `stack_ul_checker_dose_v41_test` 8, `dose_v41_receipt_parity_test` 4 (real pipeline output for
 205309/299065), nutrient panel "not assessed" notice, parity pin (100%).
@@ -142,6 +148,27 @@ Pipeline (128 tests, all pass): `test_directed_daily_dose` 5, `test_dose_final_s
 - Receipts render from the recorded result (facts verbatim, receipt kinds summed); no app math.
 - Unchanged and already true: quality is profile-independent; the stack provider watches the
   profile; demographics stay on device; catalog warnings name maximum labeled daily use.
+
+## Independent review (fresh context, requirement + owners + diff)
+
+Verdict: request changes, one Critical. Each finding was reproduced before acting.
+
+| Finding | Disposition |
+|---|---|
+| CRITICAL: "Women (not pregnant or lactating)" screened as pregnancy (D2) | Fixed b69d8acdf, fail-first tests |
+| Pregnancy + adult tags screened only pregnancy rows (§2.5 "whole stated population") | Fixed b69d8acdf (union of populations) |
+| Hidden-amount neutral defined by exclusion | Fixed e8ab8f439 via the existing `dose_disclosure_status` owner |
+| Two unrelated copy tests deleted | Restored a316ccfe1 |
+| 100% threshold had two owners | Guard a316ccfe1: config start must equal the confirmed exceedance |
+| Receipt counts the ceiling as unawarded | Kept: caps (verification tier ceilings too) land in `unawarded`, not deductions; entries reconcile |
+| Multi/B-complex high-RDA reductions kept | Kept for Sean: §2.4 names the two UL excess paths removed; these are non-UL coverage bands (§3.2 keeps the panel structure) |
+| Caffeine inside guarana/green tea stays unknown | Kept: §3.3 counts quantified caffeine only; unknown stays unknown |
+| Pediatric adult fallback; app no-profile shows % with * | Kept for Sean (data gap; the notice says "not assessed for you", no tier reads as safe) |
+
+After the fixes: stored-input scores unchanged (0 of 15,426 vs 810af3cf0), raw canaries 33/33.
+Locally rebuilt canaries (6 of 9; three raw labels are not in the dataset) show e1_2_2
+score-array drift on 306237/246324/176872 that reproduces identically on main 5fb2be1ca: a stale
+October 12 baseline, not this branch (follow-up).
 
 ## Sean-only decisions remaining
 
