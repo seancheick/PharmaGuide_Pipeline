@@ -22684,13 +22684,35 @@ class SupplementEnricherV3:
                             "highest_ul": _nutrient_record.get("highest_ul"),
                         }
 
+                    worst_case_nickel_within_ul = False
                     if resolved_canonical_id == "nickel" and safety_ul_status == "indeterminate":
-                        # A readable elemental amount cannot establish that
-                        # the source is a soluble salt covered by nickel's UL.
-                        skip_ul_check = True
-                        skip_ul_reason = "unresolved_form"
-                        ul_exposure.update(ul_gate_eligible=False,
-                                           ul_gate_ineligible_reason="unresolved_form")
+                        # Unknown solubility cannot prove an exceedance, but
+                        # all declared mass bounds the possible soluble nickel.
+                        # Reuse the existing sole-row active-moiety bound; no
+                        # salt identity or nutritional adequacy is inferred.
+                        nickel_ul, nickel_population = self.rda_calculator._screening_ul(
+                            _nutrient_record, ul_population or "general_adult", pediatric_age_groups
+                        )
+                        nickel_bound, nickel_unit_evaluable = self.rda_calculator._reconcile_amount_to_reference(
+                            amount_for_ul, converted_unit, _nutrient_record.get("unit")
+                        ) if converted_amount is not None else (None, False)
+                        worst_case_nickel_within_ul = bool(
+                            not skip_ul_check
+                            and positive_canonical_row_counts.get("nickel") == 1
+                            and nickel_unit_evaluable and nickel_bound is not None
+                            and nickel_ul is not None and 0 <= nickel_bound <= nickel_ul
+                            and not nickel_population.get("reference_gap")
+                        )
+                        if worst_case_nickel_within_ul:
+                            safety_ul = nickel_ul
+                            safety_pct_ul = nickel_bound / nickel_ul * 100.0
+                            safety_ul_population = nickel_population
+                            safety_warnings = []
+                        else:
+                            skip_ul_check = True
+                            skip_ul_reason = "unresolved_form"
+                            ul_exposure.update(ul_gate_eligible=False,
+                                               ul_gate_ineligible_reason="unresolved_form")
 
                     pediatric_reference_gap = bool(
                         isinstance(safety_ul_population, dict)
@@ -22733,7 +22755,7 @@ class SupplementEnricherV3:
                                 "explicit_label_preformed_vitamin_a_fraction"
                             ),
                         })
-                    worst_case_compound_mass_within_ul = bool(
+                    worst_case_compound_mass_within_ul = worst_case_nickel_within_ul or bool(
                         not skip_ul_check
                         and resolved_canonical_id
                         and positive_canonical_row_counts.get(
