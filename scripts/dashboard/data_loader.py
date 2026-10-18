@@ -1443,8 +1443,10 @@ def _load_release_config_provenance(db_conn: sqlite3.Connection | None) -> list[
 def _load_scoring_config_snapshot(db_conn: sqlite3.Connection | None, warnings: list[str]) -> dict[str, Any]:
     """Production v4 scoring config as the scorer stamps it, plus the release's stamp."""
     try:
-        provenance = all_config_provenance()
-        pillars = quality_score_config()["pillars"]
+        # The Streamlit resource cache owns dashboard freshness (Refresh + TTL).
+        # Process-long scorer caches must neither mask edits nor be invalidated.
+        provenance = all_config_provenance(fresh=True)
+        pillars = quality_score_config(fresh=True)["pillars"]
         pillar_weights = {name: spec["weight"] for name, spec in pillars.items()}
     except (OSError, ValueError, KeyError, TypeError) as exc:
         warnings.append(f"v4 scoring config could not be read: {exc}")

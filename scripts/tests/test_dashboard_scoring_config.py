@@ -6,7 +6,10 @@ scripts/config/scoring_config.json must not feed any dashboard panel, and the
 CAERS page must not claim a B8 penalty that v4 never applies (retired
 2026-06-24). Hermetic: empty scan/build roots and in-memory SQLite, so CI runs it.
 """
+import hashlib
 import json
+
+import pytest
 import sqlite3
 import types
 from pathlib import Path
@@ -177,3 +180,76 @@ def test_no_dashboard_module_reads_the_retired_config():
         if f"config/{RETIRED}" in path.read_text()
     ]
     assert readers == []
+
+
+def test_config_snapshot_reloads_current_files_without_mutating_scorer_cache(
+    dashboard_app, tmp_path, monkeypatch
+):
+    loader = __import__("scripts.dashboard.data_loader", fromlist=["x"])
+    registry = __import__("scripts.scoring_v4.config_registry", fromlist=["x"])
+    quality = __import__("scripts.scoring_v4.quality_score_config", fromlist=["x"])
+    original_provenance = registry.all_config_provenance()
+    original_config = quality.config()
+    paths = {}
+    for name, source in registry._PROVENANCE_CONFIGS.items():
+        path = tmp_path / source.name
+        path.write_bytes(source.read_bytes())
+        paths[name] = path
+    monkeypatch.setattr(registry, "_PROVENANCE_CONFIGS", paths)
+    monkeypatch.setattr(quality, "_PATH", paths["quality_score"])
+    release = _release_db([original_provenance])
+    assert loader._load_scoring_config_snapshot(release, [])["provenance"] == original_provenance
+
+    for name, path in paths.items():
+        payload = json.loads(path.read_bytes())
+        payload["_metadata"]["version"] = "test-updated"
+        if name == "quality_score":
+            payload["pillars"]["formulation"]["weight"] = 19
+            payload["pillars"]["dose"]["weight"] = 21
+        path.write_text(json.dumps(payload))
+    # Both Refresh and expiry re-enter the loader body. Streamlit is a pass-through
+    # fixture here; no cache invalidation on the scorer is permitted in either case.
+    warnings = []
+    snapshot = loader._load_scoring_config_snapshot(release, warnings)
+    assert warnings == []
+    for name, path in paths.items():
+        assert snapshot["provenance"][name] == {
+            "version": "test-updated",
+            "fingerprint": hashlib.sha256(path.read_bytes()).hexdigest()[:16],
+        }
+    assert snapshot["pillar_weights"]["formulation"] == 19
+    assert snapshot["pillar_weights"]["dose"] == 21
+    quality_view = __import__("scripts.dashboard.views.quality", fromlist=["x"])
+    rows = _rows_by_field(quality_view.build_config_snapshot_rows(types.SimpleNamespace(
+        scoring_config_snapshot=snapshot, export_manifest={}, shared_metrics={}
+    )))
+    assert rows["quality_score matches release"].startswith("No")
+    assert rows["omega matches release"].startswith("No")
+    assert registry.all_config_provenance() == original_provenance
+    assert quality.config() is original_config
+
+
+@pytest.mark.parametrize("failure", ["missing", "malformed", "non_object"])
+def test_config_snapshot_reports_invalid_file_after_cached_success(
+    dashboard_app, tmp_path, monkeypatch, failure
+):
+    loader = __import__("scripts.dashboard.data_loader", fromlist=["x"])
+    registry = __import__("scripts.scoring_v4.config_registry", fromlist=["x"])
+    quality = __import__("scripts.scoring_v4.quality_score_config", fromlist=["x"])
+    registry.all_config_provenance()
+    quality.config()
+    path = tmp_path / "quality_score.json"
+    path.write_bytes(registry._PROVENANCE_CONFIGS["quality_score"].read_bytes())
+    monkeypatch.setattr(registry, "_PROVENANCE_CONFIGS", {
+        **registry._PROVENANCE_CONFIGS, "quality_score": path,
+    })
+    monkeypatch.setattr(quality, "_PATH", path)
+    assert loader._load_scoring_config_snapshot(None, [])["pillar_weights"]
+    if failure == "missing":
+        path.unlink()
+    else:
+        path.write_text("{" if failure == "malformed" else "[]")
+    warnings = []
+    assert loader._load_scoring_config_snapshot(None, warnings) == {}
+    assert len(warnings) == 1
+    assert warnings[0].startswith("v4 scoring config could not be read:")
