@@ -247,6 +247,9 @@ def _probiotic_dose_reason(dim: Dict[str, Any], fallback: str) -> str:
                     "so Dose takes the neutral assessment value.")
         return ("No live count (CFU) is disclosed, so dose adequacy cannot be assessed; "
                 "Dose takes the neutral assessment value.")
+    if metadata.get("reference_basis") == "completed_no_general_strain_benchmark":
+        return ("Per-strain amounts are disclosed, but no general clinical dose benchmark applies; "
+                "Dose takes the neutral assessment value.")
     if metadata.get("reference_basis") == "industry_potency_not_trial_efficacy":
         if _num(metadata.get("strain_neutral_count")) > 0:
             return ("Strains with a disclosed CFU are assessed against potency benchmarks; strains without "
