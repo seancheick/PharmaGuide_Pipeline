@@ -1435,6 +1435,8 @@ def _load_release_config_provenance(db_conn: sqlite3.Connection | None) -> list[
     for stamp, products in rows:
         try:
             provenance = json.loads(stamp) if stamp else None
+            if not isinstance(provenance, dict):
+                provenance = None
         except (TypeError, json.JSONDecodeError):
             provenance = None
         release.append({"provenance": provenance, "products": int(products)})

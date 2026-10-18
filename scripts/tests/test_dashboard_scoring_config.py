@@ -261,3 +261,21 @@ def test_config_snapshot_reports_invalid_file_after_cached_success(
     assert loader._load_scoring_config_snapshot(None, warnings) == {}
     assert len(warnings) == 1
     assert warnings[0].startswith("v4 scoring config could not be read:")
+
+
+@pytest.mark.parametrize("invalid", [[1], [], "bad", "", 1, 0, True, False, None])
+def test_release_provenance_non_objects_are_unknown_and_preserve_product_counts(
+    dashboard_app, invalid
+):
+    loader = __import__("scripts.dashboard.data_loader", fromlist=["x"])
+    quality_view = __import__("scripts.dashboard.views.quality", fromlist=["x"])
+    current = config_registry.all_config_provenance()
+    release = loader._load_release_config_provenance(_release_db([current, invalid, invalid]))
+    assert sum(row["products"] for row in release) == 3
+    assert sum(row["products"] for row in release if row["provenance"] is None) == 2
+    rows = _rows_by_field(quality_view.build_config_snapshot_rows(types.SimpleNamespace(
+        scoring_config_snapshot={"provenance": current, "pillar_weights": {}, "release": release},
+        export_manifest={}, shared_metrics={}
+    )))
+    assert rows["quality_score matches release"] == "No (1 of 3 products match)"
+    assert "not recorded" in rows["quality_score config (release)"]
