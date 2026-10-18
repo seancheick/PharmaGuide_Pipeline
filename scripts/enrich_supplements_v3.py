@@ -14372,6 +14372,29 @@ class SupplementEnricherV3:
                                   ("inactiveIngredients", inactive_ingredients))
             for index, row in enumerate(rows) if isinstance(row, dict)
         }
+        # A preparation's explicitly identified source organisms/materials are
+        # provenance, not hidden blend actives. Reconcile detector placeholders
+        # by the exact source owner, only when the canonical source inventory
+        # proves every descendant is a retained source descriptor. Missing or
+        # mixed active children continue through ordinary opacity assessment.
+        source_rows = [row for row in [*active_ingredients, *inactive_ingredients]
+                       if isinstance(row, dict)]
+        source_paths = {row.get("raw_source_path") for row in source_rows if row.get("raw_source_path")}
+        source_inventory = {row.get("raw_source_path") for row in product.get("label_source_rows") or []
+                            if isinstance(row, dict) and row.get("raw_source_path")}
+        children_by_parent: Dict[str, List[Dict]] = {}
+        for row in source_rows:
+            parent = row.get("parent_source_path")
+            if parent:
+                children_by_parent.setdefault(parent, []).append(row)
+        source_only_preparations = set()
+        for parent, children in children_by_parent.items():
+            descendants = {path for path in source_inventory
+                           if path.startswith((parent + ".nestedRows[", parent + ".forms["))}
+            if (parent in source_paths and descendants
+                    and descendants <= {row.get("raw_source_path") for row in children}
+                    and all(row.get("cleaner_row_role") == "source_descriptor" for row in children)):
+                source_only_preparations.add(parent)
 
         # Chemical-identity resolution handles for the branded single-active
         # escape below (same databases the scorer's skip logic trusts via
@@ -14416,6 +14439,8 @@ class SupplementEnricherV3:
             try:
                 result = self.blend_detector.analyze_product(product)
                 for blend in result.blends_detected:
+                    if label_source_refs.get(blend.source_field) in source_only_preparations:
+                        continue
                     detector_with_amounts = blend.ingredients_with_amounts or []
                     detector_without_amounts = blend.ingredients_without_amounts or []
                     detector_children = [
@@ -14476,6 +14501,8 @@ class SupplementEnricherV3:
             for child in children:
                 if not isinstance(child, dict):
                     continue
+                if child.get("cleaner_row_role") in CLEANER_NON_EFFICACY_ROLES:
+                    continue
                 child_name = (child.get("name", "") or "").strip()
                 child_qty = child.get("quantity")
                 if isinstance(child_qty, (int, float)) and child_qty > 0:
@@ -14520,6 +14547,9 @@ class SupplementEnricherV3:
                 }
 
             for idx, ingredient in enumerate(ingredient_list):
+                if (ingredient.get("cleaner_row_role") in CLEANER_NON_EFFICACY_ROLES
+                        or ingredient.get("raw_source_path") in source_only_preparations):
+                    continue
                 is_nested = bool(ingredient.get('isNestedIngredient', False))
                 parent_blend = (ingredient.get('parentBlend', '') or '').strip()
                 parent_source_path = str(
