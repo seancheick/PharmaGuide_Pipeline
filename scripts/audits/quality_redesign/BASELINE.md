@@ -131,3 +131,9 @@ env -u PYTHONHASHSEED "$PG_PYTHON" scripts/audits/quality_redesign/replay.py sna
 ```
 
 Validate independent unpinned repetitions and explicit cross-seed probes using whole-record hashes; do not expand the volatile-field list to hide ordering differences. The old baseline above excludes Product_Submissions by format; validate that source separately through its manifest-owned stages and a stored-enrichment snapshot. New capture and validation receipts will be recorded here after the pipeline completes. No release is implied.
+
+### Integrated harness qualification — October 18
+
+Candidate `78dd06211de07febe07320024afdc5b4f136dae5` includes Dose V4.1 main `0989ba966`. Whole-fast CI [39165275431](https://github.com/seancheick/PharmaGuide_Pipeline/actions/runs/39165275431) passed all four groups and skip guards; the two named replay test files pass 68 checks on the combined source. Independent review found no blocking defect or widened hash exclusions.
+
+Two independent unpinned `--full --blob` captures of the nine existing source-verified raw canaries agree across all four records: nine products, zero changed records or paths. Both receipts record `worker_env={}`, successful capture and stable source. Frozen inputs, original receipts and full records remain in the primary checkout's `reports/worktree_closeout_20261018/real_harness/`. This is bounded harness qualification, not the new corpus baseline or a catalog rebuild. All three production-stage code/reference fingerprints equal the already-qualified Dose source. The later full baseline recapture and determinism audit still require Sean's completed new-source run, including separate validation of Product_Submissions.
