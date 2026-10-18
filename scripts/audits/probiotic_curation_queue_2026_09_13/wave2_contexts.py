@@ -757,9 +757,10 @@ def main():
     before = deepcopy(reg)
     entries = {e["id"]: e for e in reg["clinically_relevant_strains"]}
     meta = reg["_metadata"]
-    if meta.get("version") == "2.4.0":
+    if meta.get("version") != "2.3.0":
         # This is a one-time data migration, but the documented command is
-        # safe to rerun. Validate the materialized rows byte-for-byte instead
+        # safe to rerun after later registry updates. Only the known 2.3.0
+        # predecessor may enter the authoring path. Validate materialized rows instead
         # of appending duplicates or silently accepting a partial application.
         # Later source-bound dispositions (apply_batch1_disposition.py) patch
         # individual fields of some Wave 2 rows without changing review status;
