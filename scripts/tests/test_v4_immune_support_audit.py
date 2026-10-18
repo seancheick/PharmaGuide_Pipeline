@@ -222,7 +222,9 @@ def test_gummy_high_zinc_immune_formula_not_benchmark_clean() -> None:
         item for item in dose["metadata"]["specialized_purpose_assessments"]
         if item.get("active") == "zinc"
     )
-    assert zinc["score"] == 0.0
+    # Dose V4.1 D1: keep the existing range-fit half credit; confirmed excess
+    # belongs to the one product-level ceiling after purpose aggregation.
+    assert zinc["score"] == 11.0
 
 
 def test_high_zinc_changes_dose_not_formulation_quality() -> None:

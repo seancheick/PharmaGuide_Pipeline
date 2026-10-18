@@ -135,10 +135,8 @@ def score_immune_purpose_dose(
         _range_score(daily, band["low"], band["high"], 22.0),
         _range_score(daily_max, band["low"], band["high"], 22.0),
     )
-    if active == "zinc" and daily_max > HIGH_ZINC_THRESHOLD_MG:
-        score = 0.0
-    if active == "vitamin_d" and daily_max > HIGH_VITAMIN_D_THRESHOLD_MCG:
-        score = 0.0
+    # Confirmed excess is evaluated once after purpose aggregation, by the
+    # shared product-level Dose ceiling. Keep the existing range-fit policy.
     return {
         "score": round(score, 4),
         "active": active,
@@ -268,12 +266,13 @@ def _row_amount(row: Dict[str, Any], active: str) -> Optional[float]:
         return None
     unit = _norm_text(row.get("unit_normalized") or row.get("unit"))
     compact = unit.replace(" ", "")
+    microgram_reference = active in {"vitamin_d", "selenium"}
     if compact in {"mg", "milligram", "milligrams", "milligram(s)"}:
-        return quantity
+        return quantity * 1000.0 if microgram_reference else quantity
     if compact in {"g", "gram", "grams", "gram(s)"}:
-        return quantity * 1000.0
+        return quantity * (1000000.0 if microgram_reference else 1000.0)
     if compact in {"mcg", "ug", "microgram", "micrograms", "microgram(s)"}:
-        return quantity if active in {"vitamin_d", "selenium"} else quantity / 1000.0
+        return quantity if microgram_reference else quantity / 1000.0
     if compact == "iu" and active == "vitamin_d":
         return quantity / 40.0
     return None
