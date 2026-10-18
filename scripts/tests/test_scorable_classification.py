@@ -1573,6 +1573,20 @@ class TestScorableNamesNormalized:
                        for norm in normalized_names), \
                 f"Expected {name} to have normalized form in output"
 
+    def test_normalized_names_are_sorted_so_the_record_does_not_depend_on_the_hash_seed(self, enricher):
+        """A set rendered as a list follows the process hash seed, so the enriched record changed between
+        identical runs (replay --full: 16 of 22 Hum labels reordered, PR #155). The list must be sorted."""
+        product = {
+            'id': 'test_sorted_names', 'fullName': 'Twelve Nutrient Test', 'brandName': 'Test Brand',
+            'activeIngredients': [{'name': name, 'quantity': 10, 'unit': 'mg'} for name in (
+                'Vitamin C', 'Vitamin D3', 'Zinc', 'Magnesium', 'Selenium', 'Iron', 'Calcium', 'Vitamin B12',
+                'Folate', 'Biotin', 'Vitamin E', 'Vitamin K')],
+            'otherIngredients': [],
+        }
+        names = enricher._collect_ingredient_quality_data(product)['scorable_ingredient_names_normalized']
+        assert len(names) >= 12 and len(set(names)) == len(names)
+        assert names == sorted(names)
+
 
 class TestBlendPatternCounterTests:
     """

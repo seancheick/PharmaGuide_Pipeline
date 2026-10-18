@@ -5570,8 +5570,10 @@ class SupplementEnricherV3:
             "contains_match_wins_count": contains_match_wins_count,
             "parent_fallback_count": parent_fallback_count,
 
-            # Quick-lookup normalized names for scoring efficiency
-            "scorable_ingredient_names_normalized": list(scorable_names_normalized),
+            # Quick-lookup normalized names for scoring efficiency. Sorted: a set
+            # rendered as a list follows the process hash seed, and the enriched
+            # record must not change between identical runs.
+            "scorable_ingredient_names_normalized": sorted(scorable_names_normalized),
             # Sprint E1.23 — ingredients demoted from scorable because they
             # are sub-threshold absorption enhancers (e.g. BioPerine 5 mg).
             # Carried for audit; Flutter can surface them as info chips.
