@@ -33,7 +33,7 @@ from assessment_readiness import (
     has_sports_primary_identity_signal,
 )
 from dose_assessment import has_incomplete_material_dose_assessment
-from probiotic_measurements import AFU_REVIEW_REASON, declared_total_cfu
+from probiotic_measurements import AFU_REVIEW_REASON, declared_total_cfu, unresolved_cfu_measurements
 from scoring_input_contract import classify_ingredient_roles, get_scoring_ingredients
 
 MULTI_DOSE_COVERAGE_MIN = 0.60
@@ -254,6 +254,8 @@ def _base_checks(
         and assessment_readiness.get("enforcement_mode") == "enforced"
     )
     rda_ul_data = _safe_dict(product.get("rda_ul_data"))
+    if unresolved_cfu_measurements(product):
+        missing.append("dose_assessment_readiness")
     if not readiness_enforced and "dose_assessments" in rda_ul_data:
         collection_status = _norm(rda_ul_data.get("collection_status"))
         assessments = _safe_list(rda_ul_data.get("dose_assessments"))

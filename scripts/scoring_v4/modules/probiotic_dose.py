@@ -27,7 +27,7 @@ from typing import Any, Dict, Iterable, List
 from scoring_input_contract import get_scoring_ingredients
 from probiotic_measurements import (
     AFU_REVIEW_REASON, pending_afu_measurements, declared_total_cfu,
-    probiotic_label_identity_summary,
+    probiotic_label_identity_summary, unresolved_cfu_measurements,
 )
 from scoring_v4.modules.generic_helpers import (
     archetype_dose_reference, dose_reference_scope, unbenchmarked_dose_credit,
@@ -70,6 +70,11 @@ def score_dose(product: Any) -> Dict[str, Any]:
     )
     if not product.get("probiotic_data") and isinstance(product.get("probiotic_detail"), dict):
         product = {**product, "probiotic_data": product["probiotic_detail"]}
+    unresolved = unresolved_cfu_measurements(product)
+    if unresolved:
+        return {"score": None, "max": CAP_DOSE, "components": {}, "penalties": {},
+                "metadata": {"phase": PHASE_MARKER, "assessment_status": "incomplete",
+                             "reason_code": "unresolved_source_quantity", "measurements": unresolved}}
     assessment = assess_probiotic_evidence(product)
     formula = assessment["formula_assessment"]
     if formula["status"] == "assessed_studied_formula":

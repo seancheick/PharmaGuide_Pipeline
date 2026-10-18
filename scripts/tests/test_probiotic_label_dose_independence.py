@@ -168,8 +168,10 @@ def test_has_cfu_flag_cannot_manufacture_numeric_disclosure(count):
     product["probiotic_data"].update(total_cfu=0, total_billion_count=0)
     product["probiotic_data"]["probiotic_blends"][0]["cfu_data"]["cfu_count"] = count
     dose = score_dose(product)
-    assert _disclosure_points(dose) == 0
-    assert dose["score"] == NEUTRAL_DOSE
+    # A producer promised a measurement but lost/corrupted its value. This is
+    # a source failure, not a label hiding strain shares under a valid total.
+    assert dose["score"] is None
+    assert dose["metadata"]["assessment_status"] == "incomplete"
     json.dumps(dose, allow_nan=False)
 
 
@@ -325,7 +327,8 @@ def test_actual_source_identity_overrides_stale_clinical_and_blend_names():
     assert result["metadata"]["identified_strain_count"] == 1  # Actual HN001, not projected LGG.
     assert studied_formulas.label_owned_native_strains(p) == []
     assert score_evidence(p)["score"] == 0
-    assert score_dose(p)["metadata"]["per_strain_cfu_disclosed_count"] == 0
+    assert score_dose(p)["score"] is None
+    assert score_dose(p)["metadata"]["reason_code"] == "unresolved_source_quantity"
 
 
 def test_normalized_billion_count_can_prove_disclosure_without_clinical_review():
@@ -349,8 +352,12 @@ def test_product_total_or_conflicting_measure_cannot_pose_as_individual_disclosu
     else:
         m["billion_count"] = 50
     dose = score_dose(p)
-    assert _disclosure_points(dose) == 0
-    assert dose["score"] == NEUTRAL_DOSE
+    if change == "scope":
+        assert _disclosure_points(dose) == 0
+        assert dose["score"] == NEUTRAL_DOSE  # genuine aggregate-only disclosure
+    else:
+        assert dose["score"] is None
+        assert dose["metadata"]["assessment_status"] == "incomplete"
 
 
 def test_pillars_do_not_reconstruct_a_conflicting_or_missing_total_from_child_projections():
@@ -391,16 +398,14 @@ def test_conflicting_source_measurements_cannot_award_daily_potency():
     other = deepcopy(p["probiotic_data"]["probiotic_blends"][0])
     other["cfu_data"]["cfu_count"] = 50e9
     p["probiotic_data"]["probiotic_blends"].append(other)
-    assert score_dose(p)["components"]["cfu_adequacy"] == NEUTRAL_DOSE
+    assert score_dose(p)["score"] is None
+    assert score_dose(p)["metadata"]["assessment_status"] == "incomplete"
 
 
 def test_matching_path_does_not_authorize_another_strains_measurement():
     p = owned_label()
     p["probiotic_data"]["probiotic_blends"][0]["strains"] = ["Bifidobacterium lactis BB-12"]
     result = score_dose(p)
-    assert result["metadata"]["per_strain_cfu_disclosed_count"] == 0
-    assert result["metadata"]["cfu_adequacy_v3_points"] == NEUTRAL_V3
-    # The valid product total is recorded as a label limit, not credited;
-    # neither projected identity owns an individual measured potency.
-    assert result["metadata"]["cfu_adequacy_basis"] == "aggregate_cfu_disclosed_only"
-    assert result["components"]["cfu_adequacy"] == NEUTRAL_DOSE
+    assert result["score"] is None
+    assert result["metadata"]["assessment_status"] == "incomplete"
+    assert result["metadata"]["measurements"][0]["reason_code"] == "cfu_source_identity_mismatch"
