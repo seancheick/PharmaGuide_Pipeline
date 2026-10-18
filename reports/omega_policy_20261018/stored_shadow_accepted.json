@@ -1,0 +1,14 @@
+{
+  "git_commit": "1521486e4e406dc43aa2c0ba70a4958106fa3076",
+  "command": null,
+  "old_dir": "/Users/seancheick/pg_quality/omega_policy_20261018/stored_baseline",
+  "new_dir": "/Users/seancheick/pg_quality/omega_policy_20261018/stored_accepted",
+  "old_dir_mtime": 1792350599.9923813,
+  "new_dir_mtime": 1792352226.154014,
+  "shared_product_count": 715,
+  "taxonomy_shifts": 0,
+  "verdict_shifts": 0,
+  "safety_shifts": 0,
+  "coverage_drops": 0,
+  "rows": []
+}
