@@ -842,16 +842,15 @@ def graded_studied_range(product: Dict[str, Any], row: Dict[str, Any], low_end: 
 
 
 def unassessed_amount_band(band: str, benchmark: str, label_hidden: bool = True) -> Dict[str, Any]:
-    """A disclosed amount without a benchmark, or a hidden/missing one."""
+    """Keep completed no-reference and hidden-label states distinct from gaps."""
     from scoring_v4.modules.generic_helpers import unbenchmarked_dose_credit
 
-    # A disclosed amount without a benchmark is neutral, as is a missing amount
-    # with no benchmark. With a benchmark, only an amount the label hides (a
-    # blend total, or a member printed without its amount) is neutral (Dose
-    # V4.1 section 2.3); a missing amount keeps 0. A benchmark identity that is
-    # unresolved stays unfinished (0, reported partial).
-    neutral = (band == "disclosed_no_reference" or benchmark == "absent"
-               or (benchmark == "present" and label_hidden))
+    # Missing capture cannot become neutral merely because no benchmark was
+    # found. A valid disclosed amount with a completed no-reference conclusion,
+    # or positive label-hiding evidence, takes neutral (Dose V4.1 section 2.3).
+    # An unresolved benchmark identity stays unfinished (0, reported partial).
+    neutral = (benchmark != "unresolved"
+               and (band == "disclosed_no_reference" or label_hidden))
     return {"score": unbenchmarked_dose_credit() if neutral else 0.0, "band": band,
             "metadata": {"benchmark": benchmark}}
 

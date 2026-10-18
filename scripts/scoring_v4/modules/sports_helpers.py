@@ -203,6 +203,7 @@ def group_bcaa(rows: List[Dict[str, Any]]) -> Dict[str, Any]:
 def group_eaa(rows: List[Dict[str, Any]]) -> Dict[str, Any]:
     values: Dict[str, float] = {}
     aggregate_total_g: Optional[float] = None
+    aggregate_identity_complete = False
     for row in rows:
         key = canonical(row)
         if key in EAA_AGGREGATE_CANONICALS:
@@ -217,8 +218,10 @@ def group_eaa(rows: List[Dict[str, Any]]) -> Dict[str, Any]:
                 if _norm_text(value)
             }
             grams = dose_g(row)
-            if verified == set(EAA_CANONICALS) and grams is not None:
-                aggregate_total_g = max(aggregate_total_g or 0.0, grams)
+            if verified == set(EAA_CANONICALS):
+                aggregate_identity_complete = True
+                if grams is not None:
+                    aggregate_total_g = max(aggregate_total_g or 0.0, grams)
             continue
         if key not in EAA_CANONICALS:
             continue
@@ -234,6 +237,7 @@ def group_eaa(rows: List[Dict[str, Any]]) -> Dict[str, Any]:
         "values_g": values,
         "total_g": aggregate_total_g if aggregate_complete else sum(values.values()),
         "aggregate_total_g": aggregate_total_g,
+        "aggregate_identity_complete": aggregate_identity_complete,
     }
 
 

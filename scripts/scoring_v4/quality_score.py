@@ -318,7 +318,8 @@ def _over_limit_dose_reason(dim: Dict[str, Any]) -> Optional[str]:
             use = ("at one serving a day (the label gives no daily directions)" if ceiling.get("frequency_defaulted")
                    else "even at the lowest directed daily use" if ceiling.get("minimum_exceeds")
                    else "at the highest directed daily use")
-            return (f"The label provides {_num(ceiling.get('amount_mg_day')):.0f} mg of caffeine a day {use}, "
+            qualifier = {">=": "at least ", ">": "more than "}.get(ceiling.get("quantity_operator"), "")
+            return (f"The label provides {qualifier}{_num(ceiling.get('amount_mg_day')):g} mg of caffeine a day {use}, "
                     f"above the {_num(ceiling.get('exceeds_above_mg_day')):.0f} mg/day that FDA describes as generally "
                     f"not associated with negative effects for most adults, {outcome}. This cap is PharmaGuide "
                     "scoring policy, not a medical toxicity grade.")
@@ -1091,6 +1092,9 @@ def _dose_reference(dim: Dict[str, Any], archetype: str, sub: Dict[str, Any]) ->
     variants = sub.get("assessed_component_reference") or {}
     components = dim.get("components") or {}
     metadata = dim.get("metadata") or {}
+    if metadata.get("dose_aggregation") == "co_primary_average":
+        # Each primary already uses its own assessed-component reference.
+        return ref
     if "sports_primary_active_dose" in components and (
         metadata.get("primary_identity") in {"bcaa", "eaa"}
         or _num(components.get("sports_ratio_or_completeness")) > 0

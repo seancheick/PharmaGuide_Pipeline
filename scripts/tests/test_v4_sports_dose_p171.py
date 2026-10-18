@@ -346,7 +346,10 @@ def test_preworkout_ignores_tiny_accessory_creatine_when_beta_alanine_is_better_
         )
     )
 
-    assert payload["components"]["sports_primary_active_dose"] == pytest.approx(16.0)
+    # The 5g BCAA preparation is a co-primary, assessed once on its existing
+    # 22-point scale. The tiny creatine accessory remains excluded.
+    assert payload["components"]["sports_primary_active_dose"] == pytest.approx((16 + 14 / 22 * 20) / 2, abs=.0001)
+    assert [c["ingredient"] for c in payload["metadata"]["dose_contributions"]] == ["beta_alanine", "bcaa"]
     assert payload["metadata"]["primary_identity"] == "beta_alanine"
     assert payload["metadata"]["dose_basis"] == "beta_alanine_2_to_4_g"
 

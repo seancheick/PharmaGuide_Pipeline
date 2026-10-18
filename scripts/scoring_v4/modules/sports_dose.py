@@ -13,16 +13,19 @@ from scoring_v4.exposure import row_exposure
 from serving_frequency import has_loading_protocol
 
 from scoring_v4.modules.generic_helpers import _norm_text, _safe_list, get_active_ingredients
-from scoring_input_contract import classify_ingredient_roles, is_lent_blend_mass, normalize_product_evidence_scope
+from scoring_input_contract import classify_ingredient_roles, dose_disclosure_status, is_lent_blend_mass, normalize_product_evidence_scope
 from scoring_v4.modules.sports_helpers import (
     ALPHA_GPC_CANONICALS,
     ATP_CANONICALS,
     BCAA_AGGREGATE_CANONICALS,
+    BCAA_CANONICALS,
     BETA_ALANINE_CANONICALS,
     BETAINE_CANONICALS,
     CAFFEINE_CANONICALS,
     CITRULLINE_CANONICALS,
     CREATINE_CANONICALS,
+    EAA_AGGREGATE_CANONICALS,
+    EAA_CANONICALS,
     HMB_CANONICALS,
     SPORTS_BAND_CANONICALS,
     SPORTS_PROTEIN_CANONICALS,
@@ -41,8 +44,8 @@ from scoring_v4.modules.sports_helpers import (
 
 PHASE_MARKER = "P1.7_sports_dose_v1"
 METHOD_MARKER = "sports_active_dose_bands_v1"
-# Daily basis verified against NIH ODS exercise fact sheet; caffeine is per use.
-_DAILY_CANONICALS = CREATINE_CANONICALS | BETA_ALANINE_CANONICALS | HMB_CANONICALS
+# Chronic daily references use minimum directed use; acute references stay per use.
+_DAILY_CANONICALS = CREATINE_CANONICALS | BETA_ALANINE_CANONICALS | HMB_CANONICALS | BETAINE_CANONICALS
 
 from scoring_v4.quality_score_config import block as _cfg_block
 
@@ -57,8 +60,9 @@ def score_dose(product: Dict[str, Any]) -> Dict[str, Any]:
         product = {}
 
     identity, primary, basis, aggregation, scored = _best_primary_score(product)
-    identity, primary, basis = _apply_offlist_dose_floor(product, identity, primary, basis)
-    completeness = _score_ratio_or_completeness(product, identity)
+    identity, primary, basis, proxy_metadata = _apply_offlist_dose_floor(product, identity, primary, basis)
+    completeness = (0.0 if aggregation == "co_primary_average"
+                    else _score_ratio_or_completeness(product, identity))
     not_evaluable = _not_evaluable_reason(product, primary)
     if (
         primary <= 0
@@ -73,8 +77,7 @@ def score_dose(product: Dict[str, Any]) -> Dict[str, Any]:
         "sports_primary_active_dose": round(primary, 4),
         "sports_ratio_or_completeness": round(completeness, 4),
     }
-    # Transparency B5 owns blend opacity; a hidden primary amount is recorded
-    # as not evaluable here and earns no substitute credit (V4.1 Step 4).
+    # Hidden label amounts use the shared neutral; Transparency B5 owns opacity.
     penalties: Dict[str, float] = {}
     score = _clamp(
         0.0,
@@ -87,7 +90,7 @@ def score_dose(product: Dict[str, Any]) -> Dict[str, Any]:
         "primary_identity": identity,
         "dose_basis": basis,
         "dose_aggregation": aggregation,
-        "dose_contributions": [{"ingredient": name, "assessment": label, "credit_raw": round(points, 4)}
+        "dose_contributions": [_dose_contribution(product, name, points + (completeness if len(scored) == 1 else 0.0), label)
                                for name, points, label in scored],
         "benchmark_exposures": [
             asdict(row_exposure(product, row, basis="daily" if canonical(row) in _DAILY_CANONICALS else "per_use", unit="g"))
@@ -97,23 +100,19 @@ def score_dose(product: Dict[str, Any]) -> Dict[str, Any]:
         "daily_interval_selection": "minimum_directed_use",
 
     }
+    if proxy_metadata is not None:
+        # The selected generic assessment owns both the score and its receipt.
+        # Keeping the discarded sports anchor would report another calculation.
+        metadata.update({key: value for key, value in proxy_metadata.items()
+                         if key not in {"phase", "method"}})
+        metadata["dose_aggregation"] = proxy_metadata.get("dose_participation_basis", aggregation)
     unknown_daily = [e for e in metadata["benchmark_exposures"] if e["benchmark_amount"] is None and e["uncertainty"]]
     if unknown_daily and primary <= 0:
         not_evaluable = unknown_daily[0]["uncertainty"]
+    if scored and all(label == "hidden_amount_neutral" for _, _, label in scored):
+        not_evaluable = "opaque_primary_sports_blend"
     if not_evaluable:
         metadata["not_evaluable_reason"] = not_evaluable
-    if not_evaluable == "opaque_primary_sports_blend" and sports_identity_rows(product):
-        # Dose V4.1 section 2.3: named sports actives whose amounts the label
-        # hides take the shared neutral; Transparency B5 keeps the opacity.
-        # With no identified active there is nothing to assess (strict hold).
-        from scoring_v4.modules.generic_helpers import archetype_dose_reference, dose_reference_scope, unbenchmarked_dose_credit
-        from scoring_v4.modules.sports_helpers import sports_subtype
-
-        with dose_reference_scope(archetype_dose_reference("sports", module_metadata={"sports_subtype": sports_subtype(product)})):
-            components["sports_primary_active_dose"] = round(unbenchmarked_dose_credit(), 4)
-        metadata["dose_basis"] = "hidden_amount_neutral"
-        score = _clamp(0.0, DIMENSION_CAP, sum(components.values()))
-
     return {
         "score": round(score, 4),
         "max": DIMENSION_CAP,
@@ -155,7 +154,7 @@ def _apply_offlist_dose_floor(
     identity: Optional[str],
     primary: float,
     basis: Optional[str],
-) -> Tuple[Optional[str], float, Optional[str]]:
+) -> Tuple[Optional[str], float, Optional[str], Optional[Dict[str, Any]]]:
     """Coverage-gap floor for sports products whose primary has no sports band.
 
     Routing a product to sports must not DISCARD a disclosed active the band rubric
@@ -165,7 +164,8 @@ def _apply_offlist_dose_floor(
     so an under-dosed creatine / BCAA is never rescued by this floor.
     """
     if not _dominant_disclosed_active_is_offlist(product):
-        return identity, primary, basis
+        return identity, primary, basis, None
+    payload: Dict[str, Any] = {}
     try:
         from scoring_v4.modules.generic_dose import score_dose as _generic_dose
         from scoring_v4.modules.generic_helpers import archetype_dose_reference, dose_reference_scope
@@ -173,15 +173,16 @@ def _apply_offlist_dose_floor(
 
         reference = archetype_dose_reference("sports", module_metadata={"sports_subtype": sports_subtype(product)})
         with dose_reference_scope(reference):
-            proxy = float((_generic_dose(product) or {}).get("score") or 0.0)
+            payload = _generic_dose(product) or {}
+            proxy = float(payload.get("score") or 0.0)
     except Exception:
         proxy = 0.0
     if proxy > primary:
-        return None, proxy, "generic_dose_proxy_for_offlist_primary"
-    return identity, primary, basis
+        return None, proxy, "generic_dose_proxy_for_offlist_primary", payload.get("metadata") or {}
+    return identity, primary, basis, None
 
 
-def _score_primary(product: Dict[str, Any], identity: Optional[str]) -> Tuple[float, Optional[str]]:
+def _score_primary(product: Dict[str, Any], identity: Optional[str], *, details: Optional[dict] = None) -> Tuple[float, Optional[str]]:
     rows = sports_dosed_rows(product)
     if identity == "protein":
         grams = _max_g(rows, SPORTS_PROTEIN_CANONICALS)
@@ -353,11 +354,14 @@ def _score_primary(product: Dict[str, Any], identity: Optional[str]) -> Tuple[fl
         return 18.0, "caffeine_above_400_mg"
 
     if identity == "betaine":
-        grams = _max_g(rows, BETAINE_CANONICALS)
+        grams = _max_benchmark_amount(product, rows, BETAINE_CANONICALS, basis="daily", unit="g")
         if grams is None:
             return 0.0, "betaine_no_dose"
-        if grams < 2.5:
-            return _partial(grams, 2.5, 20.0), "betaine_under_2_5_g"
+        target = 2.5
+        if details is not None:
+            details.update(reference_value=target, pct_of_reference=100 * grams / target)
+        if grams < target:
+            return _partial(grams, target, 20.0), "betaine_under_2_5_g"
         # 2.5 g/day chronic for strength/power (PMC2915951). Dose V4.1 §2.2:
         # its moderate certainty is the Evidence pillar's, not a Dose cap.
         return 20.0, "betaine_at_least_2_5_g"
@@ -380,6 +384,8 @@ _IDENTITY_CANONICALS = (
     ("beta_alanine", BETA_ALANINE_CANONICALS), ("citrulline", CITRULLINE_CANONICALS),
     ("hmb", HMB_CANONICALS), ("alpha_gpc", ALPHA_GPC_CANONICALS), ("atp", ATP_CANONICALS),
     ("caffeine", CAFFEINE_CANONICALS), ("betaine", BETAINE_CANONICALS), ("taurine", TAURINE_CANONICALS),
+    ("bcaa", BCAA_CANONICALS | BCAA_AGGREGATE_CANONICALS),
+    ("eaa", EAA_CANONICALS | EAA_AGGREGATE_CANONICALS),
 )
 
 
@@ -390,6 +396,27 @@ def _co_primary_identities(product: Dict[str, Any]) -> list[str]:
     materiality mode decides which of them are co-primaries.
     """
     rows = sports_identity_rows(product)
+    # BCAAs are part of an EAA preparation. Use the existing aggregate owner
+    # to choose the preparation once, rather than voting per amino acid or
+    # adding a second BCAA vote to a complete/partial EAA profile.
+    eaa_group = group_eaa(rows)
+    eaa_preparation = (eaa_group["count"] >= 6
+                       or eaa_group["aggregate_identity_complete"])
+    if not eaa_group["aggregate_identity_complete"]:
+        # An untyped EAA header has no verified preparation identity. The
+        # aggregate owner must accept it before it can become a purpose vote.
+        rows = [row for row in rows if canonical(row) not in EAA_AGGREGATE_CANONICALS]
+    group_identity = "eaa" if eaa_preparation else "bcaa"
+    group_canons = EAA_CANONICALS if eaa_preparation else BCAA_CANONICALS
+    aggregate_canons = EAA_AGGREGATE_CANONICALS if eaa_preparation else BCAA_AGGREGATE_CANONICALS
+    group = eaa_group if eaa_preparation else group_bcaa(rows)
+    if group["total_g"] > 0 and not any(canonical(row) in aggregate_canons for row in rows):
+        # Materiality belongs to the preparation, too. Split amino-acid rows
+        # cannot each become a purpose or make a named BCAA/EAA purpose vanish.
+        rows = [row for row in rows if canonical(row) not in group_canons]
+        rows.append({"canonical_id": next(iter(aggregate_canons)),
+                     "name": "Essential Amino Acids EAA" if group_identity == "eaa" else "Branched Chain Amino Acids BCAA",
+                     "quantity": group["total_g"], "unit": "g"})
     roles = classify_ingredient_roles(product, module="sports", rows=rows, materiality_only=True)
     found = []
     for row, role in zip(rows, roles):
@@ -397,6 +424,8 @@ def _co_primary_identities(product: Dict[str, Any]) -> list[str]:
             continue
         key = canonical(row)
         identity = next((name for name, canons in _IDENTITY_CANONICALS if key in canons), None)
+        if eaa_preparation and key in EAA_CANONICALS | EAA_AGGREGATE_CANONICALS:
+            identity = "eaa"
         if identity and identity not in found:
             found.append(identity)
     return found
@@ -414,12 +443,24 @@ def _best_primary_score(product: Dict[str, Any]) -> Tuple[Optional[str], float, 
     co_primaries = [identity for identity in _co_primary_identities(product)
                     if identity != "protein" or shared_primary == "protein"]
     if len(co_primaries) > 1:
-        scored = [(identity, *_score_primary(product, identity)) for identity in co_primaries]
+        from scoring_v4.modules.generic_helpers import archetype_dose_reference
+        from scoring_v4.modules.sports_helpers import sports_subtype
+
+        reference = archetype_dose_reference("sports", module_metadata={"sports_subtype": sports_subtype(product)})
+        scored = []
+        for identity in co_primaries:
+            points, basis = _assess_primary(product, identity)
+            composition = _score_ratio_or_completeness(product, identity)
+            own_reference = _primary_dose_reference(product, identity, composition)
+            # Each preparation keeps its existing complete assessment (including
+            # composition), normalized to the common averaging scale once.
+            points = min(own_reference, points + composition) / own_reference * reference
+            scored.append((identity, points, basis))
         average = sum(score for _, score, _ in scored) / len(scored)
         lead = max(scored, key=lambda item: item[1])
         return lead[0], round(average, 4), lead[2], "co_primary_average", scored
     if co_primaries:
-        score, basis = _score_primary(product, co_primaries[0])
+        score, basis = _assess_primary(product, co_primaries[0])
         return co_primaries[0], score, basis, "single_primary", [(co_primaries[0], score, basis)]
     identity, score, basis = _strongest_primary_score(product, shared_primary)
     return identity, score, basis, "strongest_dosed_anchor", ([(identity, score, basis)] if identity else [])
@@ -437,7 +478,7 @@ def _strongest_primary_score(product: Dict[str, Any], shared_primary: Optional[s
         # purpose owner identifies it as an incidental amino-mixture source.
         if identity == "protein" and shared_primary != "protein":
             continue
-        score, basis = _score_primary(product, identity)
+        score, basis = _assess_primary(product, identity)
         if score > best_score:
             best_identity = identity
             best_score = score
@@ -448,6 +489,71 @@ def _strongest_primary_score(product: Dict[str, Any], shared_primary: Optional[s
             _score, basis = _score_primary(product, fallback_identity)
             return fallback_identity, 0.0, basis
     return best_identity, best_score, best_basis
+
+
+def _assess_primary(product: Dict[str, Any], identity: str) -> Tuple[float, Optional[str]]:
+    """Only a positively hidden label amount receives neutral credit."""
+    points, basis = _score_primary(product, identity)
+    if points > 0:
+        return points, basis
+    canons = next(canons for name, canons in _IDENTITY_CANONICALS if name == identity)
+    rows = [row for row in sports_identity_rows(product) if canonical(row) in canons]
+    if rows and all(is_lent_blend_mass(row) or dose_disclosure_status(row) == "not_disclosed_blend" for row in rows):
+        from scoring_v4.modules.generic_helpers import dose_reference_scope, unbenchmarked_dose_credit
+
+        with dose_reference_scope(_primary_dose_reference(product, identity)):
+            return unbenchmarked_dose_credit(), "hidden_amount_neutral"
+    return points, basis
+
+
+def _primary_dose_reference(product: Dict[str, Any], identity: str, composition: float = 0.0) -> float:
+    """Read the public owner's existing reference for one preparation."""
+    from scoring_v4.quality_score import _archetype, _dose_reference
+    from scoring_v4.modules.sports_helpers import sports_subtype
+
+    archetype = _archetype("sports", {"metadata": {"sports_subtype": sports_subtype(product)}})
+    dimension = {"components": {"sports_primary_active_dose": 0.0,
+                                "sports_ratio_or_completeness": composition},
+                 "metadata": {"primary_identity": identity}}
+    return _dose_reference(dimension, archetype, _cfg_block("dose_subscale", "archetype_reference"))
+
+
+def _dose_contribution(product: Dict[str, Any], identity: str, points: float, basis: Optional[str]) -> dict:
+    """Project the same source-owned preparation exposure used by the band."""
+    result = {"ingredient": identity, "assessment": basis, "credit_raw": round(points, 4)}
+    canons = next(canons for name, canons in _IDENTITY_CANONICALS if name == identity)
+    rows = [row for row in sports_dosed_rows(product) if canonical(row) in canons]
+    if identity == "citrulline":
+        rows = rows[:1]  # the preparation selected by _score_primary
+    unit = "mg" if identity in {"alpha_gpc", "atp", "caffeine"} else "g"
+    if identity in {"bcaa", "eaa"}:
+        grouped = group_bcaa(rows) if identity == "bcaa" else group_eaa(rows)
+        if identity == "bcaa" and not grouped["complete"]:
+            rows = [row for row in sports_identity_rows(product)
+                    if canonical(row) in BCAA_AGGREGATE_CANONICALS and not is_lent_blend_mass(row)]
+        elif identity == "eaa" and grouped["aggregate_total_g"] is not None:
+            rows = [row for row in rows if canonical(row) in EAA_AGGREGATE_CANONICALS]
+        else:
+            # Collapse amino acid components through their aggregate owner,
+            # then apply the shared exposure owner to that one preparation.
+            total = grouped["total_g"]
+            rows = [{"quantity": total, "unit": "g"}] if total > 0 else []
+    basis_kind = "daily" if identity in {"creatine", "beta_alanine", "hmb", "betaine"} else "per_use"
+    exposures = [(row, row_exposure(product, row, basis=basis_kind, unit=unit)) for row in rows]
+    usable = [(row, exposure) for row, exposure in exposures if exposure.benchmark_amount is not None]
+    if usable:
+        row, benchmark = max(usable, key=lambda pair: pair[1].benchmark_amount)
+        daily = row_exposure(product, row, basis="daily", unit=unit)
+        result.update(amount_per_serving=benchmark.per_serving_amount,
+                      amount_at_minimum=daily.benchmark_amount,
+                      amount_at_maximum=daily.benchmark_maximum, amount_unit=unit,
+                      quantity_operator=daily.quantity_operator,
+                      frequency_defaulted=daily.frequency_defaulted)
+        # Betaine has an explicit daily target. Other sports curves remain
+        # band assessments; do not invent reference semantics for their tiers.
+        if identity == "betaine":
+            _score_primary(product, identity, details=result)
+    return result
 
 
 def _score_ratio_or_completeness(product: Dict[str, Any], identity: Optional[str]) -> float:

@@ -4,19 +4,17 @@ A transparent, well-dosed pre-workout must not crater at dose=0 just because its
 primary actives are alpha-GPC / ATP / caffeine / betaine / taurine or a disclosed
 BCAA aggregate rather than the classic creatine/protein/BCAA-trio anchors.
 
-Dose bands are source-verified (no invented numbers); evidence strength sets the
-credit cap (strong=caffeine, moderate=alpha-GPC/betaine, weak=ATP/taurine, and
-BCAA credited as a recovery aid, not an ergogenic):
+Dose bands retain their source context; Evidence certainty is assessed in its
+own pillar. BCAA is credited as a recovery aid, not an ergogenic:
   - alpha-GPC 600 mg  — Ziegenfuss 2008 (JISSN), moderate
-  - ATP 400 mg/day    — PMID 34957398, weak-equivocal -> capped
+  - ATP 400 mg per use — PMID 34957398, acute single-dose study
   - caffeine 3-6 mg/kg ~ 200-400 mg — ISSN PMID 33388079, strong
   - betaine 2.5 g/day — PMC2915951, moderate
-  - taurine 1-3 g (flat dose-response) — PMID 40852891, weak -> capped, no under-dose penalty
+  - taurine 1-3 g (flat dose-response) — PMID 40852891
   - BCAA 5-10 g       — PMID 33586928, recovery not performance -> capped
 
-Disclosed-dose-only: an undisclosed (NP / 0) active earns nothing, so opaque
-proprietary blends correctly stay cratered (parity with the opaque-fish-oil omega
-precedent and the B5 transparency penalty).
+A missing amount earns no substitute credit. A positively hidden label amount
+takes the shared neutral; Transparency separately records blend opacity.
 """
 
 from __future__ import annotations
@@ -180,7 +178,7 @@ def test_thorne_preworkout_alpha_gpc_atp_takes_alpha_gpc_primary() -> None:
     assert basis == "alpha_gpc_at_least_600_mg"
 
 
-@pytest.mark.parametrize("lent,quantity,expected", [(False,7000,14), (True,7000,0), (False,None,0)])
+@pytest.mark.parametrize("lent,quantity,expected", [(False,7000,14), (True,7000,12.54), (False,None,0)])
 def test_bcaa_preparation_assessment_owns_aggregate_not_individual_mass(lent, quantity, expected):
     from scoring_v4.modules.generic_helpers import has_usable_individual_dose
     from scoring_v4.modules.sports_helpers import sports_dosed_rows
@@ -193,6 +191,12 @@ def test_bcaa_preparation_assessment_owns_aggregate_not_individual_mass(lent, qu
     assert not has_usable_individual_dose(row)
     assert not sports_dosed_rows(product)
     assert _primary(product)[0] == expected
+    if lent:
+        # The 7g blend total is not the child's amount. Positive source-owned
+        # hiding takes 11.4/20 neutral on the preparation's existing 22 scale.
+        payload = score_dose(product)
+        assert payload["metadata"]["dose_basis"] == "hidden_amount_neutral"
+        assert payload["metadata"]["dose_contributions"][0].get("amount_per_serving") is None
 
 
 def test_bcaa_header_does_not_duplicate_individually_disclosed_members():
