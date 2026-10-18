@@ -88,7 +88,10 @@ Clean/Enrich behavioral change for its own fix task (see the memory gotcha on se
 - Production source: `5fb2be1ca` (main). The snapshot's `repository.head` is `5fb2be1ca` and `source_sha256`
   covers every production module, scoring config and data file at that commit (tests and `scripts/audits/` are
   outside the fingerprint, so the harness edit does not appear in it). Harness used: `replay.py` sha256
-  `2d2a0612387d6c4bab2fc1c8e611e84742a30795d478eba0858ca8927db1ab71` (`full.harness_sha256` in the receipt), the version committed in this PR.
+  `2d2a0612387d6c4bab2fc1c8e611e84742a30795d478eba0858ca8927db1ab71` (`full.harness_sha256` in the receipt), commit ce5694b88.
+  The review fix that followed (compare refuses snapshots whose recorded `volatile_fields` or `worker_env` differ from the
+  harness; `replay.py` sha256 `836986b36a6428b851a610cf2dd93abd978e54360b300d2fa63258998d651d25`) changes no capture code: `compare` of this baseline
+  against itself under that harness reports 15,414 products, 0 changed (`self_compare_guard_check.json`).
 - Command (from the worktree, `PG_PYTHON` = pinned 3.13.3):
   `replay.py snapshot --checkout <worktree at 5fb2be1ca> --products-root .../frozen_raw --manifest .../manifest.json --out .../baseline_5fb2be1ca.jsonl --workers 4 --full --blob`
 - Output: `/Users/seancheick/pg_quality/full_artifact_baseline_20261018/baseline_5fb2be1ca.jsonl`

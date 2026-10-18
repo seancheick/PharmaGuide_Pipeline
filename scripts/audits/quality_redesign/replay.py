@@ -749,6 +749,9 @@ def main():
         full = baseline_meta.get('full'), candidate_meta.get('full')
         if (full[0] is None) != (full[1] is None) or (full[0] and full[0]['blob'] != full[1]['blob']):
             raise ValueError('Snapshots must both be --full with the same --blob setting, or neither')
+        if full[0] and any(meta.get('volatile_fields') != VOLATILE_FIELDS or meta.get('worker_env') != FULL_WORKER_ENV for meta in full):
+            # Row hashes come from the list of the harness that wrote them: an older list would read as changed or corrupt records.
+            raise ValueError('Snapshot volatile_fields or worker_env differ from this harness; recapture with the same harness')
         records = (records_dir(args.baseline), records_dir(args.candidate)) if full[0] else None
         differences = compare_records(read_rows(args.baseline), read_rows(args.candidate), records)
         write_json(args.out, differences)

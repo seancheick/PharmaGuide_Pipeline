@@ -222,6 +222,12 @@ def test_full_compare_reports_the_changed_record_and_path_for_an_enricher_change
     replay.snapshot(checkout, frozen, manifest, plain, 1)
     proc = subprocess.run([sys.executable, HARNESS, 'compare', '--baseline', str(base), '--candidate', str(plain), '--out', str(tmp_path / 'x.json')], capture_output=True, text=True)
     assert proc.returncode == 1 and 'both be --full' in proc.stderr
+    meta_path = Path(str(cand) + '.meta.json')
+    meta = json.loads(meta_path.read_text())
+    meta['full']['volatile_fields'] = {**meta['full']['volatile_fields'], 'blob': {'generated_at': 'from an older harness'}}
+    meta_path.write_text(json.dumps(meta))
+    proc = subprocess.run([sys.executable, HARNESS, 'compare', '--baseline', str(base), '--candidate', str(cand), '--out', str(tmp_path / 'y.json')], capture_output=True, text=True)
+    assert proc.returncode == 1 and 'volatile_fields' in proc.stderr and not (tmp_path / 'y.json').exists()
 
 
 def test_score_only_capture_has_no_hashes_records_or_full_receipt(tmp_path):
