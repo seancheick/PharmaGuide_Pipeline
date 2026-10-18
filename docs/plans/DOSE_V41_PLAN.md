@@ -1,6 +1,6 @@
 # Dose V4.1: finish the shared rules before one pipeline run
 
-Status: **implemented on branch `claude/dose-v41` (pipeline and app), not activated; see [the review packet](DOSE_V41_REVIEW_PACKET.md).** Revised October 17, 2026 after Sean's
+Status: **candidate on `claude/dose-v41`; reference research and factual bug fixes completed October18, calibration approval and final implementation/validation still required. Not merge/run/release-ready. See [the reference decision table](DOSE_V41_REFERENCE_DECISIONS.md) and [review packet](DOSE_V41_REVIEW_PACKET.md).** Revised October 17, 2026 after Sean's
 design review (grill). Baseline: `main` at `b043fc513`, engine 4.6.0, config
 `1.27.0-declared-serving-dose`. This plan supersedes the serving-only Dose decision recorded in
 `reports/declared_serving_20261017/README.md` (PR #154).
@@ -355,7 +355,7 @@ capped at 10) and 3,000–<3,750 mg (10 → 0), plus any warning/status change.
 3. Required local checks (`scripts/test.sh local`) and one completed-candidate CI checkpoint per
    repo. Resolve all known failure classes before requesting another broad checkpoint.
 4. Bump config version/engine identifier; update `scripts/SCORING_ENGINE_SPEC.md`,
-   `docs/scoring/SCORING_TEAM_REVIEW_2026-10-17.md` and the existing handoff/LEDGER.
+   `docs/plans/DOSE_V41_REFERENCE_DECISIONS.md` and the existing handoff/LEDGER.
 5. Integrate validated source changes in both repos (main pushes are Sean's).
 6. Inspect actual stage fingerprints, then give Sean the exact earliest-stage command. Today's
    form, to be re-confirmed against the fingerprints:

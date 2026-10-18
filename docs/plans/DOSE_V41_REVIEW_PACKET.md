@@ -188,7 +188,7 @@ feature branches. No pipeline, main push, release or IPA was performed.
 - Receipts carry the actual selected assessment, quantified exposure/default/qualifier, panel
   components and assessed references. Prenatal reference rows reflect the pregnancy rebase.
   Receipt reconciliation checks contribution arithmetic, and magnesium copy no longer expands a
-  supplemental-only UL to food intake. Triglyceride references are labeled supported minima.
+  supplemental-only UL to food intake. The triglyceride reference is a purpose-specific authorized-claim condition; the decision table corrects its earlier supported-minimum interpretation.
 - App percentages keep their matching reference and non-personal marker; stronger verified
   personal excess is retained. Clearing age/sex actually clears the watched state. The original
   audit's request to replace a known adolescent's limit with an adult limit is **retracted**;
@@ -231,3 +231,15 @@ Those candidate merge gates remain pending. Local commits were requested; no rem
 
 Approve item 9 and the "kept, for Sean" lines in items 3–5 and the pediatric gap; activation;
 merging both branches to `main`; the pipeline run; release; IPA.
+
+## October18 reference review completion and factual corrections
+
+The [one reference decision table](DOSE_V41_REFERENCE_DECISIONS.md) supersedes generic pending-reference lists in earlier review notes. It contains237 concrete reference/consumer rows:43 ask for policy approval (29 retain existing nutritional curves;14 propose module calibration),194 retain accepted direction, retire unsupported inference to approved neutral, correct facts, or identify descriptive/inactive records. A completed no-general-benchmark conclusion is complete, not Preliminary. These are proposed implementation dispositions; table preparation does not mean all retirements have landed or policy is approved.
+
+Unambiguous committed corrections: immune duplicate zinc/D zeroing and microgram units; Bi07 combination-total basis; five source-fact corrections; literature-regimen-to-minimum fallback retirement with seven existing source records completed-neutral; actual Facts protein quantity ownership; established soluble-nickel UL with form/elemental guards; FDA Daily Value versus RDA policy wording. Engine4.7.3/config1.28.2 identify this technical candidate. No new proposed numerical calibration has been applied.
+
+Measurements use frozen stored inputs only, not regenerated catalog evidence. Immune142: one total67.8→69.0, no safety/status changes. Literature10 against832c1bd7: three lysine Dose10/15→11.4,three MCT6→11.4; four controls unchanged, all safety/status/non-Dose pillars unchanged. Protein252510 Facts27g remains Dose20/total83.6;294273 ingredient-only whey30g becomes incomplete Dose/partial assessment, preserving ingredient mass, other pillars and safety. The latter is a real quantity qualification correction; no purity is inferred. Nickel synthetic regressions pin1mg exactly,1.2mg soluble elemental nickel, unknown salt scope and compound mass. Low unknown-form exposure is bounded using the existing maximum-possible-moiety owner without a salt-identity assertion or false warning; higher unresolved exposure remains review-only. A personal stack containing unknown scoped contributions can remain indeterminate: individually bounded products cannot be blindly excluded when summed. The app guard is paired before qualification.
+
+Current validation:503 combined named pipeline checks pass;124 nickel owner checks and259 protein owner checks pass (overlapping sets, not additive). Config/semantics24 pass; earlier CI679330f1 failed9 checks in four classes, all reproduced and corrected against existing owners. It is not acceptance. Appdd8e0529 analyze/full3951 tests andCI39136864282 passed before the additional form-scope safeguard; that new app candidate requires its own checks. The local rung reported502passed/3known out-of-scope e1_2_2 failures/65skips (41generated-artifact gaps,24declared opt-ins); it is not green/current final acceptance. Missing rebuilt canary/build-dependent cases and declared live opt-ins remain explicit.
+
+Before merge: Sean approves the table; implement approved calibrations and remaining unsupported-curve retirements together in existing owners; make §2.2 exhaustive semantics acceptance executable (the current eleven-record inventory is insufficient); measure the combined candidate and unaffected controls; independent fresh-context review; one green exact completed-candidate CI per repo plus applicable local checks. Keep the separate e1_2_2 owner informed; do not weaken its assertions. Then inspect stage fingerprints and give Sean the required run command. No full pipeline before policy approval, no main push/release/IPA under this task.
