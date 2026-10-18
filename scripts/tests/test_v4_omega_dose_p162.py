@@ -458,15 +458,17 @@ def _load_canaries(ids):
 
 # Values between two band anchors interpolate (Model C, 2026-09-18); the
 # anchors themselves and the band labels are unchanged.
+# Dose V4.1: ordinary adults score 20 x min(EPA+DHA at minimum use / 250, 1);
+# band labels are descriptive only.
 @pytest.mark.parametrize("dsld_id,expected_score,expected_band", [
-    ("327776", 16.0, "aha_cvd"),    # Sports Research: EPA 690 + DHA 310 = 1000 mg
-    ("326270", 16.0, "aha_cvd"),    # Sports Research alt SKU: same EPA/DHA
-    ("288740", 16.4, "aha_cvd"),    # Nordic Ultimate Omega + CoQ10: 1100 mg
-    ("273630", 16.64, "aha_cvd"),   # Garden of Life Advanced Omega: 1160 mg
-    ("239592", 0.0, "below_efsa_ai"),  # CVS Krill 350: only 74 mg/day
-    ("184654", 4.28, "near_efsa_ai"),  # Pure Encap Krill-Plex (2026-09-22: 182968 left the catalog)
-    ("261863", 4.5, "near_efsa_ai"),  # Pro-Resolve: EPA 225 mg + DHA 200 mcg
-    ("267461", 0.0, "below_efsa_ai"),  # Vitafusion gummy: only 50 mg aggregate
+    ("327776", 20.0, "aha_cvd"),    # Sports Research: EPA 690 + DHA 310 = 1000 mg
+    ("326270", 20.0, "aha_cvd"),    # Sports Research alt SKU: same EPA/DHA
+    ("288740", 20.0, "aha_cvd"),    # Nordic Ultimate Omega + CoQ10: 1100 mg
+    ("273630", 20.0, "aha_cvd"),    # Garden of Life Advanced Omega: 1160 mg
+    ("239592", 5.92, "below_efsa_ai"),  # CVS Krill 350: only 74 mg/day
+    ("184654", 17.12, "near_efsa_ai"),  # Pure Encap Krill-Plex: 214 mg/day
+    ("261863", 18.02, "near_efsa_ai"),  # Pro-Resolve: EPA 225 mg + DHA 200 mcg
+    ("267461", 4.0, "below_efsa_ai"),  # Vitafusion gummy: only 50 mg aggregate
 ])
 def test_canary_dose_scores(dsld_id, expected_score, expected_band):
     """Real-catalog dose scoring lock — protects against silent regressions

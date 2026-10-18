@@ -281,15 +281,18 @@ def _load_canaries(ids):
 # the mixed-purpose Nordic label is held at zero instead of borrowing omega-only
 # credit. Dose continues to own EPA+DHA exposure. These are expectation updates for
 # the already-measured policy; no production magnitude changed here.
+# Dose V4.1 (2026-10-17): ordinary-adult EPA+DHA is proportional to 250 mg/day
+# then plateaus, so each canary moves by exactly its Dose change (+4.0, +4.0,
+# +3.6, +3.36, +5.92, +12.84); no other dimension moved.
 @pytest.mark.parametrize("dsld_id,brand,expected_score_min,expected_score_max", [
-    ("327776", "Sports Research", 63.3, 64.3),
-    ("326270", "Sports Research", 63.3, 64.3),
-    ("288740", "Nordic Naturals", 41.7, 42.7),
+    ("327776", "Sports Research", 67.3, 68.3),
+    ("326270", "Sports Research", 67.3, 68.3),
+    ("288740", "Nordic Naturals", 45.3, 46.3),
     # Sep-08 canonical-form ordering restores the verified exact-SKU NSF match;
     # the approved audit already carries its verification15 (not brand-only2).
-    ("273630", "Garden of Life", 62.9, 63.9),
-    ("239592", "CVS Health", 32.9, 33.9),
-    ("184654", "Pure Encapsulations", 44.8, 45.8),
+    ("273630", "Garden of Life", 66.3, 67.3),
+    ("239592", "CVS Health", 38.4, 39.4),
+    ("184654", "Pure Encapsulations", 57.7, 58.7),
 ])
 def test_canary_final_score_in_range(dsld_id, brand, expected_score_min, expected_score_max):
     """Real-catalog raw-rubric omega scores lock in expected ranges.
