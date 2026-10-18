@@ -286,11 +286,19 @@ SHARD_PLAN_NAME = "shard_plan.json"
 
 
 def load_shard_plan(tests_dir: Path) -> dict[str, float]:
-    """File name -> seconds; empty when no plan is committed beside the tests."""
+    """File name -> seconds; empty when no plan is committed beside the tests.
+
+    A negative or non-finite duration would be placed first by the greedy and skew
+    the partition, so the plan is rejected rather than silently used.
+    """
     path = tests_dir / SHARD_PLAN_NAME
     if not path.exists():
         return {}
-    return {name: float(seconds) for name, seconds in json.loads(path.read_text())["durations"].items()}
+    plan = {name: float(seconds) for name, seconds in json.loads(path.read_text())["durations"].items()}
+    bad = sorted(name for name, seconds in plan.items() if not (seconds >= 0 and seconds != float("inf")))
+    if bad:
+        raise ValueError(f"{path}: durations must be finite and >= 0: {bad[:5]}")
+    return plan
 
 
 def shard_assignment(paths: list[Path], shard_count: int, plan: dict[str, float]) -> list[list[Path]]:

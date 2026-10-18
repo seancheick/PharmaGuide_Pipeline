@@ -122,7 +122,25 @@ def test_without_a_plan_sharding_is_round_robin_by_sorted_name(tmp_path):
         assert list(iter_profile_paths('fast', root, shard_index=index, shard_count=3)) == expected[index::3]
 
 
+def test_a_plan_with_a_negative_or_non_finite_duration_is_rejected(tmp_path):
+    import json
+    from test_profiles import iter_profile_paths, load_shard_plan
+    root = _touch_tests(tmp_path, ['test_a.py', 'test_b.py'])
+    for bad in (-1, 'NaN', 'Infinity'):
+        (root / 'shard_plan.json').write_text('{"durations": {"test_a.py": %s, "test_b.py": 1}}' % bad)
+        with pytest.raises(ValueError):
+            load_shard_plan(root)
+        with pytest.raises(ValueError):
+            list(iter_profile_paths('fast', root, shard_index=0, shard_count=2))
+    (root / 'shard_plan.json').write_text(json.dumps({'durations': {'test_a.py': 0, 'test_b.py': 1}}))
+    assert load_shard_plan(root) == {'test_a.py': 0.0, 'test_b.py': 1.0}
+
+
 def test_committed_shard_plan_names_its_source_run_and_balances_the_fast_rung():
+    """Periodic regeneration task: once fewer than 90% of fast files are in the plan
+    (new test files round-robin correctly until then), download the four junit-fast-<i>
+    artifacts of a recent green run and rerun scripts/test_shard_plan.py --run-id <id>.
+    Run 39070168203's artifacts expire 2027-01-15; any later green run serves."""
     import json
     from test_profiles import SHARD_PLAN_NAME, iter_profile_paths, load_shard_plan, shard_assignment
     tests_dir = Path(__file__).resolve().parent
