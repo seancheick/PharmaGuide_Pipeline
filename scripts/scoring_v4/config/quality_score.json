@@ -1,10 +1,10 @@
 {
   "_metadata": {
     "config_name": "quality_score",
-    "version": "1.29.0-dose-v41-approved-reference-policy",
+    "version": "1.29.1-dose-v41-omega-integration",
     "schema_version": "1.0.0",
     "last_updated": "2026-10-18",
-    "description": "PharmaGuide public six-pillar Quality Score (decision score) in the 20/20/20/15/15/10 frame. Pillars are category-aware purpose-fit adapters, NOT raw linear remaps: formulation/dose/evidence normalize against the engine's reviewed structural ceiling; verification saturates hard third-party signals with a fail-open neutral baseline and recognizes verified brand/facility-scoped certs as a small non-stacking signal; safety_hygiene is product-level. Rubric proxies are removed: ingredient-count breadth (including immune-support ingredient counts), focus bonuses/floors, generic enzyme recognition, blanket gummy format penalties, organic/Non-GMO/natural-source and marine-sustainability points, the omega EPA:DHA ratio bonus, the generic Dose premium-form count (1.21.0), astaxanthin/CoQ10 public caps, ingredient-presence Evidence floors, and certification-derived omega Formulation/Transparency floors. Fish/krill/algal oil carrier mass never becomes EPA+DHA dose; an omega-3 row printed as EPA and/or DHA owns that EPA/DHA amount (1.10.1), and omega concentration may use the declared Total Fat plus its FDA rounding half-increment when no oil mass is printed (1.10.1). Dose and Evidence never manufacture Formulation credit. Only transparency remains a faithful linear source-dimension map. raw_score_v4_100 is a module-rubric audit subtotal, not the public six-pillar score. quality_score_status controls whether any public quality score may be shown. Audited GMP facility credit comes only from a sourced link to an audited GMP facility registry row, and mid-tier reputation that restates verified certifications or audited GMP is not counted twice (1.9.0). Quality tiers are independent of safety; quality assembly never writes POOR or converts quality thresholds into SAFE. POOR is a read-only old-catalog compatibility value (October 1, 2026). Omega label ownership is enforced in 1.10.0. Sugar and sweetener charges come only from the shared B1 dietary-sugar and harmful-additive owners: the sports-protein and fiber adapters no longer add their own, and their former clean-daily-use points became a fixed route_base (1.21.4), retired in 1.26.0. Probiotic Evidence uses shared evidence-family certainty (10), identity/purpose applicability (6), and independent same-condition replication (0/2/4); CFU and studied-amount adequacy belong exclusively to Dose (1.22.0). v4 is the production catalog scoring contract as of export schema 2.2.0. Delivery credit uses the shared source-supported, form-aware eligibility decision. Intrinsic chemistry and a technology already represented by the resolved form cannot earn a second delivery bonus; Verification policy is unchanged. 1.26.0 (V4.1 Step 4): the formula-checks pillar owns additive and sugar findings within one 10-point budget; count, disclosure, focus, route-base and duplicate branded credits are retired; an unrated form and an unbenchmarked amount each take one shared neutral; probiotic Formulation is canonical form quality and probiotic Dose is measured adequacy; a label limitation stays scored while PharmaGuide's own unfinished work marks the assessment partial. 1.27.0: Sean approved Dose quality per one declared Facts-panel serving across all routes; daily maximum safety findings remain separate and unchanged. Formulation, Evidence, Verification and personal intake policies are unchanged. 1.28.0 (Dose V4.1, Sean 2026-10-17): Dose adequacy uses the minimum directed daily use and safety the maximum on every route; the per-nutrient UL bands and B7 subtraction are replaced by one product-level Dose ceiling (dose_safety_ceiling). Ordinary-adult magnesium (84 mg) and calcium (260 mg) contribution-policy targets and the potassium completed neutral are in dose_magnitudes.generic (Dose V4.1 section 3.1). Sports adequacy plateaus above former studied ranges; total daily caffeine feeds the product-level ceiling (dose_safety_ceiling.caffeine); sports co-primaries and probiotic strains average, hidden or unbenchmarked strains taking the shared neutral; evidence certainty no longer caps ATP, betaine or taurine Dose. Hidden amounts and completed no-reference conclusions take the shared Dose neutral on every route (section 2.3); config-owned Dose anchors carry reference semantics validated by schemas/dose_reference_semantics.schema.json. Above a highest studied dose adequacy plateaus (the above-studied-range credit is retired); immune zinc and vitamin D at their ULs are reduced only by the product-level ceiling; hidden botanical and collagen amounts take the neutral. 1.29.0: Sean approved revised43reference decisions and six-member prenatal critical group inside existing5-pointbudget on2026-10-18. One shared nutritional curve; unsupported discrete-dose extrapolations completed neutral; sports contribution targets are policy, not clinical minima; generic quarter-RDA/clinical-anchor shortcuts and sports composition credit retired.",
+    "description": "PharmaGuide public six-pillar Quality Score (decision score) in the 20/20/20/15/15/10 frame. Pillars are category-aware purpose-fit adapters, NOT raw linear remaps: formulation/dose/evidence normalize against the engine's reviewed structural ceiling; verification saturates hard third-party signals with a fail-open neutral baseline and recognizes verified brand/facility-scoped certs as a small non-stacking signal; safety_hygiene is product-level. Rubric proxies are removed: ingredient-count breadth (including immune-support ingredient counts), focus bonuses/floors, generic enzyme recognition, blanket gummy format penalties, organic/Non-GMO/natural-source and marine-sustainability points, the omega EPA:DHA ratio bonus, the generic Dose premium-form count (1.21.0), astaxanthin/CoQ10 public caps, ingredient-presence Evidence floors, and certification-derived omega Formulation/Transparency floors. Fish/krill/algal oil carrier mass never becomes EPA+DHA dose; an omega-3 row printed as EPA and/or DHA owns that EPA/DHA amount (1.10.1), and omega concentration may use the declared Total Fat plus its FDA rounding half-increment when no oil mass is printed (1.10.1). Dose and Evidence never manufacture Formulation credit. Only transparency remains a faithful linear source-dimension map. raw_score_v4_100 is a module-rubric audit subtotal, not the public six-pillar score. quality_score_status controls whether any public quality score may be shown. Audited GMP facility credit comes only from a sourced link to an audited GMP facility registry row, and mid-tier reputation that restates verified certifications or audited GMP is not counted twice (1.9.0). Quality tiers are independent of safety; quality assembly never writes POOR or converts quality thresholds into SAFE. POOR is a read-only old-catalog compatibility value (October 1, 2026). Omega label ownership is enforced in 1.10.0. Sugar and sweetener charges come only from the shared B1 dietary-sugar and harmful-additive owners: the sports-protein and fiber adapters no longer add their own, and their former clean-daily-use points became a fixed route_base (1.21.4), retired in 1.26.0. Probiotic Evidence uses shared evidence-family certainty (10), identity/purpose applicability (6), and independent same-condition replication (0/2/4); CFU and studied-amount adequacy belong exclusively to Dose (1.22.0). v4 is the production catalog scoring contract as of export schema 2.2.0. Delivery credit uses the shared source-supported, form-aware eligibility decision. Intrinsic chemistry and a technology already represented by the resolved form cannot earn a second delivery bonus; Verification policy is unchanged. 1.26.0 (V4.1 Step 4): the formula-checks pillar owns additive and sugar findings within one 10-point budget; count, disclosure, focus, route-base and duplicate branded credits are retired; an unrated form and an unbenchmarked amount each take one shared neutral; probiotic Formulation is canonical form quality and probiotic Dose is measured adequacy; a label limitation stays scored while PharmaGuide's own unfinished work marks the assessment partial. 1.27.0: Sean approved Dose quality per one declared Facts-panel serving across all routes; daily maximum safety findings remain separate and unchanged. Formulation, Evidence, Verification and personal intake policies are unchanged. 1.28.0 (Dose V4.1, Sean 2026-10-17): Dose adequacy uses the minimum directed daily use and safety the maximum on every route; the per-nutrient UL bands and B7 subtraction are replaced by one product-level Dose ceiling (dose_safety_ceiling). Ordinary-adult magnesium (84 mg) and calcium (260 mg) contribution-policy targets and the potassium completed neutral are in dose_magnitudes.generic (Dose V4.1 section 3.1). Sports adequacy plateaus above former studied ranges; total daily caffeine feeds the product-level ceiling (dose_safety_ceiling.caffeine); sports co-primaries and probiotic strains average, hidden or unbenchmarked strains taking the shared neutral; evidence certainty no longer caps ATP, betaine or taurine Dose. Hidden amounts and completed no-reference conclusions take the shared Dose neutral on every route (section 2.3); config-owned Dose anchors carry reference semantics validated by schemas/dose_reference_semantics.schema.json. Above a highest studied dose adequacy plateaus (the above-studied-range credit is retired); immune zinc and vitamin D at their ULs are reduced only by the product-level ceiling; hidden botanical and collagen amounts take the neutral. 1.29.0: Sean approved revised43reference decisions and six-member prenatal critical group inside existing5-pointbudget on2026-10-18. One shared nutritional curve; unsupported discrete-dose extrapolations completed neutral; sports contribution targets are policy, not clinical minima; generic quarter-RDA/clinical-anchor shortcuts and sports composition credit retired. 1.29.1 integrates the reviewed omega marketing Evidence and molecular-form safeguards while retaining Dose V4.1 minimum-directed-daily exposure and native omega reference ownership.",
     "phase": "scoring_fairness_recalibration"
   },
   "pillars": {
@@ -34,11 +34,11 @@
     }
   },
   "safety_hygiene_subscale": {
-    "_doc": "PR3 + public truthfulness: product-level safety pillar. Clean base (no banned/recalled/watchlist match) → full 10; banned/recalled/watchlist present zeroes the raw safety_hygiene_base → 0. A Class I (critical) manufacturer recall in the last 3y deducts the raw violation magnitude HERE (safety/contamination half of the violation split); non-critical quality-system violations go to the verification pillar instead. Additive and sugar findings (formulation metadata formula_checks, low severity included) are charged here once, within this pillar's shared 10-point budget; Formulation no longer subtracts them (V4.1 Step 4). Only a confirmed high-risk or watchlist match zeroes the base. B7 excessive-dose deductions belong to Dose only; their concerns remain visible in Safety/Hygiene without another numerical charge.",
+    "_doc": "PR3 + public truthfulness: product-level safety pillar. Clean base (no banned/recalled/watchlist match) \u2192 full 10; banned/recalled/watchlist present zeroes the raw safety_hygiene_base \u2192 0. A Class I (critical) manufacturer recall in the last 3y deducts the raw violation magnitude HERE (safety/contamination half of the violation split); non-critical quality-system violations go to the verification pillar instead. Additive and sugar findings (formulation metadata formula_checks, low severity included) are charged here once, within this pillar's shared 10-point budget; Formulation no longer subtracts them (V4.1 Step 4). Only a confirmed high-risk or watchlist match zeroes the base. B7 excessive-dose deductions belong to Dose only; their concerns remain visible in Safety/Hygiene without another numerical charge.",
     "additive_or_sweetener_max_penalty": 10.0
   },
   "clean_label_subscale": {
-    "_doc": "Clean-label preferences are separate from safety verdicts. An active, source-complete policy INFORMS through clean_label_flags_v4 and may take a small graduated safety_hygiene penalty without forcing CAUTION. penalty = penalty_base (from clean_label_policy.json) × role_multiplier[role], summed across flagged additives and clamped to max_total_penalty per product. A coating/excipient (role=inactive) is penalized lightly (×0.5); an active is penalized harder (×1.5). The titanium-dioxide value is preserved from the pre-registry production policy; calibration is intentionally outside this correctness release. tier_base is a compatibility fallback only.",
+    "_doc": "Clean-label preferences are separate from safety verdicts. An active, source-complete policy INFORMS through clean_label_flags_v4 and may take a small graduated safety_hygiene penalty without forcing CAUTION. penalty = penalty_base (from clean_label_policy.json) \u00d7 role_multiplier[role], summed across flagged additives and clamped to max_total_penalty per product. A coating/excipient (role=inactive) is penalized lightly (\u00d70.5); an active is penalized harder (\u00d71.5). The titanium-dioxide value is preserved from the pre-registry production policy; calibration is intentionally outside this correctness release. tier_base is a compatibility fallback only.",
     "role_multiplier": {
       "active": 1.5,
       "major": 1.5,
@@ -119,7 +119,7 @@
     "default_reference": 25.0
   },
   "formulation_penalties": {
-    "_doc": "B1 harmful-additive severity points. Since V4.1 Step 4 they are charged once, by the safety_hygiene (formula checks) pillar from formulation metadata formula_checks, capped at safety_hygiene_subscale.additive_or_sweetener_max_penalty; Formulation no longer subtracts them. Hoisted from generic_formulation.py's hardcoded constants 2026-07-04 so calibration is a config edit, not a code edit. S6 calibration: moderate/high/critical raised to 2/3/4 for real severity separation; LOW held at 0.5 so benign fillers (silicon dioxide, stearates, maltodextrin) cost little; since V4.1 Step 4 they are charged once by the formula checks and worded as formula quality, never as a safety concern. generic_formulation.py reads these at runtime (single source; logic stays in code per the module's §13 lock). test_v4_additive_points_config guards config<->runtime drift. NOTE: the retiring v3 scorer keeps its OWN copy in scoring_config.json (B1_harmful_additives.risk_points, still 3/2/1/0.5) — the two are DIFFERENT models and are not expected to match; do not sync them.",
+    "_doc": "B1 harmful-additive severity points. Since V4.1 Step 4 they are charged once, by the safety_hygiene (formula checks) pillar from formulation metadata formula_checks, capped at safety_hygiene_subscale.additive_or_sweetener_max_penalty; Formulation no longer subtracts them. Hoisted from generic_formulation.py's hardcoded constants 2026-07-04 so calibration is a config edit, not a code edit. S6 calibration: moderate/high/critical raised to 2/3/4 for real severity separation; LOW held at 0.5 so benign fillers (silicon dioxide, stearates, maltodextrin) cost little; since V4.1 Step 4 they are charged once by the formula checks and worded as formula quality, never as a safety concern. generic_formulation.py reads these at runtime (single source; logic stays in code per the module's \u00a713 lock). test_v4_additive_points_config guards config<->runtime drift. NOTE: the retiring v3 scorer keeps its OWN copy in scoring_config.json (B1_harmful_additives.risk_points, still 3/2/1/0.5) \u2014 the two are DIFFERENT models and are not expected to match; do not sync them.",
     "b1_harmful_additive_points": {
       "critical": 4.0,
       "high": 3.0,
@@ -152,7 +152,7 @@
     "dietary_sugar_cap": 4.0
   },
   "dose_safety_ceiling": {
-    "_doc": "Dose V4.1 §2.4 (Sean D1, 2026-10-17): one product-level ceiling on the public Dose pillar, applied once after route aggregation and normalization, from the strongest confirmed exceedance at maximum directed daily use (rda_ul_data.safety_flags via scoring_v4.dose_safety). Exactly exceeds_above_pct is not an exceedance; above it and below zero_at_pct Dose is at most partial_ceiling_public; at or above zero_at_pct Dose is 0. A ceiling never raises a lower score; material_but_unresolved sets none. These bands are PharmaGuide scoring policy, not medically established toxicity grades. Replaces the per-nutrient UL bands and the B7 subtraction (-2/flag, cap 3).",
+    "_doc": "Dose V4.1 \u00a72.4 (Sean D1, 2026-10-17): one product-level ceiling on the public Dose pillar, applied once after route aggregation and normalization, from the strongest confirmed exceedance at maximum directed daily use (rda_ul_data.safety_flags via scoring_v4.dose_safety). Exactly exceeds_above_pct is not an exceedance; above it and below zero_at_pct Dose is at most partial_ceiling_public; at or above zero_at_pct Dose is 0. A ceiling never raises a lower score; material_but_unresolved sets none. These bands are PharmaGuide scoring policy, not medically established toxicity grades. Replaces the per-nutrient UL bands and the B7 subtraction (-2/flag, cap 3).",
     "reference_semantics": {
       "review_date": "2026-10-17",
       "reference_type": "safety_only_reference",
@@ -175,7 +175,7 @@
     "zero_at_pct": 150.0,
     "partial_ceiling_public": 10.0,
     "caffeine": {
-      "_doc": "Dose V4.1 §3.3 (Sean D3): total declared daily caffeine at maximum directed daily use, quantified caffeine rows summed without counting a declared total and its components twice, feeds the same ceiling as an approved non-UL upper reference. Unknown amounts stay unknown. 400 mg/day is FDA's amount generally not associated with negative effects for most adults; the 600 mg boundary and the points are PharmaGuide policy. EFSA context: single doses up to 200 mg. The per-use performance benchmark stays a separate adequacy assessment.",
+      "_doc": "Dose V4.1 \u00a73.3 (Sean D3): total declared daily caffeine at maximum directed daily use, quantified caffeine rows summed without counting a declared total and its components twice, feeds the same ceiling as an approved non-UL upper reference. Unknown amounts stay unknown. 400 mg/day is FDA's amount generally not associated with negative effects for most adults; the 600 mg boundary and the points are PharmaGuide policy. EFSA context: single doses up to 200 mg. The per-use performance benchmark stays a separate adequacy assessment.",
       "exceeds_above_mg_day": 400.0,
       "zero_at_mg_day": 600.0,
       "reference_type": "safety_only_reference",
@@ -197,7 +197,7 @@
     }
   },
   "dose_magnitudes": {
-    "_doc": "Dose-dimension caps, windows, thresholds and penalties per category module — hoisted from the score_dose modules 2026-07-04 as a PURE REFACTOR (values unchanged; verified byte-identical score_dose diff on a real-product sample). Each module reads its sub-block via scoring_v4.quality_score_config. Structural constants stay in code. Drift-guarded by test_v4_dose_magnitudes_config. 1.4.0 (2026-09-14): the generic window no longer gives full credit at 25% of any reference. Official DRI vitamins/trace minerals: half credit at window_high_source_pct (20% of RDA/AI, PharmaGuide point calibration; FDA's high/excellent-source claim uses Daily Value per RACC instead), linear to full at window_full_adequacy_pct (100% of the RDA/AI). No-DRI clinical anchors reviewed against PubMed on 2026-09-15 (1.5.1): only the aliases in _clinical_anchor_reference_by_canonical receive proportional credit, using the cited and corrected anchor in rda_optimal_uls.json; all other references keep window_rda_threshold (25%). UL bands unchanged. 1.21.0 (2026-09-26; authored as 1.14.0 on claude/angry-khayyam-155ede): the generic +3 for >= 2 forms with bio_score >= 12 in one nutrient family is removed with its three keys; IQM forms[].bio_score owns form quality (matrix concept ingredient_form_quality) and a form count is not a dose.",
+    "_doc": "Dose-dimension caps, windows, thresholds and penalties per category module \u2014 hoisted from the score_dose modules 2026-07-04 as a PURE REFACTOR (values unchanged; verified byte-identical score_dose diff on a real-product sample). Each module reads its sub-block via scoring_v4.quality_score_config. Structural constants stay in code. Drift-guarded by test_v4_dose_magnitudes_config. 1.4.0 (2026-09-14): the generic window no longer gives full credit at 25% of any reference. Official DRI vitamins/trace minerals: half credit at window_high_source_pct (20% of RDA/AI, PharmaGuide point calibration; FDA's high/excellent-source claim uses Daily Value per RACC instead), linear to full at window_full_adequacy_pct (100% of the RDA/AI). No-DRI clinical anchors reviewed against PubMed on 2026-09-15 (1.5.1): only the aliases in _clinical_anchor_reference_by_canonical receive proportional credit, using the cited and corrected anchor in rda_optimal_uls.json; all other references keep window_rda_threshold (25%). UL bands unchanged. 1.21.0 (2026-09-26; authored as 1.14.0 on claude/angry-khayyam-155ede): the generic +3 for >= 2 forms with bio_score >= 12 in one nutrient family is removed with its three keys; IQM forms[].bio_score owns form quality (matrix concept ingredient_form_quality) and a form count is not a dose.",
     "generic": {
       "cap_supplemental_window": 22.0,
       "dimension_cap": 25.0,
@@ -308,7 +308,7 @@
           "source_ids": [
             "https://pubmed.ncbi.nlm.nih.gov/27852613/"
           ],
-          "rationale": "Vitamin C enriched gelatin at 5/15 g per use before exercise was repeated three times daily; the outcome was a synthesis biomarker. This does not establish a generic daily 5–15 g window, clinical injury prevention, or a 20 g UL. Completed review retains descriptive regimen facts; no general Dose curve is established.",
+          "rationale": "Vitamin C enriched gelatin at 5/15 g per use before exercise was repeated three times daily; the outcome was a synthesis biomarker. This does not establish a generic daily 5\u201315 g window, clinical injury prevention, or a 20 g UL. Completed review retains descriptive regimen facts; no general Dose curve is established.",
           "owner": "scripts/scoring_v4/modules/collagen_profile.py::_score_collagen_row",
           "review_date": "2026-10-18",
           "approval_status": "approved_existing_neutral_2026_10_18"
@@ -359,14 +359,14 @@
           "source_ids": [
             "https://pubmed.ncbi.nlm.nih.gov/38309227/"
           ],
-          "rationale": "Thirty older adults received 100 mg/day for 12 weeks; certain subjective sleep components improved. The generic 50–300 mg window, 300/400 mg cuts and low-dose floor are not established. Completed review retains descriptive regimen facts; no general Dose curve is established.",
+          "rationale": "Thirty older adults received 100 mg/day for 12 weeks; certain subjective sleep components improved. The generic 50\u2013300 mg window, 300/400 mg cuts and low-dose floor are not established. Completed review retains descriptive regimen facts; no general Dose curve is established.",
           "owner": "scripts/scoring_v4/modules/sleep_support.py::score_sleep_purpose_dose",
           "review_date": "2026-10-18",
           "approval_status": "approved_existing_neutral_2026_10_18"
         }
       },
       "contribution_policy_targets": {
-        "_doc": "Dose V4.1 §3.1 (Sean, 2026-10-17): ordinary-adult contribution-policy targets, scored 20 x min(elemental amount at minimum directed daily use / target, 1) on the public scale. Prenatal, pediatric, panel and clinical-purpose standards keep their own references. Each target must stay below its adult supplemental UL.",
+        "_doc": "Dose V4.1 \u00a73.1 (Sean, 2026-10-17): ordinary-adult contribution-policy targets, scored 20 x min(elemental amount at minimum directed daily use / target, 1) on the public scale. Prenatal, pediatric, panel and clinical-purpose standards keep their own references. Each target must stay below its adult supplemental UL.",
         "magnesium": {
           "target_mg": 84.0,
           "reference_type": "supplement_contribution_policy",
@@ -513,7 +513,7 @@
           "source_ids": [
             "https://pubmed.ncbi.nlm.nih.gov/28642676/"
           ],
-          "rationale": "ISSN recommends high-quality protein at 0.25 g/kg or 20–40 g per serving, qualified by age and exercise. Actual protein grams must be established; whey/powder ingredient mass is not protein content. The 15 g cutoff and raw 8/16 points are editorial. Different protein preparations cannot be assumed equivalent. Sean approved the explicit PharmaGuide policy on2026-10-18; no percent clinical efficacy is implied.",
+          "rationale": "ISSN recommends high-quality protein at 0.25 g/kg or 20\u201340 g per serving, qualified by age and exercise. Actual protein grams must be established; whey/powder ingredient mass is not protein content. The 15 g cutoff and raw 8/16 points are editorial. Different protein preparations cannot be assumed equivalent. Sean approved the explicit PharmaGuide policy on2026-10-18; no percent clinical efficacy is implied.",
           "owner": "scripts/scoring_v4/modules/sports_dose.py::_score_primary",
           "review_date": "2026-10-18",
           "approval_status": "approved_sean_2026_10_18"
@@ -530,7 +530,7 @@
           "source_ids": [
             "https://pubmed.ncbi.nlm.nih.gov/28615996/"
           ],
-          "rationale": "ISSN describes creatine monohydrate maintenance at 3–5 g/day, up to 5–10 g for larger athletes, and loading at 20 g/day for 5–7 days. The 2 g cutoff and point steps are editorial. Different salts and unconfirmed loading duration cannot inherit the exact monohydrate regimen. Sean approved the explicit PharmaGuide policy on2026-10-18; no percent clinical efficacy is implied.",
+          "rationale": "ISSN describes creatine monohydrate maintenance at 3\u20135 g/day, up to 5\u201310 g for larger athletes, and loading at 20 g/day for 5\u20137 days. The 2 g cutoff and point steps are editorial. Different salts and unconfirmed loading duration cannot inherit the exact monohydrate regimen. Sean approved the explicit PharmaGuide policy on2026-10-18; no percent clinical efficacy is implied.",
           "owner": "scripts/scoring_v4/modules/sports_dose.py::_score_primary",
           "review_date": "2026-10-18",
           "approval_status": "approved_sean_2026_10_18"
@@ -547,7 +547,7 @@
           "source_ids": [
             "https://pubmed.ncbi.nlm.nih.gov/26175657/"
           ],
-          "rationale": "ISSN describes 4–6 g/day for at least 2–4 weeks, with performance context especially 1–4 minute efforts. The 2 g cutoff and raw 8/16 points are editorial. A daily amount does not establish duration adherence. Sean approved the explicit PharmaGuide policy on2026-10-18; no percent clinical efficacy is implied.",
+          "rationale": "ISSN describes 4\u20136 g/day for at least 2\u20134 weeks, with performance context especially 1\u20134 minute efforts. The 2 g cutoff and raw 8/16 points are editorial. A daily amount does not establish duration adherence. Sean approved the explicit PharmaGuide policy on2026-10-18; no percent clinical efficacy is implied.",
           "owner": "scripts/scoring_v4/modules/sports_dose.py::_score_primary",
           "review_date": "2026-10-18",
           "approval_status": "approved_sean_2026_10_18"
@@ -618,7 +618,7 @@
           "source_ids": [
             "https://pubmed.ncbi.nlm.nih.gov/33586928/"
           ],
-          "rationale": "The review describes 2–10 g/day at 2:1:1 across varied regimens, not the current per-use thresholds. The 3/5 g thresholds, ratio tolerance and two-point composition bonus lack a source-established dose-response basis. Completed review: exact regimens remain descriptive; no defensible general continuous Dose benchmark.",
+          "rationale": "The review describes 2\u201310 g/day at 2:1:1 across varied regimens, not the current per-use thresholds. The 3/5 g thresholds, ratio tolerance and two-point composition bonus lack a source-established dose-response basis. Completed review: exact regimens remain descriptive; no defensible general continuous Dose benchmark.",
           "owner": "scripts/scoring_v4/modules/sports_dose.py::_score_primary",
           "review_date": "2026-10-18",
           "approval_status": "approved_existing_neutral_2026_10_18"
@@ -635,7 +635,7 @@
           "source_ids": [
             "https://pubmed.ncbi.nlm.nih.gov/33586928/"
           ],
-          "rationale": "The review describes 2–10 g/day at 2:1:1 across varied regimens. The 2/5 g thresholds and lower aggregate-only cap can reflect disclosure or Evidence rather than dose appropriateness. Completed review: exact regimens remain descriptive; no defensible general continuous Dose benchmark.",
+          "rationale": "The review describes 2\u201310 g/day at 2:1:1 across varied regimens. The 2/5 g thresholds and lower aggregate-only cap can reflect disclosure or Evidence rather than dose appropriateness. Completed review: exact regimens remain descriptive; no defensible general continuous Dose benchmark.",
           "owner": "scripts/scoring_v4/modules/sports_dose.py::_score_primary",
           "review_date": "2026-10-18",
           "approval_status": "approved_existing_neutral_2026_10_18"
@@ -652,7 +652,7 @@
           "source_ids": [
             "https://pubmed.ncbi.nlm.nih.gov/37800468/"
           ],
-          "rationale": "ISSN describes MPS response at 1.5–3 g at rest and a plateau around 15–18 g, with composition and population qualifications. Current 5/8 g thresholds, six-amino-acid floor and completeness bonus are editorial. Completed review: exact regimens remain descriptive; no defensible general continuous Dose benchmark.",
+          "rationale": "ISSN describes MPS response at 1.5\u20133 g at rest and a plateau around 15\u201318 g, with composition and population qualifications. Current 5/8 g thresholds, six-amino-acid floor and completeness bonus are editorial. Completed review: exact regimens remain descriptive; no defensible general continuous Dose benchmark.",
           "owner": "scripts/scoring_v4/modules/sports_dose.py::_score_primary",
           "review_date": "2026-10-18",
           "approval_status": "approved_existing_neutral_2026_10_18"
@@ -705,7 +705,7 @@
           "source_ids": [
             "https://pubmed.ncbi.nlm.nih.gov/33388079/"
           ],
-          "rationale": "ISSN describes acute performance doses of 3–6 mg/kg, possibly as low as 2 mg/kg, with timing/source qualifications. Fixed 150/200 mg thresholds replace bodyweight-based guidance; the 18-point ceiling is editorial. Sean approved the explicit PharmaGuide policy on2026-10-18; no percent clinical efficacy is implied.",
+          "rationale": "ISSN describes acute performance doses of 3\u20136 mg/kg, possibly as low as 2 mg/kg, with timing/source qualifications. Fixed 150/200 mg thresholds replace bodyweight-based guidance; the 18-point ceiling is editorial. Sean approved the explicit PharmaGuide policy on2026-10-18; no percent clinical efficacy is implied.",
           "owner": "scripts/scoring_v4/modules/sports_dose.py::_score_primary",
           "review_date": "2026-10-18",
           "approval_status": "approved_sean_2026_10_18"
@@ -742,7 +742,7 @@
             "https://pubmed.ncbi.nlm.nih.gov/27380030/",
             "https://pubmed.ncbi.nlm.nih.gov/40852891/"
           ],
-          "rationale": "One gram two hours before a 3 km run improved performance in eight men; one gram before a 4 km cycling trial was null in eleven men. The meta-analysis found no linear dose-response across 1–6 g. A universal one-gram threshold and exercise-independent interpolation are not established. Completed review: exact regimens remain descriptive; no defensible general continuous Dose benchmark.",
+          "rationale": "One gram two hours before a 3 km run improved performance in eight men; one gram before a 4 km cycling trial was null in eleven men. The meta-analysis found no linear dose-response across 1\u20136 g. A universal one-gram threshold and exercise-independent interpolation are not established. Completed review: exact regimens remain descriptive; no defensible general continuous Dose benchmark.",
           "owner": "scripts/scoring_v4/modules/sports_dose.py::_score_primary",
           "review_date": "2026-10-18",
           "approval_status": "approved_existing_neutral_2026_10_18"
@@ -773,7 +773,7 @@
     }
   },
   "evidence_magnitudes": {
-    "_doc": "Evidence-dimension caps, primary-evidence floors, enrollment/depth bands and effect-direction multipliers per category module — hoisted from the score_evidence modules 2026-07-04 as a PURE REFACTOR (values unchanged; empty score_evidence diff verified, incl. generic's primary-floor path). Structural constants (eligible study-type sets, positioning/relevance sets) stay in code. Drift-guarded by test_v4_evidence_magnitudes_config.",
+    "_doc": "Evidence-dimension caps, primary-evidence floors, enrollment/depth bands and effect-direction multipliers per category module \u2014 hoisted from the score_evidence modules 2026-07-04 as a PURE REFACTOR (values unchanged; empty score_evidence diff verified, incl. generic's primary-floor path). Structural constants (eligible study-type sets, positioning/relevance sets) stay in code. Drift-guarded by test_v4_evidence_magnitudes_config.",
     "generic": {
       "cap_total": 20.0,
       "cap_per_ingredient": 7.0,
@@ -858,13 +858,13 @@
     },
     "omega": {
       "cap_evidence": 20.0,
-      "_doc": "Editorial, amount-independent Evidence mapping. Clinical facts and source identifiers live in INGR_OMEGA3.purpose_evidence; omega amount is judged only by Dose. Ordinary adult explicit EPA+DHA receives 10.4, explicit adult triglyceride-lowering purpose receives 20, and prenatal DHA intake authority receives 11.1. Child/baby, DHA-only, uncertain identity, specialized preparation and unresolved mixed-purpose labels are held. No prescription-equivalence, universal cardiovascular protection or preterm-birth efficacy claim is made. Safety remains outside this pillar.",
+      "_doc": "Editorial, amount-independent Evidence mapping. Clinical facts and source identifiers live in INGR_OMEGA3.purpose_evidence; omega amount is judged only by Dose. Ordinary adult explicit EPA+DHA receives 10.4, a label triglyceride-lowering claim retains 10.4 (purpose alone cannot establish treatment-evidence applicability), and prenatal DHA intake authority receives 11.1. Child/baby, DHA-only, uncertain identity, specialized preparation and unresolved mixed-purpose labels are held. No prescription-equivalence, universal cardiovascular protection or preterm-birth efficacy claim is made. Safety remains outside this pillar.",
       "purpose_standards": {
         "omega_reviewed_weak": {
           "pillar_score": 10.4
         },
         "triglyceride_strong": {
-          "pillar_score": 20.0
+          "score_eligible": false
         },
         "prenatal_dha_intake_authority": {
           "pillar_score": 11.1
@@ -883,7 +883,7 @@
     }
   },
   "verification_magnitudes": {
-    "_doc": "Trust/verification point values, cert-scope points, and manufacturer D1-D5 + violation caps per module — hoisted from the trust/manufacturer/brand-testing/verification-bonus modules 2026-07-04 as a PURE REFACTOR (values unchanged; empty diff verified across score_trust / score_manufacturer_trust / score_manufacturer_violations / score_brand_testing_posture / score_verification_bonus). Structural cert-name sets stay in code; CLASS_I_LOOKBACK_DAYS (3*365) stays in code as a documented window. Drift-guarded by test_v4_verification_magnitudes_config.",
+    "_doc": "Trust/verification point values, cert-scope points, and manufacturer D1-D5 + violation caps per module \u2014 hoisted from the trust/manufacturer/brand-testing/verification-bonus modules 2026-07-04 as a PURE REFACTOR (values unchanged; empty diff verified across score_trust / score_manufacturer_trust / score_manufacturer_violations / score_brand_testing_posture / score_verification_bonus). Structural cert-name sets stay in code; CLASS_I_LOOKBACK_DAYS (3*365) stays in code as a documented window. Drift-guarded by test_v4_verification_magnitudes_config.",
     "generic_trust": {
       "dimension_cap": 15.0,
       "b4a_cap": 12.0,
@@ -1008,7 +1008,7 @@
     }
   },
   "formulation_variant_magnitudes": {
-    "_doc": "Category-specific formulation/profile caps, form-quality points, standardization tiers and botanical dose-band credits — hoisted from the variant score_formulation / botanical / collagen modules 2026-07-04 as a PURE REFACTOR (values unchanged; empty diff verified across all variant + profile entrypoints). 1.26.0 (V4.1 Step 4) changed values and retired keys deliberately; see the formulation_subscale and dose_subscale docs. Canonical-ID sets stay in code. Drift-guarded by test_v4_formulation_variant_magnitudes_config. (The generic formulation module's magnitudes live in the flat formulation_magnitudes block.)",
+    "_doc": "Category-specific formulation/profile caps, form-quality points, standardization tiers and botanical dose-band credits \u2014 hoisted from the variant score_formulation / botanical / collagen modules 2026-07-04 as a PURE REFACTOR (values unchanged; empty diff verified across all variant + profile entrypoints). 1.26.0 (V4.1 Step 4) changed values and retired keys deliberately; see the formulation_subscale and dose_subscale docs. Canonical-ID sets stay in code. Drift-guarded by test_v4_formulation_variant_magnitudes_config. (The generic formulation module's magnitudes live in the flat formulation_magnitudes block.)",
     "multi_prenatal": {
       "cap_formulation": 12.0,
       "formulation_presence_floor": 2.0,
@@ -1043,7 +1043,7 @@
     }
   },
   "category_magnitudes": {
-    "_doc": "Category-router dimension caps and category-adapter magnitudes (b_complex/immune/joint/sleep/safety_hygiene) — hoisted from the router + adapter modules 2026-07-04 as a PURE REFACTOR (values unchanged; empty diff verified across score_generic/multi_prenatal/omega/probiotic/b_complex + the adapter fns). 1.26.0 (V4.1 Step 4) aligned the multi/prenatal (12) and B-complex (8) Formulation caps with their retained components. Canonical-ID sets, regex form patterns, and the retired affine constants stay in code. Drift-guarded by test_v4_category_magnitudes_config. 1.21.1 (2026-09-26; authored as 1.13.1 and 1.13.2): the immune high-variability botanical stack penalty and its botanical-count threshold joined immune_support, also a pure refactor. The immune Dose bands (low/high/points; below low is linear, above high earns dose_above_band_fraction), daily-use points, Dose cap and the strictly-greater-than high-zinc / high-vitamin-D thresholds joined immune_support, also a pure refactor.",
+    "_doc": "Category-router dimension caps and category-adapter magnitudes (b_complex/immune/joint/sleep/safety_hygiene) \u2014 hoisted from the router + adapter modules 2026-07-04 as a PURE REFACTOR (values unchanged; empty diff verified across score_generic/multi_prenatal/omega/probiotic/b_complex + the adapter fns). 1.26.0 (V4.1 Step 4) aligned the multi/prenatal (12) and B-complex (8) Formulation caps with their retained components. Canonical-ID sets, regex form patterns, and the retired affine constants stay in code. Drift-guarded by test_v4_category_magnitudes_config. 1.21.1 (2026-09-26; authored as 1.13.1 and 1.13.2): the immune high-variability botanical stack penalty and its botanical-count threshold joined immune_support, also a pure refactor. The immune Dose bands (low/high/points; below low is linear, above high earns dose_above_band_fraction), daily-use points, Dose cap and the strictly-greater-than high-zinc / high-vitamin-D thresholds joined immune_support, also a pure refactor.",
     "generic": {
       "dimension_caps": [
         [
@@ -1198,7 +1198,7 @@
           "source_ids": [
             "https://ods.od.nih.gov/factsheets/VitaminC-HealthProfessional/"
           ],
-          "rationale": "Adult RDA is 75/90 mg and UL is 2,000 mg. The 100–1,000 mg window, upper half credit, nutrient weights and discipline points are editorial; they are not optimal immune intake guidance. Sean approved the explicit PharmaGuide policy on2026-10-18; no percent clinical efficacy is implied.",
+          "rationale": "Adult RDA is 75/90 mg and UL is 2,000 mg. The 100\u20131,000 mg window, upper half credit, nutrient weights and discipline points are editorial; they are not optimal immune intake guidance. Sean approved the explicit PharmaGuide policy on2026-10-18; no percent clinical efficacy is implied.",
           "owner": "scripts/scoring_v4/modules/immune_support.py::score_immune_purpose_dose",
           "review_date": "2026-10-18",
           "approval_status": "approved_sean_2026_10_18"
@@ -1215,7 +1215,7 @@
           "source_ids": [
             "https://ods.od.nih.gov/factsheets/VitaminD-HealthProfessional/"
           ],
-          "rationale": "RDA is 15 mcg at 19–70 and 20 mcg above 70; adult UL is 100 mcg. The 15–50 mcg window and half credit above 50 are editorial. Fifty mcg is not the UL. Sean approved the explicit PharmaGuide policy on2026-10-18; no percent clinical efficacy is implied.",
+          "rationale": "RDA is 15 mcg at 19\u201370 and 20 mcg above 70; adult UL is 100 mcg. The 15\u201350 mcg window and half credit above 50 are editorial. Fifty mcg is not the UL. Sean approved the explicit PharmaGuide policy on2026-10-18; no percent clinical efficacy is implied.",
           "owner": "scripts/scoring_v4/modules/immune_support.py::score_immune_purpose_dose",
           "review_date": "2026-10-18",
           "approval_status": "approved_sean_2026_10_18"
@@ -1232,7 +1232,7 @@
           "source_ids": [
             "https://ods.od.nih.gov/factsheets/Zinc-HealthProfessional/"
           ],
-          "rationale": "Adult RDA is 8 mg for women and 11 for men; UL is 40 mg. The 8–25 mg window and half credit above 25 are editorial. Twenty-five mg is not the UL. Sean approved the explicit PharmaGuide policy on2026-10-18; no percent clinical efficacy is implied.",
+          "rationale": "Adult RDA is 8 mg for women and 11 for men; UL is 40 mg. The 8\u201325 mg window and half credit above 25 are editorial. Twenty-five mg is not the UL. Sean approved the explicit PharmaGuide policy on2026-10-18; no percent clinical efficacy is implied.",
           "owner": "scripts/scoring_v4/modules/immune_support.py::score_immune_purpose_dose",
           "review_date": "2026-10-18",
           "approval_status": "approved_sean_2026_10_18"
@@ -1249,7 +1249,7 @@
           "source_ids": [
             "https://ods.od.nih.gov/factsheets/Copper-HealthProfessional/"
           ],
-          "rationale": "Adult RDA is 0.9 mg and UL is 10 mg. The 0.5–2 mg window and upper half credit are editorial; the source establishes no particular zinc:copper requirement. Sean approved the explicit PharmaGuide policy on2026-10-18; no percent clinical efficacy is implied.",
+          "rationale": "Adult RDA is 0.9 mg and UL is 10 mg. The 0.5\u20132 mg window and upper half credit are editorial; the source establishes no particular zinc:copper requirement. Sean approved the explicit PharmaGuide policy on2026-10-18; no percent clinical efficacy is implied.",
           "owner": "scripts/scoring_v4/modules/immune_support.py::score_immune_purpose_dose",
           "review_date": "2026-10-18",
           "approval_status": "approved_sean_2026_10_18"
@@ -1266,7 +1266,7 @@
           "source_ids": [
             "https://ods.od.nih.gov/factsheets/Selenium-HealthProfessional/"
           ],
-          "rationale": "Adult RDA is 55 mcg and US UL is 400 mcg. The 45–200 mcg window and upper half credit are editorial, not those nutritional reference boundaries. Sean approved the explicit PharmaGuide policy on2026-10-18; no percent clinical efficacy is implied.",
+          "rationale": "Adult RDA is 55 mcg and US UL is 400 mcg. The 45\u2013200 mcg window and upper half credit are editorial, not those nutritional reference boundaries. Sean approved the explicit PharmaGuide policy on2026-10-18; no percent clinical efficacy is implied.",
           "owner": "scripts/scoring_v4/modules/immune_support.py::score_immune_purpose_dose",
           "review_date": "2026-10-18",
           "approval_status": "approved_sean_2026_10_18"
@@ -1283,7 +1283,7 @@
           "source_ids": [
             "https://pubmed.ncbi.nlm.nih.gov/28606567/"
           ],
-          "rationale": "Wellmune at 250 mg/day in older adults had nonsignificant primary URTI results; marathon studies used 250/500 mg. The 100–250 mg window, penalty above 250 and all-glucan equivalence are not established. Completed review: exact regimens remain descriptive; no defensible general continuous Dose benchmark.",
+          "rationale": "Wellmune at 250 mg/day in older adults had nonsignificant primary URTI results; marathon studies used 250/500 mg. The 100\u2013250 mg window, penalty above 250 and all-glucan equivalence are not established. Completed review: exact regimens remain descriptive; no defensible general continuous Dose benchmark.",
           "owner": "scripts/scoring_v4/modules/immune_support.py::score_immune_purpose_dose",
           "review_date": "2026-10-18",
           "approval_status": "approved_existing_neutral_2026_10_18"
@@ -1317,7 +1317,7 @@
           "source_ids": [
             "https://pubmed.ncbi.nlm.nih.gov/27023596/"
           ],
-          "rationale": "Standardized extract was used at 600 mg for priming and 900 mg during travel; incidence was null, with duration/severity signals. The 100–600 mg window, cut above 600, and generic fruit-powder/extract equivalence are not established. Completed review: exact regimens remain descriptive; no defensible general continuous Dose benchmark.",
+          "rationale": "Standardized extract was used at 600 mg for priming and 900 mg during travel; incidence was null, with duration/severity signals. The 100\u2013600 mg window, cut above 600, and generic fruit-powder/extract equivalence are not established. Completed review: exact regimens remain descriptive; no defensible general continuous Dose benchmark.",
           "owner": "scripts/scoring_v4/modules/immune_support.py::score_immune_purpose_dose",
           "review_date": "2026-10-18",
           "approval_status": "approved_existing_neutral_2026_10_18"

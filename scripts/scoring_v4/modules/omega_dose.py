@@ -20,7 +20,7 @@ Per Sean's 'do not invent fields' rule:
   reads the label's canonical serving row (highest quantity, matching the
   enricher's `_select_canonical_serving`) and falls back to `serving_basis`
   only when the label declares no daily servings. When nothing is declared it
-  defaults to 1 serving/day (the safe baseline — products labeled without
+  defaults to 1 serving/day (the recorded default — products labeled without
   daily-serving guidance can't be over-credited as multi-serving regimens).
 
 Per §13 architecture lock, this module does not import score_supplements (v3).

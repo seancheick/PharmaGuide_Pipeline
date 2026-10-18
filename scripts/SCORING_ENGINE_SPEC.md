@@ -230,7 +230,7 @@ Since config 1.26.0 (V4.1 Step 4) every fact earns or loses points once:
   - A recognized botanical or collagen identity is neutral credit.
   - Presence, count, focus, route-base, disclosure and duplicate branded
     credits are retired, and references are the retained attainable maximum.
-- Dose (Dose V4.1, config 1.28.0; plan `docs/plans/DOSE_V41_PLAN.md`):
+- Dose (Dose V4.1, config 1.29.1; plan `docs/plans/DOSE_V41_PLAN.md`):
   - Adequacy reads the minimum directed daily use and safety the maximum on
     every route; one Facts-panel serving a day is assessed, and recorded as the
     default, when the label gives no daily directions (§11.1).
@@ -433,7 +433,8 @@ Artifact schema 4.4.0 adds the canonical eligible-delivery projection (October 1
   owner decisions (null earns no affirmative credit), primary-mass-floor
   calibration for Evidence norms, and the vitamin-D bone-goal ownership change
   (bone goal is synergy-owned, not Evidence-owned).
-- **4.7.1 → 4.7.2** (2026-10-18, `claude/dose-v41`): remove leftover immune-purpose zinc/vitamin-D UL zeroing (one shared final ceiling); preserve equivalent mg/g/mcg amounts against microgram immune references. Config1.28.1 corrects FDA high-source terminology without numerical calibration changes. Source review still requires explicit disposition of unsupported legacy curves.
+- **4.8.0 → 4.8.1** (2026-10-18): combine the approved Dose V4.1 reference policy with PR164's shared omega population, marketing-Evidence and molecular-form safeguards. Minimum directed daily use and native omega_rubric reference ownership remain canonical; no duplicate250/200mg table or serving-only rule is restored. Config1.29.1 records this integration.
+  - **4.7.1 → 4.7.2** (2026-10-18, `claude/dose-v41`): remove leftover immune-purpose zinc/vitamin-D UL zeroing (one shared final ceiling); preserve equivalent mg/g/mcg amounts against microgram immune references. Config1.28.1 corrects FDA high-source terminology without numerical calibration changes. Source review still requires explicit disposition of unsupported legacy curves.
 - **4.7.0 → 4.7.1** (2026-10-18, branch `claude/dose-v41`): independent audit corrections to caffeine source/interval handling, labeled UL populations, sports co-primary normalization and exposure, unresolved CFU source holds, botanical missing amounts, and source-faithful Dose receipts. No numerical config calibration changed. Reference-semantics curation remains an activation blocker.
 - **4.6.0 → 4.7.0** (2026-10-17, branch `claude/dose-v41`): Dose V4.1. Directed daily use replaces the declared-serving basis; one product-level safety ceiling replaces the UL bands and B7; D2 UL screening selection; mineral, potassium and omega references; sports, caffeine and probiotic aggregation; hidden amounts take the neutral; reference semantics gate; Dose receipt. Config 1.28.0, omega rubric 2.3.0.
 - **4.5.0 → 4.6.0** (2026-10-17): Sean approved product Dose quality per declared serving across every category. Maximum labeled daily safety remains separate. Config 1.27.0 identifies this policy; other five quality pillars and clinical limits are unchanged.

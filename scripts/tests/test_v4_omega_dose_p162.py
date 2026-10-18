@@ -1,24 +1,9 @@
-"""v4 Omega Dose dimension — P1.6.2 tests.
+"""Omega Dose policy contracts.
 
-Locks the Dose sub-component math:
-
-    epa_dha_band     /20  EFSA/FDA/AHA-grounded thresholds:
-                          4000+ → 20  (prescription)
-                          2000+ → 17.5 (EFSA TG claim)
-                          1000+ → 16   (AHA CVD)
-                          500+  → 10   (FDA QHC)
-                          250+  → 5    (EFSA AI)
-                          <250  → 0
-    (the former +5 EPA:DHA ratio bonus was removed in quality_score 1.2.0)
-                          Outside range → 0
-                          Pure-EPA or pure-DHA → 0 (exempt, not penalized)
-
-Per Sean 'do not invent fields': only canonical_id ∈ {epa, dha, epa_dha}
-rows with valid mg/g/mcg units contribute. Fish-oil parent mass is NOT
-counted as EPA+DHA. Daily-servings comes from servingSizes[0]; defaults
-to 1/day when missing (safe baseline).
-
-Per §13 architecture lock — no v3 imports.
+Public-seam cases pin ordinary-adult250mg and prenatal200mg-DHA contribution
+curves. Historical band labels remain descriptive. Explicit triglyceride-purpose
+cases retain the separately approved2000mg proportional contribution target.
+Only disclosed EPA/DHA counts; no carrier-mass or personal-intake inference.
 """
 
 from __future__ import annotations
@@ -37,6 +22,7 @@ if str(SCRIPTS_ROOT) not in sys.path:
 
 def _omega_product(
     *,
+    clinical_purpose: bool = False,
     epa: float | None = 600,
     dha: float | None = 300,
     epa_unit: str = "mg",
@@ -63,7 +49,7 @@ def _omega_product(
     return {
         "status": "active",
         "form_factor": "softgel",
-        "product_name": "Test Omega",
+        "product_name": "Omega helps lower triglycerides" if clinical_purpose else "Adult Omega",
         "supplement_taxonomy": {"primary_type": "omega_3"},
         "supplement_type": {"type": "specialty"},
         "servingSizes": [{
@@ -605,3 +591,70 @@ def test_omega_adequacy_uses_same_minimum_exposure_as_evidence():
     fixed = _omega_product(epa=400, dha=300, daily_servings=(1, 1))
     variable = _omega_product(epa=400, dha=300, daily_servings=(1, 2))
     assert score_dose(variable)['score'] == score_dose(fixed)['score']
+
+
+@pytest.mark.parametrize('amount,expected', [(0,0),(1,.1),(50,4),(99,7.9),(100,8),(200,16),(250,20),(500,20),(2000,20)])
+def test_public_adult_nutritional_reference_contribution(amount, expected):
+    from scoring_v4.scored_artifact import build_scored_artifact
+    product = _omega_product(clinical_purpose=False, epa=amount*.6, dha=amount*.4)
+    result = build_scored_artifact(product)
+    assert result['quality_pillars_v4']['dose']['score'] == expected
+
+
+@pytest.mark.parametrize('epa,dha,expected', [(0,1,.1),(0,80,8),(0,100,10),(0,199,19.9),(0,200,20),(1999,1,.1),(2000,0,11.4)])
+def test_public_prenatal_dha_reference_is_exclusive(epa, dha, expected):
+    from scoring_v4.scored_artifact import build_scored_artifact
+    product = _omega_product(epa=epa, dha=dha)
+    product['product_name'] = 'Prenatal Omega DHA'
+    result = build_scored_artifact(product)
+    assert result['quality_pillars_v4']['dose']['score'] == expected
+
+
+def test_public_claim_retains_clinical_dose_context_not_nutritional_target():
+    from scoring_v4.scored_artifact import build_scored_artifact
+    product = _omega_product(epa=150,dha=100)
+    product['statements'] = [{'notes':'EPA and DHA help lower triglyceride levels.'}]
+    result = build_scored_artifact(product)
+    assert result['quality_pillars_v4']['dose']['score'] == 2.5
+
+
+@pytest.mark.parametrize("name,expected", [("Adult Omega",8.0),("Prenatal Omega DHA",4.0)])
+def test_nutritional_reference_uses_minimum_directed_daily_frequency(name, expected):
+    from scoring_v4.scored_artifact import build_scored_artifact
+    for daily in ((1,1),(2,4)):
+        product = _omega_product(clinical_purpose=False, epa=60, dha=40, daily_servings=daily)
+        product["product_name"] = name
+        artifact = build_scored_artifact(product)
+        assert artifact["quality_pillars_v4"]["dose"]["score"] == min(expected * daily[0], 20)
+
+
+@pytest.mark.parametrize("name,groups", [
+    ("Omega Junior", []), ("Omega Jr.", []),
+    ("Omega Fishies", ["Children 1 to 4 Years of Age"]),
+    ("Omega", [{"name": "Children 4 or More Years of Age"}]),
+])
+def test_child_population_does_not_receive_adult_reference(name, groups):
+    from evidence_resolver import resolve_omega_evidence_standard
+    from scoring_v4.scored_artifact import build_scored_artifact
+    product = _omega_product(clinical_purpose=False, epa=150, dha=100)
+    product.update(product_name=name, targetGroups=groups)
+    purpose = resolve_omega_evidence_standard(product)
+    assert purpose["applicability_reason"] == "held_child_or_baby_population"
+    result = build_scored_artifact(product)
+    assert result["quality_pillars_v4"]["dose"]["score"] == 11.4
+    assert result["quality_pillars_v4"]["evidence"]["score"] == 0
+
+
+@pytest.mark.parametrize("groups", [
+    [], ["Adults", "Children 4 or More Years of Age"],
+    [{"text": "Adults 18-50 Years"}, {"text": "Children 4 or More Years of Age"}],
+    ["Seniors", "Children 4 or More Years of Age"],
+    ["Women", "Children 4 or More Years of Age"],
+])
+def test_family_target_and_daily_value_population_do_not_imply_child_only(groups):
+    from scoring_v4.scored_artifact import build_scored_artifact
+    product = _omega_product(clinical_purpose=False, epa=150, dha=100)
+    product.update(targetGroups=groups, userGroups=["Adults and Children 4 or More Years of Age"])
+    result = build_scored_artifact(product)
+    assert result["quality_pillars_v4"]["dose"]["score"] == 20
+    assert result["quality_pillars_v4"]["evidence"]["score"] == 10.4

@@ -54,7 +54,7 @@ EXPECTED = {
         "cap_evidence": 20.0,
         "purpose_standards": {
             "omega_reviewed_weak": {"pillar_score": 10.4},
-            "triglyceride_strong": {"pillar_score": 20.0},
+            "triglyceride_strong": {"score_eligible": False},
             "prenatal_dha_intake_authority": {"pillar_score": 11.1},
             "prenatal_preterm_birth_outcome": {"score_eligible": False},
             "epa_predominant_depression": {"score_eligible": False},

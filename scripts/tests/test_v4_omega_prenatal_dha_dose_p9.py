@@ -8,6 +8,7 @@ adult products use the 250 mg/day EPA+DHA reference.
 from __future__ import annotations
 
 import sys
+import pytest
 from pathlib import Path
 
 SCRIPTS = Path(__file__).resolve().parents[1]
@@ -50,3 +51,27 @@ def test_prenatal_epa_dominant_product_is_still_judged_on_its_dha():
     out = score_dose(_omega("Prenatal Omega EPA Forte", epa=900, dha=100))
     assert out["metadata"]["prenatal_dha_indication"] == "prenatal_dha"
     assert out["components"]["epa_dha_band"] == 10.0
+
+
+@pytest.mark.parametrize('name,epa,dha,expected', [
+    ('Baby & Me 2 Prenatal DHA & Choline', 0, 250, 20),
+    ('Prenatal SPM DHA', 900, 100, 10),
+    ('Prenatal SPM DHA', 2000, 0, 11.4),
+])
+def test_prenatal_dha_reference_does_not_clear_evidence_population_hold(name, epa, dha, expected):
+    from scoring_v4.scored_artifact import build_scored_artifact
+    from evidence_resolver import resolve_omega_evidence_standard
+    product = {
+        'product_name': name,
+        'ingredient_quality_data': {'ingredients_scorable': [
+            {'name':'EPA','canonical_id':'epa','quantity':epa,'unit':'mg'},
+            {'name':'DHA','canonical_id':'dha','quantity':dha,'unit':'mg'},
+        ]},
+    }
+    held = resolve_omega_evidence_standard(product)
+    assert held['applicability_reason'].startswith('held_')
+    result = build_scored_artifact(product)
+    assert result['quality_pillars_v4']['dose']['score'] == expected
+    assert result['quality_pillars_v4']['evidence']['score'] == 0
+    assert result['quality_pillars_v4']['evidence']['evidence_result_state'] == 'applicability_unestablished'
+
