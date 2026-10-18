@@ -243,6 +243,8 @@
         },
         "calcium": {
           "target_mg": 260.0,
+          "absorption_context_per_administration_mg": 500.0,
+          "absorption_context_source": "https://ods.od.nih.gov/factsheets/Calcium-HealthProfessional/",
           "reference_type": "supplement_contribution_policy",
           "scope": "ordinary_adult_single_nutrient_or_declared_nutrient_purpose",
           "preparation": "elemental",

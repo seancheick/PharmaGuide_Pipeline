@@ -180,7 +180,9 @@ def _dose_contributions(module: Optional[str], metadata: Dict[str, Any], factor:
         out.append({"ingredient": str(entry.get("ingredient") or ""), "assessment": entry.get("assessment"),
                     "reference": label, "reference_kind": kind,
                     **{key: entry.get(key) for key in ("amount_at_minimum", "amount_at_maximum", "amount_unit",
-                                                       "reference_value", "pct_of_reference") if entry.get(key) is not None},
+                                                       "amount_per_serving", "reference_value", "pct_of_reference",
+                                                       "absorption_context_per_administration_mg")
+                       if entry.get(key) is not None},
                     "points": round(_num(entry["credit_raw"]) * factor, 2)})
     for strain in metadata.get("cfu_adequacy_contributions") or []:
         if isinstance(strain, dict) and _num(strain.get("points")) is not None:
@@ -253,6 +255,14 @@ def _dose_receipt_facts(receipt: Dict[str, Any]) -> List[Dict[str, Any]]:
                       **({"detail": _AGGREGATION_COPY[aggregation]} if aggregation in _AGGREGATION_COPY else {})})
     elif aggregation in _AGGREGATION_COPY:
         facts.append({"id": "dose_contributions", "label": "What Dose assessed", "value_display": _AGGREGATION_COPY[aggregation]})
+    for item in contributions:
+        per_serving, context = _num(item.get("amount_per_serving")), _num(item.get("absorption_context_per_administration_mg"))
+        if per_serving is not None and context is not None and per_serving > context:
+            facts.append({"id": "dose_absorption_context", "label": "Absorption context",
+                          "value_display": (
+                              f"One serving provides {per_serving:g} {item.get('amount_unit') or 'mg'} of {item['ingredient']}. "
+                              f"NIH notes the body absorbs calcium best in amounts of {context:g} mg or less at a time. "
+                              "This is context only and does not change the score.")})
     upper = receipt.get("upper_reference")
     adequacy, final = _num(receipt.get("adequacy_before_safety")), _num(receipt.get("final"))
     if upper:

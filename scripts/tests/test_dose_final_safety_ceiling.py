@@ -99,3 +99,13 @@ def test_enriched_row_flags_carry_the_reference_nutrient():
                   "inactiveIngredients": []}
     result = SupplementEnricherV3()._collect_rda_ul_data(product_in, min_servings_per_day=1, max_servings_per_day=1)
     assert result["safety_flags"][0]["reference_nutrient"] == "Zinc"
+
+
+def test_a_neutral_adequacy_under_a_ceiling_takes_the_lower_value():
+    # No benchmark (neutral 11.4) and a 120% exceedance: the cap of 10 applies;
+    # at 160% Dose is 0. The ceiling never lifts a neutral.
+    from test_v4_generic_dose_p132a import _ingredient, _product
+    for pct, expected in ((120.0, 10.0), (160.0, 0.0), (90.0, 11.4)):
+        p = _product(ingredients=[_ingredient(name="Ashwagandha", canonical_id="unbenchmarked_botanical", quantity=300)],
+                     adequacy_results=[], safety_flags=[_flag('Zinc', 'zinc', pct)] if pct > 100 else [])
+        assert dose(p)['score'] == expected, pct

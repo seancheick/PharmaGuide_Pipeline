@@ -84,3 +84,14 @@ def test_one_co_primary_is_scored_on_its_own_benchmark_not_an_accessory():
     assert payload["metadata"]["dose_aggregation"] == "single_primary"
     assert payload["metadata"]["primary_identity"] == "protein"
     assert payload["components"]["sports_primary_active_dose"] == 8.0
+
+
+def test_caffeine_that_is_not_a_primary_still_reaches_the_ceiling_on_the_generic_route():
+    from test_v4_generic_dose_p132a import _ingredient, _product as generic_product
+    p = generic_product(ingredients=[_ingredient(quantity=120),
+                                     {**_ingredient(name="Caffeine", canonical_id="caffeine", quantity=450),
+                                      "raw_source_path": "activeIngredients[caffeine]"}],
+                        adequacy_results=[], safety_flags=[])
+    p["product_name"] = "Magnesium Energy"
+    assert evaluate_dose_safety(p).dose_ceiling()["cap_public"] == 10.0
+    assert build_scored_artifact(p)["quality_pillars_v4"]["dose"]["score"] <= 10.0

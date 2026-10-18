@@ -219,7 +219,7 @@ def _contribution_target(canonical: object, row: Optional[Dict[str, Any]]) -> Op
 
 
 _RECEIPT_EXPOSURE_FIELDS = {"per_day_min": "amount_at_minimum", "per_day_max": "amount_at_maximum",
-                             "unit": "amount_unit"}
+                             "amount": "amount_per_serving", "unit": "amount_unit"}
 
 
 def _row_receipt(row: Dict[str, Any], kind: str) -> Dict[str, Any]:
@@ -236,6 +236,9 @@ def _row_receipt(row: Dict[str, Any], kind: str) -> Dict[str, Any]:
         amount = pct / 100.0 * rda
         detail.update(reference_value=float(target["target_mg"]),
                       pct_of_reference=round(amount / float(target["target_mg"]) * 100.0, 2))
+    if target is not None and target.get("absorption_context_per_administration_mg") is not None:
+        # Plan section 3.1: per-administration absorption is context only.
+        detail["absorption_context_per_administration_mg"] = float(target["absorption_context_per_administration_mg"])
     return {key: value for key, value in detail.items() if value is not None}
 
 

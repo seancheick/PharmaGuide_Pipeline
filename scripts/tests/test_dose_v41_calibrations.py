@@ -121,3 +121,35 @@ def test_a_prenatal_title_that_mentions_baby_still_uses_the_prenatal_dha_referen
     payload = omega_dose(product)
     assert payload['metadata']['adequacy_reference']['purpose'] == 'prenatal_dha'
     assert payload['components']['epa_dha_band'] == 20.0
+
+
+def _calcium_serving(per_serving, servings):
+    p = _mineral('calcium', 'Calcium', per_serving * servings, 1000, 2000)
+    row = p['rda_ul_data']['adequacy_results'][0]
+    row.update(amount=per_serving, per_day_min=per_serving * servings, per_day_max=per_serving * servings)
+    p['serving_basis'] = {'min_servings_per_day': servings, 'max_servings_per_day': servings,
+                          'servings_per_day_source': 'directions'}
+    return p
+
+
+def _facts(product):
+    dose = build_scored_artifact(product)['quality_pillars_v4']['dose']
+    return dose['score'], {f['id']: f['value_display'] for f in dose['explanation']['facts']}
+
+
+def test_calcium_above_500_mg_per_serving_is_absorption_context_only():
+    single, facts = _facts(_calcium_serving(600, 1))
+    divided, divided_facts = _facts(_calcium_serving(300, 2))
+    assert single == divided == 20.0  # no numerical penalty
+    assert 'does not change the score' in facts['dose_absorption_context']
+    assert '500 mg or less at a time' in facts['dose_absorption_context']
+    assert 'dose_absorption_context' not in divided_facts  # 300 mg per serving
+
+
+def test_niacinamide_ceiling_copy_does_not_claim_flushing():
+    from test_dose_final_safety_ceiling import product as ceiling_product
+    p = ceiling_product(130.0, flags=[{'nutrient': 'Niacinamide', 'reference_nutrient': 'Niacin',
+                                       'pct_ul': 130.0, 'ul': 35, 'ul_gate_eligible': True}])
+    dose = build_scored_artifact(p)['quality_pillars_v4']['dose']
+    text = dose['reason'] + ' '.join(f['value_display'] for f in dose['explanation']['facts'])
+    assert 'Niacin' in dose['reason'] and 'flush' not in text.lower()
