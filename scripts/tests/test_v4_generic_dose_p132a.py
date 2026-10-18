@@ -1766,3 +1766,142 @@ def test_shared_unread_guard_retains_typed_product_evidence_owner():
     product['product_scoring_evidence'] = [row]
     product['product_name'] = 'Vitamin C + Digestive enzyme blend'
     assert _unread_declared_purpose_rows(product) == []
+
+
+def _named_eaa_group_product(*, unavailable=0, hidden=False):
+    from scoring_v4.modules.sports_helpers import EAA_CANONICALS
+
+    rows = [_ingredient(name=key.replace('_', ' '), canonical_id=key,
+                        quantity=(0 if hidden else None) if index < unavailable else 1000,
+                        unit='NP' if hidden and index < unavailable else 'mg',
+                        cleaner_row_role='nested_display_only' if hidden and index < unavailable else 'active_scorable',
+                        raw_source_path=f'ingredientRows[{index}]')
+            for index, key in enumerate(sorted(EAA_CANONICALS))]
+    rows.extend([_ingredient(name='L-Theanine', canonical_id='l_theanine', quantity=100),
+                 _ingredient(name='Creatine', canonical_id='creatine_monohydrate', quantity=3000)])
+    return _product(ingredients=rows, supp_type='general_supplement',
+                    product_name='L-Theanine + Creatine + EAA', fullName='L-Theanine + Creatine + EAA',
+                    primary_type='general_supplement', supplement_taxonomy={'primary_type':'general_supplement'})
+
+
+@pytest.mark.parametrize('unavailable', [1, 4, 9])
+def test_named_eaa_group_keeps_lost_member_amounts_in_generic_and_public_dose(unavailable):
+    from scoring_v4.modules.generic_dose import _score_declared_purpose_window, score_dose
+    from scoring_v4.scored_artifact import build_scored_artifact
+
+    product = _named_eaa_group_product(unavailable=unavailable)
+    window = _score_declared_purpose_window(product)
+    assert window[2] == 3
+    assert [r['ingredient'] for r in window[7]].count('eaa') == 1
+    assert next(r for r in window[7] if r['ingredient'] == 'eaa')['assessment'] == 'unresolved_source_quantity'
+    assert score_dose(product)['score'] is None
+    artifact = build_scored_artifact(product)
+    dose = artifact['_v4_module_breakdown']['dimensions']['dose']
+    assert dose['score'] is None
+    assert dose['metadata']['reason_code'] == 'unresolved_source_quantity'
+    assert artifact['quality_assessment_status'] == 'partial' or artifact['quality_score_status'] == 'not_scored'
+
+
+@pytest.mark.parametrize('unavailable', [0, 1, 4, 9])
+def test_named_eaa_group_has_one_vote_with_disclosed_or_positively_hidden_members(unavailable):
+    from scoring_v4.modules.generic_dose import _score_declared_purpose_window, score_dose
+
+    product = _named_eaa_group_product(unavailable=unavailable, hidden=True)
+    window = _score_declared_purpose_window(product)
+    assert window[2] == 3
+    assert {r['ingredient'] for r in window[7]} == {'eaa', 'l_theanine', 'creatine_monohydrate'}
+    eaa = next(r for r in window[7] if r['ingredient'] == 'eaa')
+    assert eaa['credit_raw'] == pytest.approx(NEUTRAL)
+    assert eaa['assessment'] == ('hidden_amount_neutral' if unavailable else 'no_benchmark_neutral')
+    assert 'amount_per_serving' not in eaa
+    assert score_dose(product)['score'] is not None
+
+
+def test_one_unresolved_hidden_eaa_member_keeps_the_source_hold():
+    from scoring_v4.modules.generic_dose import score_dose
+    product = _named_eaa_group_product(unavailable=4, hidden=True)
+    product['ingredient_quality_data']['ingredients'][0]['quantity_operator'] = 'ambiguous'
+    assert score_dose(product)['score'] is None
+
+
+@pytest.mark.parametrize('unavailable', [0, 4])
+def test_positive_but_unresolved_eaa_member_cannot_complete_the_group(unavailable):
+    from scoring_v4.modules.generic_dose import score_dose
+    product = _named_eaa_group_product(unavailable=unavailable, hidden=True)
+    product['ingredient_quality_data']['ingredients'][8]['quantity_operator'] = 'unknown'
+    assert score_dose(product)['score'] is None
+
+
+def test_source_qualified_whole_eaa_owner_keeps_exactly_one_generic_vote():
+    from test_v4_sports_dose_p171 import _nested_complete_eaa_source
+    from scoring_v4.modules.generic_dose import _score_declared_purpose_window
+
+    product = _nested_complete_eaa_source()
+    product['product_name'] = product['fullName'] = 'EAA'
+    window = _score_declared_purpose_window(product)
+    assert window[2] == 1
+    assert len(window[7]) == 1
+    assert window[7][0]['ingredient'] == 'essential_amino_acids'
+    assert window[0] == pytest.approx(NEUTRAL)
+
+
+def test_exact_strict_amino_source_precedes_a_stale_unresolved_mirror_twin():
+    from copy import deepcopy
+    from scoring_v4.modules.generic_dose import _score_declared_purpose_window, score_dose
+
+    product = _named_eaa_group_product()
+    product['ingredient_quality_data']['ingredients'] = deepcopy(product['ingredient_quality_data']['ingredients'])
+    product['ingredient_quality_data']['ingredients'][0]['quantity_operator'] = 'unknown'
+    window = _score_declared_purpose_window(product)
+    assert window[2] == 3
+    assert next(r for r in window[7] if r['ingredient'] == 'eaa')['assessment'] == 'no_benchmark_neutral'
+    assert score_dose(product)['score'] is not None
+
+
+def test_unnamed_eaa_members_do_not_create_an_extra_purpose_or_hold():
+    from scoring_v4.modules.generic_dose import _score_declared_purpose_window, score_dose
+    product = _named_eaa_group_product(unavailable=9)
+    product['product_name'] = product['fullName'] = 'L-Theanine + Creatine'
+    window = _score_declared_purpose_window(product)
+    assert window[2] == 2
+    assert {r['ingredient'] for r in window[7]} == {'l_theanine', 'creatine_monohydrate'}
+    assert score_dose(product)['score'] is not None
+
+
+def _named_bcaa_with_whole_preparation(*, hidden=False, qualified=True, unresolved=False):
+    from scoring_v4.modules.sports_helpers import BCAA_CANONICALS
+    product = _named_eaa_group_product(unavailable=9 if hidden else 0, hidden=hidden)
+    rows = [r for r in product['ingredient_quality_data']['ingredients']
+            if r['canonical_id'] in BCAA_CANONICALS]
+    owner = _ingredient(name='BCAA', canonical_id='branched_chain_amino_acids', quantity=7000,
+                        raw_source_path='ingredientRows[20]')
+    if qualified:
+        owner.update(scoring_input_kind='product_level_evidence', evidence_type='blend_anchor_mass',
+                     evidence_scope='blend_level', dose_class='therapeutic_mass', scoreable=True, dose_value=7000)
+    if unresolved:
+        owner['quantity_operator'] = 'unknown'
+    rows.append(owner)
+    product['ingredient_quality_data']['ingredients'] = rows
+    product['ingredient_quality_data']['ingredients_scorable'] = rows
+    product['product_name'] = product['fullName'] = 'BCAA'
+    return product
+
+
+@pytest.mark.parametrize('hidden', [False, True])
+def test_qualified_bcaa_preparation_has_one_vote_despite_split_member_rows(hidden):
+    from scoring_v4.modules.generic_dose import _score_declared_purpose_window
+    product = _named_bcaa_with_whole_preparation(hidden=hidden)
+    window = _score_declared_purpose_window(product)
+    assert window[2] == len(window[7]) == 1
+    assert window[7][0]['ingredient'] == 'branched_chain_amino_acids'
+    assert window[0] == pytest.approx(NEUTRAL)
+
+
+@pytest.mark.parametrize('qualified,unresolved', [(False, False), (True, True)])
+def test_unqualified_or_unresolved_bcaa_header_cannot_suppress_missing_member_hold(qualified, unresolved):
+    from scoring_v4.modules.generic_dose import _score_declared_purpose_window, score_dose
+    product = _named_bcaa_with_whole_preparation(qualified=qualified, unresolved=unresolved)
+    product['ingredient_quality_data']['ingredients'][0]['quantity'] = None
+    window = _score_declared_purpose_window(product)
+    assert any(r['ingredient'] == 'bcaa' and r['assessment'] == 'unresolved_source_quantity' for r in window[7])
+    assert score_dose(product)['score'] is None

@@ -3228,7 +3228,9 @@ DETERMINISTIC_NON_EFFICACY_CANONICALS = frozenset({
 })
 
 
-def get_assessable_evidence_ingredients(product: Mapping[str, Any]) -> List[Dict[str, Any]]:
+def get_assessable_evidence_ingredients(
+    product: Mapping[str, Any], *, source_bound: bool = False,
+) -> List[Dict[str, Any]]:
     """Return label rows eligible for clinical evidence assessment.
 
     The label-row fallback of ``get_evidence_subject_rows``, which is the one
@@ -3255,18 +3257,59 @@ def get_assessable_evidence_ingredients(product: Mapping[str, Any]) -> List[Dict
     - Preserves source provenance without inferring dose or fabricating IDs
     - Gracefully falls back to ``get_scoring_ingredients`` when the mirror is absent
       (pre-enrichment test fixtures that only supply ``ingredients_scorable``)
+
+    Dose can request ``source_bound`` membership: when an original active tree
+    exists, a mirror occurrence must still match one eligible current source
+    path and canonical identity. A stale mirror cannot repair a lost profile.
     """
     data = dict(product) if isinstance(product, Mapping) else {}
     quality = _safe_dict(data.get("ingredient_quality_data"))
     rows = quality.get("ingredients")
     if not isinstance(rows, list):
         # Pre-enrichment fixture fallback: mirror not present, use scored rows.
-        return list(get_scoring_ingredients(data, strict=True).rows)
+        rows = list(get_scoring_ingredients(data, strict=True).rows)
+        if not source_bound:
+            return rows
+
+    current_sources = None
+    eligible_sources = set()
+    if source_bound and isinstance(data.get("activeIngredients"), list):
+        current_sources = {}
+        source_rows = _source_tree_rows(data)
+        for source_row in source_rows:
+            key = (str(source_row.get("raw_source_path") or ""), _norm(source_row.get("canonical_id")))
+            current_sources.setdefault(key, []).append(source_row)
+        eligible_sources = {
+            (str(source_row.get("raw_source_path") or ""), _norm(source_row.get("canonical_id")))
+            for source_row in get_assessable_evidence_ingredients(
+                {"ingredient_quality_data": {"ingredients": source_rows}}
+            )
+        }
 
     result = []
     for row in rows:
         if not isinstance(row, Mapping):
             continue
+        if current_sources is not None:
+            key = (str(row.get("raw_source_path") or ""), _norm(row.get("canonical_id")))
+            sources = current_sources.get(key, [])
+            if not key[0] or len(sources) != 1 or key not in eligible_sources:
+                continue
+            disposition = sources[0].get("identity_disposition")
+            if disposition is not None and not is_identity_scoreable(disposition):
+                continue
+            source = sources[0]
+            if (source.get("is_nested_ingredient") or source.get("isNestedIngredient")
+                    or source.get("parent_blend") or source.get("parentBlend")):
+                # Moving a declared child outside its source tree does not
+                # turn the stale member into an independent preparation.
+                parent_path = _aggregate_parent_source_path(source)
+                if not key[0].startswith(parent_path + "."):
+                    continue
+            # Binding selects the current occurrence, including its quantity
+            # qualifications. A matching identity cannot launder stale amounts
+            # or erase an unresolved operator from the source.
+            row = source
 
         # 1. Active section only: drop inactives and excipients
         if _norm(row.get("source_section")) == "inactive":

@@ -227,6 +227,91 @@ def test_an_individually_named_leucine_purpose_keeps_its_own_vote():
     assert {row["ingredient"] for row in dose["metadata"]["dose_contributions"]} == {"l_leucine", "creatine"}
 
 
+@pytest.mark.parametrize("group,missing", [("bcaa", 1), ("bcaa", 3), ("eaa", 1), ("eaa", 4), ("eaa", 9)])
+def test_named_amino_preparation_keeps_missing_member_amounts(group, missing):
+    from scoring_v4.modules.sports_helpers import BCAA_CANONICALS, EAA_CANONICALS
+    from scoring_v4.scored_artifact import build_scored_artifact
+
+    members = sorted(BCAA_CANONICALS if group == "bcaa" else EAA_CANONICALS)
+    rows = [_row(key, None if index < missing else 1000, "mg")
+            for index, key in enumerate(members)]
+    product = _product(_row("l_theanine", 100, "mg"), _row("creatine_monohydrate", 3, "g"), *rows,
+                       name=f"L-Theanine + Creatine + {group.upper()}")
+    artifact = build_scored_artifact(product)
+    dose = artifact["_v4_module_breakdown"]["dimensions"]["dose"]
+    assert dose["score"] is None
+    assert dose["metadata"]["reason_code"] == "unresolved_source_quantity"
+    direct = score_dose(product)
+    assert direct["score"] is None
+    group_vote = next(row for row in direct["metadata"]["dose_contributions"] if row["ingredient"] == group)
+    assert "amount_per_serving" not in group_vote
+    assert artifact["quality_assessment_status"] == "partial" or artifact["quality_score_status"] == "not_scored"
+
+
+@pytest.mark.parametrize("group", ["bcaa", "eaa"])
+@pytest.mark.parametrize("lost", [False, True])
+@pytest.mark.parametrize("source_only", [False, True])
+def test_amino_preparation_distinguishes_hidden_members_from_lost_members(group, lost, source_only):
+    from scoring_v4.modules.sports_helpers import BCAA_CANONICALS, EAA_CANONICALS
+
+    members = sorted(BCAA_CANONICALS if group == "bcaa" else EAA_CANONICALS)
+    rows = [_row(key, 1000, "mg") for key in members]
+    rows[0].update(quantity=None, unit="NP", isNestedIngredient=True,
+                   parentBlend="Amino Blend", is_proprietary_blend=True)
+    if lost:
+        rows[1]["quantity"] = None
+    product = _product(*rows, name=group.upper())
+    if source_only:
+        rows[0].update(cleaner_row_role="nested_display_only", score_eligible_by_cleaner=False,
+                       is_proprietary_blend=False)
+        product["ingredient_quality_data"]["ingredients"] = rows
+        product["ingredient_quality_data"]["ingredients_scorable"] = rows[1:]
+    dose = score_dose(product)
+    vote = next(row for row in dose["metadata"]["dose_contributions"] if row["ingredient"] == group)
+    if lost:
+        assert dose["score"] is None
+        assert dose["metadata"]["reason_code"] == "unresolved_source_quantity"
+    else:
+        assert dose["score"] == 11.4
+        assert vote["assessment"] == "hidden_amount_neutral"
+    assert "amount_per_serving" not in vote
+
+
+@pytest.mark.parametrize("group", ["bcaa", "eaa"])
+def test_amino_preparation_cannot_sum_away_an_unknown_quantity_operator(group):
+    from scoring_v4.modules.sports_helpers import BCAA_CANONICALS, EAA_CANONICALS
+
+    rows = [_row(key, 1000, "mg") for key in sorted(BCAA_CANONICALS if group == "bcaa" else EAA_CANONICALS)]
+    rows[0]["quantity_operator"] = "unknown"
+    dose = score_dose(_product(*rows, name=group.upper()))
+    assert dose["score"] is None
+    assert dose["metadata"]["reason_code"] == "unresolved_source_quantity"
+
+
+@pytest.mark.parametrize("group", ["bcaa", "eaa"])
+@pytest.mark.parametrize("source_fact", [{"quantity_operator": "unknown"},
+                                        {"quantity_operator": "ambiguous"},
+                                        {"dose_data_quality": {"status": "unresolved_unit"}}])
+def test_amino_source_uncertainty_cannot_be_erased_by_a_hidden_mirror(group, source_fact):
+    from copy import deepcopy
+    from scoring_v4.modules.generic_dose import score_dose as generic_dose
+    from scoring_v4.modules.sports_helpers import BCAA_CANONICALS, EAA_CANONICALS
+
+    rows = [_row(key, 1000, "mg") for key in sorted(BCAA_CANONICALS if group == "bcaa" else EAA_CANONICALS)]
+    for i, row in enumerate(rows):
+        row["raw_source_path"] = f"ingredientRows[0].nestedRows[{i}]"
+    rows[0].update(quantity=0, unit="NP", cleaner_row_role="nested_display_only",
+                   score_eligible_by_cleaner=False, isNestedIngredient=True, parentBlend="Amino Blend")
+    product = _product(*rows[1:], name=group.upper())
+    product["ingredient_quality_data"]["ingredients"] = rows
+    product["activeIngredients"] = deepcopy(rows)
+    product["activeIngredients"][0].update(source_fact)
+    for scorer in (score_dose, generic_dose):
+        dose = scorer(product)
+        assert dose["score"] is None
+        assert dose["metadata"]["reason_code"] == "unresolved_source_quantity"
+
+
 def test_onlist_underdosed_active_is_not_rescued_by_proxy() -> None:
     # An under-target creatine (1 g, on-list) keeps proportional contribution; the
     # off-list proxy floor must NOT rescue it, because creatine has a sports band.

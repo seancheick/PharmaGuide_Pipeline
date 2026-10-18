@@ -2757,3 +2757,30 @@ def test_protein_facts_total_cannot_supply_its_own_product_intent():
     assert not any(r.get("reason") == "declared_nutrition_protein_mass"
                    for r in derive_product_scoring_evidence(product))
     assert build_scored_artifact(product)["_v4_module"] != "sports"
+
+
+@pytest.mark.parametrize("change", ["missing", "moved", "unresolved", "inactive", "descriptor"])
+def test_dose_source_membership_cannot_borrow_a_stale_identity_mirror(change):
+    from copy import deepcopy
+    from scoring_input_contract import get_assessable_evidence_ingredients
+
+    mirror = [{"canonical_id": key, "name": key, "quantity": 0, "unit": "NP",
+               "raw_source_path": f"ingredientRows[0].nestedRows[{i}]",
+               "source_section": "active", "cleaner_row_role": "nested_display_only",
+               "identity_disposition": "clean", "isNestedIngredient": True}
+              for i, key in enumerate(("l_leucine", "l_isoleucine", "l_valine"))]
+    current = deepcopy(mirror)
+    if change == "missing":
+        current.pop()
+    elif change == "moved":
+        current[-1]["raw_source_path"] = "ingredientRows[9]"
+    elif change == "unresolved":
+        current[-1]["identity_disposition"] = "unresolved"
+    elif change == "inactive":
+        current[-1]["source_section"] = "inactive"
+    else:
+        current[-1]["cleaner_row_role"] = "source_descriptor"
+    product = {"activeIngredients": current, "ingredient_quality_data": {"ingredients": mirror}}
+    assert len(get_assessable_evidence_ingredients(product)) == 3
+    bound = get_assessable_evidence_ingredients(product, source_bound=True)
+    assert {row["canonical_id"] for row in bound} == {"l_leucine", "l_isoleucine"}

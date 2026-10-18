@@ -25,7 +25,9 @@ from scoring_v4.modules.collagen_profile import (
 from scoring_v4.modules.generic_helpers import (
     get_active_ingredients,
     has_usable_individual_dose,
+    missing_doses_are_label_hidden,
     nutrient_delivering_rows,
+    delivers_its_nutrient,
     unbenchmarked_dose_credit,
     _as_float,
     _norm_text,
@@ -37,9 +39,11 @@ from scoring_input_contract import (
     ROLE_PRIMARY,
     classify_ingredient_roles,
     dose_disclosure_status,
+    get_assessable_evidence_ingredients,
     mass_primary_label_actives,
     is_lent_blend_mass,
     source_linked_rows,
+    scoring_row_key,
 )
 from scoring_v4.dose_safety import resolve_dose_safety
 from scoring_v4.exposure import quantity_is_unresolved
@@ -280,18 +284,46 @@ def _score_declared_purpose_window(
     # A declared mixture keeps one purpose vote when its clinical numerical
     # benchmark is retired. Identity/purpose and amount ownership are separate
     # from efficacy eligibility; use the existing role and mixture owners.
-    from scoring_v4.modules.sports_helpers import BCAA_CANONICALS, group_bcaa, group_eaa
-    bcaa_rows = [row for row in rows if _norm_text(row.get("canonical_id")) in BCAA_CANONICALS]
+    from scoring_v4.modules.sports_helpers import BCAA_CANONICALS, EAA_CANONICALS, group_bcaa, group_eaa
+    # Source-owned named blend members retain their identities even when the
+    # strict dose-bearing projection excludes their hidden amounts. Supplement
+    # group membership only; ordinary purpose rows still use the strict owner.
+    amino_sources = {scoring_row_key(row, index): row
+                     for index, row in enumerate(get_assessable_evidence_ingredients(product, source_bound=True))
+                     if delivers_its_nutrient(row)}
+    # The strict projection owns a source occurrence over its legacy mirror.
+    amino_sources.update({scoring_row_key(row, index): row for index, row in enumerate(rows)})
+    eaa_rows = [row for row in amino_sources.values() if _norm_text(row.get("canonical_id")) in EAA_CANONICALS]
+    strict_eaa = group_eaa(rows)
+    eaa_identity = {"canonical_id": "essential_amino_acids", "name": "EAA"}
+    eaa_role = classify_ingredient_roles(product, module="generic", rows=[eaa_identity])[0]
+    eaa_declared = (
+        aggregate is None
+        and not strict_eaa["aggregate_identity_complete"]
+        and eaa_role.get("role") in {ROLE_PRIMARY, ROLE_CLAIM_PROMINENT}
+        and EAA_CANONICALS <= {_norm_text(row.get("canonical_id")) for row in eaa_rows}
+    )
+    bcaa_rows = [row for row in amino_sources.values() if _norm_text(row.get("canonical_id")) in BCAA_CANONICALS]
     bcaa_identity = {"canonical_id": "branched_chain_amino_acids", "name": "BCAA"}
     bcaa_role = classify_ingredient_roles(product, module="generic", rows=[bcaa_identity])[0]
+    bcaa_whole_owned = any(
+        _norm_text(row.get("canonical_id")) == "branched_chain_amino_acids"
+        and not quantity_is_unresolved(row)
+        and _product_evidence_dose_credit(row)[0] > 0
+        for row in rows
+    )
     bcaa_declared = (
         aggregate is None
+        and not eaa_declared
+        and not bcaa_whole_owned
         and bcaa_role.get("role") in {ROLE_PRIMARY, ROLE_CLAIM_PROMINENT}
         and BCAA_CANONICALS <= {_norm_text(row.get("canonical_id")) for row in bcaa_rows}
-        and not group_eaa(rows)["complete"]
+        and not strict_eaa["complete"]
     )
-    if bcaa_declared:
-        aggregate_members.update(BCAA_CANONICALS)
+    amino_group = (("eaa", eaa_rows, group_eaa) if eaa_declared
+                   else ("bcaa", bcaa_rows, group_bcaa) if bcaa_declared else None)
+    if amino_group:
+        aggregate_members.update(EAA_CANONICALS if eaa_declared else BCAA_CANONICALS)
     roles = classify_ingredient_roles(product, module="generic", rows=rows)
     purpose_rows = [
         row for row, role in zip(rows, roles)
@@ -299,7 +331,7 @@ def _score_declared_purpose_window(
         and not row.get("is_parent_total")
         and _norm_text(row.get("canonical_id")) not in aggregate_members
     ]
-    if not purpose_rows and aggregate is None and not bcaa_declared:
+    if not purpose_rows and aggregate is None and amino_group is None:
         return None, [], 0, [], [], [], [], []
 
     # A physical purpose may have a compatibility projection of the same
@@ -331,21 +363,17 @@ def _score_declared_purpose_window(
                         **{key: value for key, value in detail.items() if value is not None}})
     clinical_assessments: List[Dict[str, Any]] = []
     specialized_assessments: List[Dict[str, Any]] = []
-    if bcaa_declared:
-        measured = group_bcaa(bcaa_rows)
-        hidden_members = [row for row in bcaa_rows if not has_usable_individual_dose(row)]
-        hidden_only = bool(hidden_members) and all(
-            not quantity_is_unresolved(row)
-            and dose_disclosure_status(row) == "not_disclosed_blend"
-            for row in hidden_members
-        )
-        if measured["complete"] or hidden_only:
+    if amino_group:
+        identity, members, measure = amino_group
+        measured = measure(members)
+        hidden_only = missing_doses_are_label_hidden(members)
+        if not any(quantity_is_unresolved(row) for row in members) and (measured["complete"] or hidden_only):
             credit = unbenchmarked_dose_credit()
-            vote("bcaa", "hidden_amount_neutral" if hidden_only else "no_benchmark_neutral", credit)
+            vote(identity, "hidden_amount_neutral" if hidden_only else "no_benchmark_neutral", credit)
             fallback_values.append(credit)
-            (hidden if hidden_only else unbenchmarked).append("bcaa")
+            (hidden if hidden_only else unbenchmarked).append(identity)
         else:
-            vote("bcaa", "unresolved_source_quantity", 0.0)
+            vote(identity, "unresolved_source_quantity", 0.0)
     if aggregate is not None:
         # Dose V4.1 section 2.2: the highest studied dose is no upper limit;
         # above it adequacy plateaus. Excess is the product-level ceiling's.
@@ -457,11 +485,11 @@ def _score_declared_purpose_window(
             hidden.append(key)
 
     if not contributions:
-        return 0.0, sorted(unbenchmarked), len(purposes) + int(aggregate is not None) + int(bcaa_declared), clinical_assessments, specialized_assessments, fallback_values, sorted(hidden), entries
+        return 0.0, sorted(unbenchmarked), len(purposes) + int(aggregate is not None) + int(amino_group is not None), clinical_assessments, specialized_assessments, fallback_values, sorted(hidden), entries
     return (
         round(_clamp(0.0, CAP_SUPPLEMENTAL_WINDOW, sum(contributions) / len(contributions)), 4),
         sorted(unbenchmarked),
-        len(purposes) + int(aggregate is not None) + int(bcaa_declared),
+        len(purposes) + int(aggregate is not None) + int(amino_group is not None),
         clinical_assessments,
         specialized_assessments,
         fallback_values,

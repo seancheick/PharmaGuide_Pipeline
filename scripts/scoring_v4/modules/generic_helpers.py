@@ -22,12 +22,14 @@ import re
 from typing import Any, Dict, Iterator, List, Optional, Tuple
 
 from scoring_input_contract import (
+    dose_disclosure_status,
     get_scoring_ingredients,
     get_source_score_eligible_active_rows,
     is_lent_blend_mass,
 )
 from scoring_reference_resolver import delivers_parent_nutrient, iqm_reference_entry
 from serving_frequency import resolve_daily_serving_range
+from scoring_v4.exposure import quantity_is_unresolved
 
 
 @lru_cache(maxsize=1)
@@ -304,6 +306,17 @@ def has_usable_individual_dose(ingredient: Dict[str, Any], *, allow_zero: bool =
     if unit.replace(" ", "") in _DOSE_UNIT_WHITELIST:
         return True
     return bool(ingredient.get("has_dose", False))
+
+
+def missing_doses_are_label_hidden(rows: List[Dict[str, Any]]) -> bool:
+    """Every unavailable member amount is positively label-hidden, not lost."""
+    if any(quantity_is_unresolved(row) for row in rows):
+        return False
+    missing = [row for row in rows if not has_usable_individual_dose(row)]
+    return bool(missing) and all(
+        dose_disclosure_status(row) == "not_disclosed_blend"
+        for row in missing
+    )
 
 
 def is_scorable(ingredient: Dict[str, Any]) -> bool:
