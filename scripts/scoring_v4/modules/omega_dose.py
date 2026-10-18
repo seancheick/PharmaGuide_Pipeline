@@ -41,7 +41,12 @@ import re
 from typing import Any, Dict, List, Optional, Tuple
 
 from evidence_resolver import resolve_omega_evidence_standard
-from scoring_input_contract import PRENATAL_DHA_TARGET_MG, epa_dha_amounts_per_serving
+from scoring_input_contract import (
+    PRENATAL_DHA_TARGET_MG, epa_dha_amounts_per_serving,
+    get_source_score_eligible_active_rows, has_source_printed_amount,
+    has_unresolved_identity_reason,
+)
+from scoring_v4.exposure import row_exposure
 from scoring_v4.modules.generic_helpers import (
     archetype_dose_reference,
     daily_serving_range,
@@ -89,6 +94,22 @@ def _dose_context(per_day_mg: float, bands: List[Dict[str, Any]]) -> Tuple[str, 
         if per_day_mg >= float(band.get("min_mg_day", 0) or 0):
             return str(band.get("label") or ""), band.get("flag")
     return "below_efsa_ai", None
+
+
+def _prenatal_dha_is_source_printed_zero(product: Dict[str, Any]) -> bool:
+    """Every retained DHA owner must prove an exact label zero, not a default."""
+    rows = [row for row in get_source_score_eligible_active_rows(product)
+            if str(row.get("canonical_id") or "").strip().lower() == "dha"]
+    if not rows:
+        return False
+    for row in rows:
+        if (has_unresolved_identity_reason(row)
+                or not has_source_printed_amount(row, allow_zero=True)):
+            return False
+        exposure = row_exposure(product, row, basis="per_use", unit="mg")
+        if not exposure.exact or exposure.per_serving_amount != 0:
+            return False
+    return True
 
 
 def score_dose(product: Any) -> Dict[str, Any]:
@@ -154,7 +175,7 @@ def score_dose(product: Any) -> Dict[str, Any]:
         with dose_reference_scope(archetype_dose_reference("omega")):
             band_score = unbenchmarked_dose_credit()
         reference = {"purpose": "child_or_baby", "curve": "completed_no_benchmark_neutral"}
-    elif prenatal and dha_ps <= 0:
+    elif prenatal and dha_ps <= 0 and not _prenatal_dha_is_source_printed_zero(product):
         # Combined EPA+DHA cannot stand in for the undisclosed prenatal DHA.
         with dose_reference_scope(archetype_dose_reference("omega")):
             band_score = unbenchmarked_dose_credit()

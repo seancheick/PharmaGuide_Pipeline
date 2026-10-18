@@ -75,3 +75,49 @@ def test_prenatal_dha_reference_does_not_clear_evidence_population_hold(name, ep
     assert result['quality_pillars_v4']['evidence']['score'] == 0
     assert result['quality_pillars_v4']['evidence']['evidence_result_state'] == 'applicability_unestablished'
 
+
+def _source_zero_prenatal_dha():
+    product = _omega("Prenatal SPM DHA", epa=2000, dha=0)
+    row = product["ingredient_quality_data"]["ingredients"][0]
+    row.update(raw_source_path="ingredientRows[0]", score_eligible_by_cleaner=True,
+               cleaner_row_role="active_scorable", raw_taxonomy={
+        "quantityVariants": [{"quantity": 0, "unit": "mg", "operator": "=",
+                              "quantity_parsed": True, "selected_for_analysis": True}]})
+    return product
+
+
+def test_source_printed_zero_prenatal_dha_is_not_a_hidden_amount():
+    from scoring_v4.scored_artifact import build_scored_artifact
+    product = _source_zero_prenatal_dha()
+    assert score_dose(product)["score"] == 0
+    assert build_scored_artifact(product)["quality_pillars_v4"]["dose"]["score"] == 0
+
+
+@pytest.mark.parametrize("change", ["np", "missing_source", "ambiguous", "unparsed", "has_dose", "descriptor"])
+def test_unqualified_zero_cannot_become_a_known_prenatal_dha_amount(change):
+    product = _source_zero_prenatal_dha()
+    row = product["ingredient_quality_data"]["ingredients"][0]
+    if change == "np":
+        row["unit"] = row["raw_taxonomy"]["quantityVariants"][0]["unit"] = "NP"
+    elif change == "missing_source":
+        row.pop("raw_source_path")
+    elif change == "ambiguous":
+        row["quantity_operator"] = "ambiguous"
+    elif change == "unparsed":
+        row["raw_taxonomy"]["quantityVariants"][0]["quantity_parsed"] = False
+    elif change == "has_dose":
+        row["has_dose"] = True
+        row.pop("raw_source_path")
+    elif change == "descriptor":
+        row.update(score_eligible_by_cleaner=False, cleaner_row_role="source_descriptor")
+    out = score_dose(product)
+    assert out["metadata"]["adequacy_reference"]["reason"] == "prenatal_dha_amount_not_disclosed"
+
+
+def test_one_printed_zero_cannot_hide_another_unresolved_dha_owner():
+    product = _source_zero_prenatal_dha()
+    product["ingredient_quality_data"]["ingredients"].append(
+        {"name": "DHA", "canonical_id": "dha", "quantity": 0, "unit": "NP",
+         "raw_source_path": "ingredientRows[1]", "score_eligible_by_cleaner": True,
+         "cleaner_row_role": "active_scorable"})
+    assert score_dose(product)["metadata"]["adequacy_reference"]["reason"] == "prenatal_dha_amount_not_disclosed"
