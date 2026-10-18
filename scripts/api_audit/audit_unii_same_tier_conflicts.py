@@ -23,7 +23,9 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, Iterable
 
-PLACEHOLDER_UNIIS = frozenset({"", "0", "1"})
+sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
+from normalization import normalize_unii  # noqa: E402
+
 IDENTITY_DESCRIPTOR_TOKENS = frozenset({
     "botanical",
     "std",
@@ -88,18 +90,6 @@ class SameTierGroup:
     action: str
     reason: str
     records: tuple[UniiRecord, ...]
-
-
-def normalize_unii(value: Any) -> str | None:
-    """Canonicalize a UNII string and reject DSLD placeholders."""
-    if not isinstance(value, str):
-        return None
-    canon = value.strip().upper()
-    if canon in PLACEHOLDER_UNIIS:
-        return None
-    if len(canon) != 10 or not canon.isalnum():
-        return None
-    return canon
 
 
 def extract_unii(entry: dict[str, Any]) -> str | None:

@@ -3,7 +3,8 @@
 Sprint 1 regression tests for UNII-first matching + alternateNames fallback.
 
 Covers:
-  - `_normalize_unii` canonicalization (cleaner + enricher copies must agree)
+  - `normalization.normalize_unii` canonicalization: the one UNII normalizer
+    every stage and audit calls (no copies anywhere else)
   - Placeholder rejection (None, "", "0", "1") and malformed UNIIs
   - `_unii_to_payload_lookup` index construction (priority order, collision
     behavior, cross-DB indexing)
@@ -16,6 +17,7 @@ These tests are the gate for the pre-Sprint-1 blocker rule (no critical
 UNII data-quality findings) AND prove Tier-0 matching behaves as designed.
 """
 
+import re
 import sys
 from pathlib import Path
 
@@ -27,17 +29,15 @@ sys.path.insert(0, str(SCRIPTS_DIR))
 
 
 # ============================================================================
-# Section 1 — _normalize_unii contract (cleaner + enricher must agree)
+# Section 1 — normalization.normalize_unii: one UNII normalizer
 # ============================================================================
+# The cleaner, the enricher and three api_audit scripts each carried a copy of
+# this function and of its placeholder set (architecture audit 2026-10-17,
+# AUDIT.md H #2, R2). scripts/normalization.py, the declared only normalizer,
+# owns both now; the old "cleaner and enricher copies agree" check became the
+# no-copies guard below.
 
-
-@pytest.fixture(scope="module")
-def normalize_unii_pair():
-    """Both copies of _normalize_unii — must return identical results."""
-    from enhanced_normalizer import _normalize_unii as cleaner_norm
-    from enrich_supplements_v3 import _normalize_unii as enricher_norm
-    return cleaner_norm, enricher_norm
-
+import normalization  # noqa: E402
 
 CANONICALIZATION_CASES = [
     # (input, expected_normalized_or_None)
@@ -67,55 +67,51 @@ MALFORMED_CASES = [
 ]
 
 
-@pytest.mark.parametrize("inp,expected", CANONICALIZATION_CASES)
-def test_canonicalization_cleaner(normalize_unii_pair, inp, expected):
-    cleaner_norm, _ = normalize_unii_pair
-    assert cleaner_norm(inp) == expected
-
 
 @pytest.mark.parametrize("inp,expected", CANONICALIZATION_CASES)
-def test_canonicalization_enricher(normalize_unii_pair, inp, expected):
-    _, enricher_norm = normalize_unii_pair
-    assert enricher_norm(inp) == expected
+def test_canonicalization(inp, expected):
+    assert normalization.normalize_unii(inp) == expected
 
 
 @pytest.mark.parametrize("inp", PLACEHOLDER_CASES)
-def test_placeholder_rejected_cleaner(normalize_unii_pair, inp):
-    cleaner_norm, _ = normalize_unii_pair
-    assert cleaner_norm(inp) is None
-
-
-@pytest.mark.parametrize("inp", PLACEHOLDER_CASES)
-def test_placeholder_rejected_enricher(normalize_unii_pair, inp):
-    _, enricher_norm = normalize_unii_pair
-    assert enricher_norm(inp) is None
+def test_placeholder_rejected(inp):
+    assert normalization.normalize_unii(inp) is None
 
 
 @pytest.mark.parametrize("inp", MALFORMED_CASES)
-def test_malformed_rejected_cleaner(normalize_unii_pair, inp):
-    cleaner_norm, _ = normalize_unii_pair
-    assert cleaner_norm(inp) is None
+def test_malformed_rejected(inp):
+    assert normalization.normalize_unii(inp) is None
 
 
-@pytest.mark.parametrize("inp", MALFORMED_CASES)
-def test_malformed_rejected_enricher(normalize_unii_pair, inp):
-    _, enricher_norm = normalize_unii_pair
-    assert enricher_norm(inp) is None
+def test_dsld_placeholders_are_owned_by_normalization():
+    assert normalization.UNII_PLACEHOLDERS == frozenset({"", "0", "1"})
 
 
-def test_cleaner_and_enricher_normalizers_agree(normalize_unii_pair):
-    """Contract: cleaner and enricher MUST produce identical canonicalization."""
-    cleaner_norm, enricher_norm = normalize_unii_pair
-    test_inputs = (
-        [v for v, _ in CANONICALIZATION_CASES]
-        + PLACEHOLDER_CASES
-        + MALFORMED_CASES
+_UNII_COPY = re.compile(
+    r"^\s*def\s+_?normalize_unii\s*\(|^\s*_?(?:UNII_PLACEHOLDERS|PLACEHOLDER_UNIIS)\s*=",
+    re.M,
+)
+
+
+def test_no_module_but_normalization_defines_a_unii_normalizer():
+    copies = sorted(
+        str(path.relative_to(SCRIPTS_DIR))
+        for path in SCRIPTS_DIR.rglob("*.py")
+        if path.parts[len(SCRIPTS_DIR.parts)] not in {"tests", "audits"}
+        and path.name != "normalization.py"
+        and _UNII_COPY.search(path.read_text(encoding="utf-8"))
     )
-    for inp in test_inputs:
-        assert cleaner_norm(inp) == enricher_norm(inp), (
-            f"normalize_unii drift on {inp!r}: "
-            f"cleaner={cleaner_norm(inp)!r} enricher={enricher_norm(inp)!r}"
-        )
+    assert copies == []
+
+
+def test_audit_scripts_import_the_owner():
+    sys.path.insert(0, str(SCRIPTS_DIR / "api_audit"))
+    import audit_unii_data_quality
+    import audit_unii_same_tier_conflicts
+    import backfill_unii_from_cache
+
+    for module in (audit_unii_data_quality, audit_unii_same_tier_conflicts, backfill_unii_from_cache):
+        assert module.normalize_unii is normalization.normalize_unii, module.__name__
 
 
 # ============================================================================

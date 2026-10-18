@@ -102,36 +102,7 @@ def _preprocess_text_module_cached(text: str) -> str:
     return norm_module.preprocess_text(text)
 
 
-# ---------------------------------------------------------------------------
-# Sprint 1 UNII-first matching: canonical UNII normalizer.
-# Used by index build (entries' external_ids.unii + top-level unii) AND
-# every lookup site (raw DSLD row uniiCode, forms[*].uniiCode, nonscorable
-# index lookup, backfill proposal generator). ONE function so the contract
-# is consistent across the cleaner and enricher.
-# ---------------------------------------------------------------------------
-_UNII_PLACEHOLDERS = frozenset({"", "0", "1"})
 _LABEL_CORRECTION_SCORING_DISPOSITIONS = frozenset({"source_descriptor", "unresolved_unit"})
-
-
-def _normalize_unii(value):
-    """Canonicalize a UNII string. Returns None for placeholders/garbage.
-
-    FDA UNIIs are exactly 10 alphanumeric characters. DSLD raw labels and
-    reference data may emit them with whitespace or mixed case; DSLD also
-    uses "0" and "1" as placeholders meaning "no UNII assigned". We strip
-    whitespace, uppercase, and reject placeholders + malformed values.
-
-    Returns:
-        Optional[str]: 10-char uppercase alphanumeric UNII, or None.
-    """
-    if not isinstance(value, str):
-        return None
-    canon = value.strip().upper()
-    if not canon or canon in _UNII_PLACEHOLDERS:
-        return None
-    if len(canon) != 10 or not canon.isalnum():
-        return None
-    return canon
 
 
 _UNII_IDENTITY_DESCRIPTOR_TOKENS = frozenset({
@@ -181,7 +152,7 @@ def _load_unii_exoneration_label_tokens() -> Dict[str, List[Set[str]]]:
 
     out: Dict[str, List[Set[str]]] = {}
     for exoneration in payload.get("exonerations", []) or []:
-        unii = _normalize_unii(exoneration.get("unii"))
+        unii = norm_module.normalize_unii(exoneration.get("unii"))
         if not unii:
             continue
         labels: List[Set[str]] = []
@@ -215,7 +186,7 @@ def _is_allowlisted_unii_identity_variant(
     existing_name: Any,
     incoming_name: Any,
 ) -> bool:
-    canon = _normalize_unii(unii)
+    canon = norm_module.normalize_unii(unii)
     if not canon:
         return False
     allowlisted = _load_unii_exoneration_label_tokens().get(canon) or []
@@ -1862,7 +1833,7 @@ class EnhancedDSLDNormalizer:
             payload: Dict[str, Any],
             entry_id_for_log: str = "",
         ) -> None:
-            unii = _normalize_unii(unii_raw)
+            unii = norm_module.normalize_unii(unii_raw)
             if not unii:
                 return
             payload_for_index = dict(payload)
@@ -1919,10 +1890,10 @@ class EnhancedDSLDNormalizer:
                 return None
             eid = entry.get("external_ids") or {}
             if isinstance(eid, dict):
-                u = _normalize_unii(eid.get("unii"))
+                u = norm_module.normalize_unii(eid.get("unii"))
                 if u:
                     return u
-            return _normalize_unii(entry.get("unii"))
+            return norm_module.normalize_unii(entry.get("unii"))
 
         # Safety source: banned/recalled.
         for section_value in self.banned_recalled.values():
@@ -2119,7 +2090,7 @@ class EnhancedDSLDNormalizer:
         Match precedence:
           1. Row's `uniiCode` (DSLD-attached top-level identifier)
           2. Each `forms[*].uniiCode` (DSLD-attached per-form identifier)
-        Placeholders (None, "", "0", "1") are rejected via _normalize_unii.
+        Placeholders (None, "", "0", "1") are rejected via normalize_unii.
 
         Returns:
             Optional tuple (payload_dict, match_method) where match_method is
@@ -2129,7 +2100,7 @@ class EnhancedDSLDNormalizer:
         if not isinstance(ingredient_data, dict):
             return None
         # Try top-level row UNII
-        unii = _normalize_unii(ingredient_data.get("uniiCode"))
+        unii = norm_module.normalize_unii(ingredient_data.get("uniiCode"))
         identity_unii_lookup = getattr(
             self, "_identity_unii_to_payload_lookup", self._unii_to_payload_lookup
         )
@@ -2157,7 +2128,7 @@ class EnhancedDSLDNormalizer:
             and any(
                 isinstance(form, dict)
                 and form.get("category") == "non-nutrient/non-botanical"
-                and _normalize_unii(form.get("uniiCode"))
+                and norm_module.normalize_unii(form.get("uniiCode"))
                 for form in forms
             )
         ):
@@ -2171,7 +2142,7 @@ class EnhancedDSLDNormalizer:
             for form in forms:
                 if not isinstance(form, dict):
                     continue
-                form_unii = _normalize_unii(form.get("uniiCode"))
+                form_unii = norm_module.normalize_unii(form.get("uniiCode"))
                 if not form_unii:
                     continue
                 if form_unii not in identity_unii_lookup:

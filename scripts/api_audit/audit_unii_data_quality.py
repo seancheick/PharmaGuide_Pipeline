@@ -50,6 +50,9 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Tuple
 
+sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
+from normalization import normalize_unii  # noqa: E402
+
 # Files to audit. Each entry: (path, list_key | None for top-level-dict)
 REFERENCE_FILES = [
     ("scripts/data/ingredient_quality_map.json", None),  # top-level dict-of-dicts
@@ -58,25 +61,6 @@ REFERENCE_FILES = [
     ("scripts/data/standardized_botanicals.json", "standardized_botanicals"),
 ]
 
-_PLACEHOLDER_UNIIS = frozenset({"", "0", "1"})
-
-
-def _normalize_unii(value: Any) -> Optional[str]:
-    """Canonicalize a UNII string. Returns None for placeholders/garbage.
-
-    FDA UNIIs are exactly 10 alphanumeric characters. We strip whitespace,
-    uppercase, and reject DSLD's placeholder values (`"0"`, `"1"`, `""`).
-    """
-    if not isinstance(value, str):
-        return None
-    canon = value.strip().upper()
-    if not canon or canon in _PLACEHOLDER_UNIIS:
-        return None
-    if len(canon) != 10 or not canon.isalnum():
-        return None
-    return canon
-
-
 def _extract_entry_unii(entry: Dict) -> Optional[str]:
     """Extract a UNII from a reference entry. Checks external_ids.unii and
     top-level unii (older format). Returns normalized UNII or None."""
@@ -84,10 +68,10 @@ def _extract_entry_unii(entry: Dict) -> Optional[str]:
         return None
     eid = entry.get("external_ids") or {}
     if isinstance(eid, dict):
-        u = _normalize_unii(eid.get("unii"))
+        u = normalize_unii(eid.get("unii"))
         if u:
             return u
-    return _normalize_unii(entry.get("unii"))
+    return normalize_unii(entry.get("unii"))
 
 
 def _load_iqm_entries(blob: Dict) -> List[Tuple[str, Dict]]:
