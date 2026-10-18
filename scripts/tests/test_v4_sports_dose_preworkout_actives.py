@@ -191,6 +191,42 @@ def test_disclosed_whole_preparation_uses_the_generic_owner_assessment():
     assert dose["metadata"].get("assessment_status") != "incomplete"
 
 
+def test_a_known_onlist_preparation_total_is_not_a_lost_individual_amount():
+    from scoring_v4.scored_artifact import build_scored_artifact
+
+    preparation = dict(_row("creatine_monohydrate", 2, "g", name="Con-Cret Creatine HCl"),
+                       matched_form="creatine hydrochloride", evidence_type="blend_anchor_mass",
+                       evidence_scope="blend_level", scoring_input_kind="product_level_evidence",
+                       scoreable=True, dose_value=2, dose_unit="g",
+                       reason="identity_bearing_blend_header_mass")
+    dose = build_scored_artifact(_product(preparation, name="Creatine"))[
+        "_v4_module_breakdown"]["dimensions"]["dose"]
+    assert dose["score"] == 11.4
+    assert dose["metadata"].get("assessment_status") != "incomplete"
+    # The total is not asserted to be two grams of qualified monohydrate.
+    assert "reference_value" not in dose["metadata"]["dose_contributions"][0]
+
+
+def test_one_branched_chain_amino_acid_does_not_invent_a_bcaa_preparation():
+    from scoring_v4.scored_artifact import build_scored_artifact
+
+    product = _product(_row("l_leucine", 2, "g"), _row("l_citrulline", 3, "g"),
+                       name="Recovery", primary_type="pre_workout")
+    dose = build_scored_artifact(product)["_v4_module_breakdown"]["dimensions"]["dose"]
+    assert dose["score"] == 11.4
+    assert all(row["ingredient"] != "bcaa" for row in dose["metadata"]["dose_contributions"])
+
+
+def test_an_individually_named_leucine_purpose_keeps_its_own_vote():
+    from scoring_v4.scored_artifact import build_scored_artifact
+
+    product = _product(_row("l_leucine", 2, "g"), _row("creatine_monohydrate", 3, "g"),
+                       name="Leucine + Creatine")
+    dose = build_scored_artifact(product)["_v4_module_breakdown"]["dimensions"]["dose"]
+    assert dose["score"] == 15.7
+    assert {row["ingredient"] for row in dose["metadata"]["dose_contributions"]} == {"l_leucine", "creatine"}
+
+
 def test_onlist_underdosed_active_is_not_rescued_by_proxy() -> None:
     # An under-target creatine (1 g, on-list) keeps proportional contribution; the
     # off-list proxy floor must NOT rescue it, because creatine has a sports band.

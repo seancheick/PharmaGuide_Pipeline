@@ -1171,6 +1171,8 @@ def test_explicit_eaa_total_emits_one_verified_sports_aggregate():
         "raw_taxonomy": {"category": "blend", "ingredientGroup": "Blend"},
     }
     children = [_eaa_child(canonical, index) for index, canonical in enumerate(eaa_canonicals)]
+    for index, child in enumerate(children):
+        child["raw_source_path"] = f"ingredientRows[0].nestedRows[{index}]"
     product = _product(
         [],
         product_name="EAA",
@@ -1195,7 +1197,7 @@ def test_explicit_eaa_total_emits_one_verified_sports_aggregate():
     assert row["verified_child_canonicals"] == sorted(eaa_canonicals)
     assert row["linked_rows"] == [
         "ingredientRows[0]",
-        *[f"ingredientRows[1].nestedRows[{index}]" for index in range(9)],
+        *[f"ingredientRows[0].nestedRows[{index}]" for index in range(9)],
     ]
     assert result.mapped_coverage == 1.0
 
@@ -1462,19 +1464,21 @@ def test_nutrition_protein_mass_without_product_intent_is_not_sports_evidence():
     assert not any(row.get("evidence_type") == "sports_primary_dose" for row in evidence)
 
 
-@pytest.mark.parametrize("primary_type,has_facts,expected", [
-    ("protein_powder", True, 1),
-    ("protein_powder", False, 0),
-    ("multivitamin", True, 0),
-    ("collagen", True, 0),
+@pytest.mark.parametrize("primary_type,source_g,has_facts,expected", [
+    ("protein_powder", 26.4, True, 1),
+    ("protein_powder", 26.4, False, 0),
+    ("multivitamin", 1.0, True, 0),
+    ("collagen", 1.0, True, 0),
 ])
 def test_protein_taxonomy_reuses_actual_facts_without_title_or_powder_mass_inference(
-    primary_type, has_facts, expected,
+    primary_type, source_g, has_facts, expected,
 ):
     # WheyBasics has no literal 'protein' in its name. Product taxonomy owns
     # its intent, while the exact Nutrition Facts row owns actual protein mass.
+    # An incidental source in another subtype supplies neither protein intent
+    # nor permission to substitute its ingredient mass for actual protein.
     source = _row(name="Whey Protein Isolate", canonical_id="whey_protein",
-                  quantity=26.4, unit="g", raw_source_path="ingredientRows[1]")
+                  quantity=source_g, unit="g", raw_source_path="ingredientRows[1]")
     product = _product(
         [], product_name="WheyBasics Natural Vanilla Bean Flavor",
         primary_type=primary_type, activeIngredients=[source],
@@ -2687,3 +2691,54 @@ def test_retired_native_protein_projections_cannot_change_current_facts_or_discl
     if lost:
         assert cached_artifact["quality_score_status"] == "not_scored"
         assert cached_artifact["quality_assessment_status"] == "partial"
+
+
+@pytest.mark.parametrize("source_g", [20.0, 25.0, 26.0])
+def test_material_protein_source_joins_actual_facts_without_a_protein_title(source_g):
+    from scoring_v4.scored_artifact import build_scored_artifact
+
+    whey = _row(name="Whey Protein Concentrate", canonical_id="whey_protein",
+                quantity=source_g, unit="g", raw_source_path="ingredientRows[10]")
+    product = _product(
+        [whey], product_name="Perfect Meal Milk Chocolate", primary_type="vitamin_mineral_combo",
+        activeIngredients=[whey], nutrition_summary={"protein_g": 19.0},
+        display_ingredients=[{"raw_source_text": "Protein", "source_section": "activeIngredients",
+                              "display_type": "nutrition_fact", "raw_source_path": "ingredientRows[5]",
+                              "exact_dose_text": "19 g"}],
+    )
+    evidence = [r for r in derive_product_scoring_evidence(product)
+                if r.get("reason") == "declared_nutrition_protein_mass"]
+    assert [(r["dose_value"], r["dose_unit"], r["raw_source_path"]) for r in evidence] == [
+        (19.0, "g", "ingredientRows[5]")]
+    artifact = build_scored_artifact(product)
+    dose = artifact["_v4_module_breakdown"]["dimensions"]["dose"]["metadata"]
+    assert artifact["_v4_module"] == "sports"
+    assert artifact["quality_assessment_status"] == "complete"
+    assert artifact["_v4_module_breakdown"]["dimensions"]["dose"]["score"] == 19.0
+    protein, = [r for r in dose["dose_contributions"] if r["ingredient"] == "protein"]
+    assert protein["amount_per_serving"] == 19.0
+    assert protein["credit_raw"] == 19.0
+
+
+@pytest.mark.parametrize("source_change", ["low_mass", "inactive", "excluded", "projection", "bad_unit"])
+def test_nonmaterial_or_ineligible_source_cannot_supply_protein_product_intent(source_change):
+    whey = _row(name="Whey Protein Concentrate", canonical_id="whey_protein", quantity=25.0,
+                unit="g", raw_source_path="ingredientRows[10]")
+    if source_change == "low_mass":
+        whey["quantity"] = 19.99
+    elif source_change == "inactive":
+        whey["source_section"] = "inactive"
+    elif source_change == "excluded":
+        whey["score_eligible_by_cleaner"] = False
+    elif source_change == "projection":
+        whey["scoring_input_kind"] = "product_level_evidence"
+    else:
+        whey["unit"] = "IU"
+    product = _product([whey], product_name="Perfect Meal Milk Chocolate",
+                       primary_type="vitamin_mineral_combo", activeIngredients=[whey],
+                       nutrition_summary={"protein_g": 19.0},
+                       display_ingredients=[{"raw_source_text": "Protein", "source_section": "activeIngredients",
+                                             "display_type": "nutrition_fact", "raw_source_path": "ingredientRows[5]",
+                                             "exact_dose_text": "19 g"}])
+    assert not any(r.get("reason") == "declared_nutrition_protein_mass"
+                   for r in derive_product_scoring_evidence(product))

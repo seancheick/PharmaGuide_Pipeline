@@ -25,6 +25,7 @@ from typing import Any, Dict, List, Optional, Tuple
 
 from constants import CLEANER_NON_EFFICACY_ROLES
 from scoring_input_contract import (
+    _positive_quantity,
     dose_disclosure_status,
     get_scoring_ingredients,
     has_source_printed_amount,
@@ -484,6 +485,11 @@ def _declared_active_count(product: Dict[str, Any], rows: List[Dict[str, Any]]) 
                         and row.get("raw_source_path") not in active_paths)
                     or (row.get("is_blend_header") is True
                         and row.get("raw_source_path") not in active_paths)
+                    # Exact printed zeroes remain disclosed label context,
+                    # while strict efficacy inputs intentionally exclude them.
+                    or (row.get("raw_source_path") not in active_paths
+                        and _positive_quantity(row, allow_zero=True) == 0
+                        and dose_disclosure_status(row) == "disclosed")
                 )
             )
             return max(parsed - structural_rows, 0)

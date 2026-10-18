@@ -115,7 +115,7 @@ def score_dose(product: Dict[str, Any]) -> Dict[str, Any]:
 
 
 def _score_primary(product: Dict[str, Any], identity: Optional[str], *, details: Optional[dict] = None) -> Tuple[float, Optional[str]]:
-    rows = sports_dosed_rows(product)
+    rows = _preparation_rows(sports_dosed_rows(product))
     canons = next((canons for name, canons in _IDENTITY_CANONICALS if name == identity), frozenset())
     own_rows = [row for row in rows if canonical(row) in canons]
     unit = "mg" if identity in {"alpha_gpc", "atp", "caffeine"} else "g"
@@ -128,7 +128,7 @@ def _score_primary(product: Dict[str, Any], identity: Optional[str], *, details:
     elif identity == "bcaa":
         grouped = group_bcaa(rows)
         if not grouped["complete"]:
-            own_rows = [row for row in sports_identity_rows(product)
+            own_rows = [row for row in _preparation_rows(sports_identity_rows(product))
                         if canonical(row) in BCAA_AGGREGATE_CANONICALS and not is_lent_blend_mass(row)]
         else:
             own_rows = [{"quantity": grouped["total_g"], "unit": "g"}]
@@ -139,7 +139,7 @@ def _score_primary(product: Dict[str, Any], identity: Optional[str], *, details:
             and not is_lent_blend_mass(row)
             and dose_disclosure_status(row) != "not_disclosed_blend"
             and row_exposure(product, row, basis="per_use", unit="g").benchmark_amount is None
-            for row in sports_identity_rows(product)
+            for row in _preparation_rows(sports_identity_rows(product))
         ):
             return 0.0, "eaa_no_dose"
         if not grouped["complete"] and not grouped["partial"]:
@@ -148,7 +148,7 @@ def _score_primary(product: Dict[str, Any], identity: Optional[str], *, details:
     if identity not in {"protein", "bcaa", "eaa", "caffeine"} and any(
         not is_lent_blend_mass(row) and dose_disclosure_status(row) != "not_disclosed_blend"
         and row_exposure(product, row, basis=basis, unit=unit).benchmark_amount is None
-        for row in sports_identity_rows(product) if canonical(row) in canons
+        for row in _preparation_rows(sports_identity_rows(product)) if canonical(row) in canons
     ):
         return 0.0, f"{identity}_no_dose"
     amounts = [row_exposure(product, row, basis=basis, unit=unit).benchmark_amount for row in own_rows]
@@ -214,13 +214,27 @@ _IDENTITY_CANONICALS = (
 )
 
 
+def _preparation_rows(rows: list[dict]) -> list[dict]:
+    """Consume each verified EAA total once, retaining independent preparations.
+
+    Its source-owned components remain in the product for ingredient and safety
+    assessment; they are not additional Dose purposes beside their own total.
+    """
+    owners = [str(row["raw_source_path"]) for row in rows
+              if row.get("raw_source_path") and canonical(row) in EAA_AGGREGATE_CANONICALS
+              and group_eaa([row])["aggregate_identity_complete"]]
+    return [row for row in rows if not any(
+        str(row.get("raw_source_path") or "").startswith(owner + ".nestedRows[") for owner in owners
+    )]
+
+
 def _co_primary_identities(product: Dict[str, Any]) -> list[str]:
     """Source-owned sports purposes, including declared off-list ingredients.
 
     The shared role owner selects the on-list purposes by materiality.
     Explicit label purpose is required for an off-list ingredient.
     """
-    rows = [row for row in get_active_ingredients(product) if isinstance(row, dict)]
+    rows = _preparation_rows([row for row in get_active_ingredients(product) if isinstance(row, dict)])
     # BCAAs are part of an EAA preparation. Use the existing aggregate owner
     # to choose the preparation once, rather than voting per amino acid or
     # adding a second BCAA vote to a complete/partial EAA profile.
@@ -235,7 +249,7 @@ def _co_primary_identities(product: Dict[str, Any]) -> list[str]:
     group_canons = EAA_CANONICALS if eaa_preparation else BCAA_CANONICALS
     aggregate_canons = EAA_AGGREGATE_CANONICALS if eaa_preparation else BCAA_AGGREGATE_CANONICALS
     group = eaa_group if eaa_preparation else group_bcaa(rows)
-    if group["total_g"] > 0 and not any(canonical(row) in aggregate_canons for row in rows):
+    if group["complete"] and not any(canonical(row) in aggregate_canons for row in rows):
         # Materiality belongs to the preparation, too. Split amino-acid rows
         # cannot each become a purpose or make a named BCAA/EAA purpose vanish.
         rows = [row for row in rows if canonical(row) not in group_canons]
@@ -249,6 +263,11 @@ def _co_primary_identities(product: Dict[str, Any]) -> list[str]:
             continue
         key = canonical(row)
         identity = next((name for name, canons in _IDENTITY_CANONICALS if key in canons), None)
+        if identity == "bcaa" and key in BCAA_CANONICALS and not group["complete"]:
+            # A single leucine/valine/isoleucine row is not a BCAA preparation.
+            # An independently named amino acid can still use its own generic
+            # purpose assessment below.
+            identity = None
         if eaa_preparation and key in EAA_CANONICALS | EAA_AGGREGATE_CANONICALS:
             identity = "eaa"
         if identity is None and key and role.get("role") == "claim_prominent":
@@ -332,12 +351,25 @@ def _assess_primary(product: Dict[str, Any], identity: str) -> Tuple[float, Opti
     if points > 0:
         return points, basis
     canons = next(canons for name, canons in _IDENTITY_CANONICALS if name == identity)
-    rows = [row for row in sports_identity_rows(product) if canonical(row) in canons]
+    rows = [row for row in _preparation_rows(sports_identity_rows(product)) if canonical(row) in canons]
     if rows and all(is_lent_blend_mass(row) or dose_disclosure_status(row) == "not_disclosed_blend" for row in rows):
         from scoring_v4.modules.generic_helpers import dose_reference_scope, unbenchmarked_dose_credit
 
         with dose_reference_scope(_primary_dose_reference(product, identity)):
             return unbenchmarked_dose_credit(), "hidden_amount_neutral"
+    if rows:
+        from scoring_v4.exposure import quantity_is_unresolved
+        from scoring_v4.modules.generic_dose import _product_evidence_dose_credit
+        from scoring_v4.modules.generic_helpers import dose_reference_scope, unbenchmarked_dose_credit
+
+        # A source-owned whole preparation can be disclosed without supplying
+        # an individual active amount for the qualified sports target. Reuse
+        # the generic preparation assessment; never turn blend grams into
+        # monohydrate, caffeine, or another individual analyte's exposure.
+        if all(not quantity_is_unresolved(row) and _product_evidence_dose_credit(row)[0] > 0
+               for row in rows):
+            with dose_reference_scope(_primary_dose_reference(product, identity)):
+                return unbenchmarked_dose_credit(), "hidden_amount_neutral"
     return points, basis
 
 
@@ -388,7 +420,7 @@ def _dose_contribution(product: Dict[str, Any], identity: str, points: float, ba
         rows = [row for row in get_active_ingredients(product)
                 if canonical(row) == identity and has_usable_individual_dose(row)]
     else:
-        rows = [row for row in sports_dosed_rows(product) if canonical(row) in canons]
+        rows = [row for row in _preparation_rows(sports_dosed_rows(product)) if canonical(row) in canons]
     if identity == "protein":
         rows = _protein_dose_rows(rows)
     if identity == "caffeine":
@@ -409,7 +441,7 @@ def _dose_contribution(product: Dict[str, Any], identity: str, points: float, ba
     if identity in {"bcaa", "eaa"}:
         grouped = group_bcaa(rows) if identity == "bcaa" else group_eaa(rows)
         if identity == "bcaa" and not grouped["complete"]:
-            rows = [row for row in sports_identity_rows(product)
+            rows = [row for row in _preparation_rows(sports_identity_rows(product))
                     if canonical(row) in BCAA_AGGREGATE_CANONICALS and not is_lent_blend_mass(row)]
         elif identity == "eaa" and grouped["aggregate_total_g"] is not None:
             rows = [row for row in rows if canonical(row) in EAA_AGGREGATE_CANONICALS]

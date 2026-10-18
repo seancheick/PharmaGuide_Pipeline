@@ -470,6 +470,114 @@ def test_explicit_complete_eaa_aggregate_scores_one_combined_dose() -> None:
     assert payload["metadata"]["dose_basis"] == "eaa_completed_no_general_benchmark"
 
 
+def _nested_complete_eaa_source():
+    from scoring_v4.route_features import EAA_CANONICALS
+
+    owner = dict(_row("BLEND_GENERAL", 10, "g", name="Total Essential Amino Acids"),
+                 raw_source_path="ingredientRows[0]", cleaner_row_role="blend_header_total",
+                 score_eligible_by_cleaner=False, identity_disposition="taxonomy_only",
+                 dose_class="blend_total_weight")
+    children = []
+    for i, key in enumerate(sorted(EAA_CANONICALS)):
+        amount = {"l_leucine": 2.5, "l_isoleucine": 1.25, "l_valine": 1.25}.get(key)
+        children.append(dict(_row(key, amount or 0, "g" if amount else "NP"),
+                             raw_source_path=f"ingredientRows[0].nestedRows[0].nestedRows[{i}]",
+                             identity_disposition="clean", is_nested_ingredient=True,
+                             parent_blend="Total Essential Amino Acids"))
+    product = _product(*[row for row in children if row["quantity"]], name="Essential Amino Complete")
+    product["activeIngredients"] = [owner, *children]
+    product["ingredient_quality_data"]["ingredients"] = [owner, *children]
+    return product
+
+
+def test_eaa_total_owns_mixed_disclosure_without_lending_mass_to_children():
+    from scoring_v4.scored_artifact import build_scored_artifact
+    from scoring_input_contract import get_scoring_ingredients
+
+    product = _nested_complete_eaa_source()
+    artifact = build_scored_artifact(product)
+    dose = artifact["_v4_module_breakdown"]["dimensions"]["dose"]
+    assert dose["score"] == 11.4
+    assert dose["metadata"]["primary_identity"] == "eaa"
+    assert len(dose["metadata"]["dose_contributions"]) == 1
+    aggregate = next(row for row in get_scoring_ingredients(product, strict=True).rows
+                     if row.get("reason") == "explicit_complete_eaa_aggregate_owner")
+    assert aggregate["quantity"] == 10
+    # The six undisclosed individual shares remain undisclosed.
+    assert sum(row["quantity"] == 0 and row["unit"] == "NP"
+               for row in product["activeIngredients"]) == 6
+
+
+def test_an_independent_bcaa_preparation_is_not_absorbed_into_an_eaa_total():
+    from scoring_v4.scored_artifact import build_scored_artifact
+
+    product = _nested_complete_eaa_source()
+    independent = dict(_row("branched_chain_amino_acids", 3, "g", name="BCAA"),
+                       raw_source_path="ingredientRows[2]", identity_disposition="clean")
+    product["activeIngredients"].append(independent)
+    product["ingredient_quality_data"]["ingredients"].append(independent)
+    product["ingredient_quality_data"]["ingredients_scorable"].append(independent)
+    product["product_name"] = product["fullName"] = "Essential Amino Complete + BCAA"
+    dose = build_scored_artifact(product)["_v4_module_breakdown"]["dimensions"]["dose"]
+    contributions = {row["ingredient"]: row for row in dose["metadata"]["dose_contributions"]}
+    assert set(contributions) == {"eaa", "bcaa"}
+    assert contributions["eaa"]["amount_per_serving"] == 10
+    assert contributions["bcaa"]["amount_per_serving"] == 3
+
+
+@pytest.mark.parametrize("change", ["missing", "moved", "unresolved"])
+def test_cached_eaa_owner_cannot_override_lost_source_profile(change):
+    from scoring_input_contract import derive_product_scoring_evidence, get_scoring_ingredients
+    from scoring_v4.scored_artifact import build_scored_artifact
+
+    product = _nested_complete_eaa_source()
+    product["product_scoring_evidence"] = derive_product_scoring_evidence(product)
+    assert any(row.get("reason") == "explicit_complete_eaa_aggregate_owner"
+               for row in product["product_scoring_evidence"])
+    if change == "missing":
+        product["activeIngredients"].pop()
+    elif change == "moved":
+        product["activeIngredients"][-1]["raw_source_path"] = "ingredientRows[9]"
+    else:
+        product["activeIngredients"][-1]["identity_disposition"] = "unresolved"
+    rows = get_scoring_ingredients(product, strict=True)
+    assert not any(row.get("reason") == "explicit_complete_eaa_aggregate_owner" for row in rows.rows)
+    dose = build_scored_artifact(product)["_v4_module_breakdown"]["dimensions"]["dose"]
+    assert all(row["ingredient"] != "eaa" for row in dose["metadata"]["dose_contributions"])
+
+
+def test_cached_eaa_metadata_cannot_override_the_current_source_owner():
+    from scoring_input_contract import derive_product_scoring_evidence, get_scoring_ingredients
+    from scoring_v4.route_features import EAA_CANONICALS
+
+    product = _nested_complete_eaa_source()
+    product["product_scoring_evidence"] = derive_product_scoring_evidence(product)
+    cached = next(row for row in product["product_scoring_evidence"]
+                  if row.get("reason") == "explicit_complete_eaa_aggregate_owner")
+    cached["verified_child_canonicals"] = ["l_leucine"]
+    rows = get_scoring_ingredients(product, strict=True).rows
+    current = [row for row in rows if row.get("reason") == "explicit_complete_eaa_aggregate_owner"]
+    assert len(current) == 1
+    assert current[0]["verified_child_canonicals"] == sorted(EAA_CANONICALS)
+
+
+@pytest.mark.parametrize("defect", ["unrelated_child", "extra_non_eaa", "unresolved_child"])
+def test_eaa_total_cannot_borrow_another_profile_or_non_eaa_mass(defect):
+    from scoring_input_contract import get_scoring_ingredients
+
+    product = _nested_complete_eaa_source()
+    children = product["activeIngredients"]
+    if defect == "unrelated_child":
+        children[-1]["raw_source_path"] = "ingredientRows[9]"
+    elif defect == "extra_non_eaa":
+        children.append(dict(_row("taurine", 1, "g"), raw_source_path="ingredientRows[0].nestedRows[1]",
+                             identity_disposition="clean"))
+    else:
+        children[-1]["identity_disposition"] = "unresolved"
+    assert not any(row.get("reason") == "explicit_complete_eaa_aggregate_owner"
+                   for row in get_scoring_ingredients(product, strict=True).rows)
+
+
 def test_untyped_eaa_aggregate_cannot_bypass_product_evidence_contract() -> None:
     aggregate = {
         **_row("essential_amino_acids", 10, "g", name="Essential Amino Acids"),

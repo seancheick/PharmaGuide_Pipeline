@@ -361,10 +361,12 @@ def _unit_is_mass(unit: Any) -> bool:
     return _norm(unit).replace(" ", "") in {u.replace(" ", "") for u in _MASS_UNITS}
 
 
-def _positive_quantity(row: Dict[str, Any]) -> Optional[float]:
+def _positive_quantity(row: Dict[str, Any], *, allow_zero: bool = False) -> Optional[float]:
     for key in ("quantity", "amount", "dose", "dosage", "dose_value"):
         value = _as_float(row.get(key), None)
-        if value is not None and value > 0:
+        if value is not None and (value > 0 or (
+            allow_zero and value == 0 and not isinstance(row.get(key), bool)
+        )):
             return value
     return None
 
@@ -478,7 +480,7 @@ def epa_dha_row_is_trustworthy(row: Dict[str, Any]) -> bool:
 DOSE_NOT_PROVIDED_UNITS = frozenset({"np", "n/p", "not provided", ""})
 
 
-def has_source_printed_amount(row: Mapping[str, Any]) -> bool:
+def has_source_printed_amount(row: Mapping[str, Any], *, allow_zero: bool = False) -> bool:
     """Whether the selected source-label amount proves this row's quantity.
 
     A derived parent total can have a usable amount without printed disclosure.
@@ -486,10 +488,17 @@ def has_source_printed_amount(row: Mapping[str, Any]) -> bool:
     raw quantities or confusing Formulation's double-count exclusion with opacity.
     """
     variants = _safe_list(_safe_dict(row.get("raw_taxonomy")).get("quantityVariants"))
+    if allow_zero and _positive_quantity(row, allow_zero=True) == 0:
+        selected = [v for v in variants if isinstance(v, dict) and v.get("selected_for_analysis") is True]
+        if len(selected) != 1 or selected[0].get("quantity_parsed") is not True:
+            return False
     return bool(row.get("raw_source_path")) and any(
         isinstance(v, dict) and v.get("selected_for_analysis") is True
         and _as_float(v.get("quantity"), None) == _as_float(row.get("quantity"), None)
-        and _as_float(v.get("quantity"), 0) > 0
+        and (_as_float(v.get("quantity"), 0) > 0 or (
+            allow_zero and _as_float(v.get("quantity"), None) == 0
+            and not isinstance(v.get("quantity"), bool)
+        ))
         and _norm(v.get("unit")) == _norm(row.get("unit"))
         for v in variants
     )
@@ -502,7 +511,9 @@ def dose_disclosure_status(row: Mapping[str, Any]) -> str:
     Disclosure is a label fact: any positive printed amount with a stated unit
     (mg, HUT, mg NE, %DV) is disclosed, whether or not Dose can use it as an
     exposure. A probiotic strain whose CFU the enricher found on strain-side
-    fields carries has_dose. A blend member printed without its own amount is a
+    fields carries has_dose. A parsed exact zero with its selected source unit
+    is also disclosed, without becoming a positive efficacy exposure.
+    A blend member printed without its own amount is a
     label nondisclosure ("Amount not disclosed"); any other row with no amount
     is missing capture. Blend membership is the cleaner's flag on either row
     shape (export row or scoring row).
@@ -511,6 +522,18 @@ def dose_disclosure_status(row: Mapping[str, Any]) -> str:
     unit = _norm(_row_unit(row))
     if (amount is not None and math.isfinite(amount) and unit not in DOSE_NOT_PROVIDED_UNITS) or row.get("has_dose"):
         return "disclosed"
+    if (
+        _positive_quantity(row, allow_zero=True) == 0
+        and unit not in DOSE_NOT_PROVIDED_UNITS
+        and has_source_printed_amount(row, allow_zero=True)
+    ):
+        # A parsed exact zero is label disclosure, not a positive exposure.
+        # Reuse the unit/operator owner; defaults, NP and ambiguous captures
+        # must never become a statement that the label printed zero.
+        from scoring_v4.exposure import row_exposure
+        exposure = row_exposure({}, row, basis="per_use", unit="mg")
+        if exposure.exact and exposure.per_serving_amount == 0:
+            return "disclosed"
     member = (
         row.get("isNestedIngredient") or row.get("proprietaryBlend") or row.get("parent_blend")
         or row.get("cleaner_row_role") == "nested_display_only"
@@ -909,13 +932,6 @@ _EXPLICIT_EPA_DHA_AGGREGATE_RE = re.compile(
     re.IGNORECASE,
 )
 
-_EXPLICIT_EAA_AGGREGATE_NAMES = {
-    "essential amino acids",
-    "essential amino acids eaa",
-    "eaa essential amino acids",
-}
-
-
 def _is_explicit_epa_dha_aggregate_label(value: Any) -> bool:
     """True only when the label names a combined EPA+DHA dose owner."""
     normalized = re.sub(r"[^a-z0-9]+", " ", str(value or "").lower()).strip()
@@ -1008,11 +1024,13 @@ def _children_are_exactly_the_eaas(owner: Dict[str, Any], rows: List[Dict[str, A
     prefix = str(owner.get("raw_source_path") or "") + ".nestedRows["
     if prefix == ".nestedRows[":
         return False
-    children = [
-        row for row in rows
-        if str(row.get("raw_source_path") or "").startswith(prefix)
-        and "." not in str(row.get("raw_source_path"))[len(prefix):]
-    ]
+    descendants = [row for row in rows if str(row.get("raw_source_path") or "").startswith(prefix)]
+    # Nested BCAA and remaining-EAA subgroups are structure, not extra actives.
+    # Only this owner's source leaves can establish its nine-member profile.
+    children = [row for row in descendants if not any(
+        str(other.get("raw_source_path") or "").startswith(str(row.get("raw_source_path")) + ".nestedRows[")
+        for other in descendants
+    )]
     canonicals = [_norm(row.get("canonical_id")) for row in children]
     return len(canonicals) == len(EAA_CANONICALS) and set(canonicals) == set(EAA_CANONICALS)
 
@@ -1027,36 +1045,19 @@ def _derive_explicit_eaa_aggregate_evidence(
     the old false quarantine and the opposite error of counting the same 10 g
     nine times.
     """
-    child_rows = [
-        row
-        for row in rows
-        if _norm(row.get("canonical_id")) in EAA_CANONICALS
-    ]
-    verified_children = {
-        _norm(row.get("canonical_id"))
-        for row in child_rows
-        if row.get("identity_disposition") is not None
-        and is_identity_scoreable(row.get("identity_disposition"))
-    }
-    if verified_children != set(EAA_CANONICALS):
-        return []
-    if any(
-        _positive_quantity(row) is not None
-        and _unit_is_mass(_row_unit(row))
-        for row in child_rows
-    ):
-        return []
-
     evidence: List[Dict[str, Any]] = []
     for owner in rows:
-        owner_name = re.sub(
-            r"[^a-z0-9]+",
-            " ",
-            str(owner.get("raw_source_text") or owner.get("name") or "").lower(),
-        ).strip()
-        if owner_name not in _EXPLICIT_EAA_AGGREGATE_NAMES and not _children_are_exactly_the_eaas(owner, rows):
+        if not _children_are_exactly_the_eaas(owner, rows):
             continue
         if _norm(owner.get("cleaner_row_role")) != "blend_header_total":
+            continue
+        prefix = str(owner.get("raw_source_path")) + ".nestedRows["
+        child_rows = [row for row in rows if _norm(row.get("canonical_id")) in EAA_CANONICALS
+                      and str(row.get("raw_source_path") or "").startswith(prefix)]
+        verified_children = {_norm(row.get("canonical_id")) for row in child_rows
+                             if row.get("identity_disposition") is not None
+                             and is_identity_scoreable(row.get("identity_disposition"))}
+        if verified_children != set(EAA_CANONICALS):
             continue
         mass = _positive_quantity(owner)
         unit = _row_unit(owner)
@@ -1085,7 +1086,8 @@ def _derive_explicit_eaa_aggregate_evidence(
             *child_paths,
         ]))
         item["verified_child_canonicals"] = sorted(verified_children)
-        item["profile_disclosure_status"] = "complete_identity_profile_amounts_undisclosed"
+        if any(_positive_quantity(row) is None for row in child_rows):
+            item["profile_disclosure_status"] = "complete_identity_profile_amounts_undisclosed"
         item["canonical_source_db"] = "verified_label_child_aggregate"
         evidence.append(item)
     return evidence
@@ -1108,6 +1110,7 @@ def _derive_declared_nutrition_protein_evidence(
     if not (
         has_protein_product_intent(_route_product_label_text(product))
         or _primary_type(product) == "protein_powder"
+        or _route_has_material_protein_row(active_rows)
     ):
         return []
 
@@ -1937,7 +1940,9 @@ def derive_product_scoring_evidence(product: Dict[str, Any]) -> List[Dict[str, A
             )
             evidence.append(item)
 
-    for item in _derive_explicit_eaa_aggregate_evidence(active_rows):
+    eaa_aggregates = _derive_explicit_eaa_aggregate_evidence(active_rows)
+    eaa_owner_paths = {item["raw_source_path"] for item in eaa_aggregates}
+    for item in eaa_aggregates:
         special_evidence_paths.update(
             str(path) for path in _safe_list(item.get("linked_rows")) if path
         )
@@ -2070,6 +2075,7 @@ def derive_product_scoring_evidence(product: Dict[str, Any]) -> List[Dict[str, A
             and _unit_is_mass(unit)
             and anchor_canonical
             and str(row.get("raw_source_path") or "") not in scorable_paths
+            and str(row.get("raw_source_path") or "") not in eaa_owner_paths
             and (
                 cleaner_role == "blend_header_total"
                 or str(row.get("raw_source_path") or "") not in special_evidence_paths
@@ -2528,6 +2534,10 @@ def _product_scoring_evidence_rows(
         evidence_key(item) for item in derived_evidence_rows
         if item.get("reason") == "declared_nutrition_protein_mass"
     }
+    eaa_owner_paths = {item.get("raw_source_path") for item in derived_evidence_rows
+                       if item.get("reason") == "explicit_complete_eaa_aggregate_owner"}
+    valid_eaa_keys = {evidence_key(item) for item in derived_evidence_rows
+                      if item.get("reason") == "explicit_complete_eaa_aggregate_owner"}
     context_fields = (
         "raw_taxonomy",
         "forms",
@@ -2573,6 +2583,18 @@ def _product_scoring_evidence_rows(
         _backfill_product_evidence_identity(product, item)
         evidence_type = _norm(item.get("evidence_type") or item.get("dose_class"))
         dose_class = _norm(item.get("dose_class"))
+        if item.get("reason") == "explicit_complete_eaa_aggregate_owner" and idx < len(native_evidence_rows):
+            # A cached profile cannot establish today's source composition.
+            # Even a valid cache defers to the freshly qualified projection,
+            # including its verified children and current source metadata.
+            if evidence_key(item) not in valid_eaa_keys:
+                rejected.append(_reject(item, "stale_explicit_eaa_aggregate_evidence"))
+            continue
+        if evidence_type == "blend_anchor_mass" and item.get("raw_source_path") in eaa_owner_paths:
+            # The verified EAA total owns this preparation, including when a
+            # stored generic projection predates that source-qualified join.
+            rejected.append(_reject(item, "superseded_eaa_total_projection"))
+            continue
         if (
             evidence_type == "sports_primary_dose"
             and (
@@ -4472,6 +4494,22 @@ def _route_has_collagen_primary_identity(product: Dict[str, Any], name_text: str
     return True
 
 
+def _route_has_material_protein_row(rows: Iterable[Dict[str, Any]]) -> bool:
+    """Use the route's existing protein-source mass threshold as product intent.
+
+    Source ingredient mass proves intent only; actual protein dose still needs
+    its separate, quantity-bearing Facts declaration.
+    """
+    return any(
+        _norm(row.get("canonical_id")) in ROUTE_FEATURE_PROTEIN_CANONICALS
+        and row.get("scoring_input_kind") != "product_level_evidence"
+        and row.get("score_eligible_by_cleaner") is not False
+        and _norm(row.get("source_section")) != "inactive"
+        and (_role_mass_mg(row) or 0.0) >= _ROUTE_PROTEIN_MATERIAL_MIN_MG
+        for row in rows
+    )
+
+
 def _route_is_sports_class(
     product: Dict[str, Any],
     name_text: str,
@@ -4532,12 +4570,7 @@ def _route_is_sports_class(
     if (
         float(facts.get("row_level_protein_mass_mg") or 0.0)
         >= _ROUTE_PROTEIN_MATERIAL_MIN_MG
-        or any(
-            _norm(row.get("canonical_id")) in ROUTE_FEATURE_PROTEIN_CANONICALS
-            and (_role_mass_mg(row) or 0.0) >= _ROUTE_PROTEIN_MATERIAL_MIN_MG
-            for row in _route_scoring_rows(product)
-            if row.get("scoring_input_kind") != "product_level_evidence"
-        )
+        or _route_has_material_protein_row(_route_scoring_rows(product))
     ):
         return True
     if protein_intent and (protein_identities or has_protein_mass or primary_type == "protein_powder"):
