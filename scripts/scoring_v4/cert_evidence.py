@@ -1,6 +1,6 @@
 """Certification evidence shared by every v4 trust scorer, confidence and export.
 
-One owner for three facts that used to be copied between generic_trust,
+One owner for four facts that used to be copied between generic_trust,
 omega_trust and confidence (and re-implemented in build_final_db):
 
 - which verified certification rows belong to this product's brand;
@@ -8,7 +8,9 @@ omega_trust and confidence (and re-implemented in build_final_db):
   (``implies_gmp`` policy in data/cert_claim_rules.json);
 - whether this product has audited GMP evidence at all (a verified product
   certification that audits GMP, or the canonical manufacturer's sourced
-  registration in an audited GMP facility registry).
+  registration in an audited GMP facility registry);
+- the program key that counts one certification once in B4a
+  (``cert_program_key``).
 
 Label GMP wording (a "GMP"/"cGMP" claim, an NSF GMP mark, FDA facility
 registration) is self-asserted and never counts as audited GMP.
@@ -176,6 +178,33 @@ def verified_product_cert_entries(product: Dict[str, Any]) -> List[Dict[str, Any
         entry for entry in verified_cert_entries(product)
         if is_verified_product_cert_entry(product, entry)
     ]
+
+
+def cert_program_key(display: str, rule_id: str) -> str:
+    """The one program key a trust module uses to count a certification once.
+
+    ``display`` and ``rule_id`` arrive lower-cased by the caller. The first
+    matching token wins (IFOS before USP, NSF Sport before NSF); anything else
+    keeps its own display name, then its rule id.
+    """
+    haystack = f"{display} {rule_id}"
+    if "ifos" in haystack:
+        return "ifos"
+    if "usp" in haystack:
+        return "usp verified"
+    if "informed choice" in haystack:
+        return "informed choice"
+    if "informed sport" in haystack:
+        return "informed sport"
+    if "bscg" in haystack:
+        return "bscg"
+    if "labdoor" in haystack:
+        return "labdoor tested"
+    if "nsf" in haystack and "sport" in haystack:
+        return "nsf sport"
+    if "nsf" in haystack:
+        return "nsf certified"
+    return display or rule_id
 
 
 QUALITY_FLAGS = ("purity_verified", "heavy_metal_tested", "label_accuracy_verified")

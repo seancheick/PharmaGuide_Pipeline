@@ -264,3 +264,57 @@ def test_verified_product_cert_entries_is_the_one_filter():
 def test_omega_formulation_does_not_carry_its_own_brand_matcher(name):
     from scoring_v4.modules import omega_formulation
     assert not hasattr(omega_formulation, name)
+
+
+# One certification program key (architecture audit 2026-10-17, AUDIT.md §H #3).
+# generic_trust._label_asserted_program_key and omega_trust._cert_program_key were
+# identical copies of the display/rule_id -> program-key decision that de-duplicates
+# B4a credit; ADR-0004 puts certification decisions in cert_evidence alone.
+
+
+@pytest.mark.parametrize("display, rule_id, key", [
+    ("ifos 5-star", "", "ifos"),
+    ("", "rule_ifos_certified", "ifos"),
+    ("usp verified mark", "", "usp verified"),
+    ("informed choice", "", "informed choice"),
+    ("informed sport", "", "informed sport"),
+    ("bscg certified drug free", "", "bscg"),
+    ("labdoor", "", "labdoor tested"),
+    ("nsf certified for sport", "", "nsf sport"),
+    ("nsf", "rule_nsf_sport", "nsf sport"),
+    ("nsf contents certified", "", "nsf certified"),
+    ("ifos and usp verified", "", "ifos"),
+    ("non-gmo project", "rule_non_gmo", "non-gmo project"),
+    ("", "rule_kosher", "rule_kosher"),
+    ("", "", ""),
+])
+def test_cert_program_key_is_the_owner_decision(display, rule_id, key):
+    assert cert_evidence.cert_program_key(display, rule_id) == key
+
+
+@pytest.mark.parametrize("module, name", [
+    (generic_trust, "_label_asserted_program_key"),
+    (omega_trust, "_cert_program_key"),
+])
+def test_trust_modules_do_not_carry_their_own_program_key(module, name):
+    assert not hasattr(module, name)
+
+
+def test_both_trust_modules_key_label_asserted_programs_through_the_owner():
+    product = _product(certification_data={
+        "gmp": {}, "batch_traceability": {},
+        "evidence_based": {"third_party_programs": [
+            {"display_name": "IFOS 5-Star Certified", "score_eligible": True},
+            {"display_name": "NSF Certified for Sport", "score_eligible": True},
+            {"display_name": "USP Verified", "rule_id": "usp", "score_eligible": True},
+            {"display_name": "USP Verified Mark", "score_eligible": True},
+            {"display_name": "Friend of the Sea", "score_eligible": True},
+            {"display_name": "Informed Choice", "score_eligible": False},
+        ]},
+    })
+    assert generic_trust._label_asserted_quality_programs(product, True) == [
+        "ifos", "nsf sport", "usp verified",
+    ]
+    assert omega_trust._label_asserted_quality_programs(product) == [
+        "ifos", "nsf sport", "usp verified",
+    ]
