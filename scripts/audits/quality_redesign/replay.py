@@ -34,6 +34,7 @@ import hashlib
 import json
 import math
 import os
+import re
 import shutil
 import subprocess
 import sys
@@ -335,51 +336,61 @@ def _bounded(value):
     return text if len(text) <= VALUE_CHARS else text[:VALUE_CHARS] + f'... ({len(text)} chars)'
 
 
-def first_difference(left, right, path='$'):
-    """First JSON path (sorted keys, list order) where two values differ, with bounded values, or None."""
+def differences(left, right, path='$'):
+    """Every JSON path (sorted keys, list order) where two values differ, with bounded values.
+    Leaves differ when their canonical JSON differs, exactly as record_hash sees them
+    (-0.0 vs 0.0 and 1 vs 1.0 differ; NaN vs NaN does not)."""
     if isinstance(left, dict) and isinstance(right, dict):
         for key in sorted(set(left) | set(right), key=str):
             here = f'{path}.{key}'
             if key not in left or key not in right:
-                return {'path': here, 'baseline': _bounded(left[key]) if key in left else ABSENT,
-                        'candidate': _bounded(right[key]) if key in right else ABSENT}
-            found = first_difference(left[key], right[key], here)
-            if found:
-                return found
-        return None
-    if isinstance(left, list) and isinstance(right, list):
+                yield {'path': here, 'baseline': _bounded(left[key]) if key in left else ABSENT,
+                       'candidate': _bounded(right[key]) if key in right else ABSENT}
+            else:
+                yield from differences(left[key], right[key], here)
+    elif isinstance(left, list) and isinstance(right, list):
         for index, (a, b) in enumerate(zip(left, right)):
-            found = first_difference(a, b, f'{path}[{index}]')
-            if found:
-                return found
+            yield from differences(a, b, f'{path}[{index}]')
         if len(left) != len(right):
-            return {'path': path, 'baseline': f'{len(left)} items', 'candidate': f'{len(right)} items'}
-        return None
-    if type(left) is type(right) and (left == right or (isinstance(left, float) and math.isnan(left) and math.isnan(right))):
-        return None
-    return {'path': path, 'baseline': _bounded(left), 'candidate': _bounded(right)}
+            yield {'path': path, 'baseline': f'{len(left)} items', 'candidate': f'{len(right)} items'}
+    elif canonical_json(left) != canonical_json(right):
+        yield {'path': path, 'baseline': _bounded(left), 'candidate': _bounded(right)}
 
 
-def record_differences(pid, left_row, right_row, records):
-    """Which stage records of one product changed and, per changed record, the first differing path.
-    The stored records are re-hashed against the snapshot rows before they are trusted."""
+def first_difference(left, right, path='$'):
+    """The first JSON path where two values differ, or None."""
+    return next(differences(left, right, path), None)
+
+
+def generic_path(path):
+    """A JSON path with list indices replaced by [*], for grouping differences across products."""
+    return re.sub(r'\[\d+\]', '[*]', path)
+
+
+def record_differences(pid, left_row, right_row, records, all_paths=False):
+    """Which stage records of one product changed and, per changed record, the first differing path
+    (every differing path with `all_paths`). The stored records are re-hashed against the snapshot
+    rows before they are trusted."""
     if left_row['hashes'].keys() != right_row['hashes'].keys():
         raise ValueError(f'Snapshots capture different records: {pid}')
     changed = [stage for stage in sorted(left_row['hashes']) if left_row['hashes'][stage] != right_row['hashes'][stage]]
-    first = {}
+    result = {'changed': changed, 'first_difference': {}}
     if changed:
         left, right = load_records(records[0], pid), load_records(records[1], pid)
         for side, row, stored in (('baseline', left_row, left), ('candidate', right_row, right)):
             for stage in changed:
                 if record_hash(stored.get(stage), stage) != row['hashes'][stage]:
                     raise ValueError(f'{side} record {pid}/{stage} does not match its snapshot hash')
-        first = {stage: first_difference(without_volatile(left[stage], stage), without_volatile(right[stage], stage)) for stage in changed}
-    return {'changed': changed, 'first_difference': first}
+        stripped = {stage: (without_volatile(left[stage], stage), without_volatile(right[stage], stage)) for stage in changed}
+        result['first_difference'] = {stage: first_difference(*pair) for stage, pair in stripped.items()}
+        if all_paths:
+            result['differences'] = {stage: list(differences(*pair)) for stage, pair in stripped.items()}
+    return result
 
 
-def compare_records(baseline, candidate, records=None):
+def compare_records(baseline, candidate, records=None, all_paths=False):
     """Rows that differ; with `records` (baseline, candidate records directories) each entry also
-    names the changed stage records and their first differing JSON path."""
+    names the changed stage records and their first differing JSON path (all of them with `all_paths`)."""
     require_success(baseline)
     require_success(candidate)
     left, right = {p['id']: p for p in baseline}, {p['id']: p for p in candidate}
@@ -394,7 +405,7 @@ def compare_records(baseline, candidate, records=None):
             continue
         entry = {'id': key, 'baseline': left[key], 'candidate': right[key]}
         if records is not None:
-            entry.update(record_differences(key, left[key], right[key], records))
+            entry.update(record_differences(key, left[key], right[key], records, all_paths))
         differences.append(entry)
     return differences
 
@@ -722,6 +733,7 @@ def main():
     p = subs.add_parser('compare')
     for flag in ('baseline', 'candidate', 'out'):
         p.add_argument('--' + flag, required=True)
+    p.add_argument('--all-paths', action='store_true', help='with --full snapshots: list every differing path of each changed record, not only the first')
     p = subs.add_parser('report')
     p.add_argument('--baseline', required=True)
     p.add_argument('--candidate', action='append', required=True, help='name=path; repeatable')
@@ -752,15 +764,23 @@ def main():
         if full[0] and any(meta.get('volatile_fields') != VOLATILE_FIELDS or meta.get('worker_env') != FULL_WORKER_ENV for meta in full):
             # Row hashes come from the list of the harness that wrote them: an older list would read as changed or corrupt records.
             raise ValueError('Snapshot volatile_fields or worker_env differ from this harness; recapture with the same harness')
+        if args.all_paths and not full[0]:
+            raise ValueError('--all-paths needs --full snapshots')
         records = (records_dir(args.baseline), records_dir(args.candidate)) if full[0] else None
-        differences = compare_records(read_rows(args.baseline), read_rows(args.candidate), records)
-        write_json(args.out, differences)
+        entries = compare_records(read_rows(args.baseline), read_rows(args.candidate), records, args.all_paths)
+        write_json(args.out, entries)
         if records:
-            counts = {}
-            for entry in differences:
+            counts, paths = {}, {}
+            for entry in entries:
                 for stage in entry['changed']:
                     counts[stage] = counts.get(stage, 0) + 1
-            print(json.dumps({'products': baseline_meta['product_count'], 'changed': len(differences), 'by_record': counts}), file=sys.stderr)
+                for stage, found in entry.get('differences', {}).items():
+                    for name in {f'{stage}:{generic_path(d["path"])}' for d in found}:
+                        paths[name] = paths.get(name, 0) + 1  # products carrying that path
+            summary = {'products': baseline_meta['product_count'], 'changed': len(entries), 'by_record': counts}
+            if args.all_paths:
+                summary['paths'] = dict(sorted(paths.items(), key=lambda kv: (-kv[1], kv[0])))
+            print(json.dumps(summary), file=sys.stderr)
     elif args.command == 'report':
         cases = json.loads(Path(args.reference_cases).read_text()) if args.reference_cases else None
         arms = [tuple(item.split('=', 1)) for item in args.candidate]

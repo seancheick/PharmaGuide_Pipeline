@@ -81,6 +81,24 @@ def test_first_difference_is_none_for_equal_values_including_nan_and_bounds_long
     assert len(found['baseline']) < 300 and found['baseline'].endswith('... (1002 chars)')
 
 
+def test_leaves_differ_exactly_when_the_hash_differs():
+    left, right = {'penalties': {'B7_dose_safety': -0.0}}, {'penalties': {'B7_dose_safety': 0.0}}
+    assert replay.record_hash(left, 'scored') != replay.record_hash(right, 'scored')
+    assert replay.first_difference(left, right) == {'path': '$.penalties.B7_dose_safety', 'baseline': '-0.0', 'candidate': '0.0'}
+
+
+def test_differences_yields_every_path_in_order_and_first_is_its_head():
+    left = {'a': {'b': [1, {'c': 'x'}]}, 'k': 1, 'z': 2}
+    right = {'a': {'b': [1, {'c': 'y'}, 3]}, 'k': 1}
+    found = list(replay.differences(left, right))
+    assert [d['path'] for d in found] == ['$.a.b[1].c', '$.a.b', '$.z']
+    assert found[1] == {'path': '$.a.b', 'baseline': '2 items', 'candidate': '3 items'}
+    assert found[2] == {'path': '$.z', 'baseline': '2', 'candidate': '<absent>'}
+    assert replay.first_difference(left, right) == found[0]
+    assert list(replay.differences({'a': [1]}, {'a': [1]})) == []
+    assert replay.generic_path('$.rows[12].items[3].name') == '$.rows[*].items[*].name'
+
+
 def _full_row(pid, stages):
     return {'id': pid, 'input_sha256': 'h' + pid, 'total': 50.0, 'hashes': {stage: replay.record_hash(value, stage) for stage, value in stages.items()}}
 
@@ -176,8 +194,8 @@ def frozen_labels(tmp_path):
     return frozen, manifest
 
 
-def compare_cli(baseline, candidate, out):
-    proc = subprocess.run([sys.executable, HARNESS, 'compare', '--baseline', str(baseline), '--candidate', str(candidate), '--out', str(out)], capture_output=True, text=True)
+def compare_cli(baseline, candidate, out, *extra):
+    proc = subprocess.run([sys.executable, HARNESS, 'compare', '--baseline', str(baseline), '--candidate', str(candidate), '--out', str(out), *extra], capture_output=True, text=True)
     assert proc.returncode == 0, proc.stderr
     return json.loads(Path(out).read_text()), json.loads(proc.stderr.strip().splitlines()[-1])
 
@@ -218,10 +236,16 @@ def test_full_compare_reports_the_changed_record_and_path_for_an_enricher_change
     assert [(d['id'], d['changed']) for d in diffs] == [('1', ['enriched']), ('2', ['enriched'])]
     assert diffs[0]['first_difference'] == {'enriched': {'path': '$.ingredient_quality_data.ingredients[0].name', 'baseline': '"one"', 'candidate': '"one (changed)"'}}
     assert summary == {'products': 2, 'changed': 2, 'by_record': {'enriched': 2}}
+    assert 'differences' not in diffs[0]
+    diffs, summary = compare_cli(base, cand, tmp_path / 'delta_all.json', '--all-paths')
+    assert diffs[0]['differences'] == {'enriched': [diffs[0]['first_difference']['enriched']]}
+    assert summary == {'products': 2, 'changed': 2, 'by_record': {'enriched': 2}, 'paths': {'enriched:$.ingredient_quality_data.ingredients[*].name': 2}}
     plain = tmp_path / 'plain.jsonl'
     replay.snapshot(checkout, frozen, manifest, plain, 1)
     proc = subprocess.run([sys.executable, HARNESS, 'compare', '--baseline', str(base), '--candidate', str(plain), '--out', str(tmp_path / 'x.json')], capture_output=True, text=True)
     assert proc.returncode == 1 and 'both be --full' in proc.stderr
+    proc = subprocess.run([sys.executable, HARNESS, 'compare', '--baseline', str(plain), '--candidate', str(plain), '--out', str(tmp_path / 'x.json'), '--all-paths'], capture_output=True, text=True)
+    assert proc.returncode == 1 and '--all-paths needs --full' in proc.stderr
     meta_path = Path(str(cand) + '.meta.json')
     meta = json.loads(meta_path.read_text())
     meta['full']['volatile_fields'] = {**meta['full']['volatile_fields'], 'blob': {'generated_at': 'from an older harness'}}

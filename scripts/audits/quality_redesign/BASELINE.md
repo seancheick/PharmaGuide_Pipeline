@@ -89,9 +89,10 @@ Clean/Enrich behavioral change for its own fix task (see the memory gotcha on se
   covers every production module, scoring config and data file at that commit (tests and `scripts/audits/` are
   outside the fingerprint, so the harness edit does not appear in it). Harness used: `replay.py` sha256
   `2d2a0612387d6c4bab2fc1c8e611e84742a30795d478eba0858ca8927db1ab71` (`full.harness_sha256` in the receipt), commit ce5694b88.
-  The review fix that followed (compare refuses snapshots whose recorded `volatile_fields` or `worker_env` differ from the
-  harness; `replay.py` sha256 `836986b36a6428b851a610cf2dd93abd978e54360b300d2fa63258998d651d25`) changes no capture code: `compare` of this baseline
-  against itself under that harness reports 15,414 products, 0 changed (`self_compare_guard_check.json`).
+  The review fixes that followed change only the compare side (receipt guard on `volatile_fields` / `worker_env`;
+  leaves compared by canonical JSON so `-0.0` vs `0.0` is reported like the hash sees it; `compare --all-paths`), never
+  capture: `compare` of this baseline against itself under the PR head harness reports 15,414 products, 0 changed
+  (`self_compare_guard_check.json`, rerun after each compare-side change).
 - Command (from the worktree, `PG_PYTHON` = pinned 3.13.3):
   `replay.py snapshot --checkout <worktree at 5fb2be1ca> --products-root .../frozen_raw --manifest .../manifest.json --out .../baseline_5fb2be1ca.jsonl --workers 4 --full --blob`
 - Output: `/Users/seancheick/pg_quality/full_artifact_baseline_20261018/baseline_5fb2be1ca.jsonl`
@@ -109,5 +110,14 @@ replay.py compare --baseline .../baseline_5fb2be1ca.jsonl --candidate .../candid
 ```
 
 `compare` writes one entry per product whose row differs, each with `changed` (cleaned / enriched / scored /
-blob) and `first_difference` per changed record, and prints a one-line summary to stderr. Every listed difference
-is justified in the PR that produced it; none is removed by widening `VOLATILE_FIELDS`.
+blob) and `first_difference` per changed record, and prints a one-line summary to stderr. `--all-paths` adds every
+differing path of each changed record (`differences`) and, to the summary, the number of products carrying each
+path with list indices generalized to `[*]`: the "only this path differs" receipt of a PR comes from that summary.
+Every listed difference is justified in the PR that produced it; none is removed by widening `VOLATILE_FIELDS`.
+
+### Follow-ups
+
+- **Measure set-order nondeterminism instead of masking it.** The `--full` worker pins `PYTHONHASHSEED=0` and `compare`
+  requires both receipts' `worker_env` to equal the harness constant, so dropping the pin later would refuse today's
+  baseline. For the next recapture after the sorted list (PR #156) lands: record the observed seed in the receipt,
+  require baseline and candidate receipts to agree with each other rather than with the constant, and drop the pin.
